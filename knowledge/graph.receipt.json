@@ -1,8 +1,13 @@
 {
-  "content_sha256": "0b7014b9c8591c5905ee2645141a16373d04510098408752733751f04e0bcf8e",
+  "content_sha256": "8a8a00198f9b565f5332b3c3c5b601b12df3a39a249d4e49a350ecbb45e1c5a3",
   "graph_id": "lightyear:carddemo-modernization",
   "receipt_type": "lightyear-knowledge-graph-build",
-  "schema_version": "1.0",
+  "relationship_ontology": {
+    "content_sha256": "77993541f774ff088f9a7ae121bdf282508418eddd7416bf2641323deb838fba",
+    "ontology_id": "lightyear:modernization-relationships",
+    "schema_version": "1.0"
+  },
+  "schema_version": "1.1",
   "sources": [
     {
       "commit": "59cc6c2fd7ebd7ef7925cad552a01a4b8b6e4d5e",

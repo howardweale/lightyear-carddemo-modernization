@@ -1,0 +1,205 @@
+{
+  "ontology_id": "lightyear:modernization-relationships",
+  "relations": {
+    "ALLOCATES": {
+      "allowed_pairs": [["jcl_dd_allocation", "dataset"]],
+      "category": "data-lineage",
+      "direction": "allocation to dataset",
+      "evidence_policy": "endpoint-or-edge",
+      "label": "allocates",
+      "purpose": "Connects a concrete JCL DD allocation to the dataset it resolves at runtime."
+    },
+    "ASSIGNED_TO": {
+      "allowed_pairs": [["cobol_file_handle", "jcl_dd_name"]],
+      "category": "data-lineage",
+      "direction": "file handle to DD name",
+      "evidence_policy": "edge",
+      "label": "assigned to",
+      "purpose": "Connects a COBOL SELECT file handle to the external DD name used by JCL."
+    },
+    "BINDS": {
+      "allowed_pairs": [["jcl_dd_allocation", "jcl_dd_name"]],
+      "category": "scheduling",
+      "direction": "allocation to DD name",
+      "evidence_policy": "endpoint-or-edge",
+      "label": "binds",
+      "purpose": "Connects a JCL allocation statement to the DD name exposed to a program step."
+    },
+    "CALLS": {
+      "allowed_pairs": [
+        ["cobol_paragraph", "cobol_paragraph"],
+        ["cobol_paragraph", "cobol_program"],
+        ["cobol_program", "cobol_paragraph"],
+        ["cobol_program", "cobol_program"]
+      ],
+      "category": "control-flow",
+      "direction": "caller to callee",
+      "evidence_policy": "edge",
+      "label": "calls",
+      "purpose": "Represents an observed COBOL control-flow transfer from a caller to a program or paragraph."
+    },
+    "CONTAINS": {
+      "allowed_pairs": [
+        ["cobol_field", "cobol_field"],
+        ["cobol_program", "cobol_paragraph"],
+        ["copybook", "cobol_field"],
+        ["java_type", "java_method"],
+        ["java_type", "test_case"],
+        ["jcl_job", "jcl_step"],
+        ["jcl_procedure", "jcl_step"]
+      ],
+      "category": "structure",
+      "direction": "container to member",
+      "evidence_policy": "endpoint",
+      "label": "contains",
+      "purpose": "Expresses a deterministic structural parent-child relationship in source or job definitions."
+    },
+    "DECLARES": {
+      "allowed_pairs": [
+        ["cobol_program", "cobol_file_handle"],
+        ["source_file", "cobol_program"],
+        ["source_file", "copybook"],
+        ["source_file", "java_type"],
+        ["source_file", "jcl_job"],
+        ["source_file", "jcl_procedure"],
+        ["source_file", "software_dependency"]
+      ],
+      "category": "structure",
+      "direction": "declarer to declared entity",
+      "evidence_policy": "endpoint-or-edge",
+      "label": "declares",
+      "purpose": "Records that a source artifact or program defines the connected entity."
+    },
+    "DEPENDS_ON": {
+      "allowed_pairs": [["java_type", "java_type"]],
+      "category": "dependency",
+      "direction": "consumer to dependency",
+      "evidence_policy": "edge",
+      "label": "depends on",
+      "purpose": "Represents a modern source-level dependency between Java types."
+    },
+    "DERIVED_FROM": {
+      "allowed_pairs": [
+        ["business_rule", "cobol_paragraph"],
+        ["business_rule", "cobol_program"],
+        ["business_rule", "copybook"]
+      ],
+      "category": "semantic-traceability",
+      "direction": "modernization claim to legacy evidence",
+      "evidence_policy": "edge",
+      "label": "derived from",
+      "purpose": "States that a curated business rule is supported by specific legacy source evidence."
+    },
+    "EXECUTES": {
+      "allowed_pairs": [
+        ["jcl_step", "cobol_program"],
+        ["jcl_step", "executable"]
+      ],
+      "category": "scheduling",
+      "direction": "job step to executable",
+      "evidence_policy": "edge",
+      "label": "executes",
+      "purpose": "Connects a JCL step to the program or utility named on its EXEC statement."
+    },
+    "HAS_DD": {
+      "allowed_pairs": [["jcl_step", "jcl_dd_allocation"]],
+      "category": "scheduling",
+      "direction": "job step to DD allocation",
+      "evidence_policy": "endpoint",
+      "label": "has DD",
+      "purpose": "Associates a JCL step with one of its DD allocation statements."
+    },
+    "HAS_RULE": {
+      "allowed_pairs": [["modernization_workload", "business_rule"]],
+      "category": "semantic-traceability",
+      "direction": "workload to rule",
+      "evidence_policy": "edge",
+      "label": "has rule",
+      "purpose": "Associates a modernization workload with a curated behavior claim in its semantic scope."
+    },
+    "HAS_SCENARIO": {
+      "allowed_pairs": [["modernization_workload", "verification_scenario"]],
+      "category": "verification",
+      "direction": "workload to verification scenario",
+      "evidence_policy": "edge",
+      "label": "has scenario",
+      "purpose": "Associates a workload with a public or verifier-private behavior scenario."
+    },
+    "IMPLEMENTED_BY": {
+      "allowed_pairs": [["business_rule", "java_method"]],
+      "category": "semantic-traceability",
+      "direction": "business rule to modern implementation",
+      "evidence_policy": "edge",
+      "label": "implemented by",
+      "purpose": "Maps a curated business rule to the modern Java method intended to implement it."
+    },
+    "LEGACY_ENTRYPOINT": {
+      "allowed_pairs": [["modernization_workload", "cobol_program"]],
+      "category": "semantic-traceability",
+      "direction": "workload to legacy entry point",
+      "evidence_policy": "edge",
+      "label": "legacy entry point",
+      "purpose": "Identifies the authoritative legacy program at the boundary of a modernization workload."
+    },
+    "MODERN_ENTRYPOINT": {
+      "allowed_pairs": [["modernization_workload", "java_type"]],
+      "category": "semantic-traceability",
+      "direction": "workload to modern entry point",
+      "evidence_policy": "edge",
+      "label": "modern entry point",
+      "purpose": "Identifies a modern application or batch configuration type that starts the replacement workload."
+    },
+    "READS": {
+      "allowed_pairs": [["cobol_paragraph", "cobol_file_handle"]],
+      "category": "data-lineage",
+      "direction": "code to consumed file handle",
+      "evidence_policy": "edge",
+      "label": "reads",
+      "purpose": "Records that a COBOL paragraph consumes records through the connected file handle."
+    },
+    "READS_WRITES": {
+      "allowed_pairs": [["cobol_paragraph", "cobol_file_handle"]],
+      "category": "data-lineage",
+      "direction": "code to updated file handle",
+      "evidence_policy": "edge",
+      "label": "reads and writes",
+      "purpose": "Records that a COBOL paragraph uses the connected file handle for both input and update operations."
+    },
+    "SCHEDULED_BY": {
+      "allowed_pairs": [["modernization_workload", "jcl_job"]],
+      "category": "scheduling",
+      "direction": "workload to scheduler artifact",
+      "evidence_policy": "edge",
+      "label": "scheduled by",
+      "purpose": "Maps a modernization workload to the legacy JCL job that schedules its execution."
+    },
+    "USES_COPYBOOK": {
+      "allowed_pairs": [["cobol_program", "copybook"]],
+      "category": "dependency",
+      "direction": "program to included data contract",
+      "evidence_policy": "edge",
+      "label": "uses copybook",
+      "purpose": "Records that a COBOL program imports and depends on the connected copybook."
+    },
+    "VERIFIED_BY": {
+      "allowed_pairs": [
+        ["business_rule", "test_case"],
+        ["business_rule", "verification_scenario"]
+      ],
+      "category": "verification",
+      "direction": "claim to verification asset",
+      "evidence_policy": "edge",
+      "label": "verified by",
+      "purpose": "Connects a business-rule claim to the test or scenario that supplies independent behavioral evidence."
+    },
+    "WRITES": {
+      "allowed_pairs": [["cobol_paragraph", "cobol_file_handle"]],
+      "category": "data-lineage",
+      "direction": "code to produced file handle",
+      "evidence_policy": "edge",
+      "label": "writes",
+      "purpose": "Records that a COBOL paragraph creates or updates records through the connected file handle."
+    }
+  },
+  "schema_version": "1.0"
+}

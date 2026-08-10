@@ -6,6 +6,7 @@ from typing import Any
 
 from .extractors import LEGACY_SOURCE_ID, MODERN_SOURCE_ID, extract_legacy, extract_modern
 from .model import KnowledgeGraph, evidence
+from .ontology import DEFAULT_ONTOLOGY_PATH, load_ontology, ontology_identity
 
 
 def build_graph(
@@ -14,7 +15,9 @@ def build_graph(
     manifest_path: Path,
     legacy_commit: str,
     modern_commit: str = "working-tree",
+    ontology_path: Path = DEFAULT_ONTOLOGY_PATH,
 ) -> KnowledgeGraph:
+    ontology = load_ontology(ontology_path)
     graph = KnowledgeGraph(
         "lightyear:carddemo-modernization",
         [
@@ -31,6 +34,7 @@ def build_graph(
                 "commit": modern_commit,
             },
         ],
+        ontology_identity(ontology),
     )
     extract_legacy(graph, legacy_root)
     extract_modern(graph, modern_root)
@@ -136,6 +140,7 @@ def write_receipt(graph_payload: dict[str, Any], path: Path) -> None:
         "receipt_type": "lightyear-knowledge-graph-build",
         "graph_id": graph_payload["graph_id"],
         "schema_version": graph_payload["schema_version"],
+        "relationship_ontology": graph_payload["relationship_ontology"],
         "content_sha256": graph_payload["content_sha256"],
         "sources": graph_payload["sources"],
         "statistics": graph_payload["statistics"],

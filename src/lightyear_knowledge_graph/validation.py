@@ -4,18 +4,22 @@ from collections import Counter
 from typing import Any
 
 from .model import SCHEMA_VERSION, graph_hash
+from .ontology import load_ontology, validate_graph_relationships
 
 
 ALLOWED_CONFIDENCE = {"observed", "asserted", "inferred", "verified"}
 REQUIRED_RULE_RELATIONS = {"DERIVED_FROM", "IMPLEMENTED_BY", "VERIFIED_BY"}
 
 
-def validate_graph(payload: dict[str, Any]) -> list[str]:
+def validate_graph(
+    payload: dict[str, Any], ontology: dict[str, Any] | None = None
+) -> list[str]:
     errors: list[str] = []
     if payload.get("schema_version") != SCHEMA_VERSION:
         errors.append(f"unsupported schema_version: {payload.get('schema_version')}")
     if payload.get("content_sha256") != graph_hash(payload):
         errors.append("content_sha256 does not match canonical graph content")
+    errors.extend(validate_graph_relationships(payload, ontology or load_ontology()))
 
     nodes = payload.get("nodes", [])
     edges = payload.get("edges", [])

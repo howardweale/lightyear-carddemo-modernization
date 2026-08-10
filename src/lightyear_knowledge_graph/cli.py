@@ -5,9 +5,17 @@ import json
 from pathlib import Path
 
 from .builder import build_graph, write_receipt
+from .evidence_pack import (
+    build_evidence_pack,
+    load_evidence_pack,
+    validate_evidence_pack,
+    write_evidence_pack,
+    write_evidence_receipt,
+)
 from .explorer import serve
 from .model import load_graph
 from .neo4j_export import export_neo4j
+from .ontology import DEFAULT_ONTOLOGY_PATH
 from .query import neighborhood, shortest_trace
 from .validation import rule_gaps, validate_graph
 
@@ -27,9 +35,26 @@ def build_parser() -> argparse.ArgumentParser:
     build.add_argument("--receipt", type=Path, default=Path("knowledge/graph.receipt.json"))
     build.add_argument("--legacy-commit", default=DEFAULT_LEGACY_COMMIT)
     build.add_argument("--modern-commit", default="working-tree")
+    build.add_argument("--ontology", type=Path, default=DEFAULT_ONTOLOGY_PATH)
+    build.add_argument(
+        "--evidence-pack", type=Path, default=Path("knowledge/evidence/source.pack.json.gz")
+    )
+    build.add_argument(
+        "--evidence-receipt", type=Path, default=Path("knowledge/evidence/source.receipt.json")
+    )
 
     validate = subparsers.add_parser("validate", help="Validate graph integrity and rule coverage")
     validate.add_argument("--graph", type=Path, default=Path("knowledge/graph.snapshot.json.gz"))
+
+    validate_evidence = subparsers.add_parser(
+        "validate-evidence", help="Validate source evidence capsules against the canonical graph"
+    )
+    validate_evidence.add_argument(
+        "--graph", type=Path, default=Path("knowledge/graph.snapshot.json.gz")
+    )
+    validate_evidence.add_argument(
+        "--evidence-pack", type=Path, default=Path("knowledge/evidence/source.pack.json.gz")
+    )
 
     stats = subparsers.add_parser("stats", help="Print graph statistics")
     stats.add_argument("--graph", type=Path, default=Path("knowledge/graph.snapshot.json.gz"))
@@ -60,9 +85,19 @@ def build_parser() -> argparse.ArgumentParser:
     compare.add_argument("--expected", type=Path, required=True)
     compare.add_argument("--actual", type=Path, required=True)
 
+    compare_evidence = subparsers.add_parser(
+        "compare-evidence-packs", help="Compare canonical source evidence pack identities"
+    )
+    compare_evidence.add_argument("--expected", type=Path, required=True)
+    compare_evidence.add_argument("--actual", type=Path, required=True)
+
     explorer = subparsers.add_parser("serve", help="Run the local LIGHTYEAR Graph Explorer")
     explorer.add_argument("--graph", type=Path, default=Path("knowledge/graph.snapshot.json.gz"))
     explorer.add_argument("--viewer-root", type=Path, default=Path("knowledge/viewer"))
+    explorer.add_argument("--ontology", type=Path, default=DEFAULT_ONTOLOGY_PATH)
+    explorer.add_argument(
+        "--evidence-pack", type=Path, default=Path("knowledge/evidence/source.pack.json.gz")
+    )
     explorer.add_argument("--host", default="127.0.0.1")
     explorer.add_argument("--port", type=int, default=8765)
     explorer.add_argument("--no-browser", action="store_true")
@@ -85,10 +120,33 @@ def main(argv: list[str] | None = None) -> int:
             args.manifest,
             args.legacy_commit,
             args.modern_commit,
+            args.ontology,
         )
         payload = graph.write(args.output)
         write_receipt(payload, args.receipt)
-        print(json.dumps({"output": str(args.output), **payload["statistics"], "content_sha256": payload["content_sha256"]}, indent=2, sort_keys=True))
+        evidence_payload = build_evidence_pack(
+            payload,
+            {
+                "source:aws-carddemo": args.legacy_root,
+                "source:lightyear-carddemo": args.modern_root,
+            },
+        )
+        write_evidence_pack(evidence_payload, args.evidence_pack)
+        write_evidence_receipt(evidence_payload, args.evidence_receipt)
+        print(
+            json.dumps(
+                {
+                    "content_sha256": payload["content_sha256"],
+                    "evidence_pack": str(args.evidence_pack),
+                    "evidence_pack_content_sha256": evidence_payload["content_sha256"],
+                    "evidence_statistics": evidence_payload["statistics"],
+                    "output": str(args.output),
+                    **payload["statistics"],
+                },
+                indent=2,
+                sort_keys=True,
+            )
+        )
         return 0
 
     if args.command == "compare-snapshots":
@@ -108,8 +166,33 @@ def main(argv: list[str] | None = None) -> int:
         )
         return 0 if matches else 1
 
+    if args.command == "compare-evidence-packs":
+        expected = load_evidence_pack(args.expected)
+        actual = load_evidence_pack(args.actual)
+        matches = expected.get("content_sha256") == actual.get("content_sha256")
+        print(
+            json.dumps(
+                {
+                    "actual_content_sha256": actual.get("content_sha256"),
+                    "expected_content_sha256": expected.get("content_sha256"),
+                    "status": "passed" if matches else "failed",
+                },
+                indent=2,
+                sort_keys=True,
+            )
+        )
+        return 0 if matches else 1
+
     if args.command == "serve":
-        serve(args.graph, args.viewer_root, args.host, args.port, not args.no_browser)
+        serve(
+            args.graph,
+            args.viewer_root,
+            args.host,
+            args.port,
+            not args.no_browser,
+            args.ontology,
+            args.evidence_pack,
+        )
         return 0
 
     payload = load_graph(args.graph)
@@ -120,6 +203,17 @@ def main(argv: list[str] | None = None) -> int:
     if args.command == "validate":
         errors = validate_graph(payload)
         print(json.dumps({"status": "passed" if not errors else "failed", "errors": errors}, indent=2, sort_keys=True))
+        return 0 if not errors else 1
+    if args.command == "validate-evidence":
+        evidence_payload = load_evidence_pack(args.evidence_pack)
+        errors = validate_evidence_pack(payload, evidence_payload)
+        print(
+            json.dumps(
+                {"errors": errors, "status": "passed" if not errors else "failed"},
+                indent=2,
+                sort_keys=True,
+            )
+        )
         return 0 if not errors else 1
     if args.command == "stats":
         print(json.dumps(payload["statistics"], indent=2, sort_keys=True))

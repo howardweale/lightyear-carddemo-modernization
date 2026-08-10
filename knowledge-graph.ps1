@@ -24,10 +24,14 @@ $env:PYTHONPATH = Join-Path $ProjectDir "src"
 $Manifest = Join-Path $ProjectDir "knowledge\mappings\carddemo-intcalc.json"
 $Snapshot = Join-Path $ProjectDir "knowledge\graph.snapshot.json.gz"
 $Receipt = Join-Path $ProjectDir "knowledge\graph.receipt.json"
+$Ontology = Join-Path $ProjectDir "knowledge\ontology\relationships.json"
+$EvidencePack = Join-Path $ProjectDir "knowledge\evidence\source.pack.json.gz"
+$EvidenceReceipt = Join-Path $ProjectDir "knowledge\evidence\source.receipt.json"
 
 if ($Action -eq "build") {
     & py -3.11 -m lightyear_knowledge_graph build `
         --legacy-root $LegacyRoot --modern-root $ProjectDir --manifest $Manifest `
+        --ontology $Ontology --evidence-pack $EvidencePack --evidence-receipt $EvidenceReceipt `
         --output $Snapshot --receipt $Receipt --legacy-commit $LegacyCommit `
         --modern-commit repository-content
     exit $LASTEXITCODE
@@ -37,20 +41,33 @@ if ($Action -eq "verify") {
     New-Item -ItemType Directory -Force -Path $Generated | Out-Null
     $GeneratedSnapshot = Join-Path $Generated "graph.snapshot.json.gz"
     $GeneratedReceipt = Join-Path $Generated "graph.receipt.json"
+    $GeneratedEvidencePack = Join-Path $Generated "source.pack.json.gz"
+    $GeneratedEvidenceReceipt = Join-Path $Generated "source.receipt.json"
     & py -3.11 -m lightyear_knowledge_graph build `
         --legacy-root $LegacyRoot --modern-root $ProjectDir --manifest $Manifest `
+        --ontology $Ontology --evidence-pack $GeneratedEvidencePack `
+        --evidence-receipt $GeneratedEvidenceReceipt `
         --output $GeneratedSnapshot --receipt $GeneratedReceipt --legacy-commit $LegacyCommit `
         --modern-commit repository-content
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
     & py -3.11 -m lightyear_knowledge_graph validate --graph $GeneratedSnapshot
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+    & py -3.11 -m lightyear_knowledge_graph validate-evidence `
+        --graph $GeneratedSnapshot --evidence-pack $GeneratedEvidencePack
+    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
     & py -3.11 -m lightyear_knowledge_graph gaps --graph $GeneratedSnapshot
+    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+    & py -3.11 -m lightyear_knowledge_graph compare-evidence-packs `
+        --expected $EvidencePack --actual $GeneratedEvidencePack
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
     & py -3.11 -m lightyear_knowledge_graph compare-snapshots `
         --expected $Snapshot --actual $GeneratedSnapshot
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
     if ((Get-FileHash $Receipt).Hash -ne (Get-FileHash $GeneratedReceipt).Hash) {
         throw "Knowledge graph receipt is stale; run .\knowledge-graph.ps1 build"
+    }
+    if ((Get-FileHash $EvidenceReceipt).Hash -ne (Get-FileHash $GeneratedEvidenceReceipt).Hash) {
+        throw "Source evidence receipt is stale; run .\knowledge-graph.ps1 build"
     }
     Write-Host "Knowledge graph snapshot is deterministic, current, and policy-complete."
     exit 0

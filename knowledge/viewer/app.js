@@ -7,6 +7,8 @@ const state = {
   chatHistory: [],
   selection: null,
   selectedId: null,
+  selectedEdgeId: null,
+  edgeDetail: null,
   positions: new Map(),
   zoom: { x: 0, y: 0, scale: 1 },
   drag: null,
@@ -128,6 +130,20 @@ function bindControls() {
     switchRightPanel("chat");
     $("chat-question").focus();
   });
+  $("ask-edge").addEventListener("click", () => {
+    switchRightPanel("chat");
+    $("chat-question").value = "Why does this relationship exist?";
+    $("chat-question").focus();
+  });
+  $("edge-source").addEventListener("click", () => inspectNode(state.edgeDetail.source));
+  $("edge-target").addEventListener("click", () => inspectNode(state.edgeDetail.target));
+  $("trace-edge").addEventListener("click", () => {
+    document.querySelectorAll(".edge").forEach((item) => {
+      item.classList.toggle("selected", item.dataset.id === state.selectedEdgeId);
+    });
+    fitGraph();
+  });
+  $("close-source").addEventListener("click", () => { $("source-drawer").hidden = true; });
   $("inspector-tab").addEventListener("click", () => switchRightPanel("inspector"));
   $("chat-tab").addEventListener("click", () => switchRightPanel("chat"));
   $("clear-chat").addEventListener("click", resetChat);
@@ -150,6 +166,10 @@ function bindControls() {
     searchTimer = setTimeout(runSearch, 180);
   });
   document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !$("source-drawer").hidden) {
+      $("source-drawer").hidden = true;
+      return;
+    }
     if (event.key === "/" && document.activeElement !== $("search")) {
       event.preventDefault();
       $("search").focus();
@@ -181,6 +201,8 @@ async function loadNeighborhood(nodeId, overrideDepth) {
       limit: 220,
     });
     state.selectedId = nodeId;
+    state.selectedEdgeId = null;
+    state.edgeDetail = null;
     $("selection-count").textContent = `${state.selection.nodes.length} nodes · ${state.selection.edges.length} links${state.selection.truncated ? " · bounded" : ""}`;
     renderGraph();
     await inspectNode(nodeId);
@@ -252,6 +274,16 @@ function renderGraph() {
     title.textContent = edge.relation;
     line.appendChild(title);
     $("edges").appendChild(line);
+    const hit = document.createElementNS(NS, "line");
+    hit.classList.add("edge-hit");
+    hit.dataset.id = edge.id;
+    hit.dataset.source = edge.source;
+    hit.dataset.target = edge.target;
+    hit.addEventListener("click", (event) => {
+      event.stopPropagation();
+      inspectEdge(edge.id);
+    });
+    $("edges").appendChild(hit);
   });
 
   nodes.forEach((node) => {
@@ -325,7 +357,7 @@ function updatePositions() {
     const point = state.positions.get(element.dataset.id);
     element.setAttribute("transform", `translate(${point.x},${point.y})`);
   });
-  document.querySelectorAll(".edge").forEach((element) => {
+  document.querySelectorAll(".edge, .edge-hit").forEach((element) => {
     const source = state.positions.get(element.dataset.source);
     const target = state.positions.get(element.dataset.target);
     element.setAttribute("x1", source.x);
@@ -339,10 +371,16 @@ async function inspectNode(nodeId) {
   try {
     const node = await api("/api/node", { id: nodeId, audience: $("audience").value });
     state.selectedId = nodeId;
+    state.selectedEdgeId = null;
+    state.edgeDetail = null;
     document.querySelectorAll(".node").forEach((item) => item.classList.toggle("active", item.dataset.id === nodeId));
-    document.querySelectorAll(".edge").forEach((item) => item.classList.toggle("active", item.dataset.source === nodeId || item.dataset.target === nodeId));
+    document.querySelectorAll(".edge").forEach((item) => {
+      item.classList.toggle("active", item.dataset.source === nodeId || item.dataset.target === nodeId);
+      item.classList.remove("selected");
+    });
     $("inspector-placeholder").hidden = true;
     $("inspector").hidden = false;
+    $("edge-inspector").hidden = true;
     $("detail-kind").textContent = node.kind.replaceAll("_", " ");
     $("detail-kind").style.background = colors[groupFor(node.kind)];
     $("detail-name").textContent = node.name;
@@ -351,9 +389,42 @@ async function inspectNode(nodeId) {
     $("detail-statement").textContent = statement;
     $("detail-statement").hidden = !statement;
     renderProperties(node.properties || {});
-    renderEvidence(node.evidence || []);
+    renderEvidence(node.evidence || [], "node", node.id, $("detail-evidence"));
     renderRelations(node);
     $("chat-focus").textContent = `${node.name} · ${node.kind.replaceAll("_", " ")}`;
+  } catch (error) {
+    setError(error);
+  }
+}
+
+async function inspectEdge(edgeId) {
+  try {
+    const edge = await api("/api/edge", { id: edgeId, audience: $("audience").value });
+    state.selectedId = null;
+    state.selectedEdgeId = edgeId;
+    state.edgeDetail = edge;
+    document.querySelectorAll(".node").forEach((item) => item.classList.remove("active"));
+    document.querySelectorAll(".edge").forEach((item) => {
+      item.classList.toggle("selected", item.dataset.id === edgeId);
+      item.classList.remove("active");
+    });
+    $("inspector-placeholder").hidden = true;
+    $("inspector").hidden = true;
+    $("edge-inspector").hidden = false;
+    $("edge-category").textContent = edge.definition.category.replaceAll("-", " ");
+    $("edge-name").textContent = edge.definition.label;
+    $("edge-id").textContent = edge.id;
+    $("edge-purpose").textContent = edge.definition.purpose;
+    $("edge-source").textContent = edge.source_node.name;
+    $("edge-source").title = edge.source;
+    $("edge-target").textContent = edge.target_node.name;
+    $("edge-target").title = edge.target;
+    $("edge-relation").textContent = `—${edge.relation}→`;
+    renderDefinition(edge.definition);
+    renderEdgeProperties(edge.properties || {});
+    renderSupportingEvidence(edge.supporting_evidence || [], $("edge-evidence"));
+    $("chat-focus").textContent = `${edge.source_node.name} —${edge.relation}→ ${edge.target_node.name}`;
+    switchRightPanel("inspector");
   } catch (error) {
     setError(error);
   }
@@ -373,22 +444,51 @@ function renderProperties(properties) {
   });
 }
 
-function renderEvidence(evidence) {
-  const container = $("detail-evidence");
+function renderEvidence(evidence, ownerType, ownerId, container) {
   container.replaceChildren();
   if (!evidence.length) {
-    container.textContent = "No node-level evidence; inspect connected derivation edges.";
+    container.textContent = "No direct evidence; inspect the endpoints and connected derivation edges.";
     return;
   }
-  evidence.forEach((item) => {
-    const card = document.createElement("div");
-    card.className = "evidence-card";
+  evidence.forEach((item, evidenceIndex) => {
+    const card = document.createElement("button");
+    card.type = "button";
+    card.className = "evidence-card clickable";
     const label = document.createElement("strong");
     label.textContent = `${item.confidence || "unclassified"} · ${item.method || "source"}`;
     const path = document.createElement("code");
     const lines = item.line_start ? `:${item.line_start}${item.line_end && item.line_end !== item.line_start ? `–${item.line_end}` : ""}` : "";
     path.textContent = `${item.path || item.source_id || "unknown"}${lines}`;
     card.append(label, path);
+    card.addEventListener("click", () => openEvidence(ownerType, ownerId, evidenceIndex));
+    container.appendChild(card);
+  });
+}
+
+function renderSupportingEvidence(records, container) {
+  container.replaceChildren();
+  if (!records.length) {
+    container.textContent = "No source evidence is attached to the relationship or its endpoints.";
+    return;
+  }
+  records.forEach((record) => {
+    const item = record.evidence;
+    const card = document.createElement("button");
+    card.type = "button";
+    card.className = "evidence-card clickable";
+    const label = document.createElement("strong");
+    label.textContent = `${record.role} · ${item.confidence || "unclassified"}`;
+    const path = document.createElement("code");
+    const lines = item.line_start
+      ? `:${item.line_start}${item.line_end && item.line_end !== item.line_start ? `–${item.line_end}` : ""}`
+      : "";
+    path.textContent = `${item.path || item.source_id || "unknown"}${lines}`;
+    card.append(label, path);
+    card.addEventListener("click", () => openEvidence(
+      record.owner_type,
+      record.owner_id,
+      record.evidence_index,
+    ));
     container.appendChild(card);
   });
 }
@@ -397,8 +497,8 @@ function renderRelations(node) {
   const container = $("detail-relations");
   container.replaceChildren();
   const relations = [
-    ...node.incoming.map((edge) => ({ relation: `← ${edge.relation}`, target: edge.source })),
-    ...node.outgoing.map((edge) => ({ relation: `${edge.relation} →`, target: edge.target })),
+    ...node.incoming.map((edge) => ({ id: edge.id, relation: `← ${edge.relation}`, target: edge.source })),
+    ...node.outgoing.map((edge) => ({ id: edge.id, relation: `${edge.relation} →`, target: edge.target })),
   ];
   if (!relations.length) {
     container.textContent = "No visible relationships.";
@@ -413,12 +513,85 @@ function renderRelations(node) {
     const target = document.createElement("span");
     target.textContent = item.target;
     button.append(relation, target);
-    button.addEventListener("click", () => {
-      if (state.positions.has(item.target)) inspectNode(item.target);
-      else loadNeighborhood(item.target);
-    });
+    button.title = "Inspect this relationship and its supporting source";
+    button.addEventListener("click", () => inspectEdge(item.id));
     container.appendChild(button);
   });
+}
+
+function renderDefinition(definition) {
+  const list = $("edge-semantics");
+  list.replaceChildren();
+  [
+    ["Purpose", definition.purpose],
+    ["Direction", definition.direction],
+    ["Category", definition.category],
+    ["Evidence", definition.evidence_policy],
+  ].forEach(([key, value]) => {
+    const term = document.createElement("dt");
+    term.textContent = key;
+    const description = document.createElement("dd");
+    description.textContent = value;
+    list.append(term, description);
+  });
+}
+
+function renderEdgeProperties(properties) {
+  const list = $("edge-properties");
+  list.replaceChildren();
+  const entries = Object.entries(properties);
+  $("edge-properties-section").hidden = !entries.length;
+  entries.forEach(([key, value]) => {
+    const term = document.createElement("dt");
+    term.textContent = key;
+    const description = document.createElement("dd");
+    description.textContent = typeof value === "object" ? JSON.stringify(value) : String(value);
+    list.append(term, description);
+  });
+}
+
+async function openEvidence(ownerType, ownerId, evidenceIndex) {
+  try {
+    const excerpt = await api("/api/evidence", {
+      owner_type: ownerType,
+      owner_id: ownerId,
+      evidence_index: evidenceIndex,
+      audience: $("audience").value,
+    });
+    $("source-title").textContent = `${excerpt.path}:${excerpt.line_start}–${excerpt.line_end}`;
+    const meta = $("source-meta");
+    meta.replaceChildren();
+    [
+      excerpt.source_id,
+      excerpt.language,
+      excerpt.confidence,
+      excerpt.method,
+      `file ${excerpt.file_sha256.slice(0, 12)}`,
+      `capsule ${excerpt.capsule_id.slice(8, 20)}`,
+    ].forEach((value) => {
+      const item = document.createElement("span");
+      item.textContent = value;
+      meta.appendChild(item);
+    });
+    const code = $("source-code");
+    code.replaceChildren();
+    excerpt.lines.forEach((line) => {
+      const row = document.createElement("span");
+      row.className = `source-line${line.highlighted ? " highlighted" : ""}`;
+      const number = document.createElement("span");
+      number.className = "source-line-number";
+      number.textContent = line.number;
+      const text = document.createElement("span");
+      text.className = "source-line-text";
+      text.textContent = line.text || " ";
+      row.append(number, text);
+      code.appendChild(row);
+    });
+    $("source-drawer").hidden = false;
+    code.focus();
+  } catch (error) {
+    setError(error);
+  }
 }
 
 function fitGraph() {
@@ -450,7 +623,7 @@ function bindPanZoom() {
     applyZoom();
   }, { passive: false });
   graph.addEventListener("pointerdown", (event) => {
-    if (event.target.closest?.(".node")) return;
+    if (event.target.closest?.(".node, .edge-hit")) return;
     state.drag = { type: "pan", x: event.clientX, y: event.clientY, originX: state.zoom.x, originY: state.zoom.y };
     graph.setPointerCapture(event.pointerId);
   });
@@ -535,6 +708,7 @@ async function submitChat(event) {
     const answer = await apiPost("/api/chat", {
       question,
       focus_node_id: state.selectedId,
+      focus_edge_id: state.selectedEdgeId,
       audience: $("audience").value,
       provider: $("chat-provider").value,
       depth: Number($("depth").value),
@@ -546,7 +720,10 @@ async function submitChat(event) {
     state.chatHistory.push({ role: "assistant", content: answer.answer });
     state.chatHistory = state.chatHistory.slice(-8);
     renderChatSuggestions(answer.follow_up_questions || []);
-    highlightGrounding(answer.grounding.node_ids || []);
+    highlightGrounding(
+      answer.grounding.node_ids || [],
+      answer.grounding.edge_ids || [],
+    );
   } catch (error) {
     loading.remove();
     appendChatMessage("assistant", `I could not answer that question. ${error.message}`);
@@ -649,10 +826,16 @@ function renderChatSuggestions(questions) {
   });
 }
 
-function highlightGrounding(nodeIds) {
+function highlightGrounding(nodeIds, edgeIds) {
   const grounded = new Set(nodeIds);
+  const groundedEdges = new Set(edgeIds);
   document.querySelectorAll(".node").forEach((item) => {
     item.classList.toggle("grounded", grounded.has(item.dataset.id));
+  });
+  document.querySelectorAll(".edge").forEach((item) => {
+    if (!item.classList.contains("selected")) {
+      item.classList.toggle("active", groundedEdges.has(item.dataset.id));
+    }
   });
 }
 

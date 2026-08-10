@@ -123,6 +123,33 @@
             <div id="detail-relations"></div>
           </section>
         </div>
+        <div id="edge-inspector" hidden>
+          <p id="edge-category" class="kind-pill"></p>
+          <h2 id="edge-name"></h2>
+          <code id="edge-id"></code>
+          <p id="edge-purpose" class="statement"></p>
+          <div class="relationship-direction" aria-label="Relationship direction">
+            <button id="edge-source" type="button"></button>
+            <strong id="edge-relation"></strong>
+            <button id="edge-target" type="button"></button>
+          </div>
+          <div class="button-stack">
+            <button id="ask-edge" class="primary-button" type="button">Ask about relationship</button>
+            <button id="trace-edge" class="secondary-button" type="button">Show endpoints</button>
+          </div>
+          <section>
+            <h3>Semantics</h3>
+            <dl id="edge-semantics"></dl>
+          </section>
+          <section id="edge-properties-section">
+            <h3>Properties</h3>
+            <dl id="edge-properties"></dl>
+          </section>
+          <section>
+            <h3>Supporting source</h3>
+            <div id="edge-evidence"></div>
+          </section>
+        </div>
       </div>
 
       <div id="chat-view" class="chat-view" hidden>
@@ -164,6 +191,17 @@
     <span>Canonical LIGHTYEAR snapshot</span>
     <span>Neo4j is an optional projection, not the source of truth.</span>
   </footer>
+  <aside id="source-drawer" class="source-drawer" hidden aria-label="Source evidence viewer">
+    <header>
+      <div>
+        <p class="eyebrow">CONTENT-ADDRESSED EVIDENCE</p>
+        <h2 id="source-title">Source</h2>
+      </div>
+      <button id="close-source" class="text-button" type="button">Close</button>
+    </header>
+    <div id="source-meta" class="source-meta"></div>
+    <pre id="source-code" class="source-code" tabindex="0"></pre>
+  </aside>
   <script src="app.js" defer></script>
 </body>
 </html>

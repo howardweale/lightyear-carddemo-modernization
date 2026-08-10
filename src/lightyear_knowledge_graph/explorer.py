@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import parse_qs, unquote, urlparse
 
+from .chat import ChatError, GraphChatService
 from .model import load_graph
 from .validation import rule_gaps
 
@@ -286,10 +287,12 @@ class ExplorerServer(ThreadingHTTPServer):
         address: tuple[str, int],
         index: GraphExplorerIndex,
         viewer_root: Path,
+        chat_service: GraphChatService | None = None,
     ) -> None:
         super().__init__(address, ExplorerRequestHandler)
         self.index = index
         self.viewer_root = viewer_root.resolve()
+        self.chat_service = chat_service or GraphChatService.from_environment(index)
 
 
 class ExplorerRequestHandler(BaseHTTPRequestHandler):
@@ -309,6 +312,20 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
         except Exception as exc:  # pragma: no cover - defensive HTTP boundary
             self._json({"error": f"Explorer request failed: {exc}"}, HTTPStatus.INTERNAL_SERVER_ERROR)
 
+    def do_POST(self) -> None:  # noqa: N802 - standard-library handler API
+        parsed = urlparse(self.path)
+        try:
+            if parsed.path == "/api/chat":
+                self._json(self.server.chat_service.answer(self._request_json()))
+                return
+            self._json({"error": f"Unknown API route: {parsed.path}"}, HTTPStatus.NOT_FOUND)
+        except KeyError as exc:
+            self._json({"error": f"Unknown graph node: {exc.args[0]}"}, HTTPStatus.NOT_FOUND)
+        except (ChatError, TypeError, ValueError, json.JSONDecodeError) as exc:
+            self._json({"error": str(exc)}, HTTPStatus.BAD_REQUEST)
+        except Exception as exc:  # pragma: no cover - defensive HTTP boundary
+            self._json({"error": f"Chat request failed: {exc}"}, HTTPStatus.INTERNAL_SERVER_ERROR)
+
     def log_message(self, format: str, *args: Any) -> None:
         return
 
@@ -316,6 +333,9 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
         index = self.server.index
         if path == "/api/meta":
             self._json(index.metadata())
+            return
+        if path == "/api/chat/status":
+            self._json(self.server.chat_service.status())
             return
         if path == "/api/search":
             self._json(
@@ -386,6 +406,20 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
         self.send_header("Cache-Control", "no-store")
         self.end_headers()
         self.wfile.write(body)
+
+    def _request_json(self) -> dict[str, Any]:
+        content_length = int(self.headers.get("Content-Length", "0"))
+        if content_length <= 0:
+            raise ChatError("Request body is required.")
+        if content_length > 65536:
+            raise ChatError("Request body exceeds the 64 KiB limit.")
+        content_type = self.headers.get("Content-Type", "")
+        if "application/json" not in content_type:
+            raise ChatError("Content-Type must be application/json.")
+        payload = json.loads(self.rfile.read(content_length).decode("utf-8"))
+        if not isinstance(payload, dict):
+            raise ChatError("Request body must be a JSON object.")
+        return payload
 
     @staticmethod
     def _value(query: dict[str, list[str]], key: str, required: bool = False) -> str:

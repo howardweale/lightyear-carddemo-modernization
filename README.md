@@ -1,14 +1,15 @@
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.4.0 — visual graph explorer and optional Neo4j projection**
+Release: **v0.5.0 — evidence-grounded graph chat**
 
 An evidence-aware knowledge graph, source-faithful local oracle, differential harness, and
 Java/Spring Batch candidate for AWS CardDemo. Together they form the first engineering cell of a
 verified modernization factory.
 
-v0.4 makes the factory model directly explorable in a local browser and adds a deterministic
-Neo4j projection. The canonical graph remains LIGHTYEAR-controlled, portable, content-addressed,
-and independent of any graph database.
+v0.5 adds node-aware natural-language questions to the visual explorer. Answers are built from a
+bounded, audience-filtered evidence package and return citations, confidence, limitations, and the
+exact supporting graph identity. A deterministic local provider works offline; an optional OpenAI
+provider supplies higher-quality synthesis through strict structured output.
 
 The oracle runs on Windows, macOS, or Linux with Python 3.11 or newer and has no runtime
 dependencies outside the Python standard library. The candidate uses Java 17, Spring Boot 4.1,
@@ -25,11 +26,13 @@ legacy source to business rules, Java implementation, and verification scenarios
 2. Maps `INTCALC` business rules from COBOL evidence to Java code and independent tests.
 3. Produces audience-filtered context packages so implementers cannot see private verifier assets.
 4. Serves bounded, searchable visual perspectives of the graph from a local web application.
-5. Exports a lossless, disposable Neo4j projection without surrendering graph ownership.
-6. Reads CardDemo-compatible fixed-width ASCII datasets and COBOL signed zoned decimals.
-7. Executes the source-faithful `CBACT04C` interest-calculation behavior.
-8. Writes canonical output and hashed evidence receipts.
-9. Compares the modernization candidate with the oracle exactly on business fields.
+5. Answers who, what, where, when, why, how, impact, lineage, and verification questions about
+   selected nodes or the estate.
+6. Exports a lossless, disposable Neo4j projection without surrendering graph ownership.
+7. Reads CardDemo-compatible fixed-width ASCII datasets and COBOL signed zoned decimals.
+8. Executes the source-faithful `CBACT04C` interest-calculation behavior.
+9. Writes canonical output and hashed evidence receipts.
+10. Compares the modernization candidate with the oracle exactly on business fields.
 
 The included `candidate-java` module is the first modernization candidate. It consumes and emits
 the same fixed-width records as the oracle, including COBOL signed zoned decimals.
@@ -109,6 +112,31 @@ to the local machine by default and uses Python's standard library; it does not 
 
 Do not expose the verifier view to implementation agents. It includes private holdout metadata.
 The current local audience selector demonstrates the policy boundary; it is not authentication.
+
+### Grounded graph chat
+
+Open the **Ask graph** tab, select a node, and ask questions such as:
+
+- `What is the monthly interest rule?`
+- `Where does INTCALC read and write data?`
+- `Why is the final-account behavior preserved?`
+- `How does INTCALC work end to end?`
+- `What would be affected if the account copybook changed?`
+- `What evidence verifies this node?`
+
+Grounded local mode is available immediately. To enable higher-quality model synthesis, set an API
+key only in the terminal that launches the server:
+
+```bash
+export OPENAI_API_KEY="your-api-key"
+export LIGHTYEAR_OPENAI_MODEL="gpt-5.6"
+./graph-explorer.sh
+```
+
+The key never reaches the browser. The OpenAI request contains only a bounded evidence package and
+short conversation history, uses strict JSON Schema output, and disables API response storage.
+Answers are rejected if they cite evidence outside their retrieval package. See
+`knowledge/chat/README.md` for the answer pipeline, quality contract, and production security gaps.
 
 ### Optional Neo4j projection
 
@@ -236,7 +264,7 @@ Once a candidate can pass the visible cases:
 2. Add private holdout fixtures and mutation tests under the verifier-only boundary.
 3. Expand verified rule mappings to the posting and statement-generation workloads.
 4. Put separate implementation and inspection agents behind authenticated, signed graph context
-   packages rather than the v0.4 local audience selector.
+   and answer packages rather than the local audience selector.
 5. Retain graph deltas, decisions, failed attempts, and verification outcomes as compounding memory.
 6. Route structured differences through an automated repair loop.
 7. Issue a LIGHTYEAR acceptance receipt only after structural, behavioral, security, and private

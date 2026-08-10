@@ -1,0 +1,28 @@
+{
+  "name": "carddemo-interest-calculation",
+  "oracle_kind": "source-faithful-local",
+  "upstream": {
+    "repository": "https://github.com/aws-samples/aws-mainframe-modernization-carddemo",
+    "commit": "59cc6c2fd7ebd7ef7925cad552a01a4b8b6e4d5e",
+    "program": "app/cbl/CBACT04C.cbl",
+    "jcl": "app/jcl/INTCALC.jcl"
+  },
+  "inputs": [
+    {"name": "tcatbal.txt", "copybook": "CVTRA01Y", "record_length": 50},
+    {"name": "discgrp.txt", "copybook": "CVTRA02Y", "record_length": 50},
+    {"name": "cardxref.txt", "copybook": "CVACT03Y", "record_length": 50},
+    {"name": "acctdata.txt", "copybook": "CVACT01Y", "record_length": 300}
+  ],
+  "outputs": [
+    {"name": "acctdata.txt", "copybook": "CVACT01Y", "record_length": 300},
+    {"name": "transactions.txt", "copybook": "CVTRA05Y", "record_length": 350},
+    {"name": "canonical.json"},
+    {"name": "receipt.json"}
+  ],
+  "equivalence": {
+    "timestamps": "ignored by the comparator",
+    "decimals": "exact after COBOL scale truncation",
+    "records": "keyed by account_id or transaction_id",
+    "default_final_account_policy": "source-faithful"
+  }
+}

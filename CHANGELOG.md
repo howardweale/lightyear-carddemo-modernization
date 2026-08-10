@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.4.0 — 2026-08-10
+
+- Added a locally executable LIGHTYEAR Graph Explorer with no third-party runtime dependencies.
+- Added five curated exploration perspectives for workload, rule, JCL lineage, data contract, and
+  discovered edge-case analysis.
+- Added bounded search, node inspection, evidence display, pan, zoom, depth selection, and graph
+  focus controls for the 10,000-node estate.
+- Enforced implementer/verifier visibility across search, direct lookup, neighborhoods, and traces.
+- Added a deterministic, lossless Neo4j CSV projection with graph identity and row-count receipts.
+- Added Neo4j import guidance and explicit source-of-truth and private-evidence boundaries.
+- Added HTTP, privacy, bounding, explorer, and Neo4j projection tests to the verification suite.
+
 ## 0.3.0 — 2026-08-10
 
 - Added a deterministic, evidence-aware knowledge graph for the complete pinned AWS CardDemo estate.

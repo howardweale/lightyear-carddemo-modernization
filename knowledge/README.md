@@ -35,8 +35,8 @@ database—is the durable advantage.
 | Verification | scenarios, tests, mutations, differential results | independent verifier |
 | Governance | visibility, confidence, policy decisions, receipts | factory policy engine |
 
-Only the structural, semantic-mapping, and initial verification layers are implemented in this
-release. Runtime truth is the most important next addition.
+The structural, semantic-mapping, initial verification, local exploration, and database-projection
+layers are implemented in this release. Runtime truth is the most important next addition.
 
 ## Trust model
 
@@ -79,10 +79,12 @@ Core relations include `CONTAINS`, `CALLS`, `USES_COPYBOOK`, `EXECUTES`, `ALLOCA
 - `graph.receipt.json`: content hash, sources, and counts suitable for CI evidence;
 - `schema/graph.schema.json`: portable JSON Schema contract;
 - `mappings/carddemo-intcalc.json`: curated semantic and verification mappings.
+- `viewer/`: locally served, dependency-free visual explorer;
+- `neo4j/README.md`: optional Neo4j projection and import contract.
 
-The graph uses plain JSON and the Python standard library so it remains portable. A future graph
-service can import the same snapshot into Neo4j, Amazon Neptune, PostgreSQL/Apache AGE, or another
-engine without making that database the source of truth.
+The graph uses plain JSON and the Python standard library so it remains portable. v0.4 can export
+the same snapshot into Neo4j without making that database the source of truth; Amazon Neptune,
+PostgreSQL/Apache AGE, or another engine can be supported through additional projections.
 
 ## Commands
 
@@ -98,7 +100,18 @@ PYTHONPATH=src python3 -m lightyear_knowledge_graph impact \
 PYTHONPATH=src python3 -m lightyear_knowledge_graph trace \
   --from legacy:cobol-paragraph:CBACT04C:1300-COMPUTE-INTEREST \
   --to modern:test:ai.lightyear.carddemo.service.InterestCalculationServiceTest#matchesInterestAndDefaultRateRules
+
+./graph-explorer.sh
+
+PYTHONPATH=src python3 -m lightyear_knowledge_graph export-neo4j \
+  --output-dir work/neo4j-export
 ```
+
+The explorer serves only on `127.0.0.1` by default. It queries bounded subgraphs and never attempts
+to render the entire estate. Its implementer view filters verifier-private entities across search,
+direct node reads, neighborhoods, and traces. The local selector is a policy demonstration, not an
+authentication system; production use still requires identity, authorization, auditing, and signed
+context receipts.
 
 `verify` rebuilds from the pinned upstream commit, validates graph integrity and mapping coverage,
 and byte-compares the result with the committed snapshot. CI therefore fails when source,

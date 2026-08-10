@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LIGHTYEAR Graph Explorer</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="masthead">
+    <div>
+      <p class="eyebrow">LIGHTYEAR / MODERNIZATION INTELLIGENCE</p>
+      <h1>Graph Explorer</h1>
+    </div>
+    <div class="status" aria-live="polite">
+      <span id="status-dot" class="status-dot"></span>
+      <span id="status-text">Connecting to graph</span>
+    </div>
+  </header>
+
+  <section class="metrics" aria-label="Graph statistics">
+    <div><strong id="metric-nodes">—</strong><span>entities</span></div>
+    <div><strong id="metric-edges">—</strong><span>relationships</span></div>
+    <div><strong id="metric-rules">—</strong><span>business rules</span></div>
+    <div><strong id="metric-hash">—</strong><span>snapshot identity</span></div>
+  </section>
+
+  <main class="workspace">
+    <aside class="left-panel panel">
+      <section>
+        <label for="perspective">Perspective</label>
+        <select id="perspective"></select>
+        <p id="perspective-description" class="hint"></p>
+      </section>
+
+      <section class="control-row">
+        <div>
+          <label for="depth">Depth</label>
+          <select id="depth">
+            <option value="1">1 hop</option>
+            <option value="2">2 hops</option>
+            <option value="3">3 hops</option>
+            <option value="4">4 hops</option>
+          </select>
+        </div>
+        <div>
+          <label for="audience">View</label>
+          <select id="audience">
+            <option value="implementer">Implementer</option>
+            <option value="verifier">Verifier</option>
+          </select>
+        </div>
+      </section>
+
+      <section>
+        <label for="search">Find an entity</label>
+        <div class="search-box">
+          <input id="search" type="search" placeholder="Program, field, rule…" autocomplete="off">
+          <kbd>/</kbd>
+        </div>
+        <div id="search-results" class="search-results" aria-live="polite"></div>
+      </section>
+
+      <section>
+        <div class="section-heading">
+          <span>Legend</span>
+          <button id="fit" class="text-button" type="button">Fit graph</button>
+        </div>
+        <div id="legend" class="legend"></div>
+      </section>
+    </aside>
+
+    <section class="graph-panel" aria-label="Knowledge graph visualization">
+      <div class="graph-toolbar">
+        <span id="graph-title">Loading perspective…</span>
+        <span id="selection-count"></span>
+      </div>
+      <svg id="graph" role="img" aria-label="Interactive knowledge graph">
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="16" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z"></path>
+          </marker>
+        </defs>
+        <g id="viewport">
+          <g id="edges"></g>
+          <g id="nodes"></g>
+        </g>
+      </svg>
+      <div id="empty-state" class="empty-state" hidden></div>
+    </section>
+
+    <aside class="right-panel panel">
+      <div id="inspector-placeholder" class="placeholder">
+        <span class="placeholder-mark">◎</span>
+        <h2>Inspect an entity</h2>
+        <p>Select a node to see its meaning, properties, evidence, and relationships.</p>
+      </div>
+      <div id="inspector" hidden>
+        <p id="detail-kind" class="kind-pill"></p>
+        <h2 id="detail-name"></h2>
+        <code id="detail-id"></code>
+        <p id="detail-statement" class="statement"></p>
+        <button id="focus-node" class="primary-button" type="button">Focus this entity</button>
+        <section id="properties-section">
+          <h3>Properties</h3>
+          <dl id="detail-properties"></dl>
+        </section>
+        <section>
+          <h3>Evidence</h3>
+          <div id="detail-evidence"></div>
+        </section>
+        <section>
+          <h3>Relationships</h3>
+          <div id="detail-relations"></div>
+        </section>
+      </div>
+    </aside>
+  </main>
+
+  <footer>
+    <span>Canonical LIGHTYEAR snapshot</span>
+    <span>Neo4j is an optional projection, not the source of truth.</span>
+  </footer>
+  <script src="app.js" defer></script>
+</body>
+</html>

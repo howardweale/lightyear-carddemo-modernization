@@ -5,7 +5,9 @@ import json
 from pathlib import Path
 
 from .builder import build_graph, write_receipt
+from .explorer import serve
 from .model import load_graph
+from .neo4j_export import export_neo4j
 from .query import neighborhood, shortest_trace
 from .validation import rule_gaps, validate_graph
 
@@ -57,6 +59,20 @@ def build_parser() -> argparse.ArgumentParser:
     )
     compare.add_argument("--expected", type=Path, required=True)
     compare.add_argument("--actual", type=Path, required=True)
+
+    explorer = subparsers.add_parser("serve", help="Run the local LIGHTYEAR Graph Explorer")
+    explorer.add_argument("--graph", type=Path, default=Path("knowledge/graph.snapshot.json.gz"))
+    explorer.add_argument("--viewer-root", type=Path, default=Path("knowledge/viewer"))
+    explorer.add_argument("--host", default="127.0.0.1")
+    explorer.add_argument("--port", type=int, default=8765)
+    explorer.add_argument("--no-browser", action="store_true")
+
+    neo4j = subparsers.add_parser(
+        "export-neo4j",
+        help="Export a deterministic Neo4j CSV projection",
+    )
+    neo4j.add_argument("--graph", type=Path, default=Path("knowledge/graph.snapshot.json.gz"))
+    neo4j.add_argument("--output-dir", type=Path, default=Path("work/neo4j-export"))
     return parser
 
 
@@ -92,7 +108,15 @@ def main(argv: list[str] | None = None) -> int:
         )
         return 0 if matches else 1
 
+    if args.command == "serve":
+        serve(args.graph, args.viewer_root, args.host, args.port, not args.no_browser)
+        return 0
+
     payload = load_graph(args.graph)
+    if args.command == "export-neo4j":
+        receipt = export_neo4j(payload, args.output_dir)
+        print(json.dumps({"output": str(args.output_dir), **receipt}, indent=2, sort_keys=True))
+        return 0
     if args.command == "validate":
         errors = validate_graph(payload)
         print(json.dumps({"status": "passed" if not errors else "failed", "errors": errors}, indent=2, sort_keys=True))

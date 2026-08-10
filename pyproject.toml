@@ -4,14 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "lightyear-carddemo-oracle"
-version = "0.1.0"
-description = "Source-faithful local oracle and differential harness for CardDemo INTCALC"
+version = "0.3.0"
+description = "Evidence-aware modernization graph, local oracle, and differential harness for CardDemo"
 requires-python = ">=3.11"
 dependencies = []
 
 [project.scripts]
 carddemo-oracle = "carddemo_oracle.cli:main"
+lightyear-graph = "lightyear_knowledge_graph.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
-

@@ -1,0 +1,69 @@
+{
+  "content_sha256": "1fe091266622bf41349b18be43c207b6939fdf39561d71dcb921efaa80af381c",
+  "graph_id": "lightyear:carddemo-modernization",
+  "receipt_type": "lightyear-knowledge-graph-build",
+  "schema_version": "1.0",
+  "sources": [
+    {
+      "commit": "59cc6c2fd7ebd7ef7925cad552a01a4b8b6e4d5e",
+      "id": "source:aws-carddemo",
+      "kind": "git_repository",
+      "repository": "https://github.com/aws-samples/aws-mainframe-modernization-carddemo"
+    },
+    {
+      "commit": "repository-content",
+      "id": "source:lightyear-carddemo",
+      "kind": "git_repository",
+      "repository": "https://github.com/howardweale/lightyear-carddemo-modernization"
+    }
+  ],
+  "statistics": {
+    "edge_count": 11841,
+    "edges_by_relation": {
+      "ALLOCATES": 207,
+      "ASSIGNED_TO": 56,
+      "BINDS": 451,
+      "CALLS": 998,
+      "CONTAINS": 8809,
+      "DECLARES": 225,
+      "DEPENDS_ON": 22,
+      "DERIVED_FROM": 11,
+      "EXECUTES": 120,
+      "HAS_DD": 451,
+      "HAS_RULE": 9,
+      "HAS_SCENARIO": 3,
+      "IMPLEMENTED_BY": 13,
+      "LEGACY_ENTRYPOINT": 1,
+      "MODERN_ENTRYPOINT": 2,
+      "READS": 67,
+      "READS_WRITES": 3,
+      "SCHEDULED_BY": 1,
+      "USES_COPYBOOK": 354,
+      "VERIFIED_BY": 19,
+      "WRITES": 19
+    },
+    "node_count": 10098,
+    "nodes_by_kind": {
+      "business_rule": 9,
+      "cobol_field": 7817,
+      "cobol_file_handle": 56,
+      "cobol_paragraph": 927,
+      "cobol_program": 54,
+      "copybook": 75,
+      "dataset": 99,
+      "executable": 11,
+      "java_method": 59,
+      "java_type": 15,
+      "jcl_dd_allocation": 451,
+      "jcl_dd_name": 104,
+      "jcl_job": 46,
+      "jcl_procedure": 2,
+      "jcl_step": 119,
+      "modernization_workload": 1,
+      "software_dependency": 5,
+      "source_file": 239,
+      "test_case": 6,
+      "verification_scenario": 3
+    }
+  }
+}

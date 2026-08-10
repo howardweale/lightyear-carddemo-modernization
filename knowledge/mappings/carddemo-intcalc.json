@@ -1,0 +1,252 @@
+{
+  "schema_version": "1.0",
+  "workloads": [
+    {
+      "id": "workload:carddemo-intcalc",
+      "name": "CardDemo interest calculation",
+      "status": "verified-candidate",
+      "visibility": "shared",
+      "legacy_entrypoints": [
+        "legacy:cobol-program:CBACT04C"
+      ],
+      "modern_entrypoints": [
+        "modern:java-type:ai.lightyear.carddemo.service.InterestCalculationService",
+        "modern:java-type:ai.lightyear.carddemo.batch.InterestCalculationTasklet"
+      ],
+      "scheduled_by": [
+        "legacy:jcl-job:INTCALC"
+      ],
+      "scenarios": [
+        {
+          "id": "scenario:intcalc:synthetic-differential",
+          "name": "Synthetic source-faithful differential run",
+          "kind": "differential",
+          "status": "passing",
+          "visibility": "shared"
+        },
+        {
+          "id": "scenario:intcalc:upstream-ascii-differential",
+          "name": "Pinned upstream ASCII differential run",
+          "kind": "differential",
+          "status": "passing",
+          "visibility": "shared"
+        },
+        {
+          "id": "scenario:intcalc:private-holdout-boundary",
+          "name": "Private legacy execution holdouts",
+          "kind": "differential-holdout",
+          "status": "planned",
+          "visibility": "inspector_private"
+        }
+      ],
+      "rules": [
+        {
+          "id": "rule:intcalc:account-boundary",
+          "name": "Group category balances by account",
+          "statement": "When the account identifier changes, persist the previous account total, reset accumulated interest, and load the new account and card cross-reference.",
+          "confidence": "observed",
+          "derived_from": [
+            {
+              "node": "legacy:cobol-program:CBACT04C",
+              "path": "app/cbl/CBACT04C.cbl",
+              "line_start": 194,
+              "line_end": 205
+            }
+          ],
+          "implemented_by": [
+            "modern:java-method:ai.lightyear.carddemo.service.InterestCalculationService#calculate"
+          ],
+          "verified_by": [
+            "modern:test:ai.lightyear.carddemo.service.InterestCalculationServiceTest#matchesInterestAndDefaultRateRules",
+            "scenario:intcalc:synthetic-differential"
+          ]
+        },
+        {
+          "id": "rule:intcalc:disclosure-rate",
+          "name": "Resolve account-group disclosure rate",
+          "statement": "Use the account group, transaction type, and category to obtain the applicable annual disclosure rate.",
+          "confidence": "observed",
+          "derived_from": [
+            {
+              "node": "legacy:cobol-program:CBACT04C",
+              "path": "app/cbl/CBACT04C.cbl",
+              "line_start": 210,
+              "line_end": 213
+            }
+          ],
+          "implemented_by": [
+            "modern:java-method:ai.lightyear.carddemo.service.InterestCalculationService#calculate"
+          ],
+          "verified_by": [
+            "modern:test:ai.lightyear.carddemo.service.InterestCalculationServiceTest#matchesInterestAndDefaultRateRules",
+            "scenario:intcalc:upstream-ascii-differential"
+          ]
+        },
+        {
+          "id": "rule:intcalc:default-rate",
+          "name": "Fallback to the default disclosure group",
+          "statement": "If the account-group disclosure is missing, retry the lookup using the DEFAULT group and fail if that record is also missing.",
+          "confidence": "observed",
+          "derived_from": [
+            {
+              "node": "legacy:cobol-paragraph:CBACT04C:1200-GET-INTEREST-RATE",
+              "path": "app/cbl/CBACT04C.cbl",
+              "line_start": 415,
+              "line_end": 459
+            }
+          ],
+          "implemented_by": [
+            "modern:java-method:ai.lightyear.carddemo.service.InterestCalculationService#calculate"
+          ],
+          "verified_by": [
+            "modern:test:ai.lightyear.carddemo.service.InterestCalculationServiceTest#matchesInterestAndDefaultRateRules",
+            "scenario:intcalc:synthetic-differential"
+          ]
+        },
+        {
+          "id": "rule:intcalc:zero-rate",
+          "name": "Skip zero-rate categories",
+          "statement": "A zero disclosure rate creates no interest transaction and contributes no interest to the account.",
+          "confidence": "observed",
+          "derived_from": [
+            {
+              "node": "legacy:cobol-program:CBACT04C",
+              "path": "app/cbl/CBACT04C.cbl",
+              "line_start": 214,
+              "line_end": 217
+            }
+          ],
+          "implemented_by": [
+            "modern:java-method:ai.lightyear.carddemo.service.InterestCalculationService#calculate"
+          ],
+          "verified_by": [
+            "modern:test:ai.lightyear.carddemo.service.InterestCalculationServiceTest#zeroRateEmitsNoTransaction"
+          ]
+        },
+        {
+          "id": "rule:intcalc:monthly-interest",
+          "name": "Calculate monthly interest",
+          "statement": "Monthly interest is category balance multiplied by annual percentage rate, divided by 1200, and represented with COBOL-compatible two-decimal truncation.",
+          "confidence": "observed",
+          "derived_from": [
+            {
+              "node": "legacy:cobol-paragraph:CBACT04C:1300-COMPUTE-INTEREST",
+              "path": "app/cbl/CBACT04C.cbl",
+              "line_start": 462,
+              "line_end": 468
+            }
+          ],
+          "implemented_by": [
+            "modern:java-method:ai.lightyear.carddemo.service.InterestCalculationService#calculate"
+          ],
+          "verified_by": [
+            "modern:test:ai.lightyear.carddemo.service.InterestCalculationServiceTest#matchesInterestAndDefaultRateRules",
+            "scenario:intcalc:upstream-ascii-differential"
+          ]
+        },
+        {
+          "id": "rule:intcalc:interest-transaction",
+          "name": "Emit an interest transaction",
+          "statement": "For every non-zero monthly interest amount, write a system transaction with a deterministic processing-date identifier and the account card number.",
+          "confidence": "observed",
+          "derived_from": [
+            {
+              "node": "legacy:cobol-paragraph:CBACT04C:1300-B-WRITE-TX",
+              "path": "app/cbl/CBACT04C.cbl",
+              "line_start": 473,
+              "line_end": 500
+            }
+          ],
+          "implemented_by": [
+            "modern:java-method:ai.lightyear.carddemo.service.InterestCalculationService#calculate"
+          ],
+          "verified_by": [
+            "modern:test:ai.lightyear.carddemo.service.InterestCalculationServiceTest#matchesInterestAndDefaultRateRules",
+            "scenario:intcalc:synthetic-differential"
+          ]
+        },
+        {
+          "id": "rule:intcalc:account-update",
+          "name": "Apply accumulated interest and reset cycle totals",
+          "statement": "Add accumulated interest to the current balance, reset current-cycle credit and debit to zero, and rewrite the account record.",
+          "confidence": "observed",
+          "derived_from": [
+            {
+              "node": "legacy:cobol-paragraph:CBACT04C:1050-UPDATE-ACCOUNT",
+              "path": "app/cbl/CBACT04C.cbl",
+              "line_start": 350,
+              "line_end": 356
+            }
+          ],
+          "implemented_by": [
+            "modern:java-method:ai.lightyear.carddemo.service.InterestCalculationService#calculate"
+          ],
+          "verified_by": [
+            "modern:test:ai.lightyear.carddemo.service.InterestCalculationServiceTest#matchesInterestAndDefaultRateRules",
+            "scenario:intcalc:synthetic-differential"
+          ]
+        },
+        {
+          "id": "rule:intcalc:source-final-account",
+          "name": "Preserve source final-account EOF behavior",
+          "statement": "In source-faithful mode, the account associated with the final input row is not rewritten because EOF is set after the enclosing branch was evaluated.",
+          "confidence": "observed",
+          "derived_from": [
+            {
+              "node": "legacy:cobol-program:CBACT04C",
+              "path": "app/cbl/CBACT04C.cbl",
+              "line_start": 188,
+              "line_end": 221
+            },
+            {
+              "node": "legacy:cobol-paragraph:CBACT04C:1000-TCATBALF-GET-NEXT",
+              "path": "app/cbl/CBACT04C.cbl",
+              "line_start": 325,
+              "line_end": 340
+            }
+          ],
+          "implemented_by": [
+            "modern:java-method:ai.lightyear.carddemo.service.InterestCalculationService#calculate"
+          ],
+          "verified_by": [
+            "modern:test:ai.lightyear.carddemo.service.InterestCalculationServiceTest#matchesInterestAndDefaultRateRules",
+            "modern:test:ai.lightyear.carddemo.service.InterestCalculationServiceTest#intendedPolicyUpdatesFinalAccount",
+            "scenario:intcalc:synthetic-differential"
+          ]
+        },
+        {
+          "id": "rule:intcalc:fixed-width-contract",
+          "name": "Preserve fixed-width record contracts",
+          "statement": "Read and write the account, disclosure, cross-reference, category-balance, and transaction layouts with their pinned field positions and COBOL signed-zoned decimal representation.",
+          "confidence": "asserted",
+          "derived_from": [
+            {
+              "node": "legacy:copybook:CVACT01Y",
+              "path": "app/cpy/CVACT01Y.cpy",
+              "line_start": 1,
+              "line_end": 80
+            },
+            {
+              "node": "legacy:copybook:CVTRA05Y",
+              "path": "app/cpy/CVTRA05Y.cpy",
+              "line_start": 1,
+              "line_end": 80
+            }
+          ],
+          "implemented_by": [
+            "modern:java-method:ai.lightyear.carddemo.codec.CardDemoRecordCodec#parseAccount",
+            "modern:java-method:ai.lightyear.carddemo.codec.CardDemoRecordCodec#renderAccount",
+            "modern:java-method:ai.lightyear.carddemo.codec.CardDemoRecordCodec#renderTransaction",
+            "modern:java-method:ai.lightyear.carddemo.codec.ZonedDecimal#decode",
+            "modern:java-method:ai.lightyear.carddemo.codec.ZonedDecimal#encode"
+          ],
+          "verified_by": [
+            "modern:test:ai.lightyear.carddemo.codec.ZonedDecimalTest#positiveRoundTrip",
+            "modern:test:ai.lightyear.carddemo.codec.ZonedDecimalTest#negativeRoundTrip",
+            "scenario:intcalc:upstream-ascii-differential"
+          ]
+        }
+      ]
+    }
+  ]
+}

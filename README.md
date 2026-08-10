@@ -1,21 +1,29 @@
-# LIGHTYEAR CardDemo Local Oracle
+# LIGHTYEAR CardDemo Modernization Factory
 
-A source-faithful, locally executable oracle, differential harness, and Java/Spring Batch candidate
-for the CardDemo `INTCALC` batch workload. It is the first engineering slice of a verified
-modernization factory.
+Release: **v0.3.0 — evidence-aware knowledge graph foundation**
+
+An evidence-aware knowledge graph, source-faithful local oracle, differential harness, and
+Java/Spring Batch candidate for AWS CardDemo. Together they form the first engineering cell of a
+verified modernization factory.
 
 The oracle runs on Windows, macOS, or Linux with Python 3.11 or newer and has no runtime
 dependencies outside the Python standard library. The candidate uses Java 17, Spring Boot 4.1,
 Spring Batch 6, Maven Wrapper, and an in-memory H2 Batch metadata store.
 
+The knowledge graph deterministically indexes the complete pinned CardDemo estate—COBOL programs,
+paragraphs, copybooks, fields, JCL jobs and steps, datasets, Java types, methods, tests, and software
+dependencies. The `INTCALC` workload is the first vertical slice with explicit traceability from
+legacy source to business rules, Java implementation, and verification scenarios.
+
 ## What it does
 
-1. Reads CardDemo-compatible fixed-width ASCII datasets.
-2. Decodes COBOL signed zoned decimals, including overpunched signs.
-3. Executes the interest-calculation behavior defined by `CBACT04C`.
-4. Produces updated account records and generated transaction records.
-5. Writes canonical JSON plus a hashed evidence receipt.
-6. Compares a modernization candidate's output to the oracle output.
+1. Builds a deterministic, provenance-rich graph of the entire CardDemo application estate.
+2. Maps `INTCALC` business rules from COBOL evidence to Java code and independent tests.
+3. Produces audience-filtered context packages so implementers cannot see private verifier assets.
+4. Reads CardDemo-compatible fixed-width ASCII datasets and COBOL signed zoned decimals.
+5. Executes the source-faithful `CBACT04C` interest-calculation behavior.
+6. Writes canonical output and hashed evidence receipts.
+7. Compares the modernization candidate with the oracle exactly on business fields.
 
 The included `candidate-java` module is the first modernization candidate. It consumes and emits
 the same fixed-width records as the oracle, including COBOL signed zoned decimals.
@@ -47,7 +55,33 @@ Build and differentially verify the Java/Spring Batch candidate:
 ```
 
 This runs both Python and Java unit tests, packages the executable Spring Boot JAR, executes the
-oracle and candidate on a deterministic fixture, and fails if any business field differs.
+oracle and candidate on a deterministic fixture, rebuilds the knowledge graph, and fails if the
+graph is stale, a rule loses traceability, or any business field differs.
+
+## Knowledge graph
+
+Build the full graph using a sibling clone of the pinned AWS CardDemo repository:
+
+```powershell
+.\knowledge-graph.ps1 build ..\aws-mainframe-modernization-carddemo
+```
+
+On macOS or Linux:
+
+```bash
+./knowledge-graph.sh build ../carddemo-upstream
+```
+
+Inspect graph statistics or ask for a rule-focused implementer context package:
+
+```bash
+PYTHONPATH=src python3 -m lightyear_knowledge_graph stats
+PYTHONPATH=src python3 -m lightyear_knowledge_graph context \
+  --node rule:intcalc:monthly-interest --depth 2 --audience implementer
+```
+
+The generated snapshot, its content-addressed receipt, curated mappings, and schema live under
+`knowledge/`. See `knowledge/README.md` for the trust model, graph ontology, queries, and roadmap.
 
 Optional editable installation for developers:
 
@@ -157,11 +191,12 @@ deciding whether a legacy behavior should be preserved or intentionally correcte
 
 Once a candidate can pass the visible cases:
 
-1. Add private holdout fixtures under a separate access boundary.
-2. Run mutation tests that deliberately alter the divisor, rounding, default-rate fallback, and
-   final-account behavior.
-3. Put an implementation agent behind the comparator.
-4. Route structured differences back to a repair agent.
-5. Issue a LIGHTYEAR decision receipt only after all visible and private scenarios pass.
+1. Capture independent z/OS executions and attach runtime observations to graph entities.
+2. Add private holdout fixtures and mutation tests under the verifier-only boundary.
+3. Expand verified rule mappings to the posting and statement-generation workloads.
+4. Put separate implementation and inspection agents behind graph-generated context packages.
+5. Route structured differences through an automated repair loop.
+6. Issue a LIGHTYEAR acceptance receipt only after structural, behavioral, security, and private
+   verification policies pass.
 
 The pinned workload specification is in `spec/carddemo-intcalc.json`.

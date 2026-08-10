@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schemas/modernization-knowledge-graph-1.0.json",
+  "title": "LIGHTYEAR Modernization Knowledge Graph",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "graph_id",
+    "content_sha256",
+    "sources",
+    "statistics",
+    "nodes",
+    "edges"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "graph_id": {"type": "string", "minLength": 1},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "kind", "repository", "commit"],
+        "properties": {
+          "id": {"type": "string"},
+          "kind": {"type": "string"},
+          "repository": {"type": "string"},
+          "commit": {"type": "string"}
+        },
+        "additionalProperties": true
+      }
+    },
+    "statistics": {"type": "object"},
+    "nodes": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/node"}
+    },
+    "edges": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/edge"}
+    }
+  },
+  "$defs": {
+    "evidence": {
+      "type": "object",
+      "required": ["source_id", "path", "line_start", "line_end", "method", "confidence"],
+      "properties": {
+        "source_id": {"type": "string"},
+        "path": {"type": "string"},
+        "line_start": {"type": "integer", "minimum": 1},
+        "line_end": {"type": "integer", "minimum": 1},
+        "method": {"type": "string"},
+        "confidence": {"enum": ["observed", "asserted", "inferred", "verified"]}
+      },
+      "additionalProperties": false
+    },
+    "node": {
+      "type": "object",
+      "required": ["id", "kind", "name", "properties", "evidence"],
+      "properties": {
+        "id": {"type": "string"},
+        "kind": {"type": "string"},
+        "name": {"type": "string"},
+        "properties": {"type": "object"},
+        "evidence": {"type": "array", "items": {"$ref": "#/$defs/evidence"}}
+      },
+      "additionalProperties": false
+    },
+    "edge": {
+      "type": "object",
+      "required": ["id", "source", "relation", "target", "properties", "evidence"],
+      "properties": {
+        "id": {"type": "string"},
+        "source": {"type": "string"},
+        "relation": {"type": "string"},
+        "target": {"type": "string"},
+        "properties": {"type": "object"},
+        "evidence": {"type": "array", "items": {"$ref": "#/$defs/evidence"}}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

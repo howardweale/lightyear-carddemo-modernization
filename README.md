@@ -1,10 +1,12 @@
 # LIGHTYEAR CardDemo Local Oracle
 
-A source-faithful, locally executable oracle and differential harness for the CardDemo `INTCALC`
-batch workload. It is the first engineering slice of a verified modernization factory.
+A source-faithful, locally executable oracle, differential harness, and Java/Spring Batch candidate
+for the CardDemo `INTCALC` batch workload. It is the first engineering slice of a verified
+modernization factory.
 
-The project runs on Windows, macOS, or Linux with Python 3.11 or newer and has no runtime
-dependencies outside the Python standard library.
+The oracle runs on Windows, macOS, or Linux with Python 3.11 or newer and has no runtime
+dependencies outside the Python standard library. The candidate uses Java 17, Spring Boot 4.1,
+Spring Batch 6, Maven Wrapper, and an in-memory H2 Batch metadata store.
 
 ## What it does
 
@@ -14,6 +16,9 @@ dependencies outside the Python standard library.
 4. Produces updated account records and generated transaction records.
 5. Writes canonical JSON plus a hashed evidence receipt.
 6. Compares a modernization candidate's output to the oracle output.
+
+The included `candidate-java` module is the first modernization candidate. It consumes and emits
+the same fixed-width records as the oracle, including COBOL signed zoned decimals.
 
 This is a **temporary local oracle derived from source**, not independent proof of z/OS behavior.
 It does not emulate VSAM locking, JES, Language Environment behavior, or EBCDIC collation. Replace
@@ -34,6 +39,15 @@ Run the deterministic demonstration:
 ```powershell
 .\oracle.ps1 demo --work-dir .\work\demo
 ```
+
+Build and differentially verify the Java/Spring Batch candidate:
+
+```powershell
+.\verify.ps1
+```
+
+This runs both Python and Java unit tests, packages the executable Spring Boot JAR, executes the
+oracle and candidate on a deterministic fixture, and fails if any business field differs.
 
 Optional editable installation for developers:
 
@@ -81,8 +95,9 @@ Then run:
   --timestamp 2022-07-18-00.00.00.000000
 ```
 
-The supplied CardDemo `tcatbal.txt` currently contains zero balances, so the synthetic demo is
-more useful for validating interest behavior and edge cases.
+The supplied CardDemo fixture is useful as a broad compatibility check. The synthetic demo adds
+targeted coverage for explicit disclosure rates, default-rate fallback, and the final-account edge
+case.
 
 ## Compare a candidate implementation
 
@@ -99,6 +114,29 @@ Your Java, Python, Go, or agent-generated candidate should write CardDemo-compat
 The command returns exit code `0` when equivalent and `1` when differences exist. Timestamps are
 normalized out of the comparison; financial fields, identifiers, account mutations, and all other
 business fields are compared exactly.
+
+## Java/Spring Batch candidate
+
+The candidate is intentionally small and auditable:
+
+1. `InterestCalculationTasklet` owns the file-oriented batch boundary.
+2. `CardDemoRecordCodec` parses and renders the upstream fixed-width layouts.
+3. `ZonedDecimal` implements COBOL overpunch decoding and encoding.
+4. `InterestCalculationService` contains the business transformation without framework coupling.
+5. The Python comparator acts as the executable acceptance contract.
+
+Run the JAR directly after `candidate-java\mvnw.cmd package`:
+
+```powershell
+java -jar .\candidate-java\target\carddemo-spring-batch-candidate-0.1.0-SNAPSHOT.jar `
+  --carddemo.input-dir=.\work\demo\input `
+  --carddemo.output-dir=.\work\candidate-output `
+  --carddemo.processing-date=2022071800 `
+  --carddemo.timestamp=2022-07-18-00.00.00.000000 `
+  --carddemo.final-account-policy=source-faithful
+```
+
+See `candidate-java/README.md` for the implementation design and standalone commands.
 
 ## Important discovered behavior
 

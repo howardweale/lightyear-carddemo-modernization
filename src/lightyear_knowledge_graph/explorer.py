@@ -13,7 +13,9 @@ from typing import Any
 from urllib.parse import parse_qs, unquote, urlparse
 
 from .chat import ChatError, GraphChatService
+from .evidence_pack import EvidenceStore, load_evidence_pack
 from .model import load_graph
+from .ontology import load_ontology
 from .validation import rule_gaps
 
 
@@ -79,9 +81,16 @@ class GraphSelection:
 class GraphExplorerIndex:
     """Read-optimized index for bounded, audience-aware visual exploration."""
 
-    def __init__(self, payload: dict[str, Any], max_nodes: int = 300) -> None:
+    def __init__(
+        self,
+        payload: dict[str, Any],
+        max_nodes: int = 300,
+        ontology: dict[str, Any] | None = None,
+    ) -> None:
         self.payload = payload
         self.max_nodes = max_nodes
+        self.ontology = ontology or load_ontology()
+        self.relation_definitions = self.ontology["relations"]
         self.node_by_id = {node["id"]: node for node in payload["nodes"]}
         self.edge_by_id = {edge["id"]: edge for edge in payload["edges"]}
         self.adjacency: dict[str, list[tuple[str, str]]] = defaultdict(list)
@@ -101,6 +110,7 @@ class GraphExplorerIndex:
             "schema_version": self.payload["schema_version"],
             "content_sha256": self.payload["content_sha256"],
             "statistics": self.payload["statistics"],
+            "relationship_ontology": self.payload["relationship_ontology"],
             "perspectives": self.perspectives(),
         }
 
@@ -160,6 +170,52 @@ class GraphExplorerIndex:
         result = dict(node)
         result["incoming"] = sorted(incoming, key=lambda item: (item["relation"], item["source"]))
         result["outgoing"] = sorted(outgoing, key=lambda item: (item["relation"], item["target"]))
+        return result
+
+    def edge(self, edge_id: str, audience: str = "implementer") -> dict[str, Any]:
+        audience = self._audience(audience)
+        edge = self.edge_by_id[edge_id]
+        source = self.node_by_id[edge["source"]]
+        target = self.node_by_id[edge["target"]]
+        if (
+            self._edge_hidden(edge, audience)
+            or self._hidden(source, audience)
+            or self._hidden(target, audience)
+        ):
+            raise KeyError(edge_id)
+        result = dict(edge)
+        result["source_node"] = self._summary(source)
+        result["target_node"] = self._summary(target)
+        result["definition"] = self.relation_definitions[edge["relation"]]
+        supporting_evidence = []
+        seen_evidence: set[tuple[Any, ...]] = set()
+        for owner_type, owner, role in (
+            ("edge", edge, "relationship"),
+            ("node", source, "source endpoint"),
+            ("node", target, "target endpoint"),
+        ):
+            for evidence_index, item in enumerate(owner.get("evidence", [])):
+                identity = (
+                    item.get("source_id"), item.get("path"), item.get("line_start"),
+                    item.get("line_end"), item.get("method"), item.get("confidence"),
+                )
+                if identity in seen_evidence:
+                    continue
+                seen_evidence.add(identity)
+                supporting_evidence.append(
+                    {
+                        "evidence": item,
+                        "evidence_index": evidence_index,
+                        "owner_id": owner["id"],
+                        "owner_type": owner_type,
+                        "role": role,
+                    }
+                )
+                if len(supporting_evidence) >= 24:
+                    break
+            if len(supporting_evidence) >= 24:
+                break
+        result["supporting_evidence"] = supporting_evidence
         return result
 
     def neighborhood(
@@ -288,11 +344,16 @@ class ExplorerServer(ThreadingHTTPServer):
         index: GraphExplorerIndex,
         viewer_root: Path,
         chat_service: GraphChatService | None = None,
+        evidence_store: EvidenceStore | None = None,
     ) -> None:
         super().__init__(address, ExplorerRequestHandler)
         self.index = index
         self.viewer_root = viewer_root.resolve()
         self.chat_service = chat_service or GraphChatService.from_environment(index)
+        if evidence_store is None:
+            default_pack = self.viewer_root.parent / "evidence" / "source.pack.json.gz"
+            evidence_store = EvidenceStore(load_evidence_pack(default_pack)) if default_pack.is_file() else None
+        self.evidence_store = evidence_store
 
 
 class ExplorerRequestHandler(BaseHTTPRequestHandler):
@@ -306,7 +367,10 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
             else:
                 self._static(parsed.path)
         except KeyError as exc:
-            self._json({"error": f"Unknown graph node: {exc.args[0]}"}, HTTPStatus.NOT_FOUND)
+            self._json(
+                {"error": f"Unknown or hidden graph entity: {exc.args[0]}"},
+                HTTPStatus.NOT_FOUND,
+            )
         except (TypeError, ValueError) as exc:
             self._json({"error": str(exc)}, HTTPStatus.BAD_REQUEST)
         except Exception as exc:  # pragma: no cover - defensive HTTP boundary
@@ -320,7 +384,10 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
                 return
             self._json({"error": f"Unknown API route: {parsed.path}"}, HTTPStatus.NOT_FOUND)
         except KeyError as exc:
-            self._json({"error": f"Unknown graph node: {exc.args[0]}"}, HTTPStatus.NOT_FOUND)
+            self._json(
+                {"error": f"Unknown or hidden graph entity: {exc.args[0]}"},
+                HTTPStatus.NOT_FOUND,
+            )
         except (ChatError, TypeError, ValueError, json.JSONDecodeError) as exc:
             self._json({"error": str(exc)}, HTTPStatus.BAD_REQUEST)
         except Exception as exc:  # pragma: no cover - defensive HTTP boundary
@@ -336,6 +403,17 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
             return
         if path == "/api/chat/status":
             self._json(self.server.chat_service.status())
+            return
+        if path == "/api/edge":
+            self._json(
+                index.edge(
+                    self._value(query, "id", required=True),
+                    self._value(query, "audience") or "implementer",
+                )
+            )
+            return
+        if path == "/api/evidence":
+            self._json(self._evidence(index, query))
             return
         if path == "/api/search":
             self._json(
@@ -379,6 +457,37 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
             self._json({"status": "passed" if not gaps else "failed", "gaps": gaps})
             return
         self._json({"error": f"Unknown API route: {path}"}, HTTPStatus.NOT_FOUND)
+
+    def _evidence(
+        self, index: GraphExplorerIndex, query: dict[str, list[str]]
+    ) -> dict[str, Any]:
+        if self.server.evidence_store is None:
+            raise ValueError("Source evidence pack is not available.")
+        owner_type = self._value(query, "owner_type", required=True)
+        owner_id = self._value(query, "owner_id", required=True)
+        evidence_index = self._integer(query, "evidence_index", -1)
+        audience = self._value(query, "audience") or "implementer"
+        if owner_type == "node":
+            owner = index.node(owner_id, audience)
+        elif owner_type == "edge":
+            owner = index.edge(owner_id, audience)
+        else:
+            raise ValueError("owner_type must be node or edge")
+        evidence_items = owner.get("evidence", [])
+        if evidence_index < 0 or evidence_index >= len(evidence_items):
+            raise ValueError("evidence_index is outside the selected owner")
+        try:
+            excerpt = self.server.evidence_store.excerpt(
+                owner_type, owner_id, evidence_index
+            )
+        except KeyError as exc:
+            raise ValueError("No source capsule exists for this evidence item") from exc
+        return {
+            **excerpt,
+            "graph_content_sha256": index.payload["content_sha256"],
+            "owner_id": owner_id,
+            "owner_type": owner_type,
+        }
 
     def _static(self, raw_path: str) -> None:
         requested = "index.html" if raw_path in {"", "/"} else unquote(raw_path.lstrip("/"))
@@ -440,9 +549,16 @@ def serve(
     host: str = "127.0.0.1",
     port: int = 8765,
     open_browser: bool = True,
+    ontology_path: Path | None = None,
+    evidence_pack_path: Path | None = None,
 ) -> None:
-    index = GraphExplorerIndex.from_path(graph_path)
-    server = ExplorerServer((host, port), index, viewer_root)
+    ontology = load_ontology(ontology_path) if ontology_path else load_ontology()
+    index = GraphExplorerIndex(load_graph(graph_path), ontology=ontology)
+    pack_path = evidence_pack_path or graph_path.parent / "evidence" / "source.pack.json.gz"
+    evidence_store = EvidenceStore(load_evidence_pack(pack_path))
+    server = ExplorerServer(
+        (host, port), index, viewer_root, evidence_store=evidence_store
+    )
     url = f"http://{host}:{server.server_port}/"
     print(f"LIGHTYEAR Graph Explorer: {url}")
     print("Press Ctrl-C to stop.")

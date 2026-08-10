@@ -1,15 +1,16 @@
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.5.0 — evidence-grounded graph chat**
+Release: **v0.6.0 — relationship and source evidence intelligence**
 
 An evidence-aware knowledge graph, source-faithful local oracle, differential harness, and
 Java/Spring Batch candidate for AWS CardDemo. Together they form the first engineering cell of a
 verified modernization factory.
 
-v0.5 adds node-aware natural-language questions to the visual explorer. Answers are built from a
-bounded, audience-filtered evidence package and return citations, confidence, limitations, and the
-exact supporting graph identity. A deterministic local provider works offline; an optional OpenAI
-provider supplies higher-quality synthesis through strict structured output.
+v0.6 turns graph relationships into inspectable, governed claims. Every relationship type has a
+versioned purpose, direction, evidence policy, and set of valid endpoint kinds. Click an edge or a
+relationship row to see why it exists, navigate its endpoints, inspect its supporting source, and
+ask a grounded question about that exact relationship. A deterministic source-evidence pack makes
+11,646 excerpts locally viewable without exposing arbitrary filesystem access.
 
 The oracle runs on Windows, macOS, or Linux with Python 3.11 or newer and has no runtime
 dependencies outside the Python standard library. The candidate uses Java 17, Spring Boot 4.1,
@@ -26,13 +27,13 @@ legacy source to business rules, Java implementation, and verification scenarios
 2. Maps `INTCALC` business rules from COBOL evidence to Java code and independent tests.
 3. Produces audience-filtered context packages so implementers cannot see private verifier assets.
 4. Serves bounded, searchable visual perspectives of the graph from a local web application.
-5. Answers who, what, where, when, why, how, impact, lineage, and verification questions about
-   selected nodes or the estate.
-6. Exports a lossless, disposable Neo4j projection without surrendering graph ownership.
-7. Reads CardDemo-compatible fixed-width ASCII datasets and COBOL signed zoned decimals.
-8. Executes the source-faithful `CBACT04C` interest-calculation behavior.
-9. Writes canonical output and hashed evidence receipts.
-10. Compares the modernization candidate with the oracle exactly on business fields.
+5. Explains the purpose, direction, evidence policy, and sources behind every visible relationship.
+6. Opens content-addressed source excerpts with exact evidence lines highlighted.
+7. Answers who, what, where, when, why, how, impact, lineage, and verification questions about
+   selected nodes, relationships, or the estate.
+8. Exports a lossless, disposable Neo4j projection without surrendering graph ownership.
+9. Reads CardDemo-compatible fixed-width ASCII datasets and COBOL signed zoned decimals.
+10. Executes and differentially verifies the source-faithful `CBACT04C` behavior.
 
 The included `candidate-java` module is the first modernization candidate. It consumes and emits
 the same fixed-width records as the oracle, including COBOL signed zoned decimals.
@@ -107,11 +108,27 @@ On Windows:
 ```
 
 It opens `http://127.0.0.1:8765` and provides five curated perspectives, full-graph search,
-bounded neighborhoods, evidence inspection, and implementer/verifier views. The server binds only
-to the local machine by default and uses Python's standard library; it does not upload graph data.
+bounded neighborhoods, node and edge inspection, source-code evidence, and implementer/verifier
+views. The server binds only to the local machine by default and uses Python's standard library; it
+does not upload graph data.
 
 Do not expose the verifier view to implementation agents. It includes private holdout metadata.
 The current local audience selector demonstrates the policy boundary; it is not authentication.
+
+### Edge and source inspection
+
+Click a drawn edge or a relationship in the entity inspector. The Edge Inspector explains the
+relationship in plain language, shows its direction and governed semantics, and lists direct plus
+endpoint source evidence. Click an evidence card to open the content-addressed source excerpt with
+the supporting lines highlighted. The browser supplies only an owner ID and evidence index; it
+cannot request an arbitrary local path.
+
+Select **Ask about relationship** to focus graph chat on the exact edge. Questions such as `Why
+does this relationship exist?`, `What source supports it?`, and `What would be affected if this
+connection changed?` remain bounded by the selected audience and evidence package.
+
+The relationship catalog lives in `knowledge/ontology/relationships.json`. The self-contained
+source pack and receipt live under `knowledge/evidence/`.
 
 ### Grounded graph chat
 

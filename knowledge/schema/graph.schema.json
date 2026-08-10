@@ -6,6 +6,7 @@
   "required": [
     "schema_version",
     "graph_id",
+    "relationship_ontology",
     "content_sha256",
     "sources",
     "statistics",
@@ -13,8 +14,18 @@
     "edges"
   ],
   "properties": {
-    "schema_version": {"const": "1.0"},
+    "schema_version": {"const": "1.1"},
     "graph_id": {"type": "string", "minLength": 1},
+    "relationship_ontology": {
+      "type": "object",
+      "required": ["ontology_id", "schema_version", "content_sha256"],
+      "properties": {
+        "ontology_id": {"type": "string", "minLength": 1},
+        "schema_version": {"const": "1.0"},
+        "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    },
     "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
     "sources": {
       "type": "array",

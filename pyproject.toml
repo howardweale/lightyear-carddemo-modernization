@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "lightyear-carddemo-oracle"
-version = "0.5.0"
-description = "Grounded modernization graph chat, local oracle, and differential harness for CardDemo"
+version = "0.6.0"
+description = "Edge intelligence, grounded graph chat, local oracle, and differential harness for CardDemo"
 requires-python = ">=3.11"
 dependencies = []
 

@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.6.0 — 2026-08-11
+
+- Added a versioned relationship ontology covering all 21 graph relationship types, their purpose,
+  direction, category, evidence policy, and allowed node-kind pairs.
+- Bound the ontology identity into the canonical graph and added validation for undefined,
+  reversed, incompatible, or drifted relationship claims.
+- Added 11,646 content-addressed source evidence capsules covering all 12,129 graph evidence
+  supports, including source context, highlighted lines, file hashes, excerpt hashes, and receipts.
+- Added audience-safe edge and evidence APIs that resolve source only through visible owner IDs and
+  evidence indexes; browser-supplied source paths are ignored.
+- Made SVG edges and inspector relationship rows clickable and added a plain-language Edge
+  Inspector with semantics, direction, endpoint navigation, properties, and supporting sources.
+- Added a source-code drawer with contextual line display and exact evidence highlighting.
+- Extended grounded chat to focus on a selected relationship and explain why the edge exists.
+- Added ontology, pair validation, evidence integrity, tamper detection, path traversal, privacy,
+  HTTP, UI-contract, and edge-focused chat tests.
+
 ## 0.5.0 — 2026-08-10
 
 - Added node-aware graph chat for who, what, where, when, why, how, impact, lineage, verification,

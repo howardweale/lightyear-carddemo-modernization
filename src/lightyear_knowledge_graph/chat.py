@@ -85,6 +85,8 @@ class EvidencePackage:
     question: str
     audience: str
     focus_node_id: str | None
+    focus_edge_id: str | None
+    focus_relationship: dict[str, Any] | None
     intent: str
     root_ids: list[str]
     nodes: list[dict[str, Any]]
@@ -111,6 +113,8 @@ class EvidencePackage:
             "question": self.question,
             "audience": self.audience,
             "focus_node_id": self.focus_node_id,
+            "focus_edge_id": self.focus_edge_id,
+            "focus_relationship": self.focus_relationship,
             "intent": self.intent,
             "roots": self.root_ids,
             "nodes": [
@@ -153,6 +157,7 @@ class GraphRetriever:
         audience: str,
         depth: int = 2,
         node_limit: int = 140,
+        focus_edge_id: str | None = None,
     ) -> EvidencePackage:
         normalized = " ".join(question.split())
         if not normalized:
@@ -163,11 +168,27 @@ class GraphRetriever:
             raise ChatError("audience must be implementer or verifier")
 
         intent = self._intent(normalized)
+        if focus_node_id and focus_edge_id:
+            raise ChatError("Choose either a focused node or a focused edge, not both.")
         roots: list[str] = []
+        focus_relationship = None
+        focused_edge = None
+        if focus_edge_id:
+            focused_edge = self.index.edge(focus_edge_id, audience)
+            roots.extend([focused_edge["source"], focused_edge["target"]])
+            focus_relationship = {
+                "definition": focused_edge["definition"],
+                "id": focused_edge["id"],
+                "relation": focused_edge["relation"],
+                "source": focused_edge["source"],
+                "source_name": focused_edge["source_node"]["name"],
+                "target": focused_edge["target"],
+                "target_name": focused_edge["target_node"]["name"],
+            }
         if focus_node_id:
             self.index.node(focus_node_id, audience)
             roots.append(focus_node_id)
-        else:
+        elif not focus_edge_id:
             for node_id in self._search_roots(normalized, audience):
                 if node_id not in roots:
                     roots.append(node_id)
@@ -198,6 +219,10 @@ class GraphRetriever:
             for edge in selection["edges"]:
                 if edge["source"] in nodes and edge["target"] in nodes:
                     edges[edge["id"]] = edge
+        if focused_edge:
+            for node_id in (focused_edge["source"], focused_edge["target"]):
+                nodes[node_id] = self.index.node_by_id[node_id]
+            edges[focused_edge["id"]] = self.index.edge_by_id[focused_edge["id"]]
 
         ordered_nodes = sorted(
             nodes.values(),
@@ -214,6 +239,8 @@ class GraphRetriever:
             question=normalized,
             audience=audience,
             focus_node_id=focus_node_id,
+            focus_edge_id=focus_edge_id,
+            focus_relationship=focus_relationship,
             intent=intent,
             root_ids=roots,
             nodes=ordered_nodes,
@@ -416,6 +443,9 @@ class LocalGroundedAnswerer:
         node_by_id = {node["id"]: node for node in package.nodes}
         roots = [node_by_id[node_id] for node_id in package.root_ids if node_id in node_by_id]
         focus = node_by_id.get(package.focus_node_id or "") or (roots[0] if roots else None)
+        focused_edge = next(
+            (edge for edge in package.edges if edge["id"] == package.focus_edge_id), None
+        )
         relation_counts = Counter(edge["relation"] for edge in package.edges)
         confidence = self._confidence(package)
         limitations = []
@@ -441,7 +471,14 @@ class LocalGroundedAnswerer:
                 "not establish read/write direction."
             )
 
-        if focus:
+        if focused_edge and package.focus_relationship:
+            identity_body = (
+                f"Graph ID: {focused_edge['id']}\n"
+                f"Relationship: {focused_edge['relation']}\n"
+                f"Source: {package.focus_relationship['source_name']}\n"
+                f"Target: {package.focus_relationship['target_name']}"
+            )
+        elif focus:
             identity_body = (
                 f"Graph ID: {focus['id']}\n"
                 f"Type: {focus['kind'].replace('_', ' ')}\n"
@@ -460,6 +497,8 @@ class LocalGroundedAnswerer:
         intent_body, intent_edge_ids = self._intent_body(package, focus)
         answer = self._direct_answer(package, focus, intent_edge_ids)
         focus_owner_ids = {focus["id"]} if focus else set()
+        if focused_edge:
+            focus_owner_ids.add(focused_edge["id"])
         if focus:
             focus_owner_ids.update(
                 edge["id"]
@@ -477,7 +516,11 @@ class LocalGroundedAnswerer:
         return {
             "answer": answer,
             "sections": [
-                {"heading": "Focused entity", "body": identity_body, "citation_ids": identity_citations},
+                {
+                    "heading": "Focused relationship" if focused_edge else "Focused entity",
+                    "body": identity_body,
+                    "citation_ids": identity_citations,
+                },
                 {"heading": self._intent_heading(package.intent), "body": intent_body, "citation_ids": intent_citations},
                 {"heading": "Visible relationship profile", "body": relation_body, "citation_ids": relation_citations},
             ],
@@ -497,6 +540,14 @@ class LocalGroundedAnswerer:
             return (
                 "No specific graph entity matched the question. The answer is limited to "
                 "the default INTCALC workload context."
+            )
+
+        if package.focus_relationship:
+            relationship = package.focus_relationship
+            purpose = relationship["definition"]["purpose"]
+            return (
+                f"{relationship['source_name']} —{relationship['relation']}→ "
+                f"{relationship['target_name']}. {purpose}"
             )
 
         name = focus["name"]
@@ -832,13 +883,22 @@ class GraphChatService:
         focus_node_id = request.get("focus_node_id") or None
         if focus_node_id is not None and not isinstance(focus_node_id, str):
             raise ChatError("focus_node_id must be text")
+        focus_edge_id = request.get("focus_edge_id") or None
+        if focus_edge_id is not None and not isinstance(focus_edge_id, str):
+            raise ChatError("focus_edge_id must be text")
         history = self._history(request.get("history", []))
         audience = request.get("audience", "implementer")
         provider = request.get("provider", "local")
         depth = request.get("depth", 2)
         if not isinstance(depth, int):
             raise ChatError("depth must be an integer")
-        package = self.retriever.retrieve(question, focus_node_id, audience, depth)
+        package = self.retriever.retrieve(
+            question,
+            focus_node_id,
+            audience,
+            depth,
+            focus_edge_id=focus_edge_id,
+        )
         answerer: Any = self.local_answerer
         if provider == "openai":
             if self.openai_answerer is None:
@@ -851,6 +911,7 @@ class GraphChatService:
         answer_identity = {
             "audience": package.audience,
             "focus_node_id": package.focus_node_id,
+            "focus_edge_id": package.focus_edge_id,
             "graph_content_sha256": package.graph_content_sha256,
             "model": answerer.model if isinstance(answerer, OpenAIAnswerer) else None,
             "provider": answerer.name,
@@ -870,6 +931,7 @@ class GraphChatService:
                 ],
                 "grounding": {
                     "focus_node_id": package.focus_node_id,
+                    "focus_edge_id": package.focus_edge_id,
                     "root_ids": package.root_ids,
                     "node_ids": [node["id"] for node in package.nodes],
                     "edge_ids": [edge["id"] for edge in package.edges],

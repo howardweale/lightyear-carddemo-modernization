@@ -35,9 +35,9 @@ database—is the durable advantage.
 | Verification | scenarios, tests, mutations, differential results | independent verifier |
 | Governance | visibility, confidence, policy decisions, receipts | factory policy engine |
 
-The structural, semantic-mapping, initial verification, local exploration, grounded-question, and
-database-projection layers are implemented in this release. Runtime truth is the most important
-next addition.
+The structural, semantic-mapping, initial verification, local exploration, governed-relationship,
+content-addressed source-evidence, grounded-question, and database-projection layers are implemented
+in this release. Runtime truth is the most important next addition.
 
 ## Trust model
 
@@ -71,17 +71,23 @@ Stable, namespaced IDs allow artifacts from different extractors and agents to j
 | Test | `modern:test:...InterestCalculationServiceTest#matchesInterestAndDefaultRateRules` |
 | Scenario | `scenario:intcalc:synthetic-differential` |
 
-Core relations include `CONTAINS`, `CALLS`, `USES_COPYBOOK`, `EXECUTES`, `ALLOCATES`, `READS`,
-`WRITES`, `DERIVED_FROM`, `IMPLEMENTED_BY`, and `VERIFIED_BY`.
+All 21 relations are defined in `ontology/relationships.json`. Each definition includes a purpose,
+direction, category, evidence policy, and exact allowed source/target node-kind pairs. The graph
+snapshot carries the ontology content hash, and validation rejects undefined or incompatible edges.
 
 ## Artifacts
 
 - `graph.snapshot.json.gz`: deterministic, compressed property-graph snapshot;
 - `graph.receipt.json`: content hash, sources, and counts suitable for CI evidence;
 - `schema/graph.schema.json`: portable JSON Schema contract;
-- `mappings/carddemo-intcalc.json`: curated semantic and verification mappings.
+- `schema/relationship-ontology.schema.json`: governed relationship contract;
+- `schema/evidence-pack.schema.json`: content-addressed source capsule contract;
+- `mappings/carddemo-intcalc.json`: curated semantic and verification mappings;
+- `ontology/relationships.json`: canonical meanings and endpoint constraints for all edges;
+- `evidence/source.pack.json.gz`: deterministic source excerpts and supporting context;
+- `evidence/source.receipt.json`: evidence-pack and graph identity receipt;
 - `viewer/`: locally served, dependency-free visual explorer;
-- `neo4j/README.md`: optional Neo4j projection and import contract.
+- `neo4j/README.md`: optional Neo4j projection and import contract;
 - `chat/`: grounded answer quality contract and versioned structured-output schema.
 
 The graph uses plain JSON and the Python standard library so it remains portable. It can export
@@ -95,6 +101,7 @@ PostgreSQL/Apache AGE, or another engine can be supported through additional pro
 ./knowledge-graph.sh verify ../carddemo-upstream
 
 PYTHONPATH=src python3 -m lightyear_knowledge_graph validate
+PYTHONPATH=src python3 -m lightyear_knowledge_graph validate-evidence
 PYTHONPATH=src python3 -m lightyear_knowledge_graph gaps
 PYTHONPATH=src python3 -m lightyear_knowledge_graph stats
 PYTHONPATH=src python3 -m lightyear_knowledge_graph impact \
@@ -111,14 +118,16 @@ PYTHONPATH=src python3 -m lightyear_knowledge_graph export-neo4j \
 
 The explorer serves only on `127.0.0.1` by default. It queries bounded subgraphs and never attempts
 to render the entire estate. Its implementer view filters verifier-private entities across search,
-direct node reads, neighborhoods, traces, and graph-chat retrieval. Chat answers include evidence,
-confidence, limitations, supporting entity IDs, and the canonical graph hash. The local selector is
+direct node reads, edge reads, source excerpts, neighborhoods, traces, and graph-chat retrieval.
+Chat answers include evidence, confidence, limitations, supporting node and edge IDs, and the
+canonical graph hash. The local selector is
 a policy demonstration, not an authentication system; production use still requires identity,
 authorization, auditing, and signed context and answer receipts.
 
-`verify` rebuilds from the pinned upstream commit, validates graph integrity and mapping coverage,
-and byte-compares the result with the committed snapshot. CI therefore fails when source,
-extractors, mappings, or generated evidence drift apart.
+`verify` rebuilds from the pinned upstream commit, validates graph integrity, relationship ontology,
+mapping coverage, every evidence capsule, and byte-compares the generated graph and evidence
+identities with committed receipts. CI therefore fails when source, extractors, ontology, mappings,
+or generated evidence drift apart.
 
 ## Expansion roadmap
 

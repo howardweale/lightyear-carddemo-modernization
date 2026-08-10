@@ -27,8 +27,11 @@ if [[ "$action" == "build" ]]; then
     --legacy-root "$legacy_root" \
     --modern-root "$project_dir" \
     --manifest "$project_dir/knowledge/mappings/carddemo-intcalc.json" \
+    --ontology "$project_dir/knowledge/ontology/relationships.json" \
     --output "$project_dir/knowledge/graph.snapshot.json.gz" \
     --receipt "$project_dir/knowledge/graph.receipt.json" \
+    --evidence-pack "$project_dir/knowledge/evidence/source.pack.json.gz" \
+    --evidence-receipt "$project_dir/knowledge/evidence/source.receipt.json" \
     --legacy-commit "$legacy_commit" \
     --modern-commit repository-content
 elif [[ "$action" == "verify" ]]; then
@@ -38,16 +41,26 @@ elif [[ "$action" == "verify" ]]; then
     --legacy-root "$legacy_root" \
     --modern-root "$project_dir" \
     --manifest "$project_dir/knowledge/mappings/carddemo-intcalc.json" \
+    --ontology "$project_dir/knowledge/ontology/relationships.json" \
     --output "$generated/graph.snapshot.json.gz" \
     --receipt "$generated/graph.receipt.json" \
+    --evidence-pack "$generated/source.pack.json.gz" \
+    --evidence-receipt "$generated/source.receipt.json" \
     --legacy-commit "$legacy_commit" \
     --modern-commit repository-content
   python3 -m lightyear_knowledge_graph validate --graph "$generated/graph.snapshot.json.gz"
+  python3 -m lightyear_knowledge_graph validate-evidence \
+    --graph "$generated/graph.snapshot.json.gz" \
+    --evidence-pack "$generated/source.pack.json.gz"
   python3 -m lightyear_knowledge_graph gaps --graph "$generated/graph.snapshot.json.gz"
   python3 -m lightyear_knowledge_graph compare-snapshots \
     --expected "$project_dir/knowledge/graph.snapshot.json.gz" \
     --actual "$generated/graph.snapshot.json.gz"
+  python3 -m lightyear_knowledge_graph compare-evidence-packs \
+    --expected "$project_dir/knowledge/evidence/source.pack.json.gz" \
+    --actual "$generated/source.pack.json.gz"
   cmp "$project_dir/knowledge/graph.receipt.json" "$generated/graph.receipt.json"
+  cmp "$project_dir/knowledge/evidence/source.receipt.json" "$generated/source.receipt.json"
   echo "Knowledge graph snapshot is deterministic, current, and policy-complete."
 else
   echo "Usage: ./knowledge-graph.sh [build|verify] [optional-carddemo-upstream-root]" >&2

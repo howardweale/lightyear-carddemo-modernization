@@ -8,7 +8,7 @@ from pathlib import Path
 from typing import Any
 
 
-SCHEMA_VERSION = "1.0"
+SCHEMA_VERSION = "1.1"
 
 
 def evidence(
@@ -32,9 +32,15 @@ def evidence(
 class KnowledgeGraph:
     """Small property-graph model with deterministic serialization and provenance."""
 
-    def __init__(self, graph_id: str, sources: list[dict[str, Any]]) -> None:
+    def __init__(
+        self,
+        graph_id: str,
+        sources: list[dict[str, Any]],
+        relationship_ontology: dict[str, str],
+    ) -> None:
         self.graph_id = graph_id
         self.sources = sorted(sources, key=lambda item: item["id"])
+        self.relationship_ontology = relationship_ontology
         self.nodes: dict[str, dict[str, Any]] = {}
         self.edges: dict[str, dict[str, Any]] = {}
 
@@ -130,6 +136,7 @@ class KnowledgeGraph:
         payload = {
             "schema_version": SCHEMA_VERSION,
             "graph_id": self.graph_id,
+            "relationship_ontology": self.relationship_ontology,
             "sources": self.sources,
             "statistics": self.statistics(),
             "nodes": nodes,

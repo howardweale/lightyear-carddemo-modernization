@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schemas/source-evidence-pack-1.0.json",
+  "additionalProperties": false,
+  "properties": {
+    "capsules": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "capsule_id": {"pattern": "^capsule:[0-9a-f]{24}$", "type": "string"},
+          "confidence": {"enum": ["observed", "asserted", "inferred", "verified"]},
+          "context_end": {"minimum": 1, "type": "integer"},
+          "context_start": {"minimum": 1, "type": "integer"},
+          "display_line_end": {"minimum": 1, "type": "integer"},
+          "excerpt_sha256": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+          "file_sha256": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+          "language": {"type": "string"},
+          "line_end": {"minimum": 1, "type": "integer"},
+          "line_start": {"minimum": 1, "type": "integer"},
+          "lines": {
+            "items": {
+              "additionalProperties": false,
+              "properties": {
+                "highlighted": {"type": "boolean"},
+                "number": {"minimum": 1, "type": "integer"},
+                "text": {"type": "string"}
+              },
+              "required": ["highlighted", "number", "text"],
+              "type": "object"
+            },
+            "type": "array"
+          },
+          "method": {"type": "string"},
+          "path": {"type": "string"},
+          "source_id": {"type": "string"},
+          "supports": {"type": "array"},
+          "truncated": {"type": "boolean"}
+        },
+        "required": [
+          "capsule_id", "confidence", "context_end", "context_start",
+          "display_line_end", "excerpt_sha256", "file_sha256", "language",
+          "line_end", "line_start", "lines", "method", "path", "source_id",
+          "supports", "truncated"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    },
+    "content_sha256": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+    "graph_content_sha256": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+    "relationship_ontology": {"type": "object"},
+    "schema_version": {"const": "1.0"},
+    "sources": {"type": "array"},
+    "statistics": {"type": "object"}
+  },
+  "required": [
+    "capsules", "content_sha256", "graph_content_sha256",
+    "relationship_ontology", "schema_version", "sources", "statistics"
+  ],
+  "title": "LIGHTYEAR Source Evidence Pack",
+  "type": "object"
+}

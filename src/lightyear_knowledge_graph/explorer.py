@@ -1,0 +1,422 @@
+from __future__ import annotations
+
+import json
+import mimetypes
+import threading
+import webbrowser
+from collections import defaultdict, deque
+from dataclasses import dataclass
+from http import HTTPStatus
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+from pathlib import Path
+from typing import Any
+from urllib.parse import parse_qs, unquote, urlparse
+
+from .model import load_graph
+from .validation import rule_gaps
+
+
+DEFAULT_PERSPECTIVES = [
+    {
+        "id": "intcalc-workload",
+        "name": "INTCALC workload",
+        "description": "Legacy entry point, modern candidate, rules, scenarios, and scheduler.",
+        "root": "workload:carddemo-intcalc",
+        "depth": 2,
+    },
+    {
+        "id": "monthly-interest",
+        "name": "Monthly-interest rule",
+        "description": "Source evidence, implementation, and independent verification.",
+        "root": "rule:intcalc:monthly-interest",
+        "depth": 2,
+    },
+    {
+        "id": "intcalc-job",
+        "name": "INTCALC job lineage",
+        "description": "JCL job, execution step, program, DD allocations, and datasets.",
+        "root": "legacy:jcl-job:INTCALC",
+        "depth": 3,
+    },
+    {
+        "id": "account-copybook",
+        "name": "Account data contract",
+        "description": "Account copybook fields and the programs that depend on the layout.",
+        "root": "legacy:copybook:CVACT01Y",
+        "depth": 2,
+    },
+    {
+        "id": "final-account-behavior",
+        "name": "Final-account behavior",
+        "description": "The discovered EOF behavior and its implementation and tests.",
+        "root": "rule:intcalc:source-final-account",
+        "depth": 2,
+    },
+]
+
+
+@dataclass(frozen=True)
+class GraphSelection:
+    root: str
+    depth: int
+    audience: str
+    nodes: list[dict[str, Any]]
+    edges: list[dict[str, Any]]
+    truncated: bool
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "root": self.root,
+            "depth": self.depth,
+            "audience": self.audience,
+            "truncated": self.truncated,
+            "nodes": self.nodes,
+            "edges": self.edges,
+        }
+
+
+class GraphExplorerIndex:
+    """Read-optimized index for bounded, audience-aware visual exploration."""
+
+    def __init__(self, payload: dict[str, Any], max_nodes: int = 300) -> None:
+        self.payload = payload
+        self.max_nodes = max_nodes
+        self.node_by_id = {node["id"]: node for node in payload["nodes"]}
+        self.edge_by_id = {edge["id"]: edge for edge in payload["edges"]}
+        self.adjacency: dict[str, list[tuple[str, str]]] = defaultdict(list)
+        for edge in payload["edges"]:
+            self.adjacency[edge["source"]].append((edge["id"], edge["target"]))
+            self.adjacency[edge["target"]].append((edge["id"], edge["source"]))
+        for values in self.adjacency.values():
+            values.sort(key=lambda item: (self.edge_by_id[item[0]]["relation"], item[1]))
+
+    @classmethod
+    def from_path(cls, graph_path: Path, max_nodes: int = 300) -> "GraphExplorerIndex":
+        return cls(load_graph(graph_path), max_nodes=max_nodes)
+
+    def metadata(self) -> dict[str, Any]:
+        return {
+            "graph_id": self.payload["graph_id"],
+            "schema_version": self.payload["schema_version"],
+            "content_sha256": self.payload["content_sha256"],
+            "statistics": self.payload["statistics"],
+            "perspectives": self.perspectives(),
+        }
+
+    def perspectives(self) -> list[dict[str, Any]]:
+        return [item for item in DEFAULT_PERSPECTIVES if item["root"] in self.node_by_id]
+
+    def search(
+        self,
+        query: str,
+        kind: str = "",
+        limit: int = 25,
+        audience: str = "implementer",
+    ) -> list[dict[str, Any]]:
+        audience = self._audience(audience)
+        normalized = query.strip().casefold()
+        if not normalized:
+            return []
+        matches = []
+        for node in self.node_by_id.values():
+            if self._hidden(node, audience):
+                continue
+            if kind and node["kind"] != kind:
+                continue
+            haystack = " ".join(
+                [node["id"], node["name"], str(node.get("properties", {}).get("statement", ""))]
+            ).casefold()
+            if normalized not in haystack:
+                continue
+            score = 0 if node["name"].casefold().startswith(normalized) else 1
+            matches.append((score, node["kind"], node["name"], node))
+        matches.sort(key=lambda item: (item[0], item[1], item[2], item[3]["id"]))
+        return [self._summary(item[3]) for item in matches[: max(1, min(limit, 100))]]
+
+    def node(self, node_id: str, audience: str = "implementer") -> dict[str, Any]:
+        audience = self._audience(audience)
+        node = self.node_by_id[node_id]
+        if self._hidden(node, audience):
+            raise KeyError(node_id)
+        incoming = []
+        outgoing = []
+        for edge_id, _ in self.adjacency.get(node_id, []):
+            edge = self.edge_by_id[edge_id]
+            if self._edge_hidden(edge, audience):
+                continue
+            other_id = edge["source"] if edge["target"] == node_id else edge["target"]
+            if self._hidden(self.node_by_id[other_id], audience):
+                continue
+            target = incoming if edge["target"] == node_id else outgoing
+            target.append(
+                {
+                    "id": edge["id"],
+                    "relation": edge["relation"],
+                    "source": edge["source"],
+                    "target": edge["target"],
+                }
+            )
+        result = dict(node)
+        result["incoming"] = sorted(incoming, key=lambda item: (item["relation"], item["source"]))
+        result["outgoing"] = sorted(outgoing, key=lambda item: (item["relation"], item["target"]))
+        return result
+
+    def neighborhood(
+        self,
+        node_id: str,
+        depth: int = 2,
+        audience: str = "implementer",
+        limit: int | None = None,
+    ) -> GraphSelection:
+        if node_id not in self.node_by_id:
+            raise KeyError(node_id)
+        audience = self._audience(audience)
+        if self._hidden(self.node_by_id[node_id], audience):
+            raise KeyError(node_id)
+        depth = max(0, min(depth, 5))
+        node_limit = max(10, min(limit or self.max_nodes, 1000))
+        seen = {node_id}
+        selected_edges: set[str] = set()
+        queue = deque([(node_id, 0)])
+        truncated = False
+        while queue:
+            current, distance = queue.popleft()
+            if distance >= depth:
+                continue
+            for edge_id, neighbor in self.adjacency.get(current, []):
+                if self._edge_hidden(self.edge_by_id[edge_id], audience):
+                    continue
+                neighbor_node = self.node_by_id[neighbor]
+                if self._hidden(neighbor_node, audience):
+                    continue
+                if neighbor not in seen and len(seen) >= node_limit:
+                    truncated = True
+                    continue
+                selected_edges.add(edge_id)
+                if neighbor not in seen:
+                    seen.add(neighbor)
+                    queue.append((neighbor, distance + 1))
+        nodes = [self.node_by_id[item] for item in sorted(seen)]
+        edges = [
+            self.edge_by_id[item]
+            for item in sorted(selected_edges)
+            if self.edge_by_id[item]["source"] in seen and self.edge_by_id[item]["target"] in seen
+        ]
+        return GraphSelection(node_id, depth, audience, nodes, edges, truncated)
+
+    def trace(
+        self,
+        source: str,
+        target: str,
+        audience: str = "implementer",
+    ) -> dict[str, Any] | None:
+        audience = self._audience(audience)
+        for node_id in (source, target):
+            if node_id not in self.node_by_id or self._hidden(self.node_by_id[node_id], audience):
+                raise KeyError(node_id)
+        queue = deque([source])
+        previous: dict[str, tuple[str, str]] = {}
+        seen = {source}
+        while queue:
+            current = queue.popleft()
+            if current == target:
+                break
+            for edge_id, neighbor in self.adjacency.get(current, []):
+                if (
+                    neighbor in seen
+                    or self._edge_hidden(self.edge_by_id[edge_id], audience)
+                    or self._hidden(self.node_by_id[neighbor], audience)
+                ):
+                    continue
+                seen.add(neighbor)
+                previous[neighbor] = (current, edge_id)
+                queue.append(neighbor)
+        if target not in seen:
+            return None
+        node_ids = [target]
+        edge_ids = []
+        while node_ids[-1] != source:
+            parent, edge_id = previous[node_ids[-1]]
+            node_ids.append(parent)
+            edge_ids.append(edge_id)
+        node_ids.reverse()
+        edge_ids.reverse()
+        return {
+            "node_ids": node_ids,
+            "nodes": [self.node_by_id[node_id] for node_id in node_ids],
+            "edges": [self.edge_by_id[edge_id] for edge_id in edge_ids],
+        }
+
+    def gaps(self) -> list[dict[str, Any]]:
+        return rule_gaps(self.payload)
+
+    @staticmethod
+    def _hidden(node: dict[str, Any], audience: str) -> bool:
+        return (
+            audience == "implementer"
+            and node.get("properties", {}).get("visibility") == "inspector_private"
+        )
+
+    @staticmethod
+    def _edge_hidden(edge: dict[str, Any], audience: str) -> bool:
+        return (
+            audience == "implementer"
+            and edge.get("properties", {}).get("visibility") == "inspector_private"
+        )
+
+    @staticmethod
+    def _audience(value: str) -> str:
+        if value not in {"implementer", "verifier"}:
+            raise ValueError("audience must be implementer or verifier")
+        return value
+
+    @staticmethod
+    def _summary(node: dict[str, Any]) -> dict[str, Any]:
+        return {
+            "id": node["id"],
+            "kind": node["kind"],
+            "name": node["name"],
+            "statement": node.get("properties", {}).get("statement", ""),
+        }
+
+
+class ExplorerServer(ThreadingHTTPServer):
+    def __init__(
+        self,
+        address: tuple[str, int],
+        index: GraphExplorerIndex,
+        viewer_root: Path,
+    ) -> None:
+        super().__init__(address, ExplorerRequestHandler)
+        self.index = index
+        self.viewer_root = viewer_root.resolve()
+
+
+class ExplorerRequestHandler(BaseHTTPRequestHandler):
+    server: ExplorerServer
+
+    def do_GET(self) -> None:  # noqa: N802 - standard-library handler API
+        parsed = urlparse(self.path)
+        try:
+            if parsed.path.startswith("/api/"):
+                self._api(parsed.path, parse_qs(parsed.query))
+            else:
+                self._static(parsed.path)
+        except KeyError as exc:
+            self._json({"error": f"Unknown graph node: {exc.args[0]}"}, HTTPStatus.NOT_FOUND)
+        except (TypeError, ValueError) as exc:
+            self._json({"error": str(exc)}, HTTPStatus.BAD_REQUEST)
+        except Exception as exc:  # pragma: no cover - defensive HTTP boundary
+            self._json({"error": f"Explorer request failed: {exc}"}, HTTPStatus.INTERNAL_SERVER_ERROR)
+
+    def log_message(self, format: str, *args: Any) -> None:
+        return
+
+    def _api(self, path: str, query: dict[str, list[str]]) -> None:
+        index = self.server.index
+        if path == "/api/meta":
+            self._json(index.metadata())
+            return
+        if path == "/api/search":
+            self._json(
+                {
+                    "results": index.search(
+                        self._value(query, "q"),
+                        self._value(query, "kind"),
+                        self._integer(query, "limit", 25),
+                        self._value(query, "audience") or "implementer",
+                    )
+                }
+            )
+            return
+        if path == "/api/node":
+            self._json(
+                index.node(
+                    self._value(query, "id", required=True),
+                    self._value(query, "audience") or "implementer",
+                )
+            )
+            return
+        if path == "/api/neighborhood":
+            selection = index.neighborhood(
+                self._value(query, "node", required=True),
+                self._integer(query, "depth", 2),
+                self._value(query, "audience") or "implementer",
+                self._integer(query, "limit", index.max_nodes),
+            )
+            self._json(selection.to_dict())
+            return
+        if path == "/api/trace":
+            result = index.trace(
+                self._value(query, "from", required=True),
+                self._value(query, "to", required=True),
+                self._value(query, "audience") or "implementer",
+            )
+            self._json({"status": "found" if result else "not_found", "trace": result})
+            return
+        if path == "/api/gaps":
+            gaps = index.gaps()
+            self._json({"status": "passed" if not gaps else "failed", "gaps": gaps})
+            return
+        self._json({"error": f"Unknown API route: {path}"}, HTTPStatus.NOT_FOUND)
+
+    def _static(self, raw_path: str) -> None:
+        requested = "index.html" if raw_path in {"", "/"} else unquote(raw_path.lstrip("/"))
+        candidate = (self.server.viewer_root / requested).resolve()
+        if self.server.viewer_root not in candidate.parents and candidate != self.server.viewer_root:
+            self._json({"error": "Invalid static path"}, HTTPStatus.BAD_REQUEST)
+            return
+        if not candidate.is_file():
+            self._json({"error": "Static asset not found"}, HTTPStatus.NOT_FOUND)
+            return
+        content_type, _ = mimetypes.guess_type(candidate.name)
+        body = candidate.read_bytes()
+        self.send_response(HTTPStatus.OK)
+        self.send_header("Content-Type", content_type or "application/octet-stream")
+        self.send_header("Content-Length", str(len(body)))
+        self.send_header("Cache-Control", "no-store")
+        self.end_headers()
+        self.wfile.write(body)
+
+    def _json(self, payload: Any, status: HTTPStatus = HTTPStatus.OK) -> None:
+        body = (json.dumps(payload, sort_keys=True) + "\n").encode("utf-8")
+        self.send_response(status)
+        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        self.send_header("Cache-Control", "no-store")
+        self.end_headers()
+        self.wfile.write(body)
+
+    @staticmethod
+    def _value(query: dict[str, list[str]], key: str, required: bool = False) -> str:
+        value = query.get(key, [""])[0]
+        if required and not value:
+            raise ValueError(f"Missing required query parameter: {key}")
+        return value
+
+    @classmethod
+    def _integer(cls, query: dict[str, list[str]], key: str, default: int) -> int:
+        value = cls._value(query, key)
+        return int(value) if value else default
+
+
+def serve(
+    graph_path: Path,
+    viewer_root: Path,
+    host: str = "127.0.0.1",
+    port: int = 8765,
+    open_browser: bool = True,
+) -> None:
+    index = GraphExplorerIndex.from_path(graph_path)
+    server = ExplorerServer((host, port), index, viewer_root)
+    url = f"http://{host}:{server.server_port}/"
+    print(f"LIGHTYEAR Graph Explorer: {url}")
+    print("Press Ctrl-C to stop.")
+    if open_browser:
+        threading.Timer(0.35, lambda: webbrowser.open(url)).start()
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        pass
+    finally:
+        server.server_close()

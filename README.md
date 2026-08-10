@@ -1,10 +1,14 @@
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.3.0 — evidence-aware knowledge graph foundation**
+Release: **v0.4.0 — visual graph explorer and optional Neo4j projection**
 
 An evidence-aware knowledge graph, source-faithful local oracle, differential harness, and
 Java/Spring Batch candidate for AWS CardDemo. Together they form the first engineering cell of a
 verified modernization factory.
+
+v0.4 makes the factory model directly explorable in a local browser and adds a deterministic
+Neo4j projection. The canonical graph remains LIGHTYEAR-controlled, portable, content-addressed,
+and independent of any graph database.
 
 The oracle runs on Windows, macOS, or Linux with Python 3.11 or newer and has no runtime
 dependencies outside the Python standard library. The candidate uses Java 17, Spring Boot 4.1,
@@ -20,10 +24,12 @@ legacy source to business rules, Java implementation, and verification scenarios
 1. Builds a deterministic, provenance-rich graph of the entire CardDemo application estate.
 2. Maps `INTCALC` business rules from COBOL evidence to Java code and independent tests.
 3. Produces audience-filtered context packages so implementers cannot see private verifier assets.
-4. Reads CardDemo-compatible fixed-width ASCII datasets and COBOL signed zoned decimals.
-5. Executes the source-faithful `CBACT04C` interest-calculation behavior.
-6. Writes canonical output and hashed evidence receipts.
-7. Compares the modernization candidate with the oracle exactly on business fields.
+4. Serves bounded, searchable visual perspectives of the graph from a local web application.
+5. Exports a lossless, disposable Neo4j projection without surrendering graph ownership.
+6. Reads CardDemo-compatible fixed-width ASCII datasets and COBOL signed zoned decimals.
+7. Executes the source-faithful `CBACT04C` interest-calculation behavior.
+8. Writes canonical output and hashed evidence receipts.
+9. Compares the modernization candidate with the oracle exactly on business fields.
 
 The included `candidate-java` module is the first modernization candidate. It consumes and emits
 the same fixed-width records as the oracle, including COBOL signed zoned decimals.
@@ -82,6 +88,41 @@ PYTHONPATH=src python3 -m lightyear_knowledge_graph context \
 
 The generated snapshot, its content-addressed receipt, curated mappings, and schema live under
 `knowledge/`. See `knowledge/README.md` for the trust model, graph ontology, queries, and roadmap.
+
+## Visual Graph Explorer
+
+On macOS or Linux, start the explorer from the repository root:
+
+```bash
+./graph-explorer.sh
+```
+
+On Windows:
+
+```powershell
+.\graph-explorer.ps1
+```
+
+It opens `http://127.0.0.1:8765` and provides five curated perspectives, full-graph search,
+bounded neighborhoods, evidence inspection, and implementer/verifier views. The server binds only
+to the local machine by default and uses Python's standard library; it does not upload graph data.
+
+Do not expose the verifier view to implementation agents. It includes private holdout metadata.
+The current local audience selector demonstrates the policy boundary; it is not authentication.
+
+### Optional Neo4j projection
+
+Export the canonical snapshot into deterministic Neo4j bulk-import CSVs:
+
+```bash
+PYTHONPATH=src python3 -m lightyear_knowledge_graph export-neo4j \
+  --output-dir work/neo4j-export
+```
+
+Use Neo4j for richer Cypher queries, Browser, or Bloom if useful, but treat that database as a
+regenerable read model. LIGHTYEAR's proprietary value remains in the ontology, verified mappings,
+evidence lineage, policies, graph history, and learning loop. See `knowledge/neo4j/README.md` for
+the projection contract, import choices, example queries, and security boundary.
 
 Optional editable installation for developers:
 
@@ -194,9 +235,11 @@ Once a candidate can pass the visible cases:
 1. Capture independent z/OS executions and attach runtime observations to graph entities.
 2. Add private holdout fixtures and mutation tests under the verifier-only boundary.
 3. Expand verified rule mappings to the posting and statement-generation workloads.
-4. Put separate implementation and inspection agents behind graph-generated context packages.
-5. Route structured differences through an automated repair loop.
-6. Issue a LIGHTYEAR acceptance receipt only after structural, behavioral, security, and private
+4. Put separate implementation and inspection agents behind authenticated, signed graph context
+   packages rather than the v0.4 local audience selector.
+5. Retain graph deltas, decisions, failed attempts, and verification outcomes as compounding memory.
+6. Route structured differences through an automated repair loop.
+7. Issue a LIGHTYEAR acceptance receipt only after structural, behavioral, security, and private
    verification policies pass.
 
 The pinned workload specification is in `spec/carddemo-intcalc.json`.

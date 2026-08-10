@@ -7,7 +7,15 @@ candidate_jar="$project_dir/candidate-java/target/carddemo-spring-batch-candidat
 
 export PYTHONPATH="$project_dir/src"
 
+default_maven_home="${MAVEN_USER_HOME:-${HOME}/.m2}"
+if { [[ -e "$default_maven_home" ]] && [[ ! -w "$default_maven_home" ]]; } || \
+   { [[ ! -e "$default_maven_home" ]] && [[ ! -w "$(dirname "$default_maven_home")" ]]; }; then
+  export MAVEN_USER_HOME="$project_dir/work/.m2"
+  export MAVEN_OPTS="${MAVEN_OPTS:-} -Dmaven.repo.local=$project_dir/work/.m2/repository"
+fi
+
 python3 -m unittest discover -s "$project_dir/tests" -v
+"$project_dir/knowledge-graph.sh" verify
 
 (
   cd "$project_dir/candidate-java"

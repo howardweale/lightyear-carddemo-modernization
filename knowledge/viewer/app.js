@@ -3,6 +3,8 @@
 const NS = "http://www.w3.org/2000/svg";
 const state = {
   meta: null,
+  chatStatus: null,
+  chatHistory: [],
   selection: null,
   selectedId: null,
   positions: new Map(),
@@ -43,6 +45,17 @@ async function api(path, params = {}) {
   return payload;
 }
 
+async function apiPost(path, body) {
+  const response = await fetch(path, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body),
+  });
+  const payload = await response.json();
+  if (!response.ok) throw new Error(payload.error || `Request failed: ${response.status}`);
+  return payload;
+}
+
 function formatNumber(value) {
   return new Intl.NumberFormat().format(value || 0);
 }
@@ -51,7 +64,10 @@ function groupFor(kind) { return groups[kind] || "other"; }
 
 async function initialize() {
   try {
-    state.meta = await api("/api/meta");
+    [state.meta, state.chatStatus] = await Promise.all([
+      api("/api/meta"),
+      api("/api/chat/status"),
+    ]);
     const stats = state.meta.statistics;
     $("metric-nodes").textContent = formatNumber(stats.node_count);
     $("metric-edges").textContent = formatNumber(stats.edge_count);
@@ -61,6 +77,7 @@ async function initialize() {
     $("status-text").textContent = "Local graph online";
     populatePerspectives();
     populateLegend();
+    configureChat();
     bindControls();
     await loadPerspective();
   } catch (error) {
@@ -102,10 +119,31 @@ function bindControls() {
   $("audience").addEventListener("change", async () => {
     $("search").value = "";
     $("search-results").replaceChildren();
+    resetChat();
     await loadPerspective();
   });
   $("fit").addEventListener("click", fitGraph);
   $("focus-node").addEventListener("click", () => loadNeighborhood(state.selectedId));
+  $("ask-node").addEventListener("click", () => {
+    switchRightPanel("chat");
+    $("chat-question").focus();
+  });
+  $("inspector-tab").addEventListener("click", () => switchRightPanel("inspector"));
+  $("chat-tab").addEventListener("click", () => switchRightPanel("chat"));
+  $("clear-chat").addEventListener("click", resetChat);
+  $("chat-form").addEventListener("submit", submitChat);
+  $("chat-suggestions").addEventListener("click", (event) => {
+    const button = event.target.closest("button");
+    if (!button) return;
+    $("chat-question").value = button.textContent;
+    $("chat-question").focus();
+  });
+  $("chat-question").addEventListener("keydown", (event) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      $("chat-form").requestSubmit();
+    }
+  });
   let searchTimer;
   $("search").addEventListener("input", () => {
     clearTimeout(searchTimer);
@@ -315,6 +353,7 @@ async function inspectNode(nodeId) {
     renderProperties(node.properties || {});
     renderEvidence(node.evidence || []);
     renderRelations(node);
+    $("chat-focus").textContent = `${node.name} · ${node.kind.replaceAll("_", " ")}`;
   } catch (error) {
     setError(error);
   }
@@ -442,6 +481,179 @@ function startNodeDrag(event) {
 
 function applyZoom() {
   $("viewport").setAttribute("transform", `translate(${state.zoom.x},${state.zoom.y}) scale(${state.zoom.scale})`);
+}
+
+function configureChat() {
+  const openai = state.chatStatus.providers.openai;
+  const option = $("chat-provider").querySelector('option[value="openai"]');
+  option.disabled = !openai.available;
+  option.textContent = openai.available
+    ? `OpenAI high-quality · ${openai.model}`
+    : "OpenAI high-quality · API key required";
+  if (openai.available) $("chat-provider").value = "openai";
+  $("chat-provider-note").textContent = openai.available
+    ? `Model reasoning is grounded in a bounded evidence package. Model: ${openai.model}.`
+    : "Local mode works offline. Set OPENAI_API_KEY before launch to enable model reasoning.";
+  $("chat-provider").addEventListener("change", () => {
+    const selected = $("chat-provider").value;
+    $("chat-provider-note").textContent = selected === "openai"
+      ? `Model reasoning is grounded in a bounded evidence package. Model: ${openai.model}.`
+      : "Deterministic answer assembled locally from visible graph facts.";
+  });
+}
+
+function switchRightPanel(view) {
+  const chat = view === "chat";
+  $("chat-view").hidden = !chat;
+  $("inspector-view").hidden = chat;
+  $("chat-tab").classList.toggle("active", chat);
+  $("inspector-tab").classList.toggle("active", !chat);
+}
+
+function resetChat() {
+  state.chatHistory = [];
+  const messages = $("chat-messages");
+  messages.replaceChildren();
+  const welcome = document.createElement("article");
+  welcome.className = "chat-message assistant";
+  const text = document.createElement("p");
+  text.textContent = "Conversation cleared. Ask a question grounded in the current audience view.";
+  welcome.appendChild(text);
+  messages.appendChild(welcome);
+}
+
+async function submitChat(event) {
+  event.preventDefault();
+  const input = $("chat-question");
+  const question = input.value.trim();
+  if (!question) return;
+  input.value = "";
+  appendChatMessage("user", question);
+  const loading = appendChatMessage("assistant loading", "Retrieving evidence and constructing a grounded answer…");
+  $("send-chat").disabled = true;
+  try {
+    const answer = await apiPost("/api/chat", {
+      question,
+      focus_node_id: state.selectedId,
+      audience: $("audience").value,
+      provider: $("chat-provider").value,
+      depth: Number($("depth").value),
+      history: state.chatHistory,
+    });
+    loading.remove();
+    renderChatAnswer(answer);
+    state.chatHistory.push({ role: "user", content: question });
+    state.chatHistory.push({ role: "assistant", content: answer.answer });
+    state.chatHistory = state.chatHistory.slice(-8);
+    renderChatSuggestions(answer.follow_up_questions || []);
+    highlightGrounding(answer.grounding.node_ids || []);
+  } catch (error) {
+    loading.remove();
+    appendChatMessage("assistant", `I could not answer that question. ${error.message}`);
+  } finally {
+    $("send-chat").disabled = false;
+    input.focus();
+  }
+}
+
+function appendChatMessage(role, content) {
+  const article = document.createElement("article");
+  article.className = `chat-message ${role}`;
+  const paragraph = document.createElement("p");
+  paragraph.textContent = content;
+  article.appendChild(paragraph);
+  $("chat-messages").appendChild(article);
+  article.scrollIntoView({ block: "end", behavior: "smooth" });
+  return article;
+}
+
+function renderChatAnswer(answer) {
+  const article = document.createElement("article");
+  article.className = "chat-message assistant";
+  const meta = document.createElement("div");
+  meta.className = "answer-meta";
+  meta.append(
+    answerBadge(`${answer.confidence.level} confidence`, answer.confidence.level),
+    answerBadge(answer.provider === "openai" ? answer.model : "local evidence"),
+    answerBadge(`${answer.grounding.node_ids.length} nodes`),
+  );
+  const summary = document.createElement("p");
+  summary.textContent = answer.answer;
+  article.append(meta, summary);
+
+  (answer.sections || []).forEach((section) => {
+    const container = document.createElement("section");
+    container.className = "answer-section";
+    const heading = document.createElement("h4");
+    heading.textContent = section.heading;
+    const body = document.createElement("p");
+    body.textContent = section.body;
+    container.append(heading, body);
+    if (section.citation_ids?.length) {
+      const markers = document.createElement("small");
+      markers.textContent = section.citation_ids.map((item) => `[${item}]`).join(" ");
+      container.appendChild(markers);
+    }
+    article.appendChild(container);
+  });
+
+  if (answer.citations?.length) {
+    const details = document.createElement("details");
+    details.className = "answer-section";
+    const summaryElement = document.createElement("summary");
+    summaryElement.textContent = `Evidence (${answer.citations.length})`;
+    const list = document.createElement("ol");
+    list.className = "citation-list";
+    answer.citations.forEach((citation) => {
+      const item = document.createElement("li");
+      const lines = citation.line_start
+        ? `:${citation.line_start}${citation.line_end && citation.line_end !== citation.line_start ? `–${citation.line_end}` : ""}`
+        : "";
+      const path = document.createElement("code");
+      path.textContent = `[${citation.id}] ${citation.path || citation.source_id}${lines}`;
+      const provenance = document.createElement("span");
+      provenance.textContent = ` · ${citation.confidence || "unclassified"} · ${citation.method || "source"}`;
+      item.append(path, provenance);
+      list.appendChild(item);
+    });
+    details.append(summaryElement, list);
+    article.appendChild(details);
+  }
+
+  const notes = [answer.confidence.rationale, ...(answer.limitations || [])].filter(Boolean);
+  if (notes.length) {
+    const limitations = document.createElement("div");
+    limitations.className = "limitations";
+    limitations.textContent = notes.join(" ");
+    article.appendChild(limitations);
+  }
+  $("chat-messages").appendChild(article);
+  article.scrollIntoView({ block: "end", behavior: "smooth" });
+}
+
+function answerBadge(text, className = "") {
+  const badge = document.createElement("span");
+  badge.className = `answer-badge ${className}`.trim();
+  badge.textContent = text;
+  return badge;
+}
+
+function renderChatSuggestions(questions) {
+  const container = $("chat-suggestions");
+  container.replaceChildren();
+  questions.slice(0, 4).forEach((question) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = question;
+    container.appendChild(button);
+  });
+}
+
+function highlightGrounding(nodeIds) {
+  const grounded = new Set(nodeIds);
+  document.querySelectorAll(".node").forEach((item) => {
+    item.classList.toggle("grounded", grounded.has(item.dataset.id));
+  });
 }
 
 function shorten(value, limit) { return value.length > limit ? `${value.slice(0, limit - 1)}…` : value; }

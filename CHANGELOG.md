@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.5.0 — 2026-08-10
+
+- Added node-aware graph chat for who, what, where, when, why, how, impact, lineage, verification,
+  and general explanation questions.
+- Added intent-specific bounded retrieval and deterministic local answers with no external runtime
+  dependencies.
+- Added an optional OpenAI Responses API provider with strict structured output, server-side secret
+  handling, disabled API storage, and a model override.
+- Added claim citations, confidence rationale, limitations, supporting node and edge IDs, graph
+  snapshot identity, and suggested follow-up questions to every answer.
+- Added retrieval-time implementer/verifier isolation, audience-change history clearing, untrusted
+  graph-data instructions, and rejection of citations outside the retrieved evidence package.
+- Added a versioned answer schema and documented answer-quality and production-security contracts.
+- Added six-question, prompt-injection, private-holdout, schema, provider, HTTP, and citation-
+  validation tests.
+
 ## 0.4.0 — 2026-08-10
 
 - Added a locally executable LIGHTYEAR Graph Explorer with no third-party runtime dependencies.

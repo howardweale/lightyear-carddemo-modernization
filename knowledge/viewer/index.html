@@ -90,29 +90,72 @@
     </section>
 
     <aside class="right-panel panel">
-      <div id="inspector-placeholder" class="placeholder">
-        <span class="placeholder-mark">◎</span>
-        <h2>Inspect an entity</h2>
-        <p>Select a node to see its meaning, properties, evidence, and relationships.</p>
+      <nav class="right-tabs" aria-label="Entity tools">
+        <button id="inspector-tab" class="right-tab active" type="button">Inspector</button>
+        <button id="chat-tab" class="right-tab" type="button">Ask graph</button>
+      </nav>
+
+      <div id="inspector-view">
+        <div id="inspector-placeholder" class="placeholder">
+          <span class="placeholder-mark">◎</span>
+          <h2>Inspect an entity</h2>
+          <p>Select a node to see its meaning, properties, evidence, and relationships.</p>
+        </div>
+        <div id="inspector" hidden>
+          <p id="detail-kind" class="kind-pill"></p>
+          <h2 id="detail-name"></h2>
+          <code id="detail-id"></code>
+          <p id="detail-statement" class="statement"></p>
+          <div class="button-stack">
+            <button id="focus-node" class="primary-button" type="button">Focus this entity</button>
+            <button id="ask-node" class="secondary-button" type="button">Ask about this entity</button>
+          </div>
+          <section id="properties-section">
+            <h3>Properties</h3>
+            <dl id="detail-properties"></dl>
+          </section>
+          <section>
+            <h3>Evidence</h3>
+            <div id="detail-evidence"></div>
+          </section>
+          <section>
+            <h3>Relationships</h3>
+            <div id="detail-relations"></div>
+          </section>
+        </div>
       </div>
-      <div id="inspector" hidden>
-        <p id="detail-kind" class="kind-pill"></p>
-        <h2 id="detail-name"></h2>
-        <code id="detail-id"></code>
-        <p id="detail-statement" class="statement"></p>
-        <button id="focus-node" class="primary-button" type="button">Focus this entity</button>
-        <section id="properties-section">
-          <h3>Properties</h3>
-          <dl id="detail-properties"></dl>
-        </section>
-        <section>
-          <h3>Evidence</h3>
-          <div id="detail-evidence"></div>
-        </section>
-        <section>
-          <h3>Relationships</h3>
-          <div id="detail-relations"></div>
-        </section>
+
+      <div id="chat-view" class="chat-view" hidden>
+        <div class="chat-header">
+          <div>
+            <p class="eyebrow">GROUNDED GRAPH CHAT</p>
+            <h2>Ask who, what, where, when, why or how.</h2>
+          </div>
+          <button id="clear-chat" class="text-button" type="button">Clear</button>
+        </div>
+        <p class="chat-disclosure">Answers are limited to the selected audience and retrieved graph evidence.</p>
+        <div id="chat-focus" class="chat-focus">No focused node</div>
+        <div id="chat-messages" class="chat-messages" aria-live="polite">
+          <article class="chat-message assistant">
+            <p>Select a node or ask about the estate. I will show supporting evidence, confidence and gaps.</p>
+          </article>
+        </div>
+        <div id="chat-suggestions" class="chat-suggestions">
+          <button type="button">How does INTCALC work end to end?</button>
+          <button type="button">Why is the final account behavior preserved?</button>
+          <button type="button">What verifies the monthly interest rule?</button>
+        </div>
+        <form id="chat-form" class="chat-form">
+          <textarea id="chat-question" rows="3" maxlength="2000" placeholder="Ask the graph…" required></textarea>
+          <div class="chat-form-row">
+            <select id="chat-provider" aria-label="Answer provider">
+              <option value="local">Grounded local</option>
+              <option value="openai">OpenAI high-quality</option>
+            </select>
+            <button id="send-chat" class="primary-button" type="submit">Ask</button>
+          </div>
+          <p id="chat-provider-note" class="provider-note"></p>
+        </form>
       </div>
     </aside>
   </main>

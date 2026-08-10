@@ -1,0 +1,82 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "answer": {
+      "type": "string"
+    },
+    "citation_ids": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "confidence": {
+      "additionalProperties": false,
+      "properties": {
+        "level": {
+          "enum": [
+            "high",
+            "medium",
+            "low"
+          ],
+          "type": "string"
+        },
+        "rationale": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "level",
+        "rationale"
+      ],
+      "type": "object"
+    },
+    "follow_up_questions": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "limitations": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    },
+    "sections": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "body": {
+            "type": "string"
+          },
+          "citation_ids": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array"
+          },
+          "heading": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "heading",
+          "body",
+          "citation_ids"
+        ],
+        "type": "object"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "answer",
+    "sections",
+    "citation_ids",
+    "confidence",
+    "limitations",
+    "follow_up_questions"
+  ],
+  "type": "object"
+}

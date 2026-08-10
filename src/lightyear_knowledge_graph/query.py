@@ -74,4 +74,3 @@ def shortest_trace(payload: dict[str, Any], source: str, target: str) -> dict[st
     nodes.reverse()
     edges.reverse()
     return {"nodes": nodes, "edges": edges}
-

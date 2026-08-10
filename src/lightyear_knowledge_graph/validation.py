@@ -75,4 +75,3 @@ def rule_gaps(payload: dict[str, Any]) -> list[dict[str, Any]]:
 
 def _duplicates(items: list[Any]) -> list[Any]:
     return sorted(item for item, count in Counter(items).items() if count > 1)
-

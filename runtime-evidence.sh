@@ -19,6 +19,7 @@ elif [[ "$action" == "verify" ]]; then
   "$LIGHTYEAR_PYTHON_BIN" -m lightyear_runtime compare \
     --expected "$project_dir/knowledge/runtime/runtime.snapshot.json.gz" \
     --actual "$generated"
+  "$project_dir/zosmf-adapter.sh" verify
   echo "Runtime evidence snapshot is deterministic, graph-bound, and policy-valid."
 else
   echo "Usage: ./runtime-evidence.sh [build|verify]" >&2

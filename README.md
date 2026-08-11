@@ -1,6 +1,6 @@
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.8.0 — runtime evidence plane**
+Release: **v0.9.0 — z/OSMF adapter kit and connection simulator**
 
 An evidence-aware knowledge graph, source-faithful local oracle, differential harness, and
 Java/Spring Batch candidate for AWS CardDemo. Together they form the first engineering cell of a
@@ -29,6 +29,11 @@ under separate development-readiness and mainframe-equivalence policies. Synthet
 exercise the machinery, but only evidence classified as `zos_observed` can satisfy mainframe
 equivalence.
 
+v0.9 turns that adapter boundary into a working read-only z/OSMF integration. An IBM-shaped local
+server lets the complete Jobs/status/steps/spool flow run before a mainframe is available. The real
+client enforces verified HTTPS, external credentials, response limits, content minimization, and an
+explicit operator attestation before it can emit `zos_observed` evidence.
+
 ## What it does
 
 1. Builds a deterministic, provenance-rich graph of the entire CardDemo application estate.
@@ -49,6 +54,8 @@ equivalence.
 14. Records graph-addressed runtime observations through a replaceable adapter contract.
 15. Distinguishes static-only, runtime-observed, and runtime-contradicted graph claims.
 16. Blocks mainframe-equivalence claims until every required entity has z/OS-observed evidence.
+17. Rehearses the real z/OSMF REST integration against a deterministic local connection simulator.
+18. Captures authorized JES job, step, program, DD-allocation, return-code, timestamp, and spool-hash evidence.
 
 The included `candidate-java` module is the first modernization candidate. It consumes and emits
 the same fixed-width records as the oracle, including COBOL signed zoned decimals.
@@ -148,9 +155,39 @@ PYTHONPATH=src python3 -m lightyear_runtime inspect
 
 Open the explorer's **Runtime** tab to inspect adapter runs, chained events, trust policy results,
 and limitations. Node and edge inspectors show the projected runtime state, confidence class,
-observed operation, and run identity. The included replay fixture is explicitly `simulated`; it
-cannot satisfy the `mainframe_equivalence` policy. See `knowledge/runtime/README.md` for the
-adapter boundary and the future z/OS capture contract.
+observed operation, and run identity. The included replay fixture and z/OSMF simulator are
+explicitly `simulated`; neither can satisfy the `mainframe_equivalence` policy. See
+`knowledge/runtime/README.md` for the evidence contract.
+
+Rehearse the z/OSMF adapter locally:
+
+```bash
+./zosmf-adapter.sh simulate
+./zosmf-adapter.sh verify
+```
+
+When access is available, configure credentials in the launching terminal, diagnose the read-only
+connection, then capture one known job. The adapter does not submit or modify jobs:
+
+```bash
+export ZOSMF_BASE_URL="https://zosmf.example.com:10443"
+export ZOSMF_SYSTEM_ALIAS="SY1"
+export ZOSMF_USER="IBMUSER"
+export ZOSMF_PASSWORD="..."
+
+PYTHONPATH=src python3 -m lightyear_runtime zosmf-diagnose \
+  --owner IBMUSER --prefix 'INTCALC*'
+
+PYTHONPATH=src python3 -m lightyear_runtime capture-zosmf \
+  --job-name INTCALC --job-id JOB00001 \
+  --output work/zosmf-capture/intcalc.runtime.snapshot.json.gz \
+  --attest-real-zos
+```
+
+`--attest-real-zos` is accepted only for non-loopback HTTPS and records a deliberate provenance
+decision. Credentials, authentication headers, raw spool bodies, and returned server URLs are not
+written to the evidence snapshot. See `knowledge/runtime/zosmf/README.md` for CA, mutual-TLS,
+bearer-token, mapping, and first-connection guidance.
 
 Repeated collections may reuse a human-readable run ID. The API and control room address each
 physical run through a stable, path-opaque `run_key`, preventing collisions without exposing local

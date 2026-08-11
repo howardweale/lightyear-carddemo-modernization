@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schemas/zosmf-mapping-1.0.json",
+  "title": "LIGHTYEAR z/OSMF Graph Mapping",
+  "type": "object",
+  "required": ["schema_version", "workload", "job", "steps", "dd_allocations"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "workload": {"type": "string", "minLength": 1},
+    "job": {
+      "type": "object",
+      "required": ["name", "node_id"],
+      "properties": {
+        "name": {"type": "string", "pattern": "^[A-Z0-9$#@]{1,8}$"},
+        "node_id": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "steps": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "node_id", "program", "program_node_id", "job_step_edge_id", "step_program_edge_id"]
+      }
+    },
+    "dd_allocations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["ddname", "edge_id", "access"],
+        "properties": {
+          "ddname": {"type": "string", "pattern": "^[A-Z0-9$#@]{1,8}$"},
+          "edge_id": {"type": "string", "minLength": 1},
+          "access": {"enum": ["read", "write", "read-write"]}
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

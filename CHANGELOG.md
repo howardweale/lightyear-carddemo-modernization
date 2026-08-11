@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.9.0 — 2026-08-11
+
+- Added a read-only z/OSMF Jobs adapter for job discovery, status and step data, spool-file
+  inventory, and bounded spool-record retrieval using IBM-compatible resource shapes.
+- Added verified TLS, optional enterprise CA and mutual TLS, Basic or bearer authentication,
+  no-redirect transport, strict URL and identifier validation, time and response limits, and
+  fail-closed status and content-type handling.
+- Added recursive secret redaction and a minimization boundary that retains approved metadata,
+  graph matches, and spool hashes while discarding raw spool bodies and server resource URLs.
+- Added an explicit real-z/OS attestation gate: only non-loopback HTTPS captures made with the
+  operator acknowledgement can emit `zos_observed`; simulator and unattested captures remain
+  `simulated` and cannot satisfy mainframe equivalence.
+- Added an IBM-shaped local z/OSMF server, INTCALC job/step/program/DD mapping, deterministic
+  simulator snapshot, macOS/Linux and Windows launchers, and connection/capture commands.
+- Added conformance, authentication non-leakage, transport security, content minimization,
+  program-contradiction, record-range, deterministic capture, and trust-policy tests.
+
 ## 0.8.0 — 2026-08-11
 
 - Added a versioned runtime-evidence contract that binds every observation to an existing graph

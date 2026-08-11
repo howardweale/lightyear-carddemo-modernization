@@ -1,6 +1,7 @@
 # LIGHTYEAR Modernization Knowledge Graph
 
-The canonical graph is complemented by the v0.8 runtime evidence plane under `knowledge/runtime/`.
+The canonical graph is complemented by the v0.9 runtime evidence plane and z/OSMF adapter kit
+under `knowledge/runtime/`.
 Runtime captures remain append-only evidence rather than nondeterministic mutations of the source
 snapshot. The explorer joins both identities at read time and refuses to treat simulated or local
 evidence as proof of z/OS equivalence.
@@ -41,9 +42,9 @@ database—is the durable advantage.
 | Governance | visibility, confidence, policy decisions, receipts | factory policy engine |
 
 The structural, semantic-mapping, initial verification, local exploration, governed-relationship,
-content-addressed source-evidence, grounded-question, database-projection, and bounded factory-
-orchestration layers are implemented in this release. Runtime truth is the most important next
-addition.
+content-addressed source-evidence, grounded-question, database-projection, bounded factory-
+orchestration, runtime evidence, and z/OSMF connection-simulation layers are implemented in this
+release. Independent production evidence remains the most important next addition.
 
 ## Trust model
 

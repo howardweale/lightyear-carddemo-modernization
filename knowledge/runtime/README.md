@@ -29,11 +29,13 @@ The resulting `runtime.snapshot.json.gz` is content addressed and targets one ex
 identity. The explorer exposes the run receipts and overlays node and edge state as
 `static_only`, `runtime_observed`, or `runtime_contradicted`.
 
-## Future z/OS adapter
+## z/OSMF adapter
 
-The adapter must emit the same capture bundle contract as the local and fixture adapters. The
-first connection should collect JES job and step results, spool messages, dataset allocations,
-program identity, return codes, timestamps, and artifact hashes. Credentials remain outside
-events and receipts. Raw production records must be minimized or tokenized before ingestion.
+v0.9 implements the first real adapter boundary using the read-only z/OSMF Jobs REST interface.
+It collects JES job and step results, approved spool metadata and hashes, program identity, return
+codes, timestamps, and JCL-proven DD allocations. Credentials remain outside events and receipts,
+and raw spool records are discarded after bounded parsing.
 
-The current fixture proves ingestion and policy mechanics only. It is not mainframe evidence.
+Run `./zosmf-adapter.sh verify` to exercise the IBM-shaped local server and prove its evidence
+remains simulated. See `zosmf/README.md` for the live connection, TLS, authentication, capture,
+mapping, and attestation contract.

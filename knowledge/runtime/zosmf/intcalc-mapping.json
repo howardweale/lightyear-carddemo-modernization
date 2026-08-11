@@ -1,0 +1,35 @@
+{
+  "dd_allocations": [
+    {
+      "access": "read",
+      "ddname": "TCATBALF",
+      "edge_id": "edge:306c54c9d54a2e3394b2"
+    },
+    {
+      "access": "read-write",
+      "ddname": "ACCTFILE",
+      "edge_id": "edge:ca49e89cc43783d9af72"
+    },
+    {
+      "access": "write",
+      "ddname": "TRANSACT",
+      "edge_id": "edge:ae7de3f32e08f9eee0a0"
+    }
+  ],
+  "job": {
+    "name": "INTCALC",
+    "node_id": "legacy:jcl-job:INTCALC"
+  },
+  "schema_version": "1.0",
+  "steps": [
+    {
+      "job_step_edge_id": "edge:41c665376569d66442a5",
+      "name": "STEP15",
+      "node_id": "legacy:jcl-step:INTCALC:STEP15",
+      "program": "CBACT04C",
+      "program_node_id": "legacy:cobol-program:CBACT04C",
+      "step_program_edge_id": "edge:0594254ade360b961aef"
+    }
+  ],
+  "workload": "workload:carddemo-intcalc"
+}

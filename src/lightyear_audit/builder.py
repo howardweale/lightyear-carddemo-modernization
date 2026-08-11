@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any
 
 from lightyear_runtime.engine import load_snapshot as load_runtime_snapshot
+from lightyear_execution.evidence import normalize_execution_evidence
 
 from .contracts import EventDraft, canonical_hash
 from .ledger import build_snapshot
@@ -21,6 +22,7 @@ def build_canonical_audit(
     work_order_path: Path,
     policy_path: Path,
     signing_key: bytes | None = None,
+    execution_receipt_path: Path | None = None,
 ) -> dict[str, Any]:
     graph = json.loads(graph_receipt_path.read_text(encoding="utf-8"))
     evidence = json.loads(evidence_receipt_path.read_text(encoding="utf-8"))
@@ -56,8 +58,37 @@ def build_canonical_audit(
         actor_kind="human",
     ))
 
-    runtime_decisions = []
+    execution_decisions = []
     tick = 300
+    if execution_receipt_path is not None:
+        source_execution = json.loads(execution_receipt_path.read_text(encoding="utf-8"))
+        execution = normalize_execution_evidence(source_execution)
+        drafts.append(_draft(
+            "2022-07-18T00:00:00.250Z",
+            "system:execution-controller", "system", "execution.evidence_recorded",
+            "execution_policy", "execution:carddemo-hardened-plane",
+            [{
+                "id": "execution:carddemo-hardened-plane",
+                "kind": execution["evidence_class"],
+                "sha256": execution["source_receipt_sha256"],
+            }],
+            {
+                "evidence_class": execution["evidence_class"],
+                "source_receipt_type": execution["source_receipt_type"],
+                "assurance": execution["assurance"],
+                "hardened_execution_ready": execution["hardened_execution_ready"],
+                "checks": execution["checks"],
+                "gaps": execution["gaps"],
+                "execution_policy_sha256": execution["execution_policy_sha256"],
+                "bindings": execution["bindings"],
+            },
+        ))
+        decision = policy.execution_decision(execution, _tick(tick))
+        tick += 100
+        execution_decisions.append(decision)
+        drafts.append(_decision_draft(decision, execution["source_receipt_sha256"]))
+
+    runtime_decisions = []
     seen_runtime_sha: set[str] = set()
     for runtime_path in runtime_paths:
         snapshot = load_runtime_snapshot(runtime_path)
@@ -88,13 +119,14 @@ def build_canonical_audit(
                 drafts.append(_decision_draft(decision, run["content_sha256"]))
 
     promotion_at = _tick(tick)
-    release_id = "release:carddemo-intcalc:v0.10-demo"
+    release_id = "release:carddemo-intcalc:v0.11.2-demo"
     promotion = policy.promotion_decision(
         release_id,
         runtime_decisions,
         graph["content_sha256"],
         evidence["content_sha256"],
         promotion_at,
+        execution_decisions=execution_decisions,
     )
     drafts.append(_decision_draft(promotion, graph["content_sha256"]))
     checkpoint_at = _tick(tick + 100)

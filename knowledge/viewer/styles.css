@@ -212,7 +212,7 @@ dd { margin: 0; overflow-wrap: anywhere; font: 11px/1.4 ui-monospace, SFMono-Reg
 
 .runtime-view { min-height: calc(100vh - 235px); }
 .runtime-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 12px 0; }
-.audit-summary { grid-template-columns: repeat(4, 1fr); }
+.audit-summary { grid-template-columns: repeat(5, 1fr); }
 .runtime-summary div { padding: 8px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px; text-align: center; }
 .runtime-summary strong, .runtime-summary span { display: block; }
 .runtime-summary strong { font: 700 15px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; }

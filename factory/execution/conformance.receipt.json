@@ -1,0 +1,54 @@
+{
+  "assurance": "simulated",
+  "backend_plan": {
+    "assurance": "enforced",
+    "backend": "oci-docker",
+    "cap_drop_all": true,
+    "command": [
+      "python3",
+      "-m",
+      "lightyear_factory.private_benchmark"
+    ],
+    "cpus": 1.0,
+    "environment_names": [
+      "LIGHTYEAR_FACTORY_WORKSPACE",
+      "LIGHTYEAR_NETWORK_POLICY",
+      "PYTHONPATH"
+    ],
+    "image": "python:3.13-alpine@sha256:399babc8b49529dabfd9c922f2b5eea81d611e4512e3ed250d75bd2e7683f4b0",
+    "memory_mb": 512,
+    "network_mode": "none",
+    "no_new_privileges": true,
+    "pids_limit": 128,
+    "read_only_root": true,
+    "run_as_user": "65532:65532",
+    "tmpfs_mb": 64,
+    "workspace_read_only": true
+  },
+  "checks": {
+    "capabilities_dropped": true,
+    "digest_pinned_image": true,
+    "network_disabled": true,
+    "non_root_identity": true,
+    "privilege_escalation_denied": true,
+    "protected_value_not_forwarded": true,
+    "resource_limits_present": true,
+    "root_filesystem_read_only": true,
+    "workspace_read_only": true
+  },
+  "content_sha256": "36bd915c65150ad7f148f2d9fe88a5f67f9baf1ea2b83e39591d561f5a0c6180",
+  "execution_policy_id": "lightyear:carddemo:hardened-execution",
+  "execution_policy_sha256": "4418dff96d2704aea013c03dd92e1ab0d26b68c4ea671343e1293aed4a4d8a95",
+  "gaps": [
+    "container-runtime-enforcement-not-observed",
+    "live-signed-work-order-admission-not-observed"
+  ],
+  "limitations": [
+    "This receipt proves deterministic policy and invocation construction, not OS enforcement.",
+    "Run a live Docker or Podman probe before claiming hardened execution readiness."
+  ],
+  "production_ready": false,
+  "receipt_type": "lightyear-execution-policy-conformance",
+  "schema_version": "1.0",
+  "status": "passed"
+}

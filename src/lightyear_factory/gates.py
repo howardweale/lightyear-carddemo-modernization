@@ -2,10 +2,11 @@ from __future__ import annotations
 
 import hashlib
 import os
-import subprocess
-import time
 from pathlib import Path
 from typing import Any
+
+from lightyear_execution.backend import LocalProcessBackend
+from lightyear_execution.contracts import canonical_hash
 
 from .contracts import GateContract
 
@@ -16,9 +17,15 @@ MAX_CAPTURE_BYTES = 64 * 1024
 class GateRunner:
     """Run deterministic acceptance commands without invoking a shell."""
 
-    def __init__(self, workspace_root: Path, allow_network: bool = False) -> None:
+    def __init__(
+        self,
+        workspace_root: Path,
+        allow_network: bool = False,
+        backend: Any | None = None,
+    ) -> None:
         self.workspace_root = workspace_root.resolve()
         self.allow_network = allow_network
+        self.backend = backend or LocalProcessBackend()
 
     def run(self, gates: tuple[GateContract, ...]) -> dict[str, Any]:
         results = [self._run_one(gate) for gate in gates]
@@ -47,39 +54,27 @@ class GateRunner:
             ):
                 environment.pop(key, None)
             environment["NO_PROXY"] = "*"
-        started = time.monotonic()
-        timed_out = False
-        try:
-            completed = subprocess.run(
-                list(gate.command),
-                cwd=self.workspace_root,
-                env=environment,
-                stdin=subprocess.DEVNULL,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                timeout=gate.timeout_seconds,
-                check=False,
-            )
-            exit_code = completed.returncode
-            stdout = completed.stdout[-MAX_CAPTURE_BYTES:]
-            stderr = completed.stderr[-MAX_CAPTURE_BYTES:]
-        except subprocess.TimeoutExpired as exc:
-            timed_out = True
-            exit_code = None
-            stdout = (exc.stdout or b"")[-MAX_CAPTURE_BYTES:]
-            stderr = (exc.stderr or b"")[-MAX_CAPTURE_BYTES:]
-        duration_ms = round((time.monotonic() - started) * 1000)
+        result = self.backend.execute(
+            gate.command, self.workspace_root, environment, gate.timeout_seconds
+        )
+        exit_code = result.exit_code
+        timed_out = result.timed_out
+        stdout = result.stdout[-MAX_CAPTURE_BYTES:]
+        stderr = result.stderr[-MAX_CAPTURE_BYTES:]
+        execution = dict(result.evidence)
+        execution["content_sha256"] = canonical_hash(execution)
         return {
             "id": gate.gate_id,
             "status": "passed" if exit_code == 0 and not timed_out else "failed",
             "exit_code": exit_code,
             "timed_out": timed_out,
-            "duration_ms": duration_ms,
+            "duration_ms": result.duration_ms,
             "command": list(gate.command),
             "stdout": stdout.decode("utf-8", errors="replace"),
             "stderr": stderr.decode("utf-8", errors="replace"),
             "output_sha256": hashlib.sha256(stdout + b"\0" + stderr).hexdigest(),
             "expose_output_to_builder": gate.expose_output_to_builder,
+            "execution": execution,
         }
 
 

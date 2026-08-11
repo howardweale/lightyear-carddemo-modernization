@@ -1,14 +1,31 @@
-# LIGHTYEAR Autonomous Factory
+# LIGHTYEAR Autonomous Factory and Hardened Execution Plane
 
-The v0.7.1 factory is a bounded, evidence-governed run engine. It can plan, edit, verify, retry, and
+The factory is a bounded, evidence-governed run engine. It can plan, edit, verify, retry, and
 record a modernization task without a person driving each step. It cannot declare itself correct:
 only controller-run acceptance gates determine the final state.
+
+v0.11 adds enforceable admission and execution security around that loop. A signed work order is
+verified against an external key, expiry, trusted issuer, exact policy hash, and one-use nonce.
+Short-lived credentials authorize planner, builder, provider, and verifier actions independently.
+Acceptance gates can run through Docker or Podman with a digest-pinned image, no network, read-only
+root and workspace filesystems, a non-root user, all capabilities dropped, no-new-privileges,
+bounded processes, memory, CPU and tmpfs, and no shell interpolation.
+
+v0.11.1 distinguishes policy simulation, a live runtime probe, and a signed admitted factory run.
+Only the last class can satisfy hardened readiness. Its receipt binds admission, work order,
+policy, issued identities, verified role actions, acceptance-gate executions, and protected-value
+posture; the audit engine recomputes readiness instead of trusting a producer-supplied flag.
+
+v0.11.2 maps host workspace environment values to the fixed `/workspace` OCI mount. This prevents
+Mac or Windows host paths from reaching a Linux container and makes the private verifier portable
+without weakening the read-only mount or exposing additional environment variables.
 
 ## Control model
 
 ```mermaid
 flowchart TD
-    W["Approved work order"] --> C["Deterministic controller"]
+    W["Signed work order"] --> A["Admission and replay gate"]
+    A --> C["Deterministic controller"]
     C --> P["Planner agent"]
     P --> C
     C --> B["Builder agent"]
@@ -27,6 +44,11 @@ The roles are deliberately separate:
 | Builder | plan, allowed files, public failure envelope | exact find/replace proposal | see private gate output or apply edits |
 | Verifier | full controller gate report | private diagnosis | modify the workspace or declare acceptance |
 | Controller | all signed-in-process artifacts and policy | state transitions, applied changes, receipt | waive a failed gate |
+
+Every role receives a work-order-bound, action-scoped credential. Model-provider credentials are
+leased to the controller-side provider adapter, not exposed to planner or builder prompt content.
+Lease receipts record only the approved name, subject and hashes; values are one-use, cleared from
+the lease after consumption, and never serialized.
 
 `LocalAgentSet` is a deterministic reference worker for the published mutation family.
 `OpenAIAgentSet` is an optional Responses API adapter. The controller and artifact contracts remain
@@ -112,19 +134,60 @@ store root and is the opaque API/UI address. No local path is exposed to the bro
 
 ## Security boundaries
 
-v0.7 fails closed on unsafe relative paths, unauthorized plan paths, ambiguous edits, excess file
+The factory fails closed on unsafe relative paths, unauthorized plan paths, ambiguous edits, excess file
 or patch budgets, duplicate run IDs, gate timeouts, and controller errors. It also removes proxy
 variables when a work order denies network access and never invokes a shell for gate commands.
 
-Two boundaries are intentionally incomplete and appear on every receipt:
+The v0.11.2 hardened path additionally fails closed on invalid, expired, replayed or policy-mismatched
+work-order signatures; wrong issuer keys; underlength signing keys; unauthorized agent actions;
+cross-work-order credentials; unapproved protected-value names; missing container runtimes;
+unpinned images; unapproved commands; and weakened isolation controls.
 
-- copy-on-run isolation is not an operating-system sandbox; and
-- network denial is advisory until a container, microVM, or policy engine enforces it.
+Build and verify the deterministic execution-policy conformance receipt:
+
+```bash
+./hardened-execution.sh build
+./hardened-execution.sh verify
+```
+
+This proves contract and OCI invocation construction only. It deliberately reports `simulated` and
+`production_ready: false`. To prove the live OCI boundary with Docker Desktop or Podman:
+
+```bash
+./hardened-execution.sh probe docker
+```
+
+The probe reports `runtime_ready: true` when isolation succeeds but remains
+`production_ready: false` because it has no signed work order or agent-action evidence.
+
+To admit and run the example work order, validate its composite evidence, and generate a live audit
+snapshot plus dossier, keep both keys outside the repository:
+
+```bash
+export LIGHTYEAR_WORK_ORDER_SIGNING_KEY="$(openssl rand -hex 32)"
+export LIGHTYEAR_IDENTITY_SIGNING_KEY="$(openssl rand -hex 32)"
+./hardened-execution.sh admitted-run docker
+```
+
+An optional third argument supplies a run ID. Outputs are written under
+`work/factory-runs/<run-id>/` and `work/hardened-execution-runs/<run-id>/`. The latter contains the
+signed envelope, live audit snapshot, and release dossier; signing keys remain environment-only.
+
+The compatibility path remains available for the offline mutation benchmark, but its receipts say
+`advisory` and are not production-ready. A conformance simulator cannot become acceptance proof.
+
+Remaining deployment boundaries include:
+
+- HMAC is shared-secret admission; high-assurance deployments should use KMS-backed asymmetric
+  signatures and independently authenticated human/service identity;
+- Docker or Podman isolation inherits the security and configuration of its host daemon;
+- output artifacts and nonce ledgers still need immutable external storage and concurrency control;
+- egress allowlists are intentionally unsupported in v0.11.2—gate networking is either denied or the
+  hardened policy does not admit the run.
 
 The private benchmark module is separated from builder context by the controller, but it resides in
-the same local checkout. Production use needs separate worker and verifier trust domains,
-authenticated identities, signed work orders, secret brokering, immutable artifact storage, and
-enforced egress policy.
+the same source snapshot mounted read-only during a hardened gate. Production use should also place
+workers, verifiers, signing services and artifact retention in separate trust domains.
 
 ## When the mainframe connection arrives
 
@@ -134,4 +197,4 @@ output dataset hashes, record counts, return codes, timestamps, environment iden
 logs. Differential observations then become verifier-private graph evidence. Only after those gates
 pass should a receipt make a mainframe-equivalence claim.
 
-Until that evidence exists, v0.7 receipts correctly say that runtime mainframe parity is unproven.
+Until that evidence exists, receipts correctly say that runtime mainframe parity is unproven.

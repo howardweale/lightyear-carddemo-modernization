@@ -13,8 +13,8 @@ if [[ "$action" == "build" ]]; then
 elif [[ "$action" == "verify" ]]; then
   verification_dir="$project_dir/work/audit-control-tower-verify"
   generated="$verification_dir/audit.snapshot.json.gz"
-  generated_json="$verification_dir/carddemo-intcalc-v0.10-demo.json"
-  generated_markdown="$verification_dir/carddemo-intcalc-v0.10-demo.md"
+  generated_json="$verification_dir/carddemo-intcalc-v0.11.2-demo.json"
+  generated_markdown="$verification_dir/carddemo-intcalc-v0.11.2-demo.md"
   mkdir -p "$verification_dir"
   "$LIGHTYEAR_PYTHON_BIN" -m lightyear_audit build \
     --output "$generated" \
@@ -25,8 +25,8 @@ elif [[ "$action" == "verify" ]]; then
   "$LIGHTYEAR_PYTHON_BIN" -m lightyear_audit compare \
     --expected "$project_dir/audit/audit.snapshot.json.gz" \
     --actual "$generated"
-  cmp "$project_dir/audit/dossiers/carddemo-intcalc-v0.10-demo.json" "$generated_json"
-  cmp "$project_dir/audit/dossiers/carddemo-intcalc-v0.10-demo.md" "$generated_markdown"
+  cmp "$project_dir/audit/dossiers/carddemo-intcalc-v0.11.2-demo.json" "$generated_json"
+  cmp "$project_dir/audit/dossiers/carddemo-intcalc-v0.11.2-demo.md" "$generated_markdown"
   echo "Audit ledger, checkpoint, projections, policy decisions, and dossier are deterministic and valid."
 else
   echo "Usage: ./audit-control-tower.sh [build|verify]" >&2

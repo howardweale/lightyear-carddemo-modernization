@@ -67,6 +67,7 @@ class AuditPolicyEngine:
         evidence_sha256: str,
         evaluated_at: str,
         exception_payload: dict[str, Any] | None = None,
+        execution_decisions: list[dict[str, Any]] | None = None,
     ) -> dict[str, Any]:
         policy = self.by_id["release.promotion"]
         development = [
@@ -82,6 +83,11 @@ class AuditPolicyEngine:
             gaps.append("development-readiness")
         if not mainframe or not any(item["status"] == "passed" for item in mainframe):
             gaps.append("mainframe-equivalence")
+        execution_decisions = execution_decisions or []
+        if not execution_decisions or not any(
+            item["status"] == "passed" for item in execution_decisions
+        ):
+            gaps.append("hardened-execution-enforcement")
         status = "passed" if not gaps else "blocked"
         exception = None
         if exception_payload is not None:
@@ -99,9 +105,9 @@ class AuditPolicyEngine:
             evaluated_at=evaluated_at,
             gaps=gaps,
             rationale=(
-                "Release satisfies graph, source-evidence, development, and mainframe gates."
+                "Release satisfies graph, source-evidence, development, hardened execution, and mainframe gates."
                 if status == "passed"
-                else "Release is blocked until independently observed z/OS equivalence evidence exists."
+                else "Release is blocked until every independent runtime and execution-security gate has evidence."
                 if status == "blocked"
                 else f"Release policy was overridden by approved exception {exception.exception_id}."
             ),
@@ -109,8 +115,42 @@ class AuditPolicyEngine:
                 "graph_content_sha256": graph_sha256,
                 "source_evidence_content_sha256": evidence_sha256,
                 "runtime_decision_ids": [item["id"] for item in runtime_decisions],
+                "execution_decision_ids": [item["id"] for item in execution_decisions],
             },
             exception=exception.to_dict() if exception else None,
+        )
+
+    def execution_decision(
+        self,
+        receipt: dict[str, Any],
+        evaluated_at: str,
+    ) -> dict[str, Any]:
+        policy = self.by_id["execution.hardened_readiness"]
+        passed = (
+            receipt.get("hardened_execution_ready") is True
+            and receipt.get("evidence_class") == "signed-admitted-oci-factory-run"
+            and receipt.get("assurance") == "enforced"
+            and all(receipt.get("checks", {}).values())
+        )
+        gaps = [] if passed else list(receipt.get("gaps", ["execution-enforcement-unproven"]))
+        return self._decision(
+            decision_id="decision:execution:hardened-readiness",
+            policy=policy,
+            subject_id="execution:carddemo-hardened-plane",
+            status="passed" if passed else "blocked",
+            evaluated_at=evaluated_at,
+            gaps=gaps,
+            rationale=(
+                "A live OCI runtime enforced the admitted execution policy."
+                if passed
+                else "Policy construction passed, but live OCI enforcement has not been observed."
+            ),
+            inputs={
+                "execution_receipt_sha256": receipt["source_receipt_sha256"],
+                "evidence_class": receipt.get("evidence_class"),
+                "assurance": receipt.get("assurance"),
+                "hardened_execution_ready": receipt.get("hardened_execution_ready", False),
+            },
         )
 
     @staticmethod

@@ -3,7 +3,7 @@
   "$id": "https://lightyear.ai/schema/factory/run-receipt-1.0.json",
   "title": "LIGHTYEAR Autonomous Factory Run Receipt",
   "type": "object",
-  "required": ["schema_version", "receipt_type", "run_id", "work_order_sha256", "status", "ledger_head_sha256", "verification", "content_sha256"],
+  "required": ["schema_version", "receipt_type", "run_id", "work_order_sha256", "status", "ledger_head_sha256", "verification", "execution_security", "content_sha256"],
   "properties": {
     "schema_version": {"const": "1.0"},
     "receipt_type": {"const": "lightyear-autonomous-factory-run"},
@@ -12,7 +12,40 @@
     "status": {"enum": ["passed", "blocked"]},
     "ledger_head_sha256": {"type": ["string", "null"]},
     "verification": {"type": "object"},
+    "execution_security": {
+      "type": "object",
+      "required": ["status", "production_ready", "backend", "secrets_persisted", "gaps"],
+      "properties": {
+        "evidence_class": {"const": "signed-admitted-oci-factory-run"},
+        "status": {"enum": ["advisory", "simulated", "enforced"]},
+        "production_ready": {"type": "boolean"},
+        "backend": {"type": "string"},
+        "work_order_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "execution_policy_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "admission_receipt_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "identity_receipt_sha256": {"type": "array", "items": {"type": "string", "pattern": "^[0-9a-f]{64}$"}},
+        "authorization_receipt_sha256": {"type": "array", "items": {"type": "string", "pattern": "^[0-9a-f]{64}$"}},
+        "required_agent_actions": {"type": "array", "items": {"type": "string"}},
+        "authorized_agent_actions": {"type": "array", "items": {"type": "string"}},
+        "gate_execution_sha256": {"type": "array", "items": {"type": "string", "pattern": "^[0-9a-f]{64}$"}},
+        "secrets_persisted": {"const": false},
+        "gaps": {"type": "array", "items": {"type": "string"}},
+        "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      },
+      "allOf": [
+        {
+          "if": {"required": ["evidence_class"]},
+          "then": {
+            "required": [
+              "evidence_class", "work_order_sha256", "execution_policy_sha256",
+              "admission_receipt_sha256", "identity_receipt_sha256",
+              "authorization_receipt_sha256", "required_agent_actions",
+              "authorized_agent_actions", "gate_execution_sha256", "content_sha256"
+            ]
+          }
+        }
+      ]
+    },
     "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
   }
 }
-

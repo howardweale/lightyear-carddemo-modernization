@@ -20,6 +20,12 @@ def build_dossier(snapshot: dict[str, Any], release_id: str) -> dict[str, Any]:
     runtime_decisions = [
         item for item in snapshot["decisions"] if item["policy_id"].startswith("runtime.")
     ]
+    execution_decisions = [
+        item for item in snapshot["decisions"] if item["policy_id"].startswith("execution.")
+    ]
+    execution_passed = bool(execution_decisions) and all(
+        item["status"] == "passed" for item in execution_decisions
+    )
     evidence = {}
     for event in snapshot["events"]:
         for item in event["evidence"]:
@@ -33,6 +39,7 @@ def build_dossier(snapshot: dict[str, Any], release_id: str) -> dict[str, Any]:
         "gaps": promotion["gaps"],
         "promotion_decision": promotion,
         "runtime_decisions": runtime_decisions,
+        "execution_decisions": execution_decisions,
         "evidence_inventory": [evidence[key] for key in sorted(evidence)],
         "audit": {
             "ledger_id": snapshot["ledger_id"],
@@ -44,6 +51,11 @@ def build_dossier(snapshot: dict[str, Any], release_id: str) -> dict[str, Any]:
         "limitations": [
             "The committed canonical checkpoint is unsigned; live environments should configure a signing key.",
             "Simulated and local observations do not establish production mainframe equivalence.",
+            (
+                "Signed admission, scoped agent actions, and OCI acceptance-gate enforcement were observed."
+                if execution_passed
+                else "Execution policy conformance or an OCI probe alone is not signed factory-run proof."
+            ),
             "This dossier is a deterministic evidence summary, not a substitute for organizational approval policy.",
         ],
     }
@@ -52,7 +64,7 @@ def build_dossier(snapshot: dict[str, Any], release_id: str) -> dict[str, Any]:
 
 
 def render_markdown(dossier: dict[str, Any]) -> str:
-    decisions = dossier["runtime_decisions"]
+    decisions = [*dossier["runtime_decisions"], *dossier["execution_decisions"]]
     rows = [
         f"| `{item['policy_id']}` | `{item['subject_id']}` | **{item['status']}** | {len(item['gaps'])} |"
         for item in decisions
@@ -77,7 +89,7 @@ def render_markdown(dossier: dict[str, Any]) -> str:
         *(f"- `{gap}`" for gap in dossier["gaps"]),
         "" if dossier["gaps"] else "- None",
         "",
-        "## Runtime policy decisions",
+        "## Runtime and execution policy decisions",
         "",
         "| Policy | Subject | Status | Gaps |",
         "|---|---|---:|---:|",

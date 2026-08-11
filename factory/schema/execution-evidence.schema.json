@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schema/factory/execution-evidence-1.0.json",
+  "title": "LIGHTYEAR normalized execution evidence",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "evidence_class", "source_receipt_type", "source_receipt_sha256",
+    "assurance", "hardened_execution_ready", "execution_policy_sha256", "checks",
+    "gaps", "bindings", "content_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "evidence_class": {
+      "enum": [
+        "policy-conformance-simulation",
+        "live-container-runtime-probe",
+        "signed-admitted-oci-factory-run"
+      ]
+    },
+    "source_receipt_type": {
+      "enum": [
+        "lightyear-execution-policy-conformance",
+        "lightyear-live-execution-probe",
+        "lightyear-autonomous-factory-run"
+      ]
+    },
+    "source_receipt_sha256": {"$ref": "#/$defs/sha256"},
+    "assurance": {"enum": ["simulated", "enforced", "failed"]},
+    "hardened_execution_ready": {"type": "boolean"},
+    "execution_policy_sha256": {"$ref": "#/$defs/sha256"},
+    "checks": {
+      "type": "object",
+      "required": [
+        "policy_construction_passed", "runtime_enforced", "signed_admission_bound",
+        "agent_actions_authorized", "acceptance_gates_passed",
+        "protected_values_not_persisted"
+      ],
+      "additionalProperties": {"type": "boolean"}
+    },
+    "gaps": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "bindings": {"type": "object"},
+    "content_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

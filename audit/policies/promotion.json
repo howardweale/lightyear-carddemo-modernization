@@ -14,6 +14,12 @@
       "version": "1.0"
     },
     {
+      "id": "execution.hardened_readiness",
+      "name": "Hardened execution readiness",
+      "override_allowed": false,
+      "version": "1.0"
+    },
+    {
       "id": "release.promotion",
       "name": "Governed release promotion",
       "override_allowed": false,

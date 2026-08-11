@@ -1,6 +1,6 @@
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.10.0 — audit ledger and Evidence Control Tower**
+Release: **v0.11.2 — corrected OCI workspace translation**
 
 An evidence-aware knowledge graph, source-faithful local oracle, differential harness, and
 Java/Spring Batch candidate for AWS CardDemo. Together they form the first engineering cell of a
@@ -40,6 +40,23 @@ Deterministic promotion policy, governed exceptions, optional signed checkpoints
 dossiers, and a read-only Evidence Control Tower make unattended execution inspectable without
 allowing agents or dashboard state to declare their own success.
 
+v0.11 closes the largest local autonomy boundary. Signed, expiring work orders pass a replay-safe
+admission gate; planner, builder, provider, and verifier receive short-lived action-scoped
+identities; protected values use one-use non-persistent leases; and deterministic gates can execute
+through a digest-pinned Docker or Podman sandbox with no network, read-only filesystems, non-root
+identity, dropped capabilities, no-new-privileges, and resource ceilings. Simulation proves policy
+construction but cannot satisfy the new hardened-execution release gate.
+
+v0.11.1 closes the live-evidence loop without weakening that gate. A Docker/Podman probe now proves
+only the container boundary. Hardened readiness requires a passed factory receipt that binds the
+signed admission, exact work order and policy, scoped agent-action attestations, protected-value
+posture, and enforced acceptance-gate hashes. The audit plane normalizes all three evidence classes,
+rejects partial or tampered proof, and can project a live run into the Control Tower and dossier.
+
+v0.11.2 corrects the host-to-container workspace boundary discovered by the first Apple Silicon
+live run. The controller now translates both `PYTHONPATH` and `LIGHTYEAR_FACTORY_WORKSPACE` to
+their `/workspace` container paths before launching a gate, while retaining the read-only host bind.
+
 ## What it does
 
 1. Builds a deterministic, provenance-rich graph of the entire CardDemo application estate.
@@ -66,6 +83,14 @@ allowing agents or dashboard state to declare their own success.
 20. Detects changed, deleted, reordered, duplicated, or stale audit events and projections.
 21. Produces deterministic release dossiers and blocks promotion until governed evidence passes.
 22. Shows trust posture, policy rationale, evidence lineage, exceptions, and checkpoints in a read-only Control Tower.
+23. Verifies signed work orders against trusted issuers, expiry, policy identity, and one-use nonces.
+24. Issues short-lived, action-scoped identities for planner, builder, provider, and verifier roles.
+25. Brokers allowlisted protected values through one-use leases without persisting their contents.
+26. Runs acceptance gates through a digest-pinned, networkless, non-root Docker or Podman sandbox.
+27. Blocks promotion when only simulated execution-policy conformance exists.
+28. Prevents a successful container-only probe from impersonating a signed factory run.
+29. Binds admitted work orders, agent-action attestations, and OCI gate evidence in one receipt.
+30. Ingests live execution evidence while leaving mainframe equivalence independently blocked.
 
 The included `candidate-java` module is the first modernization candidate. It consumes and emits
 the same fixed-width records as the oracle, including COBOL signed zoned decimals.
@@ -213,11 +238,40 @@ Build or verify the canonical audit snapshot and release dossier:
 ```
 
 Then run `./graph-explorer.sh` and open the **Audit** tab. The demo release is correctly shown as
-blocked because local and simulated evidence cannot prove mainframe equivalence. The ledger is the
-source of truth; dashboard metrics and dossiers are rebuildable projections. Configure
+blocked because local and simulated evidence proves neither mainframe equivalence nor live
+hardened-runtime enforcement. The ledger is the source of truth; dashboard metrics and dossiers
+are rebuildable projections. Configure
 `LIGHTYEAR_AUDIT_SIGNING_KEY` only through the environment when signed checkpoints are required.
 See `audit/README.md` for policy authority, exceptions, schemas, signing, privacy, and production
 hardening gaps.
+
+## Hardened execution
+
+Verify the deterministic policy and OCI invocation contract without requiring Docker:
+
+```bash
+./hardened-execution.sh verify
+```
+
+When Docker Desktop or Podman is available, run a live container-boundary probe:
+
+```bash
+./hardened-execution.sh probe docker
+```
+
+The canonical receipt remains explicitly simulated and non-production-ready. A probe proves OCI
+isolation but deliberately reports `production_ready: false` until a signed work order actually
+runs. To execute the complete admitted path and generate a live audit projection:
+
+```bash
+export LIGHTYEAR_WORK_ORDER_SIGNING_KEY="$(openssl rand -hex 32)"
+export LIGHTYEAR_IDENTITY_SIGNING_KEY="$(openssl rand -hex 32)"
+./hardened-execution.sh admitted-run docker
+```
+
+The generated factory receipt is the evidence input that can pass hardened-execution readiness;
+mainframe equivalence remains a separate gate. See `factory/README.md` for the trust boundary and
+artifact locations.
 
 Execute a specific approved work order with the local reference workers:
 
@@ -430,12 +484,11 @@ Once a candidate can pass the visible cases:
 
 1. Capture independent z/OS executions and attach runtime observations to graph entities.
 2. Externalize the audit log to immutable retention with managed asymmetric signing and trusted time.
-3. Replace copy isolation and advisory network denial with an enforced container or microVM policy.
-4. Add authenticated worker identities, signed work orders, admission policy, and secret brokering.
-5. Expand private holdouts and verified rule mappings to posting and statement-generation workloads.
-6. Add conflict-aware parallel work cells, graph-delta memory, and human approval for high-risk
+3. Move signed admission and identity credentials from HMAC to KMS-backed asymmetric trust.
+4. Expand private holdouts and verified rule mappings to posting and statement-generation workloads.
+5. Add conflict-aware parallel work cells, graph-delta memory, and human approval for high-risk
    changes.
-7. Issue a production acceptance receipt only after structural, behavioral, security, operational,
+6. Issue a production acceptance receipt only after structural, behavioral, security, operational,
    and mainframe-backed verification policies pass.
 
 The pinned workload specification is in `spec/carddemo-intcalc.json`.

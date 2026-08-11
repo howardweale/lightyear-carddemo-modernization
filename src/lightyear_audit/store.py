@@ -16,16 +16,22 @@ class AuditStore:
         promotion = [
             item for item in self.snapshot["decisions"] if item["policy_id"] == "release.promotion"
         ]
+        execution = [
+            item for item in self.snapshot["decisions"]
+            if item["policy_id"] == "execution.hardened_readiness"
+        ]
         return {
             "content_sha256": self.snapshot["content_sha256"],
             "graph_content_sha256": self.snapshot["graph_content_sha256"],
             "checkpoint": self.snapshot["checkpoint"],
             "statistics": self.snapshot["statistics"],
             "promotion_decisions": promotion,
+            "execution_decisions": execution,
             "trust_posture": {
                 "promotion_status": promotion[-1]["status"] if promotion else "not_evaluated",
                 "unresolved_gaps": promotion[-1]["gaps"] if promotion else [],
                 "signed_checkpoint": bool(self.snapshot["checkpoint"].get("signature")),
+                "execution_status": execution[-1]["status"] if execution else "not_evaluated",
             },
         }
 

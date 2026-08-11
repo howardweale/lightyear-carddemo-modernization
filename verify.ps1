@@ -8,6 +8,9 @@ $env:PYTHONPATH = Join-Path $ProjectDir "src"
 & py -3.11 -m unittest discover -s (Join-Path $ProjectDir "tests") -v
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
+& (Join-Path $ProjectDir "hardened-execution.ps1") verify
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
 & (Join-Path $ProjectDir "knowledge-graph.ps1") verify
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 

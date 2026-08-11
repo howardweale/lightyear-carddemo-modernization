@@ -6,7 +6,7 @@
   "additionalProperties": false,
   "required": [
     "schema_version", "dossier_type", "release_id", "status", "rationale", "gaps",
-    "promotion_decision", "runtime_decisions", "evidence_inventory", "audit",
+    "promotion_decision", "runtime_decisions", "execution_decisions", "evidence_inventory", "audit",
     "limitations", "content_sha256"
   ],
   "properties": {
@@ -18,6 +18,7 @@
     "gaps": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
     "promotion_decision": {"$ref": "policy-decision.schema.json"},
     "runtime_decisions": {"type": "array", "items": {"$ref": "policy-decision.schema.json"}},
+    "execution_decisions": {"type": "array", "items": {"$ref": "policy-decision.schema.json"}},
     "evidence_inventory": {
       "type": "array",
       "items": {

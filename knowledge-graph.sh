@@ -2,6 +2,8 @@
 set -euo pipefail
 
 project_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+source "$project_dir/python-runtime.sh"
+lightyear_resolve_python
 legacy_commit="59cc6c2fd7ebd7ef7925cad552a01a4b8b6e4d5e"
 action="${1:-verify}"
 legacy_root="${2:-${CARDDEMO_UPSTREAM_ROOT:-}}"
@@ -23,7 +25,7 @@ fi
 export PYTHONPATH="$project_dir/src"
 
 if [[ "$action" == "build" ]]; then
-  python3 -m lightyear_knowledge_graph build \
+  "$LIGHTYEAR_PYTHON_BIN" -m lightyear_knowledge_graph build \
     --legacy-root "$legacy_root" \
     --modern-root "$project_dir" \
     --manifest "$project_dir/knowledge/mappings/carddemo-intcalc.json" \
@@ -37,7 +39,7 @@ if [[ "$action" == "build" ]]; then
 elif [[ "$action" == "verify" ]]; then
   generated="$project_dir/work/knowledge-graph-verify"
   mkdir -p "$generated"
-  python3 -m lightyear_knowledge_graph build \
+  "$LIGHTYEAR_PYTHON_BIN" -m lightyear_knowledge_graph build \
     --legacy-root "$legacy_root" \
     --modern-root "$project_dir" \
     --manifest "$project_dir/knowledge/mappings/carddemo-intcalc.json" \
@@ -48,15 +50,15 @@ elif [[ "$action" == "verify" ]]; then
     --evidence-receipt "$generated/source.receipt.json" \
     --legacy-commit "$legacy_commit" \
     --modern-commit repository-content
-  python3 -m lightyear_knowledge_graph validate --graph "$generated/graph.snapshot.json.gz"
-  python3 -m lightyear_knowledge_graph validate-evidence \
+  "$LIGHTYEAR_PYTHON_BIN" -m lightyear_knowledge_graph validate --graph "$generated/graph.snapshot.json.gz"
+  "$LIGHTYEAR_PYTHON_BIN" -m lightyear_knowledge_graph validate-evidence \
     --graph "$generated/graph.snapshot.json.gz" \
     --evidence-pack "$generated/source.pack.json.gz"
-  python3 -m lightyear_knowledge_graph gaps --graph "$generated/graph.snapshot.json.gz"
-  python3 -m lightyear_knowledge_graph compare-snapshots \
+  "$LIGHTYEAR_PYTHON_BIN" -m lightyear_knowledge_graph gaps --graph "$generated/graph.snapshot.json.gz"
+  "$LIGHTYEAR_PYTHON_BIN" -m lightyear_knowledge_graph compare-snapshots \
     --expected "$project_dir/knowledge/graph.snapshot.json.gz" \
     --actual "$generated/graph.snapshot.json.gz"
-  python3 -m lightyear_knowledge_graph compare-evidence-packs \
+  "$LIGHTYEAR_PYTHON_BIN" -m lightyear_knowledge_graph compare-evidence-packs \
     --expected "$project_dir/knowledge/evidence/source.pack.json.gz" \
     --actual "$generated/source.pack.json.gz"
   cmp "$project_dir/knowledge/graph.receipt.json" "$generated/graph.receipt.json"

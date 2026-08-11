@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schema/factory/run-receipt-1.0.json",
+  "title": "LIGHTYEAR Autonomous Factory Run Receipt",
+  "type": "object",
+  "required": ["schema_version", "receipt_type", "run_id", "work_order_sha256", "status", "ledger_head_sha256", "verification", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "receipt_type": {"const": "lightyear-autonomous-factory-run"},
+    "run_id": {"type": "string"},
+    "work_order_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "status": {"enum": ["passed", "blocked"]},
+    "ledger_head_sha256": {"type": ["string", "null"]},
+    "verification": {"type": "object"},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}
+

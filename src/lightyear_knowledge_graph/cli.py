@@ -101,6 +101,7 @@ def build_parser() -> argparse.ArgumentParser:
     explorer.add_argument("--host", default="127.0.0.1")
     explorer.add_argument("--port", type=int, default=8765)
     explorer.add_argument("--no-browser", action="store_true")
+    explorer.add_argument("--factory-runs", type=Path, default=Path("work"))
 
     neo4j = subparsers.add_parser(
         "export-neo4j",
@@ -192,6 +193,7 @@ def main(argv: list[str] | None = None) -> int:
             not args.no_browser,
             args.ontology,
             args.evidence_pack,
+            args.factory_runs,
         )
         return 0
 

@@ -32,6 +32,10 @@ class KnowledgeGraphTests(unittest.TestCase):
         self.assertGreaterEqual(stats["nodes_by_kind"]["jcl_job"], 40)
         self.assertGreaterEqual(stats["nodes_by_kind"]["cobol_field"], 1000)
         self.assertEqual(9, stats["nodes_by_kind"]["business_rule"])
+        self.assertIn(
+            "modern:file:src/lightyear_factory/orchestrator.py",
+            {node["id"] for node in self.graph["nodes"]},
+        )
 
     def test_business_rule_traces_to_implementation_and_test(self) -> None:
         rule = "rule:intcalc:monthly-interest"

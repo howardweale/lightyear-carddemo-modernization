@@ -93,6 +93,7 @@
       <nav class="right-tabs" aria-label="Entity tools">
         <button id="inspector-tab" class="right-tab active" type="button">Inspector</button>
         <button id="chat-tab" class="right-tab" type="button">Ask graph</button>
+        <button id="factory-tab" class="right-tab" type="button">Factory</button>
       </nav>
 
       <div id="inspector-view">
@@ -183,6 +184,43 @@
           </div>
           <p id="chat-provider-note" class="provider-note"></p>
         </form>
+      </div>
+
+      <div id="factory-view" class="factory-view" hidden>
+        <div class="factory-header">
+          <div>
+            <p class="eyebrow">AUTONOMOUS RUN CONTROL ROOM</p>
+            <h2>Every station leaves a receipt.</h2>
+          </div>
+          <button id="refresh-factory" class="text-button" type="button">Refresh</button>
+        </div>
+        <p class="chat-disclosure">Implementer view redacts verifier-private artifacts and holdout output.</p>
+        <div id="factory-runs" class="factory-runs" aria-live="polite"></div>
+        <div id="factory-empty" class="factory-empty" hidden>
+          <strong>No factory runs found</strong>
+          <p>Run <code>PYTHONPATH=src python3 -m lightyear_factory benchmark</code>, then refresh.</p>
+        </div>
+        <article id="factory-detail" class="factory-detail" hidden>
+          <div id="factory-badges" class="answer-meta"></div>
+          <h2 id="factory-title"></h2>
+          <code id="factory-id"></code>
+          <section>
+            <h3>Acceptance gates</h3>
+            <div id="factory-gates"></div>
+          </section>
+          <section>
+            <h3>Station timeline</h3>
+            <ol id="factory-timeline" class="factory-timeline"></ol>
+          </section>
+          <section>
+            <h3>Changed paths</h3>
+            <div id="factory-paths" class="factory-paths"></div>
+          </section>
+          <section>
+            <h3>Receipt identity</h3>
+            <code id="factory-receipt-hash" class="factory-hash"></code>
+          </section>
+        </article>
       </div>
     </aside>
   </main>

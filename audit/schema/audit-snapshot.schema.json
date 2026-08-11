@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schema/audit-snapshot.schema.json",
+  "title": "LIGHTYEAR audit ledger snapshot",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "snapshot_type", "ledger_id", "graph_content_sha256", "events",
+    "decisions", "exceptions", "checkpoint", "statistics", "content_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "snapshot_type": {"const": "lightyear-audit-ledger"},
+    "ledger_id": {"type": "string", "minLength": 1},
+    "graph_content_sha256": {"$ref": "#/$defs/sha256"},
+    "events": {"type": "array", "minItems": 1, "items": {"$ref": "audit-event.schema.json"}},
+    "decisions": {"type": "array", "items": {"$ref": "policy-decision.schema.json"}},
+    "exceptions": {"type": "array", "items": {"$ref": "exception.schema.json"}},
+    "checkpoint": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "checkpoint_version", "created_at", "event_count", "ledger_head_sha256",
+        "signature_algorithm", "signature"
+      ],
+      "properties": {
+        "checkpoint_version": {"const": "1.0"},
+        "created_at": {"type": "string", "format": "date-time"},
+        "event_count": {"type": "integer", "minimum": 1},
+        "ledger_head_sha256": {"$ref": "#/$defs/sha256"},
+        "signature_algorithm": {"enum": ["none", "HMAC-SHA256"]},
+        "signature": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/sha256"}]}
+      }
+    },
+    "statistics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["event_count", "actors", "actions", "decisions", "active_exceptions"],
+      "properties": {
+        "event_count": {"type": "integer", "minimum": 1},
+        "actors": {"$ref": "#/$defs/counts"},
+        "actions": {"$ref": "#/$defs/counts"},
+        "decisions": {"$ref": "#/$defs/counts"},
+        "active_exceptions": {"type": "integer", "minimum": 0}
+      }
+    },
+    "content_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "counts": {
+      "type": "object",
+      "additionalProperties": {"type": "integer", "minimum": 0}
+    }
+  }
+}

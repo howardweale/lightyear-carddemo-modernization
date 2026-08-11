@@ -7,6 +7,9 @@ const state = {
   chatHistory: [],
   factoryRuns: [],
   runtimeRuns: [],
+  auditSummary: null,
+  auditEvents: [],
+  auditReleaseId: null,
   selection: null,
   selectedId: null,
   selectedEdgeId: null,
@@ -83,7 +86,7 @@ async function initialize() {
     populateLegend();
     configureChat();
     bindControls();
-    await Promise.all([loadPerspective(), loadFactoryRuns(false), loadRuntimeRuns(false)]);
+    await Promise.all([loadPerspective(), loadFactoryRuns(false), loadRuntimeRuns(false), loadAudit(false)]);
   } catch (error) {
     setError(error);
   }
@@ -156,8 +159,14 @@ function bindControls() {
     switchRightPanel("runtime");
     await loadRuntimeRuns(true);
   });
+  $("audit-tab").addEventListener("click", async () => {
+    switchRightPanel("audit");
+    await loadAudit(true);
+  });
   $("refresh-factory").addEventListener("click", () => loadFactoryRuns(true));
   $("refresh-runtime").addEventListener("click", () => loadRuntimeRuns(true));
+  $("refresh-audit").addEventListener("click", () => loadAudit(true));
+  $("view-audit-dossier").addEventListener("click", loadAuditDossier);
   $("clear-chat").addEventListener("click", resetChat);
   $("chat-form").addEventListener("submit", submitChat);
   $("chat-suggestions").addEventListener("click", (event) => {
@@ -693,14 +702,139 @@ function switchRightPanel(view) {
   const chat = view === "chat";
   const factory = view === "factory";
   const runtime = view === "runtime";
+  const audit = view === "audit";
   $("chat-view").hidden = !chat;
   $("factory-view").hidden = !factory;
   $("runtime-view").hidden = !runtime;
-  $("inspector-view").hidden = chat || factory || runtime;
+  $("audit-view").hidden = !audit;
+  $("inspector-view").hidden = chat || factory || runtime || audit;
   $("chat-tab").classList.toggle("active", chat);
   $("factory-tab").classList.toggle("active", factory);
   $("runtime-tab").classList.toggle("active", runtime);
-  $("inspector-tab").classList.toggle("active", !chat && !factory && !runtime);
+  $("audit-tab").classList.toggle("active", audit);
+  $("inspector-tab").classList.toggle("active", !chat && !factory && !runtime && !audit);
+}
+
+async function loadAudit(selectLatest = true) {
+  try {
+    const [summary, timeline] = await Promise.all([
+      api("/api/audit/summary"),
+      api("/api/audit/events", { audience: $("audience").value, limit: 100 }),
+    ]);
+    state.auditSummary = summary;
+    state.auditEvents = timeline.events || [];
+    const stats = summary.statistics || {};
+    const cards = $("audit-summary");
+    cards.replaceChildren();
+    [
+      [stats.event_count || 0, "events"],
+      [(stats.decisions?.blocked || 0), "blocked"],
+      [stats.active_exceptions || 0, "exceptions"],
+      [summary.trust_posture?.signed_checkpoint ? "yes" : "no", "signed"],
+    ].forEach(([value, label]) => {
+      const card = document.createElement("div");
+      const number = document.createElement("strong");
+      number.textContent = typeof value === "number" ? formatNumber(value) : value;
+      const text = document.createElement("span");
+      text.textContent = label;
+      card.append(number, text);
+      cards.appendChild(card);
+    });
+    const posture = summary.trust_posture || {};
+    const posturePanel = $("audit-posture");
+    posturePanel.className = `audit-posture ${posture.promotion_status || "not_evaluated"}`;
+    posturePanel.replaceChildren();
+    const postureTitle = document.createElement("strong");
+    postureTitle.textContent = `Promotion ${String(posture.promotion_status || "not evaluated").replaceAll("_", " ")}`;
+    const postureText = document.createElement("p");
+    postureText.textContent = (posture.unresolved_gaps || []).length
+      ? `Unresolved gates: ${posture.unresolved_gaps.join(", ")}.`
+      : "No unresolved promotion gates.";
+    posturePanel.append(postureTitle, postureText);
+    renderAuditDecisions(summary.promotion_decisions || []);
+    renderAuditTimeline(state.auditEvents);
+    $("audit-checkpoint").textContent = summary.checkpoint?.ledger_head_sha256 || "No checkpoint";
+    if (selectLatest && summary.promotion_decisions?.length) {
+      await loadAuditDecision(summary.promotion_decisions.at(-1).id);
+    }
+  } catch (error) {
+    setError(error);
+  }
+}
+
+function renderAuditDecisions(decisions) {
+  const container = $("audit-decisions");
+  container.replaceChildren();
+  decisions.forEach((decision) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = `factory-run ${decision.status}`;
+    const title = document.createElement("strong");
+    title.textContent = decision.subject_id;
+    const status = document.createElement("span");
+    status.textContent = `${decision.status} · ${decision.gaps.length} gaps`;
+    const id = document.createElement("code");
+    id.textContent = decision.id;
+    button.append(title, status, id);
+    button.addEventListener("click", () => loadAuditDecision(decision.id));
+    container.appendChild(button);
+  });
+  if (!decisions.length) container.textContent = "No promotion decisions recorded.";
+}
+
+async function loadAuditDecision(decisionId) {
+  const decision = await api("/api/audit/decision", { id: decisionId });
+  state.auditReleaseId = decision.subject_id;
+  const dossier = $("audit-dossier");
+  dossier.className = `audit-dossier ${decision.status}`;
+  dossier.replaceChildren();
+  const title = document.createElement("strong");
+  title.textContent = `${decision.status.toUpperCase()} · ${decision.policy_id}`;
+  const rationale = document.createElement("p");
+  rationale.textContent = decision.rationale;
+  const hash = document.createElement("code");
+  hash.textContent = decision.content_sha256;
+  dossier.append(title, rationale, hash);
+}
+
+function renderAuditTimeline(events) {
+  const list = $("audit-events");
+  list.replaceChildren();
+  events.forEach((event) => {
+    const item = document.createElement("li");
+    const marker = document.createElement("span");
+    const decisionStatus = event.details?.decision?.status;
+    marker.className = `station-state ${decisionStatus || "passed"}`;
+    marker.textContent = event.actor.role;
+    const content = document.createElement("div");
+    const title = document.createElement("strong");
+    title.textContent = event.action.replaceAll(".", " ").replaceAll("_", " ");
+    const meta = document.createElement("small");
+    meta.textContent = `${event.sequence} · ${event.subject.id} · ${event.event_sha256.slice(0, 12)}`;
+    content.append(title, meta);
+    item.append(marker, content);
+    list.appendChild(item);
+  });
+}
+
+async function loadAuditDossier() {
+  if (!state.auditReleaseId) return;
+  try {
+    const dossier = await api("/api/audit/dossier", { release: state.auditReleaseId });
+    const panel = $("audit-dossier");
+    panel.replaceChildren();
+    const title = document.createElement("strong");
+    title.textContent = `${dossier.status.toUpperCase()} · ${dossier.release_id}`;
+    const rationale = document.createElement("p");
+    rationale.textContent = dossier.rationale;
+    const inventory = document.createElement("p");
+    inventory.textContent = `${dossier.evidence_inventory.length} evidence items · ${dossier.runtime_decisions.length} runtime decisions · ${dossier.gaps.length} unresolved gaps`;
+    const hash = document.createElement("code");
+    hash.textContent = dossier.content_sha256;
+    panel.append(title, rationale, inventory, hash);
+  } catch (error) {
+    setError(error);
+  }
 }
 
 function renderRuntimeProjection(runtime, container) {
@@ -851,7 +985,7 @@ async function loadFactoryRun(runKey) {
     });
     const receipt = payload.receipt;
     const summary = state.factoryRuns.find((item) => item.run_key === runKey);
-    document.querySelectorAll(".factory-run").forEach((item) => {
+    document.querySelectorAll("#factory-runs .factory-run").forEach((item) => {
       item.classList.toggle("active", item.dataset.runKey === runKey);
     });
     $("factory-detail").hidden = false;

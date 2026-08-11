@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schema/policy-decision.schema.json",
+  "title": "LIGHTYEAR policy decision",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id", "policy_id", "policy_version", "subject_id", "status", "evaluated_at",
+    "rationale", "gaps", "inputs", "override_allowed", "exception", "content_sha256"
+  ],
+  "properties": {
+    "id": {"type": "string", "minLength": 1, "maxLength": 200},
+    "policy_id": {"type": "string", "minLength": 1, "maxLength": 200},
+    "policy_version": {"type": "string", "minLength": 1},
+    "subject_id": {"type": "string", "minLength": 1, "maxLength": 200},
+    "status": {"enum": ["passed", "blocked", "overridden"]},
+    "evaluated_at": {"type": "string", "format": "date-time"},
+    "rationale": {"type": "string", "minLength": 1},
+    "gaps": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "inputs": {"type": "object"},
+    "override_allowed": {"type": "boolean"},
+    "exception": {
+      "oneOf": [
+        {"type": "null"},
+        {"$ref": "exception.schema.json"}
+      ]
+    },
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

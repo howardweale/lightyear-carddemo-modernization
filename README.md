@@ -1,6 +1,6 @@
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.9.0 — z/OSMF adapter kit and connection simulator**
+Release: **v0.10.0 — audit ledger and Evidence Control Tower**
 
 An evidence-aware knowledge graph, source-faithful local oracle, differential harness, and
 Java/Spring Batch candidate for AWS CardDemo. Together they form the first engineering cell of a
@@ -34,6 +34,12 @@ server lets the complete Jobs/status/steps/spool flow run before a mainframe is 
 client enforces verified HTTPS, external credentials, response limits, content minimization, and an
 explicit operator attestation before it can emit `zos_observed` evidence.
 
+v0.10 adds an append-only governance layer across the factory. Hash-chained audit events bind
+actors, actions, subjects, policy decisions, and evidence receipts to the exact graph identity.
+Deterministic promotion policy, governed exceptions, optional signed checkpoints, release evidence
+dossiers, and a read-only Evidence Control Tower make unattended execution inspectable without
+allowing agents or dashboard state to declare their own success.
+
 ## What it does
 
 1. Builds a deterministic, provenance-rich graph of the entire CardDemo application estate.
@@ -56,6 +62,10 @@ explicit operator attestation before it can emit `zos_observed` evidence.
 16. Blocks mainframe-equivalence claims until every required entity has z/OS-observed evidence.
 17. Rehearses the real z/OSMF REST integration against a deterministic local connection simulator.
 18. Captures authorized JES job, step, program, DD-allocation, return-code, timestamp, and spool-hash evidence.
+19. Unifies graph, source, factory, runtime, and release decisions in a hash-chained audit ledger.
+20. Detects changed, deleted, reordered, duplicated, or stale audit events and projections.
+21. Produces deterministic release dossiers and blocks promotion until governed evidence passes.
+22. Shows trust posture, policy rationale, evidence lineage, exceptions, and checkpoints in a read-only Control Tower.
 
 The included `candidate-java` module is the first modernization candidate. It consumes and emits
 the same fixed-width records as the oracle, including COBOL signed zoned decimals.
@@ -192,6 +202,22 @@ bearer-token, mapping, and first-connection guidance.
 Repeated collections may reuse a human-readable run ID. The API and control room address each
 physical run through a stable, path-opaque `run_key`, preventing collisions without exposing local
 filesystem paths.
+
+## Audit ledger and Evidence Control Tower
+
+Build or verify the canonical audit snapshot and release dossier:
+
+```bash
+./audit-control-tower.sh build
+./audit-control-tower.sh verify
+```
+
+Then run `./graph-explorer.sh` and open the **Audit** tab. The demo release is correctly shown as
+blocked because local and simulated evidence cannot prove mainframe equivalence. The ledger is the
+source of truth; dashboard metrics and dossiers are rebuildable projections. Configure
+`LIGHTYEAR_AUDIT_SIGNING_KEY` only through the environment when signed checkpoints are required.
+See `audit/README.md` for policy authority, exceptions, schemas, signing, privacy, and production
+hardening gaps.
 
 Execute a specific approved work order with the local reference workers:
 
@@ -403,12 +429,13 @@ deciding whether a legacy behavior should be preserved or intentionally correcte
 Once a candidate can pass the visible cases:
 
 1. Capture independent z/OS executions and attach runtime observations to graph entities.
-2. Replace copy isolation and advisory network denial with an enforced container or microVM policy.
-3. Add authenticated worker identities, signed work orders, admission policy, and secret brokering.
-4. Expand private holdouts and verified rule mappings to posting and statement-generation workloads.
-5. Add conflict-aware parallel work cells, graph-delta memory, and human approval for high-risk
+2. Externalize the audit log to immutable retention with managed asymmetric signing and trusted time.
+3. Replace copy isolation and advisory network denial with an enforced container or microVM policy.
+4. Add authenticated worker identities, signed work orders, admission policy, and secret brokering.
+5. Expand private holdouts and verified rule mappings to posting and statement-generation workloads.
+6. Add conflict-aware parallel work cells, graph-delta memory, and human approval for high-risk
    changes.
-6. Issue a production acceptance receipt only after structural, behavioral, security, operational,
+7. Issue a production acceptance receipt only after structural, behavioral, security, operational,
    and mainframe-backed verification policies pass.
 
 The pinned workload specification is in `spec/carddemo-intcalc.json`.

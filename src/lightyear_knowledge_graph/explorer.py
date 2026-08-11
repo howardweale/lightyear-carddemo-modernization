@@ -20,6 +20,8 @@ from .validation import rule_gaps
 from lightyear_factory.store import FactoryRunStore
 from lightyear_runtime.engine import load_snapshot as load_runtime_snapshot
 from lightyear_runtime.store import RuntimeEvidenceStore
+from lightyear_audit.ledger import load_snapshot as load_audit_snapshot
+from lightyear_audit.store import AuditStore
 
 
 DEFAULT_PERSPECTIVES = [
@@ -372,6 +374,7 @@ class ExplorerServer(ThreadingHTTPServer):
         evidence_store: EvidenceStore | None = None,
         factory_store: FactoryRunStore | None = None,
         runtime_store: RuntimeEvidenceStore | None = None,
+        audit_store: AuditStore | None = None,
     ) -> None:
         super().__init__(address, ExplorerRequestHandler)
         self.index = index
@@ -399,6 +402,16 @@ class ExplorerServer(ThreadingHTTPServer):
         ):
             raise ValueError("Runtime evidence snapshot targets a different graph identity")
         self.index.runtime_store = self.runtime_store
+        if audit_store is None:
+            default_audit = self.viewer_root.parents[1] / "audit" / "audit.snapshot.json.gz"
+            audit_store = AuditStore(load_audit_snapshot(default_audit)) if default_audit.is_file() else None
+        self.audit_store = audit_store
+        if (
+            self.audit_store is not None
+            and self.audit_store.snapshot.get("graph_content_sha256")
+            != self.index.payload.get("content_sha256")
+        ):
+            raise ValueError("Audit snapshot targets a different graph identity")
 
 
 class ExplorerRequestHandler(BaseHTTPRequestHandler):
@@ -450,6 +463,11 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
                 if self.server.runtime_store is not None
                 else {"run_count": 0, "event_count": 0}
             )
+            metadata["audit"] = (
+                self.server.audit_store.summary()["statistics"]
+                if self.server.audit_store is not None
+                else {"event_count": 0, "decisions": {}}
+            )
             self._json(metadata)
             return
         if path == "/api/chat/status":
@@ -485,6 +503,37 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
             if self.server.runtime_store is None:
                 raise KeyError(self._value(query, "id", required=True))
             self._json(self.server.runtime_store.run(self._value(query, "id", required=True)))
+            return
+        if path == "/api/audit/summary":
+            if self.server.audit_store is None:
+                self._json({
+                    "statistics": {"event_count": 0, "decisions": {}, "active_exceptions": 0},
+                    "promotion_decisions": [],
+                    "trust_posture": {"promotion_status": "not_evaluated", "unresolved_gaps": []},
+                })
+            else:
+                self._json(self.server.audit_store.summary())
+            return
+        if path == "/api/audit/events":
+            if self.server.audit_store is None:
+                self._json({"events": [], "total": 0})
+            else:
+                self._json(self.server.audit_store.events(
+                    self._value(query, "audience") or "implementer",
+                    self._integer(query, "limit", 100),
+                ))
+            return
+        if path == "/api/audit/decision":
+            if self.server.audit_store is None:
+                raise KeyError(self._value(query, "id", required=True))
+            self._json(self.server.audit_store.decision(self._value(query, "id", required=True)))
+            return
+        if path == "/api/audit/dossier":
+            if self.server.audit_store is None:
+                raise KeyError(self._value(query, "release", required=True))
+            self._json(self.server.audit_store.dossier(
+                self._value(query, "release", required=True)
+            ))
             return
         if path == "/api/edge":
             edge_id = self._value(query, "id", required=True)
@@ -640,6 +689,7 @@ def serve(
     evidence_pack_path: Path | None = None,
     factory_runs_path: Path | None = None,
     runtime_snapshot_path: Path | None = None,
+    audit_snapshot_path: Path | None = None,
 ) -> None:
     ontology = load_ontology(ontology_path) if ontology_path else load_ontology()
     index = GraphExplorerIndex(load_graph(graph_path), ontology=ontology)
@@ -654,9 +704,11 @@ def serve(
         if runtime_path.is_file()
         else None
     )
+    audit_path = audit_snapshot_path or viewer_root.resolve().parents[1] / "audit" / "audit.snapshot.json.gz"
+    audit_store = AuditStore(load_audit_snapshot(audit_path)) if audit_path.is_file() else None
     server = ExplorerServer(
         (host, port), index, viewer_root, evidence_store=evidence_store,
-        factory_store=factory_store, runtime_store=runtime_store,
+        factory_store=factory_store, runtime_store=runtime_store, audit_store=audit_store,
     )
     url = f"http://{host}:{server.server_port}/"
     print(f"LIGHTYEAR Graph Explorer: {url}")

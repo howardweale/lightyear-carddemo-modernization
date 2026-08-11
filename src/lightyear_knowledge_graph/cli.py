@@ -107,6 +107,11 @@ def build_parser() -> argparse.ArgumentParser:
         type=Path,
         default=Path("knowledge/runtime/runtime.snapshot.json.gz"),
     )
+    explorer.add_argument(
+        "--audit-snapshot",
+        type=Path,
+        default=Path("audit/audit.snapshot.json.gz"),
+    )
 
     neo4j = subparsers.add_parser(
         "export-neo4j",
@@ -200,6 +205,7 @@ def main(argv: list[str] | None = None) -> int:
             args.evidence_pack,
             args.factory_runs,
             args.runtime_snapshot,
+            args.audit_snapshot,
         )
         return 0
 

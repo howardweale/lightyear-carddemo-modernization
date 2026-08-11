@@ -1,0 +1,24 @@
+{
+  "id": "lightyear:carddemo:audit-policy-set",
+  "policies": [
+    {
+      "id": "runtime.development_readiness",
+      "name": "Development readiness",
+      "override_allowed": true,
+      "version": "1.0"
+    },
+    {
+      "id": "runtime.mainframe_equivalence",
+      "name": "Mainframe equivalence",
+      "override_allowed": false,
+      "version": "1.0"
+    },
+    {
+      "id": "release.promotion",
+      "name": "Governed release promotion",
+      "override_allowed": false,
+      "version": "1.0"
+    }
+  ],
+  "schema_version": "1.0"
+}

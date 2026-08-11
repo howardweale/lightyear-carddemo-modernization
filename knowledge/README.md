@@ -1,7 +1,7 @@
 # LIGHTYEAR Modernization Knowledge Graph
 
-The canonical graph is complemented by the v0.9 runtime evidence plane and z/OSMF adapter kit
-under `knowledge/runtime/`.
+The canonical graph is complemented by the runtime evidence plane and z/OSMF adapter kit under
+`knowledge/runtime/`, plus the v0.10 audit ledger and Evidence Control Tower under `../audit/`.
 Runtime captures remain append-only evidence rather than nondeterministic mutations of the source
 snapshot. The explorer joins both identities at read time and refuses to treat simulated or local
 evidence as proof of z/OS equivalence.
@@ -43,8 +43,9 @@ database—is the durable advantage.
 
 The structural, semantic-mapping, initial verification, local exploration, governed-relationship,
 content-addressed source-evidence, grounded-question, database-projection, bounded factory-
-orchestration, runtime evidence, and z/OSMF connection-simulation layers are implemented in this
-release. Independent production evidence remains the most important next addition.
+orchestration, runtime evidence, z/OSMF connection simulation, and audit-governance layers are
+implemented in this release. Independent production evidence remains the most important next
+addition.
 
 ## Trust model
 
@@ -98,6 +99,8 @@ snapshot carries the ontology content hash, and validation rejects undefined or 
 - `chat/`: grounded answer quality contract and versioned structured-output schema.
 - `../factory/`: autonomous run contracts, example work orders, mutation benchmark, and operator
   guidance; run artifacts and receipts are generated beneath `../work/`.
+- `../audit/`: hash-chained events, deterministic policy decisions, governed exceptions, release
+  dossiers, schemas, and checkpoint guidance.
 
 The graph uses plain JSON and the Python standard library so it remains portable. It can export
 the same snapshot into Neo4j without making that database the source of truth; Amazon Neptune,
@@ -123,6 +126,8 @@ PYTHONPATH=src python3 -m lightyear_knowledge_graph trace \
 
 ./factory-benchmark.sh
 
+./audit-control-tower.sh verify
+
 PYTHONPATH=src python3 -m lightyear_knowledge_graph export-neo4j \
   --output-dir work/neo4j-export
 ```
@@ -142,8 +147,8 @@ or generated evidence drift apart.
 
 ## Expansion roadmap
 
-1. **Runtime evidence:** ingest z/OS job executions, file hashes, record counts, return codes, and
-   field-level differential observations.
+1. **Independent runtime evidence:** ingest real z/OS job executions, file hashes, record counts,
+   return codes, and field-level differential observations.
 2. **Deeper semantics:** extract control-flow, data-flow, SQL, CICS, IMS, MQ, scheduler, and security
    relationships; maintain inferred claims separately until verified.
 3. **Coverage intelligence:** compute rule, branch, mutation, data-layout, and workload acceptance
@@ -152,9 +157,11 @@ or generated evidence drift apart.
    or MCP interface.
 5. **Factory scale-out:** add authenticated work admission, enforced sandboxing, conflict-aware
    parallel cells, policy-selected gates, and risk-based human approval.
-6. **Longitudinal memory:** retain graph deltas, architectural decisions, failed attempts, and
+6. **Durable governance:** anchor signed audit checkpoints in immutable external retention with
+   enterprise identity, trusted time, key rotation, and legal hold policy.
+7. **Longitudinal memory:** retain graph deltas, architectural decisions, failed attempts, and
    production feedback across releases and customer estates.
-7. **Portfolio learning:** derive reusable modernization patterns without exposing customer source,
+8. **Portfolio learning:** derive reusable modernization patterns without exposing customer source,
    data, or private verification assets.
 
 The acceptance principle remains strict: a rich graph improves understanding and orchestration,

@@ -1,0 +1,17 @@
+{
+  "approved_by": {
+    "id": "human:release-approver",
+    "kind": "human",
+    "role": "approver"
+  },
+  "compensating_controls": [
+    "Restrict deployment to a non-production environment.",
+    "Require independent verification before exception expiry."
+  ],
+  "expires_at": "2026-09-01T00:00:00Z",
+  "id": "exception:example:development-only",
+  "justification": "Temporary development-only exception while independent evidence is collected.",
+  "owner": "human:release-owner",
+  "policy_id": "runtime.development_readiness",
+  "subject_id": "release:example"
+}

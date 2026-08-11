@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schema/release-dossier.schema.json",
+  "title": "LIGHTYEAR release evidence dossier",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "dossier_type", "release_id", "status", "rationale", "gaps",
+    "promotion_decision", "runtime_decisions", "evidence_inventory", "audit",
+    "limitations", "content_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "dossier_type": {"const": "lightyear-release-evidence"},
+    "release_id": {"type": "string", "minLength": 1},
+    "status": {"enum": ["passed", "blocked", "overridden"]},
+    "rationale": {"type": "string", "minLength": 1},
+    "gaps": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "promotion_decision": {"$ref": "policy-decision.schema.json"},
+    "runtime_decisions": {"type": "array", "items": {"$ref": "policy-decision.schema.json"}},
+    "evidence_inventory": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "kind", "sha256"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "kind": {"type": "string", "minLength": 1},
+          "sha256": {"$ref": "#/$defs/sha256"}
+        }
+      }
+    },
+    "audit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "ledger_id", "ledger_content_sha256", "ledger_head_sha256", "event_count",
+        "checkpoint_signature_algorithm"
+      ],
+      "properties": {
+        "ledger_id": {"type": "string", "minLength": 1},
+        "ledger_content_sha256": {"$ref": "#/$defs/sha256"},
+        "ledger_head_sha256": {"$ref": "#/$defs/sha256"},
+        "event_count": {"type": "integer", "minimum": 1},
+        "checkpoint_signature_algorithm": {"enum": ["none", "HMAC-SHA256"]}
+      }
+    },
+    "limitations": {"type": "array", "items": {"type": "string", "minLength": 1}},
+    "content_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

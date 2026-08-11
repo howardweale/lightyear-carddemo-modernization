@@ -95,6 +95,7 @@
         <button id="chat-tab" class="right-tab" type="button">Ask graph</button>
         <button id="factory-tab" class="right-tab" type="button">Factory</button>
         <button id="runtime-tab" class="right-tab" type="button">Runtime</button>
+        <button id="audit-tab" class="right-tab" type="button">Audit</button>
       </nav>
 
       <div id="inspector-view">
@@ -268,6 +269,38 @@
             <code id="runtime-receipt-hash" class="factory-hash"></code>
           </section>
         </article>
+      </div>
+
+      <div id="audit-view" class="audit-view" hidden>
+        <div class="factory-header">
+          <div>
+            <p class="eyebrow">EVIDENCE CONTROL TOWER</p>
+            <h2>Every decision must be reconstructable.</h2>
+          </div>
+          <button id="refresh-audit" class="text-button" type="button">Refresh</button>
+        </div>
+        <p class="chat-disclosure">This dashboard is a read-only projection. The hash-chained audit ledger is authoritative.</p>
+        <div id="audit-summary" class="runtime-summary audit-summary"></div>
+        <article id="audit-posture" class="audit-posture"></article>
+        <section>
+          <h3>Promotion decisions</h3>
+          <div id="audit-decisions"></div>
+        </section>
+        <section>
+          <h3>Audit timeline</h3>
+          <ol id="audit-events" class="factory-timeline"></ol>
+        </section>
+        <section>
+          <div class="section-heading">
+            <h3>Release dossier</h3>
+            <button id="view-audit-dossier" class="text-button" type="button">View dossier</button>
+          </div>
+          <div id="audit-dossier" class="audit-dossier">Select a promotion decision to inspect its release evidence package.</div>
+        </section>
+        <section>
+          <h3>Ledger checkpoint</h3>
+          <code id="audit-checkpoint" class="factory-hash"></code>
+        </section>
       </div>
     </aside>
   </main>

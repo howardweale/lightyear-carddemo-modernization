@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.8.0 — 2026-08-11
+
+- Added a versioned runtime-evidence contract that binds every observation to an existing graph
+  node or edge and rejects unknown identifiers before ingestion.
+- Added replaceable local-oracle and recorded-fixture adapters plus a clean boundary for future
+  z/OSMF, JES, spool, SMF, and dataset-allocation collectors.
+- Added append-only SHA-256 event chains, content-addressed run receipts, deterministic compressed
+  snapshots, source-system identity, artifact hashes, and declared limitations.
+- Added runtime reconciliation with `static_only`, `runtime_observed`, and
+  `runtime_contradicted` states and evidence-class-aware confidence scoring.
+- Added separate development-readiness and mainframe-equivalence policies; simulated and local
+  evidence can exercise the factory but only `zos_observed` evidence can prove mainframe parity.
+- Added a Runtime explorer view for adapter runs, trust policies, observed operations, limitations,
+  receipt identities, and node/edge runtime projections.
+- Added deterministic build and verification launchers, JSON Schemas, a synthetic z/OS-shaped
+  replay fixture, tamper and contradiction tests, and full-suite integration.
+
 ## 0.7.1 — 2026-08-11
 
 - Added shared macOS/Linux Python admission that automatically selects Python 3.11 or newer,

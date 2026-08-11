@@ -18,6 +18,7 @@ fi
 
 "$LIGHTYEAR_PYTHON_BIN" -m unittest discover -s "$project_dir/tests" -v
 "$project_dir/knowledge-graph.sh" verify
+"$project_dir/runtime-evidence.sh" verify
 
 (
   cd "$project_dir/candidate-java"

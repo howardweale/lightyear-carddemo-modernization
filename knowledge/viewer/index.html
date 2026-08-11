@@ -94,6 +94,7 @@
         <button id="inspector-tab" class="right-tab active" type="button">Inspector</button>
         <button id="chat-tab" class="right-tab" type="button">Ask graph</button>
         <button id="factory-tab" class="right-tab" type="button">Factory</button>
+        <button id="runtime-tab" class="right-tab" type="button">Runtime</button>
       </nav>
 
       <div id="inspector-view">
@@ -118,6 +119,10 @@
           <section>
             <h3>Evidence</h3>
             <div id="detail-evidence"></div>
+          </section>
+          <section>
+            <h3>Runtime truth</h3>
+            <div id="detail-runtime" class="runtime-projection"></div>
           </section>
           <section>
             <h3>Relationships</h3>
@@ -149,6 +154,10 @@
           <section>
             <h3>Supporting source</h3>
             <div id="edge-evidence"></div>
+          </section>
+          <section>
+            <h3>Runtime truth</h3>
+            <div id="edge-runtime" class="runtime-projection"></div>
           </section>
         </div>
       </div>
@@ -219,6 +228,44 @@
           <section>
             <h3>Receipt identity</h3>
             <code id="factory-receipt-hash" class="factory-hash"></code>
+          </section>
+        </article>
+      </div>
+
+      <div id="runtime-view" class="runtime-view" hidden>
+        <div class="factory-header">
+          <div>
+            <p class="eyebrow">RUNTIME EVIDENCE PLANE</p>
+            <h2>Static claims meet observed behavior.</h2>
+          </div>
+          <button id="refresh-runtime" class="text-button" type="button">Refresh</button>
+        </div>
+        <p class="chat-disclosure">Simulation proves ingestion mechanics. Only z/OS-observed evidence can satisfy mainframe equivalence.</p>
+        <div id="runtime-summary" class="runtime-summary"></div>
+        <div id="runtime-runs" class="factory-runs" aria-live="polite"></div>
+        <div id="runtime-empty" class="factory-empty" hidden>
+          <strong>No runtime evidence found</strong>
+          <p>Run <code>./runtime-evidence.sh build</code>, then refresh.</p>
+        </div>
+        <article id="runtime-detail" class="factory-detail" hidden>
+          <div id="runtime-badges" class="answer-meta"></div>
+          <h2 id="runtime-title"></h2>
+          <code id="runtime-id"></code>
+          <section>
+            <h3>Trust policies</h3>
+            <div id="runtime-policies"></div>
+          </section>
+          <section>
+            <h3>Observed operations</h3>
+            <ol id="runtime-events" class="factory-timeline"></ol>
+          </section>
+          <section>
+            <h3>Limitations</h3>
+            <div id="runtime-limitations" class="limitations"></div>
+          </section>
+          <section>
+            <h3>Receipt identity</h3>
+            <code id="runtime-receipt-hash" class="factory-hash"></code>
           </section>
         </article>
       </div>

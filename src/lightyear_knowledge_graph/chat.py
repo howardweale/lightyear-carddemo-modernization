@@ -109,6 +109,17 @@ class EvidencePackage:
                 in citation_ids_by_key
             ]
 
+        def runtime_summary(item: dict[str, Any]) -> dict[str, Any]:
+            runtime = item.get("runtime", {})
+            return {
+                "state": runtime.get("state", "static_only"),
+                "confidence": runtime.get("confidence", 0.35),
+                "evidence_classes": runtime.get("evidence_classes", []),
+                "observation_count": runtime.get("observation_count", 0),
+                "runs": runtime.get("runs", []),
+                "operations": runtime.get("operations", []),
+            }
+
         return {
             "question": self.question,
             "audience": self.audience,
@@ -123,6 +134,7 @@ class EvidencePackage:
                     "kind": node["kind"],
                     "name": node["name"],
                     "properties": node.get("properties", {}),
+                    "runtime": runtime_summary(node),
                     "citation_ids": evidence_ids(node.get("evidence", [])),
                 }
                 for node in self.nodes
@@ -134,6 +146,7 @@ class EvidencePackage:
                     "relation": edge["relation"],
                     "target": edge["target"],
                     "properties": edge.get("properties", {}),
+                    "runtime": runtime_summary(edge),
                     "citation_ids": evidence_ids(edge.get("evidence", [])),
                 }
                 for edge in self.edges
@@ -225,7 +238,7 @@ class GraphRetriever:
             edges[focused_edge["id"]] = self.index.edge_by_id[focused_edge["id"]]
 
         ordered_nodes = sorted(
-            nodes.values(),
+            (self.index.decorate_runtime("node", item) for item in nodes.values()),
             key=lambda node: (
                 0 if node["id"] in roots else 1,
                 node["kind"],
@@ -233,7 +246,10 @@ class GraphRetriever:
                 node["id"],
             ),
         )
-        ordered_edges = sorted(edges.values(), key=lambda edge: edge["id"])
+        ordered_edges = sorted(
+            (self.index.decorate_runtime("edge", item) for item in edges.values()),
+            key=lambda edge: edge["id"],
+        )
         citations = self._citations(ordered_nodes, ordered_edges)
         return EvidencePackage(
             question=normalized,
@@ -455,6 +471,10 @@ class LocalGroundedAnswerer:
             limitations.append("The selected subgraph has no file-level evidence records.")
         if package.intent == "when" and not self._temporal_facts(package):
             limitations.append("The graph does not currently contain runtime timestamps or execution history for this question.")
+        elif package.intent == "when" and self._temporal_facts(package):
+            limitations.append(
+                "Runtime timestamps describe captured evidence, not necessarily the production schedule."
+            )
         if package.intent == "who" and not any(
             node["kind"] in {"person", "team", "organization"} for node in package.nodes
         ):
@@ -542,8 +562,20 @@ class LocalGroundedAnswerer:
                 "the default INTCALC workload context."
             )
 
+        focused_edge = next(
+            (edge for edge in package.edges if edge["id"] == package.focus_edge_id), None
+        )
         if package.focus_relationship:
             relationship = package.focus_relationship
+            if package.intent == "when" and focused_edge:
+                runtime = focused_edge.get("runtime", {})
+                if runtime.get("observation_count", 0):
+                    classes = ", ".join(runtime.get("evidence_classes", []))
+                    operations = ", ".join(runtime.get("operations", [])[:4])
+                    return (
+                        f"This relationship has {runtime['observation_count']} runtime observation(s) "
+                        f"classified as {classes}. Observed operations include {operations}."
+                    )
             purpose = relationship["definition"]["purpose"]
             return (
                 f"{relationship['source_name']} —{relationship['relation']}→ "
@@ -572,6 +604,18 @@ class LocalGroundedAnswerer:
                 return (
                     f"The graph shows structural scheduling or execution links for {name}, "
                     "but it does not contain a runtime schedule or execution timestamp."
+                )
+            runtime_events = [
+                event
+                for item in [focus, *package.edges]
+                for event in item.get("runtime", {}).get("events", [])
+            ]
+            if runtime_events:
+                classes = sorted({event["evidence_class"] for event in runtime_events})
+                operations = sorted({event["operation"] for event in runtime_events})
+                return (
+                    f"{name} has {len(runtime_events)} runtime observation(s) classified as "
+                    f"{', '.join(classes)}. Observed operations include {', '.join(operations[:4])}."
                 )
         if package.intent == "who":
             if not any(
@@ -636,6 +680,20 @@ class LocalGroundedAnswerer:
 
     @staticmethod
     def _confidence(package: EvidencePackage) -> dict[str, str]:
+        runtime = [
+            item.get("runtime", {}) for item in [*package.nodes, *package.edges]
+            if item.get("runtime", {}).get("observation_count", 0)
+        ]
+        if any(item.get("state") == "runtime_contradicted" for item in runtime):
+            return {
+                "level": "low",
+                "rationale": "Runtime evidence contradicts at least one retrieved static relationship.",
+            }
+        if any("zos_observed" in item.get("evidence_classes", []) for item in runtime):
+            return {
+                "level": "high",
+                "rationale": "The retrieved context includes graph-bound z/OS runtime observations.",
+            }
         values = {item.get("confidence") for item in package.citations}
         relations = {edge["relation"] for edge in package.edges}
         if "verified" in values or "VERIFIED_BY" in relations:
@@ -730,7 +788,10 @@ class LocalGroundedAnswerer:
     @staticmethod
     def _temporal_facts(package: EvidencePackage) -> bool:
         temporal_keys = {"date", "timestamp", "schedule", "frequency", "created_at", "observed_at"}
-        return any(temporal_keys.intersection(node.get("properties", {})) for node in package.nodes)
+        return any(temporal_keys.intersection(node.get("properties", {})) for node in package.nodes) or any(
+            item.get("runtime", {}).get("observation_count", 0)
+            for item in [*package.nodes, *package.edges]
+        )
 
     @staticmethod
     def _follow_ups(focus: dict[str, Any] | None) -> list[str]:

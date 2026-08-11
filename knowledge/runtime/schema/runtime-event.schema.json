@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schemas/runtime-event-1.0.json",
+  "title": "LIGHTYEAR Runtime Evidence Event",
+  "type": "object",
+  "required": [
+    "schema_version", "run_id", "sequence", "captured_at", "adapter_id",
+    "source_system", "entity_kind", "entity_id", "assertion", "operation",
+    "evidence_class", "details", "previous_sha256", "content_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "run_id": {"type": "string", "minLength": 1},
+    "sequence": {"type": "integer", "minimum": 1},
+    "captured_at": {"type": "string", "format": "date-time"},
+    "adapter_id": {"type": "string", "minLength": 1},
+    "source_system": {"type": "string", "minLength": 1},
+    "entity_kind": {"enum": ["node", "edge"]},
+    "entity_id": {"type": "string", "minLength": 1},
+    "assertion": {"enum": ["observed", "contradicted"]},
+    "operation": {"type": "string", "minLength": 1},
+    "evidence_class": {"enum": ["simulated", "local_observed", "zos_observed"]},
+    "details": {"type": "object"},
+    "previous_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

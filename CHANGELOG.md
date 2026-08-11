@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.12.0 — 2026-08-11
+
+- Added a replaceable model-provider contract with a controller-side budget boundary for calls,
+  input/output bytes, tokens, estimated cost, and elapsed time.
+- Refactored the OpenAI Responses integration behind the provider contract while retaining strict
+  JSON Schema output, `store: false`, external credentials, refusal detection, and prompt-free receipts.
+- Added a graph context assembler that binds approved graph roots, shared source-evidence capsules,
+  allowed candidate files, truncation state, byte limits, and exact graph/evidence identities.
+- Added an atomic constrained patch broker that validates all edits before writing and enforces
+  allowlisted paths, text-only targets, exact matches, file size, patch size, file count, and changed-line limits.
+- Added sanitized failure-analysis feedback, independently hashed model-call artifacts, run-level
+  intelligence receipts, and Control Tower metrics for model, calls, tokens, cost, and evidence identity.
+- Added a 36-fault, eight-category public calibration catalog plus an external sealed-holdout
+  interface; public calibration is explicitly prevented from masquerading as blind evaluation.
+- Added macOS/Linux and Windows model-workcell launchers, schemas, adversarial budget and atomicity
+  tests, catalog mutation rejection tests, and full-suite verification integration.
+
 ## 0.11.2 — 2026-08-11
 
 - Corrected OCI environment translation so the host workspace path becomes `/workspace` inside

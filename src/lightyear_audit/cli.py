@@ -25,9 +25,9 @@ DEFAULT_ZOSMF_RUNTIME = Path("knowledge/runtime/zosmf/intcalc.runtime.snapshot.j
 DEFAULT_WORK_ORDER = Path("factory/work-orders/intcalc-repair.example.json")
 DEFAULT_POLICY = Path("audit/policies/promotion.json")
 DEFAULT_EXECUTION_RECEIPT = Path("factory/execution/conformance.receipt.json")
-DEFAULT_DOSSIER_JSON = Path("audit/dossiers/carddemo-intcalc-v0.11.2-demo.json")
-DEFAULT_DOSSIER_MD = Path("audit/dossiers/carddemo-intcalc-v0.11.2-demo.md")
-DEFAULT_RELEASE = "release:carddemo-intcalc:v0.11.2-demo"
+DEFAULT_DOSSIER_JSON = Path("audit/dossiers/carddemo-intcalc-v0.12-demo.json")
+DEFAULT_DOSSIER_MD = Path("audit/dossiers/carddemo-intcalc-v0.12-demo.md")
+DEFAULT_RELEASE = "release:carddemo-intcalc:v0.12-demo"
 
 
 def build_parser() -> argparse.ArgumentParser:

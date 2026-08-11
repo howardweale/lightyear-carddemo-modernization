@@ -35,7 +35,16 @@
     "audience": "implementer",
     "allow_network": false,
     "max_files_changed": 1,
-    "max_patch_bytes": 4096
+    "max_patch_bytes": 4096,
+    "max_changed_lines": 80,
+    "max_context_bytes": 160000,
+    "max_file_bytes": 250000,
+    "max_model_calls": 10,
+    "max_model_input_bytes": 2000000,
+    "max_model_output_bytes": 500000,
+    "max_model_tokens": 250000,
+    "max_model_cost_usd": 25.0,
+    "max_elapsed_seconds": 1800
   },
   "metadata": {
     "owner": "LIGHTYEAR demo",

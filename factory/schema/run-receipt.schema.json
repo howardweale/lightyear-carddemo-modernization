@@ -12,6 +12,21 @@
     "status": {"enum": ["passed", "blocked"]},
     "ledger_head_sha256": {"type": ["string", "null"]},
     "verification": {"type": "object"},
+    "intelligence": {
+      "type": "object",
+      "required": ["mode", "provider", "calls", "content_sha256"],
+      "properties": {
+        "mode": {"enum": ["deterministic-reference", "model-backed", "unreported"]},
+        "provider": {"type": "string"},
+        "model": {"type": ["string", "null"]},
+        "calls": {"type": "integer", "minimum": 0},
+        "input_tokens": {"type": "integer", "minimum": 0},
+        "output_tokens": {"type": "integer", "minimum": 0},
+        "estimated_cost_usd": {"type": "number", "minimum": 0},
+        "cost_estimate_available": {"type": "boolean"},
+        "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
     "execution_security": {
       "type": "object",
       "required": ["status", "production_ready", "backend", "secrets_persisted", "gaps"],

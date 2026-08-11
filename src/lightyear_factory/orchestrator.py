@@ -1,16 +1,14 @@
 from __future__ import annotations
 
-import json
 import re
 import secrets
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Callable
 
-from lightyear_knowledge_graph.explorer import GraphExplorerIndex
-from lightyear_knowledge_graph.model import load_graph
-
 from .agents import AgentSet
+from .context import GraphContextAssembler
 from .contracts import (
     ARTIFACT_SCHEMA_VERSION,
     RUN_RECEIPT_SCHEMA_VERSION,
@@ -21,6 +19,7 @@ from .contracts import (
 )
 from .gates import GateRunner, builder_failure_view
 from .ledger import RunLedger
+from .patches import PatchBroker
 from .workspace import IsolatedWorkspace
 
 
@@ -60,7 +59,7 @@ class ArtifactStore:
 
 
 class FactoryOrchestrator:
-    """Deterministic authority around replaceable planner, builder, and verifier workers."""
+    """Deterministic authority around replaceable workers and an independent verifier."""
 
     def __init__(
         self,
@@ -68,6 +67,7 @@ class FactoryOrchestrator:
         runs_root: Path,
         agents: AgentSet,
         graph_path: Path | None = None,
+        evidence_path: Path | None = None,
         prepare_workspace: Callable[[IsolatedWorkspace, WorkOrder], None] | None = None,
         execution_context: Any | None = None,
     ) -> None:
@@ -75,6 +75,12 @@ class FactoryOrchestrator:
         self.runs_root = runs_root.resolve()
         self.agents = agents
         self.graph_path = graph_path.resolve() if graph_path else None
+        if evidence_path:
+            self.evidence_path = evidence_path.resolve()
+        elif self.graph_path:
+            self.evidence_path = self.graph_path.parent / "evidence" / "source.pack.json.gz"
+        else:
+            self.evidence_path = None
         self.prepare_workspace = prepare_workspace
         self.execution_context = execution_context
 
@@ -96,6 +102,7 @@ class FactoryOrchestrator:
         initial_snapshot: dict[str, str] = {}
         final_snapshot: dict[str, str] = {}
         started_at = datetime.now(timezone.utc).isoformat()
+        started_monotonic = time.monotonic()
 
         write_json(order.to_dict(), run_dir / "work-order.json")
         ledger.append(
@@ -125,7 +132,7 @@ class FactoryOrchestrator:
                 },
             )
 
-            context = self._context(order)
+            context = self._context(order, workspace.root)
             context_ref = artifacts.write(
                 "implementer-context", "controller", "implementer", context
             )
@@ -133,6 +140,9 @@ class FactoryOrchestrator:
             state = "PLANNED"
             self._authorize("planner", "factory:plan")
             plan = self.agents.plan(order, context)
+            self._record_agent_evidence(
+                artifacts, ledger, references, "planner", "implementer"
+            )
             self._validate_plan(order, plan)
             plan_ref = artifacts.write("plan", "planner", "implementer", plan)
             references.append(plan_ref)
@@ -167,20 +177,29 @@ class FactoryOrchestrator:
                         "The approved state already satisfied every deterministic gate.",
                     )
                 public_failure = builder_failure_view(latest_verification)
-                self._authorize("verifier", "factory:verify")
-                diagnosis = self.agents.diagnose(order, latest_verification, 0)
+                self._authorize("failure_analyst", "factory:analyze-failure")
+                diagnosis = self.agents.analyze_failure(order, public_failure, 0)
+                self._record_agent_evidence(
+                    artifacts, ledger, references, "failure_analyst", "verifier_private"
+                )
                 diagnosis_ref = artifacts.write(
-                    "failure-diagnosis", "verifier", "verifier_private", diagnosis
+                    "failure-diagnosis", "failure_analyst", "verifier_private", diagnosis
                 )
                 references.append(diagnosis_ref)
                 ledger.append(state, "failure_diagnosed", diagnosis_ref)
+                public_failure = self._failure_envelope(public_failure, diagnosis)
 
             while attempts < order.max_attempts:
+                if time.monotonic() - started_monotonic > order.max_elapsed_seconds:
+                    raise ContractError("Factory exceeded max_elapsed_seconds")
                 attempts += 1
                 state = "BUILDING"
                 self._authorize("builder", "factory:build")
                 proposal = self.agents.build(
                     order, plan, public_failure, workspace.root, attempts
+                )
+                self._record_agent_evidence(
+                    artifacts, ledger, references, "builder", "implementer"
                 )
                 proposal_ref = artifacts.write(
                     "build-proposal", "builder", "implementer", proposal
@@ -226,14 +245,18 @@ class FactoryOrchestrator:
                     state = "PASSED"
                     ledger.append(state, "acceptance_gates_passed", {"attempt": attempts})
                     break
-                self._authorize("verifier", "factory:verify")
-                diagnosis = self.agents.diagnose(order, latest_verification, attempts)
+                self._authorize("failure_analyst", "factory:analyze-failure")
+                public_failure = builder_failure_view(latest_verification)
+                diagnosis = self.agents.analyze_failure(order, public_failure, attempts)
+                self._record_agent_evidence(
+                    artifacts, ledger, references, "failure_analyst", "verifier_private"
+                )
                 diagnosis_ref = artifacts.write(
-                    "failure-diagnosis", "verifier", "verifier_private", diagnosis
+                    "failure-diagnosis", "failure_analyst", "verifier_private", diagnosis
                 )
                 references.append(diagnosis_ref)
                 ledger.append(state, "failure_diagnosed", diagnosis_ref)
-                public_failure = builder_failure_view(latest_verification)
+                public_failure = self._failure_envelope(public_failure, diagnosis)
             else:
                 state = "BLOCKED"
                 ledger.append(
@@ -285,47 +308,12 @@ class FactoryOrchestrator:
             self.execution_context.record_verification(report)
         return report
 
-    def _context(self, order: WorkOrder) -> dict[str, Any]:
-        if not self.graph_path or not self.graph_path.is_file():
-            return {
-                "audience": "implementer",
-                "graph_content_sha256": None,
-                "nodes": [],
-                "edges": [],
-                "limitations": ["No knowledge graph was supplied to this run."],
-            }
-        payload = load_graph(self.graph_path)
-        index = GraphExplorerIndex(payload, max_nodes=160)
-        nodes: dict[str, dict[str, Any]] = {}
-        edges: dict[str, dict[str, Any]] = {}
-        for node_id in order.graph_node_ids:
-            selection = index.neighborhood(node_id, 2, "implementer", 80)
-            for node in selection.nodes:
-                nodes[node["id"]] = {
-                    "id": node["id"],
-                    "kind": node["kind"],
-                    "name": node["name"],
-                    "properties": node.get("properties", {}),
-                }
-            for edge in selection.edges:
-                edges[edge["id"]] = {
-                    "id": edge["id"],
-                    "source": edge["source"],
-                    "relation": edge["relation"],
-                    "target": edge["target"],
-                }
-        serialized = json.dumps({"nodes": nodes, "edges": edges})
-        if "inspector_private" in serialized:
-            raise ContractError("Implementer context contains verifier-private content")
-        return {
-            "audience": "implementer",
-            "graph_content_sha256": payload["content_sha256"],
-            "nodes": [nodes[item] for item in sorted(nodes)],
-            "edges": [edges[item] for item in sorted(edges)],
-            "limitations": [
-                "Context is bounded to approved graph roots and two relationship hops."
-            ],
-        }
+    def _context(self, order: WorkOrder, workspace_root: Path) -> dict[str, Any]:
+        return GraphContextAssembler(
+            self.graph_path,
+            self.evidence_path,
+            max_nodes=160,
+        ).assemble(order, workspace_root)
 
     @staticmethod
     def _validate_plan(order: WorkOrder, plan: dict[str, Any]) -> None:
@@ -341,43 +329,45 @@ class FactoryOrchestrator:
     def _apply_edits(
         order: WorkOrder, workspace: IsolatedWorkspace, edits: list[dict[str, Any]]
     ) -> dict[str, Any]:
-        if not isinstance(edits, list):
-            raise ContractError("Builder edits must be an array")
-        paths = {str(item.get("path", "")) for item in edits}
-        if len(paths) > order.max_files_changed:
-            raise ContractError("Builder exceeded max_files_changed")
-        total_patch_bytes = 0
-        changes = []
-        for edit in edits:
-            relative = str(edit.get("path", ""))
-            find = edit.get("find")
-            replace = edit.get("replace")
-            if not isinstance(find, str) or not find or not isinstance(replace, str):
-                raise ContractError("Every edit requires non-empty find text and replacement text")
-            path = workspace.resolve(relative)
-            if not path.is_file():
-                raise ContractError(f"Builder target is not a file: {relative}")
-            current = path.read_text(encoding="utf-8")
-            occurrences = current.count(find)
-            if occurrences != 1:
-                raise ContractError(
-                    f"Edit for {relative} expected one exact match; found {occurrences}"
-                )
-            total_patch_bytes += len(find.encode("utf-8")) + len(replace.encode("utf-8"))
-            if total_patch_bytes > order.max_patch_bytes:
-                raise ContractError("Builder exceeded max_patch_bytes")
-            before_sha = canonical_hash({"text": current})
-            updated = current.replace(find, replace, 1)
-            path.write_text(updated, encoding="utf-8")
-            changes.append(
-                {
-                    "path": relative,
-                    "before_sha256": before_sha,
-                    "after_sha256": canonical_hash({"text": updated}),
-                    "rationale": str(edit.get("rationale", ""))[:1000],
-                }
+        return PatchBroker().apply(order, workspace, edits)
+
+    def _record_agent_evidence(
+        self,
+        artifacts: ArtifactStore,
+        ledger: RunLedger,
+        references: list[dict[str, Any]],
+        role: str,
+        visibility: str,
+    ) -> None:
+        drain = getattr(self.agents, "drain_evidence", None)
+        if not callable(drain):
+            return
+        for evidence in drain():
+            reference = artifacts.write(
+                "model-call-evidence", role, visibility, evidence
             )
-        return {"changes": changes, "patch_bytes": total_patch_bytes}
+            references.append(reference)
+            ledger.append(
+                {"planner": "PLANNED", "builder": "BUILDING"}.get(role, "VERIFYING"),
+                "model_call_recorded",
+                reference,
+            )
+
+    @staticmethod
+    def _failure_envelope(
+        public_verification: dict[str, Any], diagnosis: dict[str, Any]
+    ) -> dict[str, Any]:
+        return {
+            **public_verification,
+            "diagnosis": {
+                "summary": str(diagnosis.get("summary", ""))[:500],
+                "failure_codes": [
+                    str(item)[:120] for item in diagnosis.get("failure_codes", [])[:20]
+                ],
+                "builder_guidance": str(diagnosis.get("builder_guidance", ""))[:1_000],
+                "risk": str(diagnosis.get("risk", "medium")),
+            },
+        }
 
     def _finish(
         self,
@@ -405,6 +395,8 @@ class FactoryOrchestrator:
         }
         if attempts:
             required_actions.add(("builder", "factory:build"))
+        if any(item.get("artifact_type") == "failure-diagnosis" for item in artifacts):
+            required_actions.add(("failure_analyst", "factory:analyze-failure"))
         execution_security = (
             self.execution_context.summary(required_actions)
             if self.execution_context
@@ -414,6 +406,17 @@ class FactoryOrchestrator:
                 "backend": "host-process",
                 "secrets_persisted": False,
                 "gaps": ["hardened-execution-not-configured"],
+            }
+        )
+        summary_method = getattr(self.agents, "intelligence_summary", None)
+        intelligence = (
+            summary_method()
+            if callable(summary_method)
+            else {
+                "mode": "unreported",
+                "provider": self.agents.name,
+                "calls": 0,
+                "limitations": ["Agent set did not emit intelligence provenance."],
             }
         )
         security_limitations = (
@@ -452,6 +455,7 @@ class FactoryOrchestrator:
             },
             "artifacts": artifacts,
             "execution_security": execution_security,
+            "intelligence": intelligence,
             "limitations": [
                 limitation,
                 *security_limitations,
@@ -466,6 +470,8 @@ class FactoryOrchestrator:
                 "attempts": attempts,
                 "title": order.title,
                 "receipt_sha256": receipt["content_sha256"],
+                "intelligence_mode": intelligence.get("mode"),
+                "model_calls": intelligence.get("calls", 0),
                 "updated_at": receipt["completed_at"],
             },
             run_dir / "summary.json",

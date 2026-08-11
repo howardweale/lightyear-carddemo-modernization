@@ -10,10 +10,9 @@
     "artifact_type": {"type": "string"},
     "run_id": {"type": "string"},
     "sequence": {"type": "integer", "minimum": 1},
-    "role": {"enum": ["controller", "planner", "builder", "verifier"]},
+    "role": {"enum": ["controller", "planner", "builder", "failure_analyst", "verifier"]},
     "visibility": {"enum": ["implementer", "verifier_private", "shared"]},
     "content": {"type": "object"},
     "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
   }
 }
-

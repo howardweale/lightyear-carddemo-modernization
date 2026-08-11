@@ -1007,6 +1007,7 @@ async function loadFactoryRun(runKey) {
     );
     renderFactoryGates(receipt.verification?.gates || []);
     renderFactorySecurity(receipt.execution_security);
+    renderFactoryIntelligence(receipt.intelligence);
     renderFactoryTimeline(payload.events || []);
     const paths = $("factory-paths");
     paths.replaceChildren();
@@ -1047,6 +1048,50 @@ function renderFactorySecurity(security) {
   const hash = document.createElement("code");
   hash.textContent = posture.execution_policy_sha256 || "No hardened execution policy attached";
   container.append(title, detail, evidence, hash);
+}
+
+function renderFactoryIntelligence(intelligence) {
+  const posture = intelligence || {
+    mode: "unreported",
+    provider: "unknown",
+    model: null,
+    calls: 0,
+    input_tokens: 0,
+    output_tokens: 0,
+    estimated_cost_usd: 0,
+  };
+  const container = $("factory-intelligence");
+  container.replaceChildren();
+  const heading = document.createElement("strong");
+  heading.textContent = `${String(posture.mode).replaceAll("-", " ")} · ${posture.provider}`;
+  const model = document.createElement("p");
+  model.textContent = posture.model
+    ? `Model ${posture.model}; ${posture.calls || 0} independently receipted call(s).`
+    : "Deterministic reference worker; no model-performance claim is made.";
+  const metrics = document.createElement("div");
+  metrics.className = "factory-intelligence-metrics";
+  [
+    ["Calls", posture.calls || 0],
+    ["Input tokens", posture.input_tokens || 0],
+    ["Output tokens", posture.output_tokens || 0],
+    [
+      "Estimated cost",
+      posture.cost_estimate_available
+        ? `$${Number(posture.estimated_cost_usd || 0).toFixed(4)}`
+        : "not configured",
+    ],
+  ].forEach(([label, value]) => {
+    const item = document.createElement("span");
+    const amount = document.createElement("b");
+    amount.textContent = String(value);
+    const caption = document.createElement("small");
+    caption.textContent = label;
+    item.append(amount, caption);
+    metrics.appendChild(item);
+  });
+  const hash = document.createElement("code");
+  hash.textContent = posture.content_sha256 || "No intelligence receipt attached";
+  container.append(heading, model, metrics, hash);
 }
 
 function renderFactoryGates(gates) {

@@ -243,7 +243,7 @@ class HardenedExecutionTests(unittest.TestCase):
         )
         binding = context.bind(self.order.content_sha256, ISSUED)
         context.authorize("planner", "factory:plan", NOW)
-        self.assertEqual(4, len(binding["identity_receipts"]))
+        self.assertEqual(5, len(binding["identity_receipts"]))
         context.record_verification({
             "gates": [{"execution": {"content_sha256": "a" * 64, "enforced": False}}]
         })

@@ -9,6 +9,7 @@ from pathlib import Path
 from .agents import LocalAgentSet, OpenAIAgentSet
 from .benchmark import run_mutation_benchmark
 from .contracts import WorkOrder
+from .evals import load_evaluation_catalog, run_model_evaluation, validate_evaluation_catalog
 from .orchestrator import FactoryOrchestrator
 from .store import FactoryRunStore
 
@@ -28,6 +29,9 @@ def build_parser() -> argparse.ArgumentParser:
     run.add_argument("--source-root", type=Path, default=Path("."))
     run.add_argument("--runs-root", type=Path, default=Path("work/factory-runs"))
     run.add_argument("--graph", type=Path, default=Path("knowledge/graph.snapshot.json.gz"))
+    run.add_argument(
+        "--evidence-pack", type=Path, default=Path("knowledge/evidence/source.pack.json.gz")
+    )
     run.add_argument("--provider", choices=["local", "openai"], default="local")
     run.add_argument("--run-id")
     run.add_argument("--execution-policy", type=Path, default=Path("factory/execution/policy.json"))
@@ -39,6 +43,24 @@ def build_parser() -> argparse.ArgumentParser:
     benchmark.add_argument("--project-root", type=Path, default=Path("."))
     benchmark.add_argument("--output-root", type=Path)
     benchmark.add_argument("--mutation", action="append", dest="mutations")
+
+    evaluate = subparsers.add_parser(
+        "evaluate", help="Run a model-backed public or sealed work-cell evaluation"
+    )
+    evaluate.add_argument("--project-root", type=Path, default=Path("."))
+    evaluate.add_argument(
+        "--catalog", type=Path, default=Path("factory/evals/carddemo-v0.12-public.json")
+    )
+    evaluate.add_argument("--output-root", type=Path)
+    evaluate.add_argument("--provider", choices=["openai"], default="openai")
+
+    validate_eval = subparsers.add_parser(
+        "validate-eval", help="Validate an evaluation catalog without calling a model"
+    )
+    validate_eval.add_argument("--project-root", type=Path, default=Path("."))
+    validate_eval.add_argument(
+        "--catalog", type=Path, default=Path("factory/evals/carddemo-v0.12-public.json")
+    )
 
     inspect = subparsers.add_parser("inspect", help="Inspect a factory run receipt and ledger")
     inspect.add_argument("--runs-root", type=Path, default=Path("work/factory-runs"))
@@ -56,6 +78,25 @@ def main(argv: list[str] | None = None) -> int:
         )
         result = run_mutation_benchmark(
             args.project_root, output_root, args.mutations
+        )
+        print(json.dumps(result, indent=2, sort_keys=True))
+        return 0 if result["status"] == "passed" else 1
+    if args.command == "validate-eval":
+        result = validate_evaluation_catalog(
+            args.project_root.resolve(), load_evaluation_catalog(args.catalog)
+        )
+        print(json.dumps(result, indent=2, sort_keys=True))
+        return 0
+    if args.command == "evaluate":
+        output_root = args.output_root or Path("work") / (
+            "model-evaluation-"
+            + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+        )
+        result = run_model_evaluation(
+            args.project_root,
+            output_root,
+            args.catalog,
+            lambda _: OpenAIAgentSet.from_environment(),
         )
         print(json.dumps(result, indent=2, sort_keys=True))
         return 0 if result["status"] == "passed" else 1
@@ -110,6 +151,7 @@ def main(argv: list[str] | None = None) -> int:
         args.runs_root,
         agents,
         graph_path=args.graph,
+        evidence_path=args.evidence_pack,
         execution_context=execution_context,
     ).run(order, args.run_id)
     print(json.dumps(receipt, indent=2, sort_keys=True))

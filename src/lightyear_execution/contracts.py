@@ -122,9 +122,11 @@ class ExecutionPolicy:
         if not 60 <= ttl <= 86400 or not 30 <= identity_ttl <= ttl:
             raise ExecutionContractError("Admission or identity TTL is outside policy bounds")
         roles = identities.get("roles", {})
-        required_roles = {"planner", "builder", "verifier"}
+        required_roles = {"planner", "builder", "failure_analyst", "verifier"}
         if not required_roles.issubset(roles):
-            raise ExecutionContractError("Identity policy must define planner, builder, and verifier")
+            raise ExecutionContractError(
+                "Identity policy must define planner, builder, failure_analyst, and verifier"
+            )
         role_actions = {
             role: tuple(str(item) for item in roles[role].get("actions", []))
             for role in sorted(roles)

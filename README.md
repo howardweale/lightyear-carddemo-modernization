@@ -1,6 +1,6 @@
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.11.2 — corrected OCI workspace translation**
+Release: **v0.12.0 — graph-grounded autonomous work cell**
 
 An evidence-aware knowledge graph, source-faithful local oracle, differential harness, and
 Java/Spring Batch candidate for AWS CardDemo. Together they form the first engineering cell of a
@@ -41,7 +41,7 @@ dossiers, and a read-only Evidence Control Tower make unattended execution inspe
 allowing agents or dashboard state to declare their own success.
 
 v0.11 closes the largest local autonomy boundary. Signed, expiring work orders pass a replay-safe
-admission gate; planner, builder, provider, and verifier receive short-lived action-scoped
+admission gate; planner, builder, failure analyst, provider, and verifier receive short-lived action-scoped
 identities; protected values use one-use non-persistent leases; and deterministic gates can execute
 through a digest-pinned Docker or Podman sandbox with no network, read-only filesystems, non-root
 identity, dropped capabilities, no-new-privileges, and resource ceilings. Simulation proves policy
@@ -57,6 +57,13 @@ v0.11.2 corrects the host-to-container workspace boundary discovered by the firs
 live run. The controller now translates both `PYTHONPATH` and `LIGHTYEAR_FACTORY_WORKSPACE` to
 their `/workspace` container paths before launching a gate, while retaining the read-only host bind.
 
+v0.12 makes model-backed work measurable and bounded. A replaceable provider sits behind planner,
+builder, and failure-analysis roles; a context assembler packages approved graph neighborhoods,
+shared source excerpts, and candidate files; an atomic patch broker validates every proposed edit;
+and independent call receipts record model, hashes, tokens, latency, cost estimate, and budgets.
+A 36-fault public calibration suite exercises the work cell while remaining explicitly distinct
+from externally controlled sealed holdouts and mainframe evidence.
+
 ## What it does
 
 1. Builds a deterministic, provenance-rich graph of the entire CardDemo application estate.
@@ -68,7 +75,7 @@ their `/workspace` container paths before launching a gate, while retaining the 
 7. Answers who, what, where, when, why, how, impact, lineage, and verification questions about
    selected nodes, relationships, or the estate.
 8. Exports a lossless, disposable Neo4j projection without surrendering graph ownership.
-9. Executes bounded planner, builder, and verifier roles under a deterministic run controller.
+9. Executes bounded planner, builder, failure-analyst, and verifier roles under a deterministic run controller.
 10. Isolates each run, enforces edit budgets, protects verifier-private evidence, and records every
     transition and artifact by hash.
 11. Shows factory runs, acceptance gates, changes, and receipts in the local control room.
@@ -84,13 +91,19 @@ their `/workspace` container paths before launching a gate, while retaining the 
 21. Produces deterministic release dossiers and blocks promotion until governed evidence passes.
 22. Shows trust posture, policy rationale, evidence lineage, exceptions, and checkpoints in a read-only Control Tower.
 23. Verifies signed work orders against trusted issuers, expiry, policy identity, and one-use nonces.
-24. Issues short-lived, action-scoped identities for planner, builder, provider, and verifier roles.
+24. Issues short-lived, action-scoped identities for planner, builder, failure analyst, provider, and verifier roles.
 25. Brokers allowlisted protected values through one-use leases without persisting their contents.
 26. Runs acceptance gates through a digest-pinned, networkless, non-root Docker or Podman sandbox.
 27. Blocks promotion when only simulated execution-policy conformance exists.
 28. Prevents a successful container-only probe from impersonating a signed factory run.
 29. Binds admitted work orders, agent-action attestations, and OCI gate evidence in one receipt.
 30. Ingests live execution evidence while leaving mainframe equivalence independently blocked.
+31. Assembles content-addressed model context from approved graph roots and source capsules.
+32. Places replaceable model providers behind controller-enforced call, token, cost, byte, and time budgets.
+33. Applies model proposals through an atomic allowlisted patch broker with line and file ceilings.
+34. Returns sanitized failure envelopes without exposing private gate output to the builder.
+35. Records every model call as a prompt-free provenance artifact linked into the run receipt.
+36. Measures autonomous repair rate and false acceptance independently across public or sealed evaluations.
 
 The included `candidate-java` module is the first modernization candidate. It consumes and emits
 the same fixed-width records as the oracle, including COBOL signed zoned decimals.
@@ -176,8 +189,29 @@ Then start the explorer and open the **Factory** tab:
 ```
 
 The control room shows the station timeline, gates, attempts, changed paths, receipt hash, and
-audience-safe run history. This is deliberately observable autonomy: “dark” means unattended
-execution, not invisible decisions.
+audience-safe run history. v0.12 also shows provider, model, model-call count, token usage, estimated
+cost, and intelligence-receipt identity. This is deliberately observable autonomy: “dark” means
+unattended execution, not invisible decisions.
+
+Validate the 36-fault public calibration catalog without making an API call:
+
+```bash
+./model-workcell.sh validate
+```
+
+Run the live model evaluation after supplying the provider key outside the repository:
+
+```bash
+export OPENAI_API_KEY="..."
+export LIGHTYEAR_FACTORY_MODEL="gpt-5.6"
+./model-workcell.sh evaluate
+```
+
+Optional environment-only token prices can be supplied through
+`LIGHTYEAR_MODEL_INPUT_USD_PER_MILLION` and `LIGHTYEAR_MODEL_OUTPUT_USD_PER_MILLION`; otherwise the
+receipt marks the cost estimate as unavailable rather than treating zero as a real price. The checked-in suite is public calibration,
+not a blind benchmark. Supply an independently retained catalog with `evaluation_class` set to
+`sealed-holdout` to measure blind generalization without disclosing mutation details to workers.
 
 ## Runtime evidence
 
@@ -283,7 +317,7 @@ PYTHONPATH=src python3 -m lightyear_factory run \
   --provider local
 ```
 
-To use model-backed planner, builder, and verifier adapters, keep the API key in the launching
+To use model-backed planner, builder, and failure-analysis adapters, keep the API key in the launching
 terminal and select the OpenAI provider:
 
 ```bash
@@ -478,17 +512,20 @@ To compare with the likely intended behavior instead:
 This difference is exactly why the modernization harness must reproduce observed behavior before
 deciding whether a legacy behavior should be preserved or intentionally corrected.
 
-## Next factory increment
+## Next factory increments
 
 Once a candidate can pass the visible cases:
 
-1. Capture independent z/OS executions and attach runtime observations to graph entities.
-2. Externalize the audit log to immutable retention with managed asymmetric signing and trusted time.
-3. Move signed admission and identity credentials from HMAC to KMS-backed asymmetric trust.
-4. Expand private holdouts and verified rule mappings to posting and statement-generation workloads.
-5. Add conflict-aware parallel work cells, graph-delta memory, and human approval for high-risk
+1. Run the v0.12 work cell against an independently retained sealed holdout and establish the first
+   honest model baseline: repair rate, false acceptance, escalations, latency, and cost.
+2. Capture independent z/OS executions and attach runtime observations to graph entities.
+3. Turn verified failure, plan, patch, and outcome pairs into graph-addressed semantic memory.
+4. Externalize the audit log to immutable retention with managed asymmetric signing and trusted time.
+5. Move signed admission and identity credentials from HMAC to KMS-backed asymmetric trust.
+6. Expand private holdouts and verified rule mappings to posting and statement-generation workloads.
+7. Add conflict-aware parallel work cells, graph-delta memory, and human approval for high-risk
    changes.
-6. Issue a production acceptance receipt only after structural, behavioral, security, operational,
+8. Issue a production acceptance receipt only after structural, behavioral, security, operational,
    and mainframe-backed verification policies pass.
 
 The pinned workload specification is in `spec/carddemo-intcalc.json`.

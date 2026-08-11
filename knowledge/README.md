@@ -1,7 +1,8 @@
 # LIGHTYEAR Modernization Knowledge Graph
 
 The canonical graph is complemented by the runtime evidence plane and z/OSMF adapter kit under
-`knowledge/runtime/`, plus the v0.10 audit ledger and Evidence Control Tower under `../audit/`.
+`knowledge/runtime/`, the audit ledger and Evidence Control Tower under `../audit/`, and the v0.11.2
+hardened execution policy under `../factory/execution/`.
 Runtime captures remain append-only evidence rather than nondeterministic mutations of the source
 snapshot. The explorer joins both identities at read time and refuses to treat simulated or local
 evidence as proof of z/OS equivalence.
@@ -43,9 +44,9 @@ database—is the durable advantage.
 
 The structural, semantic-mapping, initial verification, local exploration, governed-relationship,
 content-addressed source-evidence, grounded-question, database-projection, bounded factory-
-orchestration, runtime evidence, z/OSMF connection simulation, and audit-governance layers are
-implemented in this release. Independent production evidence remains the most important next
-addition.
+orchestration, signed admission, scoped identity, container policy, runtime evidence, z/OSMF
+connection simulation, and audit-governance layers are implemented in this release. Independent
+production evidence remains the most important next addition.
 
 ## Trust model
 
@@ -126,6 +127,8 @@ PYTHONPATH=src python3 -m lightyear_knowledge_graph trace \
 
 ./factory-benchmark.sh
 
+./hardened-execution.sh verify
+
 ./audit-control-tower.sh verify
 
 PYTHONPATH=src python3 -m lightyear_knowledge_graph export-neo4j \
@@ -155,8 +158,8 @@ or generated evidence drift apart.
    coverage directly from the graph.
 4. **Agent context service:** serve minimal, signed, audience-specific subgraphs through a stable API
    or MCP interface.
-5. **Factory scale-out:** add authenticated work admission, enforced sandboxing, conflict-aware
-   parallel cells, policy-selected gates, and risk-based human approval.
+5. **Factory scale-out:** move admission and identity signing to managed asymmetric keys; add
+   conflict-aware parallel cells, policy-selected gates, and risk-based human approval.
 6. **Durable governance:** anchor signed audit checkpoints in immutable external retention with
    enterprise identity, trusted time, key rotation, and legal hold policy.
 7. **Longitudinal memory:** retain graph deltas, architectural decisions, failed attempts, and

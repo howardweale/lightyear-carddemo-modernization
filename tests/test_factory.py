@@ -268,6 +268,7 @@ class FactoryTests(unittest.TestCase):
         self.assertIn("run.run_key", app)
         self.assertIn('id="factory-tab"', html)
         self.assertIn('id="factory-timeline"', html)
+        self.assertIn("required agent actions attested", app)
 
 
 if __name__ == "__main__":

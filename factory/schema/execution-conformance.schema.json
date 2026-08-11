@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schema/factory/execution-conformance-1.0.json",
+  "title": "LIGHTYEAR execution policy conformance receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "receipt_type", "status", "assurance", "production_ready", "execution_policy_id", "execution_policy_sha256", "backend_plan", "checks", "gaps", "limitations", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "receipt_type": {"const": "lightyear-execution-policy-conformance"},
+    "status": {"enum": ["passed", "failed"]},
+    "assurance": {"enum": ["simulated", "enforced"]},
+    "production_ready": {"type": "boolean"},
+    "execution_policy_id": {"type": "string"},
+    "execution_policy_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "backend_plan": {"type": "object"},
+    "checks": {"type": "object", "additionalProperties": {"type": "boolean"}},
+    "gaps": {"type": "array", "items": {"type": "string"}},
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

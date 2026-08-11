@@ -69,12 +69,14 @@ class FactoryOrchestrator:
         agents: AgentSet,
         graph_path: Path | None = None,
         prepare_workspace: Callable[[IsolatedWorkspace, WorkOrder], None] | None = None,
+        execution_context: Any | None = None,
     ) -> None:
         self.source_root = source_root.resolve()
         self.runs_root = runs_root.resolve()
         self.agents = agents
         self.graph_path = graph_path.resolve() if graph_path else None
         self.prepare_workspace = prepare_workspace
+        self.execution_context = execution_context
 
     def run(self, order: WorkOrder, run_id: str | None = None) -> dict[str, Any]:
         run_id = _run_id(run_id)
@@ -106,6 +108,9 @@ class FactoryOrchestrator:
             },
         )
         try:
+            if self.execution_context:
+                security_binding = self.execution_context.bind(order.content_sha256, started_at)
+                ledger.append(state, "hardened_admission_bound", security_binding)
             workspace.create()
             if self.prepare_workspace:
                 self.prepare_workspace(workspace, order)
@@ -116,7 +121,7 @@ class FactoryOrchestrator:
                 {
                     "allowed_paths": list(order.allowed_paths),
                     "initial_snapshot_sha256": canonical_hash(initial_snapshot),
-                    "mode": "copy-on-run",
+                    "mode": "copy-on-run-plus-oci-gates" if self.execution_context else "copy-on-run",
                 },
             )
 
@@ -126,6 +131,7 @@ class FactoryOrchestrator:
             )
             references.append(context_ref)
             state = "PLANNED"
+            self._authorize("planner", "factory:plan")
             plan = self.agents.plan(order, context)
             self._validate_plan(order, plan)
             plan_ref = artifacts.write("plan", "planner", "implementer", plan)
@@ -135,9 +141,8 @@ class FactoryOrchestrator:
             public_failure: dict[str, Any] = {"status": "not_run", "gates": []}
             if order.baseline_first:
                 state = "VERIFYING"
-                latest_verification = GateRunner(
-                    workspace.root, allow_network=order.allow_network
-                ).run(order.gates)
+                self._authorize("verifier", "factory:verify")
+                latest_verification = self._run_gates(workspace, order)
                 verification_ref = artifacts.write(
                     "verification-report",
                     "controller",
@@ -162,6 +167,7 @@ class FactoryOrchestrator:
                         "The approved state already satisfied every deterministic gate.",
                     )
                 public_failure = builder_failure_view(latest_verification)
+                self._authorize("verifier", "factory:verify")
                 diagnosis = self.agents.diagnose(order, latest_verification, 0)
                 diagnosis_ref = artifacts.write(
                     "failure-diagnosis", "verifier", "verifier_private", diagnosis
@@ -172,6 +178,7 @@ class FactoryOrchestrator:
             while attempts < order.max_attempts:
                 attempts += 1
                 state = "BUILDING"
+                self._authorize("builder", "factory:build")
                 proposal = self.agents.build(
                     order, plan, public_failure, workspace.root, attempts
                 )
@@ -197,9 +204,8 @@ class FactoryOrchestrator:
                 ledger.append(state, "changes_applied", change_ref)
 
                 state = "VERIFYING"
-                latest_verification = GateRunner(
-                    workspace.root, allow_network=order.allow_network
-                ).run(order.gates)
+                self._authorize("verifier", "factory:verify")
+                latest_verification = self._run_gates(workspace, order)
                 verification_ref = artifacts.write(
                     "verification-report",
                     "controller",
@@ -220,6 +226,7 @@ class FactoryOrchestrator:
                     state = "PASSED"
                     ledger.append(state, "acceptance_gates_passed", {"attempt": attempts})
                     break
+                self._authorize("verifier", "factory:verify")
                 diagnosis = self.agents.diagnose(order, latest_verification, attempts)
                 diagnosis_ref = artifacts.write(
                     "failure-diagnosis", "verifier", "verifier_private", diagnosis
@@ -261,6 +268,22 @@ class FactoryOrchestrator:
                 f"Controller stopped safely: {type(exc).__name__}",
             )
             raise
+
+    def _authorize(self, role: str, action: str) -> None:
+        if self.execution_context:
+            self.execution_context.authorize(
+                role, action, datetime.now(timezone.utc).isoformat()
+            )
+
+    def _run_gates(self, workspace: IsolatedWorkspace, order: WorkOrder) -> dict[str, Any]:
+        report = GateRunner(
+            workspace.root,
+            allow_network=order.allow_network,
+            backend=self.execution_context.backend if self.execution_context else None,
+        ).run(order.gates)
+        if self.execution_context:
+            self.execution_context.record_verification(report)
+        return report
 
     def _context(self, order: WorkOrder) -> dict[str, Any]:
         if not self.graph_path or not self.graph_path.is_file():
@@ -356,8 +379,8 @@ class FactoryOrchestrator:
             )
         return {"changes": changes, "patch_bytes": total_patch_bytes}
 
-    @staticmethod
     def _finish(
+        self,
         run_dir: Path,
         run_id: str,
         order: WorkOrder,
@@ -375,6 +398,31 @@ class FactoryOrchestrator:
             path
             for path in set(initial_snapshot) | set(final_snapshot)
             if initial_snapshot.get(path) != final_snapshot.get(path)
+        )
+        required_actions = {
+            ("planner", "factory:plan"),
+            ("verifier", "factory:verify"),
+        }
+        if attempts:
+            required_actions.add(("builder", "factory:build"))
+        execution_security = (
+            self.execution_context.summary(required_actions)
+            if self.execution_context
+            else {
+                "status": "advisory",
+                "production_ready": False,
+                "backend": "host-process",
+                "secrets_persisted": False,
+                "gaps": ["hardened-execution-not-configured"],
+            }
+        )
+        security_limitations = (
+            ["Acceptance gates ran inside the admitted OCI security policy."]
+            if execution_security.get("production_ready")
+            else [
+                "Local copy isolation is not an OS container security boundary.",
+                "Network-deny is advisory until a live container backend enforces it.",
+            ]
         )
         receipt = {
             "schema_version": RUN_RECEIPT_SCHEMA_VERSION,
@@ -403,10 +451,10 @@ class FactoryOrchestrator:
                 ],
             },
             "artifacts": artifacts,
+            "execution_security": execution_security,
             "limitations": [
                 limitation,
-                "Local copy isolation is not an OS container security boundary.",
-                "Network-deny is advisory until a sandbox policy engine enforces it.",
+                *security_limitations,
             ],
         }
         receipt["content_sha256"] = canonical_hash(receipt)
@@ -432,4 +480,3 @@ def _run_id(value: str | None) -> str:
         return value
     stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
     return f"run-{stamp}-{secrets.token_hex(4)}"
-

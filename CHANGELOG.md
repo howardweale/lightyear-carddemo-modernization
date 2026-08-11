@@ -1,5 +1,53 @@
 # Changelog
 
+## 0.11.2 — 2026-08-11
+
+- Corrected OCI environment translation so the host workspace path becomes `/workspace` inside
+  Docker/Podman, matching the read-only bind mount used by private acceptance gates.
+- Added a regression assertion that rejects leaking the host workspace path into the container
+  environment while preserving the fixed `/workspace/src` Python module path.
+- Retained the v0.11.1 signed-admission and composite-evidence contract unchanged.
+
+## 0.11.1 — 2026-08-11
+
+- Split execution assurance into deterministic policy simulation, live container-runtime probe,
+  and signed admitted OCI factory-run evidence; a probe can no longer satisfy the factory gate.
+- Bound work-order admission, exact policy and work-order identities, issued agent identities,
+  attested role actions, enforced acceptance gates, and non-persistent protected values into the
+  factory execution-security receipt.
+- Added strict evidence normalization that recomputes readiness, rejects unknown receipt types,
+  invalid hashes, partial bindings, failed gates, missing actions, and producer-asserted readiness.
+- Added a one-command macOS/Linux and Windows admitted-run workflow that signs, executes through
+  Docker/Podman, validates the composite receipt, and builds a live audit snapshot and dossier.
+- Updated audit ingestion, non-overridable policy, release dossier, Control Tower, and Factory UI to
+  distinguish evidence class and clear only hardened execution while z/OS equivalence remains blocked.
+- Added a normalized execution-evidence schema and adversarial tests proving that a successful live
+  probe cannot impersonate a signed factory run.
+
+## 0.11.0 — 2026-08-11
+
+- Added signed, expiring work-order envelopes with trusted issuer keys, exact work-order and
+  execution-policy identities, minimum key strength, maximum TTL, and append-only nonce replay
+  prevention.
+- Added short-lived, work-order-bound, audience- and action-scoped credentials for planner,
+  builder, provider, and verifier roles; wrong role, action, work order, policy, signature, audience,
+  time window, or issuer fails closed.
+- Added an allowlisted one-use protected-value broker whose receipts never contain values and whose
+  in-memory leases clear their contents after consumption.
+- Added a real Docker/Podman backend with a digest-pinned image, network disabled, read-only root
+  and workspace mounts, numeric non-root identity, all capabilities dropped, no-new-privileges,
+  process/memory/CPU/tmpfs limits, environment filtering, command allowlisting, no shell, bounded
+  output, and timeouts.
+- Added a deterministic offline conformance receipt and separate live enforcement probe. Simulation
+  is explicitly non-production-ready and cannot satisfy hardened-execution promotion policy.
+- Integrated admission, agent-identity and gate-execution evidence into factory ledgers and run
+  receipts, plus execution posture in the Factory control room.
+- Added a non-overridable hardened-execution audit decision, Evidence Control Tower projection, and
+  release-dossier gate alongside runtime and mainframe evidence.
+- Added cross-platform execution launchers, three JSON Schema contracts, policy weakening,
+  tampering, expiry, replay, identity scope, protected-value leakage, OCI invocation, orchestration,
+  API and UI tests, and full-suite verification.
+
 ## 0.10.0 — 2026-08-11
 
 - Added a versioned, append-only audit contract with actors, roles, actions, subjects, evidence

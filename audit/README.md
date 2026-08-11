@@ -1,6 +1,6 @@
 # LIGHTYEAR audit ledger and Evidence Control Tower
 
-v0.10 makes factory activity auditable by construction. A deterministic control plane converts
+The audit plane makes factory activity auditable by construction. A deterministic control plane converts
 existing graph, source-evidence, factory, and runtime receipts into one hash-chained event ledger.
 The browser dashboard is a read-only projection of that ledger; it is never the source of truth.
 
@@ -31,16 +31,21 @@ knowledge-graph identity.
 ## Included artifacts
 
 - `audit.snapshot.json.gz`: canonical deterministic audit snapshot;
-- `dossiers/carddemo-intcalc-v0.10-demo.json`: machine-readable release evidence dossier;
-- `dossiers/carddemo-intcalc-v0.10-demo.md`: human-readable dossier;
+- `dossiers/carddemo-intcalc-v0.11.2-demo.json`: current machine-readable release evidence dossier;
+- `dossiers/carddemo-intcalc-v0.11.2-demo.md`: current human-readable dossier;
 - `policies/promotion.json`: versioned policy set;
 - `examples/exception.example.json`: governed, expiring human exception example;
 - `schema/`: JSON Schemas for events, snapshots, decisions, exceptions, policies, and dossiers.
 
-The canonical demo contains 13 events: graph and source-evidence publication, work-order
-registration, three distinct runtime captures, six runtime policy decisions, and one release
-promotion decision. Promotion is intentionally **blocked** because no independently observed z/OS
-equivalence evidence exists yet.
+The v0.11.2 canonical demo contains 15 events: graph and source-evidence publication, work-order
+registration, normalized hardened-execution evidence, three distinct runtime captures, seven supporting
+policy decisions, and one release-promotion decision. Promotion is intentionally **blocked**
+because neither independently observed z/OS equivalence nor live container-enforcement evidence
+exists yet.
+
+A live Docker probe alone remains blocked. A passed signed factory-run receipt is accepted as a
+different evidence class and clears only the hardened-execution gate. Generate that projection with
+`./hardened-execution.sh admitted-run docker`; real z/OS equivalence remains independently blocked.
 
 ## Commands
 
@@ -63,7 +68,7 @@ Inspect the trust posture or event stream:
 PYTHONPATH=src python3 -m lightyear_audit inspect
 PYTHONPATH=src python3 -m lightyear_audit inspect --events --audience auditor
 PYTHONPATH=src python3 -m lightyear_audit inspect \
-  --decision decision:release:carddemo-intcalc:v0.10-demo:promotion
+  --decision decision:release:carddemo-intcalc:v0.11.2-demo:promotion
 ```
 
 Start the graph explorer and open the **Audit** tab:
@@ -81,9 +86,9 @@ policy engine and explicitly authorized human approvers can create policy outcom
 reject policy decisions attributed to planner or builder roles.
 
 `runtime.development_readiness` may be overridden by an expiring, human-approved exception with a
-named owner, justification, and compensating controls. `runtime.mainframe_equivalence` and
-`release.promotion` are deliberately non-overridable in this release. No exception can manufacture
-mainframe evidence.
+named owner, justification, and compensating controls. `runtime.mainframe_equivalence`,
+`execution.hardened_readiness`, and `release.promotion` are deliberately non-overridable in this
+release. No exception can manufacture mainframe or operating-system enforcement evidence.
 
 ## Checkpoint signing
 

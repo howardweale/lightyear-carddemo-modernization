@@ -24,9 +24,10 @@ DEFAULT_RUNTIME = Path("knowledge/runtime/runtime.snapshot.json.gz")
 DEFAULT_ZOSMF_RUNTIME = Path("knowledge/runtime/zosmf/intcalc.runtime.snapshot.json.gz")
 DEFAULT_WORK_ORDER = Path("factory/work-orders/intcalc-repair.example.json")
 DEFAULT_POLICY = Path("audit/policies/promotion.json")
-DEFAULT_DOSSIER_JSON = Path("audit/dossiers/carddemo-intcalc-v0.10-demo.json")
-DEFAULT_DOSSIER_MD = Path("audit/dossiers/carddemo-intcalc-v0.10-demo.md")
-DEFAULT_RELEASE = "release:carddemo-intcalc:v0.10-demo"
+DEFAULT_EXECUTION_RECEIPT = Path("factory/execution/conformance.receipt.json")
+DEFAULT_DOSSIER_JSON = Path("audit/dossiers/carddemo-intcalc-v0.11.2-demo.json")
+DEFAULT_DOSSIER_MD = Path("audit/dossiers/carddemo-intcalc-v0.11.2-demo.md")
+DEFAULT_RELEASE = "release:carddemo-intcalc:v0.11.2-demo"
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -39,6 +40,7 @@ def build_parser() -> argparse.ArgumentParser:
     build.add_argument("--runtime", type=Path, action="append", dest="runtime_paths")
     build.add_argument("--work-order", type=Path, default=DEFAULT_WORK_ORDER)
     build.add_argument("--policy", type=Path, default=DEFAULT_POLICY)
+    build.add_argument("--execution-receipt", type=Path, default=DEFAULT_EXECUTION_RECEIPT)
     build.add_argument("--output", type=Path, default=DEFAULT_SNAPSHOT)
     build.add_argument("--dossier-json", type=Path, default=DEFAULT_DOSSIER_JSON)
     build.add_argument("--dossier-markdown", type=Path, default=DEFAULT_DOSSIER_MD)
@@ -84,6 +86,7 @@ def main(argv: list[str] | None = None) -> int:
             args.work_order,
             args.policy,
             signing_key,
+            args.execution_receipt,
         )
         write_snapshot(payload, args.output)
         dossier = build_dossier(payload, args.release)

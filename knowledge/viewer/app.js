@@ -730,6 +730,7 @@ async function loadAudit(selectLatest = true) {
       [stats.event_count || 0, "events"],
       [(stats.decisions?.blocked || 0), "blocked"],
       [stats.active_exceptions || 0, "exceptions"],
+      [summary.trust_posture?.execution_status || "not evaluated", "execution"],
       [summary.trust_posture?.signed_checkpoint ? "yes" : "no", "signed"],
     ].forEach(([value, label]) => {
       const card = document.createElement("div");
@@ -751,7 +752,8 @@ async function loadAudit(selectLatest = true) {
       ? `Unresolved gates: ${posture.unresolved_gaps.join(", ")}.`
       : "No unresolved promotion gates.";
     posturePanel.append(postureTitle, postureText);
-    renderAuditDecisions(summary.promotion_decisions || []);
+    renderAuditDecisionList("audit-execution", summary.execution_decisions || [], "No hardened execution decision recorded.");
+    renderAuditDecisionList("audit-decisions", summary.promotion_decisions || [], "No promotion decisions recorded.");
     renderAuditTimeline(state.auditEvents);
     $("audit-checkpoint").textContent = summary.checkpoint?.ledger_head_sha256 || "No checkpoint";
     if (selectLatest && summary.promotion_decisions?.length) {
@@ -762,8 +764,8 @@ async function loadAudit(selectLatest = true) {
   }
 }
 
-function renderAuditDecisions(decisions) {
-  const container = $("audit-decisions");
+function renderAuditDecisionList(containerId, decisions, emptyMessage) {
+  const container = $(containerId);
   container.replaceChildren();
   decisions.forEach((decision) => {
     const button = document.createElement("button");
@@ -779,12 +781,12 @@ function renderAuditDecisions(decisions) {
     button.addEventListener("click", () => loadAuditDecision(decision.id));
     container.appendChild(button);
   });
-  if (!decisions.length) container.textContent = "No promotion decisions recorded.";
+  if (!decisions.length) container.textContent = emptyMessage;
 }
 
 async function loadAuditDecision(decisionId) {
   const decision = await api("/api/audit/decision", { id: decisionId });
-  state.auditReleaseId = decision.subject_id;
+  if (decision.policy_id === "release.promotion") state.auditReleaseId = decision.subject_id;
   const dossier = $("audit-dossier");
   dossier.className = `audit-dossier ${decision.status}`;
   dossier.replaceChildren();
@@ -792,9 +794,15 @@ async function loadAuditDecision(decisionId) {
   title.textContent = `${decision.status.toUpperCase()} · ${decision.policy_id}`;
   const rationale = document.createElement("p");
   rationale.textContent = decision.rationale;
+  const evidenceClass = document.createElement("small");
+  evidenceClass.textContent = decision.inputs?.evidence_class
+    ? `Evidence class: ${decision.inputs.evidence_class.replaceAll("-", " ")}`
+    : "";
   const hash = document.createElement("code");
   hash.textContent = decision.content_sha256;
-  dossier.append(title, rationale, hash);
+  dossier.append(title, rationale);
+  if (evidenceClass.textContent) dossier.append(evidenceClass);
+  dossier.append(hash);
 }
 
 function renderAuditTimeline(events) {
@@ -828,7 +836,7 @@ async function loadAuditDossier() {
     const rationale = document.createElement("p");
     rationale.textContent = dossier.rationale;
     const inventory = document.createElement("p");
-    inventory.textContent = `${dossier.evidence_inventory.length} evidence items · ${dossier.runtime_decisions.length} runtime decisions · ${dossier.gaps.length} unresolved gaps`;
+    inventory.textContent = `${dossier.evidence_inventory.length} evidence items · ${dossier.runtime_decisions.length} runtime decisions · ${dossier.execution_decisions.length} execution decisions · ${dossier.gaps.length} unresolved gaps`;
     const hash = document.createElement("code");
     hash.textContent = dossier.content_sha256;
     panel.append(title, rationale, inventory, hash);
@@ -998,6 +1006,7 @@ async function loadFactoryRun(runKey) {
       answerBadge(`${receipt.event_count} events`),
     );
     renderFactoryGates(receipt.verification?.gates || []);
+    renderFactorySecurity(receipt.execution_security);
     renderFactoryTimeline(payload.events || []);
     const paths = $("factory-paths");
     paths.replaceChildren();
@@ -1011,6 +1020,33 @@ async function loadFactoryRun(runKey) {
   } catch (error) {
     setError(error);
   }
+}
+
+function renderFactorySecurity(security) {
+  const posture = security || {
+    status: "advisory",
+    backend: "host-process",
+    production_ready: false,
+    gaps: ["hardened-execution-not-configured"],
+  };
+  const container = $("factory-security");
+  container.className = `audit-posture ${posture.production_ready ? "passed" : "blocked"}`;
+  container.replaceChildren();
+  const title = document.createElement("strong");
+  title.textContent = `${String(posture.status).replaceAll("_", " ")} · ${posture.backend}`;
+  const detail = document.createElement("p");
+  detail.textContent = posture.production_ready
+    ? "Signed admission, scoped identities, and OCI gate isolation were enforced."
+    : `Not production ready: ${(posture.gaps || []).join(", ") || "enforcement evidence missing"}.`;
+  const evidence = document.createElement("small");
+  const required = posture.required_agent_actions || [];
+  const authorized = posture.authorized_agent_actions || [];
+  evidence.textContent = posture.evidence_class
+    ? `${posture.evidence_class.replaceAll("-", " ")} · ${authorized.length}/${required.length} required agent actions attested`
+    : "No signed execution evidence attached";
+  const hash = document.createElement("code");
+  hash.textContent = posture.execution_policy_sha256 || "No hardened execution policy attached";
+  container.append(title, detail, evidence, hash);
 }
 
 function renderFactoryGates(gates) {

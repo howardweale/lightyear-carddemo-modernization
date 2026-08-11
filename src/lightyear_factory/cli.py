@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -11,18 +12,26 @@ from .contracts import WorkOrder
 from .orchestrator import FactoryOrchestrator
 from .store import FactoryRunStore
 
+from lightyear_execution.admission import AdmissionNonceStore, verify_work_order
+from lightyear_execution.backend import OCIContainerBackend
+from lightyear_execution.contracts import ExecutionContractError, ExecutionPolicy
+from lightyear_execution.integration import HardenedExecutionContext
+
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="LIGHTYEAR autonomous modernization factory")
     subparsers = parser.add_subparsers(dest="command", required=True)
 
     run = subparsers.add_parser("run", help="Execute one approved factory work order")
-    run.add_argument("--work-order", type=Path, required=True)
+    run.add_argument("--work-order", type=Path)
+    run.add_argument("--signed-work-order", type=Path)
     run.add_argument("--source-root", type=Path, default=Path("."))
     run.add_argument("--runs-root", type=Path, default=Path("work/factory-runs"))
     run.add_argument("--graph", type=Path, default=Path("knowledge/graph.snapshot.json.gz"))
     run.add_argument("--provider", choices=["local", "openai"], default="local")
     run.add_argument("--run-id")
+    run.add_argument("--execution-policy", type=Path, default=Path("factory/execution/policy.json"))
+    run.add_argument("--execution-runtime", choices=["docker", "podman"])
 
     benchmark = subparsers.add_parser(
         "benchmark", help="Run the offline INTCALC mutation gauntlet"
@@ -54,13 +63,54 @@ def main(argv: list[str] | None = None) -> int:
         result = FactoryRunStore(args.runs_root).run(args.run_id, args.verifier)
         print(json.dumps(result, indent=2, sort_keys=True))
         return 0
-    order = WorkOrder.load(args.work_order)
-    agents = LocalAgentSet() if args.provider == "local" else OpenAIAgentSet.from_environment()
+    execution_context = None
+    if args.execution_runtime:
+        if not args.signed_work_order or args.work_order:
+            raise ExecutionContractError(
+                "Hardened execution requires --signed-work-order and forbids unsigned --work-order"
+            )
+        policy = ExecutionPolicy.load(args.execution_policy)
+        envelope = json.loads(args.signed_work_order.read_text(encoding="utf-8"))
+        key_id = envelope.get("signature", {}).get("key_id", "")
+        admission_key = os.environ.get("LIGHTYEAR_WORK_ORDER_SIGNING_KEY", "").encode()
+        order, admission = verify_work_order(
+            envelope,
+            policy,
+            {key_id: admission_key},
+            datetime.now(timezone.utc).isoformat(),
+            AdmissionNonceStore(args.runs_root / "admission-nonces.sha256"),
+        )
+        identity_key = os.environ.get("LIGHTYEAR_IDENTITY_SIGNING_KEY", "").encode()
+        execution_context = HardenedExecutionContext(
+            policy,
+            OCIContainerBackend(policy, args.execution_runtime, execute=True),
+            admission,
+            identity_key,
+            {"OPENAI_API_KEY": os.environ.get("OPENAI_API_KEY", "")},
+        )
+        execution_context.bind(order.content_sha256, datetime.now(timezone.utc).isoformat())
+    else:
+        if not args.work_order or args.signed_work_order:
+            raise ExecutionContractError(
+                "Host compatibility mode requires exactly one unsigned --work-order"
+            )
+        order = WorkOrder.load(args.work_order)
+    if args.provider == "local":
+        agents = LocalAgentSet()
+    elif execution_context:
+        agents = OpenAIAgentSet(
+            execution_context.lease_secret(
+                "provider", "OPENAI_API_KEY", datetime.now(timezone.utc).isoformat()
+            )
+        )
+    else:
+        agents = OpenAIAgentSet.from_environment()
     receipt = FactoryOrchestrator(
         args.source_root,
         args.runs_root,
         agents,
         graph_path=args.graph,
+        execution_context=execution_context,
     ).run(order, args.run_id)
     print(json.dumps(receipt, indent=2, sort_keys=True))
     return 0 if receipt["status"] == "passed" else 1

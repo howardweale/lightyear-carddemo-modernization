@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.10.0 — 2026-08-11
+
+- Added a versioned, append-only audit contract with actors, roles, actions, subjects, evidence
+  references, visibility, timestamps, sequence numbers, previous-event hashes, and event identities.
+- Added deterministic ledger snapshots bound to the canonical knowledge-graph identity, plus
+  validation that detects mutation, deletion, reordering, duplication, broken chains, stale
+  projections, invalid decision hashes, statistics drift, and checkpoint tampering.
+- Added deterministic development-readiness, mainframe-equivalence, and release-promotion policy
+  decisions. Planner and builder roles cannot record acceptance decisions, and missing z/OS proof
+  blocks release promotion.
+- Added governed exceptions requiring a human approver, named owner, substantive justification,
+  expiry, and compensating controls; mainframe equivalence and release promotion are non-overridable.
+- Added optional HMAC-SHA256 checkpoint signing through an environment-only key, wrong-key
+  detection, and explicit unsigned-canonical warnings.
+- Added machine-readable and human-readable release evidence dossiers with policy rationale,
+  unresolved gaps, evidence inventory, and ledger checkpoint identity.
+- Added a read-only Evidence Control Tower to the graph explorer with promotion posture, policy
+  decisions, audit timeline, dossier, and checkpoint views.
+- Added cross-platform audit build and deterministic verification launchers, six portable JSON
+  Schema contracts, tamper/privacy/policy/signature/API/UI tests, and full-suite integration.
+
 ## 0.9.0 — 2026-08-11
 
 - Added a read-only z/OSMF Jobs adapter for job discovery, status and step data, spool-file

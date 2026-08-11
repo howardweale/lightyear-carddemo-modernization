@@ -11,6 +11,12 @@ if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 & (Join-Path $ProjectDir "knowledge-graph.ps1") verify
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
+& (Join-Path $ProjectDir "runtime-evidence.ps1") verify
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+& (Join-Path $ProjectDir "audit-control-tower.ps1") verify
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
 Push-Location (Join-Path $ProjectDir "candidate-java")
 try {
     & .\mvnw.cmd test package

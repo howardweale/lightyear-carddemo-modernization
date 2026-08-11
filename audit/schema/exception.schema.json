@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schema/exception.schema.json",
+  "title": "LIGHTYEAR governed policy exception",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id", "policy_id", "subject_id", "owner", "approved_by", "justification",
+    "expires_at", "compensating_controls"
+  ],
+  "properties": {
+    "id": {"type": "string", "minLength": 1, "maxLength": 200},
+    "policy_id": {"type": "string", "minLength": 1, "maxLength": 200},
+    "subject_id": {"type": "string", "minLength": 1, "maxLength": 200},
+    "owner": {"type": "string", "minLength": 1, "maxLength": 200},
+    "approved_by": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "role"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1, "maxLength": 200},
+        "kind": {"const": "human"},
+        "role": {"const": "approver"}
+      }
+    },
+    "justification": {"type": "string", "minLength": 20},
+    "expires_at": {"type": "string", "format": "date-time"},
+    "compensating_controls": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "minLength": 1}
+    }
+  }
+}

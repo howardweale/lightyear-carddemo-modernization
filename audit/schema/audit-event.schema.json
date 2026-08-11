@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schema/audit-event.schema.json",
+  "title": "LIGHTYEAR audit event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "sequence", "event_id", "event_sha256", "previous_sha256",
+    "occurred_at", "actor", "action", "subject", "evidence", "details", "visibility"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "sequence": {"type": "integer", "minimum": 1},
+    "event_id": {"type": "string", "pattern": "^audit:event:[0-9a-f]{24}$"},
+    "event_sha256": {"$ref": "#/$defs/sha256"},
+    "previous_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+    "occurred_at": {"type": "string", "format": "date-time"},
+    "actor": {"$ref": "#/$defs/actor"},
+    "action": {"$ref": "#/$defs/identifier"},
+    "subject": {"$ref": "#/$defs/subject"},
+    "evidence": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/evidence"}
+    },
+    "details": {"type": "object"},
+    "visibility": {"enum": ["shared", "auditor_private"]}
+  },
+  "$defs": {
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200,
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9_.:@/$#-]*$"
+    },
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "actor": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "role"],
+      "properties": {
+        "id": {"$ref": "#/$defs/identifier"},
+        "kind": {"enum": ["human", "service", "agent"]},
+        "role": {"enum": ["system", "planner", "builder", "verifier", "operator", "approver", "auditor"]}
+      }
+    },
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind"],
+      "properties": {
+        "id": {"$ref": "#/$defs/identifier"},
+        "kind": {"$ref": "#/$defs/identifier"}
+      }
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind", "sha256"],
+      "properties": {
+        "id": {"$ref": "#/$defs/identifier"},
+        "kind": {"$ref": "#/$defs/identifier"},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      }
+    }
+  }
+}

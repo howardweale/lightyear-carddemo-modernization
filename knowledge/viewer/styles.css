@@ -175,7 +175,7 @@ dd { margin: 0; overflow-wrap: anywhere; font: 11px/1.4 ui-monospace, SFMono-Reg
 .source-line-number { padding-right: 12px; color: #75837c; text-align: right; user-select: none; }
 .source-line-text { white-space: pre; }
 
-.right-tabs { position: sticky; z-index: 3; top: -20px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 8px 0 12px; background: var(--surface); border-bottom: 1px solid var(--border); }
+.right-tabs { position: sticky; z-index: 3; top: -20px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; padding: 8px 0 12px; background: var(--surface); border-bottom: 1px solid var(--border); }
 .right-tab { padding: 8px; color: var(--muted); background: transparent; border: 0; border-radius: 6px; cursor: pointer; font: inherit; font-weight: 700; }
 .right-tab.active { color: var(--ink); background: var(--surface-2); box-shadow: inset 0 -2px var(--accent); }
 
@@ -209,6 +209,19 @@ dd { margin: 0; overflow-wrap: anywhere; font: 11px/1.4 ui-monospace, SFMono-Reg
 .factory-paths { display: grid; gap: 4px; }
 .factory-paths code { padding: 5px 7px; overflow-wrap: anywhere; background: var(--surface-2); border-radius: 4px; font-size: 9px; }
 .factory-hash { display: block; overflow-wrap: anywhere; color: var(--accent-2); font-size: 9px; }
+
+.runtime-view { min-height: calc(100vh - 235px); }
+.runtime-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 12px 0; }
+.runtime-summary div { padding: 8px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px; text-align: center; }
+.runtime-summary strong, .runtime-summary span { display: block; }
+.runtime-summary strong { font: 700 15px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; }
+.runtime-summary span { margin-top: 3px; color: var(--muted); font-size: 8px; text-transform: uppercase; }
+.runtime-projection { padding: 10px; background: var(--surface-2); border-left: 3px solid var(--muted); border-radius: 0 6px 6px 0; }
+.runtime-projection.runtime_observed { border-left-color: #24a66a; }
+.runtime-projection.runtime_contradicted { border-left-color: #d94141; }
+.runtime-projection strong, .runtime-projection span, .runtime-projection code { display: block; }
+.runtime-projection strong { text-transform: uppercase; }
+.runtime-projection span, .runtime-projection code { margin-top: 4px; color: var(--muted); font-size: 9px; overflow-wrap: anywhere; }
 
 .chat-view { display: flex; flex-direction: column; min-height: calc(100vh - 235px); }
 .chat-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding-top: 14px; }

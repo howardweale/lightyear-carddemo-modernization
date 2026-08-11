@@ -18,6 +18,8 @@ from .model import load_graph
 from .ontology import load_ontology
 from .validation import rule_gaps
 from lightyear_factory.store import FactoryRunStore
+from lightyear_runtime.engine import load_snapshot as load_runtime_snapshot
+from lightyear_runtime.store import RuntimeEvidenceStore
 
 
 DEFAULT_PERSPECTIVES = [
@@ -87,11 +89,13 @@ class GraphExplorerIndex:
         payload: dict[str, Any],
         max_nodes: int = 300,
         ontology: dict[str, Any] | None = None,
+        runtime_store: RuntimeEvidenceStore | None = None,
     ) -> None:
         self.payload = payload
         self.max_nodes = max_nodes
         self.ontology = ontology or load_ontology()
         self.relation_definitions = self.ontology["relations"]
+        self.runtime_store = runtime_store
         self.node_by_id = {node["id"]: node for node in payload["nodes"]}
         self.edge_by_id = {edge["id"]: edge for edge in payload["edges"]}
         self.adjacency: dict[str, list[tuple[str, str]]] = defaultdict(list)
@@ -171,6 +175,7 @@ class GraphExplorerIndex:
         result = dict(node)
         result["incoming"] = sorted(incoming, key=lambda item: (item["relation"], item["source"]))
         result["outgoing"] = sorted(outgoing, key=lambda item: (item["relation"], item["target"]))
+        result["runtime"] = self.runtime_projection("node", node_id)
         return result
 
     def edge(self, edge_id: str, audience: str = "implementer") -> dict[str, Any]:
@@ -188,6 +193,7 @@ class GraphExplorerIndex:
         result["source_node"] = self._summary(source)
         result["target_node"] = self._summary(target)
         result["definition"] = self.relation_definitions[edge["relation"]]
+        result["runtime"] = self.runtime_projection("edge", edge_id)
         supporting_evidence = []
         seen_evidence: set[tuple[Any, ...]] = set()
         for owner_type, owner, role in (
@@ -217,6 +223,24 @@ class GraphExplorerIndex:
             if len(supporting_evidence) >= 24:
                 break
         result["supporting_evidence"] = supporting_evidence
+        return result
+
+    def runtime_projection(self, entity_kind: str, entity_id: str) -> dict[str, Any]:
+        if self.runtime_store is None:
+            return {
+                "state": "static_only",
+                "confidence": 0.35,
+                "evidence_classes": [],
+                "observation_count": 0,
+                "runs": [],
+                "operations": [],
+                "events": [],
+            }
+        return self.runtime_store.projection(entity_kind, entity_id)
+
+    def decorate_runtime(self, entity_kind: str, item: dict[str, Any]) -> dict[str, Any]:
+        result = dict(item)
+        result["runtime"] = self.runtime_projection(entity_kind, item["id"])
         return result
 
     def neighborhood(
@@ -347,6 +371,7 @@ class ExplorerServer(ThreadingHTTPServer):
         chat_service: GraphChatService | None = None,
         evidence_store: EvidenceStore | None = None,
         factory_store: FactoryRunStore | None = None,
+        runtime_store: RuntimeEvidenceStore | None = None,
     ) -> None:
         super().__init__(address, ExplorerRequestHandler)
         self.index = index
@@ -359,6 +384,21 @@ class ExplorerServer(ThreadingHTTPServer):
         self.factory_store = factory_store or FactoryRunStore(
             self.viewer_root.parents[1] / "work"
         )
+        if runtime_store is None:
+            default_runtime = self.viewer_root.parent / "runtime" / "runtime.snapshot.json.gz"
+            runtime_store = (
+                RuntimeEvidenceStore(load_runtime_snapshot(default_runtime))
+                if default_runtime.is_file()
+                else None
+            )
+        self.runtime_store = runtime_store
+        if (
+            self.runtime_store is not None
+            and self.runtime_store.snapshot.get("graph_content_sha256")
+            != self.index.payload.get("content_sha256")
+        ):
+            raise ValueError("Runtime evidence snapshot targets a different graph identity")
+        self.index.runtime_store = self.runtime_store
 
 
 class ExplorerRequestHandler(BaseHTTPRequestHandler):
@@ -404,7 +444,13 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
     def _api(self, path: str, query: dict[str, list[str]]) -> None:
         index = self.server.index
         if path == "/api/meta":
-            self._json(index.metadata())
+            metadata = index.metadata()
+            metadata["runtime"] = (
+                self.server.runtime_store.summary()["statistics"]
+                if self.server.runtime_store is not None
+                else {"run_count": 0, "event_count": 0}
+            )
+            self._json(metadata)
             return
         if path == "/api/chat/status":
             self._json(self.server.chat_service.status())
@@ -429,13 +475,25 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
                 )
             )
             return
+        if path == "/api/runtime/summary":
+            if self.server.runtime_store is None:
+                self._json({"runs": [], "statistics": {"run_count": 0, "event_count": 0}})
+            else:
+                self._json(self.server.runtime_store.summary())
+            return
+        if path == "/api/runtime/run":
+            if self.server.runtime_store is None:
+                raise KeyError(self._value(query, "id", required=True))
+            self._json(self.server.runtime_store.run(self._value(query, "id", required=True)))
+            return
         if path == "/api/edge":
-            self._json(
-                index.edge(
-                    self._value(query, "id", required=True),
-                    self._value(query, "audience") or "implementer",
-                )
+            edge_id = self._value(query, "id", required=True)
+            result = index.edge(
+                edge_id,
+                self._value(query, "audience") or "implementer",
             )
+            result["runtime"] = self._runtime_projection("edge", edge_id)
+            self._json(result)
             return
         if path == "/api/evidence":
             self._json(self._evidence(index, query))
@@ -453,12 +511,13 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
             )
             return
         if path == "/api/node":
-            self._json(
-                index.node(
-                    self._value(query, "id", required=True),
-                    self._value(query, "audience") or "implementer",
-                )
+            node_id = self._value(query, "id", required=True)
+            result = index.node(
+                node_id,
+                self._value(query, "audience") or "implementer",
             )
+            result["runtime"] = self._runtime_projection("node", node_id)
+            self._json(result)
             return
         if path == "/api/neighborhood":
             selection = index.neighborhood(
@@ -482,6 +541,9 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
             self._json({"status": "passed" if not gaps else "failed", "gaps": gaps})
             return
         self._json({"error": f"Unknown API route: {path}"}, HTTPStatus.NOT_FOUND)
+
+    def _runtime_projection(self, entity_kind: str, entity_id: str) -> dict[str, Any]:
+        return self.server.index.runtime_projection(entity_kind, entity_id)
 
     def _evidence(
         self, index: GraphExplorerIndex, query: dict[str, list[str]]
@@ -577,6 +639,7 @@ def serve(
     ontology_path: Path | None = None,
     evidence_pack_path: Path | None = None,
     factory_runs_path: Path | None = None,
+    runtime_snapshot_path: Path | None = None,
 ) -> None:
     ontology = load_ontology(ontology_path) if ontology_path else load_ontology()
     index = GraphExplorerIndex(load_graph(graph_path), ontology=ontology)
@@ -585,9 +648,15 @@ def serve(
     factory_store = FactoryRunStore(
         factory_runs_path or viewer_root.resolve().parents[1] / "work"
     )
+    runtime_path = runtime_snapshot_path or graph_path.parent / "runtime" / "runtime.snapshot.json.gz"
+    runtime_store = (
+        RuntimeEvidenceStore(load_runtime_snapshot(runtime_path))
+        if runtime_path.is_file()
+        else None
+    )
     server = ExplorerServer(
         (host, port), index, viewer_root, evidence_store=evidence_store,
-        factory_store=factory_store,
+        factory_store=factory_store, runtime_store=runtime_store,
     )
     url = f"http://{host}:{server.server_port}/"
     print(f"LIGHTYEAR Graph Explorer: {url}")

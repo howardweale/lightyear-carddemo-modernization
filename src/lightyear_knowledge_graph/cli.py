@@ -102,6 +102,11 @@ def build_parser() -> argparse.ArgumentParser:
     explorer.add_argument("--port", type=int, default=8765)
     explorer.add_argument("--no-browser", action="store_true")
     explorer.add_argument("--factory-runs", type=Path, default=Path("work"))
+    explorer.add_argument(
+        "--runtime-snapshot",
+        type=Path,
+        default=Path("knowledge/runtime/runtime.snapshot.json.gz"),
+    )
 
     neo4j = subparsers.add_parser(
         "export-neo4j",
@@ -194,6 +199,7 @@ def main(argv: list[str] | None = None) -> int:
             args.ontology,
             args.evidence_pack,
             args.factory_runs,
+            args.runtime_snapshot,
         )
         return 0
 

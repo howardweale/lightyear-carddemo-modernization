@@ -1,0 +1,87 @@
+{
+  "adapter_id": "lightyear.recorded-zos-fixture.v1",
+  "artifacts": [
+    {
+      "kind": "jes-spool-fixture",
+      "sha256": "cde66ebf21260d3fd5fa24363445367fb772a480307352798096186dd84c37c0"
+    }
+  ],
+  "captured_at": "2022-07-18T00:00:00Z",
+  "evidence_class": "simulated",
+  "limitations": [
+    "Recorded replay is synthetic and must not be represented as observed z/OS behavior.",
+    "The fixture exercises adapter, reconciliation, confidence, and policy mechanics only."
+  ],
+  "observations": [
+    {
+      "assertion": "observed",
+      "details": {"job_id": "JOB00001", "return_code": 0},
+      "entity_id": "legacy:jcl-job:INTCALC",
+      "entity_kind": "node",
+      "operation": "job_completed"
+    },
+    {
+      "assertion": "observed",
+      "details": {"return_code": 0, "step_name": "STEP15"},
+      "entity_id": "legacy:jcl-step:INTCALC:STEP15",
+      "entity_kind": "node",
+      "operation": "step_completed"
+    },
+    {
+      "assertion": "observed",
+      "details": {"program_name": "CBACT04C"},
+      "entity_id": "legacy:cobol-program:CBACT04C",
+      "entity_kind": "node",
+      "operation": "program_invoked"
+    },
+    {
+      "assertion": "observed",
+      "details": {"count": 1},
+      "entity_id": "edge:41c665376569d66442a5",
+      "entity_kind": "edge",
+      "operation": "job_step_observed"
+    },
+    {
+      "assertion": "observed",
+      "details": {"count": 1},
+      "entity_id": "edge:0594254ade360b961aef",
+      "entity_kind": "edge",
+      "operation": "step_program_observed"
+    },
+    {
+      "assertion": "observed",
+      "details": {"access": "read", "dd_name": "TCATBALF"},
+      "entity_id": "edge:306c54c9d54a2e3394b2",
+      "entity_kind": "edge",
+      "operation": "dd_allocation_used"
+    },
+    {
+      "assertion": "observed",
+      "details": {"access": "read-write", "dd_name": "ACCTFILE"},
+      "entity_id": "edge:ca49e89cc43783d9af72",
+      "entity_kind": "edge",
+      "operation": "dd_allocation_used"
+    },
+    {
+      "assertion": "observed",
+      "details": {"access": "write", "dd_name": "TRANSACT"},
+      "entity_id": "edge:ae7de3f32e08f9eee0a0",
+      "entity_kind": "edge",
+      "operation": "dd_allocation_used"
+    }
+  ],
+  "required_edges": [
+    "edge:41c665376569d66442a5",
+    "edge:0594254ade360b961aef",
+    "edge:306c54c9d54a2e3394b2",
+    "edge:ca49e89cc43783d9af72",
+    "edge:ae7de3f32e08f9eee0a0"
+  ],
+  "required_nodes": [
+    "legacy:jcl-job:INTCALC",
+    "legacy:jcl-step:INTCALC:STEP15",
+    "legacy:cobol-program:CBACT04C"
+  ],
+  "run_id": "recorded-zos-intcalc-replay",
+  "source_system": "synthetic-zos-replay-fixture"
+}

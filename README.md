@@ -1,6 +1,6 @@
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.7.1 — autonomous factory run engine**
+Release: **v0.8.0 — runtime evidence plane**
 
 An evidence-aware knowledge graph, source-faithful local oracle, differential harness, and
 Java/Spring Batch candidate for AWS CardDemo. Together they form the first engineering cell of a
@@ -23,6 +23,12 @@ paragraphs, copybooks, fields, JCL jobs and steps, datasets, Java types, methods
 dependencies. The `INTCALC` workload is the first vertical slice with explicit traceability from
 legacy source to business rules, Java implementation, and verification scenarios.
 
+v0.8 adds an append-only runtime evidence plane. Local executions and recorded adapter fixtures
+are bound to exact graph entities, hash chained, reconciled into runtime truth states, and evaluated
+under separate development-readiness and mainframe-equivalence policies. Synthetic replay can
+exercise the machinery, but only evidence classified as `zos_observed` can satisfy mainframe
+equivalence.
+
 ## What it does
 
 1. Builds a deterministic, provenance-rich graph of the entire CardDemo application estate.
@@ -40,6 +46,9 @@ legacy source to business rules, Java implementation, and verification scenarios
 11. Shows factory runs, acceptance gates, changes, and receipts in the local control room.
 12. Reads CardDemo-compatible fixed-width ASCII datasets and COBOL signed zoned decimals.
 13. Executes and differentially verifies the source-faithful `CBACT04C` behavior.
+14. Records graph-addressed runtime observations through a replaceable adapter contract.
+15. Distinguishes static-only, runtime-observed, and runtime-contradicted graph claims.
+16. Blocks mainframe-equivalence claims until every required entity has z/OS-observed evidence.
 
 The included `candidate-java` module is the first modernization candidate. It consumes and emits
 the same fixed-width records as the oracle, including COBOL signed zoned decimals.
@@ -127,6 +136,21 @@ Then start the explorer and open the **Factory** tab:
 The control room shows the station timeline, gates, attempts, changed paths, receipt hash, and
 audience-safe run history. This is deliberately observable autonomy: “dark” means unattended
 execution, not invisible decisions.
+
+## Runtime evidence
+
+Build the deterministic local capture and recorded z/OS-shaped replay fixture:
+
+```bash
+./runtime-evidence.sh build
+PYTHONPATH=src python3 -m lightyear_runtime inspect
+```
+
+Open the explorer's **Runtime** tab to inspect adapter runs, chained events, trust policy results,
+and limitations. Node and edge inspectors show the projected runtime state, confidence class,
+observed operation, and run identity. The included replay fixture is explicitly `simulated`; it
+cannot satisfy the `mainframe_equivalence` policy. See `knowledge/runtime/README.md` for the
+adapter boundary and the future z/OS capture contract.
 
 Repeated collections may reuse a human-readable run ID. The API and control room address each
 physical run through a stable, path-opaque `run_key`, preventing collisions without exposing local

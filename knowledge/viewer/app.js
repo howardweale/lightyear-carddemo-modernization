@@ -6,6 +6,7 @@ const state = {
   chatStatus: null,
   chatHistory: [],
   factoryRuns: [],
+  runtimeRuns: [],
   selection: null,
   selectedId: null,
   selectedEdgeId: null,
@@ -82,7 +83,7 @@ async function initialize() {
     populateLegend();
     configureChat();
     bindControls();
-    await Promise.all([loadPerspective(), loadFactoryRuns(false)]);
+    await Promise.all([loadPerspective(), loadFactoryRuns(false), loadRuntimeRuns(false)]);
   } catch (error) {
     setError(error);
   }
@@ -151,7 +152,12 @@ function bindControls() {
     switchRightPanel("factory");
     await loadFactoryRuns(true);
   });
+  $("runtime-tab").addEventListener("click", async () => {
+    switchRightPanel("runtime");
+    await loadRuntimeRuns(true);
+  });
   $("refresh-factory").addEventListener("click", () => loadFactoryRuns(true));
+  $("refresh-runtime").addEventListener("click", () => loadRuntimeRuns(true));
   $("clear-chat").addEventListener("click", resetChat);
   $("chat-form").addEventListener("submit", submitChat);
   $("chat-suggestions").addEventListener("click", (event) => {
@@ -396,6 +402,7 @@ async function inspectNode(nodeId) {
     $("detail-statement").hidden = !statement;
     renderProperties(node.properties || {});
     renderEvidence(node.evidence || [], "node", node.id, $("detail-evidence"));
+    renderRuntimeProjection(node.runtime, $("detail-runtime"));
     renderRelations(node);
     $("chat-focus").textContent = `${node.name} · ${node.kind.replaceAll("_", " ")}`;
   } catch (error) {
@@ -429,6 +436,7 @@ async function inspectEdge(edgeId) {
     renderDefinition(edge.definition);
     renderEdgeProperties(edge.properties || {});
     renderSupportingEvidence(edge.supporting_evidence || [], $("edge-evidence"));
+    renderRuntimeProjection(edge.runtime, $("edge-runtime"));
     $("chat-focus").textContent = `${edge.source_node.name} —${edge.relation}→ ${edge.target_node.name}`;
     switchRightPanel("inspector");
   } catch (error) {
@@ -684,12 +692,123 @@ function configureChat() {
 function switchRightPanel(view) {
   const chat = view === "chat";
   const factory = view === "factory";
+  const runtime = view === "runtime";
   $("chat-view").hidden = !chat;
   $("factory-view").hidden = !factory;
-  $("inspector-view").hidden = chat || factory;
+  $("runtime-view").hidden = !runtime;
+  $("inspector-view").hidden = chat || factory || runtime;
   $("chat-tab").classList.toggle("active", chat);
   $("factory-tab").classList.toggle("active", factory);
-  $("inspector-tab").classList.toggle("active", !chat && !factory);
+  $("runtime-tab").classList.toggle("active", runtime);
+  $("inspector-tab").classList.toggle("active", !chat && !factory && !runtime);
+}
+
+function renderRuntimeProjection(runtime, container) {
+  const projection = runtime || { state: "static_only", confidence: 0.35, observation_count: 0, evidence_classes: [], operations: [] };
+  container.className = `runtime-projection ${projection.state}`;
+  container.replaceChildren();
+  const stateLabel = document.createElement("strong");
+  stateLabel.textContent = projection.state.replaceAll("_", " ");
+  const confidence = document.createElement("span");
+  confidence.textContent = `${Math.round((projection.confidence || 0) * 100)}% trust · ${projection.observation_count || 0} observations`;
+  const classes = document.createElement("code");
+  classes.textContent = (projection.evidence_classes || []).join(" · ") || "No runtime evidence attached";
+  const operations = document.createElement("span");
+  operations.textContent = (projection.operations || []).join(", ");
+  container.append(stateLabel, confidence, classes);
+  if (operations.textContent) container.appendChild(operations);
+}
+
+async function loadRuntimeRuns(selectLatest = true) {
+  try {
+    const payload = await api("/api/runtime/summary");
+    state.runtimeRuns = payload.runs || [];
+    const stats = payload.statistics || {};
+    const summary = $("runtime-summary");
+    summary.replaceChildren();
+    [[stats.run_count || 0, "runs"], [stats.event_count || 0, "events"], [stats.contradicted_edges || 0, "contradictions"]].forEach(([value, label]) => {
+      const card = document.createElement("div");
+      const number = document.createElement("strong");
+      number.textContent = formatNumber(value);
+      const text = document.createElement("span");
+      text.textContent = label;
+      card.append(number, text);
+      summary.appendChild(card);
+    });
+    const container = $("runtime-runs");
+    container.replaceChildren();
+    $("runtime-empty").hidden = state.runtimeRuns.length > 0;
+    state.runtimeRuns.forEach((run) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = `factory-run ${run.development_status}`;
+      const title = document.createElement("strong");
+      title.textContent = run.source_system;
+      const meta = document.createElement("span");
+      meta.textContent = `${run.event_count} events · mainframe ${run.mainframe_status}`;
+      const identity = document.createElement("code");
+      identity.textContent = run.run_id;
+      button.append(title, meta, identity);
+      button.dataset.runId = run.run_id;
+      button.addEventListener("click", () => loadRuntimeRun(run.run_id));
+      container.appendChild(button);
+    });
+    if (selectLatest && state.runtimeRuns.length) await loadRuntimeRun(state.runtimeRuns[0].run_id);
+    if (!state.runtimeRuns.length) $("runtime-detail").hidden = true;
+  } catch (error) {
+    setError(error);
+  }
+}
+
+async function loadRuntimeRun(runId) {
+  try {
+    const run = await api("/api/runtime/run", { id: runId });
+    document.querySelectorAll("#runtime-runs .factory-run").forEach((item) => {
+      item.classList.toggle("active", item.dataset.runId === runId);
+    });
+    $("runtime-detail").hidden = false;
+    $("runtime-title").textContent = run.source_system;
+    $("runtime-id").textContent = `${run.run_id} · ${run.adapter_id}`;
+    $("runtime-badges").replaceChildren(
+      answerBadge(run.policies.development_readiness.status, run.policies.development_readiness.status === "passed" ? "high" : "low"),
+      answerBadge(`mainframe ${run.policies.mainframe_equivalence.status}`, run.policies.mainframe_equivalence.status === "passed" ? "high" : "low"),
+      answerBadge(`${run.event_count} events`),
+    );
+    const policies = $("runtime-policies");
+    policies.replaceChildren();
+    Object.entries(run.policies).forEach(([name, policy]) => {
+      const row = document.createElement("div");
+      row.className = `factory-gate ${policy.status}`;
+      const status = document.createElement("strong");
+      status.textContent = policy.status;
+      const label = document.createElement("span");
+      label.textContent = name.replaceAll("_", " ");
+      const gaps = document.createElement("code");
+      gaps.textContent = `${(policy.gaps || []).length} gaps`;
+      row.append(status, label, gaps);
+      policies.appendChild(row);
+    });
+    const events = $("runtime-events");
+    events.replaceChildren();
+    run.events.forEach((event) => {
+      const item = document.createElement("li");
+      const marker = document.createElement("span");
+      marker.className = `station-state ${event.assertion === "observed" ? "passed" : "blocked"}`;
+      marker.textContent = event.evidence_class;
+      const content = document.createElement("div");
+      const title = document.createElement("strong");
+      title.textContent = event.operation.replaceAll("_", " ");
+      const meta = document.createElement("small");
+      meta.textContent = event.entity_id;
+      content.append(title, meta);
+      item.append(marker, content);
+      events.appendChild(item);
+    });
+    $("runtime-limitations").textContent = (run.limitations || []).join(" ");
+    $("runtime-receipt-hash").textContent = run.content_sha256;
+  } catch (error) {
+    setError(error);
+  }
 }
 
 async function loadFactoryRuns(selectLatest = true) {

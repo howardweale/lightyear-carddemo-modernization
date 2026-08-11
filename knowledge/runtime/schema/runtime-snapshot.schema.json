@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schemas/runtime-snapshot-1.0.json",
+  "title": "LIGHTYEAR Runtime Evidence Snapshot",
+  "type": "object",
+  "required": [
+    "schema_version", "snapshot_type", "graph_content_sha256", "runs",
+    "projections", "statistics", "content_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "snapshot_type": {"const": "lightyear-runtime-evidence"},
+    "graph_content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "runs": {"type": "array", "minItems": 1, "items": {"type": "object"}},
+    "projections": {
+      "type": "object",
+      "required": ["nodes", "edges"],
+      "properties": {"nodes": {"type": "object"}, "edges": {"type": "object"}},
+      "additionalProperties": false
+    },
+    "statistics": {"type": "object"},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

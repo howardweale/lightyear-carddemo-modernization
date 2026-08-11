@@ -1,5 +1,10 @@
 # LIGHTYEAR Modernization Knowledge Graph
 
+The canonical graph is complemented by the v0.8 runtime evidence plane under `knowledge/runtime/`.
+Runtime captures remain append-only evidence rather than nondeterministic mutations of the source
+snapshot. The explorer joins both identities at read time and refuses to treat simulated or local
+evidence as proof of z/OS equivalence.
+
 The graph is the factory's shared system model. It is deliberately broader than a code index: it
 connects application structure, business meaning, modernization implementation, verification, and
 provenance in one queryable artifact.

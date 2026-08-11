@@ -15,6 +15,7 @@ if ($action -eq "build") {
     python -m lightyear_runtime compare `
         --expected (Join-Path $projectDir "knowledge/runtime/runtime.snapshot.json.gz") `
         --actual $generated
+    & (Join-Path $projectDir "zosmf-adapter.ps1") verify
 } else {
     Write-Error "Usage: .\runtime-evidence.ps1 [build|verify]"
 }

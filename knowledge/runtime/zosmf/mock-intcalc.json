@@ -1,0 +1,66 @@
+{
+  "files": [
+    {
+      "byte-count": 302,
+      "class": "H",
+      "ddname": "JESJCL",
+      "id": 2,
+      "jobid": "JOB00001",
+      "jobname": "INTCALC",
+      "procstep": null,
+      "record-count": 7,
+      "records-url": "https://example.invalid/zosmf/restjobs/jobs/INTCALC/JOB00001/files/2/records",
+      "stepname": "JESE",
+      "subsystem": "JES2"
+    },
+    {
+      "byte-count": 97,
+      "class": "H",
+      "ddname": "JESMSGLG",
+      "id": 3,
+      "jobid": "JOB00001",
+      "jobname": "INTCALC",
+      "procstep": null,
+      "record-count": 2,
+      "records-url": "https://example.invalid/zosmf/restjobs/jobs/INTCALC/JOB00001/files/3/records",
+      "stepname": "JESE",
+      "subsystem": "JES2"
+    }
+  ],
+  "job": {
+    "class": "A",
+    "exec-ended": "2022-07-18T00:00:03.000Z",
+    "exec-member": "SY1",
+    "exec-started": "2022-07-18T00:00:01.000Z",
+    "exec-submitted": "2022-07-18T00:00:00.000Z",
+    "exec-system": "SY1",
+    "files-url": "https://example.invalid/zosmf/restjobs/jobs/INTCALC/JOB00001/files",
+    "job-correlator": "J0000001SY1....................:",
+    "jobid": "JOB00001",
+    "jobname": "INTCALC",
+    "owner": "IBMUSER",
+    "phase": 20,
+    "phase-name": "Job is on the hard copy queue",
+    "retcode": "CC 0000",
+    "status": "OUTPUT",
+    "step-data": [
+      {
+        "active": false,
+        "completion-code": "CC 0000",
+        "proc-step-name": "",
+        "program-name": "CBACT04C",
+        "smfid": "SY1",
+        "step-name": "STEP15",
+        "step-number": 1
+      }
+    ],
+    "subsystem": "JES2",
+    "type": "JOB",
+    "url": "https://example.invalid/zosmf/restjobs/jobs/INTCALC/JOB00001"
+  },
+  "records": {
+    "2": "//INTCALC JOB (),CLASS=A,MSGCLASS=H\n//STEP15 EXEC PGM=CBACT04C\n//TCATBALF DD DSN=AWS.M2.CARDDEMO.TCATBALF,DISP=SHR\n//ACCTFILE DD DSN=AWS.M2.CARDDEMO.ACCTFILE,DISP=SHR\n//TRANSACT DD DSN=AWS.M2.CARDDEMO.TRANSACT,DISP=(NEW,CATLG)\n//SYSOUT DD SYSOUT=*\n//CEEDUMP DD SYSOUT=*\n",
+    "3": "IEF142I INTCALC STEP15 - STEP WAS EXECUTED - COND CODE 0000\nIEF404I INTCALC - ENDED - TIME=00.00.03\n"
+  },
+  "schema_version": "1.0"
+}

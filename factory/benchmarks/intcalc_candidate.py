@@ -11,6 +11,27 @@ DEFAULT_GROUP = "DEFAULT"
 SKIP_ZERO_RATE = True
 PRESERVE_FINAL_ACCOUNT = True
 
+# Cross-layer modernization facts used by the v0.12 evaluation surface. These values are
+# independently asserted by the pinned specification, record codecs, oracle, and JCL mapping.
+CATEGORY_BALANCE_LENGTH = 50
+DISCLOSURE_LENGTH = 50
+CARD_XREF_LENGTH = 50
+ACCOUNT_LENGTH = 300
+TRANSACTION_LENGTH = 350
+ACCOUNT_ID_WIDTH = 11
+GROUP_ID_WIDTH = 10
+TRANSACTION_ID_WIDTH = 16
+AMOUNT_SCALE = 2
+TRANSACTION_TYPE = "01"
+TRANSACTION_CATEGORY = "0005"
+TRANSACTION_SOURCE = "System"
+MERCHANT_ID = "000000000"
+PROCESSING_DATE_WIDTH = 10
+TIMESTAMP_WIDTH = 26
+INTCALC_JOB = "INTCALC"
+BALANCE_DATASET = "tcatbal.txt"
+ACCOUNT_DATASET = "acctdata.txt"
+
 
 def monthly_interest(balance: str, annual_rate: str) -> Decimal:
     rounding = ROUND_DOWN if ROUNDING == "down" else ROUND_HALF_UP

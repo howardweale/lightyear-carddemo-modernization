@@ -76,8 +76,10 @@ def render_markdown(dossier: dict[str, Any]) -> str:
     return "\n".join([
         "# LIGHTYEAR release evidence dossier",
         "",
-        f"**Release:** `{dossier['release_id']}`  ",
-        f"**Decision:** **{dossier['status'].upper()}**  ",
+        f"**Release:** `{dossier['release_id']}`",
+        "",
+        f"**Decision:** **{dossier['status'].upper()}**",
+        "",
         f"**Dossier identity:** `{dossier['content_sha256']}`",
         "",
         "## Promotion rationale",

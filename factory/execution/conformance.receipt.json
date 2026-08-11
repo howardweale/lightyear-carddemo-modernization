@@ -36,9 +36,9 @@
     "root_filesystem_read_only": true,
     "workspace_read_only": true
   },
-  "content_sha256": "36bd915c65150ad7f148f2d9fe88a5f67f9baf1ea2b83e39591d561f5a0c6180",
+  "content_sha256": "83d937880f17192b3ff8e5caa881481bf50feb307c20fab9da67543c94bb571e",
   "execution_policy_id": "lightyear:carddemo:hardened-execution",
-  "execution_policy_sha256": "4418dff96d2704aea013c03dd92e1ab0d26b68c4ea671343e1293aed4a4d8a95",
+  "execution_policy_sha256": "03b09388b431e1714206558c19b827f3b83e9c49346ce32f177b08d5c41a58bc",
   "gaps": [
     "container-runtime-enforcement-not-observed",
     "live-signed-work-order-admission-not-observed"

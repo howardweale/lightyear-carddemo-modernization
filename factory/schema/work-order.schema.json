@@ -52,10 +52,18 @@
         "audience": {"const": "implementer"},
         "allow_network": {"type": "boolean"},
         "max_files_changed": {"type": "integer", "minimum": 1, "maximum": 100},
-        "max_patch_bytes": {"type": "integer", "minimum": 1, "maximum": 5000000}
+        "max_patch_bytes": {"type": "integer", "minimum": 1, "maximum": 5000000},
+        "max_changed_lines": {"type": "integer", "minimum": 1, "maximum": 100000},
+        "max_context_bytes": {"type": "integer", "minimum": 1000, "maximum": 5000000},
+        "max_file_bytes": {"type": "integer", "minimum": 1000, "maximum": 5000000},
+        "max_model_calls": {"type": "integer", "minimum": 1, "maximum": 100},
+        "max_model_input_bytes": {"type": "integer", "minimum": 1000, "maximum": 100000000},
+        "max_model_output_bytes": {"type": "integer", "minimum": 1000, "maximum": 10000000},
+        "max_model_tokens": {"type": "integer", "minimum": 1000, "maximum": 10000000},
+        "max_model_cost_usd": {"type": "number", "minimum": 0, "maximum": 10000},
+        "max_elapsed_seconds": {"type": "integer", "minimum": 30, "maximum": 86400}
       }
     },
     "metadata": {"type": "object"}
   }
 }
-

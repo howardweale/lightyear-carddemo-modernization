@@ -1,5 +1,5 @@
 {
-  "content_sha256": "b2393f5cfee4d92d8589ec684218a6a29a4a67bd17cfb126d741acba394b7b0d",
+  "content_sha256": "97f4095d3f498165b02895cd2c5350515a8e9a7601595943ea7d922a2e061f69",
   "graph_id": "lightyear:carddemo-modernization",
   "receipt_type": "lightyear-knowledge-graph-build",
   "relationship_ontology": {
@@ -47,7 +47,7 @@
       "VERIFIED_BY": 19,
       "WRITES": 19
     },
-    "node_count": 10163,
+    "node_count": 10168,
     "nodes_by_kind": {
       "business_rule": 9,
       "cobol_field": 7817,
@@ -66,7 +66,7 @@
       "jcl_step": 119,
       "modernization_workload": 1,
       "software_dependency": 5,
-      "source_file": 304,
+      "source_file": 309,
       "test_case": 6,
       "verification_scenario": 3
     }

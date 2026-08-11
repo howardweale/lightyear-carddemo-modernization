@@ -40,6 +40,9 @@
       "builder": {
         "actions": ["factory:build"]
       },
+      "failure_analyst": {
+        "actions": ["factory:analyze-failure"]
+      },
       "provider": {
         "actions": ["secret:lease:OPENAI_API_KEY"]
       },

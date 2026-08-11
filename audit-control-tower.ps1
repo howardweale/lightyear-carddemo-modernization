@@ -10,8 +10,8 @@ if ($action -eq "build") {
 } elseif ($action -eq "verify") {
     $verificationDir = Join-Path $projectDir "work/audit-control-tower-verify"
     $generated = Join-Path $verificationDir "audit.snapshot.json.gz"
-    $generatedJson = Join-Path $verificationDir "carddemo-intcalc-v0.11.2-demo.json"
-    $generatedMarkdown = Join-Path $verificationDir "carddemo-intcalc-v0.11.2-demo.md"
+    $generatedJson = Join-Path $verificationDir "carddemo-intcalc-v0.12-demo.json"
+    $generatedMarkdown = Join-Path $verificationDir "carddemo-intcalc-v0.12-demo.md"
     New-Item -ItemType Directory -Force $verificationDir | Out-Null
     & py -3.11 -m lightyear_audit build `
         --output $generated `
@@ -26,9 +26,9 @@ if ($action -eq "build") {
         --expected (Join-Path $projectDir "audit/audit.snapshot.json.gz") `
         --actual $generated
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-    $canonicalJson = (Get-FileHash (Join-Path $projectDir "audit/dossiers/carddemo-intcalc-v0.11.2-demo.json") -Algorithm SHA256).Hash
+    $canonicalJson = (Get-FileHash (Join-Path $projectDir "audit/dossiers/carddemo-intcalc-v0.12-demo.json") -Algorithm SHA256).Hash
     $actualJson = (Get-FileHash $generatedJson -Algorithm SHA256).Hash
-    $canonicalMarkdown = (Get-FileHash (Join-Path $projectDir "audit/dossiers/carddemo-intcalc-v0.11.2-demo.md") -Algorithm SHA256).Hash
+    $canonicalMarkdown = (Get-FileHash (Join-Path $projectDir "audit/dossiers/carddemo-intcalc-v0.12-demo.md") -Algorithm SHA256).Hash
     $actualMarkdown = (Get-FileHash $generatedMarkdown -Algorithm SHA256).Hash
     if ($canonicalJson -ne $actualJson -or $canonicalMarkdown -ne $actualMarkdown) {
         Write-Error "Generated audit dossier differs from the canonical dossier"

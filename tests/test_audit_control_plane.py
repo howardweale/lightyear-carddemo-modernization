@@ -193,7 +193,7 @@ class AuditControlPlaneTests(unittest.TestCase):
             )
 
     def test_release_dossier_is_content_addressed_and_explains_the_block(self) -> None:
-        dossier = build_dossier(canonical_snapshot(), "release:carddemo-intcalc:v0.11.2-demo")
+        dossier = build_dossier(canonical_snapshot(), "release:carddemo-intcalc:v0.12-demo")
         self.assertEqual("blocked", dossier["status"])
         self.assertIn("mainframe-equivalence", dossier["gaps"])
         self.assertIn("hardened-execution-enforcement", dossier["gaps"])

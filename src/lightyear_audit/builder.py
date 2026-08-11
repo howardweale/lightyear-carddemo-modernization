@@ -119,7 +119,7 @@ def build_canonical_audit(
                 drafts.append(_decision_draft(decision, run["content_sha256"]))
 
     promotion_at = _tick(tick)
-    release_id = "release:carddemo-intcalc:v0.11.2-demo"
+    release_id = "release:carddemo-intcalc:v0.12-demo"
     promotion = policy.promotion_decision(
         release_id,
         runtime_decisions,

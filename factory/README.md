@@ -6,7 +6,7 @@ only controller-run acceptance gates determine the final state.
 
 v0.11 adds enforceable admission and execution security around that loop. A signed work order is
 verified against an external key, expiry, trusted issuer, exact policy hash, and one-use nonce.
-Short-lived credentials authorize planner, builder, provider, and verifier actions independently.
+Short-lived credentials authorize planner, builder, failure-analyst, provider, and verifier actions independently.
 Acceptance gates can run through Docker or Podman with a digest-pinned image, no network, read-only
 root and workspace filesystems, a non-root user, all capabilities dropped, no-new-privileges,
 bounded processes, memory, CPU and tmpfs, and no shell interpolation.
@@ -19,6 +19,11 @@ posture; the audit engine recomputes readiness instead of trusting a producer-su
 v0.11.2 maps host workspace environment values to the fixed `/workspace` OCI mount. This prevents
 Mac or Windows host paths from reaching a Linux container and makes the private verifier portable
 without weakening the read-only mount or exposing additional environment variables.
+
+v0.12 adds the graph-grounded model work cell inside those boundaries. Model providers are
+replaceable; the controller assembles approved graph and source context, enforces call/token/cost/
+time budgets, mediates every patch, sanitizes verifier feedback, and records prompt-free call
+evidence. The model proposes work but never receives write authority or acceptance authority.
 
 ## Control model
 
@@ -42,7 +47,8 @@ The roles are deliberately separate:
 |---|---|---|---|
 | Planner | approved work order, bounded implementer graph | structured task plan | widen writable paths |
 | Builder | plan, allowed files, public failure envelope | exact find/replace proposal | see private gate output or apply edits |
-| Verifier | full controller gate report | private diagnosis | modify the workspace or declare acceptance |
+| Failure analyst | sanitized gate metadata | bounded failure diagnosis | see private gate output or modify files |
+| Verifier | isolated workspace and private gates | deterministic gate report | modify the workspace or waive a failure |
 | Controller | all signed-in-process artifacts and policy | state transitions, applied changes, receipt | waive a failed gate |
 
 Every role receives a work-order-bound, action-scoped credential. Model-provider credentials are
@@ -53,6 +59,32 @@ the lease after consumption, and never serialized.
 `LocalAgentSet` is a deterministic reference worker for the published mutation family.
 `OpenAIAgentSet` is an optional Responses API adapter. The controller and artifact contracts remain
 the same when the worker implementation changes.
+
+`ModelAgentSet` is the v0.12 provider-neutral worker. `OpenAIResponsesProvider` is the first live
+provider and `ScriptedModelProvider` exists only for deterministic tests. The provider receives
+strict role-specific schemas; its outputs still pass controller validation and the patch broker.
+
+## Model work-cell evaluation
+
+Validate the checked-in 36-fault public calibration catalog without a provider call:
+
+```bash
+./model-workcell.sh validate
+```
+
+Run it with a live model:
+
+```bash
+export OPENAI_API_KEY="..."
+export LIGHTYEAR_FACTORY_MODEL="gpt-5.6"
+./model-workcell.sh evaluate
+```
+
+The evaluation receipt reports baseline rejection, repair rate, false acceptance, attempts, calls,
+tokens, estimated cost, and each factory receipt identity. Public cases calibrate mechanics and
+model behavior; they do not prove blind generalization. A sealed holdout must be retained outside
+the worker-visible repository and supplied as an external catalog. Neither class proves z/OS
+equivalence. See `evals/README.md` for evidence-class and scoring rules.
 
 ## Run the mutation gauntlet
 

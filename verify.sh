@@ -17,6 +17,7 @@ if { [[ -e "$default_maven_home" ]] && [[ ! -w "$default_maven_home" ]]; } || \
 fi
 
 "$LIGHTYEAR_PYTHON_BIN" -m unittest discover -s "$project_dir/tests" -v
+"$project_dir/model-workcell.sh" validate
 "$project_dir/hardened-execution.sh" verify
 "$project_dir/knowledge-graph.sh" verify
 "$project_dir/runtime-evidence.sh" verify

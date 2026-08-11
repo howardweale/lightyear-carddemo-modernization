@@ -1,7 +1,7 @@
 # LIGHTYEAR Modernization Knowledge Graph
 
 The canonical graph is complemented by the runtime evidence plane and z/OSMF adapter kit under
-`knowledge/runtime/`, the audit ledger and Evidence Control Tower under `../audit/`, and the v0.11.2
+`knowledge/runtime/`, the audit ledger and Evidence Control Tower under `../audit/`, and the v0.12
 hardened execution policy under `../factory/execution/`.
 Runtime captures remain append-only evidence rather than nondeterministic mutations of the source
 snapshot. The explorer joins both identities at read time and refuses to treat simulated or local

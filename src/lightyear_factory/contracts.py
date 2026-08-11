@@ -81,6 +81,15 @@ class WorkOrder:
     max_attempts: int
     max_files_changed: int
     max_patch_bytes: int
+    max_changed_lines: int
+    max_context_bytes: int
+    max_file_bytes: int
+    max_model_calls: int
+    max_model_input_bytes: int
+    max_model_output_bytes: int
+    max_model_tokens: int
+    max_model_cost_usd: float
+    max_elapsed_seconds: int
     baseline_first: bool
     allow_network: bool
     metadata: dict[str, Any]
@@ -118,12 +127,39 @@ class WorkOrder:
         max_attempts = int(acceptance.get("max_attempts", 3))
         max_files_changed = int(policy.get("max_files_changed", 12))
         max_patch_bytes = int(policy.get("max_patch_bytes", 250_000))
+        max_changed_lines = int(policy.get("max_changed_lines", 2_000))
+        max_context_bytes = int(policy.get("max_context_bytes", 160_000))
+        max_file_bytes = int(policy.get("max_file_bytes", 250_000))
+        max_model_calls = int(policy.get("max_model_calls", 12))
+        max_model_input_bytes = int(policy.get("max_model_input_bytes", 2_000_000))
+        max_model_output_bytes = int(policy.get("max_model_output_bytes", 500_000))
+        max_model_tokens = int(policy.get("max_model_tokens", 250_000))
+        max_model_cost_usd = float(policy.get("max_model_cost_usd", 25.0))
+        max_elapsed_seconds = int(policy.get("max_elapsed_seconds", 1_800))
         if not 1 <= max_attempts <= 10:
             raise ContractError("max_attempts must be between 1 and 10")
         if not 1 <= max_files_changed <= 100:
             raise ContractError("max_files_changed must be between 1 and 100")
         if not 1 <= max_patch_bytes <= 5_000_000:
             raise ContractError("max_patch_bytes must be between 1 and 5,000,000")
+        if not 1 <= max_changed_lines <= 100_000:
+            raise ContractError("max_changed_lines must be between 1 and 100,000")
+        if not 1_000 <= max_context_bytes <= 5_000_000:
+            raise ContractError("max_context_bytes must be between 1,000 and 5,000,000")
+        if not 1_000 <= max_file_bytes <= 5_000_000:
+            raise ContractError("max_file_bytes must be between 1,000 and 5,000,000")
+        if not 1 <= max_model_calls <= 100:
+            raise ContractError("max_model_calls must be between 1 and 100")
+        if not 1_000 <= max_model_input_bytes <= 100_000_000:
+            raise ContractError("max_model_input_bytes must be between 1,000 and 100,000,000")
+        if not 1_000 <= max_model_output_bytes <= 10_000_000:
+            raise ContractError("max_model_output_bytes must be between 1,000 and 10,000,000")
+        if not 1_000 <= max_model_tokens <= 10_000_000:
+            raise ContractError("max_model_tokens must be between 1,000 and 10,000,000")
+        if not 0 <= max_model_cost_usd <= 10_000:
+            raise ContractError("max_model_cost_usd must be between 0 and 10,000")
+        if not 30 <= max_elapsed_seconds <= 86_400:
+            raise ContractError("max_elapsed_seconds must be between 30 and 86,400")
         non_goals = payload.get("non_goals", [])
         if not isinstance(non_goals, list) or not all(isinstance(item, str) for item in non_goals):
             raise ContractError("non_goals must be an array of strings")
@@ -142,6 +178,15 @@ class WorkOrder:
             max_attempts=max_attempts,
             max_files_changed=max_files_changed,
             max_patch_bytes=max_patch_bytes,
+            max_changed_lines=max_changed_lines,
+            max_context_bytes=max_context_bytes,
+            max_file_bytes=max_file_bytes,
+            max_model_calls=max_model_calls,
+            max_model_input_bytes=max_model_input_bytes,
+            max_model_output_bytes=max_model_output_bytes,
+            max_model_tokens=max_model_tokens,
+            max_model_cost_usd=max_model_cost_usd,
+            max_elapsed_seconds=max_elapsed_seconds,
             baseline_first=bool(acceptance.get("baseline_first", True)),
             allow_network=bool(policy.get("allow_network", False)),
             metadata=metadata,
@@ -172,6 +217,15 @@ class WorkOrder:
                 "allow_network": self.allow_network,
                 "max_files_changed": self.max_files_changed,
                 "max_patch_bytes": self.max_patch_bytes,
+                "max_changed_lines": self.max_changed_lines,
+                "max_context_bytes": self.max_context_bytes,
+                "max_file_bytes": self.max_file_bytes,
+                "max_model_calls": self.max_model_calls,
+                "max_model_input_bytes": self.max_model_input_bytes,
+                "max_model_output_bytes": self.max_model_output_bytes,
+                "max_model_tokens": self.max_model_tokens,
+                "max_model_cost_usd": self.max_model_cost_usd,
+                "max_elapsed_seconds": self.max_elapsed_seconds,
             },
             "metadata": self.metadata,
         }
@@ -184,4 +238,3 @@ class WorkOrder:
 def write_json(payload: dict[str, Any], path: Path) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-

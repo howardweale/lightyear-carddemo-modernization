@@ -5,6 +5,7 @@ const state = {
   meta: null,
   chatStatus: null,
   chatHistory: [],
+  factoryRuns: [],
   selection: null,
   selectedId: null,
   selectedEdgeId: null,
@@ -81,7 +82,7 @@ async function initialize() {
     populateLegend();
     configureChat();
     bindControls();
-    await loadPerspective();
+    await Promise.all([loadPerspective(), loadFactoryRuns(false)]);
   } catch (error) {
     setError(error);
   }
@@ -146,6 +147,11 @@ function bindControls() {
   $("close-source").addEventListener("click", () => { $("source-drawer").hidden = true; });
   $("inspector-tab").addEventListener("click", () => switchRightPanel("inspector"));
   $("chat-tab").addEventListener("click", () => switchRightPanel("chat"));
+  $("factory-tab").addEventListener("click", async () => {
+    switchRightPanel("factory");
+    await loadFactoryRuns(true);
+  });
+  $("refresh-factory").addEventListener("click", () => loadFactoryRuns(true));
   $("clear-chat").addEventListener("click", resetChat);
   $("chat-form").addEventListener("submit", submitChat);
   $("chat-suggestions").addEventListener("click", (event) => {
@@ -677,10 +683,122 @@ function configureChat() {
 
 function switchRightPanel(view) {
   const chat = view === "chat";
+  const factory = view === "factory";
   $("chat-view").hidden = !chat;
-  $("inspector-view").hidden = chat;
+  $("factory-view").hidden = !factory;
+  $("inspector-view").hidden = chat || factory;
   $("chat-tab").classList.toggle("active", chat);
-  $("inspector-tab").classList.toggle("active", !chat);
+  $("factory-tab").classList.toggle("active", factory);
+  $("inspector-tab").classList.toggle("active", !chat && !factory);
+}
+
+async function loadFactoryRuns(selectLatest = true) {
+  try {
+    const payload = await api("/api/factory/runs", { limit: 50 });
+    state.factoryRuns = payload.runs || [];
+    const container = $("factory-runs");
+    container.replaceChildren();
+    $("factory-empty").hidden = state.factoryRuns.length > 0;
+    state.factoryRuns.forEach((run) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = `factory-run ${run.status}`;
+      const title = document.createElement("strong");
+      title.textContent = run.title;
+      const meta = document.createElement("span");
+      meta.textContent = `${run.status} · ${run.attempts} attempt${run.attempts === 1 ? "" : "s"}`;
+      const identity = document.createElement("code");
+      identity.textContent = run.run_id;
+      button.append(title, meta, identity);
+      button.dataset.runKey = run.run_key;
+      button.addEventListener("click", () => loadFactoryRun(run.run_key));
+      container.appendChild(button);
+    });
+    if (selectLatest && state.factoryRuns.length) {
+      await loadFactoryRun(state.factoryRuns[0].run_key);
+    } else if (!state.factoryRuns.length) {
+      $("factory-detail").hidden = true;
+    }
+  } catch (error) {
+    setError(error);
+  }
+}
+
+async function loadFactoryRun(runKey) {
+  try {
+    const payload = await api("/api/factory/run", {
+      id: runKey,
+      audience: $("audience").value,
+    });
+    const receipt = payload.receipt;
+    const summary = state.factoryRuns.find((item) => item.run_key === runKey);
+    document.querySelectorAll(".factory-run").forEach((item) => {
+      item.classList.toggle("active", item.dataset.runKey === runKey);
+    });
+    $("factory-detail").hidden = false;
+    $("factory-title").textContent = summary?.title || receipt.work_order_id;
+    $("factory-id").textContent = receipt.run_id;
+    const badges = $("factory-badges");
+    badges.replaceChildren(
+      answerBadge(receipt.status, receipt.status === "passed" ? "high" : "low"),
+      answerBadge(`${receipt.attempts} attempt${receipt.attempts === 1 ? "" : "s"}`),
+      answerBadge(`${receipt.event_count} events`),
+    );
+    renderFactoryGates(receipt.verification?.gates || []);
+    renderFactoryTimeline(payload.events || []);
+    const paths = $("factory-paths");
+    paths.replaceChildren();
+    (receipt.changed_paths || []).forEach((path) => {
+      const code = document.createElement("code");
+      code.textContent = path;
+      paths.appendChild(code);
+    });
+    if (!receipt.changed_paths?.length) paths.textContent = "No accepted file changes.";
+    $("factory-receipt-hash").textContent = receipt.content_sha256;
+  } catch (error) {
+    setError(error);
+  }
+}
+
+function renderFactoryGates(gates) {
+  const container = $("factory-gates");
+  container.replaceChildren();
+  gates.forEach((gate) => {
+    const row = document.createElement("div");
+    row.className = `factory-gate ${gate.status}`;
+    const status = document.createElement("strong");
+    status.textContent = gate.status;
+    const name = document.createElement("span");
+    name.textContent = gate.id;
+    const hash = document.createElement("code");
+    hash.textContent = gate.output_sha256.slice(0, 12);
+    row.append(status, name, hash);
+    container.appendChild(row);
+  });
+}
+
+function renderFactoryTimeline(events) {
+  const list = $("factory-timeline");
+  list.replaceChildren();
+  events.forEach((event) => {
+    const item = document.createElement("li");
+    const marker = document.createElement("span");
+    marker.className = `station-state ${event.state.toLowerCase()}`;
+    marker.textContent = event.state;
+    const content = document.createElement("div");
+    const title = document.createElement("strong");
+    title.textContent = event.kind.replaceAll("_", " ");
+    const meta = document.createElement("small");
+    const extras = [
+      `station ${event.sequence}`,
+      event.payload?.attempt !== undefined ? `attempt ${event.payload.attempt}` : null,
+      event.payload?.redacted ? "private artifact redacted" : null,
+    ].filter(Boolean);
+    meta.textContent = extras.join(" · ");
+    content.append(title, meta);
+    item.append(marker, content);
+    list.appendChild(item);
+  });
 }
 
 function resetChat() {

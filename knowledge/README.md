@@ -36,8 +36,9 @@ database—is the durable advantage.
 | Governance | visibility, confidence, policy decisions, receipts | factory policy engine |
 
 The structural, semantic-mapping, initial verification, local exploration, governed-relationship,
-content-addressed source-evidence, grounded-question, and database-projection layers are implemented
-in this release. Runtime truth is the most important next addition.
+content-addressed source-evidence, grounded-question, database-projection, and bounded factory-
+orchestration layers are implemented in this release. Runtime truth is the most important next
+addition.
 
 ## Trust model
 
@@ -89,6 +90,8 @@ snapshot carries the ontology content hash, and validation rejects undefined or 
 - `viewer/`: locally served, dependency-free visual explorer;
 - `neo4j/README.md`: optional Neo4j projection and import contract;
 - `chat/`: grounded answer quality contract and versioned structured-output schema.
+- `../factory/`: autonomous run contracts, example work orders, mutation benchmark, and operator
+  guidance; run artifacts and receipts are generated beneath `../work/`.
 
 The graph uses plain JSON and the Python standard library so it remains portable. It can export
 the same snapshot into Neo4j without making that database the source of truth; Amazon Neptune,
@@ -111,6 +114,8 @@ PYTHONPATH=src python3 -m lightyear_knowledge_graph trace \
   --to modern:test:ai.lightyear.carddemo.service.InterestCalculationServiceTest#matchesInterestAndDefaultRateRules
 
 ./graph-explorer.sh
+
+./factory-benchmark.sh
 
 PYTHONPATH=src python3 -m lightyear_knowledge_graph export-neo4j \
   --output-dir work/neo4j-export
@@ -139,8 +144,8 @@ or generated evidence drift apart.
    coverage directly from the graph.
 4. **Agent context service:** serve minimal, signed, audience-specific subgraphs through a stable API
    or MCP interface.
-5. **Factory orchestration:** use graph boundaries to decompose work, prevent conflicting edits,
-   select tests, route failures, and drive repair loops.
+5. **Factory scale-out:** add authenticated work admission, enforced sandboxing, conflict-aware
+   parallel cells, policy-selected gates, and risk-based human approval.
 6. **Longitudinal memory:** retain graph deltas, architectural decisions, failed attempts, and
    production feedback across releases and customer estates.
 7. **Portfolio learning:** derive reusable modernization patterns without exposing customer source,

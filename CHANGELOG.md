@@ -1,5 +1,36 @@
 # Changelog
 
+## 0.7.1 — 2026-08-11
+
+- Added shared macOS/Linux Python admission that automatically selects Python 3.11 or newer,
+  supports an explicit `LIGHTYEAR_PYTHON` override, and rejects Apple's bundled Python 3.9 before
+  a run can be misclassified as a semantic failure.
+- Made the offline benchmark candidate postpone annotation evaluation as a defensive import guard.
+- Added collision-safe, path-opaque run keys so repeated benchmark collections with the same
+  human-readable run IDs remain independently addressable in the Factory control room.
+- Added supported/unsupported runtime-admission and repeated-collection regression tests.
+
+## 0.7.0 — 2026-08-11
+
+- Added a deterministic autonomous-factory controller around replaceable planner, builder, and
+  verifier agents; workers propose artifacts while deterministic policy remains authoritative.
+- Added versioned work-order, agent-artifact, and run-receipt contracts with strict path, attempt,
+  file-count, patch-size, timeout, audience, and network-intent policies.
+- Added copy-on-run workspaces, exact bounded edit application, command-array acceptance gates,
+  content-addressed artifacts, and an append-only hash-chained event ledger.
+- Added implementer/verifier separation so private gate output and diagnoses are withheld from the
+  builder while public failure envelopes remain useful for repair.
+- Added local reference agents and an optional OpenAI Responses API adapter using strict structured
+  output, disabled response storage, server-side credentials, and interchangeable model selection.
+- Added an offline five-fault INTCALC mutation gauntlet that proves every defect is rejected before
+  repair and reports autonomous repairs and false acceptances separately.
+- Added a Factory control room to the graph explorer for run status, gates, state transitions,
+  changed paths, receipt identity, and audience-filtered event inspection.
+- Expanded modern source indexing so factory, graph, oracle, benchmark, and test Python files are
+  searchable source nodes with content-addressed evidence in the canonical graph.
+- Added factory contract, path-boundary, ledger-tamper, privacy, provider, benchmark, HTTP, and UI
+  tests. Mainframe equivalence remains explicitly unclaimed until runtime evidence is connected.
+
 ## 0.6.0 — 2026-08-11
 
 - Added a versioned relationship ontology covering all 21 graph relationship types, their purpose,

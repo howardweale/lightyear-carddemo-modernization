@@ -5,6 +5,8 @@ project_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 verification_dir="$project_dir/work/java-candidate-verify"
 candidate_jar="$project_dir/candidate-java/target/carddemo-spring-batch-candidate-0.1.0-SNAPSHOT.jar"
 
+source "$project_dir/python-runtime.sh"
+lightyear_resolve_python
 export PYTHONPATH="$project_dir/src"
 
 default_maven_home="${MAVEN_USER_HOME:-${HOME}/.m2}"
@@ -14,7 +16,7 @@ if { [[ -e "$default_maven_home" ]] && [[ ! -w "$default_maven_home" ]]; } || \
   export MAVEN_OPTS="${MAVEN_OPTS:-} -Dmaven.repo.local=$project_dir/work/.m2/repository"
 fi
 
-python3 -m unittest discover -s "$project_dir/tests" -v
+"$LIGHTYEAR_PYTHON_BIN" -m unittest discover -s "$project_dir/tests" -v
 "$project_dir/knowledge-graph.sh" verify
 
 (
@@ -22,7 +24,7 @@ python3 -m unittest discover -s "$project_dir/tests" -v
   ./mvnw test package
 )
 
-python3 -m carddemo_oracle demo --work-dir "$verification_dir"
+"$LIGHTYEAR_PYTHON_BIN" -m carddemo_oracle demo --work-dir "$verification_dir"
 
 java -jar "$candidate_jar" \
   --carddemo.input-dir="$verification_dir/input" \
@@ -31,7 +33,7 @@ java -jar "$candidate_jar" \
   --carddemo.timestamp=2022-07-18-00.00.00.000000 \
   --carddemo.final-account-policy=source-faithful
 
-python3 -m carddemo_oracle compare \
+"$LIGHTYEAR_PYTHON_BIN" -m carddemo_oracle compare \
   --expected "$verification_dir/oracle-output" \
   --actual "$verification_dir/candidate-output" \
   --report "$verification_dir/comparison.json"

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schema/factory/agent-artifact-1.0.json",
+  "title": "LIGHTYEAR Factory Agent Artifact Envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "artifact_type", "run_id", "sequence", "role", "visibility", "content", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "artifact_type": {"type": "string"},
+    "run_id": {"type": "string"},
+    "sequence": {"type": "integer", "minimum": 1},
+    "role": {"enum": ["controller", "planner", "builder", "verifier"]},
+    "visibility": {"enum": ["implementer", "verifier_private", "shared"]},
+    "content": {"type": "object"},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}
+

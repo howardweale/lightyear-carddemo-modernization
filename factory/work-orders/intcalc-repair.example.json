@@ -1,0 +1,44 @@
+{
+  "schema_version": "1.0",
+  "id": "carddemo:intcalc:bounded-repair",
+  "title": "Verify or repair the INTCALC candidate",
+  "goal": "Keep the modernization candidate source-faithful and prove it with deterministic gates.",
+  "non_goals": [
+    "Do not alter the legacy source or verifier-private assets.",
+    "Do not claim z/OS equivalence without runtime evidence."
+  ],
+  "scope": {
+    "allowed_paths": [
+      "factory/benchmarks/intcalc_candidate.py"
+    ],
+    "graph_node_ids": [
+      "workload:carddemo-intcalc"
+    ]
+  },
+  "acceptance": {
+    "baseline_first": true,
+    "max_attempts": 3,
+    "gates": [
+      {
+        "id": "private-intcalc-policy",
+        "command": [
+          "python3",
+          "-m",
+          "lightyear_factory.private_benchmark"
+        ],
+        "timeout_seconds": 30,
+        "expose_output_to_builder": false
+      }
+    ]
+  },
+  "policy": {
+    "audience": "implementer",
+    "allow_network": false,
+    "max_files_changed": 1,
+    "max_patch_bytes": 4096
+  },
+  "metadata": {
+    "owner": "LIGHTYEAR demo",
+    "mainframe_runtime_required": false
+  }
+}

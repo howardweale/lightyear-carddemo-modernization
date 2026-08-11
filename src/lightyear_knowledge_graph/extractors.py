@@ -336,7 +336,12 @@ def extract_modern(graph: KnowledgeGraph, root: Path) -> None:
     pom = java_root / "pom.xml"
     if pom.exists():
         _extract_maven(graph, pom, root)
-    for path in sorted((root / "src" / "carddemo_oracle").glob("*.py")):
+    python_paths = {
+        *root.joinpath("src").rglob("*.py"),
+        *root.joinpath("tests").rglob("*.py"),
+        *root.joinpath("factory").rglob("*.py"),
+    }
+    for path in sorted(python_paths):
         _add_file_node(graph, "modern", path, root, MODERN_SOURCE_ID, "python")
 
 

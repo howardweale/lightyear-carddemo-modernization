@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schema/factory/work-order-1.0.json",
+  "title": "LIGHTYEAR Factory Work Order",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "id", "title", "goal", "non_goals", "scope", "acceptance", "policy", "metadata"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "id": {"type": "string", "minLength": 1},
+    "title": {"type": "string", "minLength": 1},
+    "goal": {"type": "string", "minLength": 1},
+    "non_goals": {"type": "array", "items": {"type": "string"}},
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["allowed_paths", "graph_node_ids"],
+      "properties": {
+        "allowed_paths": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "graph_node_ids": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "acceptance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["baseline_first", "max_attempts", "gates"],
+      "properties": {
+        "baseline_first": {"type": "boolean"},
+        "max_attempts": {"type": "integer", "minimum": 1, "maximum": 10},
+        "gates": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["id", "command", "timeout_seconds", "expose_output_to_builder"],
+            "properties": {
+              "id": {"type": "string", "minLength": 1},
+              "command": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+              "timeout_seconds": {"type": "integer", "minimum": 1, "maximum": 3600},
+              "expose_output_to_builder": {"type": "boolean"}
+            }
+          }
+        }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["audience", "allow_network", "max_files_changed", "max_patch_bytes"],
+      "properties": {
+        "audience": {"const": "implementer"},
+        "allow_network": {"type": "boolean"},
+        "max_files_changed": {"type": "integer", "minimum": 1, "maximum": 100},
+        "max_patch_bytes": {"type": "integer", "minimum": 1, "maximum": 5000000}
+      }
+    },
+    "metadata": {"type": "object"}
+  }
+}
+

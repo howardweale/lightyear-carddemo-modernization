@@ -17,6 +17,7 @@ from .evidence_pack import EvidenceStore, load_evidence_pack
 from .model import load_graph
 from .ontology import load_ontology
 from .validation import rule_gaps
+from lightyear_factory.store import FactoryRunStore
 
 
 DEFAULT_PERSPECTIVES = [
@@ -345,6 +346,7 @@ class ExplorerServer(ThreadingHTTPServer):
         viewer_root: Path,
         chat_service: GraphChatService | None = None,
         evidence_store: EvidenceStore | None = None,
+        factory_store: FactoryRunStore | None = None,
     ) -> None:
         super().__init__(address, ExplorerRequestHandler)
         self.index = index
@@ -354,6 +356,9 @@ class ExplorerServer(ThreadingHTTPServer):
             default_pack = self.viewer_root.parent / "evidence" / "source.pack.json.gz"
             evidence_store = EvidenceStore(load_evidence_pack(default_pack)) if default_pack.is_file() else None
         self.evidence_store = evidence_store
+        self.factory_store = factory_store or FactoryRunStore(
+            self.viewer_root.parents[1] / "work"
+        )
 
 
 class ExplorerRequestHandler(BaseHTTPRequestHandler):
@@ -403,6 +408,26 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
             return
         if path == "/api/chat/status":
             self._json(self.server.chat_service.status())
+            return
+        if path == "/api/factory/runs":
+            self._json(
+                {
+                    "runs": self.server.factory_store.list_runs(
+                        self._integer(query, "limit", 50)
+                    )
+                }
+            )
+            return
+        if path == "/api/factory/run":
+            audience = self._value(query, "audience") or "implementer"
+            if audience not in {"implementer", "verifier"}:
+                raise ValueError("audience must be implementer or verifier")
+            self._json(
+                self.server.factory_store.run(
+                    self._value(query, "id", required=True),
+                    include_private=audience == "verifier",
+                )
+            )
             return
         if path == "/api/edge":
             self._json(
@@ -551,13 +576,18 @@ def serve(
     open_browser: bool = True,
     ontology_path: Path | None = None,
     evidence_pack_path: Path | None = None,
+    factory_runs_path: Path | None = None,
 ) -> None:
     ontology = load_ontology(ontology_path) if ontology_path else load_ontology()
     index = GraphExplorerIndex(load_graph(graph_path), ontology=ontology)
     pack_path = evidence_pack_path or graph_path.parent / "evidence" / "source.pack.json.gz"
     evidence_store = EvidenceStore(load_evidence_pack(pack_path))
+    factory_store = FactoryRunStore(
+        factory_runs_path or viewer_root.resolve().parents[1] / "work"
+    )
     server = ExplorerServer(
-        (host, port), index, viewer_root, evidence_store=evidence_store
+        (host, port), index, viewer_root, evidence_store=evidence_store,
+        factory_store=factory_store,
     )
     url = f"http://{host}:{server.server_port}/"
     print(f"LIGHTYEAR Graph Explorer: {url}")

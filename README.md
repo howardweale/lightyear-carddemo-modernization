@@ -1,19 +1,21 @@
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.6.0 — relationship and source evidence intelligence**
+Release: **v0.7.1 — autonomous factory run engine**
 
 An evidence-aware knowledge graph, source-faithful local oracle, differential harness, and
 Java/Spring Batch candidate for AWS CardDemo. Together they form the first engineering cell of a
 verified modernization factory.
 
-v0.6 turns graph relationships into inspectable, governed claims. Every relationship type has a
-versioned purpose, direction, evidence policy, and set of valid endpoint kinds. Click an edge or a
-relationship row to see why it exists, navigate its endpoints, inspect its supporting source, and
-ask a grounded question about that exact relationship. A deterministic source-evidence pack makes
-11,646 excerpts locally viewable without exposing arbitrary filesystem access.
+v0.7 adds the first autonomous modernization loop. A deterministic controller accepts a bounded
+work order, gives evidence-scoped context to planner and builder agents, runs independent private
+gates, routes failures back without leaking holdout answers, and emits a content-addressed receipt
+plus a hash-chained event ledger. The included offline mutation gauntlet injects five known INTCALC
+faults and requires the factory to reject each defect before repairing it.
 
 The oracle runs on Windows, macOS, or Linux with Python 3.11 or newer and has no runtime
-dependencies outside the Python standard library. The candidate uses Java 17, Spring Boot 4.1,
+dependencies outside the Python standard library. macOS/Linux launchers automatically select a
+supported interpreter and reject Apple's bundled Python 3.9 before starting; set
+`LIGHTYEAR_PYTHON` to override the selection. The candidate uses Java 17, Spring Boot 4.1,
 Spring Batch 6, Maven Wrapper, and an in-memory H2 Batch metadata store.
 
 The knowledge graph deterministically indexes the complete pinned CardDemo estate—COBOL programs,
@@ -32,8 +34,12 @@ legacy source to business rules, Java implementation, and verification scenarios
 7. Answers who, what, where, when, why, how, impact, lineage, and verification questions about
    selected nodes, relationships, or the estate.
 8. Exports a lossless, disposable Neo4j projection without surrendering graph ownership.
-9. Reads CardDemo-compatible fixed-width ASCII datasets and COBOL signed zoned decimals.
-10. Executes and differentially verifies the source-faithful `CBACT04C` behavior.
+9. Executes bounded planner, builder, and verifier roles under a deterministic run controller.
+10. Isolates each run, enforces edit budgets, protects verifier-private evidence, and records every
+    transition and artifact by hash.
+11. Shows factory runs, acceptance gates, changes, and receipts in the local control room.
+12. Reads CardDemo-compatible fixed-width ASCII datasets and COBOL signed zoned decimals.
+13. Executes and differentially verifies the source-faithful `CBACT04C` behavior.
 
 The included `candidate-java` module is the first modernization candidate. It consumes and emits
 the same fixed-width records as the oracle, including COBOL signed zoned decimals.
@@ -92,6 +98,64 @@ PYTHONPATH=src python3 -m lightyear_knowledge_graph context \
 
 The generated snapshot, its content-addressed receipt, curated mappings, and schema live under
 `knowledge/`. See `knowledge/README.md` for the trust model, graph ontology, queries, and roadmap.
+
+## Autonomous factory
+
+Run the complete offline factory benchmark on macOS or Linux:
+
+```bash
+./factory-benchmark.sh
+```
+
+On Windows:
+
+```powershell
+.\factory-benchmark.ps1
+```
+
+The benchmark creates a new timestamped folder under `work/`, injects five different regressions
+into isolated copies of the INTCALC policy surface, proves each faulty baseline fails a private
+gate, permits a bounded repair, and reruns the gate. Its receipt reports repairs and false
+acceptances independently.
+
+Then start the explorer and open the **Factory** tab:
+
+```bash
+./graph-explorer.sh
+```
+
+The control room shows the station timeline, gates, attempts, changed paths, receipt hash, and
+audience-safe run history. This is deliberately observable autonomy: “dark” means unattended
+execution, not invisible decisions.
+
+Repeated collections may reuse a human-readable run ID. The API and control room address each
+physical run through a stable, path-opaque `run_key`, preventing collisions without exposing local
+filesystem paths.
+
+Execute a specific approved work order with the local reference workers:
+
+```bash
+PYTHONPATH=src python3 -m lightyear_factory run \
+  --work-order factory/work-orders/intcalc-repair.example.json \
+  --source-root . \
+  --runs-root work/factory-runs \
+  --provider local
+```
+
+To use model-backed planner, builder, and verifier adapters, keep the API key in the launching
+terminal and select the OpenAI provider:
+
+```bash
+export OPENAI_API_KEY="your-api-key"
+export LIGHTYEAR_FACTORY_MODEL="gpt-5.6"
+PYTHONPATH=src python3 -m lightyear_factory run \
+  --work-order factory/work-orders/intcalc-repair.example.json \
+  --provider openai
+```
+
+The agents do not decide acceptance. The controller validates their structured artifacts, applies
+only authorized exact edits, and trusts only deterministic gates. See `factory/README.md` for the
+architecture, contracts, security boundaries, receipts, and mainframe-evidence handoff.
 
 ## Visual Graph Explorer
 
@@ -278,13 +342,12 @@ deciding whether a legacy behavior should be preserved or intentionally correcte
 Once a candidate can pass the visible cases:
 
 1. Capture independent z/OS executions and attach runtime observations to graph entities.
-2. Add private holdout fixtures and mutation tests under the verifier-only boundary.
-3. Expand verified rule mappings to the posting and statement-generation workloads.
-4. Put separate implementation and inspection agents behind authenticated, signed graph context
-   and answer packages rather than the local audience selector.
-5. Retain graph deltas, decisions, failed attempts, and verification outcomes as compounding memory.
-6. Route structured differences through an automated repair loop.
-7. Issue a LIGHTYEAR acceptance receipt only after structural, behavioral, security, and private
-   verification policies pass.
+2. Replace copy isolation and advisory network denial with an enforced container or microVM policy.
+3. Add authenticated worker identities, signed work orders, admission policy, and secret brokering.
+4. Expand private holdouts and verified rule mappings to posting and statement-generation workloads.
+5. Add conflict-aware parallel work cells, graph-delta memory, and human approval for high-risk
+   changes.
+6. Issue a production acceptance receipt only after structural, behavioral, security, operational,
+   and mainframe-backed verification policies pass.
 
 The pinned workload specification is in `spec/carddemo-intcalc.json`.

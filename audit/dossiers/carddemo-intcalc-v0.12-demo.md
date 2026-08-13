@@ -4,7 +4,7 @@
 
 **Decision:** **BLOCKED**
 
-**Dossier identity:** `7c44d5621dcc9a205da80354162ae227bedd69a4e778b95f44cca7a38041a614`
+**Dossier identity:** `c07f00a8903fc2779b29e521ad448e178d8da6c1ebe6f7329a7fc88b5a360fea`
 
 ## Promotion rationale
 
@@ -33,10 +33,10 @@ Release is blocked until every independent runtime and execution-security gate h
 | Kind | Identifier | SHA-256 |
 |---|---|---|
 | `work_order` | `carddemo:intcalc:bounded-repair` | `71e7e34d92dd056a…` |
-| `source_evidence_pack` | `evidence:source-pack` | `9284257b7066713a…` |
+| `source_evidence_pack` | `evidence:source-pack` | `1d0b91b046c337a9…` |
 | `decision_input` | `execution:carddemo-hardened-plane` | `83d937880f17192b…` |
-| `graph_snapshot` | `lightyear:carddemo-modernization` | `97f4095d3f498165…` |
-| `decision_input` | `release:carddemo-intcalc:v0.12-demo` | `97f4095d3f498165…` |
+| `graph_snapshot` | `lightyear:carddemo-modernization` | `6a0505843e94323e…` |
+| `decision_input` | `release:carddemo-intcalc:v0.12-demo` | `6a0505843e94323e…` |
 | `decision_input` | `runtime-run:local-oracle-intcalc-reference` | `9ada6983de37a9aa…` |
 | `decision_input` | `runtime-run:recorded-zos-intcalc-replay` | `d7d2cb1562f26f1c…` |
 | `decision_input` | `runtime-run:zosmf-intcalc-job00001` | `c821cdbcd2ba17c4…` |
@@ -45,7 +45,7 @@ Release is blocked until every independent runtime and execution-security gate h
 
 - Ledger: `lightyear:carddemo:audit`
 - Events: 15
-- Ledger head: `2b0222a297cdeb873a7ae13bca7173afd2bf7552bb45a48f32c2fd0de6af5f74`
+- Ledger head: `c997872a0dfaa39b7172df1a87fe64a29727194826f84666c8076f1c4a15a8a4`
 - Signature algorithm: `none`
 
 ## Limitations

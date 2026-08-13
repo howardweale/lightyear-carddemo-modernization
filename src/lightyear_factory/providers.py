@@ -1,8 +1,11 @@
 from __future__ import annotations
 
 import json
+import random
 import time
 from dataclasses import dataclass
+from datetime import datetime, timezone
+from email.utils import parsedate_to_datetime
 from typing import Any, Callable, Protocol
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
@@ -29,6 +32,39 @@ class ProviderResult:
     evidence: dict[str, Any]
 
 
+class ProviderError(ContractError):
+    """Sanitized provider failure safe to expose in evaluation control receipts."""
+
+    def __init__(
+        self,
+        role: str,
+        code: str,
+        *,
+        status_code: int | None = None,
+        retryable: bool = False,
+        attempts: int = 1,
+        retries: list[dict[str, Any]] | None = None,
+    ) -> None:
+        super().__init__(f"OpenAI {role} request failed ({code})")
+        self.role = role
+        self.code = code
+        self.status_code = status_code
+        self.retryable = retryable
+        self.attempts = attempts
+        self.retries = list(retries or [])
+
+    def safe_dict(self) -> dict[str, Any]:
+        return {
+            "provider": "openai-responses",
+            "role": self.role,
+            "error_code": self.code,
+            "status_code": self.status_code,
+            "retryable": self.retryable,
+            "attempts": self.attempts,
+            "retries": self.retries,
+        }
+
+
 class OpenAIResponsesProvider:
     """Stateless Responses API provider with strict structured output."""
 
@@ -37,10 +73,17 @@ class OpenAIResponsesProvider:
     def __init__(
         self,
         api_key: str,
-        model: str = "gpt-5.6",
+        model: str = "gpt-5.6-terra",
         opener: Callable[..., Any] = urlopen,
         input_usd_per_million: float = 0.0,
         output_usd_per_million: float = 0.0,
+        max_output_tokens: int = 25_000,
+        max_retries: int = 4,
+        request_timeout_seconds: int = 240,
+        retry_base_seconds: float = 1.0,
+        retry_max_seconds: float = 60.0,
+        sleep: Callable[[float], None] = time.sleep,
+        jitter: Callable[[float], float] | None = None,
     ) -> None:
         if not api_key:
             raise ContractError("OPENAI_API_KEY is required for the OpenAI factory provider")
@@ -49,6 +92,13 @@ class OpenAIResponsesProvider:
         self.opener = opener
         self.input_usd_per_million = max(0.0, float(input_usd_per_million))
         self.output_usd_per_million = max(0.0, float(output_usd_per_million))
+        self.max_output_tokens = max(1, int(max_output_tokens))
+        self.max_retries = max(0, min(8, int(max_retries)))
+        self.request_timeout_seconds = max(1, min(600, int(request_timeout_seconds)))
+        self.retry_base_seconds = max(0.1, float(retry_base_seconds))
+        self.retry_max_seconds = max(self.retry_base_seconds, float(retry_max_seconds))
+        self.sleep = sleep
+        self.jitter = jitter or (lambda upper: random.uniform(0.0, upper))
 
     def complete(
         self,
@@ -60,6 +110,7 @@ class OpenAIResponsesProvider:
         body = {
             "model": self.model,
             "store": False,
+            "max_output_tokens": self.max_output_tokens,
             "instructions": (
                 f"You are the LIGHTYEAR {role} worker. Communicate only through the required "
                 f"JSON artifact. {instruction} The deterministic controller, never you, decides "
@@ -75,25 +126,93 @@ class OpenAIResponsesProvider:
                 }
             },
         }
-        request = Request(
-            "https://api.openai.com/v1/responses",
-            data=json.dumps(body, separators=(",", ":")).encode("utf-8"),
-            headers={
-                "Authorization": f"Bearer {self.api_key}",
-                "Content-Type": "application/json",
-            },
-            method="POST",
-        )
         started = time.monotonic()
-        try:
-            with self.opener(request, timeout=180) as response:
-                response_payload = json.loads(response.read().decode("utf-8"))
-        except HTTPError as exc:
-            raise ContractError(f"OpenAI {role} request failed with HTTP {exc.code}") from exc
-        except (URLError, TimeoutError) as exc:
-            detail = exc.reason if hasattr(exc, "reason") else exc
-            raise ContractError(f"OpenAI {role} request failed: {detail}") from exc
+        retries: list[dict[str, Any]] = []
+        response_headers: dict[str, str] = {}
+        response_payload: dict[str, Any] | None = None
+        for attempt in range(1, self.max_retries + 2):
+            request = Request(
+                "https://api.openai.com/v1/responses",
+                data=json.dumps(body, separators=(",", ":")).encode("utf-8"),
+                headers={
+                    "Authorization": f"Bearer {self.api_key}",
+                    "Content-Type": "application/json",
+                },
+                method="POST",
+            )
+            try:
+                with self.opener(request, timeout=self.request_timeout_seconds) as response:
+                    response_headers = _safe_rate_limit_headers(getattr(response, "headers", {}))
+                    response_payload = json.loads(response.read().decode("utf-8"))
+                break
+            except HTTPError as exc:
+                error_code = _http_error_code(exc)
+                retryable = _retryable_http_error(exc.code, error_code)
+                if not retryable or attempt > self.max_retries:
+                    raise ProviderError(
+                        role,
+                        error_code,
+                        status_code=exc.code,
+                        retryable=retryable,
+                        attempts=attempt,
+                        retries=retries,
+                    ) from exc
+                delay = _retry_delay_seconds(
+                    exc.headers,
+                    attempt,
+                    self.retry_base_seconds,
+                    self.retry_max_seconds,
+                    self.jitter,
+                )
+                retries.append(
+                    {
+                        "attempt": attempt,
+                        "status_code": exc.code,
+                        "error_code": error_code,
+                        "delay_ms": int(delay * 1000),
+                    }
+                )
+                self.sleep(delay)
+            except json.JSONDecodeError as exc:
+                raise ProviderError(
+                    role,
+                    "invalid_json_response",
+                    retryable=False,
+                    attempts=attempt,
+                    retries=retries,
+                ) from exc
+            except (URLError, TimeoutError) as exc:
+                error_code = "network_timeout" if isinstance(exc, TimeoutError) else "network_error"
+                if attempt > self.max_retries:
+                    raise ProviderError(
+                        role,
+                        error_code,
+                        retryable=True,
+                        attempts=attempt,
+                        retries=retries,
+                    ) from exc
+                delay = min(
+                    self.retry_max_seconds,
+                    self.retry_base_seconds * (2 ** (attempt - 1)),
+                ) + self.jitter(min(1.0, self.retry_base_seconds))
+                retries.append(
+                    {
+                        "attempt": attempt,
+                        "status_code": None,
+                        "error_code": error_code,
+                        "delay_ms": int(delay * 1000),
+                    }
+                )
+                self.sleep(delay)
+        if response_payload is None:
+            raise ProviderError(role, "empty_response", retryable=False)
         elapsed_ms = int((time.monotonic() - started) * 1000)
+        if response_payload.get("status") == "incomplete":
+            reason = (
+                response_payload.get("incomplete_details", {}).get("reason")
+                or "incomplete_response"
+            )
+            raise ProviderError(role, str(reason), retryable=False, attempts=len(retries) + 1)
         output_text = None
         for output in response_payload.get("output", []):
             for content in output.get("content", []):
@@ -127,6 +246,11 @@ class OpenAIResponsesProvider:
             "role": role,
             "store": False,
             "strict_schema": True,
+            "max_output_tokens": self.max_output_tokens,
+            "attempts": len(retries) + 1,
+            "retry_count": len(retries),
+            "retries": retries,
+            "rate_limits": response_headers,
             "request_sha256": canonical_hash(body),
             "response_sha256": canonical_hash({"content": result}),
             "input_tokens": input_tokens,
@@ -175,6 +299,15 @@ class BoundedModelProvider:
         )
         if self.input_bytes + request_bytes > self.order.max_model_input_bytes:
             raise ContractError("Model provider exceeded max_model_input_bytes")
+        input_price = float(getattr(self.provider, "input_usd_per_million", 0.0))
+        output_price = float(getattr(self.provider, "output_usd_per_million", 0.0))
+        output_cap = int(getattr(self.provider, "max_output_tokens", 0))
+        if input_price > 0 and output_price > 0 and output_cap > 0:
+            conservative_call_cost = (
+                request_bytes * input_price + output_cap * output_price
+            ) / 1_000_000
+            if self.estimated_cost_usd + conservative_call_cost > self.order.max_model_cost_usd:
+                raise ContractError("Model provider cannot admit call inside max_model_cost_usd")
         result = self.provider.complete(role, instruction, payload, schema)
         response_bytes = len(
             json.dumps(result.content, sort_keys=True, separators=(",", ":")).encode("utf-8")
@@ -214,6 +347,8 @@ class BoundedModelProvider:
             "provider": self.provider_id,
             "model": self.model,
             "calls": len(self.calls),
+            "provider_attempts": sum(int(item.get("attempts", 1)) for item in self.calls),
+            "provider_retries": sum(int(item.get("retry_count", 0)) for item in self.calls),
             "input_bytes": self.input_bytes,
             "output_bytes": self.output_bytes,
             "input_tokens": self.input_tokens,
@@ -281,6 +416,85 @@ class ScriptedModelProvider:
         }
         evidence["content_sha256"] = canonical_hash(evidence)
         return ProviderResult(content, evidence)
+
+
+_NON_RETRYABLE_LIMIT_CODES = {
+    "billing_hard_limit_reached",
+    "credit_balance_exhausted",
+    "insufficient_quota",
+    "organization_spend_limit_exceeded",
+    "organization_usage_limit_exceeded",
+    "project_spend_limit_exceeded",
+}
+
+
+def _http_error_code(error: HTTPError) -> str:
+    try:
+        raw = error.read(65_536)
+        payload = json.loads(raw.decode("utf-8")) if raw else {}
+        detail = payload.get("error", {}) if isinstance(payload, dict) else {}
+        code = detail.get("code") or detail.get("type")
+        if isinstance(code, str) and code.strip():
+            return code.strip()[:120]
+    except (AttributeError, UnicodeDecodeError, json.JSONDecodeError):
+        pass
+    return f"http_{error.code}"
+
+
+def _retryable_http_error(status_code: int, error_code: str) -> bool:
+    if error_code in _NON_RETRYABLE_LIMIT_CODES:
+        return False
+    return status_code in {408, 409, 429} or 500 <= status_code <= 599
+
+
+def _retry_delay_seconds(
+    headers: Any,
+    attempt: int,
+    base: float,
+    maximum: float,
+    jitter: Callable[[float], float],
+) -> float:
+    retry_after = _retry_after_seconds(headers)
+    if retry_after is not None:
+        if retry_after > maximum:
+            return maximum
+        return max(0.0, retry_after) + jitter(min(1.0, base))
+    exponential = min(maximum, base * (2 ** (attempt - 1)))
+    return min(maximum, exponential + jitter(min(1.0, base)))
+
+
+def _retry_after_seconds(headers: Any) -> float | None:
+    value = headers.get("Retry-After") if headers is not None else None
+    if not value:
+        return None
+    try:
+        return max(0.0, float(value))
+    except (TypeError, ValueError):
+        try:
+            when = parsedate_to_datetime(str(value))
+            if when.tzinfo is None:
+                when = when.replace(tzinfo=timezone.utc)
+            return max(0.0, (when - datetime.now(timezone.utc)).total_seconds())
+        except (TypeError, ValueError, OverflowError):
+            return None
+
+
+def _safe_rate_limit_headers(headers: Any) -> dict[str, str]:
+    allowed = (
+        "x-ratelimit-limit-requests",
+        "x-ratelimit-limit-tokens",
+        "x-ratelimit-remaining-requests",
+        "x-ratelimit-remaining-tokens",
+        "x-ratelimit-reset-requests",
+        "x-ratelimit-reset-tokens",
+        "x-request-id",
+    )
+    result: dict[str, str] = {}
+    for name in allowed:
+        value = headers.get(name) if headers is not None else None
+        if value is not None:
+            result[name] = str(value)[:200]
+    return result
 
 
 def _validate_schema(value: Any, schema: dict[str, Any], location: str) -> None:

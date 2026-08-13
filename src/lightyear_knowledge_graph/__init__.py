@@ -1,3 +1,3 @@
 """Evidence-aware knowledge graph for the LIGHTYEAR modernization factory."""
 
-__version__ = "0.12.0"
+__version__ = "0.12.1"

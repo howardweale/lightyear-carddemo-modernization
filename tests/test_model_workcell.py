@@ -1,16 +1,19 @@
 from __future__ import annotations
 
 import json
+from io import BytesIO
 import tempfile
 import types
 import unittest
 from pathlib import Path
+from urllib.error import HTTPError
 
 from lightyear_factory.agents import ModelAgentSet
 from lightyear_factory.benchmark import benchmark_work_order
 from lightyear_factory.context import GraphContextAssembler
 from lightyear_factory.contracts import ContractError, WorkOrder
 from lightyear_factory.evals import (
+    EvaluationPolicy,
     load_evaluation_catalog,
     run_model_evaluation,
     validate_evaluation_catalog,
@@ -18,7 +21,13 @@ from lightyear_factory.evals import (
 from lightyear_factory.orchestrator import FactoryOrchestrator
 from lightyear_factory.patches import PatchBroker
 from lightyear_factory.private_benchmark import policy_checks
-from lightyear_factory.providers import ScriptedModelProvider
+from lightyear_factory.providers import (
+    ModelProvider,
+    OpenAIResponsesProvider,
+    ProviderError,
+    ProviderResult,
+    ScriptedModelProvider,
+)
 from lightyear_factory.workspace import IsolatedWorkspace
 
 
@@ -64,6 +73,34 @@ def proposal() -> dict:
         ],
         "blocked_reason": None,
     }
+
+
+def replacement_proposal(before: str, after: str) -> dict:
+    return {
+        "summary": "Restore the canonical constant.",
+        "edits": [{
+            "path": "factory/benchmarks/intcalc_candidate.py",
+            "find": after,
+            "replace": before,
+            "rationale": "The graph-grounded source rule requires the canonical value.",
+        }],
+        "blocked_reason": None,
+    }
+
+
+class FailingProvider(ModelProvider):
+    provider_id = "failing-test"
+    model = "failing-test-model"
+
+    def complete(self, role, instruction, payload, schema) -> ProviderResult:
+        raise ProviderError(
+            role,
+            "rate_limit_exceeded",
+            status_code=429,
+            retryable=True,
+            attempts=5,
+            retries=[{"attempt": 1, "delay_ms": 1000, "error_code": "rate_limit_exceeded"}],
+        )
 
 
 class ModelWorkcellTests(unittest.TestCase):
@@ -162,6 +199,87 @@ class ModelWorkcellTests(unittest.TestCase):
         with self.assertRaisesRegex(ContractError, "max_model_calls"):
             agents.plan(order, {"nodes": []})
 
+    def test_openai_provider_retries_transient_429_and_receipts_the_delay(self) -> None:
+        calls = 0
+        sleeps: list[float] = []
+        schema = {
+            "type": "object",
+            "additionalProperties": False,
+            "required": ["ok"],
+            "properties": {"ok": {"type": "boolean"}},
+        }
+
+        class Response:
+            headers = {"x-ratelimit-remaining-requests": "499"}
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return None
+
+            def read(self):
+                return json.dumps({
+                    "status": "completed",
+                    "model": "gpt-test",
+                    "usage": {"input_tokens": 10, "output_tokens": 2},
+                    "output": [{"content": [{
+                        "type": "output_text", "text": json.dumps({"ok": True})
+                    }]}],
+                }).encode()
+
+        def opener(request, timeout):
+            nonlocal calls
+            calls += 1
+            body = json.loads(request.data)
+            self.assertEqual(25_000, body["max_output_tokens"])
+            if calls == 1:
+                raise HTTPError(
+                    request.full_url,
+                    429,
+                    "rate limited",
+                    {"Retry-After": "0"},
+                    BytesIO(json.dumps({
+                        "error": {"code": "rate_limit_exceeded"}
+                    }).encode()),
+                )
+            return Response()
+
+        provider = OpenAIResponsesProvider(
+            "secret",
+            "gpt-test",
+            opener=opener,
+            sleep=sleeps.append,
+            jitter=lambda _: 0.0,
+        )
+        result = provider.complete("planner", "Return JSON.", {}, schema)
+        self.assertTrue(result.content["ok"])
+        self.assertEqual(2, result.evidence["attempts"])
+        self.assertEqual(1, result.evidence["retry_count"])
+        self.assertEqual([0.0], sleeps)
+        self.assertEqual("499", result.evidence["rate_limits"]["x-ratelimit-remaining-requests"])
+
+    def test_openai_provider_does_not_retry_billing_429(self) -> None:
+        calls = 0
+
+        def opener(request, timeout):
+            nonlocal calls
+            calls += 1
+            raise HTTPError(
+                request.full_url,
+                429,
+                "quota",
+                {},
+                BytesIO(json.dumps({"error": {"code": "insufficient_quota"}}).encode()),
+            )
+
+        provider = OpenAIResponsesProvider("secret", opener=opener, sleep=lambda _: None)
+        with self.assertRaises(ProviderError) as raised:
+            provider.complete("planner", "Return JSON.", {}, {"type": "object"})
+        self.assertEqual(1, calls)
+        self.assertFalse(raised.exception.retryable)
+        self.assertNotIn("secret", json.dumps(raised.exception.safe_dict()))
+
     def test_public_catalog_has_36_rejected_faults_and_is_not_called_holdout(self) -> None:
         catalog = load_evaluation_catalog(CATALOG)
         validation = validate_evaluation_catalog(ROOT, catalog)
@@ -203,15 +321,91 @@ class ModelWorkcellTests(unittest.TestCase):
         self.assertEqual(0, receipt["false_acceptances"])
         self.assertEqual(1.0, receipt["repair_rate"])
 
+    def test_evaluation_checkpoints_stops_and_resumes_without_repeating_completed_case(self) -> None:
+        catalog = load_evaluation_catalog(CATALOG)
+        selected = [
+            next(item for item in catalog["cases"] if item["id"] == "rounding-half-up"),
+            next(item for item in catalog["cases"] if item["id"] == "monthly-divisor-100"),
+        ]
+        catalog["id"] = "resume-test"
+        catalog["minimum_repair_rate"] = 1.0
+        catalog["cases"] = selected
+        policy = EvaluationPolicy(pace_seconds=0)
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            catalog_path = root / "catalog.json"
+            output = root / "evaluation"
+            catalog_path.write_text(json.dumps(catalog), encoding="utf-8")
+            calls = 0
+
+            def first_factory(order):
+                nonlocal calls
+                calls += 1
+                if calls == 1:
+                    case = selected[0]
+                    return ModelAgentSet(ScriptedModelProvider([
+                        planner(), diagnosis(), replacement_proposal(case["before"], case["after"])
+                    ]))
+                return ModelAgentSet(FailingProvider())
+
+            stopped = run_model_evaluation(
+                ROOT, output, catalog_path, first_factory, policy=policy, sleep=lambda _: None
+            )
+            checkpoint = json.loads((output / "evaluation.checkpoint.json").read_text())
+            case = selected[1]
+            resumed = run_model_evaluation(
+                ROOT,
+                output,
+                catalog_path,
+                lambda _: ModelAgentSet(ScriptedModelProvider([
+                    planner(), diagnosis(), replacement_proposal(case["before"], case["after"])
+                ])),
+                policy=policy,
+                resume=True,
+                sleep=lambda _: None,
+            )
+        self.assertEqual("stopped", stopped["status"])
+        self.assertEqual(["rounding-half-up"], checkpoint["completed_case_ids"])
+        self.assertEqual("passed", resumed["status"])
+        self.assertEqual(2, resumed["completed_cases"])
+
+    def test_evaluation_global_call_budget_stops_before_next_case(self) -> None:
+        catalog = load_evaluation_catalog(CATALOG)
+        selected = [
+            next(item for item in catalog["cases"] if item["id"] == "rounding-half-up"),
+            next(item for item in catalog["cases"] if item["id"] == "monthly-divisor-100"),
+        ]
+        catalog["id"] = "budget-stop-test"
+        catalog["cases"] = selected
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            catalog_path = root / "catalog.json"
+            catalog_path.write_text(json.dumps(catalog), encoding="utf-8")
+            case = selected[0]
+            receipt = run_model_evaluation(
+                ROOT,
+                root / "evaluation",
+                catalog_path,
+                lambda _: ModelAgentSet(ScriptedModelProvider([
+                    planner(), diagnosis(), replacement_proposal(case["before"], case["after"])
+                ])),
+                policy=EvaluationPolicy(max_model_calls=3, pace_seconds=0),
+                sleep=lambda _: None,
+            )
+        self.assertEqual("stopped", receipt["status"])
+        self.assertEqual("evaluation_budget_exhausted", receipt["stopped_reason"]["code"])
+        self.assertEqual(1, receipt["completed_cases"])
+
     def test_workcell_schemas_are_versioned(self) -> None:
         for name in (
             "model-call-evidence.schema.json",
             "evaluation-catalog.schema.json",
             "evaluation-receipt.schema.json",
+            "evaluation-checkpoint.schema.json",
         ):
             schema = json.loads((ROOT / "factory" / "schema" / name).read_text())
             self.assertEqual("https://json-schema.org/draft/2020-12/schema", schema["$schema"])
-            self.assertIn("1.0", schema["$id"])
+            self.assertRegex(schema["$id"], r"-1\.[01]\.json$")
 
     def test_factory_ui_projects_intelligence_without_becoming_authority(self) -> None:
         html = (ROOT / "knowledge" / "viewer" / "index.html").read_text()

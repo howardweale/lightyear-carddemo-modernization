@@ -330,6 +330,8 @@ class ModelAgentSet:
                 "provider": self.provider.provider_id,
                 "model": self.provider.model,
                 "calls": 0,
+                "provider_attempts": 0,
+                "provider_retries": 0,
                 "input_bytes": 0,
                 "output_bytes": 0,
                 "input_tokens": 0,
@@ -351,7 +353,7 @@ class OpenAIAgentSet(ModelAgentSet):
     def __init__(
         self,
         api_key: str,
-        model: str = "gpt-5.6",
+        model: str = "gpt-5.6-terra",
         opener: Callable[..., Any] | None = None,
     ) -> None:
         kwargs: dict[str, Any] = {}
@@ -367,6 +369,13 @@ class OpenAIAgentSet(ModelAgentSet):
                 output_usd_per_million=float(
                     os.environ.get("LIGHTYEAR_MODEL_OUTPUT_USD_PER_MILLION", "0")
                 ),
+                max_output_tokens=int(
+                    os.environ.get("LIGHTYEAR_MODEL_MAX_OUTPUT_TOKENS", "25000")
+                ),
+                max_retries=int(os.environ.get("LIGHTYEAR_MODEL_MAX_RETRIES", "4")),
+                request_timeout_seconds=int(
+                    os.environ.get("LIGHTYEAR_MODEL_TIMEOUT_SECONDS", "240")
+                ),
                 **kwargs,
             )
         )
@@ -375,5 +384,5 @@ class OpenAIAgentSet(ModelAgentSet):
     def from_environment(cls) -> "OpenAIAgentSet":
         return cls(
             os.environ.get("OPENAI_API_KEY", ""),
-            os.environ.get("LIGHTYEAR_FACTORY_MODEL", "gpt-5.6"),
+            os.environ.get("LIGHTYEAR_FACTORY_MODEL", "gpt-5.6-terra"),
         )

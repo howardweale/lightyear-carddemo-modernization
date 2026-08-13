@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.12.1 — 2026-08-13
+
+- Added bounded Retry-After-aware exponential backoff with jitter for transient Responses API
+  throttling and transport failures; billing, quota, refusal, schema, and other hard failures do
+  not retry.
+- Added a 25,000-token per-call output ceiling, request timeouts, conservative pre-call cost
+  admission, safe rate-limit metadata, and prompt-free retry evidence.
+- Added evaluation-wide call, token, and estimated-cost budgets plus lower per-case ceilings and
+  configurable pacing between cases.
+- Added atomic per-case checkpoints, partial stopped receipts, sanitized provider failure
+  classification, collision-safe retry run IDs, and resumability without repeating completed cases.
+- Added v1.1 evaluation receipts, checkpoint schema, cross-platform resume commands, and tests for
+  transient 429 recovery, hard-quota rejection, budget stops, partial evidence, and resume.
+
 ## 0.12.0 — 2026-08-11
 
 - Added a replaceable model-provider contract with a controller-side budget boundary for calls,

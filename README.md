@@ -1,6 +1,6 @@
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.12.0 — graph-grounded autonomous work cell**
+Release: **v0.12.1 — resilient model evaluation controller**
 
 An evidence-aware knowledge graph, source-faithful local oracle, differential harness, and
 Java/Spring Batch candidate for AWS CardDemo. Together they form the first engineering cell of a
@@ -64,6 +64,13 @@ and independent call receipts record model, hashes, tokens, latency, cost estima
 A 36-fault public calibration suite exercises the work cell while remaining explicitly distinct
 from externally controlled sealed holdouts and mainframe evidence.
 
+v0.12.1 hardens live evaluations after the first successful model-driven smoke repair. Transient
+rate limits use bounded Retry-After-aware backoff with jitter, while billing and hard-quota errors
+stop immediately. Every case is checkpointed, global and per-case token/call/cost budgets fail
+closed, partial receipts survive interruption, and a stopped evaluation can resume without
+repeating completed cases. Model calls cap output at 25,000 tokens by default and receipt retry
+metadata without storing prompts, credentials, or provider error bodies.
+
 ## What it does
 
 1. Builds a deterministic, provenance-rich graph of the entire CardDemo application estate.
@@ -104,6 +111,9 @@ from externally controlled sealed holdouts and mainframe evidence.
 34. Returns sanitized failure envelopes without exposing private gate output to the builder.
 35. Records every model call as a prompt-free provenance artifact linked into the run receipt.
 36. Measures autonomous repair rate and false acceptance independently across public or sealed evaluations.
+37. Retries transient model throttles within a bounded receipted policy and stops on hard quota errors.
+38. Checkpoints each evaluation case and resumes without repeating completed model work.
+39. Enforces evaluation-wide call, token, cost, and pacing limits in addition to per-case budgets.
 
 The included `candidate-java` module is the first modernization candidate. It consumes and emits
 the same fixed-width records as the oracle, including COBOL signed zoned decimals.
@@ -203,15 +213,21 @@ Run the live model evaluation after supplying the provider key outside the repos
 
 ```bash
 export OPENAI_API_KEY="..."
-export LIGHTYEAR_FACTORY_MODEL="gpt-5.6"
+export LIGHTYEAR_FACTORY_MODEL="gpt-5.6-terra"
+export LIGHTYEAR_MODEL_INPUT_USD_PER_MILLION="2.00"
+export LIGHTYEAR_MODEL_OUTPUT_USD_PER_MILLION="12.00"
 ./model-workcell.sh evaluate
 ```
 
-Optional environment-only token prices can be supplied through
-`LIGHTYEAR_MODEL_INPUT_USD_PER_MILLION` and `LIGHTYEAR_MODEL_OUTPUT_USD_PER_MILLION`; otherwise the
-receipt marks the cost estimate as unavailable rather than treating zero as a real price. The checked-in suite is public calibration,
-not a blind benchmark. Supply an independently retained catalog with `evaluation_class` set to
-`sealed-holdout` to measure blind generalization without disclosing mutation details to workers.
+Live evaluations require environment-only token prices so the controller can enforce its cost
+budget; update them whenever the selected model, service tier, region, or context price changes.
+The checked-in suite is public calibration, not a blind benchmark. Supply an independently retained
+catalog with `evaluation_class` set to `sealed-holdout` to measure blind generalization without
+disclosing mutation details to workers. If a run stops, resume it without repeating completed cases:
+
+```bash
+./model-workcell.sh resume work/model-evaluation-YYYYMMDDTHHMMSSZ
+```
 
 ## Runtime evidence
 
@@ -322,7 +338,7 @@ terminal and select the OpenAI provider:
 
 ```bash
 export OPENAI_API_KEY="your-api-key"
-export LIGHTYEAR_FACTORY_MODEL="gpt-5.6"
+export LIGHTYEAR_FACTORY_MODEL="gpt-5.6-terra"
 PYTHONPATH=src python3 -m lightyear_factory run \
   --work-order factory/work-orders/intcalc-repair.example.json \
   --provider openai

@@ -25,6 +25,12 @@ replaceable; the controller assembles approved graph and source context, enforce
 time budgets, mediates every patch, sanitizes verifier feedback, and records prompt-free call
 evidence. The model proposes work but never receives write authority or acceptance authority.
 
+v0.12.1 adds a resilient evaluation controller around that cell. Transient rate limits and
+transport failures retry within a bounded, receipted policy; hard billing or quota failures stop
+immediately. A checkpoint is written after every completed case, so an interrupted evaluation can
+resume without paying to rerun completed cases. Evaluation-wide budgets constrain total calls,
+tokens, and estimated cost in addition to the existing per-work-order limits.
+
 ## Control model
 
 ```mermaid
@@ -76,9 +82,28 @@ Run it with a live model:
 
 ```bash
 export OPENAI_API_KEY="..."
-export LIGHTYEAR_FACTORY_MODEL="gpt-5.6"
+export LIGHTYEAR_FACTORY_MODEL="gpt-5.6-terra"
+export LIGHTYEAR_MODEL_INPUT_USD_PER_MILLION="2.00"
+export LIGHTYEAR_MODEL_OUTPUT_USD_PER_MILLION="12.00"
 ./model-workcell.sh evaluate
 ```
+
+The default live policy allows at most 180 calls, 8 million total tokens, USD 15 estimated cost,
+USD 2 and 400,000 tokens per case, one second of pacing between cases, four transient retries per
+provider call, and 25,000 output tokens per call. Override these with
+`LIGHTYEAR_EVALUATION_MAX_MODEL_CALLS`, `LIGHTYEAR_EVALUATION_MAX_TOKENS`,
+`LIGHTYEAR_EVALUATION_MAX_COST_USD`, `LIGHTYEAR_EVALUATION_MAX_CASE_COST_USD`,
+`LIGHTYEAR_EVALUATION_MAX_CASE_TOKENS`, `LIGHTYEAR_EVALUATION_PACE_SECONDS`,
+`LIGHTYEAR_MODEL_MAX_RETRIES`, or `LIGHTYEAR_MODEL_MAX_OUTPUT_TOKENS`.
+
+If the run stops, preserve the output directory shown as `MODEL_EVALUATION` and resume it:
+
+```bash
+./model-workcell.sh resume work/model-evaluation-YYYYMMDDTHHMMSSZ
+```
+
+`evaluation.checkpoint.json` is updated after each case. `evaluation.receipt.json` is always
+written, including for a budget or provider stop, and contains only sanitized failure metadata.
 
 The evaluation receipt reports baseline rejection, repair rate, false acceptance, attempts, calls,
 tokens, estimated cost, and each factory receipt identity. Public cases calibrate mechanics and

@@ -8,8 +8,13 @@ from pathlib import Path
 
 from .agents import LocalAgentSet, OpenAIAgentSet
 from .benchmark import run_mutation_benchmark
-from .contracts import WorkOrder
-from .evals import load_evaluation_catalog, run_model_evaluation, validate_evaluation_catalog
+from .contracts import ContractError, WorkOrder
+from .evals import (
+    EvaluationPolicy,
+    load_evaluation_catalog,
+    run_model_evaluation,
+    validate_evaluation_catalog,
+)
 from .orchestrator import FactoryOrchestrator
 from .store import FactoryRunStore
 
@@ -53,6 +58,37 @@ def build_parser() -> argparse.ArgumentParser:
     )
     evaluate.add_argument("--output-root", type=Path)
     evaluate.add_argument("--provider", choices=["openai"], default="openai")
+    evaluate.add_argument("--resume", action="store_true")
+    evaluate.add_argument(
+        "--max-evaluation-cost-usd",
+        type=float,
+        default=float(os.environ.get("LIGHTYEAR_EVALUATION_MAX_COST_USD", "15")),
+    )
+    evaluate.add_argument(
+        "--max-evaluation-tokens",
+        type=int,
+        default=int(os.environ.get("LIGHTYEAR_EVALUATION_MAX_TOKENS", "8000000")),
+    )
+    evaluate.add_argument(
+        "--max-evaluation-model-calls",
+        type=int,
+        default=int(os.environ.get("LIGHTYEAR_EVALUATION_MAX_MODEL_CALLS", "180")),
+    )
+    evaluate.add_argument(
+        "--max-case-cost-usd",
+        type=float,
+        default=float(os.environ.get("LIGHTYEAR_EVALUATION_MAX_CASE_COST_USD", "2")),
+    )
+    evaluate.add_argument(
+        "--max-case-tokens",
+        type=int,
+        default=int(os.environ.get("LIGHTYEAR_EVALUATION_MAX_CASE_TOKENS", "400000")),
+    )
+    evaluate.add_argument(
+        "--pace-seconds",
+        type=float,
+        default=float(os.environ.get("LIGHTYEAR_EVALUATION_PACE_SECONDS", "1")),
+    )
 
     validate_eval = subparsers.add_parser(
         "validate-eval", help="Validate an evaluation catalog without calling a model"
@@ -92,11 +128,28 @@ def main(argv: list[str] | None = None) -> int:
             "model-evaluation-"
             + datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
         )
+        input_price = float(os.environ.get("LIGHTYEAR_MODEL_INPUT_USD_PER_MILLION", "0"))
+        output_price = float(os.environ.get("LIGHTYEAR_MODEL_OUTPUT_USD_PER_MILLION", "0"))
+        if input_price <= 0 or output_price <= 0:
+            raise ContractError(
+                "Live evaluation requires positive model input and output prices for cost enforcement"
+            )
+        policy = EvaluationPolicy(
+            max_cost_usd=args.max_evaluation_cost_usd,
+            max_tokens=args.max_evaluation_tokens,
+            max_model_calls=args.max_evaluation_model_calls,
+            max_case_cost_usd=args.max_case_cost_usd,
+            max_case_tokens=args.max_case_tokens,
+            pace_seconds=args.pace_seconds,
+            require_cost_estimate=True,
+        )
         result = run_model_evaluation(
             args.project_root,
             output_root,
             args.catalog,
             lambda _: OpenAIAgentSet.from_environment(),
+            policy=policy,
+            resume=args.resume,
         )
         print(json.dumps(result, indent=2, sort_keys=True))
         return 0 if result["status"] == "passed" else 1

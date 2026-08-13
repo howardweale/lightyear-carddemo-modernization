@@ -1,7 +1,8 @@
 param(
-    [ValidateSet("validate", "evaluate")]
+    [ValidateSet("validate", "evaluate", "resume")]
     [string]$Action = "validate",
-    [string]$Catalog
+    [string]$Catalog,
+    [string]$Output
 )
 
 $ProjectDir = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -15,18 +16,30 @@ if ($Action -eq "validate") {
     exit $LASTEXITCODE
 }
 
-if (-not $env:OPENAI_API_KEY) {
-    Write-Error "OPENAI_API_KEY is required for a live model evaluation"
+if (-not $env:OPENAI_API_KEY -or
+    -not $env:LIGHTYEAR_MODEL_INPUT_USD_PER_MILLION -or
+    -not $env:LIGHTYEAR_MODEL_OUTPUT_USD_PER_MILLION) {
+    Write-Error "OPENAI_API_KEY and model input/output prices are required for a governed evaluation"
     exit 2
 }
-$Stamp = (Get-Date).ToUniversalTime().ToString("yyyyMMddTHHmmssZ")
-$Output = Join-Path $ProjectDir "work/model-evaluation-$Stamp"
+if ($Action -eq "resume" -and -not $Output) {
+    Write-Error "Resume requires -Output <evaluation-output>"
+    exit 2
+}
+if (-not $Output) {
+    $Stamp = (Get-Date).ToUniversalTime().ToString("yyyyMMddTHHmmssZ")
+    $Output = Join-Path $ProjectDir "work/model-evaluation-$Stamp"
+}
+$Resume = @()
+if ($Action -eq "resume") {
+    $Resume = @("--resume")
+}
 & py -3.11 -m lightyear_factory evaluate `
     --project-root $ProjectDir `
     --catalog $Catalog `
     --output-root $Output `
-    --provider openai
-if ($LASTEXITCODE -eq 0) {
-    Write-Output "MODEL_EVALUATION=$Output"
-}
-exit $LASTEXITCODE
+    --provider openai `
+    @Resume
+$EvaluationCode = $LASTEXITCODE
+Write-Output "MODEL_EVALUATION=$Output"
+exit $EvaluationCode

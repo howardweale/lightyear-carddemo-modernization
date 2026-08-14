@@ -1,6 +1,6 @@
 {
-  "content_sha256": "71e640297349eb7b134664a96203a9aadb9ba86a37c61556263e616b7c2d01b2",
-  "graph_content_sha256": "4b8141cf27d91fd780e8ae1a020084e005b982f0043162c3879b219e4be808f7",
+  "content_sha256": "3c6fdf1d7aeeb7c3298628499437503dbc0c3003b7f15f282928848bd3d86fcf",
+  "graph_content_sha256": "a08b05b5f01df4788e33068a174f79cc0578a0837e263fab53f4911bd5ad2ff4",
   "receipt_type": "lightyear-source-evidence-pack",
   "relationship_ontology": {
     "content_sha256": "77993541f774ff088f9a7ae121bdf282508418eddd7416bf2641323deb838fba",
@@ -9,11 +9,11 @@
   },
   "schema_version": "1.0",
   "statistics": {
-    "capsule_count": 11725,
+    "capsule_count": 11727,
     "capsules_by_source": {
       "source:aws-carddemo": 11473,
-      "source:lightyear-carddemo": 252
+      "source:lightyear-carddemo": 254
     },
-    "support_count": 12208
+    "support_count": 12210
   }
 }

@@ -1,6 +1,23 @@
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.15.0 — conflict-aware portfolio factory**
+Release: **v0.16.0 — durable recovery control plane**
+
+v0.16 makes portfolio execution recoverable. Work is persisted before dispatch, leased
+transactionally to disposable workers, heartbeat-protected while running, and safely returned to
+the queue after a crash. Completion is idempotent, human approvals are single-use, successor waves
+remain blocked behind failed predecessors, and every transition enters a hash-chained event ledger.
+
+```bash
+./durable-factory.sh verify
+./durable-factory.sh init
+./durable-factory.sh status
+```
+
+The Graph Explorer includes a read-only **Recovery** view. SQLite is the locally executable
+durability oracle; a multi-host deployment should preserve the same contracts with PostgreSQL and
+immutable object storage. See [factory/durable/README.md](factory/durable/README.md).
+
+Previous milestone: **v0.15.0 — conflict-aware portfolio factory**
 
 An evidence-aware knowledge graph, source-faithful local oracle, differential harness, and
 Java/Spring Batch candidate for AWS CardDemo. Together they form the first engineering cell of a

@@ -35,6 +35,8 @@ WORK_ORDER = ROOT / "factory" / "work-orders" / "intcalc-repair.example.json"
 POLICY = ROOT / "audit" / "policies" / "promotion.json"
 EXECUTION = ROOT / "factory" / "execution" / "conformance.receipt.json"
 MEMORY = ROOT / "factory" / "memory" / "store" / "memory.snapshot.json.gz"
+DURABLE = ROOT / "factory" / "durable" / "policy.json"
+DURABLE_CONFORMANCE = ROOT / "factory" / "durable" / "conformance.receipt.json"
 
 
 def canonical_snapshot(signing_key: bytes | None = None) -> dict:
@@ -48,6 +50,9 @@ def canonical_snapshot(signing_key: bytes | None = None) -> dict:
         EXECUTION,
         MEMORY,
         "release:carddemo-intcalc:v0.14-demo",
+        None,
+        DURABLE,
+        DURABLE_CONFORMANCE,
     )
 
 
@@ -72,10 +77,11 @@ class AuditControlPlaneTests(unittest.TestCase):
         first = canonical_snapshot()
         second = canonical_snapshot()
         self.assertEqual(first["content_sha256"], second["content_sha256"])
-        self.assertEqual(16, first["statistics"]["event_count"])
+        self.assertEqual(17, first["statistics"]["event_count"])
         self.assertEqual({"blocked": 5, "passed": 3}, first["statistics"]["decisions"])
         self.assertEqual(0, first["statistics"]["active_exceptions"])
         self.assertEqual(1, first["statistics"]["actions"]["factory.memory_snapshot_published"])
+        self.assertEqual(1, first["statistics"]["actions"]["factory.durable_policy_published"])
         promotion = AuditStore(first).summary()["promotion_decisions"][0]
         self.assertEqual("blocked", promotion["status"])
         self.assertEqual(
@@ -204,6 +210,8 @@ class AuditControlPlaneTests(unittest.TestCase):
         self.assertEqual(1, len(dossier["execution_decisions"]))
         self.assertGreaterEqual(len(dossier["evidence_inventory"]), 6)
         self.assertEqual("verified", dossier["semantic_memory"]["status"])
+        self.assertEqual("contract_published", dossier["durable_control_plane"]["status"])
+        self.assertEqual("passed", dossier["durable_control_plane"]["conformance_status"])
         self.assertEqual(3, dossier["semantic_memory"]["experience_count"])
         markdown = render_markdown(dossier)
         self.assertIn("LIGHTYEAR release evidence dossier", markdown)
@@ -315,13 +323,13 @@ class AuditControlPlaneTests(unittest.TestCase):
             base = f"http://127.0.0.1:{server.server_port}"
             with urlopen(f"{base}/api/audit/summary", timeout=3) as response:
                 summary = json.load(response)
-            self.assertEqual(16, summary["statistics"]["event_count"])
+            self.assertEqual(17, summary["statistics"]["event_count"])
             self.assertEqual("blocked", summary["trust_posture"]["execution_status"])
             with urlopen(
                 f"{base}/api/audit/events?{urlencode({'audience': 'implementer'})}", timeout=3
             ) as response:
                 events = json.load(response)
-            self.assertEqual(16, events["total"])
+            self.assertEqual(17, events["total"])
             release = summary["promotion_decisions"][0]["subject_id"]
             with urlopen(
                 f"{base}/api/audit/dossier?{urlencode({'release': release})}", timeout=3

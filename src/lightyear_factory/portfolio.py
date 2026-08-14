@@ -259,6 +259,7 @@ def plan_portfolio(
             "allowed_paths": list(order.allowed_paths),
             "graph_node_ids": list(order.graph_node_ids),
             "depends_on": sorted(dependencies[order_id]),
+            "max_attempts": order.max_attempts,
         })
     required_conflicts = sorted(
         item["id"] for item in conflicts if item["severity"] in manifest.approval_risks

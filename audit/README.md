@@ -31,14 +31,15 @@ knowledge-graph identity.
 ## Included artifacts
 
 - `audit.snapshot.json.gz`: canonical deterministic audit snapshot;
-- `dossiers/carddemo-intcalc-v0.15-demo.json`: current machine-readable release evidence dossier;
-- `dossiers/carddemo-intcalc-v0.15-demo.md`: current human-readable dossier;
+- `dossiers/carddemo-intcalc-v0.16-demo.json`: current machine-readable release evidence dossier;
+- `dossiers/carddemo-intcalc-v0.16-demo.md`: current human-readable dossier;
 - `policies/promotion.json`: versioned policy set;
 - `examples/exception.example.json`: governed, expiring human exception example;
 - `schema/`: JSON Schemas for events, snapshots, decisions, exceptions, policies, and dossiers.
 
-The v0.15 canonical demo contains 17 events: graph and source-evidence publication, verified-memory
-snapshot publication, conflict-aware portfolio-plan publication, work-order registration,
+The v0.16 canonical demo contains 18 events: graph and source-evidence publication,
+verified-memory snapshot publication, durable policy and crash-recovery conformance publication,
+conflict-aware portfolio-plan publication, work-order registration,
 normalized hardened-execution evidence, three distinct
 runtime captures, seven supporting policy decisions, and one release-promotion decision. Promotion is intentionally **blocked**
 because neither independently observed z/OS equivalence nor live container-enforcement evidence
@@ -69,7 +70,7 @@ Inspect the trust posture or event stream:
 PYTHONPATH=src python3 -m lightyear_audit inspect
 PYTHONPATH=src python3 -m lightyear_audit inspect --events --audience auditor
 PYTHONPATH=src python3 -m lightyear_audit inspect \
-  --decision decision:release:carddemo-intcalc:v0.15-demo:promotion
+  --decision decision:release:carddemo-intcalc:v0.16-demo:promotion
 ```
 
 Start the graph explorer and open the **Audit** tab:

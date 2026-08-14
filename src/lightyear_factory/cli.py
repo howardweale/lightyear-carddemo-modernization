@@ -9,6 +9,7 @@ from pathlib import Path
 from .agents import LocalAgentSet, OpenAIAgentSet
 from .benchmark import run_mutation_benchmark
 from .contracts import ContractError, WorkOrder, canonical_hash
+from .durable import DurableQueue, run_durable_conformance
 from .context import GraphContextAssembler
 from .evals import (
     EvaluationPolicy,
@@ -231,11 +232,122 @@ def build_parser() -> argparse.ArgumentParser:
         "--evidence-pack", type=Path, default=Path("knowledge/evidence/source.pack.json.gz")
     )
     portfolio_run.add_argument("--output-root", type=Path, required=True)
+
+    durable_init = subparsers.add_parser(
+        "durable-init", help="Initialize the transactional durable control plane"
+    )
+    durable_init.add_argument("--database", type=Path, required=True)
+
+    durable_submit = subparsers.add_parser(
+        "durable-submit", help="Admit one exact portfolio plan into the durable queue"
+    )
+    durable_submit.add_argument("--database", type=Path, required=True)
+    durable_submit.add_argument("--plan", type=Path, required=True)
+    durable_submit.add_argument("--approval", type=Path)
+    durable_submit.add_argument("--run-id", required=True)
+
+    durable_lease = subparsers.add_parser(
+        "durable-lease", help="Atomically lease the next eligible work cell"
+    )
+    durable_lease.add_argument("--database", type=Path, required=True)
+    durable_lease.add_argument("--worker-id", required=True)
+    durable_lease.add_argument("--lease-seconds", type=int, default=60)
+    durable_lease.add_argument("--output", type=Path)
+
+    for command, help_text in (
+        ("durable-start", "Mark an authorized lease as running"),
+        ("durable-heartbeat", "Renew an authorized work-cell lease"),
+    ):
+        action = subparsers.add_parser(command, help=help_text)
+        action.add_argument("--database", type=Path, required=True)
+        action.add_argument("--lease", type=Path, required=True)
+        if command == "durable-heartbeat":
+            action.add_argument("--lease-seconds", type=int, default=60)
+
+    durable_conformance = subparsers.add_parser(
+        "durable-conformance", help="Run the deterministic killed-worker recovery proof"
+    )
+    durable_conformance.add_argument("--project-root", type=Path, default=Path("."))
+    durable_conformance.add_argument("--output", type=Path)
+
+    durable_complete = subparsers.add_parser(
+        "durable-complete", help="Commit a hash-valid work-cell receipt"
+    )
+    durable_complete.add_argument("--database", type=Path, required=True)
+    durable_complete.add_argument("--lease", type=Path, required=True)
+    durable_complete.add_argument("--receipt", type=Path, required=True)
+
+    durable_fail = subparsers.add_parser(
+        "durable-fail", help="Retry or dead-letter an authorized work-cell lease"
+    )
+    durable_fail.add_argument("--database", type=Path, required=True)
+    durable_fail.add_argument("--lease", type=Path, required=True)
+    durable_fail.add_argument("--error-code", required=True)
+    durable_fail.add_argument("--backoff-seconds", type=int, default=5)
+
+    for command, help_text in (
+        ("durable-recover", "Recover expired leases after worker termination"),
+        ("durable-status", "Render a read-only durable control-plane snapshot"),
+        ("durable-validate", "Validate durable state and event-chain integrity"),
+    ):
+        action = subparsers.add_parser(command, help=help_text)
+        action.add_argument("--database", type=Path, required=True)
     return parser
 
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
+    if args.command.startswith("durable-"):
+        if args.command == "durable-conformance":
+            result = run_durable_conformance(args.project_root, args.output)
+            print(json.dumps(result, indent=2, sort_keys=True))
+            return 0 if result["status"] == "passed" else 1
+        queue = DurableQueue(args.database)
+        if args.command == "durable-init":
+            result = queue.initialize()
+        elif args.command == "durable-submit":
+            plan = json.loads(args.plan.read_text(encoding="utf-8"))
+            admission = None
+            if args.approval:
+                envelope = json.loads(args.approval.read_text(encoding="utf-8"))
+                key_id = str(envelope.get("key_id", ""))
+                key = os.environ.get("LIGHTYEAR_PORTFOLIO_APPROVAL_KEY", "").encode()
+                admission = verify_portfolio_approval(plan, envelope, {key_id: key})
+            result = queue.submit(plan, args.run_id, admission)
+        elif args.command == "durable-lease":
+            result = queue.lease_next(
+                args.worker_id, lease_seconds=args.lease_seconds
+            ) or {"status": "empty"}
+            if args.output and result.get("lease_token"):
+                from .contracts import write_json
+
+                write_json(result, args.output)
+        elif args.command in {"durable-start", "durable-heartbeat"}:
+            lease = json.loads(args.lease.read_text(encoding="utf-8"))
+            result = (
+                queue.start(lease)
+                if args.command == "durable-start"
+                else queue.heartbeat(lease, lease_seconds=args.lease_seconds)
+            )
+        elif args.command == "durable-complete":
+            result = queue.complete(
+                json.loads(args.lease.read_text(encoding="utf-8")),
+                json.loads(args.receipt.read_text(encoding="utf-8")),
+            )
+        elif args.command == "durable-fail":
+            result = queue.fail(
+                json.loads(args.lease.read_text(encoding="utf-8")),
+                args.error_code,
+                backoff_seconds=args.backoff_seconds,
+            )
+        elif args.command == "durable-recover":
+            result = queue.recover_expired()
+        elif args.command == "durable-status":
+            result = queue.snapshot()
+        else:
+            result = queue.validate()
+        print(json.dumps(result, indent=2, sort_keys=True))
+        return 0 if result.get("status", "passed") in {"passed", "empty"} else 1
     if args.command == "benchmark":
         output_root = args.output_root or Path("work") / (
             "factory-benchmark-"

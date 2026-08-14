@@ -25,8 +25,10 @@ def build_canonical_audit(
     signing_key: bytes | None = None,
     execution_receipt_path: Path | None = None,
     memory_snapshot_path: Path | None = None,
-    release_id: str = "release:carddemo-intcalc:v0.15-demo",
+    release_id: str = "release:carddemo-intcalc:v0.16-demo",
     portfolio_plan_path: Path | None = None,
+    durable_policy_path: Path | None = None,
+    durable_conformance_path: Path | None = None,
 ) -> dict[str, Any]:
     graph = json.loads(graph_receipt_path.read_text(encoding="utf-8"))
     evidence = json.loads(evidence_receipt_path.read_text(encoding="utf-8"))
@@ -103,6 +105,44 @@ def build_canonical_audit(
                 "conflicts": len(portfolio["conflicts"]),
                 "approval_required": portfolio["approval"]["required"],
                 "approval_authority": portfolio["approval"]["authority"],
+            },
+        ))
+
+    if durable_policy_path is not None and durable_policy_path.is_file():
+        durable_policy = json.loads(durable_policy_path.read_text(encoding="utf-8"))
+        durable_policy_sha = canonical_hash(durable_policy)
+        durable_evidence = [{
+            "id": "factory:durable-control-plane",
+            "kind": "durable_execution_policy",
+            "sha256": durable_policy_sha,
+        }]
+        conformance_details: dict[str, Any] = {"status": "not_recorded"}
+        if durable_conformance_path is not None and durable_conformance_path.is_file():
+            conformance = json.loads(durable_conformance_path.read_text(encoding="utf-8"))
+            if canonical_hash(conformance, {"content_sha256"}) != conformance.get("content_sha256"):
+                raise ValueError("Durable conformance receipt failed content hash validation")
+            durable_evidence.append({
+                "id": "factory:durable-conformance",
+                "kind": "durable_conformance_receipt",
+                "sha256": conformance["content_sha256"],
+            })
+            conformance_details = {
+                "status": conformance["status"],
+                "evidence_class": conformance["evidence_class"],
+                "checks": conformance["checks"],
+            }
+        drafts.append(_draft(
+            "2022-07-18T00:00:00.235Z",
+            "system:durable-controller", "system", "factory.durable_policy_published",
+            "durable_execution_policy", "factory:durable-control-plane",
+            durable_evidence,
+            {
+                "backend": durable_policy["backend"],
+                "approval_consumption": durable_policy["approval_consumption"],
+                "receipt_index": durable_policy["receipt_index"],
+                "event_integrity": durable_policy["event_integrity"],
+                "production_adapter": durable_policy["production_adapter"],
+                "conformance": conformance_details,
             },
         ))
 

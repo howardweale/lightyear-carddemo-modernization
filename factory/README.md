@@ -1,5 +1,14 @@
 # LIGHTYEAR Autonomous Factory and Hardened Execution Plane
 
+## Durable execution (v0.16)
+
+The portfolio controller can now submit exact plans to a transactional queue. Disposable workers
+use bounded leases and heartbeats; completion receipts are content-addressed; crashed leases are
+recovered; exhausted items are dead-lettered; and later waves fail closed behind unsuccessful
+predecessors. Human approvals are consumed once in the same database transaction as run creation.
+Start with `./durable-factory.sh verify` and read
+[`factory/durable/README.md`](durable/README.md).
+
 The factory is a bounded, evidence-governed run engine. It can plan, edit, verify, retry, and
 record a modernization task without a person driving each step. It cannot declare itself correct:
 only controller-run acceptance gates determine the final state.

@@ -7,6 +7,7 @@ const state = {
   chatHistory: [],
   factoryRuns: [],
   portfolio: null,
+  recovery: null,
   evaluations: [],
   memorySummary: null,
   runtimeRuns: [],
@@ -89,7 +90,7 @@ async function initialize() {
     populateLegend();
     configureChat();
     bindControls();
-    await Promise.all([loadPerspective(), loadFactoryRuns(false), loadPortfolio(false), loadEvaluations(false), loadMemory(false), loadRuntimeRuns(false), loadAudit(false)]);
+    await Promise.all([loadPerspective(), loadFactoryRuns(false), loadPortfolio(false), loadRecovery(false), loadEvaluations(false), loadMemory(false), loadRuntimeRuns(false), loadAudit(false)]);
   } catch (error) {
     setError(error);
   }
@@ -162,6 +163,10 @@ function bindControls() {
     switchRightPanel("portfolio");
     await loadPortfolio(true);
   });
+  $("recovery-tab").addEventListener("click", async () => {
+    switchRightPanel("recovery");
+    await loadRecovery(true);
+  });
   $("evaluation-tab").addEventListener("click", async () => {
     switchRightPanel("evaluation");
     await loadEvaluations(true);
@@ -180,6 +185,7 @@ function bindControls() {
   });
   $("refresh-factory").addEventListener("click", () => loadFactoryRuns(true));
   $("refresh-portfolio").addEventListener("click", () => loadPortfolio(true));
+  $("refresh-recovery").addEventListener("click", () => loadRecovery(true));
   $("refresh-evaluations").addEventListener("click", () => loadEvaluations(true));
   $("refresh-memory").addEventListener("click", () => loadMemory(true));
   $("refresh-runtime").addEventListener("click", () => loadRuntimeRuns(true));
@@ -720,6 +726,7 @@ function switchRightPanel(view) {
   const chat = view === "chat";
   const factory = view === "factory";
   const portfolio = view === "portfolio";
+  const recovery = view === "recovery";
   const evaluation = view === "evaluation";
   const memory = view === "memory";
   const runtime = view === "runtime";
@@ -727,19 +734,21 @@ function switchRightPanel(view) {
   $("chat-view").hidden = !chat;
   $("factory-view").hidden = !factory;
   $("portfolio-view").hidden = !portfolio;
+  $("recovery-view").hidden = !recovery;
   $("evaluation-view").hidden = !evaluation;
   $("memory-view").hidden = !memory;
   $("runtime-view").hidden = !runtime;
   $("audit-view").hidden = !audit;
-  $("inspector-view").hidden = chat || factory || portfolio || evaluation || memory || runtime || audit;
+  $("inspector-view").hidden = chat || factory || portfolio || recovery || evaluation || memory || runtime || audit;
   $("chat-tab").classList.toggle("active", chat);
   $("factory-tab").classList.toggle("active", factory);
   $("portfolio-tab").classList.toggle("active", portfolio);
+  $("recovery-tab").classList.toggle("active", recovery);
   $("evaluation-tab").classList.toggle("active", evaluation);
   $("memory-tab").classList.toggle("active", memory);
   $("runtime-tab").classList.toggle("active", runtime);
   $("audit-tab").classList.toggle("active", audit);
-  $("inspector-tab").classList.toggle("active", !chat && !factory && !portfolio && !evaluation && !memory && !runtime && !audit);
+  $("inspector-tab").classList.toggle("active", !chat && !factory && !portfolio && !recovery && !evaluation && !memory && !runtime && !audit);
 }
 
 async function loadPortfolio() {
@@ -808,6 +817,70 @@ async function loadPortfolio() {
       orders.appendChild(row);
     });
     $("portfolio-plan-hash").textContent = portfolio.content_sha256 || "No portfolio plan snapshot";
+  } catch (error) {
+    setError(error);
+  }
+}
+
+async function loadRecovery() {
+  try {
+    state.recovery = await api("/api/durable/summary");
+    const snapshot = state.recovery;
+    const stats = snapshot.statistics || {};
+    const configured = snapshot.status === "passed";
+    const posture = $("recovery-posture");
+    const unsafe = (stats.states?.dead_letter || 0) + (stats.states?.blocked || 0);
+    posture.className = `audit-posture ${configured && unsafe === 0 ? "passed" : "blocked"}`;
+    posture.replaceChildren();
+    const title = document.createElement("strong");
+    title.textContent = !configured ? "No durable database configured" : unsafe ? "Operator attention required" : "Recovery posture healthy";
+    const detail = document.createElement("p");
+    detail.textContent = !configured
+      ? "Initialize work/durable/control.sqlite3 to observe live queue state."
+      : `${stats.work_items || 0} work cell(s), ${stats.events || 0} durable event(s), ${unsafe} blocked or dead-lettered.`;
+    posture.append(title, detail);
+
+    const metrics = $("recovery-metrics");
+    metrics.replaceChildren();
+    [["Runs", stats.runs], ["Queued", stats.states?.queued], ["Running", stats.states?.running], ["Passed", stats.states?.passed], ["Dead", stats.states?.dead_letter], ["Approvals", stats.consumed_approvals]].forEach(([label, value]) => {
+      const row = document.createElement("div");
+      const strong = document.createElement("strong");
+      strong.textContent = value || 0;
+      const span = document.createElement("span");
+      span.textContent = label;
+      row.append(strong, span);
+      metrics.appendChild(row);
+    });
+
+    const runs = $("recovery-runs");
+    runs.replaceChildren();
+    (snapshot.runs || []).forEach((run) => {
+      const row = document.createElement("div");
+      row.className = `factory-run ${run.state === "passed" ? "passed" : "blocked"}`;
+      const title = document.createElement("strong"); title.textContent = run.run_id;
+      const stateLabel = document.createElement("span"); stateLabel.textContent = run.state;
+      const hash = document.createElement("code"); hash.textContent = (run.plan_sha256 || "").slice(0, 12);
+      row.append(title, stateLabel, hash); runs.appendChild(row);
+    });
+    const items = $("recovery-items");
+    items.replaceChildren();
+    (snapshot.items || []).forEach((item) => {
+      const row = document.createElement("div");
+      row.className = `factory-run ${item.state === "passed" ? "passed" : "blocked"}`;
+      const title = document.createElement("strong"); title.textContent = item.work_order_id;
+      const stateLabel = document.createElement("span"); stateLabel.textContent = `${item.state} · attempt ${item.attempt}/${item.max_attempts}`;
+      const wave = document.createElement("code"); wave.textContent = `wave ${item.wave}`;
+      row.append(title, stateLabel, wave); items.appendChild(row);
+    });
+    const events = $("recovery-events");
+    events.replaceChildren();
+    (snapshot.events || []).slice(-30).reverse().forEach((event) => {
+      const row = document.createElement("li");
+      const title = document.createElement("strong"); title.textContent = event.kind.replaceAll("_", " ");
+      const detail = document.createElement("span"); detail.textContent = `${event.run_id}${event.item_id ? ` · ${event.item_id}` : ""}`;
+      row.append(title, detail); events.appendChild(row);
+    });
+    $("recovery-hash").textContent = snapshot.content_sha256 || "No durable snapshot";
   } catch (error) {
     setError(error);
   }

@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.16.0 — 2026-08-15
+
+- Added a transactional durable control plane with a SQLite WAL reference backend and explicit
+  contracts suitable for PostgreSQL and immutable object-store production adapters.
+- Added atomic worker leasing, opaque bearer tokens stored only as SHA-256 digests, bounded
+  heartbeats, lease expiry recovery, retry backoff and terminal dead-letter handling.
+- Added crash-safe wave barriers and idempotent completion: passed cells are never dispatched
+  twice and successor waves remain unavailable until every predecessor has passed.
+- Added exactly-once consumption of human portfolio approvals, exact work-order identity checks,
+  content-addressed receipt indexing and a tamper-evident durable event chain.
+- Added cross-platform durable queue commands, versioned lease/state/snapshot schemas, operator
+  guidance and a strictly read-only Recovery Control Tower with no dispatch authority.
+- Added concurrent lease, worker termination, stale-token, replay, retry, dead-letter, wave-barrier,
+  artifact-index and event-tampering tests plus full verification integration.
+
 ## 0.15.0 — 2026-08-15
 
 - Added a deterministic portfolio controller that loads multiple bounded work orders, binds them to

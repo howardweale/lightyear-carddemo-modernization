@@ -1,0 +1,28 @@
+{
+  "checks": {
+    "approval_replay_rejected": true,
+    "atomic_recovery": true,
+    "attempt_incremented": true,
+    "event_chain_valid": true,
+    "portfolio_completed_once": true,
+    "receipts_content_addressed": true,
+    "same_item_released_after_crash": true
+  },
+  "content_sha256": "e2aa93dfc11d196911ec965ee6e3abf1da47ed99a8808f312cdacfe085a78570",
+  "evidence_class": "synthetic-crash-recovery-conformance",
+  "limitations": [
+    "This proves local control-plane mechanics, not distributed PostgreSQL behavior.",
+    "Synthetic worker termination does not establish live z/OS equivalence."
+  ],
+  "plan_sha256": "5b87d98d6b939087c7ec1ede85b936520a9bba7ab06769386793f9de9f985ae8",
+  "policy_sha256": "72b0c927dc60dc8b8c0412c79f9fa9db19e8984f70d32007aa63dbed89eeaf4d",
+  "receipt_type": "lightyear-durable-control-plane-conformance",
+  "reference_backend": "sqlite-wal",
+  "schema_version": "1.0",
+  "statistics": {
+    "indexed_receipts": 3,
+    "recovered_leases": 1,
+    "work_items": 3
+  },
+  "status": "passed"
+}

@@ -1,6 +1,6 @@
 # LIGHTYEAR model work-cell evaluations
 
-The v0.12 evaluation plane measures whether a model-backed work cell can repair an isolated defect
+The v0.13 evaluation plane measures whether a model-backed work cell can repair an isolated defect
 without giving the worker acceptance authority or private gate output.
 
 `carddemo-v0.12-public.json` contains 36 public calibration cases across copybook layout, field
@@ -19,7 +19,8 @@ Changing the label does not make a public suite private. In a real evaluation, r
 catalog outside the repository, provide it only to the controller at launch, and prevent planner,
 builder, provider tooling, and prompts from reading it. The evaluation receipt records the catalog
 hash, class, aggregate score, per-case receipt hashes, token use, and false acceptance without
-including the mutation text.
+including the mutation text. The controller also requires a valid external envelope before it will
+run any catalog labeled `sealed-holdout`; changing the label is not admission.
 
 ## Scoring
 
@@ -34,12 +35,19 @@ Baseline rejection, autonomous repair, and false acceptance are recorded indepen
 suite's default threshold is 70% repair with zero false acceptance. Passing either evaluation class
 does not prove z/OS equivalence.
 
+Cases may use `reject-and-repair` or `accept-unchanged`. Clean cases prove that the work cell can
+recognize correct code and stop with zero edits. The factory-quality gate additionally requires a
+minimum case and category count, clean cases, evidence-scored cases, baseline rejection, repair,
+first-attempt repair, evidence precision, correct no-change, zero privacy leaks, zero unauthorized
+edit attempts, zero false acceptances, and bounded average input tokens.
+
 ## Commands
 
 ```bash
 ./model-workcell.sh validate
 ./model-workcell.sh evaluate
-./model-workcell.sh evaluate /secure/evaluator/carddemo-holdout.json
+./quality-gate.sh sign /secure/evaluator/holdout.json /secure/evaluator/holdout.envelope.json independent-evaluator
+./quality-gate.sh evaluate /secure/evaluator/holdout.envelope.json
 ```
 
 Model credentials and optional price inputs remain environment-only. Run artifacts are written

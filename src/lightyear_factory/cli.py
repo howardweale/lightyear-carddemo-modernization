@@ -15,6 +15,13 @@ from .evals import (
     run_model_evaluation,
     validate_evaluation_catalog,
 )
+from .quality import (
+    QualityPolicy,
+    compare_evaluations,
+    sign_sealed_catalog,
+    verify_sealed_catalog,
+    write_signed_catalog,
+)
 from .orchestrator import FactoryOrchestrator
 from .store import FactoryRunStore
 
@@ -55,6 +62,10 @@ def build_parser() -> argparse.ArgumentParser:
     evaluate.add_argument("--project-root", type=Path, default=Path("."))
     evaluate.add_argument(
         "--catalog", type=Path, default=Path("factory/evals/carddemo-v0.12-public.json")
+    )
+    evaluate.add_argument("--sealed-envelope", type=Path)
+    evaluate.add_argument(
+        "--quality-policy", type=Path, default=Path("factory/evals/quality-policy.json")
     )
     evaluate.add_argument("--output-root", type=Path)
     evaluate.add_argument("--provider", choices=["openai"], default="openai")
@@ -98,6 +109,25 @@ def build_parser() -> argparse.ArgumentParser:
         "--catalog", type=Path, default=Path("factory/evals/carddemo-v0.12-public.json")
     )
 
+    sign_eval = subparsers.add_parser(
+        "sign-eval-catalog", help="Sign an externally controlled sealed holdout catalog"
+    )
+    sign_eval.add_argument("--catalog", type=Path, required=True)
+    sign_eval.add_argument("--output", type=Path, required=True)
+    sign_eval.add_argument("--issuer", required=True)
+    sign_eval.add_argument("--key-id", default="evaluation-controller")
+    sign_eval.add_argument("--ttl-seconds", type=int, default=86_400)
+
+    validate_sealed = subparsers.add_parser(
+        "validate-sealed-eval", help="Verify a sealed catalog without printing its contents"
+    )
+    validate_sealed.add_argument("--envelope", type=Path, required=True)
+
+    compare_eval = subparsers.add_parser(
+        "compare-evals", help="Compare two or more evaluation receipts safety-first"
+    )
+    compare_eval.add_argument("--receipt", type=Path, action="append", required=True)
+
     inspect = subparsers.add_parser("inspect", help="Inspect a factory run receipt and ledger")
     inspect.add_argument("--runs-root", type=Path, default=Path("work/factory-runs"))
     inspect.add_argument("--run-id", required=True)
@@ -129,6 +159,39 @@ def main(argv: list[str] | None = None) -> int:
         )
         print(json.dumps(result, indent=2, sort_keys=True))
         return 0
+    if args.command == "sign-eval-catalog":
+        key = os.environ.get("LIGHTYEAR_EVALUATION_SIGNING_KEY", "").encode()
+        catalog = load_evaluation_catalog(args.catalog)
+        envelope = sign_sealed_catalog(
+            catalog,
+            key,
+            issuer=args.issuer,
+            key_id=args.key_id,
+            ttl_seconds=args.ttl_seconds,
+        )
+        write_signed_catalog(envelope, args.output)
+        result = {
+            "status": "passed",
+            "output": str(args.output.resolve()),
+            "catalog_sha256": envelope["catalog_sha256"],
+            "envelope_sha256": envelope["content_sha256"],
+            "expires_at": envelope["expires_at"],
+        }
+        print(json.dumps(result, indent=2, sort_keys=True))
+        return 0
+    if args.command == "validate-sealed-eval":
+        envelope = json.loads(args.envelope.read_text(encoding="utf-8"))
+        key_id = str(envelope.get("key_id", ""))
+        key = os.environ.get("LIGHTYEAR_EVALUATION_SIGNING_KEY", "").encode()
+        _, binding = verify_sealed_catalog(envelope, {key_id: key})
+        print(json.dumps({"status": "passed", **binding}, indent=2, sort_keys=True))
+        return 0
+    if args.command == "compare-evals":
+        result = compare_evaluations([
+            json.loads(path.read_text(encoding="utf-8")) for path in args.receipt
+        ])
+        print(json.dumps(result, indent=2, sort_keys=True))
+        return 0
     if args.command == "evaluate":
         output_root = args.output_root or Path("work") / (
             "model-evaluation-"
@@ -149,12 +212,24 @@ def main(argv: list[str] | None = None) -> int:
             pace_seconds=args.pace_seconds,
             require_cost_estimate=True,
         )
+        catalog_override = None
+        sealed_binding = None
+        if args.sealed_envelope:
+            envelope = json.loads(args.sealed_envelope.read_text(encoding="utf-8"))
+            key_id = str(envelope.get("key_id", ""))
+            key = os.environ.get("LIGHTYEAR_EVALUATION_SIGNING_KEY", "").encode()
+            catalog_override, sealed_binding = verify_sealed_catalog(
+                envelope, {key_id: key}
+            )
         result = run_model_evaluation(
             args.project_root,
             output_root,
             args.catalog,
             lambda _: OpenAIAgentSet.from_environment(),
             policy=policy,
+            catalog_override=catalog_override,
+            sealed_binding=sealed_binding,
+            quality_policy=QualityPolicy.load(args.quality_policy),
             resume=args.resume,
         )
         print(json.dumps(result, indent=2, sort_keys=True))

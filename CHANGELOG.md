@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.13.0 — 2026-08-14
+
+- Added HMAC-signed, expiring sealed evaluation envelopes with trusted key IDs, exact catalog
+  identity, tamper detection, and fail-closed admission; a plain relabeled catalog is rejected.
+- Added opaque holdout case references and privacy-safe receipts that omit private case names,
+  categories, mutation markers, and verifier output from worker artifacts and dashboard APIs.
+- Added clean `accept-unchanged` cases so needless edits are measured independently from mutation
+  repair, including correct no-change and false-acceptance outcomes.
+- Added evidence-selection precision, first-attempt repair, private-leak, unauthorized-edit, token,
+  cost, baseline-rejection, and repair metrics under a versioned quality policy.
+- Added a promotion-grade quality decision that can qualify only signed sealed evidence meeting
+  every policy threshold; public calibration always remains non-qualifying.
+- Added safety-first evaluation comparison, cross-platform quality-gate launchers, updated schemas,
+  read-only evaluation APIs, and a Quality Control Tower view.
+- Added signature, tamper, expiry, wrong-key, clean-case, privacy, policy, comparison, storage, UI,
+  and full-suite regression coverage.
+
 ## 0.12.2 — 2026-08-13
 
 - Replaced repeated full-context prompts with progressive role-specific retrieval: planners receive

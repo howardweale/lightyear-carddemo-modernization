@@ -144,3 +144,77 @@ class FactoryRunStore:
             }
         public["payload"] = payload
         return public
+
+
+class EvaluationStore:
+    """Read-only projection of privacy-safe evaluation receipts."""
+
+    def __init__(self, root: Path) -> None:
+        self.root = root.resolve()
+
+    def list_evaluations(self, limit: int = 50) -> list[dict[str, Any]]:
+        rows = []
+        for path in self._receipts():
+            try:
+                receipt = json.loads(path.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError):
+                continue
+            quality = receipt.get("quality_gate", {})
+            metrics = quality.get("metrics", {})
+            rows.append({
+                "evaluation_key": self._key(path, receipt),
+                "evaluation_id": receipt.get("evaluation_id"),
+                "evaluation_class": receipt.get("evaluation_class"),
+                "status": receipt.get("status"),
+                "quality_status": quality.get("status", "unreported"),
+                "cases": receipt.get("cases", 0),
+                "repair_rate": metrics.get("repair_rate", receipt.get("repair_rate", 0.0)),
+                "correct_no_change_rate": metrics.get(
+                    "correct_no_change_rate", receipt.get("correct_no_change_rate", 0.0)
+                ),
+                "false_acceptances": metrics.get(
+                    "false_acceptances", receipt.get("false_acceptances", 0)
+                ),
+                "average_input_tokens": metrics.get("average_input_tokens", 0.0),
+                "estimated_cost_usd": receipt.get("totals", {}).get(
+                    "estimated_cost_usd", 0.0
+                ),
+                "receipt_sha256": receipt.get("content_sha256"),
+            })
+        rows.sort(
+            key=lambda item: (
+                item["quality_status"] == "qualified",
+                item["status"] == "passed",
+                item["evaluation_id"] or "",
+            ),
+            reverse=True,
+        )
+        return rows[: max(1, min(limit, 200))]
+
+    def evaluation(self, selector: str) -> dict[str, Any]:
+        if not re.fullmatch(r"[a-zA-Z0-9][a-zA-Z0-9:._-]{2,100}", selector):
+            raise KeyError(selector)
+        matches = []
+        for path in self._receipts():
+            receipt = json.loads(path.read_text(encoding="utf-8"))
+            if selector in {
+                self._key(path, receipt), receipt.get("evaluation_id"),
+                receipt.get("content_sha256"),
+            }:
+                matches.append(receipt)
+        if len(matches) != 1:
+            raise KeyError(selector)
+        return matches[0]
+
+    def _receipts(self) -> list[Path]:
+        if not self.root.is_dir():
+            return []
+        return [
+            path for path in self.root.rglob("evaluation.receipt.json")
+            if self.root in path.resolve().parents
+        ]
+
+    @staticmethod
+    def _key(path: Path, receipt: dict[str, Any]) -> str:
+        identity = f"{path.resolve()}:{receipt.get('content_sha256', '')}"
+        return f"evaluation-{hashlib.sha256(identity.encode()).hexdigest()[:24]}"

@@ -1,6 +1,6 @@
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.12.2 — progressive evidence retrieval and exact token admission**
+Release: **v0.13.0 — sealed evaluation and factory quality gate**
 
 An evidence-aware knowledge graph, source-faithful local oracle, differential harness, and
 Java/Spring Batch candidate for AWS CardDemo. Together they form the first engineering cell of a
@@ -78,6 +78,14 @@ endpoint before generation and rejects any call above its configured ceiling. Pr
 manifests and an audience-safe transcript make the mediated role exchange inspectable without
 exposing verifier-private output.
 
+v0.13 turns model evaluation into a promotion-grade evidence plane. An independent evaluator can
+HMAC-sign an expiring holdout envelope; the controller verifies its identity and runs opaque case
+references without publishing mutation text, case names, or categories. The scorecard separately
+measures rejected faults, repaired faults, correct no-change decisions, first-attempt repairs,
+evidence-selection precision, privacy leaks, unauthorized edits, tokens, and cost. Public
+calibration can never satisfy the sealed-evidence check, and the new Quality dashboard is a
+read-only projection rather than a source of acceptance authority.
+
 ## What it does
 
 1. Builds a deterministic, provenance-rich graph of the entire CardDemo application estate.
@@ -125,6 +133,10 @@ exposing verifier-private output.
 41. Counts exact Responses API input tokens before generation and rejects oversized calls.
 42. Records request manifests with context statistics and selected evidence identities.
 43. Renders a controller-mediated role transcript with verifier-private content redacted by default.
+44. Admits externally signed, expiring sealed holdout catalogs without exposing case answers to agents.
+45. Tests clean inputs so unnecessary changes count as failures rather than successful activity.
+46. Applies a versioned factory-quality policy across repair, safety, evidence, privacy, and efficiency.
+47. Compares evaluation receipts safety-first and projects qualified or blocked status in the Quality tab.
 
 The included `candidate-java` module is the first modernization candidate. It consumes and emits
 the same fixed-width records as the oracle, including COBOL signed zoned decimals.

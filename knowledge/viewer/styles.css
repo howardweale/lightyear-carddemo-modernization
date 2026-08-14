@@ -175,7 +175,7 @@ dd { margin: 0; overflow-wrap: anywhere; font: 11px/1.4 ui-monospace, SFMono-Reg
 .source-line-number { padding-right: 12px; color: #75837c; text-align: right; user-select: none; }
 .source-line-text { white-space: pre; }
 
-.right-tabs { position: sticky; z-index: 3; top: -20px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 4px; padding: 8px 0 12px; background: var(--surface); border-bottom: 1px solid var(--border); }
+.right-tabs { position: sticky; z-index: 3; top: -20px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 8px 0 12px; background: var(--surface); border-bottom: 1px solid var(--border); }
 .right-tab { padding: 8px; color: var(--muted); background: transparent; border: 0; border-radius: 6px; cursor: pointer; font: inherit; font-weight: 700; }
 .right-tab.active { color: var(--ink); background: var(--surface-2); box-shadow: inset 0 -2px var(--accent); }
 

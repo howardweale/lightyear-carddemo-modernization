@@ -17,7 +17,7 @@ from .evidence_pack import EvidenceStore, load_evidence_pack
 from .model import load_graph
 from .ontology import load_ontology
 from .validation import rule_gaps
-from lightyear_factory.store import FactoryRunStore
+from lightyear_factory.store import EvaluationStore, FactoryRunStore
 from lightyear_runtime.engine import load_snapshot as load_runtime_snapshot
 from lightyear_runtime.store import RuntimeEvidenceStore
 from lightyear_audit.ledger import load_snapshot as load_audit_snapshot
@@ -373,6 +373,7 @@ class ExplorerServer(ThreadingHTTPServer):
         chat_service: GraphChatService | None = None,
         evidence_store: EvidenceStore | None = None,
         factory_store: FactoryRunStore | None = None,
+        evaluation_store: EvaluationStore | None = None,
         runtime_store: RuntimeEvidenceStore | None = None,
         audit_store: AuditStore | None = None,
     ) -> None:
@@ -385,6 +386,9 @@ class ExplorerServer(ThreadingHTTPServer):
             evidence_store = EvidenceStore(load_evidence_pack(default_pack)) if default_pack.is_file() else None
         self.evidence_store = evidence_store
         self.factory_store = factory_store or FactoryRunStore(
+            self.viewer_root.parents[1] / "work"
+        )
+        self.evaluation_store = evaluation_store or EvaluationStore(
             self.viewer_root.parents[1] / "work"
         )
         if runtime_store is None:
@@ -492,6 +496,18 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
                     include_private=audience == "verifier",
                 )
             )
+            return
+        if path == "/api/evaluations":
+            self._json({
+                "evaluations": self.server.evaluation_store.list_evaluations(
+                    self._integer(query, "limit", 50)
+                )
+            })
+            return
+        if path == "/api/evaluation":
+            self._json(self.server.evaluation_store.evaluation(
+                self._value(query, "id", required=True)
+            ))
             return
         if path == "/api/runtime/summary":
             if self.server.runtime_store is None:
@@ -708,7 +724,9 @@ def serve(
     audit_store = AuditStore(load_audit_snapshot(audit_path)) if audit_path.is_file() else None
     server = ExplorerServer(
         (host, port), index, viewer_root, evidence_store=evidence_store,
-        factory_store=factory_store, runtime_store=runtime_store, audit_store=audit_store,
+        factory_store=factory_store,
+        evaluation_store=EvaluationStore(factory_runs_path or viewer_root.resolve().parents[1] / "work"),
+        runtime_store=runtime_store, audit_store=audit_store,
     )
     url = f"http://{host}:{server.server_port}/"
     print(f"LIGHTYEAR Graph Explorer: {url}")

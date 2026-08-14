@@ -5,6 +5,7 @@ from io import BytesIO
 import tempfile
 import types
 import unittest
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from urllib.error import HTTPError
 
@@ -18,6 +19,13 @@ from lightyear_factory.evals import (
     run_model_evaluation,
     validate_evaluation_catalog,
 )
+from lightyear_factory.quality import (
+    QualityPolicy,
+    compare_evaluations,
+    quality_scorecard,
+    sign_sealed_catalog,
+    verify_sealed_catalog,
+)
 from lightyear_factory.orchestrator import FactoryOrchestrator
 from lightyear_factory.patches import PatchBroker
 from lightyear_factory.private_benchmark import policy_checks
@@ -28,7 +36,7 @@ from lightyear_factory.providers import (
     ProviderResult,
     ScriptedModelProvider,
 )
-from lightyear_factory.store import FactoryRunStore
+from lightyear_factory.store import EvaluationStore, FactoryRunStore
 from lightyear_factory.workspace import IsolatedWorkspace
 
 
@@ -524,23 +532,171 @@ class ModelWorkcellTests(unittest.TestCase):
         self.assertEqual("evaluation_budget_exhausted", receipt["stopped_reason"]["code"])
         self.assertEqual(1, receipt["completed_cases"])
 
+    def test_sealed_catalog_signature_tamper_expiry_and_wrong_key_fail_closed(self) -> None:
+        catalog = load_evaluation_catalog(CATALOG)
+        catalog["id"] = "externally-controlled-holdout"
+        catalog["evaluation_class"] = "sealed-holdout"
+        key = b"a" * 32
+        issued = datetime(2026, 8, 14, tzinfo=timezone.utc)
+        envelope = sign_sealed_catalog(
+            catalog, key, issuer="independent-evaluator", key_id="holdout-1",
+            issued_at=issued, ttl_seconds=3600,
+        )
+        verified, binding = verify_sealed_catalog(
+            envelope, {"holdout-1": key}, now=issued + timedelta(minutes=1)
+        )
+        self.assertEqual(catalog["id"], verified["id"])
+        self.assertTrue(binding["signature_valid"])
+        tampered = json.loads(json.dumps(envelope))
+        tampered["catalog"]["id"] = "changed"
+        with self.assertRaisesRegex(ContractError, "identity"):
+            verify_sealed_catalog(tampered, {"holdout-1": key}, now=issued)
+        with self.assertRaisesRegex(ContractError, "trusted"):
+            verify_sealed_catalog(envelope, {"other": key}, now=issued)
+        with self.assertRaisesRegex(ContractError, "expired"):
+            verify_sealed_catalog(
+                envelope, {"holdout-1": key}, now=issued + timedelta(hours=2)
+            )
+
+    def test_plain_sealed_catalog_is_rejected_without_verified_envelope(self) -> None:
+        catalog = load_evaluation_catalog(CATALOG)
+        catalog["id"] = "unsigned-holdout"
+        catalog["evaluation_class"] = "sealed-holdout"
+        catalog["cases"] = [catalog["cases"][0]]
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            path = root / "catalog.json"
+            path.write_text(json.dumps(catalog), encoding="utf-8")
+            with self.assertRaisesRegex(ContractError, "verified envelope"):
+                run_model_evaluation(
+                    ROOT, root / "output", path,
+                    lambda _: ModelAgentSet(ScriptedModelProvider([planner()])),
+                )
+
+    def test_clean_holdout_case_passes_unchanged_and_receipt_hides_case_identity(self) -> None:
+        catalog = {
+            "schema_version": "1.0",
+            "id": "secret-holdout-name",
+            "evaluation_class": "sealed-holdout",
+            "description": "private",
+            "minimum_repair_rate": 1.0,
+            "target_path": "factory/benchmarks/intcalc_candidate.py",
+            "cases": [{
+                "id": "secret-clean-case",
+                "category": "secret-category",
+                "expectation": "accept-unchanged",
+                "forbidden_public_markers": ["secret-clean-case", "secret-category"],
+            }],
+        }
+        key = b"b" * 32
+        envelope = sign_sealed_catalog(
+            catalog, key, issuer="independent-evaluator", key_id="holdout-2"
+        )
+        verified, binding = verify_sealed_catalog(envelope, {"holdout-2": key})
+        permissive = QualityPolicy(
+            minimum_cases=1, minimum_categories=1, minimum_clean_cases=1,
+            minimum_evidence_scored_cases=0, minimum_baseline_rejection_rate=0,
+            minimum_repair_rate=0, minimum_correct_no_change_rate=1,
+            minimum_first_attempt_repair_rate=0, minimum_evidence_precision=0,
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            receipt = run_model_evaluation(
+                ROOT, Path(directory) / "evaluation", Path("unused.json"),
+                lambda _: ModelAgentSet(ScriptedModelProvider([planner()])),
+                catalog_override=verified, sealed_binding=binding,
+                quality_policy=permissive, policy=EvaluationPolicy(pace_seconds=0),
+            )
+        public = json.dumps(receipt)
+        self.assertEqual("passed", receipt["status"])
+        self.assertEqual(1, receipt["correct_no_changes"])
+        self.assertEqual(0, receipt["false_acceptances"])
+        self.assertEqual("qualified", receipt["quality_gate"]["status"])
+        self.assertNotIn("secret-clean-case", public)
+        self.assertNotIn("secret-category", public)
+
+    def test_quality_gate_blocks_public_calibration_and_comparison_is_safety_first(self) -> None:
+        result = {
+            "expectation": "reject-and-repair", "baseline_rejected": True,
+            "autonomously_repaired": True, "correct_no_change": False,
+            "false_acceptance": False, "attempts": 1, "input_tokens": 100,
+            "estimated_cost_usd": 0.01, "private_evidence_leaks": 0,
+            "unauthorized_edit_attempts": 0,
+            "evidence_selection": {"available": True, "precision": 1.0},
+        }
+        policy = QualityPolicy(
+            minimum_cases=1, minimum_categories=1, minimum_clean_cases=0,
+            minimum_evidence_scored_cases=1, minimum_baseline_rejection_rate=1,
+            minimum_repair_rate=1, minimum_correct_no_change_rate=0,
+            minimum_first_attempt_repair_rate=1, minimum_evidence_precision=1,
+        )
+        gate = quality_scorecard(
+            "public-calibration", {"layout": 1}, [result], policy, None
+        )
+        self.assertEqual("blocked", gate["status"])
+        self.assertIn("sealed_evidence", gate["gaps"])
+        safe = {
+            "evaluation_id": "safe", "evaluation_class": "sealed-holdout",
+            "status": "passed", "content_sha256": "a" * 64,
+            "quality_gate": {"status": "qualified", "metrics": {
+                "repair_rate": 0.8, "false_acceptances": 0,
+                "correct_no_change_rate": 1.0, "evidence_selection_precision": 0.8,
+                "average_input_tokens": 50,
+            }}, "totals": {"estimated_cost_usd": 1.0},
+        }
+        unsafe = json.loads(json.dumps(safe))
+        unsafe["evaluation_id"] = "unsafe"
+        unsafe["content_sha256"] = "b" * 64
+        unsafe["quality_gate"]["metrics"]["repair_rate"] = 1.0
+        unsafe["quality_gate"]["metrics"]["false_acceptances"] = 1
+        comparison = compare_evaluations([unsafe, safe])
+        self.assertEqual("a" * 64, comparison["recommended_receipt_sha256"])
+
+    def test_evaluation_store_projects_quality_receipts(self) -> None:
+        receipt = {
+            "evaluation_id": "sealed:opaque", "evaluation_class": "sealed-holdout",
+            "status": "passed", "cases": 20, "repair_rate": 0.9,
+            "correct_no_change_rate": 1.0, "false_acceptances": 0,
+            "content_sha256": "c" * 64,
+            "quality_gate": {"status": "qualified", "metrics": {
+                "repair_rate": 0.9, "correct_no_change_rate": 1.0,
+                "false_acceptances": 0, "average_input_tokens": 42000,
+            }},
+            "totals": {"estimated_cost_usd": 2.5},
+        }
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / "run" / "evaluation.receipt.json"
+            path.parent.mkdir()
+            path.write_text(json.dumps(receipt), encoding="utf-8")
+            store = EvaluationStore(Path(directory))
+            rows = store.list_evaluations()
+            detail = store.evaluation(rows[0]["evaluation_key"])
+        self.assertEqual("qualified", rows[0]["quality_status"])
+        self.assertEqual("sealed:opaque", detail["evaluation_id"])
+
     def test_workcell_schemas_are_versioned(self) -> None:
         for name in (
             "model-call-evidence.schema.json",
             "evaluation-catalog.schema.json",
             "evaluation-receipt.schema.json",
             "evaluation-checkpoint.schema.json",
+            "sealed-evaluation-envelope.schema.json",
+            "factory-quality-policy.schema.json",
+            "factory-quality-gate.schema.json",
+            "evaluation-comparison.schema.json",
             "agent-exchange.schema.json",
         ):
             schema = json.loads((ROOT / "factory" / "schema" / name).read_text())
             self.assertEqual("https://json-schema.org/draft/2020-12/schema", schema["$schema"])
-            self.assertRegex(schema["$id"], r"-1\.[01]\.json$")
+            self.assertRegex(schema["$id"], r"-(?:1\.[01]|2\.0)\.json$")
 
     def test_factory_ui_projects_intelligence_without_becoming_authority(self) -> None:
         html = (ROOT / "knowledge" / "viewer" / "index.html").read_text()
         script = (ROOT / "knowledge" / "viewer" / "app.js").read_text()
         self.assertIn('id="factory-intelligence"', html)
+        self.assertIn('id="evaluation-tab"', html)
+        self.assertIn('id="evaluation-checks"', html)
         self.assertIn("renderFactoryIntelligence", script)
+        self.assertIn("loadEvaluations", script)
         self.assertIn("independently receipted call", script)
 
 

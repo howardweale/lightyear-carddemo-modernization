@@ -38,6 +38,12 @@ content-addressed controller artifact for audit, but is no longer resent to ever
 OpenAI provider also counts exact input tokens before generation and fails closed above the
 per-call ceiling.
 
+v0.13 adds the independent quality boundary. Holdout catalogs are signed outside the repository,
+admitted as expiring envelopes, addressed by opaque case references, and never copied into worker
+artifacts. A versioned policy evaluates mutation repair, clean no-change behavior, evidence
+selection, privacy, path safety, token efficiency, and cost. Only a verified sealed evaluation can
+qualify; public calibration remains useful but non-promotional.
+
 ## Control model
 
 ```mermaid
@@ -130,6 +136,21 @@ tokens, estimated cost, and each factory receipt identity. Public cases calibrat
 model behavior; they do not prove blind generalization. A sealed holdout must be retained outside
 the worker-visible repository and supplied as an external catalog. Neither class proves z/OS
 equivalence. See `evals/README.md` for evidence-class and scoring rules.
+
+For a sealed evaluation, the independent evaluator keeps the catalog outside the repository and
+uses an external 32-byte-or-longer key:
+
+```bash
+export LIGHTYEAR_EVALUATION_SIGNING_KEY="$(openssl rand -hex 32)"
+./quality-gate.sh sign /secure/holdout.json /secure/holdout.envelope.json independent-evaluator
+./quality-gate.sh validate /secure/holdout.envelope.json
+./quality-gate.sh evaluate /secure/holdout.envelope.json
+./quality-gate.sh compare work/evaluation-a/evaluation.receipt.json work/evaluation-b/evaluation.receipt.json
+```
+
+The public receipt contains the envelope and catalog hashes, aggregate metrics, opaque case
+references, and the quality decision. It does not contain case IDs, categories, mutation markers,
+private gate output, or the signing key. The Quality tab displays this receipt but cannot alter it.
 
 ## Run the mutation gauntlet
 

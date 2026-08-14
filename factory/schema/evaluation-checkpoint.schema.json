@@ -1,25 +1,29 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://lightyear.ai/schema/factory/evaluation-checkpoint-1.0.json",
+  "$id": "https://lightyear.ai/schema/factory/evaluation-checkpoint-1.1.json",
   "title": "LIGHTYEAR model work-cell evaluation checkpoint",
   "type": "object",
   "additionalProperties": false,
   "required": [
     "schema_version", "receipt_type", "evaluation_id", "catalog_sha256",
-    "catalog_validation_sha256", "status", "completed_case_ids", "results",
-    "totals", "policy", "stopped_reason", "content_sha256"
+    "catalog_validation_sha256", "status", "completed_case_refs", "results",
+    "totals", "policy", "quality_policy_sha256", "sealed_binding_sha256",
+    "stopped_reason", "content_sha256"
   ],
   "properties": {
-    "schema_version": {"const": "1.0"},
+    "schema_version": {"const": "1.1"},
     "receipt_type": {"const": "lightyear-model-workcell-evaluation-checkpoint"},
     "evaluation_id": {"type": "string", "minLength": 1},
     "catalog_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
     "catalog_validation_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
     "status": {"enum": ["running", "stopped", "completed"]},
+    "completed_case_refs": {"type": "array", "items": {"type": "string"}},
     "completed_case_ids": {"type": "array", "items": {"type": "string"}},
     "results": {"type": "array", "items": {"type": "object"}},
     "totals": {"type": "object"},
     "policy": {"type": "object"},
+    "quality_policy_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "sealed_binding_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
     "stopped_reason": {"type": ["object", "null"]},
     "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
   }

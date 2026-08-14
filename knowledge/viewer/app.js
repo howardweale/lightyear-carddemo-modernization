@@ -6,6 +6,7 @@ const state = {
   chatStatus: null,
   chatHistory: [],
   factoryRuns: [],
+  evaluations: [],
   runtimeRuns: [],
   auditSummary: null,
   auditEvents: [],
@@ -86,7 +87,7 @@ async function initialize() {
     populateLegend();
     configureChat();
     bindControls();
-    await Promise.all([loadPerspective(), loadFactoryRuns(false), loadRuntimeRuns(false), loadAudit(false)]);
+    await Promise.all([loadPerspective(), loadFactoryRuns(false), loadEvaluations(false), loadRuntimeRuns(false), loadAudit(false)]);
   } catch (error) {
     setError(error);
   }
@@ -155,6 +156,10 @@ function bindControls() {
     switchRightPanel("factory");
     await loadFactoryRuns(true);
   });
+  $("evaluation-tab").addEventListener("click", async () => {
+    switchRightPanel("evaluation");
+    await loadEvaluations(true);
+  });
   $("runtime-tab").addEventListener("click", async () => {
     switchRightPanel("runtime");
     await loadRuntimeRuns(true);
@@ -164,6 +169,7 @@ function bindControls() {
     await loadAudit(true);
   });
   $("refresh-factory").addEventListener("click", () => loadFactoryRuns(true));
+  $("refresh-evaluations").addEventListener("click", () => loadEvaluations(true));
   $("refresh-runtime").addEventListener("click", () => loadRuntimeRuns(true));
   $("refresh-audit").addEventListener("click", () => loadAudit(true));
   $("view-audit-dossier").addEventListener("click", loadAuditDossier);
@@ -701,18 +707,106 @@ function configureChat() {
 function switchRightPanel(view) {
   const chat = view === "chat";
   const factory = view === "factory";
+  const evaluation = view === "evaluation";
   const runtime = view === "runtime";
   const audit = view === "audit";
   $("chat-view").hidden = !chat;
   $("factory-view").hidden = !factory;
+  $("evaluation-view").hidden = !evaluation;
   $("runtime-view").hidden = !runtime;
   $("audit-view").hidden = !audit;
-  $("inspector-view").hidden = chat || factory || runtime || audit;
+  $("inspector-view").hidden = chat || factory || evaluation || runtime || audit;
   $("chat-tab").classList.toggle("active", chat);
   $("factory-tab").classList.toggle("active", factory);
+  $("evaluation-tab").classList.toggle("active", evaluation);
   $("runtime-tab").classList.toggle("active", runtime);
   $("audit-tab").classList.toggle("active", audit);
-  $("inspector-tab").classList.toggle("active", !chat && !factory && !runtime && !audit);
+  $("inspector-tab").classList.toggle("active", !chat && !factory && !evaluation && !runtime && !audit);
+}
+
+async function loadEvaluations(selectLatest = true) {
+  try {
+    const payload = await api("/api/evaluations", { limit: 50 });
+    state.evaluations = payload.evaluations || [];
+    const container = $("evaluation-runs");
+    container.replaceChildren();
+    $("evaluation-empty").hidden = state.evaluations.length > 0;
+    state.evaluations.forEach((evaluation) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = `factory-run ${evaluation.quality_status === "qualified" ? "passed" : "blocked"}`;
+      button.dataset.evaluationKey = evaluation.evaluation_key;
+      const title = document.createElement("strong");
+      title.textContent = evaluation.evaluation_id;
+      const meta = document.createElement("span");
+      meta.textContent = `${evaluation.quality_status} · ${evaluation.cases} cases · ${Math.round((evaluation.repair_rate || 0) * 100)}% repair`;
+      const identity = document.createElement("code");
+      identity.textContent = evaluation.evaluation_class;
+      button.append(title, meta, identity);
+      button.addEventListener("click", () => loadEvaluation(evaluation.evaluation_key));
+      container.appendChild(button);
+    });
+    if (selectLatest && state.evaluations.length) {
+      await loadEvaluation(state.evaluations[0].evaluation_key);
+    } else if (!state.evaluations.length) {
+      $("evaluation-detail").hidden = true;
+    }
+  } catch (error) {
+    setError(error);
+  }
+}
+
+async function loadEvaluation(evaluationKey) {
+  try {
+    const receipt = await api("/api/evaluation", { id: evaluationKey });
+    const quality = receipt.quality_gate || { status: "unreported", metrics: {}, checks: {} };
+    document.querySelectorAll("#evaluation-runs .factory-run").forEach((item) => {
+      item.classList.toggle("active", item.dataset.evaluationKey === evaluationKey);
+    });
+    $("evaluation-detail").hidden = false;
+    $("evaluation-title").textContent = receipt.evaluation_id;
+    $("evaluation-id").textContent = `${receipt.evaluation_class} · ${receipt.cases} completed cases`;
+    $("evaluation-badges").replaceChildren(
+      answerBadge(receipt.status, receipt.status === "passed" ? "high" : "low"),
+      answerBadge(quality.status, quality.status === "qualified" ? "high" : "low"),
+      answerBadge(`${receipt.false_acceptances || 0} false acceptances`, receipt.false_acceptances ? "low" : "high"),
+    );
+    const metrics = $("evaluation-metrics");
+    metrics.replaceChildren();
+    const displayed = [
+      [quality.metrics.repair_rate, "repair rate", true],
+      [quality.metrics.correct_no_change_rate, "correct no-change", true],
+      [quality.metrics.first_attempt_repair_rate, "first-attempt", true],
+      [quality.metrics.evidence_selection_precision, "evidence precision", true],
+      [quality.metrics.average_input_tokens, "average input tokens", false],
+      [quality.metrics.estimated_cost_usd, "estimated cost USD", false],
+    ];
+    displayed.forEach(([value, label, percentage]) => {
+      const card = document.createElement("div");
+      const number = document.createElement("strong");
+      number.textContent = percentage ? `${Math.round((value || 0) * 100)}%` : String(value ?? 0);
+      const text = document.createElement("span");
+      text.textContent = label;
+      card.append(number, text);
+      metrics.appendChild(card);
+    });
+    const checks = $("evaluation-checks");
+    checks.replaceChildren();
+    Object.entries(quality.checks || {}).forEach(([name, passed]) => {
+      const row = document.createElement("div");
+      row.className = `factory-gate ${passed ? "passed" : "failed"}`;
+      const status = document.createElement("strong");
+      status.textContent = passed ? "passed" : "blocked";
+      const label = document.createElement("span");
+      label.textContent = name.replaceAll("_", " ");
+      row.append(status, label);
+      checks.appendChild(row);
+    });
+    $("evaluation-limitations").textContent = (receipt.limitations || []).join(" ");
+    $("evaluation-receipt-hash").textContent = receipt.content_sha256;
+  } catch (error) {
+    setError(error);
+  }
 }
 
 async function loadAudit(selectLatest = true) {

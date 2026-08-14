@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schema/portfolio-run-receipt.schema.json",
+  "title": "LIGHTYEAR portfolio run receipt",
+  "type": "object",
+  "required": ["schema_version", "receipt_type", "portfolio_id", "plan_sha256", "status", "cells", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "receipt_type": {"const": "lightyear-modernization-portfolio-run"},
+    "status": {"enum": ["passed", "blocked"]},
+    "cells": {"type": "array"},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

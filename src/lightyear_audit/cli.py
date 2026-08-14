@@ -26,9 +26,10 @@ DEFAULT_WORK_ORDER = Path("factory/work-orders/intcalc-repair.example.json")
 DEFAULT_POLICY = Path("audit/policies/promotion.json")
 DEFAULT_EXECUTION_RECEIPT = Path("factory/execution/conformance.receipt.json")
 DEFAULT_MEMORY_SNAPSHOT = Path("factory/memory/store/memory.snapshot.json.gz")
-DEFAULT_DOSSIER_JSON = Path("audit/dossiers/carddemo-intcalc-v0.14-demo.json")
-DEFAULT_DOSSIER_MD = Path("audit/dossiers/carddemo-intcalc-v0.14-demo.md")
-DEFAULT_RELEASE = "release:carddemo-intcalc:v0.14-demo"
+DEFAULT_PORTFOLIO_PLAN = Path("factory/portfolio/carddemo-plan.snapshot.json")
+DEFAULT_DOSSIER_JSON = Path("audit/dossiers/carddemo-intcalc-v0.15-demo.json")
+DEFAULT_DOSSIER_MD = Path("audit/dossiers/carddemo-intcalc-v0.15-demo.md")
+DEFAULT_RELEASE = "release:carddemo-intcalc:v0.15-demo"
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -43,6 +44,7 @@ def build_parser() -> argparse.ArgumentParser:
     build.add_argument("--policy", type=Path, default=DEFAULT_POLICY)
     build.add_argument("--execution-receipt", type=Path, default=DEFAULT_EXECUTION_RECEIPT)
     build.add_argument("--memory-snapshot", type=Path, default=DEFAULT_MEMORY_SNAPSHOT)
+    build.add_argument("--portfolio-plan", type=Path, default=DEFAULT_PORTFOLIO_PLAN)
     build.add_argument("--output", type=Path, default=DEFAULT_SNAPSHOT)
     build.add_argument("--dossier-json", type=Path, default=DEFAULT_DOSSIER_JSON)
     build.add_argument("--dossier-markdown", type=Path, default=DEFAULT_DOSSIER_MD)
@@ -91,6 +93,7 @@ def main(argv: list[str] | None = None) -> int:
             args.execution_receipt,
             args.memory_snapshot,
             args.release,
+            args.portfolio_plan,
         )
         write_snapshot(payload, args.output)
         dossier = build_dossier(payload, args.release)

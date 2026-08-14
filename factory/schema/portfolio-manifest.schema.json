@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schema/portfolio-manifest.schema.json",
+  "title": "LIGHTYEAR modernization portfolio manifest",
+  "type": "object",
+  "required": ["schema_version", "id", "title", "work_orders", "policy"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "id": {"type": "string", "minLength": 1},
+    "title": {"type": "string", "minLength": 1},
+    "work_orders": {"type": "array", "minItems": 2, "uniqueItems": true, "items": {"type": "string"}},
+    "policy": {
+      "type": "object",
+      "required": ["max_parallel", "human_approval_required_for", "graph_trace_depth"],
+      "properties": {
+        "max_parallel": {"type": "integer", "minimum": 1, "maximum": 16},
+        "human_approval_required_for": {"type": "array", "items": {"enum": ["low", "medium", "high", "critical"]}},
+        "graph_trace_depth": {"type": "integer", "minimum": 0, "maximum": 5}
+      },
+      "additionalProperties": false
+    },
+    "metadata": {"type": "object"}
+  },
+  "additionalProperties": false
+}

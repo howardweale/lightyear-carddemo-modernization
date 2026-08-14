@@ -22,6 +22,7 @@ fi
 "$project_dir/knowledge-graph.sh" verify
 "$project_dir/runtime-evidence.sh" verify
 "$project_dir/semantic-memory.sh" validate
+"$project_dir/portfolio-factory.sh" verify
 "$project_dir/audit-control-tower.sh" verify
 
 (

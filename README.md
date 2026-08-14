@@ -1,6 +1,6 @@
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.14.0 — verified semantic memory**
+Release: **v0.15.0 — conflict-aware portfolio factory**
 
 An evidence-aware knowledge graph, source-faithful local oracle, differential harness, and
 Java/Spring Batch candidate for AWS CardDemo. Together they form the first engineering cell of a
@@ -94,6 +94,14 @@ entirely, verifier-private artifacts never cross the audience boundary, and a ch
 source-evidence identity immediately makes an experience stale. The Memory dashboard is a
 read-only projection; current source and fresh gates remain authoritative.
 
+v0.15 scales the controller from one work cell to a portfolio. A deterministic planner binds every
+work order to the exact graph and source scope, detects file collisions, shared graph scope and
+declared dependencies, then schedules non-conflicting cells into bounded parallel waves. High-risk
+work and critical conflicts fail closed until an external human signs the exact plan hash. The
+approval authorizes dispatch only: each cell must still pass its independent private gates. The
+included CardDemo portfolio coordinates INTCALC, POSTTRAN and statement generation, and its
+read-only dashboard cannot approve, resolve, or launch work.
+
 ## What it does
 
 1. Builds a deterministic, provenance-rich graph of the entire CardDemo application estate.
@@ -123,6 +131,31 @@ read-only projection; current source and fresh gates remain authoritative.
 23. Verifies signed work orders against trusted issuers, expiry, policy identity, and one-use nonces.
 24. Issues short-lived, action-scoped identities for planner, builder, failure analyst, provider, and verifier roles.
 25. Brokers allowlisted protected values through one-use leases without persisting their contents.
+26. Plans multiple graph-bound work cells into deterministic, conflict-free execution waves.
+27. Requires an expiring human signature for high-risk work and critical conflicts.
+28. Stops later waves when any cell fails and emits one composite portfolio receipt.
+
+## Run the v0.15 portfolio locally
+
+Planning and validation require no model, mainframe, or secret:
+
+```bash
+./portfolio-factory.sh plan
+./portfolio-factory.sh verify
+```
+
+The sample includes a high-risk financial-posting cell, so dispatch requires an external key and a
+named human approver:
+
+```bash
+export LIGHTYEAR_PORTFOLIO_APPROVAL_KEY="$(openssl rand -hex 32)"
+export LIGHTYEAR_PORTFOLIO_APPROVER="your-name"
+./portfolio-factory.sh sign
+./portfolio-factory.sh run
+```
+
+The key and signature are not committed. Changing a work order, graph snapshot, conflict, wave or
+policy changes the plan hash and invalidates the approval.
 26. Runs acceptance gates through a digest-pinned, networkless, non-root Docker or Podman sandbox.
 27. Blocks promotion when only simulated execution-policy conformance exists.
 28. Prevents a successful container-only probe from impersonating a signed factory run.

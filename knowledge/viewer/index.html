@@ -94,6 +94,7 @@
         <button id="inspector-tab" class="right-tab active" type="button">Inspector</button>
         <button id="chat-tab" class="right-tab" type="button">Ask graph</button>
         <button id="factory-tab" class="right-tab" type="button">Factory</button>
+        <button id="portfolio-tab" class="right-tab" type="button">Portfolio</button>
         <button id="evaluation-tab" class="right-tab" type="button">Quality</button>
         <button id="memory-tab" class="right-tab" type="button">Memory</button>
         <button id="runtime-tab" class="right-tab" type="button">Runtime</button>
@@ -241,6 +242,34 @@
             <code id="factory-receipt-hash" class="factory-hash"></code>
           </section>
         </article>
+      </div>
+
+      <div id="portfolio-view" class="factory-view" hidden>
+        <div class="factory-header">
+          <div>
+            <p class="eyebrow">MULTI-WORKLOAD CONTROL TOWER</p>
+            <h2>Coordinate cells without delegating authority.</h2>
+          </div>
+          <button id="refresh-portfolio" class="text-button" type="button">Refresh</button>
+        </div>
+        <p class="chat-disclosure">This is a read-only projection. It cannot approve, resolve conflicts, or dispatch work.</p>
+        <div id="portfolio-posture" class="audit-posture"></div>
+        <section>
+          <h3>Execution waves</h3>
+          <div id="portfolio-waves" class="portfolio-waves"></div>
+        </section>
+        <section>
+          <h3>Conflict register</h3>
+          <div id="portfolio-conflicts"></div>
+        </section>
+        <section>
+          <h3>Work cells</h3>
+          <div id="portfolio-orders" class="factory-runs"></div>
+        </section>
+        <section>
+          <h3>Plan identity</h3>
+          <code id="portfolio-plan-hash" class="factory-hash"></code>
+        </section>
       </div>
 
       <div id="evaluation-view" class="factory-view" hidden>

@@ -162,8 +162,8 @@ or generated evidence drift apart.
    coverage directly from the graph.
 4. **Agent context service:** serve minimal, signed, audience-specific subgraphs through a stable API
    or MCP interface.
-5. **Factory scale-out:** move admission and identity signing to managed asymmetric keys; add
-   conflict-aware parallel cells, policy-selected gates, and risk-based human approval.
+5. **Factory scale-out:** v0.15 adds conflict-aware parallel cells and risk-based human approval;
+   next move admission and identity signing to managed asymmetric keys and durable queues.
 6. **Durable governance:** anchor signed audit checkpoints in immutable external retention with
    enterprise identity, trusted time, key rotation, and legal hold policy.
 7. **Longitudinal memory:** retain graph deltas, architectural decisions, failed attempts, and

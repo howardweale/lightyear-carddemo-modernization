@@ -1,0 +1,88 @@
+{
+  "approval": {
+    "authority": "human",
+    "required": true,
+    "required_conflict_ids": [],
+    "required_order_ids": [
+      "carddemo:posttran:portfolio-cell"
+    ]
+  },
+  "conflicts": [
+    {
+      "evidence": [
+        "carddemo:posttran:portfolio-cell"
+      ],
+      "id": "conflict:28c9076c3a1b4ed2446c",
+      "kind": "declared_dependency",
+      "orders": [
+        "carddemo:create-statement:portfolio-cell",
+        "carddemo:posttran:portfolio-cell"
+      ],
+      "resolution": "serialize",
+      "severity": "medium"
+    }
+  ],
+  "content_sha256": "e72cf47cf39e0fecb9156db76410f4f0d51d0741d3e1a037c06d41ca48182609",
+  "graph_content_sha256": "4b8141cf27d91fd780e8ae1a020084e005b982f0043162c3879b219e4be808f7",
+  "limitations": [
+    "Portfolio scheduling proves bounded factory coordination, not z/OS equivalence.",
+    "Only deterministic controllers and human approvers may authorize portfolio dispatch."
+  ],
+  "manifest_sha256": "65eb10e696263885f7f1c924d670633218da1cc67ca2f5c09e747e864959fe7d",
+  "max_parallel": 2,
+  "orders": [
+    {
+      "allowed_paths": ["factory/benchmarks/statement_candidate.py"],
+      "depends_on": ["carddemo:posttran:portfolio-cell"],
+      "graph_node_ids": [
+        "legacy:jcl-job:CREASTMT",
+        "legacy:cobol-paragraph:CBSTM03A:5000-CREATE-STATEMENT"
+      ],
+      "id": "carddemo:create-statement:portfolio-cell",
+      "risk": "medium",
+      "title": "Statement generation modernization cell",
+      "work_order_sha256": "f3f6490901d5a2499db9681b07c29e1be269dded0a0925ef5291284369dd3c6a"
+    },
+    {
+      "allowed_paths": ["factory/benchmarks/intcalc_candidate.py"],
+      "depends_on": [],
+      "graph_node_ids": ["legacy:jcl-job:INTCALC"],
+      "id": "carddemo:intcalc:portfolio-cell",
+      "risk": "medium",
+      "title": "INTCALC modernization cell",
+      "work_order_sha256": "e88716839006d4686a86cf947509caeef04a17540ff69bcff34ad4e56f974470"
+    },
+    {
+      "allowed_paths": ["factory/benchmarks/posttran_candidate.py"],
+      "depends_on": [],
+      "graph_node_ids": [
+        "legacy:jcl-job:POSTTRAN",
+        "legacy:cobol-paragraph:CBTRN02C:2000-POST-TRANSACTION"
+      ],
+      "id": "carddemo:posttran:portfolio-cell",
+      "risk": "high",
+      "title": "POSTTRAN modernization cell",
+      "work_order_sha256": "0e3f939b606ed56653db2a098bfeab5db8758ce43c83debf66c5bb4d35fc6da1"
+    }
+  ],
+  "plan_type": "lightyear-modernization-portfolio-plan",
+  "portfolio_id": "carddemo:modernization:v0.15",
+  "schema_version": "1.0",
+  "status": "approval_required",
+  "title": "CardDemo multi-workload modernization portfolio",
+  "waves": [
+    {
+      "parallelism": 2,
+      "wave": 1,
+      "work_order_ids": [
+        "carddemo:intcalc:portfolio-cell",
+        "carddemo:posttran:portfolio-cell"
+      ]
+    },
+    {
+      "parallelism": 1,
+      "wave": 2,
+      "work_order_ids": ["carddemo:create-statement:portfolio-cell"]
+    }
+  ]
+}

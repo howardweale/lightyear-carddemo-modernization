@@ -33,6 +33,13 @@ def build_dossier(snapshot: dict[str, Any], release_id: str) -> dict[str, Any]:
         ),
         None,
     )
+    portfolio_event = next(
+        (
+            item for item in reversed(snapshot["events"])
+            if item["action"] == "factory.portfolio_plan_published"
+        ),
+        None,
+    )
     evidence = {}
     for event in snapshot["events"]:
         for item in event["evidence"]:
@@ -61,6 +68,25 @@ def build_dossier(snapshot: dict[str, Any], release_id: str) -> dict[str, Any]:
                 "experience_count": 0,
                 "outcomes": {},
                 "policy_sha256": None,
+            }
+        ),
+        "portfolio_plan": (
+            {
+                "status": "approval_required"
+                if portfolio_event["details"]["approval_required"] else "ready",
+                "plan_sha256": portfolio_event["evidence"][0]["sha256"],
+                "orders": portfolio_event["details"]["orders"],
+                "waves": portfolio_event["details"]["waves"],
+                "conflicts": portfolio_event["details"]["conflicts"],
+                "approval_authority": portfolio_event["details"]["approval_authority"],
+            }
+            if portfolio_event is not None else {
+                "status": "not_recorded",
+                "plan_sha256": None,
+                "orders": 0,
+                "waves": 0,
+                "conflicts": 0,
+                "approval_authority": None,
             }
         ),
         "evidence_inventory": [evidence[key] for key in sorted(evidence)],
@@ -131,6 +157,15 @@ def render_markdown(dossier: dict[str, Any]) -> str:
         f"- Status: `{dossier['semantic_memory']['status']}`",
         f"- Experiences: {dossier['semantic_memory']['experience_count']}",
         f"- Snapshot: `{dossier['semantic_memory']['snapshot_sha256'] or 'not recorded'}`",
+        "",
+        "## Modernization portfolio",
+        "",
+        f"- Status: `{dossier['portfolio_plan']['status']}`",
+        f"- Work cells: {dossier['portfolio_plan']['orders']}",
+        f"- Execution waves: {dossier['portfolio_plan']['waves']}",
+        f"- Detected conflicts: {dossier['portfolio_plan']['conflicts']}",
+        f"- Approval authority: `{dossier['portfolio_plan']['approval_authority'] or 'not recorded'}`",
+        f"- Plan: `{dossier['portfolio_plan']['plan_sha256'] or 'not recorded'}`",
         "",
         "## Audit checkpoint",
         "",

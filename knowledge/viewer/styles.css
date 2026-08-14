@@ -222,6 +222,11 @@ dd { margin: 0; overflow-wrap: anywhere; font: 11px/1.4 ui-monospace, SFMono-Reg
 .memory-summary { grid-template-columns: repeat(3, 1fr); }
 .memory-lessons { display: grid; gap: 6px; padding-left: 20px; color: var(--ink); font-size: 10px; }
 .memory-lessons li { padding: 6px 8px; background: var(--surface-2); border-radius: 5px; }
+.portfolio-waves { display: grid; gap: 8px; }
+.portfolio-wave { display: grid; grid-template-columns: 58px 1fr; gap: 8px; padding: 9px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px; }
+.portfolio-wave strong { color: var(--accent); font-size: 10px; text-transform: uppercase; }
+.portfolio-wave div { display: grid; gap: 4px; }
+.portfolio-wave code { overflow-wrap: anywhere; color: var(--muted); font-size: 9px; }
 .audit-summary { grid-template-columns: repeat(5, 1fr); }
 .runtime-summary div { padding: 8px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px; text-align: center; }
 .runtime-summary strong, .runtime-summary span { display: block; }

@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schema/portfolio-approval.schema.json",
+  "title": "LIGHTYEAR human portfolio approval",
+  "type": "object",
+  "required": ["schema_version", "envelope_type", "approver", "key_id", "issued_at", "expires_at", "nonce", "portfolio_id", "plan_sha256", "approved_order_ids", "acknowledged_conflict_ids", "signature", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "envelope_type": {"const": "lightyear-human-portfolio-approval"},
+    "approver": {
+      "type": "object",
+      "required": ["id", "kind", "role"],
+      "properties": {"kind": {"const": "human"}, "role": {"const": "approver"}}
+    },
+    "plan_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "signature": {"type": "object", "properties": {"algorithm": {"const": "HMAC-SHA256"}}},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

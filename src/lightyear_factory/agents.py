@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable, Protocol
 
+from .context import GraphContextAssembler
 from .contracts import ContractError, WorkOrder, canonical_hash
 from .providers import BoundedModelProvider, ModelProvider, OpenAIResponsesProvider
 
@@ -23,8 +24,14 @@ PLANNER_SCHEMA = {
                     "objective": {"type": "string"},
                     "paths": {"type": "array", "items": {"type": "string"}},
                     "graph_node_ids": {"type": "array", "items": {"type": "string"}},
+                    "evidence_capsule_ids": {
+                        "type": "array",
+                        "items": {"type": "string"},
+                    },
                 },
-                "required": ["id", "objective", "paths", "graph_node_ids"],
+                "required": [
+                    "id", "objective", "paths", "graph_node_ids", "evidence_capsule_ids"
+                ],
                 "additionalProperties": False,
             },
         },
@@ -153,6 +160,10 @@ class LocalAgentSet:
                     "objective": order.goal,
                     "paths": list(order.allowed_paths),
                     "graph_node_ids": list(order.graph_node_ids),
+                    "evidence_capsule_ids": [
+                        item["capsule_id"]
+                        for item in context.get("source_excerpts", [])[:8]
+                    ],
                 }
             ],
             "risks": [
@@ -234,16 +245,23 @@ class ModelAgentSet:
         self.order_sha256: str | None = None
         self.pending_evidence: list[dict[str, Any]] = []
         self.implementer_context: dict[str, Any] | None = None
+        self.context_projections: dict[str, dict[str, Any]] = {}
 
     def plan(self, order: WorkOrder, context: dict[str, Any]) -> dict[str, Any]:
         self.implementer_context = context
+        planner_context = GraphContextAssembler.planner_context(context)
+        planner_limit = min(order.max_context_bytes, 80_000)
+        if planner_context["statistics"]["context_bytes"] > planner_limit:
+            raise ContractError("Planner evidence catalog exceeded its role context budget")
+        self.context_projections["planner"] = planner_context["statistics"]
         return self._call(
             order,
             "planner",
-            "Use the supplied graph relationships, evidence excerpts, and approved files to "
-            "decompose the work order. Cite graph node IDs in tasks. Do not propose paths outside "
+            "Use the supplied graph relationships and evidence catalog to decompose the work "
+            "order. Every task must cite graph_node_ids and select only evidence_capsule_ids "
+            "listed in the catalog for later builder retrieval. Do not propose paths outside "
             "allowed_paths and state uncertainty as risk.",
-            {"work_order": order.to_dict(), "implementer_context": context},
+            {"work_order": order.to_dict(), "planner_context": planner_context},
             PLANNER_SCHEMA,
         )
 
@@ -265,6 +283,30 @@ class ModelAgentSet:
                     "content": raw[: order.max_file_bytes].decode("utf-8", errors="replace"),
                     "truncated": len(raw) > order.max_file_bytes,
                 }
+        evidence_capsule_ids = list(
+            dict.fromkeys(
+                str(item)
+                for task in plan.get("tasks", [])
+                for item in task.get("evidence_capsule_ids", [])
+            )
+        )
+        graph_node_ids = list(
+            dict.fromkeys(
+                str(item)
+                for task in plan.get("tasks", [])
+                for item in task.get("graph_node_ids", [])
+            )
+        )
+        full_context = self.implementer_context or {}
+        if full_context.get("source_excerpts") and not evidence_capsule_ids:
+            raise ContractError("Planner did not select source evidence for the builder")
+        builder_context = GraphContextAssembler.builder_context(
+            full_context, evidence_capsule_ids, graph_node_ids
+        )
+        builder_limit = min(order.max_context_bytes, 80_000)
+        if builder_context["statistics"]["context_bytes"] > builder_limit:
+            raise ContractError("Builder selected evidence exceeded its role context budget")
+        self.context_projections["builder"] = builder_context["statistics"]
         return self._call(
             order,
             "builder",
@@ -273,11 +315,7 @@ class ModelAgentSet:
             {
                 "work_order": order.to_dict(),
                 "plan": plan,
-                "graph_context": {
-                    key: value
-                    for key, value in (self.implementer_context or {}).items()
-                    if key != "allowed_files"
-                },
+                "graph_context": builder_context,
                 "public_failure": failure,
                 "attempt": attempt,
                 "allowed_files": files,
@@ -340,9 +378,13 @@ class ModelAgentSet:
                 "cost_estimate_available": False,
                 "call_evidence_sha256": [],
             }
+            payload["context_projections"] = self.context_projections
             payload["content_sha256"] = canonical_hash(payload)
             return payload
-        return self.bounded_provider.summary()
+        payload = self.bounded_provider.summary()
+        payload["context_projections"] = self.context_projections
+        payload["content_sha256"] = canonical_hash(payload, {"content_sha256"})
+        return payload
 
 
 class OpenAIAgentSet(ModelAgentSet):
@@ -355,10 +397,15 @@ class OpenAIAgentSet(ModelAgentSet):
         api_key: str,
         model: str = "gpt-5.6-terra",
         opener: Callable[..., Any] | None = None,
+        token_preflight: bool | None = None,
     ) -> None:
         kwargs: dict[str, Any] = {}
         if opener is not None:
             kwargs["opener"] = opener
+        if token_preflight is None:
+            token_preflight = opener is None and os.environ.get(
+                "LIGHTYEAR_MODEL_TOKEN_PREFLIGHT", "true"
+            ).casefold() not in {"0", "false", "no", "off"}
         super().__init__(
             OpenAIResponsesProvider(
                 api_key,
@@ -375,6 +422,12 @@ class OpenAIAgentSet(ModelAgentSet):
                 max_retries=int(os.environ.get("LIGHTYEAR_MODEL_MAX_RETRIES", "4")),
                 request_timeout_seconds=int(
                     os.environ.get("LIGHTYEAR_MODEL_TIMEOUT_SECONDS", "240")
+                ),
+                token_preflight=token_preflight,
+                max_input_tokens_per_call=int(
+                    os.environ.get(
+                        "LIGHTYEAR_MODEL_MAX_INPUT_TOKENS_PER_CALL", "60000"
+                    )
                 ),
                 **kwargs,
             )

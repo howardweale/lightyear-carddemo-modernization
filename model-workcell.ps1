@@ -1,8 +1,10 @@
 param(
-    [ValidateSet("validate", "evaluate", "resume")]
+    [ValidateSet("validate", "evaluate", "resume", "transcript")]
     [string]$Action = "validate",
     [string]$Catalog,
-    [string]$Output
+    [string]$Output,
+    [string]$RunId,
+    [switch]$Verifier
 )
 
 $ProjectDir = Split-Path -Parent $MyInvocation.MyCommand.Path
@@ -13,6 +15,22 @@ if (-not $Catalog) {
 
 if ($Action -eq "validate") {
     & py -3.11 -m lightyear_factory validate-eval --project-root $ProjectDir --catalog $Catalog
+    exit $LASTEXITCODE
+}
+
+if ($Action -eq "transcript") {
+    if (-not $Output -or -not $RunId) {
+        Write-Error "Transcript requires -Output <runs-root> -RunId <run-id>"
+        exit 2
+    }
+    $Audience = @()
+    if ($Verifier) {
+        $Audience = @("--verifier")
+    }
+    & py -3.11 -m lightyear_factory transcript `
+        --runs-root $Output `
+        --run-id $RunId `
+        @Audience
     exit $LASTEXITCODE
 }
 

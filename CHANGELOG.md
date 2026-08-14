@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.12.2 — 2026-08-13
+
+- Replaced repeated full-context prompts with progressive role-specific retrieval: planners receive
+  a compact graph and evidence catalog, and builders receive only plan-selected source capsules.
+- Added fail-closed validation for planner-selected graph nodes and evidence capsule IDs plus
+  independent 80 KB planner and builder context ceilings.
+- Added exact Responses API input-token preflight before generation, a configurable per-call input
+  ceiling, bounded count-request retries, and count identities and rate metadata in call evidence.
+- Added request manifests that record prompt and payload hashes, context statistics, and selected
+  evidence IDs without persisting provider credentials or full model prompts.
+- Added an audience-safe controller-mediated transcript command that shows planner and builder
+  artifacts while redacting verifier-private evidence by default.
+- Added regression tests proving substantial context reduction, evidence-selection boundaries,
+  exact token admission, pre-generation budget rejection, and transcript privacy.
+
 ## 0.12.1 — 2026-08-13
 
 - Added bounded Retry-After-aware exponential backoff with jitter for transient Responses API

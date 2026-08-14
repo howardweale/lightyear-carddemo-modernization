@@ -61,8 +61,25 @@ elif [[ "$action" == "resume" ]]; then
   fi
   echo "MODEL_EVALUATION=$output"
   exit "$evaluation_code"
+elif [[ "$action" == "transcript" ]]; then
+  runs_root="${2:-}"
+  run_id="${3:-}"
+  audience_flag="${4:-}"
+  if [[ -z "$runs_root" || -z "$run_id" ]]; then
+    echo "Usage: ./model-workcell.sh transcript <runs-root> <run-id> [--verifier]" >&2
+    exit 2
+  fi
+  command=(
+    "$LIGHTYEAR_PYTHON_BIN" -m lightyear_factory transcript
+    --runs-root "$runs_root" --run-id "$run_id"
+  )
+  if [[ "$audience_flag" == "--verifier" ]]; then
+    command+=(--verifier)
+  fi
+  "${command[@]}"
 else
   echo "Usage: ./model-workcell.sh [validate|evaluate] [catalog.json] [output]" >&2
   echo "       ./model-workcell.sh resume <evaluation-output> [catalog.json]" >&2
+  echo "       ./model-workcell.sh transcript <runs-root> <run-id> [--verifier]" >&2
   exit 2
 fi

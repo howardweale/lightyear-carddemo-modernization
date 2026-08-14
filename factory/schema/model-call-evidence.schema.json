@@ -19,11 +19,45 @@
     "store": {"const": false},
     "strict_schema": {"const": true},
     "max_output_tokens": {"type": "integer", "minimum": 1},
+    "input_token_preflight": {"type": "boolean"},
+    "input_tokens_preflight": {"type": ["integer", "null"], "minimum": 0},
+    "max_input_tokens_per_call": {"type": "integer", "minimum": 1000},
+    "token_count_attempts": {"type": "integer", "minimum": 0},
+    "token_count_retry_count": {"type": "integer", "minimum": 0},
+    "token_count_retries": {"type": "array", "items": {"type": "object"}},
+    "token_count_rate_limits": {
+      "type": "object", "additionalProperties": {"type": "string"}
+    },
+    "token_count_request_sha256": {
+      "type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"
+    },
     "attempts": {"type": "integer", "minimum": 1},
     "retry_count": {"type": "integer", "minimum": 0},
     "retries": {"type": "array", "items": {"type": "object"}},
     "rate_limits": {"type": "object", "additionalProperties": {"type": "string"}},
     "request_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "request_manifest": {
+      "type": "object",
+      "required": [
+        "instruction_sha256", "payload_sha256", "payload_keys",
+        "selected_evidence_capsule_ids", "selected_graph_node_ids", "content_sha256"
+      ],
+      "properties": {
+        "instruction_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "payload_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "payload_keys": {"type": "array", "items": {"type": "string"}},
+        "context_type": {"type": ["string", "null"]},
+        "context_sha256": {"type": ["string", "null"]},
+        "context_statistics": {"type": "object"},
+        "selected_evidence_capsule_ids": {
+          "type": "array", "items": {"type": "string"}
+        },
+        "selected_graph_node_ids": {
+          "type": "array", "items": {"type": "string"}
+        },
+        "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
     "response_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
     "input_tokens": {"type": "integer", "minimum": 0},
     "output_tokens": {"type": "integer", "minimum": 0},

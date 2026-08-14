@@ -102,6 +102,12 @@ def build_parser() -> argparse.ArgumentParser:
     inspect.add_argument("--runs-root", type=Path, default=Path("work/factory-runs"))
     inspect.add_argument("--run-id", required=True)
     inspect.add_argument("--verifier", action="store_true")
+    transcript = subparsers.add_parser(
+        "transcript", help="Render the controller-mediated exchange for a factory run"
+    )
+    transcript.add_argument("--runs-root", type=Path, default=Path("work/factory-runs"))
+    transcript.add_argument("--run-id", required=True)
+    transcript.add_argument("--verifier", action="store_true")
     return parser
 
 
@@ -155,6 +161,10 @@ def main(argv: list[str] | None = None) -> int:
         return 0 if result["status"] == "passed" else 1
     if args.command == "inspect":
         result = FactoryRunStore(args.runs_root).run(args.run_id, args.verifier)
+        print(json.dumps(result, indent=2, sort_keys=True))
+        return 0
+    if args.command == "transcript":
+        result = FactoryRunStore(args.runs_root).transcript(args.run_id, args.verifier)
         print(json.dumps(result, indent=2, sort_keys=True))
         return 0
     execution_context = None

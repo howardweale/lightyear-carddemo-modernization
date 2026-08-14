@@ -28,12 +28,14 @@ from lightyear_factory.providers import (
     ProviderResult,
     ScriptedModelProvider,
 )
+from lightyear_factory.store import FactoryRunStore
 from lightyear_factory.workspace import IsolatedWorkspace
 
 
 ROOT = Path(__file__).resolve().parents[1]
 CATALOG = ROOT / "factory" / "evals" / "carddemo-v0.12-public.json"
 TARGET = ROOT / "factory" / "benchmarks" / "intcalc_candidate.py"
+EVIDENCE_ID = "capsule:00499794e29839da11701d13"
 
 
 def planner() -> dict:
@@ -45,6 +47,7 @@ def planner() -> dict:
                 "objective": "Restore source-faithful behavior",
                 "paths": ["factory/benchmarks/intcalc_candidate.py"],
                 "graph_node_ids": ["workload:carddemo-intcalc"],
+                "evidence_capsule_ids": [EVIDENCE_ID],
             }
         ],
         "risks": [],
@@ -121,6 +124,34 @@ class ModelWorkcellTests(unittest.TestCase):
         self.assertRegex(context["content_sha256"], r"^[0-9a-f]{64}$")
         self.assertNotIn("inspector_private", json.dumps(context))
 
+    def test_role_contexts_use_catalog_then_plan_selected_source(self) -> None:
+        order = benchmark_work_order("rounding-mode")
+        context = GraphContextAssembler(
+            ROOT / "knowledge" / "graph.snapshot.json.gz",
+            ROOT / "knowledge" / "evidence" / "source.pack.json.gz",
+        ).assemble(order, ROOT)
+        planner_context = GraphContextAssembler.planner_context(context)
+        selected = [item["capsule_id"] for item in context["source_excerpts"][:2]]
+        builder_context = GraphContextAssembler.builder_context(
+            context, selected, ["workload:carddemo-intcalc"]
+        )
+        self.assertNotIn("source_excerpts", planner_context)
+        self.assertNotIn("content", json.dumps(planner_context["allowed_files"]))
+        self.assertEqual(selected, builder_context["selected_evidence_capsule_ids"])
+        self.assertEqual(2, len(builder_context["source_excerpts"]))
+        self.assertLess(
+            planner_context["statistics"]["context_bytes"],
+            context["statistics"]["context_bytes"] * 0.6,
+        )
+        self.assertLess(
+            builder_context["statistics"]["context_bytes"],
+            context["statistics"]["context_bytes"] * 0.6,
+        )
+        with self.assertRaisesRegex(ContractError, "unknown evidence capsule"):
+            GraphContextAssembler.builder_context(
+                context, ["capsule:not-approved"], ["workload:carddemo-intcalc"]
+            )
+
     def test_patch_broker_validates_every_edit_before_writing(self) -> None:
         order = benchmark_work_order("rounding-mode")
         with tempfile.TemporaryDirectory() as directory:
@@ -180,6 +211,9 @@ class ModelWorkcellTests(unittest.TestCase):
                 item for item in artifacts if item["artifact_type"] == "model-call-evidence"
             ]
             change_set = [item for item in artifacts if item["artifact_type"] == "change-set"]
+            transcript = FactoryRunStore(root / "runs").transcript(
+                "scripted-model-repair"
+            )
         self.assertEqual("passed", receipt["status"])
         self.assertEqual("model-backed", receipt["intelligence"]["mode"])
         self.assertEqual(3, receipt["intelligence"]["calls"])
@@ -189,6 +223,20 @@ class ModelWorkcellTests(unittest.TestCase):
         builder_request = next(item for item in provider.requests if item["role"] == "builder")
         self.assertTrue(builder_request["payload"]["graph_context"]["source_excerpts"])
         self.assertNotIn("allowed_files", builder_request["payload"]["graph_context"])
+        planner_request = next(item for item in provider.requests if item["role"] == "planner")
+        self.assertIn("evidence_catalog", planner_request["payload"]["planner_context"])
+        self.assertNotIn("source_excerpts", planner_request["payload"]["planner_context"])
+        self.assertFalse(transcript["direct_agent_chat"])
+        self.assertTrue(
+            any(item["artifact_type"] == "plan" for item in transcript["messages"])
+        )
+        self.assertTrue(
+            any(
+                item["visibility"] == "verifier_private"
+                and item["content"] == {"redacted": True}
+                for item in transcript["messages"]
+            )
+        )
 
     def test_model_call_budget_fails_closed(self) -> None:
         payload = benchmark_work_order("rounding-mode").to_dict()
@@ -251,6 +299,7 @@ class ModelWorkcellTests(unittest.TestCase):
             opener=opener,
             sleep=sleeps.append,
             jitter=lambda _: 0.0,
+            token_preflight=False,
         )
         result = provider.complete("planner", "Return JSON.", {}, schema)
         self.assertTrue(result.content["ok"])
@@ -273,12 +322,91 @@ class ModelWorkcellTests(unittest.TestCase):
                 BytesIO(json.dumps({"error": {"code": "insufficient_quota"}}).encode()),
             )
 
-        provider = OpenAIResponsesProvider("secret", opener=opener, sleep=lambda _: None)
+        provider = OpenAIResponsesProvider(
+            "secret", opener=opener, sleep=lambda _: None, token_preflight=False
+        )
         with self.assertRaises(ProviderError) as raised:
             provider.complete("planner", "Return JSON.", {}, {"type": "object"})
         self.assertEqual(1, calls)
         self.assertFalse(raised.exception.retryable)
         self.assertNotIn("secret", json.dumps(raised.exception.safe_dict()))
+
+    def test_openai_provider_preflights_exact_tokens_and_records_evidence(self) -> None:
+        requests: list[str] = []
+        schema = {
+            "type": "object",
+            "additionalProperties": False,
+            "required": ["ok"],
+            "properties": {"ok": {"type": "boolean"}},
+        }
+
+        class Response:
+            headers = {"x-ratelimit-remaining-tokens": "499000"}
+
+            def __init__(self, payload):
+                self.payload = payload
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return None
+
+            def read(self):
+                return json.dumps(self.payload).encode()
+
+        def opener(request, timeout):
+            requests.append(request.full_url)
+            if request.full_url.endswith("/input_tokens"):
+                body = json.loads(request.data)
+                self.assertIn("instructions", body)
+                self.assertIn("text", body)
+                return Response({"input_tokens": 321})
+            return Response({
+                "status": "completed",
+                "model": "gpt-test",
+                "usage": {"input_tokens": 321, "output_tokens": 2},
+                "output": [{"content": [{
+                    "type": "output_text", "text": json.dumps({"ok": True})
+                }]}],
+            })
+
+        provider = OpenAIResponsesProvider(
+            "secret", "gpt-test", opener=opener, max_input_tokens_per_call=1_000
+        )
+        result = provider.complete("planner", "Return JSON.", {}, schema)
+        self.assertEqual(2, len(requests))
+        self.assertEqual(321, result.evidence["input_tokens_preflight"])
+        self.assertEqual(1_000, result.evidence["max_input_tokens_per_call"])
+        self.assertTrue(result.evidence["input_token_preflight"])
+
+    def test_openai_provider_blocks_over_budget_before_generation(self) -> None:
+        calls = 0
+
+        class Response:
+            headers = {}
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return None
+
+            def read(self):
+                return json.dumps({"input_tokens": 1_001}).encode()
+
+        def opener(request, timeout):
+            nonlocal calls
+            calls += 1
+            return Response()
+
+        provider = OpenAIResponsesProvider(
+            "secret", opener=opener, max_input_tokens_per_call=1_000
+        )
+        with self.assertRaises(ProviderError) as raised:
+            provider.complete("planner", "Return JSON.", {}, {"type": "object"})
+        self.assertEqual("input_token_budget_exceeded", raised.exception.code)
+        self.assertEqual(1, calls)
 
     def test_public_catalog_has_36_rejected_faults_and_is_not_called_holdout(self) -> None:
         catalog = load_evaluation_catalog(CATALOG)
@@ -402,6 +530,7 @@ class ModelWorkcellTests(unittest.TestCase):
             "evaluation-catalog.schema.json",
             "evaluation-receipt.schema.json",
             "evaluation-checkpoint.schema.json",
+            "agent-exchange.schema.json",
         ):
             schema = json.loads((ROOT / "factory" / "schema" / name).read_text())
             self.assertEqual("https://json-schema.org/draft/2020-12/schema", schema["$schema"])

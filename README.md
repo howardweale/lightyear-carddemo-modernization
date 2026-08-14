@@ -1,6 +1,6 @@
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.12.1 — resilient model evaluation controller**
+Release: **v0.12.2 — progressive evidence retrieval and exact token admission**
 
 An evidence-aware knowledge graph, source-faithful local oracle, differential harness, and
 Java/Spring Batch candidate for AWS CardDemo. Together they form the first engineering cell of a
@@ -71,6 +71,13 @@ closed, partial receipts survive interruption, and a stopped evaluation can resu
 repeating completed cases. Model calls cap output at 25,000 tokens by default and receipt retry
 metadata without storing prompts, credentials, or provider error bodies.
 
+v0.12.2 removes the largest source of repeated model input. The planner now receives a compact
+graph and evidence catalog, selects source capsule IDs in its plan, and the controller retrieves
+only those full excerpts for the builder. The OpenAI adapter calls the Responses input-token count
+endpoint before generation and rejects any call above its configured ceiling. Prompt-free request
+manifests and an audience-safe transcript make the mediated role exchange inspectable without
+exposing verifier-private output.
+
 ## What it does
 
 1. Builds a deterministic, provenance-rich graph of the entire CardDemo application estate.
@@ -114,6 +121,10 @@ metadata without storing prompts, credentials, or provider error bodies.
 37. Retries transient model throttles within a bounded receipted policy and stops on hard quota errors.
 38. Checkpoints each evaluation case and resumes without repeating completed model work.
 39. Enforces evaluation-wide call, token, cost, and pacing limits in addition to per-case budgets.
+40. Sends compact evidence catalogs to planners and only plan-selected source capsules to builders.
+41. Counts exact Responses API input tokens before generation and rejects oversized calls.
+42. Records request manifests with context statistics and selected evidence identities.
+43. Renders a controller-mediated role transcript with verifier-private content redacted by default.
 
 The included `candidate-java` module is the first modernization candidate. It consumes and emits
 the same fixed-width records as the oracle, including COBOL signed zoned decimals.
@@ -216,6 +227,7 @@ export OPENAI_API_KEY="..."
 export LIGHTYEAR_FACTORY_MODEL="gpt-5.6-terra"
 export LIGHTYEAR_MODEL_INPUT_USD_PER_MILLION="2.00"
 export LIGHTYEAR_MODEL_OUTPUT_USD_PER_MILLION="12.00"
+export LIGHTYEAR_MODEL_MAX_INPUT_TOKENS_PER_CALL="60000"
 ./model-workcell.sh evaluate
 ```
 
@@ -228,6 +240,20 @@ disclosing mutation details to workers. If a run stops, resume it without repeat
 ```bash
 ./model-workcell.sh resume work/model-evaluation-YYYYMMDDTHHMMSSZ
 ```
+
+Inspect what the controller passed between roles after a run. This is not direct agent-to-agent
+chat; it is an ordered view of independently stored artifacts. Verifier-private content remains
+redacted unless an authorized verifier explicitly requests it:
+
+```bash
+./model-workcell.sh transcript \
+  work/model-evaluation-YYYYMMDDTHHMMSSZ/runs \
+  eval-category-balance-length
+```
+
+Set `LIGHTYEAR_MODEL_TOKEN_PREFLIGHT=false` only for an offline compatible endpoint that does not
+implement `POST /v1/responses/input_tokens`. Disabling it removes exact pre-generation token
+admission and is recorded in model-call evidence.
 
 ## Runtime evidence
 

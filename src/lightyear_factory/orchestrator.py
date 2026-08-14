@@ -143,7 +143,7 @@ class FactoryOrchestrator:
             self._record_agent_evidence(
                 artifacts, ledger, references, "planner", "implementer"
             )
-            self._validate_plan(order, plan)
+            self._validate_plan(order, plan, context)
             plan_ref = artifacts.write("plan", "planner", "implementer", plan)
             references.append(plan_ref)
             ledger.append(state, "plan_created", plan_ref)
@@ -316,14 +316,28 @@ class FactoryOrchestrator:
         ).assemble(order, workspace_root)
 
     @staticmethod
-    def _validate_plan(order: WorkOrder, plan: dict[str, Any]) -> None:
+    def _validate_plan(
+        order: WorkOrder, plan: dict[str, Any], context: dict[str, Any]
+    ) -> None:
         tasks = plan.get("tasks")
         if not isinstance(tasks, list) or not tasks:
             raise ContractError("Planner must return at least one task")
+        known_nodes = {item["id"] for item in context.get("nodes", [])}
+        known_capsules = {
+            item["capsule_id"] for item in context.get("source_excerpts", [])
+        }
         for task in tasks:
             for path in task.get("paths", []):
                 if path not in order.allowed_paths:
                     raise ContractError(f"Planner proposed an unauthorized path: {path}")
+            for node_id in task.get("graph_node_ids", []):
+                if node_id not in known_nodes:
+                    raise ContractError(f"Planner selected an unknown graph node: {node_id}")
+            for capsule_id in task.get("evidence_capsule_ids", []):
+                if capsule_id not in known_capsules:
+                    raise ContractError(
+                        f"Planner selected an unknown evidence capsule: {capsule_id}"
+                    )
 
     @staticmethod
     def _apply_edits(

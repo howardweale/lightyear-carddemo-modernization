@@ -22,6 +22,11 @@
         "calls": {"type": "integer", "minimum": 0},
         "input_tokens": {"type": "integer", "minimum": 0},
         "output_tokens": {"type": "integer", "minimum": 0},
+        "input_token_preflight_calls": {"type": "integer", "minimum": 0},
+        "input_tokens_preflight": {"type": "integer", "minimum": 0},
+        "input_token_count_attempts": {"type": "integer", "minimum": 0},
+        "input_token_count_retries": {"type": "integer", "minimum": 0},
+        "context_projections": {"type": "object"},
         "estimated_cost_usd": {"type": "number", "minimum": 0},
         "cost_estimate_available": {"type": "boolean"},
         "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}

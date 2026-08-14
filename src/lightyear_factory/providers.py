@@ -82,6 +82,8 @@ class OpenAIResponsesProvider:
         request_timeout_seconds: int = 240,
         retry_base_seconds: float = 1.0,
         retry_max_seconds: float = 60.0,
+        token_preflight: bool = True,
+        max_input_tokens_per_call: int = 60_000,
         sleep: Callable[[float], None] = time.sleep,
         jitter: Callable[[float], float] | None = None,
     ) -> None:
@@ -97,6 +99,8 @@ class OpenAIResponsesProvider:
         self.request_timeout_seconds = max(1, min(600, int(request_timeout_seconds)))
         self.retry_base_seconds = max(0.1, float(retry_base_seconds))
         self.retry_max_seconds = max(self.retry_base_seconds, float(retry_max_seconds))
+        self.token_preflight = bool(token_preflight)
+        self.max_input_tokens_per_call = max(1_000, int(max_input_tokens_per_call))
         self.sleep = sleep
         self.jitter = jitter or (lambda upper: random.uniform(0.0, upper))
 
@@ -127,6 +131,30 @@ class OpenAIResponsesProvider:
             },
         }
         started = time.monotonic()
+        token_count: int | None = None
+        token_count_attempts = 0
+        token_count_retries: list[dict[str, Any]] = []
+        token_count_headers: dict[str, str] = {}
+        token_count_request_sha256: str | None = None
+        if self.token_preflight:
+            count_body = {
+                key: body[key] for key in ("model", "instructions", "input", "text")
+            }
+            token_count_request_sha256 = canonical_hash(count_body)
+            (
+                token_count,
+                token_count_attempts,
+                token_count_retries,
+                token_count_headers,
+            ) = self._count_input_tokens(role, count_body)
+            if token_count > self.max_input_tokens_per_call:
+                raise ProviderError(
+                    role,
+                    "input_token_budget_exceeded",
+                    retryable=False,
+                    attempts=token_count_attempts,
+                    retries=token_count_retries,
+                )
         retries: list[dict[str, Any]] = []
         response_headers: dict[str, str] = {}
         response_payload: dict[str, Any] | None = None
@@ -247,11 +275,20 @@ class OpenAIResponsesProvider:
             "store": False,
             "strict_schema": True,
             "max_output_tokens": self.max_output_tokens,
+            "input_token_preflight": self.token_preflight,
+            "input_tokens_preflight": token_count,
+            "max_input_tokens_per_call": self.max_input_tokens_per_call,
+            "token_count_attempts": token_count_attempts,
+            "token_count_retry_count": len(token_count_retries),
+            "token_count_retries": token_count_retries,
+            "token_count_rate_limits": token_count_headers,
+            "token_count_request_sha256": token_count_request_sha256,
             "attempts": len(retries) + 1,
             "retry_count": len(retries),
             "retries": retries,
             "rate_limits": response_headers,
             "request_sha256": canonical_hash(body),
+            "request_manifest": _request_manifest(instruction, payload),
             "response_sha256": canonical_hash({"content": result}),
             "input_tokens": input_tokens,
             "output_tokens": output_tokens,
@@ -261,6 +298,102 @@ class OpenAIResponsesProvider:
         }
         evidence["content_sha256"] = canonical_hash(evidence)
         return ProviderResult(result, evidence)
+
+    def _count_input_tokens(
+        self, role: str, body: dict[str, Any]
+    ) -> tuple[int, int, list[dict[str, Any]], dict[str, str]]:
+        retries: list[dict[str, Any]] = []
+        response_headers: dict[str, str] = {}
+        for attempt in range(1, self.max_retries + 2):
+            request = Request(
+                "https://api.openai.com/v1/responses/input_tokens",
+                data=json.dumps(body, separators=(",", ":")).encode("utf-8"),
+                headers={
+                    "Authorization": f"Bearer {self.api_key}",
+                    "Content-Type": "application/json",
+                },
+                method="POST",
+            )
+            try:
+                with self.opener(request, timeout=self.request_timeout_seconds) as response:
+                    response_headers = _safe_rate_limit_headers(
+                        getattr(response, "headers", {})
+                    )
+                    payload = json.loads(response.read().decode("utf-8"))
+                count = payload.get("input_tokens")
+                if not isinstance(count, int) or isinstance(count, bool) or count < 0:
+                    raise ProviderError(
+                        role,
+                        "invalid_token_count_response",
+                        retryable=False,
+                        attempts=attempt,
+                        retries=retries,
+                    )
+                return count, attempt, retries, response_headers
+            except HTTPError as exc:
+                error_code = _http_error_code(exc)
+                retryable = _retryable_http_error(exc.code, error_code)
+                if not retryable or attempt > self.max_retries:
+                    raise ProviderError(
+                        role,
+                        f"token_count_{error_code}",
+                        status_code=exc.code,
+                        retryable=retryable,
+                        attempts=attempt,
+                        retries=retries,
+                    ) from exc
+                delay = _retry_delay_seconds(
+                    exc.headers,
+                    attempt,
+                    self.retry_base_seconds,
+                    self.retry_max_seconds,
+                    self.jitter,
+                )
+                retries.append(
+                    {
+                        "attempt": attempt,
+                        "status_code": exc.code,
+                        "error_code": error_code,
+                        "delay_ms": int(delay * 1000),
+                    }
+                )
+                self.sleep(delay)
+            except json.JSONDecodeError as exc:
+                raise ProviderError(
+                    role,
+                    "invalid_token_count_response",
+                    retryable=False,
+                    attempts=attempt,
+                    retries=retries,
+                ) from exc
+            except (URLError, TimeoutError) as exc:
+                error_code = (
+                    "token_count_network_timeout"
+                    if isinstance(exc, TimeoutError)
+                    else "token_count_network_error"
+                )
+                if attempt > self.max_retries:
+                    raise ProviderError(
+                        role,
+                        error_code,
+                        retryable=True,
+                        attempts=attempt,
+                        retries=retries,
+                    ) from exc
+                delay = min(
+                    self.retry_max_seconds,
+                    self.retry_base_seconds * (2 ** (attempt - 1)),
+                ) + self.jitter(min(1.0, self.retry_base_seconds))
+                retries.append(
+                    {
+                        "attempt": attempt,
+                        "status_code": None,
+                        "error_code": error_code,
+                        "delay_ms": int(delay * 1000),
+                    }
+                )
+                self.sleep(delay)
+        raise ProviderError(role, "token_count_empty_response", retryable=False)
 
 
 class BoundedModelProvider:
@@ -353,6 +486,18 @@ class BoundedModelProvider:
             "output_bytes": self.output_bytes,
             "input_tokens": self.input_tokens,
             "output_tokens": self.output_tokens,
+            "input_token_preflight_calls": sum(
+                1 for item in self.calls if item.get("input_token_preflight")
+            ),
+            "input_token_count_attempts": sum(
+                int(item.get("token_count_attempts", 0)) for item in self.calls
+            ),
+            "input_token_count_retries": sum(
+                int(item.get("token_count_retry_count", 0)) for item in self.calls
+            ),
+            "input_tokens_preflight": sum(
+                int(item.get("input_tokens_preflight") or 0) for item in self.calls
+            ),
             "estimated_cost_usd": round(self.estimated_cost_usd, 8),
             "cost_estimate_available": self.cost_estimate_available,
             "elapsed_ms": int((time.monotonic() - self.started) * 1000),
@@ -407,6 +552,7 @@ class ScriptedModelProvider:
             "store": False,
             "strict_schema": True,
             "request_sha256": canonical_hash({"instruction": instruction, "payload": payload}),
+            "request_manifest": _request_manifest(instruction, payload),
             "response_sha256": canonical_hash({"content": content}),
             "input_tokens": 0,
             "output_tokens": 0,
@@ -495,6 +641,24 @@ def _safe_rate_limit_headers(headers: Any) -> dict[str, str]:
         if value is not None:
             result[name] = str(value)[:200]
     return result
+
+
+def _request_manifest(instruction: str, payload: dict[str, Any]) -> dict[str, Any]:
+    context = payload.get("planner_context") or payload.get("graph_context") or {}
+    manifest = {
+        "instruction_sha256": canonical_hash({"instruction": instruction}),
+        "payload_sha256": canonical_hash(payload),
+        "payload_keys": sorted(payload),
+        "context_type": context.get("context_type"),
+        "context_sha256": context.get("content_sha256"),
+        "context_statistics": context.get("statistics", {}),
+        "selected_evidence_capsule_ids": context.get(
+            "selected_evidence_capsule_ids", []
+        ),
+        "selected_graph_node_ids": context.get("selected_graph_node_ids", []),
+    }
+    manifest["content_sha256"] = canonical_hash(manifest)
+    return manifest
 
 
 def _validate_schema(value: Any, schema: dict[str, Any], location: str) -> None:

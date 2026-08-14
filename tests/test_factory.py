@@ -193,6 +193,7 @@ class FactoryTests(unittest.TestCase):
                 "objective": "Repair",
                 "paths": ["factory/benchmarks/intcalc_candidate.py"],
                 "graph_node_ids": ["workload:carddemo-intcalc"],
+                "evidence_capsule_ids": [],
             }], "risks": []}
             return FakeResponse({"output": [{"content": [{
                 "type": "output_text", "text": json.dumps(result)

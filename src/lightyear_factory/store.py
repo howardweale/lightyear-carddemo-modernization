@@ -146,6 +146,47 @@ class FactoryRunStore:
         return public
 
 
+class PortfolioStore:
+    """Read-only portfolio control-tower projection; it exposes no dispatch authority."""
+
+    def __init__(self, plan_path: Path, runs_root: Path) -> None:
+        self.plan_path = plan_path.resolve()
+        self.runs_root = runs_root.resolve()
+
+    def summary(self) -> dict[str, Any]:
+        if not self.plan_path.is_file():
+            return {
+                "status": "not_configured",
+                "orders": [],
+                "conflicts": [],
+                "waves": [],
+                "approval": {"required": False, "authority": "human"},
+                "runs": [],
+                "read_only": True,
+            }
+        plan = json.loads(self.plan_path.read_text(encoding="utf-8"))
+        if plan.get("content_sha256") != canonical_hash(plan, {"content_sha256"}):
+            raise ValueError("Portfolio plan snapshot hash is invalid")
+        runs = []
+        if self.runs_root.is_dir():
+            for path in self.runs_root.rglob("receipt.json"):
+                try:
+                    receipt = json.loads(path.read_text(encoding="utf-8"))
+                except (OSError, json.JSONDecodeError):
+                    continue
+                if receipt.get("receipt_type") != "lightyear-modernization-portfolio-run":
+                    continue
+                runs.append({
+                    "portfolio_id": receipt.get("portfolio_id"),
+                    "status": receipt.get("status"),
+                    "waves_completed": receipt.get("waves_completed", 0),
+                    "cells": len(receipt.get("cells", [])),
+                    "receipt_sha256": receipt.get("content_sha256"),
+                })
+        runs.sort(key=lambda item: item.get("receipt_sha256") or "", reverse=True)
+        return {**plan, "runs": runs[:20], "read_only": True}
+
+
 class EvaluationStore:
     """Read-only projection of privacy-safe evaluation receipts."""
 

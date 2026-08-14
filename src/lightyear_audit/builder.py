@@ -25,7 +25,8 @@ def build_canonical_audit(
     signing_key: bytes | None = None,
     execution_receipt_path: Path | None = None,
     memory_snapshot_path: Path | None = None,
-    release_id: str = "release:carddemo-intcalc:v0.14-demo",
+    release_id: str = "release:carddemo-intcalc:v0.15-demo",
+    portfolio_plan_path: Path | None = None,
 ) -> dict[str, Any]:
     graph = json.loads(graph_receipt_path.read_text(encoding="utf-8"))
     evidence = json.loads(evidence_receipt_path.read_text(encoding="utf-8"))
@@ -81,6 +82,29 @@ def build_canonical_audit(
         },
         actor_kind="human",
     ))
+
+    if portfolio_plan_path is not None and portfolio_plan_path.is_file():
+        portfolio = json.loads(portfolio_plan_path.read_text(encoding="utf-8"))
+        if canonical_hash(portfolio, {"content_sha256"}) != portfolio.get("content_sha256"):
+            raise ValueError("Portfolio plan failed content hash validation")
+        drafts.append(_draft(
+            "2022-07-18T00:00:00.225Z",
+            "system:portfolio-controller", "system", "factory.portfolio_plan_published",
+            "portfolio_plan", portfolio["portfolio_id"],
+            [{
+                "id": portfolio["portfolio_id"],
+                "kind": "portfolio_plan",
+                "sha256": portfolio["content_sha256"],
+            }],
+            {
+                "graph_content_sha256": portfolio["graph_content_sha256"],
+                "orders": len(portfolio["orders"]),
+                "waves": len(portfolio["waves"]),
+                "conflicts": len(portfolio["conflicts"]),
+                "approval_required": portfolio["approval"]["required"],
+                "approval_authority": portfolio["approval"]["authority"],
+            },
+        ))
 
     execution_decisions = []
     tick = 300

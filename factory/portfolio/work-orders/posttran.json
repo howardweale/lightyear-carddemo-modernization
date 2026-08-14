@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "id": "carddemo:posttran:portfolio-cell",
+  "title": "POSTTRAN modernization cell",
+  "goal": "Verify the bounded POSTTRAN financial-posting policy surface.",
+  "non_goals": ["Do not move money or write to a mainframe."],
+  "scope": {
+    "allowed_paths": ["factory/benchmarks/posttran_candidate.py"],
+    "graph_node_ids": ["legacy:jcl-job:POSTTRAN", "legacy:cobol-paragraph:CBTRN02C:2000-POST-TRANSACTION"]
+  },
+  "acceptance": {
+    "baseline_first": true,
+    "max_attempts": 2,
+    "gates": [{
+      "id": "private-posttran-policy",
+      "command": ["python3", "-m", "lightyear_factory.posttran_private"],
+      "timeout_seconds": 30,
+      "expose_output_to_builder": false
+    }]
+  },
+  "policy": {
+    "audience": "implementer", "allow_network": false, "max_files_changed": 1,
+    "max_patch_bytes": 4096, "max_changed_lines": 80, "max_context_bytes": 120000,
+    "max_file_bytes": 250000, "max_model_calls": 8, "max_model_input_bytes": 1500000,
+    "max_model_output_bytes": 250000, "max_model_tokens": 180000,
+    "max_model_cost_usd": 15.0, "max_elapsed_seconds": 900
+  },
+  "metadata": {"owner": "LIGHTYEAR demo", "risk": "high", "mainframe_runtime_required": false}
+}

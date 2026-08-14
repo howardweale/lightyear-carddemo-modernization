@@ -8,7 +8,7 @@ from pathlib import Path
 
 from .agents import LocalAgentSet, OpenAIAgentSet
 from .benchmark import run_mutation_benchmark
-from .contracts import ContractError, WorkOrder
+from .contracts import ContractError, WorkOrder, canonical_hash
 from .context import GraphContextAssembler
 from .evals import (
     EvaluationPolicy,
@@ -25,6 +25,13 @@ from .quality import (
 )
 from .orchestrator import FactoryOrchestrator
 from .memory import SemanticMemoryStore
+from .portfolio import (
+    PortfolioManifest,
+    PortfolioRunner,
+    plan_portfolio,
+    sign_portfolio_approval,
+    verify_portfolio_approval,
+)
 from .store import FactoryRunStore
 
 from lightyear_execution.admission import AdmissionNonceStore, verify_work_order
@@ -184,6 +191,46 @@ def build_parser() -> argparse.ArgumentParser:
     memory_validate.add_argument(
         "--memory-policy", type=Path, default=Path("factory/memory/policy.json")
     )
+
+    portfolio_plan = subparsers.add_parser(
+        "portfolio-plan", help="Build a deterministic conflict-aware portfolio plan"
+    )
+    portfolio_plan.add_argument("--manifest", type=Path, required=True)
+    portfolio_plan.add_argument("--project-root", type=Path, default=Path("."))
+    portfolio_plan.add_argument(
+        "--graph", type=Path, default=Path("knowledge/graph.snapshot.json.gz")
+    )
+    portfolio_plan.add_argument("--output", type=Path, required=True)
+
+    portfolio_sign = subparsers.add_parser(
+        "portfolio-sign", help="Bind a human approval to one exact portfolio plan"
+    )
+    portfolio_sign.add_argument("--plan", type=Path, required=True)
+    portfolio_sign.add_argument("--output", type=Path, required=True)
+    portfolio_sign.add_argument("--approver", required=True)
+    portfolio_sign.add_argument("--key-id", default="portfolio-approver")
+    portfolio_sign.add_argument("--ttl-seconds", type=int, default=900)
+
+    portfolio_validate = subparsers.add_parser(
+        "portfolio-validate", help="Validate a plan and optional signed human approval"
+    )
+    portfolio_validate.add_argument("--plan", type=Path, required=True)
+    portfolio_validate.add_argument("--approval", type=Path)
+
+    portfolio_run = subparsers.add_parser(
+        "portfolio-run", help="Dispatch approved work cells using wave barriers"
+    )
+    portfolio_run.add_argument("--manifest", type=Path, required=True)
+    portfolio_run.add_argument("--plan", type=Path, required=True)
+    portfolio_run.add_argument("--approval", type=Path)
+    portfolio_run.add_argument("--project-root", type=Path, default=Path("."))
+    portfolio_run.add_argument(
+        "--graph", type=Path, default=Path("knowledge/graph.snapshot.json.gz")
+    )
+    portfolio_run.add_argument(
+        "--evidence-pack", type=Path, default=Path("knowledge/evidence/source.pack.json.gz")
+    )
+    portfolio_run.add_argument("--output-root", type=Path, required=True)
     return parser
 
 
@@ -238,6 +285,88 @@ def main(argv: list[str] | None = None) -> int:
         ])
         print(json.dumps(result, indent=2, sort_keys=True))
         return 0
+    if args.command == "portfolio-plan":
+        manifest = PortfolioManifest.load(args.manifest)
+        graph_path = args.graph if args.graph.is_absolute() else args.project_root / args.graph
+        result, _ = plan_portfolio(manifest, args.project_root, graph_path)
+        from .contracts import write_json
+
+        write_json(result, args.output)
+        print(json.dumps(result, indent=2, sort_keys=True))
+        return 0
+    if args.command == "portfolio-sign":
+        plan = json.loads(args.plan.read_text(encoding="utf-8"))
+        key = os.environ.get("LIGHTYEAR_PORTFOLIO_APPROVAL_KEY", "").encode()
+        result = sign_portfolio_approval(
+            plan,
+            key,
+            approver_id=args.approver,
+            key_id=args.key_id,
+            ttl_seconds=args.ttl_seconds,
+        )
+        from .contracts import write_json
+
+        write_json(result, args.output)
+        print(json.dumps({
+            "status": "passed",
+            "output": str(args.output.resolve()),
+            "plan_sha256": result["plan_sha256"],
+            "expires_at": result["expires_at"],
+        }, indent=2, sort_keys=True))
+        return 0
+    if args.command == "portfolio-validate":
+        plan = json.loads(args.plan.read_text(encoding="utf-8"))
+        if plan.get("content_sha256") != canonical_hash(plan, {"content_sha256"}):
+            raise ContractError("Portfolio plan content hash is invalid")
+        result: dict[str, object] = {
+            "status": "passed",
+            "plan_sha256": plan["content_sha256"],
+            "approval_required": bool(plan.get("approval", {}).get("required")),
+        }
+        if args.approval:
+            envelope = json.loads(args.approval.read_text(encoding="utf-8"))
+            key_id = str(envelope.get("key_id", ""))
+            key = os.environ.get("LIGHTYEAR_PORTFOLIO_APPROVAL_KEY", "").encode()
+            result["admission"] = verify_portfolio_approval(plan, envelope, {key_id: key})
+        print(json.dumps(result, indent=2, sort_keys=True))
+        return 0
+    if args.command == "portfolio-run":
+        manifest = PortfolioManifest.load(args.manifest)
+        graph_path = args.graph if args.graph.is_absolute() else args.project_root / args.graph
+        expected_plan, orders = plan_portfolio(manifest, args.project_root, graph_path)
+        supplied_plan = json.loads(args.plan.read_text(encoding="utf-8"))
+        if supplied_plan.get("content_sha256") != expected_plan["content_sha256"]:
+            raise ContractError("Supplied portfolio plan is stale or targets different inputs")
+        admission = None
+        if args.approval:
+            envelope = json.loads(args.approval.read_text(encoding="utf-8"))
+            key_id = str(envelope.get("key_id", ""))
+            key = os.environ.get("LIGHTYEAR_PORTFOLIO_APPROVAL_KEY", "").encode()
+            admission = verify_portfolio_approval(
+                expected_plan, envelope, {key_id: key}
+            )
+        cells_root = args.output_root / "cells"
+        evidence = (
+            args.evidence_pack
+            if args.evidence_pack.is_absolute()
+            else args.project_root / args.evidence_pack
+        )
+
+        def execute_cell(order: WorkOrder, run_id: str) -> dict[str, object]:
+            return FactoryOrchestrator(
+                args.project_root,
+                cells_root,
+                LocalAgentSet(),
+                graph_path=graph_path,
+                evidence_path=evidence,
+                memory_store=None,
+            ).run(order, run_id)
+
+        result = PortfolioRunner(execute_cell).run(
+            expected_plan, orders, args.output_root, admission
+        )
+        print(json.dumps(result, indent=2, sort_keys=True))
+        return 0 if result["status"] == "passed" else 1
     if args.command == "evaluate":
         output_root = args.output_root or Path("work") / (
             "model-evaluation-"

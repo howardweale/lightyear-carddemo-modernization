@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schema/portfolio-plan.schema.json",
+  "title": "LIGHTYEAR conflict-aware portfolio plan",
+  "type": "object",
+  "required": ["schema_version", "plan_type", "portfolio_id", "graph_content_sha256", "orders", "conflicts", "waves", "approval", "status", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "plan_type": {"const": "lightyear-modernization-portfolio-plan"},
+    "portfolio_id": {"type": "string"},
+    "graph_content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "orders": {"type": "array", "minItems": 2},
+    "conflicts": {"type": "array"},
+    "waves": {"type": "array", "minItems": 1},
+    "approval": {
+      "type": "object",
+      "required": ["required", "required_order_ids", "required_conflict_ids", "authority"],
+      "properties": {"authority": {"const": "human"}}
+    },
+    "status": {"enum": ["ready", "approval_required"]},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

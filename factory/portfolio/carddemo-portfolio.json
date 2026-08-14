@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "id": "carddemo:modernization:v0.15",
+  "title": "CardDemo multi-workload modernization portfolio",
+  "work_orders": [
+    "factory/portfolio/work-orders/intcalc.json",
+    "factory/portfolio/work-orders/posttran.json",
+    "factory/portfolio/work-orders/create-statement.json"
+  ],
+  "policy": {
+    "max_parallel": 2,
+    "human_approval_required_for": ["high", "critical"],
+    "graph_trace_depth": 2
+  },
+  "metadata": {
+    "owner": "LIGHTYEAR demo",
+    "purpose": "Prove conflict-aware portfolio orchestration before live z/OS access."
+  }
+}

@@ -6,7 +6,7 @@
   "additionalProperties": false,
   "required": [
     "schema_version", "dossier_type", "release_id", "status", "rationale", "gaps",
-    "promotion_decision", "runtime_decisions", "execution_decisions", "semantic_memory",
+    "promotion_decision", "runtime_decisions", "execution_decisions", "semantic_memory", "portfolio_plan",
     "evidence_inventory", "audit",
     "limitations", "content_sha256"
   ],
@@ -33,6 +33,19 @@
           "additionalProperties": {"type": "integer", "minimum": 0}
         },
         "policy_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]}
+      }
+    },
+    "portfolio_plan": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "plan_sha256", "orders", "waves", "conflicts", "approval_authority"],
+      "properties": {
+        "status": {"enum": ["ready", "approval_required", "not_recorded"]},
+        "plan_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "orders": {"type": "integer", "minimum": 0},
+        "waves": {"type": "integer", "minimum": 0},
+        "conflicts": {"type": "integer", "minimum": 0},
+        "approval_authority": {"oneOf": [{"const": "human"}, {"type": "null"}]}
       }
     },
     "evidence_inventory": {

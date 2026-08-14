@@ -6,6 +6,7 @@ const state = {
   chatStatus: null,
   chatHistory: [],
   factoryRuns: [],
+  portfolio: null,
   evaluations: [],
   memorySummary: null,
   runtimeRuns: [],
@@ -88,7 +89,7 @@ async function initialize() {
     populateLegend();
     configureChat();
     bindControls();
-    await Promise.all([loadPerspective(), loadFactoryRuns(false), loadEvaluations(false), loadMemory(false), loadRuntimeRuns(false), loadAudit(false)]);
+    await Promise.all([loadPerspective(), loadFactoryRuns(false), loadPortfolio(false), loadEvaluations(false), loadMemory(false), loadRuntimeRuns(false), loadAudit(false)]);
   } catch (error) {
     setError(error);
   }
@@ -157,6 +158,10 @@ function bindControls() {
     switchRightPanel("factory");
     await loadFactoryRuns(true);
   });
+  $("portfolio-tab").addEventListener("click", async () => {
+    switchRightPanel("portfolio");
+    await loadPortfolio(true);
+  });
   $("evaluation-tab").addEventListener("click", async () => {
     switchRightPanel("evaluation");
     await loadEvaluations(true);
@@ -174,6 +179,7 @@ function bindControls() {
     await loadAudit(true);
   });
   $("refresh-factory").addEventListener("click", () => loadFactoryRuns(true));
+  $("refresh-portfolio").addEventListener("click", () => loadPortfolio(true));
   $("refresh-evaluations").addEventListener("click", () => loadEvaluations(true));
   $("refresh-memory").addEventListener("click", () => loadMemory(true));
   $("refresh-runtime").addEventListener("click", () => loadRuntimeRuns(true));
@@ -713,24 +719,98 @@ function configureChat() {
 function switchRightPanel(view) {
   const chat = view === "chat";
   const factory = view === "factory";
+  const portfolio = view === "portfolio";
   const evaluation = view === "evaluation";
   const memory = view === "memory";
   const runtime = view === "runtime";
   const audit = view === "audit";
   $("chat-view").hidden = !chat;
   $("factory-view").hidden = !factory;
+  $("portfolio-view").hidden = !portfolio;
   $("evaluation-view").hidden = !evaluation;
   $("memory-view").hidden = !memory;
   $("runtime-view").hidden = !runtime;
   $("audit-view").hidden = !audit;
-  $("inspector-view").hidden = chat || factory || evaluation || memory || runtime || audit;
+  $("inspector-view").hidden = chat || factory || portfolio || evaluation || memory || runtime || audit;
   $("chat-tab").classList.toggle("active", chat);
   $("factory-tab").classList.toggle("active", factory);
+  $("portfolio-tab").classList.toggle("active", portfolio);
   $("evaluation-tab").classList.toggle("active", evaluation);
   $("memory-tab").classList.toggle("active", memory);
   $("runtime-tab").classList.toggle("active", runtime);
   $("audit-tab").classList.toggle("active", audit);
-  $("inspector-tab").classList.toggle("active", !chat && !factory && !evaluation && !memory && !runtime && !audit);
+  $("inspector-tab").classList.toggle("active", !chat && !factory && !portfolio && !evaluation && !memory && !runtime && !audit);
+}
+
+async function loadPortfolio() {
+  try {
+    state.portfolio = await api("/api/portfolio/summary");
+    const portfolio = state.portfolio;
+    const posture = $("portfolio-posture");
+    const approvalRequired = Boolean(portfolio.approval?.required);
+    posture.className = `audit-posture ${approvalRequired ? "blocked" : "passed"}`;
+    posture.replaceChildren();
+    const title = document.createElement("strong");
+    title.textContent = approvalRequired ? "Human approval required" : "Ready for bounded dispatch";
+    const detail = document.createElement("p");
+    detail.textContent = approvalRequired
+      ? `${(portfolio.approval?.required_order_ids || []).length} high-risk work cell(s) must be approved against this exact plan hash.`
+      : "No high-risk work cells or critical conflicts require approval.";
+    const authority = document.createElement("small");
+    authority.textContent = "Approval authority: human only · projection: read only";
+    posture.append(title, detail, authority);
+
+    const waves = $("portfolio-waves");
+    waves.replaceChildren();
+    (portfolio.waves || []).forEach((wave) => {
+      const row = document.createElement("div");
+      row.className = "portfolio-wave";
+      const label = document.createElement("strong");
+      label.textContent = `Wave ${wave.wave}`;
+      const cells = document.createElement("div");
+      wave.work_order_ids.forEach((id) => {
+        const item = document.createElement("code");
+        item.textContent = id;
+        cells.appendChild(item);
+      });
+      row.append(label, cells);
+      waves.appendChild(row);
+    });
+
+    const conflicts = $("portfolio-conflicts");
+    conflicts.replaceChildren();
+    (portfolio.conflicts || []).forEach((conflict) => {
+      const row = document.createElement("div");
+      row.className = `factory-gate ${conflict.severity === "critical" ? "failed" : "passed"}`;
+      const severity = document.createElement("strong");
+      severity.textContent = conflict.severity;
+      const purpose = document.createElement("span");
+      purpose.textContent = `${conflict.kind.replaceAll("_", " ")} · ${conflict.resolution}`;
+      const id = document.createElement("code");
+      id.textContent = conflict.id.slice(-10);
+      row.append(severity, purpose, id);
+      conflicts.appendChild(row);
+    });
+    if (!portfolio.conflicts?.length) conflicts.textContent = "No conflicts detected.";
+
+    const orders = $("portfolio-orders");
+    orders.replaceChildren();
+    (portfolio.orders || []).forEach((order) => {
+      const row = document.createElement("div");
+      row.className = `factory-run ${["high", "critical"].includes(order.risk) ? "blocked" : "passed"}`;
+      const title = document.createElement("strong");
+      title.textContent = order.title;
+      const risk = document.createElement("span");
+      risk.textContent = `${order.risk} risk`;
+      const id = document.createElement("code");
+      id.textContent = order.id;
+      row.append(title, risk, id);
+      orders.appendChild(row);
+    });
+    $("portfolio-plan-hash").textContent = portfolio.content_sha256 || "No portfolio plan snapshot";
+  } catch (error) {
+    setError(error);
+  }
 }
 
 async function loadMemory(selectLatest = true) {

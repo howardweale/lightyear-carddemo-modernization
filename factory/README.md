@@ -303,6 +303,31 @@ The private benchmark module is separated from builder context by the controller
 the same source snapshot mounted read-only during a hardened gate. Production use should also place
 workers, verifiers, signing services and artifact retention in separate trust domains.
 
+## Portfolio orchestration (v0.15)
+
+`factory/portfolio/carddemo-portfolio.json` coordinates three bounded work cells. The controller
+loads and hashes each work order, verifies every graph root, detects collisions and dependencies,
+and emits deterministic waves. It does not ask a model to schedule work or decide risk.
+
+```bash
+./portfolio-factory.sh plan
+./portfolio-factory.sh verify
+```
+
+POSTTRAN is deliberately marked high risk. Dispatch therefore requires a short-lived signature
+from a named human that is bound to the exact plan hash:
+
+```bash
+export LIGHTYEAR_PORTFOLIO_APPROVAL_KEY="$(openssl rand -hex 32)"
+export LIGHTYEAR_PORTFOLIO_APPROVER="your-name"
+./portfolio-factory.sh sign
+./portfolio-factory.sh run
+```
+
+The controller runs independent cells in parallel only when they have no detected conflict and all
+declared predecessors have passed. A failed cell blocks all later waves. Approval does not waive a
+gate, change a result, or establish mainframe equivalence.
+
 ## When the mainframe connection arrives
 
 Keep the same run engine and add z/OS-backed gates rather than giving an agent unrestricted

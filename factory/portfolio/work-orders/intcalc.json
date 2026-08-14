@@ -1,0 +1,29 @@
+{
+  "schema_version": "1.0",
+  "id": "carddemo:intcalc:portfolio-cell",
+  "title": "INTCALC modernization cell",
+  "goal": "Verify the bounded INTCALC modernization policy surface.",
+  "non_goals": ["Do not claim live z/OS equivalence."],
+  "scope": {
+    "allowed_paths": ["factory/benchmarks/intcalc_candidate.py"],
+    "graph_node_ids": ["legacy:jcl-job:INTCALC"]
+  },
+  "acceptance": {
+    "baseline_first": true,
+    "max_attempts": 2,
+    "gates": [{
+      "id": "private-intcalc-policy",
+      "command": ["python3", "-m", "lightyear_factory.private_benchmark"],
+      "timeout_seconds": 30,
+      "expose_output_to_builder": false
+    }]
+  },
+  "policy": {
+    "audience": "implementer", "allow_network": false, "max_files_changed": 1,
+    "max_patch_bytes": 4096, "max_changed_lines": 80, "max_context_bytes": 120000,
+    "max_file_bytes": 250000, "max_model_calls": 8, "max_model_input_bytes": 1500000,
+    "max_model_output_bytes": 250000, "max_model_tokens": 180000,
+    "max_model_cost_usd": 15.0, "max_elapsed_seconds": 900
+  },
+  "metadata": {"owner": "LIGHTYEAR demo", "risk": "medium", "mainframe_runtime_required": false}
+}

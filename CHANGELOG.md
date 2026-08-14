@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.15.0 — 2026-08-15
+
+- Added a deterministic portfolio controller that loads multiple bounded work orders, binds them to
+  the exact knowledge-graph identity, and emits a content-addressed execution plan.
+- Added file-scope, graph-scope, graph-dependency and declared-dependency conflict detection with
+  stable serialization decisions and bounded parallel wave scheduling.
+- Added explicit low, medium, high and critical risk classification; high-risk work and critical
+  conflicts fail closed until approved by an external human authority.
+- Added HMAC-signed, expiring, tamper-evident human approvals bound to the exact plan, required work
+  orders and acknowledged conflicts; agent identities cannot approve portfolios.
+- Added wave barriers, parallel cell dispatch, stop-on-failure behavior and composite portfolio run
+  receipts while preserving independent private acceptance gates for every cell.
+- Expanded the demo to bounded INTCALC, POSTTRAN and CREASTMT policy surfaces grounded in the
+  existing CardDemo graph without claiming live z/OS equivalence.
+- Added versioned portfolio manifest, plan, approval and run-receipt schemas, cross-platform CLI
+  launchers, a read-only Portfolio Control Tower, and adversarial approval/scheduling tests.
+
 ## 0.14.0 — 2026-08-14
 
 - Added controller-owned, content-addressed semantic experiences that bind verified plans, patches,

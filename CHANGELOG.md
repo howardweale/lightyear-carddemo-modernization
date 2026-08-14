@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.14.0 — 2026-08-14
+
+- Added controller-owned, content-addressed semantic experiences that bind verified plans, patches,
+  outcomes, graph nodes, source-evidence capsules, paths, gates, and run identities.
+- Added positive repair, correct-unchanged, and non-executable negative memory classes; controller
+  failures and unapproved evidence classes are quarantined instead of becoming reusable knowledge.
+- Added a hard contamination boundary that excludes sealed-holdout runs and verifier-private
+  artifacts from implementer memory, with adversarial validation and read-only projections.
+- Added graph-, evidence-, path-, and vocabulary-aware retrieval with independent byte and result
+  limits; graph or evidence-pack changes immediately stale prior experiences.
+- Added progressive planner and builder memory context, while preserving fresh source evidence and
+  deterministic gates as higher-authority inputs.
+- Added versioned experience, snapshot, retrieval, and policy schemas plus cross-platform memory
+  launchers, CLI ingestion/query/validation, and a Verified Experience Memory dashboard.
+- Bound the verified-memory snapshot into the hash-chained audit ledger and current release dossier;
+  full verification now rejects stale, tampered, or privacy-contaminated memory.
+- Added tamper, idempotency, invalidation, negative-replay, sealed-contamination, context-budget,
+  API, UI, and full-suite regression coverage.
+
 ## 0.13.0 — 2026-08-14
 
 - Added HMAC-signed, expiring sealed evaluation envelopes with trusted key IDs, exact catalog

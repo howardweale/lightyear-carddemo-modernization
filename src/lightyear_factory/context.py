@@ -37,6 +37,7 @@ class GraphContextAssembler:
             "edges": [],
             "source_excerpts": [],
             "allowed_files": [],
+            "semantic_memory": None,
             "statistics": {},
             "truncated": False,
             "limitations": [],
@@ -154,6 +155,62 @@ class GraphContextAssembler:
         return self._finish(base, order)
 
     @staticmethod
+    def attach_semantic_memory(
+        context: dict[str, Any], memory: dict[str, Any], order: WorkOrder
+    ) -> dict[str, Any]:
+        """Attach a bounded controller-owned memory projection to implementer context."""
+        result = json.loads(json.dumps(context))
+        selected = json.loads(json.dumps(memory))
+        result["semantic_memory"] = selected
+
+        def size() -> int:
+            return len(
+                json.dumps(result, sort_keys=True, separators=(",", ":")).encode("utf-8")
+            )
+
+        # Preserve a useful memory card by first trimming surplus raw evidence. The
+        # planner still receives evidence identifiers and can select from the bounded
+        # retained capsule catalog.
+        while (
+            size() > order.max_context_bytes
+            and len(result.get("source_excerpts", [])) > 8
+        ):
+            result["source_excerpts"].pop()
+            result["truncated"] = True
+        while (
+            size() > order.max_context_bytes and len(result.get("edges", [])) > 24
+        ):
+            result["edges"].pop()
+            result["truncated"] = True
+        while (
+            size() > order.max_context_bytes and selected.get("cards")
+        ):
+            selected["cards"].pop()
+            selected["truncated"] = True
+        while size() > order.max_context_bytes and result.get("source_excerpts"):
+            result["source_excerpts"].pop()
+            result["truncated"] = True
+        while size() > order.max_context_bytes and result.get("edges"):
+            result["edges"].pop()
+            result["truncated"] = True
+        selected["statistics"]["records_returned"] = len(selected.get("cards", []))
+        selected["statistics"]["context_bytes"] = len(
+            json.dumps(selected, sort_keys=True, separators=(",", ":")).encode("utf-8")
+        )
+        selected["content_sha256"] = canonical_hash(selected, {"content_sha256"})
+        result["statistics"]["nodes"] = len(result.get("nodes", []))
+        result["statistics"]["edges"] = len(result.get("edges", []))
+        result["statistics"]["source_excerpts"] = len(result.get("source_excerpts", []))
+        result["statistics"]["semantic_memory_cards"] = len(
+            result["semantic_memory"].get("cards", [])
+        )
+        result["statistics"]["context_bytes"] = len(
+            json.dumps(result, sort_keys=True, separators=(",", ":")).encode("utf-8")
+        )
+        result["content_sha256"] = canonical_hash(result, {"content_sha256"})
+        return result
+
+    @staticmethod
     def planner_context(context: dict[str, Any]) -> dict[str, Any]:
         """Project the full evidence bundle into a compact planner catalog.
 
@@ -227,6 +284,7 @@ class GraphContextAssembler:
             "edges": edges,
             "evidence_catalog": evidence_catalog,
             "allowed_files": allowed_files,
+            "semantic_memory": context.get("semantic_memory"),
             "limitations": [
                 *context.get("limitations", []),
                 "Source bodies are omitted; tasks select evidence_capsule_ids for builder retrieval.",
@@ -237,6 +295,9 @@ class GraphContextAssembler:
             "edges": len(edges),
             "evidence_catalog_entries": len(evidence_catalog),
             "allowed_files": len(allowed_files),
+            "semantic_memory_cards": len(
+                (context.get("semantic_memory") or {}).get("cards", [])
+            ),
             "source_context_bytes": context.get("statistics", {}).get("context_bytes", 0),
         }
         return _finish_projection(payload)
@@ -301,6 +362,7 @@ class GraphContextAssembler:
             "nodes": selected_nodes,
             "edges": selected_edges,
             "source_excerpts": selected_excerpts,
+            "semantic_memory": context.get("semantic_memory"),
             "limitations": [
                 "Evidence is restricted to identifiers selected in the approved planner artifact."
             ],
@@ -309,6 +371,9 @@ class GraphContextAssembler:
             "nodes": len(selected_nodes),
             "edges": len(selected_edges),
             "source_excerpts": len(selected_excerpts),
+            "semantic_memory_cards": len(
+                (context.get("semantic_memory") or {}).get("cards", [])
+            ),
             "source_context_bytes": context.get("statistics", {}).get("context_bytes", 0),
         }
         return _finish_projection(payload)
@@ -331,6 +396,9 @@ class GraphContextAssembler:
             "edges": len(payload["edges"]),
             "source_excerpts": len(payload["source_excerpts"]),
             "allowed_files": len(payload["allowed_files"]),
+            "semantic_memory_cards": len(
+                (payload.get("semantic_memory") or {}).get("cards", [])
+            ),
             "context_bytes": len(
                 json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
             ),

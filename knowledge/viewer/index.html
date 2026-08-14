@@ -95,6 +95,7 @@
         <button id="chat-tab" class="right-tab" type="button">Ask graph</button>
         <button id="factory-tab" class="right-tab" type="button">Factory</button>
         <button id="evaluation-tab" class="right-tab" type="button">Quality</button>
+        <button id="memory-tab" class="right-tab" type="button">Memory</button>
         <button id="runtime-tab" class="right-tab" type="button">Runtime</button>
         <button id="audit-tab" class="right-tab" type="button">Audit</button>
       </nav>
@@ -277,6 +278,44 @@
             <code id="evaluation-receipt-hash" class="factory-hash"></code>
           </section>
         </article>
+      </div>
+
+      <div id="memory-view" class="factory-view" hidden>
+        <div class="factory-header">
+          <div>
+            <p class="eyebrow">VERIFIED EXPERIENCE MEMORY</p>
+            <h2>The factory remembers only what it can prove.</h2>
+          </div>
+          <button id="refresh-memory" class="text-button" type="button">Refresh</button>
+        </div>
+        <p class="chat-disclosure">Sealed holdouts and verifier-private output never enter this implementer projection. Stale graph identities are excluded from retrieval.</p>
+        <div id="memory-metrics" class="runtime-summary memory-summary"></div>
+        <div id="memory-experiences" class="factory-runs" aria-live="polite"></div>
+        <div id="memory-empty" class="factory-empty" hidden>
+          <strong>No verified experiences found</strong>
+          <p>Run <code>./semantic-memory.sh ingest work/factory-runs/&lt;run-id&gt;</code>, then refresh.</p>
+        </div>
+        <article id="memory-detail" class="factory-detail" hidden>
+          <div id="memory-badges" class="answer-meta"></div>
+          <h2 id="memory-title"></h2>
+          <code id="memory-id"></code>
+          <section>
+            <h3>Verified lessons</h3>
+            <ol id="memory-lessons" class="memory-lessons"></ol>
+          </section>
+          <section>
+            <h3>Graph and path bindings</h3>
+            <div id="memory-bindings" class="factory-paths"></div>
+          </section>
+          <section>
+            <h3>Experience identity</h3>
+            <code id="memory-experience-hash" class="factory-hash"></code>
+          </section>
+        </article>
+        <section>
+          <h3>Snapshot identity</h3>
+          <code id="memory-snapshot-hash" class="factory-hash"></code>
+        </section>
       </div>
 
       <div id="runtime-view" class="runtime-view" hidden>

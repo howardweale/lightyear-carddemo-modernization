@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schema/factory/semantic-memory-policy-1.0.json",
+  "title": "LIGHTYEAR Semantic Memory Policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "maximum_results", "maximum_context_bytes", "minimum_score",
+    "maximum_lessons", "maximum_edit_templates", "allow_negative_memory",
+    "allowed_evidence_classes"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "maximum_results": {"type": "integer", "minimum": 1, "maximum": 50},
+    "maximum_context_bytes": {"type": "integer", "minimum": 1000, "maximum": 500000},
+    "minimum_score": {"type": "integer", "minimum": 0, "maximum": 10000},
+    "maximum_lessons": {"type": "integer", "minimum": 1, "maximum": 100},
+    "maximum_edit_templates": {"type": "integer", "minimum": 0, "maximum": 100},
+    "allow_negative_memory": {"type": "boolean"},
+    "allowed_evidence_classes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"enum": ["factory-run", "public-calibration", "production-observed"]}
+    }
+  }
+}

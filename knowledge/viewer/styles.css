@@ -219,6 +219,9 @@ dd { margin: 0; overflow-wrap: anywhere; font: 11px/1.4 ui-monospace, SFMono-Reg
 
 .runtime-view { min-height: calc(100vh - 235px); }
 .runtime-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 12px 0; }
+.memory-summary { grid-template-columns: repeat(3, 1fr); }
+.memory-lessons { display: grid; gap: 6px; padding-left: 20px; color: var(--ink); font-size: 10px; }
+.memory-lessons li { padding: 6px 8px; background: var(--surface-2); border-radius: 5px; }
 .audit-summary { grid-template-columns: repeat(5, 1fr); }
 .runtime-summary div { padding: 8px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px; text-align: center; }
 .runtime-summary strong, .runtime-summary span { display: block; }

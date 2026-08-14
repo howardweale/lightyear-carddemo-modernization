@@ -7,6 +7,7 @@ const state = {
   chatHistory: [],
   factoryRuns: [],
   evaluations: [],
+  memorySummary: null,
   runtimeRuns: [],
   auditSummary: null,
   auditEvents: [],
@@ -87,7 +88,7 @@ async function initialize() {
     populateLegend();
     configureChat();
     bindControls();
-    await Promise.all([loadPerspective(), loadFactoryRuns(false), loadEvaluations(false), loadRuntimeRuns(false), loadAudit(false)]);
+    await Promise.all([loadPerspective(), loadFactoryRuns(false), loadEvaluations(false), loadMemory(false), loadRuntimeRuns(false), loadAudit(false)]);
   } catch (error) {
     setError(error);
   }
@@ -160,6 +161,10 @@ function bindControls() {
     switchRightPanel("evaluation");
     await loadEvaluations(true);
   });
+  $("memory-tab").addEventListener("click", async () => {
+    switchRightPanel("memory");
+    await loadMemory(true);
+  });
   $("runtime-tab").addEventListener("click", async () => {
     switchRightPanel("runtime");
     await loadRuntimeRuns(true);
@@ -170,6 +175,7 @@ function bindControls() {
   });
   $("refresh-factory").addEventListener("click", () => loadFactoryRuns(true));
   $("refresh-evaluations").addEventListener("click", () => loadEvaluations(true));
+  $("refresh-memory").addEventListener("click", () => loadMemory(true));
   $("refresh-runtime").addEventListener("click", () => loadRuntimeRuns(true));
   $("refresh-audit").addEventListener("click", () => loadAudit(true));
   $("view-audit-dossier").addEventListener("click", loadAuditDossier);
@@ -708,20 +714,106 @@ function switchRightPanel(view) {
   const chat = view === "chat";
   const factory = view === "factory";
   const evaluation = view === "evaluation";
+  const memory = view === "memory";
   const runtime = view === "runtime";
   const audit = view === "audit";
   $("chat-view").hidden = !chat;
   $("factory-view").hidden = !factory;
   $("evaluation-view").hidden = !evaluation;
+  $("memory-view").hidden = !memory;
   $("runtime-view").hidden = !runtime;
   $("audit-view").hidden = !audit;
-  $("inspector-view").hidden = chat || factory || evaluation || runtime || audit;
+  $("inspector-view").hidden = chat || factory || evaluation || memory || runtime || audit;
   $("chat-tab").classList.toggle("active", chat);
   $("factory-tab").classList.toggle("active", factory);
   $("evaluation-tab").classList.toggle("active", evaluation);
+  $("memory-tab").classList.toggle("active", memory);
   $("runtime-tab").classList.toggle("active", runtime);
   $("audit-tab").classList.toggle("active", audit);
-  $("inspector-tab").classList.toggle("active", !chat && !factory && !evaluation && !runtime && !audit);
+  $("inspector-tab").classList.toggle("active", !chat && !factory && !evaluation && !memory && !runtime && !audit);
+}
+
+async function loadMemory(selectLatest = true) {
+  try {
+    state.memorySummary = await api("/api/memory/summary");
+    const stats = state.memorySummary.statistics || {};
+    const metrics = $("memory-metrics");
+    metrics.replaceChildren();
+    [
+      ["Experiences", stats.experience_count || 0],
+      ["Positive", (stats.outcomes || {}).verified_success || 0],
+      ["Unchanged", (stats.outcomes || {}).accept_unchanged || 0],
+      ["Negative", (stats.outcomes || {}).verified_failure || 0],
+      ["Graph nodes", stats.covered_graph_nodes || 0],
+      ["Paths", stats.covered_paths || 0],
+    ].forEach(([label, value]) => {
+      const item = document.createElement("div");
+      const amount = document.createElement("strong");
+      amount.textContent = String(value);
+      const caption = document.createElement("span");
+      caption.textContent = label;
+      item.append(amount, caption);
+      metrics.appendChild(item);
+    });
+    const list = $("memory-experiences");
+    list.replaceChildren();
+    const experiences = state.memorySummary.experiences || [];
+    $("memory-empty").hidden = experiences.length > 0;
+    experiences.forEach((experience) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = `factory-run ${experience.outcome_class === "verified_failure" ? "blocked" : "passed"}`;
+      button.dataset.experienceId = experience.experience_id;
+      const title = document.createElement("strong");
+      title.textContent = experience.summary || experience.work_order_id;
+      const meta = document.createElement("span");
+      meta.textContent = `${experience.outcome_class.replaceAll("_", " ")} · ${experience.evidence_class}`;
+      const identity = document.createElement("code");
+      identity.textContent = experience.experience_id;
+      button.append(title, meta, identity);
+      button.addEventListener("click", () => loadExperience(experience.experience_id));
+      list.appendChild(button);
+    });
+    $("memory-snapshot-hash").textContent = state.memorySummary.snapshot_sha256 || "No memory snapshot";
+    if (selectLatest && experiences.length) await loadExperience(experiences[0].experience_id);
+    if (!experiences.length) $("memory-detail").hidden = true;
+  } catch (error) {
+    setError(error);
+  }
+}
+
+async function loadExperience(experienceId) {
+  try {
+    const experience = await api("/api/memory/experience", { id: experienceId });
+    document.querySelectorAll("#memory-experiences .factory-run").forEach((item) => {
+      item.classList.toggle("active", item.dataset.experienceId === experienceId);
+    });
+    $("memory-detail").hidden = false;
+    $("memory-title").textContent = experience.knowledge.summary;
+    $("memory-id").textContent = experience.experience_id;
+    $("memory-badges").replaceChildren(
+      answerBadge(experience.outcome.class, experience.outcome.class === "verified_failure" ? "low" : "high"),
+      answerBadge(experience.evidence_class),
+      answerBadge(`${experience.outcome.attempts} attempt${experience.outcome.attempts === 1 ? "" : "s"}`),
+    );
+    const lessons = $("memory-lessons");
+    lessons.replaceChildren();
+    (experience.knowledge.lessons || []).forEach((lesson) => {
+      const item = document.createElement("li");
+      item.textContent = lesson;
+      lessons.appendChild(item);
+    });
+    const bindings = $("memory-bindings");
+    bindings.replaceChildren();
+    [...(experience.scope.graph_node_ids || []), ...(experience.scope.paths || [])].forEach((binding) => {
+      const code = document.createElement("code");
+      code.textContent = binding;
+      bindings.appendChild(code);
+    });
+    $("memory-experience-hash").textContent = experience.content_sha256;
+  } catch (error) {
+    setError(error);
+  }
 }
 
 async function loadEvaluations(selectLatest = true) {

@@ -44,6 +44,22 @@ artifacts. A versioned policy evaluates mutation repair, clean no-change behavio
 selection, privacy, path safety, token efficiency, and cost. Only a verified sealed evaluation can
 qualify; public calibration remains useful but non-promotional.
 
+v0.14 adds verified semantic memory after the quality boundary. The controller can promote a
+passed repair, a correct no-change result, or a verified failure into a content-addressed
+experience. Each record binds the work order and run ledger to exact graph, evidence-pack, source
+capsule, and path identities. Positive memories may expose bounded successful edit templates;
+negative memories expose only fingerprints. Sealed-holdout runs are never admitted to implementer
+memory, and any graph or evidence-pack change excludes stale records from retrieval.
+
+```bash
+./semantic-memory.sh validate
+./semantic-memory.sh summary
+./semantic-memory.sh query factory/work-orders/intcalc-repair.example.json
+```
+
+Memory remains advisory. It can make planning faster and cheaper, but it cannot waive fresh source
+inspection, deterministic gates, execution security, or mainframe-equivalence policy.
+
 ## Control model
 
 ```mermaid

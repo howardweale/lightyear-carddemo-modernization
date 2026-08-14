@@ -12,6 +12,27 @@
     "status": {"enum": ["passed", "blocked"]},
     "ledger_head_sha256": {"type": ["string", "null"]},
     "verification": {"type": "object"},
+    "semantic_memory": {
+      "type": "object",
+      "required": ["retrieval_sha256", "retrieved_experiences", "decision"],
+      "properties": {
+        "retrieval_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+        "retrieved_experiences": {"type": "integer", "minimum": 0},
+        "decision": {
+          "type": "object",
+          "required": ["schema_version", "memory_type", "run_id", "disposition", "reason", "content_sha256"],
+          "properties": {
+            "schema_version": {"const": "1.0"},
+            "memory_type": {"const": "lightyear-semantic-memory-decision"},
+            "run_id": {"type": "string"},
+            "disposition": {"enum": ["promoted-positive", "promoted-negative", "excluded", "quarantined"]},
+            "reason": {"type": "string"},
+            "experience_sha256": {"type": ["string", "null"]},
+            "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+          }
+        }
+      }
+    },
     "intelligence": {
       "type": "object",
       "required": ["mode", "provider", "calls", "content_sha256"],

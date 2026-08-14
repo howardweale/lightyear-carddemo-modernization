@@ -9,6 +9,7 @@ from pathlib import Path
 from .agents import LocalAgentSet, OpenAIAgentSet
 from .benchmark import run_mutation_benchmark
 from .contracts import ContractError, WorkOrder
+from .context import GraphContextAssembler
 from .evals import (
     EvaluationPolicy,
     load_evaluation_catalog,
@@ -23,6 +24,7 @@ from .quality import (
     write_signed_catalog,
 )
 from .orchestrator import FactoryOrchestrator
+from .memory import SemanticMemoryStore
 from .store import FactoryRunStore
 
 from lightyear_execution.admission import AdmissionNonceStore, verify_work_order
@@ -48,6 +50,11 @@ def build_parser() -> argparse.ArgumentParser:
     run.add_argument("--run-id")
     run.add_argument("--execution-policy", type=Path, default=Path("factory/execution/policy.json"))
     run.add_argument("--execution-runtime", choices=["docker", "podman"])
+    run.add_argument("--memory-root", type=Path, default=Path("work/semantic-memory"))
+    run.add_argument(
+        "--memory-policy", type=Path, default=Path("factory/memory/policy.json")
+    )
+    run.add_argument("--disable-memory", action="store_true")
 
     benchmark = subparsers.add_parser(
         "benchmark", help="Run the offline INTCALC mutation gauntlet"
@@ -138,6 +145,45 @@ def build_parser() -> argparse.ArgumentParser:
     transcript.add_argument("--runs-root", type=Path, default=Path("work/factory-runs"))
     transcript.add_argument("--run-id", required=True)
     transcript.add_argument("--verifier", action="store_true")
+
+    memory_ingest = subparsers.add_parser(
+        "memory-ingest", help="Promote one existing verified run into semantic memory"
+    )
+    memory_ingest.add_argument("--run-dir", type=Path, required=True)
+    memory_ingest.add_argument("--memory-root", type=Path, default=Path("work/semantic-memory"))
+    memory_ingest.add_argument(
+        "--memory-policy", type=Path, default=Path("factory/memory/policy.json")
+    )
+
+    memory_query = subparsers.add_parser(
+        "memory-query", help="Retrieve graph-addressed experiences for a work order"
+    )
+    memory_query.add_argument("--work-order", type=Path, required=True)
+    memory_query.add_argument("--source-root", type=Path, default=Path("."))
+    memory_query.add_argument("--graph", type=Path, default=Path("knowledge/graph.snapshot.json.gz"))
+    memory_query.add_argument(
+        "--evidence-pack", type=Path, default=Path("knowledge/evidence/source.pack.json.gz")
+    )
+    memory_query.add_argument("--memory-root", type=Path, default=Path("work/semantic-memory"))
+    memory_query.add_argument(
+        "--memory-policy", type=Path, default=Path("factory/memory/policy.json")
+    )
+
+    memory_summary = subparsers.add_parser(
+        "memory-summary", help="Show the privacy-safe semantic-memory inventory"
+    )
+    memory_summary.add_argument("--memory-root", type=Path, default=Path("work/semantic-memory"))
+    memory_summary.add_argument(
+        "--memory-policy", type=Path, default=Path("factory/memory/policy.json")
+    )
+
+    memory_validate = subparsers.add_parser(
+        "memory-validate", help="Validate memory hashes, privacy, and deterministic projection"
+    )
+    memory_validate.add_argument("--memory-root", type=Path, default=Path("work/semantic-memory"))
+    memory_validate.add_argument(
+        "--memory-policy", type=Path, default=Path("factory/memory/policy.json")
+    )
     return parser
 
 
@@ -242,6 +288,28 @@ def main(argv: list[str] | None = None) -> int:
         result = FactoryRunStore(args.runs_root).transcript(args.run_id, args.verifier)
         print(json.dumps(result, indent=2, sort_keys=True))
         return 0
+    if args.command.startswith("memory-"):
+        memory = SemanticMemoryStore.from_policy_path(
+            args.memory_root, args.memory_policy
+        )
+        if args.command == "memory-ingest":
+            result = memory.ingest_run_dir(args.run_dir)
+        elif args.command == "memory-query":
+            order = WorkOrder.load(args.work_order)
+            context = GraphContextAssembler(
+                args.graph.resolve(), args.evidence_pack.resolve(), max_nodes=160
+            ).assemble(order, args.source_root.resolve())
+            result = memory.retrieve(
+                order,
+                context.get("graph_content_sha256"),
+                context.get("evidence_pack_sha256"),
+            )
+        elif args.command == "memory-summary":
+            result = memory.summary()
+        else:
+            result = memory.validate()
+        print(json.dumps(result, indent=2, sort_keys=True))
+        return 0 if result.get("status", "passed") == "passed" else 1
     execution_context = None
     if args.execution_runtime:
         if not args.signed_work_order or args.work_order:
@@ -284,6 +352,14 @@ def main(argv: list[str] | None = None) -> int:
         )
     else:
         agents = OpenAIAgentSet.from_environment()
+    memory_policy_path = args.memory_policy
+    if not memory_policy_path.is_absolute():
+        memory_policy_path = args.source_root / memory_policy_path
+    memory_store = (
+        None
+        if args.disable_memory
+        else SemanticMemoryStore.from_policy_path(args.memory_root, memory_policy_path)
+    )
     receipt = FactoryOrchestrator(
         args.source_root,
         args.runs_root,
@@ -291,6 +367,7 @@ def main(argv: list[str] | None = None) -> int:
         graph_path=args.graph,
         evidence_path=args.evidence_pack,
         execution_context=execution_context,
+        memory_store=memory_store,
     ).run(order, args.run_id)
     print(json.dumps(receipt, indent=2, sort_keys=True))
     return 0 if receipt["status"] == "passed" else 1

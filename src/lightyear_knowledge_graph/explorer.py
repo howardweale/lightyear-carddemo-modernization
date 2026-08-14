@@ -17,6 +17,7 @@ from .evidence_pack import EvidenceStore, load_evidence_pack
 from .model import load_graph
 from .ontology import load_ontology
 from .validation import rule_gaps
+from lightyear_factory.memory import SemanticMemoryStore
 from lightyear_factory.store import EvaluationStore, FactoryRunStore
 from lightyear_runtime.engine import load_snapshot as load_runtime_snapshot
 from lightyear_runtime.store import RuntimeEvidenceStore
@@ -374,6 +375,7 @@ class ExplorerServer(ThreadingHTTPServer):
         evidence_store: EvidenceStore | None = None,
         factory_store: FactoryRunStore | None = None,
         evaluation_store: EvaluationStore | None = None,
+        memory_store: SemanticMemoryStore | None = None,
         runtime_store: RuntimeEvidenceStore | None = None,
         audit_store: AuditStore | None = None,
     ) -> None:
@@ -390,6 +392,9 @@ class ExplorerServer(ThreadingHTTPServer):
         )
         self.evaluation_store = evaluation_store or EvaluationStore(
             self.viewer_root.parents[1] / "work"
+        )
+        self.memory_store = memory_store or SemanticMemoryStore(
+            self.viewer_root.parents[1] / "factory" / "memory" / "store"
         )
         if runtime_store is None:
             default_runtime = self.viewer_root.parent / "runtime" / "runtime.snapshot.json.gz"
@@ -472,6 +477,7 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
                 if self.server.audit_store is not None
                 else {"event_count": 0, "decisions": {}}
             )
+            metadata["memory"] = self.server.memory_store.summary()["statistics"]
             self._json(metadata)
             return
         if path == "/api/chat/status":
@@ -506,6 +512,14 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
             return
         if path == "/api/evaluation":
             self._json(self.server.evaluation_store.evaluation(
+                self._value(query, "id", required=True)
+            ))
+            return
+        if path == "/api/memory/summary":
+            self._json(self.server.memory_store.summary())
+            return
+        if path == "/api/memory/experience":
+            self._json(self.server.memory_store.experience(
                 self._value(query, "id", required=True)
             ))
             return

@@ -6,7 +6,8 @@
   "additionalProperties": false,
   "required": [
     "schema_version", "dossier_type", "release_id", "status", "rationale", "gaps",
-    "promotion_decision", "runtime_decisions", "execution_decisions", "evidence_inventory", "audit",
+    "promotion_decision", "runtime_decisions", "execution_decisions", "semantic_memory",
+    "evidence_inventory", "audit",
     "limitations", "content_sha256"
   ],
   "properties": {
@@ -19,6 +20,21 @@
     "promotion_decision": {"$ref": "policy-decision.schema.json"},
     "runtime_decisions": {"type": "array", "items": {"$ref": "policy-decision.schema.json"}},
     "execution_decisions": {"type": "array", "items": {"$ref": "policy-decision.schema.json"}},
+    "semantic_memory": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "snapshot_sha256", "experience_count", "outcomes", "policy_sha256"],
+      "properties": {
+        "status": {"enum": ["verified", "not_recorded"]},
+        "snapshot_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "experience_count": {"type": "integer", "minimum": 0},
+        "outcomes": {
+          "type": "object",
+          "additionalProperties": {"type": "integer", "minimum": 0}
+        },
+        "policy_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]}
+      }
+    },
     "evidence_inventory": {
       "type": "array",
       "items": {

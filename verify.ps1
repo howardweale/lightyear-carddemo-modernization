@@ -20,6 +20,9 @@ if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 & (Join-Path $ProjectDir "runtime-evidence.ps1") verify
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
+& (Join-Path $ProjectDir "semantic-memory.ps1") validate
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
 & (Join-Path $ProjectDir "audit-control-tower.ps1") verify
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 

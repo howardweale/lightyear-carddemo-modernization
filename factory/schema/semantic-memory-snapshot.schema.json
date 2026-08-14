@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schema/factory/semantic-memory-snapshot-1.0.json",
+  "title": "LIGHTYEAR Semantic Memory Snapshot",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "snapshot_type", "policy_sha256", "experiences",
+    "graph_content_sha256", "evidence_pack_sha256", "statistics",
+    "content_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "snapshot_type": {"const": "lightyear-semantic-memory-snapshot"},
+    "policy_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "experiences": {"type": "array", "items": {"type": "object"}},
+    "graph_content_sha256": {"type": "array", "items": {"type": "string", "pattern": "^[0-9a-f]{64}$"}},
+    "evidence_pack_sha256": {"type": "array", "items": {"type": "string", "pattern": "^[0-9a-f]{64}$"}},
+    "statistics": {"type": "object"},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

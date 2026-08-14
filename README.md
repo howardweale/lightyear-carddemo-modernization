@@ -1,6 +1,6 @@
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.13.0 — sealed evaluation and factory quality gate**
+Release: **v0.14.0 — verified semantic memory**
 
 An evidence-aware knowledge graph, source-faithful local oracle, differential harness, and
 Java/Spring Batch candidate for AWS CardDemo. Together they form the first engineering cell of a
@@ -86,6 +86,14 @@ evidence-selection precision, privacy leaks, unauthorized edits, tokens, and cos
 calibration can never satisfy the sealed-evidence check, and the new Quality dashboard is a
 read-only projection rather than a source of acceptance authority.
 
+v0.14 gives the factory governed institutional memory. Passed repairs, correct no-change outcomes,
+and verified failures become content-addressed experiences bound to their graph nodes, source
+capsules, paths, gate hashes, and run identities. Positive memories can carry bounded edit
+templates; negative memories retain only non-executable fingerprints. Sealed holdouts are excluded
+entirely, verifier-private artifacts never cross the audience boundary, and a changed graph or
+source-evidence identity immediately makes an experience stale. The Memory dashboard is a
+read-only projection; current source and fresh gates remain authoritative.
+
 ## What it does
 
 1. Builds a deterministic, provenance-rich graph of the entire CardDemo application estate.
@@ -137,6 +145,14 @@ read-only projection rather than a source of acceptance authority.
 45. Tests clean inputs so unnecessary changes count as failures rather than successful activity.
 46. Applies a versioned factory-quality policy across repair, safety, evidence, privacy, and efficiency.
 47. Compares evaluation receipts safety-first and projects qualified or blocked status in the Quality tab.
+48. Promotes only controller-observed, independently verified outcomes into semantic memory.
+49. Distinguishes verified repairs, correct no-change decisions, and non-executable negative memory.
+50. Excludes sealed holdouts and verifier-private artifacts from implementer memory by construction.
+51. Binds experiences to exact graph, evidence-pack, work-order, ledger, and workspace identities.
+52. Invalidates retrieval when graph or source-evidence identities change.
+53. Retrieves bounded graph-, path-, and vocabulary-matched experience cards for planners and builders.
+54. Detects tampering, stale evidence, privacy contamination, and executable negative edits.
+55. Projects memory coverage, outcomes, lessons, and identities in the read-only Memory tab.
 
 The included `candidate-java` module is the first modernization candidate. It consumes and emits
 the same fixed-width records as the oracle, including COBOL signed zoned decimals.
@@ -570,16 +586,15 @@ deciding whether a legacy behavior should be preserved or intentionally correcte
 
 Once a candidate can pass the visible cases:
 
-1. Run the v0.12 work cell against an independently retained sealed holdout and establish the first
+1. Run the v0.14 work cell against an independently retained sealed holdout and establish the first
    honest model baseline: repair rate, false acceptance, escalations, latency, and cost.
 2. Capture independent z/OS executions and attach runtime observations to graph entities.
-3. Turn verified failure, plan, patch, and outcome pairs into graph-addressed semantic memory.
-4. Externalize the audit log to immutable retention with managed asymmetric signing and trusted time.
-5. Move signed admission and identity credentials from HMAC to KMS-backed asymmetric trust.
-6. Expand private holdouts and verified rule mappings to posting and statement-generation workloads.
-7. Add conflict-aware parallel work cells, graph-delta memory, and human approval for high-risk
+3. Externalize the audit log to immutable retention with managed asymmetric signing and trusted time.
+4. Move signed admission and identity credentials from HMAC to KMS-backed asymmetric trust.
+5. Expand private holdouts and verified rule mappings to posting and statement-generation workloads.
+6. Add conflict-aware parallel work cells, graph-delta memory, and human approval for high-risk
    changes.
-8. Issue a production acceptance receipt only after structural, behavioral, security, operational,
+7. Issue a production acceptance receipt only after structural, behavioral, security, operational,
    and mainframe-backed verification policies pass.
 
 The pinned workload specification is in `spec/carddemo-intcalc.json`.

@@ -227,6 +227,9 @@ dd { margin: 0; overflow-wrap: anywhere; font: 11px/1.4 ui-monospace, SFMono-Reg
 .portfolio-wave strong { color: var(--accent); font-size: 10px; text-transform: uppercase; }
 .portfolio-wave div { display: grid; gap: 4px; }
 .portfolio-wave code { overflow-wrap: anywhere; color: var(--muted); font-size: 9px; }
+.right-tabs { flex-wrap: wrap; }
+#recovery-events li { grid-template-columns: minmax(120px, 1fr); }
+#recovery-events span { overflow-wrap: anywhere; color: var(--muted); font-size: 9px; }
 .audit-summary { grid-template-columns: repeat(5, 1fr); }
 .runtime-summary div { padding: 8px; background: var(--surface-2); border: 1px solid var(--border); border-radius: 6px; text-align: center; }
 .runtime-summary strong, .runtime-summary span { display: block; }

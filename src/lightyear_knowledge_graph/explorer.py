@@ -18,7 +18,7 @@ from .model import load_graph
 from .ontology import load_ontology
 from .validation import rule_gaps
 from lightyear_factory.memory import SemanticMemoryStore
-from lightyear_factory.store import EvaluationStore, FactoryRunStore, PortfolioStore
+from lightyear_factory.store import DurableStore, EvaluationStore, FactoryRunStore, PortfolioStore
 from lightyear_runtime.engine import load_snapshot as load_runtime_snapshot
 from lightyear_runtime.store import RuntimeEvidenceStore
 from lightyear_audit.ledger import load_snapshot as load_audit_snapshot
@@ -376,6 +376,7 @@ class ExplorerServer(ThreadingHTTPServer):
         factory_store: FactoryRunStore | None = None,
         evaluation_store: EvaluationStore | None = None,
         portfolio_store: PortfolioStore | None = None,
+        durable_store: DurableStore | None = None,
         memory_store: SemanticMemoryStore | None = None,
         runtime_store: RuntimeEvidenceStore | None = None,
         audit_store: AuditStore | None = None,
@@ -397,6 +398,9 @@ class ExplorerServer(ThreadingHTTPServer):
         self.portfolio_store = portfolio_store or PortfolioStore(
             self.viewer_root.parents[1] / "factory" / "portfolio" / "carddemo-plan.snapshot.json",
             self.viewer_root.parents[1] / "work" / "portfolio",
+        )
+        self.durable_store = durable_store or DurableStore(
+            self.viewer_root.parents[1] / "work" / "durable" / "control.sqlite3"
         )
         self.memory_store = memory_store or SemanticMemoryStore(
             self.viewer_root.parents[1] / "factory" / "memory" / "store"
@@ -489,6 +493,7 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
                 "orders": len(portfolio.get("orders", [])),
                 "waves": len(portfolio.get("waves", [])),
             }
+            metadata["durable"] = self.server.durable_store.summary()["statistics"]
             self._json(metadata)
             return
         if path == "/api/chat/status":
@@ -516,6 +521,9 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
             return
         if path == "/api/portfolio/summary":
             self._json(self.server.portfolio_store.summary())
+            return
+        if path == "/api/durable/summary":
+            self._json(self.server.durable_store.summary())
             return
         if path == "/api/evaluations":
             self._json({

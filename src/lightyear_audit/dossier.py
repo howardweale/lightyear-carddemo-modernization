@@ -40,6 +40,13 @@ def build_dossier(snapshot: dict[str, Any], release_id: str) -> dict[str, Any]:
         ),
         None,
     )
+    durable_event = next(
+        (
+            item for item in reversed(snapshot["events"])
+            if item["action"] == "factory.durable_policy_published"
+        ),
+        None,
+    )
     evidence = {}
     for event in snapshot["events"]:
         for item in event["evidence"]:
@@ -87,6 +94,26 @@ def build_dossier(snapshot: dict[str, Any], release_id: str) -> dict[str, Any]:
                 "waves": 0,
                 "conflicts": 0,
                 "approval_authority": None,
+            }
+        ),
+        "durable_control_plane": (
+            {
+                "status": "contract_published",
+                "policy_sha256": durable_event["evidence"][0]["sha256"],
+                "backend": durable_event["details"]["backend"],
+                "approval_consumption": durable_event["details"]["approval_consumption"],
+                "event_integrity": durable_event["details"]["event_integrity"],
+                "production_adapter": durable_event["details"]["production_adapter"],
+                "conformance_status": durable_event["details"]["conformance"]["status"],
+            }
+            if durable_event is not None else {
+                "status": "not_recorded",
+                "policy_sha256": None,
+                "backend": None,
+                "approval_consumption": None,
+                "event_integrity": None,
+                "production_adapter": None,
+                "conformance_status": "not_recorded",
             }
         ),
         "evidence_inventory": [evidence[key] for key in sorted(evidence)],
@@ -173,6 +200,16 @@ def render_markdown(dossier: dict[str, Any]) -> str:
         f"- Events: {dossier['audit']['event_count']}",
         f"- Ledger head: `{dossier['audit']['ledger_head_sha256']}`",
         f"- Signature algorithm: `{dossier['audit']['checkpoint_signature_algorithm']}`",
+        "",
+        "## Durable recovery control plane",
+        "",
+        f"- Status: `{dossier['durable_control_plane']['status']}`",
+        f"- Reference backend: `{dossier['durable_control_plane']['backend'] or 'not recorded'}`",
+        f"- Approval consumption: `{dossier['durable_control_plane']['approval_consumption'] or 'not recorded'}`",
+        f"- Event integrity: `{dossier['durable_control_plane']['event_integrity'] or 'not recorded'}`",
+        f"- Production adapter: `{dossier['durable_control_plane']['production_adapter'] or 'not recorded'}`",
+        f"- Crash-recovery conformance: `{dossier['durable_control_plane']['conformance_status']}`",
+        f"- Policy: `{dossier['durable_control_plane']['policy_sha256'] or 'not recorded'}`",
         "",
         "## Limitations",
         "",

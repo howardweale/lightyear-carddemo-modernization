@@ -6,7 +6,7 @@
   "additionalProperties": false,
   "required": [
     "schema_version", "dossier_type", "release_id", "status", "rationale", "gaps",
-    "promotion_decision", "runtime_decisions", "execution_decisions", "semantic_memory", "portfolio_plan",
+    "promotion_decision", "runtime_decisions", "execution_decisions", "semantic_memory", "portfolio_plan", "durable_control_plane",
     "evidence_inventory", "audit",
     "limitations", "content_sha256"
   ],
@@ -46,6 +46,20 @@
         "waves": {"type": "integer", "minimum": 0},
         "conflicts": {"type": "integer", "minimum": 0},
         "approval_authority": {"oneOf": [{"const": "human"}, {"type": "null"}]}
+      }
+    },
+    "durable_control_plane": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "policy_sha256", "backend", "approval_consumption", "event_integrity", "production_adapter", "conformance_status"],
+      "properties": {
+        "status": {"enum": ["contract_published", "not_recorded"]},
+        "policy_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "backend": {"type": ["string", "null"]},
+        "approval_consumption": {"type": ["string", "null"]},
+        "event_integrity": {"type": ["string", "null"]},
+        "production_adapter": {"type": ["string", "null"]},
+        "conformance_status": {"enum": ["passed", "failed", "not_recorded"]}
       }
     },
     "evidence_inventory": {

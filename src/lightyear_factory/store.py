@@ -3,6 +3,8 @@ from __future__ import annotations
 import hashlib
 import json
 import re
+import sqlite3
+from collections import Counter
 from pathlib import Path
 from typing import Any
 
@@ -185,6 +187,83 @@ class PortfolioStore:
                 })
         runs.sort(key=lambda item: item.get("receipt_sha256") or "", reverse=True)
         return {**plan, "runs": runs[:20], "read_only": True}
+
+
+class DurableStore:
+    """Strictly read-only projection of an existing durable SQLite database."""
+
+    def __init__(self, path: Path) -> None:
+        self.path = path.resolve()
+
+    def summary(self, event_limit: int = 100) -> dict[str, Any]:
+        if not self.path.is_file():
+            return {
+                "schema_version": "1.0",
+                "snapshot_type": "lightyear-durable-control-plane",
+                "status": "not_configured",
+                "statistics": {"runs": 0, "work_items": 0, "states": {}, "events": 0},
+                "runs": [],
+                "items": [],
+                "events": [],
+                "read_only": True,
+            }
+        connection = sqlite3.connect(
+            f"file:{self.path.as_posix()}?mode=ro", uri=True, timeout=5
+        )
+        connection.row_factory = sqlite3.Row
+        try:
+            runs = [dict(row) for row in connection.execute(
+                "SELECT * FROM portfolio_runs ORDER BY submitted_at DESC, run_id"
+            )]
+            items = [dict(row) for row in connection.execute(
+                """
+                SELECT item_id, run_id, work_order_id, wave, ordinal, state, attempt,
+                       max_attempts, available_at, lease_owner, lease_expires_at,
+                       receipt_sha256, error_code, updated_at
+                FROM work_items ORDER BY run_id, wave, ordinal
+                """
+            )]
+            event_rows = connection.execute(
+                "SELECT * FROM durable_events ORDER BY sequence DESC LIMIT ?", (event_limit,)
+            ).fetchall()
+            events = [
+                {
+                    "sequence": row["sequence"],
+                    "occurred_at": row["occurred_at"],
+                    "run_id": row["run_id"],
+                    "item_id": row["item_id"],
+                    "kind": row["kind"],
+                    "payload": json.loads(row["payload_json"]),
+                    "previous_sha256": row["previous_sha256"],
+                    "event_sha256": row["event_sha256"],
+                }
+                for row in reversed(event_rows)
+            ]
+            approvals = connection.execute(
+                "SELECT COUNT(*) FROM approval_consumptions"
+            ).fetchone()[0]
+            artifacts = connection.execute("SELECT COUNT(*) FROM artifact_index").fetchone()[0]
+        finally:
+            connection.close()
+        result = {
+            "schema_version": "1.0",
+            "snapshot_type": "lightyear-durable-control-plane",
+            "status": "passed",
+            "statistics": {
+                "runs": len(runs),
+                "work_items": len(items),
+                "states": dict(sorted(Counter(item["state"] for item in items).items())),
+                "consumed_approvals": approvals,
+                "indexed_artifacts": artifacts,
+                "events": len(events),
+            },
+            "runs": runs,
+            "items": items,
+            "events": events,
+            "read_only": True,
+        }
+        result["content_sha256"] = canonical_hash(result)
+        return result
 
 
 class EvaluationStore:

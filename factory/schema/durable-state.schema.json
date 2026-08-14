@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schema/durable-state.schema.json",
+  "title": "LIGHTYEAR durable portfolio state",
+  "type": "object",
+  "required": ["schema_version", "receipt_type", "run_id", "portfolio_id", "plan_sha256", "state", "items", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "receipt_type": {"const": "lightyear-durable-portfolio-state"},
+    "run_id": {"type": "string"},
+    "portfolio_id": {"type": "string"},
+    "plan_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "admission_sha256": {"type": ["string", "null"]},
+    "state": {"enum": ["queued", "running", "passed", "blocked"]},
+    "submitted_at": {"type": "string", "format": "date-time"},
+    "updated_at": {"type": "string", "format": "date-time"},
+    "items": {"type": "array", "items": {"type": "object"}},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

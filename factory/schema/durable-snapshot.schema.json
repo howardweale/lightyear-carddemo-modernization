@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schema/durable-snapshot.schema.json",
+  "title": "LIGHTYEAR durable control-plane snapshot",
+  "type": "object",
+  "required": ["schema_version", "snapshot_type", "status", "statistics", "runs", "items", "events", "read_only"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "snapshot_type": {"const": "lightyear-durable-control-plane"},
+    "status": {"enum": ["passed", "not_configured"]},
+    "statistics": {"type": "object"},
+    "runs": {"type": "array"},
+    "items": {"type": "array"},
+    "events": {"type": "array"},
+    "read_only": {"const": true},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

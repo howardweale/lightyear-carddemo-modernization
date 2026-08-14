@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schema/factory/semantic-memory-retrieval-1.0.json",
+  "title": "LIGHTYEAR Semantic Memory Retrieval",
+  "type": "object",
+  "required": [
+    "schema_version", "retrieval_type", "audience", "query", "cards", "statistics",
+    "truncated", "limitations", "content_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "retrieval_type": {"const": "lightyear-semantic-memory-retrieval"},
+    "audience": {"const": "implementer"},
+    "query": {"type": "object"},
+    "cards": {"type": "array", "items": {"type": "object"}},
+    "statistics": {"type": "object"},
+    "truncated": {"type": "boolean"},
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schema/factory/sealed-evaluation-envelope-1.0.json",
+  "title": "LIGHTYEAR sealed evaluation catalog envelope",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "envelope_type", "issuer", "key_id", "issued_at",
+    "expires_at", "nonce", "catalog_sha256", "catalog", "signature", "content_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "envelope_type": {"const": "lightyear-sealed-evaluation-catalog"},
+    "issuer": {"type": "string", "minLength": 1},
+    "key_id": {"type": "string", "minLength": 1},
+    "issued_at": {"type": "string", "format": "date-time"},
+    "expires_at": {"type": "string", "format": "date-time"},
+    "nonce": {"type": "string", "pattern": "^[0-9a-f]{32}$"},
+    "catalog_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "catalog": {"type": "object"},
+    "signature": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

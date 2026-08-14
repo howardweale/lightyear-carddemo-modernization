@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schema/factory/agent-exchange-1.0.json",
+  "title": "LIGHTYEAR controller-mediated agent exchange",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "transcript_type", "run_id", "run_key", "audience",
+    "direct_agent_chat", "messages", "content_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "transcript_type": {"const": "lightyear-controller-mediated-agent-exchange"},
+    "run_id": {"type": "string", "minLength": 1},
+    "run_key": {"type": "string", "pattern": "^factory-[0-9a-f]{24}$"},
+    "audience": {"enum": ["implementer", "verifier"]},
+    "direct_agent_chat": {"const": false},
+    "messages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "sequence", "actor", "artifact_type", "visibility",
+          "content_sha256", "content"
+        ],
+        "properties": {
+          "sequence": {"type": "integer", "minimum": 1},
+          "actor": {"type": "string"},
+          "artifact_type": {"type": "string"},
+          "visibility": {"enum": ["implementer", "verifier_private", "shared"]},
+          "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "content": {"type": "object"}
+        }
+      }
+    },
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

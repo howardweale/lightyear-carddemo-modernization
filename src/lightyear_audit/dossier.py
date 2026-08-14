@@ -26,6 +26,13 @@ def build_dossier(snapshot: dict[str, Any], release_id: str) -> dict[str, Any]:
     execution_passed = bool(execution_decisions) and all(
         item["status"] == "passed" for item in execution_decisions
     )
+    memory_event = next(
+        (
+            item for item in reversed(snapshot["events"])
+            if item["action"] == "factory.memory_snapshot_published"
+        ),
+        None,
+    )
     evidence = {}
     for event in snapshot["events"]:
         for item in event["evidence"]:
@@ -40,6 +47,22 @@ def build_dossier(snapshot: dict[str, Any], release_id: str) -> dict[str, Any]:
         "promotion_decision": promotion,
         "runtime_decisions": runtime_decisions,
         "execution_decisions": execution_decisions,
+        "semantic_memory": (
+            {
+                "status": "verified",
+                "snapshot_sha256": memory_event["evidence"][0]["sha256"],
+                "experience_count": memory_event["details"]["statistics"]["experience_count"],
+                "outcomes": memory_event["details"]["statistics"]["outcomes"],
+                "policy_sha256": memory_event["details"]["policy_sha256"],
+            }
+            if memory_event is not None else {
+                "status": "not_recorded",
+                "snapshot_sha256": None,
+                "experience_count": 0,
+                "outcomes": {},
+                "policy_sha256": None,
+            }
+        ),
         "evidence_inventory": [evidence[key] for key in sorted(evidence)],
         "audit": {
             "ledger_id": snapshot["ledger_id"],
@@ -102,6 +125,12 @@ def render_markdown(dossier: dict[str, Any]) -> str:
         "| Kind | Identifier | SHA-256 |",
         "|---|---|---|",
         *evidence_rows,
+        "",
+        "## Verified semantic memory",
+        "",
+        f"- Status: `{dossier['semantic_memory']['status']}`",
+        f"- Experiences: {dossier['semantic_memory']['experience_count']}",
+        f"- Snapshot: `{dossier['semantic_memory']['snapshot_sha256'] or 'not recorded'}`",
         "",
         "## Audit checkpoint",
         "",

@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schema/factory/evaluation-comparison-1.0.json",
+  "title": "LIGHTYEAR factory evaluation comparison",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "comparison_type", "evaluations", "ranking",
+    "recommended_receipt_sha256", "limitations", "content_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "comparison_type": {"const": "lightyear-factory-evaluation-comparison"},
+    "evaluations": {"type": "array", "minItems": 2, "items": {"type": "object"}},
+    "ranking": {"type": "array", "items": {"type": "string"}},
+    "recommended_receipt_sha256": {"type": "string"},
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

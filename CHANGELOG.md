@@ -1,5 +1,56 @@
 # Changelog
 
+## 0.14.0 — 2026-08-14
+
+- Added controller-owned, content-addressed semantic experiences that bind verified plans, patches,
+  outcomes, graph nodes, source-evidence capsules, paths, gates, and run identities.
+- Added positive repair, correct-unchanged, and non-executable negative memory classes; controller
+  failures and unapproved evidence classes are quarantined instead of becoming reusable knowledge.
+- Added a hard contamination boundary that excludes sealed-holdout runs and verifier-private
+  artifacts from implementer memory, with adversarial validation and read-only projections.
+- Added graph-, evidence-, path-, and vocabulary-aware retrieval with independent byte and result
+  limits; graph or evidence-pack changes immediately stale prior experiences.
+- Added progressive planner and builder memory context, while preserving fresh source evidence and
+  deterministic gates as higher-authority inputs.
+- Added versioned experience, snapshot, retrieval, and policy schemas plus cross-platform memory
+  launchers, CLI ingestion/query/validation, and a Verified Experience Memory dashboard.
+- Bound the verified-memory snapshot into the hash-chained audit ledger and current release dossier;
+  full verification now rejects stale, tampered, or privacy-contaminated memory.
+- Added tamper, idempotency, invalidation, negative-replay, sealed-contamination, context-budget,
+  API, UI, and full-suite regression coverage.
+
+## 0.13.0 — 2026-08-14
+
+- Added HMAC-signed, expiring sealed evaluation envelopes with trusted key IDs, exact catalog
+  identity, tamper detection, and fail-closed admission; a plain relabeled catalog is rejected.
+- Added opaque holdout case references and privacy-safe receipts that omit private case names,
+  categories, mutation markers, and verifier output from worker artifacts and dashboard APIs.
+- Added clean `accept-unchanged` cases so needless edits are measured independently from mutation
+  repair, including correct no-change and false-acceptance outcomes.
+- Added evidence-selection precision, first-attempt repair, private-leak, unauthorized-edit, token,
+  cost, baseline-rejection, and repair metrics under a versioned quality policy.
+- Added a promotion-grade quality decision that can qualify only signed sealed evidence meeting
+  every policy threshold; public calibration always remains non-qualifying.
+- Added safety-first evaluation comparison, cross-platform quality-gate launchers, updated schemas,
+  read-only evaluation APIs, and a Quality Control Tower view.
+- Added signature, tamper, expiry, wrong-key, clean-case, privacy, policy, comparison, storage, UI,
+  and full-suite regression coverage.
+
+## 0.12.2 — 2026-08-13
+
+- Replaced repeated full-context prompts with progressive role-specific retrieval: planners receive
+  a compact graph and evidence catalog, and builders receive only plan-selected source capsules.
+- Added fail-closed validation for planner-selected graph nodes and evidence capsule IDs plus
+  independent 80 KB planner and builder context ceilings.
+- Added exact Responses API input-token preflight before generation, a configurable per-call input
+  ceiling, bounded count-request retries, and count identities and rate metadata in call evidence.
+- Added request manifests that record prompt and payload hashes, context statistics, and selected
+  evidence IDs without persisting provider credentials or full model prompts.
+- Added an audience-safe controller-mediated transcript command that shows planner and builder
+  artifacts while redacting verifier-private evidence by default.
+- Added regression tests proving substantial context reduction, evidence-selection boundaries,
+  exact token admission, pre-generation budget rejection, and transcript privacy.
+
 ## 0.12.1 — 2026-08-13
 
 - Added bounded Retry-After-aware exponential backoff with jitter for transient Responses API

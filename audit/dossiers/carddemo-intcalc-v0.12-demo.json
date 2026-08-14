@@ -2,11 +2,11 @@
   "audit": {
     "checkpoint_signature_algorithm": "none",
     "event_count": 15,
-    "ledger_content_sha256": "678183e8a43d970af3fe3f71777baebb6303206fb442a7b8ac55858f8b90d8cb",
-    "ledger_head_sha256": "c997872a0dfaa39b7172df1a87fe64a29727194826f84666c8076f1c4a15a8a4",
+    "ledger_content_sha256": "df9c67750fac9dfddfbe97e530f91b319b31baaf11c02b4fdee7f1d4519a1daf",
+    "ledger_head_sha256": "54059f30e69dabb892227e666c0d97500fe36c5ebd083b28287ce83b510ba9f9",
     "ledger_id": "lightyear:carddemo:audit"
   },
-  "content_sha256": "c07f00a8903fc2779b29e521ad448e178d8da6c1ebe6f7329a7fc88b5a360fea",
+  "content_sha256": "3ffc365eae9bc41688fa0db19a4e7159c69a8962094b0a583331e0b1e75a1057",
   "dossier_type": "lightyear-release-evidence",
   "evidence_inventory": [
     {
@@ -17,7 +17,7 @@
     {
       "id": "evidence:source-pack",
       "kind": "source_evidence_pack",
-      "sha256": "1d0b91b046c337a9f3ce3cab87d2b8c6e028611d2aa144a8991ddc5fd03052b6"
+      "sha256": "bad2410356663c38eb9a0ad3bd12bcb5217de00d48cecf2b6bea9ba2e7d82532"
     },
     {
       "id": "execution:carddemo-hardened-plane",
@@ -27,12 +27,12 @@
     {
       "id": "lightyear:carddemo-modernization",
       "kind": "graph_snapshot",
-      "sha256": "6a0505843e94323eaab96f037ec36b84d917bf4fb3c3dfa9e2e595f84580eb80"
+      "sha256": "d5891ab03fb3dcafccce52e175dba2e7023e053f4ec665bd70620aa41fcdb5d5"
     },
     {
       "id": "release:carddemo-intcalc:v0.12-demo",
       "kind": "decision_input",
-      "sha256": "6a0505843e94323eaab96f037ec36b84d917bf4fb3c3dfa9e2e595f84580eb80"
+      "sha256": "d5891ab03fb3dcafccce52e175dba2e7023e053f4ec665bd70620aa41fcdb5d5"
     },
     {
       "id": "runtime-run:local-oracle-intcalc-reference",
@@ -87,7 +87,7 @@
     "This dossier is a deterministic evidence summary, not a substitute for organizational approval policy."
   ],
   "promotion_decision": {
-    "content_sha256": "706d8650723ce6a0590a29d7cfa0cc64b3147e8517a29a8643d97ebede62ef17",
+    "content_sha256": "b5066002bf129d3bd14763047c5f64876ebdf49669d953c72c5d596457d3d3e0",
     "evaluated_at": "2022-07-18T00:00:01.300Z",
     "exception": null,
     "gaps": [
@@ -99,7 +99,7 @@
       "execution_decision_ids": [
         "decision:execution:hardened-readiness"
       ],
-      "graph_content_sha256": "6a0505843e94323eaab96f037ec36b84d917bf4fb3c3dfa9e2e595f84580eb80",
+      "graph_content_sha256": "d5891ab03fb3dcafccce52e175dba2e7023e053f4ec665bd70620aa41fcdb5d5",
       "runtime_decision_ids": [
         "decision:local-oracle-intcalc-reference:development_readiness",
         "decision:local-oracle-intcalc-reference:mainframe_equivalence",
@@ -108,7 +108,7 @@
         "decision:zosmf-intcalc-job00001:development_readiness",
         "decision:zosmf-intcalc-job00001:mainframe_equivalence"
       ],
-      "source_evidence_content_sha256": "1d0b91b046c337a9f3ce3cab87d2b8c6e028611d2aa144a8991ddc5fd03052b6"
+      "source_evidence_content_sha256": "bad2410356663c38eb9a0ad3bd12bcb5217de00d48cecf2b6bea9ba2e7d82532"
     },
     "override_allowed": false,
     "policy_id": "release.promotion",

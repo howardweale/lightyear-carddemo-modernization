@@ -19,6 +19,7 @@ from .contracts import (
 )
 from .gates import GateRunner, builder_failure_view
 from .ledger import RunLedger
+from .memory import SemanticMemoryStore
 from .patches import PatchBroker
 from .workspace import IsolatedWorkspace
 
@@ -70,6 +71,7 @@ class FactoryOrchestrator:
         evidence_path: Path | None = None,
         prepare_workspace: Callable[[IsolatedWorkspace, WorkOrder], None] | None = None,
         execution_context: Any | None = None,
+        memory_store: SemanticMemoryStore | None = None,
     ) -> None:
         self.source_root = source_root.resolve()
         self.runs_root = runs_root.resolve()
@@ -83,6 +85,8 @@ class FactoryOrchestrator:
             self.evidence_path = None
         self.prepare_workspace = prepare_workspace
         self.execution_context = execution_context
+        self.memory_store = memory_store
+        self.memory_retrieval: dict[str, Any] | None = None
 
     def run(self, order: WorkOrder, run_id: str | None = None) -> dict[str, Any]:
         run_id = _run_id(run_id)
@@ -101,6 +105,7 @@ class FactoryOrchestrator:
         latest_verification: dict[str, Any] = {"status": "not_run", "gates": []}
         initial_snapshot: dict[str, str] = {}
         final_snapshot: dict[str, str] = {}
+        context: dict[str, Any] = {}
         started_at = datetime.now(timezone.utc).isoformat()
         started_monotonic = time.monotonic()
 
@@ -143,7 +148,7 @@ class FactoryOrchestrator:
             self._record_agent_evidence(
                 artifacts, ledger, references, "planner", "implementer"
             )
-            self._validate_plan(order, plan)
+            self._validate_plan(order, plan, context)
             plan_ref = artifacts.write("plan", "planner", "implementer", plan)
             references.append(plan_ref)
             ledger.append(state, "plan_created", plan_ref)
@@ -174,7 +179,7 @@ class FactoryOrchestrator:
                     return self._finish(
                         run_dir, run_id, order, state, attempts, started_at,
                         ledger, references, initial_snapshot, workspace.snapshot(), latest_verification,
-                        "The approved state already satisfied every deterministic gate.",
+                        "The approved state already satisfied every deterministic gate.", context,
                     )
                 public_failure = builder_failure_view(latest_verification)
                 self._authorize("failure_analyst", "factory:analyze-failure")
@@ -276,6 +281,7 @@ class FactoryOrchestrator:
             return self._finish(
                 run_dir, run_id, order, state, attempts, started_at,
                 ledger, references, initial_snapshot, final_snapshot, latest_verification, limitation,
+                context,
             )
         except Exception as exc:
             state = "BLOCKED"
@@ -288,7 +294,7 @@ class FactoryOrchestrator:
             self._finish(
                 run_dir, run_id, order, state, attempts, started_at,
                 ledger, references, initial_snapshot, final_snapshot, latest_verification,
-                f"Controller stopped safely: {type(exc).__name__}",
+                f"Controller stopped safely: {type(exc).__name__}", context,
             )
             raise
 
@@ -309,21 +315,45 @@ class FactoryOrchestrator:
         return report
 
     def _context(self, order: WorkOrder, workspace_root: Path) -> dict[str, Any]:
-        return GraphContextAssembler(
+        context = GraphContextAssembler(
             self.graph_path,
             self.evidence_path,
             max_nodes=160,
         ).assemble(order, workspace_root)
+        if self.memory_store:
+            self.memory_retrieval = self.memory_store.retrieve(
+                order,
+                context.get("graph_content_sha256"),
+                context.get("evidence_pack_sha256"),
+            )
+            context = GraphContextAssembler.attach_semantic_memory(
+                context, self.memory_retrieval, order
+            )
+        return context
 
     @staticmethod
-    def _validate_plan(order: WorkOrder, plan: dict[str, Any]) -> None:
+    def _validate_plan(
+        order: WorkOrder, plan: dict[str, Any], context: dict[str, Any]
+    ) -> None:
         tasks = plan.get("tasks")
         if not isinstance(tasks, list) or not tasks:
             raise ContractError("Planner must return at least one task")
+        known_nodes = {item["id"] for item in context.get("nodes", [])}
+        known_capsules = {
+            item["capsule_id"] for item in context.get("source_excerpts", [])
+        }
         for task in tasks:
             for path in task.get("paths", []):
                 if path not in order.allowed_paths:
                     raise ContractError(f"Planner proposed an unauthorized path: {path}")
+            for node_id in task.get("graph_node_ids", []):
+                if node_id not in known_nodes:
+                    raise ContractError(f"Planner selected an unknown graph node: {node_id}")
+            for capsule_id in task.get("evidence_capsule_ids", []):
+                if capsule_id not in known_capsules:
+                    raise ContractError(
+                        f"Planner selected an unknown evidence capsule: {capsule_id}"
+                    )
 
     @staticmethod
     def _apply_edits(
@@ -383,6 +413,7 @@ class FactoryOrchestrator:
         final_snapshot: dict[str, str],
         verification: dict[str, Any],
         limitation: str,
+        context: dict[str, Any],
     ) -> dict[str, Any]:
         changed_paths = sorted(
             path
@@ -461,6 +492,32 @@ class FactoryOrchestrator:
                 *security_limitations,
             ],
         }
+        if self.memory_store:
+            try:
+                memory_decision = self.memory_store.observe_run(
+                    run_dir, order, receipt, context, artifacts
+                )
+            except (ContractError, OSError, ValueError) as exc:
+                memory_decision = {
+                    "schema_version": "1.0",
+                    "memory_type": "lightyear-semantic-memory-decision",
+                    "run_id": run_id,
+                    "disposition": "quarantined",
+                    "reason": f"memory-controller-error:{type(exc).__name__}",
+                    "experience_sha256": None,
+                }
+                memory_decision["content_sha256"] = canonical_hash(memory_decision)
+            receipt["semantic_memory"] = {
+                "retrieval_sha256": (
+                    self.memory_retrieval.get("content_sha256")
+                    if self.memory_retrieval else None
+                ),
+                "retrieved_experiences": (
+                    len(self.memory_retrieval.get("cards", []))
+                    if self.memory_retrieval else 0
+                ),
+                "decision": memory_decision,
+            }
         receipt["content_sha256"] = canonical_hash(receipt)
         write_json(receipt, run_dir / "receipt.json")
         write_json(

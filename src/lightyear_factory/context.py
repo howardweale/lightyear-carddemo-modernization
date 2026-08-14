@@ -37,6 +37,7 @@ class GraphContextAssembler:
             "edges": [],
             "source_excerpts": [],
             "allowed_files": [],
+            "semantic_memory": None,
             "statistics": {},
             "truncated": False,
             "limitations": [],
@@ -154,6 +155,230 @@ class GraphContextAssembler:
         return self._finish(base, order)
 
     @staticmethod
+    def attach_semantic_memory(
+        context: dict[str, Any], memory: dict[str, Any], order: WorkOrder
+    ) -> dict[str, Any]:
+        """Attach a bounded controller-owned memory projection to implementer context."""
+        result = json.loads(json.dumps(context))
+        selected = json.loads(json.dumps(memory))
+        result["semantic_memory"] = selected
+
+        def size() -> int:
+            return len(
+                json.dumps(result, sort_keys=True, separators=(",", ":")).encode("utf-8")
+            )
+
+        # Preserve a useful memory card by first trimming surplus raw evidence. The
+        # planner still receives evidence identifiers and can select from the bounded
+        # retained capsule catalog.
+        while (
+            size() > order.max_context_bytes
+            and len(result.get("source_excerpts", [])) > 8
+        ):
+            result["source_excerpts"].pop()
+            result["truncated"] = True
+        while (
+            size() > order.max_context_bytes and len(result.get("edges", [])) > 24
+        ):
+            result["edges"].pop()
+            result["truncated"] = True
+        while (
+            size() > order.max_context_bytes and selected.get("cards")
+        ):
+            selected["cards"].pop()
+            selected["truncated"] = True
+        while size() > order.max_context_bytes and result.get("source_excerpts"):
+            result["source_excerpts"].pop()
+            result["truncated"] = True
+        while size() > order.max_context_bytes and result.get("edges"):
+            result["edges"].pop()
+            result["truncated"] = True
+        selected["statistics"]["records_returned"] = len(selected.get("cards", []))
+        selected["statistics"]["context_bytes"] = len(
+            json.dumps(selected, sort_keys=True, separators=(",", ":")).encode("utf-8")
+        )
+        selected["content_sha256"] = canonical_hash(selected, {"content_sha256"})
+        result["statistics"]["nodes"] = len(result.get("nodes", []))
+        result["statistics"]["edges"] = len(result.get("edges", []))
+        result["statistics"]["source_excerpts"] = len(result.get("source_excerpts", []))
+        result["statistics"]["semantic_memory_cards"] = len(
+            result["semantic_memory"].get("cards", [])
+        )
+        result["statistics"]["context_bytes"] = len(
+            json.dumps(result, sort_keys=True, separators=(",", ":")).encode("utf-8")
+        )
+        result["content_sha256"] = canonical_hash(result, {"content_sha256"})
+        return result
+
+    @staticmethod
+    def planner_context(context: dict[str, Any]) -> dict[str, Any]:
+        """Project the full evidence bundle into a compact planner catalog.
+
+        The controller retains the complete implementer context as an artifact.  The
+        planner receives identifiers and short previews so it can select evidence for
+        a task without paying to reread every source excerpt.
+        """
+        nodes = [
+            {
+                "id": item["id"],
+                "kind": item["kind"],
+                "name": item["name"],
+                "properties": _compact_properties(item.get("properties", {})),
+            }
+            for item in context.get("nodes", [])
+        ]
+        edges = [
+            {
+                "id": item["id"],
+                "source": item["source"],
+                "relation": item["relation"],
+                "target": item["target"],
+            }
+            for item in context.get("edges", [])
+        ]
+        evidence_catalog = []
+        for excerpt in context.get("source_excerpts", []):
+            highlighted = [
+                str(line.get("text", ""))
+                for line in excerpt.get("lines", [])
+                if line.get("highlighted")
+            ]
+            preview_lines = highlighted or [
+                str(line.get("text", "")) for line in excerpt.get("lines", [])[:3]
+            ]
+            preview = "\n".join(preview_lines)[:480]
+            evidence_catalog.append(
+                {
+                    "capsule_id": excerpt["capsule_id"],
+                    "path": excerpt.get("path"),
+                    "language": excerpt.get("language"),
+                    "line_start": excerpt.get("line_start"),
+                    "line_end": excerpt.get("line_end"),
+                    "confidence": excerpt.get("confidence"),
+                    "preview": preview,
+                    "supports": [
+                        {
+                            "owner_type": support.get("owner_type"),
+                            "owner_id": support.get("owner_id"),
+                        }
+                        for support in excerpt.get("supports", [])
+                    ],
+                }
+            )
+        allowed_files = [
+            {
+                key: item.get(key)
+                for key in ("path", "bytes", "sha256", "truncated")
+            }
+            for item in context.get("allowed_files", [])
+        ]
+        payload = {
+            "schema_version": "1.0",
+            "context_type": "lightyear-planner-evidence-catalog",
+            "audience": "implementer",
+            "source_context_sha256": context.get("content_sha256"),
+            "graph_content_sha256": context.get("graph_content_sha256"),
+            "evidence_pack_sha256": context.get("evidence_pack_sha256"),
+            "approved_roots": context.get("approved_roots", []),
+            "nodes": nodes,
+            "edges": edges,
+            "evidence_catalog": evidence_catalog,
+            "allowed_files": allowed_files,
+            "semantic_memory": context.get("semantic_memory"),
+            "limitations": [
+                *context.get("limitations", []),
+                "Source bodies are omitted; tasks select evidence_capsule_ids for builder retrieval.",
+            ],
+        }
+        payload["statistics"] = {
+            "nodes": len(nodes),
+            "edges": len(edges),
+            "evidence_catalog_entries": len(evidence_catalog),
+            "allowed_files": len(allowed_files),
+            "semantic_memory_cards": len(
+                (context.get("semantic_memory") or {}).get("cards", [])
+            ),
+            "source_context_bytes": context.get("statistics", {}).get("context_bytes", 0),
+        }
+        return _finish_projection(payload)
+
+    @staticmethod
+    def builder_context(
+        context: dict[str, Any],
+        evidence_capsule_ids: list[str],
+        graph_node_ids: list[str],
+    ) -> dict[str, Any]:
+        """Retrieve only plan-selected graph and source evidence for the builder."""
+        node_by_id = {item["id"]: item for item in context.get("nodes", [])}
+        edge_by_id = {item["id"]: item for item in context.get("edges", [])}
+        excerpt_by_id = {
+            item["capsule_id"]: item for item in context.get("source_excerpts", [])
+        }
+        unknown_capsules = sorted(set(evidence_capsule_ids) - set(excerpt_by_id))
+        if unknown_capsules:
+            raise ContractError(
+                "Planner selected unknown evidence capsule(s): "
+                + ", ".join(unknown_capsules[:10])
+            )
+        unknown_nodes = sorted(set(graph_node_ids) - set(node_by_id))
+        if unknown_nodes:
+            raise ContractError(
+                "Planner selected unknown graph node(s): " + ", ".join(unknown_nodes[:10])
+            )
+
+        selected_excerpts = [excerpt_by_id[item] for item in dict.fromkeys(evidence_capsule_ids)]
+        selected_node_ids = set(graph_node_ids)
+        selected_edge_ids: set[str] = set()
+        for excerpt in selected_excerpts:
+            for support in excerpt.get("supports", []):
+                if support.get("owner_type") == "node":
+                    selected_node_ids.add(str(support.get("owner_id")))
+                elif support.get("owner_type") == "edge":
+                    selected_edge_ids.add(str(support.get("owner_id")))
+        for edge_id in list(selected_edge_ids):
+            edge = edge_by_id.get(edge_id)
+            if edge:
+                selected_node_ids.update((edge["source"], edge["target"]))
+        selected_edges = [
+            item
+            for item in context.get("edges", [])
+            if item["id"] in selected_edge_ids
+            or (item["source"] in selected_node_ids and item["target"] in selected_node_ids)
+        ]
+        for edge in selected_edges:
+            selected_node_ids.update((edge["source"], edge["target"]))
+        selected_nodes = [
+            item for item in context.get("nodes", []) if item["id"] in selected_node_ids
+        ]
+        payload = {
+            "schema_version": "1.0",
+            "context_type": "lightyear-builder-selected-evidence",
+            "audience": "implementer",
+            "source_context_sha256": context.get("content_sha256"),
+            "graph_content_sha256": context.get("graph_content_sha256"),
+            "evidence_pack_sha256": context.get("evidence_pack_sha256"),
+            "selected_evidence_capsule_ids": list(dict.fromkeys(evidence_capsule_ids)),
+            "selected_graph_node_ids": list(dict.fromkeys(graph_node_ids)),
+            "nodes": selected_nodes,
+            "edges": selected_edges,
+            "source_excerpts": selected_excerpts,
+            "semantic_memory": context.get("semantic_memory"),
+            "limitations": [
+                "Evidence is restricted to identifiers selected in the approved planner artifact."
+            ],
+        }
+        payload["statistics"] = {
+            "nodes": len(selected_nodes),
+            "edges": len(selected_edges),
+            "source_excerpts": len(selected_excerpts),
+            "semantic_memory_cards": len(
+                (context.get("semantic_memory") or {}).get("cards", [])
+            ),
+            "source_context_bytes": context.get("statistics", {}).get("context_bytes", 0),
+        }
+        return _finish_projection(payload)
+
+    @staticmethod
     def _append_within(
         payload: dict[str, Any], key: str, item: dict[str, Any], order: WorkOrder
     ) -> bool:
@@ -171,6 +396,9 @@ class GraphContextAssembler:
             "edges": len(payload["edges"]),
             "source_excerpts": len(payload["source_excerpts"]),
             "allowed_files": len(payload["allowed_files"]),
+            "semantic_memory_cards": len(
+                (payload.get("semantic_memory") or {}).get("cards", [])
+            ),
             "context_bytes": len(
                 json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
             ),
@@ -179,3 +407,24 @@ class GraphContextAssembler:
         payload["content_sha256"] = canonical_hash(payload)
         return payload
 
+
+def _compact_properties(properties: dict[str, Any]) -> dict[str, Any]:
+    result: dict[str, Any] = {}
+    for key in sorted(properties):
+        value = properties[key]
+        if isinstance(value, (str, int, float, bool)) or value is None:
+            result[key] = value[:240] if isinstance(value, str) else value
+    return result
+
+
+def _finish_projection(payload: dict[str, Any]) -> dict[str, Any]:
+    payload["statistics"]["context_bytes"] = len(
+        json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    )
+    source_bytes = int(payload["statistics"].get("source_context_bytes", 0) or 0)
+    projected_bytes = payload["statistics"]["context_bytes"]
+    payload["statistics"]["reduction_ratio"] = (
+        round(1 - projected_bytes / source_bytes, 4) if source_bytes else 0.0
+    )
+    payload["content_sha256"] = canonical_hash(payload)
+    return payload

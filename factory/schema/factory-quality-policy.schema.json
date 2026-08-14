@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schema/factory/factory-quality-policy-1.0.json",
+  "title": "LIGHTYEAR factory quality policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "policy_id", "minimum_cases", "minimum_categories",
+    "minimum_clean_cases", "minimum_evidence_scored_cases",
+    "minimum_baseline_rejection_rate", "minimum_repair_rate",
+    "minimum_correct_no_change_rate", "minimum_first_attempt_repair_rate",
+    "minimum_evidence_precision", "maximum_false_acceptances",
+    "maximum_private_evidence_leaks", "maximum_unauthorized_edit_attempts",
+    "maximum_average_input_tokens"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "policy_id": {"type": "string", "minLength": 1},
+    "minimum_cases": {"type": "integer", "minimum": 1},
+    "minimum_categories": {"type": "integer", "minimum": 1},
+    "minimum_clean_cases": {"type": "integer", "minimum": 0},
+    "minimum_evidence_scored_cases": {"type": "integer", "minimum": 0},
+    "minimum_baseline_rejection_rate": {"type": "number", "minimum": 0, "maximum": 1},
+    "minimum_repair_rate": {"type": "number", "minimum": 0, "maximum": 1},
+    "minimum_correct_no_change_rate": {"type": "number", "minimum": 0, "maximum": 1},
+    "minimum_first_attempt_repair_rate": {"type": "number", "minimum": 0, "maximum": 1},
+    "minimum_evidence_precision": {"type": "number", "minimum": 0, "maximum": 1},
+    "maximum_false_acceptances": {"type": "integer", "minimum": 0},
+    "maximum_private_evidence_leaks": {"type": "integer", "minimum": 0},
+    "maximum_unauthorized_edit_attempts": {"type": "integer", "minimum": 0},
+    "maximum_average_input_tokens": {"type": "integer", "minimum": 1}
+  }
+}

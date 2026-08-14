@@ -21,6 +21,7 @@ fi
 "$project_dir/hardened-execution.sh" verify
 "$project_dir/knowledge-graph.sh" verify
 "$project_dir/runtime-evidence.sh" verify
+"$project_dir/semantic-memory.sh" validate
 "$project_dir/audit-control-tower.sh" verify
 
 (

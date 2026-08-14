@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schema/factory/factory-quality-gate-1.0.json",
+  "title": "LIGHTYEAR factory quality gate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "decision_type", "policy_id", "policy_sha256",
+    "evaluation_class", "sealed_binding_sha256", "metrics", "checks",
+    "status", "gaps", "content_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "decision_type": {"const": "lightyear-factory-quality-gate"},
+    "policy_id": {"type": "string"},
+    "policy_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "evaluation_class": {"enum": ["public-calibration", "sealed-holdout"]},
+    "sealed_binding_sha256": {"type": ["string", "null"]},
+    "metrics": {"type": "object"},
+    "checks": {"type": "object", "additionalProperties": {"type": "boolean"}},
+    "status": {"enum": ["qualified", "blocked"]},
+    "gaps": {"type": "array", "items": {"type": "string"}},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

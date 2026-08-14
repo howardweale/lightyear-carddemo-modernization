@@ -31,6 +31,35 @@ immediately. A checkpoint is written after every completed case, so an interrupt
 resume without paying to rerun completed cases. Evaluation-wide budgets constrain total calls,
 tokens, and estimated cost in addition to the existing per-work-order limits.
 
+v0.12.2 makes model context progressive. The planner sees graph structure, file identities, and
+short source previews; its structured tasks select evidence capsule IDs. The controller validates
+those IDs and retrieves only their complete excerpts for the builder. The full context remains a
+content-addressed controller artifact for audit, but is no longer resent to every role. The live
+OpenAI provider also counts exact input tokens before generation and fails closed above the
+per-call ceiling.
+
+v0.13 adds the independent quality boundary. Holdout catalogs are signed outside the repository,
+admitted as expiring envelopes, addressed by opaque case references, and never copied into worker
+artifacts. A versioned policy evaluates mutation repair, clean no-change behavior, evidence
+selection, privacy, path safety, token efficiency, and cost. Only a verified sealed evaluation can
+qualify; public calibration remains useful but non-promotional.
+
+v0.14 adds verified semantic memory after the quality boundary. The controller can promote a
+passed repair, a correct no-change result, or a verified failure into a content-addressed
+experience. Each record binds the work order and run ledger to exact graph, evidence-pack, source
+capsule, and path identities. Positive memories may expose bounded successful edit templates;
+negative memories expose only fingerprints. Sealed-holdout runs are never admitted to implementer
+memory, and any graph or evidence-pack change excludes stale records from retrieval.
+
+```bash
+./semantic-memory.sh validate
+./semantic-memory.sh summary
+./semantic-memory.sh query factory/work-orders/intcalc-repair.example.json
+```
+
+Memory remains advisory. It can make planning faster and cheaper, but it cannot waive fresh source
+inspection, deterministic gates, execution security, or mainframe-equivalence policy.
+
 ## Control model
 
 ```mermaid
@@ -51,8 +80,8 @@ The roles are deliberately separate:
 
 | Role | Receives | Produces | Cannot do |
 |---|---|---|---|
-| Planner | approved work order, bounded implementer graph | structured task plan | widen writable paths |
-| Builder | plan, allowed files, public failure envelope | exact find/replace proposal | see private gate output or apply edits |
+| Planner | approved work order, compact graph and evidence catalog | task plan with selected evidence IDs | widen writable paths or read full source bodies |
+| Builder | plan-selected source excerpts, allowed files, public failure envelope | exact find/replace proposal | see unselected or private evidence, or apply edits |
 | Failure analyst | sanitized gate metadata | bounded failure diagnosis | see private gate output or modify files |
 | Verifier | isolated workspace and private gates | deterministic gate report | modify the workspace or waive a failure |
 | Controller | all signed-in-process artifacts and policy | state transitions, applied changes, receipt | waive a failed gate |
@@ -94,13 +123,26 @@ provider call, and 25,000 output tokens per call. Override these with
 `LIGHTYEAR_EVALUATION_MAX_MODEL_CALLS`, `LIGHTYEAR_EVALUATION_MAX_TOKENS`,
 `LIGHTYEAR_EVALUATION_MAX_COST_USD`, `LIGHTYEAR_EVALUATION_MAX_CASE_COST_USD`,
 `LIGHTYEAR_EVALUATION_MAX_CASE_TOKENS`, `LIGHTYEAR_EVALUATION_PACE_SECONDS`,
-`LIGHTYEAR_MODEL_MAX_RETRIES`, or `LIGHTYEAR_MODEL_MAX_OUTPUT_TOKENS`.
+`LIGHTYEAR_MODEL_MAX_RETRIES`, `LIGHTYEAR_MODEL_MAX_OUTPUT_TOKENS`, or
+`LIGHTYEAR_MODEL_MAX_INPUT_TOKENS_PER_CALL`. Exact input preflight defaults to 60,000 tokens per
+call and can be disabled only with `LIGHTYEAR_MODEL_TOKEN_PREFLIGHT=false` for compatible offline
+endpoints that do not implement the count API.
 
 If the run stops, preserve the output directory shown as `MODEL_EVALUATION` and resume it:
 
 ```bash
 ./model-workcell.sh resume work/model-evaluation-YYYYMMDDTHHMMSSZ
 ```
+
+Render the ordered, controller-mediated role exchange for one run:
+
+```bash
+./model-workcell.sh transcript <runs-root> <run-id>
+```
+
+The default transcript shows planner and builder artifacts plus hashes and call metrics, while
+verifier-private artifacts appear as redacted placeholders. An authorized diagnostic session can
+add `--verifier` as the final argument.
 
 `evaluation.checkpoint.json` is updated after each case. `evaluation.receipt.json` is always
 written, including for a budget or provider stop, and contains only sanitized failure metadata.
@@ -110,6 +152,21 @@ tokens, estimated cost, and each factory receipt identity. Public cases calibrat
 model behavior; they do not prove blind generalization. A sealed holdout must be retained outside
 the worker-visible repository and supplied as an external catalog. Neither class proves z/OS
 equivalence. See `evals/README.md` for evidence-class and scoring rules.
+
+For a sealed evaluation, the independent evaluator keeps the catalog outside the repository and
+uses an external 32-byte-or-longer key:
+
+```bash
+export LIGHTYEAR_EVALUATION_SIGNING_KEY="$(openssl rand -hex 32)"
+./quality-gate.sh sign /secure/holdout.json /secure/holdout.envelope.json independent-evaluator
+./quality-gate.sh validate /secure/holdout.envelope.json
+./quality-gate.sh evaluate /secure/holdout.envelope.json
+./quality-gate.sh compare work/evaluation-a/evaluation.receipt.json work/evaluation-b/evaluation.receipt.json
+```
+
+The public receipt contains the envelope and catalog hashes, aggregate metrics, opaque case
+references, and the quality decision. It does not contain case IDs, categories, mutation markers,
+private gate output, or the signing key. The Quality tab displays this receipt but cannot alter it.
 
 ## Run the mutation gauntlet
 

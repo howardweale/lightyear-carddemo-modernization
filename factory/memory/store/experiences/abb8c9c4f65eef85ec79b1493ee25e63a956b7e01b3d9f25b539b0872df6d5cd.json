@@ -1,0 +1,84 @@
+{
+  "content_sha256": "abb8c9c4f65eef85ec79b1493ee25e63a956b7e01b3d9f25b539b0872df6d5cd",
+  "evidence_class": "factory-run",
+  "experience_id": "experience:74759f2921acc7c5abb88691",
+  "experience_type": "lightyear-verified-semantic-experience",
+  "graph_binding": {
+    "evidence_pack_sha256": "ed0f2387aed68ef6d03eab3fb5de8a265feda68c93b35d1d182afce8ff0ec248",
+    "graph_content_sha256": "6c999445e3530cff73e5cb18832e101f6f9268fe433e19a3c13cbe2396ab796a"
+  },
+  "keywords": [
+    "behavior",
+    "bound",
+    "gates.",
+    "intcalc",
+    "path",
+    "private",
+    "prove",
+    "regression",
+    "repair",
+    "restore",
+    "rounding-mode",
+    "source-faithful",
+    "writable"
+  ],
+  "knowledge": {
+    "edit_fingerprints": [],
+    "edit_templates": [],
+    "lessons": [
+      "Restore source-faithful INTCALC behavior and prove it with private gates."
+    ],
+    "summary": "Bound Repair INTCALC rounding-mode regression to 1 writable path(s)."
+  },
+  "limitations": [
+    "Memory is derived from controller-observed artifacts and does not replace source evidence.",
+    "A verified local gate does not prove z/OS equivalence."
+  ],
+  "outcome": {
+    "attempts": 0,
+    "changed_paths": [],
+    "class": "accept_unchanged",
+    "gates": [
+      {
+        "id": "private-intcalc-policy",
+        "output_sha256": "6798a983342b663fad63fce975ac2dfc8ea52fb7763551eb7402d2e46715e0f7",
+        "status": "passed"
+      }
+    ],
+    "status": "passed"
+  },
+  "privacy": {
+    "audience": "implementer",
+    "executable_negative_edits_included": false,
+    "sealed_holdout_content_included": false,
+    "verifier_private_artifacts_excluded": true
+  },
+  "run_binding": {
+    "final_snapshot_sha256": "70bb0eaceff6f019f3f1bed350440d9b7875d9ca95acce9f78249f4bfa152463",
+    "initial_snapshot_sha256": "70bb0eaceff6f019f3f1bed350440d9b7875d9ca95acce9f78249f4bfa152463",
+    "ledger_head_sha256": "3bc5b7cd37353b34ad5183f7b81db5d22a898fdd2f564ee0298cb21f6734fe8a",
+    "run_id": "memory-demo-accept-unchanged",
+    "work_order_id": "benchmark:intcalc:rounding-mode",
+    "work_order_sha256": "5d69202e3cd8c80337acdb9f97940f216b5edae25af76c58a793052a6e1ebb51"
+  },
+  "schema_version": "1.0",
+  "scope": {
+    "evidence_capsule_ids": [
+      "capsule:00499794e29839da11701d13",
+      "capsule:00d173112582b1d0d1b9256a",
+      "capsule:04912d3599317c8ee29cd741",
+      "capsule:050be894b432055cfd868396",
+      "capsule:0619668eabd4c0d8d19cd69a",
+      "capsule:0e55a29c41b127d2684e4a75",
+      "capsule:0f74030cbf9521668ea42bf7",
+      "capsule:115a8c8c9ca2af9894fee5c9"
+    ],
+    "graph_node_ids": [
+      "workload:carddemo-intcalc"
+    ],
+    "paths": [
+      "factory/benchmarks/intcalc_candidate.py"
+    ]
+  },
+  "state": "active"
+}

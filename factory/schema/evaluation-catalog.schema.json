@@ -18,13 +18,21 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["id", "category", "before", "after"],
+        "required": ["id", "category"],
         "properties": {
           "id": {"type": "string", "minLength": 1},
           "category": {"type": "string", "minLength": 1},
+          "expectation": {"enum": ["reject-and-repair", "accept-unchanged"]},
           "before": {"type": "string", "minLength": 1},
-          "after": {"type": "string"}
-        }
+          "after": {"type": "string"},
+          "relevant_evidence_owner_ids": {"type": "array", "items": {"type": "string"}},
+          "forbidden_public_markers": {"type": "array", "items": {"type": "string"}}
+        },
+        "allOf": [{
+          "if": {"properties": {"expectation": {"const": "accept-unchanged"}}, "required": ["expectation"]},
+          "then": {},
+          "else": {"required": ["before", "after"]}
+        }]
       }
     }
   }

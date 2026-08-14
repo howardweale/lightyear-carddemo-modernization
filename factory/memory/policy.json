@@ -1,0 +1,14 @@
+{
+  "schema_version": "1.0",
+  "maximum_results": 5,
+  "maximum_context_bytes": 24000,
+  "minimum_score": 10,
+  "maximum_lessons": 12,
+  "maximum_edit_templates": 8,
+  "allow_negative_memory": true,
+  "allowed_evidence_classes": [
+    "factory-run",
+    "public-calibration",
+    "production-observed"
+  ]
+}

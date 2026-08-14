@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schema/factory/semantic-experience-1.0.json",
+  "title": "LIGHTYEAR Verified Semantic Experience",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "experience_type", "experience_id", "state", "evidence_class",
+    "run_binding", "graph_binding", "scope", "outcome", "knowledge", "keywords",
+    "privacy", "limitations", "content_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "experience_type": {"const": "lightyear-verified-semantic-experience"},
+    "experience_id": {"type": "string", "pattern": "^experience:[0-9a-f]{24}$"},
+    "state": {"const": "active"},
+    "evidence_class": {"enum": ["factory-run", "public-calibration", "production-observed"]},
+    "run_binding": {"type": "object"},
+    "graph_binding": {
+      "type": "object",
+      "required": ["graph_content_sha256", "evidence_pack_sha256"],
+      "properties": {
+        "graph_content_sha256": {"type": ["string", "null"]},
+        "evidence_pack_sha256": {"type": ["string", "null"]}
+      }
+    },
+    "scope": {"type": "object"},
+    "outcome": {
+      "type": "object",
+      "required": ["class", "status", "attempts", "changed_paths", "gates"],
+      "properties": {
+        "class": {"enum": ["verified_success", "verified_failure", "accept_unchanged"]},
+        "status": {"enum": ["passed", "blocked"]},
+        "attempts": {"type": "integer", "minimum": 0},
+        "changed_paths": {"type": "array", "items": {"type": "string"}},
+        "gates": {"type": "array", "items": {"type": "object"}}
+      }
+    },
+    "knowledge": {"type": "object"},
+    "keywords": {"type": "array", "items": {"type": "string"}},
+    "privacy": {
+      "type": "object",
+      "required": [
+        "audience", "verifier_private_artifacts_excluded",
+        "sealed_holdout_content_included", "executable_negative_edits_included"
+      ],
+      "properties": {
+        "audience": {"const": "implementer"},
+        "verifier_private_artifacts_excluded": {"const": true},
+        "sealed_holdout_content_included": {"const": false},
+        "executable_negative_edits_included": {"const": false}
+      }
+    },
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

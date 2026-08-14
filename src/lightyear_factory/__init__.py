@@ -1,3 +1,3 @@
 """LIGHTYEAR autonomous modernization factory control plane."""
 
-__version__ = "0.12.1"
+__version__ = "0.14.0"

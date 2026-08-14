@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import gzip
 from pathlib import Path
 from typing import Any
 
@@ -23,6 +24,8 @@ def build_canonical_audit(
     policy_path: Path,
     signing_key: bytes | None = None,
     execution_receipt_path: Path | None = None,
+    memory_snapshot_path: Path | None = None,
+    release_id: str = "release:carddemo-intcalc:v0.14-demo",
 ) -> dict[str, Any]:
     graph = json.loads(graph_receipt_path.read_text(encoding="utf-8"))
     evidence = json.loads(evidence_receipt_path.read_text(encoding="utf-8"))
@@ -43,6 +46,27 @@ def build_canonical_audit(
         [{"id": "evidence:source-pack", "kind": "source_evidence_pack", "sha256": evidence["content_sha256"]}],
         {"statistics": evidence["statistics"], "graph_content_sha256": evidence["graph_content_sha256"]},
     ))
+    if memory_snapshot_path is not None and memory_snapshot_path.is_file():
+        with gzip.open(memory_snapshot_path, "rt", encoding="utf-8") as handle:
+            memory = json.load(handle)
+        if canonical_hash(memory, {"content_sha256"}) != memory.get("content_sha256"):
+            raise ValueError("Semantic memory snapshot failed content hash validation")
+        drafts.append(_draft(
+            "2022-07-18T00:00:00.150Z",
+            "system:memory-controller", "system", "factory.memory_snapshot_published",
+            "semantic_memory", "memory:verified-experiences",
+            [{
+                "id": "memory:verified-experiences",
+                "kind": "semantic_memory_snapshot",
+                "sha256": memory["content_sha256"],
+            }],
+            {
+                "statistics": memory["statistics"],
+                "policy_sha256": memory["policy_sha256"],
+                "graph_content_sha256": memory.get("graph_content_sha256", []),
+                "evidence_pack_sha256": memory.get("evidence_pack_sha256", []),
+            },
+        ))
     work_order_sha = canonical_hash(work_order)
     drafts.append(_draft(
         "2022-07-18T00:00:00.200Z",
@@ -119,7 +143,6 @@ def build_canonical_audit(
                 drafts.append(_decision_draft(decision, run["content_sha256"]))
 
     promotion_at = _tick(tick)
-    release_id = "release:carddemo-intcalc:v0.12-demo"
     promotion = policy.promotion_decision(
         release_id,
         runtime_decisions,

@@ -94,6 +94,8 @@
         <button id="inspector-tab" class="right-tab active" type="button">Inspector</button>
         <button id="chat-tab" class="right-tab" type="button">Ask graph</button>
         <button id="factory-tab" class="right-tab" type="button">Factory</button>
+        <button id="evaluation-tab" class="right-tab" type="button">Quality</button>
+        <button id="memory-tab" class="right-tab" type="button">Memory</button>
         <button id="runtime-tab" class="right-tab" type="button">Runtime</button>
         <button id="audit-tab" class="right-tab" type="button">Audit</button>
       </nav>
@@ -239,6 +241,81 @@
             <code id="factory-receipt-hash" class="factory-hash"></code>
           </section>
         </article>
+      </div>
+
+      <div id="evaluation-view" class="factory-view" hidden>
+        <div class="factory-header">
+          <div>
+            <p class="eyebrow">SEALED EVALUATION CONTROL TOWER</p>
+            <h2>Quality before promotion.</h2>
+          </div>
+          <button id="refresh-evaluations" class="text-button" type="button">Refresh</button>
+        </div>
+        <p class="chat-disclosure">Holdout case identities and verifier-private answers remain outside this read-only projection.</p>
+        <div id="evaluation-runs" class="factory-runs" aria-live="polite"></div>
+        <div id="evaluation-empty" class="factory-empty" hidden>
+          <strong>No evaluation receipts found</strong>
+          <p>Run <code>./quality-gate.sh evaluate</code>, then refresh.</p>
+        </div>
+        <article id="evaluation-detail" class="factory-detail" hidden>
+          <div id="evaluation-badges" class="answer-meta"></div>
+          <h2 id="evaluation-title"></h2>
+          <code id="evaluation-id"></code>
+          <section>
+            <h3>Quality metrics</h3>
+            <div id="evaluation-metrics" class="runtime-summary"></div>
+          </section>
+          <section>
+            <h3>Promotion checks</h3>
+            <div id="evaluation-checks"></div>
+          </section>
+          <section>
+            <h3>Known limitations</h3>
+            <div id="evaluation-limitations" class="limitations"></div>
+          </section>
+          <section>
+            <h3>Receipt identity</h3>
+            <code id="evaluation-receipt-hash" class="factory-hash"></code>
+          </section>
+        </article>
+      </div>
+
+      <div id="memory-view" class="factory-view" hidden>
+        <div class="factory-header">
+          <div>
+            <p class="eyebrow">VERIFIED EXPERIENCE MEMORY</p>
+            <h2>The factory remembers only what it can prove.</h2>
+          </div>
+          <button id="refresh-memory" class="text-button" type="button">Refresh</button>
+        </div>
+        <p class="chat-disclosure">Sealed holdouts and verifier-private output never enter this implementer projection. Stale graph identities are excluded from retrieval.</p>
+        <div id="memory-metrics" class="runtime-summary memory-summary"></div>
+        <div id="memory-experiences" class="factory-runs" aria-live="polite"></div>
+        <div id="memory-empty" class="factory-empty" hidden>
+          <strong>No verified experiences found</strong>
+          <p>Run <code>./semantic-memory.sh ingest work/factory-runs/&lt;run-id&gt;</code>, then refresh.</p>
+        </div>
+        <article id="memory-detail" class="factory-detail" hidden>
+          <div id="memory-badges" class="answer-meta"></div>
+          <h2 id="memory-title"></h2>
+          <code id="memory-id"></code>
+          <section>
+            <h3>Verified lessons</h3>
+            <ol id="memory-lessons" class="memory-lessons"></ol>
+          </section>
+          <section>
+            <h3>Graph and path bindings</h3>
+            <div id="memory-bindings" class="factory-paths"></div>
+          </section>
+          <section>
+            <h3>Experience identity</h3>
+            <code id="memory-experience-hash" class="factory-hash"></code>
+          </section>
+        </article>
+        <section>
+          <h3>Snapshot identity</h3>
+          <code id="memory-snapshot-hash" class="factory-hash"></code>
+        </section>
       </div>
 
       <div id="runtime-view" class="runtime-view" hidden>

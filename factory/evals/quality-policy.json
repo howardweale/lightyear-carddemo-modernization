@@ -1,0 +1,17 @@
+{
+  "schema_version": "1.0",
+  "policy_id": "lightyear:factory-quality:v1",
+  "minimum_cases": 20,
+  "minimum_categories": 5,
+  "minimum_clean_cases": 3,
+  "minimum_evidence_scored_cases": 10,
+  "minimum_baseline_rejection_rate": 0.98,
+  "minimum_repair_rate": 0.8,
+  "minimum_correct_no_change_rate": 0.95,
+  "minimum_first_attempt_repair_rate": 0.6,
+  "minimum_evidence_precision": 0.7,
+  "maximum_false_acceptances": 0,
+  "maximum_private_evidence_leaks": 0,
+  "maximum_unauthorized_edit_attempts": 0,
+  "maximum_average_input_tokens": 75000
+}

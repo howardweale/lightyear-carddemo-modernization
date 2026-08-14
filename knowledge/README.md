@@ -2,7 +2,9 @@
 
 The canonical graph is complemented by the runtime evidence plane and z/OSMF adapter kit under
 `knowledge/runtime/`, the audit ledger and Evidence Control Tower under `../audit/`, and the v0.12
-hardened execution policy under `../factory/execution/`.
+hardened execution policy under `../factory/execution/`. Verified factory experiences are retained
+under `../factory/memory/` and joined to graph context only when their graph and evidence identities
+still match.
 Runtime captures remain append-only evidence rather than nondeterministic mutations of the source
 snapshot. The explorer joins both identities at read time and refuses to treat simulated or local
 evidence as proof of z/OS equivalence.
@@ -46,7 +48,9 @@ The structural, semantic-mapping, initial verification, local exploration, gover
 content-addressed source-evidence, grounded-question, database-projection, bounded factory-
 orchestration, signed admission, scoped identity, container policy, runtime evidence, z/OSMF
 connection simulation, and audit-governance layers are implemented in this release. Independent
-production evidence remains the most important next addition.
+production evidence remains the most important next addition. v0.14 also implements the first
+longitudinal memory layer for verified plans, patches, outcomes, and non-executable failures;
+sealed evaluation content remains outside that memory boundary.
 
 ## Trust model
 

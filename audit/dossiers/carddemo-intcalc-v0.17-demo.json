@@ -2,11 +2,11 @@
   "audit": {
     "checkpoint_signature_algorithm": "none",
     "event_count": 19,
-    "ledger_content_sha256": "c65fc38511888b3408af84ed1c55fd1ba3916467e8793bc66d89b615449f0733",
-    "ledger_head_sha256": "dfa773c5d8b6ba9c4bbf3d7ef412279ea655dad06ddb8f8c5923f38e236d3eba",
+    "ledger_content_sha256": "8df302ce5a3c24fbc1ad1024f6e8993a2a042d660613c6eef7bc966c13bc6f6c",
+    "ledger_head_sha256": "e7cd286bbc6f1f197ef194447dc0adeecfc4597d249198756020fdfd00c45277",
     "ledger_id": "lightyear:carddemo:audit"
   },
-  "content_sha256": "5bd28f2c827098974b1ba6fd3af498a727a2f8239068f6de7976c4aeb589d963",
+  "content_sha256": "0a98223c107d838bbcf6a6327ccee510927abaff042ed05220b28ad11a11e586",
   "dossier_type": "lightyear-release-evidence",
   "durable_control_plane": {
     "approval_consumption": "exactly-once",
@@ -26,7 +26,7 @@
     {
       "id": "carddemo:modernization:v0.15",
       "kind": "portfolio_plan",
-      "sha256": "e52238b46de085032ca33fb92c370678e8f8b0d9f90dfc33578c889011c14b78"
+      "sha256": "4e7033f6efee3268508fea4d38b2a1efa802586d1332b536bca4cd1d097a9c6b"
     },
     {
       "id": "control-tower:live-evidence-plane",
@@ -36,7 +36,7 @@
     {
       "id": "evidence:source-pack",
       "kind": "source_evidence_pack",
-      "sha256": "9c3076a94af6038e676ece0747f2fffef15c4f34f2f242225a7087f4cc1c5599"
+      "sha256": "e0096d736f84550abbfe86e3a7c85646aab427b1f3531d30d6584163fe515592"
     },
     {
       "id": "execution:carddemo-hardened-plane",
@@ -46,7 +46,7 @@
     {
       "id": "factory:durable-conformance",
       "kind": "durable_conformance_receipt",
-      "sha256": "8e0e912561acf01944c469c218acdb913327a9f684a3dff0b1587c786b40bea9"
+      "sha256": "4c3156a31421e0b3ea340820400ec268c9797ffcd629223321c2c0238421357f"
     },
     {
       "id": "factory:durable-control-plane",
@@ -56,7 +56,7 @@
     {
       "id": "lightyear:carddemo-modernization",
       "kind": "graph_snapshot",
-      "sha256": "ce4e79bbee65763dc0aa998fd990d14ae31b630bf1dbacc373b6e2581d3b5ec9"
+      "sha256": "a37416e5efaf25f42dff13d01544f3bae8d72111e0c364482df72e38b649fb91"
     },
     {
       "id": "memory:verified-experiences",
@@ -66,7 +66,7 @@
     {
       "id": "release:carddemo-intcalc:v0.17-demo",
       "kind": "decision_input",
-      "sha256": "ce4e79bbee65763dc0aa998fd990d14ae31b630bf1dbacc373b6e2581d3b5ec9"
+      "sha256": "a37416e5efaf25f42dff13d01544f3bae8d72111e0c364482df72e38b649fb91"
     },
     {
       "id": "runtime-run:local-oracle-intcalc-reference",
@@ -124,12 +124,12 @@
     "approval_authority": "human",
     "conflicts": 1,
     "orders": 3,
-    "plan_sha256": "e52238b46de085032ca33fb92c370678e8f8b0d9f90dfc33578c889011c14b78",
+    "plan_sha256": "4e7033f6efee3268508fea4d38b2a1efa802586d1332b536bca4cd1d097a9c6b",
     "status": "approval_required",
     "waves": 2
   },
   "promotion_decision": {
-    "content_sha256": "dc83822cbd198d305355a440d3cf169deaf607b88084c2e3be144aa067294dac",
+    "content_sha256": "42917361d9665b69a1ef946849015551bbe2dfa4cb4bf42f980204ea700e01fa",
     "evaluated_at": "2022-07-18T00:00:01.300Z",
     "exception": null,
     "gaps": [
@@ -141,7 +141,7 @@
       "execution_decision_ids": [
         "decision:execution:hardened-readiness"
       ],
-      "graph_content_sha256": "ce4e79bbee65763dc0aa998fd990d14ae31b630bf1dbacc373b6e2581d3b5ec9",
+      "graph_content_sha256": "a37416e5efaf25f42dff13d01544f3bae8d72111e0c364482df72e38b649fb91",
       "runtime_decision_ids": [
         "decision:local-oracle-intcalc-reference:development_readiness",
         "decision:local-oracle-intcalc-reference:mainframe_equivalence",
@@ -150,7 +150,7 @@
         "decision:zosmf-intcalc-job00001:development_readiness",
         "decision:zosmf-intcalc-job00001:mainframe_equivalence"
       ],
-      "source_evidence_content_sha256": "9c3076a94af6038e676ece0747f2fffef15c4f34f2f242225a7087f4cc1c5599"
+      "source_evidence_content_sha256": "e0096d736f84550abbfe86e3a7c85646aab427b1f3531d30d6584163fe515592"
     },
     "override_allowed": false,
     "policy_id": "release.promotion",

@@ -4,7 +4,7 @@
 
 **Decision:** **BLOCKED**
 
-**Dossier identity:** `5bd28f2c827098974b1ba6fd3af498a727a2f8239068f6de7976c4aeb589d963`
+**Dossier identity:** `0a98223c107d838bbcf6a6327ccee510927abaff042ed05220b28ad11a11e586`
 
 ## Promotion rationale
 
@@ -33,15 +33,15 @@ Release is blocked until every independent runtime and execution-security gate h
 | Kind | Identifier | SHA-256 |
 |---|---|---|
 | `work_order` | `carddemo:intcalc:bounded-repair` | `71e7e34d92dd056a…` |
-| `portfolio_plan` | `carddemo:modernization:v0.15` | `e52238b46de08503…` |
+| `portfolio_plan` | `carddemo:modernization:v0.15` | `4e7033f6efee3268…` |
 | `operational_control_policy` | `control-tower:live-evidence-plane` | `b4c43578b6cb7060…` |
-| `source_evidence_pack` | `evidence:source-pack` | `9c3076a94af6038e…` |
+| `source_evidence_pack` | `evidence:source-pack` | `e0096d736f84550a…` |
 | `decision_input` | `execution:carddemo-hardened-plane` | `83d937880f17192b…` |
-| `durable_conformance_receipt` | `factory:durable-conformance` | `8e0e912561acf019…` |
+| `durable_conformance_receipt` | `factory:durable-conformance` | `4c3156a31421e0b3…` |
 | `durable_execution_policy` | `factory:durable-control-plane` | `72b0c927dc60dc8b…` |
-| `graph_snapshot` | `lightyear:carddemo-modernization` | `ce4e79bbee65763d…` |
+| `graph_snapshot` | `lightyear:carddemo-modernization` | `a37416e5efaf25f4…` |
 | `semantic_memory_snapshot` | `memory:verified-experiences` | `42000f0e821e12b7…` |
-| `decision_input` | `release:carddemo-intcalc:v0.17-demo` | `ce4e79bbee65763d…` |
+| `decision_input` | `release:carddemo-intcalc:v0.17-demo` | `a37416e5efaf25f4…` |
 | `decision_input` | `runtime-run:local-oracle-intcalc-reference` | `9ada6983de37a9aa…` |
 | `decision_input` | `runtime-run:recorded-zos-intcalc-replay` | `d7d2cb1562f26f1c…` |
 | `decision_input` | `runtime-run:zosmf-intcalc-job00001` | `c821cdbcd2ba17c4…` |
@@ -59,13 +59,13 @@ Release is blocked until every independent runtime and execution-security gate h
 - Execution waves: 2
 - Detected conflicts: 1
 - Approval authority: `human`
-- Plan: `e52238b46de085032ca33fb92c370678e8f8b0d9f90dfc33578c889011c14b78`
+- Plan: `4e7033f6efee3268508fea4d38b2a1efa802586d1332b536bca4cd1d097a9c6b`
 
 ## Audit checkpoint
 
 - Ledger: `lightyear:carddemo:audit`
 - Events: 19
-- Ledger head: `dfa773c5d8b6ba9c4bbf3d7ef412279ea655dad06ddb8f8c5923f38e236d3eba`
+- Ledger head: `e7cd286bbc6f1f197ef194447dc0adeecfc4597d249198756020fdfd00c45277`
 - Signature algorithm: `none`
 
 ## Durable recovery control plane

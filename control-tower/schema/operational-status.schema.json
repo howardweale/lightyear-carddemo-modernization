@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schema/operational-status-1.0.json",
+  "title": "LIGHTYEAR live control-tower status",
+  "type": "object",
+  "required": ["schema_version", "plane_type", "status", "connection", "read_only", "command_plane", "latest_sequence", "sources", "alerts"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "plane_type": {"const": "lightyear-live-evidence-control-plane"},
+    "status": {"enum": ["healthy", "warning", "critical"]},
+    "connection": {"enum": ["live", "reconnecting", "unavailable"]},
+    "read_only": {"const": true},
+    "command_plane": {"const": "disabled"},
+    "latest_sequence": {"type": "integer", "minimum": 0},
+    "sources": {"type": "array", "items": {"type": "object"}},
+    "alerts": {"type": "array", "items": {"type": "object"}}
+  }
+}

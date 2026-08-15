@@ -1,6 +1,7 @@
 # LIGHTYEAR Modernization Knowledge Graph
 
-The canonical graph is complemented by the runtime evidence plane and z/OSMF adapter kit under
+The canonical graph is complemented by the v0.17 live operational plane under
+`../control-tower/`, the runtime evidence plane and z/OSMF adapter kit under
 `knowledge/runtime/`, the audit ledger and Evidence Control Tower under `../audit/`, and the v0.12
 hardened execution policy under `../factory/execution/`. Verified factory experiences are retained
 under `../factory/memory/` and joined to graph context only when their graph and evidence identities
@@ -106,6 +107,8 @@ snapshot carries the ontology content hash, and validation rejects undefined or 
   guidance; run artifacts and receipts are generated beneath `../work/`.
 - `../audit/`: hash-chained events, deterministic policy decisions, governed exceptions, release
   dossiers, schemas, and checkpoint guidance.
+- `../control-tower/`: canonical operational events, freshness/alert policy, SSE projection, and
+  production hardening guidance.
 
 The graph uses plain JSON and the Python standard library so it remains portable. It can export
 the same snapshot into Neo4j without making that database the source of truth; Amazon Neptune,
@@ -128,6 +131,8 @@ PYTHONPATH=src python3 -m lightyear_knowledge_graph trace \
   --to modern:test:ai.lightyear.carddemo.service.InterestCalculationServiceTest#matchesInterestAndDefaultRateRules
 
 ./graph-explorer.sh
+
+./live-control-tower.sh serve
 
 ./factory-benchmark.sh
 

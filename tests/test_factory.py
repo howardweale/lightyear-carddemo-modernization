@@ -105,6 +105,7 @@ class FactoryTests(unittest.TestCase):
         )
         self.assertEqual(WORK_ORDER_SCHEMA_VERSION, example.to_dict()["schema_version"])
 
+    @unittest.skipIf(os.name == "nt", "Bash launcher is verified on POSIX hosts")
     def test_python_runtime_admission_selects_supported_interpreter_and_rejects_old_one(self) -> None:
         runtime = ROOT / "python-runtime.sh"
         accepted = subprocess.run(

@@ -5,6 +5,7 @@ import sqlite3
 import tempfile
 import threading
 import unittest
+from contextlib import closing
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -183,7 +184,7 @@ class DurableFactoryTest(unittest.TestCase):
     def test_event_chain_detects_tampering(self) -> None:
         self.submit()
         self.assertEqual(self.queue.validate()["status"], "passed")
-        with sqlite3.connect(self.queue.path) as connection:
+        with closing(sqlite3.connect(self.queue.path)) as connection, connection:
             connection.execute(
                 "UPDATE durable_events SET payload_json='{}' WHERE sequence=1"
             )

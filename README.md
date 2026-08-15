@@ -1,23 +1,23 @@
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.16.0 — durable recovery control plane**
+Release: **v0.17.0 — live evidence and Control Tower plane**
 
-v0.16 makes portfolio execution recoverable. Work is persisted before dispatch, leased
-transactionally to disposable workers, heartbeat-protected while running, and safely returned to
-the queue after a crash. Completion is idempotent, human approvals are single-use, successor waves
-remain blocked behind failed predecessors, and every transition enters a hash-chained event ledger.
+v0.17 makes the existing Control Tower live. Factory, Portfolio, Recovery, Quality, Memory,
+Runtime, and Audit remain independent authoritative stores; a new operational plane observes their
+identities, emits hash-chained events, classifies freshness and trust, raises alerts, and streams
+updates to the browser with resumable Server-Sent Events.
 
 ```bash
-./durable-factory.sh verify
-./durable-factory.sh init
-./durable-factory.sh status
+./live-control-tower.sh verify
+./live-control-tower.sh serve
 ```
 
-The Graph Explorer includes a read-only **Recovery** view. SQLite is the locally executable
-durability oracle; a multi-host deployment should preserve the same contracts with PostgreSQL and
-immutable object storage. See [factory/durable/README.md](factory/durable/README.md).
+Open `http://127.0.0.1:8765`. The browser remains strictly read-only: it cannot approve, lease,
+retry, dispatch, promote, or write exceptions. See
+[control-tower/README.md](control-tower/README.md) for the production architecture and command-plane
+hardening boundary.
 
-Previous milestone: **v0.15.0 — conflict-aware portfolio factory**
+Previous milestone: **v0.16.0 — durable recovery control plane**
 
 An evidence-aware knowledge graph, source-faithful local oracle, differential harness, and
 Java/Spring Batch candidate for AWS CardDemo. Together they form the first engineering cell of a
@@ -203,6 +203,11 @@ policy changes the plan hash and invalidates the approval.
 53. Retrieves bounded graph-, path-, and vocabulary-matched experience cards for planners and builders.
 54. Detects tampering, stale evidence, privacy contamination, and executable negative edits.
 55. Projects memory coverage, outcomes, lessons, and identities in the read-only Memory tab.
+56. Streams canonical operational events from every control-plane domain over resumable SSE.
+57. Shows per-source freshness, observation age, identity change, trust class, and stream sequence.
+58. Raises visible alerts for dead letters, expired leases, stale runtime evidence, and blocked releases.
+59. Reloads runtime and audit projections when their authoritative snapshots change.
+60. Keeps the live UI query-only until an authenticated, signed, policy-governed command API exists.
 
 The included `candidate-java` module is the first modernization candidate. It consumes and emits
 the same fixed-width records as the oracle, including COBOL signed zoned decimals.

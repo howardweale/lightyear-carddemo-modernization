@@ -690,8 +690,8 @@ class ModelWorkcellTests(unittest.TestCase):
             self.assertRegex(schema["$id"], r"-(?:1\.[01]|2\.0)\.json$")
 
     def test_factory_ui_projects_intelligence_without_becoming_authority(self) -> None:
-        html = (ROOT / "knowledge" / "viewer" / "index.html").read_text()
-        script = (ROOT / "knowledge" / "viewer" / "app.js").read_text()
+        html = (ROOT / "knowledge" / "viewer" / "index.html").read_text(encoding="utf-8")
+        script = (ROOT / "knowledge" / "viewer" / "app.js").read_text(encoding="utf-8")
         self.assertIn('id="factory-intelligence"', html)
         self.assertIn('id="evaluation-tab"', html)
         self.assertIn('id="evaluation-checks"', html)

@@ -25,10 +25,11 @@ def build_canonical_audit(
     signing_key: bytes | None = None,
     execution_receipt_path: Path | None = None,
     memory_snapshot_path: Path | None = None,
-    release_id: str = "release:carddemo-intcalc:v0.16-demo",
+    release_id: str = "release:carddemo-intcalc:v0.17-demo",
     portfolio_plan_path: Path | None = None,
     durable_policy_path: Path | None = None,
     durable_conformance_path: Path | None = None,
+    control_tower_policy_path: Path | None = None,
 ) -> dict[str, Any]:
     graph = json.loads(graph_receipt_path.read_text(encoding="utf-8"))
     evidence = json.loads(evidence_receipt_path.read_text(encoding="utf-8"))
@@ -143,6 +144,25 @@ def build_canonical_audit(
                 "event_integrity": durable_policy["event_integrity"],
                 "production_adapter": durable_policy["production_adapter"],
                 "conformance": conformance_details,
+            },
+        ))
+
+    if control_tower_policy_path is not None and control_tower_policy_path.is_file():
+        control_policy = json.loads(control_tower_policy_path.read_text(encoding="utf-8"))
+        control_policy_sha = canonical_hash(control_policy)
+        drafts.append(_draft(
+            "2022-07-18T00:00:00.240Z",
+            "system:control-tower", "system", "control_tower.live_plane_registered",
+            "operational_control_policy", "control-tower:live-evidence-plane",
+            [{
+                "id": "control-tower:live-evidence-plane",
+                "kind": "operational_control_policy",
+                "sha256": control_policy_sha,
+            }],
+            {
+                "command_plane": control_policy["command_plane"],
+                "loopback_only": control_policy["loopback_only"],
+                "sources": control_policy["sources"],
             },
         ))
 

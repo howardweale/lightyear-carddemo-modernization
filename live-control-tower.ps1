@@ -1,8 +1,12 @@
+param(
+  [ValidateSet("serve", "validate", "events", "verify")][string]$Command = "serve",
+  [Parameter(ValueFromRemainingArguments=$true)][string[]]$Rest
+)
 $ErrorActionPreference = "Stop"
-
 $ProjectDir = $PSScriptRoot
 $env:PYTHONPATH = Join-Path $ProjectDir "src"
 Set-Location $ProjectDir
+
 $versions = @("3.13", "3.12", "3.11", "3.14")
 $selected = $null
 foreach ($version in $versions) {
@@ -16,5 +20,15 @@ foreach ($version in $versions) {
   if ($probeExitCode -eq 0) { $selected = "-$version"; break }
 }
 if (-not $selected) { throw "LIGHTYEAR requires Python 3.11 or newer." }
-& py $selected -m lightyear_knowledge_graph serve @args
+
+if ($Command -eq "serve") {
+  & py $selected -m lightyear_knowledge_graph serve @Rest
+} elseif ($Command -eq "verify") {
+  & py $selected -m unittest tests.test_live_control_tower -v
+  if ($LASTEXITCODE -eq 0) {
+    & py $selected -m lightyear_control_tower validate --database (Join-Path $ProjectDir "work/control-tower/events.sqlite3")
+  }
+} else {
+  & py $selected -m lightyear_control_tower $Command @Rest
+}
 exit $LASTEXITCODE

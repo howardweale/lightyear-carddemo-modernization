@@ -29,9 +29,10 @@ DEFAULT_MEMORY_SNAPSHOT = Path("factory/memory/store/memory.snapshot.json.gz")
 DEFAULT_PORTFOLIO_PLAN = Path("factory/portfolio/carddemo-plan.snapshot.json")
 DEFAULT_DURABLE_POLICY = Path("factory/durable/policy.json")
 DEFAULT_DURABLE_CONFORMANCE = Path("factory/durable/conformance.receipt.json")
-DEFAULT_DOSSIER_JSON = Path("audit/dossiers/carddemo-intcalc-v0.16-demo.json")
-DEFAULT_DOSSIER_MD = Path("audit/dossiers/carddemo-intcalc-v0.16-demo.md")
-DEFAULT_RELEASE = "release:carddemo-intcalc:v0.16-demo"
+DEFAULT_CONTROL_TOWER_POLICY = Path("control-tower/policy.json")
+DEFAULT_DOSSIER_JSON = Path("audit/dossiers/carddemo-intcalc-v0.17-demo.json")
+DEFAULT_DOSSIER_MD = Path("audit/dossiers/carddemo-intcalc-v0.17-demo.md")
+DEFAULT_RELEASE = "release:carddemo-intcalc:v0.17-demo"
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -49,6 +50,7 @@ def build_parser() -> argparse.ArgumentParser:
     build.add_argument("--portfolio-plan", type=Path, default=DEFAULT_PORTFOLIO_PLAN)
     build.add_argument("--durable-policy", type=Path, default=DEFAULT_DURABLE_POLICY)
     build.add_argument("--durable-conformance", type=Path, default=DEFAULT_DURABLE_CONFORMANCE)
+    build.add_argument("--control-tower-policy", type=Path, default=DEFAULT_CONTROL_TOWER_POLICY)
     build.add_argument("--output", type=Path, default=DEFAULT_SNAPSHOT)
     build.add_argument("--dossier-json", type=Path, default=DEFAULT_DOSSIER_JSON)
     build.add_argument("--dossier-markdown", type=Path, default=DEFAULT_DOSSIER_MD)
@@ -100,6 +102,7 @@ def main(argv: list[str] | None = None) -> int:
             args.portfolio_plan,
             args.durable_policy,
             args.durable_conformance,
+            args.control_tower_policy,
         )
         write_snapshot(payload, args.output)
         dossier = build_dossier(payload, args.release)

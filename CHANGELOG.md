@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.17.0 — 2026-08-16
+
+- Added a canonical operational event envelope and append-only SQLite WAL reference ledger with
+  monotonic sequence, correlation, trust, severity, time, previous-hash and content-hash fields.
+- Added source observers for Factory, Portfolio, Recovery, Quality, Memory, Runtime and Audit with
+  explicit expected latency, freshness, last observation, last identity change and trust class.
+- Added resumable Server-Sent Events, bounded replay, heartbeat and live-status APIs so the local
+  Control Tower updates without polling or manual refresh.
+- Added operational alerts for dead letters, expired leases, stale runtime evidence, unavailable
+  recovery projections and blocked release promotion, including opened/resolved ledger events.
+- Upgraded the Graph Explorer into an Evidence Control Tower with connection, sequence, freshness,
+  trust and active-alert indicators while keeping every operational surface strictly read-only.
+- Added live runtime/audit snapshot reloading, portable event/status schemas, cross-platform
+  launchers, production hardening guidance and Windows Python 3.12/3.13/3.14 discovery.
+- Added event replay, chain tampering, source-change, freshness, alert, SSE and no-command-authority
+  tests plus full verification integration.
+
 ## 0.16.0 — 2026-08-15
 
 - Added a transactional durable control plane with a SQLite WAL reference backend and explicit

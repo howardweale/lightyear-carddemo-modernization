@@ -24,6 +24,7 @@ fi
 "$project_dir/semantic-memory.sh" validate
 "$project_dir/portfolio-factory.sh" verify
 "$project_dir/durable-factory.sh" verify
+"$project_dir/live-control-tower.sh" verify
 "$project_dir/audit-control-tower.sh" verify
 
 (

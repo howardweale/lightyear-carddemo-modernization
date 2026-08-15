@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import mimetypes
+import queue
 import threading
 import webbrowser
 from collections import defaultdict, deque
@@ -23,6 +24,12 @@ from lightyear_runtime.engine import load_snapshot as load_runtime_snapshot
 from lightyear_runtime.store import RuntimeEvidenceStore
 from lightyear_audit.ledger import load_snapshot as load_audit_snapshot
 from lightyear_audit.store import AuditStore
+from lightyear_control_tower.operational import (
+    OperationalControlTower,
+    OperationalEventStore,
+    OperationalMonitor,
+    OperationalSource,
+)
 
 
 DEFAULT_PERSPECTIVES = [
@@ -380,10 +387,12 @@ class ExplorerServer(ThreadingHTTPServer):
         memory_store: SemanticMemoryStore | None = None,
         runtime_store: RuntimeEvidenceStore | None = None,
         audit_store: AuditStore | None = None,
+        operational_store: OperationalEventStore | None = None,
     ) -> None:
         super().__init__(address, ExplorerRequestHandler)
         self.index = index
         self.viewer_root = viewer_root.resolve()
+        self.project_root = self.viewer_root.parents[1]
         self.chat_service = chat_service or GraphChatService.from_environment(index)
         if evidence_store is None:
             default_pack = self.viewer_root.parent / "evidence" / "source.pack.json.gz"
@@ -405,8 +414,9 @@ class ExplorerServer(ThreadingHTTPServer):
         self.memory_store = memory_store or SemanticMemoryStore(
             self.viewer_root.parents[1] / "factory" / "memory" / "store"
         )
+        self.runtime_path = self.viewer_root.parent / "runtime" / "runtime.snapshot.json.gz"
         if runtime_store is None:
-            default_runtime = self.viewer_root.parent / "runtime" / "runtime.snapshot.json.gz"
+            default_runtime = self.runtime_path
             runtime_store = (
                 RuntimeEvidenceStore(load_runtime_snapshot(default_runtime))
                 if default_runtime.is_file()
@@ -420,8 +430,9 @@ class ExplorerServer(ThreadingHTTPServer):
         ):
             raise ValueError("Runtime evidence snapshot targets a different graph identity")
         self.index.runtime_store = self.runtime_store
+        self.audit_path = self.project_root / "audit" / "audit.snapshot.json.gz"
         if audit_store is None:
-            default_audit = self.viewer_root.parents[1] / "audit" / "audit.snapshot.json.gz"
+            default_audit = self.audit_path
             audit_store = AuditStore(load_audit_snapshot(default_audit)) if default_audit.is_file() else None
         self.audit_store = audit_store
         if (
@@ -430,6 +441,85 @@ class ExplorerServer(ThreadingHTTPServer):
             != self.index.payload.get("content_sha256")
         ):
             raise ValueError("Audit snapshot targets a different graph identity")
+        self._runtime_file_state = self._file_state(self.runtime_path)
+        self._audit_file_state = self._file_state(self.audit_path)
+        self.operational_store = operational_store or OperationalEventStore(
+            self.project_root / "work" / "control-tower" / "events.sqlite3"
+        )
+        sources = (
+            OperationalSource(
+                "factory", (self.factory_store.root,), "controller-receipt", 2,
+                lambda: {"runs": self.factory_store.list_runs(200)},
+            ),
+            OperationalSource(
+                "portfolio", (self.portfolio_store.plan_path, self.portfolio_store.runs_root),
+                "approved-plan", 5, self.portfolio_store.summary,
+            ),
+            OperationalSource(
+                "recovery", (self.durable_store.path,), "transactional-ledger", 2,
+                self.durable_store.summary,
+            ),
+            OperationalSource(
+                "quality", (self.evaluation_store.root,), "evaluation-receipt", 10,
+                lambda: {"evaluations": self.evaluation_store.list_evaluations(200)},
+            ),
+            OperationalSource(
+                "memory", (self.memory_store.root,), "verified-semantic-memory", 15,
+                self.memory_store.summary,
+            ),
+            OperationalSource(
+                "runtime", (self.runtime_path,), "runtime-observation", 30,
+                self.runtime_summary,
+            ),
+            OperationalSource(
+                "audit", (self.audit_path,), "hash-chained-audit", 5,
+                self.audit_summary,
+            ),
+        )
+        self.control_tower = OperationalControlTower(self.operational_store, sources)
+        self.operational_monitor = OperationalMonitor(self.control_tower)
+
+    @staticmethod
+    def _file_state(path: Path) -> tuple[int, int] | None:
+        if not path.is_file():
+            return None
+        stat = path.stat()
+        return stat.st_mtime_ns, stat.st_size
+
+    def refresh_live_projections(self) -> None:
+        runtime_state = self._file_state(self.runtime_path)
+        if runtime_state != self._runtime_file_state:
+            self.runtime_store = (
+                RuntimeEvidenceStore(load_runtime_snapshot(self.runtime_path))
+                if runtime_state is not None else None
+            )
+            self.index.runtime_store = self.runtime_store
+            self._runtime_file_state = runtime_state
+        audit_state = self._file_state(self.audit_path)
+        if audit_state != self._audit_file_state:
+            self.audit_store = (
+                AuditStore(load_audit_snapshot(self.audit_path))
+                if audit_state is not None else None
+            )
+            self._audit_file_state = audit_state
+
+    def runtime_summary(self) -> dict[str, Any]:
+        self.refresh_live_projections()
+        if self.runtime_store is None:
+            return {"runs": [], "statistics": {"run_count": 0, "event_count": 0}}
+        return self.runtime_store.summary()
+
+    def audit_summary(self) -> dict[str, Any]:
+        self.refresh_live_projections()
+        if self.audit_store is None:
+            return {
+                "statistics": {"event_count": 0, "decisions": {}, "active_exceptions": 0},
+                "promotion_decisions": [],
+                "trust_posture": {
+                    "promotion_status": "not_evaluated", "unresolved_gaps": []
+                },
+            }
+        return self.audit_store.summary()
 
 
 class ExplorerRequestHandler(BaseHTTPRequestHandler):
@@ -474,18 +564,26 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
 
     def _api(self, path: str, query: dict[str, list[str]]) -> None:
         index = self.server.index
+        if path == "/api/operations/stream":
+            self._event_stream(query)
+            return
+        if path == "/api/operations/status":
+            self.server.control_tower.scan()
+            self._json(self.server.control_tower.status())
+            return
+        if path == "/api/operations/events":
+            self._json({
+                "events": self.server.operational_store.events(
+                    self._integer(query, "after", 0), self._integer(query, "limit", 200)
+                ),
+                "read_only": True,
+            })
+            return
         if path == "/api/meta":
             metadata = index.metadata()
-            metadata["runtime"] = (
-                self.server.runtime_store.summary()["statistics"]
-                if self.server.runtime_store is not None
-                else {"run_count": 0, "event_count": 0}
-            )
-            metadata["audit"] = (
-                self.server.audit_store.summary()["statistics"]
-                if self.server.audit_store is not None
-                else {"event_count": 0, "decisions": {}}
-            )
+            metadata["runtime"] = self.server.runtime_summary()["statistics"]
+            metadata["audit"] = self.server.audit_summary()["statistics"]
+            metadata["operations"] = self.server.control_tower.status()
             metadata["memory"] = self.server.memory_store.summary()["statistics"]
             portfolio = self.server.portfolio_store.summary()
             metadata["portfolio"] = {
@@ -546,27 +644,19 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
             ))
             return
         if path == "/api/runtime/summary":
-            if self.server.runtime_store is None:
-                self._json({"runs": [], "statistics": {"run_count": 0, "event_count": 0}})
-            else:
-                self._json(self.server.runtime_store.summary())
+            self._json(self.server.runtime_summary())
             return
         if path == "/api/runtime/run":
+            self.server.refresh_live_projections()
             if self.server.runtime_store is None:
                 raise KeyError(self._value(query, "id", required=True))
             self._json(self.server.runtime_store.run(self._value(query, "id", required=True)))
             return
         if path == "/api/audit/summary":
-            if self.server.audit_store is None:
-                self._json({
-                    "statistics": {"event_count": 0, "decisions": {}, "active_exceptions": 0},
-                    "promotion_decisions": [],
-                    "trust_posture": {"promotion_status": "not_evaluated", "unresolved_gaps": []},
-                })
-            else:
-                self._json(self.server.audit_store.summary())
+            self._json(self.server.audit_summary())
             return
         if path == "/api/audit/events":
+            self.server.refresh_live_projections()
             if self.server.audit_store is None:
                 self._json({"events": [], "total": 0})
             else:
@@ -576,11 +666,13 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
                 ))
             return
         if path == "/api/audit/decision":
+            self.server.refresh_live_projections()
             if self.server.audit_store is None:
                 raise KeyError(self._value(query, "id", required=True))
             self._json(self.server.audit_store.decision(self._value(query, "id", required=True)))
             return
         if path == "/api/audit/dossier":
+            self.server.refresh_live_projections()
             if self.server.audit_store is None:
                 raise KeyError(self._value(query, "release", required=True))
             self._json(self.server.audit_store.dossier(
@@ -642,6 +734,37 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
             self._json({"status": "passed" if not gaps else "failed", "gaps": gaps})
             return
         self._json({"error": f"Unknown API route: {path}"}, HTTPStatus.NOT_FOUND)
+
+    def _event_stream(self, query: dict[str, list[str]]) -> None:
+        after = self._integer(query, "after", 0)
+        header_sequence = self.headers.get("Last-Event-ID", "")
+        if header_sequence.isdigit():
+            after = max(after, int(header_sequence))
+        channel = self.server.operational_store.subscribe(after)
+        self.send_response(HTTPStatus.OK)
+        self.send_header("Content-Type", "text/event-stream; charset=utf-8")
+        self.send_header("Cache-Control", "no-cache, no-transform")
+        self.send_header("Connection", "keep-alive")
+        self.send_header("X-Accel-Buffering", "no")
+        self.end_headers()
+        try:
+            self.wfile.write(b"retry: 2000\nevent: ready\ndata: {\"status\":\"live\"}\n\n")
+            self.wfile.flush()
+            while True:
+                try:
+                    event = channel.get(timeout=15)
+                    body = json.dumps(event, sort_keys=True, separators=(",", ":"))
+                    packet = (
+                        f"id: {event['sequence']}\nevent: operational-event\ndata: {body}\n\n"
+                    ).encode("utf-8")
+                except queue.Empty:
+                    packet = b": heartbeat\n\n"
+                self.wfile.write(packet)
+                self.wfile.flush()
+        except (BrokenPipeError, ConnectionResetError):
+            return
+        finally:
+            self.server.operational_store.unsubscribe(channel)
 
     def _runtime_projection(self, entity_kind: str, entity_id: str) -> dict[str, Any]:
         return self.server.index.runtime_projection(entity_kind, entity_id)
@@ -766,12 +889,15 @@ def serve(
     )
     url = f"http://{host}:{server.server_port}/"
     print(f"LIGHTYEAR Graph Explorer: {url}")
+    print("Live Evidence Plane: connected (read-only command posture)")
     print("Press Ctrl-C to stop.")
     if open_browser:
         threading.Timer(0.35, lambda: webbrowser.open(url)).start()
     try:
+        server.operational_monitor.start()
         server.serve_forever()
     except KeyboardInterrupt:
         pass
     finally:
+        server.operational_monitor.stop()
         server.server_close()

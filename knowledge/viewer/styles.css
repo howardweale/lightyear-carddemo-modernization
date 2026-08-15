@@ -87,10 +87,30 @@ h3 { margin: 24px 0 9px; font-size: 12px; letter-spacing: 0.08em; text-transform
 .metrics strong { font: 650 16px/1 ui-monospace, SFMono-Regular, Menlo, monospace; }
 .metrics span { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; }
 
-.workspace { display: grid; grid-template-columns: 256px minmax(520px, 1fr) 380px; min-height: calc(100vh - 171px); }
+.live-plane { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 8px 28px; background: color-mix(in srgb, var(--surface) 88%, var(--accent-2) 4%); border-bottom: 1px solid var(--border); }
+.live-plane-heading { display: flex; align-items: center; gap: 7px; white-space: nowrap; }
+.live-plane-heading strong { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; }
+.live-plane-heading > span:not(.live-connection):not(.read-only-badge) { color: var(--muted); font: 9px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; }
+.live-connection, .read-only-badge { padding: 3px 6px; border: 1px solid var(--border); border-radius: 999px; font: 700 8px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; }
+.live-connection.live { color: #168653; border-color: #58ad82; background: color-mix(in srgb, #24a66a 9%, transparent); }
+.live-connection.connecting, .live-connection.reconnecting { color: #956510; border-color: #cda854; }
+.read-only-badge { color: var(--accent-2); }
+.live-sources { display: flex; gap: 5px; min-width: 0; overflow-x: auto; }
+.live-source { display: flex; align-items: baseline; gap: 5px; flex: none; padding: 4px 6px; background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--muted); border-radius: 5px; }
+.live-source.live { border-left-color: #24a66a; }
+.live-source.delayed { border-left-color: #e6a323; }
+.live-source.stale, .live-source.unavailable { border-left-color: #d94141; }
+.live-source b { font-size: 9px; text-transform: uppercase; }
+.live-source small { color: var(--muted); font-size: 8px; }
+.live-alerts { padding: 5px 8px; color: var(--muted); background: var(--surface); border: 1px solid var(--border); border-radius: 6px; cursor: pointer; font: 700 9px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; }
+.live-alerts.warning { color: #956510; border-color: #cda854; }
+.live-alerts.critical { color: #b72d2d; border-color: #d77878; }
+.live-alerts.healthy { color: #168653; border-color: #58ad82; }
+
+.workspace { display: grid; grid-template-columns: 256px minmax(520px, 1fr) 380px; min-height: calc(100vh - 214px); }
 .panel { padding: 20px; background: color-mix(in srgb, var(--surface) 92%, transparent); }
 .left-panel { border-right: 1px solid var(--border); }
-.right-panel { border-left: 1px solid var(--border); overflow: auto; max-height: calc(100vh - 171px); }
+.right-panel { border-left: 1px solid var(--border); overflow: auto; max-height: calc(100vh - 214px); }
 .panel section + section { margin-top: 22px; }
 
 label, .section-heading { display: block; margin-bottom: 7px; color: var(--muted); font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
@@ -126,7 +146,7 @@ kbd { position: absolute; top: 9px; right: 9px; padding: 1px 6px; color: var(--m
 .graph-panel { position: relative; min-width: 0; overflow: hidden; background-image: radial-gradient(var(--border) 0.65px, transparent 0.65px); background-size: 18px 18px; }
 .graph-toolbar { position: absolute; z-index: 2; top: 14px; left: 16px; right: 16px; display: flex; justify-content: space-between; pointer-events: none; }
 .graph-toolbar span { padding: 6px 9px; background: color-mix(in srgb, var(--surface) 92%, transparent); border: 1px solid var(--border); border-radius: 6px; box-shadow: var(--shadow); font-size: 11px; }
-#graph { display: block; width: 100%; height: calc(100vh - 171px); min-height: 600px; cursor: grab; }
+#graph { display: block; width: 100%; height: calc(100vh - 214px); min-height: 600px; cursor: grab; }
 #graph:active { cursor: grabbing; }
 #arrow path { fill: var(--edge); }
 .edge { stroke: var(--edge); stroke-width: 1.1; stroke-opacity: 0.5; marker-end: url(#arrow); }

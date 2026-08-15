@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>LIGHTYEAR Graph Explorer</title>
+  <title>LIGHTYEAR Control Tower</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="masthead">
     <div>
       <p class="eyebrow">LIGHTYEAR / MODERNIZATION INTELLIGENCE</p>
-      <h1>Graph Explorer</h1>
+      <h1>Evidence Control Tower</h1>
     </div>
     <div class="status" aria-live="polite">
       <span id="status-dot" class="status-dot"></span>
@@ -23,6 +23,17 @@
     <div><strong id="metric-edges">—</strong><span>relationships</span></div>
     <div><strong id="metric-rules">—</strong><span>business rules</span></div>
     <div><strong id="metric-hash">—</strong><span>snapshot identity</span></div>
+  </section>
+
+  <section class="live-plane" aria-label="Live operational evidence plane">
+    <div class="live-plane-heading">
+      <span id="live-connection" class="live-connection connecting">CONNECTING</span>
+      <strong>Live evidence plane</strong>
+      <span id="live-sequence">sequence —</span>
+      <span class="read-only-badge">READ-ONLY COMMAND POSTURE</span>
+    </div>
+    <div id="live-sources" class="live-sources" aria-live="polite"></div>
+    <button id="live-alerts" class="live-alerts" type="button">0 active alerts</button>
   </section>
 
   <main class="workspace">

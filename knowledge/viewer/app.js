@@ -14,6 +14,9 @@ const state = {
   auditSummary: null,
   auditEvents: [],
   auditReleaseId: null,
+  operations: null,
+  eventStream: null,
+  liveRefreshTimer: null,
   selection: null,
   selectedId: null,
   selectedEdgeId: null,
@@ -85,11 +88,14 @@ async function initialize() {
     $("metric-rules").textContent = formatNumber(stats.nodes_by_kind.business_rule);
     $("metric-hash").textContent = state.meta.content_sha256.slice(0, 10);
     $("status-dot").classList.add("online");
-    $("status-text").textContent = "Local graph online";
+    $("status-text").textContent = "Local control plane online";
     populatePerspectives();
     populateLegend();
     configureChat();
     bindControls();
+    state.operations = state.meta.operations || await api("/api/operations/status");
+    renderLiveStatus();
+    connectLivePlane();
     await Promise.all([loadPerspective(), loadFactoryRuns(false), loadPortfolio(false), loadRecovery(false), loadEvaluations(false), loadMemory(false), loadRuntimeRuns(false), loadAudit(false)]);
   } catch (error) {
     setError(error);
@@ -191,6 +197,10 @@ function bindControls() {
   $("refresh-runtime").addEventListener("click", () => loadRuntimeRuns(true));
   $("refresh-audit").addEventListener("click", () => loadAudit(true));
   $("view-audit-dossier").addEventListener("click", loadAuditDossier);
+  $("live-alerts").addEventListener("click", async () => {
+    switchRightPanel("recovery");
+    await loadRecovery(true);
+  });
   $("clear-chat").addEventListener("click", resetChat);
   $("chat-form").addEventListener("submit", submitChat);
   $("chat-suggestions").addEventListener("click", (event) => {
@@ -221,6 +231,83 @@ function bindControls() {
     }
   });
   bindPanZoom();
+}
+
+function renderLiveStatus() {
+  const status = state.operations;
+  if (!status) return;
+  const connection = $("live-connection");
+  connection.textContent = status.connection === "live" ? "LIVE" : "RECONNECTING";
+  connection.className = `live-connection ${status.connection || "connecting"}`;
+  $("live-sequence").textContent = `sequence ${status.latest_sequence || 0}`;
+  const sources = $("live-sources");
+  sources.replaceChildren();
+  (status.sources || []).forEach((source) => {
+    const chip = document.createElement("span");
+    chip.className = `live-source ${source.freshness}`;
+    chip.dataset.source = source.source;
+    chip.title = `${source.trust_class}; observed ${source.last_observed_at || "never"}`;
+    const age = source.age_seconds === null ? "no signal" : source.age_seconds < 2 ? "now" : `${source.age_seconds}s`;
+    const name = document.createElement("b");
+    name.textContent = source.source;
+    const detail = document.createElement("small");
+    detail.textContent = `${source.freshness} · ${age}`;
+    chip.append(name, detail);
+    sources.appendChild(chip);
+  });
+  const alerts = status.alerts || [];
+  const alertButton = $("live-alerts");
+  alertButton.textContent = `${alerts.length} active alert${alerts.length === 1 ? "" : "s"}`;
+  alertButton.className = `live-alerts ${alerts.some((item) => item.severity === "critical") ? "critical" : alerts.length ? "warning" : "healthy"}`;
+  alertButton.title = alerts.map((item) => item.message).join("\n") || "No active operational alerts";
+}
+
+function connectLivePlane() {
+  if (!window.EventSource) {
+    state.operations.connection = "unavailable";
+    renderLiveStatus();
+    return;
+  }
+  if (state.eventStream) state.eventStream.close();
+  const after = state.operations?.latest_sequence || 0;
+  const stream = new EventSource(`/api/operations/stream?after=${after}`);
+  state.eventStream = stream;
+  stream.addEventListener("ready", () => {
+    state.operations.connection = "live";
+    renderLiveStatus();
+  });
+  stream.addEventListener("operational-event", (message) => {
+    const event = JSON.parse(message.data);
+    state.operations.latest_sequence = event.sequence;
+    scheduleLiveRefresh(event.source, event.payload?.refresh_hint);
+  });
+  stream.onerror = () => {
+    state.operations.connection = "reconnecting";
+    renderLiveStatus();
+  };
+}
+
+function scheduleLiveRefresh(source, hint) {
+  clearTimeout(state.liveRefreshTimer);
+  state.liveRefreshTimer = setTimeout(async () => {
+    try {
+      state.operations = await api("/api/operations/status");
+      renderLiveStatus();
+      const target = hint || source;
+      const refreshers = {
+        factory: () => loadFactoryRuns(false),
+        portfolio: () => loadPortfolio(false),
+        recovery: () => loadRecovery(false),
+        quality: () => loadEvaluations(false),
+        memory: () => loadMemory(false),
+        runtime: () => loadRuntimeRuns(false),
+        audit: () => loadAudit(false),
+      };
+      if (refreshers[target]) await refreshers[target]();
+    } catch (error) {
+      console.warn("Live projection refresh failed", error);
+    }
+  }, 180);
 }
 
 function selectedPerspective() {

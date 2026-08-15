@@ -37,6 +37,7 @@ EXECUTION = ROOT / "factory" / "execution" / "conformance.receipt.json"
 MEMORY = ROOT / "factory" / "memory" / "store" / "memory.snapshot.json.gz"
 DURABLE = ROOT / "factory" / "durable" / "policy.json"
 DURABLE_CONFORMANCE = ROOT / "factory" / "durable" / "conformance.receipt.json"
+CONTROL_TOWER = ROOT / "control-tower" / "policy.json"
 
 
 def canonical_snapshot(signing_key: bytes | None = None) -> dict:
@@ -53,6 +54,7 @@ def canonical_snapshot(signing_key: bytes | None = None) -> dict:
         None,
         DURABLE,
         DURABLE_CONFORMANCE,
+        CONTROL_TOWER,
     )
 
 
@@ -77,11 +79,12 @@ class AuditControlPlaneTests(unittest.TestCase):
         first = canonical_snapshot()
         second = canonical_snapshot()
         self.assertEqual(first["content_sha256"], second["content_sha256"])
-        self.assertEqual(17, first["statistics"]["event_count"])
+        self.assertEqual(18, first["statistics"]["event_count"])
         self.assertEqual({"blocked": 5, "passed": 3}, first["statistics"]["decisions"])
         self.assertEqual(0, first["statistics"]["active_exceptions"])
         self.assertEqual(1, first["statistics"]["actions"]["factory.memory_snapshot_published"])
         self.assertEqual(1, first["statistics"]["actions"]["factory.durable_policy_published"])
+        self.assertEqual(1, first["statistics"]["actions"]["control_tower.live_plane_registered"])
         promotion = AuditStore(first).summary()["promotion_decisions"][0]
         self.assertEqual("blocked", promotion["status"])
         self.assertEqual(
@@ -323,13 +326,13 @@ class AuditControlPlaneTests(unittest.TestCase):
             base = f"http://127.0.0.1:{server.server_port}"
             with urlopen(f"{base}/api/audit/summary", timeout=3) as response:
                 summary = json.load(response)
-            self.assertEqual(17, summary["statistics"]["event_count"])
+            self.assertEqual(18, summary["statistics"]["event_count"])
             self.assertEqual("blocked", summary["trust_posture"]["execution_status"])
             with urlopen(
                 f"{base}/api/audit/events?{urlencode({'audience': 'implementer'})}", timeout=3
             ) as response:
                 events = json.load(response)
-            self.assertEqual(17, events["total"])
+            self.assertEqual(18, events["total"])
             release = summary["promotion_decisions"][0]["subject_id"]
             with urlopen(
                 f"{base}/api/audit/dossier?{urlencode({'release': release})}", timeout=3

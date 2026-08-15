@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schema/operational-event-1.0.json",
+  "title": "LIGHTYEAR operational event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "sequence", "event_id", "event_type", "source", "subject", "severity", "trust_class", "occurred_at", "observed_at", "payload", "previous_sha256", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "sequence": {"type": "integer", "minimum": 1},
+    "event_id": {"type": "string", "pattern": "^op-[0-9a-f]{24}$"},
+    "event_type": {"type": "string", "minLength": 3, "maxLength": 120},
+    "source": {"enum": ["factory", "portfolio", "recovery", "quality", "memory", "runtime", "audit", "control-tower"]},
+    "subject": {"type": "string", "minLength": 1, "maxLength": 240},
+    "severity": {"enum": ["info", "warning", "critical"]},
+    "trust_class": {"type": "string", "minLength": 3, "maxLength": 80},
+    "correlation_id": {"type": ["string", "null"], "maxLength": 160},
+    "occurred_at": {"type": "string", "format": "date-time"},
+    "observed_at": {"type": "string", "format": "date-time"},
+    "payload": {"type": "object"},
+    "previous_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

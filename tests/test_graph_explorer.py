@@ -69,7 +69,7 @@ class GraphExplorerTests(unittest.TestCase):
             self.assertEqual(self.payload["content_sha256"], metadata["content_sha256"])
             with urlopen(f"{base}/", timeout=3) as response:
                 body = response.read().decode("utf-8")
-            self.assertIn("LIGHTYEAR Graph Explorer", body)
+            self.assertIn("LIGHTYEAR Control Tower", body)
         finally:
             server.shutdown()
             server.server_close()

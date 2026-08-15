@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "policy_type": "lightyear-live-control-tower-policy",
+  "command_plane": "disabled",
+  "loopback_only": true,
+  "sources": {
+    "factory": {"expected_interval_seconds": 2, "trust_class": "controller-receipt"},
+    "portfolio": {"expected_interval_seconds": 5, "trust_class": "approved-plan"},
+    "recovery": {"expected_interval_seconds": 2, "trust_class": "transactional-ledger"},
+    "quality": {"expected_interval_seconds": 10, "trust_class": "evaluation-receipt"},
+    "memory": {"expected_interval_seconds": 15, "trust_class": "verified-semantic-memory"},
+    "runtime": {"expected_interval_seconds": 30, "trust_class": "runtime-observation"},
+    "audit": {"expected_interval_seconds": 5, "trust_class": "hash-chained-audit"}
+  }
+}

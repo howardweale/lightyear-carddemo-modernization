@@ -25,6 +25,9 @@ fi
 "$project_dir/portfolio-factory.sh" verify
 "$project_dir/durable-factory.sh" verify
 "$project_dir/live-control-tower.sh" verify
+"$project_dir/cics-vsam-readiness.sh" verify
+"$project_dir/asm-readiness.sh" verify
+"$project_dir/ims-readiness.sh" verify
 "$project_dir/audit-control-tower.sh" verify
 
 (

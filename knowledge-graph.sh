@@ -29,6 +29,9 @@ if [[ "$action" == "build" ]]; then
     --legacy-root "$legacy_root" \
     --modern-root "$project_dir" \
     --manifest "$project_dir/knowledge/mappings/carddemo-intcalc.json" \
+    --manifest "$project_dir/knowledge/mappings/carddemo-cics-vsam-account-view.json" \
+    --manifest "$project_dir/knowledge/mappings/carddemo-asm-date-format.json" \
+    --manifest "$project_dir/knowledge/mappings/carddemo-ims-expired-authorization-purge.json" \
     --ontology "$project_dir/knowledge/ontology/relationships.json" \
     --output "$project_dir/knowledge/graph.snapshot.json.gz" \
     --receipt "$project_dir/knowledge/graph.receipt.json" \
@@ -36,6 +39,12 @@ if [[ "$action" == "build" ]]; then
     --evidence-receipt "$project_dir/knowledge/evidence/source.receipt.json" \
     --legacy-commit "$legacy_commit" \
     --modern-commit repository-content
+  "$LIGHTYEAR_PYTHON_BIN" -m lightyear_knowledge_graph capabilities \
+    --graph "$project_dir/knowledge/graph.snapshot.json.gz" \
+    --cics-vsam-receipt "$project_dir/readiness/cics-vsam/readiness-receipt.json" \
+    --asm-receipt "$project_dir/readiness/asm-date/readiness-receipt.json" \
+    --ims-receipt "$project_dir/readiness/ims-expiry/readiness-receipt.json" \
+    --output "$project_dir/knowledge/capabilities/mainframe-readiness.json"
 elif [[ "$action" == "verify" ]]; then
   generated="$project_dir/work/knowledge-graph-verify"
   mkdir -p "$generated"
@@ -43,6 +52,9 @@ elif [[ "$action" == "verify" ]]; then
     --legacy-root "$legacy_root" \
     --modern-root "$project_dir" \
     --manifest "$project_dir/knowledge/mappings/carddemo-intcalc.json" \
+    --manifest "$project_dir/knowledge/mappings/carddemo-cics-vsam-account-view.json" \
+    --manifest "$project_dir/knowledge/mappings/carddemo-asm-date-format.json" \
+    --manifest "$project_dir/knowledge/mappings/carddemo-ims-expired-authorization-purge.json" \
     --ontology "$project_dir/knowledge/ontology/relationships.json" \
     --output "$generated/graph.snapshot.json.gz" \
     --receipt "$generated/graph.receipt.json" \
@@ -50,6 +62,12 @@ elif [[ "$action" == "verify" ]]; then
     --evidence-receipt "$generated/source.receipt.json" \
     --legacy-commit "$legacy_commit" \
     --modern-commit repository-content
+  "$LIGHTYEAR_PYTHON_BIN" -m lightyear_knowledge_graph capabilities \
+    --graph "$generated/graph.snapshot.json.gz" \
+    --cics-vsam-receipt "$project_dir/readiness/cics-vsam/readiness-receipt.json" \
+    --asm-receipt "$project_dir/readiness/asm-date/readiness-receipt.json" \
+    --ims-receipt "$project_dir/readiness/ims-expiry/readiness-receipt.json" \
+    --output "$generated/mainframe-readiness.json"
   "$LIGHTYEAR_PYTHON_BIN" -m lightyear_knowledge_graph validate --graph "$generated/graph.snapshot.json.gz"
   "$LIGHTYEAR_PYTHON_BIN" -m lightyear_knowledge_graph validate-evidence \
     --graph "$generated/graph.snapshot.json.gz" \
@@ -63,6 +81,7 @@ elif [[ "$action" == "verify" ]]; then
     --actual "$generated/source.pack.json.gz"
   cmp "$project_dir/knowledge/graph.receipt.json" "$generated/graph.receipt.json"
   cmp "$project_dir/knowledge/evidence/source.receipt.json" "$generated/source.receipt.json"
+  cmp "$project_dir/knowledge/capabilities/mainframe-readiness.json" "$generated/mainframe-readiness.json"
   echo "Knowledge graph snapshot is deterministic, current, and policy-complete."
 else
   echo "Usage: ./knowledge-graph.sh [build|verify] [optional-carddemo-upstream-root]" >&2

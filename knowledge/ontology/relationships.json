@@ -27,6 +27,7 @@
     },
     "CALLS": {
       "allowed_pairs": [
+        ["cobol_paragraph", "assembler_program"],
         ["cobol_paragraph", "cobol_paragraph"],
         ["cobol_paragraph", "cobol_program"],
         ["cobol_program", "cobol_paragraph"],
@@ -40,13 +41,17 @@
     },
     "CONTAINS": {
       "allowed_pairs": [
+        ["assembler_program", "assembler_instruction"],
+        ["assembler_program", "assembler_symbol"],
         ["cobol_field", "cobol_field"],
         ["cobol_program", "cobol_paragraph"],
         ["copybook", "cobol_field"],
         ["java_type", "java_method"],
         ["java_type", "test_case"],
         ["jcl_job", "jcl_step"],
-        ["jcl_procedure", "jcl_step"]
+        ["jcl_procedure", "jcl_step"],
+        ["ims_database", "ims_segment"],
+        ["ims_psb", "ims_pcb"]
       ],
       "category": "structure",
       "direction": "container to member",
@@ -56,13 +61,25 @@
     },
     "DECLARES": {
       "allowed_pairs": [
+        ["source_file", "assembler_dsect"],
+        ["source_file", "assembler_macro"],
+        ["source_file", "assembler_program"],
         ["cobol_program", "cobol_file_handle"],
+        ["source_file", "bms_mapset"],
+        ["source_file", "cics_file_resource"],
+        ["source_file", "cics_program_resource"],
+        ["source_file", "cics_transaction"],
         ["source_file", "cobol_program"],
         ["source_file", "copybook"],
         ["source_file", "java_type"],
         ["source_file", "jcl_job"],
         ["source_file", "jcl_procedure"],
-        ["source_file", "software_dependency"]
+        ["source_file", "ims_database"],
+        ["source_file", "ims_psb"],
+        ["source_file", "software_dependency"],
+        ["source_file", "vsam_alternate_index"],
+        ["source_file", "vsam_cluster"],
+        ["source_file", "vsam_path"]
       ],
       "category": "structure",
       "direction": "declarer to declared entity",
@@ -80,9 +97,28 @@
     },
     "DERIVED_FROM": {
       "allowed_pairs": [
+        ["business_rule", "assembler_dsect"],
+        ["business_rule", "assembler_field"],
+        ["business_rule", "assembler_instruction"],
+        ["business_rule", "assembler_macro"],
+        ["business_rule", "assembler_program"],
+        ["business_rule", "bms_field"],
+        ["business_rule", "bms_map"],
+        ["business_rule", "cics_command"],
+        ["business_rule", "cics_file_resource"],
+        ["business_rule", "cics_transaction"],
         ["business_rule", "cobol_paragraph"],
         ["business_rule", "cobol_program"],
-        ["business_rule", "copybook"]
+        ["business_rule", "copybook"],
+        ["business_rule", "ims_database"],
+        ["business_rule", "ims_field"],
+        ["business_rule", "ims_pcb"],
+        ["business_rule", "ims_psb"],
+        ["business_rule", "ims_segment"],
+        ["business_rule", "jcl_step"],
+        ["business_rule", "vsam_alternate_index"],
+        ["business_rule", "vsam_cluster"],
+        ["business_rule", "vsam_path"]
       ],
       "category": "semantic-traceability",
       "direction": "modernization claim to legacy evidence",
@@ -92,6 +128,7 @@
     },
     "EXECUTES": {
       "allowed_pairs": [
+        ["jcl_step", "assembler_program"],
         ["jcl_step", "cobol_program"],
         ["jcl_step", "executable"]
       ],
@@ -126,7 +163,10 @@
       "purpose": "Associates a workload with a public or verifier-private behavior scenario."
     },
     "IMPLEMENTED_BY": {
-      "allowed_pairs": [["business_rule", "java_method"]],
+      "allowed_pairs": [
+        ["business_rule", "java_method"],
+        ["business_rule", "source_file"]
+      ],
       "category": "semantic-traceability",
       "direction": "business rule to modern implementation",
       "evidence_policy": "edge",
@@ -134,7 +174,13 @@
       "purpose": "Maps a curated business rule to the modern Java method intended to implement it."
     },
     "LEGACY_ENTRYPOINT": {
-      "allowed_pairs": [["modernization_workload", "cobol_program"]],
+      "allowed_pairs": [
+        ["modernization_workload", "assembler_program"],
+        ["modernization_workload", "cics_transaction"],
+        ["modernization_workload", "cobol_program"],
+        ["modernization_workload", "ims_database"],
+        ["modernization_workload", "ims_psb"]
+      ],
       "category": "semantic-traceability",
       "direction": "workload to legacy entry point",
       "evidence_policy": "edge",
@@ -142,7 +188,10 @@
       "purpose": "Identifies the authoritative legacy program at the boundary of a modernization workload."
     },
     "MODERN_ENTRYPOINT": {
-      "allowed_pairs": [["modernization_workload", "java_type"]],
+      "allowed_pairs": [
+        ["modernization_workload", "java_type"],
+        ["modernization_workload", "source_file"]
+      ],
       "category": "semantic-traceability",
       "direction": "workload to modern entry point",
       "evidence_policy": "edge",
@@ -199,6 +248,187 @@
       "evidence_policy": "edge",
       "label": "writes",
       "purpose": "Records that a COBOL paragraph creates or updates records through the connected file handle."
+    },
+    "ACCESSES": {
+      "allowed_pairs": [["cics_command", "cics_file_resource"]],
+      "category": "data-lineage",
+      "direction": "CICS command to logical file resource",
+      "evidence_policy": "edge",
+      "label": "accesses",
+      "purpose": "Records the logical CICS file or dataset named by an EXEC CICS data command."
+    },
+    "BACKED_BY": {
+      "allowed_pairs": [
+        ["cics_file_resource", "vsam_cluster"],
+        ["cics_file_resource", "vsam_path"]
+      ],
+      "category": "data-lineage",
+      "direction": "CICS file resource to VSAM catalog object",
+      "evidence_policy": "edge",
+      "label": "backed by",
+      "purpose": "Resolves a CICS FILE definition to its cataloged VSAM cluster or path."
+    },
+    "HAS_COMPONENT": {
+      "allowed_pairs": [["vsam_cluster", "vsam_component"]],
+      "category": "structure",
+      "direction": "VSAM cluster to data or index component",
+      "evidence_policy": "endpoint-or-edge",
+      "label": "has component",
+      "purpose": "Connects an IDCAMS cluster definition to its named data and index components."
+    },
+    "HAS_FIELD": {
+      "allowed_pairs": [
+        ["assembler_dsect", "assembler_field"],
+        ["bms_map", "bms_field"],
+        ["ims_segment", "ims_field"]
+      ],
+      "category": "structure",
+      "direction": "BMS map to terminal field",
+      "evidence_policy": "endpoint-or-edge",
+      "label": "has field",
+      "purpose": "Connects a BMS map to a screen field with its position, length, and attributes."
+    },
+    "HAS_MAP": {
+      "allowed_pairs": [["bms_mapset", "bms_map"]],
+      "category": "structure",
+      "direction": "BMS mapset to map",
+      "evidence_policy": "endpoint-or-edge",
+      "label": "has map",
+      "purpose": "Connects a compiled BMS mapset to the maps it contains."
+    },
+    "ISSUES": {
+      "allowed_pairs": [
+        ["cobol_paragraph", "cics_command"],
+        ["cobol_program", "cics_command"]
+      ],
+      "category": "control-flow",
+      "direction": "COBOL scope to EXEC CICS command",
+      "evidence_policy": "edge",
+      "label": "issues",
+      "purpose": "Records the exact program or paragraph scope that issues an EXEC CICS command."
+    },
+    "RESOLVES_TO": {
+      "allowed_pairs": [
+        ["cics_program_resource", "cobol_program"],
+        ["dataset", "vsam_alternate_index"],
+        ["dataset", "vsam_cluster"],
+        ["dataset", "vsam_path"]
+      ],
+      "category": "dependency",
+      "direction": "logical or catalog name to implementation",
+      "evidence_policy": "edge",
+      "label": "resolves to",
+      "purpose": "Resolves a configured CICS or JCL identity to the source program or VSAM object it represents."
+    },
+    "STARTS_PROGRAM": {
+      "allowed_pairs": [["cics_transaction", "cics_program_resource"]],
+      "category": "control-flow",
+      "direction": "CICS transaction to configured program",
+      "evidence_policy": "edge",
+      "label": "starts program",
+      "purpose": "Records the PROGRAM resource selected by a CICS transaction definition."
+    },
+    "TARGETS": {
+      "allowed_pairs": [
+        ["vsam_alternate_index", "vsam_cluster"],
+        ["vsam_path", "vsam_alternate_index"]
+      ],
+      "category": "data-lineage",
+      "direction": "VSAM index or path to its target",
+      "evidence_policy": "edge",
+      "label": "targets",
+      "purpose": "Connects VSAM paths and alternate indexes to the catalog objects they address."
+    },
+    "USES_MAP": {
+      "allowed_pairs": [["cics_command", "bms_map"]],
+      "category": "dependency",
+      "direction": "EXEC CICS command to BMS map",
+      "evidence_policy": "edge",
+      "label": "uses map",
+      "purpose": "Records the BMS map named by an EXEC CICS SEND or RECEIVE command."
+    },
+    "USES_MAPSET": {
+      "allowed_pairs": [["cics_command", "bms_mapset"]],
+      "category": "dependency",
+      "direction": "EXEC CICS command to BMS mapset",
+      "evidence_policy": "edge",
+      "label": "uses mapset",
+      "purpose": "Records the BMS mapset named by an EXEC CICS SEND or RECEIVE command."
+    },
+    "BRANCHES_TO": {
+      "allowed_pairs": [["assembler_instruction", "assembler_symbol"]],
+      "category": "control-flow",
+      "direction": "assembler instruction to target symbol",
+      "evidence_policy": "edge",
+      "label": "branches to",
+      "purpose": "Records a statically resolved HLASM branch target without claiming runtime reachability."
+    },
+    "HAS_DATASET_GROUP": {
+      "allowed_pairs": [["ims_database", "ims_dataset_group"]],
+      "category": "structure",
+      "direction": "IMS database to dataset group",
+      "evidence_policy": "endpoint-or-edge",
+      "label": "has dataset group",
+      "purpose": "Connects an IMS DBD to a DATASET macro and its DD, record, or access attributes."
+    },
+    "INDEXES": {
+      "allowed_pairs": [["ims_segment", "ims_segment"]],
+      "category": "data-lineage",
+      "direction": "IMS logical child to indexed segment",
+      "evidence_policy": "edge",
+      "label": "indexes",
+      "purpose": "Represents an IMS LCHILD relationship between index and target database segments."
+    },
+    "PARENT_OF": {
+      "allowed_pairs": [["ims_segment", "ims_segment"]],
+      "category": "structure",
+      "direction": "IMS parent segment to child segment",
+      "evidence_policy": "edge",
+      "label": "parent of",
+      "purpose": "Records the physical or logical IMS hierarchy declared by a SEGM macro."
+    },
+    "SENSITIVE_TO": {
+      "allowed_pairs": [["ims_pcb", "ims_segment"]],
+      "category": "authorization",
+      "direction": "IMS PCB to sensitive segment",
+      "evidence_policy": "edge",
+      "label": "sensitive to",
+      "purpose": "Connects an IMS PCB view to each SENSEG exposed to the application."
+    },
+    "USES_DBD": {
+      "allowed_pairs": [["ims_pcb", "ims_database"]],
+      "category": "dependency",
+      "direction": "IMS PCB to DBD",
+      "evidence_policy": "edge",
+      "label": "uses DBD",
+      "purpose": "Resolves a PCB DBDNAME to the IMS database definition it authorizes."
+    },
+    "USES_DSECT": {
+      "allowed_pairs": [["assembler_program", "assembler_dsect"]],
+      "category": "dependency",
+      "direction": "assembler program to DSECT",
+      "evidence_policy": "edge",
+      "label": "uses DSECT",
+      "purpose": "Records a HLASM COPY dependency on a symbolic storage layout."
+    },
+    "USES_MACRO": {
+      "allowed_pairs": [["assembler_program", "assembler_macro"]],
+      "category": "dependency",
+      "direction": "assembler program to macro",
+      "evidence_policy": "edge",
+      "label": "uses macro",
+      "purpose": "Records an observed HLASM macro invocation from a program."
+    },
+    "USES_PSB": {
+      "allowed_pairs": [
+        ["assembler_program", "ims_psb"],
+        ["cobol_program", "ims_psb"]
+      ],
+      "category": "authorization",
+      "direction": "application program to IMS PSB",
+      "evidence_policy": "edge",
+      "label": "uses PSB",
+      "purpose": "Binds a BMP or DLI application to the PSB named by its execution parameters."
     }
   },
   "schema_version": "1.0"

@@ -1,0 +1,332 @@
+{
+  "analysis_type": "factorydark-mainframe-capability-readiness",
+  "capabilities": [
+    {
+      "development_ready": true,
+      "discovery_ready": true,
+      "gates": [
+        {
+          "evidence": [
+            "240 cics_command nodes",
+            "25 cics_transaction nodes",
+            "585 bms_field nodes"
+          ],
+          "gate": 1,
+          "name": "typed native asset parsing",
+          "status": "passed"
+        },
+        {
+          "evidence": [
+            "240 ISSUES edges",
+            "25 STARTS_PROGRAM edges",
+            "47 USES_MAP edges"
+          ],
+          "gate": 2,
+          "name": "connected dependency and control-flow graph",
+          "status": "passed"
+        },
+        {
+          "evidence": [
+            "8 curated CICS/VSAM rules"
+          ],
+          "gate": 3,
+          "name": "curated behavior contract",
+          "status": "passed"
+        },
+        {
+          "evidence": [
+            "modern:file:factory/benchmarks/cics_vsam_account_candidate.py"
+          ],
+          "gate": 4,
+          "name": "bounded modernization candidate",
+          "status": "passed"
+        },
+        {
+          "evidence": [
+            "scenario:cics-vsam:private-mutation-gate"
+          ],
+          "gate": 5,
+          "name": "mutation and negative verification",
+          "status": "passed"
+        },
+        {
+          "evidence": [
+            "readiness/cics-vsam/readiness-receipt.json"
+          ],
+          "gap": "A signed, authorized z/OS CAVW observation is not yet bound.",
+          "gate": 6,
+          "name": "authorized execution of the original on z/OS",
+          "status": "blocked"
+        },
+        {
+          "evidence": [
+            "readiness/cics-vsam/comparison.json"
+          ],
+          "gap": "A signed, authorized z/OS CAVW observation is not yet bound.",
+          "gate": 7,
+          "name": "independent differential comparison",
+          "status": "mechanism_ready"
+        },
+        {
+          "evidence": [
+            "readiness/cics-vsam/readiness-receipt.json"
+          ],
+          "gap": "A signed, authorized z/OS CAVW observation is not yet bound.",
+          "gate": 8,
+          "name": "signed equivalence receipt with unresolved gaps",
+          "status": "blocked"
+        }
+      ],
+      "mainframe_equivalent": false,
+      "support_claim": "development-proof; live z/OS evidence pending",
+      "technology": "CICS"
+    },
+    {
+      "development_ready": true,
+      "discovery_ready": true,
+      "gates": [
+        {
+          "evidence": [
+            "15 vsam_cluster nodes",
+            "3 VSAM paths",
+            "3 alternate indexes"
+          ],
+          "gate": 1,
+          "name": "typed native asset parsing",
+          "status": "passed"
+        },
+        {
+          "evidence": [
+            "58 CICS file access edges",
+            "6 TARGETS edges",
+            "8 BACKED_BY edges"
+          ],
+          "gate": 2,
+          "name": "connected dependency and control-flow graph",
+          "status": "passed"
+        },
+        {
+          "evidence": [
+            "8 curated CICS/VSAM rules"
+          ],
+          "gate": 3,
+          "name": "curated behavior contract",
+          "status": "passed"
+        },
+        {
+          "evidence": [
+            "modern:file:factory/benchmarks/cics_vsam_account_candidate.py"
+          ],
+          "gate": 4,
+          "name": "bounded modernization candidate",
+          "status": "passed"
+        },
+        {
+          "evidence": [
+            "scenario:cics-vsam:private-mutation-gate"
+          ],
+          "gate": 5,
+          "name": "mutation and negative verification",
+          "status": "passed"
+        },
+        {
+          "evidence": [
+            "readiness/cics-vsam/readiness-receipt.json"
+          ],
+          "gap": "A signed, authorized z/OS CAVW observation is not yet bound.",
+          "gate": 6,
+          "name": "authorized execution of the original on z/OS",
+          "status": "blocked"
+        },
+        {
+          "evidence": [
+            "readiness/cics-vsam/comparison.json"
+          ],
+          "gap": "A signed, authorized z/OS CAVW observation is not yet bound.",
+          "gate": 7,
+          "name": "independent differential comparison",
+          "status": "mechanism_ready"
+        },
+        {
+          "evidence": [
+            "readiness/cics-vsam/readiness-receipt.json"
+          ],
+          "gap": "A signed, authorized z/OS CAVW observation is not yet bound.",
+          "gate": 8,
+          "name": "signed equivalence receipt with unresolved gaps",
+          "status": "blocked"
+        }
+      ],
+      "mainframe_equivalent": false,
+      "support_claim": "development-proof; live z/OS evidence pending",
+      "technology": "VSAM"
+    },
+    {
+      "development_ready": true,
+      "discovery_ready": true,
+      "gates": [
+        {
+          "evidence": [
+            "3 IMS segments",
+            "4 IMS DBDs",
+            "4 IMS PSBs",
+            "6 IMS PCBs"
+          ],
+          "gate": 1,
+          "name": "typed native asset parsing",
+          "status": "passed"
+        },
+        {
+          "evidence": [
+            "4 program-to-PSB edges",
+            "6 USES_DBD edges",
+            "8 SENSITIVE_TO edges"
+          ],
+          "gate": 2,
+          "name": "connected dependency and control-flow graph",
+          "status": "passed"
+        },
+        {
+          "evidence": [
+            "8 curated CBPAUP0C IMS rules"
+          ],
+          "gate": 3,
+          "name": "curated behavior contract",
+          "status": "passed"
+        },
+        {
+          "evidence": [
+            "modern:file:factory/benchmarks/ims_expiry_candidate.py"
+          ],
+          "gate": 4,
+          "name": "bounded modernization candidate",
+          "status": "passed"
+        },
+        {
+          "evidence": [
+            "scenario:ims-expiry:private-mutation-gate"
+          ],
+          "gate": 5,
+          "name": "mutation and negative verification",
+          "status": "passed"
+        },
+        {
+          "evidence": [
+            "readiness/ims-expiry/readiness-receipt.json"
+          ],
+          "gap": "No authorized CBPAUP0C IMS BMP execution capture exists.",
+          "gate": 6,
+          "name": "authorized execution of the original on z/OS",
+          "status": "blocked"
+        },
+        {
+          "evidence": [
+            "readiness/ims-expiry/comparison.json"
+          ],
+          "gap": "No authorized CBPAUP0C IMS BMP execution capture exists.",
+          "gate": 7,
+          "name": "independent differential comparison",
+          "status": "mechanism_ready"
+        },
+        {
+          "evidence": [
+            "readiness/ims-expiry/readiness-receipt.json"
+          ],
+          "gap": "No authorized CBPAUP0C IMS BMP execution capture exists.",
+          "gate": 8,
+          "name": "signed equivalence receipt with unresolved gaps",
+          "status": "blocked"
+        }
+      ],
+      "mainframe_equivalent": false,
+      "support_claim": "development-proof; live z/OS evidence pending",
+      "technology": "IMS"
+    },
+    {
+      "development_ready": true,
+      "discovery_ready": true,
+      "gates": [
+        {
+          "evidence": [
+            "1 DSECTs",
+            "1 macros",
+            "2 assembler programs",
+            "41 assembler instructions"
+          ],
+          "gate": 1,
+          "name": "typed native asset parsing",
+          "status": "passed"
+        },
+        {
+          "evidence": [
+            "1 USES_DSECT edges",
+            "1 USES_MACRO edges",
+            "9 BRANCHES_TO edges",
+            "legacy:cobol-program:CBACT01C -> legacy:assembler-program:COBDATFT"
+          ],
+          "gate": 2,
+          "name": "connected dependency and control-flow graph",
+          "status": "passed"
+        },
+        {
+          "evidence": [
+            "5 curated COBDATFT rules"
+          ],
+          "gate": 3,
+          "name": "curated behavior contract",
+          "status": "passed"
+        },
+        {
+          "evidence": [
+            "modern:file:factory/benchmarks/asm_date_candidate.py"
+          ],
+          "gate": 4,
+          "name": "bounded modernization candidate",
+          "status": "passed"
+        },
+        {
+          "evidence": [
+            "scenario:asm-date:private-mutation-gate"
+          ],
+          "gate": 5,
+          "name": "mutation and negative verification",
+          "status": "passed"
+        },
+        {
+          "evidence": [
+            "readiness/asm-date/readiness-receipt.json"
+          ],
+          "gap": "No authorized COBDATFT z/OS execution capture exists.",
+          "gate": 6,
+          "name": "authorized execution of the original on z/OS",
+          "status": "blocked"
+        },
+        {
+          "evidence": [
+            "readiness/asm-date/comparison.json"
+          ],
+          "gap": "No authorized COBDATFT z/OS execution capture exists.",
+          "gate": 7,
+          "name": "independent differential comparison",
+          "status": "mechanism_ready"
+        },
+        {
+          "evidence": [
+            "readiness/asm-date/readiness-receipt.json"
+          ],
+          "gap": "No authorized COBDATFT z/OS execution capture exists.",
+          "gate": 8,
+          "name": "signed equivalence receipt with unresolved gaps",
+          "status": "blocked"
+        }
+      ],
+      "mainframe_equivalent": false,
+      "support_claim": "development-proof; live z/OS evidence pending",
+      "technology": "HLASM"
+    }
+  ],
+  "content_sha256": "800d67033df3f6bad0ed5c0ed2d504de59aae472f11ae38d6e513b4a71b74870",
+  "graph_content_sha256": "d03e2b144c4ca815f434ac31c0496404387a12a77bfa5d87b2c35b59e3c1f6b8",
+  "schema_version": "1.0",
+  "truth_boundary": "Local, simulated, fixture, and static evidence cannot satisfy z/OS observation gates."
+}

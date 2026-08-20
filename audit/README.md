@@ -31,13 +31,13 @@ knowledge-graph identity.
 ## Included artifacts
 
 - `audit.snapshot.json.gz`: canonical deterministic audit snapshot;
-- `dossiers/carddemo-intcalc-v0.17-demo.json`: current machine-readable release evidence dossier;
-- `dossiers/carddemo-intcalc-v0.17-demo.md`: current human-readable dossier;
+- `dossiers/carddemo-intcalc-v0.18-demo.json`: current machine-readable release evidence dossier;
+- `dossiers/carddemo-intcalc-v0.18-demo.md`: current human-readable dossier;
 - `policies/promotion.json`: versioned policy set;
 - `examples/exception.example.json`: governed, expiring human exception example;
 - `schema/`: JSON Schemas for events, snapshots, decisions, exceptions, policies, and dossiers.
 
-The v0.17 canonical demo contains the current graph and source-evidence publication,
+The v0.18 canonical demo contains the current graph, CICS/VSAM readiness, and source-evidence publication,
 verified-memory snapshot publication, durable policy and crash-recovery conformance publication,
 conflict-aware portfolio-plan publication, work-order registration,
 normalized hardened-execution evidence, three distinct
@@ -70,7 +70,7 @@ Inspect the trust posture or event stream:
 PYTHONPATH=src python3 -m lightyear_audit inspect
 PYTHONPATH=src python3 -m lightyear_audit inspect --events --audience auditor
 PYTHONPATH=src python3 -m lightyear_audit inspect \
-  --decision decision:release:carddemo-intcalc:v0.17-demo:promotion
+  --decision decision:release:carddemo-intcalc:v0.18-demo:promotion
 ```
 
 Start the graph explorer and open the **Audit** tab:

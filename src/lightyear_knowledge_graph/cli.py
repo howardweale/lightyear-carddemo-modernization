@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 
 from .builder import build_graph, write_receipt
+from .capability import analyze_capabilities, validate_capability_analysis, write_capability_analysis
 from .evidence_pack import (
     build_evidence_pack,
     load_evidence_pack,
@@ -30,7 +31,12 @@ def build_parser() -> argparse.ArgumentParser:
     build = subparsers.add_parser("build", help="Build a deterministic graph snapshot")
     build.add_argument("--legacy-root", type=Path, required=True)
     build.add_argument("--modern-root", type=Path, default=Path("."))
-    build.add_argument("--manifest", type=Path, default=Path("knowledge/mappings/carddemo-intcalc.json"))
+    build.add_argument(
+        "--manifest",
+        type=Path,
+        action="append",
+        help="Curated workload manifest; repeat to compose multiple vertical slices",
+    )
     build.add_argument("--output", type=Path, default=Path("knowledge/graph.snapshot.json.gz"))
     build.add_argument("--receipt", type=Path, default=Path("knowledge/graph.receipt.json"))
     build.add_argument("--legacy-commit", default=DEFAULT_LEGACY_COMMIT)
@@ -61,6 +67,26 @@ def build_parser() -> argparse.ArgumentParser:
 
     gaps = subparsers.add_parser("gaps", help="List business rules missing evidence, code, or tests")
     gaps.add_argument("--graph", type=Path, default=Path("knowledge/graph.snapshot.json.gz"))
+
+    capabilities = subparsers.add_parser(
+        "capabilities", help="Evaluate CICS, VSAM, IMS, and HLASM against readiness gates 1-8"
+    )
+    capabilities.add_argument("--graph", type=Path, default=Path("knowledge/graph.snapshot.json.gz"))
+    capabilities.add_argument(
+        "--cics-vsam-receipt",
+        type=Path,
+        default=Path("readiness/cics-vsam/readiness-receipt.json"),
+    )
+    capabilities.add_argument(
+        "--output", type=Path, default=Path("knowledge/capabilities/mainframe-readiness.json")
+    )
+    capabilities.add_argument(
+        "--asm-receipt", type=Path, default=Path("readiness/asm-date/readiness-receipt.json")
+    )
+    capabilities.add_argument(
+        "--ims-receipt", type=Path, default=Path("readiness/ims-expiry/readiness-receipt.json")
+    )
+    capabilities.add_argument("--validate-only", action="store_true")
 
     context = subparsers.add_parser("context", help="Build an audience-filtered context package")
     context.add_argument("--graph", type=Path, default=Path("knowledge/graph.snapshot.json.gz"))
@@ -128,7 +154,7 @@ def main(argv: list[str] | None = None) -> int:
         graph = build_graph(
             args.legacy_root,
             args.modern_root,
-            args.manifest,
+            args.manifest or [Path("knowledge/mappings/carddemo-intcalc.json")],
             args.legacy_commit,
             args.modern_commit,
             args.ontology,
@@ -236,6 +262,42 @@ def main(argv: list[str] | None = None) -> int:
         gaps = rule_gaps(payload)
         print(json.dumps({"status": "passed" if not gaps else "failed", "gaps": gaps}, indent=2, sort_keys=True))
         return 0 if not gaps else 1
+    if args.command == "capabilities":
+        if args.validate_only:
+            analysis = json.loads(args.output.read_text(encoding="utf-8"))
+        else:
+            receipt = (
+                json.loads(args.cics_vsam_receipt.read_text(encoding="utf-8"))
+                if args.cics_vsam_receipt.exists()
+                else None
+            )
+            asm_receipt = (
+                json.loads(args.asm_receipt.read_text(encoding="utf-8"))
+                if args.asm_receipt.exists()
+                else None
+            )
+            ims_receipt = (
+                json.loads(args.ims_receipt.read_text(encoding="utf-8"))
+                if args.ims_receipt.exists()
+                else None
+            )
+            analysis = analyze_capabilities(payload, receipt, asm_receipt, ims_receipt)
+            write_capability_analysis(analysis, args.output)
+        errors = validate_capability_analysis(analysis, payload)
+        print(
+            json.dumps(
+                {
+                    "capabilities": analysis.get("capabilities", []),
+                    "content_sha256": analysis.get("content_sha256"),
+                    "errors": errors,
+                    "output": str(args.output),
+                    "status": "passed" if not errors else "failed",
+                },
+                indent=2,
+                sort_keys=True,
+            )
+        )
+        return 0 if not errors else 1
     if args.command == "context":
         print(json.dumps(neighborhood(payload, args.node, args.depth, args.audience), indent=2, sort_keys=True))
         return 0

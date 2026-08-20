@@ -1,0 +1,196 @@
+{
+  "artifacts": [
+    {
+      "role": "candidate-source",
+      "sha256": "b81e46f4cec734aa6f3e57457bd97df54765c0df26c0ee8d692ef7563edcf3e8"
+    },
+    {
+      "role": "input-fixture",
+      "sha256": "c2919b21094efaa01c557aefc1b1e533f1bb43e51d0ffc024281a5620550957b"
+    },
+    {
+      "role": "output",
+      "sha256": "248adcf5ea4ae122d7f36096fe803077b9b368711dab878bc13184ac8004a249"
+    }
+  ],
+  "attestation_signature": null,
+  "capture_type": "factorydark-ims-bmp-execution",
+  "content_sha256": "ea946aa88e353a48a145f9417d7249c0f5c80f4fdec6ecfdb11a1c477581e25d",
+  "evidence_class": "local_observed",
+  "input": {
+    "checkpoint_frequency": 1,
+    "current_yyddd": 20181,
+    "expiry_days": "05",
+    "summaries": [
+      {
+        "account_id": "00000000001",
+        "approved_amount": "40.00",
+        "approved_count": 1,
+        "declined_amount": "25.00",
+        "declined_count": 1,
+        "details": [
+          {
+            "approved_amount": "40.00",
+            "authorization_id": "APPROVED-OLD",
+            "inverted_auth_date": 79823,
+            "response_code": "00",
+            "transaction_amount": "40.00"
+          },
+          {
+            "approved_amount": "0.00",
+            "authorization_id": "DECLINED-NEW",
+            "inverted_auth_date": 79820,
+            "response_code": "05",
+            "transaction_amount": "25.00"
+          }
+        ]
+      },
+      {
+        "account_id": "00000000002",
+        "approved_amount": "10.00",
+        "approved_count": 1,
+        "declined_amount": "12.00",
+        "declined_count": 1,
+        "details": [
+          {
+            "approved_amount": "0.00",
+            "authorization_id": "DECLINED-OLD",
+            "inverted_auth_date": 79824,
+            "response_code": "05",
+            "transaction_amount": "12.00"
+          }
+        ]
+      }
+    ]
+  },
+  "limitations": [
+    "This capture does not schedule PSBPAUTB or execute CBPAUP0C in an IMS BMP region.",
+    "IMS status handling, locking, logging, checkpoints, restart, EBCDIC and packed-decimal bytes remain unproven."
+  ],
+  "mainframe_identity": {},
+  "observed_at": "2022-07-18T00:00:00Z",
+  "operator_attestation": {
+    "authorized": false,
+    "reason": "local deterministic logical proof only"
+  },
+  "output": {
+    "access_trace": [
+      {
+        "account_id": "00000000001",
+        "operation": "GN",
+        "segment": "PAUTSUM0"
+      },
+      {
+        "account_id": "00000000001",
+        "authorization_id": "APPROVED-OLD",
+        "operation": "GNP",
+        "segment": "PAUTDTL1"
+      },
+      {
+        "account_id": "00000000001",
+        "authorization_id": "APPROVED-OLD",
+        "operation": "DLET",
+        "segment": "PAUTDTL1"
+      },
+      {
+        "account_id": "00000000001",
+        "authorization_id": "DECLINED-NEW",
+        "operation": "GNP",
+        "segment": "PAUTDTL1"
+      },
+      {
+        "account_id": "00000000001",
+        "operation": "DLET",
+        "segment": "PAUTSUM0"
+      },
+      {
+        "account_id": "00000000002",
+        "operation": "GN",
+        "segment": "PAUTSUM0"
+      },
+      {
+        "account_id": "00000000002",
+        "authorization_id": "DECLINED-OLD",
+        "operation": "GNP",
+        "segment": "PAUTDTL1"
+      },
+      {
+        "account_id": "00000000002",
+        "authorization_id": "DECLINED-OLD",
+        "operation": "DLET",
+        "segment": "PAUTDTL1"
+      },
+      {
+        "account_id": "00000000002",
+        "operation": "CHKP",
+        "segment": null
+      },
+      {
+        "account_id": "00000000002",
+        "operation": "CHKP",
+        "segment": null
+      }
+    ],
+    "checkpoints": [
+      {
+        "after_account_id": "00000000002",
+        "reason": "frequency"
+      },
+      {
+        "after_account_id": "00000000002",
+        "reason": "final"
+      }
+    ],
+    "current_yyddd": 20181,
+    "database": "DBPAUTP0",
+    "deleted_details": [
+      {
+        "account_id": "00000000001",
+        "authorization_id": "APPROVED-OLD"
+      },
+      {
+        "account_id": "00000000002",
+        "authorization_id": "DECLINED-OLD"
+      }
+    ],
+    "deleted_summary_ids": [
+      "00000000001"
+    ],
+    "expiry_days": 5,
+    "pcb": "PAUTBPCB",
+    "program": "CBPAUP0C",
+    "psb": "PSBPAUTB",
+    "source_quirks": [
+      "approved-count-duplicated"
+    ],
+    "summaries": [
+      {
+        "account_id": "00000000002",
+        "approved_amount": "10.00",
+        "approved_count": 1,
+        "declined_amount": "0.00",
+        "declined_count": 0,
+        "details": []
+      }
+    ],
+    "totals": {
+      "details_deleted": 2,
+      "details_read": 3,
+      "summaries_deleted": 1,
+      "summaries_read": 2
+    }
+  },
+  "program": {
+    "database": "DBPAUTP0",
+    "detail_segment": "PAUTDTL1",
+    "id": "CBPAUP0C",
+    "mode": "BMP",
+    "pcb": "PAUTBPCB",
+    "psb": "PSBPAUTB",
+    "root_segment": "PAUTSUM0"
+  },
+  "return_code": 0,
+  "run_id": "local-cbpaup0c-reference",
+  "schema_version": "1.0",
+  "source_system": "factorydark-local-semantic-candidate"
+}

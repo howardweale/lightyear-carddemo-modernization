@@ -21,19 +21,45 @@ if (-not $LegacyRoot) {
 }
 
 $env:PYTHONPATH = Join-Path $ProjectDir "src"
+$Python = if (Get-Command py -ErrorAction SilentlyContinue) { "py" } else { "python" }
+$Prefix = @()
+if ($Python -eq "py") {
+    $Selected = $null
+    foreach ($Version in @("3.13", "3.12", "3.11", "3.14")) {
+        try {
+            & py "-$Version" -c "import sys; raise SystemExit(0 if sys.version_info >= (3, 11) else 1)" 2>$null
+            if ($LASTEXITCODE -eq 0) { $Selected = "-$Version"; break }
+        } catch {}
+    }
+    if (-not $Selected) { throw "FactoryDark requires Python 3.11 or newer." }
+    $Prefix = @($Selected)
+}
+function Run-Python { & $Python @Prefix @args }
 $Manifest = Join-Path $ProjectDir "knowledge\mappings\carddemo-intcalc.json"
+$CicsVsamManifest = Join-Path $ProjectDir "knowledge\mappings\carddemo-cics-vsam-account-view.json"
+$AsmManifest = Join-Path $ProjectDir "knowledge\mappings\carddemo-asm-date-format.json"
+$ImsManifest = Join-Path $ProjectDir "knowledge\mappings\carddemo-ims-expired-authorization-purge.json"
 $Snapshot = Join-Path $ProjectDir "knowledge\graph.snapshot.json.gz"
 $Receipt = Join-Path $ProjectDir "knowledge\graph.receipt.json"
 $Ontology = Join-Path $ProjectDir "knowledge\ontology\relationships.json"
 $EvidencePack = Join-Path $ProjectDir "knowledge\evidence\source.pack.json.gz"
 $EvidenceReceipt = Join-Path $ProjectDir "knowledge\evidence\source.receipt.json"
+$Capabilities = Join-Path $ProjectDir "knowledge\capabilities\mainframe-readiness.json"
+$CicsVsamReceipt = Join-Path $ProjectDir "readiness\cics-vsam\readiness-receipt.json"
+$AsmReceipt = Join-Path $ProjectDir "readiness\asm-date\readiness-receipt.json"
+$ImsReceipt = Join-Path $ProjectDir "readiness\ims-expiry\readiness-receipt.json"
 
 if ($Action -eq "build") {
-    & py -3.11 -m lightyear_knowledge_graph build `
+    Run-Python -m lightyear_knowledge_graph build `
         --legacy-root $LegacyRoot --modern-root $ProjectDir --manifest $Manifest `
+        --manifest $CicsVsamManifest --manifest $AsmManifest --manifest $ImsManifest `
         --ontology $Ontology --evidence-pack $EvidencePack --evidence-receipt $EvidenceReceipt `
         --output $Snapshot --receipt $Receipt --legacy-commit $LegacyCommit `
         --modern-commit repository-content
+    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+    Run-Python -m lightyear_knowledge_graph capabilities --graph $Snapshot `
+        --cics-vsam-receipt $CicsVsamReceipt --asm-receipt $AsmReceipt `
+        --ims-receipt $ImsReceipt --output $Capabilities
     exit $LASTEXITCODE
 }
 if ($Action -eq "verify") {
@@ -43,24 +69,31 @@ if ($Action -eq "verify") {
     $GeneratedReceipt = Join-Path $Generated "graph.receipt.json"
     $GeneratedEvidencePack = Join-Path $Generated "source.pack.json.gz"
     $GeneratedEvidenceReceipt = Join-Path $Generated "source.receipt.json"
-    & py -3.11 -m lightyear_knowledge_graph build `
+    $GeneratedCapabilities = Join-Path $Generated "mainframe-readiness.json"
+    Run-Python -m lightyear_knowledge_graph build `
         --legacy-root $LegacyRoot --modern-root $ProjectDir --manifest $Manifest `
+        --manifest $CicsVsamManifest --manifest $AsmManifest --manifest $ImsManifest `
         --ontology $Ontology --evidence-pack $GeneratedEvidencePack `
         --evidence-receipt $GeneratedEvidenceReceipt `
         --output $GeneratedSnapshot --receipt $GeneratedReceipt --legacy-commit $LegacyCommit `
         --modern-commit repository-content
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-    & py -3.11 -m lightyear_knowledge_graph validate --graph $GeneratedSnapshot
+    Run-Python -m lightyear_knowledge_graph capabilities --graph $GeneratedSnapshot `
+        --cics-vsam-receipt $CicsVsamReceipt --asm-receipt $AsmReceipt `
+        --ims-receipt $ImsReceipt `
+        --output $GeneratedCapabilities
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-    & py -3.11 -m lightyear_knowledge_graph validate-evidence `
+    Run-Python -m lightyear_knowledge_graph validate --graph $GeneratedSnapshot
+    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+    Run-Python -m lightyear_knowledge_graph validate-evidence `
         --graph $GeneratedSnapshot --evidence-pack $GeneratedEvidencePack
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-    & py -3.11 -m lightyear_knowledge_graph gaps --graph $GeneratedSnapshot
+    Run-Python -m lightyear_knowledge_graph gaps --graph $GeneratedSnapshot
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-    & py -3.11 -m lightyear_knowledge_graph compare-evidence-packs `
+    Run-Python -m lightyear_knowledge_graph compare-evidence-packs `
         --expected $EvidencePack --actual $GeneratedEvidencePack
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-    & py -3.11 -m lightyear_knowledge_graph compare-snapshots `
+    Run-Python -m lightyear_knowledge_graph compare-snapshots `
         --expected $Snapshot --actual $GeneratedSnapshot
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
     if ((Get-FileHash $Receipt).Hash -ne (Get-FileHash $GeneratedReceipt).Hash) {
@@ -68,6 +101,9 @@ if ($Action -eq "verify") {
     }
     if ((Get-FileHash $EvidenceReceipt).Hash -ne (Get-FileHash $GeneratedEvidenceReceipt).Hash) {
         throw "Source evidence receipt is stale; run .\knowledge-graph.ps1 build"
+    }
+    if ((Get-FileHash $Capabilities).Hash -ne (Get-FileHash $GeneratedCapabilities).Hash) {
+        throw "Capability analysis is stale; run .\knowledge-graph.ps1 build"
     }
     Write-Host "Knowledge graph snapshot is deterministic, current, and policy-complete."
     exit 0

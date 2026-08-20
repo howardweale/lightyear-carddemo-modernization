@@ -1,0 +1,82 @@
+{
+  "artifacts": [
+    {
+      "role": "jcl",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "role": "load-module",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "role": "psb",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "role": "dbd",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "role": "synthetic-before-image",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "role": "synthetic-after-image",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "role": "job-output",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "role": "ims-log-or-trace",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  ],
+  "attestation_signature": null,
+  "capture_type": "factorydark-ims-bmp-execution",
+  "content_sha256": "cefa5e967064ecdde24e1bf250fd9afa951cdcecbfc03e1c6cdfb92de8ea28ab",
+  "evidence_class": "zos_observed",
+  "input": {
+    "checkpoint_frequency": 1,
+    "current_yyddd": 20181,
+    "expiry_days": "05",
+    "summaries": "REPLACE-WITH-REDACTED-SYNTHETIC-FIXTURE-MANIFEST"
+  },
+  "limitations": [],
+  "mainframe_identity": {
+    "database": "DBPAUTP0",
+    "ims_region": "REPLACE",
+    "job_id": "REPLACE",
+    "lpar": "REPLACE",
+    "operator": "REPLACE",
+    "program": "CBPAUP0C",
+    "psb": "PSBPAUTB",
+    "step_name": "STEP01",
+    "system_id": "REPLACE"
+  },
+  "observed_at": "REPLACE-WITH-UTC-TIMESTAMP",
+  "operator_attestation": {
+    "authorized": false,
+    "scope": "synthetic CBPAUP0C BMP proof",
+    "ticket": "REPLACE"
+  },
+  "output": {
+    "after_digest": "0000000000000000000000000000000000000000000000000000000000000000",
+    "before_digest": "0000000000000000000000000000000000000000000000000000000000000000",
+    "normalized_result": "REPLACE-WITH-NORMALIZED-SEGMENT-AND-TRACE-RESULT"
+  },
+  "program": {
+    "database": "DBPAUTP0",
+    "detail_segment": "PAUTDTL1",
+    "id": "CBPAUP0C",
+    "mode": "BMP",
+    "pcb": "PAUTBPCB",
+    "psb": "PSBPAUTB",
+    "root_segment": "PAUTSUM0"
+  },
+  "return_code": 0,
+  "run_id": "REPLACE-WITH-UNIQUE-RUN-ID",
+  "schema_version": "1.0",
+  "source_system": "REPLACE-WITH-AUTHORIZED-ZOS-ALIAS"
+}

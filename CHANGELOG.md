@@ -1,5 +1,40 @@
 # Changelog
 
+## 0.18.2 — 2026-08-21
+
+- Added a bounded logical proof for the `CBPAUP0C` IMS BMP authorization-expiry workload through
+  `PSBPAUTB`, `PAUTBPCB`, `DBPAUTP0`, `PAUTSUM0`, and `PAUTDTL1`.
+- Curated eight source-grounded rules for BMP routing, hierarchy, GN/GNP traversal, inverted-date
+  expiry, summary adjustments, DLET behavior, checkpoints, and the duplicated approved-count root
+  deletion quirk.
+- Added a source-faithful candidate, independent private mutation gate, deterministic local
+  capture, differential comparator, z/OS capture contract, operational runbook, and signed IMS
+  readiness receipt.
+- Advanced IMS readiness gates 3–5 to passed and gate 7 to mechanism-ready while keeping live BMP
+  execution and mainframe equivalence blocked until externally attested z/OS evidence exists.
+
+## 0.18.1 — 2026-08-21
+
+- Added deterministic HLASM parsing for programs, instructions, symbols, branches, macros, DSECTs, and fields.
+- Added native IMS DBD/PSB parsing for databases, dataset groups, segments, fields, PCBs, sensitive segments, and program-to-PSB bindings.
+- Added a bounded, source-faithful COBDATFT modernization candidate with private mutation gates.
+- Added a graph-bound CICS, VSAM, IMS, and HLASM capability projection across readiness gates 1–8.
+- Kept every technology fail-closed for mainframe equivalence until signed z/OS evidence exists.
+
+## 0.18.0 — 2026-08-21
+
+- Added deterministic native extraction for CICS CSD transactions, programs, files and mapsets;
+  BMS maps and fields; EXEC CICS command spans; and IDCAMS VSAM clusters, components, alternate
+  indexes and paths, each with exact source evidence.
+- Added typed routing and lineage relationships from `CAVW` through `COACTVWC`, `CACTVWA`, CICS
+  file resources, and the underlying CardXref, account, and customer VSAM objects.
+- Curated eight graph-grounded account-view behavior rules and a bounded read-only modernization
+  candidate with an independent private gate and mutation/negative coverage.
+- Added an operator-safe real-CICS capture contract, redacted artifact manifest, mainframe identity
+  requirements, differential comparator, and fail-closed signed readiness receipt.
+- Added cross-platform launchers, JSON schemas, an operational runbook, deterministic development
+  evidence, and full verification integration. Local proof cannot satisfy z/OS equivalence.
+
 ## 0.17.0 — 2026-08-16
 
 - Added a canonical operational event envelope and append-only SQLite WAL reference ledger with

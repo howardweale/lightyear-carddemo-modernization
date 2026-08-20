@@ -1,0 +1,17 @@
+{
+  "baseline_evidence_class": "local_observed",
+  "baseline_sha256": "ea946aa88e353a48a145f9417d7249c0f5c80f4fdec6ecfdb11a1c477581e25d",
+  "behavior_match": true,
+  "candidate_evidence_class": "local_observed",
+  "candidate_sha256": "ea946aa88e353a48a145f9417d7249c0f5c80f4fdec6ecfdb11a1c477581e25d",
+  "comparison_type": "factorydark-ims-bmp-differential",
+  "content_sha256": "f5825ba1acc6268ab318e00fb1826d68564641cf3ef8ea766940a5375b70d916",
+  "differences": [],
+  "mainframe_baseline": false,
+  "schema_version": "1.0",
+  "status": "passed",
+  "validation_errors": {
+    "baseline": [],
+    "candidate": []
+  }
+}

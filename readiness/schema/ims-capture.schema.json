@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://factorydark.ai/schemas/ims-capture-1.0.json",
+  "title": "FactoryDark IMS BMP Execution Capture",
+  "type": "object",
+  "required": ["schema_version", "capture_type", "run_id", "source_system", "observed_at", "evidence_class", "program", "input", "output", "return_code", "artifacts", "mainframe_identity", "operator_attestation", "attestation_signature", "limitations", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "capture_type": {"const": "factorydark-ims-bmp-execution"},
+    "run_id": {"type": "string", "minLength": 1},
+    "source_system": {"type": "string", "minLength": 1},
+    "observed_at": {"type": "string", "minLength": 1},
+    "evidence_class": {"enum": ["local_observed", "zos_observed"]},
+    "program": {"type": "object"},
+    "input": {"type": "object"},
+    "output": {"type": "object"},
+    "return_code": {"type": "integer"},
+    "artifacts": {"type": "array", "minItems": 1, "items": {"type": "object", "required": ["role", "sha256"]}},
+    "mainframe_identity": {"type": "object"},
+    "operator_attestation": {"type": "object"},
+    "attestation_signature": {"type": ["object", "null"]},
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

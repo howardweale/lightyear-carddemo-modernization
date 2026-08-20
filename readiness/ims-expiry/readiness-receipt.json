@@ -1,0 +1,23 @@
+{
+  "checks": {
+    "bounded_candidate": true,
+    "curated_behavior_contract": true,
+    "differential_behavior_match": true,
+    "private_negative_gate": true,
+    "typed_static_graph": true,
+    "zos_observed_baseline": false
+  },
+  "comparison_sha256": "f5825ba1acc6268ab318e00fb1826d68564641cf3ef8ea766940a5375b70d916",
+  "content_sha256": "fa80f81d50082342edbc33e10c53986b5e8fcdc7211a452e17c4a458cdefe4e9",
+  "development_ready": true,
+  "mainframe_equivalent": false,
+  "receipt_type": "factorydark-ims-readiness",
+  "schema_version": "1.0",
+  "signature": null,
+  "status": "blocked",
+  "unresolved_gaps": [
+    "No authorized zos_observed CBPAUP0C BMP baseline is bound to this comparison.",
+    "No external IMS equivalence signing key was configured."
+  ],
+  "workload_id": "workload:carddemo-ims-expired-authorization-purge"
+}

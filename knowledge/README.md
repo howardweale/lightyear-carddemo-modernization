@@ -14,9 +14,11 @@ The graph is the factory's shared system model. It is deliberately broader than 
 connects application structure, business meaning, modernization implementation, verification, and
 provenance in one queryable artifact.
 
-The committed snapshot currently describes the complete pinned AWS CardDemo estate. `INTCALC` is
-the first fully mapped workload; the rest of the application is structurally indexed but is not
-yet claimed to be semantically recovered or behaviorally verified.
+The committed snapshot currently describes the complete pinned AWS CardDemo estate. `INTCALC`,
+the `CAVW` CICS/VSAM account-view path, the bounded `COBDATFT` HLASM routine, and the `CBPAUP0C`
+IMS expired-authorization purge are mapped workloads. IMS DBDs, PSBs, PCBs, segment hierarchies,
+sensitivity views, and program bindings are structurally indexed; the CBPAUP0C normal path is
+curated and development-proven without claiming live IMS equivalence or general IMS coverage.
 
 ## Why this can become a moat
 
@@ -80,12 +82,19 @@ Stable, namespaced IDs allow artifacts from different extractors and agents to j
 | Copybook field | `legacy:cobol-field:CVACT01Y:ACCT-CURR-BAL:<line>` |
 | JCL job | `legacy:jcl-job:INTCALC` |
 | Dataset | `legacy:dataset:AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS` |
+| CICS transaction | `legacy:cics-transaction:CAVW` |
+| BMS field | `legacy:bms-field:CACTVWA:ACCTSID:84` |
+| VSAM cluster | `legacy:vsam-cluster:AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS` |
+| IMS database | `legacy:ims-database:DBPAUTP0` |
+| IMS PSB/PCB | `legacy:ims-psb:PSBPAUTB` / `legacy:ims-pcb:PSBPAUTB:PAUTBPCB` |
+| HLASM program | `legacy:assembler-program:COBDATFT` |
+| HLASM DSECT | `legacy:assembler-dsect:COCDATFT` |
 | Business rule | `rule:intcalc:monthly-interest` |
 | Java method | `modern:java-method:...InterestCalculationService#calculate` |
 | Test | `modern:test:...InterestCalculationServiceTest#matchesInterestAndDefaultRateRules` |
 | Scenario | `scenario:intcalc:synthetic-differential` |
 
-All 21 relations are defined in `ontology/relationships.json`. Each definition includes a purpose,
+All relations are defined in `ontology/relationships.json`. Each definition includes a purpose,
 direction, category, evidence policy, and exact allowed source/target node-kind pairs. The graph
 snapshot carries the ontology content hash, and validation rejects undefined or incompatible edges.
 
@@ -97,6 +106,11 @@ snapshot carries the ontology content hash, and validation rejects undefined or 
 - `schema/relationship-ontology.schema.json`: governed relationship contract;
 - `schema/evidence-pack.schema.json`: content-addressed source capsule contract;
 - `mappings/carddemo-intcalc.json`: curated semantic and verification mappings;
+- `mappings/carddemo-cics-vsam-account-view.json`: bounded CICS/VSAM proof mapping;
+- `mappings/carddemo-asm-date-format.json`: bounded HLASM proof mapping;
+- `mappings/carddemo-ims-expired-authorization-purge.json`: bounded IMS BMP proof mapping;
+- `capabilities/mainframe-readiness.json`: graph-bound readiness gates for CICS, VSAM, IMS, and HLASM;
+- `schema/capability-readiness.schema.json`: portable contract for the capability projection;
 - `ontology/relationships.json`: canonical meanings and endpoint constraints for all edges;
 - `evidence/source.pack.json.gz`: deterministic source excerpts and supporting context;
 - `evidence/source.receipt.json`: evidence-pack and graph identity receipt;
@@ -124,6 +138,7 @@ PYTHONPATH=src python3 -m lightyear_knowledge_graph validate
 PYTHONPATH=src python3 -m lightyear_knowledge_graph validate-evidence
 PYTHONPATH=src python3 -m lightyear_knowledge_graph gaps
 PYTHONPATH=src python3 -m lightyear_knowledge_graph stats
+PYTHONPATH=src python3 -m lightyear_knowledge_graph capabilities
 PYTHONPATH=src python3 -m lightyear_knowledge_graph impact \
   --node legacy:copybook:CVACT01Y --depth 2
 PYTHONPATH=src python3 -m lightyear_knowledge_graph trace \

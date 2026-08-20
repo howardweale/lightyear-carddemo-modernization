@@ -6,7 +6,7 @@
   "additionalProperties": false,
   "required": [
     "schema_version", "dossier_type", "release_id", "status", "rationale", "gaps",
-    "promotion_decision", "runtime_decisions", "execution_decisions", "semantic_memory", "portfolio_plan", "durable_control_plane",
+    "promotion_decision", "runtime_decisions", "execution_decisions", "semantic_memory", "portfolio_plan", "durable_control_plane", "cics_vsam_readiness",
     "evidence_inventory", "audit",
     "limitations", "content_sha256"
   ],
@@ -60,6 +60,19 @@
         "event_integrity": {"type": ["string", "null"]},
         "production_adapter": {"type": ["string", "null"]},
         "conformance_status": {"enum": ["passed", "failed", "not_recorded"]}
+      }
+    },
+    "cics_vsam_readiness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status", "development_ready", "mainframe_equivalent", "signed", "unresolved_gaps", "receipt_sha256"],
+      "properties": {
+        "status": {"enum": ["passed", "blocked", "not_recorded"]},
+        "development_ready": {"type": "boolean"},
+        "mainframe_equivalent": {"type": "boolean"},
+        "signed": {"type": "boolean"},
+        "unresolved_gaps": {"type": "array", "items": {"type": "string"}},
+        "receipt_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]}
       }
     },
     "evidence_inventory": {

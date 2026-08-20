@@ -47,6 +47,13 @@ def build_dossier(snapshot: dict[str, Any], release_id: str) -> dict[str, Any]:
         ),
         None,
     )
+    cics_vsam_event = next(
+        (
+            item for item in reversed(snapshot["events"])
+            if item["action"] == "readiness.cics_vsam_recorded"
+        ),
+        None,
+    )
     evidence = {}
     for event in snapshot["events"]:
         for item in event["evidence"]:
@@ -114,6 +121,24 @@ def build_dossier(snapshot: dict[str, Any], release_id: str) -> dict[str, Any]:
                 "event_integrity": None,
                 "production_adapter": None,
                 "conformance_status": "not_recorded",
+            }
+        ),
+        "cics_vsam_readiness": (
+            {
+                "status": cics_vsam_event["details"]["status"],
+                "development_ready": cics_vsam_event["details"]["development_ready"],
+                "mainframe_equivalent": cics_vsam_event["details"]["mainframe_equivalent"],
+                "signed": cics_vsam_event["details"]["signed"],
+                "unresolved_gaps": cics_vsam_event["details"]["unresolved_gaps"],
+                "receipt_sha256": cics_vsam_event["evidence"][0]["sha256"],
+            }
+            if cics_vsam_event is not None else {
+                "status": "not_recorded",
+                "development_ready": False,
+                "mainframe_equivalent": False,
+                "signed": False,
+                "unresolved_gaps": ["CICS/VSAM readiness receipt is not recorded."],
+                "receipt_sha256": None,
             }
         ),
         "evidence_inventory": [evidence[key] for key in sorted(evidence)],
@@ -200,6 +225,15 @@ def render_markdown(dossier: dict[str, Any]) -> str:
         f"- Events: {dossier['audit']['event_count']}",
         f"- Ledger head: `{dossier['audit']['ledger_head_sha256']}`",
         f"- Signature algorithm: `{dossier['audit']['checkpoint_signature_algorithm']}`",
+        "",
+        "## CICS/VSAM readiness",
+        "",
+        f"- Status: `{dossier['cics_vsam_readiness']['status']}`",
+        f"- Development ready: `{dossier['cics_vsam_readiness']['development_ready']}`",
+        f"- Mainframe equivalent: `{dossier['cics_vsam_readiness']['mainframe_equivalent']}`",
+        f"- Signed: `{dossier['cics_vsam_readiness']['signed']}`",
+        f"- Receipt: `{dossier['cics_vsam_readiness']['receipt_sha256'] or 'not recorded'}`",
+        *(f"- Gap: {item}" for item in dossier["cics_vsam_readiness"]["unresolved_gaps"]),
         "",
         "## Durable recovery control plane",
         "",

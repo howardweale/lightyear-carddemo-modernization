@@ -1,0 +1,23 @@
+{
+  "checks": {
+    "bounded_candidate": true,
+    "curated_behavior_contract": true,
+    "differential_behavior_match": true,
+    "private_negative_gate": true,
+    "typed_static_graph": true,
+    "zos_observed_baseline": false
+  },
+  "comparison_sha256": "18ffa8df47108e299c14e971c7a646ded82020e0853f0d2d897be1aa09e4a23b",
+  "content_sha256": "6bbe74439aa51d147bcb266f95af048a357f2e44dc32bcc200406a7884424389",
+  "development_ready": true,
+  "mainframe_equivalent": false,
+  "receipt_type": "lightyear-cics-vsam-readiness",
+  "schema_version": "1.0",
+  "signature": null,
+  "status": "blocked",
+  "unresolved_gaps": [
+    "No authorized zos_observed CAVW baseline is bound to this comparison.",
+    "No external equivalence signing key was configured."
+  ],
+  "workload_id": "workload:carddemo-cics-vsam-account-view"
+}

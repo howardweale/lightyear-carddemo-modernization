@@ -12,7 +12,7 @@ from .ontology import DEFAULT_ONTOLOGY_PATH, load_ontology, ontology_identity
 def build_graph(
     legacy_root: Path,
     modern_root: Path,
-    manifest_path: Path,
+    manifest_path: Path | list[Path] | tuple[Path, ...],
     legacy_commit: str,
     modern_commit: str = "working-tree",
     ontology_path: Path = DEFAULT_ONTOLOGY_PATH,
@@ -38,7 +38,9 @@ def build_graph(
     )
     extract_legacy(graph, legacy_root)
     extract_modern(graph, modern_root)
-    _apply_manifest(graph, manifest_path)
+    manifests = [manifest_path] if isinstance(manifest_path, Path) else list(manifest_path)
+    for path in manifests:
+        _apply_manifest(graph, path)
     return graph
 
 

@@ -1,5 +1,28 @@
 # LIGHTYEAR Autonomous Factory and Hardened Execution Plane
 
+## CICS/VSAM, HLASM, and IMS vertical cells (v0.18.2)
+
+The first online workload cell models `CAVW` transaction routing, BMS input/output, alternate-index
+lookup, two primary keyed reads, NOTFND behavior, and a read-only invariant. Its builder surface is
+bounded to `factory/benchmarks/cics_vsam_account_candidate.py`; an independent private gate rejects
+routing, layout, key, and mutation faults. The production claim remains owned by the external
+CICS/VSAM capture and signed equivalence gate under `readiness/cics-vsam/`.
+
+The HLASM cell models the COBOL-callable `COBDATFT` routine, its `COCDATFT` parameter DSECT,
+fixed-position compact/hyphenated date conversion, invalid direction handling, and the source's
+commented separator validation. The bounded candidate is
+`factory/benchmarks/asm_date_candidate.py`; the private policy is
+`src/lightyear_factory/asm_private.py`. It is development-proven only: live assembly, link-edit,
+COBOL caller execution, and an independently signed z/OS comparison remain blocked.
+
+The IMS cell models the `CBPAUP0C` BMP purge across `PSBPAUTB`, `DBPAUTP0`, `PAUTSUM0`, and
+`PAUTDTL1`. It preserves inverted Julian-date qualification, approved/declined summary
+adjustments, GN/GNP/DLET ordering, strict checkpoint frequency, and the duplicated approved-count
+root deletion test found in the source. The bounded candidate is
+`factory/benchmarks/ims_expiry_candidate.py`; the private gate is
+`src/lightyear_factory/ims_private.py`. Only a signed, authorized live BMP capture can advance it
+from development proof to mainframe equivalence.
+
 ## Durable execution (v0.16)
 
 The portfolio controller can now submit exact plans to a transactional queue. Disposable workers

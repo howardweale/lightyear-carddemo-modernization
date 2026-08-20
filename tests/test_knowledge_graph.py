@@ -31,7 +31,12 @@ class KnowledgeGraphTests(unittest.TestCase):
         self.assertGreaterEqual(stats["nodes_by_kind"]["cobol_program"], 40)
         self.assertGreaterEqual(stats["nodes_by_kind"]["jcl_job"], 40)
         self.assertGreaterEqual(stats["nodes_by_kind"]["cobol_field"], 1000)
-        self.assertEqual(9, stats["nodes_by_kind"]["business_rule"])
+        self.assertEqual(30, stats["nodes_by_kind"]["business_rule"])
+        self.assertGreaterEqual(stats["nodes_by_kind"]["assembler_program"], 2)
+        self.assertGreaterEqual(stats["nodes_by_kind"]["ims_database"], 4)
+        self.assertGreaterEqual(stats["nodes_by_kind"]["cics_transaction"], 20)
+        self.assertGreaterEqual(stats["nodes_by_kind"]["bms_field"], 500)
+        self.assertGreaterEqual(stats["nodes_by_kind"]["vsam_cluster"], 10)
         self.assertIn(
             "modern:file:src/lightyear_factory/orchestrator.py",
             {node["id"] for node in self.graph["nodes"]},

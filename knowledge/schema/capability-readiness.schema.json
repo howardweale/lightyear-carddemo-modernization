@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://factorydark.ai/schemas/capability-readiness-1.0.json",
+  "title": "FactoryDark Mainframe Capability Readiness",
+  "type": "object",
+  "required": ["schema_version", "analysis_type", "graph_content_sha256", "truth_boundary", "capabilities", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "analysis_type": {"const": "factorydark-mainframe-capability-readiness"},
+    "graph_content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "truth_boundary": {"type": "string", "minLength": 1},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "capabilities": {
+      "type": "array",
+      "minItems": 4,
+      "items": {
+        "type": "object",
+        "required": ["technology", "discovery_ready", "development_ready", "mainframe_equivalent", "support_claim", "gates"],
+        "properties": {
+          "technology": {"enum": ["CICS", "VSAM", "IMS", "HLASM"]},
+          "discovery_ready": {"type": "boolean"},
+          "development_ready": {"type": "boolean"},
+          "mainframe_equivalent": {"type": "boolean"},
+          "support_claim": {"type": "string"},
+          "gates": {
+            "type": "array",
+            "minItems": 8,
+            "maxItems": 8,
+            "items": {
+              "type": "object",
+              "required": ["gate", "name", "status", "evidence"],
+              "properties": {
+                "gate": {"type": "integer", "minimum": 1, "maximum": 8},
+                "name": {"type": "string"},
+                "status": {"enum": ["passed", "mechanism_ready", "blocked", "not_started"]},
+                "evidence": {"type": "array", "items": {"type": "string"}},
+                "gap": {"type": "string"}
+              },
+              "additionalProperties": false
+            }
+          }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}

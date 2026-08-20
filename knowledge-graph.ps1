@@ -4,37 +4,29 @@ $ProjectDir = $PSScriptRoot
 $LegacyCommit = "59cc6c2fd7ebd7ef7925cad552a01a4b8b6e4d5e"
 $Action = if ($args.Count -gt 0) { $args[0] } else { "verify" }
 $LegacyRoot = if ($args.Count -gt 1) { $args[1] } elseif ($env:CARDDEMO_UPSTREAM_ROOT) { $env:CARDDEMO_UPSTREAM_ROOT } else { "" }
+$ManagedLegacyRoot = $false
 
 if (-not $LegacyRoot -and (Test-Path (Join-Path $ProjectDir "..\carddemo-upstream\app"))) {
     $LegacyRoot = (Resolve-Path (Join-Path $ProjectDir "..\carddemo-upstream")).Path
 }
 if (-not $LegacyRoot) {
     $LegacyRoot = Join-Path $ProjectDir "work\carddemo-upstream"
+    $ManagedLegacyRoot = $true
     if (-not (Test-Path (Join-Path $LegacyRoot ".git"))) {
-        & git clone --filter=blob:none --no-checkout `
+        & git -c core.autocrlf=false -c core.eol=lf clone --filter=blob:none --no-checkout `
             https://github.com/aws-samples/aws-mainframe-modernization-carddemo.git `
             $LegacyRoot
         if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
     }
-    & git -C $LegacyRoot checkout --detach $LegacyCommit
+    & git -C $LegacyRoot config --local core.autocrlf false
+    & git -C $LegacyRoot config --local core.eol lf
+    & git -C $LegacyRoot -c core.autocrlf=false -c core.eol=lf checkout --detach --force $LegacyCommit
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 }
 
 $env:PYTHONPATH = Join-Path $ProjectDir "src"
-$Python = if (Get-Command py -ErrorAction SilentlyContinue) { "py" } else { "python" }
-$Prefix = @()
-if ($Python -eq "py") {
-    $Selected = $null
-    foreach ($Version in @("3.13", "3.12", "3.11", "3.14")) {
-        try {
-            & py "-$Version" -c "import sys; raise SystemExit(0 if sys.version_info >= (3, 11) else 1)" 2>$null
-            if ($LASTEXITCODE -eq 0) { $Selected = "-$Version"; break }
-        } catch {}
-    }
-    if (-not $Selected) { throw "FactoryDark requires Python 3.11 or newer." }
-    $Prefix = @($Selected)
-}
-function Run-Python { & $Python @Prefix @args }
+. (Join-Path $ProjectDir "python-runtime.ps1")
+function Run-Python { Invoke-FactoryDarkPython @args }
 $Manifest = Join-Path $ProjectDir "knowledge\mappings\carddemo-intcalc.json"
 $CicsVsamManifest = Join-Path $ProjectDir "knowledge\mappings\carddemo-cics-vsam-account-view.json"
 $AsmManifest = Join-Path $ProjectDir "knowledge\mappings\carddemo-asm-date-format.json"

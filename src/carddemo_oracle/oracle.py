@@ -7,6 +7,8 @@ from decimal import Decimal
 from pathlib import Path
 from typing import Any
 
+from lightyear_common.io import write_json
+
 from .records import (
     Account,
     CardXref,
@@ -204,7 +206,7 @@ def run_directory(
         "transactions": [_decimal_json(asdict(txn)) for txn in result.transactions],
         "observations": result.observations,
     }
-    canonical_path.write_text(json.dumps(canonical, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    write_json(canonical_path, canonical)
 
     receipt = {
         "oracle": "carddemo-intcalc-source-faithful-local",
@@ -225,5 +227,5 @@ def run_directory(
         },
         "observations": result.observations,
     }
-    receipt_path.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    write_json(receipt_path, receipt)
     return receipt

@@ -1,11 +1,12 @@
 $ErrorActionPreference = "Stop"
 $projectDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $env:PYTHONPATH = Join-Path $projectDir "src"
+. (Join-Path $projectDir "python-runtime.ps1")
 Set-Location $projectDir
 
 $action = if ($args.Count -gt 0) { $args[0] } else { "build" }
 if ($action -eq "build") {
-    & py -3.11 -m lightyear_audit build
+    Invoke-FactoryDarkPython -m lightyear_audit build
     exit $LASTEXITCODE
 } elseif ($action -eq "verify") {
     $verificationDir = Join-Path $projectDir "work/audit-control-tower-verify"
@@ -13,16 +14,16 @@ if ($action -eq "build") {
     $generatedJson = Join-Path $verificationDir "carddemo-intcalc-v0.18-demo.json"
     $generatedMarkdown = Join-Path $verificationDir "carddemo-intcalc-v0.18-demo.md"
     New-Item -ItemType Directory -Force $verificationDir | Out-Null
-    & py -3.11 -m lightyear_audit build `
+    Invoke-FactoryDarkPython -m lightyear_audit build `
         --output $generated `
         --dossier-json $generatedJson `
         --dossier-markdown $generatedMarkdown
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-    & py -3.11 -m lightyear_audit validate --snapshot $generated
+    Invoke-FactoryDarkPython -m lightyear_audit validate --snapshot $generated
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-    & py -3.11 -m lightyear_audit validate
+    Invoke-FactoryDarkPython -m lightyear_audit validate
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-    & py -3.11 -m lightyear_audit compare `
+    Invoke-FactoryDarkPython -m lightyear_audit compare `
         --expected (Join-Path $projectDir "audit/audit.snapshot.json.gz") `
         --actual $generated
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

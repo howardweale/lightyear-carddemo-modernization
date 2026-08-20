@@ -6,6 +6,8 @@ from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
 from typing import Any
 
+from lightyear_common.io import write_json as write_deterministic_json
+
 
 WORK_ORDER_SCHEMA_VERSION = "1.0"
 RUN_RECEIPT_SCHEMA_VERSION = "1.0"
@@ -236,5 +238,4 @@ class WorkOrder:
 
 
 def write_json(payload: dict[str, Any], path: Path) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    write_deterministic_json(path, payload)

@@ -4,7 +4,7 @@
 
 **Decision:** **BLOCKED**
 
-**Dossier identity:** `c3afd5d57a9cd6a7b2cc79172f2e0ff1535f2660881b6db0f4bfbdb8732c7597`
+**Dossier identity:** `de396ed79ffcc949eb991c580889bfc5b97aa80d5ce19faaedd93c137bbaadc6`
 
 ## Promotion rationale
 
@@ -33,15 +33,15 @@ Release is blocked until every independent runtime and execution-security gate h
 | Kind | Identifier | SHA-256 |
 |---|---|---|
 | `work_order` | `carddemo:intcalc:bounded-repair` | `71e7e34d92dd056a…` |
-| `portfolio_plan` | `carddemo:modernization:v0.15` | `5331dc9ed2598ddf…` |
+| `portfolio_plan` | `carddemo:modernization:v0.15` | `3777011d47072a23…` |
 | `operational_control_policy` | `control-tower:live-evidence-plane` | `b4c43578b6cb7060…` |
-| `source_evidence_pack` | `evidence:source-pack` | `092f35d3d253939d…` |
+| `source_evidence_pack` | `evidence:source-pack` | `8259061ddbd6b8fb…` |
 | `decision_input` | `execution:carddemo-hardened-plane` | `83d937880f17192b…` |
-| `durable_conformance_receipt` | `factory:durable-conformance` | `667290640b6a8a3f…` |
+| `durable_conformance_receipt` | `factory:durable-conformance` | `e49562a07bf2bfc6…` |
 | `durable_execution_policy` | `factory:durable-control-plane` | `72b0c927dc60dc8b…` |
-| `graph_snapshot` | `lightyear:carddemo-modernization` | `d03e2b144c4ca815…` |
+| `graph_snapshot` | `lightyear:carddemo-modernization` | `c720425a6080218e…` |
 | `semantic_memory_snapshot` | `memory:verified-experiences` | `42000f0e821e12b7…` |
-| `decision_input` | `release:carddemo-intcalc:v0.18-demo` | `d03e2b144c4ca815…` |
+| `decision_input` | `release:carddemo-intcalc:v0.18-demo` | `c720425a6080218e…` |
 | `decision_input` | `runtime-run:local-oracle-intcalc-reference` | `9ada6983de37a9aa…` |
 | `decision_input` | `runtime-run:recorded-zos-intcalc-replay` | `d7d2cb1562f26f1c…` |
 | `decision_input` | `runtime-run:zosmf-intcalc-job00001` | `c821cdbcd2ba17c4…` |
@@ -60,13 +60,13 @@ Release is blocked until every independent runtime and execution-security gate h
 - Execution waves: 2
 - Detected conflicts: 1
 - Approval authority: `human`
-- Plan: `5331dc9ed2598ddf377aa88993de1b1e58b6e2b340864375435dfc3e2816ff49`
+- Plan: `3777011d47072a239a7efcd1caadbd10573a7a89ec8bf7fc7bcaf7e2aed754a8`
 
 ## Audit checkpoint
 
 - Ledger: `lightyear:carddemo:audit`
 - Events: 20
-- Ledger head: `a28c84c040ee64fbc478ea456a15e6c2ae912c54fb4dc581a3a0e6ba67c79a10`
+- Ledger head: `4b8f92614892667788b169329bd7d8c671cedd63963f00a32d11dcbcdc97c47f`
 - Signature algorithm: `none`
 
 ## CICS/VSAM readiness

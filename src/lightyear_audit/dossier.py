@@ -4,6 +4,8 @@ import json
 from pathlib import Path
 from typing import Any
 
+from lightyear_common.io import write_json, write_text
+
 from .contracts import canonical_hash
 
 
@@ -253,7 +255,5 @@ def render_markdown(dossier: dict[str, Any]) -> str:
 
 
 def write_dossier(dossier: dict[str, Any], json_path: Path, markdown_path: Path) -> None:
-    json_path.parent.mkdir(parents=True, exist_ok=True)
-    markdown_path.parent.mkdir(parents=True, exist_ok=True)
-    json_path.write_text(json.dumps(dossier, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    markdown_path.write_text(render_markdown(dossier), encoding="utf-8")
+    write_json(json_path, dossier)
+    write_text(markdown_path, render_markdown(dossier))

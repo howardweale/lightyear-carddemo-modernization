@@ -10,6 +10,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Callable
 
+from lightyear_common.io import write_text as write_deterministic_text
+
 from .agents import AgentSet
 from .contracts import ContractError, WorkOrder, canonical_hash, safe_relative_path, write_json
 from .orchestrator import FactoryOrchestrator
@@ -326,7 +328,7 @@ def run_model_evaluation(
             after = current_case["after"]
             if content.count(before) != 1:
                 raise ContractError("Mutation marker is not unique for the sealed case")
-            path.write_text(content.replace(before, after, 1), encoding="utf-8")
+            write_deterministic_text(path, content.replace(before, after, 1))
 
         try:
             receipt = FactoryOrchestrator(
@@ -665,7 +667,5 @@ def _write_checkpoint(
     payload["content_sha256"] = canonical_hash(payload)
     path.parent.mkdir(parents=True, exist_ok=True)
     temporary = path.with_name(f".{path.name}.tmp")
-    temporary.write_text(
-        json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8"
-    )
+    write_deterministic_text(temporary, json.dumps(payload, indent=2, sort_keys=True) + "\n")
     temporary.replace(path)

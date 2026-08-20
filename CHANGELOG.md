@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.18.3 — 2026-08-21
+
+- Added one adaptive PowerShell Python runtime resolver across every Windows entry point, with an
+  explicit `LIGHTYEAR_PYTHON` override and tested support for Python 3.11 and newer.
+- Made managed AWS CardDemo checkouts line-ending neutral and added repository-wide Git attributes
+  for stable text and binary handling.
+- Added dual source identity: raw transport hashes preserve forensic custody while normalized-LF
+  logical hashes drive graph and evidence-pack semantic identity.
+- Made canonical JSON and Markdown writers emit UTF-8/LF on every platform.
+- Added Windows and Linux CI plus regression tests for LF/CRLF equivalence, canonical receipt
+  identity, shared launcher adoption, and executable shell entry points.
+
 ## 0.18.2 — 2026-08-21
 
 - Added a bounded logical proof for the `CBPAUP0C` IMS BMP authorization-expiry workload through

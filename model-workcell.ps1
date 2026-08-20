@@ -9,12 +9,13 @@ param(
 
 $ProjectDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $env:PYTHONPATH = Join-Path $ProjectDir "src"
+. (Join-Path $ProjectDir "python-runtime.ps1")
 if (-not $Catalog) {
     $Catalog = Join-Path $ProjectDir "factory/evals/carddemo-v0.12-public.json"
 }
 
 if ($Action -eq "validate") {
-    & py -3.11 -m lightyear_factory validate-eval --project-root $ProjectDir --catalog $Catalog
+    Invoke-FactoryDarkPython -m lightyear_factory validate-eval --project-root $ProjectDir --catalog $Catalog
     exit $LASTEXITCODE
 }
 
@@ -27,7 +28,7 @@ if ($Action -eq "transcript") {
     if ($Verifier) {
         $Audience = @("--verifier")
     }
-    & py -3.11 -m lightyear_factory transcript `
+    Invoke-FactoryDarkPython -m lightyear_factory transcript `
         --runs-root $Output `
         --run-id $RunId `
         @Audience
@@ -52,7 +53,7 @@ $Resume = @()
 if ($Action -eq "resume") {
     $Resume = @("--resume")
 }
-& py -3.11 -m lightyear_factory evaluate `
+Invoke-FactoryDarkPython -m lightyear_factory evaluate `
     --project-root $ProjectDir `
     --catalog $Catalog `
     --output-root $Output `

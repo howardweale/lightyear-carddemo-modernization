@@ -8,24 +8,12 @@ param(
 $ErrorActionPreference = "Stop"
 $ProjectDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $env:PYTHONPATH = Join-Path $ProjectDir "src"
-$Python = if (Get-Command py -ErrorAction SilentlyContinue) { "py" } else { "python" }
-$PyArgs = @()
-if ($Python -eq "py") {
-  $Selected = $null
-  foreach ($Version in @("3.13", "3.12", "3.11", "3.14")) {
-    try {
-      & py "-$Version" -c "import sys; raise SystemExit(0 if sys.version_info >= (3, 11) else 1)" 2>$null
-      if ($LASTEXITCODE -eq 0) { $Selected = "-$Version"; break }
-    } catch {}
-  }
-  if (-not $Selected) { throw "FactoryDark requires Python 3.11 or newer." }
-  $PyArgs = @($Selected)
-}
+. (Join-Path $ProjectDir "python-runtime.ps1")
 $OutputDir = [System.IO.Path]::GetFullPath((Join-Path $ProjectDir $OutputDir))
 New-Item -ItemType Directory -Force -Path $OutputDir | Out-Null
 
 function Run-Python([string[]]$Arguments) {
-  & $Python @PyArgs @Arguments
+  Invoke-FactoryDarkPython @Arguments
   if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 }
 

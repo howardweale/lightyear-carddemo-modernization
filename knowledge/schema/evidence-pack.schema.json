@@ -14,6 +14,7 @@
           "display_line_end": {"minimum": 1, "type": "integer"},
           "excerpt_sha256": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
           "file_sha256": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+          "hash_basis": {"const": "normalized-lf"},
           "language": {"type": "string"},
           "line_end": {"minimum": 1, "type": "integer"},
           "line_start": {"minimum": 1, "type": "integer"},
@@ -35,12 +36,13 @@
           "source_id": {"type": "string"},
           "supports": {"type": "array"},
           "truncated": {"type": "boolean"}
+          ,"transport_file_sha256": {"pattern": "^[0-9a-f]{64}$", "type": "string"}
         },
         "required": [
           "capsule_id", "confidence", "context_end", "context_start",
-          "display_line_end", "excerpt_sha256", "file_sha256", "language",
+          "display_line_end", "excerpt_sha256", "file_sha256", "hash_basis", "language",
           "line_end", "line_start", "lines", "method", "path", "source_id",
-          "supports", "truncated"
+          "supports", "transport_file_sha256", "truncated"
         ],
         "type": "object"
       },

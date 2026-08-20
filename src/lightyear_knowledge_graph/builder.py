@@ -4,6 +4,8 @@ import json
 from pathlib import Path
 from typing import Any
 
+from lightyear_common.io import write_json
+
 from .extractors import LEGACY_SOURCE_ID, MODERN_SOURCE_ID, extract_legacy, extract_modern
 from .model import KnowledgeGraph, evidence
 from .ontology import DEFAULT_ONTOLOGY_PATH, load_ontology, ontology_identity
@@ -147,5 +149,4 @@ def write_receipt(graph_payload: dict[str, Any], path: Path) -> None:
         "sources": graph_payload["sources"],
         "statistics": graph_payload["statistics"],
     }
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    write_json(path, receipt)

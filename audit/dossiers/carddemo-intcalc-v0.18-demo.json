@@ -2,8 +2,8 @@
   "audit": {
     "checkpoint_signature_algorithm": "none",
     "event_count": 20,
-    "ledger_content_sha256": "82a7bc9d8c01d13519c958278a57a4e07daeaf8121f1598c652c8368204ffab4",
-    "ledger_head_sha256": "a28c84c040ee64fbc478ea456a15e6c2ae912c54fb4dc581a3a0e6ba67c79a10",
+    "ledger_content_sha256": "df12540b87820f27b81d71f4fa1fbae4b4abd1386992284564d5fb832ce2f3f4",
+    "ledger_head_sha256": "4b8f92614892667788b169329bd7d8c671cedd63963f00a32d11dcbcdc97c47f",
     "ledger_id": "lightyear:carddemo:audit"
   },
   "cics_vsam_readiness": {
@@ -17,7 +17,7 @@
       "No external equivalence signing key was configured."
     ]
   },
-  "content_sha256": "c3afd5d57a9cd6a7b2cc79172f2e0ff1535f2660881b6db0f4bfbdb8732c7597",
+  "content_sha256": "de396ed79ffcc949eb991c580889bfc5b97aa80d5ce19faaedd93c137bbaadc6",
   "dossier_type": "lightyear-release-evidence",
   "durable_control_plane": {
     "approval_consumption": "exactly-once",
@@ -37,7 +37,7 @@
     {
       "id": "carddemo:modernization:v0.15",
       "kind": "portfolio_plan",
-      "sha256": "5331dc9ed2598ddf377aa88993de1b1e58b6e2b340864375435dfc3e2816ff49"
+      "sha256": "3777011d47072a239a7efcd1caadbd10573a7a89ec8bf7fc7bcaf7e2aed754a8"
     },
     {
       "id": "control-tower:live-evidence-plane",
@@ -47,7 +47,7 @@
     {
       "id": "evidence:source-pack",
       "kind": "source_evidence_pack",
-      "sha256": "092f35d3d253939d6eae61c7970d3fe19eb60b951a6d2b1e31a82d253de5b3e3"
+      "sha256": "8259061ddbd6b8fb1104a65f7c20036d21c0535965cd22e9ad9d3505d8289c6f"
     },
     {
       "id": "execution:carddemo-hardened-plane",
@@ -57,7 +57,7 @@
     {
       "id": "factory:durable-conformance",
       "kind": "durable_conformance_receipt",
-      "sha256": "667290640b6a8a3f882636459f0346d8484e6a68d40589a72789804808749688"
+      "sha256": "e49562a07bf2bfc6284c3572088ab3c6ab6afa4e871942a7a28036aa019518e8"
     },
     {
       "id": "factory:durable-control-plane",
@@ -67,7 +67,7 @@
     {
       "id": "lightyear:carddemo-modernization",
       "kind": "graph_snapshot",
-      "sha256": "d03e2b144c4ca815f434ac31c0496404387a12a77bfa5d87b2c35b59e3c1f6b8"
+      "sha256": "c720425a6080218ee199bd7723fb941f4666ca8538c98f116116a08dfb542841"
     },
     {
       "id": "memory:verified-experiences",
@@ -77,7 +77,7 @@
     {
       "id": "release:carddemo-intcalc:v0.18-demo",
       "kind": "decision_input",
-      "sha256": "d03e2b144c4ca815f434ac31c0496404387a12a77bfa5d87b2c35b59e3c1f6b8"
+      "sha256": "c720425a6080218ee199bd7723fb941f4666ca8538c98f116116a08dfb542841"
     },
     {
       "id": "runtime-run:local-oracle-intcalc-reference",
@@ -140,12 +140,12 @@
     "approval_authority": "human",
     "conflicts": 1,
     "orders": 3,
-    "plan_sha256": "5331dc9ed2598ddf377aa88993de1b1e58b6e2b340864375435dfc3e2816ff49",
+    "plan_sha256": "3777011d47072a239a7efcd1caadbd10573a7a89ec8bf7fc7bcaf7e2aed754a8",
     "status": "approval_required",
     "waves": 2
   },
   "promotion_decision": {
-    "content_sha256": "e45360756514a5fdbb4674f73e25bad5eb08e212e462b627f4141c57d5cb2c99",
+    "content_sha256": "2ba88e7c82f3cce5605d47428081ae7668ceb58cf66eb05180ef243034f0bcda",
     "evaluated_at": "2022-07-18T00:00:01.300Z",
     "exception": null,
     "gaps": [
@@ -157,7 +157,7 @@
       "execution_decision_ids": [
         "decision:execution:hardened-readiness"
       ],
-      "graph_content_sha256": "d03e2b144c4ca815f434ac31c0496404387a12a77bfa5d87b2c35b59e3c1f6b8",
+      "graph_content_sha256": "c720425a6080218ee199bd7723fb941f4666ca8538c98f116116a08dfb542841",
       "runtime_decision_ids": [
         "decision:local-oracle-intcalc-reference:development_readiness",
         "decision:local-oracle-intcalc-reference:mainframe_equivalence",
@@ -166,7 +166,7 @@
         "decision:zosmf-intcalc-job00001:development_readiness",
         "decision:zosmf-intcalc-job00001:mainframe_equivalence"
       ],
-      "source_evidence_content_sha256": "092f35d3d253939d6eae61c7970d3fe19eb60b951a6d2b1e31a82d253de5b3e3"
+      "source_evidence_content_sha256": "8259061ddbd6b8fb1104a65f7c20036d21c0535965cd22e9ad9d3505d8289c6f"
     },
     "override_allowed": false,
     "policy_id": "release.promotion",

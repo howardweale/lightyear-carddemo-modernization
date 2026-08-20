@@ -10,8 +10,12 @@ permissions:
 
 jobs:
   differential-verification:
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
 
     steps:
       - name: Check out source
@@ -20,7 +24,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v7
         with:
-          python-version: "3.11"
+          python-version: "3.12"
 
       - name: Set up Java
         uses: actions/setup-java@v5
@@ -31,4 +35,10 @@ jobs:
           cache-dependency-path: candidate-java/pom.xml
 
       - name: Run unit and differential verification
+        if: runner.os == 'Linux'
         run: ./verify.sh
+
+      - name: Run unit and differential verification (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: .\verify.ps1

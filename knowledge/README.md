@@ -1,5 +1,14 @@
 # LIGHTYEAR Modernization Knowledge Graph
 
+## Cross-platform source identity
+
+Source-file nodes and evidence capsules retain two identities. `transport_content_sha256` (or
+`transport_file_sha256`) hashes the exact bytes received for forensic chain of custody.
+`content_sha256` (or `file_sha256`) hashes the same source after CRLF and legacy CR are normalized
+to LF and is marked with `hash_basis: normalized-lf`. Semantic graph and evidence-pack receipts
+exclude the transport-only observation, so one source revision has one logical identity on
+Windows, macOS, and Linux without discarding the raw acquisition hash.
+
 The canonical graph is complemented by the v0.17 live operational plane under
 `../control-tower/`, the runtime evidence plane and z/OSMF adapter kit under
 `knowledge/runtime/`, the audit ledger and Evidence Control Tower under `../audit/`, and the v0.12

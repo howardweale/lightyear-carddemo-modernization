@@ -4,6 +4,8 @@ import argparse
 import json
 from pathlib import Path
 
+from lightyear_common.io import write_json
+
 from .cics_vsam import (
     attestation_key_from_environment,
     capture_template,
@@ -22,8 +24,7 @@ def _load(path: Path) -> dict:
 
 
 def _write(path: Path, payload: dict) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    write_json(path, payload)
 
 
 def build_parser() -> argparse.ArgumentParser:

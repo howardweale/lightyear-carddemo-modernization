@@ -1,9 +1,10 @@
 from __future__ import annotations
 
-import hashlib
 import re
 import xml.etree.ElementTree as ET
 from pathlib import Path
+
+from lightyear_common.io import source_hashes
 
 from .model import KnowledgeGraph, evidence
 
@@ -34,7 +35,7 @@ def _add_file_node(
     language: str,
 ) -> str:
     relative = _relative(path, root)
-    content_sha256 = hashlib.sha256(path.read_bytes()).hexdigest()
+    content_sha256, transport_content_sha256 = source_hashes(path)
     return graph.add_node(
         f"{prefix}:file:{relative}",
         "source_file",
@@ -44,6 +45,8 @@ def _add_file_node(
             "language": language,
             "estate": prefix,
             "content_sha256": content_sha256,
+            "hash_basis": "normalized-lf",
+            "transport_content_sha256": transport_content_sha256,
         },
         evidence_items=[evidence(source_id, relative, 1, max(1, len(_lines(path))))],
     )

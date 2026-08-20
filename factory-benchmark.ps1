@@ -5,8 +5,9 @@ $Stamp = (Get-Date).ToUniversalTime().ToString("yyyyMMddTHHmmssZ")
 $OutputDir = Join-Path $ProjectDir "work/factory-benchmark-$Stamp"
 
 $env:PYTHONPATH = Join-Path $ProjectDir "src"
+. (Join-Path $ProjectDir "python-runtime.ps1")
 Set-Location $ProjectDir
-& py -3.11 -m lightyear_factory benchmark `
+Invoke-FactoryDarkPython -m lightyear_factory benchmark `
   --project-root $ProjectDir `
   --output-root $OutputDir `
   @args

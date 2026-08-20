@@ -2,24 +2,11 @@ $ErrorActionPreference = "Stop"
 $ProjectDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $env:PYTHONPATH = Join-Path $ProjectDir "src"
 $env:LIGHTYEAR_CICS_VSAM_WORKSPACE = $ProjectDir
+. (Join-Path $ProjectDir "python-runtime.ps1")
 $Action = if ($args.Count -gt 0) { $args[0] } else { "verify" }
 $OutputDir = if ($args.Count -gt 1) { $args[1] } else { Join-Path $ProjectDir "work\cics-vsam-readiness" }
 New-Item -ItemType Directory -Force -Path $OutputDir | Out-Null
-$Python = if (Get-Command py -ErrorAction SilentlyContinue) { "py" } else { "python" }
-$Prefix = @()
-if ($Python -eq "py") {
-  $Selected = $null
-  foreach ($Version in @("3.13", "3.12", "3.11", "3.14")) {
-    try {
-      & py "-$Version" -c "import sys; raise SystemExit(0 if sys.version_info >= (3, 11) else 1)" 2>$null
-      if ($LASTEXITCODE -eq 0) { $Selected = "-$Version"; break }
-    } catch {}
-  }
-  if (-not $Selected) { throw "FactoryDark requires Python 3.11 or newer." }
-  $Prefix = @($Selected)
-}
-
-function Run-Python { & $Python @Prefix @args; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE } }
+function Run-Python { Invoke-FactoryDarkPython @args; if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE } }
 
 if ($Action -eq "template") {
   Run-Python -m lightyear_readiness capture-template --output (Join-Path $OutputDir "zos-capture.template.json")

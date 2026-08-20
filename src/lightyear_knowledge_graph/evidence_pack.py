@@ -7,6 +7,10 @@ from collections import Counter
 from pathlib import Path
 from typing import Any
 
+from lightyear_common.io import normalize_logical_source, write_json
+
+from .model import semantic_content
+
 
 EVIDENCE_PACK_SCHEMA_VERSION = "1.0"
 ALLOWED_VISIBILITY = {"shared", "inspector_private"}
@@ -54,7 +58,7 @@ def build_evidence_pack(
 ) -> dict[str, Any]:
     nodes = {node["id"]: node for node in graph["nodes"]}
     sources = {source["id"]: source for source in graph["sources"]}
-    file_cache: dict[tuple[str, str], tuple[list[str], str]] = {}
+    file_cache: dict[tuple[str, str], tuple[list[str], str, str]] = {}
     capsules: dict[str, dict[str, Any]] = {}
 
     for owner_type, owners in (("node", graph["nodes"]), ("edge", graph["edges"])):
@@ -72,9 +76,14 @@ def build_evidence_pack(
                     cache_key = (source_id, relative_path)
                     if cache_key not in file_cache:
                         raw = source_path.read_bytes()
-                        lines = raw.decode("utf-8", errors="replace").splitlines() or [""]
-                        file_cache[cache_key] = (lines, hashlib.sha256(raw).hexdigest())
-                    lines, file_sha256 = file_cache[cache_key]
+                        logical = normalize_logical_source(raw)
+                        lines = logical.decode("utf-8", errors="replace").splitlines() or [""]
+                        file_cache[cache_key] = (
+                            lines,
+                            hashlib.sha256(logical).hexdigest(),
+                            hashlib.sha256(raw).hexdigest(),
+                        )
+                    lines, file_sha256, transport_file_sha256 = file_cache[cache_key]
                     line_start = item["line_start"]
                     line_end = item["line_end"]
                     if line_start < 1 or line_start > len(lines):
@@ -107,6 +116,7 @@ def build_evidence_pack(
                         "display_line_end": display_line_end,
                         "excerpt_sha256": excerpt_hash,
                         "file_sha256": file_sha256,
+                        "hash_basis": "normalized-lf",
                         "language": _language(relative_path),
                         "line_end": line_end,
                         "line_start": line_start,
@@ -116,6 +126,7 @@ def build_evidence_pack(
                         "source_id": source_id,
                         "supports": [],
                         "truncated": line_end > display_line_end,
+                        "transport_file_sha256": transport_file_sha256,
                     }
                 support = {
                     "evidence_index": evidence_index,
@@ -170,7 +181,9 @@ def load_evidence_pack(path: Path) -> dict[str, Any]:
 
 def evidence_pack_hash(payload: dict[str, Any]) -> str:
     content = {key: value for key, value in payload.items() if key != "content_sha256"}
-    canonical = json.dumps(content, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    canonical = json.dumps(
+        semantic_content(content), sort_keys=True, separators=(",", ":")
+    ).encode("utf-8")
     return hashlib.sha256(canonical).hexdigest()
 
 
@@ -251,8 +264,7 @@ def write_evidence_receipt(payload: dict[str, Any], path: Path) -> None:
         "schema_version": payload["schema_version"],
         "statistics": payload["statistics"],
     }
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    write_json(path, receipt)
 
 
 def _owner_visibility(

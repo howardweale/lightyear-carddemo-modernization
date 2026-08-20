@@ -15,11 +15,14 @@ fi
 if [[ -z "$legacy_root" ]]; then
   legacy_root="$project_dir/work/carddemo-upstream"
   if [[ ! -d "$legacy_root/.git" ]]; then
-    git clone --filter=blob:none --no-checkout \
+    git -c core.autocrlf=false -c core.eol=lf clone --filter=blob:none --no-checkout \
       https://github.com/aws-samples/aws-mainframe-modernization-carddemo.git \
       "$legacy_root"
   fi
-  git -C "$legacy_root" checkout --detach "$legacy_commit"
+  git -C "$legacy_root" config --local core.autocrlf false
+  git -C "$legacy_root" config --local core.eol lf
+  git -C "$legacy_root" -c core.autocrlf=false -c core.eol=lf \
+    checkout --detach --force "$legacy_commit"
 fi
 
 export PYTHONPATH="$project_dir/src"

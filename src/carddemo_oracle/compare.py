@@ -5,6 +5,8 @@ from decimal import Decimal
 from pathlib import Path
 from typing import Any
 
+from lightyear_common.io import write_json
+
 from .records import Account, Transaction, read_records
 
 
@@ -70,5 +72,4 @@ def compare_directories(expected_dir: Path, actual_dir: Path) -> dict[str, Any]:
 
 
 def write_comparison(report: dict[str, Any], path: Path) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    write_json(path, report)

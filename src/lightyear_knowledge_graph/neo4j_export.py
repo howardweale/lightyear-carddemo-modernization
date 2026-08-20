@@ -6,6 +6,8 @@ import re
 from pathlib import Path
 from typing import Any
 
+from lightyear_common.io import write_json, write_text
+
 
 def _label(value: str) -> str:
     words = re.findall(r"[A-Za-z0-9]+", value)
@@ -66,10 +68,10 @@ def export_neo4j(payload: dict[str, Any], output_dir: Path) -> dict[str, Any]:
                 ]
             )
 
-    constraints_path.write_text(
+    write_text(
+        constraints_path,
         "CREATE CONSTRAINT lightyear_entity_id IF NOT EXISTS\n"
         "FOR (entity:Entity) REQUIRE entity.nodeId IS UNIQUE;\n",
-        encoding="utf-8",
     )
     receipt = {
         "receipt_type": "lightyear-neo4j-projection",
@@ -83,6 +85,5 @@ def export_neo4j(payload: dict[str, Any], output_dir: Path) -> dict[str, Any]:
             "constraints": constraints_path.name,
         },
     }
-    receipt_path.write_text(json.dumps(receipt, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    write_json(receipt_path, receipt)
     return receipt
-

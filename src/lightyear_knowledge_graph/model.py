@@ -9,6 +9,21 @@ from typing import Any
 
 
 SCHEMA_VERSION = "1.1"
+TRANSPORT_ONLY_KEYS = {"transport_content_sha256", "transport_file_sha256"}
+
+
+def semantic_content(value: Any) -> Any:
+    """Remove transport-only observations from canonical semantic identity."""
+
+    if isinstance(value, dict):
+        return {
+            key: semantic_content(item)
+            for key, item in value.items()
+            if key not in TRANSPORT_ONLY_KEYS
+        }
+    if isinstance(value, list):
+        return [semantic_content(item) for item in value]
+    return value
 
 
 def evidence(
@@ -142,7 +157,9 @@ class KnowledgeGraph:
             "nodes": nodes,
             "edges": edges,
         }
-        canonical = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
+        canonical = json.dumps(
+            semantic_content(payload), sort_keys=True, separators=(",", ":")
+        ).encode("utf-8")
         payload["content_sha256"] = hashlib.sha256(canonical).hexdigest()
         return payload
 
@@ -165,5 +182,7 @@ def load_graph(path: Path) -> dict[str, Any]:
 
 def graph_hash(payload: dict[str, Any]) -> str:
     without_hash = {key: value for key, value in payload.items() if key != "content_sha256"}
-    canonical = json.dumps(without_hash, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    canonical = json.dumps(
+        semantic_content(without_hash), sort_keys=True, separators=(",", ":")
+    ).encode("utf-8")
     return hashlib.sha256(canonical).hexdigest()

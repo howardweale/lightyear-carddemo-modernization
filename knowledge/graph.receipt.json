@@ -1,5 +1,5 @@
 {
-  "content_sha256": "d03e2b144c4ca815f434ac31c0496404387a12a77bfa5d87b2c35b59e3c1f6b8",
+  "content_sha256": "c720425a6080218ee199bd7723fb941f4666ca8538c98f116116a08dfb542841",
   "graph_id": "lightyear:carddemo-modernization",
   "receipt_type": "lightyear-knowledge-graph-build",
   "relationship_ontology": {
@@ -67,7 +67,7 @@
       "VERIFIED_BY": 40,
       "WRITES": 19
     },
-    "node_count": 11340,
+    "node_count": 11343,
     "nodes_by_kind": {
       "assembler_dsect": 1,
       "assembler_field": 5,
@@ -105,7 +105,7 @@
       "jcl_step": 119,
       "modernization_workload": 4,
       "software_dependency": 5,
-      "source_file": 343,
+      "source_file": 346,
       "test_case": 8,
       "verification_scenario": 12,
       "vsam_alternate_index": 3,

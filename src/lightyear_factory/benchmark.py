@@ -6,6 +6,8 @@ import sys
 from pathlib import Path
 from typing import Any
 
+from lightyear_common.io import write_text as write_deterministic_text
+
 from .agents import DEFAULT_REPAIR_RULES, LocalAgentSet
 from .contracts import WorkOrder, canonical_hash, write_json
 from .orchestrator import FactoryOrchestrator
@@ -96,7 +98,7 @@ def run_mutation_benchmark(
                 raise ValueError(
                     f"Mutation source marker is not unique for {prepared_mutation_id}"
                 )
-            path.write_text(content.replace(before, after, 1), encoding="utf-8")
+            write_deterministic_text(path, content.replace(before, after, 1))
 
         receipt = FactoryOrchestrator(
             seed_root,

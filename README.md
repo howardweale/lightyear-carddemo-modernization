@@ -1,6 +1,24 @@
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.18.2 — bounded IMS logical proof cell**
+Release: **v0.18.3 — cross-platform deterministic evidence contract**
+
+v0.18.3 hardens the complete factory for repeatable Windows and Linux operation. Every PowerShell
+entry point now uses one Python 3.11+ resolver, managed CardDemo checkouts explicitly materialize
+LF source, and canonical JSON/Markdown writers always emit UTF-8 with LF. Source evidence records
+both the raw transport hash and a normalized logical-source hash; only the logical identity enters
+semantic graph and evidence-pack receipts. Git attributes, dual-platform CI, and regression tests
+prevent Python pinning, newline conversion, or lost shell executable bits from silently changing a
+release. Raw hashes remain available for forensic chain of custody.
+
+```powershell
+.\verify.ps1
+```
+
+```bash
+./verify.sh
+```
+
+Previous milestone: **v0.18.2 — bounded IMS logical proof cell**
 
 v0.18.2 advances IMS from structural discovery to a bounded development proof. The cell follows
 `CBPAUP0J -> CBPAUP0C -> PSBPAUTB/PAUTBPCB -> DBPAUTP0 -> PAUTSUM0/PAUTDTL1`, models its normal-path
@@ -59,10 +77,10 @@ plus a hash-chained event ledger. The included offline mutation gauntlet injects
 faults and requires the factory to reject each defect before repairing it.
 
 The oracle runs on Windows, macOS, or Linux with Python 3.11 or newer and has no runtime
-dependencies outside the Python standard library. macOS/Linux launchers automatically select a
-supported interpreter and reject Apple's bundled Python 3.9 before starting; set
-`LIGHTYEAR_PYTHON` to override the selection. The candidate uses Java 17, Spring Boot 4.1,
-Spring Batch 6, Maven Wrapper, and an in-memory H2 Batch metadata store.
+dependencies outside the Python standard library. PowerShell and POSIX launchers automatically
+select a supported interpreter and reject older runtimes before starting; set
+`LIGHTYEAR_PYTHON` to an executable path to override the selection. The candidate uses Java 17,
+Spring Boot 4.1, Spring Batch 6, Maven Wrapper, and an in-memory H2 Batch metadata store.
 
 The knowledge graph deterministically indexes the complete pinned CardDemo estate—COBOL programs,
 paragraphs, copybooks, fields, JCL jobs and steps, datasets, Java types, methods, tests, and software

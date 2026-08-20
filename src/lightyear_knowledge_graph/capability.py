@@ -5,6 +5,8 @@ import json
 from pathlib import Path
 from typing import Any
 
+from lightyear_common.io import write_json
+
 
 GATE_NAMES = {
     1: "typed native asset parsing",
@@ -201,5 +203,4 @@ def validate_capability_analysis(payload: dict[str, Any], graph: dict[str, Any])
 
 
 def write_capability_analysis(payload: dict[str, Any], path: Path) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    write_json(path, payload)

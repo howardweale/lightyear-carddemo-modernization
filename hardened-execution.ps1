@@ -1,22 +1,23 @@
 $ErrorActionPreference = "Stop"
 $projectDir = Split-Path -Parent $MyInvocation.MyCommand.Path
 $env:PYTHONPATH = Join-Path $projectDir "src"
+. (Join-Path $projectDir "python-runtime.ps1")
 Set-Location $projectDir
 
 $action = if ($args.Count -gt 0) { $args[0] } else { "build" }
 if ($action -eq "build") {
-    & py -3.11 -m lightyear_execution build
+    Invoke-FactoryDarkPython -m lightyear_execution build
     exit $LASTEXITCODE
 } elseif ($action -eq "verify") {
     $generated = Join-Path $projectDir "work/hardened-execution-verify/conformance.receipt.json"
     New-Item -ItemType Directory -Force (Split-Path -Parent $generated) | Out-Null
-    & py -3.11 -m lightyear_execution build --output $generated
+    Invoke-FactoryDarkPython -m lightyear_execution build --output $generated
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-    & py -3.11 -m lightyear_execution validate --receipt $generated
+    Invoke-FactoryDarkPython -m lightyear_execution validate --receipt $generated
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-    & py -3.11 -m lightyear_execution validate-evidence --receipt $generated | Out-Null
+    Invoke-FactoryDarkPython -m lightyear_execution validate-evidence --receipt $generated | Out-Null
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-    & py -3.11 -m lightyear_execution validate
+    Invoke-FactoryDarkPython -m lightyear_execution validate
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
     $canonical = (Get-FileHash (Join-Path $projectDir "factory/execution/conformance.receipt.json") -Algorithm SHA256).Hash
     $actual = (Get-FileHash $generated -Algorithm SHA256).Hash
@@ -24,7 +25,7 @@ if ($action -eq "build") {
     Write-Host "Hardened execution policy, OCI invocation, and conformance receipt are deterministic."
 } elseif ($action -eq "probe") {
     $runtime = if ($args.Count -gt 1) { $args[1] } else { "docker" }
-    & py -3.11 -m lightyear_execution probe --runtime $runtime
+    Invoke-FactoryDarkPython -m lightyear_execution probe --runtime $runtime
     exit $LASTEXITCODE
 } elseif ($action -eq "admitted-run") {
     $runtime = if ($args.Count -gt 1) { $args[1] } else { "docker" }
@@ -39,19 +40,19 @@ if ($action -eq "build") {
     $signedOrder = Join-Path $evidenceDir "signed-work-order.json"
     $factoryReceipt = Join-Path $projectDir "work/factory-runs/$runId/receipt.json"
     New-Item -ItemType Directory -Force $evidenceDir | Out-Null
-    & py -3.11 -m lightyear_execution sign-work-order `
+    Invoke-FactoryDarkPython -m lightyear_execution sign-work-order `
         --work-order (Join-Path $projectDir "factory/work-orders/intcalc-repair.example.json") `
         --issuer "operator:release" --key-id "lightyear-release-operator" --output $signedOrder
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-    & py -3.11 -m lightyear_factory run `
+    Invoke-FactoryDarkPython -m lightyear_factory run `
         --signed-work-order $signedOrder --source-root $projectDir `
         --runs-root (Join-Path $projectDir "work/factory-runs") `
         --graph (Join-Path $projectDir "knowledge/graph.snapshot.json.gz") `
         --provider local --execution-runtime $runtime --run-id $runId
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-    & py -3.11 -m lightyear_execution validate-evidence --receipt $factoryReceipt
+    Invoke-FactoryDarkPython -m lightyear_execution validate-evidence --receipt $factoryReceipt
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-    & py -3.11 -m lightyear_audit build `
+    Invoke-FactoryDarkPython -m lightyear_audit build `
         --execution-receipt $factoryReceipt `
         --output (Join-Path $evidenceDir "audit.snapshot.json.gz") `
         --dossier-json (Join-Path $evidenceDir "release-dossier.json") `

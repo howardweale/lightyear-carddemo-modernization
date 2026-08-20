@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://factorydark.ai/schema/cics-vsam-capture.schema.json",
+  "type": "object",
+  "required": ["schema_version", "capture_type", "run_id", "source_system", "observed_at", "evidence_class", "transaction", "input", "output", "accesses", "mutations", "artifacts", "mainframe_identity", "operator_attestation", "attestation_signature", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "capture_type": {"const": "lightyear-cics-vsam-execution"},
+    "evidence_class": {"enum": ["local_observed", "zos_observed"]},
+    "run_id": {"type": "string", "minLength": 1},
+    "source_system": {"type": "string", "minLength": 1},
+    "observed_at": {"type": "string", "minLength": 1},
+    "transaction": {"type": "object"},
+    "input": {"type": "object"},
+    "output": {"type": "object"},
+    "accesses": {"type": "array", "minItems": 1},
+    "mutations": {"type": "array"},
+    "artifacts": {"type": "array", "minItems": 1},
+    "mainframe_identity": {"type": "object"},
+    "operator_attestation": {"type": "object"},
+    "attestation_signature": {"type": ["object", "null"]},
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

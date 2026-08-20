@@ -1,0 +1,61 @@
+{
+  "artifacts": [
+    {
+      "role": "assembly-listing",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "role": "binder-map",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "role": "load-module",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "role": "cobol-caller-output",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  ],
+  "attestation_signature": null,
+  "capture_type": "factorydark-hlasm-execution",
+  "content_sha256": "a5a27b637064661160fd22f14ce7e32d3dbf61e70b1ef6ae8fdad25afbe2b4ea",
+  "evidence_class": "zos_observed",
+  "input": {
+    "input_date": "2026-08-21",
+    "input_type": "2",
+    "output_type": "2"
+  },
+  "limitations": [],
+  "mainframe_identity": {
+    "caller_program": "CBACT01C",
+    "job_id": "REPLACE",
+    "load_module": "COBDATFT",
+    "lpar": "REPLACE",
+    "operator": "REPLACE",
+    "step_name": "REPLACE",
+    "system_id": "REPLACE"
+  },
+  "observed_at": "REPLACE-WITH-UTC-TIMESTAMP",
+  "operator_attestation": {
+    "authorized": false,
+    "scope": "COBDATFT proof",
+    "ticket": "REPLACE"
+  },
+  "output": {
+    "error_message": "REPLACE-WITH-38-BYTE-VALUE",
+    "input_date": "REPLACE-WITH-20-BYTE-VALUE",
+    "input_type": "2",
+    "output_date": "REPLACE-WITH-20-BYTE-VALUE",
+    "output_type": "2"
+  },
+  "program": {
+    "caller": "CBACT01C",
+    "dsect": "COCDATFT",
+    "id": "COBDATFT"
+  },
+  "return_code": 0,
+  "run_id": "REPLACE-WITH-UNIQUE-RUN-ID",
+  "schema_version": "1.0",
+  "source_system": "REPLACE-WITH-AUTHORIZED-ZOS-ALIAS"
+}

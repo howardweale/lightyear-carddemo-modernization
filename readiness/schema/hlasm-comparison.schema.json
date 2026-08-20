@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://factorydark.ai/schemas/hlasm-comparison-1.0.json",
+  "type": "object",
+  "required": ["schema_version", "comparison_type", "baseline_sha256", "candidate_sha256", "baseline_evidence_class", "candidate_evidence_class", "validation_errors", "differences", "behavior_match", "mainframe_baseline", "status", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "comparison_type": {"const": "factorydark-hlasm-differential"},
+    "baseline_sha256": {"type": "string"},
+    "candidate_sha256": {"type": "string"},
+    "baseline_evidence_class": {"type": "string"},
+    "candidate_evidence_class": {"type": "string"},
+    "validation_errors": {"type": "object"},
+    "differences": {"type": "array"},
+    "behavior_match": {"type": "boolean"},
+    "mainframe_baseline": {"type": "boolean"},
+    "status": {"enum": ["passed", "failed"]},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

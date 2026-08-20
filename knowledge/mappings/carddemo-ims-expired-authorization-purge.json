@@ -1,0 +1,187 @@
+{
+  "workloads": [
+    {
+      "id": "workload:carddemo-ims-expired-authorization-purge",
+      "name": "CardDemo IMS expired pending-authorization purge",
+      "status": "development-proven-mainframe-pending",
+      "legacy_entrypoints": [
+        "legacy:cobol-program:CBPAUP0C",
+        "legacy:ims-psb:PSBPAUTB",
+        "legacy:ims-database:DBPAUTP0"
+      ],
+      "modern_entrypoints": [
+        "modern:file:factory/benchmarks/ims_expiry_candidate.py"
+      ],
+      "scheduled_by": [
+        "legacy:jcl-job:CBPAUP0J"
+      ],
+      "scenarios": [
+        {
+          "id": "scenario:ims-expiry:local-logical-proof",
+          "name": "Local CBPAUP0C logical proof",
+          "kind": "local-deterministic",
+          "status": "passed"
+        },
+        {
+          "id": "scenario:ims-expiry:private-mutation-gate",
+          "name": "Private IMS expiry mutation gate",
+          "kind": "private-holdout",
+          "visibility": "verifier_private",
+          "status": "passed"
+        },
+        {
+          "id": "scenario:ims-expiry:zos-equivalence",
+          "name": "Live z/OS CBPAUP0C BMP equivalence capture",
+          "kind": "zos-observed",
+          "status": "blocked-pending-mainframe"
+        }
+      ],
+      "rules": [
+        {
+          "id": "rule:ims-expiry:bmp-route",
+          "name": "IMS BMP execution route",
+          "statement": "CBPAUP0J invokes CBPAUP0C in BMP mode with PSBPAUTB, whose AP PCB exposes DBPAUTP0 root PAUTSUM0 and child PAUTDTL1.",
+          "derived_from": [
+            {
+              "node": "legacy:jcl-step:CBPAUP0J:STEP01",
+              "path": "app/app-authorization-ims-db2-mq/jcl/CBPAUP0J.jcl",
+              "line_start": 24,
+              "line_end": 37
+            },
+            {
+              "node": "legacy:ims-pcb:PSBPAUTB:PAUTBPCB",
+              "path": "app/app-authorization-ims-db2-mq/ims/PSBPAUTB.psb",
+              "line_start": 17,
+              "line_end": 20
+            }
+          ],
+          "implemented_by": ["modern:file:factory/benchmarks/ims_expiry_candidate.py"],
+          "verified_by": ["scenario:ims-expiry:private-mutation-gate"]
+        },
+        {
+          "id": "rule:ims-expiry:hierarchy",
+          "name": "Pending authorization hierarchy",
+          "statement": "DBPAUTP0 is a HIDAM VSAM database with 100-byte PAUTSUM0 roots and 200-byte PAUTDTL1 children.",
+          "derived_from": [
+            {
+              "node": "legacy:ims-database:DBPAUTP0",
+              "path": "app/app-authorization-ims-db2-mq/ims/DBPAUTP0.dbd",
+              "line_start": 18,
+              "line_end": 37
+            }
+          ],
+          "implemented_by": ["modern:file:factory/benchmarks/ims_expiry_candidate.py"],
+          "verified_by": ["scenario:ims-expiry:private-mutation-gate"]
+        },
+        {
+          "id": "rule:ims-expiry:traversal",
+          "name": "GN and GNP traversal",
+          "statement": "The BMP reads PAUTSUM0 roots with GN and visits their PAUTDTL1 children with GNP in parent context.",
+          "derived_from": [
+            {
+              "node": "legacy:cobol-paragraph:CBPAUP0C:2000-FIND-NEXT-AUTH-SUMMARY",
+              "path": "app/app-authorization-ims-db2-mq/cbl/CBPAUP0C.cbl",
+              "line_start": 216,
+              "line_end": 241
+            },
+            {
+              "node": "legacy:cobol-paragraph:CBPAUP0C:3000-FIND-NEXT-AUTH-DTL",
+              "path": "app/app-authorization-ims-db2-mq/cbl/CBPAUP0C.cbl",
+              "line_start": 248,
+              "line_end": 271
+            }
+          ],
+          "implemented_by": ["modern:file:factory/benchmarks/ims_expiry_candidate.py"],
+          "verified_by": ["scenario:ims-expiry:private-mutation-gate"]
+        },
+        {
+          "id": "rule:ims-expiry:date-threshold",
+          "name": "Inverted Julian expiry threshold",
+          "statement": "Authorization date is recovered as 99999 minus PA-AUTH-DATE-9C; a detail expires when current YYDDD minus that value is greater than or equal to the configured expiry days.",
+          "derived_from": [
+            {
+              "node": "legacy:cobol-paragraph:CBPAUP0C:4000-CHECK-IF-EXPIRED",
+              "path": "app/app-authorization-ims-db2-mq/cbl/CBPAUP0C.cbl",
+              "line_start": 277,
+              "line_end": 296
+            }
+          ],
+          "implemented_by": ["modern:file:factory/benchmarks/ims_expiry_candidate.py"],
+          "verified_by": ["scenario:ims-expiry:private-mutation-gate"]
+        },
+        {
+          "id": "rule:ims-expiry:summary-adjustment",
+          "name": "Summary counter and amount adjustment",
+          "statement": "Expired approved details decrement approved count and approved amount; other response codes decrement declined count and declined transaction amount.",
+          "derived_from": [
+            {
+              "node": "legacy:cobol-paragraph:CBPAUP0C:4000-CHECK-IF-EXPIRED",
+              "path": "app/app-authorization-ims-db2-mq/cbl/CBPAUP0C.cbl",
+              "line_start": 284,
+              "line_end": 293
+            }
+          ],
+          "implemented_by": ["modern:file:factory/benchmarks/ims_expiry_candidate.py"],
+          "verified_by": ["scenario:ims-expiry:private-mutation-gate"]
+        },
+        {
+          "id": "rule:ims-expiry:detail-delete",
+          "name": "Expired child deletion",
+          "statement": "Each qualifying PAUTDTL1 child is deleted with DLET and a nonblank IMS status takes the abend path.",
+          "derived_from": [
+            {
+              "node": "legacy:cobol-paragraph:CBPAUP0C:5000-DELETE-AUTH-DTL",
+              "path": "app/app-authorization-ims-db2-mq/cbl/CBPAUP0C.cbl",
+              "line_start": 303,
+              "line_end": 321
+            }
+          ],
+          "implemented_by": ["modern:file:factory/benchmarks/ims_expiry_candidate.py"],
+          "verified_by": ["scenario:ims-expiry:private-mutation-gate"]
+        },
+        {
+          "id": "rule:ims-expiry:duplicate-approved-root-test",
+          "name": "Source-faithful duplicated root deletion test",
+          "statement": "CBPAUP0C tests PA-APPROVED-AUTH-CNT twice before deleting PAUTSUM0; the bounded candidate preserves this observable source quirk rather than substituting declined count.",
+          "derived_from": [
+            {
+              "node": "legacy:cobol-paragraph:CBPAUP0C:MAIN-PARA",
+              "path": "app/app-authorization-ims-db2-mq/cbl/CBPAUP0C.cbl",
+              "line_start": 142,
+              "line_end": 158
+            },
+            {
+              "node": "legacy:cobol-paragraph:CBPAUP0C:6000-DELETE-AUTH-SUMMARY",
+              "path": "app/app-authorization-ims-db2-mq/cbl/CBPAUP0C.cbl",
+              "line_start": 328,
+              "line_end": 346
+            }
+          ],
+          "implemented_by": ["modern:file:factory/benchmarks/ims_expiry_candidate.py"],
+          "verified_by": ["scenario:ims-expiry:private-mutation-gate"]
+        },
+        {
+          "id": "rule:ims-expiry:checkpoint-policy",
+          "name": "Strict frequency and final checkpoint",
+          "statement": "A CHKP occurs only after processed summaries exceed the configured frequency, the counter resets, and one final checkpoint is always attempted.",
+          "derived_from": [
+            {
+              "node": "legacy:cobol-paragraph:CBPAUP0C:MAIN-PARA",
+              "path": "app/app-authorization-ims-db2-mq/cbl/CBPAUP0C.cbl",
+              "line_start": 160,
+              "line_end": 169
+            },
+            {
+              "node": "legacy:cobol-paragraph:CBPAUP0C:9000-TAKE-CHECKPOINT",
+              "path": "app/app-authorization-ims-db2-mq/cbl/CBPAUP0C.cbl",
+              "line_start": 351,
+              "line_end": 374
+            }
+          ],
+          "implemented_by": ["modern:file:factory/benchmarks/ims_expiry_candidate.py"],
+          "verified_by": ["scenario:ims-expiry:private-mutation-gate"]
+        }
+      ]
+    }
+  ]
+}

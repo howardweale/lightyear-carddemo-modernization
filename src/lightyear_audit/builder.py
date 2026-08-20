@@ -25,11 +25,12 @@ def build_canonical_audit(
     signing_key: bytes | None = None,
     execution_receipt_path: Path | None = None,
     memory_snapshot_path: Path | None = None,
-    release_id: str = "release:carddemo-intcalc:v0.17-demo",
+    release_id: str = "release:carddemo-intcalc:v0.18-demo",
     portfolio_plan_path: Path | None = None,
     durable_policy_path: Path | None = None,
     durable_conformance_path: Path | None = None,
     control_tower_policy_path: Path | None = None,
+    cics_vsam_readiness_path: Path | None = None,
 ) -> dict[str, Any]:
     graph = json.loads(graph_receipt_path.read_text(encoding="utf-8"))
     evidence = json.loads(evidence_receipt_path.read_text(encoding="utf-8"))
@@ -163,6 +164,29 @@ def build_canonical_audit(
                 "command_plane": control_policy["command_plane"],
                 "loopback_only": control_policy["loopback_only"],
                 "sources": control_policy["sources"],
+            },
+        ))
+
+    if cics_vsam_readiness_path is not None and cics_vsam_readiness_path.is_file():
+        readiness = json.loads(cics_vsam_readiness_path.read_text(encoding="utf-8"))
+        if canonical_hash(readiness, {"content_sha256"}) != readiness.get("content_sha256"):
+            raise ValueError("CICS/VSAM readiness receipt failed content hash validation")
+        drafts.append(_draft(
+            "2022-07-18T00:00:00.245Z",
+            "system:cics-vsam-readiness", "verifier", "readiness.cics_vsam_recorded",
+            "modernization_workload", readiness["workload_id"],
+            [{
+                "id": readiness["workload_id"],
+                "kind": "cics_vsam_readiness_receipt",
+                "sha256": readiness["content_sha256"],
+            }],
+            {
+                "status": readiness["status"],
+                "development_ready": readiness["development_ready"],
+                "mainframe_equivalent": readiness["mainframe_equivalent"],
+                "checks": readiness["checks"],
+                "unresolved_gaps": readiness["unresolved_gaps"],
+                "signed": readiness["signature"] is not None,
             },
         ))
 

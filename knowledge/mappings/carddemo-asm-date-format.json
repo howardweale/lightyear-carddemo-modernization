@@ -1,0 +1,113 @@
+{
+  "workloads": [
+    {
+      "id": "workload:carddemo-asm-date-format",
+      "name": "CardDemo HLASM date formatting routine",
+      "status": "development-proven-mainframe-pending",
+      "legacy_entrypoints": [
+        "legacy:assembler-program:COBDATFT"
+      ],
+      "modern_entrypoints": [
+        "modern:file:factory/benchmarks/asm_date_candidate.py"
+      ],
+      "scenarios": [
+        {
+          "id": "scenario:asm-date:local-semantic-proof",
+          "name": "Local COBDATFT semantic proof",
+          "kind": "local-deterministic",
+          "status": "passed"
+        },
+        {
+          "id": "scenario:asm-date:private-mutation-gate",
+          "name": "Private HLASM date mutation gate",
+          "kind": "private-holdout",
+          "visibility": "verifier_private",
+          "status": "passed"
+        },
+        {
+          "id": "scenario:asm-date:zos-equivalence",
+          "name": "Live z/OS COBDATFT equivalence capture",
+          "kind": "zos-observed",
+          "status": "blocked-pending-mainframe"
+        }
+      ],
+      "rules": [
+        {
+          "id": "rule:asm-date:cobol-call-boundary",
+          "name": "COBOL to HLASM call boundary",
+          "statement": "CBACT01C calls COBDATFT using the shared CODATECN record.",
+          "derived_from": [
+            {
+              "node": "legacy:assembler-program:COBDATFT",
+              "path": "app/asm/COBDATFT.asm",
+              "line_start": 17,
+              "line_end": 29
+            }
+          ],
+          "implemented_by": ["modern:file:factory/benchmarks/asm_date_candidate.py"],
+          "verified_by": ["scenario:asm-date:private-mutation-gate"]
+        },
+        {
+          "id": "rule:asm-date:dsect-contract",
+          "name": "COCDATFT parameter layout",
+          "statement": "The parameter DSECT contains one-byte type fields, two twenty-byte date fields, and a thirty-eight-byte error field.",
+          "derived_from": [
+            {
+              "node": "legacy:assembler-dsect:COCDATFT",
+              "path": "app/maclib/COCDATFT.mac",
+              "line_start": 17,
+              "line_end": 23
+            }
+          ],
+          "implemented_by": ["modern:file:factory/benchmarks/asm_date_candidate.py"],
+          "verified_by": ["scenario:asm-date:private-mutation-gate"]
+        },
+        {
+          "id": "rule:asm-date:compact-to-hyphenated",
+          "name": "Compact date formatting",
+          "statement": "Input type 1 converts YYYYMMDD positions to YYYY-MM-DD when the output direction is accepted.",
+          "derived_from": [
+            {
+              "node": "legacy:assembler-instruction:COBDATFT:40:17",
+              "path": "app/asm/COBDATFT.asm",
+              "line_start": 35,
+              "line_end": 45
+            }
+          ],
+          "implemented_by": ["modern:file:factory/benchmarks/asm_date_candidate.py"],
+          "verified_by": ["scenario:asm-date:private-mutation-gate"]
+        },
+        {
+          "id": "rule:asm-date:hyphenated-to-compact",
+          "name": "Hyphenated date formatting",
+          "statement": "Input type 2 copies fixed YYYY, MM, and DD positions into an eight-byte compact output without adding validation absent from the source.",
+          "derived_from": [
+            {
+              "node": "legacy:assembler-instruction:COBDATFT:51:25",
+              "path": "app/asm/COBDATFT.asm",
+              "line_start": 46,
+              "line_end": 54
+            }
+          ],
+          "implemented_by": ["modern:file:factory/benchmarks/asm_date_candidate.py"],
+          "verified_by": ["scenario:asm-date:private-mutation-gate"]
+        },
+        {
+          "id": "rule:asm-date:invalid-input",
+          "name": "Invalid input response",
+          "statement": "Unsupported input types or rejected input/output direction pairs return INVALID INPUT.",
+          "derived_from": [
+            {
+              "node": "legacy:assembler-instruction:COBDATFT:56:29",
+              "path": "app/asm/COBDATFT.asm",
+              "line_start": 30,
+              "line_end": 56
+            }
+          ],
+          "implemented_by": ["modern:file:factory/benchmarks/asm_date_candidate.py"],
+          "verified_by": ["scenario:asm-date:private-mutation-gate"]
+        }
+      ]
+    }
+  ]
+}

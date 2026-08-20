@@ -1,6 +1,37 @@
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.17.0 — live evidence and Control Tower plane**
+Release: **v0.18.2 — bounded IMS logical proof cell**
+
+v0.18.2 advances IMS from structural discovery to a bounded development proof. The cell follows
+`CBPAUP0J -> CBPAUP0C -> PSBPAUTB/PAUTBPCB -> DBPAUTP0 -> PAUTSUM0/PAUTDTL1`, models its normal-path
+GN/GNP/DLET/CHKP behavior, and preserves the source's duplicated approved-count root deletion test
+as an explicit, mutation-tested legacy quirk. CICS, VSAM, IMS, and the bounded COBDATFT HLASM cell
+are now development-proven; none is claimed mainframe-equivalent without live z/OS evidence.
+The graph now parses CSD resources, BMS maps and fields, EXEC CICS commands, and IDCAMS KSDS,
+ESDS, RRDS, alternate-index, path, and component definitions. The first proof follows `CAVW` to
+`COACTVWC`, its `CACTVWA` screen, and ordered reads of `CXACAIX`, `ACCTDAT`, and `CUSTDAT`.
+It also parses IMS DBD/PSB macros and HLASM programs, instructions, branches, macros, DSECTs, and
+fields. The second bounded proof follows the COBOL call into `COBDATFT` and preserves its exact
+fixed-position date conversion behavior, including the source's commented-out separator check.
+The third proof models CBPAUP0C's expired pending-authorization purge against its IMS hierarchy.
+
+```bash
+./cics-vsam-readiness.sh verify
+./cics-vsam-readiness.sh template work/cavw-live
+./asm-readiness.sh verify
+./ims-readiness.sh verify
+./ims-readiness.sh template work/cbpaup0c-live
+PYTHONPATH=src python3 -m lightyear_knowledge_graph capabilities
+```
+
+The local proof is mutation-tested and development-ready. The signed release gate intentionally
+remains blocked until authorized operators supply `zos_observed` captures from real CICS, IMS, and
+z/OS execution environments, independent comparators find no differences, and external signing
+keys are present. See [readiness/cics-vsam/README.md](readiness/cics-vsam/README.md),
+[readiness/asm-date/README.md](readiness/asm-date/README.md), and
+[readiness/ims-expiry/README.md](readiness/ims-expiry/README.md).
+
+Previous milestone: **v0.17.0 — live evidence and Control Tower plane**
 
 v0.17 makes the existing Control Tower live. Factory, Portfolio, Recovery, Quality, Memory,
 Runtime, and Audit remain independent authoritative stores; a new operational plane observes their
@@ -16,8 +47,6 @@ Open `http://127.0.0.1:8765`. The browser remains strictly read-only: it cannot 
 retry, dispatch, promote, or write exceptions. See
 [control-tower/README.md](control-tower/README.md) for the production architecture and command-plane
 hardening boundary.
-
-Previous milestone: **v0.16.0 — durable recovery control plane**
 
 An evidence-aware knowledge graph, source-faithful local oracle, differential harness, and
 Java/Spring Batch candidate for AWS CardDemo. Together they form the first engineering cell of a
@@ -121,8 +150,10 @@ read-only dashboard cannot approve, resolve, or launch work.
 
 ## What it does
 
-1. Builds a deterministic, provenance-rich graph of the entire CardDemo application estate.
-2. Maps `INTCALC` business rules from COBOL evidence to Java code and independent tests.
+1. Builds a deterministic, provenance-rich graph of the entire CardDemo application estate,
+   including native CICS, BMS, VSAM, IMS DBD/PSB, and HLASM structures.
+2. Maps `INTCALC`, `CAVW`, `COBDATFT`, and `CBPAUP0C` business rules from legacy evidence to bounded
+   candidates and independent tests.
 3. Produces audience-filtered context packages so implementers cannot see private verifier assets.
 4. Serves bounded, searchable visual perspectives of the graph from a local web application.
 5. Explains the purpose, direction, evidence policy, and sources behind every visible relationship.

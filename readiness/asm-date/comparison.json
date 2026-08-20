@@ -1,0 +1,17 @@
+{
+  "baseline_evidence_class": "local_observed",
+  "baseline_sha256": "c7c50acd14b1647d2fe4e8b22ab0581b80f023d5f1c70f7dfba14cb8eba05d99",
+  "behavior_match": true,
+  "candidate_evidence_class": "local_observed",
+  "candidate_sha256": "c7c50acd14b1647d2fe4e8b22ab0581b80f023d5f1c70f7dfba14cb8eba05d99",
+  "comparison_type": "factorydark-hlasm-differential",
+  "content_sha256": "340162a28898fe3ee892d9bd94d0caa6b4d558dbe55cbfc4cace251f1b19a13f",
+  "differences": [],
+  "mainframe_baseline": false,
+  "schema_version": "1.0",
+  "status": "passed",
+  "validation_errors": {
+    "baseline": [],
+    "candidate": []
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "checks": {
+    "bounded_candidate": true,
+    "curated_behavior_contract": true,
+    "differential_behavior_match": true,
+    "private_negative_gate": true,
+    "typed_static_graph": true,
+    "zos_observed_baseline": false
+  },
+  "comparison_sha256": "340162a28898fe3ee892d9bd94d0caa6b4d558dbe55cbfc4cace251f1b19a13f",
+  "content_sha256": "08e54af640a9929fcadfc79803ad71462ecabdbfcda5c72acb09511f12786ef5",
+  "development_ready": true,
+  "mainframe_equivalent": false,
+  "receipt_type": "factorydark-hlasm-readiness",
+  "schema_version": "1.0",
+  "signature": null,
+  "status": "blocked",
+  "unresolved_gaps": [
+    "No authorized zos_observed COBDATFT baseline is bound to this comparison.",
+    "No external ASM equivalence signing key was configured."
+  ],
+  "workload_id": "workload:carddemo-asm-date-format"
+}

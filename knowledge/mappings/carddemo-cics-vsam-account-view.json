@@ -1,0 +1,104 @@
+{
+  "workloads": [
+    {
+      "id": "workload:carddemo-cics-vsam-account-view",
+      "name": "CardDemo CICS/VSAM account view",
+      "status": "development-proven-mainframe-pending",
+      "legacy_entrypoints": [
+        "legacy:cics-transaction:CAVW",
+        "legacy:cobol-program:COACTVWC"
+      ],
+      "modern_entrypoints": [
+        "modern:java-type:ai.lightyear.carddemo.service.CicsVsamAccountViewService",
+        "modern:file:factory/benchmarks/cics_vsam_account_candidate.py"
+      ],
+      "scenarios": [
+        {
+          "id": "scenario:cics-vsam:local-semantic-proof",
+          "name": "Local CAVW keyed-read semantic proof",
+          "kind": "local-deterministic",
+          "status": "passed"
+        },
+        {
+          "id": "scenario:cics-vsam:private-mutation-gate",
+          "name": "Private CICS/VSAM mutation and negative gate",
+          "kind": "private-holdout",
+          "visibility": "verifier_private",
+          "status": "passed"
+        },
+        {
+          "id": "scenario:cics-vsam:zos-equivalence",
+          "name": "Live z/OS CAVW equivalence capture",
+          "kind": "zos-observed",
+          "status": "blocked-pending-mainframe"
+        }
+      ],
+      "rules": [
+        {
+          "id": "rule:cics-vsam:cavw-dispatch",
+          "name": "CAVW transaction dispatch",
+          "statement": "CICS transaction CAVW dispatches program COACTVWC.",
+          "derived_from": [{"node": "legacy:cics-transaction:CAVW", "path": "app/csd/CARDDEMO.CSD", "line_start": 317, "line_end": 330}],
+          "implemented_by": ["modern:file:factory/benchmarks/cics_vsam_account_candidate.py"],
+          "verified_by": ["scenario:cics-vsam:private-mutation-gate"]
+        },
+        {
+          "id": "rule:cics-vsam:account-input",
+          "name": "Eleven digit account input",
+          "statement": "The CAVW map accepts an eleven-digit required account identifier at ACCTSID.",
+          "derived_from": [{"node": "legacy:bms-field:CACTVWA:ACCTSID:84", "path": "app/bms/COACTVW.bms", "line_start": 84, "line_end": 90}],
+          "implemented_by": ["modern:file:factory/benchmarks/cics_vsam_account_candidate.py"],
+          "verified_by": ["scenario:cics-vsam:private-mutation-gate"]
+        },
+        {
+          "id": "rule:cics-vsam:xref-read",
+          "name": "Account alternate-index lookup",
+          "statement": "The account identifier first reads CXACAIX, the CardXref alternate-index path with key length 11 and offset 25.",
+          "derived_from": [{"node": "legacy:cics-command:COACTVWC:727:6", "path": "app/cbl/COACTVWC.cbl", "line_start": 727, "line_end": 736}],
+          "implemented_by": ["modern:file:factory/benchmarks/cics_vsam_account_candidate.py"],
+          "verified_by": ["scenario:cics-vsam:private-mutation-gate"]
+        },
+        {
+          "id": "rule:cics-vsam:account-read",
+          "name": "Account master lookup",
+          "statement": "A successful cross-reference lookup is followed by a keyed read of ACCTDAT.",
+          "derived_from": [{"node": "legacy:cics-command:COACTVWC:776:7", "path": "app/cbl/COACTVWC.cbl", "line_start": 776, "line_end": 785}],
+          "implemented_by": ["modern:file:factory/benchmarks/cics_vsam_account_candidate.py"],
+          "verified_by": ["scenario:cics-vsam:private-mutation-gate"]
+        },
+        {
+          "id": "rule:cics-vsam:customer-read",
+          "name": "Customer master lookup",
+          "statement": "The customer identifier recovered from CardXref keys a CUSTDAT read.",
+          "derived_from": [{"node": "legacy:cics-command:COACTVWC:826:8", "path": "app/cbl/COACTVWC.cbl", "line_start": 826, "line_end": 835}],
+          "implemented_by": ["modern:file:factory/benchmarks/cics_vsam_account_candidate.py"],
+          "verified_by": ["scenario:cics-vsam:private-mutation-gate"]
+        },
+        {
+          "id": "rule:cics-vsam:not-found",
+          "name": "Fail closed on missing records",
+          "statement": "A missing cross-reference, account, or customer produces a NOT_FOUND response and no partial view.",
+          "derived_from": [{"node": "legacy:cobol-paragraph:COACTVWC:9200-GETCARDXREF-BYACCT", "path": "app/cbl/COACTVWC.cbl", "line_start": 725, "line_end": 768}],
+          "implemented_by": ["modern:file:factory/benchmarks/cics_vsam_account_candidate.py"],
+          "verified_by": ["scenario:cics-vsam:private-mutation-gate"]
+        },
+        {
+          "id": "rule:cics-vsam:map-contract",
+          "name": "BMS map response contract",
+          "statement": "The response is rendered through map CACTVWA in mapset COACTVW.",
+          "derived_from": [{"node": "legacy:bms-map:CACTVWA", "path": "app/bms/COACTVW.bms", "line_start": 27, "line_end": 31}],
+          "implemented_by": ["modern:file:factory/benchmarks/cics_vsam_account_candidate.py"],
+          "verified_by": ["scenario:cics-vsam:local-semantic-proof"]
+        },
+        {
+          "id": "rule:cics-vsam:read-only",
+          "name": "Account view is read only",
+          "statement": "CAVW reads the three resources without creating, updating, or deleting records.",
+          "derived_from": [{"node": "legacy:cics-file:ACCTDAT", "path": "app/csd/CARDDEMO.CSD", "line_start": 1, "line_end": 12}],
+          "implemented_by": ["modern:file:factory/benchmarks/cics_vsam_account_candidate.py"],
+          "verified_by": ["scenario:cics-vsam:private-mutation-gate"]
+        }
+      ]
+    }
+  ]
+}

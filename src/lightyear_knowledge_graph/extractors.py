@@ -14,6 +14,7 @@ LEGACY_EXTENSIONS = {
     ".asm", ".bms", ".cbl", ".cpy", ".csd", ".ctl", ".dbd", ".dcl", ".ddl",
     ".jcl", ".mac", ".prc", ".psb", ".txt",
 }
+ASSEMBLER_EXTENSIONS = {".asm", ".mac"}
 
 
 def _relative(path: Path, root: Path) -> str:
@@ -50,21 +51,41 @@ def _add_file_node(
 
 def extract_legacy(graph: KnowledgeGraph, root: Path) -> None:
     app_root = root / "app"
+    assembler_programs = {
+        path.stem.upper()
+        for path in app_root.rglob("*")
+        if path.is_file() and path.suffix.lower() == ".asm"
+    }
     for path in sorted(item for item in app_root.rglob("*") if item.is_file()):
         if path.suffix.lower() not in LEGACY_EXTENSIONS and path.suffix:
             continue
         suffix = path.suffix.lower()
         if suffix in {".cbl"}:
-            _extract_cobol(graph, path, root)
+            _extract_cobol(graph, path, root, assembler_programs)
         elif suffix in {".cpy"}:
             _extract_copybook(graph, path, root)
+        elif suffix == ".bms":
+            _extract_bms(graph, path, root)
+        elif suffix == ".csd":
+            _extract_csd(graph, path, root)
+        elif suffix in ASSEMBLER_EXTENSIONS:
+            _extract_assembler(graph, path, root)
+        elif suffix == ".dbd":
+            _extract_ims_dbd(graph, path, root)
+        elif suffix == ".psb":
+            _extract_ims_psb(graph, path, root)
         elif suffix in {".jcl", ".prc"}:
             _extract_jcl(graph, path, root)
         else:
             _add_file_node(graph, "legacy", path, root, LEGACY_SOURCE_ID, suffix.lstrip(".") or "text")
 
 
-def _extract_cobol(graph: KnowledgeGraph, path: Path, root: Path) -> None:
+def _extract_cobol(
+    graph: KnowledgeGraph,
+    path: Path,
+    root: Path,
+    assembler_programs: set[str] | None = None,
+) -> None:
     lines = _lines(path)
     relative = _relative(path, root)
     file_id = _add_file_node(graph, "legacy", path, root, LEGACY_SOURCE_ID, "cobol")
@@ -144,8 +165,12 @@ def _extract_cobol(graph: KnowledgeGraph, path: Path, root: Path) -> None:
             )
 
         for called in re.findall(r"\bCALL\s+['\"]([A-Z0-9-]+)['\"]", upper):
-            called_id = f"legacy:cobol-program:{called}"
-            graph.add_node(called_id, "cobol_program", called)
+            if called in (assembler_programs or set()):
+                called_id = f"legacy:assembler-program:{called}"
+                graph.add_node(called_id, "assembler_program", called)
+            else:
+                called_id = f"legacy:cobol-program:{called}"
+                graph.add_node(called_id, "cobol_program", called)
             graph.add_edge(
                 current_scope,
                 "CALLS",
@@ -183,6 +208,524 @@ def _extract_cobol(graph: KnowledgeGraph, path: Path, root: Path) -> None:
                     properties={"operation": "OPEN", "mode": mode},
                     evidence_items=[evidence(LEGACY_SOURCE_ID, relative, line_number)],
                 )
+
+    _extract_cics_commands(graph, lines, relative, program_id, program_name)
+
+
+def _extract_cics_commands(
+    graph: KnowledgeGraph,
+    lines: list[str],
+    relative: str,
+    program_id: str,
+    program_name: str,
+) -> None:
+    """Extract EXEC CICS blocks and resolve literal resource names.
+
+    This intentionally models the command boundary instead of pretending to be a
+    full COBOL parser. Every inferred link retains the exact command span and the
+    literal's source span remains available on the program source node.
+    """
+    joined = "\n".join(lines)
+    literals = {
+        name.upper(): value.strip().upper()
+        for name, value in re.findall(
+            r"\b(LIT-[A-Z0-9-]+)\s+PIC\s+[^\n]+\n\s*VALUE\s+'([^']*)'",
+            joined,
+            re.IGNORECASE,
+        )
+    }
+    paragraph_starts: list[tuple[int, str]] = []
+    paragraph_pattern = re.compile(r"^\s{0,7}([0-9A-Z][0-9A-Z-]+)\.\s*(?:$|\s)", re.IGNORECASE)
+    excluded = {
+        "IDENTIFICATION", "ENVIRONMENT", "DATA", "PROCEDURE", "FILE-CONTROL",
+        "INPUT-OUTPUT", "WORKING-STORAGE", "LINKAGE", "FILE", "CONFIGURATION",
+    }
+    for line_number, line in enumerate(lines, 1):
+        match = paragraph_pattern.match(line)
+        if match and match.group(1).upper() not in excluded and not match.group(1).isdigit():
+            paragraph_starts.append((line_number, match.group(1).upper()))
+
+    for occurrence, match in enumerate(
+        re.finditer(r"\bEXEC\s+CICS\s+(.*?)\bEND-EXEC", joined, re.IGNORECASE | re.DOTALL),
+        start=1,
+    ):
+        body = re.sub(r"\s+", " ", match.group(1)).strip()
+        if not body:
+            continue
+        line_start = joined[: match.start()].count("\n") + 1
+        line_end = line_start + match.group(0).count("\n")
+        words = body.split()
+        command = words[0].upper()
+        specialized = re.match(r"^(SEND|RECEIVE)\s+(MAP|TEXT)\b", body, re.IGNORECASE)
+        if specialized:
+            command = f"{specialized.group(1).upper()} {specialized.group(2).upper()}"
+        scope = program_id
+        for paragraph_line, paragraph_name in paragraph_starts:
+            if paragraph_line > line_start:
+                break
+            scope = f"legacy:cobol-paragraph:{program_name}:{paragraph_name}"
+        ev = [evidence(LEGACY_SOURCE_ID, relative, line_start, line_end)]
+        command_id = f"legacy:cics-command:{program_name}:{line_start}:{occurrence}"
+        operands: dict[str, str] = {}
+        for key, raw in re.findall(
+            r"\b(MAPSET|MAP|DATASET|FILE|PROGRAM|TRANSID)\s*\(\s*([^)]+?)\s*\)",
+            body,
+            re.IGNORECASE,
+        ):
+            token = raw.strip().strip("'\"").upper()
+            operands[key.upper()] = literals.get(token, token).strip()
+        graph.add_node(
+            command_id,
+            "cics_command",
+            command,
+            properties={"command": command, "operands": operands, "program": program_name},
+            evidence_items=ev,
+        )
+        graph.add_edge(scope, "ISSUES", command_id, evidence_items=ev)
+
+        mapset = operands.get("MAPSET")
+        map_name = operands.get("MAP")
+        if mapset:
+            mapset_id = f"legacy:bms-mapset:{mapset}"
+            graph.add_node(mapset_id, "bms_mapset", mapset)
+            graph.add_edge(command_id, "USES_MAPSET", mapset_id, evidence_items=ev)
+        if map_name:
+            map_id = f"legacy:bms-map:{map_name}"
+            graph.add_node(map_id, "bms_map", map_name)
+            graph.add_edge(command_id, "USES_MAP", map_id, evidence_items=ev)
+        resource = operands.get("DATASET") or operands.get("FILE")
+        if resource:
+            file_id = f"legacy:cics-file:{resource}"
+            graph.add_node(file_id, "cics_file_resource", resource)
+            graph.add_edge(
+                command_id,
+                "ACCESSES",
+                file_id,
+                properties={"operation": command},
+                evidence_items=ev,
+            )
+
+
+def _logical_macro_statements(lines: list[str]) -> list[tuple[int, int, str]]:
+    statements: list[tuple[int, int, str]] = []
+    current: list[str] = []
+    start = 1
+    for line_number, line in enumerate(lines, 1):
+        if not current:
+            start = line_number
+        current.append(line.rstrip().removesuffix("-").strip())
+        if not line.rstrip().endswith("-"):
+            statements.append((start, line_number, " ".join(current)))
+            current = []
+    if current:
+        statements.append((start, len(lines), " ".join(current)))
+    return statements
+
+
+def _macro_attributes(text: str) -> dict[str, str]:
+    return {
+        key.upper(): value.strip().strip("'")
+        for key, value in re.findall(
+            r"\b([A-Z][A-Z0-9]+)\s*=\s*(\([^)]*\)|'[^']*'|[^,\s]+)",
+            text,
+            re.IGNORECASE,
+        )
+    }
+
+
+def _extract_bms(graph: KnowledgeGraph, path: Path, root: Path) -> None:
+    lines = _lines(path)
+    relative = _relative(path, root)
+    file_id = _add_file_node(graph, "legacy", path, root, LEGACY_SOURCE_ID, "bms")
+    current_mapset: str | None = None
+    current_map: str | None = None
+    anonymous = 0
+    for line_start, line_end, statement in _logical_macro_statements(lines):
+        match = re.match(r"^([A-Z0-9-]*)\s+(DFHMSD|DFHMDI|DFHMDF)\b(.*)$", statement, re.IGNORECASE)
+        if not match:
+            continue
+        label, macro, remainder = match.groups()
+        label = label.upper()
+        macro = macro.upper()
+        attrs = _macro_attributes(remainder)
+        ev = [evidence(LEGACY_SOURCE_ID, relative, line_start, line_end)]
+        if macro == "DFHMSD":
+            current_mapset = label or path.stem.upper()
+            mapset_id = f"legacy:bms-mapset:{current_mapset}"
+            graph.add_node(mapset_id, "bms_mapset", current_mapset, properties=attrs, evidence_items=ev)
+            graph.add_edge(file_id, "DECLARES", mapset_id, evidence_items=ev)
+        elif macro == "DFHMDI" and current_mapset:
+            current_map = label
+            map_id = f"legacy:bms-map:{current_map}"
+            graph.add_node(map_id, "bms_map", current_map, properties=attrs, evidence_items=ev)
+            graph.add_edge(f"legacy:bms-mapset:{current_mapset}", "HAS_MAP", map_id, evidence_items=ev)
+        elif macro == "DFHMDF" and current_map:
+            anonymous += 1
+            field_name = label or f"ANONYMOUS-{anonymous}"
+            field_id = f"legacy:bms-field:{current_map}:{field_name}:{line_start}"
+            graph.add_node(
+                field_id,
+                "bms_field",
+                field_name,
+                properties={**attrs, "map": current_map, "mapset": current_mapset},
+                evidence_items=ev,
+            )
+            graph.add_edge(f"legacy:bms-map:{current_map}", "HAS_FIELD", field_id, evidence_items=ev)
+
+
+def _csd_blocks(lines: list[str]) -> list[tuple[int, int, str, str, str]]:
+    starts = [
+        (index, match.group(1).upper(), match.group(2).upper())
+        for index, line in enumerate(lines, 1)
+        if (match := re.match(r"^\s*DEFINE\s+([A-Z]+)\(([^)]+)\)", line, re.IGNORECASE))
+    ]
+    blocks = []
+    for offset, (line_start, kind, name) in enumerate(starts):
+        line_end = starts[offset + 1][0] - 1 if offset + 1 < len(starts) else len(lines)
+        blocks.append((line_start, line_end, kind, name, " ".join(lines[line_start - 1 : line_end])))
+    return blocks
+
+
+def _extract_csd(graph: KnowledgeGraph, path: Path, root: Path) -> None:
+    lines = _lines(path)
+    relative = _relative(path, root)
+    file_id = _add_file_node(graph, "legacy", path, root, LEGACY_SOURCE_ID, "csd")
+    for line_start, line_end, resource_kind, name, block in _csd_blocks(lines):
+        ev = [evidence(LEGACY_SOURCE_ID, relative, line_start, line_end)]
+        properties = {key.lower(): value for key, value in re.findall(r"\b([A-Z][A-Z0-9]+)\(([^)]*)\)", block)}
+        if resource_kind == "TRANSACTION":
+            node_id = f"legacy:cics-transaction:{name}"
+            graph.add_node(node_id, "cics_transaction", name, properties=properties, evidence_items=ev)
+            graph.add_edge(file_id, "DECLARES", node_id, evidence_items=ev)
+            program = properties.get("program", "").upper()
+            if program:
+                target = f"legacy:cics-program-resource:{program}"
+                graph.add_node(target, "cics_program_resource", program)
+                graph.add_edge(node_id, "STARTS_PROGRAM", target, evidence_items=ev)
+        elif resource_kind == "PROGRAM":
+            node_id = f"legacy:cics-program-resource:{name}"
+            graph.add_node(node_id, "cics_program_resource", name, properties=properties, evidence_items=ev)
+            graph.add_edge(file_id, "DECLARES", node_id, evidence_items=ev)
+            target = f"legacy:cobol-program:{name}"
+            graph.add_node(target, "cobol_program", name)
+            graph.add_edge(node_id, "RESOLVES_TO", target, evidence_items=ev)
+        elif resource_kind == "FILE":
+            node_id = f"legacy:cics-file:{name}"
+            graph.add_node(node_id, "cics_file_resource", name, properties=properties, evidence_items=ev)
+            graph.add_edge(file_id, "DECLARES", node_id, evidence_items=ev)
+            dsn = properties.get("dsname", "").upper()
+            if dsn:
+                target_kind = "vsam_path" if dsn.endswith(".PATH") else "vsam_cluster"
+                prefix = "vsam-path" if target_kind == "vsam_path" else "vsam-cluster"
+                target = f"legacy:{prefix}:{dsn}"
+                graph.add_node(target, target_kind, dsn)
+                graph.add_edge(node_id, "BACKED_BY", target, evidence_items=ev)
+        elif resource_kind == "MAPSET":
+            node_id = f"legacy:bms-mapset:{name}"
+            graph.add_node(node_id, "bms_mapset", name, properties=properties, evidence_items=ev)
+            graph.add_edge(file_id, "DECLARES", node_id, evidence_items=ev)
+
+
+def _hlasm_parts(line: str) -> tuple[str, str, str] | None:
+    """Return label, operation, and operands for one physical HLASM line."""
+    if not line.strip() or line.lstrip().startswith("*"):
+        return None
+    body = line[:71].rstrip()
+    tokens = body.split(None, 2)
+    if not tokens:
+        return None
+    has_label = bool(body and not body[0].isspace())
+    if has_label:
+        label = tokens[0].upper()
+        operation = tokens[1].upper() if len(tokens) > 1 else ""
+        operands = tokens[2].strip() if len(tokens) > 2 else ""
+    else:
+        label = ""
+        operation = tokens[0].upper()
+        operands = tokens[1].strip() if len(tokens) > 1 else ""
+        if len(tokens) > 2:
+            operands = f"{operands} {tokens[2]}".strip()
+    return label, operation, operands
+
+
+_HLASM_DIRECTIVES = {
+    "AMODE", "CSECT", "COPY", "DC", "DROP", "DS", "DSECT", "END", "ENTRY",
+    "EQU", "EXITCTL", "ICTL", "LTORG", "MACRO", "MEND", "ORG", "PRINT", "RMODE",
+    "SPACE", "START", "TITLE", "USING",
+}
+_HLASM_BRANCHES = {
+    "B", "BAL", "BALR", "BAS", "BASR", "BC", "BCR", "BE", "BH", "BL", "BM", "BNE",
+    "BNH", "BNL", "BNM", "BNO", "BNP", "BNZ", "BO", "BP", "BR", "BZ", "J", "JE",
+    "JH", "JL", "JNE", "JNH", "JNL", "JNM", "JNO", "JNP", "JNZ", "JO", "JP", "JZ",
+}
+
+
+def _extract_assembler(graph: KnowledgeGraph, path: Path, root: Path) -> None:
+    lines = _lines(path)
+    relative = _relative(path, root)
+    language = "hlasm-macro" if path.suffix.lower() == ".mac" else "hlasm"
+    file_id = _add_file_node(graph, "legacy", path, root, LEGACY_SOURCE_ID, language)
+    parsed = [(line_number, parts) for line_number, line in enumerate(lines, 1)
+              if (parts := _hlasm_parts(line))]
+
+    macro_name: str | None = None
+    for index, (_, (_, operation, _)) in enumerate(parsed):
+        if operation == "MACRO" and index + 1 < len(parsed):
+            macro_name = parsed[index + 1][1][1]
+            break
+    if macro_name:
+        header_line = next(number for number, parts in parsed if parts[1] == macro_name)
+        macro_id = f"legacy:assembler-macro:{macro_name}"
+        ev = [evidence(LEGACY_SOURCE_ID, relative, header_line)]
+        graph.add_node(
+            macro_id,
+            "assembler_macro",
+            macro_name,
+            properties={"path": relative, "language": "HLASM"},
+            evidence_items=ev,
+        )
+        graph.add_edge(file_id, "DECLARES", macro_id, evidence_items=ev)
+
+    dsects: dict[str, str] = {}
+    for line_number, (label, operation, _) in parsed:
+        if operation == "DSECT" and label:
+            dsect_id = f"legacy:assembler-dsect:{label}"
+            dsects[label] = dsect_id
+            ev = [evidence(LEGACY_SOURCE_ID, relative, line_number)]
+            graph.add_node(
+                dsect_id,
+                "assembler_dsect",
+                label,
+                properties={"path": relative},
+                evidence_items=ev,
+            )
+            graph.add_edge(file_id, "DECLARES", dsect_id, evidence_items=ev)
+
+    if path.suffix.lower() == ".mac" and dsects:
+        current_dsect: str | None = None
+        for line_number, (label, operation, operands) in parsed:
+            if operation == "DSECT" and label:
+                current_dsect = dsects[label]
+                continue
+            if current_dsect and label and operation in {"DS", "DC"}:
+                field_id = f"legacy:assembler-field:{current_dsect.rsplit(':', 1)[-1]}:{label}"
+                ev = [evidence(LEGACY_SOURCE_ID, relative, line_number)]
+                graph.add_node(
+                    field_id,
+                    "assembler_field",
+                    label,
+                    properties={"declaration": operands, "storage": operation},
+                    evidence_items=ev,
+                )
+                graph.add_edge(current_dsect, "HAS_FIELD", field_id, evidence_items=ev)
+
+    if path.suffix.lower() != ".asm":
+        return
+
+    entry = next(
+        ((line_number, label, operation) for line_number, (label, operation, _) in parsed
+         if operation in {"CSECT", "START"} and label),
+        (1, path.stem.upper(), "UNKNOWN"),
+    )
+    entry_line, program_name, entry_directive = entry
+    program_id = f"legacy:assembler-program:{program_name}"
+    program_ev = [evidence(LEGACY_SOURCE_ID, relative, entry_line)]
+    graph.add_node(
+        program_id,
+        "assembler_program",
+        program_name,
+        properties={"entry_directive": entry_directive, "language": "HLASM", "path": relative},
+        evidence_items=program_ev,
+    )
+    graph.add_edge(file_id, "DECLARES", program_id, evidence_items=program_ev)
+
+    symbols: dict[str, str] = {}
+    instruction_sequence = 0
+    known_macro_files = {
+        candidate.stem.upper()
+        for candidate in (root / "app" / "maclib").glob("*.mac")
+    }
+    for line_number, (label, operation, operands) in parsed:
+        ev = [evidence(LEGACY_SOURCE_ID, relative, line_number)]
+        if label and operation not in {"CSECT", "START", "DSECT"}:
+            symbol_id = f"legacy:assembler-symbol:{program_name}:{label}"
+            symbols[label] = symbol_id
+            graph.add_node(
+                symbol_id,
+                "assembler_symbol",
+                label,
+                properties={"operation": operation, "program": program_name},
+                evidence_items=ev,
+            )
+            graph.add_edge(program_id, "CONTAINS", symbol_id, evidence_items=ev)
+        if operation == "COPY":
+            dsect_name = operands.split()[0].rstrip(",").upper()
+            dsect_id = f"legacy:assembler-dsect:{dsect_name}"
+            graph.add_node(dsect_id, "assembler_dsect", dsect_name)
+            graph.add_edge(program_id, "USES_DSECT", dsect_id, evidence_items=ev)
+        if operation in known_macro_files:
+            macro_id = f"legacy:assembler-macro:{operation}"
+            graph.add_node(macro_id, "assembler_macro", operation)
+            graph.add_edge(program_id, "USES_MACRO", macro_id, evidence_items=ev)
+        if operation and operation not in _HLASM_DIRECTIVES and operation not in known_macro_files:
+            instruction_sequence += 1
+            instruction_id = f"legacy:assembler-instruction:{program_name}:{line_number}:{instruction_sequence}"
+            graph.add_node(
+                instruction_id,
+                "assembler_instruction",
+                operation,
+                properties={"operands": operands, "program": program_name},
+                evidence_items=ev,
+            )
+            graph.add_edge(program_id, "CONTAINS", instruction_id, evidence_items=ev)
+            if operation in _HLASM_BRANCHES and operands:
+                target_name = operands.split(",")[-1].split()[0].strip().upper()
+                if re.fullmatch(r"[A-Z$#@][A-Z0-9$#@]*", target_name):
+                    target_id = f"legacy:assembler-symbol:{program_name}:{target_name}"
+                    graph.add_node(
+                        target_id,
+                        "assembler_symbol",
+                        target_name,
+                        properties={"program": program_name},
+                    )
+                    graph.add_edge(instruction_id, "BRANCHES_TO", target_id, evidence_items=ev)
+
+
+def _ims_statements(lines: list[str], operations: set[str]) -> list[tuple[int, int, str, str, str]]:
+    starts: list[tuple[int, str, str, str]] = []
+    for line_number, line in enumerate(lines, 1):
+        parts = _hlasm_parts(line)
+        if not parts:
+            continue
+        label, operation, operands = parts
+        if operation in operations:
+            starts.append((line_number, label, operation, operands))
+    result = []
+    for index, (line_start, label, operation, operands) in enumerate(starts):
+        line_end = starts[index + 1][0] - 1 if index + 1 < len(starts) else line_start
+        continuation = " ".join(
+            line[:71].rstrip().rstrip("CX").strip()
+            for line in lines[line_start:line_end]
+            if line.strip() and not line.lstrip().startswith("*")
+        )
+        result.append((line_start, line_end, label, operation, f"{operands} {continuation}".strip()))
+    return result
+
+
+def _ims_attrs(text: str) -> dict[str, str]:
+    return {
+        key.upper(): value.strip().strip("'")
+        for key, value in re.findall(
+            r"\b([A-Z][A-Z0-9]+)\s*=\s*(\([^)]*\)|'[^']*'|[^,\s]+)",
+            text,
+            re.IGNORECASE,
+        )
+    }
+
+
+def _extract_ims_dbd(graph: KnowledgeGraph, path: Path, root: Path) -> None:
+    lines = _lines(path)
+    relative = _relative(path, root)
+    file_id = _add_file_node(graph, "legacy", path, root, LEGACY_SOURCE_ID, "ims-dbd")
+    statements = _ims_statements(lines, {"DBD", "DATASET", "SEGM", "FIELD", "LCHILD"})
+    dbd_stmt = next((item for item in statements if item[3] == "DBD"), None)
+    if not dbd_stmt:
+        return
+    line_start, line_end, _, _, operands = dbd_stmt
+    attrs = _ims_attrs(operands)
+    dbd_name = attrs.get("NAME", path.stem).strip("()").upper()
+    dbd_id = f"legacy:ims-database:{dbd_name}"
+    access = attrs.get("ACCESS", "").strip("()").split(",")
+    ev = [evidence(LEGACY_SOURCE_ID, relative, line_start, line_end)]
+    graph.add_node(
+        dbd_id,
+        "ims_database",
+        dbd_name,
+        properties={"access_method": access[0] if access else "", "organization": access, "path": relative},
+        evidence_items=ev,
+    )
+    graph.add_edge(file_id, "DECLARES", dbd_id, evidence_items=ev)
+    current_segment: str | None = None
+    for line_start, line_end, label, operation, operands in statements:
+        attrs = _ims_attrs(operands)
+        ev = [evidence(LEGACY_SOURCE_ID, relative, line_start, line_end)]
+        if operation == "DATASET":
+            group_name = label or f"GROUP-{line_start}"
+            group_id = f"legacy:ims-dataset-group:{dbd_name}:{group_name}"
+            graph.add_node(group_id, "ims_dataset_group", group_name, properties=attrs, evidence_items=ev)
+            graph.add_edge(dbd_id, "HAS_DATASET_GROUP", group_id, evidence_items=ev)
+        elif operation == "SEGM":
+            segment_name = attrs.get("NAME", label).strip("()").upper()
+            current_segment = f"legacy:ims-segment:{dbd_name}:{segment_name}"
+            graph.add_node(
+                current_segment,
+                "ims_segment",
+                segment_name,
+                properties={**attrs, "database": dbd_name},
+                evidence_items=ev,
+            )
+            graph.add_edge(dbd_id, "CONTAINS", current_segment, evidence_items=ev)
+            parent = attrs.get("PARENT", "").strip("()").split(",")[0].strip("()")
+            if parent and parent != "0":
+                parent_id = f"legacy:ims-segment:{dbd_name}:{parent.upper()}"
+                graph.add_node(parent_id, "ims_segment", parent.upper(), properties={"database": dbd_name})
+                graph.add_edge(parent_id, "PARENT_OF", current_segment, evidence_items=ev)
+        elif operation == "FIELD" and current_segment:
+            raw_name = attrs.get("NAME", label).strip("()")
+            field_name = raw_name.split(",")[0].upper()
+            field_id = f"legacy:ims-field:{dbd_name}:{field_name}"
+            graph.add_node(
+                field_id,
+                "ims_field",
+                field_name,
+                properties={**attrs, "database": dbd_name},
+                evidence_items=ev,
+            )
+            graph.add_edge(current_segment, "HAS_FIELD", field_id, evidence_items=ev)
+        elif operation == "LCHILD" and current_segment:
+            raw = attrs.get("NAME", "").strip("()")
+            parts = [part.strip().upper() for part in raw.split(",")]
+            if len(parts) >= 2:
+                target = f"legacy:ims-segment:{parts[1]}:{parts[0]}"
+                graph.add_node(target, "ims_segment", parts[0], properties={"database": parts[1]})
+                graph.add_edge(current_segment, "INDEXES", target, evidence_items=ev)
+
+
+def _extract_ims_psb(graph: KnowledgeGraph, path: Path, root: Path) -> None:
+    lines = _lines(path)
+    relative = _relative(path, root)
+    file_id = _add_file_node(graph, "legacy", path, root, LEGACY_SOURCE_ID, "ims-psb")
+    statements = _ims_statements(lines, {"PCB", "SENSEG", "PSBGEN"})
+    psb_stmt = next((item for item in statements if item[3] == "PSBGEN"), None)
+    if not psb_stmt:
+        return
+    line_start, line_end, _, _, operands = psb_stmt
+    attrs = _ims_attrs(operands)
+    psb_name = attrs.get("PSBNAME", path.stem).strip("()").upper()
+    psb_id = f"legacy:ims-psb:{psb_name}"
+    ev = [evidence(LEGACY_SOURCE_ID, relative, line_start, line_end)]
+    graph.add_node(psb_id, "ims_psb", psb_name, properties={**attrs, "path": relative}, evidence_items=ev)
+    graph.add_edge(file_id, "DECLARES", psb_id, evidence_items=ev)
+    current_pcb: str | None = None
+    current_database: str | None = None
+    for line_start, line_end, label, operation, operands in statements:
+        attrs = _ims_attrs(operands)
+        ev = [evidence(LEGACY_SOURCE_ID, relative, line_start, line_end)]
+        if operation == "PCB":
+            pcb_name = label or f"PCB-{line_start}"
+            current_pcb = f"legacy:ims-pcb:{psb_name}:{pcb_name}"
+            current_database = attrs.get("DBDNAME", "").strip("()").upper()
+            graph.add_node(current_pcb, "ims_pcb", pcb_name, properties=attrs, evidence_items=ev)
+            graph.add_edge(psb_id, "CONTAINS", current_pcb, evidence_items=ev)
+            if current_database:
+                dbd_id = f"legacy:ims-database:{current_database}"
+                graph.add_node(dbd_id, "ims_database", current_database)
+                graph.add_edge(current_pcb, "USES_DBD", dbd_id, evidence_items=ev)
+        elif operation == "SENSEG" and current_pcb and current_database:
+            segment_name = attrs.get("NAME", label).strip("()").upper()
+            segment_id = f"legacy:ims-segment:{current_database}:{segment_name}"
+            graph.add_node(segment_id, "ims_segment", segment_name, properties={"database": current_database})
+            graph.add_edge(current_pcb, "SENSITIVE_TO", segment_id, evidence_items=ev)
 
 
 def _extract_copybook(graph: KnowledgeGraph, path: Path, root: Path) -> None:
@@ -271,9 +814,12 @@ def _extract_jcl(graph: KnowledgeGraph, path: Path, root: Path) -> None:
                 evidence_items=[evidence(LEGACY_SOURCE_ID, relative, line_number)],
             )
             graph.add_edge(owner, "CONTAINS", step_id)
-            program_id = f"legacy:cobol-program:{executable}"
-            if program_id in graph.nodes:
-                executable_id = program_id
+            cobol_program_id = f"legacy:cobol-program:{executable}"
+            assembler_program_id = f"legacy:assembler-program:{executable}"
+            if cobol_program_id in graph.nodes:
+                executable_id = cobol_program_id
+            elif assembler_program_id in graph.nodes:
+                executable_id = assembler_program_id
             else:
                 executable_id = f"legacy:executable:{executable}"
                 graph.add_node(
@@ -310,6 +856,131 @@ def _extract_jcl(graph: KnowledgeGraph, path: Path, root: Path) -> None:
             continue
         if allocation_id and line.startswith("//"):
             _extract_dsn(graph, allocation_id, line, relative, line_number)
+
+    _extract_idcams(graph, file_id, lines, relative)
+    _extract_ims_jcl_bindings(graph, lines, relative)
+
+
+def _extract_ims_jcl_bindings(
+    graph: KnowledgeGraph, lines: list[str], relative: str
+) -> None:
+    """Bind IMS BMP/DLI program identities to the PSB named in EXEC parameters."""
+    joined = "\n".join(lines)
+    for match in re.finditer(
+        r"PARM\s*=\s*['\"](?:BMP|DLI)\s*,\s*([A-Z0-9$#@-]+)\s*,\s*([A-Z0-9$#@-]+)",
+        joined,
+        re.IGNORECASE,
+    ):
+        program_name, psb_name = (value.upper() for value in match.groups())
+        program_id = f"legacy:cobol-program:{program_name}"
+        if program_id not in graph.nodes:
+            assembler_id = f"legacy:assembler-program:{program_name}"
+            if assembler_id in graph.nodes:
+                program_id = assembler_id
+            else:
+                graph.add_node(program_id, "cobol_program", program_name)
+        psb_id = f"legacy:ims-psb:{psb_name}"
+        graph.add_node(psb_id, "ims_psb", psb_name)
+        line_number = joined[: match.start()].count("\n") + 1
+        graph.add_edge(
+            program_id,
+            "USES_PSB",
+            psb_id,
+            evidence_items=[evidence(LEGACY_SOURCE_ID, relative, line_number)],
+        )
+
+
+def _extract_idcams(
+    graph: KnowledgeGraph, file_id: str, lines: list[str], relative: str
+) -> None:
+    """Extract VSAM catalog definitions embedded in IDCAMS SYSIN streams."""
+    normalized_lines = [line.rstrip().removesuffix("-").strip() for line in lines]
+    starts: list[tuple[int, str]] = []
+    for index, line in enumerate(normalized_lines, 1):
+        match = re.match(r"^DEFINE\s+(CLUSTER|ALTERNATEINDEX|PATH)\b", line, re.IGNORECASE)
+        if match:
+            starts.append((index, match.group(1).upper()))
+    for offset, (line_start, definition) in enumerate(starts):
+        next_start = starts[offset + 1][0] if offset + 1 < len(starts) else len(lines) + 1
+        line_end = next_start - 1
+        for index in range(line_start, next_start):
+            if normalized_lines[index - 1].startswith("/*"):
+                line_end = index - 1
+                break
+        block = " ".join(normalized_lines[line_start - 1 : line_end])
+        names = re.findall(r"\bNAME\s*\(\s*([A-Z0-9.$#@-]+)\s*\)", block, re.IGNORECASE)
+        if not names:
+            continue
+        name = names[0].upper()
+        ev = [evidence(LEGACY_SOURCE_ID, relative, line_start, max(line_start, line_end))]
+        common: dict[str, object] = {}
+        keys = re.search(r"\bKEYS\s*\(\s*(\d+)\s*[, ]\s*(\d+)\s*\)", block, re.IGNORECASE)
+        records = re.search(r"\bRECORDSIZE\s*\(\s*(\d+)\s*[, ]\s*(\d+)\s*\)", block, re.IGNORECASE)
+        shares = re.search(r"\bSHAREOPTIONS\s*\(\s*(\d+)\s*[, ]\s*(\d+)\s*\)", block, re.IGNORECASE)
+        if keys:
+            common.update({"key_length": int(keys.group(1)), "key_offset": int(keys.group(2))})
+        if records:
+            common.update({"record_size_min": int(records.group(1)), "record_size_max": int(records.group(2))})
+        if shares:
+            common.update({"share_cross_region": int(shares.group(1)), "share_cross_system": int(shares.group(2))})
+        common.update({
+            "erase": bool(re.search(r"\bERASE\b", block, re.IGNORECASE)),
+            "reuse": bool(re.search(r"\bREUSE\b", block, re.IGNORECASE)),
+        })
+
+        if definition == "CLUSTER":
+            organization = (
+                "KSDS" if re.search(r"\bINDEXED\b", block, re.IGNORECASE)
+                else "RRDS" if re.search(r"\bNUMBERED\b", block, re.IGNORECASE)
+                else "LDS" if re.search(r"\bLINEAR\b", block, re.IGNORECASE)
+                else "ESDS" if re.search(r"\bNONINDEXED\b", block, re.IGNORECASE)
+                else "UNKNOWN"
+            )
+            node_id = f"legacy:vsam-cluster:{name}"
+            graph.add_node(
+                node_id,
+                "vsam_cluster",
+                name,
+                properties={**common, "organization": organization},
+                evidence_items=ev,
+            )
+            graph.add_edge(file_id, "DECLARES", node_id, evidence_items=ev)
+            for component_name in names[1:]:
+                component_name = component_name.upper()
+                component_id = f"legacy:vsam-component:{component_name}"
+                component_type = "INDEX" if component_name.endswith(".INDEX") else "DATA"
+                graph.add_node(
+                    component_id,
+                    "vsam_component",
+                    component_name,
+                    properties={"component_type": component_type},
+                    evidence_items=ev,
+                )
+                graph.add_edge(node_id, "HAS_COMPONENT", component_id, evidence_items=ev)
+        elif definition == "ALTERNATEINDEX":
+            node_id = f"legacy:vsam-alternate-index:{name}"
+            graph.add_node(node_id, "vsam_alternate_index", name, properties=common, evidence_items=ev)
+            graph.add_edge(file_id, "DECLARES", node_id, evidence_items=ev)
+            relate = re.search(r"\bRELATE\s*\(\s*([A-Z0-9.$#@-]+)\s*\)", block, re.IGNORECASE)
+            if relate:
+                target_name = relate.group(1).upper()
+                target = f"legacy:vsam-cluster:{target_name}"
+                graph.add_node(target, "vsam_cluster", target_name)
+                graph.add_edge(node_id, "TARGETS", target, evidence_items=ev)
+        else:
+            node_id = f"legacy:vsam-path:{name}"
+            graph.add_node(node_id, "vsam_path", name, evidence_items=ev)
+            graph.add_edge(file_id, "DECLARES", node_id, evidence_items=ev)
+            entry = re.search(r"\bPATHENTRY\s*\(\s*([A-Z0-9.$#@-]+)\s*\)", block, re.IGNORECASE)
+            if entry:
+                target_name = entry.group(1).upper()
+                target = f"legacy:vsam-alternate-index:{target_name}"
+                graph.add_node(target, "vsam_alternate_index", target_name)
+                graph.add_edge(node_id, "TARGETS", target, evidence_items=ev)
+
+        dataset_id = f"legacy:dataset:{name}"
+        if dataset_id in graph.nodes:
+            graph.add_edge(dataset_id, "RESOLVES_TO", node_id, evidence_items=ev)
 
 
 def _extract_dsn(

@@ -1,0 +1,47 @@
+{
+  "artifacts": [
+    {
+      "role": "candidate-source",
+      "sha256": "b25b366f0e5b24958ca430470375f1766b20f3c5c16b0087bd2fcf6cb25bed9e"
+    },
+    {
+      "role": "output",
+      "sha256": "6b012180ee9cc83bf1b6478cf6cb5f3a33f32a811ce2fb36d19a2a0446c1a3ce"
+    }
+  ],
+  "attestation_signature": null,
+  "capture_type": "factorydark-hlasm-execution",
+  "content_sha256": "c7c50acd14b1647d2fe4e8b22ab0581b80f023d5f1c70f7dfba14cb8eba05d99",
+  "evidence_class": "local_observed",
+  "input": {
+    "input_date": "2026-08-21",
+    "input_type": "2",
+    "output_type": "2"
+  },
+  "limitations": [
+    "This capture does not assemble, bind, or execute COBDATFT on z/OS.",
+    "AMODE/RMODE, linkage conventions, LE behavior, EBCDIC bytes, and abend behavior remain unproven."
+  ],
+  "mainframe_identity": {},
+  "observed_at": "2022-07-18T00:00:00Z",
+  "operator_attestation": {
+    "authorized": false,
+    "reason": "local deterministic proof only"
+  },
+  "output": {
+    "error_message": "                                      ",
+    "input_date": "2026-08-21          ",
+    "input_type": "2",
+    "output_date": "20260821            ",
+    "output_type": "2"
+  },
+  "program": {
+    "caller": "CBACT01C",
+    "dsect": "COCDATFT",
+    "id": "COBDATFT"
+  },
+  "return_code": 0,
+  "run_id": "local-cobdatft-reference",
+  "schema_version": "1.0",
+  "source_system": "factorydark-local-semantic-candidate"
+}

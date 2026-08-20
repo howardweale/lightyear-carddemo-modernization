@@ -1,0 +1,73 @@
+{
+  "accesses": [
+    {
+      "key": "00000000001",
+      "operation": "READ",
+      "resource": "CXACAIX"
+    },
+    {
+      "key": "00000000001",
+      "operation": "READ",
+      "resource": "ACCTDAT"
+    },
+    {
+      "key": "000000001",
+      "operation": "READ",
+      "resource": "CUSTDAT"
+    }
+  ],
+  "artifacts": [
+    {
+      "role": "candidate-source",
+      "sha256": "4a15529afccc12be8c17a0c38c0b22a025738a15104bd7706b85e1e7e324eaaf"
+    },
+    {
+      "role": "output",
+      "sha256": "56f703e73baf2a2ea2cf6c112c5981e323f1214983a785c14588a00153f67d93"
+    }
+  ],
+  "attestation_signature": null,
+  "capture_type": "lightyear-cics-vsam-execution",
+  "content_sha256": "d4f498195d934c796797597b17d0db3d61af260b44c1759f70f5c437df019beb",
+  "evidence_class": "local_observed",
+  "input": {
+    "account_id": "00000000001"
+  },
+  "limitations": [
+    "This capture does not execute CICS or VSAM.",
+    "Locking, RLS, recoverability, EBCDIC terminal behavior, and region configuration remain unproven."
+  ],
+  "mainframe_identity": {},
+  "mutations": [],
+  "observed_at": "2022-07-18T00:00:00Z",
+  "operator_attestation": {
+    "authorized": false,
+    "reason": "local deterministic proof only"
+  },
+  "output": {
+    "map": "CACTVWA",
+    "mapset": "COACTVW",
+    "mutations": [],
+    "program": "COACTVWC",
+    "status": "NORMAL",
+    "transaction": "CAVW",
+    "view": {
+      "account_id": "00000000001",
+      "account_status": "Y",
+      "card_number": "4111111111111111",
+      "credit_limit": "5000.00",
+      "current_balance": "125.25",
+      "customer_id": "000000001",
+      "customer_name": "JANE CUSTOMER"
+    }
+  },
+  "run_id": "local-cavw-reference",
+  "schema_version": "1.0",
+  "source_system": "factorydark-local-semantic-candidate",
+  "transaction": {
+    "id": "CAVW",
+    "map": "CACTVWA",
+    "mapset": "COACTVW",
+    "program": "COACTVWC"
+  }
+}

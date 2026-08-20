@@ -1,5 +1,10 @@
 # CardDemo Spring Batch candidate
 
+v0.18 also includes `CicsVsamAccountViewService`, a bounded read-only service seam for CICS
+transaction `CAVW`. It preserves the legacy lookup order across the CardXref alternate-index path,
+account master, and customer master while exposing an explicit read trace and zero-mutation result.
+It is verified locally but does not claim to emulate CICS task semantics or VSAM locking/recovery.
+
 This module is a Java 17, Spring Boot 4.1, Spring Batch 6 candidate implementation of CardDemo's
 `CBACT04C` interest-calculation workload. It deliberately remains behind the repository's Python
 oracle and comparator: passing the differential test is the acceptance contract.

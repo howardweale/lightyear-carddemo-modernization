@@ -1,0 +1,17 @@
+{
+  "baseline_evidence_class": "local_observed",
+  "baseline_sha256": "d4f498195d934c796797597b17d0db3d61af260b44c1759f70f5c437df019beb",
+  "behavior_match": true,
+  "candidate_evidence_class": "local_observed",
+  "candidate_sha256": "d4f498195d934c796797597b17d0db3d61af260b44c1759f70f5c437df019beb",
+  "comparison_type": "lightyear-cics-vsam-differential",
+  "content_sha256": "18ffa8df47108e299c14e971c7a646ded82020e0853f0d2d897be1aa09e4a23b",
+  "differences": [],
+  "mainframe_baseline": false,
+  "schema_version": "1.0",
+  "status": "passed",
+  "validation_errors": {
+    "baseline": [],
+    "candidate": []
+  }
+}

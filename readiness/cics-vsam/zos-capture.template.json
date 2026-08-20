@@ -1,0 +1,76 @@
+{
+  "accesses": [
+    {
+      "key": "REPLACE",
+      "operation": "READ",
+      "resource": "CXACAIX"
+    },
+    {
+      "key": "REPLACE",
+      "operation": "READ",
+      "resource": "ACCTDAT"
+    },
+    {
+      "key": "REPLACE",
+      "operation": "READ",
+      "resource": "CUSTDAT"
+    }
+  ],
+  "artifacts": [
+    {
+      "role": "terminal-input-redacted",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "role": "terminal-output-redacted",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "role": "cics-trace-or-log",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "role": "dataset-before-digests",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "role": "dataset-after-digests",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  ],
+  "attestation_signature": null,
+  "capture_type": "lightyear-cics-vsam-execution",
+  "content_sha256": "ec636cb7cb05b78c2c6aa79742a46d5a5cd786d947214b1b31feb9b1353db5e1",
+  "evidence_class": "zos_observed",
+  "input": {
+    "account_id": "REPLACE-WITH-SYNTHETIC-11-DIGIT-ID"
+  },
+  "limitations": [],
+  "mainframe_identity": {
+    "cics_region": "REPLACE",
+    "lpar": "REPLACE",
+    "operator": "REPLACE",
+    "system_id": "REPLACE",
+    "task_id": "REPLACE"
+  },
+  "mutations": [],
+  "observed_at": "REPLACE-WITH-UTC-TIMESTAMP",
+  "operator_attestation": {
+    "authorized": false,
+    "scope": "read-only CAVW proof",
+    "ticket": "REPLACE"
+  },
+  "output": {
+    "status": "REPLACE",
+    "view": {}
+  },
+  "run_id": "REPLACE-WITH-UNIQUE-RUN-ID",
+  "schema_version": "1.0",
+  "source_system": "REPLACE-WITH-AUTHORIZED-ZOS-ALIAS",
+  "transaction": {
+    "id": "CAVW",
+    "map": "CACTVWA",
+    "mapset": "COACTVW",
+    "program": "COACTVWC"
+  }
+}

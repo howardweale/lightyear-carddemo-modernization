@@ -78,7 +78,11 @@ def main(argv: list[str] | None = None) -> int:
         report = compare_directories(args.expected, args.actual)
         write_comparison(report, args.report)
         print(json.dumps(report, indent=2, sort_keys=True))
-        return 0 if report["status"] == "passed" else 1
+        if report["status"] == "passed":
+            return 0
+        if report["status"] == "failed":
+            return 1
+        return 2
     return 2
 
 

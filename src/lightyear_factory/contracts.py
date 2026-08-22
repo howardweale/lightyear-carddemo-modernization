@@ -19,6 +19,18 @@ class ContractError(ValueError):
     """A versioned factory contract is invalid or unsafe."""
 
 
+def strict_bool(value: Any, *, field: str, default: bool) -> bool:
+    """Parse security-relevant JSON booleans without Python truthiness."""
+
+    if value is None:
+        return default
+    if isinstance(value, bool):
+        return value
+    raise ContractError(
+        f"{field} must be a JSON boolean; quoted strings and numeric values are rejected"
+    )
+
+
 def canonical_hash(payload: dict[str, Any], excluded: set[str] | None = None) -> str:
     content = {
         key: value for key, value in payload.items() if key not in (excluded or set())
@@ -58,7 +70,11 @@ class GateContract:
             gate_id=gate_id,
             command=tuple(command),
             timeout_seconds=timeout,
-            expose_output_to_builder=bool(payload.get("expose_output_to_builder", False)),
+            expose_output_to_builder=strict_bool(
+                payload.get("expose_output_to_builder"),
+                field=f"gate {gate_id} expose_output_to_builder",
+                default=False,
+            ),
         )
 
     def to_dict(self) -> dict[str, Any]:
@@ -189,8 +205,12 @@ class WorkOrder:
             max_model_tokens=max_model_tokens,
             max_model_cost_usd=max_model_cost_usd,
             max_elapsed_seconds=max_elapsed_seconds,
-            baseline_first=bool(acceptance.get("baseline_first", True)),
-            allow_network=bool(policy.get("allow_network", False)),
+            baseline_first=strict_bool(
+                acceptance.get("baseline_first"), field="acceptance.baseline_first", default=True
+            ),
+            allow_network=strict_bool(
+                policy.get("allow_network"), field="policy.allow_network", default=False
+            ),
             metadata=metadata,
         )
 

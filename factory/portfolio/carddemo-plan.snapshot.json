@@ -22,8 +22,8 @@
       "severity": "medium"
     }
   ],
-  "content_sha256": "3777011d47072a239a7efcd1caadbd10573a7a89ec8bf7fc7bcaf7e2aed754a8",
-  "graph_content_sha256": "c720425a6080218ee199bd7723fb941f4666ca8538c98f116116a08dfb542841",
+  "content_sha256": "afa7c5242c945a1902d7139cbd7b410454021d663eafb5ada2738d8e6401ec8e",
+  "graph_content_sha256": "6684aea8ca9ef3d5d8d2c7f5f8336883a766f2b1a64cb66a708a75d81db9b058",
   "limitations": [
     "Portfolio scheduling proves bounded factory coordination, not z/OS equivalence.",
     "Only deterministic controllers and human approvers may authorize portfolio dispatch."

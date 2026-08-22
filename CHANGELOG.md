@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.18.4 — 2026-08-22
+
+- Replaced dictionary-only comparator indexing with explicit duplicate detection on both expected
+  and actual records, plus independent population-count checks.
+- Added a three-state differential contract: equivalent exits `0`, verified differences exit `1`,
+  and comparisons with no evidence return `indeterminate` and exit `2`.
+- Removed timestamp suppression because the oracle and candidate already receive the same pinned
+  clock; malformed, blank, or different timestamps now fail comparison.
+- Added a versioned, content-addressed comparison report and an owned normalization ledger.
+- Made `baseline_first`, `allow_network`, and `expose_output_to_builder` reject quoted or numeric
+  pseudo-booleans; deserialized reports require an exact `true` before exposing gate output.
+- Added comparator escape and holdout-boundary suites with positive controls, bare-pytest source
+  discovery, cross-platform verifier launchers, dedicated CI jobs, and a tracked-evidence clean-tree
+  assertion.
+- Kept the separately observed oracle duplicate-account/CardXref behavior change out of scope until
+  it receives an independent source and z/OS semantics review.
+
 ## 0.18.3 — 2026-08-21
 
 - Added one adaptive PowerShell Python runtime resolver across every Windows entry point, with an

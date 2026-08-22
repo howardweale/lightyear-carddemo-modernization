@@ -1,6 +1,33 @@
-# LIGHTYEAR CardDemo Modernization Factory
+# FactoryDark.ai CardDemo Modernization Factory
 
-Release: **v0.18.3 — cross-platform deterministic evidence contract**
+Release: **v0.18.4 — verifier trust hardening**
+
+v0.18.4 closes false-green paths in the load-bearing differential verifier. Duplicate keys and
+record-count mismatches now fail independently, deterministic timestamps are compared exactly, and
+a comparison with no records returns `indeterminate` with exit code `2` rather than claiming
+equivalence. Security-relevant work-order flags accept JSON booleans only, while direct positive and
+negative tests protect the builder holdout boundary. A separate CI escape gauntlet attacks the
+verifier on Windows and Linux before the full factory suite runs.
+
+| Claim | Current evidence | Boundary |
+|---|---|---|
+| INTCALC comparator rejects known escape classes | `tests/test_comparator_escape.py` and verifier-gauntlet CI | Development evidence only |
+| Builder cannot see private holdout output by default | `tests/test_trust_boundaries.py` | Explicit per-gate exposure remains possible |
+| CICS, VSAM, IMS and bounded HLASM cells are logically exercised | `knowledge/capabilities/mainframe-readiness.json` | Not mainframe-equivalent |
+| Live mainframe equivalence | No qualifying customer capture yet | **Blocked** |
+| Production readiness | No production pilot evidence yet | **`production_ready: false`** |
+
+```powershell
+.\verifier-gauntlet.ps1
+.\verify.ps1
+```
+
+```bash
+./verifier-gauntlet.sh
+./verify.sh
+```
+
+Previous milestone: **v0.18.3 — cross-platform deterministic evidence contract**
 
 v0.18.3 hardens the complete factory for repeatable Windows and Linux operation. Every PowerShell
 entry point now uses one Python 3.11+ resolver, managed CardDemo checkouts explicitly materialize
@@ -644,9 +671,11 @@ Your Java, Python, Go, or agent-generated candidate should write CardDemo-compat
   --report .\work\comparison.json
 ```
 
-The command returns exit code `0` when equivalent and `1` when differences exist. Timestamps are
-normalized out of the comparison; financial fields, identifiers, account mutations, and all other
-business fields are compared exactly.
+The command returns exit code `0` when equivalent, `1` when verified differences exist, and `2`
+when the verifier cannot establish a meaningful result. Duplicate keys, population counts,
+timestamps, financial fields, identifiers, account mutations, and all business fields are checked.
+Only the documented rules in [spec/comparison-normalizations.json](spec/comparison-normalizations.json)
+may normalize or exclude fields.
 
 ## Java/Spring Batch candidate
 

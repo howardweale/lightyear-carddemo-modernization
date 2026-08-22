@@ -90,7 +90,7 @@ def builder_failure_view(report: dict[str, Any]) -> dict[str, Any]:
             "timed_out": item["timed_out"],
             "output_sha256": item["output_sha256"],
         }
-        if item.get("expose_output_to_builder"):
+        if item.get("expose_output_to_builder") is True:
             public["stdout"] = item.get("stdout", "")
             public["stderr"] = item.get("stderr", "")
         gates.append(public)

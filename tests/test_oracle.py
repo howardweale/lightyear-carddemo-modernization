@@ -109,13 +109,23 @@ class OracleTests(unittest.TestCase):
         self.assertEqual([], result.transactions)
         self.assertEqual(1, result.observations["zero_rate_rows"])
 
-    def test_comparator_ignores_timestamps_but_detects_amount_mutation(self) -> None:
+    def test_comparator_requires_same_injected_timestamp(self) -> None:
         expected = self.root / "expected"
         actual = self.root / "actual"
         run_directory(self.root / "input", expected, PROCESSING_DATE, TIMESTAMP)
         run_directory(self.root / "input", actual, PROCESSING_DATE, "2023-01-01-12.00.00.000000")
-        self.assertEqual("passed", compare_directories(expected, actual)["status"])
+        report = compare_directories(expected, actual)
+        self.assertEqual("failed", report["status"])
+        fields = {item.get("field") for item in report["differences"]}
+        self.assertIn("original_timestamp", fields)
+        self.assertIn("processing_timestamp", fields)
 
+    def test_comparator_detects_amount_mutation_with_same_clock(self) -> None:
+        expected = self.root / "expected"
+        actual = self.root / "actual"
+        run_directory(self.root / "input", expected, PROCESSING_DATE, TIMESTAMP)
+        run_directory(self.root / "input", actual, PROCESSING_DATE, TIMESTAMP)
+        self.assertEqual("passed", compare_directories(expected, actual)["status"])
         records = read_records(actual / "transactions.txt", Transaction.LENGTH)
         first = Transaction.parse(records[0])
         records[0] = replace(first, amount=Decimal("12.01")).render()

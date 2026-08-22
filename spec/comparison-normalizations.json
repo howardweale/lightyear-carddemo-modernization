@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "comparator": "carddemo-intcalc-differential",
+  "rules": [
+    {
+      "id": "decimal-canonical-text",
+      "scope": "all decimal fields",
+      "behavior": "format Decimal values without exponent notation",
+      "reason": "Compare numeric meaning while preserving exact decimal value and sign.",
+      "owner": "FactoryDark verification authority",
+      "review_after": "2027-02-22"
+    },
+    {
+      "id": "fixed-width-right-padding",
+      "scope": "all text fields",
+      "behavior": "ignore right-padding spaces added by fixed-width rendering",
+      "reason": "COBOL fixed-width padding is structural; non-padding text remains exact.",
+      "owner": "FactoryDark verification authority",
+      "review_after": "2027-02-22"
+    },
+    {
+      "id": "copybook-filler",
+      "scope": "account.filler and transaction.filler",
+      "behavior": "exclude non-business filler bytes",
+      "reason": "The pinned copybooks classify these bytes as filler with no business meaning.",
+      "owner": "FactoryDark verification authority",
+      "review_after": "2027-02-22"
+    }
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://factorydark.ai/schema/carddemo/comparison-report-1.0.json",
+  "title": "FactoryDark CardDemo differential comparison report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "comparison_type",
+    "status",
+    "reason_code",
+    "expected_accounts",
+    "actual_accounts",
+    "expected_transactions",
+    "actual_transactions",
+    "compared_accounts",
+    "compared_transactions",
+    "differences",
+    "normalizations",
+    "content_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "comparison_type": {"const": "factorydark-carddemo-intcalc-differential"},
+    "status": {"enum": ["passed", "failed", "indeterminate"]},
+    "reason_code": {"type": ["string", "null"]},
+    "expected_accounts": {"type": "integer", "minimum": 0},
+    "actual_accounts": {"type": "integer", "minimum": 0},
+    "expected_transactions": {"type": "integer", "minimum": 0},
+    "actual_transactions": {"type": "integer", "minimum": 0},
+    "compared_accounts": {"type": "integer", "minimum": 0},
+    "compared_transactions": {"type": "integer", "minimum": 0},
+    "differences": {"type": "array", "items": {"type": "object"}},
+    "normalizations": {"type": "array", "items": {"type": "object"}},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"status": {"const": "indeterminate"}}},
+      "then": {"properties": {"reason_code": {"type": "string", "minLength": 1}}}
+    },
+    {
+      "if": {"properties": {"status": {"enum": ["passed", "failed"]}}},
+      "then": {"properties": {"reason_code": {"type": "null"}}}
+    }
+  ]
+}

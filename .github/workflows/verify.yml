@@ -9,6 +9,32 @@ permissions:
   contents: read
 
 jobs:
+  verifier-escape-gauntlet:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Attack verifier and holdout boundaries
+        if: runner.os == 'Linux'
+        run: ./verifier-gauntlet.sh
+
+      - name: Attack verifier and holdout boundaries (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: .\verifier-gauntlet.ps1
+
   differential-verification:
     strategy:
       fail-fast: false
@@ -42,3 +68,6 @@ jobs:
         if: runner.os == 'Windows'
         shell: pwsh
         run: .\verify.ps1
+
+      - name: Reject verification that mutates tracked evidence
+        run: git diff --exit-code

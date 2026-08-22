@@ -1,5 +1,31 @@
 # LIGHTYEAR Autonomous Factory and Hardened Execution Plane
 
+## Verifier trust boundary (v0.18.4)
+
+The factory treats a verifier that examined no evidence as unsafe, not successful. The INTCALC
+differential comparator therefore has three outcomes: `passed`, `failed`, and `indeterminate`.
+Both empty outputs return `indeterminate`; duplicate business keys and population-count mismatches
+are explicit failures; and pinned timestamps are compared as business evidence. The only excluded
+record field is declared copybook filler, with every normalization owned in
+[`spec/comparison-normalizations.json`](../spec/comparison-normalizations.json).
+
+Private gate output crosses into the builder context only when the corresponding work-order field
+is the JSON boolean `true`. Strings such as `"false"`, numbers, missing values, and `null` cannot
+open the boundary. `baseline_first` and `allow_network` use the same strict parsing rule. Run the
+small adversarial suite before changing a verifier or factory contract:
+
+```bash
+./verifier-gauntlet.sh
+```
+
+```powershell
+.\verifier-gauntlet.ps1
+```
+
+The gauntlet is a regression barrier, not proof that the comparator is complete. Every new proof
+cell must add escape mutations for empty evidence, duplicates, omissions, reordering, truncation,
+formatting, and incorrect normalization before it can support a promotion claim.
+
 ## CICS/VSAM, HLASM, and IMS vertical cells (v0.18.2)
 
 The first online workload cell models `CAVW` transaction routing, BMS input/output, alternate-index

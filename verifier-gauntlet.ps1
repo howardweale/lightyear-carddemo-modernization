@@ -7,4 +7,8 @@ Invoke-FactoryDarkPython -m unittest `
     tests.test_comparator_escape `
     tests.test_trust_boundaries `
     -v
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
+Invoke-FactoryDarkPython -m carddemo_oracle validate-normalizations `
+    --ledger (Join-Path $ProjectDir "spec\comparison-normalizations.json")
 exit $LASTEXITCODE

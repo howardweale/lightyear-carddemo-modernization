@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from collections import Counter
+from datetime import date, datetime, timezone
 from decimal import Decimal
 import hashlib
 import json
@@ -32,11 +33,96 @@ NORMALIZATION_RULES = (
     },
 )
 
+NORMALIZATION_LEDGER_SCHEMA_VERSION = "1.0"
+NORMALIZATION_LEDGER_COMPARATOR = "carddemo-intcalc-differential"
+
 
 def _normalized(value: Any) -> Any:
     if isinstance(value, Decimal):
         return format(value, "f")
     return value.rstrip() if isinstance(value, str) else value
+
+
+def validate_normalization_ledger(
+    path: Path,
+    *,
+    as_of: date | None = None,
+) -> dict[str, Any]:
+    """Validate that governed comparator exceptions match executable behavior."""
+
+    effective_date = as_of or datetime.now(timezone.utc).date()
+    errors: list[str] = []
+    try:
+        ledger = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError) as exc:
+        ledger = {}
+        errors.append(f"NORMALIZATION_LEDGER_UNREADABLE:{type(exc).__name__}")
+
+    if ledger.get("schema_version") != NORMALIZATION_LEDGER_SCHEMA_VERSION:
+        errors.append("NORMALIZATION_SCHEMA_UNSUPPORTED")
+    if ledger.get("comparator") != NORMALIZATION_LEDGER_COMPARATOR:
+        errors.append("NORMALIZATION_COMPARATOR_MISMATCH")
+
+    rules = ledger.get("rules")
+    if not isinstance(rules, list):
+        errors.append("NORMALIZATION_RULES_INVALID")
+        rules = []
+
+    runtime_by_id = {item["id"]: item for item in NORMALIZATION_RULES}
+    ledger_by_id: dict[str, dict[str, Any]] = {}
+    for item in rules:
+        if not isinstance(item, dict):
+            errors.append("NORMALIZATION_RULE_INVALID")
+            continue
+        rule_id = item.get("id")
+        if not isinstance(rule_id, str) or not rule_id:
+            errors.append("NORMALIZATION_RULE_ID_INVALID")
+            continue
+        if rule_id in ledger_by_id:
+            errors.append(f"NORMALIZATION_RULE_DUPLICATE:{rule_id}")
+            continue
+        ledger_by_id[rule_id] = item
+
+        for field in ("reason", "owner", "review_after"):
+            if not isinstance(item.get(field), str) or not item[field].strip():
+                errors.append(f"NORMALIZATION_GOVERNANCE_MISSING:{rule_id}:{field}")
+        review_after = item.get("review_after")
+        if isinstance(review_after, str) and review_after.strip():
+            try:
+                review_date = date.fromisoformat(review_after)
+            except ValueError:
+                errors.append(f"NORMALIZATION_REVIEW_DATE_INVALID:{rule_id}")
+            else:
+                if review_date <= effective_date:
+                    errors.append(
+                        f"NORMALIZATION_REVIEW_EXPIRED:{rule_id}:{review_after}"
+                    )
+
+    runtime_ids = set(runtime_by_id)
+    ledger_ids = set(ledger_by_id)
+    for rule_id in sorted(runtime_ids - ledger_ids):
+        errors.append(f"NORMALIZATION_RUNTIME_RULE_UNGOVERNED:{rule_id}")
+    for rule_id in sorted(ledger_ids - runtime_ids):
+        errors.append(f"NORMALIZATION_LEDGER_RULE_UNUSED:{rule_id}")
+    for rule_id in sorted(runtime_ids & ledger_ids):
+        runtime_rule = runtime_by_id[rule_id]
+        ledger_rule = ledger_by_id[rule_id]
+        for field in ("scope", "behavior"):
+            if ledger_rule.get(field) != runtime_rule[field]:
+                errors.append(f"NORMALIZATION_RUNTIME_MISMATCH:{rule_id}:{field}")
+
+    report: dict[str, Any] = {
+        "schema_version": "1.0",
+        "validation_type": "factorydark-normalization-ledger-validation",
+        "as_of": effective_date.isoformat(),
+        "rules": len(rules),
+        "errors": errors,
+        "status": "passed" if not errors else "failed",
+    }
+    report["content_sha256"] = hashlib.sha256(
+        json.dumps(report, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()
+    return report
 
 
 def _index_by_key(

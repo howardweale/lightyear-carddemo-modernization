@@ -1,10 +1,15 @@
 from __future__ import annotations
 
 import argparse
+from datetime import date
 import json
 from pathlib import Path
 
-from .compare import compare_directories, write_comparison
+from .compare import (
+    compare_directories,
+    validate_normalization_ledger,
+    write_comparison,
+)
 from .demo import create_demo_inputs
 from .oracle import run_directory
 
@@ -44,6 +49,21 @@ def build_parser() -> argparse.ArgumentParser:
     compare_parser.add_argument("--expected", type=Path, required=True)
     compare_parser.add_argument("--actual", type=Path, required=True)
     compare_parser.add_argument("--report", type=Path, required=True)
+
+    normalization_parser = subparsers.add_parser(
+        "validate-normalizations",
+        help="Validate governed comparator normalizations and review dates",
+    )
+    normalization_parser.add_argument(
+        "--ledger",
+        type=Path,
+        default=Path("spec/comparison-normalizations.json"),
+    )
+    normalization_parser.add_argument(
+        "--as-of",
+        type=date.fromisoformat,
+        help="ISO date used for deterministic review-expiry checks",
+    )
     return parser
 
 
@@ -83,6 +103,10 @@ def main(argv: list[str] | None = None) -> int:
         if report["status"] == "failed":
             return 1
         return 2
+    if args.command == "validate-normalizations":
+        report = validate_normalization_ledger(args.ledger, as_of=args.as_of)
+        print(json.dumps(report, indent=2, sort_keys=True))
+        return 0 if report["status"] == "passed" else 1
     return 2
 
 

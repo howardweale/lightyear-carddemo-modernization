@@ -1,5 +1,14 @@
 # LIGHTYEAR Autonomous Factory and Hardened Execution Plane
 
+## Verifier invariant pinning (v0.18.5)
+
+The normalization ledger is now an executable control rather than documentation alone. Its rule
+ids, scopes, and behaviors must match the comparator in both directions; each rule requires an
+owner, reason, and valid ISO review date; and verification fails on the review date until an
+authorized review updates the ledger. Tests also pin the direct `GateContract` default to private
+and the comparator's first-observed duplicate diagnostic policy. The clean-tree CI check is a
+preventive control and is not evidence that an earlier tracked-artifact mutation was found.
+
 ## Verifier trust boundary (v0.18.4)
 
 The factory treats a verifier that examined no evidence as unsafe, not successful. The INTCALC

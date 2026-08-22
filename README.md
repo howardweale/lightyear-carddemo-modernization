@@ -1,6 +1,26 @@
 # FactoryDark.ai CardDemo Modernization Factory
 
-Release: **v0.18.4 — verifier trust hardening**
+Release: **v0.18.5 — verifier invariant pinning**
+
+v0.18.5 converts the independent mutation-review findings into executable invariants. Directly
+constructed private gates now have a regression test that pins output exposure to `false`; the
+comparator's first-observed duplicate diagnostic policy is behavior-tested; and the normalization
+ledger must match runtime scope and behavior exactly. Normalization owners, reasons, and ISO review
+dates are mandatory, with reviews expiring fail-closed on the stated date. Both the focused
+gauntlet and the full verifier run the governance check. The tracked-evidence clean-tree assertion
+is retained as a preventive CI control, not described as a previously observed defect repair.
+
+```powershell
+.\verifier-gauntlet.ps1
+.\verify.ps1
+```
+
+```bash
+./verifier-gauntlet.sh
+./verify.sh
+```
+
+Previous milestone: **v0.18.4 — verifier trust hardening**
 
 v0.18.4 closes false-green paths in the load-bearing differential verifier. Duplicate keys and
 record-count mismatches now fail independently, deterministic timestamps are compared exactly, and

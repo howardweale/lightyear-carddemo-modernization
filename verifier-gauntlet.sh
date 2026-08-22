@@ -10,3 +10,6 @@ export PYTHONPATH="$project_dir/src"
   tests.test_comparator_escape \
   tests.test_trust_boundaries \
   -v
+
+"$LIGHTYEAR_PYTHON_BIN" -m carddemo_oracle validate-normalizations \
+  --ledger "$project_dir/spec/comparison-normalizations.json"

@@ -28,6 +28,14 @@ def gate_result(gate_id: str, expose: object = False) -> dict[str, object]:
 
 
 class HoldoutBoundaryTests(unittest.TestCase):
+    def test_direct_gate_contract_defaults_to_private(self) -> None:
+        gate = GateContract(
+            gate_id="private",
+            command=("python", "private_gate.py"),
+            timeout_seconds=30,
+        )
+        self.assertFalse(gate.expose_output_to_builder)
+
     def test_default_view_is_an_exact_allowlist(self) -> None:
         view = builder_failure_view({"status": "failed", "gates": [gate_result("private")]})
         public = view["gates"][0]

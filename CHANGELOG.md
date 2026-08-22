@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.18.5 — 2026-08-22
+
+- Pinned the direct-construction default for private gate output so a future dataclass-default
+  inversion is rejected even when no JSON deserialization path is involved.
+- Pinned the comparator's first-observed duplicate diagnostic policy while preserving independent
+  duplicate and population-count failures.
+- Turned the normalization ledger into an executable governance control: schema, comparator,
+  runtime scope, behavior, owner, reason, and ISO review date are validated fail-closed.
+- Made a normalization review date expire on the stated date and wired validation into both the
+  focused verifier gauntlet and full cross-platform verification.
+- Clarified that the tracked-evidence clean-tree assertion is a preventive CI control; it was not
+  remediation of an independently observed artifact-mutation defect.
+
 ## 0.18.4 — 2026-08-22
 
 - Replaced dictionary-only comparator indexing with explicit duplicate detection on both expected

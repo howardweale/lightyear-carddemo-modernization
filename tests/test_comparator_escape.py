@@ -7,11 +7,16 @@ import tempfile
 import unittest
 from contextlib import redirect_stdout
 from dataclasses import replace
+from datetime import date
 from decimal import Decimal
 from pathlib import Path
 
 from carddemo_oracle.cli import main as oracle_cli
-from carddemo_oracle.compare import NORMALIZATION_RULES, compare_directories
+from carddemo_oracle.compare import (
+    NORMALIZATION_RULES,
+    compare_directories,
+    validate_normalization_ledger,
+)
 from carddemo_oracle.demo import create_demo_inputs
 from carddemo_oracle.oracle import run_directory
 from carddemo_oracle.records import Account, Transaction, read_records, write_records
@@ -66,6 +71,29 @@ class ComparatorEscapeTests(unittest.TestCase):
         classifications = {item["classification"] for item in report["differences"]}
         self.assertIn("duplicate_record", classifications)
         self.assertIn("record_count_mismatch", classifications)
+
+    def test_duplicate_diagnostics_compare_the_first_observed_record(self) -> None:
+        records = self._transactions(self.actual)
+        first = Transaction.parse(records[0])
+        later_duplicate = replace(first, amount=first.amount + Decimal("1.00")).render()
+        write_records(
+            self.actual / "transactions.txt",
+            [*records, later_duplicate],
+            Transaction.LENGTH,
+        )
+        report = compare_directories(self.expected, self.actual)
+        self.assertEqual("failed", report["status"])
+        self.assertTrue(
+            any(item["classification"] == "duplicate_record" for item in report["differences"])
+        )
+        self.assertFalse(
+            any(
+                item["classification"] == "field_difference"
+                and item.get("key") == first.transaction_id
+                for item in report["differences"]
+            ),
+            "Duplicate diagnostics must retain the first observed record for field comparison",
+        )
 
     def test_duplicate_expected_account_is_rejected(self) -> None:
         records = self._accounts(self.expected)
@@ -160,16 +188,49 @@ class ComparatorEscapeTests(unittest.TestCase):
 
     def test_normalization_ledger_matches_runtime_rules(self) -> None:
         root = Path(__file__).resolve().parents[1]
-        ledger = json.loads(
-            (root / "spec/comparison-normalizations.json").read_text(
-                encoding="utf-8"
-            )
-        )
+        ledger_path = root / "spec/comparison-normalizations.json"
+        ledger = json.loads(ledger_path.read_text(encoding="utf-8"))
         self.assertEqual([item["id"] for item in NORMALIZATION_RULES], [item["id"] for item in ledger["rules"]])
         self.assertTrue(all(item["reason"] and item["owner"] and item["review_after"] for item in ledger["rules"]))
+        self.assertEqual(
+            "passed",
+            validate_normalization_ledger(
+                ledger_path, as_of=date(2026, 8, 22)
+            )["status"],
+        )
         schema = json.loads((root / "spec/comparison-report.schema.json").read_text(encoding="utf-8"))
         self.assertEqual(
             ["passed", "failed", "indeterminate"], schema["properties"]["status"]["enum"]
+        )
+
+    def test_expired_normalization_review_fails_closed(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        ledger = json.loads(
+            (root / "spec/comparison-normalizations.json").read_text(encoding="utf-8")
+        )
+        ledger["rules"][0]["review_after"] = "2026-08-22"
+        path = self.root / "expired-normalizations.json"
+        path.write_text(json.dumps(ledger), encoding="utf-8")
+        report = validate_normalization_ledger(path, as_of=date(2026, 8, 22))
+        self.assertEqual("failed", report["status"])
+        self.assertIn(
+            "NORMALIZATION_REVIEW_EXPIRED:decimal-canonical-text:2026-08-22",
+            report["errors"],
+        )
+
+    def test_normalization_scope_or_behavior_drift_fails_closed(self) -> None:
+        root = Path(__file__).resolve().parents[1]
+        ledger = json.loads(
+            (root / "spec/comparison-normalizations.json").read_text(encoding="utf-8")
+        )
+        ledger["rules"][1]["scope"] = "some text fields"
+        path = self.root / "drifted-normalizations.json"
+        path.write_text(json.dumps(ledger), encoding="utf-8")
+        report = validate_normalization_ledger(path, as_of=date(2026, 8, 22))
+        self.assertEqual("failed", report["status"])
+        self.assertIn(
+            "NORMALIZATION_RUNTIME_MISMATCH:fixed-width-right-padding:scope",
+            report["errors"],
         )
 
 

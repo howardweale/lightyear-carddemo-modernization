@@ -9,6 +9,10 @@ $env:PYTHONPATH = Join-Path $ProjectDir "src"
 Invoke-FactoryDarkPython -m unittest discover -s (Join-Path $ProjectDir "tests") -v
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
+Invoke-FactoryDarkPython -m carddemo_oracle validate-normalizations `
+    --ledger (Join-Path $ProjectDir "spec\comparison-normalizations.json")
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
 & (Join-Path $ProjectDir "model-workcell.ps1") validate
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 

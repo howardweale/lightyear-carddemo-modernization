@@ -1,0 +1,50 @@
+{
+  "bindings": {
+    "canonical_model_sha256": "fb59dfc8f78bd088f18f2f2167c457c887f3928e10264f05b3ac5482ec8a6664",
+    "fixture_catalog_sha256": "f2dcda58733e6cca9551adb904856496bd803354c2511c14e61db66945c6f5e4",
+    "target_mapping_sha256": "24f0f0dc82363749d9db4a7294315ec8dc3ca5660e7d800550560195b0d27f45"
+  },
+  "checks": {
+    "keys_and_constraints": true,
+    "query_results": true,
+    "row_counts_and_checksums": true,
+    "schema_structure": true,
+    "transaction_commit": true,
+    "transaction_rollback": true
+  },
+  "content_sha256": "8e2e2dc30cffa3205ceb743f418ae937ea8ac05d6bde9041182acc61cba3abbe",
+  "errors": [],
+  "evidence_class": "offline-db2-to-target-development-proof",
+  "gaps": [
+    "live-db2-catalog-not-observed",
+    "live-zos-data-not-compared",
+    "cdc-and-cutover-not-proven"
+  ],
+  "production_ready": false,
+  "query_results": {
+    "fraud_authorization_count": 1,
+    "total_approved_amount": "125.50"
+  },
+  "receipt_type": "factorydark-data-equivalence",
+  "schema_version": "1.0",
+  "signature": {
+    "algorithm": "hmac-sha256",
+    "signer": "factorydark-development-fixture",
+    "value": "57cdaade3354ee3c4354f707cd08e9006bd7603802967d7c0f7af9b6e0105abb"
+  },
+  "source": "db2-zos",
+  "statistics": {
+    "columns": 26,
+    "constraints": 1,
+    "distinct_primary_keys": 2,
+    "indexes": 1,
+    "row_checksums": [
+      "2a7d555ac1db0081c5aff51dd5378631d715117eca4d0d70467033cdf3fb48f6",
+      "92235c9e35356db7cb03e698756a069d9f1d04fa396e47e2549ffc06afe2c5c8"
+    ],
+    "rows": 2
+  },
+  "status": "passed",
+  "target": "postgresql-16",
+  "workload": "carddemo-authorization-authfrds"
+}

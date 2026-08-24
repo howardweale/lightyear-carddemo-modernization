@@ -73,6 +73,10 @@ def extract_legacy(graph: KnowledgeGraph, root: Path) -> None:
             _extract_csd(graph, path, root)
         elif suffix in ASSEMBLER_EXTENSIONS:
             _extract_assembler(graph, path, root)
+        elif suffix == ".ddl":
+            _extract_db2_ddl(graph, path, root)
+        elif suffix == ".dcl":
+            _extract_db2_dcl(graph, path, root)
         elif suffix == ".dbd":
             _extract_ims_dbd(graph, path, root)
         elif suffix == ".psb":
@@ -213,6 +217,116 @@ def _extract_cobol(
                 )
 
     _extract_cics_commands(graph, lines, relative, program_id, program_name)
+    _extract_embedded_sql(graph, lines, relative, program_id, program_name)
+
+
+def _db2_table_id(schema: str, table: str) -> str:
+    return f"legacy:db2-table:{schema.upper()}.{table.upper()}"
+
+
+def _extract_db2_ddl(graph: KnowledgeGraph, path: Path, root: Path) -> None:
+    lines = _lines(path)
+    text = "\n".join(lines)
+    relative = _relative(path, root)
+    file_id = _add_file_node(graph, "legacy", path, root, LEGACY_SOURCE_ID, "db2-ddl")
+    table = re.search(r"CREATE\s+TABLE\s+([A-Z0-9_]+)\.([A-Z0-9_]+)\s*\((.*?)\)\s*;", text, re.I | re.S)
+    if table:
+        schema, name, body = table.groups()
+        table_id = _db2_table_id(schema, name)
+        line = text[:table.start()].count("\n") + 1
+        ev = [evidence(LEGACY_SOURCE_ID, relative, line, line + table.group(0).count("\n"))]
+        graph.add_node(table_id, "db2_table", f"{schema.upper()}.{name.upper()}", properties={"schema": schema.upper(), "table": name.upper()}, evidence_items=ev)
+        graph.add_edge(file_id, "DECLARES", table_id, evidence_items=ev)
+        for ordinal, match in enumerate(re.finditer(r"^\s*([A-Z][A-Z0-9_]*)\s+(CHAR|VARCHAR|DECIMAL|SMALLINT|INTEGER|DATE|TIMESTAMP)\s*(?:\(([^)]*)\))?([^,\n]*)", body, re.I | re.M), 1):
+            column, source_type, arguments, tail = match.groups()
+            column_id = f"legacy:db2-column:{schema.upper()}.{name.upper()}.{column.upper()}"
+            column_line = line + body[:match.start()].count("\n") + 1
+            column_ev = [evidence(LEGACY_SOURCE_ID, relative, column_line)]
+            graph.add_node(column_id, "db2_column", column.upper(), properties={"ordinal": ordinal, "source_type": source_type.upper(), "arguments": arguments or "", "nullable": not bool(re.search(r"NOT\s+NULL", tail, re.I))}, evidence_items=column_ev)
+            graph.add_edge(table_id, "HAS_COLUMN", column_id, evidence_items=column_ev)
+        primary = re.search(r"PRIMARY\s+KEY\s*\(([^)]*)\)", body, re.I)
+        if primary:
+            constraint_id = f"legacy:db2-constraint:{schema.upper()}.{name.upper()}:PRIMARY_KEY"
+            constraint_line = line + body[:primary.start()].count("\n") + 1
+            constraint_ev = [evidence(LEGACY_SOURCE_ID, relative, constraint_line)]
+            graph.add_node(constraint_id, "db2_constraint", f"{name.upper()} primary key", properties={"kind": "primary_key", "columns": [value.strip().upper() for value in primary.group(1).split(",")]}, evidence_items=constraint_ev)
+            graph.add_edge(table_id, "HAS_CONSTRAINT", constraint_id, evidence_items=constraint_ev)
+    index = re.search(r"CREATE\s+(UNIQUE\s+)?INDEX\s+([A-Z0-9_]+)\.([A-Z0-9_]+)\s+ON\s+([A-Z0-9_]+)\.([A-Z0-9_]+)\s*\(([^)]*)\)", text, re.I | re.S)
+    if index:
+        unique, index_schema, index_name, table_schema, table_name, columns = index.groups()
+        index_id = f"legacy:db2-index:{index_schema.upper()}.{index_name.upper()}"
+        table_id = _db2_table_id(table_schema, table_name)
+        line = text[:index.start()].count("\n") + 1
+        ev = [evidence(LEGACY_SOURCE_ID, relative, line, line + index.group(0).count("\n"))]
+        graph.add_node(table_id, "db2_table", f"{table_schema.upper()}.{table_name.upper()}")
+        graph.add_node(index_id, "db2_index", f"{index_schema.upper()}.{index_name.upper()}", properties={"unique": bool(unique), "columns": re.sub(r"\s+", " ", columns).strip()}, evidence_items=ev)
+        graph.add_edge(file_id, "DECLARES", index_id, evidence_items=ev)
+        graph.add_edge(index_id, "INDEXES", table_id, evidence_items=ev)
+
+
+def _extract_db2_dcl(graph: KnowledgeGraph, path: Path, root: Path) -> None:
+    lines = _lines(path)
+    text = "\n".join(lines)
+    relative = _relative(path, root)
+    file_id = _add_file_node(graph, "legacy", path, root, LEGACY_SOURCE_ID, "db2-dcl")
+    table = re.search(r"DECLARE\s+([A-Z0-9_]+)\.([A-Z0-9_]+)\s+TABLE", text, re.I)
+    if not table:
+        return
+    schema, name = table.groups()
+    dcl_id = f"legacy:db2-dcl:{schema.upper()}.{name.upper()}"
+    table_id = _db2_table_id(schema, name)
+    line = text[:table.start()].count("\n") + 1
+    ev = [evidence(LEGACY_SOURCE_ID, relative, line)]
+    graph.add_node(table_id, "db2_table", f"{schema.upper()}.{name.upper()}")
+    graph.add_node(dcl_id, "db2_dcl", f"{schema.upper()}.{name.upper()} host contract", properties={"table": f"{schema.upper()}.{name.upper()}"}, evidence_items=ev)
+    graph.add_edge(file_id, "DECLARES", dcl_id, evidence_items=ev)
+    graph.add_edge(dcl_id, "DESCRIBES", table_id, evidence_items=ev)
+
+
+def _extract_embedded_sql(graph: KnowledgeGraph, lines: list[str], relative: str, program_id: str, program_name: str) -> None:
+    text = "\n".join(lines)
+    paragraphs: list[tuple[int, str]] = []
+    for number, line in enumerate(lines, 1):
+        match = re.match(r"^\s{0,7}([0-9A-Z][0-9A-Z-]+)\.\s*(?:$|\s)", line, re.I)
+        if match:
+            paragraphs.append((number, match.group(1).upper()))
+    for occurrence, match in enumerate(re.finditer(r"EXEC\s+SQL\s+(.*?)\s+END-EXEC", text, re.I | re.S), 1):
+        body = re.sub(r"\s+", " ", match.group(1)).strip()
+        operation_match = re.match(r"(INSERT|UPDATE|DELETE|SELECT)\b", body, re.I)
+        table_match = re.search(r"(?:INTO|UPDATE|FROM)\s+(?:([A-Z0-9_]+)\.)?([A-Z0-9_]+)", body, re.I)
+        if not operation_match or not table_match:
+            continue
+        operation = operation_match.group(1).upper()
+        schema = (table_match.group(1) or "CARDDEMO").upper()
+        table_name = table_match.group(2).upper()
+        line_start = text[:match.start()].count("\n") + 1
+        line_end = line_start + match.group(0).count("\n")
+        paragraph = next((name for number, name in reversed(paragraphs) if number <= line_start), None)
+        scope_id = f"legacy:cobol-paragraph:{program_name}:{paragraph}" if paragraph else program_id
+        graph.add_node(scope_id, "cobol_paragraph" if paragraph else "cobol_program", paragraph or program_name, properties={"program": program_name, "path": relative})
+        statement_id = f"legacy:db2-sql:{program_name}:{line_start}:{occurrence}"
+        table_id = _db2_table_id(schema, table_name)
+        ev = [evidence(LEGACY_SOURCE_ID, relative, line_start, line_end)]
+        graph.add_node(table_id, "db2_table", f"{schema}.{table_name}")
+        graph.add_node(statement_id, "db2_sql_statement", f"{operation} {schema}.{table_name}", properties={"operation": operation, "program": program_name, "paragraph": paragraph or "PROGRAM", "normalized_sql": body}, evidence_items=ev)
+        graph.add_edge(scope_id, "ISSUES_SQL", statement_id, evidence_items=ev)
+        graph.add_edge(statement_id, "READS_TABLE" if operation == "SELECT" else "WRITES_TABLE", table_id, evidence_items=ev)
+        referenced: set[str] = set()
+        if operation == "INSERT":
+            columns = re.search(r"INTO\s+(?:[A-Z0-9_]+\.)?[A-Z0-9_]+\s*\((.*?)\)\s*VALUES", body, re.I)
+            if columns:
+                referenced.update(value.strip().upper() for value in columns.group(1).split(","))
+        elif operation == "UPDATE":
+            assignments = re.search(r"\bSET\s+(.*?)\s+WHERE\b", body, re.I)
+            if assignments:
+                referenced.update(value.split("=", 1)[0].strip().upper() for value in assignments.group(1).split(","))
+        where = re.search(r"\bWHERE\s+(.*)", body, re.I)
+        if where:
+            referenced.update(value.upper() for value in re.findall(r"\b([A-Z][A-Z0-9_]*)\s*=", where.group(1), re.I))
+        for column in sorted(referenced):
+            column_id = f"legacy:db2-column:{schema}.{table_name}.{column}"
+            graph.add_node(column_id, "db2_column", column)
+            graph.add_edge(statement_id, "REFERENCES_COLUMN", column_id, evidence_items=ev)
 
 
 def _extract_cics_commands(

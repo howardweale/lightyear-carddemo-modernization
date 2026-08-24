@@ -72,7 +72,7 @@ class CicsVsamGraphTests(unittest.TestCase):
         )
 
     def test_curated_vertical_slice_is_policy_complete(self) -> None:
-        self.assertEqual(30, self.graph["statistics"]["nodes_by_kind"]["business_rule"])
+        self.assertEqual(34, self.graph["statistics"]["nodes_by_kind"]["business_rule"])
         self.assertIn("workload:carddemo-cics-vsam-account-view", self.nodes)
         rules = [
             node for node in self.graph["nodes"]

@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://factorydark.ai/schema/target-equivalence-receipt.schema.json",
+  "title": "FactoryDark target data-equivalence receipt",
+  "type": "object",
+  "required": ["schema_version", "receipt_type", "target", "adapter", "status", "production_ready", "checks", "bindings", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "receipt_type": {"const": "factorydark-target-data-equivalence"},
+    "target": {"enum": ["postgresql-16", "oracle-26ai-free"]},
+    "adapter": {
+      "type": "object",
+      "required": ["id", "version"],
+      "properties": {"id": {"type": "string", "minLength": 1}, "version": {"type": "string", "minLength": 1}}
+    },
+    "status": {"enum": ["passed", "failed"]},
+    "production_ready": {"const": false},
+    "checks": {"type": "object", "minProperties": 9, "additionalProperties": {"type": "boolean"}},
+    "bindings": {"type": "object", "required": ["canonical_model_sha256", "target_mapping_sha256", "fixture_catalog_sha256", "schema_sql_sha256", "fixture_sql_sha256", "verification_sql_sha256"]},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

@@ -10,6 +10,7 @@ const state = {
   recovery: null,
   evaluations: [],
   memorySummary: null,
+  dataSummary: null,
   runtimeRuns: [],
   auditSummary: null,
   auditEvents: [],
@@ -41,7 +42,9 @@ const groups = {
   jcl_step: "program", jcl_procedure: "program", executable: "program",
   copybook: "structure", cobol_field: "structure", cobol_file_handle: "structure",
   jcl_dd_name: "structure", jcl_dd_allocation: "structure",
-  dataset: "data", business_rule: "rule", modernization_workload: "rule",
+  dataset: "data", db2_table: "data", db2_column: "structure", db2_index: "data",
+  db2_constraint: "structure", db2_dcl: "structure", db2_sql_statement: "program",
+  business_rule: "rule", modernization_workload: "rule",
   java_type: "modern", java_method: "modern", software_dependency: "modern",
   test_case: "verify", verification_scenario: "verify",
 };
@@ -96,7 +99,7 @@ async function initialize() {
     state.operations = state.meta.operations || await api("/api/operations/status");
     renderLiveStatus();
     connectLivePlane();
-    await Promise.all([loadPerspective(), loadFactoryRuns(false), loadPortfolio(false), loadRecovery(false), loadEvaluations(false), loadMemory(false), loadRuntimeRuns(false), loadAudit(false)]);
+    await Promise.all([loadPerspective(), loadFactoryRuns(false), loadPortfolio(false), loadRecovery(false), loadEvaluations(false), loadMemory(false), loadData(false), loadRuntimeRuns(false), loadAudit(false)]);
   } catch (error) {
     setError(error);
   }
@@ -181,6 +184,10 @@ function bindControls() {
     switchRightPanel("memory");
     await loadMemory(true);
   });
+  $("data-tab").addEventListener("click", async () => {
+    switchRightPanel("data");
+    await loadData(true);
+  });
   $("runtime-tab").addEventListener("click", async () => {
     switchRightPanel("runtime");
     await loadRuntimeRuns(true);
@@ -194,6 +201,7 @@ function bindControls() {
   $("refresh-recovery").addEventListener("click", () => loadRecovery(true));
   $("refresh-evaluations").addEventListener("click", () => loadEvaluations(true));
   $("refresh-memory").addEventListener("click", () => loadMemory(true));
+  $("refresh-data").addEventListener("click", () => loadData(true));
   $("refresh-runtime").addEventListener("click", () => loadRuntimeRuns(true));
   $("refresh-audit").addEventListener("click", () => loadAudit(true));
   $("view-audit-dossier").addEventListener("click", loadAuditDossier);
@@ -816,6 +824,7 @@ function switchRightPanel(view) {
   const recovery = view === "recovery";
   const evaluation = view === "evaluation";
   const memory = view === "memory";
+  const data = view === "data";
   const runtime = view === "runtime";
   const audit = view === "audit";
   $("chat-view").hidden = !chat;
@@ -824,18 +833,59 @@ function switchRightPanel(view) {
   $("recovery-view").hidden = !recovery;
   $("evaluation-view").hidden = !evaluation;
   $("memory-view").hidden = !memory;
+  $("data-view").hidden = !data;
   $("runtime-view").hidden = !runtime;
   $("audit-view").hidden = !audit;
-  $("inspector-view").hidden = chat || factory || portfolio || recovery || evaluation || memory || runtime || audit;
+  $("inspector-view").hidden = chat || factory || portfolio || recovery || evaluation || memory || data || runtime || audit;
   $("chat-tab").classList.toggle("active", chat);
   $("factory-tab").classList.toggle("active", factory);
   $("portfolio-tab").classList.toggle("active", portfolio);
   $("recovery-tab").classList.toggle("active", recovery);
   $("evaluation-tab").classList.toggle("active", evaluation);
   $("memory-tab").classList.toggle("active", memory);
+  $("data-tab").classList.toggle("active", data);
   $("runtime-tab").classList.toggle("active", runtime);
   $("audit-tab").classList.toggle("active", audit);
-  $("inspector-tab").classList.toggle("active", !chat && !factory && !portfolio && !recovery && !evaluation && !memory && !runtime && !audit);
+  $("inspector-tab").classList.toggle("active", !chat && !factory && !portfolio && !recovery && !evaluation && !memory && !data && !runtime && !audit);
+}
+
+async function loadData() {
+  try {
+    const summary = await api("/api/data/summary");
+    state.dataSummary = summary;
+    const cards = $("data-summary");
+    cards.replaceChildren();
+    [[summary.statistics.columns, "columns"], [summary.statistics.constraints, "constraints"], [summary.statistics.indexes, "indexes"], [summary.statistics.fixture_rows, "fixture rows"]].forEach(([value, label]) => {
+      const card = document.createElement("div");
+      const number = document.createElement("strong"); number.textContent = formatNumber(value);
+      const text = document.createElement("span"); text.textContent = label;
+      card.append(number, text); cards.appendChild(card);
+    });
+    const posture = $("data-posture");
+    posture.className = `audit-posture ${summary.production_ready ? "passed" : "blocked"}`;
+    posture.replaceChildren();
+    const title = document.createElement("strong"); title.textContent = summary.production_ready ? "Production evidence complete" : "Development proof only";
+    const detail = document.createElement("p"); detail.textContent = `${summary.source_table} → ${summary.target_table} · ${summary.evidence_class}`;
+    posture.append(title, detail);
+    const targets = $("data-targets"); targets.replaceChildren();
+    (summary.targets || []).forEach((target) => {
+      const card = document.createElement("article"); card.className = `factory-run ${target.status === "passed" ? "passed" : "blocked"}`;
+      const heading = document.createElement("strong"); heading.textContent = target.dialect;
+      const status = document.createElement("span"); status.className = "answer-badge"; status.textContent = `${target.status} · ${target.evidence}`;
+      const table = document.createElement("code"); table.textContent = target.target_table;
+      const identity = document.createElement("small"); identity.textContent = target.image_identity ? `image ${target.image_identity}` : "No live container receipt yet";
+      card.append(heading, status, table, identity); targets.appendChild(card);
+    });
+    const checks = $("data-checks"); checks.replaceChildren();
+    Object.entries(summary.checks || {}).forEach(([name, passed]) => {
+      const row = document.createElement("div"); row.className = `factory-gate ${passed ? "passed" : "failed"}`;
+      const status = document.createElement("strong"); status.textContent = passed ? "passed" : "blocked";
+      const label = document.createElement("span"); label.textContent = name.replaceAll("_", " ");
+      row.append(status, label); checks.appendChild(row);
+    });
+    $("data-gaps").textContent = (summary.gaps || []).join(" · ") || "No declared gaps";
+    $("data-receipt-hash").textContent = summary.content_sha256 || "No receipt";
+  } catch (error) { setError(error); }
 }
 
 async function loadPortfolio() {

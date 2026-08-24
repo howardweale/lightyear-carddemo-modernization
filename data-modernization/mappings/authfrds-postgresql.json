@@ -1,0 +1,230 @@
+{
+  "adapter": {
+    "id": "factorydark-postgresql",
+    "version": "1.0"
+  },
+  "columns": [
+    {
+      "nullable": false,
+      "source": "CARD_NUM",
+      "source_type": "CHAR(16)",
+      "target": "card_num",
+      "target_type": "CHAR(16)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": false,
+      "source": "AUTH_TS",
+      "source_type": "TIMESTAMP",
+      "target": "auth_ts",
+      "target_type": "TIMESTAMP(6)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "AUTH_TYPE",
+      "source_type": "CHAR(4)",
+      "target": "auth_type",
+      "target_type": "CHAR(4)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "CARD_EXPIRY_DATE",
+      "source_type": "CHAR(4)",
+      "target": "card_expiry_date",
+      "target_type": "CHAR(4)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "MESSAGE_TYPE",
+      "source_type": "CHAR(6)",
+      "target": "message_type",
+      "target_type": "CHAR(6)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "MESSAGE_SOURCE",
+      "source_type": "CHAR(6)",
+      "target": "message_source",
+      "target_type": "CHAR(6)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "AUTH_ID_CODE",
+      "source_type": "CHAR(6)",
+      "target": "auth_id_code",
+      "target_type": "CHAR(6)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "AUTH_RESP_CODE",
+      "source_type": "CHAR(2)",
+      "target": "auth_resp_code",
+      "target_type": "CHAR(2)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "AUTH_RESP_REASON",
+      "source_type": "CHAR(4)",
+      "target": "auth_resp_reason",
+      "target_type": "CHAR(4)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "PROCESSING_CODE",
+      "source_type": "CHAR(6)",
+      "target": "processing_code",
+      "target_type": "CHAR(6)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "TRANSACTION_AMT",
+      "source_type": "DECIMAL(12,2)",
+      "target": "transaction_amt",
+      "target_type": "NUMERIC(12,2)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "APPROVED_AMT",
+      "source_type": "DECIMAL(12,2)",
+      "target": "approved_amt",
+      "target_type": "NUMERIC(12,2)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "MERCHANT_CATAGORY_CODE",
+      "source_type": "CHAR(4)",
+      "target": "merchant_catagory_code",
+      "target_type": "CHAR(4)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "ACQR_COUNTRY_CODE",
+      "source_type": "CHAR(3)",
+      "target": "acqr_country_code",
+      "target_type": "CHAR(3)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "POS_ENTRY_MODE",
+      "source_type": "SMALLINT",
+      "target": "pos_entry_mode",
+      "target_type": "SMALLINT",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "MERCHANT_ID",
+      "source_type": "CHAR(15)",
+      "target": "merchant_id",
+      "target_type": "CHAR(15)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "MERCHANT_NAME",
+      "source_type": "VARCHAR(22)",
+      "target": "merchant_name",
+      "target_type": "VARCHAR(22)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "MERCHANT_CITY",
+      "source_type": "CHAR(13)",
+      "target": "merchant_city",
+      "target_type": "CHAR(13)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "MERCHANT_STATE",
+      "source_type": "CHAR(2)",
+      "target": "merchant_state",
+      "target_type": "CHAR(2)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "MERCHANT_ZIP",
+      "source_type": "CHAR(9)",
+      "target": "merchant_zip",
+      "target_type": "CHAR(9)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "TRANSACTION_ID",
+      "source_type": "CHAR(15)",
+      "target": "transaction_id",
+      "target_type": "CHAR(15)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "MATCH_STATUS",
+      "source_type": "CHAR(1)",
+      "target": "match_status",
+      "target_type": "CHAR(1)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "AUTH_FRAUD",
+      "source_type": "CHAR(1)",
+      "target": "auth_fraud",
+      "target_type": "CHAR(1)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "FRAUD_RPT_DATE",
+      "source_type": "DATE",
+      "target": "fraud_rpt_date",
+      "target_type": "DATE",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "ACCT_ID",
+      "source_type": "DECIMAL(11,0)",
+      "target": "acct_id",
+      "target_type": "NUMERIC(11,0)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "CUST_ID",
+      "source_type": "DECIMAL(9,0)",
+      "target": "cust_id",
+      "target_type": "NUMERIC(9,0)",
+      "transformation": "identity-with-encoding-normalization"
+    }
+  ],
+  "content_sha256": "24f0f0dc82363749d9db4a7294315ec8dc3ca5660e7d800550560195b0d27f45",
+  "known_gaps": [
+    {
+      "id": "live-db2-catalog-not-observed",
+      "severity": "blocking-production",
+      "statement": "The Db2 catalog and live authorization workload have not yet been captured on z/OS."
+    }
+  ],
+  "mapping_type": "target-adapter-mapping",
+  "schema_version": "1.0",
+  "source_dialect": "db2-zos",
+  "source_table": "CARDDEMO.AUTHFRDS",
+  "target_dialect": "postgresql-16",
+  "target_table": "carddemo.authfrds"
+}

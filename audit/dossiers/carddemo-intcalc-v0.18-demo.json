@@ -2,8 +2,8 @@
   "audit": {
     "checkpoint_signature_algorithm": "none",
     "event_count": 20,
-    "ledger_content_sha256": "49b935cee4a51172ffa194bc5f0c4f18c93d70e89be47ea8098f5722ba402453",
-    "ledger_head_sha256": "c2312585c7db4274ebf41a6ca51379a3eef7decbf08e8c67a0af5c37456beda8",
+    "ledger_content_sha256": "1c437b3a27e080af6e446cf3af51ae89de7d8f44583c8a7ad417e47dba29e3ad",
+    "ledger_head_sha256": "d72d6dba88c9aee66a838d6c97d01851e8e51466a3b358f6bfe9f76e82e76222",
     "ledger_id": "lightyear:carddemo:audit"
   },
   "cics_vsam_readiness": {
@@ -17,7 +17,7 @@
       "No external equivalence signing key was configured."
     ]
   },
-  "content_sha256": "28390ad5ca65c3769c16f1b21fa5c6f09feb15c2178ed8b0cb90d66ea8e7fb75",
+  "content_sha256": "f07094bbc6d04985f1b2dc60a514229f4c62005ff33dd4d5b8f82ad3e9b94c15",
   "dossier_type": "lightyear-release-evidence",
   "durable_control_plane": {
     "approval_consumption": "exactly-once",
@@ -47,7 +47,7 @@
     {
       "id": "evidence:source-pack",
       "kind": "source_evidence_pack",
-      "sha256": "1ade0d7a2645c75f4dc8a82c39f42133cfa77c12dabd5610bbdb27bff61ccbc9"
+      "sha256": "92c916166022a3ee99969d1d7cc5453fc00293ad60400cf904d334e791666c84"
     },
     {
       "id": "execution:carddemo-hardened-plane",
@@ -67,7 +67,7 @@
     {
       "id": "lightyear:carddemo-modernization",
       "kind": "graph_snapshot",
-      "sha256": "4fab83d8a18c08ba4ddc60588a5310c35d93201ccad1d565ef398324caabefde"
+      "sha256": "e12917d055e3209f375c314d44fad40ace8d75741afc38f10ba9c88932d4b8b1"
     },
     {
       "id": "memory:verified-experiences",
@@ -77,7 +77,7 @@
     {
       "id": "release:carddemo-intcalc:v0.18-demo",
       "kind": "decision_input",
-      "sha256": "4fab83d8a18c08ba4ddc60588a5310c35d93201ccad1d565ef398324caabefde"
+      "sha256": "e12917d055e3209f375c314d44fad40ace8d75741afc38f10ba9c88932d4b8b1"
     },
     {
       "id": "runtime-run:local-oracle-intcalc-reference",
@@ -145,7 +145,7 @@
     "waves": 2
   },
   "promotion_decision": {
-    "content_sha256": "46ed09678312e632165b826c03e066aa4d5a960314c93419083814e80d873bd8",
+    "content_sha256": "207f9bc04e9e0dd4e4f836f43b8cd12a57249933efc4344bcd0ef8db05cb4bf8",
     "evaluated_at": "2022-07-18T00:00:01.300Z",
     "exception": null,
     "gaps": [
@@ -157,7 +157,7 @@
       "execution_decision_ids": [
         "decision:execution:hardened-readiness"
       ],
-      "graph_content_sha256": "4fab83d8a18c08ba4ddc60588a5310c35d93201ccad1d565ef398324caabefde",
+      "graph_content_sha256": "e12917d055e3209f375c314d44fad40ace8d75741afc38f10ba9c88932d4b8b1",
       "runtime_decision_ids": [
         "decision:local-oracle-intcalc-reference:development_readiness",
         "decision:local-oracle-intcalc-reference:mainframe_equivalence",
@@ -166,7 +166,7 @@
         "decision:zosmf-intcalc-job00001:development_readiness",
         "decision:zosmf-intcalc-job00001:mainframe_equivalence"
       ],
-      "source_evidence_content_sha256": "1ade0d7a2645c75f4dc8a82c39f42133cfa77c12dabd5610bbdb27bff61ccbc9"
+      "source_evidence_content_sha256": "92c916166022a3ee99969d1d7cc5453fc00293ad60400cf904d334e791666c84"
     },
     "override_allowed": false,
     "policy_id": "release.promotion",

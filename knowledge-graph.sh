@@ -35,6 +35,7 @@ if [[ "$action" == "build" ]]; then
     --manifest "$project_dir/knowledge/mappings/carddemo-cics-vsam-account-view.json" \
     --manifest "$project_dir/knowledge/mappings/carddemo-asm-date-format.json" \
     --manifest "$project_dir/knowledge/mappings/carddemo-ims-expired-authorization-purge.json" \
+    --manifest "$project_dir/knowledge/mappings/carddemo-db2-authfrds.json" \
     --ontology "$project_dir/knowledge/ontology/relationships.json" \
     --output "$project_dir/knowledge/graph.snapshot.json.gz" \
     --receipt "$project_dir/knowledge/graph.receipt.json" \
@@ -58,6 +59,7 @@ elif [[ "$action" == "verify" ]]; then
     --manifest "$project_dir/knowledge/mappings/carddemo-cics-vsam-account-view.json" \
     --manifest "$project_dir/knowledge/mappings/carddemo-asm-date-format.json" \
     --manifest "$project_dir/knowledge/mappings/carddemo-ims-expired-authorization-purge.json" \
+    --manifest "$project_dir/knowledge/mappings/carddemo-db2-authfrds.json" \
     --ontology "$project_dir/knowledge/ontology/relationships.json" \
     --output "$generated/graph.snapshot.json.gz" \
     --receipt "$generated/graph.receipt.json" \

@@ -21,6 +21,7 @@ fi
   --ledger "$project_dir/spec/comparison-normalizations.json"
 "$project_dir/model-workcell.sh" validate
 "$project_dir/hardened-execution.sh" verify
+"$project_dir/data-modernization.sh" verify
 "$project_dir/knowledge-graph.sh" verify
 "$project_dir/runtime-evidence.sh" verify
 "$project_dir/semantic-memory.sh" validate

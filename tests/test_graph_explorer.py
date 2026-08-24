@@ -27,7 +27,8 @@ class GraphExplorerTests(unittest.TestCase):
 
     def test_curated_perspectives_resolve_to_graph_nodes(self) -> None:
         perspectives = self.index.perspectives()
-        self.assertEqual(5, len(perspectives))
+        self.assertEqual(6, len(perspectives))
+        self.assertIn("authfrds-data-lineage", {item["id"] for item in perspectives})
         self.assertTrue(all(item["root"] in self.index.node_by_id for item in perspectives))
 
     def test_every_explorer_route_respects_private_visibility(self) -> None:
@@ -67,6 +68,11 @@ class GraphExplorerTests(unittest.TestCase):
             with urlopen(f"{base}/api/meta", timeout=3) as response:
                 metadata = json.load(response)
             self.assertEqual(self.payload["content_sha256"], metadata["content_sha256"])
+            self.assertEqual(26, metadata["data"]["columns"])
+            with urlopen(f"{base}/api/data/summary", timeout=3) as response:
+                data = json.load(response)
+            self.assertEqual("passed", data["status"])
+            self.assertFalse(data["production_ready"])
             with urlopen(f"{base}/", timeout=3) as response:
                 body = response.read().decode("utf-8")
             self.assertIn("LIGHTYEAR Control Tower", body)

@@ -1,0 +1,235 @@
+{
+  "adapter": {
+    "id": "factorydark-oracle",
+    "version": "1.0"
+  },
+  "columns": [
+    {
+      "nullable": false,
+      "source": "CARD_NUM",
+      "source_type": "CHAR(16)",
+      "target": "CARD_NUM",
+      "target_type": "CHAR(16 CHAR)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": false,
+      "source": "AUTH_TS",
+      "source_type": "TIMESTAMP",
+      "target": "AUTH_TS",
+      "target_type": "TIMESTAMP(6)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "AUTH_TYPE",
+      "source_type": "CHAR(4)",
+      "target": "AUTH_TYPE",
+      "target_type": "CHAR(4 CHAR)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "CARD_EXPIRY_DATE",
+      "source_type": "CHAR(4)",
+      "target": "CARD_EXPIRY_DATE",
+      "target_type": "CHAR(4 CHAR)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "MESSAGE_TYPE",
+      "source_type": "CHAR(6)",
+      "target": "MESSAGE_TYPE",
+      "target_type": "CHAR(6 CHAR)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "MESSAGE_SOURCE",
+      "source_type": "CHAR(6)",
+      "target": "MESSAGE_SOURCE",
+      "target_type": "CHAR(6 CHAR)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "AUTH_ID_CODE",
+      "source_type": "CHAR(6)",
+      "target": "AUTH_ID_CODE",
+      "target_type": "CHAR(6 CHAR)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "AUTH_RESP_CODE",
+      "source_type": "CHAR(2)",
+      "target": "AUTH_RESP_CODE",
+      "target_type": "CHAR(2 CHAR)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "AUTH_RESP_REASON",
+      "source_type": "CHAR(4)",
+      "target": "AUTH_RESP_REASON",
+      "target_type": "CHAR(4 CHAR)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "PROCESSING_CODE",
+      "source_type": "CHAR(6)",
+      "target": "PROCESSING_CODE",
+      "target_type": "CHAR(6 CHAR)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "TRANSACTION_AMT",
+      "source_type": "DECIMAL(12,2)",
+      "target": "TRANSACTION_AMT",
+      "target_type": "NUMBER(12,2)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "APPROVED_AMT",
+      "source_type": "DECIMAL(12,2)",
+      "target": "APPROVED_AMT",
+      "target_type": "NUMBER(12,2)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "MERCHANT_CATAGORY_CODE",
+      "source_type": "CHAR(4)",
+      "target": "MERCHANT_CATAGORY_CODE",
+      "target_type": "CHAR(4 CHAR)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "ACQR_COUNTRY_CODE",
+      "source_type": "CHAR(3)",
+      "target": "ACQR_COUNTRY_CODE",
+      "target_type": "CHAR(3 CHAR)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "POS_ENTRY_MODE",
+      "source_type": "SMALLINT",
+      "target": "POS_ENTRY_MODE",
+      "target_type": "NUMBER(5,0)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "MERCHANT_ID",
+      "source_type": "CHAR(15)",
+      "target": "MERCHANT_ID",
+      "target_type": "CHAR(15 CHAR)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "MERCHANT_NAME",
+      "source_type": "VARCHAR(22)",
+      "target": "MERCHANT_NAME",
+      "target_type": "VARCHAR2(22 CHAR)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "MERCHANT_CITY",
+      "source_type": "CHAR(13)",
+      "target": "MERCHANT_CITY",
+      "target_type": "CHAR(13 CHAR)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "MERCHANT_STATE",
+      "source_type": "CHAR(2)",
+      "target": "MERCHANT_STATE",
+      "target_type": "CHAR(2 CHAR)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "MERCHANT_ZIP",
+      "source_type": "CHAR(9)",
+      "target": "MERCHANT_ZIP",
+      "target_type": "CHAR(9 CHAR)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "TRANSACTION_ID",
+      "source_type": "CHAR(15)",
+      "target": "TRANSACTION_ID",
+      "target_type": "CHAR(15 CHAR)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "MATCH_STATUS",
+      "source_type": "CHAR(1)",
+      "target": "MATCH_STATUS",
+      "target_type": "CHAR(1 CHAR)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "AUTH_FRAUD",
+      "source_type": "CHAR(1)",
+      "target": "AUTH_FRAUD",
+      "target_type": "CHAR(1 CHAR)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "FRAUD_RPT_DATE",
+      "source_type": "DATE",
+      "target": "FRAUD_RPT_DATE",
+      "target_type": "DATE",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "ACCT_ID",
+      "source_type": "DECIMAL(11,0)",
+      "target": "ACCT_ID",
+      "target_type": "NUMBER(11,0)",
+      "transformation": "identity-with-encoding-normalization"
+    },
+    {
+      "nullable": true,
+      "source": "CUST_ID",
+      "source_type": "DECIMAL(9,0)",
+      "target": "CUST_ID",
+      "target_type": "NUMBER(9,0)",
+      "transformation": "identity-with-encoding-normalization"
+    }
+  ],
+  "content_sha256": "a948a0567245bc7c15fda3d8d2dc742ccee5691db4ee034d947b1671ab6f172f",
+  "known_gaps": [
+    {
+      "id": "oracle-empty-string-is-null",
+      "severity": "requires-data-profile",
+      "statement": "Oracle treats zero-length character values as NULL; live source profiling must prove this is safe."
+    },
+    {
+      "id": "live-db2-catalog-not-observed",
+      "severity": "blocking-production",
+      "statement": "The Db2 catalog and live authorization workload have not yet been captured on z/OS."
+    }
+  ],
+  "mapping_type": "target-adapter-mapping",
+  "schema_version": "1.0",
+  "source_dialect": "db2-zos",
+  "source_table": "CARDDEMO.AUTHFRDS",
+  "target_dialect": "oracle-26ai-free",
+  "target_table": "CARDDEMO.AUTHFRDS"
+}

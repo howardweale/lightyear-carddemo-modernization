@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://factorydark.ai/schema/canonical-data-model.schema.json",
+  "type": "object",
+  "required": ["schema_version", "model_type", "schema", "name", "columns", "constraints", "indexes", "content_sha256"],
+  "properties": {
+    "model_type": {"const": "factorydark-canonical-data-model"},
+    "columns": {"type": "array", "minItems": 1},
+    "constraints": {"type": "array", "minItems": 1},
+    "indexes": {"type": "array"},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

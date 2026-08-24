@@ -17,11 +17,25 @@ if ($Command -eq "build") {
   Run-Python -m lightyear_data build --legacy-root $LegacyRoot --output-root $Output
   Run-Python -m lightyear_data validate --project-root $Output
   Run-Python -m lightyear_data verify-offline --project-root $Output
-  $Expected = Get-ChildItem (Join-Path $ProjectDir "data-modernization") -Recurse -File
-  foreach ($File in $Expected) {
-    $Relative = $File.FullName.Substring((Join-Path $ProjectDir "data-modernization").Length).TrimStart('\')
+  $ExpectedFiles = @(
+    "canonical/authfrds.model.json"
+    "source/authfrds.dcl-contract.json"
+    "source/authfrds.embedded-sql.json"
+    "mappings/authfrds-postgresql.json"
+    "mappings/authfrds-oracle.json"
+    "fixtures/authfrds.fixtures.json"
+    "postgres/authfrds.sql"
+    "oracle/authfrds.sql"
+    "receipts/authfrds.offline.receipt.json"
+    "receipts/authfrds.oracle-offline.receipt.json"
+    "receipts/authfrds.target-plan.json"
+  )
+  foreach ($Relative in $ExpectedFiles) {
+    $Expected = Join-Path (Join-Path $ProjectDir "data-modernization") $Relative
     $Actual = Join-Path (Join-Path $Output "data-modernization") $Relative
-    if (-not (Test-Path $Actual) -or (Get-FileHash $File.FullName).Hash -ne (Get-FileHash $Actual).Hash) { throw "Generated data artifact differs: $Relative" }
+    if (-not (Test-Path $Actual) -or (Get-FileHash $Expected).Hash -ne (Get-FileHash $Actual).Hash) {
+      throw "Generated data artifact differs: $Relative"
+    }
   }
   Write-Host "AUTHFRDS canonical model, PostgreSQL/Oracle mappings, fixtures, and signed development receipts are deterministic."
 } elseif ($Command -in @("live", "live-postgres")) {

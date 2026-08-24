@@ -47,6 +47,12 @@ jobs:
       - name: Check out source
         uses: actions/checkout@v7
 
+      - name: Check out pinned CardDemo source
+        shell: bash
+        run: |
+          git -c core.autocrlf=false -c core.eol=lf clone --filter=blob:none --no-checkout https://github.com/aws-samples/aws-mainframe-modernization-carddemo.git ../carddemo-upstream
+          git -C ../carddemo-upstream -c core.autocrlf=false -c core.eol=lf checkout --detach 59cc6c2fd7ebd7ef7925cad552a01a4b8b6e4d5e
+
       - name: Set up Python
         uses: actions/setup-python@v7
         with:

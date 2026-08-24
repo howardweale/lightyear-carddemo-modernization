@@ -4,7 +4,7 @@
 
 **Decision:** **BLOCKED**
 
-**Dossier identity:** `22932564eff577393eb557a311de7f11220444bb47140b9b7786a5df0a56ef15`
+**Dossier identity:** `2182ae9f0bef60b04995c1e9a444448d36885e39c7c96bd9e7a0ab6349aa5f98`
 
 ## Promotion rationale
 
@@ -38,7 +38,7 @@ Release is blocked until every independent runtime and execution-security gate h
 | `operational_control_policy` | `control-tower:live-evidence-plane` | `943f4c1626a3ac66…` |
 | `source_evidence_pack` | `evidence:source-pack` | `d161540bb54b9b8c…` |
 | `decision_input` | `execution:carddemo-hardened-plane` | `83d937880f17192b…` |
-| `durable_conformance_receipt` | `factory:durable-conformance` | `d2286b4ce6b94d26…` |
+| `durable_conformance_receipt` | `factory:durable-conformance` | `4b362f12a0427750…` |
 | `durable_execution_policy` | `factory:durable-control-plane` | `72b0c927dc60dc8b…` |
 | `graph_snapshot` | `lightyear:carddemo-modernization` | `dba240076dd7452f…` |
 | `semantic_memory_snapshot` | `memory:verified-experiences` | `42000f0e821e12b7…` |
@@ -67,7 +67,7 @@ Release is blocked until every independent runtime and execution-security gate h
 
 - Ledger: `lightyear:carddemo:audit`
 - Events: 21
-- Ledger head: `6e11150d88b9bc29e43929f6e20c838e55f8b450a55ff94978f260ebcffdfa1d`
+- Ledger head: `096cc386b32be95c0cb79a0478f83bdc0ba6905d71a2bba836608c8992acee26`
 - Signature algorithm: `none`
 
 ## CICS/VSAM readiness

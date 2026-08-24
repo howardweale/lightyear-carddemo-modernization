@@ -68,6 +68,13 @@ DEFAULT_PERSPECTIVES = [
         "root": "rule:intcalc:source-final-account",
         "depth": 2,
     },
+    {
+        "id": "authfrds-data-lineage",
+        "name": "AUTHFRDS data lineage",
+        "description": "Db2 table, columns, DCL, embedded SQL, business rules, and PostgreSQL proof.",
+        "root": "workload:carddemo-db2-authfrds",
+        "depth": 3,
+    },
 ]
 
 
@@ -468,6 +475,10 @@ class ExplorerServer(ThreadingHTTPServer):
                 self.memory_store.summary,
             ),
             OperationalSource(
+                "data", (self.project_root / "data-modernization",), "data-equivalence-receipt", 15,
+                self.data_summary,
+            ),
+            OperationalSource(
                 "runtime", (self.runtime_path,), "runtime-observation", 30,
                 self.runtime_summary,
             ),
@@ -520,6 +531,61 @@ class ExplorerServer(ThreadingHTTPServer):
                 },
             }
         return self.audit_store.summary()
+
+    def data_summary(self) -> dict[str, Any]:
+        root = self.project_root / "data-modernization"
+
+        def load(relative: str) -> dict[str, Any]:
+            path = root / relative
+            return json.loads(path.read_text(encoding="utf-8")) if path.is_file() else {}
+
+        model = load("canonical/authfrds.model.json")
+        mapping = load("mappings/authfrds-postgresql.json")
+        oracle_mapping = load("mappings/authfrds-oracle.json")
+        receipt = load("receipts/authfrds.offline.receipt.json")
+        oracle_offline = load("receipts/authfrds.oracle-offline.receipt.json")
+        live_root = self.project_root / "work/data-modernization"
+        def load_live(name: str) -> dict[str, Any]:
+            path = live_root / name
+            return json.loads(path.read_text(encoding="utf-8")) if path.is_file() else {}
+        targets = []
+        for target_mapping, offline, filename in (
+            (mapping, receipt, "live-postgresql.receipt.json"),
+            (oracle_mapping, oracle_offline, "live-oracle.receipt.json"),
+        ):
+            live = load_live(filename)
+            active = live or offline
+            targets.append({
+                "dialect": target_mapping.get("target_dialect", "not_available"),
+                "target_table": target_mapping.get("target_table", ""),
+                "adapter": target_mapping.get("adapter", {}),
+                "evidence": "live-container" if live else "offline-development",
+                "status": active.get("status", "not_available"),
+                "production_ready": active.get("production_ready", False),
+                "checks": active.get("checks", {}),
+                "gaps": active.get("gaps", []),
+                "content_sha256": active.get("content_sha256"),
+                "image_identity": live.get("image_identity"),
+            })
+        return {
+            "workload": receipt.get("workload", "carddemo-authorization-authfrds"),
+            "status": receipt.get("status", "not_available"),
+            "production_ready": receipt.get("production_ready", False),
+            "evidence_class": receipt.get("evidence_class", "not_available"),
+            "source_table": f"{model.get('schema', '')}.{model.get('name', '')}".strip("."),
+            "target_table": mapping.get("target_table", ""),
+            "targets": targets,
+            "statistics": {
+                "columns": len(model.get("columns", [])),
+                "constraints": len(model.get("constraints", [])),
+                "indexes": len(model.get("indexes", [])),
+                "fixture_rows": receipt.get("statistics", {}).get("rows", 0),
+            },
+            "checks": receipt.get("checks", {}),
+            "gaps": receipt.get("gaps", []),
+            "content_sha256": receipt.get("content_sha256"),
+            "signature": receipt.get("signature"),
+        }
 
 
 class ExplorerRequestHandler(BaseHTTPRequestHandler):
@@ -592,6 +658,7 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
                 "waves": len(portfolio.get("waves", [])),
             }
             metadata["durable"] = self.server.durable_store.summary()["statistics"]
+            metadata["data"] = self.server.data_summary()["statistics"]
             self._json(metadata)
             return
         if path == "/api/chat/status":
@@ -645,6 +712,9 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
             return
         if path == "/api/runtime/summary":
             self._json(self.server.runtime_summary())
+            return
+        if path == "/api/data/summary":
+            self._json(self.server.data_summary())
             return
         if path == "/api/runtime/run":
             self.server.refresh_live_projections()

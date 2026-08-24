@@ -70,7 +70,7 @@ class LiveControlTowerTests(unittest.TestCase):
         self.assertEqual("disabled", policy["command_plane"])
         self.assertTrue(policy["loopback_only"])
         self.assertEqual(
-            {"factory", "portfolio", "recovery", "quality", "memory", "runtime", "audit"},
+            {"factory", "portfolio", "recovery", "quality", "memory", "data", "runtime", "audit"},
             set(policy["sources"]),
         )
 

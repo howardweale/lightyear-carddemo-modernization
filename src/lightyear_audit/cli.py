@@ -31,9 +31,10 @@ DEFAULT_DURABLE_POLICY = Path("factory/durable/policy.json")
 DEFAULT_DURABLE_CONFORMANCE = Path("factory/durable/conformance.receipt.json")
 DEFAULT_CONTROL_TOWER_POLICY = Path("control-tower/policy.json")
 DEFAULT_CICS_VSAM_READINESS = Path("readiness/cics-vsam/readiness-receipt.json")
-DEFAULT_DOSSIER_JSON = Path("audit/dossiers/carddemo-intcalc-v0.18-demo.json")
-DEFAULT_DOSSIER_MD = Path("audit/dossiers/carddemo-intcalc-v0.18-demo.md")
-DEFAULT_RELEASE = "release:carddemo-intcalc:v0.18-demo"
+DEFAULT_DATA_EQUIVALENCE = Path("data-modernization/receipts/authfrds.offline.receipt.json")
+DEFAULT_DOSSIER_JSON = Path("audit/dossiers/carddemo-intcalc-v0.19-demo.json")
+DEFAULT_DOSSIER_MD = Path("audit/dossiers/carddemo-intcalc-v0.19-demo.md")
+DEFAULT_RELEASE = "release:carddemo-intcalc:v0.19-demo"
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -53,6 +54,7 @@ def build_parser() -> argparse.ArgumentParser:
     build.add_argument("--durable-conformance", type=Path, default=DEFAULT_DURABLE_CONFORMANCE)
     build.add_argument("--control-tower-policy", type=Path, default=DEFAULT_CONTROL_TOWER_POLICY)
     build.add_argument("--cics-vsam-readiness", type=Path, default=DEFAULT_CICS_VSAM_READINESS)
+    build.add_argument("--data-equivalence", type=Path, default=DEFAULT_DATA_EQUIVALENCE)
     build.add_argument("--output", type=Path, default=DEFAULT_SNAPSHOT)
     build.add_argument("--dossier-json", type=Path, default=DEFAULT_DOSSIER_JSON)
     build.add_argument("--dossier-markdown", type=Path, default=DEFAULT_DOSSIER_MD)
@@ -106,6 +108,7 @@ def main(argv: list[str] | None = None) -> int:
             args.durable_conformance,
             args.control_tower_policy,
             args.cics_vsam_readiness,
+            args.data_equivalence,
         )
         write_snapshot(payload, args.output)
         dossier = build_dossier(payload, args.release)

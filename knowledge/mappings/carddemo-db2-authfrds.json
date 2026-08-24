@@ -1,0 +1,42 @@
+{
+  "workloads": [
+    {
+      "id": "workload:carddemo-db2-authfrds",
+      "name": "CardDemo Db2 AUTHFRDS data modernization",
+      "status": "offline-development-proven-live-db2-pending",
+      "legacy_entrypoints": ["legacy:db2-table:CARDDEMO.AUTHFRDS", "legacy:cobol-program:COPAUS2C"],
+      "modern_entrypoints": ["modern:file:src/lightyear_data/postgres.py", "modern:file:src/lightyear_data/equivalence.py"],
+      "scenarios": [
+        {"id": "scenario:data-authfrds:offline-equivalence", "name": "Offline AUTHFRDS schema and data equivalence", "kind": "local-deterministic", "status": "passed"},
+        {"id": "scenario:data-authfrds:docker-postgresql", "name": "Docker PostgreSQL 16 behavioral proof", "kind": "local-container", "status": "available-on-demand"},
+        {"id": "scenario:data-authfrds:live-db2", "name": "Live Db2 for z/OS catalog and row equivalence", "kind": "zos-observed", "status": "blocked-pending-mainframe"}
+      ],
+      "rules": [
+        {
+          "id": "rule:data-authfrds:composite-key", "name": "Authorization composite identity",
+          "statement": "An authorization is uniquely identified by card number and authorization timestamp.",
+          "derived_from": [{"node": "legacy:db2-table:CARDDEMO.AUTHFRDS", "path": "app/app-authorization-ims-db2-mq/ddl/AUTHFRDS.ddl", "line_start": 20, "line_end": 54}],
+          "implemented_by": ["modern:file:src/lightyear_data/postgres.py"], "verified_by": ["scenario:data-authfrds:offline-equivalence"]
+        },
+        {
+          "id": "rule:data-authfrds:insert", "name": "Authorization insert contract",
+          "statement": "COPAUS2C inserts the complete 26-column authorization record into AUTHFRDS.",
+          "derived_from": [{"node": "legacy:db2-sql:COPAUS2C:141:3", "path": "app/app-authorization-ims-db2-mq/cbl/COPAUS2C.cbl", "line_start": 141, "line_end": 198}],
+          "implemented_by": ["modern:file:src/lightyear_data/equivalence.py"], "verified_by": ["scenario:data-authfrds:offline-equivalence"]
+        },
+        {
+          "id": "rule:data-authfrds:fraud-update", "name": "Fraud status update contract",
+          "statement": "A duplicate authorization updates fraud status and report date for the same card and timestamp.",
+          "derived_from": [{"node": "legacy:db2-sql:COPAUS2C:222:4", "path": "app/app-authorization-ims-db2-mq/cbl/COPAUS2C.cbl", "line_start": 221, "line_end": 229}],
+          "implemented_by": ["modern:file:src/lightyear_data/equivalence.py"], "verified_by": ["scenario:data-authfrds:offline-equivalence", "scenario:data-authfrds:docker-postgresql"]
+        },
+        {
+          "id": "rule:data-authfrds:rollback", "name": "Transactional rollback preservation",
+          "statement": "A rolled-back AUTHFRDS change leaves row count and stored authorizations unchanged.",
+          "derived_from": [{"node": "legacy:db2-table:CARDDEMO.AUTHFRDS", "path": "app/app-authorization-ims-db2-mq/ddl/AUTHFRDS.ddl", "line_start": 20, "line_end": 54}],
+          "implemented_by": ["modern:file:src/lightyear_data/equivalence.py"], "verified_by": ["scenario:data-authfrds:docker-postgresql"]
+        }
+      ]
+    }
+  ]
+}

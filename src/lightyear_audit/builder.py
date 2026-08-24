@@ -25,12 +25,13 @@ def build_canonical_audit(
     signing_key: bytes | None = None,
     execution_receipt_path: Path | None = None,
     memory_snapshot_path: Path | None = None,
-    release_id: str = "release:carddemo-intcalc:v0.18-demo",
+    release_id: str = "release:carddemo-intcalc:v0.19-demo",
     portfolio_plan_path: Path | None = None,
     durable_policy_path: Path | None = None,
     durable_conformance_path: Path | None = None,
     control_tower_policy_path: Path | None = None,
     cics_vsam_readiness_path: Path | None = None,
+    data_equivalence_path: Path | None = None,
 ) -> dict[str, Any]:
     graph = json.loads(graph_receipt_path.read_text(encoding="utf-8"))
     evidence = json.loads(evidence_receipt_path.read_text(encoding="utf-8"))
@@ -187,6 +188,25 @@ def build_canonical_audit(
                 "checks": readiness["checks"],
                 "unresolved_gaps": readiness["unresolved_gaps"],
                 "signed": readiness["signature"] is not None,
+            },
+        ))
+
+    if data_equivalence_path is not None and data_equivalence_path.is_file():
+        data_receipt = json.loads(data_equivalence_path.read_text(encoding="utf-8"))
+        if canonical_hash(data_receipt, {"content_sha256", "signature"}) != data_receipt.get("content_sha256"):
+            raise ValueError("Data-equivalence receipt failed content hash validation")
+        drafts.append(_draft(
+            "2022-07-18T00:00:00.247Z",
+            "system:data-modernization", "verifier", "data.equivalence_recorded",
+            "data_modernization_workload", data_receipt["workload"],
+            [{"id": data_receipt["workload"], "kind": "data_equivalence_receipt", "sha256": data_receipt["content_sha256"]}],
+            {
+                "status": data_receipt["status"],
+                "evidence_class": data_receipt["evidence_class"],
+                "production_ready": data_receipt["production_ready"],
+                "checks": data_receipt["checks"],
+                "gaps": data_receipt["gaps"],
+                "signed": data_receipt.get("signature") is not None,
             },
         ))
 

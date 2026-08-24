@@ -1,0 +1,8 @@
+@@ -14,6 +14,7 @@
+ - Made Oracle readiness fail closed on an exact `FD_READY` query marker instead of accepting digits embedded in connection errors.
+ - Run Oracle on an ephemeral Docker `--internal` bridge, connect `SYSTEM` through `FREE`, and switch the session into `FREEPDB1`; this supplies the private IP required by `netca` without publishing ports or permitting external egress.
+ - Fail immediately when the Oracle container exits, bind failures to a startup-log hash, and record the vendor entrypoint's requirement for default capabilities and disabled `no-new-privileges` as explicit non-production security gaps.
++- Keep bounded Oracle JSON evidence on one SQL*Plus line with `VARCHAR2(4000)` and `WRAP OFF`, and replace the SQL*Plus bind-variable transaction probe with separate, bind-free statements that independently preserve committed state and prove rollback restoration.
+ 
+ ## 0.19.1 — 2026-08-23
+ 

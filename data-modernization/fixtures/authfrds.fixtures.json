@@ -1,0 +1,104 @@
+{
+  "content_sha256": "f2dcda58733e6cca9551adb904856496bd803354c2511c14e61db66945c6f5e4",
+  "coverage": [
+    "ebcdic-cp037",
+    "packed-decimal",
+    "zoned-decimal",
+    "date",
+    "null",
+    "fixed-width"
+  ],
+  "expected_results": {
+    "fraud_authorization_count": 1,
+    "rollback_row_count": 2,
+    "row_checksums": [
+      "2a7d555ac1db0081c5aff51dd5378631d715117eca4d0d70467033cdf3fb48f6",
+      "92235c9e35356db7cb03e698756a069d9f1d04fa396e47e2549ffc06afe2c5c8"
+    ],
+    "row_count": 2,
+    "total_approved_amount": "125.50"
+  },
+  "fixture_type": "db2-postgresql-boundary-fixtures",
+  "rows": [
+    {
+      "ACCT_ID": "10000000001",
+      "ACQR_COUNTRY_CODE": "840",
+      "APPROVED_AMT": "125.50",
+      "AUTH_FRAUD": "N",
+      "AUTH_ID_CODE": "A10001",
+      "AUTH_RESP_CODE": "00",
+      "AUTH_RESP_REASON": "APRV",
+      "AUTH_TS": "2026-08-20T10:15:30.123456",
+      "AUTH_TYPE": "SALE",
+      "CARD_EXPIRY_DATE": "2808",
+      "CARD_NUM": "4000000000000001",
+      "CUST_ID": "100000001",
+      "FRAUD_RPT_DATE": null,
+      "MATCH_STATUS": "M",
+      "MERCHANT_CATAGORY_CODE": "5411",
+      "MERCHANT_CITY": "SAN FRANCISCO",
+      "MERCHANT_ID": "M00000000000001",
+      "MERCHANT_NAME": "FactoryDark Market",
+      "MERCHANT_STATE": "CA",
+      "MERCHANT_ZIP": "941050000",
+      "MESSAGE_SOURCE": "POS001",
+      "MESSAGE_TYPE": "010000",
+      "POS_ENTRY_MODE": 5,
+      "PROCESSING_CODE": "000000",
+      "TRANSACTION_AMT": "125.50",
+      "TRANSACTION_ID": "TX0000000000001"
+    },
+    {
+      "ACCT_ID": "10000000002",
+      "ACQR_COUNTRY_CODE": "036",
+      "APPROVED_AMT": "0.00",
+      "AUTH_FRAUD": "Y",
+      "AUTH_ID_CODE": "A10002",
+      "AUTH_RESP_CODE": "05",
+      "AUTH_RESP_REASON": "DECL",
+      "AUTH_TS": "2026-08-20T10:16:31.000001",
+      "AUTH_TYPE": "RFND",
+      "CARD_EXPIRY_DATE": "2712",
+      "CARD_NUM": "4000000000000002",
+      "CUST_ID": null,
+      "FRAUD_RPT_DATE": "2026-08-21",
+      "MATCH_STATUS": "U",
+      "MERCHANT_CATAGORY_CODE": "5999",
+      "MERCHANT_CITY": "MELBOURNE",
+      "MERCHANT_ID": "M00000000000002",
+      "MERCHANT_NAME": "Null Name Test",
+      "MERCHANT_STATE": "VI",
+      "MERCHANT_ZIP": "300000000",
+      "MESSAGE_SOURCE": "WEB001",
+      "MESSAGE_TYPE": "010000",
+      "POS_ENTRY_MODE": 81,
+      "PROCESSING_CODE": "200000",
+      "TRANSACTION_AMT": "-9.99",
+      "TRANSACTION_ID": "TX0000000000002"
+    }
+  ],
+  "schema_version": "1.0",
+  "source_encoding_evidence": [
+    {
+      "card_num_ebcdic_hex": "F4F0F0F0F0F0F0F0F0F0F0F0F0F0F0F1",
+      "merchant_name_ebcdic_fixed_22_hex": "C68183A39699A8C481999240D481999285A340404040",
+      "null_columns": [
+        "FRAUD_RPT_DATE"
+      ],
+      "row": 1,
+      "transaction_amount_packed_decimal_hex": "0000000012550C",
+      "transaction_amount_zoned_decimal_hex": "F0F0F0F0F0F0F0F1F2F5F5C0"
+    },
+    {
+      "card_num_ebcdic_hex": "F4F0F0F0F0F0F0F0F0F0F0F0F0F0F0F2",
+      "merchant_name_ebcdic_fixed_22_hex": "D5A4939340D581948540E385A2A34040404040404040",
+      "null_columns": [
+        "CUST_ID"
+      ],
+      "row": 2,
+      "transaction_amount_packed_decimal_hex": "0000000000999D",
+      "transaction_amount_zoned_decimal_hex": "F0F0F0F0F0F0F0F0F0F9F9D9"
+    }
+  ],
+  "table": "CARDDEMO.AUTHFRDS"
+}

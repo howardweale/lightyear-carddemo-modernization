@@ -13,7 +13,7 @@ from typing import Any, Callable, Iterable
 
 
 SCHEMA_VERSION = "1.0"
-SOURCE_ORDER = ("factory", "portfolio", "recovery", "quality", "memory", "runtime", "audit")
+SOURCE_ORDER = ("factory", "portfolio", "recovery", "quality", "memory", "data", "runtime", "audit")
 
 
 def _utc_now() -> datetime:

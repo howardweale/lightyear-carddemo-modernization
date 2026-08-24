@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://factorydark.ai/schema/data-equivalence-receipt.schema.json",
+  "type": "object",
+  "required": ["receipt_type", "status", "production_ready", "bindings", "checks", "errors", "gaps", "content_sha256"],
+  "properties": {
+    "receipt_type": {"const": "factorydark-data-equivalence"},
+    "status": {"enum": ["passed", "failed", "indeterminate"]},
+    "production_ready": {"type": "boolean"},
+    "bindings": {"type": "object", "required": ["canonical_model_sha256", "target_mapping_sha256", "fixture_catalog_sha256"]},
+    "checks": {"type": "object"},
+    "errors": {"type": "array"},
+    "gaps": {"type": "array"},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

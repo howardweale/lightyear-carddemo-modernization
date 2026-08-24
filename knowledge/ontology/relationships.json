@@ -76,6 +76,9 @@
         ["source_file", "jcl_procedure"],
         ["source_file", "ims_database"],
         ["source_file", "ims_psb"],
+        ["source_file", "db2_dcl"],
+        ["source_file", "db2_index"],
+        ["source_file", "db2_table"],
         ["source_file", "software_dependency"],
         ["source_file", "vsam_alternate_index"],
         ["source_file", "vsam_cluster"],
@@ -110,6 +113,8 @@
         ["business_rule", "cobol_paragraph"],
         ["business_rule", "cobol_program"],
         ["business_rule", "copybook"],
+        ["business_rule", "db2_sql_statement"],
+        ["business_rule", "db2_table"],
         ["business_rule", "ims_database"],
         ["business_rule", "ims_field"],
         ["business_rule", "ims_pcb"],
@@ -179,7 +184,8 @@
         ["modernization_workload", "cics_transaction"],
         ["modernization_workload", "cobol_program"],
         ["modernization_workload", "ims_database"],
-        ["modernization_workload", "ims_psb"]
+        ["modernization_workload", "ims_psb"],
+        ["modernization_workload", "db2_table"]
       ],
       "category": "semantic-traceability",
       "direction": "workload to legacy entry point",
@@ -372,12 +378,42 @@
       "purpose": "Connects an IMS DBD to a DATASET macro and its DD, record, or access attributes."
     },
     "INDEXES": {
-      "allowed_pairs": [["ims_segment", "ims_segment"]],
+      "allowed_pairs": [["ims_segment", "ims_segment"], ["db2_index", "db2_table"]],
       "category": "data-lineage",
       "direction": "IMS logical child to indexed segment",
       "evidence_policy": "edge",
       "label": "indexes",
       "purpose": "Represents an IMS LCHILD relationship between index and target database segments."
+    },
+    "DESCRIBES": {
+      "allowed_pairs": [["db2_dcl", "db2_table"]],
+      "category": "data-lineage", "direction": "host contract to table", "evidence_policy": "edge",
+      "label": "describes", "purpose": "Connects a Db2 DCL host-variable contract to the table it describes."
+    },
+    "HAS_COLUMN": {
+      "allowed_pairs": [["db2_table", "db2_column"]],
+      "category": "structure", "direction": "table to column", "evidence_policy": "endpoint-or-edge",
+      "label": "has column", "purpose": "Connects a Db2 table to a deterministically parsed column."
+    },
+    "HAS_CONSTRAINT": {
+      "allowed_pairs": [["db2_table", "db2_constraint"]],
+      "category": "structure", "direction": "table to constraint", "evidence_policy": "endpoint-or-edge",
+      "label": "has constraint", "purpose": "Connects a Db2 table to a parsed key or integrity constraint."
+    },
+    "ISSUES_SQL": {
+      "allowed_pairs": [["cobol_paragraph", "db2_sql_statement"], ["cobol_program", "db2_sql_statement"]],
+      "category": "control-flow", "direction": "COBOL scope to SQL statement", "evidence_policy": "edge",
+      "label": "issues SQL", "purpose": "Records the COBOL scope that issues an embedded SQL statement."
+    },
+    "REFERENCES_COLUMN": {
+      "allowed_pairs": [["db2_sql_statement", "db2_column"]],
+      "category": "data-lineage", "direction": "SQL statement to referenced column", "evidence_policy": "edge",
+      "label": "references column", "purpose": "Connects embedded SQL to the exact Db2 columns it reads or changes."
+    },
+    "WRITES_TABLE": {
+      "allowed_pairs": [["db2_sql_statement", "db2_table"]],
+      "category": "data-lineage", "direction": "SQL statement to changed table", "evidence_policy": "edge",
+      "label": "writes table", "purpose": "Records a statically observed insert, update, or delete against a table."
     },
     "PARENT_OF": {
       "allowed_pairs": [["ims_segment", "ims_segment"]],

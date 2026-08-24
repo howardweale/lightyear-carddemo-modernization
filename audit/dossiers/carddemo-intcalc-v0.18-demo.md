@@ -4,7 +4,7 @@
 
 **Decision:** **BLOCKED**
 
-**Dossier identity:** `28390ad5ca65c3769c16f1b21fa5c6f09feb15c2178ed8b0cb90d66ea8e7fb75`
+**Dossier identity:** `f07094bbc6d04985f1b2dc60a514229f4c62005ff33dd4d5b8f82ad3e9b94c15`
 
 ## Promotion rationale
 
@@ -35,13 +35,13 @@ Release is blocked until every independent runtime and execution-security gate h
 | `work_order` | `carddemo:intcalc:bounded-repair` | `71e7e34d92dd056a…` |
 | `portfolio_plan` | `carddemo:modernization:v0.15` | `e4550120899fac23…` |
 | `operational_control_policy` | `control-tower:live-evidence-plane` | `b4c43578b6cb7060…` |
-| `source_evidence_pack` | `evidence:source-pack` | `1ade0d7a2645c75f…` |
+| `source_evidence_pack` | `evidence:source-pack` | `92c916166022a3ee…` |
 | `decision_input` | `execution:carddemo-hardened-plane` | `83d937880f17192b…` |
 | `durable_conformance_receipt` | `factory:durable-conformance` | `6c1c810e62a25de3…` |
 | `durable_execution_policy` | `factory:durable-control-plane` | `72b0c927dc60dc8b…` |
-| `graph_snapshot` | `lightyear:carddemo-modernization` | `4fab83d8a18c08ba…` |
+| `graph_snapshot` | `lightyear:carddemo-modernization` | `e12917d055e3209f…` |
 | `semantic_memory_snapshot` | `memory:verified-experiences` | `42000f0e821e12b7…` |
-| `decision_input` | `release:carddemo-intcalc:v0.18-demo` | `4fab83d8a18c08ba…` |
+| `decision_input` | `release:carddemo-intcalc:v0.18-demo` | `e12917d055e3209f…` |
 | `decision_input` | `runtime-run:local-oracle-intcalc-reference` | `9ada6983de37a9aa…` |
 | `decision_input` | `runtime-run:recorded-zos-intcalc-replay` | `d7d2cb1562f26f1c…` |
 | `decision_input` | `runtime-run:zosmf-intcalc-job00001` | `c821cdbcd2ba17c4…` |
@@ -66,7 +66,7 @@ Release is blocked until every independent runtime and execution-security gate h
 
 - Ledger: `lightyear:carddemo:audit`
 - Events: 20
-- Ledger head: `c2312585c7db4274ebf41a6ca51379a3eef7decbf08e8c67a0af5c37456beda8`
+- Ledger head: `d72d6dba88c9aee66a838d6c97d01851e8e51466a3b358f6bfe9f76e82e76222`
 - Signature algorithm: `none`
 
 ## CICS/VSAM readiness

@@ -1,6 +1,47 @@
 # FactoryDark.ai CardDemo Modernization Factory
 
-Release: **v0.18.5 — verifier invariant pinning**
+Release: **v0.19.2 — multi-target data equivalence cell**
+
+v0.19.2 turns the PostgreSQL-only live check into a target-adapter contract and adds Oracle
+Database 26ai Free as the second implementation. Both adapters must report exact column metadata,
+primary-key order, secondary-index order, normalized row values, bounded query results, commit
+behavior, and rollback behavior. Missing, malformed, duplicate, or mismatched evidence fails
+closed. Every live receipt binds the adapter version, canonical model, mapping, fixtures, generated
+schema SQL, fixture SQL, verification SQL, container image identity, and observed results.
+
+```bash
+./data-modernization.sh live-postgres
+./data-modernization.sh live-oracle
+./data-modernization.sh live-all
+```
+
+The Oracle command expects the official Oracle Database Free image to exist locally. The default
+is `oracle/database:23.26.1-free`; override it with `--oracle-image` when invoking the Python CLI.
+Building or using the image requires accepting Oracle's license. No Oracle credential or database
+output is persisted in the receipt. The Control Tower shows PostgreSQL and Oracle side by side and
+clearly distinguishes offline development evidence from a live container receipt.
+
+This milestone does not make Oracle a production migration target and does not prove source Db2
+equivalence. Live Db2 catalog/data capture, PL/I lineage for this bounded workload, CDC, performance,
+cutover, and rollback on customer infrastructure remain explicit gaps; `production_ready` stays
+`false`.
+
+Previous milestone: **v0.19.1 — Db2-to-PostgreSQL data modernization proof cell**
+
+v0.19 adds a bounded, evidence-first modernization of the CardDemo `CARDDEMO.AUTHFRDS`
+authorization table. It parses Db2 DDL/DCL and COPAUS2C embedded SQL, projects schema and
+statement lineage into the knowledge graph, emits a target-neutral canonical model and PostgreSQL
+schema, exercises mainframe encoding boundary fixtures, and issues a signed development-equivalence
+receipt. The Control Tower now shows data checks and migration gaps. Run:
+
+```bash
+./data-modernization.sh verify /path/to/aws-carddemo
+./data-modernization.sh live-postgres  # requires Docker
+```
+
+The live command runs PostgreSQL 16 in an ephemeral, network-isolated container. This is strong
+offline development evidence, not live Db2/z/OS equivalence; `production_ready` therefore remains
+`false` until the v0.20 mainframe campaign.
 
 v0.18.5 converts the independent mutation-review findings into executable invariants. Directly
 constructed private gates now have a regression test that pins output exposure to `false`; the

@@ -1,5 +1,34 @@
 # Changelog
 
+## 0.19.2 — 2026-08-23
+
+- Generalized data-target generation and catalog expectations behind a versioned adapter contract.
+- Added an Oracle Database 26ai Free adapter, schema projection, boundary-fixture loader, Docker runner, and explicit Oracle semantic gaps.
+- Replaced coarse PostgreSQL object counts with exact column, type, length, precision, scale, nullability, key-order, and index-order evidence.
+- Added normalized row-level checksums, bounded query comparisons, and independent commit/rollback probes for both targets.
+- Added fail-closed parsing for missing, malformed, unknown, and duplicate evidence markers plus adversarial mutation tests.
+- Bound model, mapping, fixture, schema SQL, fixture SQL, verification SQL, adapter version, and container image identity into live receipts.
+- Added a multi-target aggregate receipt that cannot pass unless both PostgreSQL and Oracle receipts pass.
+- Added a side-by-side target evidence matrix to the Control Tower while retaining `production_ready: false`.
+- Corrected Oracle SQL/JSON generation after the first live 26ai Free probe: apply `NULL ON NULL` once per object, emit bounded one-line `VARCHAR2` evidence, and exit SQL*Plus on the first database error.
+
+## 0.19.1 — 2026-08-23
+
+- Wait for the requested PostgreSQL database to accept a real query before running the live equivalence proof.
+- Record bounded live-proof failure reason and `psql` exit code without persisting raw database output.
+- Add regression coverage for the PostgreSQL entrypoint initialization race.
+
+## 0.19.0 — 2026-08-22
+
+- Added deterministic Db2 DDL, DCL, and embedded-SQL parsing for the CardDemo AUTHFRDS vertical slice.
+- Added first-class Db2 table, column, constraint, index, DCL, and SQL-statement entities to the evidence graph.
+- Added paragraph-to-SQL, SQL-to-table, and SQL-to-column lineage plus four curated data business rules.
+- Added a target-neutral canonical model, PostgreSQL 16 adapter, schema, migration mapping, and boundary fixtures.
+- Added fail-closed schema/data/query/transaction equivalence checks and a tamper-evident signed development receipt.
+- Added an isolated Docker PostgreSQL proof command and customer-key receipt signing path.
+- Added a Control Tower Data panel for lineage posture, equivalence checks, and unresolved production gaps.
+- Added 17 focused tests, including empty-input, duplicate-key, incomplete-row, missing-marker, and signature-tamper cases.
+
 ## 0.18.5 — 2026-08-22
 
 - Pinned the direct-construction default for private gate output so a future dataclass-default

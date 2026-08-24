@@ -1,0 +1,78 @@
+{
+  "content_sha256": "33a325c3362f7c2561fdd13dac31ff65909273425749ddbdabdde51c698e4eb8",
+  "contract_type": "embedded-sql-inventory",
+  "path": "app/app-authorization-ims-db2-mq/cbl/COPAUS2C.cbl",
+  "schema_version": "1.0",
+  "statements": [
+    {
+      "columns": [],
+      "id": "sql:COPAUS2C:65:1",
+      "line_end": 67,
+      "line_start": 65,
+      "normalized_sql": "INCLUDE SQLCA",
+      "operation": "INCLUDE",
+      "paragraph": "AUTHOR",
+      "table": null
+    },
+    {
+      "columns": [],
+      "id": "sql:COPAUS2C:68:2",
+      "line_end": 70,
+      "line_start": 68,
+      "normalized_sql": "INCLUDE AUTHFRDS",
+      "operation": "INCLUDE",
+      "paragraph": "AUTHOR",
+      "table": null
+    },
+    {
+      "columns": [
+        "CARD_NUM",
+        "AUTH_TS",
+        "AUTH_TYPE",
+        "CARD_EXPIRY_DATE",
+        "MESSAGE_TYPE",
+        "MESSAGE_SOURCE",
+        "AUTH_ID_CODE",
+        "AUTH_RESP_CODE",
+        "AUTH_RESP_REASON",
+        "PROCESSING_CODE",
+        "TRANSACTION_AMT",
+        "APPROVED_AMT",
+        "MERCHANT_CATAGORY_CODE",
+        "ACQR_COUNTRY_CODE",
+        "POS_ENTRY_MODE",
+        "MERCHANT_ID",
+        "MERCHANT_NAME",
+        "MERCHANT_CITY",
+        "MERCHANT_STATE",
+        "MERCHANT_ZIP",
+        "TRANSACTION_ID",
+        "MATCH_STATUS",
+        "AUTH_FRAUD",
+        "FRAUD_RPT_DATE",
+        "ACCT_ID",
+        "CUST_ID"
+      ],
+      "id": "sql:COPAUS2C:141:3",
+      "line_end": 198,
+      "line_start": 141,
+      "normalized_sql": "INSERT INTO CARDDEMO.AUTHFRDS (CARD_NUM ,AUTH_TS ,AUTH_TYPE ,CARD_EXPIRY_DATE ,MESSAGE_TYPE ,MESSAGE_SOURCE ,AUTH_ID_CODE ,AUTH_RESP_CODE ,AUTH_RESP_REASON ,PROCESSING_CODE ,TRANSACTION_AMT ,APPROVED_AMT ,MERCHANT_CATAGORY_CODE ,ACQR_COUNTRY_CODE ,POS_ENTRY_MODE ,MERCHANT_ID ,MERCHANT_NAME ,MERCHANT_CITY ,MERCHANT_STATE ,MERCHANT_ZIP ,TRANSACTION_ID ,MATCH_STATUS ,AUTH_FRAUD ,FRAUD_RPT_DATE ,ACCT_ID ,CUST_ID) VALUES ( :CARD-NUM ,TIMESTAMP_FORMAT (:AUTH-TS, 'YY-MM-DD HH24.MI.SSNNNNNN') ,:AUTH-TYPE ,:CARD-EXPIRY-DATE ,:MESSAGE-TYPE ,:MESSAGE-SOURCE ,:AUTH-ID-CODE ,:AUTH-RESP-CODE ,:AUTH-RESP-REASON ,:PROCESSING-CODE ,:TRANSACTION-AMT ,:APPROVED-AMT ,:MERCHANT-CATAGORY-CODE ,:ACQR-COUNTRY-CODE ,:POS-ENTRY-MODE ,:MERCHANT-ID ,:MERCHANT-NAME ,:MERCHANT-CITY ,:MERCHANT-STATE ,:MERCHANT-ZIP ,:TRANSACTION-ID ,:MATCH-STATUS ,:AUTH-FRAUD ,CURRENT DATE ,:ACCT-ID ,:CUST-ID )",
+      "operation": "INSERT",
+      "paragraph": "MAIN-PARA",
+      "table": "CARDDEMO.AUTHFRDS"
+    },
+    {
+      "columns": [
+        "AUTH_FRAUD",
+        "FRAUD_RPT_DATE"
+      ],
+      "id": "sql:COPAUS2C:222:4",
+      "line_end": 229,
+      "line_start": 222,
+      "normalized_sql": "UPDATE CARDDEMO.AUTHFRDS SET AUTH_FRAUD = :AUTH-FRAUD, FRAUD_RPT_DATE = CURRENT DATE WHERE CARD_NUM = :CARD-NUM AND AUTH_TS = TIMESTAMP_FORMAT (:AUTH-TS, 'YY-MM-DD HH24.MI.SSNNNNNN')",
+      "operation": "UPDATE",
+      "paragraph": "FRAUD-UPDATE",
+      "table": "CARDDEMO.AUTHFRDS"
+    }
+  ]
+}

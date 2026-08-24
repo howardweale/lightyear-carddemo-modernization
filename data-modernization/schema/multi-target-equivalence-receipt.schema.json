@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://factorydark.ai/schema/multi-target-equivalence-receipt.schema.json",
+  "title": "FactoryDark multi-target data-equivalence receipt",
+  "type": "object",
+  "required": ["schema_version", "receipt_type", "status", "production_ready", "targets", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "receipt_type": {"const": "factorydark-multi-target-data-equivalence"},
+    "status": {"enum": ["passed", "failed"]},
+    "production_ready": {"const": false},
+    "targets": {
+      "type": "object",
+      "required": ["postgresql-16", "oracle-26ai-free"],
+      "additionalProperties": {"type": "object", "required": ["status", "content_sha256"]}
+    },
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

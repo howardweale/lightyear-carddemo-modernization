@@ -31,6 +31,7 @@ $Manifest = Join-Path $ProjectDir "knowledge\mappings\carddemo-intcalc.json"
 $CicsVsamManifest = Join-Path $ProjectDir "knowledge\mappings\carddemo-cics-vsam-account-view.json"
 $AsmManifest = Join-Path $ProjectDir "knowledge\mappings\carddemo-asm-date-format.json"
 $ImsManifest = Join-Path $ProjectDir "knowledge\mappings\carddemo-ims-expired-authorization-purge.json"
+$DataManifest = Join-Path $ProjectDir "knowledge\mappings\carddemo-db2-authfrds.json"
 $Snapshot = Join-Path $ProjectDir "knowledge\graph.snapshot.json.gz"
 $Receipt = Join-Path $ProjectDir "knowledge\graph.receipt.json"
 $Ontology = Join-Path $ProjectDir "knowledge\ontology\relationships.json"
@@ -44,7 +45,7 @@ $ImsReceipt = Join-Path $ProjectDir "readiness\ims-expiry\readiness-receipt.json
 if ($Action -eq "build") {
     Run-Python -m lightyear_knowledge_graph build `
         --legacy-root $LegacyRoot --modern-root $ProjectDir --manifest $Manifest `
-        --manifest $CicsVsamManifest --manifest $AsmManifest --manifest $ImsManifest `
+        --manifest $CicsVsamManifest --manifest $AsmManifest --manifest $ImsManifest --manifest $DataManifest `
         --ontology $Ontology --evidence-pack $EvidencePack --evidence-receipt $EvidenceReceipt `
         --output $Snapshot --receipt $Receipt --legacy-commit $LegacyCommit `
         --modern-commit repository-content
@@ -64,7 +65,7 @@ if ($Action -eq "verify") {
     $GeneratedCapabilities = Join-Path $Generated "mainframe-readiness.json"
     Run-Python -m lightyear_knowledge_graph build `
         --legacy-root $LegacyRoot --modern-root $ProjectDir --manifest $Manifest `
-        --manifest $CicsVsamManifest --manifest $AsmManifest --manifest $ImsManifest `
+        --manifest $CicsVsamManifest --manifest $AsmManifest --manifest $ImsManifest --manifest $DataManifest `
         --ontology $Ontology --evidence-pack $GeneratedEvidencePack `
         --evidence-receipt $GeneratedEvidenceReceipt `
         --output $GeneratedSnapshot --receipt $GeneratedReceipt --legacy-commit $LegacyCommit `

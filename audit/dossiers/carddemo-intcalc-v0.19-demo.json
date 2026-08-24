@@ -1,0 +1,343 @@
+{
+  "audit": {
+    "checkpoint_signature_algorithm": "none",
+    "event_count": 21,
+    "ledger_content_sha256": "ab74af96dd066e4cf1d056c0df8d8d48b638a66160e25cbcb1f4477ced330e98",
+    "ledger_head_sha256": "355ba8332bea243264fe48dfe1aa547b9b6b3fe2fef07880c91adb67357c2a0c",
+    "ledger_id": "lightyear:carddemo:audit"
+  },
+  "cics_vsam_readiness": {
+    "development_ready": true,
+    "mainframe_equivalent": false,
+    "receipt_sha256": "6bbe74439aa51d147bcb266f95af048a357f2e44dc32bcc200406a7884424389",
+    "signed": false,
+    "status": "blocked",
+    "unresolved_gaps": [
+      "No authorized zos_observed CAVW baseline is bound to this comparison.",
+      "No external equivalence signing key was configured."
+    ]
+  },
+  "content_sha256": "7708163cc5c74d27e289f76f0157eb9c0301f69911213d7ee1984c16b5a66315",
+  "dossier_type": "lightyear-release-evidence",
+  "durable_control_plane": {
+    "approval_consumption": "exactly-once",
+    "backend": "sqlite-wal-reference",
+    "conformance_status": "passed",
+    "event_integrity": "sha256-chain",
+    "policy_sha256": "72b0c927dc60dc8b8c0412c79f9fa9db19e8984f70d32007aa63dbed89eeaf4d",
+    "production_adapter": "postgresql-object-store",
+    "status": "contract_published"
+  },
+  "evidence_inventory": [
+    {
+      "id": "carddemo-authorization-authfrds",
+      "kind": "data_equivalence_receipt",
+      "sha256": "8e2e2dc30cffa3205ceb743f418ae937ea8ac05d6bde9041182acc61cba3abbe"
+    },
+    {
+      "id": "carddemo:intcalc:bounded-repair",
+      "kind": "work_order",
+      "sha256": "71e7e34d92dd056a8d501098e7a2cfe8074d7096844b59c5ced4ef305c835330"
+    },
+    {
+      "id": "carddemo:modernization:v0.15",
+      "kind": "portfolio_plan",
+      "sha256": "4dd94f2e119090c5678cddcf8ac6b59700af800cd54221a8fd9f510e1bf20278"
+    },
+    {
+      "id": "control-tower:live-evidence-plane",
+      "kind": "operational_control_policy",
+      "sha256": "943f4c1626a3ac66cfb2311bb9079ef2181f4c1a01783493a1ba5503b7524e28"
+    },
+    {
+      "id": "evidence:source-pack",
+      "kind": "source_evidence_pack",
+      "sha256": "cd499f6666b8a253faab6a21a29fb7f58fb613514611cb528426508fa43671ae"
+    },
+    {
+      "id": "execution:carddemo-hardened-plane",
+      "kind": "decision_input",
+      "sha256": "83d937880f17192b3ff8e5caa881481bf50feb307c20fab9da67543c94bb571e"
+    },
+    {
+      "id": "factory:durable-conformance",
+      "kind": "durable_conformance_receipt",
+      "sha256": "d2286b4ce6b94d26760cb69e27ab6f339c02a58833bf1da3890d9f3d0df40bd0"
+    },
+    {
+      "id": "factory:durable-control-plane",
+      "kind": "durable_execution_policy",
+      "sha256": "72b0c927dc60dc8b8c0412c79f9fa9db19e8984f70d32007aa63dbed89eeaf4d"
+    },
+    {
+      "id": "lightyear:carddemo-modernization",
+      "kind": "graph_snapshot",
+      "sha256": "0d54d22fe164e4398d24c2c54b02b6324a1a2d478ad24e4209ce4c489339b17d"
+    },
+    {
+      "id": "memory:verified-experiences",
+      "kind": "semantic_memory_snapshot",
+      "sha256": "42000f0e821e12b7716717db7aaa3de6e6ad75eea00d7fa5b18f67c35344fa38"
+    },
+    {
+      "id": "release:carddemo-intcalc:v0.19-demo",
+      "kind": "decision_input",
+      "sha256": "0d54d22fe164e4398d24c2c54b02b6324a1a2d478ad24e4209ce4c489339b17d"
+    },
+    {
+      "id": "runtime-run:local-oracle-intcalc-reference",
+      "kind": "decision_input",
+      "sha256": "9ada6983de37a9aa4c5d3e1475e4f3016887f2a4335d43022f4d184b8dcf9cb4"
+    },
+    {
+      "id": "runtime-run:recorded-zos-intcalc-replay",
+      "kind": "decision_input",
+      "sha256": "d7d2cb1562f26f1c57bd2d3c839df86b6de12df2ac4d0f491ebf13e23666727d"
+    },
+    {
+      "id": "runtime-run:zosmf-intcalc-job00001",
+      "kind": "decision_input",
+      "sha256": "c821cdbcd2ba17c432dd5b996b0135b97f74cfd73fdd1fef5ef3b4132a012c1b"
+    },
+    {
+      "id": "workload:carddemo-cics-vsam-account-view",
+      "kind": "cics_vsam_readiness_receipt",
+      "sha256": "6bbe74439aa51d147bcb266f95af048a357f2e44dc32bcc200406a7884424389"
+    }
+  ],
+  "execution_decisions": [
+    {
+      "content_sha256": "a2f60a68ab91c3f02ac74cfba437c1e964565a39e2e6dc50dcac663db03221ba",
+      "evaluated_at": "2022-07-18T00:00:00.300Z",
+      "exception": null,
+      "gaps": [
+        "container-runtime-enforcement-not-observed",
+        "live-container-runtime-not-observed",
+        "live-signed-work-order-admission-not-observed",
+        "signed-factory-work-order-not-observed"
+      ],
+      "id": "decision:execution:hardened-readiness",
+      "inputs": {
+        "assurance": "simulated",
+        "evidence_class": "policy-conformance-simulation",
+        "execution_receipt_sha256": "83d937880f17192b3ff8e5caa881481bf50feb307c20fab9da67543c94bb571e",
+        "hardened_execution_ready": false
+      },
+      "override_allowed": false,
+      "policy_id": "execution.hardened_readiness",
+      "policy_version": "1.0",
+      "rationale": "Policy construction passed, but live OCI enforcement has not been observed.",
+      "status": "blocked",
+      "subject_id": "execution:carddemo-hardened-plane"
+    }
+  ],
+  "gaps": [
+    "hardened-execution-enforcement",
+    "mainframe-equivalence"
+  ],
+  "limitations": [
+    "The committed canonical checkpoint is unsigned; live environments should configure a signing key.",
+    "Simulated and local observations do not establish production mainframe equivalence.",
+    "Execution policy conformance or an OCI probe alone is not signed factory-run proof.",
+    "This dossier is a deterministic evidence summary, not a substitute for organizational approval policy."
+  ],
+  "portfolio_plan": {
+    "approval_authority": "human",
+    "conflicts": 1,
+    "orders": 3,
+    "plan_sha256": "4dd94f2e119090c5678cddcf8ac6b59700af800cd54221a8fd9f510e1bf20278",
+    "status": "approval_required",
+    "waves": 2
+  },
+  "promotion_decision": {
+    "content_sha256": "dacc289411bc3b3d2aba8e1a0b349575cca20f9cb9ef9f0caa3e549dd3a6baea",
+    "evaluated_at": "2022-07-18T00:00:01.300Z",
+    "exception": null,
+    "gaps": [
+      "hardened-execution-enforcement",
+      "mainframe-equivalence"
+    ],
+    "id": "decision:release:carddemo-intcalc:v0.19-demo:promotion",
+    "inputs": {
+      "execution_decision_ids": [
+        "decision:execution:hardened-readiness"
+      ],
+      "graph_content_sha256": "0d54d22fe164e4398d24c2c54b02b6324a1a2d478ad24e4209ce4c489339b17d",
+      "runtime_decision_ids": [
+        "decision:local-oracle-intcalc-reference:development_readiness",
+        "decision:local-oracle-intcalc-reference:mainframe_equivalence",
+        "decision:recorded-zos-intcalc-replay:development_readiness",
+        "decision:recorded-zos-intcalc-replay:mainframe_equivalence",
+        "decision:zosmf-intcalc-job00001:development_readiness",
+        "decision:zosmf-intcalc-job00001:mainframe_equivalence"
+      ],
+      "source_evidence_content_sha256": "cd499f6666b8a253faab6a21a29fb7f58fb613514611cb528426508fa43671ae"
+    },
+    "override_allowed": false,
+    "policy_id": "release.promotion",
+    "policy_version": "1.0",
+    "rationale": "Release is blocked until every independent runtime and execution-security gate has evidence.",
+    "status": "blocked",
+    "subject_id": "release:carddemo-intcalc:v0.19-demo"
+  },
+  "rationale": "Release is blocked until every independent runtime and execution-security gate has evidence.",
+  "release_id": "release:carddemo-intcalc:v0.19-demo",
+  "runtime_decisions": [
+    {
+      "content_sha256": "e1d76241cf75b4f33c54c475fe819db0c4d12f58ef196f708db2b68c3e72303d",
+      "evaluated_at": "2022-07-18T00:00:00.500Z",
+      "exception": null,
+      "gaps": [],
+      "id": "decision:local-oracle-intcalc-reference:development_readiness",
+      "inputs": {
+        "adapter_id": "lightyear.local-oracle.v1",
+        "evidence_classes": [
+          "local_observed"
+        ],
+        "run_receipt_sha256": "9ada6983de37a9aa4c5d3e1475e4f3016887f2a4335d43022f4d184b8dcf9cb4"
+      },
+      "override_allowed": true,
+      "policy_id": "runtime.development_readiness",
+      "policy_version": "1.0",
+      "rationale": "Development readiness passed with all required evidence.",
+      "status": "passed",
+      "subject_id": "runtime-run:local-oracle-intcalc-reference"
+    },
+    {
+      "content_sha256": "706b91bc16399b4375949f313c997a574dbbf215b6b5bbbba0e4b9d5838383bc",
+      "evaluated_at": "2022-07-18T00:00:00.600Z",
+      "exception": null,
+      "gaps": [
+        "rule:intcalc:default-rate",
+        "rule:intcalc:monthly-interest",
+        "rule:intcalc:source-final-account",
+        "workload:carddemo-intcalc"
+      ],
+      "id": "decision:local-oracle-intcalc-reference:mainframe_equivalence",
+      "inputs": {
+        "adapter_id": "lightyear.local-oracle.v1",
+        "evidence_classes": [
+          "local_observed"
+        ],
+        "run_receipt_sha256": "9ada6983de37a9aa4c5d3e1475e4f3016887f2a4335d43022f4d184b8dcf9cb4"
+      },
+      "override_allowed": false,
+      "policy_id": "runtime.mainframe_equivalence",
+      "policy_version": "1.0",
+      "rationale": "Mainframe equivalence blocked because 4 required evidence item(s) are absent.",
+      "status": "blocked",
+      "subject_id": "runtime-run:local-oracle-intcalc-reference"
+    },
+    {
+      "content_sha256": "655ccb77b990ed48abe8ec96092ac26f13bb9fb14d8b5c8e1ed47a542e29a655",
+      "evaluated_at": "2022-07-18T00:00:00.800Z",
+      "exception": null,
+      "gaps": [],
+      "id": "decision:recorded-zos-intcalc-replay:development_readiness",
+      "inputs": {
+        "adapter_id": "lightyear.recorded-zos-fixture.v1",
+        "evidence_classes": [
+          "simulated"
+        ],
+        "run_receipt_sha256": "d7d2cb1562f26f1c57bd2d3c839df86b6de12df2ac4d0f491ebf13e23666727d"
+      },
+      "override_allowed": true,
+      "policy_id": "runtime.development_readiness",
+      "policy_version": "1.0",
+      "rationale": "Development readiness passed with all required evidence.",
+      "status": "passed",
+      "subject_id": "runtime-run:recorded-zos-intcalc-replay"
+    },
+    {
+      "content_sha256": "c04f4e282b89f90cd1bd757fe12bbbb44f8fae4043277b9ba3b0ba753ce23b86",
+      "evaluated_at": "2022-07-18T00:00:00.900Z",
+      "exception": null,
+      "gaps": [
+        "edge:0594254ade360b961aef",
+        "edge:306c54c9d54a2e3394b2",
+        "edge:41c665376569d66442a5",
+        "edge:ae7de3f32e08f9eee0a0",
+        "edge:ca49e89cc43783d9af72",
+        "legacy:cobol-program:CBACT04C",
+        "legacy:jcl-job:INTCALC",
+        "legacy:jcl-step:INTCALC:STEP15"
+      ],
+      "id": "decision:recorded-zos-intcalc-replay:mainframe_equivalence",
+      "inputs": {
+        "adapter_id": "lightyear.recorded-zos-fixture.v1",
+        "evidence_classes": [
+          "simulated"
+        ],
+        "run_receipt_sha256": "d7d2cb1562f26f1c57bd2d3c839df86b6de12df2ac4d0f491ebf13e23666727d"
+      },
+      "override_allowed": false,
+      "policy_id": "runtime.mainframe_equivalence",
+      "policy_version": "1.0",
+      "rationale": "Mainframe equivalence blocked because 8 required evidence item(s) are absent.",
+      "status": "blocked",
+      "subject_id": "runtime-run:recorded-zos-intcalc-replay"
+    },
+    {
+      "content_sha256": "3eaa8b64fdd4b4526601b9f647a912b0850f5fc07c5519a633bf8a4a3aae7e4d",
+      "evaluated_at": "2022-07-18T00:00:01.100Z",
+      "exception": null,
+      "gaps": [],
+      "id": "decision:zosmf-intcalc-job00001:development_readiness",
+      "inputs": {
+        "adapter_id": "lightyear.zosmf-jobs.v1",
+        "evidence_classes": [
+          "simulated"
+        ],
+        "run_receipt_sha256": "c821cdbcd2ba17c432dd5b996b0135b97f74cfd73fdd1fef5ef3b4132a012c1b"
+      },
+      "override_allowed": true,
+      "policy_id": "runtime.development_readiness",
+      "policy_version": "1.0",
+      "rationale": "Development readiness passed with all required evidence.",
+      "status": "passed",
+      "subject_id": "runtime-run:zosmf-intcalc-job00001"
+    },
+    {
+      "content_sha256": "20f8637783d02f8ebc489bef5c6305e280960c6982fd24299c34874da0aea1ec",
+      "evaluated_at": "2022-07-18T00:00:01.200Z",
+      "exception": null,
+      "gaps": [
+        "edge:0594254ade360b961aef",
+        "edge:306c54c9d54a2e3394b2",
+        "edge:41c665376569d66442a5",
+        "edge:ae7de3f32e08f9eee0a0",
+        "edge:ca49e89cc43783d9af72",
+        "legacy:cobol-program:CBACT04C",
+        "legacy:jcl-job:INTCALC",
+        "legacy:jcl-step:INTCALC:STEP15"
+      ],
+      "id": "decision:zosmf-intcalc-job00001:mainframe_equivalence",
+      "inputs": {
+        "adapter_id": "lightyear.zosmf-jobs.v1",
+        "evidence_classes": [
+          "simulated"
+        ],
+        "run_receipt_sha256": "c821cdbcd2ba17c432dd5b996b0135b97f74cfd73fdd1fef5ef3b4132a012c1b"
+      },
+      "override_allowed": false,
+      "policy_id": "runtime.mainframe_equivalence",
+      "policy_version": "1.0",
+      "rationale": "Mainframe equivalence blocked because 8 required evidence item(s) are absent.",
+      "status": "blocked",
+      "subject_id": "runtime-run:zosmf-intcalc-job00001"
+    }
+  ],
+  "schema_version": "1.0",
+  "semantic_memory": {
+    "experience_count": 3,
+    "outcomes": {
+      "accept_unchanged": 1,
+      "verified_failure": 1,
+      "verified_success": 1
+    },
+    "policy_sha256": "99ff760b6a2fc27b014931c809ba36d8473599610ca759ac8a2d2c4d84200102",
+    "snapshot_sha256": "42000f0e821e12b7716717db7aaa3de6e6ad75eea00d7fa5b18f67c35344fa38",
+    "status": "verified"
+  },
+  "status": "blocked"
+}

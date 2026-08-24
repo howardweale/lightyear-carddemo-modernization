@@ -1,0 +1,38 @@
+{
+  "content_sha256": "fe3963ebde9ed1c517e2da070e5a557160049788c46cc717b038f71c5f935546",
+  "plan_type": "factorydark-multi-target-data-equivalence-plan",
+  "production_ready": false,
+  "required_live_checks": [
+    "exact_schema",
+    "exact_primary_key",
+    "exact_indexes",
+    "row_count",
+    "normalized_row_checksums",
+    "query_results",
+    "transaction_commit",
+    "transaction_rollback"
+  ],
+  "schema_version": "1.0",
+  "source": "db2-zos",
+  "targets": [
+    {
+      "adapter": {
+        "id": "factorydark-postgresql",
+        "version": "1.0"
+      },
+      "dialect": "postgresql-16",
+      "image": "postgres:16-alpine",
+      "mapping_sha256": "24f0f0dc82363749d9db4a7294315ec8dc3ca5660e7d800550560195b0d27f45"
+    },
+    {
+      "adapter": {
+        "id": "factorydark-oracle",
+        "version": "1.0"
+      },
+      "dialect": "oracle-26ai-free",
+      "image": "oracle/database:23.26.1-free",
+      "mapping_sha256": "a948a0567245bc7c15fda3d8d2dc742ccee5691db4ee034d947b1671ab6f172f"
+    }
+  ],
+  "workload": "carddemo-authorization-authfrds"
+}

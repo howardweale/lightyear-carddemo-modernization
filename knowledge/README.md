@@ -25,7 +25,9 @@ provenance in one queryable artifact.
 
 The committed snapshot currently describes the complete pinned AWS CardDemo estate. `INTCALC`,
 the `CAVW` CICS/VSAM account-view path, the bounded `COBDATFT` HLASM routine, and the `CBPAUP0C`
-IMS expired-authorization purge are mapped workloads. IMS DBDs, PSBs, PCBs, segment hierarchies,
+IMS expired-authorization purge, and the Db2 AUTHFRDS data-modernization slice are mapped workloads.
+Db2 tables, columns, constraints, indexes, DCL contracts, embedded SQL, and their issuing COBOL
+paragraphs are first-class graph entities. IMS DBDs, PSBs, PCBs, segment hierarchies,
 sensitivity views, and program bindings are structurally indexed; the CBPAUP0C normal path is
 curated and development-proven without claiming live IMS equivalence or general IMS coverage.
 

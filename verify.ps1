@@ -19,6 +19,9 @@ if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 & (Join-Path $ProjectDir "hardened-execution.ps1") verify
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
+& (Join-Path $ProjectDir "data-modernization.ps1") verify
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
 & (Join-Path $ProjectDir "knowledge-graph.ps1") verify
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 

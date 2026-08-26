@@ -1,0 +1,88 @@
+{
+  "authfrds": {
+    "TX0000000000001": {
+      "approved_amount": "125.50",
+      "fraud_flag": "N"
+    },
+    "TX0000000000002": {
+      "approved_amount": "0.00",
+      "fraud_flag": "Y"
+    }
+  },
+  "cases": [
+    {
+      "id": "db2-overwrite-non-fraud",
+      "record": {
+        "approved_amount": "999.99",
+        "authorization_code": "Z99999",
+        "card_number": "4000000000000001",
+        "fraud_flag": "Y",
+        "transaction_id": "TX0000000000001"
+      }
+    },
+    {
+      "id": "db2-overwrite-fraud",
+      "record": {
+        "approved_amount": "125.50",
+        "authorization_code": "Z99999",
+        "card_number": "4000000000000001",
+        "fraud_flag": "N",
+        "transaction_id": "TX0000000000002"
+      }
+    },
+    {
+      "id": "sql-not-found",
+      "record": {
+        "approved_amount": "999.99",
+        "authorization_code": "Z99999",
+        "card_number": "4000000000000001",
+        "fraud_flag": "Y",
+        "transaction_id": "TX0000000000999"
+      }
+    },
+    {
+      "id": "invalid-card-width",
+      "record": {
+        "approved_amount": "999.99",
+        "authorization_code": "Z99999",
+        "card_number": "4000",
+        "fraud_flag": "Y",
+        "transaction_id": "TX0000000000001"
+      }
+    },
+    {
+      "id": "invalid-transaction-width",
+      "record": {
+        "approved_amount": "999.99",
+        "authorization_code": "Z99999",
+        "card_number": "4000000000000001",
+        "fraud_flag": "Y",
+        "transaction_id": "TOO-LONG-TRANSACTION"
+      }
+    },
+    {
+      "id": "invalid-fraud-flag",
+      "record": {
+        "approved_amount": "999.99",
+        "authorization_code": "Z99999",
+        "card_number": "4000000000000001",
+        "fraud_flag": "?",
+        "transaction_id": "TX0000000000001"
+      }
+    },
+    {
+      "id": "invalid-decimal",
+      "record": {
+        "approved_amount": "not-a-decimal",
+        "authorization_code": "Z99999",
+        "card_number": "4000000000000001",
+        "fraud_flag": "Y",
+        "transaction_id": "TX0000000000001"
+      }
+    }
+  ],
+  "content_sha256": "cbaafdf6074521e1d2933fc66efd5fd5e4c22f97d45caea254cdb08621b573a0",
+  "fixture_type": "lightyear-pli-mixed-boundary-fixtures",
+  "schema_version": "1.0",
+  "workload_id": "workload:carddemo-pli-auth-risk"
+}

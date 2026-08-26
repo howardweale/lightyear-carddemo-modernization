@@ -93,6 +93,11 @@ def build_parser() -> argparse.ArgumentParser:
         "--extension-catalog", type=Path, default=Path("extensions/catalog.json")
     )
     capabilities.add_argument(
+        "--pli-development-receipt",
+        type=Path,
+        default=Path("extensions/pli/modernization/development.receipt.json"),
+    )
+    capabilities.add_argument(
         "--postgres-data-receipt",
         type=Path,
         default=Path("data-modernization/receipts/authfrds.offline.receipt.json"),
@@ -292,6 +297,7 @@ def main(argv: list[str] | None = None) -> int:
         ims_receipt = load_optional(args.ims_receipt)
         pli_fragment = load_optional(args.pli_fragment)
         extension_catalog = load_optional(args.extension_catalog)
+        pli_development_receipt = load_optional(args.pli_development_receipt)
         postgres_data_receipt = load_optional(args.postgres_data_receipt)
         oracle_data_receipt = load_optional(args.oracle_data_receipt)
         campaign_receipt = load_optional(args.campaign_receipt)
@@ -302,6 +308,7 @@ def main(argv: list[str] | None = None) -> int:
             ims_receipt,
             pli_fragment,
             extension_catalog,
+            pli_development_receipt,
             postgres_data_receipt,
             oracle_data_receipt,
             campaign_receipt,

@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.22.0 — 2026-08-26
+
+- Advanced the bounded mixed `ACCTPL1` PL/I–COBOL–Db2 workload from discovery-only to a
+  content-addressed local development proof.
+- Made the PL/I source explicit about `OPTIONS(COBOL)`, the `CBACT04C` parameter aggregate, and
+  `DIVIDE(...,5,2)` truncation semantics.
+- Added a curated behavior contract, seven boundary fixtures, a source-faithful executable oracle,
+  and an independently implemented Python modernization candidate.
+- Added nine mutation probes covering Db2 overwrite behavior, risk calculation and rounding, COBOL target and
+  parameters, and fail-closed error side effects.
+- Added a production-shaped Java service and JUnit suite for the same bounded service seam.
+- Added deterministic POSIX and PowerShell build/verify launchers plus a fail-closed development
+  receipt binding graph, fragment, contract, fixtures, comparison, and candidate sources.
+- Promoted PL/I capability gates 3–5 to passed and gate 7 to mechanism-ready while keeping
+  authorized z/OS execution, signed equivalence, mainframe equivalence, and production readiness
+  explicitly blocked.
+
 ## 0.21.1 — 2026-08-26
 
 - Replaced the four-cell capability view with one evidence-bound projection spanning runtime,

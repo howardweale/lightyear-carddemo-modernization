@@ -1,10 +1,10 @@
 {
   "base_graph": {
-    "content_sha256": "aa5355a292e38c2f77fc2bf1a901f251d1bfbf5418dc8cd5247ec3818083e5e8",
+    "content_sha256": "48da03518cd2fb8146c5b55b7993cd24ded4414c93d11c8a8e21f687bb7f699d",
     "graph_id": "lightyear:carddemo-modernization",
     "schema_version": "1.1"
   },
-  "content_sha256": "a3dddfeaf07d955ef3056da95b6aa70e652c105742248522f8708190abae8990",
+  "content_sha256": "f2d9db306f060e2a0ed29d4aad1eab83ab5254623870440c6f59040242fd30f1",
   "fragment_id": "lightyear:pli-reference-v1",
   "language_pack": {
     "extensions": [
@@ -14,7 +14,7 @@
     ],
     "id": "lightyear.pli",
     "language": "PL/I",
-    "version": "1.0"
+    "version": "1.1"
   },
   "production_ready": false,
   "receipt_type": "lightyear-graph-extension-build",

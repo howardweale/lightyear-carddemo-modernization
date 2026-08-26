@@ -330,7 +330,7 @@
     },
     {
       "capability_kind": "language",
-      "development_ready": false,
+      "development_ready": true,
       "discovery_ready": true,
       "gates": [
         {
@@ -354,39 +354,47 @@
           "status": "passed"
         },
         {
-          "evidence": [],
-          "gap": "No curated PL/I behavior contract exists.",
+          "evidence": [
+            "extensions/pli/modernization/behavior-contract.json",
+            "fixed-width, decimal, Db2 lookup, and COBOL-call semantics"
+          ],
           "gate": 3,
           "name": "curated behavior contract",
-          "status": "not_started"
+          "status": "passed"
         },
         {
-          "evidence": [],
-          "gap": "No bounded PL/I modernization candidate exists.",
+          "evidence": [
+            "candidate-java MixedPliAuthorizationService",
+            "factory/benchmarks/pli_authorization_candidate.py"
+          ],
           "gate": 4,
           "name": "bounded modernization candidate",
-          "status": "not_started"
+          "status": "passed"
         },
         {
-          "evidence": [],
-          "gap": "No PL/I mutation or negative-verification gate exists.",
+          "evidence": [
+            "extensions/pli/modernization/comparison.json",
+            "nine mutation probes and seven boundary cases"
+          ],
           "gate": 5,
           "name": "mutation and negative verification",
-          "status": "not_started"
+          "status": "passed"
         },
         {
           "evidence": [],
-          "gap": "No authorized execution of the PL/I original on z/OS exists.",
+          "gap": "No authorized compiled and executed ACCTPL1 observation exists on z/OS.",
           "gate": 6,
           "name": "authorized execution of the original on z/OS",
           "status": "blocked"
         },
         {
-          "evidence": [],
-          "gap": "No independent PL/I differential comparison exists.",
+          "evidence": [
+            "independent source-faithful oracle and modernization candidate comparator"
+          ],
+          "gap": "No authorized compiled and executed ACCTPL1 observation exists on z/OS.",
           "gate": 7,
           "name": "independent differential comparison",
-          "status": "blocked"
+          "status": "mechanism_ready"
         },
         {
           "evidence": [],
@@ -397,7 +405,7 @@
         }
       ],
       "mainframe_equivalent": false,
-      "support_claim": "discovery and dependency analysis only",
+      "support_claim": "development-proof; live z/OS evidence pending",
       "technology": "PL/I"
     },
     {
@@ -495,20 +503,21 @@
       "live_observed": false,
       "mechanism": "Mainframe Access Campaign",
       "production_ready": false,
-      "receipt_sha256": "8b155247a80efe7e42b8c9844cc7edc383b39b248fe9ad744186d1abfba275fa",
+      "receipt_sha256": "f6b6d9808399e11e42c482c1ae41d5193b1899487dbd299db0288d8b75773a5e",
       "status": "simulated_ready"
     }
   ],
-  "content_sha256": "52e6a562b0f33131f65a4284f24487f7966cf642b71c083e469998b27e2a2817",
+  "content_sha256": "c5d8b9fca5ff37135e065c96fb1db6ee8ec63182bb50e18c8d2adbd8a52280e8",
   "evidence_bindings": {
-    "canonical_graph_sha256": "aa5355a292e38c2f77fc2bf1a901f251d1bfbf5418dc8cd5247ec3818083e5e8",
-    "extension_catalog_sha256": "f2a3d07eaebc0a6e773c54f989325a00d0bac85a08b42e4f95e5ca200529b8df",
-    "mainframe_campaign_receipt_sha256": "8b155247a80efe7e42b8c9844cc7edc383b39b248fe9ad744186d1abfba275fa",
+    "canonical_graph_sha256": "48da03518cd2fb8146c5b55b7993cd24ded4414c93d11c8a8e21f687bb7f699d",
+    "extension_catalog_sha256": "39f522fcabd7c5f4adea91fd8c81a82625bea732149e242f839d00a449305ce4",
+    "mainframe_campaign_receipt_sha256": "f6b6d9808399e11e42c482c1ae41d5193b1899487dbd299db0288d8b75773a5e",
     "oracle_data_receipt_sha256": "6958d7cc783d5ad00c469c112db5b665bf9ba93b7addec9cc94375d6c3f2dd83",
-    "pli_fragment_sha256": "a3dddfeaf07d955ef3056da95b6aa70e652c105742248522f8708190abae8990",
+    "pli_development_receipt_sha256": "33b6f4f7b5ad5b0568c7bf2341b70d7656ae548c73d3595dc212af32e494f6eb",
+    "pli_fragment_sha256": "f2d9db306f060e2a0ed29d4aad1eab83ab5254623870440c6f59040242fd30f1",
     "postgres_data_receipt_sha256": "8e2e2dc30cffa3205ceb743f418ae937ea8ac05d6bde9041182acc61cba3abbe"
   },
-  "graph_content_sha256": "aa5355a292e38c2f77fc2bf1a901f251d1bfbf5418dc8cd5247ec3818083e5e8",
-  "schema_version": "1.1",
+  "graph_content_sha256": "48da03518cd2fb8146c5b55b7993cd24ded4414c93d11c8a8e21f687bb7f699d",
+  "schema_version": "1.2",
   "truth_boundary": "Local, simulated, fixture, static, and offline target evidence cannot satisfy live z/OS observation or equivalence gates."
 }

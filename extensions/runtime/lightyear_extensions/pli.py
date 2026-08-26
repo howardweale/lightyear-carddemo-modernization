@@ -13,7 +13,7 @@ from .contracts import ExtensionContractError, canonical_hash
 
 
 PACK_ID = "lightyear.pli"
-PACK_VERSION = "1.0"
+PACK_VERSION = "1.1"
 SOURCE_ID = "source:lightyear-carddemo"
 _EXTENSIONS = {".pli", ".pl1", ".inc"}
 _RELATIONS = {

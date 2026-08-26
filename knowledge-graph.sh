@@ -50,6 +50,7 @@ if [[ "$action" == "build" ]]; then
     --ims-receipt "$project_dir/readiness/ims-expiry/readiness-receipt.json" \
     --pli-fragment "$project_dir/extensions/pli/pli.fragment.json" \
     --extension-catalog "$project_dir/extensions/catalog.json" \
+    --pli-development-receipt "$project_dir/extensions/pli/modernization/development.receipt.json" \
     --postgres-data-receipt "$project_dir/data-modernization/receipts/authfrds.offline.receipt.json" \
     --oracle-data-receipt "$project_dir/data-modernization/receipts/authfrds.oracle-offline.receipt.json" \
     --campaign-receipt "$project_dir/extensions/adapters/campaign/campaign.receipt.json" \
@@ -79,6 +80,7 @@ elif [[ "$action" == "verify" ]]; then
     --ims-receipt "$project_dir/readiness/ims-expiry/readiness-receipt.json" \
     --pli-fragment "$project_dir/extensions/pli/pli.fragment.json" \
     --extension-catalog "$project_dir/extensions/catalog.json" \
+    --pli-development-receipt "$project_dir/extensions/pli/modernization/development.receipt.json" \
     --postgres-data-receipt "$project_dir/data-modernization/receipts/authfrds.offline.receipt.json" \
     --oracle-data-receipt "$project_dir/data-modernization/receipts/authfrds.oracle-offline.receipt.json" \
     --campaign-receipt "$project_dir/extensions/adapters/campaign/campaign.receipt.json" \

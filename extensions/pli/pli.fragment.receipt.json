@@ -1,0 +1,45 @@
+{
+  "base_graph": {
+    "content_sha256": "dba240076dd7452f19d2922e958119f2dce12715a6771f054d100299ea39c73e",
+    "graph_id": "lightyear:carddemo-modernization",
+    "schema_version": "1.1"
+  },
+  "content_sha256": "be073a0c9d0b4cdfed8798a0520755b52b9b29ce1cb56df3cc7cc5d474a2c1d0",
+  "fragment_id": "lightyear:pli-reference-v1",
+  "language_pack": {
+    "extensions": [
+      ".inc",
+      ".pl1",
+      ".pli"
+    ],
+    "id": "lightyear.pli",
+    "language": "PL/I",
+    "version": "1.0"
+  },
+  "production_ready": false,
+  "receipt_type": "lightyear-graph-extension-build",
+  "schema_version": "1.0",
+  "statistics": {
+    "edge_count": 10,
+    "edges_by_relation": {
+      "CALLS": 2,
+      "CONTAINS": 1,
+      "DECLARES": 2,
+      "ISSUES_SQL": 1,
+      "READS": 1,
+      "READS_TABLE": 1,
+      "USES_INCLUDE": 1,
+      "WRITES": 1
+    },
+    "external_reference_count": 2,
+    "node_count": 8,
+    "nodes_by_kind": {
+      "db2_sql_statement": 1,
+      "pli_file_handle": 2,
+      "pli_include": 1,
+      "pli_procedure": 1,
+      "pli_program": 1,
+      "source_file": 2
+    }
+  }
+}

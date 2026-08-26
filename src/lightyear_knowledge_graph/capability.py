@@ -27,6 +27,17 @@ def _canonical_hash(payload: dict[str, Any]) -> str:
     ).hexdigest()
 
 
+def _unsigned_hash(payload: dict[str, Any]) -> str:
+    body = {
+        key: value
+        for key, value in payload.items()
+        if key not in {"content_sha256", "signature"}
+    }
+    return hashlib.sha256(
+        json.dumps(body, sort_keys=True, separators=(",", ":"), ensure_ascii=True).encode("utf-8")
+    ).hexdigest()
+
+
 def _gate(number: int, status: str, evidence: list[str], gap: str | None = None) -> dict[str, Any]:
     result: dict[str, Any] = {
         "gate": number,
@@ -39,11 +50,66 @@ def _gate(number: int, status: str, evidence: list[str], gap: str | None = None)
     return result
 
 
+def _hashed_and_bound(payload: dict[str, Any], graph_sha256: str) -> bool:
+    return bool(
+        payload
+        and payload.get("content_sha256") == _canonical_hash(payload)
+        and payload.get("base_graph", {}).get("content_sha256") == graph_sha256
+    )
+
+
+def _offline_data_receipt_passed(payload: dict[str, Any], target: str) -> bool:
+    checks = payload.get("checks", {})
+    expected_checks = {
+        "keys_and_constraints",
+        "query_results",
+        "row_counts_and_checksums",
+        "schema_structure",
+        "transaction_commit",
+        "transaction_rollback",
+    }
+    return bool(
+        payload.get("receipt_type") == "factorydark-data-equivalence"
+        and payload.get("evidence_class") == "offline-db2-to-target-development-proof"
+        and payload.get("target") == target
+        and payload.get("status") == "passed"
+        and payload.get("production_ready") is False
+        and payload.get("content_sha256") == _unsigned_hash(payload)
+        and set(checks) == expected_checks
+        and all(value is True for value in checks.values())
+    )
+
+
+def _capability(technology: str, capability_kind: str, gates: list[dict[str, Any]]) -> dict[str, Any]:
+    development_ready = all(item["status"] == "passed" for item in gates[:5])
+    mainframe_equivalent = all(item["status"] == "passed" for item in gates)
+    return {
+        "technology": technology,
+        "capability_kind": capability_kind,
+        "discovery_ready": all(item["status"] == "passed" for item in gates[:2]),
+        "development_ready": development_ready,
+        "mainframe_equivalent": mainframe_equivalent,
+        "support_claim": (
+            "mainframe-equivalent"
+            if mainframe_equivalent
+            else "development-proof; live z/OS evidence pending"
+            if development_ready
+            else "discovery and dependency analysis only"
+        ),
+        "gates": gates,
+    }
+
+
 def analyze_capabilities(
     graph: dict[str, Any],
     cics_vsam_receipt: dict[str, Any] | None = None,
     asm_receipt: dict[str, Any] | None = None,
     ims_receipt: dict[str, Any] | None = None,
+    pli_fragment: dict[str, Any] | None = None,
+    extension_catalog: dict[str, Any] | None = None,
+    postgres_data_receipt: dict[str, Any] | None = None,
+    oracle_data_receipt: dict[str, Any] | None = None,
+    campaign_receipt: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     nodes = {node["id"]: node for node in graph["nodes"]}
     kind_counts = graph["statistics"]["nodes_by_kind"]
@@ -141,64 +207,195 @@ def analyze_capabilities(
         _gate(8, "passed" if ims_live else "blocked", ["readiness/ims-expiry/readiness-receipt.json"], ims_gap),
     ]
 
-    capabilities = []
-    for technology, gates in (
-        ("CICS", cics_common),
-        ("VSAM", vsam_common),
-        ("IMS", ims_gates),
-        ("HLASM", asm_gates),
-    ):
-        development_ready = all(item["status"] == "passed" for item in gates[:5])
-        mainframe_equivalent = all(item["status"] == "passed" for item in gates)
-        capabilities.append(
-            {
-                "technology": technology,
-                "discovery_ready": all(item["status"] == "passed" for item in gates[:2]),
-                "development_ready": development_ready,
-                "mainframe_equivalent": mainframe_equivalent,
-                "support_claim": (
-                    "mainframe-equivalent"
-                    if mainframe_equivalent
-                    else "development-proof; live z/OS evidence pending"
-                    if development_ready
-                    else "discovery and dependency analysis only"
-                ),
-                "gates": gates,
-            }
+    fragment = pli_fragment or {}
+    catalog = extension_catalog or {}
+    graph_sha256 = graph["content_sha256"]
+    pli_cataloged = bool(
+        catalog.get("content_sha256") == _canonical_hash(catalog)
+        and any(
+            item.get("id") == "lightyear.pli"
+            and item.get("language") == "PL/I"
+            and item.get("status") == "reference-proof"
+            for item in catalog.get("language_packs", [])
         )
+    )
+    pli_parsed = _hashed_and_bound(fragment, graph_sha256) and pli_cataloged
+    fragment_stats = fragment.get("statistics", {})
+    fragment_kinds = fragment_stats.get("nodes_by_kind", {})
+    fragment_relations = fragment_stats.get("edges_by_relation", {})
+    external_ids = {
+        item.get("entity_id") for item in fragment.get("external_references", [])
+    }
+    pli_connected = bool(
+        pli_parsed
+        and fragment_kinds.get("pli_program", 0) >= 1
+        and fragment_kinds.get("pli_include", 0) >= 1
+        and fragment_relations.get("CALLS", 0) >= 2
+        and fragment_relations.get("READS_TABLE", 0) >= 1
+        and {
+            "legacy:cobol-program:CBACT04C",
+            "legacy:db2-table:CARDDEMO.AUTHFRDS",
+        }.issubset(external_ids)
+    )
+    pli_parse_gap = None if pli_parsed else "The PL/I fragment or extension-catalog binding is invalid."
+    pli_graph_gap = None if pli_connected else "The PL/I-to-COBOL and PL/I-to-Db2 dependency links are incomplete."
+    pli_gates = [
+        _gate(1, "passed" if pli_parsed else "blocked", [
+            "extensions/pli/pli.fragment.json",
+            f"{fragment_kinds.get('pli_program', 0)} PL/I program",
+            f"{fragment_kinds.get('pli_include', 0)} PL/I include",
+        ], pli_parse_gap),
+        _gate(2, "passed" if pli_connected else "blocked", [
+            f"{fragment_relations.get('CALLS', 0)} CALLS edges",
+            f"{fragment_relations.get('READS_TABLE', 0)} READS_TABLE edge",
+            "PL/I -> COBOL and PL/I -> Db2 external references",
+        ], pli_graph_gap),
+        _gate(3, "not_started", [], "No curated PL/I behavior contract exists."),
+        _gate(4, "not_started", [], "No bounded PL/I modernization candidate exists."),
+        _gate(5, "not_started", [], "No PL/I mutation or negative-verification gate exists."),
+        _gate(6, "blocked", [], "No authorized execution of the PL/I original on z/OS exists."),
+        _gate(7, "blocked", [], "No independent PL/I differential comparison exists."),
+        _gate(8, "blocked", [], "No signed PL/I equivalence receipt exists."),
+    ]
+
+    postgres = postgres_data_receipt or {}
+    oracle = oracle_data_receipt or {}
+    postgres_passed = _offline_data_receipt_passed(postgres, "postgresql-16")
+    oracle_passed = _offline_data_receipt_passed(oracle, "oracle-26ai-free")
+    data_parsed = bool(
+        kind_counts.get("db2_table", 0) >= 1
+        and kind_counts.get("db2_column", 0) >= 26
+        and kind_counts.get("db2_sql_statement", 0) >= 1
+    )
+    data_connected = bool(
+        data_parsed
+        and relation_counts.get("HAS_COLUMN", 0) >= 26
+        and relation_counts.get("ISSUES_SQL", 0) >= 1
+        and relation_counts.get("REFERENCES_COLUMN", 0) >= 26
+    )
+    data_development = postgres_passed and oracle_passed
+    data_receipt_gap = None if data_development else "Both target-specific offline development receipts must pass."
+    data_live_gap = "Live Db2 catalog, source rows, CDC, cutover, and rollback evidence remain pending."
+    data_gates = [
+        _gate(1, "passed" if data_parsed else "blocked", [
+            f"{kind_counts.get('db2_table', 0)} Db2 tables",
+            f"{kind_counts.get('db2_column', 0)} Db2 columns",
+            f"{kind_counts.get('db2_sql_statement', 0)} embedded SQL statements",
+        ], None if data_parsed else "Db2 schema and SQL assets are incomplete."),
+        _gate(2, "passed" if data_connected else "blocked", [
+            f"{relation_counts.get('HAS_COLUMN', 0)} HAS_COLUMN edges",
+            f"{relation_counts.get('ISSUES_SQL', 0)} ISSUES_SQL edges",
+            f"{relation_counts.get('REFERENCES_COLUMN', 0)} REFERENCES_COLUMN edges",
+        ], None if data_connected else "Db2 schema and embedded-SQL lineage is incomplete."),
+        _gate(3, "passed" if data_development else "blocked", [
+            "data-modernization/receipts/authfrds.offline.receipt.json",
+            "data-modernization/receipts/authfrds.oracle-offline.receipt.json",
+        ], data_receipt_gap),
+        _gate(4, "passed" if data_development else "blocked", [
+            "PostgreSQL 16 AUTHFRDS projection",
+            "Oracle 26ai Free AUTHFRDS projection",
+        ], data_receipt_gap),
+        _gate(5, "passed" if data_development else "blocked", [
+            "schema, key, index, row, query, commit, and rollback checks",
+            "fail-closed evidence-marker mutation tests",
+        ], data_receipt_gap),
+        _gate(6, "blocked", ["extensions/adapters/campaign/campaign.receipt.json"], data_live_gap),
+        _gate(7, "mechanism_ready", [
+            "PostgreSQL and Oracle differential-verification adapters",
+            "lightyear.db2-zos-catalog read-only collector",
+        ], data_live_gap),
+        _gate(8, "blocked", [], "No signed live Db2-to-target equivalence receipt exists."),
+    ]
+
+    capabilities = [
+        _capability("CICS", "runtime", cics_common),
+        _capability("VSAM", "data", vsam_common),
+        _capability("IMS", "runtime", ims_gates),
+        _capability("HLASM", "language", asm_gates),
+        _capability("PL/I", "language", pli_gates),
+        _capability("Db2/Data", "data", data_gates),
+    ]
+
+    campaign = campaign_receipt or {}
+    campaign_valid = bool(
+        campaign.get("content_sha256") == _canonical_hash(campaign)
+        and campaign.get("status") == "passed"
+        and campaign.get("graph_binding", {}).get("content_sha256") == graph_sha256
+        and campaign.get("production_ready") is False
+    )
+    campaign_class = campaign.get("evidence_class") if campaign_valid else None
+    collection_status = (
+        "live_observed" if campaign_class == "live" else "simulated_ready" if campaign_class == "simulated" else "blocked"
+    )
+    collection_mechanisms = [{
+        "mechanism": "Mainframe Access Campaign",
+        "status": collection_status,
+        "evidence_class": campaign_class or "unverified",
+        "live_observed": campaign_class == "live",
+        "production_ready": False,
+        "adapters": sorted(campaign.get("required_adapters", [])) if campaign_valid else [],
+        "receipt_sha256": campaign.get("content_sha256") if campaign_valid else None,
+    }]
+
+    evidence_bindings = {
+        "canonical_graph_sha256": graph_sha256,
+        "extension_catalog_sha256": catalog.get("content_sha256"),
+        "pli_fragment_sha256": fragment.get("content_sha256"),
+        "postgres_data_receipt_sha256": postgres.get("content_sha256"),
+        "oracle_data_receipt_sha256": oracle.get("content_sha256"),
+        "mainframe_campaign_receipt_sha256": campaign.get("content_sha256"),
+    }
 
     payload = {
-        "schema_version": "1.0",
+        "schema_version": "1.1",
         "analysis_type": "factorydark-mainframe-capability-readiness",
-        "graph_content_sha256": graph["content_sha256"],
+        "graph_content_sha256": graph_sha256,
         "truth_boundary": (
-            "Local, simulated, fixture, and static evidence cannot satisfy z/OS observation gates."
+            "Local, simulated, fixture, static, and offline target evidence cannot satisfy live z/OS observation or equivalence gates."
         ),
+        "evidence_bindings": evidence_bindings,
         "capabilities": capabilities,
+        "collection_mechanisms": collection_mechanisms,
     }
     payload["content_sha256"] = _canonical_hash(payload)
     return payload
 
 
-def validate_capability_analysis(payload: dict[str, Any], graph: dict[str, Any]) -> list[str]:
+def validate_capability_analysis(
+    payload: dict[str, Any],
+    graph: dict[str, Any],
+    expected: dict[str, Any] | None = None,
+) -> list[str]:
     errors: list[str] = []
-    if payload.get("schema_version") != "1.0":
+    if payload.get("schema_version") != "1.1":
         errors.append("unsupported capability analysis schema_version")
     if payload.get("graph_content_sha256") != graph.get("content_sha256"):
         errors.append("capability analysis is not bound to the canonical graph")
     if payload.get("content_sha256") != _canonical_hash(payload):
         errors.append("capability analysis content_sha256 is invalid")
     technologies = [item.get("technology") for item in payload.get("capabilities", [])]
-    if technologies != ["CICS", "VSAM", "IMS", "HLASM"]:
-        errors.append("capability analysis must cover CICS, VSAM, IMS, and HLASM in order")
+    expected_technologies = ["CICS", "VSAM", "IMS", "HLASM", "PL/I", "Db2/Data"]
+    if technologies != expected_technologies:
+        errors.append("capability analysis must cover CICS, VSAM, IMS, HLASM, PL/I, and Db2/Data in order")
     for capability in payload.get("capabilities", []):
         gates = capability.get("gates", [])
+        if capability.get("capability_kind") not in {"runtime", "language", "data"}:
+            errors.append(f"{capability.get('technology')} has an invalid capability_kind")
         if [gate.get("gate") for gate in gates] != list(range(1, 9)):
             errors.append(f"{capability.get('technology')} does not contain readiness gates 1-8")
         if capability.get("mainframe_equivalent") and any(
             gate.get("status") != "passed" for gate in gates
         ):
             errors.append(f"{capability.get('technology')} overstates mainframe equivalence")
+    mechanisms = payload.get("collection_mechanisms", [])
+    if len(mechanisms) != 1 or mechanisms[0].get("mechanism") != "Mainframe Access Campaign":
+        errors.append("capability analysis must include the mainframe access campaign")
+    elif mechanisms[0].get("evidence_class") != "live" and mechanisms[0].get("live_observed"):
+        errors.append("non-live campaign evidence cannot be reported as live observed")
+    if payload.get("evidence_bindings", {}).get("canonical_graph_sha256") != graph.get("content_sha256"):
+        errors.append("capability evidence bindings do not include the canonical graph")
+    if expected is not None and payload != expected:
+        errors.append("capability analysis is stale against bound extension, data, or campaign evidence")
     return errors
 
 

@@ -1,6 +1,27 @@
 # FactoryDark.ai CardDemo Modernization Factory
 
-Release: **v0.21.0 — mainframe access readiness campaign**
+Release: **v0.21.1 — unified capability projection**
+
+v0.21.1 gives customers and auditors one evidence-bound readiness view across runtimes, languages,
+and data. `knowledge/capabilities/mainframe-readiness.json` now includes CICS, VSAM, IMS, HLASM,
+PL/I, and Db2/Data, with an explicit capability kind and the same eight readiness gates for every
+cell. The projection binds the canonical graph, extension catalog, PL/I fragment, both offline data
+receipts, and the mainframe-access campaign receipt by content hash.
+
+The view deliberately reports different levels of maturity. PL/I is discovery-ready because the
+reference parser and mixed PL/I-to-COBOL/Db2 links pass, but it is not development-ready because no
+behavior contract, candidate, or mutation gate exists. Db2/Data is development-ready because both
+PostgreSQL and Oracle offline target proofs pass, but it is not mainframe-equivalent because live
+Db2 catalog and source-data comparison, CDC, cutover, and rollback evidence remain pending. The
+simulated MS #21 access campaign appears separately as a collection mechanism and cannot promote
+any technology to live-observed or production-ready.
+
+```bash
+./knowledge-graph.sh verify /path/to/aws-carddemo
+PYTHONPATH=src python3 -m lightyear_knowledge_graph capabilities --validate-only
+```
+
+Previous milestone: **v0.21.0 — mainframe access readiness campaign**
 
 v0.21 turns the MS #20 adapter contracts into one credential-safe, read-only customer campaign.
 The campaign collects exact, graph-addressed observations from z/OSMF Jobs, a customer-approved
@@ -130,7 +151,7 @@ verifier on Windows and Linux before the full factory suite runs.
 |---|---|---|
 | INTCALC comparator rejects known escape classes | `tests/test_comparator_escape.py` and verifier-gauntlet CI | Development evidence only |
 | Builder cannot see private holdout output by default | `tests/test_trust_boundaries.py` | Explicit per-gate exposure remains possible |
-| CICS, VSAM, IMS and bounded HLASM cells are logically exercised | `knowledge/capabilities/mainframe-readiness.json` | Not mainframe-equivalent |
+| CICS, VSAM, IMS, HLASM, PL/I, and Db2/Data readiness is visible in one projection | `knowledge/capabilities/mainframe-readiness.json` | PL/I discovery-only; Db2/Data development-only; none mainframe-equivalent |
 | Live mainframe equivalence | No qualifying customer capture yet | **Blocked** |
 | Production readiness | No production pilot evidence yet | **`production_ready: false`** |
 

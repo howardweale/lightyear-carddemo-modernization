@@ -1,47 +1,85 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://factorydark.ai/schemas/capability-readiness-1.0.json",
-  "title": "FactoryDark Mainframe Capability Readiness",
+  "$id": "https://factorydark.ai/schemas/capability-readiness-1.1.json",
+  "title": "FactoryDark Unified Mainframe Capability Readiness",
   "type": "object",
-  "required": ["schema_version", "analysis_type", "graph_content_sha256", "truth_boundary", "capabilities", "content_sha256"],
+  "required": ["schema_version", "analysis_type", "graph_content_sha256", "truth_boundary", "evidence_bindings", "capabilities", "collection_mechanisms", "content_sha256"],
   "properties": {
-    "schema_version": {"const": "1.0"},
+    "schema_version": {"const": "1.1"},
     "analysis_type": {"const": "factorydark-mainframe-capability-readiness"},
-    "graph_content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "graph_content_sha256": {"$ref": "#/$defs/hash"},
     "truth_boundary": {"type": "string", "minLength": 1},
-    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "content_sha256": {"$ref": "#/$defs/hash"},
+    "evidence_bindings": {
+      "type": "object",
+      "required": ["canonical_graph_sha256", "extension_catalog_sha256", "pli_fragment_sha256", "postgres_data_receipt_sha256", "oracle_data_receipt_sha256", "mainframe_campaign_receipt_sha256"],
+      "properties": {
+        "canonical_graph_sha256": {"$ref": "#/$defs/hash"},
+        "extension_catalog_sha256": {"$ref": "#/$defs/hash"},
+        "pli_fragment_sha256": {"$ref": "#/$defs/hash"},
+        "postgres_data_receipt_sha256": {"$ref": "#/$defs/hash"},
+        "oracle_data_receipt_sha256": {"$ref": "#/$defs/hash"},
+        "mainframe_campaign_receipt_sha256": {"$ref": "#/$defs/hash"}
+      },
+      "additionalProperties": false
+    },
     "capabilities": {
       "type": "array",
-      "minItems": 4,
+      "minItems": 6,
+      "maxItems": 6,
+      "items": {"$ref": "#/$defs/capability"}
+    },
+    "collection_mechanisms": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1,
       "items": {
         "type": "object",
-        "required": ["technology", "discovery_ready", "development_ready", "mainframe_equivalent", "support_claim", "gates"],
+        "required": ["mechanism", "status", "evidence_class", "live_observed", "production_ready", "adapters", "receipt_sha256"],
         "properties": {
-          "technology": {"enum": ["CICS", "VSAM", "IMS", "HLASM"]},
-          "discovery_ready": {"type": "boolean"},
-          "development_ready": {"type": "boolean"},
-          "mainframe_equivalent": {"type": "boolean"},
-          "support_claim": {"type": "string"},
-          "gates": {
-            "type": "array",
-            "minItems": 8,
-            "maxItems": 8,
-            "items": {
-              "type": "object",
-              "required": ["gate", "name", "status", "evidence"],
-              "properties": {
-                "gate": {"type": "integer", "minimum": 1, "maximum": 8},
-                "name": {"type": "string"},
-                "status": {"enum": ["passed", "mechanism_ready", "blocked", "not_started"]},
-                "evidence": {"type": "array", "items": {"type": "string"}},
-                "gap": {"type": "string"}
-              },
-              "additionalProperties": false
-            }
-          }
+          "mechanism": {"const": "Mainframe Access Campaign"},
+          "status": {"enum": ["live_observed", "simulated_ready", "blocked"]},
+          "evidence_class": {"enum": ["live", "recorded", "simulated", "inferred", "unverified"]},
+          "live_observed": {"type": "boolean"},
+          "production_ready": {"const": false},
+          "adapters": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+          "receipt_sha256": {"anyOf": [{"$ref": "#/$defs/hash"}, {"type": "null"}]}
         },
         "additionalProperties": false
       }
+    }
+  },
+  "$defs": {
+    "hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "capability": {
+      "type": "object",
+      "required": ["technology", "capability_kind", "discovery_ready", "development_ready", "mainframe_equivalent", "support_claim", "gates"],
+      "properties": {
+        "technology": {"enum": ["CICS", "VSAM", "IMS", "HLASM", "PL/I", "Db2/Data"]},
+        "capability_kind": {"enum": ["runtime", "language", "data"]},
+        "discovery_ready": {"type": "boolean"},
+        "development_ready": {"type": "boolean"},
+        "mainframe_equivalent": {"type": "boolean"},
+        "support_claim": {"type": "string"},
+        "gates": {
+          "type": "array",
+          "minItems": 8,
+          "maxItems": 8,
+          "items": {
+            "type": "object",
+            "required": ["gate", "name", "status", "evidence"],
+            "properties": {
+              "gate": {"type": "integer", "minimum": 1, "maximum": 8},
+              "name": {"type": "string"},
+              "status": {"enum": ["passed", "mechanism_ready", "blocked", "not_started"]},
+              "evidence": {"type": "array", "items": {"type": "string"}},
+              "gap": {"type": "string"}
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
     }
   },
   "additionalProperties": false

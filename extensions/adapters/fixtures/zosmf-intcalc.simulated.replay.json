@@ -34,12 +34,12 @@
     }
   ],
   "collected_at": "2026-08-20T00:00:00Z",
-  "content_sha256": "5b4606376ac3a34dc07b582359305f0b9412ecb2808a77dc5e2e1a2b312480f0",
-  "envelope_id": "replay:52327ce25650b92165a7411d",
+  "content_sha256": "88bb8f1b546bd4300c968bdbbe86f95df8d78cb0840be926a81ed3c297b16738",
+  "envelope_id": "replay:8963897d59067dbc8b7c020e",
   "envelope_type": "lightyear-adapter-evidence",
   "evidence_class": "simulated",
   "graph_binding": {
-    "content_sha256": "dba240076dd7452f19d2922e958119f2dce12715a6771f054d100299ea39c73e",
+    "content_sha256": "aa5355a292e38c2f77fc2bf1a901f251d1bfbf5418dc8cd5247ec3818083e5e8",
     "graph_id": "lightyear:carddemo-modernization"
   },
   "limitations": [
@@ -47,7 +47,7 @@
     "Spool bodies are hashed and discarded; only bounded metadata is retained.",
     "Replay preserves a captured observation; it is not a live system observation."
   ],
-  "recorded_from_sha256": "52327ce25650b92165a7411dfe2ae05d15391c311f442ea869e446d8d774e2e7",
+  "recorded_from_sha256": "8963897d59067dbc8b7c020e35d222806dd05a2409b7a97905ca6cf533de10b7",
   "schema_version": "1.0",
   "scope": {
     "mode": "replay",

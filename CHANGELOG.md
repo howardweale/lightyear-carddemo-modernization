@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.21.0 — 2026-08-26
+
+- Turned the z/OSMF, Db2 for z/OS catalog, and CICS CMCI contracts into one executable read-only
+  mainframe access campaign with an exact-adapter-set aggregate receipt.
+- Added a no-redirect, verified-HTTPS, GET-only transport with bounded response reads, external
+  bearer credentials, sanitized failures, and no raw-body retention.
+- Added IBM-shaped z/OSMF step-data and CICS CMCI resource parsing plus a deliberately bounded
+  customer-approved Db2 catalog REST projection.
+- Added a credential-free access profile that binds remote observations to exact graph entities
+  and rejects extra adapters, unsafe paths, secret-shaped configuration, and unbounded settings.
+- Added separate live evidence signing, graph-bound per-adapter envelopes, and aggregate validation
+  for missing, duplicate, mixed-class, invalid, unsigned, or drifted captures.
+- Added deterministic simulated campaign evidence, POSIX and PowerShell launchers, JSON schemas,
+  a customer access runbook, and adversarial transport/parser/receipt tests.
+- Kept `production_ready: false`: passing collection proves bounded read-only observations, not
+  source equivalence, performance, CDC, cutover, rollback, or production promotion.
+
 ## 0.20.0 — 2026-08-26
 
 - Added a versioned adapter evidence envelope that binds every claim to an exact graph identity and

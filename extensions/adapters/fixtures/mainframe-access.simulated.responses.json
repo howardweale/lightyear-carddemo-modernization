@@ -1,0 +1,43 @@
+{
+  "collected_at": "2026-08-26T00:00:00Z",
+  "responses": {
+    "/CICSSystemManagement/CICSPlex/CMAS1/CICSRegion/CARDDEMO/TRANSACTION/CAVW": {
+      "body": "<response><records><cicslocaltransaction applid=\"CARDDEMO\" tranid=\"CAVW\" program=\"COACTVWC\" enablestatus=\"ENABLED\"/></records></response>",
+      "content_type": "application/xml",
+      "status": 200
+    },
+    "/lightyear/db2/catalog/CARDDEMO/AUTHFRDS": {
+      "body": {
+        "column_count": 26,
+        "index_count": 1,
+        "package_count": 1,
+        "primary_key": [
+          "CARD_NUM",
+          "AUTH_TS"
+        ],
+        "schema": "CARDDEMO",
+        "table": "AUTHFRDS"
+      },
+      "content_type": "application/json",
+      "status": 200
+    },
+    "/zosmf/restjobs/jobs/INTCALC/JOB00001?step-data=Y&exec-data=Y": {
+      "body": {
+        "jobid": "JOB00001",
+        "jobname": "INTCALC",
+        "retcode": "CC 0000",
+        "status": "OUTPUT",
+        "step-data": [
+          {
+            "completion-code": "CC 0000",
+            "program-name": "CBACT04C",
+            "step-name": "STEP15"
+          }
+        ]
+      },
+      "content_type": "application/json",
+      "status": 200
+    }
+  },
+  "schema_version": "1.0"
+}

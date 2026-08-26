@@ -1,0 +1,65 @@
+{
+  "adapter": {
+    "id": "lightyear.zosmf-jobs",
+    "version": "1.1"
+  },
+  "artifacts": [
+    {
+      "content_retained": false,
+      "kind": "zosmf-job-response",
+      "sha256": "20c443222d25c83e618d874aad2c34addcdef03198233a81cfbc329cf58d8917"
+    }
+  ],
+  "claims": [
+    {
+      "assertion": "observed",
+      "details": {
+        "completion_code": "CC 0000",
+        "job_id": "JOB00001",
+        "job_name": "INTCALC",
+        "status": "OUTPUT"
+      },
+      "entity_id": "legacy:jcl-job:INTCALC",
+      "entity_kind": "node",
+      "operation": "job_status_observed"
+    },
+    {
+      "assertion": "observed",
+      "details": {
+        "completion_code": "CC 0000",
+        "program": "CBACT04C",
+        "step": "STEP15"
+      },
+      "entity_id": "legacy:cobol-program:CBACT04C",
+      "entity_kind": "node",
+      "operation": "job_step_program_observed"
+    }
+  ],
+  "collected_at": "2026-08-26T00:00:00Z",
+  "content_sha256": "417340afd087a3f23b21c1dbd90759fcd7197e753ffb684476a0febd9144b7a5",
+  "envelope_id": "capture:zosmf-jobs:carddemo-readonly-v1",
+  "envelope_type": "lightyear-adapter-evidence",
+  "evidence_class": "simulated",
+  "graph_binding": {
+    "content_sha256": "dba240076dd7452f19d2922e958119f2dce12715a6771f054d100299ea39c73e",
+    "graph_id": "lightyear:carddemo-modernization"
+  },
+  "limitations": [
+    "Raw response bodies are hashed and discarded; only bounded graph-addressed claims are retained.",
+    "This capture used deterministic simulated responses, not a customer mainframe."
+  ],
+  "schema_version": "1.0",
+  "scope": {
+    "mode": "fixture-capture",
+    "read_only": true,
+    "resources": [
+      "lightyear.zosmf-jobs"
+    ]
+  },
+  "signature": null,
+  "source": {
+    "attestation": "local-simulator",
+    "kind": "campaign-simulator",
+    "system": "carddemo-zos"
+  }
+}

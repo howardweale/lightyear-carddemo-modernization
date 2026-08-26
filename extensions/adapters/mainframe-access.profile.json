@@ -1,0 +1,31 @@
+{
+  "adapters": {
+    "lightyear.cics-cmci": {
+      "entities": {
+        "program": "legacy:cobol-program:COACTVWC",
+        "transaction": "legacy:cics-transaction:CAVW"
+      },
+      "path": "/CICSSystemManagement/CICSPlex/CMAS1/CICSRegion/CARDDEMO/TRANSACTION/CAVW"
+    },
+    "lightyear.db2-zos-catalog": {
+      "entities": {
+        "table": "legacy:db2-table:CARDDEMO.AUTHFRDS"
+      },
+      "path": "/lightyear/db2/catalog/CARDDEMO/AUTHFRDS"
+    },
+    "lightyear.zosmf-jobs": {
+      "entities": {
+        "job": "legacy:jcl-job:INTCALC",
+        "program": "legacy:cobol-program:CBACT04C"
+      },
+      "path": "/zosmf/restjobs/jobs/INTCALC/JOB00001?step-data=Y&exec-data=Y"
+    }
+  },
+  "bounds": {
+    "max_response_bytes": 65536,
+    "timeout_seconds": 15
+  },
+  "profile_id": "carddemo-readonly-v1",
+  "schema_version": "1.0",
+  "source_system": "carddemo-zos"
+}

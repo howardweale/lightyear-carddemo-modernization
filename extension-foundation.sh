@@ -14,10 +14,13 @@ replay="$project_dir/extensions/adapters/fixtures/zosmf-intcalc.simulated.replay
 fragment="$project_dir/extensions/pli/pli.fragment.json"
 receipt="$project_dir/extensions/pli/pli.fragment.receipt.json"
 catalog="$project_dir/extensions/catalog.json"
+campaign_profile="$project_dir/extensions/adapters/mainframe-access.profile.json"
+campaign_responses="$project_dir/extensions/adapters/fixtures/mainframe-access.simulated.responses.json"
+campaign_canonical="$project_dir/extensions/adapters/campaign"
 
 build_outputs() {
   local output_root="$1"
-  mkdir -p "$output_root/adapters" "$output_root/pli"
+  mkdir -p "$output_root/adapters" "$output_root/pli" "$output_root/campaign"
   "$LIGHTYEAR_PYTHON_BIN" -m lightyear_extensions catalog \
     --output "$output_root/catalog.json" >/dev/null
   "$LIGHTYEAR_PYTHON_BIN" -m lightyear_extensions build-fixture-capture \
@@ -29,6 +32,9 @@ build_outputs() {
     --graph "$graph" --source-root "$project_dir/extensions/pli/reference" \
     --repository-root "$project_dir" --output "$output_root/pli/fragment.json" \
     --receipt "$output_root/pli/receipt.json" >/dev/null
+  "$LIGHTYEAR_PYTHON_BIN" -m lightyear_extensions campaign-fixture \
+    --profile "$campaign_profile" --responses "$campaign_responses" \
+    --graph "$graph" --output-root "$output_root/campaign" >/dev/null
 }
 
 case "$action" in
@@ -39,6 +45,8 @@ case "$action" in
     cp "$project_dir/work/extension-foundation-build/adapters/replay.json" "$replay"
     cp "$project_dir/work/extension-foundation-build/pli/fragment.json" "$fragment"
     cp "$project_dir/work/extension-foundation-build/pli/receipt.json" "$receipt"
+    mkdir -p "$campaign_canonical"
+    cp "$project_dir/work/extension-foundation-build/campaign/"*.json "$campaign_canonical/"
     ;;
   verify)
     generated="$project_dir/work/extension-foundation-verify"
@@ -52,12 +60,18 @@ case "$action" in
       --capture "$generated/adapters/replay.json" --graph "$graph" >/dev/null
     "$LIGHTYEAR_PYTHON_BIN" -m lightyear_extensions validate-pli \
       --fragment "$generated/pli/fragment.json" --graph "$graph" >/dev/null
+    "$LIGHTYEAR_PYTHON_BIN" -m lightyear_extensions campaign-validate \
+      --profile "$campaign_profile" --graph "$graph" \
+      --capture-root "$generated/campaign" >/dev/null
     cmp "$catalog" "$generated/catalog.json"
     cmp "$capture" "$generated/adapters/capture.json"
     cmp "$replay" "$generated/adapters/replay.json"
     cmp "$fragment" "$generated/pli/fragment.json"
     cmp "$receipt" "$generated/pli/receipt.json"
-    echo "Trusted adapter evidence, record/replay, and PL/I graph extension are deterministic."
+    for expected in "$campaign_canonical/"*.json; do
+      cmp "$expected" "$generated/campaign/$(basename "$expected")"
+    done
+    echo "Trusted adapter evidence, mainframe access campaign, record/replay, and PL/I graph extension are deterministic."
     ;;
   *)
     echo "Usage: ./extension-foundation.sh [build|verify]" >&2

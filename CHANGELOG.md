@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.21.1 — 2026-08-26
+
+- Replaced the four-cell capability view with one evidence-bound projection spanning runtime,
+  language, and data capabilities: CICS, VSAM, IMS, HLASM, PL/I, and Db2/Data.
+- Added explicit capability kinds so discovery, development proof, and live-mainframe equivalence
+  are compared without treating languages, runtimes, and data platforms as interchangeable.
+- Bound the projection to the canonical graph, extension catalog, PL/I fragment, PostgreSQL and
+  Oracle offline receipts, and the mainframe-access campaign receipt.
+- Made the PL/I reference proof visible as discovery-ready but not development-ready, and made the
+  Db2 multi-target proof visible as development-ready but not live-mainframe-equivalent.
+- Added the MS #21 access campaign as a separate collection mechanism so simulated collector
+  readiness cannot be mistaken for a technology equivalence gate.
+- Added stale-evidence and tampered-fragment regression tests while preserving the canonical graph
+  identity and every existing fail-closed production boundary.
+
 ## 0.21.0 — 2026-08-26
 
 - Turned the z/OSMF, Db2 for z/OS catalog, and CICS CMCI contracts into one executable read-only

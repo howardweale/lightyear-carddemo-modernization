@@ -2,6 +2,7 @@
   "analysis_type": "factorydark-mainframe-capability-readiness",
   "capabilities": [
     {
+      "capability_kind": "runtime",
       "development_ready": true,
       "discovery_ready": true,
       "gates": [
@@ -82,6 +83,7 @@
       "technology": "CICS"
     },
     {
+      "capability_kind": "data",
       "development_ready": true,
       "discovery_ready": true,
       "gates": [
@@ -162,6 +164,7 @@
       "technology": "VSAM"
     },
     {
+      "capability_kind": "runtime",
       "development_ready": true,
       "discovery_ready": true,
       "gates": [
@@ -243,6 +246,7 @@
       "technology": "IMS"
     },
     {
+      "capability_kind": "language",
       "development_ready": true,
       "discovery_ready": true,
       "gates": [
@@ -323,10 +327,188 @@
       "mainframe_equivalent": false,
       "support_claim": "development-proof; live z/OS evidence pending",
       "technology": "HLASM"
+    },
+    {
+      "capability_kind": "language",
+      "development_ready": false,
+      "discovery_ready": true,
+      "gates": [
+        {
+          "evidence": [
+            "1 PL/I include",
+            "1 PL/I program",
+            "extensions/pli/pli.fragment.json"
+          ],
+          "gate": 1,
+          "name": "typed native asset parsing",
+          "status": "passed"
+        },
+        {
+          "evidence": [
+            "1 READS_TABLE edge",
+            "2 CALLS edges",
+            "PL/I -> COBOL and PL/I -> Db2 external references"
+          ],
+          "gate": 2,
+          "name": "connected dependency and control-flow graph",
+          "status": "passed"
+        },
+        {
+          "evidence": [],
+          "gap": "No curated PL/I behavior contract exists.",
+          "gate": 3,
+          "name": "curated behavior contract",
+          "status": "not_started"
+        },
+        {
+          "evidence": [],
+          "gap": "No bounded PL/I modernization candidate exists.",
+          "gate": 4,
+          "name": "bounded modernization candidate",
+          "status": "not_started"
+        },
+        {
+          "evidence": [],
+          "gap": "No PL/I mutation or negative-verification gate exists.",
+          "gate": 5,
+          "name": "mutation and negative verification",
+          "status": "not_started"
+        },
+        {
+          "evidence": [],
+          "gap": "No authorized execution of the PL/I original on z/OS exists.",
+          "gate": 6,
+          "name": "authorized execution of the original on z/OS",
+          "status": "blocked"
+        },
+        {
+          "evidence": [],
+          "gap": "No independent PL/I differential comparison exists.",
+          "gate": 7,
+          "name": "independent differential comparison",
+          "status": "blocked"
+        },
+        {
+          "evidence": [],
+          "gap": "No signed PL/I equivalence receipt exists.",
+          "gate": 8,
+          "name": "signed equivalence receipt with unresolved gaps",
+          "status": "blocked"
+        }
+      ],
+      "mainframe_equivalent": false,
+      "support_claim": "discovery and dependency analysis only",
+      "technology": "PL/I"
+    },
+    {
+      "capability_kind": "data",
+      "development_ready": true,
+      "discovery_ready": true,
+      "gates": [
+        {
+          "evidence": [
+            "2 embedded SQL statements",
+            "3 Db2 tables",
+            "31 Db2 columns"
+          ],
+          "gate": 1,
+          "name": "typed native asset parsing",
+          "status": "passed"
+        },
+        {
+          "evidence": [
+            "2 ISSUES_SQL edges",
+            "30 REFERENCES_COLUMN edges",
+            "31 HAS_COLUMN edges"
+          ],
+          "gate": 2,
+          "name": "connected dependency and control-flow graph",
+          "status": "passed"
+        },
+        {
+          "evidence": [
+            "data-modernization/receipts/authfrds.offline.receipt.json",
+            "data-modernization/receipts/authfrds.oracle-offline.receipt.json"
+          ],
+          "gate": 3,
+          "name": "curated behavior contract",
+          "status": "passed"
+        },
+        {
+          "evidence": [
+            "Oracle 26ai Free AUTHFRDS projection",
+            "PostgreSQL 16 AUTHFRDS projection"
+          ],
+          "gate": 4,
+          "name": "bounded modernization candidate",
+          "status": "passed"
+        },
+        {
+          "evidence": [
+            "fail-closed evidence-marker mutation tests",
+            "schema, key, index, row, query, commit, and rollback checks"
+          ],
+          "gate": 5,
+          "name": "mutation and negative verification",
+          "status": "passed"
+        },
+        {
+          "evidence": [
+            "extensions/adapters/campaign/campaign.receipt.json"
+          ],
+          "gap": "Live Db2 catalog, source rows, CDC, cutover, and rollback evidence remain pending.",
+          "gate": 6,
+          "name": "authorized execution of the original on z/OS",
+          "status": "blocked"
+        },
+        {
+          "evidence": [
+            "PostgreSQL and Oracle differential-verification adapters",
+            "lightyear.db2-zos-catalog read-only collector"
+          ],
+          "gap": "Live Db2 catalog, source rows, CDC, cutover, and rollback evidence remain pending.",
+          "gate": 7,
+          "name": "independent differential comparison",
+          "status": "mechanism_ready"
+        },
+        {
+          "evidence": [],
+          "gap": "No signed live Db2-to-target equivalence receipt exists.",
+          "gate": 8,
+          "name": "signed equivalence receipt with unresolved gaps",
+          "status": "blocked"
+        }
+      ],
+      "mainframe_equivalent": false,
+      "support_claim": "development-proof; live z/OS evidence pending",
+      "technology": "Db2/Data"
     }
   ],
-  "content_sha256": "1e4cb8ef66e7e74468c8fae27eece238fe35f0554cdd8b0c737db4cd3a6d82dd",
-  "graph_content_sha256": "dba240076dd7452f19d2922e958119f2dce12715a6771f054d100299ea39c73e",
-  "schema_version": "1.0",
-  "truth_boundary": "Local, simulated, fixture, and static evidence cannot satisfy z/OS observation gates."
+  "collection_mechanisms": [
+    {
+      "adapters": [
+        "lightyear.cics-cmci",
+        "lightyear.db2-zos-catalog",
+        "lightyear.zosmf-jobs"
+      ],
+      "evidence_class": "simulated",
+      "live_observed": false,
+      "mechanism": "Mainframe Access Campaign",
+      "production_ready": false,
+      "receipt_sha256": "8b155247a80efe7e42b8c9844cc7edc383b39b248fe9ad744186d1abfba275fa",
+      "status": "simulated_ready"
+    }
+  ],
+  "content_sha256": "52e6a562b0f33131f65a4284f24487f7966cf642b71c083e469998b27e2a2817",
+  "evidence_bindings": {
+    "canonical_graph_sha256": "aa5355a292e38c2f77fc2bf1a901f251d1bfbf5418dc8cd5247ec3818083e5e8",
+    "extension_catalog_sha256": "f2a3d07eaebc0a6e773c54f989325a00d0bac85a08b42e4f95e5ca200529b8df",
+    "mainframe_campaign_receipt_sha256": "8b155247a80efe7e42b8c9844cc7edc383b39b248fe9ad744186d1abfba275fa",
+    "oracle_data_receipt_sha256": "6958d7cc783d5ad00c469c112db5b665bf9ba93b7addec9cc94375d6c3f2dd83",
+    "pli_fragment_sha256": "a3dddfeaf07d955ef3056da95b6aa70e652c105742248522f8708190abae8990",
+    "postgres_data_receipt_sha256": "8e2e2dc30cffa3205ceb743f418ae937ea8ac05d6bde9041182acc61cba3abbe"
+  },
+  "graph_content_sha256": "aa5355a292e38c2f77fc2bf1a901f251d1bfbf5418dc8cd5247ec3818083e5e8",
+  "schema_version": "1.1",
+  "truth_boundary": "Local, simulated, fixture, static, and offline target evidence cannot satisfy live z/OS observation or equivalence gates."
 }

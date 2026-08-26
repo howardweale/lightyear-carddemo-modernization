@@ -69,7 +69,7 @@ def build_parser() -> argparse.ArgumentParser:
     gaps.add_argument("--graph", type=Path, default=Path("knowledge/graph.snapshot.json.gz"))
 
     capabilities = subparsers.add_parser(
-        "capabilities", help="Evaluate CICS, VSAM, IMS, and HLASM against readiness gates 1-8"
+        "capabilities", help="Project runtime, language, and data readiness against gates 1-8"
     )
     capabilities.add_argument("--graph", type=Path, default=Path("knowledge/graph.snapshot.json.gz"))
     capabilities.add_argument(
@@ -85,6 +85,27 @@ def build_parser() -> argparse.ArgumentParser:
     )
     capabilities.add_argument(
         "--ims-receipt", type=Path, default=Path("readiness/ims-expiry/readiness-receipt.json")
+    )
+    capabilities.add_argument(
+        "--pli-fragment", type=Path, default=Path("extensions/pli/pli.fragment.json")
+    )
+    capabilities.add_argument(
+        "--extension-catalog", type=Path, default=Path("extensions/catalog.json")
+    )
+    capabilities.add_argument(
+        "--postgres-data-receipt",
+        type=Path,
+        default=Path("data-modernization/receipts/authfrds.offline.receipt.json"),
+    )
+    capabilities.add_argument(
+        "--oracle-data-receipt",
+        type=Path,
+        default=Path("data-modernization/receipts/authfrds.oracle-offline.receipt.json"),
+    )
+    capabilities.add_argument(
+        "--campaign-receipt",
+        type=Path,
+        default=Path("extensions/adapters/campaign/campaign.receipt.json"),
     )
     capabilities.add_argument("--validate-only", action="store_true")
 
@@ -263,32 +284,41 @@ def main(argv: list[str] | None = None) -> int:
         print(json.dumps({"status": "passed" if not gaps else "failed", "gaps": gaps}, indent=2, sort_keys=True))
         return 0 if not gaps else 1
     if args.command == "capabilities":
+        def load_optional(path: Path) -> dict | None:
+            return json.loads(path.read_text(encoding="utf-8")) if path.exists() else None
+
+        receipt = load_optional(args.cics_vsam_receipt)
+        asm_receipt = load_optional(args.asm_receipt)
+        ims_receipt = load_optional(args.ims_receipt)
+        pli_fragment = load_optional(args.pli_fragment)
+        extension_catalog = load_optional(args.extension_catalog)
+        postgres_data_receipt = load_optional(args.postgres_data_receipt)
+        oracle_data_receipt = load_optional(args.oracle_data_receipt)
+        campaign_receipt = load_optional(args.campaign_receipt)
+        expected = analyze_capabilities(
+            payload,
+            receipt,
+            asm_receipt,
+            ims_receipt,
+            pli_fragment,
+            extension_catalog,
+            postgres_data_receipt,
+            oracle_data_receipt,
+            campaign_receipt,
+        )
         if args.validate_only:
             analysis = json.loads(args.output.read_text(encoding="utf-8"))
         else:
-            receipt = (
-                json.loads(args.cics_vsam_receipt.read_text(encoding="utf-8"))
-                if args.cics_vsam_receipt.exists()
-                else None
-            )
-            asm_receipt = (
-                json.loads(args.asm_receipt.read_text(encoding="utf-8"))
-                if args.asm_receipt.exists()
-                else None
-            )
-            ims_receipt = (
-                json.loads(args.ims_receipt.read_text(encoding="utf-8"))
-                if args.ims_receipt.exists()
-                else None
-            )
-            analysis = analyze_capabilities(payload, receipt, asm_receipt, ims_receipt)
+            analysis = expected
             write_capability_analysis(analysis, args.output)
-        errors = validate_capability_analysis(analysis, payload)
+        errors = validate_capability_analysis(analysis, payload, expected)
         print(
             json.dumps(
                 {
                     "capabilities": analysis.get("capabilities", []),
+                    "collection_mechanisms": analysis.get("collection_mechanisms", []),
                     "content_sha256": analysis.get("content_sha256"),
+                    "evidence_bindings": analysis.get("evidence_bindings", {}),
                     "errors": errors,
                     "output": str(args.output),
                     "status": "passed" if not errors else "failed",

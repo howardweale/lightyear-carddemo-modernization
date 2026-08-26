@@ -48,6 +48,11 @@ if [[ "$action" == "build" ]]; then
     --cics-vsam-receipt "$project_dir/readiness/cics-vsam/readiness-receipt.json" \
     --asm-receipt "$project_dir/readiness/asm-date/readiness-receipt.json" \
     --ims-receipt "$project_dir/readiness/ims-expiry/readiness-receipt.json" \
+    --pli-fragment "$project_dir/extensions/pli/pli.fragment.json" \
+    --extension-catalog "$project_dir/extensions/catalog.json" \
+    --postgres-data-receipt "$project_dir/data-modernization/receipts/authfrds.offline.receipt.json" \
+    --oracle-data-receipt "$project_dir/data-modernization/receipts/authfrds.oracle-offline.receipt.json" \
+    --campaign-receipt "$project_dir/extensions/adapters/campaign/campaign.receipt.json" \
     --output "$project_dir/knowledge/capabilities/mainframe-readiness.json"
 elif [[ "$action" == "verify" ]]; then
   generated="$project_dir/work/knowledge-graph-verify"
@@ -72,6 +77,11 @@ elif [[ "$action" == "verify" ]]; then
     --cics-vsam-receipt "$project_dir/readiness/cics-vsam/readiness-receipt.json" \
     --asm-receipt "$project_dir/readiness/asm-date/readiness-receipt.json" \
     --ims-receipt "$project_dir/readiness/ims-expiry/readiness-receipt.json" \
+    --pli-fragment "$project_dir/extensions/pli/pli.fragment.json" \
+    --extension-catalog "$project_dir/extensions/catalog.json" \
+    --postgres-data-receipt "$project_dir/data-modernization/receipts/authfrds.offline.receipt.json" \
+    --oracle-data-receipt "$project_dir/data-modernization/receipts/authfrds.oracle-offline.receipt.json" \
+    --campaign-receipt "$project_dir/extensions/adapters/campaign/campaign.receipt.json" \
     --output "$generated/mainframe-readiness.json"
   "$LIGHTYEAR_PYTHON_BIN" -m lightyear_knowledge_graph validate --graph "$generated/graph.snapshot.json.gz"
   "$LIGHTYEAR_PYTHON_BIN" -m lightyear_knowledge_graph validate-evidence \

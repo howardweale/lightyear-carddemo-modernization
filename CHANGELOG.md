@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.20.0 — 2026-08-26
+
+- Added a versioned adapter evidence envelope that binds every claim to an exact graph identity and
+  classifies evidence as live, recorded, simulated, or inferred.
+- Added recursive credential redaction, bounded artifact metadata, optional HMAC signatures, and
+  fail-closed validation for drift, tampering, missing graph entities, unsafe scope, and untrusted
+  signing keys.
+- Added a deterministic record/replay adapter that downgrades live captures to recorded evidence
+  and can never promote simulated or inferred evidence.
+- Added an adapter registry with implemented fixture, replay, and z/OSMF contracts plus explicit
+  pre-access contracts for Db2 for z/OS catalog and CICS CMCI collectors.
+- Added a hash-bound graph extension-fragment contract so new language packs do not silently mutate
+  the verified base graph or invalidate downstream audit and runtime evidence.
+- Added the first PL/I language pack proof for programs, procedures, includes, file access,
+  embedded Db2 SQL, and a mixed-language call into the existing CardDemo COBOL graph.
+- Added deterministic POSIX and PowerShell verification, JSON schemas, adversarial tests, and
+  committed development receipts while keeping live-mainframe and production-readiness claims
+  blocked.
+
 ## 0.19.2 — 2026-08-23
 
 - Generalized data-target generation and catalog expectations behind a versioned adapter contract.

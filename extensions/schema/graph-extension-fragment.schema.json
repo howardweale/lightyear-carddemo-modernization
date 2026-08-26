@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schemas/graph-extension-fragment-1.0.json",
+  "title": "LIGHTYEAR Graph Extension Fragment",
+  "type": "object",
+  "required": [
+    "schema_version", "fragment_type", "fragment_id", "base_graph", "language_pack",
+    "source", "nodes", "edges", "external_references", "statistics", "limitations",
+    "content_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "fragment_type": {"const": "lightyear-graph-extension"},
+    "fragment_id": {"type": "string", "minLength": 1},
+    "base_graph": {
+      "type": "object",
+      "required": ["graph_id", "schema_version", "content_sha256"],
+      "properties": {
+        "graph_id": {"type": "string"},
+        "schema_version": {"type": "string"},
+        "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    },
+    "language_pack": {"type": "object"},
+    "source": {"type": "object"},
+    "nodes": {"type": "array", "items": {"type": "object"}},
+    "edges": {"type": "array", "items": {"type": "object"}},
+    "external_references": {"type": "array", "items": {"type": "object"}},
+    "statistics": {"type": "object"},
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

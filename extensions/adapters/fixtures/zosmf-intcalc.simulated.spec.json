@@ -1,0 +1,57 @@
+{
+  "adapter": {
+    "id": "lightyear.zosmf-jobs",
+    "version": "1.0"
+  },
+  "artifacts": [
+    {
+      "content_retained": false,
+      "kind": "jes-spool-metadata",
+      "sha256": "2d48d0403dd192a78bdb98a991462557d8073359748a7198333b1d6c5afdc0ca"
+    }
+  ],
+  "claims": [
+    {
+      "assertion": "observed",
+      "details": {
+        "completion_code": "CC 0000",
+        "job_id": "JOB00001",
+        "status": "OUTPUT"
+      },
+      "entity_id": "legacy:jcl-job:INTCALC",
+      "entity_kind": "node",
+      "operation": "job_completed"
+    },
+    {
+      "assertion": "observed",
+      "details": {
+        "program": "CBACT04C",
+        "step": "STEP15"
+      },
+      "entity_id": "legacy:cobol-program:CBACT04C",
+      "entity_kind": "node",
+      "operation": "program_invoked"
+    }
+  ],
+  "collected_at": "2026-08-20T00:00:00Z",
+  "envelope_id": "fixture:zosmf-intcalc-job00001",
+  "envelope_type": "lightyear-adapter-evidence",
+  "evidence_class": "simulated",
+  "limitations": [
+    "This capture was produced by the local z/OSMF simulator, not a mainframe.",
+    "Spool bodies are hashed and discarded; only bounded metadata is retained."
+  ],
+  "schema_version": "1.0",
+  "scope": {
+    "read_only": true,
+    "resources": [
+      "JES job status",
+      "bounded spool metadata"
+    ]
+  },
+  "source": {
+    "attestation": "local-simulator",
+    "kind": "zosmf-simulator",
+    "system": "carddemo-intcalc-simulator"
+  }
+}

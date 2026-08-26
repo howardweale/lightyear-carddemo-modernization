@@ -1,0 +1,380 @@
+{
+  "base_graph": {
+    "content_sha256": "dba240076dd7452f19d2922e958119f2dce12715a6771f054d100299ea39c73e",
+    "graph_id": "lightyear:carddemo-modernization",
+    "schema_version": "1.1"
+  },
+  "content_sha256": "be073a0c9d0b4cdfed8798a0520755b52b9b29ce1cb56df3cc7cc5d474a2c1d0",
+  "edges": [
+    {
+      "evidence": [
+        {
+          "confidence": "observed",
+          "line_end": 19,
+          "line_start": 19,
+          "method": "pli-language-pack-v1",
+          "path": "extensions/pli/reference/ACCTPL1.pli",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "fragment-edge:1e4fcda433e21fcaff8d",
+      "properties": {},
+      "relation": "WRITES",
+      "source": "extension:pli-program:ACCTPL1",
+      "target": "extension:pli-file:ACCTPL1:AUTHOUT"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "observed",
+          "line_end": 17,
+          "line_start": 17,
+          "method": "pli-language-pack-v1",
+          "path": "extensions/pli/reference/ACCTPL1.pli",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "fragment-edge:252d8ba2efed4af5d9c8",
+      "properties": {},
+      "relation": "CALLS",
+      "source": "extension:pli-program:ACCTPL1",
+      "target": "extension:pli-procedure:ACCTPL1:CALC_RISK"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "observed",
+          "line_end": 9,
+          "line_start": 9,
+          "method": "pli-language-pack-v1",
+          "path": "extensions/pli/reference/ACCTPL1.pli",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "fragment-edge:2bd12c3442600c0b46d8",
+      "properties": {},
+      "relation": "READS",
+      "source": "extension:pli-program:ACCTPL1",
+      "target": "extension:pli-file:ACCTPL1:AUTHIN"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "observed",
+          "line_end": 3,
+          "line_start": 3,
+          "method": "pli-language-pack-v1",
+          "path": "extensions/pli/reference/ACCTPL1.pli",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "fragment-edge:4cc4bc3eb92433ca0ff6",
+      "properties": {},
+      "relation": "USES_INCLUDE",
+      "source": "extension:pli-program:ACCTPL1",
+      "target": "extension:pli-include:AUTHCOM"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "observed",
+          "line_end": 15,
+          "line_start": 11,
+          "method": "pli-language-pack-v1",
+          "path": "extensions/pli/reference/ACCTPL1.pli",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "fragment-edge:50cb9a7eec0173e07fb3",
+      "properties": {},
+      "relation": "READS_TABLE",
+      "source": "extension:pli-sql:ACCTPL1:11:1",
+      "target": "legacy:db2-table:CARDDEMO.AUTHFRDS"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "observed",
+          "line_end": 20,
+          "line_start": 20,
+          "method": "pli-language-pack-v1",
+          "path": "extensions/pli/reference/ACCTPL1.pli",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "fragment-edge:646e86fea3bb10de7807",
+      "properties": {},
+      "relation": "CONTAINS",
+      "source": "extension:pli-program:ACCTPL1",
+      "target": "extension:pli-procedure:ACCTPL1:CALC_RISK"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "observed",
+          "line_end": 15,
+          "line_start": 11,
+          "method": "pli-language-pack-v1",
+          "path": "extensions/pli/reference/ACCTPL1.pli",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "fragment-edge:c4689099fd50963fdec7",
+      "properties": {},
+      "relation": "ISSUES_SQL",
+      "source": "extension:pli-program:ACCTPL1",
+      "target": "extension:pli-sql:ACCTPL1:11:1"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "observed",
+          "line_end": 18,
+          "line_start": 18,
+          "method": "pli-language-pack-v1",
+          "path": "extensions/pli/reference/ACCTPL1.pli",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "fragment-edge:cdc07ecf97d0959f4a6e",
+      "properties": {},
+      "relation": "CALLS",
+      "source": "extension:pli-program:ACCTPL1",
+      "target": "legacy:cobol-program:CBACT04C"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "observed",
+          "line_end": 1,
+          "line_start": 1,
+          "method": "pli-language-pack-v1",
+          "path": "extensions/pli/reference/AUTHCOM.inc",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "fragment-edge:e64099dd00457c46f9d4",
+      "properties": {},
+      "relation": "DECLARES",
+      "source": "extension:source-file:extensions/pli/reference/AUTHCOM.inc",
+      "target": "extension:pli-include:AUTHCOM"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "observed",
+          "line_end": 2,
+          "line_start": 2,
+          "method": "pli-language-pack-v1",
+          "path": "extensions/pli/reference/ACCTPL1.pli",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "fragment-edge:fb3bdc3aa3e63165433c",
+      "properties": {},
+      "relation": "DECLARES",
+      "source": "extension:source-file:extensions/pli/reference/ACCTPL1.pli",
+      "target": "extension:pli-program:ACCTPL1"
+    }
+  ],
+  "external_references": [
+    {
+      "entity_id": "legacy:cobol-program:CBACT04C",
+      "entity_kind": "node"
+    },
+    {
+      "entity_id": "legacy:db2-table:CARDDEMO.AUTHFRDS",
+      "entity_kind": "node"
+    }
+  ],
+  "fragment_id": "lightyear:pli-reference-v1",
+  "fragment_type": "lightyear-graph-extension",
+  "language_pack": {
+    "extensions": [
+      ".inc",
+      ".pl1",
+      ".pli"
+    ],
+    "id": "lightyear.pli",
+    "language": "PL/I",
+    "version": "1.0"
+  },
+  "limitations": [
+    "The bundled PL/I source is a reference fixture, not customer production source.",
+    "Static PL/I extraction does not prove runtime behavior or compilation equivalence.",
+    "The fragment is bound to one exact base graph identity and fails closed after graph drift."
+  ],
+  "nodes": [
+    {
+      "evidence": [],
+      "id": "extension:pli-file:ACCTPL1:AUTHIN",
+      "kind": "pli_file_handle",
+      "name": "AUTHIN",
+      "properties": {
+        "program": "ACCTPL1"
+      }
+    },
+    {
+      "evidence": [],
+      "id": "extension:pli-file:ACCTPL1:AUTHOUT",
+      "kind": "pli_file_handle",
+      "name": "AUTHOUT",
+      "properties": {
+        "program": "ACCTPL1"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "observed",
+          "line_end": 7,
+          "line_start": 1,
+          "method": "pli-language-pack-v1",
+          "path": "extensions/pli/reference/AUTHCOM.inc",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "extension:pli-include:AUTHCOM",
+      "kind": "pli_include",
+      "name": "AUTHCOM",
+      "properties": {
+        "path": "extensions/pli/reference/AUTHCOM.inc"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "observed",
+          "line_end": 20,
+          "line_start": 20,
+          "method": "pli-language-pack-v1",
+          "path": "extensions/pli/reference/ACCTPL1.pli",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "extension:pli-procedure:ACCTPL1:CALC_RISK",
+      "kind": "pli_procedure",
+      "name": "CALC_RISK",
+      "properties": {
+        "path": "extensions/pli/reference/ACCTPL1.pli",
+        "program": "ACCTPL1"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "observed",
+          "line_end": 2,
+          "line_start": 2,
+          "method": "pli-language-pack-v1",
+          "path": "extensions/pli/reference/ACCTPL1.pli",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "extension:pli-program:ACCTPL1",
+      "kind": "pli_program",
+      "name": "ACCTPL1",
+      "properties": {
+        "language": "PL/I",
+        "path": "extensions/pli/reference/ACCTPL1.pli",
+        "reference_fixture": true
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "observed",
+          "line_end": 15,
+          "line_start": 11,
+          "method": "pli-language-pack-v1",
+          "path": "extensions/pli/reference/ACCTPL1.pli",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "extension:pli-sql:ACCTPL1:11:1",
+      "kind": "db2_sql_statement",
+      "name": "SELECT CARDDEMO.AUTHFRDS",
+      "properties": {
+        "language": "PL/I",
+        "normalized_sql": "SELECT APPROVED_AMOUNT, FRAUD_FLAG INTO :APPROVED_AMOUNT, :FRAUD_FLAG FROM CARDDEMO.AUTHFRDS WHERE TRANSACTION_ID = :TRANSACTION_ID",
+        "operation": "SELECT",
+        "program": "ACCTPL1"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "observed",
+          "line_end": 29,
+          "line_start": 1,
+          "method": "pli-language-pack-v1",
+          "path": "extensions/pli/reference/ACCTPL1.pli",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "extension:source-file:extensions/pli/reference/ACCTPL1.pli",
+      "kind": "source_file",
+      "name": "ACCTPL1.pli",
+      "properties": {
+        "content_sha256": "a0db8e97eb0363e5888480f274bb58e024c35bb7729b760206e010252d0107f1",
+        "hash_basis": "normalized-lf",
+        "language": "PL/I",
+        "path": "extensions/pli/reference/ACCTPL1.pli",
+        "reference_fixture": true,
+        "transport_content_sha256": "a0db8e97eb0363e5888480f274bb58e024c35bb7729b760206e010252d0107f1"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "observed",
+          "line_end": 7,
+          "line_start": 1,
+          "method": "pli-language-pack-v1",
+          "path": "extensions/pli/reference/AUTHCOM.inc",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "extension:source-file:extensions/pli/reference/AUTHCOM.inc",
+      "kind": "source_file",
+      "name": "AUTHCOM.inc",
+      "properties": {
+        "content_sha256": "7e0ae88ca9679f4259b96e7629503e5ed6c2d5df094a7d40c68c8e0a6b524318",
+        "hash_basis": "normalized-lf",
+        "language": "PL/I include",
+        "path": "extensions/pli/reference/AUTHCOM.inc",
+        "reference_fixture": true,
+        "transport_content_sha256": "7e0ae88ca9679f4259b96e7629503e5ed6c2d5df094a7d40c68c8e0a6b524318"
+      }
+    }
+  ],
+  "schema_version": "1.0",
+  "source": {
+    "kind": "reference-fixture",
+    "root": "extensions/pli/reference",
+    "source_id": "source:lightyear-carddemo"
+  },
+  "statistics": {
+    "edge_count": 10,
+    "edges_by_relation": {
+      "CALLS": 2,
+      "CONTAINS": 1,
+      "DECLARES": 2,
+      "ISSUES_SQL": 1,
+      "READS": 1,
+      "READS_TABLE": 1,
+      "USES_INCLUDE": 1,
+      "WRITES": 1
+    },
+    "external_reference_count": 2,
+    "node_count": 8,
+    "nodes_by_kind": {
+      "db2_sql_statement": 1,
+      "pli_file_handle": 2,
+      "pli_include": 1,
+      "pli_procedure": 1,
+      "pli_program": 1,
+      "source_file": 2
+    }
+  }
+}

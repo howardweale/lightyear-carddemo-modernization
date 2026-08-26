@@ -1,0 +1,79 @@
+{
+  "adapters": [
+    {
+      "capabilities": [
+        "installed-resources",
+        "definitional-resources",
+        "region-identity"
+      ],
+      "evidence_classes": [
+        "live",
+        "recorded"
+      ],
+      "id": "lightyear.cics-cmci",
+      "version": "0.1-contract"
+    },
+    {
+      "capabilities": [
+        "tables",
+        "columns",
+        "constraints",
+        "indexes",
+        "packages"
+      ],
+      "evidence_classes": [
+        "live",
+        "recorded"
+      ],
+      "id": "lightyear.db2-zos-catalog",
+      "version": "0.1-contract"
+    },
+    {
+      "capabilities": [
+        "bounded-fixture-capture"
+      ],
+      "evidence_classes": [
+        "simulated",
+        "inferred"
+      ],
+      "id": "lightyear.fixture",
+      "version": "1.0"
+    },
+    {
+      "capabilities": [
+        "content-addressed-replay",
+        "classification-downgrade"
+      ],
+      "evidence_classes": [
+        "recorded",
+        "simulated",
+        "inferred"
+      ],
+      "id": "lightyear.recorded-replay",
+      "version": "1.0"
+    },
+    {
+      "capabilities": [
+        "jes-job-status",
+        "bounded-spool-metadata",
+        "graph-addressed-observations"
+      ],
+      "evidence_classes": [
+        "live",
+        "simulated"
+      ],
+      "id": "lightyear.zosmf-jobs",
+      "version": "1.0"
+    }
+  ],
+  "content_sha256": "4f3c004306b68513639a468c6d857681b4925aec0bccee47332f0f92bddf8d65",
+  "language_packs": [
+    {
+      "id": "lightyear.pli",
+      "language": "PL/I",
+      "status": "reference-proof",
+      "version": "1.0"
+    }
+  ],
+  "schema_version": "1.0"
+}

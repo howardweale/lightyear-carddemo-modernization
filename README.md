@@ -1,6 +1,29 @@
 # FactoryDark.ai CardDemo Modernization Factory
 
-Release: **v0.19.2 — multi-target data equivalence cell**
+Release: **v0.20.0 — trusted extension foundation**
+
+v0.20 turns the verified factory into an extensible product boundary without pretending that
+recorded or simulated evidence is live. Every adapter capture declares its evidence class, read-only
+scope, source attestation, bounded artifacts, limitations, and exact graph identity. Content hashes,
+optional signatures, recursive credential redaction, and fail-closed entity validation protect the
+boundary. Deterministic replay preserves captured facts but can never increase their trust class.
+
+The first language-pack proof adds PL/I programs, internal procedures, includes, file access,
+embedded Db2 SQL, and a mixed-language call into the existing COBOL estate. It is emitted as a
+content-addressed extension fragment bound to the exact v0.19 graph hash. This avoids silently
+changing the canonical graph and invalidating its runtime, audit, portfolio, and control-tower
+evidence.
+
+```bash
+./extension-foundation.sh verify
+```
+
+The bundled PL/I workload and adapter captures are reference fixtures. Live z/OSMF, Db2 catalog,
+CICS CMCI, customer PL/I compilation, runtime equivalence, CDC, cutover, and production readiness
+remain explicitly blocked until authorized customer evidence is available. See
+[extensions/README.md](extensions/README.md).
+
+Previous milestone: **v0.19.2 — multi-target data equivalence cell**
 
 v0.19.2 turns the PostgreSQL-only live check into a target-adapter contract and adds Oracle
 Database 26ai Free as the second implementation. Both adapters must report exact column metadata,

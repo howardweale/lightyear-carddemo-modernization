@@ -1,0 +1,59 @@
+{
+  "adapter": {
+    "id": "lightyear.db2-zos-catalog",
+    "version": "1.0"
+  },
+  "artifacts": [
+    {
+      "content_retained": false,
+      "kind": "db2-zos-catalog-response",
+      "sha256": "d4441c7a9ac100330d177f1f8359d14380bb4ab161e4720c5745cd17411f7c17"
+    }
+  ],
+  "claims": [
+    {
+      "assertion": "observed",
+      "details": {
+        "column_count": 26,
+        "index_count": 1,
+        "package_count": 1,
+        "primary_key": [
+          "CARD_NUM",
+          "AUTH_TS"
+        ],
+        "schema": "CARDDEMO",
+        "table": "AUTHFRDS"
+      },
+      "entity_id": "legacy:db2-table:CARDDEMO.AUTHFRDS",
+      "entity_kind": "node",
+      "operation": "db2_catalog_observed"
+    }
+  ],
+  "collected_at": "2026-08-26T00:00:00Z",
+  "content_sha256": "7a604691b0198605f4dee939905858c3bdb99f392d5e94a1f3d536759d2cc9ce",
+  "envelope_id": "capture:db2-zos-catalog:carddemo-readonly-v1",
+  "envelope_type": "lightyear-adapter-evidence",
+  "evidence_class": "simulated",
+  "graph_binding": {
+    "content_sha256": "dba240076dd7452f19d2922e958119f2dce12715a6771f054d100299ea39c73e",
+    "graph_id": "lightyear:carddemo-modernization"
+  },
+  "limitations": [
+    "Raw response bodies are hashed and discarded; only bounded graph-addressed claims are retained.",
+    "This capture used deterministic simulated responses, not a customer mainframe."
+  ],
+  "schema_version": "1.0",
+  "scope": {
+    "mode": "fixture-capture",
+    "read_only": true,
+    "resources": [
+      "lightyear.db2-zos-catalog"
+    ]
+  },
+  "signature": null,
+  "source": {
+    "attestation": "local-simulator",
+    "kind": "campaign-simulator",
+    "system": "carddemo-zos"
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "campaign_id": "campaign:carddemo-readonly-v1",
+  "captures": [
+    {
+      "adapter_id": "lightyear.cics-cmci",
+      "content_sha256": "e53a22d2eec108604a03f66f95d6a9969ce7d77d2be75feec3851e312a78ce2d",
+      "evidence_class": "simulated"
+    },
+    {
+      "adapter_id": "lightyear.db2-zos-catalog",
+      "content_sha256": "7a604691b0198605f4dee939905858c3bdb99f392d5e94a1f3d536759d2cc9ce",
+      "evidence_class": "simulated"
+    },
+    {
+      "adapter_id": "lightyear.zosmf-jobs",
+      "content_sha256": "417340afd087a3f23b21c1dbd90759fcd7197e753ffb684476a0febd9144b7a5",
+      "evidence_class": "simulated"
+    }
+  ],
+  "checks": {
+    "all_captures_valid": true,
+    "all_graph_bound": true,
+    "all_read_only": true,
+    "consistent_evidence_class": true,
+    "exact_adapter_set": true,
+    "live_signatures_trusted": true,
+    "unique_adapters": true
+  },
+  "content_sha256": "8bfbfd6ecc3115e8adfb3abb8e6b7e6c52fbfc6b1434b38546073baa48681bdd",
+  "errors": [],
+  "evidence_class": "simulated",
+  "graph_binding": {
+    "content_sha256": "dba240076dd7452f19d2922e958119f2dce12715a6771f054d100299ea39c73e",
+    "graph_id": "lightyear:carddemo-modernization"
+  },
+  "limitations": [
+    "A passing campaign proves bounded read-only observations, not modernization equivalence.",
+    "Production promotion still requires customer-authorized baselines, policy approval, and cutover evidence."
+  ],
+  "production_ready": false,
+  "profile_id": "carddemo-readonly-v1",
+  "receipt_type": "lightyear-mainframe-access-campaign",
+  "required_adapters": [
+    "lightyear.cics-cmci",
+    "lightyear.db2-zos-catalog",
+    "lightyear.zosmf-jobs"
+  ],
+  "schema_version": "1.0",
+  "source_system": "carddemo-zos",
+  "status": "passed"
+}

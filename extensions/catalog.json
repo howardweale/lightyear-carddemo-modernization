@@ -4,14 +4,16 @@
       "capabilities": [
         "installed-resources",
         "definitional-resources",
-        "region-identity"
+        "region-identity",
+        "credential-safe-live-capture"
       ],
       "evidence_classes": [
         "live",
-        "recorded"
+        "recorded",
+        "simulated"
       ],
       "id": "lightyear.cics-cmci",
-      "version": "0.1-contract"
+      "version": "1.0"
     },
     {
       "capabilities": [
@@ -19,14 +21,16 @@
         "columns",
         "constraints",
         "indexes",
-        "packages"
+        "packages",
+        "credential-safe-live-capture"
       ],
       "evidence_classes": [
         "live",
-        "recorded"
+        "recorded",
+        "simulated"
       ],
       "id": "lightyear.db2-zos-catalog",
-      "version": "0.1-contract"
+      "version": "1.0"
     },
     {
       "capabilities": [
@@ -56,17 +60,18 @@
       "capabilities": [
         "jes-job-status",
         "bounded-spool-metadata",
-        "graph-addressed-observations"
+        "graph-addressed-observations",
+        "credential-safe-live-capture"
       ],
       "evidence_classes": [
         "live",
         "simulated"
       ],
       "id": "lightyear.zosmf-jobs",
-      "version": "1.0"
+      "version": "1.1"
     }
   ],
-  "content_sha256": "4f3c004306b68513639a468c6d857681b4925aec0bccee47332f0f92bddf8d65",
+  "content_sha256": "f2a3d07eaebc0a6e773c54f989325a00d0bac85a08b42e4f95e5ca200529b8df",
   "language_packs": [
     {
       "id": "lightyear.pli",

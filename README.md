@@ -1,6 +1,39 @@
 # FactoryDark.ai CardDemo Modernization Factory
 
-Release: **v0.20.0 — trusted extension foundation**
+Release: **v0.21.0 — mainframe access readiness campaign**
+
+v0.21 turns the MS #20 adapter contracts into one credential-safe, read-only customer campaign.
+The campaign collects exact, graph-addressed observations from z/OSMF Jobs, a customer-approved
+Db2 for z/OS catalog REST projection, and CICS CMCI. The three envelopes must share the exact
+adapter set, graph identity, evidence class, and read-only posture before the aggregate receipt can
+pass. Missing, duplicate, malformed, mixed-class, oversized, redirected, insecure, or tampered
+evidence fails closed.
+
+Credentials are read only from environment variables and are never written to profiles, captures,
+receipts, errors, or logs. Live access requires verified HTTPS and a separate customer evidence
+signing key. Raw response bodies are hashed and discarded. The identical parsers run against
+committed IBM-shaped development responses today:
+
+```bash
+./mainframe-access.sh verify
+./mainframe-access.sh simulate
+```
+
+When authorized access is available:
+
+```bash
+export LIGHTYEAR_MAINFRAME_BEARER='...'
+export LIGHTYEAR_EXTENSION_EVIDENCE_KEY='at-least-32-bytes...'
+./mainframe-access.sh live https://mainframe.example customer-campaign-key
+```
+
+PowerShell equivalents are provided. A passing live campaign proves bounded observations from the
+configured source; it does not prove full source equivalence or production readiness. Customer-
+authorized baselines, independent comparison, performance, CDC, cutover, rollback, and promotion
+approval remain explicit gates, so `production_ready` remains `false`. See
+[the mainframe access runbook](extensions/adapters/README.md).
+
+Previous milestone: **v0.20.0 — trusted extension foundation**
 
 v0.20 turns the verified factory into an extensible product boundary without pretending that
 recorded or simulated evidence is live. Every adapter capture declares its evidence class, read-only

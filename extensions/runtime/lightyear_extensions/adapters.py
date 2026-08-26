@@ -143,20 +143,29 @@ def default_registry() -> AdapterRegistry:
     registry.register(RecordedReplayAdapter.descriptor)
     registry.register(AdapterDescriptor(
         "lightyear.zosmf-jobs",
-        "1.0",
-        ("jes-job-status", "bounded-spool-metadata", "graph-addressed-observations"),
+        "1.1",
+        (
+            "jes-job-status", "bounded-spool-metadata", "graph-addressed-observations",
+            "credential-safe-live-capture",
+        ),
         ("live", "simulated"),
     ))
     registry.register(AdapterDescriptor(
         "lightyear.db2-zos-catalog",
-        "0.1-contract",
-        ("tables", "columns", "constraints", "indexes", "packages"),
-        ("live", "recorded"),
+        "1.0",
+        (
+            "tables", "columns", "constraints", "indexes", "packages",
+            "credential-safe-live-capture",
+        ),
+        ("live", "recorded", "simulated"),
     ))
     registry.register(AdapterDescriptor(
         "lightyear.cics-cmci",
-        "0.1-contract",
-        ("installed-resources", "definitional-resources", "region-identity"),
-        ("live", "recorded"),
+        "1.0",
+        (
+            "installed-resources", "definitional-resources", "region-identity",
+            "credential-safe-live-capture",
+        ),
+        ("live", "recorded", "simulated"),
     ))
     return registry

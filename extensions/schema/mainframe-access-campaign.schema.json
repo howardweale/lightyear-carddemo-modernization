@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schema/mainframe-access-campaign.schema.json",
+  "additionalProperties": false,
+  "properties": {
+    "campaign_id": {"minLength": 1, "type": "string"},
+    "captures": {"items": {"type": "object"}, "minItems": 3, "type": "array"},
+    "checks": {"additionalProperties": {"type": "boolean"}, "type": "object"},
+    "content_sha256": {"pattern": "^[0-9a-f]{64}$", "type": "string"},
+    "errors": {"items": {"type": "string"}, "type": "array"},
+    "evidence_class": {"enum": ["live", "simulated", "mixed"]},
+    "graph_binding": {"type": "object"},
+    "limitations": {"items": {"type": "string"}, "type": "array"},
+    "production_ready": {"const": false},
+    "profile_id": {"minLength": 1, "type": "string"},
+    "receipt_type": {"const": "lightyear-mainframe-access-campaign"},
+    "required_adapters": {"items": {"type": "string"}, "minItems": 3, "type": "array"},
+    "schema_version": {"const": "1.0"},
+    "source_system": {"minLength": 1, "type": "string"},
+    "status": {"enum": ["passed", "failed"]}
+  },
+  "required": [
+    "schema_version", "receipt_type", "campaign_id", "profile_id", "source_system",
+    "graph_binding", "evidence_class", "required_adapters", "captures", "checks",
+    "errors", "production_ready", "limitations", "status", "content_sha256"
+  ],
+  "type": "object"
+}

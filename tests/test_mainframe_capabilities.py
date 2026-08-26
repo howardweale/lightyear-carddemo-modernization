@@ -51,6 +51,7 @@ class MainframeCapabilityGraphTests(unittest.TestCase):
             "ims_receipt": self.load_json("readiness/ims-expiry/readiness-receipt.json"),
             "pli_fragment": self.load_json("extensions/pli/pli.fragment.json"),
             "extension_catalog": self.load_json("extensions/catalog.json"),
+            "pli_development_receipt": self.load_json("extensions/pli/modernization/development.receipt.json"),
             "postgres_data_receipt": self.load_json("data-modernization/receipts/authfrds.offline.receipt.json"),
             "oracle_data_receipt": self.load_json("data-modernization/receipts/authfrds.oracle-offline.receipt.json"),
             "campaign_receipt": self.load_json("extensions/adapters/campaign/campaign.receipt.json"),
@@ -117,13 +118,14 @@ class MainframeCapabilityGraphTests(unittest.TestCase):
         self.assertTrue(by_name["HLASM"]["development_ready"])
         self.assertTrue(by_name["IMS"]["development_ready"])
         self.assertTrue(by_name["PL/I"]["discovery_ready"])
-        self.assertFalse(by_name["PL/I"]["development_ready"])
+        self.assertTrue(by_name["PL/I"]["development_ready"])
         self.assertTrue(by_name["Db2/Data"]["development_ready"])
         self.assertTrue(all(not item["mainframe_equivalent"] for item in by_name.values()))
         self.assertEqual("language", by_name["PL/I"]["capability_kind"])
         self.assertEqual("data", by_name["Db2/Data"]["capability_kind"])
         self.assertEqual("blocked", by_name["HLASM"]["gates"][5]["status"])
         self.assertEqual("mechanism_ready", by_name["IMS"]["gates"][6]["status"])
+        self.assertEqual("mechanism_ready", by_name["PL/I"]["gates"][6]["status"])
         campaign = analysis["collection_mechanisms"][0]
         self.assertEqual("simulated_ready", campaign["status"])
         self.assertEqual("simulated", campaign["evidence_class"])
@@ -138,6 +140,15 @@ class MainframeCapabilityGraphTests(unittest.TestCase):
         self.assertFalse(by_name["PL/I"]["discovery_ready"])
         self.assertFalse(by_name["PL/I"]["development_ready"])
         self.assertTrue(by_name["Db2/Data"]["development_ready"])
+
+    def test_tampered_pli_development_receipt_fails_closed(self) -> None:
+        receipt = self.load_json("extensions/pli/modernization/development.receipt.json")
+        receipt["checks"]["mutation_and_negative_verification"] = False
+        analysis = self.expected_projection(pli_development_receipt=receipt)
+        pli = next(item for item in analysis["capabilities"] if item["technology"] == "PL/I")
+        self.assertTrue(pli["discovery_ready"])
+        self.assertFalse(pli["development_ready"])
+        self.assertFalse(pli["mainframe_equivalent"])
 
     def test_stale_projection_is_rejected_when_bound_evidence_changes(self) -> None:
         analysis = self.expected_projection()

@@ -1,0 +1,60 @@
+{
+  "cobol_call": {
+    "boundary": "Invocation contract only; CBACT04C file processing remains independently verified by the INTCALC cell.",
+    "calling_convention": "OPTIONS(COBOL)",
+    "fields": {
+      "PARM_DATE": "2026-08-20",
+      "PARM_LENGTH": 10
+    },
+    "parameter": "EXTERNAL_PARMS",
+    "program": "CBACT04C"
+  },
+  "content_sha256": "c04c386eb896f3d74db88827ba5ef93165404d594843317e42635e6fae61b00e",
+  "contract_type": "lightyear-pli-mixed-behavior-contract",
+  "record_contract": {
+    "approved_amount": {
+      "precision": 12,
+      "scale": 2,
+      "type": "DECIMAL"
+    },
+    "authorization_code": {
+      "length": 6,
+      "type": "CHAR"
+    },
+    "card_number": {
+      "length": 16,
+      "type": "CHAR"
+    },
+    "fraud_flag": {
+      "length": 1,
+      "type": "CHAR",
+      "values": [
+        "N",
+        "Y"
+      ]
+    },
+    "risk_score": {
+      "precision": 5,
+      "rounding": "truncate",
+      "scale": 2,
+      "type": "DECIMAL"
+    },
+    "transaction_id": {
+      "logical_length": 15,
+      "padding": "right-space",
+      "pli_length": 16,
+      "type": "CHAR"
+    }
+  },
+  "schema_version": "1.0",
+  "scope": "ACCTPL1 bounded authorization-risk cell",
+  "steps": [
+    "READ AUTHIN into AUTHORIZATION_RECORD",
+    "SELECT APPROVED_AMT and AUTH_FRAUD into APPROVED_AMOUNT and FRAUD_FLAG from CARDDEMO.AUTHFRDS by TRANSACTION_ID",
+    "CALC_RISK: fraud Y gives 100.00; otherwise DIVIDE(amount,100,5,2)",
+    "CALL CBACT04C using OPTIONS(COBOL) and EXTERNAL_PARMS",
+    "WRITE AUTHORIZATION_RECORD to AUTHOUT"
+  ],
+  "truth_boundary": "Local executable development evidence; no compiled or executed PL/I observation on z/OS.",
+  "workload_id": "workload:carddemo-pli-auth-risk"
+}

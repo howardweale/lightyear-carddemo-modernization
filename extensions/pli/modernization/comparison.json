@@ -1,0 +1,91 @@
+{
+  "all_mutations_detected": true,
+  "case_results": [
+    {
+      "actual_sha256": "10ce0620888fbf66e724fc3d50425446a1a604495fe6c326746ab3f7ecbb393c",
+      "case_id": "db2-overwrite-non-fraud",
+      "equivalent": true,
+      "expected_sha256": "10ce0620888fbf66e724fc3d50425446a1a604495fe6c326746ab3f7ecbb393c"
+    },
+    {
+      "actual_sha256": "df47849b0250ff7ba964eedd57ef81514e5b813e991f8b258ae3eb61878c1586",
+      "case_id": "db2-overwrite-fraud",
+      "equivalent": true,
+      "expected_sha256": "df47849b0250ff7ba964eedd57ef81514e5b813e991f8b258ae3eb61878c1586"
+    },
+    {
+      "actual_sha256": "a799f72687f1df66229d15cfc56544af9973d42155f05c07a5d9929bdbd22181",
+      "case_id": "sql-not-found",
+      "equivalent": true,
+      "expected_sha256": "a799f72687f1df66229d15cfc56544af9973d42155f05c07a5d9929bdbd22181"
+    },
+    {
+      "actual_sha256": "dc28d6cdb0c352360bf75e3bf794a02c84e417c96d5abf7570d83c663f8622ad",
+      "case_id": "invalid-card-width",
+      "equivalent": true,
+      "expected_sha256": "dc28d6cdb0c352360bf75e3bf794a02c84e417c96d5abf7570d83c663f8622ad"
+    },
+    {
+      "actual_sha256": "dc28d6cdb0c352360bf75e3bf794a02c84e417c96d5abf7570d83c663f8622ad",
+      "case_id": "invalid-transaction-width",
+      "equivalent": true,
+      "expected_sha256": "dc28d6cdb0c352360bf75e3bf794a02c84e417c96d5abf7570d83c663f8622ad"
+    },
+    {
+      "actual_sha256": "dc28d6cdb0c352360bf75e3bf794a02c84e417c96d5abf7570d83c663f8622ad",
+      "case_id": "invalid-fraud-flag",
+      "equivalent": true,
+      "expected_sha256": "dc28d6cdb0c352360bf75e3bf794a02c84e417c96d5abf7570d83c663f8622ad"
+    },
+    {
+      "actual_sha256": "dc28d6cdb0c352360bf75e3bf794a02c84e417c96d5abf7570d83c663f8622ad",
+      "case_id": "invalid-decimal",
+      "equivalent": true,
+      "expected_sha256": "dc28d6cdb0c352360bf75e3bf794a02c84e417c96d5abf7570d83c663f8622ad"
+    }
+  ],
+  "comparison_type": "lightyear-pli-mixed-differential-comparison",
+  "content_sha256": "31d0eb349496a95beb7e43782fc3d838da3ad8f225187f6ca715438e7e028eed",
+  "equivalent": true,
+  "evidence_class": "local_observed",
+  "mutation_results": [
+    {
+      "detected": true,
+      "mutation": "fraud-score"
+    },
+    {
+      "detected": true,
+      "mutation": "risk-divisor"
+    },
+    {
+      "detected": true,
+      "mutation": "risk-rounding"
+    },
+    {
+      "detected": true,
+      "mutation": "skip-db-overwrite"
+    },
+    {
+      "detected": true,
+      "mutation": "wrong-cobol-program"
+    },
+    {
+      "detected": true,
+      "mutation": "wrong-parm-length"
+    },
+    {
+      "detected": true,
+      "mutation": "wrong-parm-date"
+    },
+    {
+      "detected": true,
+      "mutation": "call-on-error"
+    },
+    {
+      "detected": true,
+      "mutation": "write-on-error"
+    }
+  ],
+  "schema_version": "1.0",
+  "workload_id": "workload:carddemo-pli-auth-risk"
+}

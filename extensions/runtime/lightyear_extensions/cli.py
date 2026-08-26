@@ -20,6 +20,7 @@ from .campaign import (
 )
 from .contracts import ExtensionContractError, canonical_hash, validate_envelope
 from .pli import build_pli_fragment, fragment_receipt, validate_pli_fragment
+from .pli_proof import build_proof, validate_development_receipt
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -57,6 +58,22 @@ def build_parser() -> argparse.ArgumentParser:
     validate_pli = commands.add_parser("validate-pli", help="Validate a PL/I extension fragment")
     validate_pli.add_argument("--graph", type=Path, required=True)
     validate_pli.add_argument("--fragment", type=Path, required=True)
+
+    build_pli_proof = commands.add_parser(
+        "build-pli-proof", help="Build the bounded mixed PL/I development proof"
+    )
+    build_pli_proof.add_argument("--project-root", type=Path, required=True)
+    build_pli_proof.add_argument("--graph", type=Path, required=True)
+    build_pli_proof.add_argument("--fragment", type=Path, required=True)
+    build_pli_proof.add_argument("--output-root", type=Path, required=True)
+
+    validate_pli_proof = commands.add_parser(
+        "validate-pli-proof", help="Validate a mixed PL/I development receipt"
+    )
+    validate_pli_proof.add_argument("--project-root", type=Path, required=True)
+    validate_pli_proof.add_argument("--graph", type=Path, required=True)
+    validate_pli_proof.add_argument("--fragment", type=Path, required=True)
+    validate_pli_proof.add_argument("--receipt", type=Path, required=True)
 
     fixture_campaign = commands.add_parser(
         "campaign-fixture", help="Run the mainframe access campaign against deterministic responses"
@@ -98,9 +115,9 @@ def main(argv: list[str] | None = None) -> int:
                 "adapters": default_registry().catalog(),
                 "language_packs": [{
                     "id": "lightyear.pli",
-                    "version": "1.0",
+                    "version": "1.1",
                     "language": "PL/I",
-                    "status": "reference-proof",
+                    "status": "development-proof",
                 }],
             }
             payload["content_sha256"] = canonical_hash(payload)
@@ -110,6 +127,19 @@ def main(argv: list[str] | None = None) -> int:
             return 0
 
         graph = load_graph(args.graph)
+        if args.command in {"build-pli-proof", "validate-pli-proof"}:
+            fragment = json.loads(args.fragment.read_text(encoding="utf-8"))
+            if args.command == "build-pli-proof":
+                receipt = build_proof(args.project_root, graph, fragment, args.output_root)
+                return _result(
+                    "passed" if receipt["status"] == "passed" else "failed",
+                    output=str(args.output_root),
+                    content_sha256=receipt["content_sha256"],
+                    checks=receipt["checks"],
+                )
+            receipt = json.loads(args.receipt.read_text(encoding="utf-8"))
+            errors = validate_development_receipt(receipt, args.project_root, graph, fragment)
+            return _result("passed" if not errors else "failed", errors=errors)
         if args.command in {"campaign-fixture", "campaign-live", "campaign-validate"}:
             profile = load_profile(args.profile)
             if args.command == "campaign-fixture":

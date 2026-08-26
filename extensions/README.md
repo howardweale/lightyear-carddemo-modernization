@@ -1,5 +1,25 @@
 # Trusted extensions and mainframe access
 
+## MS #22 mixed PL/I development proof
+
+MS #22 advances the bounded `ACCTPL1` fixture beyond parsing. Its behavior contract covers the
+PL/I fixed-width authorization record, `CARDDEMO.AUTHFRDS` lookup, explicit decimal truncation,
+ordered `AUTHIN`/`AUTHOUT` effects, and the `OPTIONS(COBOL)` invocation of `CBACT04C`. The source-
+faithful oracle and independent candidate must match seven normal and negative cases, while nine
+mutations attack the Db2 overwrite, risk formula, COBOL target and parameter boundary, and error-
+path side effects.
+
+```bash
+./extension-foundation.sh verify
+./pli-modernization.sh verify
+```
+
+The committed development receipt binds the graph, PL/I fragment, contract, fixtures, comparison,
+PL/I/include sources, Python candidate, and Java candidate/tests. It can promote gates 3–5 only.
+No local or simulated artifact can satisfy authorized z/OS execution or signed live equivalence.
+The proof is complete for this bounded workload, not for arbitrary PL/I programs or the full
+`CBACT04C` interest-calculation estate.
+
 MS #21 turns the MS #20 extension boundary into a complete access-readiness campaign. It runs three
 read-only collectors—z/OSMF Jobs, Db2 for z/OS catalog, and CICS CMCI—through one credential-free
 profile. Every capture is signed separately in live mode, bound to exact graph entities, and

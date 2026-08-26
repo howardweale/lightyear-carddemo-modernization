@@ -43,6 +43,7 @@ $AsmReceipt = Join-Path $ProjectDir "readiness\asm-date\readiness-receipt.json"
 $ImsReceipt = Join-Path $ProjectDir "readiness\ims-expiry\readiness-receipt.json"
 $PliFragment = Join-Path $ProjectDir "extensions\pli\pli.fragment.json"
 $ExtensionCatalog = Join-Path $ProjectDir "extensions\catalog.json"
+$PliDevelopmentReceipt = Join-Path $ProjectDir "extensions\pli\modernization\development.receipt.json"
 $PostgresDataReceipt = Join-Path $ProjectDir "data-modernization\receipts\authfrds.offline.receipt.json"
 $OracleDataReceipt = Join-Path $ProjectDir "data-modernization\receipts\authfrds.oracle-offline.receipt.json"
 $CampaignReceipt = Join-Path $ProjectDir "extensions\adapters\campaign\campaign.receipt.json"
@@ -58,7 +59,8 @@ if ($Action -eq "build") {
     Run-Python -m lightyear_knowledge_graph capabilities --graph $Snapshot `
         --cics-vsam-receipt $CicsVsamReceipt --asm-receipt $AsmReceipt `
         --ims-receipt $ImsReceipt --pli-fragment $PliFragment `
-        --extension-catalog $ExtensionCatalog --postgres-data-receipt $PostgresDataReceipt `
+        --extension-catalog $ExtensionCatalog --pli-development-receipt $PliDevelopmentReceipt `
+        --postgres-data-receipt $PostgresDataReceipt `
         --oracle-data-receipt $OracleDataReceipt --campaign-receipt $CampaignReceipt `
         --output $Capabilities
     exit $LASTEXITCODE
@@ -82,7 +84,8 @@ if ($Action -eq "verify") {
     Run-Python -m lightyear_knowledge_graph capabilities --graph $GeneratedSnapshot `
         --cics-vsam-receipt $CicsVsamReceipt --asm-receipt $AsmReceipt `
         --ims-receipt $ImsReceipt --pli-fragment $PliFragment `
-        --extension-catalog $ExtensionCatalog --postgres-data-receipt $PostgresDataReceipt `
+        --extension-catalog $ExtensionCatalog --pli-development-receipt $PliDevelopmentReceipt `
+        --postgres-data-receipt $PostgresDataReceipt `
         --oracle-data-receipt $OracleDataReceipt --campaign-receipt $CampaignReceipt `
         --output $GeneratedCapabilities
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

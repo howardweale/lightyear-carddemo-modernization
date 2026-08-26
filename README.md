@@ -1,25 +1,31 @@
 # FactoryDark.ai CardDemo Modernization Factory
 
-Release: **v0.21.1 — unified capability projection**
+Release: **v0.22.0 — mixed PL/I modernization proof cell**
 
-v0.21.1 gives customers and auditors one evidence-bound readiness view across runtimes, languages,
-and data. `knowledge/capabilities/mainframe-readiness.json` now includes CICS, VSAM, IMS, HLASM,
-PL/I, and Db2/Data, with an explicit capability kind and the same eight readiness gates for every
-cell. The projection binds the canonical graph, extension catalog, PL/I fragment, both offline data
-receipts, and the mainframe-access campaign receipt by content hash.
+v0.22 advances the bounded `ACCTPL1` mixed PL/I–COBOL–Db2 workload from discovery to a complete
+local development proof. It pins fixed-width records, Db2 lookup behavior, decimal truncation, the
+`OPTIONS(COBOL)` call contract into `CBACT04C`, ordered effects, and fail-closed error behavior. An
+independent executable oracle and Python candidate compare seven boundary cases; nine deliberate
+mutations prove the comparator rejects semantic drift. A production-shaped Java service and JUnit
+suite provide the modernization seam used by CI.
 
-The view deliberately reports different levels of maturity. PL/I is discovery-ready because the
-reference parser and mixed PL/I-to-COBOL/Db2 links pass, but it is not development-ready because no
-behavior contract, candidate, or mutation gate exists. Db2/Data is development-ready because both
-PostgreSQL and Oracle offline target proofs pass, but it is not mainframe-equivalent because live
-Db2 catalog and source-data comparison, CDC, cutover, and rollback evidence remain pending. The
-simulated MS #21 access campaign appears separately as a collection mechanism and cannot promote
-any technology to live-observed or production-ready.
+The content-addressed receipt promotes only PL/I readiness gates 3–5. PL/I is now
+`development_ready: true`, but gates 6 and 8 remain blocked because no customer-authorized,
+compiled and executed PL/I baseline or signed live equivalence receipt exists. Gate 7 reports only
+`mechanism_ready`. This is a complete proof for one bounded mixed workload—not general PL/I
+coverage, production readiness, or live-mainframe equivalence.
 
 ```bash
+./extension-foundation.sh verify
+./pli-modernization.sh verify
 ./knowledge-graph.sh verify /path/to/aws-carddemo
-PYTHONPATH=src python3 -m lightyear_knowledge_graph capabilities --validate-only
 ```
+
+Previous milestone: **v0.21.1 — unified capability projection**
+
+v0.21.1 gives customers and auditors one evidence-bound readiness view across CICS, VSAM, IMS,
+HLASM, PL/I, and Db2/Data. It distinguishes discovery, development proof, and live-mainframe
+equivalence and binds every displayed status to exact graph, extension, data, and campaign evidence.
 
 Previous milestone: **v0.21.0 — mainframe access readiness campaign**
 
@@ -151,7 +157,7 @@ verifier on Windows and Linux before the full factory suite runs.
 |---|---|---|
 | INTCALC comparator rejects known escape classes | `tests/test_comparator_escape.py` and verifier-gauntlet CI | Development evidence only |
 | Builder cannot see private holdout output by default | `tests/test_trust_boundaries.py` | Explicit per-gate exposure remains possible |
-| CICS, VSAM, IMS, HLASM, PL/I, and Db2/Data readiness is visible in one projection | `knowledge/capabilities/mainframe-readiness.json` | PL/I discovery-only; Db2/Data development-only; none mainframe-equivalent |
+| CICS, VSAM, IMS, HLASM, PL/I, and Db2/Data readiness is visible in one projection | `knowledge/capabilities/mainframe-readiness.json` | PL/I and Db2/Data development-ready; none mainframe-equivalent |
 | Live mainframe equivalence | No qualifying customer capture yet | **Blocked** |
 | Production readiness | No production pilot evidence yet | **`production_ready: false`** |
 

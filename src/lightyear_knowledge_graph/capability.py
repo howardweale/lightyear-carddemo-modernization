@@ -80,6 +80,37 @@ def _offline_data_receipt_passed(payload: dict[str, Any], target: str) -> bool:
     )
 
 
+def _pli_development_receipt_passed(
+    payload: dict[str, Any], graph_sha256: str, fragment_sha256: str | None
+) -> bool:
+    checks = payload.get("checks", {})
+    expected_checks = {
+        "bounded_candidate",
+        "curated_behavior_contract",
+        "db2_lookup_contract",
+        "differential_behavior_match",
+        "live_zos_baseline",
+        "mixed_language_call_contract",
+        "mutation_and_negative_verification",
+        "typed_static_graph",
+    }
+    bindings = payload.get("bindings", {})
+    return bool(
+        payload.get("receipt_type") == "lightyear-pli-mixed-development-proof"
+        and payload.get("evidence_class") == "local_observed"
+        and payload.get("status") == "passed"
+        and payload.get("development_ready") is True
+        and payload.get("mainframe_equivalent") is False
+        and payload.get("production_ready") is False
+        and payload.get("content_sha256") == _canonical_hash(payload)
+        and set(checks) == expected_checks
+        and checks.get("live_zos_baseline") is False
+        and all(checks.get(name) is True for name in expected_checks - {"live_zos_baseline"})
+        and bindings.get("canonical_graph_sha256") == graph_sha256
+        and bindings.get("pli_fragment_sha256") == fragment_sha256
+    )
+
+
 def _capability(technology: str, capability_kind: str, gates: list[dict[str, Any]]) -> dict[str, Any]:
     development_ready = all(item["status"] == "passed" for item in gates[:5])
     mainframe_equivalent = all(item["status"] == "passed" for item in gates)
@@ -107,6 +138,7 @@ def analyze_capabilities(
     ims_receipt: dict[str, Any] | None = None,
     pli_fragment: dict[str, Any] | None = None,
     extension_catalog: dict[str, Any] | None = None,
+    pli_development_receipt: dict[str, Any] | None = None,
     postgres_data_receipt: dict[str, Any] | None = None,
     oracle_data_receipt: dict[str, Any] | None = None,
     campaign_receipt: dict[str, Any] | None = None,
@@ -215,7 +247,8 @@ def analyze_capabilities(
         and any(
             item.get("id") == "lightyear.pli"
             and item.get("language") == "PL/I"
-            and item.get("status") == "reference-proof"
+            and item.get("version") == "1.1"
+            and item.get("status") == "development-proof"
             for item in catalog.get("language_packs", [])
         )
     )
@@ -239,6 +272,14 @@ def analyze_capabilities(
     )
     pli_parse_gap = None if pli_parsed else "The PL/I fragment or extension-catalog binding is invalid."
     pli_graph_gap = None if pli_connected else "The PL/I-to-COBOL and PL/I-to-Db2 dependency links are incomplete."
+    pli_development = _pli_development_receipt_passed(
+        pli_development_receipt or {}, graph_sha256, fragment.get("content_sha256")
+    )
+    pli_development_gap = (
+        None if pli_development
+        else "The graph-bound mixed PL/I development receipt is missing, stale, incomplete, or tampered."
+    )
+    pli_live_gap = "No authorized compiled and executed ACCTPL1 observation exists on z/OS."
     pli_gates = [
         _gate(1, "passed" if pli_parsed else "blocked", [
             "extensions/pli/pli.fragment.json",
@@ -250,11 +291,22 @@ def analyze_capabilities(
             f"{fragment_relations.get('READS_TABLE', 0)} READS_TABLE edge",
             "PL/I -> COBOL and PL/I -> Db2 external references",
         ], pli_graph_gap),
-        _gate(3, "not_started", [], "No curated PL/I behavior contract exists."),
-        _gate(4, "not_started", [], "No bounded PL/I modernization candidate exists."),
-        _gate(5, "not_started", [], "No PL/I mutation or negative-verification gate exists."),
-        _gate(6, "blocked", [], "No authorized execution of the PL/I original on z/OS exists."),
-        _gate(7, "blocked", [], "No independent PL/I differential comparison exists."),
+        _gate(3, "passed" if pli_development else "blocked", [
+            "extensions/pli/modernization/behavior-contract.json",
+            "fixed-width, decimal, Db2 lookup, and COBOL-call semantics",
+        ], pli_development_gap),
+        _gate(4, "passed" if pli_development else "blocked", [
+            "factory/benchmarks/pli_authorization_candidate.py",
+            "candidate-java MixedPliAuthorizationService",
+        ], pli_development_gap),
+        _gate(5, "passed" if pli_development else "blocked", [
+            "extensions/pli/modernization/comparison.json",
+            "nine mutation probes and seven boundary cases",
+        ], pli_development_gap),
+        _gate(6, "blocked", [], pli_live_gap),
+        _gate(7, "mechanism_ready" if pli_development else "blocked", [
+            "independent source-faithful oracle and modernization candidate comparator",
+        ], pli_live_gap if pli_development else pli_development_gap),
         _gate(8, "blocked", [], "No signed PL/I equivalence receipt exists."),
     ]
 
@@ -341,13 +393,14 @@ def analyze_capabilities(
         "canonical_graph_sha256": graph_sha256,
         "extension_catalog_sha256": catalog.get("content_sha256"),
         "pli_fragment_sha256": fragment.get("content_sha256"),
+        "pli_development_receipt_sha256": (pli_development_receipt or {}).get("content_sha256"),
         "postgres_data_receipt_sha256": postgres.get("content_sha256"),
         "oracle_data_receipt_sha256": oracle.get("content_sha256"),
         "mainframe_campaign_receipt_sha256": campaign.get("content_sha256"),
     }
 
     payload = {
-        "schema_version": "1.1",
+        "schema_version": "1.2",
         "analysis_type": "factorydark-mainframe-capability-readiness",
         "graph_content_sha256": graph_sha256,
         "truth_boundary": (
@@ -367,7 +420,7 @@ def validate_capability_analysis(
     expected: dict[str, Any] | None = None,
 ) -> list[str]:
     errors: list[str] = []
-    if payload.get("schema_version") != "1.1":
+    if payload.get("schema_version") != "1.2":
         errors.append("unsupported capability analysis schema_version")
     if payload.get("graph_content_sha256") != graph.get("content_sha256"):
         errors.append("capability analysis is not bound to the canonical graph")

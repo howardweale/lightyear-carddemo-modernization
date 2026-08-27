@@ -261,13 +261,17 @@ def validate_attestation(project_root: Path, artifact_root: Path) -> list[str]:
         errors.append("PL/I build asymmetric signature or signer identity is invalid")
     parameters = statement.get("predicate", {}).get("buildDefinition", {}).get("externalParameters", {})
     source_commit = receipt.get("source_commit", "")
-    if parameters.get("sourceCommit") != source_commit or not _commit_exists(project_root, source_commit):
+    if parameters.get("sourceCommit") != source_commit or not _valid_commit_digest(source_commit):
         errors.append("PL/I build source commit binding is invalid")
     if parameters.get("workflow") != EXPECTED_WORKFLOW or receipt.get("workflow") != EXPECTED_WORKFLOW:
         errors.append("PL/I build attestation targets a foreign workflow")
     if parameters.get("sourceTreeSha256") != _source_tree_hash(project_root) or bindings.get("source_tree_sha256") != _source_tree_hash(project_root):
         errors.append("PL/I build source tree is stale")
-    if not _paths_match_commit(project_root, source_commit):
+    # A PR checkout can resolve the pre-evidence source commit and receives the
+    # stronger path-by-path Git comparison.  After a squash merge that commit
+    # may no longer be reachable, so the independently signed source-tree
+    # digest remains the portable content binding.
+    if _commit_exists(project_root, source_commit) and not _paths_match_commit(project_root, source_commit):
         errors.append("PL/I build source paths differ from the attested commit")
     development = _load(project_root / "extensions/pli/modernization/development.receipt.json")
     comparison = _load(project_root / "extensions/pli/modernization/comparison.json")
@@ -343,9 +347,18 @@ def _paths_match_commit(project_root: Path, source_commit: str) -> bool:
 
 
 def _commit_exists(project_root: Path, source_commit: str) -> bool:
-    if not isinstance(source_commit, str) or len(source_commit) != 40:
+    if not _valid_commit_digest(source_commit):
         return False
     return subprocess.run(["git", "cat-file", "-e", f"{source_commit}^{{commit}}"], cwd=project_root, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False).returncode == 0
+
+
+def _valid_commit_digest(source_commit: Any) -> bool:
+    return (
+        isinstance(source_commit, str)
+        and len(source_commit) == 40
+        and source_commit != "0" * 40
+        and all(character in "0123456789abcdef" for character in source_commit)
+    )
 
 
 def _git(project_root: Path, *args: str) -> str:

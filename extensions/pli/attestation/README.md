@@ -9,11 +9,13 @@ JUnit-compatible XML report, inventories runtime dependencies, and produces a Cy
 ./pli-build-attestation.sh verify
 ```
 
-The committed provenance binds the exact clean source commit, relevant source-tree digest, JAR,
-test report, dependency inventory, SBOM, MS #22 contract, fixtures, comparison, and development
-receipt. Its RSA key is deliberately published as a non-secret development test key and has
-`release_authorized: false`; it proves verifier behavior and a reproducible local build, not a
-release identity.
+The committed provenance records the exact clean source commit and binds the relevant source-tree
+digest, JAR, test report, dependency inventory, SBOM, MS #22 contract, fixtures, comparison, and
+development receipt. When the recorded commit is available, validation also compares every bound
+source path to that Git object. The signed source-tree digest remains portable after a squash merge
+makes the pre-evidence commit unreachable. Its RSA key is deliberately published as a non-secret
+development test key and has `release_authorized: false`; it proves verifier behavior and a
+reproducible local build, not a release identity.
 
 GitHub Actions independently rebuilds the artifacts and uses GitHub workload identity through
 `actions/attest` for authoritative CI provenance and SBOM attestations. The CI artifacts are

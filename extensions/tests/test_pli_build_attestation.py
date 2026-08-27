@@ -6,6 +6,7 @@ import shutil
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from lightyear_common.asymmetric import rsa_pkcs1v15_sha256_sign
 from lightyear_common.io import write_json
@@ -59,12 +60,26 @@ class PliBuildAttestationTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as directory:
             copied = Path(directory)
             self.copy_artifacts(copied)
+            key = json.loads((CANONICAL / "keys/development-test-key.json").read_text(encoding="utf-8"))
+            attestation_path = copied / "build.attestation.json"
+            attestation = json.loads(attestation_path.read_text(encoding="utf-8"))
+            attestation["statement"]["predicate"]["buildDefinition"]["externalParameters"]["sourceCommit"] = "0" * 40
+            attestation["signature"]["value"] = rsa_pkcs1v15_sha256_sign(
+                attestation["statement"], key["public_modulus_hex"], key["private_exponent_hex"]
+            )
+            attestation["content_sha256"] = canonical_hash(attestation, {"content_sha256"})
+            write_json(attestation_path, attestation)
             receipt_path = copied / "build.receipt.json"
             receipt = json.loads(receipt_path.read_text(encoding="utf-8"))
             receipt["source_commit"] = "0" * 40
+            receipt["bindings"]["build_attestation_sha256"] = attestation["content_sha256"]
             receipt["content_sha256"] = canonical_hash(receipt, {"content_sha256"})
             write_json(receipt_path, receipt)
-            self.assertTrue(validate_attestation(ROOT, copied))
+            self.assertIn("PL/I build source commit binding is invalid", validate_attestation(ROOT, copied))
+
+    def test_content_binding_survives_unreachable_pre_evidence_commit(self) -> None:
+        with patch("lightyear_extensions.pli_attestation._commit_exists", return_value=False):
+            self.assertEqual([], validate_attestation(ROOT, CANONICAL))
 
     def test_foreign_workflow_replay_is_rejected_even_with_development_signature(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

@@ -1,0 +1,8 @@
+ mixed19 :
+   procedure
+   options ( main ) ;
+   dcl value decimal
+       (7,2) fixed;
+   value
+       = 10.25;
+ end mixed19;

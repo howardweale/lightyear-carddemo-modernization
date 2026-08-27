@@ -1,0 +1,136 @@
+{
+  "bindings": {
+    "canonical_graph_sha256": "2a003843da4fcdb04fc563f2d9644dd745ba0589c9fb6651b7fd21c9e6fad571",
+    "corpus_manifest_sha256": "d625bba1164cd0ef875a8ab2b2b0bd76d209c55db206ae0c883287d6dddd10db",
+    "golden_results_sha256": "f7625080359770189abd7015e03547c91e0cbcb2cb5b4fab87d86724f47f5002",
+    "support_matrix_sha256": "b3d0804a8b6f7e5d34d3a63cf2af676f841aa981cea8e71a2daace2b34e94eb4"
+  },
+  "checks": {
+    "all_case_expectations_match": true,
+    "corpus_minimum_20_cases": true,
+    "exact_manifest_source_set": true,
+    "mutation_cases_resist_false_facts": true,
+    "positive_cases_parse": true,
+    "source_locations_are_present": true,
+    "supported_matrix_is_exercised": true,
+    "unsupported_cases_are_explicit_blockers": true
+  },
+  "claim_boundary": {
+    "arbitrary_enterprise_pli_supported": false,
+    "ibm_compiler_semantics_proven": false,
+    "mainframe_equivalent": false,
+    "production_ready": false,
+    "runtime_executed": false,
+    "static_discovery_only": true
+  },
+  "content_sha256": "28113863189a3d393a486f06a186cead4cb32c75f0da096020055fe737e97dd5",
+  "corpus": {
+    "blocked_case_count": 5,
+    "case_count": 27,
+    "customer_source": false,
+    "id": "lightyear-pli-synthetic-conformance-v1",
+    "include_case_count": 2,
+    "mutation_case_count": 7,
+    "positive_case_count": 22,
+    "program_case_count": 25,
+    "synthetic": true
+  },
+  "coverage": {
+    "exercised_supported_construct_count": 22,
+    "explicit_gap_codes": {
+      "ambiguous-shadowed-call": 1,
+      "missing-include": 1,
+      "unsupported-based-storage": 1,
+      "unsupported-preprocessor": 1,
+      "unterminated-comment": 1
+    },
+    "located_construct_count": 72,
+    "parser_confidence": "supported-subset-observed",
+    "provenance": "synthetic-conformance-corpus",
+    "recognized_constructs": {
+      "assignment": 3,
+      "call": 5,
+      "cics_reference": 1,
+      "conditional": 1,
+      "control_flow": 1,
+      "decimal_declaration": 3,
+      "declaration": 4,
+      "embedded_sql": 2,
+      "entry_point": 4,
+      "error_control": 2,
+      "file_declaration": 2,
+      "file_read": 1,
+      "file_write": 1,
+      "ims_reference": 1,
+      "include_member": 2,
+      "include_reference": 2,
+      "procedure": 1,
+      "program": 24,
+      "record_declaration": 6,
+      "sqlca_reference": 1,
+      "structure": 2,
+      "structure_member": 3
+    },
+    "supported_matrix_construct_count": 22,
+    "unresolved_constructs": [
+      {
+        "case_id": "23-missing-include",
+        "code": "missing-include",
+        "column": 12,
+        "line": 2,
+        "path": "23-missing-include.pli"
+      },
+      {
+        "case_id": "24-shadowed-call",
+        "code": "ambiguous-shadowed-call",
+        "column": 8,
+        "line": 4,
+        "path": "24-shadowed-call.pli"
+      },
+      {
+        "case_id": "25-unsupported-preprocessor",
+        "code": "unsupported-preprocessor",
+        "column": 3,
+        "line": 2,
+        "path": "25-unsupported-preprocessor.pli"
+      },
+      {
+        "case_id": "26-unsupported-storage",
+        "code": "unsupported-based-storage",
+        "column": 20,
+        "line": 3,
+        "path": "26-unsupported-storage.pli"
+      },
+      {
+        "case_id": "27-malformed-comment",
+        "code": "unterminated-comment",
+        "column": 3,
+        "line": 2,
+        "path": "27-malformed-comment.pli"
+      }
+    ],
+    "unsupported_syntax": [
+      "BASED and CONTROLLED storage semantics",
+      "GENERIC entry resolution",
+      "PACKAGE declarations",
+      "preprocessor directives other than %INCLUDE",
+      "dynamic or expression-valued CALL targets",
+      "arbitrary EXEC subsystems and SQL grammar",
+      "IBM compiler type inference, macro expansion, and runtime semantics"
+    ]
+  },
+  "evidence_class": "synthetic-static-conformance",
+  "language_pack": {
+    "id": "lightyear.pli",
+    "version": "1.2"
+  },
+  "limitations": [
+    "The corpus is synthetic and does not represent a customer PL/I estate.",
+    "The parser implements a measured supported subset, not IBM Enterprise PL/I compiler semantics.",
+    "Static discovery and mutation resistance do not establish runtime equivalence."
+  ],
+  "production_ready": false,
+  "receipt_type": "lightyear-pli-discovery-conformance",
+  "schema_version": "1.0",
+  "status": "passed"
+}

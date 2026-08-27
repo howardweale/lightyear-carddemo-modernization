@@ -71,13 +71,13 @@
       "version": "1.1"
     }
   ],
-  "content_sha256": "39f522fcabd7c5f4adea91fd8c81a82625bea732149e242f839d00a449305ce4",
+  "content_sha256": "a3ca454e737d047b44ce1a17d225ea23174a345e0e66083e304290a037f73106",
   "language_packs": [
     {
       "id": "lightyear.pli",
       "language": "PL/I",
       "status": "development-proof",
-      "version": "1.1"
+      "version": "1.2"
     }
   ],
   "schema_version": "1.0"

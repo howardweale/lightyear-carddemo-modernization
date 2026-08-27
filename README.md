@@ -1,6 +1,31 @@
 # FactoryDark.ai CardDemo Modernization Factory
 
-Release: **v0.23.0 — stable composite estate and developer golden path**
+Release: **v0.24.0 — PL/I discovery coverage and conformance lab**
+
+v0.24 replaces the PL/I pack's line-oriented pattern boundary with a tokenized, statement-aware
+front end for a published supported subset. A synthetic 27-case corpus exercises 22 construct
+categories across programs, procedures, declarations, structures, includes, entry points, fixed
+and varying records, SQL/SQLCA, file I/O, COBOL calls, decimal assignments, conditional/error
+control, and bounded CICS/IMS references. Five intentionally blocked cases and seven mutation-
+oriented cases prove that missing includes, shadowed calls, unsupported preprocessors/storage,
+malformed comments, comments and strings, casing, spacing, and continuation lines cannot silently
+create or omit graph facts.
+
+The content-addressed coverage receipt records every recognized construct and located gap, binds
+the corpus, support matrix, golden results, parser version, and canonical graph, and is now required
+for PL/I discovery readiness. The unified capability projection publishes the breadth metrics while
+labelling them `synthetic-static-supported-subset`. This does not claim arbitrary Enterprise PL/I
+coverage, IBM compiler semantics, customer-source coverage, runtime behavior, or mainframe
+equivalence.
+
+```bash
+./pli-conformance.sh verify
+./lightyear.sh verify
+```
+
+PowerShell equivalents are provided through `pli-conformance.ps1` and `lightyear.ps1`.
+
+Previous milestone: **v0.23.0 — stable composite estate and developer golden path**
 
 v0.23 makes the separately governed PL/I extension naturally visible beside the canonical COBOL,
 JCL, CICS, IMS, HLASM, VSAM, and Db2 estate without merging it into the canonical graph. A
@@ -29,7 +54,7 @@ reported as optional-path limitations; missing Python, Git, semantic artifacts, 
 contracts fail diagnostics with a remediation. The full claim boundary remains unchanged:
 `mainframe_equivalent: false` and `production_ready: false`.
 
-Previous milestone: **v0.22.0 — mixed PL/I modernization proof cell**
+Earlier milestone: **v0.22.0 — mixed PL/I modernization proof cell**
 
 v0.22 advances the bounded `ACCTPL1` mixed PL/I–COBOL–Db2 workload from discovery to a complete
 local development proof. It pins fixed-width records, Db2 lookup behavior, decimal truncation, the

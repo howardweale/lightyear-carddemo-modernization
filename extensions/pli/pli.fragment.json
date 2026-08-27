@@ -4,15 +4,20 @@
     "graph_id": "lightyear:carddemo-modernization",
     "schema_version": "1.1"
   },
-  "content_sha256": "c41d373bb758b52e0e14549422f9638e992aae91fde33cfda0c9ac4d3e947546",
+  "content_sha256": "33a57c2a87a74ce73dc18742cc96c48735a8b7df152add5a1db44a77ed4a48ec",
+  "coverage": {
+    "blocker_count": 0,
+    "frontend": "tokenized-statement-parser",
+    "parser_version": "1.2"
+  },
   "edges": [
     {
       "evidence": [
         {
           "confidence": "observed",
-          "line_end": 19,
+          "line_end": 15,
           "line_start": 15,
-          "method": "pli-language-pack-v1",
+          "method": "pli-supported-subset-v2",
           "path": "extensions/pli/reference/ACCTPL1.pli",
           "source_id": "source:lightyear-carddemo"
         }
@@ -29,7 +34,7 @@
           "confidence": "observed",
           "line_end": 23,
           "line_start": 23,
-          "method": "pli-language-pack-v1",
+          "method": "pli-supported-subset-v2",
           "path": "extensions/pli/reference/ACCTPL1.pli",
           "source_id": "source:lightyear-carddemo"
         }
@@ -46,7 +51,7 @@
           "confidence": "observed",
           "line_end": 21,
           "line_start": 21,
-          "method": "pli-language-pack-v1",
+          "method": "pli-supported-subset-v2",
           "path": "extensions/pli/reference/ACCTPL1.pli",
           "source_id": "source:lightyear-carddemo"
         }
@@ -63,7 +68,7 @@
           "confidence": "observed",
           "line_end": 13,
           "line_start": 13,
-          "method": "pli-language-pack-v1",
+          "method": "pli-supported-subset-v2",
           "path": "extensions/pli/reference/ACCTPL1.pli",
           "source_id": "source:lightyear-carddemo"
         }
@@ -80,7 +85,7 @@
           "confidence": "observed",
           "line_end": 3,
           "line_start": 3,
-          "method": "pli-language-pack-v1",
+          "method": "pli-supported-subset-v2",
           "path": "extensions/pli/reference/ACCTPL1.pli",
           "source_id": "source:lightyear-carddemo"
         }
@@ -95,9 +100,9 @@
       "evidence": [
         {
           "confidence": "observed",
-          "line_end": 19,
+          "line_end": 15,
           "line_start": 15,
-          "method": "pli-language-pack-v1",
+          "method": "pli-supported-subset-v2",
           "path": "extensions/pli/reference/ACCTPL1.pli",
           "source_id": "source:lightyear-carddemo"
         }
@@ -112,9 +117,9 @@
       "evidence": [
         {
           "confidence": "observed",
-          "line_end": 24,
-          "line_start": 24,
-          "method": "pli-language-pack-v1",
+          "line_end": 25,
+          "line_start": 25,
+          "method": "pli-supported-subset-v2",
           "path": "extensions/pli/reference/ACCTPL1.pli",
           "source_id": "source:lightyear-carddemo"
         }
@@ -131,7 +136,7 @@
           "confidence": "observed",
           "line_end": 22,
           "line_start": 22,
-          "method": "pli-language-pack-v1",
+          "method": "pli-supported-subset-v2",
           "path": "extensions/pli/reference/ACCTPL1.pli",
           "source_id": "source:lightyear-carddemo"
         }
@@ -148,7 +153,7 @@
           "confidence": "observed",
           "line_end": 1,
           "line_start": 1,
-          "method": "pli-language-pack-v1",
+          "method": "pli-supported-subset-v2",
           "path": "extensions/pli/reference/AUTHCOM.inc",
           "source_id": "source:lightyear-carddemo"
         }
@@ -165,7 +170,7 @@
           "confidence": "observed",
           "line_end": 2,
           "line_start": 2,
-          "method": "pli-language-pack-v1",
+          "method": "pli-supported-subset-v2",
           "path": "extensions/pli/reference/ACCTPL1.pli",
           "source_id": "source:lightyear-carddemo"
         }
@@ -197,7 +202,7 @@
     ],
     "id": "lightyear.pli",
     "language": "PL/I",
-    "version": "1.1"
+    "version": "1.2"
   },
   "limitations": [
     "The bundled PL/I source is a reference fixture, not customer production source.",
@@ -229,7 +234,7 @@
           "confidence": "observed",
           "line_end": 7,
           "line_start": 1,
-          "method": "pli-language-pack-v1",
+          "method": "pli-supported-subset-v2",
           "path": "extensions/pli/reference/AUTHCOM.inc",
           "source_id": "source:lightyear-carddemo"
         }
@@ -238,6 +243,7 @@
       "kind": "pli_include",
       "name": "AUTHCOM",
       "properties": {
+        "parser": "pli-supported-subset-v2",
         "path": "extensions/pli/reference/AUTHCOM.inc"
       }
     },
@@ -245,9 +251,9 @@
       "evidence": [
         {
           "confidence": "observed",
-          "line_end": 24,
-          "line_start": 24,
-          "method": "pli-language-pack-v1",
+          "line_end": 25,
+          "line_start": 25,
+          "method": "pli-supported-subset-v2",
           "path": "extensions/pli/reference/ACCTPL1.pli",
           "source_id": "source:lightyear-carddemo"
         }
@@ -256,6 +262,7 @@
       "kind": "pli_procedure",
       "name": "CALC_RISK",
       "properties": {
+        "parser": "pli-supported-subset-v2",
         "path": "extensions/pli/reference/ACCTPL1.pli",
         "program": "ACCTPL1"
       }
@@ -266,7 +273,7 @@
           "confidence": "observed",
           "line_end": 2,
           "line_start": 2,
-          "method": "pli-language-pack-v1",
+          "method": "pli-supported-subset-v2",
           "path": "extensions/pli/reference/ACCTPL1.pli",
           "source_id": "source:lightyear-carddemo"
         }
@@ -276,6 +283,7 @@
       "name": "ACCTPL1",
       "properties": {
         "language": "PL/I",
+        "parser": "pli-supported-subset-v2",
         "path": "extensions/pli/reference/ACCTPL1.pli",
         "reference_fixture": true
       }
@@ -284,9 +292,9 @@
       "evidence": [
         {
           "confidence": "observed",
-          "line_end": 19,
+          "line_end": 15,
           "line_start": 15,
-          "method": "pli-language-pack-v1",
+          "method": "pli-supported-subset-v2",
           "path": "extensions/pli/reference/ACCTPL1.pli",
           "source_id": "source:lightyear-carddemo"
         }
@@ -296,8 +304,9 @@
       "name": "SELECT CARDDEMO.AUTHFRDS",
       "properties": {
         "language": "PL/I",
-        "normalized_sql": "SELECT APPROVED_AMT, AUTH_FRAUD INTO :APPROVED_AMOUNT, :FRAUD_FLAG FROM CARDDEMO.AUTHFRDS WHERE TRANSACTION_ID = :TRANSACTION_ID",
+        "normalized_sql": "SELECT APPROVED_AMT, AUTH_FRAUD INTO:APPROVED_AMOUNT,:FRAUD_FLAG FROM CARDDEMO.AUTHFRDS WHERE TRANSACTION_ID =:TRANSACTION_ID",
         "operation": "SELECT",
+        "parser": "pli-supported-subset-v2",
         "program": "ACCTPL1"
       }
     },
@@ -307,7 +316,7 @@
           "confidence": "observed",
           "line_end": 33,
           "line_start": 1,
-          "method": "pli-language-pack-v1",
+          "method": "pli-supported-subset-v2",
           "path": "extensions/pli/reference/ACCTPL1.pli",
           "source_id": "source:lightyear-carddemo"
         }
@@ -330,7 +339,7 @@
           "confidence": "observed",
           "line_end": 7,
           "line_start": 1,
-          "method": "pli-language-pack-v1",
+          "method": "pli-supported-subset-v2",
           "path": "extensions/pli/reference/AUTHCOM.inc",
           "source_id": "source:lightyear-carddemo"
         }

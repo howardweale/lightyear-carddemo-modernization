@@ -24,6 +24,7 @@ fi
 "$project_dir/data-modernization.sh" verify
 "$project_dir/knowledge-graph.sh" verify
 "$project_dir/extension-foundation.sh" verify
+"$project_dir/pli-conformance.sh" verify
 "$project_dir/pli-modernization.sh" verify
 "$project_dir/composite-estate.sh" verify
 "$project_dir/runtime-evidence.sh" verify

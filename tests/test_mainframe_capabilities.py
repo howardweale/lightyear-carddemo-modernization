@@ -51,6 +51,7 @@ class MainframeCapabilityGraphTests(unittest.TestCase):
             "ims_receipt": self.load_json("readiness/ims-expiry/readiness-receipt.json"),
             "pli_fragment": self.load_json("extensions/pli/pli.fragment.json"),
             "extension_catalog": self.load_json("extensions/catalog.json"),
+            "pli_coverage_receipt": self.load_json("extensions/pli/conformance/coverage.receipt.json"),
             "pli_development_receipt": self.load_json("extensions/pli/modernization/development.receipt.json"),
             "postgres_data_receipt": self.load_json("data-modernization/receipts/authfrds.offline.receipt.json"),
             "oracle_data_receipt": self.load_json("data-modernization/receipts/authfrds.oracle-offline.receipt.json"),
@@ -126,6 +127,10 @@ class MainframeCapabilityGraphTests(unittest.TestCase):
         self.assertEqual("blocked", by_name["HLASM"]["gates"][5]["status"])
         self.assertEqual("mechanism_ready", by_name["IMS"]["gates"][6]["status"])
         self.assertEqual("mechanism_ready", by_name["PL/I"]["gates"][6]["status"])
+        self.assertEqual(27, by_name["PL/I"]["breadth"]["corpus_case_count"])
+        self.assertEqual(22, by_name["PL/I"]["breadth"]["supported_construct_count"])
+        self.assertFalse(by_name["PL/I"]["breadth"]["customer_source"])
+        self.assertFalse(by_name["PL/I"]["breadth"]["runtime_evidence"])
         campaign = analysis["collection_mechanisms"][0]
         self.assertEqual("simulated_ready", campaign["status"])
         self.assertEqual("simulated", campaign["evidence_class"])
@@ -149,6 +154,17 @@ class MainframeCapabilityGraphTests(unittest.TestCase):
         self.assertTrue(pli["discovery_ready"])
         self.assertFalse(pli["development_ready"])
         self.assertFalse(pli["mainframe_equivalent"])
+
+    def test_missing_or_tampered_pli_coverage_demotes_discovery(self) -> None:
+        missing = self.expected_projection(pli_coverage_receipt={})
+        pli = next(item for item in missing["capabilities"] if item["technology"] == "PL/I")
+        self.assertFalse(pli["discovery_ready"])
+        self.assertFalse(pli["development_ready"])
+        receipt = self.load_json("extensions/pli/conformance/coverage.receipt.json")
+        receipt["corpus"]["case_count"] = 1
+        tampered = self.expected_projection(pli_coverage_receipt=receipt)
+        pli = next(item for item in tampered["capabilities"] if item["technology"] == "PL/I")
+        self.assertFalse(pli["discovery_ready"])
 
     def test_stale_projection_is_rejected_when_bound_evidence_changes(self) -> None:
         analysis = self.expected_projection()

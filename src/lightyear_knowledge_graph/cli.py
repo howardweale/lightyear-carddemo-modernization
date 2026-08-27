@@ -171,6 +171,11 @@ def build_parser() -> argparse.ArgumentParser:
         "--extension-catalog", type=Path, default=Path("extensions/catalog.json")
     )
     capabilities.add_argument(
+        "--pli-coverage-receipt",
+        type=Path,
+        default=Path("extensions/pli/conformance/coverage.receipt.json"),
+    )
+    capabilities.add_argument(
         "--pli-development-receipt",
         type=Path,
         default=Path("extensions/pli/modernization/development.receipt.json"),
@@ -446,21 +451,23 @@ def main(argv: list[str] | None = None) -> int:
         ims_receipt = load_optional(args.ims_receipt)
         pli_fragment = load_optional(args.pli_fragment)
         extension_catalog = load_optional(args.extension_catalog)
+        pli_coverage_receipt = load_optional(args.pli_coverage_receipt)
         pli_development_receipt = load_optional(args.pli_development_receipt)
         postgres_data_receipt = load_optional(args.postgres_data_receipt)
         oracle_data_receipt = load_optional(args.oracle_data_receipt)
         campaign_receipt = load_optional(args.campaign_receipt)
         expected = analyze_capabilities(
             payload,
-            receipt,
-            asm_receipt,
-            ims_receipt,
-            pli_fragment,
-            extension_catalog,
-            pli_development_receipt,
-            postgres_data_receipt,
-            oracle_data_receipt,
-            campaign_receipt,
+            cics_vsam_receipt=receipt,
+            asm_receipt=asm_receipt,
+            ims_receipt=ims_receipt,
+            pli_fragment=pli_fragment,
+            extension_catalog=extension_catalog,
+            pli_coverage_receipt=pli_coverage_receipt,
+            pli_development_receipt=pli_development_receipt,
+            postgres_data_receipt=postgres_data_receipt,
+            oracle_data_receipt=oracle_data_receipt,
+            campaign_receipt=campaign_receipt,
         )
         if args.validate_only:
             analysis = json.loads(args.output.read_text(encoding="utf-8"))

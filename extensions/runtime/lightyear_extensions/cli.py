@@ -19,7 +19,8 @@ from .campaign import (
     validate_campaign_receipt,
 )
 from .contracts import ExtensionContractError, canonical_hash, validate_envelope
-from .pli import build_pli_fragment, fragment_receipt, validate_pli_fragment
+from .pli import PACK_VERSION, build_pli_fragment, fragment_receipt, validate_pli_fragment
+from .pli_conformance import build_conformance_lab, validate_conformance_receipt
 from .pli_proof import build_proof, validate_development_receipt
 
 
@@ -58,6 +59,24 @@ def build_parser() -> argparse.ArgumentParser:
     validate_pli = commands.add_parser("validate-pli", help="Validate a PL/I extension fragment")
     validate_pli.add_argument("--graph", type=Path, required=True)
     validate_pli.add_argument("--fragment", type=Path, required=True)
+
+    build_pli_conformance = commands.add_parser(
+        "build-pli-conformance", help="Build synthetic PL/I supported-subset conformance evidence"
+    )
+    build_pli_conformance.add_argument("--graph", type=Path, required=True)
+    build_pli_conformance.add_argument("--corpus-root", type=Path, required=True)
+    build_pli_conformance.add_argument("--manifest", type=Path, required=True)
+    build_pli_conformance.add_argument("--support-matrix", type=Path, required=True)
+    build_pli_conformance.add_argument("--repository-root", type=Path, default=Path("."))
+    build_pli_conformance.add_argument("--golden-output", type=Path, required=True)
+    build_pli_conformance.add_argument("--receipt", type=Path, required=True)
+
+    validate_pli_conformance = commands.add_parser(
+        "validate-pli-conformance", help="Validate PL/I supported-subset conformance evidence"
+    )
+    validate_pli_conformance.add_argument("--graph", type=Path, required=True)
+    validate_pli_conformance.add_argument("--golden", type=Path, required=True)
+    validate_pli_conformance.add_argument("--receipt", type=Path, required=True)
 
     build_pli_proof = commands.add_parser(
         "build-pli-proof", help="Build the bounded mixed PL/I development proof"
@@ -115,7 +134,7 @@ def main(argv: list[str] | None = None) -> int:
                 "adapters": default_registry().catalog(),
                 "language_packs": [{
                     "id": "lightyear.pli",
-                    "version": "1.1",
+                    "version": PACK_VERSION,
                     "language": "PL/I",
                     "status": "development-proof",
                 }],
@@ -127,6 +146,22 @@ def main(argv: list[str] | None = None) -> int:
             return 0
 
         graph = load_graph(args.graph)
+        if args.command == "build-pli-conformance":
+            golden, receipt = build_conformance_lab(
+                graph, args.corpus_root, args.manifest, args.support_matrix, args.repository_root
+            )
+            write_json(args.golden_output, golden)
+            write_json(args.receipt, receipt)
+            return _result(
+                receipt["status"], output=str(args.receipt),
+                content_sha256=receipt["content_sha256"], corpus=receipt["corpus"],
+                checks=receipt["checks"],
+            )
+        if args.command == "validate-pli-conformance":
+            golden = json.loads(args.golden.read_text(encoding="utf-8"))
+            receipt = json.loads(args.receipt.read_text(encoding="utf-8"))
+            errors = validate_conformance_receipt(receipt, golden, graph)
+            return _result("passed" if not errors else "failed", errors=errors)
         if args.command in {"build-pli-proof", "validate-pli-proof"}:
             fragment = json.loads(args.fragment.read_text(encoding="utf-8"))
             if args.command == "build-pli-proof":

@@ -111,10 +111,45 @@ def _pli_development_receipt_passed(
     )
 
 
-def _capability(technology: str, capability_kind: str, gates: list[dict[str, Any]]) -> dict[str, Any]:
+def _pli_coverage_receipt_passed(payload: dict[str, Any], graph_sha256: str) -> bool:
+    checks = payload.get("checks", {})
+    corpus = payload.get("corpus", {})
+    coverage = payload.get("coverage", {})
+    boundary = payload.get("claim_boundary", {})
+    return bool(
+        payload.get("receipt_type") == "lightyear-pli-discovery-conformance"
+        and payload.get("evidence_class") == "synthetic-static-conformance"
+        and payload.get("status") == "passed"
+        and payload.get("content_sha256") == _canonical_hash(payload)
+        and payload.get("language_pack") == {"id": "lightyear.pli", "version": "1.2"}
+        and payload.get("bindings", {}).get("canonical_graph_sha256") == graph_sha256
+        and corpus.get("case_count", 0) >= 20
+        and corpus.get("synthetic") is True
+        and corpus.get("customer_source") is False
+        and coverage.get("supported_matrix_construct_count", 0) >= 20
+        and coverage.get("exercised_supported_construct_count")
+        == coverage.get("supported_matrix_construct_count")
+        and bool(checks)
+        and all(value is True for value in checks.values())
+        and boundary.get("static_discovery_only") is True
+        and boundary.get("runtime_executed") is False
+        and boundary.get("ibm_compiler_semantics_proven") is False
+        and boundary.get("arbitrary_enterprise_pli_supported") is False
+        and boundary.get("mainframe_equivalent") is False
+        and boundary.get("production_ready") is False
+        and payload.get("production_ready") is False
+    )
+
+
+def _capability(
+    technology: str,
+    capability_kind: str,
+    gates: list[dict[str, Any]],
+    breadth: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     development_ready = all(item["status"] == "passed" for item in gates[:5])
     mainframe_equivalent = all(item["status"] == "passed" for item in gates)
-    return {
+    result = {
         "technology": technology,
         "capability_kind": capability_kind,
         "discovery_ready": all(item["status"] == "passed" for item in gates[:2]),
@@ -129,6 +164,9 @@ def _capability(technology: str, capability_kind: str, gates: list[dict[str, Any
         ),
         "gates": gates,
     }
+    if breadth is not None:
+        result["breadth"] = breadth
+    return result
 
 
 def analyze_capabilities(
@@ -138,6 +176,7 @@ def analyze_capabilities(
     ims_receipt: dict[str, Any] | None = None,
     pli_fragment: dict[str, Any] | None = None,
     extension_catalog: dict[str, Any] | None = None,
+    pli_coverage_receipt: dict[str, Any] | None = None,
     pli_development_receipt: dict[str, Any] | None = None,
     postgres_data_receipt: dict[str, Any] | None = None,
     oracle_data_receipt: dict[str, Any] | None = None,
@@ -247,12 +286,13 @@ def analyze_capabilities(
         and any(
             item.get("id") == "lightyear.pli"
             and item.get("language") == "PL/I"
-            and item.get("version") == "1.1"
+            and item.get("version") == "1.2"
             and item.get("status") == "development-proof"
             for item in catalog.get("language_packs", [])
         )
     )
-    pli_parsed = _hashed_and_bound(fragment, graph_sha256) and pli_cataloged
+    pli_coverage = _pli_coverage_receipt_passed(pli_coverage_receipt or {}, graph_sha256)
+    pli_parsed = _hashed_and_bound(fragment, graph_sha256) and pli_cataloged and pli_coverage
     fragment_stats = fragment.get("statistics", {})
     fragment_kinds = fragment_stats.get("nodes_by_kind", {})
     fragment_relations = fragment_stats.get("edges_by_relation", {})
@@ -270,7 +310,10 @@ def analyze_capabilities(
             "legacy:db2-table:CARDDEMO.AUTHFRDS",
         }.issubset(external_ids)
     )
-    pli_parse_gap = None if pli_parsed else "The PL/I fragment or extension-catalog binding is invalid."
+    pli_parse_gap = (
+        None if pli_parsed
+        else "The PL/I fragment, language-pack catalog, or synthetic conformance coverage binding is invalid."
+    )
     pli_graph_gap = None if pli_connected else "The PL/I-to-COBOL and PL/I-to-Db2 dependency links are incomplete."
     pli_development = _pli_development_receipt_passed(
         pli_development_receipt or {}, graph_sha256, fragment.get("content_sha256")
@@ -283,8 +326,11 @@ def analyze_capabilities(
     pli_gates = [
         _gate(1, "passed" if pli_parsed else "blocked", [
             "extensions/pli/pli.fragment.json",
+            "extensions/pli/conformance/coverage.receipt.json",
             f"{fragment_kinds.get('pli_program', 0)} PL/I program",
             f"{fragment_kinds.get('pli_include', 0)} PL/I include",
+            f"{(pli_coverage_receipt or {}).get('corpus', {}).get('case_count', 0)} synthetic conformance cases",
+            f"{(pli_coverage_receipt or {}).get('coverage', {}).get('supported_matrix_construct_count', 0)} supported construct categories",
         ], pli_parse_gap),
         _gate(2, "passed" if pli_connected else "blocked", [
             f"{fragment_relations.get('CALLS', 0)} CALLS edges",
@@ -364,7 +410,17 @@ def analyze_capabilities(
         _capability("VSAM", "data", vsam_common),
         _capability("IMS", "runtime", ims_gates),
         _capability("HLASM", "language", asm_gates),
-        _capability("PL/I", "language", pli_gates),
+        _capability("PL/I", "language", pli_gates, {
+            "scope": "synthetic-static-supported-subset",
+            "corpus_case_count": (pli_coverage_receipt or {}).get("corpus", {}).get("case_count", 0),
+            "positive_case_count": (pli_coverage_receipt or {}).get("corpus", {}).get("positive_case_count", 0),
+            "blocked_case_count": (pli_coverage_receipt or {}).get("corpus", {}).get("blocked_case_count", 0),
+            "mutation_case_count": (pli_coverage_receipt or {}).get("corpus", {}).get("mutation_case_count", 0),
+            "supported_construct_count": (pli_coverage_receipt or {}).get("coverage", {}).get("supported_matrix_construct_count", 0),
+            "explicit_gap_count": sum((pli_coverage_receipt or {}).get("coverage", {}).get("explicit_gap_codes", {}).values()),
+            "customer_source": False,
+            "runtime_evidence": False,
+        }),
         _capability("Db2/Data", "data", data_gates),
     ]
 
@@ -393,6 +449,7 @@ def analyze_capabilities(
         "canonical_graph_sha256": graph_sha256,
         "extension_catalog_sha256": catalog.get("content_sha256"),
         "pli_fragment_sha256": fragment.get("content_sha256"),
+        "pli_coverage_receipt_sha256": (pli_coverage_receipt or {}).get("content_sha256"),
         "pli_development_receipt_sha256": (pli_development_receipt or {}).get("content_sha256"),
         "postgres_data_receipt_sha256": postgres.get("content_sha256"),
         "oracle_data_receipt_sha256": oracle.get("content_sha256"),

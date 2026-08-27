@@ -329,6 +329,17 @@
       "technology": "HLASM"
     },
     {
+      "breadth": {
+        "blocked_case_count": 5,
+        "corpus_case_count": 27,
+        "customer_source": false,
+        "explicit_gap_count": 5,
+        "mutation_case_count": 7,
+        "positive_case_count": 22,
+        "runtime_evidence": false,
+        "scope": "synthetic-static-supported-subset",
+        "supported_construct_count": 22
+      },
       "capability_kind": "language",
       "development_ready": true,
       "discovery_ready": true,
@@ -337,6 +348,9 @@
           "evidence": [
             "1 PL/I include",
             "1 PL/I program",
+            "22 supported construct categories",
+            "27 synthetic conformance cases",
+            "extensions/pli/conformance/coverage.receipt.json",
             "extensions/pli/pli.fragment.json"
           ],
           "gate": 1,
@@ -507,14 +521,15 @@
       "status": "simulated_ready"
     }
   ],
-  "content_sha256": "c33f2143a22219275dcbc6b8635fdaa0649417a8dcad4bedf032e88e60a99308",
+  "content_sha256": "57cd264b1f18adb89d72ee678b91f74dea1048b06d2b15896969bfd36bfc4726",
   "evidence_bindings": {
     "canonical_graph_sha256": "2a003843da4fcdb04fc563f2d9644dd745ba0589c9fb6651b7fd21c9e6fad571",
-    "extension_catalog_sha256": "39f522fcabd7c5f4adea91fd8c81a82625bea732149e242f839d00a449305ce4",
+    "extension_catalog_sha256": "a3ca454e737d047b44ce1a17d225ea23174a345e0e66083e304290a037f73106",
     "mainframe_campaign_receipt_sha256": "264fe772a82ed67058a828e854cbde96b3d2deea3789f01a23ab5f6189cc027f",
     "oracle_data_receipt_sha256": "6958d7cc783d5ad00c469c112db5b665bf9ba93b7addec9cc94375d6c3f2dd83",
-    "pli_development_receipt_sha256": "ce1545251f524fa904498e5565efed921b0fa5c27f93836823d40129837d49be",
-    "pli_fragment_sha256": "c41d373bb758b52e0e14549422f9638e992aae91fde33cfda0c9ac4d3e947546",
+    "pli_coverage_receipt_sha256": "28113863189a3d393a486f06a186cead4cb32c75f0da096020055fe737e97dd5",
+    "pli_development_receipt_sha256": "dc6d3680564ba54690f4a568f669636e40e60b225c1d34d92791f8bca0729c07",
+    "pli_fragment_sha256": "33a57c2a87a74ce73dc18742cc96c48735a8b7df152add5a1db44a77ed4a48ec",
     "postgres_data_receipt_sha256": "8e2e2dc30cffa3205ceb743f418ae937ea8ac05d6bde9041182acc61cba3abbe"
   },
   "graph_content_sha256": "2a003843da4fcdb04fc563f2d9644dd745ba0589c9fb6651b7fd21c9e6fad571",

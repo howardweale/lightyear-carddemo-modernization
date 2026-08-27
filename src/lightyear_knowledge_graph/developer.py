@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import hashlib
+import json
 import platform
 import shutil
 import sys
@@ -44,6 +46,7 @@ def doctor(project_root: Path) -> dict[str, Any]:
         "semantic_inputs": root / "knowledge" / "semantic-inputs.json",
         "canonical_graph": root / "knowledge" / "graph.snapshot.json.gz",
         "pli_fragment": root / "extensions" / "pli" / "pli.fragment.json",
+        "pli_coverage": root / "extensions" / "pli" / "conformance" / "coverage.receipt.json",
         "capabilities": root / "knowledge" / "capabilities" / "mainframe-readiness.json",
         "composite_estate": root / "knowledge" / "composite" / "estate.snapshot.json.gz",
         "composite_evidence": root / "knowledge" / "composite" / "source.pack.json.gz",
@@ -64,11 +67,20 @@ def doctor(project_root: Path) -> dict[str, Any]:
         load_semantic_inputs(paths["semantic_inputs"], root)
         base = load_graph(paths["canonical_graph"])
         fragment = load_json(paths["pli_fragment"])
+        coverage = load_json(paths["pli_coverage"])
         capabilities = load_json(paths["capabilities"])
         composite = load_graph(paths["composite_estate"])
         structural_errors = validate_composite_estate(
             composite, base, [fragment], capabilities
         )
+        coverage_body = {key: value for key, value in coverage.items() if key != "content_sha256"}
+        coverage_hash = hashlib.sha256(
+            json.dumps(coverage_body, sort_keys=True, separators=(",", ":")).encode("utf-8")
+        ).hexdigest()
+        if coverage.get("content_sha256") != coverage_hash:
+            structural_errors.append("PL/I conformance coverage receipt hash is invalid")
+        if capabilities.get("evidence_bindings", {}).get("pli_coverage_receipt_sha256") != coverage_hash:
+            structural_errors.append("Capability projection does not bind the PL/I coverage receipt")
     except (OSError, ValueError, KeyError) as exc:
         structural_errors = [str(exc)]
     checks.append(

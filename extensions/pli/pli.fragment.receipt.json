@@ -4,7 +4,7 @@
     "graph_id": "lightyear:carddemo-modernization",
     "schema_version": "1.1"
   },
-  "content_sha256": "c41d373bb758b52e0e14549422f9638e992aae91fde33cfda0c9ac4d3e947546",
+  "content_sha256": "33a57c2a87a74ce73dc18742cc96c48735a8b7df152add5a1db44a77ed4a48ec",
   "fragment_id": "lightyear:pli-reference-v1",
   "language_pack": {
     "extensions": [
@@ -14,7 +14,7 @@
     ],
     "id": "lightyear.pli",
     "language": "PL/I",
-    "version": "1.1"
+    "version": "1.2"
   },
   "production_ready": false,
   "receipt_type": "lightyear-graph-extension-build",

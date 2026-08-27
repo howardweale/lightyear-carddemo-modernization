@@ -1,0 +1,43 @@
+{
+  "schema_version": "1.0",
+  "matrix_id": "lightyear-pli-supported-subset-v1",
+  "language_pack": {
+    "id": "lightyear.pli",
+    "version": "1.2"
+  },
+  "constructs": [
+    {"id": "assignment", "status": "supported", "scope": "simple scalar and decimal assignment"},
+    {"id": "call", "status": "supported", "scope": "static identifier targets and OPTIONS(COBOL) declarations"},
+    {"id": "cics_reference", "status": "supported", "scope": "discovery of EXEC CICS command names"},
+    {"id": "conditional", "status": "supported", "scope": "IF, SELECT, WHEN, and OTHERWISE discovery"},
+    {"id": "control_flow", "status": "supported", "scope": "DO block discovery"},
+    {"id": "decimal_declaration", "status": "supported", "scope": "DECIMAL FIXED declarations"},
+    {"id": "declaration", "status": "supported", "scope": "bounded scalar declarations"},
+    {"id": "embedded_sql", "status": "supported", "scope": "SELECT, INSERT, UPDATE, and DELETE table lineage"},
+    {"id": "entry_point", "status": "supported", "scope": "ENTRY and OPTIONS(COBOL) declarations"},
+    {"id": "error_control", "status": "supported", "scope": "ON condition discovery"},
+    {"id": "file_declaration", "status": "supported", "scope": "FILE declarations"},
+    {"id": "file_read", "status": "supported", "scope": "READ FILE(handle)"},
+    {"id": "file_write", "status": "supported", "scope": "WRITE FILE(handle)"},
+    {"id": "ims_reference", "status": "supported", "scope": "CBLTDLI call discovery"},
+    {"id": "include_member", "status": "supported", "scope": "bounded .inc members"},
+    {"id": "include_reference", "status": "supported", "scope": "%INCLUDE identifier"},
+    {"id": "procedure", "status": "supported", "scope": "named internal procedures"},
+    {"id": "program", "status": "supported", "scope": "OPTIONS(MAIN) procedures"},
+    {"id": "record_declaration", "status": "supported", "scope": "fixed and varying character records"},
+    {"id": "sqlca_reference", "status": "supported", "scope": "EXEC SQL INCLUDE SQLCA"},
+    {"id": "structure", "status": "supported", "scope": "level-1 declarations"},
+    {"id": "structure_member", "status": "supported", "scope": "nested level declarations"}
+  ],
+  "explicitly_unsupported": [
+    "BASED and CONTROLLED storage semantics",
+    "GENERIC entry resolution",
+    "PACKAGE declarations",
+    "preprocessor directives other than %INCLUDE",
+    "dynamic or expression-valued CALL targets",
+    "arbitrary EXEC subsystems and SQL grammar",
+    "IBM compiler type inference, macro expansion, and runtime semantics"
+  ],
+  "claim_boundary": "This matrix describes a synthetic static-discovery subset, not IBM Enterprise PL/I compatibility.",
+  "content_sha256": "b3d0804a8b6f7e5d34d3a63cf2af676f841aa981cea8e71a2daace2b34e94eb4"
+}

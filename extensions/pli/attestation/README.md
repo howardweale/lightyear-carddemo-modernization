@@ -7,6 +7,8 @@ JUnit-compatible XML report, inventories runtime dependencies, and produces a Cy
 The committed inventory binds the Java SE 17 language and compiler-module contract rather than a
 runner-specific JDK vendor string; GitHub workload-identity provenance records the concrete CI
 environment separately.
+The JAR container uses stored entries with fixed ordering, timestamps, permissions, creator
+metadata, and extension fields so its bytes do not depend on the host ZIP or zlib implementation.
 
 ```bash
 ./pli-build-attestation.sh verify

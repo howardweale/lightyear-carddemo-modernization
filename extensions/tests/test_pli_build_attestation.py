@@ -5,6 +5,7 @@ import json
 import shutil
 import tempfile
 import unittest
+import zipfile
 from pathlib import Path
 from unittest.mock import patch
 
@@ -34,7 +35,20 @@ class PliBuildAttestationTests(unittest.TestCase):
             self.assertEqual(receipt, rebuilt)
             generated_names = set(ARTIFACT_FILES.values()) | {"build.attestation.json", "build.receipt.json"}
             for name in sorted(generated_names):
-                self.assertEqual((CANONICAL / name).read_bytes(), (generated / name).read_bytes())
+                expected = (CANONICAL / name).read_bytes()
+                actual = (generated / name).read_bytes()
+                self.assertEqual(expected, actual, f"Attestation artifact differs: {name}")
+
+    def test_jar_container_metadata_is_platform_neutral(self) -> None:
+        with zipfile.ZipFile(CANONICAL / ARTIFACT_FILES["candidate_jar_sha256"]) as archive:
+            names = archive.namelist()
+            self.assertEqual(sorted(names), names)
+            for info in archive.infolist():
+                self.assertEqual((1980, 1, 1, 0, 0, 0), info.date_time)
+                self.assertEqual(3, info.create_system)
+                self.assertEqual(zipfile.ZIP_STORED, info.compress_type)
+                self.assertEqual(b"", info.extra)
+                self.assertEqual(b"", info.comment)
 
     def test_compiled_jar_tamper_is_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

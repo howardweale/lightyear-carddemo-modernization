@@ -310,17 +310,24 @@ def _run_harness(classes: Path, report: Path) -> None:
 
 def _write_reproducible_jar(classes: Path, output: Path) -> None:
     manifest = b"Manifest-Version: 1.0\r\nCreated-By: LIGHTYEAR reproducible builder\r\n\r\n"
-    with zipfile.ZipFile(output, "w", compression=zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
-        info = zipfile.ZipInfo("META-INF/MANIFEST.MF", (1980, 1, 1, 0, 0, 0))
-        info.external_attr = 0o100644 << 16
-        info.compress_type = zipfile.ZIP_DEFLATED
-        archive.writestr(info, manifest)
+    # Stored entries avoid zlib-version variance, while explicit creator,
+    # permissions, timestamps, ordering, and empty extension fields prevent
+    # ZIP headers from inheriting host-operating-system metadata.
+    with zipfile.ZipFile(output, "w", compression=zipfile.ZIP_STORED) as archive:
+        archive.writestr(_canonical_jar_entry("META-INF/MANIFEST.MF"), manifest)
         for path in sorted(classes.rglob("MixedPliAuthorizationService*.class")):
             relative = path.relative_to(classes).as_posix()
-            info = zipfile.ZipInfo(relative, (1980, 1, 1, 0, 0, 0))
-            info.external_attr = 0o100644 << 16
-            info.compress_type = zipfile.ZIP_DEFLATED
-            archive.writestr(info, path.read_bytes())
+            archive.writestr(_canonical_jar_entry(relative), path.read_bytes())
+
+
+def _canonical_jar_entry(name: str) -> zipfile.ZipInfo:
+    info = zipfile.ZipInfo(name, (1980, 1, 1, 0, 0, 0))
+    info.create_system = 3
+    info.external_attr = 0o100644 << 16
+    info.compress_type = zipfile.ZIP_STORED
+    info.extra = b""
+    info.comment = b""
+    return info
 
 
 def _source_tree_hash(project_root: Path) -> str:

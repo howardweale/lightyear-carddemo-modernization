@@ -524,14 +524,14 @@
       "status": "simulated_ready"
     }
   ],
-  "content_sha256": "473681838e456789e435c04bee5134292d97f7ed9d2bdbb0d894841112165221",
+  "content_sha256": "33f5f18b2a45c0dd6ab1be65bd80011b5af924a7508d8dc539145725b25461f7",
   "evidence_bindings": {
     "canonical_graph_sha256": "2a003843da4fcdb04fc563f2d9644dd745ba0589c9fb6651b7fd21c9e6fad571",
     "extension_catalog_sha256": "a3ca454e737d047b44ce1a17d225ea23174a345e0e66083e304290a037f73106",
     "mainframe_campaign_receipt_sha256": "264fe772a82ed67058a828e854cbde96b3d2deea3789f01a23ab5f6189cc027f",
     "oracle_data_receipt_sha256": "6958d7cc783d5ad00c469c112db5b665bf9ba93b7addec9cc94375d6c3f2dd83",
-    "pli_build_attestation_sha256": "2b328551e00b50765ef2c05cdf62e2f62f38aaf3c981be7c084e40473c8dca49",
-    "pli_build_receipt_sha256": "e332a13893215eff781ed101118815d62013aa8ab5e21f2107b4baa4eb4f176b",
+    "pli_build_attestation_sha256": "048addb4ed83ed6b2d2ded97d14cfb828262b846d4bbeed687d7b440d860507f",
+    "pli_build_receipt_sha256": "5a65da81ef4dcb7d5fcf2b79178aafeec9e999dffed47e9f755a28841e1f0d4c",
     "pli_coverage_receipt_sha256": "28113863189a3d393a486f06a186cead4cb32c75f0da096020055fe737e97dd5",
     "pli_development_receipt_sha256": "69962583b4134dca1c33798890624e8488830a69d9a1b1722a1fb29a97f1ff15",
     "pli_fragment_sha256": "33a57c2a87a74ce73dc18742cc96c48735a8b7df152add5a1db44a77ed4a48ec",

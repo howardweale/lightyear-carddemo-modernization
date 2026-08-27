@@ -1,6 +1,6 @@
 {
   "artifact": "pli-auth-risk-candidate.jar",
-  "content_sha256": "6d55292045917d99e4470ca9c21469e36a5835c5e785a1bac9cb512e7d3ecb07",
+  "content_sha256": "849e6037a989a0abd730e6cfbc7c6c36d9d4d2e196db533a59aa4021c341bf7e",
   "inventory_type": "lightyear-pli-bounded-candidate-dependencies",
   "runtime_dependencies": [
     {
@@ -15,7 +15,7 @@
   "toolchain": {
     "compiler": "jdk.compiler module",
     "language_release": "17",
-    "runtime": "openjdk version \"17.0.20\" 2026-07-21"
+    "runtime_contract": "Java SE 17"
   },
   "workload_id": "workload:carddemo-pli-auth-risk"
 }

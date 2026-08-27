@@ -1,13 +1,13 @@
 {
   "attestation_type": "lightyear-pli-build-attestation",
-  "content_sha256": "2b328551e00b50765ef2c05cdf62e2f62f38aaf3c981be7c084e40473c8dca49",
+  "content_sha256": "048addb4ed83ed6b2d2ded97d14cfb828262b846d4bbeed687d7b440d860507f",
   "schema_version": "1.0",
   "signature": {
     "algorithm": "RSASSA-PKCS1-v1_5-SHA256",
     "key_id": "lightyear-pli-development-test-rsa-v1",
     "release_authorized": false,
     "signer_class": "development-test-key",
-    "value": "mXuvSXMyffa8ZNJ0HcEsV3PVynDWUWsvLGxZiVLcIHDxQgRg7oBoiqv+fDhF5QgRENu0FY4EKmoVNmnzjM91Ts18ilULWlWdj/mRI8l4PxljcigW5Kuyuy4Kj4WBMcjQOeCqzPC1qwIe96TpQ6WOqY7drLWWo4Fa9cNvbgxAC8cFFpxRD8QhQeh4vdEhktSJahZaf68nilgacnTb9IfrvXTGfpxlmUQSJ+BDyoclslexTdvmqwuiB+6nel9em3hwrgzHedCDhC4Jci6CgQqGQzC39u475qjDQb2jcD2oToTE/531kxSjcDP/hMcWPMGX/ICGIq+iC5bRwwlH2eXQHg=="
+    "value": "WztCMUzyHlEErG71Dy+vI+LrphLAXi8LR9aUHTn45ySE8ORDVj1BOMzoVF5wmAMOzXiEkaC16jgFdl1zpbRkE5zDLlrBx+F9/XVJH7zkcGG296q3huK3mPQak4zWP1SkVrZ+358LGmYLW12+7lcbbWrOtaAHgw46CLjZeraW/ZxDsdcEOH+pKxKbs3W4p6RrmBKfslWdmi237+lzI6wbN5m9Gl7kKAnQtcxcrIuIgGJ7DImA1FaxIxG/B+nUlhFDEBqiqSNjrCf94o7lcKn5WPZIJPJ6xREXXmCK4IgKSQcFfRU45Tkx8/jTtwqvL2rMSuVz8XIo2jQkxgadIr/fAw=="
   },
   "statement": {
     "_type": "https://in-toto.io/Statement/v1",
@@ -15,8 +15,8 @@
       "buildDefinition": {
         "buildType": "https://lightyear.ai/build/pli-bounded-jdk17/v1",
         "externalParameters": {
-          "sourceCommit": "5f2fa592d251683bcc99f3cd84842870bba2d001",
-          "sourceTreeSha256": "8250731d9b59daf2aa5512dc607c11d91be3e02837494301a2460cd288a5f838",
+          "sourceCommit": "b515d7b4c310e8fa6309db79ff683ef9fe149732",
+          "sourceTreeSha256": "b0dceb281b4ca07edcff09b8e8f1e2ae08f80006e0cbafd46f235b58c5e7b3eb",
           "workflow": "howardweale/lightyear-carddemo-modernization/.github/workflows/verify.yml"
         },
         "resolvedDependencies": [
@@ -52,7 +52,7 @@
         },
         "metadata": {
           "cleanSourceTree": true,
-          "invocationId": "development:5f2fa592d251683bcc99f3cd84842870bba2d001"
+          "invocationId": "development:b515d7b4c310e8fa6309db79ff683ef9fe149732"
         }
       }
     },
@@ -72,7 +72,7 @@
       },
       {
         "digest": {
-          "sha256": "ceff8d41c735d0ab88324ba8828700199210b68f6b52ac1d1b9a2fc79c1f9a11"
+          "sha256": "ea145bfbc1c730267c1fdb895e0b5d7575ab3fb5e0155e9fa37aa3e1562e53ed"
         },
         "name": "dependencies.json"
       },

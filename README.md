@@ -1,6 +1,30 @@
 # FactoryDark.ai CardDemo Modernization Factory
 
-Release: **v0.24.0 — PL/I discovery coverage and conformance lab**
+Release: **v0.25.0 — reproducible build and artifact attestation**
+
+v0.25 closes the source-only delivery gap in the bounded mixed PL/I modernization cell. A
+JDK-17-only build now compiles `MixedPliAuthorizationService`, creates a byte-reproducible
+standalone JAR, executes five bounded tests into JUnit-compatible XML, inventories dependencies,
+and emits a CycloneDX 1.5 SBOM. SLSA-shaped provenance binds those artifacts to a clean source
+commit and to the MS #22 contract, fixtures, differential comparison, mutations, and development
+receipt.
+
+The committed proof uses an openly published development test key with release authorization
+hard-disabled. GitHub Actions rebuilds the same evidence and adds GitHub workload-identity build
+and SBOM attestations. Missing artifacts, edited reports, dependency changes, substituted commits,
+foreign workflows, invalid signatures, and development-key release claims all fail closed and
+demote PL/I development readiness.
+
+```bash
+./pli-build-attestation.sh verify
+./lightyear.sh verify
+```
+
+This unlocks the bounded claim that the delivered Java artifact was compiled, tested, and
+cryptographically bound to its evidence. It does not prove execution or equivalence of an IBM
+Enterprise PL/I load module; `mainframe_equivalent` and `production_ready` remain false.
+
+Previous milestone: **v0.24.0 — PL/I discovery coverage and conformance lab**
 
 v0.24 replaces the PL/I pack's line-oriented pattern boundary with a tokenized, statement-aware
 front end for a published supported subset. A synthetic 27-case corpus exercises 22 construct

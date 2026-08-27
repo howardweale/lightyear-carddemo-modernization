@@ -32,6 +32,11 @@ The v0.24 PL/I conformance receipt under `../extensions/pli/conformance/` binds 
 corpus and 22-category support matrix to the canonical graph. The capability projection exposes
 these breadth metrics but explicitly identifies them as non-customer, static, non-runtime evidence.
 
+The v0.25 PL/I build attestation under `../extensions/pli/attestation/` binds a reproducible
+compiled JAR, JUnit-compatible test execution, dependency inventory, CycloneDX SBOM, clean source
+commit, and MS #22 behavior evidence. A published development test key cannot be promoted to a
+release identity; GitHub workload identity separately attests CI artifacts.
+
 The graph is the factory's shared system model. It is deliberately broader than a code index: it
 connects application structure, business meaning, modernization implementation, verification, and
 provenance in one queryable artifact.
@@ -138,6 +143,7 @@ snapshot carries the ontology content hash, and validation rejects undefined or 
 - `capabilities/mainframe-readiness.json`: graph-bound readiness gates for CICS, VSAM, IMS, HLASM, PL/I, and Db2/Data;
 - `schema/capability-readiness.schema.json`: portable contract for the capability projection;
 - `schema/pli-coverage.schema.json`: portable contract for PL/I supported-subset coverage evidence;
+- `../extensions/schema/pli-build-attestation-receipt.schema.json`: compiled-artifact receipt contract;
 - `ontology/relationships.json`: canonical meanings and endpoint constraints for all edges;
 - `evidence/source.pack.json.gz`: deterministic source excerpts and supporting context;
 - `evidence/source.receipt.json`: evidence-pack and graph identity receipt;

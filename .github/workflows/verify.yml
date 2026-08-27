@@ -9,6 +9,50 @@ permissions:
   contents: read
 
 jobs:
+  pli-build-attestation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+
+      - name: Set up Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Build and verify bounded PL/I candidate evidence
+        run: ./pli-build-attestation.sh ci-build
+
+      - name: Generate workload-identity build provenance
+        uses: actions/attest@v4
+        with:
+          subject-path: work/pli-build-attestation-ci-build/pli-auth-risk-candidate.jar
+
+      - name: Generate workload-identity SBOM attestation
+        uses: actions/attest@v4
+        with:
+          subject-path: work/pli-build-attestation-ci-build/pli-auth-risk-candidate.jar
+          sbom-path: work/pli-build-attestation-ci-build/sbom.cdx.json
+
+      - name: Publish attested build evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: pli-build-attestation-${{ github.sha }}
+          path: work/pli-build-attestation-ci-build/
+          if-no-files-found: error
+
   verifier-escape-gauntlet:
     strategy:
       fail-fast: false

@@ -28,6 +28,7 @@ if ($Action -eq "verify") {
     & (Join-Path $ProjectDir "pli-conformance.ps1") verify
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
     & (Join-Path $ProjectDir "pli-modernization.ps1") verify
+    & (Join-Path $ProjectDir "pli-build-attestation.ps1") verify
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
     & (Join-Path $ProjectDir "composite-estate.ps1") verify
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

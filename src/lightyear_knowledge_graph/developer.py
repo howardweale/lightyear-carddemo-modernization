@@ -12,6 +12,7 @@ from .composite import load_json, validate_composite_estate
 from .explorer import GraphExplorerIndex
 from .inputs import load_semantic_inputs
 from .model import load_graph
+from lightyear_common.pli_build_trust import trusted_development_attestation
 
 
 def doctor(project_root: Path) -> dict[str, Any]:
@@ -47,6 +48,8 @@ def doctor(project_root: Path) -> dict[str, Any]:
         "canonical_graph": root / "knowledge" / "graph.snapshot.json.gz",
         "pli_fragment": root / "extensions" / "pli" / "pli.fragment.json",
         "pli_coverage": root / "extensions" / "pli" / "conformance" / "coverage.receipt.json",
+        "pli_build_receipt": root / "extensions" / "pli" / "attestation" / "build.receipt.json",
+        "pli_build_attestation": root / "extensions" / "pli" / "attestation" / "build.attestation.json",
         "capabilities": root / "knowledge" / "capabilities" / "mainframe-readiness.json",
         "composite_estate": root / "knowledge" / "composite" / "estate.snapshot.json.gz",
         "composite_evidence": root / "knowledge" / "composite" / "source.pack.json.gz",
@@ -68,6 +71,8 @@ def doctor(project_root: Path) -> dict[str, Any]:
         base = load_graph(paths["canonical_graph"])
         fragment = load_json(paths["pli_fragment"])
         coverage = load_json(paths["pli_coverage"])
+        build_receipt = load_json(paths["pli_build_receipt"])
+        build_attestation = load_json(paths["pli_build_attestation"])
         capabilities = load_json(paths["capabilities"])
         composite = load_graph(paths["composite_estate"])
         structural_errors = validate_composite_estate(
@@ -81,6 +86,25 @@ def doctor(project_root: Path) -> dict[str, Any]:
             structural_errors.append("PL/I conformance coverage receipt hash is invalid")
         if capabilities.get("evidence_bindings", {}).get("pli_coverage_receipt_sha256") != coverage_hash:
             structural_errors.append("Capability projection does not bind the PL/I coverage receipt")
+        receipt_hash = _canonical_hash(build_receipt)
+        attestation_hash = _canonical_hash(build_attestation)
+        if build_receipt.get("content_sha256") != receipt_hash:
+            structural_errors.append("PL/I build attestation receipt hash is invalid")
+        if build_attestation.get("content_sha256") != attestation_hash or not trusted_development_attestation(build_attestation):
+            structural_errors.append("PL/I build attestation signature or identity is invalid")
+        bindings = capabilities.get("evidence_bindings", {})
+        if bindings.get("pli_build_receipt_sha256") != receipt_hash or bindings.get("pli_build_attestation_sha256") != attestation_hash:
+            structural_errors.append("Capability projection does not bind the PL/I build attestation")
+        artifact_bindings = build_receipt.get("bindings", {})
+        for binding, filename in (
+            ("candidate_jar_sha256", "pli-auth-risk-candidate.jar"),
+            ("junit_xml_sha256", "TEST-MixedPliAuthorizationAttestation.xml"),
+            ("dependency_inventory_sha256", "dependencies.json"),
+            ("sbom_sha256", "sbom.cdx.json"),
+        ):
+            artifact = paths["pli_build_receipt"].parent / filename
+            if not artifact.is_file() or artifact_bindings.get(binding) != hashlib.sha256(artifact.read_bytes()).hexdigest():
+                structural_errors.append(f"PL/I build artifact is missing or tampered: {filename}")
     except (OSError, ValueError, KeyError) as exc:
         structural_errors = [str(exc)]
     checks.append(
@@ -167,3 +191,10 @@ def _trace_summary(trace: dict[str, Any]) -> dict[str, Any]:
             }
         ),
     }
+
+
+def _canonical_hash(payload: dict[str, Any]) -> str:
+    body = {key: value for key, value in payload.items() if key != "content_sha256"}
+    return hashlib.sha256(
+        json.dumps(body, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    ).hexdigest()

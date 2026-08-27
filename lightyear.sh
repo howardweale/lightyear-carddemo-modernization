@@ -24,6 +24,7 @@ case "$action" in
     "$project_dir/extension-foundation.sh" verify
     "$project_dir/pli-conformance.sh" verify
     "$project_dir/pli-modernization.sh" verify
+    "$project_dir/pli-build-attestation.sh" verify
     "$project_dir/composite-estate.sh" verify
     "$LIGHTYEAR_PYTHON_BIN" -m unittest tests.test_semantic_inputs tests.test_composite_estate
     ;;

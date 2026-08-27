@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any
 
 from lightyear_common.io import write_json
+from lightyear_common.pli_build_trust import EXPECTED_WORKFLOW, trusted_development_attestation
 
 
 GATE_NAMES = {
@@ -111,6 +112,60 @@ def _pli_development_receipt_passed(
     )
 
 
+def _pli_build_attestation_passed(
+    receipt: dict[str, Any], attestation: dict[str, Any], development_receipt_sha256: str | None
+) -> bool:
+    expected_checks = {
+        "asymmetric_signature",
+        "clean_source_tree",
+        "compiled_candidate",
+        "dependency_inventory",
+        "junit_execution",
+        "live_zos_baseline",
+        "ms22_evidence_bound",
+        "release_key_separation",
+        "reproducible_build",
+        "sbom",
+        "source_commit_bound",
+    }
+    checks = receipt.get("checks", {})
+    bindings = receipt.get("bindings", {})
+    subjects = {
+        item.get("name"): item.get("digest", {}).get("sha256")
+        for item in attestation.get("statement", {}).get("subject", [])
+    }
+    parameters = (
+        attestation.get("statement", {})
+        .get("predicate", {})
+        .get("buildDefinition", {})
+        .get("externalParameters", {})
+    )
+    return bool(
+        receipt.get("schema_version") == "1.0"
+        and receipt.get("receipt_type") == "lightyear-pli-build-attestation-receipt"
+        and receipt.get("evidence_class") == "attested-local-build"
+        and receipt.get("status") == "passed"
+        and receipt.get("development_ready") is True
+        and receipt.get("mainframe_equivalent") is False
+        and receipt.get("production_ready") is False
+        and receipt.get("release_attestation") is False
+        and receipt.get("workflow") == EXPECTED_WORKFLOW
+        and receipt.get("source_commit") == parameters.get("sourceCommit")
+        and receipt.get("content_sha256") == _canonical_hash(receipt)
+        and attestation.get("content_sha256") == _canonical_hash(attestation)
+        and trusted_development_attestation(attestation)
+        and bindings.get("build_attestation_sha256") == attestation.get("content_sha256")
+        and bindings.get("development_receipt_sha256") == development_receipt_sha256
+        and subjects.get("pli-auth-risk-candidate.jar") == bindings.get("candidate_jar_sha256")
+        and subjects.get("TEST-MixedPliAuthorizationAttestation.xml") == bindings.get("junit_xml_sha256")
+        and subjects.get("dependencies.json") == bindings.get("dependency_inventory_sha256")
+        and subjects.get("sbom.cdx.json") == bindings.get("sbom_sha256")
+        and set(checks) == expected_checks
+        and checks.get("live_zos_baseline") is False
+        and all(checks.get(name) is True for name in expected_checks - {"live_zos_baseline"})
+    )
+
+
 def _pli_coverage_receipt_passed(payload: dict[str, Any], graph_sha256: str) -> bool:
     checks = payload.get("checks", {})
     corpus = payload.get("corpus", {})
@@ -178,6 +233,8 @@ def analyze_capabilities(
     extension_catalog: dict[str, Any] | None = None,
     pli_coverage_receipt: dict[str, Any] | None = None,
     pli_development_receipt: dict[str, Any] | None = None,
+    pli_build_receipt: dict[str, Any] | None = None,
+    pli_build_attestation: dict[str, Any] | None = None,
     postgres_data_receipt: dict[str, Any] | None = None,
     oracle_data_receipt: dict[str, Any] | None = None,
     campaign_receipt: dict[str, Any] | None = None,
@@ -315,12 +372,18 @@ def analyze_capabilities(
         else "The PL/I fragment, language-pack catalog, or synthetic conformance coverage binding is invalid."
     )
     pli_graph_gap = None if pli_connected else "The PL/I-to-COBOL and PL/I-to-Db2 dependency links are incomplete."
-    pli_development = _pli_development_receipt_passed(
+    pli_source_development = _pli_development_receipt_passed(
         pli_development_receipt or {}, graph_sha256, fragment.get("content_sha256")
     )
+    pli_attested_build = _pli_build_attestation_passed(
+        pli_build_receipt or {},
+        pli_build_attestation or {},
+        (pli_development_receipt or {}).get("content_sha256"),
+    )
+    pli_development = pli_source_development and pli_attested_build
     pli_development_gap = (
         None if pli_development
-        else "The graph-bound mixed PL/I development receipt is missing, stale, incomplete, or tampered."
+        else "The graph-bound PL/I proof or its compiled-artifact attestation is missing, stale, foreign, incomplete, or tampered."
     )
     pli_live_gap = "No authorized compiled and executed ACCTPL1 observation exists on z/OS."
     pli_gates = [
@@ -344,10 +407,13 @@ def analyze_capabilities(
         _gate(4, "passed" if pli_development else "blocked", [
             "factory/benchmarks/pli_authorization_candidate.py",
             "candidate-java MixedPliAuthorizationService",
+            "extensions/pli/attestation/pli-auth-risk-candidate.jar",
+            "asymmetrically signed build provenance and SBOM",
         ], pli_development_gap),
         _gate(5, "passed" if pli_development else "blocked", [
             "extensions/pli/modernization/comparison.json",
             "nine mutation probes and seven boundary cases",
+            "attested JUnit-compatible execution report",
         ], pli_development_gap),
         _gate(6, "blocked", [], pli_live_gap),
         _gate(7, "mechanism_ready" if pli_development else "blocked", [
@@ -451,13 +517,15 @@ def analyze_capabilities(
         "pli_fragment_sha256": fragment.get("content_sha256"),
         "pli_coverage_receipt_sha256": (pli_coverage_receipt or {}).get("content_sha256"),
         "pli_development_receipt_sha256": (pli_development_receipt or {}).get("content_sha256"),
+        "pli_build_receipt_sha256": (pli_build_receipt or {}).get("content_sha256"),
+        "pli_build_attestation_sha256": (pli_build_attestation or {}).get("content_sha256"),
         "postgres_data_receipt_sha256": postgres.get("content_sha256"),
         "oracle_data_receipt_sha256": oracle.get("content_sha256"),
         "mainframe_campaign_receipt_sha256": campaign.get("content_sha256"),
     }
 
     payload = {
-        "schema_version": "1.2",
+        "schema_version": "1.3",
         "analysis_type": "factorydark-mainframe-capability-readiness",
         "graph_content_sha256": graph_sha256,
         "truth_boundary": (
@@ -477,7 +545,7 @@ def validate_capability_analysis(
     expected: dict[str, Any] | None = None,
 ) -> list[str]:
     errors: list[str] = []
-    if payload.get("schema_version") != "1.2":
+    if payload.get("schema_version") != "1.3":
         errors.append("unsupported capability analysis schema_version")
     if payload.get("graph_content_sha256") != graph.get("content_sha256"):
         errors.append("capability analysis is not bound to the canonical graph")

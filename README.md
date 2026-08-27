@@ -1,6 +1,6 @@
 # FactoryDark.ai CardDemo Modernization Factory
 
-Release: **v0.25.0 — reproducible build and artifact attestation**
+Release: **v0.25.1 — squash-safe reproducible build verification**
 
 v0.25 closes the source-only delivery gap in the bounded mixed PL/I modernization cell. A
 JDK-17-only build now compiles `MixedPliAuthorizationService`, creates a byte-reproducible
@@ -8,6 +8,12 @@ standalone JAR, executes five bounded tests into JUnit-compatible XML, inventori
 and emits a CycloneDX 1.5 SBOM. SLSA-shaped provenance binds those artifacts to a clean source
 commit and to the MS #22 contract, fixtures, differential comparison, mutations, and development
 receipt.
+
+v0.25.1 makes that verification portable across repository history. It still rebuilds and compares
+the full provenance envelope when the recorded source commit is reachable. After a squash merge,
+it validates the unchanged signed source-tree binding and compares the JAR, JUnit report,
+dependency inventory, and SBOM byte-for-byte against a rebuild from the equivalent merged source.
+It never substitutes the squash commit into the original development receipt.
 
 The committed proof uses an openly published development test key with release authorization
 hard-disabled. GitHub Actions rebuilds the same evidence and adds GitHub workload-identity build

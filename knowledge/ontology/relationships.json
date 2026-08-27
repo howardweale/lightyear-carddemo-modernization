@@ -31,13 +31,15 @@
         ["cobol_paragraph", "cobol_paragraph"],
         ["cobol_paragraph", "cobol_program"],
         ["cobol_program", "cobol_paragraph"],
-        ["cobol_program", "cobol_program"]
+        ["cobol_program", "cobol_program"],
+        ["pli_program", "cobol_program"],
+        ["pli_program", "pli_procedure"]
       ],
       "category": "control-flow",
       "direction": "caller to callee",
       "evidence_policy": "edge",
       "label": "calls",
-      "purpose": "Represents an observed COBOL control-flow transfer from a caller to a program or paragraph."
+      "purpose": "Represents an observed control-flow transfer across supported COBOL and PL/I scopes."
     },
     "CONTAINS": {
       "allowed_pairs": [
@@ -51,7 +53,8 @@
         ["jcl_job", "jcl_step"],
         ["jcl_procedure", "jcl_step"],
         ["ims_database", "ims_segment"],
-        ["ims_psb", "ims_pcb"]
+        ["ims_psb", "ims_pcb"],
+        ["pli_program", "pli_procedure"]
       ],
       "category": "structure",
       "direction": "container to member",
@@ -74,6 +77,8 @@
         ["source_file", "java_type"],
         ["source_file", "jcl_job"],
         ["source_file", "jcl_procedure"],
+        ["source_file", "pli_include"],
+        ["source_file", "pli_program"],
         ["source_file", "ims_database"],
         ["source_file", "ims_psb"],
         ["source_file", "db2_dcl"],
@@ -205,12 +210,23 @@
       "purpose": "Identifies a modern application or batch configuration type that starts the replacement workload."
     },
     "READS": {
-      "allowed_pairs": [["cobol_paragraph", "cobol_file_handle"]],
+      "allowed_pairs": [
+        ["cobol_paragraph", "cobol_file_handle"],
+        ["pli_program", "pli_file_handle"]
+      ],
       "category": "data-lineage",
       "direction": "code to consumed file handle",
       "evidence_policy": "edge",
       "label": "reads",
-      "purpose": "Records that a COBOL paragraph consumes records through the connected file handle."
+      "purpose": "Records that a supported code scope consumes records through the connected file handle."
+    },
+    "READS_TABLE": {
+      "allowed_pairs": [["db2_sql_statement", "db2_table"]],
+      "category": "data-lineage",
+      "direction": "SQL statement to read table",
+      "evidence_policy": "edge",
+      "label": "reads table",
+      "purpose": "Records a statically observed query against a Db2 table."
     },
     "READS_WRITES": {
       "allowed_pairs": [["cobol_paragraph", "cobol_file_handle"]],
@@ -236,6 +252,14 @@
       "label": "uses copybook",
       "purpose": "Records that a COBOL program imports and depends on the connected copybook."
     },
+    "USES_INCLUDE": {
+      "allowed_pairs": [["pli_program", "pli_include"]],
+      "category": "dependency",
+      "direction": "PL/I program to included source contract",
+      "evidence_policy": "edge",
+      "label": "uses include",
+      "purpose": "Records that a PL/I program imports and depends on the connected include."
+    },
     "VERIFIED_BY": {
       "allowed_pairs": [
         ["business_rule", "test_case"],
@@ -248,12 +272,15 @@
       "purpose": "Connects a business-rule claim to the test or scenario that supplies independent behavioral evidence."
     },
     "WRITES": {
-      "allowed_pairs": [["cobol_paragraph", "cobol_file_handle"]],
+      "allowed_pairs": [
+        ["cobol_paragraph", "cobol_file_handle"],
+        ["pli_program", "pli_file_handle"]
+      ],
       "category": "data-lineage",
       "direction": "code to produced file handle",
       "evidence_policy": "edge",
       "label": "writes",
-      "purpose": "Records that a COBOL paragraph creates or updates records through the connected file handle."
+      "purpose": "Records that a supported code scope creates or updates records through the connected file handle."
     },
     "ACCESSES": {
       "allowed_pairs": [["cics_command", "cics_file_resource"]],
@@ -401,9 +428,13 @@
       "label": "has constraint", "purpose": "Connects a Db2 table to a parsed key or integrity constraint."
     },
     "ISSUES_SQL": {
-      "allowed_pairs": [["cobol_paragraph", "db2_sql_statement"], ["cobol_program", "db2_sql_statement"]],
-      "category": "control-flow", "direction": "COBOL scope to SQL statement", "evidence_policy": "edge",
-      "label": "issues SQL", "purpose": "Records the COBOL scope that issues an embedded SQL statement."
+      "allowed_pairs": [
+        ["cobol_paragraph", "db2_sql_statement"],
+        ["cobol_program", "db2_sql_statement"],
+        ["pli_program", "db2_sql_statement"]
+      ],
+      "category": "control-flow", "direction": "source scope to SQL statement", "evidence_policy": "edge",
+      "label": "issues SQL", "purpose": "Records the supported source scope that issues an embedded SQL statement."
     },
     "REFERENCES_COLUMN": {
       "allowed_pairs": [["db2_sql_statement", "db2_column"]],

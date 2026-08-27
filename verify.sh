@@ -25,6 +25,7 @@ fi
 "$project_dir/knowledge-graph.sh" verify
 "$project_dir/extension-foundation.sh" verify
 "$project_dir/pli-modernization.sh" verify
+"$project_dir/composite-estate.sh" verify
 "$project_dir/runtime-evidence.sh" verify
 "$project_dir/semantic-memory.sh" validate
 "$project_dir/portfolio-factory.sh" verify

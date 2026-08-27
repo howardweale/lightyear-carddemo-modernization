@@ -1,0 +1,206 @@
+{
+  "base_graph": {
+    "content_sha256": "2a003843da4fcdb04fc563f2d9644dd745ba0589c9fb6651b7fd21c9e6fad571",
+    "graph_id": "lightyear:carddemo-modernization",
+    "schema_version": "1.1"
+  },
+  "capability_projection": {
+    "capabilities": [
+      {
+        "capability_kind": "runtime",
+        "development_ready": true,
+        "discovery_ready": true,
+        "mainframe_equivalent": false,
+        "technology": "CICS"
+      },
+      {
+        "capability_kind": "data",
+        "development_ready": true,
+        "discovery_ready": true,
+        "mainframe_equivalent": false,
+        "technology": "VSAM"
+      },
+      {
+        "capability_kind": "runtime",
+        "development_ready": true,
+        "discovery_ready": true,
+        "mainframe_equivalent": false,
+        "technology": "IMS"
+      },
+      {
+        "capability_kind": "language",
+        "development_ready": true,
+        "discovery_ready": true,
+        "mainframe_equivalent": false,
+        "technology": "HLASM"
+      },
+      {
+        "capability_kind": "language",
+        "development_ready": true,
+        "discovery_ready": true,
+        "mainframe_equivalent": false,
+        "technology": "PL/I"
+      },
+      {
+        "capability_kind": "data",
+        "development_ready": true,
+        "discovery_ready": true,
+        "mainframe_equivalent": false,
+        "technology": "Db2/Data"
+      }
+    ],
+    "collection_mechanisms": [
+      {
+        "adapters": [
+          "lightyear.cics-cmci",
+          "lightyear.db2-zos-catalog",
+          "lightyear.zosmf-jobs"
+        ],
+        "evidence_class": "simulated",
+        "live_observed": false,
+        "mechanism": "Mainframe Access Campaign",
+        "production_ready": false,
+        "receipt_sha256": "264fe772a82ed67058a828e854cbde96b3d2deea3789f01a23ab5f6189cc027f",
+        "status": "simulated_ready"
+      }
+    ],
+    "content_sha256": "c33f2143a22219275dcbc6b8635fdaa0649417a8dcad4bedf032e88e60a99308",
+    "schema_version": "1.2",
+    "truth_boundary": "Local, simulated, fixture, static, and offline target evidence cannot satisfy live z/OS observation or equivalence gates."
+  },
+  "claim_boundary": {
+    "changes_canonical_graph": false,
+    "composite_is_read_only": true,
+    "mainframe_equivalent": false,
+    "production_ready": false,
+    "proves_runtime_behavior": false,
+    "statement": "The projection composes separately validated discovery and development evidence; it does not promote live-mainframe or production claims."
+  },
+  "composite_graph_id": "lightyear:carddemo-modernization:composite",
+  "content_sha256": "beb62508cae1a592fd667c2ef7034b69a28a8e6f5004e0f3bf308aa4ccbb6631",
+  "fragments": [
+    {
+      "content_sha256": "c41d373bb758b52e0e14549422f9638e992aae91fde33cfda0c9ac4d3e947546",
+      "fragment_id": "lightyear:pli-reference-v1",
+      "fragment_type": "lightyear-graph-extension",
+      "language": "PL/I",
+      "limitations": [
+        "The bundled PL/I source is a reference fixture, not customer production source.",
+        "Static PL/I extraction does not prove runtime behavior or compilation equivalence.",
+        "The fragment is bound to one exact base graph identity and fails closed after graph drift."
+      ]
+    }
+  ],
+  "receipt_type": "lightyear-composite-estate-build",
+  "schema_version": "1.0",
+  "statistics": {
+    "edge_count": 13470,
+    "edges_by_relation": {
+      "ACCESSES": 58,
+      "ALLOCATES": 207,
+      "ASSIGNED_TO": 56,
+      "BACKED_BY": 8,
+      "BINDS": 451,
+      "BRANCHES_TO": 9,
+      "CALLS": 1000,
+      "CONTAINS": 8916,
+      "DECLARES": 377,
+      "DEPENDS_ON": 29,
+      "DERIVED_FROM": 40,
+      "DESCRIBES": 3,
+      "EXECUTES": 120,
+      "HAS_COLUMN": 31,
+      "HAS_COMPONENT": 28,
+      "HAS_CONSTRAINT": 3,
+      "HAS_DATASET_GROUP": 4,
+      "HAS_DD": 451,
+      "HAS_FIELD": 593,
+      "HAS_MAP": 21,
+      "HAS_RULE": 34,
+      "HAS_SCENARIO": 15,
+      "IMPLEMENTED_BY": 38,
+      "INDEXES": 5,
+      "ISSUES": 240,
+      "ISSUES_SQL": 3,
+      "LEGACY_ENTRYPOINT": 9,
+      "MODERN_ENTRYPOINT": 8,
+      "PARENT_OF": 1,
+      "READS": 68,
+      "READS_TABLE": 1,
+      "READS_WRITES": 3,
+      "REFERENCES_COLUMN": 30,
+      "RESOLVES_TO": 41,
+      "SCHEDULED_BY": 2,
+      "SENSITIVE_TO": 8,
+      "STARTS_PROGRAM": 25,
+      "TARGETS": 6,
+      "USES_COPYBOOK": 354,
+      "USES_DBD": 6,
+      "USES_DSECT": 1,
+      "USES_INCLUDE": 1,
+      "USES_MACRO": 1,
+      "USES_MAP": 47,
+      "USES_MAPSET": 47,
+      "USES_PSB": 4,
+      "VERIFIED_BY": 45,
+      "WRITES": 20,
+      "WRITES_TABLE": 2
+    },
+    "node_count": 11328,
+    "nodes_by_kind": {
+      "assembler_dsect": 1,
+      "assembler_field": 5,
+      "assembler_instruction": 41,
+      "assembler_macro": 1,
+      "assembler_program": 2,
+      "assembler_symbol": 23,
+      "bms_field": 585,
+      "bms_map": 23,
+      "bms_mapset": 23,
+      "business_rule": 34,
+      "cics_command": 240,
+      "cics_file_resource": 16,
+      "cics_program_resource": 26,
+      "cics_transaction": 25,
+      "cobol_field": 7817,
+      "cobol_file_handle": 56,
+      "cobol_paragraph": 927,
+      "cobol_program": 55,
+      "copybook": 75,
+      "dataset": 99,
+      "db2_column": 31,
+      "db2_constraint": 3,
+      "db2_dcl": 3,
+      "db2_index": 3,
+      "db2_sql_statement": 3,
+      "db2_table": 3,
+      "executable": 11,
+      "ims_database": 4,
+      "ims_dataset_group": 4,
+      "ims_field": 3,
+      "ims_pcb": 6,
+      "ims_psb": 4,
+      "ims_segment": 3,
+      "java_method": 87,
+      "java_type": 26,
+      "jcl_dd_allocation": 451,
+      "jcl_dd_name": 104,
+      "jcl_job": 46,
+      "jcl_procedure": 2,
+      "jcl_step": 119,
+      "modernization_workload": 5,
+      "pli_file_handle": 2,
+      "pli_include": 1,
+      "pli_procedure": 1,
+      "pli_program": 1,
+      "software_dependency": 5,
+      "source_file": 248,
+      "test_case": 11,
+      "verification_scenario": 15,
+      "vsam_alternate_index": 3,
+      "vsam_cluster": 15,
+      "vsam_component": 28,
+      "vsam_path": 3
+    }
+  }
+}

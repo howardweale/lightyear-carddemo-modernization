@@ -7,6 +7,7 @@ from typing import Any
 from lightyear_common.io import write_json
 
 from .extractors import LEGACY_SOURCE_ID, MODERN_SOURCE_ID, extract_legacy, extract_modern
+from .inputs import load_semantic_inputs, manifest_binding, resolve_declared_paths
 from .model import KnowledgeGraph, evidence
 from .ontology import DEFAULT_ONTOLOGY_PATH, load_ontology, ontology_identity
 
@@ -18,8 +19,29 @@ def build_graph(
     legacy_commit: str,
     modern_commit: str = "working-tree",
     ontology_path: Path = DEFAULT_ONTOLOGY_PATH,
+    semantic_input_path: Path | None = None,
 ) -> KnowledgeGraph:
+    legacy_root = legacy_root.resolve()
+    modern_root = modern_root.resolve()
+    ontology_path = ontology_path.resolve()
+    if semantic_input_path is not None:
+        semantic_input_path = semantic_input_path.resolve()
     ontology = load_ontology(ontology_path)
+    semantic_inputs = (
+        load_semantic_inputs(semantic_input_path, modern_root)
+        if semantic_input_path is not None
+        else None
+    )
+    modern_source = {
+        "id": MODERN_SOURCE_ID,
+        "kind": "git_repository",
+        "repository": "https://github.com/howardweale/lightyear-carddemo-modernization",
+        "commit": modern_commit,
+    }
+    if semantic_inputs is not None:
+        modern_source["semantic_inputs"] = manifest_binding(
+            semantic_inputs, semantic_input_path, modern_root
+        )
     graph = KnowledgeGraph(
         "lightyear:carddemo-modernization",
         [
@@ -29,18 +51,24 @@ def build_graph(
                 "repository": "https://github.com/aws-samples/aws-mainframe-modernization-carddemo",
                 "commit": legacy_commit,
             },
-            {
-                "id": MODERN_SOURCE_ID,
-                "kind": "git_repository",
-                "repository": "https://github.com/howardweale/lightyear-carddemo-modernization",
-                "commit": modern_commit,
-            },
+            modern_source,
         ],
         ontology_identity(ontology),
     )
     extract_legacy(graph, legacy_root)
-    extract_modern(graph, modern_root)
-    manifests = [manifest_path] if isinstance(manifest_path, Path) else list(manifest_path)
+    declared_modern = (
+        resolve_declared_paths(semantic_inputs, modern_root, "modern_files")
+        if semantic_inputs is not None
+        else None
+    )
+    extract_modern(graph, modern_root, declared_modern)
+    if semantic_inputs is not None:
+        manifests = resolve_declared_paths(semantic_inputs, modern_root, "workload_manifests")
+        supplied = [manifest_path] if isinstance(manifest_path, Path) else list(manifest_path)
+        if supplied and {path.resolve() for path in supplied} != {path.resolve() for path in manifests}:
+            raise ValueError("CLI workload manifests differ from the semantic input manifest")
+    else:
+        manifests = [manifest_path] if isinstance(manifest_path, Path) else list(manifest_path)
     for path in manifests:
         _apply_manifest(graph, path)
     return graph

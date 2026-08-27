@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.23.0 — 2026-08-27
+
+- Added a content-addressed semantic-input manifest that limits canonical modern-source identity to
+  explicitly declared candidates and mappings while retaining fail-closed drift behavior.
+- Added a deterministic read-only composite estate that overlays validated PL/I nodes and edges on
+  the canonical graph without changing its identity or evidence contract.
+- Added PL/I relationship ontology coverage and a complete Explorer perspective for
+  `ACCTPL1 → CBACT04C` and `ACCTPL1 → Db2 AUTHFRDS` lineage.
+- Added a separately content-addressed composite source pack so PL/I evidence excerpts are
+  inspectable without modifying the canonical evidence pack.
+- Preserved canonical runtime and audit bindings inside the composite Explorer and added an
+  explicit UI banner showing canonical/composite hashes and the non-equivalence claim boundary.
+- Added `doctor`, `demo`, `explorer`, and `verify` developer entry points for POSIX and PowerShell,
+  with required-versus-optional prerequisite diagnostics and actionable remediation.
+- Added fail-closed tests for semantic input drift, undeclared implementation changes, fragment
+  drift, projection tampering, cross-estate navigation, and canonical runtime/audit compatibility.
+- Kept gates 6 and 8 blocked, gate 7 mechanism-ready, `mainframe_equivalent: false`, and
+  `production_ready: false`.
+
 ## 0.22.0 — 2026-08-26
 
 - Advanced the bounded mixed `ACCTPL1` PL/I–COBOL–Db2 workload from discovery-only to a

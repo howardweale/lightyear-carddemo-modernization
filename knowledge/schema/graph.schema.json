@@ -27,6 +27,11 @@
       "additionalProperties": false
     },
     "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "projection_type": {"type": "string"},
+    "base_graph": {"type": "object"},
+    "fragments": {"type": "array"},
+    "capability_projection": {"type": "object"},
+    "claim_boundary": {"type": "object"},
     "sources": {
       "type": "array",
       "items": {

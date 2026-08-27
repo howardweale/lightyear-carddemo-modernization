@@ -31,6 +31,7 @@ if [[ "$action" == "build" ]]; then
   "$LIGHTYEAR_PYTHON_BIN" -m lightyear_knowledge_graph build \
     --legacy-root "$legacy_root" \
     --modern-root "$project_dir" \
+    --semantic-inputs "$project_dir/knowledge/semantic-inputs.json" \
     --manifest "$project_dir/knowledge/mappings/carddemo-intcalc.json" \
     --manifest "$project_dir/knowledge/mappings/carddemo-cics-vsam-account-view.json" \
     --manifest "$project_dir/knowledge/mappings/carddemo-asm-date-format.json" \
@@ -61,6 +62,7 @@ elif [[ "$action" == "verify" ]]; then
   "$LIGHTYEAR_PYTHON_BIN" -m lightyear_knowledge_graph build \
     --legacy-root "$legacy_root" \
     --modern-root "$project_dir" \
+    --semantic-inputs "$project_dir/knowledge/semantic-inputs.json" \
     --manifest "$project_dir/knowledge/mappings/carddemo-intcalc.json" \
     --manifest "$project_dir/knowledge/mappings/carddemo-cics-vsam-account-view.json" \
     --manifest "$project_dir/knowledge/mappings/carddemo-asm-date-format.json" \

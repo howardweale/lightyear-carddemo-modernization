@@ -1,0 +1,43 @@
+{
+  "content_sha256": "1099f4f252b79cc1f8f20fcddda68ed963729ae7575dcde6c6591ecab45097e2",
+  "limitations": [
+    "Only declared modern candidate and mapping files influence canonical semantic graph identity.",
+    "Extensions remain separately content-addressed and are visible through the composite estate projection."
+  ],
+  "manifest_id": "lightyear:carddemo-semantic-inputs",
+  "modern_files": [
+    "candidate-java/pom.xml",
+    "candidate-java/src/main/java/ai/lightyear/carddemo/CardDemoCandidateApplication.java",
+    "candidate-java/src/main/java/ai/lightyear/carddemo/batch/InterestCalculationTasklet.java",
+    "candidate-java/src/main/java/ai/lightyear/carddemo/codec/CardDemoRecordCodec.java",
+    "candidate-java/src/main/java/ai/lightyear/carddemo/codec/ZonedDecimal.java",
+    "candidate-java/src/main/java/ai/lightyear/carddemo/config/BatchConfiguration.java",
+    "candidate-java/src/main/java/ai/lightyear/carddemo/domain/Records.java",
+    "candidate-java/src/main/java/ai/lightyear/carddemo/io/DatasetIo.java",
+    "candidate-java/src/main/java/ai/lightyear/carddemo/service/CicsVsamAccountViewService.java",
+    "candidate-java/src/main/java/ai/lightyear/carddemo/service/InterestCalculationService.java",
+    "candidate-java/src/main/java/ai/lightyear/carddemo/service/MixedPliAuthorizationService.java",
+    "candidate-java/src/test/java/ai/lightyear/carddemo/codec/ZonedDecimalTest.java",
+    "candidate-java/src/test/java/ai/lightyear/carddemo/service/CicsVsamAccountViewServiceTest.java",
+    "candidate-java/src/test/java/ai/lightyear/carddemo/service/InterestCalculationServiceTest.java",
+    "candidate-java/src/test/java/ai/lightyear/carddemo/service/MixedPliAuthorizationServiceTest.java",
+    "factory/benchmarks/asm_date_candidate.py",
+    "factory/benchmarks/cics_vsam_account_candidate.py",
+    "factory/benchmarks/ims_expiry_candidate.py",
+    "factory/benchmarks/intcalc_candidate.py",
+    "factory/benchmarks/pli_authorization_candidate.py",
+    "factory/benchmarks/posttran_candidate.py",
+    "factory/benchmarks/statement_candidate.py",
+    "src/carddemo_oracle/oracle.py",
+    "src/lightyear_data/equivalence.py",
+    "src/lightyear_data/postgres.py"
+  ],
+  "schema_version": "1.0",
+  "workload_manifests": [
+    "knowledge/mappings/carddemo-asm-date-format.json",
+    "knowledge/mappings/carddemo-cics-vsam-account-view.json",
+    "knowledge/mappings/carddemo-db2-authfrds.json",
+    "knowledge/mappings/carddemo-ims-expired-authorization-purge.json",
+    "knowledge/mappings/carddemo-intcalc.json"
+  ]
+}

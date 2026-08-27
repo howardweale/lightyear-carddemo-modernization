@@ -26,6 +26,7 @@ from lightyear_knowledge_graph.ontology import (
 
 ROOT = Path(__file__).resolve().parents[1]
 GRAPH = ROOT / "knowledge" / "graph.snapshot.json.gz"
+COMPOSITE = ROOT / "knowledge" / "composite" / "estate.snapshot.json.gz"
 EVIDENCE_PACK = ROOT / "knowledge" / "evidence" / "source.pack.json.gz"
 PRIVATE_NODE = "scenario:intcalc:private-holdout-boundary"
 WORKLOAD = "workload:carddemo-intcalc"
@@ -35,6 +36,7 @@ class EdgeIntelligenceTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.graph = load_graph(GRAPH)
+        cls.composite = load_graph(COMPOSITE)
         cls.ontology = load_ontology()
         cls.pack = load_evidence_pack(EVIDENCE_PACK)
         cls.index = GraphExplorerIndex(cls.graph, ontology=cls.ontology)
@@ -54,8 +56,13 @@ class EdgeIntelligenceTests(unittest.TestCase):
     def test_relationship_ontology_covers_every_edge_and_pair(self) -> None:
         self.assertEqual([], validate_ontology(self.ontology))
         self.assertEqual([], validate_graph_relationships(self.graph, self.ontology))
+        self.assertEqual([], validate_graph_relationships(self.composite, self.ontology))
+        self.assertTrue(
+            set(self.graph["statistics"]["edges_by_relation"])
+            <= set(self.ontology["relations"])
+        )
         self.assertEqual(
-            set(self.graph["statistics"]["edges_by_relation"]),
+            set(self.composite["statistics"]["edges_by_relation"]),
             set(self.ontology["relations"]),
         )
         changed = copy.deepcopy(self.graph)

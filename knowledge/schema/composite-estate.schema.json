@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schemas/composite-estate-1.0.json",
+  "title": "LIGHTYEAR read-only composite estate",
+  "allOf": [
+    {"$ref": "graph.schema.json"}
+  ],
+  "type": "object",
+  "required": [
+    "projection_type",
+    "base_graph",
+    "fragments",
+    "capability_projection",
+    "claim_boundary"
+  ],
+  "properties": {
+    "projection_type": {"const": "lightyear-composite-estate"},
+    "base_graph": {
+      "type": "object",
+      "required": ["graph_id", "schema_version", "content_sha256"],
+      "properties": {
+        "graph_id": {"type": "string", "minLength": 1},
+        "schema_version": {"const": "1.1"},
+        "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    },
+    "fragments": {"type": "array", "minItems": 1, "items": {"type": "object"}},
+    "capability_projection": {"type": "object"},
+    "claim_boundary": {
+      "type": "object",
+      "required": [
+        "composite_is_read_only",
+        "changes_canonical_graph",
+        "proves_runtime_behavior",
+        "mainframe_equivalent",
+        "production_ready",
+        "statement"
+      ],
+      "properties": {
+        "composite_is_read_only": {"const": true},
+        "changes_canonical_graph": {"const": false},
+        "proves_runtime_behavior": {"const": false},
+        "mainframe_equivalent": {"const": false},
+        "production_ready": {"const": false},
+        "statement": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    }
+  }
+}

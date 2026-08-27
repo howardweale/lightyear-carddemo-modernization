@@ -1117,19 +1117,32 @@ def _extract_dsn(
     )
 
 
-def extract_modern(graph: KnowledgeGraph, root: Path) -> None:
-    java_root = root / "candidate-java"
-    for path in sorted(java_root.rglob("*.java")):
+def extract_modern(
+    graph: KnowledgeGraph,
+    root: Path,
+    declared_paths: list[Path] | None = None,
+) -> None:
+    if declared_paths is None:
+        java_root = root / "candidate-java"
+        java_paths = sorted(java_root.rglob("*.java"))
+        pom_paths = [java_root / "pom.xml"] if (java_root / "pom.xml").exists() else []
+        python_paths = sorted(
+            {
+                *root.joinpath("src").rglob("*.py"),
+                *root.joinpath("tests").rglob("*.py"),
+                *root.joinpath("factory").rglob("*.py"),
+            }
+        )
+    else:
+        java_paths = sorted(path for path in declared_paths if path.suffix.casefold() == ".java")
+        pom_paths = sorted(path for path in declared_paths if path.name == "pom.xml")
+        python_paths = sorted(path for path in declared_paths if path.suffix.casefold() == ".py")
+
+    for path in java_paths:
         _extract_java(graph, path, root)
-    pom = java_root / "pom.xml"
-    if pom.exists():
-        _extract_maven(graph, pom, root)
-    python_paths = {
-        *root.joinpath("src").rglob("*.py"),
-        *root.joinpath("tests").rglob("*.py"),
-        *root.joinpath("factory").rglob("*.py"),
-    }
-    for path in sorted(python_paths):
+    for path in pom_paths:
+        _extract_maven(graph, path, root)
+    for path in python_paths:
         _add_file_node(graph, "modern", path, root, MODERN_SOURCE_ID, "python")
 
 

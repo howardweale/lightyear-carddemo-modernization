@@ -50,6 +50,11 @@ class PliBuildAttestationTests(unittest.TestCase):
                 self.assertEqual(b"", info.extra)
                 self.assertEqual(b"", info.comment)
 
+    def test_powershell_entrypoint_uses_shared_runtime_contract(self) -> None:
+        script = (ROOT / "pli-build-attestation.ps1").read_text(encoding="utf-8")
+        self.assertIn("Invoke-FactoryDarkPython", script)
+        self.assertNotIn("Resolve-LightyearPython", script)
+
     def test_compiled_jar_tamper_is_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             copied = Path(directory)

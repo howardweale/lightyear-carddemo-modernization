@@ -31,9 +31,9 @@ class PliBuildAttestationTests(unittest.TestCase):
             generated = Path(directory)
             rebuilt = build_attestation(ROOT, generated, receipt["source_commit"])
             self.assertEqual(receipt, rebuilt)
-            for expected in CANONICAL.iterdir():
-                if expected.is_file():
-                    self.assertEqual(expected.read_bytes(), (generated / expected.name).read_bytes())
+            generated_names = set(ARTIFACT_FILES.values()) | {"build.attestation.json", "build.receipt.json"}
+            for name in sorted(generated_names):
+                self.assertEqual((CANONICAL / name).read_bytes(), (generated / name).read_bytes())
 
     def test_compiled_jar_tamper_is_rejected(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

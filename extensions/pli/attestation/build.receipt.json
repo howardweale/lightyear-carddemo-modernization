@@ -1,0 +1,44 @@
+{
+  "bindings": {
+    "behavior_contract_sha256": "c04c386eb896f3d74db88827ba5ef93165404d594843317e42635e6fae61b00e",
+    "build_attestation_sha256": "10025581e8021bc356516e3693ba0152988b26bf5145972d3643b1f0573c5729",
+    "candidate_jar_sha256": "89f72e732d6377ce10e6afc386fb3e54384f872e5cc04a1a530287645f7b31ba",
+    "comparison_sha256": "31d0eb349496a95beb7e43782fc3d838da3ad8f225187f6ca715438e7e028eed",
+    "dependency_inventory_sha256": "ceff8d41c735d0ab88324ba8828700199210b68f6b52ac1d1b9a2fc79c1f9a11",
+    "development_receipt_sha256": "69962583b4134dca1c33798890624e8488830a69d9a1b1722a1fb29a97f1ff15",
+    "fixtures_sha256": "cbaafdf6074521e1d2933fc66efd5fd5e4c22f97d45caea254cdb08621b573a0",
+    "junit_xml_sha256": "dc0f92270bfea35b7ca2af24043bbacf4ff15a2d3a8a9112975df9f2658b4083",
+    "sbom_sha256": "781327ee0ba6c4f18f66da5488b94394518a16cae15aee499db6d586300c43d3",
+    "source_tree_sha256": "c1192c7fc00a496fdd4341cfba52e3f3a5c223c5378a7f5450956b70802763df"
+  },
+  "checks": {
+    "asymmetric_signature": true,
+    "clean_source_tree": true,
+    "compiled_candidate": true,
+    "dependency_inventory": true,
+    "junit_execution": true,
+    "live_zos_baseline": false,
+    "ms22_evidence_bound": true,
+    "release_key_separation": true,
+    "reproducible_build": true,
+    "sbom": true,
+    "source_commit_bound": true
+  },
+  "content_sha256": "7aed1ffe8dd5ba3de628b527a429de1f241d5779275e4fa35c73d31538668853",
+  "development_ready": true,
+  "evidence_class": "attested-local-build",
+  "mainframe_equivalent": false,
+  "production_ready": false,
+  "receipt_type": "lightyear-pli-build-attestation-receipt",
+  "release_attestation": false,
+  "schema_version": "1.0",
+  "source_commit": "b0eed2a58e6467c54f6575db11bb7831d9abfe72",
+  "status": "passed",
+  "unresolved_gaps": [
+    "The committed signature uses a public development test key and is not a release attestation.",
+    "GitHub Actions workload identity attests CI artifacts separately.",
+    "No authorized compiled and executed ACCTPL1 observation exists on z/OS."
+  ],
+  "workflow": "howardweale/lightyear-carddemo-modernization/.github/workflows/verify.yml",
+  "workload_id": "workload:carddemo-pli-auth-risk"
+}

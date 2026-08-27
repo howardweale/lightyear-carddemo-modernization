@@ -35,10 +35,11 @@ if ($Action -eq "build") {
     Build-Outputs $Generated $SourceCommit
     & $PythonBin -m unittest extensions.tests.test_pli_build_attestation -v
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-    Get-ChildItem $Canonical -File | ForEach-Object {
-        $Actual = Join-Path $Generated $_.Name
-        if ((Get-FileHash $_.FullName -Algorithm SHA256).Hash -ne (Get-FileHash $Actual -Algorithm SHA256).Hash) {
-            throw "Attestation artifact differs: $($_.Name)"
+    @("pli-auth-risk-candidate.jar", "TEST-MixedPliAuthorizationAttestation.xml", "dependencies.json", "sbom.cdx.json", "build.attestation.json", "build.receipt.json") | ForEach-Object {
+        $Expected = Join-Path $Canonical $_
+        $Actual = Join-Path $Generated $_
+        if ((Get-FileHash $Expected -Algorithm SHA256).Hash -ne (Get-FileHash $Actual -Algorithm SHA256).Hash) {
+            throw "Attestation artifact differs: $_"
         }
     }
 }

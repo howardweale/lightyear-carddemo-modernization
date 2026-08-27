@@ -1,0 +1,38 @@
+{
+  "bomFormat": "CycloneDX",
+  "components": [],
+  "dependencies": [
+    {
+      "dependsOn": [],
+      "ref": "pkg:maven/ai.lightyear/pli-auth-risk-candidate@0.25.0"
+    }
+  ],
+  "metadata": {
+    "component": {
+      "bom-ref": "pkg:maven/ai.lightyear/pli-auth-risk-candidate@0.25.0",
+      "group": "ai.lightyear",
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "89f72e732d6377ce10e6afc386fb3e54384f872e5cc04a1a530287645f7b31ba"
+        }
+      ],
+      "name": "pli-auth-risk-candidate",
+      "type": "application",
+      "version": "0.25.0"
+    },
+    "properties": [
+      {
+        "name": "lightyear.build.scope",
+        "value": "bounded-standalone-service"
+      },
+      {
+        "name": "lightyear.third-party-dependency-count",
+        "value": "0"
+      }
+    ]
+  },
+  "serialNumber": "urn:uuid:5b3a9590-9fb8-5a2b-9967-4a44c7012500",
+  "specVersion": "1.5",
+  "version": 1
+}

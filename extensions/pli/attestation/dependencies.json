@@ -1,0 +1,21 @@
+{
+  "artifact": "pli-auth-risk-candidate.jar",
+  "content_sha256": "6d55292045917d99e4470ca9c21469e36a5835c5e785a1bac9cb512e7d3ecb07",
+  "inventory_type": "lightyear-pli-bounded-candidate-dependencies",
+  "runtime_dependencies": [
+    {
+      "name": "java.base",
+      "relationship": "requires",
+      "version": "17"
+    }
+  ],
+  "schema_version": "1.0",
+  "scope": "standalone bounded PL/I modernization service",
+  "third_party_dependencies": [],
+  "toolchain": {
+    "compiler": "jdk.compiler module",
+    "language_release": "17",
+    "runtime": "openjdk version \"17.0.20\" 2026-07-21"
+  },
+  "workload_id": "workload:carddemo-pli-auth-risk"
+}

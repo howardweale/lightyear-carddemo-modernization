@@ -1,0 +1,87 @@
+{
+  "attestation_type": "lightyear-pli-build-attestation",
+  "content_sha256": "10025581e8021bc356516e3693ba0152988b26bf5145972d3643b1f0573c5729",
+  "schema_version": "1.0",
+  "signature": {
+    "algorithm": "RSASSA-PKCS1-v1_5-SHA256",
+    "key_id": "lightyear-pli-development-test-rsa-v1",
+    "release_authorized": false,
+    "signer_class": "development-test-key",
+    "value": "RnV+k4jxNWLVp9syJ5E07medtYW72JSxRB1oQH2RqMFjjV8c0Gl1T+8jyAHhPJhuregdz2eekv4ujWuTHBwI9qUqFVjny1Rd+UurJXam9LiVUmWmDherroDl3n89trBj9ZAnOIjiL4rfID9VwiIWir3OYvqG2D4DsvnTcQu9nR+T6einF2cxtziax8shf83uw13wd2wEDTKXkvEc+uwb1B1Lnu4OvYD9o1RYAFm0osPQf8GrZvAw4yGy9TzW9O15RhVuDq4KNhVh593NjnLrhBN2Quw/KtSgL4E3Pbg8aDXAsj6Dd+xK4AsfdCLC6d6JV4JaO9HcUxJmUioB3GOpyw=="
+  },
+  "statement": {
+    "_type": "https://in-toto.io/Statement/v1",
+    "predicate": {
+      "buildDefinition": {
+        "buildType": "https://lightyear.ai/build/pli-bounded-jdk17/v1",
+        "externalParameters": {
+          "sourceCommit": "b0eed2a58e6467c54f6575db11bb7831d9abfe72",
+          "sourceTreeSha256": "c1192c7fc00a496fdd4341cfba52e3f3a5c223c5378a7f5450956b70802763df",
+          "workflow": "howardweale/lightyear-carddemo-modernization/.github/workflows/verify.yml"
+        },
+        "resolvedDependencies": [
+          {
+            "digest": {
+              "sha256": "69962583b4134dca1c33798890624e8488830a69d9a1b1722a1fb29a97f1ff15"
+            },
+            "uri": "extensions/pli/modernization/development.receipt.json"
+          },
+          {
+            "digest": {
+              "sha256": "c04c386eb896f3d74db88827ba5ef93165404d594843317e42635e6fae61b00e"
+            },
+            "uri": "extensions/pli/modernization/behavior-contract.json"
+          },
+          {
+            "digest": {
+              "sha256": "cbaafdf6074521e1d2933fc66efd5fd5e4c22f97d45caea254cdb08621b573a0"
+            },
+            "uri": "extensions/pli/modernization/fixtures.json"
+          },
+          {
+            "digest": {
+              "sha256": "31d0eb349496a95beb7e43782fc3d838da3ad8f225187f6ca715438e7e028eed"
+            },
+            "uri": "extensions/pli/modernization/comparison.json"
+          }
+        ]
+      },
+      "runDetails": {
+        "builder": {
+          "id": "https://lightyear.ai/builders/reproducible-jdk17-v1"
+        },
+        "metadata": {
+          "cleanSourceTree": true,
+          "invocationId": "development:b0eed2a58e6467c54f6575db11bb7831d9abfe72"
+        }
+      }
+    },
+    "predicateType": "https://slsa.dev/provenance/v1",
+    "subject": [
+      {
+        "digest": {
+          "sha256": "89f72e732d6377ce10e6afc386fb3e54384f872e5cc04a1a530287645f7b31ba"
+        },
+        "name": "pli-auth-risk-candidate.jar"
+      },
+      {
+        "digest": {
+          "sha256": "dc0f92270bfea35b7ca2af24043bbacf4ff15a2d3a8a9112975df9f2658b4083"
+        },
+        "name": "TEST-MixedPliAuthorizationAttestation.xml"
+      },
+      {
+        "digest": {
+          "sha256": "ceff8d41c735d0ab88324ba8828700199210b68f6b52ac1d1b9a2fc79c1f9a11"
+        },
+        "name": "dependencies.json"
+      },
+      {
+        "digest": {
+          "sha256": "781327ee0ba6c4f18f66da5488b94394518a16cae15aee499db6d586300c43d3"
+        },
+        "name": "sbom.cdx.json"
+      }
+    ]
+  }
+}

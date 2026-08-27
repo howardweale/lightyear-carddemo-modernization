@@ -41,8 +41,11 @@ case "$action" in
     source_commit="$($LIGHTYEAR_PYTHON_BIN -c 'import json,sys; print(json.load(open(sys.argv[1]))["source_commit"])' "$canonical/build.receipt.json")"
     build_outputs "$generated" "$source_commit"
     "$LIGHTYEAR_PYTHON_BIN" -m unittest extensions.tests.test_pli_build_attestation -v
-    for expected in "$canonical/"*; do
-      cmp "$expected" "$generated/$(basename "$expected")"
+    for filename in \
+      pli-auth-risk-candidate.jar \
+      TEST-MixedPliAuthorizationAttestation.xml \
+      dependencies.json sbom.cdx.json build.attestation.json build.receipt.json; do
+      cmp "$canonical/$filename" "$generated/$filename"
     done
     ;;
   *)

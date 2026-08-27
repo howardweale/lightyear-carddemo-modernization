@@ -1,13 +1,13 @@
 {
   "attestation_type": "lightyear-pli-build-attestation",
-  "content_sha256": "10025581e8021bc356516e3693ba0152988b26bf5145972d3643b1f0573c5729",
+  "content_sha256": "2b328551e00b50765ef2c05cdf62e2f62f38aaf3c981be7c084e40473c8dca49",
   "schema_version": "1.0",
   "signature": {
     "algorithm": "RSASSA-PKCS1-v1_5-SHA256",
     "key_id": "lightyear-pli-development-test-rsa-v1",
     "release_authorized": false,
     "signer_class": "development-test-key",
-    "value": "RnV+k4jxNWLVp9syJ5E07medtYW72JSxRB1oQH2RqMFjjV8c0Gl1T+8jyAHhPJhuregdz2eekv4ujWuTHBwI9qUqFVjny1Rd+UurJXam9LiVUmWmDherroDl3n89trBj9ZAnOIjiL4rfID9VwiIWir3OYvqG2D4DsvnTcQu9nR+T6einF2cxtziax8shf83uw13wd2wEDTKXkvEc+uwb1B1Lnu4OvYD9o1RYAFm0osPQf8GrZvAw4yGy9TzW9O15RhVuDq4KNhVh593NjnLrhBN2Quw/KtSgL4E3Pbg8aDXAsj6Dd+xK4AsfdCLC6d6JV4JaO9HcUxJmUioB3GOpyw=="
+    "value": "mXuvSXMyffa8ZNJ0HcEsV3PVynDWUWsvLGxZiVLcIHDxQgRg7oBoiqv+fDhF5QgRENu0FY4EKmoVNmnzjM91Ts18ilULWlWdj/mRI8l4PxljcigW5Kuyuy4Kj4WBMcjQOeCqzPC1qwIe96TpQ6WOqY7drLWWo4Fa9cNvbgxAC8cFFpxRD8QhQeh4vdEhktSJahZaf68nilgacnTb9IfrvXTGfpxlmUQSJ+BDyoclslexTdvmqwuiB+6nel9em3hwrgzHedCDhC4Jci6CgQqGQzC39u475qjDQb2jcD2oToTE/531kxSjcDP/hMcWPMGX/ICGIq+iC5bRwwlH2eXQHg=="
   },
   "statement": {
     "_type": "https://in-toto.io/Statement/v1",
@@ -15,8 +15,8 @@
       "buildDefinition": {
         "buildType": "https://lightyear.ai/build/pli-bounded-jdk17/v1",
         "externalParameters": {
-          "sourceCommit": "b0eed2a58e6467c54f6575db11bb7831d9abfe72",
-          "sourceTreeSha256": "c1192c7fc00a496fdd4341cfba52e3f3a5c223c5378a7f5450956b70802763df",
+          "sourceCommit": "5f2fa592d251683bcc99f3cd84842870bba2d001",
+          "sourceTreeSha256": "8250731d9b59daf2aa5512dc607c11d91be3e02837494301a2460cd288a5f838",
           "workflow": "howardweale/lightyear-carddemo-modernization/.github/workflows/verify.yml"
         },
         "resolvedDependencies": [
@@ -52,7 +52,7 @@
         },
         "metadata": {
           "cleanSourceTree": true,
-          "invocationId": "development:b0eed2a58e6467c54f6575db11bb7831d9abfe72"
+          "invocationId": "development:5f2fa592d251683bcc99f3cd84842870bba2d001"
         }
       }
     },

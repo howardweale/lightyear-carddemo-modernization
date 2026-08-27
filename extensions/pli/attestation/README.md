@@ -4,6 +4,9 @@ MS #25 closes the source-only boundary in the bounded `ACCTPL1` modernization pr
 attestation builder compiles `MixedPliAuthorizationService` with the JDK 17 compiler module,
 creates a byte-reproducible standalone JAR, executes a deterministic test harness, emits a
 JUnit-compatible XML report, inventories runtime dependencies, and produces a CycloneDX 1.5 SBOM.
+The committed inventory binds the Java SE 17 language and compiler-module contract rather than a
+runner-specific JDK vendor string; GitHub workload-identity provenance records the concrete CI
+environment separately.
 
 ```bash
 ./pli-build-attestation.sh verify

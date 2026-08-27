@@ -56,6 +56,19 @@ class PliBuildAttestationTests(unittest.TestCase):
                 path.write_bytes(path.read_bytes() + b"\nchanged")
                 self.assertTrue(validate_attestation(ROOT, copied))
 
+    def test_dependency_inventory_uses_portable_toolchain_contract(self) -> None:
+        inventory = json.loads(
+            (CANONICAL / ARTIFACT_FILES["dependency_inventory_sha256"]).read_text(encoding="utf-8")
+        )
+        self.assertEqual(
+            {
+                "compiler": "jdk.compiler module",
+                "language_release": "17",
+                "runtime_contract": "Java SE 17",
+            },
+            inventory["toolchain"],
+        )
+
     def test_substituted_commit_is_rejected_even_when_receipt_is_rehashed(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             copied = Path(directory)

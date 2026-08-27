@@ -374,9 +374,16 @@ def _run(command: list[str], label: str) -> None:
 
 
 def _java_version() -> dict[str, str]:
-    result = subprocess.run(["java", "-version"], check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
-    first = (result.stderr or result.stdout).splitlines()[0]
-    return {"runtime": first, "language_release": "17", "compiler": "jdk.compiler module"}
+    # Vendor/build strings from ``java -version`` are observations of the
+    # current runner, not inputs to this bounded build.  Keeping them in a
+    # content-addressed inventory made otherwise identical Temurin, OpenJDK,
+    # and OpenJ9 builds produce different receipts.  CI workload-identity
+    # provenance records the concrete runner separately.
+    return {
+        "runtime_contract": "Java SE 17",
+        "language_release": "17",
+        "compiler": "jdk.compiler module",
+    }
 
 
 def _sha256_file(path: Path) -> str:

@@ -31,15 +31,29 @@ if ($Action -eq "build") {
     $SourceCommit = if ($env:GITHUB_SHA) { $env:GITHUB_SHA } else { (git -C $ProjectDir rev-parse HEAD).Trim() }
     Build-Outputs $Generated $SourceCommit
 } else {
+    Run-Python -m lightyear_extensions validate-pli-attestation --project-root $ProjectDir --artifact-root $Canonical
     $SourceCommit = (Get-Content (Join-Path $Canonical "build.receipt.json") -Raw | ConvertFrom-Json).source_commit
-    Build-Outputs $Generated $SourceCommit
+    git -C $ProjectDir cat-file -e "$SourceCommit^{commit}" 2>$null
+    $ExactProvenanceRebuild = $LASTEXITCODE -eq 0
+    $RebuildCommit = if ($ExactProvenanceRebuild) { $SourceCommit } else { (git -C $ProjectDir rev-parse HEAD).Trim() }
+    Build-Outputs $Generated $RebuildCommit
     Run-Python -m unittest extensions.tests.test_pli_build_attestation -v
-    @("pli-auth-risk-candidate.jar", "TEST-MixedPliAuthorizationAttestation.xml", "dependencies.json", "sbom.cdx.json", "build.attestation.json", "build.receipt.json") | ForEach-Object {
+    @("pli-auth-risk-candidate.jar", "TEST-MixedPliAuthorizationAttestation.xml", "dependencies.json", "sbom.cdx.json") | ForEach-Object {
         $Expected = Join-Path $Canonical $_
         $Actual = Join-Path $Generated $_
         if ((Get-FileHash $Expected -Algorithm SHA256).Hash -ne (Get-FileHash $Actual -Algorithm SHA256).Hash) {
             throw "Attestation artifact differs: $_"
         }
+    }
+    if ($ExactProvenanceRebuild) {
+        @("build.attestation.json", "build.receipt.json") | ForEach-Object {
+            if ((Get-FileHash (Join-Path $Canonical $_) -Algorithm SHA256).Hash -ne (Get-FileHash (Join-Path $Generated $_) -Algorithm SHA256).Hash) {
+                throw "Attestation provenance differs: $_"
+            }
+        }
+        Write-Host "PL/I provenance rebuilt against the recorded source commit."
+    } else {
+        Write-Host "Recorded pre-evidence commit is unavailable after squash; portable artifacts rebuilt from the signed source-tree content."
     }
 }
 

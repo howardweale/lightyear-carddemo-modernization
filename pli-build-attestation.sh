@@ -38,15 +38,32 @@ case "$action" in
     build_outputs "$generated" "$source_commit"
     ;;
   verify)
+    "$LIGHTYEAR_PYTHON_BIN" -m lightyear_extensions validate-pli-attestation \
+      --project-root "$project_dir" \
+      --artifact-root "$canonical"
     source_commit="$($LIGHTYEAR_PYTHON_BIN -c 'import json,sys; print(json.load(open(sys.argv[1]))["source_commit"])' "$canonical/build.receipt.json")"
-    build_outputs "$generated" "$source_commit"
+    exact_provenance_rebuild=true
+    if git -C "$project_dir" cat-file -e "$source_commit^{commit}" 2>/dev/null; then
+      rebuild_commit="$source_commit"
+    else
+      exact_provenance_rebuild=false
+      rebuild_commit="$(git -C "$project_dir" rev-parse HEAD)"
+    fi
+    build_outputs "$generated" "$rebuild_commit"
     "$LIGHTYEAR_PYTHON_BIN" -m unittest extensions.tests.test_pli_build_attestation -v
     for filename in \
       pli-auth-risk-candidate.jar \
       TEST-MixedPliAuthorizationAttestation.xml \
-      dependencies.json sbom.cdx.json build.attestation.json build.receipt.json; do
+      dependencies.json sbom.cdx.json; do
       cmp "$canonical/$filename" "$generated/$filename"
     done
+    if [[ "$exact_provenance_rebuild" == true ]]; then
+      cmp "$canonical/build.attestation.json" "$generated/build.attestation.json"
+      cmp "$canonical/build.receipt.json" "$generated/build.receipt.json"
+      echo "PL/I provenance rebuilt against the recorded source commit."
+    else
+      echo "Recorded pre-evidence commit is unavailable after squash; portable artifacts rebuilt from the signed source-tree content."
+    fi
     ;;
   *)
     echo "Usage: ./pli-build-attestation.sh [build|verify|ci-build]" >&2

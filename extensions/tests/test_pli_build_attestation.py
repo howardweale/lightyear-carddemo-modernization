@@ -3,6 +3,7 @@ from __future__ import annotations
 import copy
 import json
 import shutil
+import subprocess
 import tempfile
 import unittest
 import zipfile
@@ -29,11 +30,28 @@ class PliBuildAttestationTests(unittest.TestCase):
     def test_committed_attestation_is_deterministic_and_valid(self) -> None:
         receipt = json.loads((CANONICAL / "build.receipt.json").read_text(encoding="utf-8"))
         self.assertEqual([], validate_attestation(ROOT, CANONICAL))
+        recorded_commit = receipt["source_commit"]
+        exact_commit_available = subprocess.run(
+            ["git", "cat-file", "-e", f"{recorded_commit}^{{commit}}"],
+            cwd=ROOT,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+            check=False,
+        ).returncode == 0
+        rebuild_commit = recorded_commit if exact_commit_available else subprocess.run(
+            ["git", "rev-parse", "HEAD"], cwd=ROOT, check=True, text=True, stdout=subprocess.PIPE
+        ).stdout.strip()
         with tempfile.TemporaryDirectory() as directory:
             generated = Path(directory)
-            rebuilt = build_attestation(ROOT, generated, receipt["source_commit"])
-            self.assertEqual(receipt, rebuilt)
-            generated_names = set(ARTIFACT_FILES.values()) | {"build.attestation.json", "build.receipt.json"}
+            rebuilt = build_attestation(ROOT, generated, rebuild_commit)
+            generated_names = set(ARTIFACT_FILES.values())
+            if exact_commit_available:
+                self.assertEqual(receipt, rebuilt)
+                generated_names |= {"build.attestation.json", "build.receipt.json"}
+            else:
+                self.assertNotEqual(recorded_commit, rebuilt["source_commit"])
+                for binding in ARTIFACT_FILES:
+                    self.assertEqual(receipt["bindings"][binding], rebuilt["bindings"][binding])
             for name in sorted(generated_names):
                 expected = (CANONICAL / name).read_bytes()
                 actual = (generated / name).read_bytes()

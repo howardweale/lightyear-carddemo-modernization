@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.25.1 — 2026-08-27
+
+- Made deterministic PL/I artifact verification survive a squash merge without weakening the
+  committed source-tree, signature, workflow, or artifact bindings.
+- Preserved exact receipt and attestation comparison whenever the recorded pre-evidence commit is
+  reachable; otherwise compare the four portable build products byte-for-byte.
+
 ## 0.25.0 — 2026-08-27
 
 - Added a JDK-17-only reproducible builder for the bounded PL/I modernization service JAR.

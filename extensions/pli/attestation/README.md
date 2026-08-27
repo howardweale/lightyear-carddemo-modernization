@@ -22,6 +22,12 @@ makes the pre-evidence commit unreachable. Its RSA key is deliberately published
 development test key and has `release_authorized: false`; it proves verifier behavior and a
 reproducible local build, not a release identity.
 
+Verification rebuilds the complete provenance envelope byte-for-byte when the recorded commit is
+reachable. After a squash merge, it first validates the unchanged signed source-tree provenance,
+then rebuilds the JAR, JUnit report, dependency inventory, and SBOM from the equivalent current
+source and compares all four artifacts byte-for-byte. It does not manufacture a replacement
+receipt or treat the squash commit as the original signer identity.
+
 GitHub Actions independently rebuilds the artifacts and uses GitHub workload identity through
 `actions/attest` for authoritative CI provenance and SBOM attestations. The CI artifacts are
 published per workflow run rather than committed as live or mainframe evidence.

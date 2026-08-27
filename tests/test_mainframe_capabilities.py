@@ -53,6 +53,8 @@ class MainframeCapabilityGraphTests(unittest.TestCase):
             "extension_catalog": self.load_json("extensions/catalog.json"),
             "pli_coverage_receipt": self.load_json("extensions/pli/conformance/coverage.receipt.json"),
             "pli_development_receipt": self.load_json("extensions/pli/modernization/development.receipt.json"),
+            "pli_build_receipt": self.load_json("extensions/pli/attestation/build.receipt.json"),
+            "pli_build_attestation": self.load_json("extensions/pli/attestation/build.attestation.json"),
             "postgres_data_receipt": self.load_json("data-modernization/receipts/authfrds.offline.receipt.json"),
             "oracle_data_receipt": self.load_json("data-modernization/receipts/authfrds.oracle-offline.receipt.json"),
             "campaign_receipt": self.load_json("extensions/adapters/campaign/campaign.receipt.json"),
@@ -154,6 +156,17 @@ class MainframeCapabilityGraphTests(unittest.TestCase):
         self.assertTrue(pli["discovery_ready"])
         self.assertFalse(pli["development_ready"])
         self.assertFalse(pli["mainframe_equivalent"])
+
+    def test_missing_or_foreign_build_attestation_demotes_development(self) -> None:
+        missing = self.expected_projection(pli_build_receipt={}, pli_build_attestation={})
+        pli = next(item for item in missing["capabilities"] if item["technology"] == "PL/I")
+        self.assertTrue(pli["discovery_ready"])
+        self.assertFalse(pli["development_ready"])
+        attestation = self.load_json("extensions/pli/attestation/build.attestation.json")
+        attestation["statement"]["predicate"]["buildDefinition"]["externalParameters"]["workflow"] = "foreign/repository/.github/workflows/release.yml"
+        foreign = self.expected_projection(pli_build_attestation=attestation)
+        pli = next(item for item in foreign["capabilities"] if item["technology"] == "PL/I")
+        self.assertFalse(pli["development_ready"])
 
     def test_missing_or_tampered_pli_coverage_demotes_discovery(self) -> None:
         missing = self.expected_projection(pli_coverage_receipt={})

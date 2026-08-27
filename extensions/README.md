@@ -1,5 +1,21 @@
 # Trusted extensions and mainframe access
 
+## MS #25 reproducible build and artifact attestation
+
+MS #25 binds the bounded Java modernization deliverable to its executed evidence rather than
+stopping at source hashes. The committed development chain contains a reproducible JAR,
+JUnit-compatible XML, dependency inventory, CycloneDX SBOM, SLSA-shaped provenance, and an
+asymmetric development signature. The unified capability projection requires this chain in
+addition to the MS #22 behavior proof.
+
+```bash
+./pli-build-attestation.sh verify
+```
+
+The checked-in RSA material is an explicitly non-secret test key and can never authorize a
+release. GitHub Actions separately creates workload-identity build and SBOM attestations. See
+[`pli/attestation/README.md`](pli/attestation/README.md) for the artifact and trust boundaries.
+
 ## MS #24 PL/I discovery coverage and conformance lab
 
 MS #24 upgrades `lightyear.pli` to v1.2 and places a tokenized, statement-aware front end in front
@@ -32,7 +48,8 @@ path side effects.
 ```
 
 The committed development receipt binds the graph, PL/I fragment, contract, fixtures, comparison,
-PL/I/include sources, Python candidate, and Java candidate/tests. It can promote gates 3–5 only.
+PL/I/include sources, Python candidate, and Java candidate/tests. The MS #25 build receipt must
+also bind a valid compiled artifact and executed test report before gates 3–5 remain promoted.
 No local or simulated artifact can satisfy authorized z/OS execution or signed live equivalence.
 The proof is complete for this bounded workload, not for arbitrary PL/I programs or the full
 `CBACT04C` interest-calculation estate.

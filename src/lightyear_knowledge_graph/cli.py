@@ -181,6 +181,16 @@ def build_parser() -> argparse.ArgumentParser:
         default=Path("extensions/pli/modernization/development.receipt.json"),
     )
     capabilities.add_argument(
+        "--pli-build-receipt",
+        type=Path,
+        default=Path("extensions/pli/attestation/build.receipt.json"),
+    )
+    capabilities.add_argument(
+        "--pli-build-attestation",
+        type=Path,
+        default=Path("extensions/pli/attestation/build.attestation.json"),
+    )
+    capabilities.add_argument(
         "--postgres-data-receipt",
         type=Path,
         default=Path("data-modernization/receipts/authfrds.offline.receipt.json"),
@@ -453,6 +463,8 @@ def main(argv: list[str] | None = None) -> int:
         extension_catalog = load_optional(args.extension_catalog)
         pli_coverage_receipt = load_optional(args.pli_coverage_receipt)
         pli_development_receipt = load_optional(args.pli_development_receipt)
+        pli_build_receipt = load_optional(args.pli_build_receipt)
+        pli_build_attestation = load_optional(args.pli_build_attestation)
         postgres_data_receipt = load_optional(args.postgres_data_receipt)
         oracle_data_receipt = load_optional(args.oracle_data_receipt)
         campaign_receipt = load_optional(args.campaign_receipt)
@@ -465,6 +477,8 @@ def main(argv: list[str] | None = None) -> int:
             extension_catalog=extension_catalog,
             pli_coverage_receipt=pli_coverage_receipt,
             pli_development_receipt=pli_development_receipt,
+            pli_build_receipt=pli_build_receipt,
+            pli_build_attestation=pli_build_attestation,
             postgres_data_receipt=postgres_data_receipt,
             oracle_data_receipt=oracle_data_receipt,
             campaign_receipt=campaign_receipt,

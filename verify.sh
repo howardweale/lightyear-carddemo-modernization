@@ -26,6 +26,7 @@ fi
 "$project_dir/extension-foundation.sh" verify
 "$project_dir/pli-conformance.sh" verify
 "$project_dir/pli-modernization.sh" verify
+"$project_dir/pli-build-attestation.sh" verify
 "$project_dir/composite-estate.sh" verify
 "$project_dir/runtime-evidence.sh" verify
 "$project_dir/semantic-memory.sh" validate

@@ -20,6 +20,7 @@ from .campaign import (
 )
 from .contracts import ExtensionContractError, canonical_hash, validate_envelope
 from .pli import PACK_VERSION, build_pli_fragment, fragment_receipt, validate_pli_fragment
+from .pli_attestation import build_attestation, validate_attestation
 from .pli_conformance import build_conformance_lab, validate_conformance_receipt
 from .pli_proof import build_proof, validate_development_receipt
 
@@ -94,6 +95,19 @@ def build_parser() -> argparse.ArgumentParser:
     validate_pli_proof.add_argument("--fragment", type=Path, required=True)
     validate_pli_proof.add_argument("--receipt", type=Path, required=True)
 
+    build_pli_attestation = commands.add_parser(
+        "build-pli-attestation", help="Build the reproducible bounded PL/I Java artifact attestation"
+    )
+    build_pli_attestation.add_argument("--project-root", type=Path, required=True)
+    build_pli_attestation.add_argument("--output-root", type=Path, required=True)
+    build_pli_attestation.add_argument("--source-commit")
+
+    validate_pli_attestation = commands.add_parser(
+        "validate-pli-attestation", help="Validate PL/I build artifacts, provenance, and signature"
+    )
+    validate_pli_attestation.add_argument("--project-root", type=Path, required=True)
+    validate_pli_attestation.add_argument("--artifact-root", type=Path, required=True)
+
     fixture_campaign = commands.add_parser(
         "campaign-fixture", help="Run the mainframe access campaign against deterministic responses"
     )
@@ -128,6 +142,17 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     try:
+        if args.command == "build-pli-attestation":
+            receipt = build_attestation(args.project_root, args.output_root, args.source_commit)
+            return _result(
+                "passed" if receipt["status"] == "passed" else "failed",
+                output=str(args.output_root),
+                content_sha256=receipt["content_sha256"],
+                checks=receipt["checks"],
+            )
+        if args.command == "validate-pli-attestation":
+            errors = validate_attestation(args.project_root, args.artifact_root)
+            return _result("passed" if not errors else "failed", errors=errors)
         if args.command == "catalog":
             payload = {
                 "schema_version": "1.0",

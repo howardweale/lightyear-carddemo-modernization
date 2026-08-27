@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="MixedPliAuthorizationAttestation" tests="5" failures="0" errors="0" skipped="0">
+  <testcase classname="ai.lightyear.carddemo.service.MixedPliAuthorizationService" name="normalRiskAndCobolBoundary"></testcase>
+  <testcase classname="ai.lightyear.carddemo.service.MixedPliAuthorizationService" name="fraudRiskIsOneHundred"></testcase>
+  <testcase classname="ai.lightyear.carddemo.service.MixedPliAuthorizationService" name="invalidInputStopsBeforeCall"></testcase>
+  <testcase classname="ai.lightyear.carddemo.service.MixedPliAuthorizationService" name="missingDb2RowStopsBeforeCall"></testcase>
+  <testcase classname="ai.lightyear.carddemo.service.MixedPliAuthorizationService" name="decimalDivisionTruncates"></testcase>
+</testsuite>

@@ -33,6 +33,16 @@ macOS or Linux:
 ./mvnw test package
 ```
 
+The bounded mixed PL/I service also has a dependency-free, reproducible attestation build:
+
+```bash
+../pli-build-attestation.sh verify
+```
+
+That path compiles only the attested service seam, emits a deterministic JAR and JUnit-compatible
+report, and binds them to an SBOM and signed provenance. The Maven build remains the full Spring
+Boot candidate verification path.
+
 The full repository verification scripts build the candidate, create deterministic inputs, run the
 oracle and candidate, and compare their business outputs:
 

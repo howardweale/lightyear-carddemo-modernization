@@ -22,7 +22,7 @@
     "mutation_and_negative_verification": true,
     "typed_static_graph": true
   },
-  "content_sha256": "dc6d3680564ba54690f4a568f669636e40e60b225c1d34d92791f8bca0729c07",
+  "content_sha256": "69962583b4134dca1c33798890624e8488830a69d9a1b1722a1fb29a97f1ff15",
   "development_ready": true,
   "evidence_class": "local_observed",
   "mainframe_equivalent": false,
@@ -33,7 +33,7 @@
   "unresolved_gaps": [
     "No authorized compiled and executed ACCTPL1 observation exists on z/OS.",
     "No independently signed live PL/I differential comparison exists.",
-    "The committed receipt binds Java source; Java compilation and tests are a separate CI control."
+    "Compiled Java delivery evidence is governed by the separate MS #25 build-attestation receipt."
   ],
   "workload_id": "workload:carddemo-pli-auth-risk"
 }

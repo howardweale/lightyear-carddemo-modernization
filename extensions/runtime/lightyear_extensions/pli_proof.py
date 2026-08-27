@@ -160,7 +160,7 @@ def build_proof(project_root: Path, graph: Mapping[str, Any], fragment: Mapping[
         "unresolved_gaps": [
             "No authorized compiled and executed ACCTPL1 observation exists on z/OS.",
             "No independently signed live PL/I differential comparison exists.",
-            "The committed receipt binds Java source; Java compilation and tests are a separate CI control.",
+            "Compiled Java delivery evidence is governed by the separate MS #25 build-attestation receipt.",
         ],
     }
     receipt["content_sha256"] = canonical_hash(receipt)

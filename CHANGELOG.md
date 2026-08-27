@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.25.0 — 2026-08-27
+
+- Added a JDK-17-only reproducible builder for the bounded PL/I modernization service JAR.
+- Added five deterministic execution checks with a JUnit-compatible XML report.
+- Added a content-addressed dependency inventory and CycloneDX 1.5 SBOM.
+- Added SLSA-shaped provenance binding the clean source commit, compiled JAR, test report, SBOM,
+  dependency inventory, and MS #22 behavior evidence.
+- Added asymmetric RSA development signatures with a hard non-release boundary and pure-Python
+  verification against a pinned public trust anchor.
+- Added GitHub workload-identity build and SBOM attestations using repository OIDC.
+- Made missing, stale, tampered, foreign-workflow, replayed, or incorrectly signed build evidence
+  demote PL/I development readiness.
+- Added tamper tests for the JAR, JUnit XML, dependency inventory, commit, workflow, and release
+  overclaim while keeping live PL/I equivalence and production readiness blocked.
+
 ## 0.24.0 — 2026-08-27
 
 - Replaced the PL/I language pack's line-oriented pattern extraction boundary with a tokenized,

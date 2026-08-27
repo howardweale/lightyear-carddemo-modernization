@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schemas/pli-build-attestation-receipt-1.0.json",
+  "title": "LIGHTYEAR PL/I build attestation receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "receipt_type", "workload_id", "evidence_class", "source_commit", "workflow", "bindings", "checks", "development_ready", "mainframe_equivalent", "production_ready", "release_attestation", "status", "unresolved_gaps", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "receipt_type": {"const": "lightyear-pli-build-attestation-receipt"},
+    "workload_id": {"const": "workload:carddemo-pli-auth-risk"},
+    "evidence_class": {"const": "attested-local-build"},
+    "source_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "workflow": {"const": "howardweale/lightyear-carddemo-modernization/.github/workflows/verify.yml"},
+    "bindings": {"type": "object", "minProperties": 10, "additionalProperties": {"type": "string", "pattern": "^[0-9a-f]{64}$"}},
+    "checks": {"type": "object", "minProperties": 11, "maxProperties": 11, "additionalProperties": {"type": "boolean"}},
+    "development_ready": {"const": true},
+    "mainframe_equivalent": {"const": false},
+    "production_ready": {"const": false},
+    "release_attestation": {"const": false},
+    "status": {"const": "passed"},
+    "unresolved_gaps": {"type": "array", "minItems": 2, "items": {"type": "string", "minLength": 1}},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

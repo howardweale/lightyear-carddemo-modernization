@@ -90,6 +90,7 @@ async function initialize() {
     $("metric-edges").textContent = formatNumber(stats.edge_count);
     $("metric-rules").textContent = formatNumber(stats.nodes_by_kind.business_rule);
     $("metric-hash").textContent = state.meta.content_sha256.slice(0, 10);
+    renderEstateBoundary();
     $("status-dot").classList.add("online");
     $("status-text").textContent = "Local control plane online";
     populatePerspectives();
@@ -103,6 +104,17 @@ async function initialize() {
   } catch (error) {
     setError(error);
   }
+}
+
+function renderEstateBoundary() {
+  if (state.meta.projection_type !== "lightyear-composite-estate") return;
+  const boundary = $("estate-boundary");
+  boundary.hidden = false;
+  const fragments = state.meta.fragments || [];
+  $("estate-fragments").textContent = `${fragments.length} validated extension fragment${fragments.length === 1 ? "" : "s"}`;
+  $("estate-base-hash").textContent = state.meta.canonical_content_sha256.slice(0, 10);
+  $("estate-composite-hash").textContent = state.meta.content_sha256.slice(0, 10);
+  $("estate-boundary-statement").textContent = state.meta.claim_boundary?.statement || "Read-only composition of separately governed evidence.";
 }
 
 function populatePerspectives() {

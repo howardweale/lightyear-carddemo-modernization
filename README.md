@@ -1,6 +1,35 @@
 # FactoryDark.ai CardDemo Modernization Factory
 
-Release: **v0.22.0 — mixed PL/I modernization proof cell**
+Release: **v0.23.0 — stable composite estate and developer golden path**
+
+v0.23 makes the separately governed PL/I extension naturally visible beside the canonical COBOL,
+JCL, CICS, IMS, HLASM, VSAM, and Db2 estate without merging it into the canonical graph. A
+content-addressed semantic-input manifest now declares the exact modern candidate files allowed to
+influence the canonical semantic identity. Viewer, validator, documentation, and unrelated test
+edits therefore no longer force every graph-bound receipt to be regenerated; declared candidate,
+mapping, ontology, or legacy-source changes still invalidate evidence as intended.
+
+The read-only composite projection contains 11,328 nodes and 13,470 relationships, including the
+complete `ACCTPL1 → CBACT04C` call and `ACCTPL1 → SQL → CARDDEMO.AUTHFRDS` lineage. It has its own
+hash and source evidence pack while retaining the exact canonical graph binding used by runtime and
+audit evidence. The Explorer visibly labels this boundary and does not present composition as live
+runtime proof, mainframe equivalence, or production readiness.
+
+Start with the developer golden path:
+
+```bash
+./lightyear.sh doctor
+./lightyear.sh demo
+./lightyear.sh explorer
+./lightyear.sh verify
+```
+
+PowerShell equivalents are available through `lightyear.ps1`. Missing Java, Maven, or Docker are
+reported as optional-path limitations; missing Python, Git, semantic artifacts, or invalid evidence
+contracts fail diagnostics with a remediation. The full claim boundary remains unchanged:
+`mainframe_equivalent: false` and `production_ready: false`.
+
+Previous milestone: **v0.22.0 — mixed PL/I modernization proof cell**
 
 v0.22 advances the bounded `ACCTPL1` mixed PL/I–COBOL–Db2 workload from discovery to a complete
 local development proof. It pins fixed-width records, Db2 lookup behavior, decimal truncation, the
@@ -691,10 +720,15 @@ On Windows:
 .\graph-explorer.ps1
 ```
 
-It opens `http://127.0.0.1:8765` and provides five curated perspectives, full-graph search,
+It opens `http://127.0.0.1:8765` and provides seven curated perspectives, including the bounded
+PL/I authorization-risk lineage, full-graph search,
 bounded neighborhoods, node and edge inspection, source-code evidence, and implementer/verifier
 views. The server binds only to the local machine by default and uses Python's standard library; it
 does not upload graph data.
+
+The default Explorer artifact is `knowledge/composite/estate.snapshot.json.gz`. Its visible trust
+banner shows both the canonical and composite identities. Canonical runtime and audit evidence
+continues to bind to `knowledge/graph.snapshot.json.gz`; the overlay cannot promote those claims.
 
 Do not expose the verifier view to implementation agents. It includes private holdout metadata.
 The current local audience selector demonstrates the policy boundary; it is not authentication.
@@ -711,8 +745,9 @@ Select **Ask about relationship** to focus graph chat on the exact edge. Questio
 does this relationship exist?`, `What source supports it?`, and `What would be affected if this
 connection changed?` remain bounded by the selected audience and evidence package.
 
-The relationship catalog lives in `knowledge/ontology/relationships.json`. The self-contained
-source pack and receipt live under `knowledge/evidence/`.
+The relationship catalog lives in `knowledge/ontology/relationships.json`. Canonical source
+evidence lives under `knowledge/evidence/`; the composite source pack, including PL/I excerpts,
+lives under `knowledge/composite/`.
 
 ### Grounded graph chat
 

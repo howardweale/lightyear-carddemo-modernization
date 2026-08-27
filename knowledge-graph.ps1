@@ -38,6 +38,7 @@ $Ontology = Join-Path $ProjectDir "knowledge\ontology\relationships.json"
 $EvidencePack = Join-Path $ProjectDir "knowledge\evidence\source.pack.json.gz"
 $EvidenceReceipt = Join-Path $ProjectDir "knowledge\evidence\source.receipt.json"
 $Capabilities = Join-Path $ProjectDir "knowledge\capabilities\mainframe-readiness.json"
+$SemanticInputs = Join-Path $ProjectDir "knowledge\semantic-inputs.json"
 $CicsVsamReceipt = Join-Path $ProjectDir "readiness\cics-vsam\readiness-receipt.json"
 $AsmReceipt = Join-Path $ProjectDir "readiness\asm-date\readiness-receipt.json"
 $ImsReceipt = Join-Path $ProjectDir "readiness\ims-expiry\readiness-receipt.json"
@@ -50,7 +51,7 @@ $CampaignReceipt = Join-Path $ProjectDir "extensions\adapters\campaign\campaign.
 
 if ($Action -eq "build") {
     Run-Python -m lightyear_knowledge_graph build `
-        --legacy-root $LegacyRoot --modern-root $ProjectDir --manifest $Manifest `
+        --legacy-root $LegacyRoot --modern-root $ProjectDir --semantic-inputs $SemanticInputs --manifest $Manifest `
         --manifest $CicsVsamManifest --manifest $AsmManifest --manifest $ImsManifest --manifest $DataManifest `
         --ontology $Ontology --evidence-pack $EvidencePack --evidence-receipt $EvidenceReceipt `
         --output $Snapshot --receipt $Receipt --legacy-commit $LegacyCommit `
@@ -74,7 +75,7 @@ if ($Action -eq "verify") {
     $GeneratedEvidenceReceipt = Join-Path $Generated "source.receipt.json"
     $GeneratedCapabilities = Join-Path $Generated "mainframe-readiness.json"
     Run-Python -m lightyear_knowledge_graph build `
-        --legacy-root $LegacyRoot --modern-root $ProjectDir --manifest $Manifest `
+        --legacy-root $LegacyRoot --modern-root $ProjectDir --semantic-inputs $SemanticInputs --manifest $Manifest `
         --manifest $CicsVsamManifest --manifest $AsmManifest --manifest $ImsManifest --manifest $DataManifest `
         --ontology $Ontology --evidence-pack $GeneratedEvidencePack `
         --evidence-receipt $GeneratedEvidenceReceipt `

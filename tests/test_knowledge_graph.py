@@ -39,10 +39,10 @@ class KnowledgeGraphTests(unittest.TestCase):
         self.assertGreaterEqual(stats["nodes_by_kind"]["cics_transaction"], 20)
         self.assertGreaterEqual(stats["nodes_by_kind"]["bms_field"], 500)
         self.assertGreaterEqual(stats["nodes_by_kind"]["vsam_cluster"], 10)
-        self.assertIn(
-            "modern:file:src/lightyear_factory/orchestrator.py",
-            {node["id"] for node in self.graph["nodes"]},
-        )
+        node_ids = {node["id"] for node in self.graph["nodes"]}
+        self.assertIn("modern:file:src/carddemo_oracle/oracle.py", node_ids)
+        self.assertIn("modern:file:src/lightyear_data/equivalence.py", node_ids)
+        self.assertNotIn("modern:file:src/lightyear_factory/orchestrator.py", node_ids)
 
     def test_business_rule_traces_to_implementation_and_test(self) -> None:
         rule = "rule:intcalc:monthly-interest"

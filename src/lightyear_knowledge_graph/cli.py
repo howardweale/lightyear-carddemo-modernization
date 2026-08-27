@@ -6,6 +6,14 @@ from pathlib import Path
 
 from .builder import build_graph, write_receipt
 from .capability import analyze_capabilities, validate_capability_analysis, write_capability_analysis
+from .composite import (
+    build_composite_estate,
+    load_json as load_composite_input,
+    validate_composite_estate,
+    write_composite_estate,
+    write_composite_receipt,
+)
+from .developer import demo as developer_demo, doctor as developer_doctor
 from .evidence_pack import (
     build_evidence_pack,
     load_evidence_pack,
@@ -36,6 +44,76 @@ def build_parser() -> argparse.ArgumentParser:
         type=Path,
         action="append",
         help="Curated workload manifest; repeat to compose multiple vertical slices",
+    )
+
+    composite = subparsers.add_parser(
+        "build-composite", help="Build a read-only base-plus-extension estate projection"
+    )
+    composite.add_argument(
+        "--base-graph", type=Path, default=Path("knowledge/graph.snapshot.json.gz")
+    )
+    composite.add_argument(
+        "--fragment", type=Path, action="append", required=True,
+        help="Validated extension fragment; repeat to compose multiple fragments",
+    )
+    composite.add_argument(
+        "--capabilities",
+        type=Path,
+        default=Path("knowledge/capabilities/mainframe-readiness.json"),
+    )
+    composite.add_argument(
+        "--output", type=Path, default=Path("knowledge/composite/estate.snapshot.json.gz")
+    )
+    composite.add_argument(
+        "--receipt", type=Path, default=Path("knowledge/composite/estate.receipt.json")
+    )
+    composite.add_argument(
+        "--legacy-root", type=Path, help="Legacy source root for the composite evidence pack"
+    )
+    composite.add_argument("--modern-root", type=Path, default=Path("."))
+    composite.add_argument(
+        "--evidence-pack",
+        type=Path,
+        default=Path("knowledge/composite/source.pack.json.gz"),
+    )
+    composite.add_argument(
+        "--evidence-receipt",
+        type=Path,
+        default=Path("knowledge/composite/source.receipt.json"),
+    )
+
+    validate_composite = subparsers.add_parser(
+        "validate-composite", help="Validate a composite estate against its bound evidence"
+    )
+    validate_composite.add_argument(
+        "--graph", type=Path, default=Path("knowledge/composite/estate.snapshot.json.gz")
+    )
+
+    doctor = subparsers.add_parser(
+        "doctor", help="Diagnose required and optional developer prerequisites"
+    )
+    doctor.add_argument("--project-root", type=Path, default=Path("."))
+
+    demo = subparsers.add_parser(
+        "demo", help="Verify and summarize the bounded mixed-language composite lineage"
+    )
+    demo.add_argument("--project-root", type=Path, default=Path("."))
+    validate_composite.add_argument(
+        "--base-graph", type=Path, default=Path("knowledge/graph.snapshot.json.gz")
+    )
+    validate_composite.add_argument("--fragment", type=Path, action="append", required=True)
+    validate_composite.add_argument(
+        "--capabilities",
+        type=Path,
+        default=Path("knowledge/capabilities/mainframe-readiness.json"),
+    )
+    validate_composite.add_argument(
+        "--evidence-pack", type=Path, default=Path("knowledge/composite/source.pack.json.gz")
+    )
+    build.add_argument(
+        "--semantic-inputs",
+        type=Path,
+        help="Versioned manifest declaring files allowed to influence semantic graph identity",
     )
     build.add_argument("--output", type=Path, default=Path("knowledge/graph.snapshot.json.gz"))
     build.add_argument("--receipt", type=Path, default=Path("knowledge/graph.receipt.json"))
@@ -144,11 +222,13 @@ def build_parser() -> argparse.ArgumentParser:
     compare_evidence.add_argument("--actual", type=Path, required=True)
 
     explorer = subparsers.add_parser("serve", help="Run the local LIGHTYEAR Graph Explorer")
-    explorer.add_argument("--graph", type=Path, default=Path("knowledge/graph.snapshot.json.gz"))
+    explorer.add_argument(
+        "--graph", type=Path, default=Path("knowledge/composite/estate.snapshot.json.gz")
+    )
     explorer.add_argument("--viewer-root", type=Path, default=Path("knowledge/viewer"))
     explorer.add_argument("--ontology", type=Path, default=DEFAULT_ONTOLOGY_PATH)
     explorer.add_argument(
-        "--evidence-pack", type=Path, default=Path("knowledge/evidence/source.pack.json.gz")
+        "--evidence-pack", type=Path, default=Path("knowledge/composite/source.pack.json.gz")
     )
     explorer.add_argument("--host", default="127.0.0.1")
     explorer.add_argument("--port", type=int, default=8765)
@@ -184,6 +264,7 @@ def main(argv: list[str] | None = None) -> int:
             args.legacy_commit,
             args.modern_commit,
             args.ontology,
+            args.semantic_inputs,
         )
         payload = graph.write(args.output)
         write_receipt(payload, args.receipt)
@@ -210,6 +291,74 @@ def main(argv: list[str] | None = None) -> int:
                 sort_keys=True,
             )
         )
+        return 0
+
+    if args.command == "build-composite":
+        base_graph = load_graph(args.base_graph)
+        fragments = [load_composite_input(path) for path in args.fragment]
+        capabilities = load_composite_input(args.capabilities)
+        payload = build_composite_estate(base_graph, fragments, capabilities)
+        write_composite_estate(payload, args.output)
+        write_composite_receipt(payload, args.receipt)
+        evidence_payload = None
+        if args.legacy_root is not None:
+            evidence_payload = build_evidence_pack(
+                payload,
+                {
+                    "source:aws-carddemo": args.legacy_root,
+                    "source:lightyear-carddemo": args.modern_root,
+                },
+            )
+            write_evidence_pack(evidence_payload, args.evidence_pack)
+            write_evidence_receipt(evidence_payload, args.evidence_receipt)
+        print(
+            json.dumps(
+                {
+                    "base_graph_content_sha256": payload["base_graph"]["content_sha256"],
+                    "content_sha256": payload["content_sha256"],
+                    "evidence_pack_content_sha256": (
+                        evidence_payload["content_sha256"] if evidence_payload else None
+                    ),
+                    "fragments": payload["fragments"],
+                    "output": str(args.output),
+                    **payload["statistics"],
+                },
+                indent=2,
+                sort_keys=True,
+            )
+        )
+        return 0
+
+    if args.command == "validate-composite":
+        payload = load_graph(args.graph)
+        base_graph = load_graph(args.base_graph)
+        fragments = [load_composite_input(path) for path in args.fragment]
+        capabilities = load_composite_input(args.capabilities)
+        errors = validate_composite_estate(payload, base_graph, fragments, capabilities)
+        if args.evidence_pack.is_file():
+            errors.extend(validate_evidence_pack(payload, load_evidence_pack(args.evidence_pack)))
+        errors = sorted(set(errors))
+        print(
+            json.dumps(
+                {"errors": errors, "status": "passed" if not errors else "failed"},
+                indent=2,
+                sort_keys=True,
+            )
+        )
+        return 0 if not errors else 1
+
+    if args.command == "doctor":
+        result = developer_doctor(args.project_root)
+        print(json.dumps(result, indent=2, sort_keys=True))
+        return 0 if result["status"] == "passed" else 1
+
+    if args.command == "demo":
+        try:
+            result = developer_demo(args.project_root)
+        except (OSError, ValueError, KeyError) as exc:
+            print(json.dumps({"status": "failed", "error": str(exc)}, indent=2, sort_keys=True))
+            return 1
+        print(json.dumps(result, indent=2, sort_keys=True))
         return 0
 
     if args.command == "compare-snapshots":

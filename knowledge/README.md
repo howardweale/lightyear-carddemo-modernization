@@ -2,6 +2,11 @@
 
 ## Cross-platform source identity
 
+The canonical graph's modern semantic inputs are declared in `semantic-inputs.json`. Only those
+content-addressed candidate and mapping files influence canonical semantic identity. Repository
+implementation files remain governed by Git and CI but do not cause graph-wide receipt churn unless
+they are deliberately added to the manifest.
+
 Source-file nodes and evidence capsules retain two identities. `transport_content_sha256` (or
 `transport_file_sha256`) hashes the exact bytes received for forensic chain of custody.
 `content_sha256` (or `file_sha256`) hashes the same source after CRLF and legacy CR are normalized
@@ -18,6 +23,10 @@ still match.
 Runtime captures remain append-only evidence rather than nondeterministic mutations of the source
 snapshot. The explorer joins both identities at read time and refuses to treat simulated or local
 evidence as proof of z/OS equivalence.
+
+The v0.23 read-only composite estate under `composite/` overlays the separately governed PL/I
+fragment for navigation. It has its own identity and evidence pack while retaining the canonical
+graph hash used by runtime and audit evidence.
 
 The graph is the factory's shared system model. It is deliberately broader than a code index: it
 connects application structure, business meaning, modernization implementation, verification, and
@@ -104,6 +113,7 @@ Stable, namespaced IDs allow artifacts from different extractors and agents to j
 | Java method | `modern:java-method:...InterestCalculationService#calculate` |
 | Test | `modern:test:...InterestCalculationServiceTest#matchesInterestAndDefaultRateRules` |
 | Scenario | `scenario:intcalc:synthetic-differential` |
+| PL/I extension program | `extension:pli-program:ACCTPL1` |
 
 All relations are defined in `ontology/relationships.json`. Each definition includes a purpose,
 direction, category, evidence policy, and exact allowed source/target node-kind pairs. The graph
@@ -113,6 +123,7 @@ snapshot carries the ontology content hash, and validation rejects undefined or 
 
 - `graph.snapshot.json.gz`: deterministic, compressed property-graph snapshot;
 - `graph.receipt.json`: content hash, sources, and counts suitable for CI evidence;
+- `semantic-inputs.json`: exact modern files and workload mappings allowed into semantic identity;
 - `schema/graph.schema.json`: portable JSON Schema contract;
 - `schema/relationship-ontology.schema.json`: governed relationship contract;
 - `schema/evidence-pack.schema.json`: content-addressed source capsule contract;
@@ -120,11 +131,12 @@ snapshot carries the ontology content hash, and validation rejects undefined or 
 - `mappings/carddemo-cics-vsam-account-view.json`: bounded CICS/VSAM proof mapping;
 - `mappings/carddemo-asm-date-format.json`: bounded HLASM proof mapping;
 - `mappings/carddemo-ims-expired-authorization-purge.json`: bounded IMS BMP proof mapping;
-- `capabilities/mainframe-readiness.json`: graph-bound readiness gates for CICS, VSAM, IMS, and HLASM;
+- `capabilities/mainframe-readiness.json`: graph-bound readiness gates for CICS, VSAM, IMS, HLASM, PL/I, and Db2/Data;
 - `schema/capability-readiness.schema.json`: portable contract for the capability projection;
 - `ontology/relationships.json`: canonical meanings and endpoint constraints for all edges;
 - `evidence/source.pack.json.gz`: deterministic source excerpts and supporting context;
 - `evidence/source.receipt.json`: evidence-pack and graph identity receipt;
+- `composite/`: read-only canonical-plus-extension snapshot, receipt, and extension-aware source pack;
 - `viewer/`: locally served, dependency-free visual explorer;
 - `neo4j/README.md`: optional Neo4j projection and import contract;
 - `chat/`: grounded answer quality contract and versioned structured-output schema.
@@ -144,6 +156,9 @@ PostgreSQL/Apache AGE, or another engine can be supported through additional pro
 ```bash
 ./knowledge-graph.sh build ../carddemo-upstream
 ./knowledge-graph.sh verify ../carddemo-upstream
+./composite-estate.sh verify ../carddemo-upstream
+./lightyear.sh doctor
+./lightyear.sh demo
 
 PYTHONPATH=src python3 -m lightyear_knowledge_graph validate
 PYTHONPATH=src python3 -m lightyear_knowledge_graph validate-evidence

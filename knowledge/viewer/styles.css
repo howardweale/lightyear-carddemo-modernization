@@ -87,6 +87,22 @@ h3 { margin: 24px 0 9px; font-size: 12px; letter-spacing: 0.08em; text-transform
 .metrics strong { font: 650 16px/1 ui-monospace, SFMono-Regular, Menlo, monospace; }
 .metrics span { color: var(--muted); font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; }
 
+.estate-boundary {
+  display: grid;
+  grid-template-columns: auto auto minmax(260px, 1fr) auto;
+  gap: 14px;
+  align-items: center;
+  padding: 8px 28px;
+  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--surface) 84%, var(--accent) 5%);
+}
+.estate-boundary[hidden] { display: none; }
+.estate-boundary > div { display: flex; gap: 7px; align-items: center; white-space: nowrap; }
+.estate-boundary strong { color: var(--accent); font: 700 9px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: .08em; }
+.estate-boundary span { color: var(--muted); font-size: 9px; text-transform: uppercase; }
+.estate-boundary code { font-size: 9px; }
+.estate-boundary p { margin: 0; color: var(--muted); font-size: 10px; }
+
 .live-plane { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 8px 28px; background: color-mix(in srgb, var(--surface) 88%, var(--accent-2) 4%); border-bottom: 1px solid var(--border); }
 .live-plane-heading { display: flex; align-items: center; gap: 7px; white-space: nowrap; }
 .live-plane-heading strong { font-size: 11px; text-transform: uppercase; letter-spacing: .06em; }

@@ -75,6 +75,13 @@ DEFAULT_PERSPECTIVES = [
         "root": "workload:carddemo-db2-authfrds",
         "depth": 3,
     },
+    {
+        "id": "pli-auth-risk-lineage",
+        "name": "PL/I authorization-risk lineage",
+        "description": "PL/I files, include, Db2 SQL, internal procedure, and COBOL call boundary.",
+        "root": "extension:pli-program:ACCTPL1",
+        "depth": 3,
+    },
 ]
 
 
@@ -127,14 +134,31 @@ class GraphExplorerIndex:
         return cls(load_graph(graph_path), max_nodes=max_nodes)
 
     def metadata(self) -> dict[str, Any]:
-        return {
+        metadata = {
             "graph_id": self.payload["graph_id"],
             "schema_version": self.payload["schema_version"],
             "content_sha256": self.payload["content_sha256"],
+            "canonical_content_sha256": self.canonical_content_sha256,
             "statistics": self.payload["statistics"],
             "relationship_ontology": self.payload["relationship_ontology"],
             "perspectives": self.perspectives(),
         }
+        for key in (
+            "projection_type",
+            "base_graph",
+            "fragments",
+            "capability_projection",
+            "claim_boundary",
+        ):
+            if key in self.payload:
+                metadata[key] = self.payload[key]
+        return metadata
+
+    @property
+    def canonical_content_sha256(self) -> str:
+        return self.payload.get("base_graph", {}).get(
+            "content_sha256", self.payload["content_sha256"]
+        )
 
     def perspectives(self) -> list[dict[str, Any]]:
         return [item for item in DEFAULT_PERSPECTIVES if item["root"] in self.node_by_id]
@@ -433,7 +457,7 @@ class ExplorerServer(ThreadingHTTPServer):
         if (
             self.runtime_store is not None
             and self.runtime_store.snapshot.get("graph_content_sha256")
-            != self.index.payload.get("content_sha256")
+            != self.index.canonical_content_sha256
         ):
             raise ValueError("Runtime evidence snapshot targets a different graph identity")
         self.index.runtime_store = self.runtime_store
@@ -445,7 +469,7 @@ class ExplorerServer(ThreadingHTTPServer):
         if (
             self.audit_store is not None
             and self.audit_store.snapshot.get("graph_content_sha256")
-            != self.index.payload.get("content_sha256")
+            != self.index.canonical_content_sha256
         ):
             raise ValueError("Audit snapshot targets a different graph identity")
         self._runtime_file_state = self._file_state(self.runtime_path)

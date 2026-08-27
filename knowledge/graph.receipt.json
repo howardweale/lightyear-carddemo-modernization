@@ -1,9 +1,9 @@
 {
-  "content_sha256": "48da03518cd2fb8146c5b55b7993cd24ded4414c93d11c8a8e21f687bb7f699d",
+  "content_sha256": "2a003843da4fcdb04fc563f2d9644dd745ba0589c9fb6651b7fd21c9e6fad571",
   "graph_id": "lightyear:carddemo-modernization",
   "receipt_type": "lightyear-knowledge-graph-build",
   "relationship_ontology": {
-    "content_sha256": "873563748b089c0d24d2f2aa07c70c2b8f162ba9b01d02c91de355b4313e3359",
+    "content_sha256": "2a891d138b1fbbb4bf7c98845acd52ba36af6955bee75993aafacc36e96e4f0d",
     "ontology_id": "lightyear:modernization-relationships",
     "schema_version": "1.0"
   },
@@ -19,7 +19,13 @@
       "commit": "repository-content",
       "id": "source:lightyear-carddemo",
       "kind": "git_repository",
-      "repository": "https://github.com/howardweale/lightyear-carddemo-modernization"
+      "repository": "https://github.com/howardweale/lightyear-carddemo-modernization",
+      "semantic_inputs": {
+        "content_sha256": "1099f4f252b79cc1f8f20fcddda68ed963729ae7575dcde6c6591ecab45097e2",
+        "manifest_id": "lightyear:carddemo-semantic-inputs",
+        "path": "knowledge/semantic-inputs.json",
+        "schema_version": "1.0"
+      }
     }
   ],
   "statistics": {
@@ -73,7 +79,7 @@
       "WRITES": 19,
       "WRITES_TABLE": 2
     },
-    "node_count": 11440,
+    "node_count": 11320,
     "nodes_by_kind": {
       "assembler_dsect": 1,
       "assembler_field": 5,
@@ -117,7 +123,7 @@
       "jcl_step": 119,
       "modernization_workload": 5,
       "software_dependency": 5,
-      "source_file": 366,
+      "source_file": 246,
       "test_case": 11,
       "verification_scenario": 15,
       "vsam_alternate_index": 3,

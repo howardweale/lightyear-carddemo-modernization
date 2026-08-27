@@ -2,8 +2,8 @@
   "audit": {
     "checkpoint_signature_algorithm": "none",
     "event_count": 21,
-    "ledger_content_sha256": "29f43796fc6c176c024197c907f87877cf47e30992c216b1ffb12a990b5cb30c",
-    "ledger_head_sha256": "5c8f1a83e28ec37ad8168686b38d375b6a854cbdf33b0a2e64d786ac4a785345",
+    "ledger_content_sha256": "bd001937db321c3433b14d0b16344c37a0a491dd56edd691f305d88aeb431c3a",
+    "ledger_head_sha256": "1d1cd85c1ccafa6b32afaa6fdb18fc36eb94c5900648423db692259247db5d06",
     "ledger_id": "lightyear:carddemo:audit"
   },
   "cics_vsam_readiness": {
@@ -17,7 +17,7 @@
       "No external equivalence signing key was configured."
     ]
   },
-  "content_sha256": "2cf46e923b4626f193dfd4788691d64b7bc1aef4e57fbb7fb193324de9278efb",
+  "content_sha256": "25c4dc987f27a5b05610c11450eda198cf1d2441e347e1744348146eecd1fca3",
   "dossier_type": "lightyear-release-evidence",
   "durable_control_plane": {
     "approval_consumption": "exactly-once",
@@ -40,9 +40,9 @@
       "sha256": "71e7e34d92dd056a8d501098e7a2cfe8074d7096844b59c5ced4ef305c835330"
     },
     {
-      "id": "carddemo:modernization:v0.15",
+      "id": "carddemo:modernization:v0.26",
       "kind": "portfolio_plan",
-      "sha256": "8cd50a367b4cc0700381c361d14fd2767f9902e730605afa25efe96d95e6c281"
+      "sha256": "bb864004cb4d27e48cf2fff83ec4487d6b2ba44705af6b18e10e531336be707e"
     },
     {
       "id": "control-tower:live-evidence-plane",
@@ -62,7 +62,7 @@
     {
       "id": "factory:durable-conformance",
       "kind": "durable_conformance_receipt",
-      "sha256": "7dafd37df6ca3d6ac89d4e20ebdad19733c2cd645925b3022873020d97e55d9d"
+      "sha256": "cb43eb4080f42d2132dd0dd650409fe74b0e12d3b2e998d99d09639763f74837"
     },
     {
       "id": "factory:durable-control-plane",
@@ -143,9 +143,9 @@
   ],
   "portfolio_plan": {
     "approval_authority": "human",
-    "conflicts": 1,
-    "orders": 3,
-    "plan_sha256": "8cd50a367b4cc0700381c361d14fd2767f9902e730605afa25efe96d95e6c281",
+    "conflicts": 2,
+    "orders": 4,
+    "plan_sha256": "bb864004cb4d27e48cf2fff83ec4487d6b2ba44705af6b18e10e531336be707e",
     "status": "approval_required",
     "waves": 2
   },

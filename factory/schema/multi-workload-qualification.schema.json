@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schema/factory/multi-workload-qualification-1.0.json",
+  "title": "LIGHTYEAR multi-workload factory qualification receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "receipt_type", "qualification_id", "manifest_sha256",
+    "status", "promotion_allowed", "production_ready", "mainframe_equivalent",
+    "policy", "metrics", "checks", "workloads", "portfolio", "limitations",
+    "content_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "receipt_type": {"const": "lightyear-multi-workload-factory-qualification"},
+    "qualification_id": {"type": "string", "minLength": 1},
+    "manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "status": {"enum": ["qualified", "blocked"]},
+    "promotion_allowed": {"type": "boolean"},
+    "production_ready": {"const": false},
+    "mainframe_equivalent": {"const": false},
+    "policy": {"type": "object"},
+    "metrics": {"type": "object"},
+    "checks": {"type": "object", "additionalProperties": {"type": "boolean"}},
+    "workloads": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"type": "object"}},
+    "portfolio": {"type": "object"},
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

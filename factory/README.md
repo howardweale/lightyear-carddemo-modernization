@@ -1,5 +1,26 @@
 # LIGHTYEAR Autonomous Factory and Hardened Execution Plane
 
+## Multi-workload factory qualification (v0.26)
+
+The qualification plane now spans four bounded modernization cells: INTCALC, POSTTRAN, CREASTMT,
+and ACCTPL1. Each cell has a trusted target path, graph roots, private verifier, mutation catalog,
+and clean accept-unchanged cases. The committed deterministic calibration repairs 23/23 published
+mutations and preserves 8/8 clean candidates with zero false acceptance.
+
+That result verifies the mechanism; it does not qualify a model. A promotional receipt requires at
+least two distinct independently sealed, model-backed evaluation runs per workload and one passed
+four-cell portfolio run. The aggregator resolves every evaluation result to its exact factory run
+and model-call evidence, then enforces repair, no-change, first-attempt, false-acceptance, false-
+rejection, latency, token, cost, retry, resume, conflict, parallel-wave, and approval controls.
+
+```bash
+./factory-qualification.sh verify
+```
+
+See [`qualification/README.md`](qualification/README.md) for the external sealed-run procedure and
+the complete trust boundary. Qualification never implies native z/OS equivalence or production
+authorization.
+
 ## Verifier invariant pinning (v0.18.5)
 
 The normalization ledger is now an executable control rather than documentation alone. Its rule
@@ -372,7 +393,7 @@ workers, verifiers, signing services and artifact retention in separate trust do
 
 ## Portfolio orchestration (v0.15)
 
-`factory/portfolio/carddemo-portfolio.json` coordinates three bounded work cells. The controller
+`factory/portfolio/carddemo-portfolio.json` coordinates four bounded work cells. The controller
 loads and hashes each work order, verifies every graph root, detects collisions and dependencies,
 and emits deterministic waves. It does not ask a model to schedule work or decide risk.
 
@@ -389,11 +410,14 @@ export LIGHTYEAR_PORTFOLIO_APPROVAL_KEY="$(openssl rand -hex 32)"
 export LIGHTYEAR_PORTFOLIO_APPROVER="your-name"
 ./portfolio-factory.sh sign
 ./portfolio-factory.sh run
+./portfolio-factory.sh resume
 ```
 
 The controller runs independent cells in parallel only when they have no detected conflict and all
-declared predecessors have passed. A failed cell blocks all later waves. Approval does not waive a
-gate, change a result, or establish mainframe equivalence.
+declared predecessors have passed. A checkpoint is written after each wave; resume reuses passed
+cells and retries only blocked cells after validating the plan and approval identities. A failed
+cell blocks all later waves. Approval does not waive a gate, change a result, or establish
+mainframe equivalence.
 
 ## When the mainframe connection arrives
 

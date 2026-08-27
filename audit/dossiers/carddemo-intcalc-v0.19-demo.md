@@ -4,7 +4,7 @@
 
 **Decision:** **BLOCKED**
 
-**Dossier identity:** `2cf46e923b4626f193dfd4788691d64b7bc1aef4e57fbb7fb193324de9278efb`
+**Dossier identity:** `25c4dc987f27a5b05610c11450eda198cf1d2441e347e1744348146eecd1fca3`
 
 ## Promotion rationale
 
@@ -34,11 +34,11 @@ Release is blocked until every independent runtime and execution-security gate h
 |---|---|---|
 | `data_equivalence_receipt` | `carddemo-authorization-authfrds` | `8e2e2dc30cffa320…` |
 | `work_order` | `carddemo:intcalc:bounded-repair` | `71e7e34d92dd056a…` |
-| `portfolio_plan` | `carddemo:modernization:v0.15` | `8cd50a367b4cc070…` |
+| `portfolio_plan` | `carddemo:modernization:v0.26` | `bb864004cb4d27e4…` |
 | `operational_control_policy` | `control-tower:live-evidence-plane` | `943f4c1626a3ac66…` |
 | `source_evidence_pack` | `evidence:source-pack` | `41b45fbac66bb6b2…` |
 | `decision_input` | `execution:carddemo-hardened-plane` | `83d937880f17192b…` |
-| `durable_conformance_receipt` | `factory:durable-conformance` | `7dafd37df6ca3d6a…` |
+| `durable_conformance_receipt` | `factory:durable-conformance` | `cb43eb4080f42d21…` |
 | `durable_execution_policy` | `factory:durable-control-plane` | `72b0c927dc60dc8b…` |
 | `graph_snapshot` | `lightyear:carddemo-modernization` | `2a003843da4fcdb0…` |
 | `semantic_memory_snapshot` | `memory:verified-experiences` | `42000f0e821e12b7…` |
@@ -57,17 +57,17 @@ Release is blocked until every independent runtime and execution-security gate h
 ## Modernization portfolio
 
 - Status: `approval_required`
-- Work cells: 3
+- Work cells: 4
 - Execution waves: 2
-- Detected conflicts: 1
+- Detected conflicts: 2
 - Approval authority: `human`
-- Plan: `8cd50a367b4cc0700381c361d14fd2767f9902e730605afa25efe96d95e6c281`
+- Plan: `bb864004cb4d27e48cf2fff83ec4487d6b2ba44705af6b18e10e531336be707e`
 
 ## Audit checkpoint
 
 - Ledger: `lightyear:carddemo:audit`
 - Events: 21
-- Ledger head: `5c8f1a83e28ec37ad8168686b38d375b6a854cbdf33b0a2e64d786ac4a785345`
+- Ledger head: `1d1cd85c1ccafa6b32afaa6fdb18fc36eb94c5900648423db692259247db5d06`
 - Signature algorithm: `none`
 
 ## CICS/VSAM readiness

@@ -4,6 +4,7 @@
     "required": true,
     "required_conflict_ids": [],
     "required_order_ids": [
+      "carddemo:acctpl1:portfolio-cell",
       "carddemo:posttran:portfolio-cell"
     ]
   },
@@ -20,17 +21,45 @@
       ],
       "resolution": "serialize",
       "severity": "medium"
+    },
+    {
+      "evidence": [
+        "legacy:jcl-job:INTCALC:distance=2"
+      ],
+      "id": "conflict:a684ea544f4c6be102ed",
+      "kind": "graph_dependency",
+      "orders": [
+        "carddemo:acctpl1:portfolio-cell",
+        "carddemo:intcalc:portfolio-cell"
+      ],
+      "resolution": "serialize",
+      "severity": "medium"
     }
   ],
-  "content_sha256": "8cd50a367b4cc0700381c361d14fd2767f9902e730605afa25efe96d95e6c281",
+  "content_sha256": "bb864004cb4d27e48cf2fff83ec4487d6b2ba44705af6b18e10e531336be707e",
   "graph_content_sha256": "2a003843da4fcdb04fc563f2d9644dd745ba0589c9fb6651b7fd21c9e6fad571",
   "limitations": [
     "Portfolio scheduling proves bounded factory coordination, not z/OS equivalence.",
     "Only deterministic controllers and human approvers may authorize portfolio dispatch."
   ],
-  "manifest_sha256": "65eb10e696263885f7f1c924d670633218da1cc67ca2f5c09e747e864959fe7d",
+  "manifest_sha256": "10dcfa9ea8292db4c65400b3c2408f9b3ae419f49190c9f07048c05b147e93f7",
   "max_parallel": 2,
   "orders": [
+    {
+      "allowed_paths": [
+        "factory/benchmarks/pli_authorization_candidate.py"
+      ],
+      "depends_on": [],
+      "graph_node_ids": [
+        "legacy:cobol-program:CBACT04C",
+        "legacy:db2-table:CARDDEMO.AUTHFRDS"
+      ],
+      "id": "carddemo:acctpl1:portfolio-cell",
+      "max_attempts": 3,
+      "risk": "high",
+      "title": "ACCTPL1 mixed-language modernization cell",
+      "work_order_sha256": "8cc06a1a6be67c58b074229f974fbffe2fa9d0d3ea735be1fada0e81abfde3d5"
+    },
     {
       "allowed_paths": [
         "factory/benchmarks/statement_candidate.py"
@@ -79,7 +108,7 @@
     }
   ],
   "plan_type": "lightyear-modernization-portfolio-plan",
-  "portfolio_id": "carddemo:modernization:v0.15",
+  "portfolio_id": "carddemo:modernization:v0.26",
   "schema_version": "1.0",
   "status": "approval_required",
   "title": "CardDemo multi-workload modernization portfolio",
@@ -88,15 +117,16 @@
       "parallelism": 2,
       "wave": 1,
       "work_order_ids": [
-        "carddemo:intcalc:portfolio-cell",
+        "carddemo:acctpl1:portfolio-cell",
         "carddemo:posttran:portfolio-cell"
       ]
     },
     {
-      "parallelism": 1,
+      "parallelism": 2,
       "wave": 2,
       "work_order_ids": [
-        "carddemo:create-statement:portfolio-cell"
+        "carddemo:create-statement:portfolio-cell",
+        "carddemo:intcalc:portfolio-cell"
       ]
     }
   ]

@@ -61,7 +61,7 @@ class DurableFactoryTest(unittest.TestCase):
         repeated = self.submit()
         self.assertFalse(first["idempotent"])
         self.assertTrue(repeated["idempotent"])
-        self.assertEqual(len(first["items"]), 3)
+        self.assertEqual(len(first["items"]), 4)
         with self.assertRaisesRegex(ContractError, "already been consumed"):
             self.submit("durable-run-002")
 
@@ -133,12 +133,17 @@ class DurableFactoryTest(unittest.TestCase):
         self.queue.start(second, now=NOW)
         self.queue.complete(second, receipt(), now=NOW + timedelta(seconds=2))
         third = self.queue.lease_next("worker-three", now=NOW + timedelta(seconds=2))
-        assert third
+        fourth = self.queue.lease_next("worker-four", now=NOW + timedelta(seconds=2))
+        assert third and fourth
         self.assertEqual(third["wave"], 2)
+        self.assertEqual(fourth["wave"], 2)
         self.queue.start(third, now=NOW + timedelta(seconds=2))
-        final = self.queue.complete(third, receipt(), now=NOW + timedelta(seconds=3))
+        pending = self.queue.complete(third, receipt(), now=NOW + timedelta(seconds=3))
+        self.assertEqual(pending["state"], "running")
+        self.queue.start(fourth, now=NOW + timedelta(seconds=3))
+        final = self.queue.complete(fourth, receipt(), now=NOW + timedelta(seconds=4))
         self.assertEqual(final["state"], "passed")
-        self.assertIsNone(self.queue.lease_next("worker-four", now=NOW + timedelta(seconds=4)))
+        self.assertIsNone(self.queue.lease_next("worker-five", now=NOW + timedelta(seconds=5)))
 
     def test_retries_backoff_dead_letter_and_block_descendants(self) -> None:
         plan = json.loads(json.dumps(self.plan))

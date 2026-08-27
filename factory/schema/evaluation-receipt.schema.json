@@ -5,19 +5,20 @@
   "type": "object",
   "additionalProperties": false,
   "required": [
-    "schema_version", "receipt_type", "evaluation_id", "evaluation_class",
+    "schema_version", "receipt_type", "evaluation_id", "evaluation_class", "workload_id",
     "catalog_sha256", "catalog_validation_sha256", "planned_cases", "completed_cases",
     "cases", "categories", "mutation_cases", "clean_cases",
     "baselines_rejected", "autonomously_repaired", "repair_rate",
     "correct_no_changes", "correct_no_change_rate",
     "minimum_repair_rate", "false_acceptances", "status", "results", "totals",
-    "stopped_reason", "policy", "quality_gate", "sealed_binding", "limitations", "content_sha256"
+    "stopped_reason", "resume_count", "policy", "quality_gate", "sealed_binding", "limitations", "content_sha256"
   ],
   "properties": {
     "schema_version": {"const": "2.0"},
     "receipt_type": {"const": "lightyear-model-workcell-evaluation"},
     "evaluation_id": {"type": "string"},
     "evaluation_class": {"enum": ["public-calibration", "sealed-holdout"]},
+    "workload_id": {"enum": ["INTCALC", "POSTTRAN", "CREASTMT", "ACCTPL1"]},
     "catalog_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
     "catalog_validation_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
     "planned_cases": {"type": "integer", "minimum": 1},
@@ -35,6 +36,7 @@
     "false_acceptances": {"type": "integer", "minimum": 0},
     "status": {"enum": ["passed", "failed", "stopped"]},
     "stopped_reason": {"type": ["object", "null"]},
+    "resume_count": {"type": "integer", "minimum": 0},
     "policy": {"type": "object"},
     "quality_gate": {"type": "object"},
     "sealed_binding": {"type": ["object", "null"]},

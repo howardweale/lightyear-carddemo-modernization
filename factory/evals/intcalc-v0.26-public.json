@@ -1,0 +1,18 @@
+{
+  "schema_version": "1.0",
+  "id": "lightyear-intcalc-v0.26-public-calibration",
+  "evaluation_class": "public-calibration",
+  "workload_id": "INTCALC",
+  "description": "Bounded INTCALC repair and accept-unchanged calibration for MS #26. It is not a sealed holdout.",
+  "minimum_repair_rate": 1.0,
+  "target_path": "factory/benchmarks/intcalc_candidate.py",
+  "cases": [
+    {"id":"rounding","category":"decimal-semantics","before":"ROUNDING = \"down\"","after":"ROUNDING = \"half-up\""},
+    {"id":"divisor","category":"interest-policy","before":"MONTHS_PERCENT = 1200","after":"MONTHS_PERCENT = 100"},
+    {"id":"fallback","category":"disclosure-policy","before":"DEFAULT_GROUP = \"DEFAULT\"","after":"DEFAULT_GROUP = \"STANDARD\""},
+    {"id":"zero-rate","category":"transaction-policy","before":"SKIP_ZERO_RATE = True","after":"SKIP_ZERO_RATE = False"},
+    {"id":"final-account","category":"boundary-behavior","before":"PRESERVE_FINAL_ACCOUNT = True","after":"PRESERVE_FINAL_ACCOUNT = False"},
+    {"id":"clean-1","category":"clean-baseline","expectation":"accept-unchanged"},
+    {"id":"clean-2","category":"clean-baseline","expectation":"accept-unchanged"}
+  ]
+}

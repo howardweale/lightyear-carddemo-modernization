@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schema/portfolio-checkpoint-1.0.json",
+  "title": "LIGHTYEAR portfolio recovery checkpoint",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "receipt_type", "portfolio_id", "plan_sha256",
+    "admission_sha256", "started_at", "status", "resume_count", "cells",
+    "content_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "receipt_type": {"const": "lightyear-modernization-portfolio-checkpoint"},
+    "portfolio_id": {"type": "string"},
+    "plan_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "admission_sha256": {"type": ["string", "null"]},
+    "started_at": {"type": "string", "format": "date-time"},
+    "status": {"enum": ["running", "blocked", "completed"]},
+    "resume_count": {"type": "integer", "minimum": 0},
+    "cells": {"type": "array"},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

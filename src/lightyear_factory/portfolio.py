@@ -413,26 +413,83 @@ class PortfolioRunner:
         orders: dict[str, WorkOrder],
         output_root: Path,
         admission: dict[str, Any] | None = None,
+        *,
+        resume: bool = False,
     ) -> dict[str, Any]:
+        if plan.get("content_sha256") != canonical_hash(plan, {"content_sha256"}):
+            raise ContractError("Portfolio plan content hash is invalid")
         if plan.get("approval", {}).get("required"):
             if not admission or admission.get("status") != "passed":
                 raise ContractError("Human-approved portfolio admission is required")
             if admission.get("plan_sha256") != plan.get("content_sha256"):
                 raise ContractError("Portfolio admission targets a different plan")
         output_root.mkdir(parents=True, exist_ok=True)
-        started = datetime.now(timezone.utc)
-        cell_receipts: list[dict[str, Any]] = []
+        checkpoint_path = output_root / "checkpoint.json"
+        receipt_path = output_root / "receipt.json"
+        admission_sha256 = admission.get("content_sha256") if admission else None
+        resume_count = 0
+        if resume:
+            if not checkpoint_path.is_file():
+                raise ContractError("Portfolio resume requires checkpoint.json")
+            checkpoint = json.loads(checkpoint_path.read_text(encoding="utf-8"))
+            if checkpoint.get("content_sha256") != canonical_hash(
+                checkpoint, {"content_sha256"}
+            ):
+                raise ContractError("Portfolio checkpoint content hash is invalid")
+            if checkpoint.get("plan_sha256") != plan.get("content_sha256"):
+                raise ContractError("Portfolio checkpoint targets a different plan")
+            if checkpoint.get("admission_sha256") != admission_sha256:
+                raise ContractError("Portfolio checkpoint targets a different admission")
+            started_at = str(checkpoint.get("started_at"))
+            cell_receipts = list(checkpoint.get("cells", []))
+            resume_count = int(checkpoint.get("resume_count", 0)) + 1
+        else:
+            if checkpoint_path.exists() or receipt_path.exists():
+                raise ContractError("Portfolio output already exists; use resume or a new root")
+            started_at = datetime.now(timezone.utc).isoformat()
+            cell_receipts = []
+
+        def write_checkpoint(status: str) -> dict[str, Any]:
+            checkpoint_payload = {
+                "schema_version": PORTFOLIO_SCHEMA_VERSION,
+                "receipt_type": "lightyear-modernization-portfolio-checkpoint",
+                "portfolio_id": plan["portfolio_id"],
+                "plan_sha256": plan["content_sha256"],
+                "admission_sha256": admission_sha256,
+                "started_at": started_at,
+                "status": status,
+                "resume_count": resume_count,
+                "cells": sorted(
+                    cell_receipts, key=lambda item: (item["wave"], item["work_order_id"])
+                ),
+            }
+            checkpoint_payload["content_sha256"] = canonical_hash(checkpoint_payload)
+            write_json(checkpoint_payload, checkpoint_path)
+            return checkpoint_payload
+
+        write_checkpoint("running")
         blocked = False
         for wave in plan.get("waves", []):
             if blocked:
                 break
-            ids = list(wave["work_order_ids"])
+            passed_ids = {
+                item["work_order_id"]
+                for item in cell_receipts
+                if item.get("status") == "passed"
+            }
+            ids = [item for item in wave["work_order_ids"] if item not in passed_ids]
+            if not ids:
+                continue
+            cell_receipts = [
+                item for item in cell_receipts if item["work_order_id"] not in set(ids)
+            ]
             with ThreadPoolExecutor(max_workers=max(1, len(ids))) as executor:
                 futures = {
                     executor.submit(
                         self.execute_cell,
                         orders[order_id],
-                        f"portfolio-{plan['portfolio_id'].split(':')[-1]}-w{wave['wave']}-{index + 1}",
+                        f"portfolio-{plan['portfolio_id'].split(':')[-1]}-w{wave['wave']}-{index + 1}"
+                        + (f"-retry-{resume_count}" if resume_count else ""),
                     ): order_id
                     for index, order_id in enumerate(ids)
                 }
@@ -456,19 +513,35 @@ class PortfolioRunner:
                 rows.sort(key=lambda item: item["work_order_id"])
                 blocked = any(item["status"] != "passed" for item in rows)
                 cell_receipts.extend({"wave": wave["wave"], **item} for item in rows)
+                write_checkpoint("blocked" if blocked else "running")
+        completed_ids = {
+            item["work_order_id"]
+            for item in cell_receipts
+            if item.get("status") == "passed"
+        }
+        waves_completed = sum(
+            set(wave["work_order_ids"]) <= completed_ids for wave in plan.get("waves", [])
+        )
+        final_checkpoint = write_checkpoint(
+            "completed" if completed_ids == set(orders) else "blocked"
+        )
         receipt = {
             "schema_version": PORTFOLIO_SCHEMA_VERSION,
             "receipt_type": "lightyear-modernization-portfolio-run",
             "portfolio_id": plan["portfolio_id"],
             "plan_sha256": plan["content_sha256"],
-            "admission_sha256": admission.get("content_sha256") if admission else None,
-            "started_at": started.isoformat(),
+            "admission_sha256": admission_sha256,
+            "started_at": started_at,
             "completed_at": datetime.now(timezone.utc).isoformat(),
-            "status": "blocked" if blocked or len(cell_receipts) != len(orders) else "passed",
-            "waves_completed": len({item["wave"] for item in cell_receipts}),
-            "cells": cell_receipts,
+            "status": "passed" if completed_ids == set(orders) else "blocked",
+            "waves_completed": waves_completed,
+            "resume_count": resume_count,
+            "checkpoint_sha256": final_checkpoint["content_sha256"],
+            "cells": sorted(
+                cell_receipts, key=lambda item: (item["wave"], item["work_order_id"])
+            ),
             "limitations": ["Cell acceptance does not substitute for live z/OS equivalence."],
         }
         receipt["content_sha256"] = canonical_hash(receipt)
-        write_json(receipt, output_root / "receipt.json")
+        write_json(receipt, receipt_path)
         return receipt

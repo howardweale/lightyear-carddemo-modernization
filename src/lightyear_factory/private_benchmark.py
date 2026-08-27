@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-import importlib.util
 import os
 import sys
+import types
 from decimal import Decimal
 from pathlib import Path
 
@@ -12,11 +12,9 @@ def _candidate() -> object:
     path = workspace / "factory" / "benchmarks" / "intcalc_candidate.py"
     if not workspace.is_dir() or workspace not in path.resolve().parents or not path.is_file():
         raise RuntimeError("Factory candidate is unavailable")
-    spec = importlib.util.spec_from_file_location("lightyear_factory_candidate", path)
-    if spec is None or spec.loader is None:
-        raise RuntimeError("Factory candidate cannot be loaded")
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
+    module = types.ModuleType("lightyear_factory_candidate")
+    module.__file__ = str(path)
+    exec(compile(path.read_text(encoding="utf-8"), str(path), "exec"), module.__dict__)
     return module
 
 

@@ -9,6 +9,7 @@
     "schema_version": {"const": "1.0"},
     "id": {"type": "string", "minLength": 1},
     "evaluation_class": {"enum": ["public-calibration", "sealed-holdout"]},
+    "workload_id": {"enum": ["INTCALC", "POSTTRAN", "CREASTMT", "ACCTPL1"]},
     "description": {"type": "string"},
     "minimum_repair_rate": {"type": "number", "minimum": 0, "maximum": 1},
     "target_path": {"type": "string", "minLength": 1},

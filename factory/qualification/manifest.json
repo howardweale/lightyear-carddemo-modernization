@@ -1,0 +1,16 @@
+{
+  "schema_version": "1.0",
+  "id": "lightyear:carddemo:multi-workload:v0.26",
+  "workloads": ["INTCALC", "POSTTRAN", "CREASTMT", "ACCTPL1"],
+  "policy": {
+    "minimum_runs_per_workload": 2,
+    "minimum_repair_rate": 0.8,
+    "minimum_correct_no_change_rate": 0.95,
+    "minimum_first_attempt_repair_rate": 0.6,
+    "maximum_false_acceptances": 0,
+    "maximum_false_rejections": 0,
+    "maximum_average_latency_ms": 900000,
+    "maximum_average_input_tokens": 75000,
+    "maximum_total_cost_usd": 120.0
+  }
+}

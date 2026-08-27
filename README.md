@@ -1,6 +1,34 @@
 # FactoryDark.ai CardDemo Modernization Factory
 
-Release: **v0.25.1 — squash-safe reproducible build verification**
+Release: **v0.26.0 — multi-workload factory qualification**
+
+v0.26 expands the governed model work cell from one INTCALC calibration surface into a bounded
+four-workload qualification plane: `INTCALC`, `POSTTRAN`, `CREASTMT`, and the mixed PL/I–COBOL–Db2
+`ACCTPL1` cell. Four public catalogs exercise 23 injected defects and eight clean cases through
+workload-specific private gates. The deterministic reference worker repairs all published defects,
+preserves every clean candidate, and records zero false acceptances.
+
+Actual model promotion is stricter. It requires at least two distinct, independently sealed,
+model-backed runs per workload and a passed four-cell portfolio execution. The qualification
+receipt binds exact evaluation, run, model-call, prompt/context manifest, portfolio plan, approval,
+checkpoint, and completion identities while measuring repair, correct-no-change, first-attempt,
+false-acceptance, false-rejection, escalation, retry, resume, latency, token, and cost behavior. A
+single critical false acceptance blocks promotion.
+
+The portfolio now detects cross-workload conflicts, dispatches safe cells in parallel waves,
+requires human approval for high-risk cells, and resumes without rerunning cells that already
+passed. No model credential or independently retained holdout is committed, so the repository
+proves the qualification mechanism but does not claim that a particular model is qualified.
+
+```bash
+./factory-qualification.sh verify
+./portfolio-factory.sh verify
+```
+
+Model qualification remains distinct from native z/OS equivalence and production authorization;
+`mainframe_equivalent` and `production_ready` remain false.
+
+Previous milestone: **v0.25.1 — squash-safe reproducible build verification**
 
 v0.25 closes the source-only delivery gap in the bounded mixed PL/I modernization cell. A
 JDK-17-only build now compiles `MixedPliAuthorizationService`, creates a byte-reproducible
@@ -30,7 +58,7 @@ This unlocks the bounded claim that the delivered Java artifact was compiled, te
 cryptographically bound to its evidence. It does not prove execution or equivalence of an IBM
 Enterprise PL/I load module; `mainframe_equivalent` and `production_ready` remain false.
 
-Previous milestone: **v0.24.0 — PL/I discovery coverage and conformance lab**
+Earlier milestone: **v0.24.0 — PL/I discovery coverage and conformance lab**
 
 v0.24 replaces the PL/I pack's line-oriented pattern boundary with a tokenized, statement-aware
 front end for a published supported subset. A synthetic 27-case corpus exercises 22 construct

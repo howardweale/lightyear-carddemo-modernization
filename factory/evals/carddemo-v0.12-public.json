@@ -2,6 +2,7 @@
   "schema_version": "1.0",
   "id": "lightyear-carddemo-v0.12-public-calibration",
   "evaluation_class": "public-calibration",
+  "workload_id": "INTCALC",
   "description": "Thirty-six isolated CardDemo modernization faults. This suite calibrates mechanics and model behavior; it is not a secret holdout or mainframe equivalence proof.",
   "minimum_repair_rate": 0.7,
   "target_path": "factory/benchmarks/intcalc_candidate.py",

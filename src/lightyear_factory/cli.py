@@ -33,6 +33,7 @@ from .portfolio import (
     sign_portfolio_approval,
     verify_portfolio_approval,
 )
+from .qualification import QualificationManifest, qualify_factory
 from .store import FactoryRunStore
 
 from lightyear_execution.admission import AdmissionNonceStore, verify_work_order
@@ -143,6 +144,17 @@ def build_parser() -> argparse.ArgumentParser:
     )
     compare_eval.add_argument("--receipt", type=Path, action="append", required=True)
 
+    qualify = subparsers.add_parser(
+        "qualify", help="Issue a safety-first four-workload factory qualification receipt"
+    )
+    qualify.add_argument(
+        "--manifest", type=Path, default=Path("factory/qualification/manifest.json")
+    )
+    qualify.add_argument("--evaluation-receipt", type=Path, action="append", required=True)
+    qualify.add_argument("--portfolio-plan", type=Path, required=True)
+    qualify.add_argument("--portfolio-run", type=Path, required=True)
+    qualify.add_argument("--output", type=Path, required=True)
+
     inspect = subparsers.add_parser("inspect", help="Inspect a factory run receipt and ledger")
     inspect.add_argument("--runs-root", type=Path, default=Path("work/factory-runs"))
     inspect.add_argument("--run-id", required=True)
@@ -232,6 +244,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--evidence-pack", type=Path, default=Path("knowledge/evidence/source.pack.json.gz")
     )
     portfolio_run.add_argument("--output-root", type=Path, required=True)
+    portfolio_run.add_argument("--resume", action="store_true")
 
     durable_init = subparsers.add_parser(
         "durable-init", help="Initialize the transactional durable control plane"
@@ -475,7 +488,7 @@ def main(argv: list[str] | None = None) -> int:
             ).run(order, run_id)
 
         result = PortfolioRunner(execute_cell).run(
-            expected_plan, orders, args.output_root, admission
+            expected_plan, orders, args.output_root, admission, resume=args.resume
         )
         print(json.dumps(result, indent=2, sort_keys=True))
         return 0 if result["status"] == "passed" else 1
@@ -521,6 +534,16 @@ def main(argv: list[str] | None = None) -> int:
         )
         print(json.dumps(result, indent=2, sort_keys=True))
         return 0 if result["status"] == "passed" else 1
+    if args.command == "qualify":
+        result = qualify_factory(
+            QualificationManifest.load(args.manifest),
+            args.evaluation_receipt,
+            args.portfolio_plan,
+            args.portfolio_run,
+            args.output,
+        )
+        print(json.dumps(result, indent=2, sort_keys=True))
+        return 0 if result["status"] == "qualified" else 1
     if args.command == "inspect":
         result = FactoryRunStore(args.runs_root).run(args.run_id, args.verifier)
         print(json.dumps(result, indent=2, sort_keys=True))

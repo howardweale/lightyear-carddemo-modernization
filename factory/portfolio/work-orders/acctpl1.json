@@ -1,0 +1,32 @@
+{
+  "schema_version": "1.0",
+  "id": "carddemo:acctpl1:portfolio-cell",
+  "title": "ACCTPL1 mixed-language modernization cell",
+  "goal": "Verify the bounded ACCTPL1 PL/I-Cobol-Db2 policy surface.",
+  "non_goals": ["Do not claim native PL/I compilation or live z/OS equivalence."],
+  "scope": {
+    "allowed_paths": ["factory/benchmarks/pli_authorization_candidate.py"],
+    "graph_node_ids": ["legacy:cobol-program:CBACT04C", "legacy:db2-table:CARDDEMO.AUTHFRDS"]
+  },
+  "acceptance": {
+    "baseline_first": true,
+    "max_attempts": 3,
+    "gates": [{
+      "id": "private-acctpl1-policy",
+      "command": ["python3", "-m", "lightyear_factory.pli_private"],
+      "timeout_seconds": 30,
+      "expose_output_to_builder": false
+    }]
+  },
+  "policy": {
+    "audience": "implementer", "allow_network": false, "max_files_changed": 1,
+    "max_patch_bytes": 8192, "max_changed_lines": 100, "max_context_bytes": 160000,
+    "max_file_bytes": 250000, "max_model_calls": 10, "max_model_input_bytes": 2000000,
+    "max_model_output_bytes": 350000, "max_model_tokens": 250000,
+    "max_model_cost_usd": 20.0, "max_elapsed_seconds": 1200
+  },
+  "metadata": {
+    "owner": "LIGHTYEAR demo", "risk": "high", "mainframe_runtime_required": false,
+    "extension_program_id": "extension:pli-program:ACCTPL1"
+  }
+}

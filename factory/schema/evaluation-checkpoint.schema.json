@@ -8,7 +8,7 @@
     "schema_version", "receipt_type", "evaluation_id", "catalog_sha256",
     "catalog_validation_sha256", "status", "completed_case_refs", "results",
     "totals", "policy", "quality_policy_sha256", "sealed_binding_sha256",
-    "stopped_reason", "content_sha256"
+    "stopped_reason", "resume_count", "content_sha256"
   ],
   "properties": {
     "schema_version": {"const": "1.1"},
@@ -25,6 +25,7 @@
     "quality_policy_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
     "sealed_binding_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"},
     "stopped_reason": {"type": ["object", "null"]},
+    "resume_count": {"type": "integer", "minimum": 0},
     "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
   }
 }

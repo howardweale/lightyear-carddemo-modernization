@@ -18,6 +18,7 @@ from .orchestrator import FactoryOrchestrator
 from .providers import ProviderError
 from .quality import QualityPolicy, quality_scorecard
 from .workspace import IsolatedWorkspace
+from .workloads import workload_profile
 from lightyear_knowledge_graph.evidence_pack import load_evidence_pack
 
 
@@ -63,6 +64,7 @@ def normalize_evaluation_catalog(payload: dict[str, Any]) -> dict[str, Any]:
     if payload.get("evaluation_class") not in EVALUATION_CLASSES:
         raise ContractError("evaluation_class must be public-calibration or sealed-holdout")
     target = safe_relative_path(str(payload.get("target_path", "")))
+    workload_profile(payload.get("workload_id"), target)
     cases = payload.get("cases")
     if not isinstance(cases, list) or not cases:
         raise ContractError("Evaluation catalog requires at least one case")
@@ -102,6 +104,7 @@ def load_evaluation_catalog(path: Path) -> dict[str, Any]:
 
 
 def validate_evaluation_catalog(project_root: Path, catalog: dict[str, Any]) -> dict[str, Any]:
+    profile = workload_profile(catalog.get("workload_id"), catalog["target_path"])
     target = project_root.resolve() / catalog["target_path"]
     if not target.is_file():
         raise ContractError(f"Evaluation target does not exist: {catalog['target_path']}")
@@ -125,6 +128,8 @@ def validate_evaluation_catalog(project_root: Path, catalog: dict[str, Any]) -> 
             sorted(Counter(item["expectation"] for item in catalog["cases"]).items())
         ),
         "target_path": catalog["target_path"],
+        "workload_id": profile.workload_id,
+        "workload_profile_sha256": canonical_hash(profile.to_dict()),
         "minimum_repair_rate": minimum,
         "status": "passed",
     }
@@ -140,6 +145,7 @@ def evaluation_work_order(
     *,
     evaluation_class: str = "public-calibration",
     case_ref: str | None = None,
+    workload_id: str = "INTCALC",
 ) -> WorkOrder:
     policy = policy or EvaluationPolicy()
     remaining = remaining or {
@@ -149,10 +155,11 @@ def evaluation_work_order(
     }
     sealed = evaluation_class == "sealed-holdout"
     public_id = case_ref or case["id"]
+    profile = workload_profile(workload_id, target_path)
     return WorkOrder.from_dict(
         {
             "schema_version": "1.0",
-            "id": f"evaluation:carddemo:{public_id}",
+            "id": f"evaluation:carddemo:{profile.workload_id.lower()}:{public_id}",
             "title": (
                 "Evaluate an unfamiliar isolated CardDemo candidate"
                 if sealed
@@ -168,14 +175,14 @@ def evaluation_work_order(
             ],
             "scope": {
                 "allowed_paths": [target_path],
-                "graph_node_ids": ["workload:carddemo-intcalc"],
+                "graph_node_ids": list(profile.graph_node_ids),
             },
             "acceptance": {
                 "baseline_first": True,
                 "max_attempts": 3,
                 "gates": [{
-                    "id": "private-carddemo-policy",
-                    "command": [sys.executable, "-m", "lightyear_factory.private_benchmark"],
+                    "id": profile.gate_id,
+                    "command": [sys.executable, "-m", profile.gate_module],
                     "timeout_seconds": 30,
                     "expose_output_to_builder": False,
                 }],
@@ -200,6 +207,7 @@ def evaluation_work_order(
             "metadata": {
                 "evaluation_case_ref": public_id,
                 "evaluation_class": evaluation_class,
+                "workload_id": profile.workload_id,
                 **({} if sealed else {
                     "evaluation_case_id": case["id"],
                     "evaluation_category": case["category"],
@@ -245,6 +253,7 @@ def run_model_evaluation(
     checkpoint_path = output_root / "evaluation.checkpoint.json"
     receipt_path = output_root / "evaluation.receipt.json"
     results: list[dict[str, Any]] = []
+    resume_count = 0
     if resume:
         if not checkpoint_path.is_file():
             raise ContractError("Resume requested but evaluation.checkpoint.json is missing")
@@ -260,6 +269,7 @@ def run_model_evaluation(
         ):
             raise ContractError("Resume sealed binding does not match the evaluation checkpoint")
         results = list(checkpoint.get("results", []))
+        resume_count = int(checkpoint.get("resume_count", 0)) + 1
     elif checkpoint_path.exists() or receipt_path.exists():
         raise ContractError("Evaluation output already exists; use --resume or a new output root")
 
@@ -280,7 +290,7 @@ def run_model_evaluation(
     stopped_reason: dict[str, Any] | None = None
     _write_checkpoint(
         checkpoint_path, catalog, catalog_sha256, validation, policy, quality_policy,
-        sealed_binding, results, "running", None
+        sealed_binding, results, "running", None, resume_count
     )
     evidence_pack = load_evidence_pack(
         project_root / "knowledge" / "evidence" / "source.pack.json.gz"
@@ -313,6 +323,9 @@ def run_model_evaluation(
             remaining,
             evaluation_class=catalog["evaluation_class"],
             case_ref=case_ref,
+            workload_id=workload_profile(
+                catalog.get("workload_id"), catalog["target_path"]
+            ).workload_id,
         )
 
         def prepare(
@@ -404,6 +417,7 @@ def run_model_evaluation(
             "input_tokens": intelligence.get("input_tokens", 0),
             "output_tokens": intelligence.get("output_tokens", 0),
             "estimated_cost_usd": intelligence.get("estimated_cost_usd", 0.0),
+            "elapsed_ms": intelligence.get("elapsed_ms", 0),
             "cost_estimate_available": intelligence.get("cost_estimate_available", False),
             "receipt_sha256": receipt["content_sha256"],
         }
@@ -422,6 +436,7 @@ def run_model_evaluation(
             results,
             "stopped" if stopped_reason else "running",
             stopped_reason,
+            resume_count,
         )
         if stopped_reason:
             break
@@ -431,7 +446,7 @@ def run_model_evaluation(
     status = "stopped" if stopped_reason else _evaluation_status(catalog, results)
     payload = _evaluation_receipt(
         catalog, catalog_sha256, validation, policy, quality_policy, sealed_binding,
-        results, status, stopped_reason
+        results, status, stopped_reason, resume_count
     )
     write_json(payload, receipt_path)
     _write_checkpoint(
@@ -445,6 +460,7 @@ def run_model_evaluation(
         results,
         "completed" if status in {"passed", "failed"} else "stopped",
         stopped_reason,
+        resume_count,
     )
     return payload
 
@@ -576,6 +592,7 @@ def _evaluation_receipt(
     results: list[dict[str, Any]],
     status: str,
     stopped_reason: dict[str, Any] | None,
+    resume_count: int,
 ) -> dict[str, Any]:
     mutation = [item for item in results if item["expectation"] == "reject-and-repair"]
     clean = [item for item in results if item["expectation"] == "accept-unchanged"]
@@ -595,6 +612,9 @@ def _evaluation_receipt(
             if catalog["evaluation_class"] == "sealed-holdout" else catalog["id"]
         ),
         "evaluation_class": catalog["evaluation_class"],
+        "workload_id": workload_profile(
+            catalog.get("workload_id"), catalog["target_path"]
+        ).workload_id,
         "catalog_sha256": catalog_sha256,
         "catalog_validation_sha256": validation["content_sha256"],
         "planned_cases": len(catalog["cases"]),
@@ -615,6 +635,7 @@ def _evaluation_receipt(
         "false_acceptances": false_acceptances,
         "status": status,
         "stopped_reason": stopped_reason,
+        "resume_count": resume_count,
         "policy": policy.to_dict(),
         "quality_gate": quality,
         "sealed_binding": sealed_binding,
@@ -642,6 +663,7 @@ def _write_checkpoint(
     results: list[dict[str, Any]],
     status: str,
     stopped_reason: dict[str, Any] | None,
+    resume_count: int,
 ) -> None:
     payload = {
         "schema_version": "1.1",
@@ -663,6 +685,7 @@ def _write_checkpoint(
         "quality_policy_sha256": quality_policy.content_sha256,
         "sealed_binding_sha256": sealed_binding.get("content_sha256") if sealed_binding else None,
         "stopped_reason": stopped_reason,
+        "resume_count": resume_count,
     }
     payload["content_sha256"] = canonical_hash(payload)
     path.parent.mkdir(parents=True, exist_ok=True)

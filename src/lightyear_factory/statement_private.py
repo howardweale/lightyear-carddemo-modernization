@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-import importlib.util
 import os
 import sys
+import types
 from pathlib import Path
 
 
@@ -11,11 +11,9 @@ def main() -> int:
     path = workspace / "factory/benchmarks/statement_candidate.py"
     if not workspace.is_dir() or workspace not in path.resolve().parents or not path.is_file():
         raise RuntimeError("Statement candidate is unavailable")
-    spec = importlib.util.spec_from_file_location("statement_candidate", path)
-    if spec is None or spec.loader is None:
-        raise RuntimeError("Statement candidate cannot be loaded")
-    candidate = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(candidate)
+    candidate = types.ModuleType("statement_candidate")
+    candidate.__file__ = str(path)
+    exec(compile(path.read_text(encoding="utf-8"), str(path), "exec"), candidate.__dict__)
     checks = (
         candidate.STATEMENT_JOB == "CREASTMT",
         candidate.STATEMENT_PROGRAM == "CBSTM03A",

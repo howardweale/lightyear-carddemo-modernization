@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schema/factory/qualification-manifest-1.0.json",
+  "title": "LIGHTYEAR multi-workload qualification manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "id", "workloads", "policy"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "id": {"type": "string", "minLength": 1},
+    "workloads": {
+      "type": "array", "minItems": 4, "maxItems": 4, "uniqueItems": true,
+      "items": {"enum": ["INTCALC", "POSTTRAN", "CREASTMT", "ACCTPL1"]}
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "minimum_runs_per_workload", "minimum_repair_rate",
+        "minimum_correct_no_change_rate", "minimum_first_attempt_repair_rate",
+        "maximum_false_acceptances", "maximum_false_rejections",
+        "maximum_average_latency_ms", "maximum_average_input_tokens",
+        "maximum_total_cost_usd"
+      ],
+      "properties": {
+        "minimum_runs_per_workload": {"type": "integer", "minimum": 2},
+        "minimum_repair_rate": {"type": "number", "minimum": 0, "maximum": 1},
+        "minimum_correct_no_change_rate": {"type": "number", "minimum": 0, "maximum": 1},
+        "minimum_first_attempt_repair_rate": {"type": "number", "minimum": 0, "maximum": 1},
+        "maximum_false_acceptances": {"const": 0},
+        "maximum_false_rejections": {"type": "integer", "minimum": 0},
+        "maximum_average_latency_ms": {"type": "integer", "minimum": 0},
+        "maximum_average_input_tokens": {"type": "integer", "minimum": 0},
+        "maximum_total_cost_usd": {"type": "number", "exclusiveMinimum": 0}
+      }
+    }
+  }
+}

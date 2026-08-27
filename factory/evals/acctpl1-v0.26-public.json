@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0",
+  "id": "lightyear-acctpl1-v0.26-public-calibration",
+  "evaluation_class": "public-calibration",
+  "workload_id": "ACCTPL1",
+  "description": "Bounded mixed PL/I-Cobol-Db2 repair and accept-unchanged calibration for MS #26. It is not native z/OS proof.",
+  "minimum_repair_rate": 1.0,
+  "target_path": "factory/benchmarks/pli_authorization_candidate.py",
+  "cases": [
+    {"id":"fraud-score","category":"risk-policy","before":"\"fraud_score\": \"100.00\"","after":"\"fraud_score\": \"10.00\""},
+    {"id":"divisor","category":"decimal-semantics","before":"\"divisor\": \"100\"","after":"\"divisor\": \"10\""},
+    {"id":"db-assignment","category":"db2-boundary","before":"\"overwrite_db_fields\": True","after":"\"overwrite_db_fields\": False"},
+    {"id":"cobol-target","category":"mixed-language-call","before":"\"cobol_program\": \"CBACT04C\"","after":"\"cobol_program\": \"CBACT04X\""},
+    {"id":"parm-length","category":"mixed-language-call","before":"\"parm_length\": 10","after":"\"parm_length\": 8"},
+    {"id":"call-on-error","category":"error-boundary","before":"\"call_on_error\": False","after":"\"call_on_error\": True"},
+    {"id":"write-on-error","category":"error-boundary","before":"\"write_on_error\": False","after":"\"write_on_error\": True"},
+    {"id":"clean-1","category":"clean-baseline","expectation":"accept-unchanged"},
+    {"id":"clean-2","category":"clean-baseline","expectation":"accept-unchanged"}
+  ]
+}

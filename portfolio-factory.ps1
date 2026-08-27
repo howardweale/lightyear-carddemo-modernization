@@ -1,5 +1,5 @@
 param(
-  [ValidateSet("plan", "sign", "run", "verify")][string]$Command = "plan",
+  [ValidateSet("plan", "sign", "run", "resume", "verify")][string]$Command = "plan",
   [string]$Manifest = "$PSScriptRoot/factory/portfolio/carddemo-portfolio.json",
   [string]$Plan = "$PSScriptRoot/work/portfolio/carddemo-plan.json",
   [string]$Approval = "$PSScriptRoot/work/portfolio/human-approval.json",
@@ -12,7 +12,11 @@ elseif ($Command -eq "sign") {
   $approver = if ($env:LIGHTYEAR_PORTFOLIO_APPROVER) { $env:LIGHTYEAR_PORTFOLIO_APPROVER } else { "local-human-operator" }
   Invoke-FactoryDarkPython -m lightyear_factory portfolio-sign --plan $Plan --output $Approval --approver $approver
 }
-elseif ($Command -eq "run") { Invoke-FactoryDarkPython -m lightyear_factory portfolio-run --project-root $PSScriptRoot --manifest $Manifest --plan $Plan --approval $Approval --output-root $Output }
+elseif ($Command -eq "run" -or $Command -eq "resume") {
+  $Resume = @()
+  if ($Command -eq "resume") { $Resume = @("--resume") }
+  Invoke-FactoryDarkPython -m lightyear_factory portfolio-run --project-root $PSScriptRoot --manifest $Manifest --plan $Plan --approval $Approval --output-root $Output @Resume
+}
 else {
   $verificationPlan = "$PSScriptRoot/work/portfolio-verify/carddemo-plan.json"
   Invoke-FactoryDarkPython -m lightyear_factory portfolio-plan --project-root $PSScriptRoot --manifest $Manifest --output $verificationPlan | Out-Null

@@ -8,6 +8,18 @@ mapping, decimal behavior, interest and disclosure policy, transaction contracts
 dataset/JCL names, and the final-account boundary. Each case is applied to a fresh workspace and
 must fail the private baseline before a repair can count.
 
+v0.26 adds four smaller workload-bound catalogs for repeatable portfolio qualification mechanics:
+
+| Catalog | Workload | Candidate surface |
+|---|---|---|
+| `intcalc-v0.26-public.json` | INTCALC | interest, disclosure, file and record policy |
+| `posttran-v0.26-public.json` | POSTTRAN | posting amounts, rejection and record contracts |
+| `creastmt-v0.26-public.json` | CREASTMT | statement keys, rendering and output contracts |
+| `acctpl1-v0.26-public.json` | ACCTPL1 | Db2 overwrite, decimal risk and COBOL-call contract |
+
+These catalogs verify private gates and repair plumbing. They cannot be relabelled or counted as
+the independently retained sealed evidence required by `factory/qualification/manifest.json`.
+
 ## Evidence classes
 
 | Class | Location | Valid claim |

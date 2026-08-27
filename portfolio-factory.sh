@@ -21,12 +21,17 @@ case "$command" in
       --plan "$plan" --output "${4:-$project_dir/work/portfolio/human-approval.json}" \
       --approver "${LIGHTYEAR_PORTFOLIO_APPROVER:-local-human-operator}"
     ;;
-  run)
+  run|resume)
     : "${LIGHTYEAR_PORTFOLIO_APPROVAL_KEY:?Set LIGHTYEAR_PORTFOLIO_APPROVAL_KEY first}"
+    resume_args=()
+    if [[ "$command" == "resume" ]]; then
+      resume_args+=(--resume)
+    fi
     "$LIGHTYEAR_PYTHON_BIN" -m lightyear_factory portfolio-run \
       --project-root "$project_dir" --manifest "$manifest" --plan "$plan" \
       --approval "${4:-$project_dir/work/portfolio/human-approval.json}" \
-      --output-root "${5:-$project_dir/work/portfolio/carddemo-run}"
+      --output-root "${5:-$project_dir/work/portfolio/carddemo-run}" \
+      "${resume_args[@]}"
     ;;
   verify)
     output="$project_dir/work/portfolio-verify/carddemo-plan.json"
@@ -35,7 +40,7 @@ case "$command" in
     "$LIGHTYEAR_PYTHON_BIN" -m lightyear_factory portfolio-validate --plan "$output"
     ;;
   *)
-    echo "Usage: ./portfolio-factory.sh [plan|sign|run|verify] [manifest] [plan] [approval] [output]" >&2
+    echo "Usage: ./portfolio-factory.sh [plan|sign|run|resume|verify] [manifest] [plan] [approval] [output]" >&2
     exit 2
     ;;
 esac

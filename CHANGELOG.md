@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.26.0 — 2026-08-27
+
+- Added trusted workload profiles and public calibration catalogs for INTCALC, POSTTRAN,
+  CREASTMT, and the mixed PL/I–COBOL–Db2 ACCTPL1 cell.
+- Added workload-specific private gates and deterministic repairs covering 23 published mutations
+  plus eight clean accept-unchanged cases with zero false acceptance.
+- Added a content-addressed qualification manifest and safety-first aggregate receipt requiring at
+  least two distinct sealed model runs per workload.
+- Bound qualification to exact evaluation, factory-run, model-call, request-manifest, portfolio,
+  approval, checkpoint, latency, token, retry, resume, and cost evidence.
+- Made one critical false acceptance block promotion regardless of aggregate repair rate.
+- Expanded the portfolio to four work cells with graph/dependency conflict detection, two parallel
+  waves, high-risk approval barriers, and checkpointed recovery that does not repeat passed cells.
+- Added POSIX and PowerShell verification/qualification entry points and versioned JSON schemas.
+- Kept model qualification, production authorization, native z/OS equivalence, and general
+  workload coverage as separate claims; no model is qualified by committed public calibration.
+
 ## 0.25.1 — 2026-08-27
 
 - Made deterministic PL/I artifact verification survive a squash merge without weakening the

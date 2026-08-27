@@ -36,18 +36,18 @@ class PortfolioFactoryTest(unittest.TestCase):
         self.assertEqual(self.plan, repeated)
         self.assertEqual(self.plan["content_sha256"], canonical_hash(self.plan, {"content_sha256"}))
         self.assertEqual(self.plan["status"], "approval_required")
-        self.assertEqual(len(self.plan["orders"]), 3)
+        self.assertEqual(len(self.plan["orders"]), 4)
         self.assertEqual(
             self.plan["waves"][0]["work_order_ids"],
-            ["carddemo:intcalc:portfolio-cell", "carddemo:posttran:portfolio-cell"],
+            ["carddemo:acctpl1:portfolio-cell", "carddemo:posttran:portfolio-cell"],
         )
         self.assertEqual(
             self.plan["waves"][1]["work_order_ids"],
-            ["carddemo:create-statement:portfolio-cell"],
+            ["carddemo:create-statement:portfolio-cell", "carddemo:intcalc:portfolio-cell"],
         )
         self.assertEqual(
             self.plan["approval"]["required_order_ids"],
-            ["carddemo:posttran:portfolio-cell"],
+            ["carddemo:acctpl1:portfolio-cell", "carddemo:posttran:portfolio-cell"],
         )
         self.assertTrue(self.plan["graph_content_sha256"])
 
@@ -144,7 +144,7 @@ class PortfolioFactoryTest(unittest.TestCase):
             )
         self.assertEqual(receipt["status"], "passed")
         self.assertEqual(maximum, 2)
-        self.assertEqual(len(receipt["cells"]), 3)
+        self.assertEqual(len(receipt["cells"]), 4)
 
     def test_runner_fails_closed_without_approval_or_after_failed_wave(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -183,7 +183,7 @@ class PortfolioFactoryTest(unittest.TestCase):
         with self.assertRaisesRegex(ContractError, "unique"):
             PortfolioManifest.from_dict(payload)
         orders = load_portfolio_orders(self.manifest, ROOT)
-        self.assertEqual(len(orders), 3)
+        self.assertEqual(len(orders), 4)
 
     def test_dashboard_projection_is_hash_valid_and_read_only(self) -> None:
         summary = PortfolioStore(

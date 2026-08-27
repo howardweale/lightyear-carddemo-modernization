@@ -31,6 +31,7 @@ fi
 "$project_dir/runtime-evidence.sh" verify
 "$project_dir/semantic-memory.sh" validate
 "$project_dir/portfolio-factory.sh" verify
+"$project_dir/factory-qualification.sh" verify
 "$project_dir/durable-factory.sh" verify
 "$project_dir/live-control-tower.sh" verify
 "$project_dir/cics-vsam-readiness.sh" verify

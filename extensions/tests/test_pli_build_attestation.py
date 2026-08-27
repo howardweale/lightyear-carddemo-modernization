@@ -131,6 +131,13 @@ class PliBuildAttestationTests(unittest.TestCase):
         with patch("lightyear_extensions.pli_attestation._commit_exists", return_value=False):
             self.assertEqual([], validate_attestation(ROOT, CANONICAL))
 
+    def test_unreachable_commit_does_not_allow_source_tree_drift(self) -> None:
+        with (
+            patch("lightyear_extensions.pli_attestation._commit_exists", return_value=False),
+            patch("lightyear_extensions.pli_attestation._source_tree_hash", return_value="0" * 64),
+        ):
+            self.assertIn("PL/I build source tree is stale", validate_attestation(ROOT, CANONICAL))
+
     def test_foreign_workflow_replay_is_rejected_even_with_development_signature(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             copied = Path(directory)

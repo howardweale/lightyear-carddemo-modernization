@@ -1,13 +1,13 @@
 {
   "attestation_type": "lightyear-pli-build-attestation",
-  "content_sha256": "048addb4ed83ed6b2d2ded97d14cfb828262b846d4bbeed687d7b440d860507f",
+  "content_sha256": "2ea62a29571ec292120050028544f4a91c66ce6a0bb6758ae208b1f9a0d9f174",
   "schema_version": "1.0",
   "signature": {
     "algorithm": "RSASSA-PKCS1-v1_5-SHA256",
     "key_id": "lightyear-pli-development-test-rsa-v1",
     "release_authorized": false,
     "signer_class": "development-test-key",
-    "value": "WztCMUzyHlEErG71Dy+vI+LrphLAXi8LR9aUHTn45ySE8ORDVj1BOMzoVF5wmAMOzXiEkaC16jgFdl1zpbRkE5zDLlrBx+F9/XVJH7zkcGG296q3huK3mPQak4zWP1SkVrZ+358LGmYLW12+7lcbbWrOtaAHgw46CLjZeraW/ZxDsdcEOH+pKxKbs3W4p6RrmBKfslWdmi237+lzI6wbN5m9Gl7kKAnQtcxcrIuIgGJ7DImA1FaxIxG/B+nUlhFDEBqiqSNjrCf94o7lcKn5WPZIJPJ6xREXXmCK4IgKSQcFfRU45Tkx8/jTtwqvL2rMSuVz8XIo2jQkxgadIr/fAw=="
+    "value": "gCOuQD5TioaruX2h7s1N9D+VZS2ECbVMn6RrQJpStkq6Qt0Kdo/48gA4esN4I85LqpnAIb5CmlXqZoxlZzFXZ0ibQHN5nZYFs28aeeEVv33VwqNsGhFxt9pSudDJ+1boWjYXdVHZvBLGJfqf12VTO+2vR/euAVBkLrlyA3kcfc0KO9aeF6MzEfTZC3iVccctYMDZ1YzNOPGNPw/Y2xwCYeDDO6G1gn/K3VOXqV/jkXuy9wiwMHRP6XHljaM/gsD87f2UEVLLH9g4xhbtCFerUA7BAowzPWP3NBi2AZ9TIg56EVBzBFgfouI52VKaB5mv6eGL+fVLA08t7ofVtbKGVQ=="
   },
   "statement": {
     "_type": "https://in-toto.io/Statement/v1",
@@ -15,8 +15,8 @@
       "buildDefinition": {
         "buildType": "https://lightyear.ai/build/pli-bounded-jdk17/v1",
         "externalParameters": {
-          "sourceCommit": "b515d7b4c310e8fa6309db79ff683ef9fe149732",
-          "sourceTreeSha256": "b0dceb281b4ca07edcff09b8e8f1e2ae08f80006e0cbafd46f235b58c5e7b3eb",
+          "sourceCommit": "ec6e207161bd8899a4c2dd8f536544848bbeb68e",
+          "sourceTreeSha256": "6055a673b8f12cc0f72e707ee7c1c66a8279b38bf9b8b4b739e92176bed43994",
           "workflow": "howardweale/lightyear-carddemo-modernization/.github/workflows/verify.yml"
         },
         "resolvedDependencies": [
@@ -52,7 +52,7 @@
         },
         "metadata": {
           "cleanSourceTree": true,
-          "invocationId": "development:b515d7b4c310e8fa6309db79ff683ef9fe149732"
+          "invocationId": "development:ec6e207161bd8899a4c2dd8f536544848bbeb68e"
         }
       }
     },
@@ -60,7 +60,7 @@
     "subject": [
       {
         "digest": {
-          "sha256": "89f72e732d6377ce10e6afc386fb3e54384f872e5cc04a1a530287645f7b31ba"
+          "sha256": "d7f8b79bb8c2f2adbab42ef1aecc9ad6ba122a8bfef5b9a62e2f5951191668bb"
         },
         "name": "pli-auth-risk-candidate.jar"
       },
@@ -78,7 +78,7 @@
       },
       {
         "digest": {
-          "sha256": "781327ee0ba6c4f18f66da5488b94394518a16cae15aee499db6d586300c43d3"
+          "sha256": "5b0120ed4bd41798954ba050154201a49ccdacb81f2b482202f9627f987a7134"
         },
         "name": "sbom.cdx.json"
       }

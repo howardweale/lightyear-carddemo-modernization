@@ -1,15 +1,15 @@
 {
   "bindings": {
     "behavior_contract_sha256": "c04c386eb896f3d74db88827ba5ef93165404d594843317e42635e6fae61b00e",
-    "build_attestation_sha256": "048addb4ed83ed6b2d2ded97d14cfb828262b846d4bbeed687d7b440d860507f",
-    "candidate_jar_sha256": "89f72e732d6377ce10e6afc386fb3e54384f872e5cc04a1a530287645f7b31ba",
+    "build_attestation_sha256": "2ea62a29571ec292120050028544f4a91c66ce6a0bb6758ae208b1f9a0d9f174",
+    "candidate_jar_sha256": "d7f8b79bb8c2f2adbab42ef1aecc9ad6ba122a8bfef5b9a62e2f5951191668bb",
     "comparison_sha256": "31d0eb349496a95beb7e43782fc3d838da3ad8f225187f6ca715438e7e028eed",
     "dependency_inventory_sha256": "ea145bfbc1c730267c1fdb895e0b5d7575ab3fb5e0155e9fa37aa3e1562e53ed",
     "development_receipt_sha256": "69962583b4134dca1c33798890624e8488830a69d9a1b1722a1fb29a97f1ff15",
     "fixtures_sha256": "cbaafdf6074521e1d2933fc66efd5fd5e4c22f97d45caea254cdb08621b573a0",
     "junit_xml_sha256": "dc0f92270bfea35b7ca2af24043bbacf4ff15a2d3a8a9112975df9f2658b4083",
-    "sbom_sha256": "781327ee0ba6c4f18f66da5488b94394518a16cae15aee499db6d586300c43d3",
-    "source_tree_sha256": "b0dceb281b4ca07edcff09b8e8f1e2ae08f80006e0cbafd46f235b58c5e7b3eb"
+    "sbom_sha256": "5b0120ed4bd41798954ba050154201a49ccdacb81f2b482202f9627f987a7134",
+    "source_tree_sha256": "6055a673b8f12cc0f72e707ee7c1c66a8279b38bf9b8b4b739e92176bed43994"
   },
   "checks": {
     "asymmetric_signature": true,
@@ -24,7 +24,7 @@
     "sbom": true,
     "source_commit_bound": true
   },
-  "content_sha256": "5a65da81ef4dcb7d5fcf2b79178aafeec9e999dffed47e9f755a28841e1f0d4c",
+  "content_sha256": "28413a5ccd6e841839978f1ddb9872251ad237c51523355a40b2c5f1522f1a76",
   "development_ready": true,
   "evidence_class": "attested-local-build",
   "mainframe_equivalent": false,
@@ -32,7 +32,7 @@
   "receipt_type": "lightyear-pli-build-attestation-receipt",
   "release_attestation": false,
   "schema_version": "1.0",
-  "source_commit": "b515d7b4c310e8fa6309db79ff683ef9fe149732",
+  "source_commit": "ec6e207161bd8899a4c2dd8f536544848bbeb68e",
   "status": "passed",
   "unresolved_gaps": [
     "The committed signature uses a public development test key and is not a release attestation.",

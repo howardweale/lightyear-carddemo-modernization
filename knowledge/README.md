@@ -28,6 +28,10 @@ The v0.23 read-only composite estate under `composite/` overlays the separately 
 fragment for navigation. It has its own identity and evidence pack while retaining the canonical
 graph hash used by runtime and audit evidence.
 
+The v0.24 PL/I conformance receipt under `../extensions/pli/conformance/` binds a 27-case synthetic
+corpus and 22-category support matrix to the canonical graph. The capability projection exposes
+these breadth metrics but explicitly identifies them as non-customer, static, non-runtime evidence.
+
 The graph is the factory's shared system model. It is deliberately broader than a code index: it
 connects application structure, business meaning, modernization implementation, verification, and
 provenance in one queryable artifact.
@@ -133,6 +137,7 @@ snapshot carries the ontology content hash, and validation rejects undefined or 
 - `mappings/carddemo-ims-expired-authorization-purge.json`: bounded IMS BMP proof mapping;
 - `capabilities/mainframe-readiness.json`: graph-bound readiness gates for CICS, VSAM, IMS, HLASM, PL/I, and Db2/Data;
 - `schema/capability-readiness.schema.json`: portable contract for the capability projection;
+- `schema/pli-coverage.schema.json`: portable contract for PL/I supported-subset coverage evidence;
 - `ontology/relationships.json`: canonical meanings and endpoint constraints for all edges;
 - `evidence/source.pack.json.gz`: deterministic source excerpts and supporting context;
 - `evidence/source.receipt.json`: evidence-pack and graph identity receipt;

@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.24.0 — 2026-08-27
+
+- Replaced the PL/I language pack's line-oriented pattern extraction boundary with a tokenized,
+  statement-aware supported-subset front end that preserves source locations.
+- Published a content-addressed PL/I support matrix spanning 22 construct categories and explicit
+  unsupported syntax.
+- Added a synthetic 27-case conformance corpus with 25 program cases, two include cases, five
+  expected blockers, and seven mutation-oriented cases.
+- Added deterministic golden parse/reference results and a graph-bound coverage receipt recording
+  recognized constructs, explicit gap codes, provenance, and claim boundaries.
+- Made comments, strings, casing, spacing, continuation lines, missing includes, shadowed calls,
+  malformed comments, unsupported preprocessors, and unsupported storage fail safely.
+- Upgraded the PL/I pack contract to v1.2 and made the unified capability view depend on the
+  conformance receipt before PL/I discovery can remain ready.
+- Added PL/I breadth metrics to the customer/auditor projection while explicitly labelling the
+  corpus synthetic, non-customer, and non-runtime evidence.
+- Added Bash and PowerShell conformance entry points plus fail-closed tamper, graph-drift, and
+  overclaim tests.
+- Kept authorized z/OS execution, IBM compiler equivalence, arbitrary Enterprise PL/I support,
+  mainframe equivalence, and production readiness blocked.
+
 ## 0.23.0 — 2026-08-27
 
 - Added a content-addressed semantic-input manifest that limits canonical modern-source identity to

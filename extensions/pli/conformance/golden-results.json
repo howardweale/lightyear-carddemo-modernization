@@ -1,0 +1,1476 @@
+{
+  "content_sha256": "f7625080359770189abd7015e03547c91e0cbcb2cb5b4fab87d86724f47f5002",
+  "corpus_id": "lightyear-pli-synthetic-conformance-v1",
+  "parser": {
+    "frontend": "tokenized-statement-parser",
+    "id": "lightyear.pli",
+    "version": "1.2"
+  },
+  "result_type": "lightyear-pli-conformance-golden",
+  "results": [
+    {
+      "actual_status": "passed",
+      "case_id": "01-basic-main",
+      "classification": "positive",
+      "constructs": {
+        "assignment": 1,
+        "declaration": 1,
+        "program": 1
+      },
+      "diagnostics": [],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "passed",
+      "passed": true,
+      "path": "01-basic-main.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "BASIC01"
+        },
+        {
+          "column": 7,
+          "kind": "declaration",
+          "line": 2,
+          "name": "COUNT"
+        },
+        {
+          "column": 3,
+          "kind": "assignment",
+          "line": 3,
+          "name": "COUNT"
+        }
+      ],
+      "references": []
+    },
+    {
+      "actual_status": "passed",
+      "case_id": "02-internal-procedure",
+      "classification": "positive",
+      "constructs": {
+        "call": 1,
+        "procedure": 1,
+        "program": 1
+      },
+      "diagnostics": [],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "passed",
+      "passed": true,
+      "path": "02-internal-procedure.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "PROC02"
+        },
+        {
+          "column": 3,
+          "details": {
+            "options_cobol": false
+          },
+          "kind": "call",
+          "line": 2,
+          "name": "WORK"
+        },
+        {
+          "column": 1,
+          "details": {
+            "options_main": false
+          },
+          "kind": "procedure",
+          "line": 3,
+          "name": "WORK"
+        }
+      ],
+      "references": [
+        {
+          "column": 8,
+          "kind": "call",
+          "line": 2,
+          "scope": "PROC02",
+          "target": "WORK"
+        }
+      ]
+    },
+    {
+      "actual_status": "passed",
+      "case_id": "03-scalar-declaration",
+      "classification": "positive",
+      "constructs": {
+        "declaration": 1,
+        "program": 1
+      },
+      "diagnostics": [],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "passed",
+      "passed": true,
+      "path": "03-scalar-declaration.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "DECL03"
+        },
+        {
+          "column": 7,
+          "kind": "declaration",
+          "line": 2,
+          "name": "COUNTER"
+        }
+      ],
+      "references": []
+    },
+    {
+      "actual_status": "passed",
+      "case_id": "04-nested-structure",
+      "classification": "positive",
+      "constructs": {
+        "program": 1,
+        "structure": 1,
+        "structure_member": 2
+      },
+      "diagnostics": [],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "passed",
+      "passed": true,
+      "path": "04-nested-structure.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "STRUCT04"
+        },
+        {
+          "column": 9,
+          "details": {
+            "level": 1
+          },
+          "kind": "structure",
+          "line": 2,
+          "name": "AUTH_RECORD"
+        },
+        {
+          "column": 9,
+          "details": {
+            "level": 2
+          },
+          "kind": "structure_member",
+          "line": 3,
+          "name": "CARD_NUMBER"
+        },
+        {
+          "column": 9,
+          "details": {
+            "level": 2
+          },
+          "kind": "structure_member",
+          "line": 4,
+          "name": "AMOUNT"
+        }
+      ],
+      "references": []
+    },
+    {
+      "actual_status": "passed",
+      "case_id": "05-include-reference",
+      "classification": "positive",
+      "constructs": {
+        "include_reference": 1,
+        "program": 1
+      },
+      "diagnostics": [],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "passed",
+      "passed": true,
+      "path": "05-include-reference.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "INCL05"
+        },
+        {
+          "column": 12,
+          "kind": "include_reference",
+          "line": 2,
+          "name": "COMMON"
+        }
+      ],
+      "references": [
+        {
+          "column": 12,
+          "kind": "include",
+          "line": 2,
+          "scope": "INCL05",
+          "target": "COMMON"
+        }
+      ]
+    },
+    {
+      "actual_status": "passed",
+      "case_id": "06-entry-cobol",
+      "classification": "positive",
+      "constructs": {
+        "call": 1,
+        "entry_point": 1,
+        "program": 1
+      },
+      "diagnostics": [],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "passed",
+      "passed": true,
+      "path": "06-entry-cobol.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "ENTRY06"
+        },
+        {
+          "column": 7,
+          "details": {
+            "options_cobol": true
+          },
+          "kind": "entry_point",
+          "line": 2,
+          "name": "CBACT04C"
+        },
+        {
+          "column": 3,
+          "details": {
+            "options_cobol": true
+          },
+          "kind": "call",
+          "line": 3,
+          "name": "CBACT04C"
+        }
+      ],
+      "references": [
+        {
+          "column": 8,
+          "kind": "call",
+          "line": 3,
+          "scope": "ENTRY06",
+          "target": "CBACT04C"
+        }
+      ]
+    },
+    {
+      "actual_status": "passed",
+      "case_id": "07-fixed-record",
+      "classification": "positive",
+      "constructs": {
+        "program": 1,
+        "record_declaration": 1
+      },
+      "diagnostics": [],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "passed",
+      "passed": true,
+      "path": "07-fixed-record.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "FIXED07"
+        },
+        {
+          "column": 7,
+          "details": {
+            "fixed": true,
+            "varying": false
+          },
+          "kind": "record_declaration",
+          "line": 2,
+          "name": "AUTH_RECORD"
+        }
+      ],
+      "references": []
+    },
+    {
+      "actual_status": "passed",
+      "case_id": "08-varying-record",
+      "classification": "positive",
+      "constructs": {
+        "program": 1,
+        "record_declaration": 1
+      },
+      "diagnostics": [],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "passed",
+      "passed": true,
+      "path": "08-varying-record.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "VARY08"
+        },
+        {
+          "column": 7,
+          "details": {
+            "fixed": false,
+            "varying": true
+          },
+          "kind": "record_declaration",
+          "line": 2,
+          "name": "MESSAGE"
+        }
+      ],
+      "references": []
+    },
+    {
+      "actual_status": "passed",
+      "case_id": "09-sql-select",
+      "classification": "positive",
+      "constructs": {
+        "embedded_sql": 1,
+        "program": 1
+      },
+      "diagnostics": [],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "passed",
+      "passed": true,
+      "path": "09-sql-select.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "SQLSEL09"
+        },
+        {
+          "column": 3,
+          "details": {
+            "operation": "SELECT"
+          },
+          "kind": "embedded_sql",
+          "line": 2,
+          "name": "CARDDEMO.AUTHFRDS"
+        }
+      ],
+      "references": [
+        {
+          "column": 3,
+          "kind": "sql",
+          "line": 2,
+          "normalized_sql": "SELECT FRD_SCORE INTO:SCORE FROM CARDDEMO.AUTHFRDS",
+          "operation": "SELECT",
+          "schema": "CARDDEMO",
+          "scope": "SQLSEL09",
+          "target": "AUTHFRDS"
+        }
+      ]
+    },
+    {
+      "actual_status": "passed",
+      "case_id": "10-sql-write",
+      "classification": "positive",
+      "constructs": {
+        "embedded_sql": 1,
+        "program": 1
+      },
+      "diagnostics": [],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "passed",
+      "passed": true,
+      "path": "10-sql-write.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "SQLWR10"
+        },
+        {
+          "column": 3,
+          "details": {
+            "operation": "UPDATE"
+          },
+          "kind": "embedded_sql",
+          "line": 2,
+          "name": "CARDDEMO.AUTHFRDS"
+        }
+      ],
+      "references": [
+        {
+          "column": 3,
+          "kind": "sql",
+          "line": 2,
+          "normalized_sql": "UPDATE CARDDEMO.AUTHFRDS SET FRD_SCORE =:SCORE",
+          "operation": "UPDATE",
+          "schema": "CARDDEMO",
+          "scope": "SQLWR10",
+          "target": "AUTHFRDS"
+        }
+      ]
+    },
+    {
+      "actual_status": "passed",
+      "case_id": "11-sqlca",
+      "classification": "positive",
+      "constructs": {
+        "program": 1,
+        "sqlca_reference": 1
+      },
+      "diagnostics": [],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "passed",
+      "passed": true,
+      "path": "11-sqlca.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "SQLCA11"
+        },
+        {
+          "column": 3,
+          "kind": "sqlca_reference",
+          "line": 2,
+          "name": "SQLCA"
+        }
+      ],
+      "references": []
+    },
+    {
+      "actual_status": "passed",
+      "case_id": "12-file-io",
+      "classification": "positive",
+      "constructs": {
+        "file_declaration": 2,
+        "file_read": 1,
+        "file_write": 1,
+        "program": 1
+      },
+      "diagnostics": [],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "passed",
+      "passed": true,
+      "path": "12-file-io.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "FILE12"
+        },
+        {
+          "column": 7,
+          "kind": "file_declaration",
+          "line": 2,
+          "name": "INPUT_FILE"
+        },
+        {
+          "column": 7,
+          "kind": "file_declaration",
+          "line": 3,
+          "name": "OUTPUT_FILE"
+        },
+        {
+          "column": 3,
+          "kind": "file_read",
+          "line": 4,
+          "name": "INPUT_FILE"
+        },
+        {
+          "column": 3,
+          "kind": "file_write",
+          "line": 5,
+          "name": "OUTPUT_FILE"
+        }
+      ],
+      "references": [
+        {
+          "column": 3,
+          "kind": "file_read",
+          "line": 4,
+          "scope": "FILE12",
+          "target": "INPUT_FILE"
+        },
+        {
+          "column": 3,
+          "kind": "file_write",
+          "line": 5,
+          "scope": "FILE12",
+          "target": "OUTPUT_FILE"
+        }
+      ]
+    },
+    {
+      "actual_status": "passed",
+      "case_id": "13-static-call",
+      "classification": "positive",
+      "constructs": {
+        "call": 1,
+        "entry_point": 1,
+        "program": 1
+      },
+      "diagnostics": [],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "passed",
+      "passed": true,
+      "path": "13-static-call.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "CALL13"
+        },
+        {
+          "column": 7,
+          "details": {
+            "options_cobol": true
+          },
+          "kind": "entry_point",
+          "line": 2,
+          "name": "TARGET"
+        },
+        {
+          "column": 3,
+          "details": {
+            "options_cobol": true
+          },
+          "kind": "call",
+          "line": 3,
+          "name": "TARGET"
+        }
+      ],
+      "references": [
+        {
+          "column": 8,
+          "kind": "call",
+          "line": 3,
+          "scope": "CALL13",
+          "target": "TARGET"
+        }
+      ]
+    },
+    {
+      "actual_status": "passed",
+      "case_id": "14-decimal-assignment",
+      "classification": "positive",
+      "constructs": {
+        "assignment": 1,
+        "decimal_declaration": 2,
+        "program": 1
+      },
+      "diagnostics": [],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "passed",
+      "passed": true,
+      "path": "14-decimal-assignment.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "DEC14"
+        },
+        {
+          "column": 7,
+          "details": {
+            "fixed": true
+          },
+          "kind": "decimal_declaration",
+          "line": 2,
+          "name": "AMOUNT"
+        },
+        {
+          "column": 7,
+          "details": {
+            "fixed": true
+          },
+          "kind": "decimal_declaration",
+          "line": 3,
+          "name": "SCORE"
+        },
+        {
+          "column": 3,
+          "kind": "assignment",
+          "line": 4,
+          "name": "SCORE"
+        }
+      ],
+      "references": []
+    },
+    {
+      "actual_status": "passed",
+      "case_id": "15-conditional-flow",
+      "classification": "positive",
+      "constructs": {
+        "conditional": 1,
+        "control_flow": 1,
+        "program": 1,
+        "record_declaration": 1
+      },
+      "diagnostics": [],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "passed",
+      "passed": true,
+      "path": "15-conditional-flow.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "COND15"
+        },
+        {
+          "column": 7,
+          "details": {
+            "fixed": true,
+            "varying": false
+          },
+          "kind": "record_declaration",
+          "line": 2,
+          "name": "FLAG"
+        },
+        {
+          "column": 3,
+          "kind": "conditional",
+          "line": 3,
+          "name": "IF"
+        },
+        {
+          "column": 3,
+          "kind": "control_flow",
+          "line": 4,
+          "name": "DO"
+        }
+      ],
+      "references": []
+    },
+    {
+      "actual_status": "passed",
+      "case_id": "16-error-control",
+      "classification": "positive",
+      "constructs": {
+        "error_control": 2,
+        "program": 1
+      },
+      "diagnostics": [],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "passed",
+      "passed": true,
+      "path": "16-error-control.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "ERROR16"
+        },
+        {
+          "column": 3,
+          "kind": "error_control",
+          "line": 2,
+          "name": "ERROR"
+        },
+        {
+          "column": 3,
+          "kind": "error_control",
+          "line": 3,
+          "name": "ENDFILE"
+        }
+      ],
+      "references": []
+    },
+    {
+      "actual_status": "passed",
+      "case_id": "17-cics-reference",
+      "classification": "positive",
+      "constructs": {
+        "cics_reference": 1,
+        "program": 1
+      },
+      "diagnostics": [],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "passed",
+      "passed": true,
+      "path": "17-cics-reference.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "CICS17"
+        },
+        {
+          "column": 3,
+          "kind": "cics_reference",
+          "line": 2,
+          "name": "LINK"
+        }
+      ],
+      "references": []
+    },
+    {
+      "actual_status": "passed",
+      "case_id": "18-ims-reference",
+      "classification": "positive",
+      "constructs": {
+        "call": 1,
+        "entry_point": 1,
+        "ims_reference": 1,
+        "program": 1
+      },
+      "diagnostics": [],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "passed",
+      "passed": true,
+      "path": "18-ims-reference.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "IMS18"
+        },
+        {
+          "column": 7,
+          "details": {
+            "options_cobol": true
+          },
+          "kind": "entry_point",
+          "line": 2,
+          "name": "CBLTDLI"
+        },
+        {
+          "column": 3,
+          "details": {
+            "options_cobol": true
+          },
+          "kind": "call",
+          "line": 3,
+          "name": "CBLTDLI"
+        },
+        {
+          "column": 8,
+          "kind": "ims_reference",
+          "line": 3,
+          "name": "CBLTDLI"
+        }
+      ],
+      "references": [
+        {
+          "column": 8,
+          "kind": "call",
+          "line": 3,
+          "scope": "IMS18",
+          "target": "CBLTDLI"
+        }
+      ]
+    },
+    {
+      "actual_status": "passed",
+      "case_id": "19-case-spacing-continuation",
+      "classification": "mutation",
+      "constructs": {
+        "assignment": 1,
+        "decimal_declaration": 1,
+        "program": 1
+      },
+      "diagnostics": [],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "passed",
+      "passed": true,
+      "path": "19-case-spacing-continuation.pli",
+      "recognized": [
+        {
+          "column": 2,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "MIXED19"
+        },
+        {
+          "column": 8,
+          "details": {
+            "fixed": true
+          },
+          "kind": "decimal_declaration",
+          "line": 4,
+          "name": "VALUE"
+        },
+        {
+          "column": 4,
+          "kind": "assignment",
+          "line": 6,
+          "name": "VALUE"
+        }
+      ],
+      "references": []
+    },
+    {
+      "actual_status": "passed",
+      "case_id": "20-comments-strings",
+      "classification": "mutation",
+      "constructs": {
+        "program": 1,
+        "record_declaration": 1
+      },
+      "diagnostics": [],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "passed",
+      "passed": true,
+      "path": "20-comments-strings.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "COMMENT20"
+        },
+        {
+          "column": 7,
+          "details": {
+            "fixed": true,
+            "varying": false
+          },
+          "kind": "record_declaration",
+          "line": 3,
+          "name": "TEXT"
+        }
+      ],
+      "references": []
+    },
+    {
+      "actual_status": "passed",
+      "case_id": "21-common-include",
+      "classification": "positive",
+      "constructs": {
+        "include_member": 1,
+        "record_declaration": 1
+      },
+      "diagnostics": [],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "passed",
+      "passed": true,
+      "path": "COMMON.inc",
+      "recognized": [
+        {
+          "column": 1,
+          "kind": "include_member",
+          "line": 1,
+          "name": "COMMON"
+        },
+        {
+          "column": 5,
+          "details": {
+            "fixed": true,
+            "varying": false
+          },
+          "kind": "record_declaration",
+          "line": 1,
+          "name": "COMMON_FLAG"
+        }
+      ],
+      "references": []
+    },
+    {
+      "actual_status": "passed",
+      "case_id": "22-nested-include",
+      "classification": "positive",
+      "constructs": {
+        "include_member": 1,
+        "structure": 1,
+        "structure_member": 1
+      },
+      "diagnostics": [],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "passed",
+      "passed": true,
+      "path": "NESTED.inc",
+      "recognized": [
+        {
+          "column": 1,
+          "kind": "include_member",
+          "line": 1,
+          "name": "NESTED"
+        },
+        {
+          "column": 7,
+          "details": {
+            "level": 1
+          },
+          "kind": "structure",
+          "line": 1,
+          "name": "COMMON_RECORD"
+        },
+        {
+          "column": 7,
+          "details": {
+            "level": 2
+          },
+          "kind": "structure_member",
+          "line": 2,
+          "name": "COMMON_CODE"
+        }
+      ],
+      "references": []
+    },
+    {
+      "actual_status": "blocked",
+      "case_id": "23-missing-include",
+      "classification": "mutation",
+      "constructs": {
+        "include_reference": 1,
+        "program": 1
+      },
+      "diagnostics": [
+        {
+          "code": "missing-include",
+          "column": 12,
+          "line": 2,
+          "message": "Included member is absent from the bounded source set: DOES_NOT_EXIST",
+          "severity": "blocker"
+        }
+      ],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "blocked",
+      "passed": true,
+      "path": "23-missing-include.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "MISS23"
+        },
+        {
+          "column": 12,
+          "kind": "include_reference",
+          "line": 2,
+          "name": "DOES_NOT_EXIST"
+        }
+      ],
+      "references": [
+        {
+          "column": 12,
+          "kind": "include",
+          "line": 2,
+          "scope": "MISS23",
+          "target": "DOES_NOT_EXIST"
+        }
+      ]
+    },
+    {
+      "actual_status": "blocked",
+      "case_id": "24-shadowed-call",
+      "classification": "mutation",
+      "constructs": {
+        "call": 1,
+        "entry_point": 1,
+        "program": 1,
+        "record_declaration": 1
+      },
+      "diagnostics": [
+        {
+          "code": "ambiguous-shadowed-call",
+          "column": 8,
+          "line": 4,
+          "message": "CALL target is shadowed by incompatible declarations: TARGET",
+          "severity": "blocker"
+        }
+      ],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "blocked",
+      "passed": true,
+      "path": "24-shadowed-call.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "SHADOW24"
+        },
+        {
+          "column": 7,
+          "details": {
+            "fixed": true,
+            "varying": false
+          },
+          "kind": "record_declaration",
+          "line": 2,
+          "name": "TARGET"
+        },
+        {
+          "column": 7,
+          "details": {
+            "options_cobol": false
+          },
+          "kind": "entry_point",
+          "line": 3,
+          "name": "TARGET"
+        },
+        {
+          "column": 3,
+          "details": {
+            "options_cobol": false
+          },
+          "kind": "call",
+          "line": 4,
+          "name": "TARGET"
+        }
+      ],
+      "references": [
+        {
+          "column": 8,
+          "kind": "call",
+          "line": 4,
+          "scope": "SHADOW24",
+          "target": "TARGET"
+        }
+      ]
+    },
+    {
+      "actual_status": "blocked",
+      "case_id": "25-unsupported-preprocessor",
+      "classification": "mutation",
+      "constructs": {
+        "program": 1
+      },
+      "diagnostics": [
+        {
+          "code": "unsupported-preprocessor",
+          "column": 3,
+          "line": 2,
+          "message": "Unsupported PL/I preprocessor directive: %REPLACE",
+          "severity": "blocker"
+        }
+      ],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "blocked",
+      "passed": true,
+      "path": "25-unsupported-preprocessor.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "PRE25"
+        }
+      ],
+      "references": []
+    },
+    {
+      "actual_status": "blocked",
+      "case_id": "26-unsupported-storage",
+      "classification": "mutation",
+      "constructs": {
+        "declaration": 2,
+        "program": 1
+      },
+      "diagnostics": [
+        {
+          "code": "unsupported-based-storage",
+          "column": 20,
+          "line": 3,
+          "message": "Unsupported PL/I construct: BASED",
+          "severity": "blocker"
+        }
+      ],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "blocked",
+      "passed": true,
+      "path": "26-unsupported-storage.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "STORE26"
+        },
+        {
+          "column": 7,
+          "kind": "declaration",
+          "line": 2,
+          "name": "POINTER_VALUE"
+        },
+        {
+          "column": 7,
+          "kind": "declaration",
+          "line": 3,
+          "name": "RECORD_VALUE"
+        }
+      ],
+      "references": []
+    },
+    {
+      "actual_status": "blocked",
+      "case_id": "27-malformed-comment",
+      "classification": "mutation",
+      "constructs": {},
+      "diagnostics": [
+        {
+          "code": "unterminated-comment",
+          "column": 3,
+          "line": 2,
+          "message": "PL/I block comment is not terminated",
+          "severity": "blocker"
+        }
+      ],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "blocked",
+      "passed": true,
+      "path": "27-malformed-comment.pli",
+      "recognized": [],
+      "references": []
+    }
+  ],
+  "schema_version": "1.0",
+  "source_bindings": [
+    {
+      "case_id": "01-basic-main",
+      "logical_sha256": "9f14b0473526323e75a4de80da6c157d177e1acdf453fef82f2f6fff53a2cd44",
+      "path": "extensions/pli/conformance/corpus/01-basic-main.pli",
+      "transport_sha256": "9f14b0473526323e75a4de80da6c157d177e1acdf453fef82f2f6fff53a2cd44"
+    },
+    {
+      "case_id": "02-internal-procedure",
+      "logical_sha256": "fa44f009ea2a63a2e2001da1168014f6039f9529b4ecc38ba51147196e5585cf",
+      "path": "extensions/pli/conformance/corpus/02-internal-procedure.pli",
+      "transport_sha256": "fa44f009ea2a63a2e2001da1168014f6039f9529b4ecc38ba51147196e5585cf"
+    },
+    {
+      "case_id": "03-scalar-declaration",
+      "logical_sha256": "b8bf49d000f742dcac17e1788b948f092f6cbf0c6840ebd199dd6b2053f47306",
+      "path": "extensions/pli/conformance/corpus/03-scalar-declaration.pli",
+      "transport_sha256": "b8bf49d000f742dcac17e1788b948f092f6cbf0c6840ebd199dd6b2053f47306"
+    },
+    {
+      "case_id": "04-nested-structure",
+      "logical_sha256": "58c0a8d2cb3981f2bcff78a62aa2a2e26f9ea95b805da6dc8ae0054e5b21d020",
+      "path": "extensions/pli/conformance/corpus/04-nested-structure.pli",
+      "transport_sha256": "58c0a8d2cb3981f2bcff78a62aa2a2e26f9ea95b805da6dc8ae0054e5b21d020"
+    },
+    {
+      "case_id": "05-include-reference",
+      "logical_sha256": "2b0f95c4630a06bdcb7b785e9eb2f090826e576870740d7bce4034d9f71fecc5",
+      "path": "extensions/pli/conformance/corpus/05-include-reference.pli",
+      "transport_sha256": "2b0f95c4630a06bdcb7b785e9eb2f090826e576870740d7bce4034d9f71fecc5"
+    },
+    {
+      "case_id": "06-entry-cobol",
+      "logical_sha256": "5560873aa912efdc7142c46364843b4416eb0c57a5ba5801ceef607d9e2f6083",
+      "path": "extensions/pli/conformance/corpus/06-entry-cobol.pli",
+      "transport_sha256": "5560873aa912efdc7142c46364843b4416eb0c57a5ba5801ceef607d9e2f6083"
+    },
+    {
+      "case_id": "07-fixed-record",
+      "logical_sha256": "233313ed969f7c306fcdc55b626ca867d4eb7f7d77af4d492f8b45a1a5410d70",
+      "path": "extensions/pli/conformance/corpus/07-fixed-record.pli",
+      "transport_sha256": "233313ed969f7c306fcdc55b626ca867d4eb7f7d77af4d492f8b45a1a5410d70"
+    },
+    {
+      "case_id": "08-varying-record",
+      "logical_sha256": "32b294a52578cfdf09a22579a4943ad7edf5a27e462e05dd00ab634200bedd4e",
+      "path": "extensions/pli/conformance/corpus/08-varying-record.pli",
+      "transport_sha256": "32b294a52578cfdf09a22579a4943ad7edf5a27e462e05dd00ab634200bedd4e"
+    },
+    {
+      "case_id": "09-sql-select",
+      "logical_sha256": "464e1193ef612a5404fc010e33243f8e8743879b27ade519385c344e6b7a5582",
+      "path": "extensions/pli/conformance/corpus/09-sql-select.pli",
+      "transport_sha256": "464e1193ef612a5404fc010e33243f8e8743879b27ade519385c344e6b7a5582"
+    },
+    {
+      "case_id": "10-sql-write",
+      "logical_sha256": "ff249b0ee3139751382269bd636e7c357f62a98aa7afb0d7dcc234b0c7fcad24",
+      "path": "extensions/pli/conformance/corpus/10-sql-write.pli",
+      "transport_sha256": "ff249b0ee3139751382269bd636e7c357f62a98aa7afb0d7dcc234b0c7fcad24"
+    },
+    {
+      "case_id": "11-sqlca",
+      "logical_sha256": "0ec416a19440b038e2e4e7fcdf604fedaa1710dd901bdf1fa20724fd87c5c6e7",
+      "path": "extensions/pli/conformance/corpus/11-sqlca.pli",
+      "transport_sha256": "0ec416a19440b038e2e4e7fcdf604fedaa1710dd901bdf1fa20724fd87c5c6e7"
+    },
+    {
+      "case_id": "12-file-io",
+      "logical_sha256": "45fd66baf3bcdd627d7dfb73dc16f7435474e201b6b86a7962f96d97c55eed22",
+      "path": "extensions/pli/conformance/corpus/12-file-io.pli",
+      "transport_sha256": "45fd66baf3bcdd627d7dfb73dc16f7435474e201b6b86a7962f96d97c55eed22"
+    },
+    {
+      "case_id": "13-static-call",
+      "logical_sha256": "3951487c41b1430a69c3c940239d7304a9e822530bc34d5633bac03a99747a89",
+      "path": "extensions/pli/conformance/corpus/13-static-call.pli",
+      "transport_sha256": "3951487c41b1430a69c3c940239d7304a9e822530bc34d5633bac03a99747a89"
+    },
+    {
+      "case_id": "14-decimal-assignment",
+      "logical_sha256": "1796e0a080d58c0bbb5d93e2642fdb74d7da04ca61cf8cc7ae8965fbc276db90",
+      "path": "extensions/pli/conformance/corpus/14-decimal-assignment.pli",
+      "transport_sha256": "1796e0a080d58c0bbb5d93e2642fdb74d7da04ca61cf8cc7ae8965fbc276db90"
+    },
+    {
+      "case_id": "15-conditional-flow",
+      "logical_sha256": "7ad4738ca530b5b4abe69e5e4555feb0107ab51376a824b70cd5424c446c83c3",
+      "path": "extensions/pli/conformance/corpus/15-conditional-flow.pli",
+      "transport_sha256": "7ad4738ca530b5b4abe69e5e4555feb0107ab51376a824b70cd5424c446c83c3"
+    },
+    {
+      "case_id": "16-error-control",
+      "logical_sha256": "ba6f1c21c9cf577d2a67fb6f79feaf21491d6a1f19d07aea85819e817c821f40",
+      "path": "extensions/pli/conformance/corpus/16-error-control.pli",
+      "transport_sha256": "ba6f1c21c9cf577d2a67fb6f79feaf21491d6a1f19d07aea85819e817c821f40"
+    },
+    {
+      "case_id": "17-cics-reference",
+      "logical_sha256": "6dd45377562c323ebe511ea166b2abc7b6b18c10bb96dc1799588cd4f3f4dcb1",
+      "path": "extensions/pli/conformance/corpus/17-cics-reference.pli",
+      "transport_sha256": "6dd45377562c323ebe511ea166b2abc7b6b18c10bb96dc1799588cd4f3f4dcb1"
+    },
+    {
+      "case_id": "18-ims-reference",
+      "logical_sha256": "31974dfd3fff70ca7abda3378da62256cab10c418a626dc1ae88cf06deee06d3",
+      "path": "extensions/pli/conformance/corpus/18-ims-reference.pli",
+      "transport_sha256": "31974dfd3fff70ca7abda3378da62256cab10c418a626dc1ae88cf06deee06d3"
+    },
+    {
+      "case_id": "19-case-spacing-continuation",
+      "logical_sha256": "b7032383f9afd7f3bed5c6963a12fb0f8ee4959df3cd5c4bc0a0262ccd68e264",
+      "path": "extensions/pli/conformance/corpus/19-case-spacing-continuation.pli",
+      "transport_sha256": "b7032383f9afd7f3bed5c6963a12fb0f8ee4959df3cd5c4bc0a0262ccd68e264"
+    },
+    {
+      "case_id": "20-comments-strings",
+      "logical_sha256": "ad008afe5840ba68fdef472af0bed509a8556b42a4f3971e3e3a723367416620",
+      "path": "extensions/pli/conformance/corpus/20-comments-strings.pli",
+      "transport_sha256": "ad008afe5840ba68fdef472af0bed509a8556b42a4f3971e3e3a723367416620"
+    },
+    {
+      "case_id": "21-common-include",
+      "logical_sha256": "d0dbe4481b37f77c706fa8c5537c2e27b725a6ae771fac7d6a8e5e0b6dcd2b14",
+      "path": "extensions/pli/conformance/corpus/COMMON.inc",
+      "transport_sha256": "d0dbe4481b37f77c706fa8c5537c2e27b725a6ae771fac7d6a8e5e0b6dcd2b14"
+    },
+    {
+      "case_id": "22-nested-include",
+      "logical_sha256": "2a2f4aa2b44de7e1848c23d0aec28783acd73d5263f369ee1841bb61f1521627",
+      "path": "extensions/pli/conformance/corpus/NESTED.inc",
+      "transport_sha256": "2a2f4aa2b44de7e1848c23d0aec28783acd73d5263f369ee1841bb61f1521627"
+    },
+    {
+      "case_id": "23-missing-include",
+      "logical_sha256": "aa30ef5ddde7e5073e5434b8e55dfde4d59a8c15824008aec0b1ce1ecd903fb1",
+      "path": "extensions/pli/conformance/corpus/23-missing-include.pli",
+      "transport_sha256": "aa30ef5ddde7e5073e5434b8e55dfde4d59a8c15824008aec0b1ce1ecd903fb1"
+    },
+    {
+      "case_id": "24-shadowed-call",
+      "logical_sha256": "c51c88b8d784c4dfd9b981268e9a281a9af175aa6c6f026c77f803769a8da86c",
+      "path": "extensions/pli/conformance/corpus/24-shadowed-call.pli",
+      "transport_sha256": "c51c88b8d784c4dfd9b981268e9a281a9af175aa6c6f026c77f803769a8da86c"
+    },
+    {
+      "case_id": "25-unsupported-preprocessor",
+      "logical_sha256": "42df007b16094e952af453497e835d8b79b3e074de888417e0219d8b64f81df6",
+      "path": "extensions/pli/conformance/corpus/25-unsupported-preprocessor.pli",
+      "transport_sha256": "42df007b16094e952af453497e835d8b79b3e074de888417e0219d8b64f81df6"
+    },
+    {
+      "case_id": "26-unsupported-storage",
+      "logical_sha256": "a633df0927b581a97e66b8b13312b83236810f97e99e996416f9001af4228fe7",
+      "path": "extensions/pli/conformance/corpus/26-unsupported-storage.pli",
+      "transport_sha256": "a633df0927b581a97e66b8b13312b83236810f97e99e996416f9001af4228fe7"
+    },
+    {
+      "case_id": "27-malformed-comment",
+      "logical_sha256": "f2d2343641704f381a5db762c8fba9b30156a96919cb66092d2340c25c60aaaf",
+      "path": "extensions/pli/conformance/corpus/27-malformed-comment.pli",
+      "transport_sha256": "f2d2343641704f381a5db762c8fba9b30156a96919cb66092d2340c25c60aaaf"
+    }
+  ]
+}

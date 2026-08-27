@@ -1,0 +1,60 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schemas/pli-coverage-1.0.json",
+  "title": "LIGHTYEAR PL/I Discovery Conformance Receipt",
+  "type": "object",
+  "required": ["schema_version", "receipt_type", "evidence_class", "status", "language_pack", "bindings", "corpus", "coverage", "checks", "claim_boundary", "limitations", "production_ready", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "receipt_type": {"const": "lightyear-pli-discovery-conformance"},
+    "evidence_class": {"const": "synthetic-static-conformance"},
+    "status": {"enum": ["passed", "failed"]},
+    "language_pack": {
+      "type": "object",
+      "required": ["id", "version"],
+      "properties": {"id": {"const": "lightyear.pli"}, "version": {"const": "1.2"}},
+      "additionalProperties": false
+    },
+    "bindings": {
+      "type": "object",
+      "required": ["canonical_graph_sha256", "corpus_manifest_sha256", "support_matrix_sha256", "golden_results_sha256"],
+      "additionalProperties": {"$ref": "#/$defs/hash"}
+    },
+    "corpus": {
+      "type": "object",
+      "required": ["id", "case_count", "program_case_count", "include_case_count", "positive_case_count", "blocked_case_count", "mutation_case_count", "synthetic", "customer_source"],
+      "properties": {
+        "id": {"const": "lightyear-pli-synthetic-conformance-v1"},
+        "case_count": {"type": "integer", "minimum": 20},
+        "program_case_count": {"type": "integer", "minimum": 1},
+        "include_case_count": {"type": "integer", "minimum": 1},
+        "positive_case_count": {"type": "integer", "minimum": 1},
+        "blocked_case_count": {"type": "integer", "minimum": 1},
+        "mutation_case_count": {"type": "integer", "minimum": 5},
+        "synthetic": {"const": true},
+        "customer_source": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "coverage": {"type": "object"},
+    "checks": {"type": "object", "additionalProperties": {"const": true}},
+    "claim_boundary": {
+      "type": "object",
+      "required": ["static_discovery_only", "runtime_executed", "ibm_compiler_semantics_proven", "arbitrary_enterprise_pli_supported", "mainframe_equivalent", "production_ready"],
+      "properties": {
+        "static_discovery_only": {"const": true},
+        "runtime_executed": {"const": false},
+        "ibm_compiler_semantics_proven": {"const": false},
+        "arbitrary_enterprise_pli_supported": {"const": false},
+        "mainframe_equivalent": {"const": false},
+        "production_ready": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "limitations": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "production_ready": {"const": false},
+    "content_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {"hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}},
+  "additionalProperties": false
+}

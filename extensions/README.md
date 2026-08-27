@@ -1,5 +1,22 @@
 # Trusted extensions and mainframe access
 
+## MS #24 PL/I discovery coverage and conformance lab
+
+MS #24 upgrades `lightyear.pli` to v1.2 and places a tokenized, statement-aware front end in front
+of graph extraction. The published support matrix is exercised by 27 synthetic cases, including
+two include members, five expected blockers, and seven mutation-oriented cases. Golden results and
+the coverage receipt list recognized constructs, references, diagnostics, and exact source
+locations.
+
+```bash
+./pli-conformance.sh verify
+```
+
+The capability projection reports 27 corpus cases and 22 supported construct categories. These
+are synthetic static-discovery breadth metrics. They do not establish customer-estate coverage,
+IBM Enterprise PL/I compiler compatibility, runtime behavior, or mainframe equivalence. See
+[`pli/conformance/README.md`](pli/conformance/README.md) for the precise supported subset and gaps.
+
 ## MS #22 mixed PL/I development proof
 
 MS #22 advances the bounded `ACCTPL1` fixture beyond parsing. Its behavior contract covers the

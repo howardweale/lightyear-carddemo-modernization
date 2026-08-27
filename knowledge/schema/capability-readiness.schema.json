@@ -1,22 +1,24 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://factorydark.ai/schemas/capability-readiness-1.1.json",
+  "$id": "https://factorydark.ai/schemas/capability-readiness-1.2.json",
   "title": "FactoryDark Unified Mainframe Capability Readiness",
   "type": "object",
   "required": ["schema_version", "analysis_type", "graph_content_sha256", "truth_boundary", "evidence_bindings", "capabilities", "collection_mechanisms", "content_sha256"],
   "properties": {
-    "schema_version": {"const": "1.1"},
+    "schema_version": {"const": "1.2"},
     "analysis_type": {"const": "factorydark-mainframe-capability-readiness"},
     "graph_content_sha256": {"$ref": "#/$defs/hash"},
     "truth_boundary": {"type": "string", "minLength": 1},
     "content_sha256": {"$ref": "#/$defs/hash"},
     "evidence_bindings": {
       "type": "object",
-      "required": ["canonical_graph_sha256", "extension_catalog_sha256", "pli_fragment_sha256", "postgres_data_receipt_sha256", "oracle_data_receipt_sha256", "mainframe_campaign_receipt_sha256"],
+      "required": ["canonical_graph_sha256", "extension_catalog_sha256", "pli_fragment_sha256", "pli_coverage_receipt_sha256", "pli_development_receipt_sha256", "postgres_data_receipt_sha256", "oracle_data_receipt_sha256", "mainframe_campaign_receipt_sha256"],
       "properties": {
         "canonical_graph_sha256": {"$ref": "#/$defs/hash"},
         "extension_catalog_sha256": {"$ref": "#/$defs/hash"},
         "pli_fragment_sha256": {"$ref": "#/$defs/hash"},
+        "pli_coverage_receipt_sha256": {"$ref": "#/$defs/hash"},
+        "pli_development_receipt_sha256": {"$ref": "#/$defs/hash"},
         "postgres_data_receipt_sha256": {"$ref": "#/$defs/hash"},
         "oracle_data_receipt_sha256": {"$ref": "#/$defs/hash"},
         "mainframe_campaign_receipt_sha256": {"$ref": "#/$defs/hash"}
@@ -61,6 +63,22 @@
         "development_ready": {"type": "boolean"},
         "mainframe_equivalent": {"type": "boolean"},
         "support_claim": {"type": "string"},
+        "breadth": {
+          "type": "object",
+          "required": ["scope", "corpus_case_count", "positive_case_count", "blocked_case_count", "mutation_case_count", "supported_construct_count", "explicit_gap_count", "customer_source", "runtime_evidence"],
+          "properties": {
+            "scope": {"const": "synthetic-static-supported-subset"},
+            "corpus_case_count": {"type": "integer", "minimum": 20},
+            "positive_case_count": {"type": "integer", "minimum": 1},
+            "blocked_case_count": {"type": "integer", "minimum": 1},
+            "mutation_case_count": {"type": "integer", "minimum": 5},
+            "supported_construct_count": {"type": "integer", "minimum": 20},
+            "explicit_gap_count": {"type": "integer", "minimum": 1},
+            "customer_source": {"const": false},
+            "runtime_evidence": {"const": false}
+          },
+          "additionalProperties": false
+        },
         "gates": {
           "type": "array",
           "minItems": 8,

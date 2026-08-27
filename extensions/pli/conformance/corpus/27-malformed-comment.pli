@@ -1,0 +1,3 @@
+BAD27: PROC OPTIONS(MAIN);
+  /* this comment never closes
+END BAD27;

@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import hashlib
 import json
-import re
 from collections import Counter
 from pathlib import Path
 from typing import Any, Mapping
@@ -10,10 +9,11 @@ from typing import Any, Mapping
 from lightyear_common.io import source_hashes
 
 from .contracts import ExtensionContractError, canonical_hash
+from .pli_frontend import parse_pli_source
 
 
 PACK_ID = "lightyear.pli"
-PACK_VERSION = "1.1"
+PACK_VERSION = "1.2"
 SOURCE_ID = "source:lightyear-carddemo"
 _EXTENSIONS = {".pli", ".pl1", ".inc"}
 _RELATIONS = {
@@ -43,8 +43,9 @@ def build_pli_fragment(
     )
     if not paths:
         raise ExtensionContractError("PL/I language pack requires at least one source file")
+    include_names = {path.stem.upper() for path in paths if path.suffix.casefold() == ".inc"}
     for path in paths:
-        builder.extract(path)
+        builder.extract(path, include_names)
     return builder.fragment(source_root.relative_to(repository_root).as_posix())
 
 
@@ -93,6 +94,18 @@ def validate_pli_fragment(
     stats = fragment.get("statistics", {})
     if stats.get("node_count") != len(nodes) or stats.get("edge_count") != len(edges):
         errors.append("PL/I fragment statistics are stale")
+    coverage = fragment.get("coverage", {})
+    if coverage != {
+        "frontend": "tokenized-statement-parser",
+        "parser_version": PACK_VERSION,
+        "blocker_count": 0,
+    }:
+        errors.append("PL/I fragment supported-subset coverage metadata is invalid")
+    for entity in [*nodes, *edges]:
+        for evidence in entity.get("evidence", []):
+            if evidence.get("method") != "pli-supported-subset-v2":
+                errors.append("PL/I fragment contains evidence from an unexpected parser method")
+                break
     return errors
 
 
@@ -105,7 +118,7 @@ class _FragmentBuilder:
         self.edges: dict[str, dict[str, Any]] = {}
         self.external: set[str] = set()
 
-    def extract(self, path: Path) -> None:
+    def extract(self, path: Path, include_names: set[str]) -> None:
         relative = path.relative_to(self.repository_root).as_posix()
         lines = path.read_text(encoding="utf-8", errors="replace").splitlines() or [""]
         logical_sha, transport_sha = source_hashes(path)
@@ -118,102 +131,98 @@ class _FragmentBuilder:
             "hash_basis": "normalized-lf",
             "reference_fixture": True,
         }, self._evidence(relative, 1, len(lines)))
-        if path.suffix.casefold() == ".inc":
-            include_name = path.stem.upper()
+        parsed = parse_pli_source("\n".join(lines), relative, include_names=include_names)
+        if parsed["status"] != "passed":
+            first = parsed["diagnostics"][0]
+            raise ExtensionContractError(
+                f"PL/I supported-subset blocker at {relative}:{first.get('line', 1)}: "
+                f"{first['code']}: {first['message']}"
+            )
+        if parsed["file_kind"] == "include":
+            include_name = next(
+                item["name"] for item in parsed["constructs"] if item["kind"] == "include_member"
+            )
             include_id = f"extension:pli-include:{include_name}"
-            self._node(include_id, "pli_include", include_name, {"path": relative}, self._evidence(relative, 1, len(lines)))
+            self._node(include_id, "pli_include", include_name, {
+                "path": relative,
+                "parser": "pli-supported-subset-v2",
+            }, self._evidence(relative, 1, len(lines)))
             self._edge(file_id, "DECLARES", include_id, self._evidence(relative, 1))
             return
-        self._extract_program(file_id, relative, lines)
+        self._extract_program(file_id, relative, parsed)
 
-    def _extract_program(self, file_id: str, relative: str, lines: list[str]) -> None:
-        text = "\n".join(lines)
-        main = re.search(
-            r"(?im)^\s*([A-Z][A-Z0-9_$#@-]*)\s*:\s*PROC(?:EDURE)?\b[^;]*OPTIONS\s*\(\s*MAIN\s*\)",
-            text,
-        )
-        if not main:
-            raise ExtensionContractError(f"PL/I source has no OPTIONS(MAIN) procedure: {relative}")
-        program = main.group(1).upper()
+    def _extract_program(self, file_id: str, relative: str, parsed: Mapping[str, Any]) -> None:
+        program = str(parsed["program"])
         program_id = f"extension:pli-program:{program}"
-        main_line = text[: main.start()].count("\n") + 1
+        main_construct = next(item for item in parsed["constructs"] if item["kind"] == "program")
+        main_line = int(main_construct["line"])
         self._node(program_id, "pli_program", program, {
             "path": relative,
             "language": "PL/I",
             "reference_fixture": True,
+            "parser": "pli-supported-subset-v2",
         }, self._evidence(relative, main_line))
         self._edge(file_id, "DECLARES", program_id, self._evidence(relative, main_line))
 
         procedures: dict[str, tuple[str, int]] = {}
-        procedure_pattern = re.compile(
-            r"(?im)^\s*([A-Z][A-Z0-9_$#@-]*)\s*:\s*PROC(?:EDURE)?\b"
-        )
-        for match in procedure_pattern.finditer(text):
-            name = match.group(1).upper()
-            if name == program:
+        for construct in parsed["constructs"]:
+            if construct["kind"] != "procedure":
                 continue
-            line = text[: match.start()].count("\n") + 1
+            name = str(construct["name"])
+            line = int(construct["line"])
             procedure_id = f"extension:pli-procedure:{program}:{name}"
             procedures[name] = (procedure_id, line)
             self._node(procedure_id, "pli_procedure", name, {
                 "program": program,
                 "path": relative,
+                "parser": "pli-supported-subset-v2",
             }, self._evidence(relative, line))
             self._edge(program_id, "CONTAINS", procedure_id, self._evidence(relative, line))
 
-        scopes = [(main_line, program_id), *[(line, value[0]) for _, value in procedures.items() for line in [value[1]]]]
-        scopes.sort()
-        for line_number, line in enumerate(lines, 1):
-            scope = next((scope_id for start, scope_id in reversed(scopes) if start <= line_number), program_id)
-            include = re.search(r"%INCLUDE\s+([A-Z][A-Z0-9_$#@-]*)", line, re.I)
-            if include:
-                name = include.group(1).upper()
+        for reference in parsed["references"]:
+            line_number = int(reference["line"])
+            scope_name = reference.get("scope")
+            scope = procedures.get(str(scope_name), (program_id, main_line))[0]
+            if reference["kind"] == "include":
+                name = str(reference["target"])
                 include_id = f"extension:pli-include:{name}"
                 self._node(include_id, "pli_include", name, {})
                 self._edge(program_id, "USES_INCLUDE", include_id, self._evidence(relative, line_number))
-            for called in re.findall(r"\bCALL\s+([A-Z][A-Z0-9_$#@-]*)", line, re.I):
-                called = called.upper()
+            elif reference["kind"] == "call":
+                called = str(reference["target"])
                 if called in procedures:
                     target = procedures[called][0]
                 else:
                     target = self._external_program(called)
                 self._edge(scope, "CALLS", target, self._evidence(relative, line_number))
-            for verb, relation in (("READ", "READS"), ("WRITE", "WRITES")):
-                match = re.search(rf"\b{verb}\s+FILE\s*\(\s*([A-Z][A-Z0-9_$#@-]*)\s*\)", line, re.I)
-                if match:
-                    name = match.group(1).upper()
-                    handle = f"extension:pli-file:{program}:{name}"
-                    self._node(handle, "pli_file_handle", name, {"program": program})
-                    self._edge(scope, relation, handle, self._evidence(relative, line_number))
+            elif reference["kind"] in {"file_read", "file_write"}:
+                name = str(reference["target"])
+                handle = f"extension:pli-file:{program}:{name}"
+                self._node(handle, "pli_file_handle", name, {"program": program})
+                relation = "READS" if reference["kind"] == "file_read" else "WRITES"
+                self._edge(scope, relation, handle, self._evidence(relative, line_number))
 
-        for occurrence, match in enumerate(
-            re.finditer(r"EXEC\s+SQL\s+(.*?);", text, re.I | re.S), start=1
-        ):
-            body = re.sub(r"\s+", " ", match.group(1)).strip()
-            operation_match = re.match(r"(SELECT|INSERT|UPDATE|DELETE)\b", body, re.I)
-            table_match = re.search(
-                r"(?:FROM|INTO|UPDATE)\s+(?:([A-Z0-9_]+)\.)?([A-Z0-9_]+)", body, re.I
-            )
-            if not operation_match or not table_match:
-                continue
-            operation = operation_match.group(1).upper()
-            schema = (table_match.group(1) or "CARDDEMO").upper()
-            table = table_match.group(2).upper()
-            line_start = text[: match.start()].count("\n") + 1
-            line_end = line_start + match.group(0).count("\n")
-            scope = next((scope_id for start, scope_id in reversed(scopes) if start <= line_start), program_id)
+        sql_references = [item for item in parsed["references"] if item["kind"] == "sql"]
+        for occurrence, reference in enumerate(sql_references, start=1):
+            operation = str(reference["operation"])
+            schema = str(reference["schema"])
+            table = str(reference["target"])
+            line_start = int(reference["line"])
+            scope_name = reference.get("scope")
+            scope = procedures.get(str(scope_name), (program_id, main_line))[0]
             statement = f"extension:pli-sql:{program}:{line_start}:{occurrence}"
             self._node(statement, "db2_sql_statement", f"{operation} {schema}.{table}", {
                 "language": "PL/I",
                 "operation": operation,
-                "normalized_sql": body,
+                "normalized_sql": reference["normalized_sql"],
                 "program": program,
-            }, self._evidence(relative, line_start, line_end))
+                "parser": "pli-supported-subset-v2",
+            }, self._evidence(relative, line_start))
             table_id = f"legacy:db2-table:{schema}.{table}"
             self._external_node(table_id)
-            self._edge(scope, "ISSUES_SQL", statement, self._evidence(relative, line_start, line_end))
+            self._edge(scope, "ISSUES_SQL", statement, self._evidence(relative, line_start))
             relation = "READS_TABLE" if operation == "SELECT" else "WRITES_TABLE"
-            self._edge(statement, relation, table_id, self._evidence(relative, line_start, line_end))
+            self._edge(statement, relation, table_id, self._evidence(relative, line_start))
 
     def _external_program(self, name: str) -> str:
         candidates = (
@@ -290,7 +299,7 @@ class _FragmentBuilder:
             "path": path,
             "line_start": start,
             "line_end": end if end is not None else start,
-            "method": "pli-language-pack-v1",
+            "method": "pli-supported-subset-v2",
             "confidence": "observed",
         }]
 
@@ -329,6 +338,11 @@ class _FragmentBuilder:
                 "nodes_by_kind": dict(sorted(Counter(item["kind"] for item in nodes).items())),
                 "edges_by_relation": dict(sorted(Counter(item["relation"] for item in edges).items())),
                 "external_reference_count": len(self.external),
+            },
+            "coverage": {
+                "frontend": "tokenized-statement-parser",
+                "parser_version": PACK_VERSION,
+                "blocker_count": 0,
             },
             "limitations": [
                 "The bundled PL/I source is a reference fixture, not customer production source.",

@@ -64,7 +64,7 @@
         "status": "simulated_ready"
       }
     ],
-    "content_sha256": "c33f2143a22219275dcbc6b8635fdaa0649417a8dcad4bedf032e88e60a99308",
+    "content_sha256": "57cd264b1f18adb89d72ee678b91f74dea1048b06d2b15896969bfd36bfc4726",
     "schema_version": "1.2",
     "truth_boundary": "Local, simulated, fixture, static, and offline target evidence cannot satisfy live z/OS observation or equivalence gates."
   },
@@ -77,10 +77,10 @@
     "statement": "The projection composes separately validated discovery and development evidence; it does not promote live-mainframe or production claims."
   },
   "composite_graph_id": "lightyear:carddemo-modernization:composite",
-  "content_sha256": "beb62508cae1a592fd667c2ef7034b69a28a8e6f5004e0f3bf308aa4ccbb6631",
+  "content_sha256": "5e62099c18b58799146952f1afd5d81efacae411e0c59c50895fb8d78c1ff62b",
   "fragments": [
     {
-      "content_sha256": "c41d373bb758b52e0e14549422f9638e992aae91fde33cfda0c9ac4d3e947546",
+      "content_sha256": "33a57c2a87a74ce73dc18742cc96c48735a8b7df152add5a1db44a77ed4a48ec",
       "fragment_id": "lightyear:pli-reference-v1",
       "fragment_type": "lightyear-graph-extension",
       "language": "PL/I",

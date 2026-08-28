@@ -56,6 +56,18 @@
           "lightyear.db2-zos-catalog",
           "lightyear.zosmf-jobs"
         ],
+        "enterprise_hardening": {
+          "authentication_profiles_bounded": true,
+          "checkpoint_resume": true,
+          "evidence_class": "simulated-resilience",
+          "fault_scenarios": 8,
+          "live_observed": false,
+          "pagination_bounded": true,
+          "production_ready": false,
+          "receipt_sha256": "8ebfdca9e04bf4a0d0710ce2e0e629e6c099b0f7723ed439875639de5eaa9e2f",
+          "retry_bounded": true,
+          "status": "passed"
+        },
         "evidence_class": "simulated",
         "live_observed": false,
         "mechanism": "Mainframe Access Campaign",
@@ -64,8 +76,8 @@
         "status": "simulated_ready"
       }
     ],
-    "content_sha256": "97c066d08966b018ab84ded79ac5a01f7202580469b7a558b397069e8dfa80d6",
-    "schema_version": "1.4",
+    "content_sha256": "cdf4c55cd840dfe34258382bab3b819cda576396a175984b2982475a83ba6a7d",
+    "schema_version": "1.5",
     "truth_boundary": "Local, simulated, fixture, static, and offline target evidence cannot satisfy live z/OS observation or equivalence gates."
   },
   "claim_boundary": {
@@ -77,7 +89,7 @@
     "statement": "The projection composes separately validated discovery and development evidence; it does not promote live-mainframe or production claims."
   },
   "composite_graph_id": "lightyear:carddemo-modernization:composite",
-  "content_sha256": "e7e0c2a6467d34770a6ec3886b1ba2816668e0cac5f6bac1af052de3da43ddfc",
+  "content_sha256": "9d30cde525f36ffd96b5ebfca3239d210a9967ba27153c9ff8871435b3f09d30",
   "fragments": [
     {
       "content_sha256": "33a57c2a87a74ce73dc18742cc96c48735a8b7df152add5a1db44a77ed4a48ec",

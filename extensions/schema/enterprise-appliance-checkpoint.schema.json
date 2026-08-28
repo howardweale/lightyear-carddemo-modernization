@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schema/enterprise-appliance-checkpoint-1.0.json",
+  "title": "LIGHTYEAR enterprise collector resumable checkpoint",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "receipt_type", "appliance_id", "status", "bindings", "adapter_index", "current_path", "total_pages", "total_response_bytes", "retry_count", "resume_count", "backoff_schedule_ms", "adapter_state", "raw_bodies_retained", "production_ready", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "receipt_type": {"const": "lightyear-enterprise-collection-checkpoint"},
+    "appliance_id": {"type": "string", "minLength": 1},
+    "status": {"enum": ["running", "interrupted", "completed", "blocked"]},
+    "bindings": {"type": "object"},
+    "adapter_index": {"type": "integer", "minimum": 0, "maximum": 3},
+    "current_path": {"anyOf": [{"type": "string"}, {"type": "null"}]},
+    "total_pages": {"type": "integer", "minimum": 0},
+    "total_response_bytes": {"type": "integer", "minimum": 0},
+    "retry_count": {"type": "integer", "minimum": 0},
+    "resume_count": {"type": "integer", "minimum": 0},
+    "backoff_schedule_ms": {"type": "array", "items": {"type": "integer", "minimum": 0}},
+    "adapter_state": {"type": "object"},
+    "raw_bodies_retained": {"const": false},
+    "production_ready": {"const": false},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

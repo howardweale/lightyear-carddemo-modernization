@@ -1,0 +1,39 @@
+{
+  "content_sha256": "833e64740984297e611bcb5e4209a0ff39cf45081262d1ffb21c3d82781fbda9",
+  "fault_catalog_type": "lightyear-enterprise-collector-fault-catalog",
+  "scenarios": [
+    {
+      "expected": "bounded retry exhaustion",
+      "fault": "dns-exhaustion"
+    },
+    {
+      "expected": "immediate fail-closed rejection",
+      "fault": "tls-rejection"
+    },
+    {
+      "expected": "bounded retry then recovery",
+      "fault": "timeout-recovery"
+    },
+    {
+      "expected": "redirect rejected without credential forwarding",
+      "fault": "redirect-rejection"
+    },
+    {
+      "expected": "continuation loop rejected",
+      "fault": "pagination-loop"
+    },
+    {
+      "expected": "bounded Retry-After then recovery",
+      "fault": "rate-limit-recovery"
+    },
+    {
+      "expected": "oversized or truncated body rejected",
+      "fault": "response-truncation"
+    },
+    {
+      "expected": "content-addressed checkpoint tamper rejected",
+      "fault": "checkpoint-tamper"
+    }
+  ],
+  "schema_version": "1.0"
+}

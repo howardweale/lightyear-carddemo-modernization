@@ -1,0 +1,57 @@
+{
+  "all_expected_faults_detected": true,
+  "content_sha256": "79bb362da03ff2216a1816aec874f893bc105394320a2a50070ed44c36edec18",
+  "credential_material_retained": false,
+  "evidence_class": "simulated-resilience",
+  "limitations": [
+    "Faults are deterministic transport scripts, not a customer network exercise."
+  ],
+  "live_observed": false,
+  "production_ready": false,
+  "receipt_type": "lightyear-enterprise-collector-fault-laboratory",
+  "results": [
+    {
+      "detected": true,
+      "expected": "bounded retry exhaustion",
+      "fault": "dns-exhaustion"
+    },
+    {
+      "detected": true,
+      "expected": "immediate fail-closed rejection",
+      "fault": "tls-rejection"
+    },
+    {
+      "detected": true,
+      "expected": "bounded retry then recovery",
+      "fault": "timeout-recovery"
+    },
+    {
+      "detected": true,
+      "expected": "redirect rejected without credential forwarding",
+      "fault": "redirect-rejection"
+    },
+    {
+      "detected": true,
+      "expected": "continuation loop rejected",
+      "fault": "pagination-loop"
+    },
+    {
+      "detected": true,
+      "expected": "bounded Retry-After then recovery",
+      "fault": "rate-limit-recovery"
+    },
+    {
+      "detected": true,
+      "expected": "oversized or truncated body rejected",
+      "fault": "response-truncation"
+    },
+    {
+      "detected": true,
+      "expected": "content-addressed checkpoint tamper rejected",
+      "fault": "checkpoint-tamper"
+    }
+  ],
+  "scenario_count": 8,
+  "schema_version": "1.0",
+  "status": "passed"
+}

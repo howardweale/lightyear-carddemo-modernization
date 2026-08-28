@@ -1,0 +1,40 @@
+{
+  "appliance_id": "carddemo-enterprise-collector-v1",
+  "authentication": {
+    "accepted_modes": [
+      "bearer-env",
+      "externally-issued-oauth-bearer-env",
+      "mtls-bearer-env"
+    ],
+    "minimum_tls": "1.2"
+  },
+  "bounds": {
+    "max_total_response_bytes": 262144
+  },
+  "campaign_profile_sha256": "2ed9d0a9082273689fdd85e2678fe3377fa6cea99fb715232f3f89bfcf03e2d9",
+  "checkpoint": {
+    "interrupt_after_pages": 2,
+    "maximum_resume_count": 3
+  },
+  "content_sha256": "43546433710432528500b775ad1dfacac7b27985428cebabaf149c68df7d71dc",
+  "pagination": {
+    "allowed_query_keys": [
+      "cursor",
+      "exec-data",
+      "step-data"
+    ],
+    "max_pages_per_adapter": 3
+  },
+  "retention": {
+    "checkpoint_days": 7,
+    "evidence_days": 30,
+    "mode": "digest-and-redacted-claims-only"
+  },
+  "retry": {
+    "base_backoff_ms": 100,
+    "max_attempts": 3,
+    "max_backoff_ms": 1000,
+    "max_retry_after_ms": 5000
+  },
+  "schema_version": "1.0"
+}

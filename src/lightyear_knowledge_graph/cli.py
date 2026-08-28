@@ -210,6 +210,11 @@ def build_parser() -> argparse.ArgumentParser:
         type=Path,
         default=Path("extensions/adapters/campaign/campaign.receipt.json"),
     )
+    capabilities.add_argument(
+        "--enterprise-appliance-receipt",
+        type=Path,
+        default=Path("extensions/adapters/appliance/appliance.receipt.json"),
+    )
     capabilities.add_argument("--validate-only", action="store_true")
 
     context = subparsers.add_parser("context", help="Build an audience-filtered context package")
@@ -474,6 +479,7 @@ def main(argv: list[str] | None = None) -> int:
         oracle_data_receipt = load_optional(args.oracle_data_receipt)
         data_rehearsal_receipt = load_optional(args.data_rehearsal_receipt)
         campaign_receipt = load_optional(args.campaign_receipt)
+        enterprise_appliance_receipt = load_optional(args.enterprise_appliance_receipt)
         expected = analyze_capabilities(
             payload,
             cics_vsam_receipt=receipt,
@@ -489,6 +495,7 @@ def main(argv: list[str] | None = None) -> int:
             oracle_data_receipt=oracle_data_receipt,
             data_rehearsal_receipt=data_rehearsal_receipt,
             campaign_receipt=campaign_receipt,
+            enterprise_appliance_receipt=enterprise_appliance_receipt,
         )
         if args.validate_only:
             analysis = json.loads(args.output.read_text(encoding="utf-8"))

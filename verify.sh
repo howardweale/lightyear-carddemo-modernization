@@ -25,6 +25,7 @@ fi
 "$project_dir/migration-rehearsal.sh" verify
 "$project_dir/knowledge-graph.sh" verify
 "$project_dir/extension-foundation.sh" verify
+"$project_dir/collection-appliance.sh" verify
 "$project_dir/pli-conformance.sh" verify
 "$project_dir/pli-modernization.sh" verify
 "$project_dir/pli-build-attestation.sh" verify

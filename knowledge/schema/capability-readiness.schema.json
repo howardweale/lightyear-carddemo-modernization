@@ -1,18 +1,18 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://factorydark.ai/schemas/capability-readiness-1.4.json",
+  "$id": "https://factorydark.ai/schemas/capability-readiness-1.5.json",
   "title": "FactoryDark Unified Mainframe Capability Readiness",
   "type": "object",
   "required": ["schema_version", "analysis_type", "graph_content_sha256", "truth_boundary", "evidence_bindings", "capabilities", "collection_mechanisms", "content_sha256"],
   "properties": {
-    "schema_version": {"const": "1.4"},
+    "schema_version": {"const": "1.5"},
     "analysis_type": {"const": "factorydark-mainframe-capability-readiness"},
     "graph_content_sha256": {"$ref": "#/$defs/hash"},
     "truth_boundary": {"type": "string", "minLength": 1},
     "content_sha256": {"$ref": "#/$defs/hash"},
     "evidence_bindings": {
       "type": "object",
-      "required": ["canonical_graph_sha256", "extension_catalog_sha256", "pli_fragment_sha256", "pli_coverage_receipt_sha256", "pli_development_receipt_sha256", "pli_build_receipt_sha256", "pli_build_attestation_sha256", "postgres_data_receipt_sha256", "oracle_data_receipt_sha256", "data_rehearsal_receipt_sha256", "mainframe_campaign_receipt_sha256"],
+      "required": ["canonical_graph_sha256", "extension_catalog_sha256", "pli_fragment_sha256", "pli_coverage_receipt_sha256", "pli_development_receipt_sha256", "pli_build_receipt_sha256", "pli_build_attestation_sha256", "postgres_data_receipt_sha256", "oracle_data_receipt_sha256", "data_rehearsal_receipt_sha256", "mainframe_campaign_receipt_sha256", "enterprise_appliance_receipt_sha256"],
       "properties": {
         "canonical_graph_sha256": {"$ref": "#/$defs/hash"},
         "extension_catalog_sha256": {"$ref": "#/$defs/hash"},
@@ -24,7 +24,8 @@
         "postgres_data_receipt_sha256": {"$ref": "#/$defs/hash"},
         "oracle_data_receipt_sha256": {"$ref": "#/$defs/hash"},
         "data_rehearsal_receipt_sha256": {"$ref": "#/$defs/hash"},
-        "mainframe_campaign_receipt_sha256": {"$ref": "#/$defs/hash"}
+        "mainframe_campaign_receipt_sha256": {"$ref": "#/$defs/hash"},
+        "enterprise_appliance_receipt_sha256": {"$ref": "#/$defs/hash"}
       },
       "additionalProperties": false
     },
@@ -40,7 +41,7 @@
       "maxItems": 1,
       "items": {
         "type": "object",
-        "required": ["mechanism", "status", "evidence_class", "live_observed", "production_ready", "adapters", "receipt_sha256"],
+        "required": ["mechanism", "status", "evidence_class", "live_observed", "production_ready", "adapters", "receipt_sha256", "enterprise_hardening"],
         "properties": {
           "mechanism": {"const": "Mainframe Access Campaign"},
           "status": {"enum": ["live_observed", "simulated_ready", "blocked"]},
@@ -48,7 +49,24 @@
           "live_observed": {"type": "boolean"},
           "production_ready": {"const": false},
           "adapters": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
-          "receipt_sha256": {"anyOf": [{"$ref": "#/$defs/hash"}, {"type": "null"}]}
+          "receipt_sha256": {"anyOf": [{"$ref": "#/$defs/hash"}, {"type": "null"}]},
+          "enterprise_hardening": {
+            "type": "object",
+            "required": ["status", "evidence_class", "authentication_profiles_bounded", "pagination_bounded", "retry_bounded", "checkpoint_resume", "fault_scenarios", "live_observed", "production_ready", "receipt_sha256"],
+            "properties": {
+              "status": {"enum": ["passed", "blocked"]},
+              "evidence_class": {"enum": ["simulated-resilience", "unverified"]},
+              "authentication_profiles_bounded": {"type": "boolean"},
+              "pagination_bounded": {"type": "boolean"},
+              "retry_bounded": {"type": "boolean"},
+              "checkpoint_resume": {"type": "boolean"},
+              "fault_scenarios": {"type": "integer", "minimum": 0, "maximum": 8},
+              "live_observed": {"const": false},
+              "production_ready": {"const": false},
+              "receipt_sha256": {"anyOf": [{"$ref": "#/$defs/hash"}, {"type": "null"}]}
+            },
+            "additionalProperties": false
+          }
         },
         "additionalProperties": false
       }

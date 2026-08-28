@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.28.0 — 2026-08-28
+
+- Added a content-addressed enterprise collection-appliance profile bound to the existing
+  three-adapter mainframe access campaign.
+- Added bounded bearer, externally issued OAuth bearer, and mTLS-plus-bearer authentication
+  profiles with TLS 1.2 minimum transport and credential-free configuration.
+- Added continuation-only pagination, bounded retry and `Retry-After`, global response limits,
+  and fail-closed redirect and continuation validation.
+- Proved a forced interruption after page two followed by content-addressed checkpoint resume
+  without repeating completed adapter work.
+- Added digest-and-redacted-claims-only retention with seven-day checkpoint and thirty-day evidence
+  policy bounds; raw bodies and credentials are never retained.
+- Added an eight-scenario deterministic fault laboratory covering DNS, TLS, timeout, redirects,
+  pagination loops, rate limits, truncation, and checkpoint tampering.
+- Published the appliance posture in the unified capability projection while keeping all live,
+  mainframe-equivalence, enterprise-IdP, customer-vault, purge-scheduler, and production claims
+  blocked.
+
 ## 0.27.0 — 2026-08-28
 
 - Added a content-addressed five-event Db2-shaped AUTHFRDS change journal covering insert, update,

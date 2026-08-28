@@ -119,6 +119,45 @@ def _offline_rehearsal_passed(payload: dict[str, Any]) -> bool:
     )
 
 
+def _enterprise_appliance_receipt_passed(payload: dict[str, Any], graph_sha256: str) -> bool:
+    expected_checks = {
+        "all_adapters_complete",
+        "all_captures_valid",
+        "authentication_profiles_bounded",
+        "checkpoint_resume",
+        "fault_laboratory_passed",
+        "pagination_bounded",
+        "raw_bodies_discarded",
+        "retention_policy_bounded",
+        "retry_bounded",
+    }
+    checks = payload.get("checks", {})
+    operations = payload.get("operations", {})
+    fault_lab = payload.get("fault_laboratory", {})
+    retention = payload.get("retention", {})
+    return bool(
+        payload.get("schema_version") == "1.0"
+        and payload.get("receipt_type") == "lightyear-enterprise-collection-appliance"
+        and payload.get("evidence_class") == "simulated-resilience"
+        and payload.get("status") == "passed"
+        and payload.get("enterprise_mechanism_ready") is True
+        and payload.get("live_observed") is False
+        and payload.get("mainframe_equivalent") is False
+        and payload.get("production_ready") is False
+        and payload.get("content_sha256") == _canonical_hash(payload)
+        and payload.get("bindings", {}).get("graph_sha256") == graph_sha256
+        and set(checks) == expected_checks
+        and all(checks.values())
+        and operations.get("adapters") == 3
+        and operations.get("pages", 0) >= 4
+        and operations.get("retries", 0) >= 2
+        and operations.get("resume_count", 0) >= 1
+        and fault_lab == {"scenarios": 8, "status": "passed"}
+        and retention.get("raw_bodies_retained") is False
+        and retention.get("automatic_purge_executed") is False
+    )
+
+
 def _pli_development_receipt_passed(
     payload: dict[str, Any], graph_sha256: str, fragment_sha256: str | None
 ) -> bool:
@@ -280,6 +319,7 @@ def analyze_capabilities(
     oracle_data_receipt: dict[str, Any] | None = None,
     data_rehearsal_receipt: dict[str, Any] | None = None,
     campaign_receipt: dict[str, Any] | None = None,
+    enterprise_appliance_receipt: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     nodes = {node["id"]: node for node in graph["nodes"]}
     kind_counts = graph["statistics"]["nodes_by_kind"]
@@ -564,6 +604,8 @@ def analyze_capabilities(
     collection_status = (
         "live_observed" if campaign_class == "live" else "simulated_ready" if campaign_class == "simulated" else "blocked"
     )
+    appliance = enterprise_appliance_receipt or {}
+    appliance_valid = _enterprise_appliance_receipt_passed(appliance, graph_sha256)
     collection_mechanisms = [{
         "mechanism": "Mainframe Access Campaign",
         "status": collection_status,
@@ -572,6 +614,19 @@ def analyze_capabilities(
         "production_ready": False,
         "adapters": sorted(campaign.get("required_adapters", [])) if campaign_valid else [],
         "receipt_sha256": campaign.get("content_sha256") if campaign_valid else None,
+        "enterprise_hardening": {
+            "status": "passed" if appliance_valid else "blocked",
+            "evidence_class": appliance.get("evidence_class", "unverified") if appliance_valid else "unverified",
+            "authentication_profiles_bounded": bool(appliance_valid),
+            "pagination_bounded": bool(appliance_valid),
+            "retry_bounded": bool(appliance_valid),
+            "checkpoint_resume": bool(appliance_valid),
+            "fault_scenarios": appliance.get("fault_laboratory", {}).get("scenarios", 0)
+            if appliance_valid else 0,
+            "live_observed": False,
+            "production_ready": False,
+            "receipt_sha256": appliance.get("content_sha256") if appliance_valid else None,
+        },
     }]
 
     evidence_bindings = {
@@ -586,10 +641,11 @@ def analyze_capabilities(
         "oracle_data_receipt_sha256": oracle.get("content_sha256"),
         "data_rehearsal_receipt_sha256": rehearsal.get("content_sha256"),
         "mainframe_campaign_receipt_sha256": campaign.get("content_sha256"),
+        "enterprise_appliance_receipt_sha256": appliance.get("content_sha256"),
     }
 
     payload = {
-        "schema_version": "1.4",
+        "schema_version": "1.5",
         "analysis_type": "factorydark-mainframe-capability-readiness",
         "graph_content_sha256": graph_sha256,
         "truth_boundary": (
@@ -609,7 +665,7 @@ def validate_capability_analysis(
     expected: dict[str, Any] | None = None,
 ) -> list[str]:
     errors: list[str] = []
-    if payload.get("schema_version") != "1.4":
+    if payload.get("schema_version") != "1.5":
         errors.append("unsupported capability analysis schema_version")
     if payload.get("graph_content_sha256") != graph.get("content_sha256"):
         errors.append("capability analysis is not bound to the canonical graph")
@@ -634,6 +690,8 @@ def validate_capability_analysis(
         errors.append("capability analysis must include the mainframe access campaign")
     elif mechanisms[0].get("evidence_class") != "live" and mechanisms[0].get("live_observed"):
         errors.append("non-live campaign evidence cannot be reported as live observed")
+    elif mechanisms[0].get("enterprise_hardening", {}).get("live_observed"):
+        errors.append("unimported enterprise hardening cannot be reported as live observed")
     if payload.get("evidence_bindings", {}).get("canonical_graph_sha256") != graph.get("content_sha256"):
         errors.append("capability evidence bindings do not include the canonical graph")
     if expected is not None and payload != expected:

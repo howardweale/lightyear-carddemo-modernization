@@ -1,5 +1,50 @@
 # Mainframe access campaign
 
+## Enterprise collection appliance (MS #28)
+
+MS #28 preserves the campaign's exact read-only parsers and graph bindings while adding an
+operational envelope around collection.
+
+| Control | Bounded behavior |
+|---|---|
+| Authentication | `bearer-env`, externally issued OAuth bearer, or mTLS plus bearer |
+| TLS | HTTPS with TLS 1.2 minimum; mTLS requires separate certificate and key files |
+| Pagination | Server continuation only; three pages per adapter; approved query keys only |
+| Retry | Three attempts; bounded exponential backoff; capped `Retry-After` |
+| Recovery | Content-addressed checkpoint; at most three resumes; completed work is not repeated |
+| Retention | Redacted claims and digests only; seven-day checkpoint and thirty-day evidence policy |
+| Faults | DNS, TLS, timeout, redirect, loop, rate limit, truncation, and checkpoint tamper |
+
+The deterministic appliance fixture forces an interruption after page two, resumes once, and
+completes three adapters over four pages after two bounded retries. The fault receipt must detect
+all eight scenarios before `enterprise_mechanism_ready` can be true.
+
+```bash
+./collection-appliance.sh verify
+```
+
+For an authorized live run, provide the bearer and independent signing key through the environment.
+Use `resume` with the same arguments and output directory after a bounded transport failure. For
+mTLS, also set `LIGHTYEAR_MAINFRAME_CLIENT_CERTIFICATE` and
+`LIGHTYEAR_MAINFRAME_CLIENT_KEY`; a private CA can be selected with
+`LIGHTYEAR_MAINFRAME_CA_FILE`.
+
+```bash
+export LIGHTYEAR_MAINFRAME_BEARER='operator-supplied-value'
+export LIGHTYEAR_EXTENSION_EVIDENCE_KEY='customer-owned-value-at-least-32-bytes'
+./collection-appliance.sh live https://mainframe.example customer-key \
+  work/customer-appliance mtls-bearer-env
+./collection-appliance.sh resume https://mainframe.example customer-key \
+  work/customer-appliance mtls-bearer-env
+./collection-appliance.sh validate-live customer-key work/customer-appliance
+```
+
+The accepted OAuth mode consumes a bearer token issued by an external enterprise identity system;
+LIGHTYEAR does not claim to implement or execute that IdP's authorization flow. Likewise, the
+retention durations are enforced profile bounds, while automatic purge remains customer-operated.
+No simulated appliance artifact can set `live_observed`, `mainframe_equivalent`, or
+`production_ready` to true.
+
 This campaign is the customer-access entry point for MS #21. It is deliberately read-only and
 content-minimized. Its purpose is to turn three narrow remote observations into signed,
 graph-addressed evidence without storing credentials or response bodies.

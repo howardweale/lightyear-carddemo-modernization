@@ -530,6 +530,18 @@
         "lightyear.db2-zos-catalog",
         "lightyear.zosmf-jobs"
       ],
+      "enterprise_hardening": {
+        "authentication_profiles_bounded": true,
+        "checkpoint_resume": true,
+        "evidence_class": "simulated-resilience",
+        "fault_scenarios": 8,
+        "live_observed": false,
+        "pagination_bounded": true,
+        "production_ready": false,
+        "receipt_sha256": "8ebfdca9e04bf4a0d0710ce2e0e629e6c099b0f7723ed439875639de5eaa9e2f",
+        "retry_bounded": true,
+        "status": "passed"
+      },
       "evidence_class": "simulated",
       "live_observed": false,
       "mechanism": "Mainframe Access Campaign",
@@ -538,10 +550,11 @@
       "status": "simulated_ready"
     }
   ],
-  "content_sha256": "97c066d08966b018ab84ded79ac5a01f7202580469b7a558b397069e8dfa80d6",
+  "content_sha256": "cdf4c55cd840dfe34258382bab3b819cda576396a175984b2982475a83ba6a7d",
   "evidence_bindings": {
     "canonical_graph_sha256": "2a003843da4fcdb04fc563f2d9644dd745ba0589c9fb6651b7fd21c9e6fad571",
     "data_rehearsal_receipt_sha256": "e628b50cc4e21707f6c62e7a8429654c7867411f75fb9381e03f3d191854f652",
+    "enterprise_appliance_receipt_sha256": "8ebfdca9e04bf4a0d0710ce2e0e629e6c099b0f7723ed439875639de5eaa9e2f",
     "extension_catalog_sha256": "a3ca454e737d047b44ce1a17d225ea23174a345e0e66083e304290a037f73106",
     "mainframe_campaign_receipt_sha256": "264fe772a82ed67058a828e854cbde96b3d2deea3789f01a23ab5f6189cc027f",
     "oracle_data_receipt_sha256": "6958d7cc783d5ad00c469c112db5b665bf9ba93b7addec9cc94375d6c3f2dd83",
@@ -553,6 +566,6 @@
     "postgres_data_receipt_sha256": "8e2e2dc30cffa3205ceb743f418ae937ea8ac05d6bde9041182acc61cba3abbe"
   },
   "graph_content_sha256": "2a003843da4fcdb04fc563f2d9644dd745ba0589c9fb6651b7fd21c9e6fad571",
-  "schema_version": "1.4",
+  "schema_version": "1.5",
   "truth_boundary": "Local, simulated, fixture, static, and offline target evidence cannot satisfy live z/OS observation or equivalence gates."
 }

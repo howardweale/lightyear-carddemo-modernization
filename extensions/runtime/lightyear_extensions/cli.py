@@ -3,12 +3,20 @@ from __future__ import annotations
 import argparse
 import json
 import os
+from datetime import datetime, timezone
 from pathlib import Path
 
 from lightyear_common.io import write_json
 from lightyear_knowledge_graph.model import load_graph
 
 from .adapters import FixtureAdapter, RecordedReplayAdapter, default_registry
+from .appliance import (
+    EnterpriseHttpTransport,
+    build_appliance_evidence,
+    run_appliance,
+    run_fault_laboratory,
+    validate_appliance_evidence,
+)
 from .campaign import (
     BoundedHttpTransport,
     CampaignError,
@@ -136,6 +144,57 @@ def build_parser() -> argparse.ArgumentParser:
     validate_campaign.add_argument("--capture-root", type=Path, required=True)
     validate_campaign.add_argument("--trusted-key-id")
     validate_campaign.add_argument("--trusted-key-env", default="LIGHTYEAR_EXTENSION_EVIDENCE_KEY")
+
+    appliance_fixture = commands.add_parser(
+        "appliance-fixture",
+        help="Build deterministic enterprise collector resilience evidence",
+    )
+    appliance_fixture.add_argument("--appliance-profile", type=Path, required=True)
+    appliance_fixture.add_argument("--campaign-profile", type=Path, required=True)
+    appliance_fixture.add_argument("--responses", type=Path, required=True)
+    appliance_fixture.add_argument("--faults", type=Path, required=True)
+    appliance_fixture.add_argument("--graph", type=Path, required=True)
+    appliance_fixture.add_argument("--output-root", type=Path, required=True)
+
+    appliance_live = commands.add_parser(
+        "appliance-live",
+        help="Run the signed, resumable enterprise collector against authorized HTTPS endpoints",
+    )
+    appliance_live.add_argument("--appliance-profile", type=Path, required=True)
+    appliance_live.add_argument("--campaign-profile", type=Path, required=True)
+    appliance_live.add_argument("--faults", type=Path, required=True)
+    appliance_live.add_argument("--graph", type=Path, required=True)
+    appliance_live.add_argument("--base-url", required=True)
+    appliance_live.add_argument("--output-root", type=Path, required=True)
+    appliance_live.add_argument(
+        "--auth-mode",
+        choices=sorted({
+            "bearer-env",
+            "externally-issued-oauth-bearer-env",
+            "mtls-bearer-env",
+        }),
+        default="bearer-env",
+    )
+    appliance_live.add_argument("--credential-env", default="LIGHTYEAR_MAINFRAME_BEARER")
+    appliance_live.add_argument("--signing-key-env", default="LIGHTYEAR_EXTENSION_EVIDENCE_KEY")
+    appliance_live.add_argument("--key-id", required=True)
+    appliance_live.add_argument("--ca-file", type=Path)
+    appliance_live.add_argument("--client-certificate", type=Path)
+    appliance_live.add_argument("--client-key", type=Path)
+    appliance_live.add_argument("--resume", action="store_true")
+
+    appliance_validate = commands.add_parser(
+        "appliance-validate",
+        help="Validate enterprise collector checkpoint, captures, faults, and receipt",
+    )
+    appliance_validate.add_argument("--appliance-profile", type=Path, required=True)
+    appliance_validate.add_argument("--campaign-profile", type=Path, required=True)
+    appliance_validate.add_argument("--graph", type=Path, required=True)
+    appliance_validate.add_argument("--artifact-root", type=Path, required=True)
+    appliance_validate.add_argument("--trusted-key-id")
+    appliance_validate.add_argument(
+        "--trusted-key-env", default="LIGHTYEAR_EXTENSION_EVIDENCE_KEY"
+    )
     return parser
 
 
@@ -171,6 +230,79 @@ def main(argv: list[str] | None = None) -> int:
             return 0
 
         graph = load_graph(args.graph)
+        if args.command in {"appliance-fixture", "appliance-live", "appliance-validate"}:
+            campaign_profile = load_profile(args.campaign_profile)
+            appliance_profile = json.loads(
+                args.appliance_profile.read_text(encoding="utf-8")
+            )
+            if args.command == "appliance-fixture":
+                fixture = json.loads(args.responses.read_text(encoding="utf-8"))
+                faults = json.loads(args.faults.read_text(encoding="utf-8"))
+                receipt = build_appliance_evidence(
+                    appliance_profile,
+                    campaign_profile,
+                    graph,
+                    fixture,
+                    faults,
+                    args.output_root,
+                )
+                return _result(
+                    "passed" if receipt["status"] == "passed" else "failed",
+                    output=str(args.output_root),
+                    content_sha256=receipt["content_sha256"],
+                    checks=receipt["checks"],
+                    operations=receipt["operations"],
+                )
+            if args.command == "appliance-live":
+                credential = os.environ.get(args.credential_env)
+                signing_value = os.environ.get(args.signing_key_env)
+                if credential is None:
+                    raise CampaignError(f"Set {args.credential_env} for read-only mainframe access")
+                if signing_value is None:
+                    raise CampaignError(f"Set {args.signing_key_env} to sign live appliance evidence")
+                faults = json.loads(args.faults.read_text(encoding="utf-8"))
+                fault_receipt = run_fault_laboratory(faults, appliance_profile)
+                write_json(args.output_root / "fault-lab.receipt.json", fault_receipt)
+                transport = EnterpriseHttpTransport(
+                    args.base_url,
+                    credential,
+                    auth_mode=args.auth_mode,
+                    timeout_seconds=campaign_profile["bounds"]["timeout_seconds"],
+                    max_response_bytes=campaign_profile["bounds"]["max_response_bytes"],
+                    ca_file=args.ca_file,
+                    client_certificate=args.client_certificate,
+                    client_key=args.client_key,
+                )
+                receipt = run_appliance(
+                    appliance_profile,
+                    campaign_profile,
+                    graph,
+                    transport,
+                    args.output_root,
+                    collected_at=datetime.now(timezone.utc).isoformat(),
+                    resume=args.resume,
+                    evidence_class="live",
+                    signing_key=signing_value.encode("utf-8"),
+                    key_id=args.key_id,
+                    fault_receipt=fault_receipt,
+                )
+                return _result(
+                    "passed" if receipt["status"] == "passed" else "failed",
+                    output=str(args.output_root),
+                    content_sha256=receipt["content_sha256"],
+                    live_observed=receipt["live_observed"],
+                    production_ready=receipt["production_ready"],
+                    checks=receipt["checks"],
+                    operations=receipt["operations"],
+                )
+            errors = validate_appliance_evidence(
+                appliance_profile,
+                campaign_profile,
+                graph,
+                args.artifact_root,
+                trusted_keys=_trusted_keys(args),
+            )
+            return _result("passed" if not errors else "failed", errors=errors)
         if args.command == "build-pli-conformance":
             golden, receipt = build_conformance_lab(
                 graph, args.corpus_root, args.manifest, args.support_matrix, args.repository_root

@@ -568,6 +568,7 @@ class ExplorerServer(ThreadingHTTPServer):
         oracle_mapping = load("mappings/authfrds-oracle.json")
         receipt = load("receipts/authfrds.offline.receipt.json")
         oracle_offline = load("receipts/authfrds.oracle-offline.receipt.json")
+        rehearsal = load("rehearsal/receipt.json")
         live_root = self.project_root / "work/data-modernization"
         def load_live(name: str) -> dict[str, Any]:
             path = live_root / name
@@ -591,11 +592,22 @@ class ExplorerServer(ThreadingHTTPServer):
                 "content_sha256": active.get("content_sha256"),
                 "image_identity": live.get("image_identity"),
             })
+        rehearsal_checks = {
+            f"rehearsal_{name}": value
+            for name, value in rehearsal.get("checks", {}).items()
+        }
+        gaps = sorted(set(receipt.get("gaps", [])) | set(rehearsal.get("gaps", [])))
         return {
             "workload": receipt.get("workload", "carddemo-authorization-authfrds"),
-            "status": receipt.get("status", "not_available"),
-            "production_ready": receipt.get("production_ready", False),
-            "evidence_class": receipt.get("evidence_class", "not_available"),
+            "status": (
+                "passed"
+                if receipt.get("status") == rehearsal.get("status") == "passed"
+                else "blocked"
+            ),
+            "production_ready": False,
+            "evidence_class": rehearsal.get(
+                "evidence_class", receipt.get("evidence_class", "not_available")
+            ),
             "source_table": f"{model.get('schema', '')}.{model.get('name', '')}".strip("."),
             "target_table": mapping.get("target_table", ""),
             "targets": targets,
@@ -605,10 +617,28 @@ class ExplorerServer(ThreadingHTTPServer):
                 "indexes": len(model.get("indexes", [])),
                 "fixture_rows": receipt.get("statistics", {}).get("rows", 0),
             },
-            "checks": receipt.get("checks", {}),
-            "gaps": receipt.get("gaps", []),
-            "content_sha256": receipt.get("content_sha256"),
+            "checks": {**receipt.get("checks", {}), **rehearsal_checks},
+            "gaps": gaps,
+            "content_sha256": rehearsal.get("content_sha256", receipt.get("content_sha256")),
             "signature": receipt.get("signature"),
+            "operational_rehearsal": {
+                "status": rehearsal.get("status", "not_available"),
+                "evidence_class": rehearsal.get("evidence_class", "not_available"),
+                "events": rehearsal.get("journal", {}).get("events", 0),
+                "resume_count": rehearsal.get("recovery", {}).get("resume_count", 0),
+                "observed_rpo_events": rehearsal.get("recovery", {}).get(
+                    "observed_rpo_events", 0
+                ),
+                "observed_rto_steps": rehearsal.get("recovery", {}).get(
+                    "observed_rto_steps", 0
+                ),
+                "cutover_opened": rehearsal.get("cutover", {}).get("opened", False),
+                "production_authorized": rehearsal.get("cutover", {}).get(
+                    "production_authorized", False
+                ),
+                "rollback_exact": rehearsal.get("rollback", {}).get("exact", False),
+                "receipt_sha256": rehearsal.get("content_sha256"),
+            },
         }
 
 

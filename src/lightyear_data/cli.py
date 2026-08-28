@@ -13,6 +13,7 @@ from .equivalence import offline_equivalence
 from .live import DockerOracleRunner, DockerPostgresExactRunner, aggregate_receipts
 from .oracle import OracleAdapter
 from .postgres import PostgreSQLAdapter, fixture_sql
+from .rehearsal import build_rehearsal_evidence, validate_rehearsal_evidence
 from .validation import validate_assets
 
 
@@ -37,6 +38,11 @@ def parser() -> argparse.ArgumentParser:
     sign_command.add_argument("--receipt", type=Path, required=True)
     sign_command.add_argument("--output", type=Path, required=True)
     sign_command.add_argument("--signer", default="customer-data-equivalence-authority")
+    rehearsal = commands.add_parser("rehearse-offline")
+    rehearsal.add_argument("--project-root", type=Path, default=Path("."))
+    rehearsal.add_argument("--output-root", type=Path)
+    validate_rehearsal = commands.add_parser("validate-rehearsal")
+    validate_rehearsal.add_argument("--project-root", type=Path, default=Path("."))
     return root
 
 
@@ -68,6 +74,17 @@ def main(argv: list[str] | None = None) -> int:
         write_json(output, result)
         result = dict(result)
         result["output"] = str(output)
+    elif args.command == "rehearse-offline":
+        project_root = args.project_root.resolve()
+        result = build_rehearsal_evidence(
+            project_root, (args.output_root or project_root).resolve()
+        )
+    elif args.command == "validate-rehearsal":
+        errors = validate_rehearsal_evidence(args.project_root.resolve())
+        result = {
+            "status": "passed" if not errors else "failed",
+            "errors": errors,
+        }
     else:
         key = os.environ.get("FACTORYDARK_DATA_EQUIVALENCE_KEY", "")
         payload = json.loads(args.receipt.read_text(encoding="utf-8"))

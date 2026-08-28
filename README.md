@@ -1,6 +1,28 @@
 # FactoryDark.ai CardDemo Modernization Factory
 
-Release: **v0.26.1 — legacy live-model evidence bridge**
+Release: **v0.27.0 — offline data movement, dual-run, cutover, and rollback rehearsal**
+
+v0.27 turns the bounded `AUTHFRDS` data proof into an operational migration rehearsal. A
+content-addressed Db2-shaped journal applies five ordered inserts, updates, and deletes to
+independent PostgreSQL- and Oracle-shaped projections. The controller stops after event two,
+resumes from an exact checkpoint, detects duplicate replay without applying it twice, and requires
+both targets to reconcile with the source before a simulated human approval can open cutover.
+
+After cutover, the rehearsal injects a unilateral target divergence, detects it, restores both
+targets to their exact pre-cutover identities, and confirms zero-event fixture RPO and a bounded
+three-step recovery. The unified capability and data control-tower views expose this operational
+posture without treating it as live Db2 evidence.
+
+```bash
+./migration-rehearsal.sh verify /path/to/aws-carddemo
+./lightyear.sh verify
+```
+
+The source journal, target engines, approval, RPO, and RTO are deterministic development evidence.
+No live Db2 log, customer data, production-scale timing, real cutover authorization, or mainframe
+equivalence is claimed; `production_ready` and `mainframe_equivalent` remain false.
+
+Previous milestone: **v0.26.1 — legacy live-model evidence bridge**
 
 v0.26.1 recovers the retained v0.12 live OpenAI evaluation as independently inspectable historical
 evidence. A fail-closed ZIP importer verifies the pinned archive identity, every content-addressed

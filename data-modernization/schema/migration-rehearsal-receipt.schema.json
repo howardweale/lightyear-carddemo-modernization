@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://factorydark.ai/schemas/migration-rehearsal-receipt-1.0.json",
+  "title": "FactoryDark offline migration rehearsal receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "receipt_type", "rehearsal_id", "workload", "evidence_class", "status", "development_ready", "production_ready", "mainframe_equivalent", "checks", "bindings", "journal", "recovery", "reconciliation", "cutover", "rollback", "gaps", "limitations", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "receipt_type": {"const": "factorydark-offline-migration-rehearsal"},
+    "rehearsal_id": {"type": "string", "minLength": 1},
+    "workload": {"const": "carddemo-authorization-authfrds"},
+    "evidence_class": {"const": "offline-development-rehearsal"},
+    "status": {"enum": ["passed", "blocked"]},
+    "development_ready": {"type": "boolean"},
+    "production_ready": {"const": false},
+    "mainframe_equivalent": {"const": false},
+    "checks": {
+      "type": "object",
+      "additionalProperties": {"type": "boolean"},
+      "minProperties": 11,
+      "maxProperties": 11
+    },
+    "bindings": {"type": "object"},
+    "journal": {"type": "object"},
+    "recovery": {"type": "object"},
+    "reconciliation": {"type": "object"},
+    "cutover": {"type": "object"},
+    "rollback": {"type": "object"},
+    "gaps": {"type": "array", "minItems": 1, "items": {"type": "string"}, "uniqueItems": true},
+    "limitations": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "content_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {"hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}

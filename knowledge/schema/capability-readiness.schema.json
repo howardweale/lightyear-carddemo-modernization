@@ -1,18 +1,18 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://factorydark.ai/schemas/capability-readiness-1.3.json",
+  "$id": "https://factorydark.ai/schemas/capability-readiness-1.4.json",
   "title": "FactoryDark Unified Mainframe Capability Readiness",
   "type": "object",
   "required": ["schema_version", "analysis_type", "graph_content_sha256", "truth_boundary", "evidence_bindings", "capabilities", "collection_mechanisms", "content_sha256"],
   "properties": {
-    "schema_version": {"const": "1.3"},
+    "schema_version": {"const": "1.4"},
     "analysis_type": {"const": "factorydark-mainframe-capability-readiness"},
     "graph_content_sha256": {"$ref": "#/$defs/hash"},
     "truth_boundary": {"type": "string", "minLength": 1},
     "content_sha256": {"$ref": "#/$defs/hash"},
     "evidence_bindings": {
       "type": "object",
-      "required": ["canonical_graph_sha256", "extension_catalog_sha256", "pli_fragment_sha256", "pli_coverage_receipt_sha256", "pli_development_receipt_sha256", "pli_build_receipt_sha256", "pli_build_attestation_sha256", "postgres_data_receipt_sha256", "oracle_data_receipt_sha256", "mainframe_campaign_receipt_sha256"],
+      "required": ["canonical_graph_sha256", "extension_catalog_sha256", "pli_fragment_sha256", "pli_coverage_receipt_sha256", "pli_development_receipt_sha256", "pli_build_receipt_sha256", "pli_build_attestation_sha256", "postgres_data_receipt_sha256", "oracle_data_receipt_sha256", "data_rehearsal_receipt_sha256", "mainframe_campaign_receipt_sha256"],
       "properties": {
         "canonical_graph_sha256": {"$ref": "#/$defs/hash"},
         "extension_catalog_sha256": {"$ref": "#/$defs/hash"},
@@ -23,6 +23,7 @@
         "pli_build_attestation_sha256": {"$ref": "#/$defs/hash"},
         "postgres_data_receipt_sha256": {"$ref": "#/$defs/hash"},
         "oracle_data_receipt_sha256": {"$ref": "#/$defs/hash"},
+        "data_rehearsal_receipt_sha256": {"$ref": "#/$defs/hash"},
         "mainframe_campaign_receipt_sha256": {"$ref": "#/$defs/hash"}
       },
       "additionalProperties": false
@@ -78,6 +79,22 @@
             "explicit_gap_count": {"type": "integer", "minimum": 1},
             "customer_source": {"const": false},
             "runtime_evidence": {"const": false}
+          },
+          "additionalProperties": false
+        },
+        "operational_rehearsal": {
+          "type": "object",
+          "required": ["status", "evidence_class", "cdc_source", "dual_target_reconciled", "cutover_approval", "rollback_exact", "live_source_observed", "production_ready", "receipt_sha256"],
+          "properties": {
+            "status": {"enum": ["passed", "blocked"]},
+            "evidence_class": {"enum": ["offline-development-rehearsal", "unverified"]},
+            "cdc_source": {"const": "simulated-db2-shaped-journal"},
+            "dual_target_reconciled": {"type": "boolean"},
+            "cutover_approval": {"enum": ["simulated-development-only", "blocked"]},
+            "rollback_exact": {"type": "boolean"},
+            "live_source_observed": {"const": false},
+            "production_ready": {"const": false},
+            "receipt_sha256": {"anyOf": [{"$ref": "#/$defs/hash"}, {"type": "null"}]}
           },
           "additionalProperties": false
         },

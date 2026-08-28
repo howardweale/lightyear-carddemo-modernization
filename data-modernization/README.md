@@ -1,4 +1,4 @@
-# AUTHFRDS data-modernization proof cell
+# AUTHFRDS data-modernization and migration-rehearsal proof cell
 
 This bounded v0.19.2 vertical slice translates the AWS CardDemo Db2 for z/OS `CARDDEMO.AUTHFRDS` contract to PostgreSQL and Oracle while retaining source lineage and explicit evidence gaps.
 
@@ -12,6 +12,12 @@ This bounded v0.19.2 vertical slice translates the AWS CardDemo Db2 for z/OS `CA
 - an on-demand Docker PostgreSQL proof using no network, a read-only root, dropped capabilities, and ephemeral tmpfs storage;
 - an Oracle Free proof using no network or published ports, ephemeral credentials, dropped capabilities, and an honestly recorded writable-root exception required by the database image;
 - a multi-target aggregate receipt that fails unless both target receipts pass.
+- a five-event Db2-shaped change journal covering inserts, updates, and deletes;
+- interruption and content-addressed resume with duplicate replay suppressed idempotently;
+- normalized source-to-PostgreSQL-to-Oracle dual-target reconciliation;
+- an exact, development-only human approval barrier before simulated cutover;
+- injected post-cutover divergence followed by exact pre-cutover rollback;
+- bounded fixture-event RPO and deterministic recovery-step RTO evidence.
 
 ## Run
 
@@ -22,6 +28,7 @@ macOS/Linux:
 ./data-modernization.sh live-postgres
 ./data-modernization.sh live-oracle
 ./data-modernization.sh live-all
+./migration-rehearsal.sh verify /path/to/aws-carddemo
 ```
 
 Windows PowerShell:
@@ -31,6 +38,7 @@ Windows PowerShell:
 .\data-modernization.ps1 live-postgres
 .\data-modernization.ps1 live-oracle
 .\data-modernization.ps1 live-all
+.\migration-rehearsal.ps1 verify C:\path\to\aws-carddemo
 ```
 
 For a customer-controlled signature, set `FACTORYDARK_DATA_EQUIVALENCE_KEY` and run `sign`.
@@ -43,10 +51,11 @@ The Oracle runner defaults to the official locally built `oracle/database:23.26.
 Oracle's official container-image instructions and accept the applicable license before running it.
 The image supports Oracle Database Free on ARM64, but startup is materially slower than PostgreSQL.
 
-`production_ready` remains `false`. The cell has not observed a live Db2 catalog, customer data,
-z/OS transaction behavior, CDC, or cutover. The current source lineage is COBOL-specific for the
-AUTHFRDS slice; PL/I lineage is not claimed. Oracle empty-string semantics also require live data
-profiling. These are v0.20/v0.21 evidence requirements, not inferred claims.
+`production_ready` remains `false`. The cell has not observed a live Db2 catalog or log, customer
+data, z/OS transaction behavior, or a real cutover. CDC, dual-run, approval, failure, rollback, RPO,
+and RTO are now rehearsed only against deterministic offline projections. The current source
+lineage is COBOL-specific for the AUTHFRDS slice; Oracle empty-string semantics still require live
+data profiling.
 
 ## Scope confirmation
 
@@ -62,3 +71,8 @@ profiling. These are v0.20/v0.21 evidence requirements, not inferred claims.
 | Exact schema/data/query/transaction comparison | Implemented fail-closed for both targets |
 | Signed equivalence | Development HMAC and customer-key signing mechanism; no production key is shipped |
 | Control Tower lineage/gaps/equivalence | Side-by-side target projection implemented |
+| Offline CDC, interruption and resume | Passed for a five-event deterministic journal |
+| Dual-target reconciliation | PostgreSQL- and Oracle-shaped projections converge exactly |
+| Cutover approval | Simulated human, plan-bound, development-only; no production authority |
+| Rollback | Injected divergence detected; exact pre-cutover identities restored |
+| RPO/RTO | Zero fixture events and three recovery steps; no production timing claim |

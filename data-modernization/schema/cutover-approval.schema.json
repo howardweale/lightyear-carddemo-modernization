@@ -1,0 +1,30 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://factorydark.ai/schemas/cutover-approval-1.0.json",
+  "title": "FactoryDark development cutover approval",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "approval_type", "plan_sha256", "approved_action", "approver_type", "evidence_class", "production_authorized", "scope", "content_sha256", "signature"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "approval_type": {"const": "factorydark-offline-cutover-approval"},
+    "plan_sha256": {"$ref": "#/$defs/hash"},
+    "approved_action": {"const": "offline-authfrds-cutover-rehearsal"},
+    "approver_type": {"const": "human"},
+    "evidence_class": {"const": "simulated"},
+    "production_authorized": {"const": false},
+    "scope": {"const": "exact-development-rehearsal-plan"},
+    "content_sha256": {"$ref": "#/$defs/hash"},
+    "signature": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["algorithm", "signer", "value"],
+      "properties": {
+        "algorithm": {"const": "hmac-sha256"},
+        "signer": {"const": "factorydark-development-operator"},
+        "value": {"$ref": "#/$defs/hash"}
+      }
+    }
+  },
+  "$defs": {"hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}

@@ -1,0 +1,16 @@
+{
+  "approval_type": "factorydark-offline-cutover-approval",
+  "approved_action": "offline-authfrds-cutover-rehearsal",
+  "approver_type": "human",
+  "content_sha256": "897d93813cd0a1027d4097b07dd7d633d9991a9cbc3b21b3db79262cd21a2b5d",
+  "evidence_class": "simulated",
+  "plan_sha256": "17ac4f4819e3f50bca9c8867401cdd0af5aea6b67b62a57b50132ad8bf4590c7",
+  "production_authorized": false,
+  "schema_version": "1.0",
+  "scope": "exact-development-rehearsal-plan",
+  "signature": {
+    "algorithm": "hmac-sha256",
+    "signer": "factorydark-development-operator",
+    "value": "a36dfd6ba90bd8782a47f0228de5072b9fc84667af74b4f8501f1286b78b72f6"
+  }
+}

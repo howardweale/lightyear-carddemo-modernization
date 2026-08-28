@@ -1,0 +1,93 @@
+{
+  "bindings": {
+    "approval_sha256": "897d93813cd0a1027d4097b07dd7d633d9991a9cbc3b21b3db79262cd21a2b5d",
+    "canonical_model_sha256": "fb59dfc8f78bd088f18f2f2167c457c887f3928e10264f05b3ac5482ec8a6664",
+    "checkpoint_sha256": "bf8bec36bdf113f55d286fddd1689d668bbee4fdd289f85ae4e2ef05fc151eee",
+    "fixture_catalog_sha256": "f2dcda58733e6cca9551adb904856496bd803354c2511c14e61db66945c6f5e4",
+    "oracle_mapping_sha256": "a948a0567245bc7c15fda3d8d2dc742ccee5691db4ee034d947b1671ab6f172f",
+    "oracle_receipt_sha256": "6958d7cc783d5ad00c469c112db5b665bf9ba93b7addec9cc94375d6c3f2dd83",
+    "plan_sha256": "17ac4f4819e3f50bca9c8867401cdd0af5aea6b67b62a57b50132ad8bf4590c7",
+    "postgres_mapping_sha256": "24f0f0dc82363749d9db4a7294315ec8dc3ca5660e7d800550560195b0d27f45",
+    "postgres_receipt_sha256": "8e2e2dc30cffa3205ceb743f418ae937ea8ac05d6bde9041182acc61cba3abbe"
+  },
+  "checks": {
+    "approval_bound": true,
+    "checkpoint_resume": true,
+    "cutover_barrier": true,
+    "dual_target_reconciliation": true,
+    "failure_detected": true,
+    "idempotent_replay": true,
+    "journal_ordering": true,
+    "rollback_exact": true,
+    "rpo_policy": true,
+    "rto_policy": true,
+    "source_target_row_identity": true
+  },
+  "content_sha256": "e628b50cc4e21707f6c62e7a8429654c7867411f75fb9381e03f3d191854f652",
+  "cutover": {
+    "approval_authority": "human",
+    "approval_evidence_class": "simulated",
+    "opened": true,
+    "production_authorized": false
+  },
+  "development_ready": true,
+  "evidence_class": "offline-development-rehearsal",
+  "gaps": [
+    "live-db2-log-not-observed",
+    "customer-data-not-compared",
+    "production-scale-rpo-rto-not-measured",
+    "real-cutover-not-authorized",
+    "network-security-and-operational-faults-not-proven"
+  ],
+  "journal": {
+    "deletes": 1,
+    "events": 5,
+    "head_sha256": "7bf00972260c48608954f9c8ea723f44b72178e041e51e8ead3f888f42631d97",
+    "inserts": 2,
+    "last_applied_sequence": 5,
+    "updates": 2
+  },
+  "limitations": [
+    "CDC events and target engines are deterministic offline projections.",
+    "The approval uses a published development-only key and cannot authorize production.",
+    "RPO is measured in fixture events and RTO in deterministic recovery steps, not wall-clock time."
+  ],
+  "mainframe_equivalent": false,
+  "production_ready": false,
+  "receipt_type": "factorydark-offline-migration-rehearsal",
+  "reconciliation": {
+    "row_identity_match": true,
+    "source_rows": 3,
+    "source_state_sha256": "a4a340d33a84971c2ea7b14dfbcdfa7e048948581c2572ea57d76a04db4fcaa5",
+    "target_state_sha256": {
+      "oracle-26ai-free": "a4a340d33a84971c2ea7b14dfbcdfa7e048948581c2572ea57d76a04db4fcaa5",
+      "postgresql-16": "a4a340d33a84971c2ea7b14dfbcdfa7e048948581c2572ea57d76a04db4fcaa5"
+    }
+  },
+  "recovery": {
+    "duplicate_replay_detected": true,
+    "maximum_rpo_events": 0,
+    "maximum_rto_steps": 3,
+    "observed_rpo_events": 0,
+    "observed_rto_steps": 3,
+    "resume_count": 1
+  },
+  "rehearsal_id": "carddemo-authfrds-v0.27-offline-rehearsal",
+  "rollback": {
+    "exact": true,
+    "failure_detected": true,
+    "fault": "unilateral-uncommitted-insert",
+    "fault_target": "postgresql-16",
+    "pre_cutover_state_sha256": {
+      "oracle-26ai-free": "a4a340d33a84971c2ea7b14dfbcdfa7e048948581c2572ea57d76a04db4fcaa5",
+      "postgresql-16": "928855ad983a90665e9da671d7e1d7deb64b76693b3c5addf27318466b9d19d7"
+    },
+    "restored_state_sha256": {
+      "oracle-26ai-free": "a4a340d33a84971c2ea7b14dfbcdfa7e048948581c2572ea57d76a04db4fcaa5",
+      "postgresql-16": "928855ad983a90665e9da671d7e1d7deb64b76693b3c5addf27318466b9d19d7"
+    }
+  },
+  "schema_version": "1.0",
+  "status": "passed",
+  "workload": "carddemo-authorization-authfrds"
+}

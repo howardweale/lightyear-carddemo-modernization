@@ -54,6 +54,7 @@ if [[ "$action" == "build" ]]; then
     --pli-development-receipt "$project_dir/extensions/pli/modernization/development.receipt.json" \
     --postgres-data-receipt "$project_dir/data-modernization/receipts/authfrds.offline.receipt.json" \
     --oracle-data-receipt "$project_dir/data-modernization/receipts/authfrds.oracle-offline.receipt.json" \
+    --data-rehearsal-receipt "$project_dir/data-modernization/rehearsal/receipt.json" \
     --campaign-receipt "$project_dir/extensions/adapters/campaign/campaign.receipt.json" \
     --output "$project_dir/knowledge/capabilities/mainframe-readiness.json"
 elif [[ "$action" == "verify" ]]; then
@@ -85,6 +86,7 @@ elif [[ "$action" == "verify" ]]; then
     --pli-development-receipt "$project_dir/extensions/pli/modernization/development.receipt.json" \
     --postgres-data-receipt "$project_dir/data-modernization/receipts/authfrds.offline.receipt.json" \
     --oracle-data-receipt "$project_dir/data-modernization/receipts/authfrds.oracle-offline.receipt.json" \
+    --data-rehearsal-receipt "$project_dir/data-modernization/rehearsal/receipt.json" \
     --campaign-receipt "$project_dir/extensions/adapters/campaign/campaign.receipt.json" \
     --output "$generated/mainframe-readiness.json"
   "$LIGHTYEAR_PYTHON_BIN" -m lightyear_knowledge_graph validate --graph "$generated/graph.snapshot.json.gz"

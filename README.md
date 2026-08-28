@@ -1,6 +1,28 @@
 # FactoryDark.ai CardDemo Modernization Factory
 
-Release: **v0.26.0 — multi-workload factory qualification**
+Release: **v0.26.1 — legacy live-model evidence bridge**
+
+v0.26.1 recovers the retained v0.12 live OpenAI evaluation as independently inspectable historical
+evidence. A fail-closed ZIP importer verifies the pinned archive identity, every content-addressed
+run artifact, the event ledger, model-call provenance, reconstructed before/after workspaces, and
+the original private-gate result. It then emits a current, schema-validated
+`historical-model-evidence` receipt that appears in the quality dashboard.
+
+The recovered run used `gpt-5.6-terra` through `openai-responses` for one INTCALC public-calibration
+case. It passed after three model calls, using 101,127 input tokens and 701 output tokens at an
+estimated cost of $0.210666. The archive contains hashes rather than raw prompts or model responses
+and no retained credential. Its status is therefore `verified` and `historical-only`, never
+`qualified`: it is one public legacy-schema run, not eight independently sealed evaluations across
+four workloads or an approved portfolio execution.
+
+```bash
+./factory-qualification.sh history \
+  /secure/archive/model-evaluation-20260813T072624Z.zip \
+  work/legacy-model-evidence/historical-model-evidence.receipt.json
+./factory-qualification.sh verify
+```
+
+Previous milestone: **v0.26.0 — multi-workload factory qualification**
 
 v0.26 expands the governed model work cell from one INTCALC calibration surface into a bounded
 four-workload qualification plane: `INTCALC`, `POSTTRAN`, `CREASTMT`, and the mixed PL/I–COBOL–Db2

@@ -1,5 +1,22 @@
 # LIGHTYEAR Autonomous Factory and Hardened Execution Plane
 
+## Historical live-model evidence bridge (v0.26.1)
+
+The retained v0.12 OpenAI evaluation can now be imported without weakening the current v0.26
+qualification contract. The bridge validates the exact external archive, legacy run receipts,
+artifact hashes, event ledger, model-call provenance, workspace reconstruction, and original gate
+result, then publishes a read-only `historical-only` receipt to the quality dashboard.
+
+```bash
+./factory-qualification.sh history \
+  /secure/archive/model-evaluation-20260813T072624Z.zip \
+  work/legacy-model-evidence/historical-model-evidence.receipt.json
+```
+
+The recovered `gpt-5.6-terra` INTCALC public-calibration run is verified historical evidence. It
+cannot count as a sealed holdout, a repeated multi-workload evaluation, or an approved portfolio
+run, and it never enables promotion, production readiness, or mainframe equivalence.
+
 ## Multi-workload factory qualification (v0.26)
 
 The qualification plane now spans four bounded modernization cells: INTCALC, POSTTRAN, CREASTMT,

@@ -1,4 +1,37 @@
-# Multi-workload factory qualification (v0.26)
+# Model evidence and multi-workload qualification (v0.26.1)
+
+## Import the retained v0.12 live-model run
+
+MS #26.1 adds a compatibility bridge for the exact retained v0.12 live OpenAI evaluation archive.
+Keep the archive outside the repository and run:
+
+```bash
+./factory-qualification.sh history \
+  /secure/archive/model-evaluation-20260813T072624Z.zip \
+  work/legacy-model-evidence/historical-model-evidence.receipt.json
+```
+
+```powershell
+.\factory-qualification.ps1 history `
+  -LegacyArchive C:\secure\model-evaluation-20260813T072624Z.zip `
+  -Output work\legacy-model-evidence\historical-model-evidence.receipt.json
+```
+
+The pinned archive records one successful `INTCALC` public-calibration repair by
+`gpt-5.6-terra`: three model calls, 101,127 input tokens, 701 output tokens, and an estimated
+$0.210666 cost. The importer validates the archive and evaluation identities, 17 content-addressed
+objects, 10 referenced artifacts, the 12-event ledger, model-call request/response hashes,
+workspace before/after reconstruction, and the original failed-baseline/passed-final gate sequence.
+It rejects traversal, duplicate members or receipts, stale hashes, raw model payloads, secret-shaped
+values, altered model identity, sealed relabelling, and manifest drift.
+
+The resulting receipt is deliberately `verified` and `historical-only`. It is not qualification
+input because the source is a public legacy-schema evaluation, its independent sealed binding and
+current request manifest are absent, its average input use exceeds the current 75,000-token policy,
+and it supplies neither two runs per workload nor an approved four-workload portfolio execution.
+The archive itself and all provider credentials remain external and are never committed.
+
+## MS #26 qualification contract
 
 MS #26 turns the model work-cell and portfolio controller into a measurable qualification plane
 for four bounded CardDemo workloads: `INTCALC`, `POSTTRAN`, `CREASTMT`, and `ACCTPL1`.

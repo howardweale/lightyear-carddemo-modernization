@@ -19,7 +19,9 @@ case "$action" in
         --project-root "$project_dir" \
         --catalog "$project_dir/factory/evals/$catalog" >/dev/null
     done
-    "$LIGHTYEAR_PYTHON_BIN" -m unittest tests.test_multi_workload_qualification
+    "$LIGHTYEAR_PYTHON_BIN" -m unittest \
+      tests.test_multi_workload_qualification \
+      tests.test_legacy_model_evidence
     ;;
   qualify)
     shift
@@ -46,8 +48,20 @@ case "$action" in
       --output "$output" \
       "${receipt_args[@]}"
     ;;
+  history)
+    archive="${2:-}"
+    output="${3:-}"
+    if [[ -z "$archive" || -z "$output" ]]; then
+      echo "Usage: ./factory-qualification.sh history <legacy-evaluation.zip> <output.json>" >&2
+      exit 2
+    fi
+    "$LIGHTYEAR_PYTHON_BIN" -m lightyear_factory import-legacy-evidence \
+      --archive "$archive" \
+      --manifest "$project_dir/factory/qualification/history/v0.12-live-smoke.manifest.json" \
+      --output "$output"
+    ;;
   *)
-    echo "Usage: ./factory-qualification.sh [verify|qualify]" >&2
+    echo "Usage: ./factory-qualification.sh [verify|qualify|history]" >&2
     exit 2
     ;;
 esac

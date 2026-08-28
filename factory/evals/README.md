@@ -20,6 +20,10 @@ v0.26 adds four smaller workload-bound catalogs for repeatable portfolio qualifi
 These catalogs verify private gates and repair plumbing. They cannot be relabelled or counted as
 the independently retained sealed evidence required by `factory/qualification/manifest.json`.
 
+v0.26.1 can also validate the retained v0.12 live-model public-calibration archive through
+`factory-qualification.sh history`. That run becomes visible as verified historical evidence but
+does not enter the sealed qualification aggregate.
+
 ## Evidence classes
 
 | Class | Location | Valid claim |

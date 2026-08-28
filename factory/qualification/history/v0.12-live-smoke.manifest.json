@@ -1,0 +1,27 @@
+{
+  "content_sha256": "97797ae1dded4456dc565d75b7e6ae0383cbc75bb445ab3b672948010a95f63f",
+  "current_policy": {
+    "maximum_average_input_tokens": 75000,
+    "minimum_runs_per_workload": 2,
+    "required_workloads": 4
+  },
+  "evaluation_receipt_sha256": "b1a7d668dc93d73bd45bfdd12e8e159a0361023203c35bd6a9383ec53bc7984b",
+  "evidence_id": "lightyear:carddemo:v0.12:live-smoke:20260813T072624Z",
+  "expected": {
+    "cases": 1,
+    "cost_estimate_available": true,
+    "estimated_cost_usd": 0.210666,
+    "evaluation_class": "public-calibration",
+    "evaluation_id": "lightyear-carddemo-v0.12-smoke",
+    "input_tokens": 101127,
+    "model": "gpt-5.6-terra",
+    "model_calls": 3,
+    "output_tokens": 701,
+    "provider": "openai-responses",
+    "workload_id": "INTCALC"
+  },
+  "manifest_type": "lightyear-historical-model-evidence-manifest",
+  "qualification_eligible": false,
+  "schema_version": "1.0",
+  "source_archive_sha256": "0a6afd2b7dcdf6725b37840729fade4ae69864979bce022888a2e3adf09e5c16"
+}

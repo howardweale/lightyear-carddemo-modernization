@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.26.1 — 2026-08-28
+
+- Added a fail-closed bridge for the exact retained v0.12 live OpenAI evaluation archive.
+- Pinned the external archive and evaluation identities without committing the archive, credentials,
+  raw prompts, or raw model responses.
+- Verified legacy content hashes, artifact references, event-ledger chaining, model-call provenance,
+  workspace reconstruction, and original baseline/final gate decisions.
+- Published a schema-validated historical receipt and made it visible in the model-evidence dashboard.
+- Kept public calibration, legacy schema, missing independent sealing, current-manifest gaps, token
+  policy, workload repetition, and portfolio approval as explicit qualification blockers.
+- Added Bash and PowerShell import commands plus tamper, secret, relabelling, traversal, and manifest-
+  drift regression tests.
+
 ## 0.26.0 — 2026-08-27
 
 - Added trusted workload profiles and public calibration catalogs for INTCALC, POSTTRAN,

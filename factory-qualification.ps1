@@ -1,8 +1,9 @@
 param(
-    [ValidateSet("verify", "qualify")][string]$Action = "verify",
+    [ValidateSet("verify", "qualify", "history")][string]$Action = "verify",
     [string]$Plan,
     [string]$PortfolioRun,
     [string]$Output,
+    [string]$LegacyArchive,
     [string[]]$EvaluationReceipt = @()
 )
 
@@ -22,7 +23,21 @@ if ($Action -eq "verify") {
             --catalog (Join-Path $ProjectDir "factory/evals/$Catalog") | Out-Null
         if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
     }
-    Invoke-FactoryDarkPython -m unittest tests.test_multi_workload_qualification
+    Invoke-FactoryDarkPython -m unittest `
+        tests.test_multi_workload_qualification `
+        tests.test_legacy_model_evidence
+    exit $LASTEXITCODE
+}
+
+if ($Action -eq "history") {
+    if (-not $LegacyArchive -or -not $Output) {
+        Write-Error "Historical evidence import requires -LegacyArchive and -Output"
+        exit 2
+    }
+    Invoke-FactoryDarkPython -m lightyear_factory import-legacy-evidence `
+        --archive $LegacyArchive `
+        --manifest (Join-Path $ProjectDir "factory/qualification/history/v0.12-live-smoke.manifest.json") `
+        --output $Output
     exit $LASTEXITCODE
 }
 

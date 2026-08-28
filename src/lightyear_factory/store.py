@@ -330,7 +330,11 @@ class EvaluationStore:
         if not self.root.is_dir():
             return []
         return [
-            path for path in self.root.rglob("evaluation.receipt.json")
+            path for path in self.root.rglob("*.json")
+            if path.name in {
+                "evaluation.receipt.json",
+                "historical-model-evidence.receipt.json",
+            }
             if self.root in path.resolve().parents
         ]
 

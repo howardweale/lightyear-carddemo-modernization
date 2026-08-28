@@ -26,6 +26,7 @@ from .quality import (
 )
 from .orchestrator import FactoryOrchestrator
 from .memory import SemanticMemoryStore
+from .legacy_evidence import verify_legacy_model_archive
 from .portfolio import (
     PortfolioManifest,
     PortfolioRunner,
@@ -154,6 +155,18 @@ def build_parser() -> argparse.ArgumentParser:
     qualify.add_argument("--portfolio-plan", type=Path, required=True)
     qualify.add_argument("--portfolio-run", type=Path, required=True)
     qualify.add_argument("--output", type=Path, required=True)
+
+    legacy = subparsers.add_parser(
+        "import-legacy-evidence",
+        help="Verify a legacy live-model archive and issue a non-promoting history receipt",
+    )
+    legacy.add_argument("--archive", type=Path, required=True)
+    legacy.add_argument(
+        "--manifest",
+        type=Path,
+        default=Path("factory/qualification/history/v0.12-live-smoke.manifest.json"),
+    )
+    legacy.add_argument("--output", type=Path, required=True)
 
     inspect = subparsers.add_parser("inspect", help="Inspect a factory run receipt and ledger")
     inspect.add_argument("--runs-root", type=Path, default=Path("work/factory-runs"))
@@ -544,6 +557,10 @@ def main(argv: list[str] | None = None) -> int:
         )
         print(json.dumps(result, indent=2, sort_keys=True))
         return 0 if result["status"] == "qualified" else 1
+    if args.command == "import-legacy-evidence":
+        result = verify_legacy_model_archive(args.archive, args.manifest, args.output)
+        print(json.dumps(result, indent=2, sort_keys=True))
+        return 0
     if args.command == "inspect":
         result = FactoryRunStore(args.runs_root).run(args.run_id, args.verifier)
         print(json.dumps(result, indent=2, sort_keys=True))

@@ -1161,7 +1161,7 @@ async function loadEvaluation(evaluationKey) {
     $("evaluation-title").textContent = receipt.evaluation_id;
     $("evaluation-id").textContent = `${receipt.evaluation_class} · ${receipt.cases} completed cases`;
     $("evaluation-badges").replaceChildren(
-      answerBadge(receipt.status, receipt.status === "passed" ? "high" : "low"),
+      answerBadge(receipt.status, ["passed", "verified"].includes(receipt.status) ? "high" : "low"),
       answerBadge(quality.status, quality.status === "qualified" ? "high" : "low"),
       answerBadge(`${receipt.false_acceptances || 0} false acceptances`, receipt.false_acceptances ? "low" : "high"),
     );

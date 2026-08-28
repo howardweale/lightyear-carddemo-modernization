@@ -57,6 +57,7 @@ class MainframeCapabilityGraphTests(unittest.TestCase):
             "pli_build_attestation": self.load_json("extensions/pli/attestation/build.attestation.json"),
             "postgres_data_receipt": self.load_json("data-modernization/receipts/authfrds.offline.receipt.json"),
             "oracle_data_receipt": self.load_json("data-modernization/receipts/authfrds.oracle-offline.receipt.json"),
+            "data_rehearsal_receipt": self.load_json("data-modernization/rehearsal/receipt.json"),
             "campaign_receipt": self.load_json("extensions/adapters/campaign/campaign.receipt.json"),
         }
         evidence.update(overrides)
@@ -126,6 +127,9 @@ class MainframeCapabilityGraphTests(unittest.TestCase):
         self.assertTrue(all(not item["mainframe_equivalent"] for item in by_name.values()))
         self.assertEqual("language", by_name["PL/I"]["capability_kind"])
         self.assertEqual("data", by_name["Db2/Data"]["capability_kind"])
+        self.assertEqual("passed", by_name["Db2/Data"]["operational_rehearsal"]["status"])
+        self.assertTrue(by_name["Db2/Data"]["operational_rehearsal"]["rollback_exact"])
+        self.assertFalse(by_name["Db2/Data"]["operational_rehearsal"]["live_source_observed"])
         self.assertEqual("blocked", by_name["HLASM"]["gates"][5]["status"])
         self.assertEqual("mechanism_ready", by_name["IMS"]["gates"][6]["status"])
         self.assertEqual("mechanism_ready", by_name["PL/I"]["gates"][6]["status"])
@@ -189,6 +193,15 @@ class MainframeCapabilityGraphTests(unittest.TestCase):
             "capability analysis is stale against bound extension, data, or campaign evidence",
             errors,
         )
+
+    def test_tampered_data_rehearsal_demotes_data_development_only(self) -> None:
+        receipt = self.load_json("data-modernization/rehearsal/receipt.json")
+        receipt["checks"]["rollback_exact"] = False
+        analysis = self.expected_projection(data_rehearsal_receipt=receipt)
+        by_name = {item["technology"]: item for item in analysis["capabilities"]}
+        self.assertFalse(by_name["Db2/Data"]["development_ready"])
+        self.assertEqual("blocked", by_name["Db2/Data"]["operational_rehearsal"]["status"])
+        self.assertTrue(by_name["PL/I"]["development_ready"])
 
 
 class AssemblerBehaviorTests(unittest.TestCase):

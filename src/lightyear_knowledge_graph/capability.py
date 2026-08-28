@@ -81,6 +81,44 @@ def _offline_data_receipt_passed(payload: dict[str, Any], target: str) -> bool:
     )
 
 
+def _offline_rehearsal_passed(payload: dict[str, Any]) -> bool:
+    expected_checks = {
+        "approval_bound",
+        "checkpoint_resume",
+        "cutover_barrier",
+        "dual_target_reconciliation",
+        "failure_detected",
+        "idempotent_replay",
+        "journal_ordering",
+        "rollback_exact",
+        "rpo_policy",
+        "rto_policy",
+        "source_target_row_identity",
+    }
+    checks = payload.get("checks", {})
+    recovery = payload.get("recovery", {})
+    cutover = payload.get("cutover", {})
+    return bool(
+        payload.get("schema_version") == "1.0"
+        and payload.get("receipt_type") == "factorydark-offline-migration-rehearsal"
+        and payload.get("evidence_class") == "offline-development-rehearsal"
+        and payload.get("status") == "passed"
+        and payload.get("development_ready") is True
+        and payload.get("production_ready") is False
+        and payload.get("mainframe_equivalent") is False
+        and payload.get("content_sha256") == _canonical_hash(payload)
+        and set(checks) == expected_checks
+        and all(checks.values())
+        and recovery.get("resume_count", 0) >= 1
+        and recovery.get("observed_rpo_events") == 0
+        and recovery.get("observed_rto_steps", 99)
+        <= recovery.get("maximum_rto_steps", 0)
+        and cutover.get("approval_evidence_class") == "simulated"
+        and cutover.get("production_authorized") is False
+        and payload.get("rollback", {}).get("exact") is True
+    )
+
+
 def _pli_development_receipt_passed(
     payload: dict[str, Any], graph_sha256: str, fragment_sha256: str | None
 ) -> bool:
@@ -201,6 +239,7 @@ def _capability(
     capability_kind: str,
     gates: list[dict[str, Any]],
     breadth: dict[str, Any] | None = None,
+    operational_rehearsal: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     development_ready = all(item["status"] == "passed" for item in gates[:5])
     mainframe_equivalent = all(item["status"] == "passed" for item in gates)
@@ -221,6 +260,8 @@ def _capability(
     }
     if breadth is not None:
         result["breadth"] = breadth
+    if operational_rehearsal is not None:
+        result["operational_rehearsal"] = operational_rehearsal
     return result
 
 
@@ -237,6 +278,7 @@ def analyze_capabilities(
     pli_build_attestation: dict[str, Any] | None = None,
     postgres_data_receipt: dict[str, Any] | None = None,
     oracle_data_receipt: dict[str, Any] | None = None,
+    data_rehearsal_receipt: dict[str, Any] | None = None,
     campaign_receipt: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
     nodes = {node["id"]: node for node in graph["nodes"]}
@@ -426,6 +468,8 @@ def analyze_capabilities(
     oracle = oracle_data_receipt or {}
     postgres_passed = _offline_data_receipt_passed(postgres, "postgresql-16")
     oracle_passed = _offline_data_receipt_passed(oracle, "oracle-26ai-free")
+    rehearsal = data_rehearsal_receipt or {}
+    rehearsal_passed = _offline_rehearsal_passed(rehearsal)
     data_parsed = bool(
         kind_counts.get("db2_table", 0) >= 1
         and kind_counts.get("db2_column", 0) >= 26
@@ -437,8 +481,14 @@ def analyze_capabilities(
         and relation_counts.get("ISSUES_SQL", 0) >= 1
         and relation_counts.get("REFERENCES_COLUMN", 0) >= 26
     )
-    data_development = postgres_passed and oracle_passed
-    data_receipt_gap = None if data_development else "Both target-specific offline development receipts must pass."
+    data_targets_ready = postgres_passed and oracle_passed
+    data_development = data_targets_ready and rehearsal_passed
+    data_receipt_gap = None if data_targets_ready else "Both target-specific offline development receipts must pass."
+    data_rehearsal_gap = (
+        None
+        if rehearsal_passed
+        else "The offline CDC, resume, reconciliation, cutover, and rollback rehearsal receipt is missing, stale, incomplete, or tampered."
+    )
     data_live_gap = "Live Db2 catalog, source rows, CDC, cutover, and rollback evidence remain pending."
     data_gates = [
         _gate(1, "passed" if data_parsed else "blocked", [
@@ -451,21 +501,24 @@ def analyze_capabilities(
             f"{relation_counts.get('ISSUES_SQL', 0)} ISSUES_SQL edges",
             f"{relation_counts.get('REFERENCES_COLUMN', 0)} REFERENCES_COLUMN edges",
         ], None if data_connected else "Db2 schema and embedded-SQL lineage is incomplete."),
-        _gate(3, "passed" if data_development else "blocked", [
+        _gate(3, "passed" if data_targets_ready else "blocked", [
             "data-modernization/receipts/authfrds.offline.receipt.json",
             "data-modernization/receipts/authfrds.oracle-offline.receipt.json",
         ], data_receipt_gap),
-        _gate(4, "passed" if data_development else "blocked", [
+        _gate(4, "passed" if data_targets_ready else "blocked", [
             "PostgreSQL 16 AUTHFRDS projection",
             "Oracle 26ai Free AUTHFRDS projection",
         ], data_receipt_gap),
         _gate(5, "passed" if data_development else "blocked", [
             "schema, key, index, row, query, commit, and rollback checks",
             "fail-closed evidence-marker mutation tests",
-        ], data_receipt_gap),
+            "five-event offline CDC and exact rollback rehearsal",
+            "data-modernization/rehearsal/receipt.json",
+        ], data_rehearsal_gap if data_targets_ready else data_receipt_gap),
         _gate(6, "blocked", ["extensions/adapters/campaign/campaign.receipt.json"], data_live_gap),
         _gate(7, "mechanism_ready", [
             "PostgreSQL and Oracle differential-verification adapters",
+            "offline CDC, dual-run, cutover, and rollback rehearsal",
             "lightyear.db2-zos-catalog read-only collector",
         ], data_live_gap),
         _gate(8, "blocked", [], "No signed live Db2-to-target equivalence receipt exists."),
@@ -487,7 +540,17 @@ def analyze_capabilities(
             "customer_source": False,
             "runtime_evidence": False,
         }),
-        _capability("Db2/Data", "data", data_gates),
+        _capability("Db2/Data", "data", data_gates, operational_rehearsal={
+            "status": "passed" if rehearsal_passed else "blocked",
+            "evidence_class": rehearsal.get("evidence_class", "unverified"),
+            "cdc_source": "simulated-db2-shaped-journal",
+            "dual_target_reconciled": bool(rehearsal_passed),
+            "cutover_approval": "simulated-development-only" if rehearsal_passed else "blocked",
+            "rollback_exact": bool(rehearsal_passed),
+            "live_source_observed": False,
+            "production_ready": False,
+            "receipt_sha256": rehearsal.get("content_sha256") if rehearsal_passed else None,
+        }),
     ]
 
     campaign = campaign_receipt or {}
@@ -521,11 +584,12 @@ def analyze_capabilities(
         "pli_build_attestation_sha256": (pli_build_attestation or {}).get("content_sha256"),
         "postgres_data_receipt_sha256": postgres.get("content_sha256"),
         "oracle_data_receipt_sha256": oracle.get("content_sha256"),
+        "data_rehearsal_receipt_sha256": rehearsal.get("content_sha256"),
         "mainframe_campaign_receipt_sha256": campaign.get("content_sha256"),
     }
 
     payload = {
-        "schema_version": "1.3",
+        "schema_version": "1.4",
         "analysis_type": "factorydark-mainframe-capability-readiness",
         "graph_content_sha256": graph_sha256,
         "truth_boundary": (
@@ -545,7 +609,7 @@ def validate_capability_analysis(
     expected: dict[str, Any] | None = None,
 ) -> list[str]:
     errors: list[str] = []
-    if payload.get("schema_version") != "1.3":
+    if payload.get("schema_version") != "1.4":
         errors.append("unsupported capability analysis schema_version")
     if payload.get("graph_content_sha256") != graph.get("content_sha256"):
         errors.append("capability analysis is not bound to the canonical graph")

@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.27.0 — 2026-08-28
+
+- Added a content-addressed five-event Db2-shaped AUTHFRDS change journal covering insert, update,
+  and delete operations.
+- Added deterministic PostgreSQL- and Oracle-shaped target application with normalized row,
+  checksum, and identity reconciliation.
+- Forced an interruption after event two and proved exact checkpoint resume plus idempotent duplicate
+  replay with no lost or repeated change.
+- Added a plan-bound, development-only human cutover approval that cannot authorize production.
+- Injected a unilateral post-cutover divergence, detected it, and restored both targets to their
+  exact pre-cutover state identities.
+- Recorded bounded zero-event fixture RPO and three-step recovery while explicitly excluding
+  wall-clock production RPO/RTO claims.
+- Added fail-closed journal, before-image, checkpoint, mapping, approval, fault, receipt, and live-
+  overclaim tests plus Bash and PowerShell verification entry points.
+- Published the rehearsal in the unified Db2/Data capability and data control-tower projections;
+  live Db2, customer-data, real cutover, production, and mainframe-equivalence gates remain blocked.
+
 ## 0.26.1 — 2026-08-28
 
 - Added a fail-closed bridge for the exact retained v0.12 live OpenAI evaluation archive.

@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://factorydark.ai/schemas/migration-rehearsal-checkpoint-1.0.json",
+  "title": "FactoryDark migration rehearsal checkpoint",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "receipt_type", "status", "plan_sha256", "approval_sha256", "last_applied_sequence", "resume_count", "applied_event_sha256", "duplicate_replay_detected", "source", "targets", "production_ready", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "receipt_type": {"const": "factorydark-migration-rehearsal-checkpoint"},
+    "status": {"enum": ["running", "interrupted", "completed", "blocked"]},
+    "plan_sha256": {"$ref": "#/$defs/hash"},
+    "approval_sha256": {"$ref": "#/$defs/hash"},
+    "last_applied_sequence": {"type": "integer", "minimum": 0},
+    "resume_count": {"type": "integer", "minimum": 0},
+    "applied_event_sha256": {"type": "array", "items": {"$ref": "#/$defs/hash"}, "uniqueItems": true},
+    "duplicate_replay_detected": {"type": "boolean"},
+    "source": {"type": "object"},
+    "targets": {"type": "object"},
+    "production_ready": {"const": false},
+    "content_sha256": {"$ref": "#/$defs/hash"}
+  },
+  "$defs": {"hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}

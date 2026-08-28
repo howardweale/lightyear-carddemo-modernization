@@ -865,9 +865,10 @@ async function loadData() {
   try {
     const summary = await api("/api/data/summary");
     state.dataSummary = summary;
+    const rehearsal = summary.operational_rehearsal || {};
     const cards = $("data-summary");
     cards.replaceChildren();
-    [[summary.statistics.columns, "columns"], [summary.statistics.constraints, "constraints"], [summary.statistics.indexes, "indexes"], [summary.statistics.fixture_rows, "fixture rows"]].forEach(([value, label]) => {
+    [[summary.statistics.columns, "columns"], [summary.statistics.constraints, "constraints"], [summary.statistics.indexes, "indexes"], [summary.statistics.fixture_rows, "fixture rows"], [rehearsal.events || 0, "CDC events"], [rehearsal.resume_count || 0, "resumes"], [rehearsal.observed_rpo_events ?? 0, "RPO events"], [rehearsal.observed_rto_steps || 0, "RTO steps"]].forEach(([value, label]) => {
       const card = document.createElement("div");
       const number = document.createElement("strong"); number.textContent = formatNumber(value);
       const text = document.createElement("span"); text.textContent = label;
@@ -878,7 +879,11 @@ async function loadData() {
     posture.replaceChildren();
     const title = document.createElement("strong"); title.textContent = summary.production_ready ? "Production evidence complete" : "Development proof only";
     const detail = document.createElement("p"); detail.textContent = `${summary.source_table} → ${summary.target_table} · ${summary.evidence_class}`;
-    posture.append(title, detail);
+    const rehearsalStatus = document.createElement("small");
+    rehearsalStatus.textContent = rehearsal.status === "passed"
+      ? `Offline cutover rehearsed · rollback exact · production authorization ${rehearsal.production_authorized ? "granted" : "blocked"}`
+      : "Offline cutover and rollback rehearsal not verified";
+    posture.append(title, detail, rehearsalStatus);
     const targets = $("data-targets"); targets.replaceChildren();
     (summary.targets || []).forEach((target) => {
       const card = document.createElement("article"); card.className = `factory-run ${target.status === "passed" ? "passed" : "blocked"}`;

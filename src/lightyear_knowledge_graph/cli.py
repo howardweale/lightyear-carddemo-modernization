@@ -201,6 +201,11 @@ def build_parser() -> argparse.ArgumentParser:
         default=Path("data-modernization/receipts/authfrds.oracle-offline.receipt.json"),
     )
     capabilities.add_argument(
+        "--data-rehearsal-receipt",
+        type=Path,
+        default=Path("data-modernization/rehearsal/receipt.json"),
+    )
+    capabilities.add_argument(
         "--campaign-receipt",
         type=Path,
         default=Path("extensions/adapters/campaign/campaign.receipt.json"),
@@ -467,6 +472,7 @@ def main(argv: list[str] | None = None) -> int:
         pli_build_attestation = load_optional(args.pli_build_attestation)
         postgres_data_receipt = load_optional(args.postgres_data_receipt)
         oracle_data_receipt = load_optional(args.oracle_data_receipt)
+        data_rehearsal_receipt = load_optional(args.data_rehearsal_receipt)
         campaign_receipt = load_optional(args.campaign_receipt)
         expected = analyze_capabilities(
             payload,
@@ -481,6 +487,7 @@ def main(argv: list[str] | None = None) -> int:
             pli_build_attestation=pli_build_attestation,
             postgres_data_receipt=postgres_data_receipt,
             oracle_data_receipt=oracle_data_receipt,
+            data_rehearsal_receipt=data_rehearsal_receipt,
             campaign_receipt=campaign_receipt,
         )
         if args.validate_only:

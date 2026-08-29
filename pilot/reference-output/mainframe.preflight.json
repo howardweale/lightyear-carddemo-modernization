@@ -1,0 +1,108 @@
+{
+  "appliance_sha256": "8ebfdca9e04bf4a0d0710ce2e0e629e6c099b0f7723ed439875639de5eaa9e2f",
+  "capability_sha256": "cdf4c55cd840dfe34258382bab3b819cda576396a175984b2982475a83ba6a7d",
+  "collection_mechanism": {
+    "enterprise_mechanism_ready": true,
+    "live_observed": false
+  },
+  "content_sha256": "6cb415e1ba7a4000f929fddfc0c97c8985faba28e2b34653651677271fd948af",
+  "gates": {
+    "6_authorized_original_execution": "blocked",
+    "7_independent_comparison": "mechanism_ready",
+    "8_signed_equivalence": "blocked"
+  },
+  "global_requirements": [
+    "written authorization naming non-production systems, programs and data",
+    "customer evidence custodian identity and independent verifier identity",
+    "approved TLS endpoints, certificates and out-of-band credentials",
+    "customer-controlled evidence signing key and trusted time source",
+    "approved test data, retention, redaction and evidence export policy",
+    "approved execution, rollback, recovery and incident runbooks"
+  ],
+  "intake_sha256": "ceca09b2f0f3b53bdd48d3dd172f90ef4848a7525990aef0d9f9bb2640def427",
+  "limitations": [
+    "Preflight describes prerequisites; it is not an authorization or live observation.",
+    "The collection appliance cannot promote source-only or simulated evidence to equivalence."
+  ],
+  "mainframe_equivalent": false,
+  "pilot_id": "lightyear-carddemo-source-only-v0.29",
+  "preflight_type": "lightyear-mainframe-evidence-preflight",
+  "production_ready": false,
+  "ready_for_authorized_onboarding": true,
+  "ready_for_gates_6_8": false,
+  "schema_version": "1.0",
+  "technologies": [
+    {
+      "gate_6": "blocked",
+      "gate_7": "mechanism_ready",
+      "gate_8": "blocked",
+      "mainframe_equivalent": false,
+      "required_live_evidence": [
+        "authorized test region and transaction",
+        "CSD/CMCI observation",
+        "signed terminal and side-effect capture"
+      ],
+      "technology": "CICS"
+    },
+    {
+      "gate_6": "blocked",
+      "gate_7": "mechanism_ready",
+      "gate_8": "blocked",
+      "mainframe_equivalent": false,
+      "required_live_evidence": [
+        "approved non-production clusters and alternate indexes",
+        "record-byte capture",
+        "locking and recovery observation"
+      ],
+      "technology": "VSAM"
+    },
+    {
+      "gate_6": "blocked",
+      "gate_7": "mechanism_ready",
+      "gate_8": "blocked",
+      "mainframe_equivalent": false,
+      "required_live_evidence": [
+        "authorized BMP region, DBD and PSB",
+        "test database and JES output",
+        "status, checkpoint and restart evidence"
+      ],
+      "technology": "IMS"
+    },
+    {
+      "gate_6": "blocked",
+      "gate_7": "mechanism_ready",
+      "gate_8": "blocked",
+      "mainframe_equivalent": false,
+      "required_live_evidence": [
+        "assembler and binder listings",
+        "load-module digest",
+        "authorized Language Environment caller execution"
+      ],
+      "technology": "HLASM"
+    },
+    {
+      "gate_6": "blocked",
+      "gate_7": "mechanism_ready",
+      "gate_8": "blocked",
+      "mainframe_equivalent": false,
+      "required_live_evidence": [
+        "IBM Enterprise PL/I compile listing",
+        "Db2 precompile and package bind",
+        "actual PL/I-to-COBOL execution capture"
+      ],
+      "technology": "PL/I"
+    },
+    {
+      "gate_6": "blocked",
+      "gate_7": "mechanism_ready",
+      "gate_8": "blocked",
+      "mainframe_equivalent": false,
+      "required_live_evidence": [
+        "approved catalog and package projection",
+        "bounded source-row profile",
+        "log-based CDC, cutover and rollback observation"
+      ],
+      "technology": "Db2/Data"
+    }
+  ]
+}

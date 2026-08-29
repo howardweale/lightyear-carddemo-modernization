@@ -25,6 +25,7 @@ fi
 "$project_dir/migration-rehearsal.sh" verify
 "$project_dir/knowledge-graph.sh" verify
 "$project_dir/extension-foundation.sh" verify
+"$project_dir/collection-appliance.sh" verify
 "$project_dir/pli-conformance.sh" verify
 "$project_dir/pli-modernization.sh" verify
 "$project_dir/pli-build-attestation.sh" verify
@@ -39,6 +40,7 @@ fi
 "$project_dir/asm-readiness.sh" verify
 "$project_dir/ims-readiness.sh" verify
 "$project_dir/audit-control-tower.sh" verify
+"$project_dir/source-only-pilot.sh" verify
 
 (
   cd "$project_dir/candidate-java"

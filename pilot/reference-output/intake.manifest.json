@@ -1,0 +1,86 @@
+{
+  "approval": {
+    "approval_id": "repository-reference-fixture",
+    "approved_for_source_only_analysis": true,
+    "customer_data_allowed": false,
+    "runtime_credentials_allowed": false
+  },
+  "content_sha256": "ceca09b2f0f3b53bdd48d3dd172f90ef4848a7525990aef0d9f9bb2640def427",
+  "files": [
+    {
+      "bytes": 344,
+      "kind": "cobol",
+      "lines": 12,
+      "logical_sha256": "89ea4c0f4c3c35c4dd583581ac277eb771512e6187c0b4412123e9c849988673",
+      "path": "cobol/ACCOUNTV.cbl",
+      "raw_sha256": "89ea4c0f4c3c35c4dd583581ac277eb771512e6187c0b4412123e9c849988673"
+    },
+    {
+      "bytes": 269,
+      "kind": "system-configuration",
+      "lines": 13,
+      "logical_sha256": "a6f0feb937f234b626e82ceaa468758dc88b9fbfe9cf5f917fac8f03ff156f7e",
+      "path": "config/cics-export.json",
+      "raw_sha256": "a6f0feb937f234b626e82ceaa468758dc88b9fbfe9cf5f917fac8f03ff156f7e"
+    },
+    {
+      "bytes": 90,
+      "kind": "copybook",
+      "lines": 3,
+      "logical_sha256": "3f0074afa43e29cf509bfcaa3c8c86a71f0f7e3d49b6608ac3d257b5d9b3c180",
+      "path": "copybooks/ACCTREC.cpy",
+      "raw_sha256": "3f0074afa43e29cf509bfcaa3c8c86a71f0f7e3d49b6608ac3d257b5d9b3c180"
+    },
+    {
+      "bytes": 242,
+      "kind": "db2-ddl",
+      "lines": 8,
+      "logical_sha256": "0d675c6d7ed8f95fbd01c8f412893215f42acecd5a126bbb4776a30c28f9d72b",
+      "path": "db2/AUTHFRDS.ddl",
+      "raw_sha256": "0d675c6d7ed8f95fbd01c8f412893215f42acecd5a126bbb4776a30c28f9d72b"
+    },
+    {
+      "bytes": 203,
+      "kind": "jcl",
+      "lines": 5,
+      "logical_sha256": "61d2b6cab4590fcbf4110d105f92274f2f34ef74911c12a57fad9d5f0c784946",
+      "path": "jcl/ACCTPIL.jcl",
+      "raw_sha256": "61d2b6cab4590fcbf4110d105f92274f2f34ef74911c12a57fad9d5f0c784946"
+    },
+    {
+      "bytes": 211,
+      "kind": "pli",
+      "lines": 6,
+      "logical_sha256": "b57173bbe88dbde4f26ead75ad045e68331e2a8ced5f9bb3c8b660be2b1a2701",
+      "path": "pli/ACCTPL1.pli",
+      "raw_sha256": "b57173bbe88dbde4f26ead75ad045e68331e2a8ced5f9bb3c8b660be2b1a2701"
+    }
+  ],
+  "limitations": [
+    "Inventory proves bounded source custody, not source compilation or runtime behavior.",
+    "No customer data, credentials, binaries, dumps, or live-system observations are accepted."
+  ],
+  "manifest_type": "lightyear-source-only-pilot-intake",
+  "pilot_id": "lightyear-carddemo-source-only-v0.29",
+  "profile_sha256": "d40d5fa9c21e0550609e55136c38f8bdfe94db4e0731feac03d364ce99927b3a",
+  "schema_version": "1.0",
+  "scope": {
+    "live_system_contact": false,
+    "read_only": true,
+    "source_only": true
+  },
+  "source_label": "CardDemo bounded reference intake",
+  "source_tree_sha256": "2700e85e972c85fa1cfda21b4c415897f5c21e5981d6d2595283cf6230883fb4",
+  "statistics": {
+    "by_kind": {
+      "cobol": 1,
+      "copybook": 1,
+      "db2-ddl": 1,
+      "jcl": 1,
+      "pli": 1,
+      "system-configuration": 1
+    },
+    "bytes": 1359,
+    "files": 6
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schema/enterprise-appliance-fault-catalog-1.0.json",
+  "title": "LIGHTYEAR enterprise collector fault catalog",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "fault_catalog_type", "scenarios", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "fault_catalog_type": {"const": "lightyear-enterprise-collector-fault-catalog"},
+    "scenarios": {"type": "array", "minItems": 8, "maxItems": 8, "items": {"type": "object", "additionalProperties": false, "required": ["fault", "expected"], "properties": {"fault": {"type": "string"}, "expected": {"type": "string", "minLength": 1}}}},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

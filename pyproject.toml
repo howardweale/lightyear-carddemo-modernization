@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "lightyear-carddemo-oracle"
-version = "0.27.0"
+version = "0.29.0"
 description = "Graph-grounded, extensible and evidence-governed modernization factory for CardDemo"
 requires-python = ">=3.11"
 dependencies = []
@@ -20,6 +20,7 @@ lightyear-control-tower = "lightyear_control_tower.cli:main"
 factorydark-readiness = "lightyear_readiness.cli:main"
 factorydark-data = "lightyear_data.cli:main"
 lightyear-extensions = "lightyear_extensions.cli:main"
+lightyear-pilot = "lightyear_pilot.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src", "extensions/runtime"]

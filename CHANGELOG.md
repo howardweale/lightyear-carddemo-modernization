@@ -1,5 +1,44 @@
 # Changelog
 
+## 0.29.0 — 2026-08-29
+
+- Added one supported no-network Python 3.11+ source-tree launch and release path for a governed
+  source-only pilot, without requiring a package build backend or third-party runtime dependency.
+- Added a bounded, credential-safe intake for approved COBOL, copybooks, PL/I, JCL, Db2 DDL, and
+  configuration exports with deterministic raw and logical source identities.
+- Rejected symlinks, hidden paths, unsupported files, binary content, unsafe sizes, path drift, and
+  credential-shaped material before evidence assembly.
+- Added a gates 6–8 preflight covering global authorization, identity, TLS, signing, test-data,
+  retention, execution, rollback, recovery, and technology-specific live-evidence prerequisites.
+- Added a content-addressed JSON and Markdown pilot dossier binding 16 runtime, graph, capability, language,
+  build, qualification, data, migration, appliance, readiness, and audit artifacts by raw SHA-256.
+- Added beginner, senior-engineer, security/operations, and auditor guides plus POSIX and PowerShell
+  operator entry points.
+- Froze v1 intake, preflight, and dossier schemas for the 0.29.x pilot line and added fail-closed
+  upgrade, tamper, unsupported-input, secret, artifact-drift, and overclaim tests.
+- Added a clean-environment rehearsal that reproduces the six-class reference intake and complete
+  dossier byte-for-byte.
+- Kept model qualification, authorized original-system execution, signed live equivalence,
+  mainframe equivalence, and production readiness explicitly false or blocked.
+
+## 0.28.0 — 2026-08-28
+
+- Added a content-addressed enterprise collection-appliance profile bound to the existing
+  three-adapter mainframe access campaign.
+- Added bounded bearer, externally issued OAuth bearer, and mTLS-plus-bearer authentication
+  profiles with TLS 1.2 minimum transport and credential-free configuration.
+- Added continuation-only pagination, bounded retry and `Retry-After`, global response limits,
+  and fail-closed redirect and continuation validation.
+- Proved a forced interruption after page two followed by content-addressed checkpoint resume
+  without repeating completed adapter work.
+- Added digest-and-redacted-claims-only retention with seven-day checkpoint and thirty-day evidence
+  policy bounds; raw bodies and credentials are never retained.
+- Added an eight-scenario deterministic fault laboratory covering DNS, TLS, timeout, redirects,
+  pagination loops, rate limits, truncation, and checkpoint tampering.
+- Published the appliance posture in the unified capability projection while keeping all live,
+  mainframe-equivalence, enterprise-IdP, customer-vault, purge-scheduler, and production claims
+  blocked.
+
 ## 0.27.0 — 2026-08-28
 
 - Added a content-addressed five-event Db2-shaped AUTHFRDS change journal covering insert, update,

@@ -59,6 +59,9 @@ class MainframeCapabilityGraphTests(unittest.TestCase):
             "oracle_data_receipt": self.load_json("data-modernization/receipts/authfrds.oracle-offline.receipt.json"),
             "data_rehearsal_receipt": self.load_json("data-modernization/rehearsal/receipt.json"),
             "campaign_receipt": self.load_json("extensions/adapters/campaign/campaign.receipt.json"),
+            "enterprise_appliance_receipt": self.load_json(
+                "extensions/adapters/appliance/appliance.receipt.json"
+            ),
         }
         evidence.update(overrides)
         return analyze_capabilities(self.graph, **evidence)
@@ -142,6 +145,26 @@ class MainframeCapabilityGraphTests(unittest.TestCase):
         self.assertEqual("simulated", campaign["evidence_class"])
         self.assertFalse(campaign["live_observed"])
         self.assertFalse(campaign["production_ready"])
+        hardening = campaign["enterprise_hardening"]
+        self.assertEqual("passed", hardening["status"])
+        self.assertEqual("simulated-resilience", hardening["evidence_class"])
+        self.assertTrue(hardening["authentication_profiles_bounded"])
+        self.assertTrue(hardening["pagination_bounded"])
+        self.assertTrue(hardening["retry_bounded"])
+        self.assertTrue(hardening["checkpoint_resume"])
+        self.assertEqual(8, hardening["fault_scenarios"])
+        self.assertFalse(hardening["live_observed"])
+        self.assertFalse(hardening["production_ready"])
+
+    def test_tampered_enterprise_appliance_fails_closed(self) -> None:
+        receipt = self.load_json("extensions/adapters/appliance/appliance.receipt.json")
+        receipt["checks"]["checkpoint_resume"] = False
+        analysis = self.expected_projection(enterprise_appliance_receipt=receipt)
+        campaign = analysis["collection_mechanisms"][0]
+        self.assertEqual("blocked", campaign["enterprise_hardening"]["status"])
+        self.assertEqual(0, campaign["enterprise_hardening"]["fault_scenarios"])
+        self.assertEqual("simulated_ready", campaign["status"])
+        self.assertFalse(campaign["live_observed"])
 
     def test_invalid_pli_fragment_fails_closed_without_weakening_other_cells(self) -> None:
         fragment = self.load_json("extensions/pli/pli.fragment.json")

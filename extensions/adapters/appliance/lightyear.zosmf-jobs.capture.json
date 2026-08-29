@@ -1,0 +1,97 @@
+{
+  "adapter": {
+    "id": "lightyear.zosmf-jobs",
+    "version": "1.1"
+  },
+  "artifacts": [
+    {
+      "bytes": 169,
+      "content_retained": false,
+      "kind": "zosmf-job-response",
+      "page": 1,
+      "sha256": "20c443222d25c83e618d874aad2c34addcdef03198233a81cfbc329cf58d8917"
+    },
+    {
+      "bytes": 169,
+      "content_retained": false,
+      "kind": "zosmf-job-response",
+      "page": 2,
+      "sha256": "20c443222d25c83e618d874aad2c34addcdef03198233a81cfbc329cf58d8917"
+    }
+  ],
+  "claims": [
+    {
+      "assertion": "observed",
+      "details": {
+        "completion_code": "CC 0000",
+        "job_id": "JOB00001",
+        "job_name": "INTCALC",
+        "status": "OUTPUT"
+      },
+      "entity_id": "legacy:jcl-job:INTCALC",
+      "entity_kind": "node",
+      "operation": "job_status_observed"
+    },
+    {
+      "assertion": "observed",
+      "details": {
+        "completion_code": "CC 0000",
+        "program": "CBACT04C",
+        "step": "STEP15"
+      },
+      "entity_id": "legacy:cobol-program:CBACT04C",
+      "entity_kind": "node",
+      "operation": "job_step_program_observed"
+    },
+    {
+      "assertion": "observed",
+      "details": {
+        "completion_code": "CC 0000",
+        "job_id": "JOB00001",
+        "job_name": "INTCALC",
+        "status": "OUTPUT"
+      },
+      "entity_id": "legacy:jcl-job:INTCALC",
+      "entity_kind": "node",
+      "operation": "job_status_observed"
+    },
+    {
+      "assertion": "observed",
+      "details": {
+        "completion_code": "CC 0000",
+        "program": "CBACT04C",
+        "step": "STEP15"
+      },
+      "entity_id": "legacy:cobol-program:CBACT04C",
+      "entity_kind": "node",
+      "operation": "job_step_program_observed"
+    }
+  ],
+  "collected_at": "2026-08-28T00:00:00Z",
+  "content_sha256": "24e73bde575eea58c0dfc97ba24d361f0050d1b7f8c3eaee7d406e4084d6e8b8",
+  "envelope_id": "appliance:zosmf-jobs:carddemo-enterprise-collector-v1",
+  "envelope_type": "lightyear-adapter-evidence",
+  "evidence_class": "simulated",
+  "graph_binding": {
+    "content_sha256": "2a003843da4fcdb04fc563f2d9644dd745ba0589c9fb6651b7fd21c9e6fad571",
+    "graph_id": "lightyear:carddemo-modernization"
+  },
+  "limitations": [
+    "Raw response bodies are hashed and discarded; only bounded graph-addressed claims are retained.",
+    "This capture used deterministic simulated responses, not a customer mainframe."
+  ],
+  "schema_version": "1.0",
+  "scope": {
+    "mode": "resumable-enterprise-collection",
+    "read_only": true,
+    "resources": [
+      "lightyear.zosmf-jobs"
+    ]
+  },
+  "signature": null,
+  "source": {
+    "attestation": "local-simulator",
+    "kind": "enterprise-fault-lab",
+    "system": "carddemo-zos"
+  }
+}

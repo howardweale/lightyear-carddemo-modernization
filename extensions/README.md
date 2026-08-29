@@ -1,5 +1,20 @@
 # Trusted extensions and mainframe access
 
+## MS #28 enterprise collection appliance and fault laboratory
+
+MS #28 wraps the MS #21 collectors in a bounded operational control plane: deployment-shaped
+authentication profiles, pagination, retry/backoff, content-addressed checkpoint resume, response
+and retention bounds, and a deterministic eight-fault laboratory.
+
+```bash
+./collection-appliance.sh verify
+```
+
+The committed receipt is `simulated-resilience`. It proves that the mechanism fails closed and
+recovers within its declared bounds; it does not prove a customer IdP exchange, mainframe
+connectivity, production network behavior, or automatic customer retention enforcement. See
+[`adapters/README.md`](adapters/README.md) for the exact control and claim boundaries.
+
 ## MS #25 reproducible build and artifact attestation
 
 MS #25 binds the bounded Java modernization deliverable to its executed evidence rather than

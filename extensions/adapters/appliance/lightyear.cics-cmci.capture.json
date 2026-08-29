@@ -1,0 +1,66 @@
+{
+  "adapter": {
+    "id": "lightyear.cics-cmci",
+    "version": "1.0"
+  },
+  "artifacts": [
+    {
+      "bytes": 137,
+      "content_retained": false,
+      "kind": "cics-cmci-response",
+      "page": 1,
+      "sha256": "257188d072cd7bdbec2eeebef9e2aa79828c3e708229ba68e5f67431ee4e8d00"
+    }
+  ],
+  "claims": [
+    {
+      "assertion": "observed",
+      "details": {
+        "applid": "CARDDEMO",
+        "enabled": "ENABLED",
+        "program": "COACTVWC",
+        "transaction": "CAVW"
+      },
+      "entity_id": "legacy:cics-transaction:CAVW",
+      "entity_kind": "node",
+      "operation": "cics_transaction_observed"
+    },
+    {
+      "assertion": "observed",
+      "details": {
+        "program": "COACTVWC",
+        "region": "CARDDEMO"
+      },
+      "entity_id": "legacy:cobol-program:COACTVWC",
+      "entity_kind": "node",
+      "operation": "cics_program_binding_observed"
+    }
+  ],
+  "collected_at": "2026-08-28T00:00:00Z",
+  "content_sha256": "8bc1c08c219264acb72e4531e2c32ea4c86f55ff0ee005a74b8a904752494320",
+  "envelope_id": "appliance:cics-cmci:carddemo-enterprise-collector-v1",
+  "envelope_type": "lightyear-adapter-evidence",
+  "evidence_class": "simulated",
+  "graph_binding": {
+    "content_sha256": "2a003843da4fcdb04fc563f2d9644dd745ba0589c9fb6651b7fd21c9e6fad571",
+    "graph_id": "lightyear:carddemo-modernization"
+  },
+  "limitations": [
+    "Raw response bodies are hashed and discarded; only bounded graph-addressed claims are retained.",
+    "This capture used deterministic simulated responses, not a customer mainframe."
+  ],
+  "schema_version": "1.0",
+  "scope": {
+    "mode": "resumable-enterprise-collection",
+    "read_only": true,
+    "resources": [
+      "lightyear.cics-cmci"
+    ]
+  },
+  "signature": null,
+  "source": {
+    "attestation": "local-simulator",
+    "kind": "enterprise-fault-lab",
+    "system": "carddemo-zos"
+  }
+}

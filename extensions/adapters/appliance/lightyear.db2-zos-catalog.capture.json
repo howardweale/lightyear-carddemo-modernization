@@ -1,0 +1,61 @@
+{
+  "adapter": {
+    "id": "lightyear.db2-zos-catalog",
+    "version": "1.0"
+  },
+  "artifacts": [
+    {
+      "bytes": 129,
+      "content_retained": false,
+      "kind": "db2-zos-catalog-response",
+      "page": 1,
+      "sha256": "d4441c7a9ac100330d177f1f8359d14380bb4ab161e4720c5745cd17411f7c17"
+    }
+  ],
+  "claims": [
+    {
+      "assertion": "observed",
+      "details": {
+        "column_count": 26,
+        "index_count": 1,
+        "package_count": 1,
+        "primary_key": [
+          "CARD_NUM",
+          "AUTH_TS"
+        ],
+        "schema": "CARDDEMO",
+        "table": "AUTHFRDS"
+      },
+      "entity_id": "legacy:db2-table:CARDDEMO.AUTHFRDS",
+      "entity_kind": "node",
+      "operation": "db2_catalog_observed"
+    }
+  ],
+  "collected_at": "2026-08-28T00:00:00Z",
+  "content_sha256": "04e2cd7ad900f84597bf61e3e98c3e9375739b7ba519a1a46e2ab52b58e9e1a4",
+  "envelope_id": "appliance:db2-zos-catalog:carddemo-enterprise-collector-v1",
+  "envelope_type": "lightyear-adapter-evidence",
+  "evidence_class": "simulated",
+  "graph_binding": {
+    "content_sha256": "2a003843da4fcdb04fc563f2d9644dd745ba0589c9fb6651b7fd21c9e6fad571",
+    "graph_id": "lightyear:carddemo-modernization"
+  },
+  "limitations": [
+    "Raw response bodies are hashed and discarded; only bounded graph-addressed claims are retained.",
+    "This capture used deterministic simulated responses, not a customer mainframe."
+  ],
+  "schema_version": "1.0",
+  "scope": {
+    "mode": "resumable-enterprise-collection",
+    "read_only": true,
+    "resources": [
+      "lightyear.db2-zos-catalog"
+    ]
+  },
+  "signature": null,
+  "source": {
+    "attestation": "local-simulator",
+    "kind": "enterprise-fault-lab",
+    "system": "carddemo-zos"
+  }
+}

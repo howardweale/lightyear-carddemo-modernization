@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schema/enterprise-appliance-receipt-1.0.json",
+  "title": "LIGHTYEAR enterprise collection appliance receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "receipt_type", "appliance_id", "evidence_class", "status", "enterprise_mechanism_ready", "live_observed", "production_ready", "mainframe_equivalent", "bindings", "checks", "operations", "authentication", "retention", "fault_laboratory", "captures", "gaps", "limitations", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "receipt_type": {"const": "lightyear-enterprise-collection-appliance"},
+    "appliance_id": {"type": "string", "minLength": 1},
+    "evidence_class": {"enum": ["simulated-resilience", "live"]},
+    "status": {"enum": ["passed", "blocked"]},
+    "enterprise_mechanism_ready": {"type": "boolean"},
+    "live_observed": {"type": "boolean"},
+    "production_ready": {"const": false},
+    "mainframe_equivalent": {"const": false},
+    "bindings": {"type": "object"},
+    "checks": {"type": "object", "minProperties": 9, "maxProperties": 9, "additionalProperties": {"type": "boolean"}},
+    "operations": {"type": "object"},
+    "authentication": {"type": "object"},
+    "retention": {"type": "object"},
+    "fault_laboratory": {"type": "object"},
+    "captures": {"type": "array", "minItems": 3, "maxItems": 3},
+    "gaps": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}},
+    "limitations": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"live_observed": {"const": true}}},
+      "then": {"properties": {"evidence_class": {"const": "live"}}},
+      "else": {"properties": {"evidence_class": {"const": "simulated-resilience"}}}
+    }
+  ]
+}

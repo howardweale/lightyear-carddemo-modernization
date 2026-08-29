@@ -1,6 +1,56 @@
 # FactoryDark.ai CardDemo Modernization Factory
 
-Release: **v0.27.0 — offline data movement, dual-run, cutover, and rollback rehearsal**
+Release: **v0.29.0 — governed source-only pilot release candidate**
+
+v0.29 packages the evidence-governed platform into one Python-3.11+, source-tree offline pilot path. A bounded
+intake accepts approved UTF-8 COBOL, copybooks, PL/I, JCL, Db2 DDL, and configuration exports;
+rejects symlinks, hidden or unsupported files, binary content, unsafe sizes, and credential-shaped
+material; and publishes a content-addressed custody manifest without embedding source in the
+dossier.
+
+The pilot assembles the canonical and composite estate, capability gates, PL/I coverage and build
+proofs, model-qualification policy, PostgreSQL/Oracle development evidence, migration rehearsal,
+enterprise collection appliance, runtime readiness cells, and audit projection into one
+independently verifiable JSON and Markdown dossier. A preflight names the exact authorization,
+identity, network, signing, data, execution, recovery, and technology-specific evidence required
+later for gates 6–8. Versioned v1 contracts and a 0.29.x compatibility policy fail closed on stale
+identities, foreign major versions, or readiness relabelling.
+
+```bash
+./source-only-pilot.sh doctor
+./source-only-pilot.sh rehearse
+./source-only-pilot.sh verify
+```
+
+The committed reference release is byte-reproducible from six source classes and 16 evidence
+artifacts. It unlocks a governed source-only pilot—not live modernization. No model is declared
+qualified; gate 6 and gate 8 remain blocked; `mainframe_equivalent` and `production_ready` remain
+false. See the [pilot guide](pilot/README.md).
+
+Previous milestone: **v0.28.0 — enterprise collection appliance and fault laboratory**
+
+v0.28 hardens the read-only mainframe collection mechanism for deployment-shaped failure modes.
+The content-addressed appliance profile adds bounded bearer, externally issued OAuth bearer, and
+mTLS-plus-bearer authentication modes; TLS 1.2 minimum transport; continuation-only pagination;
+bounded retry and `Retry-After`; exact checkpoint resume; and digest-only evidence retention.
+
+A deterministic fault laboratory proves that DNS exhaustion, TLS rejection, timeout recovery,
+redirect rejection, pagination loops, rate limiting, response truncation, and checkpoint tampering
+are detected without retaining credentials or raw response bodies. The committed run exercises
+three adapters across four pages, two retries, one forced interruption and resume, and all eight
+fault classes. The unified capability projection exposes this enterprise-hardening posture.
+
+```bash
+./collection-appliance.sh verify
+./lightyear.sh verify
+```
+
+This is simulated resilience qualification, not a customer network or live IBM Z observation.
+Enterprise IdP exchange, customer vault and purge scheduling, production volume, live equivalence,
+and production authorization remain explicit gaps; `live_observed`, `mainframe_equivalent`, and
+`production_ready` remain false.
+
+Previous milestone: **v0.27.0 — offline data movement, dual-run, cutover, and rollback rehearsal**
 
 v0.27 turns the bounded `AUTHFRDS` data proof into an operational migration rehearsal. A
 content-addressed Db2-shaped journal applies five ordered inserts, updates, and deletes to

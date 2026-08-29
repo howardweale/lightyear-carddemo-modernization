@@ -1,0 +1,13 @@
+{
+  "export_class": "approved-reference-configuration",
+  "region": "DEVELOPMENT",
+  "transactions": [
+    {
+      "transaction": "CAVW",
+      "program": "COACTVWC",
+      "enabled": true
+    }
+  ],
+  "contains_customer_data": false,
+  "contains_credentials": false
+}

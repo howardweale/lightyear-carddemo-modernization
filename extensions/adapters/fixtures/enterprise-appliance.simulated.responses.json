@@ -1,0 +1,79 @@
+{
+  "collected_at": "2026-08-28T00:00:00Z",
+  "content_sha256": "290dd07649f5e9e2db29c25df0cdcf8f6b6214b0e843219e5b4ad93e44289435",
+  "fixture_type": "lightyear-enterprise-appliance-script",
+  "responses": {
+    "/CICSSystemManagement/CICSPlex/CMAS1/CICSRegion/CARDDEMO/TRANSACTION/CAVW": [
+      {
+        "fault": "timeout",
+        "retryable": true
+      },
+      {
+        "body": "<response><records><cicslocaltransaction applid=\"CARDDEMO\" tranid=\"CAVW\" program=\"COACTVWC\" enablestatus=\"ENABLED\"/></records></response>",
+        "content_type": "application/xml",
+        "status": 200
+      }
+    ],
+    "/lightyear/db2/catalog/CARDDEMO/AUTHFRDS": [
+      {
+        "body": {
+          "column_count": 26,
+          "index_count": 1,
+          "package_count": 1,
+          "primary_key": [
+            "CARD_NUM",
+            "AUTH_TS"
+          ],
+          "schema": "CARDDEMO",
+          "table": "AUTHFRDS"
+        },
+        "content_type": "application/json",
+        "status": 200
+      }
+    ],
+    "/zosmf/restjobs/jobs/INTCALC/JOB00001?step-data=Y&exec-data=Y": [
+      {
+        "retry_after_ms": 200,
+        "status": 429
+      },
+      {
+        "body": {
+          "jobid": "JOB00001",
+          "jobname": "INTCALC",
+          "retcode": "CC 0000",
+          "status": "OUTPUT",
+          "step-data": [
+            {
+              "completion-code": "CC 0000",
+              "program-name": "CBACT04C",
+              "step-name": "STEP15"
+            }
+          ]
+        },
+        "content_type": "application/json",
+        "next_path": "/zosmf/restjobs/jobs/INTCALC/JOB00001?step-data=Y&exec-data=Y&cursor=2",
+        "status": 200
+      }
+    ],
+    "/zosmf/restjobs/jobs/INTCALC/JOB00001?step-data=Y&exec-data=Y&cursor=2": [
+      {
+        "body": {
+          "jobid": "JOB00001",
+          "jobname": "INTCALC",
+          "retcode": "CC 0000",
+          "status": "OUTPUT",
+          "step-data": [
+            {
+              "completion-code": "CC 0000",
+              "program-name": "CBACT04C",
+              "step-name": "STEP15"
+            }
+          ]
+        },
+        "content_type": "application/json",
+        "status": 200
+      }
+    ]
+  },
+  "schema_version": "1.0"
+}

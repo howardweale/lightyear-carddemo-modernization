@@ -1,0 +1,170 @@
+{
+  "adapter_index": 3,
+  "adapter_state": {
+    "lightyear.cics-cmci": {
+      "artifacts": [
+        {
+          "bytes": 137,
+          "content_retained": false,
+          "kind": "cics-cmci-response",
+          "page": 1,
+          "sha256": "257188d072cd7bdbec2eeebef9e2aa79828c3e708229ba68e5f67431ee4e8d00"
+        }
+      ],
+      "claims": [
+        {
+          "assertion": "observed",
+          "details": {
+            "applid": "CARDDEMO",
+            "enabled": "ENABLED",
+            "program": "COACTVWC",
+            "transaction": "CAVW"
+          },
+          "entity_id": "legacy:cics-transaction:CAVW",
+          "entity_kind": "node",
+          "operation": "cics_transaction_observed"
+        },
+        {
+          "assertion": "observed",
+          "details": {
+            "program": "COACTVWC",
+            "region": "CARDDEMO"
+          },
+          "entity_id": "legacy:cobol-program:COACTVWC",
+          "entity_kind": "node",
+          "operation": "cics_program_binding_observed"
+        }
+      ],
+      "complete": true,
+      "paths": [
+        "/CICSSystemManagement/CICSPlex/CMAS1/CICSRegion/CARDDEMO/TRANSACTION/CAVW"
+      ]
+    },
+    "lightyear.db2-zos-catalog": {
+      "artifacts": [
+        {
+          "bytes": 129,
+          "content_retained": false,
+          "kind": "db2-zos-catalog-response",
+          "page": 1,
+          "sha256": "d4441c7a9ac100330d177f1f8359d14380bb4ab161e4720c5745cd17411f7c17"
+        }
+      ],
+      "claims": [
+        {
+          "assertion": "observed",
+          "details": {
+            "column_count": 26,
+            "index_count": 1,
+            "package_count": 1,
+            "primary_key": [
+              "CARD_NUM",
+              "AUTH_TS"
+            ],
+            "schema": "CARDDEMO",
+            "table": "AUTHFRDS"
+          },
+          "entity_id": "legacy:db2-table:CARDDEMO.AUTHFRDS",
+          "entity_kind": "node",
+          "operation": "db2_catalog_observed"
+        }
+      ],
+      "complete": true,
+      "paths": [
+        "/lightyear/db2/catalog/CARDDEMO/AUTHFRDS"
+      ]
+    },
+    "lightyear.zosmf-jobs": {
+      "artifacts": [
+        {
+          "bytes": 169,
+          "content_retained": false,
+          "kind": "zosmf-job-response",
+          "page": 1,
+          "sha256": "20c443222d25c83e618d874aad2c34addcdef03198233a81cfbc329cf58d8917"
+        },
+        {
+          "bytes": 169,
+          "content_retained": false,
+          "kind": "zosmf-job-response",
+          "page": 2,
+          "sha256": "20c443222d25c83e618d874aad2c34addcdef03198233a81cfbc329cf58d8917"
+        }
+      ],
+      "claims": [
+        {
+          "assertion": "observed",
+          "details": {
+            "completion_code": "CC 0000",
+            "job_id": "JOB00001",
+            "job_name": "INTCALC",
+            "status": "OUTPUT"
+          },
+          "entity_id": "legacy:jcl-job:INTCALC",
+          "entity_kind": "node",
+          "operation": "job_status_observed"
+        },
+        {
+          "assertion": "observed",
+          "details": {
+            "completion_code": "CC 0000",
+            "program": "CBACT04C",
+            "step": "STEP15"
+          },
+          "entity_id": "legacy:cobol-program:CBACT04C",
+          "entity_kind": "node",
+          "operation": "job_step_program_observed"
+        },
+        {
+          "assertion": "observed",
+          "details": {
+            "completion_code": "CC 0000",
+            "job_id": "JOB00001",
+            "job_name": "INTCALC",
+            "status": "OUTPUT"
+          },
+          "entity_id": "legacy:jcl-job:INTCALC",
+          "entity_kind": "node",
+          "operation": "job_status_observed"
+        },
+        {
+          "assertion": "observed",
+          "details": {
+            "completion_code": "CC 0000",
+            "program": "CBACT04C",
+            "step": "STEP15"
+          },
+          "entity_id": "legacy:cobol-program:CBACT04C",
+          "entity_kind": "node",
+          "operation": "job_step_program_observed"
+        }
+      ],
+      "complete": true,
+      "paths": [
+        "/zosmf/restjobs/jobs/INTCALC/JOB00001?step-data=Y&exec-data=Y",
+        "/zosmf/restjobs/jobs/INTCALC/JOB00001?step-data=Y&exec-data=Y&cursor=2"
+      ]
+    }
+  },
+  "appliance_id": "carddemo-enterprise-collector-v1",
+  "backoff_schedule_ms": [
+    100,
+    200
+  ],
+  "bindings": {
+    "appliance_profile_sha256": "43546433710432528500b775ad1dfacac7b27985428cebabaf149c68df7d71dc",
+    "campaign_profile_sha256": "2ed9d0a9082273689fdd85e2678fe3377fa6cea99fb715232f3f89bfcf03e2d9",
+    "graph_sha256": "2a003843da4fcdb04fc563f2d9644dd745ba0589c9fb6651b7fd21c9e6fad571"
+  },
+  "content_sha256": "6a133e9dd6672ba32c2e4e766a81be2d532f45eb7b27a405c0893b0f89732b96",
+  "current_path": null,
+  "production_ready": false,
+  "raw_bodies_retained": false,
+  "receipt_type": "lightyear-enterprise-collection-checkpoint",
+  "resume_count": 1,
+  "retry_count": 2,
+  "schema_version": "1.0",
+  "status": "completed",
+  "total_pages": 4,
+  "total_response_bytes": 604
+}

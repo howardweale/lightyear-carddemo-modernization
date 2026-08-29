@@ -96,6 +96,12 @@ class SourceOnlyPilotTests(unittest.TestCase):
             (CANONICAL / "pilot.dossier.md").read_text(encoding="utf-8"),
         )
 
+    def test_reference_graph_uses_platform_neutral_gzip_header(self) -> None:
+        raw = (CANONICAL / "source-estate.snapshot.json.gz").read_bytes()
+        self.assertEqual(b"\x1f\x8b\x08", raw[:3])
+        self.assertEqual(b"\x00\x00\x00\x00", raw[4:8])
+        self.assertEqual(255, raw[9])
+
     def test_reference_intake_covers_all_nine_source_classes(self) -> None:
         intake, _, analysis, _, _ = self.build()
         self.assertEqual(10, intake["statistics"]["files"])

@@ -788,7 +788,20 @@ def validate_source_analysis(
 
 def write_analysis_graph(payload: Mapping[str, Any], path: Path) -> None:
     import gzip
+    import io
 
     path.parent.mkdir(parents=True, exist_ok=True)
     serialized = (json.dumps(payload, indent=2, sort_keys=True) + "\n").encode("utf-8")
-    path.write_bytes(gzip.compress(serialized, compresslevel=9, mtime=0) if path.suffix == ".gz" else serialized)
+    if path.suffix != ".gz":
+        path.write_bytes(serialized)
+        return
+    compressed = io.BytesIO()
+    with gzip.GzipFile(
+        filename="",
+        mode="wb",
+        fileobj=compressed,
+        compresslevel=9,
+        mtime=0,
+    ) as handle:
+        handle.write(serialized)
+    path.write_bytes(compressed.getvalue())

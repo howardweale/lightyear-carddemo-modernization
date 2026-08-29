@@ -7,21 +7,28 @@ The pilot layer is a bounded customer analysis workcell, not a second modernizat
 ```text
 approved source -> content-addressed intake
 intake + source -> customer-specific typed graph + analysis receipt
+graph + analysis + policy -> connected slices + advisory modernization waves
 existing receipts -> raw-byte evidence registry
 capability gates + appliance -> live-evidence preflight
-all four -> JSON/Markdown pilot dossier v2
+all five -> JSON/Markdown pilot dossier v3
 ```
 
 `pilot/pilot.profile.json` fixes intake and graph bounds, supported file classes, the relationship
-ontology, and the exact evidence registry. `pilot/compatibility.policy.json` preserves v1 intake,
-preflight, and analysis contracts while introducing the customer-bound v2 dossier for the 0.30.x
-pilot line. The generated dossier binds the dynamic customer analysis plus every release evidence
-file by raw SHA-256.
+ontology, and the exact evidence registry. `pilot/assessment-policy.json` declares the planning
+rules and technology-specific evidence needs. `pilot/compatibility.policy.json` preserves v1
+intake, preflight, analysis, and assessment contracts while introducing the customer-bound v3
+dossier for the 0.31.x pilot line. The generated dossier binds the dynamic customer analysis and
+assessment plus every release evidence file by raw SHA-256.
 
 The bounded ontology includes program calls and scheduling, Db2 SQL/data lineage, HLASM
 instructions and branch targets, IMS DBD/segment/field plus PSB/PCB sensitivity relationships, and
 VSAM cluster/component/alternate-index/path topology. These are static relationships only; macro
 expansion, IMS runtime access, VSAM catalog state, and native execution remain outside this claim.
+
+The assessment uses deterministic undirected connected components as candidate application slices.
+That is an explainable coupling boundary, not a business-priority score. Missing targets enter wave
+0; resolved slices enter human pilot selection; development proof and authorized native validation
+remain later governed waves. No wave can dispatch the factory automatically.
 
 ## Adding a supported source fixture
 
@@ -37,8 +44,8 @@ parsing, modernization behavior, and runtime equivalence are separate contracts.
 
 ## Compatibility rules
 
-The 0.30.x line accepts v1 intake, preflight, and customer-analysis receipts plus the v2 dossier.
-The historical v1 dossier schema remains committed for independent verification. A foreign major
+The 0.31.x line accepts v1 intake, preflight, customer-analysis, and assessment receipts plus the
+v3 dossier. Historical v1 and v2 dossier schemas remain committed for independent verification. A foreign major
 version, stale content identity, unknown required field, or attempted promotion of live/production
 posture must fail; historical receipts must never be rewritten in place.
 

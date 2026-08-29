@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0",
   "profile_type": "lightyear-source-only-pilot-profile",
-  "pilot_id": "lightyear-carddemo-source-only-v0.30",
-  "release": "0.30.0",
+  "pilot_id": "lightyear-carddemo-source-only-v0.31",
+  "release": "0.31.0",
   "intake": {
     "max_files": 10000,
     "max_file_bytes": 2097152,
@@ -71,7 +71,13 @@
       "id": "pilot-runtime",
       "role": "runtime-dependency-contract",
       "path": "pilot/runtime-manifest.json",
-      "sha256": "735771b186974639ba367778a64fe294af134b34f8f6249d62d551a10b019856"
+      "sha256": "50422731bfc7d5dd5a4bfdbbd52ce987e46dbb7fd030d5cfb1efa6fb099da1dc"
+    },
+    {
+      "id": "estate-assessment-policy",
+      "role": "advisory-modernization-planning-contract",
+      "path": "pilot/assessment-policy.json",
+      "sha256": "a60489ddfc849e3e3e41d9d7e84bcd94b4ef9e4195153caaf86c2efe477af938"
     },
     {
       "id": "canonical-graph",
@@ -171,5 +177,5 @@
     "mainframe_equivalent": false,
     "production_ready": false
   },
-  "content_sha256": "6915e97cd689948a1581fa5e9c06c9d440f32b9d357b4c6a40b5d3d766ebc0fb"
+  "content_sha256": "86e9161865a1deaeba05b9830f3be8c386f2f30619e499666074a2b2ee002335"
 }

@@ -37,15 +37,25 @@ if ($Action -eq "analyze") {
         --output-receipt (Join-Path $args[2] "source-analysis.receipt.json")
     exit $LASTEXITCODE
 }
+if ($Action -eq "assess") {
+    if ($args.Count -lt 2) { Write-Error "Usage: .\source-only-pilot.ps1 assess OUTPUT"; exit 2 }
+    Run-Pilot assess --intake (Join-Path $args[1] "intake.manifest.json") `
+        --analysis (Join-Path $args[1] "source-analysis.receipt.json") `
+        --analysis-graph (Join-Path $args[1] "source-estate.snapshot.json.gz") `
+        --output-json (Join-Path $args[1] "estate-assessment.json") `
+        --output-md (Join-Path $args[1] "estate-assessment.md")
+    exit $LASTEXITCODE
+}
 if ($Action -eq "dossier") {
     if ($args.Count -lt 2) { Write-Error "Usage: .\source-only-pilot.ps1 dossier OUTPUT"; exit 2 }
     Run-Pilot dossier --intake (Join-Path $args[1] "intake.manifest.json") `
         --preflight (Join-Path $args[1] "mainframe.preflight.json") `
         --analysis (Join-Path $args[1] "source-analysis.receipt.json") `
         --analysis-graph (Join-Path $args[1] "source-estate.snapshot.json.gz") `
+        --assessment (Join-Path $args[1] "estate-assessment.json") `
         --output-json (Join-Path $args[1] "pilot.dossier.json") `
         --output-md (Join-Path $args[1] "pilot.dossier.md")
     exit $LASTEXITCODE
 }
-Write-Error "Usage: .\source-only-pilot.ps1 [doctor|verify|compatibility|rehearse|intake|analyze|preflight|dossier]"
+Write-Error "Usage: .\source-only-pilot.ps1 [doctor|verify|compatibility|rehearse|intake|analyze|assess|preflight|dossier]"
 exit 2

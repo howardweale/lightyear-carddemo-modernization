@@ -5,7 +5,7 @@
     "customer_data_allowed": false,
     "runtime_credentials_allowed": false
   },
-  "content_sha256": "cc7a761dde0db8b5312ac7a136cfc2435ec65d2cd751885bfbcccdbce040f4ea",
+  "content_sha256": "e7d13304a0677067e139b0ceafc9483ea7c56c02f906cbf1b74f57892dd1b3ef",
   "files": [
     {
       "bytes": 344,
@@ -93,8 +93,8 @@
     "No customer data, credentials, binaries, dumps, or live-system observations are accepted."
   ],
   "manifest_type": "lightyear-source-only-pilot-intake",
-  "pilot_id": "lightyear-carddemo-source-only-v0.30",
-  "profile_sha256": "6915e97cd689948a1581fa5e9c06c9d440f32b9d357b4c6a40b5d3d766ebc0fb",
+  "pilot_id": "lightyear-carddemo-source-only-v0.31",
+  "profile_sha256": "86e9161865a1deaeba05b9830f3be8c386f2f30619e499666074a2b2ee002335",
   "schema_version": "1.0",
   "scope": {
     "live_system_contact": false,

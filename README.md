@@ -1,18 +1,16 @@
 # FactoryDark.ai CardDemo Modernization Factory
 
-Release: **v0.30.0 — customer source analysis workcell**
+Release: **v0.31.0 — customer estate assessment and modernization planner**
 
-v0.30 closes the gap between safe source intake and useful customer analysis. Each approved intake
-now produces its own deterministic typed estate graph and analysis receipt rather than inheriting
-the repository's CardDemo graph as if it described the customer. The bounded workcell connects
-COBOL, copybooks, PL/I, JCL, embedded Db2 SQL, DDL, HLASM, IMS DBD/PSB metadata, VSAM IDCAMS
-definitions, and approved CICS configuration while retaining missing or ambiguous targets as
-explicit unresolved references.
+v0.31 turns the customer-specific source graph into an explainable modernization planning surface.
+It deterministically partitions the approved estate into connected application slices, records the
+technologies and source boundaries in each slice, sends missing targets into a boundary-closure
+wave, and publishes technology-specific development and live-evidence backlogs.
 
-The customer graph is bound to the exact intake manifest, source hashes, a dedicated relationship
-ontology, parser coverage, graph statistics, and visible gaps. The v2 dossier binds that customer
-analysis alongside the platform's existing development evidence and live-evidence preflight. It
-contains paths, types, relationships, counts, and hashes—not source text.
+The planner is intentionally advisory. It does not infer business priority from source code,
+approve a pilot, dispatch factory work, or treat static coupling as runtime equivalence. The v3
+dossier binds the exact intake, customer graph, analysis, assessment policy, connected slices,
+planning waves, evidence posture, and live-mainframe preflight.
 
 ```bash
 ./source-only-pilot.sh doctor
@@ -20,10 +18,18 @@ contains paths, types, relationships, counts, and hashes—not source text.
 ./source-only-pilot.sh verify
 ```
 
-The committed reference release is byte-reproducible from nine source classes and 16 evidence
-artifacts. It unlocks governed customer-specific static analysis—not compilation, behavior proof,
-or live modernization. No model is declared qualified; gates 6 and 8 remain blocked;
+The committed reference release is byte-reproducible from nine source classes and 17 evidence
+artifacts. It identifies four application slices, two boundary-closure items, and an explicit
+human-governed pilot selection wave. It unlocks evidence-first planning—not compilation, behavior
+proof, business priority, or live modernization. No model is declared qualified; gates 6 and 8 remain blocked;
 `mainframe_equivalent` and `production_ready` remain false. See the [pilot guide](pilot/README.md).
+
+Previous milestone: **v0.30.0 — customer source analysis workcell**
+
+v0.30 made every approved intake produce its own deterministic typed estate graph and analysis
+receipt across COBOL, copybooks, PL/I, JCL, embedded Db2 SQL, DDL, HLASM, IMS, VSAM, and approved
+CICS configuration. Missing and ambiguous targets stay visible rather than being invented. v0.31
+adds the governed assessment and planning layer over that customer-bound graph.
 
 Previous milestone: **v0.29.0 — governed source-only pilot release candidate**
 

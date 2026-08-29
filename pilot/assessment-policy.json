@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "policy_type": "lightyear-estate-assessment-policy",
+  "technologies": {
+    "CICS": {
+      "modernization_pattern": "isolate transaction and program boundary before service extraction",
+      "required_development_evidence": "transaction contract, candidate, side-effect comparator, and negative tests",
+      "required_live_evidence": "authorized CICS transaction, installed-resource, and side-effect capture"
+    },
+    "COBOL": {
+      "modernization_pattern": "preserve record and call contracts while extracting executable behavior",
+      "required_development_evidence": "behavior oracle, candidate, differential comparison, and mutation tests",
+      "required_live_evidence": "authorized compiled original execution with input, output, and side-effect capture"
+    },
+    "Configuration": {
+      "modernization_pattern": "classify ownership and deployment semantics before translating or consolidating configuration",
+      "required_development_evidence": "typed configuration contract, consumer lineage, validation rules, and deployment tests",
+      "required_live_evidence": "authorized installed configuration, consumer binding, change history, and deployment observation"
+    },
+    "Db2": {
+      "modernization_pattern": "separate schema, query semantics, data movement, cutover, and recovery proofs",
+      "required_development_evidence": "schema mapping, bounded fixtures, query checksums, CDC rehearsal, and rollback",
+      "required_live_evidence": "authorized catalog, package, source-row, log, cutover, and rollback observation"
+    },
+    "HLASM": {
+      "modernization_pattern": "isolate calling convention and bit-level behavior behind a typed replacement boundary",
+      "required_development_evidence": "instruction subset, calling contract, oracle, candidate, and boundary mutations",
+      "required_live_evidence": "assembler and binder listings, load-module digest, and authorized caller execution"
+    },
+    "IMS": {
+      "modernization_pattern": "preserve DBD, PSB, PCB, status, checkpoint, and restart semantics",
+      "required_development_evidence": "database contract, call sequence oracle, candidate, status and restart tests",
+      "required_live_evidence": "authorized BMP region, DBD/PSB, database, status, checkpoint, restart, and JES evidence"
+    },
+    "JCL": {
+      "modernization_pattern": "translate job topology only after programs, datasets, conditions, and restart boundaries resolve",
+      "required_development_evidence": "job-step DAG, condition semantics, dataset contract, restart plan, and scheduler candidate",
+      "required_live_evidence": "authorized job execution, JES output, dataset effects, conditions, and restart capture"
+    },
+    "PL/I": {
+      "modernization_pattern": "preserve decimal, file, SQL, and cross-language calling semantics in a bounded cell",
+      "required_development_evidence": "source-faithful oracle, candidate, differential comparison, and semantic mutations",
+      "required_live_evidence": "Enterprise PL/I compile, Db2 bind, and authorized PL/I-to-COBOL execution"
+    },
+    "VSAM": {
+      "modernization_pattern": "preserve keyed access, record bytes, alternate indexes, locking, and recovery semantics",
+      "required_development_evidence": "catalog contract, byte fixtures, key-path comparator, concurrency and recovery tests",
+      "required_live_evidence": "authorized clusters, alternate indexes, record bytes, locking, and recovery observation"
+    }
+  },
+  "planning_rules": {
+    "connected_components_define_candidate_slices": true,
+    "unresolved_references_enter_boundary_closure": true,
+    "business_priority_requires_human_input": true,
+    "static_analysis_cannot_authorize_execution": true
+  },
+  "content_sha256": "fe7da4aa0a9ed853086fbfccbab0de16571f9ac5942d0e48fbfce290c9d3efd6"
+}

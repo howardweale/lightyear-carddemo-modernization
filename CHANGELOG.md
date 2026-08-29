@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.30.0 — 2026-08-29
+
+- Added a deterministic customer source analysis workcell bound to each approved intake rather than
+  projecting the repository's CardDemo graph as customer evidence.
+- Added a dedicated content-addressed relationship ontology spanning bounded COBOL, copybook, PL/I,
+  JCL, Db2 DDL/SQL, HLASM control flow, IMS DBD/PSB structure, VSAM IDCAMS definitions, and approved
+  CICS configuration relationships.
+- Added customer-specific gzip graph snapshots and analysis receipts with parser coverage, entity
+  counts, graph statistics, exact source identities, and visible unresolved or ambiguous references.
+- Added native COBOL-to-PL/I calls, JCL-to-PL/I/HLASM execution, HLASM branch targets, IMS
+  DBD-to-segment and PSB-to-PCB lineage, and VSAM cluster-to-AIX-to-path relationships inside the
+  pilot analysis contract without changing the canonical CardDemo graph identity.
+- Added fail-closed source re-hashing, graph/ontology validation, size bounds, analysis tamper tests,
+  and explicit rejection of behavior, live-system, mainframe-equivalence, and production claims.
+- Added a v2 pilot dossier that binds the customer analysis while preserving the v1 intake,
+  preflight, and analysis contracts and the historical v1 dossier schema.
+- Extended POSIX and PowerShell pilot flows with an explicit `analyze` stage and made the six-artifact,
+  nine-source-class reference rehearsal byte-reproducible on Linux, macOS, and Windows.
+
 ## 0.29.0 — 2026-08-29
 
 - Added one supported no-network Python 3.11+ source-tree launch and release path for a governed

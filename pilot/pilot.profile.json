@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0",
   "profile_type": "lightyear-source-only-pilot-profile",
-  "pilot_id": "lightyear-carddemo-source-only-v0.29",
-  "release": "0.29.0",
+  "pilot_id": "lightyear-carddemo-source-only-v0.30",
+  "release": "0.30.0",
   "intake": {
     "max_files": 10000,
     "max_file_bytes": 2097152,
@@ -11,9 +11,12 @@
       "cobol",
       "copybook",
       "db2-ddl",
+      "hlasm",
+      "ims",
       "jcl",
       "pli",
-      "system-configuration"
+      "system-configuration",
+      "vsam"
     ],
     "file_classes": [
       {
@@ -37,17 +40,38 @@
         "extensions": [".sql", ".ddl", ".dcl"]
       },
       {
+        "kind": "hlasm",
+        "extensions": [".asm", ".mac"]
+      },
+      {
+        "kind": "ims",
+        "extensions": [".dbd", ".psb"]
+      },
+      {
+        "kind": "vsam",
+        "extensions": [".ctl", ".idcams"]
+      },
+      {
         "kind": "system-configuration",
         "extensions": [".json", ".yaml", ".yml", ".xml", ".txt"]
       }
     ]
+  },
+  "analysis": {
+    "mode": "bounded-source-static-analysis",
+    "relationship_ontology": "pilot/analysis-relationships.json",
+    "relationship_ontology_sha256": "e06986e03425cb1b988527d35b5d5f8854433ab5fc2001f7886436f196332080",
+    "max_nodes": 250000,
+    "max_edges": 1000000,
+    "raw_source_in_graph": false,
+    "behavior_claims_allowed": false
   },
   "evidence_artifacts": [
     {
       "id": "pilot-runtime",
       "role": "runtime-dependency-contract",
       "path": "pilot/runtime-manifest.json",
-      "sha256": "1c489854facbffc3e649c520682fb71e29eece3ac5ab16ff4cfcb64d7c1a0ff9"
+      "sha256": "735771b186974639ba367778a64fe294af134b34f8f6249d62d551a10b019856"
     },
     {
       "id": "canonical-graph",
@@ -147,5 +171,5 @@
     "mainframe_equivalent": false,
     "production_ready": false
   },
-  "content_sha256": "d40d5fa9c21e0550609e55136c38f8bdfe94db4e0731feac03d364ce99927b3a"
+  "content_sha256": "6915e97cd689948a1581fa5e9c06c9d440f32b9d357b4c6a40b5d3d766ebc0fb"
 }

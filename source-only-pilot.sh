@@ -30,14 +30,24 @@ case "$action" in
     exec "$LIGHTYEAR_PYTHON_BIN" -m lightyear_pilot --project-root "$project_dir" preflight \
       --intake "$output/intake.manifest.json" --output "$output/mainframe.preflight.json"
     ;;
+  analyze)
+    source_root="${2:?Usage: ./source-only-pilot.sh analyze SOURCE OUTPUT}"
+    output="${3:?Usage: ./source-only-pilot.sh analyze SOURCE OUTPUT}"
+    exec "$LIGHTYEAR_PYTHON_BIN" -m lightyear_pilot --project-root "$project_dir" analyze \
+      --source-root "$source_root" --intake "$output/intake.manifest.json" \
+      --output-graph "$output/source-estate.snapshot.json.gz" \
+      --output-receipt "$output/source-analysis.receipt.json"
+    ;;
   dossier)
     output="${2:?Usage: ./source-only-pilot.sh dossier OUTPUT}"
     exec "$LIGHTYEAR_PYTHON_BIN" -m lightyear_pilot --project-root "$project_dir" dossier \
       --intake "$output/intake.manifest.json" --preflight "$output/mainframe.preflight.json" \
+      --analysis "$output/source-analysis.receipt.json" \
+      --analysis-graph "$output/source-estate.snapshot.json.gz" \
       --output-json "$output/pilot.dossier.json" --output-md "$output/pilot.dossier.md"
     ;;
   *)
-    echo "Usage: ./source-only-pilot.sh [doctor|verify|compatibility|rehearse|intake|preflight|dossier]" >&2
+    echo "Usage: ./source-only-pilot.sh [doctor|verify|compatibility|rehearse|intake|analyze|preflight|dossier]" >&2
     exit 2
     ;;
 esac

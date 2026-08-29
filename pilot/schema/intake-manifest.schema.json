@@ -47,7 +47,7 @@
         "required": ["path", "kind", "bytes", "lines", "logical_sha256", "raw_sha256"],
         "properties": {
           "path": {"type": "string", "minLength": 1},
-          "kind": {"enum": ["cobol", "copybook", "pli", "jcl", "db2-ddl", "system-configuration"]},
+          "kind": {"enum": ["cobol", "copybook", "pli", "jcl", "db2-ddl", "hlasm", "ims", "vsam", "system-configuration"]},
           "bytes": {"type": "integer", "minimum": 0},
           "lines": {"type": "integer", "minimum": 0},
           "logical_sha256": {"$ref": "#/$defs/sha256"},

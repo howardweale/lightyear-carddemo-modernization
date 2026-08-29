@@ -4,8 +4,8 @@
 
 Place customer source in a dedicated, access-controlled directory. The pilot reads files without
 modifying them and rejects symbolic links, hidden paths, unsupported extensions, binary/NUL content,
-oversized files or trees, and credential-shaped strings. The dossier records only bounded metadata
-and hashes; it does not embed source text.
+oversized files or trees, and credential-shaped strings. The graph and dossier record only bounded
+paths, types, relationships, metadata, and hashes; they do not embed source text.
 
 Use a customer-issued approval identifier that can be mapped to the external authorization record.
 The identifier is not itself proof of legal authorization; operators must retain that approval in

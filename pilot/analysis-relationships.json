@@ -1,0 +1,217 @@
+{
+  "ontology_id": "lightyear:pilot-source-analysis-relationships",
+  "schema_version": "1.0",
+  "relations": {
+    "CALLS": {
+      "allowed_pairs": [
+        ["cobol_program", "cobol_program"],
+        ["cobol_program", "pli_program"],
+        ["pli_program", "cobol_program"],
+        ["pli_program", "pli_program"]
+      ],
+      "category": "control-flow",
+      "direction": "caller to callee",
+      "evidence_policy": "edge",
+      "label": "calls",
+      "purpose": "Connects statically observed program calls across the bounded COBOL and PL/I intake."
+    },
+    "CONTAINS": {
+      "allowed_pairs": [
+        ["assembler_program", "assembler_instruction"],
+        ["assembler_program", "assembler_symbol"],
+        ["ims_database", "ims_segment"],
+        ["ims_psb", "ims_pcb"],
+        ["jcl_job", "jcl_step"],
+        ["jcl_procedure", "jcl_step"]
+      ],
+      "category": "structure",
+      "direction": "container to member",
+      "evidence_policy": "endpoint",
+      "label": "contains",
+      "purpose": "Connects bounded HLASM programs, IMS definitions, and JCL jobs or procedures to their statically observed members."
+    },
+    "DECLARES": {
+      "allowed_pairs": [
+        ["source_file", "cics_program_resource"],
+        ["source_file", "cics_transaction"],
+        ["source_file", "cobol_program"],
+        ["source_file", "copybook"],
+        ["source_file", "db2_index"],
+        ["source_file", "db2_table"],
+        ["source_file", "assembler_dsect"],
+        ["source_file", "assembler_program"],
+        ["source_file", "ims_database"],
+        ["source_file", "ims_psb"],
+        ["source_file", "jcl_job"],
+        ["source_file", "jcl_procedure"],
+        ["source_file", "pli_program"],
+        ["source_file", "vsam_alternate_index"],
+        ["source_file", "vsam_cluster"],
+        ["source_file", "vsam_path"]
+      ],
+      "category": "structure",
+      "direction": "source file to declared entity",
+      "evidence_policy": "endpoint-or-edge",
+      "label": "declares",
+      "purpose": "Records the typed entities deterministically declared by an approved source file."
+    },
+    "EXECUTES": {
+      "allowed_pairs": [
+        ["jcl_step", "assembler_program"],
+        ["jcl_step", "cobol_program"],
+        ["jcl_step", "executable"],
+        ["jcl_step", "pli_program"]
+      ],
+      "category": "scheduling",
+      "direction": "JCL step to program",
+      "evidence_policy": "edge",
+      "label": "executes",
+      "purpose": "Connects a JCL EXEC statement to a declared program or bounded external executable."
+    },
+    "HAS_COLUMN": {
+      "allowed_pairs": [["db2_table", "db2_column"]],
+      "category": "structure",
+      "direction": "table to column",
+      "evidence_policy": "endpoint",
+      "label": "has column",
+      "purpose": "Connects a Db2 table to a statically parsed column definition."
+    },
+    "HAS_CONSTRAINT": {
+      "allowed_pairs": [["db2_table", "db2_constraint"]],
+      "category": "structure",
+      "direction": "table to constraint",
+      "evidence_policy": "endpoint",
+      "label": "has constraint",
+      "purpose": "Connects a Db2 table to a statically parsed primary-key constraint."
+    },
+    "BRANCHES_TO": {
+      "allowed_pairs": [["assembler_instruction", "assembler_symbol"]],
+      "category": "control-flow",
+      "direction": "instruction to target symbol",
+      "evidence_policy": "edge",
+      "label": "branches to",
+      "purpose": "Connects a bounded HLASM branch instruction to a symbol declared in the same approved source file."
+    },
+    "HAS_COMPONENT": {
+      "allowed_pairs": [["vsam_cluster", "vsam_component"]],
+      "category": "structure",
+      "direction": "cluster to catalog component",
+      "evidence_policy": "endpoint",
+      "label": "has component",
+      "purpose": "Connects a VSAM cluster definition to its statically observed data and index components."
+    },
+    "HAS_DATASET_GROUP": {
+      "allowed_pairs": [["ims_database", "ims_dataset_group"]],
+      "category": "structure",
+      "direction": "IMS database to dataset group",
+      "evidence_policy": "endpoint",
+      "label": "has dataset group",
+      "purpose": "Connects an IMS DBD to a statically observed DATASET macro."
+    },
+    "HAS_FIELD": {
+      "allowed_pairs": [["ims_segment", "ims_field"]],
+      "category": "structure",
+      "direction": "IMS segment to field",
+      "evidence_policy": "endpoint",
+      "label": "has field",
+      "purpose": "Connects an IMS segment to a statically observed FIELD macro."
+    },
+    "INDEXES": {
+      "allowed_pairs": [["db2_index", "db2_table"]],
+      "category": "data-lineage",
+      "direction": "index to table",
+      "evidence_policy": "edge",
+      "label": "indexes",
+      "purpose": "Connects a Db2 index definition to its target table."
+    },
+    "ISSUES_SQL": {
+      "allowed_pairs": [
+        ["cobol_program", "db2_sql_statement"],
+        ["pli_program", "db2_sql_statement"]
+      ],
+      "category": "control-flow",
+      "direction": "program to SQL statement",
+      "evidence_policy": "edge",
+      "label": "issues SQL",
+      "purpose": "Connects a supported source program to a statically observed embedded SQL statement."
+    },
+    "PARENT_OF": {
+      "allowed_pairs": [["ims_segment", "ims_segment"]],
+      "category": "structure",
+      "direction": "parent IMS segment to child segment",
+      "evidence_policy": "edge",
+      "label": "parent of",
+      "purpose": "Records the IMS segment hierarchy declared by PARENT attributes in a DBD."
+    },
+    "READS_TABLE": {
+      "allowed_pairs": [["db2_sql_statement", "db2_table"]],
+      "category": "data-lineage",
+      "direction": "SQL statement to table",
+      "evidence_policy": "edge",
+      "label": "reads table",
+      "purpose": "Records a statically observed SELECT against a Db2 table."
+    },
+    "RESOLVES_TO": {
+      "allowed_pairs": [
+        ["cics_program_resource", "cobol_program"],
+        ["cics_program_resource", "pli_program"]
+      ],
+      "category": "dependency",
+      "direction": "configured resource to program",
+      "evidence_policy": "edge",
+      "label": "resolves to",
+      "purpose": "Resolves a configured CICS program resource to a declared source program when present."
+    },
+    "STARTS_PROGRAM": {
+      "allowed_pairs": [["cics_transaction", "cics_program_resource"]],
+      "category": "control-flow",
+      "direction": "transaction to configured program",
+      "evidence_policy": "edge",
+      "label": "starts program",
+      "purpose": "Connects an approved CICS configuration export to its configured program resource."
+    },
+    "SENSITIVE_TO": {
+      "allowed_pairs": [["ims_pcb", "ims_segment"]],
+      "category": "authorization",
+      "direction": "IMS PCB to sensitive segment",
+      "evidence_policy": "edge",
+      "label": "sensitive to",
+      "purpose": "Connects an IMS PCB to a segment named by a statically observed SENSEG macro."
+    },
+    "TARGETS": {
+      "allowed_pairs": [
+        ["vsam_alternate_index", "vsam_cluster"],
+        ["vsam_path", "vsam_alternate_index"]
+      ],
+      "category": "data-lineage",
+      "direction": "catalog object to target",
+      "evidence_policy": "edge",
+      "label": "targets",
+      "purpose": "Connects VSAM alternate-index and path catalog definitions to their statically named targets."
+    },
+    "USES_DBD": {
+      "allowed_pairs": [["ims_pcb", "ims_database"]],
+      "category": "dependency",
+      "direction": "IMS PCB to database",
+      "evidence_policy": "edge",
+      "label": "uses DBD",
+      "purpose": "Connects a PCB DBDNAME reference to a DBD present in the approved intake."
+    },
+    "USES_COPYBOOK": {
+      "allowed_pairs": [["cobol_program", "copybook"]],
+      "category": "dependency",
+      "direction": "COBOL program to copybook",
+      "evidence_policy": "edge",
+      "label": "uses copybook",
+      "purpose": "Connects a COBOL COPY statement to a copybook present in the approved intake."
+    },
+    "WRITES_TABLE": {
+      "allowed_pairs": [["db2_sql_statement", "db2_table"]],
+      "category": "data-lineage",
+      "direction": "SQL statement to table",
+      "evidence_policy": "edge",
+      "label": "writes table",
+      "purpose": "Records a statically observed INSERT, UPDATE, or DELETE against a Db2 table."
+    }
+  }
+}

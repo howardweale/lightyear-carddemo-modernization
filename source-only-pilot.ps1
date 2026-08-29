@@ -29,13 +29,23 @@ if ($Action -eq "preflight") {
         --output (Join-Path $args[1] "mainframe.preflight.json")
     exit $LASTEXITCODE
 }
+if ($Action -eq "analyze") {
+    if ($args.Count -lt 3) { Write-Error "Usage: .\source-only-pilot.ps1 analyze SOURCE OUTPUT"; exit 2 }
+    Run-Pilot analyze --source-root $args[1] `
+        --intake (Join-Path $args[2] "intake.manifest.json") `
+        --output-graph (Join-Path $args[2] "source-estate.snapshot.json.gz") `
+        --output-receipt (Join-Path $args[2] "source-analysis.receipt.json")
+    exit $LASTEXITCODE
+}
 if ($Action -eq "dossier") {
     if ($args.Count -lt 2) { Write-Error "Usage: .\source-only-pilot.ps1 dossier OUTPUT"; exit 2 }
     Run-Pilot dossier --intake (Join-Path $args[1] "intake.manifest.json") `
         --preflight (Join-Path $args[1] "mainframe.preflight.json") `
+        --analysis (Join-Path $args[1] "source-analysis.receipt.json") `
+        --analysis-graph (Join-Path $args[1] "source-estate.snapshot.json.gz") `
         --output-json (Join-Path $args[1] "pilot.dossier.json") `
         --output-md (Join-Path $args[1] "pilot.dossier.md")
     exit $LASTEXITCODE
 }
-Write-Error "Usage: .\source-only-pilot.ps1 [doctor|verify|compatibility|rehearse|intake|preflight|dossier]"
+Write-Error "Usage: .\source-only-pilot.ps1 [doctor|verify|compatibility|rehearse|intake|analyze|preflight|dossier]"
 exit 2

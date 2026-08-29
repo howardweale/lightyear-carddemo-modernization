@@ -1,4 +1,5 @@
 {
+  "analysis_sha256": "9b241d8ac6dc2d84fbe39352874b5a5a2216aa94ada4525ce67bbbaeb29d4b8e",
   "capabilities": [
     {
       "development_ready": true,
@@ -55,33 +56,38 @@
       "technology": "Db2/Data"
     }
   ],
-  "claim_unlocked": "LIGHTYEAR is ready for a governed source-only pilot and subsequent authorized mainframe evidence collection.",
+  "claim_unlocked": "LIGHTYEAR can produce a governed, customer-specific static estate analysis from approved source and prepare subsequent authorized mainframe evidence collection.",
   "claims_prohibited": [
     "LIGHTYEAR is production-ready.",
     "LIGHTYEAR has completed a live modernization.",
     "A model is qualified for autonomous modernization.",
     "Offline rehearsal proves customer Db2 CDC or cutover."
   ],
-  "compatibility_policy_sha256": "9a6bcc9f6b23461a60ce8d386d6cba724edb7788c83d1010f64848fe9b860b60",
-  "content_sha256": "ea73de024e470835320557f88c67140427087424c01937bdf42e40606b500527",
+  "compatibility_policy_sha256": "47c006abf1efad62eb3a79ea938975263d8cef505cfd6db77b1c2f1829912f0d",
+  "content_sha256": "0a0a4dcea49d96ee4578750b740c4a00f24954ebb4434b18c8cc78dce34936b0",
   "dossier_type": "lightyear-source-only-pilot-dossier",
   "estate": {
-    "composite_sha256": "9d30cde525f36ffd96b5ebfca3239d210a9967ba27153c9ff8871435b3f09d30",
-    "graph_id": "lightyear:carddemo-modernization:composite",
-    "nodes": 11328,
-    "relationships": 13470,
-    "source_files": 6
+    "analysis_scope": "bounded-source-static-analysis",
+    "analysis_sha256": "9b241d8ac6dc2d84fbe39352874b5a5a2216aa94ada4525ce67bbbaeb29d4b8e",
+    "graph_id": "lightyear:pilot-estate:cc7a761dde0db8b5312ac7a1",
+    "graph_sha256": "47341d624048703108dc36c5c6685471fe22e75a551fd9e501b7e806cbd06765",
+    "kind": "customer-source-analysis",
+    "nodes": 52,
+    "reference_composite_sha256": "9d30cde525f36ffd96b5ebfca3239d210a9967ba27153c9ff8871435b3f09d30",
+    "relationships": 58,
+    "source_files": 10,
+    "unresolved_references": 2
   },
   "evidence_artifacts": [
     {
-      "bytes": 968,
-      "content_sha256": "81f758bba8f10797df3954f45c026ef12847c9150b3f11dee8809e159d4fb196",
+      "bytes": 1155,
+      "content_sha256": "71af9bba3325c57b1fa947a4a4b71c8a9b57593b4382b752fe58dcaea33cb5e2",
       "id": "pilot-runtime",
       "mainframe_equivalent": false,
       "path": "pilot/runtime-manifest.json",
       "production_ready": false,
       "role": "runtime-dependency-contract",
-      "sha256": "1c489854facbffc3e649c520682fb71e29eece3ac5ab16ff4cfcb64d7c1a0ff9"
+      "sha256": "735771b186974639ba367778a64fe294af134b34f8f6249d62d551a10b019856"
     },
     {
       "bytes": 3728,
@@ -236,16 +242,17 @@
       "status": "blocked"
     }
   ],
-  "intake_sha256": "ceca09b2f0f3b53bdd48d3dd172f90ef4848a7525990aef0d9f9bb2640def427",
+  "intake_sha256": "cc7a761dde0db8b5312ac7a136cfc2435ec65d2cd751885bfbcccdbce040f4ea",
   "limitations": [
     "All original-system execution and signed live-equivalence gates remain blocked.",
+    "Customer-specific estate results are bounded static analysis; unresolved references remain visible.",
     "Development readiness applies only to explicitly bounded proof cells and supported subsets.",
     "The pilot dossier retains hashes and bounded summaries, not customer credentials or raw runtime responses."
   ],
   "mainframe_equivalent": false,
-  "pilot_id": "lightyear-carddemo-source-only-v0.29",
+  "pilot_id": "lightyear-carddemo-source-only-v0.30",
   "pilot_ready": true,
-  "preflight_sha256": "6cb415e1ba7a4000f929fddfc0c97c8985faba28e2b34653651677271fd948af",
+  "preflight_sha256": "474441da22f11aa2ae42b5eaa326e2092fe8c70e35f6080617538542912a9d16",
   "production_ready": false,
   "proofs": {
     "collection_appliance": {
@@ -269,6 +276,7 @@
     "collection_mechanism_ready": true,
     "compatibility_policy_valid": true,
     "composite_estate_passed": true,
+    "customer_source_analysis_valid": true,
     "development_capabilities_visible": true,
     "intake_valid": true,
     "live_equivalence_not_overclaimed": true,
@@ -276,6 +284,6 @@
     "model_qualification_not_overclaimed": true,
     "preflight_valid": true
   },
-  "release": "0.29.0",
-  "schema_version": "1.0"
+  "release": "0.30.0",
+  "schema_version": "2.0"
 }

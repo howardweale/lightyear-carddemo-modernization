@@ -1,20 +1,18 @@
 # FactoryDark.ai CardDemo Modernization Factory
 
-Release: **v0.29.0 — governed source-only pilot release candidate**
+Release: **v0.30.0 — customer source analysis workcell**
 
-v0.29 packages the evidence-governed platform into one Python-3.11+, source-tree offline pilot path. A bounded
-intake accepts approved UTF-8 COBOL, copybooks, PL/I, JCL, Db2 DDL, and configuration exports;
-rejects symlinks, hidden or unsupported files, binary content, unsafe sizes, and credential-shaped
-material; and publishes a content-addressed custody manifest without embedding source in the
-dossier.
+v0.30 closes the gap between safe source intake and useful customer analysis. Each approved intake
+now produces its own deterministic typed estate graph and analysis receipt rather than inheriting
+the repository's CardDemo graph as if it described the customer. The bounded workcell connects
+COBOL, copybooks, PL/I, JCL, embedded Db2 SQL, DDL, HLASM, IMS DBD/PSB metadata, VSAM IDCAMS
+definitions, and approved CICS configuration while retaining missing or ambiguous targets as
+explicit unresolved references.
 
-The pilot assembles the canonical and composite estate, capability gates, PL/I coverage and build
-proofs, model-qualification policy, PostgreSQL/Oracle development evidence, migration rehearsal,
-enterprise collection appliance, runtime readiness cells, and audit projection into one
-independently verifiable JSON and Markdown dossier. A preflight names the exact authorization,
-identity, network, signing, data, execution, recovery, and technology-specific evidence required
-later for gates 6–8. Versioned v1 contracts and a 0.29.x compatibility policy fail closed on stale
-identities, foreign major versions, or readiness relabelling.
+The customer graph is bound to the exact intake manifest, source hashes, a dedicated relationship
+ontology, parser coverage, graph statistics, and visible gaps. The v2 dossier binds that customer
+analysis alongside the platform's existing development evidence and live-evidence preflight. It
+contains paths, types, relationships, counts, and hashes—not source text.
 
 ```bash
 ./source-only-pilot.sh doctor
@@ -22,10 +20,18 @@ identities, foreign major versions, or readiness relabelling.
 ./source-only-pilot.sh verify
 ```
 
-The committed reference release is byte-reproducible from six source classes and 16 evidence
-artifacts. It unlocks a governed source-only pilot—not live modernization. No model is declared
-qualified; gate 6 and gate 8 remain blocked; `mainframe_equivalent` and `production_ready` remain
-false. See the [pilot guide](pilot/README.md).
+The committed reference release is byte-reproducible from nine source classes and 16 evidence
+artifacts. It unlocks governed customer-specific static analysis—not compilation, behavior proof,
+or live modernization. No model is declared qualified; gates 6 and 8 remain blocked;
+`mainframe_equivalent` and `production_ready` remain false. See the [pilot guide](pilot/README.md).
+
+Previous milestone: **v0.29.0 — governed source-only pilot release candidate**
+
+v0.29 established the no-network Python 3.11+ pilot launcher, credential-safe six-class intake,
+content-addressed custody manifest, gates 6–8 preflight, partner guides, and evidence-bound dossier.
+It made source transfer and pilot governance reproducible, but intentionally did not claim that the
+prebuilt CardDemo estate represented an arbitrary customer intake. v0.30 supplies that missing
+customer-analysis layer.
 
 Previous milestone: **v0.28.0 — enterprise collection appliance and fault laboratory**
 

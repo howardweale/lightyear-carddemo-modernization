@@ -1,0 +1,281 @@
+{
+  "capabilities": [
+    {
+      "development_ready": true,
+      "discovery_ready": true,
+      "gate_6": "blocked",
+      "gate_8": "blocked",
+      "kind": "runtime",
+      "mainframe_equivalent": false,
+      "technology": "CICS"
+    },
+    {
+      "development_ready": true,
+      "discovery_ready": true,
+      "gate_6": "blocked",
+      "gate_8": "blocked",
+      "kind": "data",
+      "mainframe_equivalent": false,
+      "technology": "VSAM"
+    },
+    {
+      "development_ready": true,
+      "discovery_ready": true,
+      "gate_6": "blocked",
+      "gate_8": "blocked",
+      "kind": "runtime",
+      "mainframe_equivalent": false,
+      "technology": "IMS"
+    },
+    {
+      "development_ready": true,
+      "discovery_ready": true,
+      "gate_6": "blocked",
+      "gate_8": "blocked",
+      "kind": "language",
+      "mainframe_equivalent": false,
+      "technology": "HLASM"
+    },
+    {
+      "development_ready": true,
+      "discovery_ready": true,
+      "gate_6": "blocked",
+      "gate_8": "blocked",
+      "kind": "language",
+      "mainframe_equivalent": false,
+      "technology": "PL/I"
+    },
+    {
+      "development_ready": true,
+      "discovery_ready": true,
+      "gate_6": "blocked",
+      "gate_8": "blocked",
+      "kind": "data",
+      "mainframe_equivalent": false,
+      "technology": "Db2/Data"
+    }
+  ],
+  "claim_unlocked": "LIGHTYEAR is ready for a governed source-only pilot and subsequent authorized mainframe evidence collection.",
+  "claims_prohibited": [
+    "LIGHTYEAR is production-ready.",
+    "LIGHTYEAR has completed a live modernization.",
+    "A model is qualified for autonomous modernization.",
+    "Offline rehearsal proves customer Db2 CDC or cutover."
+  ],
+  "compatibility_policy_sha256": "9a6bcc9f6b23461a60ce8d386d6cba724edb7788c83d1010f64848fe9b860b60",
+  "content_sha256": "ea73de024e470835320557f88c67140427087424c01937bdf42e40606b500527",
+  "dossier_type": "lightyear-source-only-pilot-dossier",
+  "estate": {
+    "composite_sha256": "9d30cde525f36ffd96b5ebfca3239d210a9967ba27153c9ff8871435b3f09d30",
+    "graph_id": "lightyear:carddemo-modernization:composite",
+    "nodes": 11328,
+    "relationships": 13470,
+    "source_files": 6
+  },
+  "evidence_artifacts": [
+    {
+      "bytes": 968,
+      "content_sha256": "81f758bba8f10797df3954f45c026ef12847c9150b3f11dee8809e159d4fb196",
+      "id": "pilot-runtime",
+      "mainframe_equivalent": false,
+      "path": "pilot/runtime-manifest.json",
+      "production_ready": false,
+      "role": "runtime-dependency-contract",
+      "sha256": "1c489854facbffc3e649c520682fb71e29eece3ac5ab16ff4cfcb64d7c1a0ff9"
+    },
+    {
+      "bytes": 3728,
+      "content_sha256": "2a003843da4fcdb04fc563f2d9644dd745ba0589c9fb6651b7fd21c9e6fad571",
+      "id": "canonical-graph",
+      "path": "knowledge/graph.receipt.json",
+      "role": "estate-discovery",
+      "sha256": "f12ee5dee079a2e612f4875df75020dac12eb2f52f7d5f8698fbddf9f44cc3fc"
+    },
+    {
+      "bytes": 6519,
+      "content_sha256": "9d30cde525f36ffd96b5ebfca3239d210a9967ba27153c9ff8871435b3f09d30",
+      "id": "composite-estate",
+      "path": "knowledge/composite/estate.receipt.json",
+      "role": "composite-lineage",
+      "sha256": "629c3078e42d6d5dc7d0b23ea1a3d72f86077d97df562d08b115ed4e8a75f262"
+    },
+    {
+      "bytes": 18858,
+      "content_sha256": "cdf4c55cd840dfe34258382bab3b819cda576396a175984b2982475a83ba6a7d",
+      "id": "capability-projection",
+      "path": "knowledge/capabilities/mainframe-readiness.json",
+      "role": "capability-gates",
+      "sha256": "caa3249f5b299bbe9cf19dfca3d5d8f15c1da62bf1f58414f6a1fd233aa42dc2"
+    },
+    {
+      "bytes": 4345,
+      "content_sha256": "28113863189a3d393a486f06a186cead4cb32c75f0da096020055fe737e97dd5",
+      "id": "pli-coverage",
+      "path": "extensions/pli/conformance/coverage.receipt.json",
+      "production_ready": false,
+      "role": "language-coverage",
+      "sha256": "31a40aa4b100bd3ce4fb111a6e13dc2ee49654f2588e44b1ff4cd71f3c91503d",
+      "status": "passed"
+    },
+    {
+      "bytes": 2050,
+      "content_sha256": "69962583b4134dca1c33798890624e8488830a69d9a1b1722a1fb29a97f1ff15",
+      "development_ready": true,
+      "id": "pli-development",
+      "mainframe_equivalent": false,
+      "path": "extensions/pli/modernization/development.receipt.json",
+      "production_ready": false,
+      "role": "mixed-language-development-proof",
+      "sha256": "9de70abd3d460c0fbd9ae5428e5ed9157e534ec1ff9dcd33f99ec82f7154082a",
+      "status": "passed"
+    },
+    {
+      "bytes": 2193,
+      "content_sha256": "28413a5ccd6e841839978f1ddb9872251ad237c51523355a40b2c5f1522f1a76",
+      "development_ready": true,
+      "id": "pli-build",
+      "mainframe_equivalent": false,
+      "path": "extensions/pli/attestation/build.receipt.json",
+      "production_ready": false,
+      "role": "reproducible-build",
+      "sha256": "eae569443ea4d9c5e292906cfc89f2e7b6a1e5b002447ca5d21a3131138b1f34",
+      "status": "passed"
+    },
+    {
+      "bytes": 513,
+      "id": "model-qualification-policy",
+      "path": "factory/qualification/manifest.json",
+      "role": "model-qualification-boundary",
+      "sha256": "13cc4353a228fd3266e9ed11163dfbe478c7a559fe031eff20a927029c64d91b"
+    },
+    {
+      "bytes": 1634,
+      "content_sha256": "8e2e2dc30cffa3205ceb743f418ae937ea8ac05d6bde9041182acc61cba3abbe",
+      "id": "data-postgresql",
+      "path": "data-modernization/receipts/authfrds.offline.receipt.json",
+      "production_ready": false,
+      "role": "data-development-proof",
+      "sha256": "2a2e94f80d2c606b86c23eac276bcc01f46a74b92ba92ac0d3e061b4c3534a4f",
+      "status": "passed"
+    },
+    {
+      "bytes": 1637,
+      "content_sha256": "6958d7cc783d5ad00c469c112db5b665bf9ba93b7addec9cc94375d6c3f2dd83",
+      "id": "data-oracle",
+      "path": "data-modernization/receipts/authfrds.oracle-offline.receipt.json",
+      "production_ready": false,
+      "role": "data-development-proof",
+      "sha256": "ae8453104e8745628a6cad8893f8d22849a34847a5ffbfeb5a6d56eae61897b6",
+      "status": "passed"
+    },
+    {
+      "bytes": 3758,
+      "content_sha256": "e628b50cc4e21707f6c62e7a8429654c7867411f75fb9381e03f3d191854f652",
+      "development_ready": true,
+      "id": "migration-rehearsal",
+      "mainframe_equivalent": false,
+      "path": "data-modernization/rehearsal/receipt.json",
+      "production_ready": false,
+      "role": "cdc-cutover-recovery-rehearsal",
+      "sha256": "d2f0d194f39325a86063bd6609fdb631190c6686c727e348c7f36c30fffff7fd",
+      "status": "passed"
+    },
+    {
+      "bytes": 2892,
+      "content_sha256": "8ebfdca9e04bf4a0d0710ce2e0e629e6c099b0f7723ed439875639de5eaa9e2f",
+      "enterprise_mechanism_ready": true,
+      "id": "collection-appliance",
+      "live_observed": false,
+      "mainframe_equivalent": false,
+      "path": "extensions/adapters/appliance/appliance.receipt.json",
+      "production_ready": false,
+      "role": "mainframe-collection-mechanism",
+      "sha256": "228190bdbe87912eb0c38e3fe0537d7a2dd66819f0e01cb2c0f93afd5c55cc29",
+      "status": "passed"
+    },
+    {
+      "bytes": 822,
+      "content_sha256": "6bbe74439aa51d147bcb266f95af048a357f2e44dc32bcc200406a7884424389",
+      "development_ready": true,
+      "id": "cics-vsam-readiness",
+      "mainframe_equivalent": false,
+      "path": "readiness/cics-vsam/readiness-receipt.json",
+      "role": "bounded-runtime-readiness",
+      "sha256": "2dd8e24e7a23814b6e643ff186f1272071f220b7ac0e03cc57fffc1abcd7dc5a",
+      "status": "blocked"
+    },
+    {
+      "bytes": 839,
+      "content_sha256": "fa80f81d50082342edbc33e10c53986b5e8fcdc7211a452e17c4a458cdefe4e9",
+      "development_ready": true,
+      "id": "ims-readiness",
+      "mainframe_equivalent": false,
+      "path": "readiness/ims-expiry/readiness-receipt.json",
+      "role": "bounded-runtime-readiness",
+      "sha256": "f95a3d2e5d06232ae2eb00671131a055c4024d6e1546152239c83b0de990a557",
+      "status": "blocked"
+    },
+    {
+      "bytes": 821,
+      "content_sha256": "08e54af640a9929fcadfc79803ad71462ecabdbfcda5c72acb09511f12786ef5",
+      "development_ready": true,
+      "id": "hlasm-readiness",
+      "mainframe_equivalent": false,
+      "path": "readiness/asm-date/readiness-receipt.json",
+      "role": "bounded-language-readiness",
+      "sha256": "faf7a3109e4f6308a4ac71c706c2725e272fac666b5bba3d1a57ea63633dad92",
+      "status": "blocked"
+    },
+    {
+      "bytes": 13423,
+      "content_sha256": "25c4dc987f27a5b05610c11450eda198cf1d2441e347e1744348146eecd1fca3",
+      "id": "audit-dossier",
+      "path": "audit/dossiers/carddemo-intcalc-v0.19-demo.json",
+      "role": "auditor-projection",
+      "sha256": "aa49f4a4944a67f503b8d343e1195aace6a3cc9007c7ec06c9080c9fcd9cf6e8",
+      "status": "blocked"
+    }
+  ],
+  "intake_sha256": "ceca09b2f0f3b53bdd48d3dd172f90ef4848a7525990aef0d9f9bb2640def427",
+  "limitations": [
+    "All original-system execution and signed live-equivalence gates remain blocked.",
+    "Development readiness applies only to explicitly bounded proof cells and supported subsets.",
+    "The pilot dossier retains hashes and bounded summaries, not customer credentials or raw runtime responses."
+  ],
+  "mainframe_equivalent": false,
+  "pilot_id": "lightyear-carddemo-source-only-v0.29",
+  "pilot_ready": true,
+  "preflight_sha256": "6cb415e1ba7a4000f929fddfc0c97c8985faba28e2b34653651677271fd948af",
+  "production_ready": false,
+  "proofs": {
+    "collection_appliance": {
+      "enterprise_mechanism_ready": true,
+      "live_observed": false
+    },
+    "migration_rehearsal": {
+      "live_source_log_observed": false,
+      "production_cutover_authorized": false,
+      "status": "passed"
+    },
+    "model_qualification": {
+      "approved_successful_portfolio_run": false,
+      "committed_qualifying_evaluations": 0,
+      "qualified": false,
+      "required_independently_sealed_evaluations": 8
+    }
+  },
+  "readiness_checks": {
+    "all_evidence_present": true,
+    "collection_mechanism_ready": true,
+    "compatibility_policy_valid": true,
+    "composite_estate_passed": true,
+    "development_capabilities_visible": true,
+    "intake_valid": true,
+    "live_equivalence_not_overclaimed": true,
+    "migration_rehearsal_passed": true,
+    "model_qualification_not_overclaimed": true,
+    "preflight_valid": true
+  },
+  "release": "0.29.0",
+  "schema_version": "1.0"
+}

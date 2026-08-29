@@ -40,6 +40,7 @@ fi
 "$project_dir/asm-readiness.sh" verify
 "$project_dir/ims-readiness.sh" verify
 "$project_dir/audit-control-tower.sh" verify
+"$project_dir/source-only-pilot.sh" verify
 
 (
   cd "$project_dir/candidate-java"

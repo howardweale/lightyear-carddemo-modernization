@@ -19,6 +19,11 @@ case "$action" in
     shift
     exec "$project_dir/graph-explorer.sh" "$@"
     ;;
+  pilot)
+    shift
+    if [[ "$#" -eq 0 ]]; then set -- doctor; fi
+    exec "$project_dir/source-only-pilot.sh" "$@"
+    ;;
   verify)
     "$project_dir/knowledge-graph.sh" verify
     "$project_dir/extension-foundation.sh" verify
@@ -26,10 +31,11 @@ case "$action" in
     "$project_dir/pli-modernization.sh" verify
     "$project_dir/pli-build-attestation.sh" verify
     "$project_dir/composite-estate.sh" verify
+    "$project_dir/source-only-pilot.sh" verify
     "$LIGHTYEAR_PYTHON_BIN" -m unittest tests.test_semantic_inputs tests.test_composite_estate
     ;;
   *)
-    echo "Usage: ./lightyear.sh [doctor|demo|explorer|verify]" >&2
+    echo "Usage: ./lightyear.sh [doctor|demo|explorer|pilot|verify]" >&2
     exit 2
     ;;
 esac

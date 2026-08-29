@@ -13,7 +13,7 @@ from .analysis import ANALYSIS_SCHEMA_VERSION, ANALYSIS_TYPE, validate_source_an
 
 
 SCHEMA_VERSION = "1.0"
-DOSSIER_SCHEMA_VERSION = "2.0"
+DOSSIER_SCHEMA_VERSION = "3.0"
 INTAKE_TYPE = "lightyear-source-only-pilot-intake"
 PREFLIGHT_TYPE = "lightyear-mainframe-evidence-preflight"
 DOSSIER_TYPE = "lightyear-source-only-pilot-dossier"
@@ -430,9 +430,13 @@ def build_dossier(
     preflight: Mapping[str, Any],
     analysis: Mapping[str, Any],
     analysis_graph: Mapping[str, Any],
+    assessment: Mapping[str, Any],
+    assessment_policy: Mapping[str, Any],
     profile: Mapping[str, Any],
     compatibility: Mapping[str, Any],
 ) -> dict[str, Any]:
+    from .planner import validate_estate_assessment
+
     _profile_intake(profile)
     compatibility_errors = validate_compatibility_policy(compatibility)
     if compatibility_errors:
@@ -452,6 +456,11 @@ def build_dossier(
     )
     if analysis_errors:
         raise PilotError(analysis_errors[0])
+    assessment_errors = validate_estate_assessment(
+        assessment, analysis_graph, analysis, intake, assessment_policy
+    )
+    if assessment_errors:
+        raise PilotError(assessment_errors[0])
 
     capabilities = [
         {
@@ -472,6 +481,7 @@ def build_dossier(
         "intake_valid": not validate_intake_manifest(intake, profile),
         "preflight_valid": not validate_preflight(preflight, intake),
         "customer_source_analysis_valid": not analysis_errors,
+        "estate_assessment_valid": not assessment_errors,
         "compatibility_policy_valid": not compatibility_errors,
         "all_evidence_present": len(artifacts) == len(profile.get("evidence_artifacts", [])),
         "composite_estate_passed": (
@@ -493,6 +503,7 @@ def build_dossier(
         "intake_sha256": str(intake["content_sha256"]),
         "preflight_sha256": str(preflight["content_sha256"]),
         "analysis_sha256": str(analysis["content_sha256"]),
+        "assessment_sha256": str(assessment["content_sha256"]),
         "compatibility_policy_sha256": str(compatibility["content_sha256"]),
         "estate": {
             "kind": "customer-source-analysis",
@@ -505,6 +516,23 @@ def build_dossier(
             "unresolved_references": analysis.get("unresolved_reference_count"),
             "analysis_scope": analysis.get("analysis_scope"),
             "reference_composite_sha256": composite.get("content_sha256"),
+        },
+        "modernization_plan": {
+            "assessment_sha256": assessment.get("content_sha256"),
+            "clusters": assessment.get("statistics", {}).get("clusters"),
+            "clusters_with_unresolved_references": assessment.get("statistics", {}).get("clusters_with_unresolved_references"),
+            "planning_waves": [
+                {
+                    "wave": item.get("wave"),
+                    "name": item.get("name"),
+                    "cluster_count": len(item.get("cluster_ids", [])),
+                    "status": item.get("status", "advisory"),
+                }
+                for item in assessment.get("planning_waves", [])
+            ],
+            "business_priority_inferred": False,
+            "automatic_factory_dispatch": False,
+            "human_decision_required": True,
         },
         "capabilities": capabilities,
         "proofs": {
@@ -529,7 +557,7 @@ def build_dossier(
         "pilot_ready": all(readiness_checks.values()),
         "mainframe_equivalent": False,
         "production_ready": False,
-        "claim_unlocked": "LIGHTYEAR can produce a governed, customer-specific static estate analysis from approved source and prepare subsequent authorized mainframe evidence collection.",
+        "claim_unlocked": "LIGHTYEAR can produce a governed, customer-specific static estate analysis, partition it into explainable connected application slices, and prepare an evidence-first modernization plan.",
         "claims_prohibited": [
             "LIGHTYEAR is production-ready.",
             "LIGHTYEAR has completed a live modernization.",
@@ -539,6 +567,7 @@ def build_dossier(
         "limitations": [
             "All original-system execution and signed live-equivalence gates remain blocked.",
             "Customer-specific estate results are bounded static analysis; unresolved references remain visible.",
+            "Planning waves are advisory and cannot infer business priority, authorize execution, or dispatch factory work.",
             "Development readiness applies only to explicitly bounded proof cells and supported subsets.",
             "The pilot dossier retains hashes and bounded summaries, not customer credentials or raw runtime responses.",
         ],
@@ -555,13 +584,14 @@ def validate_dossier(
     preflight: Mapping[str, Any],
     analysis: Mapping[str, Any],
     analysis_graph: Mapping[str, Any],
+    assessment: Mapping[str, Any],
     project_root: Path | None = None,
     profile: Mapping[str, Any] | None = None,
 ) -> list[str]:
     errors: list[str] = []
     if dossier.get("schema_version") != DOSSIER_SCHEMA_VERSION or dossier.get("dossier_type") != DOSSIER_TYPE:
         errors.append("dossier-contract-identity-invalid")
-    if dossier.get("intake_sha256") != intake.get("content_sha256") or dossier.get("preflight_sha256") != preflight.get("content_sha256") or dossier.get("analysis_sha256") != analysis.get("content_sha256"):
+    if dossier.get("intake_sha256") != intake.get("content_sha256") or dossier.get("preflight_sha256") != preflight.get("content_sha256") or dossier.get("analysis_sha256") != analysis.get("content_sha256") or dossier.get("assessment_sha256") != assessment.get("content_sha256"):
         errors.append("dossier-input-binding-invalid")
     if dossier.get("content_sha256") != canonical_hash(dossier, {"content_sha256"}):
         errors.append("dossier-content-hash-invalid")
@@ -572,7 +602,12 @@ def validate_dossier(
         errors.append("dossier-pilot-readiness-invalid")
     if dossier.get("mainframe_equivalent") is not False or dossier.get("production_ready") is not False:
         errors.append("dossier-overclaims-live-readiness")
+    plan = dossier.get("modernization_plan")
+    if not isinstance(plan, dict) or plan.get("assessment_sha256") != assessment.get("content_sha256") or plan.get("business_priority_inferred") is not False or plan.get("automatic_factory_dispatch") is not False or plan.get("human_decision_required") is not True:
+        errors.append("dossier-modernization-plan-boundary-invalid")
     if profile is not None and project_root is not None:
+        from .planner import load_assessment_policy, validate_estate_assessment
+
         analysis_errors = validate_source_analysis(
             analysis_graph,
             analysis,
@@ -582,6 +617,12 @@ def validate_dossier(
         )
         if analysis_errors:
             errors.append(f"dossier-analysis-invalid:{analysis_errors[0]}")
+        assessment_policy = load_assessment_policy(project_root / "pilot/assessment-policy.json")
+        assessment_errors = validate_estate_assessment(
+            assessment, analysis_graph, analysis, intake, assessment_policy
+        )
+        if assessment_errors:
+            errors.append(f"dossier-assessment-invalid:{assessment_errors[0]}")
     proofs = dossier.get("proofs")
     if not isinstance(proofs, dict) or proofs.get("model_qualification", {}).get("qualified") is not False:
         errors.append("dossier-overclaims-model-qualification")
@@ -623,6 +664,7 @@ def validate_compatibility_policy(policy: Mapping[str, Any]) -> list[str]:
         INTAKE_TYPE: [SCHEMA_VERSION],
         PREFLIGHT_TYPE: [SCHEMA_VERSION],
         ANALYSIS_TYPE: [ANALYSIS_SCHEMA_VERSION],
+        "lightyear-customer-estate-assessment": ["1.0"],
         DOSSIER_TYPE: [DOSSIER_SCHEMA_VERSION],
     }
     if formats != expected_formats:
@@ -634,6 +676,7 @@ def validate_compatibility_policy(policy: Mapping[str, Any]) -> list[str]:
 
 def render_dossier_markdown(dossier: Mapping[str, Any]) -> str:
     estate = dossier["estate"]
+    plan = dossier["modernization_plan"]
     proofs = dossier["proofs"]
     rows = [
         "# LIGHTYEAR source-only pilot dossier",
@@ -660,11 +703,23 @@ def render_dossier_markdown(dossier: Mapping[str, Any]) -> str:
         f"The customer-specific estate binds **{estate['nodes']} nodes** and **{estate['relationships']} relationships**",
         f"to **{estate['source_files']} approved source files**, with **{estate['unresolved_references']} unresolved references** retained for review.",
         "",
+        "## Modernization plan",
+        "",
+        f"The assessment identifies **{plan['clusters']} connected application slices**; **{plan['clusters_with_unresolved_references']}** need boundary closure.",
+        "Business priority is not inferred, automatic dispatch is disabled, and every pilot selection requires a human decision.",
+        "",
+        "| Wave | Purpose | Slices | Status |",
+        "|---:|---|---:|---|",
+    ]
+    for item in plan["planning_waves"]:
+        rows.append(f"| {item['wave']} | {item['name']} | {item['cluster_count']} | {item['status']} |")
+    rows.extend([
+        "",
         "## Capability gates",
         "",
         "| Capability | Kind | Discovery | Development | Gate 6 | Gate 8 | Equivalent |",
         "|---|---|---:|---:|---|---|---:|",
-    ]
+    ])
     for item in dossier["capabilities"]:
         rows.append(
             f"| {item['technology']} | {item['kind']} | {str(item['discovery_ready']).lower()} | "

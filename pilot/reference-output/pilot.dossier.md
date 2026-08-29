@@ -1,8 +1,8 @@
 # LIGHTYEAR source-only pilot dossier
 
-**Release:** 0.30.0
-**Pilot:** `lightyear-carddemo-source-only-v0.30`
-**Dossier identity:** `0a0a4dcea49d96ee4578750b740c4a00f24954ebb4434b18c8cc78dce34936b0`
+**Release:** 0.31.0
+**Pilot:** `lightyear-carddemo-source-only-v0.31`
+**Dossier identity:** `69ccf5da08daa188e7999f2f907e1c51cdb05ad0eed4a491b48f390b66408b2f`
 
 ## Executive result
 
@@ -21,6 +21,18 @@ mainframe equivalence or production readiness.
 
 The customer-specific estate binds **52 nodes** and **58 relationships**
 to **10 approved source files**, with **2 unresolved references** retained for review.
+
+## Modernization plan
+
+The assessment identifies **4 connected application slices**; **2** need boundary closure.
+Business priority is not inferred, automatic dispatch is disabled, and every pilot selection requires a human decision.
+
+| Wave | Purpose | Slices | Status |
+|---:|---|---:|---|
+| 0 | boundary-closure | 2 | advisory |
+| 1 | human-pilot-selection | 4 | advisory |
+| 2 | development-proof | 4 | advisory |
+| 3 | authorized-native-validation | 4 | blocked |
 
 ## Capability gates
 
@@ -46,7 +58,8 @@ Db2 log or production cutover authorization was observed.
 
 | Role | Artifact | SHA-256 |
 |---|---|---|
-| runtime-dependency-contract | `pilot/runtime-manifest.json` | `735771b186974639ba367778a64fe294af134b34f8f6249d62d551a10b019856` |
+| runtime-dependency-contract | `pilot/runtime-manifest.json` | `50422731bfc7d5dd5a4bfdbbd52ce987e46dbb7fd030d5cfb1efa6fb099da1dc` |
+| advisory-modernization-planning-contract | `pilot/assessment-policy.json` | `a60489ddfc849e3e3e41d9d7e84bcd94b4ef9e4195153caaf86c2efe477af938` |
 | estate-discovery | `knowledge/graph.receipt.json` | `f12ee5dee079a2e612f4875df75020dac12eb2f52f7d5f8698fbddf9f44cc3fc` |
 | composite-lineage | `knowledge/composite/estate.receipt.json` | `629c3078e42d6d5dc7d0b23ea1a3d72f86077d97df562d08b115ed4e8a75f262` |
 | capability-gates | `knowledge/capabilities/mainframe-readiness.json` | `caa3249f5b299bbe9cf19dfca3d5d8f15c1da62bf1f58414f6a1fd233aa42dc2` |
@@ -74,5 +87,6 @@ Db2 log or production cutover authorization was observed.
 
 - All original-system execution and signed live-equivalence gates remain blocked.
 - Customer-specific estate results are bounded static analysis; unresolved references remain visible.
+- Planning waves are advisory and cannot infer business priority, authorize execution, or dispatch factory work.
 - Development readiness applies only to explicitly bounded proof cells and supported subsets.
 - The pilot dossier retains hashes and bounded summaries, not customer credentials or raw runtime responses.

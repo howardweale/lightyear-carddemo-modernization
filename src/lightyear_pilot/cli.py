@@ -28,6 +28,12 @@ from .pilot import (
     validate_intake_manifest,
     validate_preflight,
 )
+from .planner import (
+    build_estate_assessment,
+    load_assessment_policy,
+    render_assessment_markdown,
+    validate_estate_assessment,
+)
 
 
 def _paths(project_root: Path) -> dict[str, Path]:
@@ -35,6 +41,7 @@ def _paths(project_root: Path) -> dict[str, Path]:
     return {
         "profile": pilot / "pilot.profile.json",
         "compatibility": pilot / "compatibility.policy.json",
+        "assessment_policy": pilot / "assessment-policy.json",
         "runtime": pilot / "runtime-manifest.json",
         "source": pilot / "reference-intake",
         "canonical": pilot / "reference-output",
@@ -64,11 +71,19 @@ def build_parser() -> argparse.ArgumentParser:
     analyze.add_argument("--output-graph", type=Path, required=True)
     analyze.add_argument("--output-receipt", type=Path, required=True)
 
+    assess = subparsers.add_parser("assess", help="Partition the typed estate and build an advisory modernization plan")
+    assess.add_argument("--intake", type=Path, required=True)
+    assess.add_argument("--analysis", type=Path, required=True)
+    assess.add_argument("--analysis-graph", type=Path, required=True)
+    assess.add_argument("--output-json", type=Path, required=True)
+    assess.add_argument("--output-md", type=Path, required=True)
+
     dossier = subparsers.add_parser("dossier", help="Build the evidence-bound offline pilot dossier")
     dossier.add_argument("--intake", type=Path, required=True)
     dossier.add_argument("--preflight", type=Path, required=True)
     dossier.add_argument("--analysis", type=Path, required=True)
     dossier.add_argument("--analysis-graph", type=Path, required=True)
+    dossier.add_argument("--assessment", type=Path, required=True)
     dossier.add_argument("--output-json", type=Path, required=True)
     dossier.add_argument("--output-md", type=Path, required=True)
 
@@ -109,6 +124,11 @@ def _rehearse(project_root: Path, source_root: Path, output_root: Path, approval
     )
     if errors:
         raise PilotError(errors[0])
+    assessment_policy = load_assessment_policy(project_root / "pilot/assessment-policy.json")
+    assessment = build_estate_assessment(analysis_graph, analysis, intake, assessment_policy)
+    errors = validate_estate_assessment(assessment, analysis_graph, analysis, intake, assessment_policy)
+    if errors:
+        raise PilotError(errors[0])
     preflight = build_preflight(project_root, intake, profile)
     errors = validate_preflight(preflight, intake)
     if errors:
@@ -119,6 +139,8 @@ def _rehearse(project_root: Path, source_root: Path, output_root: Path, approval
         preflight,
         analysis,
         analysis_graph,
+        assessment,
+        assessment_policy,
         profile,
         compatibility,
     )
@@ -128,6 +150,7 @@ def _rehearse(project_root: Path, source_root: Path, output_root: Path, approval
         preflight,
         analysis,
         analysis_graph,
+        assessment,
         project_root,
         profile,
     )
@@ -137,6 +160,8 @@ def _rehearse(project_root: Path, source_root: Path, output_root: Path, approval
     write_json(output_root / "intake.manifest.json", intake)
     write_analysis_graph(analysis_graph, output_root / "source-estate.snapshot.json.gz")
     write_json(output_root / "source-analysis.receipt.json", analysis)
+    write_json(output_root / "estate-assessment.json", assessment)
+    write_text(output_root / "estate-assessment.md", render_assessment_markdown(assessment))
     write_json(output_root / "mainframe.preflight.json", preflight)
     write_json(output_root / "pilot.dossier.json", dossier)
     write_text(output_root / "pilot.dossier.md", render_dossier_markdown(dossier))
@@ -146,7 +171,7 @@ def _rehearse(project_root: Path, source_root: Path, output_root: Path, approval
 def _doctor(project_root: Path) -> int:
     paths = _paths(project_root)
     required = [
-        paths["profile"], paths["compatibility"], paths["runtime"], project_root / "knowledge/composite/estate.receipt.json",
+        paths["profile"], paths["compatibility"], paths["assessment_policy"], paths["runtime"], project_root / "knowledge/composite/estate.receipt.json",
         project_root / "knowledge/capabilities/mainframe-readiness.json",
         project_root / "extensions/adapters/appliance/appliance.receipt.json",
     ]
@@ -155,6 +180,7 @@ def _doctor(project_root: Path) -> int:
         "supported_platform": platform.system() in {"Linux", "Darwin", "Windows"},
         "pilot_profile_present": paths["profile"].is_file(),
         "compatibility_policy_present": paths["compatibility"].is_file(),
+        "assessment_policy_present": paths["assessment_policy"].is_file(),
         "runtime_manifest_present": paths["runtime"].is_file(),
         "reference_intake_present": paths["source"].is_dir(),
         "bound_evidence_present": all(path.exists() for path in required),
@@ -209,17 +235,33 @@ def main(argv: list[str] | None = None) -> int:
             write_analysis_graph(graph, args.output_graph)
             write_json(args.output_receipt, payload)
             print(payload["content_sha256"])
+        elif args.command == "assess":
+            intake = load_json(args.intake)
+            analysis = load_json(args.analysis)
+            analysis_graph = load_graph(args.analysis_graph)
+            policy = load_assessment_policy(paths["assessment_policy"])
+            payload = build_estate_assessment(analysis_graph, analysis, intake, policy)
+            errors = validate_estate_assessment(payload, analysis_graph, analysis, intake, policy)
+            if errors:
+                raise PilotError(errors[0])
+            write_json(args.output_json, payload)
+            write_text(args.output_md, render_assessment_markdown(payload))
+            print(payload["content_sha256"])
         elif args.command == "dossier":
             intake = load_json(args.intake)
             preflight = load_json(args.preflight)
             analysis = load_json(args.analysis)
             analysis_graph = load_graph(args.analysis_graph)
+            assessment = load_json(args.assessment)
+            assessment_policy = load_assessment_policy(paths["assessment_policy"])
             payload = build_dossier(
                 project_root,
                 intake,
                 preflight,
                 analysis,
                 analysis_graph,
+                assessment,
+                assessment_policy,
                 profile,
                 compatibility,
             )
@@ -229,6 +271,7 @@ def main(argv: list[str] | None = None) -> int:
                 preflight,
                 analysis,
                 analysis_graph,
+                assessment,
                 project_root,
                 profile,
             )
@@ -249,6 +292,8 @@ def main(argv: list[str] | None = None) -> int:
                     "intake.manifest.json",
                     "source-estate.snapshot.json.gz",
                     "source-analysis.receipt.json",
+                    "estate-assessment.json",
+                    "estate-assessment.md",
                     "mainframe.preflight.json",
                     "pilot.dossier.json",
                     "pilot.dossier.md",

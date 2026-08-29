@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.31.0 — 2026-08-29
+
+- Added a deterministic customer estate assessment bound to the exact intake, source-analysis
+  receipt, graph identity, and published assessment policy.
+- Partitioned the typed source graph into connected application slices with stable identifiers,
+  source files, technologies, relationship types, unresolved references, and evidence needs.
+- Added an explicit boundary-closure wave for absent or ambiguous targets, followed by
+  human-governed pilot selection, development proof, and blocked authorized-native validation.
+- Added technology-specific modernization patterns and development/live evidence backlogs for
+  COBOL, PL/I, JCL, Db2, CICS, HLASM, IMS, and VSAM.
+- Added fail-closed controls preventing assessment tampering, hidden unresolved references,
+  business-priority inference, automatic factory dispatch, or live-readiness promotion.
+- Added JSON and Markdown assessment artifacts, POSIX and PowerShell `assess` commands, a v3 pilot
+  dossier, frozen v1 assessment and v3 dossier schemas, and an eight-artifact deterministic rehearsal.
+- Kept every planning result advisory and source-only; model qualification, authorized original
+  execution, signed live equivalence, mainframe equivalence, and production readiness remain false
+  or blocked.
+
 ## 0.30.0 — 2026-08-29
 
 - Added a deterministic customer source analysis workcell bound to each approved intake rather than

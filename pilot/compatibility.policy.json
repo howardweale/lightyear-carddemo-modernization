@@ -1,13 +1,14 @@
 {
   "schema_version": "1.0",
   "policy_type": "lightyear-pilot-compatibility-policy",
-  "pilot_line": "0.30.x",
-  "minimum_reader_release": "0.30.0",
+  "pilot_line": "0.31.x",
+  "minimum_reader_release": "0.31.0",
   "formats": {
     "lightyear-source-only-pilot-intake": ["1.0"],
     "lightyear-mainframe-evidence-preflight": ["1.0"],
     "lightyear-customer-source-analysis": ["1.0"],
-    "lightyear-source-only-pilot-dossier": ["2.0"]
+    "lightyear-customer-estate-assessment": ["1.0"],
+    "lightyear-source-only-pilot-dossier": ["3.0"]
   },
   "rules": {
     "same_major_schema_versions": true,
@@ -17,12 +18,12 @@
   },
   "migration_tests": [
     "accept-v1-intake-preflight-and-analysis-contracts",
-    "accept-v2-customer-analysis-dossier",
+    "accept-v3-customer-assessment-dossier",
     "reject-foreign-major-version",
     "reject-stale-content-identity",
     "reject-live-readiness-promotion"
   ],
   "mainframe_equivalent": false,
   "production_ready": false,
-  "content_sha256": "47c006abf1efad62eb3a79ea938975263d8cef505cfd6db77b1c2f1829912f0d"
+  "content_sha256": "8350b4f0b8e8cfcf64427715cd749c696e6420fc6e955ffc37580833e5b41922"
 }

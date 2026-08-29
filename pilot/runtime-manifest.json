@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
   "manifest_type": "lightyear-source-only-pilot-runtime",
-  "release": "0.30.0",
+  "release": "0.31.0",
   "required_runtime": {
     "python": ">=3.11,<4",
     "third_party_runtime_dependencies": []
@@ -24,6 +24,12 @@
     "requires_network": false,
     "retains_raw_source_in_dossier": false
   },
+  "estate_assessment": {
+    "mode": "deterministic-connected-component-planning",
+    "business_priority_inferred": false,
+    "automatic_factory_dispatch": false,
+    "requires_network": false
+  },
   "optional_paths": {
     "java_17": "compiled Spring candidate and reproducible artifact verification",
     "maven": "full Java package verification",
@@ -31,5 +37,5 @@
   },
   "mainframe_equivalent": false,
   "production_ready": false,
-  "content_sha256": "71af9bba3325c57b1fa947a4a4b71c8a9b57593b4382b752fe58dcaea33cb5e2"
+  "content_sha256": "346e67d8e44ad46a262e001552aa35e13788a65a295661e25b0bee48c2644dce"
 }

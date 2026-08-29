@@ -1,0 +1,393 @@
+{
+  "analysis_sha256": "cc60a7dd92660c477b4799dfad88acd742c4500c6f0ed684cb9b4608f6ea55fb",
+  "assessment_policy_sha256": "fe7da4aa0a9ed853086fbfccbab0de16571f9ac5942d0e48fbfce290c9d3efd6",
+  "assessment_type": "lightyear-customer-estate-assessment",
+  "claim_unlocked": "LIGHTYEAR can partition an approved source estate into explainable connected slices and produce an evidence-first modernization planning backlog.",
+  "clusters": [
+    {
+      "cluster_id": "cluster:2b329d62ba6b900a",
+      "findings": [
+        {
+          "code": "BOUNDARY_INCOMPLETE",
+          "finding": "1 referenced target(s) are absent or ambiguous in the approved intake.",
+          "severity": "high"
+        },
+        {
+          "code": "NATIVE_RUNTIME_EVIDENCE_REQUIRED",
+          "finding": "Static source cannot establish native runtime behavior for CICS.",
+          "severity": "medium"
+        }
+      ],
+      "label": "CICS-EXPORT connected application slice",
+      "modernization_patterns": [
+        "classify ownership and deployment semantics before translating or consolidating configuration",
+        "isolate transaction and program boundary before service extraction"
+      ],
+      "node_count": 3,
+      "node_ids": [
+        "pilot:cics-program-resource:COACTVWC:a72e3c489b51",
+        "pilot:cics-transaction:CAVW:a72e3c489b51",
+        "pilot:source-file:a72e3c489b51"
+      ],
+      "relationship_count": 3,
+      "relationship_types": [
+        "DECLARES",
+        "STARTS_PROGRAM"
+      ],
+      "required_development_evidence": [
+        "transaction contract, candidate, side-effect comparator, and negative tests",
+        "typed configuration contract, consumer lineage, validation rules, and deployment tests"
+      ],
+      "required_live_evidence": [
+        "authorized CICS transaction, installed-resource, and side-effect capture",
+        "authorized installed configuration, consumer binding, change history, and deployment observation"
+      ],
+      "selection_posture": {
+        "automatically_approved": false,
+        "business_priority_known": false,
+        "candidate": true,
+        "human_decision_required": true
+      },
+      "source_files": [
+        "config/cics-export.json"
+      ],
+      "technologies": [
+        "CICS",
+        "Configuration"
+      ],
+      "unresolved_references": [
+        {
+          "kind": "cics-program",
+          "line": 1,
+          "name": "COACTVWC",
+          "path": "config/cics-export.json",
+          "reason": "target-not-in-intake"
+        }
+      ]
+    },
+    {
+      "cluster_id": "cluster:6a02c2ea6de7831e",
+      "findings": [
+        {
+          "code": "BOUNDARY_INCOMPLETE",
+          "finding": "1 referenced target(s) are absent or ambiguous in the approved intake.",
+          "severity": "high"
+        },
+        {
+          "code": "CROSS_TECHNOLOGY_COUPLING",
+          "finding": "The slice connects 5 technologies and should be tested as a coordinated unit.",
+          "severity": "high"
+        },
+        {
+          "code": "NATIVE_RUNTIME_EVIDENCE_REQUIRED",
+          "finding": "Static source cannot establish native runtime behavior for Db2, HLASM.",
+          "severity": "medium"
+        }
+      ],
+      "label": "ACCOUNTV connected application slice",
+      "modernization_patterns": [
+        "isolate calling convention and bit-level behavior behind a typed replacement boundary",
+        "preserve decimal, file, SQL, and cross-language calling semantics in a bounded cell",
+        "preserve record and call contracts while extracting executable behavior",
+        "separate schema, query semantics, data movement, cutover, and recovery proofs",
+        "translate job topology only after programs, datasets, conditions, and restart boundaries resolve"
+      ],
+      "node_count": 33,
+      "node_ids": [
+        "pilot:assembler-dsect:DATEDS:fe46a1b6c684",
+        "pilot:assembler-instruction:DATEFMT:3:3:fe46a1b6c684",
+        "pilot:assembler-instruction:DATEFMT:4:4:fe46a1b6c684",
+        "pilot:assembler-instruction:DATEFMT:5:5:fe46a1b6c684",
+        "pilot:assembler-instruction:DATEFMT:6:6:fe46a1b6c684",
+        "pilot:assembler-instruction:DATEFMT:7:7:fe46a1b6c684",
+        "pilot:assembler-instruction:DATEFMT:8:8:fe46a1b6c684",
+        "pilot:assembler-instruction:DATEFMT:9:9:fe46a1b6c684",
+        "pilot:assembler-program:DATEFMT:fe46a1b6c684",
+        "pilot:assembler-symbol:DATEFMT:DATEIN:fe46a1b6c684",
+        "pilot:assembler-symbol:DATEFMT:EMPTY:fe46a1b6c684",
+        "pilot:assembler-symbol:DATEFMT:RETURN:fe46a1b6c684",
+        "pilot:assembler-symbol:DATEFMT:START:fe46a1b6c684",
+        "pilot:cobol-program:ACCOUNTV:e918e00ee181",
+        "pilot:copybook:ACCTREC:d080fed92414",
+        "pilot:db2-column:CARDDEMO.AUTHFRDS.AUTH_ID:7407fcb1cea3",
+        "pilot:db2-column:CARDDEMO.AUTHFRDS.AUTH_STATUS:7407fcb1cea3",
+        "pilot:db2-column:CARDDEMO.AUTHFRDS.CARD_NUM:7407fcb1cea3",
+        "pilot:db2-constraint:CARDDEMO.AUTHFRDS:PRIMARY_KEY:7407fcb1cea3",
+        "pilot:db2-index:CARDDEMO.AUTHFRDS_IX1:7407fcb1cea3",
+        "pilot:db2-sql:0e4cd3843f6b:4:1",
+        "pilot:db2-sql:e918e00ee181:7:1",
+        "pilot:db2-table:CARDDEMO.AUTHFRDS:7407fcb1cea3",
+        "pilot:jcl-job:ACCTPIL:88a43b671f8f",
+        "pilot:jcl-step:ACCTPIL:FORMAT:88a43b671f8f",
+        "pilot:jcl-step:ACCTPIL:RUN:88a43b671f8f",
+        "pilot:pli-program:ACCTPL1:0e4cd3843f6b",
+        "pilot:source-file:0e4cd3843f6b",
+        "pilot:source-file:7407fcb1cea3",
+        "pilot:source-file:88a43b671f8f",
+        "pilot:source-file:d080fed92414",
+        "pilot:source-file:e918e00ee181",
+        "pilot:source-file:fe46a1b6c684"
+      ],
+      "relationship_count": 36,
+      "relationship_types": [
+        "BRANCHES_TO",
+        "CALLS",
+        "CONTAINS",
+        "DECLARES",
+        "EXECUTES",
+        "HAS_COLUMN",
+        "HAS_CONSTRAINT",
+        "INDEXES",
+        "ISSUES_SQL",
+        "READS_TABLE",
+        "USES_COPYBOOK"
+      ],
+      "required_development_evidence": [
+        "behavior oracle, candidate, differential comparison, and mutation tests",
+        "instruction subset, calling contract, oracle, candidate, and boundary mutations",
+        "job-step DAG, condition semantics, dataset contract, restart plan, and scheduler candidate",
+        "schema mapping, bounded fixtures, query checksums, CDC rehearsal, and rollback",
+        "source-faithful oracle, candidate, differential comparison, and semantic mutations"
+      ],
+      "required_live_evidence": [
+        "Enterprise PL/I compile, Db2 bind, and authorized PL/I-to-COBOL execution",
+        "assembler and binder listings, load-module digest, and authorized caller execution",
+        "authorized catalog, package, source-row, log, cutover, and rollback observation",
+        "authorized compiled original execution with input, output, and side-effect capture",
+        "authorized job execution, JES output, dataset effects, conditions, and restart capture"
+      ],
+      "selection_posture": {
+        "automatically_approved": false,
+        "business_priority_known": false,
+        "candidate": true,
+        "human_decision_required": true
+      },
+      "source_files": [
+        "cobol/ACCOUNTV.cbl",
+        "copybooks/ACCTREC.cpy",
+        "db2/AUTHFRDS.ddl",
+        "hlasm/DATEFMT.asm",
+        "jcl/ACCTPIL.jcl",
+        "pli/ACCTPL1.pli"
+      ],
+      "technologies": [
+        "COBOL",
+        "Db2",
+        "HLASM",
+        "JCL",
+        "PL/I"
+      ],
+      "unresolved_references": [
+        {
+          "kind": "program-call",
+          "line": 5,
+          "name": "CBACT04C",
+          "path": "pli/ACCTPL1.pli",
+          "reason": "target-not-in-intake"
+        }
+      ]
+    },
+    {
+      "cluster_id": "cluster:c9b7311508da5951",
+      "findings": [
+        {
+          "code": "NATIVE_RUNTIME_EVIDENCE_REQUIRED",
+          "finding": "Static source cannot establish native runtime behavior for IMS.",
+          "severity": "medium"
+        }
+      ],
+      "label": "AUTHDB connected application slice",
+      "modernization_patterns": [
+        "preserve DBD, PSB, PCB, status, checkpoint, and restart semantics"
+      ],
+      "node_count": 10,
+      "node_ids": [
+        "pilot:ims-database:AUTHDB:7627574d7b02",
+        "pilot:ims-dataset-group:AUTHDB:AUTHDS:7627574d7b02",
+        "pilot:ims-field:AUTHDB:AUTHID:7627574d7b02",
+        "pilot:ims-field:AUTHDB:STATUS:7627574d7b02",
+        "pilot:ims-pcb:AUTHPSB:AUTHPCB:08e562311f34",
+        "pilot:ims-psb:AUTHPSB:08e562311f34",
+        "pilot:ims-segment:AUTHDB:AUTHCHLD:7627574d7b02",
+        "pilot:ims-segment:AUTHDB:AUTHROOT:7627574d7b02",
+        "pilot:source-file:08e562311f34",
+        "pilot:source-file:7627574d7b02"
+      ],
+      "relationship_count": 12,
+      "relationship_types": [
+        "CONTAINS",
+        "DECLARES",
+        "HAS_DATASET_GROUP",
+        "HAS_FIELD",
+        "PARENT_OF",
+        "SENSITIVE_TO",
+        "USES_DBD"
+      ],
+      "required_development_evidence": [
+        "database contract, call sequence oracle, candidate, status and restart tests"
+      ],
+      "required_live_evidence": [
+        "authorized BMP region, DBD/PSB, database, status, checkpoint, restart, and JES evidence"
+      ],
+      "selection_posture": {
+        "automatically_approved": false,
+        "business_priority_known": false,
+        "candidate": true,
+        "human_decision_required": true
+      },
+      "source_files": [
+        "ims/AUTHDB.dbd",
+        "ims/AUTHPSB.psb"
+      ],
+      "technologies": [
+        "IMS"
+      ],
+      "unresolved_references": []
+    },
+    {
+      "cluster_id": "cluster:f05aab4a016a5627",
+      "findings": [
+        {
+          "code": "NATIVE_RUNTIME_EVIDENCE_REQUIRED",
+          "finding": "Static source cannot establish native runtime behavior for VSAM.",
+          "severity": "medium"
+        }
+      ],
+      "label": "AUTHCAT connected application slice",
+      "modernization_patterns": [
+        "preserve keyed access, record bytes, alternate indexes, locking, and recovery semantics"
+      ],
+      "node_count": 6,
+      "node_ids": [
+        "pilot:source-file:1f7edcad0fa6",
+        "pilot:vsam-alternate-index:CARDDEMO.AUTH.AIX:1f7edcad0fa6",
+        "pilot:vsam-cluster:CARDDEMO.AUTH.KSDS:1f7edcad0fa6",
+        "pilot:vsam-component:CARDDEMO.AUTH.KSDS.DATA:1f7edcad0fa6",
+        "pilot:vsam-component:CARDDEMO.AUTH.KSDS.INDEX:1f7edcad0fa6",
+        "pilot:vsam-path:CARDDEMO.AUTH.PATH:1f7edcad0fa6"
+      ],
+      "relationship_count": 7,
+      "relationship_types": [
+        "DECLARES",
+        "HAS_COMPONENT",
+        "TARGETS"
+      ],
+      "required_development_evidence": [
+        "catalog contract, byte fixtures, key-path comparator, concurrency and recovery tests"
+      ],
+      "required_live_evidence": [
+        "authorized clusters, alternate indexes, record bytes, locking, and recovery observation"
+      ],
+      "selection_posture": {
+        "automatically_approved": false,
+        "business_priority_known": false,
+        "candidate": true,
+        "human_decision_required": true
+      },
+      "source_files": [
+        "vsam/AUTHCAT.ctl"
+      ],
+      "technologies": [
+        "VSAM"
+      ],
+      "unresolved_references": []
+    }
+  ],
+  "content_sha256": "e4c65a431fdb40d05e2879ef8dfc661129104efdf7f1e382f0b1360421233a20",
+  "decision_boundary": {
+    "advisory_plan_only": true,
+    "authorized_execution_observed": false,
+    "automatic_factory_dispatch": false,
+    "business_priority_inferred": false,
+    "mainframe_equivalent": false,
+    "production_ready": false
+  },
+  "evidence_backlog": [
+    "Enterprise PL/I compile, Db2 bind, and authorized PL/I-to-COBOL execution",
+    "Resolve cics-program COACTVWC referenced by config/cics-export.json:1",
+    "Resolve program-call CBACT04C referenced by pli/ACCTPL1.pli:5",
+    "assembler and binder listings, load-module digest, and authorized caller execution",
+    "authorized BMP region, DBD/PSB, database, status, checkpoint, restart, and JES evidence",
+    "authorized CICS transaction, installed-resource, and side-effect capture",
+    "authorized catalog, package, source-row, log, cutover, and rollback observation",
+    "authorized clusters, alternate indexes, record bytes, locking, and recovery observation",
+    "authorized compiled original execution with input, output, and side-effect capture",
+    "authorized installed configuration, consumer binding, change history, and deployment observation",
+    "authorized job execution, JES output, dataset effects, conditions, and restart capture"
+  ],
+  "graph_content_sha256": "04b0f8752eecc88373343b5ca865e2dcd790fbd55e9072db13bdf89979637d4c",
+  "intake_sha256": "e7d13304a0677067e139b0ceafc9483ea7c56c02f906cbf1b74f57892dd1b3ef",
+  "limitations": [
+    "Connected components describe static coupling, not business criticality, transaction volume, runtime behavior, or ownership.",
+    "The planner does not automatically approve or dispatch modernization work.",
+    "Live original-system execution and signed equivalence remain blocked until separately authorized and observed."
+  ],
+  "method": "deterministic-undirected-connected-components",
+  "pilot_id": "lightyear-carddemo-source-only-v0.31",
+  "planning_waves": [
+    {
+      "automatic_dispatch": false,
+      "cluster_ids": [
+        "cluster:2b329d62ba6b900a",
+        "cluster:6a02c2ea6de7831e"
+      ],
+      "exit_criteria": "Referenced source targets are supplied or explicitly accepted as external boundaries.",
+      "name": "boundary-closure",
+      "wave": 0
+    },
+    {
+      "automatic_dispatch": false,
+      "cluster_ids": [
+        "cluster:2b329d62ba6b900a",
+        "cluster:6a02c2ea6de7831e",
+        "cluster:c9b7311508da5951",
+        "cluster:f05aab4a016a5627"
+      ],
+      "exit_criteria": "After required boundary closure, a business owner selects a bounded slice and approves success criteria and data policy.",
+      "name": "human-pilot-selection",
+      "wave": 1
+    },
+    {
+      "automatic_dispatch": false,
+      "cluster_ids": [
+        "cluster:2b329d62ba6b900a",
+        "cluster:6a02c2ea6de7831e",
+        "cluster:c9b7311508da5951",
+        "cluster:f05aab4a016a5627"
+      ],
+      "exit_criteria": "Selected slices have executable contracts, candidates, differential checks, and negative tests.",
+      "name": "development-proof",
+      "wave": 2
+    },
+    {
+      "automatic_dispatch": false,
+      "cluster_ids": [
+        "cluster:2b329d62ba6b900a",
+        "cluster:6a02c2ea6de7831e",
+        "cluster:c9b7311508da5951",
+        "cluster:f05aab4a016a5627"
+      ],
+      "exit_criteria": "Customer-authorized original execution and independently signed comparison evidence exist.",
+      "name": "authorized-native-validation",
+      "status": "blocked",
+      "wave": 3
+    }
+  ],
+  "schema_version": "1.0",
+  "statistics": {
+    "candidate_source_files": 10,
+    "clusters": 4,
+    "clusters_with_unresolved_references": 2,
+    "technologies": [
+      "CICS",
+      "COBOL",
+      "Configuration",
+      "Db2",
+      "HLASM",
+      "IMS",
+      "JCL",
+      "PL/I",
+      "VSAM"
+    ]
+  }
+}

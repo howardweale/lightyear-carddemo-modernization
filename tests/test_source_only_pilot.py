@@ -22,17 +22,24 @@ from lightyear_pilot.pilot import (
     validate_intake_manifest,
     validate_preflight,
 )
+from lightyear_pilot.planner import (
+    build_estate_assessment,
+    load_assessment_policy,
+    render_assessment_markdown,
+    validate_estate_assessment,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
 PROFILE = load_json(ROOT / "pilot/pilot.profile.json")
 COMPATIBILITY = load_json(ROOT / "pilot/compatibility.policy.json")
+ASSESSMENT_POLICY = load_assessment_policy(ROOT / "pilot/assessment-policy.json")
 SOURCE = ROOT / "pilot/reference-intake"
 CANONICAL = ROOT / "pilot/reference-output"
 
 
 class SourceOnlyPilotTests(unittest.TestCase):
-    def build(self) -> tuple[dict, dict, dict, dict, dict]:
+    def build(self) -> tuple[dict, dict, dict, dict, dict, dict]:
         intake = build_intake_manifest(
             SOURCE,
             PROFILE,
@@ -46,19 +53,24 @@ class SourceOnlyPilotTests(unittest.TestCase):
             ROOT / "pilot/analysis-relationships.json",
         )
         preflight = build_preflight(ROOT, intake, PROFILE)
+        assessment = build_estate_assessment(
+            analysis_graph, analysis, intake, ASSESSMENT_POLICY
+        )
         dossier = build_dossier(
             ROOT,
             intake,
             preflight,
             analysis,
             analysis_graph,
+            assessment,
+            ASSESSMENT_POLICY,
             PROFILE,
             COMPATIBILITY,
         )
-        return intake, analysis_graph, analysis, preflight, dossier
+        return intake, analysis_graph, analysis, assessment, preflight, dossier
 
     def test_reference_release_is_deterministic_and_valid(self) -> None:
-        intake, analysis_graph, analysis, preflight, dossier = self.build()
+        intake, analysis_graph, analysis, assessment, preflight, dossier = self.build()
         self.assertEqual([], validate_intake_manifest(intake, PROFILE, SOURCE))
         self.assertEqual(
             [],
@@ -73,18 +85,30 @@ class SourceOnlyPilotTests(unittest.TestCase):
         self.assertEqual([], validate_preflight(preflight, intake))
         self.assertEqual(
             [],
+            validate_estate_assessment(
+                assessment, analysis_graph, analysis, intake, ASSESSMENT_POLICY
+            ),
+        )
+        self.assertEqual(
+            [],
             validate_dossier(
                 dossier,
                 intake,
                 preflight,
                 analysis,
                 analysis_graph,
+                assessment,
                 ROOT,
                 PROFILE,
             ),
         )
         self.assertEqual(intake, load_json(CANONICAL / "intake.manifest.json"))
         self.assertEqual(analysis, load_json(CANONICAL / "source-analysis.receipt.json"))
+        self.assertEqual(assessment, load_json(CANONICAL / "estate-assessment.json"))
+        self.assertEqual(
+            render_assessment_markdown(assessment),
+            (CANONICAL / "estate-assessment.md").read_text(encoding="utf-8"),
+        )
         self.assertEqual(
             analysis_graph,
             load_graph(CANONICAL / "source-estate.snapshot.json.gz"),
@@ -103,7 +127,7 @@ class SourceOnlyPilotTests(unittest.TestCase):
         self.assertEqual(255, raw[9])
 
     def test_reference_intake_covers_all_nine_source_classes(self) -> None:
-        intake, _, analysis, _, _ = self.build()
+        intake, _, analysis, _, _, _ = self.build()
         self.assertEqual(10, intake["statistics"]["files"])
         self.assertEqual(
             {"cobol", "copybook", "db2-ddl", "hlasm", "ims", "jcl", "pli", "system-configuration", "vsam"},
@@ -115,7 +139,7 @@ class SourceOnlyPilotTests(unittest.TestCase):
         self.assertEqual(10, sum(item["typed_files"] for item in analysis["coverage"]))
 
     def test_customer_estate_connects_mixed_source_without_claiming_behavior(self) -> None:
-        _, graph, analysis, _, dossier = self.build()
+        _, graph, analysis, assessment, _, dossier = self.build()
         edges = {(item["source"], item["relation"], item["target"]) for item in graph["edges"]}
         nodes = {item["id"]: item for item in graph["nodes"]}
         call_names = {
@@ -136,6 +160,10 @@ class SourceOnlyPilotTests(unittest.TestCase):
         self.assertFalse(analysis["mainframe_equivalent"])
         self.assertEqual("customer-source-analysis", dossier["estate"]["kind"])
         self.assertEqual(analysis["graph_content_sha256"], dossier["estate"]["graph_sha256"])
+        self.assertEqual(4, assessment["statistics"]["clusters"])
+        self.assertEqual(2, assessment["statistics"]["clusters_with_unresolved_references"])
+        self.assertFalse(assessment["decision_boundary"]["automatic_factory_dispatch"])
+        self.assertTrue(all(item["selection_posture"]["human_decision_required"] for item in assessment["clusters"]))
 
     def test_customer_intake_may_use_an_applicable_subset(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -154,7 +182,7 @@ class SourceOnlyPilotTests(unittest.TestCase):
         self.assertEqual([], validate_intake_manifest(intake, PROFILE))
 
     def test_dossier_is_pilot_ready_without_live_or_model_overclaims(self) -> None:
-        _, _, _, preflight, dossier = self.build()
+        _, _, _, _, preflight, dossier = self.build()
         self.assertTrue(dossier["pilot_ready"])
         self.assertFalse(dossier["proofs"]["model_qualification"]["qualified"])
         self.assertEqual(8, dossier["proofs"]["model_qualification"]["required_independently_sealed_evaluations"])
@@ -163,6 +191,48 @@ class SourceOnlyPilotTests(unittest.TestCase):
         self.assertFalse(dossier["production_ready"])
         self.assertEqual("blocked", preflight["gates"]["6_authorized_original_execution"])
         self.assertEqual("blocked", preflight["gates"]["8_signed_equivalence"])
+
+    def test_assessment_partitions_connected_slices_and_closes_boundaries_first(self) -> None:
+        _, _, _, assessment, _, dossier = self.build()
+        technologies = {tuple(item["technologies"]) for item in assessment["clusters"]}
+        self.assertEqual(
+            {
+                ("CICS", "Configuration"),
+                ("COBOL", "Db2", "HLASM", "JCL", "PL/I"),
+                ("IMS",),
+                ("VSAM",),
+            },
+            technologies,
+        )
+        boundary_wave = assessment["planning_waves"][0]
+        self.assertEqual("boundary-closure", boundary_wave["name"])
+        self.assertEqual(2, len(boundary_wave["cluster_ids"]))
+        self.assertFalse(boundary_wave["automatic_dispatch"])
+        self.assertEqual(assessment["content_sha256"], dossier["assessment_sha256"])
+        self.assertTrue(dossier["modernization_plan"]["human_decision_required"])
+
+    def test_assessment_cannot_auto_dispatch_or_hide_unresolved_references(self) -> None:
+        intake, graph, analysis, assessment, _, _ = self.build()
+        changed = copy.deepcopy(assessment)
+        changed["decision_boundary"]["automatic_factory_dispatch"] = True
+        changed["clusters"][0]["unresolved_references"] = []
+        changed["content_sha256"] = canonical_hash(changed, {"content_sha256"})
+        errors = validate_estate_assessment(
+            changed, graph, analysis, intake, ASSESSMENT_POLICY
+        )
+        self.assertIn("assessment-overclaims-decision-or-live-readiness", errors)
+        self.assertIn("assessment-no-longer-matches-bound-estate", errors)
+
+    def test_assessment_policy_tamper_fails_closed(self) -> None:
+        changed = copy.deepcopy(ASSESSMENT_POLICY)
+        changed["planning_rules"]["business_priority_requires_human_input"] = False
+        changed["content_sha256"] = canonical_hash(changed, {"content_sha256"})
+        from lightyear_pilot.planner import validate_assessment_policy
+
+        self.assertIn(
+            "assessment-policy-planning-rules-invalid",
+            validate_assessment_policy(changed),
+        )
 
     def test_credential_shaped_material_fails_closed(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -208,7 +278,7 @@ class SourceOnlyPilotTests(unittest.TestCase):
                     )
 
     def test_intake_tamper_fails_even_when_source_tree_hash_is_recomputed(self) -> None:
-        intake, _, _, _, _ = self.build()
+        intake, _, _, _, _, _ = self.build()
         changed = copy.deepcopy(intake)
         changed["files"][0]["kind"] = "jcl"
         changed["source_tree_sha256"] = canonical_hash({"files": changed["files"]})
@@ -219,7 +289,7 @@ class SourceOnlyPilotTests(unittest.TestCase):
         self.assertIn("intake-required-source-class-missing", errors)
 
     def test_preflight_cannot_promote_gates_six_or_eight(self) -> None:
-        intake, _, _, preflight, _ = self.build()
+        intake, _, _, _, preflight, _ = self.build()
         changed = copy.deepcopy(preflight)
         changed["gates"]["6_authorized_original_execution"] = "passed"
         changed["ready_for_gates_6_8"] = True
@@ -229,17 +299,17 @@ class SourceOnlyPilotTests(unittest.TestCase):
         self.assertIn("preflight-promotes-unproven-readiness", errors)
 
     def test_dossier_cannot_relabel_model_or_production_readiness(self) -> None:
-        intake, analysis_graph, analysis, preflight, dossier = self.build()
+        intake, analysis_graph, analysis, assessment, preflight, dossier = self.build()
         changed = copy.deepcopy(dossier)
         changed["proofs"]["model_qualification"]["qualified"] = True
         changed["production_ready"] = True
         changed["content_sha256"] = canonical_hash(changed, {"content_sha256"})
-        errors = validate_dossier(changed, intake, preflight, analysis, analysis_graph)
+        errors = validate_dossier(changed, intake, preflight, analysis, analysis_graph, assessment)
         self.assertIn("dossier-overclaims-live-readiness", errors)
         self.assertIn("dossier-overclaims-model-qualification", errors)
 
     def test_bound_artifact_drift_invalidates_dossier(self) -> None:
-        intake, analysis_graph, analysis, preflight, dossier = self.build()
+        intake, analysis_graph, analysis, assessment, preflight, dossier = self.build()
         changed = copy.deepcopy(dossier)
         artifact = next(
             item for item in changed["evidence_artifacts"] if item["id"] == "canonical-graph"
@@ -252,13 +322,14 @@ class SourceOnlyPilotTests(unittest.TestCase):
             preflight,
             analysis,
             analysis_graph,
+            assessment,
             ROOT,
             PROFILE,
         )
         self.assertIn("dossier-artifact-drift:canonical-graph", errors)
 
     def test_release_profile_pins_every_evidence_artifact(self) -> None:
-        intake, analysis_graph, analysis, preflight, _ = self.build()
+        intake, analysis_graph, analysis, assessment, preflight, _ = self.build()
         changed = copy.deepcopy(PROFILE)
         artifact = next(
             item for item in changed["evidence_artifacts"] if item["id"] == "canonical-graph"
@@ -272,12 +343,14 @@ class SourceOnlyPilotTests(unittest.TestCase):
                 preflight,
                 analysis,
                 analysis_graph,
+                assessment,
+                ASSESSMENT_POLICY,
                 changed,
                 COMPATIBILITY,
             )
 
     def test_analysis_tamper_and_source_drift_fail_closed(self) -> None:
-        intake, graph, analysis, _, _ = self.build()
+        intake, graph, analysis, _, _, _ = self.build()
         changed = copy.deepcopy(analysis)
         changed["behavior_proven"] = True
         changed["content_sha256"] = canonical_hash(changed, {"content_sha256"})
@@ -335,7 +408,7 @@ class SourceOnlyPilotTests(unittest.TestCase):
 
     def test_pilot_contract_schemas_are_frozen_and_parseable(self) -> None:
         schemas = sorted((ROOT / "pilot/schema").glob("*.schema.json"))
-        self.assertEqual(5, len(schemas))
+        self.assertEqual(7, len(schemas))
         for path in schemas:
             with self.subTest(path=path.name):
                 payload = json.loads(path.read_text(encoding="utf-8"))

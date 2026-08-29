@@ -4,8 +4,8 @@
 
 Place customer source in a dedicated, access-controlled directory. The pilot reads files without
 modifying them and rejects symbolic links, hidden paths, unsupported extensions, binary/NUL content,
-oversized files or trees, and credential-shaped strings. The graph and dossier record only bounded
-paths, types, relationships, metadata, and hashes; they do not embed source text.
+oversized files or trees, and credential-shaped strings. The graph, assessment, and dossier record
+only bounded paths, types, relationships, metadata, and hashes; they do not embed source text.
 
 Use a customer-issued approval identifier that can be mapped to the external authorization record.
 The identifier is not itself proof of legal authorization; operators must retain that approval in
@@ -17,6 +17,8 @@ the customer's governance system.
 - Keep the source directory read-only.
 - Write generated evidence to a separate directory.
 - Do not supply mainframe, database, cloud, or model credentials to the source-only command.
+- Treat the assessment as advisory; require recorded human approval before selecting or dispatching
+  any modernization slice.
 - Transfer JSON/Markdown evidence through the customer's approved channel.
 - Apply the customer's retention and deletion policy to source and generated output.
 

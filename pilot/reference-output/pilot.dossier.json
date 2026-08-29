@@ -1,5 +1,6 @@
 {
-  "analysis_sha256": "9b241d8ac6dc2d84fbe39352874b5a5a2216aa94ada4525ce67bbbaeb29d4b8e",
+  "analysis_sha256": "cc60a7dd92660c477b4799dfad88acd742c4500c6f0ed684cb9b4608f6ea55fb",
+  "assessment_sha256": "e4c65a431fdb40d05e2879ef8dfc661129104efdf7f1e382f0b1360421233a20",
   "capabilities": [
     {
       "development_ready": true,
@@ -56,21 +57,21 @@
       "technology": "Db2/Data"
     }
   ],
-  "claim_unlocked": "LIGHTYEAR can produce a governed, customer-specific static estate analysis from approved source and prepare subsequent authorized mainframe evidence collection.",
+  "claim_unlocked": "LIGHTYEAR can produce a governed, customer-specific static estate analysis, partition it into explainable connected application slices, and prepare an evidence-first modernization plan.",
   "claims_prohibited": [
     "LIGHTYEAR is production-ready.",
     "LIGHTYEAR has completed a live modernization.",
     "A model is qualified for autonomous modernization.",
     "Offline rehearsal proves customer Db2 CDC or cutover."
   ],
-  "compatibility_policy_sha256": "47c006abf1efad62eb3a79ea938975263d8cef505cfd6db77b1c2f1829912f0d",
-  "content_sha256": "0a0a4dcea49d96ee4578750b740c4a00f24954ebb4434b18c8cc78dce34936b0",
+  "compatibility_policy_sha256": "8350b4f0b8e8cfcf64427715cd749c696e6420fc6e955ffc37580833e5b41922",
+  "content_sha256": "69ccf5da08daa188e7999f2f907e1c51cdb05ad0eed4a491b48f390b66408b2f",
   "dossier_type": "lightyear-source-only-pilot-dossier",
   "estate": {
     "analysis_scope": "bounded-source-static-analysis",
-    "analysis_sha256": "9b241d8ac6dc2d84fbe39352874b5a5a2216aa94ada4525ce67bbbaeb29d4b8e",
-    "graph_id": "lightyear:pilot-estate:cc7a761dde0db8b5312ac7a1",
-    "graph_sha256": "47341d624048703108dc36c5c6685471fe22e75a551fd9e501b7e806cbd06765",
+    "analysis_sha256": "cc60a7dd92660c477b4799dfad88acd742c4500c6f0ed684cb9b4608f6ea55fb",
+    "graph_id": "lightyear:pilot-estate:e7d13304a0677067e139b0ce",
+    "graph_sha256": "04b0f8752eecc88373343b5ca865e2dcd790fbd55e9072db13bdf89979637d4c",
     "kind": "customer-source-analysis",
     "nodes": 52,
     "reference_composite_sha256": "9d30cde525f36ffd96b5ebfca3239d210a9967ba27153c9ff8871435b3f09d30",
@@ -80,14 +81,22 @@
   },
   "evidence_artifacts": [
     {
-      "bytes": 1155,
-      "content_sha256": "71af9bba3325c57b1fa947a4a4b71c8a9b57593b4382b752fe58dcaea33cb5e2",
+      "bytes": 1355,
+      "content_sha256": "346e67d8e44ad46a262e001552aa35e13788a65a295661e25b0bee48c2644dce",
       "id": "pilot-runtime",
       "mainframe_equivalent": false,
       "path": "pilot/runtime-manifest.json",
       "production_ready": false,
       "role": "runtime-dependency-contract",
-      "sha256": "735771b186974639ba367778a64fe294af134b34f8f6249d62d551a10b019856"
+      "sha256": "50422731bfc7d5dd5a4bfdbbd52ce987e46dbb7fd030d5cfb1efa6fb099da1dc"
+    },
+    {
+      "bytes": 3849,
+      "content_sha256": "fe7da4aa0a9ed853086fbfccbab0de16571f9ac5942d0e48fbfce290c9d3efd6",
+      "id": "estate-assessment-policy",
+      "path": "pilot/assessment-policy.json",
+      "role": "advisory-modernization-planning-contract",
+      "sha256": "a60489ddfc849e3e3e41d9d7e84bcd94b4ef9e4195153caaf86c2efe477af938"
     },
     {
       "bytes": 3728,
@@ -242,17 +251,52 @@
       "status": "blocked"
     }
   ],
-  "intake_sha256": "cc7a761dde0db8b5312ac7a136cfc2435ec65d2cd751885bfbcccdbce040f4ea",
+  "intake_sha256": "e7d13304a0677067e139b0ceafc9483ea7c56c02f906cbf1b74f57892dd1b3ef",
   "limitations": [
     "All original-system execution and signed live-equivalence gates remain blocked.",
     "Customer-specific estate results are bounded static analysis; unresolved references remain visible.",
+    "Planning waves are advisory and cannot infer business priority, authorize execution, or dispatch factory work.",
     "Development readiness applies only to explicitly bounded proof cells and supported subsets.",
     "The pilot dossier retains hashes and bounded summaries, not customer credentials or raw runtime responses."
   ],
   "mainframe_equivalent": false,
-  "pilot_id": "lightyear-carddemo-source-only-v0.30",
+  "modernization_plan": {
+    "assessment_sha256": "e4c65a431fdb40d05e2879ef8dfc661129104efdf7f1e382f0b1360421233a20",
+    "automatic_factory_dispatch": false,
+    "business_priority_inferred": false,
+    "clusters": 4,
+    "clusters_with_unresolved_references": 2,
+    "human_decision_required": true,
+    "planning_waves": [
+      {
+        "cluster_count": 2,
+        "name": "boundary-closure",
+        "status": "advisory",
+        "wave": 0
+      },
+      {
+        "cluster_count": 4,
+        "name": "human-pilot-selection",
+        "status": "advisory",
+        "wave": 1
+      },
+      {
+        "cluster_count": 4,
+        "name": "development-proof",
+        "status": "advisory",
+        "wave": 2
+      },
+      {
+        "cluster_count": 4,
+        "name": "authorized-native-validation",
+        "status": "blocked",
+        "wave": 3
+      }
+    ]
+  },
+  "pilot_id": "lightyear-carddemo-source-only-v0.31",
   "pilot_ready": true,
-  "preflight_sha256": "474441da22f11aa2ae42b5eaa326e2092fe8c70e35f6080617538542912a9d16",
+  "preflight_sha256": "4d8745d1997280dd6aee0cdd73a70e868c59403c9b20b72c1976e7a538f145c6",
   "production_ready": false,
   "proofs": {
     "collection_appliance": {
@@ -278,12 +322,13 @@
     "composite_estate_passed": true,
     "customer_source_analysis_valid": true,
     "development_capabilities_visible": true,
+    "estate_assessment_valid": true,
     "intake_valid": true,
     "live_equivalence_not_overclaimed": true,
     "migration_rehearsal_passed": true,
     "model_qualification_not_overclaimed": true,
     "preflight_valid": true
   },
-  "release": "0.30.0",
-  "schema_version": "2.0"
+  "release": "0.31.0",
+  "schema_version": "3.0"
 }

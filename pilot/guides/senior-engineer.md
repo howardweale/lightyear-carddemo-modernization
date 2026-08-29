@@ -2,19 +2,26 @@
 
 ## Release composition
 
-The pilot layer is intentionally an assembler, not a second modernization engine:
+The pilot layer is a bounded customer analysis workcell, not a second modernization engine:
 
 ```text
 approved source -> content-addressed intake
+intake + source -> customer-specific typed graph + analysis receipt
 existing receipts -> raw-byte evidence registry
 capability gates + appliance -> live-evidence preflight
-all three -> JSON/Markdown pilot dossier
+all four -> JSON/Markdown pilot dossier v2
 ```
 
-`pilot/pilot.profile.json` fixes intake bounds, supported file classes, required reference classes,
-and the exact evidence registry. `pilot/compatibility.policy.json` freezes the v1 contract family
-for the 0.29.x pilot line. The generated dossier binds both policies plus every evidence file by
-raw SHA-256.
+`pilot/pilot.profile.json` fixes intake and graph bounds, supported file classes, the relationship
+ontology, and the exact evidence registry. `pilot/compatibility.policy.json` preserves v1 intake,
+preflight, and analysis contracts while introducing the customer-bound v2 dossier for the 0.30.x
+pilot line. The generated dossier binds the dynamic customer analysis plus every release evidence
+file by raw SHA-256.
+
+The bounded ontology includes program calls and scheduling, Db2 SQL/data lineage, HLASM
+instructions and branch targets, IMS DBD/segment/field plus PSB/PCB sensitivity relationships, and
+VSAM cluster/component/alternate-index/path topology. These are static relationships only; macro
+expansion, IMS runtime access, VSAM catalog state, and native execution remain outside this claim.
 
 ## Adding a supported source fixture
 
@@ -30,10 +37,10 @@ parsing, modernization behavior, and runtime equivalence are separate contracts.
 
 ## Compatibility rules
 
-The 0.29.x line accepts only the v1 intake, preflight, and dossier schemas. A foreign major version,
-stale content identity, unknown required field, or attempted promotion of live/production posture
-must fail. A future v2 migration must preserve prior content identities as evidence and rerun all
-validation; it must not rewrite historical receipts in place.
+The 0.30.x line accepts v1 intake, preflight, and customer-analysis receipts plus the v2 dossier.
+The historical v1 dossier schema remains committed for independent verification. A foreign major
+version, stale content identity, unknown required field, or attempted promotion of live/production
+posture must fail; historical receipts must never be rewritten in place.
 
 ## Authority boundary
 

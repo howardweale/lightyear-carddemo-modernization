@@ -2,9 +2,11 @@
 
 ## What you are running
 
-The source-only pilot reads an approved folder of source text and produces an inventory plus an
-evidence dossier. It never logs into a mainframe, compiles the original programs, changes source,
-or claims that the modernized candidates are production-equivalent.
+The source-only pilot reads an approved folder of source text and produces an inventory, a map of
+the customer's programs, batch jobs, databases, files, and dependencies, and an evidence dossier.
+That includes bounded COBOL, PL/I, JCL, Db2, HLASM/Assembler, IMS, VSAM, and approved configuration
+analysis. It never logs into a mainframe,
+compiles the original programs, changes source, or claims production equivalence.
 
 ## Five-minute path
 
@@ -12,7 +14,7 @@ or claims that the modernized candidates are production-equivalent.
 2. From the repository root, run `./source-only-pilot.sh doctor`.
 3. Run `./source-only-pilot.sh rehearse` to process the safe reference intake.
 4. Open `work/source-only-pilot/pilot.dossier.md`.
-5. Run `./lightyear.sh explorer` to inspect the composite graph in a browser.
+5. Inspect `work/source-only-pilot/source-analysis.receipt.json` for coverage and unresolved links.
 
 The dossier should say:
 
@@ -32,6 +34,7 @@ customer records, or runtime output. Then run:
 
 ```bash
 ./source-only-pilot.sh intake /approved/source APPROVAL-ID work/customer-pilot
+./source-only-pilot.sh analyze /approved/source work/customer-pilot
 ./source-only-pilot.sh preflight work/customer-pilot
 ./source-only-pilot.sh dossier work/customer-pilot
 ```

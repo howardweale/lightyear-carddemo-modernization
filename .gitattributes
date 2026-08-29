@@ -31,4 +31,10 @@
 *.cop text eol=lf
 *.jcl text eol=lf
 *.proc text eol=lf
+*.asm text eol=lf
+*.mac text eol=lf
+*.dbd text eol=lf
+*.psb text eol=lf
+*.ctl text eol=lf
+*.idcams text eol=lf
 *.txt text eol=lf

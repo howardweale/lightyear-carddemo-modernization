@@ -5,7 +5,7 @@
     "enterprise_mechanism_ready": true,
     "live_observed": false
   },
-  "content_sha256": "6cb415e1ba7a4000f929fddfc0c97c8985faba28e2b34653651677271fd948af",
+  "content_sha256": "474441da22f11aa2ae42b5eaa326e2092fe8c70e35f6080617538542912a9d16",
   "gates": {
     "6_authorized_original_execution": "blocked",
     "7_independent_comparison": "mechanism_ready",
@@ -19,13 +19,13 @@
     "approved test data, retention, redaction and evidence export policy",
     "approved execution, rollback, recovery and incident runbooks"
   ],
-  "intake_sha256": "ceca09b2f0f3b53bdd48d3dd172f90ef4848a7525990aef0d9f9bb2640def427",
+  "intake_sha256": "cc7a761dde0db8b5312ac7a136cfc2435ec65d2cd751885bfbcccdbce040f4ea",
   "limitations": [
     "Preflight describes prerequisites; it is not an authorization or live observation.",
     "The collection appliance cannot promote source-only or simulated evidence to equivalence."
   ],
   "mainframe_equivalent": false,
-  "pilot_id": "lightyear-carddemo-source-only-v0.29",
+  "pilot_id": "lightyear-carddemo-source-only-v0.30",
   "preflight_type": "lightyear-mainframe-evidence-preflight",
   "production_ready": false,
   "ready_for_authorized_onboarding": true,

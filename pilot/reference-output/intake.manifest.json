@@ -5,7 +5,7 @@
     "customer_data_allowed": false,
     "runtime_credentials_allowed": false
   },
-  "content_sha256": "ceca09b2f0f3b53bdd48d3dd172f90ef4848a7525990aef0d9f9bb2640def427",
+  "content_sha256": "cc7a761dde0db8b5312ac7a136cfc2435ec65d2cd751885bfbcccdbce040f4ea",
   "files": [
     {
       "bytes": 344,
@@ -40,12 +40,36 @@
       "raw_sha256": "0d675c6d7ed8f95fbd01c8f412893215f42acecd5a126bbb4776a30c28f9d72b"
     },
     {
-      "bytes": 203,
-      "kind": "jcl",
+      "bytes": 240,
+      "kind": "hlasm",
+      "lines": 12,
+      "logical_sha256": "28cd9f3e73402195cfe3130d5dae0f893a42eb2a996952aa6a7f4bfcc052cff3",
+      "path": "hlasm/DATEFMT.asm",
+      "raw_sha256": "28cd9f3e73402195cfe3130d5dae0f893a42eb2a996952aa6a7f4bfcc052cff3"
+    },
+    {
+      "bytes": 322,
+      "kind": "ims",
+      "lines": 9,
+      "logical_sha256": "fb7f702f14b3da401ff1a90656617906279b511a69f13c676bba299656d2d0b3",
+      "path": "ims/AUTHDB.dbd",
+      "raw_sha256": "fb7f702f14b3da401ff1a90656617906279b511a69f13c676bba299656d2d0b3"
+    },
+    {
+      "bytes": 189,
+      "kind": "ims",
       "lines": 5,
-      "logical_sha256": "61d2b6cab4590fcbf4110d105f92274f2f34ef74911c12a57fad9d5f0c784946",
+      "logical_sha256": "3f5cab60b30f9aa9a381004fe255598f1bfdfa28441772e5a63d7024897ff5ad",
+      "path": "ims/AUTHPSB.psb",
+      "raw_sha256": "3f5cab60b30f9aa9a381004fe255598f1bfdfa28441772e5a63d7024897ff5ad"
+    },
+    {
+      "bytes": 254,
+      "kind": "jcl",
+      "lines": 7,
+      "logical_sha256": "428bcd45c06d811348f812aee29caef2b448295ffb22200e4461ff00812b727a",
       "path": "jcl/ACCTPIL.jcl",
-      "raw_sha256": "61d2b6cab4590fcbf4110d105f92274f2f34ef74911c12a57fad9d5f0c784946"
+      "raw_sha256": "428bcd45c06d811348f812aee29caef2b448295ffb22200e4461ff00812b727a"
     },
     {
       "bytes": 211,
@@ -54,6 +78,14 @@
       "logical_sha256": "b57173bbe88dbde4f26ead75ad045e68331e2a8ced5f9bb3c8b660be2b1a2701",
       "path": "pli/ACCTPL1.pli",
       "raw_sha256": "b57173bbe88dbde4f26ead75ad045e68331e2a8ced5f9bb3c8b660be2b1a2701"
+    },
+    {
+      "bytes": 328,
+      "kind": "vsam",
+      "lines": 8,
+      "logical_sha256": "0845c3b226a74d40206c54b165f3e07fd737facf9e83a739651c5adbabef4103",
+      "path": "vsam/AUTHCAT.ctl",
+      "raw_sha256": "0845c3b226a74d40206c54b165f3e07fd737facf9e83a739651c5adbabef4103"
     }
   ],
   "limitations": [
@@ -61,8 +93,8 @@
     "No customer data, credentials, binaries, dumps, or live-system observations are accepted."
   ],
   "manifest_type": "lightyear-source-only-pilot-intake",
-  "pilot_id": "lightyear-carddemo-source-only-v0.29",
-  "profile_sha256": "d40d5fa9c21e0550609e55136c38f8bdfe94db4e0731feac03d364ce99927b3a",
+  "pilot_id": "lightyear-carddemo-source-only-v0.30",
+  "profile_sha256": "6915e97cd689948a1581fa5e9c06c9d440f32b9d357b4c6a40b5d3d766ebc0fb",
   "schema_version": "1.0",
   "scope": {
     "live_system_contact": false,
@@ -70,17 +102,20 @@
     "source_only": true
   },
   "source_label": "CardDemo bounded reference intake",
-  "source_tree_sha256": "2700e85e972c85fa1cfda21b4c415897f5c21e5981d6d2595283cf6230883fb4",
+  "source_tree_sha256": "7ca7b0477e5eb07903b85a2dca91e2efc4317ce5931a9d7f9eee3393733ed224",
   "statistics": {
     "by_kind": {
       "cobol": 1,
       "copybook": 1,
       "db2-ddl": 1,
+      "hlasm": 1,
+      "ims": 2,
       "jcl": 1,
       "pli": 1,
-      "system-configuration": 1
+      "system-configuration": 1,
+      "vsam": 1
     },
-    "bytes": 1359,
-    "files": 6
+    "bytes": 2489,
+    "files": 10
   }
 }

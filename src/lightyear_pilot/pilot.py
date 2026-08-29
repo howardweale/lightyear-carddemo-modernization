@@ -9,8 +9,11 @@ from typing import Any, Iterable, Mapping
 
 from lightyear_common.io import normalize_logical_source
 
+from .analysis import ANALYSIS_SCHEMA_VERSION, ANALYSIS_TYPE, validate_source_analysis
+
 
 SCHEMA_VERSION = "1.0"
+DOSSIER_SCHEMA_VERSION = "2.0"
 INTAKE_TYPE = "lightyear-source-only-pilot-intake"
 PREFLIGHT_TYPE = "lightyear-mainframe-evidence-preflight"
 DOSSIER_TYPE = "lightyear-source-only-pilot-dossier"
@@ -59,6 +62,18 @@ def _profile_intake(profile: Mapping[str, Any]) -> Mapping[str, Any]:
     intake = profile.get("intake")
     if not isinstance(intake, dict):
         raise PilotError("pilot-profile-intake-missing")
+    analysis = profile.get("analysis")
+    if (
+        not isinstance(analysis, dict)
+        or analysis.get("mode") != "bounded-source-static-analysis"
+        or analysis.get("relationship_ontology") != "pilot/analysis-relationships.json"
+        or not _SHA256.fullmatch(str(analysis.get("relationship_ontology_sha256", "")))
+        or not 1 <= int(analysis.get("max_nodes", 0)) <= 1_000_000
+        or not 1 <= int(analysis.get("max_edges", 0)) <= 5_000_000
+        or analysis.get("raw_source_in_graph") is not False
+        or analysis.get("behavior_claims_allowed") is not False
+    ):
+        raise PilotError("pilot-profile-analysis-policy-invalid")
     artifacts = profile.get("evidence_artifacts")
     if not isinstance(artifacts, list) or not artifacts:
         raise PilotError("pilot-profile-evidence-registry-missing")
@@ -413,6 +428,8 @@ def build_dossier(
     project_root: Path,
     intake: Mapping[str, Any],
     preflight: Mapping[str, Any],
+    analysis: Mapping[str, Any],
+    analysis_graph: Mapping[str, Any],
     profile: Mapping[str, Any],
     compatibility: Mapping[str, Any],
 ) -> dict[str, Any]:
@@ -426,6 +443,15 @@ def build_dossier(
     composite = load_json(project_root / "knowledge/composite/estate.receipt.json")
     appliance = load_json(project_root / "extensions/adapters/appliance/appliance.receipt.json")
     rehearsal = load_json(project_root / "data-modernization/rehearsal/receipt.json")
+    analysis_errors = validate_source_analysis(
+        analysis_graph,
+        analysis,
+        intake,
+        profile,
+        project_root / "pilot/analysis-relationships.json",
+    )
+    if analysis_errors:
+        raise PilotError(analysis_errors[0])
 
     capabilities = [
         {
@@ -445,6 +471,7 @@ def build_dossier(
     readiness_checks = {
         "intake_valid": not validate_intake_manifest(intake, profile),
         "preflight_valid": not validate_preflight(preflight, intake),
+        "customer_source_analysis_valid": not analysis_errors,
         "compatibility_policy_valid": not compatibility_errors,
         "all_evidence_present": len(artifacts) == len(profile.get("evidence_artifacts", [])),
         "composite_estate_passed": (
@@ -459,19 +486,25 @@ def build_dossier(
         "live_equivalence_not_overclaimed": all(item.get("mainframe_equivalent") is False for item in capabilities),
     }
     payload: dict[str, Any] = {
-        "schema_version": SCHEMA_VERSION,
+        "schema_version": DOSSIER_SCHEMA_VERSION,
         "dossier_type": DOSSIER_TYPE,
         "pilot_id": str(profile["pilot_id"]),
         "release": str(profile["release"]),
         "intake_sha256": str(intake["content_sha256"]),
         "preflight_sha256": str(preflight["content_sha256"]),
+        "analysis_sha256": str(analysis["content_sha256"]),
         "compatibility_policy_sha256": str(compatibility["content_sha256"]),
         "estate": {
-            "graph_id": composite.get("composite_graph_id"),
-            "composite_sha256": composite.get("content_sha256"),
-            "nodes": composite.get("statistics", {}).get("node_count"),
-            "relationships": composite.get("statistics", {}).get("edge_count"),
+            "kind": "customer-source-analysis",
+            "graph_id": analysis.get("graph_id"),
+            "graph_sha256": analysis.get("graph_content_sha256"),
+            "analysis_sha256": analysis.get("content_sha256"),
+            "nodes": analysis.get("statistics", {}).get("node_count"),
+            "relationships": analysis.get("statistics", {}).get("edge_count"),
             "source_files": intake.get("statistics", {}).get("files"),
+            "unresolved_references": analysis.get("unresolved_reference_count"),
+            "analysis_scope": analysis.get("analysis_scope"),
+            "reference_composite_sha256": composite.get("content_sha256"),
         },
         "capabilities": capabilities,
         "proofs": {
@@ -496,7 +529,7 @@ def build_dossier(
         "pilot_ready": all(readiness_checks.values()),
         "mainframe_equivalent": False,
         "production_ready": False,
-        "claim_unlocked": "LIGHTYEAR is ready for a governed source-only pilot and subsequent authorized mainframe evidence collection.",
+        "claim_unlocked": "LIGHTYEAR can produce a governed, customer-specific static estate analysis from approved source and prepare subsequent authorized mainframe evidence collection.",
         "claims_prohibited": [
             "LIGHTYEAR is production-ready.",
             "LIGHTYEAR has completed a live modernization.",
@@ -505,6 +538,7 @@ def build_dossier(
         ],
         "limitations": [
             "All original-system execution and signed live-equivalence gates remain blocked.",
+            "Customer-specific estate results are bounded static analysis; unresolved references remain visible.",
             "Development readiness applies only to explicitly bounded proof cells and supported subsets.",
             "The pilot dossier retains hashes and bounded summaries, not customer credentials or raw runtime responses.",
         ],
@@ -519,13 +553,15 @@ def validate_dossier(
     dossier: Mapping[str, Any],
     intake: Mapping[str, Any],
     preflight: Mapping[str, Any],
+    analysis: Mapping[str, Any],
+    analysis_graph: Mapping[str, Any],
     project_root: Path | None = None,
     profile: Mapping[str, Any] | None = None,
 ) -> list[str]:
     errors: list[str] = []
-    if dossier.get("schema_version") != SCHEMA_VERSION or dossier.get("dossier_type") != DOSSIER_TYPE:
+    if dossier.get("schema_version") != DOSSIER_SCHEMA_VERSION or dossier.get("dossier_type") != DOSSIER_TYPE:
         errors.append("dossier-contract-identity-invalid")
-    if dossier.get("intake_sha256") != intake.get("content_sha256") or dossier.get("preflight_sha256") != preflight.get("content_sha256"):
+    if dossier.get("intake_sha256") != intake.get("content_sha256") or dossier.get("preflight_sha256") != preflight.get("content_sha256") or dossier.get("analysis_sha256") != analysis.get("content_sha256"):
         errors.append("dossier-input-binding-invalid")
     if dossier.get("content_sha256") != canonical_hash(dossier, {"content_sha256"}):
         errors.append("dossier-content-hash-invalid")
@@ -536,6 +572,16 @@ def validate_dossier(
         errors.append("dossier-pilot-readiness-invalid")
     if dossier.get("mainframe_equivalent") is not False or dossier.get("production_ready") is not False:
         errors.append("dossier-overclaims-live-readiness")
+    if profile is not None and project_root is not None:
+        analysis_errors = validate_source_analysis(
+            analysis_graph,
+            analysis,
+            intake,
+            profile,
+            project_root / "pilot/analysis-relationships.json",
+        )
+        if analysis_errors:
+            errors.append(f"dossier-analysis-invalid:{analysis_errors[0]}")
     proofs = dossier.get("proofs")
     if not isinstance(proofs, dict) or proofs.get("model_qualification", {}).get("qualified") is not False:
         errors.append("dossier-overclaims-model-qualification")
@@ -573,8 +619,13 @@ def validate_compatibility_policy(policy: Mapping[str, Any]) -> list[str]:
     if not isinstance(rules, dict) or rules.get("same_major_schema_versions") is not True or rules.get("reject_unknown_required_fields") is not True or rules.get("preserve_content_identities_on_upgrade") is not True:
         errors.append("compatibility-policy-rules-incomplete")
     formats = policy.get("formats")
-    required = {INTAKE_TYPE, PREFLIGHT_TYPE, DOSSIER_TYPE}
-    if not isinstance(formats, dict) or set(formats) != required or any(value != [SCHEMA_VERSION] for value in formats.values()):
+    expected_formats = {
+        INTAKE_TYPE: [SCHEMA_VERSION],
+        PREFLIGHT_TYPE: [SCHEMA_VERSION],
+        ANALYSIS_TYPE: [ANALYSIS_SCHEMA_VERSION],
+        DOSSIER_TYPE: [DOSSIER_SCHEMA_VERSION],
+    }
+    if formats != expected_formats:
         errors.append("compatibility-policy-format-matrix-invalid")
     if policy.get("production_ready") is not False:
         errors.append("compatibility-policy-overclaims-production-readiness")
@@ -587,14 +638,14 @@ def render_dossier_markdown(dossier: Mapping[str, Any]) -> str:
     rows = [
         "# LIGHTYEAR source-only pilot dossier",
         "",
-        f"**Release:** {dossier['release']}  ",
-        f"**Pilot:** `{dossier['pilot_id']}`  ",
+        f"**Release:** {dossier['release']}",
+        f"**Pilot:** `{dossier['pilot_id']}`",
         f"**Dossier identity:** `{dossier['content_sha256']}`",
         "",
         "## Executive result",
         "",
         "The governed source-only pilot is ready. This result proves deterministic offline intake,",
-        "evidence assembly, verification, and mainframe-onboarding preflight. It does not prove live",
+        "customer-specific static estate analysis, evidence assembly, and mainframe-onboarding preflight. It does not prove live",
         "mainframe equivalence or production readiness.",
         "",
         "| Posture | Result |",
@@ -606,8 +657,8 @@ def render_dossier_markdown(dossier: Mapping[str, Any]) -> str:
         "",
         "## Estate summary",
         "",
-        f"The composite estate binds **{estate['nodes']} nodes** and **{estate['relationships']} relationships**",
-        f"to **{estate['source_files']} approved source files** in this reference intake.",
+        f"The customer-specific estate binds **{estate['nodes']} nodes** and **{estate['relationships']} relationships**",
+        f"to **{estate['source_files']} approved source files**, with **{estate['unresolved_references']} unresolved references** retained for review.",
         "",
         "## Capability gates",
         "",
@@ -625,7 +676,7 @@ def render_dossier_markdown(dossier: Mapping[str, Any]) -> str:
             "",
             "## Model and migration posture",
             "",
-            f"Model qualification requires **{proofs['model_qualification']['required_independently_sealed_evaluations']}** ",
+            f"Model qualification requires **{proofs['model_qualification']['required_independently_sealed_evaluations']}**",
             "independently sealed evaluations plus an approved successful portfolio run. None are",
             "committed as current qualifying evidence, so no model is declared qualified.",
             "",

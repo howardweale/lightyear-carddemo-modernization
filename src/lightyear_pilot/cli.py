@@ -8,6 +8,13 @@ import tempfile
 from pathlib import Path
 
 from lightyear_common.io import write_json, write_text
+from lightyear_knowledge_graph.model import load_graph
+
+from .analysis import (
+    build_source_analysis,
+    validate_source_analysis,
+    write_analysis_graph,
+)
 
 from .pilot import (
     PilotError,
@@ -51,9 +58,17 @@ def build_parser() -> argparse.ArgumentParser:
     preflight.add_argument("--intake", type=Path, required=True)
     preflight.add_argument("--output", type=Path, required=True)
 
+    analyze = subparsers.add_parser("analyze", help="Build a customer-specific typed source estate")
+    analyze.add_argument("--source-root", type=Path, required=True)
+    analyze.add_argument("--intake", type=Path, required=True)
+    analyze.add_argument("--output-graph", type=Path, required=True)
+    analyze.add_argument("--output-receipt", type=Path, required=True)
+
     dossier = subparsers.add_parser("dossier", help="Build the evidence-bound offline pilot dossier")
     dossier.add_argument("--intake", type=Path, required=True)
     dossier.add_argument("--preflight", type=Path, required=True)
+    dossier.add_argument("--analysis", type=Path, required=True)
+    dossier.add_argument("--analysis-graph", type=Path, required=True)
     dossier.add_argument("--output-json", type=Path, required=True)
     dossier.add_argument("--output-md", type=Path, required=True)
 
@@ -79,16 +94,49 @@ def _rehearse(project_root: Path, source_root: Path, output_root: Path, approval
     errors = validate_intake_manifest(intake, profile, source_root)
     if errors:
         raise PilotError(errors[0])
+    analysis_graph, analysis = build_source_analysis(
+        source_root,
+        intake,
+        profile,
+        project_root / "pilot/analysis-relationships.json",
+    )
+    errors = validate_source_analysis(
+        analysis_graph,
+        analysis,
+        intake,
+        profile,
+        project_root / "pilot/analysis-relationships.json",
+    )
+    if errors:
+        raise PilotError(errors[0])
     preflight = build_preflight(project_root, intake, profile)
     errors = validate_preflight(preflight, intake)
     if errors:
         raise PilotError(errors[0])
-    dossier = build_dossier(project_root, intake, preflight, profile, compatibility)
-    errors = validate_dossier(dossier, intake, preflight, project_root, profile)
+    dossier = build_dossier(
+        project_root,
+        intake,
+        preflight,
+        analysis,
+        analysis_graph,
+        profile,
+        compatibility,
+    )
+    errors = validate_dossier(
+        dossier,
+        intake,
+        preflight,
+        analysis,
+        analysis_graph,
+        project_root,
+        profile,
+    )
     if errors:
         raise PilotError(errors[0])
     output_root.mkdir(parents=True, exist_ok=True)
     write_json(output_root / "intake.manifest.json", intake)
+    write_analysis_graph(analysis_graph, output_root / "source-estate.snapshot.json.gz")
+    write_json(output_root / "source-analysis.receipt.json", analysis)
     write_json(output_root / "mainframe.preflight.json", preflight)
     write_json(output_root / "pilot.dossier.json", dossier)
     write_text(output_root / "pilot.dossier.md", render_dossier_markdown(dossier))
@@ -138,11 +186,52 @@ def main(argv: list[str] | None = None) -> int:
             payload = build_preflight(project_root, intake, profile)
             write_json(args.output, payload)
             print(payload["content_sha256"])
+        elif args.command == "analyze":
+            intake = load_json(args.intake)
+            errors = validate_intake_manifest(intake, profile, args.source_root.resolve())
+            if errors:
+                raise PilotError(errors[0])
+            graph, payload = build_source_analysis(
+                args.source_root.resolve(),
+                intake,
+                profile,
+                project_root / "pilot/analysis-relationships.json",
+            )
+            errors = validate_source_analysis(
+                graph,
+                payload,
+                intake,
+                profile,
+                project_root / "pilot/analysis-relationships.json",
+            )
+            if errors:
+                raise PilotError(errors[0])
+            write_analysis_graph(graph, args.output_graph)
+            write_json(args.output_receipt, payload)
+            print(payload["content_sha256"])
         elif args.command == "dossier":
             intake = load_json(args.intake)
             preflight = load_json(args.preflight)
-            payload = build_dossier(project_root, intake, preflight, profile, compatibility)
-            errors = validate_dossier(payload, intake, preflight, project_root, profile)
+            analysis = load_json(args.analysis)
+            analysis_graph = load_graph(args.analysis_graph)
+            payload = build_dossier(
+                project_root,
+                intake,
+                preflight,
+                analysis,
+                analysis_graph,
+                profile,
+                compatibility,
+            )
+            errors = validate_dossier(
+                payload,
+                intake,
+                preflight,
+                analysis,
+                analysis_graph,
+                project_root,
+                profile,
+            )
             if errors:
                 raise PilotError(errors[0])
             write_json(args.output_json, payload)
@@ -156,7 +245,14 @@ def main(argv: list[str] | None = None) -> int:
             with tempfile.TemporaryDirectory() as directory:
                 output = Path(directory)
                 payload = _rehearse(project_root, paths["source"], output, "repository-reference-fixture", "CardDemo bounded reference intake")
-                for name in ("intake.manifest.json", "mainframe.preflight.json", "pilot.dossier.json", "pilot.dossier.md"):
+                for name in (
+                    "intake.manifest.json",
+                    "source-estate.snapshot.json.gz",
+                    "source-analysis.receipt.json",
+                    "mainframe.preflight.json",
+                    "pilot.dossier.json",
+                    "pilot.dossier.md",
+                ):
                     if (output / name).read_bytes() != (paths["canonical"] / name).read_bytes():
                         raise PilotError(f"committed-pilot-evidence-drift:{name}")
             print(json.dumps({"status": "passed", "pilot_ready": payload["pilot_ready"], "mainframe_equivalent": False, "production_ready": False}, sort_keys=True))

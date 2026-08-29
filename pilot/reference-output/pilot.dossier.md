@@ -1,13 +1,13 @@
 # LIGHTYEAR source-only pilot dossier
 
-**Release:** 0.29.0  
-**Pilot:** `lightyear-carddemo-source-only-v0.29`  
-**Dossier identity:** `ea73de024e470835320557f88c67140427087424c01937bdf42e40606b500527`
+**Release:** 0.30.0
+**Pilot:** `lightyear-carddemo-source-only-v0.30`
+**Dossier identity:** `0a0a4dcea49d96ee4578750b740c4a00f24954ebb4434b18c8cc78dce34936b0`
 
 ## Executive result
 
 The governed source-only pilot is ready. This result proves deterministic offline intake,
-evidence assembly, verification, and mainframe-onboarding preflight. It does not prove live
+customer-specific static estate analysis, evidence assembly, and mainframe-onboarding preflight. It does not prove live
 mainframe equivalence or production readiness.
 
 | Posture | Result |
@@ -19,8 +19,8 @@ mainframe equivalence or production readiness.
 
 ## Estate summary
 
-The composite estate binds **11328 nodes** and **13470 relationships**
-to **6 approved source files** in this reference intake.
+The customer-specific estate binds **52 nodes** and **58 relationships**
+to **10 approved source files**, with **2 unresolved references** retained for review.
 
 ## Capability gates
 
@@ -35,7 +35,7 @@ to **6 approved source files** in this reference intake.
 
 ## Model and migration posture
 
-Model qualification requires **8** 
+Model qualification requires **8**
 independently sealed evaluations plus an approved successful portfolio run. None are
 committed as current qualifying evidence, so no model is declared qualified.
 
@@ -46,7 +46,7 @@ Db2 log or production cutover authorization was observed.
 
 | Role | Artifact | SHA-256 |
 |---|---|---|
-| runtime-dependency-contract | `pilot/runtime-manifest.json` | `1c489854facbffc3e649c520682fb71e29eece3ac5ab16ff4cfcb64d7c1a0ff9` |
+| runtime-dependency-contract | `pilot/runtime-manifest.json` | `735771b186974639ba367778a64fe294af134b34f8f6249d62d551a10b019856` |
 | estate-discovery | `knowledge/graph.receipt.json` | `f12ee5dee079a2e612f4875df75020dac12eb2f52f7d5f8698fbddf9f44cc3fc` |
 | composite-lineage | `knowledge/composite/estate.receipt.json` | `629c3078e42d6d5dc7d0b23ea1a3d72f86077d97df562d08b115ed4e8a75f262` |
 | capability-gates | `knowledge/capabilities/mainframe-readiness.json` | `caa3249f5b299bbe9cf19dfca3d5d8f15c1da62bf1f58414f6a1fd233aa42dc2` |
@@ -73,5 +73,6 @@ Db2 log or production cutover authorization was observed.
 ## Limitations
 
 - All original-system execution and signed live-equivalence gates remain blocked.
+- Customer-specific estate results are bounded static analysis; unresolved references remain visible.
 - Development readiness applies only to explicitly bounded proof cells and supported subsets.
 - The pilot dossier retains hashes and bounded summaries, not customer credentials or raw runtime responses.

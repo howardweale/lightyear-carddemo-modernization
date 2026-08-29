@@ -1,0 +1,194 @@
+{
+  "analysis_ready": true,
+  "analysis_scope": "bounded-source-static-analysis",
+  "analysis_type": "lightyear-customer-source-analysis",
+  "behavior_proven": false,
+  "content_sha256": "9b241d8ac6dc2d84fbe39352874b5a5a2216aa94ada4525ce67bbbaeb29d4b8e",
+  "coverage": [
+    {
+      "analysis_mode": "bounded-static",
+      "file_kind": "cobol",
+      "files": 1,
+      "typed_files": 1
+    },
+    {
+      "analysis_mode": "typed-declaration",
+      "file_kind": "copybook",
+      "files": 1,
+      "typed_files": 1
+    },
+    {
+      "analysis_mode": "bounded-static",
+      "file_kind": "db2-ddl",
+      "files": 1,
+      "typed_files": 1
+    },
+    {
+      "analysis_mode": "bounded-static",
+      "file_kind": "hlasm",
+      "files": 1,
+      "typed_files": 1
+    },
+    {
+      "analysis_mode": "bounded-static",
+      "file_kind": "ims",
+      "files": 2,
+      "typed_files": 2
+    },
+    {
+      "analysis_mode": "bounded-static",
+      "file_kind": "jcl",
+      "files": 1,
+      "typed_files": 1
+    },
+    {
+      "analysis_mode": "bounded-static",
+      "file_kind": "pli",
+      "files": 1,
+      "typed_files": 1
+    },
+    {
+      "analysis_mode": "typed-json-or-inventory",
+      "file_kind": "system-configuration",
+      "files": 1,
+      "typed_files": 1
+    },
+    {
+      "analysis_mode": "bounded-static",
+      "file_kind": "vsam",
+      "files": 1,
+      "typed_files": 1
+    }
+  ],
+  "declared_entities_by_kind": {
+    "assembler_dsect": 1,
+    "assembler_instruction": 7,
+    "assembler_program": 1,
+    "assembler_symbol": 4,
+    "cics_program_resource": 1,
+    "cics_transaction": 1,
+    "cobol_program": 1,
+    "copybook": 1,
+    "db2_column": 3,
+    "db2_constraint": 1,
+    "db2_index": 1,
+    "db2_sql_statement": 2,
+    "db2_table": 1,
+    "ims_database": 1,
+    "ims_dataset_group": 1,
+    "ims_field": 2,
+    "ims_pcb": 1,
+    "ims_psb": 1,
+    "ims_segment": 2,
+    "jcl_job": 1,
+    "jcl_step": 2,
+    "pli_program": 1,
+    "vsam_alternate_index": 1,
+    "vsam_cluster": 1,
+    "vsam_component": 2,
+    "vsam_path": 1
+  },
+  "graph_content_sha256": "47341d624048703108dc36c5c6685471fe22e75a551fd9e501b7e806cbd06765",
+  "graph_id": "lightyear:pilot-estate:cc7a761dde0db8b5312ac7a1",
+  "graph_schema_version": "1.1",
+  "intake_sha256": "cc7a761dde0db8b5312ac7a136cfc2435ec65d2cd751885bfbcccdbce040f4ea",
+  "limitations": [
+    "Static source analysis does not prove compilation, runtime behavior, or production equivalence.",
+    "Unresolved and ambiguous references remain visible and require customer context or live evidence.",
+    "Configuration formats without a bounded semantic parser remain inventory-only.",
+    "HLASM macro expansion, IMS runtime access, and live VSAM catalog state are not observed by this bounded source parser."
+  ],
+  "live_system_contact": false,
+  "mainframe_equivalent": false,
+  "pilot_id": "lightyear-carddemo-source-only-v0.30",
+  "production_ready": false,
+  "quality_gates": {
+    "all_source_bytes_reverified": true,
+    "analysis_limits_respected": true,
+    "behavior_and_equivalence_not_claimed": true,
+    "every_intake_file_typed": true,
+    "graph_integrity_valid": true,
+    "intake_identity_bound": true,
+    "no_live_system_contact": true,
+    "raw_source_not_embedded": true,
+    "relationship_ontology_bound": true
+  },
+  "relationship_ontology": {
+    "content_sha256": "60ede79efa7acf75aa761dad0d433aca5a34ec6b927b677f51a1bf6fd5d7a0ab",
+    "ontology_id": "lightyear:pilot-source-analysis-relationships",
+    "schema_version": "1.0"
+  },
+  "schema_version": "1.0",
+  "source_tree_sha256": "7ca7b0477e5eb07903b85a2dca91e2efc4317ce5931a9d7f9eee3393733ed224",
+  "statistics": {
+    "edge_count": 58,
+    "edges_by_relation": {
+      "BRANCHES_TO": 2,
+      "CALLS": 1,
+      "CONTAINS": 16,
+      "DECLARES": 15,
+      "EXECUTES": 2,
+      "HAS_COLUMN": 3,
+      "HAS_COMPONENT": 2,
+      "HAS_CONSTRAINT": 1,
+      "HAS_DATASET_GROUP": 1,
+      "HAS_FIELD": 2,
+      "INDEXES": 1,
+      "ISSUES_SQL": 2,
+      "PARENT_OF": 1,
+      "READS_TABLE": 2,
+      "SENSITIVE_TO": 2,
+      "STARTS_PROGRAM": 1,
+      "TARGETS": 2,
+      "USES_COPYBOOK": 1,
+      "USES_DBD": 1
+    },
+    "node_count": 52,
+    "nodes_by_kind": {
+      "assembler_dsect": 1,
+      "assembler_instruction": 7,
+      "assembler_program": 1,
+      "assembler_symbol": 4,
+      "cics_program_resource": 1,
+      "cics_transaction": 1,
+      "cobol_program": 1,
+      "copybook": 1,
+      "db2_column": 3,
+      "db2_constraint": 1,
+      "db2_index": 1,
+      "db2_sql_statement": 2,
+      "db2_table": 1,
+      "ims_database": 1,
+      "ims_dataset_group": 1,
+      "ims_field": 2,
+      "ims_pcb": 1,
+      "ims_psb": 1,
+      "ims_segment": 2,
+      "jcl_job": 1,
+      "jcl_step": 2,
+      "pli_program": 1,
+      "source_file": 10,
+      "vsam_alternate_index": 1,
+      "vsam_cluster": 1,
+      "vsam_component": 2,
+      "vsam_path": 1
+    }
+  },
+  "unresolved_reference_count": 2,
+  "unresolved_references": [
+    {
+      "kind": "cics-program",
+      "line": 1,
+      "name": "COACTVWC",
+      "path": "config/cics-export.json",
+      "reason": "target-not-in-intake"
+    },
+    {
+      "kind": "program-call",
+      "line": 5,
+      "name": "CBACT04C",
+      "path": "pli/ACCTPL1.pli",
+      "reason": "target-not-in-intake"
+    }
+  ]
+}

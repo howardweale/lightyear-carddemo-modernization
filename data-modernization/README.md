@@ -1,5 +1,10 @@
 # Database semantic core and AUTHFRDS proof cell
 
+MS #35 adds an independent stored-logic qualification core. It inventories database-resident and
+application SQL separately and requires live catalog, source, deployment, scheduler, and privilege
+evidence before inventory can be complete. Zero discovered procedures or triggers is not proof of
+absence. The canonical artifact is `stored-logic/authfrds.qualification.json`.
+
 MS #34 applies the semantic core to a progressively gated Oracle-to-PostgreSQL proof. The canonical
 artifact is `oracle-postgresql-proof/authfrds.proof.json`. Its eight gates deliberately distinguish
 development mechanisms, simulations, unresolved policy, and excluded stored logic. A passed proof
@@ -45,6 +50,7 @@ macOS/Linux:
 ./data-modernization.sh live-all
 PYTHONPATH=src python3 -m lightyear_data verify-semantic-core
 PYTHONPATH=src python3 -m lightyear_data verify-oracle-postgresql-proof
+PYTHONPATH=src python3 -m lightyear_data verify-stored-logic-qualification
 ./migration-rehearsal.sh verify /path/to/aws-carddemo
 ```
 

@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.35.0 — 2026-08-30
+
+- Added an independent Oracle-to-PostgreSQL stored-logic qualification core covering procedures,
+  functions, packages, triggers, views, materialized views, and application SQL.
+- Added seven fail-closed gates for inventory completeness, dependency closure, translation,
+  results/side effects, transactions/exceptions, security context, and performance/operability.
+- Inventoried the two bounded AUTHFRDS data-changing application SQL statements and classified both
+  as `policy-decision-required` pending Oracle and PostgreSQL execution evidence.
+- Prevented an empty source-only Oracle object inventory from being treated as proof that no stored
+  logic exists; live catalog, deployment DDL, scheduler, grant, and application-source capture remain
+  mandatory.
+- Bound the MS #34 stored-logic gate to the new content-addressed qualification artifact while
+  keeping inventory, stored-logic completion, database completion, and production readiness false.
+
 ## 0.34.0 — 2026-08-30
 
 - Added the first platform-neutral database path: a deterministic Oracle-to-PostgreSQL proof bound

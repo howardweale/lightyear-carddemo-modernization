@@ -20,6 +20,10 @@ from .postgres import PostgreSQLAdapter, fixture_sql
 from .rehearsal import build_rehearsal_evidence, validate_rehearsal_evidence
 from .validation import validate_assets
 from .semantic_core import validate_compatibility_ledger
+from .stored_logic import (
+    build_stored_logic_qualification,
+    validate_stored_logic_qualification,
+)
 
 
 def parser() -> argparse.ArgumentParser:
@@ -55,6 +59,11 @@ def parser() -> argparse.ArgumentParser:
     proof.add_argument("--output", type=Path)
     verify_proof = commands.add_parser("verify-oracle-postgresql-proof")
     verify_proof.add_argument("--project-root", type=Path, default=Path("."))
+    stored = commands.add_parser("build-stored-logic-qualification")
+    stored.add_argument("--project-root", type=Path, default=Path("."))
+    stored.add_argument("--output", type=Path)
+    verify_stored = commands.add_parser("verify-stored-logic-qualification")
+    verify_stored.add_argument("--project-root", type=Path, default=Path("."))
     return root
 
 
@@ -133,6 +142,27 @@ def main(argv: list[str] | None = None) -> int:
             "status": "passed" if not errors else "failed",
             "errors": errors,
             "database_migration_complete": False,
+            "production_ready": False,
+        }
+    elif args.command == "build-stored-logic-qualification":
+        project_root = args.project_root.resolve()
+        payload = build_stored_logic_qualification(project_root)
+        output = args.output or project_root / "data-modernization/stored-logic/authfrds.qualification.json"
+        write_json(output, payload)
+        result = {
+            "status": "passed",
+            "output": str(output),
+            "content_sha256": payload["content_sha256"],
+            "stored_logic_complete": False,
+            "production_ready": False,
+        }
+    elif args.command == "verify-stored-logic-qualification":
+        project_root = args.project_root.resolve()
+        errors = validate_stored_logic_qualification(project_root)
+        result = {
+            "status": "passed" if not errors else "failed",
+            "errors": errors,
+            "stored_logic_complete": False,
             "production_ready": False,
         }
     else:

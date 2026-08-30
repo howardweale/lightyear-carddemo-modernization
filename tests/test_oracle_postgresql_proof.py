@@ -42,9 +42,9 @@ class OraclePostgreSQLProofTests(unittest.TestCase):
 
     def test_stored_logic_has_its_own_fail_closed_gate(self) -> None:
         stored = build_oracle_postgresql_proof(ROOT)["gates"][7]
-        self.assertEqual(0, stored["evidence"]["procedures_qualified"])
-        self.assertEqual(0, stored["evidence"]["triggers_qualified"])
-        self.assertFalse(stored["evidence"]["arbitrary_application_sql_qualified"])
+        self.assertTrue(stored["evidence"]["qualification_core_ready"])
+        self.assertFalse(stored["evidence"]["inventory_complete"])
+        self.assertFalse(stored["evidence"]["stored_logic_complete"])
 
     def test_canonical_proof_is_current_and_valid(self) -> None:
         expected = build_oracle_postgresql_proof(ROOT)

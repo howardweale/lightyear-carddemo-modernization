@@ -3,10 +3,11 @@
     "canonical_model_sha256": "fb59dfc8f78bd088f18f2f2167c457c887f3928e10264f05b3ac5482ec8a6664",
     "canonical_schema_sha256": "ffe6df35b4be0c831e72288ecaf3e48c43cc8aac7682983e0f4570846853d042",
     "compatibility_ledger_sha256": "0811440daef856f252659d4f86698c42290dd687cb0f7ddb38dad66d44f9ad46",
-    "rehearsal_receipt_sha256": "e628b50cc4e21707f6c62e7a8429654c7867411f75fb9381e03f3d191854f652"
+    "rehearsal_receipt_sha256": "e628b50cc4e21707f6c62e7a8429654c7867411f75fb9381e03f3d191854f652",
+    "stored_logic_qualification_sha256": "9f2249f97a7e9397e668303567ba818179abc120c9717f3b2a50f8a62e6ea822"
   },
   "claim_unlocked": "LIGHTYEAR can execute a deterministic, progressively gated Oracle-to-PostgreSQL development proof without bundling unresolved behavioral or stored-logic claims.",
-  "content_sha256": "ba408ddcc82f0895eda059bcc4a88ed6f434c9f0d7e989a62126449d75065ecc",
+  "content_sha256": "ed7001094046f3d364c3f9d28659d1166c80b94b7f3f4ec0f5a5d563c1385d4c",
   "database_migration_complete": false,
   "gates": [
     {
@@ -138,13 +139,14 @@
     {
       "claim": "stored-logic",
       "evidence": {
-        "arbitrary_application_sql_qualified": false,
+        "inventory_complete": false,
         "ledger_items": [
           "behavior:oracle-26ai-free:stored-logic",
           "behavior:postgresql-16:stored-logic"
         ],
-        "procedures_qualified": 0,
-        "triggers_qualified": 0
+        "qualification_core_ready": true,
+        "qualification_sha256": "9f2249f97a7e9397e668303567ba818179abc120c9717f3b2a50f8a62e6ea822",
+        "stored_logic_complete": false
       },
       "gate": 8,
       "limitations": [

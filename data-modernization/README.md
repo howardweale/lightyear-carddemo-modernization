@@ -1,5 +1,10 @@
 # Database semantic core and AUTHFRDS proof cell
 
+MS #35.1 corrects the roadmap alignment by implementing DB2 as a genuine semantic-core source
+adapter. Its discovery, profile, source compatibility ledger, and conformance receipt are committed
+under `db2-semantic-adapter/`. These are source-only and synthetic-fixture artifacts; they do not
+claim a live Db2 catalog, log stream, or z/OS equivalence.
+
 MS #35 adds an independent stored-logic qualification core. It inventories database-resident and
 application SQL separately and requires live catalog, source, deployment, scheduler, and privilege
 evidence before inventory can be complete. Zero discovered procedures or triggers is not proof of
@@ -51,6 +56,7 @@ macOS/Linux:
 PYTHONPATH=src python3 -m lightyear_data verify-semantic-core
 PYTHONPATH=src python3 -m lightyear_data verify-oracle-postgresql-proof
 PYTHONPATH=src python3 -m lightyear_data verify-stored-logic-qualification
+PYTHONPATH=src python3 -m lightyear_data verify-db2-semantic-adapter
 ./migration-rehearsal.sh verify /path/to/aws-carddemo
 ```
 

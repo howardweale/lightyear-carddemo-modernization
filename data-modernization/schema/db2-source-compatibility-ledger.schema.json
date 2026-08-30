@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schema/db2-source-compatibility-ledger.schema.json",
+  "title": "LIGHTYEAR DB2 source compatibility ledger",
+  "type": "object",
+  "required": ["schema_version", "ledger_type", "source_model_sha256", "classifications", "entries", "statistics", "equivalence_blocked", "production_ready", "content_sha256"],
+  "properties": {
+    "ledger_type": {"const": "lightyear-db2-source-compatibility-ledger"},
+    "classifications": {"type": "array", "minItems": 5, "maxItems": 5, "uniqueItems": true},
+    "entries": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["item_id", "scope", "source_semantics", "target_semantics", "classification", "rationale", "evidence_required", "decision"],
+        "properties": {"classification": {"enum": ["exact", "normalized-equivalent", "policy-decision-required", "lossy", "unsupported"]}}
+      }
+    },
+    "equivalence_blocked": {"const": true},
+    "production_ready": {"const": false},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

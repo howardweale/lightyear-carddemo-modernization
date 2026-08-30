@@ -1,6 +1,28 @@
 # FactoryDark.ai CardDemo Modernization Factory
 
-Release: **v0.31.0 — customer estate assessment and modernization planner**
+Release: **v0.31.1 — receipt trust-boundary and developer verification hardening**
+
+v0.31.1 closes the independent-review gaps around development evidence and repository verification.
+One shared contract now requires all four non-promotion claims to remain explicitly false, and a
+repository audit rejects committed JSON or Python literals that attempt to promote those claims
+without adding an explicit authority path. The historical live-model bridge uses that shared
+contract and its regression test pins every claim.
+
+The complete test and verification entry points now fail visibly when the exact pinned CardDemo
+upstream fixture is unavailable; `unit-only` is an explicit, labelled incomplete mode. A
+content-addressed entry-point catalog classifies all 33 POSIX/PowerShell script pairs by purpose,
+role, and verification owner. The PL/I build attestation also performs an actionable JDK preflight
+before compilation. These are assurance and developer-experience controls, not new modernization
+coverage or live evidence.
+
+```bash
+./lightyear.sh doctor
+./lightyear.sh catalog
+./test.sh
+./verify.sh
+```
+
+Previous milestone: **v0.31.0 — customer estate assessment and modernization planner**
 
 v0.31 turns the customer-specific source graph into an explainable modernization planning surface.
 It deterministically partitions the approved estate into connected application slices, records the

@@ -76,7 +76,7 @@
         "status": "simulated_ready"
       }
     ],
-    "content_sha256": "cdf4c55cd840dfe34258382bab3b819cda576396a175984b2982475a83ba6a7d",
+    "content_sha256": "9876e04a4956c6afa3437fcdac829586199154bfc1e20050b9966d1a280628e5",
     "schema_version": "1.5",
     "truth_boundary": "Local, simulated, fixture, static, and offline target evidence cannot satisfy live z/OS observation or equivalence gates."
   },
@@ -89,7 +89,7 @@
     "statement": "The projection composes separately validated discovery and development evidence; it does not promote live-mainframe or production claims."
   },
   "composite_graph_id": "lightyear:carddemo-modernization:composite",
-  "content_sha256": "9d30cde525f36ffd96b5ebfca3239d210a9967ba27153c9ff8871435b3f09d30",
+  "content_sha256": "78c6a54b53f5a44ce888e50927e3e555a0d370bca4a62f7e3a25115852fdc36f",
   "fragments": [
     {
       "content_sha256": "33a57c2a87a74ce73dc18742cc96c48735a8b7df152add5a1db44a77ed4a48ec",

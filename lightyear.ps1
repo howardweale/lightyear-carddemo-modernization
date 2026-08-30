@@ -7,6 +7,8 @@ $env:PYTHONPATH = Join-Path $ProjectDir "src"
 function Run-Python { Invoke-FactoryDarkPython @args }
 
 if ($Action -eq "doctor") {
+    Run-Python -m lightyear_common doctor --project-root $ProjectDir
+    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
     Run-Python -m lightyear_knowledge_graph doctor --project-root $ProjectDir
     exit $LASTEXITCODE
 }
@@ -22,6 +24,10 @@ if ($Action -eq "explorer") {
 }
 if ($Action -eq "pilot") {
     & (Join-Path $ProjectDir "source-only-pilot.ps1") @($args | Select-Object -Skip 1)
+    exit $LASTEXITCODE
+}
+if ($Action -eq "catalog") {
+    Run-Python -m lightyear_common scripts --project-root $ProjectDir
     exit $LASTEXITCODE
 }
 if ($Action -eq "verify") {
@@ -41,5 +47,5 @@ if ($Action -eq "verify") {
     Run-Python -m unittest tests.test_semantic_inputs tests.test_composite_estate
     exit $LASTEXITCODE
 }
-Write-Error "Usage: .\lightyear.ps1 [doctor|demo|explorer|pilot|verify]"
+Write-Error "Usage: .\lightyear.ps1 [doctor|demo|explorer|pilot|catalog|verify]"
 exit 2

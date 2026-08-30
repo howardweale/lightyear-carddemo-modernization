@@ -16,6 +16,9 @@ if { [[ -e "$default_maven_home" ]] && [[ ! -w "$default_maven_home" ]]; } || \
   export MAVEN_OPTS="${MAVEN_OPTS:-} -Dmaven.repo.local=$project_dir/work/.m2/repository"
 fi
 
+"$LIGHTYEAR_PYTHON_BIN" -m lightyear_common prerequisites --project-root "$project_dir"
+"$LIGHTYEAR_PYTHON_BIN" -m lightyear_common receipt-claims --project-root "$project_dir"
+"$LIGHTYEAR_PYTHON_BIN" -m lightyear_common scripts --project-root "$project_dir"
 "$LIGHTYEAR_PYTHON_BIN" -m unittest discover -s "$project_dir/tests" -v
 "$LIGHTYEAR_PYTHON_BIN" -m carddemo_oracle validate-normalizations \
   --ledger "$project_dir/spec/comparison-normalizations.json"
@@ -25,6 +28,8 @@ fi
 "$project_dir/migration-rehearsal.sh" verify
 "$project_dir/knowledge-graph.sh" verify
 "$project_dir/extension-foundation.sh" verify
+"$project_dir/mainframe-access.sh" verify
+"$project_dir/zosmf-adapter.sh" verify
 "$project_dir/collection-appliance.sh" verify
 "$project_dir/pli-conformance.sh" verify
 "$project_dir/pli-modernization.sh" verify

@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.31.1 — 2026-08-30
+
+- Added one shared fail-closed contract for `qualification_eligible`, `promotion_allowed`,
+  `production_ready`, and `mainframe_equivalent`, then applied it to the historical model-evidence
+  bridge and pinned all four claims in regression tests.
+- Added a repository-wide audit that rejects committed receipt overclaims and literal source
+  promotions without an explicit authority implementation.
+- Made the pinned AWS CardDemo fixture a visible prerequisite for complete tests; missing data can
+  only be accepted through an explicitly labelled `unit-only` mode.
+- Added a content-addressed catalog for all 33 paired POSIX and PowerShell entry points, including
+  purpose, role, and verification ownership, plus restored missing `oracle.sh` and `test.sh` twins.
+- Added mainframe-access and z/OSMF adapter verification to the complete verifier and restored the
+  missing Windows migration-rehearsal and collection-appliance stages.
+- Added a JDK 17-or-newer compiler preflight with actionable diagnostics for old runtimes and JREs
+  that do not expose `jdk.compiler`.
+- Kept all live-system, model-qualification, mainframe-equivalence, promotion, and production claims
+  false; this patch hardens proof boundaries but does not create new live evidence.
+
 ## 0.31.0 — 2026-08-29
 
 - Added a deterministic customer estate assessment bound to the exact intake, source-analysis

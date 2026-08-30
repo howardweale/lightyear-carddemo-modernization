@@ -1,11 +1,11 @@
 {
   "appliance_sha256": "8ebfdca9e04bf4a0d0710ce2e0e629e6c099b0f7723ed439875639de5eaa9e2f",
-  "capability_sha256": "cdf4c55cd840dfe34258382bab3b819cda576396a175984b2982475a83ba6a7d",
+  "capability_sha256": "9876e04a4956c6afa3437fcdac829586199154bfc1e20050b9966d1a280628e5",
   "collection_mechanism": {
     "enterprise_mechanism_ready": true,
     "live_observed": false
   },
-  "content_sha256": "4d8745d1997280dd6aee0cdd73a70e868c59403c9b20b72c1976e7a538f145c6",
+  "content_sha256": "c6182254a6b61e6a3a1f7f5e089dab3172e6074313d16d3241035b37633bb66b",
   "gates": {
     "6_authorized_original_execution": "blocked",
     "7_independent_comparison": "mechanism_ready",
@@ -19,13 +19,13 @@
     "approved test data, retention, redaction and evidence export policy",
     "approved execution, rollback, recovery and incident runbooks"
   ],
-  "intake_sha256": "e7d13304a0677067e139b0ceafc9483ea7c56c02f906cbf1b74f57892dd1b3ef",
+  "intake_sha256": "44a3ea231803345fc113311961021cceba09ea67c5144403e37321068871b78d",
   "limitations": [
     "Preflight describes prerequisites; it is not an authorization or live observation.",
     "The collection appliance cannot promote source-only or simulated evidence to equivalence."
   ],
   "mainframe_equivalent": false,
-  "pilot_id": "lightyear-carddemo-source-only-v0.31",
+  "pilot_id": "lightyear-carddemo-source-only-v0.31.1",
   "preflight_type": "lightyear-mainframe-evidence-preflight",
   "production_ready": false,
   "ready_for_authorized_onboarding": true,

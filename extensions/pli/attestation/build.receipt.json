@@ -1,7 +1,7 @@
 {
   "bindings": {
     "behavior_contract_sha256": "c04c386eb896f3d74db88827ba5ef93165404d594843317e42635e6fae61b00e",
-    "build_attestation_sha256": "2ea62a29571ec292120050028544f4a91c66ce6a0bb6758ae208b1f9a0d9f174",
+    "build_attestation_sha256": "7b959203ba1cc1c2a6f5da8d69aa8c3dcfca65e9935f93056acd7bba8bcf9773",
     "candidate_jar_sha256": "d7f8b79bb8c2f2adbab42ef1aecc9ad6ba122a8bfef5b9a62e2f5951191668bb",
     "comparison_sha256": "31d0eb349496a95beb7e43782fc3d838da3ad8f225187f6ca715438e7e028eed",
     "dependency_inventory_sha256": "ea145bfbc1c730267c1fdb895e0b5d7575ab3fb5e0155e9fa37aa3e1562e53ed",
@@ -9,7 +9,7 @@
     "fixtures_sha256": "cbaafdf6074521e1d2933fc66efd5fd5e4c22f97d45caea254cdb08621b573a0",
     "junit_xml_sha256": "dc0f92270bfea35b7ca2af24043bbacf4ff15a2d3a8a9112975df9f2658b4083",
     "sbom_sha256": "5b0120ed4bd41798954ba050154201a49ccdacb81f2b482202f9627f987a7134",
-    "source_tree_sha256": "6055a673b8f12cc0f72e707ee7c1c66a8279b38bf9b8b4b739e92176bed43994"
+    "source_tree_sha256": "dcbf8fd28eb0c091dba2fb319be9deba53e19e21183d9d28a5c86980e8782655"
   },
   "checks": {
     "asymmetric_signature": true,
@@ -24,7 +24,7 @@
     "sbom": true,
     "source_commit_bound": true
   },
-  "content_sha256": "28413a5ccd6e841839978f1ddb9872251ad237c51523355a40b2c5f1522f1a76",
+  "content_sha256": "071b414e3472d8ac8c85ab14f75dae0540d563364fc82d7bf0726434b56b587a",
   "development_ready": true,
   "evidence_class": "attested-local-build",
   "mainframe_equivalent": false,
@@ -32,7 +32,7 @@
   "receipt_type": "lightyear-pli-build-attestation-receipt",
   "release_attestation": false,
   "schema_version": "1.0",
-  "source_commit": "ec6e207161bd8899a4c2dd8f536544848bbeb68e",
+  "source_commit": "53b475ba130529a1c996b2d112cc58e0c9b0d723",
   "status": "passed",
   "unresolved_gaps": [
     "The committed signature uses a public development test key and is not a release attestation.",

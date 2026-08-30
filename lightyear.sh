@@ -9,6 +9,7 @@ action="${1:-doctor}"
 
 case "$action" in
   doctor)
+    "$LIGHTYEAR_PYTHON_BIN" -m lightyear_common doctor --project-root "$project_dir"
     exec "$LIGHTYEAR_PYTHON_BIN" -m lightyear_knowledge_graph doctor --project-root "$project_dir"
     ;;
   demo)
@@ -24,6 +25,9 @@ case "$action" in
     if [[ "$#" -eq 0 ]]; then set -- doctor; fi
     exec "$project_dir/source-only-pilot.sh" "$@"
     ;;
+  catalog)
+    exec "$LIGHTYEAR_PYTHON_BIN" -m lightyear_common scripts --project-root "$project_dir"
+    ;;
   verify)
     "$project_dir/knowledge-graph.sh" verify
     "$project_dir/extension-foundation.sh" verify
@@ -35,7 +39,7 @@ case "$action" in
     "$LIGHTYEAR_PYTHON_BIN" -m unittest tests.test_semantic_inputs tests.test_composite_estate
     ;;
   *)
-    echo "Usage: ./lightyear.sh [doctor|demo|explorer|pilot|verify]" >&2
+    echo "Usage: ./lightyear.sh [doctor|demo|explorer|pilot|catalog|verify]" >&2
     exit 2
     ;;
 esac

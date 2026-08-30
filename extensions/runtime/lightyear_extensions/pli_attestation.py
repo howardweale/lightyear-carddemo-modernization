@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import json
+import re
 import subprocess
 import tempfile
 import zipfile
@@ -300,8 +301,55 @@ def validate_attestation(project_root: Path, artifact_root: Path) -> list[str]:
 
 
 def _compile(service: Path, harness: Path, classes: Path) -> None:
+    _require_jdk17_compiler()
     command = ["java", "--module", "jdk.compiler/com.sun.tools.javac.Main", "--release", "17", "-d", str(classes), str(service), str(harness)]
     _run(command, "JDK compiler")
+
+
+def _require_jdk17_compiler() -> None:
+    message = (
+        "PL/I build attestation requires a full JDK 17 or newer with the "
+        "jdk.compiler module; install Temurin/OpenJDK 17 and ensure java resolves to that JDK"
+    )
+    try:
+        version = subprocess.run(
+            ["java", "--version"], check=False, text=True,
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+        )
+        modules = subprocess.run(
+            ["java", "--list-modules"], check=False, text=True,
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+        )
+    except OSError as exc:
+        raise ExtensionContractError(f"{message}: {exc}") from exc
+    _validate_jdk_probe(
+        (version.stdout or "") + (version.stderr or ""),
+        modules.stdout or "",
+        version.returncode,
+        modules.returncode,
+    )
+
+
+def _validate_jdk_probe(
+    version_output: str,
+    modules_output: str,
+    version_status: int = 0,
+    modules_status: int = 0,
+) -> None:
+    requirement = (
+        "PL/I build attestation requires a full JDK 17 or newer with the "
+        "jdk.compiler module; install Temurin/OpenJDK 17 and ensure java resolves to that JDK"
+    )
+    match = re.search(r'(?:openjdk|java)\s+(?:version\s+)?"?(\d+)(?:\.(\d+))?', version_output, re.IGNORECASE)
+    if version_status or not match:
+        raise ExtensionContractError(f"{requirement}; the Java version could not be established")
+    major = int(match.group(1))
+    if major == 1 and match.group(2):
+        major = int(match.group(2))
+    if major < 17:
+        raise ExtensionContractError(f"{requirement}; detected Java {major}")
+    if modules_status or not any(line.split("@", 1)[0] == "jdk.compiler" for line in modules_output.splitlines()):
+        raise ExtensionContractError(f"{requirement}; Java {major} does not expose jdk.compiler")
 
 
 def _run_harness(classes: Path, report: Path) -> None:

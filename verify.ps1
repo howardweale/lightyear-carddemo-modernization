@@ -6,6 +6,12 @@ $CandidateJar = Join-Path $ProjectDir "candidate-java\target\carddemo-spring-bat
 $env:PYTHONPATH = Join-Path $ProjectDir "src"
 . (Join-Path $ProjectDir "python-runtime.ps1")
 
+Invoke-FactoryDarkPython -m lightyear_common prerequisites --project-root $ProjectDir
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+Invoke-FactoryDarkPython -m lightyear_common receipt-claims --project-root $ProjectDir
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+Invoke-FactoryDarkPython -m lightyear_common scripts --project-root $ProjectDir
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 Invoke-FactoryDarkPython -m unittest discover -s (Join-Path $ProjectDir "tests") -v
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
@@ -22,14 +28,24 @@ if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 & (Join-Path $ProjectDir "data-modernization.ps1") verify
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
+& (Join-Path $ProjectDir "migration-rehearsal.ps1") verify
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
 & (Join-Path $ProjectDir "knowledge-graph.ps1") verify
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 & (Join-Path $ProjectDir "extension-foundation.ps1") verify
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+& (Join-Path $ProjectDir "mainframe-access.ps1") verify
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+& (Join-Path $ProjectDir "zosmf-adapter.ps1") verify
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+& (Join-Path $ProjectDir "collection-appliance.ps1") verify
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 & (Join-Path $ProjectDir "pli-conformance.ps1") verify
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 & (Join-Path $ProjectDir "pli-modernization.ps1") verify
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 & (Join-Path $ProjectDir "pli-build-attestation.ps1") verify
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 

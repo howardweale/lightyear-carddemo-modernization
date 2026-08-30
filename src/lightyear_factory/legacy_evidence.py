@@ -9,6 +9,8 @@ import zipfile
 from pathlib import Path, PurePosixPath
 from typing import Any
 
+from lightyear_common.trust import TrustBoundaryError, require_unpromoted_claims
+
 from .contracts import ContractError, canonical_hash, safe_relative_path, write_json
 
 
@@ -538,6 +540,10 @@ def verify_legacy_model_archive(
                 "This single INTCALC case does not establish multi-workload qualification.",
             ],
         }
+        try:
+            require_unpromoted_claims(payload, label="Historical model evidence receipt")
+        except TrustBoundaryError as exc:
+            raise ContractError(str(exc)) from exc
         payload["content_sha256"] = canonical_hash(payload)
         if output_path:
             write_json(payload, output_path.resolve())

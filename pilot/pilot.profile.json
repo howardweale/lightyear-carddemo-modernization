@@ -1,8 +1,8 @@
 {
   "schema_version": "1.0",
   "profile_type": "lightyear-source-only-pilot-profile",
-  "pilot_id": "lightyear-carddemo-source-only-v0.31",
-  "release": "0.31.0",
+  "pilot_id": "lightyear-carddemo-source-only-v0.31.1",
+  "release": "0.31.1",
   "intake": {
     "max_files": 10000,
     "max_file_bytes": 2097152,
@@ -89,13 +89,13 @@
       "id": "composite-estate",
       "role": "composite-lineage",
       "path": "knowledge/composite/estate.receipt.json",
-      "sha256": "629c3078e42d6d5dc7d0b23ea1a3d72f86077d97df562d08b115ed4e8a75f262"
+      "sha256": "9cdb7ceb9c49f1d1cf0cf6c66e9dca9af3f781b7025366a51d94cdac1a6d07b5"
     },
     {
       "id": "capability-projection",
       "role": "capability-gates",
       "path": "knowledge/capabilities/mainframe-readiness.json",
-      "sha256": "caa3249f5b299bbe9cf19dfca3d5d8f15c1da62bf1f58414f6a1fd233aa42dc2"
+      "sha256": "dc187c486cbc1a3861491e96e3c8585a79a53bf382668ae30efd302054714d04"
     },
     {
       "id": "pli-coverage",
@@ -113,7 +113,7 @@
       "id": "pli-build",
       "role": "reproducible-build",
       "path": "extensions/pli/attestation/build.receipt.json",
-      "sha256": "eae569443ea4d9c5e292906cfc89f2e7b6a1e5b002447ca5d21a3131138b1f34"
+      "sha256": "02e610fb87ff9aed998c62195995ebac678389e4cf0fd01d589e91b4732ff2b6"
     },
     {
       "id": "model-qualification-policy",
@@ -177,5 +177,5 @@
     "mainframe_equivalent": false,
     "production_ready": false
   },
-  "content_sha256": "86e9161865a1deaeba05b9830f3be8c386f2f30619e499666074a2b2ee002335"
+  "content_sha256": "a604edb123444ff961804c4f7a49281845330c8bf9ec5ca12dc1c90c247527ca"
 }

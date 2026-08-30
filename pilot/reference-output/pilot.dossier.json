@@ -1,6 +1,6 @@
 {
-  "analysis_sha256": "cc60a7dd92660c477b4799dfad88acd742c4500c6f0ed684cb9b4608f6ea55fb",
-  "assessment_sha256": "e4c65a431fdb40d05e2879ef8dfc661129104efdf7f1e382f0b1360421233a20",
+  "analysis_sha256": "26c0b568a3407ee19044005b7a36183f3181837bad26dc6531e16b9103c687b8",
+  "assessment_sha256": "8b070ef9099fbf89bb00e583456f7a5a88378bd3b464cc68d66c32f3a89b2dce",
   "capabilities": [
     {
       "development_ready": true,
@@ -65,16 +65,16 @@
     "Offline rehearsal proves customer Db2 CDC or cutover."
   ],
   "compatibility_policy_sha256": "8350b4f0b8e8cfcf64427715cd749c696e6420fc6e955ffc37580833e5b41922",
-  "content_sha256": "69ccf5da08daa188e7999f2f907e1c51cdb05ad0eed4a491b48f390b66408b2f",
+  "content_sha256": "08ae4a998a28c8a45b84ad9c00763f75f2e09ad5bde3fa8a1e253636b7060268",
   "dossier_type": "lightyear-source-only-pilot-dossier",
   "estate": {
     "analysis_scope": "bounded-source-static-analysis",
-    "analysis_sha256": "cc60a7dd92660c477b4799dfad88acd742c4500c6f0ed684cb9b4608f6ea55fb",
-    "graph_id": "lightyear:pilot-estate:e7d13304a0677067e139b0ce",
-    "graph_sha256": "04b0f8752eecc88373343b5ca865e2dcd790fbd55e9072db13bdf89979637d4c",
+    "analysis_sha256": "26c0b568a3407ee19044005b7a36183f3181837bad26dc6531e16b9103c687b8",
+    "graph_id": "lightyear:pilot-estate:44a3ea231803345fc1133119",
+    "graph_sha256": "98d182f276e36789b4354ceead607e43b67eae1fa92f362d38b3370a66f7994b",
     "kind": "customer-source-analysis",
     "nodes": 52,
-    "reference_composite_sha256": "9d30cde525f36ffd96b5ebfca3239d210a9967ba27153c9ff8871435b3f09d30",
+    "reference_composite_sha256": "78c6a54b53f5a44ce888e50927e3e555a0d370bca4a62f7e3a25115852fdc36f",
     "relationships": 58,
     "source_files": 10,
     "unresolved_references": 2
@@ -108,19 +108,19 @@
     },
     {
       "bytes": 6519,
-      "content_sha256": "9d30cde525f36ffd96b5ebfca3239d210a9967ba27153c9ff8871435b3f09d30",
+      "content_sha256": "78c6a54b53f5a44ce888e50927e3e555a0d370bca4a62f7e3a25115852fdc36f",
       "id": "composite-estate",
       "path": "knowledge/composite/estate.receipt.json",
       "role": "composite-lineage",
-      "sha256": "629c3078e42d6d5dc7d0b23ea1a3d72f86077d97df562d08b115ed4e8a75f262"
+      "sha256": "9cdb7ceb9c49f1d1cf0cf6c66e9dca9af3f781b7025366a51d94cdac1a6d07b5"
     },
     {
       "bytes": 18858,
-      "content_sha256": "cdf4c55cd840dfe34258382bab3b819cda576396a175984b2982475a83ba6a7d",
+      "content_sha256": "9876e04a4956c6afa3437fcdac829586199154bfc1e20050b9966d1a280628e5",
       "id": "capability-projection",
       "path": "knowledge/capabilities/mainframe-readiness.json",
       "role": "capability-gates",
-      "sha256": "caa3249f5b299bbe9cf19dfca3d5d8f15c1da62bf1f58414f6a1fd233aa42dc2"
+      "sha256": "dc187c486cbc1a3861491e96e3c8585a79a53bf382668ae30efd302054714d04"
     },
     {
       "bytes": 4345,
@@ -146,14 +146,14 @@
     },
     {
       "bytes": 2193,
-      "content_sha256": "28413a5ccd6e841839978f1ddb9872251ad237c51523355a40b2c5f1522f1a76",
+      "content_sha256": "071b414e3472d8ac8c85ab14f75dae0540d563364fc82d7bf0726434b56b587a",
       "development_ready": true,
       "id": "pli-build",
       "mainframe_equivalent": false,
       "path": "extensions/pli/attestation/build.receipt.json",
       "production_ready": false,
       "role": "reproducible-build",
-      "sha256": "eae569443ea4d9c5e292906cfc89f2e7b6a1e5b002447ca5d21a3131138b1f34",
+      "sha256": "02e610fb87ff9aed998c62195995ebac678389e4cf0fd01d589e91b4732ff2b6",
       "status": "passed"
     },
     {
@@ -251,7 +251,7 @@
       "status": "blocked"
     }
   ],
-  "intake_sha256": "e7d13304a0677067e139b0ceafc9483ea7c56c02f906cbf1b74f57892dd1b3ef",
+  "intake_sha256": "44a3ea231803345fc113311961021cceba09ea67c5144403e37321068871b78d",
   "limitations": [
     "All original-system execution and signed live-equivalence gates remain blocked.",
     "Customer-specific estate results are bounded static analysis; unresolved references remain visible.",
@@ -261,7 +261,7 @@
   ],
   "mainframe_equivalent": false,
   "modernization_plan": {
-    "assessment_sha256": "e4c65a431fdb40d05e2879ef8dfc661129104efdf7f1e382f0b1360421233a20",
+    "assessment_sha256": "8b070ef9099fbf89bb00e583456f7a5a88378bd3b464cc68d66c32f3a89b2dce",
     "automatic_factory_dispatch": false,
     "business_priority_inferred": false,
     "clusters": 4,
@@ -294,9 +294,9 @@
       }
     ]
   },
-  "pilot_id": "lightyear-carddemo-source-only-v0.31",
+  "pilot_id": "lightyear-carddemo-source-only-v0.31.1",
   "pilot_ready": true,
-  "preflight_sha256": "4d8745d1997280dd6aee0cdd73a70e868c59403c9b20b72c1976e7a538f145c6",
+  "preflight_sha256": "c6182254a6b61e6a3a1f7f5e089dab3172e6074313d16d3241035b37633bb66b",
   "production_ready": false,
   "proofs": {
     "collection_appliance": {
@@ -329,6 +329,6 @@
     "model_qualification_not_overclaimed": true,
     "preflight_valid": true
   },
-  "release": "0.31.0",
+  "release": "0.31.1",
   "schema_version": "3.0"
 }

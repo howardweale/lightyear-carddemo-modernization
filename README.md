@@ -1,6 +1,25 @@
 # FactoryDark.ai CardDemo Modernization Factory
 
-Release: **v0.38.0 — JCL qualification hardening**
+Release: **v0.39.0 — VSAM/CICS qualification hardening**
+
+v0.39 expands the earlier read-only account-view proof into a graph-bound CICS/VSAM qualification
+plane. The canonical estate contributes 240 CICS commands, 25 transactions, 16 file resources,
+15 VSAM clusters, three alternate indexes, and three PATHs. A deterministic 38-case corpus covers
+KSDS, ESDS, RRDS, alternate-index and PATH behavior, status mapping, browsing, write/rewrite/delete,
+locks, syncpoints, BMS, and program control through eleven independent gates.
+
+The 27-entry compatibility ledger uses all five governing classes. Four fail-closed vectors keep
+LDS record access, RLS, TSQ, and TDQ outside the supported claim; native catalog and CICS-region
+execution, journal/recovery behavior, mainframe equivalence, and production readiness remain false.
+The existing signed `CAVW` differential proof remains intact and is now bound into the broader
+qualification receipt.
+
+```bash
+./cics-vsam-readiness.sh verify
+PYTHONPATH=src python3 -m lightyear_readiness.cics_vsam_qualification verify
+```
+
+Previous milestone: **v0.38.0 — JCL qualification hardening**
 
 v0.38 turns the pinned JCL estate into an explicit qualification plane: 46 jobs, two procedures,
 119 steps, and 451 DD allocations are bound to a 30-case synthetic conformance corpus. Ten
@@ -20,7 +39,7 @@ remain false.
 PYTHONPATH=src python3 -m lightyear_readiness.jcl verify
 ```
 
-Previous milestone: **v0.37.0 — PL/I qualification hardening**
+Earlier milestone: **v0.37.0 — PL/I qualification hardening**
 
 v0.37 consolidates the PL/I parser, expanded 52-case conformance lab, mixed PL/I–COBOL–Db2
 development proof, mutation probes, and candidate build attestation into one governed qualification

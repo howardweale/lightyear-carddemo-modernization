@@ -1,5 +1,9 @@
 # Authorized CAVW mainframe capture runbook
 
+This runbook remains deliberately limited to the read-only `CAVW` differential proof. The broader
+MS #39 corpus is synthetic; it does not authorize write, locking, RLS, queue, journal, recovery, or
+other state-changing activity in a customer CICS region or VSAM estate.
+
 ## Before execution
 
 1. Obtain the customer change/ticket approval and confirm the named LPAR, CICS

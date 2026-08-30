@@ -1,28 +1,46 @@
-# CICS/VSAM readiness gate
+# CICS/VSAM qualification gate
 
-This vertical proof covers `CAVW` → `COACTVWC` → `COACTVW/CACTVWA` and the
-ordered keyed reads of `CXACAIX`, `ACCTDAT`, and `CUSTDAT`.
+This qualification has two bound evidence layers:
 
-## Eight gates
+- the existing `CAVW` → `COACTVWC` → `COACTVW/CACTVWA` proof, including the ordered read-only
+  access to `CXACAIX`, `ACCTDAT`, and `CUSTDAT`; and
+- a deterministic synthetic conformance plane spanning CICS file-control and bounded VSAM
+  semantics without representing itself as a CICS or VSAM emulator.
 
-1. Native CSD, BMS, EXEC CICS, and IDCAMS assets become typed graph entities.
-2. Transactions, programs, maps, fields, CICS files, paths, alternate indexes,
-   clusters, and components are linked with line-addressable evidence.
-3. Eight account-view behaviors are curated as graph-grounded rules.
-4. A bounded read-only Python candidate provides the modernization seam.
-5. A private gate and mutation/negative tests reject wrong routing, layout,
-   lookup order, NOTFND behavior, and writes.
-6. `zos-capture.template.json` and the operator runbook define an authorized
-   execution capture from a real CICS region and VSAM estate.
-7. The differential comparator checks terminal output, keyed access order, and
-   zero mutations independently of the candidate builder.
-8. The receipt issuer can sign a matching live comparison, but remains
-   `blocked` until a `zos_observed` baseline and external signing key exist.
+## Eleven gates
 
-Local success is development evidence, not z/OS equivalence.
+1. The canonical graph binds 240 CICS commands, 25 transactions, 16 file resources, 15 VSAM
+   clusters, three alternate indexes, three PATHs, and their typed relationships.
+2. A content-addressed 38-case synthetic corpus supplies four positive, 30 targeted boundary, and
+   four fail-closed mutation cases; it contains no customer or IBM source.
+3. KSDS, ESDS, and RRDS organization, key, slot, record, and end-of-file behavior are covered as a
+   bounded supported subset. LDS record access is excluded.
+4. Unique and non-unique alternate-index lookup, duplicate collision, and PATH resolution have
+   explicit semantic vectors.
+5. READ, file status, RESP/RESP2, STARTBR, READNEXT, READPREV, and ENDBR behavior is deterministic
+   and independently receipted.
+6. WRITE, REWRITE, DELETE, duplicate record, missing record, and update-token behavior includes
+   before/after mutation counts.
+7. ENQ, DEQ, contention, syncpoint commit, and rollback are development vectors only; native lock,
+   journal, unit-of-work, and recovery equivalence require authorized execution.
+8. HANDLE CONDITION, BMS SEND/RECEIVE MAP, LINK, XCTL, RETURN, and secondary response behavior have
+   bounded command-level contracts.
+9. RLS, TSQ, TDQ, security, routing, journals, and exits remain explicitly unqualified or require
+   policy decisions.
+10. The private read-only account-view gate, deterministic comparison, and readiness receipt remain
+    bound without weakening their existing evidence or attestation rules.
+11. Native equivalence stays blocked until authorized CICS-region, VSAM-catalog, concurrency,
+    journal, recovery, and independently signed differential evidence exists.
+
+The 27-entry compatibility ledger assigns every material boundary exactly one of `exact`,
+`normalized-equivalent`, `policy-decision-required`, `lossy`, or `unsupported`. Local success is
+development evidence, not native CICS, VSAM, recovery, mainframe, or production equivalence.
 
 ```bash
 ./cics-vsam-readiness.sh verify
+PYTHONPATH=src python3 -m lightyear_readiness.cics_vsam_qualification verify
+
+# Prepare the separately governed, read-only CAVW live capture.
 ./cics-vsam-readiness.sh template work/cavw-live
 export LIGHTYEAR_EQUIVALENCE_SIGNING_KEY="$(openssl rand -hex 32)"
 export LIGHTYEAR_MAINFRAME_ATTESTATION_KEY="$(openssl rand -hex 32)"
@@ -32,6 +50,6 @@ python -m lightyear_readiness attest-capture \
 ./cics-vsam-readiness.sh compare work/cavw-live work/cavw-live/zos-capture.json
 ```
 
-The mainframe evidence custodian and release-equivalence signer should use different keys and,
-in production, different identities. Never put either signing key, credentials, production account data, or unredacted
-screen captures in the repository.
+The mainframe evidence custodian and release-equivalence signer should use different keys and, in
+production, different identities. Never put either signing key, credentials, production data, or
+unredacted screen captures in the repository.

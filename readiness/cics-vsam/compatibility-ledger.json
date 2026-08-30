@@ -1,0 +1,484 @@
+{
+  "classifications": [
+    "exact",
+    "normalized-equivalent",
+    "policy-decision-required",
+    "lossy",
+    "unsupported"
+  ],
+  "content_sha256": "e278e9d180866ab262c59734980d9cbe279ca88996db841c9bc90a28492f3159",
+  "entries": [
+    {
+      "classification": "exact",
+      "decision": "bounded-contract",
+      "evidence_required": [
+        "catalog-definition-and-dataset-identity"
+      ],
+      "item_id": "cics-vsam:vsam-cluster-identity",
+      "rationale": "Static inventory and deterministic semantic vectors are governed separately from native region, catalog, locking, journal, and recovery behavior.",
+      "scope": "vsam-cluster-identity",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM CICS TS and VSAM"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cics-vsam-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "key-length-offset-and-collation-vectors"
+      ],
+      "item_id": "cics-vsam:ksds-primary-key",
+      "rationale": "Static inventory and deterministic semantic vectors are governed separately from native region, catalog, locking, journal, and recovery behavior.",
+      "scope": "ksds-primary-key",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM CICS TS and VSAM"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cics-vsam-qualification"
+      }
+    },
+    {
+      "classification": "lossy",
+      "decision": "accepted-only-in-bounded-planning",
+      "evidence_required": [
+        "native-RBA-lifecycle-baseline"
+      ],
+      "item_id": "cics-vsam:esds-relative-byte-address",
+      "rationale": "Static inventory and deterministic semantic vectors are governed separately from native region, catalog, locking, journal, and recovery behavior.",
+      "scope": "esds-relative-byte-address",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM CICS TS and VSAM"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cics-vsam-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "occupied-empty-and-reuse-vectors"
+      ],
+      "item_id": "cics-vsam:rrds-relative-record-number",
+      "rationale": "Static inventory and deterministic semantic vectors are governed separately from native region, catalog, locking, journal, and recovery behavior.",
+      "scope": "rrds-relative-record-number",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM CICS TS and VSAM"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cics-vsam-qualification"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "LDS-specific-replacement-design"
+      ],
+      "item_id": "cics-vsam:lds-record-access",
+      "rationale": "Static inventory and deterministic semantic vectors are governed separately from native region, catalog, locking, journal, and recovery behavior.",
+      "scope": "lds-record-access",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM CICS TS and VSAM"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cics-vsam-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "RECSZ-CI-buffer-and-open-time-resolution"
+      ],
+      "item_id": "cics-vsam:fixed-and-variable-record-layout",
+      "rationale": "Static inventory and deterministic semantic vectors are governed separately from native region, catalog, locking, journal, and recovery behavior.",
+      "scope": "fixed-and-variable-record-layout",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM CICS TS and VSAM"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cics-vsam-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "CCSID-and-native-key-order-baseline"
+      ],
+      "item_id": "cics-vsam:ebcdic-key-collation",
+      "rationale": "Static inventory and deterministic semantic vectors are governed separately from native region, catalog, locking, journal, and recovery behavior.",
+      "scope": "ebcdic-key-collation",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM CICS TS and VSAM"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cics-vsam-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "BUILD-index-and-duplicate-vectors"
+      ],
+      "item_id": "cics-vsam:alternate-index-unique",
+      "rationale": "Static inventory and deterministic semantic vectors are governed separately from native region, catalog, locking, journal, and recovery behavior.",
+      "scope": "alternate-index-unique",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM CICS TS and VSAM"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cics-vsam-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "ordered-duplicate-key-vectors"
+      ],
+      "item_id": "cics-vsam:alternate-index-nonunique",
+      "rationale": "Static inventory and deterministic semantic vectors are governed separately from native region, catalog, locking, journal, and recovery behavior.",
+      "scope": "alternate-index-nonunique",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM CICS TS and VSAM"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cics-vsam-qualification"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "bounded-contract",
+      "evidence_required": [
+        "PATHENTRY-to-AIX-to-base-binding"
+      ],
+      "item_id": "cics-vsam:vsam-path-resolution",
+      "rationale": "Static inventory and deterministic semantic vectors are governed separately from native region, catalog, locking, journal, and recovery behavior.",
+      "scope": "vsam-path-resolution",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM CICS TS and VSAM"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cics-vsam-qualification"
+      }
+    },
+    {
+      "classification": "lossy",
+      "decision": "accepted-only-in-bounded-planning",
+      "evidence_required": [
+        "native-split-and-freespace-observation"
+      ],
+      "item_id": "cics-vsam:control-interval-area-splits",
+      "rationale": "Static inventory and deterministic semantic vectors are governed separately from native region, catalog, locking, journal, and recovery behavior.",
+      "scope": "control-interval-area-splits",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM CICS TS and VSAM"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cics-vsam-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "authorized-CSD-or-bundle-export"
+      ],
+      "item_id": "cics-vsam:cics-file-definition",
+      "rationale": "Static inventory and deterministic semantic vectors are governed separately from native region, catalog, locking, journal, and recovery behavior.",
+      "scope": "cics-file-definition",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM CICS TS and VSAM"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cics-vsam-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "READ-key-length-generic-vectors"
+      ],
+      "item_id": "cics-vsam:cics-read-and-generic-key",
+      "rationale": "Static inventory and deterministic semantic vectors are governed separately from native region, catalog, locking, journal, and recovery behavior.",
+      "scope": "cics-read-and-generic-key",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM CICS TS and VSAM"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cics-vsam-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "WRITE-DUPREC-and-atomicity-vectors"
+      ],
+      "item_id": "cics-vsam:cics-write",
+      "rationale": "Static inventory and deterministic semantic vectors are governed separately from native region, catalog, locking, journal, and recovery behavior.",
+      "scope": "cics-write",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM CICS TS and VSAM"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cics-vsam-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "READ-UPDATE-REWRITE-vectors"
+      ],
+      "item_id": "cics-vsam:cics-rewrite-update-token",
+      "rationale": "Static inventory and deterministic semantic vectors are governed separately from native region, catalog, locking, journal, and recovery behavior.",
+      "scope": "cics-rewrite-update-token",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM CICS TS and VSAM"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cics-vsam-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "DELETE-key-and-token-vectors"
+      ],
+      "item_id": "cics-vsam:cics-delete",
+      "rationale": "Static inventory and deterministic semantic vectors are governed separately from native region, catalog, locking, journal, and recovery behavior.",
+      "scope": "cics-delete",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM CICS TS and VSAM"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cics-vsam-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "STARTBR-READNEXT-READPREV-ENDBR-vectors"
+      ],
+      "item_id": "cics-vsam:cics-browse",
+      "rationale": "Static inventory and deterministic semantic vectors are governed separately from native region, catalog, locking, journal, and recovery behavior.",
+      "scope": "cics-browse",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM CICS TS and VSAM"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cics-vsam-qualification"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "bounded-contract",
+      "evidence_required": [
+        "status-crosswalk-and-secondary-response-vectors"
+      ],
+      "item_id": "cics-vsam:file-status-resp-resp2",
+      "rationale": "Static inventory and deterministic semantic vectors are governed separately from native region, catalog, locking, journal, and recovery behavior.",
+      "scope": "file-status-resp-resp2",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM CICS TS and VSAM"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cics-vsam-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "region-lock-scope-timeout-and-deadlock-baseline"
+      ],
+      "item_id": "cics-vsam:enq-deq-locking",
+      "rationale": "Static inventory and deterministic semantic vectors are governed separately from native region, catalog, locking, journal, and recovery behavior.",
+      "scope": "enq-deq-locking",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM CICS TS and VSAM"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cics-vsam-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "journal-UOW-and-recovery-baseline"
+      ],
+      "item_id": "cics-vsam:syncpoint-and-rollback",
+      "rationale": "Static inventory and deterministic semantic vectors are governed separately from native region, catalog, locking, journal, and recovery behavior.",
+      "scope": "syncpoint-and-rollback",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM CICS TS and VSAM"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cics-vsam-qualification"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "RLS-and-coupling-facility-qualification"
+      ],
+      "item_id": "cics-vsam:record-level-sharing",
+      "rationale": "Static inventory and deterministic semantic vectors are governed separately from native region, catalog, locking, journal, and recovery behavior.",
+      "scope": "record-level-sharing",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM CICS TS and VSAM"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cics-vsam-qualification"
+      }
+    },
+    {
+      "classification": "lossy",
+      "decision": "accepted-only-in-bounded-planning",
+      "evidence_required": [
+        "terminal-byte-stream-attention-and-attribute-baseline"
+      ],
+      "item_id": "cics-vsam:bms-map-3270-boundary",
+      "rationale": "Static inventory and deterministic semantic vectors are governed separately from native region, catalog, locking, journal, and recovery behavior.",
+      "scope": "bms-map-3270-boundary",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM CICS TS and VSAM"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cics-vsam-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "COMMAREA-channels-and-task-lifetime-vectors"
+      ],
+      "item_id": "cics-vsam:link-xctl-return",
+      "rationale": "Static inventory and deterministic semantic vectors are governed separately from native region, catalog, locking, journal, and recovery behavior.",
+      "scope": "link-xctl-return",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM CICS TS and VSAM"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cics-vsam-qualification"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "TSQ-recovery-and-auxiliary-storage-qualification"
+      ],
+      "item_id": "cics-vsam:temporary-storage-queues",
+      "rationale": "Static inventory and deterministic semantic vectors are governed separately from native region, catalog, locking, journal, and recovery behavior.",
+      "scope": "temporary-storage-queues",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM CICS TS and VSAM"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cics-vsam-qualification"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "TDQ-trigger-intra-extra-partition-qualification"
+      ],
+      "item_id": "cics-vsam:transient-data-queues",
+      "rationale": "Static inventory and deterministic semantic vectors are governed separately from native region, catalog, locking, journal, and recovery behavior.",
+      "scope": "transient-data-queues",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM CICS TS and VSAM"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cics-vsam-qualification"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "journal-model-global-user-exit-and-restart-evidence"
+      ],
+      "item_id": "cics-vsam:journals-exits-and-recovery",
+      "rationale": "Static inventory and deterministic semantic vectors are governed separately from native region, catalog, locking, journal, and recovery behavior.",
+      "scope": "journals-exits-and-recovery",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM CICS TS and VSAM"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cics-vsam-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "RACF-region-routing-and-affinity-baseline"
+      ],
+      "item_id": "cics-vsam:security-routing-and-affinity",
+      "rationale": "Static inventory and deterministic semantic vectors are governed separately from native region, catalog, locking, journal, and recovery behavior.",
+      "scope": "security-routing-and-affinity",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM CICS TS and VSAM"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cics-vsam-qualification"
+      }
+    }
+  ],
+  "graph_content_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
+  "ledger_type": "lightyear-cics-vsam-compatibility-ledger",
+  "mainframe_equivalent": false,
+  "production_ready": false,
+  "qualification_blocked": true,
+  "schema_version": "1.0",
+  "statistics": {
+    "exact": 3,
+    "lossy": 3,
+    "normalized-equivalent": 10,
+    "policy-decision-required": 6,
+    "unsupported": 5
+  }
+}

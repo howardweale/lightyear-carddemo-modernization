@@ -39,13 +39,20 @@ elif [[ "$action" == "verify" || "$action" == "build" ]]; then
     --receipt "$output_dir/readiness-receipt.json"
   "$LIGHTYEAR_PYTHON_BIN" -m lightyear_readiness capture-template \
     --output "$output_dir/zos-capture.template.json"
+  "$LIGHTYEAR_PYTHON_BIN" -m lightyear_readiness.cics_vsam_qualification build \
+    --project-root "$project_dir" --output-root "$output_dir"
   if [[ "$action" == "verify" ]]; then
     cmp "$project_dir/readiness/cics-vsam/local-capture.json" "$output_dir/local-capture.json"
     cmp "$project_dir/readiness/cics-vsam/comparison.json" "$output_dir/comparison.json"
     cmp "$project_dir/readiness/cics-vsam/readiness-receipt.json" "$output_dir/readiness-receipt.json"
     cmp "$project_dir/readiness/cics-vsam/zos-capture.template.json" "$output_dir/zos-capture.template.json"
+    cmp "$project_dir/readiness/cics-vsam/conformance.receipt.json" "$output_dir/conformance.receipt.json"
+    cmp "$project_dir/readiness/cics-vsam/compatibility-ledger.json" "$output_dir/compatibility-ledger.json"
+    cmp "$project_dir/readiness/cics-vsam/qualification.json" "$output_dir/qualification.json"
+    "$LIGHTYEAR_PYTHON_BIN" -m lightyear_readiness.cics_vsam_qualification verify \
+      --project-root "$project_dir"
   fi
-  echo "CICS/VSAM development proof passed; live z/OS equivalence remains fail-closed."
+  echo "CICS/VSAM bounded qualification passed; live z/OS equivalence remains fail-closed."
 else
   echo "Usage: ./cics-vsam-readiness.sh [build|verify|template|compare] [output-dir] [zos-capture]" >&2
   exit 2

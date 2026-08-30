@@ -1,0 +1,704 @@
+{
+  "schema_version": "1.0",
+  "corpus_id": "lightyear-cics-vsam-synthetic-conformance-v1",
+  "cases": [
+    {
+      "id": "01-ksds-read-hit",
+      "classification": "positive",
+      "features": [
+        "ksds",
+        "read",
+        "primary-key",
+        "file-status"
+      ],
+      "request": {
+        "operation": "READ",
+        "organization": "KSDS",
+        "key": "A001"
+      },
+      "expected_status": "passed",
+      "expected_response": "NORMAL",
+      "expected_file_status": "00",
+      "expected_mutation_count": 0
+    },
+    {
+      "id": "02-esds-sequential-read",
+      "classification": "positive",
+      "features": [
+        "esds",
+        "sequential-read",
+        "file-status"
+      ],
+      "request": {
+        "operation": "READ",
+        "organization": "ESDS",
+        "position": 0
+      },
+      "expected_status": "passed",
+      "expected_response": "NORMAL",
+      "expected_file_status": "00",
+      "expected_mutation_count": 0
+    },
+    {
+      "id": "03-rrds-slot-read",
+      "classification": "positive",
+      "features": [
+        "rrds",
+        "relative-record",
+        "file-status"
+      ],
+      "request": {
+        "operation": "READ",
+        "organization": "RRDS",
+        "rrn": 1
+      },
+      "expected_status": "passed",
+      "expected_response": "NORMAL",
+      "expected_file_status": "00",
+      "expected_mutation_count": 0
+    },
+    {
+      "id": "04-bms-send-map",
+      "classification": "positive",
+      "features": [
+        "bms",
+        "send-map",
+        "mapset"
+      ],
+      "request": {
+        "operation": "SEND_MAP",
+        "map": "CACTVWA",
+        "mapset": "COACTVW"
+      },
+      "expected_status": "passed",
+      "expected_response": "NORMAL",
+      "expected_file_status": "00",
+      "expected_mutation_count": 0
+    },
+    {
+      "id": "05-ksds-read-miss",
+      "classification": "boundary",
+      "features": [
+        "ksds",
+        "read",
+        "not-found",
+        "resp"
+      ],
+      "request": {
+        "operation": "READ",
+        "organization": "KSDS",
+        "key": "A999"
+      },
+      "expected_status": "passed",
+      "expected_response": "NOTFND",
+      "expected_file_status": "23",
+      "expected_mutation_count": 0
+    },
+    {
+      "id": "06-ksds-write-new",
+      "classification": "boundary",
+      "features": [
+        "ksds",
+        "write",
+        "mutation",
+        "primary-key"
+      ],
+      "request": {
+        "operation": "WRITE",
+        "organization": "KSDS",
+        "key": "A004",
+        "value": "OPEN"
+      },
+      "expected_status": "passed",
+      "expected_response": "NORMAL",
+      "expected_file_status": "00",
+      "expected_mutation_count": 1
+    },
+    {
+      "id": "07-ksds-write-duplicate",
+      "classification": "boundary",
+      "features": [
+        "ksds",
+        "write",
+        "duplicate-record",
+        "resp"
+      ],
+      "request": {
+        "operation": "WRITE",
+        "organization": "KSDS",
+        "key": "A001",
+        "value": "OPEN"
+      },
+      "expected_status": "passed",
+      "expected_response": "DUPREC",
+      "expected_file_status": "22",
+      "expected_mutation_count": 0
+    },
+    {
+      "id": "08-ksds-rewrite-update-token",
+      "classification": "boundary",
+      "features": [
+        "ksds",
+        "rewrite",
+        "update-token",
+        "mutation"
+      ],
+      "request": {
+        "operation": "REWRITE",
+        "organization": "KSDS",
+        "key": "A001",
+        "value": "CLOSED",
+        "update_token": true
+      },
+      "expected_status": "passed",
+      "expected_response": "NORMAL",
+      "expected_file_status": "00",
+      "expected_mutation_count": 1
+    },
+    {
+      "id": "09-rewrite-without-token",
+      "classification": "boundary",
+      "features": [
+        "ksds",
+        "rewrite",
+        "update-token",
+        "invalid-request"
+      ],
+      "request": {
+        "operation": "REWRITE",
+        "organization": "KSDS",
+        "key": "A001",
+        "value": "CLOSED",
+        "update_token": false
+      },
+      "expected_status": "passed",
+      "expected_response": "INVREQ",
+      "expected_file_status": "92",
+      "expected_mutation_count": 0
+    },
+    {
+      "id": "10-ksds-delete-hit",
+      "classification": "boundary",
+      "features": [
+        "ksds",
+        "delete",
+        "update-token",
+        "mutation"
+      ],
+      "request": {
+        "operation": "DELETE",
+        "organization": "KSDS",
+        "key": "A002",
+        "update_token": true
+      },
+      "expected_status": "passed",
+      "expected_response": "NORMAL",
+      "expected_file_status": "00",
+      "expected_mutation_count": 1
+    },
+    {
+      "id": "11-ksds-delete-miss",
+      "classification": "boundary",
+      "features": [
+        "ksds",
+        "delete",
+        "not-found",
+        "file-status"
+      ],
+      "request": {
+        "operation": "DELETE",
+        "organization": "KSDS",
+        "key": "A999",
+        "update_token": true
+      },
+      "expected_status": "passed",
+      "expected_response": "NOTFND",
+      "expected_file_status": "23",
+      "expected_mutation_count": 0
+    },
+    {
+      "id": "12-esds-append",
+      "classification": "boundary",
+      "features": [
+        "esds",
+        "append",
+        "write",
+        "mutation"
+      ],
+      "request": {
+        "operation": "WRITE",
+        "organization": "ESDS",
+        "value": "ENTRY-3"
+      },
+      "expected_status": "passed",
+      "expected_response": "NORMAL",
+      "expected_file_status": "00",
+      "expected_mutation_count": 1
+    },
+    {
+      "id": "13-esds-end-of-file",
+      "classification": "boundary",
+      "features": [
+        "esds",
+        "sequential-read",
+        "end-of-file",
+        "file-status"
+      ],
+      "request": {
+        "operation": "READ",
+        "organization": "ESDS",
+        "position": 2
+      },
+      "expected_status": "passed",
+      "expected_response": "ENDFILE",
+      "expected_file_status": "10",
+      "expected_mutation_count": 0
+    },
+    {
+      "id": "14-rrds-empty-slot",
+      "classification": "boundary",
+      "features": [
+        "rrds",
+        "relative-record",
+        "not-found"
+      ],
+      "request": {
+        "operation": "READ",
+        "organization": "RRDS",
+        "rrn": 2
+      },
+      "expected_status": "passed",
+      "expected_response": "NOTFND",
+      "expected_file_status": "23",
+      "expected_mutation_count": 0
+    },
+    {
+      "id": "15-rrds-write-empty-slot",
+      "classification": "boundary",
+      "features": [
+        "rrds",
+        "relative-record",
+        "write",
+        "mutation"
+      ],
+      "request": {
+        "operation": "WRITE",
+        "organization": "RRDS",
+        "rrn": 2,
+        "value": "SLOT-2"
+      },
+      "expected_status": "passed",
+      "expected_response": "NORMAL",
+      "expected_file_status": "00",
+      "expected_mutation_count": 1
+    },
+    {
+      "id": "16-aix-unique-read",
+      "classification": "boundary",
+      "features": [
+        "alternate-index",
+        "unique-key",
+        "read"
+      ],
+      "request": {
+        "operation": "AIX_READ",
+        "alternate_key": "HOLD",
+        "unique": true
+      },
+      "expected_status": "passed",
+      "expected_response": "NORMAL",
+      "expected_file_status": "00",
+      "expected_mutation_count": 0
+    },
+    {
+      "id": "17-aix-nonunique-read",
+      "classification": "boundary",
+      "features": [
+        "alternate-index",
+        "nonunique-key",
+        "duplicate-key-chain"
+      ],
+      "request": {
+        "operation": "AIX_READ",
+        "alternate_key": "OPEN",
+        "unique": false
+      },
+      "expected_status": "passed",
+      "expected_response": "NORMAL",
+      "expected_file_status": "00",
+      "expected_mutation_count": 0
+    },
+    {
+      "id": "18-aix-unique-collision",
+      "classification": "boundary",
+      "features": [
+        "alternate-index",
+        "unique-key",
+        "duplicate-record"
+      ],
+      "request": {
+        "operation": "AIX_READ",
+        "alternate_key": "OPEN",
+        "unique": true
+      },
+      "expected_status": "passed",
+      "expected_response": "DUPREC",
+      "expected_file_status": "22",
+      "expected_mutation_count": 0
+    },
+    {
+      "id": "19-path-resolution-hit",
+      "classification": "boundary",
+      "features": [
+        "vsam-path",
+        "alternate-index",
+        "path-resolution"
+      ],
+      "request": {
+        "operation": "PATH_RESOLVE",
+        "path": "CXACAIX.PATH"
+      },
+      "expected_status": "passed",
+      "expected_response": "NORMAL",
+      "expected_file_status": "00",
+      "expected_mutation_count": 0
+    },
+    {
+      "id": "20-path-resolution-miss",
+      "classification": "boundary",
+      "features": [
+        "vsam-path",
+        "path-resolution",
+        "not-found"
+      ],
+      "request": {
+        "operation": "PATH_RESOLVE",
+        "path": "MISSING.PATH"
+      },
+      "expected_status": "passed",
+      "expected_response": "NOTFND",
+      "expected_file_status": "23",
+      "expected_mutation_count": 0
+    },
+    {
+      "id": "21-browse-forward",
+      "classification": "boundary",
+      "features": [
+        "browse",
+        "startbr",
+        "readnext",
+        "endbr"
+      ],
+      "request": {
+        "operation": "BROWSE",
+        "direction": "NEXT",
+        "start": "A001",
+        "limit": 2
+      },
+      "expected_status": "passed",
+      "expected_response": "NORMAL",
+      "expected_file_status": "00",
+      "expected_mutation_count": 0
+    },
+    {
+      "id": "22-browse-reverse",
+      "classification": "boundary",
+      "features": [
+        "browse",
+        "startbr",
+        "readprev",
+        "endbr"
+      ],
+      "request": {
+        "operation": "BROWSE",
+        "direction": "PREV",
+        "start": "A003",
+        "limit": 2
+      },
+      "expected_status": "passed",
+      "expected_response": "NORMAL",
+      "expected_file_status": "00",
+      "expected_mutation_count": 0
+    },
+    {
+      "id": "23-browse-end-of-file",
+      "classification": "boundary",
+      "features": [
+        "browse",
+        "readnext",
+        "end-of-file"
+      ],
+      "request": {
+        "operation": "BROWSE",
+        "direction": "NEXT",
+        "start": "Z999",
+        "limit": 1
+      },
+      "expected_status": "passed",
+      "expected_response": "ENDFILE",
+      "expected_file_status": "10",
+      "expected_mutation_count": 0
+    },
+    {
+      "id": "24-enq-acquire",
+      "classification": "boundary",
+      "features": [
+        "enq",
+        "record-lock",
+        "task-owner"
+      ],
+      "request": {
+        "operation": "ENQ",
+        "owner": "TASK1"
+      },
+      "expected_status": "passed",
+      "expected_response": "NORMAL",
+      "expected_file_status": "00",
+      "expected_mutation_count": 0
+    },
+    {
+      "id": "25-enq-contention",
+      "classification": "boundary",
+      "features": [
+        "enq",
+        "record-lock",
+        "contention"
+      ],
+      "request": {
+        "operation": "ENQ",
+        "owner": "TASK2",
+        "held_by": "TASK1"
+      },
+      "expected_status": "passed",
+      "expected_response": "LOCKED",
+      "expected_file_status": "92",
+      "expected_mutation_count": 0
+    },
+    {
+      "id": "26-deq-release",
+      "classification": "boundary",
+      "features": [
+        "deq",
+        "record-lock",
+        "task-owner"
+      ],
+      "request": {
+        "operation": "DEQ",
+        "owner": "TASK1"
+      },
+      "expected_status": "passed",
+      "expected_response": "NORMAL",
+      "expected_file_status": "00",
+      "expected_mutation_count": 0
+    },
+    {
+      "id": "27-syncpoint-commit",
+      "classification": "boundary",
+      "features": [
+        "syncpoint",
+        "commit",
+        "unit-of-work",
+        "mutation"
+      ],
+      "request": {
+        "operation": "SYNCPOINT",
+        "action": "COMMIT",
+        "pending_mutations": 2
+      },
+      "expected_status": "passed",
+      "expected_response": "NORMAL",
+      "expected_file_status": "00",
+      "expected_mutation_count": 2
+    },
+    {
+      "id": "28-syncpoint-rollback",
+      "classification": "boundary",
+      "features": [
+        "syncpoint",
+        "rollback",
+        "unit-of-work",
+        "recovery"
+      ],
+      "request": {
+        "operation": "SYNCPOINT",
+        "action": "ROLLBACK",
+        "pending_mutations": 2
+      },
+      "expected_status": "passed",
+      "expected_response": "NORMAL",
+      "expected_file_status": "00",
+      "expected_mutation_count": 0
+    },
+    {
+      "id": "29-handle-condition",
+      "classification": "boundary",
+      "features": [
+        "handle-condition",
+        "not-found",
+        "cics-condition"
+      ],
+      "request": {
+        "operation": "HANDLE_CONDITION",
+        "condition": "NOTFND"
+      },
+      "expected_status": "passed",
+      "expected_response": "NOTFND",
+      "expected_file_status": "23",
+      "expected_mutation_count": 0
+    },
+    {
+      "id": "30-resp2-preservation",
+      "classification": "boundary",
+      "features": [
+        "resp",
+        "resp2",
+        "invalid-request",
+        "file-status"
+      ],
+      "request": {
+        "operation": "RESP2",
+        "resp2": 42
+      },
+      "expected_status": "passed",
+      "expected_response": "INVREQ",
+      "expected_file_status": "92",
+      "expected_mutation_count": 0
+    },
+    {
+      "id": "31-bms-receive-map",
+      "classification": "boundary",
+      "features": [
+        "bms",
+        "receive-map",
+        "mapset"
+      ],
+      "request": {
+        "operation": "RECEIVE_MAP",
+        "map": "CACTVWA",
+        "mapset": "COACTVW"
+      },
+      "expected_status": "passed",
+      "expected_response": "NORMAL",
+      "expected_file_status": "00",
+      "expected_mutation_count": 0
+    },
+    {
+      "id": "32-program-link",
+      "classification": "boundary",
+      "features": [
+        "program-control",
+        "link",
+        "commarea"
+      ],
+      "request": {
+        "operation": "LINK",
+        "program": "COACTVWC"
+      },
+      "expected_status": "passed",
+      "expected_response": "NORMAL",
+      "expected_file_status": "00",
+      "expected_mutation_count": 0
+    },
+    {
+      "id": "33-program-xctl",
+      "classification": "boundary",
+      "features": [
+        "program-control",
+        "xctl",
+        "task-lifetime"
+      ],
+      "request": {
+        "operation": "XCTL",
+        "program": "COACTVWC"
+      },
+      "expected_status": "passed",
+      "expected_response": "NORMAL",
+      "expected_file_status": "00",
+      "expected_mutation_count": 0
+    },
+    {
+      "id": "34-program-return",
+      "classification": "boundary",
+      "features": [
+        "program-control",
+        "return",
+        "task-lifetime"
+      ],
+      "request": {
+        "operation": "RETURN"
+      },
+      "expected_status": "passed",
+      "expected_response": "NORMAL",
+      "expected_file_status": "00",
+      "expected_mutation_count": 0
+    },
+    {
+      "id": "35-lds-record-access",
+      "classification": "mutation",
+      "features": [
+        "lds",
+        "unsupported",
+        "fail-closed"
+      ],
+      "request": {
+        "operation": "LDS_ACCESS",
+        "organization": "LDS"
+      },
+      "expected_status": "blocked",
+      "expected_response": "INVREQ",
+      "expected_file_status": "92",
+      "expected_mutation_count": 0
+    },
+    {
+      "id": "36-rls-record-access",
+      "classification": "mutation",
+      "features": [
+        "rls",
+        "unsupported",
+        "fail-closed"
+      ],
+      "request": {
+        "operation": "RLS_ACCESS",
+        "organization": "KSDS"
+      },
+      "expected_status": "blocked",
+      "expected_response": "INVREQ",
+      "expected_file_status": "92",
+      "expected_mutation_count": 0
+    },
+    {
+      "id": "37-temporary-storage-queue",
+      "classification": "mutation",
+      "features": [
+        "tsq",
+        "unsupported",
+        "fail-closed"
+      ],
+      "request": {
+        "operation": "TSQ_ACCESS"
+      },
+      "expected_status": "blocked",
+      "expected_response": "INVREQ",
+      "expected_file_status": "92",
+      "expected_mutation_count": 0
+    },
+    {
+      "id": "38-transient-data-queue",
+      "classification": "mutation",
+      "features": [
+        "tdq",
+        "unsupported",
+        "fail-closed"
+      ],
+      "request": {
+        "operation": "TDQ_ACCESS"
+      },
+      "expected_status": "blocked",
+      "expected_response": "INVREQ",
+      "expected_file_status": "92",
+      "expected_mutation_count": 0
+    }
+  ],
+  "license": "Synthetic fixtures authored for LIGHTYEAR; no customer or IBM source is included.",
+  "content_sha256": "1078c721946e9f3f18015a393cb147b9f10ac299736d4b300edf40f1d5dbccb2"
+}

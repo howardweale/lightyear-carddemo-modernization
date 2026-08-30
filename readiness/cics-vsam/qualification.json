@@ -1,0 +1,171 @@
+{
+  "bindings": {
+    "account_view_comparison_sha256": "18ffa8df47108e299c14e971c7a646ded82020e0853f0d2d897be1aa09e4a23b",
+    "account_view_readiness_sha256": "6bbe74439aa51d147bcb266f95af048a357f2e44dc32bcc200406a7884424389",
+    "compatibility_ledger_sha256": "e278e9d180866ab262c59734980d9cbe279ca88996db841c9bc90a28492f3159",
+    "conformance_sha256": "4e9da521251dce47bc3d206ad6ae95686f2d02ddf448b60c8449d412786c7656",
+    "graph_content_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
+    "manifest_sha256": "1078c721946e9f3f18015a393cb147b9f10ac299736d4b300edf40f1d5dbccb2"
+  },
+  "cics_runtime_equivalent": false,
+  "claim_unlocked": "LIGHTYEAR can inventory and fail-closed qualify a bounded synthetic CICS/VSAM semantic subset without claiming native region, VSAM, RLS, recovery, or production equivalence.",
+  "content_sha256": "4dc417aa88f6a02c3c34cad2100d6a9e5c314639b123d525dca6e4e5171ca213",
+  "development_ready": true,
+  "inventory": {
+    "blocked_cases": 4,
+    "cics_access_edges": 58,
+    "cics_commands": 240,
+    "cics_file_resources": 16,
+    "cics_issue_edges": 240,
+    "cics_program_resources": 26,
+    "cics_transactions": 25,
+    "corpus_cases": 38,
+    "customer_source": false,
+    "mutation_cases": 4,
+    "observed_feature_categories": 59,
+    "targeted_boundary_cases": 30,
+    "vsam_alternate_indexes": 3,
+    "vsam_clusters": 15,
+    "vsam_components": 28,
+    "vsam_paths": 3
+  },
+  "mainframe_equivalent": false,
+  "native_cics_qualified": false,
+  "native_vsam_qualified": false,
+  "production_ready": false,
+  "qualification_gates": [
+    {
+      "evidence": {
+        "cics_commands": 240,
+        "cics_file_resources": 16,
+        "cics_transactions": 25,
+        "graph_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
+        "vsam_alternate_indexes": 3,
+        "vsam_clusters": 15,
+        "vsam_paths": 3
+      },
+      "gate": "estate-graph-inventory",
+      "status": "passed-static"
+    },
+    {
+      "evidence": {
+        "blocked_case_count": 4,
+        "case_count": 38,
+        "conformance_sha256": "4e9da521251dce47bc3d206ad6ae95686f2d02ddf448b60c8449d412786c7656",
+        "customer_source": false,
+        "mutation_case_count": 4,
+        "passed_case_count": 34,
+        "positive_case_count": 4,
+        "targeted_boundary_case_count": 30
+      },
+      "gate": "corpus-and-provenance",
+      "status": "passed-bounded-synthetic"
+    },
+    {
+      "evidence": {
+        "lds_supported": false,
+        "organizations": [
+          "KSDS",
+          "ESDS",
+          "RRDS"
+        ]
+      },
+      "gate": "vsam-organizations-keys-and-records",
+      "status": "passed-supported-subset"
+    },
+    {
+      "evidence": {
+        "alternate_indexes": 3,
+        "native_build_index_observed": false,
+        "paths": 3
+      },
+      "gate": "alternate-index-and-path",
+      "status": "passed-bounded-semantic"
+    },
+    {
+      "evidence": {
+        "native_file_control_observed": false,
+        "responses": [
+          "DUPREC",
+          "ENDFILE",
+          "INVREQ",
+          "LOCKED",
+          "NORMAL",
+          "NOTFND"
+        ]
+      },
+      "gate": "file-access-status-and-browse",
+      "status": "passed-bounded-semantic"
+    },
+    {
+      "evidence": {
+        "mutation_vectors": 7,
+        "native_atomicity_observed": false
+      },
+      "gate": "write-rewrite-delete-and-update-token",
+      "status": "passed-bounded-semantic"
+    },
+    {
+      "evidence": {
+        "native_journal_or_UOW_observed": false,
+        "synthetic_lock_vectors": true
+      },
+      "gate": "enq-deq-syncpoint-and-recovery",
+      "status": "policy-decision-required"
+    },
+    {
+      "evidence": {
+        "bms_boundary_vectors": true,
+        "link_xctl_return_vectors": true,
+        "resp_resp2_vectors": true
+      },
+      "gate": "cics-response-map-and-program-control",
+      "status": "passed-bounded-semantic"
+    },
+    {
+      "evidence": {
+        "rls": false,
+        "security_and_routing": false,
+        "tdq": false,
+        "tsq": false
+      },
+      "gate": "rls-queues-security-and-routing",
+      "status": "excluded-unqualified"
+    },
+    {
+      "evidence": {
+        "behavior_match": true,
+        "comparison_sha256": "18ffa8df47108e299c14e971c7a646ded82020e0853f0d2d897be1aa09e4a23b",
+        "readiness_sha256": "6bbe74439aa51d147bcb266f95af048a357f2e44dc32bcc200406a7884424389"
+      },
+      "gate": "account-view-private-differential-proof",
+      "status": "passed-local-development"
+    },
+    {
+      "evidence": {
+        "native_catalog_before_after": false,
+        "region_trace": false,
+        "signed_equivalence": false,
+        "zos_observed_baseline": false
+      },
+      "gate": "authorized-native-cics-vsam-execution",
+      "status": "blocked-no-authorized-zos-evidence"
+    }
+  ],
+  "qualification_id": "carddemo-cics-vsam-v0.39",
+  "qualification_mechanism_ready": true,
+  "qualification_type": "lightyear-cics-vsam-qualification",
+  "recovery_equivalent": false,
+  "required_native_evidence": [
+    "authorized CICS region, transaction, program, task, operator, and security identities",
+    "CSD or bundle file definitions and VSAM catalog LISTCAT before and after state",
+    "native KSDS, ESDS, RRDS, alternate-index, PATH, browse, update, and delete vectors",
+    "RESP, RESP2, file status, BMS terminal, COMMAREA, channel, and program-control traces",
+    "concurrent ENQ, record-lock, deadlock, timeout, RLS, and coupling-facility evidence",
+    "journal, unit-of-work, syncpoint, rollback, abend, restart, and data recovery evidence",
+    "TSQ, TDQ, exits, routing, affinity, and installation-policy decisions",
+    "independently signed differential equivalence receipt"
+  ],
+  "rls_qualified": false,
+  "schema_version": "1.0"
+}

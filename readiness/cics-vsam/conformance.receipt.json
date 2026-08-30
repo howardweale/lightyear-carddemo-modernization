@@ -1,0 +1,1061 @@
+{
+  "claim_boundary": {
+    "cics_runtime_equivalent": false,
+    "mainframe_equivalent": false,
+    "native_cics_qualified": false,
+    "native_vsam_qualified": false,
+    "production_ready": false,
+    "recovery_equivalent": false,
+    "rls_qualified": false
+  },
+  "content_sha256": "4e9da521251dce47bc3d206ad6ae95686f2d02ddf448b60c8449d412786c7656",
+  "corpus": {
+    "blocked_case_count": 4,
+    "case_count": 38,
+    "customer_source": false,
+    "mutation_case_count": 4,
+    "passed_case_count": 34,
+    "positive_case_count": 4,
+    "targeted_boundary_case_count": 30
+  },
+  "corpus_id": "lightyear-cics-vsam-synthetic-conformance-v1",
+  "coverage": {
+    "explicit_native_gaps": [
+      "authorized CICS region execution and task identity",
+      "native VSAM catalog, CI/CA split, buffering, and EBCDIC collation",
+      "RLS, coupling-facility locking, journals, exits, and recovery",
+      "3270 terminal byte-stream and BMS runtime behavior",
+      "TSQ, TDQ, security, routing, and installation policy"
+    ],
+    "observed_feature_count": 59,
+    "observed_features": [
+      "alternate-index",
+      "append",
+      "bms",
+      "browse",
+      "cics-condition",
+      "commarea",
+      "commit",
+      "contention",
+      "delete",
+      "deq",
+      "duplicate-key-chain",
+      "duplicate-record",
+      "end-of-file",
+      "endbr",
+      "enq",
+      "esds",
+      "fail-closed",
+      "file-status",
+      "handle-condition",
+      "invalid-request",
+      "ksds",
+      "lds",
+      "link",
+      "mapset",
+      "mutation",
+      "nonunique-key",
+      "not-found",
+      "path-resolution",
+      "primary-key",
+      "program-control",
+      "read",
+      "readnext",
+      "readprev",
+      "receive-map",
+      "record-lock",
+      "recovery",
+      "relative-record",
+      "resp",
+      "resp2",
+      "return",
+      "rewrite",
+      "rls",
+      "rollback",
+      "rrds",
+      "send-map",
+      "sequential-read",
+      "startbr",
+      "syncpoint",
+      "task-lifetime",
+      "task-owner",
+      "tdq",
+      "tsq",
+      "unique-key",
+      "unit-of-work",
+      "unsupported",
+      "update-token",
+      "vsam-path",
+      "write",
+      "xctl"
+    ],
+    "organizations": [
+      "KSDS",
+      "ESDS",
+      "RRDS"
+    ],
+    "responses": [
+      "DUPREC",
+      "ENDFILE",
+      "INVREQ",
+      "LOCKED",
+      "NORMAL",
+      "NOTFND"
+    ]
+  },
+  "graph_content_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
+  "manifest_sha256": "1078c721946e9f3f18015a393cb147b9f10ac299736d4b300edf40f1d5dbccb2",
+  "receipt_type": "lightyear-cics-vsam-conformance-receipt",
+  "results": [
+    {
+      "classification": "positive",
+      "features": [
+        "file-status",
+        "ksds",
+        "primary-key",
+        "read"
+      ],
+      "id": "01-ksds-read-hit",
+      "observed": {
+        "diagnostics": [],
+        "file_status": "00",
+        "mutation_count": 0,
+        "resp": 0,
+        "resp2": 0,
+        "response": "NORMAL",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "READ KSDS A001"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "cadd1bde2e9259b4e2733f32bf8dab0f7665a0741c0e9d60437d1c0b0e5d105d"
+    },
+    {
+      "classification": "positive",
+      "features": [
+        "esds",
+        "file-status",
+        "sequential-read"
+      ],
+      "id": "02-esds-sequential-read",
+      "observed": {
+        "diagnostics": [],
+        "file_status": "00",
+        "mutation_count": 0,
+        "resp": 0,
+        "resp2": 0,
+        "response": "NORMAL",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "READ ESDS 0"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "2c950203182c12fd11b2327a2e4181fed096eceba2445b5750f7baf2eda4635c"
+    },
+    {
+      "classification": "positive",
+      "features": [
+        "file-status",
+        "relative-record",
+        "rrds"
+      ],
+      "id": "03-rrds-slot-read",
+      "observed": {
+        "diagnostics": [],
+        "file_status": "00",
+        "mutation_count": 0,
+        "resp": 0,
+        "resp2": 0,
+        "response": "NORMAL",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "READ RRDS 1"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "3a3e4b73be84db72d739ad4e38e4b9f7b8ac99f8c1a85ebd2e110ebafb0bce32"
+    },
+    {
+      "classification": "positive",
+      "features": [
+        "bms",
+        "mapset",
+        "send-map"
+      ],
+      "id": "04-bms-send-map",
+      "observed": {
+        "diagnostics": [],
+        "file_status": "00",
+        "mutation_count": 0,
+        "resp": 0,
+        "resp2": 0,
+        "response": "NORMAL",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "SEND MAP"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "522a0ddf87fe7f70958d58bff0a7b68f0a0ca181dbc2513e5d7cc78f60269e60"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "ksds",
+        "not-found",
+        "read",
+        "resp"
+      ],
+      "id": "05-ksds-read-miss",
+      "observed": {
+        "diagnostics": [],
+        "file_status": "23",
+        "mutation_count": 0,
+        "resp": 13,
+        "resp2": 0,
+        "response": "NOTFND",
+        "result_count": 0,
+        "status": "passed",
+        "trace": [
+          "READ KSDS A999"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "957990e06d6bf0e2da603b0471aef37d89dc4d63b4f23a967a9929658c5a416c"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "ksds",
+        "mutation",
+        "primary-key",
+        "write"
+      ],
+      "id": "06-ksds-write-new",
+      "observed": {
+        "diagnostics": [],
+        "file_status": "00",
+        "mutation_count": 1,
+        "resp": 0,
+        "resp2": 0,
+        "response": "NORMAL",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "WRITE KSDS A004"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "00aee05fe0c96ff7a805c2af8f0ee5781bc4518bac1dd608117f467f09fbb6a3"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "duplicate-record",
+        "ksds",
+        "resp",
+        "write"
+      ],
+      "id": "07-ksds-write-duplicate",
+      "observed": {
+        "diagnostics": [],
+        "file_status": "22",
+        "mutation_count": 0,
+        "resp": 15,
+        "resp2": 0,
+        "response": "DUPREC",
+        "result_count": 0,
+        "status": "passed",
+        "trace": [
+          "WRITE KSDS A001"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "db767389bf6d931d283085a70b31f3653ad4122946dfc54b2467003789f006d1"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "ksds",
+        "mutation",
+        "rewrite",
+        "update-token"
+      ],
+      "id": "08-ksds-rewrite-update-token",
+      "observed": {
+        "diagnostics": [],
+        "file_status": "00",
+        "mutation_count": 1,
+        "resp": 0,
+        "resp2": 0,
+        "response": "NORMAL",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "REWRITE KSDS A001"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "2a48582c0207ba48e79c1fb65fccb29958e1c006f8c3fc4353fb2bdd748975c2"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "invalid-request",
+        "ksds",
+        "rewrite",
+        "update-token"
+      ],
+      "id": "09-rewrite-without-token",
+      "observed": {
+        "diagnostics": [
+          "update-token-required"
+        ],
+        "file_status": "92",
+        "mutation_count": 0,
+        "resp": 16,
+        "resp2": 0,
+        "response": "INVREQ",
+        "result_count": 0,
+        "status": "passed",
+        "trace": [
+          "REWRITE KSDS"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "4690b746c095f42fd4a92db69ce0e759766c1568e59113264d2ad1daa27a455d"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "delete",
+        "ksds",
+        "mutation",
+        "update-token"
+      ],
+      "id": "10-ksds-delete-hit",
+      "observed": {
+        "diagnostics": [],
+        "file_status": "00",
+        "mutation_count": 1,
+        "resp": 0,
+        "resp2": 0,
+        "response": "NORMAL",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "DELETE KSDS A002"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "1946ffce5013870c236af086a407ceba4c13d4d8889696820fa6e7e77b06b2a0"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "delete",
+        "file-status",
+        "ksds",
+        "not-found"
+      ],
+      "id": "11-ksds-delete-miss",
+      "observed": {
+        "diagnostics": [],
+        "file_status": "23",
+        "mutation_count": 0,
+        "resp": 13,
+        "resp2": 0,
+        "response": "NOTFND",
+        "result_count": 0,
+        "status": "passed",
+        "trace": [
+          "DELETE KSDS A999"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "4657f8426ef6a6e5782315944d9098a486fc6a0c779ea8de675844d719a08143"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "append",
+        "esds",
+        "mutation",
+        "write"
+      ],
+      "id": "12-esds-append",
+      "observed": {
+        "diagnostics": [],
+        "file_status": "00",
+        "mutation_count": 1,
+        "resp": 0,
+        "resp2": 0,
+        "response": "NORMAL",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "WRITE ESDS APPEND"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "ab71f5baf6842d337bfc226cc689b5b4e4c507f8e0f4ab3fc872d7c3a5d0b770"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "end-of-file",
+        "esds",
+        "file-status",
+        "sequential-read"
+      ],
+      "id": "13-esds-end-of-file",
+      "observed": {
+        "diagnostics": [],
+        "file_status": "10",
+        "mutation_count": 0,
+        "resp": 20,
+        "resp2": 0,
+        "response": "ENDFILE",
+        "result_count": 0,
+        "status": "passed",
+        "trace": [
+          "READ ESDS 2"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "7964ffe667c780ad8f9c3f2a0a0f4c689b99e8a897f4aa45db35885a03b012fc"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "not-found",
+        "relative-record",
+        "rrds"
+      ],
+      "id": "14-rrds-empty-slot",
+      "observed": {
+        "diagnostics": [],
+        "file_status": "23",
+        "mutation_count": 0,
+        "resp": 13,
+        "resp2": 0,
+        "response": "NOTFND",
+        "result_count": 0,
+        "status": "passed",
+        "trace": [
+          "READ RRDS 2"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "efbd6ff4a2f212927c3b1da8cf9a66d1436c19fa61857db248799525e7cc5cb6"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "mutation",
+        "relative-record",
+        "rrds",
+        "write"
+      ],
+      "id": "15-rrds-write-empty-slot",
+      "observed": {
+        "diagnostics": [],
+        "file_status": "00",
+        "mutation_count": 1,
+        "resp": 0,
+        "resp2": 0,
+        "response": "NORMAL",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "WRITE RRDS 2"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "3b1e6c4d2a57dada8cc59c20d01c5b285c1d686fc15da75874604fec344beef8"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "alternate-index",
+        "read",
+        "unique-key"
+      ],
+      "id": "16-aix-unique-read",
+      "observed": {
+        "diagnostics": [],
+        "file_status": "00",
+        "mutation_count": 0,
+        "resp": 0,
+        "resp2": 0,
+        "response": "NORMAL",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "AIX READ HOLD"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "78c52ae2c2ff6f6fdcc3d0f9888a2fe7fc97f58dbe2ecfe424ee520e22473db3"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "alternate-index",
+        "duplicate-key-chain",
+        "nonunique-key"
+      ],
+      "id": "17-aix-nonunique-read",
+      "observed": {
+        "diagnostics": [],
+        "file_status": "00",
+        "mutation_count": 0,
+        "resp": 0,
+        "resp2": 0,
+        "response": "NORMAL",
+        "result_count": 2,
+        "status": "passed",
+        "trace": [
+          "AIX READ OPEN"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "d92a3bfa40b0c43a1237a11a9dd89825f48575fa02b1967ad2a47dfb61714936"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "alternate-index",
+        "duplicate-record",
+        "unique-key"
+      ],
+      "id": "18-aix-unique-collision",
+      "observed": {
+        "diagnostics": [],
+        "file_status": "22",
+        "mutation_count": 0,
+        "resp": 15,
+        "resp2": 0,
+        "response": "DUPREC",
+        "result_count": 2,
+        "status": "passed",
+        "trace": [
+          "AIX UNIQUE OPEN"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "8883ca6728bb2babeb700d9e2294b43333c8ea891df598a2e26e8ebc5d695e53"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "alternate-index",
+        "path-resolution",
+        "vsam-path"
+      ],
+      "id": "19-path-resolution-hit",
+      "observed": {
+        "diagnostics": [],
+        "file_status": "00",
+        "mutation_count": 0,
+        "resp": 0,
+        "resp2": 0,
+        "response": "NORMAL",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "PATH CXACAIX.PATH"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "55dc476dde9fb2b42a24559814eecd93ceffb98a9ffe91ef0615be7d814f9250"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "not-found",
+        "path-resolution",
+        "vsam-path"
+      ],
+      "id": "20-path-resolution-miss",
+      "observed": {
+        "diagnostics": [],
+        "file_status": "23",
+        "mutation_count": 0,
+        "resp": 13,
+        "resp2": 0,
+        "response": "NOTFND",
+        "result_count": 0,
+        "status": "passed",
+        "trace": [
+          "PATH MISSING.PATH"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "a1a05ef0514fe9926546f897999038a4bf37e27cb3c71bced8ac1be804a76dba"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "browse",
+        "endbr",
+        "readnext",
+        "startbr"
+      ],
+      "id": "21-browse-forward",
+      "observed": {
+        "diagnostics": [],
+        "file_status": "00",
+        "mutation_count": 0,
+        "resp": 0,
+        "resp2": 0,
+        "response": "NORMAL",
+        "result_count": 2,
+        "status": "passed",
+        "trace": [
+          "STARTBR",
+          "READNEXT",
+          "ENDBR"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "f999e379efa3011035638382577a73819c7edac9c698a071229c41d114fdb46d"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "browse",
+        "endbr",
+        "readprev",
+        "startbr"
+      ],
+      "id": "22-browse-reverse",
+      "observed": {
+        "diagnostics": [],
+        "file_status": "00",
+        "mutation_count": 0,
+        "resp": 0,
+        "resp2": 0,
+        "response": "NORMAL",
+        "result_count": 2,
+        "status": "passed",
+        "trace": [
+          "STARTBR",
+          "READPREV",
+          "ENDBR"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "6d3626f7156f4d04ba2186458e1f554abbae656f754648be2511d536c1658580"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "browse",
+        "end-of-file",
+        "readnext"
+      ],
+      "id": "23-browse-end-of-file",
+      "observed": {
+        "diagnostics": [],
+        "file_status": "10",
+        "mutation_count": 0,
+        "resp": 20,
+        "resp2": 0,
+        "response": "ENDFILE",
+        "result_count": 0,
+        "status": "passed",
+        "trace": [
+          "STARTBR",
+          "READNEXT",
+          "ENDBR"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "193561b09cbbfe53f970986c37814100c5cf8ec6637ce414e8bae453cd37176c"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "enq",
+        "record-lock",
+        "task-owner"
+      ],
+      "id": "24-enq-acquire",
+      "observed": {
+        "diagnostics": [],
+        "file_status": "00",
+        "mutation_count": 0,
+        "resp": 0,
+        "resp2": 0,
+        "response": "NORMAL",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "ENQ TASK1"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "e6d3cde1c1cec0d3fbe35ff19df8c1c749a3cee7df1d8fd0b44ea607d7469a09"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "contention",
+        "enq",
+        "record-lock"
+      ],
+      "id": "25-enq-contention",
+      "observed": {
+        "diagnostics": [
+          "record-lock-contention"
+        ],
+        "file_status": "92",
+        "mutation_count": 0,
+        "resp": 100,
+        "resp2": 0,
+        "response": "LOCKED",
+        "result_count": 0,
+        "status": "passed",
+        "trace": [
+          "ENQ TASK2"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "cac9aaa0dba3168ff402db1372c9238434add91c02ee41d1a8b23626e3d338ce"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "deq",
+        "record-lock",
+        "task-owner"
+      ],
+      "id": "26-deq-release",
+      "observed": {
+        "diagnostics": [],
+        "file_status": "00",
+        "mutation_count": 0,
+        "resp": 0,
+        "resp2": 0,
+        "response": "NORMAL",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "DEQ"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "6b3c560fe34e30d0879e014b2928d85adcec8f7866751addd1ac230c8eeb0665"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "commit",
+        "mutation",
+        "syncpoint",
+        "unit-of-work"
+      ],
+      "id": "27-syncpoint-commit",
+      "observed": {
+        "diagnostics": [],
+        "file_status": "00",
+        "mutation_count": 2,
+        "resp": 0,
+        "resp2": 0,
+        "response": "NORMAL",
+        "result_count": 2,
+        "status": "passed",
+        "trace": [
+          "SYNCPOINT COMMIT"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "0a2c1ee4c31d10b34b52ed6e1644fb7a0c745ed13a9439d12b32d898ff663e81"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "recovery",
+        "rollback",
+        "syncpoint",
+        "unit-of-work"
+      ],
+      "id": "28-syncpoint-rollback",
+      "observed": {
+        "diagnostics": [],
+        "file_status": "00",
+        "mutation_count": 0,
+        "resp": 0,
+        "resp2": 0,
+        "response": "NORMAL",
+        "result_count": 2,
+        "status": "passed",
+        "trace": [
+          "SYNCPOINT ROLLBACK"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "bab85d27050a2dd98b9a0fbf1cbccd698d3e9250bfe4bfd9837ecb184aae6cf8"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "cics-condition",
+        "handle-condition",
+        "not-found"
+      ],
+      "id": "29-handle-condition",
+      "observed": {
+        "diagnostics": [],
+        "file_status": "23",
+        "mutation_count": 0,
+        "resp": 13,
+        "resp2": 0,
+        "response": "NOTFND",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "HANDLE CONDITION NOTFND"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "8b0570eb2ea625143c32a22b5e2cbe1e2b9997b6bc34ae6d637d571904b0febd"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "file-status",
+        "invalid-request",
+        "resp",
+        "resp2"
+      ],
+      "id": "30-resp2-preservation",
+      "observed": {
+        "diagnostics": [
+          "secondary-response-preserved"
+        ],
+        "file_status": "92",
+        "mutation_count": 0,
+        "resp": 16,
+        "resp2": 42,
+        "response": "INVREQ",
+        "result_count": 0,
+        "status": "passed",
+        "trace": [
+          "RESP RESP2"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "a5e2c77ce08aaa590f9667c1eb5d502ccab72982b366990356a49f79d45fc0c7"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "bms",
+        "mapset",
+        "receive-map"
+      ],
+      "id": "31-bms-receive-map",
+      "observed": {
+        "diagnostics": [],
+        "file_status": "00",
+        "mutation_count": 0,
+        "resp": 0,
+        "resp2": 0,
+        "response": "NORMAL",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "RECEIVE MAP"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "855b078414448c244464702fb6dfed27bc0eef930d7aac597856141d91c70c55"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "commarea",
+        "link",
+        "program-control"
+      ],
+      "id": "32-program-link",
+      "observed": {
+        "diagnostics": [],
+        "file_status": "00",
+        "mutation_count": 0,
+        "resp": 0,
+        "resp2": 0,
+        "response": "NORMAL",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "LINK"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "3226baed7dec0d57a261a8fd8a3c652c926740b27e4d449c6b999364141c9f51"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "program-control",
+        "task-lifetime",
+        "xctl"
+      ],
+      "id": "33-program-xctl",
+      "observed": {
+        "diagnostics": [],
+        "file_status": "00",
+        "mutation_count": 0,
+        "resp": 0,
+        "resp2": 0,
+        "response": "NORMAL",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "XCTL"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "14004b9edad6b41fa8207ff93cb449e884b7dd910559abd6c4a9d80bfb3cdfd5"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "program-control",
+        "return",
+        "task-lifetime"
+      ],
+      "id": "34-program-return",
+      "observed": {
+        "diagnostics": [],
+        "file_status": "00",
+        "mutation_count": 0,
+        "resp": 0,
+        "resp2": 0,
+        "response": "NORMAL",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "RETURN"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "f3e84195952166ea80434c9553b0b2089486f8864a3e4de824ccc973841e0d81"
+    },
+    {
+      "classification": "mutation",
+      "features": [
+        "fail-closed",
+        "lds",
+        "unsupported"
+      ],
+      "id": "35-lds-record-access",
+      "observed": {
+        "diagnostics": [
+          "lds-record-access-unsupported"
+        ],
+        "file_status": "92",
+        "mutation_count": 0,
+        "resp": 16,
+        "resp2": 0,
+        "response": "INVREQ",
+        "result_count": 0,
+        "status": "blocked",
+        "trace": [
+          "LDS_ACCESS"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "31815d44b69b8d254dc98f50dc7ae98d67646c7a3f52944cf9897e1f5ecdc559"
+    },
+    {
+      "classification": "mutation",
+      "features": [
+        "fail-closed",
+        "rls",
+        "unsupported"
+      ],
+      "id": "36-rls-record-access",
+      "observed": {
+        "diagnostics": [
+          "rls-semantics-unsupported"
+        ],
+        "file_status": "92",
+        "mutation_count": 0,
+        "resp": 16,
+        "resp2": 0,
+        "response": "INVREQ",
+        "result_count": 0,
+        "status": "blocked",
+        "trace": [
+          "RLS_ACCESS"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "31ffa5d48a61eb5fdf41c3262d58ed6dc7e64c1169e4ab1be46183e1328c5cde"
+    },
+    {
+      "classification": "mutation",
+      "features": [
+        "fail-closed",
+        "tsq",
+        "unsupported"
+      ],
+      "id": "37-temporary-storage-queue",
+      "observed": {
+        "diagnostics": [
+          "temporary-storage-queue-unsupported"
+        ],
+        "file_status": "92",
+        "mutation_count": 0,
+        "resp": 16,
+        "resp2": 0,
+        "response": "INVREQ",
+        "result_count": 0,
+        "status": "blocked",
+        "trace": [
+          "TSQ_ACCESS"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "97617398be6d54fa5168769b475970b6f3ea748dab1447e5c3e7bfc261ac2864"
+    },
+    {
+      "classification": "mutation",
+      "features": [
+        "fail-closed",
+        "tdq",
+        "unsupported"
+      ],
+      "id": "38-transient-data-queue",
+      "observed": {
+        "diagnostics": [
+          "transient-data-queue-unsupported"
+        ],
+        "file_status": "92",
+        "mutation_count": 0,
+        "resp": 16,
+        "resp2": 0,
+        "response": "INVREQ",
+        "result_count": 0,
+        "status": "blocked",
+        "trace": [
+          "TDQ_ACCESS"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "20d9d5d677cad3351130bc84eaaa3bf80a1021be8f4324459bfbec396eb74fe2"
+    }
+  ],
+  "schema_version": "1.0",
+  "status": "passed"
+}

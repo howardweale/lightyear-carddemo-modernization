@@ -51,6 +51,7 @@ def build_oracle_postgresql_proof(project_root: Path) -> dict[str, Any]:
     canonical_schema = _load(root / "semantic-core/authfrds.canonical-schema.json")
     rehearsal = _load(root / "rehearsal/receipt.json")
     embedded_sql = _load(root / "source/authfrds.embedded-sql.json")
+    stored_logic = _load(root / "stored-logic/authfrds.qualification.json")
     oracle_sql = (root / "oracle/authfrds.sql").read_bytes()
     postgres_sql = (root / "postgres/authfrds.sql").read_bytes()
 
@@ -116,9 +117,10 @@ def build_oracle_postgresql_proof(project_root: Path) -> dict[str, Any]:
         }, ["The cutover approval is development-only and cannot authorize production."]),
         _gate(8, "stored-logic", "excluded-unqualified", {
             "ledger_items": stored_logic_entries,
-            "procedures_qualified": 0,
-            "triggers_qualified": 0,
-            "arbitrary_application_sql_qualified": False,
+            "qualification_sha256": stored_logic["content_sha256"],
+            "qualification_core_ready": stored_logic["qualification_core_ready"],
+            "inventory_complete": stored_logic["inventory_complete"],
+            "stored_logic_complete": stored_logic["stored_logic_complete"],
         }, ["Stored procedures, triggers, and arbitrary application SQL require independent qualification gates."]),
     ]
     return seal({
@@ -132,6 +134,7 @@ def build_oracle_postgresql_proof(project_root: Path) -> dict[str, Any]:
             "canonical_schema_sha256": canonical_schema["content_sha256"],
             "compatibility_ledger_sha256": ledger["content_sha256"],
             "rehearsal_receipt_sha256": rehearsal["content_sha256"],
+            "stored_logic_qualification_sha256": stored_logic["content_sha256"],
         },
         "gates": gates,
         "qualification_summary": {

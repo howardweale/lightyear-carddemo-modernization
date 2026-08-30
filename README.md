@@ -1,6 +1,23 @@
 # FactoryDark.ai CardDemo Modernization Factory
 
-Release: **v0.34.0 — Oracle to PostgreSQL progressive proof**
+Release: **v0.35.0 — stored logic qualification core**
+
+v0.35 separates stored logic from the broad database-migration claim. The qualification core
+inventories Oracle procedures, functions, packages, triggers, views, scheduler/grant context, and
+application SQL, then applies seven independent gates for dependencies, translation, behavior,
+transactions/exceptions, security, and operability.
+
+The bounded AUTHFRDS source contains two data-changing application SQL statements. Both remain
+`policy-decision-required` until Oracle baselines and PostgreSQL results, side effects, and error
+semantics are compared. No live Oracle catalog has been observed, so an empty procedure/trigger
+count cannot be interpreted as inventory completeness.
+
+```bash
+./data-modernization.sh stored-logic
+PYTHONPATH=src python3 -m lightyear_data verify-stored-logic-qualification
+```
+
+Previous milestone: **v0.34.0 — Oracle to PostgreSQL progressive proof**
 
 v0.34 applies the database semantic core to the first non-mainframe path. Oracle to PostgreSQL is
 qualified through eight independent gates rather than one broad migration claim: schema, data,

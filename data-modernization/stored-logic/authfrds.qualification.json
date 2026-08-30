@@ -1,0 +1,154 @@
+{
+  "bindings": {
+    "canonical_model_sha256": "fb59dfc8f78bd088f18f2f2167c457c887f3928e10264f05b3ac5482ec8a6664",
+    "compatibility_ledger_sha256": "0811440daef856f252659d4f86698c42290dd687cb0f7ddb38dad66d44f9ad46",
+    "embedded_sql_sha256": "33a325c3362f7c2561fdd13dac31ff65909273425749ddbdabdde51c698e4eb8"
+  },
+  "claim_unlocked": "LIGHTYEAR can inventory and independently qualify stored logic without bundling unobserved Oracle behavior into a database migration claim.",
+  "classification_policy": {
+    "allowed": [
+      "exact",
+      "normalized-equivalent",
+      "policy-decision-required",
+      "lossy",
+      "unsupported"
+    ],
+    "lossy_blocks_completion": true,
+    "unresolved_policy_blocks_completion": true,
+    "unsupported_requires_explicit_exclusion": true
+  },
+  "content_sha256": "9f2249f97a7e9397e668303567ba818179abc120c9717f3b2a50f8a62e6ea822",
+  "database_migration_complete": false,
+  "inventory_complete": false,
+  "inventory_contract": {
+    "live_catalog_observed": false,
+    "object_kinds": [
+      "procedure",
+      "function",
+      "package",
+      "package-body",
+      "trigger",
+      "view",
+      "materialized-view",
+      "application-sql"
+    ],
+    "required_sources": [
+      "oracle-catalog",
+      "application-source",
+      "deployment-ddl",
+      "scheduler-and-grants"
+    ],
+    "source_only_inventory": true
+  },
+  "object_counts": {
+    "application-sql": 2,
+    "function": 0,
+    "materialized-view": 0,
+    "package": 0,
+    "package-body": 0,
+    "procedure": 0,
+    "trigger": 0,
+    "view": 0
+  },
+  "objects": [
+    {
+      "classification": "policy-decision-required",
+      "dependencies": [
+        "CARDDEMO.AUTHFRDS"
+      ],
+      "kind": "application-sql",
+      "object_id": "sql:COPAUS2C:141:3",
+      "operation": "INSERT",
+      "qualification_status": "not-qualified",
+      "required_evidence": [
+        "oracle-execution-baseline",
+        "postgresql-execution-result",
+        "side-effect-comparison",
+        "error-and-sqlstate-mapping"
+      ],
+      "source_path": "app/app-authorization-ims-db2-mq/cbl/COPAUS2C.cbl"
+    },
+    {
+      "classification": "policy-decision-required",
+      "dependencies": [
+        "CARDDEMO.AUTHFRDS"
+      ],
+      "kind": "application-sql",
+      "object_id": "sql:COPAUS2C:222:4",
+      "operation": "UPDATE",
+      "qualification_status": "not-qualified",
+      "required_evidence": [
+        "oracle-execution-baseline",
+        "postgresql-execution-result",
+        "side-effect-comparison",
+        "error-and-sqlstate-mapping"
+      ],
+      "source_path": "app/app-authorization-ims-db2-mq/cbl/COPAUS2C.cbl"
+    }
+  ],
+  "production_ready": false,
+  "qualification_core_ready": true,
+  "qualification_gates": [
+    {
+      "evidence": {
+        "oracle_catalog_observed": false,
+        "source_only_objects": 2
+      },
+      "gate": "inventory-completeness",
+      "status": "blocked-live-catalog-required"
+    },
+    {
+      "evidence": {
+        "objects": 2,
+        "unresolved_external_dependencies": 0
+      },
+      "gate": "dependency-closure",
+      "status": "passed-source-only"
+    },
+    {
+      "evidence": {
+        "objects_requiring_policy": 2,
+        "qualified_objects": 0
+      },
+      "gate": "translation",
+      "status": "policy-decision-required"
+    },
+    {
+      "evidence": {
+        "qualified_objects": 0
+      },
+      "gate": "result-and-side-effect-equivalence",
+      "status": "blocked-no-execution-baseline"
+    },
+    {
+      "evidence": {
+        "autonomous_transactions_qualified": false,
+        "exception_mapping_qualified": false
+      },
+      "gate": "transaction-and-exception-behavior",
+      "status": "blocked-no-live-probes"
+    },
+    {
+      "evidence": {
+        "definer_invoker_rights_qualified": false,
+        "grants_qualified": false
+      },
+      "gate": "security-context",
+      "status": "blocked-no-privilege-capture"
+    },
+    {
+      "evidence": {
+        "plans_compared": 0,
+        "scheduler_jobs_qualified": 0
+      },
+      "gate": "performance-and-operability",
+      "status": "blocked-no-operational-baseline"
+    }
+  ],
+  "qualification_id": "authfrds-stored-logic-v0.35",
+  "qualification_type": "lightyear-stored-logic-qualification",
+  "schema_version": "1.0",
+  "source_dialect": "oracle-26ai-free",
+  "stored_logic_complete": false,
+  "target_dialect": "postgresql-16"
+}

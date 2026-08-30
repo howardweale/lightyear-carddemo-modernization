@@ -1,0 +1,18 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schema/stored-logic-qualification.schema.json",
+  "title": "LIGHTYEAR stored logic qualification",
+  "type": "object",
+  "required": ["schema_version", "qualification_type", "qualification_id", "source_dialect", "target_dialect", "bindings", "inventory_contract", "object_counts", "objects", "qualification_gates", "classification_policy", "qualification_core_ready", "inventory_complete", "stored_logic_complete", "database_migration_complete", "production_ready", "claim_unlocked", "content_sha256"],
+  "properties": {
+    "qualification_type": {"const": "lightyear-stored-logic-qualification"},
+    "qualification_core_ready": {"const": true},
+    "inventory_complete": {"const": false},
+    "stored_logic_complete": {"const": false},
+    "database_migration_complete": {"const": false},
+    "production_ready": {"const": false},
+    "qualification_gates": {"type": "array", "minItems": 7, "maxItems": 7},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

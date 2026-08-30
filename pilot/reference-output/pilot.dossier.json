@@ -1,6 +1,6 @@
 {
-  "analysis_sha256": "26c0b568a3407ee19044005b7a36183f3181837bad26dc6531e16b9103c687b8",
-  "assessment_sha256": "8b070ef9099fbf89bb00e583456f7a5a88378bd3b464cc68d66c32f3a89b2dce",
+  "analysis_sha256": "211ff9287f889f97958a99b18b27524d70ef20990aa0a556f84fd5c853daa026",
+  "assessment_sha256": "0995eb2636bc96ed6b89571ea3788f9e3716e88a5d8a36750be9b4f819e964c9",
   "capabilities": [
     {
       "development_ready": true,
@@ -64,14 +64,14 @@
     "A model is qualified for autonomous modernization.",
     "Offline rehearsal proves customer Db2 CDC or cutover."
   ],
-  "compatibility_policy_sha256": "8350b4f0b8e8cfcf64427715cd749c696e6420fc6e955ffc37580833e5b41922",
-  "content_sha256": "08ae4a998a28c8a45b84ad9c00763f75f2e09ad5bde3fa8a1e253636b7060268",
+  "compatibility_policy_sha256": "66273ca345fce1b5f3683152006190b08c2eb791bd361b451c4b9ba14ba45826",
+  "content_sha256": "7191811d6c1a6c834399f4fd012cb2609fde657581552c60a46db109957703c3",
   "dossier_type": "lightyear-source-only-pilot-dossier",
   "estate": {
     "analysis_scope": "bounded-source-static-analysis",
-    "analysis_sha256": "26c0b568a3407ee19044005b7a36183f3181837bad26dc6531e16b9103c687b8",
-    "graph_id": "lightyear:pilot-estate:44a3ea231803345fc1133119",
-    "graph_sha256": "98d182f276e36789b4354ceead607e43b67eae1fa92f362d38b3370a66f7994b",
+    "analysis_sha256": "211ff9287f889f97958a99b18b27524d70ef20990aa0a556f84fd5c853daa026",
+    "graph_id": "lightyear:pilot-estate:a15cbf7bcca21672c181dad3",
+    "graph_sha256": "c7597862319712e338eede1440c6d53695d4a290a6d51d5bc61bbcbb01ef84b2",
     "kind": "customer-source-analysis",
     "nodes": 52,
     "reference_composite_sha256": "78c6a54b53f5a44ce888e50927e3e555a0d370bca4a62f7e3a25115852fdc36f",
@@ -81,14 +81,14 @@
   },
   "evidence_artifacts": [
     {
-      "bytes": 1355,
-      "content_sha256": "346e67d8e44ad46a262e001552aa35e13788a65a295661e25b0bee48c2644dce",
+      "bytes": 1558,
+      "content_sha256": "e48b52660a28f27636efd67924adfcb56dd14791f584bdf773a74b32c227a2c4",
       "id": "pilot-runtime",
       "mainframe_equivalent": false,
       "path": "pilot/runtime-manifest.json",
       "production_ready": false,
       "role": "runtime-dependency-contract",
-      "sha256": "50422731bfc7d5dd5a4bfdbbd52ce987e46dbb7fd030d5cfb1efa6fb099da1dc"
+      "sha256": "3b2f99e2d748ccd9ef63aa60d1889e8447620d72a3b2803880bba6452f22bc0c"
     },
     {
       "bytes": 3849,
@@ -97,6 +97,14 @@
       "path": "pilot/assessment-policy.json",
       "role": "advisory-modernization-planning-contract",
       "sha256": "a60489ddfc849e3e3e41d9d7e84bcd94b4ef9e4195153caaf86c2efe477af938"
+    },
+    {
+      "bytes": 3629,
+      "content_sha256": "07f37778668eef3a7d90f2250ecd016a023dcfd750384decc26f3a8b495cb56f",
+      "id": "pilot-work-package-policy",
+      "path": "pilot/work-package-policy.json",
+      "role": "human-selection-and-development-packaging-contract",
+      "sha256": "36eabc9a698380f2aaecce8eadf719207070c6cc489b5e1edf78163bb0e3fec3"
     },
     {
       "bytes": 3728,
@@ -251,7 +259,7 @@
       "status": "blocked"
     }
   ],
-  "intake_sha256": "44a3ea231803345fc113311961021cceba09ea67c5144403e37321068871b78d",
+  "intake_sha256": "a15cbf7bcca21672c181dad355d5c58af7b6ef82bca2d07e0006ee5f596b888e",
   "limitations": [
     "All original-system execution and signed live-equivalence gates remain blocked.",
     "Customer-specific estate results are bounded static analysis; unresolved references remain visible.",
@@ -261,7 +269,7 @@
   ],
   "mainframe_equivalent": false,
   "modernization_plan": {
-    "assessment_sha256": "8b070ef9099fbf89bb00e583456f7a5a88378bd3b464cc68d66c32f3a89b2dce",
+    "assessment_sha256": "0995eb2636bc96ed6b89571ea3788f9e3716e88a5d8a36750be9b4f819e964c9",
     "automatic_factory_dispatch": false,
     "business_priority_inferred": false,
     "clusters": 4,
@@ -294,9 +302,9 @@
       }
     ]
   },
-  "pilot_id": "lightyear-carddemo-source-only-v0.31.1",
+  "pilot_id": "lightyear-carddemo-source-only-v0.32.0",
   "pilot_ready": true,
-  "preflight_sha256": "c6182254a6b61e6a3a1f7f5e089dab3172e6074313d16d3241035b37633bb66b",
+  "preflight_sha256": "7b18a53b70964bba12e56395dc63f3ae240c302eb153c7f3f53bc55b244e00a1",
   "production_ready": false,
   "proofs": {
     "collection_appliance": {
@@ -329,6 +337,6 @@
     "model_qualification_not_overclaimed": true,
     "preflight_valid": true
   },
-  "release": "0.31.1",
+  "release": "0.32.0",
   "schema_version": "3.0"
 }

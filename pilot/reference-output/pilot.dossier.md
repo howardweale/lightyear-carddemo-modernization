@@ -1,8 +1,8 @@
 # LIGHTYEAR source-only pilot dossier
 
-**Release:** 0.31.1
-**Pilot:** `lightyear-carddemo-source-only-v0.31.1`
-**Dossier identity:** `08ae4a998a28c8a45b84ad9c00763f75f2e09ad5bde3fa8a1e253636b7060268`
+**Release:** 0.32.0
+**Pilot:** `lightyear-carddemo-source-only-v0.32.0`
+**Dossier identity:** `7191811d6c1a6c834399f4fd012cb2609fde657581552c60a46db109957703c3`
 
 ## Executive result
 
@@ -58,8 +58,9 @@ Db2 log or production cutover authorization was observed.
 
 | Role | Artifact | SHA-256 |
 |---|---|---|
-| runtime-dependency-contract | `pilot/runtime-manifest.json` | `50422731bfc7d5dd5a4bfdbbd52ce987e46dbb7fd030d5cfb1efa6fb099da1dc` |
+| runtime-dependency-contract | `pilot/runtime-manifest.json` | `3b2f99e2d748ccd9ef63aa60d1889e8447620d72a3b2803880bba6452f22bc0c` |
 | advisory-modernization-planning-contract | `pilot/assessment-policy.json` | `a60489ddfc849e3e3e41d9d7e84bcd94b4ef9e4195153caaf86c2efe477af938` |
+| human-selection-and-development-packaging-contract | `pilot/work-package-policy.json` | `36eabc9a698380f2aaecce8eadf719207070c6cc489b5e1edf78163bb0e3fec3` |
 | estate-discovery | `knowledge/graph.receipt.json` | `f12ee5dee079a2e612f4875df75020dac12eb2f52f7d5f8698fbddf9f44cc3fc` |
 | composite-lineage | `knowledge/composite/estate.receipt.json` | `9cdb7ceb9c49f1d1cf0cf6c66e9dca9af3f781b7025366a51d94cdac1a6d07b5` |
 | capability-gates | `knowledge/capabilities/mainframe-readiness.json` | `dc187c486cbc1a3861491e96e3c8585a79a53bf382668ae30efd302054714d04` |

@@ -1,0 +1,49 @@
+{
+  "schema_version": "1.0",
+  "request_type": "lightyear-pilot-selection-request",
+  "selection_id": "carddemo-account-mixed-language-pilot-v0.32",
+  "assessment_sha256": "0995eb2636bc96ed6b89571ea3788f9e3716e88a5d8a36750be9b4f819e964c9",
+  "cluster_id": "cluster:6a02c2ea6de7831e",
+  "decision": {
+    "business_owner_id": "human:reference-business-owner",
+    "technical_owner_id": "human:reference-technical-owner",
+    "rationale": "Exercise the highest-coupling bounded slice so the pilot proves coordinated COBOL, PL/I, JCL, Db2, and HLASM planning.",
+    "business_outcomes": [
+      "Preserve account authorization behavior while separating language and data concerns.",
+      "Produce evidence-backed development cells that can later receive authorized native baselines."
+    ],
+    "success_criteria": [
+      "Every selected technology has an explicit bounded development cell.",
+      "Cross-technology dependencies and missing external boundaries remain visible.",
+      "No draft cell can dispatch, authorize native execution, or claim production readiness."
+    ],
+    "data_policy": {
+      "classification": "synthetic-reference",
+      "permitted_use": "development-proof-only",
+      "raw_customer_data_allowed": false,
+      "retention_days": 30
+    }
+  },
+  "boundary_dispositions": [
+    {
+      "reference_id": "7ef87c4aa9078d7896519a55592100efc2731138a3dbf7f5b0c7dc697ae65b47",
+      "disposition": "accepted-external-boundary",
+      "owner_id": "human:reference-technical-owner",
+      "rationale": "CBACT04C remains an explicit external dependency whose existing bounded COBOL proof is not relabelled as customer source evidence."
+    }
+  ],
+  "approval_record": {
+    "approval_id": "reference-selection-approval-v0.32",
+    "approver_id": "human:reference-business-owner",
+    "system": "repository-reference-fixture",
+    "recorded_at": "2026-08-30T00:00:00Z",
+    "evidence_class": "simulated"
+  },
+  "authorization": {
+    "work_package_generation_approved": true,
+    "factory_dispatch_approved": false,
+    "native_execution_approved": false,
+    "production_release_approved": false
+  },
+  "content_sha256": "583429ef2c0e2fb87a064d582ad9b3915a1de3e6b79dabaf81672e81b06330af"
+}

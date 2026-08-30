@@ -1,9 +1,9 @@
-# LIGHTYEAR customer estate assessment pilot
+# LIGHTYEAR governed pilot selection and work packaging
 
-MS #31 turns the customer-specific typed estate from MS #30 into an evidence-first modernization
-plan. It identifies connected application slices, retains missing boundaries, publishes explicit
-development and live-evidence backlogs, and generates a content-addressed assessment plus v3
-dossier. It never invents business priority, approves work, or dispatches the factory.
+MS #32 turns the advisory application slices from MS #31 into one human-selected, evidence-bound
+development work package. It records business outcomes and success criteria, preserves every
+missing boundary, and creates graph-scoped technology cells. It never signs or admits a factory
+work order, dispatches an agent, authorizes native execution, or promotes production readiness.
 
 ## Supported offline installation
 
@@ -11,8 +11,8 @@ The supported air-gapped path is the versioned source tree plus Python 3.11 or n
 run `pip`, contact a package index, or require a third-party runtime dependency:
 
 ```bash
-tar -xf lightyear-carddemo-modernization-v0.31.0.tar
-cd lightyear-carddemo-modernization-v0.31.0
+tar -xf lightyear-carddemo-modernization-v0.32.0.tar
+cd lightyear-carddemo-modernization-v0.32.0
 ./source-only-pilot.sh doctor
 ./source-only-pilot.sh verify
 ```
@@ -20,8 +20,8 @@ cd lightyear-carddemo-modernization-v0.31.0
 Windows PowerShell:
 
 ```powershell
-Expand-Archive lightyear-carddemo-modernization-v0.31.0.zip
-Set-Location lightyear-carddemo-modernization-v0.31.0
+Expand-Archive lightyear-carddemo-modernization-v0.32.0.zip
+Set-Location lightyear-carddemo-modernization-v0.32.0
 .\source-only-pilot.ps1 doctor
 .\source-only-pilot.ps1 verify
 ```
@@ -54,6 +54,8 @@ copy source into the dossier.
 ./source-only-pilot.sh assess work/pilot
 ./source-only-pilot.sh preflight work/pilot
 ./source-only-pilot.sh dossier work/pilot
+./source-only-pilot.sh select work/pilot /approved/pilot-selection.request.json
+./source-only-pilot.sh package work/pilot
 ```
 
 The analysis stage writes `source-estate.snapshot.json.gz` and
@@ -66,10 +68,25 @@ components are candidate application slices, not automatic modernization units. 
 comes first; a business owner must then choose the pilot using criticality, value, ownership, and
 change-window information that source code cannot supply.
 
+## Governed selection and work package
+
+`select` binds one human decision to the exact assessment and dossier. The request must identify the
+business and technical owners, record why the slice was chosen, define outcomes and success
+criteria, prohibit raw customer data in the source-only flow, and disposition every unresolved
+reference. A deferred boundary keeps the selection blocked.
+
+`package` creates one draft development cell per selected technology. Each cell has exact source
+paths, graph nodes, coordination dependencies, a bounded output root, expected deliverables,
+acceptance evidence, and live evidence. The reference package contains five cells: COBOL, PL/I,
+JCL, Db2, and HLASM.
+
+`work_package_ready: true` means the inputs are complete enough to author detailed signed work
+orders. It does not mean any work order is admitted or that factory dispatch is allowed.
+
 ## Reference release rehearsal
 
 `verify` rebuilds the nine-class reference intake, customer graph, analysis receipt, JSON and
-Markdown assessment, preflight, JSON dossier, and Markdown dossier in a new temporary directory. It validates all bindings and compares every byte with
+Markdown assessment, preflight, dossier, selection, and JSON/Markdown work package in a new temporary directory. It validates all bindings and compares every byte with
 `pilot/reference-output`. This is the clean-environment semantic identity control used by CI.
 
 ## Guides
@@ -83,10 +100,10 @@ Markdown assessment, preflight, JSON dossier, and Markdown dossier in a new temp
 
 The unlocked claim is:
 
-> LIGHTYEAR can produce a governed, customer-specific static estate analysis, partition it into
-> explainable connected application slices, and prepare an evidence-first modernization plan.
+> LIGHTYEAR can turn one recorded human pilot selection into a deterministic, graph-scoped,
+> multi-technology development work package.
 
-The dossier always keeps model qualification, live mainframe equivalence, and production readiness
-false. Business priority is not inferred and factory dispatch remains disabled. Static source
-relationships, custody, assessment, and development evidence cannot satisfy authorized original
-execution or signed live equivalence.
+The approval record is attributable and content-bound but remains external evidence; the source-only
+flow does not cryptographically verify the human identity. All generated cells remain draft scopes.
+Model qualification, factory dispatch, live mainframe equivalence, and production readiness remain
+false or blocked.

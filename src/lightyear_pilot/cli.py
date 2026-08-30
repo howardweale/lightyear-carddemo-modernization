@@ -34,6 +34,14 @@ from .planner import (
     render_assessment_markdown,
     validate_estate_assessment,
 )
+from .work_package import (
+    build_pilot_selection,
+    build_work_package,
+    load_work_package_policy,
+    render_work_package_markdown,
+    validate_pilot_selection,
+    validate_work_package,
+)
 
 
 def _paths(project_root: Path) -> dict[str, Path]:
@@ -42,6 +50,8 @@ def _paths(project_root: Path) -> dict[str, Path]:
         "profile": pilot / "pilot.profile.json",
         "compatibility": pilot / "compatibility.policy.json",
         "assessment_policy": pilot / "assessment-policy.json",
+        "work_package_policy": pilot / "work-package-policy.json",
+        "selection_request": pilot / "reference-selection.request.json",
         "runtime": pilot / "runtime-manifest.json",
         "source": pilot / "reference-intake",
         "canonical": pilot / "reference-output",
@@ -86,6 +96,20 @@ def build_parser() -> argparse.ArgumentParser:
     dossier.add_argument("--assessment", type=Path, required=True)
     dossier.add_argument("--output-json", type=Path, required=True)
     dossier.add_argument("--output-md", type=Path, required=True)
+
+    select = subparsers.add_parser("select", help="Record one human-governed pilot selection")
+    select.add_argument("--assessment", type=Path, required=True)
+    select.add_argument("--dossier", type=Path, required=True)
+    select.add_argument("--request", type=Path, required=True)
+    select.add_argument("--output", type=Path, required=True)
+
+    package = subparsers.add_parser("package", help="Compile one selected slice into a bounded development work package")
+    package.add_argument("--selection", type=Path, required=True)
+    package.add_argument("--assessment", type=Path, required=True)
+    package.add_argument("--analysis-graph", type=Path, required=True)
+    package.add_argument("--dossier", type=Path, required=True)
+    package.add_argument("--output-json", type=Path, required=True)
+    package.add_argument("--output-md", type=Path, required=True)
 
     rehearse = subparsers.add_parser("rehearse", help="Run the complete reference intake-to-dossier flow")
     rehearse.add_argument("--source-root", type=Path)
@@ -156,6 +180,29 @@ def _rehearse(project_root: Path, source_root: Path, output_root: Path, approval
     )
     if errors:
         raise PilotError(errors[0])
+    selection_request = load_json(project_root / "pilot/reference-selection.request.json")
+    selection = build_pilot_selection(selection_request, assessment, dossier)
+    errors = validate_pilot_selection(
+        selection, selection_request, assessment, dossier
+    )
+    if errors:
+        raise PilotError(errors[0])
+    work_package_policy = load_work_package_policy(
+        project_root / "pilot/work-package-policy.json"
+    )
+    work_package = build_work_package(
+        selection, assessment, analysis_graph, dossier, work_package_policy
+    )
+    errors = validate_work_package(
+        work_package,
+        selection,
+        assessment,
+        analysis_graph,
+        dossier,
+        work_package_policy,
+    )
+    if errors:
+        raise PilotError(errors[0])
     output_root.mkdir(parents=True, exist_ok=True)
     write_json(output_root / "intake.manifest.json", intake)
     write_analysis_graph(analysis_graph, output_root / "source-estate.snapshot.json.gz")
@@ -165,13 +212,19 @@ def _rehearse(project_root: Path, source_root: Path, output_root: Path, approval
     write_json(output_root / "mainframe.preflight.json", preflight)
     write_json(output_root / "pilot.dossier.json", dossier)
     write_text(output_root / "pilot.dossier.md", render_dossier_markdown(dossier))
+    write_json(output_root / "pilot-selection.json", selection)
+    write_json(output_root / "pilot-work-package.json", work_package)
+    write_text(
+        output_root / "pilot-work-package.md",
+        render_work_package_markdown(work_package),
+    )
     return dossier
 
 
 def _doctor(project_root: Path) -> int:
     paths = _paths(project_root)
     required = [
-        paths["profile"], paths["compatibility"], paths["assessment_policy"], paths["runtime"], project_root / "knowledge/composite/estate.receipt.json",
+        paths["profile"], paths["compatibility"], paths["assessment_policy"], paths["work_package_policy"], paths["selection_request"], paths["runtime"], project_root / "knowledge/composite/estate.receipt.json",
         project_root / "knowledge/capabilities/mainframe-readiness.json",
         project_root / "extensions/adapters/appliance/appliance.receipt.json",
     ]
@@ -181,6 +234,8 @@ def _doctor(project_root: Path) -> int:
         "pilot_profile_present": paths["profile"].is_file(),
         "compatibility_policy_present": paths["compatibility"].is_file(),
         "assessment_policy_present": paths["assessment_policy"].is_file(),
+        "work_package_policy_present": paths["work_package_policy"].is_file(),
+        "selection_request_present": paths["selection_request"].is_file(),
         "runtime_manifest_present": paths["runtime"].is_file(),
         "reference_intake_present": paths["source"].is_dir(),
         "bound_evidence_present": all(path.exists() for path in required),
@@ -280,6 +335,33 @@ def main(argv: list[str] | None = None) -> int:
             write_json(args.output_json, payload)
             write_text(args.output_md, render_dossier_markdown(payload))
             print(payload["content_sha256"])
+        elif args.command == "select":
+            assessment = load_json(args.assessment)
+            dossier = load_json(args.dossier)
+            request = load_json(args.request)
+            payload = build_pilot_selection(request, assessment, dossier)
+            errors = validate_pilot_selection(payload, request, assessment, dossier)
+            if errors:
+                raise PilotError(errors[0])
+            write_json(args.output, payload)
+            print(payload["content_sha256"])
+        elif args.command == "package":
+            selection = load_json(args.selection)
+            assessment = load_json(args.assessment)
+            analysis_graph = load_graph(args.analysis_graph)
+            dossier = load_json(args.dossier)
+            policy = load_work_package_policy(paths["work_package_policy"])
+            payload = build_work_package(
+                selection, assessment, analysis_graph, dossier, policy
+            )
+            errors = validate_work_package(
+                payload, selection, assessment, analysis_graph, dossier, policy
+            )
+            if errors:
+                raise PilotError(errors[0])
+            write_json(args.output_json, payload)
+            write_text(args.output_md, render_work_package_markdown(payload))
+            print(payload["content_sha256"])
         elif args.command == "rehearse":
             source = args.source_root.resolve() if args.source_root else paths["source"]
             payload = _rehearse(project_root, source, args.output_root, args.approval_id, args.source_label)
@@ -297,6 +379,9 @@ def main(argv: list[str] | None = None) -> int:
                     "mainframe.preflight.json",
                     "pilot.dossier.json",
                     "pilot.dossier.md",
+                    "pilot-selection.json",
+                    "pilot-work-package.json",
+                    "pilot-work-package.md",
                 ):
                     if (output / name).read_bytes() != (paths["canonical"] / name).read_bytes():
                         raise PilotError(f"committed-pilot-evidence-drift:{name}")

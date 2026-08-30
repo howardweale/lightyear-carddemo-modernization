@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.0",
+  "policy_type": "lightyear-pilot-work-package-policy",
+  "max_parallel": 2,
+  "technologies": {
+    "CICS": {
+      "risk": "high",
+      "deliverables": ["transaction contract", "service candidate", "side-effect comparator"],
+      "acceptance_evidence": ["negative transaction tests", "deterministic side-effect comparison"],
+      "live_evidence": ["authorized transaction execution", "installed-resource capture", "side-effect capture"]
+    },
+    "COBOL": {
+      "risk": "high",
+      "deliverables": ["behavior contract", "source-faithful oracle", "modernization candidate"],
+      "acceptance_evidence": ["differential comparison", "semantic mutation suite"],
+      "live_evidence": ["authorized compiled original execution", "input and output capture", "side-effect capture"]
+    },
+    "Configuration": {
+      "risk": "medium",
+      "deliverables": ["typed configuration contract", "consumer lineage", "deployment candidate"],
+      "acceptance_evidence": ["configuration validation", "deployment negative tests"],
+      "live_evidence": ["authorized installed configuration", "consumer binding", "change and deployment observation"]
+    },
+    "Db2": {
+      "risk": "high",
+      "deliverables": ["schema mapping", "bounded fixtures", "target schema candidate"],
+      "acceptance_evidence": ["query checksums", "data movement and rollback rehearsal"],
+      "live_evidence": ["authorized catalog and package capture", "source-row and log observation", "cutover and rollback observation"]
+    },
+    "HLASM": {
+      "risk": "high",
+      "deliverables": ["instruction-subset contract", "calling-convention oracle", "typed replacement candidate"],
+      "acceptance_evidence": ["bit-level differential comparison", "boundary mutation suite"],
+      "live_evidence": ["assembler and binder listings", "load-module digest", "authorized caller execution"]
+    },
+    "IMS": {
+      "risk": "critical",
+      "deliverables": ["database and PCB contract", "call-sequence oracle", "modernization candidate"],
+      "acceptance_evidence": ["status-code comparison", "checkpoint and restart tests"],
+      "live_evidence": ["authorized BMP execution", "DBD and PSB capture", "checkpoint, restart, and JES evidence"]
+    },
+    "JCL": {
+      "risk": "high",
+      "deliverables": ["job-step DAG", "dataset and condition contract", "scheduler candidate"],
+      "acceptance_evidence": ["condition-flow comparison", "restart-plan tests"],
+      "live_evidence": ["authorized job execution", "JES and dataset effects", "condition and restart capture"]
+    },
+    "PL/I": {
+      "risk": "high",
+      "deliverables": ["source-faithful oracle", "typed modernization candidate", "cross-language call contract"],
+      "acceptance_evidence": ["differential comparison", "decimal and call-boundary mutations"],
+      "live_evidence": ["Enterprise PL/I compilation", "Db2 bind", "authorized PL/I-to-COBOL execution"]
+    },
+    "VSAM": {
+      "risk": "critical",
+      "deliverables": ["catalog and record contract", "key-path oracle", "target access candidate"],
+      "acceptance_evidence": ["byte and key-path comparison", "concurrency and recovery tests"],
+      "live_evidence": ["authorized cluster and alternate-index capture", "record-byte observation", "locking and recovery observation"]
+    }
+  },
+  "dispatch_boundary": {
+    "draft_work_scopes_only": true,
+    "signed_work_order_required": true,
+    "automatic_dispatch": false,
+    "native_execution": false,
+    "production_release": false
+  },
+  "content_sha256": "07f37778668eef3a7d90f2250ecd016a023dcfd750384decc26f3a8b495cb56f"
+}

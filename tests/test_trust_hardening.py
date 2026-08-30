@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import os
 import tempfile
 import unittest
 from pathlib import Path
@@ -22,7 +23,8 @@ class ReceiptTrustBoundaryTests(unittest.TestCase):
     def test_repository_claims_and_script_catalog_validate(self) -> None:
         self.assertEqual([], audit_receipt_claims(ROOT))
         self.assertEqual([], audit_script_catalog(ROOT))
-        self.assertEqual([], validate_upstream_fixture(ROOT))
+        if os.environ.get("LIGHTYEAR_ALLOW_MISSING_UPSTREAM") != "1":
+            self.assertEqual([], validate_upstream_fixture(ROOT))
 
     def test_all_four_claims_are_required_and_individually_fail_closed(self) -> None:
         receipt = {field: False for field in CLAIM_FIELDS}

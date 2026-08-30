@@ -26,12 +26,14 @@ ALLOW_MISSING_UPSTREAM = os.environ.get("LIGHTYEAR_ALLOW_MISSING_UPSTREAM") == "
 
 
 class DataModernizationFixtureTests(unittest.TestCase):
-    @unittest.skipIf(AUTH_ROOT.is_dir() or ALLOW_MISSING_UPSTREAM, "Pinned upstream fixture is available or omission was explicitly accepted")
     def test_pinned_upstream_fixture_is_required_for_a_complete_suite(self) -> None:
-        self.fail(
+        if not AUTH_ROOT.is_dir() and ALLOW_MISSING_UPSTREAM:
+            self.skipTest("Explicitly incomplete unit-only run accepted missing upstream fixture")
+        self.assertTrue(
+            AUTH_ROOT.is_dir(),
             "Required ../carddemo-upstream fixture is missing; a green suite would omit the "
             "data-modernization integration tests. Clone the pinned AWS CardDemo source, or set "
-            "LIGHTYEAR_ALLOW_MISSING_UPSTREAM=1 only for an explicitly incomplete unit-only run."
+            "LIGHTYEAR_ALLOW_MISSING_UPSTREAM=1 only for an explicitly incomplete unit-only run.",
         )
 
 

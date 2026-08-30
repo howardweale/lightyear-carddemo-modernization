@@ -1,0 +1,284 @@
+{
+  "classifications": [
+    "exact",
+    "normalized-equivalent",
+    "policy-decision-required",
+    "lossy",
+    "unsupported"
+  ],
+  "content_sha256": "a7ee143005bc4c0720b17b893ce19ebbd8feaf41f151fe1eaa3d8601fb3e5da5",
+  "entries": [
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "fixed-and-free-source-fixtures"
+      ],
+      "item_id": "cobol:source-format",
+      "rationale": "COBOL behavior is classified independently; static extraction cannot promote native runtime equivalence.",
+      "scope": "source-format",
+      "source_semantics": {
+        "claim": "bounded-static-inventory",
+        "language": "IBM Enterprise COBOL"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cobol-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "compiler-search-order",
+        "complete-copybook-closure"
+      ],
+      "item_id": "cobol:copybook-resolution",
+      "rationale": "COBOL behavior is classified independently; static extraction cannot promote native runtime equivalence.",
+      "scope": "copybook-resolution",
+      "source_semantics": {
+        "claim": "bounded-static-inventory",
+        "language": "IBM Enterprise COBOL"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cobol-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "offset-length-sign-and-scale-tests"
+      ],
+      "item_id": "cobol:pic-elementary-layout",
+      "rationale": "COBOL behavior is classified independently; static extraction cannot promote native runtime equivalence.",
+      "scope": "pic-elementary-layout",
+      "source_semantics": {
+        "claim": "bounded-static-inventory",
+        "language": "IBM Enterprise COBOL"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cobol-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "layout-variants",
+        "runtime-boundary-tests"
+      ],
+      "item_id": "cobol:redefines-occurs-depending-on",
+      "rationale": "COBOL behavior is classified independently; static extraction cannot promote native runtime equivalence.",
+      "scope": "redefines-occurs-depending-on",
+      "source_semantics": {
+        "claim": "bounded-static-inventory",
+        "language": "IBM Enterprise COBOL"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cobol-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "positive-negative-zero-and-boundary-vectors"
+      ],
+      "item_id": "cobol:packed-and-zoned-decimal",
+      "rationale": "COBOL behavior is classified independently; static extraction cannot promote native runtime equivalence.",
+      "scope": "packed-and-zoned-decimal",
+      "source_semantics": {
+        "claim": "bounded-static-inventory",
+        "language": "IBM Enterprise COBOL"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cobol-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "compiler-options",
+        "native-arithmetic-baseline"
+      ],
+      "item_id": "cobol:arithmetic-rounding-truncation",
+      "rationale": "COBOL behavior is classified independently; static extraction cannot promote native runtime equivalence.",
+      "scope": "arithmetic-rounding-truncation",
+      "source_semantics": {
+        "claim": "bounded-static-inventory",
+        "language": "IBM Enterprise COBOL"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cobol-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "perform-range-and-fallthrough-tests"
+      ],
+      "item_id": "cobol:paragraph-control-flow",
+      "rationale": "COBOL behavior is classified independently; static extraction cannot promote native runtime equivalence.",
+      "scope": "paragraph-control-flow",
+      "source_semantics": {
+        "claim": "bounded-static-inventory",
+        "language": "IBM Enterprise COBOL"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cobol-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "linkage-section-and-parameter-layout"
+      ],
+      "item_id": "cobol:static-call-linkage",
+      "rationale": "COBOL behavior is classified independently; static extraction cannot promote native runtime equivalence.",
+      "scope": "static-call-linkage",
+      "source_semantics": {
+        "claim": "bounded-static-inventory",
+        "language": "IBM Enterprise COBOL"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cobol-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "runtime-target-inventory",
+        "load-resolution-policy"
+      ],
+      "item_id": "cobol:dynamic-call-linkage",
+      "rationale": "COBOL behavior is classified independently; static extraction cannot promote native runtime equivalence.",
+      "scope": "dynamic-call-linkage",
+      "source_semantics": {
+        "claim": "bounded-static-inventory",
+        "language": "IBM Enterprise COBOL"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cobol-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "organization-access-mode-status-and-rdw-tests"
+      ],
+      "item_id": "cobol:file-organization-and-status",
+      "rationale": "COBOL behavior is classified independently; static extraction cannot promote native runtime equivalence.",
+      "scope": "file-organization-and-status",
+      "source_semantics": {
+        "claim": "bounded-static-inventory",
+        "language": "IBM Enterprise COBOL"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cobol-qualification"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "DB2-precompile-package-and-runtime-qualification"
+      ],
+      "item_id": "cobol:embedded-db2-sql",
+      "rationale": "COBOL behavior is classified independently; static extraction cannot promote native runtime equivalence.",
+      "scope": "embedded-db2-sql",
+      "source_semantics": {
+        "claim": "bounded-static-inventory",
+        "language": "IBM Enterprise COBOL"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cobol-qualification"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "MS-39-CICS-qualification"
+      ],
+      "item_id": "cobol:exec-cics",
+      "rationale": "COBOL behavior is classified independently; static extraction cannot promote native runtime equivalence.",
+      "scope": "exec-cics",
+      "source_semantics": {
+        "claim": "bounded-static-inventory",
+        "language": "IBM Enterprise COBOL"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cobol-qualification"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "MS-40-IMS-qualification"
+      ],
+      "item_id": "cobol:ims-dli",
+      "rationale": "COBOL behavior is classified independently; static extraction cannot promote native runtime equivalence.",
+      "scope": "ims-dli",
+      "source_semantics": {
+        "claim": "bounded-static-inventory",
+        "language": "IBM Enterprise COBOL"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cobol-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "IBM-Enterprise-COBOL-listing-and-options"
+      ],
+      "item_id": "cobol:compiler-directives-and-options",
+      "rationale": "COBOL behavior is classified independently; static extraction cannot promote native runtime equivalence.",
+      "scope": "compiler-directives-and-options",
+      "source_semantics": {
+        "claim": "bounded-static-inventory",
+        "language": "IBM Enterprise COBOL"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cobol-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "LE-options-abend-and-condition-capture"
+      ],
+      "item_id": "cobol:language-environment-runtime",
+      "rationale": "COBOL behavior is classified independently; static extraction cannot promote native runtime equivalence.",
+      "scope": "language-environment-runtime",
+      "source_semantics": {
+        "claim": "bounded-static-inventory",
+        "language": "IBM Enterprise COBOL"
+      },
+      "target_semantics": {
+        "contract": "lightyear-cobol-qualification"
+      }
+    }
+  ],
+  "graph_content_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
+  "ledger_type": "lightyear-cobol-compatibility-ledger",
+  "mainframe_equivalent": false,
+  "production_ready": false,
+  "qualification_blocked": true,
+  "schema_version": "1.0",
+  "statistics": {
+    "exact": 0,
+    "lossy": 0,
+    "normalized-equivalent": 5,
+    "policy-decision-required": 7,
+    "unsupported": 3
+  }
+}

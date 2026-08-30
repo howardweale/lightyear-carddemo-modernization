@@ -36,10 +36,14 @@ case "$action" in
       cmp "$project_dir/data-modernization/$relative" "$output/data-modernization/$relative"
     done
     "$LIGHTYEAR_PYTHON_BIN" -m lightyear_data verify-semantic-core --project-root "$output"
+    "$LIGHTYEAR_PYTHON_BIN" -m lightyear_data verify-oracle-postgresql-proof --project-root "$project_dir"
     echo "AUTHFRDS database semantic core, adapters, ledger, fixtures, and receipts are deterministic."
     ;;
   semantic-core)
     "$LIGHTYEAR_PYTHON_BIN" -m lightyear_data verify-semantic-core --project-root "$project_dir"
+    ;;
+  oracle-postgresql-proof)
+    "$LIGHTYEAR_PYTHON_BIN" -m lightyear_data verify-oracle-postgresql-proof --project-root "$project_dir"
     ;;
   live|live-postgres)
     "$LIGHTYEAR_PYTHON_BIN" -m lightyear_data verify-docker --target postgresql --project-root "$project_dir"
@@ -60,5 +64,5 @@ case "$action" in
     fi
     "$LIGHTYEAR_PYTHON_BIN" -m lightyear_data sign --receipt "$receipt" --output "$output"
     ;;
-  *) echo "Usage: ./data-modernization.sh [build|verify|semantic-core|live-postgres|live-oracle|live-all|sign] [optional-carddemo-upstream-root]" >&2; exit 2 ;;
+  *) echo "Usage: ./data-modernization.sh [build|verify|semantic-core|oracle-postgresql-proof|live-postgres|live-oracle|live-all|sign] [optional-carddemo-upstream-root]" >&2; exit 2 ;;
 esac

@@ -1,0 +1,177 @@
+{
+  "bindings": {
+    "canonical_model_sha256": "fb59dfc8f78bd088f18f2f2167c457c887f3928e10264f05b3ac5482ec8a6664",
+    "canonical_schema_sha256": "ffe6df35b4be0c831e72288ecaf3e48c43cc8aac7682983e0f4570846853d042",
+    "compatibility_ledger_sha256": "0811440daef856f252659d4f86698c42290dd687cb0f7ddb38dad66d44f9ad46",
+    "rehearsal_receipt_sha256": "e628b50cc4e21707f6c62e7a8429654c7867411f75fb9381e03f3d191854f652"
+  },
+  "claim_unlocked": "LIGHTYEAR can execute a deterministic, progressively gated Oracle-to-PostgreSQL development proof without bundling unresolved behavioral or stored-logic claims.",
+  "content_sha256": "ba408ddcc82f0895eda059bcc4a88ed6f434c9f0d7e989a62126449d75065ecc",
+  "database_migration_complete": false,
+  "gates": [
+    {
+      "claim": "schema-translation",
+      "evidence": {
+        "canonical_schema_sha256": "ffe6df35b4be0c831e72288ecaf3e48c43cc8aac7682983e0f4570846853d042",
+        "oracle_mapping_sha256": "a948a0567245bc7c15fda3d8d2dc742ccee5691db4ee034d947b1671ab6f172f",
+        "oracle_schema_sql_sha256": "fe876a95357fec4af773affd1d2551dcc3cec409f0cf5274112958c033efd5b2",
+        "postgresql_mapping_sha256": "24f0f0dc82363749d9db4a7294315ec8dc3ca5660e7d800550560195b0d27f45",
+        "postgresql_schema_sql_sha256": "701b30cba24c7612e1de3a3bb42916b551f4e18cb11564f5c5a8ce60d31f8cc6"
+      },
+      "gate": 1,
+      "limitations": [
+        "Generated DDL is deterministic; live catalog realization is separately observed."
+      ],
+      "production_qualified": false,
+      "status": "passed-development"
+    },
+    {
+      "claim": "data-conversion",
+      "evidence": {
+        "comparison_sha256": "85a9e0de7d7fad122085212f4071da2b459ba276f6a6d22882d810cb631160f6",
+        "comparison_status": "passed",
+        "fixture_catalog_sha256": "f2dcda58733e6cca9551adb904856496bd803354c2511c14e61db66945c6f5e4",
+        "normalized_rows": 2
+      },
+      "gate": 2,
+      "limitations": [
+        "Synthetic bounded fixtures do not replace customer data profiling."
+      ],
+      "production_qualified": false,
+      "status": "passed-development"
+    },
+    {
+      "claim": "constraints-and-indexes",
+      "evidence": {
+        "canonical_schema_sha256": "ffe6df35b4be0c831e72288ecaf3e48c43cc8aac7682983e0f4570846853d042",
+        "constraint_count": 1,
+        "index_count": 1
+      },
+      "gate": 3,
+      "limitations": [
+        "Physical performance characteristics and optimizer behavior are not qualified."
+      ],
+      "production_qualified": false,
+      "status": "passed-development"
+    },
+    {
+      "claim": "query-equivalence",
+      "evidence": {
+        "comparison_sha256": "359a73a89311ad8108c37be66130aff10c87b032d9c8bb8a2b41fd5ec4f5ec4c",
+        "comparison_status": "passed",
+        "embedded_sql_sha256": "33a325c3362f7c2561fdd13dac31ff65909273425749ddbdabdde51c698e4eb8"
+      },
+      "gate": 4,
+      "limitations": [
+        "Only inventoried AUTHFRDS statements and normalized fixture results are in scope."
+      ],
+      "production_qualified": false,
+      "status": "passed-development"
+    },
+    {
+      "claim": "transaction-behavior",
+      "evidence": {
+        "commit_rollback_mechanism": "available",
+        "concurrency_observed": false,
+        "unresolved_ledger_items": [
+          "column:oracle-26ai-free:CARD_NUM",
+          "column:oracle-26ai-free:AUTH_TYPE",
+          "column:oracle-26ai-free:CARD_EXPIRY_DATE",
+          "column:oracle-26ai-free:MESSAGE_TYPE",
+          "column:oracle-26ai-free:MESSAGE_SOURCE",
+          "column:oracle-26ai-free:AUTH_ID_CODE",
+          "column:oracle-26ai-free:AUTH_RESP_CODE",
+          "column:oracle-26ai-free:AUTH_RESP_REASON",
+          "column:oracle-26ai-free:PROCESSING_CODE",
+          "column:oracle-26ai-free:MERCHANT_CATAGORY_CODE",
+          "column:oracle-26ai-free:ACQR_COUNTRY_CODE",
+          "column:oracle-26ai-free:MERCHANT_ID",
+          "column:oracle-26ai-free:MERCHANT_NAME",
+          "column:oracle-26ai-free:MERCHANT_CITY",
+          "column:oracle-26ai-free:MERCHANT_STATE",
+          "column:oracle-26ai-free:MERCHANT_ZIP",
+          "column:oracle-26ai-free:TRANSACTION_ID",
+          "column:oracle-26ai-free:MATCH_STATUS",
+          "column:oracle-26ai-free:AUTH_FRAUD",
+          "behavior:oracle-26ai-free:transaction-isolation",
+          "behavior:postgresql-16:transaction-isolation"
+        ]
+      },
+      "gate": 5,
+      "limitations": [
+        "Concurrent isolation and locking behavior require live probes and an approved policy."
+      ],
+      "production_qualified": false,
+      "status": "policy-decision-required"
+    },
+    {
+      "claim": "cdc-and-resume",
+      "evidence": {
+        "checkpoint_resume": true,
+        "idempotent_replay": true,
+        "journal_events": 5,
+        "resume_count": 1
+      },
+      "gate": 6,
+      "limitations": [
+        "Row CDC is simulated; Oracle redo and PostgreSQL logical replication are not observed.",
+        "DDL and sequence-state replication are excluded."
+      ],
+      "production_qualified": false,
+      "status": "passed-simulated"
+    },
+    {
+      "claim": "cutover-and-rollback",
+      "evidence": {
+        "approval_evidence_class": "simulated",
+        "failure_detected": true,
+        "production_authorized": false,
+        "rollback_exact": true
+      },
+      "gate": 7,
+      "limitations": [
+        "The cutover approval is development-only and cannot authorize production."
+      ],
+      "production_qualified": false,
+      "status": "passed-simulated"
+    },
+    {
+      "claim": "stored-logic",
+      "evidence": {
+        "arbitrary_application_sql_qualified": false,
+        "ledger_items": [
+          "behavior:oracle-26ai-free:stored-logic",
+          "behavior:postgresql-16:stored-logic"
+        ],
+        "procedures_qualified": 0,
+        "triggers_qualified": 0
+      },
+      "gate": 8,
+      "limitations": [
+        "Stored procedures, triggers, and arbitrary application SQL require independent qualification gates."
+      ],
+      "production_qualified": false,
+      "status": "excluded-unqualified"
+    }
+  ],
+  "production_ready": false,
+  "proof_id": "authfrds-oracle-to-postgresql-v0.34",
+  "proof_type": "lightyear-oracle-postgresql-proof",
+  "qualification_summary": {
+    "excluded_unqualified": 1,
+    "passed_development": 4,
+    "passed_simulated": 2,
+    "policy_decision_required": 1
+  },
+  "schema_version": "1.0",
+  "source": {
+    "dialect": "oracle-26ai-free",
+    "mapping_sha256": "a948a0567245bc7c15fda3d8d2dc742ccee5691db4ee034d947b1671ab6f172f"
+  },
+  "status": "passed-with-open-qualification-gates",
+  "stored_logic_complete": false,
+  "target": {
+    "dialect": "postgresql-16",
+    "mapping_sha256": "24f0f0dc82363749d9db4a7294315ec8dc3ca5660e7d800550560195b0d27f45"
+  }
+}

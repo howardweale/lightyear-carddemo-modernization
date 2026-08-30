@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.34.0 — 2026-08-30
+
+- Added the first platform-neutral database path: a deterministic Oracle-to-PostgreSQL proof bound
+  to the MS #33 canonical schema, mappings, compatibility ledger, and rehearsal evidence.
+- Separated schema translation, data conversion, constraints/indexes, query equivalence,
+  transaction behavior, CDC/resume, cutover/rollback, and stored logic into eight independent gates.
+- Passed the first four bounded development gates and the simulated CDC/resume and
+  cutover/rollback mechanisms without promoting them to live production evidence.
+- Kept transaction isolation at `policy-decision-required` until concurrent live probes and an
+  approved policy exist.
+- Kept stored procedures, triggers, and arbitrary application SQL in an independent
+  `excluded-unqualified` gate; `database_migration_complete` and `production_ready` remain false.
+
 ## 0.33.0 — 2026-08-30
 
 - Added independent source- and target-adapter interfaces plus a 17-kind canonical database type

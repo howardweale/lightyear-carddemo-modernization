@@ -12,6 +12,10 @@ from .contracts import seal, sign
 from .equivalence import offline_equivalence
 from .live import DockerOracleRunner, DockerPostgresExactRunner, aggregate_receipts
 from .oracle import OracleAdapter
+from .oracle_postgres_proof import (
+    build_oracle_postgresql_proof,
+    validate_oracle_postgresql_proof,
+)
 from .postgres import PostgreSQLAdapter, fixture_sql
 from .rehearsal import build_rehearsal_evidence, validate_rehearsal_evidence
 from .validation import validate_assets
@@ -46,6 +50,11 @@ def parser() -> argparse.ArgumentParser:
     validate_rehearsal.add_argument("--project-root", type=Path, default=Path("."))
     semantic = commands.add_parser("verify-semantic-core")
     semantic.add_argument("--project-root", type=Path, default=Path("."))
+    proof = commands.add_parser("build-oracle-postgresql-proof")
+    proof.add_argument("--project-root", type=Path, default=Path("."))
+    proof.add_argument("--output", type=Path)
+    verify_proof = commands.add_parser("verify-oracle-postgresql-proof")
+    verify_proof.add_argument("--project-root", type=Path, default=Path("."))
     return root
 
 
@@ -103,6 +112,27 @@ def main(argv: list[str] | None = None) -> int:
             "errors": errors,
             "semantic_core_version": "1.0",
             "compatibility_ledger_sha256": ledger.get("content_sha256"),
+            "production_ready": False,
+        }
+    elif args.command == "build-oracle-postgresql-proof":
+        project_root = args.project_root.resolve()
+        payload = build_oracle_postgresql_proof(project_root)
+        output = args.output or project_root / "data-modernization/oracle-postgresql-proof/authfrds.proof.json"
+        write_json(output, payload)
+        result = {
+            "status": "passed",
+            "output": str(output),
+            "content_sha256": payload["content_sha256"],
+            "database_migration_complete": False,
+            "production_ready": False,
+        }
+    elif args.command == "verify-oracle-postgresql-proof":
+        project_root = args.project_root.resolve()
+        errors = validate_oracle_postgresql_proof(project_root)
+        result = {
+            "status": "passed" if not errors else "failed",
+            "errors": errors,
+            "database_migration_complete": False,
             "production_ready": False,
         }
     else:

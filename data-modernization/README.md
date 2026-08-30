@@ -1,5 +1,10 @@
 # Database semantic core and AUTHFRDS proof cell
 
+MS #34 applies the semantic core to a progressively gated Oracle-to-PostgreSQL proof. The canonical
+artifact is `oracle-postgresql-proof/authfrds.proof.json`. Its eight gates deliberately distinguish
+development mechanisms, simulations, unresolved policy, and excluded stored logic. A passed proof
+means the contract is deterministic and honest; it does not mean the database migration is complete.
+
 MS #33 turns the original AUTHFRDS implementation into a reusable database semantic core. Database
 adapters must project through the canonical type system and satisfy the same profiling,
 transformation, normalization, comparison, CDC, cutover, rollback, and conformance contracts.
@@ -39,6 +44,7 @@ macOS/Linux:
 ./data-modernization.sh live-oracle
 ./data-modernization.sh live-all
 PYTHONPATH=src python3 -m lightyear_data verify-semantic-core
+PYTHONPATH=src python3 -m lightyear_data verify-oracle-postgresql-proof
 ./migration-rehearsal.sh verify /path/to/aws-carddemo
 ```
 

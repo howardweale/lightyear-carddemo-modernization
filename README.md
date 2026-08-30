@@ -1,6 +1,23 @@
 # FactoryDark.ai CardDemo Modernization Factory
 
-Release: **v0.33.0 — database semantic core**
+Release: **v0.34.0 — Oracle to PostgreSQL progressive proof**
+
+v0.34 applies the database semantic core to the first non-mainframe path. Oracle to PostgreSQL is
+qualified through eight independent gates rather than one broad migration claim: schema, data,
+constraints/indexes, queries, transactions, CDC/resume, cutover/rollback, and stored logic.
+
+The bounded AUTHFRDS fixture passes the first four development gates. CDC/resume and
+cutover/rollback pass only as simulations. Transaction isolation remains a required policy decision,
+and stored procedures, triggers, and arbitrary application SQL remain explicitly unqualified.
+Therefore `database_migration_complete`, `stored_logic_complete`, and `production_ready` remain
+false.
+
+```bash
+./data-modernization.sh oracle-postgresql-proof
+PYTHONPATH=src python3 -m lightyear_data verify-oracle-postgresql-proof
+```
+
+Previous milestone: **v0.33.0 — database semantic core**
 
 v0.33 extracts the bounded AUTHFRDS database proof into a genuine platform contract. The new
 semantic core defines independent source and target adapter interfaces, a canonical schema and

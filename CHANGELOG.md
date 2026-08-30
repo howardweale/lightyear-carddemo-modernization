@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.39.0 — 2026-08-30
+
+- Bound CICS/VSAM qualification to the canonical graph inventory of 240 CICS commands, 25
+  transactions, 16 file resources, 15 VSAM clusters, three alternate indexes, three PATHs, and
+  their exact graph identity.
+- Added a deterministic 38-case synthetic semantic corpus with 30 targeted boundary cases, 34
+  passing cases, four explicit fail-closed cases, and 59 observed feature categories.
+- Covered KSDS, ESDS, RRDS, alternate-index and PATH lookup, READ/WRITE/REWRITE/DELETE, update
+  tokens, STARTBR/READNEXT/READPREV/ENDBR, file status, RESP/RESP2, ENQ/DEQ, syncpoint commit and
+  rollback, BMS maps, and LINK/XCTL/RETURN.
+- Added a 27-entry CICS/VSAM compatibility ledger using all five governing classifications and
+  explicit exclusions for LDS record access, RLS, TSQ, TDQ, journals, and exits.
+- Separated eleven gates for graph inventory, corpus provenance, organizations and keys, alternate
+  indexes, file access, mutation behavior, locking/recovery, CICS command boundaries, exclusions,
+  the existing private account-view proof, and authorized native execution.
+- Added frozen schemas, POSIX/PowerShell release-gate integration, deterministic receipts, graph
+  holdouts, exact-corpus checks, negative diagnostics, and rehashed-overclaim tests.
+- Kept native VSAM, native CICS, RLS, recovery, runtime, mainframe-equivalence, and production
+  claims false pending authorized region, catalog, concurrency, journal, and recovery evidence.
+
 ## 0.38.0 — 2026-08-30
 
 - Bound JCL qualification to the canonical graph inventory of 46 jobs, two procedures, 119 steps,

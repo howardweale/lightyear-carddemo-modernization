@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schema/cics-vsam-conformance-receipt.schema.json",
+  "title": "LIGHTYEAR CICS/VSAM conformance receipt",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "receipt_type",
+    "corpus_id",
+    "graph_content_sha256",
+    "manifest_sha256",
+    "corpus",
+    "coverage",
+    "results",
+    "status",
+    "claim_boundary",
+    "content_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "receipt_type": {
+      "const": "lightyear-cics-vsam-conformance-receipt"
+    },
+    "corpus_id": {
+      "const": "lightyear-cics-vsam-synthetic-conformance-v1"
+    },
+    "graph_content_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "manifest_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "corpus": {
+      "type": "object",
+      "required": [
+        "case_count",
+        "positive_case_count",
+        "targeted_boundary_case_count",
+        "mutation_case_count",
+        "passed_case_count",
+        "blocked_case_count",
+        "customer_source"
+      ],
+      "properties": {
+        "case_count": {
+          "const": 38
+        },
+        "positive_case_count": {
+          "const": 4
+        },
+        "targeted_boundary_case_count": {
+          "const": 30
+        },
+        "mutation_case_count": {
+          "const": 4
+        },
+        "passed_case_count": {
+          "const": 34
+        },
+        "blocked_case_count": {
+          "const": 4
+        },
+        "customer_source": {
+          "const": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "coverage": {
+      "type": "object"
+    },
+    "results": {
+      "type": "array",
+      "minItems": 38,
+      "maxItems": 38
+    },
+    "status": {
+      "const": "passed"
+    },
+    "claim_boundary": {
+      "type": "object",
+      "required": [
+        "native_vsam_qualified",
+        "native_cics_qualified",
+        "rls_qualified",
+        "recovery_equivalent",
+        "cics_runtime_equivalent",
+        "mainframe_equivalent",
+        "production_ready"
+      ],
+      "properties": {
+        "native_vsam_qualified": {
+          "const": false
+        },
+        "native_cics_qualified": {
+          "const": false
+        },
+        "rls_qualified": {
+          "const": false
+        },
+        "recovery_equivalent": {
+          "const": false
+        },
+        "cics_runtime_equivalent": {
+          "const": false
+        },
+        "mainframe_equivalent": {
+          "const": false
+        },
+        "production_ready": {
+          "const": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "content_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "additionalProperties": false
+}

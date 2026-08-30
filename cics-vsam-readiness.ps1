@@ -18,10 +18,12 @@ if ($Action -eq "template") {
   Run-Python -m lightyear_readiness issue --comparison (Join-Path $OutputDir "comparison.json") --output (Join-Path $OutputDir "readiness-receipt.json")
   Run-Python -m lightyear_readiness validate-receipt --receipt (Join-Path $OutputDir "readiness-receipt.json")
   Run-Python -m lightyear_readiness capture-template --output (Join-Path $OutputDir "zos-capture.template.json")
+  Run-Python -m lightyear_readiness.cics_vsam_qualification build --project-root $ProjectDir --output-root $OutputDir
   if ($Action -eq "verify") {
-    foreach ($Name in @("local-capture.json", "comparison.json", "readiness-receipt.json", "zos-capture.template.json")) {
+    foreach ($Name in @("local-capture.json", "comparison.json", "readiness-receipt.json", "zos-capture.template.json", "conformance.receipt.json", "compatibility-ledger.json", "qualification.json")) {
       if ((Get-FileHash (Join-Path $ProjectDir "readiness\cics-vsam\$Name")).Hash -ne (Get-FileHash (Join-Path $OutputDir $Name)).Hash) { throw "$Name is stale" }
     }
+    Run-Python -m lightyear_readiness.cics_vsam_qualification verify --project-root $ProjectDir
   }
 } elseif ($Action -eq "compare") {
   if ($args.Count -lt 3) { throw "Usage: .\cics-vsam-readiness.ps1 compare OUTPUT_DIR ZOS_CAPTURE" }

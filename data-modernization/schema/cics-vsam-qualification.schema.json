@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schema/cics-vsam-qualification.schema.json",
+  "title": "LIGHTYEAR CICS/VSAM qualification",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "qualification_type",
+    "qualification_id",
+    "bindings",
+    "inventory",
+    "qualification_gates",
+    "required_native_evidence",
+    "qualification_mechanism_ready",
+    "development_ready",
+    "native_vsam_qualified",
+    "native_cics_qualified",
+    "rls_qualified",
+    "recovery_equivalent",
+    "cics_runtime_equivalent",
+    "mainframe_equivalent",
+    "production_ready",
+    "claim_unlocked",
+    "content_sha256"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "qualification_type": {
+      "const": "lightyear-cics-vsam-qualification"
+    },
+    "qualification_id": {
+      "const": "carddemo-cics-vsam-v0.39"
+    },
+    "bindings": {
+      "type": "object"
+    },
+    "inventory": {
+      "type": "object"
+    },
+    "qualification_gates": {
+      "type": "array",
+      "minItems": 11,
+      "maxItems": 11
+    },
+    "required_native_evidence": {
+      "type": "array",
+      "minItems": 8
+    },
+    "qualification_mechanism_ready": {
+      "const": true
+    },
+    "development_ready": {
+      "const": true
+    },
+    "native_vsam_qualified": {
+      "const": false
+    },
+    "native_cics_qualified": {
+      "const": false
+    },
+    "rls_qualified": {
+      "const": false
+    },
+    "recovery_equivalent": {
+      "const": false
+    },
+    "cics_runtime_equivalent": {
+      "const": false
+    },
+    "mainframe_equivalent": {
+      "const": false
+    },
+    "production_ready": {
+      "const": false
+    },
+    "claim_unlocked": {
+      "type": "string"
+    },
+    "content_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  },
+  "additionalProperties": false
+}

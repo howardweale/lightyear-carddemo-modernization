@@ -26,7 +26,20 @@ case "$action" in
       receipts/authfrds.oracle-offline.receipt.json receipts/authfrds.target-plan.json; do
       cmp "$project_dir/data-modernization/$relative" "$output/data-modernization/$relative"
     done
-    echo "AUTHFRDS canonical model, PostgreSQL/Oracle mappings, fixtures, and signed development receipts are deterministic."
+    for relative in \
+      semantic-core/database-semantic-core.json \
+      semantic-core/authfrds.canonical-schema.json \
+      semantic-core/authfrds.profile-contract.json \
+      semantic-core/authfrds.schema-transformation-plan.json \
+      semantic-core/authfrds.compatibility-ledger.json \
+      semantic-core/authfrds.adapter-conformance.receipt.json; do
+      cmp "$project_dir/data-modernization/$relative" "$output/data-modernization/$relative"
+    done
+    "$LIGHTYEAR_PYTHON_BIN" -m lightyear_data verify-semantic-core --project-root "$output"
+    echo "AUTHFRDS database semantic core, adapters, ledger, fixtures, and receipts are deterministic."
+    ;;
+  semantic-core)
+    "$LIGHTYEAR_PYTHON_BIN" -m lightyear_data verify-semantic-core --project-root "$project_dir"
     ;;
   live|live-postgres)
     "$LIGHTYEAR_PYTHON_BIN" -m lightyear_data verify-docker --target postgresql --project-root "$project_dir"
@@ -47,5 +60,5 @@ case "$action" in
     fi
     "$LIGHTYEAR_PYTHON_BIN" -m lightyear_data sign --receipt "$receipt" --output "$output"
     ;;
-  *) echo "Usage: ./data-modernization.sh [build|verify|live-postgres|live-oracle|live-all|sign] [optional-carddemo-upstream-root]" >&2; exit 2 ;;
+  *) echo "Usage: ./data-modernization.sh [build|verify|semantic-core|live-postgres|live-oracle|live-all|sign] [optional-carddemo-upstream-root]" >&2; exit 2 ;;
 esac

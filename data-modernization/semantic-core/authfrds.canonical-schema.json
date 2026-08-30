@@ -1,0 +1,298 @@
+{
+  "columns": [
+    {
+      "name": "CARD_NUM",
+      "ordinal": 1,
+      "type": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 16,
+        "nullable": false
+      }
+    },
+    {
+      "name": "AUTH_TS",
+      "ordinal": 2,
+      "type": {
+        "fractional_seconds": 6,
+        "kind": "timestamp",
+        "nullable": false,
+        "time_zone": "absent"
+      }
+    },
+    {
+      "name": "AUTH_TYPE",
+      "ordinal": 3,
+      "type": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 4,
+        "nullable": true
+      }
+    },
+    {
+      "name": "CARD_EXPIRY_DATE",
+      "ordinal": 4,
+      "type": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 4,
+        "nullable": true
+      }
+    },
+    {
+      "name": "MESSAGE_TYPE",
+      "ordinal": 5,
+      "type": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 6,
+        "nullable": true
+      }
+    },
+    {
+      "name": "MESSAGE_SOURCE",
+      "ordinal": 6,
+      "type": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 6,
+        "nullable": true
+      }
+    },
+    {
+      "name": "AUTH_ID_CODE",
+      "ordinal": 7,
+      "type": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 6,
+        "nullable": true
+      }
+    },
+    {
+      "name": "AUTH_RESP_CODE",
+      "ordinal": 8,
+      "type": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 2,
+        "nullable": true
+      }
+    },
+    {
+      "name": "AUTH_RESP_REASON",
+      "ordinal": 9,
+      "type": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 4,
+        "nullable": true
+      }
+    },
+    {
+      "name": "PROCESSING_CODE",
+      "ordinal": 10,
+      "type": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 6,
+        "nullable": true
+      }
+    },
+    {
+      "name": "TRANSACTION_AMT",
+      "ordinal": 11,
+      "type": {
+        "kind": "exact-decimal",
+        "nullable": true,
+        "precision": 12,
+        "scale": 2
+      }
+    },
+    {
+      "name": "APPROVED_AMT",
+      "ordinal": 12,
+      "type": {
+        "kind": "exact-decimal",
+        "nullable": true,
+        "precision": 12,
+        "scale": 2
+      }
+    },
+    {
+      "name": "MERCHANT_CATAGORY_CODE",
+      "ordinal": 13,
+      "type": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 4,
+        "nullable": true
+      }
+    },
+    {
+      "name": "ACQR_COUNTRY_CODE",
+      "ordinal": 14,
+      "type": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 3,
+        "nullable": true
+      }
+    },
+    {
+      "name": "POS_ENTRY_MODE",
+      "ordinal": 15,
+      "type": {
+        "bits": 16,
+        "kind": "signed-integer",
+        "nullable": true
+      }
+    },
+    {
+      "name": "MERCHANT_ID",
+      "ordinal": 16,
+      "type": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 15,
+        "nullable": true
+      }
+    },
+    {
+      "name": "MERCHANT_NAME",
+      "ordinal": 17,
+      "type": {
+        "encoding": "unicode-scalar",
+        "kind": "variable-character",
+        "length": 22,
+        "nullable": true
+      }
+    },
+    {
+      "name": "MERCHANT_CITY",
+      "ordinal": 18,
+      "type": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 13,
+        "nullable": true
+      }
+    },
+    {
+      "name": "MERCHANT_STATE",
+      "ordinal": 19,
+      "type": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 2,
+        "nullable": true
+      }
+    },
+    {
+      "name": "MERCHANT_ZIP",
+      "ordinal": 20,
+      "type": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 9,
+        "nullable": true
+      }
+    },
+    {
+      "name": "TRANSACTION_ID",
+      "ordinal": 21,
+      "type": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 15,
+        "nullable": true
+      }
+    },
+    {
+      "name": "MATCH_STATUS",
+      "ordinal": 22,
+      "type": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 1,
+        "nullable": true
+      }
+    },
+    {
+      "name": "AUTH_FRAUD",
+      "ordinal": 23,
+      "type": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 1,
+        "nullable": true
+      }
+    },
+    {
+      "name": "FRAUD_RPT_DATE",
+      "ordinal": 24,
+      "type": {
+        "calendar": "proleptic-gregorian",
+        "kind": "date",
+        "nullable": true
+      }
+    },
+    {
+      "name": "ACCT_ID",
+      "ordinal": 25,
+      "type": {
+        "kind": "exact-decimal",
+        "nullable": true,
+        "precision": 11,
+        "scale": 0
+      }
+    },
+    {
+      "name": "CUST_ID",
+      "ordinal": 26,
+      "type": {
+        "kind": "exact-decimal",
+        "nullable": true,
+        "precision": 9,
+        "scale": 0
+      }
+    }
+  ],
+  "constraints": [
+    {
+      "columns": [
+        "CARD_NUM",
+        "AUTH_TS"
+      ],
+      "id": "pk:AUTHFRDS",
+      "kind": "primary_key"
+    }
+  ],
+  "content_sha256": "ffe6df35b4be0c831e72288ecaf3e48c43cc8aac7682983e0f4570846853d042",
+  "indexes": [
+    {
+      "columns": [
+        {
+          "name": "CARD_NUM",
+          "order": "ASC"
+        },
+        {
+          "name": "AUTH_TS",
+          "order": "DESC"
+        }
+      ],
+      "name": "XAUTHFRD",
+      "schema": "CARDDEMO",
+      "table": "CARDDEMO.AUTHFRDS",
+      "unique": true
+    }
+  ],
+  "name": "AUTHFRDS",
+  "namespace": "CARDDEMO",
+  "production_ready": false,
+  "schema_type": "lightyear-canonical-database-schema",
+  "schema_version": "1.0",
+  "source_model_sha256": "fb59dfc8f78bd088f18f2f2167c457c887f3928e10264f05b3ac5482ec8a6664",
+  "stored_logic": []
+}

@@ -1,0 +1,1326 @@
+{
+  "claim_scope_excludes_unsupported": true,
+  "classifications": [
+    "exact",
+    "normalized-equivalent",
+    "policy-decision-required",
+    "lossy",
+    "unsupported"
+  ],
+  "content_sha256": "0811440daef856f252659d4f86698c42290dd687cb0f7ddb38dad66d44f9ad46",
+  "entries": [
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-profile",
+        "approved-null-empty-string-policy"
+      ],
+      "item_id": "column:oracle-26ai-free:CARD_NUM",
+      "rationale": "Oracle collapses zero-length character values to NULL; profiling and an explicit empty-string policy are required.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "CARD_NUM",
+        "nullable": false,
+        "type": "CHAR(16)"
+      },
+      "target_semantics": {
+        "dialect": "oracle-26ai-free",
+        "name": "CARD_NUM",
+        "nullable": false,
+        "type": "CHAR(16 CHAR)"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "accepted-by-core-policy",
+      "evidence_required": [
+        "typed-boundary-fixtures"
+      ],
+      "item_id": "column:oracle-26ai-free:AUTH_TS",
+      "rationale": "The value domain is preserved under the declared canonical normalization.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "AUTH_TS",
+        "nullable": false,
+        "type": "TIMESTAMP"
+      },
+      "target_semantics": {
+        "dialect": "oracle-26ai-free",
+        "name": "AUTH_TS",
+        "nullable": false,
+        "type": "TIMESTAMP(6)"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-profile",
+        "approved-null-empty-string-policy"
+      ],
+      "item_id": "column:oracle-26ai-free:AUTH_TYPE",
+      "rationale": "Oracle collapses zero-length character values to NULL; profiling and an explicit empty-string policy are required.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "AUTH_TYPE",
+        "nullable": true,
+        "type": "CHAR(4)"
+      },
+      "target_semantics": {
+        "dialect": "oracle-26ai-free",
+        "name": "AUTH_TYPE",
+        "nullable": true,
+        "type": "CHAR(4 CHAR)"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-profile",
+        "approved-null-empty-string-policy"
+      ],
+      "item_id": "column:oracle-26ai-free:CARD_EXPIRY_DATE",
+      "rationale": "Oracle collapses zero-length character values to NULL; profiling and an explicit empty-string policy are required.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "CARD_EXPIRY_DATE",
+        "nullable": true,
+        "type": "CHAR(4)"
+      },
+      "target_semantics": {
+        "dialect": "oracle-26ai-free",
+        "name": "CARD_EXPIRY_DATE",
+        "nullable": true,
+        "type": "CHAR(4 CHAR)"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-profile",
+        "approved-null-empty-string-policy"
+      ],
+      "item_id": "column:oracle-26ai-free:MESSAGE_TYPE",
+      "rationale": "Oracle collapses zero-length character values to NULL; profiling and an explicit empty-string policy are required.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "MESSAGE_TYPE",
+        "nullable": true,
+        "type": "CHAR(6)"
+      },
+      "target_semantics": {
+        "dialect": "oracle-26ai-free",
+        "name": "MESSAGE_TYPE",
+        "nullable": true,
+        "type": "CHAR(6 CHAR)"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-profile",
+        "approved-null-empty-string-policy"
+      ],
+      "item_id": "column:oracle-26ai-free:MESSAGE_SOURCE",
+      "rationale": "Oracle collapses zero-length character values to NULL; profiling and an explicit empty-string policy are required.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "MESSAGE_SOURCE",
+        "nullable": true,
+        "type": "CHAR(6)"
+      },
+      "target_semantics": {
+        "dialect": "oracle-26ai-free",
+        "name": "MESSAGE_SOURCE",
+        "nullable": true,
+        "type": "CHAR(6 CHAR)"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-profile",
+        "approved-null-empty-string-policy"
+      ],
+      "item_id": "column:oracle-26ai-free:AUTH_ID_CODE",
+      "rationale": "Oracle collapses zero-length character values to NULL; profiling and an explicit empty-string policy are required.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "AUTH_ID_CODE",
+        "nullable": true,
+        "type": "CHAR(6)"
+      },
+      "target_semantics": {
+        "dialect": "oracle-26ai-free",
+        "name": "AUTH_ID_CODE",
+        "nullable": true,
+        "type": "CHAR(6 CHAR)"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-profile",
+        "approved-null-empty-string-policy"
+      ],
+      "item_id": "column:oracle-26ai-free:AUTH_RESP_CODE",
+      "rationale": "Oracle collapses zero-length character values to NULL; profiling and an explicit empty-string policy are required.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "AUTH_RESP_CODE",
+        "nullable": true,
+        "type": "CHAR(2)"
+      },
+      "target_semantics": {
+        "dialect": "oracle-26ai-free",
+        "name": "AUTH_RESP_CODE",
+        "nullable": true,
+        "type": "CHAR(2 CHAR)"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-profile",
+        "approved-null-empty-string-policy"
+      ],
+      "item_id": "column:oracle-26ai-free:AUTH_RESP_REASON",
+      "rationale": "Oracle collapses zero-length character values to NULL; profiling and an explicit empty-string policy are required.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "AUTH_RESP_REASON",
+        "nullable": true,
+        "type": "CHAR(4)"
+      },
+      "target_semantics": {
+        "dialect": "oracle-26ai-free",
+        "name": "AUTH_RESP_REASON",
+        "nullable": true,
+        "type": "CHAR(4 CHAR)"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-profile",
+        "approved-null-empty-string-policy"
+      ],
+      "item_id": "column:oracle-26ai-free:PROCESSING_CODE",
+      "rationale": "Oracle collapses zero-length character values to NULL; profiling and an explicit empty-string policy are required.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "PROCESSING_CODE",
+        "nullable": true,
+        "type": "CHAR(6)"
+      },
+      "target_semantics": {
+        "dialect": "oracle-26ai-free",
+        "name": "PROCESSING_CODE",
+        "nullable": true,
+        "type": "CHAR(6 CHAR)"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "accepted-by-core-policy",
+      "evidence_required": [
+        "typed-boundary-fixtures"
+      ],
+      "item_id": "column:oracle-26ai-free:TRANSACTION_AMT",
+      "rationale": "The value domain is preserved under the declared canonical normalization.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "TRANSACTION_AMT",
+        "nullable": true,
+        "type": "DECIMAL(12,2)"
+      },
+      "target_semantics": {
+        "dialect": "oracle-26ai-free",
+        "name": "TRANSACTION_AMT",
+        "nullable": true,
+        "type": "NUMBER(12,2)"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "accepted-by-core-policy",
+      "evidence_required": [
+        "typed-boundary-fixtures"
+      ],
+      "item_id": "column:oracle-26ai-free:APPROVED_AMT",
+      "rationale": "The value domain is preserved under the declared canonical normalization.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "APPROVED_AMT",
+        "nullable": true,
+        "type": "DECIMAL(12,2)"
+      },
+      "target_semantics": {
+        "dialect": "oracle-26ai-free",
+        "name": "APPROVED_AMT",
+        "nullable": true,
+        "type": "NUMBER(12,2)"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-profile",
+        "approved-null-empty-string-policy"
+      ],
+      "item_id": "column:oracle-26ai-free:MERCHANT_CATAGORY_CODE",
+      "rationale": "Oracle collapses zero-length character values to NULL; profiling and an explicit empty-string policy are required.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "MERCHANT_CATAGORY_CODE",
+        "nullable": true,
+        "type": "CHAR(4)"
+      },
+      "target_semantics": {
+        "dialect": "oracle-26ai-free",
+        "name": "MERCHANT_CATAGORY_CODE",
+        "nullable": true,
+        "type": "CHAR(4 CHAR)"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-profile",
+        "approved-null-empty-string-policy"
+      ],
+      "item_id": "column:oracle-26ai-free:ACQR_COUNTRY_CODE",
+      "rationale": "Oracle collapses zero-length character values to NULL; profiling and an explicit empty-string policy are required.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "ACQR_COUNTRY_CODE",
+        "nullable": true,
+        "type": "CHAR(3)"
+      },
+      "target_semantics": {
+        "dialect": "oracle-26ai-free",
+        "name": "ACQR_COUNTRY_CODE",
+        "nullable": true,
+        "type": "CHAR(3 CHAR)"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "accepted-by-core-policy",
+      "evidence_required": [
+        "typed-boundary-fixtures"
+      ],
+      "item_id": "column:oracle-26ai-free:POS_ENTRY_MODE",
+      "rationale": "The value domain is preserved under the declared canonical normalization.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "POS_ENTRY_MODE",
+        "nullable": true,
+        "type": "SMALLINT"
+      },
+      "target_semantics": {
+        "dialect": "oracle-26ai-free",
+        "name": "POS_ENTRY_MODE",
+        "nullable": true,
+        "type": "NUMBER(5,0)"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-profile",
+        "approved-null-empty-string-policy"
+      ],
+      "item_id": "column:oracle-26ai-free:MERCHANT_ID",
+      "rationale": "Oracle collapses zero-length character values to NULL; profiling and an explicit empty-string policy are required.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "MERCHANT_ID",
+        "nullable": true,
+        "type": "CHAR(15)"
+      },
+      "target_semantics": {
+        "dialect": "oracle-26ai-free",
+        "name": "MERCHANT_ID",
+        "nullable": true,
+        "type": "CHAR(15 CHAR)"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-profile",
+        "approved-null-empty-string-policy"
+      ],
+      "item_id": "column:oracle-26ai-free:MERCHANT_NAME",
+      "rationale": "Oracle collapses zero-length character values to NULL; profiling and an explicit empty-string policy are required.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "MERCHANT_NAME",
+        "nullable": true,
+        "type": "VARCHAR(22)"
+      },
+      "target_semantics": {
+        "dialect": "oracle-26ai-free",
+        "name": "MERCHANT_NAME",
+        "nullable": true,
+        "type": "VARCHAR2(22 CHAR)"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-profile",
+        "approved-null-empty-string-policy"
+      ],
+      "item_id": "column:oracle-26ai-free:MERCHANT_CITY",
+      "rationale": "Oracle collapses zero-length character values to NULL; profiling and an explicit empty-string policy are required.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "MERCHANT_CITY",
+        "nullable": true,
+        "type": "CHAR(13)"
+      },
+      "target_semantics": {
+        "dialect": "oracle-26ai-free",
+        "name": "MERCHANT_CITY",
+        "nullable": true,
+        "type": "CHAR(13 CHAR)"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-profile",
+        "approved-null-empty-string-policy"
+      ],
+      "item_id": "column:oracle-26ai-free:MERCHANT_STATE",
+      "rationale": "Oracle collapses zero-length character values to NULL; profiling and an explicit empty-string policy are required.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "MERCHANT_STATE",
+        "nullable": true,
+        "type": "CHAR(2)"
+      },
+      "target_semantics": {
+        "dialect": "oracle-26ai-free",
+        "name": "MERCHANT_STATE",
+        "nullable": true,
+        "type": "CHAR(2 CHAR)"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-profile",
+        "approved-null-empty-string-policy"
+      ],
+      "item_id": "column:oracle-26ai-free:MERCHANT_ZIP",
+      "rationale": "Oracle collapses zero-length character values to NULL; profiling and an explicit empty-string policy are required.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "MERCHANT_ZIP",
+        "nullable": true,
+        "type": "CHAR(9)"
+      },
+      "target_semantics": {
+        "dialect": "oracle-26ai-free",
+        "name": "MERCHANT_ZIP",
+        "nullable": true,
+        "type": "CHAR(9 CHAR)"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-profile",
+        "approved-null-empty-string-policy"
+      ],
+      "item_id": "column:oracle-26ai-free:TRANSACTION_ID",
+      "rationale": "Oracle collapses zero-length character values to NULL; profiling and an explicit empty-string policy are required.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "TRANSACTION_ID",
+        "nullable": true,
+        "type": "CHAR(15)"
+      },
+      "target_semantics": {
+        "dialect": "oracle-26ai-free",
+        "name": "TRANSACTION_ID",
+        "nullable": true,
+        "type": "CHAR(15 CHAR)"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-profile",
+        "approved-null-empty-string-policy"
+      ],
+      "item_id": "column:oracle-26ai-free:MATCH_STATUS",
+      "rationale": "Oracle collapses zero-length character values to NULL; profiling and an explicit empty-string policy are required.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "MATCH_STATUS",
+        "nullable": true,
+        "type": "CHAR(1)"
+      },
+      "target_semantics": {
+        "dialect": "oracle-26ai-free",
+        "name": "MATCH_STATUS",
+        "nullable": true,
+        "type": "CHAR(1 CHAR)"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-profile",
+        "approved-null-empty-string-policy"
+      ],
+      "item_id": "column:oracle-26ai-free:AUTH_FRAUD",
+      "rationale": "Oracle collapses zero-length character values to NULL; profiling and an explicit empty-string policy are required.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "AUTH_FRAUD",
+        "nullable": true,
+        "type": "CHAR(1)"
+      },
+      "target_semantics": {
+        "dialect": "oracle-26ai-free",
+        "name": "AUTH_FRAUD",
+        "nullable": true,
+        "type": "CHAR(1 CHAR)"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "accepted-by-core-policy",
+      "evidence_required": [
+        "typed-boundary-fixtures"
+      ],
+      "item_id": "column:oracle-26ai-free:FRAUD_RPT_DATE",
+      "rationale": "The value domain is preserved under the declared canonical normalization.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "FRAUD_RPT_DATE",
+        "nullable": true,
+        "type": "DATE"
+      },
+      "target_semantics": {
+        "dialect": "oracle-26ai-free",
+        "name": "FRAUD_RPT_DATE",
+        "nullable": true,
+        "type": "DATE"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "accepted-by-core-policy",
+      "evidence_required": [
+        "typed-boundary-fixtures"
+      ],
+      "item_id": "column:oracle-26ai-free:ACCT_ID",
+      "rationale": "The value domain is preserved under the declared canonical normalization.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "ACCT_ID",
+        "nullable": true,
+        "type": "DECIMAL(11,0)"
+      },
+      "target_semantics": {
+        "dialect": "oracle-26ai-free",
+        "name": "ACCT_ID",
+        "nullable": true,
+        "type": "NUMBER(11,0)"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "accepted-by-core-policy",
+      "evidence_required": [
+        "typed-boundary-fixtures"
+      ],
+      "item_id": "column:oracle-26ai-free:CUST_ID",
+      "rationale": "The value domain is preserved under the declared canonical normalization.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "CUST_ID",
+        "nullable": true,
+        "type": "DECIMAL(9,0)"
+      },
+      "target_semantics": {
+        "dialect": "oracle-26ai-free",
+        "name": "CUST_ID",
+        "nullable": true,
+        "type": "NUMBER(9,0)"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "concurrent-transaction-probes",
+        "approved-isolation-policy"
+      ],
+      "item_id": "behavior:oracle-26ai-free:transaction-isolation",
+      "rationale": "Isolation levels and locking outcomes require observed workload-specific policy.",
+      "scope": "transaction-isolation",
+      "source_semantics": {
+        "claim": "not-observed",
+        "dialect": "db2-zos"
+      },
+      "target_semantics": {
+        "claim": "not-qualified",
+        "dialect": "oracle-26ai-free"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "separate-ddl-migration-plan"
+      ],
+      "item_id": "behavior:oracle-26ai-free:cdc-ddl",
+      "rationale": "The bounded CDC contract carries row changes; DDL propagation is outside this claim.",
+      "scope": "cdc-ddl",
+      "source_semantics": {
+        "claim": "not-observed",
+        "dialect": "db2-zos"
+      },
+      "target_semantics": {
+        "claim": "not-qualified",
+        "dialect": "oracle-26ai-free"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "separate-sequence-state-plan"
+      ],
+      "item_id": "behavior:oracle-26ai-free:cdc-sequence-state",
+      "rationale": "Sequence state is not represented by the AUTHFRDS model or row-change stream.",
+      "scope": "cdc-sequence-state",
+      "source_semantics": {
+        "claim": "not-observed",
+        "dialect": "db2-zos"
+      },
+      "target_semantics": {
+        "claim": "not-qualified",
+        "dialect": "oracle-26ai-free"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "stored-logic-inventory-and-qualification"
+      ],
+      "item_id": "behavior:oracle-26ai-free:stored-logic",
+      "rationale": "Stored procedures, triggers, and arbitrary application SQL require separate qualification gates.",
+      "scope": "stored-logic",
+      "source_semantics": {
+        "claim": "not-observed",
+        "dialect": "db2-zos"
+      },
+      "target_semantics": {
+        "claim": "not-qualified",
+        "dialect": "oracle-26ai-free"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "accepted-by-core-policy",
+      "evidence_required": [
+        "typed-boundary-fixtures"
+      ],
+      "item_id": "column:postgresql-16:CARD_NUM",
+      "rationale": "The value domain is preserved under the declared canonical normalization.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "CARD_NUM",
+        "nullable": false,
+        "type": "CHAR(16)"
+      },
+      "target_semantics": {
+        "dialect": "postgresql-16",
+        "name": "card_num",
+        "nullable": false,
+        "type": "CHAR(16)"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "accepted-by-core-policy",
+      "evidence_required": [
+        "typed-boundary-fixtures"
+      ],
+      "item_id": "column:postgresql-16:AUTH_TS",
+      "rationale": "The value domain is preserved under the declared canonical normalization.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "AUTH_TS",
+        "nullable": false,
+        "type": "TIMESTAMP"
+      },
+      "target_semantics": {
+        "dialect": "postgresql-16",
+        "name": "auth_ts",
+        "nullable": false,
+        "type": "TIMESTAMP(6)"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "accepted-by-core-policy",
+      "evidence_required": [
+        "typed-boundary-fixtures"
+      ],
+      "item_id": "column:postgresql-16:AUTH_TYPE",
+      "rationale": "The value domain is preserved under the declared canonical normalization.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "AUTH_TYPE",
+        "nullable": true,
+        "type": "CHAR(4)"
+      },
+      "target_semantics": {
+        "dialect": "postgresql-16",
+        "name": "auth_type",
+        "nullable": true,
+        "type": "CHAR(4)"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "accepted-by-core-policy",
+      "evidence_required": [
+        "typed-boundary-fixtures"
+      ],
+      "item_id": "column:postgresql-16:CARD_EXPIRY_DATE",
+      "rationale": "The value domain is preserved under the declared canonical normalization.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "CARD_EXPIRY_DATE",
+        "nullable": true,
+        "type": "CHAR(4)"
+      },
+      "target_semantics": {
+        "dialect": "postgresql-16",
+        "name": "card_expiry_date",
+        "nullable": true,
+        "type": "CHAR(4)"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "accepted-by-core-policy",
+      "evidence_required": [
+        "typed-boundary-fixtures"
+      ],
+      "item_id": "column:postgresql-16:MESSAGE_TYPE",
+      "rationale": "The value domain is preserved under the declared canonical normalization.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "MESSAGE_TYPE",
+        "nullable": true,
+        "type": "CHAR(6)"
+      },
+      "target_semantics": {
+        "dialect": "postgresql-16",
+        "name": "message_type",
+        "nullable": true,
+        "type": "CHAR(6)"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "accepted-by-core-policy",
+      "evidence_required": [
+        "typed-boundary-fixtures"
+      ],
+      "item_id": "column:postgresql-16:MESSAGE_SOURCE",
+      "rationale": "The value domain is preserved under the declared canonical normalization.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "MESSAGE_SOURCE",
+        "nullable": true,
+        "type": "CHAR(6)"
+      },
+      "target_semantics": {
+        "dialect": "postgresql-16",
+        "name": "message_source",
+        "nullable": true,
+        "type": "CHAR(6)"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "accepted-by-core-policy",
+      "evidence_required": [
+        "typed-boundary-fixtures"
+      ],
+      "item_id": "column:postgresql-16:AUTH_ID_CODE",
+      "rationale": "The value domain is preserved under the declared canonical normalization.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "AUTH_ID_CODE",
+        "nullable": true,
+        "type": "CHAR(6)"
+      },
+      "target_semantics": {
+        "dialect": "postgresql-16",
+        "name": "auth_id_code",
+        "nullable": true,
+        "type": "CHAR(6)"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "accepted-by-core-policy",
+      "evidence_required": [
+        "typed-boundary-fixtures"
+      ],
+      "item_id": "column:postgresql-16:AUTH_RESP_CODE",
+      "rationale": "The value domain is preserved under the declared canonical normalization.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "AUTH_RESP_CODE",
+        "nullable": true,
+        "type": "CHAR(2)"
+      },
+      "target_semantics": {
+        "dialect": "postgresql-16",
+        "name": "auth_resp_code",
+        "nullable": true,
+        "type": "CHAR(2)"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "accepted-by-core-policy",
+      "evidence_required": [
+        "typed-boundary-fixtures"
+      ],
+      "item_id": "column:postgresql-16:AUTH_RESP_REASON",
+      "rationale": "The value domain is preserved under the declared canonical normalization.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "AUTH_RESP_REASON",
+        "nullable": true,
+        "type": "CHAR(4)"
+      },
+      "target_semantics": {
+        "dialect": "postgresql-16",
+        "name": "auth_resp_reason",
+        "nullable": true,
+        "type": "CHAR(4)"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "accepted-by-core-policy",
+      "evidence_required": [
+        "typed-boundary-fixtures"
+      ],
+      "item_id": "column:postgresql-16:PROCESSING_CODE",
+      "rationale": "The value domain is preserved under the declared canonical normalization.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "PROCESSING_CODE",
+        "nullable": true,
+        "type": "CHAR(6)"
+      },
+      "target_semantics": {
+        "dialect": "postgresql-16",
+        "name": "processing_code",
+        "nullable": true,
+        "type": "CHAR(6)"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "accepted-by-core-policy",
+      "evidence_required": [],
+      "item_id": "column:postgresql-16:TRANSACTION_AMT",
+      "rationale": "Target type preserves the bounded source value domain.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "TRANSACTION_AMT",
+        "nullable": true,
+        "type": "DECIMAL(12,2)"
+      },
+      "target_semantics": {
+        "dialect": "postgresql-16",
+        "name": "transaction_amt",
+        "nullable": true,
+        "type": "NUMERIC(12,2)"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "accepted-by-core-policy",
+      "evidence_required": [],
+      "item_id": "column:postgresql-16:APPROVED_AMT",
+      "rationale": "Target type preserves the bounded source value domain.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "APPROVED_AMT",
+        "nullable": true,
+        "type": "DECIMAL(12,2)"
+      },
+      "target_semantics": {
+        "dialect": "postgresql-16",
+        "name": "approved_amt",
+        "nullable": true,
+        "type": "NUMERIC(12,2)"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "accepted-by-core-policy",
+      "evidence_required": [
+        "typed-boundary-fixtures"
+      ],
+      "item_id": "column:postgresql-16:MERCHANT_CATAGORY_CODE",
+      "rationale": "The value domain is preserved under the declared canonical normalization.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "MERCHANT_CATAGORY_CODE",
+        "nullable": true,
+        "type": "CHAR(4)"
+      },
+      "target_semantics": {
+        "dialect": "postgresql-16",
+        "name": "merchant_catagory_code",
+        "nullable": true,
+        "type": "CHAR(4)"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "accepted-by-core-policy",
+      "evidence_required": [
+        "typed-boundary-fixtures"
+      ],
+      "item_id": "column:postgresql-16:ACQR_COUNTRY_CODE",
+      "rationale": "The value domain is preserved under the declared canonical normalization.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "ACQR_COUNTRY_CODE",
+        "nullable": true,
+        "type": "CHAR(3)"
+      },
+      "target_semantics": {
+        "dialect": "postgresql-16",
+        "name": "acqr_country_code",
+        "nullable": true,
+        "type": "CHAR(3)"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "accepted-by-core-policy",
+      "evidence_required": [],
+      "item_id": "column:postgresql-16:POS_ENTRY_MODE",
+      "rationale": "Target type preserves the bounded source value domain.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "POS_ENTRY_MODE",
+        "nullable": true,
+        "type": "SMALLINT"
+      },
+      "target_semantics": {
+        "dialect": "postgresql-16",
+        "name": "pos_entry_mode",
+        "nullable": true,
+        "type": "SMALLINT"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "accepted-by-core-policy",
+      "evidence_required": [
+        "typed-boundary-fixtures"
+      ],
+      "item_id": "column:postgresql-16:MERCHANT_ID",
+      "rationale": "The value domain is preserved under the declared canonical normalization.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "MERCHANT_ID",
+        "nullable": true,
+        "type": "CHAR(15)"
+      },
+      "target_semantics": {
+        "dialect": "postgresql-16",
+        "name": "merchant_id",
+        "nullable": true,
+        "type": "CHAR(15)"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "accepted-by-core-policy",
+      "evidence_required": [
+        "typed-boundary-fixtures"
+      ],
+      "item_id": "column:postgresql-16:MERCHANT_NAME",
+      "rationale": "The value domain is preserved under the declared canonical normalization.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "MERCHANT_NAME",
+        "nullable": true,
+        "type": "VARCHAR(22)"
+      },
+      "target_semantics": {
+        "dialect": "postgresql-16",
+        "name": "merchant_name",
+        "nullable": true,
+        "type": "VARCHAR(22)"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "accepted-by-core-policy",
+      "evidence_required": [
+        "typed-boundary-fixtures"
+      ],
+      "item_id": "column:postgresql-16:MERCHANT_CITY",
+      "rationale": "The value domain is preserved under the declared canonical normalization.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "MERCHANT_CITY",
+        "nullable": true,
+        "type": "CHAR(13)"
+      },
+      "target_semantics": {
+        "dialect": "postgresql-16",
+        "name": "merchant_city",
+        "nullable": true,
+        "type": "CHAR(13)"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "accepted-by-core-policy",
+      "evidence_required": [
+        "typed-boundary-fixtures"
+      ],
+      "item_id": "column:postgresql-16:MERCHANT_STATE",
+      "rationale": "The value domain is preserved under the declared canonical normalization.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "MERCHANT_STATE",
+        "nullable": true,
+        "type": "CHAR(2)"
+      },
+      "target_semantics": {
+        "dialect": "postgresql-16",
+        "name": "merchant_state",
+        "nullable": true,
+        "type": "CHAR(2)"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "accepted-by-core-policy",
+      "evidence_required": [
+        "typed-boundary-fixtures"
+      ],
+      "item_id": "column:postgresql-16:MERCHANT_ZIP",
+      "rationale": "The value domain is preserved under the declared canonical normalization.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "MERCHANT_ZIP",
+        "nullable": true,
+        "type": "CHAR(9)"
+      },
+      "target_semantics": {
+        "dialect": "postgresql-16",
+        "name": "merchant_zip",
+        "nullable": true,
+        "type": "CHAR(9)"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "accepted-by-core-policy",
+      "evidence_required": [
+        "typed-boundary-fixtures"
+      ],
+      "item_id": "column:postgresql-16:TRANSACTION_ID",
+      "rationale": "The value domain is preserved under the declared canonical normalization.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "TRANSACTION_ID",
+        "nullable": true,
+        "type": "CHAR(15)"
+      },
+      "target_semantics": {
+        "dialect": "postgresql-16",
+        "name": "transaction_id",
+        "nullable": true,
+        "type": "CHAR(15)"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "accepted-by-core-policy",
+      "evidence_required": [
+        "typed-boundary-fixtures"
+      ],
+      "item_id": "column:postgresql-16:MATCH_STATUS",
+      "rationale": "The value domain is preserved under the declared canonical normalization.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "MATCH_STATUS",
+        "nullable": true,
+        "type": "CHAR(1)"
+      },
+      "target_semantics": {
+        "dialect": "postgresql-16",
+        "name": "match_status",
+        "nullable": true,
+        "type": "CHAR(1)"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "accepted-by-core-policy",
+      "evidence_required": [
+        "typed-boundary-fixtures"
+      ],
+      "item_id": "column:postgresql-16:AUTH_FRAUD",
+      "rationale": "The value domain is preserved under the declared canonical normalization.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "AUTH_FRAUD",
+        "nullable": true,
+        "type": "CHAR(1)"
+      },
+      "target_semantics": {
+        "dialect": "postgresql-16",
+        "name": "auth_fraud",
+        "nullable": true,
+        "type": "CHAR(1)"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "accepted-by-core-policy",
+      "evidence_required": [],
+      "item_id": "column:postgresql-16:FRAUD_RPT_DATE",
+      "rationale": "Target type preserves the bounded source value domain.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "FRAUD_RPT_DATE",
+        "nullable": true,
+        "type": "DATE"
+      },
+      "target_semantics": {
+        "dialect": "postgresql-16",
+        "name": "fraud_rpt_date",
+        "nullable": true,
+        "type": "DATE"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "accepted-by-core-policy",
+      "evidence_required": [],
+      "item_id": "column:postgresql-16:ACCT_ID",
+      "rationale": "Target type preserves the bounded source value domain.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "ACCT_ID",
+        "nullable": true,
+        "type": "DECIMAL(11,0)"
+      },
+      "target_semantics": {
+        "dialect": "postgresql-16",
+        "name": "acct_id",
+        "nullable": true,
+        "type": "NUMERIC(11,0)"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "accepted-by-core-policy",
+      "evidence_required": [],
+      "item_id": "column:postgresql-16:CUST_ID",
+      "rationale": "Target type preserves the bounded source value domain.",
+      "scope": "column-type-and-value-semantics",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "name": "CUST_ID",
+        "nullable": true,
+        "type": "DECIMAL(9,0)"
+      },
+      "target_semantics": {
+        "dialect": "postgresql-16",
+        "name": "cust_id",
+        "nullable": true,
+        "type": "NUMERIC(9,0)"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "concurrent-transaction-probes",
+        "approved-isolation-policy"
+      ],
+      "item_id": "behavior:postgresql-16:transaction-isolation",
+      "rationale": "Isolation levels and locking outcomes require observed workload-specific policy.",
+      "scope": "transaction-isolation",
+      "source_semantics": {
+        "claim": "not-observed",
+        "dialect": "db2-zos"
+      },
+      "target_semantics": {
+        "claim": "not-qualified",
+        "dialect": "postgresql-16"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "separate-ddl-migration-plan"
+      ],
+      "item_id": "behavior:postgresql-16:cdc-ddl",
+      "rationale": "The bounded CDC contract carries row changes; DDL propagation is outside this claim.",
+      "scope": "cdc-ddl",
+      "source_semantics": {
+        "claim": "not-observed",
+        "dialect": "db2-zos"
+      },
+      "target_semantics": {
+        "claim": "not-qualified",
+        "dialect": "postgresql-16"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "separate-sequence-state-plan"
+      ],
+      "item_id": "behavior:postgresql-16:cdc-sequence-state",
+      "rationale": "Sequence state is not represented by the AUTHFRDS model or row-change stream.",
+      "scope": "cdc-sequence-state",
+      "source_semantics": {
+        "claim": "not-observed",
+        "dialect": "db2-zos"
+      },
+      "target_semantics": {
+        "claim": "not-qualified",
+        "dialect": "postgresql-16"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "stored-logic-inventory-and-qualification"
+      ],
+      "item_id": "behavior:postgresql-16:stored-logic",
+      "rationale": "Stored procedures, triggers, and arbitrary application SQL require separate qualification gates.",
+      "scope": "stored-logic",
+      "source_semantics": {
+        "claim": "not-observed",
+        "dialect": "db2-zos"
+      },
+      "target_semantics": {
+        "claim": "not-qualified",
+        "dialect": "postgresql-16"
+      }
+    }
+  ],
+  "equivalence_blocked": true,
+  "ledger_type": "lightyear-database-compatibility-ledger",
+  "mapping_sha256s": [
+    "24f0f0dc82363749d9db4a7294315ec8dc3ca5660e7d800550560195b0d27f45",
+    "a948a0567245bc7c15fda3d8d2dc742ccee5691db4ee034d947b1671ab6f172f"
+  ],
+  "production_ready": false,
+  "schema_version": "1.0",
+  "source_model_sha256": "fb59dfc8f78bd088f18f2f2167c457c887f3928e10264f05b3ac5482ec8a6664",
+  "statistics": {
+    "exact": 6,
+    "lossy": 0,
+    "normalized-equivalent": 27,
+    "policy-decision-required": 21,
+    "unsupported": 6
+  }
+}

@@ -1,4 +1,14 @@
-# AUTHFRDS data-modernization and migration-rehearsal proof cell
+# Database semantic core and AUTHFRDS proof cell
+
+MS #33 turns the original AUTHFRDS implementation into a reusable database semantic core. Database
+adapters must project through the canonical type system and satisfy the same profiling,
+transformation, normalization, comparison, CDC, cutover, rollback, and conformance contracts.
+
+The compatibility ledger is the authority for semantic differences. It classifies every bounded
+column and behavior as `exact`, `normalized-equivalent`, `policy-decision-required`, `lossy`, or
+`unsupported`. A policy decision cannot be silently auto-accepted, loss blocks equivalence, and an
+unsupported item is excluded from the claim scope. Stored procedures, triggers, arbitrary
+application SQL, DDL replication, and sequence-state transfer remain separately gated.
 
 This bounded v0.19.2 vertical slice translates the AWS CardDemo Db2 for z/OS `CARDDEMO.AUTHFRDS` contract to PostgreSQL and Oracle while retaining source lineage and explicit evidence gaps.
 
@@ -28,6 +38,7 @@ macOS/Linux:
 ./data-modernization.sh live-postgres
 ./data-modernization.sh live-oracle
 ./data-modernization.sh live-all
+PYTHONPATH=src python3 -m lightyear_data verify-semantic-core
 ./migration-rehearsal.sh verify /path/to/aws-carddemo
 ```
 
@@ -76,3 +87,6 @@ data profiling.
 | Cutover approval | Simulated human, plan-bound, development-only; no production authority |
 | Rollback | Injected divergence detected; exact pre-cutover identities restored |
 | RPO/RTO | Zero fixture events and three recovery steps; no production timing claim |
+| Database semantic core | Canonical types, adapters, profiling, transformations, rows, comparisons, CDC, cutover/rollback, and conformance passed |
+| Compatibility ledger | 52 column mappings plus behavioral boundaries; unresolved policy decisions block equivalence |
+| Stored logic | Explicitly unsupported in this claim; requires separate qualification gates |

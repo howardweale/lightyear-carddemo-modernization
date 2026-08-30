@@ -12,6 +12,14 @@ from .parser import parse_db2_ddl, parse_dcl, parse_embedded_sql
 from .postgres import PostgreSQLAdapter
 from .oracle import OracleAdapter
 from .contracts import seal
+from .semantic_core import (
+    adapter_conformance_receipt,
+    build_compatibility_ledger,
+    build_canonical_schema,
+    build_profile_contract,
+    build_semantic_core_contract,
+    build_transformation_plan,
+)
 
 
 RELATIVE_ROOT = Path("app/app-authorization-ims-db2-mq")
@@ -60,6 +68,15 @@ def build_assets(legacy_root: Path, output_root: Path) -> dict[str, Any]:
         "production_ready": False,
         "required_live_checks": ["exact_schema", "exact_primary_key", "exact_indexes", "row_count", "normalized_row_checksums", "query_results", "transaction_commit", "transaction_rollback"],
     })
+    mappings = (postgres_mapping, oracle_mapping)
+    semantic_core = build_semantic_core_contract()
+    canonical_schema = build_canonical_schema(model)
+    profile_contract = build_profile_contract(model)
+    transformation_plan = build_transformation_plan(model, mappings)
+    compatibility_ledger = build_compatibility_ledger(model, mappings)
+    conformance_receipt = adapter_conformance_receipt(
+        (postgres, oracle), model, compatibility_ledger, fixtures
+    )
     root = output_root / "data-modernization"
     write_json(root / "canonical/authfrds.model.json", model)
     write_json(root / "source/authfrds.dcl-contract.json", dcl)
@@ -72,12 +89,22 @@ def build_assets(legacy_root: Path, output_root: Path) -> dict[str, Any]:
     write_json(root / "receipts/authfrds.offline.receipt.json", postgres_receipt)
     write_json(root / "receipts/authfrds.oracle-offline.receipt.json", oracle_receipt)
     write_json(root / "receipts/authfrds.target-plan.json", target_plan)
+    write_json(root / "semantic-core/database-semantic-core.json", semantic_core)
+    write_json(root / "semantic-core/authfrds.canonical-schema.json", canonical_schema)
+    write_json(root / "semantic-core/authfrds.profile-contract.json", profile_contract)
+    write_json(root / "semantic-core/authfrds.schema-transformation-plan.json", transformation_plan)
+    write_json(root / "semantic-core/authfrds.compatibility-ledger.json", compatibility_ledger)
+    write_json(root / "semantic-core/authfrds.adapter-conformance.receipt.json", conformance_receipt)
     return {
-        "status": "passed" if postgres_receipt["status"] == oracle_receipt["status"] == "passed" else "failed", "output": str(root),
+        "status": "passed" if postgres_receipt["status"] == oracle_receipt["status"] == conformance_receipt["status"] == "passed" else "failed", "output": str(root),
         "model_sha256": model["content_sha256"],
         "mapping_sha256": postgres_mapping["content_sha256"], "oracle_mapping_sha256": oracle_mapping["content_sha256"],
         "receipt_sha256": postgres_receipt["content_sha256"], "target_plan_sha256": target_plan["content_sha256"], "columns": len(model["columns"]),
         "sql_statements": len(sql["statements"]), "fixture_rows": len(fixtures["rows"]),
+        "semantic_core_sha256": semantic_core["content_sha256"],
+        "canonical_schema_sha256": canonical_schema["content_sha256"],
+        "compatibility_ledger_sha256": compatibility_ledger["content_sha256"],
+        "adapter_conformance_sha256": conformance_receipt["content_sha256"],
     }
 
 

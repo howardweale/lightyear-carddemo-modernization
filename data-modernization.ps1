@@ -1,5 +1,5 @@
 param(
-  [ValidateSet("build", "verify", "live", "live-postgres", "live-oracle", "live-all", "sign")][string]$Command = "verify",
+  [ValidateSet("build", "verify", "semantic-core", "live", "live-postgres", "live-oracle", "live-all", "sign")][string]$Command = "verify",
   [string]$LegacyRoot = $env:CARDDEMO_UPSTREAM_ROOT
 )
 $ErrorActionPreference = "Stop"
@@ -29,6 +29,12 @@ if ($Command -eq "build") {
     "receipts/authfrds.offline.receipt.json"
     "receipts/authfrds.oracle-offline.receipt.json"
     "receipts/authfrds.target-plan.json"
+    "semantic-core/database-semantic-core.json"
+    "semantic-core/authfrds.canonical-schema.json"
+    "semantic-core/authfrds.profile-contract.json"
+    "semantic-core/authfrds.schema-transformation-plan.json"
+    "semantic-core/authfrds.compatibility-ledger.json"
+    "semantic-core/authfrds.adapter-conformance.receipt.json"
   )
   foreach ($Relative in $ExpectedFiles) {
     $Expected = Join-Path (Join-Path $ProjectDir "data-modernization") $Relative
@@ -37,7 +43,10 @@ if ($Command -eq "build") {
       throw "Generated data artifact differs: $Relative"
     }
   }
-  Write-Host "AUTHFRDS canonical model, PostgreSQL/Oracle mappings, fixtures, and signed development receipts are deterministic."
+  Run-Python -m lightyear_data verify-semantic-core --project-root $Output
+  Write-Host "AUTHFRDS database semantic core, adapters, ledger, fixtures, and receipts are deterministic."
+} elseif ($Command -eq "semantic-core") {
+  Run-Python -m lightyear_data verify-semantic-core --project-root $ProjectDir
 } elseif ($Command -in @("live", "live-postgres")) {
   Run-Python -m lightyear_data verify-docker --target postgresql --project-root $ProjectDir
 } elseif ($Command -eq "live-oracle") {

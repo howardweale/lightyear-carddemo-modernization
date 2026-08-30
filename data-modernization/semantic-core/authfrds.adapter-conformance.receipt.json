@@ -1,0 +1,47 @@
+{
+  "adapters": [
+    {
+      "adapter": {
+        "dialect": "postgresql-16",
+        "id": "factorydark-postgresql",
+        "version": "1.0"
+      },
+      "checks": {
+        "canonical_type_coverage": true,
+        "column_coverage": true,
+        "compatibility_ledger_coverage": true,
+        "determinism": true,
+        "interface": true,
+        "normalized_row_round_trip": true,
+        "unsafe_classification_gates": true
+      },
+      "status": "passed"
+    },
+    {
+      "adapter": {
+        "dialect": "oracle-26ai-free",
+        "id": "factorydark-oracle",
+        "version": "1.0"
+      },
+      "checks": {
+        "canonical_type_coverage": true,
+        "column_coverage": true,
+        "compatibility_ledger_coverage": true,
+        "determinism": true,
+        "interface": true,
+        "normalized_row_round_trip": true,
+        "unsafe_classification_gates": true
+      },
+      "status": "passed"
+    }
+  ],
+  "content_sha256": "e5b40e481561fbcb45ea4f53f0184fff023fc8a4df36c5c316a615c02039353f",
+  "ledger_sha256": "0811440daef856f252659d4f86698c42290dd687cb0f7ddb38dad66d44f9ad46",
+  "model_sha256": "fb59dfc8f78bd088f18f2f2167c457c887f3928e10264f05b3ac5482ec8a6664",
+  "production_qualification_implied": false,
+  "production_ready": false,
+  "receipt_type": "lightyear-adapter-conformance",
+  "schema_version": "1.0",
+  "semantic_core_version": "1.0",
+  "status": "passed"
+}

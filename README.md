@@ -1,6 +1,29 @@
 # FactoryDark.ai CardDemo Modernization Factory
 
-Release: **v0.32.0 — governed pilot selection and development work packaging**
+Release: **v0.33.0 — database semantic core**
+
+v0.33 extracts the bounded AUTHFRDS database proof into a genuine platform contract. The new
+semantic core defines independent source and target adapter interfaces, a canonical schema and
+17-kind type system, data profiling, schema transformation, typed normalized rows, query and
+transaction comparison, CDC envelopes, cutover and rollback gates, and deterministic adapter
+conformance.
+
+Every source-to-target difference is now governed by a content-addressed compatibility ledger. Each
+column and behavioral boundary is classified as `exact`, `normalized-equivalent`,
+`policy-decision-required`, `lossy`, or `unsupported`. Unresolved Oracle empty-string/null and
+transaction-isolation decisions block equivalence; DDL CDC, sequence state, and stored logic are
+explicitly outside the current claim rather than silently bundled into database migration.
+
+```bash
+./data-modernization.sh verify /path/to/aws-carddemo
+PYTHONPATH=src python3 -m lightyear_data verify-semantic-core
+```
+
+The committed reference runs both existing target adapters through the same conformance suite.
+PostgreSQL and Oracle pass the development contract, but no live Db2 observation, stored-logic
+qualification, production cutover, or production-readiness claim is created.
+
+Previous milestone: **v0.32.0 — governed pilot selection and development work packaging**
 
 v0.32 closes the gap between an advisory estate assessment and executable factory governance. A
 recorded human decision selects exactly one assessed application slice, supplies business outcomes,

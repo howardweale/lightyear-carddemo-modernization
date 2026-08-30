@@ -3,7 +3,8 @@ from __future__ import annotations
 from typing import Any
 
 from .contracts import SCHEMA_VERSION, seal
-from .postgres import TargetAdapter, _source_type, sql_literal
+from .postgres import _source_type, sql_literal
+from .semantic_core import TargetAdapter
 
 
 class OracleAdapter(TargetAdapter):

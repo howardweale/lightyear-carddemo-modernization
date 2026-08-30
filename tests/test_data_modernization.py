@@ -149,6 +149,12 @@ class DataModernizationTests(unittest.TestCase):
                 "receipts/authfrds.offline.receipt.json",
                 "receipts/authfrds.oracle-offline.receipt.json",
                 "receipts/authfrds.target-plan.json",
+                "semantic-core/database-semantic-core.json",
+                "semantic-core/authfrds.canonical-schema.json",
+                "semantic-core/authfrds.profile-contract.json",
+                "semantic-core/authfrds.schema-transformation-plan.json",
+                "semantic-core/authfrds.compatibility-ledger.json",
+                "semantic-core/authfrds.adapter-conformance.receipt.json",
             ]
             for relative in generated:
                 self.assertEqual(

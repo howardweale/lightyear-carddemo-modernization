@@ -1,0 +1,74 @@
+{
+  "automatic_cutover_allowed": false,
+  "content_sha256": "984761ad4ad138cccb3d2ac196ac89874a800864a1643bdaec0170fe75f31cc0",
+  "plan_type": "lightyear-schema-transformation-plan",
+  "production_ready": false,
+  "schema_version": "1.0",
+  "source_model_sha256": "fb59dfc8f78bd088f18f2f2167c457c887f3928e10264f05b3ac5482ec8a6664",
+  "source_table": "CARDDEMO.AUTHFRDS",
+  "stored_logic_in_scope": false,
+  "targets": [
+    {
+      "mapping_sha256": "a948a0567245bc7c15fda3d8d2dc742ccee5691db4ee034d947b1671ab6f172f",
+      "steps": [
+        {
+          "operation": "create-namespace",
+          "order": 1,
+          "rollback": "drop-created-namespace"
+        },
+        {
+          "operation": "create-table",
+          "order": 2,
+          "rollback": "drop-created-table"
+        },
+        {
+          "operation": "load-normalized-rows",
+          "order": 3,
+          "rollback": "truncate-created-table"
+        },
+        {
+          "operation": "create-constraints-and-indexes",
+          "order": 4,
+          "rollback": "drop-created-constraints-and-indexes"
+        },
+        {
+          "operation": "compare-schema-data-query-and-transaction-evidence",
+          "order": 5,
+          "rollback": "retain-evidence-and-reject-cutover"
+        }
+      ],
+      "target_dialect": "oracle-26ai-free"
+    },
+    {
+      "mapping_sha256": "24f0f0dc82363749d9db4a7294315ec8dc3ca5660e7d800550560195b0d27f45",
+      "steps": [
+        {
+          "operation": "create-namespace",
+          "order": 1,
+          "rollback": "drop-created-namespace"
+        },
+        {
+          "operation": "create-table",
+          "order": 2,
+          "rollback": "drop-created-table"
+        },
+        {
+          "operation": "load-normalized-rows",
+          "order": 3,
+          "rollback": "truncate-created-table"
+        },
+        {
+          "operation": "create-constraints-and-indexes",
+          "order": 4,
+          "rollback": "drop-created-constraints-and-indexes"
+        },
+        {
+          "operation": "compare-schema-data-query-and-transaction-evidence",
+          "order": 5,
+          "rollback": "retain-evidence-and-reject-cutover"
+        }
+      ],
+      "target_dialect": "postgresql-16"
+    }
+  ]
+}

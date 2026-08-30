@@ -2,29 +2,10 @@ from __future__ import annotations
 
 import json
 import re
-from abc import ABC, abstractmethod
 from typing import Any
 
 from .contracts import SCHEMA_VERSION, seal
-
-
-class TargetAdapter(ABC):
-    adapter_id: str
-    adapter_version: str
-    dialect: str
-    default_image: str
-
-    @abstractmethod
-    def mapping(self, model: dict[str, Any]) -> dict[str, Any]: ...
-
-    @abstractmethod
-    def schema_sql(self, model: dict[str, Any]) -> str: ...
-
-    @abstractmethod
-    def fixture_sql(self, fixtures: dict[str, Any], model: dict[str, Any]) -> str: ...
-
-    @abstractmethod
-    def catalog_expectation(self, model: dict[str, Any]) -> dict[str, Any]: ...
+from .semantic_core import TargetAdapter
 
 
 class PostgreSQLAdapter(TargetAdapter):

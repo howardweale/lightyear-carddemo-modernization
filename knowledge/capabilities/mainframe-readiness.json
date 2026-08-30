@@ -538,7 +538,7 @@
         "live_observed": false,
         "pagination_bounded": true,
         "production_ready": false,
-        "receipt_sha256": "8ebfdca9e04bf4a0d0710ce2e0e629e6c099b0f7723ed439875639de5eaa9e2f",
+        "receipt_sha256": "2786d611e9861d0a8b0b8cb3b5c46a86ce49f020f7b91dcdf0e12063740c4d64",
         "retry_bounded": true,
         "status": "passed"
       },
@@ -546,26 +546,26 @@
       "live_observed": false,
       "mechanism": "Mainframe Access Campaign",
       "production_ready": false,
-      "receipt_sha256": "264fe772a82ed67058a828e854cbde96b3d2deea3789f01a23ab5f6189cc027f",
+      "receipt_sha256": "2426eb60c9824e93e27bd326d30fb990a92d537955c8d8405b8c9dce0cdb13f9",
       "status": "simulated_ready"
     }
   ],
-  "content_sha256": "9876e04a4956c6afa3437fcdac829586199154bfc1e20050b9966d1a280628e5",
+  "content_sha256": "c6a49925479eca98b3f50b0ab171a85cab7bf67aaedd8631e0bedad3a8aea2f4",
   "evidence_bindings": {
-    "canonical_graph_sha256": "2a003843da4fcdb04fc563f2d9644dd745ba0589c9fb6651b7fd21c9e6fad571",
+    "canonical_graph_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
     "data_rehearsal_receipt_sha256": "e628b50cc4e21707f6c62e7a8429654c7867411f75fb9381e03f3d191854f652",
-    "enterprise_appliance_receipt_sha256": "8ebfdca9e04bf4a0d0710ce2e0e629e6c099b0f7723ed439875639de5eaa9e2f",
+    "enterprise_appliance_receipt_sha256": "2786d611e9861d0a8b0b8cb3b5c46a86ce49f020f7b91dcdf0e12063740c4d64",
     "extension_catalog_sha256": "a3ca454e737d047b44ce1a17d225ea23174a345e0e66083e304290a037f73106",
-    "mainframe_campaign_receipt_sha256": "264fe772a82ed67058a828e854cbde96b3d2deea3789f01a23ab5f6189cc027f",
+    "mainframe_campaign_receipt_sha256": "2426eb60c9824e93e27bd326d30fb990a92d537955c8d8405b8c9dce0cdb13f9",
     "oracle_data_receipt_sha256": "6958d7cc783d5ad00c469c112db5b665bf9ba93b7addec9cc94375d6c3f2dd83",
-    "pli_build_attestation_sha256": "7b959203ba1cc1c2a6f5da8d69aa8c3dcfca65e9935f93056acd7bba8bcf9773",
-    "pli_build_receipt_sha256": "071b414e3472d8ac8c85ab14f75dae0540d563364fc82d7bf0726434b56b587a",
-    "pli_coverage_receipt_sha256": "28113863189a3d393a486f06a186cead4cb32c75f0da096020055fe737e97dd5",
-    "pli_development_receipt_sha256": "69962583b4134dca1c33798890624e8488830a69d9a1b1722a1fb29a97f1ff15",
-    "pli_fragment_sha256": "33a57c2a87a74ce73dc18742cc96c48735a8b7df152add5a1db44a77ed4a48ec",
+    "pli_build_attestation_sha256": "82826dd2bdba889bb789571fdba4285facbeed40c339b5ef3f44cbcfcdf2ae80",
+    "pli_build_receipt_sha256": "9de820e7295484c89ab8acdb5d6c902e5ae1f89113f27bc882d17d31054a283f",
+    "pli_coverage_receipt_sha256": "c29ec51c3953d7134615d238b40fb4beea388a41b3fdcbc62266775e40930d11",
+    "pli_development_receipt_sha256": "2a64d8cbff114e420e221a56bfe30c8fcc10ff0e359d4ba96b5f138598824ddb",
+    "pli_fragment_sha256": "66ed4547441d74c66582e4d373d3e374a2e5776cb366704541392255ddfe9788",
     "postgres_data_receipt_sha256": "8e2e2dc30cffa3205ceb743f418ae937ea8ac05d6bde9041182acc61cba3abbe"
   },
-  "graph_content_sha256": "2a003843da4fcdb04fc563f2d9644dd745ba0589c9fb6651b7fd21c9e6fad571",
+  "graph_content_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
   "schema_version": "1.5",
   "truth_boundary": "Local, simulated, fixture, static, and offline target evidence cannot satisfy live z/OS observation or equivalence gates."
 }

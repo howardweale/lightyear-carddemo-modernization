@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schema/database-semantic-core.schema.json",
+  "title": "LIGHTYEAR database semantic core",
+  "type": "object",
+  "required": ["schema_version", "contract_type", "semantic_core_version", "canonical_type_system", "source_adapter_interface", "target_adapter_interface", "data_profiling_contract", "normalized_row_contract", "comparison_contracts", "cdc_event_contract", "cutover_contract", "rollback_contract", "compatibility_ledger_contract", "adapter_conformance_contract", "content_sha256"],
+  "properties": {
+    "contract_type": {"const": "lightyear-database-semantic-core"},
+    "production_ready": {"const": false},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": true
+}

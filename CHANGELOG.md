@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.33.0 — 2026-08-30
+
+- Added independent source- and target-adapter interfaces plus a 17-kind canonical database type
+  system with explicit numeric, null, time-zone, and truncation rules.
+- Added deterministic data-profile and schema-transformation contracts, typed normalized rows,
+  query/result comparison, transaction comparison, a content-bound CDC envelope, and fail-closed
+  cutover and rollback contracts.
+- Added a content-addressed AUTHFRDS compatibility ledger covering every column for PostgreSQL and
+  Oracle plus transaction isolation, DDL CDC, sequence state, and stored logic.
+- Required exactly one of `exact`, `normalized-equivalent`, `policy-decision-required`, `lossy`, or
+  `unsupported` for every ledger entry; unresolved policy or loss blocks equivalence and unsupported
+  behavior is excluded from the claim scope.
+- Added a deterministic adapter conformance suite and committed receipt for the existing PostgreSQL
+  and Oracle adapters, with explicit non-promotion and non-production boundaries.
+- Added frozen JSON schemas and tamper tests for semantic contracts, normalized rows, CDC events,
+  compatibility coverage, policy decisions, query/transaction behavior, and cutover/rollback gates.
+
 ## 0.32.0 — 2026-08-30
 
 - Added a content-addressed human pilot-selection contract bound to the exact MS #31 assessment and

@@ -32,12 +32,12 @@
     }
   ],
   "collected_at": "2026-08-28T00:00:00Z",
-  "content_sha256": "04e2cd7ad900f84597bf61e3e98c3e9375739b7ba519a1a46e2ab52b58e9e1a4",
+  "content_sha256": "c1237c56ebdec0d32f3293a63426906a2fa10543c35297d920baf02f2417103a",
   "envelope_id": "appliance:db2-zos-catalog:carddemo-enterprise-collector-v1",
   "envelope_type": "lightyear-adapter-evidence",
   "evidence_class": "simulated",
   "graph_binding": {
-    "content_sha256": "2a003843da4fcdb04fc563f2d9644dd745ba0589c9fb6651b7fd21c9e6fad571",
+    "content_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
     "graph_id": "lightyear:carddemo-modernization"
   },
   "limitations": [

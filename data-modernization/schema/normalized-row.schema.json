@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schema/normalized-row.schema.json",
+  "title": "LIGHTYEAR normalized database row",
+  "type": "object",
+  "required": ["schema_version", "row_type", "model_sha256", "cells", "content_sha256"],
+  "properties": {
+    "row_type": {"const": "lightyear-normalized-row"},
+    "cells": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "canonical_type", "is_null", "value"],
+        "properties": {
+          "canonical_type": {"type": "string"},
+          "is_null": {"type": "boolean"}
+        }
+      }
+    },
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

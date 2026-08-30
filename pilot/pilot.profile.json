@@ -1,11 +1,224 @@
 {
-  "schema_version": "1.0",
-  "profile_type": "lightyear-source-only-pilot-profile",
-  "pilot_id": "lightyear-carddemo-source-only-v0.32.0",
-  "release": "0.32.0",
+  "analysis": {
+    "behavior_claims_allowed": false,
+    "max_edges": 1000000,
+    "max_nodes": 250000,
+    "mode": "bounded-source-static-analysis",
+    "raw_source_in_graph": false,
+    "relationship_ontology": "pilot/analysis-relationships.json",
+    "relationship_ontology_sha256": "e06986e03425cb1b988527d35b5d5f8854433ab5fc2001f7886436f196332080"
+  },
+  "claim_boundary": {
+    "live_mainframe_observed": false,
+    "mainframe_equivalent": false,
+    "model_qualified": false,
+    "production_ready": false,
+    "source_only_pilot": true
+  },
+  "content_sha256": "74fc0cdf22b6c57a21e343fff340f23dd923e1dd63562ae0e43ef1300fd037e9",
+  "evidence_artifacts": [
+    {
+      "id": "pilot-runtime",
+      "path": "pilot/runtime-manifest.json",
+      "role": "runtime-dependency-contract",
+      "sha256": "5c2c0bb8677d82c71e6f6087dbc9d48c2e4162d76edaf5ee2217d730df9b5c4c"
+    },
+    {
+      "id": "estate-assessment-policy",
+      "path": "pilot/assessment-policy.json",
+      "role": "advisory-modernization-planning-contract",
+      "sha256": "a60489ddfc849e3e3e41d9d7e84bcd94b4ef9e4195153caaf86c2efe477af938"
+    },
+    {
+      "id": "pilot-work-package-policy",
+      "path": "pilot/work-package-policy.json",
+      "role": "human-selection-and-development-packaging-contract",
+      "sha256": "36eabc9a698380f2aaecce8eadf719207070c6cc489b5e1edf78163bb0e3fec3"
+    },
+    {
+      "id": "canonical-graph",
+      "path": "knowledge/graph.receipt.json",
+      "role": "estate-discovery",
+      "sha256": "43a0fa2326b496c6d1a0ef44159e724bb66d00acfd48a01ad89d8d3cec4007c0"
+    },
+    {
+      "id": "composite-estate",
+      "path": "knowledge/composite/estate.receipt.json",
+      "role": "composite-lineage",
+      "sha256": "169b7cf9465e67e4c020ee6d604aaa3bf0c110b4b69924b3b56e03f0dbacd559"
+    },
+    {
+      "id": "capability-projection",
+      "path": "knowledge/capabilities/mainframe-readiness.json",
+      "role": "capability-gates",
+      "sha256": "22b6ed53591953ba72c7540c9af8b9e511c39ff5891677f68a9d789aa2c563e5"
+    },
+    {
+      "id": "pli-coverage",
+      "path": "extensions/pli/conformance/coverage.receipt.json",
+      "role": "language-coverage",
+      "sha256": "a423713287804850383af9d2ae39abd3467e5c028b00aa3a8767d72b782bc6e7"
+    },
+    {
+      "id": "pli-development",
+      "path": "extensions/pli/modernization/development.receipt.json",
+      "role": "mixed-language-development-proof",
+      "sha256": "8c1f760da5957810a0f9f6ceae74dd83e0b07aa229a7c6107517cb127d4e0de6"
+    },
+    {
+      "id": "pli-build",
+      "path": "extensions/pli/attestation/build.receipt.json",
+      "role": "reproducible-build",
+      "sha256": "29718321c6dbb59e5c433e39de15d3cdc5b177cc821dbae906e103f724027ec3"
+    },
+    {
+      "id": "model-qualification-policy",
+      "path": "factory/qualification/manifest.json",
+      "role": "model-qualification-boundary",
+      "sha256": "13cc4353a228fd3266e9ed11163dfbe478c7a559fe031eff20a927029c64d91b"
+    },
+    {
+      "id": "data-postgresql",
+      "path": "data-modernization/receipts/authfrds.offline.receipt.json",
+      "role": "data-development-proof",
+      "sha256": "2a2e94f80d2c606b86c23eac276bcc01f46a74b92ba92ac0d3e061b4c3534a4f"
+    },
+    {
+      "id": "data-oracle",
+      "path": "data-modernization/receipts/authfrds.oracle-offline.receipt.json",
+      "role": "data-development-proof",
+      "sha256": "ae8453104e8745628a6cad8893f8d22849a34847a5ffbfeb5a6d56eae61897b6"
+    },
+    {
+      "id": "migration-rehearsal",
+      "path": "data-modernization/rehearsal/receipt.json",
+      "role": "cdc-cutover-recovery-rehearsal",
+      "sha256": "d2f0d194f39325a86063bd6609fdb631190c6686c727e348c7f36c30fffff7fd"
+    },
+    {
+      "id": "collection-appliance",
+      "path": "extensions/adapters/appliance/appliance.receipt.json",
+      "role": "mainframe-collection-mechanism",
+      "sha256": "f2f83902a02f65c76b2bd87a4ef3ad742f90df6a0921f50eb23b06f2d9360053"
+    },
+    {
+      "id": "cics-vsam-readiness",
+      "path": "readiness/cics-vsam/readiness-receipt.json",
+      "role": "bounded-runtime-readiness",
+      "sha256": "2dd8e24e7a23814b6e643ff186f1272071f220b7ac0e03cc57fffc1abcd7dc5a"
+    },
+    {
+      "id": "ims-readiness",
+      "path": "readiness/ims-expiry/readiness-receipt.json",
+      "role": "bounded-runtime-readiness",
+      "sha256": "f95a3d2e5d06232ae2eb00671131a055c4024d6e1546152239c83b0de990a557"
+    },
+    {
+      "id": "hlasm-readiness",
+      "path": "readiness/asm-date/readiness-receipt.json",
+      "role": "bounded-language-readiness",
+      "sha256": "faf7a3109e4f6308a4ac71c706c2725e272fac666b5bba3d1a57ea63633dad92"
+    },
+    {
+      "id": "audit-dossier",
+      "path": "audit/dossiers/carddemo-intcalc-v0.19-demo.json",
+      "role": "auditor-projection",
+      "sha256": "c79879a2321183c06edbf8233667801d1aac96b561b319e9222e556822603269"
+    },
+    {
+      "id": "database-semantic-core",
+      "path": "data-modernization/semantic-core/database-semantic-core.json",
+      "role": "database-platform-contract",
+      "sha256": "ca3114709057e766b26a5eb339c72ba80fc1620cd4f2d070a9bc92e852d803d8"
+    },
+    {
+      "id": "database-compatibility-ledger",
+      "path": "data-modernization/semantic-core/authfrds.compatibility-ledger.json",
+      "role": "database-semantic-difference-authority",
+      "sha256": "0cbd98a780b53a0b18977819f5115800ba1067612625e42075fa1f8a05b5586e"
+    },
+    {
+      "id": "database-adapter-conformance",
+      "path": "data-modernization/semantic-core/authfrds.adapter-conformance.receipt.json",
+      "role": "database-adapter-development-conformance",
+      "sha256": "b3cde64bc0ac1ae9327bbf41a295af65ed167d770693e505fdb1b0d94f7972a7"
+    }
+  ],
   "intake": {
-    "max_files": 10000,
+    "file_classes": [
+      {
+        "extensions": [
+          ".cbl",
+          ".cob",
+          ".cobol"
+        ],
+        "kind": "cobol"
+      },
+      {
+        "extensions": [
+          ".cpy",
+          ".copy",
+          ".cop"
+        ],
+        "kind": "copybook"
+      },
+      {
+        "extensions": [
+          ".pli",
+          ".pl1",
+          ".inc"
+        ],
+        "kind": "pli"
+      },
+      {
+        "extensions": [
+          ".jcl",
+          ".proc"
+        ],
+        "kind": "jcl"
+      },
+      {
+        "extensions": [
+          ".sql",
+          ".ddl",
+          ".dcl"
+        ],
+        "kind": "db2-ddl"
+      },
+      {
+        "extensions": [
+          ".asm",
+          ".mac"
+        ],
+        "kind": "hlasm"
+      },
+      {
+        "extensions": [
+          ".dbd",
+          ".psb"
+        ],
+        "kind": "ims"
+      },
+      {
+        "extensions": [
+          ".ctl",
+          ".idcams"
+        ],
+        "kind": "vsam"
+      },
+      {
+        "extensions": [
+          ".json",
+          ".yaml",
+          ".yml",
+          ".xml",
+          ".txt"
+        ],
+        "kind": "system-configuration"
+      }
+    ],
     "max_file_bytes": 2097152,
+    "max_files": 10000,
     "max_total_bytes": 268435456,
     "required_reference_classes": [
       "cobol",
@@ -17,171 +230,10 @@
       "pli",
       "system-configuration",
       "vsam"
-    ],
-    "file_classes": [
-      {
-        "kind": "cobol",
-        "extensions": [".cbl", ".cob", ".cobol"]
-      },
-      {
-        "kind": "copybook",
-        "extensions": [".cpy", ".copy", ".cop"]
-      },
-      {
-        "kind": "pli",
-        "extensions": [".pli", ".pl1", ".inc"]
-      },
-      {
-        "kind": "jcl",
-        "extensions": [".jcl", ".proc"]
-      },
-      {
-        "kind": "db2-ddl",
-        "extensions": [".sql", ".ddl", ".dcl"]
-      },
-      {
-        "kind": "hlasm",
-        "extensions": [".asm", ".mac"]
-      },
-      {
-        "kind": "ims",
-        "extensions": [".dbd", ".psb"]
-      },
-      {
-        "kind": "vsam",
-        "extensions": [".ctl", ".idcams"]
-      },
-      {
-        "kind": "system-configuration",
-        "extensions": [".json", ".yaml", ".yml", ".xml", ".txt"]
-      }
     ]
   },
-  "analysis": {
-    "mode": "bounded-source-static-analysis",
-    "relationship_ontology": "pilot/analysis-relationships.json",
-    "relationship_ontology_sha256": "e06986e03425cb1b988527d35b5d5f8854433ab5fc2001f7886436f196332080",
-    "max_nodes": 250000,
-    "max_edges": 1000000,
-    "raw_source_in_graph": false,
-    "behavior_claims_allowed": false
-  },
-  "evidence_artifacts": [
-    {
-      "id": "pilot-runtime",
-      "role": "runtime-dependency-contract",
-      "path": "pilot/runtime-manifest.json",
-      "sha256": "3b2f99e2d748ccd9ef63aa60d1889e8447620d72a3b2803880bba6452f22bc0c"
-    },
-    {
-      "id": "estate-assessment-policy",
-      "role": "advisory-modernization-planning-contract",
-      "path": "pilot/assessment-policy.json",
-      "sha256": "a60489ddfc849e3e3e41d9d7e84bcd94b4ef9e4195153caaf86c2efe477af938"
-    },
-    {
-      "id": "pilot-work-package-policy",
-      "role": "human-selection-and-development-packaging-contract",
-      "path": "pilot/work-package-policy.json",
-      "sha256": "36eabc9a698380f2aaecce8eadf719207070c6cc489b5e1edf78163bb0e3fec3"
-    },
-    {
-      "id": "canonical-graph",
-      "role": "estate-discovery",
-      "path": "knowledge/graph.receipt.json",
-      "sha256": "f12ee5dee079a2e612f4875df75020dac12eb2f52f7d5f8698fbddf9f44cc3fc"
-    },
-    {
-      "id": "composite-estate",
-      "role": "composite-lineage",
-      "path": "knowledge/composite/estate.receipt.json",
-      "sha256": "9cdb7ceb9c49f1d1cf0cf6c66e9dca9af3f781b7025366a51d94cdac1a6d07b5"
-    },
-    {
-      "id": "capability-projection",
-      "role": "capability-gates",
-      "path": "knowledge/capabilities/mainframe-readiness.json",
-      "sha256": "dc187c486cbc1a3861491e96e3c8585a79a53bf382668ae30efd302054714d04"
-    },
-    {
-      "id": "pli-coverage",
-      "role": "language-coverage",
-      "path": "extensions/pli/conformance/coverage.receipt.json",
-      "sha256": "31a40aa4b100bd3ce4fb111a6e13dc2ee49654f2588e44b1ff4cd71f3c91503d"
-    },
-    {
-      "id": "pli-development",
-      "role": "mixed-language-development-proof",
-      "path": "extensions/pli/modernization/development.receipt.json",
-      "sha256": "9de70abd3d460c0fbd9ae5428e5ed9157e534ec1ff9dcd33f99ec82f7154082a"
-    },
-    {
-      "id": "pli-build",
-      "role": "reproducible-build",
-      "path": "extensions/pli/attestation/build.receipt.json",
-      "sha256": "02e610fb87ff9aed998c62195995ebac678389e4cf0fd01d589e91b4732ff2b6"
-    },
-    {
-      "id": "model-qualification-policy",
-      "role": "model-qualification-boundary",
-      "path": "factory/qualification/manifest.json",
-      "sha256": "13cc4353a228fd3266e9ed11163dfbe478c7a559fe031eff20a927029c64d91b"
-    },
-    {
-      "id": "data-postgresql",
-      "role": "data-development-proof",
-      "path": "data-modernization/receipts/authfrds.offline.receipt.json",
-      "sha256": "2a2e94f80d2c606b86c23eac276bcc01f46a74b92ba92ac0d3e061b4c3534a4f"
-    },
-    {
-      "id": "data-oracle",
-      "role": "data-development-proof",
-      "path": "data-modernization/receipts/authfrds.oracle-offline.receipt.json",
-      "sha256": "ae8453104e8745628a6cad8893f8d22849a34847a5ffbfeb5a6d56eae61897b6"
-    },
-    {
-      "id": "migration-rehearsal",
-      "role": "cdc-cutover-recovery-rehearsal",
-      "path": "data-modernization/rehearsal/receipt.json",
-      "sha256": "d2f0d194f39325a86063bd6609fdb631190c6686c727e348c7f36c30fffff7fd"
-    },
-    {
-      "id": "collection-appliance",
-      "role": "mainframe-collection-mechanism",
-      "path": "extensions/adapters/appliance/appliance.receipt.json",
-      "sha256": "228190bdbe87912eb0c38e3fe0537d7a2dd66819f0e01cb2c0f93afd5c55cc29"
-    },
-    {
-      "id": "cics-vsam-readiness",
-      "role": "bounded-runtime-readiness",
-      "path": "readiness/cics-vsam/readiness-receipt.json",
-      "sha256": "2dd8e24e7a23814b6e643ff186f1272071f220b7ac0e03cc57fffc1abcd7dc5a"
-    },
-    {
-      "id": "ims-readiness",
-      "role": "bounded-runtime-readiness",
-      "path": "readiness/ims-expiry/readiness-receipt.json",
-      "sha256": "f95a3d2e5d06232ae2eb00671131a055c4024d6e1546152239c83b0de990a557"
-    },
-    {
-      "id": "hlasm-readiness",
-      "role": "bounded-language-readiness",
-      "path": "readiness/asm-date/readiness-receipt.json",
-      "sha256": "faf7a3109e4f6308a4ac71c706c2725e272fac666b5bba3d1a57ea63633dad92"
-    },
-    {
-      "id": "audit-dossier",
-      "role": "auditor-projection",
-      "path": "audit/dossiers/carddemo-intcalc-v0.19-demo.json",
-      "sha256": "aa49f4a4944a67f503b8d343e1195aace6a3cc9007c7ec06c9080c9fcd9cf6e8"
-    }
-  ],
-  "claim_boundary": {
-    "source_only_pilot": true,
-    "live_mainframe_observed": false,
-    "model_qualified": false,
-    "mainframe_equivalent": false,
-    "production_ready": false
-  },
-  "content_sha256": "9bf0057cccbd61830c0f4b87de8c349f375357d32a77abb069c9587edd01c0f3"
+  "pilot_id": "lightyear-carddemo-source-only-v0.33.0",
+  "profile_type": "lightyear-source-only-pilot-profile",
+  "release": "0.33.0",
+  "schema_version": "1.0"
 }

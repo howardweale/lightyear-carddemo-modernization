@@ -1,0 +1,175 @@
+{
+  "adapter_conformance_contract": {
+    "production_qualification_implied": false,
+    "required_checks": [
+      "interface",
+      "determinism",
+      "column-coverage",
+      "canonical-type-coverage",
+      "compatibility-ledger-coverage",
+      "unsafe-classification-gates",
+      "normalized-row-round-trip"
+    ]
+  },
+  "canonical_type_system": {
+    "exact_numeric_required": true,
+    "implicit_time_zone_conversion_allowed": false,
+    "implicit_truncation_allowed": false,
+    "null_distinct_from_empty_string": true,
+    "types": [
+      "boolean",
+      "signed-integer",
+      "exact-decimal",
+      "fixed-character",
+      "variable-character",
+      "fixed-binary",
+      "variable-binary",
+      "date",
+      "time",
+      "timestamp",
+      "timestamp-with-time-zone",
+      "interval",
+      "uuid",
+      "json",
+      "large-text",
+      "large-binary"
+    ]
+  },
+  "cdc_event_contract": {
+    "ddl_is_a_separate_event_class": true,
+    "operations": [
+      "insert",
+      "update",
+      "delete"
+    ],
+    "required_fields": [
+      "source_adapter",
+      "stream_id",
+      "partition",
+      "position",
+      "transaction_id",
+      "operation",
+      "table",
+      "key",
+      "before",
+      "after",
+      "occurred_at"
+    ],
+    "resume_requires_last_applied_event_hash": true
+  },
+  "comparison_contracts": {
+    "queries": [
+      "statement-identity",
+      "parameter-identity",
+      "column-contract",
+      "typed-result-multiset",
+      "error-class"
+    ],
+    "rows": [
+      "primary-key-identity",
+      "duplicate-detection",
+      "typed-cell-identity",
+      "order-independent-table-comparison"
+    ],
+    "transactions": [
+      "initial-state",
+      "ordered-operations",
+      "commit-outcome",
+      "rollback-outcome",
+      "isolation-observations"
+    ]
+  },
+  "compatibility_ledger_contract": {
+    "allowed_classifications": [
+      "exact",
+      "normalized-equivalent",
+      "policy-decision-required",
+      "lossy",
+      "unsupported"
+    ],
+    "exactly_one_classification_per_item": true,
+    "required_fields": [
+      "item_id",
+      "scope",
+      "source_semantics",
+      "target_semantics",
+      "classification",
+      "rationale",
+      "evidence_required",
+      "decision"
+    ],
+    "unresolved_policy_or_loss_blocks_equivalence": true,
+    "unsupported_blocks_claim_scope": true
+  },
+  "content_sha256": "e8f5580ba690cc0f742886bf17a488a062ade29c8faaf1a6adc6e55d54b42b34",
+  "contract_type": "lightyear-database-semantic-core",
+  "cutover_contract": {
+    "automatic_approval_allowed": false,
+    "required_gates": [
+      "initial-load-reconciled",
+      "cdc-caught-up",
+      "write-freeze-observed",
+      "final-delta-reconciled",
+      "human-approval-valid",
+      "rollback-checkpoint-valid"
+    ]
+  },
+  "data_profiling_contract": {
+    "customer_values_may_be_persisted": false,
+    "required_metrics": [
+      "row_count",
+      "null_count",
+      "empty_string_count",
+      "minimum",
+      "maximum",
+      "maximum_character_length",
+      "distinct_count",
+      "invalid_encoding_count",
+      "decimal_overflow_count",
+      "timestamp_precision_observed"
+    ]
+  },
+  "mainframe_equivalent": false,
+  "normalized_row_contract": {
+    "cell_fields": [
+      "canonical_type",
+      "is_null",
+      "value"
+    ],
+    "column_order_is_schema_order": true,
+    "decimal_representation": "non-exponent-canonical-string",
+    "fixed_character_comparison": "right-space-normalized",
+    "timestamps_require_explicit-zone-policy": true
+  },
+  "production_ready": false,
+  "rollback_contract": {
+    "production_claim_from_rehearsal_allowed": false,
+    "required_evidence": [
+      "pre-cutover-checkpoint",
+      "reverse-or-replay-plan",
+      "identity-after-restore",
+      "divergence-report"
+    ]
+  },
+  "schema_version": "1.0",
+  "semantic_core_version": "1.0",
+  "source_adapter_interface": {
+    "required_operations": [
+      "discover_schema",
+      "profile_data",
+      "read_rows",
+      "capture_changes",
+      "transaction_capabilities"
+    ],
+    "resume_tokens_must_be_content_bound": true
+  },
+  "target_adapter_interface": {
+    "generated_schema_must_be_deterministic": true,
+    "required_operations": [
+      "mapping",
+      "schema_sql",
+      "fixture_sql",
+      "catalog_expectation"
+    ]
+  }
+}

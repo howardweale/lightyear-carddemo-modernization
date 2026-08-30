@@ -1,47 +1,51 @@
 {
-  "schema_version": "1.0",
-  "manifest_type": "lightyear-source-only-pilot-runtime",
-  "release": "0.32.0",
-  "required_runtime": {
-    "python": ">=3.11,<4",
-    "third_party_runtime_dependencies": []
-  },
-  "supported_platforms": ["Linux", "macOS", "Windows"],
-  "installation": {
-    "mode": "versioned-source-tree-launcher",
-    "command": "./source-only-pilot.sh doctor",
-    "requires_network": false,
-    "requires_package_build_backend": false,
-    "optional_console_entrypoint": "lightyear-pilot"
-  },
-  "repository_entrypoints": [
-    "source-only-pilot.sh",
-    "source-only-pilot.ps1"
-  ],
+  "content_sha256": "720b2d75883cb772d581c523c241ede7277039444b9826460c8632f55ac77ef5",
   "customer_source_analysis": {
-    "mode": "bounded-static-analysis",
     "customer_specific_graph": true,
+    "mode": "bounded-static-analysis",
     "requires_network": false,
     "retains_raw_source_in_dossier": false
   },
   "estate_assessment": {
-    "mode": "deterministic-connected-component-planning",
+    "automatic_factory_dispatch": false,
     "business_priority_inferred": false,
-    "automatic_factory_dispatch": false,
+    "mode": "deterministic-connected-component-planning",
     "requires_network": false
   },
-  "pilot_work_package": {
-    "mode": "human-selected-graph-scoped-development-packaging",
-    "draft_work_scopes_only": true,
-    "automatic_factory_dispatch": false,
-    "requires_network": false
-  },
-  "optional_paths": {
-    "java_17": "compiled Spring candidate and reproducible artifact verification",
-    "maven": "full Java package verification",
-    "docker": "live target-database development proofs"
+  "installation": {
+    "command": "./source-only-pilot.sh doctor",
+    "mode": "versioned-source-tree-launcher",
+    "optional_console_entrypoint": "lightyear-pilot",
+    "requires_network": false,
+    "requires_package_build_backend": false
   },
   "mainframe_equivalent": false,
+  "manifest_type": "lightyear-source-only-pilot-runtime",
+  "optional_paths": {
+    "docker": "live target-database development proofs",
+    "java_17": "compiled Spring candidate and reproducible artifact verification",
+    "maven": "full Java package verification"
+  },
+  "pilot_work_package": {
+    "automatic_factory_dispatch": false,
+    "draft_work_scopes_only": true,
+    "mode": "human-selected-graph-scoped-development-packaging",
+    "requires_network": false
+  },
   "production_ready": false,
-  "content_sha256": "e48b52660a28f27636efd67924adfcb56dd14791f584bdf773a74b32c227a2c4"
+  "release": "0.33.0",
+  "repository_entrypoints": [
+    "source-only-pilot.sh",
+    "source-only-pilot.ps1"
+  ],
+  "required_runtime": {
+    "python": ">=3.11,<4",
+    "third_party_runtime_dependencies": []
+  },
+  "schema_version": "1.0",
+  "supported_platforms": [
+    "Linux",
+    "macOS",
+    "Windows"
+  ]
 }

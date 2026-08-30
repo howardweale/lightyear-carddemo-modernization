@@ -1,12 +1,12 @@
 {
   "approval_record": {
-    "approval_id": "reference-selection-approval-v0.32",
+    "approval_id": "reference-selection-approval-v0.33",
     "approver_id": "human:reference-business-owner",
     "evidence_class": "simulated",
     "recorded_at": "2026-08-30T00:00:00Z",
     "system": "repository-reference-fixture"
   },
-  "assessment_sha256": "0995eb2636bc96ed6b89571ea3788f9e3716e88a5d8a36750be9b4f819e964c9",
+  "assessment_sha256": "f49fc8c14190eb7f21335d50695f2c9b43bf5b82159e49a13c6903a3f262b61d",
   "authorization": {
     "factory_dispatch_allowed": false,
     "native_execution_allowed": false,
@@ -29,7 +29,7 @@
     "production_ready": false,
     "work_order_admitted": false
   },
-  "content_sha256": "fdf9462c9c82edd147c6a5f05deaf646f80157a2d7df782404832bca55b354de",
+  "content_sha256": "1b49cb37201f2413ac3a81e4439c4c27ad4de732bb016d252be21047a213b66a",
   "decision": {
     "business_outcomes": [
       "Preserve account authorization behavior while separating language and data concerns.",
@@ -51,13 +51,13 @@
     "technical_owner_id": "human:reference-technical-owner"
   },
   "deferred_boundary_reference_ids": [],
-  "dossier_sha256": "7191811d6c1a6c834399f4fd012cb2609fde657581552c60a46db109957703c3",
+  "dossier_sha256": "9d091342b40765930b8ee78725d9a3527089da79abceaedd61ad8bea7370c300",
   "limitations": [
     "The approval record is bound and attributable but remains external evidence; LIGHTYEAR does not cryptographically verify the approver identity in this source-only flow.",
     "Selection authorizes deterministic work-package generation only, never factory dispatch or native execution.",
     "Accepted external boundaries remain explicit dependencies and are not relabelled as resolved source."
   ],
-  "request_sha256": "583429ef2c0e2fb87a064d582ad9b3915a1de3e6b79dabaf81672e81b06330af",
+  "request_sha256": "02fbd6eeefcb5cac7c337aa082d29cf034e3162c25eadc5e6f5932fedc52cb8a",
   "schema_version": "1.0",
   "selected_cluster": {
     "cluster_id": "cluster:6a02c2ea6de7831e",
@@ -116,7 +116,7 @@
       "7ef87c4aa9078d7896519a55592100efc2731138a3dbf7f5b0c7dc697ae65b47"
     ]
   },
-  "selection_id": "carddemo-account-mixed-language-pilot-v0.32",
+  "selection_id": "carddemo-account-mixed-language-pilot-v0.33",
   "selection_ready": true,
   "selection_type": "lightyear-governed-pilot-selection"
 }

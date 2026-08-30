@@ -1,8 +1,8 @@
 # LIGHTYEAR source-only pilot dossier
 
-**Release:** 0.32.0
-**Pilot:** `lightyear-carddemo-source-only-v0.32.0`
-**Dossier identity:** `7191811d6c1a6c834399f4fd012cb2609fde657581552c60a46db109957703c3`
+**Release:** 0.33.0
+**Pilot:** `lightyear-carddemo-source-only-v0.33.0`
+**Dossier identity:** `9d091342b40765930b8ee78725d9a3527089da79abceaedd61ad8bea7370c300`
 
 ## Executive result
 
@@ -58,24 +58,27 @@ Db2 log or production cutover authorization was observed.
 
 | Role | Artifact | SHA-256 |
 |---|---|---|
-| runtime-dependency-contract | `pilot/runtime-manifest.json` | `3b2f99e2d748ccd9ef63aa60d1889e8447620d72a3b2803880bba6452f22bc0c` |
+| runtime-dependency-contract | `pilot/runtime-manifest.json` | `5c2c0bb8677d82c71e6f6087dbc9d48c2e4162d76edaf5ee2217d730df9b5c4c` |
 | advisory-modernization-planning-contract | `pilot/assessment-policy.json` | `a60489ddfc849e3e3e41d9d7e84bcd94b4ef9e4195153caaf86c2efe477af938` |
 | human-selection-and-development-packaging-contract | `pilot/work-package-policy.json` | `36eabc9a698380f2aaecce8eadf719207070c6cc489b5e1edf78163bb0e3fec3` |
-| estate-discovery | `knowledge/graph.receipt.json` | `f12ee5dee079a2e612f4875df75020dac12eb2f52f7d5f8698fbddf9f44cc3fc` |
-| composite-lineage | `knowledge/composite/estate.receipt.json` | `9cdb7ceb9c49f1d1cf0cf6c66e9dca9af3f781b7025366a51d94cdac1a6d07b5` |
-| capability-gates | `knowledge/capabilities/mainframe-readiness.json` | `dc187c486cbc1a3861491e96e3c8585a79a53bf382668ae30efd302054714d04` |
-| language-coverage | `extensions/pli/conformance/coverage.receipt.json` | `31a40aa4b100bd3ce4fb111a6e13dc2ee49654f2588e44b1ff4cd71f3c91503d` |
-| mixed-language-development-proof | `extensions/pli/modernization/development.receipt.json` | `9de70abd3d460c0fbd9ae5428e5ed9157e534ec1ff9dcd33f99ec82f7154082a` |
-| reproducible-build | `extensions/pli/attestation/build.receipt.json` | `02e610fb87ff9aed998c62195995ebac678389e4cf0fd01d589e91b4732ff2b6` |
+| estate-discovery | `knowledge/graph.receipt.json` | `43a0fa2326b496c6d1a0ef44159e724bb66d00acfd48a01ad89d8d3cec4007c0` |
+| composite-lineage | `knowledge/composite/estate.receipt.json` | `169b7cf9465e67e4c020ee6d604aaa3bf0c110b4b69924b3b56e03f0dbacd559` |
+| capability-gates | `knowledge/capabilities/mainframe-readiness.json` | `22b6ed53591953ba72c7540c9af8b9e511c39ff5891677f68a9d789aa2c563e5` |
+| language-coverage | `extensions/pli/conformance/coverage.receipt.json` | `a423713287804850383af9d2ae39abd3467e5c028b00aa3a8767d72b782bc6e7` |
+| mixed-language-development-proof | `extensions/pli/modernization/development.receipt.json` | `8c1f760da5957810a0f9f6ceae74dd83e0b07aa229a7c6107517cb127d4e0de6` |
+| reproducible-build | `extensions/pli/attestation/build.receipt.json` | `29718321c6dbb59e5c433e39de15d3cdc5b177cc821dbae906e103f724027ec3` |
 | model-qualification-boundary | `factory/qualification/manifest.json` | `13cc4353a228fd3266e9ed11163dfbe478c7a559fe031eff20a927029c64d91b` |
 | data-development-proof | `data-modernization/receipts/authfrds.offline.receipt.json` | `2a2e94f80d2c606b86c23eac276bcc01f46a74b92ba92ac0d3e061b4c3534a4f` |
 | data-development-proof | `data-modernization/receipts/authfrds.oracle-offline.receipt.json` | `ae8453104e8745628a6cad8893f8d22849a34847a5ffbfeb5a6d56eae61897b6` |
 | cdc-cutover-recovery-rehearsal | `data-modernization/rehearsal/receipt.json` | `d2f0d194f39325a86063bd6609fdb631190c6686c727e348c7f36c30fffff7fd` |
-| mainframe-collection-mechanism | `extensions/adapters/appliance/appliance.receipt.json` | `228190bdbe87912eb0c38e3fe0537d7a2dd66819f0e01cb2c0f93afd5c55cc29` |
+| mainframe-collection-mechanism | `extensions/adapters/appliance/appliance.receipt.json` | `f2f83902a02f65c76b2bd87a4ef3ad742f90df6a0921f50eb23b06f2d9360053` |
 | bounded-runtime-readiness | `readiness/cics-vsam/readiness-receipt.json` | `2dd8e24e7a23814b6e643ff186f1272071f220b7ac0e03cc57fffc1abcd7dc5a` |
 | bounded-runtime-readiness | `readiness/ims-expiry/readiness-receipt.json` | `f95a3d2e5d06232ae2eb00671131a055c4024d6e1546152239c83b0de990a557` |
 | bounded-language-readiness | `readiness/asm-date/readiness-receipt.json` | `faf7a3109e4f6308a4ac71c706c2725e272fac666b5bba3d1a57ea63633dad92` |
-| auditor-projection | `audit/dossiers/carddemo-intcalc-v0.19-demo.json` | `aa49f4a4944a67f503b8d343e1195aace6a3cc9007c7ec06c9080c9fcd9cf6e8` |
+| auditor-projection | `audit/dossiers/carddemo-intcalc-v0.19-demo.json` | `c79879a2321183c06edbf8233667801d1aac96b561b319e9222e556822603269` |
+| database-platform-contract | `data-modernization/semantic-core/database-semantic-core.json` | `ca3114709057e766b26a5eb339c72ba80fc1620cd4f2d070a9bc92e852d803d8` |
+| database-semantic-difference-authority | `data-modernization/semantic-core/authfrds.compatibility-ledger.json` | `0cbd98a780b53a0b18977819f5115800ba1067612625e42075fa1f8a05b5586e` |
+| database-adapter-development-conformance | `data-modernization/semantic-core/authfrds.adapter-conformance.receipt.json` | `b3cde64bc0ac1ae9327bbf41a295af65ed167d770693e505fdb1b0d94f7972a7` |
 
 ## Prohibited claims
 

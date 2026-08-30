@@ -4,7 +4,7 @@
 
 **Decision:** **BLOCKED**
 
-**Dossier identity:** `25c4dc987f27a5b05610c11450eda198cf1d2441e347e1744348146eecd1fca3`
+**Dossier identity:** `a3b32866d7ecbe6040c7db809f9390b13fc05a74e5faa32a278723aeb370489f`
 
 ## Promotion rationale
 
@@ -34,15 +34,15 @@ Release is blocked until every independent runtime and execution-security gate h
 |---|---|---|
 | `data_equivalence_receipt` | `carddemo-authorization-authfrds` | `8e2e2dc30cffa320…` |
 | `work_order` | `carddemo:intcalc:bounded-repair` | `71e7e34d92dd056a…` |
-| `portfolio_plan` | `carddemo:modernization:v0.26` | `bb864004cb4d27e4…` |
+| `portfolio_plan` | `carddemo:modernization:v0.26` | `fd23725f1b612d1a…` |
 | `operational_control_policy` | `control-tower:live-evidence-plane` | `943f4c1626a3ac66…` |
-| `source_evidence_pack` | `evidence:source-pack` | `41b45fbac66bb6b2…` |
+| `source_evidence_pack` | `evidence:source-pack` | `6613f6c3476a04c6…` |
 | `decision_input` | `execution:carddemo-hardened-plane` | `83d937880f17192b…` |
-| `durable_conformance_receipt` | `factory:durable-conformance` | `cb43eb4080f42d21…` |
+| `durable_conformance_receipt` | `factory:durable-conformance` | `489c931f81a03b4c…` |
 | `durable_execution_policy` | `factory:durable-control-plane` | `72b0c927dc60dc8b…` |
-| `graph_snapshot` | `lightyear:carddemo-modernization` | `2a003843da4fcdb0…` |
+| `graph_snapshot` | `lightyear:carddemo-modernization` | `000c0b91cadeb906…` |
 | `semantic_memory_snapshot` | `memory:verified-experiences` | `42000f0e821e12b7…` |
-| `decision_input` | `release:carddemo-intcalc:v0.19-demo` | `2a003843da4fcdb0…` |
+| `decision_input` | `release:carddemo-intcalc:v0.19-demo` | `000c0b91cadeb906…` |
 | `decision_input` | `runtime-run:local-oracle-intcalc-reference` | `9ada6983de37a9aa…` |
 | `decision_input` | `runtime-run:recorded-zos-intcalc-replay` | `d7d2cb1562f26f1c…` |
 | `decision_input` | `runtime-run:zosmf-intcalc-job00001` | `c821cdbcd2ba17c4…` |
@@ -61,13 +61,13 @@ Release is blocked until every independent runtime and execution-security gate h
 - Execution waves: 2
 - Detected conflicts: 2
 - Approval authority: `human`
-- Plan: `bb864004cb4d27e48cf2fff83ec4487d6b2ba44705af6b18e10e531336be707e`
+- Plan: `fd23725f1b612d1a834e35b358e50ea91958bf5574a05b311bf4cb74c3c06196`
 
 ## Audit checkpoint
 
 - Ledger: `lightyear:carddemo:audit`
 - Events: 21
-- Ledger head: `1d1cd85c1ccafa6b32afaa6fdb18fc36eb94c5900648423db692259247db5d06`
+- Ledger head: `02fcb6ada2208f0b1537bce2cf62c853b4baa1bcd4fbddfa8c42f2651325940e`
 - Signature algorithm: `none`
 
 ## CICS/VSAM readiness

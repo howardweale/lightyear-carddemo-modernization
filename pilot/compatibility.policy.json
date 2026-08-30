@@ -1,23 +1,29 @@
 {
-  "schema_version": "1.0",
-  "policy_type": "lightyear-pilot-compatibility-policy",
-  "pilot_line": "0.32.x",
-  "minimum_reader_release": "0.32.0",
+  "content_sha256": "cfa5f17d272968a19021b9aedb5ec205533b66b5c92b0d74c735fd94f42824e3",
   "formats": {
-    "lightyear-source-only-pilot-intake": ["1.0"],
-    "lightyear-mainframe-evidence-preflight": ["1.0"],
-    "lightyear-customer-source-analysis": ["1.0"],
-    "lightyear-customer-estate-assessment": ["1.0"],
-    "lightyear-source-only-pilot-dossier": ["3.0"],
-    "lightyear-governed-pilot-selection": ["1.0"],
-    "lightyear-pilot-work-package": ["1.0"]
+    "lightyear-customer-estate-assessment": [
+      "1.0"
+    ],
+    "lightyear-customer-source-analysis": [
+      "1.0"
+    ],
+    "lightyear-governed-pilot-selection": [
+      "1.0"
+    ],
+    "lightyear-mainframe-evidence-preflight": [
+      "1.0"
+    ],
+    "lightyear-pilot-work-package": [
+      "1.0"
+    ],
+    "lightyear-source-only-pilot-dossier": [
+      "3.0"
+    ],
+    "lightyear-source-only-pilot-intake": [
+      "1.0"
+    ]
   },
-  "rules": {
-    "same_major_schema_versions": true,
-    "reject_unknown_required_fields": true,
-    "preserve_content_identities_on_upgrade": true,
-    "migration_requires_reverification": true
-  },
+  "mainframe_equivalent": false,
   "migration_tests": [
     "accept-v1-intake-preflight-and-analysis-contracts",
     "accept-v3-customer-assessment-dossier",
@@ -26,7 +32,15 @@
     "reject-stale-content-identity",
     "reject-live-readiness-promotion"
   ],
-  "mainframe_equivalent": false,
+  "minimum_reader_release": "0.33.0",
+  "pilot_line": "0.33.x",
+  "policy_type": "lightyear-pilot-compatibility-policy",
   "production_ready": false,
-  "content_sha256": "66273ca345fce1b5f3683152006190b08c2eb791bd361b451c4b9ba14ba45826"
+  "rules": {
+    "migration_requires_reverification": true,
+    "preserve_content_identities_on_upgrade": true,
+    "reject_unknown_required_fields": true,
+    "same_major_schema_versions": true
+  },
+  "schema_version": "1.0"
 }

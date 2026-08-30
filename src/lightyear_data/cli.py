@@ -15,6 +15,7 @@ from .oracle import OracleAdapter
 from .postgres import PostgreSQLAdapter, fixture_sql
 from .rehearsal import build_rehearsal_evidence, validate_rehearsal_evidence
 from .validation import validate_assets
+from .semantic_core import validate_compatibility_ledger
 
 
 def parser() -> argparse.ArgumentParser:
@@ -43,6 +44,8 @@ def parser() -> argparse.ArgumentParser:
     rehearsal.add_argument("--output-root", type=Path)
     validate_rehearsal = commands.add_parser("validate-rehearsal")
     validate_rehearsal.add_argument("--project-root", type=Path, default=Path("."))
+    semantic = commands.add_parser("verify-semantic-core")
+    semantic.add_argument("--project-root", type=Path, default=Path("."))
     return root
 
 
@@ -84,6 +87,23 @@ def main(argv: list[str] | None = None) -> int:
         result = {
             "status": "passed" if not errors else "failed",
             "errors": errors,
+        }
+    elif args.command == "verify-semantic-core":
+        project_root = args.project_root.resolve()
+        model, postgres_mapping, _ = load_assets(project_root)
+        _, oracle_mapping, _ = load_assets(project_root, "oracle")
+        ledger = json.loads(
+            (project_root / "data-modernization/semantic-core/authfrds.compatibility-ledger.json").read_text(encoding="utf-8")
+        )
+        errors = validate_compatibility_ledger(
+            ledger, model, (postgres_mapping, oracle_mapping)
+        )
+        result = {
+            "status": "passed" if not errors else "failed",
+            "errors": errors,
+            "semantic_core_version": "1.0",
+            "compatibility_ledger_sha256": ledger.get("content_sha256"),
+            "production_ready": False,
         }
     else:
         key = os.environ.get("FACTORYDARK_DATA_EQUIVALENCE_KEY", "")

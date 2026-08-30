@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schema/cdc-event-envelope.schema.json",
+  "title": "LIGHTYEAR CDC event envelope",
+  "type": "object",
+  "required": ["source_adapter", "stream_id", "partition", "position", "transaction_id", "operation", "table", "key", "before", "after", "occurred_at", "content_sha256"],
+  "properties": {
+    "operation": {"enum": ["insert", "update", "delete"]},
+    "key": {"type": "object"},
+    "before": {"type": ["object", "null"]},
+    "after": {"type": ["object", "null"]},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": true
+}

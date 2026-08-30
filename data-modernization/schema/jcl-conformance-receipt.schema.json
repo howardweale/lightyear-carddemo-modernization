@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schema/jcl-conformance-receipt.schema.json",
+  "title": "LIGHTYEAR JCL conformance receipt",
+  "type": "object",
+  "required": ["schema_version", "receipt_type", "corpus_id", "graph_content_sha256", "manifest_sha256", "corpus", "coverage", "results", "status", "claim_boundary", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "receipt_type": {"const": "lightyear-jcl-conformance-receipt"},
+    "corpus_id": {"const": "lightyear-jcl-synthetic-conformance-v1"},
+    "graph_content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "corpus": {"type": "object"},
+    "coverage": {"type": "object"},
+    "results": {"type": "array", "minItems": 30, "maxItems": 30},
+    "status": {"const": "passed"},
+    "claim_boundary": {
+      "type": "object",
+      "required": ["jes_qualified", "scheduler_qualified", "runtime_equivalent", "restart_equivalent", "mainframe_equivalent", "production_ready"],
+      "properties": {
+        "jes_qualified": {"const": false},
+        "scheduler_qualified": {"const": false},
+        "runtime_equivalent": {"const": false},
+        "restart_equivalent": {"const": false},
+        "mainframe_equivalent": {"const": false},
+        "production_ready": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

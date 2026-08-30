@@ -11,8 +11,8 @@ production-qualified.
 | MS #35 | DB2 Semantic Adapter Hardening | Corrected by MS #35.1 |
 | MS #35.1 | DB2 Semantic Adapter Hardening | Complete |
 | MS #36 | COBOL Qualification Hardening | Complete |
-| MS #37 | PL/I Qualification Hardening | In progress |
-| MS #38 | JCL Qualification Hardening | Planned |
+| MS #37 | PL/I Qualification Hardening | Complete |
+| MS #38 | JCL Qualification Hardening | Complete |
 | MS #39 | VSAM/CICS Qualification Hardening | Planned |
 | MS #40 | IMS Qualification Hardening | Planned |
 | MS #41 | HLASM Qualification Hardening | Planned |
@@ -39,3 +39,10 @@ MS #37 governs the existing bounded PL/I evidence through a five-class compatibi
 independent qualification gates. It qualifies the supported static and development subset while
 keeping general Enterprise PL/I, IBM compiler, z/OS runtime, mainframe-equivalence, and production
 claims blocked pending authorized native evidence and representative customer-estate coverage.
+
+## MS #38 — JCL Qualification Hardening
+
+MS #38 binds the pinned JCL estate and a 30-case synthetic conformance corpus to a five-class
+compatibility ledger and ten independent gates. It qualifies bounded static discovery and parsing
+while keeping native JCL, JES, catalog/SMS, scheduler, restart, z/OS runtime, mainframe-equivalence,
+and production claims blocked pending authorized native execution evidence.

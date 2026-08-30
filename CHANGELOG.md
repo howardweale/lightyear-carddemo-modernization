@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.38.0 — 2026-08-30
+
+- Bound JCL qualification to the canonical graph inventory of 46 jobs, two procedures, 119 steps,
+  451 DD allocations, and their exact graph identity.
+- Added a deterministic 30-case synthetic JCL conformance corpus with 20 targeted semantic-boundary
+  cases, 24 passing cases, six explicit fail-closed cases, and 36 observed feature categories.
+- Added a 22-entry JCL compatibility ledger covering jobs, procedures, symbolics, EXEC resolution,
+  DD allocation, DISP, GDG, DCB/SPACE, condition codes, restart, utilities, scheduler directives,
+  JES controls, subsystem boundaries, and RACF submission identity using all five governing classes.
+- Separated ten gates for estate inventory, corpus provenance, parsing, job/procedure semantics,
+  program resolution, dataset allocation, condition/restart behavior, utilities/scheduler/security,
+  tamper resistance, and authorized JES/catalog/scheduler execution.
+- Added frozen schemas, POSIX/PowerShell entry points, release-gate integration, deterministic
+  receipts, exact-corpus checks, diagnostic-location checks, and rehashed-overclaim tests.
+- Kept native JCL, JES, catalog/SMS, scheduler, runtime, restart, mainframe equivalence, and
+  production readiness false; no customer or IBM source is included in the synthetic corpus.
+
 ## 0.37.0 — 2026-08-30
 
 - Consolidated the PL/I conformance lab, mixed-language development proof, mutation evidence, and

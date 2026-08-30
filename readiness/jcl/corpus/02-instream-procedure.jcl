@@ -1,0 +1,3 @@
+//MYPROC   PROC ENV=TEST
+//RUN      EXEC PGM=IEFBR14
+//         PEND

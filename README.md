@@ -1,6 +1,26 @@
 # FactoryDark.ai CardDemo Modernization Factory
 
-Release: **v0.37.0 — PL/I qualification hardening**
+Release: **v0.38.0 — JCL qualification hardening**
+
+v0.38 turns the pinned JCL estate into an explicit qualification plane: 46 jobs, two procedures,
+119 steps, and 451 DD allocations are bound to a 30-case synthetic conformance corpus. Ten
+independent gates separate static statement discovery, procedure and program resolution, dataset
+allocation, condition/restart policy, utility and scheduler boundaries, and authorized native
+execution evidence.
+
+The 22-entry compatibility ledger uses all five governing classes. Twenty targeted cases cover
+symbolics, procedures, includes, JCLLIB, dispositions, temporary and generation datasets,
+concatenation, in-stream data, DCB/SPACE, condition codes, IF/THEN/ELSE, restart, overrides,
+continuations, IBM utilities, Db2, CICS, and IMS boundaries. Six negative cases fail closed. Native
+JCL, JES, catalog/SMS, scheduler, restart, runtime, mainframe-equivalence, and production claims
+remain false.
+
+```bash
+./jcl-qualification.sh verify
+PYTHONPATH=src python3 -m lightyear_readiness.jcl verify
+```
+
+Previous milestone: **v0.37.0 — PL/I qualification hardening**
 
 v0.37 consolidates the PL/I parser, expanded 52-case conformance lab, mixed PL/I–COBOL–Db2
 development proof, mutation probes, and candidate build attestation into one governed qualification

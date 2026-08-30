@@ -1,6 +1,6 @@
 # LIGHTYEAR governed pilot work package
 
-**Package identity:** `6f7ffe92b4dcf4cac0e2a027cb1e6414b3c726b004ef59f2d5d07498ec694800`
+**Package identity:** `8a01cec899ab88de62614133b5e34a8e4549308d82d52c6a8df95f7eb0b14783`
 
 ## Outcome
 

@@ -330,12 +330,12 @@
     },
     {
       "breadth": {
-        "blocked_case_count": 5,
-        "corpus_case_count": 27,
+        "blocked_case_count": 16,
+        "corpus_case_count": 52,
         "customer_source": false,
-        "explicit_gap_count": 5,
+        "explicit_gap_count": 17,
         "mutation_case_count": 7,
-        "positive_case_count": 22,
+        "positive_case_count": 36,
         "runtime_evidence": false,
         "scope": "synthetic-static-supported-subset",
         "supported_construct_count": 22
@@ -349,7 +349,7 @@
             "1 PL/I include",
             "1 PL/I program",
             "22 supported construct categories",
-            "27 synthetic conformance cases",
+            "52 synthetic conformance cases",
             "extensions/pli/conformance/coverage.receipt.json",
             "extensions/pli/pli.fragment.json"
           ],
@@ -550,7 +550,7 @@
       "status": "simulated_ready"
     }
   ],
-  "content_sha256": "c6a49925479eca98b3f50b0ab171a85cab7bf67aaedd8631e0bedad3a8aea2f4",
+  "content_sha256": "5bf8a378bd1b43457f228a3be05bf4b44bd9b3bd7b66c8959fe714567f59ac5f",
   "evidence_bindings": {
     "canonical_graph_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
     "data_rehearsal_receipt_sha256": "e628b50cc4e21707f6c62e7a8429654c7867411f75fb9381e03f3d191854f652",
@@ -560,7 +560,7 @@
     "oracle_data_receipt_sha256": "6958d7cc783d5ad00c469c112db5b665bf9ba93b7addec9cc94375d6c3f2dd83",
     "pli_build_attestation_sha256": "82826dd2bdba889bb789571fdba4285facbeed40c339b5ef3f44cbcfcdf2ae80",
     "pli_build_receipt_sha256": "9de820e7295484c89ab8acdb5d6c902e5ae1f89113f27bc882d17d31054a283f",
-    "pli_coverage_receipt_sha256": "c29ec51c3953d7134615d238b40fb4beea388a41b3fdcbc62266775e40930d11",
+    "pli_coverage_receipt_sha256": "145dd14af0532953233ed63dfe846aedc9d80755c0f986a07c52fec578161c40",
     "pli_development_receipt_sha256": "2a64d8cbff114e420e221a56bfe30c8fcc10ff0e359d4ba96b5f138598824ddb",
     "pli_fragment_sha256": "66ed4547441d74c66582e4d373d3e374a2e5776cb366704541392255ddfe9788",
     "postgres_data_receipt_sha256": "8e2e2dc30cffa3205ceb743f418ae937ea8ac05d6bde9041182acc61cba3abbe"

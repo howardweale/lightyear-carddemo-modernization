@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.37.0 — 2026-08-30
+
+- Consolidated the PL/I conformance lab, mixed-language development proof, mutation evidence, and
+  candidate build attestation into ten independent qualification gates.
+- Added a 20-entry PL/I compatibility ledger covering declarations, numeric and character
+  semantics, storage, preprocessing, calls, conditions, files, Db2, CICS, IMS, and IBM runtime
+  boundaries using all five governing classifications.
+- Expanded the conformance corpus from 27 to 52 cases with 25 targeted boundaries for storage
+  classes, arrays, pointers, picture/decimal arithmetic, conditions, preprocessing, record layouts,
+  parameter conventions, SQL cursors, CICS, and IMS; unsupported behavior fails closed.
+- Bound the qualification to 52 synthetic cases, 22 supported construct categories, seven mutation
+  cases, 16 blocked cases, and the bounded `ACCTPL1` reference workload.
+- Added deterministic qualification artifacts, frozen schemas, Linux/Windows wrappers, release
+  verification integration, and fail-closed overclaim tests.
+- Kept general Enterprise PL/I, native compiler, z/OS runtime, mainframe equivalence, and production
+  readiness false; the corpus contains no customer source.
+
 ## 0.36.0 — 2026-08-30
 
 - Added a graph-bound COBOL qualification contract covering 55 programs, 927 paragraphs, 75

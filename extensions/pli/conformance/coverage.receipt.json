@@ -1,8 +1,8 @@
 {
   "bindings": {
     "canonical_graph_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
-    "corpus_manifest_sha256": "d625bba1164cd0ef875a8ab2b2b0bd76d209c55db206ae0c883287d6dddd10db",
-    "golden_results_sha256": "f7625080359770189abd7015e03547c91e0cbcb2cb5b4fab87d86724f47f5002",
+    "corpus_manifest_sha256": "d158fbc3091f7f36753aed54df766ba64c61ac1cf25a8ee8696551165aa45fe3",
+    "golden_results_sha256": "90e27e43b2bce53a41ec9d8f9ce0fcef646b9d0926fcbb60a38c6e590f11755b",
     "support_matrix_sha256": "b3d0804a8b6f7e5d34d3a63cf2af676f841aa981cea8e71a2daace2b34e94eb4"
   },
   "checks": {
@@ -23,16 +23,16 @@
     "runtime_executed": false,
     "static_discovery_only": true
   },
-  "content_sha256": "c29ec51c3953d7134615d238b40fb4beea388a41b3fdcbc62266775e40930d11",
+  "content_sha256": "145dd14af0532953233ed63dfe846aedc9d80755c0f986a07c52fec578161c40",
   "corpus": {
-    "blocked_case_count": 5,
-    "case_count": 27,
+    "blocked_case_count": 16,
+    "case_count": 52,
     "customer_source": false,
     "id": "lightyear-pli-synthetic-conformance-v1",
     "include_case_count": 2,
     "mutation_case_count": 7,
-    "positive_case_count": 22,
-    "program_case_count": 25,
+    "positive_case_count": 36,
+    "program_case_count": 50,
     "synthetic": true
   },
   "coverage": {
@@ -40,35 +40,40 @@
     "explicit_gap_codes": {
       "ambiguous-shadowed-call": 1,
       "missing-include": 1,
-      "unsupported-based-storage": 1,
-      "unsupported-preprocessor": 1,
+      "unsupported-array-dimension": 2,
+      "unsupported-based-storage": 2,
+      "unsupported-controlled-storage": 1,
+      "unsupported-picture-declaration": 1,
+      "unsupported-pointer-storage": 2,
+      "unsupported-preprocessor": 4,
+      "unsupported-sql": 2,
       "unterminated-comment": 1
     },
-    "located_construct_count": 72,
+    "located_construct_count": 131,
     "parser_confidence": "supported-subset-observed",
     "provenance": "synthetic-conformance-corpus",
     "recognized_constructs": {
-      "assignment": 3,
-      "call": 5,
-      "cics_reference": 1,
-      "conditional": 1,
+      "assignment": 7,
+      "call": 8,
+      "cics_reference": 2,
+      "conditional": 4,
       "control_flow": 1,
-      "decimal_declaration": 3,
-      "declaration": 4,
+      "decimal_declaration": 10,
+      "declaration": 9,
       "embedded_sql": 2,
-      "entry_point": 4,
-      "error_control": 2,
+      "entry_point": 6,
+      "error_control": 4,
       "file_declaration": 2,
       "file_read": 1,
       "file_write": 1,
-      "ims_reference": 1,
+      "ims_reference": 2,
       "include_member": 2,
       "include_reference": 2,
-      "procedure": 1,
-      "program": 24,
-      "record_declaration": 6,
+      "procedure": 2,
+      "program": 49,
+      "record_declaration": 9,
       "sqlca_reference": 1,
-      "structure": 2,
+      "structure": 4,
       "structure_member": 3
     },
     "supported_matrix_construct_count": 22,
@@ -96,6 +101,13 @@
       },
       {
         "case_id": "26-unsupported-storage",
+        "code": "unsupported-pointer-storage",
+        "column": 21,
+        "line": 2,
+        "path": "26-unsupported-storage.pli"
+      },
+      {
+        "case_id": "26-unsupported-storage",
         "code": "unsupported-based-storage",
         "column": 20,
         "line": 3,
@@ -107,6 +119,83 @@
         "column": 3,
         "line": 2,
         "path": "27-malformed-comment.pli"
+      },
+      {
+        "case_id": "30-controlled-storage",
+        "code": "unsupported-controlled-storage",
+        "column": 26,
+        "line": 2,
+        "path": "30-controlled-storage.pli"
+      },
+      {
+        "case_id": "31-based-storage",
+        "code": "unsupported-based-storage",
+        "column": 26,
+        "line": 2,
+        "path": "31-based-storage.pli"
+      },
+      {
+        "case_id": "32-pointer-storage",
+        "code": "unsupported-pointer-storage",
+        "column": 18,
+        "line": 2,
+        "path": "32-pointer-storage.pli"
+      },
+      {
+        "case_id": "33-array-dimension",
+        "code": "unsupported-array-dimension",
+        "column": 34,
+        "line": 2,
+        "path": "33-array-dimension.pli"
+      },
+      {
+        "case_id": "34-multidimensional-array",
+        "code": "unsupported-array-dimension",
+        "column": 37,
+        "line": 2,
+        "path": "34-multidimensional-array.pli"
+      },
+      {
+        "case_id": "35-picture-declaration",
+        "code": "unsupported-picture-declaration",
+        "column": 22,
+        "line": 2,
+        "path": "35-picture-declaration.pli"
+      },
+      {
+        "case_id": "41-preprocessor-if",
+        "code": "unsupported-preprocessor",
+        "column": 1,
+        "line": 1,
+        "path": "41-preprocessor-if.pli"
+      },
+      {
+        "case_id": "42-preprocessor-do",
+        "code": "unsupported-preprocessor",
+        "column": 1,
+        "line": 1,
+        "path": "42-preprocessor-do.pli"
+      },
+      {
+        "case_id": "43-preprocessor-activate",
+        "code": "unsupported-preprocessor",
+        "column": 1,
+        "line": 1,
+        "path": "43-preprocessor-activate.pli"
+      },
+      {
+        "case_id": "49-sql-cursor-declare",
+        "code": "unsupported-sql",
+        "column": 3,
+        "line": 2,
+        "path": "49-sql-cursor-declare.pli"
+      },
+      {
+        "case_id": "50-sql-cursor-open",
+        "code": "unsupported-sql",
+        "column": 3,
+        "line": 2,
+        "path": "50-sql-cursor-open.pli"
       }
     ],
     "unsupported_syntax": [

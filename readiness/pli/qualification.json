@@ -1,0 +1,139 @@
+{
+  "bindings": {
+    "compatibility_ledger_sha256": "24161219b39fa485ea3fb6989498f7c6738eab46962356b7ac538b54d9fd7d94",
+    "graph_content_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
+    "manifest_sha256": "d158fbc3091f7f36753aed54df766ba64c61ac1cf25a8ee8696551165aa45fe3",
+    "support_matrix_sha256": "b3d0804a8b6f7e5d34d3a63cf2af676f841aa981cea8e71a2daace2b34e94eb4"
+  },
+  "claim_unlocked": "LIGHTYEAR can qualify a bounded PL/I supported subset and mixed PL/I-COBOL-Db2 development cell without claiming general Enterprise PL/I or z/OS equivalence.",
+  "content_sha256": "66ed16c56b19afb535434aa8eb3686b876b329fba7b4f2d6d486adb4b4f413a5",
+  "development_ready": true,
+  "enterprise_pli_qualified": false,
+  "inventory": {
+    "blocked_cases": 16,
+    "corpus_cases": 52,
+    "customer_source": false,
+    "explicitly_unsupported_categories": 7,
+    "mutation_cases": 7,
+    "positive_cases": 20,
+    "reference_includes": 1,
+    "reference_programs": 1,
+    "reference_source_lines": 33,
+    "supported_construct_categories": 22,
+    "targeted_boundary_cases": 25
+  },
+  "mainframe_equivalent": false,
+  "native_compiler_qualified": false,
+  "production_ready": false,
+  "qualification_gates": [
+    {
+      "evidence": {
+        "blocked_cases": 16,
+        "corpus_cases": 52,
+        "customer_source": false,
+        "explicitly_unsupported_categories": 7,
+        "mutation_cases": 7,
+        "positive_cases": 20,
+        "reference_includes": 1,
+        "reference_programs": 1,
+        "reference_source_lines": 33,
+        "supported_construct_categories": 22,
+        "targeted_boundary_cases": 25
+      },
+      "gate": "corpus-and-provenance",
+      "status": "passed-bounded-synthetic"
+    },
+    {
+      "evidence": {
+        "coverage_sha256": "145dd14af0532953233ed63dfe846aedc9d80755c0f986a07c52fec578161c40",
+        "native_parser": false
+      },
+      "gate": "lexical-and-statement-parsing",
+      "status": "passed-supported-subset"
+    },
+    {
+      "evidence": {
+        "based_storage": false,
+        "fixed_binary_native_layout": false,
+        "fixed_decimal": true
+      },
+      "gate": "declarations-layout-and-arithmetic",
+      "status": "passed-bounded-development"
+    },
+    {
+      "evidence": {
+        "internal_procedure": true,
+        "on_condition_discovery": true,
+        "runtime_condition_semantics": false
+      },
+      "gate": "control-flow-conditions-and-procedures",
+      "status": "passed-static-subset"
+    },
+    {
+      "evidence": {
+        "include_fixture_count": 1,
+        "macro_expansion_supported": false
+      },
+      "gate": "include-and-preprocessor-closure",
+      "status": "policy-decision-required"
+    },
+    {
+      "evidence": {
+        "dynamic_calls": false,
+        "pli_to_cobol": true
+      },
+      "gate": "mixed-language-call-linkage",
+      "status": "passed-bounded-development"
+    },
+    {
+      "evidence": {
+        "cics_milestone": "MS-39",
+        "db2_milestone": "MS-35.1",
+        "ims_milestone": "MS-40",
+        "native_file_io": false
+      },
+      "gate": "db2-cics-ims-and-file-boundaries",
+      "status": "excluded-separate-qualification"
+    },
+    {
+      "evidence": {
+        "development_receipt_sha256": "2a64d8cbff114e420e221a56bfe30c8fcc10ff0e359d4ba96b5f138598824ddb",
+        "mutation_cases": 7
+      },
+      "gate": "candidate-differential-and-mutations",
+      "status": "passed-local-development"
+    },
+    {
+      "evidence": {
+        "build_receipt_sha256": "9de820e7295484c89ab8acdb5d6c902e5ae1f89113f27bc882d17d31054a283f",
+        "original_pli_compiled": false
+      },
+      "gate": "reproducible-candidate-build",
+      "status": "passed-candidate-only"
+    },
+    {
+      "evidence": {
+        "binder_map": false,
+        "compiler_listing": false,
+        "execution_capture": false,
+        "load_module": false,
+        "signed_equivalence": false
+      },
+      "gate": "ibm-compile-link-execute-and-equivalence",
+      "status": "blocked-no-authorized-zos-evidence"
+    }
+  ],
+  "qualification_id": "carddemo-pli-v0.37",
+  "qualification_mechanism_ready": true,
+  "qualification_type": "lightyear-pli-qualification",
+  "required_native_evidence": [
+    "IBM Enterprise PL/I compiler listing and exact options",
+    "preprocessor expansion and include-resolution listing",
+    "binder map and load-module identity",
+    "Language Environment options and condition behavior",
+    "authorized z/OS inputs, outputs, SQL/CICS/IMS effects and execution trace",
+    "independently signed differential equivalence receipt"
+  ],
+  "runtime_equivalent": false,
+  "schema_version": "1.0"
+}

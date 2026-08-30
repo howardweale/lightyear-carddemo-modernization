@@ -15,7 +15,7 @@
     "production_ready": false,
     "source_only_pilot": true
   },
-  "content_sha256": "74fc0cdf22b6c57a21e343fff340f23dd923e1dd63562ae0e43ef1300fd037e9",
+  "content_sha256": "c082d7ad975fb820bea3f3ec70c9cac9ef95a81e2012edea027353516dceae00",
   "evidence_artifacts": [
     {
       "id": "pilot-runtime",
@@ -45,19 +45,19 @@
       "id": "composite-estate",
       "path": "knowledge/composite/estate.receipt.json",
       "role": "composite-lineage",
-      "sha256": "169b7cf9465e67e4c020ee6d604aaa3bf0c110b4b69924b3b56e03f0dbacd559"
+      "sha256": "ef8276fdb0fed4896ce9c91ca9488e2ca4ae36b255dae062cd4d17d3766a72cd"
     },
     {
       "id": "capability-projection",
       "path": "knowledge/capabilities/mainframe-readiness.json",
       "role": "capability-gates",
-      "sha256": "22b6ed53591953ba72c7540c9af8b9e511c39ff5891677f68a9d789aa2c563e5"
+      "sha256": "4b346cf3274057a7ed7222a4a44d55508433aebd2e8e53f395c9a8a19e85d224"
     },
     {
       "id": "pli-coverage",
       "path": "extensions/pli/conformance/coverage.receipt.json",
       "role": "language-coverage",
-      "sha256": "a423713287804850383af9d2ae39abd3467e5c028b00aa3a8767d72b782bc6e7"
+      "sha256": "9e599183e771caf1057d6f6425bdfe449ee2ca35006fb313b39de44e17918a79"
     },
     {
       "id": "pli-development",

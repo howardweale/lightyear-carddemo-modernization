@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schema/pli-qualification.schema.json",
+  "title": "LIGHTYEAR PL/I qualification",
+  "type": "object",
+  "required": ["schema_version", "qualification_type", "qualification_id", "bindings", "inventory", "qualification_gates", "required_native_evidence", "qualification_mechanism_ready", "development_ready", "enterprise_pli_qualified", "native_compiler_qualified", "runtime_equivalent", "mainframe_equivalent", "production_ready", "claim_unlocked", "content_sha256"],
+  "properties": {
+    "qualification_type": {"const": "lightyear-pli-qualification"},
+    "qualification_gates": {"type": "array", "minItems": 10, "maxItems": 10},
+    "qualification_mechanism_ready": {"const": true},
+    "enterprise_pli_qualified": {"const": false},
+    "native_compiler_qualified": {"const": false},
+    "runtime_equivalent": {"const": false},
+    "mainframe_equivalent": {"const": false},
+    "production_ready": {"const": false},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

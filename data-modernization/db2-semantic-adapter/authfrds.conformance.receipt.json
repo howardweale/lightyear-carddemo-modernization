@@ -1,0 +1,28 @@
+{
+  "adapter": {
+    "dialect": "db2-zos",
+    "id": "lightyear-db2-zos-source",
+    "version": "1.0"
+  },
+  "catalog_observed": false,
+  "cdc_observed": false,
+  "checks": {
+    "canonical-schema-coverage": true,
+    "determinism": true,
+    "ledger-coverage": true,
+    "live-claims-fail-closed": true,
+    "normalized-row-coverage": true,
+    "profile-contract-binding": true,
+    "source-interface": true,
+    "unsafe-behavior-gates": true
+  },
+  "content_sha256": "b957fea96cd2a9e7e89716bf1007cddb7ec793dfd728681142f1ce79c36f8306",
+  "ledger_sha256": "dc2f7056312e7831302530c60d04f14bee411eb672febc0fcf1ea137b278c8d6",
+  "mainframe_equivalent": false,
+  "model_sha256": "fb59dfc8f78bd088f18f2f2167c457c887f3928e10264f05b3ac5482ec8a6664",
+  "production_ready": false,
+  "profile_observed": false,
+  "receipt_type": "lightyear-db2-source-adapter-conformance",
+  "schema_version": "1.0",
+  "status": "passed"
+}

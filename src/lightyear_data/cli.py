@@ -9,6 +9,7 @@ from lightyear_common.io import write_json
 
 from .builder import build_assets, load_assets
 from .contracts import seal, sign
+from .db2 import Db2SourceAdapter, build_db2_source_ledger, db2_source_conformance_receipt
 from .equivalence import offline_equivalence
 from .live import DockerOracleRunner, DockerPostgresExactRunner, aggregate_receipts
 from .oracle import OracleAdapter
@@ -20,6 +21,7 @@ from .postgres import PostgreSQLAdapter, fixture_sql
 from .rehearsal import build_rehearsal_evidence, validate_rehearsal_evidence
 from .validation import validate_assets
 from .semantic_core import validate_compatibility_ledger
+from .semantic_core import build_profile_contract
 from .stored_logic import (
     build_stored_logic_qualification,
     validate_stored_logic_qualification,
@@ -64,6 +66,10 @@ def parser() -> argparse.ArgumentParser:
     stored.add_argument("--output", type=Path)
     verify_stored = commands.add_parser("verify-stored-logic-qualification")
     verify_stored.add_argument("--project-root", type=Path, default=Path("."))
+    db2 = commands.add_parser("build-db2-semantic-adapter")
+    db2.add_argument("--project-root", type=Path, default=Path("."))
+    verify_db2 = commands.add_parser("verify-db2-semantic-adapter")
+    verify_db2.add_argument("--project-root", type=Path, default=Path("."))
     return root
 
 
@@ -163,6 +169,41 @@ def main(argv: list[str] | None = None) -> int:
             "status": "passed" if not errors else "failed",
             "errors": errors,
             "stored_logic_complete": False,
+            "production_ready": False,
+        }
+    elif args.command in {"build-db2-semantic-adapter", "verify-db2-semantic-adapter"}:
+        project_root = args.project_root.resolve()
+        model, _, fixtures = load_assets(project_root)
+        adapter = Db2SourceAdapter(model, fixtures["rows"])
+        profile_contract = build_profile_contract(model)
+        ledger = build_db2_source_ledger(model)
+        discovery = adapter.discover_schema()
+        profile = adapter.profile_data(profile_contract)
+        receipt = db2_source_conformance_receipt(adapter, model, profile_contract, ledger)
+        output_root = project_root / "data-modernization/db2-semantic-adapter"
+        expected = {
+            "authfrds.discovery.json": discovery,
+            "authfrds.profile.json": profile,
+            "authfrds.compatibility-ledger.json": ledger,
+            "authfrds.conformance.receipt.json": receipt,
+        }
+        errors = []
+        if args.command == "build-db2-semantic-adapter":
+            for name, payload in expected.items():
+                write_json(output_root / name, payload)
+        else:
+            for name, payload in expected.items():
+                path = output_root / name
+                if not path.is_file() or json.loads(path.read_text(encoding="utf-8")) != payload:
+                    errors.append(f"db2-semantic-adapter-drift:{name}")
+        result = {
+            "status": "passed" if not errors and receipt["status"] == "passed" else "failed",
+            "errors": errors,
+            "ledger_sha256": ledger["content_sha256"],
+            "conformance_sha256": receipt["content_sha256"],
+            "catalog_observed": False,
+            "cdc_observed": False,
+            "mainframe_equivalent": False,
             "production_ready": False,
         }
     else:

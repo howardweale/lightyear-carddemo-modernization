@@ -1,0 +1,684 @@
+{
+  "classifications": [
+    "exact",
+    "normalized-equivalent",
+    "policy-decision-required",
+    "lossy",
+    "unsupported"
+  ],
+  "content_sha256": "dc2f7056312e7831302530c60d04f14bee411eb672febc0fcf1ea137b278c8d6",
+  "entries": [
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "encoding-profile",
+        "normalized-row-comparison"
+      ],
+      "item_id": "db2-column:CARD_NUM",
+      "rationale": "Character data requires explicit encoding and right-space normalization.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "type": "CHAR"
+      },
+      "target_semantics": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 16,
+        "nullable": false
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "no-policy-required",
+      "evidence_required": [
+        "catalog-projection"
+      ],
+      "item_id": "db2-column:AUTH_TS",
+      "rationale": "Db2 value domain is represented without loss by the canonical type.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "type": "TIMESTAMP"
+      },
+      "target_semantics": {
+        "fractional_seconds": 6,
+        "kind": "timestamp",
+        "nullable": false,
+        "time_zone": "absent"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "encoding-profile",
+        "normalized-row-comparison"
+      ],
+      "item_id": "db2-column:AUTH_TYPE",
+      "rationale": "Character data requires explicit encoding and right-space normalization.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "type": "CHAR"
+      },
+      "target_semantics": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 4,
+        "nullable": true
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "encoding-profile",
+        "normalized-row-comparison"
+      ],
+      "item_id": "db2-column:CARD_EXPIRY_DATE",
+      "rationale": "Character data requires explicit encoding and right-space normalization.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "type": "CHAR"
+      },
+      "target_semantics": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 4,
+        "nullable": true
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "encoding-profile",
+        "normalized-row-comparison"
+      ],
+      "item_id": "db2-column:MESSAGE_TYPE",
+      "rationale": "Character data requires explicit encoding and right-space normalization.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "type": "CHAR"
+      },
+      "target_semantics": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 6,
+        "nullable": true
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "encoding-profile",
+        "normalized-row-comparison"
+      ],
+      "item_id": "db2-column:MESSAGE_SOURCE",
+      "rationale": "Character data requires explicit encoding and right-space normalization.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "type": "CHAR"
+      },
+      "target_semantics": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 6,
+        "nullable": true
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "encoding-profile",
+        "normalized-row-comparison"
+      ],
+      "item_id": "db2-column:AUTH_ID_CODE",
+      "rationale": "Character data requires explicit encoding and right-space normalization.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "type": "CHAR"
+      },
+      "target_semantics": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 6,
+        "nullable": true
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "encoding-profile",
+        "normalized-row-comparison"
+      ],
+      "item_id": "db2-column:AUTH_RESP_CODE",
+      "rationale": "Character data requires explicit encoding and right-space normalization.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "type": "CHAR"
+      },
+      "target_semantics": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 2,
+        "nullable": true
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "encoding-profile",
+        "normalized-row-comparison"
+      ],
+      "item_id": "db2-column:AUTH_RESP_REASON",
+      "rationale": "Character data requires explicit encoding and right-space normalization.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "type": "CHAR"
+      },
+      "target_semantics": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 4,
+        "nullable": true
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "encoding-profile",
+        "normalized-row-comparison"
+      ],
+      "item_id": "db2-column:PROCESSING_CODE",
+      "rationale": "Character data requires explicit encoding and right-space normalization.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "type": "CHAR"
+      },
+      "target_semantics": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 6,
+        "nullable": true
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "no-policy-required",
+      "evidence_required": [
+        "catalog-projection"
+      ],
+      "item_id": "db2-column:TRANSACTION_AMT",
+      "rationale": "Db2 value domain is represented without loss by the canonical type.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "type": "DECIMAL"
+      },
+      "target_semantics": {
+        "kind": "exact-decimal",
+        "nullable": true,
+        "precision": 12,
+        "scale": 2
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "no-policy-required",
+      "evidence_required": [
+        "catalog-projection"
+      ],
+      "item_id": "db2-column:APPROVED_AMT",
+      "rationale": "Db2 value domain is represented without loss by the canonical type.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "type": "DECIMAL"
+      },
+      "target_semantics": {
+        "kind": "exact-decimal",
+        "nullable": true,
+        "precision": 12,
+        "scale": 2
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "encoding-profile",
+        "normalized-row-comparison"
+      ],
+      "item_id": "db2-column:MERCHANT_CATAGORY_CODE",
+      "rationale": "Character data requires explicit encoding and right-space normalization.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "type": "CHAR"
+      },
+      "target_semantics": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 4,
+        "nullable": true
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "encoding-profile",
+        "normalized-row-comparison"
+      ],
+      "item_id": "db2-column:ACQR_COUNTRY_CODE",
+      "rationale": "Character data requires explicit encoding and right-space normalization.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "type": "CHAR"
+      },
+      "target_semantics": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 3,
+        "nullable": true
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "no-policy-required",
+      "evidence_required": [
+        "catalog-projection"
+      ],
+      "item_id": "db2-column:POS_ENTRY_MODE",
+      "rationale": "Db2 value domain is represented without loss by the canonical type.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "type": "SMALLINT"
+      },
+      "target_semantics": {
+        "bits": 16,
+        "kind": "signed-integer",
+        "nullable": true
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "encoding-profile",
+        "normalized-row-comparison"
+      ],
+      "item_id": "db2-column:MERCHANT_ID",
+      "rationale": "Character data requires explicit encoding and right-space normalization.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "type": "CHAR"
+      },
+      "target_semantics": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 15,
+        "nullable": true
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "encoding-profile",
+        "normalized-row-comparison"
+      ],
+      "item_id": "db2-column:MERCHANT_NAME",
+      "rationale": "Character data requires explicit encoding and right-space normalization.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "type": "VARCHAR"
+      },
+      "target_semantics": {
+        "encoding": "unicode-scalar",
+        "kind": "variable-character",
+        "length": 22,
+        "nullable": true
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "encoding-profile",
+        "normalized-row-comparison"
+      ],
+      "item_id": "db2-column:MERCHANT_CITY",
+      "rationale": "Character data requires explicit encoding and right-space normalization.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "type": "CHAR"
+      },
+      "target_semantics": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 13,
+        "nullable": true
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "encoding-profile",
+        "normalized-row-comparison"
+      ],
+      "item_id": "db2-column:MERCHANT_STATE",
+      "rationale": "Character data requires explicit encoding and right-space normalization.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "type": "CHAR"
+      },
+      "target_semantics": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 2,
+        "nullable": true
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "encoding-profile",
+        "normalized-row-comparison"
+      ],
+      "item_id": "db2-column:MERCHANT_ZIP",
+      "rationale": "Character data requires explicit encoding and right-space normalization.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "type": "CHAR"
+      },
+      "target_semantics": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 9,
+        "nullable": true
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "encoding-profile",
+        "normalized-row-comparison"
+      ],
+      "item_id": "db2-column:TRANSACTION_ID",
+      "rationale": "Character data requires explicit encoding and right-space normalization.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "type": "CHAR"
+      },
+      "target_semantics": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 15,
+        "nullable": true
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "encoding-profile",
+        "normalized-row-comparison"
+      ],
+      "item_id": "db2-column:MATCH_STATUS",
+      "rationale": "Character data requires explicit encoding and right-space normalization.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "type": "CHAR"
+      },
+      "target_semantics": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 1,
+        "nullable": true
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "encoding-profile",
+        "normalized-row-comparison"
+      ],
+      "item_id": "db2-column:AUTH_FRAUD",
+      "rationale": "Character data requires explicit encoding and right-space normalization.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "type": "CHAR"
+      },
+      "target_semantics": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 1,
+        "nullable": true
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "no-policy-required",
+      "evidence_required": [
+        "catalog-projection"
+      ],
+      "item_id": "db2-column:FRAUD_RPT_DATE",
+      "rationale": "Db2 value domain is represented without loss by the canonical type.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "type": "DATE"
+      },
+      "target_semantics": {
+        "calendar": "proleptic-gregorian",
+        "kind": "date",
+        "nullable": true
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "no-policy-required",
+      "evidence_required": [
+        "catalog-projection"
+      ],
+      "item_id": "db2-column:ACCT_ID",
+      "rationale": "Db2 value domain is represented without loss by the canonical type.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "type": "DECIMAL"
+      },
+      "target_semantics": {
+        "kind": "exact-decimal",
+        "nullable": true,
+        "precision": 11,
+        "scale": 0
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "no-policy-required",
+      "evidence_required": [
+        "catalog-projection"
+      ],
+      "item_id": "db2-column:CUST_ID",
+      "rationale": "Db2 value domain is represented without loss by the canonical type.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "db2-zos",
+        "type": "DECIMAL"
+      },
+      "target_semantics": {
+        "kind": "exact-decimal",
+        "nullable": true,
+        "precision": 9,
+        "scale": 0
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "ccsid-capture",
+        "invalid-encoding-profile"
+      ],
+      "item_id": "db2-behavior:encoding",
+      "rationale": "DB2 behavior is classified explicitly and cannot be inferred from DDL alone.",
+      "scope": "encoding",
+      "source_semantics": {
+        "claim": "requires-observation",
+        "dialect": "db2-zos"
+      },
+      "target_semantics": {
+        "contract": "lightyear-database-semantic-core"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "right-space-comparison"
+      ],
+      "item_id": "db2-behavior:fixed-character-padding",
+      "rationale": "DB2 behavior is classified explicitly and cannot be inferred from DDL alone.",
+      "scope": "fixed-character-padding",
+      "source_semantics": {
+        "claim": "requires-observation",
+        "dialect": "db2-zos"
+      },
+      "target_semantics": {
+        "contract": "lightyear-database-semantic-core"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "no-policy-required",
+      "evidence_required": [
+        "data-profile"
+      ],
+      "item_id": "db2-behavior:null-vs-empty-string",
+      "rationale": "DB2 behavior is classified explicitly and cannot be inferred from DDL alone.",
+      "scope": "null-vs-empty-string",
+      "source_semantics": {
+        "claim": "requires-observation",
+        "dialect": "db2-zos"
+      },
+      "target_semantics": {
+        "contract": "lightyear-database-semantic-core"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "approved-isolation-policy",
+        "concurrent-transaction-probes"
+      ],
+      "item_id": "db2-behavior:transaction-isolation",
+      "rationale": "DB2 behavior is classified explicitly and cannot be inferred from DDL alone.",
+      "scope": "transaction-isolation",
+      "source_semantics": {
+        "claim": "requires-observation",
+        "dialect": "db2-zos"
+      },
+      "target_semantics": {
+        "contract": "lightyear-database-semantic-core"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "authorized-db2-log-capture",
+        "resume-and-replay-test"
+      ],
+      "item_id": "db2-behavior:cdc-log-position",
+      "rationale": "DB2 behavior is classified explicitly and cannot be inferred from DDL alone.",
+      "scope": "cdc-log-position",
+      "source_semantics": {
+        "claim": "requires-observation",
+        "dialect": "db2-zos"
+      },
+      "target_semantics": {
+        "contract": "lightyear-database-semantic-core"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "separate-ddl-change-plan"
+      ],
+      "item_id": "db2-behavior:ddl-cdc",
+      "rationale": "DB2 behavior is classified explicitly and cannot be inferred from DDL alone.",
+      "scope": "ddl-cdc",
+      "source_semantics": {
+        "claim": "requires-observation",
+        "dialect": "db2-zos"
+      },
+      "target_semantics": {
+        "contract": "lightyear-database-semantic-core"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "package-and-plan-inventory",
+        "application-qualification"
+      ],
+      "item_id": "db2-behavior:package-bind-semantics",
+      "rationale": "DB2 behavior is classified explicitly and cannot be inferred from DDL alone.",
+      "scope": "package-bind-semantics",
+      "source_semantics": {
+        "claim": "requires-observation",
+        "dialect": "db2-zos"
+      },
+      "target_semantics": {
+        "contract": "lightyear-database-semantic-core"
+      }
+    }
+  ],
+  "equivalence_blocked": true,
+  "ledger_type": "lightyear-db2-source-compatibility-ledger",
+  "production_ready": false,
+  "schema_version": "1.0",
+  "source_model_sha256": "fb59dfc8f78bd088f18f2f2167c457c887f3928e10264f05b3ac5482ec8a6664",
+  "statistics": {
+    "exact": 8,
+    "lossy": 0,
+    "normalized-equivalent": 21,
+    "policy-decision-required": 2,
+    "unsupported": 2
+  }
+}

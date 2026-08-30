@@ -1,6 +1,24 @@
 # FactoryDark.ai CardDemo Modernization Factory
 
-Release: **v0.35.0 — stored logic qualification core**
+Release: **v0.35.1 — DB2 semantic adapter hardening**
+
+v0.35.1 brings Db2 for z/OS into the same database semantic contract as the Oracle and PostgreSQL
+work. DB2 is now a concrete source adapter with schema discovery, privacy-preserving profiling,
+contract-bound extraction, content-bound CDC resume, transaction capabilities, and deterministic
+conformance.
+
+The DB2 source compatibility ledger governs every AUTHFRDS column and material behavior using
+exactly one of the five platform classifications. Character encoding and padding are normalized
+equivalents; transaction isolation and CDC position require policy; DDL CDC and package/bind
+semantics remain explicitly unsupported in this claim. Live catalog, live log, mainframe
+equivalence, and production readiness remain false.
+
+```bash
+./data-modernization.sh db2-semantic
+PYTHONPATH=src python3 -m lightyear_data verify-db2-semantic-adapter
+```
+
+Previous milestone: **v0.35.0 — stored logic qualification core (supporting MS #34 work)**
 
 v0.35 separates stored logic from the broad database-migration claim. The qualification core
 inventories Oracle procedures, functions, packages, triggers, views, scheduler/grant context, and

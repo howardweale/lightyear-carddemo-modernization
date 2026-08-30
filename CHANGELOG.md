@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.35.1 — 2026-08-30
+
+- Added a concrete Db2 for z/OS `SourceAdapter` implementing schema discovery, bounded profiling,
+  contract-bound row extraction, content-bound CDC resume, and transaction-capability projection.
+- Added a DB2 source compatibility ledger covering all 26 AUTHFRDS columns plus encoding, padding,
+  null/empty-string behavior, isolation, CDC position, DDL CDC, and package/bind semantics.
+- Required every DB2 entry to use exactly one governing classification: `exact`,
+  `normalized-equivalent`, `policy-decision-required`, `lossy`, or `unsupported`.
+- Added deterministic source-adapter discovery, profile, ledger, and conformance artifacts with
+  source-only/synthetic evidence labels and explicit false live-catalog, CDC, mainframe-equivalence,
+  and production-readiness claims.
+- Recorded the corrected MS #33–#41 roadmap and retained v0.35.0 stored-logic work as supporting
+  MS #34 evidence rather than treating it as fulfillment of DB2 hardening.
+
 ## 0.35.0 — 2026-08-30
 
 - Added an independent Oracle-to-PostgreSQL stored-logic qualification core covering procedures,

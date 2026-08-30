@@ -1,0 +1,457 @@
+{
+  "adapter": {
+    "id": "lightyear-db2-zos-source",
+    "version": "1.0"
+  },
+  "columns": [
+    {
+      "canonical_type": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 16,
+        "nullable": false
+      },
+      "metrics": {
+        "distinct_count": 2,
+        "empty_string_count": 0,
+        "invalid_encoding_count": 0,
+        "maximum_character_length": 16,
+        "null_count": 0,
+        "row_count": 2
+      },
+      "name": "CARD_NUM"
+    },
+    {
+      "canonical_type": {
+        "fractional_seconds": 6,
+        "kind": "timestamp",
+        "nullable": false,
+        "time_zone": "absent"
+      },
+      "metrics": {
+        "distinct_count": 2,
+        "maximum": "2026-08-20T10:16:31.000001",
+        "minimum": "2026-08-20T10:15:30.123456",
+        "null_count": 0,
+        "row_count": 2,
+        "timestamp_precision_observed": 6
+      },
+      "name": "AUTH_TS"
+    },
+    {
+      "canonical_type": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 4,
+        "nullable": true
+      },
+      "metrics": {
+        "distinct_count": 2,
+        "empty_string_count": 0,
+        "invalid_encoding_count": 0,
+        "maximum_character_length": 4,
+        "null_count": 0,
+        "row_count": 2
+      },
+      "name": "AUTH_TYPE"
+    },
+    {
+      "canonical_type": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 4,
+        "nullable": true
+      },
+      "metrics": {
+        "distinct_count": 2,
+        "empty_string_count": 0,
+        "invalid_encoding_count": 0,
+        "maximum_character_length": 4,
+        "null_count": 0,
+        "row_count": 2
+      },
+      "name": "CARD_EXPIRY_DATE"
+    },
+    {
+      "canonical_type": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 6,
+        "nullable": true
+      },
+      "metrics": {
+        "distinct_count": 1,
+        "empty_string_count": 0,
+        "invalid_encoding_count": 0,
+        "maximum_character_length": 6,
+        "null_count": 0,
+        "row_count": 2
+      },
+      "name": "MESSAGE_TYPE"
+    },
+    {
+      "canonical_type": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 6,
+        "nullable": true
+      },
+      "metrics": {
+        "distinct_count": 2,
+        "empty_string_count": 0,
+        "invalid_encoding_count": 0,
+        "maximum_character_length": 6,
+        "null_count": 0,
+        "row_count": 2
+      },
+      "name": "MESSAGE_SOURCE"
+    },
+    {
+      "canonical_type": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 6,
+        "nullable": true
+      },
+      "metrics": {
+        "distinct_count": 2,
+        "empty_string_count": 0,
+        "invalid_encoding_count": 0,
+        "maximum_character_length": 6,
+        "null_count": 0,
+        "row_count": 2
+      },
+      "name": "AUTH_ID_CODE"
+    },
+    {
+      "canonical_type": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 2,
+        "nullable": true
+      },
+      "metrics": {
+        "distinct_count": 2,
+        "empty_string_count": 0,
+        "invalid_encoding_count": 0,
+        "maximum_character_length": 2,
+        "null_count": 0,
+        "row_count": 2
+      },
+      "name": "AUTH_RESP_CODE"
+    },
+    {
+      "canonical_type": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 4,
+        "nullable": true
+      },
+      "metrics": {
+        "distinct_count": 2,
+        "empty_string_count": 0,
+        "invalid_encoding_count": 0,
+        "maximum_character_length": 4,
+        "null_count": 0,
+        "row_count": 2
+      },
+      "name": "AUTH_RESP_REASON"
+    },
+    {
+      "canonical_type": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 6,
+        "nullable": true
+      },
+      "metrics": {
+        "distinct_count": 2,
+        "empty_string_count": 0,
+        "invalid_encoding_count": 0,
+        "maximum_character_length": 6,
+        "null_count": 0,
+        "row_count": 2
+      },
+      "name": "PROCESSING_CODE"
+    },
+    {
+      "canonical_type": {
+        "kind": "exact-decimal",
+        "nullable": true,
+        "precision": 12,
+        "scale": 2
+      },
+      "metrics": {
+        "decimal_overflow_count": 0,
+        "distinct_count": 2,
+        "maximum": "125.50",
+        "minimum": "-9.99",
+        "null_count": 0,
+        "row_count": 2
+      },
+      "name": "TRANSACTION_AMT"
+    },
+    {
+      "canonical_type": {
+        "kind": "exact-decimal",
+        "nullable": true,
+        "precision": 12,
+        "scale": 2
+      },
+      "metrics": {
+        "decimal_overflow_count": 0,
+        "distinct_count": 2,
+        "maximum": "125.50",
+        "minimum": "0.00",
+        "null_count": 0,
+        "row_count": 2
+      },
+      "name": "APPROVED_AMT"
+    },
+    {
+      "canonical_type": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 4,
+        "nullable": true
+      },
+      "metrics": {
+        "distinct_count": 2,
+        "empty_string_count": 0,
+        "invalid_encoding_count": 0,
+        "maximum_character_length": 4,
+        "null_count": 0,
+        "row_count": 2
+      },
+      "name": "MERCHANT_CATAGORY_CODE"
+    },
+    {
+      "canonical_type": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 3,
+        "nullable": true
+      },
+      "metrics": {
+        "distinct_count": 2,
+        "empty_string_count": 0,
+        "invalid_encoding_count": 0,
+        "maximum_character_length": 3,
+        "null_count": 0,
+        "row_count": 2
+      },
+      "name": "ACQR_COUNTRY_CODE"
+    },
+    {
+      "canonical_type": {
+        "bits": 16,
+        "kind": "signed-integer",
+        "nullable": true
+      },
+      "metrics": {
+        "decimal_overflow_count": 0,
+        "distinct_count": 2,
+        "maximum": "81",
+        "minimum": "5",
+        "null_count": 0,
+        "row_count": 2
+      },
+      "name": "POS_ENTRY_MODE"
+    },
+    {
+      "canonical_type": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 15,
+        "nullable": true
+      },
+      "metrics": {
+        "distinct_count": 2,
+        "empty_string_count": 0,
+        "invalid_encoding_count": 0,
+        "maximum_character_length": 15,
+        "null_count": 0,
+        "row_count": 2
+      },
+      "name": "MERCHANT_ID"
+    },
+    {
+      "canonical_type": {
+        "encoding": "unicode-scalar",
+        "kind": "variable-character",
+        "length": 22,
+        "nullable": true
+      },
+      "metrics": {
+        "distinct_count": 2,
+        "empty_string_count": 0,
+        "invalid_encoding_count": 0,
+        "maximum_character_length": 18,
+        "null_count": 0,
+        "row_count": 2
+      },
+      "name": "MERCHANT_NAME"
+    },
+    {
+      "canonical_type": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 13,
+        "nullable": true
+      },
+      "metrics": {
+        "distinct_count": 2,
+        "empty_string_count": 0,
+        "invalid_encoding_count": 0,
+        "maximum_character_length": 13,
+        "null_count": 0,
+        "row_count": 2
+      },
+      "name": "MERCHANT_CITY"
+    },
+    {
+      "canonical_type": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 2,
+        "nullable": true
+      },
+      "metrics": {
+        "distinct_count": 2,
+        "empty_string_count": 0,
+        "invalid_encoding_count": 0,
+        "maximum_character_length": 2,
+        "null_count": 0,
+        "row_count": 2
+      },
+      "name": "MERCHANT_STATE"
+    },
+    {
+      "canonical_type": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 9,
+        "nullable": true
+      },
+      "metrics": {
+        "distinct_count": 2,
+        "empty_string_count": 0,
+        "invalid_encoding_count": 0,
+        "maximum_character_length": 9,
+        "null_count": 0,
+        "row_count": 2
+      },
+      "name": "MERCHANT_ZIP"
+    },
+    {
+      "canonical_type": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 15,
+        "nullable": true
+      },
+      "metrics": {
+        "distinct_count": 2,
+        "empty_string_count": 0,
+        "invalid_encoding_count": 0,
+        "maximum_character_length": 15,
+        "null_count": 0,
+        "row_count": 2
+      },
+      "name": "TRANSACTION_ID"
+    },
+    {
+      "canonical_type": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 1,
+        "nullable": true
+      },
+      "metrics": {
+        "distinct_count": 2,
+        "empty_string_count": 0,
+        "invalid_encoding_count": 0,
+        "maximum_character_length": 1,
+        "null_count": 0,
+        "row_count": 2
+      },
+      "name": "MATCH_STATUS"
+    },
+    {
+      "canonical_type": {
+        "encoding": "unicode-scalar",
+        "kind": "fixed-character",
+        "length": 1,
+        "nullable": true
+      },
+      "metrics": {
+        "distinct_count": 2,
+        "empty_string_count": 0,
+        "invalid_encoding_count": 0,
+        "maximum_character_length": 1,
+        "null_count": 0,
+        "row_count": 2
+      },
+      "name": "AUTH_FRAUD"
+    },
+    {
+      "canonical_type": {
+        "calendar": "proleptic-gregorian",
+        "kind": "date",
+        "nullable": true
+      },
+      "metrics": {
+        "distinct_count": 1,
+        "maximum": "2026-08-21",
+        "minimum": "2026-08-21",
+        "null_count": 1,
+        "row_count": 2,
+        "timestamp_precision_observed": null
+      },
+      "name": "FRAUD_RPT_DATE"
+    },
+    {
+      "canonical_type": {
+        "kind": "exact-decimal",
+        "nullable": true,
+        "precision": 11,
+        "scale": 0
+      },
+      "metrics": {
+        "decimal_overflow_count": 0,
+        "distinct_count": 2,
+        "maximum": "10000000002",
+        "minimum": "10000000001",
+        "null_count": 0,
+        "row_count": 2
+      },
+      "name": "ACCT_ID"
+    },
+    {
+      "canonical_type": {
+        "kind": "exact-decimal",
+        "nullable": true,
+        "precision": 9,
+        "scale": 0
+      },
+      "metrics": {
+        "decimal_overflow_count": 0,
+        "distinct_count": 1,
+        "maximum": "100000001",
+        "minimum": "100000001",
+        "null_count": 1,
+        "row_count": 2
+      },
+      "name": "CUST_ID"
+    }
+  ],
+  "content_sha256": "d7e3ae5c0d938af192878559e40aad400e97de87b7f034d4b849c5e65648ccda",
+  "evidence_class": "synthetic-fixture",
+  "model_sha256": "fb59dfc8f78bd088f18f2f2167c457c887f3928e10264f05b3ac5482ec8a6664",
+  "production_ready": false,
+  "profile_contract_sha256": "3349fb6b12d326538dc4a1831c720a7b804436d50f9b257d9041b0e7ff39ed3f",
+  "profile_observed": false,
+  "profile_type": "lightyear-db2-data-profile",
+  "raw_values_persisted": false,
+  "schema_version": "1.0"
+}

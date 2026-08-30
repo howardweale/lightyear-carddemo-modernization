@@ -11,8 +11,8 @@ The supported air-gapped path is the versioned source tree plus Python 3.11 or n
 run `pip`, contact a package index, or require a third-party runtime dependency:
 
 ```bash
-tar -xf lightyear-carddemo-modernization-v0.32.0.tar
-cd lightyear-carddemo-modernization-v0.32.0
+tar -xf lightyear-carddemo-modernization-v0.33.0.tar
+cd lightyear-carddemo-modernization-v0.33.0
 ./source-only-pilot.sh doctor
 ./source-only-pilot.sh verify
 ```
@@ -20,8 +20,8 @@ cd lightyear-carddemo-modernization-v0.32.0
 Windows PowerShell:
 
 ```powershell
-Expand-Archive lightyear-carddemo-modernization-v0.32.0.zip
-Set-Location lightyear-carddemo-modernization-v0.32.0
+Expand-Archive lightyear-carddemo-modernization-v0.33.0.zip
+Set-Location lightyear-carddemo-modernization-v0.33.0
 .\source-only-pilot.ps1 doctor
 .\source-only-pilot.ps1 verify
 ```

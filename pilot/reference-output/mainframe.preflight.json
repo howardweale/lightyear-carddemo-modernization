@@ -1,11 +1,11 @@
 {
-  "appliance_sha256": "8ebfdca9e04bf4a0d0710ce2e0e629e6c099b0f7723ed439875639de5eaa9e2f",
-  "capability_sha256": "9876e04a4956c6afa3437fcdac829586199154bfc1e20050b9966d1a280628e5",
+  "appliance_sha256": "2786d611e9861d0a8b0b8cb3b5c46a86ce49f020f7b91dcdf0e12063740c4d64",
+  "capability_sha256": "c6a49925479eca98b3f50b0ab171a85cab7bf67aaedd8631e0bedad3a8aea2f4",
   "collection_mechanism": {
     "enterprise_mechanism_ready": true,
     "live_observed": false
   },
-  "content_sha256": "7b18a53b70964bba12e56395dc63f3ae240c302eb153c7f3f53bc55b244e00a1",
+  "content_sha256": "a5ec25bfad9bea5019e195d6cdf887c67dc7a3ec7aafbd4f5c10e2ee24833715",
   "gates": {
     "6_authorized_original_execution": "blocked",
     "7_independent_comparison": "mechanism_ready",
@@ -19,13 +19,13 @@
     "approved test data, retention, redaction and evidence export policy",
     "approved execution, rollback, recovery and incident runbooks"
   ],
-  "intake_sha256": "a15cbf7bcca21672c181dad355d5c58af7b6ef82bca2d07e0006ee5f596b888e",
+  "intake_sha256": "3daab963b7b0eb9d0544cf238ca56ba932cca080f43d355c0ecb617171fe62b7",
   "limitations": [
     "Preflight describes prerequisites; it is not an authorization or live observation.",
     "The collection appliance cannot promote source-only or simulated evidence to equivalence."
   ],
   "mainframe_equivalent": false,
-  "pilot_id": "lightyear-carddemo-source-only-v0.32.0",
+  "pilot_id": "lightyear-carddemo-source-only-v0.33.0",
   "preflight_type": "lightyear-mainframe-evidence-preflight",
   "production_ready": false,
   "ready_for_authorized_onboarding": true,

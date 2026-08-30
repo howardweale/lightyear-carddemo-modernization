@@ -1,5 +1,5 @@
 {
-  "analysis_sha256": "211ff9287f889f97958a99b18b27524d70ef20990aa0a556f84fd5c853daa026",
+  "analysis_sha256": "a72746c9a483103d32fe654f734e28b415492e498d2fb2c4f19008891d304e01",
   "assessment_policy_sha256": "fe7da4aa0a9ed853086fbfccbab0de16571f9ac5942d0e48fbfce290c9d3efd6",
   "assessment_type": "lightyear-customer-estate-assessment",
   "claim_unlocked": "LIGHTYEAR can partition an approved source estate into explainable connected slices and produce an evidence-first modernization planning backlog.",
@@ -293,7 +293,7 @@
       "unresolved_references": []
     }
   ],
-  "content_sha256": "0995eb2636bc96ed6b89571ea3788f9e3716e88a5d8a36750be9b4f819e964c9",
+  "content_sha256": "51b11dd9ad8f9813a539c8ed16517aaaa8233cc1b8f64baec628df00ec48acd7",
   "decision_boundary": {
     "advisory_plan_only": true,
     "authorized_execution_observed": false,
@@ -315,15 +315,15 @@
     "authorized installed configuration, consumer binding, change history, and deployment observation",
     "authorized job execution, JES output, dataset effects, conditions, and restart capture"
   ],
-  "graph_content_sha256": "c7597862319712e338eede1440c6d53695d4a290a6d51d5bc61bbcbb01ef84b2",
-  "intake_sha256": "a15cbf7bcca21672c181dad355d5c58af7b6ef82bca2d07e0006ee5f596b888e",
+  "graph_content_sha256": "059e2c67a6d2023c0492f42854bad55fb83baa67c2706673b89e625ee578691f",
+  "intake_sha256": "3daab963b7b0eb9d0544cf238ca56ba932cca080f43d355c0ecb617171fe62b7",
   "limitations": [
     "Connected components describe static coupling, not business criticality, transaction volume, runtime behavior, or ownership.",
     "The planner does not automatically approve or dispatch modernization work.",
     "Live original-system execution and signed equivalence remain blocked until separately authorized and observed."
   ],
   "method": "deterministic-undirected-connected-components",
-  "pilot_id": "lightyear-carddemo-source-only-v0.32.0",
+  "pilot_id": "lightyear-carddemo-source-only-v0.33.0",
   "planning_waves": [
     {
       "automatic_dispatch": false,

@@ -3,7 +3,7 @@
   "analysis_scope": "bounded-source-static-analysis",
   "analysis_type": "lightyear-customer-source-analysis",
   "behavior_proven": false,
-  "content_sha256": "211ff9287f889f97958a99b18b27524d70ef20990aa0a556f84fd5c853daa026",
+  "content_sha256": "a72746c9a483103d32fe654f734e28b415492e498d2fb2c4f19008891d304e01",
   "coverage": [
     {
       "analysis_mode": "bounded-static",
@@ -88,10 +88,10 @@
     "vsam_component": 2,
     "vsam_path": 1
   },
-  "graph_content_sha256": "c7597862319712e338eede1440c6d53695d4a290a6d51d5bc61bbcbb01ef84b2",
-  "graph_id": "lightyear:pilot-estate:a15cbf7bcca21672c181dad3",
+  "graph_content_sha256": "059e2c67a6d2023c0492f42854bad55fb83baa67c2706673b89e625ee578691f",
+  "graph_id": "lightyear:pilot-estate:3daab963b7b0eb9d0544cf23",
   "graph_schema_version": "1.1",
-  "intake_sha256": "a15cbf7bcca21672c181dad355d5c58af7b6ef82bca2d07e0006ee5f596b888e",
+  "intake_sha256": "3daab963b7b0eb9d0544cf238ca56ba932cca080f43d355c0ecb617171fe62b7",
   "limitations": [
     "Static source analysis does not prove compilation, runtime behavior, or production equivalence.",
     "Unresolved and ambiguous references remain visible and require customer context or live evidence.",
@@ -100,7 +100,7 @@
   ],
   "live_system_contact": false,
   "mainframe_equivalent": false,
-  "pilot_id": "lightyear-carddemo-source-only-v0.32.0",
+  "pilot_id": "lightyear-carddemo-source-only-v0.33.0",
   "production_ready": false,
   "quality_gates": {
     "all_source_bytes_reverified": true,

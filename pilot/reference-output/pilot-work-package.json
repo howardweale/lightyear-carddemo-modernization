@@ -1,14 +1,14 @@
 {
-  "analysis_graph_sha256": "c7597862319712e338eede1440c6d53695d4a290a6d51d5bc61bbcbb01ef84b2",
-  "assessment_sha256": "0995eb2636bc96ed6b89571ea3788f9e3716e88a5d8a36750be9b4f819e964c9",
+  "analysis_graph_sha256": "059e2c67a6d2023c0492f42854bad55fb83baa67c2706673b89e625ee578691f",
+  "assessment_sha256": "51b11dd9ad8f9813a539c8ed16517aaaa8233cc1b8f64baec628df00ec48acd7",
   "authorized_execution_observed": false,
   "cells": [
     {
-      "allowed_output_root": "pilot/work/carddemo-account-mixed-language-pilot-v0-32/cobol",
-      "cell_id": "cell:carddemo-account-mixed-language-pilot-v0-32:cobol",
+      "allowed_output_root": "pilot/work/carddemo-account-mixed-language-pilot-v0-33/cobol",
+      "cell_id": "cell:carddemo-account-mixed-language-pilot-v0-33:cobol",
       "coordination_dependencies": [
-        "cell:carddemo-account-mixed-language-pilot-v0-32:db2",
-        "cell:carddemo-account-mixed-language-pilot-v0-32:pl-i"
+        "cell:carddemo-account-mixed-language-pilot-v0-33:db2",
+        "cell:carddemo-account-mixed-language-pilot-v0-33:pl-i"
       ],
       "dispatch_ready": false,
       "goal": "Materialize the bounded COBOL development proof for ACCOUNTV connected application slice.",
@@ -41,8 +41,8 @@
       "work_order_status": "draft-scope-not-admitted"
     },
     {
-      "allowed_output_root": "pilot/work/carddemo-account-mixed-language-pilot-v0-32/db2",
-      "cell_id": "cell:carddemo-account-mixed-language-pilot-v0-32:db2",
+      "allowed_output_root": "pilot/work/carddemo-account-mixed-language-pilot-v0-33/db2",
+      "cell_id": "cell:carddemo-account-mixed-language-pilot-v0-33:db2",
       "coordination_dependencies": [],
       "dispatch_ready": false,
       "goal": "Materialize the bounded Db2 development proof for ACCOUNTV connected application slice.",
@@ -81,8 +81,8 @@
       "work_order_status": "draft-scope-not-admitted"
     },
     {
-      "allowed_output_root": "pilot/work/carddemo-account-mixed-language-pilot-v0-32/hlasm",
-      "cell_id": "cell:carddemo-account-mixed-language-pilot-v0-32:hlasm",
+      "allowed_output_root": "pilot/work/carddemo-account-mixed-language-pilot-v0-33/hlasm",
+      "cell_id": "cell:carddemo-account-mixed-language-pilot-v0-33:hlasm",
       "coordination_dependencies": [],
       "dispatch_ready": false,
       "goal": "Materialize the bounded HLASM development proof for ACCOUNTV connected application slice.",
@@ -124,11 +124,11 @@
       "work_order_status": "draft-scope-not-admitted"
     },
     {
-      "allowed_output_root": "pilot/work/carddemo-account-mixed-language-pilot-v0-32/jcl",
-      "cell_id": "cell:carddemo-account-mixed-language-pilot-v0-32:jcl",
+      "allowed_output_root": "pilot/work/carddemo-account-mixed-language-pilot-v0-33/jcl",
+      "cell_id": "cell:carddemo-account-mixed-language-pilot-v0-33:jcl",
       "coordination_dependencies": [
-        "cell:carddemo-account-mixed-language-pilot-v0-32:hlasm",
-        "cell:carddemo-account-mixed-language-pilot-v0-32:pl-i"
+        "cell:carddemo-account-mixed-language-pilot-v0-33:hlasm",
+        "cell:carddemo-account-mixed-language-pilot-v0-33:pl-i"
       ],
       "dispatch_ready": false,
       "goal": "Materialize the bounded JCL development proof for ACCOUNTV connected application slice.",
@@ -160,10 +160,10 @@
       "work_order_status": "draft-scope-not-admitted"
     },
     {
-      "allowed_output_root": "pilot/work/carddemo-account-mixed-language-pilot-v0-32/pl-i",
-      "cell_id": "cell:carddemo-account-mixed-language-pilot-v0-32:pl-i",
+      "allowed_output_root": "pilot/work/carddemo-account-mixed-language-pilot-v0-33/pl-i",
+      "cell_id": "cell:carddemo-account-mixed-language-pilot-v0-33:pl-i",
       "coordination_dependencies": [
-        "cell:carddemo-account-mixed-language-pilot-v0-32:db2"
+        "cell:carddemo-account-mixed-language-pilot-v0-33:db2"
       ],
       "dispatch_ready": false,
       "goal": "Materialize the bounded PL/I development proof for ACCOUNTV connected application slice.",
@@ -194,8 +194,8 @@
     }
   ],
   "claim_unlocked": "LIGHTYEAR can turn one recorded human pilot selection into a deterministic, graph-scoped, multi-technology development work package.",
-  "content_sha256": "5088926c70f4890f62fbb2d213336e2dfd14f0aabe38bfb057a8329211e9fd71",
-  "dossier_sha256": "7191811d6c1a6c834399f4fd012cb2609fde657581552c60a46db109957703c3",
+  "content_sha256": "424f9357e89a16e99e587f9f158f6681a6e82c12693718d3a2f3a206245e81ed",
+  "dossier_sha256": "4ac1d653ff9fd6df6f788a14782c5e57f04f78f457dae5729b60a1a35053dafc",
   "factory_dispatch_allowed": false,
   "limitations": [
     "Cells are bounded draft scopes, not signed or admitted factory work orders.",
@@ -203,7 +203,7 @@
     "Every cell retains a separate live-evidence backlog and remains blocked from production promotion."
   ],
   "mainframe_equivalent": false,
-  "package_id": "package:carddemo-account-mixed-language-pilot-v0-32",
+  "package_id": "package:carddemo-account-mixed-language-pilot-v0-33",
   "planning_waves": [
     {
       "automatic_dispatch": false,
@@ -215,11 +215,11 @@
     {
       "automatic_dispatch": false,
       "cell_ids": [
-        "cell:carddemo-account-mixed-language-pilot-v0-32:cobol",
-        "cell:carddemo-account-mixed-language-pilot-v0-32:db2",
-        "cell:carddemo-account-mixed-language-pilot-v0-32:hlasm",
-        "cell:carddemo-account-mixed-language-pilot-v0-32:jcl",
-        "cell:carddemo-account-mixed-language-pilot-v0-32:pl-i"
+        "cell:carddemo-account-mixed-language-pilot-v0-33:cobol",
+        "cell:carddemo-account-mixed-language-pilot-v0-33:db2",
+        "cell:carddemo-account-mixed-language-pilot-v0-33:hlasm",
+        "cell:carddemo-account-mixed-language-pilot-v0-33:jcl",
+        "cell:carddemo-account-mixed-language-pilot-v0-33:pl-i"
       ],
       "name": "bounded-work-order-authoring",
       "status": "ready-for-human-governed-authoring",
@@ -228,11 +228,11 @@
     {
       "automatic_dispatch": false,
       "cell_ids": [
-        "cell:carddemo-account-mixed-language-pilot-v0-32:cobol",
-        "cell:carddemo-account-mixed-language-pilot-v0-32:db2",
-        "cell:carddemo-account-mixed-language-pilot-v0-32:hlasm",
-        "cell:carddemo-account-mixed-language-pilot-v0-32:jcl",
-        "cell:carddemo-account-mixed-language-pilot-v0-32:pl-i"
+        "cell:carddemo-account-mixed-language-pilot-v0-33:cobol",
+        "cell:carddemo-account-mixed-language-pilot-v0-33:db2",
+        "cell:carddemo-account-mixed-language-pilot-v0-33:hlasm",
+        "cell:carddemo-account-mixed-language-pilot-v0-33:jcl",
+        "cell:carddemo-account-mixed-language-pilot-v0-33:pl-i"
       ],
       "name": "integrated-development-proof",
       "status": "blocked-until-cell-evidence-passes",
@@ -241,11 +241,11 @@
     {
       "automatic_dispatch": false,
       "cell_ids": [
-        "cell:carddemo-account-mixed-language-pilot-v0-32:cobol",
-        "cell:carddemo-account-mixed-language-pilot-v0-32:db2",
-        "cell:carddemo-account-mixed-language-pilot-v0-32:hlasm",
-        "cell:carddemo-account-mixed-language-pilot-v0-32:jcl",
-        "cell:carddemo-account-mixed-language-pilot-v0-32:pl-i"
+        "cell:carddemo-account-mixed-language-pilot-v0-33:cobol",
+        "cell:carddemo-account-mixed-language-pilot-v0-33:db2",
+        "cell:carddemo-account-mixed-language-pilot-v0-33:hlasm",
+        "cell:carddemo-account-mixed-language-pilot-v0-33:jcl",
+        "cell:carddemo-account-mixed-language-pilot-v0-33:pl-i"
       ],
       "name": "authorized-native-validation",
       "status": "blocked-no-mainframe-access",
@@ -263,7 +263,7 @@
   "production_ready": false,
   "schema_version": "1.0",
   "selected_cluster_id": "cluster:6a02c2ea6de7831e",
-  "selection_sha256": "fdf9462c9c82edd147c6a5f05deaf646f80157a2d7df782404832bca55b354de",
+  "selection_sha256": "5ea467ac51d32aa347268ea1c82b13c1478892836a7fb9f6db90c9f7bfa22b18",
   "source_scope": {
     "boundary_reference_ids": [
       "7ef87c4aa9078d7896519a55592100efc2731138a3dbf7f5b0c7dc697ae65b47"

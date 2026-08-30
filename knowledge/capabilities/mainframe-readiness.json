@@ -341,7 +341,7 @@
         "supported_construct_count": 22
       },
       "capability_kind": "language",
-      "development_ready": false,
+      "development_ready": true,
       "discovery_ready": true,
       "gates": [
         {
@@ -372,10 +372,9 @@
             "extensions/pli/modernization/behavior-contract.json",
             "fixed-width, decimal, Db2 lookup, and COBOL-call semantics"
           ],
-          "gap": "The graph-bound PL/I proof or its compiled-artifact attestation is missing, stale, foreign, incomplete, or tampered.",
           "gate": 3,
           "name": "curated behavior contract",
-          "status": "blocked"
+          "status": "passed"
         },
         {
           "evidence": [
@@ -384,10 +383,9 @@
             "extensions/pli/attestation/pli-auth-risk-candidate.jar",
             "factory/benchmarks/pli_authorization_candidate.py"
           ],
-          "gap": "The graph-bound PL/I proof or its compiled-artifact attestation is missing, stale, foreign, incomplete, or tampered.",
           "gate": 4,
           "name": "bounded modernization candidate",
-          "status": "blocked"
+          "status": "passed"
         },
         {
           "evidence": [
@@ -395,10 +393,9 @@
             "extensions/pli/modernization/comparison.json",
             "nine mutation probes and seven boundary cases"
           ],
-          "gap": "The graph-bound PL/I proof or its compiled-artifact attestation is missing, stale, foreign, incomplete, or tampered.",
           "gate": 5,
           "name": "mutation and negative verification",
-          "status": "blocked"
+          "status": "passed"
         },
         {
           "evidence": [],
@@ -411,10 +408,10 @@
           "evidence": [
             "independent source-faithful oracle and modernization candidate comparator"
           ],
-          "gap": "The graph-bound PL/I proof or its compiled-artifact attestation is missing, stale, foreign, incomplete, or tampered.",
+          "gap": "No authorized compiled and executed ACCTPL1 observation exists on z/OS.",
           "gate": 7,
           "name": "independent differential comparison",
-          "status": "blocked"
+          "status": "mechanism_ready"
         },
         {
           "evidence": [],
@@ -425,7 +422,7 @@
         }
       ],
       "mainframe_equivalent": false,
-      "support_claim": "discovery and dependency analysis only",
+      "support_claim": "development-proof; live z/OS evidence pending",
       "technology": "PL/I"
     },
     {
@@ -553,7 +550,7 @@
       "status": "simulated_ready"
     }
   ],
-  "content_sha256": "a92e51ee2c17d242a6963f216c8eda08d77ba3cefe968cdfb804f71e6c5b5437",
+  "content_sha256": "c6a49925479eca98b3f50b0ab171a85cab7bf67aaedd8631e0bedad3a8aea2f4",
   "evidence_bindings": {
     "canonical_graph_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
     "data_rehearsal_receipt_sha256": "e628b50cc4e21707f6c62e7a8429654c7867411f75fb9381e03f3d191854f652",
@@ -561,8 +558,8 @@
     "extension_catalog_sha256": "a3ca454e737d047b44ce1a17d225ea23174a345e0e66083e304290a037f73106",
     "mainframe_campaign_receipt_sha256": "2426eb60c9824e93e27bd326d30fb990a92d537955c8d8405b8c9dce0cdb13f9",
     "oracle_data_receipt_sha256": "6958d7cc783d5ad00c469c112db5b665bf9ba93b7addec9cc94375d6c3f2dd83",
-    "pli_build_attestation_sha256": "7b959203ba1cc1c2a6f5da8d69aa8c3dcfca65e9935f93056acd7bba8bcf9773",
-    "pli_build_receipt_sha256": "071b414e3472d8ac8c85ab14f75dae0540d563364fc82d7bf0726434b56b587a",
+    "pli_build_attestation_sha256": "82826dd2bdba889bb789571fdba4285facbeed40c339b5ef3f44cbcfcdf2ae80",
+    "pli_build_receipt_sha256": "9de820e7295484c89ab8acdb5d6c902e5ae1f89113f27bc882d17d31054a283f",
     "pli_coverage_receipt_sha256": "c29ec51c3953d7134615d238b40fb4beea388a41b3fdcbc62266775e40930d11",
     "pli_development_receipt_sha256": "2a64d8cbff114e420e221a56bfe30c8fcc10ff0e359d4ba96b5f138598824ddb",
     "pli_fragment_sha256": "66ed4547441d74c66582e4d373d3e374a2e5776cb366704541392255ddfe9788",

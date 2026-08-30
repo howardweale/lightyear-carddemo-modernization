@@ -1,13 +1,13 @@
 {
   "attestation_type": "lightyear-pli-build-attestation",
-  "content_sha256": "7b959203ba1cc1c2a6f5da8d69aa8c3dcfca65e9935f93056acd7bba8bcf9773",
+  "content_sha256": "82826dd2bdba889bb789571fdba4285facbeed40c339b5ef3f44cbcfcdf2ae80",
   "schema_version": "1.0",
   "signature": {
     "algorithm": "RSASSA-PKCS1-v1_5-SHA256",
     "key_id": "lightyear-pli-development-test-rsa-v1",
     "release_authorized": false,
     "signer_class": "development-test-key",
-    "value": "iOXgkRB+F9Rla9WLpQ2/NRAEJEKA+wnXnUy3kn+QTwa+2yKqt7uhmQTW8rl/zttG33CXiejnzdk5FhSOS09IKs2aL2tnYaxVglvgH0uB0/MD5YKGtgTLc2erCu3x9BPAfmZEJbYg4jSwRZ8wwarvI+QB9xS46HCtgtP+vi2jlgPixjwkdpXWDcf4J90t7VOv75ApFMCXQmQsaCmzmylNtwzNdA+jxVwvmGYjMC8tnnedl06c4LsdzIaFkWPHXhjDvQcebYMs62zoa7zKA4lk7I/9SBM1H+dINWP8sDRSJ4eqaRfEL/rzLI5SRuJH/bcrAKSRFTCt0CS4Vo2rdVI1Gg=="
+    "value": "QjtnzCGBkned8dtez9M1P7x0rZt3yS1rphWlb8X3htSn2ZZtslFg4izxbWWWbRw/6ncQA4upd/qQ9q1EOhd6N1mSJJBJMXMkQ4lY0SlrevQgHgvryKp4+60M2jAAvCwbQjGxjWxN7R0fJl9+wiSvx3KTYmR8HmIkvONm29Xmm82xmu8iwlJWaMD2LI/Z/T31aTae5xOBCuSJ3ik1PXxDlWO0Hnr2kUoQJqhYsiPsWq37Kxgq9UZlJApI684uTYDV4ZOSYhLz6yk2TN5+ZssM6vIYr5EkWzxHR9Kc3hrkfU/BW6/jUDSDTW4UqPl6q0B9XSYx7vIuPajmNU7X3fqIng=="
   },
   "statement": {
     "_type": "https://in-toto.io/Statement/v1",
@@ -15,14 +15,14 @@
       "buildDefinition": {
         "buildType": "https://lightyear.ai/build/pli-bounded-jdk17/v1",
         "externalParameters": {
-          "sourceCommit": "53b475ba130529a1c996b2d112cc58e0c9b0d723",
-          "sourceTreeSha256": "dcbf8fd28eb0c091dba2fb319be9deba53e19e21183d9d28a5c86980e8782655",
+          "sourceCommit": "99a30cdb2e1b8b9e41f36709b62b8bab0381cfcf",
+          "sourceTreeSha256": "cbf8945e016eb92c806b30925b938a13319a5689e6aa1fdb8a5ad231782440cf",
           "workflow": "howardweale/lightyear-carddemo-modernization/.github/workflows/verify.yml"
         },
         "resolvedDependencies": [
           {
             "digest": {
-              "sha256": "69962583b4134dca1c33798890624e8488830a69d9a1b1722a1fb29a97f1ff15"
+              "sha256": "2a64d8cbff114e420e221a56bfe30c8fcc10ff0e359d4ba96b5f138598824ddb"
             },
             "uri": "extensions/pli/modernization/development.receipt.json"
           },
@@ -52,7 +52,7 @@
         },
         "metadata": {
           "cleanSourceTree": true,
-          "invocationId": "development:53b475ba130529a1c996b2d112cc58e0c9b0d723"
+          "invocationId": "development:99a30cdb2e1b8b9e41f36709b62b8bab0381cfcf"
         }
       }
     },

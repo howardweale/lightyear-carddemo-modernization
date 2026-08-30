@@ -14,7 +14,13 @@ from lightyear_common.asymmetric import rsa_pkcs1v15_sha256_sign
 from lightyear_common.io import write_json
 
 from lightyear_extensions.contracts import canonical_hash
-from lightyear_extensions.pli_attestation import ARTIFACT_FILES, build_attestation, validate_attestation
+from lightyear_extensions.contracts import ExtensionContractError
+from lightyear_extensions.pli_attestation import (
+    ARTIFACT_FILES,
+    _validate_jdk_probe,
+    build_attestation,
+    validate_attestation,
+)
 
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -105,6 +111,16 @@ class PliBuildAttestationTests(unittest.TestCase):
             },
             inventory["toolchain"],
         )
+
+    def test_jdk_preflight_accepts_a_full_jdk_17_or_newer(self) -> None:
+        _validate_jdk_probe("openjdk 17.0.12 2024-07-16", "java.base@17\njdk.compiler@17\n")
+        _validate_jdk_probe("openjdk 21.0.4 2024-07-16", "java.base@21\njdk.compiler@21\n")
+
+    def test_jdk_preflight_has_actionable_old_runtime_and_jre_errors(self) -> None:
+        with self.assertRaisesRegex(ExtensionContractError, "detected Java 11"):
+            _validate_jdk_probe("openjdk 11.0.24", "java.base@11\njdk.compiler@11\n")
+        with self.assertRaisesRegex(ExtensionContractError, "does not expose jdk.compiler"):
+            _validate_jdk_probe("openjdk 17.0.12", "java.base@17\n")
 
     def test_substituted_commit_is_rejected_even_when_receipt_is_rehashed(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

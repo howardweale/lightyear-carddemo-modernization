@@ -378,6 +378,8 @@ class LegacyModelEvidenceTests(unittest.TestCase):
         self.assertEqual("historical-only", receipt["quality_gate"]["status"])
         self.assertFalse(receipt["qualification_eligible"])
         self.assertFalse(receipt["promotion_allowed"])
+        self.assertFalse(receipt["production_ready"])
+        self.assertFalse(receipt["mainframe_equivalent"])
         self.assertTrue(all(receipt["integrity"].values()))
         self.assertFalse(receipt["quality_gate"]["checks"]["sealed_evidence"])
         self.assertEqual("historical-only", rows[0]["quality_status"])

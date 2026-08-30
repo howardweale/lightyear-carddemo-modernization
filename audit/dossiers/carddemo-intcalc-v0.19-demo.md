@@ -4,7 +4,7 @@
 
 **Decision:** **BLOCKED**
 
-**Dossier identity:** `6d50ef6fe25951cfb4330c39855ad33120091384b615a1e2392658b3c824b533`
+**Dossier identity:** `a3b32866d7ecbe6040c7db809f9390b13fc05a74e5faa32a278723aeb370489f`
 
 ## Promotion rationale
 
@@ -34,11 +34,11 @@ Release is blocked until every independent runtime and execution-security gate h
 |---|---|---|
 | `data_equivalence_receipt` | `carddemo-authorization-authfrds` | `8e2e2dc30cffa320…` |
 | `work_order` | `carddemo:intcalc:bounded-repair` | `71e7e34d92dd056a…` |
-| `portfolio_plan` | `carddemo:modernization:v0.26` | `bb864004cb4d27e4…` |
+| `portfolio_plan` | `carddemo:modernization:v0.26` | `fd23725f1b612d1a…` |
 | `operational_control_policy` | `control-tower:live-evidence-plane` | `943f4c1626a3ac66…` |
 | `source_evidence_pack` | `evidence:source-pack` | `6613f6c3476a04c6…` |
 | `decision_input` | `execution:carddemo-hardened-plane` | `83d937880f17192b…` |
-| `durable_conformance_receipt` | `factory:durable-conformance` | `cb43eb4080f42d21…` |
+| `durable_conformance_receipt` | `factory:durable-conformance` | `489c931f81a03b4c…` |
 | `durable_execution_policy` | `factory:durable-control-plane` | `72b0c927dc60dc8b…` |
 | `graph_snapshot` | `lightyear:carddemo-modernization` | `000c0b91cadeb906…` |
 | `semantic_memory_snapshot` | `memory:verified-experiences` | `42000f0e821e12b7…` |
@@ -61,13 +61,13 @@ Release is blocked until every independent runtime and execution-security gate h
 - Execution waves: 2
 - Detected conflicts: 2
 - Approval authority: `human`
-- Plan: `bb864004cb4d27e48cf2fff83ec4487d6b2ba44705af6b18e10e531336be707e`
+- Plan: `fd23725f1b612d1a834e35b358e50ea91958bf5574a05b311bf4cb74c3c06196`
 
 ## Audit checkpoint
 
 - Ledger: `lightyear:carddemo:audit`
 - Events: 21
-- Ledger head: `4fc6fe9214d40c54d6fcc1919d2312764792724b29ea2817bca5c046eb0c03a9`
+- Ledger head: `02fcb6ada2208f0b1537bce2cf62c853b4baa1bcd4fbddfa8c42f2651325940e`
 - Signature algorithm: `none`
 
 ## CICS/VSAM readiness

@@ -1,11 +1,11 @@
 {
   "appliance_sha256": "2786d611e9861d0a8b0b8cb3b5c46a86ce49f020f7b91dcdf0e12063740c4d64",
-  "capability_sha256": "c6a49925479eca98b3f50b0ab171a85cab7bf67aaedd8631e0bedad3a8aea2f4",
+  "capability_sha256": "5bf8a378bd1b43457f228a3be05bf4b44bd9b3bd7b66c8959fe714567f59ac5f",
   "collection_mechanism": {
     "enterprise_mechanism_ready": true,
     "live_observed": false
   },
-  "content_sha256": "cdd85bc64ba912a782108ac81f813e437c6b785bfcc1cd0b22ed64ca2abe6325",
+  "content_sha256": "7116f6fe6a6c435b7faf37b8ca8d502f5473135b0c4cb6919b2b65763696723a",
   "gates": {
     "6_authorized_original_execution": "blocked",
     "7_independent_comparison": "mechanism_ready",
@@ -19,7 +19,7 @@
     "approved test data, retention, redaction and evidence export policy",
     "approved execution, rollback, recovery and incident runbooks"
   ],
-  "intake_sha256": "90aa9a7d9bdeebbbc9032b7c28883d0c74b0a68e9bff04d12e3da4a34a57bfff",
+  "intake_sha256": "7e4c5eb89e8d0d12c44909ba5ed5a7f44ec43a913916d4946de53460d6ad9b97",
   "limitations": [
     "Preflight describes prerequisites; it is not an authorization or live observation.",
     "The collection appliance cannot promote source-only or simulated evidence to equivalence."

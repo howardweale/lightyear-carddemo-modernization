@@ -2,7 +2,7 @@
 
 **Release:** 0.33.0
 **Pilot:** `lightyear-carddemo-source-only-v0.33.0`
-**Dossier identity:** `9d091342b40765930b8ee78725d9a3527089da79abceaedd61ad8bea7370c300`
+**Dossier identity:** `6b01c5d2c365c858345b0ade986eb73a6d092ebf4cffed87c4ba58b8e2593bcb`
 
 ## Executive result
 
@@ -62,9 +62,9 @@ Db2 log or production cutover authorization was observed.
 | advisory-modernization-planning-contract | `pilot/assessment-policy.json` | `a60489ddfc849e3e3e41d9d7e84bcd94b4ef9e4195153caaf86c2efe477af938` |
 | human-selection-and-development-packaging-contract | `pilot/work-package-policy.json` | `36eabc9a698380f2aaecce8eadf719207070c6cc489b5e1edf78163bb0e3fec3` |
 | estate-discovery | `knowledge/graph.receipt.json` | `43a0fa2326b496c6d1a0ef44159e724bb66d00acfd48a01ad89d8d3cec4007c0` |
-| composite-lineage | `knowledge/composite/estate.receipt.json` | `169b7cf9465e67e4c020ee6d604aaa3bf0c110b4b69924b3b56e03f0dbacd559` |
-| capability-gates | `knowledge/capabilities/mainframe-readiness.json` | `22b6ed53591953ba72c7540c9af8b9e511c39ff5891677f68a9d789aa2c563e5` |
-| language-coverage | `extensions/pli/conformance/coverage.receipt.json` | `a423713287804850383af9d2ae39abd3467e5c028b00aa3a8767d72b782bc6e7` |
+| composite-lineage | `knowledge/composite/estate.receipt.json` | `ef8276fdb0fed4896ce9c91ca9488e2ca4ae36b255dae062cd4d17d3766a72cd` |
+| capability-gates | `knowledge/capabilities/mainframe-readiness.json` | `4b346cf3274057a7ed7222a4a44d55508433aebd2e8e53f395c9a8a19e85d224` |
+| language-coverage | `extensions/pli/conformance/coverage.receipt.json` | `9e599183e771caf1057d6f6425bdfe449ee2ca35006fb313b39de44e17918a79` |
 | mixed-language-development-proof | `extensions/pli/modernization/development.receipt.json` | `8c1f760da5957810a0f9f6ceae74dd83e0b07aa229a7c6107517cb127d4e0de6` |
 | reproducible-build | `extensions/pli/attestation/build.receipt.json` | `29718321c6dbb59e5c433e39de15d3cdc5b177cc821dbae906e103f724027ec3` |
 | model-qualification-boundary | `factory/qualification/manifest.json` | `13cc4353a228fd3266e9ed11163dfbe478c7a559fe031eff20a927029c64d91b` |

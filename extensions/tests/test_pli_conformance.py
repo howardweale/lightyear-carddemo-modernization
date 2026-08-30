@@ -27,12 +27,14 @@ class PliConformanceTests(unittest.TestCase):
     def build(self):
         return build_conformance_lab(GRAPH, CORPUS, MANIFEST, MATRIX, ROOT)
 
-    def test_27_case_corpus_is_deterministic_and_matches_committed_evidence(self) -> None:
+    def test_52_case_corpus_is_deterministic_and_matches_committed_evidence(self) -> None:
         first_golden, first_receipt = self.build()
         second_golden, second_receipt = self.build()
         self.assertEqual(first_golden, second_golden)
         self.assertEqual(first_receipt, second_receipt)
-        self.assertEqual(27, first_receipt["corpus"]["case_count"])
+        self.assertEqual(52, first_receipt["corpus"]["case_count"])
+        self.assertEqual(36, first_receipt["corpus"]["positive_case_count"])
+        self.assertEqual(16, first_receipt["corpus"]["blocked_case_count"])
         self.assertEqual(22, first_receipt["coverage"]["supported_matrix_construct_count"])
         self.assertEqual("passed", first_receipt["status"])
         self.assertTrue(all(
@@ -106,10 +108,21 @@ class PliConformanceTests(unittest.TestCase):
         ):
             parsed = parse_pli_source((CORPUS / name).read_text(encoding="utf-8"), name)
             self.assertEqual("blocked", parsed["status"])
-            diagnostic = parsed["diagnostics"][0]
-            self.assertEqual(code, diagnostic["code"])
+            diagnostics = {item["code"]: item for item in parsed["diagnostics"]}
+            self.assertIn(code, diagnostics)
+            diagnostic = diagnostics[code]
             self.assertGreaterEqual(diagnostic["line"], 1)
             self.assertGreaterEqual(diagnostic["column"], 1)
+
+    def test_targeted_semantic_boundaries_are_explicit(self) -> None:
+        golden, receipt = self.build()
+        targeted = [item for item in golden["results"] if item["classification"] == "boundary"]
+        self.assertEqual(25, len(targeted))
+        self.assertTrue(all(item["passed"] for item in targeted))
+        paths = {item["path"] for item in targeted}
+        for prefix in ("30-controlled", "32-pointer", "33-array", "35-picture", "38-on-", "41-preprocessor", "44-aligned", "47-procedure", "49-sql-cursor", "51-cics", "52-ims"):
+            self.assertTrue(any(path.startswith(prefix) for path in paths), prefix)
+        self.assertGreaterEqual(len(receipt["coverage"]["explicit_gap_codes"]), 10)
 
     def test_receipt_tamper_graph_drift_and_overclaim_fail_closed(self) -> None:
         golden, receipt = self.build()

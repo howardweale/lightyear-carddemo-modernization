@@ -136,7 +136,7 @@ class MainframeCapabilityGraphTests(unittest.TestCase):
         self.assertEqual("blocked", by_name["HLASM"]["gates"][5]["status"])
         self.assertEqual("mechanism_ready", by_name["IMS"]["gates"][6]["status"])
         self.assertEqual("mechanism_ready", by_name["PL/I"]["gates"][6]["status"])
-        self.assertEqual(27, by_name["PL/I"]["breadth"]["corpus_case_count"])
+        self.assertEqual(52, by_name["PL/I"]["breadth"]["corpus_case_count"])
         self.assertEqual(22, by_name["PL/I"]["breadth"]["supported_construct_count"])
         self.assertFalse(by_name["PL/I"]["breadth"]["customer_source"])
         self.assertFalse(by_name["PL/I"]["breadth"]["runtime_evidence"])

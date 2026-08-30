@@ -10,8 +10,8 @@ production-qualified.
 | MS #34 | Oracle to PostgreSQL Proof | Complete |
 | MS #35 | DB2 Semantic Adapter Hardening | Corrected by MS #35.1 |
 | MS #35.1 | DB2 Semantic Adapter Hardening | Complete |
-| MS #36 | COBOL Qualification Hardening | In progress |
-| MS #37 | PL/I Qualification Hardening | Planned |
+| MS #36 | COBOL Qualification Hardening | Complete |
+| MS #37 | PL/I Qualification Hardening | In progress |
 | MS #38 | JCL Qualification Hardening | Planned |
 | MS #39 | VSAM/CICS Qualification Hardening | Planned |
 | MS #40 | IMS Qualification Hardening | Planned |
@@ -33,3 +33,9 @@ one classification:
 
 Unresolved policy and loss block equivalence. Unsupported behavior must be excluded explicitly from
 the claim scope and cannot be silently treated as migrated.
+## MS #37 — PL/I Qualification Hardening
+
+MS #37 governs the existing bounded PL/I evidence through a five-class compatibility ledger and ten
+independent qualification gates. It qualifies the supported static and development subset while
+keeping general Enterprise PL/I, IBM compiler, z/OS runtime, mainframe-equivalence, and production
+claims blocked pending authorized native evidence and representative customer-estate coverage.

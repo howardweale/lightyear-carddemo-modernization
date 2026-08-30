@@ -9,8 +9,11 @@ IDENTIFIER = re.compile(r"^[A-Z_$#@][A-Z0-9_$#@-]*$", re.I)
 UNSUPPORTED_KEYWORDS = {
     "BASED": "based-storage",
     "CONTROLLED": "controlled-storage",
+    "DIMENSION": "array-dimension",
     "GENERIC": "generic-entry",
     "PACKAGE": "package-declaration",
+    "PICTURE": "picture-declaration",
+    "POINTER": "pointer-storage",
 }
 
 

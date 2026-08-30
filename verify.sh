@@ -32,6 +32,7 @@ fi
 "$project_dir/zosmf-adapter.sh" verify
 "$project_dir/collection-appliance.sh" verify
 "$project_dir/cobol-qualification.sh" verify
+"$project_dir/pli-qualification.sh" verify
 "$project_dir/pli-conformance.sh" verify
 "$project_dir/pli-modernization.sh" verify
 "$project_dir/pli-build-attestation.sh" verify

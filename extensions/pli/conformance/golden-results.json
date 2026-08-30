@@ -1,5 +1,5 @@
 {
-  "content_sha256": "f7625080359770189abd7015e03547c91e0cbcb2cb5b4fab87d86724f47f5002",
+  "content_sha256": "90e27e43b2bce53a41ec9d8f9ce0fcef646b9d0926fcbb60a38c6e590f11755b",
   "corpus_id": "lightyear-pli-synthetic-conformance-v1",
   "parser": {
     "frontend": "tokenized-statement-parser",
@@ -1242,6 +1242,13 @@
       },
       "diagnostics": [
         {
+          "code": "unsupported-pointer-storage",
+          "column": 21,
+          "line": 2,
+          "message": "Unsupported PL/I construct: POINTER",
+          "severity": "blocker"
+        },
+        {
           "code": "unsupported-based-storage",
           "column": 20,
           "line": 3,
@@ -1306,6 +1313,1133 @@
       "path": "27-malformed-comment.pli",
       "recognized": [],
       "references": []
+    },
+    {
+      "actual_status": "passed",
+      "case_id": "28-automatic-storage",
+      "classification": "boundary",
+      "constructs": {
+        "assignment": 1,
+        "declaration": 1,
+        "program": 1
+      },
+      "diagnostics": [],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "passed",
+      "passed": true,
+      "path": "28-automatic-storage.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "AUTOCASE"
+        },
+        {
+          "column": 7,
+          "kind": "declaration",
+          "line": 2,
+          "name": "WORK_VALUE"
+        },
+        {
+          "column": 3,
+          "kind": "assignment",
+          "line": 3,
+          "name": "WORK_VALUE"
+        }
+      ],
+      "references": []
+    },
+    {
+      "actual_status": "passed",
+      "case_id": "29-static-storage",
+      "classification": "boundary",
+      "constructs": {
+        "assignment": 1,
+        "declaration": 1,
+        "program": 1
+      },
+      "diagnostics": [],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "passed",
+      "passed": true,
+      "path": "29-static-storage.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "STATICCASE"
+        },
+        {
+          "column": 7,
+          "kind": "declaration",
+          "line": 2,
+          "name": "RUN_COUNT"
+        },
+        {
+          "column": 3,
+          "kind": "assignment",
+          "line": 3,
+          "name": "RUN_COUNT"
+        }
+      ],
+      "references": []
+    },
+    {
+      "actual_status": "blocked",
+      "case_id": "30-controlled-storage",
+      "classification": "boundary",
+      "constructs": {
+        "program": 1,
+        "record_declaration": 1
+      },
+      "diagnostics": [
+        {
+          "code": "unsupported-controlled-storage",
+          "column": 26,
+          "line": 2,
+          "message": "Unsupported PL/I construct: CONTROLLED",
+          "severity": "blocker"
+        }
+      ],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "blocked",
+      "passed": true,
+      "path": "30-controlled-storage.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "CONTROLLEDCASE"
+        },
+        {
+          "column": 7,
+          "details": {
+            "fixed": true,
+            "varying": false
+          },
+          "kind": "record_declaration",
+          "line": 2,
+          "name": "WORK_AREA"
+        }
+      ],
+      "references": []
+    },
+    {
+      "actual_status": "blocked",
+      "case_id": "31-based-storage",
+      "classification": "boundary",
+      "constructs": {
+        "program": 1,
+        "record_declaration": 1
+      },
+      "diagnostics": [
+        {
+          "code": "unsupported-based-storage",
+          "column": 26,
+          "line": 2,
+          "message": "Unsupported PL/I construct: BASED",
+          "severity": "blocker"
+        }
+      ],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "blocked",
+      "passed": true,
+      "path": "31-based-storage.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "BASEDCASE"
+        },
+        {
+          "column": 7,
+          "details": {
+            "fixed": true,
+            "varying": false
+          },
+          "kind": "record_declaration",
+          "line": 2,
+          "name": "WORK_AREA"
+        }
+      ],
+      "references": []
+    },
+    {
+      "actual_status": "blocked",
+      "case_id": "32-pointer-storage",
+      "classification": "boundary",
+      "constructs": {
+        "declaration": 1,
+        "program": 1
+      },
+      "diagnostics": [
+        {
+          "code": "unsupported-pointer-storage",
+          "column": 18,
+          "line": 2,
+          "message": "Unsupported PL/I construct: POINTER",
+          "severity": "blocker"
+        }
+      ],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "blocked",
+      "passed": true,
+      "path": "32-pointer-storage.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "POINTERCASE"
+        },
+        {
+          "column": 7,
+          "kind": "declaration",
+          "line": 2,
+          "name": "RECORD_PTR"
+        }
+      ],
+      "references": []
+    },
+    {
+      "actual_status": "blocked",
+      "case_id": "33-array-dimension",
+      "classification": "boundary",
+      "constructs": {
+        "decimal_declaration": 1,
+        "program": 1
+      },
+      "diagnostics": [
+        {
+          "code": "unsupported-array-dimension",
+          "column": 34,
+          "line": 2,
+          "message": "Unsupported PL/I construct: DIMENSION",
+          "severity": "blocker"
+        }
+      ],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "blocked",
+      "passed": true,
+      "path": "33-array-dimension.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "ARRAYCASE"
+        },
+        {
+          "column": 7,
+          "details": {
+            "fixed": true
+          },
+          "kind": "decimal_declaration",
+          "line": 2,
+          "name": "AMOUNTS"
+        }
+      ],
+      "references": []
+    },
+    {
+      "actual_status": "blocked",
+      "case_id": "34-multidimensional-array",
+      "classification": "boundary",
+      "constructs": {
+        "declaration": 1,
+        "program": 1
+      },
+      "diagnostics": [
+        {
+          "code": "unsupported-array-dimension",
+          "column": 37,
+          "line": 2,
+          "message": "Unsupported PL/I construct: DIMENSION",
+          "severity": "blocker"
+        }
+      ],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "blocked",
+      "passed": true,
+      "path": "34-multidimensional-array.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "MATRIXCASE"
+        },
+        {
+          "column": 7,
+          "kind": "declaration",
+          "line": 2,
+          "name": "SCORE_MATRIX"
+        }
+      ],
+      "references": []
+    },
+    {
+      "actual_status": "blocked",
+      "case_id": "35-picture-declaration",
+      "classification": "boundary",
+      "constructs": {
+        "declaration": 1,
+        "program": 1
+      },
+      "diagnostics": [
+        {
+          "code": "unsupported-picture-declaration",
+          "column": 22,
+          "line": 2,
+          "message": "Unsupported PL/I construct: PICTURE",
+          "severity": "blocker"
+        }
+      ],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "blocked",
+      "passed": true,
+      "path": "35-picture-declaration.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "PICTURECASE"
+        },
+        {
+          "column": 7,
+          "kind": "declaration",
+          "line": 2,
+          "name": "DISPLAY_AMOUNT"
+        }
+      ],
+      "references": []
+    },
+    {
+      "actual_status": "passed",
+      "case_id": "36-decimal-precision",
+      "classification": "boundary",
+      "constructs": {
+        "assignment": 1,
+        "decimal_declaration": 2,
+        "program": 1
+      },
+      "diagnostics": [],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "passed",
+      "passed": true,
+      "path": "36-decimal-precision.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "PRECISIONCASE"
+        },
+        {
+          "column": 7,
+          "details": {
+            "fixed": false
+          },
+          "kind": "decimal_declaration",
+          "line": 2,
+          "name": "AMOUNT"
+        },
+        {
+          "column": 7,
+          "details": {
+            "fixed": false
+          },
+          "kind": "decimal_declaration",
+          "line": 3,
+          "name": "RATE"
+        },
+        {
+          "column": 3,
+          "kind": "assignment",
+          "line": 4,
+          "name": "AMOUNT"
+        }
+      ],
+      "references": []
+    },
+    {
+      "actual_status": "passed",
+      "case_id": "37-decimal-scale-assignment",
+      "classification": "boundary",
+      "constructs": {
+        "assignment": 1,
+        "decimal_declaration": 2,
+        "program": 1
+      },
+      "diagnostics": [],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "passed",
+      "passed": true,
+      "path": "37-decimal-scale-assignment.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "SCALECASE"
+        },
+        {
+          "column": 7,
+          "details": {
+            "fixed": false
+          },
+          "kind": "decimal_declaration",
+          "line": 2,
+          "name": "SOURCE_VALUE"
+        },
+        {
+          "column": 7,
+          "details": {
+            "fixed": false
+          },
+          "kind": "decimal_declaration",
+          "line": 3,
+          "name": "TARGET_VALUE"
+        },
+        {
+          "column": 3,
+          "kind": "assignment",
+          "line": 4,
+          "name": "TARGET_VALUE"
+        }
+      ],
+      "references": []
+    },
+    {
+      "actual_status": "passed",
+      "case_id": "38-on-overflow",
+      "classification": "boundary",
+      "constructs": {
+        "error_control": 1,
+        "program": 1
+      },
+      "diagnostics": [],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "passed",
+      "passed": true,
+      "path": "38-on-overflow.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "OVERFLOWCASE"
+        },
+        {
+          "column": 3,
+          "kind": "error_control",
+          "line": 2,
+          "name": "OVERFLOW"
+        }
+      ],
+      "references": []
+    },
+    {
+      "actual_status": "passed",
+      "case_id": "39-on-conversion",
+      "classification": "boundary",
+      "constructs": {
+        "error_control": 1,
+        "program": 1
+      },
+      "diagnostics": [],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "passed",
+      "passed": true,
+      "path": "39-on-conversion.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "CONVERSIONCASE"
+        },
+        {
+          "column": 3,
+          "kind": "error_control",
+          "line": 2,
+          "name": "CONVERSION"
+        }
+      ],
+      "references": []
+    },
+    {
+      "actual_status": "passed",
+      "case_id": "40-select-conditions",
+      "classification": "boundary",
+      "constructs": {
+        "conditional": 3,
+        "program": 1
+      },
+      "diagnostics": [],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "passed",
+      "passed": true,
+      "path": "40-select-conditions.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "SELECTCASE"
+        },
+        {
+          "column": 3,
+          "kind": "conditional",
+          "line": 2,
+          "name": "SELECT"
+        },
+        {
+          "column": 5,
+          "kind": "conditional",
+          "line": 3,
+          "name": "WHEN"
+        },
+        {
+          "column": 5,
+          "kind": "conditional",
+          "line": 4,
+          "name": "OTHERWISE"
+        }
+      ],
+      "references": []
+    },
+    {
+      "actual_status": "blocked",
+      "case_id": "41-preprocessor-if",
+      "classification": "boundary",
+      "constructs": {
+        "program": 1
+      },
+      "diagnostics": [
+        {
+          "code": "unsupported-preprocessor",
+          "column": 1,
+          "line": 1,
+          "message": "Unsupported PL/I preprocessor directive: %IF",
+          "severity": "blocker"
+        }
+      ],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "blocked",
+      "passed": true,
+      "path": "41-preprocessor-if.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 2,
+          "name": "PREIFCASE"
+        }
+      ],
+      "references": []
+    },
+    {
+      "actual_status": "blocked",
+      "case_id": "42-preprocessor-do",
+      "classification": "boundary",
+      "constructs": {
+        "program": 1
+      },
+      "diagnostics": [
+        {
+          "code": "unsupported-preprocessor",
+          "column": 1,
+          "line": 1,
+          "message": "Unsupported PL/I preprocessor directive: %DO",
+          "severity": "blocker"
+        }
+      ],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "blocked",
+      "passed": true,
+      "path": "42-preprocessor-do.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 2,
+          "name": "PREDOCASE"
+        }
+      ],
+      "references": []
+    },
+    {
+      "actual_status": "blocked",
+      "case_id": "43-preprocessor-activate",
+      "classification": "boundary",
+      "constructs": {
+        "program": 1
+      },
+      "diagnostics": [
+        {
+          "code": "unsupported-preprocessor",
+          "column": 1,
+          "line": 1,
+          "message": "Unsupported PL/I preprocessor directive: %ACTIVATE",
+          "severity": "blocker"
+        }
+      ],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "blocked",
+      "passed": true,
+      "path": "43-preprocessor-activate.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 2,
+          "name": "PREACTCASE"
+        }
+      ],
+      "references": []
+    },
+    {
+      "actual_status": "passed",
+      "case_id": "44-aligned-structure",
+      "classification": "boundary",
+      "constructs": {
+        "program": 1,
+        "structure": 1
+      },
+      "diagnostics": [],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "passed",
+      "passed": true,
+      "path": "44-aligned-structure.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "ALIGNEDCASE"
+        },
+        {
+          "column": 9,
+          "details": {
+            "level": 1
+          },
+          "kind": "structure",
+          "line": 2,
+          "name": "HEADER"
+        }
+      ],
+      "references": []
+    },
+    {
+      "actual_status": "passed",
+      "case_id": "45-unaligned-record",
+      "classification": "boundary",
+      "constructs": {
+        "program": 1,
+        "structure": 1
+      },
+      "diagnostics": [],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "passed",
+      "passed": true,
+      "path": "45-unaligned-record.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "UNALIGNEDCASE"
+        },
+        {
+          "column": 9,
+          "details": {
+            "level": 1
+          },
+          "kind": "structure",
+          "line": 2,
+          "name": "REQUEST"
+        }
+      ],
+      "references": []
+    },
+    {
+      "actual_status": "passed",
+      "case_id": "46-varying-record-layout",
+      "classification": "boundary",
+      "constructs": {
+        "program": 1,
+        "record_declaration": 1
+      },
+      "diagnostics": [],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "passed",
+      "passed": true,
+      "path": "46-varying-record-layout.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "VARYLAYOUT"
+        },
+        {
+          "column": 7,
+          "details": {
+            "fixed": false,
+            "varying": true
+          },
+          "kind": "record_declaration",
+          "line": 2,
+          "name": "MESSAGE"
+        }
+      ],
+      "references": []
+    },
+    {
+      "actual_status": "passed",
+      "case_id": "47-procedure-parameters",
+      "classification": "boundary",
+      "constructs": {
+        "call": 1,
+        "decimal_declaration": 2,
+        "procedure": 1,
+        "program": 1
+      },
+      "diagnostics": [],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "passed",
+      "passed": true,
+      "path": "47-procedure-parameters.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "PARAMCASE"
+        },
+        {
+          "column": 3,
+          "details": {
+            "options_cobol": false
+          },
+          "kind": "call",
+          "line": 2,
+          "name": "COMPUTE_TOTAL"
+        },
+        {
+          "column": 1,
+          "details": {
+            "options_main": false
+          },
+          "kind": "procedure",
+          "line": 3,
+          "name": "COMPUTE_TOTAL"
+        },
+        {
+          "column": 7,
+          "details": {
+            "fixed": false
+          },
+          "kind": "decimal_declaration",
+          "line": 4,
+          "name": "AMOUNT"
+        },
+        {
+          "column": 7,
+          "details": {
+            "fixed": false
+          },
+          "kind": "decimal_declaration",
+          "line": 5,
+          "name": "RATE"
+        }
+      ],
+      "references": [
+        {
+          "column": 8,
+          "kind": "call",
+          "line": 2,
+          "scope": "PARAMCASE",
+          "target": "COMPUTE_TOTAL"
+        }
+      ]
+    },
+    {
+      "actual_status": "passed",
+      "case_id": "48-cobol-parameter-convention",
+      "classification": "boundary",
+      "constructs": {
+        "call": 1,
+        "entry_point": 1,
+        "program": 1
+      },
+      "diagnostics": [],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "passed",
+      "passed": true,
+      "path": "48-cobol-parameter-convention.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "COBOLPARM"
+        },
+        {
+          "column": 7,
+          "details": {
+            "options_cobol": true
+          },
+          "kind": "entry_point",
+          "line": 2,
+          "name": "CBACT04C"
+        },
+        {
+          "column": 3,
+          "details": {
+            "options_cobol": true
+          },
+          "kind": "call",
+          "line": 3,
+          "name": "CBACT04C"
+        }
+      ],
+      "references": [
+        {
+          "column": 8,
+          "kind": "call",
+          "line": 3,
+          "scope": "COBOLPARM",
+          "target": "CBACT04C"
+        }
+      ]
+    },
+    {
+      "actual_status": "blocked",
+      "case_id": "49-sql-cursor-declare",
+      "classification": "boundary",
+      "constructs": {
+        "program": 1
+      },
+      "diagnostics": [
+        {
+          "code": "unsupported-sql",
+          "column": 3,
+          "line": 2,
+          "message": "Unsupported or unresolved embedded SQL statement",
+          "severity": "blocker"
+        }
+      ],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "blocked",
+      "passed": true,
+      "path": "49-sql-cursor-declare.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "CURSORDECL"
+        }
+      ],
+      "references": []
+    },
+    {
+      "actual_status": "blocked",
+      "case_id": "50-sql-cursor-open",
+      "classification": "boundary",
+      "constructs": {
+        "program": 1
+      },
+      "diagnostics": [
+        {
+          "code": "unsupported-sql",
+          "column": 3,
+          "line": 2,
+          "message": "Unsupported or unresolved embedded SQL statement",
+          "severity": "blocker"
+        }
+      ],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "blocked",
+      "passed": true,
+      "path": "50-sql-cursor-open.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "CURSOROPEN"
+        }
+      ],
+      "references": []
+    },
+    {
+      "actual_status": "passed",
+      "case_id": "51-cics-read-boundary",
+      "classification": "boundary",
+      "constructs": {
+        "cics_reference": 1,
+        "program": 1
+      },
+      "diagnostics": [],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "passed",
+      "passed": true,
+      "path": "51-cics-read-boundary.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "CICSREAD"
+        },
+        {
+          "column": 3,
+          "kind": "cics_reference",
+          "line": 2,
+          "name": "READ"
+        }
+      ],
+      "references": []
+    },
+    {
+      "actual_status": "passed",
+      "case_id": "52-ims-gu-boundary",
+      "classification": "boundary",
+      "constructs": {
+        "call": 1,
+        "entry_point": 1,
+        "ims_reference": 1,
+        "program": 1
+      },
+      "diagnostics": [],
+      "expectations": {
+        "constructs": true,
+        "diagnostics": true,
+        "status": true
+      },
+      "expected_status": "passed",
+      "passed": true,
+      "path": "52-ims-gu-boundary.pli",
+      "recognized": [
+        {
+          "column": 1,
+          "details": {
+            "options_main": true
+          },
+          "kind": "program",
+          "line": 1,
+          "name": "IMSGU"
+        },
+        {
+          "column": 7,
+          "details": {
+            "options_cobol": true
+          },
+          "kind": "entry_point",
+          "line": 2,
+          "name": "CBLTDLI"
+        },
+        {
+          "column": 3,
+          "details": {
+            "options_cobol": true
+          },
+          "kind": "call",
+          "line": 3,
+          "name": "CBLTDLI"
+        },
+        {
+          "column": 8,
+          "kind": "ims_reference",
+          "line": 3,
+          "name": "CBLTDLI"
+        }
+      ],
+      "references": [
+        {
+          "column": 8,
+          "kind": "call",
+          "line": 3,
+          "scope": "IMSGU",
+          "target": "CBLTDLI"
+        }
+      ]
     }
   ],
   "schema_version": "1.0",
@@ -1471,6 +2605,156 @@
       "logical_sha256": "f2d2343641704f381a5db762c8fba9b30156a96919cb66092d2340c25c60aaaf",
       "path": "extensions/pli/conformance/corpus/27-malformed-comment.pli",
       "transport_sha256": "f2d2343641704f381a5db762c8fba9b30156a96919cb66092d2340c25c60aaaf"
+    },
+    {
+      "case_id": "28-automatic-storage",
+      "logical_sha256": "960b21a49b22f5400d2c0effdba291247a78426a2848eeaa4fa5ebf56ac8f13a",
+      "path": "extensions/pli/conformance/corpus/28-automatic-storage.pli",
+      "transport_sha256": "960b21a49b22f5400d2c0effdba291247a78426a2848eeaa4fa5ebf56ac8f13a"
+    },
+    {
+      "case_id": "29-static-storage",
+      "logical_sha256": "8b9701a5b551189e6f22d09ba0f35551824e8fdf5f9adeaa20ad17be0e36820f",
+      "path": "extensions/pli/conformance/corpus/29-static-storage.pli",
+      "transport_sha256": "8b9701a5b551189e6f22d09ba0f35551824e8fdf5f9adeaa20ad17be0e36820f"
+    },
+    {
+      "case_id": "30-controlled-storage",
+      "logical_sha256": "5a8160cc5b99d119c95c47cb6244107df8343384515258668eba9c482a886db9",
+      "path": "extensions/pli/conformance/corpus/30-controlled-storage.pli",
+      "transport_sha256": "5a8160cc5b99d119c95c47cb6244107df8343384515258668eba9c482a886db9"
+    },
+    {
+      "case_id": "31-based-storage",
+      "logical_sha256": "5ccefa6c76b457231d40d105ca6f1873a5b0a6ea8a915d75ca1ff0517d1fd7f8",
+      "path": "extensions/pli/conformance/corpus/31-based-storage.pli",
+      "transport_sha256": "5ccefa6c76b457231d40d105ca6f1873a5b0a6ea8a915d75ca1ff0517d1fd7f8"
+    },
+    {
+      "case_id": "32-pointer-storage",
+      "logical_sha256": "fc9136e1ab5d01fcfdcedf7bb78d938280da277d47d2fd5f0317e51e6f3af7f6",
+      "path": "extensions/pli/conformance/corpus/32-pointer-storage.pli",
+      "transport_sha256": "fc9136e1ab5d01fcfdcedf7bb78d938280da277d47d2fd5f0317e51e6f3af7f6"
+    },
+    {
+      "case_id": "33-array-dimension",
+      "logical_sha256": "43c2633b559e01a3585be3c53fdac4baf14f2c3e34cc81cd00f985716cb48609",
+      "path": "extensions/pli/conformance/corpus/33-array-dimension.pli",
+      "transport_sha256": "43c2633b559e01a3585be3c53fdac4baf14f2c3e34cc81cd00f985716cb48609"
+    },
+    {
+      "case_id": "34-multidimensional-array",
+      "logical_sha256": "5076d499ab4ca0a01c7712cd5db82ab4604731283ddaec7f79bfee24d276d936",
+      "path": "extensions/pli/conformance/corpus/34-multidimensional-array.pli",
+      "transport_sha256": "5076d499ab4ca0a01c7712cd5db82ab4604731283ddaec7f79bfee24d276d936"
+    },
+    {
+      "case_id": "35-picture-declaration",
+      "logical_sha256": "f95a820ee57d396b4613020e2d884b128f1513056147af8cd058778bf8428110",
+      "path": "extensions/pli/conformance/corpus/35-picture-declaration.pli",
+      "transport_sha256": "f95a820ee57d396b4613020e2d884b128f1513056147af8cd058778bf8428110"
+    },
+    {
+      "case_id": "36-decimal-precision",
+      "logical_sha256": "84c2aa34d39346c19b689126879ae177f10f7ef503f9ee643eef3c9b40365768",
+      "path": "extensions/pli/conformance/corpus/36-decimal-precision.pli",
+      "transport_sha256": "84c2aa34d39346c19b689126879ae177f10f7ef503f9ee643eef3c9b40365768"
+    },
+    {
+      "case_id": "37-decimal-scale-assignment",
+      "logical_sha256": "3fb292d21d8a519ca01f0b6a938fc78c6fb55d7547a7443b256567ffdd77585a",
+      "path": "extensions/pli/conformance/corpus/37-decimal-scale-assignment.pli",
+      "transport_sha256": "3fb292d21d8a519ca01f0b6a938fc78c6fb55d7547a7443b256567ffdd77585a"
+    },
+    {
+      "case_id": "38-on-overflow",
+      "logical_sha256": "02d21d75f7fb0b1dbc2370c545b0a24e6184248ef4d97a084ca52770dfc16137",
+      "path": "extensions/pli/conformance/corpus/38-on-overflow.pli",
+      "transport_sha256": "02d21d75f7fb0b1dbc2370c545b0a24e6184248ef4d97a084ca52770dfc16137"
+    },
+    {
+      "case_id": "39-on-conversion",
+      "logical_sha256": "7e60a77896be6094b10179734699cb7a54aa7e25235c0f87ad3f471258827821",
+      "path": "extensions/pli/conformance/corpus/39-on-conversion.pli",
+      "transport_sha256": "7e60a77896be6094b10179734699cb7a54aa7e25235c0f87ad3f471258827821"
+    },
+    {
+      "case_id": "40-select-conditions",
+      "logical_sha256": "a9dfa25d5b34416fcef2e41c9e797322f7d02148cef0c04dfd414bb24e4d48db",
+      "path": "extensions/pli/conformance/corpus/40-select-conditions.pli",
+      "transport_sha256": "a9dfa25d5b34416fcef2e41c9e797322f7d02148cef0c04dfd414bb24e4d48db"
+    },
+    {
+      "case_id": "41-preprocessor-if",
+      "logical_sha256": "8abf20f1704bb915596eb9fb10c834b359475143901e1cd79696a7a932d7a881",
+      "path": "extensions/pli/conformance/corpus/41-preprocessor-if.pli",
+      "transport_sha256": "8abf20f1704bb915596eb9fb10c834b359475143901e1cd79696a7a932d7a881"
+    },
+    {
+      "case_id": "42-preprocessor-do",
+      "logical_sha256": "2ba12f7dac0bfe68eceaa9ca15f9881387fcf056e5d33f5f700a6c49dd544b28",
+      "path": "extensions/pli/conformance/corpus/42-preprocessor-do.pli",
+      "transport_sha256": "2ba12f7dac0bfe68eceaa9ca15f9881387fcf056e5d33f5f700a6c49dd544b28"
+    },
+    {
+      "case_id": "43-preprocessor-activate",
+      "logical_sha256": "2b1f27f005087c8d0d48ff0cd823bb622bf009000198dbc7a12e0c6a90aedb42",
+      "path": "extensions/pli/conformance/corpus/43-preprocessor-activate.pli",
+      "transport_sha256": "2b1f27f005087c8d0d48ff0cd823bb622bf009000198dbc7a12e0c6a90aedb42"
+    },
+    {
+      "case_id": "44-aligned-structure",
+      "logical_sha256": "fd8c5b8dea0c13fe9eb55a402f53aafc9874635a01b2cd406dc03d2a0aa18111",
+      "path": "extensions/pli/conformance/corpus/44-aligned-structure.pli",
+      "transport_sha256": "fd8c5b8dea0c13fe9eb55a402f53aafc9874635a01b2cd406dc03d2a0aa18111"
+    },
+    {
+      "case_id": "45-unaligned-record",
+      "logical_sha256": "015d4cbe28609e268e2ff9024a835dc1fafa5bebccd0757fdeb734cf3e03a86e",
+      "path": "extensions/pli/conformance/corpus/45-unaligned-record.pli",
+      "transport_sha256": "015d4cbe28609e268e2ff9024a835dc1fafa5bebccd0757fdeb734cf3e03a86e"
+    },
+    {
+      "case_id": "46-varying-record-layout",
+      "logical_sha256": "55baba02f4bf348a4affd60b4a5843b2e6f6105f75ccee27d1e77cd318e3ee18",
+      "path": "extensions/pli/conformance/corpus/46-varying-record-layout.pli",
+      "transport_sha256": "55baba02f4bf348a4affd60b4a5843b2e6f6105f75ccee27d1e77cd318e3ee18"
+    },
+    {
+      "case_id": "47-procedure-parameters",
+      "logical_sha256": "fe793a54a1cbe04dbbd22c797d6f78ba89e4f0ad12ba7386711bd00c09596228",
+      "path": "extensions/pli/conformance/corpus/47-procedure-parameters.pli",
+      "transport_sha256": "fe793a54a1cbe04dbbd22c797d6f78ba89e4f0ad12ba7386711bd00c09596228"
+    },
+    {
+      "case_id": "48-cobol-parameter-convention",
+      "logical_sha256": "b9256a23d2ddda5dabb9e021ea19d218d1ff29e1ddcd0390650ee07df14b1e8d",
+      "path": "extensions/pli/conformance/corpus/48-cobol-parameter-convention.pli",
+      "transport_sha256": "b9256a23d2ddda5dabb9e021ea19d218d1ff29e1ddcd0390650ee07df14b1e8d"
+    },
+    {
+      "case_id": "49-sql-cursor-declare",
+      "logical_sha256": "f5f11481344816c2b1393f3e675ebaa3ac79f3fcc022b81d8528dc7cc9a300d9",
+      "path": "extensions/pli/conformance/corpus/49-sql-cursor-declare.pli",
+      "transport_sha256": "f5f11481344816c2b1393f3e675ebaa3ac79f3fcc022b81d8528dc7cc9a300d9"
+    },
+    {
+      "case_id": "50-sql-cursor-open",
+      "logical_sha256": "765b133371fd281005d5d64b8130e160bb1e50405236f0dd6ac4c35cbb2dea29",
+      "path": "extensions/pli/conformance/corpus/50-sql-cursor-open.pli",
+      "transport_sha256": "765b133371fd281005d5d64b8130e160bb1e50405236f0dd6ac4c35cbb2dea29"
+    },
+    {
+      "case_id": "51-cics-read-boundary",
+      "logical_sha256": "7938e34f87f78ef61e9c8de7b1dbb1053f4a6218192b7f98a1352a1ccea86431",
+      "path": "extensions/pli/conformance/corpus/51-cics-read-boundary.pli",
+      "transport_sha256": "7938e34f87f78ef61e9c8de7b1dbb1053f4a6218192b7f98a1352a1ccea86431"
+    },
+    {
+      "case_id": "52-ims-gu-boundary",
+      "logical_sha256": "50dd9b1290a7bd8047ff29557f9659b0e74ac371cc5f8b2d4cb70d31994d3293",
+      "path": "extensions/pli/conformance/corpus/52-ims-gu-boundary.pli",
+      "transport_sha256": "50dd9b1290a7bd8047ff29557f9659b0e74ac371cc5f8b2d4cb70d31994d3293"
     }
   ]
 }

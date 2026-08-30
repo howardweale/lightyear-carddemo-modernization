@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "lightyear-carddemo-oracle"
-version = "0.36.0"
+version = "0.37.0"
 description = "Graph-grounded, extensible and evidence-governed modernization factory for CardDemo"
 requires-python = ">=3.11"
 dependencies = []

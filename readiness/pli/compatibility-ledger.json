@@ -1,0 +1,365 @@
+{
+  "classifications": [
+    "exact",
+    "normalized-equivalent",
+    "policy-decision-required",
+    "lossy",
+    "unsupported"
+  ],
+  "content_sha256": "24161219b39fa485ea3fb6989498f7c6738eab46962356b7ac538b54d9fd7d94",
+  "entries": [
+    {
+      "classification": "exact",
+      "decision": "bounded-contract",
+      "evidence_required": [
+        "positive-program-and-procedure-cases"
+      ],
+      "item_id": "pli:program-and-internal-procedure",
+      "rationale": "Each PL/I behavior is governed independently; synthetic parsing and a local candidate cannot establish IBM compiler or z/OS runtime equivalence.",
+      "scope": "program-and-internal-procedure",
+      "source_semantics": {
+        "claim": "bounded-synthetic-and-reference-evidence",
+        "language": "IBM Enterprise PL/I"
+      },
+      "target_semantics": {
+        "contract": "lightyear-pli-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "layout-and-level-vectors"
+      ],
+      "item_id": "pli:scalar-and-structure-declarations",
+      "rationale": "Each PL/I behavior is governed independently; synthetic parsing and a local candidate cannot establish IBM compiler or z/OS runtime equivalence.",
+      "scope": "scalar-and-structure-declarations",
+      "source_semantics": {
+        "claim": "bounded-synthetic-and-reference-evidence",
+        "language": "IBM Enterprise PL/I"
+      },
+      "target_semantics": {
+        "contract": "lightyear-pli-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "compiler-options-and-native-byte-layout"
+      ],
+      "item_id": "pli:fixed-binary-representation",
+      "rationale": "Each PL/I behavior is governed independently; synthetic parsing and a local candidate cannot establish IBM compiler or z/OS runtime equivalence.",
+      "scope": "fixed-binary-representation",
+      "source_semantics": {
+        "claim": "bounded-synthetic-and-reference-evidence",
+        "language": "IBM Enterprise PL/I"
+      },
+      "target_semantics": {
+        "contract": "lightyear-pli-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "scale-sign-rounding-and-overflow-vectors"
+      ],
+      "item_id": "pli:fixed-decimal-arithmetic",
+      "rationale": "Each PL/I behavior is governed independently; synthetic parsing and a local candidate cannot establish IBM compiler or z/OS runtime equivalence.",
+      "scope": "fixed-decimal-arithmetic",
+      "source_semantics": {
+        "claim": "bounded-synthetic-and-reference-evidence",
+        "language": "IBM Enterprise PL/I"
+      },
+      "target_semantics": {
+        "contract": "lightyear-pli-qualification"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "expanded-parser-and-native-baseline"
+      ],
+      "item_id": "pli:picture-and-complex-arithmetic",
+      "rationale": "Each PL/I behavior is governed independently; synthetic parsing and a local candidate cannot establish IBM compiler or z/OS runtime equivalence.",
+      "scope": "picture-and-complex-arithmetic",
+      "source_semantics": {
+        "claim": "bounded-synthetic-and-reference-evidence",
+        "language": "IBM Enterprise PL/I"
+      },
+      "target_semantics": {
+        "contract": "lightyear-pli-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "length-padding-truncation-and-varying-prefix-tests"
+      ],
+      "item_id": "pli:character-fixed-and-varying",
+      "rationale": "Each PL/I behavior is governed independently; synthetic parsing and a local candidate cannot establish IBM compiler or z/OS runtime equivalence.",
+      "scope": "character-fixed-and-varying",
+      "source_semantics": {
+        "claim": "bounded-synthetic-and-reference-evidence",
+        "language": "IBM Enterprise PL/I"
+      },
+      "target_semantics": {
+        "contract": "lightyear-pli-qualification"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "array-bounds-layout-and-subscript-qualification"
+      ],
+      "item_id": "pli:arrays-and-dimensions",
+      "rationale": "Each PL/I behavior is governed independently; synthetic parsing and a local candidate cannot establish IBM compiler or z/OS runtime equivalence.",
+      "scope": "arrays-and-dimensions",
+      "source_semantics": {
+        "claim": "bounded-synthetic-and-reference-evidence",
+        "language": "IBM Enterprise PL/I"
+      },
+      "target_semantics": {
+        "contract": "lightyear-pli-qualification"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "storage-lifetime-aliasing-and-pointer-baseline"
+      ],
+      "item_id": "pli:based-controlled-and-pointer-storage",
+      "rationale": "Each PL/I behavior is governed independently; synthetic parsing and a local candidate cannot establish IBM compiler or z/OS runtime equivalence.",
+      "scope": "based-controlled-and-pointer-storage",
+      "source_semantics": {
+        "claim": "bounded-synthetic-and-reference-evidence",
+        "language": "IBM Enterprise PL/I"
+      },
+      "target_semantics": {
+        "contract": "lightyear-pli-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "compiler-search-order-and-complete-include-closure"
+      ],
+      "item_id": "pli:include-resolution",
+      "rationale": "Each PL/I behavior is governed independently; synthetic parsing and a local candidate cannot establish IBM compiler or z/OS runtime equivalence.",
+      "scope": "include-resolution",
+      "source_semantics": {
+        "claim": "bounded-synthetic-and-reference-evidence",
+        "language": "IBM Enterprise PL/I"
+      },
+      "target_semantics": {
+        "contract": "lightyear-pli-qualification"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "IBM-preprocessor-expansion-and-options"
+      ],
+      "item_id": "pli:preprocessor-macros",
+      "rationale": "Each PL/I behavior is governed independently; synthetic parsing and a local candidate cannot establish IBM compiler or z/OS runtime equivalence.",
+      "scope": "preprocessor-macros",
+      "source_semantics": {
+        "claim": "bounded-synthetic-and-reference-evidence",
+        "language": "IBM Enterprise PL/I"
+      },
+      "target_semantics": {
+        "contract": "lightyear-pli-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "parameter-layout-entry-and-linkage-tests"
+      ],
+      "item_id": "pli:static-call-and-options-cobol",
+      "rationale": "Each PL/I behavior is governed independently; synthetic parsing and a local candidate cannot establish IBM compiler or z/OS runtime equivalence.",
+      "scope": "static-call-and-options-cobol",
+      "source_semantics": {
+        "claim": "bounded-synthetic-and-reference-evidence",
+        "language": "IBM Enterprise PL/I"
+      },
+      "target_semantics": {
+        "contract": "lightyear-pli-qualification"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "runtime-target-and-generic-resolution-baseline"
+      ],
+      "item_id": "pli:dynamic-and-generic-entry-resolution",
+      "rationale": "Each PL/I behavior is governed independently; synthetic parsing and a local candidate cannot establish IBM compiler or z/OS runtime equivalence.",
+      "scope": "dynamic-and-generic-entry-resolution",
+      "source_semantics": {
+        "claim": "bounded-synthetic-and-reference-evidence",
+        "language": "IBM Enterprise PL/I"
+      },
+      "target_semantics": {
+        "contract": "lightyear-pli-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "condition-prefix-reversion-and-runtime-tests"
+      ],
+      "item_id": "pli:conditions-and-on-units",
+      "rationale": "Each PL/I behavior is governed independently; synthetic parsing and a local candidate cannot establish IBM compiler or z/OS runtime equivalence.",
+      "scope": "conditions-and-on-units",
+      "source_semantics": {
+        "claim": "bounded-synthetic-and-reference-evidence",
+        "language": "IBM Enterprise PL/I"
+      },
+      "target_semantics": {
+        "contract": "lightyear-pli-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "record-format-file-status-and-native-io-capture"
+      ],
+      "item_id": "pli:sequential-file-io",
+      "rationale": "Each PL/I behavior is governed independently; synthetic parsing and a local candidate cannot establish IBM compiler or z/OS runtime equivalence.",
+      "scope": "sequential-file-io",
+      "source_semantics": {
+        "claim": "bounded-synthetic-and-reference-evidence",
+        "language": "IBM Enterprise PL/I"
+      },
+      "target_semantics": {
+        "contract": "lightyear-pli-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "precompile-package-sqlcode-and-MS-35.1-evidence"
+      ],
+      "item_id": "pli:embedded-db2-sql",
+      "rationale": "Each PL/I behavior is governed independently; synthetic parsing and a local candidate cannot establish IBM compiler or z/OS runtime equivalence.",
+      "scope": "embedded-db2-sql",
+      "source_semantics": {
+        "claim": "bounded-synthetic-and-reference-evidence",
+        "language": "IBM Enterprise PL/I"
+      },
+      "target_semantics": {
+        "contract": "lightyear-pli-qualification"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "MS-39-CICS-qualification"
+      ],
+      "item_id": "pli:exec-cics",
+      "rationale": "Each PL/I behavior is governed independently; synthetic parsing and a local candidate cannot establish IBM compiler or z/OS runtime equivalence.",
+      "scope": "exec-cics",
+      "source_semantics": {
+        "claim": "bounded-synthetic-and-reference-evidence",
+        "language": "IBM Enterprise PL/I"
+      },
+      "target_semantics": {
+        "contract": "lightyear-pli-qualification"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "MS-40-IMS-qualification"
+      ],
+      "item_id": "pli:ims-cbltdli",
+      "rationale": "Each PL/I behavior is governed independently; synthetic parsing and a local candidate cannot establish IBM compiler or z/OS runtime equivalence.",
+      "scope": "ims-cbltdli",
+      "source_semantics": {
+        "claim": "bounded-synthetic-and-reference-evidence",
+        "language": "IBM Enterprise PL/I"
+      },
+      "target_semantics": {
+        "contract": "lightyear-pli-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "mutation-conformance-cases"
+      ],
+      "item_id": "pli:source-case-comments-and-continuation",
+      "rationale": "Each PL/I behavior is governed independently; synthetic parsing and a local candidate cannot establish IBM compiler or z/OS runtime equivalence.",
+      "scope": "source-case-comments-and-continuation",
+      "source_semantics": {
+        "claim": "bounded-synthetic-and-reference-evidence",
+        "language": "IBM Enterprise PL/I"
+      },
+      "target_semantics": {
+        "contract": "lightyear-pli-qualification"
+      }
+    },
+    {
+      "classification": "lossy",
+      "decision": "accepted-only-in-bounded-development-proof",
+      "evidence_required": [
+        "compatibility-ledger-and-differential-vectors"
+      ],
+      "item_id": "pli:candidate-java-type-mapping",
+      "rationale": "Each PL/I behavior is governed independently; synthetic parsing and a local candidate cannot establish IBM compiler or z/OS runtime equivalence.",
+      "scope": "candidate-java-type-mapping",
+      "source_semantics": {
+        "claim": "bounded-synthetic-and-reference-evidence",
+        "language": "IBM Enterprise PL/I"
+      },
+      "target_semantics": {
+        "contract": "lightyear-pli-qualification"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "compiler-listing-binder-map-load-module-and-zos-capture"
+      ],
+      "item_id": "pli:ibm-compiler-and-language-environment",
+      "rationale": "Each PL/I behavior is governed independently; synthetic parsing and a local candidate cannot establish IBM compiler or z/OS runtime equivalence.",
+      "scope": "ibm-compiler-and-language-environment",
+      "source_semantics": {
+        "claim": "bounded-synthetic-and-reference-evidence",
+        "language": "IBM Enterprise PL/I"
+      },
+      "target_semantics": {
+        "contract": "lightyear-pli-qualification"
+      }
+    }
+  ],
+  "graph_content_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
+  "ledger_type": "lightyear-pli-compatibility-ledger",
+  "mainframe_equivalent": false,
+  "production_ready": false,
+  "qualification_blocked": true,
+  "schema_version": "1.0",
+  "statistics": {
+    "exact": 1,
+    "lossy": 1,
+    "normalized-equivalent": 5,
+    "policy-decision-required": 5,
+    "unsupported": 8
+  }
+}

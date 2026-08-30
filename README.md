@@ -1,6 +1,26 @@
 # FactoryDark.ai CardDemo Modernization Factory
 
-Release: **v0.36.0 — COBOL qualification hardening**
+Release: **v0.37.0 — PL/I qualification hardening**
+
+v0.37 consolidates the PL/I parser, expanded 52-case conformance lab, mixed PL/I–COBOL–Db2
+development proof, mutation probes, and candidate build attestation into one governed qualification
+plane. Ten independent gates distinguish bounded static and development evidence from IBM compiler,
+Language Environment, authorized z/OS execution, and signed equivalence evidence.
+
+The PL/I compatibility ledger covers 20 material semantic boundaries and uses all five governing
+classes. The current evidence supports a meaningful bounded subset: 22 construct categories, 25
+new targeted semantic cases, seven mutation cases, 16 fail-closed blocked cases, and the `ACCTPL1`
+reference workload. The new cases exercise storage classes, arrays, pointers, picture and decimal
+semantics, conditions, preprocessing, record layouts, parameter conventions, SQL cursors, CICS,
+and IMS boundaries. It explicitly
+does not represent customer-estate coverage or general Enterprise PL/I qualification.
+
+```bash
+./pli-qualification.sh verify
+PYTHONPATH=src:extensions/runtime python3 -m lightyear_readiness.pli verify
+```
+
+Previous milestone: **v0.36.0 — COBOL qualification hardening**
 
 v0.36 turns the existing COBOL graph extraction and bounded development behavior into an explicit
 qualification plane. It inventories the complete pinned estate and independently gates syntax,
@@ -301,10 +321,10 @@ Enterprise PL/I load module; `mainframe_equivalent` and `production_ready` remai
 Earlier milestone: **v0.24.0 — PL/I discovery coverage and conformance lab**
 
 v0.24 replaces the PL/I pack's line-oriented pattern boundary with a tokenized, statement-aware
-front end for a published supported subset. A synthetic 27-case corpus exercises 22 construct
+front end for a published supported subset. The synthetic corpus now contains 52 cases exercising 22 construct
 categories across programs, procedures, declarations, structures, includes, entry points, fixed
 and varying records, SQL/SQLCA, file I/O, COBOL calls, decimal assignments, conditional/error
-control, and bounded CICS/IMS references. Five intentionally blocked cases and seven mutation-
+control, and bounded CICS/IMS references. Sixteen intentionally blocked cases and seven mutation-
 oriented cases prove that missing includes, shadowed calls, unsupported preprocessors/storage,
 malformed comments, comments and strings, casing, spacing, and continuation lines cannot silently
 create or omit graph facts.

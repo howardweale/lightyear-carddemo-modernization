@@ -1,0 +1,7 @@
+//JOB17    JOB (LIGHTYEAR),'IF'
+//CHK      EXEC PGM=IEFBR14
+//OK       IF (CHK.RC = 0) THEN
+//RUN      EXEC PGM=IEFBR14
+//         ELSE
+//ALT      EXEC PGM=IEFBR14
+//         ENDIF

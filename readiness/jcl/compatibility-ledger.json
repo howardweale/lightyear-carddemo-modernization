@@ -1,0 +1,399 @@
+{
+  "classifications": [
+    "exact",
+    "normalized-equivalent",
+    "policy-decision-required",
+    "lossy",
+    "unsupported"
+  ],
+  "content_sha256": "d9086a280cf1ee0d0d0399479d71d2bc0d2ed1266cde20a0b3c1f2839c41401c",
+  "entries": [
+    {
+      "classification": "exact",
+      "decision": "bounded-contract",
+      "evidence_required": [
+        "job-card-parse-cases"
+      ],
+      "item_id": "jcl:job-card-and-accounting",
+      "rationale": "JCL syntax, installation policy, and runtime effects are governed independently; static parsing cannot establish JES, catalog, scheduler, or restart equivalence.",
+      "scope": "job-card-and-accounting",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "language": "IBM z/OS JCL"
+      },
+      "target_semantics": {
+        "contract": "lightyear-jcl-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "installation-policy-and-JES-baseline"
+      ],
+      "item_id": "jcl:job-class-message-and-notify-routing",
+      "rationale": "JCL syntax, installation policy, and runtime effects are governed independently; static parsing cannot establish JES, catalog, scheduler, or restart equivalence.",
+      "scope": "job-class-message-and-notify-routing",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "language": "IBM z/OS JCL"
+      },
+      "target_semantics": {
+        "contract": "lightyear-jcl-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "procedure-expansion-and-override-cases"
+      ],
+      "item_id": "jcl:cataloged-and-instream-procedures",
+      "rationale": "JCL syntax, installation policy, and runtime effects are governed independently; static parsing cannot establish JES, catalog, scheduler, or restart equivalence.",
+      "scope": "cataloged-and-instream-procedures",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "language": "IBM z/OS JCL"
+      },
+      "target_semantics": {
+        "contract": "lightyear-jcl-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "substitution-order-and-system-symbol-baseline"
+      ],
+      "item_id": "jcl:symbolic-parameters-and-set",
+      "rationale": "JCL syntax, installation policy, and runtime effects are governed independently; static parsing cannot establish JES, catalog, scheduler, or restart equivalence.",
+      "scope": "symbolic-parameters-and-set",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "language": "IBM z/OS JCL"
+      },
+      "target_semantics": {
+        "contract": "lightyear-jcl-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "exact-procedure-library-and-include-closure"
+      ],
+      "item_id": "jcl:include-and-jcllib-search-order",
+      "rationale": "JCL syntax, installation policy, and runtime effects are governed independently; static parsing cannot establish JES, catalog, scheduler, or restart equivalence.",
+      "scope": "include-and-jcllib-search-order",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "language": "IBM z/OS JCL"
+      },
+      "target_semantics": {
+        "contract": "lightyear-jcl-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "load-library-and-program-identity-evidence"
+      ],
+      "item_id": "jcl:exec-pgm-resolution",
+      "rationale": "JCL syntax, installation policy, and runtime effects are governed independently; static parsing cannot establish JES, catalog, scheduler, or restart equivalence.",
+      "scope": "exec-pgm-resolution",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "language": "IBM z/OS JCL"
+      },
+      "target_semantics": {
+        "contract": "lightyear-jcl-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "cataloged-procedure-resolution-listing"
+      ],
+      "item_id": "jcl:exec-procedure-resolution",
+      "rationale": "JCL syntax, installation policy, and runtime effects are governed independently; static parsing cannot establish JES, catalog, scheduler, or restart equivalence.",
+      "scope": "exec-procedure-resolution",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "language": "IBM z/OS JCL"
+      },
+      "target_semantics": {
+        "contract": "lightyear-jcl-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "parameter-and-limit-vectors"
+      ],
+      "item_id": "jcl:parm-time-and-region",
+      "rationale": "JCL syntax, installation policy, and runtime effects are governed independently; static parsing cannot establish JES, catalog, scheduler, or restart equivalence.",
+      "scope": "parm-time-and-region",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "language": "IBM z/OS JCL"
+      },
+      "target_semantics": {
+        "contract": "lightyear-jcl-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "ordered-concatenation-and-override-cases"
+      ],
+      "item_id": "jcl:dd-name-and-concatenation",
+      "rationale": "JCL syntax, installation policy, and runtime effects are governed independently; static parsing cannot establish JES, catalog, scheduler, or restart equivalence.",
+      "scope": "dd-name-and-concatenation",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "language": "IBM z/OS JCL"
+      },
+      "target_semantics": {
+        "contract": "lightyear-jcl-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "dataset-identity-and-lifetime-cases"
+      ],
+      "item_id": "jcl:dsn-and-temporary-datasets",
+      "rationale": "JCL syntax, installation policy, and runtime effects are governed independently; static parsing cannot establish JES, catalog, scheduler, or restart equivalence.",
+      "scope": "dsn-and-temporary-datasets",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "language": "IBM z/OS JCL"
+      },
+      "target_semantics": {
+        "contract": "lightyear-jcl-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "normal-and-abnormal-termination-catalog-baseline"
+      ],
+      "item_id": "jcl:disposition-and-catalog-effects",
+      "rationale": "JCL syntax, installation policy, and runtime effects are governed independently; static parsing cannot establish JES, catalog, scheduler, or restart equivalence.",
+      "scope": "disposition-and-catalog-effects",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "language": "IBM z/OS JCL"
+      },
+      "target_semantics": {
+        "contract": "lightyear-jcl-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "live-catalog-generation-baseline"
+      ],
+      "item_id": "jcl:gdg-resolution-and-rolloff",
+      "rationale": "JCL syntax, installation policy, and runtime effects are governed independently; static parsing cannot establish JES, catalog, scheduler, or restart equivalence.",
+      "scope": "gdg-resolution-and-rolloff",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "language": "IBM z/OS JCL"
+      },
+      "target_semantics": {
+        "contract": "lightyear-jcl-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "catalog-SMS-and-open-time-resolution"
+      ],
+      "item_id": "jcl:dcb-record-layout-and-labels",
+      "rationale": "JCL syntax, installation policy, and runtime effects are governed independently; static parsing cannot establish JES, catalog, scheduler, or restart equivalence.",
+      "scope": "dcb-record-layout-and-labels",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "language": "IBM z/OS JCL"
+      },
+      "target_semantics": {
+        "contract": "lightyear-jcl-qualification"
+      }
+    },
+    {
+      "classification": "lossy",
+      "decision": "accepted-only-in-bounded-planning",
+      "evidence_required": [
+        "storage-class-management-class-and-volume-policy"
+      ],
+      "item_id": "jcl:space-sms-and-volume-allocation",
+      "rationale": "JCL syntax, installation policy, and runtime effects are governed independently; static parsing cannot establish JES, catalog, scheduler, or restart equivalence.",
+      "scope": "space-sms-and-volume-allocation",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "language": "IBM z/OS JCL"
+      },
+      "target_semantics": {
+        "contract": "lightyear-jcl-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "delimiter-spool-and-record-fidelity-cases"
+      ],
+      "item_id": "jcl:instream-data-dummy-and-sysout",
+      "rationale": "JCL syntax, installation policy, and runtime effects are governed independently; static parsing cannot establish JES, catalog, scheduler, or restart equivalence.",
+      "scope": "instream-data-dummy-and-sysout",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "language": "IBM z/OS JCL"
+      },
+      "target_semantics": {
+        "contract": "lightyear-jcl-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "step-return-code-abend-and-bypass-baseline"
+      ],
+      "item_id": "jcl:cond-and-if-then-else",
+      "rationale": "JCL syntax, installation policy, and runtime effects are governed independently; static parsing cannot establish JES, catalog, scheduler, or restart equivalence.",
+      "scope": "cond-and-if-then-else",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "language": "IBM z/OS JCL"
+      },
+      "target_semantics": {
+        "contract": "lightyear-jcl-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "authorized-restart-and-data-state-evidence"
+      ],
+      "item_id": "jcl:restart-and-checkpoint",
+      "rationale": "JCL syntax, installation policy, and runtime effects are governed independently; static parsing cannot establish JES, catalog, scheduler, or restart equivalence.",
+      "scope": "restart-and-checkpoint",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "language": "IBM z/OS JCL"
+      },
+      "target_semantics": {
+        "contract": "lightyear-jcl-qualification"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "utility-specific-control-and-output-qualification"
+      ],
+      "item_id": "jcl:ibm-utilities",
+      "rationale": "JCL syntax, installation policy, and runtime effects are governed independently; static parsing cannot establish JES, catalog, scheduler, or restart equivalence.",
+      "scope": "ibm-utilities",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "language": "IBM z/OS JCL"
+      },
+      "target_semantics": {
+        "contract": "lightyear-jcl-qualification"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "scheduler-export-dependencies-and-calendar-baseline"
+      ],
+      "item_id": "jcl:scheduler-directives-and-calendars",
+      "rationale": "JCL syntax, installation policy, and runtime effects are governed independently; static parsing cannot establish JES, catalog, scheduler, or restart equivalence.",
+      "scope": "scheduler-directives-and-calendars",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "language": "IBM z/OS JCL"
+      },
+      "target_semantics": {
+        "contract": "lightyear-jcl-qualification"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "installation-JES2-or-JES3-control-baseline"
+      ],
+      "item_id": "jcl:jes-control-statements",
+      "rationale": "JCL syntax, installation policy, and runtime effects are governed independently; static parsing cannot establish JES, catalog, scheduler, or restart equivalence.",
+      "scope": "jes-control-statements",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "language": "IBM z/OS JCL"
+      },
+      "target_semantics": {
+        "contract": "lightyear-jcl-qualification"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "MS-35.1-MS-39-and-MS-40-native-evidence"
+      ],
+      "item_id": "jcl:db2-cics-ims-execution-boundaries",
+      "rationale": "JCL syntax, installation policy, and runtime effects are governed independently; static parsing cannot establish JES, catalog, scheduler, or restart equivalence.",
+      "scope": "db2-cics-ims-execution-boundaries",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "language": "IBM z/OS JCL"
+      },
+      "target_semantics": {
+        "contract": "lightyear-jcl-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "authorized-identity-and-security-policy-evidence"
+      ],
+      "item_id": "jcl:racf-submission-and-surrogate-identity",
+      "rationale": "JCL syntax, installation policy, and runtime effects are governed independently; static parsing cannot establish JES, catalog, scheduler, or restart equivalence.",
+      "scope": "racf-submission-and-surrogate-identity",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "language": "IBM z/OS JCL"
+      },
+      "target_semantics": {
+        "contract": "lightyear-jcl-qualification"
+      }
+    }
+  ],
+  "graph_content_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
+  "ledger_type": "lightyear-jcl-compatibility-ledger",
+  "mainframe_equivalent": false,
+  "production_ready": false,
+  "qualification_blocked": true,
+  "schema_version": "1.0",
+  "statistics": {
+    "exact": 1,
+    "lossy": 1,
+    "normalized-equivalent": 6,
+    "policy-decision-required": 10,
+    "unsupported": 4
+  }
+}

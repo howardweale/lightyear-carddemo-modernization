@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schema/jcl-qualification.schema.json",
+  "title": "LIGHTYEAR JCL qualification",
+  "type": "object",
+  "required": ["schema_version", "qualification_type", "qualification_id", "bindings", "inventory", "qualification_gates", "required_native_evidence", "qualification_mechanism_ready", "development_ready", "native_jcl_qualified", "jes_qualified", "scheduler_qualified", "runtime_equivalent", "restart_equivalent", "mainframe_equivalent", "production_ready", "claim_unlocked", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "qualification_type": {"const": "lightyear-jcl-qualification"},
+    "qualification_id": {"const": "carddemo-jcl-v0.38"},
+    "bindings": {"type": "object"},
+    "inventory": {"type": "object"},
+    "qualification_gates": {"type": "array", "minItems": 10, "maxItems": 10},
+    "required_native_evidence": {"type": "array", "minItems": 8, "uniqueItems": true},
+    "qualification_mechanism_ready": {"const": true},
+    "development_ready": {"const": true},
+    "native_jcl_qualified": {"const": false},
+    "jes_qualified": {"const": false},
+    "scheduler_qualified": {"const": false},
+    "runtime_equivalent": {"const": false},
+    "restart_equivalent": {"const": false},
+    "mainframe_equivalent": {"const": false},
+    "production_ready": {"const": false},
+    "claim_unlocked": {"type": "string", "minLength": 1},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,577 @@
+{
+  "claim_boundary": {
+    "jes_qualified": false,
+    "mainframe_equivalent": false,
+    "production_ready": false,
+    "restart_equivalent": false,
+    "runtime_equivalent": false,
+    "scheduler_qualified": false
+  },
+  "content_sha256": "38aff8acfbbb307d40827f764dea0808756482006c2f18b79aa64507749e4897",
+  "corpus": {
+    "blocked_case_count": 6,
+    "case_count": 30,
+    "customer_source": false,
+    "mutation_case_count": 6,
+    "passed_case_count": 24,
+    "positive_case_count": 4,
+    "targeted_boundary_case_count": 20
+  },
+  "corpus_id": "lightyear-jcl-synthetic-conformance-v1",
+  "coverage": {
+    "explicit_native_gaps": [
+      "JES2/JES3 conversion and interpretation",
+      "catalog and SMS allocation effects",
+      "authorized program and utility execution",
+      "scheduler dependency and calendar semantics",
+      "restart, checkpoint, condition-code, and abend behavior",
+      "RACF identity and surrogate submission controls"
+    ],
+    "observed_feature_count": 36,
+    "observed_features": [
+      "cics-boundary",
+      "comment",
+      "condition-code-bypass",
+      "conditional-control",
+      "continued-parameters",
+      "dataset-allocation",
+      "db2-boundary",
+      "dd-concatenation",
+      "dd-override",
+      "dd-statement",
+      "disposition",
+      "dummy-dd",
+      "execution-limits",
+      "generation-dataset",
+      "ims-boundary",
+      "include-member",
+      "instream-data",
+      "job-card",
+      "output-descriptor",
+      "procedure-definition",
+      "procedure-end",
+      "procedure-exec",
+      "procedure-library",
+      "program-exec",
+      "program-parameters",
+      "record-layout",
+      "restart-control",
+      "scheduler-directive",
+      "space-allocation",
+      "symbolic-default",
+      "symbolic-reference",
+      "symbolic-set",
+      "sysout",
+      "temporary-dataset",
+      "typrun-control",
+      "utility-exec"
+    ]
+  },
+  "graph_content_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
+  "manifest_sha256": "6a521c40cbed4ce4af340079636d94e45662eb854e0a311d1e660d8c652e0353",
+  "receipt_type": "lightyear-jcl-conformance-receipt",
+  "results": [
+    {
+      "classification": "positive",
+      "diagnostics": [],
+      "features": [
+        "job-card",
+        "program-exec"
+      ],
+      "id": "01-basic-job",
+      "passed": true,
+      "path": "01-basic-job.jcl",
+      "source_sha256": "ccbc667cbe1cd52303b942b7dbfc041f3f1f1c3701aa2aff3292e43cbfc194bf",
+      "status": "passed"
+    },
+    {
+      "classification": "positive",
+      "diagnostics": [],
+      "features": [
+        "procedure-definition",
+        "procedure-end",
+        "program-exec",
+        "symbolic-default"
+      ],
+      "id": "02-instream-procedure",
+      "passed": true,
+      "path": "02-instream-procedure.jcl",
+      "source_sha256": "af7209a6bde8d968e82f051a9a971917b8d0dba2bd6d0c9cd11c1438abce09b4",
+      "status": "passed"
+    },
+    {
+      "classification": "positive",
+      "diagnostics": [],
+      "features": [
+        "job-card",
+        "procedure-exec"
+      ],
+      "id": "03-exec-procedure",
+      "passed": true,
+      "path": "03-exec-procedure.jcl",
+      "source_sha256": "0064bfc0db6af4b5929b8e80d90ab3357c1e66aa7f4a3fce1ffdf9bd2f09dc67",
+      "status": "passed"
+    },
+    {
+      "classification": "positive",
+      "diagnostics": [],
+      "features": [
+        "comment",
+        "job-card",
+        "program-exec"
+      ],
+      "id": "04-comments",
+      "passed": true,
+      "path": "04-comments.jcl",
+      "source_sha256": "176336210d985475e0fd37a4e49b5526306a4578f82ed2862af081ffcd4064bf",
+      "status": "passed"
+    },
+    {
+      "classification": "boundary",
+      "diagnostics": [],
+      "features": [
+        "dataset-allocation",
+        "dd-statement",
+        "disposition",
+        "job-card",
+        "program-exec",
+        "symbolic-reference",
+        "symbolic-set"
+      ],
+      "id": "05-symbolic-set",
+      "passed": true,
+      "path": "05-symbolic-set.jcl",
+      "source_sha256": "0a100170789e48f86d8430bc1148633dfe03e3721e98d71c40dde8351c96555c",
+      "status": "passed"
+    },
+    {
+      "classification": "boundary",
+      "diagnostics": [],
+      "features": [
+        "dataset-allocation",
+        "dd-statement",
+        "disposition",
+        "procedure-definition",
+        "procedure-end",
+        "program-exec",
+        "symbolic-default",
+        "symbolic-reference"
+      ],
+      "id": "06-procedure-defaults",
+      "passed": true,
+      "path": "06-procedure-defaults.jcl",
+      "source_sha256": "7fa35dbae66021e7bc2383b1ef5e518639bf1f37324445d1c463134d3cac1b5a",
+      "status": "passed"
+    },
+    {
+      "classification": "boundary",
+      "diagnostics": [],
+      "features": [
+        "include-member",
+        "job-card",
+        "procedure-library",
+        "program-exec"
+      ],
+      "id": "07-library-include",
+      "passed": true,
+      "path": "07-library-include.jcl",
+      "source_sha256": "8fafebb2762fff2bbfef21e11787fd5434d0a474bc67db2245b14e73186b26b5",
+      "status": "passed"
+    },
+    {
+      "classification": "boundary",
+      "diagnostics": [],
+      "features": [
+        "dataset-allocation",
+        "dd-statement",
+        "disposition",
+        "job-card",
+        "program-exec"
+      ],
+      "id": "08-existing-dataset",
+      "passed": true,
+      "path": "08-existing-dataset.jcl",
+      "source_sha256": "35eff5bbf362c44d3acea2100248573134fd9b34c178e45ce0c28a228e662fee",
+      "status": "passed"
+    },
+    {
+      "classification": "boundary",
+      "diagnostics": [],
+      "features": [
+        "dataset-allocation",
+        "dd-statement",
+        "disposition",
+        "job-card",
+        "program-exec"
+      ],
+      "id": "09-new-dataset-disposition",
+      "passed": true,
+      "path": "09-new-dataset-disposition.jcl",
+      "source_sha256": "13c5ec1a809e5e0ca7851c1923d371df4dbc4efd5f992e15ecd3fbac2bfcb975",
+      "status": "passed"
+    },
+    {
+      "classification": "boundary",
+      "diagnostics": [],
+      "features": [
+        "dataset-allocation",
+        "dd-statement",
+        "disposition",
+        "job-card",
+        "program-exec",
+        "symbolic-reference",
+        "temporary-dataset"
+      ],
+      "id": "10-temporary-dataset",
+      "passed": true,
+      "path": "10-temporary-dataset.jcl",
+      "source_sha256": "2bcc22bf5d5e3372a88b1396ba0d970e4614d685560702b1235359ee5f22fa19",
+      "status": "passed"
+    },
+    {
+      "classification": "boundary",
+      "diagnostics": [],
+      "features": [
+        "dataset-allocation",
+        "dd-statement",
+        "disposition",
+        "generation-dataset",
+        "job-card",
+        "program-exec"
+      ],
+      "id": "11-generation-dataset",
+      "passed": true,
+      "path": "11-generation-dataset.jcl",
+      "source_sha256": "96725085655fe1e936a589e2e2bdff8562bb9ef9c521662407bc546295efc8e9",
+      "status": "passed"
+    },
+    {
+      "classification": "boundary",
+      "diagnostics": [],
+      "features": [
+        "dataset-allocation",
+        "dd-concatenation",
+        "dd-statement",
+        "disposition",
+        "job-card",
+        "program-exec"
+      ],
+      "id": "12-dd-concatenation",
+      "passed": true,
+      "path": "12-dd-concatenation.jcl",
+      "source_sha256": "83fccf02d6f56e948faf26de6bdd6686c10b73ae799b4d33cf1e6857b8b77596",
+      "status": "passed"
+    },
+    {
+      "classification": "boundary",
+      "diagnostics": [],
+      "features": [
+        "dd-statement",
+        "instream-data",
+        "job-card",
+        "program-exec",
+        "utility-exec"
+      ],
+      "id": "13-instream-data",
+      "passed": true,
+      "path": "13-instream-data.jcl",
+      "source_sha256": "994769d6c0eb2b860db2a5aa02dde311c6918160c5d2b6927bdc392a10b7730c",
+      "status": "passed"
+    },
+    {
+      "classification": "boundary",
+      "diagnostics": [],
+      "features": [
+        "dd-statement",
+        "dummy-dd",
+        "job-card",
+        "program-exec",
+        "sysout"
+      ],
+      "id": "14-dummy-sysout",
+      "passed": true,
+      "path": "14-dummy-sysout.jcl",
+      "source_sha256": "c118d7db7a7b51868e139853af521a329cbc2f17407bb399273a4fe78591eaa3",
+      "status": "passed"
+    },
+    {
+      "classification": "boundary",
+      "diagnostics": [],
+      "features": [
+        "continued-parameters",
+        "dataset-allocation",
+        "dd-statement",
+        "disposition",
+        "job-card",
+        "program-exec",
+        "record-layout",
+        "space-allocation"
+      ],
+      "id": "15-dcb-space",
+      "passed": true,
+      "path": "15-dcb-space.jcl",
+      "source_sha256": "eb01010e69fdb51b1068f730cebb87c025792ccb438ae1ebda983c4b2d7135f8",
+      "status": "passed"
+    },
+    {
+      "classification": "boundary",
+      "diagnostics": [],
+      "features": [
+        "condition-code-bypass",
+        "job-card",
+        "program-exec"
+      ],
+      "id": "16-cond-bypass",
+      "passed": true,
+      "path": "16-cond-bypass.jcl",
+      "source_sha256": "c6449fd1f8d0f587ad720400d54cf3072a90b0d95b8df67962ebbfcf2b8f90b1",
+      "status": "passed"
+    },
+    {
+      "classification": "boundary",
+      "diagnostics": [],
+      "features": [
+        "conditional-control",
+        "job-card",
+        "program-exec"
+      ],
+      "id": "17-if-then-else",
+      "passed": true,
+      "path": "17-if-then-else.jcl",
+      "source_sha256": "9624c2b962a3a814cdaf0060e772781b6d7813dd2ed3def9d6047be5038310db",
+      "status": "passed"
+    },
+    {
+      "classification": "boundary",
+      "diagnostics": [],
+      "features": [
+        "job-card",
+        "program-exec",
+        "restart-control",
+        "typrun-control"
+      ],
+      "id": "18-restart-typrun",
+      "passed": true,
+      "path": "18-restart-typrun.jcl",
+      "source_sha256": "7f2980f95e618780ec655809b4c8711b3821c53176cd45dd45db586c9434fef7",
+      "status": "passed"
+    },
+    {
+      "classification": "boundary",
+      "diagnostics": [],
+      "features": [
+        "execution-limits",
+        "job-card",
+        "program-exec",
+        "program-parameters"
+      ],
+      "id": "19-parm-limits",
+      "passed": true,
+      "path": "19-parm-limits.jcl",
+      "source_sha256": "6e6613507340921bac17b575e37f4c15f66d6436b7df907081d90f1924ed89a3",
+      "status": "passed"
+    },
+    {
+      "classification": "boundary",
+      "diagnostics": [],
+      "features": [
+        "dataset-allocation",
+        "dd-override",
+        "dd-statement",
+        "disposition",
+        "job-card",
+        "procedure-exec"
+      ],
+      "id": "20-procedure-dd-override",
+      "passed": true,
+      "path": "20-procedure-dd-override.jcl",
+      "source_sha256": "d61436e646ab2f9f821e29e2ebbf968e83b7e667690957304ff5f9ccde2fe77c",
+      "status": "passed"
+    },
+    {
+      "classification": "boundary",
+      "diagnostics": [],
+      "features": [
+        "continued-parameters",
+        "job-card",
+        "program-exec"
+      ],
+      "id": "21-continuation",
+      "passed": true,
+      "path": "21-continuation.jcl",
+      "source_sha256": "1fdacc90ecddcd0cba187bd4eeb12797b77ef49c48cf089c0b7d9dce6ad64b2c",
+      "status": "passed"
+    },
+    {
+      "classification": "boundary",
+      "diagnostics": [],
+      "features": [
+        "dd-statement",
+        "instream-data",
+        "job-card",
+        "program-exec",
+        "sysout",
+        "utility-exec"
+      ],
+      "id": "22-idcams-utility",
+      "passed": true,
+      "path": "22-idcams-utility.jcl",
+      "source_sha256": "cc1449582b1c70da9688a617d34b1ad85c7f1b5ee0c09584b4d928481121ed84",
+      "status": "passed"
+    },
+    {
+      "classification": "boundary",
+      "diagnostics": [],
+      "features": [
+        "cics-boundary",
+        "db2-boundary",
+        "dd-statement",
+        "job-card",
+        "program-exec",
+        "sysout"
+      ],
+      "id": "23-db2-cics-boundaries",
+      "passed": true,
+      "path": "23-db2-cics-boundaries.jcl",
+      "source_sha256": "9f947623fbe2631f157db727314ad811de6eec638851f049f82b48a12c940e60",
+      "status": "passed"
+    },
+    {
+      "classification": "boundary",
+      "diagnostics": [],
+      "features": [
+        "dd-statement",
+        "dummy-dd",
+        "ims-boundary",
+        "job-card",
+        "output-descriptor",
+        "program-exec",
+        "program-parameters"
+      ],
+      "id": "24-ims-output-boundary",
+      "passed": true,
+      "path": "24-ims-output-boundary.jcl",
+      "source_sha256": "c3513ca0e4cb3123837ff15b736e39c97be2ef02c9196aa229cf102dfc46a2cb",
+      "status": "passed"
+    },
+    {
+      "classification": "mutation",
+      "diagnostics": [
+        {
+          "code": "missing-job-or-procedure",
+          "column": 1,
+          "line": 1
+        }
+      ],
+      "features": [
+        "program-exec"
+      ],
+      "id": "25-missing-container",
+      "passed": true,
+      "path": "25-missing-container.jcl",
+      "source_sha256": "0db1244b6c5372fd7922a6943ee24c798daf19d5aa7959df11af9571a67ce2e1",
+      "status": "blocked"
+    },
+    {
+      "classification": "mutation",
+      "diagnostics": [
+        {
+          "code": "unsupported-operation",
+          "column": 1,
+          "line": 2
+        }
+      ],
+      "features": [
+        "job-card"
+      ],
+      "id": "26-unsupported-operation",
+      "passed": true,
+      "path": "26-unsupported-operation.jcl",
+      "source_sha256": "22c3b3cbcead67408ec41055e669268e0c58307af078b15aaa05c898a9674bee",
+      "status": "blocked"
+    },
+    {
+      "classification": "mutation",
+      "diagnostics": [
+        {
+          "code": "unterminated-if",
+          "column": 1,
+          "line": 3
+        }
+      ],
+      "features": [
+        "conditional-control",
+        "job-card",
+        "program-exec"
+      ],
+      "id": "27-unterminated-if",
+      "passed": true,
+      "path": "27-unterminated-if.jcl",
+      "source_sha256": "d8da015fc1e64bf2dcff93e03825ab70b6233be72e032c424bf565b819ed1abc",
+      "status": "blocked"
+    },
+    {
+      "classification": "mutation",
+      "diagnostics": [
+        {
+          "code": "unsupported-scheduler-directive",
+          "column": 1,
+          "line": 2
+        }
+      ],
+      "features": [
+        "job-card",
+        "program-exec",
+        "scheduler-directive"
+      ],
+      "id": "28-scheduler-directive",
+      "passed": true,
+      "path": "28-scheduler-directive.jcl",
+      "source_sha256": "a969343e23e5b4c680468e6ca7f9654dc012f19f7b42d6a7424ef025e10fbd35",
+      "status": "blocked"
+    },
+    {
+      "classification": "mutation",
+      "diagnostics": [
+        {
+          "code": "invalid-disposition",
+          "column": 1,
+          "line": 3
+        }
+      ],
+      "features": [
+        "dataset-allocation",
+        "dd-statement",
+        "disposition",
+        "job-card",
+        "program-exec"
+      ],
+      "id": "29-invalid-disposition",
+      "passed": true,
+      "path": "29-invalid-disposition.jcl",
+      "source_sha256": "546b67a2e883858a0397c2115736410c8a197ad321f5ad5ef6cd8625556719d5",
+      "status": "blocked"
+    },
+    {
+      "classification": "mutation",
+      "diagnostics": [
+        {
+          "code": "exec-target-missing",
+          "column": 1,
+          "line": 2
+        }
+      ],
+      "features": [
+        "execution-limits",
+        "job-card"
+      ],
+      "id": "30-exec-target-missing",
+      "passed": true,
+      "path": "30-exec-target-missing.jcl",
+      "source_sha256": "00690520f148c294fa44d16f0f9ee4b8934a18ba77c2391514a7fc13caa2cffe",
+      "status": "blocked"
+    }
+  ],
+  "schema_version": "1.0",
+  "status": "passed"
+}

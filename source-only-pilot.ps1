@@ -57,5 +57,23 @@ if ($Action -eq "dossier") {
         --output-md (Join-Path $args[1] "pilot.dossier.md")
     exit $LASTEXITCODE
 }
-Write-Error "Usage: .\source-only-pilot.ps1 [doctor|verify|compatibility|rehearse|intake|analyze|assess|preflight|dossier]"
+if ($Action -eq "select") {
+    if ($args.Count -lt 2) { Write-Error "Usage: .\source-only-pilot.ps1 select OUTPUT [REQUEST]"; exit 2 }
+    $Request = if ($args.Count -gt 2) { $args[2] } else { Join-Path $ProjectDir "pilot\reference-selection.request.json" }
+    Run-Pilot select --assessment (Join-Path $args[1] "estate-assessment.json") `
+        --dossier (Join-Path $args[1] "pilot.dossier.json") --request $Request `
+        --output (Join-Path $args[1] "pilot-selection.json")
+    exit $LASTEXITCODE
+}
+if ($Action -eq "package") {
+    if ($args.Count -lt 2) { Write-Error "Usage: .\source-only-pilot.ps1 package OUTPUT"; exit 2 }
+    Run-Pilot package --selection (Join-Path $args[1] "pilot-selection.json") `
+        --assessment (Join-Path $args[1] "estate-assessment.json") `
+        --analysis-graph (Join-Path $args[1] "source-estate.snapshot.json.gz") `
+        --dossier (Join-Path $args[1] "pilot.dossier.json") `
+        --output-json (Join-Path $args[1] "pilot-work-package.json") `
+        --output-md (Join-Path $args[1] "pilot-work-package.md")
+    exit $LASTEXITCODE
+}
+Write-Error "Usage: .\source-only-pilot.ps1 [doctor|verify|compatibility|rehearse|intake|analyze|assess|preflight|dossier|select|package]"
 exit 2

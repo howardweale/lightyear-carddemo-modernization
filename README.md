@@ -1,6 +1,25 @@
 # FactoryDark.ai CardDemo Modernization Factory
 
-Release: **v0.31.1 — receipt trust-boundary and developer verification hardening**
+Release: **v0.32.0 — governed pilot selection and development work packaging**
+
+v0.32 closes the gap between an advisory estate assessment and executable factory governance. A
+recorded human decision selects exactly one assessed application slice, supplies business outcomes,
+success criteria, a bounded data policy, and a disposition for every unresolved source boundary.
+LIGHTYEAR then compiles that decision into a deterministic, graph-scoped multi-technology work
+package.
+
+The committed reference selects the mixed ACCOUNTV slice and produces five coordinated development
+cells for COBOL, PL/I, JCL, Db2, and HLASM. Every cell has exact read-only source paths, graph-node
+scope, dependencies, output boundaries, deliverables, acceptance evidence, and a separate live-
+evidence backlog. These are draft scopes, not signed or admitted work orders: automatic dispatch,
+native execution, mainframe equivalence, and production readiness remain false.
+
+```bash
+./source-only-pilot.sh rehearse
+./source-only-pilot.sh verify
+```
+
+Previous milestone: **v0.31.1 — receipt trust-boundary and developer verification hardening**
 
 v0.31.1 closes the independent-review gaps around development evidence and repository verification.
 One shared contract now requires all four non-promotion claims to remain explicitly false, and a

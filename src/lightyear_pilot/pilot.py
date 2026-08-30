@@ -666,6 +666,8 @@ def validate_compatibility_policy(policy: Mapping[str, Any]) -> list[str]:
         ANALYSIS_TYPE: [ANALYSIS_SCHEMA_VERSION],
         "lightyear-customer-estate-assessment": ["1.0"],
         DOSSIER_TYPE: [DOSSIER_SCHEMA_VERSION],
+        "lightyear-governed-pilot-selection": ["1.0"],
+        "lightyear-pilot-work-package": ["1.0"],
     }
     if formats != expected_formats:
         errors.append("compatibility-policy-format-matrix-invalid")

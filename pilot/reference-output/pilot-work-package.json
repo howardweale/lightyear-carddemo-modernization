@@ -1,0 +1,324 @@
+{
+  "analysis_graph_sha256": "c7597862319712e338eede1440c6d53695d4a290a6d51d5bc61bbcbb01ef84b2",
+  "assessment_sha256": "0995eb2636bc96ed6b89571ea3788f9e3716e88a5d8a36750be9b4f819e964c9",
+  "authorized_execution_observed": false,
+  "cells": [
+    {
+      "allowed_output_root": "pilot/work/carddemo-account-mixed-language-pilot-v0-32/cobol",
+      "cell_id": "cell:carddemo-account-mixed-language-pilot-v0-32:cobol",
+      "coordination_dependencies": [
+        "cell:carddemo-account-mixed-language-pilot-v0-32:db2",
+        "cell:carddemo-account-mixed-language-pilot-v0-32:pl-i"
+      ],
+      "dispatch_ready": false,
+      "goal": "Materialize the bounded COBOL development proof for ACCOUNTV connected application slice.",
+      "graph_node_ids": [
+        "pilot:cobol-program:ACCOUNTV:e918e00ee181",
+        "pilot:copybook:ACCTREC:d080fed92414",
+        "pilot:source-file:d080fed92414",
+        "pilot:source-file:e918e00ee181"
+      ],
+      "read_only_source_paths": [
+        "cobol/ACCOUNTV.cbl",
+        "copybooks/ACCTREC.cpy"
+      ],
+      "required_acceptance_evidence": [
+        "differential comparison",
+        "semantic mutation suite"
+      ],
+      "required_deliverables": [
+        "behavior contract",
+        "source-faithful oracle",
+        "modernization candidate"
+      ],
+      "required_live_evidence": [
+        "authorized compiled original execution",
+        "input and output capture",
+        "side-effect capture"
+      ],
+      "risk": "high",
+      "technology": "COBOL",
+      "work_order_status": "draft-scope-not-admitted"
+    },
+    {
+      "allowed_output_root": "pilot/work/carddemo-account-mixed-language-pilot-v0-32/db2",
+      "cell_id": "cell:carddemo-account-mixed-language-pilot-v0-32:db2",
+      "coordination_dependencies": [],
+      "dispatch_ready": false,
+      "goal": "Materialize the bounded Db2 development proof for ACCOUNTV connected application slice.",
+      "graph_node_ids": [
+        "pilot:db2-column:CARDDEMO.AUTHFRDS.AUTH_ID:7407fcb1cea3",
+        "pilot:db2-column:CARDDEMO.AUTHFRDS.AUTH_STATUS:7407fcb1cea3",
+        "pilot:db2-column:CARDDEMO.AUTHFRDS.CARD_NUM:7407fcb1cea3",
+        "pilot:db2-constraint:CARDDEMO.AUTHFRDS:PRIMARY_KEY:7407fcb1cea3",
+        "pilot:db2-index:CARDDEMO.AUTHFRDS_IX1:7407fcb1cea3",
+        "pilot:db2-sql:0e4cd3843f6b:4:1",
+        "pilot:db2-sql:e918e00ee181:7:1",
+        "pilot:db2-table:CARDDEMO.AUTHFRDS:7407fcb1cea3",
+        "pilot:source-file:7407fcb1cea3"
+      ],
+      "read_only_source_paths": [
+        "cobol/ACCOUNTV.cbl",
+        "db2/AUTHFRDS.ddl",
+        "pli/ACCTPL1.pli"
+      ],
+      "required_acceptance_evidence": [
+        "query checksums",
+        "data movement and rollback rehearsal"
+      ],
+      "required_deliverables": [
+        "schema mapping",
+        "bounded fixtures",
+        "target schema candidate"
+      ],
+      "required_live_evidence": [
+        "authorized catalog and package capture",
+        "source-row and log observation",
+        "cutover and rollback observation"
+      ],
+      "risk": "high",
+      "technology": "Db2",
+      "work_order_status": "draft-scope-not-admitted"
+    },
+    {
+      "allowed_output_root": "pilot/work/carddemo-account-mixed-language-pilot-v0-32/hlasm",
+      "cell_id": "cell:carddemo-account-mixed-language-pilot-v0-32:hlasm",
+      "coordination_dependencies": [],
+      "dispatch_ready": false,
+      "goal": "Materialize the bounded HLASM development proof for ACCOUNTV connected application slice.",
+      "graph_node_ids": [
+        "pilot:assembler-dsect:DATEDS:fe46a1b6c684",
+        "pilot:assembler-instruction:DATEFMT:3:3:fe46a1b6c684",
+        "pilot:assembler-instruction:DATEFMT:4:4:fe46a1b6c684",
+        "pilot:assembler-instruction:DATEFMT:5:5:fe46a1b6c684",
+        "pilot:assembler-instruction:DATEFMT:6:6:fe46a1b6c684",
+        "pilot:assembler-instruction:DATEFMT:7:7:fe46a1b6c684",
+        "pilot:assembler-instruction:DATEFMT:8:8:fe46a1b6c684",
+        "pilot:assembler-instruction:DATEFMT:9:9:fe46a1b6c684",
+        "pilot:assembler-program:DATEFMT:fe46a1b6c684",
+        "pilot:assembler-symbol:DATEFMT:DATEIN:fe46a1b6c684",
+        "pilot:assembler-symbol:DATEFMT:EMPTY:fe46a1b6c684",
+        "pilot:assembler-symbol:DATEFMT:RETURN:fe46a1b6c684",
+        "pilot:assembler-symbol:DATEFMT:START:fe46a1b6c684",
+        "pilot:source-file:fe46a1b6c684"
+      ],
+      "read_only_source_paths": [
+        "hlasm/DATEFMT.asm"
+      ],
+      "required_acceptance_evidence": [
+        "bit-level differential comparison",
+        "boundary mutation suite"
+      ],
+      "required_deliverables": [
+        "instruction-subset contract",
+        "calling-convention oracle",
+        "typed replacement candidate"
+      ],
+      "required_live_evidence": [
+        "assembler and binder listings",
+        "load-module digest",
+        "authorized caller execution"
+      ],
+      "risk": "high",
+      "technology": "HLASM",
+      "work_order_status": "draft-scope-not-admitted"
+    },
+    {
+      "allowed_output_root": "pilot/work/carddemo-account-mixed-language-pilot-v0-32/jcl",
+      "cell_id": "cell:carddemo-account-mixed-language-pilot-v0-32:jcl",
+      "coordination_dependencies": [
+        "cell:carddemo-account-mixed-language-pilot-v0-32:hlasm",
+        "cell:carddemo-account-mixed-language-pilot-v0-32:pl-i"
+      ],
+      "dispatch_ready": false,
+      "goal": "Materialize the bounded JCL development proof for ACCOUNTV connected application slice.",
+      "graph_node_ids": [
+        "pilot:jcl-job:ACCTPIL:88a43b671f8f",
+        "pilot:jcl-step:ACCTPIL:FORMAT:88a43b671f8f",
+        "pilot:jcl-step:ACCTPIL:RUN:88a43b671f8f",
+        "pilot:source-file:88a43b671f8f"
+      ],
+      "read_only_source_paths": [
+        "jcl/ACCTPIL.jcl"
+      ],
+      "required_acceptance_evidence": [
+        "condition-flow comparison",
+        "restart-plan tests"
+      ],
+      "required_deliverables": [
+        "job-step DAG",
+        "dataset and condition contract",
+        "scheduler candidate"
+      ],
+      "required_live_evidence": [
+        "authorized job execution",
+        "JES and dataset effects",
+        "condition and restart capture"
+      ],
+      "risk": "high",
+      "technology": "JCL",
+      "work_order_status": "draft-scope-not-admitted"
+    },
+    {
+      "allowed_output_root": "pilot/work/carddemo-account-mixed-language-pilot-v0-32/pl-i",
+      "cell_id": "cell:carddemo-account-mixed-language-pilot-v0-32:pl-i",
+      "coordination_dependencies": [
+        "cell:carddemo-account-mixed-language-pilot-v0-32:db2"
+      ],
+      "dispatch_ready": false,
+      "goal": "Materialize the bounded PL/I development proof for ACCOUNTV connected application slice.",
+      "graph_node_ids": [
+        "pilot:pli-program:ACCTPL1:0e4cd3843f6b",
+        "pilot:source-file:0e4cd3843f6b"
+      ],
+      "read_only_source_paths": [
+        "pli/ACCTPL1.pli"
+      ],
+      "required_acceptance_evidence": [
+        "differential comparison",
+        "decimal and call-boundary mutations"
+      ],
+      "required_deliverables": [
+        "source-faithful oracle",
+        "typed modernization candidate",
+        "cross-language call contract"
+      ],
+      "required_live_evidence": [
+        "Enterprise PL/I compilation",
+        "Db2 bind",
+        "authorized PL/I-to-COBOL execution"
+      ],
+      "risk": "high",
+      "technology": "PL/I",
+      "work_order_status": "draft-scope-not-admitted"
+    }
+  ],
+  "claim_unlocked": "LIGHTYEAR can turn one recorded human pilot selection into a deterministic, graph-scoped, multi-technology development work package.",
+  "content_sha256": "5088926c70f4890f62fbb2d213336e2dfd14f0aabe38bfb057a8329211e9fd71",
+  "dossier_sha256": "7191811d6c1a6c834399f4fd012cb2609fde657581552c60a46db109957703c3",
+  "factory_dispatch_allowed": false,
+  "limitations": [
+    "Cells are bounded draft scopes, not signed or admitted factory work orders.",
+    "No candidate, behavior comparison, model qualification, or native execution is created by packaging.",
+    "Every cell retains a separate live-evidence backlog and remains blocked from production promotion."
+  ],
+  "mainframe_equivalent": false,
+  "package_id": "package:carddemo-account-mixed-language-pilot-v0-32",
+  "planning_waves": [
+    {
+      "automatic_dispatch": false,
+      "cell_ids": [],
+      "name": "boundary-disposition-verification",
+      "status": "passed",
+      "wave": 0
+    },
+    {
+      "automatic_dispatch": false,
+      "cell_ids": [
+        "cell:carddemo-account-mixed-language-pilot-v0-32:cobol",
+        "cell:carddemo-account-mixed-language-pilot-v0-32:db2",
+        "cell:carddemo-account-mixed-language-pilot-v0-32:hlasm",
+        "cell:carddemo-account-mixed-language-pilot-v0-32:jcl",
+        "cell:carddemo-account-mixed-language-pilot-v0-32:pl-i"
+      ],
+      "name": "bounded-work-order-authoring",
+      "status": "ready-for-human-governed-authoring",
+      "wave": 1
+    },
+    {
+      "automatic_dispatch": false,
+      "cell_ids": [
+        "cell:carddemo-account-mixed-language-pilot-v0-32:cobol",
+        "cell:carddemo-account-mixed-language-pilot-v0-32:db2",
+        "cell:carddemo-account-mixed-language-pilot-v0-32:hlasm",
+        "cell:carddemo-account-mixed-language-pilot-v0-32:jcl",
+        "cell:carddemo-account-mixed-language-pilot-v0-32:pl-i"
+      ],
+      "name": "integrated-development-proof",
+      "status": "blocked-until-cell-evidence-passes",
+      "wave": 2
+    },
+    {
+      "automatic_dispatch": false,
+      "cell_ids": [
+        "cell:carddemo-account-mixed-language-pilot-v0-32:cobol",
+        "cell:carddemo-account-mixed-language-pilot-v0-32:db2",
+        "cell:carddemo-account-mixed-language-pilot-v0-32:hlasm",
+        "cell:carddemo-account-mixed-language-pilot-v0-32:jcl",
+        "cell:carddemo-account-mixed-language-pilot-v0-32:pl-i"
+      ],
+      "name": "authorized-native-validation",
+      "status": "blocked-no-mainframe-access",
+      "wave": 3
+    }
+  ],
+  "policy_sha256": "07f37778668eef3a7d90f2250ecd016a023dcfd750384decc26f3a8b495cb56f",
+  "portfolio_policy": {
+    "automatic_dispatch": false,
+    "conflict_analysis_required": true,
+    "human_approval_required": true,
+    "max_parallel": 2,
+    "signed_work_orders_required": true
+  },
+  "production_ready": false,
+  "schema_version": "1.0",
+  "selected_cluster_id": "cluster:6a02c2ea6de7831e",
+  "selection_sha256": "fdf9462c9c82edd147c6a5f05deaf646f80157a2d7df782404832bca55b354de",
+  "source_scope": {
+    "boundary_reference_ids": [
+      "7ef87c4aa9078d7896519a55592100efc2731138a3dbf7f5b0c7dc697ae65b47"
+    ],
+    "files": [
+      "cobol/ACCOUNTV.cbl",
+      "copybooks/ACCTREC.cpy",
+      "db2/AUTHFRDS.ddl",
+      "hlasm/DATEFMT.asm",
+      "jcl/ACCTPIL.jcl",
+      "pli/ACCTPL1.pli"
+    ],
+    "node_ids": [
+      "pilot:assembler-dsect:DATEDS:fe46a1b6c684",
+      "pilot:assembler-instruction:DATEFMT:3:3:fe46a1b6c684",
+      "pilot:assembler-instruction:DATEFMT:4:4:fe46a1b6c684",
+      "pilot:assembler-instruction:DATEFMT:5:5:fe46a1b6c684",
+      "pilot:assembler-instruction:DATEFMT:6:6:fe46a1b6c684",
+      "pilot:assembler-instruction:DATEFMT:7:7:fe46a1b6c684",
+      "pilot:assembler-instruction:DATEFMT:8:8:fe46a1b6c684",
+      "pilot:assembler-instruction:DATEFMT:9:9:fe46a1b6c684",
+      "pilot:assembler-program:DATEFMT:fe46a1b6c684",
+      "pilot:assembler-symbol:DATEFMT:DATEIN:fe46a1b6c684",
+      "pilot:assembler-symbol:DATEFMT:EMPTY:fe46a1b6c684",
+      "pilot:assembler-symbol:DATEFMT:RETURN:fe46a1b6c684",
+      "pilot:assembler-symbol:DATEFMT:START:fe46a1b6c684",
+      "pilot:cobol-program:ACCOUNTV:e918e00ee181",
+      "pilot:copybook:ACCTREC:d080fed92414",
+      "pilot:db2-column:CARDDEMO.AUTHFRDS.AUTH_ID:7407fcb1cea3",
+      "pilot:db2-column:CARDDEMO.AUTHFRDS.AUTH_STATUS:7407fcb1cea3",
+      "pilot:db2-column:CARDDEMO.AUTHFRDS.CARD_NUM:7407fcb1cea3",
+      "pilot:db2-constraint:CARDDEMO.AUTHFRDS:PRIMARY_KEY:7407fcb1cea3",
+      "pilot:db2-index:CARDDEMO.AUTHFRDS_IX1:7407fcb1cea3",
+      "pilot:db2-sql:0e4cd3843f6b:4:1",
+      "pilot:db2-sql:e918e00ee181:7:1",
+      "pilot:db2-table:CARDDEMO.AUTHFRDS:7407fcb1cea3",
+      "pilot:jcl-job:ACCTPIL:88a43b671f8f",
+      "pilot:jcl-step:ACCTPIL:FORMAT:88a43b671f8f",
+      "pilot:jcl-step:ACCTPIL:RUN:88a43b671f8f",
+      "pilot:pli-program:ACCTPL1:0e4cd3843f6b",
+      "pilot:source-file:0e4cd3843f6b",
+      "pilot:source-file:7407fcb1cea3",
+      "pilot:source-file:88a43b671f8f",
+      "pilot:source-file:d080fed92414",
+      "pilot:source-file:e918e00ee181",
+      "pilot:source-file:fe46a1b6c684"
+    ],
+    "technologies": [
+      "COBOL",
+      "Db2",
+      "HLASM",
+      "JCL",
+      "PL/I"
+    ]
+  },
+  "work_package_ready": true,
+  "work_package_type": "lightyear-pilot-work-package"
+}

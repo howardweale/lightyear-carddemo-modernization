@@ -1,0 +1,122 @@
+{
+  "approval_record": {
+    "approval_id": "reference-selection-approval-v0.32",
+    "approver_id": "human:reference-business-owner",
+    "evidence_class": "simulated",
+    "recorded_at": "2026-08-30T00:00:00Z",
+    "system": "repository-reference-fixture"
+  },
+  "assessment_sha256": "0995eb2636bc96ed6b89571ea3788f9e3716e88a5d8a36750be9b4f819e964c9",
+  "authorization": {
+    "factory_dispatch_allowed": false,
+    "native_execution_allowed": false,
+    "production_release_allowed": false,
+    "work_package_generation_allowed": true
+  },
+  "boundary_dispositions": [
+    {
+      "disposition": "accepted-external-boundary",
+      "owner_id": "human:reference-technical-owner",
+      "rationale": "CBACT04C remains an explicit external dependency whose existing bounded COBOL proof is not relabelled as customer source evidence.",
+      "reference_id": "7ef87c4aa9078d7896519a55592100efc2731138a3dbf7f5b0c7dc697ae65b47"
+    }
+  ],
+  "claim_boundary": {
+    "approval_identity_cryptographically_verified": false,
+    "authorized_execution_observed": false,
+    "business_priority_recorded": true,
+    "mainframe_equivalent": false,
+    "production_ready": false,
+    "work_order_admitted": false
+  },
+  "content_sha256": "fdf9462c9c82edd147c6a5f05deaf646f80157a2d7df782404832bca55b354de",
+  "decision": {
+    "business_outcomes": [
+      "Preserve account authorization behavior while separating language and data concerns.",
+      "Produce evidence-backed development cells that can later receive authorized native baselines."
+    ],
+    "business_owner_id": "human:reference-business-owner",
+    "data_policy": {
+      "classification": "synthetic-reference",
+      "permitted_use": "development-proof-only",
+      "raw_customer_data_allowed": false,
+      "retention_days": 30
+    },
+    "rationale": "Exercise the highest-coupling bounded slice so the pilot proves coordinated COBOL, PL/I, JCL, Db2, and HLASM planning.",
+    "success_criteria": [
+      "Every selected technology has an explicit bounded development cell.",
+      "Cross-technology dependencies and missing external boundaries remain visible.",
+      "No draft cell can dispatch, authorize native execution, or claim production readiness."
+    ],
+    "technical_owner_id": "human:reference-technical-owner"
+  },
+  "deferred_boundary_reference_ids": [],
+  "dossier_sha256": "7191811d6c1a6c834399f4fd012cb2609fde657581552c60a46db109957703c3",
+  "limitations": [
+    "The approval record is bound and attributable but remains external evidence; LIGHTYEAR does not cryptographically verify the approver identity in this source-only flow.",
+    "Selection authorizes deterministic work-package generation only, never factory dispatch or native execution.",
+    "Accepted external boundaries remain explicit dependencies and are not relabelled as resolved source."
+  ],
+  "request_sha256": "583429ef2c0e2fb87a064d582ad9b3915a1de3e6b79dabaf81672e81b06330af",
+  "schema_version": "1.0",
+  "selected_cluster": {
+    "cluster_id": "cluster:6a02c2ea6de7831e",
+    "label": "ACCOUNTV connected application slice",
+    "node_ids": [
+      "pilot:assembler-dsect:DATEDS:fe46a1b6c684",
+      "pilot:assembler-instruction:DATEFMT:3:3:fe46a1b6c684",
+      "pilot:assembler-instruction:DATEFMT:4:4:fe46a1b6c684",
+      "pilot:assembler-instruction:DATEFMT:5:5:fe46a1b6c684",
+      "pilot:assembler-instruction:DATEFMT:6:6:fe46a1b6c684",
+      "pilot:assembler-instruction:DATEFMT:7:7:fe46a1b6c684",
+      "pilot:assembler-instruction:DATEFMT:8:8:fe46a1b6c684",
+      "pilot:assembler-instruction:DATEFMT:9:9:fe46a1b6c684",
+      "pilot:assembler-program:DATEFMT:fe46a1b6c684",
+      "pilot:assembler-symbol:DATEFMT:DATEIN:fe46a1b6c684",
+      "pilot:assembler-symbol:DATEFMT:EMPTY:fe46a1b6c684",
+      "pilot:assembler-symbol:DATEFMT:RETURN:fe46a1b6c684",
+      "pilot:assembler-symbol:DATEFMT:START:fe46a1b6c684",
+      "pilot:cobol-program:ACCOUNTV:e918e00ee181",
+      "pilot:copybook:ACCTREC:d080fed92414",
+      "pilot:db2-column:CARDDEMO.AUTHFRDS.AUTH_ID:7407fcb1cea3",
+      "pilot:db2-column:CARDDEMO.AUTHFRDS.AUTH_STATUS:7407fcb1cea3",
+      "pilot:db2-column:CARDDEMO.AUTHFRDS.CARD_NUM:7407fcb1cea3",
+      "pilot:db2-constraint:CARDDEMO.AUTHFRDS:PRIMARY_KEY:7407fcb1cea3",
+      "pilot:db2-index:CARDDEMO.AUTHFRDS_IX1:7407fcb1cea3",
+      "pilot:db2-sql:0e4cd3843f6b:4:1",
+      "pilot:db2-sql:e918e00ee181:7:1",
+      "pilot:db2-table:CARDDEMO.AUTHFRDS:7407fcb1cea3",
+      "pilot:jcl-job:ACCTPIL:88a43b671f8f",
+      "pilot:jcl-step:ACCTPIL:FORMAT:88a43b671f8f",
+      "pilot:jcl-step:ACCTPIL:RUN:88a43b671f8f",
+      "pilot:pli-program:ACCTPL1:0e4cd3843f6b",
+      "pilot:source-file:0e4cd3843f6b",
+      "pilot:source-file:7407fcb1cea3",
+      "pilot:source-file:88a43b671f8f",
+      "pilot:source-file:d080fed92414",
+      "pilot:source-file:e918e00ee181",
+      "pilot:source-file:fe46a1b6c684"
+    ],
+    "source_files": [
+      "cobol/ACCOUNTV.cbl",
+      "copybooks/ACCTREC.cpy",
+      "db2/AUTHFRDS.ddl",
+      "hlasm/DATEFMT.asm",
+      "jcl/ACCTPIL.jcl",
+      "pli/ACCTPL1.pli"
+    ],
+    "technologies": [
+      "COBOL",
+      "Db2",
+      "HLASM",
+      "JCL",
+      "PL/I"
+    ],
+    "unresolved_reference_ids": [
+      "7ef87c4aa9078d7896519a55592100efc2731138a3dbf7f5b0c7dc697ae65b47"
+    ]
+  },
+  "selection_id": "carddemo-account-mixed-language-pilot-v0.32",
+  "selection_ready": true,
+  "selection_type": "lightyear-governed-pilot-selection"
+}

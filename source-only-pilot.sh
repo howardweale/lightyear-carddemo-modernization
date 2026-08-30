@@ -56,8 +56,26 @@ case "$action" in
       --assessment "$output/estate-assessment.json" \
       --output-json "$output/pilot.dossier.json" --output-md "$output/pilot.dossier.md"
     ;;
+  select)
+    output="${2:?Usage: ./source-only-pilot.sh select OUTPUT [REQUEST]}"
+    request="${3:-$project_dir/pilot/reference-selection.request.json}"
+    exec "$LIGHTYEAR_PYTHON_BIN" -m lightyear_pilot --project-root "$project_dir" select \
+      --assessment "$output/estate-assessment.json" \
+      --dossier "$output/pilot.dossier.json" --request "$request" \
+      --output "$output/pilot-selection.json"
+    ;;
+  package)
+    output="${2:?Usage: ./source-only-pilot.sh package OUTPUT}"
+    exec "$LIGHTYEAR_PYTHON_BIN" -m lightyear_pilot --project-root "$project_dir" package \
+      --selection "$output/pilot-selection.json" \
+      --assessment "$output/estate-assessment.json" \
+      --analysis-graph "$output/source-estate.snapshot.json.gz" \
+      --dossier "$output/pilot.dossier.json" \
+      --output-json "$output/pilot-work-package.json" \
+      --output-md "$output/pilot-work-package.md"
+    ;;
   *)
-    echo "Usage: ./source-only-pilot.sh [doctor|verify|compatibility|rehearse|intake|analyze|assess|preflight|dossier]" >&2
+    echo "Usage: ./source-only-pilot.sh [doctor|verify|compatibility|rehearse|intake|analyze|assess|preflight|dossier|select|package]" >&2
     exit 2
     ;;
 esac

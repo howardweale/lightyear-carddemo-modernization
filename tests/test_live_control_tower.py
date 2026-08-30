@@ -22,6 +22,7 @@ from lightyear_knowledge_graph.model import load_graph
 
 ROOT = Path(__file__).resolve().parents[1]
 NOW = datetime(2026, 8, 16, 1, 0, tzinfo=timezone.utc)
+HTTP_TEST_TIMEOUT_SECONDS = 30
 
 
 class MutableClock:
@@ -128,11 +129,20 @@ class LiveControlTowerTests(unittest.TestCase):
         thread.start()
         try:
             base = f"http://127.0.0.1:{server.server_port}"
-            with urlopen(f"{base}/api/operations/status", timeout=5) as response:
+            # The status route performs an initial repository projection scan. On
+            # loaded Windows CI runners that bounded scan can exceed five seconds;
+            # this test verifies the read-only HTTP contract, not scan latency.
+            with urlopen(
+                f"{base}/api/operations/status",
+                timeout=HTTP_TEST_TIMEOUT_SECONDS,
+            ) as response:
                 status = json.load(response)
             self.assertEqual("lightyear-live-evidence-control-plane", status["plane_type"])
             self.assertTrue(status["read_only"])
-            with urlopen(f"{base}/api/operations/stream?after=9999", timeout=5) as response:
+            with urlopen(
+                f"{base}/api/operations/stream?after=9999",
+                timeout=HTTP_TEST_TIMEOUT_SECONDS,
+            ) as response:
                 self.assertEqual("text/event-stream; charset=utf-8", response.headers["Content-Type"])
                 self.assertEqual("retry: 2000", response.readline().decode().strip())
                 self.assertEqual("event: ready", response.readline().decode().strip())

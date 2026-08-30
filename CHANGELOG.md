@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.32.0 — 2026-08-30
+
+- Added a content-addressed human pilot-selection contract bound to the exact MS #31 assessment and
+  source-only dossier.
+- Required business and technical ownership, rationale, outcomes, success criteria, bounded data
+  policy, and one explicit disposition for every unresolved source boundary.
+- Compiled the selected mixed ACCOUNTV slice into five deterministic development cells spanning
+  COBOL, PL/I, JCL, Db2, and HLASM with exact source, graph, dependency, output, deliverable,
+  acceptance-evidence, and live-evidence scopes.
+- Added four governed planning waves from boundary verification through blocked authorized-native
+  validation, with automatic dispatch disabled in every wave.
+- Added standalone `select` and `package` commands plus POSIX and PowerShell parity, frozen selection
+  and work-package schemas, committed reference artifacts, and fail-closed tamper tests.
+- Kept every generated cell in `draft-scope-not-admitted` state; no signed work order, model
+  qualification, authorized native execution, mainframe equivalence, or production readiness is
+  claimed.
+
 ## 0.31.1 — 2026-08-30
 
 - Added one shared fail-closed contract for `qualification_eligible`, `promotion_allowed`,

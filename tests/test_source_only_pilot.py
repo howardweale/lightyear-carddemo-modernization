@@ -28,12 +28,24 @@ from lightyear_pilot.planner import (
     render_assessment_markdown,
     validate_estate_assessment,
 )
+from lightyear_pilot.work_package import (
+    build_pilot_selection,
+    build_work_package,
+    load_work_package_policy,
+    render_work_package_markdown,
+    validate_pilot_selection,
+    validate_selection_request,
+    validate_work_package,
+    validate_work_package_policy,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
 PROFILE = load_json(ROOT / "pilot/pilot.profile.json")
 COMPATIBILITY = load_json(ROOT / "pilot/compatibility.policy.json")
 ASSESSMENT_POLICY = load_assessment_policy(ROOT / "pilot/assessment-policy.json")
+WORK_PACKAGE_POLICY = load_work_package_policy(ROOT / "pilot/work-package-policy.json")
+SELECTION_REQUEST = load_json(ROOT / "pilot/reference-selection.request.json")
 SOURCE = ROOT / "pilot/reference-intake"
 CANONICAL = ROOT / "pilot/reference-output"
 
@@ -68,6 +80,14 @@ class SourceOnlyPilotTests(unittest.TestCase):
             COMPATIBILITY,
         )
         return intake, analysis_graph, analysis, assessment, preflight, dossier
+
+    def build_package(self) -> tuple[dict, dict, dict, dict, dict, dict]:
+        _, graph, analysis, assessment, _, dossier = self.build()
+        selection = build_pilot_selection(SELECTION_REQUEST, assessment, dossier)
+        package = build_work_package(
+            selection, assessment, graph, dossier, WORK_PACKAGE_POLICY
+        )
+        return graph, analysis, assessment, dossier, selection, package
 
     def test_reference_release_is_deterministic_and_valid(self) -> None:
         intake, analysis_graph, analysis, assessment, preflight, dossier = self.build()
@@ -118,6 +138,133 @@ class SourceOnlyPilotTests(unittest.TestCase):
         self.assertEqual(
             render_dossier_markdown(dossier),
             (CANONICAL / "pilot.dossier.md").read_text(encoding="utf-8"),
+        )
+
+    def test_governed_selection_and_work_package_are_deterministic(self) -> None:
+        graph, _, assessment, dossier, selection, package = self.build_package()
+        self.assertEqual(
+            [],
+            validate_selection_request(SELECTION_REQUEST, assessment),
+        )
+        self.assertEqual(
+            [],
+            validate_pilot_selection(
+                selection, SELECTION_REQUEST, assessment, dossier
+            ),
+        )
+        self.assertEqual(
+            [],
+            validate_work_package(
+                package,
+                selection,
+                assessment,
+                graph,
+                dossier,
+                WORK_PACKAGE_POLICY,
+            ),
+        )
+        self.assertEqual(
+            selection, load_json(CANONICAL / "pilot-selection.json")
+        )
+        self.assertEqual(
+            package, load_json(CANONICAL / "pilot-work-package.json")
+        )
+        self.assertEqual(
+            render_work_package_markdown(package),
+            (CANONICAL / "pilot-work-package.md").read_text(encoding="utf-8"),
+        )
+
+    def test_work_package_compiles_five_bounded_non_admitted_cells(self) -> None:
+        _, _, _, _, selection, package = self.build_package()
+        self.assertTrue(selection["selection_ready"])
+        self.assertEqual(
+            {"COBOL", "Db2", "HLASM", "JCL", "PL/I"},
+            {item["technology"] for item in package["cells"]},
+        )
+        self.assertTrue(package["work_package_ready"])
+        self.assertTrue(
+            all(
+                item["work_order_status"] == "draft-scope-not-admitted"
+                and item["dispatch_ready"] is False
+                for item in package["cells"]
+            )
+        )
+        self.assertFalse(package["factory_dispatch_allowed"])
+        self.assertFalse(package["mainframe_equivalent"])
+        self.assertFalse(package["production_ready"])
+
+    def test_selection_fails_closed_on_missing_boundary_or_dispatch_promotion(self) -> None:
+        _, _, assessment, dossier, selection, _ = self.build_package()
+        request = copy.deepcopy(SELECTION_REQUEST)
+        request["boundary_dispositions"] = []
+        request["content_sha256"] = canonical_hash(request, {"content_sha256"})
+        self.assertIn(
+            "selection-request-boundary-coverage-incomplete",
+            validate_selection_request(request, assessment),
+        )
+
+        changed = copy.deepcopy(selection)
+        changed["authorization"]["factory_dispatch_allowed"] = True
+        changed["content_sha256"] = canonical_hash(changed, {"content_sha256"})
+        self.assertIn(
+            "selection-overclaims-authorization",
+            validate_pilot_selection(
+                changed, SELECTION_REQUEST, assessment, dossier
+            ),
+        )
+
+    def test_work_package_tamper_cannot_hide_cell_or_admit_work(self) -> None:
+        graph, _, assessment, dossier, selection, package = self.build_package()
+        changed = copy.deepcopy(package)
+        changed["cells"] = changed["cells"][:-1]
+        changed["cells"][0]["dispatch_ready"] = True
+        changed["cells"][0]["work_order_status"] = "admitted"
+        changed["content_sha256"] = canonical_hash(changed, {"content_sha256"})
+        errors = validate_work_package(
+            changed,
+            selection,
+            assessment,
+            graph,
+            dossier,
+            WORK_PACKAGE_POLICY,
+        )
+        self.assertIn("work-package-cell-admission-boundary-invalid", errors)
+        self.assertIn("work-package-no-longer-matches-bound-inputs", errors)
+
+    def test_work_package_rejects_rehashed_promoted_selection(self) -> None:
+        graph, _, assessment, dossier, selection, _ = self.build_package()
+        changed = copy.deepcopy(selection)
+        changed["authorization"]["factory_dispatch_allowed"] = True
+        changed["claim_boundary"]["work_order_admitted"] = True
+        changed["content_sha256"] = canonical_hash(
+            changed, {"content_sha256"}
+        )
+        with self.assertRaisesRegex(
+            PilotError, "work-package-selection-overclaims-authorization"
+        ):
+            build_work_package(
+                changed,
+                assessment,
+                graph,
+                dossier,
+                WORK_PACKAGE_POLICY,
+            )
+
+    def test_work_package_policy_cannot_enable_automatic_dispatch(self) -> None:
+        changed = copy.deepcopy(WORK_PACKAGE_POLICY)
+        changed["dispatch_boundary"]["automatic_dispatch"] = True
+        changed["content_sha256"] = canonical_hash(changed, {"content_sha256"})
+        self.assertIn(
+            "work-package-policy-dispatch-boundary-invalid",
+            validate_work_package_policy(changed),
+        )
+
+        changed = copy.deepcopy(WORK_PACKAGE_POLICY)
+        changed["max_parallel"] = True
+        changed["content_sha256"] = canonical_hash(changed, {"content_sha256"})
+        self.assertIn(
+            "work-package-policy-max-parallel-invalid",
+            validate_work_package_policy(changed),
         )
 
     def test_reference_graph_uses_platform_neutral_gzip_header(self) -> None:
@@ -408,7 +555,7 @@ class SourceOnlyPilotTests(unittest.TestCase):
 
     def test_pilot_contract_schemas_are_frozen_and_parseable(self) -> None:
         schemas = sorted((ROOT / "pilot/schema").glob("*.schema.json"))
-        self.assertEqual(7, len(schemas))
+        self.assertEqual(9, len(schemas))
         for path in schemas:
             with self.subTest(path=path.name):
                 payload = json.loads(path.read_text(encoding="utf-8"))

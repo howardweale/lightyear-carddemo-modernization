@@ -9,8 +9,8 @@ production-qualified.
 | MS #33 | Database Semantic Core | Complete |
 | MS #34 | Oracle to PostgreSQL Proof | Complete |
 | MS #35 | DB2 Semantic Adapter Hardening | Corrected by MS #35.1 |
-| MS #35.1 | DB2 Semantic Adapter Hardening | In progress |
-| MS #36 | COBOL Qualification Hardening | Planned |
+| MS #35.1 | DB2 Semantic Adapter Hardening | Complete |
+| MS #36 | COBOL Qualification Hardening | In progress |
 | MS #37 | PL/I Qualification Hardening | Planned |
 | MS #38 | JCL Qualification Hardening | Planned |
 | MS #39 | VSAM/CICS Qualification Hardening | Planned |

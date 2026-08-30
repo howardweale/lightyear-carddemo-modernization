@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.36.0 — 2026-08-30
+
+- Added a graph-bound COBOL qualification contract covering 55 programs, 927 paragraphs, 75
+  copybooks, 7,817 fields, 56 file handles, and their static dependency relationships.
+- Separated nine qualification gates for inventory, syntax/source format, copybook closure, data
+  layout/numerics, control flow/calls, file behavior, DB2/CICS/IMS boundaries, local differential
+  behavior, and authorized native compile/link/execute evidence.
+- Added a COBOL compatibility ledger covering source format, copybooks, PIC layouts,
+  REDEFINES/OCCURS, decimal behavior, arithmetic, control flow, linkage, file status, embedded DB2,
+  CICS, IMS, compiler options, and LE runtime semantics.
+- Required every COBOL boundary to resolve to exactly one of the five governing classifications and
+  rejected silent policy acceptance or unsupported behavior without explicit exclusion.
+- Kept native compiler qualification, runtime equivalence, mainframe equivalence, and production
+  readiness false; generated COBOL planning cells remain planning scopes only.
+
 ## 0.35.1 — 2026-08-30
 
 - Added a concrete Db2 for z/OS `SourceAdapter` implementing schema discovery, bounded profiling,

@@ -42,6 +42,8 @@ if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 & (Join-Path $ProjectDir "collection-appliance.ps1") verify
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+& (Join-Path $ProjectDir "cobol-qualification.ps1") verify
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 & (Join-Path $ProjectDir "pli-conformance.ps1") verify
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 & (Join-Path $ProjectDir "pli-modernization.ps1") verify

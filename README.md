@@ -1,6 +1,24 @@
 # FactoryDark.ai CardDemo Modernization Factory
 
-Release: **v0.35.1 — DB2 semantic adapter hardening**
+Release: **v0.36.0 — COBOL qualification hardening**
+
+v0.36 turns the existing COBOL graph extraction and bounded development behavior into an explicit
+qualification plane. It inventories the complete pinned estate and independently gates syntax,
+copybook closure, data layout and numeric behavior, control flow and calls, file semantics,
+DB2/CICS/IMS boundaries, local differential behavior, and native compilation/execution.
+
+The compatibility ledger classifies every material COBOL boundary using the same five governing
+classes as the database semantic core. Static extraction and the INTCALC development oracle pass
+bounded gates, but compiler search order, REDEFINES/OCCURS coverage, arithmetic options, dynamic
+calls, file status, IBM compiler options, and LE behavior still require policy or native evidence.
+DB2, CICS, and IMS runtime semantics stay in their own qualification milestones.
+
+```bash
+./cobol-qualification.sh verify
+PYTHONPATH=src python3 -m lightyear_readiness.cobol verify
+```
+
+Previous milestone: **v0.35.1 — DB2 semantic adapter hardening**
 
 v0.35.1 brings Db2 for z/OS into the same database semantic contract as the Oracle and PostgreSQL
 work. DB2 is now a concrete source adapter with schema discovery, privacy-preserving profiling,

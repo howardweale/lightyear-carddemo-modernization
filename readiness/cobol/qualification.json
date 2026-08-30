@@ -1,0 +1,128 @@
+{
+  "bindings": {
+    "compatibility_ledger_sha256": "a7ee143005bc4c0720b17b893ce19ebbd8feaf41f151fe1eaa3d8601fb3e5da5",
+    "graph_content_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7"
+  },
+  "claim_unlocked": "LIGHTYEAR can inventory and independently gate bounded COBOL semantics without treating static planning cells as production qualification.",
+  "content_sha256": "628152571e1a205c3a9b8e683e8cb8fc59db162347ceaaac8351830700ba4fe0",
+  "development_ready": true,
+  "inventory": {
+    "call_edges": 998,
+    "copybook_edges": 354,
+    "copybooks": 75,
+    "embedded_sql_edges": 2,
+    "fields": 7817,
+    "file_handles": 56,
+    "file_read_edges": 67,
+    "file_write_edges": 19,
+    "paragraphs": 927,
+    "programs": 55
+  },
+  "mainframe_equivalent": false,
+  "native_compiler_qualified": false,
+  "production_ready": false,
+  "qualification_gates": [
+    {
+      "evidence": {
+        "call_edges": 998,
+        "copybook_edges": 354,
+        "copybooks": 75,
+        "embedded_sql_edges": 2,
+        "fields": 7817,
+        "file_handles": 56,
+        "file_read_edges": 67,
+        "file_write_edges": 19,
+        "graph_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
+        "paragraphs": 927,
+        "programs": 55
+      },
+      "gate": "estate-inventory",
+      "status": "passed-static"
+    },
+    {
+      "evidence": {
+        "native_parser": false,
+        "source_formats": [
+          "fixed"
+        ]
+      },
+      "gate": "syntax-and-source-format",
+      "status": "passed-bounded-static"
+    },
+    {
+      "evidence": {
+        "compiler_search_order_observed": false,
+        "references": 354
+      },
+      "gate": "copybook-closure",
+      "status": "policy-decision-required"
+    },
+    {
+      "evidence": {
+        "complete_pic_coverage": false,
+        "fields": 7817,
+        "signed_zoned_decimal_proof": true
+      },
+      "gate": "data-layout-and-numeric-semantics",
+      "status": "passed-bounded-development"
+    },
+    {
+      "evidence": {
+        "call_edges": 998,
+        "dynamic_call_resolution_observed": false,
+        "paragraphs": 927
+      },
+      "gate": "control-flow-and-call-linkage",
+      "status": "passed-static"
+    },
+    {
+      "evidence": {
+        "file_handles": 56,
+        "native_file_status_observed": false
+      },
+      "gate": "file-and-external-resource-behavior",
+      "status": "policy-decision-required"
+    },
+    {
+      "evidence": {
+        "cics_milestone": "MS-39",
+        "db2_milestone": "MS-35.1",
+        "embedded_sql_edges": 2,
+        "ims_milestone": "MS-40"
+      },
+      "gate": "db2-cics-ims-boundaries",
+      "status": "excluded-separate-qualification"
+    },
+    {
+      "evidence": {
+        "candidate": "carddemo_oracle",
+        "workload": "INTCALC",
+        "zos_baseline_observed": false
+      },
+      "gate": "runtime-differential",
+      "status": "passed-local-development"
+    },
+    {
+      "evidence": {
+        "binder_map": false,
+        "compiler_listing": false,
+        "execution_capture": false,
+        "load_module": false
+      },
+      "gate": "native-compile-link-execute",
+      "status": "blocked-no-authorized-zos-evidence"
+    }
+  ],
+  "qualification_id": "carddemo-cobol-v0.36",
+  "qualification_mechanism_ready": true,
+  "qualification_type": "lightyear-cobol-qualification",
+  "required_native_evidence": [
+    "IBM Enterprise COBOL compiler listing and exact options",
+    "copybook resolution listing and preprocessor outputs",
+    "binder map and load-module identity",
+    "LE runtime options and condition/abend behavior",
+    "authorized z/OS inputs, outputs, file statuses, SQL/CICS/IMS effects, and trace"
+  ],
+  "runtime_equivalent": false,
+  "schema_version": "1.0"
+}

@@ -1,6 +1,6 @@
 # FactoryDark.ai CardDemo Modernization Factory
 
-Release: **v0.43.0 — Oracle source and stored-procedure qualification**
+Release: **v0.44.0 — Milestone documentation system**
 
 v0.43 replaces the earlier Oracle-shaped side of the bounded database proof with a genuine
 semantic-core `SourceAdapter`. It adds contract-bound Oracle schema discovery, privacy-preserving
@@ -821,6 +821,24 @@ included CardDemo portfolio coordinates INTCALC, POSTTRAN and statement generati
 read-only dashboard cannot approve, resolve, or launch work.
 
 ## What it does
+
+The complete customer-readable milestone history is published in the
+[milestone documentation library](docs/milestones/README.md). MS #1 through MS #44 each have a
+canonical Markdown narrative plus matching Microsoft Word and PDF editions. The library is
+content-addressed and fails closed when its sources or generated artifacts drift.
+
+Verify the committed documentation without optional dependencies:
+
+```bash
+./milestone-documentation.sh verify
+```
+
+Regenerate all three formats after installing the `docs` optional dependencies:
+
+```bash
+python3 -m pip install -e '.[docs]'
+./milestone-documentation.sh build
+```
 
 1. Builds a deterministic, provenance-rich graph of the entire CardDemo application estate,
    including native CICS, BMS, VSAM, IMS DBD/PSB, and HLASM structures.

@@ -18,7 +18,8 @@ production-qualified.
 | MS #41 | HLASM Qualification Hardening | Complete |
 | MS #42 | Integrated Pilot Qualification | Complete |
 | MS #43 | Oracle Source and Stored-Procedure Qualification | Complete |
-| MS #44 | SAP ASE Semantic Source Adapter | Planned |
+| MS #44 | Milestone Documentation System | Complete |
+| MS #45 | SAP ASE Semantic Source Adapter | Planned |
 
 The v0.35.0 stored-logic qualification core is retained as supporting MS #34 evidence. It does not
 replace the planned DB2 milestone.
@@ -102,9 +103,19 @@ state, database links, and procedure-owned commits remain excluded. Native datab
 live redo, general stored-logic completion, database migration completion, and production readiness
 stay blocked pending authorized evidence.
 
-## MS #44 — SAP ASE Semantic Source Adapter
+## MS #44 — Milestone Documentation System
 
-MS #44 will implement a target-neutral SAP ASE source adapter and semantic-loss analysis. Its
+MS #44 publishes MS #1 through MS #44 as one governed customer-readable body of record. Each
+milestone has matching Markdown, Microsoft Word, and PDF editions covering purpose, customer value,
+delivered capability, evidence posture, relationship to earlier work, limitations, and safe claim
+language. A deterministic generator and 132-artifact content manifest fail closed on source drift,
+missing or modified output, and undeclared milestone files. The documentation packages existing
+evidence but does not create new technical qualification, live execution, platform equivalence, or
+production-readiness evidence.
+
+## MS #45 — SAP ASE Semantic Source Adapter
+
+MS #45 will implement a target-neutral SAP ASE source adapter and semantic-loss analysis. Its
 bounded scope will include user-defined datatypes, `IDENTITY`, money and datetime behavior,
 empty-string semantics, Transact-SQL, locking, stored procedures and triggers, replication ordering,
 and transaction/rollback differences. A target-specific ASE proof will follow a real pilot choice.

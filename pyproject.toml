@@ -4,9 +4,15 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "lightyear-carddemo-oracle"
-version = "0.43.0"
+version = "0.44.0"
 description = "Graph-grounded, extensible and evidence-governed modernization factory for CardDemo"
 requires-python = ">=3.11"
+
+[project.optional-dependencies]
+docs = [
+    "python-docx>=1.1,<2",
+    "reportlab>=4,<5",
+]
 dependencies = []
 
 [project.scripts]

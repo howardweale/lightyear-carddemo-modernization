@@ -1,14 +1,14 @@
 {
   "bindings": {
-    "compatibility_ledger_sha256": "f7e7b71aa3a837047e10be83ff16d05dc543811e5451a065e442e1d0711094eb",
-    "conformance_sha256": "77d5edb2cc91c6f9d564602fc5bf58bc314033b2992c7e56f8f634571153b49b",
+    "compatibility_ledger_sha256": "41fc3b470e8da7f6356431186ff34d238cdf28204858996a5a0ed90b0f8a4d22",
+    "conformance_sha256": "fc3dd5e66da7d9b17a2304872ea041b1259a12c4e8258f0cc3fc4383fe3447d0",
     "expiry_comparison_sha256": "f5825ba1acc6268ab318e00fb1826d68564641cf3ef8ea766940a5375b70d916",
     "expiry_readiness_sha256": "fa80f81d50082342edbc33e10c53986b5e8fcdc7211a452e17c4a458cdefe4e9",
-    "graph_content_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
+    "graph_content_sha256": "d98bd92d752f23ee19263aa0957c28ee5aac52966d1322f6a31d4a9960394dc9",
     "manifest_sha256": "9b971d6f4f0b1a443fa2877e5eb152f3c59e0d6c377d121ac7062f05b44ba40e"
   },
   "claim_unlocked": "LIGHTYEAR can inventory and fail-closed qualify a bounded synthetic IMS hierarchical semantic subset without claiming native region, scheduling, Fast Path, DBRC, restart, recovery, or production equivalence.",
-  "content_sha256": "dd25b617c44c165bd62b74d73343b25056cb132f919d0c58cd22967221826a91",
+  "content_sha256": "ea963a20edcc7ecc40041c6a90435ca241ac58c199c9b405cff1a306beef2742",
   "dbrc_recovery_equivalent": false,
   "development_ready": true,
   "fast_path_qualified": false,
@@ -37,7 +37,7 @@
   "qualification_gates": [
     {
       "evidence": {
-        "graph_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
+        "graph_sha256": "d98bd92d752f23ee19263aa0957c28ee5aac52966d1322f6a31d4a9960394dc9",
         "ims_databases": 4,
         "ims_dataset_groups": 4,
         "ims_pcbs": 6,
@@ -51,7 +51,7 @@
       "evidence": {
         "blocked_case_count": 4,
         "case_count": 40,
-        "conformance_sha256": "77d5edb2cc91c6f9d564602fc5bf58bc314033b2992c7e56f8f634571153b49b",
+        "conformance_sha256": "fc3dd5e66da7d9b17a2304872ea041b1259a12c4e8258f0cc3fc4383fe3447d0",
         "customer_source": false,
         "mutation_case_count": 4,
         "passed_case_count": 36,

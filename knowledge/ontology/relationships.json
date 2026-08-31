@@ -436,6 +436,25 @@
       "category": "control-flow", "direction": "source scope to SQL statement", "evidence_policy": "edge",
       "label": "issues SQL", "purpose": "Records the supported source scope that issues an embedded SQL statement."
     },
+    "ISSUES_DLI": {
+      "allowed_pairs": [
+        ["cobol_paragraph", "ims_dli_statement"],
+        ["cobol_program", "ims_dli_statement"]
+      ],
+      "category": "control-flow",
+      "direction": "source scope to IMS DLI statement",
+      "evidence_policy": "edge",
+      "label": "issues DLI",
+      "purpose": "Records the COBOL scope that statically issues an EXEC DLI statement."
+    },
+    "READS_SEGMENT": {
+      "allowed_pairs": [["ims_dli_statement", "ims_segment"]],
+      "category": "data-lineage",
+      "direction": "DLI statement to read IMS segment",
+      "evidence_policy": "edge",
+      "label": "reads segment",
+      "purpose": "Records a statically observed IMS retrieval against a PSB-authorized segment."
+    },
     "REFERENCES_COLUMN": {
       "allowed_pairs": [["db2_sql_statement", "db2_column"]],
       "category": "data-lineage", "direction": "SQL statement to referenced column", "evidence_policy": "edge",
@@ -445,6 +464,14 @@
       "allowed_pairs": [["db2_sql_statement", "db2_table"]],
       "category": "data-lineage", "direction": "SQL statement to changed table", "evidence_policy": "edge",
       "label": "writes table", "purpose": "Records a statically observed insert, update, or delete against a table."
+    },
+    "WRITES_SEGMENT": {
+      "allowed_pairs": [["ims_dli_statement", "ims_segment"]],
+      "category": "data-lineage",
+      "direction": "DLI statement to changed IMS segment",
+      "evidence_policy": "edge",
+      "label": "writes segment",
+      "purpose": "Records a statically observed IMS insert, replace, or delete against a PSB-authorized segment."
     },
     "PARENT_OF": {
       "allowed_pairs": [["ims_segment", "ims_segment"]],

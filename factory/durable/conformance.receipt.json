@@ -8,13 +8,13 @@
     "receipts_content_addressed": true,
     "same_item_released_after_crash": true
   },
-  "content_sha256": "489c931f81a03b4c172d412d9485a6bce12be12f8ef1c53d16c9cfb8812cec17",
+  "content_sha256": "1b1b7aa9f4a93aa5c766a51a55558ffe9c57cd2c97b75c1eb8c0c6b4b4a077f4",
   "evidence_class": "synthetic-crash-recovery-conformance",
   "limitations": [
     "This proves local control-plane mechanics, not distributed PostgreSQL behavior.",
     "Synthetic worker termination does not establish live z/OS equivalence."
   ],
-  "plan_sha256": "fd23725f1b612d1a834e35b358e50ea91958bf5574a05b311bf4cb74c3c06196",
+  "plan_sha256": "f9f6480b735f3b76caa38f5651c9875c8b97cd81d9cd47ea5eea625cc55f4e64",
   "policy_sha256": "72b0c927dc60dc8b8c0412c79f9fa9db19e8984f70d32007aa63dbed89eeaf4d",
   "receipt_type": "lightyear-durable-control-plane-conformance",
   "reference_backend": "sqlite-wal",

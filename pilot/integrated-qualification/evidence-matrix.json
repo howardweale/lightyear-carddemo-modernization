@@ -10,7 +10,7 @@
       "integrated_development_evidence_passed": true,
       "native_evidence_passed": false,
       "qualification_mechanism": {
-        "content_sha256": "628152571e1a205c3a9b8e683e8cb8fc59db162347ceaaac8351830700ba4fe0",
+        "content_sha256": "a021fc91ec3f220386d8a42abdc5813c6a7562941b2fd4f519a6cc537ce08b12",
         "exact_source_acceptance_implied": false,
         "identity": "lightyear-cobol-qualification",
         "path": "readiness/cobol/qualification.json"
@@ -18,12 +18,12 @@
       "required_acceptance_evidence": [
         {
           "name": "differential comparison",
-          "receipt_sha256": "7f88d86b079cdd678c3722abcb2785262003f1a79424fb94c23dd4b064413e3b",
+          "receipt_sha256": "8333901235d7a9f9c4a1f3bd6552a2f981f5be2d272d0e91757582d358038430",
           "status": "passed-bounded-synthetic"
         },
         {
           "name": "semantic mutation suite",
-          "receipt_sha256": "7f88d86b079cdd678c3722abcb2785262003f1a79424fb94c23dd4b064413e3b",
+          "receipt_sha256": "8333901235d7a9f9c4a1f3bd6552a2f981f5be2d272d0e91757582d358038430",
           "status": "passed-bounded-synthetic"
         }
       ],
@@ -76,12 +76,12 @@
       "required_acceptance_evidence": [
         {
           "name": "query checksums",
-          "receipt_sha256": "7f88d86b079cdd678c3722abcb2785262003f1a79424fb94c23dd4b064413e3b",
+          "receipt_sha256": "8333901235d7a9f9c4a1f3bd6552a2f981f5be2d272d0e91757582d358038430",
           "status": "passed-bounded-synthetic"
         },
         {
           "name": "data movement and rollback rehearsal",
-          "receipt_sha256": "7f88d86b079cdd678c3722abcb2785262003f1a79424fb94c23dd4b064413e3b",
+          "receipt_sha256": "8333901235d7a9f9c4a1f3bd6552a2f981f5be2d272d0e91757582d358038430",
           "status": "passed-bounded-synthetic"
         }
       ],
@@ -127,7 +127,7 @@
       "integrated_development_evidence_passed": true,
       "native_evidence_passed": false,
       "qualification_mechanism": {
-        "content_sha256": "19c65120383e89aec37ca9e89510a1bb6dacd24a2612aa55b07e7f1420c7d41e",
+        "content_sha256": "21e1728158d8451b85c71ab589bba7cf08fac245c048beb00bab28136ddced26",
         "exact_source_acceptance_implied": false,
         "identity": "lightyear-hlasm-qualification",
         "path": "readiness/asm-date/qualification.json"
@@ -135,12 +135,12 @@
       "required_acceptance_evidence": [
         {
           "name": "bit-level differential comparison",
-          "receipt_sha256": "7f88d86b079cdd678c3722abcb2785262003f1a79424fb94c23dd4b064413e3b",
+          "receipt_sha256": "8333901235d7a9f9c4a1f3bd6552a2f981f5be2d272d0e91757582d358038430",
           "status": "passed-bounded-synthetic"
         },
         {
           "name": "boundary mutation suite",
-          "receipt_sha256": "7f88d86b079cdd678c3722abcb2785262003f1a79424fb94c23dd4b064413e3b",
+          "receipt_sha256": "8333901235d7a9f9c4a1f3bd6552a2f981f5be2d272d0e91757582d358038430",
           "status": "passed-bounded-synthetic"
         }
       ],
@@ -187,7 +187,7 @@
       "integrated_development_evidence_passed": true,
       "native_evidence_passed": false,
       "qualification_mechanism": {
-        "content_sha256": "11df1bcd4c7db17febe47ddf4530e09c7142c755167a40c5f2aa7682b6d977ad",
+        "content_sha256": "dd4b8672b87823c10bcf19781dee464d207ac941b6adf1d8c60058595ac0f69c",
         "exact_source_acceptance_implied": false,
         "identity": "lightyear-jcl-qualification",
         "path": "readiness/jcl/qualification.json"
@@ -195,12 +195,12 @@
       "required_acceptance_evidence": [
         {
           "name": "condition-flow comparison",
-          "receipt_sha256": "7f88d86b079cdd678c3722abcb2785262003f1a79424fb94c23dd4b064413e3b",
+          "receipt_sha256": "8333901235d7a9f9c4a1f3bd6552a2f981f5be2d272d0e91757582d358038430",
           "status": "passed-bounded-synthetic"
         },
         {
           "name": "restart-plan tests",
-          "receipt_sha256": "7f88d86b079cdd678c3722abcb2785262003f1a79424fb94c23dd4b064413e3b",
+          "receipt_sha256": "8333901235d7a9f9c4a1f3bd6552a2f981f5be2d272d0e91757582d358038430",
           "status": "passed-bounded-synthetic"
         }
       ],
@@ -246,7 +246,7 @@
       "integrated_development_evidence_passed": true,
       "native_evidence_passed": false,
       "qualification_mechanism": {
-        "content_sha256": "66ed16c56b19afb535434aa8eb3686b876b329fba7b4f2d6d486adb4b4f413a5",
+        "content_sha256": "ee9ddd20fcb5493f02aac55ba4201d4bcb47ddfd1744c2641f140385d6e6d95a",
         "exact_source_acceptance_implied": false,
         "identity": "lightyear-pli-qualification",
         "path": "readiness/pli/qualification.json"
@@ -254,12 +254,12 @@
       "required_acceptance_evidence": [
         {
           "name": "differential comparison",
-          "receipt_sha256": "7f88d86b079cdd678c3722abcb2785262003f1a79424fb94c23dd4b064413e3b",
+          "receipt_sha256": "8333901235d7a9f9c4a1f3bd6552a2f981f5be2d272d0e91757582d358038430",
           "status": "passed-bounded-synthetic"
         },
         {
           "name": "decimal and call-boundary mutations",
-          "receipt_sha256": "7f88d86b079cdd678c3722abcb2785262003f1a79424fb94c23dd4b064413e3b",
+          "receipt_sha256": "8333901235d7a9f9c4a1f3bd6552a2f981f5be2d272d0e91757582d358038430",
           "status": "passed-bounded-synthetic"
         }
       ],
@@ -297,16 +297,16 @@
       "technology": "PL/I"
     }
   ],
-  "conformance_sha256": "7f88d86b079cdd678c3722abcb2785262003f1a79424fb94c23dd4b064413e3b",
-  "content_sha256": "35009c5f7689e2bbcb303e144ebe6dab465bce623f872717e7e4c7117b9e80e6",
+  "conformance_sha256": "8333901235d7a9f9c4a1f3bd6552a2f981f5be2d272d0e91757582d358038430",
+  "content_sha256": "a5d0bd99b1a3b415abb7db87e5c22b191a5207d6e0c481c8693053a94d0e18f1",
   "factory_dispatch_allowed": false,
   "mainframe_equivalent": false,
   "matrix_type": "lightyear-integrated-pilot-evidence-matrix",
   "native_execution_observed": false,
   "production_ready": false,
   "schema_version": "1.0",
-  "selection_sha256": "a0c78bc7fa361ba53d4b9b5598d5661e18265f573d8e2cac3e8c5368888fac85",
-  "source_graph_sha256": "0981b706b30df9192ec567ede9245e5c8b9dfe40855a4d860acdcacd9f123eec",
+  "selection_sha256": "d3f461ff378e2f5c48db3a3a9a6e48825c7f1e05731920d2cb690002d21c4ebf",
+  "source_graph_sha256": "ce39766d7e479d62e2f7d165bad03ccaa5c8466920d5e309c831e0f8f2ec28de",
   "statistics": {
     "acceptance_evidence_count": 10,
     "blocked_live_evidence_count": 15,
@@ -316,5 +316,5 @@
     "technology_count": 5
   },
   "wave_2_integrated_development_ready": true,
-  "work_package_sha256": "8a01cec899ab88de62614133b5e34a8e4549308d82d52c6a8df95f7eb0b14783"
+  "work_package_sha256": "9bd0b03d5beb014d4181bf94ddc6416d5210cda24d2fa3fe0bc89679c510374e"
 }

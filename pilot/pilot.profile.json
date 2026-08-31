@@ -15,7 +15,7 @@
     "production_ready": false,
     "source_only_pilot": true
   },
-  "content_sha256": "c082d7ad975fb820bea3f3ec70c9cac9ef95a81e2012edea027353516dceae00",
+  "content_sha256": "861a20e4f12328f8b6ff15c404ff650a72268387b9630a43a3200ae1d82417f8",
   "evidence_artifacts": [
     {
       "id": "pilot-runtime",
@@ -39,37 +39,37 @@
       "id": "canonical-graph",
       "path": "knowledge/graph.receipt.json",
       "role": "estate-discovery",
-      "sha256": "43a0fa2326b496c6d1a0ef44159e724bb66d00acfd48a01ad89d8d3cec4007c0"
+      "sha256": "21a61a8e7b1a2a7847ba3096e1d6a04fed8a80320ec5ce426f363038cff382e6"
     },
     {
       "id": "composite-estate",
       "path": "knowledge/composite/estate.receipt.json",
       "role": "composite-lineage",
-      "sha256": "ef8276fdb0fed4896ce9c91ca9488e2ca4ae36b255dae062cd4d17d3766a72cd"
+      "sha256": "caa37a0437aa64b80cdfdf7928e7be2aaf6e8bef3d69d4ceeb9725ce41b4f4a6"
     },
     {
       "id": "capability-projection",
       "path": "knowledge/capabilities/mainframe-readiness.json",
       "role": "capability-gates",
-      "sha256": "4b346cf3274057a7ed7222a4a44d55508433aebd2e8e53f395c9a8a19e85d224"
+      "sha256": "73c654676c190178387ec48beddfac8cd6211438c1d3c041a7547eebf868ec95"
     },
     {
       "id": "pli-coverage",
       "path": "extensions/pli/conformance/coverage.receipt.json",
       "role": "language-coverage",
-      "sha256": "9e599183e771caf1057d6f6425bdfe449ee2ca35006fb313b39de44e17918a79"
+      "sha256": "06d02d73f0469129fa44183758e9faa9b2cd0fd347df27d0c4df83ef98f90b16"
     },
     {
       "id": "pli-development",
       "path": "extensions/pli/modernization/development.receipt.json",
       "role": "mixed-language-development-proof",
-      "sha256": "8c1f760da5957810a0f9f6ceae74dd83e0b07aa229a7c6107517cb127d4e0de6"
+      "sha256": "872019174d86fae5e79958efdc07726739982ff6129a1f88778c1acd64527578"
     },
     {
       "id": "pli-build",
       "path": "extensions/pli/attestation/build.receipt.json",
       "role": "reproducible-build",
-      "sha256": "29718321c6dbb59e5c433e39de15d3cdc5b177cc821dbae906e103f724027ec3"
+      "sha256": "23ad46c400ec728cdc658890d75b50e8d2a7d7a4e8cb9d3cc3368684f4a6f3cb"
     },
     {
       "id": "model-qualification-policy",
@@ -99,7 +99,7 @@
       "id": "collection-appliance",
       "path": "extensions/adapters/appliance/appliance.receipt.json",
       "role": "mainframe-collection-mechanism",
-      "sha256": "f2f83902a02f65c76b2bd87a4ef3ad742f90df6a0921f50eb23b06f2d9360053"
+      "sha256": "2e8b9f9e4e54243facb9685026c62afbd26b60c71277aa2f3a152e508287479b"
     },
     {
       "id": "cics-vsam-readiness",
@@ -123,7 +123,7 @@
       "id": "audit-dossier",
       "path": "audit/dossiers/carddemo-intcalc-v0.19-demo.json",
       "role": "auditor-projection",
-      "sha256": "c79879a2321183c06edbf8233667801d1aac96b561b319e9222e556822603269"
+      "sha256": "f9d9f9597851e31669d14b288089df604af8cea7ed68911497fb15bdc698930b"
     },
     {
       "id": "database-semantic-core",

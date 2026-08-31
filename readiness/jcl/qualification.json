@@ -1,12 +1,12 @@
 {
   "bindings": {
-    "compatibility_ledger_sha256": "d9086a280cf1ee0d0d0399479d71d2bc0d2ed1266cde20a0b3c1f2839c41401c",
-    "conformance_sha256": "38aff8acfbbb307d40827f764dea0808756482006c2f18b79aa64507749e4897",
-    "graph_content_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
+    "compatibility_ledger_sha256": "063fcf290ba59c5386183d0a702933b2dd5f7dcd5374fc6d01fdc6a7fbd4dc59",
+    "conformance_sha256": "35476685f438a09b8038a6c5bd3b4bad63709bb1d3cfc96605f9beb7906fb745",
+    "graph_content_sha256": "d98bd92d752f23ee19263aa0957c28ee5aac52966d1322f6a31d4a9960394dc9",
     "manifest_sha256": "6a521c40cbed4ce4af340079636d94e45662eb854e0a311d1e660d8c652e0353"
   },
   "claim_unlocked": "LIGHTYEAR can inventory and fail-closed qualify a bounded static JCL subset without claiming JES, catalog, scheduler, restart, or z/OS runtime equivalence.",
-  "content_sha256": "11df1bcd4c7db17febe47ddf4530e09c7142c755167a40c5f2aa7682b6d977ad",
+  "content_sha256": "dd4b8672b87823c10bcf19781dee464d207ac941b6adf1d8c60058595ac0f69c",
   "development_ready": true,
   "inventory": {
     "blocked_cases": 6,
@@ -32,7 +32,7 @@
     {
       "evidence": {
         "dd_allocations": 451,
-        "graph_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
+        "graph_sha256": "d98bd92d752f23ee19263aa0957c28ee5aac52966d1322f6a31d4a9960394dc9",
         "jobs": 46,
         "procedures": 2,
         "steps": 119
@@ -44,7 +44,7 @@
       "evidence": {
         "blocked_case_count": 6,
         "case_count": 30,
-        "conformance_sha256": "38aff8acfbbb307d40827f764dea0808756482006c2f18b79aa64507749e4897",
+        "conformance_sha256": "35476685f438a09b8038a6c5bd3b4bad63709bb1d3cfc96605f9beb7906fb745",
         "customer_source": false,
         "mutation_case_count": 6,
         "passed_case_count": 24,

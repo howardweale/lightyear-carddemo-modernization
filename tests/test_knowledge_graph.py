@@ -36,6 +36,7 @@ class KnowledgeGraphTests(unittest.TestCase):
         self.assertEqual(2, stats["nodes_by_kind"]["db2_sql_statement"])
         self.assertGreaterEqual(stats["nodes_by_kind"]["assembler_program"], 2)
         self.assertGreaterEqual(stats["nodes_by_kind"]["ims_database"], 4)
+        self.assertGreaterEqual(stats["nodes_by_kind"]["ims_dli_statement"], 4)
         self.assertGreaterEqual(stats["nodes_by_kind"]["cics_transaction"], 20)
         self.assertGreaterEqual(stats["nodes_by_kind"]["bms_field"], 500)
         self.assertGreaterEqual(stats["nodes_by_kind"]["vsam_cluster"], 10)
@@ -43,6 +44,28 @@ class KnowledgeGraphTests(unittest.TestCase):
         self.assertIn("modern:file:src/carddemo_oracle/oracle.py", node_ids)
         self.assertIn("modern:file:src/lightyear_data/equivalence.py", node_ids)
         self.assertNotIn("modern:file:src/lightyear_factory/orchestrator.py", node_ids)
+
+    def test_cobol_dli_delete_resolves_to_authorized_ims_segments(self) -> None:
+        relations = {
+            (edge["source"], edge["relation"], edge["target"])
+            for edge in self.graph["edges"]
+        }
+        self.assertIn(
+            (
+                "legacy:cobol-paragraph:CBPAUP0C:5000-DELETE-AUTH-DTL",
+                "ISSUES_DLI",
+                "legacy:ims-dli:CBPAUP0C:310:3",
+            ),
+            relations,
+        )
+        self.assertIn(
+            (
+                "legacy:ims-dli:CBPAUP0C:310:3",
+                "WRITES_SEGMENT",
+                "legacy:ims-segment:DBPAUTP0:PAUTDTL1",
+            ),
+            relations,
+        )
 
     def test_business_rule_traces_to_implementation_and_test(self) -> None:
         rule = "rule:intcalc:monthly-interest"

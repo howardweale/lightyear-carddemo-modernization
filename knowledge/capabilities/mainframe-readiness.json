@@ -347,7 +347,7 @@
         {
           "evidence": [
             "1 PL/I include",
-            "1 PL/I program",
+            "2 PL/I program",
             "22 supported construct categories",
             "52 synthetic conformance cases",
             "extensions/pli/conformance/coverage.receipt.json",
@@ -538,7 +538,7 @@
         "live_observed": false,
         "pagination_bounded": true,
         "production_ready": false,
-        "receipt_sha256": "2786d611e9861d0a8b0b8cb3b5c46a86ce49f020f7b91dcdf0e12063740c4d64",
+        "receipt_sha256": "df09320ff295c4adf6a3c6533150a1fa9f4b59bfe4e2a30c9620f329777a8e24",
         "retry_bounded": true,
         "status": "passed"
       },
@@ -546,26 +546,26 @@
       "live_observed": false,
       "mechanism": "Mainframe Access Campaign",
       "production_ready": false,
-      "receipt_sha256": "2426eb60c9824e93e27bd326d30fb990a92d537955c8d8405b8c9dce0cdb13f9",
+      "receipt_sha256": "a3ee70c3ec98e80377f906c97c1c0da55721748e0537a749ab2e84dd01db9053",
       "status": "simulated_ready"
     }
   ],
-  "content_sha256": "5bf8a378bd1b43457f228a3be05bf4b44bd9b3bd7b66c8959fe714567f59ac5f",
+  "content_sha256": "4bc0d37461e708c729a9ca9f90d2c5bb1cdc40b9090689520bd9c684e260573f",
   "evidence_bindings": {
-    "canonical_graph_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
+    "canonical_graph_sha256": "d98bd92d752f23ee19263aa0957c28ee5aac52966d1322f6a31d4a9960394dc9",
     "data_rehearsal_receipt_sha256": "e628b50cc4e21707f6c62e7a8429654c7867411f75fb9381e03f3d191854f652",
-    "enterprise_appliance_receipt_sha256": "2786d611e9861d0a8b0b8cb3b5c46a86ce49f020f7b91dcdf0e12063740c4d64",
+    "enterprise_appliance_receipt_sha256": "df09320ff295c4adf6a3c6533150a1fa9f4b59bfe4e2a30c9620f329777a8e24",
     "extension_catalog_sha256": "a3ca454e737d047b44ce1a17d225ea23174a345e0e66083e304290a037f73106",
-    "mainframe_campaign_receipt_sha256": "2426eb60c9824e93e27bd326d30fb990a92d537955c8d8405b8c9dce0cdb13f9",
+    "mainframe_campaign_receipt_sha256": "a3ee70c3ec98e80377f906c97c1c0da55721748e0537a749ab2e84dd01db9053",
     "oracle_data_receipt_sha256": "6958d7cc783d5ad00c469c112db5b665bf9ba93b7addec9cc94375d6c3f2dd83",
-    "pli_build_attestation_sha256": "82826dd2bdba889bb789571fdba4285facbeed40c339b5ef3f44cbcfcdf2ae80",
-    "pli_build_receipt_sha256": "9de820e7295484c89ab8acdb5d6c902e5ae1f89113f27bc882d17d31054a283f",
-    "pli_coverage_receipt_sha256": "145dd14af0532953233ed63dfe846aedc9d80755c0f986a07c52fec578161c40",
-    "pli_development_receipt_sha256": "2a64d8cbff114e420e221a56bfe30c8fcc10ff0e359d4ba96b5f138598824ddb",
-    "pli_fragment_sha256": "66ed4547441d74c66582e4d373d3e374a2e5776cb366704541392255ddfe9788",
+    "pli_build_attestation_sha256": "7f23181ec8901ed936d803cab36ef20513b603d415d3e67c54f27dfd68743270",
+    "pli_build_receipt_sha256": "17320113ac03adcd568e6f1f57719d181bb61721eef5ba5e93b3a9624543a939",
+    "pli_coverage_receipt_sha256": "2b74947f6383e7b0c3ef6f9e1446a90483df8a662ca25eec46775a8b1c8e463b",
+    "pli_development_receipt_sha256": "bd6b2b76124ac965c7ffa9285036a83032e5dcea775e49ccd0b76746c3602fe7",
+    "pli_fragment_sha256": "8606efff2dfefc8b0286237ecf1e8b9b00ea3090e49beaa4c165d9cb5a3bb1e6",
     "postgres_data_receipt_sha256": "8e2e2dc30cffa3205ceb743f418ae937ea8ac05d6bde9041182acc61cba3abbe"
   },
-  "graph_content_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
+  "graph_content_sha256": "d98bd92d752f23ee19263aa0957c28ee5aac52966d1322f6a31d4a9960394dc9",
   "schema_version": "1.5",
   "truth_boundary": "Local, simulated, fixture, static, and offline target evidence cannot satisfy live z/OS observation or equivalence gates."
 }

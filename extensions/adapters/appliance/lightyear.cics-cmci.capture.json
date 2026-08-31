@@ -37,12 +37,12 @@
     }
   ],
   "collected_at": "2026-08-28T00:00:00Z",
-  "content_sha256": "0732aaf52cecc3a4ab61bfffcb47ba57f8ed7a284be7898e55a40a85b6881fc2",
+  "content_sha256": "cbdce3412cc9261cc1249b5c2c324bf289bfefb99beb55917d5877a2357caa0c",
   "envelope_id": "appliance:cics-cmci:carddemo-enterprise-collector-v1",
   "envelope_type": "lightyear-adapter-evidence",
   "evidence_class": "simulated",
   "graph_binding": {
-    "content_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
+    "content_sha256": "d98bd92d752f23ee19263aa0957c28ee5aac52966d1322f6a31d4a9960394dc9",
     "graph_id": "lightyear:carddemo-modernization"
   },
   "limitations": [

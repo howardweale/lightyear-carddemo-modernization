@@ -85,6 +85,7 @@ def extract_legacy(graph: KnowledgeGraph, root: Path) -> None:
             _extract_jcl(graph, path, root)
         else:
             _add_file_node(graph, "legacy", path, root, LEGACY_SOURCE_ID, suffix.lstrip(".") or "text")
+    _resolve_ims_dli_segments(graph)
 
 
 def _extract_cobol(
@@ -218,6 +219,129 @@ def _extract_cobol(
 
     _extract_cics_commands(graph, lines, relative, program_id, program_name)
     _extract_embedded_sql(graph, lines, relative, program_id, program_name)
+    _extract_ims_dli_calls(graph, lines, relative, program_id, program_name)
+
+
+def _extract_ims_dli_calls(
+    graph: KnowledgeGraph,
+    lines: list[str],
+    relative: str,
+    program_id: str,
+    program_name: str,
+) -> None:
+    """Model statically identifiable EXEC DLI calls without claiming execution."""
+
+    text = "\n".join(lines)
+    paragraph_starts: list[tuple[int, str]] = []
+    excluded = {
+        "IDENTIFICATION", "ENVIRONMENT", "DATA", "PROCEDURE", "FILE-CONTROL",
+        "INPUT-OUTPUT", "WORKING-STORAGE", "LINKAGE", "FILE", "CONFIGURATION",
+    }
+    for line_number, line in enumerate(lines, 1):
+        match = re.match(r"^\s{0,7}([0-9A-Z][0-9A-Z-]+)\.\s*(?:$|\s)", line, re.IGNORECASE)
+        if match and match.group(1).upper() not in excluded and not match.group(1).isdigit():
+            paragraph_starts.append((line_number, match.group(1).upper()))
+
+    for occurrence, match in enumerate(
+        re.finditer(r"\bEXEC\s+DLI\s+(.*?)\bEND-EXEC", text, re.IGNORECASE | re.DOTALL),
+        start=1,
+    ):
+        body = re.sub(r"\s+", " ", match.group(1)).strip()
+        operation_match = re.match(r"(GN|GNP|GU|GHN|GHNP|GHU|ISRT|REPL|DLET|CHKP)\b", body, re.IGNORECASE)
+        if not operation_match:
+            continue
+        operation = operation_match.group(1).upper()
+        segment_match = re.search(
+            r"\bSEGMENT\s*\(\s*([A-Z0-9$#@-]+)\s*\)", body, re.IGNORECASE
+        )
+        line_start = text[: match.start()].count("\n") + 1
+        line_end = line_start + match.group(0).count("\n")
+        paragraph = next(
+            (name for number, name in reversed(paragraph_starts) if number <= line_start), None
+        )
+        scope_id = (
+            f"legacy:cobol-paragraph:{program_name}:{paragraph}" if paragraph else program_id
+        )
+        graph.add_node(
+            scope_id,
+            "cobol_paragraph" if paragraph else "cobol_program",
+            paragraph or program_name,
+            properties={"program": program_name, "path": relative},
+        )
+        statement_id = f"legacy:ims-dli:{program_name}:{line_start}:{occurrence}"
+        segment_name = segment_match.group(1).upper() if segment_match else ""
+        ev = [evidence(LEGACY_SOURCE_ID, relative, line_start, line_end)]
+        graph.add_node(
+            statement_id,
+            "ims_dli_statement",
+            f"{operation} {segment_name}".strip(),
+            properties={
+                "operation": operation,
+                "program": program_name,
+                "paragraph": paragraph or "PROGRAM",
+                "segment": segment_name,
+                "normalized_call": body,
+                "evidence_class": "static-source",
+                "runtime_observed": False,
+            },
+            evidence_items=ev,
+        )
+        graph.add_edge(scope_id, "ISSUES_DLI", statement_id, evidence_items=ev)
+
+
+def _resolve_ims_dli_segments(graph: KnowledgeGraph) -> None:
+    """Resolve DLI segment names through the program's PSB/PCB view where possible."""
+
+    outgoing: dict[str, list[dict[str, object]]] = {}
+    for edge in graph.edges.values():
+        outgoing.setdefault(edge["source"], []).append(edge)
+    segments_by_name: dict[str, set[str]] = {}
+    for node in graph.nodes.values():
+        if node["kind"] == "ims_segment":
+            segments_by_name.setdefault(node["name"].upper(), set()).add(node["id"])
+
+    read_operations = {"GN", "GNP", "GU", "GHN", "GHNP", "GHU"}
+    write_operations = {"ISRT", "REPL", "DLET"}
+    for statement in graph.nodes.values():
+        if statement["kind"] != "ims_dli_statement":
+            continue
+        segment_name = statement["properties"].get("segment", "")
+        if not segment_name:
+            statement["properties"]["target_resolution"] = "not-applicable"
+            continue
+        candidates = set(segments_by_name.get(str(segment_name).upper(), set()))
+        program_id = f"legacy:cobol-program:{statement['properties']['program']}"
+        authorized: set[str] = set()
+        for program_edge in outgoing.get(program_id, []):
+            if program_edge["relation"] != "USES_PSB":
+                continue
+            for psb_edge in outgoing.get(str(program_edge["target"]), []):
+                if psb_edge["relation"] != "CONTAINS":
+                    continue
+                for pcb_edge in outgoing.get(str(psb_edge["target"]), []):
+                    if pcb_edge["relation"] == "SENSITIVE_TO":
+                        authorized.add(str(pcb_edge["target"]))
+        if authorized:
+            candidates.intersection_update(authorized)
+        if len(candidates) != 1:
+            statement["properties"]["target_resolution"] = "ambiguous-or-unresolved"
+            continue
+        target = next(iter(candidates))
+        statement["properties"]["target_resolution"] = "psb-authorized-segment"
+        operation = statement["properties"]["operation"]
+        relation = (
+            "READS_SEGMENT" if operation in read_operations
+            else "WRITES_SEGMENT" if operation in write_operations
+            else None
+        )
+        if relation is not None:
+            graph.add_edge(
+                statement["id"],
+                relation,
+                target,
+                properties={"operation": operation, "runtime_observed": False},
+                evidence_items=list(statement["evidence"]),
+            )
 
 
 def _db2_table_id(schema: str, table: str) -> str:

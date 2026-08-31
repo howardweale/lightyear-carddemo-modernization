@@ -1,10 +1,10 @@
 {
   "base_graph": {
-    "content_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
+    "content_sha256": "d98bd92d752f23ee19263aa0957c28ee5aac52966d1322f6a31d4a9960394dc9",
     "graph_id": "lightyear:carddemo-modernization",
     "schema_version": "1.1"
   },
-  "content_sha256": "66ed4547441d74c66582e4d373d3e374a2e5776cb366704541392255ddfe9788",
+  "content_sha256": "8606efff2dfefc8b0286237ecf1e8b9b00ea3090e49beaa4c165d9cb5a3bb1e6",
   "fragment_id": "lightyear:pli-reference-v1",
   "language_pack": {
     "extensions": [
@@ -20,26 +20,27 @@
   "receipt_type": "lightyear-graph-extension-build",
   "schema_version": "1.0",
   "statistics": {
-    "edge_count": 10,
+    "edge_count": 13,
     "edges_by_relation": {
       "CALLS": 2,
       "CONTAINS": 1,
-      "DECLARES": 2,
-      "ISSUES_SQL": 1,
+      "DECLARES": 3,
+      "ISSUES_SQL": 2,
       "READS": 1,
       "READS_TABLE": 1,
       "USES_INCLUDE": 1,
-      "WRITES": 1
+      "WRITES": 1,
+      "WRITES_TABLE": 1
     },
     "external_reference_count": 2,
-    "node_count": 8,
+    "node_count": 11,
     "nodes_by_kind": {
-      "db2_sql_statement": 1,
+      "db2_sql_statement": 2,
       "pli_file_handle": 2,
       "pli_include": 1,
       "pli_procedure": 1,
-      "pli_program": 1,
-      "source_file": 2
+      "pli_program": 2,
+      "source_file": 3
     }
   }
 }

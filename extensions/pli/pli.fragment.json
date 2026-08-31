@@ -1,10 +1,10 @@
 {
   "base_graph": {
-    "content_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
+    "content_sha256": "d98bd92d752f23ee19263aa0957c28ee5aac52966d1322f6a31d4a9960394dc9",
     "graph_id": "lightyear:carddemo-modernization",
     "schema_version": "1.1"
   },
-  "content_sha256": "66ed4547441d74c66582e4d373d3e374a2e5776cb366704541392255ddfe9788",
+  "content_sha256": "8606efff2dfefc8b0286237ecf1e8b9b00ea3090e49beaa4c165d9cb5a3bb1e6",
   "coverage": {
     "blocker_count": 0,
     "frontend": "tokenized-statement-parser",
@@ -151,6 +151,23 @@
       "evidence": [
         {
           "confidence": "observed",
+          "line_end": 6,
+          "line_start": 6,
+          "method": "pli-supported-subset-v2",
+          "path": "extensions/pli/reference/AUTHUPD1.pli",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "fragment-edge:e3a0f98edfd718bd6fbd",
+      "properties": {},
+      "relation": "ISSUES_SQL",
+      "source": "extension:pli-program:AUTHUPD1",
+      "target": "extension:pli-sql:AUTHUPD1:6:1"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "observed",
           "line_end": 1,
           "line_start": 1,
           "method": "pli-supported-subset-v2",
@@ -163,6 +180,40 @@
       "relation": "DECLARES",
       "source": "extension:source-file:extensions/pli/reference/AUTHCOM.inc",
       "target": "extension:pli-include:AUTHCOM"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "observed",
+          "line_end": 2,
+          "line_start": 2,
+          "method": "pli-supported-subset-v2",
+          "path": "extensions/pli/reference/AUTHUPD1.pli",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "fragment-edge:e6552ec6af87dd2c8445",
+      "properties": {},
+      "relation": "DECLARES",
+      "source": "extension:source-file:extensions/pli/reference/AUTHUPD1.pli",
+      "target": "extension:pli-program:AUTHUPD1"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "observed",
+          "line_end": 6,
+          "line_start": 6,
+          "method": "pli-supported-subset-v2",
+          "path": "extensions/pli/reference/AUTHUPD1.pli",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "fragment-edge:ed1c9fe2f33f74e37df4",
+      "properties": {},
+      "relation": "WRITES_TABLE",
+      "source": "extension:pli-sql:AUTHUPD1:6:1",
+      "target": "legacy:db2-table:CARDDEMO.AUTHFRDS"
     },
     {
       "evidence": [
@@ -292,6 +343,27 @@
       "evidence": [
         {
           "confidence": "observed",
+          "line_end": 2,
+          "line_start": 2,
+          "method": "pli-supported-subset-v2",
+          "path": "extensions/pli/reference/AUTHUPD1.pli",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "extension:pli-program:AUTHUPD1",
+      "kind": "pli_program",
+      "name": "AUTHUPD1",
+      "properties": {
+        "language": "PL/I",
+        "parser": "pli-supported-subset-v2",
+        "path": "extensions/pli/reference/AUTHUPD1.pli",
+        "reference_fixture": true
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "observed",
           "line_end": 15,
           "line_start": 15,
           "method": "pli-supported-subset-v2",
@@ -308,6 +380,28 @@
         "operation": "SELECT",
         "parser": "pli-supported-subset-v2",
         "program": "ACCTPL1"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "observed",
+          "line_end": 6,
+          "line_start": 6,
+          "method": "pli-supported-subset-v2",
+          "path": "extensions/pli/reference/AUTHUPD1.pli",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "extension:pli-sql:AUTHUPD1:6:1",
+      "kind": "db2_sql_statement",
+      "name": "UPDATE CARDDEMO.AUTHFRDS",
+      "properties": {
+        "language": "PL/I",
+        "normalized_sql": "UPDATE CARDDEMO.AUTHFRDS SET AUTH_FRAUD =:FRAUD_FLAG WHERE CARD_NUM =:AUTH_ID",
+        "operation": "UPDATE",
+        "parser": "pli-supported-subset-v2",
+        "program": "AUTHUPD1"
       }
     },
     {
@@ -355,6 +449,29 @@
         "reference_fixture": true,
         "transport_content_sha256": "7e0ae88ca9679f4259b96e7629503e5ed6c2d5df094a7d40c68c8e0a6b524318"
       }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "observed",
+          "line_end": 11,
+          "line_start": 1,
+          "method": "pli-supported-subset-v2",
+          "path": "extensions/pli/reference/AUTHUPD1.pli",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "extension:source-file:extensions/pli/reference/AUTHUPD1.pli",
+      "kind": "source_file",
+      "name": "AUTHUPD1.pli",
+      "properties": {
+        "content_sha256": "d8e4d26f779bb5e6d97e26df3932617e3edb848d79bf12a4e8507596dfe2699a",
+        "hash_basis": "normalized-lf",
+        "language": "PL/I",
+        "path": "extensions/pli/reference/AUTHUPD1.pli",
+        "reference_fixture": true,
+        "transport_content_sha256": "d8e4d26f779bb5e6d97e26df3932617e3edb848d79bf12a4e8507596dfe2699a"
+      }
     }
   ],
   "schema_version": "1.0",
@@ -364,26 +481,27 @@
     "source_id": "source:lightyear-carddemo"
   },
   "statistics": {
-    "edge_count": 10,
+    "edge_count": 13,
     "edges_by_relation": {
       "CALLS": 2,
       "CONTAINS": 1,
-      "DECLARES": 2,
-      "ISSUES_SQL": 1,
+      "DECLARES": 3,
+      "ISSUES_SQL": 2,
       "READS": 1,
       "READS_TABLE": 1,
       "USES_INCLUDE": 1,
-      "WRITES": 1
+      "WRITES": 1,
+      "WRITES_TABLE": 1
     },
     "external_reference_count": 2,
-    "node_count": 8,
+    "node_count": 11,
     "nodes_by_kind": {
-      "db2_sql_statement": 1,
+      "db2_sql_statement": 2,
       "pli_file_handle": 2,
       "pli_include": 1,
       "pli_procedure": 1,
-      "pli_program": 1,
-      "source_file": 2
+      "pli_program": 2,
+      "source_file": 3
     }
   }
 }

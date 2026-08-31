@@ -146,13 +146,16 @@ class ExtensionFoundationTests(unittest.TestCase):
         self.assertEqual(fragment, json.loads(PLI_FRAGMENT.read_text(encoding="utf-8")))
         kinds = fragment["statistics"]["nodes_by_kind"]
         relations = fragment["statistics"]["edges_by_relation"]
-        self.assertEqual(1, kinds["pli_program"])
+        self.assertEqual(2, kinds["pli_program"])
         self.assertEqual(1, kinds["pli_procedure"])
         self.assertEqual(1, kinds["pli_include"])
         self.assertGreaterEqual(relations["CALLS"], 2)
         external = {item["entity_id"] for item in fragment["external_references"]}
         self.assertIn("legacy:cobol-program:CBACT04C", external)
         self.assertIn("legacy:db2-table:CARDDEMO.AUTHFRDS", external)
+        writes = [edge for edge in fragment["edges"] if edge["relation"] == "WRITES_TABLE"]
+        self.assertEqual(1, len(writes))
+        self.assertEqual("extension:pli-sql:AUTHUPD1:6:1", writes[0]["source"])
         base_ids = {item["id"] for item in GRAPH["nodes"]}
         self.assertFalse(any("lightyear_extensions" in item for item in base_ids))
 

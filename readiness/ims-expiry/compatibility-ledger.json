@@ -6,7 +6,7 @@
     "lossy",
     "unsupported"
   ],
-  "content_sha256": "f7e7b71aa3a837047e10be83ff16d05dc543811e5451a065e442e1d0711094eb",
+  "content_sha256": "41fc3b470e8da7f6356431186ff34d238cdf28204858996a5a0ed90b0f8a4d22",
   "entries": [
     {
       "classification": "exact",
@@ -485,7 +485,7 @@
       }
     }
   ],
-  "graph_content_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
+  "graph_content_sha256": "d98bd92d752f23ee19263aa0957c28ee5aac52966d1322f6a31d4a9960394dc9",
   "ledger_type": "lightyear-ims-compatibility-ledger",
   "mainframe_equivalent": false,
   "production_ready": false,

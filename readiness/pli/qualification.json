@@ -1,12 +1,12 @@
 {
   "bindings": {
-    "compatibility_ledger_sha256": "24161219b39fa485ea3fb6989498f7c6738eab46962356b7ac538b54d9fd7d94",
-    "graph_content_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
+    "compatibility_ledger_sha256": "33114ef662960b6bf9a3a1658b4c92debf6d004ce8d1c5a04b3af5fec8ae41d2",
+    "graph_content_sha256": "d98bd92d752f23ee19263aa0957c28ee5aac52966d1322f6a31d4a9960394dc9",
     "manifest_sha256": "d158fbc3091f7f36753aed54df766ba64c61ac1cf25a8ee8696551165aa45fe3",
     "support_matrix_sha256": "b3d0804a8b6f7e5d34d3a63cf2af676f841aa981cea8e71a2daace2b34e94eb4"
   },
   "claim_unlocked": "LIGHTYEAR can qualify a bounded PL/I supported subset and mixed PL/I-COBOL-Db2 development cell without claiming general Enterprise PL/I or z/OS equivalence.",
-  "content_sha256": "66ed16c56b19afb535434aa8eb3686b876b329fba7b4f2d6d486adb4b4f413a5",
+  "content_sha256": "ee9ddd20fcb5493f02aac55ba4201d4bcb47ddfd1744c2641f140385d6e6d95a",
   "development_ready": true,
   "enterprise_pli_qualified": false,
   "inventory": {
@@ -45,7 +45,7 @@
     },
     {
       "evidence": {
-        "coverage_sha256": "145dd14af0532953233ed63dfe846aedc9d80755c0f986a07c52fec578161c40",
+        "coverage_sha256": "2b74947f6383e7b0c3ef6f9e1446a90483df8a662ca25eec46775a8b1c8e463b",
         "native_parser": false
       },
       "gate": "lexical-and-statement-parsing",
@@ -97,7 +97,7 @@
     },
     {
       "evidence": {
-        "development_receipt_sha256": "2a64d8cbff114e420e221a56bfe30c8fcc10ff0e359d4ba96b5f138598824ddb",
+        "development_receipt_sha256": "bd6b2b76124ac965c7ffa9285036a83032e5dcea775e49ccd0b76746c3602fe7",
         "mutation_cases": 7
       },
       "gate": "candidate-differential-and-mutations",
@@ -105,7 +105,7 @@
     },
     {
       "evidence": {
-        "build_receipt_sha256": "9de820e7295484c89ab8acdb5d6c902e5ae1f89113f27bc882d17d31054a283f",
+        "build_receipt_sha256": "17320113ac03adcd568e6f1f57719d181bb61721eef5ba5e93b3a9624543a939",
         "original_pli_compiled": false
       },
       "gate": "reproducible-candidate-build",

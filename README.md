@@ -1,6 +1,26 @@
 # FactoryDark.ai CardDemo Modernization Factory
 
-Release: **v0.45.0 — SAP ASE semantic source adapter**
+Release: **v0.46.0 — Unified estate operator navigation**
+
+v0.46 gives an operator one customer-centered Control Tower for mainframe and database work. The
+new context bar separates the customer engagement, technology scope, and operator lens. Scope is a
+visual focus rather than a hard filter, so cross-platform dependencies remain visible.
+
+The Trace view follows directed source-to-target graph semantics and reports the platforms, hop
+count, evidence class, customer boundary, and runtime boundary. The bundled estate demonstrates
+source-backed COBOL-to-DB2 and COBOL-to-IMS writes. The IMS path resolves exact `EXEC DLI DLET`
+statements through the program's PSB/PCB view to the `PAUTDTL1` and `PAUTSUM0` segments. A separate
+`AUTHUPD1` fixture demonstrates PL/I embedded `UPDATE` extraction into a DB2 `WRITES_TABLE` edge and
+is visibly labeled non-customer reference evidence. The original `ACCTPL1` path remains a DB2 read.
+Oracle and SAP ASE have separately qualified adapter evidence, but they are not yet projected into
+the graph and have no customer integration edges; the UI reports that gap instead of inventing an
+end-to-end path. SAP application and governed security-vulnerability lenses remain planned.
+
+```bash
+./graph-explorer.sh
+```
+
+Previous milestone: **v0.45.0 — SAP ASE semantic source adapter**
 
 v0.45 adds a genuine, target-neutral SAP ASE `SourceAdapter` backed by a customer-shaped catalog,
 privacy-preserving profiles, exact extraction contracts, content-bound replication resume, explicit
@@ -20,7 +40,7 @@ false.
 PYTHONPATH=src python3 -m lightyear_data verify-sap-ase-source-adapter --project-root .
 ```
 
-Previous milestone: **v0.44.1 — Searchable milestone documentation index**
+Earlier milestone: **v0.44.1 — Searchable milestone documentation index**
 
 v0.44.1 repairs and governs the searchable milestone library. The generated index discovers all
 milestones, supports text and status filtering, links each result to its Markdown, Word, and PDF

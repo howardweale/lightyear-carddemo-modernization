@@ -1,6 +1,6 @@
 {
   "base_graph": {
-    "content_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
+    "content_sha256": "d98bd92d752f23ee19263aa0957c28ee5aac52966d1322f6a31d4a9960394dc9",
     "graph_id": "lightyear:carddemo-modernization",
     "schema_version": "1.1"
   },
@@ -64,7 +64,7 @@
           "live_observed": false,
           "pagination_bounded": true,
           "production_ready": false,
-          "receipt_sha256": "2786d611e9861d0a8b0b8cb3b5c46a86ce49f020f7b91dcdf0e12063740c4d64",
+          "receipt_sha256": "df09320ff295c4adf6a3c6533150a1fa9f4b59bfe4e2a30c9620f329777a8e24",
           "retry_bounded": true,
           "status": "passed"
         },
@@ -72,11 +72,11 @@
         "live_observed": false,
         "mechanism": "Mainframe Access Campaign",
         "production_ready": false,
-        "receipt_sha256": "2426eb60c9824e93e27bd326d30fb990a92d537955c8d8405b8c9dce0cdb13f9",
+        "receipt_sha256": "a3ee70c3ec98e80377f906c97c1c0da55721748e0537a749ab2e84dd01db9053",
         "status": "simulated_ready"
       }
     ],
-    "content_sha256": "5bf8a378bd1b43457f228a3be05bf4b44bd9b3bd7b66c8959fe714567f59ac5f",
+    "content_sha256": "4bc0d37461e708c729a9ca9f90d2c5bb1cdc40b9090689520bd9c684e260573f",
     "schema_version": "1.5",
     "truth_boundary": "Local, simulated, fixture, static, and offline target evidence cannot satisfy live z/OS observation or equivalence gates."
   },
@@ -89,10 +89,10 @@
     "statement": "The projection composes separately validated discovery and development evidence; it does not promote live-mainframe or production claims."
   },
   "composite_graph_id": "lightyear:carddemo-modernization:composite",
-  "content_sha256": "d2bad4980e845c46ee0e7ba75d16a96fc7d6ebf0f94bdddacecc15614c52a12d",
+  "content_sha256": "c3fd73bab0f528fdfeedd819b6261b7652eefa000254556cbc78be32b937496e",
   "fragments": [
     {
-      "content_sha256": "66ed4547441d74c66582e4d373d3e374a2e5776cb366704541392255ddfe9788",
+      "content_sha256": "8606efff2dfefc8b0286237ecf1e8b9b00ea3090e49beaa4c165d9cb5a3bb1e6",
       "fragment_id": "lightyear:pli-reference-v1",
       "fragment_type": "lightyear-graph-extension",
       "language": "PL/I",
@@ -106,7 +106,7 @@
   "receipt_type": "lightyear-composite-estate-build",
   "schema_version": "1.0",
   "statistics": {
-    "edge_count": 13470,
+    "edge_count": 13504,
     "edges_by_relation": {
       "ACCESSES": 58,
       "ALLOCATES": 207,
@@ -116,7 +116,7 @@
       "BRANCHES_TO": 9,
       "CALLS": 1000,
       "CONTAINS": 8916,
-      "DECLARES": 377,
+      "DECLARES": 378,
       "DEPENDS_ON": 29,
       "DERIVED_FROM": 40,
       "DESCRIBES": 3,
@@ -133,11 +133,13 @@
       "IMPLEMENTED_BY": 38,
       "INDEXES": 5,
       "ISSUES": 240,
-      "ISSUES_SQL": 3,
+      "ISSUES_DLI": 16,
+      "ISSUES_SQL": 4,
       "LEGACY_ENTRYPOINT": 9,
       "MODERN_ENTRYPOINT": 8,
       "PARENT_OF": 1,
       "READS": 68,
+      "READS_SEGMENT": 9,
       "READS_TABLE": 1,
       "READS_WRITES": 3,
       "REFERENCES_COLUMN": 30,
@@ -156,9 +158,10 @@
       "USES_PSB": 4,
       "VERIFIED_BY": 45,
       "WRITES": 20,
-      "WRITES_TABLE": 2
+      "WRITES_SEGMENT": 6,
+      "WRITES_TABLE": 3
     },
-    "node_count": 11328,
+    "node_count": 11347,
     "nodes_by_kind": {
       "assembler_dsect": 1,
       "assembler_field": 5,
@@ -184,11 +187,12 @@
       "db2_constraint": 3,
       "db2_dcl": 3,
       "db2_index": 3,
-      "db2_sql_statement": 3,
+      "db2_sql_statement": 4,
       "db2_table": 3,
       "executable": 11,
       "ims_database": 4,
       "ims_dataset_group": 4,
+      "ims_dli_statement": 16,
       "ims_field": 3,
       "ims_pcb": 6,
       "ims_psb": 4,
@@ -204,9 +208,9 @@
       "pli_file_handle": 2,
       "pli_include": 1,
       "pli_procedure": 1,
-      "pli_program": 1,
+      "pli_program": 2,
       "software_dependency": 5,
-      "source_file": 248,
+      "source_file": 249,
       "test_case": 11,
       "verification_scenario": 15,
       "vsam_alternate_index": 3,

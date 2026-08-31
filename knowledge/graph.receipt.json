@@ -1,9 +1,9 @@
 {
-  "content_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
+  "content_sha256": "d98bd92d752f23ee19263aa0957c28ee5aac52966d1322f6a31d4a9960394dc9",
   "graph_id": "lightyear:carddemo-modernization",
   "receipt_type": "lightyear-knowledge-graph-build",
   "relationship_ontology": {
-    "content_sha256": "2a891d138b1fbbb4bf7c98845acd52ba36af6955bee75993aafacc36e96e4f0d",
+    "content_sha256": "431e714ec357bc34e88b365acacc5295c749ab7b470014c7cd7ccfdaba96de46",
     "ontology_id": "lightyear:modernization-relationships",
     "schema_version": "1.0"
   },
@@ -29,7 +29,7 @@
     }
   ],
   "statistics": {
-    "edge_count": 13460,
+    "edge_count": 13491,
     "edges_by_relation": {
       "ACCESSES": 58,
       "ALLOCATES": 207,
@@ -56,11 +56,13 @@
       "IMPLEMENTED_BY": 38,
       "INDEXES": 5,
       "ISSUES": 240,
+      "ISSUES_DLI": 16,
       "ISSUES_SQL": 2,
       "LEGACY_ENTRYPOINT": 9,
       "MODERN_ENTRYPOINT": 8,
       "PARENT_OF": 1,
       "READS": 67,
+      "READS_SEGMENT": 9,
       "READS_WRITES": 3,
       "REFERENCES_COLUMN": 30,
       "RESOLVES_TO": 41,
@@ -77,9 +79,10 @@
       "USES_PSB": 4,
       "VERIFIED_BY": 45,
       "WRITES": 19,
+      "WRITES_SEGMENT": 6,
       "WRITES_TABLE": 2
     },
-    "node_count": 11320,
+    "node_count": 11336,
     "nodes_by_kind": {
       "assembler_dsect": 1,
       "assembler_field": 5,
@@ -110,6 +113,7 @@
       "executable": 11,
       "ims_database": 4,
       "ims_dataset_group": 4,
+      "ims_dli_statement": 16,
       "ims_field": 3,
       "ims_pcb": 6,
       "ims_psb": 4,

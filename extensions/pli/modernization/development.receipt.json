@@ -1,13 +1,13 @@
 {
   "bindings": {
     "behavior_contract_sha256": "c04c386eb896f3d74db88827ba5ef93165404d594843317e42635e6fae61b00e",
-    "canonical_graph_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
+    "canonical_graph_sha256": "d98bd92d752f23ee19263aa0957c28ee5aac52966d1322f6a31d4a9960394dc9",
     "comparison_sha256": "31d0eb349496a95beb7e43782fc3d838da3ad8f225187f6ca715438e7e028eed",
     "data_fixture_source_sha256": "3c8fb00c1a178e656b9278d29598564e19475344ed970bdaf6bcfb4cda0de61c",
     "fixtures_sha256": "cbaafdf6074521e1d2933fc66efd5fd5e4c22f97d45caea254cdb08621b573a0",
     "java_candidate_sha256": "6e9a26963a3cf4663ff5971ab5865fb1b63da5f2ba57247967d44968721d48dc",
     "java_test_sha256": "edc6a52b8dcf61cb7d99078277127ffe616e097669f8b92478a4eceedeb3cf21",
-    "pli_fragment_sha256": "66ed4547441d74c66582e4d373d3e374a2e5776cb366704541392255ddfe9788",
+    "pli_fragment_sha256": "8606efff2dfefc8b0286237ecf1e8b9b00ea3090e49beaa4c165d9cb5a3bb1e6",
     "pli_include_sha256": "7e0ae88ca9679f4259b96e7629503e5ed6c2d5df094a7d40c68c8e0a6b524318",
     "pli_source_sha256": "04d2702ce18c329c59680e6868c643e60c1a59d69a075d43eeaea9d2f2b6a1d6",
     "python_candidate_sha256": "566073dc2eee9bca674c5dbeeec21937b11328cef2c1fb9aec607e8fcf1c044a"
@@ -22,7 +22,7 @@
     "mutation_and_negative_verification": true,
     "typed_static_graph": true
   },
-  "content_sha256": "2a64d8cbff114e420e221a56bfe30c8fcc10ff0e359d4ba96b5f138598824ddb",
+  "content_sha256": "bd6b2b76124ac965c7ffa9285036a83032e5dcea775e49ccd0b76746c3602fe7",
   "development_ready": true,
   "evidence_class": "local_observed",
   "mainframe_equivalent": false,

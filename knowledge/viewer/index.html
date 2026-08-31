@@ -8,20 +8,32 @@
 </head>
 <body>
   <header class="masthead">
-    <div>
-      <p class="eyebrow">LIGHTYEAR / MODERNIZATION INTELLIGENCE</p>
+    <div class="brand-lockup">
+      <span class="brand-mark" aria-hidden="true">L</span>
+      <div>
+      <p class="eyebrow">Lightyear · Operational trust plane</p>
       <h1>Evidence Control Tower</h1>
+      <p class="masthead-subtitle">Live, graph-bound modernization evidence for governed decisions.</p>
+      </div>
     </div>
     <div class="status" aria-live="polite">
       <span id="status-dot" class="status-dot"></span>
-      <span id="status-text">Connecting to graph</span>
+      <span id="status-text">Connecting to the trust plane</span>
     </div>
   </header>
 
   <section class="operator-context" aria-label="Operator context">
     <div>
-      <label for="customer-context">Customer</label>
+      <label for="customer-context">Company</label>
       <select id="customer-context"></select>
+    </div>
+    <div>
+      <label for="problem-context">Business problem</label>
+      <select id="problem-context"></select>
+    </div>
+    <div>
+      <label for="workload-context">Workload</label>
+      <select id="workload-context"></select>
     </div>
     <div>
       <label for="technology-scope">Technology scope</label>
@@ -31,20 +43,23 @@
       <label for="operator-lens">Operator lens</label>
       <select id="operator-lens"></select>
     </div>
-    <p id="operator-context-description">Loading operator context…</p>
-    <span id="customer-evidence-badge" class="context-badge">REFERENCE EVIDENCE</span>
+    <div class="context-summary">
+      <strong id="operator-context-path">Loading graph context…</strong>
+      <p id="operator-context-description">Loading operator context…</p>
+    </div>
+    <span id="customer-evidence-badge" class="context-badge">Reference evidence</span>
   </section>
 
   <section class="metrics" aria-label="Graph statistics">
-    <div><strong id="metric-nodes">—</strong><span>entities</span></div>
-    <div><strong id="metric-edges">—</strong><span>relationships</span></div>
-    <div><strong id="metric-rules">—</strong><span>business rules</span></div>
-    <div><strong id="metric-hash">—</strong><span>snapshot identity</span></div>
+    <div><span>Graph entities</span><strong id="metric-nodes">—</strong></div>
+    <div><span>Relationships</span><strong id="metric-edges">—</strong></div>
+    <div><span>Business rules</span><strong id="metric-rules">—</strong></div>
+    <div class="identity-metric"><span>Canonical identity</span><strong id="metric-hash">—</strong></div>
   </section>
 
   <section id="estate-boundary" class="estate-boundary" aria-label="Composite estate trust boundary" hidden>
     <div>
-      <strong>COMPOSITE ESTATE</strong>
+      <strong>Composite estate</strong>
       <span id="estate-fragments">—</span>
     </div>
     <div>
@@ -54,18 +69,31 @@
       <code id="estate-composite-hash">—</code>
     </div>
     <p id="estate-boundary-statement"></p>
-    <span class="read-only-badge">DISCOVERY VIEW · NOT LIVE EQUIVALENCE</span>
+    <span class="read-only-badge">Discovery view · not live equivalence</span>
   </section>
 
   <section class="live-plane" aria-label="Live operational evidence plane">
     <div class="live-plane-heading">
-      <span id="live-connection" class="live-connection connecting">CONNECTING</span>
-      <strong>Live evidence plane</strong>
+      <span id="live-connection" class="live-connection connecting">Connecting</span>
+      <div>
+        <strong>Live evidence plane</strong>
+        <small id="live-updated">Starting live refresh…</small>
+      </div>
       <span id="live-sequence">sequence —</span>
-      <span class="read-only-badge">READ-ONLY COMMAND POSTURE</span>
+    </div>
+    <div id="graph-binding" class="graph-binding connecting" aria-live="polite">
+      <span class="graph-binding-icon" aria-hidden="true"></span>
+      <div>
+        <b>Knowledge Graph</b>
+        <code id="graph-binding-hash">binding…</code>
+      </div>
+      <small id="graph-binding-detail">Verifying graph identity</small>
     </div>
     <div id="live-sources" class="live-sources" aria-live="polite"></div>
-    <button id="live-alerts" class="live-alerts" type="button">0 active alerts</button>
+    <div class="live-plane-actions">
+      <span class="read-only-badge">Read-only</span>
+      <button id="live-alerts" class="live-alerts" type="button">0 active alerts</button>
+    </div>
   </section>
 
   <main class="workspace">
@@ -96,7 +124,7 @@
       </section>
 
       <section>
-        <label for="search">Find an entity</label>
+        <label for="search">Search selected workload</label>
         <div class="search-box">
           <input id="search" type="search" placeholder="Program, field, rule…" autocomplete="off">
           <kbd>/</kbd>
@@ -557,12 +585,13 @@
 
   <footer>
     <span>Canonical LIGHTYEAR snapshot</span>
+    <span id="live-endpoint">Live endpoint · connecting</span>
     <span>Neo4j is an optional projection, not the source of truth.</span>
   </footer>
   <aside id="source-drawer" class="source-drawer" hidden aria-label="Source evidence viewer">
     <header>
       <div>
-        <p class="eyebrow">CONTENT-ADDRESSED EVIDENCE</p>
+        <p class="eyebrow">Content-addressed evidence</p>
         <h2 id="source-title">Source</h2>
       </div>
       <button id="close-source" class="text-button" type="button">Close</button>

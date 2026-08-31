@@ -1,5 +1,29 @@
 # Changelog
 
+## 0.47.0 — 2026-08-31
+
+- Recast the Evidence Control Tower in the LIGHTYEAR investor-deck visual system with Material-
+  influenced clarity: warm-white work surfaces, a near-black operational plane, gold hierarchy,
+  bronze boundaries, modern sans-serif typography, sentence case, rounded controls, and more space.
+- Added a dedicated Knowledge Graph binding card that exposes the canonical content identity,
+  entity and relationship counts, freshness, and downstream binding status beside the live stream.
+- Added the operator path that was missing from the first cut: Company → Business problem →
+  Workload → Technology scope → Operator lens. Company and problem constrain the available
+  workloads; workload selection moves the graph root; scope and lens refine that graph in place.
+- Promoted the canonical graph and its source-evidence pack to a first-class operational source
+  with fingerprinted observations and hash-chained `graph.projection.changed` events.
+- Added live graph reload through the existing SSE refresh path so a changed canonical snapshot
+  updates metadata, perspectives, operator context, legend, metrics, and the active graph view.
+- Added a five-second status refresh alongside the event stream so freshness ages and the visible
+  last-updated time continue to advance even when no projection-change event is emitted.
+- Added fail-closed graph binding checks: a graph identity change invalidates a mismatched source-
+  evidence pack, Runtime projection, or Audit projection and raises a critical Control Tower alert
+  until the affected evidence is rebuilt.
+- Preserved the Control Tower as a read-only projection. No approve, dispatch, retry, promote,
+  exception-authoring, or other command endpoint was added.
+- Added focused server, HTTP, UI, policy, graph-binding, and documentation regression coverage plus
+  customer-readable MS #47 documentation in Markdown, Word, and PDF.
+
 ## 0.46.0 — 2026-08-31
 
 - Added customer, technology-scope, and operator-lens navigation to the Evidence Control Tower,

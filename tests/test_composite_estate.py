@@ -42,7 +42,7 @@ class CompositeEstateTests(unittest.TestCase):
 
     def test_explorer_navigates_pli_to_cobol_and_db2(self) -> None:
         index = GraphExplorerIndex(self.composite)
-        self.assertEqual(7, len(index.perspectives()))
+        self.assertEqual(10, len(index.perspectives()))
         self.assertEqual(self.base["content_sha256"], index.canonical_content_sha256)
         pli = "extension:pli-program:ACCTPL1"
         cobol = "legacy:cobol-program:CBACT04C"

@@ -14,7 +14,7 @@ from typing import Any
 from urllib.parse import parse_qs, unquote, urlparse
 
 from .chat import ChatError, GraphChatService
-from .evidence_pack import EvidenceStore, load_evidence_pack
+from .evidence_pack import EvidenceStore, load_evidence_pack, validate_evidence_pack
 from .model import load_graph
 from .ontology import load_ontology
 from .validation import rule_gaps
@@ -76,6 +76,27 @@ DEFAULT_PERSPECTIVES = [
         "depth": 3,
     },
     {
+        "id": "cics-vsam-account-view",
+        "name": "CICS/VSAM account view",
+        "description": "CICS transaction, COBOL program, BMS map, VSAM paths, and read-only account behavior.",
+        "root": "workload:carddemo-cics-vsam-account-view",
+        "depth": 3,
+    },
+    {
+        "id": "ims-expired-authorization-purge",
+        "name": "IMS authorization purge",
+        "description": "BMP route, DLI traversal, expiry rules, segment deletes, and checkpoints.",
+        "root": "workload:carddemo-ims-expired-authorization-purge",
+        "depth": 3,
+    },
+    {
+        "id": "asm-date-format",
+        "name": "HLASM date service",
+        "description": "COBOL call boundary, assembler routine, parameter layout, and date-format rules.",
+        "root": "workload:carddemo-asm-date-format",
+        "depth": 3,
+    },
+    {
         "id": "pli-auth-risk-lineage",
         "name": "PL/I authorization-risk lineage",
         "description": "PL/I files, include, Db2 SQL, internal procedure, and COBOL call boundary.",
@@ -92,6 +113,74 @@ OPERATOR_CUSTOMERS = [
         "evidence_class": "reference",
         "description": "Bundled reference evidence; no customer system is attached.",
     }
+]
+
+OPERATOR_PROBLEMS = [
+    {
+        "id": "account-and-card-servicing",
+        "company_id": "carddemo-reference",
+        "name": "Account and card servicing",
+        "description": "Modernize account calculation and inquiry without losing financial or record-layout behavior.",
+        "workload_ids": [
+            "workload:carddemo-intcalc",
+            "workload:carddemo-cics-vsam-account-view",
+        ],
+    },
+    {
+        "id": "authorization-and-fraud",
+        "company_id": "carddemo-reference",
+        "name": "Authorization and fraud operations",
+        "description": "Modernize authorization data and expiry processing while preserving transaction and hierarchy semantics.",
+        "workload_ids": [
+            "workload:carddemo-db2-authfrds",
+            "workload:carddemo-ims-expired-authorization-purge",
+        ],
+    },
+    {
+        "id": "shared-platform-services",
+        "company_id": "carddemo-reference",
+        "name": "Shared platform services",
+        "description": "Recover and modernize shared routines used across application boundaries.",
+        "workload_ids": ["workload:carddemo-asm-date-format"],
+    },
+]
+
+OPERATOR_WORKLOADS = [
+    {
+        "id": "workload:carddemo-intcalc",
+        "problem_id": "account-and-card-servicing",
+        "perspective_id": "intcalc-workload",
+        "recommended_scope": "mainframe",
+        "description": "Monthly interest batch calculation, fixed-width contracts, rules, candidate, and verification.",
+    },
+    {
+        "id": "workload:carddemo-cics-vsam-account-view",
+        "problem_id": "account-and-card-servicing",
+        "perspective_id": "cics-vsam-account-view",
+        "recommended_scope": "mainframe",
+        "description": "Read-only CICS account inquiry across COBOL, BMS, alternate indexes, and VSAM files.",
+    },
+    {
+        "id": "workload:carddemo-db2-authfrds",
+        "problem_id": "authorization-and-fraud",
+        "perspective_id": "authfrds-data-lineage",
+        "recommended_scope": "database",
+        "description": "Authorization and fraud data lineage across COBOL, Db2, schema rules, and target proof.",
+    },
+    {
+        "id": "workload:carddemo-ims-expired-authorization-purge",
+        "problem_id": "authorization-and-fraud",
+        "perspective_id": "ims-expired-authorization-purge",
+        "recommended_scope": "mainframe",
+        "description": "IMS BMP traversal, expiry decisions, segment mutation, checkpoint, and restart boundaries.",
+    },
+    {
+        "id": "workload:carddemo-asm-date-format",
+        "problem_id": "shared-platform-services",
+        "perspective_id": "asm-date-format",
+        "recommended_scope": "mainframe",
+        "description": "Shared COBOL-to-HLASM date conversion contract and its bounded business rules.",
+    },
 ]
 
 OPERATOR_SCOPES = [
@@ -361,8 +450,31 @@ class GraphExplorerIndex:
             item["target_platform"] = self._platform(self.node_by_id[item["target"]])
             item["customer_evidence"] = False
             examples.append(item)
+        workloads = []
+        for definition in OPERATOR_WORKLOADS:
+            node = self.node_by_id.get(definition["id"])
+            if node is None:
+                continue
+            item = dict(definition)
+            item["name"] = node["name"]
+            item["root"] = node["id"]
+            item["status"] = node.get("properties", {}).get("status", "unknown")
+            workloads.append(item)
+        available_workload_ids = {item["id"] for item in workloads}
+        problems = []
+        for definition in OPERATOR_PROBLEMS:
+            item = dict(definition)
+            item["workload_ids"] = [
+                workload_id for workload_id in item["workload_ids"]
+                if workload_id in available_workload_ids
+            ]
+            if item["workload_ids"]:
+                problems.append(item)
         return {
+            "companies": OPERATOR_CUSTOMERS,
             "customers": OPERATOR_CUSTOMERS,
+            "problems": problems,
+            "workloads": workloads,
             "scopes": scopes,
             "lenses": OPERATOR_LENSES,
             "platforms": platforms,
@@ -682,16 +794,31 @@ class ExplorerServer(ThreadingHTTPServer):
         runtime_store: RuntimeEvidenceStore | None = None,
         audit_store: AuditStore | None = None,
         operational_store: OperationalEventStore | None = None,
+        graph_path: Path | None = None,
+        evidence_pack_path: Path | None = None,
     ) -> None:
         super().__init__(address, ExplorerRequestHandler)
         self.index = index
         self.viewer_root = viewer_root.resolve()
         self.project_root = self.viewer_root.parents[1]
+        self.graph_path = (graph_path or self.project_root / "knowledge" / "graph.snapshot.json.gz").resolve()
+        self.evidence_pack_path = (
+            evidence_pack_path or self.graph_path.parent / "evidence" / "source.pack.json.gz"
+        ).resolve()
+        self._projection_lock = threading.RLock()
+        self._binding_errors: dict[str, str] = {}
         self.chat_service = chat_service or GraphChatService.from_environment(index)
         if evidence_store is None:
-            default_pack = self.viewer_root.parent / "evidence" / "source.pack.json.gz"
+            default_pack = self.evidence_pack_path
             evidence_store = EvidenceStore(load_evidence_pack(default_pack)) if default_pack.is_file() else None
         self.evidence_store = evidence_store
+        if self.evidence_store is not None:
+            evidence_errors = validate_evidence_pack(
+                self.index.payload, self.evidence_store.payload
+            )
+            if evidence_errors:
+                self.evidence_store = None
+                self._binding_errors["evidence"] = "graph-identity-mismatch"
         self.factory_store = factory_store or FactoryRunStore(
             self.viewer_root.parents[1] / "work"
         )
@@ -737,10 +864,17 @@ class ExplorerServer(ThreadingHTTPServer):
             raise ValueError("Audit snapshot targets a different graph identity")
         self._runtime_file_state = self._file_state(self.runtime_path)
         self._audit_file_state = self._file_state(self.audit_path)
+        self._graph_file_state = self._file_state(self.graph_path)
+        self._evidence_file_state = self._file_state(self.evidence_pack_path)
         self.operational_store = operational_store or OperationalEventStore(
             self.project_root / "work" / "control-tower" / "events.sqlite3"
         )
         sources = (
+            OperationalSource(
+                "graph", (self.graph_path, self.evidence_pack_path),
+                "content-addressed-graph", 5, self.graph_identity,
+                identity_provider=self.graph_identity,
+            ),
             OperationalSource(
                 "factory", (self.factory_store.root,), "controller-receipt", 2,
                 lambda: {"runs": self.factory_store.list_runs(200)},
@@ -785,21 +919,84 @@ class ExplorerServer(ThreadingHTTPServer):
         return stat.st_mtime_ns, stat.st_size
 
     def refresh_live_projections(self) -> None:
-        runtime_state = self._file_state(self.runtime_path)
-        if runtime_state != self._runtime_file_state:
-            self.runtime_store = (
-                RuntimeEvidenceStore(load_runtime_snapshot(self.runtime_path))
-                if runtime_state is not None else None
-            )
-            self.index.runtime_store = self.runtime_store
-            self._runtime_file_state = runtime_state
-        audit_state = self._file_state(self.audit_path)
-        if audit_state != self._audit_file_state:
-            self.audit_store = (
-                AuditStore(load_audit_snapshot(self.audit_path))
-                if audit_state is not None else None
-            )
-            self._audit_file_state = audit_state
+        with self._projection_lock:
+            graph_state = self._file_state(self.graph_path)
+            evidence_state = self._file_state(self.evidence_pack_path)
+            graph_changed = graph_state != self._graph_file_state
+            if graph_changed:
+                refreshed = GraphExplorerIndex(
+                    load_graph(self.graph_path),
+                    max_nodes=self.index.max_nodes,
+                    ontology=self.index.ontology,
+                )
+                self.index = refreshed
+                self.chat_service = GraphChatService.from_environment(refreshed)
+                self._graph_file_state = graph_state
+            if evidence_state != self._evidence_file_state or graph_changed:
+                candidate = (
+                    EvidenceStore(load_evidence_pack(self.evidence_pack_path))
+                    if evidence_state is not None else None
+                )
+                if candidate is not None and validate_evidence_pack(
+                    self.index.payload, candidate.payload
+                ):
+                    self.evidence_store = None
+                    self._binding_errors["evidence"] = "graph-identity-mismatch"
+                else:
+                    self.evidence_store = candidate
+                    self._binding_errors.pop("evidence", None)
+                self._evidence_file_state = evidence_state
+
+            runtime_state = self._file_state(self.runtime_path)
+            if runtime_state != self._runtime_file_state or self.index.runtime_store is None:
+                candidate = (
+                    RuntimeEvidenceStore(load_runtime_snapshot(self.runtime_path))
+                    if runtime_state is not None else None
+                )
+                if (
+                    candidate is not None
+                    and candidate.snapshot.get("graph_content_sha256")
+                    != self.index.canonical_content_sha256
+                ):
+                    self.runtime_store = None
+                    self._binding_errors["runtime"] = "graph-identity-mismatch"
+                else:
+                    self.runtime_store = candidate
+                    self._binding_errors.pop("runtime", None)
+                self.index.runtime_store = self.runtime_store
+                self._runtime_file_state = runtime_state
+
+            audit_state = self._file_state(self.audit_path)
+            if audit_state != self._audit_file_state or graph_changed:
+                candidate = (
+                    AuditStore(load_audit_snapshot(self.audit_path))
+                    if audit_state is not None else None
+                )
+                if (
+                    candidate is not None
+                    and candidate.snapshot.get("graph_content_sha256")
+                    != self.index.canonical_content_sha256
+                ):
+                    self.audit_store = None
+                    self._binding_errors["audit"] = "graph-identity-mismatch"
+                else:
+                    self.audit_store = candidate
+                    self._binding_errors.pop("audit", None)
+                self._audit_file_state = audit_state
+
+    def graph_identity(self) -> dict[str, Any]:
+        self.refresh_live_projections()
+        statistics = self.index.payload["statistics"]
+        return {
+            "graph_id": self.index.payload["graph_id"],
+            "schema_version": self.index.payload["schema_version"],
+            "content_sha256": self.index.payload["content_sha256"],
+            "canonical_content_sha256": self.index.canonical_content_sha256,
+            "node_count": statistics["node_count"],
+            "edge_count": statistics["edge_count"],
+            "binding_status": "invalidated" if self._binding_errors else "bound",
+            "invalidated_projections": sorted(self._binding_errors),
+        }
 
     def runtime_summary(self) -> dict[str, Any]:
         self.refresh_live_projections()
@@ -946,6 +1143,7 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
         return
 
     def _api(self, path: str, query: dict[str, list[str]]) -> None:
+        self.server.refresh_live_projections()
         index = self.server.index
         if path == "/api/operations/stream":
             self._event_stream(query)
@@ -1278,6 +1476,7 @@ def serve(
         factory_store=factory_store,
         evaluation_store=EvaluationStore(factory_runs_path or viewer_root.resolve().parents[1] / "work"),
         runtime_store=runtime_store, audit_store=audit_store,
+        graph_path=graph_path, evidence_pack_path=pack_path,
     )
     url = f"http://{host}:{server.server_port}/"
     print(f"LIGHTYEAR Graph Explorer: {url}")

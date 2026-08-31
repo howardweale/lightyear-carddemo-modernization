@@ -18,7 +18,9 @@ const state = {
   operations: null,
   eventStream: null,
   liveRefreshTimer: null,
+  livePollTimer: null,
   selection: null,
+  workloadNodeIds: new Set(),
   selectedId: null,
   selectedEdgeId: null,
   edgeDetail: null,
@@ -85,18 +87,18 @@ function groupFor(kind) { return groups[kind] || "other"; }
 
 async function initialize() {
   try {
+    if (window.location.protocol === "file:") {
+      throw new Error("Static file mode cannot connect to the live graph. Open http://127.0.0.1:8765 after starting the Control Tower.");
+    }
     [state.meta, state.chatStatus] = await Promise.all([
       api("/api/meta"),
       api("/api/chat/status"),
     ]);
-    const stats = state.meta.statistics;
-    $("metric-nodes").textContent = formatNumber(stats.node_count);
-    $("metric-edges").textContent = formatNumber(stats.edge_count);
-    $("metric-rules").textContent = formatNumber(stats.nodes_by_kind.business_rule);
-    $("metric-hash").textContent = state.meta.content_sha256.slice(0, 10);
+    renderGraphMetrics();
     renderEstateBoundary();
     $("status-dot").classList.add("online");
-    $("status-text").textContent = "Local control plane online";
+    $("status-text").textContent = "Control Tower loaded";
+    $("live-endpoint").textContent = `Live endpoint · ${window.location.host}`;
     populateOperatorContext();
     populatePerspectives();
     populateLegend();
@@ -105,13 +107,24 @@ async function initialize() {
     state.operations = state.meta.operations || await api("/api/operations/status");
     renderLiveStatus();
     connectLivePlane();
-    await Promise.all([loadPerspective(), loadFactoryRuns(false), loadPortfolio(false), loadRecovery(false), loadEvaluations(false), loadMemory(false), loadData(false), loadRuntimeRuns(false), loadAudit(false)]);
+    await activateSelectedWorkload(false);
+    await Promise.all([loadFactoryRuns(false), loadPortfolio(false), loadRecovery(false), loadEvaluations(false), loadMemory(false), loadData(false), loadRuntimeRuns(false), loadAudit(false)]);
   } catch (error) {
     setError(error);
   }
 }
 
+function renderGraphMetrics() {
+  const stats = state.meta.statistics;
+  $("metric-nodes").textContent = formatNumber(stats.node_count);
+  $("metric-edges").textContent = formatNumber(stats.edge_count);
+  $("metric-rules").textContent = formatNumber(stats.nodes_by_kind.business_rule);
+  $("metric-hash").textContent = state.meta.content_sha256.slice(0, 12);
+  $("metric-hash").title = state.meta.content_sha256;
+}
+
 function renderEstateBoundary() {
+  $("estate-boundary").hidden = true;
   if (state.meta.projection_type !== "lightyear-composite-estate") return;
   const boundary = $("estate-boundary");
   boundary.hidden = false;
@@ -124,6 +137,7 @@ function renderEstateBoundary() {
 
 function populatePerspectives() {
   const select = $("perspective");
+  select.replaceChildren();
   state.meta.perspectives.forEach((item) => {
     const option = document.createElement("option");
     option.value = item.id;
@@ -133,6 +147,7 @@ function populatePerspectives() {
 }
 
 function populateLegend() {
+  $("legend").replaceChildren();
   const labels = { program: "Legacy flow", structure: "Data structure", data: "Dataset", rule: "Rule / workload", modern: "Modern code", verify: "Verification", other: "Other" };
   Object.entries(labels).forEach(([group, label]) => {
     const item = document.createElement("div");
@@ -147,17 +162,26 @@ function populateLegend() {
   });
 }
 
-function populateOperatorContext() {
+function populateOperatorContext(preferred = {}) {
   const context = state.meta.operator_context;
-  const customers = $("customer-context");
+  const companies = $("customer-context");
+  const problems = $("problem-context");
+  const workloads = $("workload-context");
   const scopes = $("technology-scope");
   const lenses = $("operator-lens");
-  context.customers.forEach((item) => {
+  companies.replaceChildren();
+  problems.replaceChildren();
+  workloads.replaceChildren();
+  scopes.replaceChildren();
+  lenses.replaceChildren();
+  (context.companies || context.customers).forEach((item) => {
     const option = document.createElement("option");
     option.value = item.id;
     option.textContent = item.name;
-    customers.appendChild(option);
+    companies.appendChild(option);
   });
+  if ([...companies.options].some((item) => item.value === preferred.companyId)) companies.value = preferred.companyId;
+  populateProblemOptions(preferred.problemId, preferred.workloadId);
   context.scopes.forEach((item) => {
     const option = document.createElement("option");
     option.value = item.id;
@@ -172,8 +196,54 @@ function populateOperatorContext() {
     option.disabled = item.planned;
     lenses.appendChild(option);
   });
+  if ([...scopes.options].some((item) => item.value === preferred.scopeId)) scopes.value = preferred.scopeId;
+  if ([...lenses.options].some((item) => item.value === preferred.lensId)) lenses.value = preferred.lensId;
   renderOperatorContext();
   renderTraceCoverage();
+}
+
+function populateProblemOptions(preferredProblemId, preferredWorkloadId) {
+  const problems = $("problem-context");
+  problems.replaceChildren();
+  state.meta.operator_context.problems
+    .filter((item) => item.company_id === $("customer-context").value)
+    .forEach((item) => {
+      const option = document.createElement("option");
+      option.value = item.id;
+      option.textContent = item.name;
+      problems.appendChild(option);
+    });
+  if ([...problems.options].some((item) => item.value === preferredProblemId)) problems.value = preferredProblemId;
+  populateWorkloadOptions(preferredWorkloadId);
+}
+
+function populateWorkloadOptions(preferredWorkloadId) {
+  const workloads = $("workload-context");
+  workloads.replaceChildren();
+  const problem = selectedOperatorProblem();
+  const allowed = new Set(problem?.workload_ids || []);
+  state.meta.operator_context.workloads
+    .filter((item) => item.problem_id === problem?.id && allowed.has(item.id))
+    .forEach((item) => {
+      const option = document.createElement("option");
+      option.value = item.id;
+      option.textContent = item.name.replace(/^CardDemo\s+/i, "");
+      workloads.appendChild(option);
+    });
+  if ([...workloads.options].some((item) => item.value === preferredWorkloadId)) workloads.value = preferredWorkloadId;
+}
+
+function selectedOperatorCompany() {
+  const companies = state.meta.operator_context.companies || state.meta.operator_context.customers;
+  return companies.find((item) => item.id === $("customer-context").value);
+}
+
+function selectedOperatorProblem() {
+  return state.meta.operator_context.problems.find((item) => item.id === $("problem-context").value);
+}
+
+function selectedOperatorWorkload() {
+  return state.meta.operator_context.workloads.find((item) => item.id === $("workload-context").value);
 }
 
 function selectedOperatorScope() {
@@ -185,11 +255,52 @@ function selectedOperatorLens() {
 }
 
 function renderOperatorContext() {
-  const customer = state.meta.operator_context.customers.find((item) => item.id === $("customer-context").value);
+  const customer = selectedOperatorCompany();
+  const problem = selectedOperatorProblem();
+  const workload = selectedOperatorWorkload();
   const scope = selectedOperatorScope();
   const lens = selectedOperatorLens();
-  $("operator-context-description").textContent = `${scope.description} ${lens.description}`;
-  $("customer-evidence-badge").textContent = `${customer.evidence_class} evidence`.toUpperCase();
+  if (!(customer && problem && workload && scope && lens)) return;
+  $("operator-context-path").textContent = `${customer.name} / ${problem.name} / ${workload.name.replace(/^CardDemo\s+/i, "")}`;
+  $("operator-context-description").textContent = `${workload.description} ${scope.description} ${lens.description}`;
+  $("customer-evidence-badge").textContent = `${customer.evidence_class} evidence`;
+}
+
+async function activateSelectedWorkload(syncScope = false) {
+  const workload = selectedOperatorWorkload();
+  if (!workload) {
+    renderOperatorContext();
+    return;
+  }
+  if (
+    syncScope
+    && [...$("technology-scope").options].some((item) => item.value === workload.recommended_scope)
+  ) {
+    $("technology-scope").value = workload.recommended_scope;
+  }
+  renderOperatorContext();
+  const perspective = state.meta.perspectives.find((item) => item.id === workload.perspective_id);
+  if (perspective) {
+    $("perspective").value = perspective.id;
+    await loadPerspective();
+  } else {
+    $("graph-title").textContent = workload.name;
+    await loadNeighborhood(workload.root, 3);
+  }
+  state.workloadNodeIds = new Set(state.selection.nodes.map((item) => item.id));
+}
+
+async function refreshWorkloadBoundary() {
+  const workload = selectedOperatorWorkload();
+  if (!workload) return;
+  const perspective = state.meta.perspectives.find((item) => item.id === workload.perspective_id);
+  const boundary = await api("/api/neighborhood", {
+    node: workload.root,
+    depth: perspective?.depth || 3,
+    audience: $("audience").value,
+    limit: 300,
+  });
+  state.workloadNodeIds = new Set(boundary.nodes.map((item) => item.id));
 }
 
 function renderTraceCoverage() {
@@ -229,16 +340,20 @@ function renderTraceCoverage() {
 }
 
 function bindControls() {
-  $("customer-context").addEventListener("change", renderOperatorContext);
+  $("customer-context").addEventListener("change", async () => {
+    populateProblemOptions();
+    await activateSelectedWorkload(true);
+  });
+  $("problem-context").addEventListener("change", async () => {
+    populateWorkloadOptions();
+    await activateSelectedWorkload(true);
+  });
+  $("workload-context").addEventListener("change", async () => {
+    await activateSelectedWorkload(true);
+  });
   $("technology-scope").addEventListener("change", async () => {
     renderOperatorContext();
-    const recommended = { mainframe: "intcalc-job", database: "authfrds-data-lineage" }[$("technology-scope").value];
-    if (recommended && state.meta.perspectives.some((item) => item.id === recommended)) {
-      $("perspective").value = recommended;
-      await loadPerspective();
-    } else {
-      applyOperatorFocus();
-    }
+    applyOperatorFocus();
   });
   $("operator-lens").addEventListener("change", async () => {
     renderOperatorContext();
@@ -261,6 +376,7 @@ function bindControls() {
     $("search-results").replaceChildren();
     resetChat();
     await loadPerspective();
+    await refreshWorkloadBoundary();
   });
   $("fit").addEventListener("click", fitGraph);
   $("focus-node").addEventListener("click", () => loadNeighborhood(state.selectedId));
@@ -371,25 +487,40 @@ function bindControls() {
 function renderLiveStatus() {
   const status = state.operations;
   if (!status) return;
+  $("live-updated").textContent = `Updated ${new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })}`;
   const connection = $("live-connection");
-  connection.textContent = status.connection === "live" ? "LIVE" : "RECONNECTING";
+  connection.textContent = status.connection === "live" ? "Live" : status.connection === "unavailable" ? "Offline" : "Reconnecting";
   connection.className = `live-connection ${status.connection || "connecting"}`;
   $("live-sequence").textContent = `sequence ${status.latest_sequence || 0}`;
   const sources = $("live-sources");
   sources.replaceChildren();
-  (status.sources || []).forEach((source) => {
+  (status.sources || []).filter((source) => source.source !== "graph").forEach((source) => {
     const chip = document.createElement("span");
     chip.className = `live-source ${source.freshness}`;
     chip.dataset.source = source.source;
     chip.title = `${source.trust_class}; observed ${source.last_observed_at || "never"}`;
     const age = source.age_seconds === null ? "no signal" : source.age_seconds < 2 ? "now" : `${source.age_seconds}s`;
     const name = document.createElement("b");
-    name.textContent = source.source;
+    name.textContent = source.source.charAt(0).toUpperCase() + source.source.slice(1);
     const detail = document.createElement("small");
     detail.textContent = `${source.freshness} · ${age}`;
     chip.append(name, detail);
     sources.appendChild(chip);
   });
+  const binding = status.graph_binding;
+  const identity = binding?.identity;
+  const bindingCard = $("graph-binding");
+  const bindingState = identity?.binding_status === "invalidated"
+    ? "invalidated"
+    : binding?.freshness || "connecting";
+  bindingCard.className = `graph-binding ${bindingState}`;
+  $("graph-binding-hash").textContent = identity?.content_sha256
+    ? identity.content_sha256.slice(0, 12)
+    : "binding…";
+  $("graph-binding-hash").title = identity?.content_sha256 || "Graph identity unavailable";
+  $("graph-binding-detail").textContent = identity
+    ? `${formatNumber(identity.node_count)} entities · ${formatNumber(identity.edge_count)} relationships · ${identity.binding_status}`
+    : "Verifying graph identity";
   const alerts = status.alerts || [];
   const alertButton = $("live-alerts");
   alertButton.textContent = `${alerts.length} active alert${alerts.length === 1 ? "" : "s"}`;
@@ -397,7 +528,34 @@ function renderLiveStatus() {
   alertButton.title = alerts.map((item) => item.message).join("\n") || "No active operational alerts";
 }
 
+async function refreshGraphProjection() {
+  const previousPerspective = $("perspective").value;
+  const previousCustomer = $("customer-context").value;
+  const previousProblem = $("problem-context").value;
+  const previousWorkload = $("workload-context").value;
+  const previousScope = $("technology-scope").value;
+  const previousLens = $("operator-lens").value;
+  state.meta = await api("/api/meta");
+  renderGraphMetrics();
+  renderEstateBoundary();
+  populatePerspectives();
+  populateOperatorContext({
+    companyId: previousCustomer,
+    problemId: previousProblem,
+    workloadId: previousWorkload,
+    scopeId: previousScope,
+    lensId: previousLens,
+  });
+  populateLegend();
+  if ([...$("perspective").options].some((item) => item.value === previousPerspective)) $("perspective").value = previousPerspective;
+  renderOperatorContext();
+  renderTraceCoverage();
+  await loadPerspective();
+  await refreshWorkloadBoundary();
+}
+
 function connectLivePlane() {
+  startLiveStatusPolling();
   if (!window.EventSource) {
     state.operations.connection = "unavailable";
     renderLiveStatus();
@@ -409,6 +567,8 @@ function connectLivePlane() {
   state.eventStream = stream;
   stream.addEventListener("ready", () => {
     state.operations.connection = "live";
+    $("status-dot").className = "status-dot online";
+    $("status-text").textContent = "Live graph stream connected";
     renderLiveStatus();
   });
   stream.addEventListener("operational-event", (message) => {
@@ -418,8 +578,25 @@ function connectLivePlane() {
   });
   stream.onerror = () => {
     state.operations.connection = "reconnecting";
+    $("status-dot").className = "status-dot";
+    $("status-text").textContent = "Live stream reconnecting";
     renderLiveStatus();
   };
+}
+
+function startLiveStatusPolling() {
+  clearInterval(state.livePollTimer);
+  state.livePollTimer = setInterval(async () => {
+    try {
+      const connection = state.operations?.connection || "reconnecting";
+      state.operations = await api("/api/operations/status");
+      state.operations.connection = connection;
+      renderLiveStatus();
+    } catch (error) {
+      state.operations.connection = "reconnecting";
+      renderLiveStatus();
+    }
+  }, 5000);
 }
 
 function scheduleLiveRefresh(source, hint) {
@@ -430,6 +607,7 @@ function scheduleLiveRefresh(source, hint) {
       renderLiveStatus();
       const target = hint || source;
       const refreshers = {
+        graph: refreshGraphProjection,
         factory: () => loadFactoryRuns(false),
         portfolio: () => loadPortfolio(false),
         recovery: () => loadRecovery(false),
@@ -701,11 +879,12 @@ async function runSearch() {
   if (query.length < 2) return;
   try {
     const payload = await api("/api/search", { q: query, audience: $("audience").value, limit: 30 });
-    if (!payload.results.length) {
-      container.textContent = "No matching entities";
+    const results = payload.results.filter((item) => state.workloadNodeIds.has(item.id));
+    if (!results.length) {
+      container.textContent = "No matching entities in the selected workload";
       return;
     }
-    payload.results.forEach((node) => {
+    results.forEach((node) => {
       const button = document.createElement("button");
       button.type = "button";
       button.className = "search-result";

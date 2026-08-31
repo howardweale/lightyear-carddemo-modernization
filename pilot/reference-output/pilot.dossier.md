@@ -2,7 +2,7 @@
 
 **Release:** 0.33.0
 **Pilot:** `lightyear-carddemo-source-only-v0.33.0`
-**Dossier identity:** `57a3bfdb65d80699753b1a8dfc3c881a7c8410d3ada76ec19a181c244c7dc2a1`
+**Dossier identity:** `56b4dc55a0f0f7fc2136a9f22150dd0e2c7281c021b93abbc7af0b0ce7d36bbb`
 
 ## Executive result
 
@@ -75,7 +75,7 @@ Db2 log or production cutover authorization was observed.
 | bounded-runtime-readiness | `readiness/cics-vsam/readiness-receipt.json` | `2dd8e24e7a23814b6e643ff186f1272071f220b7ac0e03cc57fffc1abcd7dc5a` |
 | bounded-runtime-readiness | `readiness/ims-expiry/readiness-receipt.json` | `f95a3d2e5d06232ae2eb00671131a055c4024d6e1546152239c83b0de990a557` |
 | bounded-language-readiness | `readiness/asm-date/readiness-receipt.json` | `faf7a3109e4f6308a4ac71c706c2725e272fac666b5bba3d1a57ea63633dad92` |
-| auditor-projection | `audit/dossiers/carddemo-intcalc-v0.19-demo.json` | `f9d9f9597851e31669d14b288089df604af8cea7ed68911497fb15bdc698930b` |
+| auditor-projection | `audit/dossiers/carddemo-intcalc-v0.19-demo.json` | `ecfb78627f806bea77cf5711eb0f80d6fcf7387d5f2e6d6c82f2e86fd1ef1c65` |
 | database-platform-contract | `data-modernization/semantic-core/database-semantic-core.json` | `ca3114709057e766b26a5eb339c72ba80fc1620cd4f2d070a9bc92e852d803d8` |
 | database-semantic-difference-authority | `data-modernization/semantic-core/authfrds.compatibility-ledger.json` | `0cbd98a780b53a0b18977819f5115800ba1067612625e42075fa1f8a05b5586e` |
 | database-adapter-development-conformance | `data-modernization/semantic-core/authfrds.adapter-conformance.receipt.json` | `b3cde64bc0ac1ae9327bbf41a295af65ed167d770693e505fdb1b0d94f7972a7` |

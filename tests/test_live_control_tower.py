@@ -17,6 +17,7 @@ from lightyear_control_tower.operational import (
     OperationalSource,
 )
 from lightyear_knowledge_graph.explorer import ExplorerServer, GraphExplorerIndex
+from lightyear_knowledge_graph.evidence_pack import EvidenceStore, load_evidence_pack
 from lightyear_knowledge_graph.model import load_graph
 
 
@@ -71,7 +72,7 @@ class LiveControlTowerTests(unittest.TestCase):
         self.assertEqual("disabled", policy["command_plane"])
         self.assertTrue(policy["loopback_only"])
         self.assertEqual(
-            {"factory", "portfolio", "recovery", "quality", "memory", "data", "runtime", "audit"},
+            {"graph", "factory", "portfolio", "recovery", "quality", "memory", "data", "runtime", "audit"},
             set(policy["sources"]),
         )
 
@@ -117,6 +118,55 @@ class LiveControlTowerTests(unittest.TestCase):
         self.assertEqual("stale", runtime_status["freshness"])
         self.assertTrue(any(item["alert_id"] == "alert:runtime:runtime-stale" for item in stale["alerts"]))
 
+    def test_graph_identity_is_streamed_and_invalidated_bindings_alert(self) -> None:
+        graph = self.root / "graph.snapshot.json.gz"
+        graph.write_bytes(b"bounded graph fixture")
+        identity = {
+            "graph_id": "lightyear:test",
+            "content_sha256": "a" * 64,
+            "node_count": 12,
+            "edge_count": 18,
+            "binding_status": "invalidated",
+            "invalidated_projections": ["audit", "runtime"],
+        }
+        source = OperationalSource(
+            "graph", (graph,), "content-addressed-graph", 5,
+            lambda: identity, identity_provider=lambda: identity,
+        )
+        tower = OperationalControlTower(self.store, (source,), now=self.clock)
+        tower.scan()
+        status = tower.status()
+        self.assertEqual(identity, status["graph_binding"]["identity"])
+        self.assertEqual("critical", status["status"])
+        self.assertTrue(any(
+            item["alert_id"] == "alert:graph:binding-invalidated"
+            for item in status["alerts"]
+        ))
+        graph_event = next(
+            event for event in self.store.events(limit=100)
+            if event["event_type"] == "graph.projection.changed"
+        )
+        self.assertEqual(identity, graph_event["payload"]["identity"])
+
+    def test_graph_binding_invalidates_a_mismatched_evidence_pack(self) -> None:
+        payload = load_graph(ROOT / "knowledge/graph.snapshot.json.gz")
+        pack = load_evidence_pack(ROOT / "knowledge/evidence/source.pack.json.gz")
+        pack["graph_content_sha256"] = "0" * 64
+        server = ExplorerServer(
+            ("127.0.0.1", 0),
+            GraphExplorerIndex(payload, max_nodes=20),
+            ROOT / "knowledge/viewer",
+            evidence_store=EvidenceStore(pack),
+            operational_store=self.store,
+        )
+        try:
+            identity = server.graph_identity()
+            self.assertIsNone(server.evidence_store)
+            self.assertEqual("invalidated", identity["binding_status"])
+            self.assertEqual(["evidence"], identity["invalidated_projections"])
+        finally:
+            server.server_close()
+
     def test_http_exposes_status_and_sse_without_command_authority(self) -> None:
         payload = load_graph(ROOT / "knowledge/graph.snapshot.json.gz")
         server = ExplorerServer(
@@ -139,6 +189,9 @@ class LiveControlTowerTests(unittest.TestCase):
                 status = json.load(response)
             self.assertEqual("lightyear-live-evidence-control-plane", status["plane_type"])
             self.assertTrue(status["read_only"])
+            self.assertEqual(payload["content_sha256"], status["graph_binding"]["identity"]["content_sha256"])
+            self.assertEqual("bound", status["graph_binding"]["identity"]["binding_status"])
+            self.assertIn("graph", {item["source"] for item in status["sources"]})
             with urlopen(
                 f"{base}/api/operations/stream?after=9999",
                 timeout=HTTP_TEST_TIMEOUT_SECONDS,

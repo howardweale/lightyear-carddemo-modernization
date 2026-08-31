@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.44.0 — 2026-08-31
+
+- Added a governed customer-readable documentation library for MS #1 through MS #44 with one
+  canonical narrative and matching Markdown, Microsoft Word, and PDF artifacts per milestone.
+- Recovered MS #1 and MS #2 from the initial repository commits and bound MS #3 through MS #43 to
+  the existing release record rather than inventing missing historical claims.
+- Standardized purpose, customer value, delivered capability, relationship to earlier work,
+  evidence posture, source of record, and explicit claim boundaries across all milestone briefs.
+- Added a deterministic cross-format generator, 132-artifact content manifest, source identity,
+  exact byte and SHA-256 checks, and fail-closed detection of missing, stale, changed, or extra
+  milestone artifacts.
+- Added customer-facing index, POSIX and PowerShell build/verify entry points, optional document
+  build dependencies, format-completeness tests, and rendered DOCX/PDF publication artifacts.
+- Moved the planned SAP ASE semantic source adapter to MS #45 so MS #44 can close the customer
+  documentation and release-governance gap before another technical qualification claim is added.
+
 ## 0.43.0 — 2026-08-31
 
 - Added a genuine Oracle semantic-core `SourceAdapter` with deterministic source discovery,

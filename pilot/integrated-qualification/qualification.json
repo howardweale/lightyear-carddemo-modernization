@@ -1,0 +1,166 @@
+{
+  "bindings": {
+    "compatibility_ledger_sha256": "664f83861d3350a94f5f7066f1e4180eefe8e5889a28326faf9d434703e905b2",
+    "conformance_sha256": "7f88d86b079cdd678c3722abcb2785262003f1a79424fb94c23dd4b064413e3b",
+    "evidence_matrix_sha256": "35009c5f7689e2bbcb303e144ebe6dab465bce623f872717e7e4c7117b9e80e6",
+    "manifest_sha256": "ab61a530f67e727f7f1996d88d988aeee29caba2b25e69889bf88ece5ed21011",
+    "selection_sha256": "a0c78bc7fa361ba53d4b9b5598d5661e18265f573d8e2cac3e8c5368888fac85",
+    "source_graph_sha256": "0981b706b30df9192ec567ede9245e5c8b9dfe40855a4d860acdcacd9f123eec",
+    "work_package_sha256": "8a01cec899ab88de62614133b5e34a8e4549308d82d52c6a8df95f7eb0b14783"
+  },
+  "claim_unlocked": "LIGHTYEAR can qualify the exact six-file ACCOUNTV reference slice as a bounded integrated COBOL, PL/I, Db2, JCL, and HLASM development contract while keeping external program behavior, native execution, dispatch, mainframe equivalence, and production release blocked.",
+  "content_sha256": "b1ba92a6f00d27fb28025413ed52643e59cbf5d2070ad64765b4775020edc1b2",
+  "development_ready": true,
+  "factory_dispatch_allowed": false,
+  "inventory": {
+    "blocked_cases": 4,
+    "cells": 5,
+    "compatibility_items": 30,
+    "conformance_cases": 40,
+    "coordination_dependencies": 5,
+    "customer_source": false,
+    "mutation_cases": 4,
+    "source_files": 6,
+    "targeted_boundary_cases": 31,
+    "technologies": 5
+  },
+  "mainframe_equivalent": false,
+  "native_execution_observed": false,
+  "native_runtime_qualified": false,
+  "production_ready": false,
+  "production_release_allowed": false,
+  "qualification_gates": [
+    {
+      "evidence": {
+        "selection_ready": true,
+        "selection_sha256": "a0c78bc7fa361ba53d4b9b5598d5661e18265f573d8e2cac3e8c5368888fac85"
+      },
+      "gate": "governed-selection",
+      "status": "passed"
+    },
+    {
+      "evidence": {
+        "cell_count": 5,
+        "work_package_sha256": "8a01cec899ab88de62614133b5e34a8e4549308d82d52c6a8df95f7eb0b14783"
+      },
+      "gate": "five-cell-work-package",
+      "status": "passed"
+    },
+    {
+      "evidence": {
+        "source_files": [
+          "cobol/ACCOUNTV.cbl",
+          "copybooks/ACCTREC.cpy",
+          "db2/AUTHFRDS.ddl",
+          "hlasm/DATEFMT.asm",
+          "jcl/ACCTPIL.jcl",
+          "pli/ACCTPL1.pli"
+        ],
+        "source_graph_sha256": "0981b706b30df9192ec567ede9245e5c8b9dfe40855a4d860acdcacd9f123eec"
+      },
+      "gate": "source-and-graph-identity",
+      "status": "passed-static"
+    },
+    {
+      "evidence": {
+        "exact_source_acceptance_implied": false,
+        "technologies": [
+          "COBOL",
+          "Db2",
+          "HLASM",
+          "JCL",
+          "PL/I"
+        ]
+      },
+      "gate": "technology-qualification-mechanisms",
+      "status": "passed-mechanism-bound"
+    },
+    {
+      "evidence": {
+        "copybook": "ACCTREC",
+        "program": "ACCOUNTV",
+        "target": "ACCTPL1"
+      },
+      "gate": "cobol-copybook-sql-and-pli-call",
+      "status": "passed-bounded-semantic"
+    },
+    {
+      "evidence": {
+        "external_program": "CBACT04C",
+        "program": "ACCTPL1",
+        "table": "CARDDEMO.AUTHFRDS"
+      },
+      "gate": "pli-db2-and-external-cobol-call",
+      "status": "passed-bounded-semantic"
+    },
+    {
+      "evidence": {
+        "columns": 3,
+        "native_db2_observed": false,
+        "unqualified_selects": 2
+      },
+      "gate": "db2-schema-query-and-index",
+      "status": "passed-bounded-semantic"
+    },
+    {
+      "evidence": {
+        "job": "ACCTPIL",
+        "native_jes_observed": false,
+        "steps": [
+          "RUN",
+          "FORMAT"
+        ]
+      },
+      "gate": "jcl-step-and-dataset-flow",
+      "status": "passed-bounded-semantic"
+    },
+    {
+      "evidence": {
+        "native_assembly_observed": false,
+        "program": "DATEFMT",
+        "return_codes": [
+          0,
+          8
+        ]
+      },
+      "gate": "hlasm-pointer-branch-and-return",
+      "status": "passed-bounded-semantic"
+    },
+    {
+      "evidence": {
+        "blocked_case_count": 4,
+        "case_count": 40,
+        "conformance_sha256": "7f88d86b079cdd678c3722abcb2785262003f1a79424fb94c23dd4b064413e3b",
+        "customer_source": false,
+        "mutation_case_count": 4,
+        "passed_case_count": 36,
+        "positive_case_count": 5,
+        "targeted_boundary_case_count": 31
+      },
+      "gate": "cross-cell-integrated-conformance",
+      "status": "passed-bounded-synthetic"
+    },
+    {
+      "evidence": {
+        "blocked_live_evidence": 15,
+        "ledger_sha256": "664f83861d3350a94f5f7066f1e4180eefe8e5889a28326faf9d434703e905b2",
+        "matrix_sha256": "35009c5f7689e2bbcb303e144ebe6dab465bce623f872717e7e4c7117b9e80e6"
+      },
+      "gate": "compatibility-policy-and-live-evidence",
+      "status": "policy-and-native-evidence-required"
+    },
+    {
+      "evidence": {
+        "native_execution_observed": false,
+        "production_release_allowed": false,
+        "signed_equivalence": false
+      },
+      "gate": "authorized-native-integrated-execution",
+      "status": "blocked-no-authorized-evidence"
+    }
+  ],
+  "qualification_id": "carddemo-account-mixed-language-pilot-v0.42",
+  "qualification_type": "lightyear-integrated-pilot-qualification",
+  "schema_version": "1.0",
+  "wave_2_integrated_development_ready": true
+}

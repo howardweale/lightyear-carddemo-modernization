@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schema/integrated-pilot-conformance-v1.json",
+  "title": "LIGHTYEAR integrated pilot conformance receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "receipt_type", "corpus_id", "bindings", "corpus", "coverage", "results", "status", "claim_boundary", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "receipt_type": {"const": "lightyear-integrated-pilot-conformance-receipt"},
+    "corpus_id": {"const": "lightyear-integrated-pilot-synthetic-conformance-v1"},
+    "bindings": {"type": "object"},
+    "corpus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["case_count", "positive_case_count", "targeted_boundary_case_count", "mutation_case_count", "passed_case_count", "blocked_case_count", "customer_source"],
+      "properties": {
+        "case_count": {"const": 40},
+        "positive_case_count": {"const": 5},
+        "targeted_boundary_case_count": {"const": 31},
+        "mutation_case_count": {"const": 4},
+        "passed_case_count": {"const": 36},
+        "blocked_case_count": {"const": 4},
+        "customer_source": {"const": false}
+      }
+    },
+    "coverage": {"type": "object"},
+    "results": {"type": "array", "minItems": 40, "maxItems": 40},
+    "status": {"const": "passed"},
+    "claim_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["bounded_integrated_development_semantics", "external_cobol_behavior_modeled", "native_execution_observed", "native_runtime_qualified", "mainframe_equivalent", "production_ready"],
+      "properties": {
+        "bounded_integrated_development_semantics": {"const": true},
+        "external_cobol_behavior_modeled": {"const": false},
+        "native_execution_observed": {"const": false},
+        "native_runtime_qualified": {"const": false},
+        "mainframe_equivalent": {"const": false},
+        "production_ready": {"const": false}
+      }
+    },
+    "content_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {"sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}

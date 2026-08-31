@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schema/integrated-pilot-qualification-v1.json",
+  "title": "LIGHTYEAR integrated pilot qualification",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "qualification_type", "qualification_id", "bindings", "inventory", "qualification_gates", "wave_2_integrated_development_ready", "development_ready", "factory_dispatch_allowed", "native_execution_observed", "native_runtime_qualified", "mainframe_equivalent", "production_release_allowed", "production_ready", "claim_unlocked", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "qualification_type": {"const": "lightyear-integrated-pilot-qualification"},
+    "qualification_id": {"const": "carddemo-account-mixed-language-pilot-v0.42"},
+    "bindings": {"type": "object"},
+    "inventory": {"type": "object"},
+    "qualification_gates": {"type": "array", "minItems": 12, "maxItems": 12},
+    "wave_2_integrated_development_ready": {"const": true},
+    "development_ready": {"const": true},
+    "factory_dispatch_allowed": {"const": false},
+    "native_execution_observed": {"const": false},
+    "native_runtime_qualified": {"const": false},
+    "mainframe_equivalent": {"const": false},
+    "production_release_allowed": {"const": false},
+    "production_ready": {"const": false},
+    "claim_unlocked": {"type": "string", "minLength": 1},
+    "content_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {"sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}

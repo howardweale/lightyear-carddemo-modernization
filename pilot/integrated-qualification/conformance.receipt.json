@@ -1,0 +1,1284 @@
+{
+  "bindings": {
+    "manifest_sha256": "ab61a530f67e727f7f1996d88d988aeee29caba2b25e69889bf88ece5ed21011",
+    "selection_sha256": "a0c78bc7fa361ba53d4b9b5598d5661e18265f573d8e2cac3e8c5368888fac85",
+    "source_graph_sha256": "0981b706b30df9192ec567ede9245e5c8b9dfe40855a4d860acdcacd9f123eec",
+    "work_package_sha256": "8a01cec899ab88de62614133b5e34a8e4549308d82d52c6a8df95f7eb0b14783"
+  },
+  "claim_boundary": {
+    "bounded_integrated_development_semantics": true,
+    "external_cobol_behavior_modeled": false,
+    "mainframe_equivalent": false,
+    "native_execution_observed": false,
+    "native_runtime_qualified": false,
+    "production_ready": false
+  },
+  "content_sha256": "7f88d86b079cdd678c3722abcb2785262003f1a79424fb94c23dd4b064413e3b",
+  "corpus": {
+    "blocked_case_count": 4,
+    "case_count": 40,
+    "customer_source": false,
+    "mutation_case_count": 4,
+    "passed_case_count": 36,
+    "positive_case_count": 5,
+    "targeted_boundary_case_count": 31
+  },
+  "corpus_id": "lightyear-integrated-pilot-synthetic-conformance-v1",
+  "coverage": {
+    "integrated_paths": [
+      "ACCTPIL.RUN -> ACCTPL1 -> AUTHFRDS -> CBACT04C external boundary",
+      "ACCTPIL.FORMAT -> DATEFMT",
+      "ACCOUNTV -> AUTHFRDS -> ACCTPL1 -> CBACT04C external boundary"
+    ],
+    "observed_feature_count": 118,
+    "observed_features": [
+      "12-byte-logical-layout",
+      "ACCOUNTV",
+      "ACCTIN",
+      "ACCTPIL",
+      "ACCTPL1",
+      "ACCTREC",
+      "AUTH-ID",
+      "AUTH-ID-second",
+      "AUTH-STATUS",
+      "AUTHFRDS",
+      "AUTHFRDS-IX1",
+      "BZ",
+      "CALL-USING",
+      "CARD-NUM",
+      "CARD-NUM-first",
+      "CBACT04C",
+      "CHAR-1",
+      "CHAR-16",
+      "CICS",
+      "COBOL",
+      "COBOL-SQL",
+      "DATEFMT",
+      "DDL",
+      "DECIMAL-11",
+      "DISP-OLD",
+      "DISP-SHR",
+      "Db2",
+      "EMPTY",
+      "FORMAT",
+      "HLASM",
+      "JCL",
+      "JES",
+      "LTR",
+      "Language-Environment",
+      "OPTIONS-COBOL",
+      "PIC-9-11",
+      "PIC-X",
+      "PL-I",
+      "RUN",
+      "SQLCODE-100",
+      "SQLCODE-811",
+      "STEPLIB",
+      "SYSTEM",
+      "allocation-mismatch",
+      "batch-pipeline",
+      "branch-return",
+      "call-contract",
+      "call-not-reached",
+      "calling-convention",
+      "cardinality",
+      "condition-code",
+      "constraint",
+      "constraint-drift",
+      "contract-mismatch",
+      "cross-language",
+      "cross-technology",
+      "data-error",
+      "dataset-binding",
+      "dataset-drift",
+      "dataset-effects",
+      "decimal-11",
+      "diagnostic",
+      "duplicate",
+      "empty-table",
+      "external-boundary",
+      "fail-closed",
+      "field-length",
+      "field-order",
+      "fixed-width",
+      "host-variable",
+      "index-order",
+      "index-uniqueness",
+      "input-overwritten",
+      "job-step-DAG",
+      "layout-mismatch",
+      "length-error",
+      "linkage",
+      "load-library",
+      "missing-step",
+      "more-than-one-row",
+      "multiple-rows",
+      "native-runtime",
+      "negative",
+      "no-WHERE-clause",
+      "no-data",
+      "no-predicate",
+      "no-row",
+      "nonnull-pointer",
+      "null-pointer",
+      "numeric-boundary",
+      "online-pipeline",
+      "outside-selection",
+      "overflow",
+      "package-bind",
+      "parameter-overwrite",
+      "parameter-width",
+      "pilot-input",
+      "primary-key",
+      "production-name",
+      "query-access-path",
+      "registers",
+      "return-code-eight",
+      "return-code-zero",
+      "reversed",
+      "reversed-columns",
+      "runtime",
+      "scheduler",
+      "schema-drift",
+      "schema-valid",
+      "sequence-error",
+      "short-circuit",
+      "single-row",
+      "source-order",
+      "source-quirk",
+      "step-order",
+      "unique-index",
+      "unqualified-select",
+      "zero-rows"
+    ],
+    "source_files": [
+      "cobol/ACCOUNTV.cbl",
+      "copybooks/ACCTREC.cpy",
+      "db2/AUTHFRDS.ddl",
+      "hlasm/DATEFMT.asm",
+      "jcl/ACCTPIL.jcl",
+      "pli/ACCTPL1.pli"
+    ],
+    "source_quirks": [
+      "both embedded SELECT statements have no predicate",
+      "ACCTPL1 overwrites its input parameter from AUTHFRDS",
+      "DATEFMT only distinguishes null and non-null pointers"
+    ],
+    "technologies": [
+      "COBOL",
+      "Db2",
+      "HLASM",
+      "JCL",
+      "PL/I"
+    ]
+  },
+  "receipt_type": "lightyear-integrated-pilot-conformance-receipt",
+  "results": [
+    {
+      "classification": "positive",
+      "features": [
+        "ACCTPIL",
+        "ACCTPL1",
+        "AUTHFRDS",
+        "CBACT04C",
+        "DATEFMT",
+        "batch-pipeline",
+        "cross-technology"
+      ],
+      "id": "01-batch-integrated-success",
+      "observed": {
+        "diagnostics": [
+          "CBACT04C-external-behavior-not-modeled"
+        ],
+        "external_call_count": 1,
+        "mutation_count": 0,
+        "response": "SUCCESS",
+        "result_count": 1,
+        "return_code": 0,
+        "selected_auth_id": 12345678901,
+        "status": "passed",
+        "trace": [
+          "ACCTPIL RUN EXEC PGM=ACCTPL1",
+          "ACCTPL1 SELECT AUTH_ID",
+          "ACCTPL1 CALL CBACT04C OPTIONS(COBOL)",
+          "ACCTPIL FORMAT EXEC PGM=DATEFMT",
+          "DATEFMT B RETURN"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "0bfc73d2aceb34854ad5c41bf592ed58c6653626039224a4e13070ca3c31bc7a"
+    },
+    {
+      "classification": "positive",
+      "features": [
+        "ACCOUNTV",
+        "ACCTPL1",
+        "ACCTREC",
+        "AUTHFRDS",
+        "CBACT04C",
+        "cross-language",
+        "online-pipeline"
+      ],
+      "id": "02-online-integrated-success",
+      "observed": {
+        "diagnostics": [
+          "CBACT04C-external-behavior-not-modeled"
+        ],
+        "external_call_count": 1,
+        "mutation_count": 0,
+        "response": "SUCCESS",
+        "result_count": 1,
+        "return_code": 0,
+        "selected_auth_id": 12345678901,
+        "status": "passed",
+        "trace": [
+          "ACCOUNTV SELECT AUTH_ID",
+          "ACCOUNTV CALL ACCTPL1",
+          "ACCTPL1 SELECT AUTH_ID",
+          "ACCTPL1 CALL CBACT04C OPTIONS(COBOL)"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "c02821c81a5428756a6128cc5bc83fdfd2fc60e94c5281b9f63650fadfe0477d"
+    },
+    {
+      "classification": "positive",
+      "features": [
+        "Db2",
+        "host-variable",
+        "parameter-overwrite",
+        "single-row",
+        "unqualified-select"
+      ],
+      "id": "03-single-row-db2-success",
+      "observed": {
+        "diagnostics": [],
+        "external_call_count": 0,
+        "mutation_count": 0,
+        "response": "SUCCESS",
+        "result_count": 1,
+        "return_code": null,
+        "selected_auth_id": 12345678901,
+        "status": "passed",
+        "trace": [
+          "UNQUALIFIED SELECT",
+          "HOST VARIABLE ACCT_ID OVERWRITTEN"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "b792fe9c0d4cf027e931db00190d266deddb2b7dacbac520abce7454213f8fd7"
+    },
+    {
+      "classification": "positive",
+      "features": [
+        "FORMAT",
+        "JCL",
+        "RUN",
+        "job-step-DAG",
+        "source-order"
+      ],
+      "id": "04-jcl-source-order-success",
+      "observed": {
+        "diagnostics": [],
+        "external_call_count": 0,
+        "mutation_count": 0,
+        "response": "SUCCESS",
+        "result_count": 2,
+        "return_code": null,
+        "selected_auth_id": null,
+        "status": "passed",
+        "trace": [
+          "RUN:ACCTPL1",
+          "FORMAT:DATEFMT"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "df5698f6d5f0c4be185f3bcd23c506b61a67dd6d750456734dd189417638da45"
+    },
+    {
+      "classification": "positive",
+      "features": [
+        "DATEFMT",
+        "HLASM",
+        "branch-return",
+        "nonnull-pointer",
+        "return-code-zero"
+      ],
+      "id": "05-hlasm-nonnull-success",
+      "observed": {
+        "diagnostics": [],
+        "external_call_count": 0,
+        "mutation_count": 0,
+        "response": "SUCCESS",
+        "result_count": 1,
+        "return_code": 0,
+        "selected_auth_id": null,
+        "status": "passed",
+        "trace": [
+          "L 2,0(1)",
+          "LTR 2,2",
+          "LA 15,0",
+          "BR 14"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "265fbd571c961faa3fca1a5157bb2ec93a7ee2d1d2e4a66a18ea9fefe52d442e"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "BZ",
+        "EMPTY",
+        "batch-pipeline",
+        "null-pointer",
+        "return-code-eight"
+      ],
+      "id": "06-batch-null-pointer-return-eight",
+      "observed": {
+        "diagnostics": [
+          "CBACT04C-external-behavior-not-modeled"
+        ],
+        "external_call_count": 1,
+        "mutation_count": 0,
+        "response": "SUCCESS",
+        "result_count": 1,
+        "return_code": 8,
+        "selected_auth_id": 12345678901,
+        "status": "passed",
+        "trace": [
+          "ACCTPIL RUN EXEC PGM=ACCTPL1",
+          "ACCTPL1 SELECT AUTH_ID",
+          "ACCTPL1 CALL CBACT04C OPTIONS(COBOL)",
+          "ACCTPIL FORMAT EXEC PGM=DATEFMT",
+          "DATEFMT BZ EMPTY"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "32390395b3d1b9460c068e6085bf80cb1b29e8ea65cbcb4c0ebc797e40e72ccd"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "SQLCODE-100",
+        "batch-pipeline",
+        "no-row",
+        "short-circuit"
+      ],
+      "id": "07-batch-no-db2-row",
+      "observed": {
+        "diagnostics": [
+          "unqualified-select-returned-no-row"
+        ],
+        "external_call_count": 0,
+        "mutation_count": 0,
+        "response": "SQL_NOT_FOUND",
+        "result_count": 0,
+        "return_code": null,
+        "selected_auth_id": null,
+        "status": "passed",
+        "trace": [
+          "SELECT AUTH_ID FROM CARDDEMO.AUTHFRDS"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "76afaf45bddfba34c87dccf0a1bf7d690f33d06244e24de8db1ee032b6016567"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "SQLCODE-811",
+        "batch-pipeline",
+        "multiple-rows",
+        "no-predicate"
+      ],
+      "id": "08-batch-multiple-db2-rows",
+      "observed": {
+        "diagnostics": [
+          "unqualified-select-returned-more-than-one-row"
+        ],
+        "external_call_count": 0,
+        "mutation_count": 0,
+        "response": "SQL_MULTIPLE_ROWS",
+        "result_count": 0,
+        "return_code": null,
+        "selected_auth_id": null,
+        "status": "passed",
+        "trace": [
+          "SELECT AUTH_ID FROM CARDDEMO.AUTHFRDS"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "c2c63f6a3f89a0536da5a026438e50046049c9c5f4f09854763a083474170943"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "COBOL-SQL",
+        "call-not-reached",
+        "no-row",
+        "online-pipeline"
+      ],
+      "id": "09-online-no-db2-row",
+      "observed": {
+        "diagnostics": [
+          "unqualified-select-returned-no-row"
+        ],
+        "external_call_count": 0,
+        "mutation_count": 0,
+        "response": "SQL_NOT_FOUND",
+        "result_count": 0,
+        "return_code": null,
+        "selected_auth_id": null,
+        "status": "passed",
+        "trace": [
+          "SELECT AUTH_ID FROM CARDDEMO.AUTHFRDS"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "bac63082fd5c5c0be568ad792dd30d985f3952445fe07866dea61201b0632e64"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "COBOL-SQL",
+        "call-not-reached",
+        "multiple-rows",
+        "online-pipeline"
+      ],
+      "id": "10-online-multiple-db2-rows",
+      "observed": {
+        "diagnostics": [
+          "unqualified-select-returned-more-than-one-row"
+        ],
+        "external_call_count": 0,
+        "mutation_count": 0,
+        "response": "SQL_MULTIPLE_ROWS",
+        "result_count": 0,
+        "return_code": null,
+        "selected_auth_id": null,
+        "status": "passed",
+        "trace": [
+          "SELECT AUTH_ID FROM CARDDEMO.AUTHFRDS"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "b3a2f1c7c8a347762866d2817e5b48c4d87531cbcb03704e82b0585325263793"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "Db2",
+        "diagnostic",
+        "empty-table",
+        "no-data"
+      ],
+      "id": "11-lookup-no-row",
+      "observed": {
+        "diagnostics": [
+          "unqualified-select-returned-no-row"
+        ],
+        "external_call_count": 0,
+        "mutation_count": 0,
+        "response": "SQL_NOT_FOUND",
+        "result_count": 0,
+        "return_code": null,
+        "selected_auth_id": null,
+        "status": "passed",
+        "trace": [
+          "SELECT AUTH_ID FROM CARDDEMO.AUTHFRDS"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "1d26295e55922937063b737f8d694577fca4e6baa3d0a97988cfab7a537c0a58"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "Db2",
+        "cardinality",
+        "diagnostic",
+        "more-than-one-row"
+      ],
+      "id": "12-lookup-multiple-rows",
+      "observed": {
+        "diagnostics": [
+          "unqualified-select-returned-more-than-one-row"
+        ],
+        "external_call_count": 0,
+        "mutation_count": 0,
+        "response": "SQL_MULTIPLE_ROWS",
+        "result_count": 0,
+        "return_code": null,
+        "selected_auth_id": null,
+        "status": "passed",
+        "trace": [
+          "SELECT AUTH_ID FROM CARDDEMO.AUTHFRDS"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "62e71760c2b08d45d1b99cd2a7a78f20606976679ae1e02f4350dfa686e3a1e8"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "Db2",
+        "input-overwritten",
+        "no-WHERE-clause",
+        "source-quirk"
+      ],
+      "id": "13-lookup-overwrites-request",
+      "observed": {
+        "diagnostics": [],
+        "external_call_count": 0,
+        "mutation_count": 0,
+        "response": "SUCCESS",
+        "result_count": 1,
+        "return_code": null,
+        "selected_auth_id": 12345678901,
+        "status": "passed",
+        "trace": [
+          "UNQUALIFIED SELECT",
+          "HOST VARIABLE ACCT_ID OVERWRITTEN"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "555d247c7f530f75b38f1167399df5ed0bdc59a219cf212f720bce64a4005f82"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "CHAR-1",
+        "CHAR-16",
+        "DDL",
+        "DECIMAL-11",
+        "primary-key"
+      ],
+      "id": "14-schema-valid-row",
+      "observed": {
+        "diagnostics": [],
+        "external_call_count": 0,
+        "mutation_count": 0,
+        "response": "SUCCESS",
+        "result_count": 1,
+        "return_code": null,
+        "selected_auth_id": null,
+        "status": "passed",
+        "trace": [
+          "DECIMAL(11,0) NOT NULL",
+          "CHAR(16) NOT NULL",
+          "CHAR(1) NOT NULL",
+          "PRIMARY KEY AUTH_ID"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "4a0620e130c61fbb200147e81c837dbff8dfed1c21a00d414de13a3bfeddc1df"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "DDL",
+        "empty-table",
+        "schema-valid",
+        "zero-rows"
+      ],
+      "id": "15-schema-valid-empty-table",
+      "observed": {
+        "diagnostics": [],
+        "external_call_count": 0,
+        "mutation_count": 0,
+        "response": "SUCCESS",
+        "result_count": 0,
+        "return_code": null,
+        "selected_auth_id": null,
+        "status": "passed",
+        "trace": [
+          "DECIMAL(11,0) NOT NULL",
+          "CHAR(16) NOT NULL",
+          "CHAR(1) NOT NULL",
+          "PRIMARY KEY AUTH_ID"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "d4da4b7d787cf1f7cea08f31482e8ba8e7e29b27d092d1d0af07e4e43293015c"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "DECIMAL-11",
+        "data-error",
+        "fail-closed",
+        "overflow"
+      ],
+      "id": "16-schema-decimal-overflow",
+      "observed": {
+        "diagnostics": [
+          "row-0-auth-id-outside-decimal-11"
+        ],
+        "external_call_count": 0,
+        "mutation_count": 0,
+        "response": "DATA_ERROR",
+        "result_count": 0,
+        "return_code": null,
+        "selected_auth_id": null,
+        "status": "passed",
+        "trace": [
+          "DECIMAL(11,0) NOT NULL",
+          "CHAR(16) NOT NULL",
+          "CHAR(1) NOT NULL",
+          "PRIMARY KEY AUTH_ID"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "18473b86ef34bd09de8dde0d558d222985e770d18dd3eee03186fe454f81331c"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "AUTH-ID",
+        "fail-closed",
+        "negative",
+        "numeric-boundary"
+      ],
+      "id": "17-schema-negative-auth-id",
+      "observed": {
+        "diagnostics": [
+          "row-0-auth-id-outside-decimal-11"
+        ],
+        "external_call_count": 0,
+        "mutation_count": 0,
+        "response": "DATA_ERROR",
+        "result_count": 0,
+        "return_code": null,
+        "selected_auth_id": null,
+        "status": "passed",
+        "trace": [
+          "DECIMAL(11,0) NOT NULL",
+          "CHAR(16) NOT NULL",
+          "CHAR(1) NOT NULL",
+          "PRIMARY KEY AUTH_ID"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "161a77653ab662ad05c225cf716a3b4dd534e0dbb94c94d0054c121c0cd8e5a5"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "constraint",
+        "duplicate",
+        "fail-closed",
+        "primary-key"
+      ],
+      "id": "18-schema-duplicate-primary-key",
+      "observed": {
+        "diagnostics": [
+          "row-1-duplicate-primary-key"
+        ],
+        "external_call_count": 0,
+        "mutation_count": 0,
+        "response": "DATA_ERROR",
+        "result_count": 0,
+        "return_code": null,
+        "selected_auth_id": null,
+        "status": "passed",
+        "trace": [
+          "DECIMAL(11,0) NOT NULL",
+          "CHAR(16) NOT NULL",
+          "CHAR(1) NOT NULL",
+          "PRIMARY KEY AUTH_ID"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "382624dbc47f864d679b197ed64d158e480b26142eef61e30a728e1f5229b025"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "CARD-NUM",
+        "CHAR-16",
+        "fixed-width",
+        "length-error"
+      ],
+      "id": "19-schema-card-number-short",
+      "observed": {
+        "diagnostics": [
+          "row-0-card-num-not-char-16"
+        ],
+        "external_call_count": 0,
+        "mutation_count": 0,
+        "response": "DATA_ERROR",
+        "result_count": 0,
+        "return_code": null,
+        "selected_auth_id": null,
+        "status": "passed",
+        "trace": [
+          "DECIMAL(11,0) NOT NULL",
+          "CHAR(16) NOT NULL",
+          "CHAR(1) NOT NULL",
+          "PRIMARY KEY AUTH_ID"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "42686c9a9da5f398a4f962a044c8256c02ec700f8a676bf62e5669e32f6f21e4"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "AUTH-STATUS",
+        "CHAR-1",
+        "fixed-width",
+        "length-error"
+      ],
+      "id": "20-schema-status-too-long",
+      "observed": {
+        "diagnostics": [
+          "row-0-auth-status-not-char-1"
+        ],
+        "external_call_count": 0,
+        "mutation_count": 0,
+        "response": "DATA_ERROR",
+        "result_count": 0,
+        "return_code": null,
+        "selected_auth_id": null,
+        "status": "passed",
+        "trace": [
+          "DECIMAL(11,0) NOT NULL",
+          "CHAR(16) NOT NULL",
+          "CHAR(1) NOT NULL",
+          "PRIMARY KEY AUTH_ID"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "a6722fd2ab236f48b2a3929b7c5ef9aa893e5faf0332ca6d5e4cb0b7e550ba64"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "12-byte-logical-layout",
+        "ACCTREC",
+        "PIC-9-11",
+        "PIC-X"
+      ],
+      "id": "21-copybook-layout-exact",
+      "observed": {
+        "diagnostics": [],
+        "external_call_count": 0,
+        "mutation_count": 0,
+        "response": "SUCCESS",
+        "result_count": 12,
+        "return_code": null,
+        "selected_auth_id": null,
+        "status": "passed",
+        "trace": [
+          "01 ACCT-RECORD",
+          "05 ACCT-ID PIC 9(11)",
+          "05 ACCT-STATUS PIC X"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "d4ecc176c5744612815d0fe839a65d5004b95a5993ff01031a936a68b73321e4"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "ACCTREC",
+        "fail-closed",
+        "field-order",
+        "layout-mismatch"
+      ],
+      "id": "22-copybook-field-order-mismatch",
+      "observed": {
+        "diagnostics": [],
+        "external_call_count": 0,
+        "mutation_count": 0,
+        "response": "LAYOUT_MISMATCH",
+        "result_count": 0,
+        "return_code": null,
+        "selected_auth_id": null,
+        "status": "passed",
+        "trace": [
+          "01 ACCT-RECORD",
+          "05 ACCT-ID PIC 9(11)",
+          "05 ACCT-STATUS PIC X"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "2043e433e691dc643ca72ac324ddb24d2634905db0330feac89ed75e88dc43b9"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "ACCTREC",
+        "fail-closed",
+        "field-length",
+        "layout-mismatch"
+      ],
+      "id": "23-copybook-field-length-mismatch",
+      "observed": {
+        "diagnostics": [],
+        "external_call_count": 0,
+        "mutation_count": 0,
+        "response": "LAYOUT_MISMATCH",
+        "result_count": 0,
+        "return_code": null,
+        "selected_auth_id": null,
+        "status": "passed",
+        "trace": [
+          "01 ACCT-RECORD",
+          "05 ACCT-ID PIC 9(11)",
+          "05 ACCT-STATUS PIC X"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "58f4dffe9a32684ddbaad940942ddf13f228fe057d53200eace2635364882ec7"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "AUTH-ID-second",
+        "AUTHFRDS-IX1",
+        "CARD-NUM-first",
+        "unique-index"
+      ],
+      "id": "24-db2-index-exact",
+      "observed": {
+        "diagnostics": [],
+        "external_call_count": 0,
+        "mutation_count": 0,
+        "response": "SUCCESS",
+        "result_count": 2,
+        "return_code": null,
+        "selected_auth_id": null,
+        "status": "passed",
+        "trace": [
+          "AUTHFRDS_IX1 CARD_NUM,AUTH_ID"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "931320e0c183f9f93c73c5fa6757493ba4e4b9418e3ab25b9d73884cd8b2ba89"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "fail-closed",
+        "index-order",
+        "query-access-path",
+        "reversed-columns"
+      ],
+      "id": "25-db2-index-reversed",
+      "observed": {
+        "diagnostics": [],
+        "external_call_count": 0,
+        "mutation_count": 0,
+        "response": "INDEX_MISMATCH",
+        "result_count": 0,
+        "return_code": null,
+        "selected_auth_id": null,
+        "status": "passed",
+        "trace": [
+          "AUTHFRDS_IX1 CARD_NUM,AUTH_ID"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "a7ed699ec096c1e6b68c935e3e257277e6579c67e5e50b11e8a4e7728a4a8840"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "constraint-drift",
+        "fail-closed",
+        "index-uniqueness",
+        "schema-drift"
+      ],
+      "id": "26-db2-index-not-unique",
+      "observed": {
+        "diagnostics": [],
+        "external_call_count": 0,
+        "mutation_count": 0,
+        "response": "INDEX_MISMATCH",
+        "result_count": 0,
+        "return_code": null,
+        "selected_auth_id": null,
+        "status": "passed",
+        "trace": [
+          "AUTHFRDS_IX1 CARD_NUM,AUTH_ID"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "4ff1ea92f86081d819a256d48f19cc32a9cd79c77a78596c14e89c6e6d6bd306"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "JCL",
+        "reversed",
+        "sequence-error",
+        "step-order"
+      ],
+      "id": "27-jcl-reversed-step-order",
+      "observed": {
+        "diagnostics": [
+          "source-step-order-mismatch"
+        ],
+        "external_call_count": 0,
+        "mutation_count": 0,
+        "response": "SEQUENCE_ERROR",
+        "result_count": 0,
+        "return_code": null,
+        "selected_auth_id": null,
+        "status": "passed",
+        "trace": [
+          "FORMAT:DATEFMT",
+          "RUN:ACCTPL1"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "3696aa7005f9434388fdafb1469abcc2e86adf376d42e3f8d55e385bd366a54e"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "FORMAT",
+        "JCL",
+        "missing-step",
+        "sequence-error"
+      ],
+      "id": "28-jcl-missing-format-step",
+      "observed": {
+        "diagnostics": [
+          "source-step-order-mismatch"
+        ],
+        "external_call_count": 0,
+        "mutation_count": 0,
+        "response": "SEQUENCE_ERROR",
+        "result_count": 0,
+        "return_code": null,
+        "selected_auth_id": null,
+        "status": "passed",
+        "trace": [
+          "RUN:ACCTPL1"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "3fc30bea9995a2035cc6929d8179fe371c43595f37d74efa56255c34f71f95ab"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "DISP-SHR",
+        "STEPLIB",
+        "dataset-binding",
+        "load-library"
+      ],
+      "id": "29-steplib-binding",
+      "observed": {
+        "diagnostics": [],
+        "external_call_count": 0,
+        "mutation_count": 0,
+        "response": "SUCCESS",
+        "result_count": 1,
+        "return_code": null,
+        "selected_auth_id": null,
+        "status": "passed",
+        "trace": [
+          "DD STEPLIB DSN=CARDDEMO.LOADLIB DISP=SHR"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "9774068da3aa5e35152bbed46c4bbbe6dc2c13104d9f978d4631bb7476d9de12"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "ACCTIN",
+        "DISP-SHR",
+        "dataset-binding",
+        "pilot-input"
+      ],
+      "id": "30-acctin-binding",
+      "observed": {
+        "diagnostics": [],
+        "external_call_count": 0,
+        "mutation_count": 0,
+        "response": "SUCCESS",
+        "result_count": 1,
+        "return_code": null,
+        "selected_auth_id": null,
+        "status": "passed",
+        "trace": [
+          "DD ACCTIN DSN=CARDDEMO.PILOT.INPUT DISP=SHR"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "efffe7818b41ed7d0c2bf22a2cd21f03675ca10faf43a5fdde37db3c76083a7e"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "DISP-OLD",
+        "allocation-mismatch",
+        "dataset-drift",
+        "production-name"
+      ],
+      "id": "31-dataset-binding-drift",
+      "observed": {
+        "diagnostics": [],
+        "external_call_count": 0,
+        "mutation_count": 0,
+        "response": "ALLOCATION_MISMATCH",
+        "result_count": 0,
+        "return_code": null,
+        "selected_auth_id": null,
+        "status": "passed",
+        "trace": [
+          "DD ACCTIN DSN=CARDDEMO.PROD.INPUT DISP=OLD"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "4ece1811d0daf833d389eb6d6b78a6867235b594928da23bcb91c8f44effe55f"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "HLASM",
+        "LTR",
+        "condition-code",
+        "null-pointer",
+        "return-code-eight"
+      ],
+      "id": "32-hlasm-null-pointer",
+      "observed": {
+        "diagnostics": [],
+        "external_call_count": 0,
+        "mutation_count": 0,
+        "response": "EMPTY_POINTER",
+        "result_count": 0,
+        "return_code": 8,
+        "selected_auth_id": null,
+        "status": "passed",
+        "trace": [
+          "L 2,0(1)",
+          "LTR 2,2",
+          "BZ EMPTY",
+          "BR 14"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "d48e3a99a940b26bb30822c86a071aecffeb02dd02f7cf99bb44adb9f1ccdd91"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "CALL-USING",
+        "COBOL",
+        "PL-I",
+        "cross-language",
+        "decimal-11"
+      ],
+      "id": "33-cobol-to-pli-call-exact",
+      "observed": {
+        "diagnostics": [],
+        "external_call_count": 0,
+        "mutation_count": 0,
+        "response": "SUCCESS",
+        "result_count": 1,
+        "return_code": null,
+        "selected_auth_id": null,
+        "status": "passed",
+        "trace": [
+          "CALL ACCTPL1 USING ACCT-ID"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "2b123cf008465d727c44beffbd26b5e95326912e9c470e1bf016dbb31308c960"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "calling-convention",
+        "contract-mismatch",
+        "fail-closed",
+        "parameter-width"
+      ],
+      "id": "34-cobol-to-pli-width-mismatch",
+      "observed": {
+        "diagnostics": [],
+        "external_call_count": 0,
+        "mutation_count": 0,
+        "response": "CALL_CONTRACT_MISMATCH",
+        "result_count": 0,
+        "return_code": null,
+        "selected_auth_id": null,
+        "status": "passed",
+        "trace": [
+          "CALL ACCTPL1 USING ACCT-ID"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "32142384378c55eef198fb0f99d983a6546aeaac92b467f424b48a295a13e521"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "CBACT04C",
+        "OPTIONS-COBOL",
+        "PL-I",
+        "call-contract",
+        "external-boundary"
+      ],
+      "id": "35-pli-to-external-cobol",
+      "observed": {
+        "diagnostics": [
+          "external-program-outside-selected-source"
+        ],
+        "external_call_count": 1,
+        "mutation_count": 0,
+        "response": "EXTERNAL_BOUNDARY_REACHED",
+        "result_count": 1,
+        "return_code": null,
+        "selected_auth_id": null,
+        "status": "passed",
+        "trace": [
+          "CALL CBACT04C OPTIONS(COBOL)"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "75c67b6550bcd928bd85475a953a99a1ec6d680f45db870338da4efff1b39b6b"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "PL-I",
+        "SYSTEM",
+        "calling-convention",
+        "contract-mismatch"
+      ],
+      "id": "36-pli-call-convention-mismatch",
+      "observed": {
+        "diagnostics": [],
+        "external_call_count": 0,
+        "mutation_count": 0,
+        "response": "CALL_CONTRACT_MISMATCH",
+        "result_count": 0,
+        "return_code": null,
+        "selected_auth_id": null,
+        "status": "passed",
+        "trace": [
+          "CALL CBACT04C OPTIONS(SYSTEM)"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "1dd74f1ed9bdef663174e7b09b768709fb0ebd6d15ab2e120736540d9163b234"
+    },
+    {
+      "classification": "mutation",
+      "features": [
+        "CICS",
+        "fail-closed",
+        "outside-selection",
+        "runtime"
+      ],
+      "id": "37-cics-runtime-blocked",
+      "observed": {
+        "diagnostics": [
+          "CICS runtime is outside the selected five-cell proof"
+        ],
+        "external_call_count": 0,
+        "mutation_count": 0,
+        "response": "UNSUPPORTED",
+        "result_count": 0,
+        "return_code": null,
+        "selected_auth_id": null,
+        "status": "blocked",
+        "trace": [
+          "CICS_TRANSACTION_RUNTIME"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "7e37906d09c7849c8c2ec381648f40cc15c997f5ccc44fef9879996f4d4ab645"
+    },
+    {
+      "classification": "mutation",
+      "features": [
+        "Db2",
+        "fail-closed",
+        "native-runtime",
+        "package-bind"
+      ],
+      "id": "38-native-db2-package-blocked",
+      "observed": {
+        "diagnostics": [
+          "native Db2 package and bind behavior were not observed"
+        ],
+        "external_call_count": 0,
+        "mutation_count": 0,
+        "response": "UNSUPPORTED",
+        "result_count": 0,
+        "return_code": null,
+        "selected_auth_id": null,
+        "status": "blocked",
+        "trace": [
+          "NATIVE_DB2_PACKAGE"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "56de4e9ceb9e48da620276cfd6b9ce5167afdd05b16ad196b23ffca1de27827c"
+    },
+    {
+      "classification": "mutation",
+      "features": [
+        "JES",
+        "dataset-effects",
+        "fail-closed",
+        "scheduler"
+      ],
+      "id": "39-native-jes-execution-blocked",
+      "observed": {
+        "diagnostics": [
+          "JES execution and dataset effects were not observed"
+        ],
+        "external_call_count": 0,
+        "mutation_count": 0,
+        "response": "UNSUPPORTED",
+        "result_count": 0,
+        "return_code": null,
+        "selected_auth_id": null,
+        "status": "blocked",
+        "trace": [
+          "NATIVE_JES_EXECUTION"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "741c64bd960c64a78f5c4ee164a59a798745e5bf184fa93b5e2eb7e3f6c7bd4b"
+    },
+    {
+      "classification": "mutation",
+      "features": [
+        "Language-Environment",
+        "fail-closed",
+        "linkage",
+        "registers"
+      ],
+      "id": "40-native-le-linkage-blocked",
+      "observed": {
+        "diagnostics": [
+          "native Language Environment linkage was not observed"
+        ],
+        "external_call_count": 0,
+        "mutation_count": 0,
+        "response": "UNSUPPORTED",
+        "result_count": 0,
+        "return_code": null,
+        "selected_auth_id": null,
+        "status": "blocked",
+        "trace": [
+          "NATIVE_LE_LINKAGE"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "62384c555917165f170e966726620d23c7138419bbd4a68ba32281ca6d2193c6"
+    }
+  ],
+  "schema_version": "1.0",
+  "status": "passed"
+}

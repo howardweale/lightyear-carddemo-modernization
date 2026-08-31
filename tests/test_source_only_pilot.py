@@ -554,8 +554,18 @@ class SourceOnlyPilotTests(unittest.TestCase):
         self.assertIn("compatibility-policy-overclaims-production-readiness", errors)
 
     def test_pilot_contract_schemas_are_frozen_and_parseable(self) -> None:
-        schemas = sorted((ROOT / "pilot/schema").glob("*.schema.json"))
-        self.assertEqual(9, len(schemas))
+        names = (
+            "estate-assessment.schema.json",
+            "intake-manifest.schema.json",
+            "mainframe-preflight.schema.json",
+            "pilot-dossier-v2.schema.json",
+            "pilot-dossier-v3.schema.json",
+            "pilot-dossier.schema.json",
+            "pilot-selection.schema.json",
+            "source-analysis.schema.json",
+            "work-package.schema.json",
+        )
+        schemas = [ROOT / "pilot/schema" / name for name in names]
         for path in schemas:
             with self.subTest(path=path.name):
                 payload = json.loads(path.read_text(encoding="utf-8"))

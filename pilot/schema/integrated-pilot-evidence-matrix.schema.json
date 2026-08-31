@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schema/integrated-pilot-evidence-matrix-v1.json",
+  "title": "LIGHTYEAR integrated pilot evidence matrix",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "matrix_type", "selection_sha256", "work_package_sha256", "source_graph_sha256", "conformance_sha256", "cells", "statistics", "wave_2_integrated_development_ready", "factory_dispatch_allowed", "native_execution_observed", "mainframe_equivalent", "production_ready", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "matrix_type": {"const": "lightyear-integrated-pilot-evidence-matrix"},
+    "selection_sha256": {"$ref": "#/$defs/sha256"},
+    "work_package_sha256": {"$ref": "#/$defs/sha256"},
+    "source_graph_sha256": {"$ref": "#/$defs/sha256"},
+    "conformance_sha256": {"$ref": "#/$defs/sha256"},
+    "cells": {
+      "type": "array", "minItems": 5, "maxItems": 5,
+      "items": {
+        "type": "object",
+        "required": ["cell_id", "technology", "source_paths", "coordination_dependencies", "qualification_mechanism", "required_deliverables", "required_acceptance_evidence", "required_live_evidence", "integrated_development_evidence_passed", "native_evidence_passed", "dispatch_ready"],
+        "properties": {
+          "technology": {"enum": ["COBOL", "Db2", "HLASM", "JCL", "PL/I"]},
+          "integrated_development_evidence_passed": {"const": true},
+          "native_evidence_passed": {"const": false},
+          "dispatch_ready": {"const": false}
+        }
+      }
+    },
+    "statistics": {"type": "object"},
+    "wave_2_integrated_development_ready": {"const": true},
+    "factory_dispatch_allowed": {"const": false},
+    "native_execution_observed": {"const": false},
+    "mainframe_equivalent": {"const": false},
+    "production_ready": {"const": false},
+    "content_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {"sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}

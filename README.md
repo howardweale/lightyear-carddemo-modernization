@@ -1,6 +1,24 @@
 # FactoryDark.ai CardDemo Modernization Factory
 
-Release: **v0.41.0 — HLASM qualification hardening**
+Release: **v0.42.0 — Integrated Pilot Qualification**
+
+v0.42 composes the independently qualified COBOL, PL/I, Db2, JCL, and HLASM development subsets
+into the exact five-cell `ACCOUNTV` pilot selected in MS #32. A graph-bound 40-case corpus covers
+the online and batch paths, shared `AUTHFRDS` access, copybook layout, job flow and dataset binding,
+the `DATEFMT` branch contract, cross-language calls, source identity, and dependency edges. It
+preserves the selected source quirks rather than silently repairing them.
+
+Five cell receipts, ten acceptance-evidence items, a 30-entry five-class compatibility ledger, and
+twelve independent gates establish that Wave 2 integrated development evidence is ready. All 15
+live-evidence items remain blocked. Factory dispatch, native compilation and execution, mainframe
+equivalence, and production release remain false.
+
+```bash
+./integrated-pilot-qualification.sh verify
+PYTHONPATH=src python3 -m lightyear_pilot.integrated_qualification verify
+```
+
+Previous milestone: **v0.41.0 — HLASM qualification hardening**
 
 v0.41 expands the bounded `COBDATFT` development proof into a graph-bound HLASM qualification
 plane covering both pinned assembler programs. The canonical estate contributes two programs, 41

@@ -83,6 +83,24 @@ JCL, Db2, and HLASM.
 `work_package_ready: true` means the inputs are complete enough to author detailed signed work
 orders. It does not mean any work order is admitted or that factory dispatch is allowed.
 
+## Integrated pilot qualification
+
+MS #42 binds the reference package's exact COBOL, PL/I, JCL, Db2, and HLASM cells into one bounded
+development qualification. It verifies the selected source paths and graph relationships, the five
+cell dependencies, online and batch paths, shared database behavior, copybook and schema contracts,
+job flow, assembler branching, and cross-language calls.
+
+```bash
+./integrated-pilot-qualification.sh build
+./integrated-pilot-qualification.sh verify
+```
+
+The resulting conformance receipt, cell evidence matrix, compatibility ledger, and twelve-gate
+qualification live in `pilot/integrated-qualification`. `wave_2_integrated_development_ready: true`
+means the deterministic selected-slice reference evidence passes. It does not admit or dispatch a
+factory work order. Every live evidence item remains blocked, and native runtime, mainframe
+equivalence, production release, and production readiness remain false.
+
 ## Reference release rehearsal
 
 `verify` rebuilds the nine-class reference intake, customer graph, analysis receipt, JSON and

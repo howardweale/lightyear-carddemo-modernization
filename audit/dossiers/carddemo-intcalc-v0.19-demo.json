@@ -2,8 +2,8 @@
   "audit": {
     "checkpoint_signature_algorithm": "none",
     "event_count": 21,
-    "ledger_content_sha256": "9b9ae322b571dce865041161d36cc31c9582cd7043889a5345bb8b5981bf8e53",
-    "ledger_head_sha256": "ea08dd9ef37282f499b7e94c2d809821f4b7870ca4ca157f9e5650592fc0aea9",
+    "ledger_content_sha256": "08f8252e9a1c59be8856b03a1d8788d8a447d13b2108585946edba87497482b5",
+    "ledger_head_sha256": "a7a5162e1e3e8e95cea059fdced625062506ce8111b62fc5f62ace8a97eb3e5c",
     "ledger_id": "lightyear:carddemo:audit"
   },
   "cics_vsam_readiness": {
@@ -17,7 +17,7 @@
       "No external equivalence signing key was configured."
     ]
   },
-  "content_sha256": "a70f382a34150b5fae5e563182e97b463b908fc389d1f5fa157b4bb012238f1f",
+  "content_sha256": "635e1ec1ed947b21bfd46d4fa2297f2ead031bd435898de3b862bdb6c8b54549",
   "dossier_type": "lightyear-release-evidence",
   "durable_control_plane": {
     "approval_consumption": "exactly-once",
@@ -47,7 +47,7 @@
     {
       "id": "control-tower:live-evidence-plane",
       "kind": "operational_control_policy",
-      "sha256": "943f4c1626a3ac66cfb2311bb9079ef2181f4c1a01783493a1ba5503b7524e28"
+      "sha256": "0742fa61b2481ac53a7f1483449e894e0120ea303ea55e6d3881c80288a26d15"
     },
     {
       "id": "evidence:source-pack",

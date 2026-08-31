@@ -14,7 +14,7 @@ production-qualified.
 | MS #37 | PL/I Qualification Hardening | Complete |
 | MS #38 | JCL Qualification Hardening | Complete |
 | MS #39 | VSAM/CICS Qualification Hardening | Complete |
-| MS #40 | IMS Qualification Hardening | Planned |
+| MS #40 | IMS Qualification Hardening | Complete |
 | MS #41 | HLASM Qualification Hardening | Planned |
 
 The v0.35.0 stored-logic qualification core is retained as supporting MS #34 evidence. It does not
@@ -56,3 +56,13 @@ alternate indexes, PATHs, access and mutation commands, file status, browsing, l
 BMS, and program control. Native CICS-region and VSAM-catalog behavior, LDS record access, RLS,
 queues, journals, recovery, mainframe equivalence, and production readiness stay blocked pending
 authorized native evidence.
+
+## MS #40 — IMS Qualification Hardening
+
+MS #40 binds the canonical IMS graph inventory, the existing `CBPAUP0C` expiry-purge differential
+proof, and a 40-case synthetic semantic corpus to a five-class compatibility ledger and eleven
+independent gates. It qualifies a bounded development subset across DBDs, PSBs, PCBs, HIDAM,
+secondary-index and GSAM boundaries, hierarchical navigation, SSAs, DL/I status codes, segment
+mutation, checkpoint, restart, rollback, and scheduling boundaries. Native IMS-region scheduling,
+IMS TM, Fast Path, DBRC, logging, restart/recovery equivalence, mainframe equivalence, and
+production readiness stay blocked pending authorized native evidence.

@@ -38,13 +38,20 @@ elif [[ "$action" == "verify" || "$action" == "build" ]]; then
     --receipt "$output_dir/readiness-receipt.json"
   "$LIGHTYEAR_PYTHON_BIN" -m lightyear_readiness.ims capture-template \
     --output "$output_dir/zos-capture.template.json"
+  "$LIGHTYEAR_PYTHON_BIN" -m lightyear_readiness.ims_qualification build \
+    --project-root "$project_dir" --output-root "$output_dir"
   if [[ "$action" == "verify" ]]; then
     cmp "$project_dir/readiness/ims-expiry/local-capture.json" "$output_dir/local-capture.json"
     cmp "$project_dir/readiness/ims-expiry/comparison.json" "$output_dir/comparison.json"
     cmp "$project_dir/readiness/ims-expiry/readiness-receipt.json" "$output_dir/readiness-receipt.json"
     cmp "$project_dir/readiness/ims-expiry/zos-capture.template.json" "$output_dir/zos-capture.template.json"
+    cmp "$project_dir/readiness/ims-expiry/conformance.receipt.json" "$output_dir/conformance.receipt.json"
+    cmp "$project_dir/readiness/ims-expiry/compatibility-ledger.json" "$output_dir/compatibility-ledger.json"
+    cmp "$project_dir/readiness/ims-expiry/qualification.json" "$output_dir/qualification.json"
+    "$LIGHTYEAR_PYTHON_BIN" -m lightyear_readiness.ims_qualification verify \
+      --project-root "$project_dir"
   fi
-  echo "IMS logical development proof passed; live BMP equivalence remains fail-closed."
+  echo "IMS bounded qualification passed; native execution and recovery equivalence remain fail-closed."
 else
   echo "Usage: ./ims-readiness.sh [build|verify|template|compare] [output-dir] [zos-capture]" >&2
   exit 2

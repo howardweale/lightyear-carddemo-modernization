@@ -1,25 +1,38 @@
 # FactoryDark.ai CardDemo Modernization Factory
 
-Release: **v0.39.0 — VSAM/CICS qualification hardening**
+Release: **v0.40.0 — IMS qualification hardening**
 
-v0.39 expands the earlier read-only account-view proof into a graph-bound CICS/VSAM qualification
-plane. The canonical estate contributes 240 CICS commands, 25 transactions, 16 file resources,
-15 VSAM clusters, three alternate indexes, and three PATHs. A deterministic 38-case corpus covers
-KSDS, ESDS, RRDS, alternate-index and PATH behavior, status mapping, browsing, write/rewrite/delete,
-locks, syncpoints, BMS, and program control through eleven independent gates.
+v0.40 expands the earlier `CBPAUP0C` expiry-purge proof into a graph-bound IMS qualification plane.
+The canonical estate contributes four DBDs, four dataset groups, four PSBs, six PCBs, three
+segments, and three fields. A deterministic 40-case corpus covers HIDAM, secondary-index and GSAM
+boundaries, hierarchical navigation, hold calls, qualified and unqualified SSAs, DL/I status codes,
+ISRT/REPL/DLET, checkpoint, restart, rollback, PROCOPT, SENSEG, and scheduling boundaries through
+eleven independent gates.
 
-The 27-entry compatibility ledger uses all five governing classes. Four fail-closed vectors keep
-LDS record access, RLS, TSQ, and TDQ outside the supported claim; native catalog and CICS-region
-execution, journal/recovery behavior, mainframe equivalence, and production readiness remain false.
-The existing signed `CAVW` differential proof remains intact and is now bound into the broader
-qualification receipt.
+The 28-entry compatibility ledger uses all five governing classes. Four fail-closed vectors keep
+Fast Path DEDB, MSDB, IMS TM shared queues, and DBRC recovery outside the supported claim; native
+IMS-region execution, logging/recovery behavior, restart equivalence, mainframe equivalence, and
+production readiness remain false. The existing signed `CBPAUP0C` differential proof remains
+intact and is now bound into the broader qualification receipt.
+
+```bash
+./ims-readiness.sh verify
+PYTHONPATH=src python3 -m lightyear_readiness.ims_qualification verify
+```
+
+Previous milestone: **v0.39.0 — VSAM/CICS qualification hardening**
+
+v0.39 binds the canonical CICS/VSAM inventory and existing `CAVW` differential proof to a 38-case
+synthetic corpus, 27-entry five-class ledger, and eleven independent qualification gates. Native
+CICS-region, VSAM catalog, RLS, journaling, recovery, mainframe-equivalence, and production claims
+remain false.
 
 ```bash
 ./cics-vsam-readiness.sh verify
 PYTHONPATH=src python3 -m lightyear_readiness.cics_vsam_qualification verify
 ```
 
-Previous milestone: **v0.38.0 — JCL qualification hardening**
+Earlier milestone: **v0.38.0 — JCL qualification hardening**
 
 v0.38 turns the pinned JCL estate into an explicit qualification plane: 46 jobs, two procedures,
 119 steps, and 451 DD allocations are bound to a 30-case synthetic conformance corpus. Ten

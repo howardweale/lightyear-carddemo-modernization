@@ -1,0 +1,183 @@
+{
+  "bindings": {
+    "compatibility_ledger_sha256": "f7e7b71aa3a837047e10be83ff16d05dc543811e5451a065e442e1d0711094eb",
+    "conformance_sha256": "77d5edb2cc91c6f9d564602fc5bf58bc314033b2992c7e56f8f634571153b49b",
+    "expiry_comparison_sha256": "f5825ba1acc6268ab318e00fb1826d68564641cf3ef8ea766940a5375b70d916",
+    "expiry_readiness_sha256": "fa80f81d50082342edbc33e10c53986b5e8fcdc7211a452e17c4a458cdefe4e9",
+    "graph_content_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
+    "manifest_sha256": "9b971d6f4f0b1a443fa2877e5eb152f3c59e0d6c377d121ac7062f05b44ba40e"
+  },
+  "claim_unlocked": "LIGHTYEAR can inventory and fail-closed qualify a bounded synthetic IMS hierarchical semantic subset without claiming native region, scheduling, Fast Path, DBRC, restart, recovery, or production equivalence.",
+  "content_sha256": "dd25b617c44c165bd62b74d73343b25056cb132f919d0c58cd22967221826a91",
+  "dbrc_recovery_equivalent": false,
+  "development_ready": true,
+  "fast_path_qualified": false,
+  "ims_runtime_equivalent": false,
+  "ims_tm_qualified": false,
+  "inventory": {
+    "blocked_cases": 4,
+    "corpus_cases": 40,
+    "customer_source": false,
+    "ims_databases": 4,
+    "ims_dataset_groups": 4,
+    "ims_fields": 3,
+    "ims_pcbs": 6,
+    "ims_psbs": 4,
+    "ims_segments": 3,
+    "mutation_cases": 4,
+    "observed_feature_categories": 94,
+    "parent_edges": 1,
+    "targeted_boundary_cases": 32,
+    "uses_dbd_edges": 6,
+    "uses_psb_edges": 4
+  },
+  "mainframe_equivalent": false,
+  "native_ims_qualified": false,
+  "production_ready": false,
+  "qualification_gates": [
+    {
+      "evidence": {
+        "graph_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
+        "ims_databases": 4,
+        "ims_dataset_groups": 4,
+        "ims_pcbs": 6,
+        "ims_psbs": 4,
+        "ims_segments": 3
+      },
+      "gate": "estate-graph-inventory",
+      "status": "passed-static"
+    },
+    {
+      "evidence": {
+        "blocked_case_count": 4,
+        "case_count": 40,
+        "conformance_sha256": "77d5edb2cc91c6f9d564602fc5bf58bc314033b2992c7e56f8f634571153b49b",
+        "customer_source": false,
+        "mutation_case_count": 4,
+        "passed_case_count": 36,
+        "positive_case_count": 4,
+        "targeted_boundary_case_count": 32
+      },
+      "gate": "corpus-and-provenance",
+      "status": "passed-bounded-synthetic"
+    },
+    {
+      "evidence": {
+        "access_methods": [
+          "GSAM",
+          "HIDAM",
+          "INDEX"
+        ],
+        "native_storage_observed": false
+      },
+      "gate": "dbd-access-methods-and-storage",
+      "status": "passed-supported-subset"
+    },
+    {
+      "evidence": {
+        "fields": 3,
+        "parent_edges": 1,
+        "segments": 3
+      },
+      "gate": "hierarchy-fields-keys-and-ssa",
+      "status": "passed-bounded-semantic"
+    },
+    {
+      "evidence": {
+        "native_schedule_observed": false,
+        "pcbs": 6,
+        "psbs": 4
+      },
+      "gate": "psb-pcb-procopt-and-senseg",
+      "status": "passed-bounded-semantic"
+    },
+    {
+      "evidence": {
+        "call_families": [
+          "GU",
+          "GN",
+          "GNP",
+          "GHU",
+          "GHN",
+          "GHNP",
+          "ISRT",
+          "REPL",
+          "DLET",
+          "CHKP",
+          "XRST",
+          "ROLB"
+        ],
+        "responses": [
+          "DUPLICATE_SEGMENT",
+          "END_DATABASE",
+          "INVALID_SSA",
+          "SEGMENT_NOT_FOUND",
+          "SEQUENCE_ERROR",
+          "SUCCESS"
+        ]
+      },
+      "gate": "navigation-hold-and-status",
+      "status": "passed-bounded-semantic"
+    },
+    {
+      "evidence": {
+        "mutation_vectors": 9,
+        "native_atomicity_observed": false
+      },
+      "gate": "insert-replace-delete",
+      "status": "passed-bounded-semantic"
+    },
+    {
+      "evidence": {
+        "native_log_or_DBRC_observed": false,
+        "synthetic_checkpoint_vectors": true
+      },
+      "gate": "checkpoint-restart-rollback-and-recovery",
+      "status": "policy-decision-required"
+    },
+    {
+      "evidence": {
+        "bmp_route_modeled": true,
+        "data_sharing": false,
+        "fast_path": false,
+        "ims_tm": false
+      },
+      "gate": "scheduling-tm-fast-path-and-data-sharing",
+      "status": "excluded-unqualified"
+    },
+    {
+      "evidence": {
+        "behavior_match": true,
+        "comparison_sha256": "f5825ba1acc6268ab318e00fb1826d68564641cf3ef8ea766940a5375b70d916",
+        "readiness_sha256": "fa80f81d50082342edbc33e10c53986b5e8fcdc7211a452e17c4a458cdefe4e9"
+      },
+      "gate": "cbpaup0c-private-differential-proof",
+      "status": "passed-local-development"
+    },
+    {
+      "evidence": {
+        "native_database_before_after": false,
+        "region_trace": false,
+        "signed_equivalence": false,
+        "zos_observed_baseline": false
+      },
+      "gate": "authorized-native-ims-execution",
+      "status": "blocked-no-authorized-zos-evidence"
+    }
+  ],
+  "qualification_id": "carddemo-ims-v0.40",
+  "qualification_mechanism_ready": true,
+  "qualification_type": "lightyear-ims-qualification",
+  "required_native_evidence": [
+    "authorized LPAR, IMS subsystem, region, program, PSB, PCB, DBD, operator, and security identities",
+    "native DBD, PSB, ACB or catalog, load module, JCL, database dataset, and image-copy digests",
+    "native HIDAM, secondary-index, GSAM, hierarchy, SSA, positioning, and status-code vectors",
+    "native ISRT, REPL, DLET, GET HOLD, locking, contention, and data-sharing evidence",
+    "CHKP, XRST, ROLB, abend, IMS log, DBRC, restart, and recovery evidence",
+    "BMP, DLI batch, MPP, IMS TM, Fast Path, routing, queue, and security scope decisions",
+    "database before and after images with restoration proof",
+    "independently signed differential equivalence receipt"
+  ],
+  "restart_equivalent": false,
+  "schema_version": "1.0"
+}

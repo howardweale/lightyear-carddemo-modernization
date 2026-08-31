@@ -495,7 +495,8 @@ function renderLiveStatus() {
   const sources = $("live-sources");
   sources.replaceChildren();
   (status.sources || []).filter((source) => source.source !== "graph").forEach((source) => {
-    const chip = document.createElement("span");
+    const chip = document.createElement("button");
+    chip.type = "button";
     chip.className = `live-source ${source.freshness}`;
     chip.dataset.source = source.source;
     chip.title = `${source.trust_class}; observed ${source.last_observed_at || "never"}`;
@@ -505,6 +506,7 @@ function renderLiveStatus() {
     const detail = document.createElement("small");
     detail.textContent = `${source.freshness} · ${age}`;
     chip.append(name, detail);
+    chip.addEventListener("click", () => openEvidencePlane(source.source));
     sources.appendChild(chip);
   });
   const binding = status.graph_binding;
@@ -523,9 +525,28 @@ function renderLiveStatus() {
     : "Verifying graph identity";
   const alerts = status.alerts || [];
   const alertButton = $("live-alerts");
-  alertButton.textContent = `${alerts.length} active alert${alerts.length === 1 ? "" : "s"}`;
+  alertButton.textContent = alerts.length
+    ? `${alerts.length} alert${alerts.length === 1 ? "" : "s"} · ${alerts[0].message}`
+    : "No active alerts";
   alertButton.className = `live-alerts ${alerts.some((item) => item.severity === "critical") ? "critical" : alerts.length ? "warning" : "healthy"}`;
   alertButton.title = alerts.map((item) => item.message).join("\n") || "No active operational alerts";
+}
+
+function openEvidencePlane(source) {
+  const views = {
+    factory: "factory",
+    portfolio: "portfolio",
+    recovery: "recovery",
+    quality: "evaluation",
+    memory: "memory",
+    data: "data",
+    runtime: "runtime",
+    audit: "audit",
+  };
+  const view = views[source];
+  if (!view) return;
+  const tab = $(`${view}-tab`) || (view === "evaluation" ? $("evaluation-tab") : null);
+  if (tab) tab.click();
 }
 
 async function refreshGraphProjection() {

@@ -136,7 +136,8 @@ class GraphExplorerTests(unittest.TestCase):
             self.assertIn("Knowledge Graph", body)
             self.assertIn("graph-binding-hash", body)
             self.assertIn("live-endpoint", body)
-            self.assertIn("Lightyear · Operational trust plane", body)
+            self.assertIn("Discovery view · not live equivalence", body)
+            self.assertIn("IBM+Plex+Sans", body)
             self.assertIn('for="problem-context"', body)
             self.assertIn('for="workload-context"', body)
             self.assertIn("Search selected workload", body)
@@ -155,12 +156,14 @@ class GraphExplorerTests(unittest.TestCase):
             self.assertIn("Static file mode cannot connect to the live graph", script)
             with urlopen(f"{base}/styles.css", timeout=3) as response:
                 styles = response.read().decode("utf-8")
-            for investor_color in (
-                "#050505", "#f8f4ec", "#c5bdaf", "#f2b84b", "#d68a17", "#8e6b35",
+            for graph_color in (
+                "#fbfaf8", "#ffffff", "#b4531f", "#2f5fb4", "#7b4fb0",
+                "#2f6b3f", "#b03a28", "#b4831f", "#a02e7a",
             ):
-                self.assertIn(investor_color, styles)
+                self.assertIn(graph_color, styles)
+            self.assertIn("warm editorial Control Tower palette", styles)
             self.assertIn(".graph-binding.invalidated", styles)
-            self.assertIn('"Google Sans", "Roboto"', styles)
+            self.assertIn('"IBM Plex Sans"', styles)
         finally:
             server.shutdown()
             server.server_close()

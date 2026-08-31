@@ -1,0 +1,1161 @@
+{
+  "claim_boundary": {
+    "dbrc_recovery_equivalent": false,
+    "fast_path_qualified": false,
+    "ims_runtime_equivalent": false,
+    "ims_tm_qualified": false,
+    "mainframe_equivalent": false,
+    "native_ims_qualified": false,
+    "production_ready": false,
+    "restart_equivalent": false
+  },
+  "content_sha256": "77d5edb2cc91c6f9d564602fc5bf58bc314033b2992c7e56f8f634571153b49b",
+  "corpus": {
+    "blocked_case_count": 4,
+    "case_count": 40,
+    "customer_source": false,
+    "mutation_case_count": 4,
+    "passed_case_count": 36,
+    "positive_case_count": 4,
+    "targeted_boundary_case_count": 32
+  },
+  "corpus_id": "lightyear-ims-synthetic-conformance-v1",
+  "coverage": {
+    "access_methods": [
+      "GSAM",
+      "HIDAM",
+      "INDEX"
+    ],
+    "call_families": [
+      "GU",
+      "GN",
+      "GNP",
+      "GHU",
+      "GHN",
+      "GHNP",
+      "ISRT",
+      "REPL",
+      "DLET",
+      "CHKP",
+      "XRST",
+      "ROLB"
+    ],
+    "explicit_native_gaps": [
+      "authorized IMS region, PSB scheduling, and native database execution",
+      "Fast Path DEDB and MSDB behavior",
+      "IMS TM message queues, shared queues, routing, and security",
+      "DBRC, logging, image copy, recovery, locking, and data sharing",
+      "native GSAM positioning, restart, and external dataset behavior"
+    ],
+    "observed_feature_count": 94,
+    "observed_features": [
+      "AJ-status",
+      "DJ-status",
+      "GB-status",
+      "GE-status",
+      "II-status",
+      "PAUTDTL1",
+      "binding-mismatch",
+      "blank-status",
+      "bmp",
+      "checkpoint-id",
+      "child-segment",
+      "chkp",
+      "commit-boundary",
+      "dbrc",
+      "dedb",
+      "diagnostic",
+      "dlet",
+      "dli-batch",
+      "duplicate-segment",
+      "end-database",
+      "end-dataset",
+      "exact-match",
+      "fail-closed",
+      "fast-path",
+      "get-hold",
+      "ghn",
+      "ghnp",
+      "ghu",
+      "gn",
+      "gnp",
+      "gsam",
+      "gu",
+      "hidam",
+      "hidden-segment",
+      "hierarchical-delete",
+      "hierarchical-path",
+      "hierarchy",
+      "ims-tm",
+      "index-dbd",
+      "index-lookup",
+      "invalid-syntax",
+      "isrt",
+      "locking",
+      "logging",
+      "missing-hold",
+      "msdb",
+      "multi-ssa",
+      "mutation",
+      "no-commit",
+      "no-mutation",
+      "not-found",
+      "parent-child",
+      "parent-exists",
+      "parent-not-found",
+      "parent-position",
+      "pcb",
+      "pcb-name",
+      "pcb-number",
+      "pending-mutations",
+      "policy-boundary",
+      "positioning",
+      "procopt",
+      "procopt-AP",
+      "psb",
+      "psb-schedule",
+      "qualified-ssa",
+      "read-only",
+      "recovery",
+      "repl",
+      "restart-position",
+      "resume",
+      "rolb",
+      "rollback",
+      "root-key",
+      "root-segment",
+      "route",
+      "routing",
+      "scheduling",
+      "secondary-index",
+      "segment-search",
+      "segment-visibility",
+      "senseg",
+      "sequence-error",
+      "sequential-dataset",
+      "sequential-navigation",
+      "sequential-position",
+      "shared-queues",
+      "ssa",
+      "target-root",
+      "unqualified-ssa",
+      "unsupported",
+      "update",
+      "update-authority",
+      "xrst"
+    ],
+    "responses": [
+      "DUPLICATE_SEGMENT",
+      "END_DATABASE",
+      "INVALID_SSA",
+      "SEGMENT_NOT_FOUND",
+      "SEQUENCE_ERROR",
+      "SUCCESS"
+    ]
+  },
+  "graph_content_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
+  "manifest_sha256": "9b971d6f4f0b1a443fa2877e5eb152f3c59e0d6c377d121ac7062f05b44ba40e",
+  "receipt_type": "lightyear-ims-conformance-receipt",
+  "results": [
+    {
+      "classification": "positive",
+      "features": [
+        "blank-status",
+        "bmp",
+        "gu",
+        "hidam",
+        "pcb",
+        "root-segment"
+      ],
+      "id": "01-gu-root-hit",
+      "observed": {
+        "diagnostics": [],
+        "held": false,
+        "ims_status": "  ",
+        "mutation_count": 0,
+        "response": "SUCCESS",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "GU PAUTSUM0 R001"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "43864d55582c62d773cb97c8c72d01bffa9ff080d105625cce42e123ffdaa928"
+    },
+    {
+      "classification": "positive",
+      "features": [
+        "blank-status",
+        "gn",
+        "hidam",
+        "positioning",
+        "sequential-navigation"
+      ],
+      "id": "02-gn-root-sequence",
+      "observed": {
+        "diagnostics": [],
+        "held": false,
+        "ims_status": "  ",
+        "mutation_count": 0,
+        "response": "SUCCESS",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "GN PAUTSUM0 1"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "ba2927b18776be21934214005c22d39d99893fead19f5e96ae3718aea96e090e"
+    },
+    {
+      "classification": "positive",
+      "features": [
+        "blank-status",
+        "child-segment",
+        "gnp",
+        "hierarchy",
+        "parent-position"
+      ],
+      "id": "03-gnp-child-hit",
+      "observed": {
+        "diagnostics": [],
+        "held": false,
+        "ims_status": "  ",
+        "mutation_count": 0,
+        "response": "SUCCESS",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "GNP PAUTDTL1 D002"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "9e3f253afef8e22860efcdaad5884e34a431fb0579a722a44b2b76b4da718285"
+    },
+    {
+      "classification": "positive",
+      "features": [
+        "blank-status",
+        "gn",
+        "gsam",
+        "sequential-dataset"
+      ],
+      "id": "04-gsam-sequential-read",
+      "observed": {
+        "diagnostics": [],
+        "held": false,
+        "ims_status": "  ",
+        "mutation_count": 0,
+        "response": "SUCCESS",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "GN GSAM 0"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "af202e1227312e6d228cb5cfab9cba13cf212e1f4c97dc1a889e9bba7ae0bb59"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "GE-status",
+        "gu",
+        "not-found",
+        "root-segment"
+      ],
+      "id": "05-gu-root-miss",
+      "observed": {
+        "diagnostics": [],
+        "held": false,
+        "ims_status": "GE",
+        "mutation_count": 0,
+        "response": "SEGMENT_NOT_FOUND",
+        "result_count": 0,
+        "status": "passed",
+        "trace": [
+          "GU PAUTSUM0 R999"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "ab380b0baf1fdc9d57450dbf623c0d8dad01fd018ded569b17e3844b44f3fe3a"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "GB-status",
+        "end-database",
+        "gn",
+        "positioning"
+      ],
+      "id": "06-gn-end-database",
+      "observed": {
+        "diagnostics": [],
+        "held": false,
+        "ims_status": "GB",
+        "mutation_count": 0,
+        "response": "END_DATABASE",
+        "result_count": 0,
+        "status": "passed",
+        "trace": [
+          "GN PAUTSUM0 9"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "89b234ed7092399bed4b6b0884d9d48bc0b9c99bcd553434a55b46b85f03d4fb"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "DJ-status",
+        "gnp",
+        "parent-position",
+        "sequence-error"
+      ],
+      "id": "07-gnp-without-parent",
+      "observed": {
+        "diagnostics": [
+          "parent-position-required"
+        ],
+        "held": false,
+        "ims_status": "DJ",
+        "mutation_count": 0,
+        "response": "SEQUENCE_ERROR",
+        "result_count": 0,
+        "status": "passed",
+        "trace": [
+          "GNP PAUTDTL1"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "cfef0203f3201011dfe4bcac331b4485fe08fc025c8bd288ac3e7564186104e1"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "get-hold",
+        "ghu",
+        "locking",
+        "root-segment"
+      ],
+      "id": "08-ghu-root-hold",
+      "observed": {
+        "diagnostics": [],
+        "held": true,
+        "ims_status": "  ",
+        "mutation_count": 0,
+        "response": "SUCCESS",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "GHU PAUTSUM0 R001"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "bc95cc1d5741b7ec5148bb369067f7c6c5ddf6a353110a716aa3115ba52466a2"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "get-hold",
+        "ghn",
+        "locking",
+        "sequential-navigation"
+      ],
+      "id": "09-ghn-root-hold",
+      "observed": {
+        "diagnostics": [],
+        "held": true,
+        "ims_status": "  ",
+        "mutation_count": 0,
+        "response": "SUCCESS",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "GHN PAUTSUM0 0"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "52993f49c37cf0efb933726115d64580f22f721c0e1918327520a811b8f6a397"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "child-segment",
+        "get-hold",
+        "ghnp",
+        "locking"
+      ],
+      "id": "10-ghnp-child-hold",
+      "observed": {
+        "diagnostics": [],
+        "held": true,
+        "ims_status": "  ",
+        "mutation_count": 0,
+        "response": "SUCCESS",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "GHNP PAUTDTL1 D003"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "f995eeb87bd595f07c82253ce3b03ac077a83e87ab2ceb014b6e979d409ee3c3"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "exact-match",
+        "qualified-ssa",
+        "root-key",
+        "ssa"
+      ],
+      "id": "11-qualified-ssa-hit",
+      "observed": {
+        "diagnostics": [],
+        "held": false,
+        "ims_status": "  ",
+        "mutation_count": 0,
+        "response": "SUCCESS",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "SSA QUALIFIED PAUTSUM0"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "64c71a795f6d16b8aa371d8f07a4768f45ce0f37ed17c4bd1ae83eee9d24a0d4"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "GE-status",
+        "not-found",
+        "qualified-ssa",
+        "ssa"
+      ],
+      "id": "12-qualified-ssa-miss",
+      "observed": {
+        "diagnostics": [],
+        "held": false,
+        "ims_status": "GE",
+        "mutation_count": 0,
+        "response": "SEGMENT_NOT_FOUND",
+        "result_count": 0,
+        "status": "passed",
+        "trace": [
+          "SSA QUALIFIED PAUTSUM0"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "a5ef7256e219d092afc13c6d0bef1d443528298b9d011d046b4f7f0b708ab5c1"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "positioning",
+        "segment-search",
+        "ssa",
+        "unqualified-ssa"
+      ],
+      "id": "13-unqualified-ssa",
+      "observed": {
+        "diagnostics": [],
+        "held": false,
+        "ims_status": "  ",
+        "mutation_count": 0,
+        "response": "SUCCESS",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "SSA UNQUALIFIED PAUTSUM0"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "e0bb3cfdec1e9a99f10082f490e8fc823a7c9a9a5c7f4e1e654e6822ee9659a3"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "hierarchical-path",
+        "multi-ssa",
+        "parent-child",
+        "ssa"
+      ],
+      "id": "14-multi-ssa-path",
+      "observed": {
+        "diagnostics": [],
+        "held": false,
+        "ims_status": "  ",
+        "mutation_count": 0,
+        "response": "SUCCESS",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "SSA QUALIFIED PAUTSUM0",
+          "SSA QUALIFIED PAUTDTL1"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "3709d6ed8528117e0fdb738f3a36195644967484fde163458f5fa2d313e241b9"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "AJ-status",
+        "diagnostic",
+        "invalid-syntax",
+        "ssa"
+      ],
+      "id": "15-invalid-ssa",
+      "observed": {
+        "diagnostics": [
+          "invalid-ssa-syntax"
+        ],
+        "held": false,
+        "ims_status": "AJ",
+        "mutation_count": 0,
+        "response": "INVALID_SSA",
+        "result_count": 0,
+        "status": "passed",
+        "trace": [
+          "SSA PARSE"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "9ae4d694a892cde0c8aa3460caa5bd3e8617d5afab16359e6016f7e96c14d881"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "index-dbd",
+        "index-lookup",
+        "secondary-index",
+        "target-root"
+      ],
+      "id": "16-secondary-index-hit",
+      "observed": {
+        "diagnostics": [],
+        "held": false,
+        "ims_status": "  ",
+        "mutation_count": 0,
+        "response": "SUCCESS",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "GU PAUTINDX 000001"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "d43311565cdc31be25a108064ebe71bc08cf5c77a222d81df64e025f572b7be2"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "GE-status",
+        "index-dbd",
+        "not-found",
+        "secondary-index"
+      ],
+      "id": "17-secondary-index-miss",
+      "observed": {
+        "diagnostics": [],
+        "held": false,
+        "ims_status": "GE",
+        "mutation_count": 0,
+        "response": "SEGMENT_NOT_FOUND",
+        "result_count": 0,
+        "status": "passed",
+        "trace": [
+          "GU PAUTINDX 999999"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "0ae9637b2b22c3ebaf65478c5e68982272cfc5b2105fc07e6046d0da4725729b"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "isrt",
+        "mutation",
+        "procopt-AP",
+        "root-segment"
+      ],
+      "id": "18-isrt-root-new",
+      "observed": {
+        "diagnostics": [],
+        "held": false,
+        "ims_status": "  ",
+        "mutation_count": 1,
+        "response": "SUCCESS",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "ISRT PAUTSUM0 R003"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "e0b1cca8cd873e2587d4fe058f8b3d9d9d4c2fb6dd171d9d3c210f70fb33be39"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "II-status",
+        "duplicate-segment",
+        "isrt",
+        "no-mutation"
+      ],
+      "id": "19-isrt-root-duplicate",
+      "observed": {
+        "diagnostics": [],
+        "held": false,
+        "ims_status": "II",
+        "mutation_count": 0,
+        "response": "DUPLICATE_SEGMENT",
+        "result_count": 0,
+        "status": "passed",
+        "trace": [
+          "ISRT PAUTSUM0 R001"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "ecbb5d4bab32e76218ef9f9285113611e379235705c7880ac3f640f600b7a902"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "child-segment",
+        "isrt",
+        "mutation",
+        "parent-exists"
+      ],
+      "id": "20-isrt-child-new",
+      "observed": {
+        "diagnostics": [],
+        "held": false,
+        "ims_status": "  ",
+        "mutation_count": 1,
+        "response": "SUCCESS",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "ISRT PAUTDTL1 D004"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "3ead0f505aaad4f4146e414bce08887707d47ceaaf30725842ee2b750c235948"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "GE-status",
+        "child-segment",
+        "isrt",
+        "parent-not-found"
+      ],
+      "id": "21-isrt-child-missing-parent",
+      "observed": {
+        "diagnostics": [
+          "parent-not-found"
+        ],
+        "held": false,
+        "ims_status": "GE",
+        "mutation_count": 0,
+        "response": "SEGMENT_NOT_FOUND",
+        "result_count": 0,
+        "status": "passed",
+        "trace": [
+          "ISRT PAUTDTL1 D004"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "4059d539bcd6aca64c7e8a0aff8017dcbd696abf9123ae7fbd30686185d1c7cd"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "get-hold",
+        "mutation",
+        "repl",
+        "update"
+      ],
+      "id": "22-repl-after-hold",
+      "observed": {
+        "diagnostics": [],
+        "held": true,
+        "ims_status": "  ",
+        "mutation_count": 1,
+        "response": "SUCCESS",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "GHU ROOT",
+          "REPL"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "e2e02865bf78fdde73ff38ae2382c60201bcd2104b7dfafe547519fde2c8b3ab"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "DJ-status",
+        "missing-hold",
+        "repl",
+        "sequence-error"
+      ],
+      "id": "23-repl-without-hold",
+      "observed": {
+        "diagnostics": [
+          "successful-get-hold-required"
+        ],
+        "held": false,
+        "ims_status": "DJ",
+        "mutation_count": 0,
+        "response": "SEQUENCE_ERROR",
+        "result_count": 0,
+        "status": "passed",
+        "trace": [
+          "REPL"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "79287b539c097d32c9110f3cbe77efac9b62fb01309c46d22689a0ce92a8a51e"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "child-segment",
+        "dlet",
+        "get-hold",
+        "mutation"
+      ],
+      "id": "24-dlet-child-after-hold",
+      "observed": {
+        "diagnostics": [],
+        "held": true,
+        "ims_status": "  ",
+        "mutation_count": 1,
+        "response": "SUCCESS",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "GHNP CHILD",
+          "DLET"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "0c4aa514b6a64c670c42930eaf22e08adc1898dbb5615d4a7af51de2685689a6"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "dlet",
+        "get-hold",
+        "hierarchical-delete",
+        "mutation",
+        "root-segment"
+      ],
+      "id": "25-dlet-root-after-hold",
+      "observed": {
+        "diagnostics": [],
+        "held": true,
+        "ims_status": "  ",
+        "mutation_count": 1,
+        "response": "SUCCESS",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "GHU ROOT",
+          "DLET"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "c64d085215079bc39d1ca491b6d8d28a8876e8d93c6da4db0426345d8d689fee"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "DJ-status",
+        "dlet",
+        "missing-hold",
+        "sequence-error"
+      ],
+      "id": "26-dlet-without-hold",
+      "observed": {
+        "diagnostics": [
+          "successful-get-hold-required"
+        ],
+        "held": false,
+        "ims_status": "DJ",
+        "mutation_count": 0,
+        "response": "SEQUENCE_ERROR",
+        "result_count": 0,
+        "status": "passed",
+        "trace": [
+          "DLET"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "a278699468893b94dd0e108ca201f523db328c78093ee27ae59a338f8a4e3c04"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "pcb",
+        "procopt",
+        "procopt-AP",
+        "psb",
+        "update-authority"
+      ],
+      "id": "27-procopt-ap-allows-update",
+      "observed": {
+        "diagnostics": [],
+        "held": false,
+        "ims_status": "  ",
+        "mutation_count": 0,
+        "response": "SUCCESS",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "PROCOPT AP"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "4bd92b0ecea4ee270576cf7352352e89f2243d5b7d7f633a1aa0f78d226cc3e8"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "pcb",
+        "policy-boundary",
+        "procopt",
+        "psb",
+        "read-only"
+      ],
+      "id": "28-procopt-g-denies-update",
+      "observed": {
+        "diagnostics": [
+          "procopt-denies-update"
+        ],
+        "held": false,
+        "ims_status": "DJ",
+        "mutation_count": 0,
+        "response": "SEQUENCE_ERROR",
+        "result_count": 0,
+        "status": "passed",
+        "trace": [
+          "PROCOPT G"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "d47069ae6cae1116f753f2fee0071c54ad53ccbfd954009236d360ad96b197a5"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "PAUTDTL1",
+        "psb",
+        "segment-visibility",
+        "senseg"
+      ],
+      "id": "29-senseg-visible",
+      "observed": {
+        "diagnostics": [],
+        "held": false,
+        "ims_status": "  ",
+        "mutation_count": 0,
+        "response": "SUCCESS",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "SENSEG PAUTDTL1"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "2ef79ee402653d4ab2ea40dd880abdcc6e814d9d87d4297952c1d06e0585bd07"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "GE-status",
+        "hidden-segment",
+        "psb",
+        "senseg"
+      ],
+      "id": "30-senseg-hidden",
+      "observed": {
+        "diagnostics": [],
+        "held": false,
+        "ims_status": "GE",
+        "mutation_count": 0,
+        "response": "SEGMENT_NOT_FOUND",
+        "result_count": 0,
+        "status": "passed",
+        "trace": [
+          "SENSEG PAUTHIDE"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "6e13a741a3865a2f73a25c3d62efdef4041a5aacc41bda9f5b869c405582dcc7"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "GB-status",
+        "end-dataset",
+        "gsam",
+        "sequential-position"
+      ],
+      "id": "31-gsam-end-dataset",
+      "observed": {
+        "diagnostics": [],
+        "held": false,
+        "ims_status": "GB",
+        "mutation_count": 0,
+        "response": "END_DATABASE",
+        "result_count": 0,
+        "status": "passed",
+        "trace": [
+          "GN GSAM 9"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "b14a0fbad7266d446dd391446bee461f0b194dc7daf7dfe6059a34f03b237fb3"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "AJ-status",
+        "binding-mismatch",
+        "pcb",
+        "pcb-name",
+        "pcb-number"
+      ],
+      "id": "32-pcb-binding-mismatch",
+      "observed": {
+        "diagnostics": [
+          "pcb-binding-mismatch"
+        ],
+        "held": false,
+        "ims_status": "AJ",
+        "mutation_count": 0,
+        "response": "INVALID_SSA",
+        "result_count": 0,
+        "status": "passed",
+        "trace": [
+          "PCB SELECT"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "1beb55763e662afd4b46ef84db65fca59be833f277ea84de40618e8cf5b97d87"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "checkpoint-id",
+        "chkp",
+        "commit-boundary",
+        "pending-mutations"
+      ],
+      "id": "33-checkpoint-commit",
+      "observed": {
+        "diagnostics": [],
+        "held": false,
+        "ims_status": "  ",
+        "mutation_count": 2,
+        "response": "SUCCESS",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "CHKP CP000001"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "3485a6fca5d9ac9bda202788c984e6d8172d0a160c0b4871b1235f1a19c525c3"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "checkpoint-id",
+        "restart-position",
+        "resume",
+        "xrst"
+      ],
+      "id": "34-restart-resume",
+      "observed": {
+        "diagnostics": [],
+        "held": false,
+        "ims_status": "  ",
+        "mutation_count": 0,
+        "response": "SUCCESS",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "XRST CP000001"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "937e45778b0c784c857e55f7ab5557826f3c910f643b1d08b26d0fba4f54fbb8"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "no-commit",
+        "pending-mutations",
+        "rolb",
+        "rollback"
+      ],
+      "id": "35-rollback-discard",
+      "observed": {
+        "diagnostics": [
+          "pending-mutations-discarded"
+        ],
+        "held": false,
+        "ims_status": "  ",
+        "mutation_count": 0,
+        "response": "SUCCESS",
+        "result_count": 2,
+        "status": "passed",
+        "trace": [
+          "ROLB"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "fe8e28f62723cedefc8386bba8fcd64f640abe5863f9f0f186bbe9faa8a1810c"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "dli-batch",
+        "psb-schedule",
+        "route",
+        "scheduling"
+      ],
+      "id": "36-dli-batch-route",
+      "observed": {
+        "diagnostics": [],
+        "held": false,
+        "ims_status": "  ",
+        "mutation_count": 0,
+        "response": "SUCCESS",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "ROUTE DLI_BATCH"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "ced292883c8965e01e4d8ed0facc78252f00e8a7dbf22fd8d5e0a1d987d1ebc1"
+    },
+    {
+      "classification": "mutation",
+      "features": [
+        "dedb",
+        "fail-closed",
+        "fast-path",
+        "unsupported"
+      ],
+      "id": "37-dedb-access-blocked",
+      "observed": {
+        "diagnostics": [
+          "fast-path-dedb-unsupported"
+        ],
+        "held": false,
+        "ims_status": "DJ",
+        "mutation_count": 0,
+        "response": "SEQUENCE_ERROR",
+        "result_count": 0,
+        "status": "blocked",
+        "trace": [
+          "DEDB_ACCESS"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "d888c8950ceca776f3ad262fe16471769981444293a709803da9e9aea0cc836a"
+    },
+    {
+      "classification": "mutation",
+      "features": [
+        "fail-closed",
+        "fast-path",
+        "msdb",
+        "unsupported"
+      ],
+      "id": "38-msdb-access-blocked",
+      "observed": {
+        "diagnostics": [
+          "msdb-unsupported"
+        ],
+        "held": false,
+        "ims_status": "DJ",
+        "mutation_count": 0,
+        "response": "SEQUENCE_ERROR",
+        "result_count": 0,
+        "status": "blocked",
+        "trace": [
+          "MSDB_ACCESS"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "32f2158d73d5b521bd20da20c083dd4bd9f757af7e8aa5769677639ac75c2fe8"
+    },
+    {
+      "classification": "mutation",
+      "features": [
+        "fail-closed",
+        "ims-tm",
+        "routing",
+        "shared-queues",
+        "unsupported"
+      ],
+      "id": "39-shared-queues-blocked",
+      "observed": {
+        "diagnostics": [
+          "ims-tm-shared-queues-unsupported"
+        ],
+        "held": false,
+        "ims_status": "DJ",
+        "mutation_count": 0,
+        "response": "SEQUENCE_ERROR",
+        "result_count": 0,
+        "status": "blocked",
+        "trace": [
+          "SHARED_QUEUES_ACCESS"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "33f58b2ddd11dc1835f7769dc3a4a47a250ee6d9a59ba63284a3f10acae3591b"
+    },
+    {
+      "classification": "mutation",
+      "features": [
+        "dbrc",
+        "fail-closed",
+        "logging",
+        "recovery",
+        "unsupported"
+      ],
+      "id": "40-dbrc-recovery-blocked",
+      "observed": {
+        "diagnostics": [
+          "dbrc-log-and-recovery-unsupported"
+        ],
+        "held": false,
+        "ims_status": "DJ",
+        "mutation_count": 0,
+        "response": "SEQUENCE_ERROR",
+        "result_count": 0,
+        "status": "blocked",
+        "trace": [
+          "DBRC_RECOVERY"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "7c338087d8b4a97b1ccef9c0057f858918d5d3d5f182c9a1e036b5c7bca6c5f4"
+    }
+  ],
+  "schema_version": "1.0",
+  "status": "passed"
+}

@@ -1,0 +1,501 @@
+{
+  "classifications": [
+    "exact",
+    "normalized-equivalent",
+    "policy-decision-required",
+    "lossy",
+    "unsupported"
+  ],
+  "content_sha256": "f7e7b71aa3a837047e10be83ff16d05dc543811e5451a065e442e1d0711094eb",
+  "entries": [
+    {
+      "classification": "exact",
+      "decision": "bounded-contract",
+      "evidence_required": [
+        "native-DBD-digest"
+      ],
+      "item_id": "ims:dbd-database-identity",
+      "rationale": "Static inventory and deterministic hierarchical vectors are governed separately from native region, storage, locking, logging, restart, and recovery behavior.",
+      "scope": "dbd-database-identity",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM IMS"
+      },
+      "target_semantics": {
+        "contract": "lightyear-ims-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "root-addressing-and-sequence-vectors"
+      ],
+      "item_id": "ims:hidam-root-and-hierarchy",
+      "rationale": "Static inventory and deterministic hierarchical vectors are governed separately from native region, storage, locking, logging, restart, and recovery behavior.",
+      "scope": "hidam-root-and-hierarchy",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM IMS"
+      },
+      "target_semantics": {
+        "contract": "lightyear-ims-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "index-to-target-vectors"
+      ],
+      "item_id": "ims:secondary-index-read",
+      "rationale": "Static inventory and deterministic hierarchical vectors are governed separately from native region, storage, locking, logging, restart, and recovery behavior.",
+      "scope": "secondary-index-read",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM IMS"
+      },
+      "target_semantics": {
+        "contract": "lightyear-ims-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "native-index-update-and-rebuild-baseline"
+      ],
+      "item_id": "ims:secondary-index-maintenance",
+      "rationale": "Static inventory and deterministic hierarchical vectors are governed separately from native region, storage, locking, logging, restart, and recovery behavior.",
+      "scope": "secondary-index-maintenance",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM IMS"
+      },
+      "target_semantics": {
+        "contract": "lightyear-ims-qualification"
+      }
+    },
+    {
+      "classification": "lossy",
+      "decision": "accepted-only-in-bounded-planning",
+      "evidence_required": [
+        "native-GSAM-position-and-dataset-baseline"
+      ],
+      "item_id": "ims:gsam-sequential-access",
+      "rationale": "Static inventory and deterministic hierarchical vectors are governed separately from native region, storage, locking, logging, restart, and recovery behavior.",
+      "scope": "gsam-sequential-access",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM IMS"
+      },
+      "target_semantics": {
+        "contract": "lightyear-ims-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "OSAM-VSAM-blocking-buffering-and-placement"
+      ],
+      "item_id": "ims:dataset-group-storage",
+      "rationale": "Static inventory and deterministic hierarchical vectors are governed separately from native region, storage, locking, logging, restart, and recovery behavior.",
+      "scope": "dataset-group-storage",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM IMS"
+      },
+      "target_semantics": {
+        "contract": "lightyear-ims-qualification"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "bounded-contract",
+      "evidence_required": [
+        "DBD-parent-child-binding"
+      ],
+      "item_id": "ims:segment-parentage",
+      "rationale": "Static inventory and deterministic hierarchical vectors are governed separately from native region, storage, locking, logging, restart, and recovery behavior.",
+      "scope": "segment-parentage",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM IMS"
+      },
+      "target_semantics": {
+        "contract": "lightyear-ims-qualification"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "bounded-contract",
+      "evidence_required": [
+        "offset-length-type-and-key-binding"
+      ],
+      "item_id": "ims:segment-field-layout",
+      "rationale": "Static inventory and deterministic hierarchical vectors are governed separately from native region, storage, locking, logging, restart, and recovery behavior.",
+      "scope": "segment-field-layout",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM IMS"
+      },
+      "target_semantics": {
+        "contract": "lightyear-ims-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "native-key-order-and-invalid-data-vectors"
+      ],
+      "item_id": "ims:packed-decimal-key-collation",
+      "rationale": "Static inventory and deterministic hierarchical vectors are governed separately from native region, storage, locking, logging, restart, and recovery behavior.",
+      "scope": "packed-decimal-key-collation",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM IMS"
+      },
+      "target_semantics": {
+        "contract": "lightyear-ims-qualification"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "bounded-contract",
+      "evidence_required": [
+        "native-PSB-digest"
+      ],
+      "item_id": "ims:psb-identity",
+      "rationale": "Static inventory and deterministic hierarchical vectors are governed separately from native region, storage, locking, logging, restart, and recovery behavior.",
+      "scope": "psb-identity",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM IMS"
+      },
+      "target_semantics": {
+        "contract": "lightyear-ims-qualification"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "bounded-contract",
+      "evidence_required": [
+        "PCB-name-number-and-DBD-binding"
+      ],
+      "item_id": "ims:pcb-selection",
+      "rationale": "Static inventory and deterministic hierarchical vectors are governed separately from native region, storage, locking, logging, restart, and recovery behavior.",
+      "scope": "pcb-selection",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM IMS"
+      },
+      "target_semantics": {
+        "contract": "lightyear-ims-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "site-PROCOPT-and-update-policy"
+      ],
+      "item_id": "ims:procopt-authorization",
+      "rationale": "Static inventory and deterministic hierarchical vectors are governed separately from native region, storage, locking, logging, restart, and recovery behavior.",
+      "scope": "procopt-authorization",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM IMS"
+      },
+      "target_semantics": {
+        "contract": "lightyear-ims-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "SENSEG-visibility-vectors"
+      ],
+      "item_id": "ims:sensitive-segment-view",
+      "rationale": "Static inventory and deterministic hierarchical vectors are governed separately from native region, storage, locking, logging, restart, and recovery behavior.",
+      "scope": "sensitive-segment-view",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM IMS"
+      },
+      "target_semantics": {
+        "contract": "lightyear-ims-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "hierarchical-position-and-end-vectors"
+      ],
+      "item_id": "ims:gu-gn-gnp-navigation",
+      "rationale": "Static inventory and deterministic hierarchical vectors are governed separately from native region, storage, locking, logging, restart, and recovery behavior.",
+      "scope": "gu-gn-gnp-navigation",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM IMS"
+      },
+      "target_semantics": {
+        "contract": "lightyear-ims-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "native-lock-scope-and-hold-lifetime"
+      ],
+      "item_id": "ims:ghu-ghn-ghnp-hold",
+      "rationale": "Static inventory and deterministic hierarchical vectors are governed separately from native region, storage, locking, logging, restart, and recovery behavior.",
+      "scope": "ghu-ghn-ghnp-hold",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM IMS"
+      },
+      "target_semantics": {
+        "contract": "lightyear-ims-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "qualified-unqualified-and-path-vectors"
+      ],
+      "item_id": "ims:ssa-qualification",
+      "rationale": "Static inventory and deterministic hierarchical vectors are governed separately from native region, storage, locking, logging, restart, and recovery behavior.",
+      "scope": "ssa-qualification",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM IMS"
+      },
+      "target_semantics": {
+        "contract": "lightyear-ims-qualification"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "bounded-contract",
+      "evidence_required": [
+        "blank-GE-GB-II-AJ-DJ-crosswalk"
+      ],
+      "item_id": "ims:dli-status-codes",
+      "rationale": "Static inventory and deterministic hierarchical vectors are governed separately from native region, storage, locking, logging, restart, and recovery behavior.",
+      "scope": "dli-status-codes",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM IMS"
+      },
+      "target_semantics": {
+        "contract": "lightyear-ims-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "ISRT-parent-sequence-and-duplicate-vectors"
+      ],
+      "item_id": "ims:segment-insert",
+      "rationale": "Static inventory and deterministic hierarchical vectors are governed separately from native region, storage, locking, logging, restart, and recovery behavior.",
+      "scope": "segment-insert",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM IMS"
+      },
+      "target_semantics": {
+        "contract": "lightyear-ims-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "GET-HOLD-REPL-vectors"
+      ],
+      "item_id": "ims:segment-replace",
+      "rationale": "Static inventory and deterministic hierarchical vectors are governed separately from native region, storage, locking, logging, restart, and recovery behavior.",
+      "scope": "segment-replace",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM IMS"
+      },
+      "target_semantics": {
+        "contract": "lightyear-ims-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "GET-HOLD-DLET-and-cascade-policy"
+      ],
+      "item_id": "ims:segment-delete",
+      "rationale": "Static inventory and deterministic hierarchical vectors are governed separately from native region, storage, locking, logging, restart, and recovery behavior.",
+      "scope": "segment-delete",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM IMS"
+      },
+      "target_semantics": {
+        "contract": "lightyear-ims-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "native-CHKP-XRST-area-and-frequency-baseline"
+      ],
+      "item_id": "ims:checkpoint-and-restart",
+      "rationale": "Static inventory and deterministic hierarchical vectors are governed separately from native region, storage, locking, logging, restart, and recovery behavior.",
+      "scope": "checkpoint-and-restart",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM IMS"
+      },
+      "target_semantics": {
+        "contract": "lightyear-ims-qualification"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "IMS-log-DBRC-ROLB-and-recovery-qualification"
+      ],
+      "item_id": "ims:rollback-and-recovery",
+      "rationale": "Static inventory and deterministic hierarchical vectors are governed separately from native region, storage, locking, logging, restart, and recovery behavior.",
+      "scope": "rollback-and-recovery",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM IMS"
+      },
+      "target_semantics": {
+        "contract": "lightyear-ims-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "authorized-BMP-JCL-region-and-PSB-observation"
+      ],
+      "item_id": "ims:bmp-scheduling",
+      "rationale": "Static inventory and deterministic hierarchical vectors are governed separately from native region, storage, locking, logging, restart, and recovery behavior.",
+      "scope": "bmp-scheduling",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM IMS"
+      },
+      "target_semantics": {
+        "contract": "lightyear-ims-qualification"
+      }
+    },
+    {
+      "classification": "lossy",
+      "decision": "accepted-only-in-bounded-planning",
+      "evidence_required": [
+        "native-DLI-region-and-dataset-allocation"
+      ],
+      "item_id": "ims:dli-batch-scheduling",
+      "rationale": "Static inventory and deterministic hierarchical vectors are governed separately from native region, storage, locking, logging, restart, and recovery behavior.",
+      "scope": "dli-batch-scheduling",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM IMS"
+      },
+      "target_semantics": {
+        "contract": "lightyear-ims-qualification"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "MPP-transaction-queue-routing-and-security-qualification"
+      ],
+      "item_id": "ims:ims-tm-message-processing",
+      "rationale": "Static inventory and deterministic hierarchical vectors are governed separately from native region, storage, locking, logging, restart, and recovery behavior.",
+      "scope": "ims-tm-message-processing",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM IMS"
+      },
+      "target_semantics": {
+        "contract": "lightyear-ims-qualification"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "DEDB-area-and-dependent-region-qualification"
+      ],
+      "item_id": "ims:fast-path-dedb",
+      "rationale": "Static inventory and deterministic hierarchical vectors are governed separately from native region, storage, locking, logging, restart, and recovery behavior.",
+      "scope": "fast-path-dedb",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM IMS"
+      },
+      "target_semantics": {
+        "contract": "lightyear-ims-qualification"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "MSDB-runtime-qualification"
+      ],
+      "item_id": "ims:msdb",
+      "rationale": "Static inventory and deterministic hierarchical vectors are governed separately from native region, storage, locking, logging, restart, and recovery behavior.",
+      "scope": "msdb",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM IMS"
+      },
+      "target_semantics": {
+        "contract": "lightyear-ims-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "native-lock-contention-IRLM-and-data-sharing-baseline"
+      ],
+      "item_id": "ims:locking-data-sharing-and-irpm",
+      "rationale": "Static inventory and deterministic hierarchical vectors are governed separately from native region, storage, locking, logging, restart, and recovery behavior.",
+      "scope": "locking-data-sharing-and-irpm",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM IMS"
+      },
+      "target_semantics": {
+        "contract": "lightyear-ims-qualification"
+      }
+    }
+  ],
+  "graph_content_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
+  "ledger_type": "lightyear-ims-compatibility-ledger",
+  "mainframe_equivalent": false,
+  "production_ready": false,
+  "qualification_blocked": true,
+  "schema_version": "1.0",
+  "statistics": {
+    "exact": 6,
+    "lossy": 2,
+    "normalized-equivalent": 10,
+    "policy-decision-required": 6,
+    "unsupported": 4
+  }
+}

@@ -1,8 +1,10 @@
 # CBPAUP0C IMS logical proof cell
 
-This package advances one bounded IMS BMP workload through readiness gates 1–5 and provides the
-capture, comparison, and signed-receipt mechanics for gates 6–8. The cell follows
-`CBPAUP0J -> CBPAUP0C -> PSBPAUTB/PAUTBPCB -> DBPAUTP0 -> PAUTSUM0/PAUTDTL1`.
+This package preserves the bounded IMS BMP proof and binds it into the broader v0.40 IMS
+qualification plane. The original cell follows
+`CBPAUP0J -> CBPAUP0C -> PSBPAUTB/PAUTBPCB -> DBPAUTP0 -> PAUTSUM0/PAUTDTL1`; the qualification
+adds graph-bound DBD/PSB/PCB inventory, a deterministic 40-case corpus, a five-class compatibility
+ledger, and eleven independent gates.
 
 The committed capture is a deterministic logical model. It does not schedule the PSB or execute
 against IMS and therefore cannot establish mainframe equivalence.
@@ -14,6 +16,9 @@ against IMS and therefore cannot establish mainframe equivalence.
 - source-faithful in-memory BMP candidate: passed;
 - private mutation and negative gate: passed;
 - local logical comparison: passed;
+- graph-bound 40-case semantic conformance: passed;
+- 28-entry compatibility ledger: passed with unresolved and excluded boundaries;
+- IMS qualification mechanism: development-ready;
 - authorized z/OS BMP execution: blocked;
 - independent live comparison: mechanism ready, evidence pending;
 - signed equivalence receipt: blocked.
@@ -26,6 +31,7 @@ separate business decision after live characterization.
 
 ```bash
 ./ims-readiness.sh verify
+PYTHONPATH=src python3 -m lightyear_readiness.ims_qualification verify
 ./ims-readiness.sh template work/cbpaup0c-live
 ```
 
@@ -41,3 +47,7 @@ A separate equivalence authority signs the final receipt with
 `LIGHTYEAR_IMS_EQUIVALENCE_SIGNING_KEY`.
 
 See [OPERATOR-RUNBOOK.md](OPERATOR-RUNBOOK.md) before requesting a live run.
+
+The synthetic corpus does not authorize additional native activity. Fast Path, MSDB, IMS TM,
+shared queues, DBRC, logging, restart/recovery equivalence, and production readiness remain outside
+the qualified claim until separately approved native evidence is captured.

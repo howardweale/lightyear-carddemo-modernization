@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.40.0 — 2026-08-31
+
+- Bound IMS qualification to the canonical graph inventory of four databases, four dataset groups,
+  four PSBs, six PCBs, three segments, three fields, and their structural relationships.
+- Added a deterministic 40-case synthetic semantic corpus with 32 targeted boundary cases, 36
+  passing cases, four explicit fail-closed cases, and 94 observed feature categories.
+- Covered HIDAM, secondary-index and GSAM boundaries; GU/GN/GNP and GHU/GHN/GHNP navigation;
+  qualified, unqualified, multi-level, and invalid SSAs; blank, GE, GB, II, AJ, and DJ status codes;
+  ISRT, REPL, DLET, PROCOPT, SENSEG, CHKP, XRST, ROLB, and scheduling boundaries.
+- Added a 28-entry IMS compatibility ledger using all five governing classifications and explicit
+  exclusions for Fast Path DEDB, MSDB, IMS TM shared queues, DBRC logging, and recovery.
+- Separated eleven gates for graph inventory, corpus provenance, DBD/storage, hierarchy and SSAs,
+  PSB/PCB policy, navigation/status, mutation behavior, checkpoint/recovery, runtime exclusions,
+  the existing private expiry-purge proof, and authorized native execution.
+- Added frozen schemas, POSIX/PowerShell release-gate integration, deterministic receipts, graph
+  holdouts, exact-corpus checks, negative diagnostics, and rehashed-overclaim tests.
+- Kept native IMS, IMS TM, Fast Path, DBRC recovery, restart, runtime, mainframe-equivalence, and
+  production claims false pending authorized region, database, logging, and recovery evidence.
+
 ## 0.39.0 — 2026-08-30
 
 - Bound CICS/VSAM qualification to the canonical graph inventory of 240 CICS commands, 25

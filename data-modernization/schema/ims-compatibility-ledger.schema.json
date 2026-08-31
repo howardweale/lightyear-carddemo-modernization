@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schema/ims-compatibility-ledger.schema.json",
+  "title": "LIGHTYEAR IMS compatibility ledger",
+  "type": "object",
+  "required": ["schema_version", "ledger_type", "graph_content_sha256", "classifications", "entries", "statistics", "qualification_blocked", "mainframe_equivalent", "production_ready", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "ledger_type": {"const": "lightyear-ims-compatibility-ledger"},
+    "graph_content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "classifications": {
+      "type": "array", "minItems": 5, "maxItems": 5, "uniqueItems": true,
+      "items": {"enum": ["exact", "normalized-equivalent", "policy-decision-required", "lossy", "unsupported"]}
+    },
+    "entries": {
+      "type": "array", "minItems": 28, "maxItems": 28,
+      "items": {"type": "object", "required": ["item_id", "scope", "source_semantics", "target_semantics", "classification", "rationale", "evidence_required", "decision"]}
+    },
+    "statistics": {"type": "object", "required": ["exact", "normalized-equivalent", "policy-decision-required", "lossy", "unsupported"]},
+    "qualification_blocked": {"const": true},
+    "mainframe_equivalent": {"const": false},
+    "production_ready": {"const": false},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

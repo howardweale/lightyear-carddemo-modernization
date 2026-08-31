@@ -6,6 +6,10 @@ Run `CBPAUP0C` with `PSBPAUTB` against an isolated, synthetic `DBPAUTP0` dataset
 evidence to independently compare segment mutations, DL/I operation order, counters, checkpoints,
 and return status with the FactoryDark logical candidate.
 
+This authorization scope remains limited to the original `CBPAUP0C` synthetic BMP proof. The v0.40
+qualification corpus is synthetic planning evidence and does not authorize tests of other programs,
+databases, regions, IMS TM, Fast Path, shared queues, DBRC, logging, restart, or recovery behavior.
+
 ## Safety prerequisites
 
 1. Obtain written customer authorization naming the test LPAR, IMS region, database, program, PSB,

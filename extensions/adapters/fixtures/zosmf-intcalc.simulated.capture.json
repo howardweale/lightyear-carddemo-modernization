@@ -34,12 +34,12 @@
     }
   ],
   "collected_at": "2026-08-20T00:00:00Z",
-  "content_sha256": "0a096707af141d6761dc63ac7c12fd5a93ca725571427cd783a1de9fa7cf64ab",
+  "content_sha256": "3fd74861360729d186a8bad8bfdd76c18e791e5ef19a8aa12a49311f6a4f5d98",
   "envelope_id": "fixture:zosmf-intcalc-job00001",
   "envelope_type": "lightyear-adapter-evidence",
   "evidence_class": "simulated",
   "graph_binding": {
-    "content_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
+    "content_sha256": "d98bd92d752f23ee19263aa0957c28ee5aac52966d1322f6a31d4a9960394dc9",
     "graph_id": "lightyear:carddemo-modernization"
   },
   "limitations": [

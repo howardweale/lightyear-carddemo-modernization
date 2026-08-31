@@ -85,6 +85,116 @@ DEFAULT_PERSPECTIVES = [
 ]
 
 
+OPERATOR_CUSTOMERS = [
+    {
+        "id": "carddemo-reference",
+        "name": "CardDemo Reference Estate",
+        "evidence_class": "reference",
+        "description": "Bundled reference evidence; no customer system is attached.",
+    }
+]
+
+OPERATOR_SCOPES = [
+    {
+        "id": "all-estate",
+        "name": "Unified estate",
+        "platforms": [],
+        "description": "Keep every evidenced technology visible in one dependency graph.",
+    },
+    {
+        "id": "mainframe",
+        "name": "Mainframe",
+        "platforms": ["COBOL", "PL/I", "JCL", "CICS", "IMS", "VSAM", "DB2", "Assembler", "BMS", "Mainframe data"],
+        "description": "Focus the graph on mainframe programs, transactions, jobs, and data stores.",
+    },
+    {
+        "id": "database",
+        "name": "Database modernization",
+        "platforms": ["DB2", "Oracle", "SAP ASE"],
+        "description": "Focus on database lineage while retaining connected application context.",
+    },
+    {
+        "id": "sap-estate",
+        "name": "SAP estate",
+        "platforms": ["SAP", "SAP ASE"],
+        "description": "Reserved for customer SAP application and integration evidence.",
+        "planned": True,
+    },
+]
+
+OPERATOR_LENSES = [
+    {
+        "id": "dependencies",
+        "name": "Dependencies",
+        "description": "Follow calls, execution, resource use, and data access across technologies.",
+    },
+    {
+        "id": "data-flow",
+        "name": "Data flow",
+        "description": "Emphasize reads, writes, SQL, datasets, DB2, VSAM, and IMS relationships.",
+    },
+    {
+        "id": "modernization",
+        "name": "Modernization",
+        "description": "Emphasize workloads, rules, modern implementations, and verification evidence.",
+    },
+    {
+        "id": "runtime",
+        "name": "Runtime evidence",
+        "description": "Review observed behavior without promoting static relationships to runtime truth.",
+    },
+    {
+        "id": "qualification",
+        "name": "Qualification evidence",
+        "description": "Review gates, receipts, limitations, and promotion posture.",
+    },
+    {
+        "id": "security",
+        "name": "Security vulnerabilities",
+        "description": "Reserved for governed vulnerability findings and remediation evidence.",
+        "planned": True,
+    },
+]
+
+PLATFORM_PREFIXES = {
+    "assembler_": "Assembler",
+    "bms_": "BMS",
+    "cics_": "CICS",
+    "cobol_": "COBOL",
+    "db2_": "DB2",
+    "ims_": "IMS",
+    "java_": "Java",
+    "jcl_": "JCL",
+    "oracle_": "Oracle",
+    "pli_": "PL/I",
+    "sap_ase_": "SAP ASE",
+    "ase_": "SAP ASE",
+    "sap_": "SAP",
+    "vsam_": "VSAM",
+}
+
+PLANNED_GRAPH_PLATFORMS = [
+    {
+        "id": "oracle",
+        "name": "Oracle",
+        "status": "qualification-not-projected",
+        "description": "Oracle qualification evidence exists outside the graph; no customer integration edges are attached.",
+    },
+    {
+        "id": "sap-ase",
+        "name": "SAP ASE",
+        "status": "qualification-not-projected",
+        "description": "SAP ASE adapter evidence exists outside the graph; no customer integration edges are attached.",
+    },
+    {
+        "id": "sap",
+        "name": "SAP",
+        "status": "planned",
+        "description": "SAP application evidence is a future capability.",
+    },
+]
+
+
 @dataclass(frozen=True)
 class GraphSelection:
     root: str
@@ -123,10 +233,14 @@ class GraphExplorerIndex:
         self.node_by_id = {node["id"]: node for node in payload["nodes"]}
         self.edge_by_id = {edge["id"]: edge for edge in payload["edges"]}
         self.adjacency: dict[str, list[tuple[str, str]]] = defaultdict(list)
+        self.outgoing: dict[str, list[tuple[str, str]]] = defaultdict(list)
         for edge in payload["edges"]:
             self.adjacency[edge["source"]].append((edge["id"], edge["target"]))
             self.adjacency[edge["target"]].append((edge["id"], edge["source"]))
+            self.outgoing[edge["source"]].append((edge["id"], edge["target"]))
         for values in self.adjacency.values():
+            values.sort(key=lambda item: (self.edge_by_id[item[0]]["relation"], item[1]))
+        for values in self.outgoing.values():
             values.sort(key=lambda item: (self.edge_by_id[item[0]]["relation"], item[1]))
 
     @classmethod
@@ -142,6 +256,7 @@ class GraphExplorerIndex:
             "statistics": self.payload["statistics"],
             "relationship_ontology": self.payload["relationship_ontology"],
             "perspectives": self.perspectives(),
+            "operator_context": self.operator_context(),
         }
         for key in (
             "projection_type",
@@ -162,6 +277,108 @@ class GraphExplorerIndex:
 
     def perspectives(self) -> list[dict[str, Any]]:
         return [item for item in DEFAULT_PERSPECTIVES if item["root"] in self.node_by_id]
+
+    def operator_context(self) -> dict[str, Any]:
+        counts: dict[str, int] = defaultdict(int)
+        for node in self.node_by_id.values():
+            counts[self._platform(node)] += 1
+        platforms = [
+            {
+                "id": name.casefold().replace("/", "-").replace(" ", "-"),
+                "name": name,
+                "node_count": count,
+                "status": "projected",
+            }
+            for name, count in sorted(counts.items())
+        ]
+        projected_names = {item["name"] for item in platforms}
+        platforms.extend(
+            item for item in PLANNED_GRAPH_PLATFORMS if item["name"] not in projected_names
+        )
+        scopes = []
+        for definition in OPERATOR_SCOPES:
+            item = dict(definition)
+            item["available"] = not item.get("planned", False) and (
+                not item["platforms"] or bool(projected_names.intersection(item["platforms"]))
+            )
+            scopes.append(item)
+        examples = []
+        for definition in (
+            {
+                "id": "cobol-db2-update",
+                "name": "COBOL → DB2 update",
+                "source": "legacy:cobol-program:COPAUS2C",
+                "target": "legacy:db2-table:CARDDEMO.AUTHFRDS",
+                "claim": "Static source shows COBOL issuing SQL that writes the DB2 table.",
+                "evidence_class": "static-source",
+                "runtime_observed": False,
+            },
+            {
+                "id": "cobol-ims-dependency",
+                "name": "COBOL → IMS dependency",
+                "source": "legacy:cobol-program:CBPAUP0C",
+                "target": "legacy:ims-database:DBPAUTP0",
+                "claim": "Static declarations connect COBOL through a PSB and PCB to the IMS DBD; this is not an update claim.",
+                "evidence_class": "static-declaration",
+                "runtime_observed": False,
+            },
+            {
+                "id": "cobol-ims-delete",
+                "name": "COBOL → IMS delete",
+                "source": "legacy:cobol-paragraph:CBPAUP0C:5000-DELETE-AUTH-DTL",
+                "target": "legacy:ims-segment:DBPAUTP0:PAUTDTL1",
+                "claim": "Static source shows CBPAUP0C issuing DLI DLET against the PSB-authorized PAUTDTL1 segment.",
+                "evidence_class": "static-source",
+                "runtime_observed": False,
+            },
+            {
+                "id": "pli-db2-read",
+                "name": "PL/I → DB2 read",
+                "source": "extension:pli-program:ACCTPL1",
+                "target": "legacy:db2-table:CARDDEMO.AUTHFRDS",
+                "claim": "Static source shows PL/I issuing SQL that reads the DB2 table.",
+                "evidence_class": "static-reference-fixture",
+                "runtime_observed": False,
+            },
+            {
+                "id": "pli-db2-write-reference",
+                "name": "PL/I → DB2 write · reference",
+                "source": "extension:pli-program:AUTHUPD1",
+                "target": "legacy:db2-table:CARDDEMO.AUTHFRDS",
+                "claim": "A bundled non-customer PL/I fixture shows embedded UPDATE extraction into WRITES_TABLE.",
+                "evidence_class": "static-reference-fixture",
+                "runtime_observed": False,
+            },
+        ):
+            if definition["source"] not in self.node_by_id or definition["target"] not in self.node_by_id:
+                continue
+            item = dict(definition)
+            item["source_name"] = self.node_by_id[item["source"]]["name"]
+            item["source_kind"] = self.node_by_id[item["source"]]["kind"]
+            item["source_platform"] = self._platform(self.node_by_id[item["source"]])
+            item["target_name"] = self.node_by_id[item["target"]]["name"]
+            item["target_kind"] = self.node_by_id[item["target"]]["kind"]
+            item["target_platform"] = self._platform(self.node_by_id[item["target"]])
+            item["customer_evidence"] = False
+            examples.append(item)
+        return {
+            "customers": OPERATOR_CUSTOMERS,
+            "scopes": scopes,
+            "lenses": OPERATOR_LENSES,
+            "platforms": platforms,
+            "trace": {
+                "directed": True,
+                "evidence_class": "static-source-and-declaration-evidence",
+                "claim": "A found path proves that the committed graph contains the displayed relationships.",
+                "limitations": [
+                    "A static path does not prove that a transaction executed in production.",
+                    "Only a path containing WRITES_SEGMENT proves a static IMS mutation; PSB/DBD dependency alone does not.",
+                    "The AUTHUPD1 PL/I write is a bundled reference fixture, not customer source.",
+                    "No Oracle or SAP ASE customer integration edges are currently projected.",
+                ],
+                "examples": examples,
+            },
+        }
 
     def search(
         self,
@@ -213,7 +430,7 @@ class GraphExplorerIndex:
                     "target": edge["target"],
                 }
             )
-        result = dict(node)
+        result = self._operator_node(node)
         result["incoming"] = sorted(incoming, key=lambda item: (item["relation"], item["source"]))
         result["outgoing"] = sorted(outgoing, key=lambda item: (item["relation"], item["target"]))
         result["runtime"] = self.runtime_projection("node", node_id)
@@ -319,7 +536,7 @@ class GraphExplorerIndex:
                 if neighbor not in seen:
                     seen.add(neighbor)
                     queue.append((neighbor, distance + 1))
-        nodes = [self.node_by_id[item] for item in sorted(seen)]
+        nodes = [self._operator_node(self.node_by_id[item]) for item in sorted(seen)]
         edges = [
             self.edge_by_id[item]
             for item in sorted(selected_edges)
@@ -332,8 +549,11 @@ class GraphExplorerIndex:
         source: str,
         target: str,
         audience: str = "implementer",
+        direction: str = "any",
     ) -> dict[str, Any] | None:
         audience = self._audience(audience)
+        if direction not in {"any", "directed"}:
+            raise ValueError("direction must be any or directed")
         for node_id in (source, target):
             if node_id not in self.node_by_id or self._hidden(self.node_by_id[node_id], audience):
                 raise KeyError(node_id)
@@ -344,7 +564,8 @@ class GraphExplorerIndex:
             current = queue.popleft()
             if current == target:
                 break
-            for edge_id, neighbor in self.adjacency.get(current, []):
+            adjacency = self.outgoing if direction == "directed" else self.adjacency
+            for edge_id, neighbor in adjacency.get(current, []):
                 if (
                     neighbor in seen
                     or self._edge_hidden(self.edge_by_id[edge_id], audience)
@@ -364,9 +585,28 @@ class GraphExplorerIndex:
             edge_ids.append(edge_id)
         node_ids.reverse()
         edge_ids.reverse()
+        nodes = [self._operator_node(self.node_by_id[node_id]) for node_id in node_ids]
+        platforms = list(dict.fromkeys(node["operator_platform"] for node in nodes))
+        reference_fixture = any(
+            bool(node.get("properties", {}).get("reference_fixture")) for node in nodes
+        )
+        evidence_class = "static-reference-fixture" if reference_fixture else "static-source"
+        limitation = (
+            "This is a non-customer reference-fixture path. It proves static extraction support, "
+            "not a production transaction."
+            if reference_fixture
+            else "This source-backed path proves committed static relationships, not a production transaction."
+        )
         return {
+            "direction": direction,
+            "hop_count": len(edge_ids),
+            "platforms": platforms,
+            "evidence_class": evidence_class,
+            "customer_evidence": False,
+            "runtime_observed": False,
+            "limitation": limitation,
             "node_ids": node_ids,
-            "nodes": [self.node_by_id[node_id] for node_id in node_ids],
+            "nodes": nodes,
             "edges": [self.edge_by_id[edge_id] for edge_id in edge_ids],
         }
 
@@ -393,13 +633,36 @@ class GraphExplorerIndex:
             raise ValueError("audience must be implementer or verifier")
         return value
 
+    @classmethod
+    def _operator_node(cls, node: dict[str, Any]) -> dict[str, Any]:
+        result = dict(node)
+        result["operator_platform"] = cls._platform(node)
+        return result
+
     @staticmethod
-    def _summary(node: dict[str, Any]) -> dict[str, Any]:
+    def _platform(node: dict[str, Any]) -> str:
+        kind = node["kind"]
+        for prefix, platform in PLATFORM_PREFIXES.items():
+            if kind.startswith(prefix):
+                return platform
+        if kind in {"copybook", "cobol_field"}:
+            return "COBOL"
+        if kind in {"dataset", "executable"}:
+            return "Mainframe data"
+        if kind in {"modernization_workload", "business_rule", "test_case", "verification_scenario"}:
+            return "Modernization"
+        if kind in {"software_dependency", "source_file"}:
+            return "Shared evidence"
+        return "Other"
+
+    @classmethod
+    def _summary(cls, node: dict[str, Any]) -> dict[str, Any]:
         return {
             "id": node["id"],
             "kind": node["kind"],
             "name": node["name"],
             "statement": node.get("properties", {}).get("statement", ""),
+            "operator_platform": cls._platform(node),
         }
 
 
@@ -850,8 +1113,13 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
                 self._value(query, "from", required=True),
                 self._value(query, "to", required=True),
                 self._value(query, "audience") or "implementer",
+                self._value(query, "direction") or "any",
             )
-            self._json({"status": "found" if result else "not_found", "trace": result})
+            self._json({
+                "status": "found" if result else "not_found",
+                "trace": result,
+                "evidence_boundary": index.operator_context()["trace"],
+            })
             return
         if path == "/api/gaps":
             gaps = index.gaps()

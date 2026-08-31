@@ -1,11 +1,11 @@
 {
-  "appliance_sha256": "2786d611e9861d0a8b0b8cb3b5c46a86ce49f020f7b91dcdf0e12063740c4d64",
-  "capability_sha256": "5bf8a378bd1b43457f228a3be05bf4b44bd9b3bd7b66c8959fe714567f59ac5f",
+  "appliance_sha256": "df09320ff295c4adf6a3c6533150a1fa9f4b59bfe4e2a30c9620f329777a8e24",
+  "capability_sha256": "4bc0d37461e708c729a9ca9f90d2c5bb1cdc40b9090689520bd9c684e260573f",
   "collection_mechanism": {
     "enterprise_mechanism_ready": true,
     "live_observed": false
   },
-  "content_sha256": "7116f6fe6a6c435b7faf37b8ca8d502f5473135b0c4cb6919b2b65763696723a",
+  "content_sha256": "8dd4d8fd71969ba61929689d0e49316408e0560ff48d6d1e6b6a5b43a11237ea",
   "gates": {
     "6_authorized_original_execution": "blocked",
     "7_independent_comparison": "mechanism_ready",
@@ -19,7 +19,7 @@
     "approved test data, retention, redaction and evidence export policy",
     "approved execution, rollback, recovery and incident runbooks"
   ],
-  "intake_sha256": "7e4c5eb89e8d0d12c44909ba5ed5a7f44ec43a913916d4946de53460d6ad9b97",
+  "intake_sha256": "abb4fd03a1e72e5895217148a8682aeb8aae787fa9d7611d64790d3e1a614f91",
   "limitations": [
     "Preflight describes prerequisites; it is not an authorization or live observation.",
     "The collection appliance cannot promote source-only or simulated evidence to equivalence."

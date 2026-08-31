@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.46.0 — 2026-08-31
+
+- Added customer, technology-scope, and operator-lens navigation to the Evidence Control Tower,
+  keeping engagement, platform focus, and task perspective separate.
+- Added unified-estate, mainframe, and database focus modes that retain connected cross-platform
+  context instead of hiding dependencies at platform boundaries; SAP estate and governed security
+  vulnerability views are visibly planned.
+- Added graph-derived platform coverage for COBOL, PL/I, DB2, VSAM, IMS, JCL, CICS, HLASM, BMS,
+  Java, and modernization evidence, with Oracle and SAP ASE marked qualification-only and not
+  projected.
+- Added directed evidence tracing, an explicit related-evidence mode, hop and platform summaries,
+  static-versus-runtime claim language, evidence-gap results, and inspector actions for choosing
+  endpoints.
+- Added first-class `ISSUES_DLI`, `READS_SEGMENT`, and `WRITES_SEGMENT` semantics, resolving exact
+  COBOL `EXEC DLI` calls through the program's PSB/PCB view to authorized IMS segments.
+- Added one-click source-backed COBOL-to-IMS `DLET` tracing plus a separate non-customer `AUTHUPD1`
+  PL/I-to-DB2 `UPDATE` fixture; retained the original `ACCTPL1` DB2 read and IMS dependency examples.
+- Added visible static-source, static-reference-fixture, non-customer, and runtime-not-observed
+  labels so a graph path cannot be mistaken for a production transaction.
+- Kept Oracle-to-mainframe and Oracle-to-IMS transaction claims blocked because no Oracle or SAP
+  ASE graph fragment, customer integration edge, or runtime transaction evidence is attached.
+- Added regression coverage and customer-readable MS #46 documentation in Markdown, Word, and PDF.
+
 ## 0.45.0 — 2026-08-31
 
 - Added a target-neutral SAP ASE `SourceAdapter` implementing schema discovery, privacy-preserving

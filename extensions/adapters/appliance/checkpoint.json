@@ -154,9 +154,9 @@
   "bindings": {
     "appliance_profile_sha256": "43546433710432528500b775ad1dfacac7b27985428cebabaf149c68df7d71dc",
     "campaign_profile_sha256": "2ed9d0a9082273689fdd85e2678fe3377fa6cea99fb715232f3f89bfcf03e2d9",
-    "graph_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7"
+    "graph_sha256": "d98bd92d752f23ee19263aa0957c28ee5aac52966d1322f6a31d4a9960394dc9"
   },
-  "content_sha256": "cc5f8bb8133eb9297c8499aea7f214ee702da8773773c6b3c8a2a8fc4111d181",
+  "content_sha256": "03a753b941126f2fbbba91989dc2745222cfe0cc30300992d402d1f7f33d36d8",
   "current_path": null,
   "production_ready": false,
   "raw_bodies_retained": false,

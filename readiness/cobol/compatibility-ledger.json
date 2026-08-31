@@ -6,7 +6,7 @@
     "lossy",
     "unsupported"
   ],
-  "content_sha256": "a7ee143005bc4c0720b17b893ce19ebbd8feaf41f151fe1eaa3d8601fb3e5da5",
+  "content_sha256": "8c0339daf5268dc9f53628df67246687cd619991f13f768486ffd1c72c3bd07b",
   "entries": [
     {
       "classification": "normalized-equivalent",
@@ -268,7 +268,7 @@
       }
     }
   ],
-  "graph_content_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
+  "graph_content_sha256": "d98bd92d752f23ee19263aa0957c28ee5aac52966d1322f6a31d4a9960394dc9",
   "ledger_type": "lightyear-cobol-compatibility-ledger",
   "mainframe_equivalent": false,
   "production_ready": false,

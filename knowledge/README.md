@@ -204,6 +204,46 @@ canonical graph hash. The local selector is
 a policy demonstration, not an authentication system; production use still requires identity,
 authorization, auditing, and signed context and answer receipts.
 
+### Operator navigation and cross-platform tracing
+
+The v0.46 operator controls answer three separate questions:
+
+1. **Customer:** which engagement evidence is being viewed. The bundled option is the CardDemo
+   reference estate and is labeled reference evidence; it is not customer evidence.
+2. **Technology scope:** which part of the unified graph should receive visual emphasis. Unified
+   estate, mainframe, and database modernization are available. Scope does not delete connected
+   nodes, because those nodes may explain a cross-platform dependency. SAP estate is planned.
+3. **Operator lens:** what task the operator is performing. Dependency, data-flow, modernization,
+   runtime, and qualification lenses are available. Security vulnerabilities remain planned until
+   governed findings and remediation evidence are attached.
+
+The Trace tab accepts two graph entities or a proven example. **Directed flow** traverses only the
+declared source-to-target direction of each relationship. **Related evidence** can traverse either
+direction and must not be described as a call or transaction path. Every found result reports its
+platform sequence, hop count, static evidence class, and the fact that runtime execution was not
+observed.
+
+Current committed examples are intentionally claim-specific:
+
+- `COPAUS2C` to `CARDDEMO.AUTHFRDS` follows COBOL paragraph containment, embedded SQL issuance,
+  and `WRITES_TABLE`; it is a static DB2 update path.
+- `CBPAUP0C` dependency tracing still follows `USES_PSB`, PSB/PCB containment, and `USES_DBD`; that
+  path alone does not prove an update.
+- `CBPAUP0C` delete paragraphs now follow `ISSUES_DLI` to exact `DLET` statements and
+  `WRITES_SEGMENT` to the PSB-authorized `PAUTDTL1` or `PAUTSUM0` segment. This is static source
+  evidence of write intent, not observed IMS execution.
+- `ACCTPL1` to `CARDDEMO.AUTHFRDS` follows PL/I `ISSUES_SQL` and `READS_TABLE`; it is available in
+  the composite estate.
+- `AUTHUPD1` to `CARDDEMO.AUTHFRDS` follows PL/I `ISSUES_SQL` and `WRITES_TABLE`. It is deliberately
+  labeled as a bundled non-customer reference fixture because the current `ACCTPL1` source is
+  read-only.
+
+Oracle and SAP ASE qualification artifacts currently live outside the graph. An end-to-end Oracle
+or ASE trace requires a governed graph fragment plus customer-evidenced integration edges, such as
+an API, message, database-link, job, or program-call boundary. An Oracle-to-IMS update claim also
+requires a modeled IMS mutation edge and authorized runtime evidence. Until those gates are met,
+the explorer returns an evidence gap rather than a plausible-looking path.
+
 `verify` rebuilds from the pinned upstream commit, validates graph integrity, relationship ontology,
 mapping coverage, every evidence capsule, and byte-compares the generated graph and evidence
 identities with committed receipts. CI therefore fails when source, extractors, ontology, mappings,

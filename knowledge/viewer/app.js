@@ -22,6 +22,10 @@ const state = {
   selectedId: null,
   selectedEdgeId: null,
   edgeDetail: null,
+  inspectedNode: null,
+  traceStart: null,
+  traceEnd: null,
+  traceResult: null,
   positions: new Map(),
   zoom: { x: 0, y: 0, scale: 1 },
   drag: null,
@@ -93,6 +97,7 @@ async function initialize() {
     renderEstateBoundary();
     $("status-dot").classList.add("online");
     $("status-text").textContent = "Local control plane online";
+    populateOperatorContext();
     populatePerspectives();
     populateLegend();
     configureChat();
@@ -142,7 +147,110 @@ function populateLegend() {
   });
 }
 
+function populateOperatorContext() {
+  const context = state.meta.operator_context;
+  const customers = $("customer-context");
+  const scopes = $("technology-scope");
+  const lenses = $("operator-lens");
+  context.customers.forEach((item) => {
+    const option = document.createElement("option");
+    option.value = item.id;
+    option.textContent = item.name;
+    customers.appendChild(option);
+  });
+  context.scopes.forEach((item) => {
+    const option = document.createElement("option");
+    option.value = item.id;
+    option.textContent = item.planned ? `${item.name} · planned` : item.name;
+    option.disabled = !item.available;
+    scopes.appendChild(option);
+  });
+  context.lenses.forEach((item) => {
+    const option = document.createElement("option");
+    option.value = item.id;
+    option.textContent = item.planned ? `${item.name} · planned` : item.name;
+    option.disabled = item.planned;
+    lenses.appendChild(option);
+  });
+  renderOperatorContext();
+  renderTraceCoverage();
+}
+
+function selectedOperatorScope() {
+  return state.meta.operator_context.scopes.find((item) => item.id === $("technology-scope").value);
+}
+
+function selectedOperatorLens() {
+  return state.meta.operator_context.lenses.find((item) => item.id === $("operator-lens").value);
+}
+
+function renderOperatorContext() {
+  const customer = state.meta.operator_context.customers.find((item) => item.id === $("customer-context").value);
+  const scope = selectedOperatorScope();
+  const lens = selectedOperatorLens();
+  $("operator-context-description").textContent = `${scope.description} ${lens.description}`;
+  $("customer-evidence-badge").textContent = `${customer.evidence_class} evidence`.toUpperCase();
+}
+
+function renderTraceCoverage() {
+  const container = $("trace-coverage");
+  container.replaceChildren();
+  state.meta.operator_context.platforms
+    .filter((item) => ["COBOL", "PL/I", "DB2", "VSAM", "IMS", "Oracle", "SAP ASE"].includes(item.name))
+    .forEach((item) => {
+      const badge = document.createElement("span");
+      badge.className = `platform-badge ${item.status === "projected" ? "projected" : "missing"}`;
+      badge.textContent = item.status === "projected" ? `${item.name} · ${formatNumber(item.node_count)}` : `${item.name} · not in graph`;
+      badge.title = item.description || `${item.node_count} projected graph entities`;
+      container.appendChild(badge);
+    });
+  const examples = $("trace-examples");
+  examples.replaceChildren();
+  state.meta.operator_context.trace.examples.forEach((item) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.textContent = item.name;
+    button.dataset.evidenceClass = item.evidence_class;
+    button.title = item.claim;
+    button.addEventListener("click", async () => {
+      chooseTraceEndpoint("start", {
+        id: item.source, name: item.source_name, kind: item.source_kind,
+        operator_platform: item.source_platform,
+      });
+      chooseTraceEndpoint("end", {
+        id: item.target, name: item.target_name, kind: item.target_kind,
+        operator_platform: item.target_platform,
+      });
+      $("trace-direction").value = "directed";
+      await runTrace();
+    });
+    examples.appendChild(button);
+  });
+}
+
 function bindControls() {
+  $("customer-context").addEventListener("change", renderOperatorContext);
+  $("technology-scope").addEventListener("change", async () => {
+    renderOperatorContext();
+    const recommended = { mainframe: "intcalc-job", database: "authfrds-data-lineage" }[$("technology-scope").value];
+    if (recommended && state.meta.perspectives.some((item) => item.id === recommended)) {
+      $("perspective").value = recommended;
+      await loadPerspective();
+    } else {
+      applyOperatorFocus();
+    }
+  });
+  $("operator-lens").addEventListener("change", async () => {
+    renderOperatorContext();
+    applyOperatorFocus();
+    if ($("operator-lens").value === "runtime") {
+      switchRightPanel("runtime");
+      await loadRuntimeRuns(true);
+    } else if ($("operator-lens").value === "qualification") {
+      switchRightPanel("evaluation");
+      await loadEvaluations(true);
+    }
+  });
   $("perspective").addEventListener("change", loadPerspective);
   $("depth").addEventListener("change", () => {
     const root = state.selection?.root || selectedPerspective()?.root;
@@ -160,6 +268,8 @@ function bindControls() {
     switchRightPanel("chat");
     $("chat-question").focus();
   });
+  $("trace-start-node").addEventListener("click", () => chooseTraceEndpoint("start", state.inspectedNode));
+  $("trace-end-node").addEventListener("click", () => chooseTraceEndpoint("end", state.inspectedNode));
   $("ask-edge").addEventListener("click", () => {
     switchRightPanel("chat");
     $("chat-question").value = "Why does this relationship exist?";
@@ -175,6 +285,7 @@ function bindControls() {
   });
   $("close-source").addEventListener("click", () => { $("source-drawer").hidden = true; });
   $("inspector-tab").addEventListener("click", () => switchRightPanel("inspector"));
+  $("trace-tab").addEventListener("click", () => switchRightPanel("trace"));
   $("chat-tab").addEventListener("click", () => switchRightPanel("chat"));
   $("factory-tab").addEventListener("click", async () => {
     switchRightPanel("factory");
@@ -222,6 +333,10 @@ function bindControls() {
     await loadRecovery(true);
   });
   $("clear-chat").addEventListener("click", resetChat);
+  $("clear-trace").addEventListener("click", clearTrace);
+  $("run-trace").addEventListener("click", runTrace);
+  bindTraceSearch("start");
+  bindTraceSearch("end");
   $("chat-form").addEventListener("submit", submitChat);
   $("chat-suggestions").addEventListener("click", (event) => {
     const button = event.target.closest("button");
@@ -363,6 +478,222 @@ async function loadNeighborhood(nodeId, overrideDepth) {
   }
 }
 
+function applyOperatorFocus() {
+  if (!state.selection) return;
+  const scope = selectedOperatorScope();
+  const lens = selectedOperatorLens();
+  const focusedPlatforms = new Set(scope.platforms || []);
+  const platformById = new Map(state.selection.nodes.map((node) => [node.id, node.operator_platform]));
+  const dataRelations = new Set([
+    "ACCESSES", "ALLOCATES", "ASSIGNED_TO", "BACKED_BY", "BINDS", "HAS_COLUMN",
+    "HAS_CONSTRAINT", "HAS_DATASET_GROUP", "ISSUES_SQL", "READS", "READS_TABLE",
+    "READS_WRITES", "REFERENCES_COLUMN", "RESOLVES_TO", "SENSITIVE_TO", "USES_DBD",
+    "USES_PSB", "WRITES", "WRITES_TABLE",
+  ]);
+  const dependencyRelations = new Set([
+    "ACCESSES", "CALLS", "DEPENDS_ON", "EXECUTES", "ISSUES", "ISSUES_SQL",
+    "LEGACY_ENTRYPOINT", "MODERN_ENTRYPOINT", "READS", "READS_TABLE", "READS_WRITES",
+    "STARTS_PROGRAM", "USES_COPYBOOK", "USES_DBD", "USES_PSB", "WRITES", "WRITES_TABLE",
+  ]);
+  document.querySelectorAll(".node").forEach((element) => {
+    const platform = platformById.get(element.dataset.id);
+    const outsideScope = focusedPlatforms.size && !focusedPlatforms.has(platform);
+    const node = state.selection.nodes.find((item) => item.id === element.dataset.id);
+    const outsideLens = lens.id === "modernization" && !["modern", "rule", "verify"].includes(groupFor(node.kind));
+    element.classList.toggle("scope-muted", Boolean(outsideScope));
+    element.classList.toggle("lens-muted", Boolean(outsideLens));
+  });
+  document.querySelectorAll(".edge").forEach((element) => {
+    const touchesScope = !focusedPlatforms.size
+      || focusedPlatforms.has(platformById.get(element.dataset.source))
+      || focusedPlatforms.has(platformById.get(element.dataset.target));
+    const relation = element.dataset.relation;
+    const lensMatch = lens.id === "data-flow"
+      ? dataRelations.has(relation)
+      : lens.id === "dependencies"
+        ? dependencyRelations.has(relation)
+        : true;
+    element.classList.toggle("scope-muted", !touchesScope);
+    element.classList.toggle("lens-muted", !lensMatch);
+  });
+}
+
+function bindTraceSearch(role) {
+  const input = $(`trace-${role}-search`);
+  let timer;
+  input.addEventListener("input", () => {
+    clearTimeout(timer);
+    timer = setTimeout(() => runTraceSearch(role), 180);
+  });
+}
+
+async function runTraceSearch(role) {
+  const input = $(`trace-${role}-search`);
+  const container = $(`trace-${role}-results`);
+  const query = input.value.trim();
+  container.replaceChildren();
+  if (query.length < 2) return;
+  const requestedExternal = state.meta.operator_context.platforms.find((item) => (
+    item.status !== "projected"
+    && (
+      (item.name === "Oracle" && /\boracle\b/i.test(query))
+      || (item.name === "SAP ASE" && /\b(?:sap\s+ase|sybase|ase)\b/i.test(query))
+    )
+  ));
+  if (requestedExternal) {
+    container.textContent = `${requestedExternal.name} qualification evidence exists, but the platform is not projected into this graph. Attach a graph fragment and customer integration edges first.`;
+    return;
+  }
+  try {
+    const payload = await api("/api/search", { q: query, audience: $("audience").value, limit: 12 });
+    if (!payload.results.length) {
+      container.textContent = "No matching graph entity.";
+      return;
+    }
+    payload.results.forEach((node) => {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "search-result";
+      const name = document.createElement("strong");
+      name.textContent = node.name;
+      const kind = document.createElement("span");
+      kind.textContent = `${node.operator_platform} · ${node.kind.replaceAll("_", " ")}`;
+      button.append(name, kind);
+      button.addEventListener("click", () => chooseTraceEndpoint(role, node));
+      container.appendChild(button);
+    });
+  } catch (error) {
+    setError(error);
+  }
+}
+
+function chooseTraceEndpoint(role, node) {
+  if (!node) return;
+  const endpoint = {
+    id: node.id,
+    name: node.name,
+    kind: node.kind,
+    operator_platform: node.operator_platform,
+  };
+  if (role === "start") state.traceStart = endpoint;
+  else state.traceEnd = endpoint;
+  $(`trace-${role}-search`).value = endpoint.name;
+  $(`trace-${role}-results`).replaceChildren();
+  renderTraceEndpoints();
+  switchRightPanel("trace");
+}
+
+function renderTraceEndpoints() {
+  [["start", state.traceStart], ["end", state.traceEnd]].forEach(([role, endpoint]) => {
+    const container = $(`trace-${role}-selection`);
+    container.replaceChildren();
+    if (!endpoint) {
+      container.textContent = role === "start" ? "No start selected" : "No destination selected";
+      return;
+    }
+    const name = document.createElement("strong");
+    name.textContent = endpoint.name;
+    const detail = document.createElement("span");
+    detail.textContent = `${endpoint.operator_platform} · ${endpoint.kind.replaceAll("_", " ")}`;
+    container.append(name, detail);
+  });
+  $("run-trace").disabled = !(state.traceStart && state.traceEnd);
+}
+
+async function runTrace() {
+  if (!state.traceStart || !state.traceEnd) return;
+  const button = $("run-trace");
+  button.disabled = true;
+  button.textContent = "Tracing…";
+  try {
+    const payload = await api("/api/trace", {
+      from: state.traceStart.id,
+      to: state.traceEnd.id,
+      direction: $("trace-direction").value,
+      audience: $("audience").value,
+    });
+    state.traceResult = payload;
+    renderTraceResult();
+    if (payload.status === "found") {
+      state.selection = {
+        root: state.traceStart.id,
+        depth: payload.trace.hop_count,
+        audience: $("audience").value,
+        nodes: payload.trace.nodes,
+        edges: payload.trace.edges,
+        truncated: false,
+        trace: true,
+      };
+      $("graph-title").textContent = `Evidence trace: ${state.traceStart.name} → ${state.traceEnd.name}`;
+      $("selection-count").textContent = `${payload.trace.nodes.length} nodes · ${payload.trace.hop_count} directed hops · static evidence`;
+      renderGraph();
+    }
+  } catch (error) {
+    setError(error);
+  } finally {
+    button.textContent = "Trace path";
+    button.disabled = !(state.traceStart && state.traceEnd);
+  }
+}
+
+function renderTraceResult() {
+  const result = $("trace-result");
+  const steps = $("trace-steps");
+  result.replaceChildren();
+  steps.replaceChildren();
+  if (!state.traceResult || state.traceResult.status !== "found") {
+    result.className = "trace-result gap";
+    const strong = document.createElement("strong");
+    strong.textContent = "No evidenced path found";
+    const text = document.createElement("p");
+    text.textContent = "This does not prove the systems are unrelated. It means the current graph cannot support the requested path claim.";
+    result.append(strong, text);
+    return;
+  }
+  const trace = state.traceResult.trace;
+  result.className = "trace-result found";
+  const title = document.createElement("strong");
+  title.textContent = `${trace.hop_count} hops across ${trace.platforms.join(" → ")}`;
+  const trust = document.createElement("p");
+  const evidence = trace.evidence_class === "static-reference-fixture"
+    ? "STATIC REFERENCE FIXTURE"
+    : "STATIC SOURCE EVIDENCE";
+  trust.className = "trace-trust";
+  trust.textContent = `${evidence} · NON-CUSTOMER · RUNTIME NOT OBSERVED`;
+  const boundary = document.createElement("p");
+  boundary.textContent = trace.limitation;
+  result.append(title, trust, boundary);
+  trace.nodes.forEach((node, index) => {
+    const item = document.createElement("li");
+    const platform = document.createElement("span");
+    platform.textContent = node.operator_platform;
+    const name = document.createElement("strong");
+    name.textContent = node.name;
+    item.append(platform, name);
+    if (index < trace.edges.length) {
+      const relation = document.createElement("code");
+      relation.textContent = `${trace.edges[index].relation} →`;
+      item.appendChild(relation);
+    }
+    item.addEventListener("click", () => inspectNode(node.id));
+    steps.appendChild(item);
+  });
+}
+
+function clearTrace() {
+  state.traceStart = null;
+  state.traceEnd = null;
+  state.traceResult = null;
+  $("trace-start-search").value = "";
+  $("trace-end-search").value = "";
+  $("trace-start-results").replaceChildren();
+  $("trace-end-results").replaceChildren();
+  $("trace-steps").replaceChildren();
+  $("trace-result").className = "trace-result";
+  $("trace-result").textContent = "Select two graph entities. Oracle and SAP ASE cannot be selected until their graph fragments and customer integration edges are attached.";
+  renderTraceEndpoints();
+}
+
 async function runSearch() {
   const query = $("search").value.trim();
   const container = $("search-results");
@@ -422,6 +753,7 @@ function renderGraph() {
     line.dataset.id = edge.id;
     line.dataset.source = edge.source;
     line.dataset.target = edge.target;
+    line.dataset.relation = edge.relation;
     const title = document.createElementNS(NS, "title");
     title.textContent = edge.relation;
     line.appendChild(title);
@@ -443,6 +775,7 @@ function renderGraph() {
     group.classList.add("node");
     if (node.id === state.selection.root) group.classList.add("root");
     group.dataset.id = node.id;
+    group.dataset.platform = node.operator_platform;
     const circle = document.createElementNS(NS, "circle");
     circle.setAttribute("r", node.id === state.selection.root ? "10" : "7");
     circle.style.fill = colors[groupFor(node.kind)];
@@ -462,6 +795,7 @@ function renderGraph() {
     $("nodes").appendChild(group);
   });
   relaxLayout(0);
+  applyOperatorFocus();
   setTimeout(fitGraph, 120);
 }
 
@@ -522,6 +856,7 @@ function updatePositions() {
 async function inspectNode(nodeId) {
   try {
     const node = await api("/api/node", { id: nodeId, audience: $("audience").value });
+    state.inspectedNode = node;
     state.selectedId = nodeId;
     state.selectedEdgeId = null;
     state.edgeDetail = null;
@@ -830,6 +1165,7 @@ function configureChat() {
 }
 
 function switchRightPanel(view) {
+  const trace = view === "trace";
   const chat = view === "chat";
   const factory = view === "factory";
   const portfolio = view === "portfolio";
@@ -839,6 +1175,7 @@ function switchRightPanel(view) {
   const data = view === "data";
   const runtime = view === "runtime";
   const audit = view === "audit";
+  $("trace-view").hidden = !trace;
   $("chat-view").hidden = !chat;
   $("factory-view").hidden = !factory;
   $("portfolio-view").hidden = !portfolio;
@@ -848,7 +1185,8 @@ function switchRightPanel(view) {
   $("data-view").hidden = !data;
   $("runtime-view").hidden = !runtime;
   $("audit-view").hidden = !audit;
-  $("inspector-view").hidden = chat || factory || portfolio || recovery || evaluation || memory || data || runtime || audit;
+  $("inspector-view").hidden = trace || chat || factory || portfolio || recovery || evaluation || memory || data || runtime || audit;
+  $("trace-tab").classList.toggle("active", trace);
   $("chat-tab").classList.toggle("active", chat);
   $("factory-tab").classList.toggle("active", factory);
   $("portfolio-tab").classList.toggle("active", portfolio);
@@ -858,7 +1196,7 @@ function switchRightPanel(view) {
   $("data-tab").classList.toggle("active", data);
   $("runtime-tab").classList.toggle("active", runtime);
   $("audit-tab").classList.toggle("active", audit);
-  $("inspector-tab").classList.toggle("active", !chat && !factory && !portfolio && !recovery && !evaluation && !memory && !data && !runtime && !audit);
+  $("inspector-tab").classList.toggle("active", !trace && !chat && !factory && !portfolio && !recovery && !evaluation && !memory && !data && !runtime && !audit);
 }
 
 async function loadData() {

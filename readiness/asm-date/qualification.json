@@ -2,15 +2,15 @@
   "assembler_qualified": false,
   "binder_qualified": false,
   "bindings": {
-    "compatibility_ledger_sha256": "c7f8cd95c505d7ace2c05f44a4a94568afe28ea30fb6a6e6afeee7a71539c604",
-    "conformance_sha256": "aebf041eaad6160de99a9a572e9ffebb1e12e6b307beaed27762f5dc0dff0d2a",
+    "compatibility_ledger_sha256": "905370a0b8dbe5ac87aa93b61ed0fa6067dfef49941e850cb8557f94d2724afa",
+    "conformance_sha256": "3988bc10d78ede3c9be07b60f3189daa426e668dd3bb585b323bff5d401db702",
     "date_comparison_sha256": "340162a28898fe3ee892d9bd94d0caa6b4d558dbe55cbfc4cace251f1b19a13f",
     "date_readiness_sha256": "08e54af640a9929fcadfc79803ad71462ecabdbfcda5c72acb09511f12786ef5",
-    "graph_content_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
+    "graph_content_sha256": "d98bd92d752f23ee19263aa0957c28ee5aac52966d1322f6a31d4a9960394dc9",
     "manifest_sha256": "fc48e621e0d3166b2acaed9774867911603dbee7e3be29c13e49c0a89bfebc85"
   },
   "claim_unlocked": "LIGHTYEAR can inventory and fail-closed qualify the bounded COBDATFT/MVSWAIT HLASM subset without claiming native assembly, binding, linkage, system-service, CPU, runtime, mainframe, or production equivalence.",
-  "content_sha256": "19c65120383e89aec37ca9e89510a1bb6dacd24a2612aa55b07e7f1420c7d41e",
+  "content_sha256": "21e1728158d8451b85c71ab589bba7cf08fac245c048beb00bab28136ddced26",
   "development_ready": true,
   "inventory": {
     "assembler_dsects": 1,
@@ -42,7 +42,7 @@
         "assembler_macros": 1,
         "assembler_programs": 2,
         "assembler_symbols": 23,
-        "graph_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7"
+        "graph_sha256": "d98bd92d752f23ee19263aa0957c28ee5aac52966d1322f6a31d4a9960394dc9"
       },
       "gate": "estate-graph-inventory",
       "status": "passed-static"
@@ -51,7 +51,7 @@
       "evidence": {
         "blocked_case_count": 4,
         "case_count": 40,
-        "conformance_sha256": "aebf041eaad6160de99a9a572e9ffebb1e12e6b307beaed27762f5dc0dff0d2a",
+        "conformance_sha256": "3988bc10d78ede3c9be07b60f3189daa426e668dd3bb585b323bff5d401db702",
         "customer_source": false,
         "mutation_case_count": 4,
         "passed_case_count": 36,

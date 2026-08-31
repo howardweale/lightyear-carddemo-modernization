@@ -18,6 +18,23 @@
     </div>
   </header>
 
+  <section class="operator-context" aria-label="Operator context">
+    <div>
+      <label for="customer-context">Customer</label>
+      <select id="customer-context"></select>
+    </div>
+    <div>
+      <label for="technology-scope">Technology scope</label>
+      <select id="technology-scope"></select>
+    </div>
+    <div>
+      <label for="operator-lens">Operator lens</label>
+      <select id="operator-lens"></select>
+    </div>
+    <p id="operator-context-description">Loading operator context…</p>
+    <span id="customer-evidence-badge" class="context-badge">REFERENCE EVIDENCE</span>
+  </section>
+
   <section class="metrics" aria-label="Graph statistics">
     <div><strong id="metric-nodes">—</strong><span>entities</span></div>
     <div><strong id="metric-edges">—</strong><span>relationships</span></div>
@@ -118,6 +135,7 @@
     <aside class="right-panel panel">
       <nav class="right-tabs" aria-label="Entity tools">
         <button id="inspector-tab" class="right-tab active" type="button">Inspector</button>
+        <button id="trace-tab" class="right-tab" type="button">Trace</button>
         <button id="chat-tab" class="right-tab" type="button">Ask graph</button>
         <button id="factory-tab" class="right-tab" type="button">Factory</button>
         <button id="portfolio-tab" class="right-tab" type="button">Portfolio</button>
@@ -143,6 +161,8 @@
           <div class="button-stack">
             <button id="focus-node" class="primary-button" type="button">Focus this entity</button>
             <button id="ask-node" class="secondary-button" type="button">Ask about this entity</button>
+            <button id="trace-start-node" class="secondary-button" type="button">Set trace start</button>
+            <button id="trace-end-node" class="secondary-button" type="button">Set trace destination</button>
           </div>
           <section id="properties-section">
             <h3>Properties</h3>
@@ -192,6 +212,47 @@
             <div id="edge-runtime" class="runtime-projection"></div>
           </section>
         </div>
+      </div>
+
+      <div id="trace-view" class="trace-view" hidden>
+        <div class="factory-header">
+          <div>
+            <p class="eyebrow">CROSS-PLATFORM EVIDENCE TRACE</p>
+            <h2>Follow only relationships the graph can prove.</h2>
+          </div>
+          <button id="clear-trace" class="text-button" type="button">Clear</button>
+        </div>
+        <p class="chat-disclosure">Directed flow follows source-to-target relationship semantics. Related evidence may traverse links in either direction.</p>
+        <div id="trace-coverage" class="trace-coverage"></div>
+        <div id="trace-examples" class="trace-examples" aria-label="Proven trace examples"></div>
+        <section>
+          <label for="trace-start-search">Starts at</label>
+          <input id="trace-start-search" type="search" placeholder="Search for a program, table, transaction…" autocomplete="off">
+          <div id="trace-start-results" class="search-results trace-search-results"></div>
+          <div id="trace-start-selection" class="trace-endpoint">No start selected</div>
+        </section>
+        <section>
+          <label for="trace-end-search">Ends at</label>
+          <input id="trace-end-search" type="search" placeholder="Search for DB2, IMS, VSAM, program…" autocomplete="off">
+          <div id="trace-end-results" class="search-results trace-search-results"></div>
+          <div id="trace-end-selection" class="trace-endpoint">No destination selected</div>
+        </section>
+        <section class="control-row">
+          <div>
+            <label for="trace-direction">Path rule</label>
+            <select id="trace-direction">
+              <option value="directed">Directed flow</option>
+              <option value="any">Related evidence</option>
+            </select>
+          </div>
+          <div class="trace-action">
+            <button id="run-trace" class="primary-button" type="button" disabled>Trace path</button>
+          </div>
+        </section>
+        <article id="trace-result" class="trace-result" aria-live="polite">
+          Select two graph entities. Oracle and SAP ASE cannot be selected until their graph fragments and customer integration edges are attached.
+        </article>
+        <ol id="trace-steps" class="trace-steps"></ol>
       </div>
 
       <div id="chat-view" class="chat-view" hidden>

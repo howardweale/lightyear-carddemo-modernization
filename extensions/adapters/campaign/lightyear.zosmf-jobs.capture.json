@@ -36,12 +36,12 @@
     }
   ],
   "collected_at": "2026-08-26T00:00:00Z",
-  "content_sha256": "bc2ff00468ac40ac35c5a39e898fa3f6c9450c441e6a3d8fef33460250e543e2",
+  "content_sha256": "712c16963ddb2906c46dd0a0f00d599c35388bc0a4b243b4db98ee51d8e8d7a2",
   "envelope_id": "capture:zosmf-jobs:carddemo-readonly-v1",
   "envelope_type": "lightyear-adapter-evidence",
   "evidence_class": "simulated",
   "graph_binding": {
-    "content_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
+    "content_sha256": "d98bd92d752f23ee19263aa0957c28ee5aac52966d1322f6a31d4a9960394dc9",
     "graph_id": "lightyear:carddemo-modernization"
   },
   "limitations": [

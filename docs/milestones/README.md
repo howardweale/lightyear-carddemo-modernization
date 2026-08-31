@@ -1,6 +1,6 @@
 # LIGHTYEAR milestone documentation library
 
-This library is the customer-readable body of record for MS #1 through MS #45. Every milestone is
+This library is the customer-readable body of record for MS #1 through MS #46. Every milestone is
 published from one governed catalog in Markdown, Microsoft Word (`.docx`), and PDF.
 
 **[Open the searchable milestone index](https://howardweale.github.io/lightyear-carddemo-modernization/milestones/)** to filter by milestone number, title,
@@ -59,6 +59,7 @@ or policy decisions.
 | MS #43 | Oracle Source and Stored-Procedure Qualification | Complete | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-43/MS-43.md) - [Download Word](https://raw.githubusercontent.com/howardweale/lightyear-carddemo-modernization/main/docs/milestones/MS-43/MS-43.docx) - [PDF](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-43/MS-43.pdf) |
 | MS #44 | Milestone Documentation System | Complete | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-44/MS-44.md) - [Download Word](https://raw.githubusercontent.com/howardweale/lightyear-carddemo-modernization/main/docs/milestones/MS-44/MS-44.docx) - [PDF](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-44/MS-44.pdf) |
 | MS #45 | SAP ASE Semantic Source Adapter | Complete | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-45/MS-45.md) - [Download Word](https://raw.githubusercontent.com/howardweale/lightyear-carddemo-modernization/main/docs/milestones/MS-45/MS-45.docx) - [PDF](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-45/MS-45.pdf) |
+| MS #46 | Unified Estate Operator Navigation | Complete | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-46/MS-46.md) - [Download Word](https://raw.githubusercontent.com/howardweale/lightyear-carddemo-modernization/main/docs/milestones/MS-46/MS-46.docx) - [PDF](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-46/MS-46.pdf) |
 
 ## Build and verification
 

@@ -50,6 +50,31 @@ class CompositeEstateTests(unittest.TestCase):
         self.assertIsNotNone(index.trace(pli, cobol))
         self.assertIsNotNone(index.trace(pli, table))
         self.assertEqual("pli_program", index.node(pli)["kind"])
+        directed = index.trace(pli, table, direction="directed")
+        self.assertEqual(["PL/I", "DB2"], directed["platforms"])
+        self.assertEqual(["ISSUES_SQL", "READS_TABLE"], [
+            edge["relation"] for edge in directed["edges"]
+        ])
+        self.assertFalse(any(
+            node["operator_platform"] in {"Oracle", "SAP ASE"}
+            for node in directed["nodes"]
+        ))
+        self.assertIn(
+            "pli-db2-read",
+            {item["id"] for item in index.operator_context()["trace"]["examples"]},
+        )
+        write = index.trace(
+            "extension:pli-program:AUTHUPD1", table, direction="directed"
+        )
+        self.assertEqual(["ISSUES_SQL", "WRITES_TABLE"], [
+            edge["relation"] for edge in write["edges"]
+        ])
+        self.assertEqual("static-reference-fixture", write["evidence_class"])
+        self.assertFalse(write["customer_evidence"])
+        self.assertIn(
+            "pli-db2-write-reference",
+            {item["id"] for item in index.operator_context()["trace"]["examples"]},
+        )
         self.assertTrue(
             any(
                 item["technology"] == "PL/I"

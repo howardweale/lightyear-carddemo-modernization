@@ -17,6 +17,10 @@ ROOT = Path(__file__).resolve().parents[1]
 GRAPH = ROOT / "knowledge" / "graph.snapshot.json.gz"
 PRIVATE_NODE = "scenario:intcalc:private-holdout-boundary"
 WORKLOAD = "workload:carddemo-intcalc"
+DB2_WRITER = "legacy:cobol-program:COPAUS2C"
+DB2_TABLE = "legacy:db2-table:CARDDEMO.AUTHFRDS"
+IMS_DELETE = "legacy:cobol-paragraph:CBPAUP0C:5000-DELETE-AUTH-DTL"
+IMS_SEGMENT = "legacy:ims-segment:DBPAUTP0:PAUTDTL1"
 
 
 class GraphExplorerTests(unittest.TestCase):
@@ -30,6 +34,46 @@ class GraphExplorerTests(unittest.TestCase):
         self.assertEqual(6, len(perspectives))
         self.assertIn("authfrds-data-lineage", {item["id"] for item in perspectives})
         self.assertTrue(all(item["root"] in self.index.node_by_id for item in perspectives))
+
+    def test_operator_context_separates_scope_lens_and_graph_coverage(self) -> None:
+        context = self.index.metadata()["operator_context"]
+        self.assertEqual("CardDemo Reference Estate", context["customers"][0]["name"])
+        self.assertEqual(
+            {"all-estate", "mainframe", "database", "sap-estate"},
+            {item["id"] for item in context["scopes"]},
+        )
+        security = next(item for item in context["lenses"] if item["id"] == "security")
+        self.assertTrue(security["planned"])
+        by_platform = {item["name"]: item for item in context["platforms"]}
+        self.assertEqual("projected", by_platform["DB2"]["status"])
+        self.assertGreater(by_platform["DB2"]["node_count"], 0)
+        self.assertEqual("qualification-not-projected", by_platform["Oracle"]["status"])
+        self.assertEqual("qualification-not-projected", by_platform["SAP ASE"]["status"])
+        examples = {item["id"] for item in context["trace"]["examples"]}
+        self.assertEqual(
+            {"cobol-db2-update", "cobol-ims-dependency", "cobol-ims-delete"}, examples
+        )
+
+    def test_cobol_ims_delete_is_a_source_backed_static_write_path(self) -> None:
+        trace = self.index.trace(IMS_DELETE, IMS_SEGMENT, direction="directed")
+        self.assertIsNotNone(trace)
+        self.assertEqual(["ISSUES_DLI", "WRITES_SEGMENT"], [
+            edge["relation"] for edge in trace["edges"]
+        ])
+        self.assertEqual("static-source", trace["evidence_class"])
+        self.assertFalse(trace["runtime_observed"])
+        self.assertFalse(trace["customer_evidence"])
+
+    def test_directed_trace_does_not_reverse_relationship_semantics(self) -> None:
+        directed = self.index.trace(DB2_WRITER, DB2_TABLE, direction="directed")
+        self.assertIsNotNone(directed)
+        self.assertEqual("directed", directed["direction"])
+        self.assertEqual(["COBOL", "DB2"], directed["platforms"])
+        self.assertFalse(directed["runtime_observed"])
+        self.assertIsNone(self.index.trace(DB2_TABLE, DB2_WRITER, direction="directed"))
+        self.assertIsNotNone(self.index.trace(DB2_TABLE, DB2_WRITER, direction="any"))
+        with self.assertRaises(ValueError):
+            self.index.trace(DB2_WRITER, DB2_TABLE, direction="invented")
 
     def test_every_explorer_route_respects_private_visibility(self) -> None:
         self.assertEqual([], self.index.search("private legacy", audience="implementer"))
@@ -76,6 +120,12 @@ class GraphExplorerTests(unittest.TestCase):
             with urlopen(f"{base}/", timeout=3) as response:
                 body = response.read().decode("utf-8")
             self.assertIn("LIGHTYEAR Control Tower", body)
+            self.assertIn("Technology scope", body)
+            self.assertIn("CROSS-PLATFORM EVIDENCE TRACE", body)
+            with urlopen(f"{base}/app.js", timeout=3) as response:
+                script = response.read().decode("utf-8")
+            self.assertIn("Attach a graph fragment and customer integration edges first", script)
+            self.assertIn('direction: $("trace-direction").value', script)
         finally:
             server.shutdown()
             server.server_close()

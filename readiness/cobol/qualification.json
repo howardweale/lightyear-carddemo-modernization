@@ -1,10 +1,10 @@
 {
   "bindings": {
-    "compatibility_ledger_sha256": "a7ee143005bc4c0720b17b893ce19ebbd8feaf41f151fe1eaa3d8601fb3e5da5",
-    "graph_content_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7"
+    "compatibility_ledger_sha256": "8c0339daf5268dc9f53628df67246687cd619991f13f768486ffd1c72c3bd07b",
+    "graph_content_sha256": "d98bd92d752f23ee19263aa0957c28ee5aac52966d1322f6a31d4a9960394dc9"
   },
   "claim_unlocked": "LIGHTYEAR can inventory and independently gate bounded COBOL semantics without treating static planning cells as production qualification.",
-  "content_sha256": "628152571e1a205c3a9b8e683e8cb8fc59db162347ceaaac8351830700ba4fe0",
+  "content_sha256": "a021fc91ec3f220386d8a42abdc5813c6a7562941b2fd4f519a6cc537ce08b12",
   "development_ready": true,
   "inventory": {
     "call_edges": 998,
@@ -32,7 +32,7 @@
         "file_handles": 56,
         "file_read_edges": 67,
         "file_write_edges": 19,
-        "graph_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
+        "graph_sha256": "d98bd92d752f23ee19263aa0957c28ee5aac52966d1322f6a31d4a9960394dc9",
         "paragraphs": 927,
         "programs": 55
       },

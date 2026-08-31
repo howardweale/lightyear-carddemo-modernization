@@ -21,6 +21,7 @@ production-qualified.
 | MS #44 | Milestone Documentation System | Complete |
 | MS #44.1 | Searchable Milestone Index Reliability | Complete |
 | MS #45 | SAP ASE Semantic Source Adapter | Complete |
+| MS #46 | Unified Estate Operator Navigation | Complete |
 
 The v0.35.0 stored-logic qualification core is retained as supporting MS #34 evidence. It does not
 replace the planned DB2 milestone.
@@ -133,3 +134,21 @@ twelve gates qualify the source adapter and analysis while keeping live ASE obse
 selection, target migration qualification, native stored-logic execution, database-migration
 completion, and production readiness false. The ASE-to-PostgreSQL or ASE-to-Oracle proof will follow
 a real pilot choice.
+
+## MS #46 — Unified Estate Operator Navigation
+
+MS #46 gives an operator one customer-centered way to move between unified-estate, mainframe, and
+database views without splitting the dependency graph into disconnected products. Customer,
+technology scope, and operator lens are separate controls. Scope visually emphasizes the selected
+technology while retaining connected nodes that explain cross-platform impact; SAP estate and
+security-vulnerability views remain explicitly planned.
+
+The new trace workflow follows directed source-to-target semantics or, when deliberately selected,
+an undirected related-evidence path. It reports hop count, platforms, static evidence class,
+customer boundary, and runtime boundary. Committed examples demonstrate COBOL-to-DB2 writes and
+source-backed COBOL-to-IMS `DLET` paths. A separate `AUTHUPD1` fixture demonstrates PL/I-to-DB2
+write extraction and is explicitly labeled non-customer reference evidence; `ACCTPL1` remains a
+read path. Oracle and SAP ASE adapter qualifications remain outside the graph, so the UI reports
+their missing projection and customer integration edges rather than inventing an Oracle-to-
+mainframe transaction path. Live execution, customer equivalence, and production readiness remain
+false.

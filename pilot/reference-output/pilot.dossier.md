@@ -2,7 +2,7 @@
 
 **Release:** 0.33.0
 **Pilot:** `lightyear-carddemo-source-only-v0.33.0`
-**Dossier identity:** `6b01c5d2c365c858345b0ade986eb73a6d092ebf4cffed87c4ba58b8e2593bcb`
+**Dossier identity:** `57a3bfdb65d80699753b1a8dfc3c881a7c8410d3ada76ec19a181c244c7dc2a1`
 
 ## Executive result
 
@@ -61,21 +61,21 @@ Db2 log or production cutover authorization was observed.
 | runtime-dependency-contract | `pilot/runtime-manifest.json` | `5c2c0bb8677d82c71e6f6087dbc9d48c2e4162d76edaf5ee2217d730df9b5c4c` |
 | advisory-modernization-planning-contract | `pilot/assessment-policy.json` | `a60489ddfc849e3e3e41d9d7e84bcd94b4ef9e4195153caaf86c2efe477af938` |
 | human-selection-and-development-packaging-contract | `pilot/work-package-policy.json` | `36eabc9a698380f2aaecce8eadf719207070c6cc489b5e1edf78163bb0e3fec3` |
-| estate-discovery | `knowledge/graph.receipt.json` | `43a0fa2326b496c6d1a0ef44159e724bb66d00acfd48a01ad89d8d3cec4007c0` |
-| composite-lineage | `knowledge/composite/estate.receipt.json` | `ef8276fdb0fed4896ce9c91ca9488e2ca4ae36b255dae062cd4d17d3766a72cd` |
-| capability-gates | `knowledge/capabilities/mainframe-readiness.json` | `4b346cf3274057a7ed7222a4a44d55508433aebd2e8e53f395c9a8a19e85d224` |
-| language-coverage | `extensions/pli/conformance/coverage.receipt.json` | `9e599183e771caf1057d6f6425bdfe449ee2ca35006fb313b39de44e17918a79` |
-| mixed-language-development-proof | `extensions/pli/modernization/development.receipt.json` | `8c1f760da5957810a0f9f6ceae74dd83e0b07aa229a7c6107517cb127d4e0de6` |
-| reproducible-build | `extensions/pli/attestation/build.receipt.json` | `29718321c6dbb59e5c433e39de15d3cdc5b177cc821dbae906e103f724027ec3` |
+| estate-discovery | `knowledge/graph.receipt.json` | `21a61a8e7b1a2a7847ba3096e1d6a04fed8a80320ec5ce426f363038cff382e6` |
+| composite-lineage | `knowledge/composite/estate.receipt.json` | `caa37a0437aa64b80cdfdf7928e7be2aaf6e8bef3d69d4ceeb9725ce41b4f4a6` |
+| capability-gates | `knowledge/capabilities/mainframe-readiness.json` | `73c654676c190178387ec48beddfac8cd6211438c1d3c041a7547eebf868ec95` |
+| language-coverage | `extensions/pli/conformance/coverage.receipt.json` | `06d02d73f0469129fa44183758e9faa9b2cd0fd347df27d0c4df83ef98f90b16` |
+| mixed-language-development-proof | `extensions/pli/modernization/development.receipt.json` | `872019174d86fae5e79958efdc07726739982ff6129a1f88778c1acd64527578` |
+| reproducible-build | `extensions/pli/attestation/build.receipt.json` | `23ad46c400ec728cdc658890d75b50e8d2a7d7a4e8cb9d3cc3368684f4a6f3cb` |
 | model-qualification-boundary | `factory/qualification/manifest.json` | `13cc4353a228fd3266e9ed11163dfbe478c7a559fe031eff20a927029c64d91b` |
 | data-development-proof | `data-modernization/receipts/authfrds.offline.receipt.json` | `2a2e94f80d2c606b86c23eac276bcc01f46a74b92ba92ac0d3e061b4c3534a4f` |
 | data-development-proof | `data-modernization/receipts/authfrds.oracle-offline.receipt.json` | `ae8453104e8745628a6cad8893f8d22849a34847a5ffbfeb5a6d56eae61897b6` |
 | cdc-cutover-recovery-rehearsal | `data-modernization/rehearsal/receipt.json` | `d2f0d194f39325a86063bd6609fdb631190c6686c727e348c7f36c30fffff7fd` |
-| mainframe-collection-mechanism | `extensions/adapters/appliance/appliance.receipt.json` | `f2f83902a02f65c76b2bd87a4ef3ad742f90df6a0921f50eb23b06f2d9360053` |
+| mainframe-collection-mechanism | `extensions/adapters/appliance/appliance.receipt.json` | `2e8b9f9e4e54243facb9685026c62afbd26b60c71277aa2f3a152e508287479b` |
 | bounded-runtime-readiness | `readiness/cics-vsam/readiness-receipt.json` | `2dd8e24e7a23814b6e643ff186f1272071f220b7ac0e03cc57fffc1abcd7dc5a` |
 | bounded-runtime-readiness | `readiness/ims-expiry/readiness-receipt.json` | `f95a3d2e5d06232ae2eb00671131a055c4024d6e1546152239c83b0de990a557` |
 | bounded-language-readiness | `readiness/asm-date/readiness-receipt.json` | `faf7a3109e4f6308a4ac71c706c2725e272fac666b5bba3d1a57ea63633dad92` |
-| auditor-projection | `audit/dossiers/carddemo-intcalc-v0.19-demo.json` | `c79879a2321183c06edbf8233667801d1aac96b561b319e9222e556822603269` |
+| auditor-projection | `audit/dossiers/carddemo-intcalc-v0.19-demo.json` | `f9d9f9597851e31669d14b288089df604af8cea7ed68911497fb15bdc698930b` |
 | database-platform-contract | `data-modernization/semantic-core/database-semantic-core.json` | `ca3114709057e766b26a5eb339c72ba80fc1620cd4f2d070a9bc92e852d803d8` |
 | database-semantic-difference-authority | `data-modernization/semantic-core/authfrds.compatibility-ledger.json` | `0cbd98a780b53a0b18977819f5115800ba1067612625e42075fa1f8a05b5586e` |
 | database-adapter-development-conformance | `data-modernization/semantic-core/authfrds.adapter-conformance.receipt.json` | `b3cde64bc0ac1ae9327bbf41a295af65ed167d770693e505fdb1b0d94f7972a7` |

@@ -38,15 +38,17 @@ Run-Python @("-m", "lightyear_readiness.asm", "compare", "--baseline", (Join-Pat
 Run-Python @("-m", "lightyear_readiness.asm", "issue", "--comparison", (Join-Path $OutputDir "comparison.json"), "--output", (Join-Path $OutputDir "readiness-receipt.json"))
 Run-Python @("-m", "lightyear_readiness.asm", "validate-receipt", "--receipt", (Join-Path $OutputDir "readiness-receipt.json"))
 Run-Python @("-m", "lightyear_readiness.asm", "capture-template", "--output", (Join-Path $OutputDir "zos-capture.template.json"))
+Run-Python @("-m", "lightyear_readiness.hlasm_qualification", "build", "--project-root", $ProjectDir, "--output-root", $OutputDir)
 
 if ($Action -eq "verify") {
-  foreach ($Name in @("local-capture.json", "comparison.json", "readiness-receipt.json", "zos-capture.template.json")) {
+  foreach ($Name in @("local-capture.json", "comparison.json", "readiness-receipt.json", "zos-capture.template.json", "conformance.receipt.json", "compatibility-ledger.json", "qualification.json")) {
     $Expected = Join-Path $ProjectDir "readiness/asm-date/$Name"
     $Actual = Join-Path $OutputDir $Name
     if ((Get-FileHash $Expected -Algorithm SHA256).Hash -ne (Get-FileHash $Actual -Algorithm SHA256).Hash) {
       throw "$Name differs from the canonical artifact."
     }
   }
+  Run-Python @("-m", "lightyear_readiness.hlasm_qualification", "verify", "--project-root", $ProjectDir)
 }
 
-Write-Host "HLASM development proof passed; live z/OS equivalence remains fail-closed."
+Write-Host "HLASM bounded qualification passed; native build and runtime equivalence remain fail-closed."

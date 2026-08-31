@@ -6,6 +6,10 @@ Produce a minimal, auditable observation of the original `COBDATFT` load module 
 `CBACT01C`. This run closes the execution-evidence gap only; the independent comparison and
 equivalence authority remain separate.
 
+This procedure is not authorization to assemble or execute `MVSWAIT`, invoke `STIMER`, test
+privileged or authorized services, or generalize the result to other HLASM programs. Those
+qualification gates remain blocked and require separately approved evidence.
+
 ## Required approvals and isolation
 
 1. Use an approved non-production LPAR and synthetic CardDemo data.

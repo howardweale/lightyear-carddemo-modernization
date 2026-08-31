@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.41.0 — 2026-08-31
+
+- Bound HLASM qualification to the canonical graph inventory of two programs, 41 instructions, 23
+  symbols, one DSECT, five fields, one macro, nine branch edges, and exact DSECT/macro relationships.
+- Added a deterministic 40-case synthetic semantic corpus with 32 targeted boundary cases, 36
+  passing cases, four explicit fail-closed cases, and 121 observed feature categories.
+- Covered `COBDATFT` date behavior and source quirks, the 80-byte `COCDATFT` layout, MVC/MVI/ST,
+  CLI/CLC condition codes, B/BE/BNE, register operations, STM/LM save areas, USING/DROP, COPY,
+  ASMWAIT static expansion, LTORG, COBOL parameter lists, and the bounded `MVSWAIT` handoff.
+- Added a 28-entry HLASM compatibility ledger using all five governing classifications and explicit
+  exclusions for privileged services, storage protection, recovery, broad instruction families,
+  native assembler output, binder behavior, and STIMER timing.
+- Separated eleven gates for graph inventory, corpus provenance, source/directives, DSECT/storage,
+  instructions, condition codes/branches, linkage policy, native exclusions, the existing private
+  date proof, and authorized native build/execution evidence.
+- Added frozen schemas, POSIX/PowerShell release-gate integration, deterministic receipts, graph
+  holdouts, exact-corpus checks, negative diagnostics, and rehashed-overclaim tests.
+- Kept native HLASM, assembler, binder, LE linkage, system services, runtime, mainframe-equivalence,
+  and production claims false pending authorized assembly, bind, execution, and operational evidence.
+
 ## 0.40.0 — 2026-08-31
 
 - Bound IMS qualification to the canonical graph inventory of four databases, four dataset groups,

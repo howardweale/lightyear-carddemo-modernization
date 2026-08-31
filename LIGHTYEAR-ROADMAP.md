@@ -15,7 +15,7 @@ production-qualified.
 | MS #38 | JCL Qualification Hardening | Complete |
 | MS #39 | VSAM/CICS Qualification Hardening | Complete |
 | MS #40 | IMS Qualification Hardening | Complete |
-| MS #41 | HLASM Qualification Hardening | Planned |
+| MS #41 | HLASM Qualification Hardening | Complete |
 
 The v0.35.0 stored-logic qualification core is retained as supporting MS #34 evidence. It does not
 replace the planned DB2 milestone.
@@ -66,3 +66,14 @@ secondary-index and GSAM boundaries, hierarchical navigation, SSAs, DL/I status 
 mutation, checkpoint, restart, rollback, and scheduling boundaries. Native IMS-region scheduling,
 IMS TM, Fast Path, DBRC, logging, restart/recovery equivalence, mainframe equivalence, and
 production readiness stay blocked pending authorized native evidence.
+
+## MS #41 — HLASM Qualification Hardening
+
+MS #41 binds the canonical two-program HLASM graph inventory, the existing `COBDATFT` date
+differential proof, and a 40-case synthetic semantic corpus to a five-class compatibility ledger
+and eleven independent gates. It qualifies a bounded development subset across DSECT fields,
+storage operations, condition codes, branches, register operations, save-area mechanics,
+addressability, COPY, static macro expansion, literal-pool boundaries, and parameter handoff. Native
+HLASM assembly and object code, binder and load-module behavior, AMODE/RMODE, LE/COBOL linkage,
+STIMER and authorized services, storage protection, recovery, broad instruction behavior,
+mainframe equivalence, and production readiness stay blocked pending authorized native evidence.

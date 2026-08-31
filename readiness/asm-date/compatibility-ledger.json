@@ -1,0 +1,501 @@
+{
+  "classifications": [
+    "exact",
+    "normalized-equivalent",
+    "policy-decision-required",
+    "lossy",
+    "unsupported"
+  ],
+  "content_sha256": "c7f8cd95c505d7ace2c05f44a4a94568afe28ea30fb6a6e6afeee7a71539c604",
+  "entries": [
+    {
+      "classification": "exact",
+      "decision": "bounded-contract",
+      "evidence_required": [
+        "source-member-and-entry-directive-binding"
+      ],
+      "item_id": "hlasm:program-and-entry-identity",
+      "rationale": "Static inventory and deterministic bounded vectors are governed separately from native assembly, object code, linkage, system services, CPU, storage, and recovery behavior.",
+      "scope": "program-and-entry-identity",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM HLASM and z/Architecture"
+      },
+      "target_semantics": {
+        "contract": "lightyear-hlasm-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "control-section-and-origin-vectors"
+      ],
+      "item_id": "hlasm:csect-and-start",
+      "rationale": "Static inventory and deterministic bounded vectors are governed separately from native assembly, object code, linkage, system services, CPU, storage, and recovery behavior.",
+      "scope": "csect-and-start",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM HLASM and z/Architecture"
+      },
+      "target_semantics": {
+        "contract": "lightyear-hlasm-qualification"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "bounded-contract",
+      "evidence_required": [
+        "line-addressed-mnemonic-and-operand-inventory"
+      ],
+      "item_id": "hlasm:instruction-and-operand-discovery",
+      "rationale": "Static inventory and deterministic bounded vectors are governed separately from native assembly, object code, linkage, system services, CPU, storage, and recovery behavior.",
+      "scope": "instruction-and-operand-discovery",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM HLASM and z/Architecture"
+      },
+      "target_semantics": {
+        "contract": "lightyear-hlasm-qualification"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "bounded-contract",
+      "evidence_required": [
+        "symbol-definition-and-branch-target-binding"
+      ],
+      "item_id": "hlasm:equ-symbols-and-labels",
+      "rationale": "Static inventory and deterministic bounded vectors are governed separately from native assembly, object code, linkage, system services, CPU, storage, and recovery behavior.",
+      "scope": "equ-symbols-and-labels",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM HLASM and z/Architecture"
+      },
+      "target_semantics": {
+        "contract": "lightyear-hlasm-qualification"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "bounded-contract",
+      "evidence_required": [
+        "COCDATFT-source-and-copy-binding"
+      ],
+      "item_id": "hlasm:dsect-identity",
+      "rationale": "Static inventory and deterministic bounded vectors are governed separately from native assembly, object code, linkage, system services, CPU, storage, and recovery behavior.",
+      "scope": "dsect-identity",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM HLASM and z/Architecture"
+      },
+      "target_semantics": {
+        "contract": "lightyear-hlasm-qualification"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "bounded-contract",
+      "evidence_required": [
+        "offset-length-and-total-size-vectors"
+      ],
+      "item_id": "hlasm:ds-field-layout",
+      "rationale": "Static inventory and deterministic bounded vectors are governed separately from native assembly, object code, linkage, system services, CPU, storage, and recovery behavior.",
+      "scope": "ds-field-layout",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM HLASM and z/Architecture"
+      },
+      "target_semantics": {
+        "contract": "lightyear-hlasm-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "assembler-alignment-and-caller-layout-baseline"
+      ],
+      "item_id": "hlasm:alignment-and-padding",
+      "rationale": "Static inventory and deterministic bounded vectors are governed separately from native assembly, object code, linkage, system services, CPU, storage, and recovery behavior.",
+      "scope": "alignment-and-padding",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM HLASM and z/Architecture"
+      },
+      "target_semantics": {
+        "contract": "lightyear-hlasm-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "CCSID-literal-pool-and-byte-compare-baseline"
+      ],
+      "item_id": "hlasm:ebcdic-literals-and-collation",
+      "rationale": "Static inventory and deterministic bounded vectors are governed separately from native assembly, object code, linkage, system services, CPU, storage, and recovery behavior.",
+      "scope": "ebcdic-literals-and-collation",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM HLASM and z/Architecture"
+      },
+      "target_semantics": {
+        "contract": "lightyear-hlasm-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "overlap-range-and-byte-write-vectors"
+      ],
+      "item_id": "hlasm:mvc-and-mvi",
+      "rationale": "Static inventory and deterministic bounded vectors are governed separately from native assembly, object code, linkage, system services, CPU, storage, and recovery behavior.",
+      "scope": "mvc-and-mvi",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM HLASM and z/Architecture"
+      },
+      "target_semantics": {
+        "contract": "lightyear-hlasm-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "unsigned-byte-compare-and-condition-code-vectors"
+      ],
+      "item_id": "hlasm:cli-and-clc",
+      "rationale": "Static inventory and deterministic bounded vectors are governed separately from native assembly, object code, linkage, system services, CPU, storage, and recovery behavior.",
+      "scope": "cli-and-clc",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM HLASM and z/Architecture"
+      },
+      "target_semantics": {
+        "contract": "lightyear-hlasm-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "CC-zero-low-high-and-consumer-vectors"
+      ],
+      "item_id": "hlasm:condition-codes",
+      "rationale": "Static inventory and deterministic bounded vectors are governed separately from native assembly, object code, linkage, system services, CPU, storage, and recovery behavior.",
+      "scope": "condition-codes",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM HLASM and z/Architecture"
+      },
+      "target_semantics": {
+        "contract": "lightyear-hlasm-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "taken-not-taken-and-return-target-vectors"
+      ],
+      "item_id": "hlasm:b-be-bne-and-br",
+      "rationale": "Static inventory and deterministic bounded vectors are governed separately from native assembly, object code, linkage, system services, CPU, storage, and recovery behavior.",
+      "scope": "b-be-bne-and-br",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM HLASM and z/Architecture"
+      },
+      "target_semantics": {
+        "contract": "lightyear-hlasm-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "register-address-value-and-overflow-vectors"
+      ],
+      "item_id": "hlasm:l-la-st-lr-and-sr",
+      "rationale": "Static inventory and deterministic bounded vectors are governed separately from native assembly, object code, linkage, system services, CPU, storage, and recovery behavior.",
+      "scope": "l-la-st-lr-and-sr",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM HLASM and z/Architecture"
+      },
+      "target_semantics": {
+        "contract": "lightyear-hlasm-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "native-save-area-chain-and-register-preservation"
+      ],
+      "item_id": "hlasm:stm-lm-save-area",
+      "rationale": "Static inventory and deterministic bounded vectors are governed separately from native assembly, object code, linkage, system services, CPU, storage, and recovery behavior.",
+      "scope": "stm-lm-save-area",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM HLASM and z/Architecture"
+      },
+      "target_semantics": {
+        "contract": "lightyear-hlasm-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "base-register-addressability-vectors"
+      ],
+      "item_id": "hlasm:using-and-drop",
+      "rationale": "Static inventory and deterministic bounded vectors are governed separately from native assembly, object code, linkage, system services, CPU, storage, and recovery behavior.",
+      "scope": "using-and-drop",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM HLASM and z/Architecture"
+      },
+      "target_semantics": {
+        "contract": "lightyear-hlasm-qualification"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "bounded-contract",
+      "evidence_required": [
+        "SYSLIB-search-order-and-member-digest"
+      ],
+      "item_id": "hlasm:copy-member-resolution",
+      "rationale": "Static inventory and deterministic bounded vectors are governed separately from native assembly, object code, linkage, system services, CPU, storage, and recovery behavior.",
+      "scope": "copy-member-resolution",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM HLASM and z/Architecture"
+      },
+      "target_semantics": {
+        "contract": "lightyear-hlasm-qualification"
+      }
+    },
+    {
+      "classification": "lossy",
+      "decision": "accepted-only-in-bounded-planning",
+      "evidence_required": [
+        "assembler-generated-literal-address-and-placement"
+      ],
+      "item_id": "hlasm:literal-pools-and-ltorg",
+      "rationale": "Static inventory and deterministic bounded vectors are governed separately from native assembly, object code, linkage, system services, CPU, storage, and recovery behavior.",
+      "scope": "literal-pools-and-ltorg",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM HLASM and z/Architecture"
+      },
+      "target_semantics": {
+        "contract": "lightyear-hlasm-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "ASMWAIT-parameter-and-expansion-vectors"
+      ],
+      "item_id": "hlasm:macro-definition-and-expansion",
+      "rationale": "Static inventory and deterministic bounded vectors are governed separately from native assembly, object code, linkage, system services, CPU, storage, and recovery behavior.",
+      "scope": "macro-definition-and-expansion",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM HLASM and z/Architecture"
+      },
+      "target_semantics": {
+        "contract": "lightyear-hlasm-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "native-R1-pointer-list-and-31-bit-addressing-baseline"
+      ],
+      "item_id": "hlasm:cobol-parameter-list",
+      "rationale": "Static inventory and deterministic bounded vectors are governed separately from native assembly, object code, linkage, system services, CPU, storage, and recovery behavior.",
+      "scope": "cobol-parameter-list",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM HLASM and z/Architecture"
+      },
+      "target_semantics": {
+        "contract": "lightyear-hlasm-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "R13-R14-R15-save-area-and-LE-baseline"
+      ],
+      "item_id": "hlasm:standard-linkage",
+      "rationale": "Static inventory and deterministic bounded vectors are governed separately from native assembly, object code, linkage, system services, CPU, storage, and recovery behavior.",
+      "scope": "standard-linkage",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM HLASM and z/Architecture"
+      },
+      "target_semantics": {
+        "contract": "lightyear-hlasm-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "object-and-load-module-attribute-baseline"
+      ],
+      "item_id": "hlasm:amode-rmode-and-residency",
+      "rationale": "Static inventory and deterministic bounded vectors are governed separately from native assembly, object code, linkage, system services, CPU, storage, and recovery behavior.",
+      "scope": "amode-rmode-and-residency",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM HLASM and z/Architecture"
+      },
+      "target_semantics": {
+        "contract": "lightyear-hlasm-qualification"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "authorized-HLASM-listing-and-object-deck"
+      ],
+      "item_id": "hlasm:assembler-diagnostics-and-object-code",
+      "rationale": "Static inventory and deterministic bounded vectors are governed separately from native assembly, object code, linkage, system services, CPU, storage, and recovery behavior.",
+      "scope": "assembler-diagnostics-and-object-code",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM HLASM and z/Architecture"
+      },
+      "target_semantics": {
+        "contract": "lightyear-hlasm-qualification"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "binder-map-load-library-and-entry-evidence"
+      ],
+      "item_id": "hlasm:binder-and-external-symbol-resolution",
+      "rationale": "Static inventory and deterministic bounded vectors are governed separately from native assembly, object code, linkage, system services, CPU, storage, and recovery behavior.",
+      "scope": "binder-and-external-symbol-resolution",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM HLASM and z/Architecture"
+      },
+      "target_semantics": {
+        "contract": "lightyear-hlasm-qualification"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "authorized-STIMER-elapsed-time-and-abend-vectors"
+      ],
+      "item_id": "hlasm:stimer-and-mvswait-timing",
+      "rationale": "Static inventory and deterministic bounded vectors are governed separately from native assembly, object code, linkage, system services, CPU, storage, and recovery behavior.",
+      "scope": "stimer-and-mvswait-timing",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM HLASM and z/Architecture"
+      },
+      "target_semantics": {
+        "contract": "lightyear-hlasm-qualification"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "ESTAE-recovery-dump-and-return-code-evidence"
+      ],
+      "item_id": "hlasm:abend-recovery-and-dumps",
+      "rationale": "Static inventory and deterministic bounded vectors are governed separately from native assembly, object code, linkage, system services, CPU, storage, and recovery behavior.",
+      "scope": "abend-recovery-and-dumps",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM HLASM and z/Architecture"
+      },
+      "target_semantics": {
+        "contract": "lightyear-hlasm-qualification"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "native-key-fetch-protection-and-address-space-evidence"
+      ],
+      "item_id": "hlasm:storage-keys-and-protection",
+      "rationale": "Static inventory and deterministic bounded vectors are governed separately from native assembly, object code, linkage, system services, CPU, storage, and recovery behavior.",
+      "scope": "storage-keys-and-protection",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM HLASM and z/Architecture"
+      },
+      "target_semantics": {
+        "contract": "lightyear-hlasm-qualification"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "authorized-state-and-SVC-qualification"
+      ],
+      "item_id": "hlasm:privileged-svc-and-authorized-services",
+      "rationale": "Static inventory and deterministic bounded vectors are governed separately from native assembly, object code, linkage, system services, CPU, storage, and recovery behavior.",
+      "scope": "privileged-svc-and-authorized-services",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM HLASM and z/Architecture"
+      },
+      "target_semantics": {
+        "contract": "lightyear-hlasm-qualification"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "separate-instruction-family-and-cache-coherency-qualification"
+      ],
+      "item_id": "hlasm:self-modifying-vector-and-crypto-code",
+      "rationale": "Static inventory and deterministic bounded vectors are governed separately from native assembly, object code, linkage, system services, CPU, storage, and recovery behavior.",
+      "scope": "self-modifying-vector-and-crypto-code",
+      "source_semantics": {
+        "claim": "bounded-static-and-synthetic-evidence",
+        "platform": "IBM HLASM and z/Architecture"
+      },
+      "target_semantics": {
+        "contract": "lightyear-hlasm-qualification"
+      }
+    }
+  ],
+  "graph_content_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
+  "ledger_type": "lightyear-hlasm-compatibility-ledger",
+  "mainframe_equivalent": false,
+  "production_ready": false,
+  "qualification_blocked": true,
+  "schema_version": "1.0",
+  "statistics": {
+    "exact": 6,
+    "lossy": 1,
+    "normalized-equivalent": 8,
+    "policy-decision-required": 6,
+    "unsupported": 7
+  }
+}

@@ -90,6 +90,9 @@ if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 & (Join-Path $ProjectDir "source-only-pilot.ps1") verify
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
+& (Join-Path $ProjectDir "integrated-pilot-qualification.ps1") verify
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
 Push-Location (Join-Path $ProjectDir "candidate-java")
 try {
     & .\mvnw.cmd test package

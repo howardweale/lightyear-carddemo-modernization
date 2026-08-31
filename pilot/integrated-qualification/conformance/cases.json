@@ -1,0 +1,856 @@
+{
+  "cases": [
+    {
+      "classification": "positive",
+      "expected_mutation_count": 0,
+      "expected_response": "SUCCESS",
+      "expected_status": "passed",
+      "features": [
+        "ACCTPIL",
+        "ACCTPL1",
+        "AUTHFRDS",
+        "CBACT04C",
+        "DATEFMT",
+        "batch-pipeline",
+        "cross-technology"
+      ],
+      "id": "01-batch-integrated-success",
+      "request": {
+        "date_pointer": 4096,
+        "operation": "BATCH_PIPELINE",
+        "rows": [
+          {
+            "auth_id": 12345678901,
+            "auth_status": "A",
+            "card_num": "4444333322221111"
+          }
+        ]
+      }
+    },
+    {
+      "classification": "positive",
+      "expected_mutation_count": 0,
+      "expected_response": "SUCCESS",
+      "expected_status": "passed",
+      "features": [
+        "ACCOUNTV",
+        "ACCTREC",
+        "ACCTPL1",
+        "AUTHFRDS",
+        "CBACT04C",
+        "online-pipeline",
+        "cross-language"
+      ],
+      "id": "02-online-integrated-success",
+      "request": {
+        "operation": "ONLINE_PIPELINE",
+        "rows": [
+          {
+            "auth_id": 12345678901,
+            "auth_status": "A",
+            "card_num": "4444333322221111"
+          }
+        ]
+      }
+    },
+    {
+      "classification": "positive",
+      "expected_mutation_count": 0,
+      "expected_response": "SUCCESS",
+      "expected_status": "passed",
+      "features": [
+        "Db2",
+        "single-row",
+        "host-variable",
+        "unqualified-select",
+        "parameter-overwrite"
+      ],
+      "id": "03-single-row-db2-success",
+      "request": {
+        "operation": "DB2_LOOKUP",
+        "requested_auth_id": 7,
+        "rows": [
+          {
+            "auth_id": 12345678901,
+            "auth_status": "A",
+            "card_num": "4444333322221111"
+          }
+        ]
+      }
+    },
+    {
+      "classification": "positive",
+      "expected_mutation_count": 0,
+      "expected_response": "SUCCESS",
+      "expected_status": "passed",
+      "features": [
+        "JCL",
+        "job-step-DAG",
+        "RUN",
+        "FORMAT",
+        "source-order"
+      ],
+      "id": "04-jcl-source-order-success",
+      "request": {
+        "operation": "JCL_FLOW",
+        "steps": [
+          "RUN:ACCTPL1",
+          "FORMAT:DATEFMT"
+        ]
+      }
+    },
+    {
+      "classification": "positive",
+      "expected_mutation_count": 0,
+      "expected_response": "SUCCESS",
+      "expected_status": "passed",
+      "features": [
+        "HLASM",
+        "DATEFMT",
+        "nonnull-pointer",
+        "return-code-zero",
+        "branch-return"
+      ],
+      "id": "05-hlasm-nonnull-success",
+      "request": {
+        "operation": "HLASM_DATEFMT",
+        "pointer": 1
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "SUCCESS",
+      "expected_status": "passed",
+      "features": [
+        "batch-pipeline",
+        "null-pointer",
+        "return-code-eight",
+        "EMPTY",
+        "BZ"
+      ],
+      "id": "06-batch-null-pointer-return-eight",
+      "request": {
+        "date_pointer": 0,
+        "operation": "BATCH_PIPELINE",
+        "rows": [
+          {
+            "auth_id": 12345678901,
+            "auth_status": "A",
+            "card_num": "4444333322221111"
+          }
+        ]
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "SQL_NOT_FOUND",
+      "expected_status": "passed",
+      "features": [
+        "batch-pipeline",
+        "SQLCODE-100",
+        "no-row",
+        "short-circuit"
+      ],
+      "id": "07-batch-no-db2-row",
+      "request": {
+        "date_pointer": 1,
+        "operation": "BATCH_PIPELINE",
+        "rows": []
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "SQL_MULTIPLE_ROWS",
+      "expected_status": "passed",
+      "features": [
+        "batch-pipeline",
+        "SQLCODE-811",
+        "multiple-rows",
+        "no-predicate"
+      ],
+      "id": "08-batch-multiple-db2-rows",
+      "request": {
+        "date_pointer": 1,
+        "operation": "BATCH_PIPELINE",
+        "rows": [
+          {
+            "auth_id": 12345678901,
+            "auth_status": "A",
+            "card_num": "4444333322221111"
+          },
+          {
+            "auth_id": 12345678902,
+            "auth_status": "D",
+            "card_num": "5555444433332222"
+          }
+        ]
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "SQL_NOT_FOUND",
+      "expected_status": "passed",
+      "features": [
+        "online-pipeline",
+        "COBOL-SQL",
+        "no-row",
+        "call-not-reached"
+      ],
+      "id": "09-online-no-db2-row",
+      "request": {
+        "operation": "ONLINE_PIPELINE",
+        "rows": []
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "SQL_MULTIPLE_ROWS",
+      "expected_status": "passed",
+      "features": [
+        "online-pipeline",
+        "COBOL-SQL",
+        "multiple-rows",
+        "call-not-reached"
+      ],
+      "id": "10-online-multiple-db2-rows",
+      "request": {
+        "operation": "ONLINE_PIPELINE",
+        "rows": [
+          {
+            "auth_id": 12345678901,
+            "auth_status": "A",
+            "card_num": "4444333322221111"
+          },
+          {
+            "auth_id": 12345678902,
+            "auth_status": "D",
+            "card_num": "5555444433332222"
+          }
+        ]
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "SQL_NOT_FOUND",
+      "expected_status": "passed",
+      "features": [
+        "Db2",
+        "empty-table",
+        "no-data",
+        "diagnostic"
+      ],
+      "id": "11-lookup-no-row",
+      "request": {
+        "operation": "DB2_LOOKUP",
+        "rows": []
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "SQL_MULTIPLE_ROWS",
+      "expected_status": "passed",
+      "features": [
+        "Db2",
+        "cardinality",
+        "more-than-one-row",
+        "diagnostic"
+      ],
+      "id": "12-lookup-multiple-rows",
+      "request": {
+        "operation": "DB2_LOOKUP",
+        "rows": [
+          {
+            "auth_id": 12345678901,
+            "auth_status": "A",
+            "card_num": "4444333322221111"
+          },
+          {
+            "auth_id": 12345678902,
+            "auth_status": "D",
+            "card_num": "5555444433332222"
+          }
+        ]
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "SUCCESS",
+      "expected_status": "passed",
+      "features": [
+        "Db2",
+        "source-quirk",
+        "input-overwritten",
+        "no-WHERE-clause"
+      ],
+      "id": "13-lookup-overwrites-request",
+      "request": {
+        "operation": "DB2_LOOKUP",
+        "requested_auth_id": 99999999999,
+        "rows": [
+          {
+            "auth_id": 12345678901,
+            "auth_status": "A",
+            "card_num": "4444333322221111"
+          }
+        ]
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "SUCCESS",
+      "expected_status": "passed",
+      "features": [
+        "DDL",
+        "DECIMAL-11",
+        "CHAR-16",
+        "CHAR-1",
+        "primary-key"
+      ],
+      "id": "14-schema-valid-row",
+      "request": {
+        "operation": "AUTHFRDS_SCHEMA",
+        "rows": [
+          {
+            "auth_id": 12345678901,
+            "auth_status": "A",
+            "card_num": "4444333322221111"
+          }
+        ]
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "SUCCESS",
+      "expected_status": "passed",
+      "features": [
+        "DDL",
+        "empty-table",
+        "schema-valid",
+        "zero-rows"
+      ],
+      "id": "15-schema-valid-empty-table",
+      "request": {
+        "operation": "AUTHFRDS_SCHEMA",
+        "rows": []
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "DATA_ERROR",
+      "expected_status": "passed",
+      "features": [
+        "DECIMAL-11",
+        "overflow",
+        "data-error",
+        "fail-closed"
+      ],
+      "id": "16-schema-decimal-overflow",
+      "request": {
+        "operation": "AUTHFRDS_SCHEMA",
+        "rows": [
+          {
+            "auth_id": 100000000000,
+            "auth_status": "A",
+            "card_num": "4444333322221111"
+          }
+        ]
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "DATA_ERROR",
+      "expected_status": "passed",
+      "features": [
+        "AUTH-ID",
+        "negative",
+        "numeric-boundary",
+        "fail-closed"
+      ],
+      "id": "17-schema-negative-auth-id",
+      "request": {
+        "operation": "AUTHFRDS_SCHEMA",
+        "rows": [
+          {
+            "auth_id": -1,
+            "auth_status": "A",
+            "card_num": "4444333322221111"
+          }
+        ]
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "DATA_ERROR",
+      "expected_status": "passed",
+      "features": [
+        "primary-key",
+        "duplicate",
+        "constraint",
+        "fail-closed"
+      ],
+      "id": "18-schema-duplicate-primary-key",
+      "request": {
+        "operation": "AUTHFRDS_SCHEMA",
+        "rows": [
+          {
+            "auth_id": 12345678901,
+            "auth_status": "A",
+            "card_num": "4444333322221111"
+          },
+          {
+            "auth_id": 12345678901,
+            "auth_status": "A",
+            "card_num": "4444333322221111"
+          }
+        ]
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "DATA_ERROR",
+      "expected_status": "passed",
+      "features": [
+        "CARD-NUM",
+        "CHAR-16",
+        "fixed-width",
+        "length-error"
+      ],
+      "id": "19-schema-card-number-short",
+      "request": {
+        "operation": "AUTHFRDS_SCHEMA",
+        "rows": [
+          {
+            "auth_id": 1,
+            "auth_status": "A",
+            "card_num": "4444"
+          }
+        ]
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "DATA_ERROR",
+      "expected_status": "passed",
+      "features": [
+        "AUTH-STATUS",
+        "CHAR-1",
+        "fixed-width",
+        "length-error"
+      ],
+      "id": "20-schema-status-too-long",
+      "request": {
+        "operation": "AUTHFRDS_SCHEMA",
+        "rows": [
+          {
+            "auth_id": 1,
+            "auth_status": "APPROVED",
+            "card_num": "4444333322221111"
+          }
+        ]
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "SUCCESS",
+      "expected_status": "passed",
+      "features": [
+        "ACCTREC",
+        "PIC-9-11",
+        "PIC-X",
+        "12-byte-logical-layout"
+      ],
+      "id": "21-copybook-layout-exact",
+      "request": {
+        "operation": "COPYBOOK_LAYOUT"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "LAYOUT_MISMATCH",
+      "expected_status": "passed",
+      "features": [
+        "ACCTREC",
+        "field-order",
+        "layout-mismatch",
+        "fail-closed"
+      ],
+      "id": "22-copybook-field-order-mismatch",
+      "request": {
+        "fields": [
+          {
+            "length": 1,
+            "name": "ACCT-STATUS"
+          },
+          {
+            "length": 11,
+            "name": "ACCT-ID"
+          }
+        ],
+        "operation": "COPYBOOK_LAYOUT"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "LAYOUT_MISMATCH",
+      "expected_status": "passed",
+      "features": [
+        "ACCTREC",
+        "field-length",
+        "layout-mismatch",
+        "fail-closed"
+      ],
+      "id": "23-copybook-field-length-mismatch",
+      "request": {
+        "fields": [
+          {
+            "length": 10,
+            "name": "ACCT-ID"
+          },
+          {
+            "length": 1,
+            "name": "ACCT-STATUS"
+          }
+        ],
+        "operation": "COPYBOOK_LAYOUT"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "SUCCESS",
+      "expected_status": "passed",
+      "features": [
+        "AUTHFRDS-IX1",
+        "unique-index",
+        "CARD-NUM-first",
+        "AUTH-ID-second"
+      ],
+      "id": "24-db2-index-exact",
+      "request": {
+        "columns": [
+          "CARD_NUM",
+          "AUTH_ID"
+        ],
+        "operation": "INDEX_ORDER",
+        "unique": true
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "INDEX_MISMATCH",
+      "expected_status": "passed",
+      "features": [
+        "index-order",
+        "reversed-columns",
+        "query-access-path",
+        "fail-closed"
+      ],
+      "id": "25-db2-index-reversed",
+      "request": {
+        "columns": [
+          "AUTH_ID",
+          "CARD_NUM"
+        ],
+        "operation": "INDEX_ORDER",
+        "unique": true
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "INDEX_MISMATCH",
+      "expected_status": "passed",
+      "features": [
+        "index-uniqueness",
+        "constraint-drift",
+        "schema-drift",
+        "fail-closed"
+      ],
+      "id": "26-db2-index-not-unique",
+      "request": {
+        "columns": [
+          "CARD_NUM",
+          "AUTH_ID"
+        ],
+        "operation": "INDEX_ORDER",
+        "unique": false
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "SEQUENCE_ERROR",
+      "expected_status": "passed",
+      "features": [
+        "JCL",
+        "step-order",
+        "reversed",
+        "sequence-error"
+      ],
+      "id": "27-jcl-reversed-step-order",
+      "request": {
+        "operation": "JCL_FLOW",
+        "steps": [
+          "FORMAT:DATEFMT",
+          "RUN:ACCTPL1"
+        ]
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "SEQUENCE_ERROR",
+      "expected_status": "passed",
+      "features": [
+        "JCL",
+        "missing-step",
+        "FORMAT",
+        "sequence-error"
+      ],
+      "id": "28-jcl-missing-format-step",
+      "request": {
+        "operation": "JCL_FLOW",
+        "steps": [
+          "RUN:ACCTPL1"
+        ]
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "SUCCESS",
+      "expected_status": "passed",
+      "features": [
+        "STEPLIB",
+        "load-library",
+        "DISP-SHR",
+        "dataset-binding"
+      ],
+      "id": "29-steplib-binding",
+      "request": {
+        "disp": "SHR",
+        "dsn": "CARDDEMO.LOADLIB",
+        "name": "STEPLIB",
+        "operation": "DATASET_BINDING"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "SUCCESS",
+      "expected_status": "passed",
+      "features": [
+        "ACCTIN",
+        "pilot-input",
+        "DISP-SHR",
+        "dataset-binding"
+      ],
+      "id": "30-acctin-binding",
+      "request": {
+        "disp": "SHR",
+        "dsn": "CARDDEMO.PILOT.INPUT",
+        "name": "ACCTIN",
+        "operation": "DATASET_BINDING"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "ALLOCATION_MISMATCH",
+      "expected_status": "passed",
+      "features": [
+        "dataset-drift",
+        "production-name",
+        "DISP-OLD",
+        "allocation-mismatch"
+      ],
+      "id": "31-dataset-binding-drift",
+      "request": {
+        "disp": "OLD",
+        "dsn": "CARDDEMO.PROD.INPUT",
+        "name": "ACCTIN",
+        "operation": "DATASET_BINDING"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "EMPTY_POINTER",
+      "expected_status": "passed",
+      "features": [
+        "HLASM",
+        "null-pointer",
+        "LTR",
+        "condition-code",
+        "return-code-eight"
+      ],
+      "id": "32-hlasm-null-pointer",
+      "request": {
+        "operation": "HLASM_DATEFMT",
+        "pointer": 0
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "SUCCESS",
+      "expected_status": "passed",
+      "features": [
+        "COBOL",
+        "PL-I",
+        "CALL-USING",
+        "decimal-11",
+        "cross-language"
+      ],
+      "id": "33-cobol-to-pli-call-exact",
+      "request": {
+        "operation": "COBOL_TO_PLI",
+        "parameter_digits": 11,
+        "program": "ACCTPL1"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "CALL_CONTRACT_MISMATCH",
+      "expected_status": "passed",
+      "features": [
+        "parameter-width",
+        "calling-convention",
+        "contract-mismatch",
+        "fail-closed"
+      ],
+      "id": "34-cobol-to-pli-width-mismatch",
+      "request": {
+        "operation": "COBOL_TO_PLI",
+        "parameter_digits": 10,
+        "program": "ACCTPL1"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "EXTERNAL_BOUNDARY_REACHED",
+      "expected_status": "passed",
+      "features": [
+        "PL-I",
+        "OPTIONS-COBOL",
+        "CBACT04C",
+        "external-boundary",
+        "call-contract"
+      ],
+      "id": "35-pli-to-external-cobol",
+      "request": {
+        "convention": "COBOL",
+        "operation": "PLI_TO_COBOL",
+        "program": "CBACT04C"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "CALL_CONTRACT_MISMATCH",
+      "expected_status": "passed",
+      "features": [
+        "PL-I",
+        "calling-convention",
+        "SYSTEM",
+        "contract-mismatch"
+      ],
+      "id": "36-pli-call-convention-mismatch",
+      "request": {
+        "convention": "SYSTEM",
+        "operation": "PLI_TO_COBOL",
+        "program": "CBACT04C"
+      }
+    },
+    {
+      "classification": "mutation",
+      "expected_mutation_count": 0,
+      "expected_response": "UNSUPPORTED",
+      "expected_status": "blocked",
+      "features": [
+        "CICS",
+        "runtime",
+        "outside-selection",
+        "fail-closed"
+      ],
+      "id": "37-cics-runtime-blocked",
+      "request": {
+        "operation": "CICS_TRANSACTION_RUNTIME"
+      }
+    },
+    {
+      "classification": "mutation",
+      "expected_mutation_count": 0,
+      "expected_response": "UNSUPPORTED",
+      "expected_status": "blocked",
+      "features": [
+        "Db2",
+        "package-bind",
+        "native-runtime",
+        "fail-closed"
+      ],
+      "id": "38-native-db2-package-blocked",
+      "request": {
+        "operation": "NATIVE_DB2_PACKAGE"
+      }
+    },
+    {
+      "classification": "mutation",
+      "expected_mutation_count": 0,
+      "expected_response": "UNSUPPORTED",
+      "expected_status": "blocked",
+      "features": [
+        "JES",
+        "scheduler",
+        "dataset-effects",
+        "fail-closed"
+      ],
+      "id": "39-native-jes-execution-blocked",
+      "request": {
+        "operation": "NATIVE_JES_EXECUTION"
+      }
+    },
+    {
+      "classification": "mutation",
+      "expected_mutation_count": 0,
+      "expected_response": "UNSUPPORTED",
+      "expected_status": "blocked",
+      "features": [
+        "Language-Environment",
+        "linkage",
+        "registers",
+        "fail-closed"
+      ],
+      "id": "40-native-le-linkage-blocked",
+      "request": {
+        "operation": "NATIVE_LE_LINKAGE"
+      }
+    }
+  ],
+  "content_sha256": "ab61a530f67e727f7f1996d88d988aeee29caba2b25e69889bf88ece5ed21011",
+  "corpus_id": "lightyear-integrated-pilot-synthetic-conformance-v1",
+  "customer_source": false,
+  "schema_version": "1.0",
+  "source": "deterministic synthetic vectors derived from the exact six-file ACCOUNTV reference selection"
+}

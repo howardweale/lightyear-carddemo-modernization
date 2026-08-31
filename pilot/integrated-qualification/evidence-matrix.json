@@ -1,0 +1,320 @@
+{
+  "cells": [
+    {
+      "cell_id": "cell:carddemo-account-mixed-language-pilot-v0-33:cobol",
+      "coordination_dependencies": [
+        "cell:carddemo-account-mixed-language-pilot-v0-33:db2",
+        "cell:carddemo-account-mixed-language-pilot-v0-33:pl-i"
+      ],
+      "dispatch_ready": false,
+      "integrated_development_evidence_passed": true,
+      "native_evidence_passed": false,
+      "qualification_mechanism": {
+        "content_sha256": "628152571e1a205c3a9b8e683e8cb8fc59db162347ceaaac8351830700ba4fe0",
+        "exact_source_acceptance_implied": false,
+        "identity": "lightyear-cobol-qualification",
+        "path": "readiness/cobol/qualification.json"
+      },
+      "required_acceptance_evidence": [
+        {
+          "name": "differential comparison",
+          "receipt_sha256": "7f88d86b079cdd678c3722abcb2785262003f1a79424fb94c23dd4b064413e3b",
+          "status": "passed-bounded-synthetic"
+        },
+        {
+          "name": "semantic mutation suite",
+          "receipt_sha256": "7f88d86b079cdd678c3722abcb2785262003f1a79424fb94c23dd4b064413e3b",
+          "status": "passed-bounded-synthetic"
+        }
+      ],
+      "required_deliverables": [
+        {
+          "name": "behavior contract",
+          "status": "passed-bounded-integrated"
+        },
+        {
+          "name": "source-faithful oracle",
+          "status": "passed-bounded-integrated"
+        },
+        {
+          "name": "modernization candidate",
+          "status": "passed-bounded-integrated"
+        }
+      ],
+      "required_live_evidence": [
+        {
+          "name": "authorized compiled original execution",
+          "status": "blocked-not-observed"
+        },
+        {
+          "name": "input and output capture",
+          "status": "blocked-not-observed"
+        },
+        {
+          "name": "side-effect capture",
+          "status": "blocked-not-observed"
+        }
+      ],
+      "source_paths": [
+        "cobol/ACCOUNTV.cbl",
+        "copybooks/ACCTREC.cpy"
+      ],
+      "technology": "COBOL"
+    },
+    {
+      "cell_id": "cell:carddemo-account-mixed-language-pilot-v0-33:db2",
+      "coordination_dependencies": [],
+      "dispatch_ready": false,
+      "integrated_development_evidence_passed": true,
+      "native_evidence_passed": false,
+      "qualification_mechanism": {
+        "content_sha256": "b957fea96cd2a9e7e89716bf1007cddb7ec793dfd728681142f1ce79c36f8306",
+        "exact_source_acceptance_implied": false,
+        "identity": "lightyear-db2-source-adapter-conformance",
+        "path": "data-modernization/db2-semantic-adapter/authfrds.conformance.receipt.json"
+      },
+      "required_acceptance_evidence": [
+        {
+          "name": "query checksums",
+          "receipt_sha256": "7f88d86b079cdd678c3722abcb2785262003f1a79424fb94c23dd4b064413e3b",
+          "status": "passed-bounded-synthetic"
+        },
+        {
+          "name": "data movement and rollback rehearsal",
+          "receipt_sha256": "7f88d86b079cdd678c3722abcb2785262003f1a79424fb94c23dd4b064413e3b",
+          "status": "passed-bounded-synthetic"
+        }
+      ],
+      "required_deliverables": [
+        {
+          "name": "schema mapping",
+          "status": "passed-bounded-integrated"
+        },
+        {
+          "name": "bounded fixtures",
+          "status": "passed-bounded-integrated"
+        },
+        {
+          "name": "target schema candidate",
+          "status": "passed-bounded-integrated"
+        }
+      ],
+      "required_live_evidence": [
+        {
+          "name": "authorized catalog and package capture",
+          "status": "blocked-not-observed"
+        },
+        {
+          "name": "source-row and log observation",
+          "status": "blocked-not-observed"
+        },
+        {
+          "name": "cutover and rollback observation",
+          "status": "blocked-not-observed"
+        }
+      ],
+      "source_paths": [
+        "cobol/ACCOUNTV.cbl",
+        "db2/AUTHFRDS.ddl",
+        "pli/ACCTPL1.pli"
+      ],
+      "technology": "Db2"
+    },
+    {
+      "cell_id": "cell:carddemo-account-mixed-language-pilot-v0-33:hlasm",
+      "coordination_dependencies": [],
+      "dispatch_ready": false,
+      "integrated_development_evidence_passed": true,
+      "native_evidence_passed": false,
+      "qualification_mechanism": {
+        "content_sha256": "19c65120383e89aec37ca9e89510a1bb6dacd24a2612aa55b07e7f1420c7d41e",
+        "exact_source_acceptance_implied": false,
+        "identity": "lightyear-hlasm-qualification",
+        "path": "readiness/asm-date/qualification.json"
+      },
+      "required_acceptance_evidence": [
+        {
+          "name": "bit-level differential comparison",
+          "receipt_sha256": "7f88d86b079cdd678c3722abcb2785262003f1a79424fb94c23dd4b064413e3b",
+          "status": "passed-bounded-synthetic"
+        },
+        {
+          "name": "boundary mutation suite",
+          "receipt_sha256": "7f88d86b079cdd678c3722abcb2785262003f1a79424fb94c23dd4b064413e3b",
+          "status": "passed-bounded-synthetic"
+        }
+      ],
+      "required_deliverables": [
+        {
+          "name": "instruction-subset contract",
+          "status": "passed-bounded-integrated"
+        },
+        {
+          "name": "calling-convention oracle",
+          "status": "passed-bounded-integrated"
+        },
+        {
+          "name": "typed replacement candidate",
+          "status": "passed-bounded-integrated"
+        }
+      ],
+      "required_live_evidence": [
+        {
+          "name": "assembler and binder listings",
+          "status": "blocked-not-observed"
+        },
+        {
+          "name": "load-module digest",
+          "status": "blocked-not-observed"
+        },
+        {
+          "name": "authorized caller execution",
+          "status": "blocked-not-observed"
+        }
+      ],
+      "source_paths": [
+        "hlasm/DATEFMT.asm"
+      ],
+      "technology": "HLASM"
+    },
+    {
+      "cell_id": "cell:carddemo-account-mixed-language-pilot-v0-33:jcl",
+      "coordination_dependencies": [
+        "cell:carddemo-account-mixed-language-pilot-v0-33:hlasm",
+        "cell:carddemo-account-mixed-language-pilot-v0-33:pl-i"
+      ],
+      "dispatch_ready": false,
+      "integrated_development_evidence_passed": true,
+      "native_evidence_passed": false,
+      "qualification_mechanism": {
+        "content_sha256": "11df1bcd4c7db17febe47ddf4530e09c7142c755167a40c5f2aa7682b6d977ad",
+        "exact_source_acceptance_implied": false,
+        "identity": "lightyear-jcl-qualification",
+        "path": "readiness/jcl/qualification.json"
+      },
+      "required_acceptance_evidence": [
+        {
+          "name": "condition-flow comparison",
+          "receipt_sha256": "7f88d86b079cdd678c3722abcb2785262003f1a79424fb94c23dd4b064413e3b",
+          "status": "passed-bounded-synthetic"
+        },
+        {
+          "name": "restart-plan tests",
+          "receipt_sha256": "7f88d86b079cdd678c3722abcb2785262003f1a79424fb94c23dd4b064413e3b",
+          "status": "passed-bounded-synthetic"
+        }
+      ],
+      "required_deliverables": [
+        {
+          "name": "job-step DAG",
+          "status": "passed-bounded-integrated"
+        },
+        {
+          "name": "dataset and condition contract",
+          "status": "passed-bounded-integrated"
+        },
+        {
+          "name": "scheduler candidate",
+          "status": "passed-bounded-integrated"
+        }
+      ],
+      "required_live_evidence": [
+        {
+          "name": "authorized job execution",
+          "status": "blocked-not-observed"
+        },
+        {
+          "name": "JES and dataset effects",
+          "status": "blocked-not-observed"
+        },
+        {
+          "name": "condition and restart capture",
+          "status": "blocked-not-observed"
+        }
+      ],
+      "source_paths": [
+        "jcl/ACCTPIL.jcl"
+      ],
+      "technology": "JCL"
+    },
+    {
+      "cell_id": "cell:carddemo-account-mixed-language-pilot-v0-33:pl-i",
+      "coordination_dependencies": [
+        "cell:carddemo-account-mixed-language-pilot-v0-33:db2"
+      ],
+      "dispatch_ready": false,
+      "integrated_development_evidence_passed": true,
+      "native_evidence_passed": false,
+      "qualification_mechanism": {
+        "content_sha256": "66ed16c56b19afb535434aa8eb3686b876b329fba7b4f2d6d486adb4b4f413a5",
+        "exact_source_acceptance_implied": false,
+        "identity": "lightyear-pli-qualification",
+        "path": "readiness/pli/qualification.json"
+      },
+      "required_acceptance_evidence": [
+        {
+          "name": "differential comparison",
+          "receipt_sha256": "7f88d86b079cdd678c3722abcb2785262003f1a79424fb94c23dd4b064413e3b",
+          "status": "passed-bounded-synthetic"
+        },
+        {
+          "name": "decimal and call-boundary mutations",
+          "receipt_sha256": "7f88d86b079cdd678c3722abcb2785262003f1a79424fb94c23dd4b064413e3b",
+          "status": "passed-bounded-synthetic"
+        }
+      ],
+      "required_deliverables": [
+        {
+          "name": "source-faithful oracle",
+          "status": "passed-bounded-integrated"
+        },
+        {
+          "name": "typed modernization candidate",
+          "status": "passed-bounded-integrated"
+        },
+        {
+          "name": "cross-language call contract",
+          "status": "passed-bounded-integrated"
+        }
+      ],
+      "required_live_evidence": [
+        {
+          "name": "Enterprise PL/I compilation",
+          "status": "blocked-not-observed"
+        },
+        {
+          "name": "Db2 bind",
+          "status": "blocked-not-observed"
+        },
+        {
+          "name": "authorized PL/I-to-COBOL execution",
+          "status": "blocked-not-observed"
+        }
+      ],
+      "source_paths": [
+        "pli/ACCTPL1.pli"
+      ],
+      "technology": "PL/I"
+    }
+  ],
+  "conformance_sha256": "7f88d86b079cdd678c3722abcb2785262003f1a79424fb94c23dd4b064413e3b",
+  "content_sha256": "35009c5f7689e2bbcb303e144ebe6dab465bce623f872717e7e4c7117b9e80e6",
+  "factory_dispatch_allowed": false,
+  "mainframe_equivalent": false,
+  "matrix_type": "lightyear-integrated-pilot-evidence-matrix",
+  "native_execution_observed": false,
+  "production_ready": false,
+  "schema_version": "1.0",
+  "selection_sha256": "a0c78bc7fa361ba53d4b9b5598d5661e18265f573d8e2cac3e8c5368888fac85",
+  "source_graph_sha256": "0981b706b30df9192ec567ede9245e5c8b9dfe40855a4d860acdcacd9f123eec",
+  "statistics": {
+    "acceptance_evidence_count": 10,
+    "blocked_live_evidence_count": 15,
+    "cell_count": 5,
+    "coordination_dependency_count": 5,
+    "deliverable_count": 15,
+    "technology_count": 5
+  },
+  "wave_2_integrated_development_ready": true,
+  "work_package_sha256": "8a01cec899ab88de62614133b5e34a8e4549308d82d52c6a8df95f7eb0b14783"
+}

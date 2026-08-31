@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.42.0 — 2026-08-31
+
+- Bound the exact five-cell `ACCOUNTV` pilot selected in MS #32 to its six source files, five
+  technologies, five coordination dependencies, and canonical source-graph identity.
+- Added a deterministic 40-case integrated corpus covering online and batch paths, Db2 cardinality,
+  schema and index behavior, copybook layout, JCL flow and datasets, HLASM branching, cross-language
+  calls, source identity, dependency edges, and four fail-closed native vectors.
+- Preserved material source truths: unqualified single-row SQL cardinality, the PL/I account-ID
+  overwrite, the bounded null/non-null `DATEFMT` branch, and the external `CBACT04C` boundary.
+- Added five bounded cell receipts, ten acceptance-evidence items, 15 blocked live-evidence items,
+  a 30-entry compatibility ledger using all five governing classes, and twelve qualification gates.
+- Added frozen schemas, POSIX/PowerShell release-gate integration, deterministic artifacts, graph
+  holdouts, source/dependency drift probes, mutation cases, and rehashed-overclaim tests.
+- Marked Wave 2 integrated development evidence ready while keeping factory dispatch, native
+  compilation/execution, mainframe equivalence, production release, and production readiness false.
+
 ## 0.41.0 — 2026-08-31
 
 - Bound HLASM qualification to the canonical graph inventory of two programs, 41 instructions, 23

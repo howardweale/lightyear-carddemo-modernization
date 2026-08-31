@@ -1,0 +1,537 @@
+{
+  "classifications": [
+    "exact",
+    "normalized-equivalent",
+    "policy-decision-required",
+    "lossy",
+    "unsupported"
+  ],
+  "content_sha256": "664f83861d3350a94f5f7066f1e4180eefe8e5889a28326faf9d434703e905b2",
+  "entries": [
+    {
+      "classification": "exact",
+      "decision": "bounded-contract",
+      "evidence_required": [
+        "selection-and-business-decision-evidence"
+      ],
+      "item_id": "integrated-pilot:selection-and-business-decision",
+      "rationale": "The six-file pilot is qualified as an integrated bounded development contract; native platform and operational behavior remain independent evidence gates.",
+      "scope": "selection-and-business-decision",
+      "source_semantics": {
+        "claim": "bounded-integrated-development",
+        "selection": "carddemo-account-mixed-language-pilot-v0.33"
+      },
+      "target_semantics": {
+        "contract": "lightyear-integrated-pilot-qualification"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "bounded-contract",
+      "evidence_required": [
+        "work-package-and-five-cell-identity-evidence"
+      ],
+      "item_id": "integrated-pilot:work-package-and-five-cell-identity",
+      "rationale": "The six-file pilot is qualified as an integrated bounded development contract; native platform and operational behavior remain independent evidence gates.",
+      "scope": "work-package-and-five-cell-identity",
+      "source_semantics": {
+        "claim": "bounded-integrated-development",
+        "selection": "carddemo-account-mixed-language-pilot-v0.33"
+      },
+      "target_semantics": {
+        "contract": "lightyear-integrated-pilot-qualification"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "bounded-contract",
+      "evidence_required": [
+        "source-file-and-graph-binding-evidence"
+      ],
+      "item_id": "integrated-pilot:source-file-and-graph-binding",
+      "rationale": "The six-file pilot is qualified as an integrated bounded development contract; native platform and operational behavior remain independent evidence gates.",
+      "scope": "source-file-and-graph-binding",
+      "source_semantics": {
+        "claim": "bounded-integrated-development",
+        "selection": "carddemo-account-mixed-language-pilot-v0.33"
+      },
+      "target_semantics": {
+        "contract": "lightyear-integrated-pilot-qualification"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "bounded-contract",
+      "evidence_required": [
+        "cell-coordination-dependency-dag-evidence"
+      ],
+      "item_id": "integrated-pilot:cell-coordination-dependency-dag",
+      "rationale": "The six-file pilot is qualified as an integrated bounded development contract; native platform and operational behavior remain independent evidence gates.",
+      "scope": "cell-coordination-dependency-dag",
+      "source_semantics": {
+        "claim": "bounded-integrated-development",
+        "selection": "carddemo-account-mixed-language-pilot-v0.33"
+      },
+      "target_semantics": {
+        "contract": "lightyear-integrated-pilot-qualification"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "bounded-contract",
+      "evidence_required": [
+        "copybook-acct-record-layout-evidence"
+      ],
+      "item_id": "integrated-pilot:copybook-acct-record-layout",
+      "rationale": "The six-file pilot is qualified as an integrated bounded development contract; native platform and operational behavior remain independent evidence gates.",
+      "scope": "copybook-acct-record-layout",
+      "source_semantics": {
+        "claim": "bounded-integrated-development",
+        "selection": "carddemo-account-mixed-language-pilot-v0.33"
+      },
+      "target_semantics": {
+        "contract": "lightyear-integrated-pilot-qualification"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "bounded-contract",
+      "evidence_required": [
+        "authfrds-three-column-projection-evidence"
+      ],
+      "item_id": "integrated-pilot:authfrds-three-column-projection",
+      "rationale": "The six-file pilot is qualified as an integrated bounded development contract; native platform and operational behavior remain independent evidence gates.",
+      "scope": "authfrds-three-column-projection",
+      "source_semantics": {
+        "claim": "bounded-integrated-development",
+        "selection": "carddemo-account-mixed-language-pilot-v0.33"
+      },
+      "target_semantics": {
+        "contract": "lightyear-integrated-pilot-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "authfrds-primary-key-evidence"
+      ],
+      "item_id": "integrated-pilot:authfrds-primary-key",
+      "rationale": "The six-file pilot is qualified as an integrated bounded development contract; native platform and operational behavior remain independent evidence gates.",
+      "scope": "authfrds-primary-key",
+      "source_semantics": {
+        "claim": "bounded-integrated-development",
+        "selection": "carddemo-account-mixed-language-pilot-v0.33"
+      },
+      "target_semantics": {
+        "contract": "lightyear-integrated-pilot-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "authfrds-unique-index-order-evidence"
+      ],
+      "item_id": "integrated-pilot:authfrds-unique-index-order",
+      "rationale": "The six-file pilot is qualified as an integrated bounded development contract; native platform and operational behavior remain independent evidence gates.",
+      "scope": "authfrds-unique-index-order",
+      "source_semantics": {
+        "claim": "bounded-integrated-development",
+        "selection": "carddemo-account-mixed-language-pilot-v0.33"
+      },
+      "target_semantics": {
+        "contract": "lightyear-integrated-pilot-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "unqualified-single-row-select-evidence"
+      ],
+      "item_id": "integrated-pilot:unqualified-single-row-select",
+      "rationale": "The six-file pilot is qualified as an integrated bounded development contract; native platform and operational behavior remain independent evidence gates.",
+      "scope": "unqualified-single-row-select",
+      "source_semantics": {
+        "claim": "bounded-integrated-development",
+        "selection": "carddemo-account-mixed-language-pilot-v0.33"
+      },
+      "target_semantics": {
+        "contract": "lightyear-integrated-pilot-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "sql-no-row-and-multiple-row-status-evidence"
+      ],
+      "item_id": "integrated-pilot:sql-no-row-and-multiple-row-status",
+      "rationale": "The six-file pilot is qualified as an integrated bounded development contract; native platform and operational behavior remain independent evidence gates.",
+      "scope": "sql-no-row-and-multiple-row-status",
+      "source_semantics": {
+        "claim": "bounded-integrated-development",
+        "selection": "carddemo-account-mixed-language-pilot-v0.33"
+      },
+      "target_semantics": {
+        "contract": "lightyear-integrated-pilot-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "cobol-to-pli-call-evidence"
+      ],
+      "item_id": "integrated-pilot:cobol-to-pli-call",
+      "rationale": "The six-file pilot is qualified as an integrated bounded development contract; native platform and operational behavior remain independent evidence gates.",
+      "scope": "cobol-to-pli-call",
+      "source_semantics": {
+        "claim": "bounded-integrated-development",
+        "selection": "carddemo-account-mixed-language-pilot-v0.33"
+      },
+      "target_semantics": {
+        "contract": "lightyear-integrated-pilot-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "pli-to-cobol-call-contract-evidence"
+      ],
+      "item_id": "integrated-pilot:pli-to-cobol-call-contract",
+      "rationale": "The six-file pilot is qualified as an integrated bounded development contract; native platform and operational behavior remain independent evidence gates.",
+      "scope": "pli-to-cobol-call-contract",
+      "source_semantics": {
+        "claim": "bounded-integrated-development",
+        "selection": "carddemo-account-mixed-language-pilot-v0.33"
+      },
+      "target_semantics": {
+        "contract": "lightyear-integrated-pilot-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "jcl-step-order-evidence"
+      ],
+      "item_id": "integrated-pilot:jcl-step-order",
+      "rationale": "The six-file pilot is qualified as an integrated bounded development contract; native platform and operational behavior remain independent evidence gates.",
+      "scope": "jcl-step-order",
+      "source_semantics": {
+        "claim": "bounded-integrated-development",
+        "selection": "carddemo-account-mixed-language-pilot-v0.33"
+      },
+      "target_semantics": {
+        "contract": "lightyear-integrated-pilot-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "jcl-dataset-bindings-evidence"
+      ],
+      "item_id": "integrated-pilot:jcl-dataset-bindings",
+      "rationale": "The six-file pilot is qualified as an integrated bounded development contract; native platform and operational behavior remain independent evidence gates.",
+      "scope": "jcl-dataset-bindings",
+      "source_semantics": {
+        "claim": "bounded-integrated-development",
+        "selection": "carddemo-account-mixed-language-pilot-v0.33"
+      },
+      "target_semantics": {
+        "contract": "lightyear-integrated-pilot-qualification"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "datefmt-null-pointer-return-code-evidence"
+      ],
+      "item_id": "integrated-pilot:datefmt-null-pointer-return-code",
+      "rationale": "The six-file pilot is qualified as an integrated bounded development contract; native platform and operational behavior remain independent evidence gates.",
+      "scope": "datefmt-null-pointer-return-code",
+      "source_semantics": {
+        "claim": "bounded-integrated-development",
+        "selection": "carddemo-account-mixed-language-pilot-v0.33"
+      },
+      "target_semantics": {
+        "contract": "lightyear-integrated-pilot-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "external-cbact04c-business-effects-evidence"
+      ],
+      "item_id": "integrated-pilot:external-cbact04c-business-effects",
+      "rationale": "The six-file pilot is qualified as an integrated bounded development contract; native platform and operational behavior remain independent evidence gates.",
+      "scope": "external-cbact04c-business-effects",
+      "source_semantics": {
+        "claim": "bounded-integrated-development",
+        "selection": "carddemo-account-mixed-language-pilot-v0.33"
+      },
+      "target_semantics": {
+        "contract": "lightyear-integrated-pilot-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "cobol-pli-parameter-representation-evidence"
+      ],
+      "item_id": "integrated-pilot:cobol-pli-parameter-representation",
+      "rationale": "The six-file pilot is qualified as an integrated bounded development contract; native platform and operational behavior remain independent evidence gates.",
+      "scope": "cobol-pli-parameter-representation",
+      "source_semantics": {
+        "claim": "bounded-integrated-development",
+        "selection": "carddemo-account-mixed-language-pilot-v0.33"
+      },
+      "target_semantics": {
+        "contract": "lightyear-integrated-pilot-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "db2-isolation-locking-and-package-options-evidence"
+      ],
+      "item_id": "integrated-pilot:db2-isolation-locking-and-package-options",
+      "rationale": "The six-file pilot is qualified as an integrated bounded development contract; native platform and operational behavior remain independent evidence gates.",
+      "scope": "db2-isolation-locking-and-package-options",
+      "source_semantics": {
+        "claim": "bounded-integrated-development",
+        "selection": "carddemo-account-mixed-language-pilot-v0.33"
+      },
+      "target_semantics": {
+        "contract": "lightyear-integrated-pilot-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "jcl-condition-restart-and-step-failure-evidence"
+      ],
+      "item_id": "integrated-pilot:jcl-condition-restart-and-step-failure",
+      "rationale": "The six-file pilot is qualified as an integrated bounded development contract; native platform and operational behavior remain independent evidence gates.",
+      "scope": "jcl-condition-restart-and-step-failure",
+      "source_semantics": {
+        "claim": "bounded-integrated-development",
+        "selection": "carddemo-account-mixed-language-pilot-v0.33"
+      },
+      "target_semantics": {
+        "contract": "lightyear-integrated-pilot-qualification"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "datefmt-linkage-amode-and-rmode-evidence"
+      ],
+      "item_id": "integrated-pilot:datefmt-linkage-amode-and-rmode",
+      "rationale": "The six-file pilot is qualified as an integrated bounded development contract; native platform and operational behavior remain independent evidence gates.",
+      "scope": "datefmt-linkage-amode-and-rmode",
+      "source_semantics": {
+        "claim": "bounded-integrated-development",
+        "selection": "carddemo-account-mixed-language-pilot-v0.33"
+      },
+      "target_semantics": {
+        "contract": "lightyear-integrated-pilot-qualification"
+      }
+    },
+    {
+      "classification": "lossy",
+      "decision": "accepted-only-in-bounded-planning",
+      "evidence_required": [
+        "ebcdic-and-fixed-character-padding-evidence"
+      ],
+      "item_id": "integrated-pilot:ebcdic-and-fixed-character-padding",
+      "rationale": "The six-file pilot is qualified as an integrated bounded development contract; native platform and operational behavior remain independent evidence gates.",
+      "scope": "ebcdic-and-fixed-character-padding",
+      "source_semantics": {
+        "claim": "bounded-integrated-development",
+        "selection": "carddemo-account-mixed-language-pilot-v0.33"
+      },
+      "target_semantics": {
+        "contract": "lightyear-integrated-pilot-qualification"
+      }
+    },
+    {
+      "classification": "lossy",
+      "decision": "accepted-only-in-bounded-planning",
+      "evidence_required": [
+        "decimal-host-variable-binary-representation-evidence"
+      ],
+      "item_id": "integrated-pilot:decimal-host-variable-binary-representation",
+      "rationale": "The six-file pilot is qualified as an integrated bounded development contract; native platform and operational behavior remain independent evidence gates.",
+      "scope": "decimal-host-variable-binary-representation",
+      "source_semantics": {
+        "claim": "bounded-integrated-development",
+        "selection": "carddemo-account-mixed-language-pilot-v0.33"
+      },
+      "target_semantics": {
+        "contract": "lightyear-integrated-pilot-qualification"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "native-cobol-and-pli-compilation-evidence"
+      ],
+      "item_id": "integrated-pilot:native-cobol-and-pli-compilation",
+      "rationale": "The six-file pilot is qualified as an integrated bounded development contract; native platform and operational behavior remain independent evidence gates.",
+      "scope": "native-cobol-and-pli-compilation",
+      "source_semantics": {
+        "claim": "bounded-integrated-development",
+        "selection": "carddemo-account-mixed-language-pilot-v0.33"
+      },
+      "target_semantics": {
+        "contract": "lightyear-integrated-pilot-qualification"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "native-db2-bind-and-execution-evidence"
+      ],
+      "item_id": "integrated-pilot:native-db2-bind-and-execution",
+      "rationale": "The six-file pilot is qualified as an integrated bounded development contract; native platform and operational behavior remain independent evidence gates.",
+      "scope": "native-db2-bind-and-execution",
+      "source_semantics": {
+        "claim": "bounded-integrated-development",
+        "selection": "carddemo-account-mixed-language-pilot-v0.33"
+      },
+      "target_semantics": {
+        "contract": "lightyear-integrated-pilot-qualification"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "native-jes-scheduler-and-dataset-effects-evidence"
+      ],
+      "item_id": "integrated-pilot:native-jes-scheduler-and-dataset-effects",
+      "rationale": "The six-file pilot is qualified as an integrated bounded development contract; native platform and operational behavior remain independent evidence gates.",
+      "scope": "native-jes-scheduler-and-dataset-effects",
+      "source_semantics": {
+        "claim": "bounded-integrated-development",
+        "selection": "carddemo-account-mixed-language-pilot-v0.33"
+      },
+      "target_semantics": {
+        "contract": "lightyear-integrated-pilot-qualification"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "native-hlasm-assembly-binder-and-le-linkage-evidence"
+      ],
+      "item_id": "integrated-pilot:native-hlasm-assembly-binder-and-le-linkage",
+      "rationale": "The six-file pilot is qualified as an integrated bounded development contract; native platform and operational behavior remain independent evidence gates.",
+      "scope": "native-hlasm-assembly-binder-and-le-linkage",
+      "source_semantics": {
+        "claim": "bounded-integrated-development",
+        "selection": "carddemo-account-mixed-language-pilot-v0.33"
+      },
+      "target_semantics": {
+        "contract": "lightyear-integrated-pilot-qualification"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "cics-cbact04c-runtime-evidence"
+      ],
+      "item_id": "integrated-pilot:cics-cbact04c-runtime",
+      "rationale": "The six-file pilot is qualified as an integrated bounded development contract; native platform and operational behavior remain independent evidence gates.",
+      "scope": "cics-cbact04c-runtime",
+      "source_semantics": {
+        "claim": "bounded-integrated-development",
+        "selection": "carddemo-account-mixed-language-pilot-v0.33"
+      },
+      "target_semantics": {
+        "contract": "lightyear-integrated-pilot-qualification"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "transaction-atomicity-across-program-boundaries-evidence"
+      ],
+      "item_id": "integrated-pilot:transaction-atomicity-across-program-boundaries",
+      "rationale": "The six-file pilot is qualified as an integrated bounded development contract; native platform and operational behavior remain independent evidence gates.",
+      "scope": "transaction-atomicity-across-program-boundaries",
+      "source_semantics": {
+        "claim": "bounded-integrated-development",
+        "selection": "carddemo-account-mixed-language-pilot-v0.33"
+      },
+      "target_semantics": {
+        "contract": "lightyear-integrated-pilot-qualification"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "operational-recovery-and-rollback-evidence"
+      ],
+      "item_id": "integrated-pilot:operational-recovery-and-rollback",
+      "rationale": "The six-file pilot is qualified as an integrated bounded development contract; native platform and operational behavior remain independent evidence gates.",
+      "scope": "operational-recovery-and-rollback",
+      "source_semantics": {
+        "claim": "bounded-integrated-development",
+        "selection": "carddemo-account-mixed-language-pilot-v0.33"
+      },
+      "target_semantics": {
+        "contract": "lightyear-integrated-pilot-qualification"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "production-cutover-and-release-evidence"
+      ],
+      "item_id": "integrated-pilot:production-cutover-and-release",
+      "rationale": "The six-file pilot is qualified as an integrated bounded development contract; native platform and operational behavior remain independent evidence gates.",
+      "scope": "production-cutover-and-release",
+      "source_semantics": {
+        "claim": "bounded-integrated-development",
+        "selection": "carddemo-account-mixed-language-pilot-v0.33"
+      },
+      "target_semantics": {
+        "contract": "lightyear-integrated-pilot-qualification"
+      }
+    }
+  ],
+  "ledger_type": "lightyear-integrated-pilot-compatibility-ledger",
+  "mainframe_equivalent": false,
+  "production_ready": false,
+  "qualification_blocked": true,
+  "schema_version": "1.0",
+  "selection_sha256": "a0c78bc7fa361ba53d4b9b5598d5661e18265f573d8e2cac3e8c5368888fac85",
+  "source_graph_sha256": "0981b706b30df9192ec567ede9245e5c8b9dfe40855a4d860acdcacd9f123eec",
+  "statistics": {
+    "exact": 6,
+    "lossy": 2,
+    "normalized-equivalent": 9,
+    "policy-decision-required": 5,
+    "unsupported": 8
+  },
+  "work_package_sha256": "8a01cec899ab88de62614133b5e34a8e4549308d82d52c6a8df95f7eb0b14783"
+}

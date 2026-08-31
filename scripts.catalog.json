@@ -1,6 +1,6 @@
 {
   "catalog_type": "lightyear-entrypoint-catalog",
-  "content_sha256": "79999d320f4c522b27e59ef88260e3d7dcff73f3d2436dddc490bb32e2d51d2b",
+  "content_sha256": "2a711750324bc87a9660f209989fc7a9998c722edfa7eb6863d81f72c69b7787",
   "entries": [
     {"name": "asm-readiness", "purpose": "Build or verify HLASM readiness evidence.", "role": "release-gated", "verification": "verify.sh and verify.ps1"},
     {"name": "audit-control-tower", "purpose": "Build or verify the audit evidence projection.", "role": "release-gated", "verification": "verify.sh and verify.ps1"},
@@ -17,6 +17,7 @@
     {"name": "graph-explorer", "purpose": "Launch the local interactive graph explorer.", "role": "developer", "verification": "tests/test_graph_explorer.py and knowledge graph verification"},
     {"name": "hardened-execution", "purpose": "Build or verify the isolated execution boundary.", "role": "release-gated", "verification": "verify.sh and verify.ps1"},
     {"name": "ims-readiness", "purpose": "Build or verify IMS readiness evidence.", "role": "release-gated", "verification": "verify.sh and verify.ps1"},
+    {"name": "integrated-pilot-qualification", "purpose": "Build or verify selected-slice integrated pilot qualification evidence.", "role": "release-gated", "verification": "verify.sh and verify.ps1"},
     {"name": "jcl-qualification", "purpose": "Build or verify bounded JCL qualification evidence.", "role": "release-gated", "verification": "verify.sh and verify.ps1"},
     {"name": "knowledge-graph", "purpose": "Build, validate, compare, or inspect the canonical graph.", "role": "release-gated", "verification": "verify.sh and verify.ps1"},
     {"name": "lightyear", "purpose": "Provide the supported aggregate doctor, demo, explorer, pilot, catalog, and verification interface.", "role": "aggregator", "verification": "delegates to cataloged component verifiers"},

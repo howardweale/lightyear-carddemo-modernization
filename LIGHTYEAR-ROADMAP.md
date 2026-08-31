@@ -16,6 +16,7 @@ production-qualified.
 | MS #39 | VSAM/CICS Qualification Hardening | Complete |
 | MS #40 | IMS Qualification Hardening | Complete |
 | MS #41 | HLASM Qualification Hardening | Complete |
+| MS #42 | Integrated Pilot Qualification | Complete |
 
 The v0.35.0 stored-logic qualification core is retained as supporting MS #34 evidence. It does not
 replace the planned DB2 milestone.
@@ -77,3 +78,13 @@ addressability, COPY, static macro expansion, literal-pool boundaries, and param
 HLASM assembly and object code, binder and load-module behavior, AMODE/RMODE, LE/COBOL linkage,
 STIMER and authorized services, storage protection, recovery, broad instruction behavior,
 mainframe equivalence, and production readiness stay blocked pending authorized native evidence.
+
+## MS #42 — Integrated Pilot Qualification
+
+MS #42 composes the five independently qualified technology subsets into the exact `ACCOUNTV`
+pilot selected in MS #32. The graph-bound qualification covers six source files, five cells, five
+coordination dependencies, three integrated paths, a deterministic 40-case corpus, ten bounded
+acceptance-evidence items, and a 30-entry five-class compatibility ledger. It makes Wave 2
+integrated development evidence ready without admitting a factory work order. All 15 live-evidence
+items remain blocked; factory dispatch, native compilation and execution, mainframe equivalence,
+production release, and production readiness remain false pending authorized evidence.

@@ -1,4 +1,24 @@
-# Database semantic core and AUTHFRDS proof cell
+# Database semantic adapters and AUTHFRDS proof cell
+
+MS #45 adds a genuine, target-neutral SAP ASE source adapter with deliberately broad semantic
+coverage. Its customer-shaped catalog contains two related tables, 31 columns, four user-defined
+datatypes, two identity columns, five constraints, three indexes, six procedures, four triggers,
+and both `datarows` and `datapages` locking. Discovery, privacy-preserving profiling, exact bounded
+extraction, transaction capabilities, and content-bound replication resume all use the shared
+database semantic-core contracts.
+
+Depth is governed rather than inferred. A 107-entry compatibility ledger uses all five classes
+(`exact`, `normalized-equivalent`, `policy-decision-required`, `lossy`, and `unsupported`), while a
+187-case deterministic corpus covers the ASE type system, UDTs, money and datetime boundaries,
+empty-string and character behavior, `IDENTITY`, locking and rollback, replication order and
+resume, Transact-SQL, stored procedures, and triggers. Twelve independent gates fail closed if the
+catalog, classifications, corpus, adapter contracts, receipt bindings, or safety boundaries drift.
+
+This is a source-adapter and semantic-loss qualification, not a completed migration. No target is
+selected. Live ASE catalog, data, log, locking, transaction, or native stored-logic evidence is not
+present; ASE-to-PostgreSQL and ASE-to-Oracle remain future pilot qualifications. Stored-logic
+inventory is deep, but native stored-logic equivalence, arbitrary application SQL, full database
+migration, cutover, and production readiness remain false.
 
 MS #43 adds a genuine Oracle source adapter and a separately gated stored-procedure subset. Four
 declared PL/SQL procedures are inventoried, translated to bounded PL/pgSQL, and exercised through
@@ -65,6 +85,8 @@ PYTHONPATH=src python3 -m lightyear_data verify-oracle-postgresql-proof
 PYTHONPATH=src python3 -m lightyear_data verify-stored-logic-qualification
 PYTHONPATH=src python3 -m lightyear_data verify-db2-semantic-adapter
 PYTHONPATH=src python3 -m lightyear_data verify-oracle-source-qualification
+PYTHONPATH=src python3 -m lightyear_data verify-sap-ase-source-adapter --project-root .
+./data-modernization.sh ase-source
 ./migration-rehearsal.sh verify /path/to/aws-carddemo
 ```
 
@@ -75,6 +97,7 @@ Windows PowerShell:
 .\data-modernization.ps1 live-postgres
 .\data-modernization.ps1 live-oracle
 .\data-modernization.ps1 live-all
+.\data-modernization.ps1 ase-source
 .\migration-rehearsal.ps1 verify C:\path\to\aws-carddemo
 ```
 
@@ -116,3 +139,5 @@ data profiling.
 | Database semantic core | Canonical types, adapters, profiling, transformations, rows, comparisons, CDC, cutover/rollback, and conformance passed |
 | Compatibility ledger | 52 column mappings plus behavioral boundaries; unresolved policy decisions block equivalence |
 | Stored logic | Four declared procedures pass a bounded separate qualification; triggers, arbitrary application SQL, live catalog completeness, native equivalence, security and operability remain open |
+| SAP ASE source adapter | Two-table, 31-column catalog; 107 classified semantic entries; 187 deterministic cases; source-only development qualification |
+| SAP ASE stored logic | Six procedures and four triggers inventoried and classified; native execution and migration equivalence remain open |

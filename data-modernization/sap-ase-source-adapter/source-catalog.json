@@ -1,0 +1,429 @@
+{
+  "catalog_observed": false,
+  "catalog_type": "lightyear-sap-ase-source-catalog",
+  "content_sha256": "16cf4c688c00d98f9cbacd6492969cace35745eeb705d68f9617cafa5c6e2e6b",
+  "database": "CARDDEMO",
+  "default_charset": "utf8",
+  "owner": "dbo",
+  "production_ready": false,
+  "schema_version": "1.0",
+  "server_version": "16.x-bounded-contract",
+  "sort_order": "binary",
+  "stored_logic": [
+    {
+      "features": [
+        "select-assignment",
+        "return-status",
+        "output-parameter"
+      ],
+      "kind": "procedure",
+      "name": "sp_get_auth"
+    },
+    {
+      "features": [
+        "explicit-transaction",
+        "rowcount-global",
+        "raiserror"
+      ],
+      "kind": "procedure",
+      "name": "sp_set_fraud"
+    },
+    {
+      "features": [
+        "money-arithmetic",
+        "case-expression"
+      ],
+      "kind": "procedure",
+      "name": "sp_money_band"
+    },
+    {
+      "features": [
+        "temp-table",
+        "select-into"
+      ],
+      "kind": "procedure",
+      "name": "sp_temp_rollup"
+    },
+    {
+      "features": [
+        "dynamic-exec"
+      ],
+      "kind": "procedure",
+      "name": "sp_dynamic_reconcile"
+    },
+    {
+      "features": [
+        "remote-server-access"
+      ],
+      "kind": "procedure",
+      "name": "sp_remote_lookup"
+    },
+    {
+      "features": [
+        "inserted-deleted-tables",
+        "multirow-trigger"
+      ],
+      "kind": "trigger",
+      "name": "tr_auth_audit"
+    },
+    {
+      "features": [
+        "trigger-rollback",
+        "raiserror"
+      ],
+      "kind": "trigger",
+      "name": "tr_auth_reject"
+    },
+    {
+      "features": [
+        "identity-global",
+        "inserted-deleted-tables"
+      ],
+      "kind": "trigger",
+      "name": "tr_identity_capture"
+    },
+    {
+      "features": [
+        "nested-trigger",
+        "recursive-trigger"
+      ],
+      "kind": "trigger",
+      "name": "tr_nested_audit"
+    }
+  ],
+  "tables": [
+    {
+      "columns": [
+        {
+          "identity": {
+            "increment": 5,
+            "seed": 1000
+          },
+          "name": "AUTH_ID",
+          "nullable": false,
+          "ordinal": 1,
+          "precision": 18,
+          "scale": 0,
+          "source_type": "numeric"
+        },
+        {
+          "name": "CARD_NUM",
+          "nullable": false,
+          "ordinal": 2,
+          "source_type": "card_number"
+        },
+        {
+          "name": "AUTH_AMT",
+          "nullable": true,
+          "ordinal": 3,
+          "source_type": "money_amount"
+        },
+        {
+          "name": "FEE_AMT",
+          "nullable": false,
+          "ordinal": 4,
+          "source_type": "smallmoney"
+        },
+        {
+          "name": "EVENT_DT",
+          "nullable": false,
+          "ordinal": 5,
+          "source_type": "datetime"
+        },
+        {
+          "name": "SETTLE_DT",
+          "nullable": true,
+          "ordinal": 6,
+          "source_type": "smalldatetime"
+        },
+        {
+          "name": "EVENT_TS",
+          "nullable": false,
+          "ordinal": 7,
+          "source_type": "event_instant"
+        },
+        {
+          "name": "EVENT_TIME",
+          "nullable": true,
+          "ordinal": 8,
+          "source_type": "bigtime"
+        },
+        {
+          "name": "BUSINESS_DATE",
+          "nullable": false,
+          "ordinal": 9,
+          "source_type": "date"
+        },
+        {
+          "name": "STATUS",
+          "nullable": false,
+          "ordinal": 10,
+          "source_type": "fraud_flag"
+        },
+        {
+          "length": 80,
+          "name": "MERCHANT_TEXT",
+          "nullable": true,
+          "ordinal": 11,
+          "source_type": "univarchar"
+        },
+        {
+          "length": 4,
+          "name": "FIXED_CODE",
+          "nullable": false,
+          "ordinal": 12,
+          "source_type": "char"
+        },
+        {
+          "length": 64,
+          "name": "REASON",
+          "nullable": true,
+          "ordinal": 13,
+          "source_type": "varchar"
+        },
+        {
+          "name": "RAW_VERSION",
+          "nullable": false,
+          "ordinal": 14,
+          "source_type": "timestamp"
+        },
+        {
+          "length": 256,
+          "name": "PAYLOAD",
+          "nullable": true,
+          "ordinal": 15,
+          "source_type": "varbinary"
+        },
+        {
+          "name": "NOTES",
+          "nullable": true,
+          "ordinal": 16,
+          "source_type": "text"
+        },
+        {
+          "name": "NATIVE_NOTES",
+          "nullable": true,
+          "ordinal": 17,
+          "source_type": "unitext"
+        },
+        {
+          "name": "IMAGE_DATA",
+          "nullable": true,
+          "ordinal": 18,
+          "source_type": "image"
+        },
+        {
+          "name": "ACTIVE",
+          "nullable": false,
+          "ordinal": 19,
+          "source_type": "bit"
+        },
+        {
+          "name": "TINY_SCORE",
+          "nullable": false,
+          "ordinal": 20,
+          "source_type": "tinyint"
+        },
+        {
+          "name": "RETRY_COUNT",
+          "nullable": false,
+          "ordinal": 21,
+          "source_type": "smallint"
+        },
+        {
+          "name": "RISK_CODE",
+          "nullable": false,
+          "ordinal": 22,
+          "source_type": "int"
+        },
+        {
+          "name": "EVENT_COUNT",
+          "nullable": false,
+          "ordinal": 23,
+          "source_type": "bigint"
+        },
+        {
+          "name": "TAX_RATE",
+          "nullable": true,
+          "ordinal": 24,
+          "precision": 9,
+          "scale": 6,
+          "source_type": "decimal"
+        },
+        {
+          "name": "UNSIGNED_COUNT",
+          "nullable": false,
+          "ordinal": 25,
+          "source_type": "unsigned int"
+        },
+        {
+          "name": "FLOAT_SCORE",
+          "nullable": true,
+          "ordinal": 26,
+          "precision": 53,
+          "source_type": "float"
+        }
+      ],
+      "constraints": [
+        {
+          "columns": [
+            "AUTH_ID"
+          ],
+          "kind": "primary-key",
+          "name": "PK_AUTHFRDS_ASE"
+        },
+        {
+          "columns": [
+            "CARD_NUM",
+            "EVENT_TS"
+          ],
+          "kind": "unique",
+          "name": "UQ_AUTHFRDS_CARD_TIME"
+        },
+        {
+          "expression": "STATUS in ('N','Y')",
+          "kind": "check",
+          "name": "CK_AUTHFRDS_STATUS"
+        }
+      ],
+      "indexes": [
+        {
+          "clustered": false,
+          "columns": [
+            {
+              "direction": "asc",
+              "name": "CARD_NUM"
+            }
+          ],
+          "name": "IX_AUTHFRDS_CARD",
+          "unique": false
+        },
+        {
+          "clustered": true,
+          "columns": [
+            {
+              "direction": "desc",
+              "name": "EVENT_TS"
+            },
+            {
+              "direction": "asc",
+              "name": "AUTH_ID"
+            }
+          ],
+          "name": "IX_AUTHFRDS_EVENT",
+          "unique": false
+        }
+      ],
+      "locking_scheme": "datarows",
+      "name": "AUTHFRDS_ASE"
+    },
+    {
+      "columns": [
+        {
+          "identity": {
+            "increment": 1,
+            "seed": 1
+          },
+          "name": "AUDIT_ID",
+          "nullable": false,
+          "ordinal": 1,
+          "precision": 18,
+          "scale": 0,
+          "source_type": "numeric"
+        },
+        {
+          "name": "AUTH_ID",
+          "nullable": false,
+          "ordinal": 2,
+          "precision": 18,
+          "scale": 0,
+          "source_type": "numeric"
+        },
+        {
+          "length": 12,
+          "name": "ACTION_CODE",
+          "nullable": false,
+          "ordinal": 3,
+          "source_type": "varchar"
+        },
+        {
+          "name": "ACTION_TS",
+          "nullable": false,
+          "ordinal": 4,
+          "source_type": "bigdatetime"
+        },
+        {
+          "length": 30,
+          "name": "LOGIN_NAME",
+          "nullable": false,
+          "ordinal": 5,
+          "source_type": "varchar"
+        }
+      ],
+      "constraints": [
+        {
+          "columns": [
+            "AUDIT_ID"
+          ],
+          "kind": "primary-key",
+          "name": "PK_AUTH_AUDIT_ASE"
+        },
+        {
+          "columns": [
+            "AUTH_ID"
+          ],
+          "kind": "foreign-key",
+          "name": "FK_AUDIT_AUTH",
+          "references": "dbo.AUTHFRDS_ASE(AUTH_ID)"
+        }
+      ],
+      "indexes": [
+        {
+          "clustered": false,
+          "columns": [
+            {
+              "direction": "asc",
+              "name": "AUTH_ID"
+            }
+          ],
+          "name": "IX_AUDIT_AUTH",
+          "unique": false
+        }
+      ],
+      "locking_scheme": "datapages",
+      "name": "AUTH_AUDIT_ASE"
+    }
+  ],
+  "user_defined_types": [
+    {
+      "base_type": "varchar",
+      "bound_default": null,
+      "bound_rule": "rule_card_number",
+      "length": 19,
+      "name": "card_number",
+      "nullable": false
+    },
+    {
+      "base_type": "money",
+      "bound_default": "default_zero_money",
+      "bound_rule": null,
+      "name": "money_amount",
+      "nullable": true
+    },
+    {
+      "base_type": "char",
+      "bound_default": "default_fraud_flag",
+      "bound_rule": "rule_fraud_flag",
+      "length": 1,
+      "name": "fraud_flag",
+      "nullable": false
+    },
+    {
+      "base_type": "bigdatetime",
+      "bound_default": "default_event_instant",
+      "bound_rule": null,
+      "name": "event_instant",
+      "nullable": false
+    }
+  ]
+}

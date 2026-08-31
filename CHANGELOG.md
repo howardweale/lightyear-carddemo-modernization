@@ -1,5 +1,39 @@
 # Changelog
 
+## 0.45.0 — 2026-08-31
+
+- Added a target-neutral SAP ASE `SourceAdapter` implementing schema discovery, privacy-preserving
+  profiles, sealed extraction contracts, content-bound replication resume, and explicit transaction
+  and locking capabilities without selecting PostgreSQL or Oracle prematurely.
+- Added a customer-shaped ASE catalog with 2 tables, 31 columns, 4 user-defined datatypes, 2 identity
+  columns, 5 constraints, 3 indexes, multiple locking schemes, 6 procedures, and 4 triggers.
+- Added a 187-case executable corpus with depth across types and UDTs, identity, money/exact numeric,
+  datetime/time, empty strings and character semantics, Transact-SQL and stored logic, locking and
+  rollback, and replication ordering/resume.
+- Added a 107-entry five-class compatibility ledger covering every discovered column, UDT,
+  constraint, index, stored-logic object, and 54 declared ASE behaviors. Unsafe policy and loss
+  decisions remain unresolved; unsupported behavior is excluded from the claim scope.
+- Added twelve separate qualification gates, five frozen JSON Schemas, ten content-addressed evidence
+  artifacts, POSIX and PowerShell verification paths, adversarial overclaim tests, and extensive
+  customer-readable documentation.
+- Kept live ASE observation, native stored-logic execution, target selection, target migration
+  qualification, stored-logic completion, database-migration completion, and production readiness
+  false pending a real pilot and authorized native evidence.
+
+## 0.44.1 — 2026-08-31
+
+- Replaced the Markdown-only milestone browsing experience with a responsive, client-side index
+  that searches milestone number, title, customer value, capability, boundary, release, and roadmap
+  phase without sending search text to a server.
+- Replaced context-dependent relative links with absolute GitHub links for Markdown and PDF and
+  direct-download links for Microsoft Word so the format links work from GitHub, ChatGPT previews,
+  copied documents, and the published index.
+- Added GitHub Pages publication, URL-backed filter state, keyboard search controls, responsive
+  mobile presentation, result counts, empty-state guidance, and regression tests for all 132 format
+  targets.
+- Extended the content manifest and fail-closed verifier to govern the Markdown and HTML index files
+  alongside the 132 milestone artifacts.
+
 ## 0.44.0 — 2026-08-31
 
 - Added a governed customer-readable documentation library for MS #1 through MS #44 with one

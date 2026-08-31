@@ -1,0 +1,803 @@
+{
+  "adapter": {
+    "id": "lightyear-sap-ase-source",
+    "version": "1.0"
+  },
+  "catalog_observed": false,
+  "catalog_sha256": "16cf4c688c00d98f9cbacd6492969cace35745eeb705d68f9617cafa5c6e2e6b",
+  "content_sha256": "d2ecbe354b474cfe3273700c8d0810fd8ab358fd79298a09701f4a19118e86bf",
+  "database": "CARDDEMO",
+  "dialect": "sap-ase-16",
+  "discovery_type": "lightyear-sap-ase-source-schema-discovery",
+  "evidence_class": "bounded-catalog-contract",
+  "owner": "dbo",
+  "production_ready": false,
+  "schema_version": "1.0",
+  "stored_logic": [
+    {
+      "analysis_type": "lightyear-sap-ase-stored-logic-analysis",
+      "classification": "normalized-equivalent",
+      "content_sha256": "392c7dae7ff39bb363ab6a0ea4af0c2f7ad2144ac9141c5f825234bb6f525be4",
+      "decision": "governed-normalization",
+      "features": [
+        {
+          "classification": "normalized-equivalent",
+          "evidence_required": [
+            "zero-one-many-row-cases"
+          ],
+          "feature": "select-assignment",
+          "rationale": "SELECT assignment is translated when cardinality and last-row behavior are explicit."
+        },
+        {
+          "classification": "normalized-equivalent",
+          "evidence_required": [
+            "call-contract"
+          ],
+          "feature": "return-status",
+          "rationale": "Integer return status can be represented separately from result sets and output parameters."
+        },
+        {
+          "classification": "normalized-equivalent",
+          "evidence_required": [
+            "parameter-contract"
+          ],
+          "feature": "output-parameter",
+          "rationale": "Output parameters are preserved with explicit direction and type metadata."
+        }
+      ],
+      "kind": "procedure",
+      "name": "sp_get_auth",
+      "native_execution_observed": false,
+      "production_ready": false,
+      "schema_version": "1.0"
+    },
+    {
+      "analysis_type": "lightyear-sap-ase-stored-logic-analysis",
+      "classification": "policy-decision-required",
+      "content_sha256": "213f42752a45999844d7b08e9529436aa67cf7f9f6f2e6b8361b33d22e06e2c9",
+      "decision": "unresolved",
+      "features": [
+        {
+          "classification": "normalized-equivalent",
+          "evidence_required": [
+            "transaction-case-corpus"
+          ],
+          "feature": "explicit-transaction",
+          "rationale": "Explicit begin, commit, and rollback are represented under a declared chained-mode policy."
+        },
+        {
+          "classification": "policy-decision-required",
+          "evidence_required": [
+            "statement-sequence-cases"
+          ],
+          "feature": "rowcount-global",
+          "rationale": "@@rowcount is session-global and sensitive to intervening statements."
+        },
+        {
+          "classification": "policy-decision-required",
+          "evidence_required": [
+            "error-class-corpus"
+          ],
+          "feature": "raiserror",
+          "rationale": "Error number, severity, state, transaction effect, and message require mapping."
+        }
+      ],
+      "kind": "procedure",
+      "name": "sp_set_fraud",
+      "native_execution_observed": false,
+      "production_ready": false,
+      "schema_version": "1.0"
+    },
+    {
+      "analysis_type": "lightyear-sap-ase-stored-logic-analysis",
+      "classification": "unsupported",
+      "content_sha256": "438c7f613a9c2fbf97ac6287bc11edaecc873e3895fd9b839a4e3fff8518a285",
+      "decision": "excluded-from-claim-scope",
+      "features": [
+        {
+          "classification": "unsupported",
+          "evidence_required": [
+            "inventory-and-separate-qualification"
+          ],
+          "feature": "money-arithmetic",
+          "rationale": "Feature is outside the declared ASE semantic inventory."
+        },
+        {
+          "classification": "exact",
+          "evidence_required": [
+            "branch-corpus"
+          ],
+          "feature": "case-expression",
+          "rationale": "The bounded CASE expression preserves declared result typing."
+        }
+      ],
+      "kind": "procedure",
+      "name": "sp_money_band",
+      "native_execution_observed": false,
+      "production_ready": false,
+      "schema_version": "1.0"
+    },
+    {
+      "analysis_type": "lightyear-sap-ase-stored-logic-analysis",
+      "classification": "policy-decision-required",
+      "content_sha256": "d858291f292d8d8e9daae64c4d5888480e99a6ca73f6366bce3fb936e1a37ed2",
+      "decision": "unresolved",
+      "features": [
+        {
+          "classification": "policy-decision-required",
+          "evidence_required": [
+            "tempdb-behavior-probes"
+          ],
+          "feature": "temp-table",
+          "rationale": "Session-scoped temp tables require lifetime, indexing, and transaction tests."
+        },
+        {
+          "classification": "policy-decision-required",
+          "evidence_required": [
+            "ddl-transaction-probes"
+          ],
+          "feature": "select-into",
+          "rationale": "SELECT INTO combines data movement with object creation and logging behavior."
+        }
+      ],
+      "kind": "procedure",
+      "name": "sp_temp_rollup",
+      "native_execution_observed": false,
+      "production_ready": false,
+      "schema_version": "1.0"
+    },
+    {
+      "analysis_type": "lightyear-sap-ase-stored-logic-analysis",
+      "classification": "unsupported",
+      "content_sha256": "fe084bc6beabec8d70145cdbaa8f17a74c7ea3379907c62847bfeb6af3515465",
+      "decision": "excluded-from-claim-scope",
+      "features": [
+        {
+          "classification": "unsupported",
+          "evidence_required": [
+            "runtime-sql-inventory"
+          ],
+          "feature": "dynamic-exec",
+          "rationale": "Arbitrary dynamic SQL is not statically qualified."
+        }
+      ],
+      "kind": "procedure",
+      "name": "sp_dynamic_reconcile",
+      "native_execution_observed": false,
+      "production_ready": false,
+      "schema_version": "1.0"
+    },
+    {
+      "analysis_type": "lightyear-sap-ase-stored-logic-analysis",
+      "classification": "unsupported",
+      "content_sha256": "74d66315247f4cae7ef7312a96108b5a6c6c82436d857184108b4d5c50338a9b",
+      "decision": "excluded-from-claim-scope",
+      "features": [
+        {
+          "classification": "unsupported",
+          "evidence_required": [
+            "remote-dependency-inventory"
+          ],
+          "feature": "remote-server-access",
+          "rationale": "Remote server and proxy-table behavior requires a separate distributed transaction qualification."
+        }
+      ],
+      "kind": "procedure",
+      "name": "sp_remote_lookup",
+      "native_execution_observed": false,
+      "production_ready": false,
+      "schema_version": "1.0"
+    },
+    {
+      "analysis_type": "lightyear-sap-ase-stored-logic-analysis",
+      "classification": "policy-decision-required",
+      "content_sha256": "da192d6717fd9d33ba516a776062a0bdd2465340848f30261c7f8389c281a7d1",
+      "decision": "unresolved",
+      "features": [
+        {
+          "classification": "normalized-equivalent",
+          "evidence_required": [
+            "multirow-trigger-corpus"
+          ],
+          "feature": "inserted-deleted-tables",
+          "rationale": "Statement transition tables can be represented when multi-row behavior is retained."
+        },
+        {
+          "classification": "policy-decision-required",
+          "evidence_required": [
+            "one-many-row-trigger-cases"
+          ],
+          "feature": "multirow-trigger",
+          "rationale": "Scalar trigger assumptions can silently fail for multi-row statements."
+        }
+      ],
+      "kind": "trigger",
+      "name": "tr_auth_audit",
+      "native_execution_observed": false,
+      "production_ready": false,
+      "schema_version": "1.0"
+    },
+    {
+      "analysis_type": "lightyear-sap-ase-stored-logic-analysis",
+      "classification": "policy-decision-required",
+      "content_sha256": "f4090f71b252e56a428cbacd3fcc1dcfc8d98329f2b5a64d898a2c4ae67c2265",
+      "decision": "unresolved",
+      "features": [
+        {
+          "classification": "policy-decision-required",
+          "evidence_required": [
+            "trigger-transaction-probes"
+          ],
+          "feature": "trigger-rollback",
+          "rationale": "Trigger rollback and error propagation must be compared with the selected target."
+        },
+        {
+          "classification": "policy-decision-required",
+          "evidence_required": [
+            "error-class-corpus"
+          ],
+          "feature": "raiserror",
+          "rationale": "Error number, severity, state, transaction effect, and message require mapping."
+        }
+      ],
+      "kind": "trigger",
+      "name": "tr_auth_reject",
+      "native_execution_observed": false,
+      "production_ready": false,
+      "schema_version": "1.0"
+    },
+    {
+      "analysis_type": "lightyear-sap-ase-stored-logic-analysis",
+      "classification": "policy-decision-required",
+      "content_sha256": "dcf333e620b90eca3b3747d13bf90ecbfd06e0ffc64804808e6c2d57355b8ac2",
+      "decision": "unresolved",
+      "features": [
+        {
+          "classification": "policy-decision-required",
+          "evidence_required": [
+            "trigger-call-graph",
+            "identity-return-policy"
+          ],
+          "feature": "identity-global",
+          "rationale": "Global identity functions can be changed by trigger-side inserts."
+        },
+        {
+          "classification": "normalized-equivalent",
+          "evidence_required": [
+            "multirow-trigger-corpus"
+          ],
+          "feature": "inserted-deleted-tables",
+          "rationale": "Statement transition tables can be represented when multi-row behavior is retained."
+        }
+      ],
+      "kind": "trigger",
+      "name": "tr_identity_capture",
+      "native_execution_observed": false,
+      "production_ready": false,
+      "schema_version": "1.0"
+    },
+    {
+      "analysis_type": "lightyear-sap-ase-stored-logic-analysis",
+      "classification": "unsupported",
+      "content_sha256": "8bfe91bd0fb85d23f41e01188e1da5515e74811c13047e8d42f610990c7790b4",
+      "decision": "excluded-from-claim-scope",
+      "features": [
+        {
+          "classification": "policy-decision-required",
+          "evidence_required": [
+            "configuration-capture",
+            "trigger-order-cases"
+          ],
+          "feature": "nested-trigger",
+          "rationale": "Nested trigger enablement and ordering are server configuration and workload dependent."
+        },
+        {
+          "classification": "unsupported",
+          "evidence_required": [
+            "separate-recursion-qualification"
+          ],
+          "feature": "recursive-trigger",
+          "rationale": "Recursive trigger behavior is excluded from the bounded adapter claim."
+        }
+      ],
+      "kind": "trigger",
+      "name": "tr_nested_audit",
+      "native_execution_observed": false,
+      "production_ready": false,
+      "schema_version": "1.0"
+    }
+  ],
+  "tables": [
+    {
+      "columns": [
+        {
+          "canonical_type": {
+            "identity": {
+              "increment": 5,
+              "seed": 1000
+            },
+            "kind": "exact-decimal",
+            "nullable": false,
+            "precision": 18,
+            "scale": 0
+          },
+          "name": "AUTH_ID",
+          "ordinal": 1,
+          "source_type": "numeric"
+        },
+        {
+          "canonical_type": {
+            "domain": {
+              "base_type": "varchar",
+              "bound_default": null,
+              "bound_rule": "rule_card_number",
+              "name": "card_number"
+            },
+            "encoding": "server-charset-policy",
+            "kind": "variable-character",
+            "length": 19,
+            "nullable": false
+          },
+          "name": "CARD_NUM",
+          "ordinal": 2,
+          "source_type": "card_number"
+        },
+        {
+          "canonical_type": {
+            "domain": {
+              "base_type": "money",
+              "bound_default": "default_zero_money",
+              "bound_rule": null,
+              "name": "money_amount"
+            },
+            "kind": "exact-decimal",
+            "nullable": true,
+            "precision": 19,
+            "scale": 4,
+            "source_range": "ase-money"
+          },
+          "name": "AUTH_AMT",
+          "ordinal": 3,
+          "source_type": "money_amount"
+        },
+        {
+          "canonical_type": {
+            "kind": "exact-decimal",
+            "nullable": false,
+            "precision": 10,
+            "scale": 4,
+            "source_range": "ase-smallmoney"
+          },
+          "name": "FEE_AMT",
+          "ordinal": 4,
+          "source_type": "smallmoney"
+        },
+        {
+          "canonical_type": {
+            "fractional_seconds": 3,
+            "kind": "timestamp",
+            "nullable": false,
+            "source_clock": "datetime",
+            "time_zone": "absent"
+          },
+          "name": "EVENT_DT",
+          "ordinal": 5,
+          "source_type": "datetime"
+        },
+        {
+          "canonical_type": {
+            "fractional_seconds": 0,
+            "kind": "timestamp",
+            "nullable": true,
+            "source_clock": "smalldatetime",
+            "time_zone": "absent"
+          },
+          "name": "SETTLE_DT",
+          "ordinal": 6,
+          "source_type": "smalldatetime"
+        },
+        {
+          "canonical_type": {
+            "domain": {
+              "base_type": "bigdatetime",
+              "bound_default": "default_event_instant",
+              "bound_rule": null,
+              "name": "event_instant"
+            },
+            "fractional_seconds": 6,
+            "kind": "timestamp",
+            "nullable": false,
+            "source_clock": "bigdatetime",
+            "time_zone": "absent"
+          },
+          "name": "EVENT_TS",
+          "ordinal": 7,
+          "source_type": "event_instant"
+        },
+        {
+          "canonical_type": {
+            "fractional_seconds": 6,
+            "kind": "time",
+            "nullable": true,
+            "time_zone": "absent"
+          },
+          "name": "EVENT_TIME",
+          "ordinal": 8,
+          "source_type": "bigtime"
+        },
+        {
+          "canonical_type": {
+            "calendar": "proleptic-gregorian",
+            "kind": "date",
+            "nullable": false
+          },
+          "name": "BUSINESS_DATE",
+          "ordinal": 9,
+          "source_type": "date"
+        },
+        {
+          "canonical_type": {
+            "domain": {
+              "base_type": "char",
+              "bound_default": "default_fraud_flag",
+              "bound_rule": "rule_fraud_flag",
+              "name": "fraud_flag"
+            },
+            "encoding": "server-charset-policy",
+            "kind": "fixed-character",
+            "length": 1,
+            "nullable": false
+          },
+          "name": "STATUS",
+          "ordinal": 10,
+          "source_type": "fraud_flag"
+        },
+        {
+          "canonical_type": {
+            "encoding": "unicode-scalar",
+            "kind": "variable-character",
+            "length": 80,
+            "nullable": true
+          },
+          "name": "MERCHANT_TEXT",
+          "ordinal": 11,
+          "source_type": "univarchar"
+        },
+        {
+          "canonical_type": {
+            "encoding": "server-charset-policy",
+            "kind": "fixed-character",
+            "length": 4,
+            "nullable": false
+          },
+          "name": "FIXED_CODE",
+          "ordinal": 12,
+          "source_type": "char"
+        },
+        {
+          "canonical_type": {
+            "encoding": "server-charset-policy",
+            "kind": "variable-character",
+            "length": 64,
+            "nullable": true
+          },
+          "name": "REASON",
+          "ordinal": 13,
+          "source_type": "varchar"
+        },
+        {
+          "canonical_type": {
+            "ase_timestamp_is_row_version": true,
+            "kind": "fixed-binary",
+            "length": 8,
+            "nullable": false
+          },
+          "name": "RAW_VERSION",
+          "ordinal": 14,
+          "source_type": "timestamp"
+        },
+        {
+          "canonical_type": {
+            "kind": "variable-binary",
+            "length": 256,
+            "nullable": true
+          },
+          "name": "PAYLOAD",
+          "ordinal": 15,
+          "source_type": "varbinary"
+        },
+        {
+          "canonical_type": {
+            "encoding": "server-charset-policy",
+            "kind": "large-text",
+            "nullable": true
+          },
+          "name": "NOTES",
+          "ordinal": 16,
+          "source_type": "text"
+        },
+        {
+          "canonical_type": {
+            "encoding": "unicode-scalar",
+            "kind": "large-text",
+            "nullable": true
+          },
+          "name": "NATIVE_NOTES",
+          "ordinal": 17,
+          "source_type": "unitext"
+        },
+        {
+          "canonical_type": {
+            "kind": "large-binary",
+            "nullable": true
+          },
+          "name": "IMAGE_DATA",
+          "ordinal": 18,
+          "source_type": "image"
+        },
+        {
+          "canonical_type": {
+            "kind": "boolean",
+            "nullable": false
+          },
+          "name": "ACTIVE",
+          "ordinal": 19,
+          "source_type": "bit"
+        },
+        {
+          "canonical_type": {
+            "bits": 8,
+            "kind": "signed-integer",
+            "nullable": false
+          },
+          "name": "TINY_SCORE",
+          "ordinal": 20,
+          "source_type": "tinyint"
+        },
+        {
+          "canonical_type": {
+            "bits": 16,
+            "kind": "signed-integer",
+            "nullable": false
+          },
+          "name": "RETRY_COUNT",
+          "ordinal": 21,
+          "source_type": "smallint"
+        },
+        {
+          "canonical_type": {
+            "bits": 32,
+            "kind": "signed-integer",
+            "nullable": false
+          },
+          "name": "RISK_CODE",
+          "ordinal": 22,
+          "source_type": "int"
+        },
+        {
+          "canonical_type": {
+            "bits": 64,
+            "kind": "signed-integer",
+            "nullable": false
+          },
+          "name": "EVENT_COUNT",
+          "ordinal": 23,
+          "source_type": "bigint"
+        },
+        {
+          "canonical_type": {
+            "kind": "exact-decimal",
+            "nullable": true,
+            "precision": 9,
+            "scale": 6
+          },
+          "name": "TAX_RATE",
+          "ordinal": 24,
+          "source_type": "decimal"
+        },
+        {
+          "canonical_type": {
+            "kind": "exact-decimal",
+            "nullable": false,
+            "precision": 10,
+            "scale": 0,
+            "source_range": "ase-unsigned-int"
+          },
+          "name": "UNSIGNED_COUNT",
+          "ordinal": 25,
+          "source_type": "unsigned int"
+        },
+        {
+          "canonical_type": {
+            "kind": "unsupported",
+            "nullable": true,
+            "reason": "approximate-number-canonical-contract-not-qualified"
+          },
+          "name": "FLOAT_SCORE",
+          "ordinal": 26,
+          "source_type": "float"
+        }
+      ],
+      "constraints": [
+        {
+          "columns": [
+            "AUTH_ID"
+          ],
+          "kind": "primary-key",
+          "name": "PK_AUTHFRDS_ASE"
+        },
+        {
+          "columns": [
+            "CARD_NUM",
+            "EVENT_TS"
+          ],
+          "kind": "unique",
+          "name": "UQ_AUTHFRDS_CARD_TIME"
+        },
+        {
+          "expression": "STATUS in ('N','Y')",
+          "kind": "check",
+          "name": "CK_AUTHFRDS_STATUS"
+        }
+      ],
+      "indexes": [
+        {
+          "clustered": false,
+          "columns": [
+            {
+              "direction": "asc",
+              "name": "CARD_NUM"
+            }
+          ],
+          "name": "IX_AUTHFRDS_CARD",
+          "unique": false
+        },
+        {
+          "clustered": true,
+          "columns": [
+            {
+              "direction": "desc",
+              "name": "EVENT_TS"
+            },
+            {
+              "direction": "asc",
+              "name": "AUTH_ID"
+            }
+          ],
+          "name": "IX_AUTHFRDS_EVENT",
+          "unique": false
+        }
+      ],
+      "locking_scheme": "datarows",
+      "name": "AUTHFRDS_ASE"
+    },
+    {
+      "columns": [
+        {
+          "canonical_type": {
+            "identity": {
+              "increment": 1,
+              "seed": 1
+            },
+            "kind": "exact-decimal",
+            "nullable": false,
+            "precision": 18,
+            "scale": 0
+          },
+          "name": "AUDIT_ID",
+          "ordinal": 1,
+          "source_type": "numeric"
+        },
+        {
+          "canonical_type": {
+            "kind": "exact-decimal",
+            "nullable": false,
+            "precision": 18,
+            "scale": 0
+          },
+          "name": "AUTH_ID",
+          "ordinal": 2,
+          "source_type": "numeric"
+        },
+        {
+          "canonical_type": {
+            "encoding": "server-charset-policy",
+            "kind": "variable-character",
+            "length": 12,
+            "nullable": false
+          },
+          "name": "ACTION_CODE",
+          "ordinal": 3,
+          "source_type": "varchar"
+        },
+        {
+          "canonical_type": {
+            "fractional_seconds": 6,
+            "kind": "timestamp",
+            "nullable": false,
+            "source_clock": "bigdatetime",
+            "time_zone": "absent"
+          },
+          "name": "ACTION_TS",
+          "ordinal": 4,
+          "source_type": "bigdatetime"
+        },
+        {
+          "canonical_type": {
+            "encoding": "server-charset-policy",
+            "kind": "variable-character",
+            "length": 30,
+            "nullable": false
+          },
+          "name": "LOGIN_NAME",
+          "ordinal": 5,
+          "source_type": "varchar"
+        }
+      ],
+      "constraints": [
+        {
+          "columns": [
+            "AUDIT_ID"
+          ],
+          "kind": "primary-key",
+          "name": "PK_AUTH_AUDIT_ASE"
+        },
+        {
+          "columns": [
+            "AUTH_ID"
+          ],
+          "kind": "foreign-key",
+          "name": "FK_AUDIT_AUTH",
+          "references": "dbo.AUTHFRDS_ASE(AUTH_ID)"
+        }
+      ],
+      "indexes": [
+        {
+          "clustered": false,
+          "columns": [
+            {
+              "direction": "asc",
+              "name": "AUTH_ID"
+            }
+          ],
+          "name": "IX_AUDIT_AUTH",
+          "unique": false
+        }
+      ],
+      "locking_scheme": "datapages",
+      "name": "AUTH_AUDIT_ASE"
+    }
+  ],
+  "user_defined_types": [
+    {
+      "base_type": "varchar",
+      "bound_default": null,
+      "bound_rule": "rule_card_number",
+      "length": 19,
+      "name": "card_number",
+      "nullable": false
+    },
+    {
+      "base_type": "money",
+      "bound_default": "default_zero_money",
+      "bound_rule": null,
+      "name": "money_amount",
+      "nullable": true
+    },
+    {
+      "base_type": "char",
+      "bound_default": "default_fraud_flag",
+      "bound_rule": "rule_fraud_flag",
+      "length": 1,
+      "name": "fraud_flag",
+      "nullable": false
+    },
+    {
+      "base_type": "bigdatetime",
+      "bound_default": "default_event_instant",
+      "bound_rule": null,
+      "name": "event_instant",
+      "nullable": false
+    }
+  ]
+}

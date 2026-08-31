@@ -1,0 +1,65 @@
+{
+  "catalog_sha256": "16cf4c688c00d98f9cbacd6492969cace35745eeb705d68f9617cafa5c6e2e6b",
+  "content_sha256": "7a5e3c6bab17b95c05ef1a1fe229684a166bc443e2fbce366d1cefdb298dff26",
+  "contract_type": "lightyear-sap-ase-data-profile",
+  "production_ready": false,
+  "profile_observed": false,
+  "raw_values_persisted": false,
+  "required_metrics": [
+    "row_count",
+    "null_count",
+    "distinct_count",
+    "empty_string_count",
+    "single_space_count",
+    "trailing_space_count",
+    "invalid_encoding_count",
+    "minimum",
+    "maximum",
+    "decimal_overflow_count",
+    "timestamp_precision_observed"
+  ],
+  "schema_version": "1.0",
+  "tables": [
+    {
+      "columns": [
+        "AUTH_ID",
+        "CARD_NUM",
+        "AUTH_AMT",
+        "FEE_AMT",
+        "EVENT_DT",
+        "SETTLE_DT",
+        "EVENT_TS",
+        "EVENT_TIME",
+        "BUSINESS_DATE",
+        "STATUS",
+        "MERCHANT_TEXT",
+        "FIXED_CODE",
+        "REASON",
+        "RAW_VERSION",
+        "PAYLOAD",
+        "NOTES",
+        "NATIVE_NOTES",
+        "IMAGE_DATA",
+        "ACTIVE",
+        "TINY_SCORE",
+        "RETRY_COUNT",
+        "RISK_CODE",
+        "EVENT_COUNT",
+        "TAX_RATE",
+        "UNSIGNED_COUNT",
+        "FLOAT_SCORE"
+      ],
+      "name": "AUTHFRDS_ASE"
+    },
+    {
+      "columns": [
+        "AUDIT_ID",
+        "AUTH_ID",
+        "ACTION_CODE",
+        "ACTION_TS",
+        "LOGIN_NAME"
+      ],
+      "name": "AUTH_AUDIT_ASE"
+    }
+  ]
+}

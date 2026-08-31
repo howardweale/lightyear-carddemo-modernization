@@ -8,6 +8,7 @@ from pathlib import Path
 from lightyear_common.io import write_json
 
 from .builder import build_assets, load_assets
+from .ase import build_ase_artifacts, validate_ase_qualification
 from .contracts import seal, sign
 from .db2 import Db2SourceAdapter, build_db2_source_ledger, db2_source_conformance_receipt
 from .equivalence import offline_equivalence
@@ -80,6 +81,11 @@ def parser() -> argparse.ArgumentParser:
     oracle_source.add_argument("--output-root", type=Path)
     verify_oracle_source = commands.add_parser("verify-oracle-source-qualification")
     verify_oracle_source.add_argument("--project-root", type=Path, default=Path("."))
+    ase_source = commands.add_parser("build-sap-ase-source-adapter")
+    ase_source.add_argument("--project-root", type=Path, default=Path("."))
+    ase_source.add_argument("--output-root", type=Path)
+    verify_ase_source = commands.add_parser("verify-sap-ase-source-adapter")
+    verify_ase_source.add_argument("--project-root", type=Path, default=Path("."))
     return root
 
 
@@ -245,6 +251,39 @@ def main(argv: list[str] | None = None) -> int:
             "supported_procedure_subset_qualified": qualification["supported_procedure_subset_qualified"],
             "database_migration_complete": False,
             "stored_logic_complete": False,
+            "production_ready": False,
+        }
+    elif args.command in {"build-sap-ase-source-adapter", "verify-sap-ase-source-adapter"}:
+        project_root = args.project_root.resolve()
+        expected = build_ase_artifacts()
+        output_root = (
+            args.output_root.resolve()
+            if args.command == "build-sap-ase-source-adapter" and args.output_root
+            else project_root / "data-modernization/sap-ase-source-adapter"
+        )
+        errors = []
+        if args.command == "build-sap-ase-source-adapter":
+            for name, payload in expected.items():
+                write_json(output_root / name, payload)
+        else:
+            for name, payload in expected.items():
+                path = output_root / name
+                if not path.is_file() or json.loads(path.read_text(encoding="utf-8")) != payload:
+                    errors.append(f"sap-ase-source-adapter-drift:{name}")
+            errors.extend(validate_ase_qualification(expected["qualification.json"]))
+        qualification = expected["qualification.json"]
+        result = {
+            "status": "passed" if not errors else "failed",
+            "errors": sorted(set(errors)),
+            "output_root": str(output_root),
+            "qualification_sha256": qualification["content_sha256"],
+            "source_adapter_qualified": qualification["source_adapter_qualified"],
+            "conformance_cases": expected["conformance-corpus.json"]["case_count"],
+            "target_selected": False,
+            "target_migration_qualified": False,
+            "live_ase_observed": False,
+            "stored_logic_complete": False,
+            "database_migration_complete": False,
             "production_ready": False,
         }
     else:

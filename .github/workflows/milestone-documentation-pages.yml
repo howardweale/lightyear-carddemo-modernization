@@ -1,0 +1,72 @@
+name: Publish milestone documentation
+
+on:
+  pull_request:
+    paths:
+      - "docs/milestones/**"
+      - "tools/generate_milestone_documentation.py"
+      - "milestone-documentation.*"
+      - ".github/workflows/milestone-documentation-pages.yml"
+  push:
+    branches: [main]
+    paths:
+      - "docs/milestones/**"
+      - "tools/generate_milestone_documentation.py"
+      - "milestone-documentation.*"
+      - ".github/workflows/milestone-documentation-pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: milestone-documentation-pages
+  cancel-in-progress: false
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Verify documentation and index
+        run: |
+          ./milestone-documentation.sh verify
+          PYTHONPATH=src python3 -m unittest tests.test_milestone_documentation -v
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: validate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Upload documentation site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: docs
+
+      - name: Deploy documentation site
+        id: deployment
+        uses: actions/deploy-pages@v4

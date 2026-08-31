@@ -1,0 +1,1840 @@
+{
+  "case_count": 187,
+  "cases": [
+    {
+      "category": "type-system",
+      "expected": "boolean",
+      "id": "type-001",
+      "input": {
+        "source_type": "bit"
+      },
+      "observed": "boolean",
+      "status": "passed"
+    },
+    {
+      "category": "type-system",
+      "expected": "signed-integer",
+      "id": "type-002",
+      "input": {
+        "source_type": "tinyint"
+      },
+      "observed": "signed-integer",
+      "status": "passed"
+    },
+    {
+      "category": "type-system",
+      "expected": "signed-integer",
+      "id": "type-003",
+      "input": {
+        "source_type": "smallint"
+      },
+      "observed": "signed-integer",
+      "status": "passed"
+    },
+    {
+      "category": "type-system",
+      "expected": "signed-integer",
+      "id": "type-004",
+      "input": {
+        "source_type": "int"
+      },
+      "observed": "signed-integer",
+      "status": "passed"
+    },
+    {
+      "category": "type-system",
+      "expected": "signed-integer",
+      "id": "type-005",
+      "input": {
+        "source_type": "integer"
+      },
+      "observed": "signed-integer",
+      "status": "passed"
+    },
+    {
+      "category": "type-system",
+      "expected": "signed-integer",
+      "id": "type-006",
+      "input": {
+        "source_type": "bigint"
+      },
+      "observed": "signed-integer",
+      "status": "passed"
+    },
+    {
+      "category": "type-system",
+      "expected": "exact-decimal",
+      "id": "type-007",
+      "input": {
+        "source_type": "unsigned int"
+      },
+      "observed": "exact-decimal",
+      "status": "passed"
+    },
+    {
+      "category": "type-system",
+      "expected": "exact-decimal",
+      "id": "type-008",
+      "input": {
+        "precision": 18,
+        "scale": 0,
+        "source_type": "numeric"
+      },
+      "observed": "exact-decimal",
+      "status": "passed"
+    },
+    {
+      "category": "type-system",
+      "expected": "exact-decimal",
+      "id": "type-009",
+      "input": {
+        "precision": 38,
+        "scale": 12,
+        "source_type": "decimal"
+      },
+      "observed": "exact-decimal",
+      "status": "passed"
+    },
+    {
+      "category": "type-system",
+      "expected": "exact-decimal",
+      "id": "type-010",
+      "input": {
+        "source_type": "money"
+      },
+      "observed": "exact-decimal",
+      "status": "passed"
+    },
+    {
+      "category": "type-system",
+      "expected": "exact-decimal",
+      "id": "type-011",
+      "input": {
+        "source_type": "smallmoney"
+      },
+      "observed": "exact-decimal",
+      "status": "passed"
+    },
+    {
+      "category": "type-system",
+      "expected": "fixed-character",
+      "id": "type-012",
+      "input": {
+        "length": 8,
+        "source_type": "char"
+      },
+      "observed": "fixed-character",
+      "status": "passed"
+    },
+    {
+      "category": "type-system",
+      "expected": "variable-character",
+      "id": "type-013",
+      "input": {
+        "length": 64,
+        "source_type": "varchar"
+      },
+      "observed": "variable-character",
+      "status": "passed"
+    },
+    {
+      "category": "type-system",
+      "expected": "fixed-character",
+      "id": "type-014",
+      "input": {
+        "length": 8,
+        "source_type": "unichar"
+      },
+      "observed": "fixed-character",
+      "status": "passed"
+    },
+    {
+      "category": "type-system",
+      "expected": "variable-character",
+      "id": "type-015",
+      "input": {
+        "length": 64,
+        "source_type": "univarchar"
+      },
+      "observed": "variable-character",
+      "status": "passed"
+    },
+    {
+      "category": "type-system",
+      "expected": "fixed-binary",
+      "id": "type-016",
+      "input": {
+        "length": 8,
+        "source_type": "binary"
+      },
+      "observed": "fixed-binary",
+      "status": "passed"
+    },
+    {
+      "category": "type-system",
+      "expected": "variable-binary",
+      "id": "type-017",
+      "input": {
+        "length": 64,
+        "source_type": "varbinary"
+      },
+      "observed": "variable-binary",
+      "status": "passed"
+    },
+    {
+      "category": "type-system",
+      "expected": "fixed-binary",
+      "id": "type-018",
+      "input": {
+        "source_type": "timestamp"
+      },
+      "observed": "fixed-binary",
+      "status": "passed"
+    },
+    {
+      "category": "type-system",
+      "expected": "large-text",
+      "id": "type-019",
+      "input": {
+        "source_type": "text"
+      },
+      "observed": "large-text",
+      "status": "passed"
+    },
+    {
+      "category": "type-system",
+      "expected": "large-text",
+      "id": "type-020",
+      "input": {
+        "source_type": "unitext"
+      },
+      "observed": "large-text",
+      "status": "passed"
+    },
+    {
+      "category": "type-system",
+      "expected": "large-binary",
+      "id": "type-021",
+      "input": {
+        "source_type": "image"
+      },
+      "observed": "large-binary",
+      "status": "passed"
+    },
+    {
+      "category": "type-system",
+      "expected": "date",
+      "id": "type-022",
+      "input": {
+        "source_type": "date"
+      },
+      "observed": "date",
+      "status": "passed"
+    },
+    {
+      "category": "type-system",
+      "expected": "time",
+      "id": "type-023",
+      "input": {
+        "source_type": "time"
+      },
+      "observed": "time",
+      "status": "passed"
+    },
+    {
+      "category": "type-system",
+      "expected": "time",
+      "id": "type-024",
+      "input": {
+        "source_type": "bigtime"
+      },
+      "observed": "time",
+      "status": "passed"
+    },
+    {
+      "category": "type-system",
+      "expected": "timestamp",
+      "id": "type-025",
+      "input": {
+        "source_type": "datetime"
+      },
+      "observed": "timestamp",
+      "status": "passed"
+    },
+    {
+      "category": "type-system",
+      "expected": "timestamp",
+      "id": "type-026",
+      "input": {
+        "source_type": "smalldatetime"
+      },
+      "observed": "timestamp",
+      "status": "passed"
+    },
+    {
+      "category": "type-system",
+      "expected": "timestamp",
+      "id": "type-027",
+      "input": {
+        "source_type": "bigdatetime"
+      },
+      "observed": "timestamp",
+      "status": "passed"
+    },
+    {
+      "category": "type-system",
+      "expected": "unsupported",
+      "id": "type-028",
+      "input": {
+        "precision": 53,
+        "source_type": "float"
+      },
+      "observed": "unsupported",
+      "status": "passed"
+    },
+    {
+      "category": "type-system",
+      "expected": "unsupported",
+      "id": "type-029",
+      "input": {
+        "source_type": "double precision"
+      },
+      "observed": "unsupported",
+      "status": "passed"
+    },
+    {
+      "category": "user-defined-datatypes",
+      "expected": "varchar",
+      "id": "udt-001",
+      "input": "card_number",
+      "observed": "varchar",
+      "status": "passed"
+    },
+    {
+      "category": "user-defined-datatypes",
+      "expected": "money",
+      "id": "udt-002",
+      "input": "money_amount",
+      "observed": "money",
+      "status": "passed"
+    },
+    {
+      "category": "user-defined-datatypes",
+      "expected": "char",
+      "id": "udt-003",
+      "input": "fraud_flag",
+      "observed": "char",
+      "status": "passed"
+    },
+    {
+      "category": "user-defined-datatypes",
+      "expected": "bigdatetime",
+      "id": "udt-004",
+      "input": "event_instant",
+      "observed": "bigdatetime",
+      "status": "passed"
+    },
+    {
+      "category": "datetime-and-time",
+      "expected": "exact",
+      "id": "behavior-001",
+      "input": "bigdatetime-microseconds",
+      "observed": "exact",
+      "status": "passed"
+    },
+    {
+      "category": "transact-sql-and-stored-logic",
+      "expected": "exact",
+      "id": "behavior-002",
+      "input": "case-expression",
+      "observed": "exact",
+      "status": "passed"
+    },
+    {
+      "category": "locking-and-transactions",
+      "expected": "policy-decision-required",
+      "id": "behavior-003",
+      "input": "chained-mode",
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "empty-string-and-character",
+      "expected": "normalized-equivalent",
+      "id": "behavior-004",
+      "input": "char-padding",
+      "observed": "normalized-equivalent",
+      "status": "passed"
+    },
+    {
+      "category": "empty-string-and-character",
+      "expected": "lossy",
+      "id": "behavior-005",
+      "input": "charset-conversion",
+      "observed": "lossy",
+      "status": "passed"
+    },
+    {
+      "category": "transact-sql-and-stored-logic",
+      "expected": "policy-decision-required",
+      "id": "behavior-006",
+      "input": "computed-column-expression",
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "locking-and-transactions",
+      "expected": "policy-decision-required",
+      "id": "behavior-007",
+      "input": "datarows-datapages-allpages",
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "datetime-and-time",
+      "expected": "normalized-equivalent",
+      "id": "behavior-008",
+      "input": "datetime-1-300-second",
+      "observed": "normalized-equivalent",
+      "status": "passed"
+    },
+    {
+      "category": "datetime-and-time",
+      "expected": "policy-decision-required",
+      "id": "behavior-009",
+      "input": "datetime-range",
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "locking-and-transactions",
+      "expected": "policy-decision-required",
+      "id": "behavior-010",
+      "input": "ddl-transaction-boundary",
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "locking-and-transactions",
+      "expected": "policy-decision-required",
+      "id": "behavior-011",
+      "input": "deadlock-victim",
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "transact-sql-and-stored-logic",
+      "expected": "unsupported",
+      "id": "behavior-012",
+      "input": "dynamic-exec",
+      "observed": "unsupported",
+      "status": "passed"
+    },
+    {
+      "category": "empty-string-and-character",
+      "expected": "policy-decision-required",
+      "id": "behavior-013",
+      "input": "empty-string-storage",
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "transact-sql-and-stored-logic",
+      "expected": "normalized-equivalent",
+      "id": "behavior-014",
+      "input": "explicit-transaction",
+      "observed": "normalized-equivalent",
+      "status": "passed"
+    },
+    {
+      "category": "transact-sql-and-stored-logic",
+      "expected": "unsupported",
+      "id": "behavior-015",
+      "input": "float-special-values",
+      "observed": "unsupported",
+      "status": "passed"
+    },
+    {
+      "category": "identity",
+      "expected": "lossy",
+      "id": "behavior-016",
+      "input": "identity-burn-max",
+      "observed": "lossy",
+      "status": "passed"
+    },
+    {
+      "category": "identity",
+      "expected": "policy-decision-required",
+      "id": "behavior-017",
+      "input": "identity-gaps-on-rollback",
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "identity",
+      "expected": "policy-decision-required",
+      "id": "behavior-018",
+      "input": "identity-global",
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "identity",
+      "expected": "policy-decision-required",
+      "id": "behavior-019",
+      "input": "identity-insert",
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "identity",
+      "expected": "normalized-equivalent",
+      "id": "behavior-020",
+      "input": "identity-seed-increment",
+      "observed": "normalized-equivalent",
+      "status": "passed"
+    },
+    {
+      "category": "transact-sql-and-stored-logic",
+      "expected": "normalized-equivalent",
+      "id": "behavior-021",
+      "input": "inserted-deleted-tables",
+      "observed": "normalized-equivalent",
+      "status": "passed"
+    },
+    {
+      "category": "locking-and-transactions",
+      "expected": "policy-decision-required",
+      "id": "behavior-022",
+      "input": "isolation-zero-one-two-three",
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "money-and-exact-numeric",
+      "expected": "policy-decision-required",
+      "id": "behavior-023",
+      "input": "money-expression-promotion",
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "money-and-exact-numeric",
+      "expected": "normalized-equivalent",
+      "id": "behavior-024",
+      "input": "money-rounding",
+      "observed": "normalized-equivalent",
+      "status": "passed"
+    },
+    {
+      "category": "money-and-exact-numeric",
+      "expected": "exact",
+      "id": "behavior-025",
+      "input": "money-storage",
+      "observed": "exact",
+      "status": "passed"
+    },
+    {
+      "category": "transact-sql-and-stored-logic",
+      "expected": "policy-decision-required",
+      "id": "behavior-026",
+      "input": "multirow-trigger",
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "transact-sql-and-stored-logic",
+      "expected": "policy-decision-required",
+      "id": "behavior-027",
+      "input": "nested-trigger",
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "transact-sql-and-stored-logic",
+      "expected": "normalized-equivalent",
+      "id": "behavior-028",
+      "input": "output-parameter",
+      "observed": "normalized-equivalent",
+      "status": "passed"
+    },
+    {
+      "category": "transact-sql-and-stored-logic",
+      "expected": "policy-decision-required",
+      "id": "behavior-029",
+      "input": "raiserror",
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "transact-sql-and-stored-logic",
+      "expected": "unsupported",
+      "id": "behavior-030",
+      "input": "recursive-trigger",
+      "observed": "unsupported",
+      "status": "passed"
+    },
+    {
+      "category": "transact-sql-and-stored-logic",
+      "expected": "unsupported",
+      "id": "behavior-031",
+      "input": "remote-server-access",
+      "observed": "unsupported",
+      "status": "passed"
+    },
+    {
+      "category": "replication-order-and-resume",
+      "expected": "normalized-equivalent",
+      "id": "behavior-032",
+      "input": "replication-commit-order",
+      "observed": "normalized-equivalent",
+      "status": "passed"
+    },
+    {
+      "category": "replication-order-and-resume",
+      "expected": "unsupported",
+      "id": "behavior-033",
+      "input": "replication-ddl",
+      "observed": "unsupported",
+      "status": "passed"
+    },
+    {
+      "category": "replication-order-and-resume",
+      "expected": "normalized-equivalent",
+      "id": "behavior-034",
+      "input": "replication-multi-table-transaction",
+      "observed": "normalized-equivalent",
+      "status": "passed"
+    },
+    {
+      "category": "replication-order-and-resume",
+      "expected": "policy-decision-required",
+      "id": "behavior-035",
+      "input": "replication-resume",
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "replication-order-and-resume",
+      "expected": "unsupported",
+      "id": "behavior-036",
+      "input": "replication-truncation",
+      "observed": "unsupported",
+      "status": "passed"
+    },
+    {
+      "category": "transact-sql-and-stored-logic",
+      "expected": "normalized-equivalent",
+      "id": "behavior-037",
+      "input": "return-status",
+      "observed": "normalized-equivalent",
+      "status": "passed"
+    },
+    {
+      "category": "transact-sql-and-stored-logic",
+      "expected": "policy-decision-required",
+      "id": "behavior-038",
+      "input": "rowcount-global",
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "locking-and-transactions",
+      "expected": "normalized-equivalent",
+      "id": "behavior-039",
+      "input": "savepoint-rollback",
+      "observed": "normalized-equivalent",
+      "status": "passed"
+    },
+    {
+      "category": "transact-sql-and-stored-logic",
+      "expected": "normalized-equivalent",
+      "id": "behavior-040",
+      "input": "select-assignment",
+      "observed": "normalized-equivalent",
+      "status": "passed"
+    },
+    {
+      "category": "transact-sql-and-stored-logic",
+      "expected": "policy-decision-required",
+      "id": "behavior-041",
+      "input": "select-into",
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "datetime-and-time",
+      "expected": "normalized-equivalent",
+      "id": "behavior-042",
+      "input": "smalldatetime-minute-rounding",
+      "observed": "normalized-equivalent",
+      "status": "passed"
+    },
+    {
+      "category": "datetime-and-time",
+      "expected": "policy-decision-required",
+      "id": "behavior-043",
+      "input": "smalldatetime-range",
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "transact-sql-and-stored-logic",
+      "expected": "exact",
+      "id": "behavior-044",
+      "input": "smallmoney-storage",
+      "observed": "exact",
+      "status": "passed"
+    },
+    {
+      "category": "empty-string-and-character",
+      "expected": "policy-decision-required",
+      "id": "behavior-045",
+      "input": "sort-order-collation",
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "transact-sql-and-stored-logic",
+      "expected": "policy-decision-required",
+      "id": "behavior-046",
+      "input": "temp-table",
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "transact-sql-and-stored-logic",
+      "expected": "lossy",
+      "id": "behavior-047",
+      "input": "text-image-locator",
+      "observed": "lossy",
+      "status": "passed"
+    },
+    {
+      "category": "transact-sql-and-stored-logic",
+      "expected": "normalized-equivalent",
+      "id": "behavior-048",
+      "input": "timestamp-row-version",
+      "observed": "normalized-equivalent",
+      "status": "passed"
+    },
+    {
+      "category": "datetime-and-time",
+      "expected": "policy-decision-required",
+      "id": "behavior-049",
+      "input": "timezone-absence",
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "empty-string-and-character",
+      "expected": "policy-decision-required",
+      "id": "behavior-050",
+      "input": "trailing-space-comparison",
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "transact-sql-and-stored-logic",
+      "expected": "policy-decision-required",
+      "id": "behavior-051",
+      "input": "trigger-rollback",
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "transact-sql-and-stored-logic",
+      "expected": "normalized-equivalent",
+      "id": "behavior-052",
+      "input": "udt-base-type-resolution",
+      "observed": "normalized-equivalent",
+      "status": "passed"
+    },
+    {
+      "category": "transact-sql-and-stored-logic",
+      "expected": "policy-decision-required",
+      "id": "behavior-053",
+      "input": "udt-bound-default",
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "transact-sql-and-stored-logic",
+      "expected": "policy-decision-required",
+      "id": "behavior-054",
+      "input": "udt-bound-rule",
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "identity",
+      "expected": "normalized-equivalent",
+      "id": "identity-boundary-001",
+      "input": {
+        "feature": "identity-seed-increment",
+        "scenario": "seed-zero-positive-increment"
+      },
+      "observed": "normalized-equivalent",
+      "status": "passed"
+    },
+    {
+      "category": "identity",
+      "expected": "normalized-equivalent",
+      "id": "identity-boundary-002",
+      "input": {
+        "feature": "identity-seed-increment",
+        "scenario": "seed-negative-positive-increment"
+      },
+      "observed": "normalized-equivalent",
+      "status": "passed"
+    },
+    {
+      "category": "identity",
+      "expected": "normalized-equivalent",
+      "id": "identity-boundary-003",
+      "input": {
+        "feature": "identity-seed-increment",
+        "scenario": "increment-five"
+      },
+      "observed": "normalized-equivalent",
+      "status": "passed"
+    },
+    {
+      "category": "identity",
+      "expected": "policy-decision-required",
+      "id": "identity-boundary-004",
+      "input": {
+        "feature": "identity-gaps-on-rollback",
+        "scenario": "rollback-burns-one-value"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "identity",
+      "expected": "policy-decision-required",
+      "id": "identity-boundary-005",
+      "input": {
+        "feature": "identity-gaps-on-rollback",
+        "scenario": "rollback-burns-batch-values"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "identity",
+      "expected": "policy-decision-required",
+      "id": "identity-boundary-006",
+      "input": {
+        "feature": "identity-insert",
+        "scenario": "explicit-identity-load"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "identity",
+      "expected": "policy-decision-required",
+      "id": "identity-boundary-007",
+      "input": {
+        "feature": "identity-insert",
+        "scenario": "session-identity-insert-state"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "identity",
+      "expected": "lossy",
+      "id": "identity-boundary-008",
+      "input": {
+        "feature": "identity-burn-max",
+        "scenario": "reseed-after-initial-load"
+      },
+      "observed": "lossy",
+      "status": "passed"
+    },
+    {
+      "category": "identity",
+      "expected": "lossy",
+      "id": "identity-boundary-009",
+      "input": {
+        "feature": "identity-burn-max",
+        "scenario": "reseed-below-observed-max"
+      },
+      "observed": "lossy",
+      "status": "passed"
+    },
+    {
+      "category": "identity",
+      "expected": "policy-decision-required",
+      "id": "identity-boundary-010",
+      "input": {
+        "feature": "identity-global",
+        "scenario": "trigger-side-identity"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "identity",
+      "expected": "policy-decision-required",
+      "id": "identity-boundary-011",
+      "input": {
+        "feature": "identity-gaps-on-rollback",
+        "scenario": "concurrent-identity-allocation"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "identity",
+      "expected": "lossy",
+      "id": "identity-boundary-012",
+      "input": {
+        "feature": "identity-burn-max",
+        "scenario": "identity-cutover-checkpoint"
+      },
+      "observed": "lossy",
+      "status": "passed"
+    },
+    {
+      "category": "money-and-exact-numeric",
+      "expected": "exact",
+      "id": "money-and-exact-numeric-boundary-001",
+      "input": {
+        "feature": "money-storage",
+        "scenario": "money-zero"
+      },
+      "observed": "exact",
+      "status": "passed"
+    },
+    {
+      "category": "money-and-exact-numeric",
+      "expected": "exact",
+      "id": "money-and-exact-numeric-boundary-002",
+      "input": {
+        "feature": "money-storage",
+        "scenario": "money-positive-maximum"
+      },
+      "observed": "exact",
+      "status": "passed"
+    },
+    {
+      "category": "money-and-exact-numeric",
+      "expected": "exact",
+      "id": "money-and-exact-numeric-boundary-003",
+      "input": {
+        "feature": "money-storage",
+        "scenario": "money-negative-minimum"
+      },
+      "observed": "exact",
+      "status": "passed"
+    },
+    {
+      "category": "money-and-exact-numeric",
+      "expected": "exact",
+      "id": "money-and-exact-numeric-boundary-004",
+      "input": {
+        "feature": "smallmoney-storage",
+        "scenario": "smallmoney-positive-maximum"
+      },
+      "observed": "exact",
+      "status": "passed"
+    },
+    {
+      "category": "money-and-exact-numeric",
+      "expected": "exact",
+      "id": "money-and-exact-numeric-boundary-005",
+      "input": {
+        "feature": "smallmoney-storage",
+        "scenario": "smallmoney-negative-minimum"
+      },
+      "observed": "exact",
+      "status": "passed"
+    },
+    {
+      "category": "money-and-exact-numeric",
+      "expected": "normalized-equivalent",
+      "id": "money-and-exact-numeric-boundary-006",
+      "input": {
+        "feature": "money-rounding",
+        "scenario": "half-step-round-down"
+      },
+      "observed": "normalized-equivalent",
+      "status": "passed"
+    },
+    {
+      "category": "money-and-exact-numeric",
+      "expected": "normalized-equivalent",
+      "id": "money-and-exact-numeric-boundary-007",
+      "input": {
+        "feature": "money-rounding",
+        "scenario": "half-step-round-up"
+      },
+      "observed": "normalized-equivalent",
+      "status": "passed"
+    },
+    {
+      "category": "money-and-exact-numeric",
+      "expected": "policy-decision-required",
+      "id": "money-and-exact-numeric-boundary-008",
+      "input": {
+        "feature": "money-expression-promotion",
+        "scenario": "money-plus-decimal"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "money-and-exact-numeric",
+      "expected": "policy-decision-required",
+      "id": "money-and-exact-numeric-boundary-009",
+      "input": {
+        "feature": "money-expression-promotion",
+        "scenario": "money-times-integer"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "money-and-exact-numeric",
+      "expected": "policy-decision-required",
+      "id": "money-and-exact-numeric-boundary-010",
+      "input": {
+        "feature": "money-expression-promotion",
+        "scenario": "money-divide-money"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "money-and-exact-numeric",
+      "expected": "policy-decision-required",
+      "id": "money-and-exact-numeric-boundary-011",
+      "input": {
+        "feature": "money-expression-promotion",
+        "scenario": "money-plus-float"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "money-and-exact-numeric",
+      "expected": "policy-decision-required",
+      "id": "money-and-exact-numeric-boundary-012",
+      "input": {
+        "feature": "money-expression-promotion",
+        "scenario": "aggregate-money-sum"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "money-and-exact-numeric",
+      "expected": "exact",
+      "id": "money-and-exact-numeric-boundary-013",
+      "input": {
+        "feature": "money-storage",
+        "scenario": "money-overflow"
+      },
+      "observed": "exact",
+      "status": "passed"
+    },
+    {
+      "category": "money-and-exact-numeric",
+      "expected": "exact",
+      "id": "money-and-exact-numeric-boundary-014",
+      "input": {
+        "feature": "smallmoney-storage",
+        "scenario": "smallmoney-overflow"
+      },
+      "observed": "exact",
+      "status": "passed"
+    },
+    {
+      "category": "datetime-and-time",
+      "expected": "policy-decision-required",
+      "id": "datetime-and-time-boundary-001",
+      "input": {
+        "feature": "datetime-range",
+        "scenario": "datetime-minimum-1753"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "datetime-and-time",
+      "expected": "policy-decision-required",
+      "id": "datetime-and-time-boundary-002",
+      "input": {
+        "feature": "datetime-range",
+        "scenario": "datetime-maximum"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "datetime-and-time",
+      "expected": "normalized-equivalent",
+      "id": "datetime-and-time-boundary-003",
+      "input": {
+        "feature": "datetime-1-300-second",
+        "scenario": "datetime-tick-000"
+      },
+      "observed": "normalized-equivalent",
+      "status": "passed"
+    },
+    {
+      "category": "datetime-and-time",
+      "expected": "normalized-equivalent",
+      "id": "datetime-and-time-boundary-004",
+      "input": {
+        "feature": "datetime-1-300-second",
+        "scenario": "datetime-tick-003"
+      },
+      "observed": "normalized-equivalent",
+      "status": "passed"
+    },
+    {
+      "category": "datetime-and-time",
+      "expected": "normalized-equivalent",
+      "id": "datetime-and-time-boundary-005",
+      "input": {
+        "feature": "datetime-1-300-second",
+        "scenario": "datetime-tick-007"
+      },
+      "observed": "normalized-equivalent",
+      "status": "passed"
+    },
+    {
+      "category": "datetime-and-time",
+      "expected": "normalized-equivalent",
+      "id": "datetime-and-time-boundary-006",
+      "input": {
+        "feature": "datetime-1-300-second",
+        "scenario": "datetime-tick-halfway"
+      },
+      "observed": "normalized-equivalent",
+      "status": "passed"
+    },
+    {
+      "category": "datetime-and-time",
+      "expected": "policy-decision-required",
+      "id": "datetime-and-time-boundary-007",
+      "input": {
+        "feature": "smalldatetime-range",
+        "scenario": "smalldatetime-minimum"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "datetime-and-time",
+      "expected": "policy-decision-required",
+      "id": "datetime-and-time-boundary-008",
+      "input": {
+        "feature": "smalldatetime-range",
+        "scenario": "smalldatetime-maximum"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "datetime-and-time",
+      "expected": "normalized-equivalent",
+      "id": "datetime-and-time-boundary-009",
+      "input": {
+        "feature": "smalldatetime-minute-rounding",
+        "scenario": "smalldatetime-second-29"
+      },
+      "observed": "normalized-equivalent",
+      "status": "passed"
+    },
+    {
+      "category": "datetime-and-time",
+      "expected": "normalized-equivalent",
+      "id": "datetime-and-time-boundary-010",
+      "input": {
+        "feature": "smalldatetime-minute-rounding",
+        "scenario": "smalldatetime-second-30"
+      },
+      "observed": "normalized-equivalent",
+      "status": "passed"
+    },
+    {
+      "category": "datetime-and-time",
+      "expected": "exact",
+      "id": "datetime-and-time-boundary-011",
+      "input": {
+        "feature": "bigdatetime-microseconds",
+        "scenario": "bigdatetime-year-one"
+      },
+      "observed": "exact",
+      "status": "passed"
+    },
+    {
+      "category": "datetime-and-time",
+      "expected": "exact",
+      "id": "datetime-and-time-boundary-012",
+      "input": {
+        "feature": "bigdatetime-microseconds",
+        "scenario": "bigdatetime-microsecond-999999"
+      },
+      "observed": "exact",
+      "status": "passed"
+    },
+    {
+      "category": "datetime-and-time",
+      "expected": "policy-decision-required",
+      "id": "datetime-and-time-boundary-013",
+      "input": {
+        "feature": "timezone-absence",
+        "scenario": "time-zone-not-recorded"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "datetime-and-time",
+      "expected": "policy-decision-required",
+      "id": "datetime-and-time-boundary-014",
+      "input": {
+        "feature": "timezone-absence",
+        "scenario": "dst-overlap-is-ambiguous"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "datetime-and-time",
+      "expected": "policy-decision-required",
+      "id": "datetime-and-time-boundary-015",
+      "input": {
+        "feature": "timezone-absence",
+        "scenario": "dst-gap-is-ambiguous"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "datetime-and-time",
+      "expected": "exact",
+      "id": "datetime-and-time-boundary-016",
+      "input": {
+        "feature": "bigdatetime-microseconds",
+        "scenario": "leap-day-round-trip"
+      },
+      "observed": "exact",
+      "status": "passed"
+    },
+    {
+      "category": "empty-string-and-character",
+      "expected": "policy-decision-required",
+      "id": "empty-string-and-character-boundary-001",
+      "input": {
+        "feature": "empty-string-storage",
+        "scenario": "varchar-empty-literal"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "empty-string-and-character",
+      "expected": "policy-decision-required",
+      "id": "empty-string-and-character-boundary-002",
+      "input": {
+        "feature": "empty-string-storage",
+        "scenario": "varchar-single-space"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "empty-string-and-character",
+      "expected": "policy-decision-required",
+      "id": "empty-string-and-character-boundary-003",
+      "input": {
+        "feature": "empty-string-storage",
+        "scenario": "varchar-null"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "empty-string-and-character",
+      "expected": "policy-decision-required",
+      "id": "empty-string-and-character-boundary-004",
+      "input": {
+        "feature": "empty-string-storage",
+        "scenario": "univarchar-empty-literal"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "empty-string-and-character",
+      "expected": "normalized-equivalent",
+      "id": "empty-string-and-character-boundary-005",
+      "input": {
+        "feature": "char-padding",
+        "scenario": "char-all-spaces"
+      },
+      "observed": "normalized-equivalent",
+      "status": "passed"
+    },
+    {
+      "category": "empty-string-and-character",
+      "expected": "normalized-equivalent",
+      "id": "empty-string-and-character-boundary-006",
+      "input": {
+        "feature": "char-padding",
+        "scenario": "char-right-padding"
+      },
+      "observed": "normalized-equivalent",
+      "status": "passed"
+    },
+    {
+      "category": "empty-string-and-character",
+      "expected": "policy-decision-required",
+      "id": "empty-string-and-character-boundary-007",
+      "input": {
+        "feature": "trailing-space-comparison",
+        "scenario": "varchar-trailing-space-equality"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "empty-string-and-character",
+      "expected": "policy-decision-required",
+      "id": "empty-string-and-character-boundary-008",
+      "input": {
+        "feature": "trailing-space-comparison",
+        "scenario": "varchar-trailing-space-ordering"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "empty-string-and-character",
+      "expected": "policy-decision-required",
+      "id": "empty-string-and-character-boundary-009",
+      "input": {
+        "feature": "sort-order-collation",
+        "scenario": "unicode-accent-comparison"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "empty-string-and-character",
+      "expected": "policy-decision-required",
+      "id": "empty-string-and-character-boundary-010",
+      "input": {
+        "feature": "sort-order-collation",
+        "scenario": "unicode-case-comparison"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "empty-string-and-character",
+      "expected": "policy-decision-required",
+      "id": "empty-string-and-character-boundary-011",
+      "input": {
+        "feature": "sort-order-collation",
+        "scenario": "binary-sort-order"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "empty-string-and-character",
+      "expected": "lossy",
+      "id": "empty-string-and-character-boundary-012",
+      "input": {
+        "feature": "charset-conversion",
+        "scenario": "invalid-server-charset-byte"
+      },
+      "observed": "lossy",
+      "status": "passed"
+    },
+    {
+      "category": "empty-string-and-character",
+      "expected": "lossy",
+      "id": "empty-string-and-character-boundary-013",
+      "input": {
+        "feature": "charset-conversion",
+        "scenario": "replacement-character-collision"
+      },
+      "observed": "lossy",
+      "status": "passed"
+    },
+    {
+      "category": "empty-string-and-character",
+      "expected": "policy-decision-required",
+      "id": "empty-string-and-character-boundary-014",
+      "input": {
+        "feature": "empty-string-storage",
+        "scenario": "empty-string-key-component"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "locking-and-transactions",
+      "expected": "policy-decision-required",
+      "id": "locking-and-transactions-boundary-001",
+      "input": {
+        "feature": "isolation-zero-one-two-three",
+        "scenario": "isolation-zero-dirty-read"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "locking-and-transactions",
+      "expected": "policy-decision-required",
+      "id": "locking-and-transactions-boundary-002",
+      "input": {
+        "feature": "isolation-zero-one-two-three",
+        "scenario": "isolation-one-read-committed"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "locking-and-transactions",
+      "expected": "policy-decision-required",
+      "id": "locking-and-transactions-boundary-003",
+      "input": {
+        "feature": "isolation-zero-one-two-three",
+        "scenario": "isolation-two-repeatable-read"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "locking-and-transactions",
+      "expected": "policy-decision-required",
+      "id": "locking-and-transactions-boundary-004",
+      "input": {
+        "feature": "isolation-zero-one-two-three",
+        "scenario": "isolation-three-serializable"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "locking-and-transactions",
+      "expected": "policy-decision-required",
+      "id": "locking-and-transactions-boundary-005",
+      "input": {
+        "feature": "datarows-datapages-allpages",
+        "scenario": "datarows-update-blocking"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "locking-and-transactions",
+      "expected": "policy-decision-required",
+      "id": "locking-and-transactions-boundary-006",
+      "input": {
+        "feature": "datarows-datapages-allpages",
+        "scenario": "datapages-neighbor-blocking"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "locking-and-transactions",
+      "expected": "policy-decision-required",
+      "id": "locking-and-transactions-boundary-007",
+      "input": {
+        "feature": "datarows-datapages-allpages",
+        "scenario": "allpages-table-blocking"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "locking-and-transactions",
+      "expected": "policy-decision-required",
+      "id": "locking-and-transactions-boundary-008",
+      "input": {
+        "feature": "deadlock-victim",
+        "scenario": "deadlock-two-table-cycle"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "locking-and-transactions",
+      "expected": "policy-decision-required",
+      "id": "locking-and-transactions-boundary-009",
+      "input": {
+        "feature": "deadlock-victim",
+        "scenario": "deadlock-retry-boundary"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "locking-and-transactions",
+      "expected": "policy-decision-required",
+      "id": "locking-and-transactions-boundary-010",
+      "input": {
+        "feature": "chained-mode",
+        "scenario": "unchained-autocommit"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "locking-and-transactions",
+      "expected": "policy-decision-required",
+      "id": "locking-and-transactions-boundary-011",
+      "input": {
+        "feature": "chained-mode",
+        "scenario": "chained-implicit-begin"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "locking-and-transactions",
+      "expected": "normalized-equivalent",
+      "id": "locking-and-transactions-boundary-012",
+      "input": {
+        "feature": "explicit-transaction",
+        "scenario": "rollback-entire-transaction"
+      },
+      "observed": "normalized-equivalent",
+      "status": "passed"
+    },
+    {
+      "category": "locking-and-transactions",
+      "expected": "normalized-equivalent",
+      "id": "locking-and-transactions-boundary-013",
+      "input": {
+        "feature": "savepoint-rollback",
+        "scenario": "rollback-to-savepoint"
+      },
+      "observed": "normalized-equivalent",
+      "status": "passed"
+    },
+    {
+      "category": "locking-and-transactions",
+      "expected": "policy-decision-required",
+      "id": "locking-and-transactions-boundary-014",
+      "input": {
+        "feature": "trigger-rollback",
+        "scenario": "trigger-initiated-rollback"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "locking-and-transactions",
+      "expected": "policy-decision-required",
+      "id": "locking-and-transactions-boundary-015",
+      "input": {
+        "feature": "ddl-transaction-boundary",
+        "scenario": "ddl-inside-transaction"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "locking-and-transactions",
+      "expected": "policy-decision-required",
+      "id": "locking-and-transactions-boundary-016",
+      "input": {
+        "feature": "ddl-transaction-boundary",
+        "scenario": "ddl-database-option-boundary"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "replication-order-and-resume",
+      "expected": "normalized-equivalent",
+      "id": "replication-order-and-resume-boundary-001",
+      "input": {
+        "feature": "replication-commit-order",
+        "scenario": "two-operations-one-transaction"
+      },
+      "observed": "normalized-equivalent",
+      "status": "passed"
+    },
+    {
+      "category": "replication-order-and-resume",
+      "expected": "normalized-equivalent",
+      "id": "replication-order-and-resume-boundary-002",
+      "input": {
+        "feature": "replication-commit-order",
+        "scenario": "two-transactions-commit-order"
+      },
+      "observed": "normalized-equivalent",
+      "status": "passed"
+    },
+    {
+      "category": "replication-order-and-resume",
+      "expected": "normalized-equivalent",
+      "id": "replication-order-and-resume-boundary-003",
+      "input": {
+        "feature": "replication-multi-table-transaction",
+        "scenario": "cross-table-transaction"
+      },
+      "observed": "normalized-equivalent",
+      "status": "passed"
+    },
+    {
+      "category": "replication-order-and-resume",
+      "expected": "normalized-equivalent",
+      "id": "replication-order-and-resume-boundary-004",
+      "input": {
+        "feature": "replication-multi-table-transaction",
+        "scenario": "update-before-after-image"
+      },
+      "observed": "normalized-equivalent",
+      "status": "passed"
+    },
+    {
+      "category": "replication-order-and-resume",
+      "expected": "normalized-equivalent",
+      "id": "replication-order-and-resume-boundary-005",
+      "input": {
+        "feature": "replication-multi-table-transaction",
+        "scenario": "delete-before-image"
+      },
+      "observed": "normalized-equivalent",
+      "status": "passed"
+    },
+    {
+      "category": "replication-order-and-resume",
+      "expected": "policy-decision-required",
+      "id": "replication-order-and-resume-boundary-006",
+      "input": {
+        "feature": "replication-resume",
+        "scenario": "resume-after-first-transaction"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "replication-order-and-resume",
+      "expected": "policy-decision-required",
+      "id": "replication-order-and-resume-boundary-007",
+      "input": {
+        "feature": "replication-resume",
+        "scenario": "resume-after-mid-transaction-rejected"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "replication-order-and-resume",
+      "expected": "policy-decision-required",
+      "id": "replication-order-and-resume-boundary-008",
+      "input": {
+        "feature": "replication-resume",
+        "scenario": "resume-wrong-catalog-rejected"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "replication-order-and-resume",
+      "expected": "policy-decision-required",
+      "id": "replication-order-and-resume-boundary-009",
+      "input": {
+        "feature": "replication-resume",
+        "scenario": "resume-wrong-event-hash-rejected"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "replication-order-and-resume",
+      "expected": "policy-decision-required",
+      "id": "replication-order-and-resume-boundary-010",
+      "input": {
+        "feature": "replication-resume",
+        "scenario": "log-retention-gap"
+      },
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "replication-order-and-resume",
+      "expected": "unsupported",
+      "id": "replication-order-and-resume-boundary-011",
+      "input": {
+        "feature": "replication-ddl",
+        "scenario": "ddl-separated-from-row-stream"
+      },
+      "observed": "unsupported",
+      "status": "passed"
+    },
+    {
+      "category": "replication-order-and-resume",
+      "expected": "unsupported",
+      "id": "replication-order-and-resume-boundary-012",
+      "input": {
+        "feature": "replication-truncation",
+        "scenario": "truncate-not-expanded-to-deletes"
+      },
+      "observed": "unsupported",
+      "status": "passed"
+    },
+    {
+      "category": "transact-sql-and-stored-logic",
+      "expected": "normalized-equivalent",
+      "id": "stored-logic-001",
+      "input": "sp_get_auth",
+      "observed": "normalized-equivalent",
+      "status": "passed"
+    },
+    {
+      "category": "transact-sql-and-stored-logic",
+      "expected": "policy-decision-required",
+      "id": "stored-logic-002",
+      "input": "sp_set_fraud",
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "transact-sql-and-stored-logic",
+      "expected": "unsupported",
+      "id": "stored-logic-003",
+      "input": "sp_money_band",
+      "observed": "unsupported",
+      "status": "passed"
+    },
+    {
+      "category": "transact-sql-and-stored-logic",
+      "expected": "policy-decision-required",
+      "id": "stored-logic-004",
+      "input": "sp_temp_rollup",
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "transact-sql-and-stored-logic",
+      "expected": "unsupported",
+      "id": "stored-logic-005",
+      "input": "sp_dynamic_reconcile",
+      "observed": "unsupported",
+      "status": "passed"
+    },
+    {
+      "category": "transact-sql-and-stored-logic",
+      "expected": "unsupported",
+      "id": "stored-logic-006",
+      "input": "sp_remote_lookup",
+      "observed": "unsupported",
+      "status": "passed"
+    },
+    {
+      "category": "transact-sql-and-stored-logic",
+      "expected": "policy-decision-required",
+      "id": "stored-logic-007",
+      "input": "tr_auth_audit",
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "transact-sql-and-stored-logic",
+      "expected": "policy-decision-required",
+      "id": "stored-logic-008",
+      "input": "tr_auth_reject",
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "transact-sql-and-stored-logic",
+      "expected": "policy-decision-required",
+      "id": "stored-logic-009",
+      "input": "tr_identity_capture",
+      "observed": "policy-decision-required",
+      "status": "passed"
+    },
+    {
+      "category": "transact-sql-and-stored-logic",
+      "expected": "unsupported",
+      "id": "stored-logic-010",
+      "input": "tr_nested_audit",
+      "observed": "unsupported",
+      "status": "passed"
+    },
+    {
+      "category": "replication-order-and-resume",
+      "expected": true,
+      "id": "replication-001",
+      "input": "unique-position",
+      "observed": true,
+      "status": "passed"
+    },
+    {
+      "category": "replication-order-and-resume",
+      "expected": true,
+      "id": "replication-002",
+      "input": "commit-order",
+      "observed": true,
+      "status": "passed"
+    },
+    {
+      "category": "replication-order-and-resume",
+      "expected": true,
+      "id": "replication-003",
+      "input": "transaction-order",
+      "observed": true,
+      "status": "passed"
+    },
+    {
+      "category": "replication-order-and-resume",
+      "expected": true,
+      "id": "replication-004",
+      "input": "multi-table-transaction",
+      "observed": true,
+      "status": "passed"
+    },
+    {
+      "category": "replication-order-and-resume",
+      "expected": true,
+      "id": "replication-005",
+      "input": "all-events-sealed",
+      "observed": true,
+      "status": "passed"
+    },
+    {
+      "category": "replication-order-and-resume",
+      "expected": true,
+      "id": "replication-006",
+      "input": "row-operations-only",
+      "observed": true,
+      "status": "passed"
+    }
+  ],
+  "catalog_sha256": "16cf4c688c00d98f9cbacd6492969cace35745eeb705d68f9617cafa5c6e2e6b",
+  "categories": {
+    "datetime-and-time": 22,
+    "empty-string-and-character": 19,
+    "identity": 17,
+    "locking-and-transactions": 22,
+    "money-and-exact-numeric": 17,
+    "replication-order-and-resume": 23,
+    "transact-sql-and-stored-logic": 34,
+    "type-system": 29,
+    "user-defined-datatypes": 4
+  },
+  "content_sha256": "3b7bd56358b97b1d0296aececb541d2a621c56d9f7ca3ea6733b3d2c8173a31b",
+  "corpus_type": "lightyear-sap-ase-semantic-conformance-corpus",
+  "live_ase_observed": false,
+  "production_ready": false,
+  "schema_version": "1.0",
+  "status": "passed"
+}

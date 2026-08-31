@@ -1,0 +1,113 @@
+{
+  "bindings": {
+    "model_sha256": "fb59dfc8f78bd088f18f2f2167c457c887f3928e10264f05b3ac5482ec8a6664",
+    "oracle_mapping_sha256": "a948a0567245bc7c15fda3d8d2dc742ccee5691db4ee034d947b1671ab6f172f",
+    "postgresql_mapping_sha256": "24f0f0dc82363749d9db4a7294315ec8dc3ca5660e7d800550560195b0d27f45",
+    "procedure_conformance_sha256": "443f700d9a39f7b6d25c9a867583f3be55b01d361eb6cfff0c2dea96518a0e17",
+    "procedure_ledger_sha256": "e3b3cd2e296907ff2da0ccbff8ab35d1e9e8cc576cf120af54c37016606af656",
+    "procedure_qualification_sha256": "308b4cc9c4f510bfd348a9e0a8cabcbcc43b22f6c46be50165e4b5cd230e254d",
+    "source_conformance_sha256": "3dbeddedebbf63f2bf55b82821bc362cc3b8164865591bbdbef6eac69cea890d",
+    "source_ledger_sha256": "6fc2d33dbf6d263a491d56466f5bcfe4e97bc594ac38d8692334b770e6ce9458"
+  },
+  "claim_unlocked": "LIGHTYEAR can exercise a genuine Oracle SourceAdapter through a bounded Oracle-to-PostgreSQL path and qualify a declared stored-procedure subset without promoting synthetic evidence to live equivalence.",
+  "content_sha256": "35cc2ba105010a317c3c03cd96dc8b73ecfa904dee7ef7ff03f108c0455ee13c",
+  "database_migration_complete": false,
+  "development_ready": true,
+  "gates": [
+    {
+      "claim": "oracle-source-schema-discovery",
+      "evidence": {
+        "catalog_observed": false,
+        "columns": 26
+      },
+      "gate": 1,
+      "status": "passed-bounded-source-contract"
+    },
+    {
+      "claim": "oracle-to-postgresql-data-conversion",
+      "evidence": {
+        "comparison_sha256": "85a9e0de7d7fad122085212f4071da2b459ba276f6a6d22882d810cb631160f6",
+        "rows": 2,
+        "target_columns": 26
+      },
+      "gate": 2,
+      "status": "passed-bounded-adapter-execution"
+    },
+    {
+      "claim": "constraints-and-indexes",
+      "evidence": {
+        "constraints": 1,
+        "indexes": 1
+      },
+      "gate": 3,
+      "status": "passed-bounded-source-contract"
+    },
+    {
+      "claim": "query-equivalence",
+      "evidence": {
+        "comparisons": [
+          "359a73a89311ad8108c37be66130aff10c87b032d9c8bb8a2b41fd5ec4f5ec4c",
+          "359a73a89311ad8108c37be66130aff10c87b032d9c8bb8a2b41fd5ec4f5ec4c"
+        ]
+      },
+      "gate": 4,
+      "status": "passed-bounded-adapter-execution"
+    },
+    {
+      "claim": "transaction-behavior",
+      "evidence": {
+        "bounded_commit_rollback": true,
+        "concurrent_execution_observed": false
+      },
+      "gate": 5,
+      "status": "policy-decision-required-live-concurrency"
+    },
+    {
+      "claim": "cdc-and-resume",
+      "evidence": {
+        "content_bound_resume": true,
+        "events": 4,
+        "redo_observed": false
+      },
+      "gate": 6,
+      "status": "passed-bounded-scn-replay"
+    },
+    {
+      "claim": "cutover-and-rollback",
+      "evidence": {
+        "production_authorized": false,
+        "rollback_exact": true
+      },
+      "gate": 7,
+      "status": "passed-bounded-rehearsal"
+    },
+    {
+      "claim": "stored-procedure-subset",
+      "evidence": {
+        "cases": 20,
+        "native_execution_observed": false,
+        "procedures": 4
+      },
+      "gate": 8,
+      "status": "passed-bounded-supported-subset"
+    }
+  ],
+  "live_redo_observed": false,
+  "live_source_observed": false,
+  "live_target_observed": false,
+  "native_procedure_execution_observed": false,
+  "production_ready": false,
+  "qualification_id": "authfrds-oracle-postgresql-source-v0.43",
+  "qualification_type": "lightyear-oracle-postgresql-source-qualification",
+  "schema_version": "1.0",
+  "source": {
+    "adapter": "lightyear-oracle-source",
+    "dialect": "oracle-26ai-free"
+  },
+  "stored_logic_complete": false,
+  "supported_procedure_subset_qualified": true,
+  "target": {
+    "adapter": "factorydark-postgresql",
+    "dialect": "postgresql-16"
+  }
+}

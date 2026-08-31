@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schema/oracle-procedure-conformance-receipt.schema.json",
+  "title": "LIGHTYEAR Oracle procedure conformance receipt",
+  "type": "object",
+  "required": ["schema_version", "receipt_type", "corpus_id", "source_path", "source_sha256", "procedure_ids", "case_count", "classification_counts", "observed_feature_count", "results", "status", "evidence_class", "native_oracle_execution_observed", "native_postgresql_execution_observed", "production_ready", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "receipt_type": {"const": "lightyear-oracle-procedure-conformance"},
+    "corpus_id": {"const": "oracle-procedure-supported-subset-v1"},
+    "source_path": {"type": "string"},
+    "source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "procedure_ids": {"type": "array", "minItems": 4, "maxItems": 4, "uniqueItems": true},
+    "case_count": {"const": 20},
+    "classification_counts": {"type": "object"},
+    "observed_feature_count": {"type": "integer", "minimum": 15},
+    "results": {"type": "array", "minItems": 20, "maxItems": 20},
+    "status": {"const": "passed"},
+    "evidence_class": {"const": "bounded-synthetic-procedure-semantics"},
+    "native_oracle_execution_observed": {"const": false},
+    "native_postgresql_execution_observed": {"const": false},
+    "production_ready": {"const": false},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

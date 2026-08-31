@@ -17,6 +17,8 @@ production-qualified.
 | MS #40 | IMS Qualification Hardening | Complete |
 | MS #41 | HLASM Qualification Hardening | Complete |
 | MS #42 | Integrated Pilot Qualification | Complete |
+| MS #43 | Oracle Source and Stored-Procedure Qualification | Complete |
+| MS #44 | SAP ASE Semantic Source Adapter | Planned |
 
 The v0.35.0 stored-logic qualification core is retained as supporting MS #34 evidence. It does not
 replace the planned DB2 milestone.
@@ -88,3 +90,21 @@ acceptance-evidence items, and a 30-entry five-class compatibility ledger. It ma
 integrated development evidence ready without admitting a factory work order. All 15 live-evidence
 items remain blocked; factory dispatch, native compilation and execution, mainframe equivalence,
 production release, and production readiness remain false pending authorized evidence.
+
+## MS #43 — Oracle Source and Stored-Procedure Qualification
+
+MS #43 upgrades the bounded Oracle-to-PostgreSQL mechanism with a genuine Oracle `SourceAdapter`,
+SCN-bound CDC resume, source profiling and extraction contracts, a five-class semantic ledger, and
+an eight-gate source-to-target qualification. It also qualifies four declared PL/SQL procedures
+through deterministic PL/pgSQL translation and 20 result, side-effect, row-count, exception,
+decimal, null, empty-string, and mutation cases. Dynamic SQL, autonomous transactions, package
+state, database links, and procedure-owned commits remain excluded. Native database execution,
+live redo, general stored-logic completion, database migration completion, and production readiness
+stay blocked pending authorized evidence.
+
+## MS #44 — SAP ASE Semantic Source Adapter
+
+MS #44 will implement a target-neutral SAP ASE source adapter and semantic-loss analysis. Its
+bounded scope will include user-defined datatypes, `IDENTITY`, money and datetime behavior,
+empty-string semantics, Transact-SQL, locking, stored procedures and triggers, replication ordering,
+and transaction/rollback differences. A target-specific ASE proof will follow a real pilot choice.

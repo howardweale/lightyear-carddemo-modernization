@@ -1,5 +1,11 @@
 # Database semantic core and AUTHFRDS proof cell
 
+MS #43 adds a genuine Oracle source adapter and a separately gated stored-procedure subset. Four
+declared PL/SQL procedures are inventoried, translated to bounded PL/pgSQL, and exercised through
+20 deterministic result, side-effect, exception, row-count, decimal, null, empty-string, and
+mutation cases. This supports development qualification for the declared subset; it does not claim
+a complete Oracle catalog inventory or native source/target equivalence.
+
 MS #35.1 corrects the roadmap alignment by implementing DB2 as a genuine semantic-core source
 adapter. Its discovery, profile, source compatibility ledger, and conformance receipt are committed
 under `db2-semantic-adapter/`. These are source-only and synthetic-fixture artifacts; they do not
@@ -22,8 +28,9 @@ transformation, normalization, comparison, CDC, cutover, rollback, and conforman
 The compatibility ledger is the authority for semantic differences. It classifies every bounded
 column and behavior as `exact`, `normalized-equivalent`, `policy-decision-required`, `lossy`, or
 `unsupported`. A policy decision cannot be silently auto-accepted, loss blocks equivalence, and an
-unsupported item is excluded from the claim scope. Stored procedures, triggers, arbitrary
-application SQL, DDL replication, and sequence-state transfer remain separately gated.
+unsupported item is excluded from the claim scope. The declared stored-procedure subset now has
+its own qualification; triggers, arbitrary application SQL, DDL replication, sequence-state
+transfer, and general PL/SQL remain separately gated.
 
 This bounded v0.19.2 vertical slice translates the AWS CardDemo Db2 for z/OS `CARDDEMO.AUTHFRDS` contract to PostgreSQL and Oracle while retaining source lineage and explicit evidence gaps.
 
@@ -57,6 +64,7 @@ PYTHONPATH=src python3 -m lightyear_data verify-semantic-core
 PYTHONPATH=src python3 -m lightyear_data verify-oracle-postgresql-proof
 PYTHONPATH=src python3 -m lightyear_data verify-stored-logic-qualification
 PYTHONPATH=src python3 -m lightyear_data verify-db2-semantic-adapter
+PYTHONPATH=src python3 -m lightyear_data verify-oracle-source-qualification
 ./migration-rehearsal.sh verify /path/to/aws-carddemo
 ```
 
@@ -107,4 +115,4 @@ data profiling.
 | RPO/RTO | Zero fixture events and three recovery steps; no production timing claim |
 | Database semantic core | Canonical types, adapters, profiling, transformations, rows, comparisons, CDC, cutover/rollback, and conformance passed |
 | Compatibility ledger | 52 column mappings plus behavioral boundaries; unresolved policy decisions block equivalence |
-| Stored logic | Explicitly unsupported in this claim; requires separate qualification gates |
+| Stored logic | Four declared procedures pass a bounded separate qualification; triggers, arbitrary application SQL, live catalog completeness, native equivalence, security and operability remain open |

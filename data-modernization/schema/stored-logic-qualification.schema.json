@@ -3,10 +3,11 @@
   "$id": "https://lightyear.example/schema/stored-logic-qualification.schema.json",
   "title": "LIGHTYEAR stored logic qualification",
   "type": "object",
-  "required": ["schema_version", "qualification_type", "qualification_id", "source_dialect", "target_dialect", "bindings", "inventory_contract", "object_counts", "objects", "qualification_gates", "classification_policy", "qualification_core_ready", "inventory_complete", "stored_logic_complete", "database_migration_complete", "production_ready", "claim_unlocked", "content_sha256"],
+  "required": ["schema_version", "qualification_type", "qualification_id", "source_dialect", "target_dialect", "bindings", "inventory_contract", "object_counts", "objects", "qualification_gates", "classification_policy", "qualification_core_ready", "supported_procedure_subset_qualified", "inventory_complete", "stored_logic_complete", "database_migration_complete", "production_ready", "claim_unlocked", "content_sha256"],
   "properties": {
     "qualification_type": {"const": "lightyear-stored-logic-qualification"},
     "qualification_core_ready": {"const": true},
+    "supported_procedure_subset_qualified": {"const": true},
     "inventory_complete": {"const": false},
     "stored_logic_complete": {"const": false},
     "database_migration_complete": {"const": false},

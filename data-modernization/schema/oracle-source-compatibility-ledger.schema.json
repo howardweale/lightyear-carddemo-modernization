@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schema/oracle-source-compatibility-ledger.schema.json",
+  "title": "LIGHTYEAR Oracle source compatibility ledger",
+  "type": "object",
+  "required": ["schema_version", "ledger_type", "source_model_sha256", "classifications", "entries", "statistics", "equivalence_blocked", "production_ready", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "ledger_type": {"const": "lightyear-oracle-source-compatibility-ledger"},
+    "source_model_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "classifications": {"type": "array", "minItems": 5, "maxItems": 5, "uniqueItems": true},
+    "entries": {"type": "array", "minItems": 30},
+    "statistics": {"type": "object"},
+    "equivalence_blocked": {"const": true},
+    "production_ready": {"const": false},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

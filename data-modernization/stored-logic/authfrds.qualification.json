@@ -2,9 +2,10 @@
   "bindings": {
     "canonical_model_sha256": "fb59dfc8f78bd088f18f2f2167c457c887f3928e10264f05b3ac5482ec8a6664",
     "compatibility_ledger_sha256": "0811440daef856f252659d4f86698c42290dd687cb0f7ddb38dad66d44f9ad46",
-    "embedded_sql_sha256": "33a325c3362f7c2561fdd13dac31ff65909273425749ddbdabdde51c698e4eb8"
+    "embedded_sql_sha256": "33a325c3362f7c2561fdd13dac31ff65909273425749ddbdabdde51c698e4eb8",
+    "procedure_qualification_sha256": "308b4cc9c4f510bfd348a9e0a8cabcbcc43b22f6c46be50165e4b5cd230e254d"
   },
-  "claim_unlocked": "LIGHTYEAR can inventory and independently qualify stored logic without bundling unobserved Oracle behavior into a database migration claim.",
+  "claim_unlocked": "LIGHTYEAR can inventory stored logic and qualify a declared bounded Oracle procedure subset without bundling unobserved native behavior into a database migration claim.",
   "classification_policy": {
     "allowed": [
       "exact",
@@ -17,7 +18,7 @@
     "unresolved_policy_blocks_completion": true,
     "unsupported_requires_explicit_exclusion": true
   },
-  "content_sha256": "9f2249f97a7e9397e668303567ba818179abc120c9717f3b2a50f8a62e6ea822",
+  "content_sha256": "c2a169d8da153f6def998d4e575e2bef5ccbd69e3bbf79847eaf4d4027ee729f",
   "database_migration_complete": false,
   "inventory_complete": false,
   "inventory_contract": {
@@ -46,11 +47,75 @@
     "materialized-view": 0,
     "package": 0,
     "package-body": 0,
-    "procedure": 0,
+    "procedure": 4,
     "trigger": 0,
     "view": 0
   },
   "objects": [
+    {
+      "classification": "policy-decision-required",
+      "dependencies": [
+        "CARDDEMO.AUTHFRDS"
+      ],
+      "kind": "procedure",
+      "object_id": "CARDDEMO.GET_AUTH_STATUS",
+      "operation": "PLSQL_PROCEDURE",
+      "qualification_status": "qualified-bounded-supported-subset",
+      "required_evidence": [
+        "procedure-qualification-receipt",
+        "native-oracle-execution-baseline",
+        "native-postgresql-execution-result",
+        "security-and-plan-comparison"
+      ],
+      "source_path": "data-modernization/oracle-source/procedures.sql"
+    },
+    {
+      "classification": "policy-decision-required",
+      "dependencies": [
+        "CARDDEMO.AUTHFRDS"
+      ],
+      "kind": "procedure",
+      "object_id": "CARDDEMO.SET_FRAUD_FLAG",
+      "operation": "PLSQL_PROCEDURE",
+      "qualification_status": "qualified-bounded-supported-subset",
+      "required_evidence": [
+        "procedure-qualification-receipt",
+        "native-oracle-execution-baseline",
+        "native-postgresql-execution-result",
+        "security-and-plan-comparison"
+      ],
+      "source_path": "data-modernization/oracle-source/procedures.sql"
+    },
+    {
+      "classification": "policy-decision-required",
+      "dependencies": [],
+      "kind": "procedure",
+      "object_id": "CARDDEMO.CLASSIFY_AMOUNT",
+      "operation": "PLSQL_PROCEDURE",
+      "qualification_status": "qualified-bounded-supported-subset",
+      "required_evidence": [
+        "procedure-qualification-receipt",
+        "native-oracle-execution-baseline",
+        "native-postgresql-execution-result",
+        "security-and-plan-comparison"
+      ],
+      "source_path": "data-modernization/oracle-source/procedures.sql"
+    },
+    {
+      "classification": "policy-decision-required",
+      "dependencies": [],
+      "kind": "procedure",
+      "object_id": "CARDDEMO.NORMALIZE_REASON",
+      "operation": "PLSQL_PROCEDURE",
+      "qualification_status": "qualified-bounded-supported-subset",
+      "required_evidence": [
+        "procedure-qualification-receipt",
+        "native-oracle-execution-baseline",
+        "native-postgresql-execution-result",
+        "security-and-plan-comparison"
+      ],
+      "source_path": "data-modernization/oracle-source/procedures.sql"
+    },
     {
       "classification": "policy-decision-required",
       "dependencies": [
@@ -91,15 +156,16 @@
   "qualification_gates": [
     {
       "evidence": {
+        "declared_procedures": 4,
         "oracle_catalog_observed": false,
-        "source_only_objects": 2
+        "source_only_objects": 6
       },
       "gate": "inventory-completeness",
       "status": "blocked-live-catalog-required"
     },
     {
       "evidence": {
-        "objects": 2,
+        "objects": 6,
         "unresolved_external_dependencies": 0
       },
       "gate": "dependency-closure",
@@ -108,25 +174,27 @@
     {
       "evidence": {
         "objects_requiring_policy": 2,
-        "qualified_objects": 0
+        "qualified_objects": 4
       },
       "gate": "translation",
-      "status": "policy-decision-required"
+      "status": "passed-bounded-procedure-subset"
     },
     {
       "evidence": {
-        "qualified_objects": 0
+        "native_objects_compared": 0,
+        "qualified_objects": 4
       },
       "gate": "result-and-side-effect-equivalence",
-      "status": "blocked-no-execution-baseline"
+      "status": "passed-bounded-procedure-subset"
     },
     {
       "evidence": {
         "autonomous_transactions_qualified": false,
-        "exception_mapping_qualified": false
+        "bounded_exception_mapping_qualified": true,
+        "native_transaction_behavior_observed": false
       },
       "gate": "transaction-and-exception-behavior",
-      "status": "blocked-no-live-probes"
+      "status": "policy-decision-required"
     },
     {
       "evidence": {
@@ -145,10 +213,11 @@
       "status": "blocked-no-operational-baseline"
     }
   ],
-  "qualification_id": "authfrds-stored-logic-v0.35",
+  "qualification_id": "authfrds-stored-logic-v0.43",
   "qualification_type": "lightyear-stored-logic-qualification",
   "schema_version": "1.0",
   "source_dialect": "oracle-26ai-free",
   "stored_logic_complete": false,
+  "supported_procedure_subset_qualified": true,
   "target_dialect": "postgresql-16"
 }

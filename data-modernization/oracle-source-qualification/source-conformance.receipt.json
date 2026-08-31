@@ -1,0 +1,30 @@
+{
+  "adapter": {
+    "dialect": "oracle-26ai-free",
+    "id": "lightyear-oracle-source",
+    "version": "1.0"
+  },
+  "catalog_observed": false,
+  "checks": {
+    "canonical-schema-coverage": true,
+    "compatibility-ledger-complete": true,
+    "content-bound-cdc-resume": true,
+    "contract-bound-extraction": true,
+    "deterministic-discovery": true,
+    "live-claims-fail-closed": true,
+    "privacy-preserving-profile": true,
+    "source-interface": true,
+    "transaction-capabilities-fail-closed": true
+  },
+  "content_sha256": "3dbeddedebbf63f2bf55b82821bc362cc3b8164865591bbdbef6eac69cea890d",
+  "ledger_sha256": "6fc2d33dbf6d263a491d56466f5bcfe4e97bc594ac38d8692334b770e6ce9458",
+  "model_sha256": "fb59dfc8f78bd088f18f2f2167c457c887f3928e10264f05b3ac5482ec8a6664",
+  "production_ready": false,
+  "profile_contract_sha256": "3349fb6b12d326538dc4a1831c720a7b804436d50f9b257d9041b0e7ff39ed3f",
+  "profile_observed": false,
+  "receipt_type": "lightyear-oracle-source-adapter-conformance",
+  "redo_observed": false,
+  "schema_version": "1.0",
+  "status": "passed",
+  "transaction_observed": false
+}

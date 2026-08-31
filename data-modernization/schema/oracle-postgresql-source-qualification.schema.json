@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schema/oracle-postgresql-source-qualification.schema.json",
+  "title": "LIGHTYEAR Oracle to PostgreSQL source qualification",
+  "type": "object",
+  "required": ["schema_version", "qualification_type", "qualification_id", "source", "target", "bindings", "gates", "development_ready", "supported_procedure_subset_qualified", "live_source_observed", "live_target_observed", "live_redo_observed", "native_procedure_execution_observed", "database_migration_complete", "stored_logic_complete", "production_ready", "claim_unlocked", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "qualification_type": {"const": "lightyear-oracle-postgresql-source-qualification"},
+    "qualification_id": {"const": "authfrds-oracle-postgresql-source-v0.43"},
+    "source": {"type": "object"},
+    "target": {"type": "object"},
+    "bindings": {"type": "object"},
+    "gates": {"type": "array", "minItems": 8, "maxItems": 8},
+    "development_ready": {"const": true},
+    "supported_procedure_subset_qualified": {"const": true},
+    "live_source_observed": {"const": false},
+    "live_target_observed": {"const": false},
+    "live_redo_observed": {"const": false},
+    "native_procedure_execution_observed": {"const": false},
+    "database_migration_complete": {"const": false},
+    "stored_logic_complete": {"const": false},
+    "production_ready": {"const": false},
+    "claim_unlocked": {"type": "string"},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

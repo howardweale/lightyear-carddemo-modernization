@@ -36,7 +36,7 @@ class OraclePostgreSQLProofTests(unittest.TestCase):
         self.assertEqual("policy-decision-required", statuses[5])
         self.assertEqual("passed-simulated", statuses[6])
         self.assertEqual("passed-simulated", statuses[7])
-        self.assertEqual("excluded-unqualified", statuses[8])
+        self.assertEqual("passed-bounded-subset-with-open-gates", statuses[8])
         self.assertFalse(proof["database_migration_complete"])
         self.assertFalse(proof["production_ready"])
 
@@ -45,6 +45,7 @@ class OraclePostgreSQLProofTests(unittest.TestCase):
         self.assertTrue(stored["evidence"]["qualification_core_ready"])
         self.assertFalse(stored["evidence"]["inventory_complete"])
         self.assertFalse(stored["evidence"]["stored_logic_complete"])
+        self.assertTrue(stored["evidence"]["supported_procedure_subset_qualified"])
 
     def test_canonical_proof_is_current_and_valid(self) -> None:
         expected = build_oracle_postgresql_proof(ROOT)

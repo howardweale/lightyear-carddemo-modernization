@@ -1,0 +1,274 @@
+{
+  "claim_unlocked": "LIGHTYEAR can inventory, translate, and behaviorally qualify the declared bounded Oracle procedure subset without claiming general PL/SQL or native equivalence.",
+  "compatibility_ledger_sha256": "e3b3cd2e296907ff2da0ccbff8ab35d1e9e8cc576cf120af54c37016606af656",
+  "conformance_receipt_sha256": "443f700d9a39f7b6d25c9a867583f3be55b01d361eb6cfff0c2dea96518a0e17",
+  "content_sha256": "308b4cc9c4f510bfd348a9e0a8cabcbcc43b22f6c46be50165e4b5cd230e254d",
+  "database_migration_complete": false,
+  "live_catalog_inventory_complete": false,
+  "native_execution_observed": false,
+  "procedure_count": 4,
+  "procedures": [
+    {
+      "dependencies": [
+        "CARDDEMO.AUTHFRDS"
+      ],
+      "features": [
+        "no-data-found",
+        "select-into"
+      ],
+      "name": "GET_AUTH_STATUS",
+      "parameters": [
+        {
+          "length": null,
+          "mode": "IN",
+          "name": "P_CARD_NUM",
+          "ordinal": 1,
+          "source_type": "VARCHAR2"
+        },
+        {
+          "length": null,
+          "mode": "OUT",
+          "name": "P_STATUS",
+          "ordinal": 2,
+          "source_type": "VARCHAR2"
+        }
+      ],
+      "procedure_id": "CARDDEMO.GET_AUTH_STATUS",
+      "schema": "CARDDEMO",
+      "source_sha256": "da5c0d595e1f5b42137f5a6a6e132dff87d1a036ba16f5fe4b2cc76bacc5ec9e"
+    },
+    {
+      "dependencies": [
+        "CARDDEMO.AUTHFRDS"
+      ],
+      "features": [
+        "sql-rowcount",
+        "update"
+      ],
+      "name": "SET_FRAUD_FLAG",
+      "parameters": [
+        {
+          "length": null,
+          "mode": "IN",
+          "name": "P_CARD_NUM",
+          "ordinal": 1,
+          "source_type": "VARCHAR2"
+        },
+        {
+          "length": null,
+          "mode": "IN",
+          "name": "P_REASON",
+          "ordinal": 2,
+          "source_type": "VARCHAR2"
+        },
+        {
+          "length": null,
+          "mode": "OUT",
+          "name": "P_ROWS",
+          "ordinal": 3,
+          "source_type": "NUMBER"
+        }
+      ],
+      "procedure_id": "CARDDEMO.SET_FRAUD_FLAG",
+      "schema": "CARDDEMO",
+      "source_sha256": "4fea32adb4e00a091d4f8b1d74fd7ea2abc7c42572e0dd901669a91ab0588bc1"
+    },
+    {
+      "dependencies": [],
+      "features": [
+        "if-elsif-else",
+        "raise-application-error"
+      ],
+      "name": "CLASSIFY_AMOUNT",
+      "parameters": [
+        {
+          "length": null,
+          "mode": "IN",
+          "name": "P_AMOUNT",
+          "ordinal": 1,
+          "source_type": "NUMBER"
+        },
+        {
+          "length": null,
+          "mode": "OUT",
+          "name": "P_CLASS",
+          "ordinal": 2,
+          "source_type": "VARCHAR2"
+        }
+      ],
+      "procedure_id": "CARDDEMO.CLASSIFY_AMOUNT",
+      "schema": "CARDDEMO",
+      "source_sha256": "acd973e84df616055a01373d699f00e5893882ae32e36055db929b732ebf0e08"
+    },
+    {
+      "dependencies": [],
+      "features": [
+        "nvl"
+      ],
+      "name": "NORMALIZE_REASON",
+      "parameters": [
+        {
+          "length": null,
+          "mode": "IN",
+          "name": "P_REASON",
+          "ordinal": 1,
+          "source_type": "VARCHAR2"
+        },
+        {
+          "length": null,
+          "mode": "OUT",
+          "name": "P_RESULT",
+          "ordinal": 2,
+          "source_type": "VARCHAR2"
+        }
+      ],
+      "procedure_id": "CARDDEMO.NORMALIZE_REASON",
+      "schema": "CARDDEMO",
+      "source_sha256": "8bc528c63c7e8c440291c58902a858b6a9eb2ec932d6e0fb21345b5327bdda87"
+    }
+  ],
+  "production_ready": false,
+  "qualification_gates": [
+    {
+      "evidence": {
+        "live_catalog_observed": false,
+        "procedures": 4
+      },
+      "gate": "declared-source-inventory",
+      "status": "passed-source-bound"
+    },
+    {
+      "evidence": {
+        "parameters": 9
+      },
+      "gate": "syntax-and-parameter-contract",
+      "status": "passed-bounded-subset"
+    },
+    {
+      "evidence": {
+        "dependencies": [
+          "CARDDEMO.AUTHFRDS"
+        ]
+      },
+      "gate": "dependency-closure",
+      "status": "passed-declared-source"
+    },
+    {
+      "evidence": {
+        "translated_procedures": 4
+      },
+      "gate": "plsql-to-plpgsql-translation",
+      "status": "passed-bounded-subset"
+    },
+    {
+      "evidence": {
+        "cases": 20,
+        "receipt_sha256": "443f700d9a39f7b6d25c9a867583f3be55b01d361eb6cfff0c2dea96518a0e17"
+      },
+      "gate": "result-and-side-effect-conformance",
+      "status": "passed-bounded-synthetic"
+    },
+    {
+      "evidence": {
+        "autonomous_transactions_supported": false,
+        "procedure_owned_commit_supported": false
+      },
+      "gate": "transaction-and-exception-policy",
+      "status": "policy-decision-required"
+    },
+    {
+      "evidence": {
+        "grants_observed": false,
+        "plans_compared": 0
+      },
+      "gate": "security-and-operability",
+      "status": "blocked-live-evidence-required"
+    },
+    {
+      "evidence": {
+        "oracle_execution_observed": false,
+        "postgresql_execution_observed": false
+      },
+      "gate": "native-source-target-execution",
+      "status": "blocked-no-authorized-evidence"
+    }
+  ],
+  "qualification_id": "authfrds-oracle-procedure-subset-v0.43",
+  "qualification_type": "lightyear-oracle-procedure-qualification",
+  "schema_version": "1.0",
+  "source_dialect": "oracle-plsql",
+  "source_path": "data-modernization/oracle-source/procedures.sql",
+  "source_sha256": "df8039e3134949101f31131f6daa0f90781d74273c2a6d08e7c466fc0ebad4da",
+  "stored_logic_complete": false,
+  "supported_features": [
+    "if-elsif-else",
+    "no-data-found",
+    "nvl",
+    "raise-application-error",
+    "select-into",
+    "sql-rowcount",
+    "update"
+  ],
+  "supported_procedure_subset_qualified": true,
+  "target_dialect": "postgresql-plpgsql",
+  "translations": [
+    {
+      "dependencies": [
+        "CARDDEMO.AUTHFRDS"
+      ],
+      "features": [
+        "no-data-found",
+        "select-into"
+      ],
+      "procedure_id": "CARDDEMO.GET_AUTH_STATUS",
+      "source_sha256": "da5c0d595e1f5b42137f5a6a6e132dff87d1a036ba16f5fe4b2cc76bacc5ec9e",
+      "status": "translated-bounded-subset",
+      "target_sql": "CREATE OR REPLACE PROCEDURE carddemo.get_auth_status (\n  IN p_card_num VARCHAR,\n  OUT p_status VARCHAR\n)\nLANGUAGE plpgsql\nAS $$\nBEGIN\n  SELECT AUTH_FRAUD\n    INTO P_STATUS\n    FROM carddemo.authfrds\n   WHERE CARD_NUM = P_CARD_NUM;\nEXCEPTION\n  WHEN NO_DATA_FOUND THEN\n    P_STATUS := 'N';\nEND;\n$$;\n",
+      "target_sql_sha256": "e29e31ed3132014d5b9338e9627dd4a5941e962e7a0d61a0b1cca171cdbe18d1"
+    },
+    {
+      "dependencies": [
+        "CARDDEMO.AUTHFRDS"
+      ],
+      "features": [
+        "sql-rowcount",
+        "update"
+      ],
+      "procedure_id": "CARDDEMO.SET_FRAUD_FLAG",
+      "source_sha256": "4fea32adb4e00a091d4f8b1d74fd7ea2abc7c42572e0dd901669a91ab0588bc1",
+      "status": "translated-bounded-subset",
+      "target_sql": "CREATE OR REPLACE PROCEDURE carddemo.set_fraud_flag (\n  IN p_card_num VARCHAR,\n  IN p_reason VARCHAR,\n  OUT p_rows NUMERIC\n)\nLANGUAGE plpgsql\nAS $$\nBEGIN\n  UPDATE carddemo.authfrds\n     SET AUTH_FRAUD = 'Y',\n         AUTH_RESP_REASON = P_REASON\n   WHERE CARD_NUM = P_CARD_NUM;\n  GET DIAGNOSTICS P_ROWS = ROW_COUNT;\nEND;\n$$;\n",
+      "target_sql_sha256": "b4043d277a0f484212e4b6923d89d70fb2811aa36d37251481477c2aea1423a0"
+    },
+    {
+      "dependencies": [],
+      "features": [
+        "if-elsif-else",
+        "raise-application-error"
+      ],
+      "procedure_id": "CARDDEMO.CLASSIFY_AMOUNT",
+      "source_sha256": "acd973e84df616055a01373d699f00e5893882ae32e36055db929b732ebf0e08",
+      "status": "translated-bounded-subset",
+      "target_sql": "CREATE OR REPLACE PROCEDURE carddemo.classify_amount (\n  IN p_amount NUMERIC,\n  OUT p_class VARCHAR\n)\nLANGUAGE plpgsql\nAS $$\nBEGIN\n  IF P_AMOUNT < 0 THEN\n    RAISE EXCEPTION 'NEGATIVE_AMOUNT' USING ERRCODE = 'P0001';\n  ELSIF P_AMOUNT >= 1000 THEN\n    P_CLASS := 'HIGH';\n  ELSE\n    P_CLASS := 'STANDARD';\n  END IF;\nEND;\n$$;\n",
+      "target_sql_sha256": "099ceb0ff0c69cc62afd46ee8e19a6b38889466d04156814a9901bed4833266e"
+    },
+    {
+      "dependencies": [],
+      "features": [
+        "nvl"
+      ],
+      "procedure_id": "CARDDEMO.NORMALIZE_REASON",
+      "source_sha256": "8bc528c63c7e8c440291c58902a858b6a9eb2ec932d6e0fb21345b5327bdda87",
+      "status": "translated-bounded-subset",
+      "target_sql": "CREATE OR REPLACE PROCEDURE carddemo.normalize_reason (\n  IN p_reason VARCHAR,\n  OUT p_result VARCHAR\n)\nLANGUAGE plpgsql\nAS $$\nBEGIN\n  P_RESULT := COALESCE(P_REASON, 'UNSPECIFIED');\nEND;\n$$;\n",
+      "target_sql_sha256": "2ddf5a020f6761b1cceb48c96b5980a9800c1ea2d443b1081cf9aaea1b23102f"
+    }
+  ],
+  "unsupported_features": [
+    "autonomous-transaction",
+    "database-link",
+    "dynamic-sql",
+    "package-state",
+    "procedure-owned-commit"
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schema/hlasm-conformance-receipt.schema.json",
+  "title": "LIGHTYEAR HLASM conformance receipt",
+  "type": "object",
+  "required": ["schema_version", "receipt_type", "corpus_id", "graph_content_sha256", "manifest_sha256", "corpus", "coverage", "results", "status", "claim_boundary", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "receipt_type": {"const": "lightyear-hlasm-conformance-receipt"},
+    "corpus_id": {"const": "lightyear-hlasm-synthetic-conformance-v1"},
+    "graph_content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "corpus": {
+      "type": "object",
+      "required": ["case_count", "positive_case_count", "targeted_boundary_case_count", "mutation_case_count", "passed_case_count", "blocked_case_count", "customer_source"],
+      "properties": {
+        "case_count": {"const": 40},
+        "positive_case_count": {"const": 4},
+        "targeted_boundary_case_count": {"const": 32},
+        "mutation_case_count": {"const": 4},
+        "passed_case_count": {"const": 36},
+        "blocked_case_count": {"const": 4},
+        "customer_source": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "coverage": {"type": "object"},
+    "results": {"type": "array", "minItems": 40, "maxItems": 40},
+    "status": {"const": "passed"},
+    "claim_boundary": {
+      "type": "object",
+      "required": ["native_hlasm_qualified", "assembler_qualified", "binder_qualified", "le_linkage_qualified", "system_services_qualified", "runtime_equivalent", "mainframe_equivalent", "production_ready"],
+      "properties": {
+        "native_hlasm_qualified": {"const": false},
+        "assembler_qualified": {"const": false},
+        "binder_qualified": {"const": false},
+        "le_linkage_qualified": {"const": false},
+        "system_services_qualified": {"const": false},
+        "runtime_equivalent": {"const": false},
+        "mainframe_equivalent": {"const": false},
+        "production_ready": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

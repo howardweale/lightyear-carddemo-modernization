@@ -1,0 +1,1406 @@
+{
+  "claim_boundary": {
+    "assembler_qualified": false,
+    "binder_qualified": false,
+    "le_linkage_qualified": false,
+    "mainframe_equivalent": false,
+    "native_hlasm_qualified": false,
+    "production_ready": false,
+    "runtime_equivalent": false,
+    "system_services_qualified": false
+  },
+  "content_sha256": "aebf041eaad6160de99a9a572e9ffebb1e12e6b307beaed27762f5dc0dff0d2a",
+  "corpus": {
+    "blocked_case_count": 4,
+    "case_count": 40,
+    "customer_source": false,
+    "mutation_case_count": 4,
+    "passed_case_count": 36,
+    "positive_case_count": 4,
+    "targeted_boundary_case_count": 32
+  },
+  "corpus_id": "lightyear-hlasm-synthetic-conformance-v1",
+  "coverage": {
+    "directives": [
+      "COPY",
+      "CSECT",
+      "DROP",
+      "DSECT",
+      "DS",
+      "END",
+      "EQU",
+      "LTORG",
+      "MACRO",
+      "MEND",
+      "START",
+      "USING"
+    ],
+    "explicit_native_gaps": [
+      "authorized HLASM assembly, macro expansion, object generation, and binder execution",
+      "native z/Architecture instruction, condition-code, addressing, storage-key, and protection behavior",
+      "AMODE, RMODE, residency, reentrancy, and executable module attributes",
+      "Language Environment and COBOL linkage, save-area, recovery, and abend behavior",
+      "STIMER, SVC, authorized services, timing, dispatching, and system state"
+    ],
+    "instruction_subset": [
+      "B",
+      "BE",
+      "BNE",
+      "BR",
+      "CLC",
+      "CLI",
+      "L",
+      "LA",
+      "LM",
+      "LR",
+      "MVC",
+      "MVI",
+      "SR",
+      "ST",
+      "STM"
+    ],
+    "observed_feature_count": 121,
+    "observed_features": [
+      "15-registers",
+      "20-byte-input",
+      "80-byte-record",
+      "ASMWAIT",
+      "B",
+      "BE",
+      "BNE",
+      "CLC",
+      "CLI",
+      "COBDATFT",
+      "COBSWAIT",
+      "COCDATFT",
+      "COERMSG",
+      "COINPDT",
+      "COOUTDT",
+      "COPY",
+      "CSECT",
+      "DROP",
+      "DS",
+      "DSECT",
+      "DSECT-binding",
+      "EXITL",
+      "GOTOERR",
+      "L",
+      "LA",
+      "LM",
+      "LR",
+      "LTORG",
+      "MACRO",
+      "MEND",
+      "MVC",
+      "MVI",
+      "MVSWAIT",
+      "R12",
+      "R13",
+      "R14",
+      "R15",
+      "SR",
+      "STIMER",
+      "STM",
+      "SVC",
+      "SYSLIB",
+      "USING",
+      "address-placement",
+      "addressability",
+      "addressing-error",
+      "assembler-dependent",
+      "authorized-service",
+      "base-register",
+      "bounded-handoff",
+      "bounded-storage",
+      "branch-not-taken",
+      "branch-taken",
+      "branch-target",
+      "byte-area",
+      "cache-coherency",
+      "character-area",
+      "commented-instruction",
+      "compact-input",
+      "compact-output",
+      "compare",
+      "condition-code",
+      "condition-code-nonzero",
+      "condition-code-one",
+      "condition-code-two",
+      "condition-code-zero",
+      "crypto",
+      "date-format",
+      "delimiter",
+      "displacement",
+      "effective-address",
+      "error-area",
+      "explicit-length",
+      "fail-closed",
+      "fallthrough",
+      "field-layout",
+      "fixed-length",
+      "fixed-offset",
+      "fullword-load",
+      "hyphenated-input",
+      "hyphenated-output",
+      "indirection",
+      "input-type-1",
+      "input-type-2",
+      "instruction-family",
+      "invalid-input",
+      "length-38",
+      "literal-pool",
+      "memory-copy",
+      "memory-write",
+      "offset-42",
+      "output-type-1",
+      "output-type-2",
+      "parameter-list",
+      "privileged",
+      "register",
+      "register-copy",
+      "register-range",
+      "restore",
+      "return",
+      "return-code",
+      "save-area",
+      "security-state",
+      "self-modifying-code",
+      "separator",
+      "single-byte",
+      "slash-input",
+      "source-quirk",
+      "source-validation",
+      "space-padding",
+      "standard-entry",
+      "static-expansion",
+      "storage-range",
+      "system-state",
+      "truncation",
+      "unconditional",
+      "unsigned-byte",
+      "unsupported",
+      "vector",
+      "wrap-range",
+      "zero-register"
+    ],
+    "programs": [
+      "COBDATFT",
+      "MVSWAIT"
+    ],
+    "responses": [
+      "ADDRESSING_ERROR",
+      "BRANCH_NOT_TAKEN",
+      "BRANCH_TAKEN",
+      "CONDITION_FALSE",
+      "CONDITION_TRUE",
+      "INVALID_INPUT",
+      "MODELED",
+      "SUCCESS",
+      "UNSUPPORTED"
+    ]
+  },
+  "graph_content_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
+  "manifest_sha256": "fc48e621e0d3166b2acaed9774867911603dbee7e3be29c13e49c0a89bfebc85",
+  "receipt_type": "lightyear-hlasm-conformance-receipt",
+  "results": [
+    {
+      "classification": "positive",
+      "features": [
+        "COBDATFT",
+        "MVC",
+        "MVI",
+        "compact-input",
+        "date-format",
+        "hyphenated-output"
+      ],
+      "id": "01-compact-to-hyphenated",
+      "observed": {
+        "condition_code": null,
+        "diagnostics": [],
+        "memory_writes": [
+          {
+            "field": "COOUTDT",
+            "value": "2026-08-21          "
+          },
+          {
+            "field": "COERMSG",
+            "value": "                                      "
+          }
+        ],
+        "mutation_count": 1,
+        "register_changes": {},
+        "response": "SUCCESS",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "CLI COINTYPE",
+          "B EXITL",
+          "MVC OUTPUT"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "b6e4e090cb03a66ac44cfe4500c65935bc6ae3613921854e0b50d7a0589cdc26"
+    },
+    {
+      "classification": "positive",
+      "features": [
+        "COBDATFT",
+        "MVC",
+        "compact-output",
+        "date-format",
+        "fixed-offset",
+        "hyphenated-input"
+      ],
+      "id": "02-hyphenated-to-compact",
+      "observed": {
+        "condition_code": null,
+        "diagnostics": [],
+        "memory_writes": [
+          {
+            "field": "COOUTDT",
+            "value": "20260821            "
+          },
+          {
+            "field": "COERMSG",
+            "value": "                                      "
+          }
+        ],
+        "mutation_count": 1,
+        "register_changes": {},
+        "response": "SUCCESS",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "CLI COINTYPE",
+          "B EXITL",
+          "MVC OUTPUT"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "8e57e99761848dfe79fe582e136516bd9cea70208939ddca453914dfdc653eb2"
+    },
+    {
+      "classification": "positive",
+      "features": [
+        "ASMWAIT",
+        "COBSWAIT",
+        "MVSWAIT",
+        "STIMER",
+        "bounded-handoff",
+        "parameter-list"
+      ],
+      "id": "03-mvswait-interval-handoff",
+      "observed": {
+        "condition_code": null,
+        "diagnostics": [
+          "stimer-not-invoked",
+          "elapsed-time-not-qualified"
+        ],
+        "memory_writes": [],
+        "mutation_count": 0,
+        "register_changes": {},
+        "response": "MODELED",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "L R5,0(R1)",
+          "L R1,0(R5)",
+          "ST R1,BINLBL",
+          "ASMWAIT BINLBL"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "36e466a2760a8c7ebe6c16f6577d68509a965d5fcc5287b74dcdcb4e9847806a"
+    },
+    {
+      "classification": "positive",
+      "features": [
+        "COBDATFT",
+        "LM",
+        "R13",
+        "R14",
+        "R15",
+        "STM",
+        "return",
+        "save-area",
+        "standard-entry"
+      ],
+      "id": "04-register-save-return",
+      "observed": {
+        "condition_code": null,
+        "diagnostics": [],
+        "memory_writes": [],
+        "mutation_count": 0,
+        "register_changes": {
+          "R13": 4096,
+          "R15": 0
+        },
+        "response": "SUCCESS",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "STM R14,R12,12(R13)",
+          "LR R13,R12",
+          "LM R14,R12,12(R13)",
+          "SR R15,R15",
+          "BR R14"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "515b69dc316c5c5caefee27eb42e5b35388e9850b474c65463af1086c51c591c"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "CLI",
+        "COBDATFT",
+        "GOTOERR",
+        "error-area",
+        "invalid-input"
+      ],
+      "id": "05-invalid-input-type",
+      "observed": {
+        "condition_code": null,
+        "diagnostics": [
+          "source-routes-to-invalid-input"
+        ],
+        "memory_writes": [
+          {
+            "field": "COOUTDT",
+            "value": "                    "
+          },
+          {
+            "field": "COERMSG",
+            "value": "INVALID INPUT                         "
+          }
+        ],
+        "mutation_count": 1,
+        "register_changes": {},
+        "response": "INVALID_INPUT",
+        "result_count": 0,
+        "status": "passed",
+        "trace": [
+          "CLI COINTYPE",
+          "B GOTOERR",
+          "MVC COERMSG"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "ec31a4eb2a713c5c0e547b43886c67cbaf4a3ab7ce55aca35412ffce548bf45a"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "BE",
+        "COBDATFT",
+        "GOTOERR",
+        "input-type-1",
+        "output-type-2"
+      ],
+      "id": "06-compact-invalid-direction",
+      "observed": {
+        "condition_code": null,
+        "diagnostics": [
+          "source-routes-to-invalid-input"
+        ],
+        "memory_writes": [
+          {
+            "field": "COOUTDT",
+            "value": "                    "
+          },
+          {
+            "field": "COERMSG",
+            "value": "INVALID INPUT                         "
+          }
+        ],
+        "mutation_count": 1,
+        "register_changes": {},
+        "response": "INVALID_INPUT",
+        "result_count": 0,
+        "status": "passed",
+        "trace": [
+          "CLI COINTYPE",
+          "B GOTOERR",
+          "MVC COERMSG"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "f47b9482a3ce7cbc07f08819703f6ae71df88588040c1439a2570c09293b0ce2"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "BE",
+        "COBDATFT",
+        "GOTOERR",
+        "input-type-2",
+        "output-type-1"
+      ],
+      "id": "07-hyphenated-invalid-direction",
+      "observed": {
+        "condition_code": null,
+        "diagnostics": [
+          "source-routes-to-invalid-input"
+        ],
+        "memory_writes": [
+          {
+            "field": "COOUTDT",
+            "value": "                    "
+          },
+          {
+            "field": "COERMSG",
+            "value": "INVALID INPUT                         "
+          }
+        ],
+        "mutation_count": 1,
+        "register_changes": {},
+        "response": "INVALID_INPUT",
+        "result_count": 0,
+        "status": "passed",
+        "trace": [
+          "CLI COINTYPE",
+          "B GOTOERR",
+          "MVC COERMSG"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "a5201d9302dd54b0bfeb20aaafe944ddd6619084c8e7ba8650e4d672c9211c49"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "CLC",
+        "COBDATFT",
+        "condition-code",
+        "separator",
+        "source-validation"
+      ],
+      "id": "08-compact-separator-rejected",
+      "observed": {
+        "condition_code": null,
+        "diagnostics": [
+          "source-routes-to-invalid-input"
+        ],
+        "memory_writes": [
+          {
+            "field": "COOUTDT",
+            "value": "                    "
+          },
+          {
+            "field": "COERMSG",
+            "value": "INVALID INPUT                         "
+          }
+        ],
+        "mutation_count": 1,
+        "register_changes": {},
+        "response": "INVALID_INPUT",
+        "result_count": 0,
+        "status": "passed",
+        "trace": [
+          "CLI COINTYPE",
+          "B GOTOERR",
+          "MVC COERMSG"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "eff17974f13fbd161cf9e5ee593c68bed2ebc749f44961899e7c02c6b817fda1"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "COBDATFT",
+        "commented-instruction",
+        "fixed-offset",
+        "slash-input",
+        "source-quirk"
+      ],
+      "id": "09-commented-check-quirk",
+      "observed": {
+        "condition_code": null,
+        "diagnostics": [],
+        "memory_writes": [
+          {
+            "field": "COOUTDT",
+            "value": "20260821            "
+          },
+          {
+            "field": "COERMSG",
+            "value": "                                      "
+          }
+        ],
+        "mutation_count": 1,
+        "register_changes": {},
+        "response": "SUCCESS",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "CLI COINTYPE",
+          "B EXITL",
+          "MVC OUTPUT"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "4d9f69542723447266fd728dbb08d8fb1b8d8f22b5e51e1e26ef83fdcfad39d1"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "COBDATFT",
+        "DSECT",
+        "byte-area",
+        "fixed-length",
+        "space-padding"
+      ],
+      "id": "10-short-input-padding",
+      "observed": {
+        "condition_code": null,
+        "diagnostics": [],
+        "memory_writes": [
+          {
+            "field": "COOUTDT",
+            "value": "2026-01-01          "
+          },
+          {
+            "field": "COERMSG",
+            "value": "                                      "
+          }
+        ],
+        "mutation_count": 1,
+        "register_changes": {},
+        "response": "SUCCESS",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "CLI COINTYPE",
+          "B EXITL",
+          "MVC OUTPUT"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "391027a80e61da662da77f7e26381323c9fb1e8dd68705fb85fcc7f19544da68"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "20-byte-input",
+        "COBDATFT",
+        "byte-area",
+        "fixed-length",
+        "truncation"
+      ],
+      "id": "11-long-input-truncation",
+      "observed": {
+        "condition_code": null,
+        "diagnostics": [],
+        "memory_writes": [
+          {
+            "field": "COOUTDT",
+            "value": "20260821            "
+          },
+          {
+            "field": "COERMSG",
+            "value": "                                      "
+          }
+        ],
+        "mutation_count": 1,
+        "register_changes": {},
+        "response": "SUCCESS",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "CLI COINTYPE",
+          "B EXITL",
+          "MVC OUTPUT"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "61aa1e31ac10955606430cad54695f0290dc80e7aaf6a967a505fde1c14a5c00"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "80-byte-record",
+        "COCDATFT",
+        "DS",
+        "DSECT",
+        "field-layout"
+      ],
+      "id": "12-dsect-total-layout",
+      "observed": {
+        "condition_code": null,
+        "diagnostics": [],
+        "memory_writes": [],
+        "mutation_count": 0,
+        "register_changes": {},
+        "response": "SUCCESS",
+        "result_count": 5,
+        "status": "passed",
+        "trace": [
+          "COPY COCDATFT",
+          "DSECT LENGTH 80"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "292e9097c1e7161fa3fad9b21c45ad2ad1065cc82483194826f3ffa168be2a09"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "COCDATFT",
+        "COERMSG",
+        "field-layout",
+        "length-38",
+        "offset-42"
+      ],
+      "id": "13-dsect-error-field",
+      "observed": {
+        "condition_code": null,
+        "diagnostics": [],
+        "memory_writes": [],
+        "mutation_count": 0,
+        "register_changes": {},
+        "response": "SUCCESS",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "COPY COCDATFT",
+          "DSECT LENGTH 80"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "703bd0b4b9437890fb4b1c7ae997a030f9eb4f49bc5bc29d56e12e081513f276"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "MVC",
+        "bounded-storage",
+        "explicit-length",
+        "memory-copy"
+      ],
+      "id": "14-mvc-bounded-copy",
+      "observed": {
+        "condition_code": null,
+        "diagnostics": [],
+        "memory_writes": [
+          {
+            "length": 4,
+            "offset": 22
+          }
+        ],
+        "mutation_count": 1,
+        "register_changes": {},
+        "response": "SUCCESS",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "MVC 22(4)"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "2832f63f4d0811ac57e2320123f156c51500c559c38dae91c3e2153b03f32fda"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "COINPDT",
+        "COOUTDT",
+        "MVC",
+        "bounded-storage",
+        "displacement"
+      ],
+      "id": "15-mvc-displacement-copy",
+      "observed": {
+        "condition_code": null,
+        "diagnostics": [],
+        "memory_writes": [
+          {
+            "length": 2,
+            "offset": 27
+          }
+        ],
+        "mutation_count": 1,
+        "register_changes": {},
+        "response": "SUCCESS",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "MVC 27(2)"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "32fc16ffdefd6aa3401f3aaf856787eda2339ffea7c3ee347886f53b31b6f8b1"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "MVC",
+        "addressing-error",
+        "fail-closed",
+        "storage-range"
+      ],
+      "id": "16-mvc-range-error",
+      "observed": {
+        "condition_code": null,
+        "diagnostics": [
+          "bounded-storage-range-exceeded"
+        ],
+        "memory_writes": [],
+        "mutation_count": 0,
+        "register_changes": {},
+        "response": "ADDRESSING_ERROR",
+        "result_count": 0,
+        "status": "passed",
+        "trace": [
+          "MVC 79(4)"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "0a95d440163d9a8c4c554e8d9b90e97868055d2a0f909eeb933214100bf5e5f5"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "MVI",
+        "delimiter",
+        "memory-write",
+        "single-byte"
+      ],
+      "id": "17-mvi-byte-write",
+      "observed": {
+        "condition_code": null,
+        "diagnostics": [],
+        "memory_writes": [
+          {
+            "length": 1,
+            "offset": 26
+          }
+        ],
+        "mutation_count": 1,
+        "register_changes": {},
+        "response": "SUCCESS",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "MVI 26(1)"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "2182ad4832f15cc29cc4b6772be45807167db480098b4c703581b5d4ce688ecf"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "CLI",
+        "compare",
+        "condition-code-zero",
+        "unsigned-byte"
+      ],
+      "id": "18-cli-equal",
+      "observed": {
+        "condition_code": 0,
+        "diagnostics": [],
+        "memory_writes": [],
+        "mutation_count": 0,
+        "register_changes": {},
+        "response": "CONDITION_TRUE",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "CLI CC=0"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "e83b5e2240b1dd5567f6cca8927dc633c61c9704cce21f833c5f1f9cb4c158e4"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "CLI",
+        "compare",
+        "condition-code-one",
+        "unsigned-byte"
+      ],
+      "id": "19-cli-low",
+      "observed": {
+        "condition_code": 1,
+        "diagnostics": [],
+        "memory_writes": [],
+        "mutation_count": 0,
+        "register_changes": {},
+        "response": "CONDITION_FALSE",
+        "result_count": 0,
+        "status": "passed",
+        "trace": [
+          "CLI CC=1"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "aca7f34056d4d10695961e4fd1d401cd883c9c345525557cbcc93fdab87453c6"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "CLC",
+        "character-area",
+        "compare",
+        "condition-code-zero"
+      ],
+      "id": "20-clc-equal",
+      "observed": {
+        "condition_code": 0,
+        "diagnostics": [],
+        "memory_writes": [],
+        "mutation_count": 0,
+        "register_changes": {},
+        "response": "CONDITION_TRUE",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "CLC CC=0"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "5fa79fa96c44699db4184db3d3a9206f4dfeee123d66cca8206dc2d050f11eca"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "CLC",
+        "character-area",
+        "compare",
+        "condition-code-two"
+      ],
+      "id": "21-clc-high",
+      "observed": {
+        "condition_code": 2,
+        "diagnostics": [],
+        "memory_writes": [],
+        "mutation_count": 0,
+        "register_changes": {},
+        "response": "CONDITION_FALSE",
+        "result_count": 0,
+        "status": "passed",
+        "trace": [
+          "CLC CC=2"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "3ed04f17bc116c3cf388d7821003cfad05ee0d4510de5bbb727adbd58cf8e9b0"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "BE",
+        "branch-taken",
+        "branch-target",
+        "condition-code-zero"
+      ],
+      "id": "22-be-taken",
+      "observed": {
+        "condition_code": 0,
+        "diagnostics": [],
+        "memory_writes": [],
+        "mutation_count": 0,
+        "register_changes": {},
+        "response": "BRANCH_TAKEN",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "BE VALIDIN1"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "32d1cc40e2f384cb4c42c543caae3e6e7ccec5ca9b702687fc96bb6eeee77f69"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "BE",
+        "branch-not-taken",
+        "condition-code-nonzero",
+        "fallthrough"
+      ],
+      "id": "23-be-not-taken",
+      "observed": {
+        "condition_code": 1,
+        "diagnostics": [],
+        "memory_writes": [],
+        "mutation_count": 0,
+        "register_changes": {},
+        "response": "BRANCH_NOT_TAKEN",
+        "result_count": 0,
+        "status": "passed",
+        "trace": [
+          "BE GOTOERR"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "7b07cf193ae4c5707ca26c8a4e9a0dc36aa8b3cffaccf14152adc7691a4b0614"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "BNE",
+        "branch-taken",
+        "branch-target",
+        "condition-code-nonzero"
+      ],
+      "id": "24-bne-taken",
+      "observed": {
+        "condition_code": 2,
+        "diagnostics": [],
+        "memory_writes": [],
+        "mutation_count": 0,
+        "register_changes": {},
+        "response": "BRANCH_TAKEN",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "BNE GOTOERR"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "7986ed6b316801831f00b7b3d8b0cb3b58ff4c0441863ef95dd9ea0bb1212ba3"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "B",
+        "EXITL",
+        "branch-taken",
+        "unconditional"
+      ],
+      "id": "25-unconditional-branch",
+      "observed": {
+        "condition_code": 2,
+        "diagnostics": [],
+        "memory_writes": [],
+        "mutation_count": 0,
+        "register_changes": {},
+        "response": "BRANCH_TAKEN",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "B EXITL"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "bd0d17ca232341639271fa12348c057f43fbe8062e9fbaf64dc9da520d1e016a"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "15-registers",
+        "STM",
+        "register-range",
+        "save-area",
+        "wrap-range"
+      ],
+      "id": "26-stm-wrap-register-range",
+      "observed": {
+        "condition_code": null,
+        "diagnostics": [],
+        "memory_writes": [
+          {
+            "save_area_registers": 15
+          }
+        ],
+        "mutation_count": 15,
+        "register_changes": {},
+        "response": "SUCCESS",
+        "result_count": 15,
+        "status": "passed",
+        "trace": [
+          "STM 14,12"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "5150ab23ee8bcb6c6cb5f98e440da5ffdc32a01d8a50b5ebc43edd8287d3233f"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "LM",
+        "register-range",
+        "restore",
+        "save-area"
+      ],
+      "id": "27-lm-restore-registers",
+      "observed": {
+        "condition_code": null,
+        "diagnostics": [],
+        "memory_writes": [],
+        "mutation_count": 0,
+        "register_changes": {
+          "R12": 1,
+          "R14": 1
+        },
+        "response": "SUCCESS",
+        "result_count": 15,
+        "status": "passed",
+        "trace": [
+          "LM 14,12"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "942eeaa4b88a8cfca54b587d8a39bfca4f8c1eb70dfa84af9000112442c49660"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "L",
+        "fullword-load",
+        "indirection",
+        "register"
+      ],
+      "id": "28-l-register-load",
+      "observed": {
+        "condition_code": null,
+        "diagnostics": [],
+        "memory_writes": [],
+        "mutation_count": 0,
+        "register_changes": {
+          "R2": 4096
+        },
+        "response": "SUCCESS",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "L R2"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "c1fb5f3938e222ac9496a99a16900d7a99debdfcaa58ef4793e226ac43ab9d25"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "LA",
+        "base-register",
+        "displacement",
+        "effective-address"
+      ],
+      "id": "29-la-effective-address",
+      "observed": {
+        "condition_code": null,
+        "diagnostics": [],
+        "memory_writes": [],
+        "mutation_count": 0,
+        "register_changes": {
+          "R12": 4096
+        },
+        "response": "SUCCESS",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "LA R12"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "a4e3693c3d1e974911eb138e19d545551981e4ef8ab2b3e6e4ded4744557d0b4"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "LR",
+        "R12",
+        "R15",
+        "register-copy"
+      ],
+      "id": "30-lr-register-copy",
+      "observed": {
+        "condition_code": null,
+        "diagnostics": [],
+        "memory_writes": [],
+        "mutation_count": 0,
+        "register_changes": {
+          "R12": 8192
+        },
+        "response": "SUCCESS",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "LR R12"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "063c5c70cb139f53b1162b0419d6975137d6483c6a1e43964cbaa88825c93411"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "R15",
+        "SR",
+        "condition-code-zero",
+        "return-code",
+        "zero-register"
+      ],
+      "id": "31-sr-zero-register",
+      "observed": {
+        "condition_code": 0,
+        "diagnostics": [],
+        "memory_writes": [],
+        "mutation_count": 0,
+        "register_changes": {
+          "R15": 0
+        },
+        "response": "SUCCESS",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "SR R15"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "28e24f7f3f5379129b47d00e4d222290a0e1c9dc9999afcd21dbebed87650342"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "CSECT",
+        "USING",
+        "addressability",
+        "base-register"
+      ],
+      "id": "32-using-establish-addressability",
+      "observed": {
+        "condition_code": null,
+        "diagnostics": [
+          "addressability-established"
+        ],
+        "memory_writes": [],
+        "mutation_count": 0,
+        "register_changes": {},
+        "response": "SUCCESS",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "USING COBDATFT,R12"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "0eb8287a72be9b8a90602015d6016b5bee5540e0ce72db04d66d9ca32709f26b"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "DROP",
+        "R15",
+        "addressability",
+        "base-register"
+      ],
+      "id": "33-drop-remove-addressability",
+      "observed": {
+        "condition_code": null,
+        "diagnostics": [
+          "addressability-removed"
+        ],
+        "memory_writes": [],
+        "mutation_count": 0,
+        "register_changes": {},
+        "response": "SUCCESS",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "DROP CSECT,R15"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "9ac3aaa4ac0b803d9fdb2e21a516de824f1bc7b451d82838cc18b036b7a549e4"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "COCDATFT",
+        "COPY",
+        "DSECT-binding",
+        "SYSLIB"
+      ],
+      "id": "34-copy-dsect-member",
+      "observed": {
+        "condition_code": null,
+        "diagnostics": [],
+        "memory_writes": [],
+        "mutation_count": 0,
+        "register_changes": {},
+        "response": "SUCCESS",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "COPY COCDATFT"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "b935d47224720cce7dac60dbca54d95e17cc7ec2c5d53f45bff197cb12bffdf6"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "ASMWAIT",
+        "MACRO",
+        "MEND",
+        "STIMER",
+        "static-expansion"
+      ],
+      "id": "35-asmwait-macro-expansion",
+      "observed": {
+        "condition_code": null,
+        "diagnostics": [
+          "static-expansion-only"
+        ],
+        "memory_writes": [],
+        "mutation_count": 0,
+        "register_changes": {},
+        "response": "MODELED",
+        "result_count": 1,
+        "status": "passed",
+        "trace": [
+          "ASMWAIT BINLBL",
+          "STIMER WAIT,BINTVL=BINLBL"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "6cd9e64d9f11054d514b2653f7c7c3afdc17e89b4a01f8ae8a3bfc1d1266cbc6"
+    },
+    {
+      "classification": "boundary",
+      "features": [
+        "LTORG",
+        "address-placement",
+        "assembler-dependent",
+        "literal-pool"
+      ],
+      "id": "36-literal-pool-boundary",
+      "observed": {
+        "condition_code": null,
+        "diagnostics": [
+          "literal-placement-is-assembler-dependent"
+        ],
+        "memory_writes": [],
+        "mutation_count": 0,
+        "register_changes": {},
+        "response": "MODELED",
+        "result_count": 2,
+        "status": "passed",
+        "trace": [
+          "LTORG"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "73f2a99256ca0745754ad7a9c7b3bda3e55bcb79a0ce64a31c45cca0ce72090f"
+    },
+    {
+      "classification": "mutation",
+      "features": [
+        "fail-closed",
+        "privileged",
+        "system-state",
+        "unsupported"
+      ],
+      "id": "37-privileged-instruction-blocked",
+      "observed": {
+        "condition_code": null,
+        "diagnostics": [
+          "privileged-system-state-unsupported"
+        ],
+        "memory_writes": [],
+        "mutation_count": 0,
+        "register_changes": {},
+        "response": "UNSUPPORTED",
+        "result_count": 0,
+        "status": "blocked",
+        "trace": [
+          "PRIVILEGED_INSTRUCTION"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "872dfbe2f1b0c4da891cab0e60ee06621d9c6f87d0a3a980aaf5fc864c00e4a7"
+    },
+    {
+      "classification": "mutation",
+      "features": [
+        "crypto",
+        "fail-closed",
+        "instruction-family",
+        "unsupported",
+        "vector"
+      ],
+      "id": "38-vector-crypto-blocked",
+      "observed": {
+        "condition_code": null,
+        "diagnostics": [
+          "vector-and-crypto-instruction-families-unsupported"
+        ],
+        "memory_writes": [],
+        "mutation_count": 0,
+        "register_changes": {},
+        "response": "UNSUPPORTED",
+        "result_count": 0,
+        "status": "blocked",
+        "trace": [
+          "VECTOR_CRYPTO"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "900405c35c0718553e5e641e9ee6ddde8c0f35c74bf13c063db45c106434b2cb"
+    },
+    {
+      "classification": "mutation",
+      "features": [
+        "cache-coherency",
+        "fail-closed",
+        "self-modifying-code",
+        "unsupported"
+      ],
+      "id": "39-self-modifying-code-blocked",
+      "observed": {
+        "condition_code": null,
+        "diagnostics": [
+          "self-modifying-code-unsupported"
+        ],
+        "memory_writes": [],
+        "mutation_count": 0,
+        "register_changes": {},
+        "response": "UNSUPPORTED",
+        "result_count": 0,
+        "status": "blocked",
+        "trace": [
+          "SELF_MODIFYING_CODE"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "b09f9f97b570f3e723e24a0601b5847a22b4c13789bfdafefe1a7aa9830e2d88"
+    },
+    {
+      "classification": "mutation",
+      "features": [
+        "SVC",
+        "authorized-service",
+        "fail-closed",
+        "security-state",
+        "unsupported"
+      ],
+      "id": "40-authorized-svc-blocked",
+      "observed": {
+        "condition_code": null,
+        "diagnostics": [
+          "svc-and-authorized-services-unsupported"
+        ],
+        "memory_writes": [],
+        "mutation_count": 0,
+        "register_changes": {},
+        "response": "UNSUPPORTED",
+        "result_count": 0,
+        "status": "blocked",
+        "trace": [
+          "AUTHORIZED_SVC"
+        ]
+      },
+      "passed": true,
+      "request_sha256": "f212101781df8f0aaf6f39eae318125f4e803bb7d050f663c148020b0d9801b9"
+    }
+  ],
+  "schema_version": "1.0",
+  "status": "passed"
+}

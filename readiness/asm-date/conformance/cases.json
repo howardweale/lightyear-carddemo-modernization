@@ -1,0 +1,757 @@
+{
+  "cases": [
+    {
+      "classification": "positive",
+      "expected_mutation_count": 1,
+      "expected_response": "SUCCESS",
+      "expected_status": "passed",
+      "features": [
+        "COBDATFT",
+        "date-format",
+        "compact-input",
+        "hyphenated-output",
+        "MVC",
+        "MVI"
+      ],
+      "id": "01-compact-to-hyphenated",
+      "request": {
+        "input_date": "20260821",
+        "input_type": "1",
+        "operation": "DATE_FORMAT",
+        "output_type": "1"
+      }
+    },
+    {
+      "classification": "positive",
+      "expected_mutation_count": 1,
+      "expected_response": "SUCCESS",
+      "expected_status": "passed",
+      "features": [
+        "COBDATFT",
+        "date-format",
+        "hyphenated-input",
+        "compact-output",
+        "fixed-offset",
+        "MVC"
+      ],
+      "id": "02-hyphenated-to-compact",
+      "request": {
+        "input_date": "2026-08-21",
+        "input_type": "2",
+        "operation": "DATE_FORMAT",
+        "output_type": "2"
+      }
+    },
+    {
+      "classification": "positive",
+      "expected_mutation_count": 0,
+      "expected_response": "MODELED",
+      "expected_status": "passed",
+      "features": [
+        "MVSWAIT",
+        "COBSWAIT",
+        "parameter-list",
+        "ASMWAIT",
+        "STIMER",
+        "bounded-handoff"
+      ],
+      "id": "03-mvswait-interval-handoff",
+      "request": {
+        "interval": 100,
+        "operation": "MVSWAIT_HANDOFF"
+      }
+    },
+    {
+      "classification": "positive",
+      "expected_mutation_count": 0,
+      "expected_response": "SUCCESS",
+      "expected_status": "passed",
+      "features": [
+        "COBDATFT",
+        "standard-entry",
+        "save-area",
+        "STM",
+        "LM",
+        "R13",
+        "R14",
+        "R15",
+        "return"
+      ],
+      "id": "04-register-save-return",
+      "request": {
+        "operation": "REGISTER_SEQUENCE"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 1,
+      "expected_response": "INVALID_INPUT",
+      "expected_status": "passed",
+      "features": [
+        "COBDATFT",
+        "CLI",
+        "invalid-input",
+        "GOTOERR",
+        "error-area"
+      ],
+      "id": "05-invalid-input-type",
+      "request": {
+        "input_date": "20260821",
+        "input_type": "9",
+        "operation": "DATE_FORMAT",
+        "output_type": "1"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 1,
+      "expected_response": "INVALID_INPUT",
+      "expected_status": "passed",
+      "features": [
+        "COBDATFT",
+        "input-type-1",
+        "output-type-2",
+        "BE",
+        "GOTOERR"
+      ],
+      "id": "06-compact-invalid-direction",
+      "request": {
+        "input_date": "20260821",
+        "input_type": "1",
+        "operation": "DATE_FORMAT",
+        "output_type": "2"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 1,
+      "expected_response": "INVALID_INPUT",
+      "expected_status": "passed",
+      "features": [
+        "COBDATFT",
+        "input-type-2",
+        "output-type-1",
+        "BE",
+        "GOTOERR"
+      ],
+      "id": "07-hyphenated-invalid-direction",
+      "request": {
+        "input_date": "2026-08-21",
+        "input_type": "2",
+        "operation": "DATE_FORMAT",
+        "output_type": "1"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 1,
+      "expected_response": "INVALID_INPUT",
+      "expected_status": "passed",
+      "features": [
+        "COBDATFT",
+        "CLC",
+        "separator",
+        "condition-code",
+        "source-validation"
+      ],
+      "id": "08-compact-separator-rejected",
+      "request": {
+        "input_date": "2026-08-21",
+        "input_type": "1",
+        "operation": "DATE_FORMAT",
+        "output_type": "1"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 1,
+      "expected_response": "SUCCESS",
+      "expected_status": "passed",
+      "features": [
+        "COBDATFT",
+        "commented-instruction",
+        "source-quirk",
+        "fixed-offset",
+        "slash-input"
+      ],
+      "id": "09-commented-check-quirk",
+      "request": {
+        "input_date": "2026/08/21",
+        "input_type": "2",
+        "operation": "DATE_FORMAT",
+        "output_type": "2"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 1,
+      "expected_response": "SUCCESS",
+      "expected_status": "passed",
+      "features": [
+        "COBDATFT",
+        "fixed-length",
+        "space-padding",
+        "DSECT",
+        "byte-area"
+      ],
+      "id": "10-short-input-padding",
+      "request": {
+        "input_date": "20260101",
+        "input_type": "1",
+        "operation": "DATE_FORMAT",
+        "output_type": "1"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 1,
+      "expected_response": "SUCCESS",
+      "expected_status": "passed",
+      "features": [
+        "COBDATFT",
+        "fixed-length",
+        "truncation",
+        "20-byte-input",
+        "byte-area"
+      ],
+      "id": "11-long-input-truncation",
+      "request": {
+        "input_date": "2026-08-21-EXTRA-DATA-BEYOND",
+        "input_type": "2",
+        "operation": "DATE_FORMAT",
+        "output_type": "2"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "SUCCESS",
+      "expected_status": "passed",
+      "features": [
+        "COCDATFT",
+        "DSECT",
+        "DS",
+        "field-layout",
+        "80-byte-record"
+      ],
+      "id": "12-dsect-total-layout",
+      "request": {
+        "operation": "DSECT_LAYOUT"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "SUCCESS",
+      "expected_status": "passed",
+      "features": [
+        "COCDATFT",
+        "COERMSG",
+        "offset-42",
+        "length-38",
+        "field-layout"
+      ],
+      "id": "13-dsect-error-field",
+      "request": {
+        "field": "COERMSG",
+        "operation": "DSECT_LAYOUT"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 1,
+      "expected_response": "SUCCESS",
+      "expected_status": "passed",
+      "features": [
+        "MVC",
+        "memory-copy",
+        "explicit-length",
+        "bounded-storage"
+      ],
+      "id": "14-mvc-bounded-copy",
+      "request": {
+        "area_length": 80,
+        "length": 4,
+        "offset": 22,
+        "operation": "MVC"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 1,
+      "expected_response": "SUCCESS",
+      "expected_status": "passed",
+      "features": [
+        "MVC",
+        "displacement",
+        "COOUTDT",
+        "COINPDT",
+        "bounded-storage"
+      ],
+      "id": "15-mvc-displacement-copy",
+      "request": {
+        "area_length": 80,
+        "length": 2,
+        "offset": 27,
+        "operation": "MVC"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "ADDRESSING_ERROR",
+      "expected_status": "passed",
+      "features": [
+        "MVC",
+        "storage-range",
+        "addressing-error",
+        "fail-closed"
+      ],
+      "id": "16-mvc-range-error",
+      "request": {
+        "area_length": 80,
+        "length": 4,
+        "offset": 79,
+        "operation": "MVC"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 1,
+      "expected_response": "SUCCESS",
+      "expected_status": "passed",
+      "features": [
+        "MVI",
+        "single-byte",
+        "delimiter",
+        "memory-write"
+      ],
+      "id": "17-mvi-byte-write",
+      "request": {
+        "area_length": 80,
+        "length": 1,
+        "offset": 26,
+        "operation": "MVI"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "CONDITION_TRUE",
+      "expected_status": "passed",
+      "features": [
+        "CLI",
+        "condition-code-zero",
+        "unsigned-byte",
+        "compare"
+      ],
+      "id": "18-cli-equal",
+      "request": {
+        "left": "1",
+        "operation": "CLI",
+        "right": "1"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "CONDITION_FALSE",
+      "expected_status": "passed",
+      "features": [
+        "CLI",
+        "condition-code-one",
+        "unsigned-byte",
+        "compare"
+      ],
+      "id": "19-cli-low",
+      "request": {
+        "left": "1",
+        "operation": "CLI",
+        "right": "2"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "CONDITION_TRUE",
+      "expected_status": "passed",
+      "features": [
+        "CLC",
+        "condition-code-zero",
+        "character-area",
+        "compare"
+      ],
+      "id": "20-clc-equal",
+      "request": {
+        "left": "-",
+        "operation": "CLC",
+        "right": "-"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "CONDITION_FALSE",
+      "expected_status": "passed",
+      "features": [
+        "CLC",
+        "condition-code-two",
+        "character-area",
+        "compare"
+      ],
+      "id": "21-clc-high",
+      "request": {
+        "left": "Z",
+        "operation": "CLC",
+        "right": "A"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "BRANCH_TAKEN",
+      "expected_status": "passed",
+      "features": [
+        "BE",
+        "branch-taken",
+        "condition-code-zero",
+        "branch-target"
+      ],
+      "id": "22-be-taken",
+      "request": {
+        "condition_code": 0,
+        "operation": "BE",
+        "target": "VALIDIN1"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "BRANCH_NOT_TAKEN",
+      "expected_status": "passed",
+      "features": [
+        "BE",
+        "branch-not-taken",
+        "condition-code-nonzero",
+        "fallthrough"
+      ],
+      "id": "23-be-not-taken",
+      "request": {
+        "condition_code": 1,
+        "operation": "BE",
+        "target": "GOTOERR"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "BRANCH_TAKEN",
+      "expected_status": "passed",
+      "features": [
+        "BNE",
+        "branch-taken",
+        "condition-code-nonzero",
+        "branch-target"
+      ],
+      "id": "24-bne-taken",
+      "request": {
+        "condition_code": 2,
+        "operation": "BNE",
+        "target": "GOTOERR"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "BRANCH_TAKEN",
+      "expected_status": "passed",
+      "features": [
+        "B",
+        "unconditional",
+        "branch-taken",
+        "EXITL"
+      ],
+      "id": "25-unconditional-branch",
+      "request": {
+        "condition_code": 2,
+        "operation": "B",
+        "target": "EXITL"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 15,
+      "expected_response": "SUCCESS",
+      "expected_status": "passed",
+      "features": [
+        "STM",
+        "register-range",
+        "save-area",
+        "wrap-range",
+        "15-registers"
+      ],
+      "id": "26-stm-wrap-register-range",
+      "request": {
+        "first": 14,
+        "last": 12,
+        "operation": "STM"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "SUCCESS",
+      "expected_status": "passed",
+      "features": [
+        "LM",
+        "register-range",
+        "restore",
+        "save-area"
+      ],
+      "id": "27-lm-restore-registers",
+      "request": {
+        "first": 14,
+        "last": 12,
+        "operation": "LM"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "SUCCESS",
+      "expected_status": "passed",
+      "features": [
+        "L",
+        "fullword-load",
+        "register",
+        "indirection"
+      ],
+      "id": "28-l-register-load",
+      "request": {
+        "operation": "L",
+        "source": 4096,
+        "target": "R2"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "SUCCESS",
+      "expected_status": "passed",
+      "features": [
+        "LA",
+        "effective-address",
+        "base-register",
+        "displacement"
+      ],
+      "id": "29-la-effective-address",
+      "request": {
+        "base": 4000,
+        "displacement": 96,
+        "operation": "LA",
+        "target": "R12"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "SUCCESS",
+      "expected_status": "passed",
+      "features": [
+        "LR",
+        "register-copy",
+        "R12",
+        "R15"
+      ],
+      "id": "30-lr-register-copy",
+      "request": {
+        "operation": "LR",
+        "source": 8192,
+        "target": "R12"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "SUCCESS",
+      "expected_status": "passed",
+      "features": [
+        "SR",
+        "zero-register",
+        "R15",
+        "condition-code-zero",
+        "return-code"
+      ],
+      "id": "31-sr-zero-register",
+      "request": {
+        "operation": "SR",
+        "same_register": true,
+        "source": 7,
+        "target": "R15",
+        "target_value": 7
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "SUCCESS",
+      "expected_status": "passed",
+      "features": [
+        "USING",
+        "base-register",
+        "addressability",
+        "CSECT"
+      ],
+      "id": "32-using-establish-addressability",
+      "request": {
+        "base": "COBDATFT",
+        "operation": "USING",
+        "register": "R12"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "SUCCESS",
+      "expected_status": "passed",
+      "features": [
+        "DROP",
+        "base-register",
+        "addressability",
+        "R15"
+      ],
+      "id": "33-drop-remove-addressability",
+      "request": {
+        "operation": "DROP",
+        "register": "R15"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "SUCCESS",
+      "expected_status": "passed",
+      "features": [
+        "COPY",
+        "COCDATFT",
+        "SYSLIB",
+        "DSECT-binding"
+      ],
+      "id": "34-copy-dsect-member",
+      "request": {
+        "member": "COCDATFT",
+        "operation": "COPY"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "MODELED",
+      "expected_status": "passed",
+      "features": [
+        "MACRO",
+        "MEND",
+        "ASMWAIT",
+        "STIMER",
+        "static-expansion"
+      ],
+      "id": "35-asmwait-macro-expansion",
+      "request": {
+        "name": "ASMWAIT",
+        "operation": "MACRO_EXPAND"
+      }
+    },
+    {
+      "classification": "boundary",
+      "expected_mutation_count": 0,
+      "expected_response": "MODELED",
+      "expected_status": "passed",
+      "features": [
+        "LTORG",
+        "literal-pool",
+        "assembler-dependent",
+        "address-placement"
+      ],
+      "id": "36-literal-pool-boundary",
+      "request": {
+        "literal_count": 2,
+        "operation": "LTORG"
+      }
+    },
+    {
+      "classification": "mutation",
+      "expected_mutation_count": 0,
+      "expected_response": "UNSUPPORTED",
+      "expected_status": "blocked",
+      "features": [
+        "privileged",
+        "system-state",
+        "unsupported",
+        "fail-closed"
+      ],
+      "id": "37-privileged-instruction-blocked",
+      "request": {
+        "operation": "PRIVILEGED_INSTRUCTION"
+      }
+    },
+    {
+      "classification": "mutation",
+      "expected_mutation_count": 0,
+      "expected_response": "UNSUPPORTED",
+      "expected_status": "blocked",
+      "features": [
+        "vector",
+        "crypto",
+        "instruction-family",
+        "unsupported",
+        "fail-closed"
+      ],
+      "id": "38-vector-crypto-blocked",
+      "request": {
+        "operation": "VECTOR_CRYPTO"
+      }
+    },
+    {
+      "classification": "mutation",
+      "expected_mutation_count": 0,
+      "expected_response": "UNSUPPORTED",
+      "expected_status": "blocked",
+      "features": [
+        "self-modifying-code",
+        "cache-coherency",
+        "unsupported",
+        "fail-closed"
+      ],
+      "id": "39-self-modifying-code-blocked",
+      "request": {
+        "operation": "SELF_MODIFYING_CODE"
+      }
+    },
+    {
+      "classification": "mutation",
+      "expected_mutation_count": 0,
+      "expected_response": "UNSUPPORTED",
+      "expected_status": "blocked",
+      "features": [
+        "SVC",
+        "authorized-service",
+        "security-state",
+        "unsupported",
+        "fail-closed"
+      ],
+      "id": "40-authorized-svc-blocked",
+      "request": {
+        "operation": "AUTHORIZED_SVC"
+      }
+    }
+  ],
+  "content_sha256": "fc48e621e0d3166b2acaed9774867911603dbee7e3be29c13e49c0a89bfebc85",
+  "corpus_id": "lightyear-hlasm-synthetic-conformance-v1",
+  "provenance": {
+    "contains_production_data": false,
+    "customer_source": false,
+    "native_hlasm_execution": false,
+    "source": "deterministic synthetic vectors derived from the pinned CARDDEMO HLASM graph"
+  },
+  "schema_version": "1.0"
+}

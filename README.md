@@ -1,6 +1,27 @@
 # FactoryDark.ai CardDemo Modernization Factory
 
-Release: **v0.40.0 — IMS qualification hardening**
+Release: **v0.41.0 — HLASM qualification hardening**
+
+v0.41 expands the bounded `COBDATFT` development proof into a graph-bound HLASM qualification
+plane covering both pinned assembler programs. The canonical estate contributes two programs, 41
+instructions, 23 symbols, one DSECT with five fields, one macro, nine branch edges, and exact
+COBOL-call, DSECT, and macro relationships. A deterministic 40-case corpus covers date formatting,
+field layout, bounded storage operations, comparisons and condition codes, branches, register and
+save-area mechanics, base-register addressability, COPY, macro expansion, literal pools, and the
+static `MVSWAIT` interval handoff through eleven independent gates.
+
+The 28-entry compatibility ledger uses all five governing classes. Four fail-closed vectors keep
+privileged instructions, vector/crypto families, self-modifying code, and authorized SVC behavior
+outside the claim. Native assembly, object generation, binding, AMODE/RMODE, LE/COBOL linkage,
+STIMER timing, storage protection, recovery, runtime equivalence, mainframe equivalence, and
+production readiness remain false.
+
+```bash
+./asm-readiness.sh verify
+PYTHONPATH=src python3 -m lightyear_readiness.hlasm_qualification verify
+```
+
+Previous milestone: **v0.40.0 — IMS qualification hardening**
 
 v0.40 expands the earlier `CBPAUP0C` expiry-purge proof into a graph-bound IMS qualification plane.
 The canonical estate contributes four DBDs, four dataset groups, four PSBs, six PCBs, three

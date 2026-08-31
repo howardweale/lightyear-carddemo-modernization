@@ -1,0 +1,194 @@
+{
+  "assembler_qualified": false,
+  "binder_qualified": false,
+  "bindings": {
+    "compatibility_ledger_sha256": "c7f8cd95c505d7ace2c05f44a4a94568afe28ea30fb6a6e6afeee7a71539c604",
+    "conformance_sha256": "aebf041eaad6160de99a9a572e9ffebb1e12e6b307beaed27762f5dc0dff0d2a",
+    "date_comparison_sha256": "340162a28898fe3ee892d9bd94d0caa6b4d558dbe55cbfc4cace251f1b19a13f",
+    "date_readiness_sha256": "08e54af640a9929fcadfc79803ad71462ecabdbfcda5c72acb09511f12786ef5",
+    "graph_content_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7",
+    "manifest_sha256": "fc48e621e0d3166b2acaed9774867911603dbee7e3be29c13e49c0a89bfebc85"
+  },
+  "claim_unlocked": "LIGHTYEAR can inventory and fail-closed qualify the bounded COBDATFT/MVSWAIT HLASM subset without claiming native assembly, binding, linkage, system-service, CPU, runtime, mainframe, or production equivalence.",
+  "content_sha256": "19c65120383e89aec37ca9e89510a1bb6dacd24a2612aa55b07e7f1420c7d41e",
+  "development_ready": true,
+  "inventory": {
+    "assembler_dsects": 1,
+    "assembler_fields": 5,
+    "assembler_instructions": 41,
+    "assembler_macros": 1,
+    "assembler_programs": 2,
+    "assembler_symbols": 23,
+    "blocked_cases": 4,
+    "branch_edges": 9,
+    "corpus_cases": 40,
+    "customer_source": false,
+    "mutation_cases": 4,
+    "observed_feature_categories": 121,
+    "targeted_boundary_cases": 32,
+    "uses_dsect_edges": 1,
+    "uses_macro_edges": 1
+  },
+  "le_linkage_qualified": false,
+  "mainframe_equivalent": false,
+  "native_hlasm_qualified": false,
+  "production_ready": false,
+  "qualification_gates": [
+    {
+      "evidence": {
+        "assembler_dsects": 1,
+        "assembler_fields": 5,
+        "assembler_instructions": 41,
+        "assembler_macros": 1,
+        "assembler_programs": 2,
+        "assembler_symbols": 23,
+        "graph_sha256": "000c0b91cadeb906c791c7af5dd005bd27948c15b265569bb8a0bfaa94a68ea7"
+      },
+      "gate": "estate-graph-inventory",
+      "status": "passed-static"
+    },
+    {
+      "evidence": {
+        "blocked_case_count": 4,
+        "case_count": 40,
+        "conformance_sha256": "aebf041eaad6160de99a9a572e9ffebb1e12e6b307beaed27762f5dc0dff0d2a",
+        "customer_source": false,
+        "mutation_case_count": 4,
+        "passed_case_count": 36,
+        "positive_case_count": 4,
+        "targeted_boundary_case_count": 32
+      },
+      "gate": "corpus-and-provenance",
+      "status": "passed-bounded-synthetic"
+    },
+    {
+      "evidence": {
+        "directives": [
+          "COPY",
+          "CSECT",
+          "DROP",
+          "DSECT",
+          "DS",
+          "END",
+          "EQU",
+          "LTORG",
+          "MACRO",
+          "MEND",
+          "START",
+          "USING"
+        ],
+        "programs": [
+          "COBDATFT",
+          "MVSWAIT"
+        ]
+      },
+      "gate": "program-directives-symbols-and-source",
+      "status": "passed-static"
+    },
+    {
+      "evidence": {
+        "dsects": 1,
+        "fields": 5,
+        "native_alignment_observed": false
+      },
+      "gate": "dsect-fields-storage-and-literals",
+      "status": "passed-bounded-semantic"
+    },
+    {
+      "evidence": {
+        "instruction_subset": [
+          "B",
+          "BE",
+          "BNE",
+          "BR",
+          "CLC",
+          "CLI",
+          "L",
+          "LA",
+          "LM",
+          "LR",
+          "MVC",
+          "MVI",
+          "SR",
+          "ST",
+          "STM"
+        ],
+        "native_cpu_observed": false
+      },
+      "gate": "instruction-and-memory-subset",
+      "status": "passed-bounded-semantic"
+    },
+    {
+      "evidence": {
+        "branch_edges": 9,
+        "native_psw_observed": false
+      },
+      "gate": "condition-codes-and-branches",
+      "status": "passed-bounded-semantic"
+    },
+    {
+      "evidence": {
+        "native_le_or_cobol_linkage_observed": false,
+        "synthetic_register_vectors": true
+      },
+      "gate": "register-addressing-save-area-and-linkage",
+      "status": "policy-decision-required"
+    },
+    {
+      "evidence": {
+        "amode_rmode": false,
+        "binder": false,
+        "macro_expansion_static": true,
+        "stimer": false
+      },
+      "gate": "macro-stimer-amode-rmode-and-binder",
+      "status": "excluded-unqualified"
+    },
+    {
+      "evidence": {
+        "broad_instruction_families": false,
+        "privileged": false,
+        "recovery": false,
+        "storage_protection": false
+      },
+      "gate": "privileged-storage-protection-recovery-and-broad-instructions",
+      "status": "excluded-unqualified"
+    },
+    {
+      "evidence": {
+        "behavior_match": true,
+        "comparison_sha256": "340162a28898fe3ee892d9bd94d0caa6b4d558dbe55cbfc4cace251f1b19a13f",
+        "readiness_sha256": "08e54af640a9929fcadfc79803ad71462ecabdbfcda5c72acb09511f12786ef5"
+      },
+      "gate": "cobdatft-private-differential-proof",
+      "status": "passed-local-development"
+    },
+    {
+      "evidence": {
+        "assembly_listing": false,
+        "binder_map": false,
+        "load_module": false,
+        "signed_equivalence": false,
+        "zos_observed_baseline": false
+      },
+      "gate": "authorized-native-hlasm-build-and-execution",
+      "status": "blocked-no-authorized-zos-evidence"
+    }
+  ],
+  "qualification_id": "carddemo-hlasm-v0.41",
+  "qualification_mechanism_ready": true,
+  "qualification_type": "lightyear-hlasm-qualification",
+  "required_native_evidence": [
+    "authorized z/OS, HLASM, macro library, assembler option, operator, and security identities",
+    "source, macro, COPY member, assembly listing, object deck, binder map, and load module digests",
+    "native instruction, condition-code, branch, addressing, overlap, alignment, and literal-pool vectors",
+    "AMODE, RMODE, residency, reentrancy, entry point, and external-symbol attributes",
+    "COBOL and Language Environment parameter-list, save-area, register, return, and abend evidence",
+    "STIMER interval, elapsed-time, dispatching, invalid-parameter, and recovery evidence",
+    "storage-key, protection, SVC, authorized-state, dump, and operational-policy decisions",
+    "independently signed differential equivalence receipt"
+  ],
+  "runtime_equivalent": false,
+  "schema_version": "1.0",
+  "system_services_qualified": false
+}

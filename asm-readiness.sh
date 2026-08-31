@@ -38,13 +38,20 @@ elif [[ "$action" == "verify" || "$action" == "build" ]]; then
     --receipt "$output_dir/readiness-receipt.json"
   "$LIGHTYEAR_PYTHON_BIN" -m lightyear_readiness.asm capture-template \
     --output "$output_dir/zos-capture.template.json"
+  "$LIGHTYEAR_PYTHON_BIN" -m lightyear_readiness.hlasm_qualification build \
+    --project-root "$project_dir" --output-root "$output_dir"
   if [[ "$action" == "verify" ]]; then
     cmp "$project_dir/readiness/asm-date/local-capture.json" "$output_dir/local-capture.json"
     cmp "$project_dir/readiness/asm-date/comparison.json" "$output_dir/comparison.json"
     cmp "$project_dir/readiness/asm-date/readiness-receipt.json" "$output_dir/readiness-receipt.json"
     cmp "$project_dir/readiness/asm-date/zos-capture.template.json" "$output_dir/zos-capture.template.json"
+    cmp "$project_dir/readiness/asm-date/conformance.receipt.json" "$output_dir/conformance.receipt.json"
+    cmp "$project_dir/readiness/asm-date/compatibility-ledger.json" "$output_dir/compatibility-ledger.json"
+    cmp "$project_dir/readiness/asm-date/qualification.json" "$output_dir/qualification.json"
+    "$LIGHTYEAR_PYTHON_BIN" -m lightyear_readiness.hlasm_qualification verify \
+      --project-root "$project_dir"
   fi
-  echo "HLASM development proof passed; live z/OS equivalence remains fail-closed."
+  echo "HLASM bounded qualification passed; native build and runtime equivalence remain fail-closed."
 else
   echo "Usage: ./asm-readiness.sh [build|verify|template|compare] [output-dir] [zos-capture]" >&2
   exit 2

@@ -4,6 +4,7 @@
   "command_plane": "disabled",
   "loopback_only": true,
   "sources": {
+    "graph": {"expected_interval_seconds": 5, "trust_class": "content-addressed-graph"},
     "factory": {"expected_interval_seconds": 2, "trust_class": "controller-receipt"},
     "portfolio": {"expected_interval_seconds": 5, "trust_class": "approved-plan"},
     "recovery": {"expected_interval_seconds": 2, "trust_class": "transactional-ledger"},

@@ -13,7 +13,10 @@ from typing import Any, Callable, Iterable
 
 
 SCHEMA_VERSION = "1.0"
-SOURCE_ORDER = ("factory", "portfolio", "recovery", "quality", "memory", "data", "runtime", "audit")
+SOURCE_ORDER = (
+    "graph", "factory", "portfolio", "recovery", "quality", "memory",
+    "data", "runtime", "audit",
+)
 
 
 def _utc_now() -> datetime:
@@ -38,6 +41,7 @@ class OperationalSource:
     trust_class: str
     expected_interval_seconds: int
     provider: Callable[[], dict[str, Any]]
+    identity_provider: Callable[[], dict[str, Any]] | None = None
 
 
 class OperationalEventStore:
@@ -267,16 +271,19 @@ class OperationalControlTower:
                 )
                 if changed:
                     changed_sources.append(source.name)
+                    payload: dict[str, Any] = {
+                        "fingerprint": fingerprint,
+                        "previous_fingerprint": previous,
+                        "path_count": path_count,
+                        "refresh_hint": source.name,
+                    }
+                    if source.identity_provider is not None:
+                        payload["identity"] = source.identity_provider()
                     self.store.append(
                         f"{source.name}.projection.changed",
                         source.name,
                         f"control-tower:{source.name}",
-                        {
-                            "fingerprint": fingerprint,
-                            "previous_fingerprint": previous,
-                            "path_count": path_count,
-                            "refresh_hint": source.name,
-                        },
+                        payload,
                         trust_class=source.trust_class,
                     )
             alerts = self._alerts()
@@ -312,7 +319,7 @@ class OperationalControlTower:
                 continue
             observation = observations.get(name)
             if observation is None:
-                sources.append({
+                item = {
                     "source": name,
                     "freshness": "unavailable",
                     "age_seconds": None,
@@ -320,10 +327,13 @@ class OperationalControlTower:
                     "last_observed_at": None,
                     "last_changed_at": None,
                     "expected_interval_seconds": source.expected_interval_seconds,
-                })
+                }
+                if source.identity_provider is not None:
+                    item["identity"] = source.identity_provider()
+                sources.append(item)
                 continue
             if observation["path_count"] == 0:
-                sources.append({
+                item = {
                     "source": name,
                     "freshness": "unavailable",
                     "age_seconds": None,
@@ -332,7 +342,10 @@ class OperationalControlTower:
                     "last_changed_at": observation["changed_at"],
                     "expected_interval_seconds": source.expected_interval_seconds,
                     "fingerprint": observation["fingerprint"],
-                })
+                }
+                if source.identity_provider is not None:
+                    item["identity"] = source.identity_provider()
+                sources.append(item)
                 continue
             freshness_time = (
                 observation["changed_at"] if name == "runtime" else observation["observed_at"]
@@ -341,7 +354,7 @@ class OperationalControlTower:
             age = max(0, int((now - observed).total_seconds()))
             expected = source.expected_interval_seconds
             freshness = "live" if age <= expected * 2 else "delayed" if age <= expected * 6 else "stale"
-            sources.append({
+            item = {
                 "source": name,
                 "freshness": freshness,
                 "age_seconds": age,
@@ -350,9 +363,13 @@ class OperationalControlTower:
                 "last_changed_at": observation["changed_at"],
                 "expected_interval_seconds": expected,
                 "fingerprint": observation["fingerprint"],
-            })
+            }
+            if source.identity_provider is not None:
+                item["identity"] = source.identity_provider()
+            sources.append(item)
         events = self.store.events(limit=1)
         alerts = self._alerts()
+        graph = next((item for item in sources if item["source"] == "graph"), None)
         return {
             "schema_version": SCHEMA_VERSION,
             "plane_type": "lightyear-live-evidence-control-plane",
@@ -362,12 +379,26 @@ class OperationalControlTower:
             "read_only": True,
             "command_plane": "disabled",
             "latest_sequence": events[-1]["sequence"] if events else 0,
+            "graph_binding": graph,
             "sources": sources,
             "alerts": alerts,
         }
 
     def _alerts(self) -> list[dict[str, Any]]:
         alerts: list[dict[str, Any]] = []
+        graph = self.sources.get("graph")
+        if graph and graph.identity_provider:
+            try:
+                binding = graph.identity_provider()
+                if binding.get("binding_status") == "invalidated":
+                    invalidated = ", ".join(binding.get("invalidated_projections", []))
+                    alerts.append(self._alert(
+                        "graph", "critical", "binding-invalidated", "knowledge-graph:canonical",
+                        f"Graph identity changed and invalidated bound projections: {invalidated}."))
+            except (OSError, ValueError, KeyError):
+                alerts.append(self._alert(
+                    "graph", "critical", "projection-unavailable", "knowledge-graph:canonical",
+                    "The canonical Knowledge Graph projection could not be read."))
         recovery = self.sources.get("recovery")
         if recovery:
             try:

@@ -12,6 +12,7 @@
     "read_only": {"const": true},
     "command_plane": {"const": "disabled"},
     "latest_sequence": {"type": "integer", "minimum": 0},
+    "graph_binding": {"type": ["object", "null"]},
     "sources": {"type": "array", "items": {"type": "object"}},
     "alerts": {"type": "array", "items": {"type": "object"}}
   }

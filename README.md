@@ -1,6 +1,36 @@
 # FactoryDark.ai CardDemo Modernization Factory
 
-Release: **v0.46.0 — Unified estate operator navigation**
+Release: **v0.47.0 — Graph-bound live Evidence Control Tower**
+
+v0.47 gives the Evidence Control Tower the visual and operational clarity needed for customer and
+executive use. The interface now combines the LIGHTYEAR investor palette with Material-influenced
+clarity: warm-white work surfaces, a near-black operational plane, gold hierarchy, bronze evidence
+boundaries, modern sans-serif typography, sentence case, rounded controls, and more space.
+
+The Control Tower now drives the graph through an explicit operator path: **Company → Business
+problem → Workload → Technology scope → Operator lens**. Each company exposes only its governed
+problems; each problem exposes only its mapped workloads; choosing a workload moves the Knowledge
+Graph to that workload root. Technology scope and operator lens then refine the displayed workload
+without hiding connected cross-platform evidence.
+
+The canonical Knowledge Graph and its evidence pack are now a first-class source in the live
+operational plane. The Control Tower shows their content identity, counts, freshness, and binding
+status; graph changes emit hash-chained events through the SSE stream and refresh graph metadata,
+perspectives, operator context, legend, metrics, and the active view. A five-second status refresh
+keeps freshness ages and the visible last-updated time moving between events. Runtime and Audit projections
+whose graph identity no longer matches—and a mismatched source-evidence pack—are invalidated and
+surfaced as a critical alert. The browser
+remains a read-only projection and gains no approval, dispatch, retry, promotion, or exception
+authority.
+
+```bash
+./live-control-tower.sh serve
+```
+
+Then open `http://127.0.0.1:8765`. Do not open `knowledge/viewer/index.html` directly: static file
+mode cannot connect to the Knowledge Graph or the live event stream.
+
+Previous milestone: **v0.46.0 — Unified estate operator navigation**
 
 v0.46 gives an operator one customer-centered Control Tower for mainframe and database work. The
 new context bar separates the customer engagement, technology scope, and operator lens. Scope is a

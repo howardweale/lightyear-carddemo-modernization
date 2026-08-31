@@ -31,13 +31,26 @@ class GraphExplorerTests(unittest.TestCase):
 
     def test_curated_perspectives_resolve_to_graph_nodes(self) -> None:
         perspectives = self.index.perspectives()
-        self.assertEqual(6, len(perspectives))
+        self.assertEqual(9, len(perspectives))
         self.assertIn("authfrds-data-lineage", {item["id"] for item in perspectives})
+        self.assertIn("ims-expired-authorization-purge", {item["id"] for item in perspectives})
         self.assertTrue(all(item["root"] in self.index.node_by_id for item in perspectives))
 
     def test_operator_context_separates_scope_lens_and_graph_coverage(self) -> None:
         context = self.index.metadata()["operator_context"]
         self.assertEqual("CardDemo Reference Estate", context["customers"][0]["name"])
+        self.assertEqual(context["customers"], context["companies"])
+        self.assertEqual(
+            {
+                "account-and-card-servicing",
+                "authorization-and-fraud",
+                "shared-platform-services",
+            },
+            {item["id"] for item in context["problems"]},
+        )
+        self.assertEqual(5, len(context["workloads"]))
+        self.assertTrue(all(item["root"] in self.index.node_by_id for item in context["workloads"]))
+        self.assertTrue(all(item["perspective_id"] for item in context["workloads"]))
         self.assertEqual(
             {"all-estate", "mainframe", "database", "sap-estate"},
             {item["id"] for item in context["scopes"]},
@@ -120,12 +133,34 @@ class GraphExplorerTests(unittest.TestCase):
             with urlopen(f"{base}/", timeout=3) as response:
                 body = response.read().decode("utf-8")
             self.assertIn("LIGHTYEAR Control Tower", body)
+            self.assertIn("Knowledge Graph", body)
+            self.assertIn("graph-binding-hash", body)
+            self.assertIn("live-endpoint", body)
+            self.assertIn("Lightyear · Operational trust plane", body)
+            self.assertIn('for="problem-context"', body)
+            self.assertIn('for="workload-context"', body)
+            self.assertIn("Search selected workload", body)
             self.assertIn("Technology scope", body)
             self.assertIn("CROSS-PLATFORM EVIDENCE TRACE", body)
             with urlopen(f"{base}/app.js", timeout=3) as response:
                 script = response.read().decode("utf-8")
             self.assertIn("Attach a graph fragment and customer integration edges first", script)
             self.assertIn('direction: $("trace-direction").value', script)
+            self.assertIn("graph: refreshGraphProjection", script)
+            self.assertIn("Live graph stream connected", script)
+            self.assertIn("startLiveStatusPolling", script)
+            self.assertIn("/api/operations/status", script)
+            self.assertIn("activateSelectedWorkload", script)
+            self.assertIn("No matching entities in the selected workload", script)
+            self.assertIn("Static file mode cannot connect to the live graph", script)
+            with urlopen(f"{base}/styles.css", timeout=3) as response:
+                styles = response.read().decode("utf-8")
+            for investor_color in (
+                "#050505", "#f8f4ec", "#c5bdaf", "#f2b84b", "#d68a17", "#8e6b35",
+            ):
+                self.assertIn(investor_color, styles)
+            self.assertIn(".graph-binding.invalidated", styles)
+            self.assertIn('"Google Sans", "Roboto"', styles)
         finally:
             server.shutdown()
             server.server_close()

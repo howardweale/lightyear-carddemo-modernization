@@ -22,6 +22,7 @@ production-qualified.
 | MS #44.1 | Searchable Milestone Index Reliability | Complete |
 | MS #45 | SAP ASE Semantic Source Adapter | Complete |
 | MS #46 | Unified Estate Operator Navigation | Complete |
+| MS #47 | Graph-Bound Live Evidence Control Tower | Complete |
 
 The v0.35.0 stored-logic qualification core is retained as supporting MS #34 evidence. It does not
 replace the planned DB2 milestone.
@@ -152,3 +153,24 @@ read path. Oracle and SAP ASE adapter qualifications remain outside the graph, s
 their missing projection and customer integration edges rather than inventing an Oracle-to-
 mainframe transaction path. Live execution, customer equivalence, and production readiness remain
 false.
+
+## MS #47 — Graph-Bound Live Evidence Control Tower
+
+MS #47 turns the Control Tower into a more credible customer and executive operating surface while
+preserving its evidence boundary. The UI combines the LIGHTYEAR investor visual system with
+Material-influenced clarity: warm-white work surfaces, a near-black operational plane, gold
+hierarchy, bronze boundaries, modern sans-serif typography, sentence case, rounded controls, and a
+dedicated graph-binding card for canonical identity, counts, freshness, and downstream posture.
+The operator path is Company → Business problem → Workload → Technology scope → Operator lens.
+Company and problem constrain the available workloads, workload selection moves the graph root,
+and scope and lens refine the resulting graph without replacing the business context.
+
+The canonical Knowledge Graph and source-evidence pack become a first-class monitored source.
+Fingerprint changes emit hash-chained operational events through the existing SSE plane and refresh
+the browser's metadata, perspectives, operator context, legend, metrics, and active graph view.
+The source-evidence pack, Runtime projection, and Audit projection are accepted only when their
+graph identity matches the current canonical graph; a mismatch invalidates the affected projection
+and raises a critical alert. The Control
+Tower remains read-only and loopback-only. It does not add execution authority, enterprise
+authentication, managed streaming, customer runtime evidence, platform equivalence, or production
+readiness.

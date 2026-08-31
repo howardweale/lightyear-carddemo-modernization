@@ -1,9 +1,21 @@
 # Live Evidence and Control Tower Plane
 
-v0.17 turns the existing snapshot dashboard into a live, read-only operational projection. It
+v0.47 makes the canonical Knowledge Graph and source-evidence pack a first-class source in the
+live, read-only operational projection first introduced in v0.17. It also applies the LIGHTYEAR
+investor visual system to the browser: near-black surfaces, warm-white type, gold hierarchy, and
+bronze evidence boundaries.
+
+Operator navigation is graph-bound in this order: **Company → Business problem → Workload →
+Technology scope → Operator lens**. Company and problem determine the permitted workload choices;
+the workload supplies the graph root and curated perspective; scope and lens visually refine that
+bounded graph without silently changing the selected business problem.
+
+The plane
 observes the authoritative stores already owned by Factory, Portfolio, Recovery, Quality, Memory,
-Runtime, and Audit; emits canonical events when their identities change; and streams those events
-to the browser with Server-Sent Events (SSE).
+Data, Runtime, and Audit; emits canonical events when their identities change; and streams those
+events to the browser with Server-Sent Events (SSE). Graph changes refresh the live explorer and
+invalidate a mismatched source-evidence pack, Runtime projection, or Audit projection until
+graph-bound evidence is regenerated.
 
 The event stream is not an execution bus. The browser has no approve, lease, retry, recover,
 dispatch, promote, or exception-authoring endpoint. Production commands remain disabled until an
@@ -26,7 +38,9 @@ Set-ExecutionPolicy -Scope Process Bypass
 ```
 
 Open `http://127.0.0.1:8765`. Keep the server on loopback; this local release has no user
-authentication and must not be exposed with `--host 0.0.0.0`.
+authentication and must not be exposed with `--host 0.0.0.0`. `127.0.0.0` is the loopback network
+identifier, not the Control Tower address. Do not open `knowledge/viewer/index.html` directly;
+static file mode cannot use the API or Server-Sent Events stream.
 
 ## Operational contract
 
@@ -38,6 +52,7 @@ interface in production.
 
 | Source | Typical latency | Authority shown |
 |---|---:|---|
+| Graph | seconds | canonical graph identity, source-evidence binding, entities and relationships |
 | Factory | seconds | controller receipts and station transitions |
 | Portfolio | seconds | approved plan, conflicts, waves, composite runs |
 | Recovery | immediate | transactional leases, retries, dead letters |
@@ -47,8 +62,9 @@ interface in production.
 | Audit | immediate append | hash-chained decisions and release posture |
 
 The status API reports freshness, age, last observation, last identity change, expected interval,
-and trust class for every source. Initial alert rules cover dead letters, expired worker leases,
-stale runtime evidence, unavailable recovery projections, and blocked release promotion.
+and trust class for every source. It also returns the graph identity and downstream binding status.
+Alert rules cover graph-binding invalidation, dead letters, expired worker leases, stale runtime
+evidence, unavailable recovery projections, and blocked release promotion.
 
 ## HTTP surface
 

@@ -3,9 +3,12 @@
 Release: **v0.47.0 — Graph-bound live Evidence Control Tower**
 
 v0.47 gives the Evidence Control Tower the visual and operational clarity needed for customer and
-executive use. The interface now combines the LIGHTYEAR investor palette with Material-influenced
-clarity: warm-white work surfaces, a near-black operational plane, gold hierarchy, bronze evidence
-boundaries, modern sans-serif typography, sentence case, rounded controls, and more space.
+executive use. The Knowledge Graph uses the approved warm editorial palette: paper-white work
+surfaces, quiet stone rails, a restrained burnt-orange LIGHTYEAR accent, IBM Plex typography, and
+six distinct entity colors. Operational health keeps a separate green, amber, and red status
+language so graph meaning is never confused with system condition. The compact Control Tower
+header and three primary modes keep the graph dominant; live evidence stores remain directly
+accessible from the left rail.
 
 The Control Tower now drives the graph through an explicit operator path: **Company → Business
 problem → Workload → Technology scope → Operator lens**. Each company exposes only its governed

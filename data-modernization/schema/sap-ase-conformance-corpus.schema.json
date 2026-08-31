@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schema/sap-ase-conformance-corpus.schema.json",
+  "title": "LIGHTYEAR SAP ASE semantic conformance corpus",
+  "type": "object",
+  "required": ["schema_version", "corpus_type", "catalog_sha256", "case_count", "categories", "cases", "status", "live_ase_observed", "production_ready", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "corpus_type": {"const": "lightyear-sap-ase-semantic-conformance-corpus"},
+    "catalog_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "case_count": {"type": "integer", "minimum": 180},
+    "categories": {"type": "object", "minProperties": 8},
+    "cases": {"type": "array", "minItems": 180, "items": {"type": "object", "required": ["id", "category", "input", "expected", "observed", "status"], "properties": {"status": {"const": "passed"}}}},
+    "status": {"const": "passed"},
+    "live_ase_observed": {"const": false},
+    "production_ready": {"const": false},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,588 @@
+{
+  "adapter": {
+    "id": "lightyear-sap-ase-source",
+    "version": "1.0"
+  },
+  "catalog_sha256": "16cf4c688c00d98f9cbacd6492969cace35745eeb705d68f9617cafa5c6e2e6b",
+  "content_sha256": "86a5b4d026e48b7241e8bf6fe9e0b6713be338d86b49f51e27eefa549c527386",
+  "evidence_class": "bounded-fixture-profile",
+  "production_ready": false,
+  "profile_contract_sha256": "7a5e3c6bab17b95c05ef1a1fe229684a166bc443e2fbce366d1cefdb298dff26",
+  "profile_observed": false,
+  "profile_type": "lightyear-sap-ase-source-data-profile",
+  "raw_values_persisted": false,
+  "schema_version": "1.0",
+  "tables": [
+    {
+      "columns": [
+        {
+          "canonical_type": {
+            "identity": {
+              "increment": 5,
+              "seed": 1000
+            },
+            "kind": "exact-decimal",
+            "nullable": false,
+            "precision": 18,
+            "scale": 0
+          },
+          "metrics": {
+            "decimal_overflow_count": 0,
+            "distinct_count": 3,
+            "maximum": "1010",
+            "minimum": "1000",
+            "null_count": 0,
+            "row_count": 3
+          },
+          "name": "AUTH_ID"
+        },
+        {
+          "canonical_type": {
+            "domain": {
+              "base_type": "varchar",
+              "bound_default": null,
+              "bound_rule": "rule_card_number",
+              "name": "card_number"
+            },
+            "encoding": "server-charset-policy",
+            "kind": "variable-character",
+            "length": 19,
+            "nullable": false
+          },
+          "metrics": {
+            "distinct_count": 3,
+            "empty_string_count": 0,
+            "invalid_encoding_count": 0,
+            "maximum_character_length": 16,
+            "null_count": 0,
+            "row_count": 3,
+            "single_space_count": 0,
+            "trailing_space_count": 0
+          },
+          "name": "CARD_NUM"
+        },
+        {
+          "canonical_type": {
+            "domain": {
+              "base_type": "money",
+              "bound_default": "default_zero_money",
+              "bound_rule": null,
+              "name": "money_amount"
+            },
+            "kind": "exact-decimal",
+            "nullable": true,
+            "precision": 19,
+            "scale": 4,
+            "source_range": "ase-money"
+          },
+          "metrics": {
+            "decimal_overflow_count": 0,
+            "distinct_count": 3,
+            "maximum": "922337203685477.5807",
+            "minimum": "-922337203685477.5808",
+            "null_count": 0,
+            "row_count": 3
+          },
+          "name": "AUTH_AMT"
+        },
+        {
+          "canonical_type": {
+            "kind": "exact-decimal",
+            "nullable": false,
+            "precision": 10,
+            "scale": 4,
+            "source_range": "ase-smallmoney"
+          },
+          "metrics": {
+            "decimal_overflow_count": 0,
+            "distinct_count": 3,
+            "maximum": "214748.3647",
+            "minimum": "-214748.3648",
+            "null_count": 0,
+            "row_count": 3
+          },
+          "name": "FEE_AMT"
+        },
+        {
+          "canonical_type": {
+            "fractional_seconds": 3,
+            "kind": "timestamp",
+            "nullable": false,
+            "source_clock": "datetime",
+            "time_zone": "absent"
+          },
+          "metrics": {
+            "distinct_count": 3,
+            "maximum": "9999-12-31T23:59:59.997",
+            "minimum": "1753-01-01T00:00:00.000",
+            "null_count": 0,
+            "row_count": 3,
+            "timestamp_precision_observed": 3
+          },
+          "name": "EVENT_DT"
+        },
+        {
+          "canonical_type": {
+            "fractional_seconds": 0,
+            "kind": "timestamp",
+            "nullable": true,
+            "source_clock": "smalldatetime",
+            "time_zone": "absent"
+          },
+          "metrics": {
+            "distinct_count": 3,
+            "maximum": "2079-06-06T23:59:00",
+            "minimum": "1900-01-01T00:00:00",
+            "null_count": 0,
+            "row_count": 3,
+            "timestamp_precision_observed": 0
+          },
+          "name": "SETTLE_DT"
+        },
+        {
+          "canonical_type": {
+            "domain": {
+              "base_type": "bigdatetime",
+              "bound_default": "default_event_instant",
+              "bound_rule": null,
+              "name": "event_instant"
+            },
+            "fractional_seconds": 6,
+            "kind": "timestamp",
+            "nullable": false,
+            "source_clock": "bigdatetime",
+            "time_zone": "absent"
+          },
+          "metrics": {
+            "distinct_count": 3,
+            "maximum": "9999-12-31T23:59:59.999999",
+            "minimum": "0001-01-01T00:00:00.000000",
+            "null_count": 0,
+            "row_count": 3,
+            "timestamp_precision_observed": 6
+          },
+          "name": "EVENT_TS"
+        },
+        {
+          "canonical_type": {
+            "fractional_seconds": 6,
+            "kind": "time",
+            "nullable": true,
+            "time_zone": "absent"
+          },
+          "metrics": {
+            "distinct_count": 3,
+            "maximum": "23:59:59.999999",
+            "minimum": "00:00:00.000000",
+            "null_count": 0,
+            "row_count": 3,
+            "timestamp_precision_observed": 6
+          },
+          "name": "EVENT_TIME"
+        },
+        {
+          "canonical_type": {
+            "calendar": "proleptic-gregorian",
+            "kind": "date",
+            "nullable": false
+          },
+          "metrics": {
+            "distinct_count": 2,
+            "maximum": "2026-09-01",
+            "minimum": "2026-08-31",
+            "null_count": 0,
+            "row_count": 3,
+            "timestamp_precision_observed": 0
+          },
+          "name": "BUSINESS_DATE"
+        },
+        {
+          "canonical_type": {
+            "domain": {
+              "base_type": "char",
+              "bound_default": "default_fraud_flag",
+              "bound_rule": "rule_fraud_flag",
+              "name": "fraud_flag"
+            },
+            "encoding": "server-charset-policy",
+            "kind": "fixed-character",
+            "length": 1,
+            "nullable": false
+          },
+          "metrics": {
+            "distinct_count": 2,
+            "empty_string_count": 0,
+            "invalid_encoding_count": 0,
+            "maximum_character_length": 1,
+            "null_count": 0,
+            "row_count": 3,
+            "single_space_count": 0,
+            "trailing_space_count": 0
+          },
+          "name": "STATUS"
+        },
+        {
+          "canonical_type": {
+            "encoding": "unicode-scalar",
+            "kind": "variable-character",
+            "length": 80,
+            "nullable": true
+          },
+          "metrics": {
+            "distinct_count": 3,
+            "empty_string_count": 1,
+            "invalid_encoding_count": 0,
+            "maximum_character_length": 4,
+            "null_count": 0,
+            "row_count": 3,
+            "single_space_count": 0,
+            "trailing_space_count": 0
+          },
+          "name": "MERCHANT_TEXT"
+        },
+        {
+          "canonical_type": {
+            "encoding": "server-charset-policy",
+            "kind": "fixed-character",
+            "length": 4,
+            "nullable": false
+          },
+          "metrics": {
+            "distinct_count": 3,
+            "empty_string_count": 0,
+            "invalid_encoding_count": 0,
+            "maximum_character_length": 4,
+            "null_count": 0,
+            "row_count": 3,
+            "single_space_count": 0,
+            "trailing_space_count": 3
+          },
+          "name": "FIXED_CODE"
+        },
+        {
+          "canonical_type": {
+            "encoding": "server-charset-policy",
+            "kind": "variable-character",
+            "length": 64,
+            "nullable": true
+          },
+          "metrics": {
+            "distinct_count": 2,
+            "empty_string_count": 1,
+            "invalid_encoding_count": 0,
+            "maximum_character_length": 1,
+            "null_count": 1,
+            "row_count": 3,
+            "single_space_count": 1,
+            "trailing_space_count": 1
+          },
+          "name": "REASON"
+        },
+        {
+          "canonical_type": {
+            "ase_timestamp_is_row_version": true,
+            "kind": "fixed-binary",
+            "length": 8,
+            "nullable": false
+          },
+          "metrics": {
+            "distinct_count": 3,
+            "maximum_byte_length": 16,
+            "null_count": 0,
+            "row_count": 3
+          },
+          "name": "RAW_VERSION"
+        },
+        {
+          "canonical_type": {
+            "kind": "variable-binary",
+            "length": 256,
+            "nullable": true
+          },
+          "metrics": {
+            "distinct_count": 2,
+            "maximum_byte_length": 4,
+            "null_count": 1,
+            "row_count": 3
+          },
+          "name": "PAYLOAD"
+        },
+        {
+          "canonical_type": {
+            "encoding": "server-charset-policy",
+            "kind": "large-text",
+            "nullable": true
+          },
+          "metrics": {
+            "distinct_count": 2,
+            "empty_string_count": 0,
+            "invalid_encoding_count": 0,
+            "maximum_character_length": 5,
+            "null_count": 1,
+            "row_count": 3,
+            "single_space_count": 0,
+            "trailing_space_count": 0
+          },
+          "name": "NOTES"
+        },
+        {
+          "canonical_type": {
+            "encoding": "unicode-scalar",
+            "kind": "large-text",
+            "nullable": true
+          },
+          "metrics": {
+            "distinct_count": 2,
+            "empty_string_count": 0,
+            "invalid_encoding_count": 0,
+            "maximum_character_length": 6,
+            "null_count": 1,
+            "row_count": 3,
+            "single_space_count": 0,
+            "trailing_space_count": 0
+          },
+          "name": "NATIVE_NOTES"
+        },
+        {
+          "canonical_type": {
+            "kind": "large-binary",
+            "nullable": true
+          },
+          "metrics": {
+            "distinct_count": 1,
+            "maximum_byte_length": 8,
+            "null_count": 2,
+            "row_count": 3
+          },
+          "name": "IMAGE_DATA"
+        },
+        {
+          "canonical_type": {
+            "kind": "boolean",
+            "nullable": false
+          },
+          "metrics": {
+            "distinct_count": 2,
+            "maximum_byte_length": 1,
+            "null_count": 0,
+            "row_count": 3
+          },
+          "name": "ACTIVE"
+        },
+        {
+          "canonical_type": {
+            "bits": 8,
+            "kind": "signed-integer",
+            "nullable": false
+          },
+          "metrics": {
+            "decimal_overflow_count": 0,
+            "distinct_count": 3,
+            "maximum": "255",
+            "minimum": "0",
+            "null_count": 0,
+            "row_count": 3
+          },
+          "name": "TINY_SCORE"
+        },
+        {
+          "canonical_type": {
+            "bits": 16,
+            "kind": "signed-integer",
+            "nullable": false
+          },
+          "metrics": {
+            "decimal_overflow_count": 0,
+            "distinct_count": 3,
+            "maximum": "32767",
+            "minimum": "-32768",
+            "null_count": 0,
+            "row_count": 3
+          },
+          "name": "RETRY_COUNT"
+        },
+        {
+          "canonical_type": {
+            "bits": 32,
+            "kind": "signed-integer",
+            "nullable": false
+          },
+          "metrics": {
+            "decimal_overflow_count": 0,
+            "distinct_count": 3,
+            "maximum": "2147483647",
+            "minimum": "-2147483648",
+            "null_count": 0,
+            "row_count": 3
+          },
+          "name": "RISK_CODE"
+        },
+        {
+          "canonical_type": {
+            "bits": 64,
+            "kind": "signed-integer",
+            "nullable": false
+          },
+          "metrics": {
+            "decimal_overflow_count": 0,
+            "distinct_count": 3,
+            "maximum": "9223372036854775807",
+            "minimum": "-9223372036854775808",
+            "null_count": 0,
+            "row_count": 3
+          },
+          "name": "EVENT_COUNT"
+        },
+        {
+          "canonical_type": {
+            "kind": "exact-decimal",
+            "nullable": true,
+            "precision": 9,
+            "scale": 6
+          },
+          "metrics": {
+            "decimal_overflow_count": 0,
+            "distinct_count": 3,
+            "maximum": "999.999999",
+            "minimum": "-999.999999",
+            "null_count": 0,
+            "row_count": 3
+          },
+          "name": "TAX_RATE"
+        },
+        {
+          "canonical_type": {
+            "kind": "exact-decimal",
+            "nullable": false,
+            "precision": 10,
+            "scale": 0,
+            "source_range": "ase-unsigned-int"
+          },
+          "metrics": {
+            "decimal_overflow_count": 0,
+            "distinct_count": 3,
+            "maximum": "4294967295",
+            "minimum": "0",
+            "null_count": 0,
+            "row_count": 3
+          },
+          "name": "UNSIGNED_COUNT"
+        },
+        {
+          "canonical_type": {
+            "kind": "unsupported",
+            "nullable": true,
+            "reason": "approximate-number-canonical-contract-not-qualified"
+          },
+          "metrics": {
+            "distinct_count": 3,
+            "maximum_byte_length": 8,
+            "null_count": 0,
+            "row_count": 3
+          },
+          "name": "FLOAT_SCORE"
+        }
+      ],
+      "table": "AUTHFRDS_ASE"
+    },
+    {
+      "columns": [
+        {
+          "canonical_type": {
+            "identity": {
+              "increment": 1,
+              "seed": 1
+            },
+            "kind": "exact-decimal",
+            "nullable": false,
+            "precision": 18,
+            "scale": 0
+          },
+          "metrics": {
+            "decimal_overflow_count": 0,
+            "distinct_count": 2,
+            "maximum": "2",
+            "minimum": "1",
+            "null_count": 0,
+            "row_count": 2
+          },
+          "name": "AUDIT_ID"
+        },
+        {
+          "canonical_type": {
+            "kind": "exact-decimal",
+            "nullable": false,
+            "precision": 18,
+            "scale": 0
+          },
+          "metrics": {
+            "decimal_overflow_count": 0,
+            "distinct_count": 2,
+            "maximum": "1005",
+            "minimum": "1000",
+            "null_count": 0,
+            "row_count": 2
+          },
+          "name": "AUTH_ID"
+        },
+        {
+          "canonical_type": {
+            "encoding": "server-charset-policy",
+            "kind": "variable-character",
+            "length": 12,
+            "nullable": false
+          },
+          "metrics": {
+            "distinct_count": 2,
+            "empty_string_count": 0,
+            "invalid_encoding_count": 0,
+            "maximum_character_length": 6,
+            "null_count": 0,
+            "row_count": 2,
+            "single_space_count": 0,
+            "trailing_space_count": 0
+          },
+          "name": "ACTION_CODE"
+        },
+        {
+          "canonical_type": {
+            "fractional_seconds": 6,
+            "kind": "timestamp",
+            "nullable": false,
+            "source_clock": "bigdatetime",
+            "time_zone": "absent"
+          },
+          "metrics": {
+            "distinct_count": 2,
+            "maximum": "2026-08-31T12:00:01.000000",
+            "minimum": "2026-08-31T12:00:00.004000",
+            "null_count": 0,
+            "row_count": 2,
+            "timestamp_precision_observed": 6
+          },
+          "name": "ACTION_TS"
+        },
+        {
+          "canonical_type": {
+            "encoding": "server-charset-policy",
+            "kind": "variable-character",
+            "length": 30,
+            "nullable": false
+          },
+          "metrics": {
+            "distinct_count": 2,
+            "empty_string_count": 0,
+            "invalid_encoding_count": 0,
+            "maximum_character_length": 10,
+            "null_count": 0,
+            "row_count": 2,
+            "single_space_count": 0,
+            "trailing_space_count": 0
+          },
+          "name": "LOGIN_NAME"
+        }
+      ],
+      "table": "AUTH_AUDIT_ASE"
+    }
+  ]
+}

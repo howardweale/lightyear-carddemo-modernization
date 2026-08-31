@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schema/sap-ase-conformance-receipt.schema.json",
+  "title": "LIGHTYEAR SAP ASE source adapter conformance receipt",
+  "type": "object",
+  "required": ["schema_version", "receipt_type", "adapter", "bindings", "checks", "status", "catalog_observed", "profile_observed", "replication_observed", "transaction_observed", "target_selected", "production_ready", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "receipt_type": {"const": "lightyear-sap-ase-source-adapter-conformance"},
+    "adapter": {"type": "object", "required": ["id", "version", "dialect"]},
+    "bindings": {"type": "object", "required": ["catalog_sha256", "discovery_sha256", "profile_contract_sha256", "profile_sha256", "ledger_sha256", "corpus_sha256"]},
+    "checks": {"type": "object", "minProperties": 12},
+    "status": {"const": "passed"},
+    "catalog_observed": {"const": false},
+    "profile_observed": {"const": false},
+    "replication_observed": {"const": false},
+    "transaction_observed": {"const": false},
+    "target_selected": {"const": false},
+    "production_ready": {"const": false},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

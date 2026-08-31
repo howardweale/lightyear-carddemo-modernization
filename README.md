@@ -1,6 +1,32 @@
 # FactoryDark.ai CardDemo Modernization Factory
 
-Release: **v0.44.0 — Milestone documentation system**
+Release: **v0.45.0 — SAP ASE semantic source adapter**
+
+v0.45 adds a genuine, target-neutral SAP ASE `SourceAdapter` backed by a customer-shaped catalog,
+privacy-preserving profiles, exact extraction contracts, content-bound replication resume, explicit
+transaction and locking capabilities, a 107-entry five-class semantic ledger, and twelve independent
+qualification gates. The 187-case corpus provides depth across ASE datatypes and UDTs, `IDENTITY`,
+money and datetime boundaries, empty strings and character comparison, Transact-SQL, procedures and
+triggers, locking and rollback, and cross-table replication order.
+
+The source adapter and semantic-loss analysis are qualified as bounded development capabilities.
+Live ASE catalog, profile, replication, transaction, and native stored-logic evidence remain false.
+No target is selected: ASE-to-PostgreSQL or ASE-to-Oracle qualification will follow the needs of a
+real pilot. Stored-logic completion, database-migration completion, and production readiness remain
+false.
+
+```bash
+./data-modernization.sh ase-source
+PYTHONPATH=src python3 -m lightyear_data verify-sap-ase-source-adapter --project-root .
+```
+
+Previous milestone: **v0.44.1 — Searchable milestone documentation index**
+
+v0.44.1 repairs and governs the searchable milestone library. The generated index discovers all
+milestones, supports text and status filtering, links each result to its Markdown, Word, and PDF
+artifact, and verifies every link against the 135-file manifest.
+
+Earlier milestone: **v0.43.0 — Oracle semantic source qualification**
 
 v0.43 replaces the earlier Oracle-shaped side of the bounded database proof with a genuine
 semantic-core `SourceAdapter`. It adds contract-bound Oracle schema discovery, privacy-preserving
@@ -823,9 +849,13 @@ read-only dashboard cannot approve, resolve, or launch work.
 ## What it does
 
 The complete customer-readable milestone history is published in the
-[milestone documentation library](docs/milestones/README.md). MS #1 through MS #44 each have a
-canonical Markdown narrative plus matching Microsoft Word and PDF editions. The library is
-content-addressed and fails closed when its sources or generated artifacts drift.
+[searchable milestone documentation library](https://howardweale.github.io/lightyear-carddemo-modernization/milestones/).
+MS #1 through MS #44 each have a canonical Markdown narrative plus matching Microsoft Word and PDF
+editions. Search runs locally in the browser over milestone number, title, customer value,
+capability, release, boundary, and roadmap phase. The
+[repository index](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/README.md)
+uses absolute links so every format remains reachable outside GitHub's relative-link context. The
+library is content-addressed and fails closed when its sources or generated artifacts drift.
 
 Verify the committed documentation without optional dependencies:
 

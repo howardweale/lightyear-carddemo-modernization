@@ -19,7 +19,8 @@ production-qualified.
 | MS #42 | Integrated Pilot Qualification | Complete |
 | MS #43 | Oracle Source and Stored-Procedure Qualification | Complete |
 | MS #44 | Milestone Documentation System | Complete |
-| MS #45 | SAP ASE Semantic Source Adapter | Planned |
+| MS #44.1 | Searchable Milestone Index Reliability | Complete |
+| MS #45 | SAP ASE Semantic Source Adapter | Complete |
 
 The v0.35.0 stored-logic qualification core is retained as supporting MS #34 evidence. It does not
 replace the planned DB2 milestone.
@@ -113,9 +114,22 @@ missing or modified output, and undeclared milestone files. The documentation pa
 evidence but does not create new technical qualification, live execution, platform equivalence, or
 production-readiness evidence.
 
+## MS #44.1 — Searchable Milestone Index Reliability
+
+MS #44.1 corrects the customer access path for the milestone library. It adds a responsive,
+client-side search and roadmap-phase filter, publishes the index through GitHub Pages, replaces
+context-dependent relative format links with absolute GitHub links, and makes Word links direct
+downloads. Search covers customer-readable milestone metadata and narrative fields; it does not
+search customer source code or replace underlying receipts, ledgers, tests, or policy evidence.
+
 ## MS #45 — SAP ASE Semantic Source Adapter
 
-MS #45 will implement a target-neutral SAP ASE source adapter and semantic-loss analysis. Its
-bounded scope will include user-defined datatypes, `IDENTITY`, money and datetime behavior,
-empty-string semantics, Transact-SQL, locking, stored procedures and triggers, replication ordering,
-and transaction/rollback differences. A target-specific ASE proof will follow a real pilot choice.
+MS #45 implements a genuine target-neutral SAP ASE `SourceAdapter` and broad semantic-loss analysis.
+The bounded catalog covers 2 tables, 31 columns, 4 UDTs, 2 identity columns, 5 constraints, 3
+indexes, 6 procedures, 4 triggers, and multiple ASE locking schemes. A 187-case corpus provides
+depth across datatypes, identity, money, datetime, empty strings, Transact-SQL, stored logic,
+transactions, rollback, locking, replication order, and resume. A 107-entry five-class ledger and
+twelve gates qualify the source adapter and analysis while keeping live ASE observation, target
+selection, target migration qualification, native stored-logic execution, database-migration
+completion, and production readiness false. The ASE-to-PostgreSQL or ASE-to-Oracle proof will follow
+a real pilot choice.

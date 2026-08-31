@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schema/sap-ase-source-catalog.schema.json",
+  "title": "LIGHTYEAR SAP ASE source catalog",
+  "type": "object",
+  "required": ["schema_version", "catalog_type", "server_version", "database", "owner", "default_charset", "sort_order", "user_defined_types", "tables", "stored_logic", "catalog_observed", "production_ready", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "catalog_type": {"const": "lightyear-sap-ase-source-catalog"},
+    "server_version": {"type": "string"},
+    "database": {"type": "string", "minLength": 1},
+    "owner": {"type": "string", "minLength": 1},
+    "default_charset": {"type": "string", "minLength": 1},
+    "sort_order": {"type": "string", "minLength": 1},
+    "user_defined_types": {"type": "array", "minItems": 4, "items": {"type": "object", "required": ["name", "base_type", "nullable", "bound_rule", "bound_default"]}},
+    "tables": {"type": "array", "minItems": 2, "items": {"type": "object", "required": ["name", "locking_scheme", "columns", "constraints", "indexes"], "properties": {"locking_scheme": {"enum": ["allpages", "datapages", "datarows"]}, "columns": {"type": "array", "minItems": 5}, "constraints": {"type": "array"}, "indexes": {"type": "array"}}}},
+    "stored_logic": {"type": "array", "minItems": 10, "items": {"type": "object", "required": ["name", "kind", "features"], "properties": {"kind": {"enum": ["procedure", "trigger"]}}}},
+    "catalog_observed": {"const": false},
+    "production_ready": {"const": false},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

@@ -1,0 +1,2236 @@
+{
+  "catalog_sha256": "16cf4c688c00d98f9cbacd6492969cace35745eeb705d68f9617cafa5c6e2e6b",
+  "classifications": [
+    "exact",
+    "normalized-equivalent",
+    "policy-decision-required",
+    "lossy",
+    "unsupported"
+  ],
+  "content_sha256": "59dcf7a42a795ef4b3532c90284cd8edcf85afc35500c176c8cb71abc346c2fe",
+  "coverage": {
+    "behaviors": 54,
+    "columns": 31,
+    "constraints": 5,
+    "indexes": 3,
+    "stored_logic": 10,
+    "tables": 2,
+    "udts": 4
+  },
+  "entries": [
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "catalog-udt-definition",
+        "rule-and-default-binding"
+      ],
+      "item_id": "ase-udt:card_number",
+      "rationale": "UDT identity is retained while its physical base type maps to the canonical type.",
+      "scope": "user-defined-datatype",
+      "source_semantics": {
+        "base_type": "varchar",
+        "bound_default": null,
+        "bound_rule": "rule_card_number",
+        "length": 19,
+        "name": "card_number",
+        "nullable": false
+      },
+      "target_semantics": {
+        "contract": "canonical-domain-plus-base-type"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "catalog-udt-definition",
+        "rule-and-default-binding"
+      ],
+      "item_id": "ase-udt:money_amount",
+      "rationale": "UDT identity is retained while its physical base type maps to the canonical type.",
+      "scope": "user-defined-datatype",
+      "source_semantics": {
+        "base_type": "money",
+        "bound_default": "default_zero_money",
+        "bound_rule": null,
+        "name": "money_amount",
+        "nullable": true
+      },
+      "target_semantics": {
+        "contract": "canonical-domain-plus-base-type"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "catalog-udt-definition",
+        "rule-and-default-binding"
+      ],
+      "item_id": "ase-udt:fraud_flag",
+      "rationale": "UDT identity is retained while its physical base type maps to the canonical type.",
+      "scope": "user-defined-datatype",
+      "source_semantics": {
+        "base_type": "char",
+        "bound_default": "default_fraud_flag",
+        "bound_rule": "rule_fraud_flag",
+        "length": 1,
+        "name": "fraud_flag",
+        "nullable": false
+      },
+      "target_semantics": {
+        "contract": "canonical-domain-plus-base-type"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "catalog-udt-definition",
+        "rule-and-default-binding"
+      ],
+      "item_id": "ase-udt:event_instant",
+      "rationale": "UDT identity is retained while its physical base type maps to the canonical type.",
+      "scope": "user-defined-datatype",
+      "source_semantics": {
+        "base_type": "bigdatetime",
+        "bound_default": "default_event_instant",
+        "bound_rule": null,
+        "name": "event_instant",
+        "nullable": false
+      },
+      "target_semantics": {
+        "contract": "canonical-domain-plus-base-type"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "no-policy-required",
+      "evidence_required": [
+        "catalog-definition",
+        "boundary-corpus"
+      ],
+      "item_id": "ase-column:AUTHFRDS_ASE:AUTH_ID",
+      "rationale": "Column is classified against the target-neutral canonical semantic contract.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "identity": {
+          "increment": 5,
+          "seed": 1000
+        },
+        "table": "AUTHFRDS_ASE",
+        "type": "numeric"
+      },
+      "target_semantics": {
+        "identity": {
+          "increment": 5,
+          "seed": 1000
+        },
+        "kind": "exact-decimal",
+        "nullable": false,
+        "precision": 18,
+        "scale": 0
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-padding-and-collation-profile",
+        "approved-string-policy"
+      ],
+      "item_id": "ase-column:AUTHFRDS_ASE:CARD_NUM",
+      "rationale": "Column is classified against the target-neutral canonical semantic contract.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "identity": null,
+        "table": "AUTHFRDS_ASE",
+        "type": "card_number"
+      },
+      "target_semantics": {
+        "domain": {
+          "base_type": "varchar",
+          "bound_default": null,
+          "bound_rule": "rule_card_number",
+          "name": "card_number"
+        },
+        "encoding": "server-charset-policy",
+        "kind": "variable-character",
+        "length": 19,
+        "nullable": false
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "no-policy-required",
+      "evidence_required": [
+        "catalog-definition",
+        "boundary-corpus"
+      ],
+      "item_id": "ase-column:AUTHFRDS_ASE:AUTH_AMT",
+      "rationale": "Column is classified against the target-neutral canonical semantic contract.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "identity": null,
+        "table": "AUTHFRDS_ASE",
+        "type": "money_amount"
+      },
+      "target_semantics": {
+        "domain": {
+          "base_type": "money",
+          "bound_default": "default_zero_money",
+          "bound_rule": null,
+          "name": "money_amount"
+        },
+        "kind": "exact-decimal",
+        "nullable": true,
+        "precision": 19,
+        "scale": 4,
+        "source_range": "ase-money"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "no-policy-required",
+      "evidence_required": [
+        "catalog-definition",
+        "boundary-corpus"
+      ],
+      "item_id": "ase-column:AUTHFRDS_ASE:FEE_AMT",
+      "rationale": "Column is classified against the target-neutral canonical semantic contract.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "identity": null,
+        "table": "AUTHFRDS_ASE",
+        "type": "smallmoney"
+      },
+      "target_semantics": {
+        "kind": "exact-decimal",
+        "nullable": false,
+        "precision": 10,
+        "scale": 4,
+        "source_range": "ase-smallmoney"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "typed-boundary-corpus"
+      ],
+      "item_id": "ase-column:AUTHFRDS_ASE:EVENT_DT",
+      "rationale": "Column is classified against the target-neutral canonical semantic contract.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "identity": null,
+        "table": "AUTHFRDS_ASE",
+        "type": "datetime"
+      },
+      "target_semantics": {
+        "fractional_seconds": 3,
+        "kind": "timestamp",
+        "nullable": false,
+        "source_clock": "datetime",
+        "time_zone": "absent"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "typed-boundary-corpus"
+      ],
+      "item_id": "ase-column:AUTHFRDS_ASE:SETTLE_DT",
+      "rationale": "Column is classified against the target-neutral canonical semantic contract.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "identity": null,
+        "table": "AUTHFRDS_ASE",
+        "type": "smalldatetime"
+      },
+      "target_semantics": {
+        "fractional_seconds": 0,
+        "kind": "timestamp",
+        "nullable": true,
+        "source_clock": "smalldatetime",
+        "time_zone": "absent"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "no-policy-required",
+      "evidence_required": [
+        "catalog-definition",
+        "boundary-corpus"
+      ],
+      "item_id": "ase-column:AUTHFRDS_ASE:EVENT_TS",
+      "rationale": "Column is classified against the target-neutral canonical semantic contract.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "identity": null,
+        "table": "AUTHFRDS_ASE",
+        "type": "event_instant"
+      },
+      "target_semantics": {
+        "domain": {
+          "base_type": "bigdatetime",
+          "bound_default": "default_event_instant",
+          "bound_rule": null,
+          "name": "event_instant"
+        },
+        "fractional_seconds": 6,
+        "kind": "timestamp",
+        "nullable": false,
+        "source_clock": "bigdatetime",
+        "time_zone": "absent"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "typed-boundary-corpus"
+      ],
+      "item_id": "ase-column:AUTHFRDS_ASE:EVENT_TIME",
+      "rationale": "Column is classified against the target-neutral canonical semantic contract.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "identity": null,
+        "table": "AUTHFRDS_ASE",
+        "type": "bigtime"
+      },
+      "target_semantics": {
+        "fractional_seconds": 6,
+        "kind": "time",
+        "nullable": true,
+        "time_zone": "absent"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "no-policy-required",
+      "evidence_required": [
+        "catalog-definition",
+        "boundary-corpus"
+      ],
+      "item_id": "ase-column:AUTHFRDS_ASE:BUSINESS_DATE",
+      "rationale": "Column is classified against the target-neutral canonical semantic contract.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "identity": null,
+        "table": "AUTHFRDS_ASE",
+        "type": "date"
+      },
+      "target_semantics": {
+        "calendar": "proleptic-gregorian",
+        "kind": "date",
+        "nullable": false
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "typed-boundary-corpus"
+      ],
+      "item_id": "ase-column:AUTHFRDS_ASE:STATUS",
+      "rationale": "Column is classified against the target-neutral canonical semantic contract.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "identity": null,
+        "table": "AUTHFRDS_ASE",
+        "type": "fraud_flag"
+      },
+      "target_semantics": {
+        "domain": {
+          "base_type": "char",
+          "bound_default": "default_fraud_flag",
+          "bound_rule": "rule_fraud_flag",
+          "name": "fraud_flag"
+        },
+        "encoding": "server-charset-policy",
+        "kind": "fixed-character",
+        "length": 1,
+        "nullable": false
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-padding-and-collation-profile",
+        "approved-string-policy"
+      ],
+      "item_id": "ase-column:AUTHFRDS_ASE:MERCHANT_TEXT",
+      "rationale": "Column is classified against the target-neutral canonical semantic contract.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "identity": null,
+        "table": "AUTHFRDS_ASE",
+        "type": "univarchar"
+      },
+      "target_semantics": {
+        "encoding": "unicode-scalar",
+        "kind": "variable-character",
+        "length": 80,
+        "nullable": true
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "typed-boundary-corpus"
+      ],
+      "item_id": "ase-column:AUTHFRDS_ASE:FIXED_CODE",
+      "rationale": "Column is classified against the target-neutral canonical semantic contract.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "identity": null,
+        "table": "AUTHFRDS_ASE",
+        "type": "char"
+      },
+      "target_semantics": {
+        "encoding": "server-charset-policy",
+        "kind": "fixed-character",
+        "length": 4,
+        "nullable": false
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-padding-and-collation-profile",
+        "approved-string-policy"
+      ],
+      "item_id": "ase-column:AUTHFRDS_ASE:REASON",
+      "rationale": "Column is classified against the target-neutral canonical semantic contract.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "identity": null,
+        "table": "AUTHFRDS_ASE",
+        "type": "varchar"
+      },
+      "target_semantics": {
+        "encoding": "server-charset-policy",
+        "kind": "variable-character",
+        "length": 64,
+        "nullable": true
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "typed-boundary-corpus"
+      ],
+      "item_id": "ase-column:AUTHFRDS_ASE:RAW_VERSION",
+      "rationale": "Column is classified against the target-neutral canonical semantic contract.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "identity": null,
+        "table": "AUTHFRDS_ASE",
+        "type": "timestamp"
+      },
+      "target_semantics": {
+        "ase_timestamp_is_row_version": true,
+        "kind": "fixed-binary",
+        "length": 8,
+        "nullable": false
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "typed-boundary-corpus"
+      ],
+      "item_id": "ase-column:AUTHFRDS_ASE:PAYLOAD",
+      "rationale": "Column is classified against the target-neutral canonical semantic contract.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "identity": null,
+        "table": "AUTHFRDS_ASE",
+        "type": "varbinary"
+      },
+      "target_semantics": {
+        "kind": "variable-binary",
+        "length": 256,
+        "nullable": true
+      }
+    },
+    {
+      "classification": "lossy",
+      "decision": "unresolved",
+      "evidence_required": [
+        "lob-streaming-and-locator-plan"
+      ],
+      "item_id": "ase-column:AUTHFRDS_ASE:NOTES",
+      "rationale": "Column is classified against the target-neutral canonical semantic contract.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "identity": null,
+        "table": "AUTHFRDS_ASE",
+        "type": "text"
+      },
+      "target_semantics": {
+        "encoding": "server-charset-policy",
+        "kind": "large-text",
+        "nullable": true
+      }
+    },
+    {
+      "classification": "lossy",
+      "decision": "unresolved",
+      "evidence_required": [
+        "lob-streaming-and-locator-plan"
+      ],
+      "item_id": "ase-column:AUTHFRDS_ASE:NATIVE_NOTES",
+      "rationale": "Column is classified against the target-neutral canonical semantic contract.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "identity": null,
+        "table": "AUTHFRDS_ASE",
+        "type": "unitext"
+      },
+      "target_semantics": {
+        "encoding": "unicode-scalar",
+        "kind": "large-text",
+        "nullable": true
+      }
+    },
+    {
+      "classification": "lossy",
+      "decision": "unresolved",
+      "evidence_required": [
+        "lob-streaming-and-locator-plan"
+      ],
+      "item_id": "ase-column:AUTHFRDS_ASE:IMAGE_DATA",
+      "rationale": "Column is classified against the target-neutral canonical semantic contract.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "identity": null,
+        "table": "AUTHFRDS_ASE",
+        "type": "image"
+      },
+      "target_semantics": {
+        "kind": "large-binary",
+        "nullable": true
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "no-policy-required",
+      "evidence_required": [
+        "catalog-definition",
+        "boundary-corpus"
+      ],
+      "item_id": "ase-column:AUTHFRDS_ASE:ACTIVE",
+      "rationale": "Column is classified against the target-neutral canonical semantic contract.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "identity": null,
+        "table": "AUTHFRDS_ASE",
+        "type": "bit"
+      },
+      "target_semantics": {
+        "kind": "boolean",
+        "nullable": false
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "no-policy-required",
+      "evidence_required": [
+        "catalog-definition",
+        "boundary-corpus"
+      ],
+      "item_id": "ase-column:AUTHFRDS_ASE:TINY_SCORE",
+      "rationale": "Column is classified against the target-neutral canonical semantic contract.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "identity": null,
+        "table": "AUTHFRDS_ASE",
+        "type": "tinyint"
+      },
+      "target_semantics": {
+        "bits": 8,
+        "kind": "signed-integer",
+        "nullable": false
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "no-policy-required",
+      "evidence_required": [
+        "catalog-definition",
+        "boundary-corpus"
+      ],
+      "item_id": "ase-column:AUTHFRDS_ASE:RETRY_COUNT",
+      "rationale": "Column is classified against the target-neutral canonical semantic contract.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "identity": null,
+        "table": "AUTHFRDS_ASE",
+        "type": "smallint"
+      },
+      "target_semantics": {
+        "bits": 16,
+        "kind": "signed-integer",
+        "nullable": false
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "no-policy-required",
+      "evidence_required": [
+        "catalog-definition",
+        "boundary-corpus"
+      ],
+      "item_id": "ase-column:AUTHFRDS_ASE:RISK_CODE",
+      "rationale": "Column is classified against the target-neutral canonical semantic contract.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "identity": null,
+        "table": "AUTHFRDS_ASE",
+        "type": "int"
+      },
+      "target_semantics": {
+        "bits": 32,
+        "kind": "signed-integer",
+        "nullable": false
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "no-policy-required",
+      "evidence_required": [
+        "catalog-definition",
+        "boundary-corpus"
+      ],
+      "item_id": "ase-column:AUTHFRDS_ASE:EVENT_COUNT",
+      "rationale": "Column is classified against the target-neutral canonical semantic contract.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "identity": null,
+        "table": "AUTHFRDS_ASE",
+        "type": "bigint"
+      },
+      "target_semantics": {
+        "bits": 64,
+        "kind": "signed-integer",
+        "nullable": false
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "no-policy-required",
+      "evidence_required": [
+        "catalog-definition",
+        "boundary-corpus"
+      ],
+      "item_id": "ase-column:AUTHFRDS_ASE:TAX_RATE",
+      "rationale": "Column is classified against the target-neutral canonical semantic contract.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "identity": null,
+        "table": "AUTHFRDS_ASE",
+        "type": "decimal"
+      },
+      "target_semantics": {
+        "kind": "exact-decimal",
+        "nullable": true,
+        "precision": 9,
+        "scale": 6
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "separate-type-qualification"
+      ],
+      "item_id": "ase-column:AUTHFRDS_ASE:UNSIGNED_COUNT",
+      "rationale": "Column is classified against the target-neutral canonical semantic contract.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "identity": null,
+        "table": "AUTHFRDS_ASE",
+        "type": "unsigned int"
+      },
+      "target_semantics": {
+        "kind": "exact-decimal",
+        "nullable": false,
+        "precision": 10,
+        "scale": 0,
+        "source_range": "ase-unsigned-int"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "separate-approximate-number-contract"
+      ],
+      "item_id": "ase-column:AUTHFRDS_ASE:FLOAT_SCORE",
+      "rationale": "Column is classified against the target-neutral canonical semantic contract.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "identity": null,
+        "table": "AUTHFRDS_ASE",
+        "type": "float"
+      },
+      "target_semantics": {
+        "kind": "unsupported",
+        "nullable": true,
+        "reason": "approximate-number-canonical-contract-not-qualified"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "catalog-definition",
+        "negative-boundary-cases"
+      ],
+      "item_id": "ase-constraint:AUTHFRDS_ASE:PK_AUTHFRDS_ASE",
+      "rationale": "Constraint identity and enforcement timing remain explicit.",
+      "scope": "constraint",
+      "source_semantics": {
+        "columns": [
+          "AUTH_ID"
+        ],
+        "kind": "primary-key",
+        "name": "PK_AUTHFRDS_ASE"
+      },
+      "target_semantics": {
+        "contract": "canonical-constraint"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "catalog-definition",
+        "negative-boundary-cases"
+      ],
+      "item_id": "ase-constraint:AUTHFRDS_ASE:UQ_AUTHFRDS_CARD_TIME",
+      "rationale": "Constraint identity and enforcement timing remain explicit.",
+      "scope": "constraint",
+      "source_semantics": {
+        "columns": [
+          "CARD_NUM",
+          "EVENT_TS"
+        ],
+        "kind": "unique",
+        "name": "UQ_AUTHFRDS_CARD_TIME"
+      },
+      "target_semantics": {
+        "contract": "canonical-constraint"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "catalog-definition",
+        "negative-boundary-cases"
+      ],
+      "item_id": "ase-constraint:AUTHFRDS_ASE:CK_AUTHFRDS_STATUS",
+      "rationale": "Constraint identity and enforcement timing remain explicit.",
+      "scope": "constraint",
+      "source_semantics": {
+        "expression": "STATUS in ('N','Y')",
+        "kind": "check",
+        "name": "CK_AUTHFRDS_STATUS"
+      },
+      "target_semantics": {
+        "contract": "canonical-constraint"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "catalog-definition",
+        "target-access-plan"
+      ],
+      "item_id": "ase-index:AUTHFRDS_ASE:IX_AUTHFRDS_CARD",
+      "rationale": "Logical key order is separable from ASE physical clustering and locking behavior.",
+      "scope": "index-and-physical-access",
+      "source_semantics": {
+        "clustered": false,
+        "columns": [
+          {
+            "direction": "asc",
+            "name": "CARD_NUM"
+          }
+        ],
+        "name": "IX_AUTHFRDS_CARD",
+        "unique": false
+      },
+      "target_semantics": {
+        "contract": "logical-index-with-target-physical-policy"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "catalog-definition",
+        "target-access-plan"
+      ],
+      "item_id": "ase-index:AUTHFRDS_ASE:IX_AUTHFRDS_EVENT",
+      "rationale": "Logical key order is separable from ASE physical clustering and locking behavior.",
+      "scope": "index-and-physical-access",
+      "source_semantics": {
+        "clustered": true,
+        "columns": [
+          {
+            "direction": "desc",
+            "name": "EVENT_TS"
+          },
+          {
+            "direction": "asc",
+            "name": "AUTH_ID"
+          }
+        ],
+        "name": "IX_AUTHFRDS_EVENT",
+        "unique": false
+      },
+      "target_semantics": {
+        "contract": "logical-index-with-target-physical-policy"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "no-policy-required",
+      "evidence_required": [
+        "catalog-definition",
+        "boundary-corpus"
+      ],
+      "item_id": "ase-column:AUTH_AUDIT_ASE:AUDIT_ID",
+      "rationale": "Column is classified against the target-neutral canonical semantic contract.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "identity": {
+          "increment": 1,
+          "seed": 1
+        },
+        "table": "AUTH_AUDIT_ASE",
+        "type": "numeric"
+      },
+      "target_semantics": {
+        "identity": {
+          "increment": 1,
+          "seed": 1
+        },
+        "kind": "exact-decimal",
+        "nullable": false,
+        "precision": 18,
+        "scale": 0
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "no-policy-required",
+      "evidence_required": [
+        "catalog-definition",
+        "boundary-corpus"
+      ],
+      "item_id": "ase-column:AUTH_AUDIT_ASE:AUTH_ID",
+      "rationale": "Column is classified against the target-neutral canonical semantic contract.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "identity": null,
+        "table": "AUTH_AUDIT_ASE",
+        "type": "numeric"
+      },
+      "target_semantics": {
+        "kind": "exact-decimal",
+        "nullable": false,
+        "precision": 18,
+        "scale": 0
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-padding-and-collation-profile",
+        "approved-string-policy"
+      ],
+      "item_id": "ase-column:AUTH_AUDIT_ASE:ACTION_CODE",
+      "rationale": "Column is classified against the target-neutral canonical semantic contract.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "identity": null,
+        "table": "AUTH_AUDIT_ASE",
+        "type": "varchar"
+      },
+      "target_semantics": {
+        "encoding": "server-charset-policy",
+        "kind": "variable-character",
+        "length": 12,
+        "nullable": false
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "no-policy-required",
+      "evidence_required": [
+        "catalog-definition",
+        "boundary-corpus"
+      ],
+      "item_id": "ase-column:AUTH_AUDIT_ASE:ACTION_TS",
+      "rationale": "Column is classified against the target-neutral canonical semantic contract.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "identity": null,
+        "table": "AUTH_AUDIT_ASE",
+        "type": "bigdatetime"
+      },
+      "target_semantics": {
+        "fractional_seconds": 6,
+        "kind": "timestamp",
+        "nullable": false,
+        "source_clock": "bigdatetime",
+        "time_zone": "absent"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-padding-and-collation-profile",
+        "approved-string-policy"
+      ],
+      "item_id": "ase-column:AUTH_AUDIT_ASE:LOGIN_NAME",
+      "rationale": "Column is classified against the target-neutral canonical semantic contract.",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "identity": null,
+        "table": "AUTH_AUDIT_ASE",
+        "type": "varchar"
+      },
+      "target_semantics": {
+        "encoding": "server-charset-policy",
+        "kind": "variable-character",
+        "length": 30,
+        "nullable": false
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "catalog-definition",
+        "negative-boundary-cases"
+      ],
+      "item_id": "ase-constraint:AUTH_AUDIT_ASE:PK_AUTH_AUDIT_ASE",
+      "rationale": "Constraint identity and enforcement timing remain explicit.",
+      "scope": "constraint",
+      "source_semantics": {
+        "columns": [
+          "AUDIT_ID"
+        ],
+        "kind": "primary-key",
+        "name": "PK_AUTH_AUDIT_ASE"
+      },
+      "target_semantics": {
+        "contract": "canonical-constraint"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "catalog-definition",
+        "negative-boundary-cases"
+      ],
+      "item_id": "ase-constraint:AUTH_AUDIT_ASE:FK_AUDIT_AUTH",
+      "rationale": "Constraint identity and enforcement timing remain explicit.",
+      "scope": "constraint",
+      "source_semantics": {
+        "columns": [
+          "AUTH_ID"
+        ],
+        "kind": "foreign-key",
+        "name": "FK_AUDIT_AUTH",
+        "references": "dbo.AUTHFRDS_ASE(AUTH_ID)"
+      },
+      "target_semantics": {
+        "contract": "canonical-constraint"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "catalog-definition",
+        "target-access-plan"
+      ],
+      "item_id": "ase-index:AUTH_AUDIT_ASE:IX_AUDIT_AUTH",
+      "rationale": "Logical key order is separable from ASE physical clustering and locking behavior.",
+      "scope": "index-and-physical-access",
+      "source_semantics": {
+        "clustered": false,
+        "columns": [
+          {
+            "direction": "asc",
+            "name": "AUTH_ID"
+          }
+        ],
+        "name": "IX_AUDIT_AUTH",
+        "unique": false
+      },
+      "target_semantics": {
+        "contract": "logical-index-with-target-physical-policy"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "no-policy-required",
+      "evidence_required": [
+        "microsecond-boundaries"
+      ],
+      "item_id": "ase-behavior:bigdatetime-microseconds",
+      "rationale": "The bounded contract preserves six fractional digits without a time zone.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "bigdatetime-microseconds"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "no-policy-required",
+      "evidence_required": [
+        "branch-corpus"
+      ],
+      "item_id": "ase-behavior:case-expression",
+      "rationale": "The bounded CASE expression preserves declared result typing.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "case-expression"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "session-option-capture",
+        "transaction-probes"
+      ],
+      "item_id": "ase-behavior:chained-mode",
+      "rationale": "Implicit transaction start differs between chained and unchained modes.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "chained-mode"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "fixed-character-boundaries"
+      ],
+      "item_id": "ase-behavior:char-padding",
+      "rationale": "Fixed character padding is preserved through right-space normalization.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "char-padding"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "lossy",
+      "decision": "unresolved",
+      "evidence_required": [
+        "byte-inventory",
+        "invalid-encoding-count"
+      ],
+      "item_id": "ase-behavior:charset-conversion",
+      "rationale": "Unrepresentable server-charset bytes can be replaced or rejected during Unicode conversion.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "charset-conversion"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "expression-inventory"
+      ],
+      "item_id": "ase-behavior:computed-column-expression",
+      "rationale": "Computed expressions require parsed dependency and determinism analysis.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "computed-column-expression"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "locking-scheme-inventory",
+        "blocking-probes"
+      ],
+      "item_id": "ase-behavior:datarows-datapages-allpages",
+      "rationale": "Lock granularity depends on table locking scheme and optimizer choices.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "datarows-datapages-allpages"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "tick-rounding-corpus"
+      ],
+      "item_id": "ase-behavior:datetime-1-300-second",
+      "rationale": "ASE datetime uses 1/300-second ticks rather than arbitrary millisecond precision.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "datetime-1-300-second"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "minimum-maximum-profile"
+      ],
+      "item_id": "ase-behavior:datetime-range",
+      "rationale": "ASE datetime starts in 1753 while canonical targets often accept earlier dates.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "datetime-range"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "ddl-transaction-matrix"
+      ],
+      "item_id": "ase-behavior:ddl-transaction-boundary",
+      "rationale": "DDL logging and transaction restrictions vary by command and database option.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "ddl-transaction-boundary"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "deadlock-probe",
+        "retry-policy"
+      ],
+      "item_id": "ase-behavior:deadlock-victim",
+      "rationale": "Victim choice and error handling are not portable.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "deadlock-victim"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "runtime-sql-inventory"
+      ],
+      "item_id": "ase-behavior:dynamic-exec",
+      "rationale": "Arbitrary dynamic SQL is not statically qualified.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "dynamic-exec"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-single-space-profile",
+        "approved-string-policy"
+      ],
+      "item_id": "ase-behavior:empty-string-storage",
+      "rationale": "ASE empty-string and single-space behavior depends on datatype and server behavior and must be profiled.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "empty-string-storage"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "transaction-case-corpus"
+      ],
+      "item_id": "ase-behavior:explicit-transaction",
+      "rationale": "Explicit begin, commit, and rollback are represented under a declared chained-mode policy.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "explicit-transaction"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "separate-approximate-number-contract"
+      ],
+      "item_id": "ase-behavior:float-special-values",
+      "rationale": "NaN, infinity, and approximate equality are not qualified by the exact canonical contract.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "float-special-values"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "lossy",
+      "decision": "unresolved",
+      "evidence_required": [
+        "identity-current-value",
+        "cutover-reseed-plan"
+      ],
+      "item_id": "ase-behavior:identity-burn-max",
+      "rationale": "Observed maximum alone cannot reconstruct all allocated and burned values.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "identity-burn-max"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "rollback-probe",
+        "approved-gap-policy"
+      ],
+      "item_id": "ase-behavior:identity-gaps-on-rollback",
+      "rationale": "Rolled-back identity allocation may leave gaps and must not be treated as transactional data.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "identity-gaps-on-rollback"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "trigger-call-graph",
+        "identity-return-policy"
+      ],
+      "item_id": "ase-behavior:identity-global",
+      "rationale": "Global identity functions can be changed by trigger-side inserts.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "identity-global"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "set-identity-insert-probe",
+        "load-policy"
+      ],
+      "item_id": "ase-behavior:identity-insert",
+      "rationale": "Explicit identity insertion changes session state and target behavior.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "identity-insert"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "identity-catalog",
+        "boundary-inserts"
+      ],
+      "item_id": "ase-behavior:identity-seed-increment",
+      "rationale": "Seed and increment can be represented but require explicit target sequence state.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "identity-seed-increment"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "multirow-trigger-corpus"
+      ],
+      "item_id": "ase-behavior:inserted-deleted-tables",
+      "rationale": "Statement transition tables can be represented when multi-row behavior is retained.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "inserted-deleted-tables"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "concurrency-matrix"
+      ],
+      "item_id": "ase-behavior:isolation-zero-one-two-three",
+      "rationale": "ASE isolation levels and dirty/nonrepeatable/phantom behavior require concurrent probes.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "isolation-zero-one-two-three"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "expression-type-probes"
+      ],
+      "item_id": "ase-behavior:money-expression-promotion",
+      "rationale": "Mixed money, decimal, integer, and approximate expressions require result-type evidence.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "money-expression-promotion"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "half-step-boundary-cases"
+      ],
+      "item_id": "ase-behavior:money-rounding",
+      "rationale": "Scale-four rounding is preserved under a declared decimal rounding rule.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "money-rounding"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "no-policy-required",
+      "evidence_required": [
+        "money-boundary-values"
+      ],
+      "item_id": "ase-behavior:money-storage",
+      "rationale": "ASE money is a bounded exact scale-four value.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "money-storage"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "one-many-row-trigger-cases"
+      ],
+      "item_id": "ase-behavior:multirow-trigger",
+      "rationale": "Scalar trigger assumptions can silently fail for multi-row statements.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "multirow-trigger"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "configuration-capture",
+        "trigger-order-cases"
+      ],
+      "item_id": "ase-behavior:nested-trigger",
+      "rationale": "Nested trigger enablement and ordering are server configuration and workload dependent.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "nested-trigger"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "parameter-contract"
+      ],
+      "item_id": "ase-behavior:output-parameter",
+      "rationale": "Output parameters are preserved with explicit direction and type metadata.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "output-parameter"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "error-class-corpus"
+      ],
+      "item_id": "ase-behavior:raiserror",
+      "rationale": "Error number, severity, state, transaction effect, and message require mapping.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "raiserror"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "separate-recursion-qualification"
+      ],
+      "item_id": "ase-behavior:recursive-trigger",
+      "rationale": "Recursive trigger behavior is excluded from the bounded adapter claim.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "recursive-trigger"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "remote-dependency-inventory"
+      ],
+      "item_id": "ase-behavior:remote-server-access",
+      "rationale": "Remote server and proxy-table behavior requires a separate distributed transaction qualification.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "remote-server-access"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "commit-and-operation-sequences"
+      ],
+      "item_id": "ase-behavior:replication-commit-order",
+      "rationale": "Commit order is retained separately from within-transaction operation order.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "replication-commit-order"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "separate-ddl-plan"
+      ],
+      "item_id": "ase-behavior:replication-ddl",
+      "rationale": "DDL replication is a separate event class outside the row-change claim.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "replication-ddl"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "multi-table-transaction-cases"
+      ],
+      "item_id": "ase-behavior:replication-multi-table-transaction",
+      "rationale": "Events from one transaction remain contiguous and ordered across tables.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "replication-multi-table-transaction"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "restart-and-retention-tests"
+      ],
+      "item_id": "ase-behavior:replication-resume",
+      "rationale": "Resume must bind source identity, log position, catalog, and last applied event.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "replication-resume"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "separate-bulk-operation-plan"
+      ],
+      "item_id": "ase-behavior:replication-truncation",
+      "rationale": "TRUNCATE is not represented as row deletes in the bounded CDC contract.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "replication-truncation"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "call-contract"
+      ],
+      "item_id": "ase-behavior:return-status",
+      "rationale": "Integer return status can be represented separately from result sets and output parameters.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "return-status"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "statement-sequence-cases"
+      ],
+      "item_id": "ase-behavior:rowcount-global",
+      "rationale": "@@rowcount is session-global and sensitive to intervening statements.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "rowcount-global"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "nested-work-unit-cases"
+      ],
+      "item_id": "ase-behavior:savepoint-rollback",
+      "rationale": "Named savepoint rollback can be represented within a transaction.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "savepoint-rollback"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "zero-one-many-row-cases"
+      ],
+      "item_id": "ase-behavior:select-assignment",
+      "rationale": "SELECT assignment is translated when cardinality and last-row behavior are explicit.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "select-assignment"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "ddl-transaction-probes"
+      ],
+      "item_id": "ase-behavior:select-into",
+      "rationale": "SELECT INTO combines data movement with object creation and logging behavior.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "select-into"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "29-30-second-boundaries"
+      ],
+      "item_id": "ase-behavior:smalldatetime-minute-rounding",
+      "rationale": "Seconds are rounded to minute precision under an explicit rule.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "smalldatetime-minute-rounding"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "range-profile",
+        "target-check-policy"
+      ],
+      "item_id": "ase-behavior:smalldatetime-range",
+      "rationale": "The 1900-2079 source range must be retained as a validation constraint if required.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "smalldatetime-range"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "no-policy-required",
+      "evidence_required": [
+        "smallmoney-boundary-values"
+      ],
+      "item_id": "ase-behavior:smallmoney-storage",
+      "rationale": "ASE smallmoney is a bounded exact scale-four value.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "smallmoney-storage"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "sort-order",
+        "comparison-corpus"
+      ],
+      "item_id": "ase-behavior:sort-order-collation",
+      "rationale": "Case, accent, and binary sort semantics require an explicit target collation.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "sort-order-collation"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "tempdb-behavior-probes"
+      ],
+      "item_id": "ase-behavior:temp-table",
+      "rationale": "Session-scoped temp tables require lifetime, indexing, and transaction tests.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "temp-table"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "lossy",
+      "decision": "unresolved",
+      "evidence_required": [
+        "lob-streaming-plan"
+      ],
+      "item_id": "ase-behavior:text-image-locator",
+      "rationale": "Locator and streaming behavior is not preserved by value-only extraction.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "text-image-locator"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "catalog-type-identity",
+        "binary-round-trip"
+      ],
+      "item_id": "ase-behavior:timestamp-row-version",
+      "rationale": "ASE timestamp is an eight-byte row version, not a temporal timestamp.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "timestamp-row-version"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "approved-zone-policy"
+      ],
+      "item_id": "ase-behavior:timezone-absence",
+      "rationale": "ASE temporal values carry no time-zone identity.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "timezone-absence"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "comparison-corpus",
+        "collation-policy"
+      ],
+      "item_id": "ase-behavior:trailing-space-comparison",
+      "rationale": "ASE comparison and padding rules can ignore trailing blanks.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "trailing-space-comparison"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "trigger-transaction-probes"
+      ],
+      "item_id": "ase-behavior:trigger-rollback",
+      "rationale": "Trigger rollback and error propagation must be compared with the selected target.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "trigger-rollback"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "catalog-udt-definition",
+        "rule-and-default-binding"
+      ],
+      "item_id": "ase-behavior:udt-base-type-resolution",
+      "rationale": "UDT identity is retained while its physical base type maps to the canonical type.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "udt-base-type-resolution"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "default-source",
+        "dependency-order"
+      ],
+      "item_id": "ase-behavior:udt-bound-default",
+      "rationale": "Bound defaults require dependency-aware translation and ordering.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "udt-bound-default"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "rule-source",
+        "constraint-policy"
+      ],
+      "item_id": "ase-behavior:udt-bound-rule",
+      "rationale": "Bound ASE rules do not become portable constraints without an approved translation.",
+      "scope": "source-behavior",
+      "source_semantics": {
+        "dialect": "sap-ase-16",
+        "feature": "udt-bound-rule"
+      },
+      "target_semantics": {
+        "contract": "target-neutral-semantic-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "source-text",
+        "dependency-graph",
+        "native-differential-cases"
+      ],
+      "item_id": "ase-stored-logic:procedure:sp_get_auth",
+      "rationale": "Overall stored-logic classification is the most restrictive declared feature classification.",
+      "scope": "stored-logic",
+      "source_semantics": {
+        "features": [
+          "select-assignment",
+          "return-status",
+          "output-parameter"
+        ],
+        "kind": "procedure",
+        "name": "sp_get_auth"
+      },
+      "target_semantics": {
+        "contract": "inventory-and-feature-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "source-text",
+        "dependency-graph",
+        "native-differential-cases"
+      ],
+      "item_id": "ase-stored-logic:procedure:sp_set_fraud",
+      "rationale": "Overall stored-logic classification is the most restrictive declared feature classification.",
+      "scope": "stored-logic",
+      "source_semantics": {
+        "features": [
+          "explicit-transaction",
+          "rowcount-global",
+          "raiserror"
+        ],
+        "kind": "procedure",
+        "name": "sp_set_fraud"
+      },
+      "target_semantics": {
+        "contract": "inventory-and-feature-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "source-text",
+        "dependency-graph",
+        "native-differential-cases"
+      ],
+      "item_id": "ase-stored-logic:procedure:sp_money_band",
+      "rationale": "Overall stored-logic classification is the most restrictive declared feature classification.",
+      "scope": "stored-logic",
+      "source_semantics": {
+        "features": [
+          "money-arithmetic",
+          "case-expression"
+        ],
+        "kind": "procedure",
+        "name": "sp_money_band"
+      },
+      "target_semantics": {
+        "contract": "inventory-and-feature-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "source-text",
+        "dependency-graph",
+        "native-differential-cases"
+      ],
+      "item_id": "ase-stored-logic:procedure:sp_temp_rollup",
+      "rationale": "Overall stored-logic classification is the most restrictive declared feature classification.",
+      "scope": "stored-logic",
+      "source_semantics": {
+        "features": [
+          "temp-table",
+          "select-into"
+        ],
+        "kind": "procedure",
+        "name": "sp_temp_rollup"
+      },
+      "target_semantics": {
+        "contract": "inventory-and-feature-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "source-text",
+        "dependency-graph",
+        "native-differential-cases"
+      ],
+      "item_id": "ase-stored-logic:procedure:sp_dynamic_reconcile",
+      "rationale": "Overall stored-logic classification is the most restrictive declared feature classification.",
+      "scope": "stored-logic",
+      "source_semantics": {
+        "features": [
+          "dynamic-exec"
+        ],
+        "kind": "procedure",
+        "name": "sp_dynamic_reconcile"
+      },
+      "target_semantics": {
+        "contract": "inventory-and-feature-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "source-text",
+        "dependency-graph",
+        "native-differential-cases"
+      ],
+      "item_id": "ase-stored-logic:procedure:sp_remote_lookup",
+      "rationale": "Overall stored-logic classification is the most restrictive declared feature classification.",
+      "scope": "stored-logic",
+      "source_semantics": {
+        "features": [
+          "remote-server-access"
+        ],
+        "kind": "procedure",
+        "name": "sp_remote_lookup"
+      },
+      "target_semantics": {
+        "contract": "inventory-and-feature-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "source-text",
+        "dependency-graph",
+        "native-differential-cases"
+      ],
+      "item_id": "ase-stored-logic:trigger:tr_auth_audit",
+      "rationale": "Overall stored-logic classification is the most restrictive declared feature classification.",
+      "scope": "stored-logic",
+      "source_semantics": {
+        "features": [
+          "inserted-deleted-tables",
+          "multirow-trigger"
+        ],
+        "kind": "trigger",
+        "name": "tr_auth_audit"
+      },
+      "target_semantics": {
+        "contract": "inventory-and-feature-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "source-text",
+        "dependency-graph",
+        "native-differential-cases"
+      ],
+      "item_id": "ase-stored-logic:trigger:tr_auth_reject",
+      "rationale": "Overall stored-logic classification is the most restrictive declared feature classification.",
+      "scope": "stored-logic",
+      "source_semantics": {
+        "features": [
+          "trigger-rollback",
+          "raiserror"
+        ],
+        "kind": "trigger",
+        "name": "tr_auth_reject"
+      },
+      "target_semantics": {
+        "contract": "inventory-and-feature-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "source-text",
+        "dependency-graph",
+        "native-differential-cases"
+      ],
+      "item_id": "ase-stored-logic:trigger:tr_identity_capture",
+      "rationale": "Overall stored-logic classification is the most restrictive declared feature classification.",
+      "scope": "stored-logic",
+      "source_semantics": {
+        "features": [
+          "identity-global",
+          "inserted-deleted-tables"
+        ],
+        "kind": "trigger",
+        "name": "tr_identity_capture"
+      },
+      "target_semantics": {
+        "contract": "inventory-and-feature-analysis",
+        "target_selected": false
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "source-text",
+        "dependency-graph",
+        "native-differential-cases"
+      ],
+      "item_id": "ase-stored-logic:trigger:tr_nested_audit",
+      "rationale": "Overall stored-logic classification is the most restrictive declared feature classification.",
+      "scope": "stored-logic",
+      "source_semantics": {
+        "features": [
+          "nested-trigger",
+          "recursive-trigger"
+        ],
+        "kind": "trigger",
+        "name": "tr_nested_audit"
+      },
+      "target_semantics": {
+        "contract": "inventory-and-feature-analysis",
+        "target_selected": false
+      }
+    }
+  ],
+  "equivalence_blocked": true,
+  "ledger_type": "lightyear-sap-ase-source-compatibility-ledger",
+  "production_ready": false,
+  "schema_version": "1.0",
+  "statistics": {
+    "exact": 18,
+    "lossy": 6,
+    "normalized-equivalent": 33,
+    "policy-decision-required": 38,
+    "unsupported": 12
+  },
+  "target_selected": false
+}

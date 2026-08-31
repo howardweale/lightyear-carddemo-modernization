@@ -1,0 +1,183 @@
+{
+  "bindings": {
+    "catalog_sha256": "16cf4c688c00d98f9cbacd6492969cace35745eeb705d68f9617cafa5c6e2e6b",
+    "conformance_sha256": "e7c895e3c33c9ad21ee4236576f6a6d95a55723f40017b5b632dc2791718ebd4",
+    "corpus_sha256": "3b7bd56358b97b1d0296aececb541d2a621c56d9f7ca3ea6733b3d2c8173a31b",
+    "ledger_sha256": "59dcf7a42a795ef4b3532c90284cd8edcf85afc35500c176c8cb71abc346c2fe"
+  },
+  "claim_unlocked": "LIGHTYEAR can ingest a bounded SAP ASE catalog through a genuine target-neutral SourceAdapter, classify its semantic risks with broad executable coverage, and prepare evidence for a pilot-specific target qualification without claiming a completed migration.",
+  "content_sha256": "963c09eedfc1c948afbb35933d202e3aecfa211c933bd1ec226812c1ce58d7ee",
+  "database_migration_complete": false,
+  "development_ready": true,
+  "gates": [
+    {
+      "claim": "source-adapter-interface-and-catalog",
+      "evidence": {
+        "catalog_observed": false,
+        "columns": 31,
+        "tables": 2
+      },
+      "gate": 1,
+      "status": "passed-bounded-catalog-contract"
+    },
+    {
+      "claim": "user-defined-datatypes",
+      "evidence": {
+        "rules_and_defaults_retained": true,
+        "udts": 4
+      },
+      "gate": 2,
+      "status": "passed-bounded-resolution-and-binding-analysis"
+    },
+    {
+      "claim": "identity-semantics",
+      "evidence": {
+        "identity_columns": 2,
+        "rollback_gap_policy_unresolved": true,
+        "seed_increment_retained": true
+      },
+      "gate": 3,
+      "status": "policy-decision-required-live-sequence-probes"
+    },
+    {
+      "claim": "money-datetime-and-empty-string-semantics",
+      "evidence": {
+        "categories": {
+          "datetime-and-time": 22,
+          "empty-string-and-character": 19,
+          "money-and-exact-numeric": 17
+        },
+        "corpus_sha256": "3b7bd56358b97b1d0296aececb541d2a621c56d9f7ca3ea6733b3d2c8173a31b"
+      },
+      "gate": 4,
+      "status": "passed-bounded-semantic-corpus-with-open-policies"
+    },
+    {
+      "claim": "constraints-indexes-and-locking-schemes",
+      "evidence": {
+        "allpages_covered_by_corpus": true,
+        "constraints": 5,
+        "indexes": 3,
+        "locking_schemes": [
+          "datarows",
+          "datapages"
+        ]
+      },
+      "gate": 5,
+      "status": "passed-inventory-target-physical-policy-required"
+    },
+    {
+      "claim": "transact-sql-constructs",
+      "evidence": {
+        "behaviors": 54,
+        "dynamic_sql_excluded": true,
+        "remote_access_excluded": true
+      },
+      "gate": 6,
+      "status": "passed-feature-inventory-not-general-translation"
+    },
+    {
+      "claim": "stored-procedures-and-triggers",
+      "evidence": {
+        "native_execution_observed": false,
+        "procedures": 6,
+        "stored_logic": 10,
+        "triggers": 4
+      },
+      "gate": 7,
+      "status": "passed-inventory-and-semantic-analysis"
+    },
+    {
+      "claim": "transaction-rollback-and-locking",
+      "evidence": {
+        "deadlock_and_rollback_cases_declared": true,
+        "isolation_levels": [
+          0,
+          1,
+          2,
+          3
+        ],
+        "locking_schemes": [
+          "allpages",
+          "datapages",
+          "datarows"
+        ],
+        "transaction_observed": false
+      },
+      "gate": 8,
+      "status": "policy-decision-required-live-concurrency"
+    },
+    {
+      "claim": "replication-ordering-and-resume",
+      "evidence": {
+        "commit_and_transaction_order_bound": true,
+        "content_bound_resume": true,
+        "events": 6,
+        "replication_observed": false
+      },
+      "gate": 9,
+      "status": "passed-bounded-event-contract"
+    },
+    {
+      "claim": "semantic-loss-analysis",
+      "evidence": {
+        "entries": 107,
+        "equivalence_blocked": true,
+        "statistics": {
+          "exact": 18,
+          "lossy": 6,
+          "normalized-equivalent": 33,
+          "policy-decision-required": 38,
+          "unsupported": 12
+        }
+      },
+      "gate": 10,
+      "status": "passed-five-class-ledger"
+    },
+    {
+      "claim": "depth-and-coverage",
+      "evidence": {
+        "all_cases_passed": true,
+        "cases": 187,
+        "categories": {
+          "datetime-and-time": 22,
+          "empty-string-and-character": 19,
+          "identity": 17,
+          "locking-and-transactions": 22,
+          "money-and-exact-numeric": 17,
+          "replication-order-and-resume": 23,
+          "transact-sql-and-stored-logic": 34,
+          "type-system": 29,
+          "user-defined-datatypes": 4
+        }
+      },
+      "gate": 11,
+      "status": "passed-bounded-corpus"
+    },
+    {
+      "claim": "target-specific-migration",
+      "evidence": {
+        "target_qualification_complete": false,
+        "target_selected": false
+      },
+      "gate": 12,
+      "status": "blocked-pending-real-pilot-target"
+    }
+  ],
+  "live_ase_observed": false,
+  "native_stored_logic_execution_observed": false,
+  "production_ready": false,
+  "qualification_id": "sap-ase-source-semantic-v0.45",
+  "qualification_type": "lightyear-sap-ase-source-semantic-qualification",
+  "schema_version": "1.0",
+  "semantic_loss_analysis_complete": true,
+  "source": {
+    "adapter": "lightyear-sap-ase-source",
+    "dialect": "sap-ase-16"
+  },
+  "source_adapter_qualified": true,
+  "stored_logic_complete": false,
+  "target": null,
+  "target_migration_qualified": false,
+  "target_selected": false
+}

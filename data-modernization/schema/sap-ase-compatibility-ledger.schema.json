@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schema/sap-ase-compatibility-ledger.schema.json",
+  "title": "LIGHTYEAR SAP ASE source compatibility ledger",
+  "type": "object",
+  "required": ["schema_version", "ledger_type", "catalog_sha256", "classifications", "entries", "statistics", "coverage", "target_selected", "equivalence_blocked", "production_ready", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "ledger_type": {"const": "lightyear-sap-ase-source-compatibility-ledger"},
+    "catalog_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "classifications": {"type": "array", "minItems": 5, "maxItems": 5, "uniqueItems": true},
+    "entries": {"type": "array", "minItems": 100, "items": {"type": "object", "required": ["item_id", "scope", "source_semantics", "target_semantics", "classification", "rationale", "evidence_required", "decision"], "properties": {"classification": {"enum": ["exact", "normalized-equivalent", "policy-decision-required", "lossy", "unsupported"]}, "decision": {"enum": ["no-policy-required", "governed-normalization", "unresolved", "excluded-from-claim-scope"]}}}},
+    "statistics": {"type": "object", "required": ["exact", "normalized-equivalent", "policy-decision-required", "lossy", "unsupported"]},
+    "coverage": {"type": "object", "required": ["udts", "tables", "columns", "constraints", "indexes", "behaviors", "stored_logic"]},
+    "target_selected": {"const": false},
+    "equivalence_blocked": {"const": true},
+    "production_ready": {"const": false},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

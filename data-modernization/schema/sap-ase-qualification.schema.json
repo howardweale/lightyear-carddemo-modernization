@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schema/sap-ase-qualification.schema.json",
+  "title": "LIGHTYEAR SAP ASE source semantic qualification",
+  "type": "object",
+  "required": ["schema_version", "qualification_type", "qualification_id", "source", "target", "bindings", "gates", "source_adapter_qualified", "semantic_loss_analysis_complete", "development_ready", "target_selected", "target_migration_qualified", "live_ase_observed", "native_stored_logic_execution_observed", "stored_logic_complete", "database_migration_complete", "production_ready", "claim_unlocked", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "qualification_type": {"const": "lightyear-sap-ase-source-semantic-qualification"},
+    "qualification_id": {"const": "sap-ase-source-semantic-v0.45"},
+    "source": {"type": "object", "required": ["adapter", "dialect"]},
+    "target": {"type": "null"},
+    "bindings": {"type": "object", "required": ["catalog_sha256", "ledger_sha256", "corpus_sha256", "conformance_sha256"]},
+    "gates": {"type": "array", "minItems": 12, "maxItems": 12},
+    "source_adapter_qualified": {"const": true},
+    "semantic_loss_analysis_complete": {"const": true},
+    "development_ready": {"const": true},
+    "target_selected": {"const": false},
+    "target_migration_qualified": {"const": false},
+    "live_ase_observed": {"const": false},
+    "native_stored_logic_execution_observed": {"const": false},
+    "stored_logic_complete": {"const": false},
+    "database_migration_complete": {"const": false},
+    "production_ready": {"const": false},
+    "claim_unlocked": {"type": "string", "minLength": 80},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

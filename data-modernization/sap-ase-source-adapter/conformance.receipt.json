@@ -1,0 +1,40 @@
+{
+  "adapter": {
+    "dialect": "sap-ase-16",
+    "id": "lightyear-sap-ase-source",
+    "version": "1.0"
+  },
+  "bindings": {
+    "catalog_sha256": "16cf4c688c00d98f9cbacd6492969cace35745eeb705d68f9617cafa5c6e2e6b",
+    "corpus_sha256": "3b7bd56358b97b1d0296aececb541d2a621c56d9f7ca3ea6733b3d2c8173a31b",
+    "discovery_sha256": "d2ecbe354b474cfe3273700c8d0810fd8ab358fd79298a09701f4a19118e86bf",
+    "ledger_sha256": "59dcf7a42a795ef4b3532c90284cd8edcf85afc35500c176c8cb71abc346c2fe",
+    "profile_contract_sha256": "7a5e3c6bab17b95c05ef1a1fe229684a166bc443e2fbce366d1cefdb298dff26",
+    "profile_sha256": "86a5b4d026e48b7241e8bf6fe9e0b6713be338d86b49f51e27eefa549c527386"
+  },
+  "catalog_observed": false,
+  "checks": {
+    "catalog-coverage": true,
+    "content-bound-replication-resume": true,
+    "contract-bound-extraction": true,
+    "deep-conformance-corpus": true,
+    "deterministic-discovery": true,
+    "five-class-ledger-complete": true,
+    "live-claims-fail-closed": true,
+    "privacy-preserving-profile": true,
+    "source-interface": true,
+    "stored-logic-inventory": true,
+    "target-neutral": true,
+    "transaction-capabilities-fail-closed": true,
+    "udt-coverage": true
+  },
+  "content_sha256": "e7c895e3c33c9ad21ee4236576f6a6d95a55723f40017b5b632dc2791718ebd4",
+  "production_ready": false,
+  "profile_observed": false,
+  "receipt_type": "lightyear-sap-ase-source-adapter-conformance",
+  "replication_observed": false,
+  "schema_version": "1.0",
+  "status": "passed",
+  "target_selected": false,
+  "transaction_observed": false
+}

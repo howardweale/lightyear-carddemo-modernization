@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build and verify the MS #1-44 customer documentation library."""
+"""Build and verify the MS #1-45 customer documentation library."""
 
 from __future__ import annotations
 
@@ -21,9 +21,15 @@ DOC_ROOT = ROOT / "docs" / "milestones"
 CATALOG_PATH = DOC_ROOT / "catalog.json"
 CHANGELOG_PATH = ROOT / "CHANGELOG.md"
 MANIFEST_PATH = DOC_ROOT / "manifest.json"
-GENERATOR_VERSION = "1.0"
+GENERATOR_VERSION = "1.1"
+REPOSITORY = "howardweale/lightyear-carddemo-modernization"
+DEFAULT_BRANCH = "main"
+GITHUB_BLOB_ROOT = f"https://github.com/{REPOSITORY}/blob/{DEFAULT_BRANCH}"
+GITHUB_RAW_ROOT = f"https://raw.githubusercontent.com/{REPOSITORY}/{DEFAULT_BRANCH}"
+PAGES_INDEX = f"https://howardweale.github.io/{REPOSITORY.split('/', 1)[1]}/milestones/"
 FIXED_TIME = datetime(2026, 8, 31, 12, 0, 0, tzinfo=timezone.utc)
-EXPECTED_MILESTONES = tuple(range(1, 45))
+EXPECTED_MILESTONES = tuple(range(1, 46))
+EXPECTED_ARTIFACTS = len(EXPECTED_MILESTONES) * 3
 BOUNDARY_TERMS = (
     "remain false", "remains false", "remain blocked", "remains blocked",
     "unclaimed", "not claim", "does not", "no customer", "non-production",
@@ -35,11 +41,19 @@ def sha256_path(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def github_blob(path: str) -> str:
+    return f"{GITHUB_BLOB_ROOT}/{path}"
+
+
+def github_raw(path: str) -> str:
+    return f"{GITHUB_RAW_ROOT}/{path}"
+
+
 def load_catalog() -> dict[str, Any]:
     catalog = json.loads(CATALOG_PATH.read_text(encoding="utf-8"))
     numbers = [entry["number"] for entry in catalog["milestones"]]
     if numbers != list(EXPECTED_MILESTONES):
-        raise ValueError(f"catalog must contain MS #1-44 exactly; found {numbers}")
+        raise ValueError(f"catalog must contain MS #1-{EXPECTED_MILESTONES[-1]} exactly; found {numbers}")
     return catalog
 
 
@@ -111,7 +125,7 @@ def build_model(
             "This milestone establishes only the bounded capabilities and evidence listed here; later capabilities are not retroactive.",
             "Production readiness and platform equivalence require the explicit evidence and policy gates applicable to the customer environment.",
         ]
-    relationship = (
+    relationship = entry.get("relationship") or (
         "This is the starting engineering milestone. It creates the executable behavioral reference that later graph, factory, qualification, and customer-pilot work can govern."
         if number == 1
         else f"MS #{number} builds on MS #{number - 1} ({titles[number - 1]}). The earlier milestone established its own bounded capability; this milestone adds {entry['title'].lower()} while preserving the earlier evidence and its limits."
@@ -172,11 +186,11 @@ def markdown_text(model: dict[str, Any], audience: str) -> str:
     lines.extend([
         "", "These boundaries are part of the deliverable. They prevent bounded development evidence from becoming "
         "an unsupported customer promise.", "", "## Source of record", "",
-        f"- Release record: [CHANGELOG.md](../../../CHANGELOG.md), release section(s) {model['release']}.",
-        "- Product and operating guidance: [README.md](../../../README.md).",
-        "- Governing sequence and claim classifications: [LIGHTYEAR-ROADMAP.md](../../../LIGHTYEAR-ROADMAP.md).",
-        "- Machine-readable milestone metadata: [catalog.json](../catalog.json).",
-        "- Artifact integrity: [manifest.json](../manifest.json).", "", "---", "",
+        f"- Release record: [CHANGELOG.md]({github_blob('CHANGELOG.md')}), release section(s) {model['release']}.",
+        f"- Product and operating guidance: [README.md]({github_blob('README.md')}).",
+        f"- Governing sequence and claim classifications: [LIGHTYEAR-ROADMAP.md]({github_blob('LIGHTYEAR-ROADMAP.md')}).",
+        f"- Machine-readable milestone metadata: [catalog.json]({github_blob('docs/milestones/catalog.json')}).",
+        f"- Artifact integrity: [manifest.json]({github_blob('docs/milestones/manifest.json')}).", "", "---", "",
         "This document is a customer-readable explanation of committed repository evidence. The underlying schemas, "
         "receipts, ledgers, tests, and policy decisions remain authoritative when greater detail is required.", "",
     ])
@@ -450,21 +464,171 @@ def source_sha256() -> str:
     return digest.hexdigest()
 
 
-def write_index(models: list[dict[str, Any]]) -> None:
+def format_links(model: dict[str, Any]) -> tuple[str, str, str]:
+    stem = f"MS-{model['number']:02d}"
+    root = f"docs/milestones/{stem}/{stem}"
+    return github_blob(f"{root}.md"), github_raw(f"{root}.docx"), github_blob(f"{root}.pdf")
+
+
+def write_markdown_index(models: list[dict[str, Any]]) -> None:
     lines = [
         "# LIGHTYEAR milestone documentation library", "",
-        "This library is the customer-readable body of record for MS #1 through MS #44. Every milestone is",
+        f"This library is the customer-readable body of record for MS #1 through MS #{EXPECTED_MILESTONES[-1]}. Every milestone is",
         "published from one governed catalog in Markdown, Microsoft Word (`.docx`), and PDF.", "",
+        f"**[Open the searchable milestone index]({PAGES_INDEX})** to filter by milestone number, title,",
+        "customer value, capability, release, or roadmap phase.", "",
         "The documents explain purpose, customer value, delivered capability, evidence posture, limitations, and",
         "the relationship to earlier work. They do not override the underlying schemas, receipts, ledgers, tests,",
         "or policy decisions.", "", "## Milestone index", "",
         "| Milestone | Title | Status | Formats |", "|---|---|---|---|",
     ]
     for model in models:
-        stem = f"MS-{model['number']:02d}"
-        lines.append(f"| MS #{model['number']:02d} | {model['title']} | {model['status']} | [Markdown]({stem}/{stem}.md) - [Word]({stem}/{stem}.docx) - [PDF]({stem}/{stem}.pdf) |")
-    lines.extend(["", "## Build and verification", "", "```bash", "./milestone-documentation.sh verify", "./milestone-documentation.sh build", "```", "", "Windows:", "", "```powershell", ".\\milestone-documentation.ps1 verify", ".\\milestone-documentation.ps1 build", "```", "", "`verify` uses only the Python standard library. `build` requires the `docs` optional dependency set.", "", "The content-addressed [manifest](manifest.json) fails verification if a canonical source changes, an artifact is missing or modified, or an untracked milestone artifact appears.", ""])
+        markdown, word, pdf = format_links(model)
+        lines.append(f"| MS #{model['number']:02d} | {model['title']} | {model['status']} | [Markdown]({markdown}) - [Download Word]({word}) - [PDF]({pdf}) |")
+    lines.extend(["", "## Build and verification", "", "```bash", "./milestone-documentation.sh verify", "./milestone-documentation.sh build", "```", "", "Windows:", "", "```powershell", ".\\milestone-documentation.ps1 verify", ".\\milestone-documentation.ps1 build", "```", "", "`verify` uses only the Python standard library. `build` requires the `docs` optional dependency set.", "", f"The content-addressed [manifest]({github_blob('docs/milestones/manifest.json')}) fails verification if a canonical source changes, an artifact is missing or modified, or an untracked milestone artifact appears.", ""])
     (DOC_ROOT / "README.md").write_text("\n".join(lines), encoding="utf-8")
+
+
+def roadmap_phase(number: int) -> tuple[str, str]:
+    if number <= 10:
+        return "foundation", "Foundation"
+    if number <= 20:
+        return "trust-runtime", "Trust and runtime"
+    if number <= 32:
+        return "pilot-preparation", "Pilot preparation"
+    return "qualification", "Qualification"
+
+
+def write_html_index(models: list[dict[str, Any]]) -> None:
+    rows = []
+    for model in models:
+        markdown, word, pdf = format_links(model)
+        phase_value, phase_label = roadmap_phase(model["number"])
+        searchable = " ".join(
+            [
+                f"MS {model['number']} {model['number']:02d}", model["title"], model["customer_value"],
+                model["release"], phase_label, *model["deliverables"], *model["boundaries"],
+            ]
+        ).lower()
+        rows.append(
+            f'''<tr class="milestone" data-phase="{phase_value}" data-search="{html.escape(searchable, quote=True)}">
+              <td class="number"><span>MS #{model['number']:02d}</span></td>
+              <td><a class="title" href="{markdown}">{html.escape(model['title'])}</a><p>{html.escape(model['customer_value'])}</p></td>
+              <td class="phase"><span>{phase_label}</span><small>{html.escape(model['release'])}</small></td>
+              <td class="formats"><a href="{markdown}">Read</a><a href="{pdf}">PDF</a><a href="{word}" download>Word</a></td>
+            </tr>'''
+        )
+    page = f'''<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Search the governed LIGHTYEAR documentation for milestones MS #1 through MS #{EXPECTED_MILESTONES[-1]}.">
+  <title>LIGHTYEAR milestone library</title>
+  <style>
+    :root {{ color-scheme: light; --ink:#102a43; --muted:#52687a; --line:#d9e2ec; --paper:#fff; --wash:#f4f8fb; --navy:#071f33; --teal:#00a6a6; --teal-dark:#007b7b; }}
+    * {{ box-sizing:border-box; }}
+    body {{ margin:0; color:var(--ink); background:var(--wash); font:16px/1.5 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }}
+    a {{ color:var(--teal-dark); }}
+    header {{ background:linear-gradient(135deg, var(--navy), #123c55); color:white; padding:3.5rem max(1.25rem, calc((100vw - 1180px)/2)); }}
+    header p {{ max-width:760px; margin:.7rem 0 0; color:#c9e6ea; font-size:1.08rem; }}
+    .eyebrow {{ margin:0; color:#6ee7e7; font-size:.78rem; font-weight:800; letter-spacing:.14em; text-transform:uppercase; }}
+    h1 {{ margin:.25rem 0 0; font-size:clamp(2rem, 5vw, 3.6rem); line-height:1.05; letter-spacing:-.035em; }}
+    main {{ width:min(1180px, calc(100% - 2rem)); margin:-1.35rem auto 3rem; }}
+    .controls {{ display:grid; grid-template-columns:minmax(250px, 1fr) minmax(190px, 260px); gap:1rem; padding:1.1rem; background:var(--paper); border:1px solid var(--line); border-radius:14px; box-shadow:0 12px 34px rgba(7,31,51,.1); }}
+    label {{ display:block; margin:0 0 .35rem; font-size:.78rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; }}
+    input, select {{ width:100%; min-height:46px; border:1px solid #9fb3c4; border-radius:8px; padding:.65rem .8rem; color:var(--ink); background:white; font:inherit; }}
+    input:focus, select:focus {{ outline:3px solid rgba(0,166,166,.22); border-color:var(--teal-dark); }}
+    .summary {{ display:flex; justify-content:space-between; gap:1rem; align-items:center; margin:1.4rem .2rem .65rem; color:var(--muted); }}
+    #result-count {{ font-weight:750; color:var(--ink); }}
+    .summary a {{ font-size:.92rem; }}
+    .table-wrap {{ overflow:hidden; border:1px solid var(--line); border-radius:12px; background:var(--paper); box-shadow:0 8px 26px rgba(7,31,51,.06); }}
+    table {{ width:100%; border-collapse:collapse; }}
+    th {{ padding:.78rem 1rem; color:#d8f3f3; background:var(--navy); font-size:.75rem; letter-spacing:.07em; text-align:left; text-transform:uppercase; }}
+    td {{ padding:1rem; border-top:1px solid var(--line); vertical-align:top; }}
+    tbody tr:first-child td {{ border-top:0; }}
+    tbody tr:hover {{ background:#f7fbfc; }}
+    .number {{ width:100px; }}
+    .number span, .phase span {{ display:inline-block; border-radius:999px; background:#e6f6f6; color:#006d6d; padding:.25rem .55rem; font-size:.78rem; font-weight:800; white-space:nowrap; }}
+    .title {{ color:var(--ink); font-size:1.02rem; font-weight:800; text-decoration:none; }}
+    .title:hover {{ color:var(--teal-dark); text-decoration:underline; }}
+    td p {{ max-width:670px; margin:.28rem 0 0; color:var(--muted); font-size:.9rem; }}
+    .phase {{ width:170px; }}
+    .phase small {{ display:block; margin:.35rem 0 0 .25rem; color:var(--muted); }}
+    .formats {{ width:190px; white-space:nowrap; }}
+    .formats a {{ display:inline-block; margin:0 .28rem .35rem 0; border:1px solid #a9d6d6; border-radius:6px; padding:.28rem .48rem; font-size:.82rem; font-weight:750; text-decoration:none; }}
+    .formats a:hover {{ color:white; background:var(--teal-dark); border-color:var(--teal-dark); }}
+    #empty {{ display:none; padding:3rem 1rem; color:var(--muted); text-align:center; }}
+    footer {{ width:min(1180px, calc(100% - 2rem)); margin:0 auto 3rem; color:var(--muted); font-size:.87rem; }}
+    @media (max-width:760px) {{
+      header {{ padding-top:2.6rem; padding-bottom:3.3rem; }} .controls {{ grid-template-columns:1fr; }}
+      thead {{ position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0 0 0 0); }}
+      table, tbody, tr, td {{ display:block; width:100% !important; }}
+      tr {{ padding:1rem; border-top:1px solid var(--line); }} tr:first-child {{ border-top:0; }} td {{ padding:.3rem 0; border:0 !important; }}
+      .formats {{ padding-top:.7rem; }} .summary {{ align-items:flex-start; flex-direction:column; }}
+    }}
+  </style>
+</head>
+<body>
+  <header>
+    <p class="eyebrow">Governed modernization evidence</p>
+    <h1>Milestone library</h1>
+    <p>Search {len(models)} customer-readable milestone briefs by number, title, customer value, delivered capability, release, or roadmap phase.</p>
+  </header>
+  <main>
+    <section class="controls" aria-label="Milestone filters">
+      <div><label for="search">Search milestones</label><input id="search" type="search" placeholder="Try Oracle, stored procedures, CDC, customer pilot…" autocomplete="off"></div>
+      <div><label for="phase">Roadmap phase</label><select id="phase"><option value="all">All phases</option><option value="foundation">Foundation (MS #1–10)</option><option value="trust-runtime">Trust and runtime (MS #11–20)</option><option value="pilot-preparation">Pilot preparation (MS #21–32)</option><option value="qualification">Qualification (MS #33–{EXPECTED_MILESTONES[-1]})</option></select></div>
+    </section>
+    <div class="summary"><span id="result-count" aria-live="polite">{len(models)} milestones</span><a href="{github_blob('docs/milestones/README.md')}">Open repository index</a></div>
+    <section class="table-wrap" aria-label="Milestone results">
+      <table><thead><tr><th>Milestone</th><th>Customer brief</th><th>Phase / release</th><th>Formats</th></tr></thead><tbody>
+        {''.join(rows)}
+      </tbody></table>
+      <p id="empty">No milestones match those filters. Clear the search or select another phase.</p>
+    </section>
+  </main>
+  <footer>These briefs package committed repository evidence. Underlying receipts, ledgers, gates, tests, and policy decisions remain authoritative.</footer>
+  <script>
+    (() => {{
+      const search = document.querySelector('#search');
+      const phase = document.querySelector('#phase');
+      const rows = [...document.querySelectorAll('.milestone')];
+      const count = document.querySelector('#result-count');
+      const empty = document.querySelector('#empty');
+      const params = new URLSearchParams(location.search);
+      search.value = params.get('q') || '';
+      if ([...phase.options].some(option => option.value === params.get('phase'))) phase.value = params.get('phase');
+      const apply = () => {{
+        const terms = search.value.toLowerCase().trim().split(/\\s+/).filter(Boolean);
+        let visible = 0;
+        rows.forEach(row => {{
+          const matchesText = terms.every(term => row.dataset.search.includes(term));
+          const matchesPhase = phase.value === 'all' || row.dataset.phase === phase.value;
+          const show = matchesText && matchesPhase;
+          row.hidden = !show;
+          if (show) visible += 1;
+        }});
+        count.textContent = `${{visible}} milestone${{visible === 1 ? '' : 's'}}`;
+        empty.style.display = visible ? 'none' : 'block';
+        const next = new URLSearchParams();
+        if (search.value.trim()) next.set('q', search.value.trim());
+        if (phase.value !== 'all') next.set('phase', phase.value);
+        history.replaceState(null, '', next.size ? `?${{next}}` : location.pathname);
+      }};
+      search.addEventListener('input', apply);
+      phase.addEventListener('change', apply);
+      document.addEventListener('keydown', event => {{
+        if (event.key === '/' && document.activeElement !== search) {{ event.preventDefault(); search.focus(); }}
+        if (event.key === 'Escape' && document.activeElement === search) {{ search.value = ''; apply(); }}
+      }});
+      apply();
+    }})();
+  </script>
+</body>
+</html>
+'''
+    (DOC_ROOT / "index.html").write_text(page, encoding="utf-8")
 
 
 def build() -> None:
@@ -481,24 +645,28 @@ def build() -> None:
         (directory / f"{stem}.md").write_text(markdown_text(model, catalog["audience"]), encoding="utf-8")
         build_docx(model, catalog["audience"], directory / f"{stem}.docx")
         build_pdf(model, catalog["audience"], directory / f"{stem}.pdf")
-    write_index(models)
+    write_markdown_index(models)
+    write_html_index(models)
     artifacts = []
     for number in EXPECTED_MILESTONES:
         stem = f"MS-{number:02d}"
         for suffix in (".md", ".docx", ".pdf"):
             path = DOC_ROOT / stem / f"{stem}{suffix}"
             artifacts.append({"path": path.relative_to(ROOT).as_posix(), "bytes": path.stat().st_size, "sha256": sha256_path(path)})
-    manifest = {"schema_version": "1.0", "generator_version": GENERATOR_VERSION, "source_sha256": source_sha256(), "milestone_count": 44, "artifact_count": 132, "formats": ["md", "docx", "pdf"], "artifacts": artifacts}
+    library_files = []
+    for path in (DOC_ROOT / "README.md", DOC_ROOT / "index.html"):
+        library_files.append({"path": path.relative_to(ROOT).as_posix(), "bytes": path.stat().st_size, "sha256": sha256_path(path)})
+    manifest = {"schema_version": "1.1", "generator_version": GENERATOR_VERSION, "source_sha256": source_sha256(), "milestone_count": len(EXPECTED_MILESTONES), "artifact_count": EXPECTED_ARTIFACTS, "formats": ["md", "docx", "pdf"], "artifacts": artifacts, "library_files": library_files}
     MANIFEST_PATH.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    print(json.dumps({"status": "built", "milestones": 44, "artifacts": 132}, sort_keys=True))
+    print(json.dumps({"status": "built", "milestones": len(EXPECTED_MILESTONES), "artifacts": EXPECTED_ARTIFACTS}, sort_keys=True))
 
 
 def verify() -> None:
     load_catalog()
     manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8")); errors = []
     if manifest.get("source_sha256") != source_sha256(): errors.append("documentation sources changed without regeneration")
-    if manifest.get("milestone_count") != 44: errors.append("manifest milestone count is not 44")
-    if manifest.get("artifact_count") != 132: errors.append("manifest artifact count is not 132")
+    if manifest.get("milestone_count") != len(EXPECTED_MILESTONES): errors.append(f"manifest milestone count is not {len(EXPECTED_MILESTONES)}")
+    if manifest.get("artifact_count") != EXPECTED_ARTIFACTS: errors.append(f"manifest artifact count is not {EXPECTED_ARTIFACTS}")
     declared = set()
     for artifact in manifest.get("artifacts", []):
         relative = artifact["path"]; declared.add(relative); path = ROOT / relative
@@ -508,9 +676,14 @@ def verify() -> None:
     actual = {path.relative_to(ROOT).as_posix() for path in DOC_ROOT.glob("MS-*/*") if path.is_file() and path.suffix in {".md", ".docx", ".pdf"}}
     errors.extend(f"undeclared artifact: {path}" for path in sorted(actual - declared))
     errors.extend(f"declared artifact missing: {path}" for path in sorted(declared - actual))
+    for library_file in manifest.get("library_files", []):
+        relative = library_file["path"]; path = ROOT / relative
+        if not path.is_file(): errors.append(f"missing library file: {relative}"); continue
+        if path.stat().st_size != library_file["bytes"]: errors.append(f"size mismatch: {relative}")
+        if sha256_path(path) != library_file["sha256"]: errors.append(f"hash mismatch: {relative}")
     if errors:
         raise SystemExit("Milestone documentation verification failed:\n- " + "\n- ".join(errors))
-    print(json.dumps({"status": "verified", "milestones": 44, "artifacts": 132}, sort_keys=True))
+    print(json.dumps({"status": "verified", "milestones": len(EXPECTED_MILESTONES), "artifacts": EXPECTED_ARTIFACTS}, sort_keys=True))
 
 
 def main() -> None:

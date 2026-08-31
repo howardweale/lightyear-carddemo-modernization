@@ -1,0 +1,150 @@
+{
+  "catalog_sha256": "16cf4c688c00d98f9cbacd6492969cace35745eeb705d68f9617cafa5c6e2e6b",
+  "content_sha256": "c418423c43ac42a183ea677532be1ac1d1100349596ce1dbdf9d10436b693afc",
+  "event_set_type": "lightyear-sap-ase-replication-event-set",
+  "events": [
+    {
+      "after": {
+        "status": "after"
+      },
+      "before": null,
+      "commit_sequence": 1,
+      "content_sha256": "a9c6e0f1de9ae510cf012980b11b13d8bd9d9d335cbbe8d002d5f46089b0bd3c",
+      "event_type": "lightyear-sap-ase-replication-event",
+      "evidence_class": "bounded-replication-shape",
+      "key": {
+        "AUTH_ID": "1000"
+      },
+      "occurred_at": "2026-08-31T12:00:01Z",
+      "operation": "insert",
+      "partition": "0",
+      "position": "LTM:0001:000001",
+      "schema_version": "1.0",
+      "source_adapter": "lightyear-sap-ase-source",
+      "stream_id": "CARDDEMO-LTM-REFERENCE",
+      "table": "dbo.AUTHFRDS_ASE",
+      "transaction_id": "ASE-TX-001",
+      "transaction_sequence": 1
+    },
+    {
+      "after": {
+        "status": "after"
+      },
+      "before": null,
+      "commit_sequence": 1,
+      "content_sha256": "4b1dab27351f27ab1b935d5d9116be1acc19eb08bfc4b5723bef7003586b3604",
+      "event_type": "lightyear-sap-ase-replication-event",
+      "evidence_class": "bounded-replication-shape",
+      "key": {
+        "AUDIT_ID": "1"
+      },
+      "occurred_at": "2026-08-31T12:00:01Z",
+      "operation": "insert",
+      "partition": "0",
+      "position": "LTM:0001:000002",
+      "schema_version": "1.0",
+      "source_adapter": "lightyear-sap-ase-source",
+      "stream_id": "CARDDEMO-LTM-REFERENCE",
+      "table": "dbo.AUTH_AUDIT_ASE",
+      "transaction_id": "ASE-TX-001",
+      "transaction_sequence": 2
+    },
+    {
+      "after": {
+        "status": "after"
+      },
+      "before": {
+        "status": "before"
+      },
+      "commit_sequence": 2,
+      "content_sha256": "757912fb60dd462b24d0ae07ef8c82f7a932f12dbbcb44fdb506093224929f26",
+      "event_type": "lightyear-sap-ase-replication-event",
+      "evidence_class": "bounded-replication-shape",
+      "key": {
+        "AUTH_ID": "1005"
+      },
+      "occurred_at": "2026-08-31T12:00:02Z",
+      "operation": "update",
+      "partition": "0",
+      "position": "LTM:0001:000003",
+      "schema_version": "1.0",
+      "source_adapter": "lightyear-sap-ase-source",
+      "stream_id": "CARDDEMO-LTM-REFERENCE",
+      "table": "dbo.AUTHFRDS_ASE",
+      "transaction_id": "ASE-TX-002",
+      "transaction_sequence": 1
+    },
+    {
+      "after": {
+        "status": "after"
+      },
+      "before": null,
+      "commit_sequence": 2,
+      "content_sha256": "7f26fbc8a4579c049de99b01558fdc02c6285e72c3af4b5fe83c1161b0e1c2e2",
+      "event_type": "lightyear-sap-ase-replication-event",
+      "evidence_class": "bounded-replication-shape",
+      "key": {
+        "AUDIT_ID": "2"
+      },
+      "occurred_at": "2026-08-31T12:00:02Z",
+      "operation": "insert",
+      "partition": "0",
+      "position": "LTM:0001:000004",
+      "schema_version": "1.0",
+      "source_adapter": "lightyear-sap-ase-source",
+      "stream_id": "CARDDEMO-LTM-REFERENCE",
+      "table": "dbo.AUTH_AUDIT_ASE",
+      "transaction_id": "ASE-TX-002",
+      "transaction_sequence": 2
+    },
+    {
+      "after": null,
+      "before": {
+        "status": "before"
+      },
+      "commit_sequence": 3,
+      "content_sha256": "f11a87423e242d73e584dc06a53ab5fffc90de19a0b4ed4c4a1479e5df03bda5",
+      "event_type": "lightyear-sap-ase-replication-event",
+      "evidence_class": "bounded-replication-shape",
+      "key": {
+        "AUTH_ID": "1010"
+      },
+      "occurred_at": "2026-08-31T12:00:03Z",
+      "operation": "delete",
+      "partition": "0",
+      "position": "LTM:0001:000005",
+      "schema_version": "1.0",
+      "source_adapter": "lightyear-sap-ase-source",
+      "stream_id": "CARDDEMO-LTM-REFERENCE",
+      "table": "dbo.AUTHFRDS_ASE",
+      "transaction_id": "ASE-TX-003",
+      "transaction_sequence": 1
+    },
+    {
+      "after": {
+        "status": "after"
+      },
+      "before": null,
+      "commit_sequence": 4,
+      "content_sha256": "54d5a165f1ea0e59530014f1d7af91b569bba94c9220d7729eaea9abe7561563",
+      "event_type": "lightyear-sap-ase-replication-event",
+      "evidence_class": "bounded-replication-shape",
+      "key": {
+        "AUTH_ID": "1015"
+      },
+      "occurred_at": "2026-08-31T12:00:04Z",
+      "operation": "insert",
+      "partition": "0",
+      "position": "LTM:0001:000006",
+      "schema_version": "1.0",
+      "source_adapter": "lightyear-sap-ase-source",
+      "stream_id": "CARDDEMO-LTM-REFERENCE",
+      "table": "dbo.AUTHFRDS_ASE",
+      "transaction_id": "ASE-TX-004",
+      "transaction_sequence": 1
+    }
+  ],
+  "production_ready": false,
+  "replication_observed": false,
+  "schema_version": "1.0"
+}

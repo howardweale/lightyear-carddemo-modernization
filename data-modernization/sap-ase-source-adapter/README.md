@@ -1,0 +1,125 @@
+# MS #45 — SAP ASE semantic source adapter
+
+MS #45 adds a target-neutral SAP ASE `SourceAdapter` and a governed semantic-loss analysis. It is
+designed to answer whether LIGHTYEAR understands an ASE estate deeply enough to scope and qualify a
+real migration path. It does not select PostgreSQL or Oracle in advance and does not claim that an ASE
+migration has been completed.
+
+## Depth and coverage
+
+The bounded reference catalog deliberately contains more than plausible DDL:
+
+- 2 related tables, 31 columns, 5 constraints, 3 indexes, and both `datarows` and `datapages`
+  locking schemes;
+- 4 user-defined datatypes with retained base type, nullability, bound-rule, and bound-default
+  metadata;
+- 2 `IDENTITY` columns with different seeds and increments;
+- `money`, `smallmoney`, `decimal`, `numeric`, `datetime`, `smalldatetime`, `bigdatetime`, `bigtime`,
+  Unicode and server-charset strings, text/image LOBs, unsigned integers, ASE `timestamp` row
+  versions, and deliberately unsupported approximate-number behavior;
+- 6 procedures and 4 triggers, including multi-row transition tables, error signaling, explicit
+  transactions, temporary tables, identity functions, nested/recursive triggers, dynamic SQL, and
+  remote-server dependencies;
+- 54 separately classified ASE behaviors and a 107-entry five-class compatibility ledger; and
+- 187 executable conformance cases across nine categories.
+
+The six risk dimensions called out for this milestone each have at least ten cases:
+
+| Dimension | Cases |
+|---|---:|
+| Identity | 17 |
+| Money and exact numeric | 17 |
+| Datetime and time | 22 |
+| Empty-string and character behavior | 19 |
+| Locking and transactions | 22 |
+| Replication ordering and resume | 23 |
+
+The remaining coverage includes 29 source-type cases, 4 UDT cases, and 34 Transact-SQL and
+stored-logic cases.
+
+## What the adapter does
+
+The adapter implements every source-side operation in the database semantic core:
+
+1. `discover_schema` retains ASE type identity, UDT bindings, identity attributes, constraints,
+   indexes, locking schemes, procedures, triggers, and unsupported features.
+2. `profile_data` is bound to the exact catalog hash and records risk-relevant aggregates without
+   persisting customer values. Character profiles distinguish null, empty, single-space, trailing
+   space, length, and invalid-encoding observations.
+3. `read_rows` requires a sealed catalog, table, column-order contract. Unknown tables, altered
+   columns, or rehashed mismatches fail closed.
+4. `capture_changes` preserves commit order and within-transaction order across tables. Resume
+   tokens bind the adapter, catalog, log position, and last applied event hash.
+5. `transaction_capabilities` exposes ASE isolation levels 0–3, chained-mode policy, savepoints,
+   `allpages`/`datapages`/`datarows` locking, deadlock policy, and DDL transaction boundaries without
+   pretending those behaviors were observed live.
+
+## Compatibility classifications
+
+Every catalog object and declared behavior resolves to exactly one governed class:
+
+- `exact`
+- `normalized-equivalent`
+- `policy-decision-required`
+- `lossy`
+- `unsupported`
+
+Policy and lossy entries remain unresolved. Unsupported features are explicitly excluded from the
+claim scope. No unsafe entry can be silently promoted by changing the decision field and resealing
+the document; the verifier recomputes the canonical ledger.
+
+## Qualification gates
+
+The aggregate qualification has twelve independent gates:
+
+1. source adapter and catalog contract;
+2. user-defined datatype resolution and bindings;
+3. identity semantics;
+4. money, datetime, and empty-string semantics;
+5. constraints, indexes, and locking schemes;
+6. Transact-SQL construct inventory;
+7. stored procedures and triggers;
+8. transaction, rollback, isolation, locking, and deadlock behavior;
+9. replication order and content-bound resume;
+10. complete five-class semantic-loss ledger;
+11. depth and coverage corpus; and
+12. target-specific qualification, which remains blocked until a real pilot selects the target.
+
+## Evidence boundaries
+
+The catalog, rows, stored-logic inventory, replication stream, and transaction behaviors in this
+milestone are bounded development contracts and fixtures. They are not observations from a live ASE
+server. Consequently:
+
+- `catalog_observed`, `profile_observed`, `replication_observed`, and `transaction_observed` remain
+  false;
+- stored logic is inventoried and semantically classified, but not natively executed;
+- no target is selected and no ASE-to-PostgreSQL or ASE-to-Oracle equivalence claim is made;
+- `stored_logic_complete`, `database_migration_complete`, and `production_ready` remain false.
+
+## Verification
+
+```bash
+./data-modernization.sh ase-source
+```
+
+Windows:
+
+```powershell
+.\data-modernization.ps1 ase-source
+```
+
+The full data-modernization verifier also includes the ASE adapter:
+
+```bash
+./data-modernization.sh verify
+```
+
+Committed outputs are regenerated by:
+
+```bash
+PYTHONPATH=src python3 -m lightyear_data build-sap-ase-source-adapter --project-root .
+```
+
+The JSON Schemas in `data-modernization/schema/` freeze the catalog, ledger, corpus, conformance,
+and aggregate qualification contracts.

@@ -1,0 +1,379 @@
+{
+  "classifications": [
+    "exact",
+    "normalized-equivalent",
+    "policy-decision-required",
+    "lossy",
+    "unsupported"
+  ],
+  "content_sha256": "e3b3cd2e296907ff2da0ccbff8ab35d1e9e8cc576cf120af54c37016606af656",
+  "entries": [
+    {
+      "classification": "exact",
+      "decision": "bounded-source-contract",
+      "evidence_required": [
+        "source-digest",
+        "parameter-order-and-mode"
+      ],
+      "item_id": "oracle-procedure:procedure-identity-and-parameters",
+      "scope": "procedure-identity-and-parameters",
+      "source_semantics": {
+        "dialect": "oracle-plsql",
+        "procedures": [
+          "CARDDEMO.GET_AUTH_STATUS",
+          "CARDDEMO.SET_FRAUD_FLAG",
+          "CARDDEMO.CLASSIFY_AMOUNT",
+          "CARDDEMO.NORMALIZE_REASON"
+        ]
+      },
+      "target_semantics": {
+        "bounded_translation": true,
+        "dialect": "postgresql-plpgsql"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "bounded-canonical-decimal",
+      "evidence_required": [
+        "decimal-boundary-corpus"
+      ],
+      "item_id": "oracle-procedure:number-bounded-domain",
+      "scope": "number-bounded-domain",
+      "source_semantics": {
+        "dialect": "oracle-plsql",
+        "procedures": [
+          "CARDDEMO.GET_AUTH_STATUS",
+          "CARDDEMO.SET_FRAUD_FLAG",
+          "CARDDEMO.CLASSIFY_AMOUNT",
+          "CARDDEMO.NORMALIZE_REASON"
+        ]
+      },
+      "target_semantics": {
+        "bounded_translation": true,
+        "dialect": "postgresql-plpgsql"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "bounded-behavior",
+      "evidence_required": [
+        "found-not-found-and-multiple-row-cases"
+      ],
+      "item_id": "oracle-procedure:select-into-single-row",
+      "scope": "select-into-single-row",
+      "source_semantics": {
+        "dialect": "oracle-plsql",
+        "procedures": [
+          "CARDDEMO.GET_AUTH_STATUS",
+          "CARDDEMO.SET_FRAUD_FLAG",
+          "CARDDEMO.CLASSIFY_AMOUNT",
+          "CARDDEMO.NORMALIZE_REASON"
+        ]
+      },
+      "target_semantics": {
+        "bounded_translation": true,
+        "dialect": "postgresql-plpgsql"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "translated-mechanism",
+      "evidence_required": [
+        "side-effect-and-row-count-comparison"
+      ],
+      "item_id": "oracle-procedure:update-and-rowcount",
+      "scope": "update-and-rowcount",
+      "source_semantics": {
+        "dialect": "oracle-plsql",
+        "procedures": [
+          "CARDDEMO.GET_AUTH_STATUS",
+          "CARDDEMO.SET_FRAUD_FLAG",
+          "CARDDEMO.CLASSIFY_AMOUNT",
+          "CARDDEMO.NORMALIZE_REASON"
+        ]
+      },
+      "target_semantics": {
+        "bounded_translation": true,
+        "dialect": "postgresql-plpgsql"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "translated-mechanism",
+      "evidence_required": [
+        "branch-boundary-corpus"
+      ],
+      "item_id": "oracle-procedure:if-elsif-else",
+      "scope": "if-elsif-else",
+      "source_semantics": {
+        "dialect": "oracle-plsql",
+        "procedures": [
+          "CARDDEMO.GET_AUTH_STATUS",
+          "CARDDEMO.SET_FRAUD_FLAG",
+          "CARDDEMO.CLASSIFY_AMOUNT",
+          "CARDDEMO.NORMALIZE_REASON"
+        ]
+      },
+      "target_semantics": {
+        "bounded_translation": true,
+        "dialect": "postgresql-plpgsql"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "null-empty-and-space-cases"
+      ],
+      "item_id": "oracle-procedure:nvl-to-coalesce",
+      "scope": "nvl-to-coalesce",
+      "source_semantics": {
+        "dialect": "oracle-plsql",
+        "procedures": [
+          "CARDDEMO.GET_AUTH_STATUS",
+          "CARDDEMO.SET_FRAUD_FLAG",
+          "CARDDEMO.CLASSIFY_AMOUNT",
+          "CARDDEMO.NORMALIZE_REASON"
+        ]
+      },
+      "target_semantics": {
+        "bounded_translation": true,
+        "dialect": "postgresql-plpgsql"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "customer-profile",
+        "approved-null-empty-policy"
+      ],
+      "item_id": "oracle-procedure:oracle-empty-string",
+      "scope": "oracle-empty-string",
+      "source_semantics": {
+        "dialect": "oracle-plsql",
+        "procedures": [
+          "CARDDEMO.GET_AUTH_STATUS",
+          "CARDDEMO.SET_FRAUD_FLAG",
+          "CARDDEMO.CLASSIFY_AMOUNT",
+          "CARDDEMO.NORMALIZE_REASON"
+        ]
+      },
+      "target_semantics": {
+        "bounded_translation": true,
+        "dialect": "postgresql-plpgsql"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "translated-exception",
+      "evidence_required": [
+        "exception-class-comparison"
+      ],
+      "item_id": "oracle-procedure:no-data-found",
+      "scope": "no-data-found",
+      "source_semantics": {
+        "dialect": "oracle-plsql",
+        "procedures": [
+          "CARDDEMO.GET_AUTH_STATUS",
+          "CARDDEMO.SET_FRAUD_FLAG",
+          "CARDDEMO.CLASSIFY_AMOUNT",
+          "CARDDEMO.NORMALIZE_REASON"
+        ]
+      },
+      "target_semantics": {
+        "bounded_translation": true,
+        "dialect": "postgresql-plpgsql"
+      }
+    },
+    {
+      "classification": "lossy",
+      "decision": "explicit-code-remap",
+      "evidence_required": [
+        "approved-error-code-map"
+      ],
+      "item_id": "oracle-procedure:raise-application-error-code",
+      "scope": "raise-application-error-code",
+      "source_semantics": {
+        "dialect": "oracle-plsql",
+        "procedures": [
+          "CARDDEMO.GET_AUTH_STATUS",
+          "CARDDEMO.SET_FRAUD_FLAG",
+          "CARDDEMO.CLASSIFY_AMOUNT",
+          "CARDDEMO.NORMALIZE_REASON"
+        ]
+      },
+      "target_semantics": {
+        "bounded_translation": true,
+        "dialect": "postgresql-plpgsql"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "oracle-authid-and-grants",
+        "postgres-role-policy"
+      ],
+      "item_id": "oracle-procedure:definer-invoker-rights",
+      "scope": "definer-invoker-rights",
+      "source_semantics": {
+        "dialect": "oracle-plsql",
+        "procedures": [
+          "CARDDEMO.GET_AUTH_STATUS",
+          "CARDDEMO.SET_FRAUD_FLAG",
+          "CARDDEMO.CLASSIFY_AMOUNT",
+          "CARDDEMO.NORMALIZE_REASON"
+        ]
+      },
+      "target_semantics": {
+        "bounded_translation": true,
+        "dialect": "postgresql-plpgsql"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "approved-transaction-boundary-policy"
+      ],
+      "item_id": "oracle-procedure:transaction-ownership",
+      "scope": "transaction-ownership",
+      "source_semantics": {
+        "dialect": "oracle-plsql",
+        "procedures": [
+          "CARDDEMO.GET_AUTH_STATUS",
+          "CARDDEMO.SET_FRAUD_FLAG",
+          "CARDDEMO.CLASSIFY_AMOUNT",
+          "CARDDEMO.NORMALIZE_REASON"
+        ]
+      },
+      "target_semantics": {
+        "bounded_translation": true,
+        "dialect": "postgresql-plpgsql"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "separate-dynamic-sql-qualification"
+      ],
+      "item_id": "oracle-procedure:dynamic-sql",
+      "scope": "dynamic-sql",
+      "source_semantics": {
+        "dialect": "oracle-plsql",
+        "procedures": [
+          "CARDDEMO.GET_AUTH_STATUS",
+          "CARDDEMO.SET_FRAUD_FLAG",
+          "CARDDEMO.CLASSIFY_AMOUNT",
+          "CARDDEMO.NORMALIZE_REASON"
+        ]
+      },
+      "target_semantics": {
+        "bounded_translation": true,
+        "dialect": "postgresql-plpgsql"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "separate-transaction-qualification"
+      ],
+      "item_id": "oracle-procedure:autonomous-transaction",
+      "scope": "autonomous-transaction",
+      "source_semantics": {
+        "dialect": "oracle-plsql",
+        "procedures": [
+          "CARDDEMO.GET_AUTH_STATUS",
+          "CARDDEMO.SET_FRAUD_FLAG",
+          "CARDDEMO.CLASSIFY_AMOUNT",
+          "CARDDEMO.NORMALIZE_REASON"
+        ]
+      },
+      "target_semantics": {
+        "bounded_translation": true,
+        "dialect": "postgresql-plpgsql"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "package-state-redesign"
+      ],
+      "item_id": "oracle-procedure:package-state",
+      "scope": "package-state",
+      "source_semantics": {
+        "dialect": "oracle-plsql",
+        "procedures": [
+          "CARDDEMO.GET_AUTH_STATUS",
+          "CARDDEMO.SET_FRAUD_FLAG",
+          "CARDDEMO.CLASSIFY_AMOUNT",
+          "CARDDEMO.NORMALIZE_REASON"
+        ]
+      },
+      "target_semantics": {
+        "bounded_translation": true,
+        "dialect": "postgresql-plpgsql"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "external-database-dependency-plan"
+      ],
+      "item_id": "oracle-procedure:database-link",
+      "scope": "database-link",
+      "source_semantics": {
+        "dialect": "oracle-plsql",
+        "procedures": [
+          "CARDDEMO.GET_AUTH_STATUS",
+          "CARDDEMO.SET_FRAUD_FLAG",
+          "CARDDEMO.CLASSIFY_AMOUNT",
+          "CARDDEMO.NORMALIZE_REASON"
+        ]
+      },
+      "target_semantics": {
+        "bounded_translation": true,
+        "dialect": "postgresql-plpgsql"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "transaction-boundary-redesign"
+      ],
+      "item_id": "oracle-procedure:procedure-owned-commit",
+      "scope": "procedure-owned-commit",
+      "source_semantics": {
+        "dialect": "oracle-plsql",
+        "procedures": [
+          "CARDDEMO.GET_AUTH_STATUS",
+          "CARDDEMO.SET_FRAUD_FLAG",
+          "CARDDEMO.CLASSIFY_AMOUNT",
+          "CARDDEMO.NORMALIZE_REASON"
+        ]
+      },
+      "target_semantics": {
+        "bounded_translation": true,
+        "dialect": "postgresql-plpgsql"
+      }
+    }
+  ],
+  "ledger_type": "lightyear-oracle-procedure-compatibility-ledger",
+  "production_ready": false,
+  "qualification_blocked": true,
+  "schema_version": "1.0",
+  "source_sha256": "df8039e3134949101f31131f6daa0f90781d74273c2a6d08e7c466fc0ebad4da",
+  "statistics": {
+    "exact": 4,
+    "lossy": 1,
+    "normalized-equivalent": 3,
+    "policy-decision-required": 3,
+    "unsupported": 5
+  }
+}

@@ -4,10 +4,10 @@
     "canonical_schema_sha256": "ffe6df35b4be0c831e72288ecaf3e48c43cc8aac7682983e0f4570846853d042",
     "compatibility_ledger_sha256": "0811440daef856f252659d4f86698c42290dd687cb0f7ddb38dad66d44f9ad46",
     "rehearsal_receipt_sha256": "e628b50cc4e21707f6c62e7a8429654c7867411f75fb9381e03f3d191854f652",
-    "stored_logic_qualification_sha256": "9f2249f97a7e9397e668303567ba818179abc120c9717f3b2a50f8a62e6ea822"
+    "stored_logic_qualification_sha256": "c2a169d8da153f6def998d4e575e2bef5ccbd69e3bbf79847eaf4d4027ee729f"
   },
   "claim_unlocked": "LIGHTYEAR can execute a deterministic, progressively gated Oracle-to-PostgreSQL development proof without bundling unresolved behavioral or stored-logic claims.",
-  "content_sha256": "ed7001094046f3d364c3f9d28659d1166c80b94b7f3f4ec0f5a5d563c1385d4c",
+  "content_sha256": "17565b21aa22c82a3d41f378848883f844f839a3b56e71b1fc713501e9a98aac",
   "database_migration_complete": false,
   "gates": [
     {
@@ -145,22 +145,23 @@
           "behavior:postgresql-16:stored-logic"
         ],
         "qualification_core_ready": true,
-        "qualification_sha256": "9f2249f97a7e9397e668303567ba818179abc120c9717f3b2a50f8a62e6ea822",
-        "stored_logic_complete": false
+        "qualification_sha256": "c2a169d8da153f6def998d4e575e2bef5ccbd69e3bbf79847eaf4d4027ee729f",
+        "stored_logic_complete": false,
+        "supported_procedure_subset_qualified": true
       },
       "gate": 8,
       "limitations": [
         "Stored procedures, triggers, and arbitrary application SQL require independent qualification gates."
       ],
       "production_qualified": false,
-      "status": "excluded-unqualified"
+      "status": "passed-bounded-subset-with-open-gates"
     }
   ],
   "production_ready": false,
   "proof_id": "authfrds-oracle-to-postgresql-v0.34",
   "proof_type": "lightyear-oracle-postgresql-proof",
   "qualification_summary": {
-    "excluded_unqualified": 1,
+    "passed_bounded_subset": 1,
     "passed_development": 4,
     "passed_simulated": 2,
     "policy_decision_required": 1

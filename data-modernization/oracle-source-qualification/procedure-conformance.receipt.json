@@ -1,0 +1,381 @@
+{
+  "case_count": 20,
+  "classification_counts": {
+    "mutation": 4,
+    "positive": 5,
+    "targeted-boundary": 11
+  },
+  "content_sha256": "443f700d9a39f7b6d25c9a867583f3be55b01d361eb6cfff0c2dea96518a0e17",
+  "corpus_id": "oracle-procedure-supported-subset-v1",
+  "evidence_class": "bounded-synthetic-procedure-semantics",
+  "native_oracle_execution_observed": false,
+  "native_postgresql_execution_observed": false,
+  "observed_feature_count": 17,
+  "procedure_ids": [
+    "CARDDEMO.GET_AUTH_STATUS",
+    "CARDDEMO.SET_FRAUD_FLAG",
+    "CARDDEMO.CLASSIFY_AMOUNT",
+    "CARDDEMO.NORMALIZE_REASON"
+  ],
+  "production_ready": false,
+  "receipt_type": "lightyear-oracle-procedure-conformance",
+  "results": [
+    {
+      "classification": "positive",
+      "features": [
+        "select-into"
+      ],
+      "id": "01-get-found",
+      "observed": {
+        "error_class": null,
+        "mutation_count": 0,
+        "outputs": {
+          "P_STATUS": "N"
+        },
+        "status": "passed"
+      },
+      "passed": true,
+      "procedure": "GET_AUTH_STATUS",
+      "request_sha256": "4a4892190dc48e76abb011e593ca2604d329521380c41a1464dcec39f8564116"
+    },
+    {
+      "classification": "targeted-boundary",
+      "features": [
+        "no-data-found"
+      ],
+      "id": "02-get-not-found",
+      "observed": {
+        "error_class": null,
+        "mutation_count": 0,
+        "outputs": {
+          "P_STATUS": "N"
+        },
+        "status": "passed"
+      },
+      "passed": true,
+      "procedure": "GET_AUTH_STATUS",
+      "request_sha256": "1bb06f1a9c3858210c99a4aebfa296ec697a08fbddfc143d1e9fa14759f97ded"
+    },
+    {
+      "classification": "mutation",
+      "features": [
+        "too-many-rows"
+      ],
+      "id": "03-get-duplicate",
+      "observed": {
+        "error_class": "TOO_MANY_ROWS",
+        "mutation_count": 0,
+        "outputs": {},
+        "status": "failed"
+      },
+      "passed": true,
+      "procedure": "GET_AUTH_STATUS",
+      "request_sha256": "d0dcd5c4fdf327155fb36027e2a072153f38e5cd2f86ebc454f000dd1d1caad5"
+    },
+    {
+      "classification": "targeted-boundary",
+      "features": [
+        "oracle-empty-string-is-null"
+      ],
+      "id": "04-get-empty-key",
+      "observed": {
+        "error_class": null,
+        "mutation_count": 0,
+        "outputs": {
+          "P_STATUS": "N"
+        },
+        "status": "passed"
+      },
+      "passed": true,
+      "procedure": "GET_AUTH_STATUS",
+      "request_sha256": "689330ac49f9a4bbd93123461ef5a55fd5d45aa21bafe86299e2cde487dc142b"
+    },
+    {
+      "classification": "positive",
+      "features": [
+        "sql-rowcount",
+        "update"
+      ],
+      "id": "05-set-one",
+      "observed": {
+        "error_class": null,
+        "mutation_count": 1,
+        "outputs": {
+          "P_ROWS": 1
+        },
+        "status": "passed"
+      },
+      "passed": true,
+      "procedure": "SET_FRAUD_FLAG",
+      "request_sha256": "c3fb76de3e7b6d95f09aa83ed124a1c9a1a61d79e2bc970a1012e3f86eff65e5"
+    },
+    {
+      "classification": "targeted-boundary",
+      "features": [
+        "zero-row-update"
+      ],
+      "id": "06-set-none",
+      "observed": {
+        "error_class": null,
+        "mutation_count": 0,
+        "outputs": {
+          "P_ROWS": 0
+        },
+        "status": "passed"
+      },
+      "passed": true,
+      "procedure": "SET_FRAUD_FLAG",
+      "request_sha256": "7b64dd654c1ed388426af9124b07e32e0763bf27b8f9bba71f38078d160623df"
+    },
+    {
+      "classification": "mutation",
+      "features": [
+        "multi-row-update"
+      ],
+      "id": "07-set-two",
+      "observed": {
+        "error_class": null,
+        "mutation_count": 2,
+        "outputs": {
+          "P_ROWS": 2
+        },
+        "status": "passed"
+      },
+      "passed": true,
+      "procedure": "SET_FRAUD_FLAG",
+      "request_sha256": "58a485a48660805bf3be7b456d9bca3c10794c7d6051bc6b7bc7e6645f90121a"
+    },
+    {
+      "classification": "targeted-boundary",
+      "features": [
+        "null-input"
+      ],
+      "id": "08-set-null-reason",
+      "observed": {
+        "error_class": null,
+        "mutation_count": 1,
+        "outputs": {
+          "P_ROWS": 1
+        },
+        "status": "passed"
+      },
+      "passed": true,
+      "procedure": "SET_FRAUD_FLAG",
+      "request_sha256": "02e0ab093a18e3e045cadb28db26b6679ee2bedef89aaabef472d273432efedf"
+    },
+    {
+      "classification": "targeted-boundary",
+      "features": [
+        "oracle-empty-string-is-null"
+      ],
+      "id": "09-set-empty-reason",
+      "observed": {
+        "error_class": null,
+        "mutation_count": 1,
+        "outputs": {
+          "P_ROWS": 1
+        },
+        "status": "passed"
+      },
+      "passed": true,
+      "procedure": "SET_FRAUD_FLAG",
+      "request_sha256": "6d35f1a3fe2c2e02f7e3ce43e822719031d1362ebc1e9dedb525c86cf06f5fc0"
+    },
+    {
+      "classification": "targeted-boundary",
+      "features": [
+        "raise-application-error"
+      ],
+      "id": "10-class-negative",
+      "observed": {
+        "error_class": "APPLICATION_ERROR:P0001",
+        "mutation_count": 0,
+        "outputs": {},
+        "status": "failed"
+      },
+      "passed": true,
+      "procedure": "CLASSIFY_AMOUNT",
+      "request_sha256": "fae9d7c40476ebdcd43df1e4a04ce10ad86720f6e97af88f5b234524a75f4b50"
+    },
+    {
+      "classification": "targeted-boundary",
+      "features": [
+        "decimal-zero"
+      ],
+      "id": "11-class-zero",
+      "observed": {
+        "error_class": null,
+        "mutation_count": 0,
+        "outputs": {
+          "P_CLASS": "STANDARD"
+        },
+        "status": "passed"
+      },
+      "passed": true,
+      "procedure": "CLASSIFY_AMOUNT",
+      "request_sha256": "9d32bfd04c345bf5ce40d3a4fde8d2ddd2574789eb150cd144c59103c6cc64d1"
+    },
+    {
+      "classification": "targeted-boundary",
+      "features": [
+        "decimal-threshold"
+      ],
+      "id": "12-class-below",
+      "observed": {
+        "error_class": null,
+        "mutation_count": 0,
+        "outputs": {
+          "P_CLASS": "STANDARD"
+        },
+        "status": "passed"
+      },
+      "passed": true,
+      "procedure": "CLASSIFY_AMOUNT",
+      "request_sha256": "578369d0d7ea649763abc4d9c2c380eed5abc35d38982b250b091205b6413f31"
+    },
+    {
+      "classification": "positive",
+      "features": [
+        "decimal-threshold"
+      ],
+      "id": "13-class-at",
+      "observed": {
+        "error_class": null,
+        "mutation_count": 0,
+        "outputs": {
+          "P_CLASS": "HIGH"
+        },
+        "status": "passed"
+      },
+      "passed": true,
+      "procedure": "CLASSIFY_AMOUNT",
+      "request_sha256": "f476abf6ad0f7ddc0107ec08035acca32b260c3be374baf0ddfbdbdbbc8537a1"
+    },
+    {
+      "classification": "targeted-boundary",
+      "features": [
+        "decimal-threshold"
+      ],
+      "id": "14-class-above",
+      "observed": {
+        "error_class": null,
+        "mutation_count": 0,
+        "outputs": {
+          "P_CLASS": "HIGH"
+        },
+        "status": "passed"
+      },
+      "passed": true,
+      "procedure": "CLASSIFY_AMOUNT",
+      "request_sha256": "bf13424459fb67c6fd210f7e166f7254d37ed4409e5c2f75cc608192f1f3601a"
+    },
+    {
+      "classification": "mutation",
+      "features": [
+        "invalid-number"
+      ],
+      "id": "15-class-invalid",
+      "observed": {
+        "error_class": "INVALID_NUMBER",
+        "mutation_count": 0,
+        "outputs": {},
+        "status": "failed"
+      },
+      "passed": true,
+      "procedure": "CLASSIFY_AMOUNT",
+      "request_sha256": "37d58afc41ec09b8d7925ce2c5de2ad92a4b6350dcfdb7477d04ff278961c571"
+    },
+    {
+      "classification": "positive",
+      "features": [
+        "nvl"
+      ],
+      "id": "16-normalize-null",
+      "observed": {
+        "error_class": null,
+        "mutation_count": 0,
+        "outputs": {
+          "P_RESULT": "UNSPECIFIED"
+        },
+        "status": "passed"
+      },
+      "passed": true,
+      "procedure": "NORMALIZE_REASON",
+      "request_sha256": "db55fa619bfe29b158ac7d5cbbc891d8ffecf913787192b3856e3c27072999f4"
+    },
+    {
+      "classification": "targeted-boundary",
+      "features": [
+        "oracle-empty-string-is-null"
+      ],
+      "id": "17-normalize-empty",
+      "observed": {
+        "error_class": null,
+        "mutation_count": 0,
+        "outputs": {
+          "P_RESULT": "UNSPECIFIED"
+        },
+        "status": "passed"
+      },
+      "passed": true,
+      "procedure": "NORMALIZE_REASON",
+      "request_sha256": "d0a0ed72381925cc6f3d7f8d998256765fe68a4ea25c48993c67ecf5639aa599"
+    },
+    {
+      "classification": "positive",
+      "features": [
+        "character-output"
+      ],
+      "id": "18-normalize-text",
+      "observed": {
+        "error_class": null,
+        "mutation_count": 0,
+        "outputs": {
+          "P_RESULT": "DECLINED"
+        },
+        "status": "passed"
+      },
+      "passed": true,
+      "procedure": "NORMALIZE_REASON",
+      "request_sha256": "f6f5a3bc5b7ff234160e893151bdcdd2735c9d0a808b71d4e9792e39276ead0f"
+    },
+    {
+      "classification": "targeted-boundary",
+      "features": [
+        "space-not-empty"
+      ],
+      "id": "19-normalize-space",
+      "observed": {
+        "error_class": null,
+        "mutation_count": 0,
+        "outputs": {
+          "P_RESULT": " "
+        },
+        "status": "passed"
+      },
+      "passed": true,
+      "procedure": "NORMALIZE_REASON",
+      "request_sha256": "a65dda60022abf61646e76193d8bbe99fcc909150f474775c395cac4007f1d71"
+    },
+    {
+      "classification": "mutation",
+      "features": [
+        "parameter-type"
+      ],
+      "id": "20-normalize-number",
+      "observed": {
+        "error_class": "TYPE_MISMATCH",
+        "mutation_count": 0,
+        "outputs": {},
+        "status": "failed"
+      },
+      "passed": true,
+      "procedure": "NORMALIZE_REASON",
+      "request_sha256": "685537daf803ead5fc379f2a06d135ca6c4331954ef50c10f084d1a7cf5f9ed0"
+    }
+  ],
+  "schema_version": "1.0",
+  "source_path": "data-modernization/oracle-source/procedures.sql",
+  "source_sha256": "df8039e3134949101f31131f6daa0f90781d74273c2a6d08e7c466fc0ebad4da",
+  "status": "passed"
+}

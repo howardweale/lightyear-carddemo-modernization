@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schema/oracle-procedure-qualification.schema.json",
+  "title": "LIGHTYEAR Oracle procedure qualification",
+  "type": "object",
+  "required": ["schema_version", "qualification_type", "qualification_id", "source_dialect", "target_dialect", "source_path", "source_sha256", "procedure_count", "procedures", "translations", "compatibility_ledger_sha256", "conformance_receipt_sha256", "qualification_gates", "supported_features", "unsupported_features", "supported_procedure_subset_qualified", "live_catalog_inventory_complete", "native_execution_observed", "stored_logic_complete", "database_migration_complete", "production_ready", "claim_unlocked", "content_sha256"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "qualification_type": {"const": "lightyear-oracle-procedure-qualification"},
+    "qualification_id": {"const": "authfrds-oracle-procedure-subset-v0.43"},
+    "source_dialect": {"const": "oracle-plsql"},
+    "target_dialect": {"const": "postgresql-plpgsql"},
+    "source_path": {"type": "string"},
+    "source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "procedure_count": {"const": 4},
+    "procedures": {"type": "array", "minItems": 4, "maxItems": 4},
+    "translations": {"type": "array", "minItems": 4, "maxItems": 4},
+    "compatibility_ledger_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "conformance_receipt_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "qualification_gates": {"type": "array", "minItems": 8, "maxItems": 8},
+    "supported_features": {"type": "array"},
+    "unsupported_features": {"type": "array", "minItems": 5, "maxItems": 5},
+    "supported_procedure_subset_qualified": {"const": true},
+    "live_catalog_inventory_complete": {"const": false},
+    "native_execution_observed": {"const": false},
+    "stored_logic_complete": {"const": false},
+    "database_migration_complete": {"const": false},
+    "production_ready": {"const": false},
+    "claim_unlocked": {"type": "string"},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": false
+}

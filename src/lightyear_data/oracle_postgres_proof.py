@@ -115,12 +115,13 @@ def build_oracle_postgresql_proof(project_root: Path) -> dict[str, Any]:
             "rollback_exact": rehearsal["rollback"]["exact"],
             "failure_detected": rehearsal["rollback"]["failure_detected"],
         }, ["The cutover approval is development-only and cannot authorize production."]),
-        _gate(8, "stored-logic", "excluded-unqualified", {
+        _gate(8, "stored-logic", "passed-bounded-subset-with-open-gates", {
             "ledger_items": stored_logic_entries,
             "qualification_sha256": stored_logic["content_sha256"],
             "qualification_core_ready": stored_logic["qualification_core_ready"],
             "inventory_complete": stored_logic["inventory_complete"],
             "stored_logic_complete": stored_logic["stored_logic_complete"],
+            "supported_procedure_subset_qualified": stored_logic["supported_procedure_subset_qualified"],
         }, ["Stored procedures, triggers, and arbitrary application SQL require independent qualification gates."]),
     ]
     return seal({
@@ -141,7 +142,7 @@ def build_oracle_postgresql_proof(project_root: Path) -> dict[str, Any]:
             "passed_development": 4,
             "passed_simulated": 2,
             "policy_decision_required": 1,
-            "excluded_unqualified": 1,
+            "passed_bounded_subset": 1,
         },
         "status": "passed-with-open-qualification-gates",
         "database_migration_complete": False,
@@ -165,7 +166,7 @@ def validate_oracle_postgresql_proof(project_root: Path, proof: Mapping[str, Any
     if [item.get("gate") for item in gates if isinstance(item, dict)] != list(range(1, 9)):
         errors.append("oracle-postgresql-proof-gate-sequence-invalid")
     statuses = {item.get("gate"): item.get("status") for item in gates if isinstance(item, dict)}
-    if statuses.get(5) != "policy-decision-required" or statuses.get(8) != "excluded-unqualified":
+    if statuses.get(5) != "policy-decision-required" or statuses.get(8) != "passed-bounded-subset-with-open-gates":
         errors.append("oracle-postgresql-proof-qualification-boundary-invalid")
     if any(proof.get(name) is not False for name in ("database_migration_complete", "stored_logic_complete", "production_ready")):
         errors.append("oracle-postgresql-proof-overclaims-completion")

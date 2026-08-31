@@ -22,19 +22,21 @@ class StoredLogicQualificationTests(unittest.TestCase):
         result = build_stored_logic_qualification(ROOT)
         self.assertEqual(set(OBJECT_KINDS), set(result["inventory_contract"]["object_kinds"]))
         self.assertEqual(2, result["object_counts"]["application-sql"])
+        self.assertEqual(4, result["object_counts"]["procedure"])
         self.assertFalse(result["inventory_contract"]["live_catalog_observed"])
 
     def test_all_seven_qualification_gates_are_independent(self) -> None:
         result = build_stored_logic_qualification(ROOT)
         self.assertEqual(list(QUALIFICATION_GATES), [item["gate"] for item in result["qualification_gates"]])
         self.assertEqual("passed-source-only", result["qualification_gates"][1]["status"])
-        self.assertEqual("policy-decision-required", result["qualification_gates"][2]["status"])
+        self.assertEqual("passed-bounded-procedure-subset", result["qualification_gates"][2]["status"])
 
     def test_application_sql_is_not_silently_declared_translated(self) -> None:
         result = build_stored_logic_qualification(ROOT)
-        self.assertEqual({"INSERT", "UPDATE"}, {item["operation"] for item in result["objects"]})
-        self.assertTrue(all(item["classification"] == "policy-decision-required" for item in result["objects"]))
-        self.assertTrue(all(item["qualification_status"] == "not-qualified" for item in result["objects"]))
+        application_sql = [item for item in result["objects"] if item["kind"] == "application-sql"]
+        self.assertEqual({"INSERT", "UPDATE"}, {item["operation"] for item in application_sql})
+        self.assertTrue(all(item["classification"] == "policy-decision-required" for item in application_sql))
+        self.assertTrue(all(item["qualification_status"] == "not-qualified" for item in application_sql))
 
     def test_zero_catalog_objects_cannot_become_inventory_complete(self) -> None:
         result = build_stored_logic_qualification(ROOT)

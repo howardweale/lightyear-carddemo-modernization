@@ -17,6 +17,11 @@ from .oracle_postgres_proof import (
     build_oracle_postgresql_proof,
     validate_oracle_postgresql_proof,
 )
+from .oracle_procedures import validate_procedure_artifacts
+from .oracle_source import (
+    build_oracle_source_artifacts,
+    validate_oracle_postgresql_source_qualification,
+)
 from .postgres import PostgreSQLAdapter, fixture_sql
 from .rehearsal import build_rehearsal_evidence, validate_rehearsal_evidence
 from .validation import validate_assets
@@ -70,6 +75,11 @@ def parser() -> argparse.ArgumentParser:
     db2.add_argument("--project-root", type=Path, default=Path("."))
     verify_db2 = commands.add_parser("verify-db2-semantic-adapter")
     verify_db2.add_argument("--project-root", type=Path, default=Path("."))
+    oracle_source = commands.add_parser("build-oracle-source-qualification")
+    oracle_source.add_argument("--project-root", type=Path, default=Path("."))
+    oracle_source.add_argument("--output-root", type=Path)
+    verify_oracle_source = commands.add_parser("verify-oracle-source-qualification")
+    verify_oracle_source.add_argument("--project-root", type=Path, default=Path("."))
     return root
 
 
@@ -204,6 +214,37 @@ def main(argv: list[str] | None = None) -> int:
             "catalog_observed": False,
             "cdc_observed": False,
             "mainframe_equivalent": False,
+            "production_ready": False,
+        }
+    elif args.command in {"build-oracle-source-qualification", "verify-oracle-source-qualification"}:
+        project_root = args.project_root.resolve()
+        expected = build_oracle_source_artifacts(project_root)
+        output_root = (
+            args.output_root.resolve()
+            if args.command == "build-oracle-source-qualification" and args.output_root
+            else project_root / "data-modernization/oracle-source-qualification"
+        )
+        errors = []
+        if args.command == "build-oracle-source-qualification":
+            for name, payload in expected.items():
+                write_json(output_root / name, payload)
+        else:
+            for name, payload in expected.items():
+                path = output_root / name
+                if not path.is_file() or json.loads(path.read_text(encoding="utf-8")) != payload:
+                    errors.append(f"oracle-source-qualification-drift:{name}")
+            errors.extend(validate_procedure_artifacts(project_root, expected["procedure-qualification.json"]))
+            errors.extend(validate_oracle_postgresql_source_qualification(project_root, expected["qualification.json"]))
+        qualification = expected["qualification.json"]
+        result = {
+            "status": "passed" if not errors else "failed",
+            "errors": sorted(set(errors)),
+            "output_root": str(output_root),
+            "qualification_sha256": qualification["content_sha256"],
+            "development_ready": qualification["development_ready"],
+            "supported_procedure_subset_qualified": qualification["supported_procedure_subset_qualified"],
+            "database_migration_complete": False,
+            "stored_logic_complete": False,
             "production_ready": False,
         }
     else:

@@ -1,0 +1,667 @@
+{
+  "classifications": [
+    "exact",
+    "normalized-equivalent",
+    "policy-decision-required",
+    "lossy",
+    "unsupported"
+  ],
+  "content_sha256": "6fc2d33dbf6d263a491d56466f5bcfe4e97bc594ac38d8692334b770e6ce9458",
+  "entries": [
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-and-padding-profile",
+        "approved-null-policy"
+      ],
+      "item_id": "oracle-source-column:CARD_NUM",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "oracle-26ai-free",
+        "oracle_type": "CHAR(16 CHAR)"
+      },
+      "target_semantics": {
+        "canonical_source_type": "CHAR"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "no-policy-required",
+      "evidence_required": [
+        "catalog-and-boundary-values"
+      ],
+      "item_id": "oracle-source-column:AUTH_TS",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "oracle-26ai-free",
+        "oracle_type": "TIMESTAMP(6)"
+      },
+      "target_semantics": {
+        "canonical_source_type": "TIMESTAMP"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-and-padding-profile",
+        "approved-null-policy"
+      ],
+      "item_id": "oracle-source-column:AUTH_TYPE",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "oracle-26ai-free",
+        "oracle_type": "CHAR(4 CHAR)"
+      },
+      "target_semantics": {
+        "canonical_source_type": "CHAR"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-and-padding-profile",
+        "approved-null-policy"
+      ],
+      "item_id": "oracle-source-column:CARD_EXPIRY_DATE",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "oracle-26ai-free",
+        "oracle_type": "CHAR(4 CHAR)"
+      },
+      "target_semantics": {
+        "canonical_source_type": "CHAR"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-and-padding-profile",
+        "approved-null-policy"
+      ],
+      "item_id": "oracle-source-column:MESSAGE_TYPE",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "oracle-26ai-free",
+        "oracle_type": "CHAR(6 CHAR)"
+      },
+      "target_semantics": {
+        "canonical_source_type": "CHAR"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-and-padding-profile",
+        "approved-null-policy"
+      ],
+      "item_id": "oracle-source-column:MESSAGE_SOURCE",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "oracle-26ai-free",
+        "oracle_type": "CHAR(6 CHAR)"
+      },
+      "target_semantics": {
+        "canonical_source_type": "CHAR"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-and-padding-profile",
+        "approved-null-policy"
+      ],
+      "item_id": "oracle-source-column:AUTH_ID_CODE",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "oracle-26ai-free",
+        "oracle_type": "CHAR(6 CHAR)"
+      },
+      "target_semantics": {
+        "canonical_source_type": "CHAR"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-and-padding-profile",
+        "approved-null-policy"
+      ],
+      "item_id": "oracle-source-column:AUTH_RESP_CODE",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "oracle-26ai-free",
+        "oracle_type": "CHAR(2 CHAR)"
+      },
+      "target_semantics": {
+        "canonical_source_type": "CHAR"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-and-padding-profile",
+        "approved-null-policy"
+      ],
+      "item_id": "oracle-source-column:AUTH_RESP_REASON",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "oracle-26ai-free",
+        "oracle_type": "CHAR(4 CHAR)"
+      },
+      "target_semantics": {
+        "canonical_source_type": "CHAR"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-and-padding-profile",
+        "approved-null-policy"
+      ],
+      "item_id": "oracle-source-column:PROCESSING_CODE",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "oracle-26ai-free",
+        "oracle_type": "CHAR(6 CHAR)"
+      },
+      "target_semantics": {
+        "canonical_source_type": "CHAR"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "no-policy-required",
+      "evidence_required": [
+        "catalog-and-boundary-values"
+      ],
+      "item_id": "oracle-source-column:TRANSACTION_AMT",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "oracle-26ai-free",
+        "oracle_type": "NUMBER(12,2)"
+      },
+      "target_semantics": {
+        "canonical_source_type": "DECIMAL"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "no-policy-required",
+      "evidence_required": [
+        "catalog-and-boundary-values"
+      ],
+      "item_id": "oracle-source-column:APPROVED_AMT",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "oracle-26ai-free",
+        "oracle_type": "NUMBER(12,2)"
+      },
+      "target_semantics": {
+        "canonical_source_type": "DECIMAL"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-and-padding-profile",
+        "approved-null-policy"
+      ],
+      "item_id": "oracle-source-column:MERCHANT_CATAGORY_CODE",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "oracle-26ai-free",
+        "oracle_type": "CHAR(4 CHAR)"
+      },
+      "target_semantics": {
+        "canonical_source_type": "CHAR"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-and-padding-profile",
+        "approved-null-policy"
+      ],
+      "item_id": "oracle-source-column:ACQR_COUNTRY_CODE",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "oracle-26ai-free",
+        "oracle_type": "CHAR(3 CHAR)"
+      },
+      "target_semantics": {
+        "canonical_source_type": "CHAR"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "no-policy-required",
+      "evidence_required": [
+        "catalog-and-boundary-values"
+      ],
+      "item_id": "oracle-source-column:POS_ENTRY_MODE",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "oracle-26ai-free",
+        "oracle_type": "NUMBER(5,0)"
+      },
+      "target_semantics": {
+        "canonical_source_type": "SMALLINT"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-and-padding-profile",
+        "approved-null-policy"
+      ],
+      "item_id": "oracle-source-column:MERCHANT_ID",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "oracle-26ai-free",
+        "oracle_type": "CHAR(15 CHAR)"
+      },
+      "target_semantics": {
+        "canonical_source_type": "CHAR"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-and-padding-profile",
+        "approved-null-policy"
+      ],
+      "item_id": "oracle-source-column:MERCHANT_NAME",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "oracle-26ai-free",
+        "oracle_type": "VARCHAR2(22 CHAR)"
+      },
+      "target_semantics": {
+        "canonical_source_type": "VARCHAR"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-and-padding-profile",
+        "approved-null-policy"
+      ],
+      "item_id": "oracle-source-column:MERCHANT_CITY",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "oracle-26ai-free",
+        "oracle_type": "CHAR(13 CHAR)"
+      },
+      "target_semantics": {
+        "canonical_source_type": "CHAR"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-and-padding-profile",
+        "approved-null-policy"
+      ],
+      "item_id": "oracle-source-column:MERCHANT_STATE",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "oracle-26ai-free",
+        "oracle_type": "CHAR(2 CHAR)"
+      },
+      "target_semantics": {
+        "canonical_source_type": "CHAR"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-and-padding-profile",
+        "approved-null-policy"
+      ],
+      "item_id": "oracle-source-column:MERCHANT_ZIP",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "oracle-26ai-free",
+        "oracle_type": "CHAR(9 CHAR)"
+      },
+      "target_semantics": {
+        "canonical_source_type": "CHAR"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-and-padding-profile",
+        "approved-null-policy"
+      ],
+      "item_id": "oracle-source-column:TRANSACTION_ID",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "oracle-26ai-free",
+        "oracle_type": "CHAR(15 CHAR)"
+      },
+      "target_semantics": {
+        "canonical_source_type": "CHAR"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-and-padding-profile",
+        "approved-null-policy"
+      ],
+      "item_id": "oracle-source-column:MATCH_STATUS",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "oracle-26ai-free",
+        "oracle_type": "CHAR(1 CHAR)"
+      },
+      "target_semantics": {
+        "canonical_source_type": "CHAR"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-and-padding-profile",
+        "approved-null-policy"
+      ],
+      "item_id": "oracle-source-column:AUTH_FRAUD",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "oracle-26ai-free",
+        "oracle_type": "CHAR(1 CHAR)"
+      },
+      "target_semantics": {
+        "canonical_source_type": "CHAR"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "no-policy-required",
+      "evidence_required": [
+        "catalog-and-boundary-values"
+      ],
+      "item_id": "oracle-source-column:FRAUD_RPT_DATE",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "oracle-26ai-free",
+        "oracle_type": "DATE"
+      },
+      "target_semantics": {
+        "canonical_source_type": "DATE"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "no-policy-required",
+      "evidence_required": [
+        "catalog-and-boundary-values"
+      ],
+      "item_id": "oracle-source-column:ACCT_ID",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "oracle-26ai-free",
+        "oracle_type": "NUMBER(11,0)"
+      },
+      "target_semantics": {
+        "canonical_source_type": "DECIMAL"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "no-policy-required",
+      "evidence_required": [
+        "catalog-and-boundary-values"
+      ],
+      "item_id": "oracle-source-column:CUST_ID",
+      "scope": "source-column-to-canonical-type",
+      "source_semantics": {
+        "dialect": "oracle-26ai-free",
+        "oracle_type": "NUMBER(9,0)"
+      },
+      "target_semantics": {
+        "canonical_source_type": "DECIMAL"
+      }
+    },
+    {
+      "classification": "exact",
+      "decision": "no-policy-required",
+      "evidence_required": [
+        "catalog-precision-scale"
+      ],
+      "item_id": "oracle-source-behavior:number-precision-scale",
+      "scope": "number-precision-scale",
+      "source_semantics": {
+        "dialect": "oracle-26ai-free",
+        "requires_observation": true
+      },
+      "target_semantics": {
+        "contract": "lightyear-database-semantic-core",
+        "dialect": "postgresql-16"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "date-time-boundary-cases"
+      ],
+      "item_id": "oracle-source-behavior:date-includes-time",
+      "scope": "date-includes-time",
+      "source_semantics": {
+        "dialect": "oracle-26ai-free",
+        "requires_observation": true
+      },
+      "target_semantics": {
+        "contract": "lightyear-database-semantic-core",
+        "dialect": "postgresql-16"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "fractional-second-profile"
+      ],
+      "item_id": "oracle-source-behavior:timestamp-precision",
+      "scope": "timestamp-precision",
+      "source_semantics": {
+        "dialect": "oracle-26ai-free",
+        "requires_observation": true
+      },
+      "target_semantics": {
+        "contract": "lightyear-database-semantic-core",
+        "dialect": "postgresql-16"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "empty-string-profile",
+        "approved-null-policy"
+      ],
+      "item_id": "oracle-source-behavior:empty-string-is-null",
+      "scope": "empty-string-is-null",
+      "source_semantics": {
+        "dialect": "oracle-26ai-free",
+        "requires_observation": true
+      },
+      "target_semantics": {
+        "contract": "lightyear-database-semantic-core",
+        "dialect": "postgresql-16"
+      }
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "governed-normalization",
+      "evidence_required": [
+        "quoted-identifier-inventory"
+      ],
+      "item_id": "oracle-source-behavior:identifier-case",
+      "scope": "identifier-case",
+      "source_semantics": {
+        "dialect": "oracle-26ai-free",
+        "requires_observation": true
+      },
+      "target_semantics": {
+        "contract": "lightyear-database-semantic-core",
+        "dialect": "postgresql-16"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "concurrent-oracle-postgresql-probes",
+        "approved-isolation-policy"
+      ],
+      "item_id": "oracle-source-behavior:transaction-isolation",
+      "scope": "transaction-isolation",
+      "source_semantics": {
+        "dialect": "oracle-26ai-free",
+        "requires_observation": true
+      },
+      "target_semantics": {
+        "contract": "lightyear-database-semantic-core",
+        "dialect": "postgresql-16"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "authorized-logminer-or-xstream-capture",
+        "restart-test"
+      ],
+      "item_id": "oracle-source-behavior:redo-scn-resume",
+      "scope": "redo-scn-resume",
+      "source_semantics": {
+        "dialect": "oracle-26ai-free",
+        "requires_observation": true
+      },
+      "target_semantics": {
+        "contract": "lightyear-database-semantic-core",
+        "dialect": "postgresql-16"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "separate-ddl-change-plan"
+      ],
+      "item_id": "oracle-source-behavior:ddl-cdc",
+      "scope": "ddl-cdc",
+      "source_semantics": {
+        "dialect": "oracle-26ai-free",
+        "requires_observation": true
+      },
+      "target_semantics": {
+        "contract": "lightyear-database-semantic-core",
+        "dialect": "postgresql-16"
+      }
+    },
+    {
+      "classification": "lossy",
+      "decision": "unresolved",
+      "evidence_required": [
+        "sequence-inventory-and-cutover-policy"
+      ],
+      "item_id": "oracle-source-behavior:sequence-and-identity-state",
+      "scope": "sequence-and-identity-state",
+      "source_semantics": {
+        "dialect": "oracle-26ai-free",
+        "requires_observation": true
+      },
+      "target_semantics": {
+        "contract": "lightyear-database-semantic-core",
+        "dialect": "postgresql-16"
+      }
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "unresolved",
+      "evidence_required": [
+        "procedure-qualification-receipt",
+        "native-differential-execution"
+      ],
+      "item_id": "oracle-source-behavior:stored-procedure-subset",
+      "scope": "stored-procedure-subset",
+      "source_semantics": {
+        "dialect": "oracle-26ai-free",
+        "requires_observation": true
+      },
+      "target_semantics": {
+        "contract": "lightyear-database-semantic-core",
+        "dialect": "postgresql-16"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "separate-package-state-qualification"
+      ],
+      "item_id": "oracle-source-behavior:packages-and-package-state",
+      "scope": "packages-and-package-state",
+      "source_semantics": {
+        "dialect": "oracle-26ai-free",
+        "requires_observation": true
+      },
+      "target_semantics": {
+        "contract": "lightyear-database-semantic-core",
+        "dialect": "postgresql-16"
+      }
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-from-claim-scope",
+      "evidence_required": [
+        "separate-transaction-qualification"
+      ],
+      "item_id": "oracle-source-behavior:autonomous-transactions",
+      "scope": "autonomous-transactions",
+      "source_semantics": {
+        "dialect": "oracle-26ai-free",
+        "requires_observation": true
+      },
+      "target_semantics": {
+        "contract": "lightyear-database-semantic-core",
+        "dialect": "postgresql-16"
+      }
+    }
+  ],
+  "equivalence_blocked": true,
+  "ledger_type": "lightyear-oracle-source-compatibility-ledger",
+  "production_ready": false,
+  "schema_version": "1.0",
+  "source_model_sha256": "fb59dfc8f78bd088f18f2f2167c457c887f3928e10264f05b3ac5482ec8a6664",
+  "statistics": {
+    "exact": 8,
+    "lossy": 1,
+    "normalized-equivalent": 3,
+    "policy-decision-required": 23,
+    "unsupported": 3
+  }
+}

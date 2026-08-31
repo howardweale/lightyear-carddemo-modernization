@@ -1,5 +1,5 @@
 param(
-  [ValidateSet("build", "verify", "semantic-core", "oracle-postgresql-proof", "stored-logic", "db2-semantic", "live", "live-postgres", "live-oracle", "live-all", "sign")][string]$Command = "verify",
+  [ValidateSet("build", "verify", "semantic-core", "oracle-postgresql-proof", "stored-logic", "db2-semantic", "oracle-source", "live", "live-postgres", "live-oracle", "live-all", "sign")][string]$Command = "verify",
   [string]$LegacyRoot = $env:CARDDEMO_UPSTREAM_ROOT
 )
 $ErrorActionPreference = "Stop"
@@ -47,6 +47,7 @@ if ($Command -eq "build") {
   Run-Python -m lightyear_data verify-oracle-postgresql-proof --project-root $ProjectDir
   Run-Python -m lightyear_data verify-stored-logic-qualification --project-root $ProjectDir
   Run-Python -m lightyear_data verify-db2-semantic-adapter --project-root $ProjectDir
+  Run-Python -m lightyear_data verify-oracle-source-qualification --project-root $ProjectDir
   Write-Host "AUTHFRDS database semantic core, adapters, ledger, fixtures, and receipts are deterministic."
 } elseif ($Command -eq "semantic-core") {
   Run-Python -m lightyear_data verify-semantic-core --project-root $ProjectDir
@@ -56,6 +57,8 @@ if ($Command -eq "build") {
   Run-Python -m lightyear_data verify-stored-logic-qualification --project-root $ProjectDir
 } elseif ($Command -eq "db2-semantic") {
   Run-Python -m lightyear_data verify-db2-semantic-adapter --project-root $ProjectDir
+} elseif ($Command -eq "oracle-source") {
+  Run-Python -m lightyear_data verify-oracle-source-qualification --project-root $ProjectDir
 } elseif ($Command -in @("live", "live-postgres")) {
   Run-Python -m lightyear_data verify-docker --target postgresql --project-root $ProjectDir
 } elseif ($Command -eq "live-oracle") {

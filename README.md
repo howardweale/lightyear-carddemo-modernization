@@ -1,6 +1,26 @@
 # FactoryDark.ai CardDemo Modernization Factory
 
-Release: **v0.42.0 — Integrated Pilot Qualification**
+Release: **v0.43.0 — Oracle source and stored-procedure qualification**
+
+v0.43 replaces the earlier Oracle-shaped side of the bounded database proof with a genuine
+semantic-core `SourceAdapter`. It adds contract-bound Oracle schema discovery, privacy-preserving
+profiling, exact extraction contracts, SCN- and event-bound CDC resume, explicit transaction
+capabilities, a five-class source compatibility ledger, and an eight-gate Oracle-to-PostgreSQL
+source qualification.
+
+Stored procedures are now a separately governed supported subset. Four declared PL/SQL procedures
+cover `SELECT INTO`, `NO_DATA_FOUND`, updates and `SQL%ROWCOUNT`, decimal branches and application
+errors, and `NVL`/Oracle empty-string behavior through 20 deterministic cases. Dynamic SQL,
+autonomous transactions, package state, database links, and procedure-owned commits fail closed.
+Native Oracle/PostgreSQL execution, live redo, general stored-logic completion, database migration
+completion, and production readiness remain false.
+
+```bash
+./data-modernization.sh oracle-source
+PYTHONPATH=src python3 -m lightyear_data verify-oracle-source-qualification
+```
+
+Previous milestone: **v0.42.0 — Integrated Pilot Qualification**
 
 v0.42 composes the independently qualified COBOL, PL/I, Db2, JCL, and HLASM development subsets
 into the exact five-cell `ACCOUNTV` pilot selected in MS #32. A graph-bound 40-case corpus covers

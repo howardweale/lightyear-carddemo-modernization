@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.43.0 — 2026-08-31
+
+- Added a genuine Oracle semantic-core `SourceAdapter` with deterministic source discovery,
+  privacy-preserving profiling, contract-bound extraction, content-bound SCN resume, and explicit
+  fail-closed transaction capabilities.
+- Added a 38-entry Oracle source compatibility ledger covering all 26 AUTHFRDS columns and Oracle
+  number, date/time, empty-string, identifier, transaction, redo, DDL, sequence, procedure,
+  package-state, and autonomous-transaction boundaries using all five governing classes.
+- Added four bounded Oracle PL/SQL procedures and deterministic PL/pgSQL translations covering
+  `SELECT INTO`, `NO_DATA_FOUND`, UPDATE and `SQL%ROWCOUNT`, decimal branches and application
+  errors, and `NVL`/empty-string behavior.
+- Added a 20-case stored-procedure corpus covering results, side effects, row counts, exception
+  mapping, numeric thresholds, null/empty/space behavior, type failures, duplicate rows, and
+  mutation boundaries.
+- Added explicit fail-closed exclusions for dynamic SQL, autonomous transactions, package state,
+  database links, and procedure-owned commits.
+- Bound the source adapter, procedure conformance and five-class ledgers into eight independent
+  Oracle-to-PostgreSQL gates; bounded development and the supported procedure subset pass while
+  live source/target, redo, native procedure, full stored-logic, database-completion, and production
+  claims remain false.
+
 ## 0.42.0 — 2026-08-31
 
 - Bound the exact five-cell `ACCOUNTV` pilot selected in MS #32 to its six source files, five

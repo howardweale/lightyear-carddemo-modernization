@@ -31,7 +31,13 @@ const state = {
   positions: new Map(),
   zoom: { x: 0, y: 0, scale: 1 },
   drag: null,
+  verifierToken: "",
+  comboboxes: new Map(),
+  fullSelection: null,
+  densityBypass: false,
 };
+
+const READABLE_NODE_LIMIT = 70;
 
 const colors = {
   program: "var(--program)",
@@ -51,7 +57,7 @@ const groups = {
   dataset: "data", db2_table: "data", db2_column: "structure", db2_index: "data",
   db2_constraint: "structure", db2_dcl: "structure", db2_sql_statement: "program",
   business_rule: "rule", modernization_workload: "rule",
-  java_type: "modern", java_method: "modern", software_dependency: "modern",
+  java_type: "modern", java_method: "modern", java_package: "modern", software_dependency: "modern",
   test_case: "verify", verification_scenario: "verify",
 };
 
@@ -62,16 +68,21 @@ async function api(path, params = {}) {
   Object.entries(params).forEach(([key, value]) => {
     if (value !== "" && value !== undefined && value !== null) query.set(key, value);
   });
-  const response = await fetch(`${path}?${query}`);
+  const headers = state.verifierToken
+    ? { Authorization: `Bearer ${state.verifierToken}` }
+    : {};
+  const response = await fetch(`${path}?${query}`, { headers });
   const payload = await response.json();
   if (!response.ok) throw new Error(payload.error || `Request failed: ${response.status}`);
   return payload;
 }
 
 async function apiPost(path, body) {
+  const headers = { "Content-Type": "application/json" };
+  if (state.verifierToken) headers.Authorization = `Bearer ${state.verifierToken}`;
   const response = await fetch(path, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers,
     body: JSON.stringify(body),
   });
   const payload = await response.json();
@@ -84,6 +95,136 @@ function formatNumber(value) {
 }
 
 function groupFor(kind) { return groups[kind] || "other"; }
+
+const comboboxDefinitions = [
+  ["customer-context", "Company"],
+  ["problem-context", "Business problem"],
+  ["workload-context", "Workload"],
+  ["technology-scope", "Scope"],
+  ["operator-lens", "Lens"],
+];
+
+function initializeComboboxes() {
+  comboboxDefinitions.forEach(([id, label]) => enhanceSelect(id, label));
+  document.addEventListener("click", (event) => {
+    state.comboboxes.forEach((item) => {
+      if (!item.widget.contains(event.target)) closeCombobox(item);
+    });
+    if (
+      !$("estate-popover").hidden
+      && !$("estate-popover").contains(event.target)
+      && !$("estate-trigger").contains(event.target)
+    ) toggleEstatePopover(false);
+  });
+}
+
+function enhanceSelect(id, labelText) {
+  const select = $(id);
+  select.classList.add("native-select-proxy");
+  select.tabIndex = -1;
+  const widget = document.createElement("div");
+  widget.className = "combobox";
+  const trigger = document.createElement("button");
+  trigger.type = "button";
+  trigger.className = "combobox-trigger";
+  trigger.setAttribute("role", "combobox");
+  trigger.setAttribute("aria-haspopup", "listbox");
+  trigger.setAttribute("aria-expanded", "false");
+  const list = document.createElement("div");
+  list.id = `${id}-listbox`;
+  list.className = "combobox-list";
+  list.setAttribute("role", "listbox");
+  list.hidden = true;
+  trigger.setAttribute("aria-controls", list.id);
+  widget.append(trigger, list);
+  select.after(widget);
+  const item = { id, labelText, select, widget, trigger, list };
+  state.comboboxes.set(id, item);
+  trigger.addEventListener("click", () => toggleCombobox(item));
+  trigger.addEventListener("keydown", (event) => {
+    if (["ArrowDown", "ArrowUp", "Enter", " "].includes(event.key)) {
+      event.preventDefault();
+      openCombobox(item);
+      list.querySelector('[role="option"]:not([aria-disabled="true"])')?.focus();
+    } else if (event.key === "Escape") {
+      closeCombobox(item);
+    }
+  });
+  refreshCombobox(id);
+}
+
+function refreshCombobox(id) {
+  const item = state.comboboxes.get(id);
+  if (!item) return;
+  const selected = item.select.selectedOptions[0];
+  item.trigger.replaceChildren();
+  const label = document.createElement("span");
+  label.className = "combobox-label";
+  label.textContent = item.labelText;
+  const value = document.createElement("span");
+  value.className = "combobox-value";
+  value.textContent = selected?.textContent || "Choose…";
+  const arrow = document.createElement("span");
+  arrow.className = "combobox-arrow";
+  arrow.textContent = "⌄";
+  arrow.setAttribute("aria-hidden", "true");
+  item.trigger.append(label, value, arrow);
+  item.list.replaceChildren();
+  [...item.select.options].forEach((option) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.setAttribute("role", "option");
+    button.setAttribute("aria-selected", String(option.value === item.select.value));
+    button.setAttribute("aria-disabled", String(option.disabled));
+    button.disabled = option.disabled;
+    button.textContent = option.textContent;
+    button.addEventListener("click", () => {
+      item.select.value = option.value;
+      refreshCombobox(id);
+      closeCombobox(item);
+      item.select.dispatchEvent(new Event("change", { bubbles: true }));
+    });
+    button.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closeCombobox(item);
+        item.trigger.focus();
+      }
+    });
+    item.list.appendChild(button);
+  });
+}
+
+function openCombobox(item) {
+  state.comboboxes.forEach((candidate) => {
+    if (candidate !== item) closeCombobox(candidate);
+  });
+  item.list.hidden = false;
+  item.trigger.setAttribute("aria-expanded", "true");
+}
+
+function closeCombobox(item) {
+  item.list.hidden = true;
+  item.trigger.setAttribute("aria-expanded", "false");
+}
+
+function toggleCombobox(item) {
+  if (item.list.hidden) openCombobox(item);
+  else closeCombobox(item);
+}
+
+function toggleEstatePopover(open) {
+  $("estate-popover").hidden = !open;
+  $("estate-trigger").setAttribute("aria-expanded", String(open));
+}
+
+function renderEstateTrigger() {
+  const company = selectedOperatorCompany();
+  const problem = selectedOperatorProblem();
+  $("estate-trigger-value").textContent = company?.name || "Choose estate";
+  $("estate-trigger").title = problem && company
+    ? `${company.name} · ${problem.name}`
+    : "Choose estate";
+}
 
 async function initialize() {
   try {
@@ -100,6 +241,7 @@ async function initialize() {
     $("status-text").textContent = "Control Tower loaded";
     $("live-endpoint").textContent = `Live endpoint · ${window.location.host}`;
     populateOperatorContext();
+    initializeComboboxes();
     populatePerspectives();
     populateLegend();
     configureChat();
@@ -129,9 +271,10 @@ function renderEstateBoundary() {
   const boundary = $("estate-boundary");
   boundary.hidden = false;
   const fragments = state.meta.fragments || [];
-  $("estate-fragments").textContent = `${fragments.length} validated extension fragment${fragments.length === 1 ? "" : "s"}`;
+  $("estate-fragments").textContent = `${fragments.length} validated`;
   $("estate-base-hash").textContent = state.meta.canonical_content_sha256.slice(0, 10);
   $("estate-composite-hash").textContent = state.meta.content_sha256.slice(0, 10);
+  $("metric-hash").title = `Snapshot: ${state.meta.content_sha256}\nCanonical base: ${state.meta.canonical_content_sha256}\nComposite: ${state.meta.content_sha256}`;
   $("estate-boundary-statement").textContent = state.meta.claim_boundary?.statement || "Read-only composition of separately governed evidence.";
 }
 
@@ -198,6 +341,7 @@ function populateOperatorContext(preferred = {}) {
   });
   if ([...scopes.options].some((item) => item.value === preferred.scopeId)) scopes.value = preferred.scopeId;
   if ([...lenses.options].some((item) => item.value === preferred.lensId)) lenses.value = preferred.lensId;
+  comboboxDefinitions.forEach(([id]) => refreshCombobox(id));
   renderOperatorContext();
   renderTraceCoverage();
 }
@@ -214,6 +358,7 @@ function populateProblemOptions(preferredProblemId, preferredWorkloadId) {
       problems.appendChild(option);
     });
   if ([...problems.options].some((item) => item.value === preferredProblemId)) problems.value = preferredProblemId;
+  refreshCombobox("problem-context");
   populateWorkloadOptions(preferredWorkloadId);
 }
 
@@ -231,6 +376,7 @@ function populateWorkloadOptions(preferredWorkloadId) {
       workloads.appendChild(option);
     });
   if ([...workloads.options].some((item) => item.value === preferredWorkloadId)) workloads.value = preferredWorkloadId;
+  refreshCombobox("workload-context");
 }
 
 function selectedOperatorCompany() {
@@ -264,6 +410,7 @@ function renderOperatorContext() {
   $("operator-context-path").textContent = `${customer.name} / ${problem.name} / ${workload.name.replace(/^CardDemo\s+/i, "")}`;
   $("operator-context-description").textContent = `${workload.description} ${scope.description} ${lens.description}`;
   $("customer-evidence-badge").textContent = `${customer.evidence_class} evidence`;
+  renderEstateTrigger();
 }
 
 async function activateSelectedWorkload(syncScope = false) {
@@ -340,12 +487,16 @@ function renderTraceCoverage() {
 }
 
 function bindControls() {
+  $("estate-trigger").addEventListener("click", () => toggleEstatePopover($("estate-popover").hidden));
+  $("close-estate").addEventListener("click", () => toggleEstatePopover(false));
   $("customer-context").addEventListener("change", async () => {
     populateProblemOptions();
+    refreshCombobox("customer-context");
     await activateSelectedWorkload(true);
   });
   $("problem-context").addEventListener("change", async () => {
     populateWorkloadOptions();
+    refreshCombobox("problem-context");
     await activateSelectedWorkload(true);
   });
   $("workload-context").addEventListener("change", async () => {
@@ -372,20 +523,30 @@ function bindControls() {
     if (root) loadNeighborhood(root, Number($("depth").value));
   });
   $("audience").addEventListener("change", async () => {
-    $("search").value = "";
-    $("search-results").replaceChildren();
-    resetChat();
-    await loadPerspective();
-    await refreshWorkloadBoundary();
+    if ($("audience").value === "verifier" && !state.verifierToken) {
+      $("audience").value = "implementer";
+      openVerifierDialog();
+      return;
+    }
+    await applyAudienceChange();
   });
   $("fit").addEventListener("click", fitGraph);
   $("focus-node").addEventListener("click", () => loadNeighborhood(state.selectedId));
-  $("ask-node").addEventListener("click", () => {
-    switchRightPanel("chat");
-    $("chat-question").focus();
+  $("open-proof-run").addEventListener("click", async () => {
+    switchRightPanel("factory");
+    await loadFactoryRuns(true);
   });
   $("trace-start-node").addEventListener("click", () => chooseTraceEndpoint("start", state.inspectedNode));
-  $("trace-end-node").addEventListener("click", () => chooseTraceEndpoint("end", state.inspectedNode));
+  $("density-collapse").addEventListener("click", () => applyDensityReduction("packages"));
+  $("density-rules").addEventListener("click", () => applyDensityReduction("rules"));
+  $("density-bridges").addEventListener("click", () => applyDensityReduction("bridges"));
+  $("density-render-all").addEventListener("click", () => {
+    state.densityBypass = true;
+    renderGraph();
+  });
+  $("density-reset").addEventListener("click", restoreFullSelection);
+  $("verifier-form").addEventListener("submit", unlockVerifierView);
+  $("cancel-verifier").addEventListener("click", closeVerifierDialog);
   $("ask-edge").addEventListener("click", () => {
     switchRightPanel("chat");
     $("chat-question").value = "Why does this relationship exist?";
@@ -482,6 +643,43 @@ function bindControls() {
     }
   });
   bindPanZoom();
+}
+
+function openVerifierDialog() {
+  $("verifier-error").textContent = "";
+  $("verifier-token").value = "";
+  $("verifier-dialog").showModal();
+  $("verifier-token").focus();
+}
+
+function closeVerifierDialog() {
+  $("verifier-dialog").close();
+  $("audience").value = "implementer";
+}
+
+async function unlockVerifierView(event) {
+  event.preventDefault();
+  const token = $("verifier-token").value.trim();
+  if (!token) return;
+  state.verifierToken = token;
+  try {
+    await api("/api/search", { q: "INTCALC", audience: "verifier", limit: 1 });
+    $("audience").value = "verifier";
+    $("verifier-dialog").close();
+    await applyAudienceChange();
+  } catch (error) {
+    state.verifierToken = "";
+    $("verifier-error").textContent = "That token was not accepted by this Control Tower session.";
+    $("verifier-token").select();
+  }
+}
+
+async function applyAudienceChange() {
+  $("search").value = "";
+  $("search-results").replaceChildren();
+  resetChat();
+  await loadPerspective();
+  await refreshWorkloadBoundary();
 }
 
 function renderLiveStatus() {
@@ -660,12 +858,15 @@ async function loadPerspective() {
 async function loadNeighborhood(nodeId, overrideDepth) {
   try {
     const depth = overrideDepth || Number($("depth").value);
-    state.selection = await api("/api/neighborhood", {
+    const selection = await api("/api/neighborhood", {
       node: nodeId,
       depth,
       audience: $("audience").value,
       limit: 220,
     });
+    state.selection = selection;
+    state.fullSelection = selection;
+    state.densityBypass = false;
     state.selectedId = nodeId;
     state.selectedEdgeId = null;
     state.edgeDetail = null;
@@ -927,11 +1128,118 @@ async function runSearch() {
   }
 }
 
+function applyDensityReduction(mode) {
+  if (!state.fullSelection) return;
+  if (mode === "packages") state.selection = collapseImplementationPackages(state.fullSelection);
+  else if (mode === "rules") state.selection = rulesAndProofSelection(state.fullSelection);
+  else state.selection = legacyModernBridgeSelection(state.fullSelection);
+  state.densityBypass = true;
+  $("density-reset").hidden = false;
+  $("selection-count").textContent = `${state.selection.nodes.length} nodes · ${state.selection.edges.length} links · reduced view`;
+  renderGraph();
+}
+
+function restoreFullSelection() {
+  if (!state.fullSelection) return;
+  state.selection = state.fullSelection;
+  state.densityBypass = false;
+  $("density-reset").hidden = true;
+  $("selection-count").textContent = `${state.selection.nodes.length} nodes · ${state.selection.edges.length} links`;
+  renderGraph();
+}
+
+function collapseImplementationPackages(selection) {
+  const packages = new Map();
+  selection.nodes.forEach((node) => {
+    if (!["java_type", "java_method"].includes(node.kind)) return;
+    const qualified = node.id.replace(/^modern:java-(?:type|method):/, "").split("#")[0];
+    const packageName = qualified.split(".").slice(0, -1).join(".") || "java";
+    if (!packages.has(packageName)) packages.set(packageName, []);
+    packages.get(packageName).push(node);
+  });
+  const replacement = new Map();
+  const collapsed = [];
+  packages.forEach((members, packageName) => {
+    if (members.length < 2) return;
+    const id = `collapsed:java-package:${packageName}`;
+    members.forEach((member) => replacement.set(member.id, id));
+    collapsed.push({
+      id,
+      kind: "java_package",
+      name: `${packageName.split(".").pop()} ×${members.length}`,
+      operator_platform: "Java",
+      collapsed_members: members,
+      properties: { statement: `${members.length} Java types and methods collapsed from ${packageName}.` },
+    });
+  });
+  const nodes = selection.nodes.filter((node) => !replacement.has(node.id)).concat(collapsed);
+  const edgeKeys = new Set();
+  const edges = [];
+  selection.edges.forEach((edge) => {
+    const source = replacement.get(edge.source) || edge.source;
+    const target = replacement.get(edge.target) || edge.target;
+    if (source === target) return;
+    const key = `${source}\u0000${edge.relation}\u0000${target}`;
+    if (edgeKeys.has(key)) return;
+    edgeKeys.add(key);
+    edges.push({ ...edge, id: `collapsed:${edges.length}:${edge.relation}`, source, target });
+  });
+  return { ...selection, root: replacement.get(selection.root) || selection.root, nodes, edges };
+}
+
+function rulesAndProofSelection(selection) {
+  const keep = new Set(selection.nodes
+    .filter((node) => ["rule", "verify"].includes(groupFor(node.kind)) || node.id === selection.root)
+    .map((node) => node.id));
+  selection.edges.forEach((edge) => {
+    if (keep.has(edge.source) || keep.has(edge.target)) {
+      keep.add(edge.source);
+      keep.add(edge.target);
+    }
+  });
+  return inducedSelection(selection, keep);
+}
+
+function legacyModernBridgeSelection(selection) {
+  const byId = new Map(selection.nodes.map((node) => [node.id, node]));
+  const legacy = new Set(["program", "structure", "data"]);
+  const modern = new Set(["modern", "rule", "verify"]);
+  const keep = new Set([selection.root]);
+  selection.edges.forEach((edge) => {
+    const sourceGroup = groupFor(byId.get(edge.source)?.kind);
+    const targetGroup = groupFor(byId.get(edge.target)?.kind);
+    if ((legacy.has(sourceGroup) && modern.has(targetGroup)) || (modern.has(sourceGroup) && legacy.has(targetGroup))) {
+      keep.add(edge.source);
+      keep.add(edge.target);
+    }
+  });
+  return inducedSelection(selection, keep);
+}
+
+function inducedSelection(selection, keep) {
+  return {
+    ...selection,
+    nodes: selection.nodes.filter((node) => keep.has(node.id)),
+    edges: selection.edges.filter((edge) => keep.has(edge.source) && keep.has(edge.target)),
+  };
+}
+
 function renderGraph() {
   $("edges").replaceChildren();
   $("nodes").replaceChildren();
   state.positions.clear();
   const graph = $("graph");
+  if (state.selection.nodes.length > READABLE_NODE_LIMIT && !state.densityBypass) {
+    graph.hidden = true;
+    $("density-guard").hidden = false;
+    $("density-count").textContent = formatNumber(state.selection.nodes.length);
+    const collapsed = collapseImplementationPackages(state.selection);
+    const reduction = state.selection.nodes.length - collapsed.nodes.length;
+    $("density-collapse").textContent = `Collapse implementation packages (−${reduction})`;
+    return;
+  }
+  graph.hidden = false;
+  $("density-guard").hidden = true;
   const width = graph.clientWidth || 800;
   const height = graph.clientHeight || 650;
   const nodes = state.selection.nodes;
@@ -982,14 +1290,23 @@ function renderGraph() {
     const title = document.createElementNS(NS, "title");
     title.textContent = `${node.name}\n${node.kind}`;
     circle.appendChild(title);
+    const labelText = shorten(node.name, 30);
+    const pill = document.createElementNS(NS, "rect");
+    pill.classList.add("node-label-pill");
+    pill.setAttribute("x", "9");
+    pill.setAttribute("y", "-8");
+    pill.setAttribute("width", String(Math.max(34, labelText.length * 5.6 + 12)));
+    pill.setAttribute("height", "17");
+    pill.setAttribute("rx", "8.5");
     const label = document.createElementNS(NS, "text");
     label.setAttribute("x", "11");
     label.setAttribute("y", "3.5");
-    label.textContent = shorten(node.name, 30);
-    group.append(circle, label);
+    label.textContent = labelText;
+    group.append(circle, pill, label);
     group.addEventListener("click", (event) => {
       event.stopPropagation();
-      inspectNode(node.id);
+      if (node.collapsed_members) inspectCollapsedPackage(node);
+      else inspectNode(node.id);
     });
     group.addEventListener("pointerdown", startNodeDrag);
     $("nodes").appendChild(group);
@@ -1053,6 +1370,30 @@ function updatePositions() {
   });
 }
 
+function inspectCollapsedPackage(node) {
+  state.inspectedNode = node;
+  state.selectedId = null;
+  state.selectedEdgeId = null;
+  state.edgeDetail = null;
+  $("inspector-placeholder").hidden = true;
+  $("inspector").hidden = false;
+  $("edge-inspector").hidden = true;
+  $("detail-kind").textContent = "collapsed Java package";
+  $("detail-kind").style.background = colors.modern;
+  $("detail-name").textContent = node.name;
+  $("detail-id").textContent = node.id.replace("collapsed:java-package:", "");
+  $("detail-statement").hidden = false;
+  $("detail-statement").textContent = node.properties.statement;
+  renderProperties({ members: node.collapsed_members.map((item) => item.name) });
+  $("detail-evidence").textContent = "Expand the full selection to inspect the source evidence for each member.";
+  renderRuntimeProjection(null, $("detail-runtime"));
+  $("detail-relations").textContent = `${node.collapsed_members.length} implementation members are represented by this package node.`;
+  $("focus-node").disabled = true;
+  $("trace-start-node").disabled = true;
+  $("chat-focus").textContent = `${node.name} · collapsed Java package`;
+  switchRightPanel("inspector");
+}
+
 async function inspectNode(nodeId) {
   try {
     const node = await api("/api/node", { id: nodeId, audience: $("audience").value });
@@ -1060,6 +1401,8 @@ async function inspectNode(nodeId) {
     state.selectedId = nodeId;
     state.selectedEdgeId = null;
     state.edgeDetail = null;
+    $("focus-node").disabled = false;
+    $("trace-start-node").disabled = false;
     document.querySelectorAll(".node").forEach((item) => item.classList.toggle("active", item.dataset.id === nodeId));
     document.querySelectorAll(".edge").forEach((item) => {
       item.classList.toggle("active", item.dataset.source === nodeId || item.dataset.target === nodeId);

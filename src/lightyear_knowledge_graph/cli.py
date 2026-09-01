@@ -256,6 +256,15 @@ def build_parser() -> argparse.ArgumentParser:
         "--evidence-pack", type=Path, default=Path("knowledge/composite/source.pack.json.gz")
     )
     explorer.add_argument("--host", default="127.0.0.1")
+    explorer.add_argument(
+        "--i-understand-this-is-unauthenticated",
+        action="store_true",
+        help="Explicitly allow a non-loopback bind; customer deployments still require SSO/OIDC",
+    )
+    explorer.add_argument(
+        "--verifier-token",
+        help="Use an operator-supplied verifier bearer token instead of generating one",
+    )
     explorer.add_argument("--port", type=int, default=8765)
     explorer.add_argument("--no-browser", action="store_true")
     explorer.add_argument("--factory-runs", type=Path, default=Path("work"))
@@ -421,19 +430,25 @@ def main(argv: list[str] | None = None) -> int:
         return 0 if matches else 1
 
     if args.command == "serve":
-        serve(
-            args.graph,
-            args.viewer_root,
-            args.host,
-            args.port,
-            not args.no_browser,
-            args.ontology,
-            args.evidence_pack,
-            args.factory_runs,
-            args.runtime_snapshot,
-            args.audit_snapshot,
-        )
-        return 0
+        try:
+            serve(
+                args.graph,
+                args.viewer_root,
+                args.host,
+                args.port,
+                not args.no_browser,
+                args.ontology,
+                args.evidence_pack,
+                args.factory_runs,
+                args.runtime_snapshot,
+                args.audit_snapshot,
+                args.i_understand_this_is_unauthenticated,
+                args.verifier_token,
+            )
+            return 0
+        except ValueError as exc:
+            print(f"Control Tower refused to start: {exc}")
+            return 2
 
     payload = load_graph(args.graph)
     if args.command == "export-neo4j":

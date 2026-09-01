@@ -1,6 +1,28 @@
 # FactoryDark.ai CardDemo Modernization Factory
 
-Release: **v0.47.0 — Graph-bound live Evidence Control Tower**
+Release: **v0.47.2 — Control Tower usability and transport hardening**
+
+v0.47.2 closes the independent 1366-pixel and security review of the live Evidence Control Tower.
+Company and business problem now live in an Estate popover while workload, technology scope, and
+lens remain in the working bar as labelled, keyboard-accessible comboboxes. The claim band labels
+its snapshot, entities, relationships, rules, and validated extensions instead of exposing debug-
+style hash soup. Selections above 70 nodes stop at a density guard with package-collapse, rules-and-
+proof, and legacy-to-modern reductions; node labels use readable pills and the workload inspector
+opens the existing proof-run evidence rather than offering only graph navigation.
+
+The local server now refuses every non-loopback bind unless the operator supplies the explicit
+`--i-understand-this-is-unauthenticated` flag. Verifier-audience API requests require a per-session
+bearer token printed in the terminal at startup. Implementer use remains open on loopback, and
+customer deployments must use an approved SSO/OIDC reverse proxy. IBM Plex font subsets are served
+from the repository, eliminating the Google Fonts request in locked-down environments.
+
+```bash
+./live-control-tower.sh serve
+```
+
+Then open `http://127.0.0.1:8765` and use the terminal token only when opening the Verifier view.
+
+Previous release: **v0.47.1 — Approved warm editorial Control Tower visual system**
 
 v0.47 gives the Evidence Control Tower the visual and operational clarity needed for customer and
 executive use. The Knowledge Graph uses the approved warm editorial palette: paper-white work

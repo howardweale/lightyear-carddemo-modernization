@@ -6,7 +6,7 @@
     "recorded_at": "2026-08-30T00:00:00Z",
     "system": "repository-reference-fixture"
   },
-  "assessment_sha256": "7e8cafc82122ccdbc8e4b69e38f916859c944a67f000dae67ae6f6e5618632d3",
+  "assessment_sha256": "1e63a7e82063b0561012fd4de7dd011652afa53a3e88b7006e268a5ca3010bd5",
   "authorization": {
     "factory_dispatch_approved": false,
     "native_execution_approved": false,
@@ -22,7 +22,7 @@
     }
   ],
   "cluster_id": "cluster:6a02c2ea6de7831e",
-  "content_sha256": "b680fea5419ac85b37e3a47f24573c35a6d2a1d7b9a9b020f7e0a8b8c85eb168",
+  "content_sha256": "f64adfe2ed819a987f7ccaaef255dd1b10425c4b784bb7e08da3066969efeeb6",
   "decision": {
     "business_outcomes": [
       "Preserve account authorization behavior while separating language and data concerns.",

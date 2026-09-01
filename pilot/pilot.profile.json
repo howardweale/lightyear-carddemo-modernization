@@ -15,7 +15,7 @@
     "production_ready": false,
     "source_only_pilot": true
   },
-  "content_sha256": "0ae6d52952d9c433c96db0c8677d98620eac969be0830b9203ccc439ad75347c",
+  "content_sha256": "bbfa494d93e00583a83e200440449ab294620c5794ef063017035b55b9db32e1",
   "evidence_artifacts": [
     {
       "id": "pilot-runtime",
@@ -123,7 +123,7 @@
       "id": "audit-dossier",
       "path": "audit/dossiers/carddemo-intcalc-v0.19-demo.json",
       "role": "auditor-projection",
-      "sha256": "ecfb78627f806bea77cf5711eb0f80d6fcf7387d5f2e6d6c82f2e86fd1ef1c65"
+      "sha256": "c3ea49afe75bdbbe0df5a98b8924d75decddf51644173945a6ff3592e9ed4f9e"
     },
     {
       "id": "database-semantic-core",

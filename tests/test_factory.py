@@ -9,8 +9,8 @@ import threading
 import unittest
 from pathlib import Path
 from urllib.parse import urlencode
-from urllib.request import urlopen
-from urllib.request import Request
+from urllib.error import HTTPError
+from urllib.request import Request, urlopen
 
 from lightyear_factory.agents import LocalAgentSet, OpenAIAgentSet
 from lightyear_factory.benchmark import benchmark_work_order, run_mutation_benchmark
@@ -256,7 +256,15 @@ class FactoryTests(unittest.TestCase):
                 query = urlencode(
                     {"id": runs[0]["run_key"], "audience": "verifier"}
                 )
-                with urlopen(f"{base}/api/factory/run?{query}", timeout=3) as response:
+                verifier_url = f"{base}/api/factory/run?{query}"
+                with self.assertRaises(HTTPError) as rejected:
+                    urlopen(verifier_url, timeout=3)
+                self.assertEqual(401, rejected.exception.code)
+                request = Request(
+                    verifier_url,
+                    headers={"Authorization": f"Bearer {server.verifier_token}"},
+                )
+                with urlopen(request, timeout=3) as response:
                     verifier = json.load(response)
                 self.assertFalse(any(item["payload"].get("redacted") for item in verifier["events"]))
             finally:

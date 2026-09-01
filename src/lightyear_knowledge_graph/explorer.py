@@ -1,8 +1,11 @@
 from __future__ import annotations
 
+import hmac
+import ipaddress
 import json
 import mimetypes
 import queue
+import secrets
 import threading
 import webbrowser
 from collections import defaultdict, deque
@@ -30,6 +33,34 @@ from lightyear_control_tower.operational import (
     OperationalMonitor,
     OperationalSource,
 )
+
+
+NON_LOOPBACK_WARNING = (
+    "WARNING: the LIGHTYEAR Control Tower is unauthenticated for implementer views. "
+    "A non-loopback bind exposes graph, source, runtime, and audit evidence to the network."
+)
+
+
+def is_loopback_host(host: str) -> bool:
+    """Return true only for an explicit loopback hostname or address."""
+    normalized = host.strip().casefold().strip("[]")
+    if normalized == "localhost":
+        return True
+    try:
+        return ipaddress.ip_address(normalized).is_loopback
+    except ValueError:
+        return False
+
+
+def validate_bind_host(host: str, allow_unauthenticated_network: bool = False) -> None:
+    if is_loopback_host(host):
+        return
+    if not allow_unauthenticated_network:
+        raise ValueError(
+            f"Refusing non-loopback bind {host!r}. {NON_LOOPBACK_WARNING} "
+            "Pass --i-understand-this-is-unauthenticated only after placing the service "
+            "behind an approved reverse proxy or accepting the exposure explicitly."
+        )
 
 
 DEFAULT_PERSPECTIVES = [
@@ -796,6 +827,7 @@ class ExplorerServer(ThreadingHTTPServer):
         operational_store: OperationalEventStore | None = None,
         graph_path: Path | None = None,
         evidence_pack_path: Path | None = None,
+        verifier_token: str | None = None,
     ) -> None:
         super().__init__(address, ExplorerRequestHandler)
         self.index = index
@@ -805,6 +837,7 @@ class ExplorerServer(ThreadingHTTPServer):
         self.evidence_pack_path = (
             evidence_pack_path or self.graph_path.parent / "evidence" / "source.pack.json.gz"
         ).resolve()
+        self.verifier_token = verifier_token or secrets.token_urlsafe(32)
         self._projection_lock = threading.RLock()
         self._binding_errors: dict[str, str] = {}
         self.chat_service = chat_service or GraphChatService.from_environment(index)
@@ -1109,7 +1142,11 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
         parsed = urlparse(self.path)
         try:
             if parsed.path.startswith("/api/"):
-                self._api(parsed.path, parse_qs(parsed.query))
+                query = parse_qs(parsed.query)
+                if self._value(query, "audience") == "verifier" and not self._verifier_authorized():
+                    self._verifier_required()
+                    return
+                self._api(parsed.path, query)
             else:
                 self._static(parsed.path)
         except KeyError as exc:
@@ -1126,7 +1163,11 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
         parsed = urlparse(self.path)
         try:
             if parsed.path == "/api/chat":
-                self._json(self.server.chat_service.answer(self._request_json()))
+                payload = self._request_json()
+                if payload.get("audience") == "verifier" and not self._verifier_authorized():
+                    self._verifier_required()
+                    return
+                self._json(self.server.chat_service.answer(payload))
                 return
             self._json({"error": f"Unknown API route: {parsed.path}"}, HTTPStatus.NOT_FOUND)
         except KeyError as exc:
@@ -1141,6 +1182,21 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
 
     def log_message(self, format: str, *args: Any) -> None:
         return
+
+    def _verifier_authorized(self) -> bool:
+        supplied = self.headers.get("Authorization", "")
+        expected = f"Bearer {self.server.verifier_token}"
+        return hmac.compare_digest(supplied, expected)
+
+    def _verifier_required(self) -> None:
+        self.send_response(HTTPStatus.UNAUTHORIZED)
+        self.send_header("WWW-Authenticate", 'Bearer realm="LIGHTYEAR verifier"')
+        body = b'{"error":"A valid per-session verifier token is required."}\n'
+        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header("Content-Length", str(len(body)))
+        self.send_header("Cache-Control", "no-store")
+        self.end_headers()
+        self.wfile.write(body)
 
     def _api(self, path: str, query: dict[str, list[str]]) -> None:
         self.server.refresh_live_projections()
@@ -1455,7 +1511,12 @@ def serve(
     factory_runs_path: Path | None = None,
     runtime_snapshot_path: Path | None = None,
     audit_snapshot_path: Path | None = None,
+    allow_unauthenticated_network: bool = False,
+    verifier_token: str | None = None,
 ) -> None:
+    validate_bind_host(host, allow_unauthenticated_network)
+    if not is_loopback_host(host):
+        print(NON_LOOPBACK_WARNING)
     ontology = load_ontology(ontology_path) if ontology_path else load_ontology()
     index = GraphExplorerIndex(load_graph(graph_path), ontology=ontology)
     pack_path = evidence_pack_path or graph_path.parent / "evidence" / "source.pack.json.gz"
@@ -1477,10 +1538,14 @@ def serve(
         evaluation_store=EvaluationStore(factory_runs_path or viewer_root.resolve().parents[1] / "work"),
         runtime_store=runtime_store, audit_store=audit_store,
         graph_path=graph_path, evidence_pack_path=pack_path,
+        verifier_token=verifier_token,
     )
-    url = f"http://{host}:{server.server_port}/"
+    display_host = f"[{host.strip('[]')}]" if ":" in host else host
+    url = f"http://{display_host}:{server.server_port}/"
     print(f"LIGHTYEAR Graph Explorer: {url}")
     print("Live Evidence Plane: connected (read-only command posture)")
+    print(f"Verifier token (this session only): {server.verifier_token}")
+    print("Customer deployments must place the Control Tower behind approved SSO/OIDC.")
     print("Press Ctrl-C to stop.")
     if open_browser:
         threading.Timer(0.35, lambda: webbrowser.open(url)).start()

@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.local/schema/oracle-native-case-manifest.schema.json",
+  "title": "LIGHTYEAR Oracle native case manifest",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "manifest_type",
+    "release",
+    "catalog_sha256",
+    "version_lanes",
+    "behavior_count",
+    "case_count",
+    "required_native_case_execution_count",
+    "materialized_harness_count",
+    "native_executed_case_count",
+    "cases",
+    "native_oracle_execution_observed",
+    "native_oracle_conformance",
+    "content_sha256"
+  ],
+  "properties": {
+    "manifest_type": {"const": "lightyear-oracle-native-case-manifest"},
+    "release": {"const": "0.51.0"},
+    "version_lanes": {"const": ["19c", "26ai"]},
+    "behavior_count": {"const": 500},
+    "case_count": {"const": 2000},
+    "required_native_case_execution_count": {"const": 4000},
+    "materialized_harness_count": {"const": 0},
+    "native_executed_case_count": {"const": 0},
+    "native_oracle_execution_observed": {"const": false},
+    "native_oracle_conformance": {"const": false},
+    "cases": {
+      "type": "array",
+      "minItems": 2000,
+      "maxItems": 2000,
+      "items": {
+        "type": "object",
+        "required": [
+          "case_id",
+          "behavior_id",
+          "domain_id",
+          "topic",
+          "dimension",
+          "documentation",
+          "bounded_expectation_sha256",
+          "bounded_corpus_status",
+          "native_lanes",
+          "native_oracle_verified",
+          "target_equivalent"
+        ]
+      }
+    },
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

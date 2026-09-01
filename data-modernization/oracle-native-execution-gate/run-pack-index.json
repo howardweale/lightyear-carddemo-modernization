@@ -1,0 +1,200 @@
+{
+  "batch_count": 20,
+  "batches": [
+    {
+      "batch_id": "oracle-19c-expressions",
+      "case_count": 240,
+      "database_lane": "19c",
+      "domain_id": "expressions",
+      "execution_status": "blocked-harness-and-authorized-database-required",
+      "materialized_harness_count": 0,
+      "required_harness_count": 240
+    },
+    {
+      "batch_id": "oracle-19c-globalization",
+      "case_count": 180,
+      "database_lane": "19c",
+      "domain_id": "globalization",
+      "execution_status": "blocked-harness-and-authorized-database-required",
+      "materialized_harness_count": 0,
+      "required_harness_count": 180
+    },
+    {
+      "batch_id": "oracle-19c-operations",
+      "case_count": 100,
+      "database_lane": "19c",
+      "domain_id": "operations",
+      "execution_status": "blocked-harness-and-authorized-database-required",
+      "materialized_harness_count": 0,
+      "required_harness_count": 100
+    },
+    {
+      "batch_id": "oracle-19c-plsql",
+      "case_count": 320,
+      "database_lane": "19c",
+      "domain_id": "plsql",
+      "execution_status": "blocked-harness-and-authorized-database-required",
+      "materialized_harness_count": 0,
+      "required_harness_count": 320
+    },
+    {
+      "batch_id": "oracle-19c-queries",
+      "case_count": 240,
+      "database_lane": "19c",
+      "domain_id": "queries",
+      "execution_status": "blocked-harness-and-authorized-database-required",
+      "materialized_harness_count": 0,
+      "required_harness_count": 240
+    },
+    {
+      "batch_id": "oracle-19c-schema-dml",
+      "case_count": 200,
+      "database_lane": "19c",
+      "domain_id": "schema-dml",
+      "execution_status": "blocked-harness-and-authorized-database-required",
+      "materialized_harness_count": 0,
+      "required_harness_count": 200
+    },
+    {
+      "batch_id": "oracle-19c-schema-objects",
+      "case_count": 140,
+      "database_lane": "19c",
+      "domain_id": "schema-objects",
+      "execution_status": "blocked-harness-and-authorized-database-required",
+      "materialized_harness_count": 0,
+      "required_harness_count": 140
+    },
+    {
+      "batch_id": "oracle-19c-structured-data",
+      "case_count": 140,
+      "database_lane": "19c",
+      "domain_id": "structured-data",
+      "execution_status": "blocked-harness-and-authorized-database-required",
+      "materialized_harness_count": 0,
+      "required_harness_count": 140
+    },
+    {
+      "batch_id": "oracle-19c-transactions",
+      "case_count": 180,
+      "database_lane": "19c",
+      "domain_id": "transactions",
+      "execution_status": "blocked-harness-and-authorized-database-required",
+      "materialized_harness_count": 0,
+      "required_harness_count": 180
+    },
+    {
+      "batch_id": "oracle-19c-types",
+      "case_count": 260,
+      "database_lane": "19c",
+      "domain_id": "types",
+      "execution_status": "blocked-harness-and-authorized-database-required",
+      "materialized_harness_count": 0,
+      "required_harness_count": 260
+    },
+    {
+      "batch_id": "oracle-26ai-expressions",
+      "case_count": 240,
+      "database_lane": "26ai",
+      "domain_id": "expressions",
+      "execution_status": "blocked-harness-and-authorized-database-required",
+      "materialized_harness_count": 0,
+      "required_harness_count": 240
+    },
+    {
+      "batch_id": "oracle-26ai-globalization",
+      "case_count": 180,
+      "database_lane": "26ai",
+      "domain_id": "globalization",
+      "execution_status": "blocked-harness-and-authorized-database-required",
+      "materialized_harness_count": 0,
+      "required_harness_count": 180
+    },
+    {
+      "batch_id": "oracle-26ai-operations",
+      "case_count": 100,
+      "database_lane": "26ai",
+      "domain_id": "operations",
+      "execution_status": "blocked-harness-and-authorized-database-required",
+      "materialized_harness_count": 0,
+      "required_harness_count": 100
+    },
+    {
+      "batch_id": "oracle-26ai-plsql",
+      "case_count": 320,
+      "database_lane": "26ai",
+      "domain_id": "plsql",
+      "execution_status": "blocked-harness-and-authorized-database-required",
+      "materialized_harness_count": 0,
+      "required_harness_count": 320
+    },
+    {
+      "batch_id": "oracle-26ai-queries",
+      "case_count": 240,
+      "database_lane": "26ai",
+      "domain_id": "queries",
+      "execution_status": "blocked-harness-and-authorized-database-required",
+      "materialized_harness_count": 0,
+      "required_harness_count": 240
+    },
+    {
+      "batch_id": "oracle-26ai-schema-dml",
+      "case_count": 200,
+      "database_lane": "26ai",
+      "domain_id": "schema-dml",
+      "execution_status": "blocked-harness-and-authorized-database-required",
+      "materialized_harness_count": 0,
+      "required_harness_count": 200
+    },
+    {
+      "batch_id": "oracle-26ai-schema-objects",
+      "case_count": 140,
+      "database_lane": "26ai",
+      "domain_id": "schema-objects",
+      "execution_status": "blocked-harness-and-authorized-database-required",
+      "materialized_harness_count": 0,
+      "required_harness_count": 140
+    },
+    {
+      "batch_id": "oracle-26ai-structured-data",
+      "case_count": 140,
+      "database_lane": "26ai",
+      "domain_id": "structured-data",
+      "execution_status": "blocked-harness-and-authorized-database-required",
+      "materialized_harness_count": 0,
+      "required_harness_count": 140
+    },
+    {
+      "batch_id": "oracle-26ai-transactions",
+      "case_count": 180,
+      "database_lane": "26ai",
+      "domain_id": "transactions",
+      "execution_status": "blocked-harness-and-authorized-database-required",
+      "materialized_harness_count": 0,
+      "required_harness_count": 180
+    },
+    {
+      "batch_id": "oracle-26ai-types",
+      "case_count": 260,
+      "database_lane": "26ai",
+      "domain_id": "types",
+      "execution_status": "blocked-harness-and-authorized-database-required",
+      "materialized_harness_count": 0,
+      "required_harness_count": 260
+    }
+  ],
+  "bootstrap_harness": {
+    "case_result_marker_count": 0,
+    "eligible_as_catalog_native_case_evidence": false,
+    "fixture_completion_marker_count": 8,
+    "path": "data-modernization/oracle-dialect-conformance/native-oracle-fixtures.sql",
+    "reason": "fixture completion markers are not per-case native observations"
+  },
+  "content_sha256": "425a12524e94e953d3fca2a74b964eeefb063fe844f21a1f9b986adf951f0359",
+  "index_type": "lightyear-oracle-native-run-pack-index",
+  "manifest_sha256": "710e6b5f430db48f2cea3767507bd970bee70ed3cda0486fccbc88875c76780e",
+  "materialized_harness_count": 0,
+  "native_executed_case_count": 0,
+  "release": "0.51.0",
+  "required_native_case_execution_count": 4000,
+  "schema_version": "1.0"
+}

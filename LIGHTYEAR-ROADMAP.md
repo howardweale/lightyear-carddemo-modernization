@@ -32,7 +32,8 @@ production-qualified.
 | MS #47.3 | Control Tower Craft and Accessibility Correction | Complete |
 | MS #48 | iDempiere Oracle Reference Estate Inventory | Complete |
 | MS #49 | Oracle Dialect Authority Corpus and Executable Fixtures | Complete |
-| MS #50 | Oracle Semantic Coverage Program | Bounded catalog execution complete; native Oracle increment pending |
+| MS #50 | Oracle Semantic Coverage Program | Complete |
+| MS #51 | Oracle Native Execution Admission Gate | Admission contract complete; SQL harnesses and authorized native runs pending |
 
 The v0.35.0 stored-logic qualification core is retained as supporting MS #34 evidence. It does not
 replace the planned DB2 milestone.
@@ -277,3 +278,28 @@ native JSON/XML/object behavior, and the 19c-to-26ai JSON datatype delta remain 
 evidence exists. iDempiere Control Tower projection and CloudBank mapping follow this program
 rather than preceding it. Native Oracle conformance, application equivalence, migration
 completion, and production readiness remain false.
+
+## MS #51 — Oracle Native Execution Admission Gate
+
+MS #51 operationalizes the evidence boundary established by MS #50. Release 0.51.0 maps every one
+of the 2,000 governed catalog cases to both Oracle Database 19c and Oracle AI Database 26ai. The
+result is a 4,000-execution native requirement divided into 20 exact version/domain batches, rather
+than an unquantified statement that Oracle has been tested.
+
+The admission contract requires each result to bind the exact catalog case, bounded expectation,
+materialized SQL harness hash, database identity, session settings, normalized observation,
+diagnostics, timestamps, and runner identity. External-wallet authentication is mandatory;
+credentials, verification keys, and raw SQL output cannot be committed. Receipts must be content-
+addressed and signed with a runtime-only evidence key. The verifier rejects unknown or duplicate
+cases, version mismatches, altered expectation bindings, unsafe credential posture, count drift,
+partial conformance promotion, and target-equivalence overclaims.
+
+The eight-fixture MS #49 SQL file remains useful bootstrap harness material, but its fixture-level
+completion markers do not contain per-case native observations and are therefore ineligible as
+catalog-native evidence. Release 0.51.0 materializes zero of the 4,000 version-specific SQL
+harnesses and admits zero native executions. The milestone makes the next evidence rung precise
+and enforceable; it does not claim to have climbed it.
+
+The next increment materializes governed SQL harness batches, followed by authorized 19c and 26ai
+execution. Native Oracle conformance, target equivalence, iDempiere application equivalence,
+CloudBank mapping, migration completion, and production readiness remain false.

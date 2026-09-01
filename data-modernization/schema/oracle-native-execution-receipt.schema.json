@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.local/schema/oracle-native-execution-receipt.schema.json",
+  "title": "LIGHTYEAR signed Oracle native execution receipt",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "receipt_type",
+    "release",
+    "manifest_sha256",
+    "run_id",
+    "runner_identity",
+    "raw_stdout_sha256",
+    "raw_stderr_sha256",
+    "database_identity",
+    "session_settings",
+    "security",
+    "results",
+    "native_executed_case_count",
+    "native_passed_case_count",
+    "native_verified_behavior_count",
+    "native_oracle_conformance",
+    "target_equivalence_observed",
+    "production_ready",
+    "content_sha256",
+    "signature"
+  ],
+  "properties": {
+    "receipt_type": {"const": "lightyear-oracle-native-execution-receipt"},
+    "release": {"const": "0.51.0"},
+    "run_id": {"type": "string", "pattern": "^[A-Za-z0-9._:@/+,-]{1,256}$"},
+    "runner_identity": {"type": "string", "pattern": "^[A-Za-z0-9._:@/+,-]{1,256}$"},
+    "raw_stdout_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "raw_stderr_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "database_identity": {"type": "object"},
+    "session_settings": {"type": "object"},
+    "security": {"type": "object"},
+    "results": {"type": "array", "minItems": 1, "maxItems": 2000},
+    "native_executed_case_count": {"type": "integer", "minimum": 1, "maximum": 2000},
+    "native_passed_case_count": {"type": "integer", "minimum": 0, "maximum": 2000},
+    "native_verified_behavior_count": {"type": "integer", "minimum": 0, "maximum": 500},
+    "target_equivalence_observed": {"const": false},
+    "production_ready": {"const": false},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "signature": {
+      "type": "object",
+      "required": ["algorithm", "signer", "value"],
+      "properties": {
+        "algorithm": {"const": "hmac-sha256"},
+        "signer": {"type": "string", "minLength": 1},
+        "value": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

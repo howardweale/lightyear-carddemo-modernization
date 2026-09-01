@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 220" role="img" aria-labelledby="title">
   <title id="title">LIGHTYEAR primary logo</title>
-  <path fill="#7D57EA" d="M18 96c61-4 100-29 143-70 10-10 22-15 33-11 9 3 17 10 28 20 38 36 74 58 120 61H18Z"/>
-  <path fill="#7D57EA" d="M18 124c61 4 100 29 143 70 10 10 22 15 33 11 9-3 17-10 28-20 38-36 74-58 120-61H18Z"/>
-  <text x="180" y="119" fill="#A7702C" font-family="Arial, sans-serif" font-size="32" font-weight="700" letter-spacing="6" text-anchor="middle">LIGHTYEAR</text>
+  <path fill="#7D57EA" d="M24 96C84 92 125 74 156 47C166 38 173 30 179 29C179.5 28.7 179.8 28.2 180 28C180.2 28.2 180.5 28.7 181 29C187 30 194 38 204 47C235 74 276 92 336 96H24Z"/>
+  <path fill="#7D57EA" d="M24 124C84 128 125 146 156 173C166 182 173 190 179 191C179.5 191.3 179.8 191.8 180 192C180.2 191.8 180.5 191.3 181 191C187 190 194 182 204 173C235 146 276 128 336 124H24Z"/>
+  <text x="180" y="122" fill="#A7702C" font-family="Arial, sans-serif" font-size="32" font-weight="700" letter-spacing="6" text-anchor="middle">LIGHTYEAR</text>
 </svg>

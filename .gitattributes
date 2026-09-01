@@ -23,6 +23,9 @@
 *.png binary
 *.jpg binary
 *.jpeg binary
+*.pdf binary
+*.docx binary
+*.pptx binary
 *.ddl text eol=lf
 *.dcl text eol=lf
 *.cbl text eol=lf

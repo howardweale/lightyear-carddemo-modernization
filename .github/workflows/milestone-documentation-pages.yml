@@ -3,14 +3,20 @@ name: Publish milestone documentation
 on:
   pull_request:
     paths:
+      - "docs/index.html"
+      - "docs/assets/**"
       - "docs/milestones/**"
+      - "tests/test_website.py"
       - "tools/generate_milestone_documentation.py"
       - "milestone-documentation.*"
       - ".github/workflows/milestone-documentation-pages.yml"
   push:
     branches: [main]
     paths:
+      - "docs/index.html"
+      - "docs/assets/**"
       - "docs/milestones/**"
+      - "tests/test_website.py"
       - "tools/generate_milestone_documentation.py"
       - "milestone-documentation.*"
       - ".github/workflows/milestone-documentation-pages.yml"
@@ -39,7 +45,7 @@ jobs:
       - name: Verify documentation and index
         run: |
           ./milestone-documentation.sh verify
-          PYTHONPATH=src python3 -m unittest tests.test_milestone_documentation -v
+          PYTHONPATH=src python3 -m unittest tests.test_milestone_documentation tests.test_website -v
 
   deploy:
     if: github.event_name != 'pull_request'

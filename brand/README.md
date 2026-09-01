@@ -43,3 +43,10 @@ node tools/generate_brand_deck.mjs
 ```
 
 The milestone builder regenerates Markdown, Word, PDF, and the searchable documentation website from the governed catalog. The deck generator creates `brand/Lightyear-Deck-Template.pptx`.
+
+## Foundation decks
+
+- [`foundation/LIGHTYEAR-Investor-Foundation.pptx`](foundation/LIGHTYEAR-Investor-Foundation.pptx): investor and VC narrative foundation.
+- [`foundation/LIGHTYEAR-Developer-Architecture-Foundation.pptx`](foundation/LIGHTYEAR-Developer-Architecture-Foundation.pptx): developer and architecture narrative foundation.
+
+Both foundations preserve their original slide systems and use the approved dark LIGHTYEAR lockup throughout.

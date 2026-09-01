@@ -4,7 +4,27 @@
 
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.47.3 — Control Tower craft and accessibility correction**
+Release: **v0.48.0 — iDempiere Oracle reference-estate inventory**
+
+v0.48 replaces a toy Oracle comparison source with a defensible enterprise-shaped reference-estate
+decision. It pins the supported iDempiere release-13 branch at commit
+`731515dcdd5278b843db33b9d3109d155b881951` without vendoring, building, or executing it. A
+reproducible static inventory measures 12,565 tracked files, a 4,520-node and 36,819-edge internal
+Java source-unit graph, and 2,823 Oracle SQL files.
+
+The first bounded business slices are order-to-cash and procure-to-pay. Their one-hop source graphs
+contain 181 nodes/497 edges and 177 nodes/475 edges respectively, with the shared iDempiere table
+model and its `IsSOTrx`/`IsReceipt` selectors preserved. Eight Oracle semantic fixtures are
+identified for the next corpus step. Oracle's official sample schemas remain the dialect authority;
+CloudBank remains the intended modern destination. No upstream runtime, Oracle equivalence,
+CloudBank mapping, migration-completion, or production-readiness claim is created.
+
+```bash
+python3 tools/inventory_idempiere_reference.py \
+  --source-root /path/to/pinned/idempiere-release-13 --verify
+```
+
+Previous release: **v0.47.3 — Control Tower craft and accessibility correction**
 
 v0.47.3 closes the follow-up craft and accessibility review of the live Evidence Control Tower.
 The density guard now dismisses for every reduction and full-render action. Graph labels choose

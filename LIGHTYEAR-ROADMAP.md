@@ -30,6 +30,7 @@ production-qualified.
 | MS #47.1 | Approved Control Tower Visual System | Complete |
 | MS #47.2 | Control Tower Usability and Transport Hardening | Complete |
 | MS #47.3 | Control Tower Craft and Accessibility Correction | Complete |
+| MS #48 | iDempiere Oracle Reference Estate Inventory | Complete |
 
 The v0.35.0 stored-logic qualification core is retained as supporting MS #34 evidence. It does not
 replace the planned DB2 milestone.
@@ -193,3 +194,25 @@ and preserves every graph node as a tooltip and keyboard-operable target. Roving
 arrow navigation, Enter/Space inspection, Home-to-root behavior, readable control metadata, and an
 accessible non-clipping live status complete the bounded browser correction without changing the
 read-only evidence or transport boundary.
+
+## MS #48 — iDempiere Oracle Reference Estate Inventory
+
+MS #48 adopts iDempiere release 13 as the enterprise-shaped Oracle equivalent of CardDemo for
+future reference-estate work. The upstream source is pinned at commit
+`731515dcdd5278b843db33b9d3109d155b881951` and remains outside the product repository. The
+inventory tool refuses a different or dirty checkout and emits only derived counts and source-path
+references.
+
+The measured baseline contains 12,565 tracked files, 4,520 package-qualified Java source units,
+36,819 internal Java source-unit dependency edges, and 2,823 Oracle SQL files. The first bounded
+business slices are order-to-cash and procure-to-pay. Their one-hop graphs contain 181 nodes/497
+edges and 177 nodes/475 edges respectively; ten of twelve seed units are deliberately shared
+because iDempiere uses the same physical document model with `IsSOTrx` and `IsReceipt` selecting
+sales versus purchase semantics.
+
+Eight initial Oracle fixtures cover empty-string/null behavior, `NUMBER` precision and scale,
+`DATE` arithmetic, `NVL`/`DECODE`, `ROWNUM`, `SELECT FOR UPDATE`, `NO_DATA_FOUND`, and LOB
+boundaries. Oracle's official sample schemas remain the dialect authority and are identified but
+not acquired in this milestone. CloudBank remains the modern destination/reference architecture;
+no mapping is yet asserted. Source execution, Oracle equivalence, customer evidence, application
+migration completion, and production readiness remain false.

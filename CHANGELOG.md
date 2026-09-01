@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.48.0 — 2026-09-01
+
+- Pinned the supported iDempiere release-13 branch at commit
+  `731515dcdd5278b843db33b9d3109d155b881951` without vendoring, building, or executing the
+  upstream source.
+- Added a reproducible, fail-closed inventory tool and measured a 12,565-file estate with a
+  4,520-node, 36,819-edge internal Java source-unit graph and 2,823 Oracle SQL files.
+- Mapped bounded order-to-cash and procure-to-pay slices while preserving their shared physical
+  table model and the `IsSOTrx` and `IsReceipt` business selectors.
+- Measured one-hop slice graphs of 181 nodes and 497 edges for order-to-cash and 177 nodes and 475
+  edges for procure-to-pay.
+- Identified eight initial Oracle semantic fixtures and kept Oracle's official sample schemas as
+  the planned dialect authority rather than treating iDempiere examples as the language standard.
+- Kept source execution, CloudBank mapping, Oracle runtime behavior, application equivalence,
+  migration completion, and production readiness explicitly false.
+
 ## 0.47.3 — 2026-09-01
 
 - Corrected the density guard so every reduction choice and the explicit full-render override

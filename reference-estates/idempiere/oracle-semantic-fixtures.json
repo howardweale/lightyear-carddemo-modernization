@@ -1,0 +1,96 @@
+{
+  "corpus_policy": {
+    "official_oracle_corpus": "https://github.com/oracle-samples/db-sample-schemas",
+    "planned_schemas": [
+      "customer_orders",
+      "human_resources",
+      "sales_history"
+    ],
+    "status": "identified-not-acquired",
+    "upstream_idempiere_role": "estate-specific examples and prioritization evidence, not the Oracle dialect authority"
+  },
+  "evidence_class": "upstream-static",
+  "fixtures": [
+    {
+      "acceptance_focus": "An empty VARCHAR2 result is observed as NULL and is not preserved as a distinct empty string.",
+      "id": "oracle-empty-string-null",
+      "priority": 1,
+      "source_paths": [
+        "db/oracle/functions/documentNo.sql"
+      ],
+      "status": "identified"
+    },
+    {
+      "acceptance_focus": "NUMBER values preserve declared precision and scale, including unconstrained NUMBER and financial rounding boundaries.",
+      "id": "oracle-number-precision-scale",
+      "priority": 2,
+      "source_paths": [
+        "db/oracle/functions/C_Invoice_OpenToDate.sql",
+        "db/oracle/functions/BOM_PriceList.sql"
+      ],
+      "status": "identified"
+    },
+    {
+      "acceptance_focus": "Oracle DATE retains second-level time while TRUNC, month-end, and date arithmetic follow Oracle behavior.",
+      "id": "oracle-date-time-arithmetic",
+      "priority": 3,
+      "source_paths": [
+        "db/oracle/functions/C_PaymentTerm_DueDays.sql",
+        "db/oracle/functions/nextBusinessDay.sql"
+      ],
+      "status": "identified"
+    },
+    {
+      "acceptance_focus": "NVL and DECODE preserve Oracle coercion, null, and branch-selection semantics.",
+      "id": "oracle-nvl-decode-coercion",
+      "priority": 4,
+      "source_paths": [
+        "db/oracle/functions/BOM_PriceList.sql",
+        "db/oracle/functions/nextBusinessDay.sql"
+      ],
+      "status": "identified"
+    },
+    {
+      "acceptance_focus": "ROWNUM is applied before outer ordering unless the ordering is isolated in a subquery.",
+      "id": "oracle-rownum-ordering",
+      "priority": 5,
+      "source_paths": [
+        "db/oracle/functions/get_Sysconfig.sql",
+        "db/oracle/functions/C_Currency_Rate.sql"
+      ],
+      "status": "identified"
+    },
+    {
+      "acceptance_focus": "SELECT FOR UPDATE serializes sequence allocation and preserves the update in the caller transaction.",
+      "id": "oracle-select-for-update-sequence",
+      "priority": 6,
+      "source_paths": [
+        "db/oracle/procedures/AD_Sequence_Next.sql",
+        "db/oracle/procedures/AD_Sequence_Doc.sql"
+      ],
+      "status": "identified"
+    },
+    {
+      "acceptance_focus": "SELECT INTO raises NO_DATA_FOUND and the declared handler maps it to the intended default or application error.",
+      "id": "oracle-select-into-no-data-found",
+      "priority": 7,
+      "source_paths": [
+        "db/oracle/functions/get_Sysconfig.sql",
+        "db/oracle/procedures/AD_Sequence_Next.sql"
+      ],
+      "status": "identified"
+    },
+    {
+      "acceptance_focus": "CLOB and BLOB values preserve nullability, byte content, and large-value boundaries without implicit VARCHAR2 conversion.",
+      "id": "oracle-lob-boundaries",
+      "priority": 8,
+      "source_paths": [
+        "migration/iD12/oracle/202405080546_IDEMPIERE-6133.sql",
+        "migration/i5.1/oracle/201804251707_IDEMPIERE-3698.sql"
+      ],
+      "status": "identified"
+    }
+  ],
+  "native_oracle_executed": false,
+  "schema_version": "1.0"
+}

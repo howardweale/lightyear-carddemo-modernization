@@ -1,0 +1,90 @@
+{
+  "graph_definition": {
+    "edge_scope": "curated document-flow relationships confirmed by the pinned model and process source units",
+    "node_scope": "business-document tables needed to trace the bounded slice",
+    "shared_physical_model": "iDempiere uses the same order, movement, invoice, payment, and allocation tables for sales and purchase flows; IsSOTrx and IsReceipt select the business semantics."
+  },
+  "schema_version": "1.0",
+  "slices": [
+    {
+      "business_question": "Can an accepted sales order be traced through shipment, customer invoice, receipt, and allocation?",
+      "edges": [
+        ["C_Order", "CONTAINS", "C_OrderLine"],
+        ["C_Order", "GENERATES", "M_InOut"],
+        ["C_OrderLine", "FULFILLED_BY", "M_InOutLine"],
+        ["M_InOut", "CONTAINS", "M_InOutLine"],
+        ["M_InOut", "SOURCES", "C_Invoice"],
+        ["M_InOutLine", "MATCHED_BY", "C_InvoiceLine"],
+        ["C_Invoice", "CONTAINS", "C_InvoiceLine"],
+        ["C_Invoice", "SETTLED_THROUGH", "C_AllocationLine"],
+        ["C_Payment", "SETTLED_THROUGH", "C_AllocationLine"],
+        ["C_AllocationHdr", "CONTAINS", "C_AllocationLine"]
+      ],
+      "entry_processes": [
+        "org.compiere.process.InOutGenerate",
+        "org.compiere.process.InvoiceGenerate",
+        "org.compiere.process.AllocationAuto"
+      ],
+      "id": "order-to-cash",
+      "node_count": 9,
+      "edge_count": 10,
+      "selectors": {
+        "C_Invoice.IsSOTrx": "Y",
+        "C_Order.IsSOTrx": "Y",
+        "C_Payment.IsReceipt": "Y",
+        "M_InOut.IsSOTrx": "Y"
+      },
+      "tables": [
+        "C_Order",
+        "C_OrderLine",
+        "M_InOut",
+        "M_InOutLine",
+        "C_Invoice",
+        "C_InvoiceLine",
+        "C_Payment",
+        "C_AllocationHdr",
+        "C_AllocationLine"
+      ]
+    },
+    {
+      "business_question": "Can an approved purchase order be traced through material receipt, vendor invoice, payment, and allocation?",
+      "edges": [
+        ["C_Order", "CONTAINS", "C_OrderLine"],
+        ["C_Order", "GENERATES", "M_InOut"],
+        ["C_OrderLine", "FULFILLED_BY", "M_InOutLine"],
+        ["M_InOut", "CONTAINS", "M_InOutLine"],
+        ["M_InOut", "SOURCES", "C_Invoice"],
+        ["M_InOutLine", "MATCHED_BY", "C_InvoiceLine"],
+        ["C_Invoice", "CONTAINS", "C_InvoiceLine"],
+        ["C_Invoice", "SETTLED_THROUGH", "C_AllocationLine"],
+        ["C_Payment", "SETTLED_THROUGH", "C_AllocationLine"],
+        ["C_AllocationHdr", "CONTAINS", "C_AllocationLine"]
+      ],
+      "entry_processes": [
+        "org.compiere.process.OrderPOCreate",
+        "org.compiere.process.InOutCreateInvoice",
+        "org.compiere.process.AllocationAuto"
+      ],
+      "id": "procure-to-pay",
+      "node_count": 9,
+      "edge_count": 10,
+      "selectors": {
+        "C_Invoice.IsSOTrx": "N",
+        "C_Order.IsSOTrx": "N",
+        "C_Payment.IsReceipt": "N",
+        "M_InOut.IsSOTrx": "N"
+      },
+      "tables": [
+        "C_Order",
+        "C_OrderLine",
+        "M_InOut",
+        "M_InOutLine",
+        "C_Invoice",
+        "C_InvoiceLine",
+        "C_Payment",
+        "C_AllocationHdr",
+        "C_AllocationLine"
+      ]
+    }
+  ]
+}

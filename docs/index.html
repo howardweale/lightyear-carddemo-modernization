@@ -462,7 +462,7 @@ code{font-family:var(--mono);font-size:.93em;color:var(--ink);background:var(--f
     <div class="wrap">
       <div class="grid4">
         <div class="stat"><div class="n">11,336</div><div class="l">graph nodes bound to<br>exact source locations</div></div>
-        <div class="stat"><div class="n">46</div><div class="l">shipped milestones, each with<br>a published evidence boundary</div></div>
+        <div class="stat"><div class="n">48</div><div class="l">shipped milestones, each with<br>a published evidence boundary</div></div>
         <div class="stat"><div class="n">432</div><div class="l">tests, every guard verified<br>by breaking what it protects</div></div>
         <div class="stat"><div class="n"><em>0</em></div><div class="l">third-party runtime<br>dependencies</div></div>
       </div>
@@ -708,7 +708,7 @@ lightyr audit verify        <span class="c"># replay the hash-chained ledger</sp
 
         <div class="docsec" id="d-record">
           <h3>Body of record</h3>
-          <p>Every milestone ships with a published document: what it delivered, what evidence supports it, and — the part that matters — what it explicitly does not claim. Forty-seven of them, generated from the same catalog the platform validates against, so the narrative and the code cannot drift apart.</p>
+          <p>Every milestone ships with a published document: what it delivered, what evidence supports it, and — the part that matters — what it explicitly does not claim. Forty-eight of them, generated from the same catalog the platform validates against, so the narrative and the code cannot drift apart.</p>
           <pre>lightyr milestones build     <span class="c"># regenerate the record from source</span>
 lightyr milestones verify    <span class="c"># catalog, hashes and boundaries</span>
 lightyr receipt-claims       <span class="c"># reject literal promotion anywhere in the tree</span>

@@ -5,7 +5,7 @@ import json
 import os
 from pathlib import Path
 
-from lightyear_common.io import write_json
+from lightyear_common.io import write_json, write_text
 
 from .builder import build_assets, load_assets
 from .ase import build_ase_artifacts, validate_ase_qualification
@@ -14,6 +14,11 @@ from .db2 import Db2SourceAdapter, build_db2_source_ledger, db2_source_conforman
 from .equivalence import offline_equivalence
 from .live import DockerOracleRunner, DockerPostgresExactRunner, aggregate_receipts
 from .oracle import OracleAdapter
+from .oracle_dialect import (
+    OUTPUT_ROOT as ORACLE_DIALECT_OUTPUT_ROOT,
+    build_oracle_dialect_artifacts,
+    validate_oracle_dialect_artifacts,
+)
 from .oracle_postgres_proof import (
     build_oracle_postgresql_proof,
     validate_oracle_postgresql_proof,
@@ -81,6 +86,10 @@ def parser() -> argparse.ArgumentParser:
     oracle_source.add_argument("--output-root", type=Path)
     verify_oracle_source = commands.add_parser("verify-oracle-source-qualification")
     verify_oracle_source.add_argument("--project-root", type=Path, default=Path("."))
+    oracle_dialect = commands.add_parser("build-oracle-dialect-corpus")
+    oracle_dialect.add_argument("--project-root", type=Path, default=Path("."))
+    verify_oracle_dialect = commands.add_parser("verify-oracle-dialect-corpus")
+    verify_oracle_dialect.add_argument("--project-root", type=Path, default=Path("."))
     ase_source = commands.add_parser("build-sap-ase-source-adapter")
     ase_source.add_argument("--project-root", type=Path, default=Path("."))
     ase_source.add_argument("--output-root", type=Path)
@@ -251,6 +260,28 @@ def main(argv: list[str] | None = None) -> int:
             "supported_procedure_subset_qualified": qualification["supported_procedure_subset_qualified"],
             "database_migration_complete": False,
             "stored_logic_complete": False,
+            "production_ready": False,
+        }
+    elif args.command in {"build-oracle-dialect-corpus", "verify-oracle-dialect-corpus"}:
+        project_root = args.project_root.resolve()
+        catalog, receipt, sql = build_oracle_dialect_artifacts(project_root)
+        output_root = project_root / ORACLE_DIALECT_OUTPUT_ROOT
+        errors = []
+        if args.command == "build-oracle-dialect-corpus":
+            write_json(output_root / "fixture-catalog.json", catalog)
+            write_json(output_root / "model-conformance.receipt.json", receipt)
+            write_text(output_root / "native-oracle-fixtures.sql", sql)
+        else:
+            errors.extend(validate_oracle_dialect_artifacts(project_root))
+        result = {
+            "status": "passed" if not errors else "failed",
+            "errors": sorted(set(errors)),
+            "output_root": str(output_root),
+            "fixture_count": receipt["fixture_count"],
+            "case_count": receipt["case_count"],
+            "bounded_model_execution_observed": True,
+            "native_oracle_execution_observed": False,
+            "native_oracle_conformance": False,
             "production_ready": False,
         }
     elif args.command in {"build-sap-ase-source-adapter", "verify-sap-ase-source-adapter"}:

@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.49.0 — 2026-09-01
+
+- Pinned Oracle's official Database Sample Schemas release `v23.3` at commit
+  `e3325a83e56c516815844025418a96ecaf219751` with exact tree and MIT license
+  identities.
+- Added a fail-closed acquisition path for an allowlisted nine-file, three-schema authority corpus
+  containing four SQL files, 2,000 SQL lines, and 77,919 bytes.
+- Turned the eight MS #48 Oracle semantic risks into 24 deterministic executable cases covering
+  nulls, numeric precision, dates, Oracle functions, row limits, locks, PL/SQL exceptions, and LOBs.
+- Added a content-addressed bounded-model receipt and adversarial tests that reject altered content,
+  native-execution overclaims, and iDempiere application-equivalence overclaims.
+- Emitted a fail-fast native Oracle SQL harness with eight fixture completion markers while keeping
+  native Oracle execution and conformance explicitly false.
+- Added CLI, POSIX shell, and PowerShell build and verification paths plus governed MS #49
+  Markdown, Word, and PDF documentation.
+- Kept iDempiere execution and equivalence, CloudBank mapping, migration completion, and production
+  readiness explicitly false.
+
 ## 0.48.0 — 2026-09-01
 
 - Pinned the supported iDempiere release-13 branch at commit

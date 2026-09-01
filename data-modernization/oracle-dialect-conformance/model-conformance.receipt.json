@@ -1,0 +1,291 @@
+{
+  "bounded_model_execution_observed": true,
+  "case_count": 24,
+  "catalog_sha256": "d855b925aec07c25fd2de6f28e599eb26aeae750214430ff6e63b9c8623067dd",
+  "cloudbank_mapping_complete": false,
+  "content_sha256": "9b9989d65b1ae2e8ce4f14b538de220ab789172e27b68521320b41903a711a6d",
+  "corpus_id": "oracle-v23.3-first-eight-dialect-fixtures-v1",
+  "fixture_count": 8,
+  "idempiere_application_equivalence": false,
+  "migration_complete": false,
+  "native_oracle_conformance": false,
+  "native_oracle_execution_observed": false,
+  "native_sql_sha256": "3b3ab4bd0b6f7267663d8059d74daaa98f6b6b5fc94b4e97f0a45ef697b77017",
+  "official_corpus_manifest_sha256": "b6ae8ac2bf022575e7dd741c7056e2a884b7c7b3f33e106e22bc1cd8a75d8a7c",
+  "official_sample_schema_commit": "e3325a83e56c516815844025418a96ecaf219751",
+  "oracle_dialect_authority_acquired": true,
+  "production_ready": false,
+  "receipt_type": "lightyear-oracle-dialect-model-conformance",
+  "results": [
+    {
+      "case_id": "empty-to-null",
+      "expected_sha256": "1c197daef20de3f47eec5e2f735ec6669869d3180cc29f35be4788511e0af0f8",
+      "fixture_id": "oracle-empty-string-null",
+      "observed": {
+        "value": null
+      },
+      "passed": true,
+      "request_sha256": "a0bb5c592e12ef471f46a3d24e6c422daa2f4d3478b2e24ee0597bdc8793bc4e"
+    },
+    {
+      "case_id": "null-remains-null",
+      "expected_sha256": "1c197daef20de3f47eec5e2f735ec6669869d3180cc29f35be4788511e0af0f8",
+      "fixture_id": "oracle-empty-string-null",
+      "observed": {
+        "value": null
+      },
+      "passed": true,
+      "request_sha256": "f9e91482a3dff3f09c1be7f541467ea415b8f7cd83eaaeb830a35529e5189f54"
+    },
+    {
+      "case_id": "space-remains-value",
+      "expected_sha256": "4a039a5dcb61c85c9598884bfbce00026dd0b7e1984c9f99eeefc8634003ec38",
+      "fixture_id": "oracle-empty-string-null",
+      "observed": {
+        "value": " "
+      },
+      "passed": true,
+      "request_sha256": "f6e1d6572b986b3e5ab0409368afc286eee42b1967a24f248634326ff3db219a"
+    },
+    {
+      "case_id": "round-scale-one",
+      "expected_sha256": "933a08b080d221a4e243d6baf19f0af7b2adaea54bdd01caf99e292b181e6e1c",
+      "fixture_id": "oracle-number-precision-scale",
+      "observed": {
+        "value": "123.9"
+      },
+      "passed": true,
+      "request_sha256": "cbc58cc20f151745c04c50baade3e08c62e343ffc83e984273902b369fcad97c"
+    },
+    {
+      "case_id": "round-small-number",
+      "expected_sha256": "f7d9b701ef5f25038be1a1c7400d12ee6f862ebd5f8e3b9f1218e392774166cb",
+      "fixture_id": "oracle-number-precision-scale",
+      "observed": {
+        "value": "0.00013"
+      },
+      "passed": true,
+      "request_sha256": "b1e312a06ede719252b6e7e155125fd271ce7a6a901f4a553a9b035388f2b375"
+    },
+    {
+      "case_id": "precision-overflow",
+      "expected_sha256": "eaf98d9fb545e3dc2e8ebed76b492bdfdbd4ef1df744d9cfb87295767f04ac15",
+      "fixture_id": "oracle-number-precision-scale",
+      "observed": {
+        "error": "ORA-01438"
+      },
+      "passed": true,
+      "request_sha256": "64966aca243ff783400fcd5a9fd6f54a09f0ba92a64e983d769f8483eaa145b3"
+    },
+    {
+      "case_id": "retain-seconds",
+      "expected_sha256": "3e9ad2e7f4c8514cde6099e4dd34c49a5284211fe8ef1d55d6303cdd3c891b64",
+      "fixture_id": "oracle-date-time-arithmetic",
+      "observed": {
+        "value": "2024-02-29T23:59:59"
+      },
+      "passed": true,
+      "request_sha256": "fc10640b91e3428c3a122b8d91f773feb3b6213f7a7707741d02863cb772a3ec"
+    },
+    {
+      "case_id": "add-one-second",
+      "expected_sha256": "54f37174f60d81ff8bf59afb4ebf27b550002a372d93690b4e6626585eab41d7",
+      "fixture_id": "oracle-date-time-arithmetic",
+      "observed": {
+        "value": "2024-03-01T00:00:00"
+      },
+      "passed": true,
+      "request_sha256": "3a5b6dc83612e98a6f755ff163f789e35d1e0dceaa9be45d6981320404c2dedb"
+    },
+    {
+      "case_id": "trunc-day",
+      "expected_sha256": "54f37174f60d81ff8bf59afb4ebf27b550002a372d93690b4e6626585eab41d7",
+      "fixture_id": "oracle-date-time-arithmetic",
+      "observed": {
+        "value": "2024-03-01T00:00:00"
+      },
+      "passed": true,
+      "request_sha256": "092ff452838563c1561acb3c8a64beffcac510a95ea969823c5ff6a5d7d38d11"
+    },
+    {
+      "case_id": "nvl-null",
+      "expected_sha256": "415b6a35681afe6b593b5a6da42950f0cf7229d90ced700ecedd4481b2b54d2e",
+      "fixture_id": "oracle-nvl-decode-coercion",
+      "observed": {
+        "value": "fallback"
+      },
+      "passed": true,
+      "request_sha256": "6066cfc06017593158604888ec284cdb688371d7aefcfdcb27ac85f7e7829b21"
+    },
+    {
+      "case_id": "nvl-empty",
+      "expected_sha256": "415b6a35681afe6b593b5a6da42950f0cf7229d90ced700ecedd4481b2b54d2e",
+      "fixture_id": "oracle-nvl-decode-coercion",
+      "observed": {
+        "value": "fallback"
+      },
+      "passed": true,
+      "request_sha256": "1e71a1c28a5c0c786ef384f1e925603e179d0fb565ff21ebaab394647e7a1afe"
+    },
+    {
+      "case_id": "decode-null-equals-null",
+      "expected_sha256": "dfaea9d1c48e940f8f3f8995a3e69ed770456d3b8bd7d577eb9668fd61e27a35",
+      "fixture_id": "oracle-nvl-decode-coercion",
+      "observed": {
+        "value": "null-match"
+      },
+      "passed": true,
+      "request_sha256": "9ee923f6c61cae3ab3e1bc1be4fa39004e2368983f275b0e7dde784666d99216"
+    },
+    {
+      "case_id": "rownum-before-order",
+      "expected_sha256": "e6c6895e691c209c01bb1eb7f0adce49f368da98abc21c51e7b6b3de3379087b",
+      "fixture_id": "oracle-rownum-ordering",
+      "observed": {
+        "values": [
+          1,
+          3
+        ]
+      },
+      "passed": true,
+      "request_sha256": "917b64751c68a14e1fafffc1264ce9e5c746123152713ef6fcf76f8166408265"
+    },
+    {
+      "case_id": "order-before-rownum",
+      "expected_sha256": "54fc94706765042e92a6c74fefd93f0134252a9a9ff81fea085dbd55b8227037",
+      "fixture_id": "oracle-rownum-ordering",
+      "observed": {
+        "values": [
+          1,
+          2
+        ]
+      },
+      "passed": true,
+      "request_sha256": "e67879ef30e55a5a9144285e04831e10af18e9c341fee1348e7a2da2d9bd8d8d"
+    },
+    {
+      "case_id": "rownum-greater-than-one",
+      "expected_sha256": "8138e5e9bb95f27b029fa5e119d99c2e9a6b7f44c8a07faada29f295b76297d3",
+      "fixture_id": "oracle-rownum-ordering",
+      "observed": {
+        "values": []
+      },
+      "passed": true,
+      "request_sha256": "fbde6f04b58b1509e4dc9ebf1e77b82f34aa8dc6274d3da318aba9dc23246453"
+    },
+    {
+      "case_id": "two-allocations",
+      "expected_sha256": "4dfff2da38fcadda4f11325fc96563d8d0de4d78f4af06fab76f1943630645dc",
+      "fixture_id": "oracle-select-for-update-sequence",
+      "observed": {
+        "allocated": [
+          101,
+          102
+        ],
+        "committed_value": 102
+      },
+      "passed": true,
+      "request_sha256": "87f952642ae9299fc3bc72b3c41616cac07f4baece6a723b1b54a604b84fb6af"
+    },
+    {
+      "case_id": "rollback-allocation",
+      "expected_sha256": "6d8ea8598ebc0c9b037ae1b840c6f577111e259639d4c7156a3e79b347f23615",
+      "fixture_id": "oracle-select-for-update-sequence",
+      "observed": {
+        "allocated": [
+          201
+        ],
+        "committed_value": 200
+      },
+      "passed": true,
+      "request_sha256": "fffe7d81e0bdd12585e760dacd6cb2aeb4f7d28d25353eb8808e354954d5b237"
+    },
+    {
+      "case_id": "serialized-sessions",
+      "expected_sha256": "3767632635939620907af37fa907bff9a24111b780b047336ca923fa435c54ae",
+      "fixture_id": "oracle-select-for-update-sequence",
+      "observed": {
+        "allocations": [
+          {
+            "session": "A",
+            "value": 8
+          },
+          {
+            "session": "B",
+            "value": 9
+          }
+        ],
+        "committed_value": 9
+      },
+      "passed": true,
+      "request_sha256": "9f1e8fe5a0d582ab1e589fdd2b7a5d3807ebdd36e634b887e7e46613b04e7e98"
+    },
+    {
+      "case_id": "no-row-handler",
+      "expected_sha256": "51cf6efc0b8e6a4890d287afc3800066a18de53e4028f010bcbb794e1c63e818",
+      "fixture_id": "oracle-select-into-no-data-found",
+      "observed": {
+        "handled": "NO_DATA_FOUND",
+        "value": "DEFAULT"
+      },
+      "passed": true,
+      "request_sha256": "6e7bfb44df42c012f3294e33bfc0f8bdb124eec42e3a8b613c70cef543f61fe0"
+    },
+    {
+      "case_id": "single-row",
+      "expected_sha256": "31574d25b772293d54374d3dfc1a07bbd83b115ff7f90877287c5ca2199f236a",
+      "fixture_id": "oracle-select-into-no-data-found",
+      "observed": {
+        "handled": null,
+        "value": 42
+      },
+      "passed": true,
+      "request_sha256": "f6005422fb56157a2ba4de0c3a07573d02eca3a82a169f44bb708c745c9d6fac"
+    },
+    {
+      "case_id": "multiple-rows",
+      "expected_sha256": "c50ea3fbeab63e85ba340a849e9824750a5272f35f819ca1dee317cf2d3b5597",
+      "fixture_id": "oracle-select-into-no-data-found",
+      "observed": {
+        "error": "ORA-01422"
+      },
+      "passed": true,
+      "request_sha256": "a47677524fe8c50cb00f21c9e1a1b40e441fe2ea425fa94d829b169f6e4e1cd8"
+    },
+    {
+      "case_id": "blob-byte-content",
+      "expected_sha256": "a7f68e3300e183ba405f49922eb43d0bbfa30a50ae1142151cdeecbbb7f38a20",
+      "fixture_id": "oracle-lob-boundaries",
+      "observed": {
+        "byte_length": 3,
+        "sha256": "26a66b061e8f48f39927c312f25293959729eee95978e2892d49d3512a5cc092"
+      },
+      "passed": true,
+      "request_sha256": "f935d5186e4a26bf00af75d2fc68c023b59d2580ee0826097eb29645fb66ea39"
+    },
+    {
+      "case_id": "clob-character-content",
+      "expected_sha256": "2b13ee99257898faf58ae00726fe90d2add82aaed712a29068e7a7d08b4a8825",
+      "fixture_id": "oracle-lob-boundaries",
+      "observed": {
+        "character_length": 24,
+        "sha256": "2d262b62157500cb9bca0234acada9002d51cedd53d5cc2a3804499acbc3c556"
+      },
+      "passed": true,
+      "request_sha256": "606207ba0aaa8a9c15c13577a5770e1a127ce865c16b0dda6c4c35cfd7a4bb57"
+    },
+    {
+      "case_id": "null-lobs",
+      "expected_sha256": "bfcc8d6ec33295cde25c9febcc7dd884590a42d569fba91d2a2e8a563e1f441d",
+      "fixture_id": "oracle-lob-boundaries",
+      "observed": {
+        "blob_is_null": true,
+        "clob_is_null": true
+      },
+      "passed": true,
+      "request_sha256": "2f71dd5f1ed5506b451a664846fbe0d24e2a61a5c5f4dcd88a9af3b45ce94db8"
+    }
+  ],
+  "schema_version": "1.0",
+  "status": "passed-bounded-model"
+}

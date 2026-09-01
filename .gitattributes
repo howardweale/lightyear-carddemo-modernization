@@ -43,3 +43,6 @@
 *.ctl text eol=lf
 *.idcams text eol=lf
 *.txt text eol=lf
+
+# Preserve the pinned Oracle-authored corpus byte for byte, including upstream whitespace.
+reference-estates/oracle/corpus/** -whitespace

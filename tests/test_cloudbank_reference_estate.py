@@ -133,6 +133,7 @@ class CloudBankReferenceEstateTests(unittest.TestCase):
         self.assertIsNotNone(spec.loader)
         spec.loader.exec_module(module)
         self.assertEqual(PINNED_COMMIT, module.PINNED_COMMIT)
+        self.assertEqual("main", module.PINNED_BRANCH)
 
     def test_tampering_and_target_overclaim_fail_closed(self) -> None:
         changed = copy.deepcopy(self.fragment)

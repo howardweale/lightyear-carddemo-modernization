@@ -21,6 +21,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT = ROOT / "reference-estates" / "cloudbank"
 PINNED_COMMIT = "4f41b16d00c45503f691836fee8138010c969e86"
+PINNED_BRANCH = "main"
 UPSTREAM_PREFIX = "cloudbank-v5/"
 
 ORACLE_PATTERN = re.compile(
@@ -160,7 +161,9 @@ def build_inventory(source_root: Path) -> dict[str, Any]:
         "schema_version": "1.0",
         "claim_class": "upstream-static-modern-oracle-inventory",
         "source": {
-            "branch": git(source_root, "branch", "--show-current"),
+            # The inventory records the pinned upstream branch, not the local
+            # checkout state. CI intentionally checks the commit out detached.
+            "branch": PINNED_BRANCH,
             "commit": commit,
             "commit_time": git(source_root, "show", "-s", "--format=%cI", "HEAD"),
             "repository": "https://github.com/oracle/microservices-backend",

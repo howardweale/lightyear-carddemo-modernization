@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.51.0 — 2026-09-01
+
+- Mapped all 2,000 governed Oracle catalog cases to both the 19c baseline and 26ai delta, defining
+  4,000 required native executions across 20 exact version/domain batches.
+- Replaced four tranche-local native plans with one content-addressed admission manifest,
+  execution contract, run-pack index, evidence matrix, and readiness receipt.
+- Required exact database and session identity, external-wallet authentication, per-case bounded-
+  expectation and SQL-harness hashes, observations, diagnostics, timestamps, runner identity, and
+  environment-key signatures for native receipt admission.
+- Added a strict native-receipt verifier that rejects unsigned evidence, unknown or duplicate
+  cases, version-lane mismatches, altered expectations, unsafe credential posture, count drift,
+  partial conformance promotion, and target-equivalence overclaims.
+- Classified the earlier eight-fixture SQL completion markers as ineligible catalog-native evidence
+  because they do not contain per-case observations.
+- Added three JSON Schemas, deterministic artifacts, CLI and cross-platform launchers, dependency-
+  drift tests, signed partial-admission tests, and rehashed overclaim rejection.
+- Kept SQL harness materialization, authorized Oracle 19c/26ai execution, native conformance,
+  target equivalence, iDempiere application equivalence, CloudBank mapping, migration completion,
+  and production readiness blocked or false.
+
 ## 0.50.4 — 2026-09-01
 
 - Executed the final 480 governed cases for 120 behavior contracts in the schema/DML,

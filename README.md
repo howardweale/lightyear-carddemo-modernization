@@ -4,7 +4,27 @@
 
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.50.4 — Oracle bounded catalog execution complete**
+Release: **v0.51.0 — Oracle native execution admission gate**
+
+v0.51.0 converts the completed 500-behavior, 2,000-case Oracle catalog into one governed native
+execution contract. Every case is mapped to both Oracle Database 19c and Oracle AI Database 26ai,
+creating 4,000 required native executions across 20 version/domain batches.
+
+The gate requires exact database and session identity, external-wallet authentication, per-case
+expectation and SQL-harness hashes, normalized observations, diagnostics, timestamps, runner
+identity, content addressing, and an environment-key signature. Unsigned, duplicate, partial,
+misbound, or rehashed overclaim receipts fail closed.
+
+```bash
+PYTHONPATH=src python3 -m lightyear_data verify-oracle-native-execution-gate
+./data-modernization.sh oracle-native-gate
+```
+
+No version-specific catalog SQL harnesses have been materialized and no authorized Oracle database
+has executed the catalog. Native Oracle and target-equivalent counts therefore remain zero. The
+next increment materializes governed harness batches before authorized 19c/26ai execution.
+
+Previous release: **v0.50.4 — Oracle bounded catalog execution complete**
 
 v0.50.4 executes the final 480 governed cases across all 120 behaviors in the schema/DML,
 schema-object, and structured-data domains. The tranche covers DML state changes, defaults,

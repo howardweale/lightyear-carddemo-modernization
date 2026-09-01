@@ -1,0 +1,73 @@
+{
+  "conformance_rule": "A database lane is conformant only when all 2,000 manifest cases have unique, signed, passed-native results bound to one database identity and the exact materialized SQL harness hashes.",
+  "content_sha256": "421c351665f8796541472b17abb8cffd5b4a75dc919f960899fa21b42f347446",
+  "contract_type": "lightyear-oracle-native-execution-contract",
+  "manifest_sha256": "710e6b5f430db48f2cea3767507bd970bee70ed3cda0486fccbc88875c76780e",
+  "receipt_security": {
+    "content_addressed": true,
+    "signature_algorithm": "hmac-sha256",
+    "unsigned_receipts_admitted": false,
+    "verification_key_source": "runtime-environment-only"
+  },
+  "release": "0.51.0",
+  "required_database_identity_fields": [
+    "database_lane",
+    "version_full",
+    "version_banner_sha256",
+    "dbid_sha256",
+    "container_name",
+    "character_set",
+    "national_character_set",
+    "database_timezone",
+    "option_set_sha256"
+  ],
+  "required_receipt_fields": [
+    "run_id",
+    "runner_identity",
+    "raw_stdout_sha256",
+    "raw_stderr_sha256"
+  ],
+  "required_result_fields": [
+    "case_id",
+    "behavior_id",
+    "status",
+    "bounded_expectation_sha256",
+    "harness_sql_sha256",
+    "observed_result_sha256",
+    "diagnostic_codes",
+    "started_at",
+    "completed_at"
+  ],
+  "required_session_fields": [
+    "current_schema",
+    "current_edition",
+    "session_timezone",
+    "nls_date_format",
+    "nls_timestamp_format",
+    "nls_numeric_characters",
+    "nls_sort",
+    "nls_comp",
+    "isolation_level"
+  ],
+  "result_marker": "LY_NATIVE_RESULT=<base64url-canonical-json>",
+  "result_statuses": [
+    "passed-native",
+    "failed-native",
+    "blocked-native"
+  ],
+  "schema_version": "1.0",
+  "target_equivalence_rule": "Native Oracle conformance does not establish source-to-target equivalence.",
+  "transport": {
+    "authentication": "external-wallet-alias-only",
+    "client": "sqlplus-or-sqlcl",
+    "credential_files_allowed_in_repository": false,
+    "raw_output_policy": "hash-and-redact-after-marker-validation",
+    "stderr_persisted": false,
+    "stdout_persisted": false,
+    "username_or_password_arguments_allowed": false
+  },
+  "version_lanes": [
+    "19c",
+    "26ai"
+  ]
+}

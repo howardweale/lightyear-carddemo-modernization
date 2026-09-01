@@ -44,6 +44,12 @@ from .oracle_schema_structured import (
     build_oracle_schema_structured_artifacts,
     validate_oracle_schema_structured_artifacts,
 )
+from .oracle_native_gate import (
+    OUTPUT_ROOT as ORACLE_NATIVE_GATE_OUTPUT_ROOT,
+    build_oracle_native_gate_artifacts,
+    validate_native_execution_receipt,
+    validate_oracle_native_gate_artifacts,
+)
 from .oracle_postgres_proof import (
     build_oracle_postgresql_proof,
     validate_oracle_postgresql_proof,
@@ -135,6 +141,16 @@ def parser() -> argparse.ArgumentParser:
     oracle_schema_structured.add_argument("--project-root", type=Path, default=Path("."))
     verify_oracle_schema_structured = commands.add_parser("verify-oracle-schema-structured-coverage")
     verify_oracle_schema_structured.add_argument("--project-root", type=Path, default=Path("."))
+    oracle_native_gate = commands.add_parser("build-oracle-native-execution-gate")
+    oracle_native_gate.add_argument("--project-root", type=Path, default=Path("."))
+    verify_oracle_native_gate = commands.add_parser("verify-oracle-native-execution-gate")
+    verify_oracle_native_gate.add_argument("--project-root", type=Path, default=Path("."))
+    verify_oracle_native_receipt = commands.add_parser("verify-oracle-native-receipt")
+    verify_oracle_native_receipt.add_argument("--project-root", type=Path, default=Path("."))
+    verify_oracle_native_receipt.add_argument("--receipt", type=Path, required=True)
+    verify_oracle_native_receipt.add_argument(
+        "--key-env", default="LIGHTYEAR_ORACLE_NATIVE_EVIDENCE_KEY"
+    )
     ase_source = commands.add_parser("build-sap-ase-source-adapter")
     ase_source.add_argument("--project-root", type=Path, default=Path("."))
     ase_source.add_argument("--output-root", type=Path)
@@ -478,6 +494,63 @@ def main(argv: list[str] | None = None) -> int:
             "bounded_catalog_execution_complete": receipt["bounded_catalog_execution_complete"],
             "native_oracle_verified_behavior_count": 0,
             "native_oracle_conformance": False,
+            "production_ready": False,
+        }
+    elif args.command in {
+        "build-oracle-native-execution-gate",
+        "verify-oracle-native-execution-gate",
+    }:
+        project_root = args.project_root.resolve()
+        expected = build_oracle_native_gate_artifacts(project_root)
+        output_root = project_root / ORACLE_NATIVE_GATE_OUTPUT_ROOT
+        errors = []
+        if args.command == "build-oracle-native-execution-gate":
+            for name, payload in expected.items():
+                if name.endswith(".json"):
+                    write_json(output_root / name, payload)
+                else:
+                    write_text(output_root / name, payload)
+        else:
+            errors.extend(validate_oracle_native_gate_artifacts(project_root))
+        receipt = expected["readiness.receipt.json"]
+        result = {
+            "status": "passed" if not errors else "failed",
+            "errors": sorted(set(errors)),
+            "output_root": str(output_root),
+            "catalog_behavior_count": receipt["catalog_behavior_count"],
+            "catalog_case_count": receipt["catalog_case_count"],
+            "required_native_case_execution_count": receipt[
+                "required_native_case_execution_count"
+            ],
+            "materialized_harness_count": receipt["materialized_harness_count"],
+            "native_executed_case_count": receipt["native_executed_case_count"],
+            "native_verified_behavior_count": receipt["native_verified_behavior_count"],
+            "gate_status": receipt["gate_status"],
+            "native_oracle_conformance": False,
+            "target_equivalence_observed": False,
+            "production_ready": False,
+        }
+    elif args.command == "verify-oracle-native-receipt":
+        project_root = args.project_root.resolve()
+        payload = json.loads(args.receipt.read_text(encoding="utf-8"))
+        errors = validate_native_execution_receipt(
+            project_root,
+            payload,
+            os.environ.get(args.key_env, ""),
+        )
+        result = {
+            "status": "passed" if not errors else "failed",
+            "errors": errors,
+            "receipt": str(args.receipt),
+            "native_executed_case_count": payload.get("native_executed_case_count", 0),
+            "native_passed_case_count": payload.get("native_passed_case_count", 0),
+            "native_verified_behavior_count": payload.get(
+                "native_verified_behavior_count", 0
+            ),
+            "native_oracle_conformance": payload.get(
+                "native_oracle_conformance", False
+            ),
+            "target_equivalence_observed": False,
             "production_ready": False,
         }
     elif args.command in {"build-sap-ase-source-adapter", "verify-sap-ase-source-adapter"}:

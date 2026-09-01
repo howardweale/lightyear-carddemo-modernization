@@ -1,0 +1,59 @@
+{
+  "catalog_behavior_count": 500,
+  "catalog_case_count": 2000,
+  "claim_statement": "All 2,000 bounded catalog cases are mapped to 4,000 required 19c/26ai native executions under a signed evidence contract; no catalog-native execution has occurred and native Oracle and target-equivalent counts remain zero.",
+  "cloudbank_mapping_complete": false,
+  "content_sha256": "cdbeb6c7c0efc573d881697ecc06d2244f31f1e7932368725b6ee9d20bcfdcfb",
+  "execution_contract_sha256": "421c351665f8796541472b17abb8cffd5b4a75dc919f960899fa21b42f347446",
+  "gate_status": "ready-to-admit-evidence-not-ready-to-claim-conformance",
+  "gates": [
+    {
+      "id": "bounded-catalog-dependency",
+      "status": "passed"
+    },
+    {
+      "id": "case-to-version-manifest",
+      "status": "passed"
+    },
+    {
+      "id": "database-and-session-identity-contract",
+      "status": "passed"
+    },
+    {
+      "id": "credential-isolation-policy",
+      "status": "passed"
+    },
+    {
+      "id": "signed-receipt-verifier",
+      "status": "passed"
+    },
+    {
+      "id": "native-sql-harness-materialization",
+      "status": "blocked"
+    },
+    {
+      "id": "authorized-oracle-19c-execution",
+      "status": "blocked"
+    },
+    {
+      "id": "authorized-oracle-26ai-execution",
+      "status": "blocked"
+    }
+  ],
+  "idempiere_application_equivalence": false,
+  "manifest_sha256": "710e6b5f430db48f2cea3767507bd970bee70ed3cda0486fccbc88875c76780e",
+  "materialized_harness_count": 0,
+  "migration_complete": false,
+  "native_executed_case_count": 0,
+  "native_oracle_conformance": false,
+  "native_oracle_execution_observed": false,
+  "native_verified_behavior_count": 0,
+  "production_ready": false,
+  "receipt_type": "lightyear-oracle-native-execution-gate-readiness",
+  "release": "0.51.0",
+  "required_native_case_execution_count": 4000,
+  "run_pack_index_sha256": "425a12524e94e953d3fca2a74b964eeefb063fe844f21a1f9b986adf951f0359",
+  "schema_version": "1.0",
+  "target_equivalence_observed": false,
+  "target_equivalent_behavior_count": 0
+}

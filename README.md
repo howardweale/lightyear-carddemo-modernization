@@ -4,7 +4,21 @@
 
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.49.0 — Oracle dialect authority corpus and executable fixtures**
+Release: **v0.50.0 — Oracle semantic coverage program foundation**
+
+v0.50 replaces an eight-fixture coverage headline with a governed, architect-facing Oracle
+coverage contract. The catalog now defines 500 behavior contracts and 2,000 case specifications
+across ten domains, with Oracle Database 19c as the installed-base baseline and Oracle AI Database
+26ai as the current long-term-release delta. Counts are evidence-levelled: eight behaviors and 24
+cases retain bounded-model evidence from v0.49, while native Oracle verification and target
+equivalence remain zero.
+
+```bash
+PYTHONPATH=src python3 -m lightyear_data verify-oracle-semantic-coverage
+./data-modernization.sh oracle-coverage
+```
+
+Previous release: **v0.49.0 — Oracle dialect authority corpus and executable fixtures**
 
 v0.49 pins Oracle's official Database Sample Schemas release `v23.3` at commit
 `e3325a83e56c516815844025418a96ecaf219751`. A fail-closed acquisition tool admits an allowlisted

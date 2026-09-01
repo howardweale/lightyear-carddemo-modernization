@@ -85,7 +85,10 @@ PYTHONPATH=src python3 -m lightyear_data verify-oracle-postgresql-proof
 PYTHONPATH=src python3 -m lightyear_data verify-stored-logic-qualification
 PYTHONPATH=src python3 -m lightyear_data verify-db2-semantic-adapter
 PYTHONPATH=src python3 -m lightyear_data verify-oracle-source-qualification
+PYTHONPATH=src python3 -m lightyear_data verify-oracle-dialect-corpus
+PYTHONPATH=src python3 -m lightyear_data verify-oracle-semantic-coverage
 PYTHONPATH=src python3 -m lightyear_data verify-sap-ase-source-adapter --project-root .
+./data-modernization.sh oracle-coverage
 ./data-modernization.sh ase-source
 ./migration-rehearsal.sh verify /path/to/aws-carddemo
 ```
@@ -97,6 +100,7 @@ Windows PowerShell:
 .\data-modernization.ps1 live-postgres
 .\data-modernization.ps1 live-oracle
 .\data-modernization.ps1 live-all
+.\data-modernization.ps1 oracle-coverage
 .\data-modernization.ps1 ase-source
 .\migration-rehearsal.ps1 verify C:\path\to\aws-carddemo
 ```

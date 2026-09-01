@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.50.0 — 2026-09-01
+
+- Reclassified the MS #49 eight-fixture, 24-case set as bootstrap evidence rather than a credible
+  Oracle coverage corpus.
+- Added a governed catalog of 500 Oracle behavior contracts and 2,000 case specifications across
+  ten exact domains, each with a stable ID, Oracle documentation authority, and 19c/26ai scope.
+- Established Oracle Database 19c as the installed-base baseline and Oracle AI Database 26ai as the
+  current long-term-release delta while retaining Sample Schemas v23.3 only as source examples.
+- Published an evidence ladder that separates catalogued, bounded-model verified, native Oracle
+  verified, and target-equivalent counts.
+- Bound the existing eight fixtures to exact catalog behaviors without converting their bounded-
+  model results into native Oracle claims.
+- Added deterministic artifacts, two JSON Schemas, cross-platform CLI verification, and adversarial
+  tests that fail closed on artifact drift or inflated coverage claims.
+- Kept 1,976 case implementations, native Oracle execution, target equivalence, iDempiere
+  application equivalence, CloudBank mapping, migration completion, and production readiness false.
+
 ## 0.49.0 — 2026-09-01
 
 - Pinned Oracle's official Database Sample Schemas release `v23.3` at commit

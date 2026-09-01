@@ -4,7 +4,30 @@
 
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.50.3 — Oracle transaction and CDC bounded execution**
+Release: **v0.50.4 — Oracle bounded catalog execution complete**
+
+v0.50.4 executes the final 480 governed cases across all 120 behaviors in the schema/DML,
+schema-object, and structured-data domains. The tranche covers DML state changes, defaults,
+identity, constraints, indexes and schema evolution; views, sequences, synonyms, partitioning,
+materialized views, index-organized tables and editions; and BLOB, CLOB, SecureFiles, JSON,
+XMLType, and Oracle object-type behavior.
+
+All 500 catalog behaviors and all 2,000 governed cases now pass the bounded model. All eight MS
+#49 bindings overlap catalog execution, so the cumulative result is 500 unique bounded-model-
+verified behaviors—not 508—and 2,024 evidence records after retaining the 24 bootstrap executions
+separately. No governed catalog cases remain unexecuted.
+
+```bash
+PYTHONPATH=src python3 -m lightyear_data verify-oracle-schema-structured-coverage
+./data-modernization.sh oracle-schema-structured
+```
+
+Native Oracle verification and target equivalence remain zero. Physical storage and index
+behavior, partitioning, materialized-view refresh, edition visibility, SecureFiles and LOB locator
+semantics, native JSON/XML/object behavior, and the 19c-to-26ai JSON datatype delta remain bounded
+until authorized Oracle 19c/26ai evidence exists.
+
+Previous release: **v0.50.3 — Oracle transaction and CDC bounded execution**
 
 v0.50.3 executes 280 governed cases across all 70 behaviors in the transactions and operations
 domains. The tranche covers commit, rollback, savepoints, isolation, row and table locks,

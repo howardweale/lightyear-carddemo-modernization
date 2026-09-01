@@ -1,0 +1,69 @@
+{
+  "authorization_required": true,
+  "base_catalog_sha256": "0bd7db2415ed3774c8aa2b6f432e512b0d94d26d0612df9bf5100d20fbcdecc1",
+  "bounded_corpus_sha256": "aee7f18c74df168ca942b68e62de0fc5699bbbbd2e1214b5179b1d0c501b49ec",
+  "content_sha256": "59309e2d3fcc8187ccf5842065c068d3d3682fee17753379e0cc0a7a8e204cb2",
+  "native_oracle_conformance": false,
+  "native_oracle_execution_observed": false,
+  "plan_type": "lightyear-oracle-schema-structured-native-execution-plan",
+  "production_ready": false,
+  "release": "0.50.4",
+  "required_behavior_count": 120,
+  "required_case_count": 480,
+  "required_database_versions": [
+    "19c",
+    "26ai"
+  ],
+  "required_receipt_fields": [
+    "database_version",
+    "database_id_hash",
+    "session_settings",
+    "case_id",
+    "pre_state_hash",
+    "observed_result",
+    "observed_side_effects",
+    "post_state_hash",
+    "oracle_error_stack",
+    "started_at",
+    "completed_at",
+    "runner_identity",
+    "content_sha256"
+  ],
+  "required_schema_dml_observations": [
+    "pre_and_post_schema_metadata",
+    "row_results_and_rowcounts",
+    "constraint_timing",
+    "generated_values",
+    "index_metadata_and_access",
+    "ddl_commit_boundaries",
+    "object_dependency_state",
+    "partition_and_refresh_state"
+  ],
+  "required_session_controls": [
+    "current_schema_and_edition",
+    "compatible_setting",
+    "nls_and_charset_settings",
+    "enabled_roles_and_direct_grants",
+    "query_rewrite_settings",
+    "tablespace_identity",
+    "securefile_capabilities",
+    "xml_and_json_options"
+  ],
+  "required_structured_data_observations": [
+    "lob_length_hash_and_locator_state",
+    "lob_storage_attributes",
+    "json_storage_type",
+    "json_path_results_and_error_modes",
+    "xml_storage_and_query_results",
+    "object_type_version_and_collection_state",
+    "ref_identity_and_resolution"
+  ],
+  "required_topic_family_count": 24,
+  "required_version_deltas": [
+    "19c_native_json_datatype_unavailable",
+    "26ai_native_json_datatype_available",
+    "edition_and_schema_object_behavior",
+    "securefile_and_structured_data_options"
+  ],
+  "schema_version": "1.0"
+}

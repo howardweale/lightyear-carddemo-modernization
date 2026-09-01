@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.50.4 — 2026-09-01
+
+- Executed the final 480 governed cases for 120 behavior contracts in the schema/DML,
+  schema-object, and structured-data domains through a deterministic bounded model spanning 24
+  topic families.
+- Added concrete observations for DML state changes, defaults, identity, constraints, indexes,
+  schema evolution, views, sequences, synonyms, partitioning, materialized views, index-organized
+  tables, editions, BLOB, CLOB, SecureFiles, JSON, XMLType, and Oracle object types.
+- Bound the tranche to the v0.50.3 transaction/CDC receipt and completed bounded execution of all
+  500 catalog behaviors and all 2,000 governed cases, with 500 unique bounded-model behaviors and
+  2,024 evidence records after retaining 24 bootstrap executions separately.
+- Added a native-execution plan requiring authorized 19c/26ai identities, schema and session
+  controls, storage and locator observations, version-delta evidence, diagnostics, timestamps,
+  runner identity, and sealed receipts.
+- Added two JSON Schemas, deterministic artifacts, CLI and cross-platform launchers, independent
+  policy and diagnostic mutation tests, dependency drift checks, and rehashed overclaim rejection.
+- Kept physical storage, index and partition behavior, materialized-view refresh, edition
+  visibility, SecureFiles and LOB locator semantics, native JSON/XML/object behavior, Oracle
+  conformance, target equivalence, application equivalence, migration completion, and production
+  readiness false pending authorized native evidence.
+
 ## 0.50.3 — 2026-09-01
 
 - Executed all 280 governed cases for 70 behavior contracts in the transactions and operations

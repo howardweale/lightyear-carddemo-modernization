@@ -1,5 +1,5 @@
 param(
-  [ValidateSet("build", "verify", "semantic-core", "oracle-postgresql-proof", "stored-logic", "db2-semantic", "oracle-source", "oracle-dialect", "oracle-coverage", "oracle-core-sql", "oracle-plsql", "oracle-transaction-cdc", "ase-source", "live", "live-postgres", "live-oracle", "live-all", "sign")][string]$Command = "verify",
+  [ValidateSet("build", "verify", "semantic-core", "oracle-postgresql-proof", "stored-logic", "db2-semantic", "oracle-source", "oracle-dialect", "oracle-coverage", "oracle-core-sql", "oracle-plsql", "oracle-transaction-cdc", "oracle-schema-structured", "ase-source", "live", "live-postgres", "live-oracle", "live-all", "sign")][string]$Command = "verify",
   [string]$LegacyRoot = $env:CARDDEMO_UPSTREAM_ROOT
 )
 $ErrorActionPreference = "Stop"
@@ -53,6 +53,7 @@ if ($Command -eq "build") {
   Run-Python -m lightyear_data verify-oracle-core-sql-coverage --project-root $ProjectDir
   Run-Python -m lightyear_data verify-oracle-plsql-coverage --project-root $ProjectDir
   Run-Python -m lightyear_data verify-oracle-transaction-cdc-coverage --project-root $ProjectDir
+  Run-Python -m lightyear_data verify-oracle-schema-structured-coverage --project-root $ProjectDir
   Run-Python -m lightyear_data verify-sap-ase-source-adapter --project-root $ProjectDir
   Write-Host "AUTHFRDS database semantic core, adapters, ledger, fixtures, and receipts are deterministic."
 } elseif ($Command -eq "semantic-core") {
@@ -75,6 +76,8 @@ if ($Command -eq "build") {
   Run-Python -m lightyear_data verify-oracle-plsql-coverage --project-root $ProjectDir
 } elseif ($Command -eq "oracle-transaction-cdc") {
   Run-Python -m lightyear_data verify-oracle-transaction-cdc-coverage --project-root $ProjectDir
+} elseif ($Command -eq "oracle-schema-structured") {
+  Run-Python -m lightyear_data verify-oracle-schema-structured-coverage --project-root $ProjectDir
 } elseif ($Command -eq "ase-source") {
   Run-Python -m lightyear_data verify-sap-ase-source-adapter --project-root $ProjectDir
 } elseif ($Command -in @("live", "live-postgres")) {

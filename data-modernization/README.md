@@ -90,11 +90,13 @@ PYTHONPATH=src python3 -m lightyear_data verify-oracle-semantic-coverage
 PYTHONPATH=src python3 -m lightyear_data verify-oracle-core-sql-coverage
 PYTHONPATH=src python3 -m lightyear_data verify-oracle-plsql-coverage
 PYTHONPATH=src python3 -m lightyear_data verify-oracle-transaction-cdc-coverage
+PYTHONPATH=src python3 -m lightyear_data verify-oracle-schema-structured-coverage
 PYTHONPATH=src python3 -m lightyear_data verify-sap-ase-source-adapter --project-root .
 ./data-modernization.sh oracle-coverage
 ./data-modernization.sh oracle-core-sql
 ./data-modernization.sh oracle-plsql
 ./data-modernization.sh oracle-transaction-cdc
+./data-modernization.sh oracle-schema-structured
 ./data-modernization.sh ase-source
 ./migration-rehearsal.sh verify /path/to/aws-carddemo
 ```
@@ -110,6 +112,7 @@ Windows PowerShell:
 .\data-modernization.ps1 oracle-core-sql
 .\data-modernization.ps1 oracle-plsql
 .\data-modernization.ps1 oracle-transaction-cdc
+.\data-modernization.ps1 oracle-schema-structured
 .\data-modernization.ps1 ase-source
 .\migration-rehearsal.ps1 verify C:\path\to\aws-carddemo
 ```

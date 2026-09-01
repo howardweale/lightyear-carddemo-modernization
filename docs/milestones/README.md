@@ -1,3 +1,7 @@
+![LIGHTYEAR primary logo](../../brand/assets/lightyear-primary.svg)
+
+*Where context becomes trusted action.*
+
 # LIGHTYEAR milestone documentation library
 
 This library is the customer-readable body of record for MS #1 through MS #47. Every milestone is

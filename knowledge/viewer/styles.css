@@ -879,3 +879,102 @@ button:not(:disabled):active { transform: translateY(1px); }
   .workspace { grid-template-columns: 210px minmax(440px, 1fr) 310px; }
   .claim-metadata div:nth-child(4), .claim-metadata div:nth-child(5) { display: none; }
 }
+
+/* LIGHTYEAR Brand Kit v1.0 — consistent marks that signal trusted action. */
+:root {
+  --bg: #f7f6fc;
+  --surface: #fefefe;
+  --surface-2: #f4f1fb;
+  --surface-3: #efebfb;
+  --ink: #15184d;
+  --muted: #676985;
+  --border: #ddd7f2;
+  --border-strong: #b8abe8;
+  --accent: #7d57ea;
+  --accent-2: #6b45d8;
+  --edge: #b7afcf;
+  --shadow: 0 14px 36px rgba(21, 24, 77, .12);
+  --program: #315bb5;
+  --structure: #7d57ea;
+  --data: #207565;
+  --rule: #a74336;
+  --modern: #a7702c;
+  --verify: #a93680;
+  --other: #686b7d;
+  --success: #267653;
+  --warning: #a7702c;
+  --critical: #b64338;
+}
+
+body { background: var(--bg); }
+
+.masthead {
+  min-height: 64px;
+  padding: 8px 18px;
+  background: var(--surface);
+  border-bottom-color: var(--border);
+}
+.brand-lockup { gap: 10px; min-width: 196px; }
+.brand-lockup img { display: block; width: 104px; height: auto; }
+.product-name { padding-left: 10px; color: var(--ink); border-left: 1px solid var(--border-strong); font-size: 14px; font-weight: 600; line-height: 1.2; white-space: nowrap; }
+.brand-mark, .brand-lockup h1 { display: none; }
+
+.topbar { grid-template-columns: max-content minmax(170px, 200px) minmax(420px, 1fr) 10px minmax(250px, 360px); }
+.context-trigger, .combobox-trigger, select, input, textarea {
+  border-color: var(--border);
+  border-radius: 8px;
+}
+.context-trigger:hover, .combobox-trigger:hover, .combobox-trigger[aria-expanded="true"], select:hover, input:hover, textarea:hover {
+  border-color: var(--accent);
+  box-shadow: 0 4px 14px rgba(125, 87, 234, .12);
+}
+.context-trigger-label, .combobox-label, label, .section-heading { color: var(--muted); }
+.status-dot { background: var(--warning); box-shadow: 0 0 0 4px rgba(167, 112, 44, .12); }
+.status-dot.online { background: var(--success); box-shadow: 0 0 0 4px rgba(38, 118, 83, .12); }
+.status-dot.error { background: var(--critical); box-shadow: 0 0 0 4px rgba(182, 67, 56, .12); }
+.live-alerts { color: var(--ink); background: #fbf9ff; border-color: var(--border-strong); }
+
+.estate-boundary.claim { background: #faf7f0; border-bottom-color: #e7d8c3; }
+.claim .read-only-badge { color: #76501f; background: #f5ead9; border-color: #dfc39e; }
+.claim p { color: #5f4b34; }
+.claim-metadata dt { color: var(--muted); }
+.claim-metadata dd { color: var(--ink); }
+#metric-hash { color: var(--accent); }
+
+.workspace { background: var(--border); }
+.panel { background: var(--surface-2); }
+.graph-panel {
+  background-color: var(--surface);
+  background-image: radial-gradient(rgba(125, 87, 234, .19) .6px, transparent .6px);
+}
+.graph-toolbar span, .toolbar-button { border-color: var(--border); box-shadow: 0 4px 14px rgba(21, 24, 77, .06); }
+.node circle { filter: drop-shadow(0 2px 3px rgba(21, 24, 77, .14)); }
+.node-label-pill { fill: rgba(254, 254, 254, .95); stroke: var(--border); }
+.node text { fill: var(--ink); }
+
+.graph-binding { background: var(--surface); border-color: var(--border); }
+.right-tabs { background: var(--surface); }
+.right-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+.kind-pill { background: var(--accent); }
+.primary-button { background: var(--accent); border-color: var(--accent); }
+.primary-button:hover { background: var(--accent-2); }
+.secondary-button:hover, .text-button, .toolbar-button:hover { color: var(--accent); }
+
+.combobox-list, .estate-popover, .density-card, .verifier-dialog { border-color: var(--border); box-shadow: var(--shadow); }
+.combobox-list button:hover, .combobox-list button[aria-selected="true"] { color: var(--accent); background: var(--surface-3); }
+.density-guard {
+  background: repeating-linear-gradient(135deg, rgba(239, 235, 251, .95) 0 12px, rgba(254, 254, 254, .96) 12px 24px);
+}
+.density-eyebrow { color: var(--accent); }
+.verifier-dialog::backdrop { background: rgba(21, 24, 77, .32); }
+.source-drawer { box-shadow: -18px 0 42px rgba(21, 24, 77, .18); }
+.source-code { color: #f7f6fc; background: var(--ink); }
+.source-line.highlighted { background: color-mix(in srgb, var(--accent) 28%, var(--ink)); }
+.chat-message.user { background: var(--accent); }
+
+@media (max-width: 1400px) {
+  .brand-lockup { min-width: 184px; }
+  .brand-lockup img { width: 92px; }
+  .product-name { font-size: 12px; }
+  .topbar { grid-template-columns: max-content minmax(160px, 190px) minmax(400px, 1fr) 10px minmax(230px, 320px); }
+}

@@ -162,6 +162,7 @@ class GraphExplorerTests(unittest.TestCase):
             self.assertIn("Open proof run for this workload", body)
             self.assertIn('id="verifier-dialog"', body)
             self.assertIn("Search selected workload", body)
+            self.assertIn("assets/lightyear-primary.svg", body)
             self.assertIn("Technology scope", body)
             self.assertIn("CROSS-PLATFORM EVIDENCE TRACE", body)
             with urlopen(f"{base}/app.js", timeout=3) as response:
@@ -190,11 +191,11 @@ class GraphExplorerTests(unittest.TestCase):
             with urlopen(f"{base}/styles.css", timeout=3) as response:
                 styles = response.read().decode("utf-8")
             for graph_color in (
-                "#fbfaf8", "#ffffff", "#b4531f", "#2f5fb4", "#7b4fb0",
-                "#2f6b3f", "#b03a28", "#b4831f", "#a02e7a",
+                "#f7f6fc", "#fefefe", "#15184d", "#7d57ea", "#a7702c",
+                "#315bb5", "#207565", "#a74336", "#a93680",
             ):
                 self.assertIn(graph_color, styles)
-            self.assertIn("warm editorial Control Tower palette", styles)
+            self.assertIn("LIGHTYEAR Brand Kit v1.0", styles)
             self.assertIn(".graph-binding.invalidated", styles)
             self.assertIn('"IBM Plex Sans"', styles)
             self.assertIn("@font-face", styles)

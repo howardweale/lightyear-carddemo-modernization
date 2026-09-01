@@ -1,4 +1,8 @@
-# FactoryDark.ai CardDemo Modernization Factory
+![LIGHTYEAR primary logo](brand/assets/lightyear-primary.svg)
+
+*Where context becomes trusted action.*
+
+# LIGHTYEAR CardDemo Modernization Factory
 
 Release: **v0.47.3 — Control Tower craft and accessibility correction**
 

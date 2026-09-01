@@ -1,0 +1,12 @@
+:root {
+  --ly-navy: #15184D;
+  --ly-violet: #7D57EA;
+  --ly-bronze: #A7702C;
+  --ly-paper: #FEFEFE;
+  --ly-lavender: #EFEBFB;
+  --ly-lavender-strong: #D8CCF8;
+  --ly-muted: #676985;
+  --ly-line: #DDD7F2;
+  --ly-sans: "IBM Plex Sans", Arial, sans-serif;
+  --ly-mono: "IBM Plex Mono", ui-monospace, monospace;
+}

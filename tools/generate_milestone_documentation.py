@@ -21,7 +21,11 @@ DOC_ROOT = ROOT / "docs" / "milestones"
 CATALOG_PATH = DOC_ROOT / "catalog.json"
 CHANGELOG_PATH = ROOT / "CHANGELOG.md"
 MANIFEST_PATH = DOC_ROOT / "manifest.json"
-GENERATOR_VERSION = "1.1"
+BRAND_ROOT = ROOT / "brand"
+BRAND_ASSETS = BRAND_ROOT / "assets"
+BRAND_LOGO_SVG = BRAND_ASSETS / "lightyear-primary.svg"
+BRAND_LOGO_PNG = BRAND_ASSETS / "lightyear-primary.png"
+GENERATOR_VERSION = "1.3"
 REPOSITORY = "howardweale/lightyear-carddemo-modernization"
 DEFAULT_BRANCH = "main"
 GITHUB_BLOB_ROOT = f"https://github.com/{REPOSITORY}/blob/{DEFAULT_BRANCH}"
@@ -148,6 +152,8 @@ def build_model(
 def markdown_text(model: dict[str, Any], audience: str) -> str:
     number = model["number"]
     lines = [
+        "![LIGHTYEAR primary logo](../../../brand/assets/lightyear-primary.svg)", "",
+        "*Where context becomes trusted action.*", "",
         f"# MS #{number:02d} - {model['title']}", "",
         f"> **Status:** {model['status']}", ">", f"> **Release:** {model['release']}", ">",
         f"> **Date:** {model['date']}", ">", f"> **Audience:** {audience}", "",
@@ -197,7 +203,7 @@ def markdown_text(model: dict[str, Any], audience: str) -> str:
     return "\n".join(lines)
 
 
-def set_run_font(run: Any, name: str = "Calibri") -> None:
+def set_run_font(run: Any, name: str = "Arial") -> None:
     from docx.oxml.ns import qn
     run.font.name = name
     fonts = run._element.get_or_add_rPr().get_or_add_rFonts()
@@ -291,7 +297,7 @@ def build_docx(model: dict[str, Any], audience: str, output: Path) -> None:
     try:
         from docx import Document
         from docx.enum.table import WD_CELL_VERTICAL_ALIGNMENT
-        from docx.enum.text import WD_ALIGN_PARAGRAPH
+        from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_TAB_ALIGNMENT
         from docx.oxml import OxmlElement
         from docx.oxml.ns import qn
         from docx.shared import Inches, Pt, RGBColor
@@ -300,58 +306,67 @@ def build_docx(model: dict[str, Any], audience: str, output: Path) -> None:
     document = Document()
     section = document.sections[0]
     section.page_width, section.page_height = Inches(8.5), Inches(11)
-    section.top_margin = section.right_margin = section.bottom_margin = section.left_margin = Inches(1)
-    section.header_distance = section.footer_distance = Inches(0.492)
+    section.top_margin = Inches(0.88)
+    section.right_margin = section.bottom_margin = section.left_margin = Inches(1)
+    section.header_distance, section.footer_distance = Inches(0.28), Inches(0.492)
     normal = document.styles["Normal"]
-    normal.font.name, normal.font.size = "Calibri", Pt(11)
-    normal._element.get_or_add_rPr().get_or_add_rFonts().set(qn("w:ascii"), "Calibri")
-    normal._element.get_or_add_rPr().get_or_add_rFonts().set(qn("w:hAnsi"), "Calibri")
-    normal.paragraph_format.space_after, normal.paragraph_format.line_spacing = Pt(6), 1.10
+    normal.font.name, normal.font.size = "Arial", Pt(10.25)
+    normal.font.color.rgb = RGBColor.from_string("15184D")
+    normal._element.get_or_add_rPr().get_or_add_rFonts().set(qn("w:ascii"), "Arial")
+    normal._element.get_or_add_rPr().get_or_add_rFonts().set(qn("w:hAnsi"), "Arial")
+    normal.paragraph_format.space_after, normal.paragraph_format.line_spacing = Pt(5), 1.08
     for name, size, color, before, after in (
-        ("Heading 1", 16, "2E74B5", 16, 8), ("Heading 2", 13, "2E74B5", 12, 6),
-        ("Heading 3", 12, "1F4D78", 8, 4),
+        ("Heading 1", 15.5, "7D57EA", 13, 6), ("Heading 2", 13, "7D57EA", 11, 5),
+        ("Heading 3", 12, "15184D", 8, 4),
     ):
         style = document.styles[name]
-        style.font.name, style.font.size, style.font.bold = "Calibri", Pt(size), True
+        style.font.name, style.font.size, style.font.bold = "Arial", Pt(size), True
         style.font.color.rgb = RGBColor.from_string(color)
         style.paragraph_format.space_before, style.paragraph_format.space_after = Pt(before), Pt(after)
         style.paragraph_format.keep_with_next = True
     for name in ("List Bullet", "List Number"):
         style = document.styles[name]
-        style.font.name, style.font.size = "Calibri", Pt(11)
+        style.font.name, style.font.size = "Arial", Pt(10.25)
         style.paragraph_format.left_indent, style.paragraph_format.first_line_indent = Inches(0.5), Inches(-0.25)
-        style.paragraph_format.space_after, style.paragraph_format.line_spacing = Pt(8), 1.167
+        style.paragraph_format.space_after, style.paragraph_format.line_spacing = Pt(5), 1.10
     header = section.header.paragraphs[0]
-    run = header.add_run("LIGHTYEAR  |  MILESTONE DOCUMENTATION")
+    header.paragraph_format.space_after = Pt(2)
+    logo_run = header.add_run()
+    logo_run.add_picture(str(BRAND_LOGO_PNG), width=Inches(1.05))
+    run = header.add_run("   MILESTONE DOCUMENTATION")
     set_run_font(run)
-    run.font.size, run.font.bold, run.font.color.rgb = Pt(8.5), True, RGBColor.from_string("6B7280")
+    run.font.size, run.font.bold, run.font.color.rgb = Pt(8), True, RGBColor.from_string("676985")
     border = OxmlElement("w:pBdr")
     bottom = OxmlElement("w:bottom")
-    for key, value in (("w:val", "single"), ("w:sz", "6"), ("w:space", "3"), ("w:color", "D7DBE2")):
+    for key, value in (("w:val", "single"), ("w:sz", "7"), ("w:space", "3"), ("w:color", "A7702C")):
         bottom.set(qn(key), value)
     border.append(bottom)
     header._p.get_or_add_pPr().append(border)
     footer = section.footer.paragraphs[0]
-    footer.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-    run = footer.add_run(f"MS #{model['number']:02d}  |  Page ")
+    footer.alignment = WD_ALIGN_PARAGRAPH.LEFT
+    footer.paragraph_format.tab_stops.add_tab_stop(Inches(6.5), WD_TAB_ALIGNMENT.RIGHT)
+    run = footer.add_run("Underlying evidence remains authoritative.")
     set_run_font(run)
-    run.font.size, run.font.color.rgb = Pt(8.5), RGBColor.from_string("6B7280")
+    run.font.size, run.font.color.rgb = Pt(7.5), RGBColor.from_string("676985")
+    run = footer.add_run(f"\tMS #{model['number']:02d}  |  Page ")
+    set_run_font(run)
+    run.font.size, run.font.color.rgb = Pt(8.5), RGBColor.from_string("676985")
     add_page_field(footer)
     kicker = document.add_paragraph()
     kicker.paragraph_format.space_after = Pt(0)
     run = kicker.add_run("CUSTOMER MILESTONE BRIEF")
     set_run_font(run)
-    run.font.size, run.font.bold, run.font.color.rgb = Pt(9), True, RGBColor.from_string("9A6B16")
+    run.font.size, run.font.bold, run.font.color.rgb = Pt(9), True, RGBColor.from_string("A7702C")
     title = document.add_paragraph()
     title.paragraph_format.space_after = Pt(8)
     run = title.add_run(f"MS #{model['number']:02d} - {plain(model['title'])}")
     set_run_font(run)
-    run.font.size, run.font.bold, run.font.color.rgb = Pt(28), True, RGBColor.from_string("0B2545")
+    run.font.size, run.font.bold, run.font.color.rgb = Pt(28), True, RGBColor.from_string("15184D")
     subtitle = document.add_paragraph()
     subtitle.paragraph_format.space_after = Pt(18)
     run = subtitle.add_run("Purpose, customer value, delivered capability, evidence, and claim boundaries")
     set_run_font(run)
-    run.font.size, run.font.color.rgb = Pt(13.5), RGBColor.from_string("4B5563")
+    run.font.size, run.font.color.rgb = Pt(13.5), RGBColor.from_string("676985")
     table = document.add_table(rows=4, cols=2)
     table.style = "Table Grid"
     set_table_geometry(table, [2700, 6660])
@@ -359,10 +374,10 @@ def build_docx(model: dict[str, Any], audience: str, output: Path) -> None:
     for row, (label, value) in zip(table.rows, metadata):
         for cell in row.cells:
             cell.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
-        shade_cell(row.cells[0], "F2F4F7")
+        shade_cell(row.cells[0], "EFEBFB")
         label_run = row.cells[0].paragraphs[0].add_run(label)
         set_run_font(label_run)
-        label_run.bold, label_run.font.color.rgb = True, RGBColor.from_string("1F4D78")
+        label_run.bold, label_run.font.color.rgb = True, RGBColor.from_string("15184D")
         value_run = row.cells[1].paragraphs[0].add_run(plain(value))
         set_run_font(value_run)
     content = [
@@ -379,11 +394,6 @@ def build_docx(model: dict[str, Any], audience: str, output: Path) -> None:
         document.add_heading(heading, level=1)
         for value in values:
             document.add_paragraph(plain(value), style="List Bullet" if bullets else None)
-    note = document.add_paragraph()
-    note.paragraph_format.space_before = Pt(10)
-    run = note.add_run("The underlying schemas, receipts, ledgers, tests, and policy decisions remain authoritative when greater detail is required.")
-    set_run_font(run)
-    run.italic, run.font.size, run.font.color.rgb = True, Pt(9), RGBColor.from_string("6B7280")
     properties = document.core_properties
     properties.title, properties.subject, properties.author = f"MS #{model['number']:02d} - {plain(model['title'])}", "LIGHTYEAR customer milestone documentation", "LIGHTYEAR"
     properties.created = properties.modified = FIXED_TIME.replace(tzinfo=None)
@@ -411,31 +421,33 @@ def build_pdf(model: dict[str, Any], audience: str, output: Path) -> None:
         if name not in pdfmetrics.getRegisteredFontNames():
             pdfmetrics.registerFont(TTFont(name, str(font_dir / filename)))
     styles = getSampleStyleSheet()
-    body = ParagraphStyle("Body", parent=styles["BodyText"], fontName="LYSans", fontSize=10.3, leading=13.2, spaceAfter=6, textColor=colors.HexColor("#111827"))
-    heading = ParagraphStyle("H1", parent=styles["Heading1"], fontName="LYSans-Bold", fontSize=15, leading=18, textColor=colors.HexColor("#2E74B5"), spaceBefore=14, spaceAfter=7, keepWithNext=True)
-    bullet = ParagraphStyle("Bullet", parent=body, leftIndent=18, firstLineIndent=-10, spaceAfter=6)
-    label = ParagraphStyle("Label", parent=body, fontName="LYSans-Bold", textColor=colors.HexColor("#1F4D78"), spaceAfter=0)
+    body = ParagraphStyle("Body", parent=styles["BodyText"], fontName="LYSans", fontSize=9.7, leading=12.1, spaceAfter=4.5, textColor=colors.HexColor("#15184D"))
+    heading = ParagraphStyle("H1", parent=styles["Heading1"], fontName="LYSans-Bold", fontSize=14, leading=16.5, textColor=colors.HexColor("#7D57EA"), spaceBefore=10, spaceAfter=5, keepWithNext=True)
+    bullet = ParagraphStyle("Bullet", parent=body, leftIndent=18, firstLineIndent=-10, spaceAfter=4)
+    label = ParagraphStyle("Label", parent=body, fontName="LYSans-Bold", textColor=colors.HexColor("#15184D"), spaceAfter=0)
     value = ParagraphStyle("Value", parent=body, spaceAfter=0)
     def safe(text: str) -> str:
         return html.escape(plain(text))
     def furniture(canvas: Any, doc: Any) -> None:
         canvas.saveState()
-        canvas.setStrokeColor(colors.HexColor("#D7DBE2")); canvas.setLineWidth(0.5)
+        canvas.drawImage(str(BRAND_LOGO_PNG), inch, LETTER[1] - 0.66 * inch, width=0.96 * inch, height=0.587 * inch, preserveAspectRatio=True, mask="auto")
+        canvas.setStrokeColor(colors.HexColor("#A7702C")); canvas.setLineWidth(0.65)
         canvas.line(inch, LETTER[1] - 0.58 * inch, LETTER[0] - inch, LETTER[1] - 0.58 * inch)
-        canvas.setFillColor(colors.HexColor("#6B7280")); canvas.setFont("LYSans-Bold", 8)
-        canvas.drawString(inch, LETTER[1] - 0.48 * inch, "LIGHTYEAR  |  MILESTONE DOCUMENTATION")
+        canvas.setFillColor(colors.HexColor("#676985")); canvas.setFont("LYSans-Bold", 7.5)
+        canvas.drawRightString(LETTER[0] - inch, LETTER[1] - 0.45 * inch, "MILESTONE DOCUMENTATION")
         canvas.setFont("LYSans", 8)
+        canvas.drawString(inch, 0.48 * inch, "Underlying evidence remains authoritative.")
         canvas.drawRightString(LETTER[0] - inch, 0.48 * inch, f"MS #{model['number']:02d}  |  Page {doc.page}")
         canvas.restoreState()
     output.parent.mkdir(parents=True, exist_ok=True)
-    doc = SimpleDocTemplate(str(output), pagesize=LETTER, rightMargin=inch, leftMargin=inch, topMargin=0.82 * inch, bottomMargin=0.72 * inch, title=f"MS #{model['number']:02d} - {plain(model['title'])}", author="LIGHTYEAR", subject="LIGHTYEAR customer milestone documentation", invariant=1, pageCompression=1)
+    doc = SimpleDocTemplate(str(output), pagesize=LETTER, rightMargin=inch, leftMargin=inch, topMargin=0.86 * inch, bottomMargin=0.66 * inch, title=f"MS #{model['number']:02d} - {plain(model['title'])}", author="LIGHTYEAR", subject="LIGHTYEAR customer milestone documentation", invariant=1, pageCompression=1)
     story: list[Any] = [Spacer(1, 8)]
-    story.append(Paragraph("CUSTOMER MILESTONE BRIEF", ParagraphStyle("Kicker", parent=body, fontName="LYSans-Bold", fontSize=8.5, textColor=colors.HexColor("#9A6B16"), spaceAfter=2)))
-    story.append(Paragraph(f"MS #{model['number']:02d} - {safe(model['title'])}", ParagraphStyle("Title", parent=styles["Title"], fontName="LYSans-Bold", fontSize=24, leading=28, textColor=colors.HexColor("#0B2545"), spaceAfter=7)))
-    story.append(Paragraph("Purpose, customer value, delivered capability, evidence, and claim boundaries", ParagraphStyle("Subtitle", parent=body, fontSize=12, leading=15, textColor=colors.HexColor("#4B5563"), spaceAfter=14)))
+    story.append(Paragraph("CUSTOMER MILESTONE BRIEF", ParagraphStyle("Kicker", parent=body, fontName="LYSans-Bold", fontSize=8.5, textColor=colors.HexColor("#A7702C"), spaceAfter=2)))
+    story.append(Paragraph(f"MS #{model['number']:02d} - {safe(model['title'])}", ParagraphStyle("Title", parent=styles["Title"], fontName="LYSans-Bold", fontSize=23, leading=27, textColor=colors.HexColor("#15184D"), spaceAfter=6)))
+    story.append(Paragraph("Purpose, customer value, delivered capability, evidence, and claim boundaries", ParagraphStyle("Subtitle", parent=body, fontSize=11.5, leading=14, textColor=colors.HexColor("#676985"), spaceAfter=12)))
     rows = [[Paragraph(k, label), Paragraph(safe(v), value)] for k, v in (("Status", model["status"]), ("Release", model["release"]), ("Date", model["date"]), ("Audience", audience))]
     table = Table(rows, colWidths=[1.55 * inch, 4.95 * inch], hAlign="LEFT")
-    table.setStyle(TableStyle([("GRID", (0, 0), (-1, -1), 0.45, colors.HexColor("#D7DBE2")), ("BACKGROUND", (0, 0), (0, -1), colors.HexColor("#F2F4F7")), ("VALIGN", (0, 0), (-1, -1), "MIDDLE"), ("LEFTPADDING", (0, 0), (-1, -1), 8), ("RIGHTPADDING", (0, 0), (-1, -1), 8), ("TOPPADDING", (0, 0), (-1, -1), 6), ("BOTTOMPADDING", (0, 0), (-1, -1), 6)]))
+    table.setStyle(TableStyle([("GRID", (0, 0), (-1, -1), 0.45, colors.HexColor("#DDD7F2")), ("BACKGROUND", (0, 0), (0, -1), colors.HexColor("#EFEBFB")), ("VALIGN", (0, 0), (-1, -1), "MIDDLE"), ("LEFTPADDING", (0, 0), (-1, -1), 8), ("RIGHTPADDING", (0, 0), (-1, -1), 8), ("TOPPADDING", (0, 0), (-1, -1), 6), ("BOTTOMPADDING", (0, 0), (-1, -1), 6)]))
     story.append(table)
     content = [
         ("Executive summary", [model["executive_summary"]], False),
@@ -451,14 +463,12 @@ def build_pdf(model: dict[str, Any], audience: str, output: Path) -> None:
         story.append(Paragraph(safe(title), heading))
         for item in values:
             story.append(Paragraph(("-  " if bullets else "") + safe(item), bullet if bullets else body))
-    story.append(Spacer(1, 8))
-    story.append(Paragraph("The underlying schemas, receipts, ledgers, tests, and policy decisions remain authoritative when greater detail is required.", ParagraphStyle("Note", parent=body, fontName="LYSans-Italic", fontSize=8.7, leading=11, textColor=colors.HexColor("#6B7280"))))
     doc.build(story, onFirstPage=furniture, onLaterPages=furniture)
 
 
 def source_sha256() -> str:
     digest = hashlib.sha256()
-    for path in (Path(__file__).resolve(), CATALOG_PATH, CHANGELOG_PATH):
+    for path in (Path(__file__).resolve(), CATALOG_PATH, CHANGELOG_PATH, BRAND_ROOT / "tokens.json", BRAND_LOGO_SVG, BRAND_LOGO_PNG):
         digest.update(path.relative_to(ROOT).as_posix().encode()); digest.update(b"\0")
         digest.update(path.read_bytes()); digest.update(b"\0")
     return digest.hexdigest()
@@ -472,6 +482,8 @@ def format_links(model: dict[str, Any]) -> tuple[str, str, str]:
 
 def write_markdown_index(models: list[dict[str, Any]]) -> None:
     lines = [
+        "![LIGHTYEAR primary logo](../../brand/assets/lightyear-primary.svg)", "",
+        "*Where context becomes trusted action.*", "",
         "# LIGHTYEAR milestone documentation library", "",
         f"This library is the customer-readable body of record for MS #1 through MS #{EXPECTED_MILESTONES[-1]}. Every milestone is",
         "published from one governed catalog in Markdown, Microsoft Word (`.docx`), and PDF.", "",
@@ -526,38 +538,41 @@ def write_html_index(models: list[dict[str, Any]]) -> None:
   <meta name="description" content="Search the governed LIGHTYEAR documentation for milestones MS #1 through MS #{EXPECTED_MILESTONES[-1]}.">
   <title>LIGHTYEAR milestone library</title>
   <style>
-    :root {{ color-scheme: light; --ink:#102a43; --muted:#52687a; --line:#d9e2ec; --paper:#fff; --wash:#f4f8fb; --navy:#071f33; --teal:#00a6a6; --teal-dark:#007b7b; }}
+    :root {{ color-scheme: light; --ink:#15184d; --muted:#676985; --line:#ddd7f2; --paper:#fefefe; --wash:#f7f6fc; --navy:#15184d; --violet:#7d57ea; --violet-dark:#6942d6; --lavender:#efebfb; --bronze:#a7702c; }}
     * {{ box-sizing:border-box; }}
     body {{ margin:0; color:var(--ink); background:var(--wash); font:16px/1.5 Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }}
-    a {{ color:var(--teal-dark); }}
-    header {{ background:linear-gradient(135deg, var(--navy), #123c55); color:white; padding:3.5rem max(1.25rem, calc((100vw - 1180px)/2)); }}
-    header p {{ max-width:760px; margin:.7rem 0 0; color:#c9e6ea; font-size:1.08rem; }}
-    .eyebrow {{ margin:0; color:#6ee7e7; font-size:.78rem; font-weight:800; letter-spacing:.14em; text-transform:uppercase; }}
+    a {{ color:var(--violet-dark); }}
+    header {{ background:linear-gradient(135deg, var(--navy), #242866); color:white; padding:3.1rem max(1.25rem, calc((100vw - 1180px)/2)) 3.7rem; }}
+    .brand {{ display:flex; align-items:center; gap:1rem; margin-bottom:2rem; }}
+    .brand img {{ display:block; width:150px; height:auto; }}
+    .brand span {{ padding-left:1rem; color:#d8ccf8; border-left:1px solid rgba(216,204,248,.55); font-size:.92rem; font-weight:700; }}
+    header p {{ max-width:760px; margin:.7rem 0 0; color:#ded9f0; font-size:1.08rem; }}
+    .eyebrow {{ margin:0; color:#bdaafd; font-size:.78rem; font-weight:800; letter-spacing:.14em; text-transform:uppercase; }}
     h1 {{ margin:.25rem 0 0; font-size:clamp(2rem, 5vw, 3.6rem); line-height:1.05; letter-spacing:-.035em; }}
     main {{ width:min(1180px, calc(100% - 2rem)); margin:-1.35rem auto 3rem; }}
-    .controls {{ display:grid; grid-template-columns:minmax(250px, 1fr) minmax(190px, 260px); gap:1rem; padding:1.1rem; background:var(--paper); border:1px solid var(--line); border-radius:14px; box-shadow:0 12px 34px rgba(7,31,51,.1); }}
+    .controls {{ display:grid; grid-template-columns:minmax(250px, 1fr) minmax(190px, 260px); gap:1rem; padding:1.1rem; background:var(--paper); border:1px solid var(--line); border-radius:14px; box-shadow:0 12px 34px rgba(21,24,77,.1); }}
     label {{ display:block; margin:0 0 .35rem; font-size:.78rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; }}
-    input, select {{ width:100%; min-height:46px; border:1px solid #9fb3c4; border-radius:8px; padding:.65rem .8rem; color:var(--ink); background:white; font:inherit; }}
-    input:focus, select:focus {{ outline:3px solid rgba(0,166,166,.22); border-color:var(--teal-dark); }}
+    input, select {{ width:100%; min-height:46px; border:1px solid #b8abe8; border-radius:8px; padding:.65rem .8rem; color:var(--ink); background:white; font:inherit; }}
+    input:focus, select:focus {{ outline:3px solid rgba(125,87,234,.22); border-color:var(--violet); }}
     .summary {{ display:flex; justify-content:space-between; gap:1rem; align-items:center; margin:1.4rem .2rem .65rem; color:var(--muted); }}
     #result-count {{ font-weight:750; color:var(--ink); }}
     .summary a {{ font-size:.92rem; }}
-    .table-wrap {{ overflow:hidden; border:1px solid var(--line); border-radius:12px; background:var(--paper); box-shadow:0 8px 26px rgba(7,31,51,.06); }}
+    .table-wrap {{ overflow:hidden; border:1px solid var(--line); border-radius:12px; background:var(--paper); box-shadow:0 8px 26px rgba(21,24,77,.06); }}
     table {{ width:100%; border-collapse:collapse; }}
-    th {{ padding:.78rem 1rem; color:#d8f3f3; background:var(--navy); font-size:.75rem; letter-spacing:.07em; text-align:left; text-transform:uppercase; }}
+    th {{ padding:.78rem 1rem; color:#eee9ff; background:var(--navy); font-size:.75rem; letter-spacing:.07em; text-align:left; text-transform:uppercase; }}
     td {{ padding:1rem; border-top:1px solid var(--line); vertical-align:top; }}
     tbody tr:first-child td {{ border-top:0; }}
-    tbody tr:hover {{ background:#f7fbfc; }}
+    tbody tr:hover {{ background:#faf9ff; }}
     .number {{ width:100px; }}
-    .number span, .phase span {{ display:inline-block; border-radius:999px; background:#e6f6f6; color:#006d6d; padding:.25rem .55rem; font-size:.78rem; font-weight:800; white-space:nowrap; }}
+    .number span, .phase span {{ display:inline-block; border-radius:999px; background:var(--lavender); color:var(--violet-dark); padding:.25rem .55rem; font-size:.78rem; font-weight:800; white-space:nowrap; }}
     .title {{ color:var(--ink); font-size:1.02rem; font-weight:800; text-decoration:none; }}
-    .title:hover {{ color:var(--teal-dark); text-decoration:underline; }}
+    .title:hover {{ color:var(--violet-dark); text-decoration:underline; }}
     td p {{ max-width:670px; margin:.28rem 0 0; color:var(--muted); font-size:.9rem; }}
     .phase {{ width:170px; }}
     .phase small {{ display:block; margin:.35rem 0 0 .25rem; color:var(--muted); }}
     .formats {{ width:190px; white-space:nowrap; }}
-    .formats a {{ display:inline-block; margin:0 .28rem .35rem 0; border:1px solid #a9d6d6; border-radius:6px; padding:.28rem .48rem; font-size:.82rem; font-weight:750; text-decoration:none; }}
-    .formats a:hover {{ color:white; background:var(--teal-dark); border-color:var(--teal-dark); }}
+    .formats a {{ display:inline-block; margin:0 .28rem .35rem 0; border:1px solid #cbbef2; border-radius:6px; padding:.28rem .48rem; font-size:.82rem; font-weight:750; text-decoration:none; }}
+    .formats a:hover {{ color:white; background:var(--violet); border-color:var(--violet); }}
     #empty {{ display:none; padding:3rem 1rem; color:var(--muted); text-align:center; }}
     footer {{ width:min(1180px, calc(100% - 2rem)); margin:0 auto 3rem; color:var(--muted); font-size:.87rem; }}
     @media (max-width:760px) {{
@@ -571,6 +586,7 @@ def write_html_index(models: list[dict[str, Any]]) -> None:
 </head>
 <body>
   <header>
+    <div class="brand"><img src="assets/lightyear-reversed.svg" alt="LIGHTYEAR primary logo"><span>Documentation</span></div>
     <p class="eyebrow">Governed modernization evidence</p>
     <h1>Milestone library</h1>
     <p>Search {len(models)} customer-readable milestone briefs by number, title, customer value, delivered capability, release, or roadmap phase.</p>
@@ -645,6 +661,12 @@ def build() -> None:
         (directory / f"{stem}.md").write_text(markdown_text(model, catalog["audience"]), encoding="utf-8")
         build_docx(model, catalog["audience"], directory / f"{stem}.docx")
         build_pdf(model, catalog["audience"], directory / f"{stem}.pdf")
+    site_assets = DOC_ROOT / "assets"
+    site_assets.mkdir(parents=True, exist_ok=True)
+    legacy_site_logo = site_assets / "lightyear-horizontal-reversed.svg"
+    if legacy_site_logo.exists():
+        legacy_site_logo.unlink()
+    shutil.copyfile(BRAND_ASSETS / "lightyear-reversed.svg", site_assets / "lightyear-reversed.svg")
     write_markdown_index(models)
     write_html_index(models)
     artifacts = []
@@ -654,7 +676,7 @@ def build() -> None:
             path = DOC_ROOT / stem / f"{stem}{suffix}"
             artifacts.append({"path": path.relative_to(ROOT).as_posix(), "bytes": path.stat().st_size, "sha256": sha256_path(path)})
     library_files = []
-    for path in (DOC_ROOT / "README.md", DOC_ROOT / "index.html"):
+    for path in (DOC_ROOT / "README.md", DOC_ROOT / "index.html", DOC_ROOT / "assets" / "lightyear-reversed.svg"):
         library_files.append({"path": path.relative_to(ROOT).as_posix(), "bytes": path.stat().st_size, "sha256": sha256_path(path)})
     manifest = {"schema_version": "1.1", "generator_version": GENERATOR_VERSION, "source_sha256": source_sha256(), "milestone_count": len(EXPECTED_MILESTONES), "artifact_count": EXPECTED_ARTIFACTS, "formats": ["md", "docx", "pdf"], "artifacts": artifacts, "library_files": library_files}
     MANIFEST_PATH.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")

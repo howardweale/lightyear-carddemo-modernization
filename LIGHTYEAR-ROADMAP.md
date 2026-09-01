@@ -1,3 +1,7 @@
+![LIGHTYEAR primary logo](brand/assets/lightyear-primary.svg)
+
+*Where context becomes trusted action.*
+
 # LIGHTYEAR qualification roadmap
 
 This is the governing sequence after the source-only pilot planning milestones. Generated

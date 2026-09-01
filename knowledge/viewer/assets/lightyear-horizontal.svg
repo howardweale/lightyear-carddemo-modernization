@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 620 160" role="img" aria-labelledby="title">
-  <title id="title">LIGHTYEAR horizontal logo</title>
-  <g transform="translate(0 16) scale(.8)">
-    <path fill="#7D57EA" d="M10 72C52 69 79 51 109 21c7-7 15-11 23-8 6 2 12 7 19 14 27 26 52 42 79 45H10Z"/>
-    <path fill="#7D57EA" d="M10 88c42 3 69 21 99 51 7 7 15 11 23 8 6-2 12-7 19-14 27-26 52-42 79-45H10Z"/>
-  </g>
-  <path fill="#A7702C" d="M208 30h2v100h-2z"/>
-  <text x="248" y="98" fill="#15184D" font-family="Arial, sans-serif" font-size="48" font-weight="700" letter-spacing="8">LIGHTYEAR</text>
-</svg>

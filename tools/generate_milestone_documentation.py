@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build and verify the MS #1-49 customer documentation library."""
+"""Build and verify the MS #1-50 customer documentation library."""
 
 from __future__ import annotations
 
@@ -25,14 +25,14 @@ BRAND_ROOT = ROOT / "brand"
 BRAND_ASSETS = BRAND_ROOT / "assets"
 BRAND_LOGO_SVG = BRAND_ASSETS / "lightyear-primary.svg"
 BRAND_LOGO_PNG = BRAND_ASSETS / "lightyear-primary.png"
-GENERATOR_VERSION = "1.5"
+GENERATOR_VERSION = "1.6"
 REPOSITORY = "howardweale/lightyear-carddemo-modernization"
 DEFAULT_BRANCH = "main"
 GITHUB_BLOB_ROOT = f"https://github.com/{REPOSITORY}/blob/{DEFAULT_BRANCH}"
 GITHUB_RAW_ROOT = f"https://raw.githubusercontent.com/{REPOSITORY}/{DEFAULT_BRANCH}"
 PAGES_INDEX = f"https://howardweale.github.io/{REPOSITORY.split('/', 1)[1]}/milestones/"
 FIXED_TIME = datetime(2026, 8, 31, 12, 0, 0, tzinfo=timezone.utc)
-EXPECTED_MILESTONES = tuple(range(1, 50))
+EXPECTED_MILESTONES = tuple(range(1, 51))
 EXPECTED_ARTIFACTS = len(EXPECTED_MILESTONES) * 3
 BOUNDARY_TERMS = (
     "remain false", "remains false", "remain blocked", "remains blocked",
@@ -667,9 +667,19 @@ def build() -> None:
     for model in models:
         stem = f"MS-{model['number']:02d}"; directory = DOC_ROOT / stem
         directory.mkdir(parents=True, exist_ok=True)
-        (directory / f"{stem}.md").write_text(markdown_text(model, catalog["audience"]), encoding="utf-8")
-        build_docx(model, catalog["audience"], directory / f"{stem}.docx")
-        build_pdf(model, catalog["audience"], directory / f"{stem}.pdf")
+        markdown_path = directory / f"{stem}.md"
+        docx_path = directory / f"{stem}.docx"
+        pdf_path = directory / f"{stem}.pdf"
+        rendered_markdown = markdown_text(model, catalog["audience"])
+        content_changed = (
+            not markdown_path.is_file()
+            or markdown_path.read_text(encoding="utf-8") != rendered_markdown
+        )
+        markdown_path.write_text(rendered_markdown, encoding="utf-8")
+        if content_changed or not docx_path.is_file():
+            build_docx(model, catalog["audience"], docx_path)
+        if content_changed or not pdf_path.is_file():
+            build_pdf(model, catalog["audience"], pdf_path)
     site_assets = DOC_ROOT / "assets"
     site_assets.mkdir(parents=True, exist_ok=True)
     legacy_site_logo = site_assets / "lightyear-horizontal-reversed.svg"

@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schemas/oracle-semantic-behavior-catalog.schema.json",
+  "title": "LIGHTYEAR Oracle semantic behavior catalog",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "catalog_type",
+    "catalog_id",
+    "version_strategy",
+    "domains",
+    "behaviors",
+    "bootstrap_bindings",
+    "behavior_contract_count",
+    "case_specification_count",
+    "bounded_model_verified_behavior_count",
+    "native_oracle_verified_behavior_count",
+    "case_implementation_complete",
+    "native_oracle_conformance",
+    "production_ready",
+    "content_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "catalog_type": {"const": "lightyear-oracle-semantic-behavior-catalog"},
+    "catalog_id": {"const": "lightyear-oracle-semantic-coverage-v1"},
+    "domains": {"type": "array", "minItems": 10, "maxItems": 10},
+    "behaviors": {"type": "array", "minItems": 500, "maxItems": 500},
+    "bootstrap_bindings": {"type": "array", "minItems": 8, "maxItems": 8},
+    "behavior_contract_count": {"const": 500},
+    "case_specification_count": {"const": 2000},
+    "bounded_model_verified_behavior_count": {"const": 8},
+    "native_oracle_verified_behavior_count": {"const": 0},
+    "case_implementation_complete": {"const": false},
+    "native_oracle_conformance": {"const": false},
+    "production_ready": {"const": false},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": true
+}

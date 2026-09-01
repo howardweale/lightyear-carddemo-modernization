@@ -19,6 +19,7 @@ BASE = ROOT / "knowledge" / "graph.snapshot.json.gz"
 COMPOSITE = ROOT / "knowledge" / "composite" / "estate.snapshot.json.gz"
 FRAGMENT = ROOT / "extensions" / "pli" / "pli.fragment.json"
 ORACLE_FRAGMENT = ROOT / "reference-estates" / "idempiere" / "oracle-customer-large.fragment.json"
+CLOUDBANK_FRAGMENT = ROOT / "reference-estates" / "cloudbank" / "cloudbank-reference.fragment.json"
 CAPABILITIES = ROOT / "knowledge" / "capabilities" / "mainframe-readiness.json"
 
 
@@ -29,7 +30,8 @@ class CompositeEstateTests(unittest.TestCase):
         cls.composite = load_graph(COMPOSITE)
         cls.fragment = json.loads(FRAGMENT.read_text(encoding="utf-8"))
         cls.oracle_fragment = json.loads(ORACLE_FRAGMENT.read_text(encoding="utf-8"))
-        cls.fragments = [cls.fragment, cls.oracle_fragment]
+        cls.cloudbank_fragment = json.loads(CLOUDBANK_FRAGMENT.read_text(encoding="utf-8"))
+        cls.fragments = [cls.fragment, cls.oracle_fragment, cls.cloudbank_fragment]
         cls.capabilities = json.loads(CAPABILITIES.read_text(encoding="utf-8"))
 
     def test_committed_projection_is_deterministic_and_preserves_truth_boundary(self) -> None:
@@ -45,7 +47,7 @@ class CompositeEstateTests(unittest.TestCase):
 
     def test_explorer_navigates_pli_to_cobol_and_db2(self) -> None:
         index = GraphExplorerIndex(self.composite)
-        self.assertEqual(12, len(index.perspectives()))
+        self.assertEqual(17, len(index.perspectives()))
         self.assertEqual(self.base["content_sha256"], index.canonical_content_sha256)
         pli = "extension:pli-program:ACCTPL1"
         cobol = "legacy:cobol-program:CBACT04C"
@@ -89,12 +91,16 @@ class CompositeEstateTests(unittest.TestCase):
         index = GraphExplorerIndex(self.composite)
         context = index.operator_context()
         self.assertEqual(
-            ["CardDemo Reference Estate", "Oracle Customer (Large)"],
+            [
+                "CardDemo Reference Estate",
+                "Oracle Customer (Large)",
+                "CloudBank Reference Estate",
+            ],
             [item["name"] for item in context["companies"]],
         )
         oracle = next(item for item in context["platforms"] if item["name"] == "Oracle")
         self.assertEqual("projected", oracle["status"])
-        self.assertEqual(22, oracle["node_count"])
+        self.assertEqual(47, oracle["node_count"])
         workload = "oracle-reference:workload:order-to-cash"
         scenario = "oracle-reference:scenario:order-to-cash:01"
         trace = index.trace(workload, scenario, direction="directed")
@@ -107,6 +113,39 @@ class CompositeEstateTests(unittest.TestCase):
             "no customer system or Oracle runtime is attached",
             " ".join(context["trace"]["limitations"]),
         )
+
+    def test_explorer_projects_cloudbank_as_a_third_selectable_estate(self) -> None:
+        index = GraphExplorerIndex(self.composite)
+        context = index.operator_context()
+        cloudbank = next(
+            item for item in context["companies"]
+            if item["id"] == "cloudbank-reference"
+        )
+        self.assertEqual("CloudBank Reference Estate", cloudbank["name"])
+        problems = {
+            item["id"] for item in context["problems"]
+            if item["company_id"] == "cloudbank-reference"
+        }
+        self.assertEqual({
+            "cloudbank-customer-account",
+            "cloudbank-money-movement",
+            "cloudbank-check-processing",
+            "cloudbank-identity-access",
+            "cloudbank-credit-decision",
+        }, problems)
+        workload = "cloudbank-reference:workload:money-transfer"
+        scenario = "cloudbank-reference:scenario:money-transfer:01"
+        trace = index.trace(workload, scenario, direction="directed")
+        self.assertEqual(["HAS_SCENARIO"], [edge["relation"] for edge in trace["edges"]])
+        self.assertEqual(["Oracle"], trace["platforms"])
+        self.assertEqual(
+            "upstream-static-modern-oracle-reference", trace["evidence_class"]
+        )
+        self.assertIn("does not prove PostgreSQL mapping", trace["limitation"])
+        properties = index.node(workload)["properties"]
+        self.assertFalse(properties["runtime_observed"])
+        self.assertFalse(properties["postgresql_mapping_complete"])
+        self.assertFalse(properties["target_equivalent"])
 
     def test_runtime_and_audit_remain_bound_to_canonical_identity(self) -> None:
         index = GraphExplorerIndex(self.composite)

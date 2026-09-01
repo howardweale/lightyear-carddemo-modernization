@@ -1,6 +1,6 @@
 {
-  "analysis_graph_sha256": "7f11e5cd99a7fcb91d5ad3abfd7429761157c9f89250fe06edb05bf611ec9479",
-  "assessment_sha256": "9630b7b1cf83135b2e527fa5a4a32b030fe36c697b179188a32edd4dba975544",
+  "analysis_graph_sha256": "dca65ecc8983406dccd10ab786cf06b4c82f974aacdc4fd221f4ea2e619b179f",
+  "assessment_sha256": "eb1a33628bfca40eae5b7d663ff16970f7498db56b4c9670a5187f57450a22ca",
   "authorized_execution_observed": false,
   "cells": [
     {
@@ -194,8 +194,8 @@
     }
   ],
   "claim_unlocked": "LIGHTYEAR can turn one recorded human pilot selection into a deterministic, graph-scoped, multi-technology development work package.",
-  "content_sha256": "2ca8ba7ab2412e84558f9eeab0e4361e28f2f5d7d331c2d81acb172a76913aa0",
-  "dossier_sha256": "bed24bcf1743a9a672bc07899f40f0220bcff77115dd60db7b14ea2dde663fad",
+  "content_sha256": "6970bc0fe784575d70c36ffb036f9f58855a1a8dff54ce5094806c91e02a0e99",
+  "dossier_sha256": "b595eb7e9c916d7f64fe8fdeb1aee1f19904be6509a12974e7f8cd8f4991e96b",
   "factory_dispatch_allowed": false,
   "limitations": [
     "Cells are bounded draft scopes, not signed or admitted factory work orders.",
@@ -263,7 +263,7 @@
   "production_ready": false,
   "schema_version": "1.0",
   "selected_cluster_id": "cluster:6a02c2ea6de7831e",
-  "selection_sha256": "79054aaa5a2c987fb4057469cf4b4a35fcacfe2142ee4f5c812cea47378745a4",
+  "selection_sha256": "7f81564a6a74809542129c9819f865a2b62d6e367f6e010481e04c34103c328a",
   "source_scope": {
     "boundary_reference_ids": [
       "7ef87c4aa9078d7896519a55592100efc2731138a3dbf7f5b0c7dc697ae65b47"

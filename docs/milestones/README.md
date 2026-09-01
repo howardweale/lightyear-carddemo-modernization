@@ -4,7 +4,7 @@
 
 # LIGHTYEAR milestone documentation library
 
-This library is the customer-readable body of record for MS #1 through MS #52. Every milestone is
+This library is the customer-readable body of record for MS #1 through MS #53. Every milestone is
 published from one governed catalog in Markdown, Microsoft Word (`.docx`), and PDF.
 
 **[Open the searchable milestone index](https://howardweale.github.io/lightyear-carddemo-modernization/milestones/)** to filter by milestone number, title,
@@ -70,6 +70,7 @@ or policy decisions.
 | MS #50 | Oracle Semantic Coverage Program | Complete | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-50/MS-50.md) - [Download Word](https://raw.githubusercontent.com/howardweale/lightyear-carddemo-modernization/main/docs/milestones/MS-50/MS-50.docx) - [PDF](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-50/MS-50.pdf) |
 | MS #51 | Oracle Native Execution Admission Gate | Complete | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-51/MS-51.md) - [Download Word](https://raw.githubusercontent.com/howardweale/lightyear-carddemo-modernization/main/docs/milestones/MS-51/MS-51.docx) - [PDF](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-51/MS-51.pdf) |
 | MS #52 | Oracle Customer (Large) Control Tower Projection | Complete | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-52/MS-52.md) - [Download Word](https://raw.githubusercontent.com/howardweale/lightyear-carddemo-modernization/main/docs/milestones/MS-52/MS-52.docx) - [PDF](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-52/MS-52.pdf) |
+| MS #53 | CloudBank Modern Oracle Reference Estate | Complete | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-53/MS-53.md) - [Download Word](https://raw.githubusercontent.com/howardweale/lightyear-carddemo-modernization/main/docs/milestones/MS-53/MS-53.docx) - [PDF](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-53/MS-53.pdf) |
 
 ## Build and verification
 

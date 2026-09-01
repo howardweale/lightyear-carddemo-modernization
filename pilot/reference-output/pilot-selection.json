@@ -6,7 +6,7 @@
     "recorded_at": "2026-08-30T00:00:00Z",
     "system": "repository-reference-fixture"
   },
-  "assessment_sha256": "9630b7b1cf83135b2e527fa5a4a32b030fe36c697b179188a32edd4dba975544",
+  "assessment_sha256": "eb1a33628bfca40eae5b7d663ff16970f7498db56b4c9670a5187f57450a22ca",
   "authorization": {
     "factory_dispatch_allowed": false,
     "native_execution_allowed": false,
@@ -29,7 +29,7 @@
     "production_ready": false,
     "work_order_admitted": false
   },
-  "content_sha256": "79054aaa5a2c987fb4057469cf4b4a35fcacfe2142ee4f5c812cea47378745a4",
+  "content_sha256": "7f81564a6a74809542129c9819f865a2b62d6e367f6e010481e04c34103c328a",
   "decision": {
     "business_outcomes": [
       "Preserve account authorization behavior while separating language and data concerns.",
@@ -51,13 +51,13 @@
     "technical_owner_id": "human:reference-technical-owner"
   },
   "deferred_boundary_reference_ids": [],
-  "dossier_sha256": "bed24bcf1743a9a672bc07899f40f0220bcff77115dd60db7b14ea2dde663fad",
+  "dossier_sha256": "b595eb7e9c916d7f64fe8fdeb1aee1f19904be6509a12974e7f8cd8f4991e96b",
   "limitations": [
     "The approval record is bound and attributable but remains external evidence; LIGHTYEAR does not cryptographically verify the approver identity in this source-only flow.",
     "Selection authorizes deterministic work-package generation only, never factory dispatch or native execution.",
     "Accepted external boundaries remain explicit dependencies and are not relabelled as resolved source."
   ],
-  "request_sha256": "962ea82bc2b86675a1c4cc6a69ac637e96c33e0f3e9a8798706cd08db7340542",
+  "request_sha256": "5768033e277f3e44e5dc35749cb54c23968498e2692f8c10b7254009eefd9c96",
   "schema_version": "1.0",
   "selected_cluster": {
     "cluster_id": "cluster:6a02c2ea6de7831e",

@@ -1,0 +1,1454 @@
+{
+  "base_graph": {
+    "content_sha256": "d98bd92d752f23ee19263aa0957c28ee5aac52966d1322f6a31d4a9960394dc9",
+    "graph_id": "lightyear:carddemo-modernization",
+    "schema_version": "1.1"
+  },
+  "content_sha256": "779441adce8d8b3d4ed6bb5511b7bb974740014e69173c73ca5fd9cde1e9e25e",
+  "edges": [
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 105,
+          "line_start": 105,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:edge:check-deposit-clearance:01",
+      "properties": {
+        "claim_boundary": "static-modern-oracle-migration-risk",
+        "sequence": 1
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "cloudbank-reference:workload:check-deposit-clearance",
+      "target": "cloudbank-reference:scenario:check-deposit-clearance:01"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 110,
+          "line_start": 110,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:edge:check-deposit-clearance:02",
+      "properties": {
+        "claim_boundary": "static-modern-oracle-migration-risk",
+        "sequence": 2
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "cloudbank-reference:workload:check-deposit-clearance",
+      "target": "cloudbank-reference:scenario:check-deposit-clearance:02"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 115,
+          "line_start": 115,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:edge:check-deposit-clearance:03",
+      "properties": {
+        "claim_boundary": "static-modern-oracle-migration-risk",
+        "sequence": 3
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "cloudbank-reference:workload:check-deposit-clearance",
+      "target": "cloudbank-reference:scenario:check-deposit-clearance:03"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 120,
+          "line_start": 120,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:edge:check-deposit-clearance:04",
+      "properties": {
+        "claim_boundary": "static-modern-oracle-migration-risk",
+        "sequence": 4
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "cloudbank-reference:workload:check-deposit-clearance",
+      "target": "cloudbank-reference:scenario:check-deposit-clearance:04"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 177,
+          "line_start": 177,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:edge:credit-score-service:01",
+      "properties": {
+        "claim_boundary": "static-modern-oracle-migration-risk",
+        "sequence": 1
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "cloudbank-reference:workload:credit-score-service",
+      "target": "cloudbank-reference:scenario:credit-score-service:01"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 182,
+          "line_start": 182,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:edge:credit-score-service:02",
+      "properties": {
+        "claim_boundary": "static-modern-oracle-migration-risk",
+        "sequence": 2
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "cloudbank-reference:workload:credit-score-service",
+      "target": "cloudbank-reference:scenario:credit-score-service:02"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 187,
+          "line_start": 187,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:edge:credit-score-service:03",
+      "properties": {
+        "claim_boundary": "static-modern-oracle-migration-risk",
+        "sequence": 3
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "cloudbank-reference:workload:credit-score-service",
+      "target": "cloudbank-reference:scenario:credit-score-service:03"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 192,
+          "line_start": 192,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:edge:credit-score-service:04",
+      "properties": {
+        "claim_boundary": "static-modern-oracle-migration-risk",
+        "sequence": 4
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "cloudbank-reference:workload:credit-score-service",
+      "target": "cloudbank-reference:scenario:credit-score-service:04"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 33,
+          "line_start": 33,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:edge:customer-account-management:01",
+      "properties": {
+        "claim_boundary": "static-modern-oracle-migration-risk",
+        "sequence": 1
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "cloudbank-reference:workload:customer-account-management",
+      "target": "cloudbank-reference:scenario:customer-account-management:01"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 38,
+          "line_start": 38,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:edge:customer-account-management:02",
+      "properties": {
+        "claim_boundary": "static-modern-oracle-migration-risk",
+        "sequence": 2
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "cloudbank-reference:workload:customer-account-management",
+      "target": "cloudbank-reference:scenario:customer-account-management:02"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 43,
+          "line_start": 43,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:edge:customer-account-management:03",
+      "properties": {
+        "claim_boundary": "static-modern-oracle-migration-risk",
+        "sequence": 3
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "cloudbank-reference:workload:customer-account-management",
+      "target": "cloudbank-reference:scenario:customer-account-management:03"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 48,
+          "line_start": 48,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:edge:customer-account-management:04",
+      "properties": {
+        "claim_boundary": "static-modern-oracle-migration-risk",
+        "sequence": 4
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "cloudbank-reference:workload:customer-account-management",
+      "target": "cloudbank-reference:scenario:customer-account-management:04"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 141,
+          "line_start": 141,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:edge:identity-service-authorization:01",
+      "properties": {
+        "claim_boundary": "static-modern-oracle-migration-risk",
+        "sequence": 1
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "cloudbank-reference:workload:identity-service-authorization",
+      "target": "cloudbank-reference:scenario:identity-service-authorization:01"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 146,
+          "line_start": 146,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:edge:identity-service-authorization:02",
+      "properties": {
+        "claim_boundary": "static-modern-oracle-migration-risk",
+        "sequence": 2
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "cloudbank-reference:workload:identity-service-authorization",
+      "target": "cloudbank-reference:scenario:identity-service-authorization:02"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 151,
+          "line_start": 151,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:edge:identity-service-authorization:03",
+      "properties": {
+        "claim_boundary": "static-modern-oracle-migration-risk",
+        "sequence": 3
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "cloudbank-reference:workload:identity-service-authorization",
+      "target": "cloudbank-reference:scenario:identity-service-authorization:03"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 156,
+          "line_start": 156,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:edge:identity-service-authorization:04",
+      "properties": {
+        "claim_boundary": "static-modern-oracle-migration-risk",
+        "sequence": 4
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "cloudbank-reference:workload:identity-service-authorization",
+      "target": "cloudbank-reference:scenario:identity-service-authorization:04"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 69,
+          "line_start": 69,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:edge:money-transfer:01",
+      "properties": {
+        "claim_boundary": "static-modern-oracle-migration-risk",
+        "sequence": 1
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "cloudbank-reference:workload:money-transfer",
+      "target": "cloudbank-reference:scenario:money-transfer:01"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 74,
+          "line_start": 74,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:edge:money-transfer:02",
+      "properties": {
+        "claim_boundary": "static-modern-oracle-migration-risk",
+        "sequence": 2
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "cloudbank-reference:workload:money-transfer",
+      "target": "cloudbank-reference:scenario:money-transfer:02"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 79,
+          "line_start": 79,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:edge:money-transfer:03",
+      "properties": {
+        "claim_boundary": "static-modern-oracle-migration-risk",
+        "sequence": 3
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "cloudbank-reference:workload:money-transfer",
+      "target": "cloudbank-reference:scenario:money-transfer:03"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 84,
+          "line_start": 84,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:edge:money-transfer:04",
+      "properties": {
+        "claim_boundary": "static-modern-oracle-migration-risk",
+        "sequence": 4
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "cloudbank-reference:workload:money-transfer",
+      "target": "cloudbank-reference:scenario:money-transfer:04"
+    }
+  ],
+  "external_references": [],
+  "fragment_id": "lightyear:cloudbank-modern-oracle-reference-v1",
+  "fragment_type": "lightyear-graph-extension",
+  "language_pack": {
+    "extensions": [
+      ".java",
+      ".sql",
+      ".yaml",
+      ".xml",
+      ".sh"
+    ],
+    "id": "lightyear.cloudbank-reference",
+    "language": "Modern Oracle reference estate",
+    "version": "1.0"
+  },
+  "limitations": [
+    "CloudBank Reference Estate is an official upstream reference application, not an attached customer system.",
+    "The projection is derived from a pinned static inventory and curated migration risks; CloudBank was not built or executed.",
+    "Oracle coupling is identified but no PostgreSQL or other target mapping is complete or selected.",
+    "Static source evidence does not prove application equivalence, migration completion, runtime behavior, or production readiness.",
+    "The fragment is bound to one exact canonical graph identity and fails closed after graph drift."
+  ],
+  "nodes": [
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 105,
+          "line_start": 105,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:scenario:check-deposit-clearance:01",
+      "kind": "verification_scenario",
+      "name": "Cheque deposit and clearance risk 01: Transactional Event Queue",
+      "properties": {
+        "application_architecture": "cloud-native-microservices",
+        "customer_id": "cloudbank-reference",
+        "evidence_class": "upstream-static-modern-oracle-reference",
+        "migration_complete": false,
+        "migration_risk_id": "transactional-event-queue",
+        "operator_platform": "Oracle",
+        "postgresql_mapping_complete": false,
+        "production_ready": false,
+        "runtime_observed": false,
+        "scenario_kind": "static-modern-oracle-migration-risk",
+        "sequence": 1,
+        "source_commit": "4f41b16d00c45503f691836fee8138010c969e86",
+        "source_product": "CloudBank v5",
+        "source_repository": "https://github.com/oracle/microservices-backend",
+        "statement": "The workflow uses Oracle Transactional Event Queue/JMS configuration whose delivery contract requires a target messaging decision.",
+        "target_equivalent": false,
+        "workload_id": "cloudbank-reference:workload:check-deposit-clearance"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 110,
+          "line_start": 110,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:scenario:check-deposit-clearance:02",
+      "kind": "verification_scenario",
+      "name": "Cheque deposit and clearance risk 02: Delivery and replay",
+      "properties": {
+        "application_architecture": "cloud-native-microservices",
+        "customer_id": "cloudbank-reference",
+        "evidence_class": "upstream-static-modern-oracle-reference",
+        "migration_complete": false,
+        "migration_risk_id": "delivery-and-replay",
+        "operator_platform": "Oracle",
+        "postgresql_mapping_complete": false,
+        "production_ready": false,
+        "runtime_observed": false,
+        "scenario_kind": "static-modern-oracle-migration-risk",
+        "sequence": 2,
+        "source_commit": "4f41b16d00c45503f691836fee8138010c969e86",
+        "source_product": "CloudBank v5",
+        "source_repository": "https://github.com/oracle/microservices-backend",
+        "statement": "Deposit and clearance consumers must retain acknowledgement, retry, duplicate-delivery, and replay behavior.",
+        "target_equivalent": false,
+        "workload_id": "cloudbank-reference:workload:check-deposit-clearance"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 115,
+          "line_start": 115,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:scenario:check-deposit-clearance:03",
+      "kind": "verification_scenario",
+      "name": "Cheque deposit and clearance risk 03: Internal service authorization",
+      "properties": {
+        "application_architecture": "cloud-native-microservices",
+        "customer_id": "cloudbank-reference",
+        "evidence_class": "upstream-static-modern-oracle-reference",
+        "migration_complete": false,
+        "migration_risk_id": "internal-service-authorization",
+        "operator_platform": "Oracle",
+        "postgresql_mapping_complete": false,
+        "production_ready": false,
+        "runtime_observed": false,
+        "scenario_kind": "static-modern-oracle-migration-risk",
+        "sequence": 3,
+        "source_commit": "4f41b16d00c45503f691836fee8138010c969e86",
+        "source_product": "CloudBank v5",
+        "source_repository": "https://github.com/oracle/microservices-backend",
+        "statement": "Cheque consumers call protected account endpoints with service identity; database migration must not weaken that boundary.",
+        "target_equivalent": false,
+        "workload_id": "cloudbank-reference:workload:check-deposit-clearance"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 120,
+          "line_start": 120,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:scenario:check-deposit-clearance:04",
+      "kind": "verification_scenario",
+      "name": "Cheque deposit and clearance risk 04: Event-to-balance consistency",
+      "properties": {
+        "application_architecture": "cloud-native-microservices",
+        "customer_id": "cloudbank-reference",
+        "evidence_class": "upstream-static-modern-oracle-reference",
+        "migration_complete": false,
+        "migration_risk_id": "event-to-balance-consistency",
+        "operator_platform": "Oracle",
+        "postgresql_mapping_complete": false,
+        "production_ready": false,
+        "runtime_observed": false,
+        "scenario_kind": "static-modern-oracle-migration-risk",
+        "sequence": 4,
+        "source_commit": "4f41b16d00c45503f691836fee8138010c969e86",
+        "source_product": "CloudBank v5",
+        "source_repository": "https://github.com/oracle/microservices-backend",
+        "statement": "Pending journal creation and later clearance form an eventual-consistency contract that needs end-to-end comparison.",
+        "target_equivalent": false,
+        "workload_id": "cloudbank-reference:workload:check-deposit-clearance"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 177,
+          "line_start": 177,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:scenario:credit-score-service:01",
+      "kind": "verification_scenario",
+      "name": "Credit score service risk 01: Nondeterministic output",
+      "properties": {
+        "application_architecture": "cloud-native-microservices",
+        "customer_id": "cloudbank-reference",
+        "evidence_class": "upstream-static-modern-oracle-reference",
+        "migration_complete": false,
+        "migration_risk_id": "nondeterministic-output",
+        "operator_platform": "Oracle",
+        "postgresql_mapping_complete": false,
+        "production_ready": false,
+        "runtime_observed": false,
+        "scenario_kind": "static-modern-oracle-migration-risk",
+        "sequence": 1,
+        "source_commit": "4f41b16d00c45503f691836fee8138010c969e86",
+        "source_product": "CloudBank v5",
+        "source_repository": "https://github.com/oracle/microservices-backend",
+        "statement": "SecureRandom output prevents literal response comparison and requires property-based acceptance bounds.",
+        "target_equivalent": false,
+        "workload_id": "cloudbank-reference:workload:credit-score-service"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 182,
+          "line_start": 182,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:scenario:credit-score-service:02",
+      "kind": "verification_scenario",
+      "name": "Credit score service risk 02: Date contract",
+      "properties": {
+        "application_architecture": "cloud-native-microservices",
+        "customer_id": "cloudbank-reference",
+        "evidence_class": "upstream-static-modern-oracle-reference",
+        "migration_complete": false,
+        "migration_risk_id": "date-contract",
+        "operator_platform": "Oracle",
+        "postgresql_mapping_complete": false,
+        "production_ready": false,
+        "runtime_observed": false,
+        "scenario_kind": "static-modern-oracle-migration-risk",
+        "sequence": 2,
+        "source_commit": "4f41b16d00c45503f691836fee8138010c969e86",
+        "source_product": "CloudBank v5",
+        "source_repository": "https://github.com/oracle/microservices-backend",
+        "statement": "The response uses LocalDate.now and therefore needs an explicit clock, timezone, and normalization policy.",
+        "target_equivalent": false,
+        "workload_id": "cloudbank-reference:workload:credit-score-service"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 187,
+          "line_start": 187,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:scenario:credit-score-service:03",
+      "kind": "verification_scenario",
+      "name": "Credit score service risk 03: API and security contract",
+      "properties": {
+        "application_architecture": "cloud-native-microservices",
+        "customer_id": "cloudbank-reference",
+        "evidence_class": "upstream-static-modern-oracle-reference",
+        "migration_complete": false,
+        "migration_risk_id": "api-and-security-contract",
+        "operator_platform": "Oracle",
+        "postgresql_mapping_complete": false,
+        "production_ready": false,
+        "runtime_observed": false,
+        "scenario_kind": "static-modern-oracle-migration-risk",
+        "sequence": 3,
+        "source_commit": "4f41b16d00c45503f691836fee8138010c969e86",
+        "source_product": "CloudBank v5",
+        "source_repository": "https://github.com/oracle/microservices-backend",
+        "statement": "The endpoint shape and CloudBank read scope remain part of equivalence even when no service-owned database table is migrated.",
+        "target_equivalent": false,
+        "workload_id": "cloudbank-reference:workload:credit-score-service"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 192,
+          "line_start": 192,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:scenario:credit-score-service:04",
+      "kind": "verification_scenario",
+      "name": "Credit score service risk 04: Operational equivalence",
+      "properties": {
+        "application_architecture": "cloud-native-microservices",
+        "customer_id": "cloudbank-reference",
+        "evidence_class": "upstream-static-modern-oracle-reference",
+        "migration_complete": false,
+        "migration_risk_id": "operational-equivalence",
+        "operator_platform": "Oracle",
+        "postgresql_mapping_complete": false,
+        "production_ready": false,
+        "runtime_observed": false,
+        "scenario_kind": "static-modern-oracle-migration-risk",
+        "sequence": 4,
+        "source_commit": "4f41b16d00c45503f691836fee8138010c969e86",
+        "source_product": "CloudBank v5",
+        "source_repository": "https://github.com/oracle/microservices-backend",
+        "statement": "Health, metrics, traces, logging, failure propagation, and deployment behavior remain target acceptance concerns.",
+        "target_equivalent": false,
+        "workload_id": "cloudbank-reference:workload:credit-score-service"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 33,
+          "line_start": 33,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:scenario:customer-account-management:01",
+      "kind": "verification_scenario",
+      "name": "Customer and account management risk 01: Service-owned schema boundary",
+      "properties": {
+        "application_architecture": "cloud-native-microservices",
+        "customer_id": "cloudbank-reference",
+        "evidence_class": "upstream-static-modern-oracle-reference",
+        "migration_complete": false,
+        "migration_risk_id": "service-owned-schema-boundary",
+        "operator_platform": "Oracle",
+        "postgresql_mapping_complete": false,
+        "production_ready": false,
+        "runtime_observed": false,
+        "scenario_kind": "static-modern-oracle-migration-risk",
+        "sequence": 1,
+        "source_commit": "4f41b16d00c45503f691836fee8138010c969e86",
+        "source_product": "CloudBank v5",
+        "source_repository": "https://github.com/oracle/microservices-backend",
+        "statement": "The account and customer services own separate Oracle schemas and Liquibase change logs; a target must preserve ownership and deployment order.",
+        "target_equivalent": false,
+        "workload_id": "cloudbank-reference:workload:customer-account-management"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 38,
+          "line_start": 38,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:scenario:customer-account-management:02",
+      "kind": "verification_scenario",
+      "name": "Customer and account management risk 02: Oracle identity generation",
+      "properties": {
+        "application_architecture": "cloud-native-microservices",
+        "customer_id": "cloudbank-reference",
+        "evidence_class": "upstream-static-modern-oracle-reference",
+        "migration_complete": false,
+        "migration_risk_id": "oracle-identity-generation",
+        "operator_platform": "Oracle",
+        "postgresql_mapping_complete": false,
+        "production_ready": false,
+        "runtime_observed": false,
+        "scenario_kind": "static-modern-oracle-migration-risk",
+        "sequence": 2,
+        "source_commit": "4f41b16d00c45503f691836fee8138010c969e86",
+        "source_product": "CloudBank v5",
+        "source_repository": "https://github.com/oracle/microservices-backend",
+        "statement": "NUMBER identity columns with START WITH and CACHE semantics require an explicit target identity policy.",
+        "target_equivalent": false,
+        "workload_id": "cloudbank-reference:workload:customer-account-management"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 43,
+          "line_start": 43,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:scenario:customer-account-management:03",
+      "kind": "verification_scenario",
+      "name": "Customer and account management risk 03: Money and date semantics",
+      "properties": {
+        "application_architecture": "cloud-native-microservices",
+        "customer_id": "cloudbank-reference",
+        "evidence_class": "upstream-static-modern-oracle-reference",
+        "migration_complete": false,
+        "migration_risk_id": "money-and-date-semantics",
+        "operator_platform": "Oracle",
+        "postgresql_mapping_complete": false,
+        "production_ready": false,
+        "runtime_observed": false,
+        "scenario_kind": "static-modern-oracle-migration-risk",
+        "sequence": 3,
+        "source_commit": "4f41b16d00c45503f691836fee8138010c969e86",
+        "source_product": "CloudBank v5",
+        "source_repository": "https://github.com/oracle/microservices-backend",
+        "statement": "Unscaled NUMBER balances and Oracle DATE/SYSDATE behavior require bounded precision, timezone, and default-value decisions.",
+        "target_equivalent": false,
+        "workload_id": "cloudbank-reference:workload:customer-account-management"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 48,
+          "line_start": 48,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:scenario:customer-account-management:04",
+      "kind": "verification_scenario",
+      "name": "Customer and account management risk 04: Constraint and ORM behavior",
+      "properties": {
+        "application_architecture": "cloud-native-microservices",
+        "customer_id": "cloudbank-reference",
+        "evidence_class": "upstream-static-modern-oracle-reference",
+        "migration_complete": false,
+        "migration_risk_id": "constraint-and-orm-behavior",
+        "operator_platform": "Oracle",
+        "postgresql_mapping_complete": false,
+        "production_ready": false,
+        "runtime_observed": false,
+        "scenario_kind": "static-modern-oracle-migration-risk",
+        "sequence": 4,
+        "source_commit": "4f41b16d00c45503f691836fee8138010c969e86",
+        "source_product": "CloudBank v5",
+        "source_repository": "https://github.com/oracle/microservices-backend",
+        "statement": "Primary keys, foreign keys, checks, uniqueness, JPA mappings, and repository queries must be compared at schema and API levels.",
+        "target_equivalent": false,
+        "workload_id": "cloudbank-reference:workload:customer-account-management"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 141,
+          "line_start": 141,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:scenario:identity-service-authorization:01",
+      "kind": "verification_scenario",
+      "name": "Authentication and service authorization risk 01: User repository schema",
+      "properties": {
+        "application_architecture": "cloud-native-microservices",
+        "customer_id": "cloudbank-reference",
+        "evidence_class": "upstream-static-modern-oracle-reference",
+        "migration_complete": false,
+        "migration_risk_id": "user-repository-schema",
+        "operator_platform": "Oracle",
+        "postgresql_mapping_complete": false,
+        "production_ready": false,
+        "runtime_observed": false,
+        "scenario_kind": "static-modern-oracle-migration-risk",
+        "sequence": 1,
+        "source_commit": "4f41b16d00c45503f691836fee8138010c969e86",
+        "source_product": "CloudBank v5",
+        "source_repository": "https://github.com/oracle/microservices-backend",
+        "statement": "Oracle identity columns, VARCHAR2 character semantics, TIMESTAMP/SYSDATE defaults, uniqueness, and audit columns need target mappings.",
+        "target_equivalent": false,
+        "workload_id": "cloudbank-reference:workload:identity-service-authorization"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 146,
+          "line_start": 146,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:scenario:identity-service-authorization:02",
+      "kind": "verification_scenario",
+      "name": "Authentication and service authorization risk 02: Audit trigger semantics",
+      "properties": {
+        "application_architecture": "cloud-native-microservices",
+        "customer_id": "cloudbank-reference",
+        "evidence_class": "upstream-static-modern-oracle-reference",
+        "migration_complete": false,
+        "migration_risk_id": "audit-trigger-semantics",
+        "operator_platform": "Oracle",
+        "postgresql_mapping_complete": false,
+        "production_ready": false,
+        "runtime_observed": false,
+        "scenario_kind": "static-modern-oracle-migration-risk",
+        "sequence": 2,
+        "source_commit": "4f41b16d00c45503f691836fee8138010c969e86",
+        "source_product": "CloudBank v5",
+        "source_repository": "https://github.com/oracle/microservices-backend",
+        "statement": "An Oracle editionable trigger derives update identity through SYS_CONTEXT and REGEXP_SUBSTR; equivalent audit behavior must be designed explicitly.",
+        "target_equivalent": false,
+        "workload_id": "cloudbank-reference:workload:identity-service-authorization"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 151,
+          "line_start": 151,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:scenario:identity-service-authorization:03",
+      "kind": "verification_scenario",
+      "name": "Authentication and service authorization risk 03: OAuth scope boundary",
+      "properties": {
+        "application_architecture": "cloud-native-microservices",
+        "customer_id": "cloudbank-reference",
+        "evidence_class": "upstream-static-modern-oracle-reference",
+        "migration_complete": false,
+        "migration_risk_id": "oauth-scope-boundary",
+        "operator_platform": "Oracle",
+        "postgresql_mapping_complete": false,
+        "production_ready": false,
+        "runtime_observed": false,
+        "scenario_kind": "static-modern-oracle-migration-risk",
+        "sequence": 3,
+        "source_commit": "4f41b16d00c45503f691836fee8138010c969e86",
+        "source_product": "CloudBank v5",
+        "source_repository": "https://github.com/oracle/microservices-backend",
+        "statement": "APISIX and each service independently enforce CloudBank scopes; a database change cannot turn gateway checks into the only authorization layer.",
+        "target_equivalent": false,
+        "workload_id": "cloudbank-reference:workload:identity-service-authorization"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 156,
+          "line_start": 156,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:scenario:identity-service-authorization:04",
+      "kind": "verification_scenario",
+      "name": "Authentication and service authorization risk 04: Credential and secret posture",
+      "properties": {
+        "application_architecture": "cloud-native-microservices",
+        "customer_id": "cloudbank-reference",
+        "evidence_class": "upstream-static-modern-oracle-reference",
+        "migration_complete": false,
+        "migration_risk_id": "credential-and-secret-posture",
+        "operator_platform": "Oracle",
+        "postgresql_mapping_complete": false,
+        "production_ready": false,
+        "runtime_observed": false,
+        "scenario_kind": "static-modern-oracle-migration-risk",
+        "sequence": 4,
+        "source_commit": "4f41b16d00c45503f691836fee8138010c969e86",
+        "source_product": "CloudBank v5",
+        "source_repository": "https://github.com/oracle/microservices-backend",
+        "statement": "BCrypt hashes, database credentials, OAuth client secrets, and signing keys must retain their storage, rotation, and non-disclosure boundaries.",
+        "target_equivalent": false,
+        "workload_id": "cloudbank-reference:workload:identity-service-authorization"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 69,
+          "line_start": 69,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:scenario:money-transfer:01",
+      "kind": "verification_scenario",
+      "name": "Money transfer risk 01: LRA coordination",
+      "properties": {
+        "application_architecture": "cloud-native-microservices",
+        "customer_id": "cloudbank-reference",
+        "evidence_class": "upstream-static-modern-oracle-reference",
+        "migration_complete": false,
+        "migration_risk_id": "lra-coordination",
+        "operator_platform": "Oracle",
+        "postgresql_mapping_complete": false,
+        "production_ready": false,
+        "runtime_observed": false,
+        "scenario_kind": "static-modern-oracle-migration-risk",
+        "sequence": 1,
+        "source_commit": "4f41b16d00c45503f691836fee8138010c969e86",
+        "source_product": "CloudBank v5",
+        "source_repository": "https://github.com/oracle/microservices-backend",
+        "statement": "The transfer service starts an Oracle MicroTx LRA and invokes account participants; the target must preserve coordination and termination semantics.",
+        "target_equivalent": false,
+        "workload_id": "cloudbank-reference:workload:money-transfer"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 74,
+          "line_start": 74,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:scenario:money-transfer:02",
+      "kind": "verification_scenario",
+      "name": "Money transfer risk 02: Compensation state machine",
+      "properties": {
+        "application_architecture": "cloud-native-microservices",
+        "customer_id": "cloudbank-reference",
+        "evidence_class": "upstream-static-modern-oracle-reference",
+        "migration_complete": false,
+        "migration_risk_id": "compensation-state-machine",
+        "operator_platform": "Oracle",
+        "postgresql_mapping_complete": false,
+        "production_ready": false,
+        "runtime_observed": false,
+        "scenario_kind": "static-modern-oracle-migration-risk",
+        "sequence": 2,
+        "source_commit": "4f41b16d00c45503f691836fee8138010c969e86",
+        "source_product": "CloudBank v5",
+        "source_repository": "https://github.com/oracle/microservices-backend",
+        "statement": "Complete, compensate, status, and after-LRA callbacks form a durable state machine that cannot be reduced to successful HTTP responses.",
+        "target_equivalent": false,
+        "workload_id": "cloudbank-reference:workload:money-transfer"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 79,
+          "line_start": 79,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:scenario:money-transfer:03",
+      "kind": "verification_scenario",
+      "name": "Money transfer risk 03: Local transaction boundaries",
+      "properties": {
+        "application_architecture": "cloud-native-microservices",
+        "customer_id": "cloudbank-reference",
+        "evidence_class": "upstream-static-modern-oracle-reference",
+        "migration_complete": false,
+        "migration_risk_id": "local-transaction-boundaries",
+        "operator_platform": "Oracle",
+        "postgresql_mapping_complete": false,
+        "production_ready": false,
+        "runtime_observed": false,
+        "scenario_kind": "static-modern-oracle-migration-risk",
+        "sequence": 3,
+        "source_commit": "4f41b16d00c45503f691836fee8138010c969e86",
+        "source_product": "CloudBank v5",
+        "source_repository": "https://github.com/oracle/microservices-backend",
+        "statement": "Participant callbacks combine distributed coordination with local Spring transactions and require atomic journal and balance behavior.",
+        "target_equivalent": false,
+        "workload_id": "cloudbank-reference:workload:money-transfer"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 84,
+          "line_start": 84,
+          "method": "curated-cloudbank-migration-risk-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:scenario:money-transfer:04",
+      "kind": "verification_scenario",
+      "name": "Money transfer risk 04: Journal idempotency",
+      "properties": {
+        "application_architecture": "cloud-native-microservices",
+        "customer_id": "cloudbank-reference",
+        "evidence_class": "upstream-static-modern-oracle-reference",
+        "migration_complete": false,
+        "migration_risk_id": "journal-idempotency",
+        "operator_platform": "Oracle",
+        "postgresql_mapping_complete": false,
+        "production_ready": false,
+        "runtime_observed": false,
+        "scenario_kind": "static-modern-oracle-migration-risk",
+        "sequence": 4,
+        "source_commit": "4f41b16d00c45503f691836fee8138010c969e86",
+        "source_product": "CloudBank v5",
+        "source_repository": "https://github.com/oracle/microservices-backend",
+        "statement": "LRA identifiers and journal states must survive retries, duplicate callbacks, cancellation, and recovery without double application.",
+        "target_equivalent": false,
+        "workload_id": "cloudbank-reference:workload:money-transfer"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 102,
+          "line_start": 102,
+          "method": "curated-cloudbank-workload-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:workload:check-deposit-clearance",
+      "kind": "modernization_workload",
+      "name": "Cheque deposit and clearance",
+      "properties": {
+        "application_architecture": "cloud-native-microservices",
+        "business_problem": "Cheque processing",
+        "business_question": "Can asynchronous cheque deposit and clearance retain delivery, ordering, authorization, retry, and balance-update behavior on a new database?",
+        "customer_id": "cloudbank-reference",
+        "estate_inventory": {
+          "deployable_units": 10,
+          "java_source_units": 70,
+          "runtime_service_modules": 8,
+          "sql_files": 9,
+          "tracked_files": 189
+        },
+        "evidence_class": "upstream-static-modern-oracle-reference",
+        "migration_complete": false,
+        "migration_risk_count": 4,
+        "operator_platform": "Oracle",
+        "postgresql_mapping_complete": false,
+        "production_ready": false,
+        "runtime_observed": false,
+        "services": [
+          "checks",
+          "testrunner",
+          "account"
+        ],
+        "source_commit": "4f41b16d00c45503f691836fee8138010c969e86",
+        "source_paths": [
+          "cloudbank-v5/checks/src/main/java/com/example/checks/controller/CheckReceiver.java",
+          "cloudbank-v5/checks/src/main/java/com/example/checks/controller/ClearanceReceiver.java",
+          "cloudbank-v5/checks/src/main/java/com/example/checks/service/AccountService.java",
+          "cloudbank-v5/account/src/main/resources/db/changelog/txeventq.sql",
+          "cloudbank-v5/testrunner/src/main/java/com/example/testrunner/controller/TestRunnerController.java"
+        ],
+        "source_product": "CloudBank v5",
+        "source_repository": "https://github.com/oracle/microservices-backend",
+        "statement": "Pinned static modern-Oracle workload for CloudBank Reference Estate; no runtime or target equivalence is attached.",
+        "status": "reference-projected",
+        "target_equivalent": false,
+        "target_posture": {
+          "candidate_lanes": [
+            "PostgreSQL",
+            "PostgreSQL-compatible distributed SQL",
+            "other adapter-qualified relational target"
+          ],
+          "selected_target": null,
+          "statement": "Target selection remains a governed later decision; this milestone inventories the source and migration risks without claiming a completed mapping."
+        }
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 174,
+          "line_start": 174,
+          "method": "curated-cloudbank-workload-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:workload:credit-score-service",
+      "kind": "modernization_workload",
+      "name": "Credit score service",
+      "properties": {
+        "application_architecture": "cloud-native-microservices",
+        "business_problem": "Credit decision services",
+        "business_question": "Can a nominally database-light service retain its API, randomness, date, security, dependency, and observability behavior while the surrounding estate changes?",
+        "customer_id": "cloudbank-reference",
+        "estate_inventory": {
+          "deployable_units": 10,
+          "java_source_units": 70,
+          "runtime_service_modules": 8,
+          "sql_files": 9,
+          "tracked_files": 189
+        },
+        "evidence_class": "upstream-static-modern-oracle-reference",
+        "migration_complete": false,
+        "migration_risk_count": 4,
+        "operator_platform": "Oracle",
+        "postgresql_mapping_complete": false,
+        "production_ready": false,
+        "runtime_observed": false,
+        "services": [
+          "creditscore",
+          "common"
+        ],
+        "source_commit": "4f41b16d00c45503f691836fee8138010c969e86",
+        "source_paths": [
+          "cloudbank-v5/creditscore/src/main/java/com/example/creditscore/controller/CreditScoreController.java",
+          "cloudbank-v5/creditscore/src/main/resources/application.yaml",
+          "cloudbank-v5/creditscore/values.yaml",
+          "cloudbank-v5/common/src/main/java/com/example/common/security/CloudBankSecurityAutoConfiguration.java",
+          "cloudbank-v5/pom.xml"
+        ],
+        "source_product": "CloudBank v5",
+        "source_repository": "https://github.com/oracle/microservices-backend",
+        "statement": "Pinned static modern-Oracle workload for CloudBank Reference Estate; no runtime or target equivalence is attached.",
+        "status": "reference-projected",
+        "target_equivalent": false,
+        "target_posture": {
+          "candidate_lanes": [
+            "PostgreSQL",
+            "PostgreSQL-compatible distributed SQL",
+            "other adapter-qualified relational target"
+          ],
+          "selected_target": null,
+          "statement": "Target selection remains a governed later decision; this milestone inventories the source and migration risks without claiming a completed mapping."
+        }
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 30,
+          "line_start": 30,
+          "method": "curated-cloudbank-workload-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:workload:customer-account-management",
+      "kind": "modernization_workload",
+      "name": "Customer and account management",
+      "properties": {
+        "application_architecture": "cloud-native-microservices",
+        "business_problem": "Customer and account platform",
+        "business_question": "Can customer and account behavior move from Oracle-owned service schemas without changing identifiers, balances, lifecycle dates, constraints, or API behavior?",
+        "customer_id": "cloudbank-reference",
+        "estate_inventory": {
+          "deployable_units": 10,
+          "java_source_units": 70,
+          "runtime_service_modules": 8,
+          "sql_files": 9,
+          "tracked_files": 189
+        },
+        "evidence_class": "upstream-static-modern-oracle-reference",
+        "migration_complete": false,
+        "migration_risk_count": 4,
+        "operator_platform": "Oracle",
+        "postgresql_mapping_complete": false,
+        "production_ready": false,
+        "runtime_observed": false,
+        "services": [
+          "account",
+          "customer",
+          "customer-helidon"
+        ],
+        "source_commit": "4f41b16d00c45503f691836fee8138010c969e86",
+        "source_paths": [
+          "cloudbank-v5/account/src/main/resources/db/changelog/table.sql",
+          "cloudbank-v5/account/src/main/java/com/example/accounts/controller/AccountController.java",
+          "cloudbank-v5/customer/src/main/resources/db/changelog/table.sql",
+          "cloudbank-v5/customer/src/main/java/com/example/customer/controller/CustomerController.java",
+          "cloudbank-v5/customer-helidon/src/main/resources/META-INF/init-script.sql"
+        ],
+        "source_product": "CloudBank v5",
+        "source_repository": "https://github.com/oracle/microservices-backend",
+        "statement": "Pinned static modern-Oracle workload for CloudBank Reference Estate; no runtime or target equivalence is attached.",
+        "status": "reference-projected",
+        "target_equivalent": false,
+        "target_posture": {
+          "candidate_lanes": [
+            "PostgreSQL",
+            "PostgreSQL-compatible distributed SQL",
+            "other adapter-qualified relational target"
+          ],
+          "selected_target": null,
+          "statement": "Target selection remains a governed later decision; this milestone inventories the source and migration risks without claiming a completed mapping."
+        }
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 138,
+          "line_start": 138,
+          "method": "curated-cloudbank-workload-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:workload:identity-service-authorization",
+      "kind": "modernization_workload",
+      "name": "Authentication and service authorization",
+      "properties": {
+        "application_architecture": "cloud-native-microservices",
+        "business_problem": "Identity and access",
+        "business_question": "Can Oracle-backed user storage move while preserving OAuth2/OIDC issuance, scopes, ownership checks, credential protection, and audit behavior?",
+        "customer_id": "cloudbank-reference",
+        "estate_inventory": {
+          "deployable_units": 10,
+          "java_source_units": 70,
+          "runtime_service_modules": 8,
+          "sql_files": 9,
+          "tracked_files": 189
+        },
+        "evidence_class": "upstream-static-modern-oracle-reference",
+        "migration_complete": false,
+        "migration_risk_count": 4,
+        "operator_platform": "Oracle",
+        "postgresql_mapping_complete": false,
+        "production_ready": false,
+        "runtime_observed": false,
+        "services": [
+          "azn-server",
+          "common",
+          "APISIX"
+        ],
+        "source_commit": "4f41b16d00c45503f691836fee8138010c969e86",
+        "source_paths": [
+          "cloudbank-v5/azn-server/src/main/resources/db/changelog/table.sql",
+          "cloudbank-v5/azn-server/src/main/resources/db/changelog/trigger.sql",
+          "cloudbank-v5/azn-server/src/main/java/oracle/obaas/aznserver/securityconfig/SecurityConfig.java",
+          "cloudbank-v5/common/src/main/java/com/example/common/security/CloudBankSecurityAutoConfiguration.java",
+          "cloudbank-v5/5-apisix_create_routes.sh"
+        ],
+        "source_product": "CloudBank v5",
+        "source_repository": "https://github.com/oracle/microservices-backend",
+        "statement": "Pinned static modern-Oracle workload for CloudBank Reference Estate; no runtime or target equivalence is attached.",
+        "status": "reference-projected",
+        "target_equivalent": false,
+        "target_posture": {
+          "candidate_lanes": [
+            "PostgreSQL",
+            "PostgreSQL-compatible distributed SQL",
+            "other adapter-qualified relational target"
+          ],
+          "selected_target": null,
+          "statement": "Target selection remains a governed later decision; this milestone inventories the source and migration risks without claiming a completed mapping."
+        }
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 66,
+          "line_start": 66,
+          "method": "curated-cloudbank-workload-v1",
+          "path": "reference-estates/cloudbank/workloads.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "cloudbank-reference:workload:money-transfer",
+      "kind": "modernization_workload",
+      "name": "Money transfer",
+      "properties": {
+        "application_architecture": "cloud-native-microservices",
+        "business_problem": "Money movement",
+        "business_question": "Can transfers retain debit, credit, compensation, journal, and failure behavior after the Oracle persistence layer is replaced?",
+        "customer_id": "cloudbank-reference",
+        "estate_inventory": {
+          "deployable_units": 10,
+          "java_source_units": 70,
+          "runtime_service_modules": 8,
+          "sql_files": 9,
+          "tracked_files": 189
+        },
+        "evidence_class": "upstream-static-modern-oracle-reference",
+        "migration_complete": false,
+        "migration_risk_count": 4,
+        "operator_platform": "Oracle",
+        "postgresql_mapping_complete": false,
+        "production_ready": false,
+        "runtime_observed": false,
+        "services": [
+          "transfer",
+          "account"
+        ],
+        "source_commit": "4f41b16d00c45503f691836fee8138010c969e86",
+        "source_paths": [
+          "cloudbank-v5/transfer/src/main/java/com/example/transfer/TransferService.java",
+          "cloudbank-v5/account/src/main/java/com/example/accounts/services/WithdrawService.java",
+          "cloudbank-v5/account/src/main/java/com/example/accounts/services/DepositService.java",
+          "cloudbank-v5/account/src/main/java/com/example/accounts/model/Journal.java",
+          "cloudbank-v5/account/src/main/resources/db/changelog/table.sql"
+        ],
+        "source_product": "CloudBank v5",
+        "source_repository": "https://github.com/oracle/microservices-backend",
+        "statement": "Pinned static modern-Oracle workload for CloudBank Reference Estate; no runtime or target equivalence is attached.",
+        "status": "reference-projected",
+        "target_equivalent": false,
+        "target_posture": {
+          "candidate_lanes": [
+            "PostgreSQL",
+            "PostgreSQL-compatible distributed SQL",
+            "other adapter-qualified relational target"
+          ],
+          "selected_target": null,
+          "statement": "Target selection remains a governed later decision; this milestone inventories the source and migration risks without claiming a completed mapping."
+        }
+      }
+    }
+  ],
+  "schema_version": "1.0",
+  "source": {
+    "acquisition_mode": "inventory-only",
+    "inventory": "reference-estates/cloudbank/inventory.json",
+    "license": {
+      "declared": "UPL-1.0",
+      "license_file": "LICENSE.txt",
+      "license_sha256": "bddb351064fea224bea3f4f1ff5614176523a0e600920e887a94045bed83eacd"
+    },
+    "operator_estate_id": "cloudbank-reference",
+    "operator_estate_name": "CloudBank Reference Estate",
+    "source_pin": "reference-estates/cloudbank/source-pin.json",
+    "subtree": "cloudbank-v5",
+    "upstream_commit": "4f41b16d00c45503f691836fee8138010c969e86",
+    "upstream_product": "CloudBank v5",
+    "upstream_repository": "https://github.com/oracle/microservices-backend",
+    "upstream_root_tree": "6aa92e89c783f123c4da8d7ae18108004a4f4a99",
+    "upstream_subtree_tree": "bd918386209f284a1ed31802555740eb34b75348",
+    "workloads": "reference-estates/cloudbank/workloads.json"
+  },
+  "statistics": {
+    "edge_count": 20,
+    "edges_by_relation": {
+      "HAS_SCENARIO": 20
+    },
+    "external_reference_count": 0,
+    "node_count": 25,
+    "nodes_by_kind": {
+      "modernization_workload": 5,
+      "verification_scenario": 20
+    }
+  }
+}

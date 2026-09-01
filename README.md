@@ -4,7 +4,30 @@
 
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.52.0 — Oracle Customer (Large) Control Tower projection**
+Release: **v0.53.0 — CloudBank modern Oracle reference estate**
+
+v0.53 adds Oracle's official CloudBank v5 reference application as the third selectable Control
+Tower estate: **CloudBank Reference Estate**. Unlike the enterprise ERP-shaped Oracle source,
+CloudBank is already a modern Java and Kubernetes microservices application. Its continued Oracle
+Database, wallet, Transactional Event Queue, and MicroTx LRA dependencies make it the reference
+source for demonstrating autonomous database decoupling to PostgreSQL or another adapter-qualified
+relational target.
+
+The pinned static inventory measures 189 files, 70 Java source units, ten Maven modules, ten
+deployable units, nine SQL files, and 62 endpoint annotations. Five operator workloads expose 20
+curated migration-risk scenarios across customer/account management, money transfer, cheque
+processing, identity/authorization, and credit scoring.
+
+```bash
+./cloudbank-reference-estate.sh verify
+./composite-estate.sh verify /path/to/carddemo-upstream
+```
+
+CloudBank has not been built or executed and no target has been selected. PostgreSQL mapping,
+generated refactoring, target execution, application equivalence, migration completion, and
+production readiness remain false.
+
+Previous release: **v0.52.0 — Oracle Customer (Large) Control Tower projection**
 
 v0.52 projects the pinned Oracle reference estate into the Control Tower as the selectable
 operator-facing company **Oracle Customer (Large)**. Its order-to-cash and procure-to-pay
@@ -1101,7 +1124,7 @@ read-only dashboard cannot approve, resolve, or launch work.
 
 The complete customer-readable milestone history is published in the
 [searchable milestone documentation library](https://howardweale.github.io/lightyear-carddemo-modernization/milestones/).
-MS #1 through MS #44 each have a canonical Markdown narrative plus matching Microsoft Word and PDF
+MS #1 through MS #53 each have a canonical Markdown narrative plus matching Microsoft Word and PDF
 editions. Search runs locally in the browser over milestone number, title, customer value,
 capability, release, boundary, and roadmap phase. The
 [repository index](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/README.md)

@@ -35,6 +35,7 @@ production-qualified.
 | MS #50 | Oracle Semantic Coverage Program | Complete |
 | MS #51 | Oracle Native Execution Admission Gate | Admission contract complete; SQL harnesses and authorized native runs pending |
 | MS #52 | Oracle Customer (Large) Control Tower Projection | Complete |
+| MS #53 | CloudBank Modern Oracle Reference Estate | Complete |
 
 The v0.35.0 stored-logic qualification core is retained as supporting MS #34 evidence. It does not
 replace the planned DB2 milestone.
@@ -322,3 +323,28 @@ promotion of static trace evidence into runtime observation.
 Oracle Customer (Large) is a public reference-estate projection, not an attached customer system.
 The 20 relationships are curated static scenarios, not native Oracle execution. Application
 equivalence, CloudBank mapping, migration completion, and production readiness remain false.
+
+## MS #53 — CloudBank Modern Oracle Reference Estate
+
+MS #53 adds **CloudBank Reference Estate** as the third selectable company context alongside
+CardDemo and Oracle Customer (Large). It pins Oracle's official CloudBank v5 source at commit
+`4f41b16d00c45503f691836fee8138010c969e86` and records a reproducible static inventory without
+vendoring, building, or executing the upstream application.
+
+CloudBank is deliberately different from the earlier reference estates: it is already a modern
+Java and Kubernetes microservices system, yet remains coupled to Oracle Database, wallet and
+connection behavior, Transactional Event Queue, and MicroTx LRA coordination. This makes it the
+source estate for showing that the autonomous factory can move a modern Oracle application toward
+PostgreSQL, PostgreSQL-compatible distributed SQL, or another adapter-qualified relational target,
+not only transform visibly legacy code.
+
+The Control Tower presents five business workloads and 20 curated migration-risk scenarios. The
+source inventory measures 189 tracked files, 70 Java source units, ten Maven modules, ten
+deployable units, nine SQL files, 53 Spring endpoint annotations, and nine JAX-RS annotations. A
+content-addressed extension fragment composes with the PL/I and Oracle Customer (Large) fragments
+while leaving the canonical CardDemo graph and its runtime/audit identity unchanged.
+
+This is the governed source-and-risk baseline for later factory milestones. CloudBank has not been
+built or executed, no target is selected, and no schema conversion, application refactoring,
+dual-run comparison, native target proof, application equivalence, migration completion, or
+production readiness is claimed.

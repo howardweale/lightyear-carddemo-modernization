@@ -6,6 +6,12 @@ from pathlib import Path
 
 from .builder import build_graph, write_receipt
 from .capability import analyze_capabilities, validate_capability_analysis, write_capability_analysis
+from .cloudbank_reference import (
+    build_cloudbank_reference_fragment,
+    validate_cloudbank_reference_fragment,
+    write_cloudbank_reference_fragment,
+    write_cloudbank_reference_receipt,
+)
 from .composite import (
     build_composite_estate,
     load_json as load_composite_input,
@@ -103,6 +109,58 @@ def build_parser() -> argparse.ArgumentParser:
     validate_oracle_reference.add_argument(
         "--fragment", type=Path,
         default=Path("reference-estates/idempiere/oracle-customer-large.fragment.json"),
+    )
+
+    cloudbank_reference = subparsers.add_parser(
+        "build-cloudbank-reference",
+        help="Build the pinned CloudBank modern-Oracle static reference projection",
+    )
+    cloudbank_reference.add_argument(
+        "--base-graph", type=Path, default=Path("knowledge/graph.snapshot.json.gz")
+    )
+    cloudbank_reference.add_argument(
+        "--workloads", type=Path,
+        default=Path("reference-estates/cloudbank/workloads.json"),
+    )
+    cloudbank_reference.add_argument(
+        "--inventory", type=Path,
+        default=Path("reference-estates/cloudbank/inventory.json"),
+    )
+    cloudbank_reference.add_argument(
+        "--source-pin", type=Path,
+        default=Path("reference-estates/cloudbank/source-pin.json"),
+    )
+    cloudbank_reference.add_argument(
+        "--output", type=Path,
+        default=Path("reference-estates/cloudbank/cloudbank-reference.fragment.json"),
+    )
+    cloudbank_reference.add_argument(
+        "--receipt", type=Path,
+        default=Path("reference-estates/cloudbank/cloudbank-reference.receipt.json"),
+    )
+
+    validate_cloudbank_reference = subparsers.add_parser(
+        "validate-cloudbank-reference",
+        help="Validate the CloudBank modern-Oracle static reference projection",
+    )
+    validate_cloudbank_reference.add_argument(
+        "--base-graph", type=Path, default=Path("knowledge/graph.snapshot.json.gz")
+    )
+    validate_cloudbank_reference.add_argument(
+        "--workloads", type=Path,
+        default=Path("reference-estates/cloudbank/workloads.json"),
+    )
+    validate_cloudbank_reference.add_argument(
+        "--inventory", type=Path,
+        default=Path("reference-estates/cloudbank/inventory.json"),
+    )
+    validate_cloudbank_reference.add_argument(
+        "--source-pin", type=Path,
+        default=Path("reference-estates/cloudbank/source-pin.json"),
+    )
+    validate_cloudbank_reference.add_argument(
+        "--fragment", type=Path,
+        default=Path("reference-estates/cloudbank/cloudbank-reference.fragment.json"),
     )
     composite.add_argument(
         "--fragment", type=Path, action="append", required=True,
@@ -440,6 +498,39 @@ def main(argv: list[str] | None = None) -> int:
         fragment = json.loads(args.fragment.read_text(encoding="utf-8"))
         errors = validate_oracle_reference_fragment(
             fragment, base_graph, slices, inventory, source_pin
+        )
+        print(json.dumps(
+            {"errors": errors, "status": "passed" if not errors else "failed"},
+            indent=2,
+            sort_keys=True,
+        ))
+        return 0 if not errors else 1
+
+    if args.command in {"build-cloudbank-reference", "validate-cloudbank-reference"}:
+        base_graph = load_graph(args.base_graph)
+        workloads = json.loads(args.workloads.read_text(encoding="utf-8"))
+        inventory = json.loads(args.inventory.read_text(encoding="utf-8"))
+        source_pin = json.loads(args.source_pin.read_text(encoding="utf-8"))
+        if args.command == "build-cloudbank-reference":
+            payload = build_cloudbank_reference_fragment(
+                base_graph, workloads, inventory, source_pin
+            )
+            write_cloudbank_reference_fragment(payload, args.output)
+            write_cloudbank_reference_receipt(payload, args.receipt)
+            errors = validate_cloudbank_reference_fragment(
+                payload, base_graph, workloads, inventory, source_pin
+            )
+            print(json.dumps({
+                "content_sha256": payload["content_sha256"],
+                "errors": errors,
+                "output": str(args.output),
+                "status": "passed" if not errors else "failed",
+                **payload["statistics"],
+            }, indent=2, sort_keys=True))
+            return 0 if not errors else 1
+        fragment = json.loads(args.fragment.read_text(encoding="utf-8"))
+        errors = validate_cloudbank_reference_fragment(
+            fragment, base_graph, workloads, inventory, source_pin
         )
         print(json.dumps(
             {"errors": errors, "status": "passed" if not errors else "failed"},

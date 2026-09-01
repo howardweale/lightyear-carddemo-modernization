@@ -15,7 +15,7 @@
     "production_ready": false,
     "source_only_pilot": true
   },
-  "content_sha256": "a2ed86d83c1b6b86ec2ac8d021fb89a25e8974212073ed0a92925d44087759c1",
+  "content_sha256": "ea09bf2e876bb521aeec75663b211b905e249a447a03e8c873f3432d42ee1ca0",
   "evidence_artifacts": [
     {
       "id": "pilot-runtime",
@@ -45,7 +45,7 @@
       "id": "composite-estate",
       "path": "knowledge/composite/estate.receipt.json",
       "role": "composite-lineage",
-      "sha256": "aa51c7847172133cdf2f159f0da04a73f9f9ff7d4eb712981b4198100628ce78"
+      "sha256": "8cb004e876dd5d28f2a3d8a9a5634c275df74bfbe3496032f8592711ed8945cc"
     },
     {
       "id": "capability-projection",

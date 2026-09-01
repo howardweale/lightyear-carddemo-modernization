@@ -1,0 +1,29 @@
+{
+  "acquisition": {
+    "mode": "inventory-only",
+    "observed_at": "2026-09-01",
+    "source_vendored": false,
+    "upstream_build_executed": false,
+    "upstream_runtime_executed": false
+  },
+  "claim_boundary": "This pin supports static inventory, Oracle-coupling analysis, workload selection, and a read-only Control Tower projection only. It is not CloudBank runtime evidence, PostgreSQL compatibility, target equivalence, migration completion, or production-readiness evidence.",
+  "license": {
+    "declared": "UPL-1.0",
+    "license_file": "LICENSE.txt",
+    "license_sha256": "bddb351064fea224bea3f4f1ff5614176523a0e600920e887a94045bed83eacd"
+  },
+  "schema_version": "1.0",
+  "source": {
+    "branch": "main",
+    "commit": "4f41b16d00c45503f691836fee8138010c969e86",
+    "commit_time": "2026-08-26T10:43:02-05:00",
+    "repository": "https://github.com/oracle/microservices-backend",
+    "root_tree": "6aa92e89c783f123c4da8d7ae18108004a4f4a99",
+    "subtree": "cloudbank-v5",
+    "subtree_tree": "bd918386209f284a1ed31802555740eb34b75348"
+  },
+  "upstream_status": {
+    "basis": "Oracle's repository describes cloudbank-v5 as a reference application for modern cloud-native microservices using Oracle Backend as a Service.",
+    "official_reference_application": true
+  }
+}

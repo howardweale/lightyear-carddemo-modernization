@@ -1,0 +1,208 @@
+{
+  "claim_boundary": {
+    "application_equivalent": false,
+    "cloudbank_runtime_executed": false,
+    "migration_complete": false,
+    "postgresql_mapping_complete": false,
+    "production_ready": false,
+    "target_equivalent": false
+  },
+  "evidence_class": "upstream-static-modern-oracle-reference",
+  "operator_estate": {
+    "id": "cloudbank-reference",
+    "name": "CloudBank Reference Estate"
+  },
+  "schema_version": "1.0",
+  "source_platform": "Oracle Database",
+  "target_posture": {
+    "candidate_lanes": [
+      "PostgreSQL",
+      "PostgreSQL-compatible distributed SQL",
+      "other adapter-qualified relational target"
+    ],
+    "selected_target": null,
+    "statement": "Target selection remains a governed later decision; this milestone inventories the source and migration risks without claiming a completed mapping."
+  },
+  "workloads": [
+    {
+      "business_problem": "Customer and account platform",
+      "business_question": "Can customer and account behavior move from Oracle-owned service schemas without changing identifiers, balances, lifecycle dates, constraints, or API behavior?",
+      "id": "customer-account-management",
+      "migration_risks": [
+        {
+          "id": "service-owned-schema-boundary",
+          "name": "Service-owned schema boundary",
+          "statement": "The account and customer services own separate Oracle schemas and Liquibase change logs; a target must preserve ownership and deployment order."
+        },
+        {
+          "id": "oracle-identity-generation",
+          "name": "Oracle identity generation",
+          "statement": "NUMBER identity columns with START WITH and CACHE semantics require an explicit target identity policy."
+        },
+        {
+          "id": "money-and-date-semantics",
+          "name": "Money and date semantics",
+          "statement": "Unscaled NUMBER balances and Oracle DATE/SYSDATE behavior require bounded precision, timezone, and default-value decisions."
+        },
+        {
+          "id": "constraint-and-orm-behavior",
+          "name": "Constraint and ORM behavior",
+          "statement": "Primary keys, foreign keys, checks, uniqueness, JPA mappings, and repository queries must be compared at schema and API levels."
+        }
+      ],
+      "name": "Customer and account management",
+      "services": ["account", "customer", "customer-helidon"],
+      "source_paths": [
+        "cloudbank-v5/account/src/main/resources/db/changelog/table.sql",
+        "cloudbank-v5/account/src/main/java/com/example/accounts/controller/AccountController.java",
+        "cloudbank-v5/customer/src/main/resources/db/changelog/table.sql",
+        "cloudbank-v5/customer/src/main/java/com/example/customer/controller/CustomerController.java",
+        "cloudbank-v5/customer-helidon/src/main/resources/META-INF/init-script.sql"
+      ]
+    },
+    {
+      "business_problem": "Money movement",
+      "business_question": "Can transfers retain debit, credit, compensation, journal, and failure behavior after the Oracle persistence layer is replaced?",
+      "id": "money-transfer",
+      "migration_risks": [
+        {
+          "id": "lra-coordination",
+          "name": "LRA coordination",
+          "statement": "The transfer service starts an Oracle MicroTx LRA and invokes account participants; the target must preserve coordination and termination semantics."
+        },
+        {
+          "id": "compensation-state-machine",
+          "name": "Compensation state machine",
+          "statement": "Complete, compensate, status, and after-LRA callbacks form a durable state machine that cannot be reduced to successful HTTP responses."
+        },
+        {
+          "id": "local-transaction-boundaries",
+          "name": "Local transaction boundaries",
+          "statement": "Participant callbacks combine distributed coordination with local Spring transactions and require atomic journal and balance behavior."
+        },
+        {
+          "id": "journal-idempotency",
+          "name": "Journal idempotency",
+          "statement": "LRA identifiers and journal states must survive retries, duplicate callbacks, cancellation, and recovery without double application."
+        }
+      ],
+      "name": "Money transfer",
+      "services": ["transfer", "account"],
+      "source_paths": [
+        "cloudbank-v5/transfer/src/main/java/com/example/transfer/TransferService.java",
+        "cloudbank-v5/account/src/main/java/com/example/accounts/services/WithdrawService.java",
+        "cloudbank-v5/account/src/main/java/com/example/accounts/services/DepositService.java",
+        "cloudbank-v5/account/src/main/java/com/example/accounts/model/Journal.java",
+        "cloudbank-v5/account/src/main/resources/db/changelog/table.sql"
+      ]
+    },
+    {
+      "business_problem": "Cheque processing",
+      "business_question": "Can asynchronous cheque deposit and clearance retain delivery, ordering, authorization, retry, and balance-update behavior on a new database?",
+      "id": "check-deposit-clearance",
+      "migration_risks": [
+        {
+          "id": "transactional-event-queue",
+          "name": "Transactional Event Queue",
+          "statement": "The workflow uses Oracle Transactional Event Queue/JMS configuration whose delivery contract requires a target messaging decision."
+        },
+        {
+          "id": "delivery-and-replay",
+          "name": "Delivery and replay",
+          "statement": "Deposit and clearance consumers must retain acknowledgement, retry, duplicate-delivery, and replay behavior."
+        },
+        {
+          "id": "internal-service-authorization",
+          "name": "Internal service authorization",
+          "statement": "Cheque consumers call protected account endpoints with service identity; database migration must not weaken that boundary."
+        },
+        {
+          "id": "event-to-balance-consistency",
+          "name": "Event-to-balance consistency",
+          "statement": "Pending journal creation and later clearance form an eventual-consistency contract that needs end-to-end comparison."
+        }
+      ],
+      "name": "Cheque deposit and clearance",
+      "services": ["checks", "testrunner", "account"],
+      "source_paths": [
+        "cloudbank-v5/checks/src/main/java/com/example/checks/controller/CheckReceiver.java",
+        "cloudbank-v5/checks/src/main/java/com/example/checks/controller/ClearanceReceiver.java",
+        "cloudbank-v5/checks/src/main/java/com/example/checks/service/AccountService.java",
+        "cloudbank-v5/account/src/main/resources/db/changelog/txeventq.sql",
+        "cloudbank-v5/testrunner/src/main/java/com/example/testrunner/controller/TestRunnerController.java"
+      ]
+    },
+    {
+      "business_problem": "Identity and access",
+      "business_question": "Can Oracle-backed user storage move while preserving OAuth2/OIDC issuance, scopes, ownership checks, credential protection, and audit behavior?",
+      "id": "identity-service-authorization",
+      "migration_risks": [
+        {
+          "id": "user-repository-schema",
+          "name": "User repository schema",
+          "statement": "Oracle identity columns, VARCHAR2 character semantics, TIMESTAMP/SYSDATE defaults, uniqueness, and audit columns need target mappings."
+        },
+        {
+          "id": "audit-trigger-semantics",
+          "name": "Audit trigger semantics",
+          "statement": "An Oracle editionable trigger derives update identity through SYS_CONTEXT and REGEXP_SUBSTR; equivalent audit behavior must be designed explicitly."
+        },
+        {
+          "id": "oauth-scope-boundary",
+          "name": "OAuth scope boundary",
+          "statement": "APISIX and each service independently enforce CloudBank scopes; a database change cannot turn gateway checks into the only authorization layer."
+        },
+        {
+          "id": "credential-and-secret-posture",
+          "name": "Credential and secret posture",
+          "statement": "BCrypt hashes, database credentials, OAuth client secrets, and signing keys must retain their storage, rotation, and non-disclosure boundaries."
+        }
+      ],
+      "name": "Authentication and service authorization",
+      "services": ["azn-server", "common", "APISIX"],
+      "source_paths": [
+        "cloudbank-v5/azn-server/src/main/resources/db/changelog/table.sql",
+        "cloudbank-v5/azn-server/src/main/resources/db/changelog/trigger.sql",
+        "cloudbank-v5/azn-server/src/main/java/oracle/obaas/aznserver/securityconfig/SecurityConfig.java",
+        "cloudbank-v5/common/src/main/java/com/example/common/security/CloudBankSecurityAutoConfiguration.java",
+        "cloudbank-v5/5-apisix_create_routes.sh"
+      ]
+    },
+    {
+      "business_problem": "Credit decision services",
+      "business_question": "Can a nominally database-light service retain its API, randomness, date, security, dependency, and observability behavior while the surrounding estate changes?",
+      "id": "credit-score-service",
+      "migration_risks": [
+        {
+          "id": "nondeterministic-output",
+          "name": "Nondeterministic output",
+          "statement": "SecureRandom output prevents literal response comparison and requires property-based acceptance bounds."
+        },
+        {
+          "id": "date-contract",
+          "name": "Date contract",
+          "statement": "The response uses LocalDate.now and therefore needs an explicit clock, timezone, and normalization policy."
+        },
+        {
+          "id": "api-and-security-contract",
+          "name": "API and security contract",
+          "statement": "The endpoint shape and CloudBank read scope remain part of equivalence even when no service-owned database table is migrated."
+        },
+        {
+          "id": "operational-equivalence",
+          "name": "Operational equivalence",
+          "statement": "Health, metrics, traces, logging, failure propagation, and deployment behavior remain target acceptance concerns."
+        }
+      ],
+      "name": "Credit score service",
+      "services": ["creditscore", "common"],
+      "source_paths": [
+        "cloudbank-v5/creditscore/src/main/java/com/example/creditscore/controller/CreditScoreController.java",
+        "cloudbank-v5/creditscore/src/main/resources/application.yaml",
+        "cloudbank-v5/creditscore/values.yaml",
+        "cloudbank-v5/common/src/main/java/com/example/common/security/CloudBankSecurityAutoConfiguration.java",
+        "cloudbank-v5/pom.xml"
+      ]
+    }
+  ]
+}

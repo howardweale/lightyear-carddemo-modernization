@@ -4,25 +4,36 @@
 
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.48.0 — iDempiere Oracle reference-estate inventory**
+Release: **v0.49.0 — Oracle dialect authority corpus and executable fixtures**
+
+v0.49 pins Oracle's official Database Sample Schemas release `v23.3` at commit
+`e3325a83e56c516815844025418a96ecaf219751`. A fail-closed acquisition tool admits an allowlisted
+nine-file subset across `customer_orders`, `human_resources`, and `sales_history`: four SQL files,
+2,000 SQL lines, and 77,919 bytes, with exact source, tree, license, and file hashes.
+
+The eight Oracle risks selected in v0.48 now have 24 deterministic executable cases. The generated
+receipt records every case as `passed-bounded-model`, and a separate native Oracle SQL harness emits
+one completion marker per fixture. The harness has not been run against an authorized Oracle
+database, so native Oracle conformance, iDempiere application equivalence, CloudBank mapping,
+migration completion, and production readiness remain false.
+
+```bash
+python3 tools/acquire_oracle_dialect_corpus.py --verify
+PYTHONPATH=src python3 -m lightyear_data verify-oracle-dialect-corpus
+./data-modernization.sh oracle-dialect
+```
+
+Previous release: **v0.48.0 — iDempiere Oracle reference-estate inventory**
 
 v0.48 replaces a toy Oracle comparison source with a defensible enterprise-shaped reference-estate
 decision. It pins the supported iDempiere release-13 branch at commit
 `731515dcdd5278b843db33b9d3109d155b881951` without vendoring, building, or executing it. A
 reproducible static inventory measures 12,565 tracked files, a 4,520-node and 36,819-edge internal
-Java source-unit graph, and 2,823 Oracle SQL files.
-
-The first bounded business slices are order-to-cash and procure-to-pay. Their one-hop source graphs
-contain 181 nodes/497 edges and 177 nodes/475 edges respectively, with the shared iDempiere table
-model and its `IsSOTrx`/`IsReceipt` selectors preserved. Eight Oracle semantic fixtures are
-identified for the next corpus step. Oracle's official sample schemas remain the dialect authority;
-CloudBank remains the intended modern destination. No upstream runtime, Oracle equivalence,
-CloudBank mapping, migration-completion, or production-readiness claim is created.
-
-```bash
-python3 tools/inventory_idempiere_reference.py \
-  --source-root /path/to/pinned/idempiere-release-13 --verify
-```
+Java source-unit graph, and 2,823 Oracle SQL files. The first bounded business slices are
+order-to-cash and procure-to-pay; their one-hop source graphs contain 181 nodes/497 edges and 177
+nodes/475 edges respectively. The milestone identifies eight Oracle semantic fixtures while
+keeping source execution, Oracle equivalence, CloudBank mapping, migration completion, and
+production readiness false.
 
 Previous release: **v0.47.3 — Control Tower craft and accessibility correction**
 

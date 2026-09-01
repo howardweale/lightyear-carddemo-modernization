@@ -31,6 +31,7 @@ production-qualified.
 | MS #47.2 | Control Tower Usability and Transport Hardening | Complete |
 | MS #47.3 | Control Tower Craft and Accessibility Correction | Complete |
 | MS #48 | iDempiere Oracle Reference Estate Inventory | Complete |
+| MS #49 | Oracle Dialect Authority Corpus and Executable Fixtures | Complete |
 
 The v0.35.0 stored-logic qualification core is retained as supporting MS #34 evidence. It does not
 replace the planned DB2 milestone.
@@ -215,4 +216,22 @@ Eight initial Oracle fixtures cover empty-string/null behavior, `NUMBER` precisi
 boundaries. Oracle's official sample schemas remain the dialect authority and are identified but
 not acquired in this milestone. CloudBank remains the modern destination/reference architecture;
 no mapping is yet asserted. Source execution, Oracle equivalence, customer evidence, application
+migration completion, and production readiness remain false.
+
+## MS #49 — Oracle Dialect Authority Corpus and Executable Fixtures
+
+MS #49 pins Oracle's official Database Sample Schemas release `v23.3` at commit
+`e3325a83e56c516815844025418a96ecaf219751` and admits only an allowlisted, hash-bound subset. The
+selected `customer_orders`, `human_resources`, and `sales_history` surface contains nine files,
+four SQL files, 2,000 SQL lines, and 77,919 bytes. Installation wrappers, population scripts, the
+large sales-history data files, and archived schemas remain outside the committed corpus.
+
+The eight risks selected in MS #48 now form an executable catalog of 24 deterministic cases. A
+local Oracle-semantics model passes all 24 cases and produces a content-addressed
+`passed-bounded-model` receipt. A separate fail-fast native SQL harness covers the same eight
+fixtures and emits one completion marker for each, but it has not been run against an authorized
+Oracle database.
+
+The local model does not substitute for native Oracle observation. Native execution and
+conformance, iDempiere application behavior and equivalence, customer evidence, CloudBank mapping,
 migration completion, and production readiness remain false.

@@ -26,8 +26,9 @@ class WebsiteTests(unittest.TestCase):
         for pane in ("how", "where", "proof", "trust", "docs", "engage"):
             self.assertIn(f'id="p-{pane}"', self.page)
         self.assertIn('href="milestones/"', self.page)
-        self.assertIn('<div class="n">48</div>', self.page)
-        self.assertIn("Forty-eight of them", self.page)
+        self.assertIn('<div class="n">49</div>', self.page)
+        self.assertIn('<div class="n">455</div>', self.page)
+        self.assertIn("Forty-nine of them", self.page)
         self.assertIn("Anyone can rewrite it.", self.page)
         self.assertIn("We prove it behaves the same.", self.page)
 

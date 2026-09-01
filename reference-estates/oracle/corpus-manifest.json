@@ -1,0 +1,87 @@
+{
+  "corpus_id": "oracle-db-sample-schemas-v23.3-active-schema-surface",
+  "file_count": 9,
+  "files": [
+    {
+      "bytes": 1094,
+      "path": "LICENSE.txt",
+      "sha256": "2da4f8e1f04662e5db9b224a20dfd13db8bc396398271d607bda0343212fbce3"
+    },
+    {
+      "bytes": 3784,
+      "path": "README.md",
+      "sha256": "7cf645edad1c721d5a75b7f01e2d18e7c9a054de69a3c1e69d1574b574555ade"
+    },
+    {
+      "bytes": 2384,
+      "path": "customer_orders/README.md",
+      "sha256": "2457cbcf82ae25f791a79a0ed1ee9bd9849121ef7bf65981f7f061cb22e83987"
+    },
+    {
+      "bytes": 19570,
+      "path": "customer_orders/co_create.sql",
+      "sha256": "8ce42790ec255840bcaf22ff8bc4f53e53996ccecb318410a0b3a36a4c3d6cc1"
+    },
+    {
+      "bytes": 2642,
+      "path": "human_resources/README.md",
+      "sha256": "03de62400d65b1afa02d1a6b9aad7029954bba03a2ec1f4616b62bd3919f5c40"
+    },
+    {
+      "bytes": 3849,
+      "path": "human_resources/hr_code.sql",
+      "sha256": "5604aae0d47585bba996a90eecc43f494d4c63de19b2b9db7afe5007d6f669f5"
+    },
+    {
+      "bytes": 17112,
+      "path": "human_resources/hr_create.sql",
+      "sha256": "7d5b1e75a450f4e96a2efb23d9bac81963d8331974a72feacee712464091dd47"
+    },
+    {
+      "bytes": 2433,
+      "path": "sales_history/README.md",
+      "sha256": "7f56abd2235608147742004fd1281842486a32c290a499432c0ad20e5036f790"
+    },
+    {
+      "bytes": 25051,
+      "path": "sales_history/sh_create.sql",
+      "sha256": "739357c74c101fb043b1cf20897829392902e8a1506fcdc1e7ff8adfac67b190"
+    }
+  ],
+  "native_oracle_executed": false,
+  "oracle_surface_counts": {
+    "blob": 3,
+    "clob": 0,
+    "date": 31,
+    "number": 98,
+    "plsql_trigger": 2,
+    "varchar2": 74
+  },
+  "production_ready": false,
+  "schema_version": "1.0",
+  "selection": {
+    "omitted": [
+      "installation and uninstallation wrappers",
+      "bulk population scripts",
+      "sales_history CSV data files",
+      "archived order_entry and product_media schemas"
+    ],
+    "policy": "schema definitions, representative stored logic, schema documentation, root documentation, and license only",
+    "schemas": [
+      "customer_orders",
+      "human_resources",
+      "sales_history"
+    ]
+  },
+  "source": {
+    "commit": "e3325a83e56c516815844025418a96ecaf219751",
+    "license_expression": "MIT",
+    "release": "v23.3",
+    "repository": "https://github.com/oracle-samples/db-sample-schemas",
+    "tree": "200fc7ef8c9a2b156ccd4deee91af17d713471ff"
+  },
+  "source_pin_sha256": "048efb7ecdad5dfa39967fcfdf3c671d0c17104d5cde4f731e312f9f66febff2",
+  "sql_file_count": 4,
+  "sql_line_count": 2000,
+  "total_bytes": 77919
+}

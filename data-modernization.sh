@@ -40,6 +40,7 @@ case "$action" in
     "$LIGHTYEAR_PYTHON_BIN" -m lightyear_data verify-stored-logic-qualification --project-root "$project_dir"
     "$LIGHTYEAR_PYTHON_BIN" -m lightyear_data verify-db2-semantic-adapter --project-root "$project_dir"
     "$LIGHTYEAR_PYTHON_BIN" -m lightyear_data verify-oracle-source-qualification --project-root "$project_dir"
+    "$LIGHTYEAR_PYTHON_BIN" -m lightyear_data verify-oracle-dialect-corpus --project-root "$project_dir"
     "$LIGHTYEAR_PYTHON_BIN" -m lightyear_data verify-sap-ase-source-adapter --project-root "$project_dir"
     echo "AUTHFRDS database semantic core, adapters, ledger, fixtures, and receipts are deterministic."
     ;;
@@ -57,6 +58,9 @@ case "$action" in
     ;;
   oracle-source)
     "$LIGHTYEAR_PYTHON_BIN" -m lightyear_data verify-oracle-source-qualification --project-root "$project_dir"
+    ;;
+  oracle-dialect)
+    "$LIGHTYEAR_PYTHON_BIN" -m lightyear_data verify-oracle-dialect-corpus --project-root "$project_dir"
     ;;
   ase-source)
     "$LIGHTYEAR_PYTHON_BIN" -m lightyear_data verify-sap-ase-source-adapter --project-root "$project_dir"
@@ -80,5 +84,5 @@ case "$action" in
     fi
     "$LIGHTYEAR_PYTHON_BIN" -m lightyear_data sign --receipt "$receipt" --output "$output"
     ;;
-  *) echo "Usage: ./data-modernization.sh [build|verify|semantic-core|oracle-postgresql-proof|stored-logic|db2-semantic|oracle-source|ase-source|live-postgres|live-oracle|live-all|sign] [optional-carddemo-upstream-root]" >&2; exit 2 ;;
+  *) echo "Usage: ./data-modernization.sh [build|verify|semantic-core|oracle-postgresql-proof|stored-logic|db2-semantic|oracle-source|oracle-dialect|ase-source|live-postgres|live-oracle|live-all|sign] [optional-carddemo-upstream-root]" >&2; exit 2 ;;
 esac

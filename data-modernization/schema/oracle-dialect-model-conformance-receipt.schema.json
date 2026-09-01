@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schemas/oracle-dialect-model-conformance-receipt.schema.json",
+  "title": "LIGHTYEAR Oracle dialect bounded-model conformance receipt",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "receipt_type",
+    "corpus_id",
+    "fixture_count",
+    "case_count",
+    "results",
+    "status",
+    "bounded_model_execution_observed",
+    "native_oracle_execution_observed",
+    "native_oracle_conformance",
+    "idempiere_application_equivalence",
+    "cloudbank_mapping_complete",
+    "migration_complete",
+    "production_ready",
+    "content_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "receipt_type": {"const": "lightyear-oracle-dialect-model-conformance"},
+    "fixture_count": {"const": 8},
+    "case_count": {"const": 24},
+    "status": {"const": "passed-bounded-model"},
+    "results": {"type": "array", "minItems": 24, "maxItems": 24},
+    "bounded_model_execution_observed": {"const": true},
+    "native_oracle_execution_observed": {"const": false},
+    "native_oracle_conformance": {"const": false},
+    "idempiere_application_equivalence": {"const": false},
+    "cloudbank_mapping_complete": {"const": false},
+    "migration_complete": {"const": false},
+    "production_ready": {"const": false},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": true
+}

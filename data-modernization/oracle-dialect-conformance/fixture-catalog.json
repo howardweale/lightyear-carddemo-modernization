@@ -1,0 +1,481 @@
+{
+  "case_count": 24,
+  "catalog_type": "lightyear-oracle-dialect-fixture-catalog",
+  "content_sha256": "d855b925aec07c25fd2de6f28e599eb26aeae750214430ff6e63b9c8623067dd",
+  "corpus_id": "oracle-v23.3-first-eight-dialect-fixtures-v1",
+  "fixture_count": 8,
+  "fixtures": [
+    {
+      "authority": {
+        "documentation": "https://docs.oracle.com/en/database/oracle/oracle-database/26/sqlrf/Concatenation-Operator.html",
+        "official_corpus_paths": [
+          "customer_orders/co_create.sql",
+          "human_resources/hr_create.sql"
+        ]
+      },
+      "cases": [
+        {
+          "expected": {
+            "value": null
+          },
+          "id": "empty-to-null",
+          "inputs": {
+            "value": ""
+          },
+          "operation": "oracle-character-normalize"
+        },
+        {
+          "expected": {
+            "value": null
+          },
+          "id": "null-remains-null",
+          "inputs": {
+            "value": null
+          },
+          "operation": "oracle-character-normalize"
+        },
+        {
+          "expected": {
+            "value": " "
+          },
+          "id": "space-remains-value",
+          "inputs": {
+            "value": " "
+          },
+          "operation": "oracle-character-normalize"
+        }
+      ],
+      "id": "oracle-empty-string-null",
+      "idempiere_source_paths": [
+        "db/oracle/functions/documentNo.sql"
+      ],
+      "priority": 1,
+      "title": "Zero-length VARCHAR2 collapses to NULL"
+    },
+    {
+      "authority": {
+        "documentation": "https://docs.oracle.com/en/database/oracle/oracle-database/26/sqlrf/Data-Types.html",
+        "official_corpus_paths": [
+          "customer_orders/co_create.sql",
+          "human_resources/hr_create.sql",
+          "sales_history/sh_create.sql"
+        ]
+      },
+      "cases": [
+        {
+          "expected": {
+            "value": "123.9"
+          },
+          "id": "round-scale-one",
+          "inputs": {
+            "precision": 6,
+            "scale": 1,
+            "value": "123.89"
+          },
+          "operation": "oracle-number-cast"
+        },
+        {
+          "expected": {
+            "value": "0.00013"
+          },
+          "id": "round-small-number",
+          "inputs": {
+            "precision": 4,
+            "scale": 5,
+            "value": ".000127"
+          },
+          "operation": "oracle-number-cast"
+        },
+        {
+          "expected": {
+            "error": "ORA-01438"
+          },
+          "id": "precision-overflow",
+          "inputs": {
+            "precision": 3,
+            "scale": 2,
+            "value": "123.89"
+          },
+          "operation": "oracle-number-cast"
+        }
+      ],
+      "id": "oracle-number-precision-scale",
+      "idempiere_source_paths": [
+        "db/oracle/functions/C_Invoice_OpenToDate.sql",
+        "db/oracle/functions/BOM_PriceList.sql"
+      ],
+      "priority": 2,
+      "title": "NUMBER precision, scale, rounding, and overflow"
+    },
+    {
+      "authority": {
+        "documentation": "https://docs.oracle.com/en/database/oracle/oracle-database/26/sqlrf/Data-Types.html",
+        "official_corpus_paths": [
+          "customer_orders/co_create.sql",
+          "human_resources/hr_create.sql",
+          "sales_history/sh_create.sql"
+        ]
+      },
+      "cases": [
+        {
+          "expected": {
+            "value": "2024-02-29T23:59:59"
+          },
+          "id": "retain-seconds",
+          "inputs": {
+            "value": "2024-02-29T23:59:59"
+          },
+          "operation": "oracle-date-retain"
+        },
+        {
+          "expected": {
+            "value": "2024-03-01T00:00:00"
+          },
+          "id": "add-one-second",
+          "inputs": {
+            "seconds": 1,
+            "value": "2024-02-29T23:59:59"
+          },
+          "operation": "oracle-date-add-seconds"
+        },
+        {
+          "expected": {
+            "value": "2024-03-01T00:00:00"
+          },
+          "id": "trunc-day",
+          "inputs": {
+            "value": "2024-03-01T17:12:03"
+          },
+          "operation": "oracle-date-trunc"
+        }
+      ],
+      "id": "oracle-date-time-arithmetic",
+      "idempiere_source_paths": [
+        "db/oracle/functions/C_PaymentTerm_DueDays.sql",
+        "db/oracle/functions/nextBusinessDay.sql"
+      ],
+      "priority": 3,
+      "title": "DATE retains seconds and uses day arithmetic"
+    },
+    {
+      "authority": {
+        "documentation": [
+          "https://docs.oracle.com/en/database/oracle/oracle-database/26/sqlrf/NVL.html",
+          "https://docs.oracle.com/en/database/oracle/oracle-database/26/sqlrf/DECODE.html"
+        ],
+        "official_corpus_paths": [
+          "human_resources/hr_create.sql"
+        ]
+      },
+      "cases": [
+        {
+          "expected": {
+            "value": "fallback"
+          },
+          "id": "nvl-null",
+          "inputs": {
+            "fallback": "fallback",
+            "value": null
+          },
+          "operation": "oracle-nvl"
+        },
+        {
+          "expected": {
+            "value": "fallback"
+          },
+          "id": "nvl-empty",
+          "inputs": {
+            "fallback": "fallback",
+            "value": ""
+          },
+          "operation": "oracle-nvl"
+        },
+        {
+          "expected": {
+            "value": "null-match"
+          },
+          "id": "decode-null-equals-null",
+          "inputs": {
+            "default": "miss",
+            "results": [
+              "null-match",
+              "a-match"
+            ],
+            "searches": [
+              null,
+              "A"
+            ],
+            "value": null
+          },
+          "operation": "oracle-decode"
+        }
+      ],
+      "id": "oracle-nvl-decode-coercion",
+      "idempiere_source_paths": [
+        "db/oracle/functions/BOM_PriceList.sql",
+        "db/oracle/functions/nextBusinessDay.sql"
+      ],
+      "priority": 4,
+      "title": "NVL conversion and DECODE null matching"
+    },
+    {
+      "authority": {
+        "documentation": "https://docs.oracle.com/en/database/oracle/oracle-database/26/sqlrf/ROWNUM-Pseudocolumn.html",
+        "official_corpus_paths": [
+          "human_resources/hr_create.sql"
+        ]
+      },
+      "cases": [
+        {
+          "expected": {
+            "values": [
+              1,
+              3
+            ]
+          },
+          "id": "rownum-before-order",
+          "inputs": {
+            "limit": 2,
+            "values": [
+              3,
+              1,
+              2
+            ]
+          },
+          "operation": "oracle-rownum-then-order"
+        },
+        {
+          "expected": {
+            "values": [
+              1,
+              2
+            ]
+          },
+          "id": "order-before-rownum",
+          "inputs": {
+            "limit": 2,
+            "values": [
+              3,
+              1,
+              2
+            ]
+          },
+          "operation": "oracle-order-then-rownum"
+        },
+        {
+          "expected": {
+            "values": []
+          },
+          "id": "rownum-greater-than-one",
+          "inputs": {
+            "threshold": 1,
+            "values": [
+              3,
+              1,
+              2
+            ]
+          },
+          "operation": "oracle-rownum-greater-than"
+        }
+      ],
+      "id": "oracle-rownum-ordering",
+      "idempiere_source_paths": [
+        "db/oracle/functions/get_Sysconfig.sql",
+        "db/oracle/functions/C_Currency_Rate.sql"
+      ],
+      "priority": 5,
+      "title": "ROWNUM filtering precedes same-level ordering"
+    },
+    {
+      "authority": {
+        "documentation": "https://docs.oracle.com/en/database/oracle/oracle-database/26/sqlrf/SELECT.html",
+        "official_corpus_paths": [
+          "customer_orders/co_create.sql"
+        ]
+      },
+      "cases": [
+        {
+          "expected": {
+            "allocated": [
+              101,
+              102
+            ],
+            "committed_value": 102
+          },
+          "id": "two-allocations",
+          "inputs": {
+            "count": 2,
+            "initial": 100
+          },
+          "operation": "oracle-sequence-allocate"
+        },
+        {
+          "expected": {
+            "allocated": [
+              201
+            ],
+            "committed_value": 200
+          },
+          "id": "rollback-allocation",
+          "inputs": {
+            "count": 1,
+            "initial": 200
+          },
+          "operation": "oracle-sequence-rollback"
+        },
+        {
+          "expected": {
+            "allocations": [
+              {
+                "session": "A",
+                "value": 8
+              },
+              {
+                "session": "B",
+                "value": 9
+              }
+            ],
+            "committed_value": 9
+          },
+          "id": "serialized-sessions",
+          "inputs": {
+            "initial": 7,
+            "sessions": [
+              "A",
+              "B"
+            ]
+          },
+          "operation": "oracle-sequence-sessions"
+        }
+      ],
+      "id": "oracle-select-for-update-sequence",
+      "idempiere_source_paths": [
+        "db/oracle/procedures/AD_Sequence_Next.sql",
+        "db/oracle/procedures/AD_Sequence_Doc.sql"
+      ],
+      "priority": 6,
+      "title": "SELECT FOR UPDATE sequence allocation stays transactional"
+    },
+    {
+      "authority": {
+        "documentation": [
+          "https://docs.oracle.com/en/database/oracle/oracle-database/26/lnpls/SELECT-INTO-statement.html",
+          "https://docs.oracle.com/en/database/oracle/oracle-database/26/lnpls/predefined-exceptions.html"
+        ],
+        "official_corpus_paths": [
+          "human_resources/hr_code.sql"
+        ]
+      },
+      "cases": [
+        {
+          "expected": {
+            "handled": "NO_DATA_FOUND",
+            "value": "DEFAULT"
+          },
+          "id": "no-row-handler",
+          "inputs": {
+            "no_data_default": "DEFAULT",
+            "rows": []
+          },
+          "operation": "oracle-select-into"
+        },
+        {
+          "expected": {
+            "handled": null,
+            "value": 42
+          },
+          "id": "single-row",
+          "inputs": {
+            "no_data_default": "DEFAULT",
+            "rows": [
+              42
+            ]
+          },
+          "operation": "oracle-select-into"
+        },
+        {
+          "expected": {
+            "error": "ORA-01422"
+          },
+          "id": "multiple-rows",
+          "inputs": {
+            "no_data_default": "DEFAULT",
+            "rows": [
+              1,
+              2
+            ]
+          },
+          "operation": "oracle-select-into"
+        }
+      ],
+      "id": "oracle-select-into-no-data-found",
+      "idempiere_source_paths": [
+        "db/oracle/functions/get_Sysconfig.sql",
+        "db/oracle/procedures/AD_Sequence_Next.sql"
+      ],
+      "priority": 7,
+      "title": "SELECT INTO distinguishes zero, one, and multiple rows"
+    },
+    {
+      "authority": {
+        "documentation": "https://docs.oracle.com/en/database/oracle/oracle-database/26/adlob/LOB-classifications.html",
+        "official_corpus_paths": [
+          "customer_orders/co_create.sql"
+        ]
+      },
+      "cases": [
+        {
+          "expected": {
+            "byte_length": 3,
+            "sha256": "26a66b061e8f48f39927c312f25293959729eee95978e2892d49d3512a5cc092"
+          },
+          "id": "blob-byte-content",
+          "inputs": {
+            "hex": "0001ff"
+          },
+          "operation": "oracle-blob"
+        },
+        {
+          "expected": {
+            "character_length": 24,
+            "sha256": "2d262b62157500cb9bca0234acada9002d51cedd53d5cc2a3804499acbc3c556"
+          },
+          "id": "clob-character-content",
+          "inputs": {
+            "text": "Lightyear Oracle dialect"
+          },
+          "operation": "oracle-clob"
+        },
+        {
+          "expected": {
+            "blob_is_null": true,
+            "clob_is_null": true
+          },
+          "id": "null-lobs",
+          "inputs": {
+            "blob": null,
+            "clob": null
+          },
+          "operation": "oracle-lob-null"
+        }
+      ],
+      "id": "oracle-lob-boundaries",
+      "idempiere_source_paths": [
+        "migration/iD12/oracle/202405080546_IDEMPIERE-6133.sql",
+        "migration/i5.1/oracle/201804251707_IDEMPIERE-3698.sql"
+      ],
+      "priority": 8,
+      "title": "BLOB bytes and CLOB characters remain distinct"
+    }
+  ],
+  "native_oracle_executed": false,
+  "native_oracle_sql_emitted": true,
+  "official_sample_schema_commit": "e3325a83e56c516815844025418a96ecaf219751",
+  "official_sample_schemas": [
+    "customer_orders",
+    "human_resources",
+    "sales_history"
+  ],
+  "production_ready": false,
+  "schema_version": "1.0"
+}

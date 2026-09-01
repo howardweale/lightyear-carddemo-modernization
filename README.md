@@ -4,7 +4,22 @@
 
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.50.0 — Oracle semantic coverage program foundation**
+Release: **v0.50.1 — Oracle core SQL and datatype bounded execution**
+
+v0.50.1 executes 920 governed cases across all 230 behaviors in the types, globalization,
+expressions, and queries domains. Five of the eight MS #49 bootstrap bindings overlap this tranche
+and three remain outside it, so cumulative unique bounded-model coverage is 233 behaviors—not an
+inflated 238. The 24 bootstrap runs remain separate evidence records.
+
+```bash
+PYTHONPATH=src python3 -m lightyear_data verify-oracle-core-sql-coverage
+./data-modernization.sh oracle-core-sql
+```
+
+Native Oracle verification and target equivalence remain zero. The next increments cover PL/SQL,
+transactions/CDC, and authorized Oracle 19c/26ai execution.
+
+Previous release: **v0.50.0 — Oracle semantic coverage program foundation**
 
 v0.50 replaces an eight-fixture coverage headline with a governed, architect-facing Oracle
 coverage contract. The catalog now defines 500 behavior contracts and 2,000 case specifications

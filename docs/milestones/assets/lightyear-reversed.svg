@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 260" role="img" aria-labelledby="title">
+  <title id="title">LIGHTYEAR reversed logo</title>
+  <rect width="420" height="260" rx="20" fill="#15184D"/>
+  <path fill="#7D57EA" d="M46 112c56-4 92-27 132-65 9-9 20-14 30-10 8 3 16 9 26 18 35 33 68 53 110 57H46Z"/>
+  <path fill="#7D57EA" d="M46 148c56 4 92 27 132 65 9 9 20 14 30 10 8-3 16-9 26-18 35-33 68-53 110-57H46Z"/>
+  <text x="210" y="142" fill="#A7702C" font-family="Arial, sans-serif" font-size="35" font-weight="700" letter-spacing="7" text-anchor="middle">LIGHTYEAR</text>
+</svg>

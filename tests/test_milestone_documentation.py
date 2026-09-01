@@ -34,7 +34,11 @@ class MilestoneDocumentationTests(unittest.TestCase):
             self.assertEqual(hashlib.sha256(path.read_bytes()).hexdigest(), artifact["sha256"])
         self.assertEqual(
             {item["path"] for item in manifest["library_files"]},
-            {"docs/milestones/README.md", "docs/milestones/index.html"},
+            {
+                "docs/milestones/README.md",
+                "docs/milestones/index.html",
+                "docs/milestones/assets/lightyear-reversed.svg",
+            },
         )
         for library_file in manifest["library_files"]:
             path = ROOT / library_file["path"]
@@ -58,6 +62,9 @@ class MilestoneDocumentationTests(unittest.TestCase):
         self.assertIn("stored procedure", page.lower())
         self.assertIn("oracle", page.lower())
         self.assertIn("sap ase", page.lower())
+        self.assertIn("lightyear-reversed.svg", page)
+        self.assertIn("#7d57ea", page.lower())
+        self.assertIn("Where context becomes trusted action", readme)
 
         github_paths = re.findall(
             r"https://github\.com/howardweale/lightyear-carddemo-modernization/blob/main/([^\"\s)]+)",
@@ -71,6 +78,15 @@ class MilestoneDocumentationTests(unittest.TestCase):
         self.assertEqual(len(raw_paths), 94)
         for relative in set(github_paths + raw_paths):
             self.assertTrue((ROOT / relative).is_file(), relative)
+
+    def test_brand_assets_are_consistent_across_surfaces(self) -> None:
+        canonical = ROOT / "brand" / "assets" / "lightyear-primary.svg"
+        viewer = ROOT / "knowledge" / "viewer" / "assets" / "lightyear-primary.svg"
+        self.assertEqual(canonical.read_bytes(), viewer.read_bytes())
+        tokens = json.loads((ROOT / "brand" / "tokens.json").read_text(encoding="utf-8"))
+        self.assertEqual("#15184D", tokens["colors"]["navy"])
+        self.assertEqual("#7D57EA", tokens["colors"]["violet"])
+        self.assertEqual("#A7702C", tokens["colors"]["bronze"])
 
     def test_search_script_has_valid_javascript(self) -> None:
         page = (DOC_ROOT / "index.html").read_text(encoding="utf-8")

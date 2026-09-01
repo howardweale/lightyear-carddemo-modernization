@@ -34,6 +34,7 @@ production-qualified.
 | MS #49 | Oracle Dialect Authority Corpus and Executable Fixtures | Complete |
 | MS #50 | Oracle Semantic Coverage Program | Complete |
 | MS #51 | Oracle Native Execution Admission Gate | Admission contract complete; SQL harnesses and authorized native runs pending |
+| MS #52 | Oracle Customer (Large) Control Tower Projection | Complete |
 
 The v0.35.0 stored-logic qualification core is retained as supporting MS #34 evidence. It does not
 replace the planned DB2 milestone.
@@ -303,3 +304,21 @@ and enforceable; it does not claim to have climbed it.
 The next increment materializes governed SQL harness batches, followed by authorized 19c and 26ai
 execution. Native Oracle conformance, target equivalence, iDempiere application equivalence,
 CloudBank mapping, migration completion, and production readiness remain false.
+
+## MS #52 — Oracle Customer (Large) Control Tower Projection
+
+MS #52 projects the pinned Oracle reference estate into the read-only Control Tower under the
+operator-facing company name **Oracle Customer (Large)**. Operators can select order-to-cash or
+procure-to-pay and inspect 20 static document-flow trace scenarios across the two curated
+nine-table slices. The upstream product identity remains available only where required for source,
+commit, tree, license, and evidence provenance.
+
+The projection is a content-addressed extension fragment bound to the exact canonical CardDemo
+graph. It composes with the PL/I fragment in the default composite estate without changing the
+canonical graph or the runtime and audit evidence identity. Deterministic build receipts and
+cross-platform verification reject drift, renamed operator context, missing provenance, and any
+promotion of static trace evidence into runtime observation.
+
+Oracle Customer (Large) is a public reference-estate projection, not an attached customer system.
+The 20 relationships are curated static scenarios, not native Oracle execution. Application
+equivalence, CloudBank mapping, migration completion, and production readiness remain false.

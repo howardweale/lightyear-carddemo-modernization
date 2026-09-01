@@ -25,6 +25,12 @@ from .explorer import serve
 from .model import load_graph
 from .neo4j_export import export_neo4j
 from .ontology import DEFAULT_ONTOLOGY_PATH
+from .oracle_reference import (
+    build_oracle_reference_fragment,
+    validate_oracle_reference_fragment,
+    write_oracle_reference_fragment,
+    write_oracle_reference_receipt,
+)
 from .query import neighborhood, shortest_trace
 from .validation import rule_gaps, validate_graph
 
@@ -51,6 +57,52 @@ def build_parser() -> argparse.ArgumentParser:
     )
     composite.add_argument(
         "--base-graph", type=Path, default=Path("knowledge/graph.snapshot.json.gz")
+    )
+
+    oracle_reference = subparsers.add_parser(
+        "build-oracle-reference",
+        help="Build the pinned Oracle Customer (Large) static reference projection",
+    )
+    oracle_reference.add_argument(
+        "--base-graph", type=Path, default=Path("knowledge/graph.snapshot.json.gz")
+    )
+    oracle_reference.add_argument(
+        "--slices", type=Path, default=Path("reference-estates/idempiere/business-slices.json")
+    )
+    oracle_reference.add_argument(
+        "--inventory", type=Path, default=Path("reference-estates/idempiere/inventory.json")
+    )
+    oracle_reference.add_argument(
+        "--source-pin", type=Path, default=Path("reference-estates/idempiere/source-pin.json")
+    )
+    oracle_reference.add_argument(
+        "--output", type=Path,
+        default=Path("reference-estates/idempiere/oracle-customer-large.fragment.json"),
+    )
+    oracle_reference.add_argument(
+        "--receipt", type=Path,
+        default=Path("reference-estates/idempiere/oracle-customer-large.receipt.json"),
+    )
+
+    validate_oracle_reference = subparsers.add_parser(
+        "validate-oracle-reference",
+        help="Validate the Oracle Customer (Large) static reference projection",
+    )
+    validate_oracle_reference.add_argument(
+        "--base-graph", type=Path, default=Path("knowledge/graph.snapshot.json.gz")
+    )
+    validate_oracle_reference.add_argument(
+        "--slices", type=Path, default=Path("reference-estates/idempiere/business-slices.json")
+    )
+    validate_oracle_reference.add_argument(
+        "--inventory", type=Path, default=Path("reference-estates/idempiere/inventory.json")
+    )
+    validate_oracle_reference.add_argument(
+        "--source-pin", type=Path, default=Path("reference-estates/idempiere/source-pin.json")
+    )
+    validate_oracle_reference.add_argument(
+        "--fragment", type=Path,
+        default=Path("reference-estates/idempiere/oracle-customer-large.fragment.json"),
     )
     composite.add_argument(
         "--fragment", type=Path, action="append", required=True,
@@ -362,6 +414,39 @@ def main(argv: list[str] | None = None) -> int:
             )
         )
         return 0
+
+    if args.command in {"build-oracle-reference", "validate-oracle-reference"}:
+        base_graph = load_graph(args.base_graph)
+        slices = json.loads(args.slices.read_text(encoding="utf-8"))
+        inventory = json.loads(args.inventory.read_text(encoding="utf-8"))
+        source_pin = json.loads(args.source_pin.read_text(encoding="utf-8"))
+        if args.command == "build-oracle-reference":
+            payload = build_oracle_reference_fragment(
+                base_graph, slices, inventory, source_pin
+            )
+            write_oracle_reference_fragment(payload, args.output)
+            write_oracle_reference_receipt(payload, args.receipt)
+            errors = validate_oracle_reference_fragment(
+                payload, base_graph, slices, inventory, source_pin
+            )
+            print(json.dumps({
+                "content_sha256": payload["content_sha256"],
+                "errors": errors,
+                "output": str(args.output),
+                "status": "passed" if not errors else "failed",
+                **payload["statistics"],
+            }, indent=2, sort_keys=True))
+            return 0 if not errors else 1
+        fragment = json.loads(args.fragment.read_text(encoding="utf-8"))
+        errors = validate_oracle_reference_fragment(
+            fragment, base_graph, slices, inventory, source_pin
+        )
+        print(json.dumps(
+            {"errors": errors, "status": "passed" if not errors else "failed"},
+            indent=2,
+            sort_keys=True,
+        ))
+        return 0 if not errors else 1
 
     if args.command == "validate-composite":
         payload = load_graph(args.graph)

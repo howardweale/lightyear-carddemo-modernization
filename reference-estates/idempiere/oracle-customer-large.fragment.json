@@ -1,0 +1,1192 @@
+{
+  "base_graph": {
+    "content_sha256": "d98bd92d752f23ee19263aa0957c28ee5aac52966d1322f6a31d4a9960394dc9",
+    "graph_id": "lightyear:carddemo-modernization",
+    "schema_version": "1.1"
+  },
+  "content_sha256": "18e8014a38997977a106d08e5f5905473a7bb2afae9af2cfdd698aee51ef2341",
+  "edges": [
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 12,
+          "line_start": 12,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:edge:order-to-cash:01",
+      "properties": {
+        "claim_boundary": "static-reference-trace",
+        "sequence": 1
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "oracle-reference:workload:order-to-cash",
+      "target": "oracle-reference:scenario:order-to-cash:01"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 13,
+          "line_start": 13,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:edge:order-to-cash:02",
+      "properties": {
+        "claim_boundary": "static-reference-trace",
+        "sequence": 2
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "oracle-reference:workload:order-to-cash",
+      "target": "oracle-reference:scenario:order-to-cash:02"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 14,
+          "line_start": 14,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:edge:order-to-cash:03",
+      "properties": {
+        "claim_boundary": "static-reference-trace",
+        "sequence": 3
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "oracle-reference:workload:order-to-cash",
+      "target": "oracle-reference:scenario:order-to-cash:03"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 15,
+          "line_start": 15,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:edge:order-to-cash:04",
+      "properties": {
+        "claim_boundary": "static-reference-trace",
+        "sequence": 4
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "oracle-reference:workload:order-to-cash",
+      "target": "oracle-reference:scenario:order-to-cash:04"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 16,
+          "line_start": 16,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:edge:order-to-cash:05",
+      "properties": {
+        "claim_boundary": "static-reference-trace",
+        "sequence": 5
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "oracle-reference:workload:order-to-cash",
+      "target": "oracle-reference:scenario:order-to-cash:05"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 17,
+          "line_start": 17,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:edge:order-to-cash:06",
+      "properties": {
+        "claim_boundary": "static-reference-trace",
+        "sequence": 6
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "oracle-reference:workload:order-to-cash",
+      "target": "oracle-reference:scenario:order-to-cash:06"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 18,
+          "line_start": 18,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:edge:order-to-cash:07",
+      "properties": {
+        "claim_boundary": "static-reference-trace",
+        "sequence": 7
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "oracle-reference:workload:order-to-cash",
+      "target": "oracle-reference:scenario:order-to-cash:07"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 19,
+          "line_start": 19,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:edge:order-to-cash:08",
+      "properties": {
+        "claim_boundary": "static-reference-trace",
+        "sequence": 8
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "oracle-reference:workload:order-to-cash",
+      "target": "oracle-reference:scenario:order-to-cash:08"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 20,
+          "line_start": 20,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:edge:order-to-cash:09",
+      "properties": {
+        "claim_boundary": "static-reference-trace",
+        "sequence": 9
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "oracle-reference:workload:order-to-cash",
+      "target": "oracle-reference:scenario:order-to-cash:09"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 21,
+          "line_start": 21,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:edge:order-to-cash:10",
+      "properties": {
+        "claim_boundary": "static-reference-trace",
+        "sequence": 10
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "oracle-reference:workload:order-to-cash",
+      "target": "oracle-reference:scenario:order-to-cash:10"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 52,
+          "line_start": 52,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:edge:procure-to-pay:01",
+      "properties": {
+        "claim_boundary": "static-reference-trace",
+        "sequence": 1
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "oracle-reference:workload:procure-to-pay",
+      "target": "oracle-reference:scenario:procure-to-pay:01"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 53,
+          "line_start": 53,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:edge:procure-to-pay:02",
+      "properties": {
+        "claim_boundary": "static-reference-trace",
+        "sequence": 2
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "oracle-reference:workload:procure-to-pay",
+      "target": "oracle-reference:scenario:procure-to-pay:02"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 54,
+          "line_start": 54,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:edge:procure-to-pay:03",
+      "properties": {
+        "claim_boundary": "static-reference-trace",
+        "sequence": 3
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "oracle-reference:workload:procure-to-pay",
+      "target": "oracle-reference:scenario:procure-to-pay:03"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 55,
+          "line_start": 55,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:edge:procure-to-pay:04",
+      "properties": {
+        "claim_boundary": "static-reference-trace",
+        "sequence": 4
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "oracle-reference:workload:procure-to-pay",
+      "target": "oracle-reference:scenario:procure-to-pay:04"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 56,
+          "line_start": 56,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:edge:procure-to-pay:05",
+      "properties": {
+        "claim_boundary": "static-reference-trace",
+        "sequence": 5
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "oracle-reference:workload:procure-to-pay",
+      "target": "oracle-reference:scenario:procure-to-pay:05"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 57,
+          "line_start": 57,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:edge:procure-to-pay:06",
+      "properties": {
+        "claim_boundary": "static-reference-trace",
+        "sequence": 6
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "oracle-reference:workload:procure-to-pay",
+      "target": "oracle-reference:scenario:procure-to-pay:06"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 58,
+          "line_start": 58,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:edge:procure-to-pay:07",
+      "properties": {
+        "claim_boundary": "static-reference-trace",
+        "sequence": 7
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "oracle-reference:workload:procure-to-pay",
+      "target": "oracle-reference:scenario:procure-to-pay:07"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 59,
+          "line_start": 59,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:edge:procure-to-pay:08",
+      "properties": {
+        "claim_boundary": "static-reference-trace",
+        "sequence": 8
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "oracle-reference:workload:procure-to-pay",
+      "target": "oracle-reference:scenario:procure-to-pay:08"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 60,
+          "line_start": 60,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:edge:procure-to-pay:09",
+      "properties": {
+        "claim_boundary": "static-reference-trace",
+        "sequence": 9
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "oracle-reference:workload:procure-to-pay",
+      "target": "oracle-reference:scenario:procure-to-pay:09"
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 61,
+          "line_start": 61,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:edge:procure-to-pay:10",
+      "properties": {
+        "claim_boundary": "static-reference-trace",
+        "sequence": 10
+      },
+      "relation": "HAS_SCENARIO",
+      "source": "oracle-reference:workload:procure-to-pay",
+      "target": "oracle-reference:scenario:procure-to-pay:10"
+    }
+  ],
+  "external_references": [],
+  "fragment_id": "lightyear:oracle-customer-large-reference-v1",
+  "fragment_type": "lightyear-graph-extension",
+  "language_pack": {
+    "extensions": [
+      ".java",
+      ".sql"
+    ],
+    "id": "lightyear.oracle-reference",
+    "language": "Oracle reference estate",
+    "version": "1.0"
+  },
+  "limitations": [
+    "Oracle Customer (Large) is an operator-facing reference-estate label; no customer system is attached.",
+    "The projection is derived from pinned iDempiere static inventory and curated slices, not native Oracle execution evidence.",
+    "Static document-flow scenarios do not prove application equivalence, migration completion, production readiness, or runtime behavior.",
+    "The fragment is bound to one exact canonical graph identity and fails closed after graph drift."
+  ],
+  "nodes": [
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 12,
+          "line_start": 12,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:scenario:order-to-cash:01",
+      "kind": "verification_scenario",
+      "name": "Order to cash static trace 01: C_Order contains C_OrderLine",
+      "properties": {
+        "customer_id": "oracle-customer-large",
+        "evidence_class": "upstream-static-reference",
+        "expected_relation": "CONTAINS",
+        "operator_platform": "Oracle",
+        "runtime_observed": false,
+        "scenario_kind": "static-reference-trace",
+        "sequence": 1,
+        "source_commit": "731515dcdd5278b843db33b9d3109d155b881951",
+        "source_product": "iDempiere",
+        "source_repository": "https://github.com/idempiere/idempiere",
+        "source_table": "C_Order",
+        "statement": "The pinned reference slice documents C_Order CONTAINS C_OrderLine; this is static provenance, not an observed Oracle transaction.",
+        "target_table": "C_OrderLine",
+        "workload_id": "oracle-reference:workload:order-to-cash"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 13,
+          "line_start": 13,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:scenario:order-to-cash:02",
+      "kind": "verification_scenario",
+      "name": "Order to cash static trace 02: C_Order generates M_InOut",
+      "properties": {
+        "customer_id": "oracle-customer-large",
+        "evidence_class": "upstream-static-reference",
+        "expected_relation": "GENERATES",
+        "operator_platform": "Oracle",
+        "runtime_observed": false,
+        "scenario_kind": "static-reference-trace",
+        "sequence": 2,
+        "source_commit": "731515dcdd5278b843db33b9d3109d155b881951",
+        "source_product": "iDempiere",
+        "source_repository": "https://github.com/idempiere/idempiere",
+        "source_table": "C_Order",
+        "statement": "The pinned reference slice documents C_Order GENERATES M_InOut; this is static provenance, not an observed Oracle transaction.",
+        "target_table": "M_InOut",
+        "workload_id": "oracle-reference:workload:order-to-cash"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 14,
+          "line_start": 14,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:scenario:order-to-cash:03",
+      "kind": "verification_scenario",
+      "name": "Order to cash static trace 03: C_OrderLine fulfilled by M_InOutLine",
+      "properties": {
+        "customer_id": "oracle-customer-large",
+        "evidence_class": "upstream-static-reference",
+        "expected_relation": "FULFILLED_BY",
+        "operator_platform": "Oracle",
+        "runtime_observed": false,
+        "scenario_kind": "static-reference-trace",
+        "sequence": 3,
+        "source_commit": "731515dcdd5278b843db33b9d3109d155b881951",
+        "source_product": "iDempiere",
+        "source_repository": "https://github.com/idempiere/idempiere",
+        "source_table": "C_OrderLine",
+        "statement": "The pinned reference slice documents C_OrderLine FULFILLED_BY M_InOutLine; this is static provenance, not an observed Oracle transaction.",
+        "target_table": "M_InOutLine",
+        "workload_id": "oracle-reference:workload:order-to-cash"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 15,
+          "line_start": 15,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:scenario:order-to-cash:04",
+      "kind": "verification_scenario",
+      "name": "Order to cash static trace 04: M_InOut contains M_InOutLine",
+      "properties": {
+        "customer_id": "oracle-customer-large",
+        "evidence_class": "upstream-static-reference",
+        "expected_relation": "CONTAINS",
+        "operator_platform": "Oracle",
+        "runtime_observed": false,
+        "scenario_kind": "static-reference-trace",
+        "sequence": 4,
+        "source_commit": "731515dcdd5278b843db33b9d3109d155b881951",
+        "source_product": "iDempiere",
+        "source_repository": "https://github.com/idempiere/idempiere",
+        "source_table": "M_InOut",
+        "statement": "The pinned reference slice documents M_InOut CONTAINS M_InOutLine; this is static provenance, not an observed Oracle transaction.",
+        "target_table": "M_InOutLine",
+        "workload_id": "oracle-reference:workload:order-to-cash"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 16,
+          "line_start": 16,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:scenario:order-to-cash:05",
+      "kind": "verification_scenario",
+      "name": "Order to cash static trace 05: M_InOut sources C_Invoice",
+      "properties": {
+        "customer_id": "oracle-customer-large",
+        "evidence_class": "upstream-static-reference",
+        "expected_relation": "SOURCES",
+        "operator_platform": "Oracle",
+        "runtime_observed": false,
+        "scenario_kind": "static-reference-trace",
+        "sequence": 5,
+        "source_commit": "731515dcdd5278b843db33b9d3109d155b881951",
+        "source_product": "iDempiere",
+        "source_repository": "https://github.com/idempiere/idempiere",
+        "source_table": "M_InOut",
+        "statement": "The pinned reference slice documents M_InOut SOURCES C_Invoice; this is static provenance, not an observed Oracle transaction.",
+        "target_table": "C_Invoice",
+        "workload_id": "oracle-reference:workload:order-to-cash"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 17,
+          "line_start": 17,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:scenario:order-to-cash:06",
+      "kind": "verification_scenario",
+      "name": "Order to cash static trace 06: M_InOutLine matched by C_InvoiceLine",
+      "properties": {
+        "customer_id": "oracle-customer-large",
+        "evidence_class": "upstream-static-reference",
+        "expected_relation": "MATCHED_BY",
+        "operator_platform": "Oracle",
+        "runtime_observed": false,
+        "scenario_kind": "static-reference-trace",
+        "sequence": 6,
+        "source_commit": "731515dcdd5278b843db33b9d3109d155b881951",
+        "source_product": "iDempiere",
+        "source_repository": "https://github.com/idempiere/idempiere",
+        "source_table": "M_InOutLine",
+        "statement": "The pinned reference slice documents M_InOutLine MATCHED_BY C_InvoiceLine; this is static provenance, not an observed Oracle transaction.",
+        "target_table": "C_InvoiceLine",
+        "workload_id": "oracle-reference:workload:order-to-cash"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 18,
+          "line_start": 18,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:scenario:order-to-cash:07",
+      "kind": "verification_scenario",
+      "name": "Order to cash static trace 07: C_Invoice contains C_InvoiceLine",
+      "properties": {
+        "customer_id": "oracle-customer-large",
+        "evidence_class": "upstream-static-reference",
+        "expected_relation": "CONTAINS",
+        "operator_platform": "Oracle",
+        "runtime_observed": false,
+        "scenario_kind": "static-reference-trace",
+        "sequence": 7,
+        "source_commit": "731515dcdd5278b843db33b9d3109d155b881951",
+        "source_product": "iDempiere",
+        "source_repository": "https://github.com/idempiere/idempiere",
+        "source_table": "C_Invoice",
+        "statement": "The pinned reference slice documents C_Invoice CONTAINS C_InvoiceLine; this is static provenance, not an observed Oracle transaction.",
+        "target_table": "C_InvoiceLine",
+        "workload_id": "oracle-reference:workload:order-to-cash"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 19,
+          "line_start": 19,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:scenario:order-to-cash:08",
+      "kind": "verification_scenario",
+      "name": "Order to cash static trace 08: C_Invoice settled through C_AllocationLine",
+      "properties": {
+        "customer_id": "oracle-customer-large",
+        "evidence_class": "upstream-static-reference",
+        "expected_relation": "SETTLED_THROUGH",
+        "operator_platform": "Oracle",
+        "runtime_observed": false,
+        "scenario_kind": "static-reference-trace",
+        "sequence": 8,
+        "source_commit": "731515dcdd5278b843db33b9d3109d155b881951",
+        "source_product": "iDempiere",
+        "source_repository": "https://github.com/idempiere/idempiere",
+        "source_table": "C_Invoice",
+        "statement": "The pinned reference slice documents C_Invoice SETTLED_THROUGH C_AllocationLine; this is static provenance, not an observed Oracle transaction.",
+        "target_table": "C_AllocationLine",
+        "workload_id": "oracle-reference:workload:order-to-cash"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 20,
+          "line_start": 20,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:scenario:order-to-cash:09",
+      "kind": "verification_scenario",
+      "name": "Order to cash static trace 09: C_Payment settled through C_AllocationLine",
+      "properties": {
+        "customer_id": "oracle-customer-large",
+        "evidence_class": "upstream-static-reference",
+        "expected_relation": "SETTLED_THROUGH",
+        "operator_platform": "Oracle",
+        "runtime_observed": false,
+        "scenario_kind": "static-reference-trace",
+        "sequence": 9,
+        "source_commit": "731515dcdd5278b843db33b9d3109d155b881951",
+        "source_product": "iDempiere",
+        "source_repository": "https://github.com/idempiere/idempiere",
+        "source_table": "C_Payment",
+        "statement": "The pinned reference slice documents C_Payment SETTLED_THROUGH C_AllocationLine; this is static provenance, not an observed Oracle transaction.",
+        "target_table": "C_AllocationLine",
+        "workload_id": "oracle-reference:workload:order-to-cash"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 21,
+          "line_start": 21,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:scenario:order-to-cash:10",
+      "kind": "verification_scenario",
+      "name": "Order to cash static trace 10: C_AllocationHdr contains C_AllocationLine",
+      "properties": {
+        "customer_id": "oracle-customer-large",
+        "evidence_class": "upstream-static-reference",
+        "expected_relation": "CONTAINS",
+        "operator_platform": "Oracle",
+        "runtime_observed": false,
+        "scenario_kind": "static-reference-trace",
+        "sequence": 10,
+        "source_commit": "731515dcdd5278b843db33b9d3109d155b881951",
+        "source_product": "iDempiere",
+        "source_repository": "https://github.com/idempiere/idempiere",
+        "source_table": "C_AllocationHdr",
+        "statement": "The pinned reference slice documents C_AllocationHdr CONTAINS C_AllocationLine; this is static provenance, not an observed Oracle transaction.",
+        "target_table": "C_AllocationLine",
+        "workload_id": "oracle-reference:workload:order-to-cash"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 52,
+          "line_start": 52,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:scenario:procure-to-pay:01",
+      "kind": "verification_scenario",
+      "name": "Procure to pay static trace 01: C_Order contains C_OrderLine",
+      "properties": {
+        "customer_id": "oracle-customer-large",
+        "evidence_class": "upstream-static-reference",
+        "expected_relation": "CONTAINS",
+        "operator_platform": "Oracle",
+        "runtime_observed": false,
+        "scenario_kind": "static-reference-trace",
+        "sequence": 1,
+        "source_commit": "731515dcdd5278b843db33b9d3109d155b881951",
+        "source_product": "iDempiere",
+        "source_repository": "https://github.com/idempiere/idempiere",
+        "source_table": "C_Order",
+        "statement": "The pinned reference slice documents C_Order CONTAINS C_OrderLine; this is static provenance, not an observed Oracle transaction.",
+        "target_table": "C_OrderLine",
+        "workload_id": "oracle-reference:workload:procure-to-pay"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 53,
+          "line_start": 53,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:scenario:procure-to-pay:02",
+      "kind": "verification_scenario",
+      "name": "Procure to pay static trace 02: C_Order generates M_InOut",
+      "properties": {
+        "customer_id": "oracle-customer-large",
+        "evidence_class": "upstream-static-reference",
+        "expected_relation": "GENERATES",
+        "operator_platform": "Oracle",
+        "runtime_observed": false,
+        "scenario_kind": "static-reference-trace",
+        "sequence": 2,
+        "source_commit": "731515dcdd5278b843db33b9d3109d155b881951",
+        "source_product": "iDempiere",
+        "source_repository": "https://github.com/idempiere/idempiere",
+        "source_table": "C_Order",
+        "statement": "The pinned reference slice documents C_Order GENERATES M_InOut; this is static provenance, not an observed Oracle transaction.",
+        "target_table": "M_InOut",
+        "workload_id": "oracle-reference:workload:procure-to-pay"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 54,
+          "line_start": 54,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:scenario:procure-to-pay:03",
+      "kind": "verification_scenario",
+      "name": "Procure to pay static trace 03: C_OrderLine fulfilled by M_InOutLine",
+      "properties": {
+        "customer_id": "oracle-customer-large",
+        "evidence_class": "upstream-static-reference",
+        "expected_relation": "FULFILLED_BY",
+        "operator_platform": "Oracle",
+        "runtime_observed": false,
+        "scenario_kind": "static-reference-trace",
+        "sequence": 3,
+        "source_commit": "731515dcdd5278b843db33b9d3109d155b881951",
+        "source_product": "iDempiere",
+        "source_repository": "https://github.com/idempiere/idempiere",
+        "source_table": "C_OrderLine",
+        "statement": "The pinned reference slice documents C_OrderLine FULFILLED_BY M_InOutLine; this is static provenance, not an observed Oracle transaction.",
+        "target_table": "M_InOutLine",
+        "workload_id": "oracle-reference:workload:procure-to-pay"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 55,
+          "line_start": 55,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:scenario:procure-to-pay:04",
+      "kind": "verification_scenario",
+      "name": "Procure to pay static trace 04: M_InOut contains M_InOutLine",
+      "properties": {
+        "customer_id": "oracle-customer-large",
+        "evidence_class": "upstream-static-reference",
+        "expected_relation": "CONTAINS",
+        "operator_platform": "Oracle",
+        "runtime_observed": false,
+        "scenario_kind": "static-reference-trace",
+        "sequence": 4,
+        "source_commit": "731515dcdd5278b843db33b9d3109d155b881951",
+        "source_product": "iDempiere",
+        "source_repository": "https://github.com/idempiere/idempiere",
+        "source_table": "M_InOut",
+        "statement": "The pinned reference slice documents M_InOut CONTAINS M_InOutLine; this is static provenance, not an observed Oracle transaction.",
+        "target_table": "M_InOutLine",
+        "workload_id": "oracle-reference:workload:procure-to-pay"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 56,
+          "line_start": 56,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:scenario:procure-to-pay:05",
+      "kind": "verification_scenario",
+      "name": "Procure to pay static trace 05: M_InOut sources C_Invoice",
+      "properties": {
+        "customer_id": "oracle-customer-large",
+        "evidence_class": "upstream-static-reference",
+        "expected_relation": "SOURCES",
+        "operator_platform": "Oracle",
+        "runtime_observed": false,
+        "scenario_kind": "static-reference-trace",
+        "sequence": 5,
+        "source_commit": "731515dcdd5278b843db33b9d3109d155b881951",
+        "source_product": "iDempiere",
+        "source_repository": "https://github.com/idempiere/idempiere",
+        "source_table": "M_InOut",
+        "statement": "The pinned reference slice documents M_InOut SOURCES C_Invoice; this is static provenance, not an observed Oracle transaction.",
+        "target_table": "C_Invoice",
+        "workload_id": "oracle-reference:workload:procure-to-pay"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 57,
+          "line_start": 57,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:scenario:procure-to-pay:06",
+      "kind": "verification_scenario",
+      "name": "Procure to pay static trace 06: M_InOutLine matched by C_InvoiceLine",
+      "properties": {
+        "customer_id": "oracle-customer-large",
+        "evidence_class": "upstream-static-reference",
+        "expected_relation": "MATCHED_BY",
+        "operator_platform": "Oracle",
+        "runtime_observed": false,
+        "scenario_kind": "static-reference-trace",
+        "sequence": 6,
+        "source_commit": "731515dcdd5278b843db33b9d3109d155b881951",
+        "source_product": "iDempiere",
+        "source_repository": "https://github.com/idempiere/idempiere",
+        "source_table": "M_InOutLine",
+        "statement": "The pinned reference slice documents M_InOutLine MATCHED_BY C_InvoiceLine; this is static provenance, not an observed Oracle transaction.",
+        "target_table": "C_InvoiceLine",
+        "workload_id": "oracle-reference:workload:procure-to-pay"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 58,
+          "line_start": 58,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:scenario:procure-to-pay:07",
+      "kind": "verification_scenario",
+      "name": "Procure to pay static trace 07: C_Invoice contains C_InvoiceLine",
+      "properties": {
+        "customer_id": "oracle-customer-large",
+        "evidence_class": "upstream-static-reference",
+        "expected_relation": "CONTAINS",
+        "operator_platform": "Oracle",
+        "runtime_observed": false,
+        "scenario_kind": "static-reference-trace",
+        "sequence": 7,
+        "source_commit": "731515dcdd5278b843db33b9d3109d155b881951",
+        "source_product": "iDempiere",
+        "source_repository": "https://github.com/idempiere/idempiere",
+        "source_table": "C_Invoice",
+        "statement": "The pinned reference slice documents C_Invoice CONTAINS C_InvoiceLine; this is static provenance, not an observed Oracle transaction.",
+        "target_table": "C_InvoiceLine",
+        "workload_id": "oracle-reference:workload:procure-to-pay"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 59,
+          "line_start": 59,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:scenario:procure-to-pay:08",
+      "kind": "verification_scenario",
+      "name": "Procure to pay static trace 08: C_Invoice settled through C_AllocationLine",
+      "properties": {
+        "customer_id": "oracle-customer-large",
+        "evidence_class": "upstream-static-reference",
+        "expected_relation": "SETTLED_THROUGH",
+        "operator_platform": "Oracle",
+        "runtime_observed": false,
+        "scenario_kind": "static-reference-trace",
+        "sequence": 8,
+        "source_commit": "731515dcdd5278b843db33b9d3109d155b881951",
+        "source_product": "iDempiere",
+        "source_repository": "https://github.com/idempiere/idempiere",
+        "source_table": "C_Invoice",
+        "statement": "The pinned reference slice documents C_Invoice SETTLED_THROUGH C_AllocationLine; this is static provenance, not an observed Oracle transaction.",
+        "target_table": "C_AllocationLine",
+        "workload_id": "oracle-reference:workload:procure-to-pay"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 60,
+          "line_start": 60,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:scenario:procure-to-pay:09",
+      "kind": "verification_scenario",
+      "name": "Procure to pay static trace 09: C_Payment settled through C_AllocationLine",
+      "properties": {
+        "customer_id": "oracle-customer-large",
+        "evidence_class": "upstream-static-reference",
+        "expected_relation": "SETTLED_THROUGH",
+        "operator_platform": "Oracle",
+        "runtime_observed": false,
+        "scenario_kind": "static-reference-trace",
+        "sequence": 9,
+        "source_commit": "731515dcdd5278b843db33b9d3109d155b881951",
+        "source_product": "iDempiere",
+        "source_repository": "https://github.com/idempiere/idempiere",
+        "source_table": "C_Payment",
+        "statement": "The pinned reference slice documents C_Payment SETTLED_THROUGH C_AllocationLine; this is static provenance, not an observed Oracle transaction.",
+        "target_table": "C_AllocationLine",
+        "workload_id": "oracle-reference:workload:procure-to-pay"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 61,
+          "line_start": 61,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:scenario:procure-to-pay:10",
+      "kind": "verification_scenario",
+      "name": "Procure to pay static trace 10: C_AllocationHdr contains C_AllocationLine",
+      "properties": {
+        "customer_id": "oracle-customer-large",
+        "evidence_class": "upstream-static-reference",
+        "expected_relation": "CONTAINS",
+        "operator_platform": "Oracle",
+        "runtime_observed": false,
+        "scenario_kind": "static-reference-trace",
+        "sequence": 10,
+        "source_commit": "731515dcdd5278b843db33b9d3109d155b881951",
+        "source_product": "iDempiere",
+        "source_repository": "https://github.com/idempiere/idempiere",
+        "source_table": "C_AllocationHdr",
+        "statement": "The pinned reference slice documents C_AllocationHdr CONTAINS C_AllocationLine; this is static provenance, not an observed Oracle transaction.",
+        "target_table": "C_AllocationLine",
+        "workload_id": "oracle-reference:workload:procure-to-pay"
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 90,
+          "line_start": 1,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:workload:order-to-cash",
+      "kind": "modernization_workload",
+      "name": "Order to cash",
+      "properties": {
+        "business_question": "Can an accepted sales order be traced through shipment, customer invoice, receipt, and allocation?",
+        "customer_id": "oracle-customer-large",
+        "documented_flow_edge_count": 10,
+        "entry_processes": [
+          "org.compiere.process.InOutGenerate",
+          "org.compiere.process.InvoiceGenerate",
+          "org.compiere.process.AllocationAuto"
+        ],
+        "estate_inventory": {
+          "internal_java_dependency_edges": 36819,
+          "java_source_units": 4520,
+          "oracle_sql_files": 2823,
+          "tracked_files": 12565
+        },
+        "evidence_class": "upstream-static-reference",
+        "operator_platform": "Oracle",
+        "runtime_observed": false,
+        "selectors": {
+          "C_Invoice.IsSOTrx": "Y",
+          "C_Order.IsSOTrx": "Y",
+          "C_Payment.IsReceipt": "Y",
+          "M_InOut.IsSOTrx": "Y"
+        },
+        "source_commit": "731515dcdd5278b843db33b9d3109d155b881951",
+        "source_product": "iDempiere",
+        "source_repository": "https://github.com/idempiere/idempiere",
+        "statement": "Static order to cash reference slice for Oracle Customer (Large); no customer system is attached.",
+        "status": "reference-projected",
+        "tables": [
+          "C_Order",
+          "C_OrderLine",
+          "M_InOut",
+          "M_InOutLine",
+          "C_Invoice",
+          "C_InvoiceLine",
+          "C_Payment",
+          "C_AllocationHdr",
+          "C_AllocationLine"
+        ]
+      }
+    },
+    {
+      "evidence": [
+        {
+          "confidence": "asserted",
+          "line_end": 90,
+          "line_start": 1,
+          "method": "curated-oracle-reference-slice-v1",
+          "path": "reference-estates/idempiere/business-slices.json",
+          "source_id": "source:lightyear-carddemo"
+        }
+      ],
+      "id": "oracle-reference:workload:procure-to-pay",
+      "kind": "modernization_workload",
+      "name": "Procure to pay",
+      "properties": {
+        "business_question": "Can an approved purchase order be traced through material receipt, vendor invoice, payment, and allocation?",
+        "customer_id": "oracle-customer-large",
+        "documented_flow_edge_count": 10,
+        "entry_processes": [
+          "org.compiere.process.OrderPOCreate",
+          "org.compiere.process.InOutCreateInvoice",
+          "org.compiere.process.AllocationAuto"
+        ],
+        "estate_inventory": {
+          "internal_java_dependency_edges": 36819,
+          "java_source_units": 4520,
+          "oracle_sql_files": 2823,
+          "tracked_files": 12565
+        },
+        "evidence_class": "upstream-static-reference",
+        "operator_platform": "Oracle",
+        "runtime_observed": false,
+        "selectors": {
+          "C_Invoice.IsSOTrx": "N",
+          "C_Order.IsSOTrx": "N",
+          "C_Payment.IsReceipt": "N",
+          "M_InOut.IsSOTrx": "N"
+        },
+        "source_commit": "731515dcdd5278b843db33b9d3109d155b881951",
+        "source_product": "iDempiere",
+        "source_repository": "https://github.com/idempiere/idempiere",
+        "statement": "Static procure to pay reference slice for Oracle Customer (Large); no customer system is attached.",
+        "status": "reference-projected",
+        "tables": [
+          "C_Order",
+          "C_OrderLine",
+          "M_InOut",
+          "M_InOutLine",
+          "C_Invoice",
+          "C_InvoiceLine",
+          "C_Payment",
+          "C_AllocationHdr",
+          "C_AllocationLine"
+        ]
+      }
+    }
+  ],
+  "schema_version": "1.0",
+  "source": {
+    "acquisition_mode": "inventory-only",
+    "business_slices": "reference-estates/idempiere/business-slices.json",
+    "inventory": "reference-estates/idempiere/inventory.json",
+    "license": {
+      "declared": "GPL-2.0",
+      "license_file": "LICENSE.md",
+      "license_sha256": "ff71df08df5d013473e420dfe5a0208f4dfdadbade1805204afc6f586a6f7624"
+    },
+    "operator_estate_id": "oracle-customer-large",
+    "operator_estate_name": "Oracle Customer (Large)",
+    "source_pin": "reference-estates/idempiere/source-pin.json",
+    "upstream_commit": "731515dcdd5278b843db33b9d3109d155b881951",
+    "upstream_product": "iDempiere",
+    "upstream_repository": "https://github.com/idempiere/idempiere",
+    "upstream_tree": "041320460a02d4ec23c837d46befa7420c162d0a"
+  },
+  "statistics": {
+    "edge_count": 20,
+    "edges_by_relation": {
+      "HAS_SCENARIO": 20
+    },
+    "external_reference_count": 0,
+    "node_count": 22,
+    "nodes_by_kind": {
+      "modernization_workload": 2,
+      "verification_scenario": 20
+    }
+  }
+}

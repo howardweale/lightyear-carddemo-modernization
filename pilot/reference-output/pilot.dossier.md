@@ -2,7 +2,7 @@
 
 **Release:** 0.33.0
 **Pilot:** `lightyear-carddemo-source-only-v0.33.0`
-**Dossier identity:** `3e8b32db6e8dae32b0ba0e6859671f3c4131da1678124994d18f761912a82c3f`
+**Dossier identity:** `bed24bcf1743a9a672bc07899f40f0220bcff77115dd60db7b14ea2dde663fad`
 
 ## Executive result
 
@@ -62,7 +62,7 @@ Db2 log or production cutover authorization was observed.
 | advisory-modernization-planning-contract | `pilot/assessment-policy.json` | `a60489ddfc849e3e3e41d9d7e84bcd94b4ef9e4195153caaf86c2efe477af938` |
 | human-selection-and-development-packaging-contract | `pilot/work-package-policy.json` | `36eabc9a698380f2aaecce8eadf719207070c6cc489b5e1edf78163bb0e3fec3` |
 | estate-discovery | `knowledge/graph.receipt.json` | `21a61a8e7b1a2a7847ba3096e1d6a04fed8a80320ec5ce426f363038cff382e6` |
-| composite-lineage | `knowledge/composite/estate.receipt.json` | `caa37a0437aa64b80cdfdf7928e7be2aaf6e8bef3d69d4ceeb9725ce41b4f4a6` |
+| composite-lineage | `knowledge/composite/estate.receipt.json` | `aa51c7847172133cdf2f159f0da04a73f9f9ff7d4eb712981b4198100628ce78` |
 | capability-gates | `knowledge/capabilities/mainframe-readiness.json` | `73c654676c190178387ec48beddfac8cd6211438c1d3c041a7547eebf868ec95` |
 | language-coverage | `extensions/pli/conformance/coverage.receipt.json` | `06d02d73f0469129fa44183758e9faa9b2cd0fd347df27d0c4df83ef98f90b16` |
 | mixed-language-development-proof | `extensions/pli/modernization/development.receipt.json` | `872019174d86fae5e79958efdc07726739982ff6129a1f88778c1acd64527578` |

@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>LIGHTYEAR Control Tower</title>
-  <link rel="stylesheet" href="styles.css?v=47.2">
+  <link rel="stylesheet" href="styles.css?v=47.3">
 </head>
 <body>
   <header class="masthead topbar">
@@ -58,9 +58,9 @@
         <select id="operator-lens" aria-label="Operator lens"></select>
       </div>
     </section>
-    <div class="status" aria-live="polite" title="Live connection status">
+    <div id="status" class="status" role="status" aria-live="polite" aria-atomic="true" aria-label="Connecting" title="Connecting">
       <span id="status-dot" class="status-dot"></span>
-      <span id="status-text">Connecting</span>
+      <span id="status-text" aria-hidden="true"></span>
     </div>
     <button id="live-alerts" class="live-alerts" type="button">0 active alerts</button>
   </header>
@@ -152,11 +152,11 @@
         </div>
         <span id="selection-count"></span>
       </div>
-      <section id="density-guard" class="density-guard" aria-live="polite" hidden>
+      <section id="density-guard" class="density-guard" role="dialog" aria-modal="true" aria-labelledby="density-heading" aria-describedby="density-description" hidden>
         <div class="density-card">
           <span class="density-eyebrow">Readable graph limit</span>
-          <h2><span id="density-count">—</span> nodes is past the readable limit</h2>
-          <p>At this density labels overlap and the layout stops carrying meaning. Choose a useful reduction, or render the full selection as a picture.</p>
+          <h2 id="density-heading"><span id="density-count">—</span> nodes is past the readable limit</h2>
+          <p id="density-description">At this density labels overlap and the layout stops carrying meaning. Choose a useful reduction, or render the full selection as a picture.</p>
           <div class="density-actions">
             <button id="density-collapse" class="primary-button" type="button">Collapse implementation packages</button>
             <button id="density-rules" class="secondary-button" type="button">Rules and proof only</button>
@@ -165,7 +165,8 @@
           <button id="density-render-all" class="text-button" type="button">Render all nodes anyway</button>
         </div>
       </section>
-      <svg id="graph" role="img" aria-label="Interactive knowledge graph">
+      <p id="graph-keyboard-help" class="visually-hidden">Use the arrow keys to move between graph nodes. Press Enter or Space to inspect a node. Press Home to return to the root node.</p>
+      <svg id="graph" role="group" aria-label="Interactive knowledge graph" aria-describedby="graph-keyboard-help">
         <defs>
           <marker id="arrow" viewBox="0 0 10 10" refX="16" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
             <path d="M 0 0 L 10 5 L 0 10 z"></path>
@@ -631,6 +632,6 @@
       </div>
     </form>
   </dialog>
-  <script src="app.js?v=47.2" defer></script>
+  <script src="app.js?v=47.3" defer></script>
 </body>
 </html>

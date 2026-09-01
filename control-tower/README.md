@@ -1,8 +1,13 @@
 # Live Evidence and Control Tower Plane
 
-v0.47.2 makes the canonical Knowledge Graph and source-evidence pack a first-class source in the
+v0.47.3 makes the canonical Knowledge Graph and source-evidence pack a first-class source in the
 live, read-only operational projection first introduced in v0.17. The browser uses the approved
 paper-white, stone, and burnt-orange visual system with locally served IBM Plex typography.
+
+The density guard dismisses for every reduction or full-render action. Graph labels use a
+collision-aware placement pass and are suppressed only when no readable location remains; every
+node keeps its tooltip and is reachable with a roving keyboard focus. Arrow keys move spatially,
+Enter or Space inspects the focused node, and Home returns to the workload root.
 
 Operator navigation is graph-bound in this order: **Company → Business problem → Workload →
 Technology scope → Operator lens**. Company and problem determine the permitted workload choices;

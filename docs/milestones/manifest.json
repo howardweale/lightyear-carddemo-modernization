@@ -692,19 +692,19 @@
       "sha256": "eb61af957407231bf717f2cbd7c4018a8342c8f9f0b990e7c85e88be6561c7d7"
     },
     {
-      "bytes": 6383,
+      "bytes": 6886,
       "path": "docs/milestones/MS-47/MS-47.md",
-      "sha256": "972641a91d21834d730a17975b4f202b34488c7ae41935e10122f38524cda642"
+      "sha256": "89e5cafac58d4aebe501b03895c429242a2813d141198de24f557c964f88a114"
     },
     {
-      "bytes": 40898,
+      "bytes": 41126,
       "path": "docs/milestones/MS-47/MS-47.docx",
-      "sha256": "b537a45e321bea71f4bc4471aca9039283af5d122639c3b737022840ef041ad0"
+      "sha256": "735d7ce535cf711fc8b4d3cfc9f1b8c1286e84530c2a2c9566595c9df74d59fa"
     },
     {
-      "bytes": 68977,
+      "bytes": 69377,
       "path": "docs/milestones/MS-47/MS-47.pdf",
-      "sha256": "c24ca2b89b3e5b856df431f2b9b18e611ddcf69de4b892578fdcc515f6c5dfb0"
+      "sha256": "069c7a737afa18b18954fe106b12540446c41ce11f0d1585c7a6411b2b4fc216"
     }
   ],
   "formats": [
@@ -720,12 +720,12 @@
       "sha256": "507f23f7be90444dffd5ba22bebade5cb967b460c2fea9290d7aa28793ed2da2"
     },
     {
-      "bytes": 143596,
+      "bytes": 144066,
       "path": "docs/milestones/index.html",
-      "sha256": "91edf67eecc1caa6951bbdb9b95ffef2b4700c662301a38dbe9b3ae6915ad12e"
+      "sha256": "4a24ab4817adc743a673f96f509283176d11faed10dbd302e0bc8194bbf92719"
     }
   ],
   "milestone_count": 47,
   "schema_version": "1.1",
-  "source_sha256": "3e72d0041d3a1f7038fd96c710c5ea0ec658c162a1da19edd52d34ed1b24e58a"
+  "source_sha256": "60f4710e6b5e31483ad210405bcc637959cd7266f12d2e341a4af08ada137797"
 }

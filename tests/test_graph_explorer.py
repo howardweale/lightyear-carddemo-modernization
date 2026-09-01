@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import csv
 import json
+import subprocess
 import tempfile
 import threading
 import unittest
@@ -174,6 +175,15 @@ class GraphExplorerTests(unittest.TestCase):
             self.assertIn("activateSelectedWorkload", script)
             self.assertIn("READABLE_NODE_LIMIT", script)
             self.assertIn("collapseImplementationPackages", script)
+            self.assertIn("labelPlacements", script)
+            self.assertIn('group.setAttribute("tabindex"', script)
+            self.assertIn("handleGraphNodeKeydown", script)
+            self.assertIn("focusInitialGraphNode", script)
+            self.assertIn('$("density-collapse").addEventListener', script)
+            self.assertIn('$("density-rules").addEventListener', script)
+            self.assertIn('$("density-bridges").addEventListener', script)
+            self.assertIn('$("density-render-all").addEventListener', script)
+            self.assertIn('$("density-guard").hidden = true', script)
             self.assertIn("role", script)
             self.assertIn("No matching entities in the selected workload", script)
             self.assertIn("Static file mode cannot connect to the live graph", script)
@@ -190,6 +200,10 @@ class GraphExplorerTests(unittest.TestCase):
             self.assertIn("@font-face", styles)
             self.assertIn(".combobox-trigger", styles)
             self.assertIn(".density-guard", styles)
+            self.assertIn(".density-guard[hidden], #graph[hidden] { display: none; }", styles)
+            self.assertIn(".node:focus-visible", styles)
+            self.assertIn("font: 500 12px/1.05 var(--mono)", styles)
+            self.assertIn(".node text { stroke: none; font-size: 11px", styles)
             with urlopen(f"{base}/fonts/IBMPlexSans-Regular-Latin1.woff2", timeout=3) as response:
                 self.assertGreater(len(response.read()), 1000)
 
@@ -208,6 +222,48 @@ class GraphExplorerTests(unittest.TestCase):
             server.shutdown()
             server.server_close()
             thread.join(timeout=3)
+
+    def test_graph_label_placement_is_collision_free(self) -> None:
+        script = r"""
+const { boxesIntersect, labelPlacements } = require(process.argv[1]);
+const nodes = [
+  { id: "root", name: "CardDemo interest calculation" },
+  { id: "near", name: "Pinned upstream ASCII difference" },
+  { id: "east", name: "Calculate monthly interest" },
+  { id: "south", name: "Preserve source final account" },
+];
+const edges = [
+  { source: "root", target: "near" },
+  { source: "root", target: "east" },
+  { source: "root", target: "south" },
+];
+const positions = new Map([
+  ["root", { x: 280, y: 180 }],
+  ["near", { x: 305, y: 180 }],
+  ["east", { x: 470, y: 180 }],
+  ["south", { x: 280, y: 310 }],
+]);
+const result = labelPlacements(nodes, edges, positions, 700, 480, "root");
+const boxes = [];
+for (const node of nodes) {
+  const placement = result.get(node.id);
+  if (!placement) continue;
+  const point = positions.get(node.id);
+  const box = { x: point.x + placement.x, y: point.y + placement.y, width: placement.width, height: placement.height };
+  if (boxes.some((other) => boxesIntersect(box, other))) throw new Error(`overlap:${node.id}`);
+  boxes.push(box);
+}
+if (boxes.length < 3) throw new Error(`too-many-hidden:${boxes.length}`);
+console.log(JSON.stringify({ visible: boxes.length }));
+"""
+        result = subprocess.run(
+            ["node", "-e", script, str(ROOT / "knowledge" / "viewer" / "app.js")],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assertGreaterEqual(json.loads(result.stdout)["visible"], 3)
 
     def test_neo4j_projection_preserves_graph_counts_and_identity(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

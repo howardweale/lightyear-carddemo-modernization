@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.47.3 — 2026-09-01
+
+- Corrected the density guard so every reduction choice and the explicit full-render override
+  dismiss the blocking layer before the graph is rendered.
+- Added collision-aware graph-label placement across five candidate positions, preserving labels
+  by graph importance and suppressing only those that cannot be placed without overlap.
+- Made graph nodes keyboard-operable with roving focus, directional arrow-key navigation,
+  Enter/Space inspection, Home-to-root behavior, descriptive accessible names, and visible focus.
+- Raised top-control and repeated metadata labels to readable sizes while retaining the compact
+  two-band Control Tower layout.
+- Replaced the permanently clipped visual stream-status string with an accessible live status on
+  the existing status indicator.
+
 ## 0.47.2 — 2026-09-01
 
 - Folded session-stable Company and Business problem selectors into an Estate popover, retaining

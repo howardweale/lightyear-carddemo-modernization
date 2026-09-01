@@ -3,6 +3,7 @@ from __future__ import annotations
 import copy
 import json
 import subprocess
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -15,7 +16,6 @@ from lightyear_data.oracle_coverage import (
 
 
 ROOT = Path(__file__).resolve().parents[1]
-OUTPUT_ROOT = ROOT / "data-modernization/oracle-semantic-coverage"
 
 
 class OracleSemanticCoverageTests(unittest.TestCase):
@@ -77,14 +77,31 @@ class OracleSemanticCoverageTests(unittest.TestCase):
         changed["native_oracle_conformance"] = True
         changed["production_ready"] = True
         changed = seal(changed)
-        path = OUTPUT_ROOT / "coverage.receipt.json"
-        original = path.read_text(encoding="utf-8")
-        try:
+        with tempfile.TemporaryDirectory() as directory:
+            project_root = Path(directory)
+            prior_source = (
+                ROOT / "data-modernization/oracle-dialect-conformance/fixture-catalog.json"
+            )
+            prior_target = (
+                project_root / "data-modernization/oracle-dialect-conformance/fixture-catalog.json"
+            )
+            prior_target.parent.mkdir(parents=True)
+            prior_target.write_bytes(prior_source.read_bytes())
+            output_root = project_root / "data-modernization/oracle-semantic-coverage"
+            output_root.mkdir(parents=True)
+            for name, payload in artifacts.items():
+                path = output_root / name
+                if name.endswith(".json"):
+                    path.write_text(
+                        json.dumps(payload, indent=2, sort_keys=True) + "\n",
+                        encoding="utf-8",
+                    )
+                else:
+                    path.write_text(payload, encoding="utf-8")
+            path = output_root / "coverage.receipt.json"
             path.write_text(json.dumps(changed, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-            errors = validate_oracle_coverage_artifacts(ROOT)
+            errors = validate_oracle_coverage_artifacts(project_root)
             self.assertIn("oracle-coverage-artifact-drift:coverage.receipt.json", errors)
-        finally:
-            path.write_text(original, encoding="utf-8")
 
     def test_cli_and_committed_artifacts_are_deterministic(self) -> None:
         self.assertEqual([], validate_oracle_coverage_artifacts(ROOT))

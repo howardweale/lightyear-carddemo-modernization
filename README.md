@@ -4,7 +4,28 @@
 
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.50.2 — Oracle PL/SQL bounded execution**
+Release: **v0.50.3 — Oracle transaction and CDC bounded execution**
+
+v0.50.3 executes 280 governed cases across all 70 behaviors in the transactions and operations
+domains. The tranche covers commit, rollback, savepoints, isolation, row and table locks,
+deadlocks, redo/LogMiner capture, dictionary visibility, session state, privileges, and Oracle
+diagnostic identity.
+
+Combined with v0.50.1 and v0.50.2, 1,520 catalog cases now pass across 380 behaviors. Seven MS #49
+bindings overlap executed catalog tranches and the LOB binding remains outside, producing 381
+unique bounded-model-verified behaviors and 1,544 separate evidence records.
+
+```bash
+PYTHONPATH=src python3 -m lightyear_data verify-oracle-transaction-cdc-coverage
+./data-modernization.sh oracle-transaction-cdc
+```
+
+Native Oracle verification and target equivalence remain zero. Concurrency, locking, redo/SCN,
+LogMiner, metadata visibility, privileges, and diagnostic observations are explicitly bounded
+simulations. The next increments cover the remaining schema/DML, schema-object and structured-data
+cases, followed by authorized Oracle 19c/26ai execution.
+
+Previous release: **v0.50.2 — Oracle PL/SQL bounded execution**
 
 v0.50.2 executes 320 governed cases across all 80 PL/SQL behaviors. The tranche covers 16 topic
 families from blocks and exception propagation through package state, cursors, bulk operations,
@@ -19,8 +40,9 @@ PYTHONPATH=src python3 -m lightyear_data verify-oracle-plsql-coverage
 ./data-modernization.sh oracle-plsql
 ```
 
-Native Oracle verification and target equivalence remain zero. The next increments cover
-transactions/CDC and authorized Oracle 19c/26ai execution.
+Native Oracle verification and target equivalence remain zero. Later increments cover
+transactions/CDC, the remaining schema and structured-data domains, and authorized Oracle 19c/26ai
+execution.
 
 Previous release: **v0.50.1 — Oracle core SQL and datatype bounded execution**
 

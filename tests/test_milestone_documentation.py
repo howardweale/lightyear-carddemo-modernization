@@ -161,13 +161,14 @@ class MilestoneDocumentationTests(unittest.TestCase):
         )
         self.assertIn("MS #50 — Oracle Semantic Coverage Program", roadmap)
         self.assertIn(
-            "| MS #50 | Oracle Semantic Coverage Program | Core SQL/type and PL/SQL tranches complete; transaction and native increments pending |",
+            "| MS #50 | Oracle Semantic Coverage Program | Core SQL/type, PL/SQL, and transaction/CDC tranches complete; schema/data and native increments pending |",
             roadmap,
         )
         self.assertIn("Release 0.50.1 executes all 920 governed cases", roadmap)
         self.assertIn("Release 0.50.2 executes", roadmap)
-        self.assertIn("312 unique bounded-model-verified behaviors", roadmap)
-        self.assertIn("1,264 bounded evidence records", roadmap)
+        self.assertIn("Release 0.50.3 executes all 280", roadmap)
+        self.assertIn("381 unique bounded-model-verified behaviors", roadmap)
+        self.assertIn("1,544 bounded evidence records", roadmap)
 
 
 if __name__ == "__main__":

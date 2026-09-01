@@ -1,0 +1,63 @@
+{
+  "authorization_required": true,
+  "base_catalog_sha256": "0bd7db2415ed3774c8aa2b6f432e512b0d94d26d0612df9bf5100d20fbcdecc1",
+  "bounded_corpus_sha256": "64ba713a9427495d578197ff7c6ed38ad3a6042fd1ca9d6fcb727bef5a8fa6ef",
+  "content_sha256": "69aaa6267eb3268297d8d1ad07ba57525a4f106464bb704e817ea05b131925ef",
+  "logminer_privileges_required": true,
+  "native_oracle_conformance": false,
+  "native_oracle_execution_observed": false,
+  "plan_type": "lightyear-oracle-transaction-cdc-native-execution-plan",
+  "production_ready": false,
+  "release": "0.50.3",
+  "required_behavior_count": 70,
+  "required_case_count": 280,
+  "required_cdc_observations": [
+    "start_and_end_scn",
+    "redo_log_identity",
+    "database_incarnation",
+    "logminer_options",
+    "ordered_change_records",
+    "transaction_commit_scn",
+    "resume_checkpoint",
+    "supplemental_logging_state"
+  ],
+  "required_concurrency_observations": [
+    "transaction_ids",
+    "deterministic_session_schedule",
+    "blocking_and_wait_state",
+    "lock_modes",
+    "snapshot_visibility",
+    "commit_and_rollback_side_effects",
+    "deadlock_victim_and_rollback_scope"
+  ],
+  "required_database_versions": [
+    "19c",
+    "26ai"
+  ],
+  "required_receipt_fields": [
+    "database_version",
+    "database_id_hash",
+    "session_identities",
+    "session_settings",
+    "case_id",
+    "observed_result",
+    "observed_side_effects",
+    "oracle_error_stack",
+    "started_at",
+    "completed_at",
+    "runner_identity",
+    "content_sha256"
+  ],
+  "required_session_controls": [
+    "two_or_more_session_identities",
+    "autocommit_disabled",
+    "isolation_level",
+    "current_schema_and_container",
+    "enabled_roles_and_direct_grants",
+    "nls_and_timezone_settings",
+    "lock_wait_timeout",
+    "database_incarnation"
+  ],
+  "required_topic_family_count": 14,
+  "schema_version": "1.0"
+}

@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.ai/schemas/oracle-transaction-cdc-corpus.schema.json",
+  "title": "LIGHTYEAR Oracle transaction and CDC bounded conformance corpus",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "corpus_type",
+    "release",
+    "base_catalog_sha256",
+    "domain_ids",
+    "topic_family_count",
+    "behavior_count",
+    "case_count",
+    "cases_by_domain",
+    "cases_by_topic",
+    "results",
+    "status",
+    "native_oracle_execution_observed",
+    "target_equivalence_observed",
+    "production_ready",
+    "content_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "corpus_type": {"const": "lightyear-oracle-transaction-cdc-bounded-conformance"},
+    "release": {"const": "0.50.3"},
+    "domain_ids": {"const": ["transactions", "operations"]},
+    "topic_family_count": {"const": 14},
+    "behavior_count": {"const": 70},
+    "case_count": {"const": 280},
+    "cases_by_domain": {
+      "const": {"operations": 100, "transactions": 180}
+    },
+    "results": {"type": "array", "minItems": 280, "maxItems": 280},
+    "status": {"const": "passed-bounded-model"},
+    "native_oracle_execution_observed": {"const": false},
+    "target_equivalence_observed": {"const": false},
+    "production_ready": {"const": false},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  },
+  "additionalProperties": true
+}

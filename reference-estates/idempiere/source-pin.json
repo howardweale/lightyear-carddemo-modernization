@@ -1,0 +1,27 @@
+{
+  "acquisition": {
+    "mode": "inventory-only",
+    "observed_at": "2026-09-01",
+    "source_vendored": false,
+    "upstream_build_executed": false,
+    "upstream_runtime_executed": false
+  },
+  "claim_boundary": "This pin supports static estate inventory and slice selection only. It is not Oracle runtime evidence, behavioral equivalence, migration completion, or production-readiness evidence.",
+  "license": {
+    "declared": "GPL-2.0",
+    "license_file": "LICENSE.md",
+    "license_sha256": "ff71df08df5d013473e420dfe5a0208f4dfdadbade1805204afc6f586a6f7624"
+  },
+  "schema_version": "1.0",
+  "source": {
+    "branch": "release-13",
+    "commit": "731515dcdd5278b843db33b9d3109d155b881951",
+    "commit_time": "2026-07-30T21:02:41+02:00",
+    "repository": "https://github.com/idempiere/idempiere",
+    "tree": "041320460a02d4ec23c837d46befa7420c162d0a"
+  },
+  "upstream_status": {
+    "basis": "The upstream SECURITY.md marks release-13 as supported and master as release 14 development.",
+    "supported_release": true
+  }
+}

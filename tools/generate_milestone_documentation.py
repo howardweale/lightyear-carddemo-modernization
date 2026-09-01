@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build and verify the MS #1-47 customer documentation library."""
+"""Build and verify the MS #1-48 customer documentation library."""
 
 from __future__ import annotations
 
@@ -25,14 +25,14 @@ BRAND_ROOT = ROOT / "brand"
 BRAND_ASSETS = BRAND_ROOT / "assets"
 BRAND_LOGO_SVG = BRAND_ASSETS / "lightyear-primary.svg"
 BRAND_LOGO_PNG = BRAND_ASSETS / "lightyear-primary.png"
-GENERATOR_VERSION = "1.3"
+GENERATOR_VERSION = "1.4"
 REPOSITORY = "howardweale/lightyear-carddemo-modernization"
 DEFAULT_BRANCH = "main"
 GITHUB_BLOB_ROOT = f"https://github.com/{REPOSITORY}/blob/{DEFAULT_BRANCH}"
 GITHUB_RAW_ROOT = f"https://raw.githubusercontent.com/{REPOSITORY}/{DEFAULT_BRANCH}"
 PAGES_INDEX = f"https://howardweale.github.io/{REPOSITORY.split('/', 1)[1]}/milestones/"
 FIXED_TIME = datetime(2026, 8, 31, 12, 0, 0, tzinfo=timezone.utc)
-EXPECTED_MILESTONES = tuple(range(1, 48))
+EXPECTED_MILESTONES = tuple(range(1, 49))
 EXPECTED_ARTIFACTS = len(EXPECTED_MILESTONES) * 3
 BOUNDARY_TERMS = (
     "remain false", "remains false", "remain blocked", "remains blocked",
@@ -297,7 +297,7 @@ def build_docx(model: dict[str, Any], audience: str, output: Path) -> None:
     try:
         from docx import Document
         from docx.enum.table import WD_CELL_VERTICAL_ALIGNMENT
-        from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_TAB_ALIGNMENT
+        from docx.enum.text import WD_ALIGN_PARAGRAPH
         from docx.oxml import OxmlElement
         from docx.oxml.ns import qn
         from docx.shared import Inches, Pt, RGBColor
@@ -342,16 +342,25 @@ def build_docx(model: dict[str, Any], audience: str, output: Path) -> None:
         bottom.set(qn(key), value)
     border.append(bottom)
     header._p.get_or_add_pPr().append(border)
-    footer = section.footer.paragraphs[0]
-    footer.alignment = WD_ALIGN_PARAGRAPH.LEFT
-    footer.paragraph_format.tab_stops.add_tab_stop(Inches(6.5), WD_TAB_ALIGNMENT.RIGHT)
-    run = footer.add_run("Underlying evidence remains authoritative.")
+    footer = section.footer
+    footer._element.remove(footer.paragraphs[0]._element)
+    footer_table = footer.add_table(rows=1, cols=2, width=Inches(6.5))
+    set_table_geometry(footer_table, [6000, 3360], indent=0)
+    left_footer, right_footer = footer_table.rows[0].cells
+    left_footer.vertical_alignment = right_footer.vertical_alignment = WD_CELL_VERTICAL_ALIGNMENT.CENTER
+    left_paragraph = left_footer.paragraphs[0]
+    left_paragraph.alignment = WD_ALIGN_PARAGRAPH.LEFT
+    left_paragraph.paragraph_format.space_after = Pt(0)
+    run = left_paragraph.add_run("Underlying evidence remains authoritative.")
     set_run_font(run)
     run.font.size, run.font.color.rgb = Pt(7.5), RGBColor.from_string("676985")
-    run = footer.add_run(f"\tMS #{model['number']:02d}  |  Page ")
+    right_paragraph = right_footer.paragraphs[0]
+    right_paragraph.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+    right_paragraph.paragraph_format.space_after = Pt(0)
+    run = right_paragraph.add_run(f"MS #{model['number']:02d}  |  Page ")
     set_run_font(run)
     run.font.size, run.font.color.rgb = Pt(8.5), RGBColor.from_string("676985")
-    add_page_field(footer)
+    add_page_field(right_paragraph)
     kicker = document.add_paragraph()
     kicker.paragraph_format.space_after = Pt(0)
     run = kicker.add_run("CUSTOMER MILESTONE BRIEF")

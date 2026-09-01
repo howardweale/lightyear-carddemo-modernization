@@ -1,0 +1,366 @@
+{
+  "claim_class": "upstream-static-inventory",
+  "estate": {
+    "extension_counts": {
+      ".bat": 58,
+      ".bcmap": 168,
+      ".cmd": 1,
+      ".css": 21,
+      ".csv": 12,
+      ".desktop": 7,
+      ".diff": 2,
+      ".directory": 2,
+      ".doc": 2,
+      ".dsp": 67,
+      ".dtd": 1,
+      ".exe": 1,
+      ".exsd": 14,
+      ".ftl": 111,
+      ".g4": 1,
+      ".gif": 24,
+      ".handlers": 2,
+      ".html": 97,
+      ".ico": 2,
+      ".iml": 38,
+      ".info": 2,
+      ".ini": 5,
+      ".interp": 2,
+      ".java": 4521,
+      ".jpg": 15,
+      ".jrxml": 5,
+      ".js": 44,
+      ".json": 96,
+      ".jsp": 7,
+      ".launch": 15,
+      ".map": 6,
+      ".md": 16,
+      ".menu": 2,
+      ".mf": 39,
+      ".mjs": 5,
+      ".ora": 5,
+      ".pdf": 2,
+      ".pfb": 10,
+      ".plist": 1,
+      ".png": 547,
+      ".prefs": 154,
+      ".product": 2,
+      ".properties": 77,
+      ".readme": 2,
+      ".schemas": 2,
+      ".setup": 1,
+      ".sh": 69,
+      ".sql": 5679,
+      ".svg": 60,
+      ".target": 6,
+      ".template": 4,
+      ".tld": 1,
+      ".tokens": 2,
+      ".tpd": 1,
+      ".ttf": 4,
+      ".txt": 27,
+      ".wpd": 10,
+      ".xls": 5,
+      ".xml": 275,
+      ".xsd": 9,
+      ".xsl": 2,
+      ".yaml": 1,
+      ".yml": 2,
+      ".zip": 1,
+      ".zs": 1,
+      ".zul": 62,
+      "[none]": 130
+    },
+    "generated_model_source_units": 706,
+    "internal_java_dependency_edges": 36819,
+    "java_packages": 214,
+    "java_source_lines": 1447671,
+    "java_source_units": 4520,
+    "model_interface_source_units": 707,
+    "oracle_sql_files": 2823,
+    "oracle_sql_files_current_migration": 1078,
+    "oracle_sql_files_historic_migration": 1664,
+    "process_source_units": 197,
+    "sql_files": 5679,
+    "tracked_files": 12565
+  },
+  "graph_method": {
+    "edge_scope": "explicit internal imports plus same-package and wildcard-import type references",
+    "node_scope": "one package-qualified node per tracked Java source unit with a package declaration",
+    "not_included": [
+      "runtime dispatch",
+      "reflection-only dependencies",
+      "application-dictionary runtime relationships",
+      "database foreign keys not referenced by a selected Java source unit"
+    ]
+  },
+  "oracle_semantic_signals": {
+    "blob": {
+      "files": 8,
+      "occurrences": 8,
+      "sample_paths": [
+        "migration-historic/331b-340s/oracle/117-FR1834749.sql",
+        "migration-historic/340s-351a/oracle/113_ReplicationFunctionality.sql",
+        "migration-historic/340s-351a/oracle/129_HR_Payroll.sql",
+        "migration/iD12/oracle/202405080546_IDEMPIERE-6133.sql",
+        "migration/iD12/oracle/202506020100_IDEMPIERE-6564.sql"
+      ]
+    },
+    "clob": {
+      "files": 11,
+      "occurrences": 21,
+      "sample_paths": [
+        "migration-historic/320-330/oracle/016_new_dashboard.sql",
+        "migration-historic/360lts-i1.0a/oracle/878_IDEMPIERE-393.sql",
+        "migration-historic/i1.0c/oracle/201309110955_IDEMPIERE-1348.sql",
+        "migration-historic/i1.0z/oracle/201309111751_IDEMPIERE-1265.sql",
+        "migration/i5.1/oracle/201804251707_IDEMPIERE-3698.sql"
+      ]
+    },
+    "connect-by": {
+      "files": 4,
+      "occurrences": 6,
+      "sample_paths": [
+        "db/oracle/functions/toTableOfVarchar2.sql",
+        "migration-historic/316-320/oracle/012_M_PriceList_Create.sql",
+        "migration/i7.1/oracle/201912282330_IDEMPIERE-3413.sql",
+        "migration/i7.1z/oracle/202008040114_IDEMPIERE-3862.sql"
+      ]
+    },
+    "date": {
+      "files": 328,
+      "occurrences": 7362,
+      "sample_paths": [
+        "db/oracle/functions/C_Currency_Base.sql",
+        "db/oracle/functions/C_Currency_Convert.sql",
+        "db/oracle/functions/C_Currency_Rate.sql",
+        "db/oracle/functions/C_Invoice_Discount.sql",
+        "db/oracle/functions/C_Invoice_OpenToDate.sql"
+      ]
+    },
+    "decode": {
+      "files": 11,
+      "occurrences": 88,
+      "sample_paths": [
+        "db/oracle/functions/get1099bucket.sql",
+        "db/oracle/functions/nextBusinessDay.sql",
+        "migration-historic/316-320/oracle/012_M_PriceList_Create.sql",
+        "migration-historic/320-330/oracle/006_BF_1721252_xe.sql",
+        "migration-historic/352a-353a/oracle/366_FRLiberoWorkShop.sql"
+      ]
+    },
+    "for-update": {
+      "files": 7,
+      "occurrences": 9,
+      "sample_paths": [
+        "db/oracle/procedures/AD_Sequence_Doc.sql",
+        "db/oracle/procedures/AD_Sequence_DocType.sql",
+        "db/oracle/procedures/AD_Sequence_Next.sql",
+        "db/oracle/procedures/nextID.sql",
+        "migration-historic/331b-340s/oracle/089_FR1883270.sql"
+      ]
+    },
+    "merge-into": {
+      "files": 0,
+      "occurrences": 0,
+      "sample_paths": []
+    },
+    "no-data-found": {
+      "files": 7,
+      "occurrences": 7,
+      "sample_paths": [
+        "db/oracle/functions/get_Sysconfig.sql",
+        "db/oracle/procedures/AD_Sequence_Doc.sql",
+        "db/oracle/procedures/AD_Sequence_DocType.sql",
+        "db/oracle/procedures/AD_Sequence_Next.sql",
+        "migration-historic/354a-360lts/oracle/718_get_Sysconfig.sql"
+      ]
+    },
+    "number": {
+      "files": 635,
+      "occurrences": 8492,
+      "sample_paths": [
+        "db/oracle/functions/Acct_Balance.sql",
+        "db/oracle/functions/BOM_PriceLimit.sql",
+        "db/oracle/functions/BOM_PriceList.sql",
+        "db/oracle/functions/BOM_PriceStd.sql",
+        "db/oracle/functions/BOM_Qty_Available.sql"
+      ]
+    },
+    "nvl": {
+      "files": 60,
+      "occurrences": 272,
+      "sample_paths": [
+        "db/oracle/functions/BOM_PriceLimit.sql",
+        "db/oracle/functions/BOM_PriceList.sql",
+        "db/oracle/functions/BOM_PriceStd.sql",
+        "db/oracle/functions/BOM_Qty_OnHand.sql",
+        "db/oracle/functions/BOM_Qty_OnHandForReservation.sql"
+      ]
+    },
+    "rownum": {
+      "files": 8,
+      "occurrences": 8,
+      "sample_paths": [
+        "db/oracle/functions/C_Currency_Rate.sql",
+        "db/oracle/functions/get_Sysconfig.sql",
+        "migration-historic/353a-354a/oracle/512_BF2830154_currencyConvert.sql",
+        "migration-historic/354a-360lts/oracle/718_get_Sysconfig.sql",
+        "migration-historic/i1.0a-i1.0b/oracle/201301181905_TICKET-1001770.sql"
+      ]
+    },
+    "sequence-nextval": {
+      "files": 0,
+      "occurrences": 0,
+      "sample_paths": []
+    },
+    "timestamp": {
+      "files": 6,
+      "occurrences": 27,
+      "sample_paths": [
+        "migration-historic/i1.0z/oracle/201307051404_IDEMPIERE-1132.sql",
+        "migration/i5.1/oracle/201803151613_IDEMPIERE-3660.sql",
+        "migration/i6.2z/oracle/201908221115_IDEMPIERE-4032.sql",
+        "migration/i8.2/oracle/202102241858_IDEMPIERE-3101.sql",
+        "migration/iD10/oracle/202203240830_IDEMPIERE-5093.sql"
+      ]
+    },
+    "varchar2": {
+      "files": 249,
+      "occurrences": 8857,
+      "sample_paths": [
+        "db/oracle/functions/C_Currency_Round.SQL",
+        "db/oracle/functions/C_Invoice_WriteOff.sql",
+        "db/oracle/functions/DBA_ConstraintCmd.sql",
+        "db/oracle/functions/DBA_DisplayType.sql",
+        "db/oracle/functions/ProductAttribute.sql"
+      ]
+    }
+  },
+  "schema_version": "1.0",
+  "shared_slice_seed_nodes": 10,
+  "slices": {
+    "order-to-cash": {
+      "dependency_depth": 1,
+      "edge_definition": "unique internal Java source-unit references from a seed source unit",
+      "edges": 497,
+      "nodes": 181,
+      "seed_nodes": 12,
+      "seed_source_lines": 21226,
+      "seeds": [
+        {
+          "node": "org.compiere.model.MAllocationHdr",
+          "path": "org.adempiere.base/src/org/compiere/model/MAllocationHdr.java"
+        },
+        {
+          "node": "org.compiere.model.MAllocationLine",
+          "path": "org.adempiere.base/src/org/compiere/model/MAllocationLine.java"
+        },
+        {
+          "node": "org.compiere.model.MInOut",
+          "path": "org.adempiere.base/src/org/compiere/model/MInOut.java"
+        },
+        {
+          "node": "org.compiere.model.MInOutLine",
+          "path": "org.adempiere.base/src/org/compiere/model/MInOutLine.java"
+        },
+        {
+          "node": "org.compiere.model.MInvoice",
+          "path": "org.adempiere.base/src/org/compiere/model/MInvoice.java"
+        },
+        {
+          "node": "org.compiere.model.MInvoiceLine",
+          "path": "org.adempiere.base/src/org/compiere/model/MInvoiceLine.java"
+        },
+        {
+          "node": "org.compiere.model.MOrder",
+          "path": "org.adempiere.base/src/org/compiere/model/MOrder.java"
+        },
+        {
+          "node": "org.compiere.model.MOrderLine",
+          "path": "org.adempiere.base/src/org/compiere/model/MOrderLine.java"
+        },
+        {
+          "node": "org.compiere.model.MPayment",
+          "path": "org.adempiere.base/src/org/compiere/model/MPayment.java"
+        },
+        {
+          "node": "org.compiere.process.AllocationAuto",
+          "path": "org.adempiere.base.process/src/org/compiere/process/AllocationAuto.java"
+        },
+        {
+          "node": "org.compiere.process.InOutGenerate",
+          "path": "org.adempiere.base.process/src/org/compiere/process/InOutGenerate.java"
+        },
+        {
+          "node": "org.compiere.process.InvoiceGenerate",
+          "path": "org.adempiere.base.process/src/org/compiere/process/InvoiceGenerate.java"
+        }
+      ]
+    },
+    "procure-to-pay": {
+      "dependency_depth": 1,
+      "edge_definition": "unique internal Java source-unit references from a seed source unit",
+      "edges": 475,
+      "nodes": 177,
+      "seed_nodes": 12,
+      "seed_source_lines": 20318,
+      "seeds": [
+        {
+          "node": "org.compiere.model.MAllocationHdr",
+          "path": "org.adempiere.base/src/org/compiere/model/MAllocationHdr.java"
+        },
+        {
+          "node": "org.compiere.model.MAllocationLine",
+          "path": "org.adempiere.base/src/org/compiere/model/MAllocationLine.java"
+        },
+        {
+          "node": "org.compiere.model.MInOut",
+          "path": "org.adempiere.base/src/org/compiere/model/MInOut.java"
+        },
+        {
+          "node": "org.compiere.model.MInOutLine",
+          "path": "org.adempiere.base/src/org/compiere/model/MInOutLine.java"
+        },
+        {
+          "node": "org.compiere.model.MInvoice",
+          "path": "org.adempiere.base/src/org/compiere/model/MInvoice.java"
+        },
+        {
+          "node": "org.compiere.model.MInvoiceLine",
+          "path": "org.adempiere.base/src/org/compiere/model/MInvoiceLine.java"
+        },
+        {
+          "node": "org.compiere.model.MOrder",
+          "path": "org.adempiere.base/src/org/compiere/model/MOrder.java"
+        },
+        {
+          "node": "org.compiere.model.MOrderLine",
+          "path": "org.adempiere.base/src/org/compiere/model/MOrderLine.java"
+        },
+        {
+          "node": "org.compiere.model.MPayment",
+          "path": "org.adempiere.base/src/org/compiere/model/MPayment.java"
+        },
+        {
+          "node": "org.compiere.process.AllocationAuto",
+          "path": "org.adempiere.base.process/src/org/compiere/process/AllocationAuto.java"
+        },
+        {
+          "node": "org.compiere.process.InOutCreateInvoice",
+          "path": "org.adempiere.base.process/src/org/compiere/process/InOutCreateInvoice.java"
+        },
+        {
+          "node": "org.compiere.process.OrderPOCreate",
+          "path": "org.adempiere.base.process/src/org/compiere/process/OrderPOCreate.java"
+        }
+      ]
+    }
+  },
+  "source": {
+    "branch": "release-13",
+    "commit": "731515dcdd5278b843db33b9d3109d155b881951",
+    "commit_time": "2026-07-30T21:02:41+02:00",
+    "repository": "https://github.com/idempiere/idempiere",
+    "tree": "041320460a02d4ec23c837d46befa7420c162d0a"
+  }
+}

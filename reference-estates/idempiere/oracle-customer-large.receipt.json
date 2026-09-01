@@ -1,0 +1,35 @@
+{
+  "base_graph": {
+    "content_sha256": "d98bd92d752f23ee19263aa0957c28ee5aac52966d1322f6a31d4a9960394dc9",
+    "graph_id": "lightyear:carddemo-modernization",
+    "schema_version": "1.1"
+  },
+  "content_sha256": "18e8014a38997977a106d08e5f5905473a7bb2afae9af2cfdd698aee51ef2341",
+  "fragment_id": "lightyear:oracle-customer-large-reference-v1",
+  "operator_estate": {
+    "id": "oracle-customer-large",
+    "name": "Oracle Customer (Large)"
+  },
+  "production_ready": false,
+  "receipt_type": "lightyear-oracle-reference-projection-build",
+  "runtime_observed": false,
+  "schema_version": "1.0",
+  "statistics": {
+    "edge_count": 20,
+    "edges_by_relation": {
+      "HAS_SCENARIO": 20
+    },
+    "external_reference_count": 0,
+    "node_count": 22,
+    "nodes_by_kind": {
+      "modernization_workload": 2,
+      "verification_scenario": 20
+    }
+  },
+  "upstream": {
+    "commit": "731515dcdd5278b843db33b9d3109d155b881951",
+    "product": "iDempiere",
+    "repository": "https://github.com/idempiere/idempiere",
+    "tree": "041320460a02d4ec23c837d46befa7420c162d0a"
+  }
+}

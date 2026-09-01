@@ -18,6 +18,7 @@ ROOT = Path(__file__).resolve().parents[1]
 BASE = ROOT / "knowledge" / "graph.snapshot.json.gz"
 COMPOSITE = ROOT / "knowledge" / "composite" / "estate.snapshot.json.gz"
 FRAGMENT = ROOT / "extensions" / "pli" / "pli.fragment.json"
+ORACLE_FRAGMENT = ROOT / "reference-estates" / "idempiere" / "oracle-customer-large.fragment.json"
 CAPABILITIES = ROOT / "knowledge" / "capabilities" / "mainframe-readiness.json"
 
 
@@ -27,13 +28,15 @@ class CompositeEstateTests(unittest.TestCase):
         cls.base = load_graph(BASE)
         cls.composite = load_graph(COMPOSITE)
         cls.fragment = json.loads(FRAGMENT.read_text(encoding="utf-8"))
+        cls.oracle_fragment = json.loads(ORACLE_FRAGMENT.read_text(encoding="utf-8"))
+        cls.fragments = [cls.fragment, cls.oracle_fragment]
         cls.capabilities = json.loads(CAPABILITIES.read_text(encoding="utf-8"))
 
     def test_committed_projection_is_deterministic_and_preserves_truth_boundary(self) -> None:
-        built = build_composite_estate(self.base, [self.fragment], self.capabilities)
+        built = build_composite_estate(self.base, self.fragments, self.capabilities)
         self.assertEqual(self.composite, built)
         self.assertEqual([], validate_composite_estate(
-            self.composite, self.base, [self.fragment], self.capabilities
+            self.composite, self.base, self.fragments, self.capabilities
         ))
         self.assertEqual(self.base["content_sha256"], self.composite["base_graph"]["content_sha256"])
         self.assertNotEqual(self.base["content_sha256"], self.composite["content_sha256"])
@@ -42,7 +45,7 @@ class CompositeEstateTests(unittest.TestCase):
 
     def test_explorer_navigates_pli_to_cobol_and_db2(self) -> None:
         index = GraphExplorerIndex(self.composite)
-        self.assertEqual(10, len(index.perspectives()))
+        self.assertEqual(12, len(index.perspectives()))
         self.assertEqual(self.base["content_sha256"], index.canonical_content_sha256)
         pli = "extension:pli-program:ACCTPL1"
         cobol = "legacy:cobol-program:CBACT04C"
@@ -82,6 +85,29 @@ class CompositeEstateTests(unittest.TestCase):
             )
         )
 
+    def test_explorer_projects_oracle_customer_large_without_runtime_overclaim(self) -> None:
+        index = GraphExplorerIndex(self.composite)
+        context = index.operator_context()
+        self.assertEqual(
+            ["CardDemo Reference Estate", "Oracle Customer (Large)"],
+            [item["name"] for item in context["companies"]],
+        )
+        oracle = next(item for item in context["platforms"] if item["name"] == "Oracle")
+        self.assertEqual("projected", oracle["status"])
+        self.assertEqual(22, oracle["node_count"])
+        workload = "oracle-reference:workload:order-to-cash"
+        scenario = "oracle-reference:scenario:order-to-cash:01"
+        trace = index.trace(workload, scenario, direction="directed")
+        self.assertEqual(["HAS_SCENARIO"], [edge["relation"] for edge in trace["edges"]])
+        self.assertEqual(["Oracle"], trace["platforms"])
+        self.assertEqual("upstream-static-reference", trace["evidence_class"])
+        self.assertIn("not customer evidence", trace["limitation"])
+        self.assertFalse(index.node(workload)["properties"]["runtime_observed"])
+        self.assertIn(
+            "no customer system or Oracle runtime is attached",
+            " ".join(context["trace"]["limitations"]),
+        )
+
     def test_runtime_and_audit_remain_bound_to_canonical_identity(self) -> None:
         index = GraphExplorerIndex(self.composite)
         server = ExplorerServer(("127.0.0.1", 0), index, ROOT / "knowledge" / "viewer")
@@ -101,7 +127,7 @@ class CompositeEstateTests(unittest.TestCase):
         projection = copy.deepcopy(self.composite)
         projection["claim_boundary"]["mainframe_equivalent"] = True
         errors = validate_composite_estate(
-            projection, self.base, [self.fragment], self.capabilities
+            projection, self.base, self.fragments, self.capabilities
         )
         self.assertTrue(any("mainframe_equivalent" in error for error in errors))
 

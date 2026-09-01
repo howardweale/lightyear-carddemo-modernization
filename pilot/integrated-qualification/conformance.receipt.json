@@ -1,9 +1,9 @@
 {
   "bindings": {
     "manifest_sha256": "ab61a530f67e727f7f1996d88d988aeee29caba2b25e69889bf88ece5ed21011",
-    "selection_sha256": "a7ec8af09d2713756bfc755aa6700a31f6c9665e548488a617a6dfbb654bdea0",
-    "source_graph_sha256": "52354861f9d81a54c7a986291e9541b47e4124f345c6578d1876fbebd2c608db",
-    "work_package_sha256": "5523cbdeb3c2f26c84d89b7e74618710bb498c698fc28237aea736f57c5dd89f"
+    "selection_sha256": "79054aaa5a2c987fb4057469cf4b4a35fcacfe2142ee4f5c812cea47378745a4",
+    "source_graph_sha256": "7f11e5cd99a7fcb91d5ad3abfd7429761157c9f89250fe06edb05bf611ec9479",
+    "work_package_sha256": "2ca8ba7ab2412e84558f9eeab0e4361e28f2f5d7d331c2d81acb172a76913aa0"
   },
   "claim_boundary": {
     "bounded_integrated_development_semantics": true,
@@ -13,7 +13,7 @@
     "native_runtime_qualified": false,
     "production_ready": false
   },
-  "content_sha256": "b5a5cf53f206042b62d7bb9f932c5858a187e20945868fc71c5b08441bb72c99",
+  "content_sha256": "f7b1a8e1948d657dc2be3e12793adc9229134fd63cb011f26df586963751a661",
   "corpus": {
     "blocked_case_count": 4,
     "case_count": 40,

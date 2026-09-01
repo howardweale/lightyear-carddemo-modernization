@@ -134,6 +134,20 @@ DEFAULT_PERSPECTIVES = [
         "root": "extension:pli-program:ACCTPL1",
         "depth": 3,
     },
+    {
+        "id": "oracle-reference-order-to-cash",
+        "name": "Oracle order-to-cash reference",
+        "description": "Pinned static document-flow scenarios for the Oracle Customer (Large) reference estate.",
+        "root": "oracle-reference:workload:order-to-cash",
+        "depth": 1,
+    },
+    {
+        "id": "oracle-reference-procure-to-pay",
+        "name": "Oracle procure-to-pay reference",
+        "description": "Pinned static document-flow scenarios for the Oracle Customer (Large) reference estate.",
+        "root": "oracle-reference:workload:procure-to-pay",
+        "depth": 1,
+    },
 ]
 
 
@@ -143,7 +157,13 @@ OPERATOR_CUSTOMERS = [
         "name": "CardDemo Reference Estate",
         "evidence_class": "reference",
         "description": "Bundled reference evidence; no customer system is attached.",
-    }
+    },
+    {
+        "id": "oracle-customer-large",
+        "name": "Oracle Customer (Large)",
+        "evidence_class": "upstream-static-reference",
+        "description": "Pinned public reference-estate evidence; no customer system is attached.",
+    },
 ]
 
 OPERATOR_PROBLEMS = [
@@ -173,6 +193,20 @@ OPERATOR_PROBLEMS = [
         "name": "Shared platform services",
         "description": "Recover and modernize shared routines used across application boundaries.",
         "workload_ids": ["workload:carddemo-asm-date-format"],
+    },
+    {
+        "id": "oracle-order-to-cash",
+        "company_id": "oracle-customer-large",
+        "name": "Order to cash",
+        "description": "Trace accepted sales orders through shipment, invoicing, receipt, and allocation using pinned static reference evidence.",
+        "workload_ids": ["oracle-reference:workload:order-to-cash"],
+    },
+    {
+        "id": "oracle-procure-to-pay",
+        "company_id": "oracle-customer-large",
+        "name": "Procure to pay",
+        "description": "Trace approved purchase orders through receipt, vendor invoicing, payment, and allocation using pinned static reference evidence.",
+        "workload_ids": ["oracle-reference:workload:procure-to-pay"],
     },
 ]
 
@@ -211,6 +245,20 @@ OPERATOR_WORKLOADS = [
         "perspective_id": "asm-date-format",
         "recommended_scope": "mainframe",
         "description": "Shared COBOL-to-HLASM date conversion contract and its bounded business rules.",
+    },
+    {
+        "id": "oracle-reference:workload:order-to-cash",
+        "problem_id": "oracle-order-to-cash",
+        "perspective_id": "oracle-reference-order-to-cash",
+        "recommended_scope": "database",
+        "description": "Pinned static sales-order, shipment, invoice, receipt, and allocation relationships; no Oracle runtime is attached.",
+    },
+    {
+        "id": "oracle-reference:workload:procure-to-pay",
+        "problem_id": "oracle-procure-to-pay",
+        "perspective_id": "oracle-reference-procure-to-pay",
+        "recommended_scope": "database",
+        "description": "Pinned static purchase-order, receipt, vendor-invoice, payment, and allocation relationships; no Oracle runtime is attached.",
     },
 ]
 
@@ -501,9 +549,25 @@ class GraphExplorerIndex:
             ]
             if item["workload_ids"]:
                 problems.append(item)
+        available_company_ids = {item["company_id"] for item in problems}
+        companies = [
+            item for item in OPERATOR_CUSTOMERS if item["id"] in available_company_ids
+        ]
+        limitations = [
+            "A static path does not prove that a transaction executed in production.",
+            "Only a path containing WRITES_SEGMENT proves a static IMS mutation; PSB/DBD dependency alone does not.",
+            "The AUTHUPD1 PL/I write is a bundled reference fixture, not customer source.",
+        ]
+        if "Oracle" in projected_names:
+            limitations.append(
+                "Oracle Customer (Large) is pinned static reference evidence; no customer system or Oracle runtime is attached."
+            )
+        else:
+            limitations.append("No Oracle customer integration edges are currently projected.")
+        limitations.append("No SAP ASE customer integration edges are currently projected.")
         return {
-            "companies": OPERATOR_CUSTOMERS,
-            "customers": OPERATOR_CUSTOMERS,
+            "companies": companies,
+            "customers": companies,
             "problems": problems,
             "workloads": workloads,
             "scopes": scopes,
@@ -513,12 +577,7 @@ class GraphExplorerIndex:
                 "directed": True,
                 "evidence_class": "static-source-and-declaration-evidence",
                 "claim": "A found path proves that the committed graph contains the displayed relationships.",
-                "limitations": [
-                    "A static path does not prove that a transaction executed in production.",
-                    "Only a path containing WRITES_SEGMENT proves a static IMS mutation; PSB/DBD dependency alone does not.",
-                    "The AUTHUPD1 PL/I write is a bundled reference fixture, not customer source.",
-                    "No Oracle or SAP ASE customer integration edges are currently projected.",
-                ],
+                "limitations": limitations,
                 "examples": examples,
             },
         }
@@ -733,13 +792,29 @@ class GraphExplorerIndex:
         reference_fixture = any(
             bool(node.get("properties", {}).get("reference_fixture")) for node in nodes
         )
-        evidence_class = "static-reference-fixture" if reference_fixture else "static-source"
-        limitation = (
-            "This is a non-customer reference-fixture path. It proves static extraction support, "
-            "not a production transaction."
-            if reference_fixture
-            else "This source-backed path proves committed static relationships, not a production transaction."
+        upstream_static_reference = any(
+            node.get("properties", {}).get("evidence_class")
+            == "upstream-static-reference"
+            for node in nodes
         )
+        if upstream_static_reference:
+            evidence_class = "upstream-static-reference"
+            limitation = (
+                "This is a pinned public reference-estate path. It is not customer evidence, "
+                "an observed Oracle transaction, or native Oracle runtime evidence."
+            )
+        elif reference_fixture:
+            evidence_class = "static-reference-fixture"
+            limitation = (
+                "This is a non-customer reference-fixture path. It proves static extraction "
+                "support, not a production transaction."
+            )
+        else:
+            evidence_class = "static-source"
+            limitation = (
+                "This source-backed path proves committed static relationships, not a "
+                "production transaction."
+            )
         return {
             "direction": direction,
             "hop_count": len(edge_ids),
@@ -784,6 +859,9 @@ class GraphExplorerIndex:
 
     @staticmethod
     def _platform(node: dict[str, Any]) -> str:
+        declared = node.get("properties", {}).get("operator_platform")
+        if isinstance(declared, str) and declared.strip():
+            return declared.strip()
         kind = node["kind"]
         for prefix, platform in PLATFORM_PREFIXES.items():
             if kind.startswith(prefix):

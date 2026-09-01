@@ -1,5 +1,5 @@
 {
-  "analysis_sha256": "c5fee924e5da1840f23f7d06edfc95866d0aca95fa4dd7978a281b528622e7fe",
+  "analysis_sha256": "2292d6ff7350b6666250caaaf480089af1780894903f89f4d2b013b557cdac80",
   "assessment_policy_sha256": "fe7da4aa0a9ed853086fbfccbab0de16571f9ac5942d0e48fbfce290c9d3efd6",
   "assessment_type": "lightyear-customer-estate-assessment",
   "claim_unlocked": "LIGHTYEAR can partition an approved source estate into explainable connected slices and produce an evidence-first modernization planning backlog.",
@@ -293,7 +293,7 @@
       "unresolved_references": []
     }
   ],
-  "content_sha256": "1e63a7e82063b0561012fd4de7dd011652afa53a3e88b7006e268a5ca3010bd5",
+  "content_sha256": "9630b7b1cf83135b2e527fa5a4a32b030fe36c697b179188a32edd4dba975544",
   "decision_boundary": {
     "advisory_plan_only": true,
     "authorized_execution_observed": false,
@@ -315,8 +315,8 @@
     "authorized installed configuration, consumer binding, change history, and deployment observation",
     "authorized job execution, JES output, dataset effects, conditions, and restart capture"
   ],
-  "graph_content_sha256": "52354861f9d81a54c7a986291e9541b47e4124f345c6578d1876fbebd2c608db",
-  "intake_sha256": "711f059f73c4eeefcce6a38006582107fabc444eb5cbb850042dd9fcace4d2e4",
+  "graph_content_sha256": "7f11e5cd99a7fcb91d5ad3abfd7429761157c9f89250fe06edb05bf611ec9479",
+  "intake_sha256": "3012f277468a28e1b94c10edee366f74a5ac298e1776ad7e04686ef288abe409",
   "limitations": [
     "Connected components describe static coupling, not business criticality, transaction volume, runtime behavior, or ownership.",
     "The planner does not automatically approve or dispatch modernization work.",

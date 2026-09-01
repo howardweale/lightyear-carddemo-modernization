@@ -25,6 +25,33 @@ python3 tools/inventory_idempiere_reference.py \
 
 The tool refuses a dirty checkout or a commit other than the recorded pin.
 
+## Control Tower projection
+
+The Control Tower exposes this evidence under the operator-facing estate name **Oracle Customer
+(Large)**. The upstream name remains in this provenance directory, the exact source pin, and the
+GPL-2.0 license record; it is not used as the customer/company label.
+
+The generated fragment contains two workloads and 20 static trace scenarios:
+
+- order to cash: ten documented relationships across order, shipment, invoice, payment, and
+  allocation tables;
+- procure to pay: ten documented relationships across purchase order, receipt, vendor invoice,
+  payment, and allocation tables.
+
+Build or verify the projection on macOS or Linux:
+
+```bash
+./oracle-reference-estate.sh build
+./oracle-reference-estate.sh verify
+```
+
+Windows:
+
+```powershell
+.\oracle-reference-estate.ps1 build
+.\oracle-reference-estate.ps1 verify
+```
+
 ## Evidence boundary
 
 This is upstream static inventory, not customer source, Oracle runtime evidence, a complete

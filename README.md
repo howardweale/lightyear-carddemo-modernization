@@ -4,7 +4,25 @@
 
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.51.0 — Oracle native execution admission gate**
+Release: **v0.52.0 — Oracle Customer (Large) Control Tower projection**
+
+v0.52 projects the pinned Oracle reference estate into the Control Tower as the selectable
+operator-facing company **Oracle Customer (Large)**. Its order-to-cash and procure-to-pay
+workloads expose 20 static document-flow trace scenarios drawn from the two curated nine-table
+slices. The upstream product name remains in source, license, and commit provenance only.
+
+The projection is a deterministic extension fragment bound to the canonical CardDemo graph. It
+does not change that canonical graph or the identity used by runtime and audit evidence.
+
+```bash
+./oracle-reference-estate.sh verify
+./composite-estate.sh verify /path/to/carddemo-upstream
+```
+
+No customer system or Oracle runtime is attached. Native Oracle execution, application
+equivalence, CloudBank mapping, migration completion, and production readiness remain false.
+
+Previous release: **v0.51.0 — Oracle native execution admission gate**
 
 v0.51.0 converts the completed 500-behavior, 2,000-case Oracle catalog into one governed native
 execution contract. Every case is mapped to both Oracle Database 19c and Oracle AI Database 26ai,
@@ -1455,8 +1473,9 @@ On Windows:
 .\graph-explorer.ps1
 ```
 
-It opens `http://127.0.0.1:8765` and provides seven curated perspectives, including the bounded
-PL/I authorization-risk lineage, full-graph search,
+It opens `http://127.0.0.1:8765` and provides selectable CardDemo and Oracle Customer (Large)
+reference estates, including bounded PL/I authorization-risk, Oracle order-to-cash, and Oracle
+procure-to-pay perspectives, full-graph search,
 bounded neighborhoods, node and edge inspection, source-code evidence, and implementer/verifier
 views. The server binds only to the local machine by default and uses Python's standard library; it
 does not upload graph data.
@@ -1481,7 +1500,8 @@ does this relationship exist?`, `What source supports it?`, and `What would be a
 connection changed?` remain bounded by the selected audience and evidence package.
 
 The relationship catalog lives in `knowledge/ontology/relationships.json`. Canonical source
-evidence lives under `knowledge/evidence/`; the composite source pack, including PL/I excerpts,
+evidence lives under `knowledge/evidence/`; the composite source pack, including PL/I and Oracle
+reference-slice excerpts,
 lives under `knowledge/composite/`.
 
 ### Grounded graph chat

@@ -47,6 +47,7 @@ def doctor(project_root: Path) -> dict[str, Any]:
         "semantic_inputs": root / "knowledge" / "semantic-inputs.json",
         "canonical_graph": root / "knowledge" / "graph.snapshot.json.gz",
         "pli_fragment": root / "extensions" / "pli" / "pli.fragment.json",
+        "oracle_reference_fragment": root / "reference-estates" / "idempiere" / "oracle-customer-large.fragment.json",
         "pli_coverage": root / "extensions" / "pli" / "conformance" / "coverage.receipt.json",
         "pli_build_receipt": root / "extensions" / "pli" / "attestation" / "build.receipt.json",
         "pli_build_attestation": root / "extensions" / "pli" / "attestation" / "build.attestation.json",
@@ -70,13 +71,14 @@ def doctor(project_root: Path) -> dict[str, Any]:
         load_semantic_inputs(paths["semantic_inputs"], root)
         base = load_graph(paths["canonical_graph"])
         fragment = load_json(paths["pli_fragment"])
+        oracle_reference_fragment = load_json(paths["oracle_reference_fragment"])
         coverage = load_json(paths["pli_coverage"])
         build_receipt = load_json(paths["pli_build_receipt"])
         build_attestation = load_json(paths["pli_build_attestation"])
         capabilities = load_json(paths["capabilities"])
         composite = load_graph(paths["composite_estate"])
         structural_errors = validate_composite_estate(
-            composite, base, [fragment], capabilities
+            composite, base, [fragment, oracle_reference_fragment], capabilities
         )
         coverage_body = {key: value for key, value in coverage.items() if key != "content_sha256"}
         coverage_hash = hashlib.sha256(

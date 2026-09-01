@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.52.0 — 2026-09-01
+
+- Projected the pinned Oracle reference estate into the Control Tower under the operator-facing
+  name `Oracle Customer (Large)` while retaining iDempiere only as source and license provenance.
+- Added selectable order-to-cash and procure-to-pay problems and workloads with 20 static
+  document-flow trace scenarios across the two curated nine-table slices.
+- Added a deterministic, content-addressed Oracle reference fragment and receipt bound to the
+  canonical graph identity, exact upstream commit, inventory, selectors, and business-slice input.
+- Composed the Oracle fragment with the existing PL/I extension without changing the canonical
+  CardDemo graph or its runtime and audit identity.
+- Added POSIX and Windows build/verification launchers plus adversarial tests for drift, naming,
+  source provenance, platform projection, and runtime overclaim rejection.
+- Kept customer-system attachment, native Oracle execution, application equivalence, CloudBank
+  mapping, migration completion, and production readiness false.
+
 ## 0.51.0 — 2026-09-01
 
 - Mapped all 2,000 governed Oracle catalog cases to both the 19c baseline and 26ai delta, defining

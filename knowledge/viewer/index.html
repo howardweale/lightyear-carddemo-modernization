@@ -4,10 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>LIGHTYEAR Control Tower</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&amp;family=IBM+Plex+Sans:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=47.1">
+  <link rel="stylesheet" href="styles.css?v=47.2">
 </head>
 <body>
   <header class="masthead topbar">
@@ -15,15 +12,39 @@
       <span class="brand-mark" aria-hidden="true"></span>
       <h1>LIGHTYEAR Control Tower</h1>
     </div>
+    <div class="estate-control">
+      <button id="estate-trigger" class="context-trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-controls="estate-popover">
+        <span class="context-trigger-label">Estate</span>
+        <span id="estate-trigger-value">Loading…</span>
+        <span aria-hidden="true">⌄</span>
+      </button>
+      <section id="estate-popover" class="estate-popover" aria-label="Estate context" hidden>
+        <header>
+          <div>
+            <span class="context-trigger-label">Estate context</span>
+            <strong>Choose the engagement boundary</strong>
+          </div>
+          <button id="close-estate" class="icon-button" type="button" aria-label="Close estate context">×</button>
+        </header>
+        <p>Company and business problem usually remain stable for an operator session.</p>
+        <div class="estate-fields">
+          <div>
+            <label for="customer-context">Company</label>
+            <select id="customer-context" aria-label="Company"></select>
+          </div>
+          <div>
+            <label for="problem-context">Business problem</label>
+            <select id="problem-context" aria-label="Business problem"></select>
+          </div>
+        </div>
+        <div class="context-summary" aria-live="polite">
+          <strong id="operator-context-path">Loading graph context…</strong>
+          <p id="operator-context-description">Loading operator context…</p>
+        </div>
+        <span id="customer-evidence-badge" class="context-badge">Reference evidence</span>
+      </section>
+    </div>
     <section class="operator-context" aria-label="Operator context">
-      <div>
-        <label for="customer-context">Company</label>
-        <select id="customer-context" aria-label="Company"></select>
-      </div>
-      <div>
-        <label for="problem-context">Business problem</label>
-        <select id="problem-context" aria-label="Business problem"></select>
-      </div>
       <div>
         <label for="workload-context">Workload</label>
         <select id="workload-context" aria-label="Workload"></select>
@@ -36,11 +57,6 @@
         <label for="operator-lens">Operator lens</label>
         <select id="operator-lens" aria-label="Operator lens"></select>
       </div>
-      <div class="context-summary" aria-live="polite">
-        <strong id="operator-context-path">Loading graph context…</strong>
-        <p id="operator-context-description">Loading operator context…</p>
-      </div>
-      <span id="customer-evidence-badge" class="context-badge">Reference evidence</span>
     </section>
     <div class="status" aria-live="polite" title="Live connection status">
       <span id="status-dot" class="status-dot"></span>
@@ -52,17 +68,15 @@
   <section id="estate-boundary" class="estate-boundary claim" aria-label="Composite estate trust boundary" hidden>
     <span class="read-only-badge">Discovery view · not live equivalence</span>
     <p id="estate-boundary-statement"></p>
-    <span class="claim-hash">
-      snapshot <strong id="metric-hash">—</strong> ·
-      <strong id="metric-nodes">—</strong> entities ·
-      <strong id="metric-edges">—</strong> relationships
-    </span>
-    <div class="claim-metadata" aria-hidden="true">
-      <strong id="metric-rules">—</strong>
-      <span id="estate-fragments">—</span>
-      <code id="estate-base-hash">—</code>
-      <code id="estate-composite-hash">—</code>
-    </div>
+    <dl class="claim-metadata">
+      <div><dt>Snapshot</dt><dd id="metric-hash">—</dd></div>
+      <div><dt>Entities</dt><dd id="metric-nodes">—</dd></div>
+      <div><dt>Relationships</dt><dd id="metric-edges">—</dd></div>
+      <div><dt>Rules</dt><dd id="metric-rules">—</dd></div>
+      <div><dt>Extensions</dt><dd id="estate-fragments">—</dd></div>
+    </dl>
+    <span id="estate-base-hash" hidden>—</span>
+    <span id="estate-composite-hash" hidden>—</span>
   </section>
 
   <main class="workspace">
@@ -134,9 +148,23 @@
         <div class="graph-toolbar-start">
           <span id="graph-title">Loading perspective…</span>
           <button id="fit" class="toolbar-button" type="button">Fit</button>
+          <button id="density-reset" class="toolbar-button" type="button" hidden>Restore selection</button>
         </div>
         <span id="selection-count"></span>
       </div>
+      <section id="density-guard" class="density-guard" aria-live="polite" hidden>
+        <div class="density-card">
+          <span class="density-eyebrow">Readable graph limit</span>
+          <h2><span id="density-count">—</span> nodes is past the readable limit</h2>
+          <p>At this density labels overlap and the layout stops carrying meaning. Choose a useful reduction, or render the full selection as a picture.</p>
+          <div class="density-actions">
+            <button id="density-collapse" class="primary-button" type="button">Collapse implementation packages</button>
+            <button id="density-rules" class="secondary-button" type="button">Rules and proof only</button>
+            <button id="density-bridges" class="secondary-button" type="button">Legacy ↔ modern paths</button>
+          </div>
+          <button id="density-render-all" class="text-button" type="button">Render all nodes anyway</button>
+        </div>
+      </section>
       <svg id="graph" role="img" aria-label="Interactive knowledge graph">
         <defs>
           <marker id="arrow" viewBox="0 0 10 10" refX="16" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
@@ -178,10 +206,9 @@
           <code id="detail-id"></code>
           <p id="detail-statement" class="statement"></p>
           <div class="button-stack">
-            <button id="focus-node" class="primary-button" type="button">Focus this entity</button>
-            <button id="ask-node" class="secondary-button" type="button">Ask about this entity</button>
-            <button id="trace-start-node" class="secondary-button" type="button">Set trace start</button>
-            <button id="trace-end-node" class="secondary-button" type="button">Set trace destination</button>
+            <button id="open-proof-run" class="primary-button action-button" type="button">Open proof run for this workload</button>
+            <button id="focus-node" class="secondary-button" type="button">Focus subgraph</button>
+            <button id="trace-start-node" class="secondary-button" type="button">Set as trace start</button>
           </div>
           <section id="properties-section">
             <h3>Properties</h3>
@@ -590,6 +617,20 @@
     <div id="source-meta" class="source-meta"></div>
     <pre id="source-code" class="source-code" tabindex="0"></pre>
   </aside>
-  <script src="app.js?v=47.1" defer></script>
+  <dialog id="verifier-dialog" class="verifier-dialog" aria-labelledby="verifier-title">
+    <form id="verifier-form" method="dialog">
+      <span class="density-eyebrow">Protected audience</span>
+      <h2 id="verifier-title">Enter this session’s verifier token</h2>
+      <p>The verifier view can reveal private qualification material. The token is printed in the operator terminal when the Control Tower starts and remains only in this browser tab.</p>
+      <label for="verifier-token">Bearer token</label>
+      <input id="verifier-token" name="verifier-token" type="password" autocomplete="off" spellcheck="false" required>
+      <p id="verifier-error" class="form-error" aria-live="polite"></p>
+      <div class="dialog-actions">
+        <button id="cancel-verifier" class="secondary-button" type="button">Cancel</button>
+        <button class="primary-button" type="submit">Unlock verifier view</button>
+      </div>
+    </form>
+  </dialog>
+  <script src="app.js?v=47.2" defer></script>
 </body>
 </html>

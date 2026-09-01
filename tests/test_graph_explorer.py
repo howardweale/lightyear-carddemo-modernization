@@ -6,9 +6,15 @@ import tempfile
 import threading
 import unittest
 from pathlib import Path
-from urllib.request import urlopen
+from urllib.error import HTTPError
+from urllib.request import Request, urlopen
 
-from lightyear_knowledge_graph.explorer import ExplorerServer, GraphExplorerIndex
+from lightyear_knowledge_graph.explorer import (
+    ExplorerServer,
+    GraphExplorerIndex,
+    is_loopback_host,
+    validate_bind_host,
+)
 from lightyear_knowledge_graph.model import load_graph
 from lightyear_knowledge_graph.neo4j_export import export_neo4j
 
@@ -116,6 +122,16 @@ class GraphExplorerTests(unittest.TestCase):
             )
         )
 
+    def test_non_loopback_bind_requires_an_explicit_risk_flag(self) -> None:
+        for host in ("127.0.0.1", "127.7.4.2", "::1", "localhost"):
+            self.assertTrue(is_loopback_host(host))
+            validate_bind_host(host)
+        for host in ("0.0.0.0", "192.168.1.20", "control-tower.internal"):
+            self.assertFalse(is_loopback_host(host))
+            with self.assertRaisesRegex(ValueError, "Refusing non-loopback bind"):
+                validate_bind_host(host)
+            validate_bind_host(host, allow_unauthenticated_network=True)
+
     def test_http_server_serves_metadata_and_viewer(self) -> None:
         server = ExplorerServer(("127.0.0.1", 0), self.index, ROOT / "knowledge" / "viewer")
         thread = threading.Thread(target=server.serve_forever, daemon=True)
@@ -137,9 +153,13 @@ class GraphExplorerTests(unittest.TestCase):
             self.assertIn("graph-binding-hash", body)
             self.assertIn("live-endpoint", body)
             self.assertIn("Discovery view · not live equivalence", body)
-            self.assertIn("IBM+Plex+Sans", body)
+            self.assertNotIn("fonts.googleapis.com", body)
+            self.assertIn('id="estate-trigger"', body)
             self.assertIn('for="problem-context"', body)
             self.assertIn('for="workload-context"', body)
+            self.assertIn('id="density-guard"', body)
+            self.assertIn("Open proof run for this workload", body)
+            self.assertIn('id="verifier-dialog"', body)
             self.assertIn("Search selected workload", body)
             self.assertIn("Technology scope", body)
             self.assertIn("CROSS-PLATFORM EVIDENCE TRACE", body)
@@ -152,6 +172,9 @@ class GraphExplorerTests(unittest.TestCase):
             self.assertIn("startLiveStatusPolling", script)
             self.assertIn("/api/operations/status", script)
             self.assertIn("activateSelectedWorkload", script)
+            self.assertIn("READABLE_NODE_LIMIT", script)
+            self.assertIn("collapseImplementationPackages", script)
+            self.assertIn("role", script)
             self.assertIn("No matching entities in the selected workload", script)
             self.assertIn("Static file mode cannot connect to the live graph", script)
             with urlopen(f"{base}/styles.css", timeout=3) as response:
@@ -164,6 +187,23 @@ class GraphExplorerTests(unittest.TestCase):
             self.assertIn("warm editorial Control Tower palette", styles)
             self.assertIn(".graph-binding.invalidated", styles)
             self.assertIn('"IBM Plex Sans"', styles)
+            self.assertIn("@font-face", styles)
+            self.assertIn(".combobox-trigger", styles)
+            self.assertIn(".density-guard", styles)
+            with urlopen(f"{base}/fonts/IBMPlexSans-Regular-Latin1.woff2", timeout=3) as response:
+                self.assertGreater(len(response.read()), 1000)
+
+            protected = f"{base}/api/search?q=private+legacy&audience=verifier"
+            with self.assertRaises(HTTPError) as denied:
+                urlopen(protected, timeout=3)
+            self.assertEqual(401, denied.exception.code)
+            request = Request(
+                protected,
+                headers={"Authorization": f"Bearer {server.verifier_token}"},
+            )
+            with urlopen(request, timeout=3) as response:
+                verifier_results = json.load(response)
+            self.assertEqual(1, len(verifier_results["results"]))
         finally:
             server.shutdown()
             server.server_close()

@@ -23,6 +23,8 @@ production-qualified.
 | MS #45 | SAP ASE Semantic Source Adapter | Complete |
 | MS #46 | Unified Estate Operator Navigation | Complete |
 | MS #47 | Graph-Bound Live Evidence Control Tower | Complete |
+| MS #47.1 | Approved Control Tower Visual System | Complete |
+| MS #47.2 | Control Tower Usability and Transport Hardening | Complete |
 
 The v0.35.0 stored-logic qualification core is retained as supporting MS #34 evidence. It does not
 replace the planned DB2 milestone.
@@ -157,10 +159,9 @@ false.
 ## MS #47 — Graph-Bound Live Evidence Control Tower
 
 MS #47 turns the Control Tower into a more credible customer and executive operating surface while
-preserving its evidence boundary. The UI combines the LIGHTYEAR investor visual system with
-Material-influenced clarity: warm-white work surfaces, a near-black operational plane, gold
-hierarchy, bronze boundaries, modern sans-serif typography, sentence case, rounded controls, and a
-dedicated graph-binding card for canonical identity, counts, freshness, and downstream posture.
+preserving its evidence boundary. The UI uses the approved paper-white, stone, and burnt-orange
+visual system with locally served IBM Plex typography, labelled modern controls, and a dedicated
+graph-binding card for canonical identity, counts, freshness, and downstream posture.
 The operator path is Company → Business problem → Workload → Technology scope → Operator lens.
 Company and problem constrain the available workloads, workload selection moves the graph root,
 and scope and lens refine the resulting graph without replacing the business context.
@@ -171,6 +172,12 @@ the browser's metadata, perspectives, operator context, legend, metrics, and act
 The source-evidence pack, Runtime projection, and Audit projection are accepted only when their
 graph identity matches the current canonical graph; a mismatch invalidates the affected projection
 and raises a critical alert. The Control
-Tower remains read-only and loopback-only. It does not add execution authority, enterprise
-authentication, managed streaming, customer runtime evidence, platform equivalence, or production
-readiness.
+Tower remains read-only. It does not add execution authority, enterprise authentication, managed
+streaming, customer runtime evidence, platform equivalence, or production readiness.
+
+MS #47.2 closes the independent usability and transport review. It moves session-stable company
+and problem choices into an Estate popover, keeps workload/scope/lens readable at 1366 pixels,
+labels claim metadata, stops unreadable graph hairballs at 70 nodes, collapses Java packages into
+counted nodes, and makes existing proof-run evidence the inspector's primary workload action. The
+server rejects non-loopback binds by default, verifier routes require a per-session bearer token,
+and customer deployment remains explicitly dependent on an approved SSO/OIDC reverse proxy.

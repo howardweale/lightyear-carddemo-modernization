@@ -3,6 +3,13 @@
   "policy_type": "lightyear-live-control-tower-policy",
   "command_plane": "disabled",
   "loopback_only": true,
+  "network_bind_override": "--i-understand-this-is-unauthenticated",
+  "audience_authorization": {
+    "implementer": "loopback-local",
+    "verifier": "per-session-bearer-token",
+    "customer_deployment": "external-sso-oidc-reverse-proxy"
+  },
+  "external_assets": "disabled",
   "sources": {
     "graph": {"expected_interval_seconds": 5, "trust_class": "content-addressed-graph"},
     "factory": {"expected_interval_seconds": 2, "trust_class": "controller-receipt"},

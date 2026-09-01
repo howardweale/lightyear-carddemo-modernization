@@ -72,6 +72,11 @@ class LiveControlTowerTests(unittest.TestCase):
         self.assertEqual("disabled", policy["command_plane"])
         self.assertTrue(policy["loopback_only"])
         self.assertEqual(
+            "per-session-bearer-token",
+            policy["audience_authorization"]["verifier"],
+        )
+        self.assertEqual("disabled", policy["external_assets"])
+        self.assertEqual(
             {"graph", "factory", "portfolio", "recovery", "quality", "memory", "data", "runtime", "audit"},
             set(policy["sources"]),
         )

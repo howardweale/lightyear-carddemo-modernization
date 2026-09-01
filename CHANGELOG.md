@@ -1,5 +1,33 @@
 # Changelog
 
+## 0.47.2 — 2026-09-01
+
+- Folded session-stable Company and Business problem selectors into an Estate popover, retaining
+  Workload, Technology scope, and Operator lens in a single 1366-pixel-safe working bar.
+- Replaced the five visible native header selects with labelled, keyboard-accessible comboboxes and
+  added hover, focus, motion, and pressed states across interactive controls.
+- Replaced the compressed claim-band debug string with labelled Snapshot, Entities, Relationships,
+  Rules, and Extensions values; one visible snapshot identity carries the canonical and composite
+  hashes in its tooltip.
+- Added a 70-node readability guard with implementation-package collapse, rules-and-proof focus,
+  legacy-to-modern path focus, and an explicit full-render override.
+- Added pill-backed graph labels and package-count nodes so high-density implementation detail reads
+  as a product rather than an unstyled graph demonstration.
+- Added the workload action “Open proof run for this workload” and reduced the inspector's primary
+  actions to proof, subgraph focus, and trace-start work.
+- Refused non-loopback binds unless the operator supplies the explicit
+  `--i-understand-this-is-unauthenticated` flag and printed a warning naming the exposed evidence.
+- Required a generated per-session bearer token for verifier-audience HTTP routes while leaving the
+  implementer projection open only on loopback; customer deployment still requires external SSO.
+- Bundled SIL-OFL IBM Plex webfont subsets and removed all Google Fonts requests.
+
+## 0.47.1 — 2026-08-31
+
+- Replaced the black Control Tower theme with the approved warm editorial paper, stone, and burnt-
+  orange palette while preserving graph-bound navigation and live evidence behavior.
+- Reduced the header to two functional bands, moved evidence planes to the left rail, limited the
+  right rail to Inspect, Trace, and Ask, promoted operational alerts, and versioned browser assets.
+
 ## 0.47.0 — 2026-08-31
 
 - Recast the Evidence Control Tower in the LIGHTYEAR investor-deck visual system with Material-

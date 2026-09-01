@@ -1,9 +1,8 @@
 # Live Evidence and Control Tower Plane
 
-v0.47 makes the canonical Knowledge Graph and source-evidence pack a first-class source in the
-live, read-only operational projection first introduced in v0.17. It also applies the LIGHTYEAR
-investor visual system to the browser: near-black surfaces, warm-white type, gold hierarchy, and
-bronze evidence boundaries.
+v0.47.2 makes the canonical Knowledge Graph and source-evidence pack a first-class source in the
+live, read-only operational projection first introduced in v0.17. The browser uses the approved
+paper-white, stone, and burnt-orange visual system with locally served IBM Plex typography.
 
 Operator navigation is graph-bound in this order: **Company → Business problem → Workload →
 Technology scope → Operator lens**. Company and problem determine the permitted workload choices;
@@ -37,10 +36,12 @@ Set-ExecutionPolicy -Scope Process Bypass
 .\live-control-tower.ps1 serve
 ```
 
-Open `http://127.0.0.1:8765`. Keep the server on loopback; this local release has no user
-authentication and must not be exposed with `--host 0.0.0.0`. `127.0.0.0` is the loopback network
-identifier, not the Control Tower address. Do not open `knowledge/viewer/index.html` directly;
-static file mode cannot use the API or Server-Sent Events stream.
+Open `http://127.0.0.1:8765`. The server refuses `0.0.0.0`, LAN addresses, and hostnames unless the
+operator supplies `--i-understand-this-is-unauthenticated`; the warning does not replace enterprise
+authentication. `127.0.0.0` is the loopback network identifier, not the Control Tower address. A
+per-session bearer token printed in the terminal is required for verifier-audience routes. For a
+customer deployment, place the service behind the customer's approved SSO/OIDC reverse proxy. Do
+not open `knowledge/viewer/index.html` directly; static file mode cannot use the API or SSE stream.
 
 ## Operational contract
 

@@ -35,6 +35,7 @@ const state = {
   comboboxes: new Map(),
   fullSelection: null,
   densityBypass: false,
+  graphFocusId: null,
 };
 
 const READABLE_NODE_LIMIT = 70;
@@ -95,6 +96,12 @@ function formatNumber(value) {
 }
 
 function groupFor(kind) { return groups[kind] || "other"; }
+
+function setConnectionStatus(message) {
+  $("status").setAttribute("aria-label", message);
+  $("status").title = message;
+  $("status-text").textContent = "";
+}
 
 const comboboxDefinitions = [
   ["customer-context", "Company"],
@@ -238,7 +245,7 @@ async function initialize() {
     renderGraphMetrics();
     renderEstateBoundary();
     $("status-dot").classList.add("online");
-    $("status-text").textContent = "Control Tower loaded";
+    setConnectionStatus("Control Tower loaded");
     $("live-endpoint").textContent = `Live endpoint · ${window.location.host}`;
     populateOperatorContext();
     initializeComboboxes();
@@ -543,6 +550,7 @@ function bindControls() {
   $("density-render-all").addEventListener("click", () => {
     state.densityBypass = true;
     renderGraph();
+    requestAnimationFrame(focusInitialGraphNode);
   });
   $("density-reset").addEventListener("click", restoreFullSelection);
   $("verifier-form").addEventListener("submit", unlockVerifierView);
@@ -787,7 +795,7 @@ function connectLivePlane() {
   stream.addEventListener("ready", () => {
     state.operations.connection = "live";
     $("status-dot").className = "status-dot online";
-    $("status-text").textContent = "Live graph stream connected";
+    setConnectionStatus("Live graph stream connected");
     renderLiveStatus();
   });
   stream.addEventListener("operational-event", (message) => {
@@ -798,7 +806,7 @@ function connectLivePlane() {
   stream.onerror = () => {
     state.operations.connection = "reconnecting";
     $("status-dot").className = "status-dot";
-    $("status-text").textContent = "Live stream reconnecting";
+    setConnectionStatus("Live stream reconnecting");
     renderLiveStatus();
   };
 }
@@ -1137,6 +1145,7 @@ function applyDensityReduction(mode) {
   $("density-reset").hidden = false;
   $("selection-count").textContent = `${state.selection.nodes.length} nodes · ${state.selection.edges.length} links · reduced view`;
   renderGraph();
+  requestAnimationFrame(focusInitialGraphNode);
 }
 
 function restoreFullSelection() {
@@ -1224,6 +1233,122 @@ function inducedSelection(selection, keep) {
   };
 }
 
+function boxesIntersect(a, b, padding = 3) {
+  return !(
+    a.x + a.width + padding <= b.x
+    || b.x + b.width + padding <= a.x
+    || a.y + a.height + padding <= b.y
+    || b.y + b.height + padding <= a.y
+  );
+}
+
+function labelPlacements(nodes, edges, positions, width, height, rootId) {
+  const degrees = new Map(nodes.map((node) => [node.id, 0]));
+  edges.forEach((edge) => {
+    degrees.set(edge.source, (degrees.get(edge.source) || 0) + 1);
+    degrees.set(edge.target, (degrees.get(edge.target) || 0) + 1);
+  });
+  const ordered = [...nodes].sort((a, b) => {
+    if (a.id === rootId) return -1;
+    if (b.id === rootId) return 1;
+    return (degrees.get(b.id) || 0) - (degrees.get(a.id) || 0);
+  });
+  const occupied = [];
+  const placements = new Map();
+  ordered.forEach((node) => {
+    const point = positions.get(node.id);
+    if (!point) return;
+    const labelWidth = Math.max(38, shorten(node.name, 30).length * 6.2 + 14);
+    const labelHeight = 19;
+    const candidates = [
+      { name: "north", x: -labelWidth / 2, y: -29 },
+      { name: "north-east", x: 9, y: -25 },
+      { name: "east", x: 9, y: -8 },
+      { name: "south-east", x: 9, y: 10 },
+      { name: "south", x: -labelWidth / 2, y: 10 },
+    ];
+    const placement = candidates.find((candidate) => {
+      const box = {
+        x: point.x + candidate.x,
+        y: point.y + candidate.y,
+        width: labelWidth,
+        height: labelHeight,
+      };
+      const inside = box.x >= 3 && box.y >= 3 && box.x + box.width <= width - 3 && box.y + box.height <= height - 3;
+      return inside && !occupied.some((other) => boxesIntersect(box, other));
+    });
+    if (!placement) {
+      placements.set(node.id, null);
+      return;
+    }
+    occupied.push({
+      x: point.x + placement.x,
+      y: point.y + placement.y,
+      width: labelWidth,
+      height: labelHeight,
+    });
+    placements.set(node.id, { ...placement, width: labelWidth, height: labelHeight });
+  });
+  return placements;
+}
+
+function focusInitialGraphNode() {
+  const preferred = state.graphFocusId || state.selection?.root;
+  const target = document.querySelector(`.node[data-id="${CSS.escape(preferred || "")}"]`)
+    || document.querySelector(".node");
+  if (target) focusGraphNode(target.dataset.id);
+}
+
+function focusGraphNode(nodeId) {
+  const nodes = [...document.querySelectorAll(".node")];
+  const target = nodes.find((item) => item.dataset.id === nodeId);
+  if (!target) return;
+  nodes.forEach((item) => item.setAttribute("tabindex", item === target ? "0" : "-1"));
+  state.graphFocusId = nodeId;
+  target.focus({ preventScroll: true });
+}
+
+function focusDirectionalNeighbor(nodeId, key) {
+  const origin = state.positions.get(nodeId);
+  if (!origin) return;
+  const candidates = state.selection.nodes
+    .filter((node) => node.id !== nodeId && state.positions.has(node.id))
+    .map((node) => {
+      const point = state.positions.get(node.id);
+      const dx = point.x - origin.x;
+      const dy = point.y - origin.y;
+      const allowed = key === "ArrowLeft" ? dx < 0
+        : key === "ArrowRight" ? dx > 0
+          : key === "ArrowUp" ? dy < 0
+            : dy > 0;
+      if (!allowed) return null;
+      const primary = key === "ArrowLeft" || key === "ArrowRight" ? Math.abs(dx) : Math.abs(dy);
+      const cross = key === "ArrowLeft" || key === "ArrowRight" ? Math.abs(dy) : Math.abs(dx);
+      return { id: node.id, score: Math.hypot(dx, dy) + cross * 1.5 - primary * 0.15 };
+    })
+    .filter(Boolean)
+    .sort((a, b) => a.score - b.score);
+  if (candidates.length) focusGraphNode(candidates[0].id);
+}
+
+function handleGraphNodeKeydown(event, node) {
+  if (event.key === "Enter" || event.key === " ") {
+    event.preventDefault();
+    if (node.collapsed_members) inspectCollapsedPackage(node);
+    else inspectNode(node.id);
+    return;
+  }
+  if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.key)) {
+    event.preventDefault();
+    focusDirectionalNeighbor(node.id, event.key);
+    return;
+  }
+  if (event.key === "Home") {
+    event.preventDefault();
+    focusGraphNode(state.selection.root);
+  }
+}
+
 function renderGraph() {
   $("edges").replaceChildren();
   $("nodes").replaceChildren();
@@ -1284,6 +1409,10 @@ function renderGraph() {
     if (node.id === state.selection.root) group.classList.add("root");
     group.dataset.id = node.id;
     group.dataset.platform = node.operator_platform;
+    group.setAttribute("role", "button");
+    group.setAttribute("focusable", "true");
+    group.setAttribute("tabindex", node.id === (state.graphFocusId || state.selection.root) ? "0" : "-1");
+    group.setAttribute("aria-label", `${node.name}, ${node.kind.replaceAll("_", " ")}, graph node`);
     const circle = document.createElementNS(NS, "circle");
     circle.setAttribute("r", node.id === state.selection.root ? "10" : "7");
     circle.style.fill = colors[groupFor(node.kind)];
@@ -1295,9 +1424,9 @@ function renderGraph() {
     pill.classList.add("node-label-pill");
     pill.setAttribute("x", "9");
     pill.setAttribute("y", "-8");
-    pill.setAttribute("width", String(Math.max(34, labelText.length * 5.6 + 12)));
-    pill.setAttribute("height", "17");
-    pill.setAttribute("rx", "8.5");
+    pill.setAttribute("width", String(Math.max(38, labelText.length * 6.2 + 14)));
+    pill.setAttribute("height", "19");
+    pill.setAttribute("rx", "9.5");
     const label = document.createElementNS(NS, "text");
     label.setAttribute("x", "11");
     label.setAttribute("y", "3.5");
@@ -1308,6 +1437,8 @@ function renderGraph() {
       if (node.collapsed_members) inspectCollapsedPackage(node);
       else inspectNode(node.id);
     });
+    group.addEventListener("focus", () => { state.graphFocusId = node.id; });
+    group.addEventListener("keydown", (event) => handleGraphNodeKeydown(event, node));
     group.addEventListener("pointerdown", startNodeDrag);
     $("nodes").appendChild(group);
   });
@@ -1367,6 +1498,29 @@ function updatePositions() {
     element.setAttribute("y1", source.y);
     element.setAttribute("x2", target.x);
     element.setAttribute("y2", target.y);
+  });
+  const placements = labelPlacements(
+    state.selection.nodes,
+    state.selection.edges,
+    state.positions,
+    $("graph").clientWidth,
+    $("graph").clientHeight,
+    state.selection.root,
+  );
+  document.querySelectorAll(".node").forEach((element) => {
+    const placement = placements.get(element.dataset.id);
+    const pill = element.querySelector(".node-label-pill");
+    const label = element.querySelector("text");
+    const visible = Boolean(placement);
+    pill.style.display = visible ? "" : "none";
+    label.style.display = visible ? "" : "none";
+    if (!visible) return;
+    pill.setAttribute("x", placement.x);
+    pill.setAttribute("y", placement.y);
+    pill.setAttribute("width", placement.width);
+    label.setAttribute("x", placement.x + 2);
+    label.setAttribute("y", placement.y + 13);
+    element.dataset.labelPosition = placement.name;
   });
 }
 
@@ -2670,8 +2824,11 @@ function shorten(value, limit) { return value.length > limit ? `${value.slice(0,
 function setError(error) {
   $("status-dot").classList.remove("online");
   $("status-dot").classList.add("error");
-  $("status-text").textContent = error.message;
+  setConnectionStatus(error.message);
   console.error(error);
 }
 
-initialize();
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = { boxesIntersect, labelPlacements };
+}
+if (typeof document !== "undefined") initialize();

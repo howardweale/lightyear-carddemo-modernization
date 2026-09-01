@@ -1,8 +1,19 @@
 # FactoryDark.ai CardDemo Modernization Factory
 
-Release: **v0.47.2 — Control Tower usability and transport hardening**
+Release: **v0.47.3 — Control Tower craft and accessibility correction**
 
-v0.47.2 closes the independent 1366-pixel and security review of the live Evidence Control Tower.
+v0.47.3 closes the follow-up craft and accessibility review of the live Evidence Control Tower.
+The density guard now dismisses for every reduction and full-render action. Graph labels choose
+among five collision-aware positions and disappear only when no readable placement exists, while
+their nodes remain available through tooltips and the keyboard. Roving focus, arrow-key spatial
+navigation, Enter/Space inspection, Home-to-root behavior, and visible focus make the SVG graph an
+operable interface rather than a pointer-only picture. Top controls and repeated metadata now meet
+the review's readable type sizes, and the live connection state no longer creates a permanently
+clipped visual string.
+
+Previous release: **v0.47.2 — Control Tower usability and transport hardening**
+
+v0.47.2 closed the independent 1366-pixel and security review of the live Evidence Control Tower.
 Company and business problem now live in an Estate popover while workload, technology scope, and
 lens remain in the working bar as labelled, keyboard-accessible comboboxes. The claim band labels
 its snapshot, entities, relationships, rules, and validated extensions instead of exposing debug-

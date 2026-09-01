@@ -26,6 +26,18 @@
 
 * { box-sizing: border-box; }
 
+.visually-hidden {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0, 0, 0, 0) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
+}
+
 body {
   margin: 0;
   min-width: 1180px;
@@ -452,7 +464,7 @@ h3 { font-size: 12px; font-weight: 500; letter-spacing: .08em; text-transform: u
   font: 11px/1 var(--mono);
   text-transform: none;
 }
-.status #status-text { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.status #status-text { display: none; }
 
 .operator-context {
   display: flex;
@@ -471,7 +483,7 @@ h3 { font-size: 12px; font-weight: 500; letter-spacing: .08em; text-transform: u
 .operator-context > div:nth-child(4), .operator-context > div:nth-child(5) { flex: 1; }
 .operator-context label, .context-summary, .context-badge { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .operator-context select { width: 100%; min-height: 34px; padding: 6px 9px; font-size: 12px; }
-label, .section-heading { color: var(--muted); font: 500 10px/1.3 var(--mono); letter-spacing: .1em; text-transform: uppercase; }
+label, .section-heading { color: var(--muted); font: 500 11px/1.3 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
 
 .estate-boundary.claim {
   display: flex;
@@ -711,8 +723,8 @@ button:not(:disabled):active { transform: translateY(1px); }
   display: block;
   grid-column: 1;
   color: var(--muted);
-  font: 500 8px/1.05 var(--mono);
-  letter-spacing: .08em;
+  font: 500 12px/1.05 var(--mono);
+  letter-spacing: .06em;
   text-transform: uppercase;
 }
 #estate-trigger-value, .combobox-value {
@@ -782,11 +794,11 @@ button:not(:disabled):active { transform: translateY(1px); }
 .estate-popover > header strong { display: block; margin-top: 4px; font-size: 15px; }
 .estate-popover > p { margin: 8px 0 14px; color: var(--muted); font-size: 11px; }
 .estate-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-.estate-fields label { display: block; margin-bottom: 5px; }
+.estate-fields label { display: block; margin-bottom: 5px; font-size: 12px; }
 .estate-popover .context-summary { position: static; width: auto; height: auto; margin-top: 14px; overflow: visible; clip-path: none; white-space: normal; }
-.estate-popover .context-summary strong { font-size: 11px; }
-.estate-popover .context-summary p { margin: 4px 0 0; color: var(--muted); font-size: 10px; }
-.estate-popover .context-badge { position: static; display: inline-block; width: auto; height: auto; margin-top: 12px; padding: 3px 6px; overflow: visible; color: var(--success); border: 1px solid color-mix(in srgb, var(--success) 45%, var(--border)); border-radius: 999px; clip-path: none; font: 500 8px/1.2 var(--mono); letter-spacing: .06em; text-transform: uppercase; }
+.estate-popover .context-summary strong { font-size: 12px; }
+.estate-popover .context-summary p { margin: 4px 0 0; color: var(--muted); font-size: 11px; }
+.estate-popover .context-badge { position: static; display: inline-block; width: auto; height: auto; margin-top: 12px; padding: 4px 7px; overflow: visible; color: var(--success); border: 1px solid color-mix(in srgb, var(--success) 45%, var(--border)); border-radius: 999px; clip-path: none; font: 500 11px/1.2 var(--mono); letter-spacing: .05em; text-transform: uppercase; }
 .icon-button { width: 30px; height: 30px; padding: 0; color: var(--muted); background: transparent; border: 1px solid var(--border); border-radius: 50%; cursor: pointer; font-size: 18px; }
 
 .estate-boundary.claim { gap: 12px; }
@@ -799,8 +811,8 @@ button:not(:disabled):active { transform: translateY(1px); }
   margin: 0;
 }
 .claim-metadata div { display: grid; gap: 1px; }
-.claim-metadata dt { color: var(--muted); font: 500 7px/1.1 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
-.claim-metadata dd { margin: 0; color: var(--ink); font: 500 9px/1.2 var(--mono); }
+.claim-metadata dt { color: var(--muted); font: 500 11px/1.1 var(--mono); letter-spacing: .06em; text-transform: uppercase; }
+.claim-metadata dd { margin: 0; color: var(--ink); font: 500 11px/1.2 var(--mono); }
 #metric-hash { color: var(--accent); cursor: help; }
 
 .density-guard {
@@ -812,6 +824,7 @@ button:not(:disabled):active { transform: translateY(1px); }
   padding: 80px 24px 24px;
   background: repeating-linear-gradient(135deg, rgba(247, 245, 241, .94) 0 12px, rgba(255, 255, 255, .94) 12px 24px);
 }
+.density-guard[hidden], #graph[hidden] { display: none; }
 .density-card {
   width: min(430px, 100%);
   padding: 28px;
@@ -821,15 +834,18 @@ button:not(:disabled):active { transform: translateY(1px); }
   box-shadow: var(--shadow);
   text-align: center;
 }
-.density-eyebrow { color: var(--accent); font: 600 9px/1.2 var(--mono); letter-spacing: .09em; text-transform: uppercase; }
+.density-eyebrow { color: var(--accent); font: 600 11px/1.2 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
 .density-card h2, .verifier-dialog h2 { margin: 8px 0 8px; font-size: 18px; }
 .density-card p, .verifier-dialog p { margin: 0 0 17px; color: var(--muted); font-size: 12px; }
 .density-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
 .density-actions .primary-button { grid-column: 1 / -1; }
 .density-card > .text-button { margin-top: 14px; }
 .node-label-pill { fill: rgba(255, 255, 255, .92); stroke: var(--border); stroke-width: .7px; }
-.node text { stroke: none; font-size: 9px; pointer-events: none; }
+.node text { stroke: none; font-size: 11px; pointer-events: none; }
 .node:hover .node-label-pill, .node.active .node-label-pill { fill: var(--surface); stroke: var(--accent); }
+.node:focus { outline: none; }
+.node:focus-visible .node-label-pill { fill: var(--surface); stroke: var(--accent); stroke-width: 1.5px; }
+.node:focus-visible circle { stroke: var(--accent); stroke-width: 4px; filter: drop-shadow(0 0 5px color-mix(in srgb, var(--accent) 45%, transparent)); }
 .node circle { transition: r 140ms ease, stroke-width 140ms ease; }
 .node:hover circle { r: 9px; stroke-width: 2px; }
 .action-button { grid-column: 1 / -1; }

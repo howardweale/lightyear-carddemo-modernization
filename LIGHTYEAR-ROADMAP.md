@@ -25,6 +25,7 @@ production-qualified.
 | MS #47 | Graph-Bound Live Evidence Control Tower | Complete |
 | MS #47.1 | Approved Control Tower Visual System | Complete |
 | MS #47.2 | Control Tower Usability and Transport Hardening | Complete |
+| MS #47.3 | Control Tower Craft and Accessibility Correction | Complete |
 
 The v0.35.0 stored-logic qualification core is retained as supporting MS #34 evidence. It does not
 replace the planned DB2 milestone.
@@ -181,3 +182,10 @@ labels claim metadata, stops unreadable graph hairballs at 70 nodes, collapses J
 counted nodes, and makes existing proof-run evidence the inspector's primary workload action. The
 server rejects non-loopback binds by default, verifier routes require a per-session bearer token,
 and customer deployment remains explicitly dependent on an approved SSO/OIDC reverse proxy.
+
+MS #47.3 closes the follow-up craft and accessibility review. It corrects the density guard's
+hidden-state cascade, places important graph labels through a collision-aware five-position pass,
+and preserves every graph node as a tooltip and keyboard-operable target. Roving focus, spatial
+arrow navigation, Enter/Space inspection, Home-to-root behavior, readable control metadata, and an
+accessible non-clipping live status complete the bounded browser correction without changing the
+read-only evidence or transport boundary.

@@ -1,0 +1,42 @@
+{
+  "authorization_required": true,
+  "base_catalog_sha256": "0bd7db2415ed3774c8aa2b6f432e512b0d94d26d0612df9bf5100d20fbcdecc1",
+  "bounded_corpus_sha256": "2b6d8fcaa2833bb90c39ac4feceaf7335d896dd2d9faa3cd1c74677b3df25de5",
+  "content_sha256": "c96e8f89a68e2cdfaa50e89d645f9762f5414b408f5a7c1103ed1812c1a1ca0f",
+  "native_oracle_conformance": false,
+  "native_oracle_execution_observed": false,
+  "plan_type": "lightyear-oracle-plsql-native-execution-plan",
+  "production_ready": false,
+  "release": "0.50.2",
+  "required_behavior_count": 80,
+  "required_case_count": 320,
+  "required_database_versions": [
+    "19c",
+    "26ai"
+  ],
+  "required_receipt_fields": [
+    "database_version",
+    "database_id_hash",
+    "session_settings",
+    "case_id",
+    "observed_result",
+    "observed_side_effects",
+    "observed_package_state",
+    "oracle_error",
+    "started_at",
+    "completed_at",
+    "runner_identity",
+    "content_sha256"
+  ],
+  "required_session_controls": [
+    "current_schema",
+    "current_edition",
+    "plsql_ccflags",
+    "plsql_optimize_level",
+    "nls_settings",
+    "invoker_and_definer_rights",
+    "package_state_reset"
+  ],
+  "required_topic_family_count": 16,
+  "schema_version": "1.0"
+}

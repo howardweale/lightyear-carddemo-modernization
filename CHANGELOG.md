@@ -1,5 +1,21 @@
 # Changelog
 
+## 0.50.2 — 2026-09-01
+
+- Executed all 320 governed cases for the 80 PL/SQL behavior contracts through a deterministic
+  bounded model covering 16 topic families, five behavior focuses, and four case dimensions.
+- Added concrete observations for blocks, variables, `SELECT INTO`, exceptions, raising,
+  procedures, functions, package state, cursors, bulk operations, collections, dynamic SQL,
+  triggers, and autonomous transaction boundaries.
+- Bound the tranche to the v0.50.1 core corpus and published cumulative counts of 310 catalog
+  behaviors, 1,240 catalog cases, 312 unique bounded-model behaviors, and 1,264 evidence records.
+- Added a PL/SQL native-execution plan requiring authorized 19c/26ai identities, session and
+  edition controls, result, side-effect, package-state, diagnostic, timestamp, and runner evidence.
+- Added two JSON Schemas, deterministic artifacts, CLI and cross-platform launchers, independent
+  expectation mutation tests, dependency drift checks, and rehashed overclaim rejection.
+- Kept the remaining 760 catalog cases, native Oracle conformance, target equivalence, iDempiere
+  application equivalence, CloudBank mapping, migration completion, and production readiness false.
+
 ## 0.50.1 — 2026-09-01
 
 - Executed all 920 governed cases for the 230 catalogued behaviors in the types, globalization,

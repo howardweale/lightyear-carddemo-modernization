@@ -4,7 +4,25 @@
 
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.50.1 — Oracle core SQL and datatype bounded execution**
+Release: **v0.50.2 — Oracle PL/SQL bounded execution**
+
+v0.50.2 executes 320 governed cases across all 80 PL/SQL behaviors. The tranche covers 16 topic
+families from blocks and exception propagation through package state, cursors, bulk operations,
+dynamic SQL, triggers, and autonomous transaction boundaries.
+
+Combined with v0.50.1, 1,240 catalog cases now pass across 310 behaviors. Six MS #49 bindings
+overlap the executed catalog tranches and two remain outside them, producing 312 unique bounded-
+model-verified behaviors and 1,264 separate evidence records.
+
+```bash
+PYTHONPATH=src python3 -m lightyear_data verify-oracle-plsql-coverage
+./data-modernization.sh oracle-plsql
+```
+
+Native Oracle verification and target equivalence remain zero. The next increments cover
+transactions/CDC and authorized Oracle 19c/26ai execution.
+
+Previous release: **v0.50.1 — Oracle core SQL and datatype bounded execution**
 
 v0.50.1 executes 920 governed cases across all 230 behaviors in the types, globalization,
 expressions, and queries domains. Five of the eight MS #49 bootstrap bindings overlap this tranche

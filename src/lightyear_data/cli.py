@@ -29,6 +29,11 @@ from .oracle_core_sql import (
     build_oracle_core_sql_artifacts,
     validate_oracle_core_sql_artifacts,
 )
+from .oracle_plsql import (
+    OUTPUT_ROOT as ORACLE_PLSQL_OUTPUT_ROOT,
+    build_oracle_plsql_artifacts,
+    validate_oracle_plsql_artifacts,
+)
 from .oracle_postgres_proof import (
     build_oracle_postgresql_proof,
     validate_oracle_postgresql_proof,
@@ -108,6 +113,10 @@ def parser() -> argparse.ArgumentParser:
     oracle_core_sql.add_argument("--project-root", type=Path, default=Path("."))
     verify_oracle_core_sql = commands.add_parser("verify-oracle-core-sql-coverage")
     verify_oracle_core_sql.add_argument("--project-root", type=Path, default=Path("."))
+    oracle_plsql = commands.add_parser("build-oracle-plsql-coverage")
+    oracle_plsql.add_argument("--project-root", type=Path, default=Path("."))
+    verify_oracle_plsql = commands.add_parser("verify-oracle-plsql-coverage")
+    verify_oracle_plsql.add_argument("--project-root", type=Path, default=Path("."))
     ase_source = commands.add_parser("build-sap-ase-source-adapter")
     ase_source.add_argument("--project-root", type=Path, default=Path("."))
     ase_source.add_argument("--output-root", type=Path)
@@ -347,6 +356,33 @@ def main(argv: list[str] | None = None) -> int:
             "errors": sorted(set(errors)),
             "output_root": str(output_root),
             "core_behavior_verified_count": receipt["core_behavior_verified_count"],
+            "catalog_case_verified_count": receipt["catalog_case_verified_count"],
+            "bounded_model_verified_behavior_count": receipt["bounded_model_verified_behavior_count"],
+            "remaining_catalog_case_count": receipt["remaining_catalog_case_count"],
+            "native_oracle_verified_behavior_count": 0,
+            "native_oracle_conformance": False,
+            "production_ready": False,
+        }
+    elif args.command in {"build-oracle-plsql-coverage", "verify-oracle-plsql-coverage"}:
+        project_root = args.project_root.resolve()
+        expected = build_oracle_plsql_artifacts(project_root)
+        output_root = project_root / ORACLE_PLSQL_OUTPUT_ROOT
+        errors = []
+        if args.command == "build-oracle-plsql-coverage":
+            for name, payload in expected.items():
+                if name.endswith(".json"):
+                    write_json(output_root / name, payload)
+                else:
+                    write_text(output_root / name, payload)
+        else:
+            errors.extend(validate_oracle_plsql_artifacts(project_root))
+        receipt = expected["plsql.receipt.json"]
+        result = {
+            "status": "passed" if not errors else "failed",
+            "errors": sorted(set(errors)),
+            "output_root": str(output_root),
+            "plsql_behavior_verified_count": receipt["plsql_behavior_verified_count"],
+            "plsql_case_verified_count": receipt["plsql_case_verified_count"],
             "catalog_case_verified_count": receipt["catalog_case_verified_count"],
             "bounded_model_verified_behavior_count": receipt["bounded_model_verified_behavior_count"],
             "remaining_catalog_case_count": receipt["remaining_catalog_case_count"],

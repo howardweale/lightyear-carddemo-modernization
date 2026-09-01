@@ -148,6 +148,41 @@ DEFAULT_PERSPECTIVES = [
         "root": "oracle-reference:workload:procure-to-pay",
         "depth": 1,
     },
+    {
+        "id": "cloudbank-customer-account",
+        "name": "CloudBank customer and account reference",
+        "description": "Pinned static Oracle schema, service, API, and migration-risk evidence.",
+        "root": "cloudbank-reference:workload:customer-account-management",
+        "depth": 1,
+    },
+    {
+        "id": "cloudbank-money-transfer",
+        "name": "CloudBank money transfer reference",
+        "description": "Pinned static LRA, compensation, journal, and transaction-boundary evidence.",
+        "root": "cloudbank-reference:workload:money-transfer",
+        "depth": 1,
+    },
+    {
+        "id": "cloudbank-check-processing",
+        "name": "CloudBank cheque processing reference",
+        "description": "Pinned static event-queue, delivery, authorization, and consistency evidence.",
+        "root": "cloudbank-reference:workload:check-deposit-clearance",
+        "depth": 1,
+    },
+    {
+        "id": "cloudbank-identity",
+        "name": "CloudBank identity reference",
+        "description": "Pinned static user-schema, audit-trigger, OAuth, and secret-boundary evidence.",
+        "root": "cloudbank-reference:workload:identity-service-authorization",
+        "depth": 1,
+    },
+    {
+        "id": "cloudbank-credit-score",
+        "name": "CloudBank credit score reference",
+        "description": "Pinned static nondeterminism, date, API, security, and operational evidence.",
+        "root": "cloudbank-reference:workload:credit-score-service",
+        "depth": 1,
+    },
 ]
 
 
@@ -163,6 +198,12 @@ OPERATOR_CUSTOMERS = [
         "name": "Oracle Customer (Large)",
         "evidence_class": "upstream-static-reference",
         "description": "Pinned public reference-estate evidence; no customer system is attached.",
+    },
+    {
+        "id": "cloudbank-reference",
+        "name": "CloudBank Reference Estate",
+        "evidence_class": "upstream-static-modern-oracle-reference",
+        "description": "Pinned modern Oracle reference application; no customer system or target equivalence is attached.",
     },
 ]
 
@@ -207,6 +248,41 @@ OPERATOR_PROBLEMS = [
         "name": "Procure to pay",
         "description": "Trace approved purchase orders through receipt, vendor invoicing, payment, and allocation using pinned static reference evidence.",
         "workload_ids": ["oracle-reference:workload:procure-to-pay"],
+    },
+    {
+        "id": "cloudbank-customer-account",
+        "company_id": "cloudbank-reference",
+        "name": "Customer and account platform",
+        "description": "Separate modern service behavior from Oracle schema, datatype, identity, constraint, and ORM assumptions.",
+        "workload_ids": ["cloudbank-reference:workload:customer-account-management"],
+    },
+    {
+        "id": "cloudbank-money-movement",
+        "company_id": "cloudbank-reference",
+        "name": "Money movement",
+        "description": "Preserve transfer, local transaction, LRA compensation, journal, retry, and recovery behavior.",
+        "workload_ids": ["cloudbank-reference:workload:money-transfer"],
+    },
+    {
+        "id": "cloudbank-check-processing",
+        "company_id": "cloudbank-reference",
+        "name": "Cheque processing",
+        "description": "Preserve asynchronous deposit and clearance delivery, authorization, replay, and consistency behavior.",
+        "workload_ids": ["cloudbank-reference:workload:check-deposit-clearance"],
+    },
+    {
+        "id": "cloudbank-identity-access",
+        "company_id": "cloudbank-reference",
+        "name": "Identity and access",
+        "description": "Preserve OAuth, service scope, ownership, credential, secret, user-schema, and audit behavior.",
+        "workload_ids": ["cloudbank-reference:workload:identity-service-authorization"],
+    },
+    {
+        "id": "cloudbank-credit-decision",
+        "company_id": "cloudbank-reference",
+        "name": "Credit decision services",
+        "description": "Define equivalence for nondeterministic, time-sensitive, secured, and operational service behavior.",
+        "workload_ids": ["cloudbank-reference:workload:credit-score-service"],
     },
 ]
 
@@ -259,6 +335,41 @@ OPERATOR_WORKLOADS = [
         "perspective_id": "oracle-reference-procure-to-pay",
         "recommended_scope": "database",
         "description": "Pinned static purchase-order, receipt, vendor-invoice, payment, and allocation relationships; no Oracle runtime is attached.",
+    },
+    {
+        "id": "cloudbank-reference:workload:customer-account-management",
+        "problem_id": "cloudbank-customer-account",
+        "perspective_id": "cloudbank-customer-account",
+        "recommended_scope": "database",
+        "description": "Modern account and customer services with Oracle-owned schemas and explicit target-mapping risks.",
+    },
+    {
+        "id": "cloudbank-reference:workload:money-transfer",
+        "problem_id": "cloudbank-money-movement",
+        "perspective_id": "cloudbank-money-transfer",
+        "recommended_scope": "database",
+        "description": "Oracle MicroTx LRA orchestration, local transactions, compensation, and journal behavior.",
+    },
+    {
+        "id": "cloudbank-reference:workload:check-deposit-clearance",
+        "problem_id": "cloudbank-check-processing",
+        "perspective_id": "cloudbank-check-processing",
+        "recommended_scope": "database",
+        "description": "Oracle Transactional Event Queue/JMS deposit and clearance behavior across protected services.",
+    },
+    {
+        "id": "cloudbank-reference:workload:identity-service-authorization",
+        "problem_id": "cloudbank-identity-access",
+        "perspective_id": "cloudbank-identity",
+        "recommended_scope": "database",
+        "description": "Oracle-backed user repository plus OAuth2/OIDC, JWT, scope, secret, ownership, and audit boundaries.",
+    },
+    {
+        "id": "cloudbank-reference:workload:credit-score-service",
+        "problem_id": "cloudbank-credit-decision",
+        "perspective_id": "cloudbank-credit-score",
+        "recommended_scope": "database",
+        "description": "Database-light service proving that API, security, time, nondeterminism, and operations remain in scope.",
     },
 ]
 
@@ -564,6 +675,10 @@ class GraphExplorerIndex:
             )
         else:
             limitations.append("No Oracle customer integration edges are currently projected.")
+        if "cloudbank-reference" in available_company_ids:
+            limitations.append(
+                "CloudBank is pinned static modern-Oracle reference evidence; no runtime, PostgreSQL mapping, target equivalence, or completed migration is attached."
+            )
         limitations.append("No SAP ASE customer integration edges are currently projected.")
         return {
             "companies": companies,
@@ -792,14 +907,24 @@ class GraphExplorerIndex:
         reference_fixture = any(
             bool(node.get("properties", {}).get("reference_fixture")) for node in nodes
         )
-        upstream_static_reference = any(
-            node.get("properties", {}).get("evidence_class")
-            == "upstream-static-reference"
+        upstream_classes = {
+            value
+            for node in nodes
+            if isinstance(
+                value := node.get("properties", {}).get("evidence_class"), str
+            ) and value.startswith("upstream-static")
+        }
+        cloudbank_reference = any(
+            node.get("properties", {}).get("customer_id") == "cloudbank-reference"
             for node in nodes
         )
-        if upstream_static_reference:
-            evidence_class = "upstream-static-reference"
+        if upstream_classes:
+            evidence_class = sorted(upstream_classes)[0]
             limitation = (
+                "This is a pinned modern-Oracle reference-estate path. It is not customer or runtime evidence, "
+                "and it does not prove PostgreSQL mapping, target equivalence, or migration completion."
+                if cloudbank_reference
+                else
                 "This is a pinned public reference-estate path. It is not customer evidence, "
                 "an observed Oracle transaction, or native Oracle runtime evidence."
             )

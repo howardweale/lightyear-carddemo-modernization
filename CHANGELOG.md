@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.53.0 — 2026-09-01
+
+- Pinned Oracle's official CloudBank v5 reference application at commit
+  `4f41b16d00c45503f691836fee8138010c969e86` without vendoring, building, or executing it.
+- Added a reproducible static inventory measuring 189 files, 70 Java source units, ten Maven
+  modules, ten deployable units, nine SQL files, and 62 Spring/JAX-RS endpoint annotations.
+- Added the selectable `CloudBank Reference Estate` company alongside CardDemo and Oracle Customer
+  (Large), with five business workloads and 20 curated migration-risk trace scenarios.
+- Identified Oracle Database, wallet, Transactional Event Queue, MicroTx LRA, local transaction,
+  messaging, identity, and audit-trigger coupling as governed future transformation concerns.
+- Added PostgreSQL, PostgreSQL-compatible distributed SQL, and other adapter-qualified relational
+  targets as candidate lanes while leaving target selection explicitly open.
+- Added a deterministic content-addressed graph fragment and receipt, three-fragment composite
+  estate, cross-platform launchers, documentation, and adversarial overclaim tests.
+- Kept CloudBank runtime execution, target mapping, generated refactoring, native target execution,
+  application equivalence, migration completion, and production readiness false.
+
 ## 0.52.0 — 2026-09-01
 
 - Projected the pinned Oracle reference estate into the Control Tower under the operator-facing

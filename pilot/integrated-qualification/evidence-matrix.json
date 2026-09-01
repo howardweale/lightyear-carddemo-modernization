@@ -18,12 +18,12 @@
       "required_acceptance_evidence": [
         {
           "name": "differential comparison",
-          "receipt_sha256": "f7b1a8e1948d657dc2be3e12793adc9229134fd63cb011f26df586963751a661",
+          "receipt_sha256": "e2a47d60de7346088a5b03128f28ca8564e7c6eb0a5af9a9d261819fa7e587be",
           "status": "passed-bounded-synthetic"
         },
         {
           "name": "semantic mutation suite",
-          "receipt_sha256": "f7b1a8e1948d657dc2be3e12793adc9229134fd63cb011f26df586963751a661",
+          "receipt_sha256": "e2a47d60de7346088a5b03128f28ca8564e7c6eb0a5af9a9d261819fa7e587be",
           "status": "passed-bounded-synthetic"
         }
       ],
@@ -76,12 +76,12 @@
       "required_acceptance_evidence": [
         {
           "name": "query checksums",
-          "receipt_sha256": "f7b1a8e1948d657dc2be3e12793adc9229134fd63cb011f26df586963751a661",
+          "receipt_sha256": "e2a47d60de7346088a5b03128f28ca8564e7c6eb0a5af9a9d261819fa7e587be",
           "status": "passed-bounded-synthetic"
         },
         {
           "name": "data movement and rollback rehearsal",
-          "receipt_sha256": "f7b1a8e1948d657dc2be3e12793adc9229134fd63cb011f26df586963751a661",
+          "receipt_sha256": "e2a47d60de7346088a5b03128f28ca8564e7c6eb0a5af9a9d261819fa7e587be",
           "status": "passed-bounded-synthetic"
         }
       ],
@@ -135,12 +135,12 @@
       "required_acceptance_evidence": [
         {
           "name": "bit-level differential comparison",
-          "receipt_sha256": "f7b1a8e1948d657dc2be3e12793adc9229134fd63cb011f26df586963751a661",
+          "receipt_sha256": "e2a47d60de7346088a5b03128f28ca8564e7c6eb0a5af9a9d261819fa7e587be",
           "status": "passed-bounded-synthetic"
         },
         {
           "name": "boundary mutation suite",
-          "receipt_sha256": "f7b1a8e1948d657dc2be3e12793adc9229134fd63cb011f26df586963751a661",
+          "receipt_sha256": "e2a47d60de7346088a5b03128f28ca8564e7c6eb0a5af9a9d261819fa7e587be",
           "status": "passed-bounded-synthetic"
         }
       ],
@@ -195,12 +195,12 @@
       "required_acceptance_evidence": [
         {
           "name": "condition-flow comparison",
-          "receipt_sha256": "f7b1a8e1948d657dc2be3e12793adc9229134fd63cb011f26df586963751a661",
+          "receipt_sha256": "e2a47d60de7346088a5b03128f28ca8564e7c6eb0a5af9a9d261819fa7e587be",
           "status": "passed-bounded-synthetic"
         },
         {
           "name": "restart-plan tests",
-          "receipt_sha256": "f7b1a8e1948d657dc2be3e12793adc9229134fd63cb011f26df586963751a661",
+          "receipt_sha256": "e2a47d60de7346088a5b03128f28ca8564e7c6eb0a5af9a9d261819fa7e587be",
           "status": "passed-bounded-synthetic"
         }
       ],
@@ -254,12 +254,12 @@
       "required_acceptance_evidence": [
         {
           "name": "differential comparison",
-          "receipt_sha256": "f7b1a8e1948d657dc2be3e12793adc9229134fd63cb011f26df586963751a661",
+          "receipt_sha256": "e2a47d60de7346088a5b03128f28ca8564e7c6eb0a5af9a9d261819fa7e587be",
           "status": "passed-bounded-synthetic"
         },
         {
           "name": "decimal and call-boundary mutations",
-          "receipt_sha256": "f7b1a8e1948d657dc2be3e12793adc9229134fd63cb011f26df586963751a661",
+          "receipt_sha256": "e2a47d60de7346088a5b03128f28ca8564e7c6eb0a5af9a9d261819fa7e587be",
           "status": "passed-bounded-synthetic"
         }
       ],
@@ -297,16 +297,16 @@
       "technology": "PL/I"
     }
   ],
-  "conformance_sha256": "f7b1a8e1948d657dc2be3e12793adc9229134fd63cb011f26df586963751a661",
-  "content_sha256": "47793a4bf003570b268637db607ed7a45a4c0850ccf96797c8d04030b5631d2f",
+  "conformance_sha256": "e2a47d60de7346088a5b03128f28ca8564e7c6eb0a5af9a9d261819fa7e587be",
+  "content_sha256": "6df79164a612b2de08028c3d79d33a2cb6429cfd14efaf3aabd6f3da3022730e",
   "factory_dispatch_allowed": false,
   "mainframe_equivalent": false,
   "matrix_type": "lightyear-integrated-pilot-evidence-matrix",
   "native_execution_observed": false,
   "production_ready": false,
   "schema_version": "1.0",
-  "selection_sha256": "79054aaa5a2c987fb4057469cf4b4a35fcacfe2142ee4f5c812cea47378745a4",
-  "source_graph_sha256": "7f11e5cd99a7fcb91d5ad3abfd7429761157c9f89250fe06edb05bf611ec9479",
+  "selection_sha256": "7f81564a6a74809542129c9819f865a2b62d6e367f6e010481e04c34103c328a",
+  "source_graph_sha256": "dca65ecc8983406dccd10ab786cf06b4c82f974aacdc4fd221f4ea2e619b179f",
   "statistics": {
     "acceptance_evidence_count": 10,
     "blocked_live_evidence_count": 15,
@@ -316,5 +316,5 @@
     "technology_count": 5
   },
   "wave_2_integrated_development_ready": true,
-  "work_package_sha256": "2ca8ba7ab2412e84558f9eeab0e4361e28f2f5d7d331c2d81acb172a76913aa0"
+  "work_package_sha256": "6970bc0fe784575d70c36ffb036f9f58855a1a8dff54ce5094806c91e02a0e99"
 }

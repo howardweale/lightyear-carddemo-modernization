@@ -21,13 +21,14 @@ function Run-Python { Invoke-FactoryDarkPython @args }
 $Base = Join-Path $ProjectDir "knowledge\graph.snapshot.json.gz"
 $Fragment = Join-Path $ProjectDir "extensions\pli\pli.fragment.json"
 $OracleFragment = Join-Path $ProjectDir "reference-estates\idempiere\oracle-customer-large.fragment.json"
+$CloudBankFragment = Join-Path $ProjectDir "reference-estates\cloudbank\cloudbank-reference.fragment.json"
 $Capabilities = Join-Path $ProjectDir "knowledge\capabilities\mainframe-readiness.json"
 $CanonicalDir = Join-Path $ProjectDir "knowledge\composite"
 
 function Build-Projection([string]$OutputDir) {
     New-Item -ItemType Directory -Force -Path $OutputDir | Out-Null
     Run-Python -m lightyear_knowledge_graph build-composite `
-        --base-graph $Base --fragment $Fragment --fragment $OracleFragment --capabilities $Capabilities `
+        --base-graph $Base --fragment $Fragment --fragment $OracleFragment --fragment $CloudBankFragment --capabilities $Capabilities `
         --legacy-root $LegacyRoot --modern-root $ProjectDir `
         --output (Join-Path $OutputDir "estate.snapshot.json.gz") `
         --receipt (Join-Path $OutputDir "estate.receipt.json") `
@@ -40,7 +41,7 @@ if ($Action -eq "build") {
     Build-Projection $CanonicalDir
     Run-Python -m lightyear_knowledge_graph validate-composite `
         --graph (Join-Path $CanonicalDir "estate.snapshot.json.gz") `
-        --base-graph $Base --fragment $Fragment --fragment $OracleFragment --capabilities $Capabilities `
+        --base-graph $Base --fragment $Fragment --fragment $OracleFragment --fragment $CloudBankFragment --capabilities $Capabilities `
         --evidence-pack (Join-Path $CanonicalDir "source.pack.json.gz")
     exit $LASTEXITCODE
 }
@@ -49,7 +50,7 @@ if ($Action -eq "verify") {
     Build-Projection $Generated
     Run-Python -m lightyear_knowledge_graph validate-composite `
         --graph (Join-Path $Generated "estate.snapshot.json.gz") `
-        --base-graph $Base --fragment $Fragment --fragment $OracleFragment --capabilities $Capabilities `
+        --base-graph $Base --fragment $Fragment --fragment $OracleFragment --fragment $CloudBankFragment --capabilities $Capabilities `
         --evidence-pack (Join-Path $Generated "source.pack.json.gz")
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
     Run-Python -m lightyear_knowledge_graph compare-snapshots `

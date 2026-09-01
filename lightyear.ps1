@@ -40,6 +40,8 @@ if ($Action -eq "verify") {
     & (Join-Path $ProjectDir "pli-modernization.ps1") verify
     & (Join-Path $ProjectDir "pli-build-attestation.ps1") verify
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+    & (Join-Path $ProjectDir "cloudbank-reference-estate.ps1") verify
+    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
     & (Join-Path $ProjectDir "composite-estate.ps1") verify
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
     & (Join-Path $ProjectDir "source-only-pilot.ps1") verify

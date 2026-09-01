@@ -1,0 +1,40 @@
+{
+  "base_graph": {
+    "content_sha256": "d98bd92d752f23ee19263aa0957c28ee5aac52966d1322f6a31d4a9960394dc9",
+    "graph_id": "lightyear:carddemo-modernization",
+    "schema_version": "1.1"
+  },
+  "content_sha256": "779441adce8d8b3d4ed6bb5511b7bb974740014e69173c73ca5fd9cde1e9e25e",
+  "fragment_id": "lightyear:cloudbank-modern-oracle-reference-v1",
+  "migration_complete": false,
+  "operator_estate": {
+    "id": "cloudbank-reference",
+    "name": "CloudBank Reference Estate"
+  },
+  "postgresql_mapping_complete": false,
+  "production_ready": false,
+  "receipt_type": "lightyear-cloudbank-reference-projection-build",
+  "runtime_observed": false,
+  "schema_version": "1.0",
+  "statistics": {
+    "edge_count": 20,
+    "edges_by_relation": {
+      "HAS_SCENARIO": 20
+    },
+    "external_reference_count": 0,
+    "node_count": 25,
+    "nodes_by_kind": {
+      "modernization_workload": 5,
+      "verification_scenario": 20
+    }
+  },
+  "target_equivalent": false,
+  "upstream": {
+    "commit": "4f41b16d00c45503f691836fee8138010c969e86",
+    "product": "CloudBank v5",
+    "repository": "https://github.com/oracle/microservices-backend",
+    "root_tree": "6aa92e89c783f123c4da8d7ae18108004a4f4a99",
+    "subtree": "cloudbank-v5",
+    "subtree_tree": "bd918386209f284a1ed31802555740eb34b75348"
+  }
+}

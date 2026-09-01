@@ -22,6 +22,7 @@ fi
 base="$project_dir/knowledge/graph.snapshot.json.gz"
 fragment="$project_dir/extensions/pli/pli.fragment.json"
 oracle_fragment="$project_dir/reference-estates/idempiere/oracle-customer-large.fragment.json"
+cloudbank_fragment="$project_dir/reference-estates/cloudbank/cloudbank-reference.fragment.json"
 capabilities="$project_dir/knowledge/capabilities/mainframe-readiness.json"
 canonical_dir="$project_dir/knowledge/composite"
 
@@ -31,6 +32,7 @@ build_projection() {
     --base-graph "$base" \
     --fragment "$fragment" \
     --fragment "$oracle_fragment" \
+    --fragment "$cloudbank_fragment" \
     --capabilities "$capabilities" \
     --legacy-root "$legacy_root" \
     --modern-root "$project_dir" \
@@ -48,6 +50,7 @@ if [[ "$action" == "build" ]]; then
     --base-graph "$base" \
     --fragment "$fragment" \
     --fragment "$oracle_fragment" \
+    --fragment "$cloudbank_fragment" \
     --capabilities "$capabilities" \
     --evidence-pack "$canonical_dir/source.pack.json.gz"
 elif [[ "$action" == "verify" ]]; then
@@ -59,6 +62,7 @@ elif [[ "$action" == "verify" ]]; then
     --base-graph "$base" \
     --fragment "$fragment" \
     --fragment "$oracle_fragment" \
+    --fragment "$cloudbank_fragment" \
     --capabilities "$capabilities" \
     --evidence-pack "$generated/source.pack.json.gz"
   "$LIGHTYEAR_PYTHON_BIN" -m lightyear_knowledge_graph compare-snapshots \

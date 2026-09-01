@@ -1,15 +1,15 @@
 {
   "bindings": {
-    "compatibility_ledger_sha256": "c5fa85877ad3c26a44bea21b51f0abd6f74fd3bfaabea990b4499d0ff2acc420",
-    "conformance_sha256": "f7b1a8e1948d657dc2be3e12793adc9229134fd63cb011f26df586963751a661",
-    "evidence_matrix_sha256": "47793a4bf003570b268637db607ed7a45a4c0850ccf96797c8d04030b5631d2f",
+    "compatibility_ledger_sha256": "54fe9cd1f19c46d34b5cb96045a519dd6e93822d1bb7286af276c4cb8040a5e3",
+    "conformance_sha256": "e2a47d60de7346088a5b03128f28ca8564e7c6eb0a5af9a9d261819fa7e587be",
+    "evidence_matrix_sha256": "6df79164a612b2de08028c3d79d33a2cb6429cfd14efaf3aabd6f3da3022730e",
     "manifest_sha256": "ab61a530f67e727f7f1996d88d988aeee29caba2b25e69889bf88ece5ed21011",
-    "selection_sha256": "79054aaa5a2c987fb4057469cf4b4a35fcacfe2142ee4f5c812cea47378745a4",
-    "source_graph_sha256": "7f11e5cd99a7fcb91d5ad3abfd7429761157c9f89250fe06edb05bf611ec9479",
-    "work_package_sha256": "2ca8ba7ab2412e84558f9eeab0e4361e28f2f5d7d331c2d81acb172a76913aa0"
+    "selection_sha256": "7f81564a6a74809542129c9819f865a2b62d6e367f6e010481e04c34103c328a",
+    "source_graph_sha256": "dca65ecc8983406dccd10ab786cf06b4c82f974aacdc4fd221f4ea2e619b179f",
+    "work_package_sha256": "6970bc0fe784575d70c36ffb036f9f58855a1a8dff54ce5094806c91e02a0e99"
   },
   "claim_unlocked": "LIGHTYEAR can qualify the exact six-file ACCOUNTV reference slice as a bounded integrated COBOL, PL/I, Db2, JCL, and HLASM development contract while keeping external program behavior, native execution, dispatch, mainframe equivalence, and production release blocked.",
-  "content_sha256": "644a7c438e48adcf9212a50afb58a85f694ec32bdb2da1c13b3f6920167a86c7",
+  "content_sha256": "83ca9decefd695a3ba48657468b294a0fd1d099ba9dd792f49e94a12620908d4",
   "development_ready": true,
   "factory_dispatch_allowed": false,
   "inventory": {
@@ -33,7 +33,7 @@
     {
       "evidence": {
         "selection_ready": true,
-        "selection_sha256": "79054aaa5a2c987fb4057469cf4b4a35fcacfe2142ee4f5c812cea47378745a4"
+        "selection_sha256": "7f81564a6a74809542129c9819f865a2b62d6e367f6e010481e04c34103c328a"
       },
       "gate": "governed-selection",
       "status": "passed"
@@ -41,7 +41,7 @@
     {
       "evidence": {
         "cell_count": 5,
-        "work_package_sha256": "2ca8ba7ab2412e84558f9eeab0e4361e28f2f5d7d331c2d81acb172a76913aa0"
+        "work_package_sha256": "6970bc0fe784575d70c36ffb036f9f58855a1a8dff54ce5094806c91e02a0e99"
       },
       "gate": "five-cell-work-package",
       "status": "passed"
@@ -56,7 +56,7 @@
           "jcl/ACCTPIL.jcl",
           "pli/ACCTPL1.pli"
         ],
-        "source_graph_sha256": "7f11e5cd99a7fcb91d5ad3abfd7429761157c9f89250fe06edb05bf611ec9479"
+        "source_graph_sha256": "dca65ecc8983406dccd10ab786cf06b4c82f974aacdc4fd221f4ea2e619b179f"
       },
       "gate": "source-and-graph-identity",
       "status": "passed-static"
@@ -130,7 +130,7 @@
       "evidence": {
         "blocked_case_count": 4,
         "case_count": 40,
-        "conformance_sha256": "f7b1a8e1948d657dc2be3e12793adc9229134fd63cb011f26df586963751a661",
+        "conformance_sha256": "e2a47d60de7346088a5b03128f28ca8564e7c6eb0a5af9a9d261819fa7e587be",
         "customer_source": false,
         "mutation_case_count": 4,
         "passed_case_count": 36,
@@ -143,8 +143,8 @@
     {
       "evidence": {
         "blocked_live_evidence": 15,
-        "ledger_sha256": "c5fa85877ad3c26a44bea21b51f0abd6f74fd3bfaabea990b4499d0ff2acc420",
-        "matrix_sha256": "47793a4bf003570b268637db607ed7a45a4c0850ccf96797c8d04030b5631d2f"
+        "ledger_sha256": "54fe9cd1f19c46d34b5cb96045a519dd6e93822d1bb7286af276c4cb8040a5e3",
+        "matrix_sha256": "6df79164a612b2de08028c3d79d33a2cb6429cfd14efaf3aabd6f3da3022730e"
       },
       "gate": "compatibility-policy-and-live-evidence",
       "status": "policy-and-native-evidence-required"

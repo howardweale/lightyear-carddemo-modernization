@@ -1,0 +1,224 @@
+{
+  "api_surface": {
+    "jaxrs_endpoint_annotations": 9,
+    "jaxrs_endpoint_files": [
+      "customer-helidon/src/main/java/com/example/CustomerResource.java",
+      "helidon-producer/src/main/java/com/example/helidon/producer/ProducerResource.java"
+    ],
+    "spring_endpoint_annotations": 53,
+    "spring_endpoint_files": [
+      "account/src/main/java/com/example/accounts/controller/AccountController.java",
+      "account/src/main/java/com/example/accounts/services/DepositService.java",
+      "account/src/main/java/com/example/accounts/services/WithdrawService.java",
+      "azn-server/src/main/java/oracle/obaas/aznserver/controller/DbUserRepoController.java",
+      "chatbot/src/main/java/com/example/chatbot/controller/ChatController.java",
+      "checks/src/main/java/com/example/checks/clients/AccountClient.java",
+      "creditscore/src/main/java/com/example/creditscore/controller/CreditScoreController.java",
+      "customer/src/main/java/com/example/customer/controller/CustomerController.java",
+      "testrunner/src/main/java/com/example/testrunner/controller/TestRunnerController.java",
+      "transfer/src/main/java/com/example/transfer/TransferService.java"
+    ]
+  },
+  "claim_class": "upstream-static-modern-oracle-inventory",
+  "coupling_signals": {
+    "local_transactions": {
+      "files": 4,
+      "occurrences": 12,
+      "sample_paths": [
+        "account/src/main/java/com/example/accounts/services/DepositService.java",
+        "account/src/main/java/com/example/accounts/services/WithdrawService.java",
+        "customer-helidon/pom.xml",
+        "customer-helidon/src/main/java/com/example/CustomerResource.java"
+      ]
+    },
+    "lra_distributed_transactions": {
+      "files": 6,
+      "occurrences": 22,
+      "sample_paths": [
+        "account/pom.xml",
+        "account/src/main/java/com/example/accounts/services/DepositService.java",
+        "account/src/main/java/com/example/accounts/services/WithdrawService.java",
+        "endpoint-authorization-matrix.md",
+        "transfer/pom.xml",
+        "transfer/src/main/java/com/example/transfer/TransferService.java"
+      ]
+    },
+    "messaging": {
+      "files": 23,
+      "occurrences": 149,
+      "sample_paths": [
+        "account/src/main/resources/db/changelog/controller.yaml",
+        "account/src/main/resources/db/changelog/txeventq.sql",
+        "checks/pom.xml",
+        "checks/src/main/java/com/example/checks/ChecksApplication.java",
+        "checks/src/main/java/com/example/checks/controller/CheckReceiver.java",
+        "checks/src/main/java/com/example/checks/controller/ClearanceReceiver.java",
+        "cloudbank-v5-install.md",
+        "endpoint-authorization-matrix.md",
+        "helidon-consumer/README.md",
+        "helidon-consumer/pom.xml",
+        "helidon-consumer/src/main/java/com/example/helidon/consumer/ConsumerBean.java",
+        "helidon-consumer/src/main/resources/META-INF/microprofile-config.properties"
+      ]
+    },
+    "oracle_coupling": {
+      "files": 19,
+      "occurrences": 67,
+      "sample_paths": [
+        "3-k8s_db_secrets.sh",
+        "README.md",
+        "account/pom.xml",
+        "account/src/main/resources/application.yaml",
+        "azn-server/pom.xml",
+        "azn-server/src/main/resources/application.yaml",
+        "azn-server/src/test/java/oracle/obaas/aznserver/integration/OracleIntegrationTestSupport.java",
+        "checks/pom.xml",
+        "checks/src/main/resources/application.yaml",
+        "cloudbank-v5-install.md",
+        "customer-helidon/README.md",
+        "customer-helidon/pom.xml"
+      ]
+    },
+    "security": {
+      "files": 41,
+      "occurrences": 398,
+      "sample_paths": [
+        "4-deploy_all_services.sh",
+        "5-apisix_create_routes.sh",
+        "6-smoke_test_secure_services.sh",
+        "7-smoke_test_microtx_jwt.sh",
+        "7-test_all_services.sh",
+        "README.md",
+        "account/src/main/java/com/example/accounts/controller/AccountController.java",
+        "azn-server/pom.xml",
+        "azn-server/src/main/java/oracle/obaas/aznserver/securityconfig/SecurityConfig.java",
+        "azn-server/src/main/resources/db/changelog/table.sql",
+        "azn-server/src/test/java/oracle/obaas/aznserver/integration/AuthorizationServerIT.java",
+        "azn-server/src/test/java/oracle/obaas/aznserver/securityconfig/SecurityConfigTest.java"
+      ]
+    }
+  },
+  "database_surface": {
+    "ddl_objects": {
+      "sequence": [],
+      "table": [
+        "ACCOUNT.ACCOUNTS",
+        "ACCOUNT.JOURNAL",
+        "CUSTOMER",
+        "CUSTOMER.CUSTOMERS",
+        "USER_REPO.USERS"
+      ],
+      "trigger": [
+        "\"USER_REPO\".\"AUDIT_TRG\""
+      ],
+      "type": []
+    },
+    "sql_paths": [
+      "account/src/main/resources/db/changelog/data.sql",
+      "account/src/main/resources/db/changelog/table.sql",
+      "account/src/main/resources/db/changelog/txeventq.sql",
+      "azn-server/src/main/resources/db/changelog/dbuser.sql",
+      "azn-server/src/main/resources/db/changelog/table.sql",
+      "azn-server/src/main/resources/db/changelog/trigger.sql",
+      "customer-helidon/src/main/resources/META-INF/init-script.sql",
+      "customer/src/main/resources/db/changelog/data.sql",
+      "customer/src/main/resources/db/changelog/table.sql"
+    ]
+  },
+  "estate": {
+    "deployable_unit_count": 10,
+    "deployable_units": [
+      "account",
+      "azn-server",
+      "checks",
+      "creditscore",
+      "customer",
+      "customer-helidon",
+      "helidon-consumer",
+      "helidon-producer",
+      "testrunner",
+      "transfer"
+    ],
+    "extension_counts": {
+      ".imports": 1,
+      ".java": 70,
+      ".manual": 3,
+      ".md": 7,
+      ".png": 5,
+      ".properties": 9,
+      ".sh": 19,
+      ".sql": 9,
+      ".txt": 8,
+      ".xml": 25,
+      ".yaml": 24,
+      "[none]": 9
+    },
+    "helm_values_files": 10,
+    "java_source_lines": 6711,
+    "java_source_units": 70,
+    "main_java_source_units": 52,
+    "maven_module_count": 10,
+    "maven_modules": [
+      "account",
+      "azn-server",
+      "buildtools",
+      "chatbot",
+      "checks",
+      "common",
+      "creditscore",
+      "customer",
+      "testrunner",
+      "transfer"
+    ],
+    "maven_pom_files": 14,
+    "root_operational_script_count": 9,
+    "root_operational_scripts": [
+      "1-oci_repos.sh",
+      "2-images_build_push.sh",
+      "3-k8s_db_secrets.sh",
+      "4-deploy_all_services.sh",
+      "5-apisix_create_routes.sh",
+      "6-smoke_test_secure_services.sh",
+      "7-smoke_test_microtx_jwt.sh",
+      "7-test_all_services.sh",
+      "check_prereqs.sh"
+    ],
+    "runtime_service_module_count": 8,
+    "runtime_service_modules": [
+      "account",
+      "azn-server",
+      "chatbot",
+      "checks",
+      "creditscore",
+      "customer",
+      "testrunner",
+      "transfer"
+    ],
+    "sql_files": 9,
+    "sql_source_lines": 231,
+    "test_java_source_units": 18,
+    "tracked_files": 189
+  },
+  "inventory_method": {
+    "database_scope": "DDL objects and Oracle-specific dependency/configuration signals in tracked source",
+    "endpoint_scope": "Spring mapping and JAX-RS verb annotations in tracked Java source",
+    "not_included": [
+      "compiled dependency bytecode",
+      "runtime database metadata",
+      "executed API traces",
+      "observed transaction outcomes",
+      "PostgreSQL compatibility or target equivalence"
+    ],
+    "scope": "tracked files under the pinned cloudbank-v5 subtree"
+  },
+  "schema_version": "1.0",
+  "source": {
+    "branch": "main",
+    "commit": "4f41b16d00c45503f691836fee8138010c969e86",
+    "commit_time": "2026-08-26T10:43:02-05:00",
+    "repository": "https://github.com/oracle/microservices-backend",
+    "root_tree": "6aa92e89c783f123c4da8d7ae18108004a4f4a99",
+    "subtree": "cloudbank-v5",
+    "subtree_tree": "bd918386209f284a1ed31802555740eb34b75348"
+  }
+}

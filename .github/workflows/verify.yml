@@ -99,6 +99,12 @@ jobs:
           git -c core.autocrlf=false -c core.eol=lf clone --filter=blob:none --no-checkout https://github.com/aws-samples/aws-mainframe-modernization-carddemo.git ../carddemo-upstream
           git -C ../carddemo-upstream -c core.autocrlf=false -c core.eol=lf checkout --detach 59cc6c2fd7ebd7ef7925cad552a01a4b8b6e4d5e
 
+      - name: Check out pinned CloudBank source
+        shell: bash
+        run: |
+          git -c core.autocrlf=false -c core.eol=lf clone --filter=blob:none --no-checkout https://github.com/oracle/microservices-backend.git ../cloudbank-upstream
+          git -C ../cloudbank-upstream -c core.autocrlf=false -c core.eol=lf checkout --detach 4f41b16d00c45503f691836fee8138010c969e86
+
       - name: Set up Python
         uses: actions/setup-python@v7
         with:
@@ -111,6 +117,15 @@ jobs:
           java-version: "17"
           cache: maven
           cache-dependency-path: candidate-java/pom.xml
+
+      - name: Verify pinned CloudBank inventory
+        if: runner.os == 'Linux'
+        run: ./cloudbank-reference-estate.sh verify-inventory ../cloudbank-upstream
+
+      - name: Verify pinned CloudBank inventory (Windows)
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: .\cloudbank-reference-estate.ps1 verify-inventory ..\cloudbank-upstream
 
       - name: Run unit and differential verification
         if: runner.os == 'Linux'

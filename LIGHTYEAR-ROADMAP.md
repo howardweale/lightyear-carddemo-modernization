@@ -32,7 +32,7 @@ production-qualified.
 | MS #47.3 | Control Tower Craft and Accessibility Correction | Complete |
 | MS #48 | iDempiere Oracle Reference Estate Inventory | Complete |
 | MS #49 | Oracle Dialect Authority Corpus and Executable Fixtures | Complete |
-| MS #50 | Oracle Semantic Coverage Program | Foundation complete; execution increments pending |
+| MS #50 | Oracle Semantic Coverage Program | Core SQL/type tranche complete; PL/SQL, transaction, and native increments pending |
 
 The v0.35.0 stored-logic qualification core is retained as supporting MS #34 evidence. It does not
 replace the planned DB2 milestone.
@@ -242,7 +242,7 @@ migration completion, and production readiness remain false.
 MS #50 corrects the coverage posture exposed by MS #49. Eight fixtures and 24 cases prove that the
 acquisition, local execution, native-harness generation, and receipt mechanisms work; they do not
 constitute broad Oracle support. Release 0.50.0 establishes the program contract before expanding
-execution.
+execution; release 0.50.1 delivers the first broad, bounded-model execution tranche.
 
 The governed catalog contains 500 behavior contracts and 2,000 case specifications across ten
 domains: types, globalization, expressions, queries, DML/DDL, transactions, PL/SQL, schema objects,
@@ -250,13 +250,14 @@ structured data, and operations. Every behavior has a stable ID, Oracle document
 an Oracle Database 19c baseline, an Oracle AI Database 26ai delta, and four required case
 dimensions. The existing eight MS #49 fixtures are bound to exact behavior IDs.
 
-Coverage is always published as an evidence ladder. The current counts are 500 catalogued behaviors,
-eight bounded-model-verified behaviors, zero native-Oracle-verified behaviors, and zero target-
-equivalent behaviors. The 2,000 case specifications are planned verification obligations; only the
-24 bootstrap cases have executed. Catalogued does not mean supported, bounded-model evidence does
-not mean native conformance, and native conformance does not by itself prove target equivalence.
+Coverage is always published as an evidence ladder. Release 0.50.1 executes all 920 governed cases
+for 230 behaviors across types, globalization, expressions, and queries. Five of the eight MS #49
+bootstrap behavior bindings overlap that tranche and three sit outside it, producing 233 unique
+bounded-model-verified behaviors and 944 bounded evidence records. The remaining 1,080 catalog
+cases have not executed. Catalogued does not mean supported, bounded-model evidence does not mean
+native conformance, and native conformance does not by itself prove target equivalence.
 
-Later 0.50.x increments implement core SQL/type cases, PL/SQL cases, transaction/CDC cases, and
-authorized Oracle 19c/26ai native execution. iDempiere Control Tower projection and CloudBank
-mapping follow this program rather than preceding it. Native Oracle conformance, application
-equivalence, migration completion, and production readiness remain false.
+Later 0.50.x increments implement PL/SQL cases, transaction/CDC cases, and authorized Oracle
+19c/26ai native execution. iDempiere Control Tower projection and CloudBank mapping follow this
+program rather than preceding it. Native Oracle conformance, application equivalence, migration
+completion, and production readiness remain false.

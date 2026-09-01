@@ -1,0 +1,31 @@
+{
+  "authorization_required": true,
+  "base_catalog_sha256": "0bd7db2415ed3774c8aa2b6f432e512b0d94d26d0612df9bf5100d20fbcdecc1",
+  "bounded_corpus_sha256": "50071e011d29b53b139fe274dcf0f01050253be930945bb4017ac7a64fa9b540",
+  "content_sha256": "f2dbc277f4dba2c92cddf3c76e893a1a32fe2bb7781ea59794d11e541638f835",
+  "native_oracle_conformance": false,
+  "native_oracle_execution_observed": false,
+  "plan_type": "lightyear-oracle-core-sql-native-execution-plan",
+  "production_ready": false,
+  "release": "0.50.1",
+  "required_behavior_count": 230,
+  "required_case_count": 920,
+  "required_database_versions": [
+    "19c",
+    "26ai"
+  ],
+  "required_receipt_fields": [
+    "database_version",
+    "database_id_hash",
+    "session_settings",
+    "case_id",
+    "observed",
+    "oracle_error",
+    "started_at",
+    "completed_at",
+    "runner_identity",
+    "content_sha256"
+  ],
+  "required_topic_family_count": 46,
+  "schema_version": "1.0"
+}

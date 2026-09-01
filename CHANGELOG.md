@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.50.1 — 2026-09-01
+
+- Executed all 920 governed cases for the 230 catalogued behaviors in the types, globalization,
+  expressions, and queries domains through a deterministic bounded Oracle model.
+- Covered 46 topic families, five behavior focuses per topic, and four case dimensions per
+  behavior with separately declared expectations and independently computed observations.
+- Added an aggregate receipt that deduplicates five overlapping MS #49 bootstrap bindings and
+  reports 233 unique bounded-model-verified behaviors, 920 catalog cases passed, and 944 total
+  bounded evidence records.
+- Added a native-execution plan requiring authorized 19c and 26ai identities, session settings,
+  per-case observations, diagnostics, timestamps, runner identity, and sealed receipts.
+- Added two JSON Schemas, deterministic artifacts, CLI and cross-platform launchers, mutation tests,
+  drift detection, and fail-closed native/equivalence claim checks.
+- Kept the remaining 1,080 catalog cases, native Oracle execution and conformance, target
+  equivalence, iDempiere application equivalence, CloudBank mapping, migration completion, and
+  production readiness false.
+
 ## 0.50.0 — 2026-09-01
 
 - Reclassified the MS #49 eight-fixture, 24-case set as bootstrap evidence rather than a credible

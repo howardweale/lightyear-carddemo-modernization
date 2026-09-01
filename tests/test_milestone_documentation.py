@@ -82,7 +82,32 @@ class MilestoneDocumentationTests(unittest.TestCase):
     def test_brand_assets_are_consistent_across_surfaces(self) -> None:
         canonical = ROOT / "brand" / "assets" / "lightyear-primary.svg"
         viewer = ROOT / "knowledge" / "viewer" / "assets" / "lightyear-primary.svg"
+        website = ROOT / "docs" / "assets" / "lightyear-primary.svg"
+        reversed_logo = ROOT / "brand" / "assets" / "lightyear-reversed.svg"
+        published_reversed = DOC_ROOT / "assets" / "lightyear-reversed.svg"
         self.assertEqual(canonical.read_bytes(), viewer.read_bytes())
+        self.assertEqual(canonical.read_bytes(), website.read_bytes())
+        self.assertEqual(reversed_logo.read_bytes(), published_reversed.read_bytes())
+        for stem in (
+            "lightyear-primary",
+            "lightyear-reversed",
+            "lightyear-icon",
+            "lightyear-horizontal",
+            "lightyear-horizontal-reversed",
+        ):
+            svg = ROOT / "brand" / "assets" / f"{stem}.svg"
+            png = ROOT / "brand" / "assets" / f"{stem}.png"
+            self.assertGreater(svg.stat().st_size, 200, svg)
+            self.assertGreater(png.stat().st_size, 2_000, png)
+        self.assertGreater((ROOT / "brand" / "Lightyear-Deck-Template.pptx").stat().st_size, 30_000)
+        for foundation in (
+            "LIGHTYEAR-Investor-Foundation.pptx",
+            "LIGHTYEAR-Developer-Architecture-Foundation.pptx",
+        ):
+            self.assertGreater(
+                (ROOT / "brand" / "foundation" / foundation).stat().st_size,
+                10_000_000,
+            )
         tokens = json.loads((ROOT / "brand" / "tokens.json").read_text(encoding="utf-8"))
         self.assertEqual("#15184D", tokens["colors"]["navy"])
         self.assertEqual("#7D57EA", tokens["colors"]["violet"])

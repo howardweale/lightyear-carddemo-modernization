@@ -32,7 +32,7 @@ production-qualified.
 | MS #47.3 | Control Tower Craft and Accessibility Correction | Complete |
 | MS #48 | iDempiere Oracle Reference Estate Inventory | Complete |
 | MS #49 | Oracle Dialect Authority Corpus and Executable Fixtures | Complete |
-| MS #50 | Oracle Semantic Coverage Program | Core SQL/type, PL/SQL, and transaction/CDC tranches complete; schema/data and native increments pending |
+| MS #50 | Oracle Semantic Coverage Program | Bounded catalog execution complete; native Oracle increment pending |
 
 The v0.35.0 stored-logic qualification core is retained as supporting MS #34 evidence. It does not
 replace the planned DB2 milestone.
@@ -243,8 +243,9 @@ MS #50 corrects the coverage posture exposed by MS #49. Eight fixtures and 24 ca
 acquisition, local execution, native-harness generation, and receipt mechanisms work; they do not
 constitute broad Oracle support. Release 0.50.0 establishes the program contract before expanding
 execution; release 0.50.1 delivers the first broad, bounded-model execution tranche, release
-0.50.2 adds the complete governed PL/SQL tranche, and release 0.50.3 adds the complete transaction
-and operations tranche.
+0.50.2 adds the complete governed PL/SQL tranche, release 0.50.3 adds the complete transaction and
+operations tranche, and release 0.50.4 completes bounded execution of the governed catalog with
+the schema/DML, schema-object, and structured-data tranche.
 
 The governed catalog contains 500 behavior contracts and 2,000 case specifications across ten
 domains: types, globalization, expressions, queries, DML/DDL, transactions, PL/SQL, schema objects,
@@ -258,13 +259,21 @@ all 320 governed cases for 80 PL/SQL behaviors, including package state, cursors
 dynamic SQL, triggers, and autonomous transaction boundaries. Release 0.50.3 executes all 280
 governed cases for 70 transaction and operations behaviors, including isolation, locking,
 deadlocks, redo/LogMiner capture, metadata visibility, session state, privileges, and diagnostics.
-The cumulative catalog result is 380 behaviors and 1,520 cases. Seven of the eight MS #49 bootstrap
-bindings now overlap executed catalog tranches and the LOB binding remains outside them, producing
-381 unique bounded-model-verified behaviors and 1,544 bounded evidence records. The remaining 480
-catalog cases have not executed. Catalogued does not mean supported, bounded-model evidence does
-not mean native conformance, and native conformance does not by itself prove target equivalence.
+Release 0.50.4 executes all 480 governed cases for the final 120 schema/DML, schema-object, and
+structured-data behaviors, covering DML state changes, schema evolution, views, sequences,
+partitioning, materialized views, editions, LOBs, SecureFiles, JSON, XMLType, and object types.
 
-Later 0.50.x increments implement the remaining schema/DML, schema-object, and structured-data
-cases, followed by authorized Oracle 19c/26ai native execution. iDempiere Control Tower projection
-and CloudBank mapping follow this program rather than preceding it. Native Oracle conformance,
-application equivalence, migration completion, and production readiness remain false.
+The cumulative bounded-catalog result is all 500 behaviors and all 2,000 cases across 100 topic
+families. All eight MS #49 bootstrap bindings now overlap executed catalog tranches. The
+deduplicated result is 500 unique bounded-model-verified behaviors—not 508.
+It contains 2,024 bounded evidence records after retaining the 24 bootstrap runs separately.
+No governed catalog cases remain unexecuted. Catalogued does not mean supported, bounded-model
+evidence does not mean native conformance, and native conformance does not by itself prove target
+equivalence.
+
+The next authorized increment is Oracle 19c/26ai native execution. Physical index and partition
+behavior, materialized-view refresh, edition visibility, SecureFiles and LOB locator semantics,
+native JSON/XML/object behavior, and the 19c-to-26ai JSON datatype delta remain bounded until that
+evidence exists. iDempiere Control Tower projection and CloudBank mapping follow this program
+rather than preceding it. Native Oracle conformance, application equivalence, migration
+completion, and production readiness remain false.

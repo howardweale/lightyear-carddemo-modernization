@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.50.3 — 2026-09-01
+
+- Executed all 280 governed cases for 70 behavior contracts in the transactions and operations
+  domains through a deterministic bounded model spanning 14 topic families.
+- Added concrete observations for commit, rollback, savepoints, read committed, serializable and
+  read-only snapshots, row and table locks, deadlocks, redo/LogMiner capture, dictionary visibility,
+  session state, privileges, and Oracle diagnostic identity.
+- Bound the tranche to the v0.50.2 PL/SQL receipt and published cumulative counts of 380 catalog
+  behaviors, 1,520 catalog cases, 381 unique bounded-model behaviors, and 1,544 evidence records.
+- Added a native-execution plan requiring authorized 19c/26ai identities, controlled multi-session
+  schedules, isolation and lock observations, SCN/redo coordinates, LogMiner options, privilege
+  context, error stacks, timestamps, runner identity, and sealed receipts.
+- Added two JSON Schemas, deterministic artifacts, CLI and cross-platform launchers, independent
+  policy and diagnostic mutation tests, dependency drift checks, and rehashed overclaim rejection.
+- Kept the remaining 480 catalog cases, live concurrency/redo/privilege claims, native Oracle
+  conformance, target equivalence, iDempiere application equivalence, CloudBank mapping, migration
+  completion, and production readiness false.
+
 ## 0.50.2 — 2026-09-01
 
 - Executed all 320 governed cases for the 80 PL/SQL behavior contracts through a deterministic

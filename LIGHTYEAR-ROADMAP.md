@@ -32,7 +32,7 @@ production-qualified.
 | MS #47.3 | Control Tower Craft and Accessibility Correction | Complete |
 | MS #48 | iDempiere Oracle Reference Estate Inventory | Complete |
 | MS #49 | Oracle Dialect Authority Corpus and Executable Fixtures | Complete |
-| MS #50 | Oracle Semantic Coverage Program | Core SQL/type and PL/SQL tranches complete; transaction and native increments pending |
+| MS #50 | Oracle Semantic Coverage Program | Core SQL/type, PL/SQL, and transaction/CDC tranches complete; schema/data and native increments pending |
 
 The v0.35.0 stored-logic qualification core is retained as supporting MS #34 evidence. It does not
 replace the planned DB2 milestone.
@@ -242,8 +242,9 @@ migration completion, and production readiness remain false.
 MS #50 corrects the coverage posture exposed by MS #49. Eight fixtures and 24 cases prove that the
 acquisition, local execution, native-harness generation, and receipt mechanisms work; they do not
 constitute broad Oracle support. Release 0.50.0 establishes the program contract before expanding
-execution; release 0.50.1 delivers the first broad, bounded-model execution tranche and release
-0.50.2 adds the complete governed PL/SQL tranche.
+execution; release 0.50.1 delivers the first broad, bounded-model execution tranche, release
+0.50.2 adds the complete governed PL/SQL tranche, and release 0.50.3 adds the complete transaction
+and operations tranche.
 
 The governed catalog contains 500 behavior contracts and 2,000 case specifications across ten
 domains: types, globalization, expressions, queries, DML/DDL, transactions, PL/SQL, schema objects,
@@ -254,14 +255,16 @@ dimensions. The existing eight MS #49 fixtures are bound to exact behavior IDs.
 Coverage is always published as an evidence ladder. Release 0.50.1 executes all 920 governed cases
 for 230 behaviors across types, globalization, expressions, and queries. Release 0.50.2 executes
 all 320 governed cases for 80 PL/SQL behaviors, including package state, cursors, bulk operations,
-dynamic SQL, triggers, and autonomous transaction boundaries. The cumulative catalog result is
-310 behaviors and 1,240 cases. Six of the eight MS #49 bootstrap bindings now overlap the executed
-catalog tranches and two sit outside them, producing 312 unique bounded-model-verified behaviors
-and 1,264 bounded evidence records. The remaining 760 catalog cases have not executed. Catalogued
-does not mean supported, bounded-model evidence does not mean native conformance, and native
-conformance does not by itself prove target equivalence.
+dynamic SQL, triggers, and autonomous transaction boundaries. Release 0.50.3 executes all 280
+governed cases for 70 transaction and operations behaviors, including isolation, locking,
+deadlocks, redo/LogMiner capture, metadata visibility, session state, privileges, and diagnostics.
+The cumulative catalog result is 380 behaviors and 1,520 cases. Seven of the eight MS #49 bootstrap
+bindings now overlap executed catalog tranches and the LOB binding remains outside them, producing
+381 unique bounded-model-verified behaviors and 1,544 bounded evidence records. The remaining 480
+catalog cases have not executed. Catalogued does not mean supported, bounded-model evidence does
+not mean native conformance, and native conformance does not by itself prove target equivalence.
 
-Later 0.50.x increments implement transaction/CDC cases and authorized Oracle 19c/26ai native
-execution. iDempiere Control Tower projection and CloudBank mapping follow this program rather than
-preceding it. Native Oracle conformance, application equivalence, migration completion, and
-production readiness remain false.
+Later 0.50.x increments implement the remaining schema/DML, schema-object, and structured-data
+cases, followed by authorized Oracle 19c/26ai native execution. iDempiere Control Tower projection
+and CloudBank mapping follow this program rather than preceding it. Native Oracle conformance,
+application equivalence, migration completion, and production readiness remain false.

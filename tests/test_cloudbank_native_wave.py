@@ -117,6 +117,7 @@ class CloudBankNativeWaveTests(unittest.TestCase):
         self.assertNotIn("password123", transfer_security)
         self.assertIn("HttpStatusCodeException", transfer_service)
         self.assertIn("exception.getStatusCode()", transfer_service)
+        self.assertIn("@Autowired\n    public TransferService", transfer_service)
 
     @patch("lightyear_data.cloudbank_native_wave.validate_ms59_receipt", return_value=[])
     @patch("lightyear_data.cloudbank_native_wave.validate_source", return_value=[])
@@ -198,6 +199,8 @@ class CloudBankNativeWaveTests(unittest.TestCase):
             workflow,
         )
         self.assertIn("mvn -pl account,transfer -am -DskipTests package", workflow)
+        self.assertIn("java -jar transfer/target/transfer-0.0.1-SNAPSHOT.jar", workflow)
+        self.assertIn("/actuator/health", workflow)
 
 
 if __name__ == "__main__":

@@ -55,6 +55,47 @@ jobs:
           (
             cd work/cloudbank-native-wave-ci
             mvn -pl account,transfer -am -DskipTests package
+            transfer_log="${RUNNER_TEMP}/cloudbank-ms60-transfer.log"
+            transfer_pid=""
+            cleanup_transfer() {
+              if [[ -n "$transfer_pid" ]]; then
+                kill "$transfer_pid" 2>/dev/null || true
+                wait "$transfer_pid" 2>/dev/null || true
+              fi
+            }
+            trap cleanup_transfer EXIT
+            env \
+              SPRING_PROFILES_ACTIVE=cloudbank-wave \
+              SERVER_ADDRESS=127.0.0.1 \
+              SERVER_PORT=18082 \
+              EUREKA_CLIENT_ENABLED=false \
+              SPRING_CLOUD_DISCOVERY_ENABLED=false \
+              SPRING_CLOUD_CONFIG_ENABLED=false \
+              CLOUDBANK_TRANSACTION_INTERNAL_TOKEN=ci-synthetic-token \
+              CLOUDBANK_WAVE_USER_PASSWORD=ci-synthetic-password \
+              ACCOUNT_TRANSACTION_URL=http://127.0.0.1:18081/api/v1/transfers \
+              java -jar transfer/target/transfer-0.0.1-SNAPSHOT.jar \
+              >"$transfer_log" 2>&1 &
+            transfer_pid=$!
+            transfer_healthy=false
+            for _ in {1..60}; do
+              if curl --fail --silent http://127.0.0.1:18082/actuator/health >/dev/null; then
+                transfer_healthy=true
+                break
+              fi
+              if ! kill -0 "$transfer_pid" 2>/dev/null; then
+                tail -120 "$transfer_log"
+                exit 1
+              fi
+              sleep 1
+            done
+            if [[ "$transfer_healthy" != true ]]; then
+              tail -120 "$transfer_log"
+              exit 1
+            fi
+            cleanup_transfer
+            transfer_pid=""
+            trap - EXIT
           )
 
       - name: Publish bounded CI build receipt

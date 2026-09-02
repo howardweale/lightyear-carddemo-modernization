@@ -1,10 +1,10 @@
 {
   "bindings": {
-    "acceptance_contract_sha256": "d28927b0c4dac1d89f843dfe8b708aec0a73800608fe336d2e8b58ba81536dfa",
+    "acceptance_contract_sha256": "34fdbd63fc20fe76a63f7dab6095de38d22b0c86cce6c5004a8399555903d792",
     "compatibility_ledger_sha256": "2c5e12ea73510280db720ab84df32548cf723371fa88db8cd3ce573abc7594a6",
-    "execution_plan_sha256": "4b8ba060a6598ad0a12dd9113562c4dab2f32a1fbf14d024ee003d01b24703b1"
+    "execution_plan_sha256": "7ccf449e3e5fe8b6389af54801ce9ccdf27b47ecb21e2fc42599bdecc74d0844"
   },
-  "content_sha256": "19b7cd7c6278d66651854938c152473d10e316a3abd138db1a0d7246d29b7244",
+  "content_sha256": "3362e34c233a1562e459cdaab6e658c5c82ece099f72a1db23047390abfc7cd5",
   "gate_status": "ready-for-signed-ms59-and-native-integrated-run",
   "integrated_target_generated": true,
   "migration_complete": false,

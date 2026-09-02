@@ -1,3 +1,6 @@
+// Copyright (c) 2023, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0.
+
 package com.example.accounts.services;
 
 import java.util.Optional;
@@ -18,6 +21,9 @@ public class TransactionCoreService {
     private final JournalRepository journals;
     private final TransferCommandRepository commands;
 
+    /**
+     * Creates the service with repositories participating in the local transaction.
+     */
     public TransactionCoreService(AccountRepository accounts, JournalRepository journals,
             TransferCommandRepository commands) {
         this.accounts = accounts;
@@ -25,6 +31,9 @@ public class TransactionCoreService {
         this.commands = commands;
     }
 
+    /**
+     * Moves value atomically and records its durable idempotency and journal evidence.
+     */
     @Transactional
     public TransferResult transfer(String commandId, long sourceId, long targetId,
             long amount, String actor, boolean injectFailureAfterDebit) {

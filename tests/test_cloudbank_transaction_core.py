@@ -140,6 +140,40 @@ class CloudBankTransactionCoreTests(unittest.TestCase):
         self.assertNotIn("microtx", transfer_pom.lower())
         self.assertNotIn("@LRA", transfer_java)
 
+    def test_java_templates_meet_upstream_header_and_javadoc_contract(self) -> None:
+        patches = ROOT / OUTPUT_ROOT / "patches"
+        java_templates = sorted(patches.glob("*.java"))
+        expected_header = (
+            "// Copyright (c) 2023, Oracle and/or its affiliates.\n"
+            "// Licensed under the Universal Permissive License v 1.0.\n"
+        )
+        self.assertEqual(8, len(java_templates))
+        for template in java_templates:
+            self.assertTrue(
+                template.read_text(encoding="utf-8").startswith(expected_header),
+                template.name,
+            )
+
+        public_apis = {
+            "TransactionCoreController.java": ["public ResponseEntity<TransferResult> transfer("],
+            "TransferCommand.java": ["public TransferCommand("],
+            "TransactionCoreService.java": [
+                "public TransactionCoreService(",
+                "public TransferResult transfer(",
+            ],
+            "TransferService.java": [
+                "public TransferService(",
+                "public ResponseEntity<String> ping(",
+                "public ResponseEntity<String> transfer(",
+            ],
+        }
+        for name, markers in public_apis.items():
+            content = (patches / name).read_text(encoding="utf-8")
+            for marker in markers:
+                method_start = content.index(marker)
+                prefix = content[max(0, method_start - 300) : method_start]
+                self.assertGreater(prefix.rfind("/**"), prefix.rfind("}"), marker)
+
     @patch("lightyear_data.cloudbank_transaction_core._validate_patch_sources", return_value=[])
     @patch("lightyear_data.cloudbank_transaction_core.materialize_target")
     @patch("lightyear_data.cloudbank_transaction_core._native_postgresql_lane")

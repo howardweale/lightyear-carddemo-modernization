@@ -28,6 +28,9 @@ public class TransferService {
     private final URI transactionUri;
     private final String internalToken;
 
+    /**
+     * Creates the HTTP facade used to submit authenticated account transfers.
+     */
     public TransferService(RestTemplateBuilder builder,
             @Value("${account.transaction.url}") URI transactionUri,
             @Value("${cloudbank.transaction.internal-token}") String internalToken) {
@@ -40,11 +43,17 @@ public class TransferService {
         this.internalToken = internalToken;
     }
 
+    /**
+     * Reports that the transfer facade is reachable.
+     */
     @GetMapping("/hello")
     public ResponseEntity<String> ping() {
         return ResponseEntity.ok("");
     }
 
+    /**
+     * Validates and forwards one transfer request to the Account transaction core.
+     */
     @PostMapping("/transfer")
     public ResponseEntity<String> transfer(
             @RequestParam("fromAccount") long fromAccount,

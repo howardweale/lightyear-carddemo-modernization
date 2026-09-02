@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schemas/cloudbank/transaction-wave-readiness.schema.json",
+  "title": "CloudBank transaction-wave readiness",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "receipt_type",
+    "release",
+    "source",
+    "bindings",
+    "gate_status",
+    "whole_application_inventory_complete",
+    "whole_application_plan_complete",
+    "transaction_wave_source_pinned",
+    "transaction_wave_mapping_complete",
+    "native_transaction_wave_observed",
+    "whole_application_equivalent",
+    "migration_complete",
+    "production_ready",
+    "content_sha256"
+  ],
+  "properties": {
+    "receipt_type": {"const": "lightyear-cloudbank-transaction-wave-readiness"},
+    "release": {"const": "0.58.0"},
+    "gate_status": {"const": "ready-for-signed-admission-not-native-execution"},
+    "whole_application_inventory_complete": {"const": true},
+    "whole_application_plan_complete": {"const": true},
+    "native_transaction_wave_observed": {"const": false},
+    "whole_application_equivalent": {"const": false},
+    "migration_complete": {"const": false},
+    "production_ready": {"const": false},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

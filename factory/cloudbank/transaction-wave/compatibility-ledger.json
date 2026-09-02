@@ -1,0 +1,46 @@
+{
+  "content_sha256": "940b2f23908102342d988542f7c21f9e6693b8116167c50e4dab59f7f9580492",
+  "entries": [
+    {
+      "capability": "account-and-journal-ddl",
+      "category": "schema",
+      "exit_gate": "native-postgresql-ddl",
+      "status": "mapped-static"
+    },
+    {
+      "capability": "local-account-mutations",
+      "category": "transactions",
+      "exit_gate": "dual-database-tests",
+      "status": "contracted"
+    },
+    {
+      "capability": "microtx-lra",
+      "category": "distributed-transactions",
+      "exit_gate": "native-compensation-tests",
+      "status": "blocked"
+    },
+    {
+      "capability": "oracle-aq-jms",
+      "category": "messaging",
+      "exit_gate": "ordered-transactional-delivery-tests",
+      "status": "blocked"
+    },
+    {
+      "capability": "service-token-authorization",
+      "category": "security",
+      "exit_gate": "native-denial-and-allow-tests",
+      "status": "contracted"
+    },
+    {
+      "capability": "checkpoint-replay-compensation",
+      "category": "recovery",
+      "exit_gate": "fault-injected-native-tests",
+      "status": "simulated"
+    }
+  ],
+  "ledger_type": "lightyear-cloudbank-transaction-compatibility-ledger",
+  "native_acceptance_complete": false,
+  "open_blockers": 2,
+  "release": "0.58.0",
+  "schema_version": "1.0"
+}

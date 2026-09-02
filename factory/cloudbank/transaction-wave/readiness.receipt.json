@@ -1,0 +1,32 @@
+{
+  "bindings": {
+    "account_mapping_sha256": "b14b3e2350ff57a4d2f7466784eb0f3f4c999e8e3f10bd1982b3e07469bb78ce",
+    "behavior_contract_sha256": "f48bdd95783436f8f6caf057df43c552d2b067f092921aec3deffdfe4a0a4683",
+    "compatibility_ledger_sha256": "940b2f23908102342d988542f7c21f9e6693b8116167c50e4dab59f7f9580492",
+    "portfolio_inventory_sha256": "101257432d9c461de7ab0b8a76dccb1a75693f72f8a85fdcffb966b24a02177e",
+    "recovery_rehearsal_sha256": "17c3f7a80abb66e5eba55e0a3591b24149c17ccf96fb8c1668b0521e4f4a4e84",
+    "transaction_source_contract_sha256": "f897eddf44cd8f88b8b8fbdfd6d895d6feadb46d56ec4a97f29287f66a10cc26",
+    "wave_plan_sha256": "5f56884d96f3b8c88b92b72e6381f18fe6e19228e8cd5377c6eb39b27c289b94"
+  },
+  "content_sha256": "f13c406bfc6fb9b40c0ba567959ee73b37d47d98da72bf13e3bc587bdc526ee3",
+  "gate_status": "ready-for-signed-admission-not-native-execution",
+  "migration_complete": false,
+  "native_lra_replacement_observed": false,
+  "native_messaging_observed": false,
+  "native_transaction_wave_observed": false,
+  "production_ready": false,
+  "receipt_type": "lightyear-cloudbank-transaction-wave-readiness",
+  "release": "0.58.0",
+  "schema_version": "1.0",
+  "source": {
+    "commit": "4f41b16d00c45503f691836fee8138010c969e86",
+    "root_tree": "6aa92e89c783f123c4da8d7ae18108004a4f4a99",
+    "subtree": "cloudbank-v5",
+    "subtree_tree": "bd918386209f284a1ed31802555740eb34b75348"
+  },
+  "transaction_wave_mapping_complete": true,
+  "transaction_wave_source_pinned": true,
+  "whole_application_equivalent": false,
+  "whole_application_inventory_complete": true,
+  "whole_application_plan_complete": true
+}

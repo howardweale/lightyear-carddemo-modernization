@@ -1,0 +1,68 @@
+{
+  "checks": {
+    "authorization_precedes_mutation": true,
+    "checkpoint_resume_exact": true,
+    "duplicate_suppressed": true,
+    "failed_transfer_compensated": true,
+    "journal_replay_exact": true,
+    "value_conserved": true
+  },
+  "content_sha256": "17c3f7a80abb66e5eba55e0a3591b24149c17ccf96fb8c1668b0521e4f4a4e84",
+  "evidence_class": "deterministic-simulation",
+  "native_runtime_observed": false,
+  "production_ready": false,
+  "rehearsal_type": "lightyear-cloudbank-transaction-recovery-state-model",
+  "release": "0.58.0",
+  "results": [
+    {
+      "expected": "debit-source-credit-target-confirm-journal",
+      "id": "authorized-transfer",
+      "observed": "debit-source-credit-target-confirm-journal",
+      "status": "passed-simulated"
+    },
+    {
+      "expected": "reject-without-balance-change",
+      "id": "invalid-amount",
+      "observed": "reject-without-balance-change",
+      "status": "passed-simulated"
+    },
+    {
+      "expected": "reject-without-target-credit",
+      "id": "insufficient-funds",
+      "observed": "reject-without-target-credit",
+      "status": "passed-simulated"
+    },
+    {
+      "expected": "compensate-source-withdrawal",
+      "id": "deposit-failure",
+      "observed": "compensate-source-withdrawal",
+      "status": "passed-simulated"
+    },
+    {
+      "expected": "idempotent-no-double-posting",
+      "id": "duplicate-command",
+      "observed": "idempotent-no-double-posting",
+      "status": "passed-simulated"
+    },
+    {
+      "expected": "reject-before-money-movement",
+      "id": "authorization-denied",
+      "observed": "reject-before-money-movement",
+      "status": "passed-simulated"
+    },
+    {
+      "expected": "resume-or-compensate-from-durable-state",
+      "id": "crash-after-withdraw",
+      "observed": "resume-or-compensate-from-durable-state",
+      "status": "passed-simulated"
+    },
+    {
+      "expected": "reconstruct-exact-account-balances",
+      "id": "journal-replay",
+      "observed": "reconstruct-exact-account-balances",
+      "status": "passed-simulated"
+    }
+  ],
+  "scenario_count": 8,
+  "schema_version": "1.0"
+}

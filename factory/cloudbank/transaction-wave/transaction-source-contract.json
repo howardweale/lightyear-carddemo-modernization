@@ -1,0 +1,109 @@
+{
+  "content_sha256": "f897eddf44cd8f88b8b8fbdfd6d895d6feadb46d56ec4a97f29287f66a10cc26",
+  "contract_type": "lightyear-cloudbank-transaction-source-contract",
+  "critical_files": [
+    {
+      "path": "account/pom.xml",
+      "sha256": "4dbc4c295146e78dfceccdf313dd8f6060d270dcf65238170f09fab9c6263595"
+    },
+    {
+      "path": "account/src/main/java/com/example/accounts/controller/AccountController.java",
+      "sha256": "b8c1baf6f138848794170b1f1684b1e7cd6adcc0353552cfc2fcae646e8b06eb"
+    },
+    {
+      "path": "account/src/main/java/com/example/accounts/model/Account.java",
+      "sha256": "c42922a184cdf6b407faa4b575ea9f7469d81375113a6fc3cbd9331b1e06d136"
+    },
+    {
+      "path": "account/src/main/java/com/example/accounts/model/Journal.java",
+      "sha256": "a452a3ca46bfd077ec113924b2169cb5fdaf796a75bb11b20f6ef25937b516c5"
+    },
+    {
+      "path": "account/src/main/java/com/example/accounts/repository/AccountRepository.java",
+      "sha256": "196fe9f55587b407dddf20e5e4d7e53a3aeebafbdb380b5a2ddffb6658876445"
+    },
+    {
+      "path": "account/src/main/java/com/example/accounts/repository/JournalRepository.java",
+      "sha256": "986288b7abec15fa615773d66ebe830d79d2e5f333a35a1a3f5a02a78be35d0d"
+    },
+    {
+      "path": "account/src/main/java/com/example/accounts/services/AccountTransferDAO.java",
+      "sha256": "dc69281c5c6d9e97aca8a9f169bff3ddacda250e1758c3275908da70355c7632"
+    },
+    {
+      "path": "account/src/main/java/com/example/accounts/services/DepositService.java",
+      "sha256": "a646e517dc9de28008fb64cfd38dac78c0350b387ebecb75b8ae62549b3db849"
+    },
+    {
+      "path": "account/src/main/java/com/example/accounts/services/WithdrawService.java",
+      "sha256": "4a9bfa60dff7dba6b641b0eb9227869f82a03c872dd69d90d6ae1a400899dd47"
+    },
+    {
+      "path": "account/src/main/resources/application.yaml",
+      "sha256": "05b3d5bf0827dfe0ae82777eb2386f24f3cf9e2f35fca89d5090332451e4b487"
+    },
+    {
+      "path": "account/src/main/resources/db/changelog/controller.yaml",
+      "sha256": "b4a2f076b45e2765cf6c0e6f3f6ac7ce24244d2eaa149bebed9999f0f4322bf5"
+    },
+    {
+      "path": "account/src/main/resources/db/changelog/data.sql",
+      "sha256": "62acc80c6849fe6f8a09f7ce621f1a9c592c59db4aca94bc1fc26819959479c2"
+    },
+    {
+      "path": "account/src/main/resources/db/changelog/table.sql",
+      "sha256": "abf35c87c3b32050ffa39cdc1cc9651c55a2e446cd13928a010799f3e94fee35"
+    },
+    {
+      "path": "account/src/main/resources/db/changelog/txeventq.sql",
+      "sha256": "646c5a5c484e78e7fbf0192a7fb74f22d1800c574287dc768cc62e763dd73eb1"
+    },
+    {
+      "path": "transfer/pom.xml",
+      "sha256": "96003c2686a7a2d449fa12ebca1565ea46bcb203fb692d27dd63886de51f8556"
+    },
+    {
+      "path": "transfer/src/main/java/com/example/transfer/TransferService.java",
+      "sha256": "46ab5a0b2253e7fdfc63858867be3029746c3e675404056feda21b50d3cc9c45"
+    },
+    {
+      "path": "transfer/src/main/resources/application.yaml",
+      "sha256": "bfcfadf0288e04e0fd3b674f097ab98360300c8643234c042def5e8ea9da4566"
+    }
+  ],
+  "interfaces": {
+    "account": [
+      "/api/v1/accounts",
+      "/api/v1/account",
+      "/api/v1/account/journal",
+      "/deposit",
+      "/withdraw"
+    ],
+    "transfer": [
+      "account-lookup",
+      "withdraw",
+      "deposit",
+      "confirm",
+      "cancel"
+    ]
+  },
+  "oracle_couplings": [
+    "Oracle NUMBER identity columns",
+    "Oracle DATE and SYSDATE",
+    "Oracle AQ deposits and clearances queues",
+    "Oracle MicroTx LRA participant callbacks"
+  ],
+  "release": "0.58.0",
+  "schema_version": "1.0",
+  "services": [
+    "customer",
+    "account",
+    "transfer"
+  ],
+  "source": {
+    "commit": "4f41b16d00c45503f691836fee8138010c969e86",
+    "root_tree": "6aa92e89c783f123c4da8d7ae18108004a4f4a99",
+    "subtree": "cloudbank-v5",
+    "subtree_tree": "bd918386209f284a1ed31802555740eb34b75348"
+  }
+}

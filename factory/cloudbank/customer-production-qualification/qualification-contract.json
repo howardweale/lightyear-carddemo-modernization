@@ -3,7 +3,7 @@
     "migration_rehearsal_sha256": "c2aaa44310dbf95f445b65bac2d976433dc73d88389c8459c8dd37cffe78726a",
     "packaging_contract_sha256": "607474bb92d8bea53e8dff699b58a0a80a332df3fc679a5a7df29e88dcee7771",
     "synthetic_profile_sha256": "0b1adc1059db85fecb3b47e22cc6490bece93622adf6ca1655a83616903cef5d",
-    "transformation_plan_sha256": "0ecc58de88c43ed20bad76fe5e347949385809fd09e0b3b368d9f40c8e53fd82"
+    "transformation_plan_sha256": "f8a46dae1b248420d7fb1d74337037d9f5be682252cc0384e33c4cc36511a296"
   },
   "claim_boundary": {
     "customer_service_production_readiness": "bounded-qualification-only",
@@ -14,7 +14,7 @@
     "production_ready": false,
     "whole_cloudbank_equivalent": false
   },
-  "content_sha256": "4ac26a2290d00059f0e0a2c01dedb0c4211ee87961ea5c9ed151a1ac81aa58fa",
+  "content_sha256": "ec74e75aa097c2fb9394dfb21da1a7bfc54cff21e79fcbdbd042ed5b5933e5b3",
   "contract_type": "lightyear-cloudbank-customer-production-readiness-qualification",
   "native_dual_lane": {
     "gates": [

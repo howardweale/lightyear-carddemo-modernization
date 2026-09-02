@@ -267,6 +267,17 @@ class CloudBankProductionQualificationTests(unittest.TestCase):
         ).read_text(encoding="utf-8")
         self.assertIn("10,000-row", readme)
         self.assertIn("does not exercise native CDC", readme)
+        qualification_test = (
+            ROOT
+            / "factory/cloudbank/customer-production-qualification/patches/"
+            "CustomerProductionQualificationTests.java"
+        ).read_text(encoding="utf-8")
+        self.assertTrue(
+            qualification_test.startswith(
+                "// Copyright (c) 2026, Oracle and/or its affiliates.\n"
+            )
+        )
+        self.assertIn("// Modifications Copyright (c) 2026 Lightyear.", qualification_test)
 
     def test_output_inside_source_and_incomplete_lane_fail_closed(self) -> None:
         checkout = ROOT.parent / "cloudbank-upstream"

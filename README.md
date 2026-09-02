@@ -4,29 +4,33 @@
 
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.57.0 — CloudBank customer production-readiness qualification**
+Release: **v0.58.0 — CloudBank whole-application transaction wave**
 
-v0.57 deepens the Customer-service workcell proven by MS #56. A shared five-test contract now runs
-against native Oracle and PostgreSQL to exercise HTTP authentication, owner/admin authorization,
-error responses, concurrent `READ COMMITTED` visibility, transaction rollback/commit, and maximum
-declared data boundaries.
+v0.58 puts the whole CloudBank application under one governed migration plan. All eight root
+deployable services are inventoried and assigned exactly once to delivery waves. The first connected
+wave combines the already-qualified Customer service with Account and Transfer because that is where
+money movement, journals, service authorization, compensation, and failure recovery meet.
 
-The PostgreSQL lane removes the inherited Oracle UCP runtime, packages the Spring Boot executable
-JAR, and verifies that it contains one PostgreSQL driver and no Oracle runtime library. MS #57 also
-adds a deterministic 10,000-row synthetic aggregate profile and an offline simulated
-checkpoint/cutover/rollback rehearsal. The native action requires the signed MS #56 receipt and
-uses its exact Oracle and PostgreSQL image identities.
+The release pins 17 critical source files, maps all 13 Account and Journal columns to PostgreSQL 16,
+and defines eight acceptance scenarios. Oracle AQ/JMS and MicroTx LRA remain explicit native blockers.
+The admission action requires the passing signed MS #57 receipt and binds its exact Oracle and
+PostgreSQL image identities.
 
 ```bash
-./cloudbank-production-qualification.sh verify
-./cloudbank-production-qualification.sh verify-source /path/to/cloudbank-upstream
+./cloudbank-transaction-wave.sh verify
+./cloudbank-transaction-wave.sh verify-source /path/to/cloudbank-upstream
 ```
 
-The committed receipt is readiness evidence, not a fabricated native result. Even after a passing
-operator run, native CDC, OCI image build/scan, authorized production data, the other CloudBank
-services, whole-estate equivalence, migration completion, and production readiness remain false.
+The committed receipt proves readiness and planning, not native Account/Transfer execution. Target
+code generation, native messaging, LRA replacement, whole-application equivalence, migration
+completion, and production readiness remain false.
 
-Previous release: **v0.56.0 — First CloudBank dark factory run**
+Previous release: **v0.57.0 — CloudBank customer production-readiness qualification**
+
+v0.57 deepens the Customer-service workcell proven by MS #56 with a shared five-test native Oracle
+and PostgreSQL HTTP, security, transaction, packaging, and rollback qualification.
+
+Earlier release: **v0.56.0 — First CloudBank dark factory run**
 
 v0.56 packages the first executable CloudBank dark-factory workcell. The controller copies the
 complete pinned source into isolation, admits six customer-service files, and proves the same

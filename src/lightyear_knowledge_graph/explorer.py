@@ -341,11 +341,11 @@ OPERATOR_WORKLOADS = [
         "problem_id": "cloudbank-customer-account",
         "perspective_id": "cloudbank-customer-account",
         "recommended_scope": "database",
-        "description": "The customer service now has a sealed PostgreSQL transformation and a production-readiness qualification contract; the signed native qualification remains operator-held evidence.",
+        "description": "The Customer qualification contract is complete and its signed result remains operator-held; the eight-service portfolio is planned and the Account/Transfer transaction wave is ready for signed admission, not native execution.",
         "target_dialect": "postgresql-16",
-        "target_status": "qualification contract ready · signed native run pending",
+        "target_status": "customer contract complete · transaction admission ready",
         "mapping_artifact": "reference-estates/cloudbank/customer-postgresql/mapping.json",
-        "factory_artifact": "factory/cloudbank/customer-production-qualification/readiness.receipt.json",
+        "factory_artifact": "factory/cloudbank/transaction-wave/readiness.receipt.json",
     },
     {
         "id": "cloudbank-reference:workload:money-transfer",
@@ -681,7 +681,7 @@ class GraphExplorerIndex:
             limitations.append("No Oracle customer integration edges are currently projected.")
         if "cloudbank-reference" in available_company_ids:
             limitations.append(
-                "CloudBank is pinned modern-Oracle reference evidence. The Customer PostgreSQL production-qualification contract is ready, but its signed native result, other services, whole-estate equivalence, and migration completion are not attached."
+                "CloudBank is pinned modern-Oracle reference evidence. The Customer qualification result remains operator-held and the whole application has an ordered wave plan; Account/Transfer native execution, messaging, LRA replacement, whole-estate equivalence, and migration completion are not attached."
             )
         limitations.append("No SAP ASE customer integration edges are currently projected.")
         return {

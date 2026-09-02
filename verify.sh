@@ -42,6 +42,7 @@ fi
 "$project_dir/cloudbank-customer-postgresql.sh" verify
 "$project_dir/cloudbank-dark-factory.sh" verify
 "$project_dir/cloudbank-production-qualification.sh" verify
+"$project_dir/cloudbank-transaction-wave.sh" verify
 "$project_dir/composite-estate.sh" verify
 "$project_dir/runtime-evidence.sh" verify
 "$project_dir/semantic-memory.sh" validate

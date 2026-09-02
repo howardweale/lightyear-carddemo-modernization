@@ -1,0 +1,79 @@
+{
+  "content_sha256": "101257432d9c461de7ab0b8a76dccb1a75693f72f8a85fdcffb966b24a02177e",
+  "deployable_count": 8,
+  "excluded_alternatives": [
+    "customer-helidon",
+    "helidon-mp-messaging-producer",
+    "helidon-mp-messaging-consumer"
+  ],
+  "exclusion_reason": "Alternative implementations are not root-reactor deployables in the pinned CloudBank application portfolio.",
+  "inventory_type": "lightyear-cloudbank-deployable-portfolio",
+  "release": "0.58.0",
+  "schema_version": "1.0",
+  "services": [
+    {
+      "capability": "customer-profile",
+      "id": "customer",
+      "java_source_units": 5,
+      "tracked_files": 12,
+      "wave": "qualified-ms57"
+    },
+    {
+      "capability": "accounts-journal-money-movement",
+      "id": "account",
+      "java_source_units": 10,
+      "tracked_files": 18,
+      "wave": "transaction-wave"
+    },
+    {
+      "capability": "distributed-transfer-orchestration",
+      "id": "transfer",
+      "java_source_units": 2,
+      "tracked_files": 7,
+      "wave": "transaction-wave"
+    },
+    {
+      "capability": "identity-and-service-authorization",
+      "id": "azn-server",
+      "java_source_units": 16,
+      "tracked_files": 25,
+      "wave": "messaging-auth-wave"
+    },
+    {
+      "capability": "check-deposit-and-clearance",
+      "id": "checks",
+      "java_source_units": 9,
+      "tracked_files": 14,
+      "wave": "messaging-auth-wave"
+    },
+    {
+      "capability": "cross-service-scenarios",
+      "id": "testrunner",
+      "java_source_units": 5,
+      "tracked_files": 10,
+      "wave": "messaging-auth-wave"
+    },
+    {
+      "capability": "credit-score-support",
+      "id": "creditscore",
+      "java_source_units": 3,
+      "tracked_files": 7,
+      "wave": "edge-auxiliary-wave"
+    },
+    {
+      "capability": "operator-conversation-edge",
+      "id": "chatbot",
+      "java_source_units": 3,
+      "tracked_files": 6,
+      "wave": "edge-auxiliary-wave"
+    }
+  ],
+  "source": {
+    "commit": "4f41b16d00c45503f691836fee8138010c969e86",
+    "root_tree": "6aa92e89c783f123c4da8d7ae18108004a4f4a99",
+    "subtree": "cloudbank-v5",
+    "subtree_tree": "bd918386209f284a1ed31802555740eb34b75348"
+  },
+  "whole_application_inventory_complete": true,
+  "whole_application_migrated": false
+}

@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.58.0 — 2026-09-02
+
+- Added a complete eight-service CloudBank deployable inventory and an ordered whole-application
+  migration plan without claiming that the whole application has already migrated.
+- Defined the first connected transaction wave as the qualified Customer service plus Account and
+  Transfer, with later messaging/authorization, edge/auxiliary, and operational waves.
+- Added an exact 17-file source contract for Account and Transfer and a 13-column PostgreSQL 16
+  mapping for Accounts and Journal tables, constraints, identity, timestamp, and money semantics.
+- Added transaction behavior and deterministic recovery contracts covering authorization, value
+  conservation, insufficient funds, compensation, replay, idempotency, crash recovery, and journals.
+- Kept Oracle AQ/JMS and MicroTx LRA replacement as explicit native blockers rather than treating
+  static mappings or simulations as runtime equivalence.
+- Added a signed admission receipt chained to the verified MS #57 Customer qualification and its
+  immutable Oracle and PostgreSQL image identities.
+- Added schemas, cross-platform launchers, Control Tower status, CI checks, documentation, and
+  adversarial tests for portfolio coverage, source drift, receipt tampering, and overclaims.
+- Kept target code generation, native Account/Transfer execution, native messaging, LRA replacement,
+  whole-application equivalence, migration completion, and production readiness false.
+
 ## 0.57.0 — 2026-09-02
 
 - Added a bounded production-readiness qualification stage chained to the signed MS #56 Customer

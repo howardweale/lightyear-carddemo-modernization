@@ -114,6 +114,21 @@ operator flow is documented under
 ./cloudbank-production-qualification.sh verify-source /path/to/oracle-microservices-backend
 ```
 
+## Plan the whole application and admit the transaction wave
+
+MS #58 inventories all eight root deployables and assigns each exactly once to a governed delivery
+wave. The first connected wave is Customer, Account, and Transfer. It adds an exact source contract,
+a 13-column Account/Journal PostgreSQL mapping, transaction and recovery behavior, compatibility
+blockers, and a signed admission chained to the passing MS #57 receipt.
+
+```bash
+./cloudbank-transaction-wave.sh verify
+./cloudbank-transaction-wave.sh verify-source /path/to/oracle-microservices-backend
+```
+
+Oracle AQ/JMS and MicroTx LRA replacement remain blocked on native behavioral evidence. The
+committed readiness receipt does not claim target code generation or Account/Transfer execution.
+
 The projection is composed with the existing PL/I and Oracle Customer (Large) fragments. It does
 not change the canonical CardDemo graph or the identity to which runtime and audit evidence are
 bound.
@@ -125,7 +140,7 @@ source-build and bounded Oracle-runtime admission path. MS #55 generates the cus
 PostgreSQL mapping while leaving its committed native target readiness unobserved. No customer
 system or production data is attached. MS #56 adds the sealed application transformation and
 dual-run workcell, but the committed readiness receipt does not claim the operator run occurred.
-MS #57 adds deeper Customer qualification, packaging and offline rehearsal contracts, but its
-committed receipt likewise does not claim native execution. No other service, native CDC,
-production data, whole-CloudBank equivalence, migration completion, or production readiness is
-claimed.
+MS #57 adds deeper Customer qualification, packaging and offline rehearsal contracts. MS #58 adds
+the complete portfolio plan and admits the transaction wave, but it does not claim native
+Account/Transfer execution. Native messaging, native LRA replacement, production data,
+whole-CloudBank equivalence, migration completion, and production readiness remain unclaimed.

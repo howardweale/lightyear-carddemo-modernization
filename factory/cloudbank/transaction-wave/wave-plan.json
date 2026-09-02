@@ -1,0 +1,82 @@
+{
+  "content_sha256": "5f56884d96f3b8c88b92b72e6381f18fe6e19228e8cd5377c6eb39b27c289b94",
+  "ownership": {
+    "factory_automation": [
+      "mapping",
+      "patching",
+      "testing",
+      "evidence",
+      "safe-stop"
+    ],
+    "human_approval": [
+      "production-data-access",
+      "cutover",
+      "rollback",
+      "promotion"
+    ]
+  },
+  "plan_type": "lightyear-cloudbank-whole-application-wave-plan",
+  "production_ready": false,
+  "release": "0.58.0",
+  "schema_version": "1.0",
+  "waves": [
+    {
+      "exit": "signed-ms57-production-qualification-receipt",
+      "id": "qualified-customer",
+      "order": 0,
+      "services": [
+        "customer"
+      ],
+      "status": "native-qualified-ms57"
+    },
+    {
+      "exit": "native-oracle-postgresql-transaction-and-recovery-equivalence",
+      "id": "transaction-core",
+      "order": 1,
+      "services": [
+        "account",
+        "transfer"
+      ],
+      "status": "ready-for-dark-factory-workcells"
+    },
+    {
+      "exit": "native-security-and-transactional-messaging-equivalence",
+      "id": "messaging-and-authorization",
+      "order": 2,
+      "services": [
+        "azn-server",
+        "checks",
+        "testrunner"
+      ],
+      "status": "planned"
+    },
+    {
+      "exit": "native-portfolio-contract-and-packaging-equivalence",
+      "id": "edge-and-auxiliary",
+      "order": 3,
+      "services": [
+        "creditscore",
+        "chatbot"
+      ],
+      "status": "planned"
+    },
+    {
+      "exit": "production-like-deploy-observe-cutover-and-rollback-rehearsal",
+      "id": "operational-rehearsal",
+      "order": 4,
+      "services": [
+        "azn-server",
+        "account",
+        "checks",
+        "customer",
+        "creditscore",
+        "transfer",
+        "testrunner",
+        "chatbot"
+      ],
+      "status": "planned-ms60"
+    }
+  ],
+  "whole_application_equivalent": false,
+  "whole_application_planned": true
+}

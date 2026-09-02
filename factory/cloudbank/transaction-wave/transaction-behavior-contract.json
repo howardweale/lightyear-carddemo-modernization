@@ -1,0 +1,56 @@
+{
+  "content_sha256": "f48bdd95783436f8f6caf057df43c552d2b067f092921aec3deffdfe4a0a4683",
+  "contract_type": "lightyear-cloudbank-transaction-behavior",
+  "invariants": [
+    "No successful transfer creates or destroys value.",
+    "A failed transfer cannot leave only one account changed.",
+    "Every balance mutation has a durable journal explanation.",
+    "Authorization failure happens before any mutation.",
+    "Replay cannot apply the same logical transfer twice."
+  ],
+  "native_scenarios_observed": 0,
+  "release": "0.58.0",
+  "scenarios": [
+    {
+      "expected": "debit-source-credit-target-confirm-journal",
+      "id": "authorized-transfer",
+      "native_observation_required": true
+    },
+    {
+      "expected": "reject-without-balance-change",
+      "id": "invalid-amount",
+      "native_observation_required": true
+    },
+    {
+      "expected": "reject-without-target-credit",
+      "id": "insufficient-funds",
+      "native_observation_required": true
+    },
+    {
+      "expected": "compensate-source-withdrawal",
+      "id": "deposit-failure",
+      "native_observation_required": true
+    },
+    {
+      "expected": "idempotent-no-double-posting",
+      "id": "duplicate-command",
+      "native_observation_required": true
+    },
+    {
+      "expected": "reject-before-money-movement",
+      "id": "authorization-denied",
+      "native_observation_required": true
+    },
+    {
+      "expected": "resume-or-compensate-from-durable-state",
+      "id": "crash-after-withdraw",
+      "native_observation_required": true
+    },
+    {
+      "expected": "reconstruct-exact-account-balances",
+      "id": "journal-replay",
+      "native_observation_required": true
+    }
+  ],
+  "schema_version": "1.0"
+}

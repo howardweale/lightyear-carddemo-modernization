@@ -40,6 +40,7 @@ production-qualified.
 | MS #55 | CloudBank Customer PostgreSQL Mapping | Mapping qualified; signed native receipt remains operator-held evidence |
 | MS #56 | First CloudBank Dark Factory Run | Factory contract complete; operator dual-run receipt pending |
 | MS #57 | CloudBank Customer Production-Readiness Qualification | Qualification contract complete; signed native receipt pending |
+| MS #58 | CloudBank Whole-Application Transaction Wave | Eight-service plan and transaction-wave admission contract complete; native Account/Transfer execution pending |
 
 The v0.35.0 stored-logic qualification core is retained as supporting MS #34 evidence. It does not
 replace the planned DB2 milestone.
@@ -449,10 +450,30 @@ It does not build or scan an OCI image, observe production data or native CDC, q
 transfer behavior, establish whole-CloudBank equivalence, complete a migration, or establish
 production readiness.
 
+## MS #58 — CloudBank Whole-Application Transaction Wave
+
+MS #58 places the complete eight-service deployable portfolio under one ordered migration plan
+without pretending that a plan is a completed migration. The qualified Customer service is wave
+zero. Account and Transfer form the first connected transaction wave because their shared boundary
+contains account balances, journal records, service authorization, distributed money movement,
+MicroTx LRA compensation, Oracle AQ/JMS coupling, and cross-service recovery.
+
+The milestone binds 17 critical source files and maps all 13 Account and Journal columns to
+PostgreSQL 16. Its behavior contract covers successful transfer, invalid amount, insufficient funds,
+deposit failure, duplicate commands, authorization denial, crash-after-withdraw recovery, and exact
+journal replay. A deterministic state-model rehearsal checks the intended outcomes, but every
+scenario still requires native Oracle/PostgreSQL observation before equivalence can be claimed.
+
+All remaining deployables are accounted for: `azn-server`, `checks`, and `testrunner` enter the
+messaging/authorization wave; `creditscore` and `chatbot` enter the edge/auxiliary wave. The signed
+admission action chains from the operator-held MS #57 receipt and immutable database image identities.
+It does not generate target code or claim native Account/Transfer, messaging, LRA, whole-application,
+migration-complete, or production-ready evidence.
+
 ## Planned next increments
 
-MS #58 should expand to the Account and Transfer transaction boundary, including journal behavior,
-service-to-service authorization, messaging, MicroTx LRA compensation, and cross-service failure
-recovery. MS #59 can then run the remaining deployable portfolio through governed workcells, and
-MS #60 can add a production-like operational deployment and cutover rehearsal. A real production
-migration remains a separately authorized customer program using approved production evidence.
+MS #59 can execute the Account/Transfer transaction workcells and then advance the remaining
+deployable portfolio through governed workcells as their native messaging and authorization gates
+become available. MS #60 can add a production-like operational deployment and cutover rehearsal.
+A real production migration remains a separately authorized customer program using approved
+production evidence.

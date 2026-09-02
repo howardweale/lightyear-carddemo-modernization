@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schemas/cloudbank/transaction-wave-admission-receipt.schema.json",
+  "title": "CloudBank transaction-wave admission receipt",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "receipt_type",
+    "release",
+    "source_ms57_receipt_sha256",
+    "oracle_image_id_sha256",
+    "postgresql_image_id_sha256",
+    "bindings",
+    "status",
+    "transaction_wave_plan_admitted",
+    "whole_application_equivalent",
+    "migration_complete",
+    "production_ready",
+    "content_sha256",
+    "signature"
+  ],
+  "properties": {
+    "receipt_type": {"const": "lightyear-cloudbank-transaction-wave-admission"},
+    "release": {"const": "0.58.0"},
+    "status": {"const": "passed-transaction-wave-plan-admitted"},
+    "transaction_wave_plan_admitted": {"const": true},
+    "whole_application_equivalent": {"const": false},
+    "migration_complete": {"const": false},
+    "production_ready": {"const": false},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "signature": {
+      "type": "object",
+      "required": ["algorithm", "signer", "value"],
+      "properties": {
+        "algorithm": {"const": "hmac-sha256"},
+        "value": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

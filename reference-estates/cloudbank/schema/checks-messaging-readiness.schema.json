@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schemas/cloudbank/checks-messaging-readiness.schema.json",
+  "title": "CloudBank Checks messaging readiness",
+  "type": "object",
+  "required": [
+    "schema_version", "receipt_type", "release", "gate_status",
+    "checks_target_messaging_qualified", "native_oracle_aq_equivalence",
+    "remaining_service_workcells_complete", "whole_application_equivalent",
+    "migration_complete", "production_ready", "content_sha256"
+  ],
+  "properties": {
+    "receipt_type": {"const": "lightyear-cloudbank-checks-messaging-readiness"},
+    "release": {"const": "0.63.0"},
+    "gate_status": {"const": "ready-for-signed-ms62-and-native-postgresql-messaging-run"},
+    "checks_target_messaging_qualified": {"const": false},
+    "native_oracle_aq_equivalence": {"const": false},
+    "remaining_service_workcells_complete": {"const": false},
+    "whole_application_equivalent": {"const": false},
+    "migration_complete": {"const": false},
+    "production_ready": {"const": false},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

@@ -193,6 +193,23 @@ three services with the same signing key. The signed result qualifies the applic
 not external TLS, managed-secret rotation, enterprise IdP federation, Checks messaging, the remaining
 services, whole-application equivalence, migration completion, or production readiness.
 
+## Run the Checks durable-messaging gate
+
+MS #63 chains from the signed MS #62 receipt and replaces Oracle AQ/JMS in Checks and Test Runner
+with a PostgreSQL durable queue. Its bounded semantics include idempotent enqueue, per-aggregate
+ordering, exclusive claims, lease-based redelivery, retry backoff, dead-letter quarantine, and
+governed replay.
+
+```bash
+./cloudbank-checks-messaging.sh verify
+./cloudbank-checks-messaging.sh verify-source /path/to/oracle-microservices-backend
+```
+
+The native gate packages the five Authorization, Account, Transfer, Checks, and Test Runner services
+without Oracle or MicroTx runtime libraries and exercises twelve PostgreSQL queue scenarios. A
+passing signed receipt qualifies target messaging only; it does not establish native Oracle AQ
+equivalence, remaining-service completion, whole-application equivalence, or production readiness.
+
 The projection is composed with the existing PL/I and Oracle Customer (Large) fragments. It does
 not change the canonical CardDemo graph or the identity to which runtime and audit evidence are
 bound.
@@ -209,6 +226,7 @@ the complete portfolio plan and admits the transaction wave. MS #59 generates th
 PostgreSQL target and its native operator gate. MS #60 adds the integrated target-side native HTTP,
 restart, and concurrency wave. MS #61 adds bounded normalized Oracle/PostgreSQL comparison for the
 Customer, Account, and Transfer scope. MS #62 adds the production OAuth application boundary for
-Authorization, Account, and Transfer. External production security operations, Checks messaging,
-production data, the remaining service workcells, whole-CloudBank equivalence, migration completion,
-and production readiness remain unclaimed.
+Authorization, Account, and Transfer. MS #63 adds the bounded PostgreSQL Checks messaging target.
+Native Oracle AQ comparison, external production security operations, production data, the remaining
+service workcells, whole-CloudBank equivalence, migration completion, and production readiness remain
+unclaimed.

@@ -1,0 +1,20 @@
+{
+  "bindings": {
+    "acceptance_contract_sha256": "0aa9a33a7862f78dd0631adac5bf046c4a569cc9ffe343303100389ef00d0b0e",
+    "compatibility_ledger_sha256": "e507bce3a5eb4ddd43be6b8eb66f73429b72faacd6a7dbee27eca7c42c282098",
+    "execution_plan_sha256": "553ef79a5e14ecab0b4322aec50b5afbbc0066159f89810bc2dc7dce6b91a782",
+    "messaging_contract_sha256": "c72520ea7ab171f9ef2682f3b28ccb5082269f6955649f45b2b3fba02f952ef1",
+    "source_contract_sha256": "2baaa0b66fcd15dc5b06c838fe24c42ea6a95f60c780e621fb97180865bbec35"
+  },
+  "checks_target_messaging_qualified": false,
+  "content_sha256": "b5ae8dc4aaba499939fd1d2a6e4206e8b3dd2590fdcc572a23aaff6a87598d2d",
+  "gate_status": "ready-for-signed-ms62-and-native-postgresql-messaging-run",
+  "migration_complete": false,
+  "native_oracle_aq_equivalence": false,
+  "production_ready": false,
+  "receipt_type": "lightyear-cloudbank-checks-messaging-readiness",
+  "release": "0.63.0",
+  "remaining_service_workcells_complete": false,
+  "schema_version": "1.0",
+  "whole_application_equivalent": false
+}

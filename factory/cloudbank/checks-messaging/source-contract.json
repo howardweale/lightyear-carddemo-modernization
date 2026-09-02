@@ -1,0 +1,68 @@
+{
+  "content_sha256": "2baaa0b66fcd15dc5b06c838fe24c42ea6a95f60c780e621fb97180865bbec35",
+  "contract_type": "lightyear-cloudbank-checks-aq-source",
+  "release": "0.63.0",
+  "schema_version": "1.0",
+  "source": {
+    "commit": "4f41b16d00c45503f691836fee8138010c969e86",
+    "root_tree": "6aa92e89c783f123c4da8d7ae18108004a4f4a99",
+    "subtree": "cloudbank-v5",
+    "subtree_tree": "bd918386209f284a1ed31802555740eb34b75348"
+  },
+  "source_bindings": [
+    {
+      "path": "account/src/main/resources/db/changelog/txeventq.sql",
+      "sha256": "646c5a5c484e78e7fbf0192a7fb74f22d1800c574287dc768cc62e763dd73eb1"
+    },
+    {
+      "path": "checks/pom.xml",
+      "sha256": "698f230f1385b634530883a87446674a7f5e5933bd0c99ca198b7c58bd554fcc"
+    },
+    {
+      "path": "checks/src/main/java/com/example/checks/ChecksApplication.java",
+      "sha256": "9a63b1c671078b2e0090fb68ac1257beac4ea36f19d7a30e44245a4efb20ea58"
+    },
+    {
+      "path": "checks/src/main/java/com/example/checks/controller/CheckReceiver.java",
+      "sha256": "9a279d672d6ed4e63179e4221ae02d109502a1dddd407fb0905909d74afcee2a"
+    },
+    {
+      "path": "checks/src/main/java/com/example/checks/controller/ClearanceReceiver.java",
+      "sha256": "aa7492ce7b9b0b797a3c47754b7be28466c1bb3d862489d298965ad42b54c683"
+    },
+    {
+      "path": "checks/src/main/java/com/example/checks/service/AccountService.java",
+      "sha256": "e3b6bc531e31091d9ebd9c272e4b79aaab2dc32292266d6c967549b3c3e302ae"
+    },
+    {
+      "path": "checks/src/main/resources/application.yaml",
+      "sha256": "a09a5012d20d07cfccdea7dcf72b8bbc070d9a94ede4f68799a50daaaba15bd1"
+    },
+    {
+      "path": "testrunner/pom.xml",
+      "sha256": "13590f81ec45840448356e147ac88ac59685ef782fc7a2cdd19e1b255233ae09"
+    },
+    {
+      "path": "testrunner/src/main/java/com/example/testrunner/TestrunnerApplication.java",
+      "sha256": "708a6b9bfe8e2042d32250ca6d95df32b35e29bc391977e00986cd0b3dcb23d2"
+    },
+    {
+      "path": "testrunner/src/main/java/com/example/testrunner/controller/TestRunnerController.java",
+      "sha256": "652b39773505db9b78bc38dc40dc5ad8b2253a754fa0c47ab1b5f59723243eef"
+    },
+    {
+      "path": "testrunner/src/main/resources/application.yaml",
+      "sha256": "249af1c11253748b2ca5d2d2d52795dfdcfe0571ae9837b9ef2cedf360fd5199"
+    }
+  ],
+  "source_semantics": {
+    "clearance_effect": "clear-existing-account-journal",
+    "consumer_model": "single-consumer-listeners",
+    "deposit_effect": "create-pending-account-journal",
+    "queues": [
+      "deposits",
+      "clearances"
+    ],
+    "transport": "oracle-aq-jms-text-message"
+  }
+}

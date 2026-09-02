@@ -1,0 +1,40 @@
+{
+  "bindings": {
+    "compatibility_ledger_sha256": "e507bce3a5eb4ddd43be6b8eb66f73429b72faacd6a7dbee27eca7c42c282098",
+    "execution_plan_sha256": "553ef79a5e14ecab0b4322aec50b5afbbc0066159f89810bc2dc7dce6b91a782",
+    "messaging_contract_sha256": "c72520ea7ab171f9ef2682f3b28ccb5082269f6955649f45b2b3fba02f952ef1",
+    "source_contract_sha256": "2baaa0b66fcd15dc5b06c838fe24c42ea6a95f60c780e621fb97180865bbec35"
+  },
+  "content_sha256": "0aa9a33a7862f78dd0631adac5bf046c4a569cc9ffe343303100389ef00d0b0e",
+  "contract_type": "lightyear-cloudbank-checks-messaging-acceptance",
+  "eligible_claim": {
+    "checks_target_messaging_qualified": true,
+    "native_oracle_aq_equivalence": false,
+    "production_ready": false,
+    "remaining_service_workcells_complete": false,
+    "whole_application_equivalent": false
+  },
+  "release": "0.63.0",
+  "required_contract_sha256": "28c44c4cb9f6d88df745808cb0d1f5d0538ab529f786da43ec4aa00fef8a5b29",
+  "required_packaging": {
+    "executable_jars": 5,
+    "microtx_runtime_libraries": 0,
+    "oracle_runtime_libraries": 0
+  },
+  "required_receipt": "lightyear-cloudbank-production-oauth-execution",
+  "required_scenarios": [
+    "deposit-enqueued-atomically",
+    "duplicate-message-suppressed",
+    "clearance-enqueued-atomically",
+    "per-aggregate-order-preserved",
+    "exclusive-skip-locked-claim",
+    "successful-delivery-acknowledged",
+    "consumer-crash-redelivered-after-lease",
+    "bounded-retry-backoff",
+    "poison-message-dead-lettered",
+    "dead-letter-replay-idempotent",
+    "queue-drain-has-no-loss",
+    "oracle-aq-runtime-removed-from-target"
+  ],
+  "schema_version": "1.0"
+}

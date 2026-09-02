@@ -1,0 +1,35 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schemas/cloudbank/checks-messaging-execution-receipt.schema.json",
+  "title": "CloudBank Checks messaging execution receipt",
+  "type": "object",
+  "required": [
+    "schema_version", "receipt_type", "release", "run_id",
+    "source_ms62_receipt_sha256", "postgresql_image_id_sha256", "bindings", "messaging_lane",
+    "status", "native_postgresql_queue_observed", "checks_target_messaging_qualified",
+    "native_oracle_aq_equivalence", "remaining_service_workcells_complete",
+    "whole_application_equivalent", "migration_complete", "production_ready",
+    "content_sha256", "signature"
+  ],
+  "properties": {
+    "receipt_type": {"const": "lightyear-cloudbank-checks-messaging-execution"},
+    "release": {"const": "0.63.0"},
+    "status": {"const": "passed-checks-target-messaging"},
+    "native_postgresql_queue_observed": {"const": true},
+    "checks_target_messaging_qualified": {"const": true},
+    "native_oracle_aq_equivalence": {"const": false},
+    "remaining_service_workcells_complete": {"const": false},
+    "whole_application_equivalent": {"const": false},
+    "migration_complete": {"const": false},
+    "production_ready": {"const": false},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "signature": {
+      "type": "object",
+      "required": ["algorithm", "signer", "value"],
+      "properties": {
+        "algorithm": {"const": "hmac-sha256"},
+        "value": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

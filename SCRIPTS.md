@@ -53,5 +53,8 @@ script is undocumented, and that every POSIX entry point has a PowerShell twin.
 - `./cloudbank-production-oauth.sh verify` checks the MS #62 Authorization/Account/Transfer OAuth
   application-boundary contract; `run` additionally requires the signed MS #61 receipt produced
   with the same key and exercises real client-credentials JWTs, resource servers, and key restart.
+- `./cloudbank-checks-messaging.sh verify` checks the MS #63 durable Checks deposit/clearance queue,
+  ordering, idempotency, claim, redelivery, retry, dead-letter, packaging, and false production
+  claims; `run` additionally requires the signed MS #62 receipt produced with the same key.
 
 See `scripts.catalog.json` for the exact purpose, role, and verification owner of all entry points.

@@ -4,7 +4,24 @@
 
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.62.0 — CloudBank production OAuth application boundary**
+Release: **v0.63.0 — CloudBank Checks durable messaging**
+
+v0.63 replaces the Checks and Test Runner dependency on Oracle AQ/JMS with a PostgreSQL-backed
+durable work queue. The bounded gate covers idempotent deposits and clearances, per-aggregate FIFO
+ordering, exclusive claims, lease-based crash redelivery, retry backoff, dead-letter quarantine,
+governed replay, and zero Oracle/MicroTx libraries across the five carried and migrated services.
+
+```bash
+./cloudbank-checks-messaging.sh verify
+./cloudbank-checks-messaging.sh verify-source /path/to/cloudbank-upstream
+```
+
+A passing signed run qualifies the target-side Checks messaging mechanics and generated workcell.
+It does not claim a native Oracle AQ comparison. Credit Score and Chatbot remain for MS #64;
+whole-application equivalence, migration completion, deployment promotion, and production readiness
+remain separate gates.
+
+Previous release: **v0.62.0 — CloudBank production OAuth application boundary**
 
 v0.62 replaces the bounded Account/Transfer workcell's development Basic authentication and static
 internal token with a live CloudBank OAuth 2.0/OIDC authorization server on PostgreSQL. Transfer and
@@ -22,7 +39,7 @@ the same persistent RSA key. External TLS termination, managed-secret rotation, 
 execution, enterprise IdP federation, Checks AQ/JMS, remaining services, and production readiness
 remain separate gates.
 
-Previous release: **v0.61.0 — CloudBank bounded Oracle/PostgreSQL equivalence**
+Earlier release: **v0.61.0 — CloudBank bounded Oracle/PostgreSQL equivalence**
 
 v0.61 chains the signed Customer dual-database qualification and native PostgreSQL transaction wave
 into a seven-scenario comparison. It executes original Account behavior on Oracle, requalifies the

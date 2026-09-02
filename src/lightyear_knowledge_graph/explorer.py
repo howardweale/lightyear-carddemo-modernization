@@ -362,7 +362,10 @@ OPERATOR_WORKLOADS = [
         "problem_id": "cloudbank-check-processing",
         "perspective_id": "cloudbank-check-processing",
         "recommended_scope": "database",
-        "description": "Oracle Transactional Event Queue/JMS deposit and clearance behavior across protected services.",
+        "description": "MS #63 replaces Oracle AQ/JMS with a durable PostgreSQL work queue covering idempotency, per-aggregate order, exclusive claims, redelivery, retry, and dead-letter handling.",
+        "target_dialect": "postgresql-16",
+        "target_status": "Checks target messaging ready · operator receipt required",
+        "factory_artifact": "factory/cloudbank/checks-messaging/readiness.receipt.json",
     },
     {
         "id": "cloudbank-reference:workload:identity-service-authorization",

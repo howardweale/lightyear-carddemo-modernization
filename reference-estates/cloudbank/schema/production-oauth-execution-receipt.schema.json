@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schemas/cloudbank/production-oauth-execution-receipt.schema.json",
+  "title": "CloudBank production OAuth application-boundary execution receipt",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "receipt_type",
+    "release",
+    "run_id",
+    "source_ms61_receipt_sha256",
+    "postgresql_image_id_sha256",
+    "oauth_lane",
+    "status",
+    "native_authorization_server_observed",
+    "jwt_resource_servers_observed",
+    "service_to_service_client_credentials_observed",
+    "persistent_signing_key_restart_observed",
+    "production_oauth_application_profile_qualified",
+    "production_oauth_operational_deployment_qualified",
+    "native_messaging_observed",
+    "whole_application_equivalent",
+    "migration_complete",
+    "production_ready",
+    "content_sha256",
+    "signature"
+  ],
+  "properties": {
+    "receipt_type": {"const": "lightyear-cloudbank-production-oauth-execution"},
+    "release": {"const": "0.62.0"},
+    "status": {"const": "passed-production-oauth-application-boundary"},
+    "native_authorization_server_observed": {"const": true},
+    "jwt_resource_servers_observed": {"const": true},
+    "service_to_service_client_credentials_observed": {"const": true},
+    "persistent_signing_key_restart_observed": {"const": true},
+    "production_oauth_application_profile_qualified": {"const": true},
+    "production_oauth_operational_deployment_qualified": {"const": false},
+    "native_messaging_observed": {"const": false},
+    "whole_application_equivalent": {"const": false},
+    "migration_complete": {"const": false},
+    "production_ready": {"const": false},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "signature": {
+      "type": "object",
+      "required": ["algorithm", "signer", "value"],
+      "properties": {
+        "algorithm": {"const": "hmac-sha256"},
+        "value": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

@@ -165,6 +165,8 @@ class CloudBankExecutableBaselineTests(unittest.TestCase):
                 "native-transaction-wave-readiness.schema.json",
                 "oracle-postgresql-equivalence-execution-receipt.schema.json",
                 "oracle-postgresql-equivalence-readiness.schema.json",
+                "production-oauth-execution-receipt.schema.json",
+                "production-oauth-readiness.schema.json",
             },
             {path.name for path in schemas},
         )

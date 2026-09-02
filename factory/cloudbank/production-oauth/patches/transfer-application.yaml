@@ -1,0 +1,26 @@
+spring:
+  application:
+    name: transfer
+  cloud:
+    config:
+      import-check:
+        enabled: false
+  config:
+    import: classpath:common.yaml
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${CLOUDBANK_SECURITY_ISSUER_URI}
+          jwk-set-uri: ${CLOUDBANK_SECURITY_JWK_SET_URI}
+account:
+  transaction:
+    url: ${ACCOUNT_TRANSACTION_URL:http://account:8080/api/v1/transfers}
+cloudbank:
+  security:
+    service-token:
+      enabled: true
+      token-uri: ${CLOUDBANK_SECURITY_SERVICE_TOKEN_URI}
+      client-id: ${CLOUDBANK_SECURITY_SERVICE_TOKEN_CLIENT_ID}
+      client-secret: ${CLOUDBANK_SECURITY_SERVICE_TOKEN_CLIENT_SECRET}
+      scope: cloudbank.internal

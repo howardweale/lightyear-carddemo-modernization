@@ -1,0 +1,31 @@
+spring:
+  application:
+    name: account
+  cloud:
+    config:
+      import-check:
+        enabled: false
+  config:
+    import: classpath:common.yaml
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${CLOUDBANK_SECURITY_ISSUER_URI}
+          jwk-set-uri: ${CLOUDBANK_SECURITY_JWK_SET_URI}
+  liquibase:
+    change-log: classpath:db/changelog/controller.yaml
+    url: ${LIQUIBASE_DATASOURCE_URL:${SPRING_DATASOURCE_URL}}
+    user: ${LIQUIBASE_DATASOURCE_USERNAME:${SPRING_DATASOURCE_USERNAME}}
+    password: ${LIQUIBASE_DATASOURCE_PASSWORD:${SPRING_DATASOURCE_PASSWORD}}
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          time_zone: UTC

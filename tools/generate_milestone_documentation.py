@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build and verify the MS #1-61 customer documentation library."""
+"""Build and verify the MS #1-62 customer documentation library."""
 
 from __future__ import annotations
 
@@ -32,7 +32,7 @@ GITHUB_BLOB_ROOT = f"https://github.com/{REPOSITORY}/blob/{DEFAULT_BRANCH}"
 GITHUB_RAW_ROOT = f"https://raw.githubusercontent.com/{REPOSITORY}/{DEFAULT_BRANCH}"
 PAGES_INDEX = f"https://howardweale.github.io/{REPOSITORY.split('/', 1)[1]}/milestones/"
 FIXED_TIME = datetime(2026, 8, 31, 12, 0, 0, tzinfo=timezone.utc)
-EXPECTED_MILESTONES = tuple(range(1, 62))
+EXPECTED_MILESTONES = tuple(range(1, 63))
 EXPECTED_ARTIFACTS = len(EXPECTED_MILESTONES) * 3
 BOUNDARY_TERMS = (
     "remain false", "remains false", "remain blocked", "remains blocked",

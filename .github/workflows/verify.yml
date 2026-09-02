@@ -112,6 +112,15 @@ jobs:
               -Dtest=PostgreSqlAccountEquivalenceTests,PostgreSqlTransferEquivalenceTests \
               -Dsurefire.failIfNoSpecifiedTests=false -DskipTests test
           )
+          ./cloudbank-production-oauth.sh verify
+          ./cloudbank-production-oauth.sh verify-source ../cloudbank-upstream
+          ./cloudbank-production-oauth.sh materialize ../cloudbank-upstream work/cloudbank-ms62-ci
+          (
+            cd work/cloudbank-ms62-ci
+            mvn -pl azn-server,account,transfer -am \
+              -Dtest=TransferServiceTests \
+              -Dsurefire.failIfNoSpecifiedTests=false test
+          )
 
       - name: Publish bounded CI build receipt
         uses: actions/upload-artifact@v4

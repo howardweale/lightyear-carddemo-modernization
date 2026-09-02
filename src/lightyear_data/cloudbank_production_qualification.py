@@ -39,6 +39,7 @@ OUTPUT_ROOT = Path("factory/cloudbank/customer-production-qualification")
 PATCH_ROOT = OUTPUT_ROOT / "patches"
 RECEIPT_TYPE = "lightyear-cloudbank-customer-production-qualification-execution"
 RECEIPT_NAME = "cloudbank-customer-production-qualification.receipt.json"
+FAILURE_REPORT_NAME = "cloudbank-customer-production-qualification.failure.json"
 QUALIFICATION_MARKER = (
     "http:pass;authn:pass;authz:pass;errors:pass;isolation:pass;rollback:pass"
 )
@@ -511,13 +512,33 @@ def _maven_test_result(
         "TEST-com.example.customer.CustomerProductionQualificationTests.xml"
     )
     totals = {"tests": -1, "failures": -1, "errors": -1, "skipped": -1}
+    failed_tests: list[dict[str, str]] = []
+    report_text = ""
     if report.is_file():
+        report_text = report.read_text(encoding="utf-8", errors="replace")
         root = ET.parse(report).getroot()
         totals = {name: int(root.attrib.get(name, "-1")) for name in totals}
+        for test_case in root.findall(".//testcase"):
+            failure = test_case.find("failure")
+            failure = failure if failure is not None else test_case.find("error")
+            if failure is not None:
+                failed_tests.append(
+                    {
+                        "name": test_case.attrib.get("name", "unknown"),
+                        "type": failure.attrib.get("type", "unknown"),
+                    }
+                )
     marker = f"CLOUDBANK_PRODUCTION_QUALIFICATION={QUALIFICATION_MARKER}"
+    marker_stdout_count = result.stdout.count(marker)
+    marker_report_count = report_text.count(marker)
+    marker_observed = (
+        marker_stdout_count in {0, 1}
+        and marker_report_count in {0, 1}
+        and max(marker_stdout_count, marker_report_count) == 1
+    )
     passed = (
         result.returncode == 0
-        and result.stdout.count(marker) == 1
+        and marker_observed
         and totals == {"tests": EXPECTED_TESTS, "failures": 0, "errors": 0, "skipped": 0}
     )
     return {
@@ -525,11 +546,31 @@ def _maven_test_result(
         "status": "passed" if passed else "failed",
         **totals,
         "maven_exit_code": result.returncode,
-        "marker_sha256": QUALIFICATION_MARKER_SHA256 if marker in result.stdout else None,
+        "marker_sha256": QUALIFICATION_MARKER_SHA256 if marker_observed else None,
+        "marker_stdout_count": marker_stdout_count,
+        "marker_report_count": marker_report_count,
+        "test_report_present": report.is_file(),
+        "failed_tests": failed_tests,
+        "failure_phase": None if passed else _maven_failure_phase(result, report.is_file()),
         "stdout_sha256": _sha256_bytes(result.stdout.encode()),
         "stderr_sha256": _sha256_bytes(result.stderr.encode()),
         "raw_output_persisted": False,
     }
+
+
+def _maven_failure_phase(
+    result: subprocess.CompletedProcess[str], test_report_present: bool = False
+) -> str:
+    output = f"{result.stdout}\n{result.stderr}"
+    if "maven-checkstyle-plugin" in output or "Checkstyle violation" in output:
+        return "checkstyle"
+    if "maven-compiler-plugin" in output or "COMPILATION ERROR" in output:
+        return "compilation"
+    if "Could not resolve dependencies" in output or "Failed to collect dependencies" in output:
+        return "dependency-resolution"
+    if test_report_present or "maven-surefire-plugin" in output:
+        return "test"
+    return "maven-command"
 
 
 def _package_result(
@@ -581,10 +622,43 @@ def _package_result(
         "runtime_library_count": len(libraries),
         "oracle_runtime_library_count": len(oracle_libraries),
         "postgresql_driver_count": len(postgres_libraries),
+        "oracle_runtime_libraries": oracle_libraries,
+        "postgresql_drivers": postgres_libraries,
+        "failure_phase": None if passed else _maven_failure_phase(result),
         "stdout_sha256": _sha256_bytes(result.stdout.encode()),
         "stderr_sha256": _sha256_bytes(result.stderr.encode()),
         "raw_output_persisted": False,
     }
+
+
+def _write_failure_report(
+    output_root: Path,
+    run_id: str,
+    oracle_lane: Mapping[str, Any],
+    postgres_lane: Mapping[str, Any],
+    package: Mapping[str, Any],
+) -> Path:
+    failure = seal(
+        {
+            "schema_version": "1.0",
+            "report_type": "lightyear-cloudbank-customer-production-qualification-failure",
+            "release": RELEASE,
+            "run_id": run_id,
+            "status": "failed-bounded-qualification",
+            "oracle_lane": dict(oracle_lane),
+            "postgresql_lane": dict(postgres_lane),
+            "packaging": dict(package),
+            "security": {
+                "raw_maven_output_persisted": False,
+                "credentials_persisted": False,
+                "production_data_persisted": False,
+            },
+        }
+    )
+    output_root.mkdir(parents=True, exist_ok=True)
+    path = output_root / FAILURE_REPORT_NAME
+    write_json(path, failure)
+    return path
 
 
 def _lane_passed(lane: Mapping[str, Any], name: str, image_id: str) -> bool:
@@ -765,6 +839,29 @@ def execute_qualification(
         and _lane_passed(postgres_lane, "postgresql", postgres_image_id)
         and _package_passed(package)
     ):
+        report(
+            "Oracle lane: "
+            f"status={oracle_lane.get('status')} tests={oracle_lane.get('tests')} "
+            f"failures={oracle_lane.get('failures')} errors={oracle_lane.get('errors')} "
+            f"phase={oracle_lane.get('failure_phase')}"
+        )
+        report(
+            "PostgreSQL lane: "
+            f"status={postgres_lane.get('status')} tests={postgres_lane.get('tests')} "
+            f"failures={postgres_lane.get('failures')} errors={postgres_lane.get('errors')} "
+            f"phase={postgres_lane.get('failure_phase')}"
+        )
+        report(
+            "Packaging: "
+            f"status={package.get('status')} executable={package.get('spring_boot_executable')} "
+            f"oracle-libraries={package.get('oracle_runtime_library_count')} "
+            f"postgresql-drivers={package.get('postgresql_driver_count')} "
+            f"phase={package.get('failure_phase')}"
+        )
+        failure_path = _write_failure_report(
+            resolved_output, run_name, oracle_lane, postgres_lane, package
+        )
+        report(f"Safe diagnostics written to {failure_path}")
         raise ValueError("cloudbank-production-qualification-acceptance-failed")
     report("All native gates passed; signing the bounded qualification receipt")
     receipt = sign(

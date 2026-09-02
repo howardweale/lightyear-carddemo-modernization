@@ -9,6 +9,7 @@ from pathlib import Path
 
 from lightyear_common.io import write_json
 from lightyear_data.cloudbank_production_qualification import (
+    FAILURE_REPORT_NAME,
     OUTPUT_ROOT,
     RECEIPT_NAME,
     build_artifacts,
@@ -62,22 +63,30 @@ def main(argv: list[str] | None = None) -> int:
     elif args.command == "run":
         project_root = args.project_root.resolve()
         ms56_receipt = json.loads(args.ms56_receipt.read_text(encoding="utf-8"))
-        receipt = execute_qualification(
-            project_root,
-            args.source_root.resolve(),
-            ms56_receipt,
-            args.output_root.resolve(),
-            key,
-            args.signer,
-            args.run_id,
-            progress=_progress,
-        )
-        result = {
-            "status": "passed",
-            "output": str(args.output_root / RECEIPT_NAME),
-            "content_sha256": receipt["content_sha256"],
-            "run_id": receipt["run_id"],
-        }
+        try:
+            receipt = execute_qualification(
+                project_root,
+                args.source_root.resolve(),
+                ms56_receipt,
+                args.output_root.resolve(),
+                key,
+                args.signer,
+                args.run_id,
+                progress=_progress,
+            )
+            result = {
+                "status": "passed",
+                "output": str(args.output_root / RECEIPT_NAME),
+                "content_sha256": receipt["content_sha256"],
+                "run_id": receipt["run_id"],
+            }
+        except ValueError as error:
+            failure_report = args.output_root / FAILURE_REPORT_NAME
+            result = {
+                "status": "failed",
+                "error": str(error),
+                "diagnostics": str(failure_report) if failure_report.is_file() else None,
+            }
     else:
         project_root = args.project_root.resolve()
         receipt = json.loads(args.receipt.read_text(encoding="utf-8"))

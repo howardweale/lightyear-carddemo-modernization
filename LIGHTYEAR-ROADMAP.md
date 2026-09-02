@@ -36,6 +36,9 @@ production-qualified.
 | MS #51 | Oracle Native Execution Admission Gate | Admission contract complete; SQL harnesses and authorized native runs pending |
 | MS #52 | Oracle Customer (Large) Control Tower Projection | Complete |
 | MS #53 | CloudBank Modern Oracle Reference Estate | Complete |
+| MS #54 | CloudBank Executable Source Baseline | Execution contract complete; authorized Java 21, Docker, and Oracle run pending |
+| MS #55 | CloudBank Customer PostgreSQL Mapping | Planned after an admitted MS #54 Oracle source receipt |
+| MS #56 | First CloudBank Dark Factory Run | Planned after MS #55 mapping qualification |
 
 The v0.35.0 stored-logic qualification core is retained as supporting MS #34 evidence. It does not
 replace the planned DB2 milestone.
@@ -348,3 +351,45 @@ This is the governed source-and-risk baseline for later factory milestones. Clou
 built or executed, no target is selected, and no schema conversion, application refactoring,
 dual-run comparison, native target proof, application equivalence, migration completion, or
 production readiness is claimed.
+
+## MS #54 — CloudBank Executable Source Baseline
+
+MS #54 makes the transition from static inventory to controlled execution explicit. The build plan
+requires the complete pinned `cloudbank-v5` subtree, its exact commit and tree identities, Java 21,
+Maven 3.6 or newer, and the seven-service set declared by the pinned upstream image-build script.
+An admitted build receipt must bind all four build commands and all seven JAR hashes; a successful
+compile cannot be inferred from source inventory.
+
+The first bounded native proof uses the real upstream `azn-server` Testcontainers suite: three
+integration classes and seven native Oracle tests covering Liquibase bootstrap, repository and API
+behavior, and OAuth2 authorization-server behavior. The receipt binds the source and build plans,
+the exact Oracle image tag and immutable image ID, Java and Maven versions, output hashes, and zero
+failed, errored, or skipped tests. Credentials, raw stdout, raw stderr, and signing keys are never
+admitted to repository evidence.
+
+The complete pinned codebase is required as an external checkout; it is not vendored. Its sample
+and bootstrap rows are enough for the first controlled source proof. A customer or production data
+extract is separate work requiring authorization, privacy controls, profiling, and reconciliation.
+The committed readiness receipt remains `ready-to-execute-not-observed` because this development
+environment lacks the authorized Java 21, Docker, and Oracle evidence run.
+
+The next workcell executes and admits this baseline, then selects the customer service as the first
+factory slice. PostgreSQL target selection and mapping follow that admitted source evidence rather
+than preceding it. Customer-service runtime behavior, production-data observation, PostgreSQL
+mapping, target equivalence, application equivalence, migration completion, and production
+readiness remain false.
+
+## Planned next increments
+
+MS #55 selects the CloudBank `customer` service as the first transformation slice and generates a
+governed Oracle-to-PostgreSQL mapping only after an MS #54 source-runtime receipt is admitted. The
+mapping must cover source DDL, Liquibase order, data types, identity/default behavior, constraints,
+sample-data fixtures, JPA mappings, repository queries, and API-observable behavior. Every item is
+classified as exact, normalized-equivalent, policy-decision-required, lossy, or unsupported; open
+policy or loss blocks workcell admission.
+
+MS #56 runs the first dark factory workcell against that sealed mapping. Planner, builder, verifier,
+and evidence roles receive only their bounded context; generated PostgreSQL DDL, Liquibase changes,
+application edits, tests, and receipts remain isolated until deterministic source tests, PostgreSQL
+tests, and dual-run API/data comparisons pass. Promotion remains human-authorized. One successful
+customer-service workcell does not establish whole-CloudBank equivalence.

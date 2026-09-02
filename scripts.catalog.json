@@ -1,10 +1,11 @@
 {
   "catalog_type": "lightyear-entrypoint-catalog",
-  "content_sha256": "cd23c93201f2698f8117d2f113afb48afc3d1759a1382ae865b8065803993061",
+  "content_sha256": "0a0bdc7e28bd3acc73d2b3ce7f2609ecab68e789c93eea1a8704f1e5f7a90dec",
   "entries": [
     {"name": "asm-readiness", "purpose": "Build or verify HLASM readiness evidence.", "role": "release-gated", "verification": "verify.sh and verify.ps1"},
     {"name": "audit-control-tower", "purpose": "Build or verify the audit evidence projection.", "role": "release-gated", "verification": "verify.sh and verify.ps1"},
     {"name": "cics-vsam-readiness", "purpose": "Build or verify CICS and VSAM readiness evidence.", "role": "release-gated", "verification": "verify.sh and verify.ps1"},
+    {"name": "cloudbank-executable-baseline", "purpose": "Build or verify the CloudBank source-build and bounded Oracle-runtime admission contract.", "role": "release-gated", "verification": "verify.sh, verify.ps1, and dedicated Java 21 GitHub CI job"},
     {"name": "cloudbank-reference-estate", "purpose": "Build or verify the CloudBank modern Oracle reference-estate projection.", "role": "release-gated", "verification": "verify.sh and verify.ps1"},
     {"name": "cobol-qualification", "purpose": "Build or verify COBOL qualification evidence.", "role": "release-gated", "verification": "verify.sh and verify.ps1"},
     {"name": "pli-qualification", "purpose": "Build or verify bounded PL/I qualification evidence.", "role": "release-gated", "verification": "verify.sh and verify.ps1"},

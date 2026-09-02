@@ -1,0 +1,133 @@
+{
+  "claim_boundary": {
+    "migration_complete": false,
+    "oracle_runtime_observed": false,
+    "postgresql_mapping_complete": false,
+    "production_ready": false,
+    "source_build_observed": false,
+    "target_equivalent": false
+  },
+  "content_sha256": "8e4a65f4bd33eb03981f76caaf3853d9268968250ea4eeb1203d1ae13c3d862c",
+  "expected_artifacts": [
+    {
+      "module": "azn-server",
+      "path": "azn-server/target/azn-server-0.0.1-SNAPSHOT.jar"
+    },
+    {
+      "module": "account",
+      "path": "account/target/account-0.0.1-SNAPSHOT.jar"
+    },
+    {
+      "module": "customer",
+      "path": "customer/target/customer-0.0.1-SNAPSHOT.jar"
+    },
+    {
+      "module": "transfer",
+      "path": "transfer/target/transfer-0.0.1-SNAPSHOT.jar"
+    },
+    {
+      "module": "checks",
+      "path": "checks/target/checks-0.0.1-SNAPSHOT.jar"
+    },
+    {
+      "module": "creditscore",
+      "path": "creditscore/target/creditscore-0.0.1-SNAPSHOT.jar"
+    },
+    {
+      "module": "testrunner",
+      "path": "testrunner/target/testrunner-0.0.1-SNAPSHOT.jar"
+    }
+  ],
+  "plan_type": "lightyear-cloudbank-source-build-plan",
+  "release": "0.54.0",
+  "schema_version": "1.0",
+  "source": {
+    "commit": "4f41b16d00c45503f691836fee8138010c969e86",
+    "repository": "https://github.com/oracle/microservices-backend",
+    "root_tree": "6aa92e89c783f123c4da8d7ae18108004a4f4a99",
+    "subtree": "cloudbank-v5",
+    "subtree_tree": "bd918386209f284a1ed31802555740eb34b75348"
+  },
+  "source_scope": {
+    "excluded_from_upstream_image_build": {
+      "chatbot": "not listed by the pinned upstream 2-images_build_push.sh service set"
+    },
+    "full_pinned_subtree_required": true,
+    "java_source_unit_count": 70,
+    "reactor_modules": [
+      "account",
+      "azn-server",
+      "buildtools",
+      "chatbot",
+      "checks",
+      "common",
+      "creditscore",
+      "customer",
+      "testrunner",
+      "transfer"
+    ],
+    "sql_file_count": 9,
+    "tracked_file_count": 189,
+    "upstream_image_build_services": [
+      "azn-server",
+      "account",
+      "customer",
+      "transfer",
+      "checks",
+      "creditscore",
+      "testrunner"
+    ]
+  },
+  "steps": [
+    {
+      "argv": [
+        "mvn",
+        "clean",
+        "install",
+        "-pl",
+        "buildtools",
+        "-DskipTests"
+      ],
+      "id": "install-buildtools"
+    },
+    {
+      "argv": [
+        "mvn",
+        "clean",
+        "install",
+        "-N",
+        "-DskipTests"
+      ],
+      "id": "install-parent"
+    },
+    {
+      "argv": [
+        "mvn",
+        "clean",
+        "install",
+        "-pl",
+        "common",
+        "-DskipTests"
+      ],
+      "id": "install-common"
+    },
+    {
+      "argv": [
+        "mvn",
+        "clean",
+        "package",
+        "-pl",
+        "azn-server,account,customer,transfer,checks,creditscore,testrunner",
+        "-Dmaven.compiler.release=21",
+        "-DskipTests"
+      ],
+      "id": "package-upstream-service-set"
+    }
+  ],
+  "toolchain": {
+    "docker_required": false,
+    "java_major": 21,
+    "maven_minimum": "3.6.0",
+    "network_dependency_resolution_required": true
+  }
+}

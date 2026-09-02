@@ -1,0 +1,60 @@
+{
+  "cloudbank_source_baseline_complete": false,
+  "content_sha256": "cc3f44c7be55982a1421e74b75a5cce28c9d994941929a4bf120db70fe3819ef",
+  "customer_service_runtime_observed": false,
+  "execution_contract_sha256": "52f147f9862472175fd73e34aa277964994f3ec61dd9340c6f5c1e64af398cf9",
+  "gate_status": "ready-to-execute-not-observed",
+  "gates": [
+    {
+      "id": "full-pinned-source",
+      "status": "passed-static"
+    },
+    {
+      "id": "java21-maven-build-contract",
+      "status": "passed-static"
+    },
+    {
+      "id": "oracle-native-test-contract",
+      "status": "passed-static"
+    },
+    {
+      "id": "signed-receipt-verifier",
+      "status": "passed-static"
+    },
+    {
+      "id": "source-build-execution",
+      "status": "blocked-authorized-runtime-required"
+    },
+    {
+      "id": "oracle-native-execution",
+      "status": "blocked-docker-oracle-runtime-required"
+    },
+    {
+      "id": "customer-service-baseline",
+      "status": "blocked-first-factory-workcell"
+    },
+    {
+      "id": "production-data-acquisition",
+      "status": "blocked-separate-authorization-required"
+    }
+  ],
+  "migration_complete": false,
+  "native_oracle_test_count": 0,
+  "oracle_runtime_observed": false,
+  "postgresql_mapping_complete": false,
+  "production_data_observed": false,
+  "production_ready": false,
+  "receipt_type": "lightyear-cloudbank-executable-baseline-readiness",
+  "release": "0.54.0",
+  "schema_version": "1.0",
+  "source": {
+    "commit": "4f41b16d00c45503f691836fee8138010c969e86",
+    "repository": "https://github.com/oracle/microservices-backend",
+    "root_tree": "6aa92e89c783f123c4da8d7ae18108004a4f4a99",
+    "subtree": "cloudbank-v5",
+    "subtree_tree": "bd918386209f284a1ed31802555740eb34b75348"
+  },
+  "source_build_observed": false,
+  "target_equivalent": false,
+  "target_selected": false
+}

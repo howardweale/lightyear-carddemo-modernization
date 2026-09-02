@@ -26,5 +26,8 @@ script is undocumented, and that every POSIX entry point has a PowerShell twin.
 - `./lightyear.sh catalog` checks entry-point coverage without running workloads.
 - `./quality-gate.sh` and `./mainframe-access.sh live` are operator-controlled by design; they are
   not release-verifier substitutes.
+- `./cloudbank-executable-baseline.sh verify` checks the committed MS #54 execution contract;
+  `verify-source`, `source-build`, and `oracle-runtime` enforce the exact pinned checkout and
+  authorized Java 21/Maven/Docker evidence path.
 
 See `scripts.catalog.json` for the exact purpose, role, and verification owner of all entry points.

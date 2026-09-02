@@ -1,0 +1,95 @@
+{
+  "application_refactored": false,
+  "columns": [
+    {
+      "nullable": false,
+      "source": "CUSTOMER_ID",
+      "source_type": "VARCHAR2(20)",
+      "target": "customer_id",
+      "target_type": "VARCHAR(20) COLLATE \"C\"",
+      "transformation": "oracle-empty-string-to-null-then-identity"
+    },
+    {
+      "nullable": true,
+      "source": "CUSTOMER_NAME",
+      "source_type": "VARCHAR2(40)",
+      "target": "customer_name",
+      "target_type": "VARCHAR(40) COLLATE \"C\"",
+      "transformation": "oracle-empty-string-to-null-then-identity"
+    },
+    {
+      "nullable": true,
+      "source": "CUSTOMER_EMAIL",
+      "source_type": "VARCHAR2(40)",
+      "target": "customer_email",
+      "target_type": "VARCHAR(40) COLLATE \"C\"",
+      "transformation": "oracle-empty-string-to-null-then-identity"
+    },
+    {
+      "nullable": false,
+      "source": "DATE_BECAME_CUSTOMER",
+      "source_type": "DATE DEFAULT SYSDATE",
+      "target": "date_became_customer",
+      "target_type": "TIMESTAMP(0) WITHOUT TIME ZONE DEFAULT CURRENT_TIMESTAMP(0)",
+      "transformation": "oracle-date-second-precision-to-timestamp-without-time-zone"
+    },
+    {
+      "nullable": true,
+      "source": "CUSTOMER_OTHER_DETAILS",
+      "source_type": "VARCHAR2(4000)",
+      "target": "customer_other_details",
+      "target_type": "VARCHAR(4000) COLLATE \"C\"",
+      "transformation": "oracle-empty-string-to-null-then-identity"
+    },
+    {
+      "nullable": true,
+      "source": "PASSWORD",
+      "source_type": "VARCHAR2(40)",
+      "target": "password",
+      "target_type": "VARCHAR(40) COLLATE \"C\"",
+      "transformation": "oracle-empty-string-to-null-then-identity"
+    },
+    {
+      "nullable": true,
+      "source": "ROLE",
+      "source_type": "VARCHAR2(40)",
+      "target": "role",
+      "target_type": "VARCHAR(40) COLLATE \"C\"",
+      "transformation": "oracle-empty-string-to-null-then-identity"
+    }
+  ],
+  "constraints": [
+    {
+      "classification": "exact",
+      "columns": [
+        "customer_id"
+      ],
+      "kind": "primary-key",
+      "source": "CUSTOMERS_PK",
+      "target": "customers_pk"
+    }
+  ],
+  "content_sha256": "7564c41281176e0363bc7c0328cba59602bb00673575413956869f9a8eadb011",
+  "decisions": {
+    "collation": "C collation qualifies bounded case-sensitive ASCII fragment searches",
+    "credentials": "preserve column shape but never copy upstream sample password values into evidence",
+    "date": "Oracle DATE maps to second-precision timestamp without time zone; controlled runs set UTC",
+    "empty_string": "all character inputs use NULLIF(value, '') before persistence",
+    "identifier_case": "unquoted Oracle uppercase maps to unquoted PostgreSQL lowercase",
+    "schema_only_role": "preserve nullable ROLE column; MS #56 must reconcile the missing JPA field"
+  },
+  "mapping_generated": true,
+  "mapping_type": "lightyear-cloudbank-oracle-postgresql-mapping",
+  "migration_complete": false,
+  "native_postgresql_observed": false,
+  "production_ready": false,
+  "release": "0.55.0",
+  "schema_version": "1.0",
+  "source_contract_sha256": "d5aabaeef84c55fb240f2cce7c7a624d1b46d6f68340c4d8d534de6fc60d0f91",
+  "source_dialect": "oracle-cloudbank-v5",
+  "source_table": "CUSTOMER.CUSTOMERS",
+  "target_dialect": "postgresql-16",
+  "target_equivalent": false,
+  "target_image": "postgres:16-alpine",
+  "target_table": "cloudbank_customer.customers"
+}

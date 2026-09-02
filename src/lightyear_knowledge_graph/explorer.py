@@ -341,7 +341,10 @@ OPERATOR_WORKLOADS = [
         "problem_id": "cloudbank-customer-account",
         "perspective_id": "cloudbank-customer-account",
         "recommended_scope": "database",
-        "description": "Modern account and customer services with Oracle-owned schemas and explicit target-mapping risks.",
+        "description": "The customer table now has a governed PostgreSQL 16 mapping; native database proof and Spring application refactoring remain gated.",
+        "target_dialect": "postgresql-16",
+        "target_status": "mapping generated · native proof pending",
+        "mapping_artifact": "reference-estates/cloudbank/customer-postgresql/mapping.json",
     },
     {
         "id": "cloudbank-reference:workload:money-transfer",
@@ -677,7 +680,7 @@ class GraphExplorerIndex:
             limitations.append("No Oracle customer integration edges are currently projected.")
         if "cloudbank-reference" in available_company_ids:
             limitations.append(
-                "CloudBank is pinned static modern-Oracle reference evidence; no runtime, PostgreSQL mapping, target equivalence, or completed migration is attached."
+                "CloudBank is pinned modern-Oracle reference evidence. The customer-table PostgreSQL mapping is generated, but native target, application equivalence, whole-estate equivalence, and migration completion are not attached."
             )
         limitations.append("No SAP ASE customer integration edges are currently projected.")
         return {

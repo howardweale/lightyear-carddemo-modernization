@@ -4,7 +4,30 @@
 
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.54.0 — CloudBank executable source baseline**
+Release: **v0.55.0 — CloudBank customer PostgreSQL mapping**
+
+v0.55 selects CloudBank's `customer` service as the first transformation workcell and generates a
+governed mapping from `CUSTOMER.CUSTOMERS` to PostgreSQL 16. All seven columns, the primary key,
+Liquibase order, synthetic fixtures, fragment searches, and CRUD commit/rollback behavior are
+bound to deterministic artifacts and a native target execution contract.
+
+The compatibility ledger makes the real semantic decisions visible: Oracle empty strings normalize
+to `NULL`; Oracle `DATE DEFAULT SYSDATE` becomes a UTC, second-precision PostgreSQL timestamp policy;
+bounded fragment searches use `C` collation; and the `ROLE` column is preserved while its absence
+from the JPA entity blocks application equivalence. Upstream demonstration passwords are excluded
+from committed fixtures and receipts.
+
+```bash
+./cloudbank-customer-postgresql.sh verify
+./cloudbank-customer-postgresql.sh verify-source /path/to/cloudbank-upstream
+```
+
+The mapping is generated, but the committed readiness receipt leaves native PostgreSQL execution
+pending. The native action requires the operator-held signed MS #54 Oracle receipt. Spring/JPA
+refactoring, HTTP/API and authorization equivalence, whole-CloudBank migration, and production
+readiness remain false.
+
+Previous release: **v0.54.0 — CloudBank executable source baseline**
 
 v0.54 turns the pinned CloudBank inventory into the execution contract needed before the first dark
 factory workcell. Every run must use the complete `cloudbank-v5` subtree at commit
@@ -28,7 +51,7 @@ enough for this first controlled source proof; production data requires a separa
 extract. PostgreSQL mapping, target equivalence, application equivalence, migration completion, and
 production readiness remain false.
 
-Previous release: **v0.53.0 — CloudBank modern Oracle reference estate**
+Earlier release: **v0.53.0 — CloudBank modern Oracle reference estate**
 
 v0.53 adds Oracle's official CloudBank v5 reference application as the third selectable Control
 Tower estate: **CloudBank Reference Estate**. Unlike the enterprise ERP-shaped Oracle source,
@@ -1148,7 +1171,7 @@ read-only dashboard cannot approve, resolve, or launch work.
 
 The complete customer-readable milestone history is published in the
 [searchable milestone documentation library](https://howardweale.github.io/lightyear-carddemo-modernization/milestones/).
-MS #1 through MS #54 each have a canonical Markdown narrative plus matching Microsoft Word and PDF
+MS #1 through MS #55 each have a canonical Markdown narrative plus matching Microsoft Word and PDF
 editions. Search runs locally in the browser over milestone number, title, customer value,
 capability, release, boundary, and roadmap phase. The
 [repository index](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/README.md)

@@ -146,7 +146,16 @@ class CloudBankExecutableBaselineTests(unittest.TestCase):
             actual = json.loads((ESTATE / "executable-baseline" / name).read_text(encoding="utf-8"))
             self.assertEqual(expected, actual)
         schemas = sorted((ESTATE / "schema").glob("*.schema.json"))
-        self.assertEqual(3, len(schemas))
+        self.assertEqual(
+            {
+                "executable-baseline-readiness.schema.json",
+                "oracle-runtime-execution-receipt.schema.json",
+                "source-build-execution-receipt.schema.json",
+                "customer-postgresql-execution-receipt.schema.json",
+                "customer-postgresql-readiness.schema.json",
+            },
+            {path.name for path in schemas},
+        )
         self.assertTrue(all(json.loads(path.read_text(encoding="utf-8"))["$schema"] for path in schemas))
 
     def test_exact_pinned_checkout_is_admitted(self) -> None:

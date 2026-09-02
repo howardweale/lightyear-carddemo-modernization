@@ -416,7 +416,9 @@ function renderOperatorContext() {
   if (!(customer && problem && workload && scope && lens)) return;
   $("operator-context-path").textContent = `${customer.name} / ${problem.name} / ${workload.name.replace(/^CardDemo\s+/i, "")}`;
   $("operator-context-description").textContent = `${workload.description} ${scope.description} ${lens.description}`;
-  $("customer-evidence-badge").textContent = `${customer.evidence_class} evidence`;
+  $("customer-evidence-badge").textContent = workload.target_status
+    ? `${customer.evidence_class} · ${workload.target_status}`
+    : `${customer.evidence_class} evidence`;
   renderEstateTrigger();
 }
 

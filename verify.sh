@@ -39,6 +39,7 @@ fi
 "$project_dir/pli-build-attestation.sh" verify
 "$project_dir/cloudbank-reference-estate.sh" verify
 "$project_dir/cloudbank-executable-baseline.sh" verify
+"$project_dir/cloudbank-customer-postgresql.sh" verify
 "$project_dir/composite-estate.sh" verify
 "$project_dir/runtime-evidence.sh" verify
 "$project_dir/semantic-memory.sh" validate

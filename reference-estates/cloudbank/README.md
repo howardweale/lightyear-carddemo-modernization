@@ -67,12 +67,24 @@ are in [`executable-baseline/README.md`](executable-baseline/README.md).
 The checked-in readiness receipt is `ready-to-execute-not-observed`. It is a deterministic
 execution contract, not a fabricated source-build or native-runtime result.
 
+## Generate the first PostgreSQL mapping
+
+MS #55 selects the `customer` service as the first transformation workcell. The generated mapping
+under [`customer-postgresql/`](customer-postgresql/) covers all seven Oracle columns, the primary
+key, Liquibase order, empty-string normalization, DATE/SYSDATE behavior, repository fragment
+queries, and CRUD transactions on PostgreSQL 16. It preserves application and production
+equivalence as blocked until later milestones.
+
+```bash
+./cloudbank-customer-postgresql.sh verify
+./cloudbank-customer-postgresql.sh verify-source /path/to/oracle-microservices-backend
+```
+
 ## Control Tower projection
 
 **CloudBank Reference Estate** is selectable alongside **CardDemo Reference Estate** and
-**Oracle Customer (Large)**. It is a source estate for future autonomous Oracle-to-PostgreSQL or
-other adapter-qualified relational-target work. The database scope is recommended, but target
-selection remains a governed later decision.
+**Oracle Customer (Large)**. PostgreSQL 16 is now selected for the bounded customer workcell; target
+selection for the rest of CloudBank remains governed later work.
 
 The projection is composed with the existing PL/I and Oracle Customer (Large) fragments. It does
 not change the canonical CardDemo graph or the identity to which runtime and audit evidence are
@@ -81,8 +93,7 @@ bound.
 ## Evidence boundary
 
 MS #53 is upstream static inventory and curated migration-risk evidence. MS #54 adds the exact
-source-build and bounded Oracle-runtime admission path, but the committed readiness receipt does not
-claim an authorized execution. No customer system or production data is attached. No PostgreSQL
-mapping, alternative-target mapping, generated refactoring, native target execution, application
-equivalence, migration completion, or production readiness is claimed. Those capabilities require
-later transformation and dual-run evidence milestones.
+source-build and bounded Oracle-runtime admission path. MS #55 generates the customer-table
+PostgreSQL mapping while leaving its committed native target readiness unobserved. No customer
+system or production data is attached. No application refactoring, API equivalence, whole-CloudBank
+equivalence, migration completion, or production readiness is claimed.

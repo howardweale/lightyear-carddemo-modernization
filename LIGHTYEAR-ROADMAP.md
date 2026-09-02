@@ -36,8 +36,8 @@ production-qualified.
 | MS #51 | Oracle Native Execution Admission Gate | Admission contract complete; SQL harnesses and authorized native runs pending |
 | MS #52 | Oracle Customer (Large) Control Tower Projection | Complete |
 | MS #53 | CloudBank Modern Oracle Reference Estate | Complete |
-| MS #54 | CloudBank Executable Source Baseline | Execution contract complete; authorized Java 21, Docker, and Oracle run pending |
-| MS #55 | CloudBank Customer PostgreSQL Mapping | Planned after an admitted MS #54 Oracle source receipt |
+| MS #54 | CloudBank Executable Source Baseline | Complete; signed execution receipts remain operator-held evidence |
+| MS #55 | CloudBank Customer PostgreSQL Mapping | Mapping generated; native PostgreSQL receipt pending |
 | MS #56 | First CloudBank Dark Factory Run | Planned after MS #55 mapping qualification |
 
 The v0.35.0 stored-logic qualification core is retained as supporting MS #34 evidence. It does not
@@ -373,20 +373,38 @@ extract is separate work requiring authorization, privacy controls, profiling, a
 The committed readiness receipt remains `ready-to-execute-not-observed` because this development
 environment lacks the authorized Java 21, Docker, and Oracle evidence run.
 
-The next workcell executes and admits this baseline, then selects the customer service as the first
+The next workcell uses an admitted baseline receipt to select the customer service as the first
 factory slice. PostgreSQL target selection and mapping follow that admitted source evidence rather
-than preceding it. Customer-service runtime behavior, production-data observation, PostgreSQL
-mapping, target equivalence, application equivalence, migration completion, and production
-readiness remain false.
+than preceding it. Customer-service runtime behavior, production-data observation, target
+equivalence, application equivalence, migration completion, and production readiness remain false.
+
+## MS #55 — CloudBank Customer PostgreSQL Mapping
+
+MS #55 selects CloudBank's `customer` service and its `CUSTOMER.CUSTOMERS` table as the first
+transformation workcell. The generated PostgreSQL 16 mapping covers all seven columns, the primary
+key, Liquibase ordering, synthetic fixtures, repository fragment searches, and database-level CRUD,
+commit, and rollback behavior.
+
+The mapping records the decisions that a text substitution would miss. Oracle empty strings are
+normalized to `NULL`. Oracle `DATE DEFAULT SYSDATE` maps to a second-precision timestamp without a
+time zone under a controlled UTC policy, while long-transaction clock behavior remains outside the
+production claim. `C` collation bounds case-sensitive ASCII fragment searches. PostgreSQL preserves
+the nullable `ROLE` column even though the pinned JPA entity does not map it; MS #56 must reconcile
+that mismatch before application equivalence can pass.
+
+The native target action accepts only the exact pinned source and an admitted signed MS #54 Oracle
+receipt, then executes the mapping in an isolated `postgres:16-alpine` container. Its signed receipt
+binds source and target image identities, mapping and ledger hashes, catalog realization, four
+synthetic rows, default and empty-string behavior, name/email fragment queries, and transaction
+commit/rollback markers. Upstream demonstration password values, raw output, credentials, and
+production data are not persisted.
+
+The committed readiness state is `mapping-generated-native-execution-pending`. The database mapping
+is ready for the operator-held native proof, but the Spring application has not been refactored or
+run on PostgreSQL. API, authorization, concurrency, CDC, cutover, whole-CloudBank equivalence,
+migration completion, and production readiness remain false.
 
 ## Planned next increments
-
-MS #55 selects the CloudBank `customer` service as the first transformation slice and generates a
-governed Oracle-to-PostgreSQL mapping only after an MS #54 source-runtime receipt is admitted. The
-mapping must cover source DDL, Liquibase order, data types, identity/default behavior, constraints,
-sample-data fixtures, JPA mappings, repository queries, and API-observable behavior. Every item is
-classified as exact, normalized-equivalent, policy-decision-required, lossy, or unsupported; open
-policy or loss blocks workcell admission.
 
 MS #56 runs the first dark factory workcell against that sealed mapping. Planner, builder, verifier,
 and evidence roles receive only their bounded context; generated PostgreSQL DDL, Liquibase changes,

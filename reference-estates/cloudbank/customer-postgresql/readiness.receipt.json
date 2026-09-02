@@ -1,0 +1,22 @@
+{
+  "application_refactored": false,
+  "behavior_contract_sha256": "680a7a740ec1038b4323245f71f00ee4b1ca8711fc201e387390f260db500c55",
+  "bounded_database_mapping_qualified": false,
+  "compatibility_ledger_sha256": "b7245d1a4677093a364460acebbb8d745226bd3d80bbf168aeb4b7559e4920bc",
+  "content_sha256": "afa11cc9bf6c1144635ad4715ed56fb56c5b34af3fd76a709aa4841ab6ee0924",
+  "gate_status": "mapping-generated-native-execution-pending",
+  "mapping_sha256": "7564c41281176e0363bc7c0328cba59602bb00673575413956869f9a8eadb011",
+  "migration_complete": false,
+  "native_postgresql_observed": false,
+  "postgresql_mapping_complete": true,
+  "production_ready": false,
+  "receipt_type": "lightyear-cloudbank-customer-postgresql-readiness",
+  "release": "0.55.0",
+  "schema_version": "1.0",
+  "source_contract_sha256": "d5aabaeef84c55fb240f2cce7c7a624d1b46d6f68340c4d8d534de6fc60d0f91",
+  "source_oracle_receipt_committed": false,
+  "source_oracle_receipt_required": true,
+  "target_dialect": "postgresql-16",
+  "target_equivalent": false,
+  "target_selected": true
+}

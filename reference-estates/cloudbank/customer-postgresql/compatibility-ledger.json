@@ -1,0 +1,169 @@
+{
+  "application_equivalence_blocked": true,
+  "bounded_database_mapping_blocked": false,
+  "content_sha256": "b7245d1a4677093a364460acebbb8d745226bd3d80bbf168aeb4b7559e4920bc",
+  "entries": [
+    {
+      "classification": "normalized-equivalent",
+      "decision": "bounded-workcell-approved",
+      "evidence_required": [
+        "ascii-boundary-fixtures",
+        "production-nls-length-profile"
+      ],
+      "item_id": "column:customer-id",
+      "rationale": "PostgreSQL VARCHAR counts characters while the Oracle DDL does not pin BYTE or CHAR length semantics.",
+      "scope": "column",
+      "source_semantics": "pinned CloudBank customer Oracle behavior",
+      "target_semantics": "bounded PostgreSQL 16 mapping"
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "bounded-workcell-approved",
+      "evidence_required": [
+        "fragment-query-probe",
+        "production-collation-profile"
+      ],
+      "item_id": "column:customer-name",
+      "rationale": "C collation preserves bounded case-sensitive ASCII fragment behavior.",
+      "scope": "column",
+      "source_semantics": "pinned CloudBank customer Oracle behavior",
+      "target_semantics": "bounded PostgreSQL 16 mapping"
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "bounded-workcell-approved",
+      "evidence_required": [
+        "fragment-query-probe",
+        "production-collation-profile"
+      ],
+      "item_id": "column:customer-email",
+      "rationale": "C collation preserves bounded case-sensitive ASCII fragment behavior.",
+      "scope": "column",
+      "source_semantics": "pinned CloudBank customer Oracle behavior",
+      "target_semantics": "bounded PostgreSQL 16 mapping"
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "use-utc-second-precision-and-block-production-equivalence",
+      "evidence_required": [
+        "default-value-probe",
+        "long-transaction-time-policy"
+      ],
+      "item_id": "column:date-became-customer",
+      "rationale": "Oracle DATE stores seconds and SYSDATE uses database wall-clock semantics; PostgreSQL CURRENT_TIMESTAMP is transaction-scoped.",
+      "scope": "column",
+      "source_semantics": "pinned CloudBank customer Oracle behavior",
+      "target_semantics": "bounded PostgreSQL 16 mapping"
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "bounded-workcell-approved",
+      "evidence_required": [
+        "empty-string-null-probe"
+      ],
+      "item_id": "column:customer-other-details",
+      "rationale": "Oracle empty strings collapse to NULL and PostgreSQL values are normalized with NULLIF.",
+      "scope": "column",
+      "source_semantics": "pinned CloudBank customer Oracle behavior",
+      "target_semantics": "bounded PostgreSQL 16 mapping"
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "synthetic-noncredential-values-only",
+      "evidence_required": [
+        "sensitive-value-negative-gate"
+      ],
+      "item_id": "column:password",
+      "rationale": "The upstream bootstrap contains demonstration plaintext credentials that must not enter committed fixtures or receipts.",
+      "scope": "security",
+      "source_semantics": "pinned CloudBank customer Oracle behavior",
+      "target_semantics": "bounded PostgreSQL 16 mapping"
+    },
+    {
+      "classification": "policy-decision-required",
+      "decision": "preserve-column-and-block-application-equivalence-until-ms56",
+      "evidence_required": [
+        "generated-entity-change",
+        "dual-run-api-proof"
+      ],
+      "item_id": "column:role",
+      "rationale": "ROLE exists in the table and bootstrap rows but is absent from the JPA entity.",
+      "scope": "orm-schema",
+      "source_semantics": "pinned CloudBank customer Oracle behavior",
+      "target_semantics": "bounded PostgreSQL 16 mapping"
+    },
+    {
+      "classification": "exact",
+      "decision": "accepted",
+      "evidence_required": [
+        "native-catalog-probe"
+      ],
+      "item_id": "behavior:primary-key",
+      "rationale": "A single-column non-null primary key is directly representable.",
+      "scope": "constraint",
+      "source_semantics": "pinned CloudBank customer Oracle behavior",
+      "target_semantics": "bounded PostgreSQL 16 mapping"
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "bounded-workcell-approved",
+      "evidence_required": [
+        "name-fragment-probe",
+        "email-fragment-probe"
+      ],
+      "item_id": "behavior:contains-search",
+      "rationale": "Spring Data containing queries map to LIKE; C collation and ASCII fixtures bound the proof.",
+      "scope": "repository-query",
+      "source_semantics": "pinned CloudBank customer Oracle behavior",
+      "target_semantics": "bounded PostgreSQL 16 mapping"
+    },
+    {
+      "classification": "normalized-equivalent",
+      "decision": "bounded-workcell-approved",
+      "evidence_required": [
+        "native-commit-rollback-probe"
+      ],
+      "item_id": "behavior:crud-transaction",
+      "rationale": "Insert, update, delete, commit, and rollback mechanics are directly testable; concurrency is excluded.",
+      "scope": "transaction",
+      "source_semantics": "pinned CloudBank customer Oracle behavior",
+      "target_semantics": "bounded PostgreSQL 16 mapping"
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-until-ms56",
+      "evidence_required": [
+        "generated-postgresql-runtime-configuration"
+      ],
+      "item_id": "behavior:oracle-ucp-wallet",
+      "rationale": "Oracle JDBC, UCP, and wallet configuration are application refactoring concerns, not database-DDL mapping.",
+      "scope": "application-runtime",
+      "source_semantics": "pinned CloudBank customer Oracle behavior",
+      "target_semantics": "bounded PostgreSQL 16 mapping"
+    },
+    {
+      "classification": "unsupported",
+      "decision": "excluded-until-ms56",
+      "evidence_required": [
+        "dual-run-api-and-security-proof"
+      ],
+      "item_id": "behavior:api-authorization",
+      "rationale": "HTTP authorization and ownership checks are not proven by a database-only target execution.",
+      "scope": "application-runtime",
+      "source_semantics": "pinned CloudBank customer Oracle behavior",
+      "target_semantics": "bounded PostgreSQL 16 mapping"
+    }
+  ],
+  "ledger_type": "lightyear-cloudbank-customer-compatibility-ledger",
+  "mapping_sha256": "7564c41281176e0363bc7c0328cba59602bb00673575413956869f9a8eadb011",
+  "production_equivalence_blocked": true,
+  "release": "0.55.0",
+  "schema_version": "1.0",
+  "statistics": {
+    "exact": 1,
+    "normalized-equivalent": 6,
+    "policy-decision-required": 3,
+    "unsupported": 2
+  },
+  "unresolved_decisions": []
+}

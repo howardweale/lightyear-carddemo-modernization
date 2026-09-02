@@ -152,7 +152,7 @@ class CompositeEstateTests(unittest.TestCase):
         )
         self.assertEqual("postgresql-16", customer_workcell["target_dialect"])
         self.assertEqual(
-            "factory contract ready · native dual-run pending",
+            "qualification contract ready · signed native run pending",
             customer_workcell["target_status"],
         )
         self.assertEqual(
@@ -160,7 +160,7 @@ class CompositeEstateTests(unittest.TestCase):
             customer_workcell["mapping_artifact"],
         )
         self.assertEqual(
-            "factory/cloudbank/customer-postgresql/readiness.receipt.json",
+            "factory/cloudbank/customer-production-qualification/readiness.receipt.json",
             customer_workcell["factory_artifact"],
         )
 

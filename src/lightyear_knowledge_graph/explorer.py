@@ -341,11 +341,11 @@ OPERATOR_WORKLOADS = [
         "problem_id": "cloudbank-customer-account",
         "perspective_id": "cloudbank-customer-account",
         "recommended_scope": "database",
-        "description": "The customer service now has a sealed six-file PostgreSQL transformation and dual-run factory contract; the signed native run remains operator-held evidence.",
+        "description": "The customer service now has a sealed PostgreSQL transformation and a production-readiness qualification contract; the signed native qualification remains operator-held evidence.",
         "target_dialect": "postgresql-16",
-        "target_status": "factory contract ready · native dual-run pending",
+        "target_status": "qualification contract ready · signed native run pending",
         "mapping_artifact": "reference-estates/cloudbank/customer-postgresql/mapping.json",
-        "factory_artifact": "factory/cloudbank/customer-postgresql/readiness.receipt.json",
+        "factory_artifact": "factory/cloudbank/customer-production-qualification/readiness.receipt.json",
     },
     {
         "id": "cloudbank-reference:workload:money-transfer",
@@ -681,7 +681,7 @@ class GraphExplorerIndex:
             limitations.append("No Oracle customer integration edges are currently projected.")
         if "cloudbank-reference" in available_company_ids:
             limitations.append(
-                "CloudBank is pinned modern-Oracle reference evidence. The customer-table PostgreSQL mapping is generated, but native target, application equivalence, whole-estate equivalence, and migration completion are not attached."
+                "CloudBank is pinned modern-Oracle reference evidence. The Customer PostgreSQL production-qualification contract is ready, but its signed native result, other services, whole-estate equivalence, and migration completion are not attached."
             )
         limitations.append("No SAP ASE customer integration edges are currently projected.")
         return {

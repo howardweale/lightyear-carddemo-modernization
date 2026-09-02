@@ -1,0 +1,34 @@
+{
+  "content_sha256": "0ecc58de88c43ed20bad76fe5e347949385809fd09e0b3b368d9f40c8e53fd82",
+  "dependency_cleanup": {
+    "common_transitive_exclusion_sha256": "46164fec02c51a368f8eeecbc2c1870ede4df579690d997f2c81ee0b45ef52af",
+    "path": "pom.xml",
+    "removed_block_sha256": "183cb4bf6a41fd24db16c08f2dee31d9ec56d20f64b3e4d7b4c79446e374ffb5",
+    "removed_dependency": "com.oracle.database.spring:oracle-spring-boot-starter-ucp"
+  },
+  "instrumentation": {
+    "qualification_test_sha256": "addbfa13af83c23fc654fe1ac9d5a0c5ce381a7c431a9e840c1deeb4ccfc7ec9",
+    "spring_security_test_dependency": "07f5db421e42bf09ac55e4873ed01f2e3889c2067c9ba607a23dafb5b0078e12"
+  },
+  "limits": {
+    "application_modules": [
+      "customer"
+    ],
+    "other_runtime_modules_changed": 0,
+    "production_data_allowed": false
+  },
+  "plan_type": "lightyear-cloudbank-customer-production-qualification-transformation",
+  "release": "0.57.0",
+  "schema_version": "1.0",
+  "source_workcell": "MS-56",
+  "target_paths": [
+    "customer/pom.xml",
+    "customer/src/main/java/com/example/customer/model/Customers.java",
+    "customer/src/main/resources/application.yaml",
+    "customer/src/main/resources/db/changelog/data.sql",
+    "customer/src/main/resources/db/changelog/table.sql",
+    "customer/src/test/java/com/example/customer/CustomerApplicationTests.java",
+    "customer/src/test/java/com/example/customer/CustomerProductionQualificationTests.java",
+    "pom.xml"
+  ]
+}

@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.61.0 — 2026-09-02
+
+- Added a receipt-gated Oracle/PostgreSQL comparison chained to the signed MS #57 Customer
+  qualification and signed MS #60 native Account/Transfer wave.
+- Added one seven-scenario normalized observation contract covering successful conservation,
+  invalid input, insufficient funds, failure recovery, Transfer input and identity rejection, and
+  successful orchestration.
+- Executed the original Account business methods against native Oracle and the generated Account
+  transaction core against native PostgreSQL in sequential, isolated lanes.
+- Exercised the original and generated Transfer source contracts with isolated HTTP collaborators
+  and required both database lanes to emit the same content-addressed observation identity.
+- Classified Oracle LRA compensation versus PostgreSQL atomic rollback as an intentional
+  implementation change and retained the Oracle zero-amount failure journal as a visible difference.
+- Added generated-workspace compile gates, deterministic contracts, schemas, cross-platform
+  launchers, safe aggregate diagnostics, Control Tower projection, documentation, and tamper tests.
+- Limited the eligible claim to bounded normalized Customer, Account, and Transfer equivalence;
+  production identity, Checks messaging, remaining services, whole-application equivalence,
+  migration completion, and production readiness remain false.
+
 ## 0.60.1 — 2026-09-02
 
 - Marked the generated Transfer facade's public constructor as the explicit Spring injection point

@@ -97,6 +97,21 @@ jobs:
             transfer_pid=""
             trap - EXIT
           )
+          ./cloudbank-oracle-equivalence.sh verify
+          ./cloudbank-oracle-equivalence.sh verify-source ../cloudbank-upstream
+          ./cloudbank-oracle-equivalence.sh materialize ../cloudbank-upstream work/cloudbank-ms61-ci
+          (
+            cd work/cloudbank-ms61-ci/oracle
+            mvn -pl account,transfer -am \
+              -Dtest=OracleAccountEquivalenceTests,OracleTransferEquivalenceTests \
+              -Dsurefire.failIfNoSpecifiedTests=false -DskipTests test
+          )
+          (
+            cd work/cloudbank-ms61-ci/postgresql
+            mvn -pl account,transfer -am \
+              -Dtest=PostgreSqlAccountEquivalenceTests,PostgreSqlTransferEquivalenceTests \
+              -Dsurefire.failIfNoSpecifiedTests=false -DskipTests test
+          )
 
       - name: Publish bounded CI build receipt
         uses: actions/upload-artifact@v4

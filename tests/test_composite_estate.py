@@ -152,7 +152,7 @@ class CompositeEstateTests(unittest.TestCase):
         )
         self.assertEqual("postgresql-16", customer_workcell["target_dialect"])
         self.assertEqual(
-            "customer qualified · integrated wave ready",
+            "bounded equivalence ready · operator receipt required",
             customer_workcell["target_status"],
         )
         self.assertEqual(
@@ -160,7 +160,7 @@ class CompositeEstateTests(unittest.TestCase):
             customer_workcell["mapping_artifact"],
         )
         self.assertEqual(
-            "factory/cloudbank/native-transaction-wave/readiness.receipt.json",
+            "factory/cloudbank/oracle-equivalence/readiness.receipt.json",
             customer_workcell["factory_artifact"],
         )
         money_workcell = next(
@@ -168,7 +168,7 @@ class CompositeEstateTests(unittest.TestCase):
             if item["id"] == "cloudbank-reference:workload:money-transfer"
         )
         self.assertEqual(
-            "integrated native wave ready · operator receipt required",
+            "bounded Oracle/PostgreSQL equivalence ready · operator receipt required",
             money_workcell["target_status"],
         )
 

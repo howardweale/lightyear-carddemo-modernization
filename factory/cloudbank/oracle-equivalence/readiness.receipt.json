@@ -1,0 +1,24 @@
+{
+  "bindings": {
+    "compatibility_ledger_sha256": "21e93cdbe6d66a556311a6099ab2e7e27ccc7e6fe9ec86b35cf431b410f7d1d6",
+    "equivalence_contract_sha256": "75a3b4538c486a13a401a7f809f8bb017085bb25bb3bc7d18c3e7ea1f1299e1b",
+    "execution_plan_sha256": "5cecd1e6d74c4fdccf7434083ee9a4369518caf425e50fb9c7b6ffddad8e89db",
+    "observation_contract_sha256": "f3b67bf1fc4b6676025b69cde763a9ef830f1dbbdc99f63fc1d47dc9618b887c"
+  },
+  "content_sha256": "0e176d4fd9edd1f04def24faecd7e27887115e3fc3adb0906429712c0099329b",
+  "contract_complete": true,
+  "exact_internal_implementation_equivalent": false,
+  "migration_complete": false,
+  "native_messaging_observed": false,
+  "native_oracle_lane_observed": false,
+  "native_postgresql_lane_observed": false,
+  "oracle_postgresql_equivalent": false,
+  "production_identity_qualified": false,
+  "production_ready": false,
+  "receipt_type": "lightyear-cloudbank-oracle-postgresql-equivalence-readiness",
+  "release": "0.61.0",
+  "remaining_service_workcells_complete": false,
+  "schema_version": "1.0",
+  "status": "ready-for-signed-ms57-ms60-native-dual-lane",
+  "whole_application_equivalent": false
+}

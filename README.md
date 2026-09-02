@@ -4,7 +4,25 @@
 
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.60.0 — CloudBank native Account/Transfer transaction wave**
+Release: **v0.61.0 — CloudBank bounded Oracle/PostgreSQL equivalence**
+
+v0.61 chains the signed Customer dual-database qualification and native PostgreSQL transaction wave
+into a seven-scenario comparison. It executes original Account behavior on Oracle, requalifies the
+generated Account target on PostgreSQL, exercises both Transfer orchestration contracts, and requires
+the two lanes to emit the same normalized observation identity.
+
+```bash
+./cloudbank-oracle-equivalence.sh verify
+./cloudbank-oracle-equivalence.sh verify-source /path/to/cloudbank-upstream
+```
+
+A passing signed receipt establishes bounded normalized equivalence for Customer, Account, and
+Transfer. It does not claim identical internals: source LRA compensation and target atomic rollback
+remain explicitly different. The source integrated HTTP/MicroTx wave, production OAuth/OIDC, Checks
+AQ/JMS, the remaining five services, whole-application equivalence, migration completion, and
+production readiness remain false.
+
+Previous release: **v0.60.0 — CloudBank native Account/Transfer transaction wave**
 
 v0.60 starts the generated Account and Transfer applications together against native PostgreSQL.
 Eleven real HTTP gates cover service health, external and internal authentication boundaries,
@@ -25,7 +43,7 @@ execution receipt closes only the bounded target-side Account/Transfer wave and 
 Production OAuth/OIDC, Oracle comparison, Checks AQ, the remaining five services, whole-application
 equivalence, migration completion, and production readiness remain false.
 
-Previous release: **v0.59.0 — CloudBank PostgreSQL transaction-core factory run**
+Earlier release: **v0.59.0 — CloudBank PostgreSQL transaction-core factory run**
 
 v0.59 turns the admitted Account and Transfer wave into bounded PostgreSQL target code and a native
 single-service transaction-core gate.

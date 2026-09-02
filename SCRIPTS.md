@@ -47,5 +47,8 @@ script is undocumented, and that every POSIX entry point has a PowerShell twin.
 - `./cloudbank-native-wave.sh verify` checks the MS #60 integrated Account/Transfer HTTP,
   authentication, restart replay, concurrency, conservation, and packaging gates; `run` additionally
   requires the passing signed MS #59 native PostgreSQL receipt produced with the same key.
+- `./cloudbank-oracle-equivalence.sh verify` checks the MS #61 shared seven-scenario normalized
+  Oracle/PostgreSQL observation contract; `run` additionally requires passing signed MS #57 and
+  MS #60 receipts produced with the same key and executes the two native database lanes sequentially.
 
 See `scripts.catalog.json` for the exact purpose, role, and verification owner of all entry points.

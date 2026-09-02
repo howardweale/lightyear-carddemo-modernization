@@ -1,0 +1,32 @@
+{
+  "bindings": {
+    "compatibility_ledger_sha256": "21e93cdbe6d66a556311a6099ab2e7e27ccc7e6fe9ec86b35cf431b410f7d1d6",
+    "execution_plan_sha256": "5cecd1e6d74c4fdccf7434083ee9a4369518caf425e50fb9c7b6ffddad8e89db",
+    "observation_contract_sha256": "f3b67bf1fc4b6676025b69cde763a9ef830f1dbbdc99f63fc1d47dc9618b887c"
+  },
+  "content_sha256": "75a3b4538c486a13a401a7f809f8bb017085bb25bb3bc7d18c3e7ea1f1299e1b",
+  "contract_type": "lightyear-cloudbank-bounded-oracle-postgresql-equivalence",
+  "eligible_claim": {
+    "equivalence_scope": "bounded-normalized-customer-account-transfer",
+    "exact_internal_implementation_equivalent": false,
+    "oracle_postgresql_equivalent": true,
+    "production_ready": false,
+    "whole_application_equivalent": false
+  },
+  "release": "0.61.0",
+  "required_database_images": [
+    "gvenzl/oracle-free:23.26.1-slim-faststart",
+    "postgres:16-alpine"
+  ],
+  "required_lanes": [
+    "oracle",
+    "postgresql"
+  ],
+  "required_marker_sha256": "505a2c322a91a08eb896bef28e2e6f64301bfe5f900c44d1873a5654edf3c26d",
+  "required_receipt_chain": [
+    "lightyear-cloudbank-customer-production-qualification-execution",
+    "lightyear-cloudbank-native-transaction-wave-execution"
+  ],
+  "schema_version": "1.0",
+  "tests_per_lane": 7
+}

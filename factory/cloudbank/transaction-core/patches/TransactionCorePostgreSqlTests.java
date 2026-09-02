@@ -3,9 +3,6 @@
 
 package com.example.accounts;
 
-import java.util.List;
-
-import com.example.accounts.model.Account;
 import com.example.accounts.model.Journal;
 import com.example.accounts.repository.AccountRepository;
 import com.example.accounts.repository.JournalRepository;
@@ -17,6 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -48,15 +46,17 @@ class TransactionCorePostgreSqlTests {
     @Autowired
     private TransferCommandRepository commands;
 
+    @Autowired
+    private JdbcTemplate jdbc;
+
     @BeforeEach
     void resetSyntheticAccounts() {
         journals.deleteAll();
         commands.deleteAll();
-        accounts.deleteAll();
-        accounts.saveAllAndFlush(List.of(
-                account(1, "Source", "cust-source", 1000),
-                account(2, "Target", "cust-target", 250),
-                account(3, "Empty", "cust-empty", 5)));
+        jdbc.update("DELETE FROM accounts");
+        insertAccount(1, "Source", "cust-source", 1000);
+        insertAccount(2, "Target", "cust-target", 250);
+        insertAccount(3, "Empty", "cust-empty", 5);
     }
 
     @Test
@@ -131,10 +131,10 @@ class TransactionCorePostgreSqlTests {
                 ? -journal.getJournalAmount() : journal.getJournalAmount();
     }
 
-    private static Account account(long id, String name, String customer, long balance) {
-        Account account = new Account(name, "CH", "MS59 synthetic", customer);
-        account.setAccountId(id);
-        account.setAccountBalance(balance);
-        return account;
+    private void insertAccount(long id, String name, String customer, long balance) {
+        jdbc.update(
+                "INSERT INTO accounts (account_id, account_name, account_type, customer_id, "
+                        + "account_other_details, account_balance) VALUES (?, ?, 'CH', ?, ?, ?)",
+                id, name, customer, "MS59 synthetic", balance);
     }
 }

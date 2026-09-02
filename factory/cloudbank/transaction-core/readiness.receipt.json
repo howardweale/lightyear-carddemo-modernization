@@ -1,10 +1,10 @@
 {
   "bindings": {
-    "acceptance_contract_sha256": "20d737d1e1f910e4854469ab44dd2733762aadac503ef4679390f651f955ffd7",
+    "acceptance_contract_sha256": "054ae30bb01b07a04cdb8db33818a70386ec9320ab699ea7daf0292c85ab0044",
     "compatibility_ledger_sha256": "c7875a1e5d706c2ecb1f0444c99c403089cd414db72bcff22ec8e8475d7a4591",
-    "transformation_plan_sha256": "a7ad318fa897a034e7910bd4e56cda598c4dd80098e11a95e4d70e6e36f1ea85"
+    "transformation_plan_sha256": "ea2131ac6a95af24152002fc3c20a5f26138367ae682e33a80c18093f4cf9080"
   },
-  "content_sha256": "a30305fdf7a9c276039c5febaedfbc2968c499aa8182a1c86ac9a9a4965022c6",
+  "content_sha256": "dc4db244e266218be51621ee9eb260e1a4fdc326d4c0afded0f362fcd144da96",
   "gate_status": "ready-for-signed-ms58-and-native-postgresql-run",
   "migration_complete": false,
   "native_lra_replacement_observed": false,

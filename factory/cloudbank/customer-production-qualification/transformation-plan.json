@@ -1,5 +1,5 @@
 {
-  "content_sha256": "f8a46dae1b248420d7fb1d74337037d9f5be682252cc0384e33c4cc36511a296",
+  "content_sha256": "f3558ac86b4254893f27dbdff4488b112ff2e7b7a5f6f55c1b49cd3c185d1bc4",
   "dependency_cleanup": {
     "common_transitive_exclusion_sha256": "46164fec02c51a368f8eeecbc2c1870ede4df579690d997f2c81ee0b45ef52af",
     "path": "pom.xml",
@@ -7,7 +7,7 @@
     "removed_dependency": "com.oracle.database.spring:oracle-spring-boot-starter-ucp"
   },
   "instrumentation": {
-    "qualification_test_sha256": "b9db0e3a8729225d705738fc57691f4d67a1b0d3be8dd7a06e23dcf4fe91c9f7",
+    "qualification_test_sha256": "104eec2367a87a0f2716464b6e308d843a42f2fb2e7799c97fd126a13fc66784",
     "spring_security_test_dependency": "07f5db421e42bf09ac55e4873ed01f2e3889c2067c9ba607a23dafb5b0078e12"
   },
   "limits": {

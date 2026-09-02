@@ -278,6 +278,7 @@ class CloudBankProductionQualificationTests(unittest.TestCase):
             )
         )
         self.assertIn("// Modifications Copyright (c) 2026 Lightyear.", qualification_test)
+        self.assertIn("import java.util.List;\nimport javax.sql.DataSource;", qualification_test)
 
     def test_output_inside_source_and_incomplete_lane_fail_closed(self) -> None:
         checkout = ROOT.parent / "cloudbank-upstream"

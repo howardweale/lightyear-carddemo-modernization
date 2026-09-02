@@ -1,0 +1,57 @@
+{
+  "comparison_policy": "exact-normalized-observation-marker",
+  "content_sha256": "f3b67bf1fc4b6676025b69cde763a9ef830f1dbbdc99f63fc1d47dc9618b887c",
+  "contract_type": "lightyear-cloudbank-normalized-oracle-postgresql-observation",
+  "inherited_customer_gate": "signed-ms57-native-dual-lane",
+  "marker": "account-success:conserved;invalid:no-mutation;funds:no-mutation;failure:restored;transfer-invalid:400;transfer-auth:403;transfer-success:200",
+  "marker_sha256": "505a2c322a91a08eb896bef28e2e6f64301bfe5f900c44d1873a5654edf3c26d",
+  "newly_executed_services": [
+    "account",
+    "transfer"
+  ],
+  "release": "0.61.0",
+  "scenario_count": 7,
+  "scenarios": [
+    {
+      "evidence": "paired finalized nonzero journals",
+      "id": "account-success",
+      "normalized_result": "conserved"
+    },
+    {
+      "evidence": "bad amount rejected before state change",
+      "id": "invalid",
+      "normalized_result": "no-mutation"
+    },
+    {
+      "evidence": "insufficient balance produces no effective mutation",
+      "id": "funds",
+      "normalized_result": "no-mutation"
+    },
+    {
+      "evidence": "compensation or rollback restores both balances",
+      "id": "failure",
+      "normalized_result": "restored"
+    },
+    {
+      "evidence": "facade returns bad request before dependency calls",
+      "id": "transfer-invalid",
+      "normalized_result": "400"
+    },
+    {
+      "evidence": "facade rejects missing identity before dependency calls",
+      "id": "transfer-auth",
+      "normalized_result": "403"
+    },
+    {
+      "evidence": "facade completes its normalized orchestration contract",
+      "id": "transfer-success",
+      "normalized_result": "200"
+    }
+  ],
+  "schema_version": "1.0",
+  "services": [
+    "customer",
+    "account",
+    "transfer"
+  ]
+}

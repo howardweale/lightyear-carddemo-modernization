@@ -1,0 +1,67 @@
+{
+  "bounded_business_equivalence_eligible": true,
+  "content_sha256": "21e93cdbe6d66a556311a6099ab2e7e27ccc7e6fe9ec86b35cf431b410f7d1d6",
+  "entries": [
+    {
+      "capability": "customer-http-and-jdbc",
+      "classification": "inherited-equivalent",
+      "evidence": "signed-ms57"
+    },
+    {
+      "capability": "successful-value-conservation",
+      "classification": "normalized-equivalent",
+      "evidence": "native-dual-lane"
+    },
+    {
+      "capability": "invalid-and-insufficient-rejection",
+      "classification": "normalized-equivalent",
+      "evidence": "native-dual-lane"
+    },
+    {
+      "capability": "source-lra-compensation-target-atomic-rollback",
+      "classification": "intentional-implementation-change",
+      "evidence": "final-state-exact"
+    },
+    {
+      "capability": "successful-journal-net",
+      "classification": "normalized-equivalent",
+      "evidence": "paired-net-zero"
+    },
+    {
+      "capability": "oracle-zero-amount-failure-journal",
+      "classification": "observable-difference",
+      "evidence": "target-has-no-effective-mutation"
+    },
+    {
+      "capability": "target-durable-idempotency",
+      "classification": "target-safety-improvement",
+      "evidence": "signed-ms60"
+    },
+    {
+      "capability": "source-transfer-http-runtime",
+      "classification": "partially-observed",
+      "evidence": "source-code-orchestration-contract-only"
+    },
+    {
+      "capability": "production-oauth2-oidc",
+      "classification": "not-qualified",
+      "evidence": "ms62"
+    },
+    {
+      "capability": "oracle-aq-checks-flow",
+      "classification": "not-qualified",
+      "evidence": "ms63"
+    },
+    {
+      "capability": "remaining-five-services",
+      "classification": "not-qualified",
+      "evidence": "ms64"
+    }
+  ],
+  "exact_internal_implementation_equivalent": false,
+  "ledger_type": "lightyear-cloudbank-oracle-postgresql-equivalence-compatibility",
+  "production_ready": false,
+  "release": "0.61.0",
+  "schema_version": "1.0",
+  "whole_application_equivalent": false
+}

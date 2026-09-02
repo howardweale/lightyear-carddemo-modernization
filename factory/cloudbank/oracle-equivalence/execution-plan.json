@@ -1,0 +1,58 @@
+{
+  "content_sha256": "5cecd1e6d74c4fdccf7434083ee9a4369518caf425e50fb9c7b6ffddad8e89db",
+  "lanes": {
+    "oracle": "exact-pinned-source-account-and-transfer",
+    "postgresql": "exact-ms60-generated-account-and-transfer-target"
+  },
+  "patches": [
+    {
+      "lane": "oracle",
+      "operation": "create-in-isolated-workspace",
+      "path": "account/src/test/java/com/example/accounts/OracleAccountEquivalenceTests.java",
+      "template": "patches/OracleAccountEquivalenceTests.java",
+      "template_sha256": "6e18229b8fbfc1e1b0cdcf14cd4ec1771cc1f262ab68e1e06f5d28f2316cf316"
+    },
+    {
+      "lane": "oracle",
+      "operation": "create-in-isolated-workspace",
+      "path": "transfer/src/test/java/com/example/transfer/OracleTransferEquivalenceTests.java",
+      "template": "patches/OracleTransferEquivalenceTests.java",
+      "template_sha256": "c7d1a541c2874060f91741c081faddb726b3ef8b8740cc0573cf2ced456760c7"
+    },
+    {
+      "lane": "postgresql",
+      "operation": "create-in-isolated-workspace",
+      "path": "account/src/test/java/com/example/accounts/PostgreSqlAccountEquivalenceTests.java",
+      "template": "patches/PostgreSqlAccountEquivalenceTests.java",
+      "template_sha256": "33637092af13f9110e62f8a2b2b392a4d494a21809e2d558f488999c312728e3"
+    },
+    {
+      "lane": "postgresql",
+      "operation": "create-in-isolated-workspace",
+      "path": "transfer/src/test/java/com/example/transfer/PostgreSqlTransferEquivalenceTests.java",
+      "template": "patches/PostgreSqlTransferEquivalenceTests.java",
+      "template_sha256": "b5e4ce459ddccf5318cef2be906af53691ba63bda8c52d74b2e18ce31bb1004a"
+    }
+  ],
+  "plan_type": "lightyear-cloudbank-oracle-postgresql-equivalence",
+  "production_data": false,
+  "production_identity": false,
+  "release": "0.61.0",
+  "requires": [
+    "signed-ms57-receipt",
+    "signed-ms60-receipt",
+    "same-evidence-key"
+  ],
+  "runtime_order": "sequential-database-lanes",
+  "schema_version": "1.0",
+  "source_checkout_mutated": false,
+  "stages": [
+    "validate-content-addressed-contracts-and-receipts",
+    "materialize-isolated-source-and-target-workspaces",
+    "run-native-oracle-account-and-source-transfer-contract",
+    "run-native-postgresql-account-and-target-transfer-contract",
+    "compare-exact-normalized-observation-markers",
+    "sign-bounded-equivalence-receipt"
+  ],
+  "whole_application": false
+}

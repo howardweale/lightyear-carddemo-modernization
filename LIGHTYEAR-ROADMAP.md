@@ -43,6 +43,7 @@ production-qualified.
 | MS #58 | CloudBank Whole-Application Transaction Wave | Eight-service plan and transaction-wave admission contract complete; native Account/Transfer execution pending |
 | MS #59 | CloudBank PostgreSQL Transaction-Core Factory Run | Account/Transfer target generated; signed native PostgreSQL execution remains operator-held evidence |
 | MS #60 | CloudBank Native Account/Transfer Transaction Wave | Integrated target ready; signed native HTTP/restart/concurrency receipt remains operator-held evidence |
+| MS #61 | CloudBank Bounded Oracle/PostgreSQL Equivalence | Contract complete; signed sequential native Oracle/PostgreSQL comparison receipt remains operator-held evidence |
 
 The v0.35.0 stored-logic qualification core is retained as supporting MS #34 evidence. It does not
 replace the planned DB2 milestone.
@@ -523,3 +524,19 @@ A production-like operational deployment and cutover rehearsal can follow only a
 service and identity gates are explicit.
 A real production migration remains a separately authorized customer program using approved
 production evidence.
+
+## MS #61 — CloudBank Bounded Oracle/PostgreSQL Equivalence
+
+MS #61 binds the signed MS #57 Customer qualification and signed MS #60 target transaction wave,
+then adds a new native comparison for Account and Transfer. It copies the exact pinned source and
+generated target into isolated workspaces, starts Oracle and PostgreSQL sequentially, and requires
+both lanes to pass the same seven normalized observations for value conservation, rejected input,
+insufficient funds, failure recovery, Transfer input validation, identity rejection, and successful
+orchestration.
+
+The claim is deliberately behavioral rather than implementation-identical. Oracle retains its LRA
+compensation path and zero-amount failure journal; PostgreSQL uses local atomic rollback and durable
+idempotency. A passing signed receipt makes bounded normalized Customer, Account, and Transfer
+Oracle/PostgreSQL equivalence true. The original integrated Oracle HTTP wave with a real MicroTx
+coordinator, production OAuth/OIDC, Checks AQ/JMS, the remaining five service workcells,
+whole-application equivalence, migration completion, and production readiness remain false.

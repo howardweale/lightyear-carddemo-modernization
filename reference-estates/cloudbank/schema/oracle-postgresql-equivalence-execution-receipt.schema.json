@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schemas/cloudbank/oracle-postgresql-equivalence-execution-receipt.schema.json",
+  "title": "CloudBank bounded Oracle/PostgreSQL equivalence execution receipt",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "receipt_type",
+    "release",
+    "run_id",
+    "source_ms57_receipt_sha256",
+    "source_ms60_receipt_sha256",
+    "oracle_image_id_sha256",
+    "postgresql_image_id_sha256",
+    "oracle_lane",
+    "postgresql_lane",
+    "status",
+    "equivalence_scope",
+    "oracle_postgresql_equivalent",
+    "exact_internal_implementation_equivalent",
+    "oracle_integrated_http_wave_observed",
+    "production_identity_qualified",
+    "native_messaging_observed",
+    "whole_application_equivalent",
+    "migration_complete",
+    "production_ready",
+    "content_sha256",
+    "signature"
+  ],
+  "properties": {
+    "receipt_type": {"const": "lightyear-cloudbank-oracle-postgresql-equivalence-execution"},
+    "release": {"const": "0.61.0"},
+    "status": {"const": "passed-bounded-normalized-customer-account-transfer-equivalence"},
+    "equivalence_scope": {"const": "customer-account-transfer"},
+    "oracle_postgresql_equivalent": {"const": true},
+    "exact_internal_implementation_equivalent": {"const": false},
+    "oracle_integrated_http_wave_observed": {"const": false},
+    "production_identity_qualified": {"const": false},
+    "native_messaging_observed": {"const": false},
+    "whole_application_equivalent": {"const": false},
+    "migration_complete": {"const": false},
+    "production_ready": {"const": false},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "signature": {
+      "type": "object",
+      "required": ["algorithm", "signer", "value"],
+      "properties": {
+        "algorithm": {"const": "hmac-sha256"},
+        "value": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

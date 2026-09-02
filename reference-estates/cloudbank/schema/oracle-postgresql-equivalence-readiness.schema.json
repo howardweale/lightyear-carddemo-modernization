@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schemas/cloudbank/oracle-postgresql-equivalence-readiness.schema.json",
+  "title": "CloudBank bounded Oracle/PostgreSQL equivalence readiness",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "receipt_type",
+    "release",
+    "status",
+    "contract_complete",
+    "native_oracle_lane_observed",
+    "native_postgresql_lane_observed",
+    "oracle_postgresql_equivalent",
+    "whole_application_equivalent",
+    "migration_complete",
+    "production_ready",
+    "content_sha256"
+  ],
+  "properties": {
+    "receipt_type": {"const": "lightyear-cloudbank-oracle-postgresql-equivalence-readiness"},
+    "release": {"const": "0.61.0"},
+    "status": {"const": "ready-for-signed-ms57-ms60-native-dual-lane"},
+    "contract_complete": {"const": true},
+    "native_oracle_lane_observed": {"const": false},
+    "native_postgresql_lane_observed": {"const": false},
+    "oracle_postgresql_equivalent": {"const": false},
+    "whole_application_equivalent": {"const": false},
+    "migration_complete": {"const": false},
+    "production_ready": {"const": false},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

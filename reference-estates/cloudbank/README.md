@@ -160,6 +160,22 @@ The signed action requires the passing MS #59 receipt. A passing run closes the 
 native transaction-wave and local LRA-replacement gates. It does not qualify production identity,
 Oracle equivalence, Checks AQ/JMS, the remaining services, or production readiness.
 
+## Run the bounded Oracle/PostgreSQL equivalence gate
+
+MS #61 binds the signed MS #57 and MS #60 receipts and executes one seven-scenario normalized
+contract across the pinned Oracle source and generated PostgreSQL target.
+
+```bash
+./cloudbank-oracle-equivalence.sh verify
+./cloudbank-oracle-equivalence.sh verify-source /path/to/oracle-microservices-backend
+```
+
+The lanes run sequentially and use synthetic data on loopback-only database ports. A passing signed
+receipt closes bounded normalized Customer, Account, and Transfer equivalence, while explicitly
+retaining LRA compensation versus atomic rollback as an implementation difference. It does not
+start the source integrated HTTP wave with MicroTx or qualify production identity, Checks messaging,
+the remaining services, whole-application equivalence, migration completion, or production readiness.
+
 The projection is composed with the existing PL/I and Oracle Customer (Large) fragments. It does
 not change the canonical CardDemo graph or the identity to which runtime and audit evidence are
 bound.
@@ -174,6 +190,7 @@ dual-run workcell, but the committed readiness receipt does not claim the operat
 MS #57 adds deeper Customer qualification, packaging and offline rehearsal contracts. MS #58 adds
 the complete portfolio plan and admits the transaction wave. MS #59 generates the Account/Transfer
 PostgreSQL target and its native operator gate. MS #60 adds the integrated target-side native HTTP,
-restart, and concurrency wave. Oracle comparison, Checks messaging, production data, the remaining
-service workcells, whole-CloudBank equivalence, migration completion, and production readiness
-remain unclaimed.
+restart, and concurrency wave. MS #61 adds bounded normalized Oracle/PostgreSQL comparison for the
+Customer, Account, and Transfer scope. Production identity, Checks messaging, production data, the
+remaining service workcells, whole-CloudBank equivalence, migration completion, and production
+readiness remain unclaimed.

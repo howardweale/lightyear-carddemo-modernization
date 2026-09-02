@@ -4,7 +4,7 @@
 
 # LIGHTYEAR milestone documentation library
 
-This library is the customer-readable body of record for MS #1 through MS #60. Every milestone is
+This library is the customer-readable body of record for MS #1 through MS #61. Every milestone is
 published from one governed catalog in Markdown, Microsoft Word (`.docx`), and PDF.
 
 **[Open the searchable milestone index](https://howardweale.github.io/lightyear-carddemo-modernization/milestones/)** to filter by milestone number, title,
@@ -78,6 +78,7 @@ or policy decisions.
 | MS #58 | CloudBank Whole-Application Transaction Wave | Complete | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-58/MS-58.md) - [Download Word](https://raw.githubusercontent.com/howardweale/lightyear-carddemo-modernization/main/docs/milestones/MS-58/MS-58.docx) - [PDF](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-58/MS-58.pdf) |
 | MS #59 | CloudBank PostgreSQL Transaction-Core Factory Run | Complete | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-59/MS-59.md) - [Download Word](https://raw.githubusercontent.com/howardweale/lightyear-carddemo-modernization/main/docs/milestones/MS-59/MS-59.docx) - [PDF](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-59/MS-59.pdf) |
 | MS #60 | CloudBank Native Account/Transfer Transaction Wave | Complete | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-60/MS-60.md) - [Download Word](https://raw.githubusercontent.com/howardweale/lightyear-carddemo-modernization/main/docs/milestones/MS-60/MS-60.docx) - [PDF](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-60/MS-60.pdf) |
+| MS #61 | CloudBank Bounded Oracle/PostgreSQL Equivalence | Complete | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-61/MS-61.md) - [Download Word](https://raw.githubusercontent.com/howardweale/lightyear-carddemo-modernization/main/docs/milestones/MS-61/MS-61.docx) - [PDF](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-61/MS-61.pdf) |
 
 ## Build and verification
 

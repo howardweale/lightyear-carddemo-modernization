@@ -1,4 +1,5 @@
-// Copyright (c) 2026 Lightyear.
+// Copyright (c) 2026, Oracle and/or its affiliates.
+// Modifications Copyright (c) 2026 Lightyear.
 // Licensed under the Universal Permissive License v 1.0.
 
 package com.example.customer;

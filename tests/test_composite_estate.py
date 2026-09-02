@@ -152,7 +152,7 @@ class CompositeEstateTests(unittest.TestCase):
         )
         self.assertEqual("postgresql-16", customer_workcell["target_dialect"])
         self.assertEqual(
-            "customer qualified · transaction target ready",
+            "customer qualified · integrated wave ready",
             customer_workcell["target_status"],
         )
         self.assertEqual(
@@ -160,8 +160,16 @@ class CompositeEstateTests(unittest.TestCase):
             customer_workcell["mapping_artifact"],
         )
         self.assertEqual(
-            "factory/cloudbank/transaction-core/readiness.receipt.json",
+            "factory/cloudbank/native-transaction-wave/readiness.receipt.json",
             customer_workcell["factory_artifact"],
+        )
+        money_workcell = next(
+            item for item in context["workloads"]
+            if item["id"] == "cloudbank-reference:workload:money-transfer"
+        )
+        self.assertEqual(
+            "integrated native wave ready · operator receipt required",
+            money_workcell["target_status"],
         )
 
     def test_runtime_and_audit_remain_bound_to_canonical_identity(self) -> None:

@@ -1,0 +1,22 @@
+{
+  "bindings": {
+    "acceptance_contract_sha256": "d28927b0c4dac1d89f843dfe8b708aec0a73800608fe336d2e8b58ba81536dfa",
+    "compatibility_ledger_sha256": "2c5e12ea73510280db720ab84df32548cf723371fa88db8cd3ce573abc7594a6",
+    "execution_plan_sha256": "4b8ba060a6598ad0a12dd9113562c4dab2f32a1fbf14d024ee003d01b24703b1"
+  },
+  "content_sha256": "19b7cd7c6278d66651854938c152473d10e316a3abd138db1a0d7246d29b7244",
+  "gate_status": "ready-for-signed-ms59-and-native-integrated-run",
+  "integrated_target_generated": true,
+  "migration_complete": false,
+  "native_lra_replacement_observed": false,
+  "native_messaging_observed": false,
+  "native_transaction_wave_observed": false,
+  "oracle_postgresql_equivalent": false,
+  "production_identity_qualified": false,
+  "production_ready": false,
+  "receipt_type": "lightyear-cloudbank-native-transaction-wave-readiness",
+  "release": "0.60.0",
+  "remaining_service_workcells_complete": false,
+  "schema_version": "1.0",
+  "whole_application_equivalent": false
+}

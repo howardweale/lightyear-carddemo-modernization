@@ -1,0 +1,62 @@
+{
+  "bounded_target_lra_replacement_eligible": true,
+  "content_sha256": "2c5e12ea73510280db720ab84df32548cf723371fa88db8cd3ce573abc7594a6",
+  "entries": [
+    {
+      "capability": "two-service-http-path",
+      "classification": "exact",
+      "exit_gate": "native-ms60-required"
+    },
+    {
+      "capability": "value-conservation",
+      "classification": "normalized-equivalent",
+      "exit_gate": "native-ms60-required"
+    },
+    {
+      "capability": "durable-idempotency",
+      "classification": "normalized-equivalent",
+      "exit_gate": "restart-replay-required"
+    },
+    {
+      "capability": "stable-lock-ordering",
+      "classification": "normalized-equivalent",
+      "exit_gate": "concurrent-wave-required"
+    },
+    {
+      "capability": "target-lra-removal",
+      "classification": "normalized-equivalent",
+      "exit_gate": "native-integrated-wave-required"
+    },
+    {
+      "capability": "development-basic-authentication",
+      "classification": "exact",
+      "exit_gate": "loopback-profile-only"
+    },
+    {
+      "capability": "production-oauth2-oidc",
+      "classification": "policy-decision-required",
+      "exit_gate": "authorization-wave"
+    },
+    {
+      "capability": "oracle-source-equivalence",
+      "classification": "policy-decision-required",
+      "exit_gate": "native-dual-lane-required"
+    },
+    {
+      "capability": "oracle-aq-checks-flow",
+      "classification": "unsupported",
+      "exit_gate": "messaging-wave"
+    },
+    {
+      "capability": "remaining-five-services",
+      "classification": "unsupported",
+      "exit_gate": "later-service-waves"
+    }
+  ],
+  "ledger_type": "lightyear-cloudbank-native-transaction-wave-compatibility",
+  "oracle_postgresql_equivalent": false,
+  "production_identity_qualified": false,
+  "release": "0.60.0",
+  "schema_version": "1.0",
+  "whole_application_equivalent": false
+}

@@ -161,6 +161,8 @@ class CloudBankExecutableBaselineTests(unittest.TestCase):
                 "transaction-wave-readiness.schema.json",
                 "transaction-core-execution-receipt.schema.json",
                 "transaction-core-readiness.schema.json",
+                "native-transaction-wave-execution-receipt.schema.json",
+                "native-transaction-wave-readiness.schema.json",
             },
             {path.name for path in schemas},
         )

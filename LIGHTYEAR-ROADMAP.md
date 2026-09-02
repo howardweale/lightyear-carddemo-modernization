@@ -42,6 +42,7 @@ production-qualified.
 | MS #57 | CloudBank Customer Production-Readiness Qualification | Qualification contract complete; signed native receipt pending |
 | MS #58 | CloudBank Whole-Application Transaction Wave | Eight-service plan and transaction-wave admission contract complete; native Account/Transfer execution pending |
 | MS #59 | CloudBank PostgreSQL Transaction-Core Factory Run | Account/Transfer target generated; signed native PostgreSQL execution remains operator-held evidence |
+| MS #60 | CloudBank Native Account/Transfer Transaction Wave | Integrated target ready; signed native HTTP/restart/concurrency receipt remains operator-held evidence |
 
 The v0.35.0 stored-logic qualification core is retained as supporting MS #34 evidence. It does not
 replace the planned DB2 milestone.
@@ -495,11 +496,30 @@ Oracle Account/Transfer lane. Removing the Account-local AQ grant script does no
 messaging flow. The remaining five services, production data, whole-application equivalence,
 migration completion, promotion, and production readiness remain false.
 
+## MS #60 — CloudBank Native Account/Transfer Transaction Wave
+
+MS #60 closes the gap between two isolated service proofs and a connected target wave. It
+materializes the MS #59 Account/Transfer target, adds an explicit integration-only security profile,
+packages both executable JARs, and starts PostgreSQL, Account, and Transfer together on loopback-only
+ephemeral ports. The pinned source checkout remains unchanged.
+
+Eleven native scenarios exercise service health, external authentication, the internal Account
+token, amount and ownership validation, insufficient funds, successful value conservation,
+idempotent replay, Transfer restart replay, concurrent opposite transfers, and Account restart
+replay. Both services must start twice, all balances and journals must conserve value, and both JARs
+must contain zero Oracle and zero MicroTx runtime libraries.
+
+A passing signed run makes the bounded target-side native transaction-wave and local
+LRA-replacement claims true. It does not prove Oracle-to-PostgreSQL equivalence. The synthetic Basic
+authentication profile is not production OAuth/OIDC; Checks AQ/JMS, the remaining five services,
+production data, whole-application equivalence, migration completion, promotion, and production
+readiness remain false.
+
 ## Planned next increments
 
 The next governed increments can add an Oracle comparison lane, migrate and qualify the Checks
 transactional messaging flow, and advance Authorization, Test Runner, Credit Score, and Chatbot.
-MS #60 can add a production-like operational deployment and cutover rehearsal only after the
-remaining service gates are explicit.
+A production-like operational deployment and cutover rehearsal can follow only after the remaining
+service and identity gates are explicit.
 A real production migration remains a separately authorized customer program using approved
 production evidence.

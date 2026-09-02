@@ -145,6 +145,21 @@ The signed native action requires the MS #58 admission receipt. Its seven tests 
 MS #58 transaction scenarios. The committed readiness artifact does not claim that operator run,
 Oracle equivalence, Checks AQ migration, the remaining service workcells, or production readiness.
 
+## Run the native Account/Transfer HTTP wave
+
+MS #60 starts the generated Account and Transfer JARs together against native PostgreSQL. Eleven
+scenarios prove authentication boundaries, rejection without mutation, successful and concurrent
+value conservation, duplicate suppression, and durable replay after separate service restarts.
+
+```bash
+./cloudbank-native-wave.sh verify
+./cloudbank-native-wave.sh verify-source /path/to/oracle-microservices-backend
+```
+
+The signed action requires the passing MS #59 receipt. A passing run closes the bounded target-side
+native transaction-wave and local LRA-replacement gates. It does not qualify production identity,
+Oracle equivalence, Checks AQ/JMS, the remaining services, or production readiness.
+
 The projection is composed with the existing PL/I and Oracle Customer (Large) fragments. It does
 not change the canonical CardDemo graph or the identity to which runtime and audit evidence are
 bound.
@@ -158,6 +173,7 @@ system or production data is attached. MS #56 adds the sealed application transf
 dual-run workcell, but the committed readiness receipt does not claim the operator run occurred.
 MS #57 adds deeper Customer qualification, packaging and offline rehearsal contracts. MS #58 adds
 the complete portfolio plan and admits the transaction wave. MS #59 generates the Account/Transfer
-PostgreSQL target and its native operator gate. Oracle comparison, Checks messaging, production
-data, the remaining service workcells, whole-CloudBank equivalence, migration completion, and
-production readiness remain unclaimed.
+PostgreSQL target and its native operator gate. MS #60 adds the integrated target-side native HTTP,
+restart, and concurrency wave. Oracle comparison, Checks messaging, production data, the remaining
+service workcells, whole-CloudBank equivalence, migration completion, and production readiness
+remain unclaimed.

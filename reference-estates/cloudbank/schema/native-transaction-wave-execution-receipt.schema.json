@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schemas/cloudbank/native-transaction-wave-execution-receipt.schema.json",
+  "title": "CloudBank native Account/Transfer transaction-wave execution receipt",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "receipt_type",
+    "release",
+    "run_id",
+    "source_ms59_receipt_sha256",
+    "postgresql_image_id_sha256",
+    "native_wave_lane",
+    "status",
+    "native_transaction_wave_observed",
+    "native_lra_replacement_observed",
+    "durable_restart_replay_observed",
+    "concurrent_value_conservation_observed",
+    "production_identity_qualified",
+    "oracle_postgresql_equivalent",
+    "whole_application_equivalent",
+    "migration_complete",
+    "production_ready",
+    "content_sha256",
+    "signature"
+  ],
+  "properties": {
+    "receipt_type": {"const": "lightyear-cloudbank-native-transaction-wave-execution"},
+    "release": {"const": "0.60.0"},
+    "status": {"const": "passed-bounded-native-account-transfer-wave"},
+    "native_transaction_wave_observed": {"const": true},
+    "native_lra_replacement_observed": {"const": true},
+    "durable_restart_replay_observed": {"const": true},
+    "concurrent_value_conservation_observed": {"const": true},
+    "production_identity_qualified": {"const": false},
+    "oracle_postgresql_equivalent": {"const": false},
+    "whole_application_equivalent": {"const": false},
+    "migration_complete": {"const": false},
+    "production_ready": {"const": false},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "signature": {
+      "type": "object",
+      "required": ["algorithm", "signer", "value"],
+      "properties": {
+        "algorithm": {"const": "hmac-sha256"},
+        "value": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

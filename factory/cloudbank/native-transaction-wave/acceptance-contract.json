@@ -1,5 +1,5 @@
 {
-  "content_sha256": "d28927b0c4dac1d89f843dfe8b708aec0a73800608fe336d2e8b58ba81536dfa",
+  "content_sha256": "34fdbd63fc20fe76a63f7dab6095de38d22b0c86cce6c5004a8399555903d792",
   "contract_sha256": "8742aa235460de6cd688ee90e0642df2752ac40091a38668b6cec35ff948b6d3",
   "contract_type": "lightyear-cloudbank-native-transaction-wave-acceptance",
   "eligible_claims_after_signed_run": {
@@ -9,7 +9,7 @@
     "production_ready": false,
     "whole_application_equivalent": false
   },
-  "execution_plan_sha256": "4b8ba060a6598ad0a12dd9113562c4dab2f32a1fbf14d024ee003d01b24703b1",
+  "execution_plan_sha256": "7ccf449e3e5fe8b6389af54801ce9ccdf27b47ecb21e2fc42599bdecc74d0844",
   "release": "0.60.0",
   "required_packaging": {
     "executable_jars": 2,

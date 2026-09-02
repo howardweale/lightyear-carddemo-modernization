@@ -6,6 +6,7 @@ package com.example.transfer;
 import java.net.URI;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
@@ -32,6 +33,7 @@ public class TransferService {
     /**
      * Creates the HTTP facade used to submit authenticated account transfers.
      */
+    @Autowired
     public TransferService(RestTemplateBuilder builder,
             @Value("${account.transaction.url}") URI transactionUri,
             @Value("${cloudbank.transaction.internal-token}") String internalToken) {

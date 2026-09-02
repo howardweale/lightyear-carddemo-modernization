@@ -280,11 +280,16 @@ def _request(
         return int(error.code), error.read(65536)
 
 
-def _wait_health(port: int, process: subprocess.Popen[bytes], pause: Callable[[float], None]) -> None:
+def _wait_health(
+    service: str,
+    port: int,
+    process: subprocess.Popen[bytes],
+    pause: Callable[[float], None],
+) -> None:
     url = f"http://127.0.0.1:{port}/actuator/health"
     for _ in range(90):
         if process.poll() is not None:
-            raise RuntimeError("service-exited-before-health")
+            raise RuntimeError(f"{service}-exited-before-health")
         try:
             status, body = _request(url, timeout=1)
             if status == 200 and b'"status":"UP"' in body:
@@ -292,10 +297,11 @@ def _wait_health(port: int, process: subprocess.Popen[bytes], pause: Callable[[f
         except (OSError, TimeoutError, urllib.error.URLError):
             pass
         pause(1)
-    raise RuntimeError("service-health-timeout")
+    raise RuntimeError(f"{service}-health-timeout")
 
 
 def _start_service(
+    service: str,
     jar: Path,
     port: int,
     env: Mapping[str, str],
@@ -309,7 +315,7 @@ def _start_service(
         stdout=log,
         stderr=log,
     )
-    _wait_health(port, process, pause)
+    _wait_health(service, port, process, pause)
     return process, log
 
 
@@ -524,10 +530,12 @@ def _native_wave_lane(
         }
         account_jar = workspace / "account/target/account-0.0.1-SNAPSHOT.jar"
         transfer_jar = workspace / "transfer/target/transfer-0.0.1-SNAPSHOT.jar"
-        account_process, account_log = _start_service(account_jar, account_port, account_env, pause)
+        account_process, account_log = _start_service(
+            "account", account_jar, account_port, account_env, pause
+        )
         service_starts["account"] += 1
         transfer_process, transfer_log = _start_service(
-            transfer_jar, transfer_port, transfer_env, pause
+            "transfer", transfer_jar, transfer_port, transfer_env, pause
         )
         service_starts["transfer"] += 1
         record("services-healthy", True, account=True, transfer=True)
@@ -597,7 +605,7 @@ def _native_wave_lane(
             service_log_hashes["transfer"].append(digest)
         transfer_process, transfer_log = None, None
         transfer_process, transfer_log = _start_service(
-            transfer_jar, transfer_port, transfer_env, pause
+            "transfer", transfer_jar, transfer_port, transfer_env, pause
         )
         service_starts["transfer"] += 1
         status, body = _transfer(
@@ -645,7 +653,9 @@ def _native_wave_lane(
         if digest:
             service_log_hashes["account"].append(digest)
         account_process, account_log = None, None
-        account_process, account_log = _start_service(account_jar, account_port, account_env, pause)
+        account_process, account_log = _start_service(
+            "account", account_jar, account_port, account_env, pause
+        )
         service_starts["account"] += 1
         status, body = _transfer(
             transfer_port, wave_password, "forward-0", 1, 2, 10, "cust-source"
@@ -656,7 +666,16 @@ def _native_wave_lane(
             http_status=status,
         )
     except Exception as exception:
-        failure_reason = f"runtime-gate-failed:{type(exception).__name__}"
+        safe_reason = str(exception)
+        if safe_reason not in {
+            "account-exited-before-health",
+            "account-health-timeout",
+            "transfer-exited-before-health",
+            "transfer-health-timeout",
+            "postgresql-query-failed",
+        }:
+            safe_reason = type(exception).__name__
+        failure_reason = f"runtime-gate-failed:{safe_reason}"
     finally:
         digest = _stop_service(transfer_process, transfer_log)
         if digest:

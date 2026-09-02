@@ -1,6 +1,6 @@
 {
   "base_target": "ms59-generated-account-transfer",
-  "content_sha256": "4b8ba060a6598ad0a12dd9113562c4dab2f32a1fbf14d024ee003d01b24703b1",
+  "content_sha256": "7ccf449e3e5fe8b6389af54801ce9ccdf27b47ecb21e2fc42599bdecc74d0844",
   "database": "postgresql-16",
   "patches": [
     {
@@ -12,7 +12,7 @@
     {
       "operation": "replace-generated",
       "path": "transfer/src/main/java/com/example/transfer/TransferService.java",
-      "target_sha256": "6bff30b198744f2b404e261d65f767999731313b83deb5805293fc88fcc24adb",
+      "target_sha256": "8257d7cce23569187acc0495978a9909a244dcf29502c122411141208660dc17",
       "template": "patches/TransferService.java"
     },
     {

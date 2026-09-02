@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.60.1 — 2026-09-02
+
+- Marked the generated Transfer facade's public constructor as the explicit Spring injection point
+  so the package-private test constructor no longer causes a missing-default-constructor startup
+  failure.
+- Added a CI runtime smoke gate that materializes and packages the MS #60 target, starts the real
+  Transfer executable JAR, and requires its loopback health endpoint to become ready.
+- Improved safe native diagnostics to distinguish Account and Transfer early exit or health timeout
+  without persisting service logs, tokens, passwords, or raw output.
+
 ## 0.60.0 — 2026-09-02
 
 - Added the first integrated native Account/Transfer wave chained to the passing signed MS #59

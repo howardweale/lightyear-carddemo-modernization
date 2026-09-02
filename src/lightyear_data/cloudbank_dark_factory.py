@@ -45,6 +45,7 @@ SHARED_CONTRACT_SHA256 = hashlib.sha256(SHARED_CONTRACT.encode("utf-8")).hexdige
 HEX_64 = re.compile(r"^[0-9a-f]{64}$")
 LANE_MARKER = "CLOUDBANK_LANE_RESULT="
 ORACLE_READY_ATTEMPTS = 600
+ORACLE_READY_MARKER = "CLOUDBANK_ORACLE_READY"
 
 PATCHES = {
     "customer/pom.xml": (
@@ -470,15 +471,15 @@ def _wait_postgres(name: str, run: Callable[..., subprocess.CompletedProcess[str
 
 def _wait_oracle(name: str, run: Callable[..., subprocess.CompletedProcess[str]], pause: Callable[[float], None]) -> None:
     for _ in range(ORACLE_READY_ATTEMPTS):
-        ready = run(
+        inspection = run(
             ["docker", "inspect", "--format", "{{json .State}}", name],
             timeout=10,
         )
-        if ready.returncode:
+        if inspection.returncode:
             pause(1)
             continue
         try:
-            state = json.loads(ready.stdout)
+            state = json.loads(inspection.stdout)
         except json.JSONDecodeError:
             pause(1)
             continue
@@ -487,7 +488,22 @@ def _wait_oracle(name: str, run: Callable[..., subprocess.CompletedProcess[str]]
         status = state.get("Status")
         if status in {"dead", "exited"}:
             raise ValueError("cloudbank-dark-factory-oracle-container-exited")
-        if (state.get("Health") or {}).get("Status") == "healthy":
+        ready = run(
+            [
+                "docker", "exec", "-i", name, "bash", "-lc",
+                'sqlplus -L -s "$APP_USER"/"$APP_USER_PASSWORD"@//localhost:1521/FREEPDB1',
+            ],
+            input=(
+                "WHENEVER OSERROR EXIT FAILURE\n"
+                "WHENEVER SQLERROR EXIT SQL.SQLCODE\n"
+                "SET HEADING OFF FEEDBACK OFF PAGESIZE 0 VERIFY OFF ECHO OFF\n"
+                f"SELECT '{ORACLE_READY_MARKER}' FROM DUAL;\n"
+                "EXIT\n"
+            ),
+            timeout=20,
+        )
+        markers = {line.strip() for line in ready.stdout.splitlines()}
+        if ready.returncode == 0 and ORACLE_READY_MARKER in markers:
             return
         pause(1)
     raise ValueError("cloudbank-dark-factory-oracle-not-ready")

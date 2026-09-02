@@ -174,6 +174,13 @@ class CloudBankTransactionCoreTests(unittest.TestCase):
                 prefix = content[max(0, method_start - 300) : method_start]
                 self.assertGreater(prefix.rfind("/**"), prefix.rfind("}"), marker)
 
+        postgresql_tests = (patches / "TransactionCorePostgreSqlTests.java").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("private JdbcTemplate jdbc;", postgresql_tests)
+        self.assertIn("INSERT INTO accounts", postgresql_tests)
+        self.assertNotIn("setAccountId", postgresql_tests)
+
     @patch("lightyear_data.cloudbank_transaction_core._validate_patch_sources", return_value=[])
     @patch("lightyear_data.cloudbank_transaction_core.materialize_target")
     @patch("lightyear_data.cloudbank_transaction_core._native_postgresql_lane")

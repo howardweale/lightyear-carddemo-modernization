@@ -1,5 +1,5 @@
 {
-  "content_sha256": "7b66be8ce2b57591b5c52b44bafd0a41c927be07f65368f79187e79bb2cfec19",
+  "content_sha256": "6638510b4da676e56d17ee73c19a74a5ae77d3026080b3e25e6e850594517779",
   "contract_complete": true,
   "executable_jar_observed": false,
   "http_contract_observed": false,
@@ -11,7 +11,7 @@
   "production_data_observed": false,
   "production_ready": false,
   "production_shaped_synthetic_profile_complete": true,
-  "qualification_contract_sha256": "ec74e75aa097c2fb9394dfb21da1a7bfc54cff21e79fcbdbd042ed5b5933e5b3",
+  "qualification_contract_sha256": "11ec3177da6b4c66dca89fd9b8971a34d1d03de9a5ae59c49263758c7438ed90",
   "receipt_type": "lightyear-cloudbank-customer-production-qualification-readiness",
   "release": "0.57.0",
   "schema_version": "1.0",

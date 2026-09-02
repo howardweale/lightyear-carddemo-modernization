@@ -41,5 +41,8 @@ script is undocumented, and that every POSIX entry point has a PowerShell twin.
 - `./cloudbank-transaction-wave.sh verify` checks the MS #58 eight-service inventory, transaction
   source and behavior contracts, Account PostgreSQL mapping, recovery model, and migration waves;
   `admit` additionally requires the passing signed MS #57 receipt produced with the same evidence key.
+- `./cloudbank-transaction-core.sh verify` checks the MS #59 bounded Account/Transfer target,
+  atomic transaction contract, packaging boundary, and false whole-application claims; `run`
+  additionally requires the passing signed MS #58 admission receipt produced with the same key.
 
 See `scripts.catalog.json` for the exact purpose, role, and verification owner of all entry points.

@@ -47,6 +47,8 @@ jobs:
           ./cloudbank-production-qualification.sh verify-source ../cloudbank-upstream
           ./cloudbank-transaction-wave.sh verify
           ./cloudbank-transaction-wave.sh verify-source ../cloudbank-upstream
+          ./cloudbank-transaction-core.sh verify
+          ./cloudbank-transaction-core.sh verify-source ../cloudbank-upstream
 
       - name: Publish bounded CI build receipt
         uses: actions/upload-artifact@v4

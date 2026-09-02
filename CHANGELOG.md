@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.59.0 — 2026-09-02
+
+- Added the first executable Account/Transfer transaction-core workcell chained to the signed
+  MS #58 admission receipt and its immutable PostgreSQL image identity.
+- Added a 20-path isolated transformation that removes inherited Oracle UCP, Account MicroTx LRA
+  participants, and the Account-local AQ grant script from the generated target.
+- Replaced the distributed debit/deposit callback path with one PostgreSQL transaction covering
+  a durable idempotency command, ordered account locks, debit, credit, and paired journals.
+- Retained Transfer as the authenticated external facade and required an actor identity, internal
+  service token, and idempotency key at the Account command boundary.
+- Added seven tests covering all eight MS #58 behaviors: success, invalid amount, insufficient
+  funds, authorization denial, duplicate suppression, injected rollback/retry, and journal replay.
+- Kept full transaction-wave and native LRA-replacement claims false because Account runs against
+  native PostgreSQL while Transfer is checked against an isolated HTTP facade contract.
+- Added executable Account and Transfer JAR inspection requiring zero Oracle and zero MicroTx
+  runtime libraries, plus signed execution receipts and safe aggregate diagnostics.
+- Added deterministic contracts, a five-class compatibility ledger, schemas, cross-platform
+  launchers, Control Tower status, CI checks, milestone documentation, and adversarial tests.
+- Kept the native run unobserved in committed readiness evidence; Oracle comparison, Checks AQ,
+  the remaining service workcells, whole-application equivalence, migration completion, and
+  production readiness remain false.
+
 ## 0.58.0 — 2026-09-02
 
 - Added a complete eight-service CloudBank deployable inventory and an ordered whole-application

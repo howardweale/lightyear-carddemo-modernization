@@ -1,0 +1,163 @@
+{
+  "architecture_decisions": [
+    "move each debit, credit, command, and journal pair into one PostgreSQL transaction",
+    "replace the distributed LRA callback path with an idempotent Account command",
+    "lock both accounts in stable identifier order to reduce deadlock risk",
+    "require an internal service token and authenticated source-account actor",
+    "retain the Transfer service as the external facade",
+    "retire Oracle AQ grants from the Account schema without claiming the Checks queue migrated"
+  ],
+  "changes": [
+    {
+      "operation": "replace",
+      "path": "account/pom.xml",
+      "source_sha256": "4dbc4c295146e78dfceccdf313dd8f6060d270dcf65238170f09fab9c6263595",
+      "target_sha256": "f2828c53e7376258f734f48dcacc07a75f34c8dbd0e7287dd8a6c5a2c465ad20",
+      "template": "patches/account-pom.xml"
+    },
+    {
+      "operation": "create",
+      "path": "account/src/main/java/com/example/accounts/controller/TransactionCoreController.java",
+      "source_sha256": null,
+      "target_sha256": "1b49205f156a8ebf82b1e5eb37165e1be8d087e458ee76622074e9e410748d6b",
+      "template": "patches/TransactionCoreController.java"
+    },
+    {
+      "operation": "create",
+      "path": "account/src/main/java/com/example/accounts/model/TransferCommand.java",
+      "source_sha256": null,
+      "target_sha256": "628eb6645c7a1397342991e12f00f1c2efd28440a167b4ec2b7b8aa43df8d4fa",
+      "template": "patches/TransferCommand.java"
+    },
+    {
+      "operation": "replace",
+      "path": "account/src/main/java/com/example/accounts/repository/AccountRepository.java",
+      "source_sha256": "196fe9f55587b407dddf20e5e4d7e53a3aeebafbdb380b5a2ddffb6658876445",
+      "target_sha256": "3eeb717fcc10411534eaee208954b9f2919741388302d5a62d9489c265b7c4a4",
+      "template": "patches/AccountRepository.java"
+    },
+    {
+      "operation": "create",
+      "path": "account/src/main/java/com/example/accounts/repository/TransferCommandRepository.java",
+      "source_sha256": null,
+      "target_sha256": "1b8fa51eb3ad8a455af05e9a633a61e1cdab9e71d8184ada2845b44e779ad851",
+      "template": "patches/TransferCommandRepository.java"
+    },
+    {
+      "operation": "delete",
+      "path": "account/src/main/java/com/example/accounts/services/AccountTransferDAO.java",
+      "source_sha256": "dc69281c5c6d9e97aca8a9f169bff3ddacda250e1758c3275908da70355c7632",
+      "target_sha256": null,
+      "template": null
+    },
+    {
+      "operation": "delete",
+      "path": "account/src/main/java/com/example/accounts/services/DepositService.java",
+      "source_sha256": "a646e517dc9de28008fb64cfd38dac78c0350b387ebecb75b8ae62549b3db849",
+      "target_sha256": null,
+      "template": null
+    },
+    {
+      "operation": "create",
+      "path": "account/src/main/java/com/example/accounts/services/TransactionCoreService.java",
+      "source_sha256": null,
+      "target_sha256": "ebacb29f27fc44a1958c242fb3b942f533dcbaa7d4a59a8a5ea1e86a51d7441e",
+      "template": "patches/TransactionCoreService.java"
+    },
+    {
+      "operation": "delete",
+      "path": "account/src/main/java/com/example/accounts/services/WithdrawService.java",
+      "source_sha256": "4a9bfa60dff7dba6b641b0eb9227869f82a03c872dd69d90d6ae1a400899dd47",
+      "target_sha256": null,
+      "template": null
+    },
+    {
+      "operation": "replace",
+      "path": "account/src/main/resources/application.yaml",
+      "source_sha256": "05b3d5bf0827dfe0ae82777eb2386f24f3cf9e2f35fca89d5090332451e4b487",
+      "target_sha256": "70409ca31f74bb72120ad9469654def1a33f810b0c4dcbd87d214a54d33167f0",
+      "template": "patches/account-application.yaml"
+    },
+    {
+      "operation": "replace",
+      "path": "account/src/main/resources/db/changelog/controller.yaml",
+      "source_sha256": "b4a2f076b45e2765cf6c0e6f3f6ac7ce24244d2eaa149bebed9999f0f4322bf5",
+      "target_sha256": "3c1ea00943be4c1b6669d57490ac0036333e20d6c5811bf1cb95c21791f945f3",
+      "template": "patches/controller.yaml"
+    },
+    {
+      "operation": "replace",
+      "path": "account/src/main/resources/db/changelog/data.sql",
+      "source_sha256": "62acc80c6849fe6f8a09f7ce621f1a9c592c59db4aca94bc1fc26819959479c2",
+      "target_sha256": "a4d4a13e96cf6eb9c0f24174308f1481a85c6ab7becfb6dccad2ac8fc036678e",
+      "template": "patches/data.sql"
+    },
+    {
+      "operation": "replace",
+      "path": "account/src/main/resources/db/changelog/table.sql",
+      "source_sha256": "abf35c87c3b32050ffa39cdc1cc9651c55a2e446cd13928a010799f3e94fee35",
+      "target_sha256": "b7b2066450557c7fca6a1fbd9267bca0c061cbf000d049905ec0bbc32bce305f",
+      "template": "patches/table.sql"
+    },
+    {
+      "operation": "delete",
+      "path": "account/src/main/resources/db/changelog/txeventq.sql",
+      "source_sha256": "646c5a5c484e78e7fbf0192a7fb74f22d1800c574287dc768cc62e763dd73eb1",
+      "target_sha256": null,
+      "template": null
+    },
+    {
+      "operation": "create",
+      "path": "account/src/test/java/com/example/accounts/TransactionCorePostgreSqlTests.java",
+      "source_sha256": null,
+      "target_sha256": "928df335a3e1d497fc3a023659e72f90faf507f6a0bb05e8992a9149e1746f34",
+      "template": "patches/TransactionCorePostgreSqlTests.java"
+    },
+    {
+      "operation": "remove-inherited-oracle-ucp",
+      "path": "pom.xml",
+      "source_sha256": "9d72b44ca06675e09f5927872a3c6fae86d98973292ffa943f2c6370cf63ace6",
+      "target_sha256": null,
+      "template": null
+    },
+    {
+      "operation": "replace",
+      "path": "transfer/pom.xml",
+      "source_sha256": "96003c2686a7a2d449fa12ebca1565ea46bcb203fb692d27dd63886de51f8556",
+      "target_sha256": "77fb192c2e13a4edbcd9a1a558b07f09a8eadcd712263bd65256bc44b752f688",
+      "template": "patches/transfer-pom.xml"
+    },
+    {
+      "operation": "replace",
+      "path": "transfer/src/main/java/com/example/transfer/TransferService.java",
+      "source_sha256": "46ab5a0b2253e7fdfc63858867be3029746c3e675404056feda21b50d3cc9c45",
+      "target_sha256": "2228f2c7be114d0f874c71e3b8c372a5d109b14727e7298871257367a6640fa1",
+      "template": "patches/TransferService.java"
+    },
+    {
+      "operation": "replace",
+      "path": "transfer/src/main/resources/application.yaml",
+      "source_sha256": "bfcfadf0288e04e0fd3b674f097ab98360300c8643234c042def5e8ea9da4566",
+      "target_sha256": "79f84b0bd3944e3f70e55a36b65b93e5ade77f13142dff20ee44b2f042e354f0",
+      "template": "patches/transfer-application.yaml"
+    },
+    {
+      "operation": "create",
+      "path": "transfer/src/test/java/com/example/transfer/TransferServiceTests.java",
+      "source_sha256": null,
+      "target_sha256": "edaa50860f5b20363384eb5ead3a6f4d8d31eab3ca73ce61df4d410589bfe541",
+      "template": "patches/TransferServiceTests.java"
+    }
+  ],
+  "content_sha256": "826089ad0a88e8ad45b4ed328463ec88466c0be3f26d7f85655412ac94f45c79",
+  "native_execution_observed": false,
+  "plan_type": "lightyear-cloudbank-transaction-core-transformation",
+  "postgresql_target_generated": true,
+  "release": "0.59.0",
+  "schema_version": "1.0",
+  "services": [
+    "account",
+    "transfer"
+  ],
+  "whole_application_migrated": false
+}

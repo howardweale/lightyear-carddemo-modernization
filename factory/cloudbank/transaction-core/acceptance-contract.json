@@ -1,0 +1,37 @@
+{
+  "claim_boundary": {
+    "checks_aq_replacement": false,
+    "oracle_postgresql_equivalence": false,
+    "postgresql_transaction_core": "eligible-after-native-run",
+    "production_ready": false,
+    "remaining_service_workcells": false,
+    "whole_application_equivalent": false
+  },
+  "content_sha256": "274e94d63f67cb7bea2930efc894bd0f92b138aedc4cef462300c9fa623e83a5",
+  "contract_type": "lightyear-cloudbank-transaction-core-acceptance",
+  "ms58_behavior_sha256": "f48bdd95783436f8f6caf057df43c552d2b067f092921aec3deffdfe4a0a4683",
+  "release": "0.59.0",
+  "required_native_lane": {
+    "contract_sha256": "75956d251ce0bee80a3624e9fe07017976b61f35831e83379e8b4e8bc7062eba",
+    "database": "postgresql-16",
+    "microtx_runtime_libraries": 0,
+    "oracle_runtime_libraries": 0,
+    "services": [
+      "account",
+      "transfer"
+    ],
+    "tests": 7
+  },
+  "required_scenarios": [
+    "authorized-transfer",
+    "invalid-amount",
+    "insufficient-funds",
+    "deposit-failure",
+    "duplicate-command",
+    "authorization-denied",
+    "crash-after-withdraw",
+    "journal-replay"
+  ],
+  "schema_version": "1.0",
+  "transformation_plan_sha256": "826089ad0a88e8ad45b4ed328463ec88466c0be3f26d7f85655412ac94f45c79"
+}

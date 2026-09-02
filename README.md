@@ -4,28 +4,33 @@
 
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.58.0 — CloudBank whole-application transaction wave**
+Release: **v0.59.0 — CloudBank PostgreSQL transaction-core factory run**
 
-v0.58 puts the whole CloudBank application under one governed migration plan. All eight root
-deployable services are inventoried and assigned exactly once to delivery waves. The first connected
-wave combines the already-qualified Customer service with Account and Transfer because that is where
-money movement, journals, service authorization, compensation, and failure recovery meet.
+v0.59 turns the admitted Account and Transfer wave into bounded target code. The generated Account
+service moves each debit, credit, durable command, and paired journal into one PostgreSQL transaction;
+the generated Transfer service becomes its authenticated, idempotent facade. Stable account locking,
+authorization-before-mutation, duplicate suppression, injected rollback and retry, journal replay,
+and executable packaging are native acceptance gates.
 
-The release pins 17 critical source files, maps all 13 Account and Journal columns to PostgreSQL 16,
-and defines eight acceptance scenarios. Oracle AQ/JMS and MicroTx LRA remain explicit native blockers.
-The admission action requires the passing signed MS #57 receipt and binds its exact Oracle and
-PostgreSQL image identities.
+The operator run requires the passing signed MS #58 admission receipt and uses its immutable
+PostgreSQL image identity. It packages both services and rejects any target JAR containing an Oracle
+or MicroTx runtime library.
 
 ```bash
-./cloudbank-transaction-wave.sh verify
-./cloudbank-transaction-wave.sh verify-source /path/to/cloudbank-upstream
+./cloudbank-transaction-core.sh verify
+./cloudbank-transaction-core.sh verify-source /path/to/cloudbank-upstream
 ```
 
-The committed receipt proves readiness and planning, not native Account/Transfer execution. Target
-code generation, native messaging, LRA replacement, whole-application equivalence, migration
-completion, and production readiness remain false.
+The committed receipt proves generated artifacts and readiness, not the native operator run.
+Oracle comparison, the Checks AQ flow, the remaining five service workcells, whole-application
+equivalence, migration completion, and production readiness remain false.
 
-Previous release: **v0.57.0 — CloudBank customer production-readiness qualification**
+Previous release: **v0.58.0 — CloudBank whole-application transaction wave**
+
+v0.58 inventories all eight root deployables, maps Account and Journal, defines the transaction
+behavior contract, and admits Account and Transfer as the first connected whole-application wave.
+
+Earlier release: **v0.57.0 — CloudBank customer production-readiness qualification**
 
 v0.57 deepens the Customer-service workcell proven by MS #56 with a shared five-test native Oracle
 and PostgreSQL HTTP, security, transaction, packaging, and rollback qualification.

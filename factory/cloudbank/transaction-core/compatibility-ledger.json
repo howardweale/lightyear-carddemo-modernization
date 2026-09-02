@@ -1,0 +1,46 @@
+{
+  "aq_migrated": false,
+  "content_sha256": "c7875a1e5d706c2ecb1f0444c99c403089cd414db72bcff22ec8e8475d7a4591",
+  "entries": [
+    {
+      "capability": "account-schema",
+      "classification": "normalized-equivalent",
+      "exit_gate": "native-ms59-required"
+    },
+    {
+      "capability": "local-money-movement",
+      "classification": "normalized-equivalent",
+      "exit_gate": "native-ms59-required"
+    },
+    {
+      "capability": "microtx-lra",
+      "classification": "policy-decision-required",
+      "exit_gate": "target-local-atomicity-observed"
+    },
+    {
+      "capability": "idempotency",
+      "classification": "normalized-equivalent",
+      "exit_gate": "native-ms59-required"
+    },
+    {
+      "capability": "authorization",
+      "classification": "normalized-equivalent",
+      "exit_gate": "native-ms59-required"
+    },
+    {
+      "capability": "oracle-aq-checks-flow",
+      "classification": "unsupported",
+      "exit_gate": "later-messaging-wave"
+    },
+    {
+      "capability": "oracle-source-equivalence",
+      "classification": "policy-decision-required",
+      "exit_gate": "native-dual-lane-required"
+    }
+  ],
+  "ledger_type": "lightyear-cloudbank-transaction-core-compatibility",
+  "oracle_postgresql_equivalent": false,
+  "release": "0.59.0",
+  "schema_version": "1.0",
+  "whole_application_equivalent": false
+}

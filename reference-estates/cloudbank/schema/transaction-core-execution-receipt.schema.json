@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schemas/cloudbank/transaction-core-execution-receipt.schema.json",
+  "title": "CloudBank PostgreSQL transaction-core execution receipt",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "receipt_type",
+    "release",
+    "run_id",
+    "source_ms58_receipt_sha256",
+    "postgresql_image_id_sha256",
+    "postgresql_lane",
+    "status",
+    "native_postgresql_transaction_core_observed",
+    "native_transaction_wave_observed",
+    "oracle_postgresql_equivalent",
+    "whole_application_equivalent",
+    "migration_complete",
+    "production_ready",
+    "content_sha256",
+    "signature"
+  ],
+  "properties": {
+    "receipt_type": {"const": "lightyear-cloudbank-transaction-core-postgresql-execution"},
+    "release": {"const": "0.59.0"},
+    "status": {"const": "passed-bounded-postgresql-transaction-core"},
+    "native_postgresql_transaction_core_observed": {"const": true},
+    "native_transaction_wave_observed": {"const": false},
+    "native_lra_replacement_observed": {"const": false},
+    "oracle_transaction_core_observed": {"const": false},
+    "oracle_postgresql_equivalent": {"const": false},
+    "whole_application_equivalent": {"const": false},
+    "migration_complete": {"const": false},
+    "production_ready": {"const": false},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "signature": {
+      "type": "object",
+      "required": ["algorithm", "signer", "value"],
+      "properties": {
+        "algorithm": {"const": "hmac-sha256"},
+        "value": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

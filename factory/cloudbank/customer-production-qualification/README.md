@@ -37,6 +37,11 @@ Replace `operator-id` with a stable identifier for the person or automation that
 for example `howard-local` or `github-actions`. The runner emits progress messages while the Oracle
 container starts and signs only hashes, counts, booleans, and bounded metadata.
 
+If a final acceptance gate fails, the runner writes
+`cloudbank-customer-production-qualification.failure.json` in the selected output directory. That
+report identifies the failed lane, test names and exception types, Maven phase, marker counts, and
+packaged database libraries without persisting raw Maven output or credentials.
+
 ## Exact boundary
 
 A passing receipt qualifies the Customer workcell more deeply. It does not exercise native CDC,

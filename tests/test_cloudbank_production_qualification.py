@@ -18,6 +18,7 @@ from lightyear_data.cloudbank_dark_factory import (
 )
 from lightyear_data.cloudbank_production_qualification import (
     EXPECTED_TESTS,
+    FAILURE_REPORT_NAME,
     QUALIFICATION_MARKER_SHA256,
     RECEIPT_TYPE,
     _materialize_workspaces,
@@ -283,12 +284,13 @@ class CloudBankProductionQualificationTests(unittest.TestCase):
         incomplete = qualification_lane("oracle", HEX_A)
         incomplete["tests"] = 4
         with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory)
             with self.assertRaisesRegex(ValueError, "acceptance-failed"):
                 execute_qualification(
                     ROOT,
                     checkout,
                     ms56_receipt(),
-                    Path(directory),
+                    output,
                     KEY,
                     "unit-test",
                     oracle_runner=lambda workspace, image: incomplete,
@@ -297,6 +299,10 @@ class CloudBankProductionQualificationTests(unittest.TestCase):
                         package_result(),
                     ),
                 )
+            failure = json.loads((output / FAILURE_REPORT_NAME).read_text(encoding="utf-8"))
+            self.assertEqual("failed-bounded-qualification", failure["status"])
+            self.assertEqual(4, failure["oracle_lane"]["tests"])
+            self.assertFalse(failure["security"]["raw_maven_output_persisted"])
 
     def test_maven_and_executable_jar_evidence_is_exact(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -342,6 +348,63 @@ class CloudBankProductionQualificationTests(unittest.TestCase):
             self.assertEqual("passed", package["status"])
             self.assertEqual(0, package["oracle_runtime_library_count"])
             self.assertEqual(1, package["postgresql_driver_count"])
+
+    def test_maven_marker_can_be_proven_by_surefire_report(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            workspace = Path(directory)
+
+            def test_run(
+                argv: list[str], **kwargs: object
+            ) -> subprocess.CompletedProcess[str]:
+                report = workspace / (
+                    "customer/target/surefire-reports/"
+                    "TEST-com.example.customer.CustomerProductionQualificationTests.xml"
+                )
+                report.parent.mkdir(parents=True)
+                marker = (
+                    "CLOUDBANK_PRODUCTION_QUALIFICATION="
+                    "http:pass;authn:pass;authz:pass;errors:pass;"
+                    "isolation:pass;rollback:pass"
+                )
+                report.write_text(
+                    '<testsuite tests="5" failures="0" errors="0" skipped="0">'
+                    f"<system-out>{marker}</system-out></testsuite>",
+                    encoding="utf-8",
+                )
+                return subprocess.CompletedProcess(argv, 0, "build passed", "")
+
+            lane = _maven_test_result(workspace, "oracle", {}, test_run)
+            self.assertEqual("passed", lane["status"])
+            self.assertEqual(0, lane["marker_stdout_count"])
+            self.assertEqual(1, lane["marker_report_count"])
+
+    def test_failed_test_diagnostic_excludes_message_and_output(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            workspace = Path(directory)
+
+            def test_run(
+                argv: list[str], **kwargs: object
+            ) -> subprocess.CompletedProcess[str]:
+                report = workspace / (
+                    "customer/target/surefire-reports/"
+                    "TEST-com.example.customer.CustomerProductionQualificationTests.xml"
+                )
+                report.parent.mkdir(parents=True)
+                report.write_text(
+                    '<testsuite tests="5" failures="1" errors="0" skipped="0">'
+                    '<testcase name="httpContract"><failure type="AssertionError" '
+                    'message="secret-value">raw-secret-value</failure></testcase></testsuite>',
+                    encoding="utf-8",
+                )
+                return subprocess.CompletedProcess(argv, 1, "maven output", "")
+
+            lane = _maven_test_result(workspace, "postgresql", {}, test_run)
+            self.assertEqual("failed", lane["status"])
+            self.assertEqual(
+                [{"name": "httpContract", "type": "AssertionError"}],
+                lane["failed_tests"],
+            )
+            self.assertNotIn("secret-value", json.dumps(lane))
 
 
 if __name__ == "__main__":

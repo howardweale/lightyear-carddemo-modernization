@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.local/schema/cloudbank-source-build-execution-receipt.schema.json",
+  "title": "Signed CloudBank source build execution receipt",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "receipt_type",
+    "release",
+    "source",
+    "build_plan_sha256",
+    "toolchain",
+    "commands",
+    "artifacts",
+    "status",
+    "security",
+    "source_build_observed",
+    "oracle_runtime_observed",
+    "cloudbank_source_baseline_complete",
+    "postgresql_mapping_complete",
+    "target_equivalent",
+    "migration_complete",
+    "production_ready",
+    "content_sha256",
+    "signature"
+  ],
+  "properties": {
+    "receipt_type": {"const": "lightyear-cloudbank-source-build-execution-receipt"},
+    "release": {"const": "0.54.0"},
+    "status": {"const": "passed"},
+    "source_build_observed": {"const": true},
+    "oracle_runtime_observed": {"const": false},
+    "cloudbank_source_baseline_complete": {"const": false},
+    "postgresql_mapping_complete": {"const": false},
+    "target_equivalent": {"const": false},
+    "migration_complete": {"const": false},
+    "production_ready": {"const": false},
+    "commands": {"type": "array", "minItems": 4, "maxItems": 4},
+    "artifacts": {"type": "array", "minItems": 7, "maxItems": 7},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "signature": {
+      "type": "object",
+      "required": ["algorithm", "signer", "value"],
+      "properties": {
+        "algorithm": {"const": "hmac-sha256"},
+        "signer": {"type": "string", "minLength": 1},
+        "value": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

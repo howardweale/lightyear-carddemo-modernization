@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.54.0 — 2026-09-02
+
+- Added a deterministic Java 21/Maven build contract bound to the complete pinned CloudBank v5
+  subtree and the seven-service set declared by its upstream image-build script.
+- Added a bounded native Oracle source-runtime contract for the three pinned `azn-server`
+  Testcontainers integration classes and their seven tests against
+  `gvenzl/oracle-free:23.26.1-slim-faststart`.
+- Added content-addressed build, runtime, execution, and readiness artifacts plus three JSON
+  Schemas and cross-platform operator launchers.
+- Added runtime-key-signed build and Oracle receipts that retain artifact, image, command-output,
+  and test-result hashes without persisting credentials or raw output.
+- Added strict admission checks for exact source identity, Java 21, Maven 3.6+, seven service JARs,
+  immutable Oracle image identity, zero failed/error/skipped native tests, and false target claims.
+- Added a Java 21 CI job that checks out and compiles the exact upstream commit without vendoring
+  CloudBank into the factory repository.
+- Recorded that pinned sample/bootstrap data is sufficient for the first controlled proof, while
+  production data requires a separately authorized, profiled, privacy-governed extract.
+- Kept source build and native Oracle execution unobserved in the committed readiness receipt;
+  PostgreSQL mapping, target equivalence, application equivalence, migration completion, and
+  production readiness remain false.
+
 ## 0.53.0 — 2026-09-01
 
 - Pinned Oracle's official CloudBank v5 reference application at commit

@@ -4,7 +4,31 @@
 
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.53.0 — CloudBank modern Oracle reference estate**
+Release: **v0.54.0 — CloudBank executable source baseline**
+
+v0.54 turns the pinned CloudBank inventory into the execution contract needed before the first dark
+factory workcell. Every run must use the complete `cloudbank-v5` subtree at commit
+`4f41b16d00c45503f691836fee8138010c969e86`, Java 21, Maven 3.6 or newer, and the seven-service
+build scope declared by the pinned upstream build script.
+
+The bounded native source proof uses CloudBank's existing `azn-server` Oracle Testcontainers suite:
+three integration classes and seven tests against
+`gvenzl/oracle-free:23.26.1-slim-faststart`. Build and runtime receipts are content-addressed,
+environment-key signed, and retain artifact, image, and aggregate result hashes without committing
+credentials or raw logs.
+
+```bash
+./cloudbank-executable-baseline.sh verify
+./cloudbank-executable-baseline.sh verify-source /path/to/cloudbank-upstream
+```
+
+The committed readiness receipt is `ready-to-execute-not-observed`: this development environment
+has not produced an authorized Java 21, Docker, and Oracle receipt. Pinned sample/bootstrap data is
+enough for this first controlled source proof; production data requires a separate authorized
+extract. PostgreSQL mapping, target equivalence, application equivalence, migration completion, and
+production readiness remain false.
+
+Previous release: **v0.53.0 — CloudBank modern Oracle reference estate**
 
 v0.53 adds Oracle's official CloudBank v5 reference application as the third selectable Control
 Tower estate: **CloudBank Reference Estate**. Unlike the enterprise ERP-shaped Oracle source,
@@ -23,9 +47,9 @@ processing, identity/authorization, and credit scoring.
 ./composite-estate.sh verify /path/to/carddemo-upstream
 ```
 
-CloudBank has not been built or executed and no target has been selected. PostgreSQL mapping,
+CloudBank was not built or executed in v0.53 and no target was selected. PostgreSQL mapping,
 generated refactoring, target execution, application equivalence, migration completion, and
-production readiness remain false.
+production readiness remained false.
 
 Previous release: **v0.52.0 — Oracle Customer (Large) Control Tower projection**
 
@@ -1124,7 +1148,7 @@ read-only dashboard cannot approve, resolve, or launch work.
 
 The complete customer-readable milestone history is published in the
 [searchable milestone documentation library](https://howardweale.github.io/lightyear-carddemo-modernization/milestones/).
-MS #1 through MS #53 each have a canonical Markdown narrative plus matching Microsoft Word and PDF
+MS #1 through MS #54 each have a canonical Markdown narrative plus matching Microsoft Word and PDF
 editions. Search runs locally in the browser over milestone number, title, customer value,
 capability, release, boundary, and roadmap phase. The
 [repository index](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/README.md)

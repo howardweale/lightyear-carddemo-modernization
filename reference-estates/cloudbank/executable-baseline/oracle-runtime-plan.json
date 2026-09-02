@@ -1,0 +1,62 @@
+{
+  "admission": {
+    "all_expected_tests_required": true,
+    "credentials_persisted": false,
+    "exact_source_identity_required": true,
+    "failures_errors_skips_allowed": 0,
+    "raw_stderr_persisted": false,
+    "raw_stdout_persisted": false,
+    "signed_build_receipt_required": true
+  },
+  "argv": [
+    "mvn",
+    "-pl",
+    "azn-server",
+    "-Dtest=UserRepositoryOracleIT,UserApiOracleIT,AuthorizationServerIT",
+    "test"
+  ],
+  "build_plan_sha256": "8e4a65f4bd33eb03981f76caaf3853d9268968250ea4eeb1203d1ae13c3d862c",
+  "claim_boundary": {
+    "cloudbank_oracle_source_baseline": "bounded-to-azn-server-upstream-integration-suite",
+    "customer_service_runtime_observed": false,
+    "migration_complete": false,
+    "postgresql_mapping_complete": false,
+    "production_data_observed": false,
+    "production_ready": false,
+    "target_equivalent": false
+  },
+  "content_sha256": "0972a89d1182b03b89ae52cce85d499f079afba57588b90cc886276226c055ab",
+  "plan_type": "lightyear-cloudbank-oracle-runtime-plan",
+  "release": "0.54.0",
+  "schema_version": "1.0",
+  "scope": {
+    "database_behavior": [
+      "Liquibase USER_REPO schema bootstrap",
+      "Oracle-backed user repository create/read/update behavior",
+      "Oracle-backed user API behavior",
+      "OAuth2 authorization-server token behavior"
+    ],
+    "expected_test_count": 7,
+    "module": "azn-server",
+    "oracle_image": "gvenzl/oracle-free:23.26.1-slim-faststart",
+    "suite": "pinned-upstream-testcontainers-oracle-integration",
+    "test_classes": [
+      "oracle.obaas.aznserver.integration.UserRepositoryOracleIT",
+      "oracle.obaas.aznserver.integration.UserApiOracleIT",
+      "oracle.obaas.aznserver.integration.AuthorizationServerIT"
+    ]
+  },
+  "source": {
+    "commit": "4f41b16d00c45503f691836fee8138010c969e86",
+    "repository": "https://github.com/oracle/microservices-backend",
+    "root_tree": "6aa92e89c783f123c4da8d7ae18108004a4f4a99",
+    "subtree": "cloudbank-v5",
+    "subtree_tree": "bd918386209f284a1ed31802555740eb34b75348"
+  },
+  "toolchain": {
+    "docker_daemon_required": true,
+    "java_major": 21,
+    "maven_minimum": "3.6.0",
+    "oracle_image_identity_required": true
+  }
+}

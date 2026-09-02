@@ -1,7 +1,7 @@
 # CloudBank modern Oracle reference estate
 
-This directory records an inventory-only acquisition of Oracle's official CloudBank v5 reference
-application from `oracle/microservices-backend`. The upstream source is pinned at commit
+This directory records a static inventory and an executable-baseline contract for Oracle's
+official CloudBank v5 reference application from `oracle/microservices-backend`. The upstream source is pinned at commit
 `4f41b16d00c45503f691836fee8138010c969e86`; its source code is not copied into this repository.
 
 CloudBank is important because it is already a cloud-native microservices application while still
@@ -53,6 +53,20 @@ Windows:
 
 The inventory tool refuses a dirty checkout or a commit other than the recorded pin.
 
+## Execute the bounded source baseline
+
+MS #54 requires the full pinned external checkout, Java 21, Maven 3.6 or newer, and, for the native
+suite, Docker plus the identified Oracle Free image. The detailed operator flow and claim boundary
+are in [`executable-baseline/README.md`](executable-baseline/README.md).
+
+```bash
+./cloudbank-executable-baseline.sh verify
+./cloudbank-executable-baseline.sh verify-source /path/to/oracle-microservices-backend
+```
+
+The checked-in readiness receipt is `ready-to-execute-not-observed`. It is a deterministic
+execution contract, not a fabricated source-build or native-runtime result.
+
 ## Control Tower projection
 
 **CloudBank Reference Estate** is selectable alongside **CardDemo Reference Estate** and
@@ -66,8 +80,9 @@ bound.
 
 ## Evidence boundary
 
-This milestone is upstream static inventory and curated migration-risk evidence. CloudBank was not
-built or executed. No customer system is attached. No PostgreSQL mapping, alternative-target
-mapping, generated refactoring, native target execution, application equivalence, migration
-completion, or production readiness is claimed. Those capabilities require later transformation
-and dual-run evidence milestones.
+MS #53 is upstream static inventory and curated migration-risk evidence. MS #54 adds the exact
+source-build and bounded Oracle-runtime admission path, but the committed readiness receipt does not
+claim an authorized execution. No customer system or production data is attached. No PostgreSQL
+mapping, alternative-target mapping, generated refactoring, native target execution, application
+equivalence, migration completion, or production readiness is claimed. Those capabilities require
+later transformation and dual-run evidence milestones.

@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.local/schema/cloudbank-executable-baseline-readiness.schema.json",
+  "title": "CloudBank executable baseline readiness receipt",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "receipt_type",
+    "release",
+    "source",
+    "execution_contract_sha256",
+    "gates",
+    "gate_status",
+    "source_build_observed",
+    "oracle_runtime_observed",
+    "cloudbank_source_baseline_complete",
+    "postgresql_mapping_complete",
+    "target_equivalent",
+    "migration_complete",
+    "production_ready",
+    "content_sha256"
+  ],
+  "properties": {
+    "receipt_type": {"const": "lightyear-cloudbank-executable-baseline-readiness"},
+    "release": {"const": "0.54.0"},
+    "gate_status": {"const": "ready-to-execute-not-observed"},
+    "source_build_observed": {"const": false},
+    "oracle_runtime_observed": {"const": false},
+    "cloudbank_source_baseline_complete": {"const": false},
+    "postgresql_mapping_complete": {"const": false},
+    "target_equivalent": {"const": false},
+    "migration_complete": {"const": false},
+    "production_ready": {"const": false},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

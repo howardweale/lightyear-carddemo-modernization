@@ -1,0 +1,29 @@
+{
+  "admitted_receipt_types": [
+    "lightyear-cloudbank-source-build-execution-receipt",
+    "lightyear-cloudbank-oracle-runtime-execution-receipt"
+  ],
+  "build_plan_sha256": "8e4a65f4bd33eb03981f76caaf3853d9268968250ea4eeb1203d1ae13c3d862c",
+  "content_sha256": "52f147f9862472175fd73e34aa277964994f3ec61dd9340c6f5c1e64af398cf9",
+  "contract_type": "lightyear-cloudbank-executable-source-baseline",
+  "data_rule": "Pinned sample and bootstrap data may qualify the first controlled run. Production CloudBank data requires a separately authorized, profiled, non-repository extract.",
+  "oracle_runtime_plan_sha256": "0972a89d1182b03b89ae52cce85d499f079afba57588b90cc886276226c055ab",
+  "postgresql_rule": "No PostgreSQL mapping is generated or admitted by this milestone; mapping begins only after the source execution receipt is admitted.",
+  "receipt_security": {
+    "content_addressed": true,
+    "credentials_or_raw_logs_admitted": false,
+    "key_source": "LIGHTYEAR_CLOUDBANK_BASELINE_EVIDENCE_KEY runtime environment only",
+    "signature_algorithm": "hmac-sha256",
+    "unsigned_receipts_admitted": false
+  },
+  "release": "0.54.0",
+  "schema_version": "1.0",
+  "source": {
+    "commit": "4f41b16d00c45503f691836fee8138010c969e86",
+    "repository": "https://github.com/oracle/microservices-backend",
+    "root_tree": "6aa92e89c783f123c4da8d7ae18108004a4f4a99",
+    "subtree": "cloudbank-v5",
+    "subtree_tree": "bd918386209f284a1ed31802555740eb34b75348"
+  },
+  "source_baseline_rule": "The bounded executable source baseline is observed only after the exact pinned source produces all seven expected service JARs and the seven pinned azn-server Oracle Testcontainers integration tests pass against an identified Oracle image."
+}

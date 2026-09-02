@@ -13,7 +13,7 @@ DOC_ROOT = ROOT / "docs" / "milestones"
 
 class MilestoneDocumentationTests(unittest.TestCase):
     def test_all_milestones_have_all_three_formats(self) -> None:
-        for number in range(1, 54):
+        for number in range(1, 55):
             stem = f"MS-{number:02d}"
             directory = DOC_ROOT / stem
             self.assertTrue(directory.is_dir(), stem)
@@ -25,8 +25,8 @@ class MilestoneDocumentationTests(unittest.TestCase):
     def test_manifest_is_complete_and_content_addressed(self) -> None:
         manifest = json.loads((DOC_ROOT / "manifest.json").read_text(encoding="utf-8"))
         self.assertEqual(manifest["schema_version"], "1.1")
-        self.assertEqual(manifest["milestone_count"], 53)
-        self.assertEqual(manifest["artifact_count"], 159)
+        self.assertEqual(manifest["milestone_count"], 54)
+        self.assertEqual(manifest["artifact_count"], 162)
         self.assertEqual(set(manifest["formats"]), {"md", "docx", "pdf"})
         for artifact in manifest["artifacts"]:
             path = ROOT / artifact["path"]
@@ -51,10 +51,10 @@ class MilestoneDocumentationTests(unittest.TestCase):
         readme = (DOC_ROOT / "README.md").read_text(encoding="utf-8")
         page = (DOC_ROOT / "index.html").read_text(encoding="utf-8")
         self.assertIn("Open the searchable milestone index", readme)
-        self.assertEqual(readme.count("https://github.com/"), 107)
-        self.assertEqual(readme.count("https://raw.githubusercontent.com/"), 53)
+        self.assertEqual(readme.count("https://github.com/"), 109)
+        self.assertEqual(readme.count("https://raw.githubusercontent.com/"), 54)
         self.assertNotRegex(readme, r"\]\(MS-\d{2}/")
-        self.assertEqual(page.count('class="milestone"'), 53)
+        self.assertEqual(page.count('class="milestone"'), 54)
         self.assertIn('id="search"', page)
         self.assertIn('id="phase"', page)
         self.assertIn("URLSearchParams", page)
@@ -75,7 +75,7 @@ class MilestoneDocumentationTests(unittest.TestCase):
             readme + page,
         )
         self.assertTrue(github_paths)
-        self.assertEqual(len(raw_paths), 106)
+        self.assertEqual(len(raw_paths), 108)
         for relative in set(github_paths + raw_paths):
             self.assertTrue((ROOT / relative).is_file(), relative)
 
@@ -136,7 +136,7 @@ class MilestoneDocumentationTests(unittest.TestCase):
             check=False,
         )
         self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
-        self.assertIn('"artifacts": 159', result.stdout)
+        self.assertIn('"artifacts": 162', result.stdout)
 
     def test_roadmap_records_unified_estate_navigation(self) -> None:
         roadmap = (ROOT / "LIGHTYEAR-ROADMAP.md").read_text(encoding="utf-8")
@@ -190,6 +190,12 @@ class MilestoneDocumentationTests(unittest.TestCase):
             roadmap,
         )
         self.assertIn("five business workloads and 20 curated migration-risk scenarios", roadmap)
+        self.assertIn("MS #54 — CloudBank Executable Source Baseline", roadmap)
+        self.assertIn(
+            "| MS #54 | CloudBank Executable Source Baseline | Execution contract complete; authorized Java 21, Docker, and Oracle run pending |",
+            roadmap,
+        )
+        self.assertIn("integration classes and seven native Oracle tests", roadmap)
 
 
 if __name__ == "__main__":

@@ -191,6 +191,14 @@ class CloudBankNativeWaveTests(unittest.TestCase):
         self.assertIn("Invoke-FactoryDarkPython", powershell)
         self.assertNotIn("Resolve-LightyearPython", powershell)
 
+    def test_ci_materializes_and_compiles_the_generated_target(self) -> None:
+        workflow = (ROOT / ".github/workflows/verify.yml").read_text(encoding="utf-8")
+        self.assertIn(
+            "cloudbank-native-wave.sh materialize ../cloudbank-upstream",
+            workflow,
+        )
+        self.assertIn("mvn -pl account,transfer -am -DskipTests package", workflow)
+
 
 if __name__ == "__main__":
     unittest.main()

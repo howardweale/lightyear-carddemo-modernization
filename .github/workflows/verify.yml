@@ -51,6 +51,11 @@ jobs:
           ./cloudbank-transaction-core.sh verify-source ../cloudbank-upstream
           ./cloudbank-native-wave.sh verify
           ./cloudbank-native-wave.sh verify-source ../cloudbank-upstream
+          ./cloudbank-native-wave.sh materialize ../cloudbank-upstream work/cloudbank-native-wave-ci
+          (
+            cd work/cloudbank-native-wave-ci
+            mvn -pl account,transfer -am -DskipTests package
+          )
 
       - name: Publish bounded CI build receipt
         uses: actions/upload-artifact@v4

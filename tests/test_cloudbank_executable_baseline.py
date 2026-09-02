@@ -155,6 +155,8 @@ class CloudBankExecutableBaselineTests(unittest.TestCase):
                 "customer-postgresql-readiness.schema.json",
                 "customer-dark-factory-execution-receipt.schema.json",
                 "customer-dark-factory-readiness.schema.json",
+                "customer-production-qualification-execution-receipt.schema.json",
+                "customer-production-qualification-readiness.schema.json",
             },
             {path.name for path in schemas},
         )

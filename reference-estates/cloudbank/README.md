@@ -83,8 +83,9 @@ equivalence as blocked until later milestones.
 ## Control Tower projection
 
 **CloudBank Reference Estate** is selectable alongside **CardDemo Reference Estate** and
-**Oracle Customer (Large)**. PostgreSQL 16 is now selected for the bounded customer workcell; target
-selection for the rest of CloudBank remains governed later work.
+**Oracle Customer (Large)**. PostgreSQL 16 is selected and production-readiness qualification is
+contracted for the bounded Customer workcell; target selection for the rest of CloudBank remains
+governed later work.
 
 ## Run the first bounded application factory workcell
 
@@ -99,6 +100,20 @@ PostgreSQL service. The operator flow is documented under
 ./cloudbank-dark-factory.sh verify-source /path/to/oracle-microservices-backend
 ```
 
+## Qualify the Customer workcell more deeply
+
+MS #57 chains from the signed MS #56 receipt and runs one five-test HTTP, security, error, isolation,
+rollback, and data-boundary contract on both native database lanes. It removes Oracle UCP from the
+PostgreSQL target dependency path, inspects the executable JAR, creates a 10,000-row synthetic
+aggregate profile, and records an offline simulated checkpoint/cutover/rollback rehearsal. The
+operator flow is documented under
+[`../../factory/cloudbank/customer-production-qualification/`](../../factory/cloudbank/customer-production-qualification/).
+
+```bash
+./cloudbank-production-qualification.sh verify
+./cloudbank-production-qualification.sh verify-source /path/to/oracle-microservices-backend
+```
+
 The projection is composed with the existing PL/I and Oracle Customer (Large) fragments. It does
 not change the canonical CardDemo graph or the identity to which runtime and audit evidence are
 bound.
@@ -110,4 +125,7 @@ source-build and bounded Oracle-runtime admission path. MS #55 generates the cus
 PostgreSQL mapping while leaving its committed native target readiness unobserved. No customer
 system or production data is attached. MS #56 adds the sealed application transformation and
 dual-run workcell, but the committed readiness receipt does not claim the operator run occurred.
-No whole-CloudBank equivalence, migration completion, or production readiness is claimed.
+MS #57 adds deeper Customer qualification, packaging and offline rehearsal contracts, but its
+committed receipt likewise does not claim native execution. No other service, native CDC,
+production data, whole-CloudBank equivalence, migration completion, or production readiness is
+claimed.

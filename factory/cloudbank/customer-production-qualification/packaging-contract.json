@@ -1,0 +1,22 @@
+{
+  "content_sha256": "607474bb92d8bea53e8dff699b58a0a80a332df3fc679a5a7df29e88dcee7771",
+  "contract_type": "lightyear-cloudbank-customer-postgresql-packaging",
+  "image_scan_observed": false,
+  "oci_image_build_observed": false,
+  "oracle_library_markers": [
+    "ojdbc",
+    "oraclepki",
+    "osdt_cert",
+    "osdt_core",
+    "ucp-"
+  ],
+  "production_deployment_observed": false,
+  "release": "0.57.0",
+  "required_checks": [
+    "maven-package-exit-zero",
+    "spring-boot-executable-jar",
+    "oracle-runtime-library-count-zero",
+    "postgresql-driver-present"
+  ],
+  "schema_version": "1.0"
+}

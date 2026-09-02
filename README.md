@@ -4,31 +4,35 @@
 
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.56.0 — First CloudBank dark factory run**
+Release: **v0.57.0 — CloudBank customer production-readiness qualification**
 
-v0.56 packages the first executable CloudBank dark-factory workcell. The existing controller copies
-the complete pinned `cloudbank-v5` checkout into isolation, admits only six customer-service files,
-and applies a deterministic PostgreSQL application transformation without modifying the source
-checkout.
+v0.57 deepens the Customer-service workcell proven by MS #56. A shared five-test contract now runs
+against native Oracle and PostgreSQL to exercise HTTP authentication, owner/admin authorization,
+error responses, concurrent `READ COMMITTED` visibility, transaction rollback/commit, and maximum
+declared data boundaries.
 
-The workcell requires the signed MS #54 Oracle and MS #55 PostgreSQL receipts. It runs one shared
-Spring/JPA and controller contract on the unchanged Oracle service, applies the sealed six-file
-patch, and runs the same contract plus explicit `ROLE` mapping on PostgreSQL 16. The contract covers
-synthetic rows, defaults, Oracle empty-string behavior, case-sensitive searches, CRUD, and
-owner/admin authorization. Database ports are ephemeral and loopback-only; credentials, raw Maven
-output, and production data are excluded from the signed receipt.
+The PostgreSQL lane removes the inherited Oracle UCP runtime, packages the Spring Boot executable
+JAR, and verifies that it contains one PostgreSQL driver and no Oracle runtime library. MS #57 also
+adds a deterministic 10,000-row synthetic aggregate profile and an offline simulated
+checkpoint/cutover/rollback rehearsal. The native action requires the signed MS #56 receipt and
+uses its exact Oracle and PostgreSQL image identities.
 
 ```bash
-./cloudbank-dark-factory.sh verify
-./cloudbank-dark-factory.sh verify-source /path/to/cloudbank-upstream
+./cloudbank-production-qualification.sh verify
+./cloudbank-production-qualification.sh verify-source /path/to/cloudbank-upstream
 ```
 
-The committed readiness receipt means the workcell is ready, not that it ran. A passing operator
-run can claim only bounded customer-application equivalence on the synthetic contract. Human
-promotion, production-data equivalence, concurrency/CDC/cutover, whole-CloudBank equivalence,
-migration completion, and production readiness remain false.
+The committed receipt is readiness evidence, not a fabricated native result. Even after a passing
+operator run, native CDC, OCI image build/scan, authorized production data, the other CloudBank
+services, whole-estate equivalence, migration completion, and production readiness remain false.
 
-Previous release: **v0.55.0 — CloudBank customer PostgreSQL mapping**
+Previous release: **v0.56.0 — First CloudBank dark factory run**
+
+v0.56 packages the first executable CloudBank dark-factory workcell. The controller copies the
+complete pinned source into isolation, admits six customer-service files, and proves the same
+bounded Spring/JPA contract on Oracle and PostgreSQL without modifying the source checkout.
+
+Earlier release: **v0.55.0 — CloudBank customer PostgreSQL mapping**
 
 v0.55 selects CloudBank's `customer` service as the first transformation workcell and generates a
 governed seven-column mapping from `CUSTOMER.CUSTOMERS` to PostgreSQL 16. The native target action

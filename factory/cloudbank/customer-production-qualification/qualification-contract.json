@@ -1,0 +1,40 @@
+{
+  "bindings": {
+    "migration_rehearsal_sha256": "c2aaa44310dbf95f445b65bac2d976433dc73d88389c8459c8dd37cffe78726a",
+    "packaging_contract_sha256": "607474bb92d8bea53e8dff699b58a0a80a332df3fc679a5a7df29e88dcee7771",
+    "synthetic_profile_sha256": "0b1adc1059db85fecb3b47e22cc6490bece93622adf6ca1655a83616903cef5d",
+    "transformation_plan_sha256": "0ecc58de88c43ed20bad76fe5e347949385809fd09e0b3b368d9f40c8e53fd82"
+  },
+  "claim_boundary": {
+    "customer_service_production_readiness": "bounded-qualification-only",
+    "migration_complete": false,
+    "native_cdc_observed": false,
+    "oci_image_built": false,
+    "production_data_observed": false,
+    "production_ready": false,
+    "whole_cloudbank_equivalent": false
+  },
+  "content_sha256": "4ac26a2290d00059f0e0a2c01dedb0c4211ee87961ea5c9ed151a1ac81aa58fa",
+  "contract_type": "lightyear-cloudbank-customer-production-readiness-qualification",
+  "native_dual_lane": {
+    "gates": [
+      "HTTP authentication",
+      "owner/admin authorization",
+      "HTTP error and mutation status",
+      "concurrent read-committed isolation",
+      "rollback and commit visibility",
+      "maximum declared column lengths"
+    ],
+    "marker_sha256": "ecab084f70eac96c1506eed5ec62c3ca2de1d3b4e3f23411336998faaf6f452c",
+    "test_class": "com.example.customer.CustomerProductionQualificationTests",
+    "tests_per_lane": 5
+  },
+  "release": "0.57.0",
+  "requires": {
+    "exact_pinned_source": true,
+    "immutable_database_images_from_ms56": true,
+    "same_evidence_key": true,
+    "signed_ms56_receipt": true
+  },
+  "schema_version": "1.0"
+}

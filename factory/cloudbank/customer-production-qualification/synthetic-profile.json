@@ -1,0 +1,31 @@
+{
+  "content_sha256": "0b1adc1059db85fecb3b47e22cc6490bece93622adf6ca1655a83616903cef5d",
+  "dataset_sha256": "f456cf7defa1e2ef8c1720dd6328fa4f0d35bce244e6765f0a4bef2ac1461480",
+  "generation": {
+    "algorithm": "deterministic-customer-boundary-v1",
+    "production_data_used": false,
+    "raw_rows_persisted": false,
+    "row_count": 10000
+  },
+  "limitations": [
+    "This is deterministic synthetic shape evidence, not sampled production data.",
+    "Customer authorization is required before profiling any real data.",
+    "Volume, skew, NLS, privacy, retention, and workload rates require customer observation."
+  ],
+  "metrics": {
+    "admin_role_count": 100,
+    "boundary_details_rows": 16,
+    "boundary_email_rows": 12,
+    "boundary_name_rows": 10,
+    "distinct_customer_ids": 10000,
+    "empty_details_count": 19,
+    "maximum_details_characters": 4000,
+    "maximum_email_characters": 40,
+    "maximum_name_characters": 40,
+    "null_details_count": 1424,
+    "null_email_count": 999
+  },
+  "profile_type": "lightyear-cloudbank-customer-production-shaped-synthetic-profile",
+  "release": "0.57.0",
+  "schema_version": "1.0"
+}

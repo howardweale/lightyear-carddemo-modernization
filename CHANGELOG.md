@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.57.0 — 2026-09-02
+
+- Added a bounded production-readiness qualification stage chained to the signed MS #56 Customer
+  dark-factory receipt and its immutable Oracle and PostgreSQL image identities.
+- Added one five-test Spring/MockMvc/JDBC contract for authentication, owner/admin authorization,
+  error status behavior, two-connection `READ COMMITTED` isolation, rollback/commit visibility,
+  maximum declared data lengths, and Oracle empty-string normalization.
+- Replayed the exact six MS #56 generated edits in temporary workspaces while adding only a shared
+  qualification test, Spring Security test support, and target parent-dependency cleanup.
+- Removed inherited Oracle UCP from the PostgreSQL target and required its executable Spring Boot
+  JAR to contain one PostgreSQL driver and zero Oracle runtime libraries.
+- Added a deterministic 10,000-row synthetic aggregate profile without persisted rows or production
+  data and an offline simulated journal/checkpoint/cutover/rollback rehearsal.
+- Added content-addressed contracts, readiness and execution schemas, a signed fail-closed receipt,
+  progress-reporting cross-platform launchers, CI verification, documentation, and adversarial tests.
+- Kept native CDC, OCI image build/scan, authorized production-data observation, other CloudBank
+  services, whole-estate equivalence, migration completion, and production readiness false.
+
 ## 0.56.0 — 2026-09-02
 
 - Added the first CloudBank dark-factory workcell, bound to the complete pinned `cloudbank-v5`

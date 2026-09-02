@@ -35,5 +35,8 @@ script is undocumented, and that every POSIX entry point has a PowerShell twin.
 - `./cloudbank-dark-factory.sh verify` checks the MS #56 sealed six-file application transformation
   and dual-run acceptance contract; `run` additionally requires the signed MS #54 Oracle and
   MS #55 PostgreSQL receipts produced with the same evidence key.
+- `./cloudbank-production-qualification.sh verify` checks the MS #57 Customer-service HTTP,
+  transaction, packaging, synthetic-profile, and offline cutover/rollback qualification contract;
+  `run` additionally requires the passing signed MS #56 receipt produced with the same evidence key.
 
 See `scripts.catalog.json` for the exact purpose, role, and verification owner of all entry points.

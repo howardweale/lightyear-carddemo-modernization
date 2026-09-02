@@ -39,6 +39,7 @@ production-qualified.
 | MS #54 | CloudBank Executable Source Baseline | Complete; signed execution receipts remain operator-held evidence |
 | MS #55 | CloudBank Customer PostgreSQL Mapping | Mapping qualified; signed native receipt remains operator-held evidence |
 | MS #56 | First CloudBank Dark Factory Run | Factory contract complete; operator dual-run receipt pending |
+| MS #57 | CloudBank Customer Production-Readiness Qualification | Qualification contract complete; signed native receipt pending |
 
 The v0.35.0 stored-logic qualification core is retained as supporting MS #34 evidence. It does not
 replace the planned DB2 milestone.
@@ -426,10 +427,32 @@ equivalence for this synthetic contract. It cannot authorize promotion or establ
 concurrency, CDC, cutover, cross-service, whole-CloudBank, migration-complete, or production-ready
 claims. Dependency download is recorded as an explicit development-network boundary.
 
+## MS #57 — CloudBank Customer Production-Readiness Qualification
+
+MS #57 deepens the Customer workcell without inflating it into a whole-application migration. It
+requires the passing signed MS #56 receipt, recreates isolated Oracle and PostgreSQL workspaces from
+the exact pinned source, and runs the same five-test HTTP and JDBC contract in both lanes. The gates
+cover authentication, owner/admin authorization, error status behavior, two-connection
+`READ COMMITTED` isolation, rollback/commit visibility, declared maximum lengths, and Oracle
+empty-string normalization.
+
+The PostgreSQL target removes inherited Oracle UCP from the shared parent path, excludes the Oracle
+starter from the Customer dependency, packages an executable Spring Boot JAR, and fails unless the
+archive contains one PostgreSQL driver and no Oracle runtime library. A deterministic 10,000-row
+synthetic aggregate profile captures boundary shape without retaining rows or production data. An
+offline simulated change journal exercises checkpoint resume, a reconciled cutover barrier, an
+injected fault, and exact rollback without claiming native CDC or production authorization.
+
+The committed readiness state is `ready-for-operator-ms56-receipt`; it does not claim that native
+qualification ran. Even a passing signed operator receipt remains bounded to the Customer service.
+It does not build or scan an OCI image, observe production data or native CDC, qualify account or
+transfer behavior, establish whole-CloudBank equivalence, complete a migration, or establish
+production readiness.
+
 ## Planned next increments
 
-MS #57 expands from the first bounded workcell toward production-grade qualification: HTTP-level
-security and error contracts, concurrency and transaction isolation, CDC/cutover/rollback design,
-container packaging, dependency cleanup in the shared parent, and authorized production-shaped data
-profiling. Expansion remains evidence-driven; MS #56 does not silently qualify the other CloudBank
-services.
+MS #58 should expand to the Account and Transfer transaction boundary, including journal behavior,
+service-to-service authorization, messaging, MicroTx LRA compensation, and cross-service failure
+recovery. MS #59 can then run the remaining deployable portfolio through governed workcells, and
+MS #60 can add a production-like operational deployment and cutover rehearsal. A real production
+migration remains a separately authorized customer program using approved production evidence.

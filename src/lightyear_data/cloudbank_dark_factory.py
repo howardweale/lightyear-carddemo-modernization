@@ -44,6 +44,7 @@ SHARED_CONTRACT = "rows:4;name:2;email:2;case:0;empty:null;crud:pass;default:pas
 SHARED_CONTRACT_SHA256 = hashlib.sha256(SHARED_CONTRACT.encode("utf-8")).hexdigest()
 HEX_64 = re.compile(r"^[0-9a-f]{64}$")
 LANE_MARKER = "CLOUDBANK_LANE_RESULT="
+ORACLE_READY_ATTEMPTS = 600
 
 PATCHES = {
     "customer/pom.xml": (
@@ -468,12 +469,25 @@ def _wait_postgres(name: str, run: Callable[..., subprocess.CompletedProcess[str
 
 
 def _wait_oracle(name: str, run: Callable[..., subprocess.CompletedProcess[str]], pause: Callable[[float], None]) -> None:
-    for _ in range(300):
+    for _ in range(ORACLE_READY_ATTEMPTS):
         ready = run(
-            ["docker", "inspect", "--format", "{{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}", name],
+            ["docker", "inspect", "--format", "{{json .State}}", name],
             timeout=10,
         )
-        if ready.returncode == 0 and ready.stdout.strip() == "healthy":
+        if ready.returncode:
+            pause(1)
+            continue
+        try:
+            state = json.loads(ready.stdout)
+        except json.JSONDecodeError:
+            pause(1)
+            continue
+        if state.get("OOMKilled") is True:
+            raise ValueError("cloudbank-dark-factory-oracle-oom-killed")
+        status = state.get("Status")
+        if status in {"dead", "exited"}:
+            raise ValueError("cloudbank-dark-factory-oracle-container-exited")
+        if (state.get("Health") or {}).get("Status") == "healthy":
             return
         pause(1)
     raise ValueError("cloudbank-dark-factory-oracle-not-ready")
@@ -589,9 +603,13 @@ def _execute_oracle_lane(
     password = "Ly" + secrets.token_hex(12) + "A1"
     started = run(
         [
-            "docker", "run", "-d", "--rm", "--name", name,
-            "-p", "127.0.0.1::1521", "--pids-limit", "512", "--memory", "3g", "--cpus", "2.0",
-            "--security-opt", "no-new-privileges",
+            # Oracle's entrypoint performs a privilege transition, so this lane
+            # deliberately matches the repository's proven Oracle runner: keep
+            # the container inspectable on failure and do not set
+            # no-new-privileges. The finally block still removes it.
+            "docker", "run", "-d", "--name", name,
+            "-p", "127.0.0.1::1521", "--pids-limit", "512",
+            "--memory", "4g", "--cpus", "2.0", "--shm-size", "1g",
             "-e", f"ORACLE_PASSWORD={password}",
             "-e", "APP_USER=CUSTOMER", "-e", f"APP_USER_PASSWORD={password}",
             f"sha256:{image_id}",

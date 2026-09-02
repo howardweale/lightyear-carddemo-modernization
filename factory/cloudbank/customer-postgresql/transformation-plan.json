@@ -41,11 +41,11 @@
       "classification": "generated-bounded-edit",
       "path": "customer/src/test/java/com/example/customer/CustomerApplicationTests.java",
       "source_sha256": "584ac017e27dcfdb2dea995dfc944ed15a55f2f331f4955b5cdf5f340bad92c5",
-      "target_sha256": "9967a86aaeb0607c41547cad4341d8172cf71f682eaca63316f0f65dbdcabd13",
+      "target_sha256": "32d8b8039bc6308962b94ddb25c2489c53fc3b40fc193c02a98ea5c87382552f",
       "template": "patches/CustomerApplicationTests.java"
     }
   ],
-  "content_sha256": "3b81bcb5751d7ffdedf387cbfc13405f0e5172996b930296c379929985e52872",
+  "content_sha256": "d89d8d74e0501b1d4f12e4b125a756e21ffe16da2be95518ab5131c602121fba",
   "decisions": [
     "replace the Oracle wallet starter with the PostgreSQL JDBC driver in the customer module",
     "override the inherited Oracle Hibernate dialect and UCP datasource configuration",

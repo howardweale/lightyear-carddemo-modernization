@@ -35,7 +35,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @Transactional
 class CustomerApplicationTests {
 
-    private static final String SHARED_MARKER = "rows:4;name:2;email:2;case:0;empty:null;crud:pass;default:pass;auth:pass";
+    private static final String SHARED_MARKER =
+            "rows:4;name:2;email:2;case:0;empty:null;crud:pass;default:pass;auth:pass";
 
     @Autowired
     private CustomersRepository repository;

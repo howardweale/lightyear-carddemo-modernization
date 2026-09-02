@@ -1,5 +1,5 @@
 {
-  "content_sha256": "e4040b10f93aad27e21f83f309b30070cb1af8b1e02cdadf768f3b4dab14318a",
+  "content_sha256": "c64e95c147b05e9efc577ca7ef540abcc37b3c163f6dc77e5db323f38418d2b3",
   "contract_type": "lightyear-cloudbank-customer-dark-factory-acceptance",
   "promotion": "human authorization remains mandatory after technical acceptance",
   "release": "0.56.0",
@@ -38,6 +38,6 @@
     "source_checkout_mutated": false,
     "synthetic_data_only": true
   },
-  "transformation_plan_sha256": "3b81bcb5751d7ffdedf387cbfc13405f0e5172996b930296c379929985e52872",
-  "work_order_template_sha256": "e9e73f8ecaa844a1636709c42ac9de6ecb7097dae1717414c42051f75b869368"
+  "transformation_plan_sha256": "d89d8d74e0501b1d4f12e4b125a756e21ffe16da2be95518ab5131c602121fba",
+  "work_order_template_sha256": "ea9f9fa30315c8eca4b21e33e9d697e36b0a86d2a814544faadd8041d92c8db6"
 }

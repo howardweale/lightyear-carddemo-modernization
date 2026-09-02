@@ -7,7 +7,7 @@
     "remaining_service_workcells": false,
     "whole_application_equivalent": false
   },
-  "content_sha256": "274e94d63f67cb7bea2930efc894bd0f92b138aedc4cef462300c9fa623e83a5",
+  "content_sha256": "20d737d1e1f910e4854469ab44dd2733762aadac503ef4679390f651f955ffd7",
   "contract_type": "lightyear-cloudbank-transaction-core-acceptance",
   "ms58_behavior_sha256": "f48bdd95783436f8f6caf057df43c552d2b067f092921aec3deffdfe4a0a4683",
   "release": "0.59.0",
@@ -33,5 +33,5 @@
     "journal-replay"
   ],
   "schema_version": "1.0",
-  "transformation_plan_sha256": "826089ad0a88e8ad45b4ed328463ec88466c0be3f26d7f85655412ac94f45c79"
+  "transformation_plan_sha256": "a7ad318fa897a034e7910bd4e56cda598c4dd80098e11a95e4d70e6e36f1ea85"
 }

@@ -1,3 +1,6 @@
+// Copyright (c) 2023, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0.
+
 package com.example.accounts.model;
 
 import java.time.Instant;
@@ -37,6 +40,9 @@ public class TransferCommand {
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
+    /**
+     * Creates the durable record used to suppress duplicate transfer commands.
+     */
     public TransferCommand(String commandId, long sourceAccountId, long targetAccountId,
             long amount, String state, String actor) {
         this.commandId = commandId;

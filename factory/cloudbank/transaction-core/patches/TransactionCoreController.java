@@ -1,3 +1,6 @@
+// Copyright (c) 2023, Oracle and/or its affiliates.
+// Licensed under the Universal Permissive License v 1.0.
+
 package com.example.accounts.controller;
 
 import java.nio.charset.StandardCharsets;
@@ -27,6 +30,9 @@ public class TransactionCoreController {
         this.internalToken = internalToken;
     }
 
+    /**
+     * Applies one authenticated and idempotent account transfer.
+     */
     @PostMapping
     public ResponseEntity<TransferResult> transfer(
             @RequestHeader("Idempotency-Key") String commandId,

@@ -131,6 +131,13 @@ class CloudBankProductionOAuthTests(unittest.TestCase):
             azn_pom = (workspace / "azn-server/pom.xml").read_text(encoding="utf-8")
             self.assertIn("postgresql", azn_pom)
             self.assertNotIn("oracle-spring-boot", azn_pom)
+            for test_dependency in (
+                "spring-security-test",
+                "spring-boot-testcontainers",
+                "junit-jupiter",
+                "oracle-free",
+            ):
+                self.assertIn(test_dependency, azn_pom)
         self.assertEqual(source_head, (SOURCE / ".git/HEAD").read_bytes())
 
     @patch(

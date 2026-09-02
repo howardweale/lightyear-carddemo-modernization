@@ -1,6 +1,6 @@
 {
   "base_target": "ms60-generated-postgresql-account-transfer",
-  "content_sha256": "0b9119c7cf180c42bc0e750d451d34839eb2130debf74a939ecc585d3d13eb63",
+  "content_sha256": "683fdbbcbc47590c86eca6b1b4a9a5eb0455073e4fcea209e2d6e87281ea4724",
   "external_tls_termination": false,
   "patches": [
     {
@@ -25,7 +25,7 @@
       "operation": "replace-or-create-in-isolated-target",
       "path": "azn-server/pom.xml",
       "template": "patches/azn-pom.xml",
-      "template_sha256": "7e078f503b47c9c90a3d6408a92f90deb4dd5f78beaeef21766377acf34d817e"
+      "template_sha256": "e73696a64b1a19cc9e299a45eaedd67d449b828994f71f1bb41c249cfbf2a408"
     },
     {
       "operation": "replace-or-create-in-isolated-target",

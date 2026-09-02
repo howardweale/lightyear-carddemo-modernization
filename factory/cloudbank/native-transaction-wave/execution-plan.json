@@ -1,0 +1,57 @@
+{
+  "base_target": "ms59-generated-account-transfer",
+  "content_sha256": "4b8ba060a6598ad0a12dd9113562c4dab2f32a1fbf14d024ee003d01b24703b1",
+  "database": "postgresql-16",
+  "patches": [
+    {
+      "operation": "create",
+      "path": "account/src/main/java/com/example/accounts/config/AccountWaveSecurityConfiguration.java",
+      "target_sha256": "d635a5d6a5eed973395b62afa529af0f37bb032e2c528fd766889cf829803652",
+      "template": "patches/AccountWaveSecurityConfiguration.java"
+    },
+    {
+      "operation": "replace-generated",
+      "path": "transfer/src/main/java/com/example/transfer/TransferService.java",
+      "target_sha256": "6bff30b198744f2b404e261d65f767999731313b83deb5805293fc88fcc24adb",
+      "template": "patches/TransferService.java"
+    },
+    {
+      "operation": "create",
+      "path": "transfer/src/main/java/com/example/transfer/config/TransferWaveSecurityConfiguration.java",
+      "target_sha256": "05c797870f6e633a11e6899ed226e162c38464dae6e2b492f67f330c740ce12e",
+      "template": "patches/TransferWaveSecurityConfiguration.java"
+    }
+  ],
+  "plan_type": "lightyear-cloudbank-native-transaction-wave",
+  "production_data": false,
+  "production_security_profile": false,
+  "release": "0.60.0",
+  "scenario_ids": [
+    "services-healthy",
+    "external-authentication-required",
+    "internal-token-rejected",
+    "invalid-amount-rejected",
+    "owner-authorization-rejected",
+    "insufficient-funds-rejected",
+    "successful-value-conservation",
+    "duplicate-command-replayed",
+    "transfer-restart-replayed",
+    "concurrent-opposite-transfers-conserve-value",
+    "account-restart-replayed"
+  ],
+  "schema_version": "1.0",
+  "services": [
+    "account",
+    "transfer"
+  ],
+  "stages": [
+    "validate-signed-ms59-receipt",
+    "materialize-isolated-ms59-target",
+    "package-account-and-transfer",
+    "start-loopback-postgresql-account-transfer",
+    "exercise-authenticated-http-and-database-contract",
+    "restart-transfer-and-account",
+    "inspect-packaging-and-sign-receipt"
+  ],
+  "whole_application_migrated": false
+}

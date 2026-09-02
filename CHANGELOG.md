@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.60.0 — 2026-09-02
+
+- Added the first integrated native Account/Transfer wave chained to the passing signed MS #59
+  PostgreSQL transaction-core receipt and its immutable database image identity.
+- Started both real Spring Boot applications with native PostgreSQL on loopback-only ephemeral ports
+  and exercised their actual HTTP boundary rather than an isolated Transfer facade.
+- Added 11 acceptance scenarios covering health, external authentication, internal service tokens,
+  validation, ownership, insufficient funds, conservation, duplicate replay, separate service
+  restarts, and concurrent opposite transfers.
+- Proved durable command replay after both Transfer and Account process loss, plus stable locking and
+  exact value conservation under eight concurrent money-movement requests.
+- Added a development-only synthetic Basic-auth profile with per-run credentials held in the process
+  environment; production OAuth/OIDC qualification remains explicitly false.
+- Closed the bounded target-side native transaction-wave and local LRA-replacement gates only after a
+  passing signed run; Oracle equivalence and whole-application claims remain false.
+- Added deterministic plans, compatibility and acceptance contracts, schemas, cross-platform
+  launchers, aggregate failure diagnostics, Control Tower status, CI gates, and adversarial tests.
+- Kept Oracle execution, Checks AQ/JMS, the remaining five service workcells, production data,
+  migration completion, promotion, and production readiness outside this milestone.
+
 ## 0.59.0 — 2026-09-02
 
 - Added the first executable Account/Transfer transaction-core workcell chained to the signed

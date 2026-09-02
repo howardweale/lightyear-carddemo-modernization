@@ -4,28 +4,33 @@
 
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.59.0 — CloudBank PostgreSQL transaction-core factory run**
+Release: **v0.60.0 — CloudBank native Account/Transfer transaction wave**
 
-v0.59 turns the admitted Account and Transfer wave into bounded target code. The generated Account
-service moves each debit, credit, durable command, and paired journal into one PostgreSQL transaction;
-the generated Transfer service becomes its authenticated, idempotent facade. Stable account locking,
-authorization-before-mutation, duplicate suppression, injected rollback and retry, journal replay,
-and executable packaging are native acceptance gates.
+v0.60 starts the generated Account and Transfer applications together against native PostgreSQL.
+Eleven real HTTP gates cover service health, external and internal authentication boundaries,
+validation, ownership, insufficient funds, value conservation, duplicate replay, separate Transfer
+and Account restarts, concurrent opposite transfers, and executable packaging.
 
-The operator run requires the passing signed MS #58 admission receipt and uses its immutable
-PostgreSQL image identity. It packages both services and rejects any target JAR containing an Oracle
-or MicroTx runtime library.
+The operator run requires the passing signed MS #59 receipt and uses its immutable PostgreSQL image
+identity. Per-run credentials stay in process memory, all ports bind to loopback, and the signed
+receipt contains only synthetic aggregate evidence and hashes.
 
 ```bash
-./cloudbank-transaction-core.sh verify
-./cloudbank-transaction-core.sh verify-source /path/to/cloudbank-upstream
+./cloudbank-native-wave.sh verify
+./cloudbank-native-wave.sh verify-source /path/to/cloudbank-upstream
 ```
 
-The committed receipt proves generated artifacts and readiness, not the native operator run.
-Oracle comparison, the Checks AQ flow, the remaining five service workcells, whole-application
+The committed receipt proves integrated target readiness, not the native operator run. A passing
+execution receipt closes only the bounded target-side Account/Transfer wave and LRA replacement.
+Production OAuth/OIDC, Oracle comparison, Checks AQ, the remaining five services, whole-application
 equivalence, migration completion, and production readiness remain false.
 
-Previous release: **v0.58.0 — CloudBank whole-application transaction wave**
+Previous release: **v0.59.0 — CloudBank PostgreSQL transaction-core factory run**
+
+v0.59 turns the admitted Account and Transfer wave into bounded PostgreSQL target code and a native
+single-service transaction-core gate.
+
+Earlier release: **v0.58.0 — CloudBank whole-application transaction wave**
 
 v0.58 inventories all eight root deployables, maps Account and Journal, defines the transaction
 behavior contract, and admits Account and Transfer as the first connected whole-application wave.

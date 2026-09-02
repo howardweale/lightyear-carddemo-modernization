@@ -47,6 +47,7 @@ fi
 "$project_dir/cloudbank-native-wave.sh" verify
 "$project_dir/cloudbank-oracle-equivalence.sh" verify
 "$project_dir/cloudbank-production-oauth.sh" verify
+"$project_dir/cloudbank-checks-messaging.sh" verify
 "$project_dir/composite-estate.sh" verify
 "$project_dir/runtime-evidence.sh" verify
 "$project_dir/semantic-memory.sh" validate

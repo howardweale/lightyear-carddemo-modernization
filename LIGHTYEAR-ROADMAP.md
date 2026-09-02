@@ -45,6 +45,7 @@ production-qualified.
 | MS #60 | CloudBank Native Account/Transfer Transaction Wave | Integrated target ready; signed native HTTP/restart/concurrency receipt remains operator-held evidence |
 | MS #61 | CloudBank Bounded Oracle/PostgreSQL Equivalence | Contract complete; signed sequential native Oracle/PostgreSQL comparison receipt remains operator-held evidence |
 | MS #62 | CloudBank Production OAuth Application Boundary | OAuth target and contract complete; signed native Authorization/Account/Transfer receipt remains operator-held evidence |
+| MS #63 | CloudBank Checks Durable Messaging | PostgreSQL queue target and contract complete; signed native messaging receipt remains operator-held evidence |
 
 The v0.35.0 stored-logic qualification core is retained as supporting MS #34 evidence. It does not
 replace the planned DB2 milestone.
@@ -565,3 +566,22 @@ termination, managed-secret storage and rotation, browser authorization-code exe
 enterprise IdP federation remain operational or customer-policy gates. Checks AQ/JMS, the remaining
 services, whole-application equivalence, migration completion, promotion, and production readiness
 remain false.
+
+## MS #63 — CloudBank Checks Durable Messaging
+
+MS #63 replaces the bounded Checks and Test Runner dependency on Oracle AQ/JMS with a durable
+PostgreSQL work queue while preserving the MS #62 service-identity boundary. Deposits and clearances
+require caller-supplied idempotency keys; workers claim available messages with row locks and
+`SKIP LOCKED`, preserve FIFO order within an aggregate, use bounded leases for crash redelivery,
+apply retry backoff, and quarantine exhausted messages in a dead-letter state for governed replay.
+
+The signed native action chains from the operator-held MS #62 receipt and its immutable PostgreSQL
+image identity. It packages Authorization, Account, Transfer, Checks, and Test Runner and rejects any
+Oracle AQ/JMS, Oracle JDBC/UCP, or MicroTx runtime library. Twelve native PostgreSQL scenarios cover
+enqueue atomicity, duplicates, ordering, exclusive claims, acknowledgement, lease expiry, retry,
+dead-letter and replay, lossless drain, and runtime-library removal.
+
+A passing receipt qualifies the target-side Checks messaging mechanics and generated workcell. It
+does not execute a native Oracle AQ comparison, so Oracle/PostgreSQL messaging equivalence remains
+false. Credit Score and Chatbot remain for MS #64. Whole-application equivalence, migration
+completion, production deployment, promotion, and production readiness remain false.

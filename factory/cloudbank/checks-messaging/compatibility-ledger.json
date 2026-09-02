@@ -1,0 +1,72 @@
+{
+  "checks_target_messaging_eligible": true,
+  "content_sha256": "e507bce3a5eb4ddd43be6b8eb66f73429b72faacd6a7dbee27eca7c42c282098",
+  "entries": [
+    {
+      "capability": "deposits-and-clearances",
+      "classification": "target-native-qualified",
+      "evidence": "postgresql-message-table"
+    },
+    {
+      "capability": "transactional-enqueue",
+      "classification": "target-native-qualified",
+      "evidence": "insert-commit-rollback"
+    },
+    {
+      "capability": "duplicate-suppression",
+      "classification": "target-native-qualified",
+      "evidence": "primary-idempotency-key"
+    },
+    {
+      "capability": "single-consumer-claim",
+      "classification": "target-native-qualified",
+      "evidence": "skip-locked"
+    },
+    {
+      "capability": "per-aggregate-ordering",
+      "classification": "target-native-qualified",
+      "evidence": "earlier-message-fence"
+    },
+    {
+      "capability": "consumer-redelivery",
+      "classification": "target-native-qualified",
+      "evidence": "lease-expiry"
+    },
+    {
+      "capability": "retry-and-dead-letter",
+      "classification": "target-native-qualified",
+      "evidence": "bounded-attempt-state"
+    },
+    {
+      "capability": "checks-account-authentication",
+      "classification": "carried-ms62",
+      "evidence": "oauth-client-credentials"
+    },
+    {
+      "capability": "oracle-aq-jms-runtime",
+      "classification": "removed-from-target",
+      "evidence": "zero-library-package-gate"
+    },
+    {
+      "capability": "native-oracle-aq-comparison",
+      "classification": "not-qualified",
+      "evidence": "customer-oracle-run-required"
+    },
+    {
+      "capability": "remaining-services",
+      "classification": "not-qualified",
+      "evidence": "ms64"
+    },
+    {
+      "capability": "production-deployment",
+      "classification": "not-qualified",
+      "evidence": "later-operational-gate"
+    }
+  ],
+  "ledger_type": "lightyear-cloudbank-checks-messaging-compatibility",
+  "oracle_postgresql_messaging_equivalent": false,
+  "production_ready": false,
+  "release": "0.63.0",
+  "schema_version": "1.0",
+  "whole_application_equivalent": false
+}

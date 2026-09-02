@@ -121,6 +121,14 @@ jobs:
               -Dtest=TransferServiceTests \
               -Dsurefire.failIfNoSpecifiedTests=false test
           )
+          ./cloudbank-checks-messaging.sh verify
+          ./cloudbank-checks-messaging.sh verify-source ../cloudbank-upstream
+          ./cloudbank-checks-messaging.sh materialize ../cloudbank-upstream work/cloudbank-ms63-ci
+          (
+            cd work/cloudbank-ms63-ci
+            mvn -pl azn-server,account,transfer,checks,testrunner -am \
+              -DskipTests package
+          )
 
       - name: Publish bounded CI build receipt
         uses: actions/upload-artifact@v4

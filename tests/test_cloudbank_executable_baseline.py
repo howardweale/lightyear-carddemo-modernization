@@ -167,6 +167,8 @@ class CloudBankExecutableBaselineTests(unittest.TestCase):
                 "oracle-postgresql-equivalence-readiness.schema.json",
                 "production-oauth-execution-receipt.schema.json",
                 "production-oauth-readiness.schema.json",
+                "checks-messaging-execution-receipt.schema.json",
+                "checks-messaging-readiness.schema.json",
             },
             {path.name for path in schemas},
         )

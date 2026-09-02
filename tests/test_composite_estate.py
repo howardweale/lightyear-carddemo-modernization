@@ -180,6 +180,15 @@ class CompositeEstateTests(unittest.TestCase):
             "factory/cloudbank/production-oauth/readiness.receipt.json",
             identity_workcell["factory_artifact"],
         )
+        checks_workcell = next(
+            item for item in context["workloads"]
+            if item["id"] == "cloudbank-reference:workload:check-deposit-clearance"
+        )
+        self.assertEqual("postgresql-16", checks_workcell["target_dialect"])
+        self.assertEqual(
+            "factory/cloudbank/checks-messaging/readiness.receipt.json",
+            checks_workcell["factory_artifact"],
+        )
 
     def test_runtime_and_audit_remain_bound_to_canonical_identity(self) -> None:
         index = GraphExplorerIndex(self.composite)

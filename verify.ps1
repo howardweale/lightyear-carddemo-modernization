@@ -82,6 +82,7 @@ if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 & (Join-Path $ProjectDir "cloudbank-production-oauth.ps1") verify
+& (Join-Path $ProjectDir "cloudbank-checks-messaging.ps1") verify
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 & (Join-Path $ProjectDir "composite-estate.ps1") verify

@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.63.0 — 2026-09-02
+
+- Replaced Oracle AQ/JMS in the bounded Checks and Test Runner target with one PostgreSQL durable
+  queue for deposits and clearances.
+- Added required idempotency keys, per-aggregate FIFO fencing, exclusive `FOR UPDATE SKIP LOCKED`
+  claims, bounded processing leases, crash redelivery, retry backoff, poison-message dead-lettering,
+  and governed replay.
+- Carried the MS #62 OAuth client-credentials provider into the generated Checks-to-Account boundary
+  and preserved message identity as the downstream idempotency key.
+- Added a five-service executable-package gate requiring Authorization, Account, Transfer, Checks,
+  and Test Runner with zero Oracle AQ/JMS, Oracle JDBC/UCP, and MicroTx runtime libraries.
+- Added twelve native PostgreSQL queue scenarios, signed MS #62-chained execution receipts, safe
+  aggregate diagnostics, deterministic contracts, schemas, cross-platform launchers, CI compilation,
+  Control Tower projection, and adversarial tests.
+- Kept native Oracle AQ comparison, Credit Score and Chatbot migration, whole-application
+  equivalence, migration completion, production deployment, promotion, and production readiness
+  explicitly false.
+
 ## 0.62.0 — 2026-09-02
 
 - Replaced the bounded Account/Transfer workcell's development Basic authentication and static

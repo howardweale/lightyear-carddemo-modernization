@@ -1,0 +1,104 @@
+{
+  "carried_services": [
+    "azn-server",
+    "account",
+    "transfer"
+  ],
+  "content_sha256": "553ef79a5e14ecab0b4322aec50b5afbbc0066159f89810bc2dc7dce6b91a782",
+  "native_oracle_aq_lane": false,
+  "patches": [
+    {
+      "path": "checks/pom.xml",
+      "template": "patches/checks-pom.xml",
+      "template_sha256": "6549cbe4ec27d9af5958730d374c68aff10d3e22f12e310521d87718a69cba1d"
+    },
+    {
+      "path": "checks/src/main/java/com/example/checks/ChecksApplication.java",
+      "template": "patches/ChecksApplication.java",
+      "template_sha256": "0b41839ea3ed868fd8f4a0d51c6891e5147f1dfec3d2083a1cbe28ed005953b2"
+    },
+    {
+      "path": "checks/src/main/java/com/example/checks/messaging/CheckMessageWorker.java",
+      "template": "patches/CheckMessageWorker.java",
+      "template_sha256": "c5cedf3261e194b2d749fc0e0848c480072469de8fefde037a8ea569af093d34"
+    },
+    {
+      "path": "checks/src/main/java/com/example/checks/messaging/DurableCheckMessage.java",
+      "template": "patches/DurableCheckMessage.java",
+      "template_sha256": "3cf31f15b6a7c44c3a6b4539df7b150d1a1d1e56d9cf979b55fd558fbfaa583f"
+    },
+    {
+      "path": "checks/src/main/java/com/example/checks/messaging/DurableCheckQueue.java",
+      "template": "patches/DurableCheckQueue.java",
+      "template_sha256": "3abe86f22e654fbf85ba6a50b5857cc664f9612ba4cff7ce86eddaea60b761ad"
+    },
+    {
+      "path": "checks/src/main/java/com/example/checks/service/AccountService.java",
+      "template": "patches/AccountService.java",
+      "template_sha256": "5cab17e2c3b64a61d43c2e3ed84c074b5f57bb12d9d95a3e61c5bfd13e020518"
+    },
+    {
+      "path": "checks/src/main/resources/application.yaml",
+      "template": "patches/checks-application.yaml",
+      "template_sha256": "aa81a859e657e35ea0af6d3d9514f21dad37a2e2786b3d06210dcc88602a70c6"
+    },
+    {
+      "path": "checks/src/main/resources/check-messages.sql",
+      "template": "patches/check-messages.sql",
+      "template_sha256": "ea0ae82ba71243db9fcfc990ba9ff55f3f8701593da28e85e3093f218b42a015"
+    },
+    {
+      "path": "testrunner/pom.xml",
+      "template": "patches/testrunner-pom.xml",
+      "template_sha256": "e95ae2855c5825facaf4d4ec1d6d88983c2915032c63b5dd3b82810602543c0e"
+    },
+    {
+      "path": "testrunner/src/main/java/com/example/testrunner/TestrunnerApplication.java",
+      "template": "patches/TestrunnerApplication.java",
+      "template_sha256": "326c09a37da88bc9aa90644cf42a9db67f48d728e27f496d7b5fc1768304aaad"
+    },
+    {
+      "path": "testrunner/src/main/java/com/example/testrunner/controller/TestRunnerController.java",
+      "template": "patches/TestRunnerController.java",
+      "template_sha256": "35695ee5b4553ef3997d3cc5db7ae69e35ac269e6fbf32b65b3f6c2ce7fc2930"
+    },
+    {
+      "path": "testrunner/src/main/java/com/example/testrunner/messaging/DurableCheckProducer.java",
+      "template": "patches/DurableCheckProducer.java",
+      "template_sha256": "1d6f1e208fd1a794d57d4d1fcb62bb4b7e4c4ffdcffdc6e2ebc1d986d5d62d88"
+    },
+    {
+      "path": "testrunner/src/main/resources/application.yaml",
+      "template": "patches/testrunner-application.yaml",
+      "template_sha256": "6dec55a70c52e05ab3998158742ceeea6317453f1281aad80592cabddbfce8b8"
+    },
+    {
+      "path": "testrunner/src/main/resources/check-messages.sql",
+      "template": "patches/check-messages.sql",
+      "template_sha256": "ea0ae82ba71243db9fcfc990ba9ff55f3f8701593da28e85e3093f218b42a015"
+    }
+  ],
+  "plan_type": "lightyear-cloudbank-checks-messaging-migration",
+  "production_data": false,
+  "release": "0.63.0",
+  "requires": [
+    "signed-ms62-receipt",
+    "same-evidence-key"
+  ],
+  "schema_version": "1.0",
+  "services": [
+    "checks",
+    "testrunner"
+  ],
+  "source_checkout_mutated": false,
+  "stages": [
+    "validate-signed-ms62-and-pinned-source",
+    "materialize-isolated-five-service-target",
+    "remove-oracle-aq-jms-and-wallet-from-checks-and-testrunner",
+    "package-five-zero-oracle-zero-microtx-executable-jars",
+    "start-native-postgresql-on-loopback-only-port",
+    "exercise-durable-queue-order-claim-retry-redelivery-and-dead-letter-contract",
+    "sign-bounded-checks-messaging-receipt"
+  ],
+  "whole_application": false
+}

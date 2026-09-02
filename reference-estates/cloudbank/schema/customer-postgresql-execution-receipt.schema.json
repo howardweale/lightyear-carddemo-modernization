@@ -1,0 +1,32 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyr.ai/schema/cloudbank/customer-postgresql-execution-receipt.schema.json",
+  "title": "CloudBank customer PostgreSQL execution receipt",
+  "type": "object",
+  "required": [
+    "schema_version", "receipt_type", "release", "source", "source_oracle_receipt_sha256",
+    "source_oracle_image_id_sha256", "mapping_sha256", "compatibility_ledger_sha256",
+    "behavior_contract_sha256", "postgresql_image", "postgresql_image_id_sha256", "checks",
+    "psql_exit_code", "stdout_sha256", "stderr_sha256", "security", "status",
+    "postgresql_mapping_complete", "native_postgresql_observed",
+    "bounded_database_mapping_qualified", "application_refactored", "application_equivalent",
+    "target_equivalent", "migration_complete", "production_ready", "content_sha256", "signature"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "receipt_type": {"const": "lightyear-cloudbank-customer-postgresql-execution-receipt"},
+    "release": {"const": "0.55.0"},
+    "postgresql_image": {"const": "postgres:16-alpine"},
+    "postgresql_image_id_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "psql_exit_code": {"const": 0},
+    "status": {"const": "passed-bounded-database-mapping"},
+    "postgresql_mapping_complete": {"const": true},
+    "native_postgresql_observed": {"const": true},
+    "bounded_database_mapping_qualified": {"const": true},
+    "application_refactored": {"const": false},
+    "application_equivalent": {"const": false},
+    "target_equivalent": {"const": false},
+    "migration_complete": {"const": false},
+    "production_ready": {"const": false}
+  }
+}

@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.55.0 — 2026-09-02
+
+- Selected PostgreSQL 16 as the target for the bounded CloudBank `customer` workcell and generated
+  a deterministic seven-column `CUSTOMER.CUSTOMERS` mapping.
+- Mapped Oracle `VARCHAR2`, empty-string-to-NULL behavior, `DATE DEFAULT SYSDATE`, the primary key,
+  table comment, identifier folding, and bounded case-sensitive fragment searches.
+- Added a compatibility ledger covering exact, normalized-equivalent, policy-decision-required,
+  and explicitly excluded application-runtime behavior without treating exclusions as migrated.
+- Preserved the schema-only `ROLE` column and blocked application equivalence until the missing JPA
+  field is reconciled in MS #56.
+- Excluded upstream demonstration password values and added only synthetic, non-production fixtures.
+- Added a hardened `postgres:16-alpine` native runner covering catalog realization, four rows,
+  defaults, empty-string normalization, repository fragment queries, CRUD, commit, and rollback.
+- Required an admitted signed MS #54 Oracle receipt before native PostgreSQL execution and bound the
+  resulting target receipt to both immutable database image identities.
+- Added deterministic contracts, DDL, fixtures, schemas, signed receipt validation, cross-platform
+  launchers, Control Tower mapping status, CI verification, and adversarial tests.
+- Kept native target execution unobserved in committed readiness evidence; Spring refactoring, API,
+  authorization, concurrency, CDC, cutover, whole-CloudBank equivalence, migration completion, and
+  production readiness remain false.
+
 ## 0.54.0 — 2026-09-02
 
 - Added a deterministic Java 21/Maven build contract bound to the complete pinned CloudBank v5

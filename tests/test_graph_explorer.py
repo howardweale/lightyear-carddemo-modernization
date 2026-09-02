@@ -168,6 +168,7 @@ class GraphExplorerTests(unittest.TestCase):
             with urlopen(f"{base}/app.js", timeout=3) as response:
                 script = response.read().decode("utf-8")
             self.assertIn("Attach a graph fragment and customer integration edges first", script)
+            self.assertIn("workload.target_status", script)
             self.assertIn('direction: $("trace-direction").value', script)
             self.assertIn("graph: refreshGraphProjection", script)
             self.assertIn("Live graph stream connected", script)

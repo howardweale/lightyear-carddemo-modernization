@@ -146,6 +146,19 @@ class CompositeEstateTests(unittest.TestCase):
         self.assertFalse(properties["runtime_observed"])
         self.assertFalse(properties["postgresql_mapping_complete"])
         self.assertFalse(properties["target_equivalent"])
+        customer_workcell = next(
+            item for item in context["workloads"]
+            if item["id"] == "cloudbank-reference:workload:customer-account-management"
+        )
+        self.assertEqual("postgresql-16", customer_workcell["target_dialect"])
+        self.assertEqual(
+            "mapping generated · native proof pending",
+            customer_workcell["target_status"],
+        )
+        self.assertEqual(
+            "reference-estates/cloudbank/customer-postgresql/mapping.json",
+            customer_workcell["mapping_artifact"],
+        )
 
     def test_runtime_and_audit_remain_bound_to_canonical_identity(self) -> None:
         index = GraphExplorerIndex(self.composite)

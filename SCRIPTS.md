@@ -29,5 +29,8 @@ script is undocumented, and that every POSIX entry point has a PowerShell twin.
 - `./cloudbank-executable-baseline.sh verify` checks the committed MS #54 execution contract;
   `verify-source`, `source-build`, and `oracle-runtime` enforce the exact pinned checkout and
   authorized Java 21/Maven/Docker evidence path.
+- `./cloudbank-customer-postgresql.sh verify` checks the MS #55 seven-column mapping, PostgreSQL
+  DDL, synthetic fixtures, compatibility ledger, and fail-closed native execution contract;
+  `native-postgresql` additionally requires an admitted MS #54 Oracle receipt.
 
 See `scripts.catalog.json` for the exact purpose, role, and verification owner of all entry points.

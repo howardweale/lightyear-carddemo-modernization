@@ -1,0 +1,99 @@
+{
+  "application_behavior": {
+    "api_operations": [
+      "list",
+      "find-by-id",
+      "find-by-name-fragment",
+      "find-by-email-fragment",
+      "create",
+      "update",
+      "delete"
+    ],
+    "jpa_entity": "com.example.customer.model.Customers",
+    "json_ignored_columns": [
+      "PASSWORD"
+    ],
+    "repository_methods": [
+      "findAll",
+      "findById",
+      "existsById",
+      "saveAndFlush",
+      "save",
+      "deleteById",
+      "findByCustomerNameIsContaining",
+      "findByCustomerEmailIsContaining"
+    ],
+    "schema_only_columns": [
+      "ROLE"
+    ]
+  },
+  "content_sha256": "d5aabaeef84c55fb240f2cce7c7a624d1b46d6f68340c4d8d534de6fc60d0f91",
+  "contract_type": "lightyear-cloudbank-customer-oracle-source",
+  "data_boundary": {
+    "production_data_observed": false,
+    "synthetic_rows_only": true,
+    "upstream_password_values_persisted": false
+  },
+  "release": "0.55.0",
+  "schema_version": "1.0",
+  "source": {
+    "commit": "4f41b16d00c45503f691836fee8138010c969e86",
+    "module": "customer",
+    "repository": "https://github.com/oracle/microservices-backend",
+    "root_tree": "6aa92e89c783f123c4da8d7ae18108004a4f4a99",
+    "subtree": "cloudbank-v5",
+    "subtree_tree": "bd918386209f284a1ed31802555740eb34b75348"
+  },
+  "source_files": [
+    {
+      "path": "customer/src/main/resources/db/changelog/table.sql",
+      "role": "table-ddl",
+      "sha256": "c7732c5fe70581c94d1d52a646b4b7e772de6404505c08ede08fe9ae9d82d2af"
+    },
+    {
+      "path": "customer/src/main/resources/db/changelog/data.sql",
+      "role": "bootstrap-data",
+      "sha256": "174524ede252be4a382e916859da12af37127672b92087b2b07302dd2fcbfb1d"
+    },
+    {
+      "path": "customer/src/main/java/com/example/customer/model/Customers.java",
+      "role": "jpa-entity",
+      "sha256": "1e44410b114c5f9ec333b323a8c1b157b1960c81e4a9d8dc8093f556f15914a8"
+    },
+    {
+      "path": "customer/src/main/java/com/example/customer/repository/CustomersRepository.java",
+      "role": "repository",
+      "sha256": "04e73f3100980f993f743f01e7eb5674907060ee99f157a27ef7d5318f1d6930"
+    },
+    {
+      "path": "customer/src/main/java/com/example/customer/controller/CustomerController.java",
+      "role": "controller",
+      "sha256": "23ce8b89b93927f8c3262eea808210dda36a81845ccc4558f04156d8234f6ab3"
+    },
+    {
+      "path": "customer/src/main/resources/application.yaml",
+      "role": "runtime-configuration",
+      "sha256": "3caa27fae2fcb936947cebb5e660835e09c294395dceb123499b408cfa303dd9"
+    },
+    {
+      "path": "customer/pom.xml",
+      "role": "maven-module",
+      "sha256": "8715304d7f327604565c49d7b4e0616150469fe082633ca6487f14b8bf72ca8b"
+    }
+  ],
+  "table": {
+    "bootstrap_rows": 3,
+    "columns": 7,
+    "liquibase_changesets": [
+      "customer:1",
+      "customer:2"
+    ],
+    "primary_key": {
+      "columns": [
+        "CUSTOMER_ID"
+      ],
+      "name": "CUSTOMERS_PK"
+    },
+    "qualified_name": "CUSTOMER.CUSTOMERS"
+  }
+}

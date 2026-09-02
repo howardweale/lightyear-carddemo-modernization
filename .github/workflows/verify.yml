@@ -39,6 +39,8 @@ jobs:
           ./cloudbank-executable-baseline.sh verify-source ../cloudbank-upstream
           ./cloudbank-executable-baseline.sh source-build ../cloudbank-upstream work/cloudbank-source-build.receipt.json github-ci-development-only
           ./cloudbank-executable-baseline.sh verify-receipt work/cloudbank-source-build.receipt.json
+          ./cloudbank-customer-postgresql.sh verify
+          ./cloudbank-customer-postgresql.sh verify-source ../cloudbank-upstream
 
       - name: Publish bounded CI build receipt
         uses: actions/upload-artifact@v4

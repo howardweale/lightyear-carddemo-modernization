@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyr.ai/schema/cloudbank/customer-postgresql-readiness.schema.json",
+  "title": "CloudBank customer PostgreSQL readiness",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "receipt_type", "release", "source_contract_sha256", "mapping_sha256",
+    "compatibility_ledger_sha256", "behavior_contract_sha256", "gate_status",
+    "source_oracle_receipt_required", "source_oracle_receipt_committed", "target_selected",
+    "target_dialect", "postgresql_mapping_complete", "native_postgresql_observed",
+    "bounded_database_mapping_qualified", "application_refactored", "target_equivalent",
+    "migration_complete", "production_ready", "content_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "receipt_type": {"const": "lightyear-cloudbank-customer-postgresql-readiness"},
+    "release": {"const": "0.55.0"},
+    "source_contract_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "mapping_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "compatibility_ledger_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "behavior_contract_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "gate_status": {"const": "mapping-generated-native-execution-pending"},
+    "source_oracle_receipt_required": {"const": true},
+    "source_oracle_receipt_committed": {"const": false},
+    "target_selected": {"const": true},
+    "target_dialect": {"const": "postgresql-16"},
+    "postgresql_mapping_complete": {"const": true},
+    "native_postgresql_observed": {"const": false},
+    "bounded_database_mapping_qualified": {"const": false},
+    "application_refactored": {"const": false},
+    "target_equivalent": {"const": false},
+    "migration_complete": {"const": false},
+    "production_ready": {"const": false},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

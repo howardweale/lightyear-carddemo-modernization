@@ -1,0 +1,40 @@
+{
+  "claim_scope": [
+    "schema",
+    "column-types",
+    "primary-key",
+    "synthetic-data",
+    "fragment-queries",
+    "crud-commit-rollback"
+  ],
+  "compatibility_ledger_sha256": "b7245d1a4677093a364460acebbb8d745226bd3d80bbf168aeb4b7559e4920bc",
+  "content_sha256": "680a7a740ec1038b4323245f71f00ee4b1ca8711fc201e387390f260db500c55",
+  "contract_type": "lightyear-cloudbank-customer-postgresql-behavior",
+  "excluded": [
+    "Spring application refactoring",
+    "HTTP/API equivalence",
+    "authorization equivalence",
+    "concurrency",
+    "CDC",
+    "cutover",
+    "production data"
+  ],
+  "mapping_sha256": "7564c41281176e0363bc7c0328cba59602bb00673575413956869f9a8eadb011",
+  "release": "0.55.0",
+  "required_native_checks": {
+    "CB_COLUMNS": "7",
+    "CB_COMMIT_ROWS": "1",
+    "CB_DEFAULTED_DATES": "4",
+    "CB_EMAIL_CONTAINS": "2",
+    "CB_EMPTY_TO_NULL": "1",
+    "CB_FINAL_ROWS": "4",
+    "CB_MUTATED_ROWS": "4",
+    "CB_NAME_CONTAINS": "2",
+    "CB_PK": "1",
+    "CB_ROLLBACK_EMAIL": "alice@example.test",
+    "CB_ROLLBACK_ROWS": "4",
+    "CB_ROWS": "4"
+  },
+  "schema_version": "1.0",
+  "synthetic_fixture_rows": 4
+}

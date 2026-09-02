@@ -1,8 +1,8 @@
 {
-  "acceptance_contract_sha256": "e4040b10f93aad27e21f83f309b30070cb1af8b1e02cdadf768f3b4dab14318a",
+  "acceptance_contract_sha256": "c64e95c147b05e9efc577ca7ef540abcc37b3c163f6dc77e5db323f38418d2b3",
   "application_refactored": false,
   "bounded_customer_application_equivalent": false,
-  "content_sha256": "9ff4224e379ae9066dc4667c7d12c9221916434cb95e282c1992971d510e25a5",
+  "content_sha256": "741b72e56f98447f32298bfc5fdafdd1d00c48ceb5adcdee31a8a19135b87f09",
   "factory_contract_complete": true,
   "gate_status": "ready-to-run-operator-receipts-required",
   "human_promotion_authorized": false,
@@ -15,6 +15,6 @@
   "schema_version": "1.0",
   "source_oracle_receipt_required": true,
   "target_equivalent": false,
-  "transformation_plan_sha256": "3b81bcb5751d7ffdedf387cbfc13405f0e5172996b930296c379929985e52872",
-  "work_order_template_sha256": "e9e73f8ecaa844a1636709c42ac9de6ecb7097dae1717414c42051f75b869368"
+  "transformation_plan_sha256": "d89d8d74e0501b1d4f12e4b125a756e21ffe16da2be95518ab5131c602121fba",
+  "work_order_template_sha256": "ea9f9fa30315c8eca4b21e33e9d697e36b0a86d2a814544faadd8041d92c8db6"
 }

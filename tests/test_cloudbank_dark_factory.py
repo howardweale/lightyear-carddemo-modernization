@@ -24,9 +24,11 @@ from lightyear_data.cloudbank_dark_factory import (
     PATCHES,
     SHARED_CONTRACT_SHA256,
     CloudBankCustomerAgentSet,
+    _execute_oracle_lane,
     _execute_postgresql_lane,
     _maven_result,
     _safe_controller_reason,
+    _wait_oracle,
     acceptance_contract,
     build_artifacts,
     execute_dark_factory,
@@ -236,7 +238,10 @@ class CloudBankDarkFactoryTests(unittest.TestCase):
                     report = workspace / "customer/target/surefire-reports/TEST-com.example.customer.CustomerApplicationTests.xml"
                     report.parent.mkdir(parents=True)
                     report.write_text('<testsuite tests="2" failures="0" errors="0" skipped="0"/>', encoding="utf-8")
-                    marker = "CLOUDBANK_SHARED_CONTRACT=rows:4;name:2;email:2;case:0;empty:null;crud:pass;default:pass;auth:pass\n"
+                    marker = (
+                        "CLOUDBANK_SHARED_CONTRACT="
+                        "rows:4;name:2;email:2;case:0;empty:null;crud:pass;default:pass;auth:pass\n"
+                    )
                     return subprocess.CompletedProcess(argv, 0, marker, "")
                 if argv[:2] == ["docker", "rm"]:
                     return subprocess.CompletedProcess(argv, 0, "", "")
@@ -251,6 +256,48 @@ class CloudBankDarkFactoryTests(unittest.TestCase):
                 env["SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT"],
             )
 
+    def test_oracle_lane_preserves_entrypoint_privilege_transition(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            workspace = Path(directory) / "workspace"
+            (workspace / "customer/src/test/java/com/example/customer").mkdir(parents=True)
+            captured: dict[str, list[str]] = {}
+
+            def fake_run(argv: list[str], **kwargs: object) -> subprocess.CompletedProcess[str]:
+                if argv[:3] == ["docker", "image", "inspect"]:
+                    return subprocess.CompletedProcess(argv, 0, f"sha256:{HEX_A}\n", "")
+                if argv[:2] == ["docker", "run"]:
+                    captured["run"] = argv
+                    return subprocess.CompletedProcess(argv, 0, "container-id\n", "")
+                if argv[:3] == ["docker", "inspect", "--format"]:
+                    state = {"Status": "running", "OOMKilled": False, "Health": {"Status": "healthy"}}
+                    return subprocess.CompletedProcess(argv, 0, json.dumps(state), "")
+                if argv[:2] == ["docker", "port"]:
+                    return subprocess.CompletedProcess(argv, 0, "127.0.0.1:11521\n", "")
+                if argv[0] == "mvn":
+                    lane_root = Path(kwargs["cwd"])
+                    report = (
+                        lane_root
+                        / "customer/target/surefire-reports/TEST-com.example.customer.CustomerApplicationTests.xml"
+                    )
+                    report.parent.mkdir(parents=True)
+                    report.write_text(
+                        '<testsuite tests="2" failures="0" errors="0" skipped="0"/>',
+                        encoding="utf-8",
+                    )
+                    marker = "CLOUDBANK_SHARED_CONTRACT=rows:4;name:2;email:2;case:0;empty:null;crud:pass;default:pass;auth:pass\n"
+                    return subprocess.CompletedProcess(argv, 0, marker, "")
+                if argv[:2] == ["docker", "rm"]:
+                    return subprocess.CompletedProcess(argv, 0, "", "")
+                return subprocess.CompletedProcess(argv, 1, "", "unexpected command")
+
+            result = _execute_oracle_lane(workspace, ROOT, HEX_A, fake_run, lambda _: None)
+            self.assertEqual("passed", result["status"])
+            run_command = captured["run"]
+            self.assertNotIn("--rm", run_command)
+            self.assertNotIn("no-new-privileges", run_command)
+            self.assertEqual("4g", run_command[run_command.index("--memory") + 1])
+            self.assertEqual("1g", run_command[run_command.index("--shm-size") + 1])
+
     def test_controller_reason_preserves_only_safe_factory_codes(self) -> None:
         self.assertEqual(
             "cloudbank-dark-factory-oracle-not-ready",
@@ -260,6 +307,30 @@ class CloudBankDarkFactoryTests(unittest.TestCase):
             "ValueError",
             _safe_controller_reason(ValueError("cloudbank-dark-factory-password leaked")),
         )
+
+    def test_oracle_wait_accepts_health_and_reports_terminal_state(self) -> None:
+        healthy = json.dumps({"Status": "running", "OOMKilled": False, "Health": {"Status": "healthy"}})
+
+        def healthy_run(argv: list[str], **kwargs: object) -> subprocess.CompletedProcess[str]:
+            return subprocess.CompletedProcess(argv, 0, healthy, "")
+
+        _wait_oracle("oracle", healthy_run, lambda _: None)
+
+        oom = json.dumps({"Status": "exited", "OOMKilled": True, "Health": {"Status": "unhealthy"}})
+
+        def oom_run(argv: list[str], **kwargs: object) -> subprocess.CompletedProcess[str]:
+            return subprocess.CompletedProcess(argv, 0, oom, "")
+
+        with self.assertRaisesRegex(ValueError, "oracle-oom-killed"):
+            _wait_oracle("oracle", oom_run, lambda _: None)
+
+        exited = json.dumps({"Status": "exited", "OOMKilled": False, "Health": {"Status": "unhealthy"}})
+
+        def exited_run(argv: list[str], **kwargs: object) -> subprocess.CompletedProcess[str]:
+            return subprocess.CompletedProcess(argv, 0, exited, "")
+
+        with self.assertRaisesRegex(ValueError, "oracle-container-exited"):
+            _wait_oracle("oracle", exited_run, lambda _: None)
 
     def test_receipt_chain_drives_one_bounded_factory_run(self) -> None:
         checkout = ROOT.parent / "cloudbank-upstream"

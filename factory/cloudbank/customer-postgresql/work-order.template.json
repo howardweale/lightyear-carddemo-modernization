@@ -13,7 +13,7 @@
     "production_ready": false,
     "whole_cloudbank_equivalence": false
   },
-  "content_sha256": "e9e73f8ecaa844a1636709c42ac9de6ecb7097dae1717414c42051f75b869368",
+  "content_sha256": "ea9f9fa30315c8eca4b21e33e9d697e36b0a86d2a814544faadd8041d92c8db6",
   "goal": "Apply the sealed MS #55 mapping to the customer Spring/JPA service and pass the shared Oracle/PostgreSQL application contract.",
   "id": "cloudbank-customer-oracle-to-postgresql-v0.56.0",
   "policy": {
@@ -54,5 +54,5 @@
   },
   "template_type": "lightyear-cloudbank-customer-dark-factory-work-order",
   "title": "CloudBank customer Oracle-to-PostgreSQL application transformation",
-  "transformation_plan_sha256": "3b81bcb5751d7ffdedf387cbfc13405f0e5172996b930296c379929985e52872"
+  "transformation_plan_sha256": "d89d8d74e0501b1d4f12e4b125a756e21ffe16da2be95518ab5131c602121fba"
 }

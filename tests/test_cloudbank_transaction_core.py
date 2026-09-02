@@ -184,6 +184,12 @@ class CloudBankTransactionCoreTests(unittest.TestCase):
         ):
             self.assertTrue((ROOT / relative).is_file(), relative)
 
+        powershell_launcher = (ROOT / "cloudbank-transaction-core.ps1").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("Invoke-FactoryDarkPython", powershell_launcher)
+        self.assertNotIn("Resolve-LightyearPython", powershell_launcher)
+
 
 if __name__ == "__main__":
     unittest.main()

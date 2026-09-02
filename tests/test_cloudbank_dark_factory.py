@@ -269,8 +269,10 @@ class CloudBankDarkFactoryTests(unittest.TestCase):
                     captured["run"] = argv
                     return subprocess.CompletedProcess(argv, 0, "container-id\n", "")
                 if argv[:3] == ["docker", "inspect", "--format"]:
-                    state = {"Status": "running", "OOMKilled": False, "Health": {"Status": "healthy"}}
+                    state = {"Status": "running", "OOMKilled": False}
                     return subprocess.CompletedProcess(argv, 0, json.dumps(state), "")
+                if argv[:3] == ["docker", "exec", "-i"]:
+                    return subprocess.CompletedProcess(argv, 0, "CLOUDBANK_ORACLE_READY\n", "")
                 if argv[:2] == ["docker", "port"]:
                     return subprocess.CompletedProcess(argv, 0, "127.0.0.1:11521\n", "")
                 if argv[0] == "mvn":
@@ -284,7 +286,10 @@ class CloudBankDarkFactoryTests(unittest.TestCase):
                         '<testsuite tests="2" failures="0" errors="0" skipped="0"/>',
                         encoding="utf-8",
                     )
-                    marker = "CLOUDBANK_SHARED_CONTRACT=rows:4;name:2;email:2;case:0;empty:null;crud:pass;default:pass;auth:pass\n"
+                    marker = (
+                        "CLOUDBANK_SHARED_CONTRACT="
+                        "rows:4;name:2;email:2;case:0;empty:null;crud:pass;default:pass;auth:pass\n"
+                    )
                     return subprocess.CompletedProcess(argv, 0, marker, "")
                 if argv[:2] == ["docker", "rm"]:
                     return subprocess.CompletedProcess(argv, 0, "", "")
@@ -308,15 +313,23 @@ class CloudBankDarkFactoryTests(unittest.TestCase):
             _safe_controller_reason(ValueError("cloudbank-dark-factory-password leaked")),
         )
 
-    def test_oracle_wait_accepts_health_and_reports_terminal_state(self) -> None:
-        healthy = json.dumps({"Status": "running", "OOMKilled": False, "Health": {"Status": "healthy"}})
+    def test_oracle_wait_uses_customer_sql_probe_and_reports_terminal_state(self) -> None:
+        running = json.dumps({"Status": "running", "OOMKilled": False})
+        calls: list[tuple[list[str], dict[str, object]]] = []
 
         def healthy_run(argv: list[str], **kwargs: object) -> subprocess.CompletedProcess[str]:
-            return subprocess.CompletedProcess(argv, 0, healthy, "")
+            calls.append((argv, kwargs))
+            if argv[:3] == ["docker", "inspect", "--format"]:
+                return subprocess.CompletedProcess(argv, 0, running, "")
+            return subprocess.CompletedProcess(argv, 0, "CLOUDBANK_ORACLE_READY\n", "")
 
         _wait_oracle("oracle", healthy_run, lambda _: None)
+        sql_call = calls[-1]
+        self.assertEqual(["docker", "exec", "-i"], sql_call[0][:3])
+        self.assertIn("$APP_USER_PASSWORD", sql_call[0][-1])
+        self.assertIn("SELECT 'CLOUDBANK_ORACLE_READY' FROM DUAL", str(sql_call[1]["input"]))
 
-        oom = json.dumps({"Status": "exited", "OOMKilled": True, "Health": {"Status": "unhealthy"}})
+        oom = json.dumps({"Status": "exited", "OOMKilled": True})
 
         def oom_run(argv: list[str], **kwargs: object) -> subprocess.CompletedProcess[str]:
             return subprocess.CompletedProcess(argv, 0, oom, "")
@@ -324,7 +337,7 @@ class CloudBankDarkFactoryTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "oracle-oom-killed"):
             _wait_oracle("oracle", oom_run, lambda _: None)
 
-        exited = json.dumps({"Status": "exited", "OOMKilled": False, "Health": {"Status": "unhealthy"}})
+        exited = json.dumps({"Status": "exited", "OOMKilled": False})
 
         def exited_run(argv: list[str], **kwargs: object) -> subprocess.CompletedProcess[str]:
             return subprocess.CompletedProcess(argv, 0, exited, "")

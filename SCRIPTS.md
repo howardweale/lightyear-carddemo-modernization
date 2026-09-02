@@ -50,5 +50,8 @@ script is undocumented, and that every POSIX entry point has a PowerShell twin.
 - `./cloudbank-oracle-equivalence.sh verify` checks the MS #61 shared seven-scenario normalized
   Oracle/PostgreSQL observation contract; `run` additionally requires passing signed MS #57 and
   MS #60 receipts produced with the same key and executes the two native database lanes sequentially.
+- `./cloudbank-production-oauth.sh verify` checks the MS #62 Authorization/Account/Transfer OAuth
+  application-boundary contract; `run` additionally requires the signed MS #61 receipt produced
+  with the same key and exercises real client-credentials JWTs, resource servers, and key restart.
 
 See `scripts.catalog.json` for the exact purpose, role, and verification owner of all entry points.

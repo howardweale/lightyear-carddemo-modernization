@@ -1,0 +1,44 @@
+{
+  "authorization_server": "native-cloudbank-azn-server-on-postgresql",
+  "browser_flow_policy": "authorization-code-requires-pkce-configured-not-exercised",
+  "caller_identity": "jwt-subject-preserved-to-account-authorization",
+  "content_sha256": "914f4b2dafa5bed21cdbb8cd7a9f224e3faf7b05e5388a1ec999c127c55ffad5",
+  "contract_type": "lightyear-cloudbank-production-oauth-boundary",
+  "grant_types_exercised": [
+    "client_credentials"
+  ],
+  "protocol": "oauth2-oidc-jwt",
+  "release": "0.62.0",
+  "required_scenarios": [
+    "authorization-server-discovery-and-jwks",
+    "invalid-client-rejected",
+    "scope-escalation-rejected",
+    "caller-token-claims-bound",
+    "service-token-claims-bound",
+    "missing-bearer-rejected",
+    "insufficient-scope-rejected",
+    "tampered-token-rejected",
+    "cross-audience-token-rejected",
+    "owner-authorization-before-mutation",
+    "authenticated-transfer-conserves-value",
+    "persistent-key-restart-continuity"
+  ],
+  "schema_version": "1.0",
+  "secrets": "runtime-environment-only-not-receipted",
+  "service_identity": "client-credentials-token-no-static-shared-header",
+  "signing_key": "operator-ephemeral-files-persistent-across-process-restart",
+  "token_validation": {
+    "audiences": [
+      "cloudbank-transfer",
+      "cloudbank-account"
+    ],
+    "issuer": "exact-runtime-issuer",
+    "lifetime": "exp-nbf-iat-default-validation",
+    "scopes": [
+      "cloudbank.transfer",
+      "cloudbank.internal"
+    ],
+    "signature": "rsa-3072-jwks"
+  },
+  "transport": "loopback-http-test-boundary-production-tls-required-separately"
+}

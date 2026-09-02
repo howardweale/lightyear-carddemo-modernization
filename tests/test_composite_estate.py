@@ -168,8 +168,17 @@ class CompositeEstateTests(unittest.TestCase):
             if item["id"] == "cloudbank-reference:workload:money-transfer"
         )
         self.assertEqual(
-            "bounded Oracle/PostgreSQL equivalence ready · operator receipt required",
+            "production OAuth application boundary ready · operator receipt required",
             money_workcell["target_status"],
+        )
+        identity_workcell = next(
+            item for item in context["workloads"]
+            if item["id"] == "cloudbank-reference:workload:identity-service-authorization"
+        )
+        self.assertEqual("postgresql-16", identity_workcell["target_dialect"])
+        self.assertEqual(
+            "factory/cloudbank/production-oauth/readiness.receipt.json",
+            identity_workcell["factory_artifact"],
         )
 
     def test_runtime_and_audit_remain_bound_to_canonical_identity(self) -> None:

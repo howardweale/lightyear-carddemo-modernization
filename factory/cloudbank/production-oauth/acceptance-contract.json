@@ -1,0 +1,56 @@
+{
+  "bindings": {
+    "compatibility_ledger_sha256": "ceeeb448d895aa379146d20aea6107091b8c82e1cb216c80c7bf1311161bd220",
+    "execution_plan_sha256": "0b9119c7cf180c42bc0e750d451d34839eb2130debf74a939ecc585d3d13eb63",
+    "security_contract_sha256": "914f4b2dafa5bed21cdbb8cd7a9f224e3faf7b05e5388a1ec999c127c55ffad5"
+  },
+  "content_sha256": "1bf841c8c1c116aacfdee1267997570590e085cc89fc8124217d685ce8e7687a",
+  "contract_type": "lightyear-cloudbank-production-oauth-acceptance",
+  "eligible_claim": {
+    "checks_messaging_qualified": false,
+    "production_oauth_application_profile_qualified": true,
+    "production_oauth_operational_deployment_qualified": false,
+    "production_ready": false,
+    "whole_application_equivalent": false
+  },
+  "release": "0.62.0",
+  "required_contract_sha256": "aa774c829a654153cae795d25e6f397c060626a2490525e9df3fcf4f317123fb",
+  "required_packaging": {
+    "executable_jars": 3,
+    "microtx_runtime_libraries": 0,
+    "oracle_runtime_libraries": 0
+  },
+  "required_receipt": "lightyear-cloudbank-oracle-postgresql-equivalence-execution",
+  "required_runtime_boundaries": {
+    "credentials_persisted": false,
+    "database_port": "ephemeral-loopback-only",
+    "raw_logs_persisted": false,
+    "service_ports": "ephemeral-loopback-only",
+    "synthetic_data_only": true
+  },
+  "required_scenarios": [
+    "authorization-server-discovery-and-jwks",
+    "invalid-client-rejected",
+    "scope-escalation-rejected",
+    "caller-token-claims-bound",
+    "service-token-claims-bound",
+    "missing-bearer-rejected",
+    "insufficient-scope-rejected",
+    "tampered-token-rejected",
+    "cross-audience-token-rejected",
+    "owner-authorization-before-mutation",
+    "authenticated-transfer-conserves-value",
+    "persistent-key-restart-continuity"
+  ],
+  "required_service_starts": {
+    "account": 2,
+    "azn-server": 2,
+    "transfer": 2
+  },
+  "required_services": [
+    "azn-server",
+    "account",
+    "transfer"
+  ],
+  "schema_version": "1.0"
+}

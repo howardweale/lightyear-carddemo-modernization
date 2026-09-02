@@ -44,6 +44,7 @@ production-qualified.
 | MS #59 | CloudBank PostgreSQL Transaction-Core Factory Run | Account/Transfer target generated; signed native PostgreSQL execution remains operator-held evidence |
 | MS #60 | CloudBank Native Account/Transfer Transaction Wave | Integrated target ready; signed native HTTP/restart/concurrency receipt remains operator-held evidence |
 | MS #61 | CloudBank Bounded Oracle/PostgreSQL Equivalence | Contract complete; signed sequential native Oracle/PostgreSQL comparison receipt remains operator-held evidence |
+| MS #62 | CloudBank Production OAuth Application Boundary | OAuth target and contract complete; signed native Authorization/Account/Transfer receipt remains operator-held evidence |
 
 The v0.35.0 stored-logic qualification core is retained as supporting MS #34 evidence. It does not
 replace the planned DB2 milestone.
@@ -540,3 +541,27 @@ idempotency. A passing signed receipt makes bounded normalized Customer, Account
 Oracle/PostgreSQL equivalence true. The original integrated Oracle HTTP wave with a real MicroTx
 coordinator, production OAuth/OIDC, Checks AQ/JMS, the remaining five service workcells,
 whole-application equivalence, migration completion, and production readiness remain false.
+
+## MS #62 — CloudBank Production OAuth Application Boundary
+
+MS #62 removes the bounded Account/Transfer workcell's development Basic-authentication and static
+internal-token shortcuts. It migrates the CloudBank Authorization service's user repository to
+PostgreSQL, packages Authorization, Account, and Transfer with zero Oracle and zero MicroTx runtime
+libraries, and starts all three services against one native PostgreSQL instance. Authorization uses
+an operator-generated RSA-3072 key pair and issues real client-credentials JWTs without persisting
+the private key, access credentials, client secrets, or raw logs in evidence.
+
+Twelve native scenarios verify discovery and JWKS, invalid clients, scope escalation, caller and
+service claim bindings, missing bearer, insufficient scope, signature tampering, cross-audience
+replay, ownership before mutation, successful value conservation, and persistent-key continuity
+after all three Java services restart. Account accepts only the `cloudbank-account` audience and
+`cloudbank.internal` scope; Transfer accepts only `cloudbank-transfer` and `cloudbank.transfer`.
+The caller subject remains distinct from the Transfer service identity through the Account
+authorization decision.
+
+A passing signed receipt qualifies the production OAuth application profile for the bounded
+Authorization/Account/Transfer workcell. The native run uses loopback HTTP, so external TLS
+termination, managed-secret storage and rotation, browser authorization-code execution, and
+enterprise IdP federation remain operational or customer-policy gates. Checks AQ/JMS, the remaining
+services, whole-application equivalence, migration completion, promotion, and production readiness
+remain false.

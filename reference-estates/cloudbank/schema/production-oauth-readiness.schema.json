@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schemas/cloudbank/production-oauth-readiness.schema.json",
+  "title": "CloudBank production OAuth application-boundary readiness",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "receipt_type",
+    "release",
+    "gate_status",
+    "production_oauth_application_profile_qualified",
+    "production_oauth_operational_deployment_qualified",
+    "native_messaging_observed",
+    "whole_application_equivalent",
+    "migration_complete",
+    "production_ready",
+    "content_sha256"
+  ],
+  "properties": {
+    "receipt_type": {"const": "lightyear-cloudbank-production-oauth-readiness"},
+    "release": {"const": "0.62.0"},
+    "gate_status": {"const": "ready-for-signed-ms61-and-native-oauth-run"},
+    "production_oauth_application_profile_qualified": {"const": false},
+    "production_oauth_operational_deployment_qualified": {"const": false},
+    "native_messaging_observed": {"const": false},
+    "whole_application_equivalent": {"const": false},
+    "migration_complete": {"const": false},
+    "production_ready": {"const": false},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+  }
+}

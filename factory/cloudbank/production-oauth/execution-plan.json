@@ -1,0 +1,120 @@
+{
+  "base_target": "ms60-generated-postgresql-account-transfer",
+  "content_sha256": "0b9119c7cf180c42bc0e750d451d34839eb2130debf74a939ecc585d3d13eb63",
+  "external_tls_termination": false,
+  "patches": [
+    {
+      "operation": "replace-or-create-in-isolated-target",
+      "path": "account/src/main/java/com/example/accounts/config/AccountOAuthSecurityConfiguration.java",
+      "template": "patches/AccountOAuthSecurityConfiguration.java",
+      "template_sha256": "b493d814f63832977324505640a8076a13f5bcd96ebf1490a31b92b58434ab40"
+    },
+    {
+      "operation": "replace-or-create-in-isolated-target",
+      "path": "account/src/main/java/com/example/accounts/controller/TransactionCoreController.java",
+      "template": "patches/TransactionCoreOAuthController.java",
+      "template_sha256": "23db13f801ca87ba5639b0efdd1521d55790171c8ff74572613a697f1e216770"
+    },
+    {
+      "operation": "replace-or-create-in-isolated-target",
+      "path": "account/src/main/resources/application.yaml",
+      "template": "patches/account-application.yaml",
+      "template_sha256": "81da1b28dae3283ea509ef1bb4705fc09f77a03bf1165ccbb0531e289d395282"
+    },
+    {
+      "operation": "replace-or-create-in-isolated-target",
+      "path": "azn-server/pom.xml",
+      "template": "patches/azn-pom.xml",
+      "template_sha256": "7e078f503b47c9c90a3d6408a92f90deb4dd5f78beaeef21766377acf34d817e"
+    },
+    {
+      "operation": "replace-or-create-in-isolated-target",
+      "path": "azn-server/src/main/java/oracle/obaas/aznserver/securityconfig/ProductionAudienceTokenCustomizer.java",
+      "template": "patches/ProductionAudienceTokenCustomizer.java",
+      "template_sha256": "535cbe44e7f1c05cbf76088ae71eb7abfb7779c027cd81c250f020a1233cbd6f"
+    },
+    {
+      "operation": "replace-or-create-in-isolated-target",
+      "path": "azn-server/src/main/resources/application.yaml",
+      "template": "patches/azn-application.yaml",
+      "template_sha256": "38c6653f727ed917773bc32242cb1156e44c9cbe0cba9df73d49908a818dfb46"
+    },
+    {
+      "operation": "replace-or-create-in-isolated-target",
+      "path": "azn-server/src/main/resources/db/changelog/controller.yaml",
+      "template": "patches/azn-controller.yaml",
+      "template_sha256": "4719c4d5a966f454a91bdcd98e3f8a2117786604538ad82de07bec1604688a73"
+    },
+    {
+      "operation": "replace-or-create-in-isolated-target",
+      "path": "azn-server/src/main/resources/db/changelog/table.sql",
+      "template": "patches/azn-table.sql",
+      "template_sha256": "e095e79043eab894d20059c85fa64b60d8248dbb026a04ad27c2365ce41bedf0"
+    },
+    {
+      "operation": "replace-or-create-in-isolated-target",
+      "path": "transfer/src/main/java/com/example/transfer/TransferService.java",
+      "template": "patches/TransferOAuthService.java",
+      "template_sha256": "d08f004a543893dbdc13c9912bbef6ab71fdf2d112eae9b768cce644d4683d06"
+    },
+    {
+      "operation": "replace-or-create-in-isolated-target",
+      "path": "transfer/src/main/java/com/example/transfer/config/TransferOAuthSecurityConfiguration.java",
+      "template": "patches/TransferOAuthSecurityConfiguration.java",
+      "template_sha256": "c66c518a51d2fc7a8089c8187aa28507ad4e5100c796d8d0863d22185d3a2bc2"
+    },
+    {
+      "operation": "replace-or-create-in-isolated-target",
+      "path": "transfer/src/main/resources/application.yaml",
+      "template": "patches/transfer-application.yaml",
+      "template_sha256": "deee7341606593ec65eded912bdfd1d7007d5b8f49e97c7f4dd7bb7a346240af"
+    },
+    {
+      "operation": "replace-or-create-in-isolated-target",
+      "path": "transfer/src/test/java/com/example/transfer/TransferServiceTests.java",
+      "template": "patches/TransferOAuthServiceTests.java",
+      "template_sha256": "373f223347699cee2e7cbf79a18ffdb085180b77bd5435f3e32640a868fe586c"
+    }
+  ],
+  "plan_type": "lightyear-cloudbank-production-oauth",
+  "production_data": false,
+  "release": "0.62.0",
+  "requires": [
+    "signed-ms61-receipt",
+    "same-evidence-key"
+  ],
+  "scenario_ids": [
+    "authorization-server-discovery-and-jwks",
+    "invalid-client-rejected",
+    "scope-escalation-rejected",
+    "caller-token-claims-bound",
+    "service-token-claims-bound",
+    "missing-bearer-rejected",
+    "insufficient-scope-rejected",
+    "tampered-token-rejected",
+    "cross-audience-token-rejected",
+    "owner-authorization-before-mutation",
+    "authenticated-transfer-conserves-value",
+    "persistent-key-restart-continuity"
+  ],
+  "schema_version": "1.0",
+  "secret_manager_integration": false,
+  "services": [
+    "azn-server",
+    "account",
+    "transfer"
+  ],
+  "source_checkout_mutated": false,
+  "stages": [
+    "validate-ms61-and-content-addressed-security-contract",
+    "materialize-isolated-postgresql-security-target",
+    "generate-runtime-rsa-3072-keypair",
+    "package-zero-oracle-zero-microtx-three-service-target",
+    "start-loopback-postgresql-and-authorization-server",
+    "issue-scoped-caller-and-service-client-credentials-tokens",
+    "exercise-negative-and-positive-resource-server-boundaries",
+    "restart-all-services-and-revalidate-pre-restart-caller-token",
+    "sign-bounded-production-oauth-application-receipt"
+  ],
+  "whole_application": false
+}

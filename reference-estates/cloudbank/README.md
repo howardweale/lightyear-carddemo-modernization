@@ -176,6 +176,23 @@ retaining LRA compensation versus atomic rollback as an implementation differenc
 start the source integrated HTTP wave with MicroTx or qualify production identity, Checks messaging,
 the remaining services, whole-application equivalence, migration completion, or production readiness.
 
+## Run the production OAuth application-boundary gate
+
+MS #62 chains from the signed MS #61 result and replaces the bounded target's Basic-authentication
+and static internal token with a live PostgreSQL-backed CloudBank authorization server and scoped,
+audience-bound RSA JWTs.
+
+```bash
+./cloudbank-production-oauth.sh verify
+./cloudbank-production-oauth.sh verify-source /path/to/oracle-microservices-backend
+```
+
+The native gate starts Authorization, Account, and Transfer, separates caller and service identity,
+rejects client, signature, scope, audience, and ownership failures before mutation, and restarts all
+three services with the same signing key. The signed result qualifies the application OAuth profile,
+not external TLS, managed-secret rotation, enterprise IdP federation, Checks messaging, the remaining
+services, whole-application equivalence, migration completion, or production readiness.
+
 The projection is composed with the existing PL/I and Oracle Customer (Large) fragments. It does
 not change the canonical CardDemo graph or the identity to which runtime and audit evidence are
 bound.
@@ -191,6 +208,7 @@ MS #57 adds deeper Customer qualification, packaging and offline rehearsal contr
 the complete portfolio plan and admits the transaction wave. MS #59 generates the Account/Transfer
 PostgreSQL target and its native operator gate. MS #60 adds the integrated target-side native HTTP,
 restart, and concurrency wave. MS #61 adds bounded normalized Oracle/PostgreSQL comparison for the
-Customer, Account, and Transfer scope. Production identity, Checks messaging, production data, the
-remaining service workcells, whole-CloudBank equivalence, migration completion, and production
-readiness remain unclaimed.
+Customer, Account, and Transfer scope. MS #62 adds the production OAuth application boundary for
+Authorization, Account, and Transfer. External production security operations, Checks messaging,
+production data, the remaining service workcells, whole-CloudBank equivalence, migration completion,
+and production readiness remain unclaimed.

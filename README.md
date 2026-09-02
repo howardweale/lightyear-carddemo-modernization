@@ -4,7 +4,25 @@
 
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.61.0 — CloudBank bounded Oracle/PostgreSQL equivalence**
+Release: **v0.62.0 — CloudBank production OAuth application boundary**
+
+v0.62 replaces the bounded Account/Transfer workcell's development Basic authentication and static
+internal token with a live CloudBank OAuth 2.0/OIDC authorization server on PostgreSQL. Transfer and
+Account validate RSA signatures, exact issuer, service-specific audience, token lifetime, and scope;
+Transfer also obtains its Account credential through the client-credentials grant.
+
+```bash
+./cloudbank-production-oauth.sh verify
+./cloudbank-production-oauth.sh verify-source /path/to/cloudbank-upstream
+```
+
+A passing signed run qualifies the production-shaped OAuth application profile and proves that a
+pre-restart caller credential remains valid after Authorization, Account, and Transfer restart with
+the same persistent RSA key. External TLS termination, managed-secret rotation, browser-flow
+execution, enterprise IdP federation, Checks AQ/JMS, remaining services, and production readiness
+remain separate gates.
+
+Previous release: **v0.61.0 — CloudBank bounded Oracle/PostgreSQL equivalence**
 
 v0.61 chains the signed Customer dual-database qualification and native PostgreSQL transaction wave
 into a seven-scenario comparison. It executes original Account behavior on Oracle, requalifies the
@@ -22,7 +40,7 @@ remain explicitly different. The source integrated HTTP/MicroTx wave, production
 AQ/JMS, the remaining five services, whole-application equivalence, migration completion, and
 production readiness remain false.
 
-Previous release: **v0.60.0 — CloudBank native Account/Transfer transaction wave**
+Earlier release: **v0.60.0 — CloudBank native Account/Transfer transaction wave**
 
 v0.60 starts the generated Account and Transfer applications together against native PostgreSQL.
 Eleven real HTTP gates cover service health, external and internal authentication boundaries,

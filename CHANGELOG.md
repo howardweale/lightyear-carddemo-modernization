@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.62.0 — 2026-09-02
+
+- Replaced the bounded Account/Transfer workcell's development Basic authentication and static
+  internal header with live OAuth 2.0 client-credentials JWTs.
+- Migrated the CloudBank Authorization service user repository and Liquibase changes to PostgreSQL
+  and required three executable JARs with zero Oracle and zero MicroTx runtime libraries.
+- Added RSA-3072 signing with a stable key id, OIDC discovery and JWKS publication, and exact issuer,
+  lifetime, signature, audience, and scope validation at both resource servers.
+- Separated the caller credential accepted by Transfer from the service credential that Transfer
+  obtains for Account; preserved the caller subject for the Account ownership decision.
+- Added twelve native scenarios for invalid clients, scope escalation, missing, under-scoped,
+  tampered, and cross-audience credentials, authorization before mutation, value conservation, and
+  acceptance of a pre-restart credential after all three Java processes restart with the same key.
+- Kept client secrets, access credentials, the private signing key, and raw logs out of signed and
+  failure evidence while binding all public artifacts and aggregate observations by hash.
+- Qualified only the production OAuth application profile; external TLS, managed-secret rotation,
+  browser-flow execution, enterprise IdP federation, Checks messaging, remaining services,
+  whole-application equivalence, migration completion, and production readiness remain false.
+
 ## 0.61.0 — 2026-09-02
 
 - Added a receipt-gated Oracle/PostgreSQL comparison chained to the signed MS #57 Customer

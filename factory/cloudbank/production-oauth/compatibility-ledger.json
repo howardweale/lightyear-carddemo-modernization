@@ -1,0 +1,82 @@
+{
+  "content_sha256": "ceeeb448d895aa379146d20aea6107091b8c82e1cb216c80c7bf1311161bd220",
+  "entries": [
+    {
+      "capability": "oauth2-client-credentials",
+      "classification": "native-qualified",
+      "evidence": "live-token-endpoint"
+    },
+    {
+      "capability": "oidc-discovery-and-jwks",
+      "classification": "native-qualified",
+      "evidence": "live-metadata-and-jwks"
+    },
+    {
+      "capability": "jwt-signature-issuer-lifetime",
+      "classification": "native-qualified",
+      "evidence": "resource-server-validation"
+    },
+    {
+      "capability": "jwt-audience-isolation",
+      "classification": "native-qualified",
+      "evidence": "cross-audience-rejection"
+    },
+    {
+      "capability": "jwt-scope-authorization",
+      "classification": "native-qualified",
+      "evidence": "negative-and-positive-paths"
+    },
+    {
+      "capability": "caller-subject-ownership",
+      "classification": "native-qualified",
+      "evidence": "authorization-before-mutation"
+    },
+    {
+      "capability": "service-to-service-oauth",
+      "classification": "native-qualified",
+      "evidence": "client-credentials-provider"
+    },
+    {
+      "capability": "persistent-signing-key-restart",
+      "classification": "native-qualified",
+      "evidence": "old-token-new-process"
+    },
+    {
+      "capability": "authorization-code-pkce",
+      "classification": "configured-not-executed",
+      "evidence": "browser-flow-later"
+    },
+    {
+      "capability": "external-tls-termination",
+      "classification": "not-qualified",
+      "evidence": "deployment-readiness-wave"
+    },
+    {
+      "capability": "managed-secret-store-and-rotation",
+      "classification": "not-qualified",
+      "evidence": "deployment-readiness-wave"
+    },
+    {
+      "capability": "external-enterprise-idp-federation",
+      "classification": "not-qualified",
+      "evidence": "customer-policy-decision"
+    },
+    {
+      "capability": "checks-aq-jms",
+      "classification": "not-qualified",
+      "evidence": "ms63"
+    },
+    {
+      "capability": "remaining-services",
+      "classification": "not-qualified",
+      "evidence": "ms64"
+    }
+  ],
+  "ledger_type": "lightyear-cloudbank-production-oauth-compatibility",
+  "production_oauth_application_profile_eligible": true,
+  "production_oauth_operational_deployment_qualified": false,
+  "production_ready": false,
+  "release": "0.62.0",
+  "schema_version": "1.0",
+  "whole_application_equivalent": false
+}

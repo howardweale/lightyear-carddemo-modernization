@@ -24,7 +24,9 @@ from lightyear_data.cloudbank_dark_factory import (
     PATCHES,
     SHARED_CONTRACT_SHA256,
     CloudBankCustomerAgentSet,
+    _execute_postgresql_lane,
     _maven_result,
+    _safe_controller_reason,
     acceptance_contract,
     build_artifacts,
     execute_dark_factory,
@@ -214,6 +216,50 @@ class CloudBankDarkFactoryTests(unittest.TestCase):
             self.assertEqual("passed", result["status"])
             self.assertEqual(2, result["tests"])
             self.assertFalse(result["raw_output_persisted"])
+
+    def test_postgresql_lane_overrides_inherited_oracle_hibernate_dialect(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            workspace = Path(directory)
+            captured: dict[str, object] = {}
+
+            def fake_run(argv: list[str], **kwargs: object) -> subprocess.CompletedProcess[str]:
+                if argv[:3] == ["docker", "image", "inspect"]:
+                    return subprocess.CompletedProcess(argv, 0, f"sha256:{HEX_B}\n", "")
+                if argv[:2] == ["docker", "run"]:
+                    return subprocess.CompletedProcess(argv, 0, "container-id\n", "")
+                if argv[:2] == ["docker", "exec"]:
+                    return subprocess.CompletedProcess(argv, 0, "1\n", "")
+                if argv[:2] == ["docker", "port"]:
+                    return subprocess.CompletedProcess(argv, 0, "127.0.0.1:15432\n", "")
+                if argv[0] == "mvn":
+                    captured["env"] = kwargs["env"]
+                    report = workspace / "customer/target/surefire-reports/TEST-com.example.customer.CustomerApplicationTests.xml"
+                    report.parent.mkdir(parents=True)
+                    report.write_text('<testsuite tests="2" failures="0" errors="0" skipped="0"/>', encoding="utf-8")
+                    marker = "CLOUDBANK_SHARED_CONTRACT=rows:4;name:2;email:2;case:0;empty:null;crud:pass;default:pass;auth:pass\n"
+                    return subprocess.CompletedProcess(argv, 0, marker, "")
+                if argv[:2] == ["docker", "rm"]:
+                    return subprocess.CompletedProcess(argv, 0, "", "")
+                return subprocess.CompletedProcess(argv, 1, "", "unexpected command")
+
+            result = _execute_postgresql_lane(workspace, HEX_B, fake_run, lambda _: None)
+            self.assertEqual("passed", result["status"])
+            env = captured["env"]
+            self.assertIsInstance(env, dict)
+            self.assertEqual(
+                "org.hibernate.dialect.PostgreSQLDialect",
+                env["SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT"],
+            )
+
+    def test_controller_reason_preserves_only_safe_factory_codes(self) -> None:
+        self.assertEqual(
+            "cloudbank-dark-factory-oracle-not-ready",
+            _safe_controller_reason(ValueError("cloudbank-dark-factory-oracle-not-ready")),
+        )
+        self.assertEqual(
+            "ValueError",
+            _safe_controller_reason(ValueError("cloudbank-dark-factory-password leaked")),
+        )
 
     def test_receipt_chain_drives_one_bounded_factory_run(self) -> None:
         checkout = ROOT.parent / "cloudbank-upstream"

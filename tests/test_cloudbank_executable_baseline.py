@@ -159,6 +159,8 @@ class CloudBankExecutableBaselineTests(unittest.TestCase):
                 "customer-production-qualification-readiness.schema.json",
                 "transaction-wave-admission-receipt.schema.json",
                 "transaction-wave-readiness.schema.json",
+                "transaction-core-execution-receipt.schema.json",
+                "transaction-core-readiness.schema.json",
             },
             {path.name for path in schemas},
         )

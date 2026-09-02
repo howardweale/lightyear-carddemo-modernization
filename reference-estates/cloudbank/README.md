@@ -129,6 +129,22 @@ blockers, and a signed admission chained to the passing MS #57 receipt.
 Oracle AQ/JMS and MicroTx LRA replacement remain blocked on native behavioral evidence. The
 committed readiness receipt does not claim target code generation or Account/Transfer execution.
 
+## Generate and run the PostgreSQL transaction core
+
+MS #59 materializes the admitted Account and Transfer target in an isolated workspace. It replaces
+the distributed LRA debit/deposit callback with one idempotent PostgreSQL transaction, retains an
+authenticated Transfer facade, and packages both services without Oracle or MicroTx runtime
+libraries.
+
+```bash
+./cloudbank-transaction-core.sh verify
+./cloudbank-transaction-core.sh verify-source /path/to/oracle-microservices-backend
+```
+
+The signed native action requires the MS #58 admission receipt. Its seven tests cover all eight
+MS #58 transaction scenarios. The committed readiness artifact does not claim that operator run,
+Oracle equivalence, Checks AQ migration, the remaining service workcells, or production readiness.
+
 The projection is composed with the existing PL/I and Oracle Customer (Large) fragments. It does
 not change the canonical CardDemo graph or the identity to which runtime and audit evidence are
 bound.
@@ -141,6 +157,7 @@ PostgreSQL mapping while leaving its committed native target readiness unobserve
 system or production data is attached. MS #56 adds the sealed application transformation and
 dual-run workcell, but the committed readiness receipt does not claim the operator run occurred.
 MS #57 adds deeper Customer qualification, packaging and offline rehearsal contracts. MS #58 adds
-the complete portfolio plan and admits the transaction wave, but it does not claim native
-Account/Transfer execution. Native messaging, native LRA replacement, production data,
-whole-CloudBank equivalence, migration completion, and production readiness remain unclaimed.
+the complete portfolio plan and admits the transaction wave. MS #59 generates the Account/Transfer
+PostgreSQL target and its native operator gate. Oracle comparison, Checks messaging, production
+data, the remaining service workcells, whole-CloudBank equivalence, migration completion, and
+production readiness remain unclaimed.

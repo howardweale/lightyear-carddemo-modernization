@@ -4,7 +4,7 @@
 
 # LIGHTYEAR milestone documentation library
 
-This library is the customer-readable body of record for MS #1 through MS #58. Every milestone is
+This library is the customer-readable body of record for MS #1 through MS #59. Every milestone is
 published from one governed catalog in Markdown, Microsoft Word (`.docx`), and PDF.
 
 **[Open the searchable milestone index](https://howardweale.github.io/lightyear-carddemo-modernization/milestones/)** to filter by milestone number, title,
@@ -76,6 +76,7 @@ or policy decisions.
 | MS #56 | First CloudBank Dark Factory Run | Complete | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-56/MS-56.md) - [Download Word](https://raw.githubusercontent.com/howardweale/lightyear-carddemo-modernization/main/docs/milestones/MS-56/MS-56.docx) - [PDF](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-56/MS-56.pdf) |
 | MS #57 | CloudBank Customer Production-Readiness Qualification | Complete | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-57/MS-57.md) - [Download Word](https://raw.githubusercontent.com/howardweale/lightyear-carddemo-modernization/main/docs/milestones/MS-57/MS-57.docx) - [PDF](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-57/MS-57.pdf) |
 | MS #58 | CloudBank Whole-Application Transaction Wave | Complete | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-58/MS-58.md) - [Download Word](https://raw.githubusercontent.com/howardweale/lightyear-carddemo-modernization/main/docs/milestones/MS-58/MS-58.docx) - [PDF](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-58/MS-58.pdf) |
+| MS #59 | CloudBank PostgreSQL Transaction-Core Factory Run | Complete | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-59/MS-59.md) - [Download Word](https://raw.githubusercontent.com/howardweale/lightyear-carddemo-modernization/main/docs/milestones/MS-59/MS-59.docx) - [PDF](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-59/MS-59.pdf) |
 
 ## Build and verification
 

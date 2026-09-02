@@ -1,0 +1,15 @@
+spring:
+  application:
+    name: transfer
+  cloud:
+    config:
+      import-check:
+        enabled: false
+  config:
+    import: classpath:common.yaml
+account:
+  transaction:
+    url: ${ACCOUNT_TRANSACTION_URL:http://account:8080/api/v1/transfers}
+cloudbank:
+  transaction:
+    internal-token: ${CLOUDBANK_TRANSACTION_INTERNAL_TOKEN}

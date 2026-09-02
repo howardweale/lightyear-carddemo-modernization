@@ -41,6 +41,7 @@ production-qualified.
 | MS #56 | First CloudBank Dark Factory Run | Factory contract complete; operator dual-run receipt pending |
 | MS #57 | CloudBank Customer Production-Readiness Qualification | Qualification contract complete; signed native receipt pending |
 | MS #58 | CloudBank Whole-Application Transaction Wave | Eight-service plan and transaction-wave admission contract complete; native Account/Transfer execution pending |
+| MS #59 | CloudBank PostgreSQL Transaction-Core Factory Run | Account/Transfer target generated; signed native PostgreSQL execution remains operator-held evidence |
 
 The v0.35.0 stored-logic qualification core is retained as supporting MS #34 evidence. It does not
 replace the planned DB2 milestone.
@@ -470,10 +471,35 @@ admission action chains from the operator-held MS #57 receipt and immutable data
 It does not generate target code or claim native Account/Transfer, messaging, LRA, whole-application,
 migration-complete, or production-ready evidence.
 
+## MS #59 — CloudBank PostgreSQL Transaction-Core Factory Run
+
+MS #59 executes the first bounded target workcell admitted by MS #58. In an isolated copy of the
+exact pinned source, it changes 20 paths across the root build, Account, and Transfer. The generated
+Account service realizes Accounts, Journal, and durable Transfer Commands on PostgreSQL. One local
+transaction locks both accounts in stable order, records the idempotency command, debits and credits,
+and writes paired journals. The generated Transfer service remains the external facade and forwards
+the authenticated actor, internal service token, and idempotency key.
+
+Seven tests cover all eight admitted behaviors: successful value conservation, invalid amounts,
+insufficient funds, authorization before mutation, duplicate suppression, injected crash rollback
+and retry, and exact net-zero journal replay. The native action packages both Spring Boot services
+and rejects Oracle or MicroTx runtime libraries before signing an MS #58-chained receipt.
+
+The Account tests use native PostgreSQL while the Transfer facade uses an isolated HTTP contract.
+Because the two services are not started together, the full native transaction wave and native LRA
+replacement remain false pending an integrated run.
+
+The architectural change replaces the bounded target's distributed LRA with local atomicity; it
+does not claim the source Oracle behavior is equivalent because this milestone does not run an
+Oracle Account/Transfer lane. Removing the Account-local AQ grant script does not migrate the Checks
+messaging flow. The remaining five services, production data, whole-application equivalence,
+migration completion, promotion, and production readiness remain false.
+
 ## Planned next increments
 
-MS #59 can execute the Account/Transfer transaction workcells and then advance the remaining
-deployable portfolio through governed workcells as their native messaging and authorization gates
-become available. MS #60 can add a production-like operational deployment and cutover rehearsal.
+The next governed increments can add an Oracle comparison lane, migrate and qualify the Checks
+transactional messaging flow, and advance Authorization, Test Runner, Credit Score, and Chatbot.
+MS #60 can add a production-like operational deployment and cutover rehearsal only after the
+remaining service gates are explicit.
 A real production migration remains a separately authorized customer program using approved
 production evidence.

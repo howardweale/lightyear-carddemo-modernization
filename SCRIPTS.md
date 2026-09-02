@@ -32,5 +32,8 @@ script is undocumented, and that every POSIX entry point has a PowerShell twin.
 - `./cloudbank-customer-postgresql.sh verify` checks the MS #55 seven-column mapping, PostgreSQL
   DDL, synthetic fixtures, compatibility ledger, and fail-closed native execution contract;
   `native-postgresql` additionally requires an admitted MS #54 Oracle receipt.
+- `./cloudbank-dark-factory.sh verify` checks the MS #56 sealed six-file application transformation
+  and dual-run acceptance contract; `run` additionally requires the signed MS #54 Oracle and
+  MS #55 PostgreSQL receipts produced with the same evidence key.
 
 See `scripts.catalog.json` for the exact purpose, role, and verification owner of all entry points.

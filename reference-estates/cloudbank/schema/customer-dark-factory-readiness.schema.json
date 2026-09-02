@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyr.ai/schema/cloudbank/customer-dark-factory-readiness.schema.json",
+  "title": "CloudBank customer dark factory readiness",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "receipt_type",
+    "release",
+    "transformation_plan_sha256",
+    "work_order_template_sha256",
+    "acceptance_contract_sha256",
+    "gate_status",
+    "source_oracle_receipt_required",
+    "postgresql_mapping_receipt_required",
+    "factory_contract_complete",
+    "native_dual_run_observed",
+    "application_refactored",
+    "bounded_customer_application_equivalent",
+    "human_promotion_authorized",
+    "target_equivalent",
+    "migration_complete",
+    "production_ready",
+    "content_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "receipt_type": {"const": "lightyear-cloudbank-customer-dark-factory-readiness"},
+    "release": {"const": "0.56.0"},
+    "gate_status": {"const": "ready-to-run-operator-receipts-required"},
+    "source_oracle_receipt_required": {"const": true},
+    "postgresql_mapping_receipt_required": {"const": true},
+    "factory_contract_complete": {"const": true},
+    "native_dual_run_observed": {"const": false},
+    "application_refactored": {"const": false},
+    "bounded_customer_application_equivalent": {"const": false},
+    "human_promotion_authorized": {"const": false},
+    "target_equivalent": {"const": false},
+    "migration_complete": {"const": false},
+    "production_ready": {"const": false}
+  }
+}

@@ -274,7 +274,12 @@ class FactoryOrchestrator:
                 state = "BLOCKED"
             final_snapshot = workspace.snapshot()
             limitation = (
-                "All deterministic gates passed. Runtime mainframe parity remains unproven."
+                str(
+                    order.metadata.get(
+                        "success_limitation",
+                        "All deterministic gates passed. Runtime mainframe parity remains unproven.",
+                    )
+                )[:1_000]
                 if state == "PASSED"
                 else "The factory stopped without satisfying all deterministic gates."
             )

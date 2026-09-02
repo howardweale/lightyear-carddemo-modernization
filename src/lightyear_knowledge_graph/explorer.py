@@ -341,10 +341,11 @@ OPERATOR_WORKLOADS = [
         "problem_id": "cloudbank-customer-account",
         "perspective_id": "cloudbank-customer-account",
         "recommended_scope": "database",
-        "description": "The customer table now has a governed PostgreSQL 16 mapping; native database proof and Spring application refactoring remain gated.",
+        "description": "The customer service now has a sealed six-file PostgreSQL transformation and dual-run factory contract; the signed native run remains operator-held evidence.",
         "target_dialect": "postgresql-16",
-        "target_status": "mapping generated · native proof pending",
+        "target_status": "factory contract ready · native dual-run pending",
         "mapping_artifact": "reference-estates/cloudbank/customer-postgresql/mapping.json",
+        "factory_artifact": "factory/cloudbank/customer-postgresql/readiness.receipt.json",
     },
     {
         "id": "cloudbank-reference:workload:money-transfer",

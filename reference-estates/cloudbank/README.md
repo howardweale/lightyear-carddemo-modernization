@@ -86,6 +86,19 @@ equivalence as blocked until later milestones.
 **Oracle Customer (Large)**. PostgreSQL 16 is now selected for the bounded customer workcell; target
 selection for the rest of CloudBank remains governed later work.
 
+## Run the first bounded application factory workcell
+
+MS #56 seals the six customer-service edits needed to apply that mapping to Spring/JPA and gives
+the existing factory controller a baseline-first work order. The same synthetic repository and
+authorization contract must pass first on unchanged Oracle source and then on the generated
+PostgreSQL service. The operator flow is documented under
+[`../../factory/cloudbank/customer-postgresql/`](../../factory/cloudbank/customer-postgresql/).
+
+```bash
+./cloudbank-dark-factory.sh verify
+./cloudbank-dark-factory.sh verify-source /path/to/oracle-microservices-backend
+```
+
 The projection is composed with the existing PL/I and Oracle Customer (Large) fragments. It does
 not change the canonical CardDemo graph or the identity to which runtime and audit evidence are
 bound.
@@ -95,5 +108,6 @@ bound.
 MS #53 is upstream static inventory and curated migration-risk evidence. MS #54 adds the exact
 source-build and bounded Oracle-runtime admission path. MS #55 generates the customer-table
 PostgreSQL mapping while leaving its committed native target readiness unobserved. No customer
-system or production data is attached. No application refactoring, API equivalence, whole-CloudBank
-equivalence, migration completion, or production readiness is claimed.
+system or production data is attached. MS #56 adds the sealed application transformation and
+dual-run workcell, but the committed readiness receipt does not claim the operator run occurred.
+No whole-CloudBank equivalence, migration completion, or production readiness is claimed.

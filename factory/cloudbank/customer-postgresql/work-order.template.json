@@ -1,0 +1,58 @@
+{
+  "acceptance": {
+    "baseline_first": true,
+    "max_attempts": 1,
+    "shared_contract_sha256": "d768f4e942df2134e96db9817ed36035c3d80d201b022d636c4d64ee815a875d",
+    "source_lane": "shared contract executed on the unchanged Oracle customer service",
+    "target_lane": "same shared contract plus ROLE mapping executed on PostgreSQL 16"
+  },
+  "claim_boundary": {
+    "bounded_customer_application_equivalence": "eligible-only-after-native-dual-run",
+    "migration_complete": false,
+    "production_data_equivalence": false,
+    "production_ready": false,
+    "whole_cloudbank_equivalence": false
+  },
+  "content_sha256": "e9e73f8ecaa844a1636709c42ac9de6ecb7097dae1717414c42051f75b869368",
+  "goal": "Apply the sealed MS #55 mapping to the customer Spring/JPA service and pass the shared Oracle/PostgreSQL application contract.",
+  "id": "cloudbank-customer-oracle-to-postgresql-v0.56.0",
+  "policy": {
+    "audience": "implementer",
+    "dependency_resolution_network_allowed": true,
+    "human_promotion_required": true,
+    "max_changed_lines": 1200,
+    "max_files_changed": 6,
+    "max_patch_bytes": 100000
+  },
+  "receipt_inputs": [
+    "lightyear-cloudbank-oracle-runtime-execution-receipt",
+    "lightyear-cloudbank-customer-postgresql-execution-receipt"
+  ],
+  "release": "0.56.0",
+  "roles": [
+    "controller",
+    "planner",
+    "builder",
+    "failure-analyst",
+    "verifier",
+    "evidence-recorder"
+  ],
+  "schema_version": "1.0",
+  "scope": {
+    "allowed_paths": [
+      "customer/pom.xml",
+      "customer/src/main/java/com/example/customer/model/Customers.java",
+      "customer/src/main/resources/application.yaml",
+      "customer/src/main/resources/db/changelog/data.sql",
+      "customer/src/main/resources/db/changelog/table.sql",
+      "customer/src/test/java/com/example/customer/CustomerApplicationTests.java"
+    ],
+    "graph_node_ids": [
+      "cloudbank-reference:workload:customer-account-management"
+    ],
+    "source": "complete pinned cloudbank-v5 checkout copied into an isolated workspace"
+  },
+  "template_type": "lightyear-cloudbank-customer-dark-factory-work-order",
+  "title": "CloudBank customer Oracle-to-PostgreSQL application transformation",
+  "transformation_plan_sha256": "3b81bcb5751d7ffdedf387cbfc13405f0e5172996b930296c379929985e52872"
+}

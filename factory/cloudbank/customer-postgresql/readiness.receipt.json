@@ -1,0 +1,20 @@
+{
+  "acceptance_contract_sha256": "e4040b10f93aad27e21f83f309b30070cb1af8b1e02cdadf768f3b4dab14318a",
+  "application_refactored": false,
+  "bounded_customer_application_equivalent": false,
+  "content_sha256": "9ff4224e379ae9066dc4667c7d12c9221916434cb95e282c1992971d510e25a5",
+  "factory_contract_complete": true,
+  "gate_status": "ready-to-run-operator-receipts-required",
+  "human_promotion_authorized": false,
+  "migration_complete": false,
+  "native_dual_run_observed": false,
+  "postgresql_mapping_receipt_required": true,
+  "production_ready": false,
+  "receipt_type": "lightyear-cloudbank-customer-dark-factory-readiness",
+  "release": "0.56.0",
+  "schema_version": "1.0",
+  "source_oracle_receipt_required": true,
+  "target_equivalent": false,
+  "transformation_plan_sha256": "3b81bcb5751d7ffdedf387cbfc13405f0e5172996b930296c379929985e52872",
+  "work_order_template_sha256": "e9e73f8ecaa844a1636709c42ac9de6ecb7097dae1717414c42051f75b869368"
+}

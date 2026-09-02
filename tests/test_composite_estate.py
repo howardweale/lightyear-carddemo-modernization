@@ -152,12 +152,16 @@ class CompositeEstateTests(unittest.TestCase):
         )
         self.assertEqual("postgresql-16", customer_workcell["target_dialect"])
         self.assertEqual(
-            "mapping generated · native proof pending",
+            "factory contract ready · native dual-run pending",
             customer_workcell["target_status"],
         )
         self.assertEqual(
             "reference-estates/cloudbank/customer-postgresql/mapping.json",
             customer_workcell["mapping_artifact"],
+        )
+        self.assertEqual(
+            "factory/cloudbank/customer-postgresql/readiness.receipt.json",
+            customer_workcell["factory_artifact"],
         )
 
     def test_runtime_and_audit_remain_bound_to_canonical_identity(self) -> None:

@@ -1,0 +1,64 @@
+{
+  "application_refactored": false,
+  "behavior_contract_sha256": "680a7a740ec1038b4323245f71f00ee4b1ca8711fc201e387390f260db500c55",
+  "changes": [
+    {
+      "classification": "generated-bounded-edit",
+      "path": "customer/pom.xml",
+      "source_sha256": "8715304d7f327604565c49d7b4e0616150469fe082633ca6487f14b8bf72ca8b",
+      "target_sha256": "adcd5cb7bb38e55b4fceecd8bf843bd29e0f41512b46a7edb418ed0f6d783fb7",
+      "template": "patches/customer-pom.xml"
+    },
+    {
+      "classification": "generated-bounded-edit",
+      "path": "customer/src/main/java/com/example/customer/model/Customers.java",
+      "source_sha256": "1e44410b114c5f9ec333b323a8c1b157b1960c81e4a9d8dc8093f556f15914a8",
+      "target_sha256": "d764f19cf82ab0489bbe06118c7b74d460298a08d3893c7fbce4b7711c212f6c",
+      "template": "patches/Customers.java"
+    },
+    {
+      "classification": "generated-bounded-edit",
+      "path": "customer/src/main/resources/application.yaml",
+      "source_sha256": "3caa27fae2fcb936947cebb5e660835e09c294395dceb123499b408cfa303dd9",
+      "target_sha256": "d30053a1ba6ce6dd3442918d857d19028c1dd65eeee04d256b01bbf24ce913fc",
+      "template": "patches/application.yaml"
+    },
+    {
+      "classification": "generated-bounded-edit",
+      "path": "customer/src/main/resources/db/changelog/data.sql",
+      "source_sha256": "174524ede252be4a382e916859da12af37127672b92087b2b07302dd2fcbfb1d",
+      "target_sha256": "9636c410bac238c3d33eea191f855a11cf9b3c5a0064212b83e57221e75f6ac8",
+      "template": "patches/data.sql"
+    },
+    {
+      "classification": "generated-bounded-edit",
+      "path": "customer/src/main/resources/db/changelog/table.sql",
+      "source_sha256": "c7732c5fe70581c94d1d52a646b4b7e772de6404505c08ede08fe9ae9d82d2af",
+      "target_sha256": "159836212d72e9dfa7127d498f9a02eed6bd03fad0f1fabb585cf9beb6489a24",
+      "template": "patches/table.sql"
+    },
+    {
+      "classification": "generated-bounded-edit",
+      "path": "customer/src/test/java/com/example/customer/CustomerApplicationTests.java",
+      "source_sha256": "584ac017e27dcfdb2dea995dfc944ed15a55f2f331f4955b5cdf5f340bad92c5",
+      "target_sha256": "9967a86aaeb0607c41547cad4341d8172cf71f682eaca63316f0f65dbdcabd13",
+      "template": "patches/CustomerApplicationTests.java"
+    }
+  ],
+  "content_sha256": "3b81bcb5751d7ffdedf387cbfc13405f0e5172996b930296c379929985e52872",
+  "decisions": [
+    "replace the Oracle wallet starter with the PostgreSQL JDBC driver in the customer module",
+    "override the inherited Oracle Hibernate dialect and UCP datasource configuration",
+    "generate PostgreSQL Liquibase DDL and synthetic bootstrap data from MS #55",
+    "map the schema-only ROLE column into the JPA entity",
+    "normalize Java empty strings before persistence to preserve Oracle semantics",
+    "replace the disabled context test with a shared Oracle/PostgreSQL application contract"
+  ],
+  "mapping_sha256": "7564c41281176e0363bc7c0328cba59602bb00673575413956869f9a8eadb011",
+  "native_dual_run_observed": false,
+  "plan_type": "lightyear-cloudbank-customer-dark-factory-transformation",
+  "production_ready": false,
+  "release": "0.56.0",
+  "schema_version": "1.0",
+  "workcell": "cloudbank-reference:workload:customer-account-management"
+}

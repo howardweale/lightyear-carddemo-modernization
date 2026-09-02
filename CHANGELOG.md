@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.56.0 — 2026-09-02
+
+- Added the first CloudBank dark-factory workcell, bound to the complete pinned `cloudbank-v5`
+  checkout and the signed MS #54 Oracle and MS #55 PostgreSQL receipt chain.
+- Sealed a deterministic six-file customer-service transformation covering Maven dependencies,
+  PostgreSQL datasource and Hibernate configuration, Liquibase DDL/data, the JPA `ROLE` mapping,
+  Oracle empty-string normalization, and application tests.
+- Reused the existing isolated factory controller with exact writable paths, one bounded attempt,
+  content-addressed templates, baseline-first verification, and no mutation of the source checkout.
+- Added one shared Spring/JPA and controller contract for four synthetic rows, default timestamps,
+  case-sensitive fragment searches, empty-string-to-NULL behavior, CRUD, and owner/admin access.
+- Required the unchanged source contract to pass on the admitted Oracle image before transformation
+  and the generated contract to pass on the admitted PostgreSQL 16 image afterward.
+- Added signed workcell receipts that retain normalized test counts and hashes without persisting
+  database credentials, raw Maven output, production data, or non-loopback database ports.
+- Added deterministic work-order, transformation, acceptance, readiness, schema, launcher, Control
+  Tower, CI, documentation, and adversarial test coverage.
+- Kept native execution unobserved in committed evidence. Human promotion, production-data and
+  whole-CloudBank equivalence, concurrency, CDC, cutover, migration completion, and production
+  readiness remain false.
+
 ## 0.55.0 — 2026-09-02
 
 - Selected PostgreSQL 16 as the target for the bounded CloudBank `customer` workcell and generated

@@ -1,0 +1,43 @@
+{
+  "content_sha256": "e4040b10f93aad27e21f83f309b30070cb1af8b1e02cdadf768f3b4dab14318a",
+  "contract_type": "lightyear-cloudbank-customer-dark-factory-acceptance",
+  "promotion": "human authorization remains mandatory after technical acceptance",
+  "release": "0.56.0",
+  "required_outcomes": {
+    "attempts": 1,
+    "changed_paths": [
+      "customer/pom.xml",
+      "customer/src/main/java/com/example/customer/model/Customers.java",
+      "customer/src/main/resources/application.yaml",
+      "customer/src/main/resources/db/changelog/data.sql",
+      "customer/src/main/resources/db/changelog/table.sql",
+      "customer/src/test/java/com/example/customer/CustomerApplicationTests.java"
+    ],
+    "factory_status": "passed",
+    "oracle_lane": {
+      "shared_contract_sha256": "d768f4e942df2134e96db9817ed36035c3d80d201b022d636c4d64ee815a875d",
+      "tests": 2
+    },
+    "postgresql_lane": {
+      "shared_contract_sha256": "d768f4e942df2134e96db9817ed36035c3d80d201b022d636c4d64ee815a875d",
+      "tests": 2
+    }
+  },
+  "required_receipts": {
+    "oracle_source": "lightyear-cloudbank-oracle-runtime-execution-receipt",
+    "postgresql_mapping": "lightyear-cloudbank-customer-postgresql-execution-receipt"
+  },
+  "schema_version": "1.0",
+  "security": {
+    "credentials_persisted": false,
+    "database_containers": "immutable-image-id-and-ephemeral",
+    "database_ports": "ephemeral-loopback-only",
+    "dependency_resolution_network": "explicitly-allowed-development-boundary",
+    "isolated_workspace_required": true,
+    "raw_maven_output_persisted": false,
+    "source_checkout_mutated": false,
+    "synthetic_data_only": true
+  },
+  "transformation_plan_sha256": "3b81bcb5751d7ffdedf387cbfc13405f0e5172996b930296c379929985e52872",
+  "work_order_template_sha256": "e9e73f8ecaa844a1636709c42ac9de6ecb7097dae1717414c42051f75b869368"
+}

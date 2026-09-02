@@ -63,6 +63,9 @@ if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 & (Join-Path $ProjectDir "cloudbank-customer-postgresql.ps1") verify
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
+& (Join-Path $ProjectDir "cloudbank-dark-factory.ps1") verify
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+
 & (Join-Path $ProjectDir "composite-estate.ps1") verify
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 

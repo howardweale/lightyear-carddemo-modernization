@@ -4,30 +4,38 @@
 
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.55.0 — CloudBank customer PostgreSQL mapping**
+Release: **v0.56.0 — First CloudBank dark factory run**
 
-v0.55 selects CloudBank's `customer` service as the first transformation workcell and generates a
-governed mapping from `CUSTOMER.CUSTOMERS` to PostgreSQL 16. All seven columns, the primary key,
-Liquibase order, synthetic fixtures, fragment searches, and CRUD commit/rollback behavior are
-bound to deterministic artifacts and a native target execution contract.
+v0.56 packages the first executable CloudBank dark-factory workcell. The existing controller copies
+the complete pinned `cloudbank-v5` checkout into isolation, admits only six customer-service files,
+and applies a deterministic PostgreSQL application transformation without modifying the source
+checkout.
 
-The compatibility ledger makes the real semantic decisions visible: Oracle empty strings normalize
-to `NULL`; Oracle `DATE DEFAULT SYSDATE` becomes a UTC, second-precision PostgreSQL timestamp policy;
-bounded fragment searches use `C` collation; and the `ROLE` column is preserved while its absence
-from the JPA entity blocks application equivalence. Upstream demonstration passwords are excluded
-from committed fixtures and receipts.
+The workcell requires the signed MS #54 Oracle and MS #55 PostgreSQL receipts. It runs one shared
+Spring/JPA and controller contract on the unchanged Oracle service, applies the sealed six-file
+patch, and runs the same contract plus explicit `ROLE` mapping on PostgreSQL 16. The contract covers
+synthetic rows, defaults, Oracle empty-string behavior, case-sensitive searches, CRUD, and
+owner/admin authorization. Database ports are ephemeral and loopback-only; credentials, raw Maven
+output, and production data are excluded from the signed receipt.
 
 ```bash
-./cloudbank-customer-postgresql.sh verify
-./cloudbank-customer-postgresql.sh verify-source /path/to/cloudbank-upstream
+./cloudbank-dark-factory.sh verify
+./cloudbank-dark-factory.sh verify-source /path/to/cloudbank-upstream
 ```
 
-The mapping is generated, but the committed readiness receipt leaves native PostgreSQL execution
-pending. The native action requires the operator-held signed MS #54 Oracle receipt. Spring/JPA
-refactoring, HTTP/API and authorization equivalence, whole-CloudBank migration, and production
-readiness remain false.
+The committed readiness receipt means the workcell is ready, not that it ran. A passing operator
+run can claim only bounded customer-application equivalence on the synthetic contract. Human
+promotion, production-data equivalence, concurrency/CDC/cutover, whole-CloudBank equivalence,
+migration completion, and production readiness remain false.
 
-Previous release: **v0.54.0 — CloudBank executable source baseline**
+Previous release: **v0.55.0 — CloudBank customer PostgreSQL mapping**
+
+v0.55 selects CloudBank's `customer` service as the first transformation workcell and generates a
+governed seven-column mapping from `CUSTOMER.CUSTOMERS` to PostgreSQL 16. The native target action
+requires the operator-held signed MS #54 Oracle receipt; its committed readiness evidence does not
+claim the target run occurred.
+
+Earlier release: **v0.54.0 — CloudBank executable source baseline**
 
 v0.54 turns the pinned CloudBank inventory into the execution contract needed before the first dark
 factory workcell. Every run must use the complete `cloudbank-v5` subtree at commit
@@ -1171,7 +1179,7 @@ read-only dashboard cannot approve, resolve, or launch work.
 
 The complete customer-readable milestone history is published in the
 [searchable milestone documentation library](https://howardweale.github.io/lightyear-carddemo-modernization/milestones/).
-MS #1 through MS #55 each have a canonical Markdown narrative plus matching Microsoft Word and PDF
+MS #1 through MS #56 each have a canonical Markdown narrative plus matching Microsoft Word and PDF
 editions. Search runs locally in the browser over milestone number, title, customer value,
 capability, release, boundary, and roadmap phase. The
 [repository index](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/README.md)

@@ -37,8 +37,8 @@ production-qualified.
 | MS #52 | Oracle Customer (Large) Control Tower Projection | Complete |
 | MS #53 | CloudBank Modern Oracle Reference Estate | Complete |
 | MS #54 | CloudBank Executable Source Baseline | Complete; signed execution receipts remain operator-held evidence |
-| MS #55 | CloudBank Customer PostgreSQL Mapping | Mapping generated; native PostgreSQL receipt pending |
-| MS #56 | First CloudBank Dark Factory Run | Planned after MS #55 mapping qualification |
+| MS #55 | CloudBank Customer PostgreSQL Mapping | Mapping qualified; signed native receipt remains operator-held evidence |
+| MS #56 | First CloudBank Dark Factory Run | Factory contract complete; operator dual-run receipt pending |
 
 The v0.35.0 stored-logic qualification core is retained as supporting MS #34 evidence. It does not
 replace the planned DB2 milestone.
@@ -400,14 +400,36 @@ commit/rollback markers. Upstream demonstration password values, raw output, cre
 production data are not persisted.
 
 The committed readiness state is `mapping-generated-native-execution-pending`. The database mapping
-is ready for the operator-held native proof, but the Spring application has not been refactored or
-run on PostgreSQL. API, authorization, concurrency, CDC, cutover, whole-CloudBank equivalence,
-migration completion, and production readiness remain false.
+is ready for the operator-held native proof, but MS #55 itself does not refactor or run the Spring
+application on PostgreSQL. API, authorization, concurrency, CDC, cutover, whole-CloudBank
+equivalence, migration completion, and production readiness remain false.
+
+## MS #56 — First CloudBank Dark Factory Run
+
+MS #56 turns the MS #55 mapping into a baseline-first application workcell. The controller accepts
+only the complete pinned source checkout plus signed MS #54 Oracle and MS #55 PostgreSQL receipts
+from the same evidence key. It copies the source into an isolated workspace and permits changes to
+exactly six customer-service paths: the module POM, datasource configuration, two Liquibase SQL
+files, the JPA entity, and the application contract test.
+
+The generated transformation removes the customer wallet starter, adds the PostgreSQL driver,
+overrides inherited Oracle datasource and Hibernate settings, realizes the seven-column target
+schema, maps `ROLE`, and normalizes Java empty strings before persistence. The shared contract uses
+four synthetic rows to test JPA bootstrap, timestamp defaults, name/email fragment behavior, CRUD,
+and owner/admin authorization. It must pass on the unchanged service against the admitted Oracle
+image before the builder runs, then pass again on the generated service against the admitted
+PostgreSQL image. PostgreSQL additionally verifies the schema and `ROLE` mapping.
+
+The committed readiness receipt is `ready-to-run-operator-receipts-required`; it does not pretend
+the native run occurred. A valid signed execution receipt can establish bounded customer-application
+equivalence for this synthetic contract. It cannot authorize promotion or establish production-data,
+concurrency, CDC, cutover, cross-service, whole-CloudBank, migration-complete, or production-ready
+claims. Dependency download is recorded as an explicit development-network boundary.
 
 ## Planned next increments
 
-MS #56 runs the first dark factory workcell against that sealed mapping. Planner, builder, verifier,
-and evidence roles receive only their bounded context; generated PostgreSQL DDL, Liquibase changes,
-application edits, tests, and receipts remain isolated until deterministic source tests, PostgreSQL
-tests, and dual-run API/data comparisons pass. Promotion remains human-authorized. One successful
-customer-service workcell does not establish whole-CloudBank equivalence.
+MS #57 expands from the first bounded workcell toward production-grade qualification: HTTP-level
+security and error contracts, concurrency and transaction isolation, CDC/cutover/rollback design,
+container packaging, dependency cleanup in the shared parent, and authorized production-shaped data
+profiling. Expansion remains evidence-driven; MS #56 does not silently qualify the other CloudBank
+services.

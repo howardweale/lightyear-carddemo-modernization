@@ -557,6 +557,11 @@ def _execute_postgresql_lane(
             "SPRING_DATASOURCE_URL": url,
             "SPRING_DATASOURCE_USERNAME": "postgres",
             "SPRING_DATASOURCE_PASSWORD": password,
+            # common.yaml is shared with the Oracle source estate and imports an
+            # Oracle Hibernate dialect. Environment properties outrank imported
+            # configuration, so the target lane must explicitly select the
+            # PostgreSQL dialect rather than querying Oracle catalog views.
+            "SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT": "org.hibernate.dialect.PostgreSQLDialect",
             "LIQUIBASE_DATASOURCE_URL": url,
             "LIQUIBASE_DATASOURCE_USERNAME": "postgres",
             "LIQUIBASE_DATASOURCE_PASSWORD": password,
@@ -858,6 +863,17 @@ def validate_factory_receipt(payload: Mapping[str, Any], key: str, project_root:
     return sorted(set(errors))
 
 
+def _safe_controller_reason(exc: Exception) -> str:
+    detail = str(exc)
+    if (
+        isinstance(exc, ValueError)
+        and detail.startswith("cloudbank-dark-factory-")
+        and re.fullmatch(r"[a-z0-9:./-]+", detail)
+    ):
+        return detail
+    return type(exc).__name__
+
+
 def _gate_main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Private CloudBank customer dual-run gate")
     parser.add_argument("command", choices=("gate",))
@@ -878,7 +894,7 @@ def _gate_main(argv: list[str] | None = None) -> int:
         result = {
             "lane": "unknown",
             "status": "failed",
-            "reason": f"controller-safe-stop:{type(exc).__name__}",
+            "reason": f"controller-safe-stop:{_safe_controller_reason(exc)}",
         }
     print(LANE_MARKER + json.dumps(result, sort_keys=True, separators=(",", ":")))
     return code

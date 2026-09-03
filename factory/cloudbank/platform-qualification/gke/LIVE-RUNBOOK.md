@@ -13,6 +13,11 @@ missing chart versions, and missing mutation acknowledgements.
 - Run `bootstrap.sh`. Delegate the printed Cloud DNS name servers from the parent DNS zone.
 - Add one JSON secret version to each of the eight Secret Manager containers. Use only synthetic
   credentials and configuration. Do not pipe values through shell command-line arguments.
+- If the operator-held MS #54 through MS #64 execution receipts are unavailable, create one
+  Secret Manager value named `cloudbank-ms67-evidence-key` and run
+  `submit-prerequisite-chain.sh SIGNER`. The asynchronous Cloud Build job executes the complete
+  signed dependency chain and exports only minimized receipts to the private evidence bucket.
+  Do not substitute committed readiness receipts for these execution receipts.
 
 ## 2. Build and deploy
 

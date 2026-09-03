@@ -20,6 +20,10 @@ authorized, non-production platform.
    DNS delegation that must be installed at the parent zone.
 3. Add secret versions directly to Secret Manager. Never put secret values in this repository,
    shell history, an observation, or a receipt.
+   If the signed MS #54 through MS #64 execution chain is no longer available, store one generated
+   evidence key in Secret Manager and run `gke/submit-prerequisite-chain.sh SIGNER`. The asynchronous
+   Cloud Build job recreates the complete chain and exports only the 12 signed prerequisite receipts
+   plus their signed chain manifest to a private, versioned evidence bucket.
 4. Materialize the MS #64 target, run `gke/build-push-images.sh`, and render the exact MS #65 bundle.
 5. Run `gke/deploy.sh` to install External Secrets, deploy all eight digest-pinned services, add
    TLS/ingress and telemetry resources, and wait for readiness.

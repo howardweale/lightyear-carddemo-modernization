@@ -18,6 +18,8 @@ from lightyear_common.io import write_json
 from .cloudbank_baseline import ORACLE_IMAGE, PINNED_SUBTREE
 from .cloudbank_customer_postgres import POSTGRES_IMAGE
 from .cloudbank_dark_factory import (
+    MAX_EXCEPTION_TYPES,
+    SAFE_EXCEPTION_TYPE,
     _container_connectivity_args,
     _container_endpoint,
     _inspect_image,
@@ -43,6 +45,7 @@ PATCH_ROOT = OUTPUT_ROOT / "patches"
 RECEIPT_TYPE = "lightyear-cloudbank-oracle-postgresql-equivalence-execution"
 RECEIPT_NAME = "cloudbank-oracle-postgresql-equivalence.receipt.json"
 FAILURE_NAME = "cloudbank-oracle-postgresql-equivalence.failure.json"
+DIAGNOSTIC_MARKER = "CLOUDBANK_ORACLE_EQUIVALENCE_ACCEPTANCE_DIAGNOSTIC="
 HEX_64 = re.compile(r"^[0-9a-f]{64}$")
 EXPECTED_TESTS = 7
 OBSERVATION_CONTRACT = (
@@ -74,6 +77,13 @@ TEST_CLASSES = {
         "PostgreSqlAccountEquivalenceTests",
         "PostgreSqlTransferEquivalenceTests",
     ),
+}
+SAFE_FAILURE_PHASES = {
+    "checkstyle",
+    "compilation",
+    "dependency-resolution",
+    "test",
+    "maven-command",
 }
 
 
@@ -532,6 +542,86 @@ def _lane_passed(lane: Mapping[str, Any], name: str, image_id: str) -> bool:
         and lane.get("raw_output_persisted") is False
         and lane.get("synthetic_data_only") is True
     )
+
+
+def _diagnostic_int(value: Any) -> int | None:
+    if isinstance(value, int) and not isinstance(value, bool) and -1 <= value <= 10_000:
+        return value
+    return None
+
+
+def _lane_failure_diagnostic(
+    lane: Mapping[str, Any], expected_lane: str, expected_image_id: str
+) -> dict[str, Any]:
+    status = lane.get("status")
+    phase = lane.get("failure_phase")
+    failed_tests = lane.get("failed_tests", [])
+    exception_types = (
+        sorted(
+            {
+                failure_type
+                for item in failed_tests
+                if isinstance(item, Mapping)
+                for failure_type in [item.get("type")]
+                if isinstance(failure_type, str)
+                and len(failure_type) <= 200
+                and SAFE_EXCEPTION_TYPE.fullmatch(failure_type)
+            }
+        )[:MAX_EXCEPTION_TYPES]
+        if isinstance(failed_tests, list)
+        else []
+    )
+    return {
+        "lane_match": lane.get("lane") == expected_lane,
+        "status": status if status in {"passed", "failed"} else "invalid",
+        "tests": _diagnostic_int(lane.get("tests")),
+        "failures": _diagnostic_int(lane.get("failures")),
+        "errors": _diagnostic_int(lane.get("errors")),
+        "skipped": _diagnostic_int(lane.get("skipped")),
+        "maven_exit_code": _diagnostic_int(lane.get("maven_exit_code")),
+        "test_reports_present": _diagnostic_int(lane.get("test_reports_present")),
+        "marker_stdout_count": _diagnostic_int(lane.get("marker_stdout_count")),
+        "marker_report_count": _diagnostic_int(lane.get("marker_report_count")),
+        "failure_phase": (
+            phase
+            if phase is None
+            or (isinstance(phase, str) and phase in SAFE_FAILURE_PHASES)
+            else "invalid"
+        ),
+        "exception_types": exception_types,
+        "database_image_match": (
+            lane.get("database_image_id_sha256") == expected_image_id
+        ),
+        "observation_match": lane.get("observation_sha256") == OBSERVATION_SHA256,
+    }
+
+
+def equivalence_failure_diagnostic(
+    report: Mapping[str, Any], oracle_image_id: str, postgres_image_id: str
+) -> dict[str, Any]:
+    report = report if isinstance(report, Mapping) else {}
+    oracle = report.get("oracle_lane")
+    postgres = report.get("postgresql_lane")
+    oracle = oracle if isinstance(oracle, Mapping) else {}
+    postgres = postgres if isinstance(postgres, Mapping) else {}
+    checks = {
+        "oracle-lane": _lane_passed(oracle, "oracle", oracle_image_id),
+        "postgresql-lane": _lane_passed(postgres, "postgresql", postgres_image_id),
+        "cross-lane-observation": (
+            oracle.get("observation_sha256") == OBSERVATION_SHA256
+            and postgres.get("observation_sha256") == OBSERVATION_SHA256
+        ),
+    }
+    return {
+        "failed_checks": sorted(name for name, passed in checks.items() if not passed),
+        "oracle": _lane_failure_diagnostic(oracle, "oracle", oracle_image_id),
+        "postgresql": _lane_failure_diagnostic(
+            postgres, "postgresql", postgres_image_id
+        ),
+        "cross_lane_observation_match": checks["cross-lane-observation"],
+        "raw_output_persisted": False,
+        "credentials_persisted": False,
+    }
 
 
 def execute_equivalence(

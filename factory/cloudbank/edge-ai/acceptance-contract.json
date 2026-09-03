@@ -1,0 +1,124 @@
+{
+  "bindings": {
+    "compatibility_ledger_sha256": "73bf8f3d6934d85b5573913fb0ededa994c676fa5af125c4590897163b2ccd4a",
+    "edge_contract_sha256": "ddca81a27700fb141e9c9fdbc30382fc90c1823637d5db946297a4165024e9aa",
+    "execution_plan_sha256": "bb393e06fc92794a6625c1e0a63a623b299b00f2c079497096a22740f5a9d7fe",
+    "source_contract_sha256": "d9f15e024d74e630403308d776bc25928e575fbe756bc835befd963ae756f79f"
+  },
+  "content_sha256": "0f3ac9e30e3300764b0f4e688d87192fc21212fae590631be5a8f8f11ad3fa31",
+  "contract_type": "lightyear-cloudbank-edge-ai-acceptance",
+  "eligible_claim": {
+    "eight_service_target_assembled": true,
+    "migration_complete": false,
+    "model_quality_qualified": false,
+    "production_ready": false,
+    "real_credit_decision_equivalent": false,
+    "remaining_service_workcells_complete": true,
+    "whole_application_equivalent": false
+  },
+  "release": "0.64.0",
+  "required_contract_sha256": "56bcf8142ae852eb75cc8742d97090411470179f69675500e676ab9534042433",
+  "required_packaging": {
+    "executable_jars": 8,
+    "microtx_runtime_libraries": 0,
+    "oracle_runtime_libraries": 0
+  },
+  "required_receipts": [
+    "lightyear-cloudbank-checks-messaging-execution",
+    "lightyear-cloudbank-customer-production-qualification-execution"
+  ],
+  "required_scenarios": [
+    "eight-service-target-packaged",
+    "oracle-and-microtx-runtime-absent",
+    "azn-server-target-workcell-generated",
+    "azn-server-target-workcell-executed",
+    "checks-target-workcell-generated",
+    "checks-target-workcell-executed",
+    "testrunner-target-workcell-generated",
+    "testrunner-target-workcell-executed",
+    "creditscore-target-workcell-generated",
+    "creditscore-target-workcell-executed",
+    "chatbot-target-workcell-generated",
+    "chatbot-target-workcell-executed",
+    "creditscore-missing-token-rejected",
+    "creditscore-wrong-audience-rejected",
+    "creditscore-missing-scope-rejected",
+    "creditscore-subject-bound",
+    "creditscore-same-subject-date-stable",
+    "creditscore-declared-range-enforced",
+    "creditscore-synthetic-provenance-returned",
+    "chatbot-missing-token-rejected",
+    "chatbot-wrong-audience-rejected",
+    "chatbot-missing-scope-rejected",
+    "chatbot-input-policy-fails-closed",
+    "chatbot-output-policy-fails-closed",
+    "chatbot-caller-rate-limit-enforced",
+    "chatbot-model-egress-policy-enforced",
+    "chatbot-model-failure-safe",
+    "raw-prompts-responses-and-secrets-not-persisted"
+  ],
+  "required_tests": {
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0,
+    "tests": 21
+  },
+  "required_workcells": [
+    {
+      "disposition": "migrated",
+      "errors": 0,
+      "executed": true,
+      "failures": 0,
+      "generated": true,
+      "migration_milestone": 62,
+      "service": "azn-server",
+      "skipped": 0,
+      "tests": 3
+    },
+    {
+      "disposition": "migrated",
+      "errors": 0,
+      "executed": true,
+      "failures": 0,
+      "generated": true,
+      "migration_milestone": 63,
+      "service": "checks",
+      "skipped": 0,
+      "tests": 4
+    },
+    {
+      "disposition": "migrated",
+      "errors": 0,
+      "executed": true,
+      "failures": 0,
+      "generated": true,
+      "migration_milestone": 63,
+      "service": "testrunner",
+      "skipped": 0,
+      "tests": 4
+    },
+    {
+      "disposition": "migrated",
+      "errors": 0,
+      "executed": true,
+      "failures": 0,
+      "generated": true,
+      "migration_milestone": 64,
+      "service": "creditscore",
+      "skipped": 0,
+      "tests": 4
+    },
+    {
+      "disposition": "migrated",
+      "errors": 0,
+      "executed": true,
+      "failures": 0,
+      "generated": true,
+      "migration_milestone": 64,
+      "service": "chatbot",
+      "skipped": 0,
+      "tests": 6
+    }
+  ],
+  "schema_version": "1.0"
+}

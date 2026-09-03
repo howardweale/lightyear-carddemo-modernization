@@ -1,0 +1,175 @@
+{
+  "base_targets": [
+    "ms63-five-service-target",
+    "ms57-qualified-customer-target"
+  ],
+  "content_sha256": "bb393e06fc92794a6625c1e0a63a623b299b00f2c079497096a22740f5a9d7fe",
+  "customer_target_paths": [
+    "customer/pom.xml",
+    "customer/src/main/java/com/example/customer/model/Customers.java",
+    "customer/src/main/resources/application.yaml",
+    "customer/src/main/resources/db/changelog/data.sql",
+    "customer/src/main/resources/db/changelog/table.sql",
+    "customer/src/test/java/com/example/customer/CustomerApplicationTests.java"
+  ],
+  "external_credit_bureau": false,
+  "external_model_called_by_acceptance": false,
+  "fresh_output_required": true,
+  "patches": [
+    {
+      "path": "azn-server/src/main/java/oracle/obaas/aznserver/securityconfig/ProductionAudienceTokenCustomizer.java",
+      "template": "patches/ProductionAudienceTokenCustomizer.java",
+      "template_sha256": "16b73cadbfa71227f773a3e9604d240bc59da8c75cfe55278a74e6c005730758"
+    },
+    {
+      "path": "azn-server/src/main/resources/application.yaml",
+      "template": "patches/azn-application.yaml",
+      "template_sha256": "8da4b9e8b78526711d2f24f50253e78d1a5d52e561664206777ef4131d0c2ace"
+    },
+    {
+      "path": "azn-server/src/test/java/oracle/obaas/aznserver/securityconfig/ProductionAudienceTokenCustomizerTest.java",
+      "template": "patches/ProductionAudienceTokenCustomizerTest.java",
+      "template_sha256": "a08853659a54aa512a648c6aa051577b3b0d9e703539759f301bc68076e4cc7d"
+    },
+    {
+      "path": "chatbot/pom.xml",
+      "template": "patches/chatbot-pom.xml",
+      "template_sha256": "ba351ce379c4ca4f2f0a1e24d95b1080671227e3a725c46db4dcd3c5510fa155"
+    },
+    {
+      "path": "chatbot/src/main/java/com/example/chatbot/config/ChatbotEndpointPolicy.java",
+      "template": "patches/ChatbotEndpointPolicy.java",
+      "template_sha256": "9b4b917848ee5e660e197538592fbcfa721200b22772d2b903f88e88d76d5a29"
+    },
+    {
+      "path": "chatbot/src/main/java/com/example/chatbot/config/ChatbotOAuthSecurityConfiguration.java",
+      "template": "patches/ChatbotOAuthSecurityConfiguration.java",
+      "template_sha256": "60385effec7a37ee8b5934d0aa72999ad3fe23764142e9fd7ec0cd9c71d9a7ea"
+    },
+    {
+      "path": "chatbot/src/main/java/com/example/chatbot/controller/ChatController.java",
+      "template": "patches/ChatController.java",
+      "template_sha256": "55603bc03d293647b4f08ad57932cf411c0e81c3477f66755f43f5c8d6ad0ac5"
+    },
+    {
+      "path": "chatbot/src/main/resources/application.yaml",
+      "template": "patches/chatbot-application.yaml",
+      "template_sha256": "d78d8b7dce223cb1844414b697f8be628c2ae4039948dba5cf89b6d5d4839527"
+    },
+    {
+      "path": "chatbot/src/test/java/com/example/chatbot/ChatbotApplicationTest.java",
+      "template": "patches/ChatbotApplicationTest.java",
+      "template_sha256": "ebdabc10615eeacf358091b969d9bad091d23094e5421aa51ad958cb215a854c"
+    },
+    {
+      "path": "checks/src/test/java/com/example/checks/ChecksTargetWorkcellTest.java",
+      "template": "patches/ChecksTargetWorkcellTest.java",
+      "template_sha256": "5075417d215471a0a4d7797f450c80b5e740bac6358f92f05e4cbb7ca93b657c"
+    },
+    {
+      "path": "creditscore/pom.xml",
+      "template": "patches/creditscore-pom.xml",
+      "template_sha256": "7cbd8bd3aba6cc4fd994ea10aab5f3beabd47bf486d256a14b504c7c09313e52"
+    },
+    {
+      "path": "creditscore/src/main/java/com/example/creditscore/config/CreditScoreOAuthSecurityConfiguration.java",
+      "template": "patches/CreditScoreOAuthSecurityConfiguration.java",
+      "template_sha256": "6c18004e761194b91dae565a9d007a55637a217bba9ef69d7e26cc0b6a02d22e"
+    },
+    {
+      "path": "creditscore/src/main/java/com/example/creditscore/controller/CreditScoreController.java",
+      "template": "patches/CreditScoreController.java",
+      "template_sha256": "43f59e6de5b7cafd3982b81ac6ecad56f7ce693dce39f55c43d0bf7d753ea2a4"
+    },
+    {
+      "path": "creditscore/src/main/java/com/example/creditscore/service/SyntheticCreditScoreService.java",
+      "template": "patches/SyntheticCreditScoreService.java",
+      "template_sha256": "9e744e84c98bf6a1bba8c55dcaac241c837e61a15cae77477c4328d03ad5f9c9"
+    },
+    {
+      "path": "creditscore/src/main/resources/application.yaml",
+      "template": "patches/creditscore-application.yaml",
+      "template_sha256": "8d66ac30c98052fb166f1d08d4d92a0d2c55bcbd5324e2823768df6b06df1be2"
+    },
+    {
+      "path": "creditscore/src/test/java/com/example/creditscore/CreditscoreApplicationTests.java",
+      "template": "patches/CreditscoreApplicationTests.java",
+      "template_sha256": "d2ba1305dc931bc9f94c427284c929045fee44c2b2a720b9c282421e38e35452"
+    },
+    {
+      "path": "testrunner/src/test/java/com/example/testrunner/TestrunnerTargetWorkcellTest.java",
+      "template": "patches/TestrunnerTargetWorkcellTest.java",
+      "template_sha256": "03af6f173c8553899e4529490dc8e37dd1ae2e61db63ce69648e95613542443b"
+    }
+  ],
+  "plan_type": "lightyear-cloudbank-eight-service-edge-ai-wave",
+  "production_data": false,
+  "release": "0.64.0",
+  "remaining_service_workcells": [
+    {
+      "disposition": "migrated",
+      "generated_and_executed_by_ms64": true,
+      "migration_milestone": 62,
+      "service": "azn-server",
+      "test_class": "ProductionAudienceTokenCustomizerTest"
+    },
+    {
+      "disposition": "migrated",
+      "generated_and_executed_by_ms64": true,
+      "migration_milestone": 63,
+      "service": "checks",
+      "test_class": "ChecksTargetWorkcellTest"
+    },
+    {
+      "disposition": "migrated",
+      "generated_and_executed_by_ms64": true,
+      "migration_milestone": 63,
+      "service": "testrunner",
+      "test_class": "TestrunnerTargetWorkcellTest"
+    },
+    {
+      "disposition": "migrated",
+      "generated_and_executed_by_ms64": true,
+      "migration_milestone": 64,
+      "service": "creditscore",
+      "test_class": "CreditscoreApplicationTests"
+    },
+    {
+      "disposition": "migrated",
+      "generated_and_executed_by_ms64": true,
+      "migration_milestone": 64,
+      "service": "chatbot",
+      "test_class": "ChatbotApplicationTest"
+    }
+  ],
+  "requires": [
+    "signed-ms63-receipt",
+    "signed-ms57-receipt",
+    "same-evidence-key",
+    "same-postgresql-image"
+  ],
+  "schema_version": "1.0",
+  "services": [
+    "azn-server",
+    "customer",
+    "account",
+    "transfer",
+    "checks",
+    "testrunner",
+    "creditscore",
+    "chatbot"
+  ],
+  "source_checkout_mutated": false,
+  "stages": [
+    "validate-signed-ms63-ms57-and-pinned-source",
+    "materialize-fresh-isolated-eight-service-target",
+    "carry-qualified-postgresql-customer-target",
+    "replace-random-score-with-subject-bound-synthetic-provider",
+    "bind-credit-and-chat-tokens-to-distinct-audiences",
+    "enforce-chat-input-output-rate-and-egress-guardrails",
+    "package-eight-zero-oracle-zero-microtx-executable-jars",
+    "execute-azn-checks-testrunner-credit-and-chat-workcell-tests",
+    "sign-bounded-edge-ai-receipt"
+  ],
+  "whole_application_equivalence": false
+}

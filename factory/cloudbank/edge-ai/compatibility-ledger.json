@@ -1,0 +1,109 @@
+{
+  "content_sha256": "73bf8f3d6934d85b5573913fb0ededa994c676fa5af125c4590897163b2ccd4a",
+  "eight_service_target_eligible": true,
+  "entries": [
+    {
+      "capability": "creditscore-authentication",
+      "classification": "target-native-qualified",
+      "evidence": "oauth-jwt"
+    },
+    {
+      "capability": "creditscore-audience-isolation",
+      "classification": "target-native-qualified",
+      "evidence": "cloudbank-creditscore"
+    },
+    {
+      "capability": "creditscore-randomness",
+      "classification": "replaced-by-policy",
+      "evidence": "subject-date-hmac"
+    },
+    {
+      "capability": "creditscore-real-bureau-result",
+      "classification": "not-qualified",
+      "evidence": "provider-integration-required"
+    },
+    {
+      "capability": "chatbot-authentication",
+      "classification": "target-native-qualified",
+      "evidence": "oauth-jwt"
+    },
+    {
+      "capability": "chatbot-audience-isolation",
+      "classification": "target-native-qualified",
+      "evidence": "cloudbank-chatbot"
+    },
+    {
+      "capability": "chatbot-prompt-separation",
+      "classification": "target-native-qualified",
+      "evidence": "system-user-message-boundary"
+    },
+    {
+      "capability": "chatbot-input-output-filtering",
+      "classification": "target-native-qualified",
+      "evidence": "negative-tests"
+    },
+    {
+      "capability": "chatbot-caller-rate-limit",
+      "classification": "target-native-qualified",
+      "evidence": "subject-window"
+    },
+    {
+      "capability": "chatbot-model-egress",
+      "classification": "target-native-qualified",
+      "evidence": "allowlist-and-tls-policy"
+    },
+    {
+      "capability": "chatbot-model-answer-quality",
+      "classification": "not-qualified",
+      "evidence": "approved-model-evaluation-required"
+    },
+    {
+      "capability": "eight-service-package",
+      "classification": "target-native-qualified",
+      "evidence": "zero-oracle-zero-microtx"
+    },
+    {
+      "capability": "azn-server-disposition",
+      "classification": "migrated-and-ms64-executed",
+      "evidence": "ms62-target-composed"
+    },
+    {
+      "capability": "checks-disposition",
+      "classification": "migrated-and-ms64-executed",
+      "evidence": "ms63-target-composed"
+    },
+    {
+      "capability": "testrunner-disposition",
+      "classification": "migrated-and-ms64-executed",
+      "evidence": "ms63-target-composed"
+    },
+    {
+      "capability": "creditscore-disposition",
+      "classification": "migrated-and-ms64-executed",
+      "evidence": "ms64-target"
+    },
+    {
+      "capability": "chatbot-disposition",
+      "classification": "migrated-and-ms64-executed",
+      "evidence": "ms64-target"
+    },
+    {
+      "capability": "whole-application-equivalence",
+      "classification": "not-qualified",
+      "evidence": "integrated-dual-run-required"
+    },
+    {
+      "capability": "production-deployment",
+      "classification": "not-qualified",
+      "evidence": "operational-gate-required"
+    }
+  ],
+  "ledger_type": "lightyear-cloudbank-edge-ai-compatibility",
+  "model_quality_qualified": false,
+  "production_ready": false,
+  "real_credit_decision_equivalent": false,
+  "release": "0.64.0",
+  "remaining_service_workcells_eligible": true,
+  "schema_version": "1.0",
+  "whole_application_equivalent": false
+}

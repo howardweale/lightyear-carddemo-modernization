@@ -4,7 +4,26 @@
 
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.63.0 — CloudBank Checks durable messaging**
+Release: **v0.64.0 — CloudBank Credit Decision and AI boundary**
+
+v0.64 composes all five remaining services into fresh target workcells and executes each one:
+Authorization migrated in MS #62, Checks and Test Runner migrated in MS #63, and Credit Score and
+Chatbot migrated in MS #64. The complete eight-service target is packaged together. Credit Score
+requires an audience-bound OAuth token and returns a stable, subject-and-date-bound result labelled
+`synthetic-v1`; Chatbot adds a separate audience and fail-closed model-interaction controls.
+
+```bash
+./cloudbank-edge-ai.sh verify
+./cloudbank-edge-ai.sh verify-source /path/to/cloudbank-upstream
+```
+
+A passing signed run qualifies generation and execution of all five remaining target workcells plus
+the zero-Oracle, zero-MicroTx eight-service package. It does not call a credit bureau or external
+model, qualify a
+credit decision or model-answer quality, establish whole-application equivalence, complete a
+migration, authorize deployment, or prove production readiness.
+
+Previous release: **v0.63.0 — CloudBank Checks durable messaging**
 
 v0.63 replaces the Checks and Test Runner dependency on Oracle AQ/JMS with a PostgreSQL-backed
 durable work queue. The bounded gate covers idempotent deposits and clearances, per-aggregate FIFO
@@ -21,7 +40,7 @@ It does not claim a native Oracle AQ comparison. Credit Score and Chatbot remain
 whole-application equivalence, migration completion, deployment promotion, and production readiness
 remain separate gates.
 
-Previous release: **v0.62.0 — CloudBank production OAuth application boundary**
+Earlier release: **v0.62.0 — CloudBank production OAuth application boundary**
 
 v0.62 replaces the bounded Account/Transfer workcell's development Basic authentication and static
 internal token with a live CloudBank OAuth 2.0/OIDC authorization server on PostgreSQL. Transfer and

@@ -178,8 +178,8 @@ DEFAULT_PERSPECTIVES = [
     },
     {
         "id": "cloudbank-credit-score",
-        "name": "CloudBank credit score reference",
-        "description": "Pinned static nondeterminism, date, API, security, and operational evidence.",
+        "name": "CloudBank credit decision and AI reference",
+        "description": "Pinned source plus MS #64 synthetic-score, OAuth, chatbot guardrail, and model-egress evidence.",
         "root": "cloudbank-reference:workload:credit-score-service",
         "depth": 1,
     },
@@ -280,8 +280,8 @@ OPERATOR_PROBLEMS = [
     {
         "id": "cloudbank-credit-decision",
         "company_id": "cloudbank-reference",
-        "name": "Credit decision services",
-        "description": "Define equivalence for nondeterministic, time-sensitive, secured, and operational service behavior.",
+        "name": "Credit decision and AI services",
+        "description": "Govern identity-bound synthetic scoring and fail-closed model interaction without claiming bureau or model quality equivalence.",
         "workload_ids": ["cloudbank-reference:workload:credit-score-service"],
     },
 ]
@@ -382,7 +382,10 @@ OPERATOR_WORKLOADS = [
         "problem_id": "cloudbank-credit-decision",
         "perspective_id": "cloudbank-credit-score",
         "recommended_scope": "database",
-        "description": "Database-light service proving that API, security, time, nondeterminism, and operations remain in scope.",
+        "description": "MS #64 replaces the random score demo with subject-bound synthetic evidence and adds distinct-audience Chatbot input, output, rate-limit, failure, and egress controls.",
+        "target_dialect": "postgresql-16",
+        "target_status": "eight-service edge and AI boundary ready · operator receipt required",
+        "factory_artifact": "factory/cloudbank/edge-ai/readiness.receipt.json",
     },
 ]
 

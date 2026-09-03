@@ -1,0 +1,61 @@
+{
+  "content_sha256": "d9f15e024d74e630403308d776bc25928e575fbe756bc835befd963ae756f79f",
+  "contract_type": "lightyear-cloudbank-edge-ai-source",
+  "release": "0.64.0",
+  "schema_version": "1.0",
+  "source": {
+    "commit": "4f41b16d00c45503f691836fee8138010c969e86",
+    "root_tree": "6aa92e89c783f123c4da8d7ae18108004a4f4a99",
+    "subtree": "cloudbank-v5",
+    "subtree_tree": "bd918386209f284a1ed31802555740eb34b75348"
+  },
+  "source_bindings": [
+    {
+      "path": "chatbot/pom.xml",
+      "sha256": "df1ddc7455eed43a1c3de81a43d3099734f39d41f00defdf747673f3de26292f"
+    },
+    {
+      "path": "chatbot/src/main/java/com/example/chatbot/ChatbotApplication.java",
+      "sha256": "19c5036a178ed60bb723eabe5122d8433d16918f0c9462a13a0b08c32ba3c47b"
+    },
+    {
+      "path": "chatbot/src/main/java/com/example/chatbot/controller/ChatController.java",
+      "sha256": "d9c86b21e23dd47954a180589833c190f8fed8483463caa2afd8cc6cee2079c1"
+    },
+    {
+      "path": "chatbot/src/main/resources/application.yaml",
+      "sha256": "b11066c83bc85d388ecb55ba6a77dfcb678907e903412273210c6f34c6f401b9"
+    },
+    {
+      "path": "chatbot/src/test/java/com/example/chatbot/ChatbotApplicationTest.java",
+      "sha256": "3409abe2cc5ea5115dc03ec9ab13d79bfa2bba61d7acf8e644b889413c3dcbc1"
+    },
+    {
+      "path": "creditscore/pom.xml",
+      "sha256": "204bfb6d11c83e794a90daff2aeac48fbbcdd194fec4b63187c23ff6ddf18b6e"
+    },
+    {
+      "path": "creditscore/src/main/java/com/example/creditscore/CreditscoreApplication.java",
+      "sha256": "590057cf3868b7dfb639204cb146b6539383be3b3fb5d9725a184f54210a893c"
+    },
+    {
+      "path": "creditscore/src/main/java/com/example/creditscore/controller/CreditScoreController.java",
+      "sha256": "134de61504c2d087c41462393cbe2e98f02343f19694049fe1c5af94865b0e66"
+    },
+    {
+      "path": "creditscore/src/main/resources/application.yaml",
+      "sha256": "4475f51ef4abd3ee4b3368e9148581a0d970ff9aaf69a2eadde22ba867de08ff"
+    },
+    {
+      "path": "creditscore/src/test/java/com/example/creditscore/CreditscoreApplicationTests.java",
+      "sha256": "a83870a5fabf67e73d393304325378870ed7b28476375c4a7d8772f0da7914af"
+    }
+  ],
+  "source_semantics": {
+    "chatbot": "oauth-scoped-ollama-chat-with-in-process-basic-guardrails",
+    "creditscore": "unauthenticated-random-500-through-899-demo-score",
+    "database_dependency": false,
+    "model_quality_baseline": false,
+    "production_bureau_integration": false
+  }
+}

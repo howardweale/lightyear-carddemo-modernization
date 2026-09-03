@@ -56,5 +56,9 @@ script is undocumented, and that every POSIX entry point has a PowerShell twin.
 - `./cloudbank-checks-messaging.sh verify` checks the MS #63 durable Checks deposit/clearance queue,
   ordering, idempotency, claim, redelivery, retry, dead-letter, packaging, and false production
   claims; `run` additionally requires the signed MS #62 receipt produced with the same key.
+- `./cloudbank-edge-ai.sh verify` checks the MS #64 deterministic synthetic Credit Score and
+  bounded Chatbot application contracts; `run` additionally requires signed MS #57 and MS #63
+  receipts produced with the same key, packages all eight CloudBank deployables, and executes the
+  generated Authorization, Checks, Test Runner, Credit Score, and Chatbot target workcells.
 
 See `scripts.catalog.json` for the exact purpose, role, and verification owner of all entry points.

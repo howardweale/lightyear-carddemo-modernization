@@ -329,11 +329,17 @@ class CloudBankPlatformQualificationTests(unittest.TestCase):
     def test_cloud_build_prerequisite_chain_is_secret_backed_and_minimized(self) -> None:
         gke = ROOT / "factory/cloudbank/platform-qualification/gke"
         cloudbuild = (gke / "cloudbuild-prerequisite-chain.yaml").read_text()
+        evidence_runner = (gke / "Dockerfile.evidence-runner").read_text()
         runner = (gke / "run-prerequisite-chain.sh").read_text()
         submit = (gke / "submit-prerequisite-chain.sh").read_text()
 
         self.assertIn("secretEnv:", cloudbuild)
         self.assertIn("cloudbank-ms67-evidence-key", submit)
+        self.assertIn("openjdk21-jdk", evidence_runner)
+        self.assertIn("JAVA_HOME=/usr/lib/jvm/java-21-openjdk", evidence_runner)
+        self.assertIn('test -x "${JAVA_HOME}/bin/javac"', evidence_runner)
+        self.assertIn("javac -version", evidence_runner)
+        self.assertIn("mvn -version", evidence_runner)
         service_account_name = next(
             line.split('"', 2)[1]
             for line in submit.splitlines()

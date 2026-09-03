@@ -3,6 +3,11 @@ FROM ${BASE_IMAGE}
 
 USER root
 
+ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk \
+    PATH=/usr/lib/jvm/java-21-openjdk/bin:${PATH} \
+    PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
 RUN apk add --no-cache \
       bash \
       coreutils \
@@ -10,10 +15,11 @@ RUN apk add --no-cache \
       git \
       jq \
       maven \
+      openjdk21-jdk \
       openssl \
-      python3
-
-ENV PYTHONDONTWRITEBYTECODE=1 \
-    PYTHONUNBUFFERED=1
+      python3 \
+    && test -x "${JAVA_HOME}/bin/javac" \
+    && javac -version \
+    && mvn -version
 
 ENTRYPOINT ["/bin/bash"]

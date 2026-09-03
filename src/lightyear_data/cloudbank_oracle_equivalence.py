@@ -86,6 +86,19 @@ SAFE_FAILURE_PHASES = {
     "test",
     "maven-command",
 }
+MAX_DATABASE_ERROR_CODES = 8
+MAX_LIQUIBASE_CHANGESETS = 8
+SAFE_ORACLE_ERROR_CODE = re.compile(r"\bORA-[0-9]{5}\b")
+SAFE_CHANGESET_ID = re.compile(r"^[A-Za-z0-9_.-]{1,80}$")
+SAFE_CHANGELOG_FILES = {
+    "db/changelog/table.sql",
+    "db/changelog/data.sql",
+    "db/changelog/txeventq.sql",
+}
+LIQUIBASE_CHANGESET_REF = re.compile(
+    r"(?P<file>db/changelog/(?:table|data|txeventq)\.sql)"
+    r"::(?P<id>[A-Za-z0-9_.-]{1,80})::[A-Za-z0-9_.-]{1,80}"
+)
 
 
 def _sha256(path: Path) -> str:
@@ -350,6 +363,64 @@ def _failure_phase(result: subprocess.CompletedProcess[str], reports: int) -> st
     return "maven-command"
 
 
+def _safe_database_diagnostics(
+    root: ET.Element,
+) -> tuple[list[str], list[dict[str, str]]]:
+    codes: set[str] = set()
+    changesets: set[tuple[str, str]] = set()
+    for element in root.findall(".//failure") + root.findall(".//error"):
+        text = element.attrib.get("message", "") + "\n" + "".join(element.itertext())
+        codes.update(SAFE_ORACLE_ERROR_CODE.findall(text))
+        for match in LIQUIBASE_CHANGESET_REF.finditer(text):
+            file_name = match.group("file")
+            changeset_id = match.group("id")
+            if (
+                file_name in SAFE_CHANGELOG_FILES
+                and SAFE_CHANGESET_ID.fullmatch(changeset_id)
+            ):
+                changesets.add((file_name, changeset_id))
+    return (
+        sorted(codes)[:MAX_DATABASE_ERROR_CODES],
+        [
+            {"file": file_name, "id": changeset_id}
+            for file_name, changeset_id in sorted(changesets)[:MAX_LIQUIBASE_CHANGESETS]
+        ],
+    )
+
+
+def _oracle_identity_login_checks(
+    name: str,
+    run: Callable[..., subprocess.CompletedProcess[str]],
+) -> dict[str, bool]:
+    commands = {
+        "application": (
+            'sqlplus -L -s "$APP_USER"/"$APP_USER_PASSWORD"'
+            '@//localhost:1521/FREEPDB1'
+        ),
+        "migration": (
+            'sqlplus -L -s system/"$ORACLE_PASSWORD"'
+            '@//localhost:1521/FREEPDB1'
+        ),
+    }
+    checks: dict[str, bool] = {}
+    for role, command in commands.items():
+        marker = f"CLOUDBANK_ORACLE_{role.upper()}_LOGIN_OK"
+        result = run(
+            ["docker", "exec", "-i", name, "bash", "-lc", command],
+            input=(
+                "WHENEVER OSERROR EXIT FAILURE\n"
+                "WHENEVER SQLERROR EXIT SQL.SQLCODE\n"
+                "SET HEADING OFF FEEDBACK OFF PAGESIZE 0 VERIFY OFF ECHO OFF\n"
+                f"SELECT '{marker}' FROM DUAL;\n"
+                "EXIT\n"
+            ),
+            timeout=20,
+        )
+        markers = {line.strip() for line in result.stdout.splitlines()}
+        checks[role] = result.returncode == 0 and marker in markers
+    return checks
+
+
 def _test_result(
     workspace: Path,
     lane: str,
@@ -385,6 +456,8 @@ def _test_result(
     totals = {"tests": 0, "failures": 0, "errors": 0, "skipped": 0}
     failed_tests: list[dict[str, str]] = []
     exception_types: set[str] = set()
+    database_error_codes: set[str] = set()
+    liquibase_changesets: set[tuple[str, str]] = set()
     report_text = ""
     present = 0
     for report in reports:
@@ -395,6 +468,11 @@ def _test_result(
         report_text += text
         root = ET.fromstring(text)
         exception_types.update(_surefire_exception_types(root))
+        report_codes, report_changesets = _safe_database_diagnostics(root)
+        database_error_codes.update(report_codes)
+        liquibase_changesets.update(
+            (item["file"], item["id"]) for item in report_changesets
+        )
         for name in totals:
             totals[name] += int(root.attrib.get(name, "0"))
         for test_case in root.findall(".//testcase"):
@@ -433,6 +511,15 @@ def _test_result(
         "test_reports_present": present,
         "failed_tests": failed_tests,
         "exception_types": sorted(exception_types)[:MAX_EXCEPTION_TYPES],
+        "database_error_codes": sorted(database_error_codes)[
+            :MAX_DATABASE_ERROR_CODES
+        ],
+        "liquibase_changesets": [
+            {"file": file_name, "id": changeset_id}
+            for file_name, changeset_id in sorted(liquibase_changesets)[
+                :MAX_LIQUIBASE_CHANGESETS
+            ]
+        ],
         "failure_phase": None if passed else _failure_phase(result, present),
         "stdout_sha256": _sha256_text(result.stdout),
         "stderr_sha256": _sha256_text(result.stderr),
@@ -484,7 +571,10 @@ def _oracle_lane(
             "SPRING_CLOUD_DISCOVERY_ENABLED": "false",
             "SPRING_CLOUD_CONFIG_ENABLED": "false",
         }
-        return _test_result(workspace, "oracle", image_id, env, run)
+        identity_login_checks = _oracle_identity_login_checks(name, run)
+        result = _test_result(workspace, "oracle", image_id, env, run)
+        result["identity_login_checks"] = identity_login_checks
+        return result
     finally:
         password = ""
         run(["docker", "rm", "-f", name], timeout=30)
@@ -586,6 +676,42 @@ def _lane_failure_diagnostic(
             and SAFE_EXCEPTION_TYPE.fullmatch(value)
         }
     )[:MAX_EXCEPTION_TYPES]
+    supplied_codes = lane.get("database_error_codes", [])
+    database_error_codes = (
+        sorted(
+            {
+                value
+                for value in supplied_codes
+                if isinstance(value, str)
+                and SAFE_ORACLE_ERROR_CODE.fullmatch(value)
+            }
+        )[:MAX_DATABASE_ERROR_CODES]
+        if isinstance(supplied_codes, list)
+        else []
+    )
+    supplied_changesets = lane.get("liquibase_changesets", [])
+    changesets: set[tuple[str, str]] = set()
+    if isinstance(supplied_changesets, list):
+        for item in supplied_changesets:
+            if not isinstance(item, Mapping):
+                continue
+            file_name = item.get("file")
+            changeset_id = item.get("id")
+            if (
+                isinstance(file_name, str)
+                and file_name in SAFE_CHANGELOG_FILES
+                and isinstance(changeset_id, str)
+                and SAFE_CHANGESET_ID.fullmatch(changeset_id)
+            ):
+                changesets.add((file_name, changeset_id))
+    supplied_logins = lane.get("identity_login_checks", {})
+    identity_login_checks = {
+        role: supplied_logins.get(role)
+        if isinstance(supplied_logins, Mapping)
+        and isinstance(supplied_logins.get(role), bool)
+        else None
+        for role in ("application", "migration")
+    }
     return {
         "lane_match": lane.get("lane") == expected_lane,
         "status": status if status in {"passed", "failed"} else "invalid",
@@ -604,6 +730,14 @@ def _lane_failure_diagnostic(
             else "invalid"
         ),
         "exception_types": exception_types,
+        "database_error_codes": database_error_codes,
+        "liquibase_changesets": [
+            {"file": file_name, "id": changeset_id}
+            for file_name, changeset_id in sorted(changesets)[
+                :MAX_LIQUIBASE_CHANGESETS
+            ]
+        ],
+        "identity_login_checks": identity_login_checks,
         "database_image_match": (
             lane.get("database_image_id_sha256") == expected_image_id
         ),

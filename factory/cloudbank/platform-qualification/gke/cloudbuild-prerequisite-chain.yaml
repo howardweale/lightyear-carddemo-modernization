@@ -1,0 +1,49 @@
+steps:
+- id: build-evidence-runner
+  name: gcr.io/cloud-builders/docker
+  args:
+  - build
+  - --build-arg
+  - BASE_IMAGE=${_JAVA_BASE_IMAGE}
+  - --tag
+  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/ms67-evidence-runner:$BUILD_ID
+  - --file
+  - factory/cloudbank/platform-qualification/gke/Dockerfile.evidence-runner
+  - .
+- id: push-evidence-runner
+  name: gcr.io/cloud-builders/docker
+  waitFor:
+  - build-evidence-runner
+  args:
+  - push
+  - ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/ms67-evidence-runner:$BUILD_ID
+- id: run-ms54-ms64-chain
+  name: ${_REGION}-docker.pkg.dev/$PROJECT_ID/${_ARTIFACT_REPOSITORY}/ms67-evidence-runner:$BUILD_ID
+  waitFor:
+  - push-evidence-runner
+  entrypoint: /bin/bash
+  secretEnv:
+  - LIGHTYEAR_CLOUDBANK_BASELINE_EVIDENCE_KEY
+  args:
+  - -ceu
+  - |
+    factory/cloudbank/platform-qualification/gke/run-prerequisite-chain.sh \
+      /workspace \
+      /workspace/ms67-upstream \
+      /workspace/ms67-chain-work \
+      /workspace/ms67-chain-export \
+      "${_SIGNER}"
+availableSecrets:
+  secretManager:
+  - versionName: projects/$PROJECT_ID/secrets/${_EVIDENCE_SECRET}/versions/latest
+    env: LIGHTYEAR_CLOUDBANK_BASELINE_EVIDENCE_KEY
+artifacts:
+  objects:
+    location: gs://${_EVIDENCE_BUCKET}/prerequisite-chain/$BUILD_ID/
+    paths:
+    - ms67-chain-export/**
+options:
+  machineType: E2_HIGHCPU_8
+  diskSizeGb: '100'
+  logging: CLOUD_LOGGING_ONLY
+timeout: 7200s

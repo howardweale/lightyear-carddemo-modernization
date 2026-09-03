@@ -1,0 +1,19 @@
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+
+USER root
+
+RUN apk add --no-cache \
+      bash \
+      coreutils \
+      docker-cli \
+      git \
+      jq \
+      maven \
+      openssl \
+      python3
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+ENTRYPOINT ["/bin/bash"]

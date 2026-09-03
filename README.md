@@ -4,7 +4,26 @@
 
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.65.0 — CloudBank Production-Like Deployment and Cutover Rehearsal**
+Release: **v0.66.0 — CloudBank Whole-Application Dual-Lane Equivalence**
+
+v0.66 closes the bounded whole-application comparison left open by MS #61–#65. It chains the
+signed MS #61 native Oracle/PostgreSQL core comparison to the signed MS #64 eight-service target,
+then admits only a matched pair of signed runtime observations in which all eight source services
+run on Oracle and all eight generated services run on PostgreSQL.
+
+```bash
+./cloudbank-whole-application-equivalence.sh verify
+./cloudbank-whole-application-equivalence.sh verify-source /path/to/cloudbank-upstream
+```
+
+Both isolated lanes must start and restart every service, finish ready, and produce the exact same
+normalized results for 18 business, negative, messaging, dependency-failure, concurrency, targeted
+restart, and full-stack recovery scenarios. Oracle AQ versus the PostgreSQL work queue and MicroTx
+LRA versus an atomic PostgreSQL transaction remain intentional internal changes. The committed
+receipt proves gate readiness only; production infrastructure qualification is MS #67 and customer
+production-readiness certification is MS #68.
+
+Previous release: **v0.65.0 — CloudBank Production-Like Deployment and Cutover Rehearsal**
 
 v0.65 takes the complete MS #64 eight-service target to the operational admission boundary. It
 binds one immutable container-image digest per service, renders a site-specific hardened Kubernetes

@@ -1,0 +1,92 @@
+{
+  "chatbot_comparison": "bounded-response-contract-not-model-answer",
+  "content_sha256": "27afe95a18beba97389b2c1775d57ff151eefad1259d3d27e43e7fcf14ee4f66",
+  "contract_type": "lightyear-cloudbank-whole-application-journeys",
+  "coverage": {
+    "business_journeys": true,
+    "concurrency": true,
+    "full_stack_restart": true,
+    "negative_paths": true,
+    "targeted_restarts": true
+  },
+  "credit_score_comparison": "declared-range-contract-not-exact-value",
+  "normalized_marker": "eight-services-ready:all-ready;authorization-token-issued:token-issued;unauthenticated-request-rejected:401;customer-owner-read:owner-visible;account-balance-read:balance-visible;transfer-success-conserves-value:conserved;transfer-invalid-no-mutation:400-no-mutation;transfer-insufficient-funds-no-mutation:rejected-no-mutation;check-deposit-applied-once:deposit-once;check-clearance-applied-once:clearance-once;duplicate-message-suppressed:duplicate-suppressed;credit-score-contract-served:score-in-declared-range;chatbot-boundary-served:bounded-response;account-restart-preserves-state:state-preserved;checks-restart-redelivers-inflight:redelivered-once;transfer-dependency-failure-recovers:restored;concurrent-opposite-transfers-conserve-value:conserved;full-stack-restart-restores-journey:journey-restored",
+  "normalized_observation_sha256": "71458ecf2e1b2ae89f1dad763d4a8898899e19834c7744f3683733ccaf9a2bc9",
+  "release": "0.66.0",
+  "scenario_count": 18,
+  "scenarios": [
+    {
+      "id": "eight-services-ready",
+      "normalized_result": "all-ready"
+    },
+    {
+      "id": "authorization-token-issued",
+      "normalized_result": "token-issued"
+    },
+    {
+      "id": "unauthenticated-request-rejected",
+      "normalized_result": "401"
+    },
+    {
+      "id": "customer-owner-read",
+      "normalized_result": "owner-visible"
+    },
+    {
+      "id": "account-balance-read",
+      "normalized_result": "balance-visible"
+    },
+    {
+      "id": "transfer-success-conserves-value",
+      "normalized_result": "conserved"
+    },
+    {
+      "id": "transfer-invalid-no-mutation",
+      "normalized_result": "400-no-mutation"
+    },
+    {
+      "id": "transfer-insufficient-funds-no-mutation",
+      "normalized_result": "rejected-no-mutation"
+    },
+    {
+      "id": "check-deposit-applied-once",
+      "normalized_result": "deposit-once"
+    },
+    {
+      "id": "check-clearance-applied-once",
+      "normalized_result": "clearance-once"
+    },
+    {
+      "id": "duplicate-message-suppressed",
+      "normalized_result": "duplicate-suppressed"
+    },
+    {
+      "id": "credit-score-contract-served",
+      "normalized_result": "score-in-declared-range"
+    },
+    {
+      "id": "chatbot-boundary-served",
+      "normalized_result": "bounded-response"
+    },
+    {
+      "id": "account-restart-preserves-state",
+      "normalized_result": "state-preserved"
+    },
+    {
+      "id": "checks-restart-redelivers-inflight",
+      "normalized_result": "redelivered-once"
+    },
+    {
+      "id": "transfer-dependency-failure-recovers",
+      "normalized_result": "restored"
+    },
+    {
+      "id": "concurrent-opposite-transfers-conserve-value",
+      "normalized_result": "conserved"
+    },
+    {
+      "id": "full-stack-restart-restores-journey",
+      "normalized_result": "journey-restored"
+    }
+  ],
+  "schema_version": "1.0"
+}

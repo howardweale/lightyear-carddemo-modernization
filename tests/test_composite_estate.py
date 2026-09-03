@@ -213,6 +213,14 @@ class CompositeEstateTests(unittest.TestCase):
                 "factory/cloudbank/production-readiness/readiness.receipt.json",
                 workload["production_readiness_artifact"],
             )
+            self.assertEqual(
+                "dual-lane whole-application equivalence ready · operator evidence required",
+                workload["whole_application_status"],
+            )
+            self.assertEqual(
+                "factory/cloudbank/whole-application-equivalence/readiness.receipt.json",
+                workload["whole_application_artifact"],
+            )
 
     def test_runtime_and_audit_remain_bound_to_canonical_identity(self) -> None:
         index = GraphExplorerIndex(self.composite)

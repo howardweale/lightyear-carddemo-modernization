@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schemas/cloudbank/whole-application-equivalence-execution-receipt.schema.json",
+  "title": "CloudBank bounded whole-application equivalence execution receipt",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "receipt_type",
+    "release",
+    "run_id",
+    "comparison_run_id",
+    "signer",
+    "bindings",
+    "source_ms61_receipt_sha256",
+    "source_ms64_receipt_sha256",
+    "oracle_image_id_sha256",
+    "postgresql_image_id_sha256",
+    "oracle_observation_sha256",
+    "postgresql_observation_sha256",
+    "normalized_observation_sha256",
+    "services",
+    "scenario_count",
+    "status",
+    "all_eight_services_observed_in_both_lanes",
+    "bounded_whole_application_equivalent",
+    "whole_application_equivalent",
+    "exact_internal_implementation_equivalent",
+    "real_credit_decision_equivalent",
+    "model_quality_qualified",
+    "migration_complete",
+    "production_deployed",
+    "production_ready",
+    "security",
+    "content_sha256",
+    "signature"
+  ],
+  "properties": {
+    "receipt_type": {"const": "lightyear-cloudbank-whole-application-equivalence-execution"},
+    "release": {"const": "0.66.0"},
+    "scenario_count": {"const": 18},
+    "status": {"const": "passed-bounded-whole-application-equivalence"},
+    "all_eight_services_observed_in_both_lanes": {"const": true},
+    "bounded_whole_application_equivalent": {"const": true},
+    "whole_application_equivalent": {"const": true},
+    "exact_internal_implementation_equivalent": {"const": false},
+    "real_credit_decision_equivalent": {"const": false},
+    "model_quality_qualified": {"const": false},
+    "migration_complete": {"const": false},
+    "production_deployed": {"const": false},
+    "production_ready": {"const": false},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "signature": {
+      "type": "object",
+      "required": ["algorithm", "signer", "value"],
+      "properties": {
+        "algorithm": {"const": "hmac-sha256"},
+        "value": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

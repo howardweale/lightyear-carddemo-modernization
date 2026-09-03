@@ -1,6 +1,6 @@
 {
   "catalog_type": "lightyear-entrypoint-catalog",
-  "content_sha256": "32914b3196938206627e6ea7bcf989b127345cd2b4e64b6bf40c56deb3e61380",
+  "content_sha256": "38ed0d79019006af8e4fa2b0425e2d99418abf9f69b6926dbf23fe7528a926a2",
   "entries": [
     {"name": "asm-readiness", "purpose": "Build or verify HLASM readiness evidence.", "role": "release-gated", "verification": "verify.sh and verify.ps1"},
     {"name": "audit-control-tower", "purpose": "Build or verify the audit evidence projection.", "role": "release-gated", "verification": "verify.sh and verify.ps1"},
@@ -17,6 +17,7 @@
     {"name": "cloudbank-checks-messaging", "purpose": "Build, verify, materialize, or execute the CloudBank Checks PostgreSQL durable-messaging replacement gate.", "role": "release-gated", "verification": "verify.sh, verify.ps1, and an admitted signed MS #62 receipt for native queue execution"},
     {"name": "cloudbank-production-oauth", "purpose": "Build, verify, materialize, or execute the CloudBank Authorization, Account, and Transfer production OAuth application-boundary gate.", "role": "release-gated", "verification": "verify.sh, verify.ps1, and an admitted signed MS #61 receipt for native JWT and restart execution"},
     {"name": "cloudbank-production-readiness", "purpose": "Build, verify, render, or admit the CloudBank eight-service production-like deployment and cutover rehearsal.", "role": "release-gated", "verification": "verify.sh, verify.ps1, and an admitted signed MS #64 receipt plus signed non-production operator observation"},
+    {"name": "cloudbank-whole-application-equivalence", "purpose": "Build, verify, materialize, or admit the CloudBank eight-service Oracle/PostgreSQL comparison.", "role": "release-gated", "verification": "verify.sh, verify.ps1, and admitted signed MS #61/MS #64 receipts plus paired signed lane observations"},
     {"name": "cloudbank-reference-estate", "purpose": "Build or verify the CloudBank modern Oracle reference-estate projection.", "role": "release-gated", "verification": "verify.sh and verify.ps1"},
     {"name": "cobol-qualification", "purpose": "Build or verify COBOL qualification evidence.", "role": "release-gated", "verification": "verify.sh and verify.ps1"},
     {"name": "pli-qualification", "purpose": "Build or verify bounded PL/I qualification evidence.", "role": "release-gated", "verification": "verify.sh and verify.ps1"},

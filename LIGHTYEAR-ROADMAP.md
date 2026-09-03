@@ -48,6 +48,7 @@ production-qualified.
 | MS #63 | CloudBank Checks Durable Messaging | PostgreSQL queue target and contract complete; signed native messaging receipt remains operator-held evidence |
 | MS #64 | CloudBank Credit Decision and AI Boundary | Eight-service target and edge-control contract complete; signed native application receipt remains operator-held evidence |
 | MS #65 | CloudBank Production-Like Deployment and Cutover Rehearsal | Deployment and rehearsal gate complete; signed non-production operator observation remains required |
+| MS #66 | CloudBank Whole-Application Dual-Lane Equivalence | Eight-service comparison gate complete; paired signed Oracle and PostgreSQL observations remain operator-held evidence |
 
 The v0.35.0 stored-logic qualification core is retained as supporting MS #34 evidence. It does not
 replace the planned DB2 milestone.
@@ -648,3 +649,27 @@ Native CDC, production data, customer change authorization, enterprise identity 
 native Oracle AQ equivalence, real credit decisions, model-answer quality, whole-application
 Oracle/PostgreSQL equivalence, migration completion, production deployment, and production readiness
 remain false.
+
+## MS #66 — CloudBank Whole-Application Dual-Lane Equivalence
+
+MS #66 joins the signed MS #61 native Oracle/PostgreSQL core comparison to the signed MS #64
+complete eight-service target. It requires isolated source and target lanes bound to the same
+comparison run, evidence key, source identity, database images, and exact contracts. The source lane
+uses native Oracle, Transactional Event Queue, and MicroTx LRA; the target lane uses native
+PostgreSQL, the durable work queue, and atomic transaction replacement.
+
+Both lanes must start Authorization, Customer, Account, Transfer, Checks, Test Runner, Credit Score,
+and Chatbot, restart the complete stack, and finish every service ready. Account, Transfer, and
+Checks require additional targeted restarts. Eighteen identical normalized scenarios cover OAuth,
+business reads, successful and rejected transfers, once-only Checks processing, duplicate
+suppression, Credit Score and Chatbot service boundaries, dependency failure, concurrency, targeted
+restart, and full-stack recovery.
+
+The two operator observations are separately signed and content-addressed. Partial service sets,
+missing restarts, unsafe evidence, wrong receipt or image bindings, changed scenarios, and differing
+normalized results fail closed. A passing execution receipt makes only bounded whole-application
+business equivalence true for the declared synthetic scenarios. Oracle AQ and MicroTx internals are
+not described as identical to their PostgreSQL replacements; real credit decisions, model-answer
+quality, production data, native CDC, customer infrastructure and IdP, migration completion,
+production deployment, and production readiness remain false. MS #67 owns platform qualification
+and MS #68 owns customer production-readiness certification.

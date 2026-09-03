@@ -24,6 +24,7 @@ from lightyear_data.cloudbank_oracle_equivalence import (
     execute_equivalence,
     execution_plan,
     _failure_phase,
+    _oracle_lane,
     _test_result,
     materialize_workspaces,
     observation_contract,
@@ -85,6 +86,73 @@ def passed_lane(name: str, image_id: str) -> dict[str, object]:
 
 
 class CloudBankOracleEquivalenceTests(unittest.TestCase):
+    def test_oracle_lane_separates_application_and_migration_identities(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            workspace = Path(directory)
+            captured: dict[str, object] = {}
+
+            def fake_run(
+                argv: list[str], **kwargs: object
+            ) -> subprocess.CompletedProcess[str]:
+                if argv[:3] == ["docker", "image", "inspect"]:
+                    return subprocess.CompletedProcess(argv, 0, f"sha256:{HEX_B}\n", "")
+                if argv[:2] == ["docker", "run"]:
+                    return subprocess.CompletedProcess(argv, 0, "container-id\n", "")
+                if argv[:3] == ["docker", "inspect", "--format"]:
+                    state = {"Status": "running", "OOMKilled": False}
+                    return subprocess.CompletedProcess(argv, 0, json.dumps(state), "")
+                if argv[:3] == ["docker", "exec", "-i"]:
+                    return subprocess.CompletedProcess(
+                        argv, 0, "CLOUDBANK_ORACLE_READY\n", ""
+                    )
+                if argv[:2] == ["docker", "port"]:
+                    return subprocess.CompletedProcess(
+                        argv, 0, "127.0.0.1:11521\n", ""
+                    )
+                if argv[0] == "mvn":
+                    captured["env"] = kwargs["env"]
+                    reports = (
+                        (
+                            "account/target/surefire-reports/"
+                            "TEST-com.example.accounts.OracleAccountEquivalenceTests.xml",
+                            4,
+                        ),
+                        (
+                            "transfer/target/surefire-reports/"
+                            "TEST-com.example.transfer.OracleTransferEquivalenceTests.xml",
+                            3,
+                        ),
+                    )
+                    for relative, tests in reports:
+                        report = workspace / relative
+                        report.parent.mkdir(parents=True)
+                        report.write_text(
+                            f'<testsuite tests="{tests}" failures="0" '
+                            'errors="0" skipped="0"/>',
+                            encoding="utf-8",
+                        )
+                    marker = (
+                        "CLOUDBANK_EQUIVALENCE_CONTRACT="
+                        "account-success:conserved;invalid:no-mutation;"
+                        "funds:no-mutation;failure:restored;transfer-invalid:400;"
+                        "transfer-auth:403;transfer-success:200\n"
+                    )
+                    return subprocess.CompletedProcess(argv, 0, marker, "")
+                if argv[:2] == ["docker", "rm"]:
+                    return subprocess.CompletedProcess(argv, 0, "", "")
+                return subprocess.CompletedProcess(argv, 1, "", "unexpected command")
+
+            result = _oracle_lane(workspace, HEX_B, fake_run, lambda _: None)
+            self.assertEqual("passed", result["status"])
+            env = captured["env"]
+            self.assertIsInstance(env, dict)
+            self.assertEqual("ACCOUNT", env["SPRING_DATASOURCE_USERNAME"])
+            self.assertEqual("system", env["LIQUIBASE_DATASOURCE_USERNAME"])
+            self.assertEqual(
+                env["SPRING_DATASOURCE_PASSWORD"],
+                env["LIQUIBASE_DATASOURCE_PASSWORD"],
+            )
+
     def test_surefire_report_takes_precedence_and_exposes_nested_types_only(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
             workspace = Path(directory)

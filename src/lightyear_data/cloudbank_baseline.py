@@ -2,8 +2,10 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
 import re
 import subprocess
+import sys
 import xml.etree.ElementTree as ET
 from pathlib import Path
 from typing import Any, Iterable, Mapping, Sequence
@@ -341,8 +343,49 @@ def _sha256_bytes(value: bytes) -> str:
     return hashlib.sha256(value).hexdigest()
 
 
-def _command_result(argv: Sequence[str], cwd: Path) -> dict[str, Any]:
+_FAILURE_DIAGNOSTIC_LIMIT = 8_000
+_FAILURE_SECRET_ENV = ("LIGHTYEAR_CLOUDBANK_BASELINE_EVIDENCE_KEY",)
+
+
+def _redacted_failure_tail(stdout: bytes, stderr: bytes) -> str:
+    combined = b"\n".join(part for part in (stdout, stderr) if part).decode(
+        "utf-8", errors="replace"
+    )
+    for name in _FAILURE_SECRET_ENV:
+        value = os.environ.get(name, "")
+        if value:
+            combined = combined.replace(value, "[REDACTED]")
+    combined = re.sub(
+        r"(?i)\b((?:password|passwd|token|secret|api[_-]?key)\s*[=:]\s*)[^\s]+",
+        r"\1[REDACTED]",
+        combined,
+    )
+    combined = re.sub(
+        r"(https?://)[^/\s:@]+:[^/\s@]+@",
+        r"\1[REDACTED]@",
+        combined,
+    )
+    return combined[-_FAILURE_DIAGNOSTIC_LIMIT:]
+
+
+def _command_result(
+    argv: Sequence[str], cwd: Path, diagnostic_step: str = "unidentified"
+) -> dict[str, Any]:
     result = subprocess.run(list(argv), cwd=cwd, check=False, capture_output=True)
+    if result.returncode:
+        diagnostic = _redacted_failure_tail(result.stdout, result.stderr)
+        print(
+            f"LIGHTYEAR_COMMAND_FAILURE step={diagnostic_step} exit_code={result.returncode}",
+            file=sys.stderr,
+        )
+        if diagnostic:
+            print(
+                f"LIGHTYEAR_COMMAND_OUTPUT_TAIL_BEGIN "
+                f"max_chars={_FAILURE_DIAGNOSTIC_LIMIT}",
+                file=sys.stderr,
+            )
+            print(diagnostic, file=sys.stderr)
+            print("LIGHTYEAR_COMMAND_OUTPUT_TAIL_END", file=sys.stderr)
     return {
         "argv_sha256": content_hash({"argv": list(argv)}),
         "exit_code": result.returncode,
@@ -382,7 +425,7 @@ def execute_source_build(source_root: Path, key: str, signer: str) -> dict[str, 
         raise ValueError("cloudbank-source-build-requires-maven-3.6-or-newer")
     plan = build_plan()
     subtree = source_root / PINNED_SUBTREE
-    results = [_command_result(step["argv"], subtree) for step in plan["steps"]]
+    results = [_command_result(step["argv"], subtree, step["id"]) for step in plan["steps"]]
     if any(item["exit_code"] != 0 for item in results):
         raise ValueError("cloudbank-source-build-command-failed")
     artifacts = []
@@ -459,7 +502,7 @@ def execute_oracle_runtime(
         raise ValueError("cloudbank-oracle-image-id-must-be-sha256")
     plan = oracle_runtime_plan()
     subtree = source_root / PINNED_SUBTREE
-    result = _command_result(plan["argv"], subtree)
+    result = _command_result(plan["argv"], subtree, "oracle-runtime-tests")
     if result["exit_code"]:
         raise ValueError("cloudbank-oracle-runtime-test-command-failed")
     totals = _surefire_totals(subtree / "azn-server/target/surefire-reports")

@@ -1,9 +1,14 @@
 from __future__ import annotations
 
 import copy
+import io
 import json
+import os
+import subprocess
 import unittest
+from contextlib import redirect_stderr
 from pathlib import Path
+from unittest.mock import patch
 
 from lightyear_data.cloudbank_baseline import (
     BUILD_RECEIPT_TYPE,
@@ -13,6 +18,7 @@ from lightyear_data.cloudbank_baseline import (
     PINNED_COMMIT,
     REACTOR_MODULES,
     UPSTREAM_IMAGE_BUILD_SERVICES,
+    _command_result,
     build_artifacts,
     build_plan,
     execution_contract,
@@ -119,6 +125,52 @@ class CloudBankExecutableBaselineTests(unittest.TestCase):
         self.assertEqual(21, plan["toolchain"]["java_major"])
         self.assertEqual("3.6.0", plan["toolchain"]["maven_minimum"])
         self.assertFalse(plan["claim_boundary"]["postgresql_mapping_complete"])
+
+    def test_failed_command_diagnostics_are_bounded_redacted_and_fail_only(self) -> None:
+        secret = "operator-held-evidence-secret"
+        failure = subprocess.CompletedProcess(
+            args=["mvn"],
+            returncode=1,
+            stdout=b"A" * 9_000 + b"\\npassword=visible\\n",
+            stderr=f"token=visible\\n{secret}".encode(),
+        )
+        diagnostic = io.StringIO()
+        with (
+            patch.dict(
+                os.environ,
+                {"LIGHTYEAR_CLOUDBANK_BASELINE_EVIDENCE_KEY": secret},
+            ),
+            patch(
+                "lightyear_data.cloudbank_baseline.subprocess.run",
+                return_value=failure,
+            ),
+            redirect_stderr(diagnostic),
+        ):
+            result = _command_result(["mvn"], ROOT, "install-buildtools")
+
+        output = diagnostic.getvalue()
+        self.assertEqual(1, result["exit_code"])
+        self.assertIn("step=install-buildtools", output)
+        self.assertIn("LIGHTYEAR_COMMAND_OUTPUT_TAIL_BEGIN", output)
+        self.assertNotIn(secret, output)
+        self.assertNotIn("password=visible", output)
+        self.assertNotIn("token=visible", output)
+        self.assertLessEqual(len(output), 8_300)
+
+        success = subprocess.CompletedProcess(
+            args=["mvn"], returncode=0, stdout=b"success", stderr=b""
+        )
+        diagnostic = io.StringIO()
+        with (
+            patch(
+                "lightyear_data.cloudbank_baseline.subprocess.run",
+                return_value=success,
+            ),
+            redirect_stderr(diagnostic),
+        ):
+            result = _command_result(["mvn"], ROOT, "install-buildtools")
+        self.assertEqual(0, result["exit_code"])
+        self.assertEqual("", diagnostic.getvalue())
 
     def test_oracle_runtime_is_bound_to_seven_real_upstream_tests(self) -> None:
         plan = oracle_runtime_plan()

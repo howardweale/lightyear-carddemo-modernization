@@ -24,6 +24,7 @@ from lightyear_data.cloudbank_dark_factory import (
     PATCHES,
     SHARED_CONTRACT_SHA256,
     CloudBankCustomerAgentSet,
+    _acceptance_diagnostic,
     _execute_oracle_lane,
     _execute_postgresql_lane,
     _maven_result,
@@ -202,6 +203,46 @@ class CloudBankDarkFactoryTests(unittest.TestCase):
                     (workspace.root / relative).read_bytes(),
                 )
         self.assertEqual(before, {path: (checkout / "cloudbank-v5" / path).read_bytes() for path in PATCHES})
+
+    def test_acceptance_diagnostic_is_minimized_and_excludes_untrusted_values(self) -> None:
+        factory = {
+            "status": "blocked-with-database_password=should-not-leak",
+            "attempts": 2,
+            "changed_paths": ["secret=should-not-leak"],
+        }
+        oracle = lane("oracle", HEX_A)
+        oracle.update(
+            {
+                "status": "failed",
+                "maven_exit_code": 1,
+                "shared_contract_sha256": None,
+                "raw_stdout": "password=should-not-leak",
+            }
+        )
+        diagnostic = _acceptance_diagnostic(
+            factory,
+            sorted(PATCHES),
+            oracle,
+            lane("postgresql", HEX_B),
+        )
+        self.assertEqual(
+            [
+                "changed-paths",
+                "factory-attempts",
+                "factory-status",
+                "oracle-contract",
+                "oracle-status",
+            ],
+            diagnostic["failed_checks"],
+        )
+        self.assertEqual("failed", diagnostic["oracle"]["status"])
+        self.assertEqual(1, diagnostic["oracle"]["maven_exit_code"])
+        self.assertFalse(diagnostic["raw_output_persisted"])
+        self.assertFalse(diagnostic["credentials_persisted"])
+        rendered = json.dumps(diagnostic, sort_keys=True)
+        self.assertNotIn("should-not-leak", rendered)
+        self.assertNotIn("raw_stdout", rendered)
+        self.assertNotIn("database_password", rendered)
 
     def test_shared_maven_evidence_requires_exact_marker_and_two_tests(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

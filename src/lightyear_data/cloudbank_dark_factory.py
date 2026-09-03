@@ -701,6 +701,59 @@ def _parse_lane_result(text: str) -> dict[str, Any]:
     return json.loads(matches[0])
 
 
+def _diagnostic_int(value: Any) -> int | None:
+    if isinstance(value, int) and not isinstance(value, bool) and -1 <= value <= 10_000:
+        return value
+    return None
+
+
+def _lane_acceptance_diagnostic(
+    lane: Mapping[str, Any], expected_lane: str
+) -> dict[str, Any]:
+    status = lane.get("status")
+    return {
+        "lane_match": lane.get("lane") == expected_lane,
+        "status": status if status in {"passed", "failed"} else "invalid",
+        "tests": _diagnostic_int(lane.get("tests")),
+        "failures": _diagnostic_int(lane.get("failures")),
+        "errors": _diagnostic_int(lane.get("errors")),
+        "skipped": _diagnostic_int(lane.get("skipped")),
+        "maven_exit_code": _diagnostic_int(lane.get("maven_exit_code")),
+        "shared_contract_match": lane.get("shared_contract_sha256") == SHARED_CONTRACT_SHA256,
+    }
+
+
+def _acceptance_diagnostic(
+    factory_receipt: Mapping[str, Any],
+    expected_paths: list[str],
+    source_lane: Mapping[str, Any],
+    target_lane: Mapping[str, Any],
+) -> dict[str, Any]:
+    checks = {
+        "factory-status": factory_receipt.get("status") == "passed",
+        "factory-attempts": factory_receipt.get("attempts") == 1,
+        "changed-paths": factory_receipt.get("changed_paths") == expected_paths,
+        "oracle-lane": source_lane.get("lane") == "oracle",
+        "postgresql-lane": target_lane.get("lane") == "postgresql",
+        "oracle-status": source_lane.get("status") == "passed",
+        "postgresql-status": target_lane.get("status") == "passed",
+        "oracle-contract": source_lane.get("shared_contract_sha256") == SHARED_CONTRACT_SHA256,
+        "postgresql-contract": target_lane.get("shared_contract_sha256") == SHARED_CONTRACT_SHA256,
+    }
+    return {
+        "failed_checks": sorted(name for name, passed in checks.items() if not passed),
+        "factory": {
+            "status_match": checks["factory-status"],
+            "attempts": _diagnostic_int(factory_receipt.get("attempts")),
+            "changed_paths_match": checks["changed-paths"],
+        },
+        "oracle": _lane_acceptance_diagnostic(source_lane, "oracle"),
+        "postgresql": _lane_acceptance_diagnostic(target_lane, "postgresql"),
+        "raw_output_persisted": False,
+        "credentials_persisted": False,
+    }
+
+
 def execute_dark_factory(
     project_root: Path,
     source_root: Path,
@@ -750,18 +803,19 @@ def execute_dark_factory(
         raise ValueError("cloudbank-dark-factory-dual-run-evidence-incomplete")
     source_lane, target_lane = reports
     expected_paths = sorted(PATCHES)
-    if (
-        factory_receipt.get("status") != "passed"
-        or factory_receipt.get("attempts") != 1
-        or factory_receipt.get("changed_paths") != expected_paths
-        or source_lane.get("lane") != "oracle"
-        or target_lane.get("lane") != "postgresql"
-        or source_lane.get("status") != "passed"
-        or target_lane.get("status") != "passed"
-        or source_lane.get("shared_contract_sha256") != SHARED_CONTRACT_SHA256
-        or target_lane.get("shared_contract_sha256") != SHARED_CONTRACT_SHA256
-    ):
-        raise ValueError("cloudbank-dark-factory-acceptance-failed")
+    diagnostic = _acceptance_diagnostic(
+        factory_receipt, expected_paths, source_lane, target_lane
+    )
+    if diagnostic["failed_checks"]:
+        print(
+            "CLOUDBANK_DARK_FACTORY_ACCEPTANCE_DIAGNOSTIC="
+            + json.dumps(diagnostic, sort_keys=True, separators=(",", ":")),
+            file=sys.stderr,
+        )
+        raise ValueError(
+            "cloudbank-dark-factory-acceptance-failed:"
+            + "/".join(diagnostic["failed_checks"])
+        )
 
     receipt = sign(
         {

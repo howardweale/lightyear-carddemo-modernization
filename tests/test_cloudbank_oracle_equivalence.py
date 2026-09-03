@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import copy
 import json
+import subprocess
 import tempfile
 import unittest
 from pathlib import Path
@@ -22,6 +23,8 @@ from lightyear_data.cloudbank_oracle_equivalence import (
     equivalence_failure_diagnostic,
     execute_equivalence,
     execution_plan,
+    _failure_phase,
+    _test_result,
     materialize_workspaces,
     observation_contract,
     readiness_receipt,
@@ -82,6 +85,63 @@ def passed_lane(name: str, image_id: str) -> dict[str, object]:
 
 
 class CloudBankOracleEquivalenceTests(unittest.TestCase):
+    def test_surefire_report_takes_precedence_and_exposes_nested_types_only(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            workspace = Path(directory)
+            report = (
+                workspace
+                / "account/target/surefire-reports"
+                / "TEST-com.example.accounts.OracleAccountEquivalenceTests.xml"
+            )
+            report.parent.mkdir(parents=True)
+            report.write_text(
+                """
+<testsuite tests="4" failures="0" errors="4" skipped="0">
+  <testcase name="contextFailure">
+    <error type="java.lang.IllegalStateException">hidden
+Caused by: org.springframework.beans.factory.BeanCreationException: hidden
+Caused by: java.sql.SQLException: password=should-not-leak
+    </error>
+  </testcase>
+  <testcase name="unsafe">
+    <error type="token=should-not-leak">hidden</error>
+  </testcase>
+</testsuite>
+""".strip(),
+                encoding="utf-8",
+            )
+
+            def fake_run(
+                argv: list[str], **kwargs: object
+            ) -> subprocess.CompletedProcess[str]:
+                return subprocess.CompletedProcess(
+                    argv,
+                    1,
+                    "maven-checkstyle-plugin password=should-not-leak",
+                    "token=should-not-leak",
+                )
+
+            result = _test_result(workspace, "oracle", HEX_B, {}, fake_run)
+            self.assertEqual("test", result["failure_phase"])
+            self.assertEqual(1, result["test_reports_present"])
+            self.assertEqual(
+                [
+                    "java.lang.IllegalStateException",
+                    "java.sql.SQLException",
+                    "org.springframework.beans.factory.BeanCreationException",
+                ],
+                result["exception_types"],
+            )
+            rendered = json.dumps(result, sort_keys=True)
+            self.assertNotIn("should-not-leak", rendered)
+            self.assertNotIn("BeanCreationException: hidden", rendered)
+
+        checkstyle = subprocess.CompletedProcess(
+            ["mvn"], 1, "maven-checkstyle-plugin", ""
+        )
+        self.assertEqual("checkstyle", _failure_phase(checkstyle, 0))
+        self.assertEqual("test", _failure_phase(checkstyle, 1))
+
     def test_failure_diagnostic_emits_only_bounded_classifications(self) -> None:
         oracle = passed_lane("oracle", HEX_B)
         oracle.update(

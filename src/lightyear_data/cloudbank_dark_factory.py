@@ -43,6 +43,10 @@ FACTORY_RECEIPT_TYPE = "lightyear-cloudbank-customer-dark-factory-execution-rece
 SHARED_CONTRACT = "rows:4;name:2;email:2;case:0;empty:null;crud:pass;default:pass;auth:pass"
 SHARED_CONTRACT_SHA256 = hashlib.sha256(SHARED_CONTRACT.encode("utf-8")).hexdigest()
 HEX_64 = re.compile(r"^[0-9a-f]{64}$")
+SAFE_EXCEPTION_TYPE = re.compile(
+    r"^[A-Za-z_$][A-Za-z0-9_$]*(?:\.[A-Za-z_$][A-Za-z0-9_$]*)+$"
+)
+MAX_EXCEPTION_TYPES = 16
 LANE_MARKER = "CLOUDBANK_LANE_RESULT="
 ORACLE_READY_ATTEMPTS = 600
 ORACLE_READY_MARKER = "CLOUDBANK_ORACLE_READY"
@@ -509,6 +513,22 @@ def _wait_oracle(name: str, run: Callable[..., subprocess.CompletedProcess[str]]
     raise ValueError("cloudbank-dark-factory-oracle-not-ready")
 
 
+def _surefire_exception_types(root: ET.Element) -> list[str]:
+    values: set[str] = set()
+    for node in (*root.findall(".//error"), *root.findall(".//failure")):
+        declared = str(node.attrib.get("type", ""))
+        if len(declared) <= 200 and SAFE_EXCEPTION_TYPE.fullmatch(declared):
+            values.add(declared)
+        for match in re.finditer(
+            r"(?m)^Caused by:\s+([A-Za-z_$][A-Za-z0-9_$.]{2,199})(?::|$)",
+            node.text or "",
+        ):
+            candidate = match.group(1)
+            if SAFE_EXCEPTION_TYPE.fullmatch(candidate):
+                values.add(candidate)
+    return sorted(values)[:MAX_EXCEPTION_TYPES]
+
+
 def _maven_result(workspace: Path, lane: str, env: dict[str, str], run: Callable[..., subprocess.CompletedProcess[str]]) -> dict[str, Any]:
     result = run(
         [
@@ -526,12 +546,14 @@ def _maven_result(workspace: Path, lane: str, env: dict[str, str], run: Callable
     marker = f"CLOUDBANK_SHARED_CONTRACT={SHARED_CONTRACT}"
     report = workspace / "customer/target/surefire-reports/TEST-com.example.customer.CustomerApplicationTests.xml"
     tests = failures = errors = skipped = -1
+    exception_types: list[str] = []
     if report.is_file():
         root = ET.parse(report).getroot()
         tests = int(root.attrib.get("tests", "-1"))
         failures = int(root.attrib.get("failures", "-1"))
         errors = int(root.attrib.get("errors", "-1"))
         skipped = int(root.attrib.get("skipped", "-1"))
+        exception_types = _surefire_exception_types(root)
     passed = (
         result.returncode == 0
         and result.stdout.count(marker) == 1
@@ -545,6 +567,7 @@ def _maven_result(workspace: Path, lane: str, env: dict[str, str], run: Callable
         "failures": failures,
         "errors": errors,
         "skipped": skipped,
+        "exception_types": exception_types,
         "shared_contract_sha256": SHARED_CONTRACT_SHA256 if marker in result.stdout else None,
         "maven_exit_code": result.returncode,
         "stdout_sha256": hashlib.sha256(result.stdout.encode()).hexdigest(),
@@ -711,6 +734,20 @@ def _lane_acceptance_diagnostic(
     lane: Mapping[str, Any], expected_lane: str
 ) -> dict[str, Any]:
     status = lane.get("status")
+    supplied_types = lane.get("exception_types", [])
+    exception_types = (
+        sorted(
+            {
+                value
+                for value in supplied_types
+                if isinstance(value, str)
+                and len(value) <= 200
+                and SAFE_EXCEPTION_TYPE.fullmatch(value)
+            }
+        )[:MAX_EXCEPTION_TYPES]
+        if isinstance(supplied_types, list)
+        else []
+    )
     return {
         "lane_match": lane.get("lane") == expected_lane,
         "status": status if status in {"passed", "failed"} else "invalid",
@@ -719,6 +756,7 @@ def _lane_acceptance_diagnostic(
         "errors": _diagnostic_int(lane.get("errors")),
         "skipped": _diagnostic_int(lane.get("skipped")),
         "maven_exit_code": _diagnostic_int(lane.get("maven_exit_code")),
+        "exception_types": exception_types,
         "shared_contract_match": lane.get("shared_contract_sha256") == SHARED_CONTRACT_SHA256,
     }
 

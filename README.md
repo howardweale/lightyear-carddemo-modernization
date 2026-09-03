@@ -4,7 +4,26 @@
 
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.64.0 — CloudBank Credit Decision and AI boundary**
+Release: **v0.65.0 — CloudBank Production-Like Deployment and Cutover Rehearsal**
+
+v0.65 takes the complete MS #64 eight-service target to the operational admission boundary. It
+binds one immutable container-image digest per service, renders a site-specific hardened Kubernetes
+bundle, and admits a signed non-production rehearsal only after all eight rollouts, backup/restore,
+canary, traffic-switch, business-check, rollback, recovery, and bounded-SLO evidence passes.
+
+```bash
+./cloudbank-production-readiness.sh verify
+./cloudbank-production-readiness.sh verify-source /path/to/cloudbank-upstream
+```
+
+The deployment template enforces two replicas per service, zero-unavailable rolling updates,
+startup/liveness/readiness probes, resource bounds, disruption budgets, non-root read-only
+containers, dedicated service accounts, default-deny networking, bounded database/model egress,
+and external secret references without secret values. A passing signed receipt establishes only an
+authorized production-like rehearsal against synthetic data. Production deployment, native CDC,
+whole-application equivalence, migration completion, and production readiness remain false.
+
+Previous release: **v0.64.0 — CloudBank Credit Decision and AI boundary**
 
 v0.64 composes all five remaining services into fresh target workcells and executes each one:
 Authorization migrated in MS #62, Checks and Test Runner migrated in MS #63, and Credit Score and
@@ -23,7 +42,7 @@ model, qualify a
 credit decision or model-answer quality, establish whole-application equivalence, complete a
 migration, authorize deployment, or prove production readiness.
 
-Previous release: **v0.63.0 — CloudBank Checks durable messaging**
+Earlier release: **v0.63.0 — CloudBank Checks durable messaging**
 
 v0.63 replaces the Checks and Test Runner dependency on Oracle AQ/JMS with a PostgreSQL-backed
 durable work queue. The bounded gate covers idempotent deposits and clearances, per-aggregate FIFO

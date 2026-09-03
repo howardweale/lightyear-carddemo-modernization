@@ -1,0 +1,22 @@
+{
+  "acceptance_contract_sha256": "b475b3046d573df10372fc56ae99586a67138313e2a4773bc33b9e711cea387a",
+  "bindings": {
+    "compatibility_ledger_sha256": "f4d591cf5a771c87550e14c3bf0c4bebf5bd3eadd2e8fdfd639cf7625ef43f81",
+    "cutover_contract_sha256": "44a949e2056aaec4e3db45f72ba15b30629d618fd0ad3b759dd63f8e399f175f",
+    "deployment_contract_sha256": "b068b5c3b6ae84b037cf0a92a676701fe1b2106ed16ab47926d5cfc3ff255896",
+    "deployment_template_sha256": "ca45ab3c3ce230290769a5b6cda6dd2b6d16f71919252d6843815ad3f07bdfdc",
+    "execution_plan_sha256": "104b9d30aca02d3ea2578fb21e6826f5b95da114b2aa051d0e332d229f1945e5"
+  },
+  "content_sha256": "1a6fcf629abba873339346649f7340f197abcd55ba94a5305fe68bce65f8bd80",
+  "cutover_rehearsal_complete": false,
+  "gate_status": "ready-for-signed-ms64-and-authorized-non-production-rehearsal",
+  "migration_complete": false,
+  "production_deployed": false,
+  "production_like_rehearsal_complete": false,
+  "production_ready": false,
+  "receipt_type": "lightyear-cloudbank-production-readiness-rehearsal-readiness",
+  "release": "0.65.0",
+  "rollback_rehearsal_complete": false,
+  "schema_version": "1.0",
+  "whole_application_equivalent": false
+}

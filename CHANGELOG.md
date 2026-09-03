@@ -1,5 +1,24 @@
 # Changelog
 
+## 0.65.0 — 2026-09-03
+
+- Added an MS #64-chained production-like deployment and cutover rehearsal gate covering all eight
+  CloudBank services without treating a rehearsal as a production deployment.
+- Added a deterministic Kubernetes bundle with immutable image digests, two replicas per service,
+  zero-unavailable rolling updates, startup/liveness/readiness probes, resource bounds, disruption
+  budgets, dedicated token-free service accounts, restricted containers, and temporary filesystems.
+- Added default-deny networking with bounded internal, ingress, DNS, and PostgreSQL paths, a
+  Chatbot-only model-egress path, and external secret references that admit names but never values.
+- Added content-addressed non-production environment, image-lock, and deployment-bundle bindings,
+  plus a signed operator observation across 24 exact rollout, backup/restore, canary, smoke,
+  traffic-switch, business-check, rollback, recovery, SLO, and evidence-minimization scenarios.
+- Added deterministic deployment, cutover, execution, acceptance, compatibility, readiness, and
+  receipt contracts; cross-platform launchers; CI materialization; Control Tower projection;
+  documentation; schemas; and adversarial image, network, observation, signature, and overclaim tests.
+- Kept native CDC, production data, customer change authorization, enterprise IdP and secret
+  rotation, native Oracle AQ equivalence, whole-application equivalence, migration completion,
+  production deployment, and production readiness explicitly false.
+
 ## 0.64.0 — 2026-09-03
 
 - Replaced the Credit Score service's unauthenticated random demo response with an OAuth-protected,

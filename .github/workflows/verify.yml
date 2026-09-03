@@ -143,6 +143,12 @@ jobs:
               -Dsurefire.failIfNoSpecifiedTests=false \
               -Djkube.skip=true -Ddependency-check.skip=true test
           )
+          ./cloudbank-production-readiness.sh verify
+          ./cloudbank-production-readiness.sh verify-source ../cloudbank-upstream
+          ./cloudbank-production-readiness.sh materialize ../cloudbank-upstream work/cloudbank-ms65-ci
+          for service in azn-server customer account transfer checks testrunner creditscore chatbot; do
+            test -f "work/cloudbank-ms65-ci/$service/pom.xml"
+          done
 
       - name: Publish bounded CI build receipt
         uses: actions/upload-artifact@v4

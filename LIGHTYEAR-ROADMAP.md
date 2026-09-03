@@ -47,6 +47,7 @@ production-qualified.
 | MS #62 | CloudBank Production OAuth Application Boundary | OAuth target and contract complete; signed native Authorization/Account/Transfer receipt remains operator-held evidence |
 | MS #63 | CloudBank Checks Durable Messaging | PostgreSQL queue target and contract complete; signed native messaging receipt remains operator-held evidence |
 | MS #64 | CloudBank Credit Decision and AI Boundary | Eight-service target and edge-control contract complete; signed native application receipt remains operator-held evidence |
+| MS #65 | CloudBank Production-Like Deployment and Cutover Rehearsal | Deployment and rehearsal gate complete; signed non-production operator observation remains required |
 
 The v0.35.0 stored-logic qualification core is retained as supporting MS #34 evidence. It does not
 replace the planned DB2 milestone.
@@ -619,3 +620,31 @@ and the eight-service package. Real credit-decision equivalence,
 model-answer quality and safety evaluation, native Oracle AQ equivalence, production data,
 whole-application equivalence, migration completion, deployment, promotion, and production
 readiness remain false.
+
+## MS #65 — CloudBank Production-Like Deployment and Cutover Rehearsal
+
+MS #65 takes the complete MS #64 eight-service target to a production-shaped operational boundary
+without calling that boundary production. It requires a passing signed MS #64 receipt, one immutable
+container-image digest for each service, a hash-bound non-production cluster identity, site-specific
+network CIDRs, and external secret object names. From those inputs it renders a placeholder-free
+Kubernetes bundle while keeping the exact pinned CloudBank source unchanged.
+
+Each service receives two replicas, a zero-unavailable rolling-update strategy, startup, liveness,
+and readiness probes, CPU and memory requests and limits, a disruption budget, a dedicated service
+account with token automount disabled, non-root execution, a read-only root filesystem, dropped
+capabilities, RuntimeDefault seccomp, and a bounded temporary filesystem. Namespace-default-deny
+networking permits only CloudBank-internal traffic, the selected ingress namespace, DNS, the
+operator-declared PostgreSQL CIDR, and the model endpoint CIDR for Chatbot alone. Secret objects and
+values are never generated or admitted.
+
+The signed rehearsal observation must pass 24 exact scenarios covering eight ready rollouts,
+content-addressed pre-cutover backup and exact restore, synthetic smoke traffic, canary readiness,
+an explicit traffic-switch checkpoint, post-switch business checks, mandatory rollback and recovery,
+and a minimum 100-request window with zero errors and p95 latency no greater than 500 milliseconds.
+A passing execution receipt makes only the production-like deployment, cutover, and rollback
+rehearsal claims true for the bound non-production cluster and synthetic evidence.
+
+Native CDC, production data, customer change authorization, enterprise identity and secret rotation,
+native Oracle AQ equivalence, real credit decisions, model-answer quality, whole-application
+Oracle/PostgreSQL equivalence, migration completion, production deployment, and production readiness
+remain false.

@@ -60,5 +60,9 @@ script is undocumented, and that every POSIX entry point has a PowerShell twin.
   bounded Chatbot application contracts; `run` additionally requires signed MS #57 and MS #63
   receipts produced with the same key, packages all eight CloudBank deployables, and executes the
   generated Authorization, Checks, Test Runner, Credit Score, and Chatbot target workcells.
+- `./cloudbank-production-readiness.sh verify` checks the MS #65 immutable-image deployment,
+  Kubernetes hardening, and cutover/rollback rehearsal contracts; `render` requires an eight-image
+  lock and non-production environment profile, while `run` additionally requires the signed MS #64
+  receipt and signed 24-scenario operator observation produced with the same evidence key.
 
 See `scripts.catalog.json` for the exact purpose, role, and verification owner of all entry points.

@@ -171,6 +171,8 @@ class CloudBankExecutableBaselineTests(unittest.TestCase):
                 "checks-messaging-readiness.schema.json",
                 "edge-ai-execution-receipt.schema.json",
                 "edge-ai-readiness.schema.json",
+                "production-readiness-execution-receipt.schema.json",
+                "production-readiness.schema.json",
             },
             {path.name for path in schemas},
         )

@@ -346,6 +346,8 @@ OPERATOR_WORKLOADS = [
         "target_status": "bounded equivalence ready · operator receipt required",
         "mapping_artifact": "reference-estates/cloudbank/customer-postgresql/mapping.json",
         "factory_artifact": "factory/cloudbank/oracle-equivalence/readiness.receipt.json",
+        "production_readiness_status": "production-like deployment and cutover rehearsal ready · operator evidence required",
+        "production_readiness_artifact": "factory/cloudbank/production-readiness/readiness.receipt.json",
     },
     {
         "id": "cloudbank-reference:workload:money-transfer",
@@ -356,6 +358,8 @@ OPERATOR_WORKLOADS = [
         "target_dialect": "postgresql-16",
         "target_status": "production OAuth application boundary ready · operator receipt required",
         "factory_artifact": "factory/cloudbank/production-oauth/readiness.receipt.json",
+        "production_readiness_status": "production-like deployment and cutover rehearsal ready · operator evidence required",
+        "production_readiness_artifact": "factory/cloudbank/production-readiness/readiness.receipt.json",
     },
     {
         "id": "cloudbank-reference:workload:check-deposit-clearance",
@@ -366,6 +370,8 @@ OPERATOR_WORKLOADS = [
         "target_dialect": "postgresql-16",
         "target_status": "Checks target messaging ready · operator receipt required",
         "factory_artifact": "factory/cloudbank/checks-messaging/readiness.receipt.json",
+        "production_readiness_status": "production-like deployment and cutover rehearsal ready · operator evidence required",
+        "production_readiness_artifact": "factory/cloudbank/production-readiness/readiness.receipt.json",
     },
     {
         "id": "cloudbank-reference:workload:identity-service-authorization",
@@ -376,6 +382,8 @@ OPERATOR_WORKLOADS = [
         "target_dialect": "postgresql-16",
         "target_status": "production OAuth application boundary ready · operator receipt required",
         "factory_artifact": "factory/cloudbank/production-oauth/readiness.receipt.json",
+        "production_readiness_status": "production-like deployment and cutover rehearsal ready · operator evidence required",
+        "production_readiness_artifact": "factory/cloudbank/production-readiness/readiness.receipt.json",
     },
     {
         "id": "cloudbank-reference:workload:credit-score-service",
@@ -386,6 +394,8 @@ OPERATOR_WORKLOADS = [
         "target_dialect": "postgresql-16",
         "target_status": "eight-service edge and AI boundary ready · operator receipt required",
         "factory_artifact": "factory/cloudbank/edge-ai/readiness.receipt.json",
+        "production_readiness_status": "production-like deployment and cutover rehearsal ready · operator evidence required",
+        "production_readiness_artifact": "factory/cloudbank/production-readiness/readiness.receipt.json",
     },
 ]
 

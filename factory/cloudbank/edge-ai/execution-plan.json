@@ -3,7 +3,7 @@
     "ms63-five-service-target",
     "ms57-qualified-customer-target"
   ],
-  "content_sha256": "bb393e06fc92794a6625c1e0a63a623b299b00f2c079497096a22740f5a9d7fe",
+  "content_sha256": "de7fc7842083323f76e0bebb98bebd1ecdd7289e4c26f817c7da76864d6c4954",
   "customer_target_paths": [
     "customer/pom.xml",
     "customer/src/main/java/com/example/customer/model/Customers.java",
@@ -74,17 +74,17 @@
     {
       "path": "creditscore/src/main/java/com/example/creditscore/config/CreditScoreOAuthSecurityConfiguration.java",
       "template": "patches/CreditScoreOAuthSecurityConfiguration.java",
-      "template_sha256": "6c18004e761194b91dae565a9d007a55637a217bba9ef69d7e26cc0b6a02d22e"
+      "template_sha256": "af09aee3ef4eecaf1d2b57b6358a691098fbfba99ba4c96c48dec0b098131f21"
     },
     {
       "path": "creditscore/src/main/java/com/example/creditscore/controller/CreditScoreController.java",
       "template": "patches/CreditScoreController.java",
-      "template_sha256": "43f59e6de5b7cafd3982b81ac6ecad56f7ce693dce39f55c43d0bf7d753ea2a4"
+      "template_sha256": "58447667fd9cdc82a171499efd5d59c51b9931bebba005efddc25b3afac0ea6d"
     },
     {
       "path": "creditscore/src/main/java/com/example/creditscore/service/SyntheticCreditScoreService.java",
       "template": "patches/SyntheticCreditScoreService.java",
-      "template_sha256": "9e744e84c98bf6a1bba8c55dcaac241c837e61a15cae77477c4328d03ad5f9c9"
+      "template_sha256": "095c512734a93bac05413eca4366ee38eb1363690cf251989a7f345550ceee9d"
     },
     {
       "path": "creditscore/src/main/resources/application.yaml",

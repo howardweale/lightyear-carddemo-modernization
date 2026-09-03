@@ -24,6 +24,13 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class CreditScoreOAuthSecurityConfiguration {
 
+    /**
+     * Configures the credit-score resource server authorization boundary.
+     *
+     * @param http the Spring Security HTTP configuration
+     * @return the configured security filter chain
+     * @throws Exception when Spring Security cannot build the chain
+     */
     @Bean
     public SecurityFilterChain creditScoreSecurityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
@@ -37,6 +44,13 @@ public class CreditScoreOAuthSecurityConfiguration {
         return http.build();
     }
 
+    /**
+     * Builds a JWT decoder that enforces issuer and credit-score audience claims.
+     *
+     * @param issuer the trusted token issuer
+     * @param jwkSetUri the issuer's JSON Web Key Set endpoint
+     * @return the validating JWT decoder
+     */
     @Bean
     public JwtDecoder creditScoreJwtDecoder(
             @Value("${spring.security.oauth2.resourceserver.jwt.issuer-uri}") String issuer,

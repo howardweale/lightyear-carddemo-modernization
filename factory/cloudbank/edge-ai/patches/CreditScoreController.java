@@ -25,6 +25,12 @@ public class CreditScoreController {
         this.service = service;
     }
 
+    /**
+     * Returns the synthetic credit score for the authenticated token subject.
+     *
+     * @param jwt the authenticated resource-server token
+     * @return the legacy-compatible credit-score response
+     */
     @GetMapping("/creditscore")
     @Operation(summary = "Get an authenticated synthetic credit score")
     public Map<String, String> getCreditScore(@AuthenticationPrincipal Jwt jwt) {

@@ -8,7 +8,6 @@ import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.time.Clock;
 import java.time.LocalDate;
-
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
 
@@ -31,6 +30,12 @@ public class SyntheticCreditScoreService {
         this(pepper, Clock.systemUTC());
     }
 
+    /**
+     * Creates the synthetic score service with an explicit clock.
+     *
+     * @param pepper the server-side secret used to derive stable scores
+     * @param clock the clock used to select the score date
+     */
     public SyntheticCreditScoreService(String pepper, Clock clock) {
         if (pepper == null || pepper.length() < 32) {
             throw new IllegalArgumentException("creditscore synthetic pepper must contain at least 32 characters");
@@ -39,6 +44,12 @@ public class SyntheticCreditScoreService {
         this.clock = clock;
     }
 
+    /**
+     * Produces the authenticated subject's synthetic score for the current UTC date.
+     *
+     * @param subject the authenticated token subject
+     * @return the derived score snapshot
+     */
     public CreditScoreSnapshot scoreFor(String subject) {
         if (subject == null || subject.isBlank()) {
             throw new IllegalArgumentException("authenticated subject is required");

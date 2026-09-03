@@ -44,7 +44,7 @@ SHARED_CONTRACT = "rows:4;name:2;email:2;case:0;empty:null;crud:pass;default:pas
 SHARED_CONTRACT_SHA256 = hashlib.sha256(SHARED_CONTRACT.encode("utf-8")).hexdigest()
 HEX_64 = re.compile(r"^[0-9a-f]{64}$")
 SAFE_EXCEPTION_TYPE = re.compile(
-    r"^[A-Za-z_$][A-Za-z0-9_$]*(?:\\.[A-Za-z_$][A-Za-z0-9_$]*)+$"
+    r"^[A-Za-z_$][A-Za-z0-9_$]*(?:\.[A-Za-z_$][A-Za-z0-9_$]*)+$"
 )
 MAX_EXCEPTION_TYPES = 16
 LANE_MARKER = "CLOUDBANK_LANE_RESULT="
@@ -520,7 +520,7 @@ def _surefire_exception_types(root: ET.Element) -> list[str]:
         if len(declared) <= 200 and SAFE_EXCEPTION_TYPE.fullmatch(declared):
             values.add(declared)
         for match in re.finditer(
-            r"(?m)^Caused by:\\s+([A-Za-z_$][A-Za-z0-9_$.]{2,199})(?::|$)",
+            r"(?m)^Caused by:\s+([A-Za-z_$][A-Za-z0-9_$.]{2,199})(?::|$)",
             node.text or "",
         ):
             candidate = match.group(1)

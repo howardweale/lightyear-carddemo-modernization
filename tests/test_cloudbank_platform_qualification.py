@@ -304,6 +304,10 @@ class CloudBankPlatformQualificationTests(unittest.TestCase):
             "reference-estates/cloudbank/schema/platform-qualification-readiness.schema.json",
             "factory/cloudbank/platform-qualification/gke/bootstrap.sh",
             "factory/cloudbank/platform-qualification/gke/destroy.sh",
+            "factory/cloudbank/platform-qualification/gke/Dockerfile.evidence-runner",
+            "factory/cloudbank/platform-qualification/gke/cloudbuild-prerequisite-chain.yaml",
+            "factory/cloudbank/platform-qualification/gke/run-prerequisite-chain.sh",
+            "factory/cloudbank/platform-qualification/gke/submit-prerequisite-chain.sh",
         ):
             self.assertTrue((ROOT / relative).is_file(), relative)
         bootstrap = (ROOT / "factory/cloudbank/platform-qualification/gke/bootstrap.sh").read_text()
@@ -321,6 +325,40 @@ class CloudBankPlatformQualificationTests(unittest.TestCase):
                          "roles/secretmanager.secretAccessor", "--no-assign-ip",
                          "--enable-dns-access", "--no-enable-ip-access", "--dns-endpoint"):
             self.assertIn(required, bootstrap)
+
+    def test_cloud_build_prerequisite_chain_is_secret_backed_and_minimized(self) -> None:
+        gke = ROOT / "factory/cloudbank/platform-qualification/gke"
+        cloudbuild = (gke / "cloudbuild-prerequisite-chain.yaml").read_text()
+        runner = (gke / "run-prerequisite-chain.sh").read_text()
+        submit = (gke / "submit-prerequisite-chain.sh").read_text()
+
+        self.assertIn("secretEnv:", cloudbuild)
+        self.assertIn("cloudbank-ms67-evidence-key", submit)
+        self.assertNotIn("operator-held-value", cloudbuild + runner + submit)
+        self.assertIn("--async", submit)
+        self.assertIn("--gcs-source-staging-dir", submit)
+        self.assertIn("--public-access-prevention", submit)
+        self.assertIn("CLOUD_LOGGING_ONLY", cloudbuild)
+        self.assertIn("ms67-chain-export/**", cloudbuild)
+
+        ordered_commands = (
+            "cloudbank-executable-baseline.sh source-build",
+            "cloudbank-executable-baseline.sh oracle-runtime",
+            "cloudbank-customer-postgresql.sh native-postgresql",
+            "cloudbank-dark-factory.sh run",
+            "cloudbank-production-qualification.sh run",
+            "cloudbank-transaction-wave.sh admit",
+            "cloudbank-transaction-core.sh run",
+            "cloudbank-native-wave.sh run",
+            "cloudbank-oracle-equivalence.sh run",
+            "cloudbank-production-oauth.sh run",
+            "cloudbank-checks-messaging.sh run",
+            "cloudbank-edge-ai.sh run",
+        )
+        offsets = [runner.index(command) for command in ordered_commands]
+        self.assertEqual(sorted(offsets), offsets)
+        self.assertIn("Expected 12 prerequisite receipts", runner)
+        self.assertIn("credentials_persisted\": False", runner)
 
 
 if __name__ == "__main__":

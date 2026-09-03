@@ -356,13 +356,13 @@ def _redacted_failure_tail(stdout: bytes, stderr: bytes) -> str:
         if value:
             combined = combined.replace(value, "[REDACTED]")
     combined = re.sub(
-        r"(?i)\\b((?:password|passwd|token|secret|api[_-]?key)\\s*[=:]\\s*)[^\\s]+",
-        r"\\1[REDACTED]",
+        r"(?i)\b((?:password|passwd|token|secret|api[_-]?key)\s*[=:]\s*)[^\s]+",
+        r"\1[REDACTED]",
         combined,
     )
     combined = re.sub(
-        r"(https?://)[^/\\s:@]+:[^/\\s@]+@",
-        r"\\1[REDACTED]@",
+        r"(https?://)[^/\s:@]+:[^/\s@]+@",
+        r"\1[REDACTED]@",
         combined,
     )
     return combined[-_FAILURE_DIAGNOSTIC_LIMIT:]

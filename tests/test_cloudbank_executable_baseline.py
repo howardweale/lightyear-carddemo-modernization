@@ -131,8 +131,8 @@ class CloudBankExecutableBaselineTests(unittest.TestCase):
         failure = subprocess.CompletedProcess(
             args=["mvn"],
             returncode=1,
-            stdout=b"A" * 9_000 + b"\\npassword=visible\\n",
-            stderr=f"token=visible\\n{secret}".encode(),
+            stdout=b"A" * 9_000 + b"\npassword=visible\n",
+            stderr=f"token=visible\n{secret}".encode(),
         )
         diagnostic = io.StringIO()
         with (

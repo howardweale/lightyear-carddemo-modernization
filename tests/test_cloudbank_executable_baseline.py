@@ -176,6 +176,10 @@ class CloudBankExecutableBaselineTests(unittest.TestCase):
                 "whole-application-equivalence-execution-receipt.schema.json",
                 "whole-application-equivalence-lane-observation.schema.json",
                 "whole-application-equivalence-readiness.schema.json",
+                "platform-qualification-profile.schema.json",
+                "platform-qualification-observation.schema.json",
+                "platform-qualification-execution-receipt.schema.json",
+                "platform-qualification-readiness.schema.json",
             },
             {path.name for path in schemas},
         )

@@ -67,5 +67,9 @@ script is undocumented, and that every POSIX entry point has a PowerShell twin.
 - `./cloudbank-whole-application-equivalence.sh verify` checks the MS #66 paired eight-service
   Oracle/source and PostgreSQL/target contract; `run` additionally requires signed MS #61/MS #64
   receipts and two same-run signed lane observations without fabricating native execution.
+- `./cloudbank-platform-qualification.sh verify` checks the MS #67 real non-production platform
+  contract and GKE implementation; `preflight` performs read-only checks against one signed explicit
+  context, while `admit` requires passing signed MS #65/MS #66 receipts and all 28 signed live
+  platform scenarios. Chargeable GKE mutation and teardown remain separately acknowledged scripts.
 
 See `scripts.catalog.json` for the exact purpose, role, and verification owner of all entry points.

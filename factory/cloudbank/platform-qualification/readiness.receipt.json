@@ -1,0 +1,30 @@
+{
+  "acceptance_contract_sha256": "d5e420946ff8f707398d5a38b4a4fd317bb08c2730ae05239660a0d9c513e01e",
+  "backup_restore_qualified": false,
+  "bindings": {
+    "compatibility_ledger_sha256": "978fe4798c5853c330976a90cf70270bbfde4a574ae60bc42866a0b5d664a467",
+    "evidence_contract_sha256": "d7af86a231d673c15dce39d14bce42d799f9794095e900831ed4f17e55b766f7",
+    "execution_plan_sha256": "42bb20ffcdc43921ed5e0556edd146b9222c8a934c5775cb7e56e9b43362f199",
+    "platform_contract_sha256": "c99dae9f766b648859c79ed605e7aa5e7a3a64d8773a191991b0ba7f92e3852b"
+  },
+  "content_sha256": "098c988b4f7db30ab40d4717dd0acc38adc722a837417407c467fb05c7a10562",
+  "customer_approval_complete": false,
+  "customer_idp_qualified": false,
+  "cutover_rollback_qualified": false,
+  "external_secrets_qualified": false,
+  "gate_status": "ready-for-signed-ms65-ms66-and-authorized-real-platform-observation",
+  "high_availability_qualified": false,
+  "migration_complete": false,
+  "non_production_platform_qualified": false,
+  "observability_qualified": false,
+  "performance_qualified": false,
+  "production_deployed": false,
+  "production_ready": false,
+  "receipt_type": "lightyear-cloudbank-non-production-platform-qualification-readiness",
+  "release": "0.67.0",
+  "representative_data_volume_qualified": false,
+  "rolling_deployment_qualified": false,
+  "schema_version": "1.0",
+  "security_qualified": false,
+  "tls_qualified": false
+}

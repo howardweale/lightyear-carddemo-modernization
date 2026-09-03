@@ -1,0 +1,19 @@
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+ARG APP_JAR=application.jar
+ARG BUILD_GENERATION
+LABEL org.opencontainers.image.title="CloudBank MS67 service" \
+      org.opencontainers.image.version="0.67.0" \
+      lightyear.ai/qualification-generation="${BUILD_GENERATION}"
+WORKDIR /opt/cloudbank
+COPY --chown=65532:65532 ${APP_JAR} application.jar
+COPY --chown=65532:65532 opentelemetry-javaagent.jar opentelemetry-javaagent.jar
+ENV JAVA_TOOL_OPTIONS="-javaagent:/opt/cloudbank/opentelemetry-javaagent.jar" \
+    OTEL_EXPORTER_OTLP_ENDPOINT="http://otel-collector.observability.svc.cluster.local:4317" \
+    OTEL_EXPORTER_OTLP_PROTOCOL="grpc" \
+    OTEL_METRICS_EXPORTER="otlp" \
+    OTEL_LOGS_EXPORTER="none" \
+    OTEL_TRACES_EXPORTER="otlp"
+USER 65532:65532
+EXPOSE 8080
+ENTRYPOINT ["java", "-XX:MaxRAMPercentage=75", "-jar", "/opt/cloudbank/application.jar"]

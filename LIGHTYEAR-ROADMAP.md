@@ -49,6 +49,7 @@ production-qualified.
 | MS #64 | CloudBank Credit Decision and AI Boundary | Eight-service target and edge-control contract complete; signed native application receipt remains operator-held evidence |
 | MS #65 | CloudBank Production-Like Deployment and Cutover Rehearsal | Deployment and rehearsal gate complete; signed non-production operator observation remains required |
 | MS #66 | CloudBank Whole-Application Dual-Lane Equivalence | Eight-service comparison gate complete; paired signed Oracle and PostgreSQL observations remain operator-held evidence |
+| MS #67 | CloudBank Real Non-Production Platform Qualification | Ephemeral GKE implementation and live-evidence gate complete; actual platform run remains operator-held evidence |
 
 The v0.35.0 stored-logic qualification core is retained as supporting MS #34 evidence. It does not
 replace the planned DB2 milestone.
@@ -673,3 +674,31 @@ not described as identical to their PostgreSQL replacements; real credit decisio
 quality, production data, native CDC, customer infrastructure and IdP, migration completion,
 production deployment, and production readiness remain false. MS #67 owns platform qualification
 and MS #68 owns customer production-readiness certification.
+
+## MS #67 — CloudBank Real Non-Production Platform Qualification
+
+MS #67 converts the MS #65 deployment design into an executable, chargeable, real-platform package
+and requires the signed MS #65 rehearsal plus the signed MS #66 whole-application equivalence result.
+Its first implementation targets a dedicated non-production regional GKE Standard cluster with a
+replicated control plane, one worker in each of three zones, private nodes, Workload Identity,
+Dataplane V2, bounded administrator access, Cloud SQL PostgreSQL regional HA with PITR, Artifact
+Registry, Cloud DNS, and explicitly pinned add-on and runtime inputs.
+
+The platform path builds digest-only images, verifies the OpenTelemetry agent hash, signs images and
+provenance with a Cloud KMS key, rejects critical or high Trivy findings, and deploys Secret Manager
+content through External Secrets Operator without static Google service-account keys. Public access
+uses ingress-nginx and cert-manager/Let's Encrypt. OpenTelemetry exports service metrics and traces;
+Cloud Logging captures workload logs. Restricted Google API VIPs keep telemetry egress bounded.
+
+Twenty-eight signed live scenarios cover cluster identity and capacity, the exact MS #65 bundle,
+all 16 service replicas, trusted TLS and plaintext rejection, external-secret synchronization and
+rotation, metrics/logs/traces and alert recovery, a minimum five-minute 1,000-request k6 window,
+image signatures/provenance and security scans, default-deny networking, content-addressed backup
+and exact PITR restore, node and failure-domain evacuation, zero-unavailable rolling updates across
+all eight services, canary cutover, all 18 business journeys, mandatory rollback, and recovery.
+
+This repository has no Google Cloud credential, Kubernetes context, or live platform observation,
+so its committed readiness receipt stays false. A later passing receipt qualifies only the exact
+authorized non-production platform and synthetic run. Customer IdP, representative customer data
+volume and workload, the customer's approval process, production deployment, and final signed
+production readiness remain MS #68.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build and verify the MS #1-66 customer documentation library."""
+"""Build and verify the MS #1-67 customer documentation library."""
 
 from __future__ import annotations
 
@@ -25,14 +25,14 @@ BRAND_ROOT = ROOT / "brand"
 BRAND_ASSETS = BRAND_ROOT / "assets"
 BRAND_LOGO_SVG = BRAND_ASSETS / "lightyear-primary.svg"
 BRAND_LOGO_PNG = BRAND_ASSETS / "lightyear-primary.png"
-GENERATOR_VERSION = "1.16"
+GENERATOR_VERSION = "1.18"
 REPOSITORY = "howardweale/lightyear-carddemo-modernization"
 DEFAULT_BRANCH = "main"
 GITHUB_BLOB_ROOT = f"https://github.com/{REPOSITORY}/blob/{DEFAULT_BRANCH}"
 GITHUB_RAW_ROOT = f"https://raw.githubusercontent.com/{REPOSITORY}/{DEFAULT_BRANCH}"
 PAGES_INDEX = f"https://howardweale.github.io/{REPOSITORY.split('/', 1)[1]}/milestones/"
 FIXED_TIME = datetime(2026, 8, 31, 12, 0, 0, tzinfo=timezone.utc)
-EXPECTED_MILESTONES = tuple(range(1, 67))
+EXPECTED_MILESTONES = tuple(range(1, 68))
 EXPECTED_ARTIFACTS = len(EXPECTED_MILESTONES) * 3
 BOUNDARY_TERMS = (
     "remain false", "remains false", "remain blocked", "remains blocked",
@@ -136,7 +136,7 @@ def build_model(
     )
     return {
         **entry,
-        "status": "Complete",
+        "status": entry.get("status", "Complete"),
         "release": release_label,
         "date": date_label,
         "deliverables": [finish_sentence(item) for item in deliverables],
@@ -422,7 +422,7 @@ def build_pdf(model: dict[str, Any], audience: str, output: Path) -> None:
         from reportlab.lib.units import inch
         from reportlab.pdfbase import pdfmetrics
         from reportlab.pdfbase.ttfonts import TTFont
-        from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
+        from reportlab.platypus import KeepTogether, Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
     except ImportError as exc:
         raise RuntimeError("PDF build requires reportlab; install the docs optional dependencies") from exc
     font_dir = Path(reportlab.__file__).resolve().parent / "fonts"
@@ -431,7 +431,7 @@ def build_pdf(model: dict[str, Any], audience: str, output: Path) -> None:
             pdfmetrics.registerFont(TTFont(name, str(font_dir / filename)))
     styles = getSampleStyleSheet()
     body = ParagraphStyle("Body", parent=styles["BodyText"], fontName="LYSans", fontSize=9.7, leading=12.1, spaceAfter=4.5, textColor=colors.HexColor("#15184D"))
-    heading = ParagraphStyle("H1", parent=styles["Heading1"], fontName="LYSans-Bold", fontSize=14, leading=16.5, textColor=colors.HexColor("#7D57EA"), spaceBefore=10, spaceAfter=5, keepWithNext=True)
+    heading = ParagraphStyle("H1", parent=styles["Heading1"], fontName="LYSans-Bold", fontSize=14, leading=16.5, textColor=colors.HexColor("#7D57EA"), spaceBefore=10, spaceAfter=5)
     bullet = ParagraphStyle("Bullet", parent=body, leftIndent=18, firstLineIndent=-10, spaceAfter=4)
     label = ParagraphStyle("Label", parent=body, fontName="LYSans-Bold", textColor=colors.HexColor("#15184D"), spaceAfter=0)
     value = ParagraphStyle("Value", parent=body, spaceAfter=0)
@@ -469,9 +469,14 @@ def build_pdf(model: dict[str, Any], audience: str, output: Path) -> None:
         ("Source of record", [f"CHANGELOG.md release section(s): {model['release']}", "README.md product and operating guidance", "LIGHTYEAR-ROADMAP.md governing sequence and claim classifications", "docs/milestones/catalog.json metadata and docs/milestones/manifest.json artifact integrity"], True),
     ]
     for title, values, bullets in content:
-        story.append(Paragraph(safe(title), heading))
-        for item in values:
-            story.append(Paragraph(("-  " if bullets else "") + safe(item), bullet if bullets else body))
+        item_style = bullet if bullets else body
+        first, *remaining = values
+        story.append(KeepTogether([
+            Paragraph(safe(title), heading),
+            Paragraph(("-  " if bullets else "") + safe(first), item_style),
+        ]))
+        for item in remaining:
+            story.append(Paragraph(("-  " if bullets else "") + safe(item), item_style))
     doc.build(story, onFirstPage=furniture, onLaterPages=furniture)
 
 

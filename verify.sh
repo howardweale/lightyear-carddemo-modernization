@@ -51,6 +51,7 @@ fi
 "$project_dir/cloudbank-edge-ai.sh" verify
 "$project_dir/cloudbank-production-readiness.sh" verify
 "$project_dir/cloudbank-whole-application-equivalence.sh" verify
+"$project_dir/cloudbank-platform-qualification.sh" verify
 "$project_dir/composite-estate.sh" verify
 "$project_dir/runtime-evidence.sh" verify
 "$project_dir/semantic-memory.sh" validate

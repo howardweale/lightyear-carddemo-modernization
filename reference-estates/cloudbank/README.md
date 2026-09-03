@@ -266,6 +266,26 @@ concurrency, restart, and recovery scenarios; every deployable must be restarted
 A passing receipt proves bounded business equivalence for those scenarios, not identical internals,
 real credit scoring, model-answer quality, production execution, or production readiness.
 
+## Run the real non-production platform qualification gate
+
+MS #67 chains the signed MS #65 deployment rehearsal and signed MS #66 whole-application result into
+one explicitly authorized real Kubernetes environment. The first implementation is a disposable
+regional GKE Standard platform with private nodes across three zones, Cloud SQL PostgreSQL regional
+HA and PITR, Artifact Registry, Workload Identity, Secret Manager, trusted public TLS, Google Cloud
+telemetry, KMS-backed image signing, security scans, and controlled teardown.
+
+```bash
+./cloudbank-platform-qualification.sh verify
+./cloudbank-platform-qualification.sh preflight PROFILE OUTPUT_ROOT
+```
+
+Twenty-eight signed live scenarios require every service and operational control to pass, including
+secret rotation, alert recovery, sustained load, exact restore, node and failure-domain evacuation,
+zero-unavailable rolling deployment, canary cutover, all 18 business journeys, and mandatory
+rollback. The committed receipt does not claim a cluster was contacted. A later passing receipt
+qualifies only the bound non-production platform; customer IdP, representative customer workload,
+customer approval, production deployment, and final readiness remain MS #68.
+
 The projection is composed with the existing PL/I and Oracle Customer (Large) fragments. It does
 not change the canonical CardDemo graph or the identity to which runtime and audit evidence are
 bound.
@@ -286,6 +306,6 @@ Authorization, Account, and Transfer. MS #63 adds the bounded PostgreSQL Checks 
 MS #64 adds the Credit Score and Chatbot control boundaries and assembles the eight-service target.
 MS #65 adds the immutable deployment renderer and signed non-production cutover/rollback rehearsal.
 MS #66 adds the signed eight-service native Oracle/PostgreSQL comparison and closes only the bounded
-whole-application business-equivalence claim. Native CDC, external production security operations,
-real credit-bureau behavior, model-quality evaluation, production data, migration completion,
-production deployment, and production readiness remain unclaimed.
+whole-application business-equivalence claim. MS #67 adds the GKE implementation and live
+non-production platform gate without fabricating a run. Customer IdP, representative customer data
+and workload, customer approval, production deployment, and production readiness remain unclaimed.

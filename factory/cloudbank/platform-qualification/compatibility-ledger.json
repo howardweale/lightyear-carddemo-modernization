@@ -1,0 +1,87 @@
+{
+  "content_sha256": "978fe4798c5853c330976a90cf70270bbfde4a574ae60bc42866a0b5d664a467",
+  "entries": [
+    {
+      "capability": "real-non-production-kubernetes",
+      "classification": "platform-qualified",
+      "evidence": "live-api-and-cluster-identity"
+    },
+    {
+      "capability": "tls",
+      "classification": "platform-qualified",
+      "evidence": "trusted-hostname-protocol-plaintext"
+    },
+    {
+      "capability": "external-secrets",
+      "classification": "platform-qualified",
+      "evidence": "sync-and-rotation"
+    },
+    {
+      "capability": "observability",
+      "classification": "platform-qualified",
+      "evidence": "metrics-logs-traces-alerts"
+    },
+    {
+      "capability": "bounded-load",
+      "classification": "platform-qualified",
+      "evidence": "sustained-zero-error-p95-window"
+    },
+    {
+      "capability": "supply-chain-security",
+      "classification": "platform-qualified",
+      "evidence": "signatures-provenance-vulnerability-scans"
+    },
+    {
+      "capability": "backup-restore",
+      "classification": "platform-qualified",
+      "evidence": "exact-state-rpo-rto"
+    },
+    {
+      "capability": "high-availability",
+      "classification": "platform-qualified",
+      "evidence": "node-and-failure-domain-disruption"
+    },
+    {
+      "capability": "rolling-deployment",
+      "classification": "platform-qualified",
+      "evidence": "zero-unavailable-all-services"
+    },
+    {
+      "capability": "cutover-rollback",
+      "classification": "platform-qualified",
+      "evidence": "canary-switch-rollback-recovery"
+    },
+    {
+      "capability": "customer-idp",
+      "classification": "not-qualified",
+      "evidence": "ms68-customer-integration-required"
+    },
+    {
+      "capability": "representative-production-volume",
+      "classification": "not-qualified",
+      "evidence": "ms68-customer-workload-required"
+    },
+    {
+      "capability": "customer-change-approval",
+      "classification": "not-qualified",
+      "evidence": "ms68-approval-required"
+    },
+    {
+      "capability": "production-deployment",
+      "classification": "not-qualified",
+      "evidence": "customer-change-authority-required"
+    },
+    {
+      "capability": "production-readiness",
+      "classification": "not-qualified",
+      "evidence": "ms68-certification-required"
+    }
+  ],
+  "ledger_type": "lightyear-cloudbank-platform-qualification-compatibility",
+  "migration_complete": false,
+  "non_production_platform_qualification_eligible": true,
+  "production_deployment_eligible": false,
+  "production_ready": false,
+  "release": "0.67.0",
+  "schema_version": "1.0"
+}

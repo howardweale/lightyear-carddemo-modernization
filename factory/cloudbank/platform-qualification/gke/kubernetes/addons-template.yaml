@@ -1,0 +1,362 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: observability
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: otel-collector
+  namespace: observability
+automountServiceAccountToken: true
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: otel-collector
+  namespace: observability
+data:
+  config.yaml: |
+    receivers:
+      otlp:
+        protocols:
+          grpc:
+            endpoint: 0.0.0.0:4317
+          http:
+            endpoint: 0.0.0.0:4318
+    processors:
+      batch: {}
+      resourcedetection:
+        detectors: [gcp]
+        timeout: 10s
+    exporters:
+      googlecloud: {}
+    service:
+      pipelines:
+        metrics:
+          receivers: [otlp]
+          processors: [resourcedetection, batch]
+          exporters: [googlecloud]
+        traces:
+          receivers: [otlp]
+          processors: [resourcedetection, batch]
+          exporters: [googlecloud]
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: otel-collector
+  namespace: observability
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: otel-collector
+  template:
+    metadata:
+      labels:
+        app: otel-collector
+    spec:
+      serviceAccountName: otel-collector
+      containers:
+      - name: collector
+        image: "{{OTEL_COLLECTOR_IMAGE}}"
+        args: ["--config=/conf/config.yaml"]
+        ports:
+        - {name: otlp-grpc, containerPort: 4317}
+        - {name: otlp-http, containerPort: 4318}
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        securityContext:
+          runAsNonRoot: true
+          runAsUser: 10001
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop: ["ALL"]
+        volumeMounts:
+        - {name: config, mountPath: /conf, readOnly: true}
+        - {name: tmp, mountPath: /tmp}
+      volumes:
+      - name: config
+        configMap:
+          name: otel-collector
+      - name: tmp
+        emptyDir: {sizeLimit: 64Mi}
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: otel-collector
+  namespace: observability
+spec:
+  selector:
+    app: otel-collector
+  ports:
+  - {name: grpc, port: 4317, targetPort: otlp-grpc}
+  - {name: http, port: 4318, targetPort: otlp-http}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: observability-default-deny
+  namespace: observability
+spec:
+  podSelector: {}
+  policyTypes: ["Ingress", "Egress"]
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: otel-collector-traffic
+  namespace: observability
+spec:
+  podSelector:
+    matchLabels:
+      app: otel-collector
+  policyTypes: ["Ingress", "Egress"]
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: "{{NAMESPACE}}"
+    ports:
+    - {protocol: TCP, port: 4317}
+  egress:
+  - to:
+    - ipBlock:
+        cidr: "{{GOOGLE_APIS_CIDR}}"
+    ports:
+    - {protocol: TCP, port: 443}
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: kube-system
+    ports:
+    - {protocol: UDP, port: 53}
+    - {protocol: TCP, port: 53}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: cloudbank-otel-egress
+  namespace: "{{NAMESPACE}}"
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/part-of: cloudbank
+  policyTypes: ["Egress"]
+  egress:
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: observability
+      podSelector:
+        matchLabels:
+          app: otel-collector
+    ports:
+    - {protocol: TCP, port: 4317}
+---
+apiVersion: external-secrets.io/v1
+kind: SecretStore
+metadata:
+  name: cloudbank-gcp-secret-manager
+  namespace: "{{NAMESPACE}}"
+spec:
+  provider:
+    gcpsm:
+      projectID: "{{PROJECT_ID}}"
+      auth:
+        workloadIdentity:
+          clusterProjectID: "{{PROJECT_ID}}"
+          clusterLocation: "{{REGION}}"
+          clusterName: "{{CLUSTER_NAME}}"
+          serviceAccountRef:
+            name: cloudbank-secret-reader
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: cloudbank-azn-server
+  namespace: "{{NAMESPACE}}"
+spec:
+  refreshInterval: 1m
+  secretStoreRef:
+    name: cloudbank-gcp-secret-manager
+    kind: SecretStore
+  target:
+    name: cloudbank-azn-server-external
+    creationPolicy: Owner
+  dataFrom:
+  - extract:
+      key: cloudbank-azn-server-external
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: cloudbank-customer
+  namespace: "{{NAMESPACE}}"
+spec:
+  refreshInterval: 1m
+  secretStoreRef:
+    name: cloudbank-gcp-secret-manager
+    kind: SecretStore
+  target:
+    name: cloudbank-customer-external
+    creationPolicy: Owner
+  dataFrom:
+  - extract:
+      key: cloudbank-customer-external
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: cloudbank-account
+  namespace: "{{NAMESPACE}}"
+spec:
+  refreshInterval: 1m
+  secretStoreRef:
+    name: cloudbank-gcp-secret-manager
+    kind: SecretStore
+  target:
+    name: cloudbank-account-external
+    creationPolicy: Owner
+  dataFrom:
+  - extract:
+      key: cloudbank-account-external
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: cloudbank-transfer
+  namespace: "{{NAMESPACE}}"
+spec:
+  refreshInterval: 1m
+  secretStoreRef:
+    name: cloudbank-gcp-secret-manager
+    kind: SecretStore
+  target:
+    name: cloudbank-transfer-external
+    creationPolicy: Owner
+  dataFrom:
+  - extract:
+      key: cloudbank-transfer-external
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: cloudbank-checks
+  namespace: "{{NAMESPACE}}"
+spec:
+  refreshInterval: 1m
+  secretStoreRef:
+    name: cloudbank-gcp-secret-manager
+    kind: SecretStore
+  target:
+    name: cloudbank-checks-external
+    creationPolicy: Owner
+  dataFrom:
+  - extract:
+      key: cloudbank-checks-external
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: cloudbank-testrunner
+  namespace: "{{NAMESPACE}}"
+spec:
+  refreshInterval: 1m
+  secretStoreRef:
+    name: cloudbank-gcp-secret-manager
+    kind: SecretStore
+  target:
+    name: cloudbank-testrunner-external
+    creationPolicy: Owner
+  dataFrom:
+  - extract:
+      key: cloudbank-testrunner-external
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: cloudbank-creditscore
+  namespace: "{{NAMESPACE}}"
+spec:
+  refreshInterval: 1m
+  secretStoreRef:
+    name: cloudbank-gcp-secret-manager
+    kind: SecretStore
+  target:
+    name: cloudbank-creditscore-external
+    creationPolicy: Owner
+  dataFrom:
+  - extract:
+      key: cloudbank-creditscore-external
+---
+apiVersion: external-secrets.io/v1
+kind: ExternalSecret
+metadata:
+  name: cloudbank-chatbot
+  namespace: "{{NAMESPACE}}"
+spec:
+  refreshInterval: 1m
+  secretStoreRef:
+    name: cloudbank-gcp-secret-manager
+    kind: SecretStore
+  target:
+    name: cloudbank-chatbot-external
+    creationPolicy: Owner
+  dataFrom:
+  - extract:
+      key: cloudbank-chatbot-external
+---
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: cloudbank-ms67-letsencrypt
+spec:
+  acme:
+    email: "{{LETSENCRYPT_EMAIL}}"
+    server: https://acme-v02.api.letsencrypt.org/directory
+    privateKeySecretRef:
+      name: cloudbank-ms67-acme
+    solvers:
+    - http01:
+        ingress:
+          ingressClassName: nginx
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: cloudbank
+  namespace: "{{NAMESPACE}}"
+  annotations:
+    cert-manager.io/cluster-issuer: cloudbank-ms67-letsencrypt
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - "{{TLS_HOSTNAME}}"
+    secretName: cloudbank-ms67-tls
+  rules:
+  - host: "{{TLS_HOSTNAME}}"
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: testrunner
+            port:
+              number: 8080
+---

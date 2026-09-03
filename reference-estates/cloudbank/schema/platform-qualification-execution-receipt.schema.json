@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schemas/cloudbank/platform-qualification-execution-receipt.schema.json",
+  "title": "CloudBank MS67 real non-production platform qualification receipt",
+  "type": "object",
+  "required": [
+    "schema_version", "receipt_type", "release", "run_id", "signer", "bindings",
+    "source_ms65_receipt_sha256", "source_ms66_receipt_sha256", "profile_sha256",
+    "observation_sha256", "deployment_bundle_sha256", "cluster_identity_sha256",
+    "namespace_uid_sha256", "status", "services", "scenario_count", "platform_summary",
+    "non_production_platform_qualified", "tls_qualified", "external_secrets_qualified",
+    "observability_qualified", "performance_qualified", "security_qualified",
+    "backup_restore_qualified", "high_availability_qualified", "rolling_deployment_qualified",
+    "cutover_rollback_qualified", "customer_idp_qualified",
+    "representative_data_volume_qualified", "customer_approval_complete",
+    "migration_complete", "production_deployed", "production_ready", "security", "content_sha256", "signature"
+  ],
+  "properties": {
+    "receipt_type": {"const": "lightyear-cloudbank-non-production-platform-qualification-execution"},
+    "release": {"const": "0.67.0"},
+    "status": {"const": "passed-real-non-production-platform-qualification"},
+    "scenario_count": {"const": 28},
+    "non_production_platform_qualified": {"const": true},
+    "tls_qualified": {"const": true},
+    "external_secrets_qualified": {"const": true},
+    "observability_qualified": {"const": true},
+    "performance_qualified": {"const": true},
+    "security_qualified": {"const": true},
+    "backup_restore_qualified": {"const": true},
+    "high_availability_qualified": {"const": true},
+    "rolling_deployment_qualified": {"const": true},
+    "cutover_rollback_qualified": {"const": true},
+    "customer_idp_qualified": {"const": false},
+    "representative_data_volume_qualified": {"const": false},
+    "customer_approval_complete": {"const": false},
+    "migration_complete": {"const": false},
+    "production_deployed": {"const": false},
+    "production_ready": {"const": false},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "signature": {"type": "object"}
+  }
+}

@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.67.0 — 2026-09-03
+
+- Added an MS #65/MS #66-chained real non-production Kubernetes platform qualification gate for
+  all eight CloudBank services.
+- Added an ephemeral regional GKE implementation with private nodes across three zones, Workload
+  Identity, Cloud SQL PostgreSQL regional HA and PITR, Artifact Registry, Cloud DNS, bounded
+  administrator access, restricted Google API egress, and an explicit teardown boundary.
+- Added digest-only Java 21 images with verified OpenTelemetry agent input, Cloud KMS Cosign
+  signatures and provenance, Trivy image scanning, and zero admitted critical or high findings.
+- Added Secret Manager integration through External Secrets Operator without static service-account
+  keys or committed secret values, plus one-minute refresh and mandatory rotation evidence.
+- Added cert-manager/Let's Encrypt TLS through ingress-nginx, OpenTelemetry metrics and traces to
+  Google Cloud, Cloud Logging, bounded k6 load, alert fire/recovery, backup/restore RPO/RTO, node and
+  failure-domain evacuation, zero-unavailable rollout, canary cutover, and rollback contracts.
+- Added 28 exact signed live scenarios, minimized content-addressed observations, four schemas,
+  cross-platform admission launchers, GKE bootstrap/build/deploy/destroy scripts, a live runbook,
+  CI verification, Control Tower projection, and adversarial overclaim tests.
+- Kept the committed receipt fail-closed because this workspace has no Kubernetes context or Google
+  Cloud credentials. Customer IdP, representative customer volumes/workload, customer approval,
+  production deployment, and final production readiness remain false for MS #68.
+
 ## 0.66.0 — 2026-09-03
 
 - Added an MS #61/MS #64-chained whole-application equivalence gate for all eight CloudBank

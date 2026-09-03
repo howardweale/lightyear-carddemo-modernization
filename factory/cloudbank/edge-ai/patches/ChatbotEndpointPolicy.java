@@ -14,6 +14,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class ChatbotEndpointPolicy {
 
+    /**
+     * Validates that the configured model endpoint is allowlisted and transport-safe.
+     *
+     * @param baseUrl the configured model endpoint
+     * @param allowedHosts the comma-separated model-host allowlist
+     */
     public ChatbotEndpointPolicy(
             @Value("${spring.ai.ollama.base-url}") String baseUrl,
             @Value("${chatbot.security.allowed-model-hosts}") String allowedHosts) {

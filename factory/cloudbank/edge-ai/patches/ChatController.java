@@ -61,6 +61,14 @@ public class ChatController {
         this(chatModel, maxRequestsPerWindow, rateLimitWindow, Clock.systemUTC());
     }
 
+    /**
+     * Creates the controller with explicit rate-limit and clock dependencies.
+     *
+     * @param chatModel the model client
+     * @param maxRequestsPerWindow the maximum calls allowed per caller and window
+     * @param rateLimitWindow the caller rate-limit window
+     * @param clock the clock used to evaluate request windows
+     */
     public ChatController(ChatModel chatModel, int maxRequestsPerWindow, Duration rateLimitWindow, Clock clock) {
         this.chatModel = chatModel;
         this.maxRequestsPerWindow = maxRequestsPerWindow;
@@ -68,6 +76,14 @@ public class ChatController {
         this.clock = clock;
     }
 
+    /**
+     * Evaluates and answers an authenticated banking-assistant question.
+     *
+     * @param question the untrusted caller question
+     * @param request the servlet request used for anonymous caller fallback
+     * @param authentication the authenticated caller
+     * @return the filtered assistant response or a fail-closed status
+     */
     @PostMapping
     public ResponseEntity<String> chat(@RequestBody String question, HttpServletRequest request,
             Authentication authentication) {

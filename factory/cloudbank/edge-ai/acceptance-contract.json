@@ -2,10 +2,10 @@
   "bindings": {
     "compatibility_ledger_sha256": "73bf8f3d6934d85b5573913fb0ededa994c676fa5af125c4590897163b2ccd4a",
     "edge_contract_sha256": "ddca81a27700fb141e9c9fdbc30382fc90c1823637d5db946297a4165024e9aa",
-    "execution_plan_sha256": "55c6c65d39e87ef278684a4a27a49c5a3129846ccc060e60e0985f2c277e5fa1",
+    "execution_plan_sha256": "5f7ae631d23366c6ced09e5ae0532412825e07c642723826d07c2c0681effc8f",
     "source_contract_sha256": "d9f15e024d74e630403308d776bc25928e575fbe756bc835befd963ae756f79f"
   },
-  "content_sha256": "5788a7ab194cf2ccfff3fcde3236b147d62b5c96d0e2d9edddc0376583b2b346",
+  "content_sha256": "1c6fad39a8c5826d74918ff7648aa8491be3854465a46946a91d8ed4e7cb5346",
   "contract_type": "lightyear-cloudbank-edge-ai-acceptance",
   "eligible_claim": {
     "eight_service_target_assembled": true,

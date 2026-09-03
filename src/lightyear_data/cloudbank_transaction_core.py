@@ -18,7 +18,12 @@ from lightyear_common.io import write_json, write_text
 
 from .cloudbank_baseline import PINNED_SUBTREE
 from .cloudbank_customer_postgres import POSTGRES_IMAGE
-from .cloudbank_dark_factory import _container_port, _inspect_image, _wait_postgres
+from .cloudbank_dark_factory import (
+    _container_connectivity_args,
+    _container_endpoint,
+    _inspect_image,
+    _wait_postgres,
+)
 from .cloudbank_transaction_wave import (
     RECEIPT_TYPE as MS58_RECEIPT_TYPE,
     SOURCE_FILES,
@@ -418,7 +423,7 @@ def _native_postgresql_lane(
     started = run(
         [
             "docker", "run", "-d", "--rm", "--name", name,
-            "-p", "127.0.0.1::5432", "--read-only", "--user", "70:70",
+            *_container_connectivity_args(5432), "--read-only", "--user", "70:70",
             "--pids-limit", "128", "--memory", "768m", "--cpus", "1.0",
             "--tmpfs", "/var/lib/postgresql/data:rw,noexec,nosuid,size=384m,uid=70,gid=70",
             "--tmpfs", "/var/run/postgresql:rw,noexec,nosuid,size=16m,uid=70,gid=70",
@@ -433,8 +438,8 @@ def _native_postgresql_lane(
         raise ValueError("cloudbank-transaction-core-postgresql-start-failed")
     try:
         _wait_postgres(name, run, pause)
-        port = _container_port(name, 5432, run)
-        url = f"jdbc:postgresql://127.0.0.1:{port}/cloudbank"
+        host, port = _container_endpoint(name, 5432, run)
+        url = f"jdbc:postgresql://{host}:{port}/cloudbank"
         env = {
             **os.environ,
             "SPRING_DATASOURCE_URL": url,

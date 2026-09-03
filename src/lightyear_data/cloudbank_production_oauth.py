@@ -21,7 +21,12 @@ from typing import Any, Callable, Mapping
 from lightyear_common.io import write_json
 
 from .cloudbank_customer_postgres import POSTGRES_IMAGE
-from .cloudbank_dark_factory import _container_port, _inspect_image, _wait_postgres
+from .cloudbank_dark_factory import (
+    _container_connectivity_args,
+    _container_endpoint,
+    _inspect_image,
+    _wait_postgres,
+)
 from .cloudbank_native_wave import (
     _free_port,
     _psql,
@@ -521,7 +526,7 @@ def _native_oauth_lane(
     started = run(
         [
             "docker", "run", "-d", "--rm", "--name", name,
-            "-p", "127.0.0.1::5432", "--read-only", "--user", "70:70",
+            *_container_connectivity_args(5432), "--read-only", "--user", "70:70",
             "--pids-limit", "128", "--memory", "768m", "--cpus", "1.0",
             "--tmpfs", "/var/lib/postgresql/data:rw,noexec,nosuid,size=384m,uid=70,gid=70",
             "--tmpfs", "/var/run/postgresql:rw,noexec,nosuid,size=16m,uid=70,gid=70",
@@ -548,8 +553,8 @@ def _native_oauth_lane(
 
     try:
         _wait_postgres(name, run, pause)
-        database_port = _container_port(name, 5432, run)
-        jdbc_url = f"jdbc:postgresql://127.0.0.1:{database_port}/cloudbank"
+        database_host, database_port = _container_endpoint(name, 5432, run)
+        jdbc_url = f"jdbc:postgresql://{database_host}:{database_port}/cloudbank"
         with tempfile.TemporaryDirectory(prefix="lightyear-ms62-keys-") as key_dir:
             private_key, public_key, public_key_sha256 = _generate_keys(Path(key_dir), run)
             issuer = f"http://127.0.0.1:{azn_port}"

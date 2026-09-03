@@ -22,6 +22,8 @@ steps:
   waitFor:
   - push-evidence-runner
   entrypoint: /bin/bash
+  env:
+  - LIGHTYEAR_FACTORY_DOCKER_NETWORK=cloudbuild
   secretEnv:
   - LIGHTYEAR_CLOUDBANK_BASELINE_EVIDENCE_KEY
   args:

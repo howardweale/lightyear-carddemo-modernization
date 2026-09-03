@@ -473,7 +473,11 @@ def _oracle_lane(
             "SPRING_DATASOURCE_USERNAME": "ACCOUNT",
             "SPRING_DATASOURCE_PASSWORD": password,
             "LIQUIBASE_DATASOURCE_URL": url,
-            "LIQUIBASE_DATASOURCE_USERNAME": "ACCOUNT",
+            # The pinned source changelog grants SYS-owned DBMS_AQ package
+            # privileges and creates queues in ACCOUNT. Keep application access
+            # least-privileged while giving only the migration its required
+            # administrative identity.
+            "LIQUIBASE_DATASOURCE_USERNAME": "system",
             "LIQUIBASE_DATASOURCE_PASSWORD": password,
             "MP_LRA_COORDINATOR_URL": "http://127.0.0.1:1/lra-coordinator",
             "EUREKA_CLIENT_ENABLED": "false",

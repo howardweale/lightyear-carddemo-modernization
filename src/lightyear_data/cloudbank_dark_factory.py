@@ -47,6 +47,8 @@ SAFE_EXCEPTION_TYPE = re.compile(
     r"^[A-Za-z_$][A-Za-z0-9_$]*(?:\.[A-Za-z_$][A-Za-z0-9_$]*)+$"
 )
 MAX_EXCEPTION_TYPES = 16
+DOCKER_NETWORK_ENV = "LIGHTYEAR_FACTORY_DOCKER_NETWORK"
+SAFE_DOCKER_NETWORK = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$")
 LANE_MARKER = "CLOUDBANK_LANE_RESULT="
 ORACLE_READY_ATTEMPTS = 600
 ORACLE_READY_MARKER = "CLOUDBANK_ORACLE_READY"
@@ -464,6 +466,35 @@ def _container_port(name: str, port: int, run: Callable[..., subprocess.Complete
     return int(value)
 
 
+def _configured_docker_network() -> str | None:
+    network = os.environ.get(DOCKER_NETWORK_ENV, "")
+    if not network:
+        return None
+    if not SAFE_DOCKER_NETWORK.fullmatch(network):
+        raise ValueError("cloudbank-dark-factory-docker-network-invalid")
+    return network
+
+
+def _container_connectivity_args(port: int) -> list[str]:
+    network = _configured_docker_network()
+    if network:
+        # Preserve the loopback-only host publication recorded by existing
+        # receipts while allowing the isolated build-step container to use the
+        # database container's name on the shared build-local Docker network.
+        return ["--network", network, "-p", f"127.0.0.1::{port}"]
+    return ["-p", f"127.0.0.1::{port}"]
+
+
+def _container_endpoint(
+    name: str,
+    port: int,
+    run: Callable[..., subprocess.CompletedProcess[str]],
+) -> tuple[str, int]:
+    if _configured_docker_network():
+        return name, port
+    return "127.0.0.1", _container_port(name, port, run)
+
+
 def _wait_postgres(name: str, run: Callable[..., subprocess.CompletedProcess[str]], pause: Callable[[float], None]) -> None:
     for _ in range(120):
         ready = run(["docker", "exec", name, "psql", "-U", "postgres", "-d", "cloudbank", "-Atqc", "SELECT 1"], timeout=10)
@@ -588,7 +619,7 @@ def _execute_postgresql_lane(
     started = run(
         [
             "docker", "run", "-d", "--rm", "--name", name,
-            "-p", "127.0.0.1::5432", "--read-only", "--user", "70:70",
+            *_container_connectivity_args(5432), "--read-only", "--user", "70:70",
             "--pids-limit", "128", "--memory", "768m", "--cpus", "1.0",
             "--tmpfs", "/var/lib/postgresql/data:rw,noexec,nosuid,size=384m,uid=70,gid=70",
             "--tmpfs", "/var/run/postgresql:rw,noexec,nosuid,size=16m,uid=70,gid=70",
@@ -603,8 +634,8 @@ def _execute_postgresql_lane(
         raise ValueError("cloudbank-dark-factory-postgresql-start-failed")
     try:
         _wait_postgres(name, run, pause)
-        port = _container_port(name, 5432, run)
-        url = f"jdbc:postgresql://127.0.0.1:{port}/cloudbank"
+        host, port = _container_endpoint(name, 5432, run)
+        url = f"jdbc:postgresql://{host}:{port}/cloudbank"
         env = {
             **os.environ,
             "SPRING_DATASOURCE_URL": url,
@@ -647,7 +678,7 @@ def _execute_oracle_lane(
             # the container inspectable on failure and do not set
             # no-new-privileges. The finally block still removes it.
             "docker", "run", "-d", "--name", name,
-            "-p", "127.0.0.1::1521", "--pids-limit", "512",
+            *_container_connectivity_args(1521), "--pids-limit", "512",
             "--memory", "4g", "--cpus", "2.0", "--shm-size", "1g",
             "-e", f"ORACLE_PASSWORD={password}",
             "-e", "APP_USER=CUSTOMER", "-e", f"APP_USER_PASSWORD={password}",
@@ -659,7 +690,7 @@ def _execute_oracle_lane(
         raise ValueError("cloudbank-dark-factory-oracle-start-failed")
     try:
         _wait_oracle(name, run, pause)
-        port = _container_port(name, 1521, run)
+        host, port = _container_endpoint(name, 1521, run)
         with tempfile.TemporaryDirectory(prefix="lightyear-cloudbank-oracle-lane-") as directory:
             lane_root = Path(directory) / "cloudbank-v5"
             shutil.copytree(workspace, lane_root, ignore=shutil.ignore_patterns("target", "*.pyc", "__pycache__"))
@@ -668,7 +699,7 @@ def _execute_oracle_lane(
                 (_template_root(project_root) / "CustomerApplicationTests.java").read_text(encoding="utf-8"),
                 encoding="utf-8",
             )
-            url = f"jdbc:oracle:thin:@127.0.0.1:{port}/FREEPDB1"
+            url = f"jdbc:oracle:thin:@{host}:{port}/FREEPDB1"
             env = {
                 **os.environ,
                 "SPRING_DATASOURCE_URL": url,

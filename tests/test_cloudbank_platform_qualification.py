@@ -334,6 +334,7 @@ class CloudBankPlatformQualificationTests(unittest.TestCase):
         submit = (gke / "submit-prerequisite-chain.sh").read_text()
 
         self.assertIn("secretEnv:", cloudbuild)
+        self.assertIn("LIGHTYEAR_FACTORY_DOCKER_NETWORK=cloudbuild", cloudbuild)
         self.assertIn("cloudbank-ms67-evidence-key", submit)
         self.assertIn("openjdk21-jdk", evidence_runner)
         self.assertIn("JAVA_HOME=/usr/lib/jvm/java-21-openjdk", evidence_runner)

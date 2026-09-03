@@ -2,11 +2,13 @@ from __future__ import annotations
 
 import copy
 import json
+import os
 import subprocess
 import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from lightyear_common.io import write_json
 from lightyear_data.cloudbank_baseline import ORACLE_IMAGE, ORACLE_RECEIPT_TYPE, build_plan, oracle_runtime_plan
@@ -19,12 +21,15 @@ from lightyear_data.cloudbank_customer_postgres import (
     target_mapping,
 )
 from lightyear_data.cloudbank_dark_factory import (
+    DOCKER_NETWORK_ENV,
     FACTORY_RECEIPT_TYPE,
     LANE_MARKER,
     PATCHES,
     SHARED_CONTRACT_SHA256,
     CloudBankCustomerAgentSet,
     _acceptance_diagnostic,
+    _container_connectivity_args,
+    _container_endpoint,
     _execute_oracle_lane,
     _execute_postgresql_lane,
     _maven_result,
@@ -157,6 +162,41 @@ class FakeOrchestrator:
 
 
 class CloudBankDarkFactoryTests(unittest.TestCase):
+    def test_container_connectivity_uses_local_or_named_network_endpoint(self) -> None:
+        calls: list[list[str]] = []
+
+        def fake_run(
+            argv: list[str], **kwargs: object
+        ) -> subprocess.CompletedProcess[str]:
+            calls.append(argv)
+            return subprocess.CompletedProcess(argv, 0, "127.0.0.1:15432\n", "")
+
+        with patch.dict(os.environ, {DOCKER_NETWORK_ENV: ""}):
+            self.assertEqual(
+                ["-p", "127.0.0.1::5432"],
+                _container_connectivity_args(5432),
+            )
+            self.assertEqual(
+                ("127.0.0.1", 15432),
+                _container_endpoint("postgres", 5432, fake_run),
+            )
+        self.assertEqual([["docker", "port", "postgres", "5432/tcp"]], calls)
+
+        with patch.dict(os.environ, {DOCKER_NETWORK_ENV: "cloudbuild"}):
+            self.assertEqual(
+                ["--network", "cloudbuild", "-p", "127.0.0.1::5432"],
+                _container_connectivity_args(5432),
+            )
+            self.assertEqual(
+                ("postgres", 5432),
+                _container_endpoint("postgres", 5432, fake_run),
+            )
+        self.assertEqual(1, len(calls))
+
+        with patch.dict(os.environ, {DOCKER_NETWORK_ENV: "unsafe network"}):
+            with self.assertRaisesRegex(ValueError, "docker-network-invalid"):
+                _container_connectivity_args(5432)
+
     def test_contracts_bind_six_exact_generated_edits(self) -> None:
         plan = transformation_plan(ROOT)
         self.assertEqual(6, len(plan["changes"]))
@@ -327,6 +367,7 @@ Caused by: org.postgresql.util.PSQLException: password=should-not-leak
                 if argv[:3] == ["docker", "image", "inspect"]:
                     return subprocess.CompletedProcess(argv, 0, f"sha256:{HEX_B}\n", "")
                 if argv[:2] == ["docker", "run"]:
+                    captured["run"] = argv
                     return subprocess.CompletedProcess(argv, 0, "container-id\n", "")
                 if argv[:2] == ["docker", "exec"]:
                     return subprocess.CompletedProcess(argv, 0, "1\n", "")
@@ -346,10 +387,23 @@ Caused by: org.postgresql.util.PSQLException: password=should-not-leak
                     return subprocess.CompletedProcess(argv, 0, "", "")
                 return subprocess.CompletedProcess(argv, 1, "", "unexpected command")
 
-            result = _execute_postgresql_lane(workspace, HEX_B, fake_run, lambda _: None)
+            with patch.dict(os.environ, {DOCKER_NETWORK_ENV: "cloudbuild"}):
+                result = _execute_postgresql_lane(
+                    workspace, HEX_B, fake_run, lambda _: None
+                )
             self.assertEqual("passed", result["status"])
             env = captured["env"]
             self.assertIsInstance(env, dict)
+            run_command = captured["run"]
+            self.assertIsInstance(run_command, list)
+            self.assertEqual(
+                "cloudbuild", run_command[run_command.index("--network") + 1]
+            )
+            container_name = run_command[run_command.index("--name") + 1]
+            self.assertEqual(
+                f"jdbc:postgresql://{container_name}:5432/cloudbank",
+                env["SPRING_DATASOURCE_URL"],
+            )
             self.assertEqual(
                 "org.hibernate.dialect.PostgreSQLDialect",
                 env["SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT"],

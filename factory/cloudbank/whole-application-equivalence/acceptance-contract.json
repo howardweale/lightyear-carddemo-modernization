@@ -1,0 +1,58 @@
+{
+  "bindings": {
+    "compatibility_ledger_sha256": "54af946233573f20011d943a416297b477ee319c1b9cd5508bee71daec15b6c9",
+    "execution_plan_sha256": "f152995a4bea33456704dc1bb20ba5d9b5ebd87152ea12c68338bc2289d10569",
+    "journey_contract_sha256": "27afe95a18beba97389b2c1775d57ff151eefad1259d3d27e43e7fcf14ee4f66",
+    "lane_contract_sha256": "834d69d823e766611839b11ef3c7d833195db902f7457d527455c27625a5db8c"
+  },
+  "content_sha256": "ff3882a70fd74837d74900234656d7950382671d8105e650639e09671969cf1e",
+  "contract_type": "lightyear-cloudbank-whole-application-equivalence-acceptance",
+  "eligible_claim": {
+    "all_eight_services_observed_in_both_lanes": true,
+    "bounded_whole_application_equivalent": true,
+    "exact_internal_implementation_equivalent": false,
+    "migration_complete": false,
+    "model_quality_qualified": false,
+    "production_deployed": false,
+    "production_ready": false,
+    "real_credit_decision_equivalent": false,
+    "whole_application_equivalent": true
+  },
+  "release": "0.66.0",
+  "required_normalized_observation_sha256": "71458ecf2e1b2ae89f1dad763d4a8898899e19834c7744f3683733ccaf9a2bc9",
+  "required_receipts": [
+    "lightyear-cloudbank-oracle-postgresql-equivalence-execution",
+    "lightyear-cloudbank-edge-ai-execution"
+  ],
+  "required_scenarios": [
+    "eight-services-ready",
+    "authorization-token-issued",
+    "unauthenticated-request-rejected",
+    "customer-owner-read",
+    "account-balance-read",
+    "transfer-success-conserves-value",
+    "transfer-invalid-no-mutation",
+    "transfer-insufficient-funds-no-mutation",
+    "check-deposit-applied-once",
+    "check-clearance-applied-once",
+    "duplicate-message-suppressed",
+    "credit-score-contract-served",
+    "chatbot-boundary-served",
+    "account-restart-preserves-state",
+    "checks-restart-redelivers-inflight",
+    "transfer-dependency-failure-recovers",
+    "concurrent-opposite-transfers-conserve-value",
+    "full-stack-restart-restores-journey"
+  ],
+  "required_services": [
+    "azn-server",
+    "customer",
+    "account",
+    "transfer",
+    "checks",
+    "testrunner",
+    "creditscore",
+    "chatbot"
+  ],
+  "schema_version": "1.0"
+}

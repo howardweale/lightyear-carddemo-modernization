@@ -1,5 +1,27 @@
 # Changelog
 
+## 0.66.0 — 2026-09-03
+
+- Added an MS #61/MS #64-chained whole-application equivalence gate for all eight CloudBank
+  deployables in isolated native Oracle/source and PostgreSQL/target lanes.
+- Added one exact 18-scenario normalized contract spanning service readiness, OAuth, Customer and
+  Account reads, successful and rejected transfers, Checks delivery and duplicate suppression,
+  Credit Score and Chatbot boundaries, dependency failure, targeted restart, concurrency, and
+  full-stack restart recovery.
+- Required every service to start in each lane, every service to participate in full-stack restart,
+  Account, Transfer, and Checks to sustain additional targeted restarts, and all services to finish
+  ready with content-addressed executable identities.
+- Added separately signed, comparison-run-bound Oracle and PostgreSQL observations and fail-closed
+  rejection for partial service sets, missing restarts, wrong scenarios, mismatched image chains,
+  unsafe evidence, signature drift, or differing normalized results.
+- Classified Oracle AQ versus the PostgreSQL durable queue and MicroTx LRA versus PostgreSQL atomic
+  transactions as intentional internal changes while admitting only equal bounded business results.
+- Added deterministic contracts, three schemas, cross-platform launchers, CI materialization,
+  Control Tower projection, documentation, and adversarial tests.
+- Kept exact internal implementation identity, real credit-decision equivalence, model-answer
+  quality, production data, migration completion, production deployment, and production readiness
+  explicitly false; MS #67 owns platform qualification and MS #68 owns customer certification.
+
 ## 0.65.0 — 2026-09-03
 
 - Added an MS #64-chained production-like deployment and cutover rehearsal gate covering all eight

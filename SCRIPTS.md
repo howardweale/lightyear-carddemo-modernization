@@ -64,5 +64,8 @@ script is undocumented, and that every POSIX entry point has a PowerShell twin.
   Kubernetes hardening, and cutover/rollback rehearsal contracts; `render` requires an eight-image
   lock and non-production environment profile, while `run` additionally requires the signed MS #64
   receipt and signed 24-scenario operator observation produced with the same evidence key.
+- `./cloudbank-whole-application-equivalence.sh verify` checks the MS #66 paired eight-service
+  Oracle/source and PostgreSQL/target contract; `run` additionally requires signed MS #61/MS #64
+  receipts and two same-run signed lane observations without fabricating native execution.
 
 See `scripts.catalog.json` for the exact purpose, role, and verification owner of all entry points.

@@ -249,6 +249,23 @@ recovery, and a bounded SLO window. A passing receipt proves only a synthetic, n
 rehearsal; it does not authorize customer production or establish migration completion or production
 readiness.
 
+## Run the whole-application dual-lane equivalence gate
+
+MS #66 chains the signed MS #61 Oracle/PostgreSQL core receipt to the signed MS #64 complete target
+and requires two isolated, operator-observed native lanes.
+
+```bash
+./cloudbank-whole-application-equivalence.sh verify
+./cloudbank-whole-application-equivalence.sh verify-source /path/to/oracle-microservices-backend
+```
+
+The Oracle lane starts the eight pinned source deployables with Oracle AQ and MicroTx LRA. The
+PostgreSQL lane starts the eight generated target deployables with the durable PostgreSQL queue and
+atomic transaction replacement. Each lane must run the same 18 normalized business, failure,
+concurrency, restart, and recovery scenarios; every deployable must be restarted and finish ready.
+A passing receipt proves bounded business equivalence for those scenarios, not identical internals,
+real credit scoring, model-answer quality, production execution, or production readiness.
+
 The projection is composed with the existing PL/I and Oracle Customer (Large) fragments. It does
 not change the canonical CardDemo graph or the identity to which runtime and audit evidence are
 bound.
@@ -268,6 +285,7 @@ Customer, Account, and Transfer scope. MS #62 adds the production OAuth applicat
 Authorization, Account, and Transfer. MS #63 adds the bounded PostgreSQL Checks messaging target.
 MS #64 adds the Credit Score and Chatbot control boundaries and assembles the eight-service target.
 MS #65 adds the immutable deployment renderer and signed non-production cutover/rollback rehearsal.
-Native CDC or Oracle AQ comparison, external production security operations, real credit-bureau
-behavior, model-quality evaluation, production data, whole-CloudBank equivalence, migration
-completion, production deployment, and production readiness remain unclaimed.
+MS #66 adds the signed eight-service native Oracle/PostgreSQL comparison and closes only the bounded
+whole-application business-equivalence claim. Native CDC, external production security operations,
+real credit-bureau behavior, model-quality evaluation, production data, migration completion,
+production deployment, and production readiness remain unclaimed.

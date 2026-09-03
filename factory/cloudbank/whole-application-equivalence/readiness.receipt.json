@@ -1,0 +1,21 @@
+{
+  "acceptance_contract_sha256": "ff3882a70fd74837d74900234656d7950382671d8105e650639e09671969cf1e",
+  "all_eight_services_observed_in_both_lanes": false,
+  "bindings": {
+    "compatibility_ledger_sha256": "54af946233573f20011d943a416297b477ee319c1b9cd5508bee71daec15b6c9",
+    "execution_plan_sha256": "f152995a4bea33456704dc1bb20ba5d9b5ebd87152ea12c68338bc2289d10569",
+    "journey_contract_sha256": "27afe95a18beba97389b2c1775d57ff151eefad1259d3d27e43e7fcf14ee4f66",
+    "lane_contract_sha256": "834d69d823e766611839b11ef3c7d833195db902f7457d527455c27625a5db8c"
+  },
+  "bounded_whole_application_equivalent": false,
+  "content_sha256": "3adf64b8b9a842189eeafdebb9d1dcfeea178e0ff1f64fb099e142bf2a5497de",
+  "exact_internal_implementation_equivalent": false,
+  "gate_status": "ready-for-signed-ms61-ms64-and-dual-lane-observations",
+  "migration_complete": false,
+  "production_deployed": false,
+  "production_ready": false,
+  "receipt_type": "lightyear-cloudbank-whole-application-equivalence-readiness",
+  "release": "0.66.0",
+  "schema_version": "1.0",
+  "whole_application_equivalent": false
+}

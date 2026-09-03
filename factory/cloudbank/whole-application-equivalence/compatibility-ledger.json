@@ -1,0 +1,82 @@
+{
+  "content_sha256": "54af946233573f20011d943a416297b477ee319c1b9cd5508bee71daec15b6c9",
+  "entries": [
+    {
+      "capability": "eight-service-startup",
+      "classification": "dual-lane-qualified",
+      "evidence": "all-ready-and-restarted"
+    },
+    {
+      "capability": "identity-boundary",
+      "classification": "normalized-equivalent",
+      "evidence": "token-and-401-journeys"
+    },
+    {
+      "capability": "customer-and-account-reads",
+      "classification": "normalized-equivalent",
+      "evidence": "owner-and-balance"
+    },
+    {
+      "capability": "money-transfer",
+      "classification": "normalized-equivalent",
+      "evidence": "success-negative-recovery-concurrency"
+    },
+    {
+      "capability": "checks-messaging",
+      "classification": "normalized-equivalent",
+      "evidence": "once-only-and-redelivery"
+    },
+    {
+      "capability": "oracle-aq-versus-postgresql-queue",
+      "classification": "intentional-change",
+      "evidence": "same-business-outcome"
+    },
+    {
+      "capability": "microtx-lra-versus-atomic-transaction",
+      "classification": "intentional-change",
+      "evidence": "same-recovery-outcome"
+    },
+    {
+      "capability": "credit-score",
+      "classification": "contract-equivalent",
+      "evidence": "range-not-exact-value"
+    },
+    {
+      "capability": "real-credit-decision",
+      "classification": "not-qualified",
+      "evidence": "approved-provider-required"
+    },
+    {
+      "capability": "chatbot",
+      "classification": "contract-equivalent",
+      "evidence": "boundary-not-answer-quality"
+    },
+    {
+      "capability": "model-answer-quality",
+      "classification": "not-qualified",
+      "evidence": "approved-model-evaluation-required"
+    },
+    {
+      "capability": "production-data",
+      "classification": "not-qualified",
+      "evidence": "customer-authorization-required"
+    },
+    {
+      "capability": "production-platform",
+      "classification": "not-qualified",
+      "evidence": "ms67-platform-qualification"
+    },
+    {
+      "capability": "production-readiness",
+      "classification": "not-qualified",
+      "evidence": "ms68-customer-certification"
+    }
+  ],
+  "exact_internal_implementation_equivalent": false,
+  "ledger_type": "lightyear-cloudbank-whole-application-equivalence-compatibility",
+  "migration_complete": false,
+  "production_ready": false,
+  "release": "0.66.0",
+  "schema_version": "1.0",
+  "whole_application_equivalence_eligible": true
+}

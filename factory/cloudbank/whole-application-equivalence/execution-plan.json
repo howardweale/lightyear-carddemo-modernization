@@ -1,0 +1,61 @@
+{
+  "content_sha256": "f152995a4bea33456704dc1bb20ba5d9b5ebd87152ea12c68338bc2289d10569",
+  "fresh_output_required": true,
+  "plan_type": "lightyear-cloudbank-whole-application-dual-lane-equivalence",
+  "production_data": false,
+  "production_environment": false,
+  "production_ready": false,
+  "release": "0.66.0",
+  "required_scenarios": [
+    "eight-services-ready",
+    "authorization-token-issued",
+    "unauthenticated-request-rejected",
+    "customer-owner-read",
+    "account-balance-read",
+    "transfer-success-conserves-value",
+    "transfer-invalid-no-mutation",
+    "transfer-insufficient-funds-no-mutation",
+    "check-deposit-applied-once",
+    "check-clearance-applied-once",
+    "duplicate-message-suppressed",
+    "credit-score-contract-served",
+    "chatbot-boundary-served",
+    "account-restart-preserves-state",
+    "checks-restart-redelivers-inflight",
+    "transfer-dependency-failure-recovers",
+    "concurrent-opposite-transfers-conserve-value",
+    "full-stack-restart-restores-journey"
+  ],
+  "requires": [
+    "signed-ms61-oracle-postgresql-core-equivalence-receipt",
+    "signed-ms64-eight-service-target-receipt",
+    "same-evidence-key",
+    "same-postgresql-image",
+    "operator-signed-oracle-and-postgresql-observations"
+  ],
+  "runtime_order": "isolated-sequential-lanes",
+  "schema_version": "1.0",
+  "services": [
+    "azn-server",
+    "customer",
+    "account",
+    "transfer",
+    "checks",
+    "testrunner",
+    "creditscore",
+    "chatbot"
+  ],
+  "source_checkout_mutated": false,
+  "stages": [
+    "validate-contracts-pinned-source-and-signed-ms61-ms64",
+    "materialize-fresh-ms64-eight-service-target",
+    "start-all-eight-pinned-source-services-on-native-oracle",
+    "run-shared-business-failure-concurrency-and-recovery-harness",
+    "restart-and-recover-all-eight-source-services",
+    "start-all-eight-generated-target-services-on-native-postgresql",
+    "run-identical-business-failure-concurrency-and-recovery-harness",
+    "restart-and-recover-all-eight-target-services",
+    "compare-exact-normalized-observations",
+    "sign-bounded-whole-application-equivalence-receipt"
+  ]
+}

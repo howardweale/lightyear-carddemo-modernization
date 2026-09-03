@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schemas/cloudbank/whole-application-equivalence-lane-observation.schema.json",
+  "title": "CloudBank MS66 signed lane observation",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "observation_type",
+    "release",
+    "lane",
+    "bindings",
+    "database_engine",
+    "services",
+    "scenarios",
+    "normalized_marker",
+    "normalized_observation_sha256",
+    "synthetic_data_only",
+    "production_environment",
+    "credentials_persisted",
+    "raw_output_persisted",
+    "content_sha256",
+    "signature"
+  ],
+  "properties": {
+    "observation_type": {"const": "lightyear-cloudbank-ms66-lane-observation"},
+    "release": {"const": "0.66.0"},
+    "lane": {"enum": ["oracle", "postgresql"]},
+    "database_engine": {"enum": ["oracle", "postgresql"]},
+    "services": {"type": "array", "minItems": 8, "maxItems": 8},
+    "scenarios": {"type": "array", "minItems": 18, "maxItems": 18},
+    "normalized_observation_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "synthetic_data_only": {"const": true},
+    "production_environment": {"const": false},
+    "credentials_persisted": {"const": false},
+    "raw_output_persisted": {"const": false},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "signature": {
+      "type": "object",
+      "required": ["algorithm", "signer", "value"],
+      "properties": {
+        "algorithm": {"const": "hmac-sha256"},
+        "value": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

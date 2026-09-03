@@ -348,6 +348,8 @@ OPERATOR_WORKLOADS = [
         "factory_artifact": "factory/cloudbank/oracle-equivalence/readiness.receipt.json",
         "production_readiness_status": "production-like deployment and cutover rehearsal ready · operator evidence required",
         "production_readiness_artifact": "factory/cloudbank/production-readiness/readiness.receipt.json",
+        "whole_application_status": "dual-lane whole-application equivalence ready · operator evidence required",
+        "whole_application_artifact": "factory/cloudbank/whole-application-equivalence/readiness.receipt.json",
     },
     {
         "id": "cloudbank-reference:workload:money-transfer",
@@ -360,6 +362,8 @@ OPERATOR_WORKLOADS = [
         "factory_artifact": "factory/cloudbank/production-oauth/readiness.receipt.json",
         "production_readiness_status": "production-like deployment and cutover rehearsal ready · operator evidence required",
         "production_readiness_artifact": "factory/cloudbank/production-readiness/readiness.receipt.json",
+        "whole_application_status": "dual-lane whole-application equivalence ready · operator evidence required",
+        "whole_application_artifact": "factory/cloudbank/whole-application-equivalence/readiness.receipt.json",
     },
     {
         "id": "cloudbank-reference:workload:check-deposit-clearance",
@@ -372,6 +376,8 @@ OPERATOR_WORKLOADS = [
         "factory_artifact": "factory/cloudbank/checks-messaging/readiness.receipt.json",
         "production_readiness_status": "production-like deployment and cutover rehearsal ready · operator evidence required",
         "production_readiness_artifact": "factory/cloudbank/production-readiness/readiness.receipt.json",
+        "whole_application_status": "dual-lane whole-application equivalence ready · operator evidence required",
+        "whole_application_artifact": "factory/cloudbank/whole-application-equivalence/readiness.receipt.json",
     },
     {
         "id": "cloudbank-reference:workload:identity-service-authorization",
@@ -384,6 +390,8 @@ OPERATOR_WORKLOADS = [
         "factory_artifact": "factory/cloudbank/production-oauth/readiness.receipt.json",
         "production_readiness_status": "production-like deployment and cutover rehearsal ready · operator evidence required",
         "production_readiness_artifact": "factory/cloudbank/production-readiness/readiness.receipt.json",
+        "whole_application_status": "dual-lane whole-application equivalence ready · operator evidence required",
+        "whole_application_artifact": "factory/cloudbank/whole-application-equivalence/readiness.receipt.json",
     },
     {
         "id": "cloudbank-reference:workload:credit-score-service",
@@ -396,6 +404,8 @@ OPERATOR_WORKLOADS = [
         "factory_artifact": "factory/cloudbank/edge-ai/readiness.receipt.json",
         "production_readiness_status": "production-like deployment and cutover rehearsal ready · operator evidence required",
         "production_readiness_artifact": "factory/cloudbank/production-readiness/readiness.receipt.json",
+        "whole_application_status": "dual-lane whole-application equivalence ready · operator evidence required",
+        "whole_application_artifact": "factory/cloudbank/whole-application-equivalence/readiness.receipt.json",
     },
 ]
 

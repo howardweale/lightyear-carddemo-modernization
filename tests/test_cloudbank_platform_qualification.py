@@ -334,6 +334,13 @@ class CloudBankPlatformQualificationTests(unittest.TestCase):
 
         self.assertIn("secretEnv:", cloudbuild)
         self.assertIn("cloudbank-ms67-evidence-key", submit)
+        service_account_name = next(
+            line.split('"', 2)[1]
+            for line in submit.splitlines()
+            if line.startswith('service_account_name="')
+        )
+        self.assertGreaterEqual(len(service_account_name), 6)
+        self.assertLessEqual(len(service_account_name), 30)
         self.assertNotIn("operator-held-value", cloudbuild + runner + submit)
         self.assertIn("--async", submit)
         self.assertIn("--gcs-source-staging-dir", submit)

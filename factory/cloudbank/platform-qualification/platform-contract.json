@@ -1,0 +1,91 @@
+{
+  "content_sha256": "5bd3b40717bb40380742792b64f465cef38ad95d6d6c50de22f40cbf23132a98",
+  "contract_type": "lightyear-cloudbank-real-non-production-kubernetes-platform",
+  "controls": {
+    "availability": {
+      "failure_domain_disruption": true,
+      "node_disruption": true,
+      "zero_data_loss": true
+    },
+    "backup_restore": {
+      "exact_normalized_restore": true,
+      "maximum_rpo_seconds": 60,
+      "maximum_rto_seconds": 600
+    },
+    "cutover_rollback": {
+      "business_journeys": 18,
+      "canary": true,
+      "rollback_mandatory": true,
+      "target_traffic_percent": 100
+    },
+    "external_secrets": {
+      "all_services_synced": true,
+      "controller_ready": true,
+      "rotation_observed": true,
+      "values_persisted": false
+    },
+    "in_cluster_model": {
+      "chatbot_only_ingress": true,
+      "external_egress": false,
+      "immutable_image": true,
+      "model": "qwen2.5:0.5b",
+      "runtime": "ollama"
+    },
+    "load": {
+      "maximum_errors": 0,
+      "maximum_p95_ms": 500,
+      "minimum_concurrency": 10,
+      "minimum_duration_seconds": 300,
+      "minimum_requests": 1000
+    },
+    "observability": {
+      "alert_fire_and_recovery": true,
+      "metrics_logs_traces_all_services": true
+    },
+    "rolling_deployment": {
+      "all_services": true,
+      "maximum_unavailable": 0
+    },
+    "security": {
+      "critical_vulnerabilities": 0,
+      "high_vulnerabilities": 0,
+      "network_policy_observed": true,
+      "provenance": true,
+      "runtime_policy_violations": 0,
+      "signed_images": true
+    },
+    "tls": {
+      "hostname_match": true,
+      "minimum_certificate_days": 30,
+      "minimum_protocol": "TLSv1.2",
+      "plaintext_rejected": true,
+      "trusted_chain": true
+    }
+  },
+  "environment_class": "authorized-real-non-production",
+  "minimum_failure_domains": 2,
+  "minimum_kubernetes": "1.28",
+  "minimum_nodes": 3,
+  "orchestrator": "kubernetes",
+  "production_environment": false,
+  "production_ready": false,
+  "release": "0.67.0",
+  "required_tools": [
+    "kubectl",
+    "helm",
+    "cosign",
+    "trivy",
+    "k6"
+  ],
+  "schema_version": "1.0",
+  "services": [
+    "azn-server",
+    "customer",
+    "account",
+    "transfer",
+    "checks",
+    "testrunner",
+    "creditscore",
+    "chatbot"
+  ]
+}

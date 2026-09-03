@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schemas/cloudbank/platform-qualification-profile.schema.json",
+  "title": "CloudBank MS67 authorized non-production platform profile",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "profile_type", "release", "signer", "context",
+    "cluster_uid_sha256", "provider", "region", "namespace", "namespace_uid_sha256",
+    "ingress_url", "expected_hostname", "model_mode", "model_namespace", "model_name",
+    "model_image", "model_manifest_sha256", "model_external_egress", "mutating_drills_authorized",
+    "production_access_authorized", "non_production", "content_sha256", "signature"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "profile_type": {"const": "lightyear-cloudbank-ms67-platform-profile"},
+    "release": {"const": "0.67.0"},
+    "signer": {"type": "string", "minLength": 1},
+    "context": {"type": "string", "minLength": 1},
+    "cluster_uid_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "provider": {"type": "string", "minLength": 1},
+    "region": {"type": "string", "minLength": 1},
+    "namespace": {"type": "string", "minLength": 1},
+    "namespace_uid_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "ingress_url": {"type": "string", "pattern": "^https://"},
+    "expected_hostname": {"type": "string", "minLength": 1},
+    "model_mode": {"const": "in-cluster-ollama"},
+    "model_namespace": {"type": "string", "minLength": 1},
+    "model_name": {"const": "qwen2.5:0.5b"},
+    "model_image": {"type": "string", "pattern": "@sha256:[0-9a-f]{64}$"},
+    "model_manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "model_external_egress": {"const": false},
+    "mutating_drills_authorized": {"const": true},
+    "production_access_authorized": {"const": false},
+    "non_production": {"const": true},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "signature": {"$ref": "#/$defs/signature"}
+  },
+  "$defs": {
+    "signature": {
+      "type": "object", "additionalProperties": false,
+      "required": ["algorithm", "signer", "value"],
+      "properties": {
+        "algorithm": {"const": "hmac-sha256"},
+        "signer": {"type": "string", "minLength": 1},
+        "value": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

@@ -3,7 +3,7 @@
     "ms63-five-service-target",
     "ms57-qualified-customer-target"
   ],
-  "content_sha256": "5f7ae631d23366c6ced09e5ae0532412825e07c642723826d07c2c0681effc8f",
+  "content_sha256": "0d606c27eccf572a593072e9d0817cae93b87e6d5fed440b368997b43d733139",
   "customer_target_paths": [
     "customer/pom.xml",
     "customer/src/main/java/com/example/customer/model/Customers.java",
@@ -39,7 +39,7 @@
     {
       "path": "chatbot/src/main/java/com/example/chatbot/config/ChatbotEndpointPolicy.java",
       "template": "patches/ChatbotEndpointPolicy.java",
-      "template_sha256": "f342750d563304410fa065d0c5f3b4a0d8d4ce8186be233fdc7fe3c18714edba"
+      "template_sha256": "a8d414ec3f5c8084225f20c0b90098dc789043f5235630ce6af19fd427fc6879"
     },
     {
       "path": "chatbot/src/main/java/com/example/chatbot/config/ChatbotOAuthSecurityConfiguration.java",
@@ -54,12 +54,12 @@
     {
       "path": "chatbot/src/main/resources/application.yaml",
       "template": "patches/chatbot-application.yaml",
-      "template_sha256": "d78d8b7dce223cb1844414b697f8be628c2ae4039948dba5cf89b6d5d4839527"
+      "template_sha256": "ba5f6b5ca2c201f7a46f1e570f4756fe57ebf85f962d7ffbf7a7223ded3ba69d"
     },
     {
       "path": "chatbot/src/test/java/com/example/chatbot/ChatbotApplicationTest.java",
       "template": "patches/ChatbotApplicationTest.java",
-      "template_sha256": "f4da161e6c621a6d1622c518ac0630b0959a94282540bdaeac839128be182d00"
+      "template_sha256": "a6d0aa452e05c86e32788a06d331ec84b7bf4d3e615e64046862c956f21904fc"
     },
     {
       "path": "checks/src/test/java/com/example/checks/ChecksTargetWorkcellTest.java",

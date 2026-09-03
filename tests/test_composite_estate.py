@@ -221,6 +221,14 @@ class CompositeEstateTests(unittest.TestCase):
                 "factory/cloudbank/whole-application-equivalence/readiness.receipt.json",
                 workload["whole_application_artifact"],
             )
+            self.assertEqual(
+                "real non-production GKE qualification ready · live operator evidence required",
+                workload["platform_qualification_status"],
+            )
+            self.assertEqual(
+                "factory/cloudbank/platform-qualification/readiness.receipt.json",
+                workload["platform_qualification_artifact"],
+            )
 
     def test_runtime_and_audit_remain_bound_to_canonical_identity(self) -> None:
         index = GraphExplorerIndex(self.composite)

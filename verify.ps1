@@ -91,6 +91,8 @@ if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 & (Join-Path $ProjectDir "cloudbank-whole-application-equivalence.ps1") verify
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+& (Join-Path $ProjectDir "cloudbank-platform-qualification.ps1") verify
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 & (Join-Path $ProjectDir "composite-estate.ps1") verify
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

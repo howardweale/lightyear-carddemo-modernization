@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schemas/cloudbank/platform-qualification-observation.schema.json",
+  "title": "CloudBank MS67 real non-production platform observation",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "observation_type", "release", "signer", "bindings", "cluster",
+    "scenarios", "service_rollouts", "tls", "external_secrets", "observability", "load",
+    "security", "backup_restore", "resilience", "rolling_deployments", "cutover_rollback",
+    "safety", "content_sha256", "signature"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "observation_type": {"const": "lightyear-cloudbank-ms67-platform-observation"},
+    "release": {"const": "0.67.0"},
+    "signer": {"type": "string", "minLength": 1},
+    "bindings": {"type": "object"},
+    "cluster": {
+      "type": "object",
+      "required": ["context", "cluster_uid_sha256", "namespace", "namespace_uid_sha256",
+                   "provider", "region", "kubernetes_version", "node_count", "failure_domains"],
+      "properties": {
+        "cluster_uid_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "namespace_uid_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "node_count": {"type": "integer", "minimum": 3},
+        "failure_domains": {"type": "array", "minItems": 2, "uniqueItems": true}
+      }
+    },
+    "scenarios": {
+      "type": "array", "minItems": 28, "maxItems": 28,
+      "items": {
+        "type": "object", "additionalProperties": false,
+        "required": ["id", "status", "evidence_sha256"],
+        "properties": {
+          "id": {"type": "string"}, "status": {"const": "passed"},
+          "evidence_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+        }
+      }
+    },
+    "service_rollouts": {"type": "array", "minItems": 8, "maxItems": 8},
+    "tls": {"type": "object"},
+    "external_secrets": {"type": "object"},
+    "observability": {"type": "object"},
+    "load": {
+      "type": "object",
+      "properties": {
+        "tool": {"const": "k6"}, "requests": {"type": "integer", "minimum": 1000},
+        "duration_seconds": {"type": "integer", "minimum": 300},
+        "concurrency": {"type": "integer", "minimum": 10},
+        "errors": {"const": 0}, "p95_ms": {"type": "number", "maximum": 500}
+      }
+    },
+    "security": {"type": "object"},
+    "backup_restore": {"type": "object"},
+    "resilience": {"type": "object"},
+    "rolling_deployments": {"type": "array", "minItems": 8, "maxItems": 8},
+    "cutover_rollback": {"type": "object"},
+    "safety": {
+      "type": "object",
+      "properties": {
+        "non_production": {"const": true}, "synthetic_data_only": {"const": true},
+        "production_accessed": {"const": false}, "secret_values_persisted": {"const": false},
+        "cluster_credentials_persisted": {"const": false}
+      }
+    },
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "signature": {"type": "object"}
+  }
+}

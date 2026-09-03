@@ -1,12 +1,12 @@
 {
   "bindings": {
-    "acceptance_contract_sha256": "1c6fad39a8c5826d74918ff7648aa8491be3854465a46946a91d8ed4e7cb5346",
+    "acceptance_contract_sha256": "0bb9b5df5d5d7daaea9f844d50625629e0ccdaad34b679b9654abbad0a7b9ea3",
     "compatibility_ledger_sha256": "73bf8f3d6934d85b5573913fb0ededa994c676fa5af125c4590897163b2ccd4a",
     "edge_contract_sha256": "ddca81a27700fb141e9c9fdbc30382fc90c1823637d5db946297a4165024e9aa",
-    "execution_plan_sha256": "5f7ae631d23366c6ced09e5ae0532412825e07c642723826d07c2c0681effc8f",
+    "execution_plan_sha256": "0d606c27eccf572a593072e9d0817cae93b87e6d5fed440b368997b43d733139",
     "source_contract_sha256": "d9f15e024d74e630403308d776bc25928e575fbe756bc835befd963ae756f79f"
   },
-  "content_sha256": "a21154a27902e532f74890d561448524b259a9f92c46a904c49341f5ce2ad385",
+  "content_sha256": "bd2017c88868cc798d8c9c3fde815b9bd27a3f8495ba8a127c84b6e0a5364d7e",
   "eight_service_target_assembled": false,
   "gate_status": "ready-for-signed-ms63-ms57-edge-ai-run",
   "migration_complete": false,

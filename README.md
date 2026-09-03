@@ -4,7 +4,27 @@
 
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.66.0 — CloudBank Whole-Application Dual-Lane Equivalence**
+Release: **v0.67.0 — CloudBank Real Non-Production Platform Qualification**
+
+v0.67 turns the MS #65 deployment design into a deployable real-platform package and chains its
+admission to both the signed MS #65 rehearsal and signed MS #66 whole-application equivalence result.
+The first implementation provisions an ephemeral regional Google Kubernetes Engine environment with
+private nodes across three zones, regional HA PostgreSQL, Workload Identity, external secrets,
+trusted public TLS, telemetry, load and security tooling, backup/restore, disruption, rollout,
+cutover, and rollback controls.
+
+```bash
+./cloudbank-platform-qualification.sh verify
+# Live preflight requires a signed profile and an explicitly selected Kubernetes context.
+./cloudbank-platform-qualification.sh preflight PROFILE OUTPUT_ROOT
+```
+
+The committed receipt remains negative because this workspace has no Google Cloud credentials or
+Kubernetes context. Only a signed 28-scenario live observation can qualify the bound non-production
+platform. Customer IdP, representative customer volumes and workload, customer approval, production
+deployment, and final production readiness remain MS #68.
+
+Previous release: **v0.66.0 — CloudBank Whole-Application Dual-Lane Equivalence**
 
 v0.66 closes the bounded whole-application comparison left open by MS #61–#65. It chains the
 signed MS #61 native Oracle/PostgreSQL core comparison to the signed MS #64 eight-service target,
@@ -23,7 +43,7 @@ LRA versus an atomic PostgreSQL transaction remain intentional internal changes.
 receipt proves gate readiness only; production infrastructure qualification is MS #67 and customer
 production-readiness certification is MS #68.
 
-Previous release: **v0.65.0 — CloudBank Production-Like Deployment and Cutover Rehearsal**
+Earlier release: **v0.65.0 — CloudBank Production-Like Deployment and Cutover Rehearsal**
 
 v0.65 takes the complete MS #64 eight-service target to the operational admission boundary. It
 binds one immutable container-image digest per service, renders a site-specific hardened Kubernetes

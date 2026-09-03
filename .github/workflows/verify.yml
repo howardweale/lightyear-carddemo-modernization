@@ -155,6 +155,7 @@ jobs:
           for service in azn-server customer account transfer checks testrunner creditscore chatbot; do
             test -f "work/cloudbank-ms66-ci/$service/pom.xml"
           done
+          ./cloudbank-platform-qualification.sh verify
 
       - name: Publish bounded CI build receipt
         uses: actions/upload-artifact@v4

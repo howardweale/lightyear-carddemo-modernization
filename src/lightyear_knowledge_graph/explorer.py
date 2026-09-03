@@ -350,6 +350,8 @@ OPERATOR_WORKLOADS = [
         "production_readiness_artifact": "factory/cloudbank/production-readiness/readiness.receipt.json",
         "whole_application_status": "dual-lane whole-application equivalence ready · operator evidence required",
         "whole_application_artifact": "factory/cloudbank/whole-application-equivalence/readiness.receipt.json",
+        "platform_qualification_status": "real non-production GKE qualification ready · live operator evidence required",
+        "platform_qualification_artifact": "factory/cloudbank/platform-qualification/readiness.receipt.json",
     },
     {
         "id": "cloudbank-reference:workload:money-transfer",
@@ -364,6 +366,8 @@ OPERATOR_WORKLOADS = [
         "production_readiness_artifact": "factory/cloudbank/production-readiness/readiness.receipt.json",
         "whole_application_status": "dual-lane whole-application equivalence ready · operator evidence required",
         "whole_application_artifact": "factory/cloudbank/whole-application-equivalence/readiness.receipt.json",
+        "platform_qualification_status": "real non-production GKE qualification ready · live operator evidence required",
+        "platform_qualification_artifact": "factory/cloudbank/platform-qualification/readiness.receipt.json",
     },
     {
         "id": "cloudbank-reference:workload:check-deposit-clearance",
@@ -378,6 +382,8 @@ OPERATOR_WORKLOADS = [
         "production_readiness_artifact": "factory/cloudbank/production-readiness/readiness.receipt.json",
         "whole_application_status": "dual-lane whole-application equivalence ready · operator evidence required",
         "whole_application_artifact": "factory/cloudbank/whole-application-equivalence/readiness.receipt.json",
+        "platform_qualification_status": "real non-production GKE qualification ready · live operator evidence required",
+        "platform_qualification_artifact": "factory/cloudbank/platform-qualification/readiness.receipt.json",
     },
     {
         "id": "cloudbank-reference:workload:identity-service-authorization",
@@ -392,6 +398,8 @@ OPERATOR_WORKLOADS = [
         "production_readiness_artifact": "factory/cloudbank/production-readiness/readiness.receipt.json",
         "whole_application_status": "dual-lane whole-application equivalence ready · operator evidence required",
         "whole_application_artifact": "factory/cloudbank/whole-application-equivalence/readiness.receipt.json",
+        "platform_qualification_status": "real non-production GKE qualification ready · live operator evidence required",
+        "platform_qualification_artifact": "factory/cloudbank/platform-qualification/readiness.receipt.json",
     },
     {
         "id": "cloudbank-reference:workload:credit-score-service",
@@ -406,6 +414,8 @@ OPERATOR_WORKLOADS = [
         "production_readiness_artifact": "factory/cloudbank/production-readiness/readiness.receipt.json",
         "whole_application_status": "dual-lane whole-application equivalence ready · operator evidence required",
         "whole_application_artifact": "factory/cloudbank/whole-application-equivalence/readiness.receipt.json",
+        "platform_qualification_status": "real non-production GKE qualification ready · live operator evidence required",
+        "platform_qualification_artifact": "factory/cloudbank/platform-qualification/readiness.receipt.json",
     },
 ]
 

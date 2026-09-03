@@ -129,6 +129,20 @@ jobs:
             mvn -pl azn-server,account,transfer,checks,testrunner -am \
               -DskipTests package
           )
+          ./cloudbank-edge-ai.sh verify
+          ./cloudbank-edge-ai.sh verify-source ../cloudbank-upstream
+          ./cloudbank-edge-ai.sh materialize ../cloudbank-upstream work/cloudbank-ms64-ci
+          (
+            cd work/cloudbank-ms64-ci
+            workcell_tests="ProductionAudienceTokenCustomizerTest,ChecksTargetWorkcellTest,"
+            workcell_tests+="TestrunnerTargetWorkcellTest,CreditscoreApplicationTests,ChatbotApplicationTest"
+            mvn -pl azn-server,customer,account,transfer,checks,testrunner,creditscore,chatbot -am \
+              -DskipTests -Djkube.skip=true -Ddependency-check.skip=true package
+            mvn -pl azn-server,checks,testrunner,creditscore,chatbot -am \
+              "-Dtest=$workcell_tests" \
+              -Dsurefire.failIfNoSpecifiedTests=false \
+              -Djkube.skip=true -Ddependency-check.skip=true test
+          )
 
       - name: Publish bounded CI build receipt
         uses: actions/upload-artifact@v4

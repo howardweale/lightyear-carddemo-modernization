@@ -1,0 +1,38 @@
+server:
+  address: ${SERVER_ADDRESS:127.0.0.1}
+  port: ${SERVER_PORT:8080}
+spring:
+  application:
+    name: chatbot
+  ai:
+    ollama:
+      base-url: ${CLOUDBANK_CHAT_MODEL_BASE_URL:http://127.0.0.1:11434}
+      chat:
+        options:
+          model: ${CLOUDBANK_CHAT_MODEL_NAME:llama3}
+          temperature: 0.0
+  cloud:
+    config:
+      import-check:
+        enabled: false
+  config:
+    import: classpath:common.yaml
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${CLOUDBANK_OAUTH_ISSUER}
+          jwk-set-uri: ${CLOUDBANK_OAUTH_JWK_SET_URI}
+chatbot:
+  security:
+    allowed-model-hosts: ${CLOUDBANK_CHAT_ALLOWED_MODEL_HOSTS:127.0.0.1,localhost}
+    rate-limit:
+      requests: ${CLOUDBANK_CHAT_RATE_LIMIT_REQUESTS:20}
+      window: ${CLOUDBANK_CHAT_RATE_LIMIT_WINDOW:PT1M}
+eureka:
+  client:
+    enabled: false
+logging:
+  level:
+    root: INFO
+    com.example.chatbot: INFO

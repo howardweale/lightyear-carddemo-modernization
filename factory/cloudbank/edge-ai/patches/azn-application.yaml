@@ -1,0 +1,68 @@
+server:
+  address: ${SERVER_ADDRESS:127.0.0.1}
+  port: ${SERVER_PORT:8080}
+spring:
+  application:
+    name: azn-server
+  cloud:
+    config:
+      import-check:
+        enabled: false
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        jdbc:
+          time_zone: UTC
+  liquibase:
+    change-log: classpath:db/changelog/controller.yaml
+    url: ${LIQUIBASE_DATASOURCE_URL:${SPRING_DATASOURCE_URL}}
+    user: ${LIQUIBASE_DATASOURCE_USERNAME:${SPRING_DATASOURCE_USERNAME}}
+    password: ${LIQUIBASE_DATASOURCE_PASSWORD:${SPRING_DATASOURCE_PASSWORD}}
+azn:
+  authorization-server:
+    issuer: ${AZN_AUTHORIZATION_SERVER_ISSUER}
+    signing-key:
+      private-key-path: ${AZN_AUTHORIZATION_SERVER_SIGNING_KEY_PRIVATE_KEY_PATH}
+      public-key-path: ${AZN_AUTHORIZATION_SERVER_SIGNING_KEY_PUBLIC_KEY_PATH}
+      key-id: ${AZN_AUTHORIZATION_SERVER_SIGNING_KEY_KEY_ID:cloudbank-ms64}
+    default-client:
+      enabled: true
+      id: ${AZN_AUTHORIZATION_SERVER_DEFAULT_CLIENT_ID}
+      secret: ${AZN_AUTHORIZATION_SERVER_DEFAULT_CLIENT_SECRET}
+      scopes: ${AZN_AUTHORIZATION_SERVER_DEFAULT_CLIENT_SCOPES:cloudbank.transfer}
+    service-client:
+      id: ${AZN_AUTHORIZATION_SERVER_SERVICE_CLIENT_ID}
+      secret: ${AZN_AUTHORIZATION_SERVER_SERVICE_CLIENT_SECRET}
+      scopes: ${AZN_AUTHORIZATION_SERVER_SERVICE_CLIENT_SCOPES:cloudbank.internal}
+    test-client:
+      id: ${AZN_AUTHORIZATION_SERVER_CREDITSCORE_CLIENT_ID}
+      secret: ${AZN_AUTHORIZATION_SERVER_CREDITSCORE_CLIENT_SECRET}
+      scopes: ${AZN_AUTHORIZATION_SERVER_CREDITSCORE_CLIENT_SCOPES:cloudbank.read}
+    admin-client:
+      id: ${AZN_AUTHORIZATION_SERVER_CHATBOT_CLIENT_ID}
+      secret: ${AZN_AUTHORIZATION_SERVER_CHATBOT_CLIENT_SECRET}
+      scopes: ${AZN_AUTHORIZATION_SERVER_CHATBOT_CLIENT_SCOPES:cloudbank.read}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  health:
+    probes:
+      enabled: true
+eureka:
+  client:
+    enabled: false
+logging:
+  level:
+    root: INFO
+    org.springframework.security: INFO

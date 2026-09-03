@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.64.0 — 2026-09-03
+
+- Replaced the Credit Score service's unauthenticated random demo response with an OAuth-protected,
+  subject-and-UTC-date-bound HMAC result explicitly labelled as synthetic evidence.
+- Added distinct `cloudbank-creditscore` and `cloudbank-chatbot` audiences while preserving issuer,
+  signature, lifetime, and `cloudbank.read` scope enforcement.
+- Added fail-closed Chatbot input and output limits, instruction-override rejection, safe model
+  failures, authenticated-subject rate limiting, and host/TLS model-egress policy.
+- Assembled Authorization, Customer, Account, Transfer, Checks, Test Runner, Credit Score, and
+  Chatbot into an eight-executable target with zero Oracle and zero MicroTx runtime libraries.
+- Recorded an explicit migrated disposition for `azn-server`, `checks`, `testrunner`, `creditscore`,
+  and `chatbot`, then generated and executed every one of those five target workcells in the MS #64
+  acceptance lane rather than merely carrying the first three as packaged artifacts.
+- Added twenty-eight receipt-gated scenarios, twenty-one generated Java tests, signed MS #63/MS #57
+  chaining, clean isolated materialization, safe aggregate diagnostics, schemas, cross-platform
+  launchers, CI compilation and tests, Control Tower projection, documentation, and adversarial tests.
+- Kept real credit-bureau behavior, model-answer quality, external model execution, production data,
+  whole-application equivalence, migration completion, deployment, promotion, and production
+  readiness explicitly false.
+
 ## 0.63.0 — 2026-09-02
 
 - Replaced Oracle AQ/JMS in the bounded Checks and Test Runner target with one PostgreSQL durable

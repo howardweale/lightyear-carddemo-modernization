@@ -189,6 +189,19 @@ class CompositeEstateTests(unittest.TestCase):
             "factory/cloudbank/checks-messaging/readiness.receipt.json",
             checks_workcell["factory_artifact"],
         )
+        edge_workcell = next(
+            item for item in context["workloads"]
+            if item["id"] == "cloudbank-reference:workload:credit-score-service"
+        )
+        self.assertEqual("postgresql-16", edge_workcell["target_dialect"])
+        self.assertEqual(
+            "eight-service edge and AI boundary ready · operator receipt required",
+            edge_workcell["target_status"],
+        )
+        self.assertEqual(
+            "factory/cloudbank/edge-ai/readiness.receipt.json",
+            edge_workcell["factory_artifact"],
+        )
 
     def test_runtime_and_audit_remain_bound_to_canonical_identity(self) -> None:
         index = GraphExplorerIndex(self.composite)

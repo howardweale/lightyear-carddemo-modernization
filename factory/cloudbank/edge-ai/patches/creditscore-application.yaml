@@ -1,0 +1,28 @@
+server:
+  address: ${SERVER_ADDRESS:127.0.0.1}
+  port: ${SERVER_PORT:8080}
+spring:
+  application:
+    name: creditscore
+  cloud:
+    config:
+      import-check:
+        enabled: false
+  config:
+    import: classpath:common.yaml
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${CLOUDBANK_OAUTH_ISSUER}
+          jwk-set-uri: ${CLOUDBANK_OAUTH_JWK_SET_URI}
+creditscore:
+  synthetic:
+    pepper: ${CLOUDBANK_CREDITSCORE_SYNTHETIC_PEPPER}
+eureka:
+  client:
+    enabled: false
+logging:
+  level:
+    root: INFO
+    com.example.creditscore: INFO

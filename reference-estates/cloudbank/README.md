@@ -210,6 +210,26 @@ without Oracle or MicroTx runtime libraries and exercises twelve PostgreSQL queu
 passing signed receipt qualifies target messaging only; it does not establish native Oracle AQ
 equivalence, remaining-service completion, whole-application equivalence, or production readiness.
 
+## Run the Credit Decision and AI application-boundary gate
+
+MS #64 chains from the signed MS #63 messaging receipt and signed MS #57 Customer qualification,
+requires the same PostgreSQL image, and assembles all eight CloudBank services in a fresh isolated
+target.
+
+```bash
+./cloudbank-edge-ai.sh verify
+./cloudbank-edge-ai.sh verify-source /path/to/oracle-microservices-backend
+```
+
+Credit Score replaces the random demo response with an authenticated, stable daily synthetic score
+that is bound to the JWT subject and labelled with its synthetic provider. Chatbot adds distinct
+audience isolation, input/output guardrails, caller rate limiting, safe upstream failures, and a
+host/TLS egress policy. The native gate packages all eight services and executes twenty-one generated
+tests across the `azn-server`, Checks, Test Runner, Credit Score, and Chatbot target workcells without
+calling a credit bureau or external model. A passing signed receipt qualifies the five explicitly
+migrated remaining-service workcells and package, not real credit scoring, model quality,
+whole-application equivalence, migration completion, deployment, or production readiness.
+
 The projection is composed with the existing PL/I and Oracle Customer (Large) fragments. It does
 not change the canonical CardDemo graph or the identity to which runtime and audit evidence are
 bound.
@@ -227,6 +247,7 @@ PostgreSQL target and its native operator gate. MS #60 adds the integrated targe
 restart, and concurrency wave. MS #61 adds bounded normalized Oracle/PostgreSQL comparison for the
 Customer, Account, and Transfer scope. MS #62 adds the production OAuth application boundary for
 Authorization, Account, and Transfer. MS #63 adds the bounded PostgreSQL Checks messaging target.
-Native Oracle AQ comparison, external production security operations, production data, the remaining
-service workcells, whole-CloudBank equivalence, migration completion, and production readiness remain
-unclaimed.
+MS #64 adds the Credit Score and Chatbot control boundaries and assembles the eight-service target.
+Native Oracle AQ comparison, external production security operations, real credit-bureau behavior,
+model-quality evaluation, production data, whole-CloudBank equivalence, migration completion, and
+production readiness remain unclaimed.

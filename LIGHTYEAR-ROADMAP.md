@@ -46,6 +46,7 @@ production-qualified.
 | MS #61 | CloudBank Bounded Oracle/PostgreSQL Equivalence | Contract complete; signed sequential native Oracle/PostgreSQL comparison receipt remains operator-held evidence |
 | MS #62 | CloudBank Production OAuth Application Boundary | OAuth target and contract complete; signed native Authorization/Account/Transfer receipt remains operator-held evidence |
 | MS #63 | CloudBank Checks Durable Messaging | PostgreSQL queue target and contract complete; signed native messaging receipt remains operator-held evidence |
+| MS #64 | CloudBank Credit Decision and AI Boundary | Eight-service target and edge-control contract complete; signed native application receipt remains operator-held evidence |
 
 The v0.35.0 stored-logic qualification core is retained as supporting MS #34 evidence. It does not
 replace the planned DB2 milestone.
@@ -585,3 +586,36 @@ A passing receipt qualifies the target-side Checks messaging mechanics and gener
 does not execute a native Oracle AQ comparison, so Oracle/PostgreSQL messaging equivalence remains
 false. Credit Score and Chatbot remain for MS #64. Whole-application equivalence, migration
 completion, production deployment, promotion, and production readiness remain false.
+
+## MS #64 — CloudBank Credit Decision and AI Boundary
+
+MS #64 completes the two edge/auxiliary workcells identified by MS #58 and left open by MS #63.
+It carries the signed MS #57 PostgreSQL Customer target and signed MS #63 five-service target into a
+fresh isolated workspace, then packages all eight deployable CloudBank services with zero Oracle and
+zero MicroTx runtime libraries.
+
+The remaining-service ledger explicitly resolves all five services as migrated rather than retired:
+`azn-server` through MS #62, `checks` and `testrunner` through MS #63, and `creditscore` and `chatbot`
+through MS #64. MS #64 regenerates all five in its composed isolated target and executes a dedicated
+Java test workcell for each service; prior signed receipts remain required evidence, not substitutes
+for the MS #64 executions.
+
+Credit Score no longer returns an unbound random demo value. The target requires an issuer-,
+signature-, lifetime-, audience-, and scope-valid JWT and derives a stable daily synthetic score
+from the authenticated subject using HMAC-SHA256 and a runtime-only pepper. The response is
+explicitly labelled `synthetic-v1`; no real credit bureau, regulated model, or production decision
+is implied.
+
+Chatbot accepts only a distinct `cloudbank-chatbot` audience. It preserves system/user prompt
+separation, rejects blank, oversized, and recognizable instruction-override input before model
+invocation, filters unsafe or oversized output, rate-limits by authenticated subject, converts model
+failures into safe responses, and restricts model egress to allowlisted HTTPS hosts or allowlisted
+loopback HTTP. Acceptance invokes no external model and persists no prompt, response, token, pepper,
+or upstream error detail.
+
+Twenty-eight scenarios and twenty-one generated Java tests qualify generation and execution of all
+five remaining target workcells, the bounded Credit Score and Chatbot application-control envelope,
+and the eight-service package. Real credit-decision equivalence,
+model-answer quality and safety evaluation, native Oracle AQ equivalence, production data,
+whole-application equivalence, migration completion, deployment, promotion, and production
+readiness remain false.

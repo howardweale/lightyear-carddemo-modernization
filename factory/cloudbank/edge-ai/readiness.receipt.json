@@ -1,0 +1,21 @@
+{
+  "bindings": {
+    "acceptance_contract_sha256": "1c6fad39a8c5826d74918ff7648aa8491be3854465a46946a91d8ed4e7cb5346",
+    "compatibility_ledger_sha256": "73bf8f3d6934d85b5573913fb0ededa994c676fa5af125c4590897163b2ccd4a",
+    "edge_contract_sha256": "ddca81a27700fb141e9c9fdbc30382fc90c1823637d5db946297a4165024e9aa",
+    "execution_plan_sha256": "5f7ae631d23366c6ced09e5ae0532412825e07c642723826d07c2c0681effc8f",
+    "source_contract_sha256": "d9f15e024d74e630403308d776bc25928e575fbe756bc835befd963ae756f79f"
+  },
+  "content_sha256": "a21154a27902e532f74890d561448524b259a9f92c46a904c49341f5ce2ad385",
+  "eight_service_target_assembled": false,
+  "gate_status": "ready-for-signed-ms63-ms57-edge-ai-run",
+  "migration_complete": false,
+  "model_quality_qualified": false,
+  "production_ready": false,
+  "real_credit_decision_equivalent": false,
+  "receipt_type": "lightyear-cloudbank-edge-ai-readiness",
+  "release": "0.64.0",
+  "remaining_service_workcells_complete": false,
+  "schema_version": "1.0",
+  "whole_application_equivalent": false
+}

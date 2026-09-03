@@ -1,0 +1,63 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schemas/cloudbank/edge-ai-execution-receipt.schema.json",
+  "title": "CloudBank edge and AI execution receipt",
+  "type": "object",
+  "required": [
+    "schema_version", "receipt_type", "release", "run_id", "source_ms63_receipt_sha256",
+    "source_ms57_receipt_sha256", "postgresql_image_id_sha256", "bindings", "edge_ai_lane",
+    "status", "remaining_service_workcells_complete", "eight_service_target_assembled",
+    "real_credit_decision_equivalent", "model_quality_qualified", "whole_application_equivalent",
+    "migration_complete", "production_ready", "content_sha256", "signature"
+  ],
+  "properties": {
+    "receipt_type": {"const": "lightyear-cloudbank-edge-ai-execution"},
+    "release": {"const": "0.64.0"},
+    "status": {"const": "passed-edge-ai-application-boundary"},
+    "edge_ai_lane": {
+      "type": "object",
+      "required": ["status", "scenarios", "tests", "packaging", "workcells"],
+      "properties": {
+        "workcells": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "items": {
+            "type": "object",
+            "required": [
+              "service", "disposition", "migration_milestone", "generated", "executed",
+              "tests", "failures", "errors", "skipped"
+            ],
+            "properties": {
+              "service": {
+                "enum": ["azn-server", "checks", "testrunner", "creditscore", "chatbot"]
+              },
+              "disposition": {"const": "migrated"},
+              "generated": {"const": true},
+              "executed": {"const": true},
+              "failures": {"const": 0},
+              "errors": {"const": 0},
+              "skipped": {"const": 0}
+            }
+          }
+        }
+      }
+    },
+    "remaining_service_workcells_complete": {"const": true},
+    "eight_service_target_assembled": {"const": true},
+    "real_credit_decision_equivalent": {"const": false},
+    "model_quality_qualified": {"const": false},
+    "whole_application_equivalent": {"const": false},
+    "migration_complete": {"const": false},
+    "production_ready": {"const": false},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "signature": {
+      "type": "object",
+      "required": ["algorithm", "signer", "value"],
+      "properties": {
+        "algorithm": {"const": "hmac-sha256"},
+        "value": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

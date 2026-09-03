@@ -9,6 +9,7 @@ from unittest.mock import patch
 
 from lightyear_data.cloudbank_native_wave import RECEIPT_TYPE as MS60_RECEIPT_TYPE
 from lightyear_data.cloudbank_oracle_equivalence import (
+    DIAGNOSTIC_MARKER,
     EXPECTED_TESTS,
     OBSERVATION_SHA256,
     OUTPUT_ROOT,
@@ -18,6 +19,7 @@ from lightyear_data.cloudbank_oracle_equivalence import (
     changed_paths,
     compatibility_ledger,
     equivalence_contract,
+    equivalence_failure_diagnostic,
     execute_equivalence,
     execution_plan,
     materialize_workspaces,
@@ -80,6 +82,46 @@ def passed_lane(name: str, image_id: str) -> dict[str, object]:
 
 
 class CloudBankOracleEquivalenceTests(unittest.TestCase):
+    def test_failure_diagnostic_emits_only_bounded_classifications(self) -> None:
+        oracle = passed_lane("oracle", HEX_B)
+        oracle.update(
+            {
+                "status": "failed",
+                "errors": 2,
+                "maven_exit_code": 1,
+                "failure_phase": "test",
+                "failed_tests": [
+                    {
+                        "name": "password=should-not-leak",
+                        "type": "java.lang.IllegalStateException",
+                    },
+                    {
+                        "name": "unsafe",
+                        "type": "token=should-not-leak",
+                    },
+                ],
+                "raw_stdout": "secret=should-not-leak",
+            }
+        )
+        postgres = passed_lane("postgresql", HEX_C)
+        postgres["failure_phase"] = ["password=should-not-leak"]
+        diagnostic = equivalence_failure_diagnostic(
+            {"oracle_lane": oracle, "postgresql_lane": postgres}, HEX_B, HEX_C
+        )
+        self.assertEqual(["oracle-lane"], diagnostic["failed_checks"])
+        self.assertEqual("test", diagnostic["oracle"]["failure_phase"])
+        self.assertEqual(
+            ["java.lang.IllegalStateException"],
+            diagnostic["oracle"]["exception_types"],
+        )
+        self.assertTrue(diagnostic["cross_lane_observation_match"])
+        self.assertEqual("invalid", diagnostic["postgresql"]["failure_phase"])
+        self.assertFalse(diagnostic["raw_output_persisted"])
+        self.assertFalse(diagnostic["credentials_persisted"])
+        rendered = json.dumps(diagnostic, sort_keys=True)
+        self.assertNotIn("should-not-leak", rendered)
+        self.assertNotIn("raw_stdout", rendered)
+
     def test_committed_artifacts_are_deterministic_and_fail_closed(self) -> None:
         self.assertEqual([], validate_artifacts(ROOT))
         for name, expected in build_artifacts(ROOT).items():
@@ -237,6 +279,11 @@ class CloudBankOracleEquivalenceTests(unittest.TestCase):
         self.assertIn("cloudbank-oracle-equivalence.sh materialize", workflow)
         self.assertIn("OracleAccountEquivalenceTests", workflow)
         self.assertIn("PostgreSqlAccountEquivalenceTests", workflow)
+        tool = (ROOT / "tools/cloudbank_oracle_equivalence.py").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("DIAGNOSTIC_MARKER", tool)
+        self.assertTrue(DIAGNOSTIC_MARKER.endswith("="))
 
 
 if __name__ == "__main__":

@@ -1,0 +1,92 @@
+{
+  "content_sha256": "f4d591cf5a771c87550e14c3bf0c4bebf5bd3eadd2e8fdfd639cf7625ef43f81",
+  "entries": [
+    {
+      "capability": "eight-service-image-lock",
+      "classification": "rehearsal-qualified",
+      "evidence": "immutable-digests"
+    },
+    {
+      "capability": "kubernetes-security-context",
+      "classification": "rehearsal-qualified",
+      "evidence": "restricted-containers"
+    },
+    {
+      "capability": "kubernetes-availability-controls",
+      "classification": "rehearsal-qualified",
+      "evidence": "replicas-rollout-pdb"
+    },
+    {
+      "capability": "network-policy",
+      "classification": "rehearsal-qualified",
+      "evidence": "default-deny-site-cidrs"
+    },
+    {
+      "capability": "secret-values",
+      "classification": "excluded",
+      "evidence": "external-secret-references-only"
+    },
+    {
+      "capability": "backup-restore",
+      "classification": "rehearsal-qualified",
+      "evidence": "synthetic-state-hash"
+    },
+    {
+      "capability": "cutover-rollback",
+      "classification": "rehearsal-qualified",
+      "evidence": "explicit-state-sequence"
+    },
+    {
+      "capability": "bounded-slo",
+      "classification": "rehearsal-qualified",
+      "evidence": "synthetic-window"
+    },
+    {
+      "capability": "production-data",
+      "classification": "not-qualified",
+      "evidence": "customer-authorization-required"
+    },
+    {
+      "capability": "native-cdc",
+      "classification": "not-qualified",
+      "evidence": "source-platform-capture-required"
+    },
+    {
+      "capability": "oracle-aq-equivalence",
+      "classification": "not-qualified",
+      "evidence": "native-oracle-lane-required"
+    },
+    {
+      "capability": "enterprise-idp-and-secret-rotation",
+      "classification": "not-qualified",
+      "evidence": "customer-platform-required"
+    },
+    {
+      "capability": "credit-decision",
+      "classification": "not-qualified",
+      "evidence": "regulated-provider-required"
+    },
+    {
+      "capability": "model-answer-quality",
+      "classification": "not-qualified",
+      "evidence": "approved-model-evaluation-required"
+    },
+    {
+      "capability": "whole-application-equivalence",
+      "classification": "not-qualified",
+      "evidence": "integrated-dual-run-required"
+    },
+    {
+      "capability": "production-deployment",
+      "classification": "not-qualified",
+      "evidence": "customer-change-authority-required"
+    }
+  ],
+  "ledger_type": "lightyear-cloudbank-production-readiness-compatibility",
+  "migration_complete": false,
+  "production_deployment_eligible": false,
+  "production_like_rehearsal_eligible": true,
+  "production_ready": false,
+  "release": "0.65.0",
+  "schema_version": "1.0"
+}

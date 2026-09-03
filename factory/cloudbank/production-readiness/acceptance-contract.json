@@ -1,0 +1,60 @@
+{
+  "bindings": {
+    "compatibility_ledger_sha256": "f4d591cf5a771c87550e14c3bf0c4bebf5bd3eadd2e8fdfd639cf7625ef43f81",
+    "cutover_contract_sha256": "44a949e2056aaec4e3db45f72ba15b30629d618fd0ad3b759dd63f8e399f175f",
+    "deployment_contract_sha256": "b068b5c3b6ae84b037cf0a92a676701fe1b2106ed16ab47926d5cfc3ff255896",
+    "deployment_template_sha256": "ca45ab3c3ce230290769a5b6cda6dd2b6d16f71919252d6843815ad3f07bdfdc",
+    "execution_plan_sha256": "104b9d30aca02d3ea2578fb21e6826f5b95da114b2aa051d0e332d229f1945e5"
+  },
+  "content_sha256": "b475b3046d573df10372fc56ae99586a67138313e2a4773bc33b9e711cea387a",
+  "contract_type": "lightyear-cloudbank-production-readiness-acceptance",
+  "eligible_claim": {
+    "cutover_rehearsal_complete": true,
+    "migration_complete": false,
+    "production_deployed": false,
+    "production_like_rehearsal_complete": true,
+    "production_ready": false,
+    "rollback_rehearsal_complete": true,
+    "whole_application_equivalent": false
+  },
+  "release": "0.65.0",
+  "required_contract_sha256": "a4e18de13a9617d34f1a5ff9debd9ba8bbf2ad31c0b0bcfeaaddc3a899c8d54a",
+  "required_ms64_receipt_type": "lightyear-cloudbank-edge-ai-execution",
+  "required_scenarios": [
+    "signed-ms64-eight-service-receipt-admitted",
+    "eight-immutable-container-images-bound",
+    "deployment-manifest-placeholder-free",
+    "eight-deployments-and-services-present",
+    "dedicated-service-accounts-and-token-automount-disabled",
+    "non-root-read-only-least-privilege-containers",
+    "cpu-and-memory-requests-and-limits-enforced",
+    "startup-liveness-and-readiness-probes-enforced",
+    "zero-unavailable-rolling-update-policy-enforced",
+    "pod-disruption-budgets-cover-all-services",
+    "default-deny-network-policy-enforced",
+    "database-model-and-dns-egress-bounded",
+    "external-secret-references-contain-no-values",
+    "release-and-configuration-hashes-projected",
+    "all-eight-service-rollouts-ready",
+    "pre-cutover-backup-created-and-verified",
+    "backup-restore-reproduces-pre-cutover-state",
+    "synthetic-smoke-suite-passes",
+    "candidate-canary-readiness-observed",
+    "traffic-switch-checkpoint-recorded",
+    "post-cutover-business-checks-pass",
+    "rollback-drill-restores-checkpoint",
+    "bounded-slo-window-meets-threshold",
+    "raw-output-secrets-and-production-data-not-persisted"
+  ],
+  "required_services": [
+    "azn-server",
+    "customer",
+    "account",
+    "transfer",
+    "checks",
+    "testrunner",
+    "creditscore",
+    "chatbot"
+  ],
+  "schema_version": "1.0"
+}

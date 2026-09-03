@@ -1,0 +1,1019 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: "{{NAMESPACE}}"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cloudbank-runtime
+  namespace: "{{NAMESPACE}}"
+data:
+  LIGHTYEAR_RELEASE: "0.65.0"
+  LIGHTYEAR_CONFIGURATION_SHA256: "{{CONFIGURATION_SHA256}}"
+  CLOUDBANK_SECURITY_ISSUER_URI: "http://azn-server:8080"
+  CLOUDBANK_SECURITY_JWK_SET_URI: "http://azn-server:8080/oauth2/jwks"
+  CLOUDBANK_OAUTH_ISSUER: "http://azn-server:8080"
+  CLOUDBANK_OAUTH_JWK_SET_URI: "http://azn-server:8080/oauth2/jwks"
+  CLOUDBANK_SECURITY_SERVICE_TOKEN_URI: "http://azn-server:8080/oauth2/token"
+  AZN_AUTHORIZATION_SERVER_SIGNING_KEY_PRIVATE_KEY_PATH: "/var/run/secrets/cloudbank/signing/private.pem"
+  AZN_AUTHORIZATION_SERVER_SIGNING_KEY_PUBLIC_KEY_PATH: "/var/run/secrets/cloudbank/signing/public.pem"
+  ACCOUNT_TRANSACTION_URL: "http://account:8080/api/v1/transfers"
+  ACCOUNT_JOURNAL_URL: "http://account:8080/api/v1/account/journal"
+  SERVER_ADDRESS: "0.0.0.0"
+  EUREKA_CLIENT_ENABLED: "false"
+  SPRING_CLOUD_DISCOVERY_ENABLED: "false"
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: azn-server
+  namespace: "{{NAMESPACE}}"
+automountServiceAccountToken: false
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: azn-server
+  namespace: "{{NAMESPACE}}"
+  labels:
+    app.kubernetes.io/name: azn-server
+    app.kubernetes.io/part-of: cloudbank
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: azn-server
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: azn-server
+        app.kubernetes.io/part-of: cloudbank
+      annotations:
+        lightyear.ai/configuration-sha256: "{{CONFIGURATION_SHA256}}"
+    spec:
+      serviceAccountName: azn-server
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: azn-server
+        image: "{{IMAGE_AZN_SERVER}}"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: cloudbank-runtime
+        - secretRef:
+            name: "{{SECRET_AZN_SERVER}}"
+        startupProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: http
+          failureThreshold: 30
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: http
+          periodSeconds: 10
+          timeoutSeconds: 2
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: http
+          periodSeconds: 5
+          timeoutSeconds: 2
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: "1"
+            memory: 1Gi
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+        - name: signing-keys
+          mountPath: /var/run/secrets/cloudbank/signing
+          readOnly: true
+      volumes:
+      - name: tmp
+        emptyDir:
+          sizeLimit: 128Mi
+      - name: signing-keys
+        secret:
+          secretName: "{{SECRET_AZN_SERVER}}"
+          items:
+          - key: private.pem
+            path: private.pem
+          - key: public.pem
+            path: public.pem
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: azn-server
+  namespace: "{{NAMESPACE}}"
+spec:
+  selector:
+    app.kubernetes.io/name: azn-server
+  ports:
+  - name: http
+    port: 8080
+    targetPort: http
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: azn-server
+  namespace: "{{NAMESPACE}}"
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: azn-server
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: customer
+  namespace: "{{NAMESPACE}}"
+automountServiceAccountToken: false
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: customer
+  namespace: "{{NAMESPACE}}"
+  labels:
+    app.kubernetes.io/name: customer
+    app.kubernetes.io/part-of: cloudbank
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: customer
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: customer
+        app.kubernetes.io/part-of: cloudbank
+      annotations:
+        lightyear.ai/configuration-sha256: "{{CONFIGURATION_SHA256}}"
+    spec:
+      serviceAccountName: customer
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: customer
+        image: "{{IMAGE_CUSTOMER}}"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: cloudbank-runtime
+        - secretRef:
+            name: "{{SECRET_CUSTOMER}}"
+        startupProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: http
+          failureThreshold: 30
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: http
+          periodSeconds: 10
+          timeoutSeconds: 2
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: http
+          periodSeconds: 5
+          timeoutSeconds: 2
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: "1"
+            memory: 1Gi
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+      volumes:
+      - name: tmp
+        emptyDir:
+          sizeLimit: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: customer
+  namespace: "{{NAMESPACE}}"
+spec:
+  selector:
+    app.kubernetes.io/name: customer
+  ports:
+  - name: http
+    port: 8080
+    targetPort: http
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: customer
+  namespace: "{{NAMESPACE}}"
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: customer
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: account
+  namespace: "{{NAMESPACE}}"
+automountServiceAccountToken: false
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: account
+  namespace: "{{NAMESPACE}}"
+  labels:
+    app.kubernetes.io/name: account
+    app.kubernetes.io/part-of: cloudbank
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: account
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: account
+        app.kubernetes.io/part-of: cloudbank
+      annotations:
+        lightyear.ai/configuration-sha256: "{{CONFIGURATION_SHA256}}"
+    spec:
+      serviceAccountName: account
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: account
+        image: "{{IMAGE_ACCOUNT}}"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: cloudbank-runtime
+        - secretRef:
+            name: "{{SECRET_ACCOUNT}}"
+        startupProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: http
+          failureThreshold: 30
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: http
+          periodSeconds: 10
+          timeoutSeconds: 2
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: http
+          periodSeconds: 5
+          timeoutSeconds: 2
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: "1"
+            memory: 1Gi
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+      volumes:
+      - name: tmp
+        emptyDir:
+          sizeLimit: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: account
+  namespace: "{{NAMESPACE}}"
+spec:
+  selector:
+    app.kubernetes.io/name: account
+  ports:
+  - name: http
+    port: 8080
+    targetPort: http
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: account
+  namespace: "{{NAMESPACE}}"
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: account
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: transfer
+  namespace: "{{NAMESPACE}}"
+automountServiceAccountToken: false
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: transfer
+  namespace: "{{NAMESPACE}}"
+  labels:
+    app.kubernetes.io/name: transfer
+    app.kubernetes.io/part-of: cloudbank
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: transfer
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: transfer
+        app.kubernetes.io/part-of: cloudbank
+      annotations:
+        lightyear.ai/configuration-sha256: "{{CONFIGURATION_SHA256}}"
+    spec:
+      serviceAccountName: transfer
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: transfer
+        image: "{{IMAGE_TRANSFER}}"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: cloudbank-runtime
+        - secretRef:
+            name: "{{SECRET_TRANSFER}}"
+        startupProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: http
+          failureThreshold: 30
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: http
+          periodSeconds: 10
+          timeoutSeconds: 2
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: http
+          periodSeconds: 5
+          timeoutSeconds: 2
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: "1"
+            memory: 1Gi
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+      volumes:
+      - name: tmp
+        emptyDir:
+          sizeLimit: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: transfer
+  namespace: "{{NAMESPACE}}"
+spec:
+  selector:
+    app.kubernetes.io/name: transfer
+  ports:
+  - name: http
+    port: 8080
+    targetPort: http
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: transfer
+  namespace: "{{NAMESPACE}}"
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: transfer
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: checks
+  namespace: "{{NAMESPACE}}"
+automountServiceAccountToken: false
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: checks
+  namespace: "{{NAMESPACE}}"
+  labels:
+    app.kubernetes.io/name: checks
+    app.kubernetes.io/part-of: cloudbank
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: checks
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: checks
+        app.kubernetes.io/part-of: cloudbank
+      annotations:
+        lightyear.ai/configuration-sha256: "{{CONFIGURATION_SHA256}}"
+    spec:
+      serviceAccountName: checks
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: checks
+        image: "{{IMAGE_CHECKS}}"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: cloudbank-runtime
+        - secretRef:
+            name: "{{SECRET_CHECKS}}"
+        startupProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: http
+          failureThreshold: 30
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: http
+          periodSeconds: 10
+          timeoutSeconds: 2
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: http
+          periodSeconds: 5
+          timeoutSeconds: 2
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: "1"
+            memory: 1Gi
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+      volumes:
+      - name: tmp
+        emptyDir:
+          sizeLimit: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: checks
+  namespace: "{{NAMESPACE}}"
+spec:
+  selector:
+    app.kubernetes.io/name: checks
+  ports:
+  - name: http
+    port: 8080
+    targetPort: http
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: checks
+  namespace: "{{NAMESPACE}}"
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: checks
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: testrunner
+  namespace: "{{NAMESPACE}}"
+automountServiceAccountToken: false
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: testrunner
+  namespace: "{{NAMESPACE}}"
+  labels:
+    app.kubernetes.io/name: testrunner
+    app.kubernetes.io/part-of: cloudbank
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: testrunner
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: testrunner
+        app.kubernetes.io/part-of: cloudbank
+      annotations:
+        lightyear.ai/configuration-sha256: "{{CONFIGURATION_SHA256}}"
+    spec:
+      serviceAccountName: testrunner
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: testrunner
+        image: "{{IMAGE_TESTRUNNER}}"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: cloudbank-runtime
+        - secretRef:
+            name: "{{SECRET_TESTRUNNER}}"
+        startupProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: http
+          failureThreshold: 30
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: http
+          periodSeconds: 10
+          timeoutSeconds: 2
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: http
+          periodSeconds: 5
+          timeoutSeconds: 2
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: "1"
+            memory: 1Gi
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+      volumes:
+      - name: tmp
+        emptyDir:
+          sizeLimit: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: testrunner
+  namespace: "{{NAMESPACE}}"
+spec:
+  selector:
+    app.kubernetes.io/name: testrunner
+  ports:
+  - name: http
+    port: 8080
+    targetPort: http
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: testrunner
+  namespace: "{{NAMESPACE}}"
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: testrunner
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: creditscore
+  namespace: "{{NAMESPACE}}"
+automountServiceAccountToken: false
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: creditscore
+  namespace: "{{NAMESPACE}}"
+  labels:
+    app.kubernetes.io/name: creditscore
+    app.kubernetes.io/part-of: cloudbank
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: creditscore
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: creditscore
+        app.kubernetes.io/part-of: cloudbank
+      annotations:
+        lightyear.ai/configuration-sha256: "{{CONFIGURATION_SHA256}}"
+    spec:
+      serviceAccountName: creditscore
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: creditscore
+        image: "{{IMAGE_CREDITSCORE}}"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: cloudbank-runtime
+        - secretRef:
+            name: "{{SECRET_CREDITSCORE}}"
+        startupProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: http
+          failureThreshold: 30
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: http
+          periodSeconds: 10
+          timeoutSeconds: 2
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: http
+          periodSeconds: 5
+          timeoutSeconds: 2
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: "1"
+            memory: 1Gi
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+      volumes:
+      - name: tmp
+        emptyDir:
+          sizeLimit: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: creditscore
+  namespace: "{{NAMESPACE}}"
+spec:
+  selector:
+    app.kubernetes.io/name: creditscore
+  ports:
+  - name: http
+    port: 8080
+    targetPort: http
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: creditscore
+  namespace: "{{NAMESPACE}}"
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: creditscore
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: chatbot
+  namespace: "{{NAMESPACE}}"
+automountServiceAccountToken: false
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chatbot
+  namespace: "{{NAMESPACE}}"
+  labels:
+    app.kubernetes.io/name: chatbot
+    app.kubernetes.io/part-of: cloudbank
+spec:
+  replicas: 2
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: chatbot
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: chatbot
+        app.kubernetes.io/part-of: cloudbank
+      annotations:
+        lightyear.ai/configuration-sha256: "{{CONFIGURATION_SHA256}}"
+    spec:
+      serviceAccountName: chatbot
+      automountServiceAccountToken: false
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: chatbot
+        image: "{{IMAGE_CHATBOT}}"
+        imagePullPolicy: IfNotPresent
+        ports:
+        - name: http
+          containerPort: 8080
+        envFrom:
+        - configMapRef:
+            name: cloudbank-runtime
+        - secretRef:
+            name: "{{SECRET_CHATBOT}}"
+        startupProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: http
+          failureThreshold: 30
+          periodSeconds: 10
+        livenessProbe:
+          httpGet:
+            path: /actuator/health/liveness
+            port: http
+          periodSeconds: 10
+          timeoutSeconds: 2
+        readinessProbe:
+          httpGet:
+            path: /actuator/health/readiness
+            port: http
+          periodSeconds: 5
+          timeoutSeconds: 2
+        resources:
+          requests:
+            cpu: 100m
+            memory: 256Mi
+          limits:
+            cpu: "1"
+            memory: 1Gi
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+        volumeMounts:
+        - name: tmp
+          mountPath: /tmp
+      volumes:
+      - name: tmp
+        emptyDir:
+          sizeLimit: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: chatbot
+  namespace: "{{NAMESPACE}}"
+spec:
+  selector:
+    app.kubernetes.io/name: chatbot
+  ports:
+  - name: http
+    port: 8080
+    targetPort: http
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  name: chatbot
+  namespace: "{{NAMESPACE}}"
+spec:
+  minAvailable: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: chatbot
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny
+  namespace: "{{NAMESPACE}}"
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: cloudbank-bounded-traffic
+  namespace: "{{NAMESPACE}}"
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/part-of: cloudbank
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/part-of: cloudbank
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: "{{INGRESS_NAMESPACE}}"
+  egress:
+  - to:
+    - podSelector:
+        matchLabels:
+          app.kubernetes.io/part-of: cloudbank
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: kube-system
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53
+  - to:
+    - ipBlock:
+        cidr: "{{DATABASE_EGRESS_CIDR}}"
+    ports:
+    - protocol: TCP
+      port: 5432
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: chatbot-model-egress
+  namespace: "{{NAMESPACE}}"
+spec:
+  podSelector:
+    matchLabels:
+      app.kubernetes.io/name: chatbot
+  policyTypes:
+  - Egress
+  egress:
+  - to:
+    - ipBlock:
+        cidr: "{{MODEL_EGRESS_CIDR}}"
+    ports:
+    - protocol: TCP
+      port: 443

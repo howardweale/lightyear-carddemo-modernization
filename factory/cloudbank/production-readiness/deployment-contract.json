@@ -1,0 +1,50 @@
+{
+  "content_sha256": "b068b5c3b6ae84b037cf0a92a676701fe1b2106ed16ab47926d5cfc3ff255896",
+  "contract_type": "lightyear-cloudbank-production-like-deployment",
+  "controls": {
+    "allow_privilege_escalation": false,
+    "automount_service_account_token": false,
+    "capabilities_dropped": [
+      "ALL"
+    ],
+    "external_secrets_only": true,
+    "model_egress_restricted_to_chatbot": true,
+    "network_default_deny": true,
+    "pod_disruption_budget_per_service": true,
+    "read_only_root_filesystem": true,
+    "resource_requests_and_limits": true,
+    "rolling_update": {
+      "max_surge": 1,
+      "max_unavailable": 0
+    },
+    "run_as_non_root": true,
+    "seccomp_profile": "RuntimeDefault",
+    "service_account_per_service": true,
+    "startup_liveness_readiness_probes": true
+  },
+  "image_policy": "immutable-sha256-digest-only",
+  "orchestrator": "kubernetes",
+  "production_environment": false,
+  "production_ready": false,
+  "release": "0.65.0",
+  "replicas_per_service": 2,
+  "schema_version": "1.0",
+  "services": [
+    "azn-server",
+    "customer",
+    "account",
+    "transfer",
+    "checks",
+    "testrunner",
+    "creditscore",
+    "chatbot"
+  ],
+  "site_specific_inputs": [
+    "namespace",
+    "cluster_identity_sha256",
+    "database_egress_cidr",
+    "model_egress_cidr",
+    "ingress_namespace",
+    "service_secret_names"
+  ]
+}

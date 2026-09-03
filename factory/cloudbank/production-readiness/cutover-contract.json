@@ -1,0 +1,31 @@
+{
+  "backup": "content-addressed-pre-cutover",
+  "content_sha256": "44a949e2056aaec4e3db45f72ba15b30629d618fd0ad3b759dd63f8e399f175f",
+  "contract_type": "lightyear-cloudbank-cutover-rollback-rehearsal",
+  "customer_cutover_authorized": false,
+  "data_class": "synthetic-only",
+  "native_cdc": false,
+  "production_ready": false,
+  "release": "0.65.0",
+  "required_state_sequence": [
+    "admitted",
+    "backup-verified",
+    "candidate-ready",
+    "smoke-passed",
+    "traffic-switched",
+    "business-checks-passed",
+    "rollback-exercised",
+    "recovered"
+  ],
+  "restore": "exact-normalized-state-hash",
+  "rollback": "mandatory-and-observed",
+  "schema_version": "1.0",
+  "slo_window": {
+    "maximum_duration_seconds": 3600,
+    "maximum_errors": 0,
+    "maximum_p95_ms": 500,
+    "minimum_duration_seconds": 60,
+    "minimum_requests": 100
+  },
+  "traffic_switch": "explicit-checkpoint"
+}

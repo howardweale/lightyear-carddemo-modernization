@@ -230,6 +230,25 @@ calling a credit bureau or external model. A passing signed receipt qualifies th
 migrated remaining-service workcells and package, not real credit scoring, model quality,
 whole-application equivalence, migration completion, deployment, or production readiness.
 
+## Run the production-like deployment and cutover rehearsal gate
+
+MS #65 chains from the signed MS #64 eight-service result, binds one immutable image digest per
+service, and renders a site-parameterized Kubernetes bundle for an authorized non-production
+cluster.
+
+```bash
+./cloudbank-production-readiness.sh verify
+./cloudbank-production-readiness.sh verify-source /path/to/oracle-microservices-backend
+```
+
+The bundle applies two replicas, zero-unavailable rolling updates, health probes, resource and
+disruption bounds, dedicated service accounts, restricted containers, default-deny networking,
+bounded egress, and external secret references. The execution gate requires signed evidence for all
+eight rollouts, backup and exact restore, smoke, canary, traffic switch, business checks, rollback,
+recovery, and a bounded SLO window. A passing receipt proves only a synthetic, non-production
+rehearsal; it does not authorize customer production or establish migration completion or production
+readiness.
+
 The projection is composed with the existing PL/I and Oracle Customer (Large) fragments. It does
 not change the canonical CardDemo graph or the identity to which runtime and audit evidence are
 bound.
@@ -248,6 +267,7 @@ restart, and concurrency wave. MS #61 adds bounded normalized Oracle/PostgreSQL 
 Customer, Account, and Transfer scope. MS #62 adds the production OAuth application boundary for
 Authorization, Account, and Transfer. MS #63 adds the bounded PostgreSQL Checks messaging target.
 MS #64 adds the Credit Score and Chatbot control boundaries and assembles the eight-service target.
-Native Oracle AQ comparison, external production security operations, real credit-bureau behavior,
-model-quality evaluation, production data, whole-CloudBank equivalence, migration completion, and
-production readiness remain unclaimed.
+MS #65 adds the immutable deployment renderer and signed non-production cutover/rollback rehearsal.
+Native CDC or Oracle AQ comparison, external production security operations, real credit-bureau
+behavior, model-quality evaluation, production data, whole-CloudBank equivalence, migration
+completion, production deployment, and production readiness remain unclaimed.

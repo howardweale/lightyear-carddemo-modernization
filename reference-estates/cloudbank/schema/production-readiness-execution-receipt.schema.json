@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schemas/cloudbank/production-readiness-execution-receipt.schema.json",
+  "title": "CloudBank production-like deployment and cutover rehearsal execution receipt",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "receipt_type",
+    "release",
+    "run_id",
+    "signer",
+    "bindings",
+    "source_ms64_receipt_sha256",
+    "image_lock_sha256",
+    "environment_sha256",
+    "deployment_bundle_sha256",
+    "observation_sha256",
+    "cluster_identity_sha256",
+    "rehearsal",
+    "production_like_rehearsal_complete",
+    "cutover_rehearsal_complete",
+    "rollback_rehearsal_complete",
+    "production_deployed",
+    "whole_application_equivalent",
+    "migration_complete",
+    "production_ready",
+    "content_sha256",
+    "signature"
+  ],
+  "properties": {
+    "receipt_type": {
+      "const": "lightyear-cloudbank-production-readiness-rehearsal-execution"
+    },
+    "release": {"const": "0.65.0"},
+    "rehearsal": {
+      "type": "object",
+      "required": [
+        "status",
+        "contract_sha256",
+        "scenario_count",
+        "scenarios",
+        "services",
+        "service_rollouts",
+        "backup_restore",
+        "cutover_states",
+        "slo_window",
+        "synthetic_data_only",
+        "raw_output_persisted",
+        "secret_values_persisted",
+        "production_environment"
+      ],
+      "properties": {
+        "status": {"const": "passed"},
+        "scenario_count": {"const": 24},
+        "services": {
+          "const": [
+            "azn-server",
+            "customer",
+            "account",
+            "transfer",
+            "checks",
+            "testrunner",
+            "creditscore",
+            "chatbot"
+          ]
+        },
+        "synthetic_data_only": {"const": true},
+        "raw_output_persisted": {"const": false},
+        "secret_values_persisted": {"const": false},
+        "production_environment": {"const": false}
+      }
+    },
+    "production_like_rehearsal_complete": {"const": true},
+    "cutover_rehearsal_complete": {"const": true},
+    "rollback_rehearsal_complete": {"const": true},
+    "production_deployed": {"const": false},
+    "whole_application_equivalent": {"const": false},
+    "migration_complete": {"const": false},
+    "production_ready": {"const": false},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "signature": {
+      "type": "object",
+      "required": ["algorithm", "signer", "value"],
+      "properties": {
+        "algorithm": {"const": "hmac-sha256"},
+        "value": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

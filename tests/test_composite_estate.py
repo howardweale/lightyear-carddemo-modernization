@@ -202,6 +202,17 @@ class CompositeEstateTests(unittest.TestCase):
             "factory/cloudbank/edge-ai/readiness.receipt.json",
             edge_workcell["factory_artifact"],
         )
+        for workload in (
+            customer_workcell, money_workcell, checks_workcell, identity_workcell, edge_workcell,
+        ):
+            self.assertEqual(
+                "production-like deployment and cutover rehearsal ready · operator evidence required",
+                workload["production_readiness_status"],
+            )
+            self.assertEqual(
+                "factory/cloudbank/production-readiness/readiness.receipt.json",
+                workload["production_readiness_artifact"],
+            )
 
     def test_runtime_and_audit_remain_bound_to_canonical_identity(self) -> None:
         index = GraphExplorerIndex(self.composite)

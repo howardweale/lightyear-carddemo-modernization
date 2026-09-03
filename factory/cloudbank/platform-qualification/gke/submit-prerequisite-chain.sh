@@ -12,7 +12,7 @@ signer="$1"
 
 evidence_secret="${MS67_EVIDENCE_SECRET:-cloudbank-ms67-evidence-key}"
 evidence_bucket="${MS67_EVIDENCE_BUCKET:-${GCP_PROJECT_ID}-ms67-evidence}"
-service_account_name="cloudbank-ms67-evidence-builder"
+service_account_name="cloudbank-ms67-evidence"
 service_account="${service_account_name}@${GCP_PROJECT_ID}.iam.gserviceaccount.com"
 config="$ms67_gke_dir/cloudbuild-prerequisite-chain.yaml"
 

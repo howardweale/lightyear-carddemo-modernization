@@ -316,7 +316,8 @@ class CloudBankPlatformQualificationTests(unittest.TestCase):
         ):
             self.assertIn(service_api, bootstrap)
         for required in ("--region", "--enable-private-nodes", "--workload-pool",
-                         "--availability-type REGIONAL", "--enable-point-in-time-recovery",
+                         "--edition ENTERPRISE", "--availability-type REGIONAL",
+                         "--enable-point-in-time-recovery",
                          "roles/secretmanager.secretAccessor", "--no-assign-ip",
                          "--enable-dns-access", "--no-enable-ip-access", "--dns-endpoint"):
             self.assertIn(required, bootstrap)

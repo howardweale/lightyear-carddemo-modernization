@@ -66,7 +66,8 @@ gcloud auth configure-docker "$GCP_REGION-docker.pkg.dev" --quiet
 
 gcloud sql instances describe "$CLOUD_SQL_INSTANCE" >/dev/null 2>&1 || \
   gcloud sql instances create "$CLOUD_SQL_INSTANCE" --database-version POSTGRES_16 \
-    --region "$GCP_REGION" --tier db-custom-2-7680 --availability-type REGIONAL \
+    --edition ENTERPRISE --region "$GCP_REGION" --tier db-custom-2-7680 \
+    --availability-type REGIONAL \
     --network "projects/$GCP_PROJECT_ID/global/networks/$GCP_NETWORK_NAME" --no-assign-ip \
     --storage-type SSD --storage-size 20 --storage-auto-increase \
     --backup-start-time 02:00 --enable-point-in-time-recovery \

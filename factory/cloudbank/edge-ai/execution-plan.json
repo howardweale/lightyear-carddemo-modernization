@@ -3,7 +3,7 @@
     "ms63-five-service-target",
     "ms57-qualified-customer-target"
   ],
-  "content_sha256": "de7fc7842083323f76e0bebb98bebd1ecdd7289e4c26f817c7da76864d6c4954",
+  "content_sha256": "55c6c65d39e87ef278684a4a27a49c5a3129846ccc060e60e0985f2c277e5fa1",
   "customer_target_paths": [
     "customer/pom.xml",
     "customer/src/main/java/com/example/customer/model/Customers.java",
@@ -59,7 +59,7 @@
     {
       "path": "chatbot/src/test/java/com/example/chatbot/ChatbotApplicationTest.java",
       "template": "patches/ChatbotApplicationTest.java",
-      "template_sha256": "ebdabc10615eeacf358091b969d9bad091d23094e5421aa51ad958cb215a854c"
+      "template_sha256": "f4da161e6c621a6d1622c518ac0630b0959a94282540bdaeac839128be182d00"
     },
     {
       "path": "checks/src/test/java/com/example/checks/ChecksTargetWorkcellTest.java",

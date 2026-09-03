@@ -217,6 +217,10 @@ class CloudBankDarkFactoryTests(unittest.TestCase):
                 "maven_exit_code": 1,
                 "shared_contract_sha256": None,
                 "raw_stdout": "password=should-not-leak",
+                "exception_types": [
+                    "java.lang.IllegalStateException",
+                    "password=should-not-leak",
+                ],
             }
         )
         diagnostic = _acceptance_diagnostic(
@@ -237,6 +241,10 @@ class CloudBankDarkFactoryTests(unittest.TestCase):
         )
         self.assertEqual("failed", diagnostic["oracle"]["status"])
         self.assertEqual(1, diagnostic["oracle"]["maven_exit_code"])
+        self.assertEqual(
+            ["java.lang.IllegalStateException"],
+            diagnostic["oracle"]["exception_types"],
+        )
         self.assertFalse(diagnostic["raw_output_persisted"])
         self.assertFalse(diagnostic["credentials_persisted"])
         rendered = json.dumps(diagnostic, sort_keys=True)
@@ -259,6 +267,56 @@ class CloudBankDarkFactoryTests(unittest.TestCase):
             self.assertEqual("passed", result["status"])
             self.assertEqual(2, result["tests"])
             self.assertFalse(result["raw_output_persisted"])
+
+    def test_maven_failure_exposes_only_validated_exception_types(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            workspace = Path(directory)
+            report = (
+                workspace
+                / "customer/target/surefire-reports"
+                / "TEST-com.example.customer.CustomerApplicationTests.xml"
+            )
+            report.parent.mkdir(parents=True)
+            report.write_text(
+                """
+<testsuite tests="2" failures="0" errors="2" skipped="0">
+  <testcase name="sharedOracleAndPostgreSqlContract">
+    <error type="java.lang.IllegalStateException">Application failed
+Caused by: org.springframework.beans.factory.BeanCreationException: hidden
+Caused by: org.postgresql.util.PSQLException: password=should-not-leak
+    </error>
+  </testcase>
+  <testcase name="targetRoleMappingIsExplicit">
+    <error type="password=should-not-leak">hidden</error>
+  </testcase>
+</testsuite>
+""".strip(),
+                encoding="utf-8",
+            )
+
+            def fake_run(
+                argv: list[str], **kwargs: object
+            ) -> subprocess.CompletedProcess[str]:
+                return subprocess.CompletedProcess(
+                    argv,
+                    1,
+                    "password=should-not-leak",
+                    "token=should-not-leak",
+                )
+
+            result = _maven_result(workspace, "postgresql", {}, fake_run)
+            self.assertEqual("failed", result["status"])
+            self.assertEqual(
+                [
+                    "java.lang.IllegalStateException",
+                    "org.postgresql.util.PSQLException",
+                    "org.springframework.beans.factory.BeanCreationException",
+                ],
+                result["exception_types"],
+            )
+            rendered = json.dumps(result, sort_keys=True)
+            self.assertNotIn("should-not-leak", rendered)
+            self.assertNotIn("Application failed", rendered)
 
     def test_postgresql_lane_overrides_inherited_oracle_hibernate_dialect(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

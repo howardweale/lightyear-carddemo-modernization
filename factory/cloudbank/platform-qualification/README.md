@@ -14,7 +14,8 @@ authorized, non-production platform.
 ## Live sequence
 
 1. Copy `gke/qualification.env.example` outside the repository and supply the project, region,
-   delegated test domain, administrator CIDR, and digest-pinned Java base image.
+   delegated test domain and digest-pinned Java and model images. Cluster administration uses the
+   IAM-authenticated GKE DNS endpoint rather than a source-IP allowlist.
 2. Run `gke/bootstrap.sh` from Google Cloud Shell. It creates chargeable resources and prints the
    DNS delegation that must be installed at the parent zone.
 3. Add secret versions directly to Secret Manager. Never put secret values in this repository,

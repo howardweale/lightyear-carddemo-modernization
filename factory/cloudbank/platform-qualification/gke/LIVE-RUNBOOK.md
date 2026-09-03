@@ -2,7 +2,7 @@
 
 This runbook creates real, chargeable, non-production effects. Use a dedicated project labelled
 `environment=non-production`. Keep the evidence key and every secret outside the repository. The
-scripts refuse broad administrator CIDRs, mutable base-image tags, production-labelled projects,
+scripts use an IAM-authenticated GKE DNS endpoint and refuse mutable base-image tags, production-labelled projects,
 missing chart versions, and missing mutation acknowledgements.
 
 ## 1. Account and DNS

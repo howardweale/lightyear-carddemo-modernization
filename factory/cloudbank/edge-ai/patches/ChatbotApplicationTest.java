@@ -96,14 +96,20 @@ class ChatbotApplicationTest {
 
     @Test
     void endpointPolicyRequiresAllowlistAndTlsExceptLoopback() {
-        new ChatbotEndpointPolicy("http://127.0.0.1:11434", "127.0.0.1,localhost");
-        new ChatbotEndpointPolicy("https://model.example.test", "model.example.test");
+        new ChatbotEndpointPolicy("http://127.0.0.1:11434", "127.0.0.1,localhost", false);
+        new ChatbotEndpointPolicy("https://model.example.test", "model.example.test", false);
+        new ChatbotEndpointPolicy("http://ollama.cloudbank-model.svc.cluster.local:11434",
+                "ollama.cloudbank-model.svc.cluster.local", true);
         assertThrows(IllegalArgumentException.class,
-                () -> new ChatbotEndpointPolicy("http://model.example.test", "model.example.test"));
+                () -> new ChatbotEndpointPolicy("http://model.example.test", "model.example.test", true));
         assertThrows(IllegalArgumentException.class,
-                () -> new ChatbotEndpointPolicy("https://evil.example.test", "model.example.test"));
+                () -> new ChatbotEndpointPolicy("http://ollama.cloudbank-model.svc.cluster.local:11434",
+                        "ollama.cloudbank-model.svc.cluster.local", false));
         assertThrows(IllegalArgumentException.class,
-                () -> new ChatbotEndpointPolicy("https://user:secret@model.example.test", "model.example.test"));
+                () -> new ChatbotEndpointPolicy("https://evil.example.test", "model.example.test", false));
+        assertThrows(IllegalArgumentException.class,
+                () -> new ChatbotEndpointPolicy(
+                        "https://user:secret@model.example.test", "model.example.test", false));
     }
 
     private static ChatResponse response(String text) {

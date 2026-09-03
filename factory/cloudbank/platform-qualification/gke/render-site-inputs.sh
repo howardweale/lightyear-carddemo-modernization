@@ -34,6 +34,8 @@ CLUSTER_IDENTITY="$cluster_identity" NAMESPACE_IDENTITY="$namespace_identity" \
 DATABASE_CIDR="$database_ip/32" OUTPUT_ROOT="$output_root" SIGNER="$signer" \
 GCP_PROJECT_ID="$GCP_PROJECT_ID" GCP_REGION="$GCP_REGION" GKE_CLUSTER_NAME="$GKE_CLUSTER_NAME" \
 GKE_NAMESPACE="$GKE_NAMESPACE" MODEL_EGRESS_CIDR="$MODEL_EGRESS_CIDR" TLS_HOSTNAME="$TLS_HOSTNAME" \
+MODEL_NAMESPACE="$MODEL_NAMESPACE" OLLAMA_MODEL_IMAGE="$OLLAMA_MODEL_IMAGE" \
+OLLAMA_MODEL_NAME="$OLLAMA_MODEL_NAME" OLLAMA_MODEL_MANIFEST_SHA256="$OLLAMA_MODEL_MANIFEST_SHA256" \
 PYTHONPATH="$ms67_project_root/src" python - <<'PY'
 import json, os
 from pathlib import Path
@@ -66,6 +68,12 @@ profile = sign({
     "namespace_uid_sha256": os.environ["NAMESPACE_IDENTITY"],
     "ingress_url": f"https://{os.environ['TLS_HOSTNAME']}",
     "expected_hostname": os.environ["TLS_HOSTNAME"],
+    "model_mode": "in-cluster-ollama",
+    "model_namespace": os.environ["MODEL_NAMESPACE"],
+    "model_name": os.environ["OLLAMA_MODEL_NAME"],
+    "model_image": os.environ["OLLAMA_MODEL_IMAGE"],
+    "model_manifest_sha256": os.environ["OLLAMA_MODEL_MANIFEST_SHA256"],
+    "model_external_egress": False,
     "mutating_drills_authorized": True,
     "production_access_authorized": False,
     "non_production": True,

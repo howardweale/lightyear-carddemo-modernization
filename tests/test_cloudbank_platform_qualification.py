@@ -79,6 +79,12 @@ def profile(**overrides: object) -> dict[str, object]:
         "namespace_uid_sha256": HEX_C,
         "ingress_url": "https://cloudbank.test.example.com",
         "expected_hostname": "cloudbank.test.example.com",
+        "model_mode": "in-cluster-ollama",
+        "model_namespace": "cloudbank-model",
+        "model_name": "qwen2.5:0.5b",
+        "model_image": image("ollama-qwen2.5-0.5b", 90),
+        "model_manifest_sha256": HEX_A,
+        "model_external_egress": False,
         "mutating_drills_authorized": True,
         "production_access_authorized": False,
         "non_production": True,
@@ -174,7 +180,8 @@ class CloudBankPlatformQualificationTests(unittest.TestCase):
         self.assertEqual(28, len(SCENARIO_IDS))
         self.assertEqual(CONTRACT_SHA256, acceptance_contract()["required_contract_sha256"])
         for control in ("tls", "external_secrets", "observability", "load", "security",
-                        "backup_restore", "availability", "rolling_deployment", "cutover_rollback"):
+                        "in_cluster_model", "backup_restore", "availability",
+                        "rolling_deployment", "cutover_rollback"):
             self.assertIn(control, contract["controls"])
         self.assertFalse(contract["production_ready"])
         self.assertEqual(SCENARIO_IDS, execution_plan()["required_scenarios"])
@@ -190,9 +197,15 @@ class CloudBankPlatformQualificationTests(unittest.TestCase):
         rendered = render_gke_addons(
             "test-project", "europe-west2", "cloudbank-ms67", "cloudbank-ms67",
             "cloudbank.test.example.com", "owner@example.com",
-            "otel/opentelemetry-collector-contrib@sha256:" + "1" * 64, "199.36.153.8/30",
+            "otel/opentelemetry-collector-contrib@sha256:" + "1" * 64,
+            "cloudbank-model", image("ollama-qwen2.5-0.5b", 90), "qwen2.5:0.5b",
+            HEX_A,
+            "199.36.153.8/30",
         )
         self.assertNotIn("{{", rendered)
+        self.assertIn("name: chatbot-only-model-ingress", rendered)
+        self.assertIn("lightyear.ai/model-manifest-sha256: \"" + HEX_A + "\"", rendered)
+        self.assertIn("networking.k8s.io/v1", rendered)
 
     def test_profile_rejects_production_http_and_missing_authorization(self) -> None:
         self.assertEqual([], validate_profile(profile(), KEY))
@@ -304,7 +317,8 @@ class CloudBankPlatformQualificationTests(unittest.TestCase):
             self.assertIn(service_api, bootstrap)
         for required in ("--region", "--enable-private-nodes", "--workload-pool",
                          "--availability-type REGIONAL", "--enable-point-in-time-recovery",
-                         "roles/secretmanager.secretAccessor", "--no-assign-ip"):
+                         "roles/secretmanager.secretAccessor", "--no-assign-ip",
+                         "--enable-dns-access", "--no-enable-ip-access", "--dns-endpoint"):
             self.assertIn(required, bootstrap)
 
 

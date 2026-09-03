@@ -117,6 +117,9 @@ def platform_contract() -> dict[str, Any]:
             "security": {"signed_images": True, "provenance": True,
                          "critical_vulnerabilities": 0, "high_vulnerabilities": 0,
                          "runtime_policy_violations": 0, "network_policy_observed": True},
+            "in_cluster_model": {"runtime": "ollama", "model": "qwen2.5:0.5b",
+                                 "immutable_image": True, "external_egress": False,
+                                 "chatbot_only_ingress": True},
             "backup_restore": {"exact_normalized_restore": True,
                                "maximum_rpo_seconds": MAXIMUM_RPO_SECONDS,
                                "maximum_rto_seconds": MAXIMUM_RTO_SECONDS},
@@ -340,6 +343,74 @@ def gke_addons_template() -> str:
             "  - extract:", f"      key: cloudbank-{service}-external", "---",
         ])
     lines.extend([
+        "apiVersion: v1", "kind: Namespace", "metadata:", "  name: \"{{MODEL_NAMESPACE}}\"",
+        "  labels:", "    pod-security.kubernetes.io/enforce: restricted",
+        "    pod-security.kubernetes.io/enforce-version: latest",
+        "    environment: non-production", "---",
+        "apiVersion: v1", "kind: ServiceAccount", "metadata:", "  name: ollama",
+        "  namespace: \"{{MODEL_NAMESPACE}}\"", "automountServiceAccountToken: false", "---",
+        "apiVersion: apps/v1", "kind: Deployment", "metadata:", "  name: ollama",
+        "  namespace: \"{{MODEL_NAMESPACE}}\"", "  labels:", "    app.kubernetes.io/name: ollama",
+        "    app.kubernetes.io/part-of: cloudbank-model", "spec:", "  replicas: 2",
+        "  strategy:", "    type: RollingUpdate", "    rollingUpdate:", "      maxUnavailable: 0",
+        "      maxSurge: 1", "  selector:", "    matchLabels:", "      app.kubernetes.io/name: ollama",
+        "  template:", "    metadata:", "      labels:", "        app.kubernetes.io/name: ollama",
+        "        app.kubernetes.io/part-of: cloudbank-model", "      annotations:",
+        "        lightyear.ai/model-name: \"{{OLLAMA_MODEL_NAME}}\"",
+        "        lightyear.ai/model-manifest-sha256: \"{{OLLAMA_MODEL_MANIFEST_SHA256}}\"", "    spec:",
+        "      serviceAccountName: ollama", "      automountServiceAccountToken: false",
+        "      topologySpreadConstraints:", "      - maxSkew: 1",
+        "        topologyKey: topology.kubernetes.io/zone", "        whenUnsatisfiable: DoNotSchedule",
+        "        labelSelector:", "          matchLabels:", "            app.kubernetes.io/name: ollama",
+        "      securityContext:", "        runAsNonRoot: true", "        runAsUser: 65532",
+        "        runAsGroup: 65532", "        fsGroup: 65532", "        seccompProfile:",
+        "          type: RuntimeDefault", "      containers:", "      - name: ollama",
+        "        image: \"{{OLLAMA_MODEL_IMAGE}}\"", "        imagePullPolicy: IfNotPresent",
+        "        env:", "        - {name: HOME, value: /tmp/ollama-home}",
+        "        - {name: OLLAMA_HOST, value: 0.0.0.0:11434}",
+        "        - {name: OLLAMA_MODELS, value: /models}",
+        "        - {name: OLLAMA_NOHISTORY, value: \"1\"}",
+        "        - {name: OLLAMA_KEEP_ALIVE, value: \"0\"}",
+        "        - {name: OLLAMA_NUM_PARALLEL, value: \"1\"}",
+        "        ports:", "        - {name: http, containerPort: 11434}",
+        "        startupProbe:", "          httpGet: {path: /api/tags, port: http}",
+        "          failureThreshold: 60", "          periodSeconds: 5", "        livenessProbe:",
+        "          httpGet: {path: /, port: http}", "          periodSeconds: 15",
+        "          timeoutSeconds: 3", "        readinessProbe:",
+        "          httpGet: {path: /api/tags, port: http}", "          periodSeconds: 5",
+        "          timeoutSeconds: 3", "        resources:", "          requests:",
+        "            cpu: 500m", "            memory: 768Mi", "          limits:",
+        "            cpu: \"2\"", "            memory: 2Gi", "        securityContext:",
+        "          allowPrivilegeEscalation: false", "          readOnlyRootFilesystem: true",
+        "          capabilities:", "            drop: [\"ALL\"]", "        volumeMounts:",
+        "        - {name: tmp, mountPath: /tmp}", "      volumes:", "      - name: tmp",
+        "        emptyDir: {sizeLimit: 128Mi}", "---",
+        "apiVersion: v1", "kind: Service", "metadata:", "  name: ollama",
+        "  namespace: \"{{MODEL_NAMESPACE}}\"", "spec:", "  selector:",
+        "    app.kubernetes.io/name: ollama", "  ports:",
+        "  - {name: http, port: 11434, targetPort: http}", "---",
+        "apiVersion: policy/v1", "kind: PodDisruptionBudget", "metadata:", "  name: ollama",
+        "  namespace: \"{{MODEL_NAMESPACE}}\"", "spec:", "  minAvailable: 1", "  selector:",
+        "    matchLabels:", "      app.kubernetes.io/name: ollama", "---",
+        "apiVersion: networking.k8s.io/v1", "kind: NetworkPolicy", "metadata:",
+        "  name: model-default-deny", "  namespace: \"{{MODEL_NAMESPACE}}\"", "spec:",
+        "  podSelector: {}", "  policyTypes: [\"Ingress\", \"Egress\"]", "---",
+        "apiVersion: networking.k8s.io/v1", "kind: NetworkPolicy", "metadata:",
+        "  name: chatbot-only-model-ingress", "  namespace: \"{{MODEL_NAMESPACE}}\"", "spec:",
+        "  podSelector:", "    matchLabels:", "      app.kubernetes.io/name: ollama",
+        "  policyTypes: [\"Ingress\"]", "  ingress:", "  - from:", "    - namespaceSelector:",
+        "        matchLabels:", "          kubernetes.io/metadata.name: \"{{NAMESPACE}}\"",
+        "      podSelector:", "        matchLabels:", "          app.kubernetes.io/name: chatbot",
+        "    ports:", "    - {protocol: TCP, port: 11434}", "---",
+        "apiVersion: networking.k8s.io/v1", "kind: NetworkPolicy", "metadata:",
+        "  name: chatbot-in-cluster-model-egress", "  namespace: \"{{NAMESPACE}}\"", "spec:",
+        "  podSelector:", "    matchLabels:", "      app.kubernetes.io/name: chatbot",
+        "  policyTypes: [\"Egress\"]", "  egress:", "  - to:", "    - namespaceSelector:",
+        "        matchLabels:", "          kubernetes.io/metadata.name: \"{{MODEL_NAMESPACE}}\"",
+        "      podSelector:", "        matchLabels:", "          app.kubernetes.io/name: ollama",
+        "    ports:", "    - {protocol: TCP, port: 11434}", "---",
+    ])
+    lines.extend([
         "apiVersion: cert-manager.io/v1", "kind: ClusterIssuer", "metadata:",
         "  name: cloudbank-ms67-letsencrypt", "spec:", "  acme:",
         "    email: \"{{LETSENCRYPT_EMAIL}}\"", "    server: https://acme-v02.api.letsencrypt.org/directory",
@@ -360,15 +431,23 @@ def gke_addons_template() -> str:
 
 def render_gke_addons(project_id: str, region: str, cluster_name: str, namespace: str,
                       hostname: str, letsencrypt_email: str, otel_collector_image: str,
+                      model_namespace: str, ollama_model_image: str, ollama_model_name: str,
+                      ollama_model_manifest_sha256: str,
                       google_apis_cidr: str) -> str:
     values = (project_id, region, cluster_name, namespace, hostname, letsencrypt_email,
-              otel_collector_image, google_apis_cidr)
+              otel_collector_image, model_namespace, ollama_model_image, ollama_model_name,
+              ollama_model_manifest_sha256, google_apis_cidr)
     if any(not value.strip() or any(character in value for character in "\n\r\"{}") for value in values):
         raise ValueError("cloudbank-platform-qualification-gke-render-input-invalid")
-    if not DNS_NAME.fullmatch(hostname) or not DNS_NAME.fullmatch(namespace):
+    if not DNS_NAME.fullmatch(hostname) or not DNS_NAME.fullmatch(namespace) \
+            or not DNS_NAME.fullmatch(model_namespace) or model_namespace == namespace:
         raise ValueError("cloudbank-platform-qualification-gke-render-dns-invalid")
-    if not IMAGE.fullmatch(otel_collector_image):
+    if not IMAGE.fullmatch(otel_collector_image) or not IMAGE.fullmatch(ollama_model_image):
         raise ValueError("cloudbank-platform-qualification-gke-render-image-invalid")
+    if ollama_model_name != "qwen2.5:0.5b":
+        raise ValueError("cloudbank-platform-qualification-gke-render-model-invalid")
+    if not HEX_64.fullmatch(ollama_model_manifest_sha256):
+        raise ValueError("cloudbank-platform-qualification-gke-render-model-manifest-invalid")
     if google_apis_cidr != "199.36.153.8/30":
         raise ValueError("cloudbank-platform-qualification-gke-render-google-api-cidr-invalid")
     rendered = gke_addons_template()
@@ -377,6 +456,10 @@ def render_gke_addons(project_id: str, region: str, cluster_name: str, namespace
         "{{NAMESPACE}}": namespace, "{{TLS_HOSTNAME}}": hostname,
         "{{LETSENCRYPT_EMAIL}}": letsencrypt_email,
         "{{OTEL_COLLECTOR_IMAGE}}": otel_collector_image,
+        "{{MODEL_NAMESPACE}}": model_namespace,
+        "{{OLLAMA_MODEL_IMAGE}}": ollama_model_image,
+        "{{OLLAMA_MODEL_NAME}}": ollama_model_name,
+        "{{OLLAMA_MODEL_MANIFEST_SHA256}}": ollama_model_manifest_sha256,
         "{{GOOGLE_APIS_CIDR}}": google_apis_cidr,
     }.items():
         rendered = rendered.replace(marker, value)
@@ -438,7 +521,9 @@ def validate_profile(profile: Mapping[str, Any], key: str) -> list[str]:
     expected = {
         "schema_version", "profile_type", "release", "signer", "context", "cluster_uid_sha256",
         "provider", "region", "namespace", "namespace_uid_sha256", "ingress_url",
-        "expected_hostname", "mutating_drills_authorized", "production_access_authorized",
+        "expected_hostname", "model_mode", "model_namespace", "model_name", "model_image",
+        "model_manifest_sha256", "model_external_egress",
+        "mutating_drills_authorized", "production_access_authorized",
         "non_production", "content_sha256", "signature",
     }
     if set(profile) != expected:
@@ -460,6 +545,14 @@ def validate_profile(profile: Mapping[str, Any], key: str) -> list[str]:
     url, hostname = str(profile.get("ingress_url", "")), str(profile.get("expected_hostname", ""))
     if url != f"https://{hostname}" or not DNS_NAME.fullmatch(hostname):
         errors.append("cloudbank-platform-qualification-profile-ingress-invalid")
+    if profile.get("model_mode") != "in-cluster-ollama" \
+            or profile.get("model_name") != "qwen2.5:0.5b" \
+            or profile.get("model_external_egress") is not False \
+            or not DNS_NAME.fullmatch(str(profile.get("model_namespace", ""))) \
+            or profile.get("model_namespace") == profile.get("namespace") \
+            or not IMAGE.fullmatch(str(profile.get("model_image", ""))) \
+            or not HEX_64.fullmatch(str(profile.get("model_manifest_sha256", ""))):
+        errors.append("cloudbank-platform-qualification-profile-model-invalid")
     if profile.get("mutating_drills_authorized") is not True \
             or profile.get("production_access_authorized") is not False \
             or profile.get("non_production") is not True:

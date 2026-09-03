@@ -26,6 +26,7 @@ spring:
 chatbot:
   security:
     allowed-model-hosts: ${CLOUDBANK_CHAT_ALLOWED_MODEL_HOSTS:127.0.0.1,localhost}
+    allow-http-cluster-local: ${CLOUDBANK_CHAT_ALLOW_HTTP_CLUSTER_LOCAL:false}
     rate-limit:
       requests: ${CLOUDBANK_CHAT_RATE_LIMIT_REQUESTS:20}
       window: ${CLOUDBANK_CHAT_RATE_LIMIT_WINDOW:PT1M}

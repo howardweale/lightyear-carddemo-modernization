@@ -1,5 +1,5 @@
 {
-  "content_sha256": "c99dae9f766b648859c79ed605e7aa5e7a3a64d8773a191991b0ba7f92e3852b",
+  "content_sha256": "5bd3b40717bb40380742792b64f465cef38ad95d6d6c50de22f40cbf23132a98",
   "contract_type": "lightyear-cloudbank-real-non-production-kubernetes-platform",
   "controls": {
     "availability": {
@@ -23,6 +23,13 @@
       "controller_ready": true,
       "rotation_observed": true,
       "values_persisted": false
+    },
+    "in_cluster_model": {
+      "chatbot_only_ingress": true,
+      "external_egress": false,
+      "immutable_image": true,
+      "model": "qwen2.5:0.5b",
+      "runtime": "ollama"
     },
     "load": {
       "maximum_errors": 0,

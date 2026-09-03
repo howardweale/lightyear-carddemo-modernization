@@ -19,7 +19,8 @@ ms67_require_environment() {
   local name
   for name in GCP_PROJECT_ID GCP_REGION GKE_CLUSTER_NAME GKE_NAMESPACE GCP_NETWORK_NAME \
     GCP_SUBNET_NAME ARTIFACT_REPOSITORY CLOUD_SQL_INSTANCE DNS_ZONE_NAME \
-    DELEGATED_DNS_NAME TLS_HOSTNAME ADMIN_CIDR MODEL_EGRESS_CIDR GOOGLE_APIS_CIDR LETSENCRYPT_EMAIL \
+    DELEGATED_DNS_NAME TLS_HOSTNAME MODEL_EGRESS_CIDR GOOGLE_APIS_CIDR LETSENCRYPT_EMAIL \
+    MODEL_NAMESPACE OLLAMA_MODEL_IMAGE OLLAMA_MODEL_NAME OLLAMA_MODEL_MANIFEST_SHA256 \
     EXTERNAL_SECRETS_CHART_VERSION CERT_MANAGER_CHART_VERSION INGRESS_NGINX_CHART_VERSION \
     OTEL_COLLECTOR_IMAGE; do
     [[ -n "${!name:-}" ]] || { echo "Required environment variable is missing: $name" >&2; exit 2; }
@@ -30,17 +31,26 @@ ms67_require_environment() {
   [[ "$TLS_HOSTNAME" == *".$DELEGATED_DNS_NAME" ]] || {
     echo "TLS_HOSTNAME must be below DELEGATED_DNS_NAME" >&2; exit 2;
   }
-  [[ "$ADMIN_CIDR" != "0.0.0.0/0" && "$ADMIN_CIDR" != "::/0" ]] || {
-    echo "ADMIN_CIDR must be bounded" >&2; exit 2;
-  }
-  [[ "$ADMIN_CIDR" =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}/32$ ]] || {
-    echo "ADMIN_CIDR must be one explicit IPv4 /32" >&2; exit 2;
-  }
   [[ "$MODEL_EGRESS_CIDR" != "0.0.0.0/0" && "$MODEL_EGRESS_CIDR" != "::/0" ]] || {
     echo "MODEL_EGRESS_CIDR must be bounded" >&2; exit 2;
   }
   [[ "$MODEL_EGRESS_CIDR" =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}/32$ ]] || {
     echo "MODEL_EGRESS_CIDR must be one explicit IPv4 /32" >&2; exit 2;
+  }
+  [[ "$MODEL_EGRESS_CIDR" == "192.0.2.1/32" ]] || {
+    echo "MS67 in-cluster mode requires the unroutable MS65 compatibility value 192.0.2.1/32" >&2; exit 2;
+  }
+  [[ "$MODEL_NAMESPACE" =~ ^[a-z0-9]([-a-z0-9]*[a-z0-9])?$ && "$MODEL_NAMESPACE" != "$GKE_NAMESPACE" ]] || {
+    echo "MODEL_NAMESPACE must be a separate DNS-label namespace" >&2; exit 2;
+  }
+  [[ "$OLLAMA_MODEL_IMAGE" =~ @sha256:[0-9a-f]{64}$ ]] || {
+    echo "OLLAMA_MODEL_IMAGE must use an immutable sha256 digest" >&2; exit 2;
+  }
+  [[ "$OLLAMA_MODEL_NAME" == "qwen2.5:0.5b" ]] || {
+    echo "OLLAMA_MODEL_NAME must be the qualified qwen2.5:0.5b model" >&2; exit 2;
+  }
+  [[ "$OLLAMA_MODEL_MANIFEST_SHA256" =~ ^[0-9a-f]{64}$ ]] || {
+    echo "OLLAMA_MODEL_MANIFEST_SHA256 must be a verified sha256" >&2; exit 2;
   }
   [[ "$GOOGLE_APIS_CIDR" == "199.36.153.8/30" ]] || {
     echo "GOOGLE_APIS_CIDR must use Google's restricted API VIP 199.36.153.8/30" >&2; exit 2;

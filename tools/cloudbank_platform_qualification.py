@@ -39,6 +39,10 @@ def parser() -> argparse.ArgumentParser:
     render.add_argument("--hostname", required=True)
     render.add_argument("--letsencrypt-email", required=True)
     render.add_argument("--otel-collector-image", required=True)
+    render.add_argument("--model-namespace", required=True)
+    render.add_argument("--ollama-model-image", required=True)
+    render.add_argument("--ollama-model-name", required=True)
+    render.add_argument("--ollama-model-manifest-sha256", required=True)
     render.add_argument("--google-apis-cidr", required=True)
     render.add_argument("--output", type=Path, required=True)
     admit = commands.add_parser("admit")
@@ -85,6 +89,8 @@ def main(argv: list[str] | None = None) -> int:
                 args.project_id, args.region, args.cluster_name, args.namespace,
                 args.hostname, args.letsencrypt_email,
                 args.otel_collector_image,
+                args.model_namespace, args.ollama_model_image, args.ollama_model_name,
+                args.ollama_model_manifest_sha256,
                 args.google_apis_cidr,
             )
             args.output.parent.mkdir(parents=True, exist_ok=True)

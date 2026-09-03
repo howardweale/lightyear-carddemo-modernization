@@ -51,14 +51,13 @@ if ! gcloud container clusters describe "$GKE_CLUSTER_NAME" --region "$GCP_REGIO
   gcloud container clusters create "$GKE_CLUSTER_NAME" --region "$GCP_REGION" \
     --release-channel regular --network "$GCP_NETWORK_NAME" --subnetwork "$GCP_SUBNET_NAME" \
     --cluster-secondary-range-name cloudbank-pods --services-secondary-range-name cloudbank-services \
-    --enable-ip-alias --enable-private-nodes --enable-master-authorized-networks \
-    --master-authorized-networks "$ADMIN_CIDR" --enable-master-global-access \
+    --enable-ip-alias --enable-private-nodes --enable-dns-access --no-enable-ip-access \
     --enable-dataplane-v2 --enable-shielded-nodes --workload-pool "$GCP_PROJECT_ID.svc.id.goog" \
     --enable-managed-prometheus --logging=SYSTEM,WORKLOAD --monitoring=SYSTEM \
     --machine-type e2-standard-4 --disk-type pd-balanced --disk-size 50 --num-nodes 1 \
     --enable-autoscaling --min-nodes 1 --max-nodes 2 --labels environment=non-production,milestone=ms67
 fi
-gcloud container clusters get-credentials "$GKE_CLUSTER_NAME" --region "$GCP_REGION"
+gcloud container clusters get-credentials "$GKE_CLUSTER_NAME" --region "$GCP_REGION" --dns-endpoint
 
 gcloud artifacts repositories describe "$ARTIFACT_REPOSITORY" --location "$GCP_REGION" >/dev/null 2>&1 || \
   gcloud artifacts repositories create "$ARTIFACT_REPOSITORY" --location "$GCP_REGION" \

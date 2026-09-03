@@ -3,9 +3,9 @@
     "compatibility_ledger_sha256": "978fe4798c5853c330976a90cf70270bbfde4a574ae60bc42866a0b5d664a467",
     "evidence_contract_sha256": "d7af86a231d673c15dce39d14bce42d799f9794095e900831ed4f17e55b766f7",
     "execution_plan_sha256": "42bb20ffcdc43921ed5e0556edd146b9222c8a934c5775cb7e56e9b43362f199",
-    "platform_contract_sha256": "c99dae9f766b648859c79ed605e7aa5e7a3a64d8773a191991b0ba7f92e3852b"
+    "platform_contract_sha256": "5bd3b40717bb40380742792b64f465cef38ad95d6d6c50de22f40cbf23132a98"
   },
-  "content_sha256": "d5e420946ff8f707398d5a38b4a4fd317bb08c2730ae05239660a0d9c513e01e",
+  "content_sha256": "dd4315411ce4c5abdfe16475c7e5afadcbd79b8752ac54ec07a706d2b3a865c7",
   "contract_type": "lightyear-cloudbank-platform-qualification-acceptance",
   "eligible_claim": {
     "backup_restore_qualified": true,

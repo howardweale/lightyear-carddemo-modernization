@@ -5,6 +5,7 @@ import json
 import subprocess
 import tempfile
 import unittest
+import xml.etree.ElementTree as ET
 from pathlib import Path
 from unittest.mock import patch
 
@@ -25,6 +26,7 @@ from lightyear_data.cloudbank_oracle_equivalence import (
     execution_plan,
     _failure_phase,
     _oracle_lane,
+    _safe_database_diagnostics,
     _test_result,
     materialize_workspaces,
     observation_contract,
@@ -102,8 +104,16 @@ class CloudBankOracleEquivalenceTests(unittest.TestCase):
                     state = {"Status": "running", "OOMKilled": False}
                     return subprocess.CompletedProcess(argv, 0, json.dumps(state), "")
                 if argv[:3] == ["docker", "exec", "-i"]:
+                    marker = next(
+                        (
+                            line.split("'")[1]
+                            for line in str(kwargs.get("input", "")).splitlines()
+                            if line.startswith("SELECT '")
+                        ),
+                        "CLOUDBANK_ORACLE_READY",
+                    )
                     return subprocess.CompletedProcess(
-                        argv, 0, "CLOUDBANK_ORACLE_READY\n", ""
+                        argv, 0, f"{marker}\n", ""
                     )
                 if argv[:2] == ["docker", "port"]:
                     return subprocess.CompletedProcess(
@@ -152,6 +162,39 @@ class CloudBankOracleEquivalenceTests(unittest.TestCase):
                 env["SPRING_DATASOURCE_PASSWORD"],
                 env["LIQUIBASE_DATASOURCE_PASSWORD"],
             )
+            self.assertEqual(
+                {"application": True, "migration": True},
+                result["identity_login_checks"],
+            )
+
+    def test_database_diagnostic_exposes_only_allowlisted_codes_and_changesets(
+        self,
+    ) -> None:
+        root = ET.fromstring(
+            """
+<testsuite>
+  <testcase name="contextFailure">
+    <error type="java.lang.IllegalStateException">
+Migration failed for changeset db/changelog/txeventq.sql::1::account:
+ORA-01031: hidden detail password=should-not-leak
+Caused by: ORA-00942: hidden detail
+Migration failed for changeset db/changelog/unsafe.sql::steal::attacker:
+ORA-ABCDE: not a valid code
+    </error>
+  </testcase>
+</testsuite>
+""".strip()
+        )
+        codes, changesets = _safe_database_diagnostics(root)
+        self.assertEqual(["ORA-00942", "ORA-01031"], codes)
+        self.assertEqual(
+            [{"file": "db/changelog/txeventq.sql", "id": "1"}],
+            changesets,
+        )
+        rendered = json.dumps({"codes": codes, "changesets": changesets})
+        self.assertNotIn("hidden detail", rendered)
+        self.assertNotIn("should-not-leak", rendered)
+        self.assertNotIn("unsafe.sql", rendered)
 
     def test_surefire_report_takes_precedence_and_exposes_nested_types_only(self) -> None:
         with tempfile.TemporaryDirectory() as directory:
@@ -229,6 +272,21 @@ Caused by: java.sql.SQLException: password=should-not-leak
                     },
                 ],
                 "raw_stdout": "secret=should-not-leak",
+                "database_error_codes": [
+                    "ORA-01031",
+                    "ORA-ABCDE",
+                    "password=should-not-leak",
+                ],
+                "liquibase_changesets": [
+                    {"file": "db/changelog/txeventq.sql", "id": "1"},
+                    {"file": "db/changelog/unsafe.sql", "id": "secret"},
+                    {"file": "db/changelog/table.sql", "id": "bad value"},
+                ],
+                "identity_login_checks": {
+                    "application": True,
+                    "migration": False,
+                    "password": "should-not-leak",
+                },
             }
         )
         postgres = passed_lane("postgresql", HEX_C)
@@ -241,6 +299,17 @@ Caused by: java.sql.SQLException: password=should-not-leak
         self.assertEqual(
             ["java.lang.IllegalStateException"],
             diagnostic["oracle"]["exception_types"],
+        )
+        self.assertEqual(
+            ["ORA-01031"], diagnostic["oracle"]["database_error_codes"]
+        )
+        self.assertEqual(
+            [{"file": "db/changelog/txeventq.sql", "id": "1"}],
+            diagnostic["oracle"]["liquibase_changesets"],
+        )
+        self.assertEqual(
+            {"application": True, "migration": False},
+            diagnostic["oracle"]["identity_login_checks"],
         )
         self.assertTrue(diagnostic["cross_lane_observation_match"])
         self.assertEqual("invalid", diagnostic["postgresql"]["failure_phase"])

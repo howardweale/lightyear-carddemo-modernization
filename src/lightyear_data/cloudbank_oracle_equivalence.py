@@ -23,6 +23,7 @@ from .cloudbank_dark_factory import (
     _container_connectivity_args,
     _container_endpoint,
     _inspect_image,
+    _surefire_exception_types,
     _wait_oracle,
     _wait_postgres,
 )
@@ -336,13 +337,15 @@ def _run(argv: list[str], **kwargs: Any) -> subprocess.CompletedProcess[str]:
 
 def _failure_phase(result: subprocess.CompletedProcess[str], reports: int) -> str:
     output = f"{result.stdout}\n{result.stderr}"
+    if reports:
+        return "test"
     if "maven-checkstyle-plugin" in output or "Checkstyle violation" in output:
         return "checkstyle"
     if "maven-compiler-plugin" in output or "COMPILATION ERROR" in output:
         return "compilation"
     if "Could not resolve dependencies" in output:
         return "dependency-resolution"
-    if reports or "maven-surefire-plugin" in output:
+    if "maven-surefire-plugin" in output:
         return "test"
     return "maven-command"
 
@@ -381,6 +384,7 @@ def _test_result(
     ]
     totals = {"tests": 0, "failures": 0, "errors": 0, "skipped": 0}
     failed_tests: list[dict[str, str]] = []
+    exception_types: set[str] = set()
     report_text = ""
     present = 0
     for report in reports:
@@ -390,18 +394,19 @@ def _test_result(
         text = report.read_text(encoding="utf-8", errors="replace")
         report_text += text
         root = ET.fromstring(text)
+        exception_types.update(_surefire_exception_types(root))
         for name in totals:
             totals[name] += int(root.attrib.get(name, "0"))
         for test_case in root.findall(".//testcase"):
             failure = test_case.find("failure")
             failure = failure if failure is not None else test_case.find("error")
             if failure is not None:
-                failed_tests.append(
-                    {
-                        "name": test_case.attrib.get("name", "unknown"),
-                        "type": failure.attrib.get("type", "unknown"),
-                    }
-                )
+                failure_type = failure.attrib.get("type", "")
+                if (
+                    len(failure_type) <= 200
+                    and SAFE_EXCEPTION_TYPE.fullmatch(failure_type)
+                ):
+                    failed_tests.append({"type": failure_type})
     marker = f"CLOUDBANK_EQUIVALENCE_CONTRACT={OBSERVATION_CONTRACT}"
     stdout_count = result.stdout.count(marker)
     report_count = report_text.count(marker)
@@ -427,6 +432,7 @@ def _test_result(
         "marker_report_count": report_count,
         "test_reports_present": present,
         "failed_tests": failed_tests,
+        "exception_types": sorted(exception_types)[:MAX_EXCEPTION_TYPES],
         "failure_phase": None if passed else _failure_phase(result, present),
         "stdout_sha256": _sha256_text(result.stdout),
         "stderr_sha256": _sha256_text(result.stderr),
@@ -556,21 +562,26 @@ def _lane_failure_diagnostic(
     status = lane.get("status")
     phase = lane.get("failure_phase")
     failed_tests = lane.get("failed_tests", [])
-    exception_types = (
-        sorted(
-            {
-                failure_type
+    supplied_types = lane.get("exception_types", [])
+    type_candidates = supplied_types if isinstance(supplied_types, list) else []
+    if isinstance(failed_tests, list):
+        type_candidates = [
+            *type_candidates,
+            *[
+                item.get("type")
                 for item in failed_tests
                 if isinstance(item, Mapping)
-                for failure_type in [item.get("type")]
-                if isinstance(failure_type, str)
-                and len(failure_type) <= 200
-                and SAFE_EXCEPTION_TYPE.fullmatch(failure_type)
-            }
-        )[:MAX_EXCEPTION_TYPES]
-        if isinstance(failed_tests, list)
-        else []
-    )
+            ],
+        ]
+    exception_types = sorted(
+        {
+            value
+            for value in type_candidates
+            if isinstance(value, str)
+            and len(value) <= 200
+            and SAFE_EXCEPTION_TYPE.fullmatch(value)
+        }
+    )[:MAX_EXCEPTION_TYPES]
     return {
         "lane_match": lane.get("lane") == expected_lane,
         "status": status if status in {"passed", "failed"} else "invalid",

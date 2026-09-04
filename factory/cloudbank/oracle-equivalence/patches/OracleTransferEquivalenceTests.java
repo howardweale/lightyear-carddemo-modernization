@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
@@ -56,7 +57,9 @@ class OracleTransferEquivalenceTests {
     void successfulRequestOrchestratesLookupWithdrawDepositAndConfirm() {
         server.expect(once(), requestTo("http://account/api/v1/accounts/1"))
                 .andExpect(method(HttpMethod.GET))
-                .andRespond(withSuccess("{\"accountCustomerId\":\"cust-source\"}", null));
+                .andRespond(withSuccess(
+                        "{\"accountCustomerId\":\"cust-source\"}",
+                        MediaType.APPLICATION_JSON));
         server.expect(once(), requestTo("http://account/withdraw?accountId=1&amount=25"))
                 .andExpect(method(HttpMethod.POST))
                 .andRespond(withSuccess("withdraw succeeded", null));

@@ -445,6 +445,19 @@ Caused by: java.sql.SQLException: password=should-not-leak
         )
         self.assertNotIn("password=should-not-leak", SAFE_TEST_SCENARIOS)
 
+    def test_oracle_transfer_lookup_fixture_declares_json_media_type(self) -> None:
+        source = (
+            ROOT
+            / OUTPUT_ROOT
+            / "patches"
+            / "OracleTransferEquivalenceTests.java"
+        ).read_text(encoding="utf-8")
+        self.assertIn("MediaType.APPLICATION_JSON", source)
+        self.assertNotIn(
+            'withSuccess("{\\"accountCustomerId\\":\\"cust-source\\"}", null)',
+            source,
+        )
+
     def test_committed_artifacts_are_deterministic_and_fail_closed(self) -> None:
         self.assertEqual([], validate_artifacts(ROOT))
         for name, expected in build_artifacts(ROOT).items():

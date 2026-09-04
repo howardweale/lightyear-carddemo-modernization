@@ -1,10 +1,10 @@
 {
   "bindings": {
     "compatibility_ledger_sha256": "21e93cdbe6d66a556311a6099ab2e7e27ccc7e6fe9ec86b35cf431b410f7d1d6",
-    "execution_plan_sha256": "5cecd1e6d74c4fdccf7434083ee9a4369518caf425e50fb9c7b6ffddad8e89db",
+    "execution_plan_sha256": "56e87c01a895ea87fda4c2f281ef53d0394009e979d1b60062dcf48941c9cc98",
     "observation_contract_sha256": "f3b67bf1fc4b6676025b69cde763a9ef830f1dbbdc99f63fc1d47dc9618b887c"
   },
-  "content_sha256": "75a3b4538c486a13a401a7f809f8bb017085bb25bb3bc7d18c3e7ea1f1299e1b",
+  "content_sha256": "4e32cdad8d8fa7c2b2431d3c972fb90ca4bcca8a479fd562682b93b104e4b99c",
   "contract_type": "lightyear-cloudbank-bounded-oracle-postgresql-equivalence",
   "eligible_claim": {
     "equivalence_scope": "bounded-normalized-customer-account-transfer",

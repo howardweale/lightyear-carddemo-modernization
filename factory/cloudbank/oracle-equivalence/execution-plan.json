@@ -1,5 +1,5 @@
 {
-  "content_sha256": "5cecd1e6d74c4fdccf7434083ee9a4369518caf425e50fb9c7b6ffddad8e89db",
+  "content_sha256": "56e87c01a895ea87fda4c2f281ef53d0394009e979d1b60062dcf48941c9cc98",
   "lanes": {
     "oracle": "exact-pinned-source-account-and-transfer",
     "postgresql": "exact-ms60-generated-account-and-transfer-target"
@@ -17,7 +17,7 @@
       "operation": "create-in-isolated-workspace",
       "path": "transfer/src/test/java/com/example/transfer/OracleTransferEquivalenceTests.java",
       "template": "patches/OracleTransferEquivalenceTests.java",
-      "template_sha256": "c7d1a541c2874060f91741c081faddb726b3ef8b8740cc0573cf2ced456760c7"
+      "template_sha256": "6bd0067320ab00446d4c2c21cc5dd7241393cd787efcee7675cfab8a27e88ae3"
     },
     {
       "lane": "postgresql",

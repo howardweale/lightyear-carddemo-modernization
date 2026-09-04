@@ -21,6 +21,8 @@ from lightyear_data.cloudbank_production_oauth import (
     _classify_service_start_cause,
     _classify_service_start_component,
     _classify_service_start_failure,
+    _create_authorization_database,
+    _isolated_postgres_jdbc_urls,
     _oauth_user_bootstrap_environment,
     _postgres_sqlstate,
     _start_oauth_service,
@@ -138,6 +140,41 @@ class CloudBankProductionOAuthTests(unittest.TestCase):
         environment = _oauth_user_bootstrap_environment()
         self.assertEqual({"AZN_BOOTSTRAP_USERS_ENABLED": "false"}, environment)
         self.assertFalse(any(name.endswith("PASSWORD") for name in environment))
+
+    def test_authorization_and_account_use_isolated_databases(self) -> None:
+        urls = _isolated_postgres_jdbc_urls("127.0.0.1", 54321)
+        self.assertEqual(
+            "jdbc:postgresql://127.0.0.1:54321/cloudbank_azn",
+            urls["authorization"],
+        )
+        self.assertEqual(
+            "jdbc:postgresql://127.0.0.1:54321/cloudbank",
+            urls["account"],
+        )
+        self.assertNotEqual(urls["authorization"], urls["account"])
+
+    def test_authorization_database_creation_is_fail_closed(self) -> None:
+        run = Mock()
+        run.return_value.returncode = 0
+        _create_authorization_database("postgres-container", run)
+        run.assert_called_once_with(
+            [
+                "docker",
+                "exec",
+                "postgres-container",
+                "createdb",
+                "-U",
+                "postgres",
+                "cloudbank_azn",
+            ],
+            timeout=30,
+        )
+
+        run.return_value.returncode = 1
+        with self.assertRaisesRegex(
+            RuntimeError, "authorization-database-create-failed"
+        ):
+            _create_authorization_database("postgres-container", run)
 
     def test_claim_membership_accepts_string_and_array_jwt_encodings(self) -> None:
         self.assertTrue(_claim_contains("cloudbank.read cloudbank.transfer", "cloudbank.transfer"))

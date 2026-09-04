@@ -32,9 +32,9 @@ from .cloudbank_native_wave import (
     _psql,
     _request,
     _seed,
-    _start_service,
     _state,
     _stop_service,
+    _wait_health,
     materialize_target as materialize_ms60_target,
 )
 from .cloudbank_oracle_equivalence import (
@@ -82,6 +82,14 @@ SAFE_FAILURE_REASONS = {
     "runtime-gate-failed:required-token-issuance-failed",
 }
 SAFE_EXCEPTION_TYPE = re.compile(r"^[A-Za-z][A-Za-z0-9_.]{0,199}$")
+SAFE_SERVICE_START_CATEGORIES = {
+    "bean-creation-failed",
+    "configuration-placeholder-missing",
+    "database-migration-failed",
+    "port-bind-failed",
+    "resource-exhausted",
+    "unclassified",
+}
 PATCHES = {
     "azn-server/pom.xml": "azn-pom.xml",
     "azn-server/src/main/resources/application.yaml": "azn-application.yaml",
@@ -493,6 +501,90 @@ def _oauth_user_bootstrap_environment() -> dict[str, str]:
     return {"AZN_BOOTSTRAP_USERS_ENABLED": "false"}
 
 
+def _claim_contains(value: Any, expected: str) -> bool:
+    """Accept the JSON string and array representations used for JWT claims."""
+    if isinstance(value, str):
+        return expected in value.split()
+    if isinstance(value, (list, tuple, set)):
+        return expected in value
+    return False
+
+
+def _classify_service_start_failure(raw_log: bytes, exit_code: int | None) -> str:
+    """Reduce a private service log to one safe, allowlisted failure category."""
+    if exit_code in {134, 137} or b"OutOfMemoryError" in raw_log:
+        return "resource-exhausted"
+    if b"Address already in use" in raw_log or (
+        b"Port " in raw_log and b"was already in use" in raw_log
+    ):
+        return "port-bind-failed"
+    if b"Could not resolve placeholder" in raw_log:
+        return "configuration-placeholder-missing"
+    if any(
+        marker in raw_log
+        for marker in (
+            b"LiquibaseException",
+            b"MigrationFailedException",
+            b"Validation Failed",
+        )
+    ):
+        return "database-migration-failed"
+    if b"BeanCreationException" in raw_log:
+        return "bean-creation-failed"
+    return "unclassified"
+
+
+class _OAuthServiceStartFailure(RuntimeError):
+    """Carries only bounded evidence from a failed OAuth service start."""
+
+    def __init__(
+        self,
+        service: str,
+        reason: str,
+        exit_code: int | None,
+        log_sha256: str,
+        category: str,
+    ) -> None:
+        super().__init__(reason)
+        self.service = service
+        self.exit_code = exit_code
+        self.log_sha256 = log_sha256
+        self.category = category
+
+
+def _start_oauth_service(
+    service: str,
+    jar: Path,
+    port: int,
+    env: Mapping[str, str],
+    pause: Callable[[float], None],
+) -> tuple[subprocess.Popen[bytes], Any]:
+    """Start a service while retaining hashed, classified evidence on failure."""
+    log = tempfile.TemporaryFile()
+    process = subprocess.Popen(
+        ["java", "-jar", str(jar)],
+        cwd=jar.parent,
+        env=dict(env),
+        stdout=log,
+        stderr=log,
+    )
+    try:
+        _wait_health(service, port, process, pause)
+    except Exception as exception:
+        exit_code = process.poll()
+        log.flush()
+        log.seek(0)
+        raw_log = log.read()
+        log_sha256 = hashlib.sha256(raw_log).hexdigest()
+        category = _classify_service_start_failure(raw_log, exit_code)
+        _stop_service(process, log)
+        reason = str(exception)
+        raise _OAuthServiceStartFailure(
+            service, reason, exit_code, log_sha256, category
+        ) from None
+    return process, log
+
+
 def _native_oauth_lane(
     workspace: Path,
     image_id: str,
@@ -539,6 +631,16 @@ def _native_oauth_lane(
     azn_log = account_log = transfer_log = None
     log_hashes: dict[str, list[str]] = {"azn-server": [], "account": [], "transfer": []}
     service_starts = {"azn-server": 0, "account": 0, "transfer": 0}
+    service_exit_codes: dict[str, int | None] = {
+        "azn-server": None,
+        "account": None,
+        "transfer": None,
+    }
+    service_start_failure_categories: dict[str, str | None] = {
+        "azn-server": None,
+        "account": None,
+        "transfer": None,
+    }
     scenarios: list[dict[str, Any]] = []
     failure_reason: str | None = None
     public_key_sha256: str | None = None
@@ -644,7 +746,7 @@ def _native_oauth_lane(
             }
 
             progress("Starting PostgreSQL and the persistent-key CloudBank authorization server")
-            azn_process, azn_log = _start_service(
+            azn_process, azn_log = _start_oauth_service(
                 "azn-server", jars["azn-server"], azn_port, azn_env, pause
             )
             service_starts["azn-server"] += 1
@@ -708,8 +810,8 @@ def _native_oauth_lane(
                 source_status == 200
                 and source_claims.get("sub") == "cust-source"
                 and source_claims.get("iss") == issuer
-                and "cloudbank-transfer" in source_claims.get("aud", [])
-                and "cloudbank.transfer" in str(source_claims.get("scope", "")).split()
+                and _claim_contains(source_claims.get("aud"), "cloudbank-transfer")
+                and _claim_contains(source_claims.get("scope"), "cloudbank.transfer")
                 and int(source_claims.get("exp", 0)) > now,
                 http_status=source_status,
                 subject="cust-source",
@@ -721,8 +823,8 @@ def _native_oauth_lane(
                 service_status == 200
                 and service_claims.get("sub") == "cloudbank-transfer-service"
                 and service_claims.get("iss") == issuer
-                and "cloudbank-account" in service_claims.get("aud", [])
-                and "cloudbank.internal" in str(service_claims.get("scope", "")).split(),
+                and _claim_contains(service_claims.get("aud"), "cloudbank-account")
+                and _claim_contains(service_claims.get("scope"), "cloudbank.internal"),
                 http_status=service_status,
                 subject="cloudbank-transfer-service",
                 audience="cloudbank-account",
@@ -743,11 +845,11 @@ def _native_oauth_lane(
                 raise RuntimeError("required-token-issuance-failed")
 
             progress("Starting OAuth resource servers and exercising denial boundaries")
-            account_process, account_log = _start_service(
+            account_process, account_log = _start_oauth_service(
                 "account", jars["account"], account_port, account_env, pause
             )
             service_starts["account"] += 1
-            transfer_process, transfer_log = _start_service(
+            transfer_process, transfer_log = _start_oauth_service(
                 "transfer", jars["transfer"], transfer_port, transfer_env, pause
             )
             service_starts["transfer"] += 1
@@ -817,15 +919,15 @@ def _native_oauth_lane(
                     log_hashes[service].append(digest)
             azn_process = account_process = transfer_process = None
             azn_log = account_log = transfer_log = None
-            azn_process, azn_log = _start_service(
+            azn_process, azn_log = _start_oauth_service(
                 "azn-server", jars["azn-server"], azn_port, azn_env, pause
             )
             service_starts["azn-server"] += 1
-            account_process, account_log = _start_service(
+            account_process, account_log = _start_oauth_service(
                 "account", jars["account"], account_port, account_env, pause
             )
             service_starts["account"] += 1
-            transfer_process, transfer_log = _start_service(
+            transfer_process, transfer_log = _start_oauth_service(
                 "transfer", jars["transfer"], transfer_port, transfer_env, pause
             )
             service_starts["transfer"] += 1
@@ -853,6 +955,10 @@ def _native_oauth_lane(
                 database_state=after_restart,
             )
     except Exception as exception:
+        if isinstance(exception, _OAuthServiceStartFailure):
+            log_hashes[exception.service].append(exception.log_sha256)
+            service_exit_codes[exception.service] = exception.exit_code
+            service_start_failure_categories[exception.service] = exception.category
         safe_reason = str(exception)
         allowed = {
             "azn-server-exited-before-health",
@@ -896,6 +1002,8 @@ def _native_oauth_lane(
         "scenarios": scenarios,
         "service_starts": service_starts,
         "service_log_sha256": log_hashes,
+        "service_exit_codes": service_exit_codes,
+        "service_start_failure_categories": service_start_failure_categories,
         "public_signing_key_sha256": public_key_sha256,
         "jwks_sha256": jwks_sha256,
         "packaging": packaging,
@@ -987,6 +1095,28 @@ def production_oauth_failure_diagnostic(
             if isinstance(values, list)
             else 0
         )
+    supplied_exit_codes = lane.get("service_exit_codes", {})
+    service_exit_codes = {
+        service: _diagnostic_int(
+            supplied_exit_codes.get(service)
+            if isinstance(supplied_exit_codes, Mapping)
+            else None,
+            -255,
+            255,
+        )
+        for service in ("azn-server", "account", "transfer")
+    }
+    supplied_categories = lane.get("service_start_failure_categories", {})
+    service_start_failure_categories = {}
+    for service in ("azn-server", "account", "transfer"):
+        value = (
+            supplied_categories.get(service)
+            if isinstance(supplied_categories, Mapping)
+            else None
+        )
+        service_start_failure_categories[service] = (
+            value if isinstance(value, str) and value in SAFE_SERVICE_START_CATEGORIES else None
+        )
 
     return {
         "lane_match": lane.get("lane") == "native-production-oauth-account-transfer",
@@ -1011,6 +1141,8 @@ def production_oauth_failure_diagnostic(
         ],
         "service_starts": service_starts,
         "service_log_counts": service_log_counts,
+        "service_exit_codes": service_exit_codes,
+        "service_start_failure_categories": service_start_failure_categories,
         "public_signing_key_created": bool(
             HEX_64.fullmatch(str(lane.get("public_signing_key_sha256", "")))
         ),

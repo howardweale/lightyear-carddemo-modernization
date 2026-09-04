@@ -1,4 +1,4 @@
-# iDempiere Oracle reference-estate inventory
+# iDempiere reference estate for Oracle compatibility
 
 This directory is the inventory-only acquisition record for the supported iDempiere release 13
 baseline. The upstream checkout is pinned at commit
@@ -12,44 +12,52 @@ The inventory establishes four bounded facts:
 4. the first eight Oracle semantic fixtures that must be grounded in Oracle's official sample
    schemas and examples before any translation claim is considered.
 
-## Rebuild the inventory
+## Build the complete inventory and projection locally
 
 ```bash
 git clone --depth 1 --branch release-13 --filter=blob:none --no-tags \
   https://github.com/idempiere/idempiere.git /path/to/idempiere-release-13
-python3 tools/inventory_idempiere_reference.py \
-  --source-root /path/to/idempiere-release-13
-python3 tools/inventory_idempiere_reference.py \
-  --source-root /path/to/idempiere-release-13 --verify
+./oracle-reference-estate.sh build-full /path/to/idempiere-release-13
 ```
 
-The tool refuses a dirty checkout or a commit other than the recorded pin.
+The tool refuses a dirty checkout or a commit other than the recorded pin. It writes the complete
+inventory, compressed projection, and receipt beneath `work/reference-estates/idempiere/`, which
+is ignored by Git. The complete upstream-derived structural graph is intentionally not committed.
 
 ## Control Tower projection
 
-The Control Tower exposes this evidence under the operator-facing estate name **Oracle Customer
-(Large)**. The upstream name remains in this provenance directory, the exact source pin, and the
-GPL-2.0 license record; it is not used as the customer/company label.
+The Control Tower exposes this evidence as **iDempiere Reference Estate (Large)** and describes
+Oracle only as the compatibility-analysis platform. This is public reference source, not an
+Oracle customer, and Oracle Corporation does not sponsor or endorse this project. The exact
+GPL-2.0 license is preserved at `LICENSES/GPL-2.0-only.md`.
 
-The generated fragment contains two workloads and 20 static trace scenarios:
+The locally generated full fragment contains two workloads, 20 static trace scenarios, and the complete
+measured Java source-unit dependency graph. The fragment contains 4,542 nodes and 36,863
+relationships, including all 4,520 package-qualified Java source units and all 36,819 unique
+internal Java dependencies:
 
 - order to cash: ten documented relationships across order, shipment, invoice, payment, and
   allocation tables;
 - procure to pay: ten documented relationships across purchase order, receipt, vendor invoice,
   payment, and allocation tables.
 
-Build or verify the projection on macOS or Linux:
+The order-to-cash workload starts from all 12 curated seeds and retains its 181-node/497-edge
+depth-one scope metadata; procure-to-pay does the same for its 177-node/475-edge scope. The wider
+estate graph remains searchable and navigable from any source unit. These are static source
+dependencies, not runtime call observations.
+
+Verify the committed bounded projection or generate the full projection on macOS or Linux:
 
 ```bash
-./oracle-reference-estate.sh build
 ./oracle-reference-estate.sh verify
+./oracle-reference-estate.sh build-full /path/to/idempiere-release-13
 ```
 
 Windows:
 
 ```powershell
-.\oracle-reference-estate.ps1 build
 .\oracle-reference-estate.ps1 verify
+.\oracle-reference-estate.ps1 build-full C:\path\to\idempiere-release-13
 ```
 
 ## Evidence boundary

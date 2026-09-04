@@ -46,3 +46,6 @@
 
 # Preserve the pinned Oracle-authored corpus byte for byte, including upstream whitespace.
 reference-estates/oracle/corpus/** -whitespace
+
+# Preserve exact third-party license and notice bytes for hash-verifiable attribution.
+LICENSES/** -whitespace

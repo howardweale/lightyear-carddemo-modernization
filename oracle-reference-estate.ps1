@@ -13,11 +13,33 @@ $SourcePin = Join-Path $ProjectDir "reference-estates\idempiere\source-pin.json"
 $Fragment = Join-Path $ProjectDir "reference-estates\idempiere\oracle-customer-large.fragment.json"
 $Receipt = Join-Path $ProjectDir "reference-estates\idempiere\oracle-customer-large.receipt.json"
 
-function Build-Projection([string]$OutputFragment, [string]$OutputReceipt) {
+function Build-Projection([string]$OutputFragment, [string]$OutputReceipt, [string]$InputInventory = $Inventory) {
     Run-Python -m lightyear_knowledge_graph build-oracle-reference `
-        --base-graph $Base --slices $Slices --inventory $Inventory --source-pin $SourcePin `
+        --base-graph $Base --slices $Slices --inventory $InputInventory --source-pin $SourcePin `
         --output $OutputFragment --receipt $OutputReceipt
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+}
+
+if ($Action -eq "build-full") {
+    if ($args.Count -lt 2) {
+        Write-Error "Pinned iDempiere upstream checkout is required for build-full."
+        exit 2
+    }
+    $Generated = Join-Path $ProjectDir "work\reference-estates\idempiere"
+    New-Item -ItemType Directory -Force -Path $Generated | Out-Null
+    $GeneratedInventory = Join-Path $Generated "inventory.json"
+    $GeneratedFragment = Join-Path $Generated "oracle-reference.fragment.json.gz"
+    $GeneratedReceipt = Join-Path $Generated "oracle-reference.receipt.json"
+    Run-Python (Join-Path $ProjectDir "tools\inventory_idempiere_reference.py") `
+        --source-root $args[1] --include-structural-graph --output $GeneratedInventory
+    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+    Build-Projection $GeneratedFragment $GeneratedReceipt $GeneratedInventory
+    Run-Python -m lightyear_knowledge_graph validate-oracle-reference `
+        --base-graph $Base --slices $Slices --inventory $GeneratedInventory --source-pin $SourcePin `
+        --fragment $GeneratedFragment
+    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+    Write-Output "Full iDempiere reference projection built in work/reference-estates/idempiere."
+    exit 0
 }
 
 if ($Action -eq "build") {
@@ -41,9 +63,9 @@ if ($Action -eq "verify") {
         --base-graph $Base --slices $Slices --inventory $Inventory --source-pin $SourcePin `
         --fragment $Fragment
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-    Write-Output "Oracle Customer (Large) reference projection is deterministic and current."
+    Write-Output "The bounded iDempiere reference projection is deterministic and current."
     exit 0
 }
 
-Write-Error "Usage: .\oracle-reference-estate.ps1 [build|verify]"
+Write-Error "Usage: .\oracle-reference-estate.ps1 [build|verify|build-full IDEMPIERE_ROOT]"
 exit 2

@@ -51,6 +51,7 @@ PATCH_ROOT = OUTPUT_ROOT / "patches"
 RECEIPT_TYPE = "lightyear-cloudbank-production-oauth-execution"
 RECEIPT_NAME = "cloudbank-production-oauth.receipt.json"
 FAILURE_NAME = "cloudbank-production-oauth.failure.json"
+DIAGNOSTIC_MARKER = "CLOUDBANK_PRODUCTION_OAUTH_ACCEPTANCE_DIAGNOSTIC="
 HEX_64 = re.compile(r"^[0-9a-f]{64}$")
 SCENARIO_IDS = [
     "authorization-server-discovery-and-jwks",
@@ -67,6 +68,20 @@ SCENARIO_IDS = [
     "persistent-key-restart-continuity",
 ]
 CONTRACT_SHA256 = hashlib.sha256(";".join(SCENARIO_IDS).encode()).hexdigest()
+SAFE_FAILURE_REASONS = {
+    "package-gate-failed",
+    "postgresql-start-failed",
+    "runtime-gate-failed:azn-server-exited-before-health",
+    "runtime-gate-failed:azn-server-health-timeout",
+    "runtime-gate-failed:account-exited-before-health",
+    "runtime-gate-failed:account-health-timeout",
+    "runtime-gate-failed:transfer-exited-before-health",
+    "runtime-gate-failed:transfer-health-timeout",
+    "runtime-gate-failed:postgresql-query-failed",
+    "runtime-gate-failed:rsa-key-generation-failed",
+    "runtime-gate-failed:required-token-issuance-failed",
+}
+SAFE_EXCEPTION_TYPE = re.compile(r"^[A-Za-z][A-Za-z0-9_.]{0,199}$")
 PATCHES = {
     "azn-server/pom.xml": "azn-pom.xml",
     "azn-server/src/main/resources/application.yaml": "azn-application.yaml",
@@ -884,6 +899,118 @@ def _native_oauth_lane(
         "ports": "ephemeral-loopback-only",
         "synthetic_data_only": True,
         "credentials_persisted": False,
+        "raw_output_persisted": False,
+    }
+
+
+def _diagnostic_int(value: Any, minimum: int = 0, maximum: int = 10_000) -> int | None:
+    if (
+        isinstance(value, int)
+        and not isinstance(value, bool)
+        and minimum <= value <= maximum
+    ):
+        return value
+    return None
+
+
+def _safe_failure_reason(value: Any) -> str:
+    if isinstance(value, str) and value in SAFE_FAILURE_REASONS:
+        return value
+    prefix = "runtime-gate-failed:"
+    if isinstance(value, str) and value.startswith(prefix):
+        exception_type = value.removeprefix(prefix)
+        if SAFE_EXCEPTION_TYPE.fullmatch(exception_type):
+            return prefix + exception_type
+    return "invalid"
+
+
+def production_oauth_failure_diagnostic(
+    report: Mapping[str, Any], expected_image_id: str
+) -> dict[str, Any]:
+    """Return an allowlisted failure summary safe to emit in shared build logs."""
+    report = report if isinstance(report, Mapping) else {}
+    supplied_lane = report.get("lane")
+    lane = supplied_lane if isinstance(supplied_lane, Mapping) else {}
+
+    supplied_scenarios = lane.get("scenarios", [])
+    scenario_statuses: dict[str, str] = {}
+    if isinstance(supplied_scenarios, list):
+        for item in supplied_scenarios:
+            if not isinstance(item, Mapping):
+                continue
+            identifier = item.get("id")
+            status = item.get("status")
+            if (
+                isinstance(identifier, str)
+                and identifier in SCENARIO_IDS
+                and isinstance(status, str)
+                and status in {"passed", "failed"}
+            ):
+                scenario_statuses[str(identifier)] = str(status)
+
+    supplied_starts = lane.get("service_starts", {})
+    service_starts = {
+        service: _diagnostic_int(
+            supplied_starts.get(service) if isinstance(supplied_starts, Mapping) else None
+        )
+        for service in ("azn-server", "account", "transfer")
+    }
+    supplied_packaging = lane.get("packaging", {})
+    packaging = {
+        field: _diagnostic_int(
+            supplied_packaging.get(field)
+            if isinstance(supplied_packaging, Mapping)
+            else None
+        )
+        for field in (
+            "executable_jars",
+            "oracle_runtime_libraries",
+            "microtx_runtime_libraries",
+        )
+    }
+    supplied_log_hashes = lane.get("service_log_sha256", {})
+    service_log_counts = {}
+    for service in ("azn-server", "account", "transfer"):
+        values = (
+            supplied_log_hashes.get(service, [])
+            if isinstance(supplied_log_hashes, Mapping)
+            else []
+        )
+        service_log_counts[service] = (
+            sum(1 for value in values if isinstance(value, str) and HEX_64.fullmatch(value))
+            if isinstance(values, list)
+            else 0
+        )
+
+    return {
+        "lane_match": lane.get("lane") == "native-production-oauth-account-transfer",
+        "status": lane.get("status")
+        if isinstance(lane.get("status"), str)
+        and lane.get("status") in {"passed", "failed"}
+        else "invalid",
+        "reason": _safe_failure_reason(lane.get("reason")),
+        "database_image_match": lane.get("database_image_id_sha256") == expected_image_id,
+        "maven_exit_code": _diagnostic_int(lane.get("maven_exit_code"), -1, 255),
+        "packaging": packaging,
+        "scenario_count": _diagnostic_int(lane.get("scenario_count")),
+        "scenario_statuses": [
+            {"id": identifier, "status": scenario_statuses[identifier]}
+            for identifier in SCENARIO_IDS
+            if identifier in scenario_statuses
+        ],
+        "failed_scenarios": [
+            identifier
+            for identifier in SCENARIO_IDS
+            if scenario_statuses.get(identifier) == "failed"
+        ],
+        "service_starts": service_starts,
+        "service_log_counts": service_log_counts,
+        "public_signing_key_created": bool(
+            HEX_64.fullmatch(str(lane.get("public_signing_key_sha256", "")))
+        ),
+        "jwks_observed": bool(HEX_64.fullmatch(str(lane.get("jwks_sha256", "")))),
+        "credentials_persisted": False,
+        "private_key_persisted": False,
         "raw_output_persisted": False,
     }
 

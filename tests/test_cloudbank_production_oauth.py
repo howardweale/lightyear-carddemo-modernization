@@ -1,15 +1,18 @@
 from __future__ import annotations
 
 import copy
+import io
 import json
 import tempfile
 import unittest
+from contextlib import redirect_stdout
 from pathlib import Path
 from unittest.mock import patch
 
 from lightyear_data.cloudbank_oracle_equivalence import RECEIPT_TYPE as MS61_RECEIPT_TYPE
 from lightyear_data.cloudbank_production_oauth import (
     CONTRACT_SHA256,
+    DIAGNOSTIC_MARKER,
     OUTPUT_ROOT,
     RECEIPT_TYPE,
     SCENARIO_IDS,
@@ -19,11 +22,13 @@ from lightyear_data.cloudbank_production_oauth import (
     execute_production_oauth,
     execution_plan,
     materialize_target,
+    production_oauth_failure_diagnostic,
     readiness_receipt,
     security_contract,
     validate_artifacts,
     validate_execution_receipt,
 )
+from tools import cloudbank_production_oauth as production_oauth_tool
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -207,6 +212,155 @@ class CloudBankProductionOAuthTests(unittest.TestCase):
             self.assertNotIn("access_token", text)
             self.assertNotIn("raw_stdout", text)
 
+    def test_failure_diagnostic_emits_only_bounded_classifications(self) -> None:
+        failed = passed_lane()
+        failed.update(
+            {
+                "status": "failed",
+                "reason": "runtime-gate-failed:azn-server-health-timeout",
+                "scenario_count": 3,
+                "scenarios": [
+                    {
+                        "id": "authorization-server-discovery-and-jwks",
+                        "status": "failed",
+                        "access_token": "should-not-leak",
+                    },
+                    {
+                        "id": "password=should-not-leak",
+                        "status": "failed",
+                    },
+                ],
+                "service_starts": {
+                    "azn-server": 1,
+                    "account": 0,
+                    "transfer": 0,
+                    "password": "should-not-leak",
+                },
+                "service_log_sha256": {
+                    "azn-server": [HEX_A, "secret=should-not-leak"],
+                    "account": [],
+                    "transfer": [],
+                    "password": ["should-not-leak"],
+                },
+                "packaging": {
+                    "executable_jars": 3,
+                    "oracle_runtime_libraries": 0,
+                    "microtx_runtime_libraries": 0,
+                    "secret": "should-not-leak",
+                },
+                "raw_stdout": "access_token=should-not-leak",
+                "private_key": "should-not-leak",
+            }
+        )
+        diagnostic = production_oauth_failure_diagnostic(
+            {"lane": failed, "secret": "should-not-leak"}, HEX_B
+        )
+        self.assertEqual(
+            "runtime-gate-failed:azn-server-health-timeout",
+            diagnostic["reason"],
+        )
+        self.assertEqual(
+            [{"id": SCENARIO_IDS[0], "status": "failed"}],
+            diagnostic["scenario_statuses"],
+        )
+        self.assertEqual([SCENARIO_IDS[0]], diagnostic["failed_scenarios"])
+        self.assertEqual(
+            {"azn-server": 1, "account": 0, "transfer": 0},
+            diagnostic["service_starts"],
+        )
+        self.assertEqual(
+            {"azn-server": 1, "account": 0, "transfer": 0},
+            diagnostic["service_log_counts"],
+        )
+        self.assertTrue(diagnostic["public_signing_key_created"])
+        self.assertTrue(diagnostic["jwks_observed"])
+        self.assertFalse(diagnostic["credentials_persisted"])
+        self.assertFalse(diagnostic["private_key_persisted"])
+        self.assertFalse(diagnostic["raw_output_persisted"])
+        rendered = json.dumps(diagnostic, sort_keys=True)
+        self.assertNotIn("should-not-leak", rendered)
+        self.assertNotIn("access_token", rendered)
+
+    def test_failure_diagnostic_rejects_unbounded_values(self) -> None:
+        diagnostic = production_oauth_failure_diagnostic(
+            {
+                "lane": {
+                    "lane": "secret=should-not-leak",
+                    "status": ["failed", "secret=should-not-leak"],
+                    "reason": "runtime-gate-failed:secret=should-not-leak",
+                    "maven_exit_code": 100_000,
+                    "scenario_count": -2,
+                    "scenarios": [
+                        {"id": SCENARIO_IDS[0], "status": ["failed"]}
+                    ],
+                }
+            },
+            HEX_B,
+        )
+        self.assertFalse(diagnostic["lane_match"])
+        self.assertEqual("invalid", diagnostic["status"])
+        self.assertEqual("invalid", diagnostic["reason"])
+        self.assertIsNone(diagnostic["maven_exit_code"])
+        self.assertIsNone(diagnostic["scenario_count"])
+        self.assertEqual([], diagnostic["scenario_statuses"])
+        self.assertNotIn("should-not-leak", json.dumps(diagnostic, sort_keys=True))
+
+    def test_run_cli_emits_bounded_failure_diagnostic_marker(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            receipt_path = root / "ms61.json"
+            receipt_path.write_text(json.dumps(ms61_receipt()), encoding="utf-8")
+            failed = passed_lane()
+            failed.update(
+                {
+                    "status": "failed",
+                    "reason": "runtime-gate-failed:azn-server-health-timeout",
+                    "service_starts": {
+                        "azn-server": 1,
+                        "account": 0,
+                        "transfer": 0,
+                    },
+                    "scenarios": [],
+                    "scenario_count": 0,
+                    "raw_stdout": "client_secret=should-not-leak",
+                }
+            )
+            (root / "cloudbank-production-oauth.failure.json").write_text(
+                json.dumps({"lane": failed}), encoding="utf-8"
+            )
+            stdout = io.StringIO()
+            with patch.object(
+                production_oauth_tool,
+                "execute_production_oauth",
+                side_effect=ValueError("cloudbank-production-oauth-acceptance-failed"),
+            ), redirect_stdout(stdout):
+                exit_code = production_oauth_tool.main(
+                    [
+                        "run",
+                        "--source-root",
+                        str(root),
+                        "--ms61-receipt",
+                        str(receipt_path),
+                        "--output-root",
+                        str(root),
+                        "--signer",
+                        "unit-test",
+                    ]
+                )
+            rendered = stdout.getvalue()
+            self.assertEqual(1, exit_code)
+            marker_lines = [
+                line for line in rendered.splitlines() if line.startswith(DIAGNOSTIC_MARKER)
+            ]
+            self.assertEqual(1, len(marker_lines))
+            diagnostic = json.loads(marker_lines[0].removeprefix(DIAGNOSTIC_MARKER))
+            self.assertEqual(
+                "runtime-gate-failed:azn-server-health-timeout",
+                diagnostic["reason"],
+            )
+            self.assertNotIn("should-not-leak", rendered)
+            self.assertNotIn("client_secret", rendered)
+
     def test_launchers_exist(self) -> None:
         for relative in (
             "cloudbank-production-oauth.sh",
@@ -221,6 +375,11 @@ class CloudBankProductionOAuthTests(unittest.TestCase):
         workflow = (ROOT / ".github/workflows/verify.yml").read_text(encoding="utf-8")
         self.assertIn("cloudbank-production-oauth.sh materialize", workflow)
         self.assertIn("mvn -pl azn-server,account,transfer", workflow)
+        tool = (ROOT / "tools/cloudbank_production_oauth.py").read_text(
+            encoding="utf-8"
+        )
+        self.assertIn("DIAGNOSTIC_MARKER", tool)
+        self.assertTrue(DIAGNOSTIC_MARKER.endswith("="))
 
 
 if __name__ == "__main__":

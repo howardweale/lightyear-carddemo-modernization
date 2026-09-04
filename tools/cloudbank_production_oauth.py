@@ -7,10 +7,12 @@ import os
 from pathlib import Path
 
 from lightyear_data.cloudbank_production_oauth import (
+    DIAGNOSTIC_MARKER,
     FAILURE_NAME,
     RECEIPT_NAME,
     execute_production_oauth,
     materialize_target,
+    production_oauth_failure_diagnostic,
     validate_artifacts,
     validate_execution_receipt,
     write_artifacts,
@@ -86,6 +88,25 @@ def main(argv: list[str] | None = None) -> int:
                 "content_sha256": receipt["content_sha256"],
             }
         except ValueError as exception:
+            failure_path = args.output_root.resolve() / FAILURE_NAME
+            try:
+                if failure_path.is_file():
+                    failure_report = json.loads(
+                        failure_path.read_text(encoding="utf-8")
+                    )
+                    diagnostic = production_oauth_failure_diagnostic(
+                        failure_report,
+                        str(ms61.get("postgresql_image_id_sha256", "")),
+                    )
+                    print(
+                        DIAGNOSTIC_MARKER
+                        + json.dumps(
+                            diagnostic, sort_keys=True, separators=(",", ":")
+                        ),
+                        flush=True,
+                    )
+            except (OSError, UnicodeDecodeError, json.JSONDecodeError):
+                pass
             result = {
                 "status": "failed",
                 "error": str(exception),

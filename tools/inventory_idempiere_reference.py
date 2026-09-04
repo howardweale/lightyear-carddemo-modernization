@@ -160,6 +160,19 @@ def slice_graph(
         "nodes": len(graph_nodes),
         "seed_nodes": len(seeds),
         "seed_source_lines": seed_lines,
+        "source_units": [
+            {
+                "node": node,
+                "package": node.rsplit(".", 1)[0],
+                "path": nodes[node],
+                "role": "seed" if node in seeds else "direct-dependency",
+            }
+            for node in graph_nodes
+        ],
+        "dependency_edges": [
+            {"source": source, "target": target}
+            for source, target in direct_edges
+        ],
         "seeds": [
             {"node": node, "path": nodes[node]}
             for node in sorted(seeds)
@@ -264,6 +277,20 @@ def build_inventory(source_root: Path) -> dict[str, Any]:
             ],
         },
         "oracle_semantic_signals": oracle_signals(source_root, paths),
+        "structural_graph": {
+            "dependency_edges": [
+                {"source": source, "target": target}
+                for source, target in sorted(edges)
+            ],
+            "source_units": [
+                {
+                    "node": node,
+                    "package": node.rsplit(".", 1)[0],
+                    "path": nodes[node],
+                }
+                for node in sorted(nodes)
+            ],
+        },
         "slices": slices,
         "shared_slice_seed_nodes": len(shared_seeds),
     }

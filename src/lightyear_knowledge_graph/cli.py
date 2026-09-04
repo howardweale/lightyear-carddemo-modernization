@@ -67,7 +67,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     oracle_reference = subparsers.add_parser(
         "build-oracle-reference",
-        help="Build the pinned Oracle Customer (Large) static reference projection",
+        help="Build the pinned iDempiere static reference projection for Oracle compatibility analysis",
     )
     oracle_reference.add_argument(
         "--base-graph", type=Path, default=Path("knowledge/graph.snapshot.json.gz")
@@ -92,7 +92,7 @@ def build_parser() -> argparse.ArgumentParser:
 
     validate_oracle_reference = subparsers.add_parser(
         "validate-oracle-reference",
-        help="Validate the Oracle Customer (Large) static reference projection",
+        help="Validate the pinned iDempiere static reference projection",
     )
     validate_oracle_reference.add_argument(
         "--base-graph", type=Path, default=Path("knowledge/graph.snapshot.json.gz")
@@ -495,7 +495,7 @@ def main(argv: list[str] | None = None) -> int:
                 **payload["statistics"],
             }, indent=2, sort_keys=True))
             return 0 if not errors else 1
-        fragment = json.loads(args.fragment.read_text(encoding="utf-8"))
+        fragment = load_composite_input(args.fragment)
         errors = validate_oracle_reference_fragment(
             fragment, base_graph, slices, inventory, source_pin
         )

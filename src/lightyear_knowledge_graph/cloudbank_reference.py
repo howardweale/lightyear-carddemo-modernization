@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 from collections import Counter
 from copy import deepcopy
 from pathlib import Path
@@ -17,6 +18,9 @@ OPERATOR_ESTATE_NAME = "CloudBank Reference Estate"
 FRAGMENT_ID = "lightyear:cloudbank-modern-oracle-reference-v1"
 SOURCE_ID = "source:lightyear-carddemo"
 SOURCE_PATH = "reference-estates/cloudbank/workloads.json"
+INVENTORY_PATH = "reference-estates/cloudbank/inventory.json"
+STRUCTURAL_INVENTORY_PATH = "work/reference-estates/cloudbank/inventory.json"
+_INVENTORY_LINE_CACHE: tuple[dict[str, Any], dict[str, int]] | None = None
 
 
 def build_cloudbank_reference_fragment(
@@ -29,6 +33,107 @@ def build_cloudbank_reference_fragment(
     edges: list[dict[str, Any]] = []
     pin = source_pin["source"]
     estate = inventory["estate"]
+    structural = inventory.get("structural_graph") or {}
+    structural_enabled = bool(structural.get("source_files"))
+    license_metadata = deepcopy(source_pin["license"])
+    if structural_enabled:
+        license_metadata["bundled_license_file"] = "LICENSES/UPL-1.0.txt"
+        license_metadata["copyright"] = (
+            "Copyright (c) 2021, 2023 Oracle and/or its affiliates."
+        )
+    database_objects_by_path: dict[str, list[dict[str, str]]] = {}
+    for declaration in inventory["database_surface"].get("ddl_declarations", []):
+        database_objects_by_path.setdefault(declaration["path"], []).append(
+            {"kind": declaration["kind"], "name": declaration["name"]}
+        )
+
+    common_static = {
+        "customer_id": OPERATOR_ESTATE_ID,
+        "evidence_class": inventory["claim_class"],
+        "runtime_observed": False,
+        "source_commit": pin["commit"],
+        "source_product": "CloudBank v5",
+        "source_repository": pin["repository"],
+    }
+    file_ids: dict[str, str] = {}
+    for record in structural.get("source_files", []):
+        path = record["path"]
+        node_id = f"cloudbank-reference:source-file:{path}"
+        file_ids[path] = node_id
+        platform = (
+            "Java" if record["category"] == "java"
+            else "Oracle" if record["category"] == "sql"
+            else "CloudBank"
+        )
+        nodes.append(
+            {
+                "id": node_id,
+                "kind": "source_file",
+                "name": path,
+                "properties": {
+                    **common_static,
+                    "category": record["category"],
+                    "declared_database_objects": database_objects_by_path.get(path, []),
+                    "extension": record["extension"],
+                    "module": record["module"],
+                    "operator_platform": platform,
+                    "path": f"cloudbank-v5/{path}",
+                    "statement": "Pinned CloudBank source artifact recorded by static inventory.",
+                },
+                "evidence": [
+                    _inventory_evidence(
+                        _inventory_line(inventory, f'"path": "{path}"')
+                    )
+                ],
+            }
+        )
+
+    type_ids: dict[str, str] = {}
+    for record in structural.get("java_types", []):
+        fqcn = record["node"]
+        node_id = f"cloudbank-reference:java-type:{fqcn}"
+        type_ids[fqcn] = node_id
+        evidence = _inventory_evidence(
+            _inventory_line(inventory, f'"node": "{fqcn}"')
+        )
+        nodes.append(
+            {
+                "id": node_id,
+                "kind": "java_type",
+                "name": fqcn,
+                "properties": {
+                    **common_static,
+                    "coupling_categories": deepcopy(record["coupling_categories"]),
+                    "endpoint_annotations": deepcopy(record["endpoint_annotations"]),
+                    "module": record["module"],
+                    "operator_platform": "Java",
+                    "package": record["package"],
+                    "source_path": f"cloudbank-v5/{record['path']}",
+                    "source_set": record["source_set"],
+                    "statement": "Package-qualified Java type derived from the pinned CloudBank source.",
+                },
+                "evidence": [evidence],
+            }
+        )
+        edges.append(
+            _structural_edge(
+                file_ids[record["path"]], "DECLARES", node_id, evidence,
+                {"extraction": "package-declaration"},
+            )
+        )
+
+    for record in structural.get("dependency_edges", []):
+        source = type_ids[record["source"]]
+        target = type_ids[record["target"]]
+        evidence = _inventory_evidence(
+            _inventory_line(inventory, f'"node": "{record["source"]}"')
+        )
+        edges.append(
+            _structural_edge(
+                source, "DEPENDS_ON", target, evidence,
+                {"extraction": "internal-java-source-reference"},
+            )
+        )
 
     for workload in sorted(workloads["workloads"], key=lambda item: item["id"]):
         workload_id = f"cloudbank-reference:workload:{workload['id']}"
@@ -76,6 +181,24 @@ def build_cloudbank_reference_fragment(
                 "evidence": [_evidence(workload_line, "curated-cloudbank-workload-v1")],
             }
         )
+        if structural_enabled:
+            for source_path in workload["source_paths"]:
+                relative_path = source_path.removeprefix("cloudbank-v5/")
+                target_id = file_ids.get(relative_path)
+                if target_id is None:
+                    raise ValueError(
+                        "CloudBank workload source path is absent from inventory: "
+                        f"{source_path}"
+                    )
+                edges.append(
+                    _structural_edge(
+                        workload_id,
+                        "MODERN_ENTRYPOINT",
+                        target_id,
+                        _evidence(workload_line, "curated-cloudbank-workload-v1"),
+                        {"scope": "curated-workload-source"},
+                    )
+                )
         for sequence, risk in enumerate(workload["migration_risks"], start=1):
             scenario_id = f"cloudbank-reference:scenario:{workload['id']}:{sequence:02d}"
             risk_line = _source_line(f'"id": "{risk["id"]}"')
@@ -127,7 +250,7 @@ def build_cloudbank_reference_fragment(
         "source": {
             "acquisition_mode": source_pin["acquisition"]["mode"],
             "inventory": "reference-estates/cloudbank/inventory.json",
-            "license": deepcopy(source_pin["license"]),
+            "license": license_metadata,
             "operator_estate_id": OPERATOR_ESTATE_ID,
             "operator_estate_name": OPERATOR_ESTATE_NAME,
             "source_pin": "reference-estates/cloudbank/source-pin.json",
@@ -146,6 +269,13 @@ def build_cloudbank_reference_fragment(
         "limitations": [
             "CloudBank Reference Estate is an official upstream reference application, not an attached customer system.",
             "The projection is derived from a pinned static inventory and curated migration risks; CloudBank was not built or executed.",
+            *(
+                [
+                    "Java dependency edges are static import and source-reference evidence; they do not prove runtime calls.",
+                    "The complete structural projection is generated into ignored work output and is not distributed in this repository.",
+                ]
+                if structural_enabled else []
+            ),
             "Oracle coupling is identified but no PostgreSQL or other target mapping is complete or selected.",
             "Static source evidence does not prove application equivalence, migration completion, runtime behavior, or production readiness.",
             "The fragment is bound to one exact canonical graph identity and fails closed after graph drift.",
@@ -172,6 +302,8 @@ def validate_cloudbank_reference_fragment(
         errors.append("CloudBank operator-facing estate name is invalid")
     for node in fragment.get("nodes", []):
         properties = node.get("properties", {})
+        if properties.get("customer_id") != OPERATOR_ESTATE_ID:
+            errors.append(f"node omits the CloudBank estate identity: {node.get('id')}")
         for key in (
             "migration_complete",
             "postgresql_mapping_complete",
@@ -179,9 +311,12 @@ def validate_cloudbank_reference_fragment(
             "runtime_observed",
             "target_equivalent",
         ):
-            if properties.get(key) is not False:
+            if node.get("kind") in {"modernization_workload", "verification_scenario"} and properties.get(key) is not False:
                 errors.append(f"node overstates {key}: {node.get('id')}")
-        if properties.get("operator_platform") != "Oracle":
+        if (
+            node.get("kind") in {"modernization_workload", "verification_scenario"}
+            and properties.get("operator_platform") != "Oracle"
+        ):
             errors.append(f"node omits the Oracle operator platform: {node.get('id')}")
     return sorted(set(errors))
 
@@ -229,6 +364,53 @@ def _evidence(line: int, method: str) -> dict[str, Any]:
         "line_end": line,
         "method": method,
         "confidence": "asserted",
+    }
+
+
+def _inventory_evidence(line: int) -> dict[str, Any]:
+    return {
+        "source_id": SOURCE_ID,
+        "path": STRUCTURAL_INVENTORY_PATH,
+        "line_start": line,
+        "line_end": line,
+        "method": "pinned-static-inventory-v2",
+        "confidence": "asserted",
+    }
+
+
+def _inventory_line(inventory: dict[str, Any], needle: str) -> int:
+    global _INVENTORY_LINE_CACHE
+    if _INVENTORY_LINE_CACHE is None or _INVENTORY_LINE_CACHE[0] is not inventory:
+        lines = {
+            line.strip().rstrip(","): number
+            for number, line in enumerate(
+                json.dumps(inventory, indent=2, sort_keys=True).splitlines(), start=1
+            )
+            if '"node": ' in line or '"path": ' in line
+        }
+        _INVENTORY_LINE_CACHE = (inventory, lines)
+    token = needle.strip().rstrip(",")
+    if token in _INVENTORY_LINE_CACHE[1]:
+        return _INVENTORY_LINE_CACHE[1][token]
+    raise ValueError(f"CloudBank inventory token is missing: {needle}")
+
+
+def _structural_edge(
+    source: str,
+    relation: str,
+    target: str,
+    evidence: dict[str, Any],
+    properties: dict[str, Any],
+) -> dict[str, Any]:
+    identity = json.dumps([source, relation, target, properties], sort_keys=True)
+    digest = hashlib.sha256(identity.encode("utf-8")).hexdigest()[:20]
+    return {
+        "id": f"cloudbank-reference:edge:structural:{digest}",
+        "source": source,
+        "target": target,
+        "relation": relation,
+        "properties": properties,
+        "evidence": [evidence],
     }
 
 

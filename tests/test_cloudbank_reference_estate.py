@@ -125,6 +125,67 @@ class CloudBankReferenceEstateTests(unittest.TestCase):
             self.assertFalse(properties["migration_complete"])
             self.assertFalse(properties["production_ready"])
 
+    def test_full_structural_inventory_is_projected_without_a_committed_graph(self) -> None:
+        inventory = copy.deepcopy(self.inventory)
+        paths = sorted({
+            path.removeprefix("cloudbank-v5/")
+            for workload in self.workloads["workloads"]
+            for path in workload["source_paths"]
+        })
+        java_paths = [path for path in paths if path.endswith(".java")]
+        self.assertGreaterEqual(len(java_paths), 2)
+        inventory["database_surface"]["ddl_declarations"] = []
+        inventory["structural_graph"] = {
+            "source_files": [
+                {
+                    "category": "java" if path.endswith(".java") else "other",
+                    "extension": Path(path).suffix or "[none]",
+                    "module": path.split("/", 1)[0] if "/" in path else "root",
+                    "path": path,
+                }
+                for path in paths
+            ],
+            "java_types": [
+                {
+                    "coupling_categories": [],
+                    "endpoint_annotations": {"jaxrs": 0, "spring": 0},
+                    "module": java_paths[index].split("/", 1)[0],
+                    "node": f"example.Type{index}",
+                    "package": "example",
+                    "path": java_paths[index],
+                    "source_set": "main",
+                }
+                for index in range(2)
+            ],
+            "dependency_edges": [
+                {"source": "example.Type0", "target": "example.Type1"}
+            ],
+        }
+
+        fragment = build_cloudbank_reference_fragment(
+            self.base, self.workloads, inventory, self.pin
+        )
+        self.assertEqual(
+            "Copyright (c) 2021, 2023 Oracle and/or its affiliates.",
+            fragment["source"]["license"]["copyright"],
+        )
+        self.assertEqual(
+            "LICENSES/UPL-1.0.txt",
+            fragment["source"]["license"]["bundled_license_file"],
+        )
+        self.assertEqual(len(paths), fragment["statistics"]["nodes_by_kind"]["source_file"])
+        self.assertEqual(2, fragment["statistics"]["nodes_by_kind"]["java_type"])
+        self.assertEqual(2, fragment["statistics"]["edges_by_relation"]["DECLARES"])
+        self.assertEqual(1, fragment["statistics"]["edges_by_relation"]["DEPENDS_ON"])
+        self.assertEqual(
+            sum(len(item["source_paths"]) for item in self.workloads["workloads"]),
+            fragment["statistics"]["edges_by_relation"]["MODERN_ENTRYPOINT"],
+        )
+        self.assertIn(
+            "not distributed in this repository",
+            " ".join(fragment["limitations"]),
+        )
+
     def test_inventory_tool_and_record_share_the_same_pin(self) -> None:
         script_path = ROOT / "tools" / "inventory_cloudbank_reference.py"
         spec = importlib.util.spec_from_file_location("cloudbank_inventory", script_path)

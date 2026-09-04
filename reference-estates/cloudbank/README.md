@@ -21,7 +21,16 @@ The pinned `cloudbank-v5` subtree contains:
 - 53 Spring and nine JAX-RS endpoint annotations; and
 - static Oracle, LRA, local-transaction, messaging, and security coupling signals.
 
-The Control Tower exposes five workloads and 20 bounded migration-risk scenarios:
+The full local Control Tower projection exposes the complete measured source-file surface, the
+package-qualified Java type graph, internal Java dependencies, five workloads, and 20 bounded
+migration-risk scenarios. It contains 282 nodes and 187 relationships: 189 tracked source files,
+68 package-qualified Java types, 74 internal Java dependencies, and the curated workload
+boundaries. The full upstream-derived inventory and graph are generated beneath ignored `work/`
+output rather than committed.
+Endpoint, database-object, coupling, module, deployment, and source-set metadata remain attached
+to the corresponding source or Java nodes rather than being presented as observed runtime calls.
+
+The five selectable workloads are:
 
 1. customer and account management;
 2. money transfer;
@@ -36,19 +45,15 @@ git clone --filter=blob:none --no-tags \
   https://github.com/oracle/microservices-backend.git /path/to/oracle-microservices-backend
 git -C /path/to/oracle-microservices-backend checkout \
   4f41b16d00c45503f691836fee8138010c969e86
-./cloudbank-reference-estate.sh inventory /path/to/oracle-microservices-backend
-./cloudbank-reference-estate.sh verify-inventory /path/to/oracle-microservices-backend
-./cloudbank-reference-estate.sh build
 ./cloudbank-reference-estate.sh verify
+./cloudbank-reference-estate.sh build-full /path/to/oracle-microservices-backend
 ```
 
 Windows:
 
 ```powershell
-.\cloudbank-reference-estate.ps1 inventory C:\path\to\oracle-microservices-backend
-.\cloudbank-reference-estate.ps1 verify-inventory C:\path\to\oracle-microservices-backend
-.\cloudbank-reference-estate.ps1 build
 .\cloudbank-reference-estate.ps1 verify
+.\cloudbank-reference-estate.ps1 build-full C:\path\to\oracle-microservices-backend
 ```
 
 The inventory tool refuses a dirty checkout or a commit other than the recorded pin.
@@ -83,9 +88,14 @@ equivalence as blocked until later milestones.
 ## Control Tower projection
 
 **CloudBank Reference Estate** is selectable alongside **CardDemo Reference Estate** and
-**Oracle Customer (Large)**. PostgreSQL 16 is selected and production-readiness qualification is
+**iDempiere Reference Estate (Large)**. PostgreSQL 16 is selected and production-readiness qualification is
 contracted for the bounded Customer workcell; target selection for the rest of CloudBank remains
 governed later work.
+
+In a full local projection, workload views begin at the curated source boundaries and expand
+through file declarations and internal Java dependencies. Estate search covers all 282 CloudBank
+nodes, including files that are not reachable from a selected workload seed. Large selections use
+the Control Tower's existing package-collapse and explicit render-all controls.
 
 ## Run the first bounded application factory workcell
 
@@ -286,7 +296,7 @@ rollback. The committed receipt does not claim a cluster was contacted. A later 
 qualifies only the bound non-production platform; customer IdP, representative customer workload,
 customer approval, production deployment, and final readiness remain MS #68.
 
-The projection is composed with the existing PL/I and Oracle Customer (Large) fragments. It does
+The projection is composed with the existing PL/I and iDempiere reference fragments. It does
 not change the canonical CardDemo graph or the identity to which runtime and audit evidence are
 bound.
 

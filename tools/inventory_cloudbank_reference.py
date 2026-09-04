@@ -13,7 +13,7 @@ import json
 import re
 import subprocess
 import xml.etree.ElementTree as ET
-from collections import Counter
+from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any
 
@@ -48,6 +48,9 @@ DDL_PATTERNS = {
     "trigger": re.compile(r'\bCREATE(?:\s+OR\s+REPLACE)?(?:\s+EDITIONABLE)?\s+TRIGGER\s+(["\w.$#]+)', re.IGNORECASE),
     "type": re.compile(r'\bCREATE(?:\s+OR\s+REPLACE)?(?:\s+EDITIONABLE)?\s+TYPE\s+(["\w.$#]+)', re.IGNORECASE),
 }
+PACKAGE_RE = re.compile(r"^\s*package\s+([\w.]+)\s*;", re.MULTILINE)
+IMPORT_RE = re.compile(r"^\s*import\s+(?:static\s+)?([\w.*]+)\s*;", re.MULTILINE)
+TYPE_TOKEN_RE = re.compile(r"\b[A-Z][A-Za-z0-9_]*\b")
 
 
 def git(source_root: Path, *args: str) -> str:
@@ -112,6 +115,119 @@ def ddl_objects(source_root: Path, sql_paths: list[str]) -> dict[str, list[str]]
         for kind, pattern in DDL_PATTERNS.items():
             objects[kind].update(match.upper() for match in pattern.findall(text))
     return {kind: sorted(names) for kind, names in objects.items()}
+
+
+def ddl_declarations(source_root: Path, sql_paths: list[str]) -> list[dict[str, str]]:
+    declarations = set()
+    for relative in sql_paths:
+        text = read_text(source_root, relative)
+        for kind, pattern in DDL_PATTERNS.items():
+            declarations.update(
+                (kind, match.upper(), relative) for match in pattern.findall(text)
+            )
+    return [
+        {"kind": kind, "name": name, "path": path}
+        for kind, name, path in sorted(declarations)
+    ]
+
+
+def source_category(path: str) -> str:
+    suffix = Path(path).suffix.lower()
+    name = Path(path).name
+    if suffix == ".java":
+        return "java"
+    if suffix == ".sql":
+        return "sql"
+    if name == "pom.xml":
+        return "build"
+    if name == "values.yaml" or suffix in {".yaml", ".yml"}:
+        return "deployment"
+    if suffix in {".properties", ".xml"}:
+        return "configuration"
+    if suffix in {".sh", ".imports"}:
+        return "operations"
+    if suffix in {".md", ".txt", ".manual"}:
+        return "documentation"
+    if suffix in {".png"}:
+        return "asset"
+    return "other"
+
+
+def structural_graph(
+    paths: list[str], texts: dict[str, str]
+) -> dict[str, Any]:
+    java_paths = [path for path in paths if path.endswith(".java")]
+    types: dict[str, dict[str, Any]] = {}
+    packages: dict[str, str] = {}
+    package_types: dict[str, dict[str, str]] = defaultdict(dict)
+
+    coupling_patterns = {
+        "local-transaction": TRANSACTION_PATTERN,
+        "lra": LRA_PATTERN,
+        "messaging": MESSAGING_PATTERN,
+        "oracle": ORACLE_PATTERN,
+        "security": SECURITY_PATTERN,
+    }
+    for path in java_paths:
+        text = texts[path]
+        package_match = PACKAGE_RE.search(text)
+        if package_match is None:
+            continue
+        package = package_match.group(1)
+        simple_name = Path(path).stem
+        fqcn = f"{package}.{simple_name}"
+        endpoint_counts = {
+            "spring": len(SPRING_ENDPOINT_PATTERN.findall(text)),
+            "jaxrs": len(JAXRS_ENDPOINT_PATTERN.findall(text)),
+        }
+        types[fqcn] = {
+            "coupling_categories": sorted(
+                name for name, pattern in coupling_patterns.items() if pattern.search(text)
+            ),
+            "endpoint_annotations": endpoint_counts,
+            "module": path.split("/", 1)[0],
+            "node": fqcn,
+            "package": package,
+            "path": path,
+            "source_set": "test" if "/src/test/" in f"/{path}" else "main",
+        }
+        packages[fqcn] = package
+        package_types[package][simple_name] = fqcn
+
+    dependencies: set[tuple[str, str]] = set()
+    for source, record in types.items():
+        text = texts[record["path"]]
+        package = packages[source]
+        imports = IMPORT_RE.findall(text)
+        wildcard_packages = [item[:-2] for item in imports if item.endswith(".*")]
+        for target in imports:
+            if target in types and target != source:
+                dependencies.add((source, target))
+        for token in set(TYPE_TOKEN_RE.findall(text)):
+            same_package = package_types[package].get(token)
+            if same_package and same_package != source:
+                dependencies.add((source, same_package))
+            for wildcard_package in wildcard_packages:
+                target = package_types[wildcard_package].get(token)
+                if target and target != source:
+                    dependencies.add((source, target))
+
+    return {
+        "dependency_edges": [
+            {"source": source, "target": target}
+            for source, target in sorted(dependencies)
+        ],
+        "java_types": [types[node] for node in sorted(types)],
+        "source_files": [
+            {
+                "category": source_category(path),
+                "extension": Path(path).suffix.lower() or "[none]",
+                "module": path.split("/", 1)[0] if "/" in path else "root",
+                "path": path,
+            }
+            for path in paths
+        ],
+    }
 
 
 def build_inventory(source_root: Path) -> dict[str, Any]:
@@ -203,9 +319,11 @@ def build_inventory(source_root: Path) -> dict[str, Any]:
         },
         "database_surface": {
             "ddl_objects": ddl_objects(source_root, sql_paths),
+            "ddl_declarations": ddl_declarations(source_root, sql_paths),
             "sql_paths": sql_paths,
         },
         "coupling_signals": signals,
+        "structural_graph": structural_graph(paths, texts),
         "inventory_method": {
             "scope": "tracked files under the pinned cloudbank-v5 subtree",
             "endpoint_scope": "Spring mapping and JAX-RS verb annotations in tracked Java source",
@@ -217,6 +335,10 @@ def build_inventory(source_root: Path) -> dict[str, Any]:
                 "observed transaction outcomes",
                 "PostgreSQL compatibility or target equivalence",
             ],
+            "structural_projection": (
+                "tracked source files, package-qualified Java types, and deterministic "
+                "internal Java source dependencies"
+            ),
         },
     }
 

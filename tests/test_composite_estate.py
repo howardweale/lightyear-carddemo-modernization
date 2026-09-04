@@ -93,7 +93,7 @@ class CompositeEstateTests(unittest.TestCase):
         self.assertEqual(
             [
                 "CardDemo Reference Estate",
-                "Oracle Customer (Large)",
+                "iDempiere Reference Estate (Large)",
                 "CloudBank Reference Estate",
             ],
             [item["name"] for item in context["companies"]],

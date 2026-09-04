@@ -230,12 +230,13 @@ CloudBank was not built or executed in v0.53 and no target was selected. Postgre
 generated refactoring, target execution, application equivalence, migration completion, and
 production readiness remained false.
 
-Previous release: **v0.52.0 — Oracle Customer (Large) Control Tower projection**
+Previous release: **v0.52.0 — iDempiere Reference Estate Control Tower projection**
 
-v0.52 projects the pinned Oracle reference estate into the Control Tower as the selectable
-operator-facing company **Oracle Customer (Large)**. Its order-to-cash and procure-to-pay
+v0.52 projects the pinned iDempiere reference estate into the Control Tower as the selectable
+operator-facing **iDempiere Reference Estate (Large)**. Its order-to-cash and procure-to-pay
 workloads expose 20 static document-flow trace scenarios drawn from the two curated nine-table
-slices. The upstream product name remains in source, license, and commit provenance only.
+slices. The label identifies the public upstream project and does not represent a customer or an
+Oracle-sponsored system.
 
 The projection is a deterministic extension fragment bound to the canonical CardDemo graph. It
 does not change that canonical graph or the identity used by runtime and audit evidence.
@@ -1699,7 +1700,7 @@ On Windows:
 .\graph-explorer.ps1
 ```
 
-It opens `http://127.0.0.1:8765` and provides selectable CardDemo and Oracle Customer (Large)
+It opens `http://127.0.0.1:8765` and provides selectable CardDemo and iDempiere Reference Estate (Large)
 reference estates, including bounded PL/I authorization-risk, Oracle order-to-cash, and Oracle
 procure-to-pay perspectives, full-graph search,
 bounded neighborhoods, node and edge inspection, source-code evidence, and implementer/verifier
@@ -1709,6 +1710,22 @@ does not upload graph data.
 The default Explorer artifact is `knowledge/composite/estate.snapshot.json.gz`. Its visible trust
 banner shows both the canonical and composite identities. Canonical runtime and audit evidence
 continues to bind to `knowledge/graph.snapshot.json.gz`; the overlay cannot promote those claims.
+
+To inspect the complete iDempiere and CloudBank source graphs without committing the generated
+upstream-derived artifacts:
+
+```bash
+./oracle-reference-estate.sh build-full /path/to/idempiere-release-13
+./cloudbank-reference-estate.sh build-full /path/to/oracle-microservices-backend
+LIGHTYEAR_ORACLE_REFERENCE_FRAGMENT="$PWD/work/reference-estates/idempiere/oracle-reference.fragment.json.gz" \
+LIGHTYEAR_CLOUDBANK_REFERENCE_FRAGMENT="$PWD/work/reference-estates/cloudbank/cloudbank-reference.fragment.json" \
+  ./composite-estate.sh build-working /path/to/carddemo-upstream
+./graph-explorer.sh --graph work/composite-estate/estate.snapshot.json.gz
+```
+
+All complete upstream structural inventories, fragments, and the working composite remain under
+Git-ignored `work/`. Exact third-party license texts and attribution are in `LICENSES/` and
+`THIRD_PARTY_NOTICES.md`.
 
 Do not expose the verifier view to implementation agents. It includes private holdout metadata.
 The current local audience selector demonstrates the policy boundary; it is not authentication.

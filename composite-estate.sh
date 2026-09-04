@@ -21,8 +21,8 @@ fi
 
 base="$project_dir/knowledge/graph.snapshot.json.gz"
 fragment="$project_dir/extensions/pli/pli.fragment.json"
-oracle_fragment="$project_dir/reference-estates/idempiere/oracle-customer-large.fragment.json"
-cloudbank_fragment="$project_dir/reference-estates/cloudbank/cloudbank-reference.fragment.json"
+oracle_fragment="${LIGHTYEAR_ORACLE_REFERENCE_FRAGMENT:-$project_dir/reference-estates/idempiere/oracle-customer-large.fragment.json}"
+cloudbank_fragment="${LIGHTYEAR_CLOUDBANK_REFERENCE_FRAGMENT:-$project_dir/reference-estates/cloudbank/cloudbank-reference.fragment.json}"
 capabilities="$project_dir/knowledge/capabilities/mainframe-readiness.json"
 canonical_dir="$project_dir/knowledge/composite"
 
@@ -42,7 +42,20 @@ build_projection() {
     --evidence-receipt "$output_dir/source.receipt.json"
 }
 
-if [[ "$action" == "build" ]]; then
+if [[ "$action" == "build-working" ]]; then
+  working_dir="$project_dir/work/composite-estate"
+  mkdir -p "$working_dir"
+  build_projection "$working_dir"
+  "$LIGHTYEAR_PYTHON_BIN" -m lightyear_knowledge_graph validate-composite \
+    --graph "$working_dir/estate.snapshot.json.gz" \
+    --base-graph "$base" \
+    --fragment "$fragment" \
+    --fragment "$oracle_fragment" \
+    --fragment "$cloudbank_fragment" \
+    --capabilities "$capabilities" \
+    --evidence-pack "$working_dir/source.pack.json.gz"
+  echo "Working composite built in work/composite-estate."
+elif [[ "$action" == "build" ]]; then
   mkdir -p "$canonical_dir"
   build_projection "$canonical_dir"
   "$LIGHTYEAR_PYTHON_BIN" -m lightyear_knowledge_graph validate-composite \
@@ -75,6 +88,6 @@ elif [[ "$action" == "verify" ]]; then
   cmp "$canonical_dir/source.receipt.json" "$generated/source.receipt.json"
   echo "Composite estate is deterministic, current, read-only, and evidence-bound."
 else
-  echo "Usage: ./composite-estate.sh [build|verify] [optional-carddemo-upstream-root]" >&2
+  echo "Usage: ./composite-estate.sh [build|build-working|verify] [optional-carddemo-upstream-root]" >&2
   exit 2
 fi

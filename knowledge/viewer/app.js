@@ -59,6 +59,7 @@ const groups = {
   db2_constraint: "structure", db2_dcl: "structure", db2_sql_statement: "program",
   business_rule: "rule", modernization_workload: "rule",
   java_type: "modern", java_method: "modern", java_package: "modern", software_dependency: "modern",
+  source_file: "structure",
   test_case: "verify", verification_scenario: "verify",
 };
 
@@ -415,7 +416,7 @@ function renderOperatorContext() {
   const lens = selectedOperatorLens();
   if (!(customer && problem && workload && scope && lens)) return;
   $("operator-context-path").textContent = `${customer.name} / ${problem.name} / ${workload.name.replace(/^CardDemo\s+/i, "")}`;
-  $("operator-context-description").textContent = `${workload.description} ${scope.description} ${lens.description}`;
+  $("operator-context-description").textContent = `${workload.description} ${scope.description} ${lens.description} Estate projection: ${formatNumber(customer.node_count)} nodes · ${formatNumber(customer.edge_count)} relationships.`;
   $("customer-evidence-badge").textContent = workload.target_status
     ? `${customer.evidence_class} · ${workload.target_status}`
     : `${customer.evidence_class} evidence`;
@@ -454,7 +455,7 @@ async function refreshWorkloadBoundary() {
     node: workload.root,
     depth: perspective?.depth || 3,
     audience: $("audience").value,
-    limit: 300,
+    limit: 1000,
   });
   state.workloadNodeIds = new Set(boundary.nodes.map((item) => item.id));
 }
@@ -872,7 +873,7 @@ async function loadNeighborhood(nodeId, overrideDepth) {
       node: nodeId,
       depth,
       audience: $("audience").value,
-      limit: 220,
+      limit: 1000,
     });
     state.selection = selection;
     state.fullSelection = selection;
@@ -1100,7 +1101,7 @@ function clearTrace() {
   $("trace-end-results").replaceChildren();
   $("trace-steps").replaceChildren();
   $("trace-result").className = "trace-result";
-  $("trace-result").textContent = "Select two graph entities. Oracle and SAP ASE cannot be selected until their graph fragments and customer integration edges are attached.";
+  $("trace-result").textContent = "Select two graph entities. A result is shown only when the current projection contains an evidenced path.";
   renderTraceEndpoints();
 }
 
@@ -1111,9 +1112,10 @@ async function runSearch() {
   if (query.length < 2) return;
   try {
     const payload = await api("/api/search", { q: query, audience: $("audience").value, limit: 30 });
-    const results = payload.results.filter((item) => state.workloadNodeIds.has(item.id));
+    const estateId = selectedOperatorCompany()?.id;
+    const results = payload.results.filter((item) => item.customer_id === estateId);
     if (!results.length) {
-      container.textContent = "No matching entities in the selected workload";
+      container.textContent = "No matching entities in the selected estate";
       return;
     }
     results.forEach((node) => {
@@ -1163,16 +1165,17 @@ function collapseImplementationPackages(selection) {
   const packages = new Map();
   selection.nodes.forEach((node) => {
     if (!["java_type", "java_method"].includes(node.kind)) return;
-    const qualified = node.id.replace(/^modern:java-(?:type|method):/, "").split("#")[0];
-    const packageName = qualified.split(".").slice(0, -1).join(".") || "java";
-    if (!packages.has(packageName)) packages.set(packageName, []);
-    packages.get(packageName).push(node);
+    const qualified = node.id.replace(/^(?:modern|oracle-reference|cloudbank-reference):java-(?:type|method):/, "").split("#")[0];
+    const packageName = node.properties?.package || qualified.split(".").slice(0, -1).join(".") || "java";
+    const estatePackage = `${node.properties?.customer_id || "carddemo-reference"}:${packageName}`;
+    if (!packages.has(estatePackage)) packages.set(estatePackage, { packageName, members: [] });
+    packages.get(estatePackage).members.push(node);
   });
   const replacement = new Map();
   const collapsed = [];
-  packages.forEach((members, packageName) => {
+  packages.forEach(({ packageName, members }, estatePackage) => {
     if (members.length < 2) return;
-    const id = `collapsed:java-package:${packageName}`;
+    const id = `collapsed:java-package:${estatePackage}`;
     members.forEach((member) => replacement.set(member.id, id));
     collapsed.push({
       id,

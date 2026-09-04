@@ -161,7 +161,7 @@ class GraphExplorerTests(unittest.TestCase):
             self.assertIn('id="density-guard"', body)
             self.assertIn("Open proof run for this workload", body)
             self.assertIn('id="verifier-dialog"', body)
-            self.assertIn("Search selected workload", body)
+            self.assertIn("Search selected estate", body)
             self.assertIn("assets/lightyear-primary.svg", body)
             self.assertIn("Technology scope", body)
             self.assertIn("CROSS-PLATFORM EVIDENCE TRACE", body)
@@ -187,7 +187,7 @@ class GraphExplorerTests(unittest.TestCase):
             self.assertIn('$("density-render-all").addEventListener', script)
             self.assertIn('$("density-guard").hidden = true', script)
             self.assertIn("role", script)
-            self.assertIn("No matching entities in the selected workload", script)
+            self.assertIn("No matching entities in the selected estate", script)
             self.assertIn("Static file mode cannot connect to the live graph", script)
             with urlopen(f"{base}/styles.css", timeout=3) as response:
                 styles = response.read().decode("utf-8")

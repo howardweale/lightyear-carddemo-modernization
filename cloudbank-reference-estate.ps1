@@ -13,13 +13,34 @@ $SourcePin = Join-Path $ProjectDir "reference-estates\cloudbank\source-pin.json"
 $Fragment = Join-Path $ProjectDir "reference-estates\cloudbank\cloudbank-reference.fragment.json"
 $Receipt = Join-Path $ProjectDir "reference-estates\cloudbank\cloudbank-reference.receipt.json"
 
-function Build-Projection([string]$OutputFragment, [string]$OutputReceipt) {
+function Build-Projection([string]$OutputFragment, [string]$OutputReceipt, [string]$InputInventory = $Inventory) {
     Run-Python -m lightyear_knowledge_graph build-cloudbank-reference `
-        --base-graph $Base --workloads $Workloads --inventory $Inventory --source-pin $SourcePin `
+        --base-graph $Base --workloads $Workloads --inventory $InputInventory --source-pin $SourcePin `
         --output $OutputFragment --receipt $OutputReceipt
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 }
 
+if ($Action -eq "build-full") {
+    if ($args.Count -lt 2) {
+        Write-Error "Pinned CloudBank upstream checkout is required for build-full."
+        exit 2
+    }
+    $Generated = Join-Path $ProjectDir "work\reference-estates\cloudbank"
+    New-Item -ItemType Directory -Force -Path $Generated | Out-Null
+    $GeneratedInventory = Join-Path $Generated "inventory.json"
+    $GeneratedFragment = Join-Path $Generated "cloudbank-reference.fragment.json"
+    $GeneratedReceipt = Join-Path $Generated "cloudbank-reference.receipt.json"
+    Run-Python (Join-Path $ProjectDir "tools\inventory_cloudbank_reference.py") `
+        --source-root $args[1] --output $GeneratedInventory
+    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+    Build-Projection $GeneratedFragment $GeneratedReceipt $GeneratedInventory
+    Run-Python -m lightyear_knowledge_graph validate-cloudbank-reference `
+        --base-graph $Base --workloads $Workloads --inventory $GeneratedInventory --source-pin $SourcePin `
+        --fragment $GeneratedFragment
+    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+    Write-Output "Full CloudBank reference projection built in work/reference-estates/cloudbank."
+    exit 0
+}
 if ($Action -eq "inventory" -or $Action -eq "verify-inventory") {
     if ($args.Count -lt 2) {
         Write-Error "CloudBank upstream checkout is required for $Action."
@@ -57,5 +78,5 @@ if ($Action -eq "verify") {
     exit 0
 }
 
-Write-Error "Usage: .\cloudbank-reference-estate.ps1 [inventory SOURCE_ROOT|verify-inventory SOURCE_ROOT|build|verify]"
+Write-Error "Usage: .\cloudbank-reference-estate.ps1 [inventory SOURCE_ROOT|verify-inventory SOURCE_ROOT|build|verify|build-full SOURCE_ROOT]"
 exit 2

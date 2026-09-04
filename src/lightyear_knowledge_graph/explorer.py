@@ -137,51 +137,51 @@ DEFAULT_PERSPECTIVES = [
     {
         "id": "oracle-reference-order-to-cash",
         "name": "Oracle order-to-cash reference",
-        "description": "Pinned static document-flow scenarios for the Oracle Customer (Large) reference estate.",
+        "description": "Pinned Java dependency slice and document-flow scenarios for the iDempiere reference estate analyzed for Oracle compatibility.",
         "root": "oracle-reference:workload:order-to-cash",
-        "depth": 1,
+        "depth": 2,
     },
     {
         "id": "oracle-reference-procure-to-pay",
         "name": "Oracle procure-to-pay reference",
-        "description": "Pinned static document-flow scenarios for the Oracle Customer (Large) reference estate.",
+        "description": "Pinned Java dependency slice and document-flow scenarios for the iDempiere reference estate analyzed for Oracle compatibility.",
         "root": "oracle-reference:workload:procure-to-pay",
-        "depth": 1,
+        "depth": 2,
     },
     {
         "id": "cloudbank-customer-account",
         "name": "CloudBank customer and account reference",
         "description": "Pinned static Oracle schema, service, API, and migration-risk evidence.",
         "root": "cloudbank-reference:workload:customer-account-management",
-        "depth": 1,
+        "depth": 3,
     },
     {
         "id": "cloudbank-money-transfer",
         "name": "CloudBank money transfer reference",
         "description": "Pinned static LRA, compensation, journal, and transaction-boundary evidence.",
         "root": "cloudbank-reference:workload:money-transfer",
-        "depth": 1,
+        "depth": 3,
     },
     {
         "id": "cloudbank-check-processing",
         "name": "CloudBank cheque processing reference",
         "description": "Pinned static event-queue, delivery, authorization, and consistency evidence.",
         "root": "cloudbank-reference:workload:check-deposit-clearance",
-        "depth": 1,
+        "depth": 3,
     },
     {
         "id": "cloudbank-identity",
         "name": "CloudBank identity reference",
         "description": "Pinned static user-schema, audit-trigger, OAuth, and secret-boundary evidence.",
         "root": "cloudbank-reference:workload:identity-service-authorization",
-        "depth": 1,
+        "depth": 3,
     },
     {
         "id": "cloudbank-credit-score",
         "name": "CloudBank credit decision and AI reference",
         "description": "Pinned source plus MS #64 synthetic-score, OAuth, chatbot guardrail, and model-egress evidence.",
         "root": "cloudbank-reference:workload:credit-score-service",
-        "depth": 1,
+        "depth": 3,
     },
 ]
 
@@ -195,9 +195,9 @@ OPERATOR_CUSTOMERS = [
     },
     {
         "id": "oracle-customer-large",
-        "name": "Oracle Customer (Large)",
+        "name": "iDempiere Reference Estate (Large)",
         "evidence_class": "upstream-static-reference",
-        "description": "Pinned public reference-estate evidence; no customer system is attached.",
+        "description": "Pinned public GPL-2.0 reference evidence analyzed for Oracle compatibility; no customer system or Oracle affiliation is attached.",
     },
     {
         "id": "cloudbank-reference",
@@ -707,9 +707,26 @@ class GraphExplorerIndex:
             if item["workload_ids"]:
                 problems.append(item)
         available_company_ids = {item["company_id"] for item in problems}
-        companies = [
-            item for item in OPERATOR_CUSTOMERS if item["id"] in available_company_ids
-        ]
+        estate_by_node = {
+            node_id: node.get("properties", {}).get("customer_id", "carddemo-reference")
+            for node_id, node in self.node_by_id.items()
+        }
+        estate_node_counts: dict[str, int] = defaultdict(int)
+        estate_edge_counts: dict[str, int] = defaultdict(int)
+        for estate_id in estate_by_node.values():
+            estate_node_counts[estate_id] += 1
+        for edge in self.edge_by_id.values():
+            source_estate = estate_by_node.get(edge["source"])
+            if source_estate and source_estate == estate_by_node.get(edge["target"]):
+                estate_edge_counts[source_estate] += 1
+        companies = []
+        for definition in OPERATOR_CUSTOMERS:
+            if definition["id"] not in available_company_ids:
+                continue
+            item = dict(definition)
+            item["node_count"] = estate_node_counts[item["id"]]
+            item["edge_count"] = estate_edge_counts[item["id"]]
+            companies.append(item)
         limitations = [
             "A static path does not prove that a transaction executed in production.",
             "Only a path containing WRITES_SEGMENT proves a static IMS mutation; PSB/DBD dependency alone does not.",
@@ -717,7 +734,7 @@ class GraphExplorerIndex:
         ]
         if "Oracle" in projected_names:
             limitations.append(
-                "Oracle Customer (Large) is pinned static reference evidence; no customer system or Oracle runtime is attached."
+                "iDempiere Reference Estate (Large) is pinned public GPL-2.0 evidence analyzed for Oracle compatibility; no customer system or Oracle runtime is attached, and no sponsorship or endorsement is implied."
             )
         else:
             limitations.append("No Oracle customer integration edges are currently projected.")
@@ -1055,6 +1072,9 @@ class GraphExplorerIndex:
             "name": node["name"],
             "statement": node.get("properties", {}).get("statement", ""),
             "operator_platform": cls._platform(node),
+            "customer_id": node.get("properties", {}).get(
+                "customer_id", "carddemo-reference"
+            ),
         }
 
 

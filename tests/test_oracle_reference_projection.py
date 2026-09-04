@@ -7,6 +7,7 @@ from pathlib import Path
 
 from lightyear_knowledge_graph.model import load_graph
 from lightyear_knowledge_graph.oracle_reference import (
+    LEGACY_OPERATOR_ESTATE_NAME,
     OPERATOR_ESTATE_NAME,
     build_oracle_reference_fragment,
     validate_oracle_reference_fragment,
@@ -36,7 +37,10 @@ class OracleReferenceProjectionTests(unittest.TestCase):
         self.assertEqual([], validate_oracle_reference_fragment(
             self.fragment, self.base, self.slices, self.inventory, self.pin
         ))
-        self.assertEqual(OPERATOR_ESTATE_NAME, self.fragment["source"]["operator_estate_name"])
+        self.assertEqual(
+            LEGACY_OPERATOR_ESTATE_NAME,
+            self.fragment["source"]["operator_estate_name"],
+        )
         self.assertEqual(22, self.fragment["statistics"]["node_count"])
         self.assertEqual(20, self.fragment["statistics"]["edge_count"])
 
@@ -77,6 +81,46 @@ class OracleReferenceProjectionTests(unittest.TestCase):
             if node["kind"] == "verification_scenario"
         }
         self.assertEqual(expected, actual)
+
+    def test_full_structural_inventory_is_projected_without_a_committed_graph(self) -> None:
+        inventory = copy.deepcopy(self.inventory)
+        source_units: dict[str, dict[str, str]] = {}
+        for slice_id, slice_inventory in inventory["slices"].items():
+            slice_inventory["source_units"] = []
+            slice_inventory["dependency_edges"] = []
+            for seed in slice_inventory["seeds"]:
+                record = {
+                    "node": seed["node"],
+                    "package": seed["node"].rsplit(".", 1)[0],
+                    "path": seed["path"],
+                }
+                source_units[seed["node"]] = record
+                slice_inventory["source_units"].append({**record, "role": "seed"})
+        dependency = {
+            "source": "org.compiere.model.MOrder",
+            "target": "org.compiere.model.MOrderLine",
+        }
+        inventory["slices"]["order-to-cash"]["dependency_edges"].append(dependency)
+        inventory["structural_graph"] = {
+            "source_units": sorted(source_units.values(), key=lambda item: item["node"]),
+            "dependency_edges": [dependency],
+        }
+
+        fragment = build_oracle_reference_fragment(
+            self.base, self.slices, inventory, self.pin
+        )
+        self.assertEqual(OPERATOR_ESTATE_NAME, fragment["source"]["operator_estate_name"])
+        self.assertEqual(
+            "LICENSES/GPL-2.0-only.md",
+            fragment["source"]["license"]["bundled_license_file"],
+        )
+        self.assertEqual(len(source_units), fragment["statistics"]["nodes_by_kind"]["java_type"])
+        self.assertEqual(24, fragment["statistics"]["edges_by_relation"]["MODERN_ENTRYPOINT"])
+        self.assertEqual(1, fragment["statistics"]["edges_by_relation"]["DEPENDS_ON"])
+        self.assertIn(
+            "not distributed in this repository",
+            " ".join(fragment["limitations"]),
+        )
 
     def test_tampering_and_runtime_overclaim_fail_closed(self) -> None:
         changed = copy.deepcopy(self.fragment)

@@ -99,6 +99,13 @@ LIQUIBASE_CHANGESET_REF = re.compile(
     r"(?P<file>db/changelog/(?:table|data|txeventq)\.sql)"
     r"::(?P<id>[A-Za-z0-9_.-]{1,80})::[A-Za-z0-9_.-]{1,80}"
 )
+ORACLE_AQ_PACKAGES = (
+    "DBMS_AQ",
+    "DBMS_AQADM",
+    "DBMS_AQIN",
+    "DBMS_AQJMS",
+    "DBMS_AQJMS_INTERNAL",
+)
 
 
 def _sha256(path: Path) -> str:
@@ -421,6 +428,40 @@ def _oracle_identity_login_checks(
     return checks
 
 
+def _bootstrap_oracle_aq_privileges(
+    name: str,
+    run: Callable[..., subprocess.CompletedProcess[str]],
+) -> bool:
+    marker = "CLOUDBANK_ORACLE_AQ_BOOTSTRAP_OK"
+    grants = "".join(
+        f"GRANT EXECUTE ON SYS.{package} TO SYSTEM WITH GRANT OPTION;\n"
+        for package in ORACLE_AQ_PACKAGES
+    )
+    result = run(
+        [
+            "docker",
+            "exec",
+            "-i",
+            name,
+            "bash",
+            "-lc",
+            "sqlplus -L -s / as sysdba",
+        ],
+        input=(
+            "WHENEVER OSERROR EXIT FAILURE\n"
+            "WHENEVER SQLERROR EXIT SQL.SQLCODE\n"
+            "SET HEADING OFF FEEDBACK OFF PAGESIZE 0 VERIFY OFF ECHO OFF\n"
+            "ALTER SESSION SET CONTAINER=FREEPDB1;\n"
+            f"{grants}"
+            f"SELECT '{marker}' FROM DUAL;\n"
+            "EXIT\n"
+        ),
+        timeout=30,
+    )
+    markers = {line.strip() for line in result.stdout.splitlines()}
+    return result.returncode == 0 and marker in markers
+
+
 def _test_result(
     workspace: Path,
     lane: str,
@@ -571,8 +612,10 @@ def _oracle_lane(
             "SPRING_CLOUD_DISCOVERY_ENABLED": "false",
             "SPRING_CLOUD_CONFIG_ENABLED": "false",
         }
+        aq_privilege_bootstrap = _bootstrap_oracle_aq_privileges(name, run)
         identity_login_checks = _oracle_identity_login_checks(name, run)
         result = _test_result(workspace, "oracle", image_id, env, run)
+        result["aq_privilege_bootstrap"] = aq_privilege_bootstrap
         result["identity_login_checks"] = identity_login_checks
         return result
     finally:
@@ -641,6 +684,14 @@ def _lane_passed(lane: Mapping[str, Any], name: str, image_id: str) -> bool:
         and lane.get("test_reports_present") == 2
         and lane.get("raw_output_persisted") is False
         and lane.get("synthetic_data_only") is True
+        and (
+            name != "oracle"
+            or (
+                lane.get("aq_privilege_bootstrap") is True
+                and lane.get("identity_login_checks")
+                == {"application": True, "migration": True}
+            )
+        )
     )
 
 
@@ -712,6 +763,7 @@ def _lane_failure_diagnostic(
         else None
         for role in ("application", "migration")
     }
+    aq_privilege_bootstrap = lane.get("aq_privilege_bootstrap")
     return {
         "lane_match": lane.get("lane") == expected_lane,
         "status": status if status in {"passed", "failed"} else "invalid",
@@ -738,6 +790,11 @@ def _lane_failure_diagnostic(
             ]
         ],
         "identity_login_checks": identity_login_checks,
+        "aq_privilege_bootstrap": (
+            aq_privilege_bootstrap
+            if isinstance(aq_privilege_bootstrap, bool)
+            else None
+        ),
         "database_image_match": (
             lane.get("database_image_id_sha256") == expected_image_id
         ),

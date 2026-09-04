@@ -488,6 +488,11 @@ def _generate_keys(
     return private_key, public_key, _sha256(public_key)
 
 
+def _oauth_user_bootstrap_environment() -> dict[str, str]:
+    """Disable browser-user seeding in the client-credentials qualification lane."""
+    return {"AZN_BOOTSTRAP_USERS_ENABLED": "false"}
+
+
 def _native_oauth_lane(
     workspace: Path,
     image_id: str,
@@ -587,6 +592,7 @@ def _native_oauth_lane(
             }
             azn_env = {
                 **common,
+                **_oauth_user_bootstrap_environment(),
                 "SERVER_PORT": str(azn_port),
                 "SPRING_DATASOURCE_URL": jdbc_url,
                 "SPRING_DATASOURCE_USERNAME": "postgres",

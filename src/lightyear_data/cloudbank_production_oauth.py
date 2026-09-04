@@ -104,15 +104,56 @@ SAFE_SERVICE_START_COMPONENTS = {
 SAFE_SERVICE_START_CAUSES = {
     "ambiguous-bean",
     "bean-definition-conflict",
-    "database-connectivity",
+    "database-authentication-failed",
+    "database-concurrency-failed",
+    "database-connection-failed",
+    "database-constraint-violation",
+    "database-object-conflict",
+    "database-object-missing",
+    "database-permission-denied",
+    "database-resource-exhausted",
+    "database-statement-failed",
     "illegal-argument",
     "illegal-state",
     "missing-bean",
     "resource-load-failed",
     "schema-validation-failed",
+    "sql-syntax-invalid",
     "unclassified",
     "unsatisfied-dependency",
 }
+POSTGRES_SQLSTATE_CAUSES = {
+    "08001": "database-connection-failed",
+    "08003": "database-connection-failed",
+    "08004": "database-connection-failed",
+    "08006": "database-connection-failed",
+    "08007": "database-connection-failed",
+    "08P01": "database-connection-failed",
+    "23502": "database-constraint-violation",
+    "23503": "database-constraint-violation",
+    "23505": "database-constraint-violation",
+    "23514": "database-constraint-violation",
+    "28P01": "database-authentication-failed",
+    "3D000": "database-object-missing",
+    "3F000": "database-object-missing",
+    "40001": "database-concurrency-failed",
+    "40P01": "database-concurrency-failed",
+    "42501": "database-permission-denied",
+    "42601": "sql-syntax-invalid",
+    "42701": "database-object-conflict",
+    "42703": "database-object-missing",
+    "42P01": "database-object-missing",
+    "42P06": "database-object-conflict",
+    "42P07": "database-object-conflict",
+    "53300": "database-resource-exhausted",
+    "55006": "database-concurrency-failed",
+    "55P03": "database-concurrency-failed",
+    "57014": "database-concurrency-failed",
+}
+POSTGRES_SQLSTATE_PATTERN = re.compile(
+    rb"(?:sql\s*state|sqlstate)\s*(?:\[|:|=)?\s*([0-9A-Z]{5})",
+    re.IGNORECASE,
+)
 PATCHES = {
     "azn-server/pom.xml": "azn-pom.xml",
     "azn-server/src/main/resources/application.yaml": "azn-application.yaml",
@@ -579,16 +620,57 @@ def _classify_service_start_component(raw_log: bytes) -> str:
     return "unclassified"
 
 
+def _postgres_sqlstate(raw_log: bytes) -> str | None:
+    """Return only a recognized PostgreSQL SQLSTATE from a private service log."""
+    for match in POSTGRES_SQLSTATE_PATTERN.finditer(raw_log):
+        value = match.group(1).decode("ascii").upper()
+        if value in POSTGRES_SQLSTATE_CAUSES:
+            return value
+    return None
+
+
 def _classify_service_start_cause(raw_log: bytes) -> str:
     """Reduce nested startup exceptions to one allowlisted root-cause category."""
+    sqlstate = _postgres_sqlstate(raw_log)
+    if sqlstate is not None:
+        return POSTGRES_SQLSTATE_CAUSES[sqlstate]
     markers = (
         ((b"BeanDefinitionOverrideException",), "bean-definition-conflict"),
         ((b"NoUniqueBeanDefinitionException",), "ambiguous-bean"),
         ((b"NoSuchBeanDefinitionException", b"No qualifying bean of type"), "missing-bean"),
-        ((b"PSQLException", b"JDBCConnectionException", b"Connection refused"),
-         "database-connectivity"),
+        (
+            (b"password authentication failed", b"no pg_hba.conf entry"),
+            "database-authentication-failed",
+        ),
+        (
+            (b"Connection refused", b"connection attempt failed", b"JDBCConnectionException"),
+            "database-connection-failed",
+        ),
+        ((b"permission denied", b"must be owner of"), "database-permission-denied"),
+        ((b"already exists",), "database-object-conflict"),
+        ((b"does not exist", b"undefined table"), "database-object-missing"),
+        (
+            (
+                b"duplicate key value",
+                b"violates not-null constraint",
+                b"violates foreign key constraint",
+                b"violates check constraint",
+                b"violates unique constraint",
+            ),
+            "database-constraint-violation",
+        ),
+        ((b"syntax error at or near",), "sql-syntax-invalid"),
+        (
+            (b"too many clients", b"remaining connection slots are reserved"),
+            "database-resource-exhausted",
+        ),
+        (
+            (b"deadlock detected", b"could not obtain lock"),
+            "database-concurrency-failed",
+        ),
         ((b"SchemaManagementException", b"Schema-validation"), "schema-validation-failed"),
         ((b"FileNotFoundException", b"class path resource"), "resource-load-failed"),
+        ((b"PSQLException",), "database-statement-failed"),
         ((b"IllegalArgumentException",), "illegal-argument"),
         ((b"IllegalStateException",), "illegal-state"),
         ((b"UnsatisfiedDependencyException",), "unsatisfied-dependency"),
@@ -611,6 +693,7 @@ class _OAuthServiceStartFailure(RuntimeError):
         category: str,
         component: str,
         cause: str,
+        database_sqlstate: str | None,
     ) -> None:
         super().__init__(reason)
         self.service = service
@@ -619,6 +702,7 @@ class _OAuthServiceStartFailure(RuntimeError):
         self.category = category
         self.component = component
         self.cause = cause
+        self.database_sqlstate = database_sqlstate
 
 
 def _start_oauth_service(
@@ -648,10 +732,18 @@ def _start_oauth_service(
         category = _classify_service_start_failure(raw_log, exit_code)
         component = _classify_service_start_component(raw_log)
         cause = _classify_service_start_cause(raw_log)
+        database_sqlstate = _postgres_sqlstate(raw_log)
         _stop_service(process, log)
         reason = str(exception)
         raise _OAuthServiceStartFailure(
-            service, reason, exit_code, log_sha256, category, component, cause
+            service,
+            reason,
+            exit_code,
+            log_sha256,
+            category,
+            component,
+            cause,
+            database_sqlstate,
         ) from None
     return process, log
 
@@ -718,6 +810,11 @@ def _native_oauth_lane(
         "transfer": None,
     }
     service_start_failure_causes: dict[str, str | None] = {
+        "azn-server": None,
+        "account": None,
+        "transfer": None,
+    }
+    service_start_database_sqlstates: dict[str, str | None] = {
         "azn-server": None,
         "account": None,
         "transfer": None,
@@ -1042,6 +1139,9 @@ def _native_oauth_lane(
             service_start_failure_categories[exception.service] = exception.category
             service_start_failure_components[exception.service] = exception.component
             service_start_failure_causes[exception.service] = exception.cause
+            service_start_database_sqlstates[exception.service] = (
+                exception.database_sqlstate
+            )
         safe_reason = str(exception)
         allowed = {
             "azn-server-exited-before-health",
@@ -1089,6 +1189,7 @@ def _native_oauth_lane(
         "service_start_failure_categories": service_start_failure_categories,
         "service_start_failure_components": service_start_failure_components,
         "service_start_failure_causes": service_start_failure_causes,
+        "service_start_database_sqlstates": service_start_database_sqlstates,
         "public_signing_key_sha256": public_key_sha256,
         "jwks_sha256": jwks_sha256,
         "packaging": packaging,
@@ -1224,6 +1325,17 @@ def production_oauth_failure_diagnostic(
         service_start_failure_causes[service] = (
             value if isinstance(value, str) and value in SAFE_SERVICE_START_CAUSES else None
         )
+    supplied_sqlstates = lane.get("service_start_database_sqlstates", {})
+    service_start_database_sqlstates = {}
+    for service in ("azn-server", "account", "transfer"):
+        value = (
+            supplied_sqlstates.get(service)
+            if isinstance(supplied_sqlstates, Mapping)
+            else None
+        )
+        service_start_database_sqlstates[service] = (
+            value if isinstance(value, str) and value in POSTGRES_SQLSTATE_CAUSES else None
+        )
 
     return {
         "lane_match": lane.get("lane") == "native-production-oauth-account-transfer",
@@ -1252,6 +1364,7 @@ def production_oauth_failure_diagnostic(
         "service_start_failure_categories": service_start_failure_categories,
         "service_start_failure_components": service_start_failure_components,
         "service_start_failure_causes": service_start_failure_causes,
+        "service_start_database_sqlstates": service_start_database_sqlstates,
         "public_signing_key_created": bool(
             HEX_64.fullmatch(str(lane.get("public_signing_key_sha256", "")))
         ),

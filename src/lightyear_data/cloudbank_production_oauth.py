@@ -90,6 +90,29 @@ SAFE_SERVICE_START_CATEGORIES = {
     "resource-exhausted",
     "unclassified",
 }
+SAFE_SERVICE_START_COMPONENTS = {
+    "datasource",
+    "entity-manager",
+    "jpa-repository",
+    "liquibase",
+    "oauth-jwt-decoder",
+    "oauth-security-filter-chain",
+    "request-logging-filter",
+    "transaction-core",
+    "unclassified",
+}
+SAFE_SERVICE_START_CAUSES = {
+    "ambiguous-bean",
+    "bean-definition-conflict",
+    "database-connectivity",
+    "illegal-argument",
+    "illegal-state",
+    "missing-bean",
+    "resource-load-failed",
+    "schema-validation-failed",
+    "unclassified",
+    "unsatisfied-dependency",
+}
 PATCHES = {
     "azn-server/pom.xml": "azn-pom.xml",
     "azn-server/src/main/resources/application.yaml": "azn-application.yaml",
@@ -534,6 +557,48 @@ def _classify_service_start_failure(raw_log: bytes, exit_code: int | None) -> st
     return "unclassified"
 
 
+def _classify_service_start_component(raw_log: bytes) -> str:
+    """Map private Spring bean names to a stable, non-sensitive component category."""
+    markers = (
+        ((b"accountOAuthSecurityFilterChain", b"transferOAuthSecurityFilterChain",
+          b"springSecurityFilterChain", b"webSecurityConfiguration"),
+         "oauth-security-filter-chain"),
+        ((b"accountJwtDecoder", b"transferJwtDecoder", b"jwtDecoder"),
+         "oauth-jwt-decoder"),
+        ((b"liquibase", b"SpringLiquibase"), "liquibase"),
+        ((b"entityManagerFactory", b"jpaSharedEM"), "entity-manager"),
+        ((b"dataSource", b"hikariPoolDataSourceMetadataProvider"), "datasource"),
+        ((b"accountRepository", b"journalRepository", b"transferCommandRepository"),
+         "jpa-repository"),
+        ((b"transactionCoreController", b"transactionCoreService"), "transaction-core"),
+        ((b"logFilter",), "request-logging-filter"),
+    )
+    for candidates, category in markers:
+        if any(candidate in raw_log for candidate in candidates):
+            return category
+    return "unclassified"
+
+
+def _classify_service_start_cause(raw_log: bytes) -> str:
+    """Reduce nested startup exceptions to one allowlisted root-cause category."""
+    markers = (
+        ((b"BeanDefinitionOverrideException",), "bean-definition-conflict"),
+        ((b"NoUniqueBeanDefinitionException",), "ambiguous-bean"),
+        ((b"NoSuchBeanDefinitionException", b"No qualifying bean of type"), "missing-bean"),
+        ((b"PSQLException", b"JDBCConnectionException", b"Connection refused"),
+         "database-connectivity"),
+        ((b"SchemaManagementException", b"Schema-validation"), "schema-validation-failed"),
+        ((b"FileNotFoundException", b"class path resource"), "resource-load-failed"),
+        ((b"IllegalArgumentException",), "illegal-argument"),
+        ((b"IllegalStateException",), "illegal-state"),
+        ((b"UnsatisfiedDependencyException",), "unsatisfied-dependency"),
+    )
+    for candidates, category in markers:
+        if any(candidate in raw_log for candidate in candidates):
+            return category
+    return "unclassified"
+
+
 class _OAuthServiceStartFailure(RuntimeError):
     """Carries only bounded evidence from a failed OAuth service start."""
 
@@ -544,12 +609,16 @@ class _OAuthServiceStartFailure(RuntimeError):
         exit_code: int | None,
         log_sha256: str,
         category: str,
+        component: str,
+        cause: str,
     ) -> None:
         super().__init__(reason)
         self.service = service
         self.exit_code = exit_code
         self.log_sha256 = log_sha256
         self.category = category
+        self.component = component
+        self.cause = cause
 
 
 def _start_oauth_service(
@@ -577,10 +646,12 @@ def _start_oauth_service(
         raw_log = log.read()
         log_sha256 = hashlib.sha256(raw_log).hexdigest()
         category = _classify_service_start_failure(raw_log, exit_code)
+        component = _classify_service_start_component(raw_log)
+        cause = _classify_service_start_cause(raw_log)
         _stop_service(process, log)
         reason = str(exception)
         raise _OAuthServiceStartFailure(
-            service, reason, exit_code, log_sha256, category
+            service, reason, exit_code, log_sha256, category, component, cause
         ) from None
     return process, log
 
@@ -637,6 +708,16 @@ def _native_oauth_lane(
         "transfer": None,
     }
     service_start_failure_categories: dict[str, str | None] = {
+        "azn-server": None,
+        "account": None,
+        "transfer": None,
+    }
+    service_start_failure_components: dict[str, str | None] = {
+        "azn-server": None,
+        "account": None,
+        "transfer": None,
+    }
+    service_start_failure_causes: dict[str, str | None] = {
         "azn-server": None,
         "account": None,
         "transfer": None,
@@ -959,6 +1040,8 @@ def _native_oauth_lane(
             log_hashes[exception.service].append(exception.log_sha256)
             service_exit_codes[exception.service] = exception.exit_code
             service_start_failure_categories[exception.service] = exception.category
+            service_start_failure_components[exception.service] = exception.component
+            service_start_failure_causes[exception.service] = exception.cause
         safe_reason = str(exception)
         allowed = {
             "azn-server-exited-before-health",
@@ -1004,6 +1087,8 @@ def _native_oauth_lane(
         "service_log_sha256": log_hashes,
         "service_exit_codes": service_exit_codes,
         "service_start_failure_categories": service_start_failure_categories,
+        "service_start_failure_components": service_start_failure_components,
+        "service_start_failure_causes": service_start_failure_causes,
         "public_signing_key_sha256": public_key_sha256,
         "jwks_sha256": jwks_sha256,
         "packaging": packaging,
@@ -1117,6 +1202,28 @@ def production_oauth_failure_diagnostic(
         service_start_failure_categories[service] = (
             value if isinstance(value, str) and value in SAFE_SERVICE_START_CATEGORIES else None
         )
+    supplied_components = lane.get("service_start_failure_components", {})
+    service_start_failure_components = {}
+    for service in ("azn-server", "account", "transfer"):
+        value = (
+            supplied_components.get(service)
+            if isinstance(supplied_components, Mapping)
+            else None
+        )
+        service_start_failure_components[service] = (
+            value if isinstance(value, str) and value in SAFE_SERVICE_START_COMPONENTS else None
+        )
+    supplied_causes = lane.get("service_start_failure_causes", {})
+    service_start_failure_causes = {}
+    for service in ("azn-server", "account", "transfer"):
+        value = (
+            supplied_causes.get(service)
+            if isinstance(supplied_causes, Mapping)
+            else None
+        )
+        service_start_failure_causes[service] = (
+            value if isinstance(value, str) and value in SAFE_SERVICE_START_CAUSES else None
+        )
 
     return {
         "lane_match": lane.get("lane") == "native-production-oauth-account-transfer",
@@ -1143,6 +1250,8 @@ def production_oauth_failure_diagnostic(
         "service_log_counts": service_log_counts,
         "service_exit_codes": service_exit_codes,
         "service_start_failure_categories": service_start_failure_categories,
+        "service_start_failure_components": service_start_failure_components,
+        "service_start_failure_causes": service_start_failure_causes,
         "public_signing_key_created": bool(
             HEX_64.fullmatch(str(lane.get("public_signing_key_sha256", "")))
         ),

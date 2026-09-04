@@ -18,6 +18,8 @@ from lightyear_data.cloudbank_production_oauth import (
     RECEIPT_TYPE,
     SCENARIO_IDS,
     _claim_contains,
+    _classify_service_start_cause,
+    _classify_service_start_component,
     _classify_service_start_failure,
     _oauth_user_bootstrap_environment,
     _start_oauth_service,
@@ -144,7 +146,10 @@ class CloudBankProductionOAuthTests(unittest.TestCase):
         self.assertFalse(_claim_contains({"scope": "cloudbank.transfer"}, "cloudbank.transfer"))
 
     def test_failed_service_start_retains_only_bounded_evidence(self) -> None:
-        raw_log = b"secret=never-emit\nBeanCreationException\n"
+        raw_log = (
+            b"secret=never-emit\nBeanCreationException: Error creating bean with name "
+            b"'accountJwtDecoder'\nCaused by: java.lang.IllegalArgumentException\n"
+        )
         process = Mock()
         process.poll.return_value = 1
         log = io.BytesIO(raw_log)
@@ -167,6 +172,8 @@ class CloudBankProductionOAuthTests(unittest.TestCase):
         self.assertEqual(1, exception.exit_code)
         self.assertEqual(hashlib.sha256(raw_log).hexdigest(), exception.log_sha256)
         self.assertEqual("bean-creation-failed", exception.category)
+        self.assertEqual("oauth-jwt-decoder", exception.component)
+        self.assertEqual("illegal-argument", exception.cause)
         self.assertNotIn("never-emit", str(exception))
 
     def test_start_failure_categories_are_allowlisted(self) -> None:
@@ -180,6 +187,30 @@ class CloudBankProductionOAuthTests(unittest.TestCase):
         )
         self.assertEqual("resource-exhausted", _classify_service_start_failure(b"", 137))
         self.assertEqual("unclassified", _classify_service_start_failure(b"private", 1))
+
+    def test_start_failure_component_and_cause_categories_are_allowlisted(self) -> None:
+        self.assertEqual(
+            "oauth-security-filter-chain",
+            _classify_service_start_component(
+                b"Error creating bean with name 'accountOAuthSecurityFilterChain'"
+            ),
+        )
+        self.assertEqual(
+            "entity-manager",
+            _classify_service_start_component(b"Error creating bean 'entityManagerFactory'"),
+        )
+        self.assertEqual(
+            "schema-validation-failed",
+            _classify_service_start_cause(
+                b"SchemaManagementException: Schema-validation: missing table"
+            ),
+        )
+        self.assertEqual(
+            "unsatisfied-dependency",
+            _classify_service_start_cause(b"UnsatisfiedDependencyException: secret=hidden"),
+        )
+        self.assertEqual("unclassified", _classify_service_start_component(b"secret"))
+        self.assertEqual("unclassified", _classify_service_start_cause(b"secret"))
 
     @unittest.skipUnless(SOURCE.is_dir(), "pinned CloudBank source is unavailable")
     def test_materialization_preserves_source_and_creates_oauth_target(self) -> None:
@@ -309,6 +340,18 @@ class CloudBankProductionOAuthTests(unittest.TestCase):
                     "transfer": None,
                     "password": "configuration-placeholder-missing",
                 },
+                "service_start_failure_components": {
+                    "azn-server": "oauth-jwt-decoder",
+                    "account": "secret=should-not-leak",
+                    "transfer": None,
+                    "password": "datasource",
+                },
+                "service_start_failure_causes": {
+                    "azn-server": "illegal-argument",
+                    "account": "secret=should-not-leak",
+                    "transfer": None,
+                    "password": "missing-bean",
+                },
                 "packaging": {
                     "executable_jars": 3,
                     "oracle_runtime_libraries": 0,
@@ -350,6 +393,22 @@ class CloudBankProductionOAuthTests(unittest.TestCase):
                 "transfer": None,
             },
             diagnostic["service_start_failure_categories"],
+        )
+        self.assertEqual(
+            {
+                "azn-server": "oauth-jwt-decoder",
+                "account": None,
+                "transfer": None,
+            },
+            diagnostic["service_start_failure_components"],
+        )
+        self.assertEqual(
+            {
+                "azn-server": "illegal-argument",
+                "account": None,
+                "transfer": None,
+            },
+            diagnostic["service_start_failure_causes"],
         )
         self.assertTrue(diagnostic["public_signing_key_created"])
         self.assertTrue(diagnostic["jwks_observed"])

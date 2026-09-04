@@ -106,6 +106,20 @@ ORACLE_AQ_PACKAGES = (
     "DBMS_AQJMS",
     "DBMS_AQJMS_INTERNAL",
 )
+SAFE_TEST_SCENARIOS = {
+    "successfulTransferConservesValueAndFinalizesJournals": "account-success",
+    "invalidAmountDoesNotMutateState": "invalid",
+    "insufficientFundsHaveNoEffectiveMutation": "funds",
+    "compensationRestoresTheSourceBalance": "failure",
+    "atomicRollbackRestoresTheSourceBalance": "failure",
+    "invalidAmountReturnsBadRequestBeforeCallingDependencies": "transfer-invalid",
+    "missingAuthenticationIsRejectedBeforeCallingDependencies": "transfer-auth",
+    "successfulRequestOrchestratesLookupWithdrawDepositAndConfirm": (
+        "transfer-success"
+    ),
+    "successfulRequestForwardsActorCommandAndInternalToken": "transfer-success",
+}
+SAFE_SCENARIO_IDS = frozenset(SAFE_TEST_SCENARIOS.values())
 
 
 def _sha256(path: Path) -> str:
@@ -496,6 +510,7 @@ def _test_result(
     ]
     totals = {"tests": 0, "failures": 0, "errors": 0, "skipped": 0}
     failed_tests: list[dict[str, str]] = []
+    failed_scenarios: set[str] = set()
     exception_types: set[str] = set()
     database_error_codes: set[str] = set()
     liquibase_changesets: set[tuple[str, str]] = set()
@@ -520,12 +535,19 @@ def _test_result(
             failure = test_case.find("failure")
             failure = failure if failure is not None else test_case.find("error")
             if failure is not None:
+                failure_entry: dict[str, str] = {}
                 failure_type = failure.attrib.get("type", "")
                 if (
                     len(failure_type) <= 200
                     and SAFE_EXCEPTION_TYPE.fullmatch(failure_type)
                 ):
-                    failed_tests.append({"type": failure_type})
+                    failure_entry["type"] = failure_type
+                scenario = SAFE_TEST_SCENARIOS.get(test_case.attrib.get("name", ""))
+                if scenario is not None:
+                    failure_entry["scenario"] = scenario
+                    failed_scenarios.add(scenario)
+                if failure_entry:
+                    failed_tests.append(failure_entry)
     marker = f"CLOUDBANK_EQUIVALENCE_CONTRACT={OBSERVATION_CONTRACT}"
     stdout_count = result.stdout.count(marker)
     report_count = report_text.count(marker)
@@ -551,6 +573,7 @@ def _test_result(
         "marker_report_count": report_count,
         "test_reports_present": present,
         "failed_tests": failed_tests,
+        "failed_scenarios": sorted(failed_scenarios),
         "exception_types": sorted(exception_types)[:MAX_EXCEPTION_TYPES],
         "database_error_codes": sorted(database_error_codes)[
             :MAX_DATABASE_ERROR_CODES
@@ -727,6 +750,26 @@ def _lane_failure_diagnostic(
             and SAFE_EXCEPTION_TYPE.fullmatch(value)
         }
     )[:MAX_EXCEPTION_TYPES]
+    supplied_scenarios = lane.get("failed_scenarios", [])
+    scenario_candidates = (
+        supplied_scenarios if isinstance(supplied_scenarios, list) else []
+    )
+    if isinstance(failed_tests, list):
+        scenario_candidates = [
+            *scenario_candidates,
+            *[
+                item.get("scenario")
+                for item in failed_tests
+                if isinstance(item, Mapping)
+            ],
+        ]
+    failed_scenarios = sorted(
+        {
+            value
+            for value in scenario_candidates
+            if isinstance(value, str) and value in SAFE_SCENARIO_IDS
+        }
+    )
     supplied_codes = lane.get("database_error_codes", [])
     database_error_codes = (
         sorted(
@@ -782,6 +825,7 @@ def _lane_failure_diagnostic(
             else "invalid"
         ),
         "exception_types": exception_types,
+        "failed_scenarios": failed_scenarios,
         "database_error_codes": database_error_codes,
         "liquibase_changesets": [
             {"file": file_name, "id": changeset_id}

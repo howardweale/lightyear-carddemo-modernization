@@ -17,6 +17,8 @@ from lightyear_data.cloudbank_oracle_equivalence import (
     ORACLE_AQ_PACKAGES,
     OUTPUT_ROOT,
     RECEIPT_TYPE,
+    SAFE_SCENARIO_IDS,
+    SAFE_TEST_SCENARIOS,
     TEST_PATCHES,
     build_artifacts,
     changed_paths,
@@ -294,7 +296,7 @@ ORA-ABCDE: not a valid code
             report.write_text(
                 """
 <testsuite tests="4" failures="0" errors="4" skipped="0">
-  <testcase name="contextFailure">
+  <testcase name="successfulTransferConservesValueAndFinalizesJournals">
     <error type="java.lang.IllegalStateException">hidden
 Caused by: org.springframework.beans.factory.BeanCreationException: hidden
 Caused by: java.sql.SQLException: password=should-not-leak
@@ -329,6 +331,14 @@ Caused by: java.sql.SQLException: password=should-not-leak
                 ],
                 result["exception_types"],
             )
+            self.assertEqual(["account-success"], result["failed_scenarios"])
+            self.assertEqual(
+                {
+                    "scenario": "account-success",
+                    "type": "java.lang.IllegalStateException",
+                },
+                result["failed_tests"][0],
+            )
             rendered = json.dumps(result, sort_keys=True)
             self.assertNotIn("should-not-leak", rendered)
             self.assertNotIn("BeanCreationException: hidden", rendered)
@@ -349,13 +359,17 @@ Caused by: java.sql.SQLException: password=should-not-leak
                 "failure_phase": "test",
                 "failed_tests": [
                     {
-                        "name": "password=should-not-leak",
+                        "scenario": "transfer-success",
                         "type": "java.lang.IllegalStateException",
                     },
                     {
-                        "name": "unsafe",
+                        "scenario": "password=should-not-leak",
                         "type": "token=should-not-leak",
                     },
+                ],
+                "failed_scenarios": [
+                    "transfer-success",
+                    "password=should-not-leak",
                 ],
                 "raw_stdout": "secret=should-not-leak",
                 "database_error_codes": [
@@ -388,6 +402,9 @@ Caused by: java.sql.SQLException: password=should-not-leak
             diagnostic["oracle"]["exception_types"],
         )
         self.assertEqual(
+            ["transfer-success"], diagnostic["oracle"]["failed_scenarios"]
+        )
+        self.assertEqual(
             ["ORA-01031"], diagnostic["oracle"]["database_error_codes"]
         )
         self.assertEqual(
@@ -406,6 +423,27 @@ Caused by: java.sql.SQLException: password=should-not-leak
         rendered = json.dumps(diagnostic, sort_keys=True)
         self.assertNotIn("should-not-leak", rendered)
         self.assertNotIn("raw_stdout", rendered)
+
+    def test_scenario_classifier_is_exact_and_bounded(self) -> None:
+        self.assertEqual(
+            {
+                "account-success",
+                "invalid",
+                "funds",
+                "failure",
+                "transfer-invalid",
+                "transfer-auth",
+                "transfer-success",
+            },
+            set(SAFE_SCENARIO_IDS),
+        )
+        self.assertEqual(
+            "transfer-success",
+            SAFE_TEST_SCENARIOS[
+                "successfulRequestOrchestratesLookupWithdrawDepositAndConfirm"
+            ],
+        )
+        self.assertNotIn("password=should-not-leak", SAFE_TEST_SCENARIOS)
 
     def test_committed_artifacts_are_deterministic_and_fail_closed(self) -> None:
         self.assertEqual([], validate_artifacts(ROOT))

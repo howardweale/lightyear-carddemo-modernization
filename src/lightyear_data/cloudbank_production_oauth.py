@@ -156,6 +156,31 @@ POSTGRES_SQLSTATE_PATTERN = re.compile(
     rb"(?:sql\s*state|sqlstate)\s*(?:\[|:|=)?\s*([0-9A-Z]{5})",
     re.IGNORECASE,
 )
+POSTGRES_UNDEFINED_RELATION_PATTERN = re.compile(
+    rb"(?:relation|table)\s+[\"']?([A-Z0-9_.\"]+)[\"']?\s+does not exist",
+    re.IGNORECASE,
+)
+POSTGRES_RELATIONS = {
+    "accounts": "accounts",
+    "accounts_account_id_seq": "accounts-identity-sequence",
+    "databasechangelog": "liquibase-history",
+    "databasechangeloglock": "liquibase-lock",
+    "journal": "journal",
+    "journal_journal_id_seq": "journal-identity-sequence",
+    "transfer_commands": "transfer-commands",
+    "user_repo.users": "authorization-users",
+}
+SAFE_SERVICE_START_STAGES = {
+    "account-liquibase-migration",
+    "account-schema-migration",
+    "account-seed-migration",
+    "application-context",
+    "authorization-liquibase-migration",
+    "authorization-schema-migration",
+    "jpa-schema-validation",
+    "oauth-security-initialization",
+    "unclassified",
+}
 PATCHES = {
     "azn-server/pom.xml": "azn-pom.xml",
     "azn-server/src/main/resources/application.yaml": "azn-application.yaml",
@@ -661,6 +686,51 @@ def _postgres_sqlstate(raw_log: bytes) -> str | None:
     return None
 
 
+def _postgres_relation(raw_log: bytes) -> str | None:
+    """Return only a known MS62 relation named in an undefined-relation error."""
+    for match in POSTGRES_UNDEFINED_RELATION_PATTERN.finditer(raw_log):
+        name = match.group(1).decode("ascii").replace('"', "").lower()
+        if name in POSTGRES_RELATIONS:
+            return POSTGRES_RELATIONS[name]
+    return None
+
+
+def _classify_service_start_stage(service: str, raw_log: bytes) -> str:
+    """Map private startup context to one stable, allowlisted lifecycle stage."""
+    lowered = raw_log.lower()
+    migration_failure = b"migration failed for changeset" in lowered
+    if service == "account" and migration_failure:
+        if (
+            b"postgresql-transaction-core-data-1" in lowered
+            or b"db/changelog/data.sql" in lowered
+        ):
+            return "account-seed-migration"
+        if (
+            b"postgresql-transaction-core-1" in lowered
+            or b"db/changelog/table.sql" in lowered
+        ):
+            return "account-schema-migration"
+        return "account-liquibase-migration"
+    if service == "azn-server" and migration_failure:
+        if b"ms62-user-repository" in lowered or b"db/changelog/table.sql" in lowered:
+            return "authorization-schema-migration"
+        return "authorization-liquibase-migration"
+    if b"schemamanagementexception" in lowered or b"schema-validation" in lowered:
+        return "jpa-schema-validation"
+    if any(
+        marker in lowered
+        for marker in (
+            b"oauthsecurityfilterchain",
+            b"jwtdecoder",
+            b"websecurityconfiguration",
+        )
+    ):
+        return "oauth-security-initialization"
+    if b"beancreationexception" in lowered or b"applicationcontext" in lowered:
+        return "application-context"
+    return "unclassified"
+
+
 def _classify_service_start_cause(raw_log: bytes) -> str:
     """Reduce nested startup exceptions to one allowlisted root-cause category."""
     sqlstate = _postgres_sqlstate(raw_log)
@@ -726,6 +796,8 @@ class _OAuthServiceStartFailure(RuntimeError):
         component: str,
         cause: str,
         database_sqlstate: str | None,
+        database_relation: str | None,
+        stage: str,
     ) -> None:
         super().__init__(reason)
         self.service = service
@@ -735,6 +807,8 @@ class _OAuthServiceStartFailure(RuntimeError):
         self.component = component
         self.cause = cause
         self.database_sqlstate = database_sqlstate
+        self.database_relation = database_relation
+        self.stage = stage
 
 
 def _start_oauth_service(
@@ -765,6 +839,8 @@ def _start_oauth_service(
         component = _classify_service_start_component(raw_log)
         cause = _classify_service_start_cause(raw_log)
         database_sqlstate = _postgres_sqlstate(raw_log)
+        database_relation = _postgres_relation(raw_log)
+        stage = _classify_service_start_stage(service, raw_log)
         _stop_service(process, log)
         reason = str(exception)
         raise _OAuthServiceStartFailure(
@@ -776,6 +852,8 @@ def _start_oauth_service(
             component,
             cause,
             database_sqlstate,
+            database_relation,
+            stage,
         ) from None
     return process, log
 
@@ -847,6 +925,16 @@ def _native_oauth_lane(
         "transfer": None,
     }
     service_start_database_sqlstates: dict[str, str | None] = {
+        "azn-server": None,
+        "account": None,
+        "transfer": None,
+    }
+    service_start_database_relations: dict[str, str | None] = {
+        "azn-server": None,
+        "account": None,
+        "transfer": None,
+    }
+    service_start_failure_stages: dict[str, str | None] = {
         "azn-server": None,
         "account": None,
         "transfer": None,
@@ -1175,6 +1263,10 @@ def _native_oauth_lane(
             service_start_database_sqlstates[exception.service] = (
                 exception.database_sqlstate
             )
+            service_start_database_relations[exception.service] = (
+                exception.database_relation
+            )
+            service_start_failure_stages[exception.service] = exception.stage
         safe_reason = str(exception)
         allowed = {
             "azn-server-exited-before-health",
@@ -1224,6 +1316,8 @@ def _native_oauth_lane(
         "service_start_failure_components": service_start_failure_components,
         "service_start_failure_causes": service_start_failure_causes,
         "service_start_database_sqlstates": service_start_database_sqlstates,
+        "service_start_database_relations": service_start_database_relations,
+        "service_start_failure_stages": service_start_failure_stages,
         "public_signing_key_sha256": public_key_sha256,
         "jwks_sha256": jwks_sha256,
         "packaging": packaging,
@@ -1370,6 +1464,28 @@ def production_oauth_failure_diagnostic(
         service_start_database_sqlstates[service] = (
             value if isinstance(value, str) and value in POSTGRES_SQLSTATE_CAUSES else None
         )
+    supplied_relations = lane.get("service_start_database_relations", {})
+    service_start_database_relations = {}
+    for service in ("azn-server", "account", "transfer"):
+        value = (
+            supplied_relations.get(service)
+            if isinstance(supplied_relations, Mapping)
+            else None
+        )
+        service_start_database_relations[service] = (
+            value if isinstance(value, str) and value in POSTGRES_RELATIONS.values() else None
+        )
+    supplied_stages = lane.get("service_start_failure_stages", {})
+    service_start_failure_stages = {}
+    for service in ("azn-server", "account", "transfer"):
+        value = (
+            supplied_stages.get(service)
+            if isinstance(supplied_stages, Mapping)
+            else None
+        )
+        service_start_failure_stages[service] = (
+            value if isinstance(value, str) and value in SAFE_SERVICE_START_STAGES else None
+        )
 
     return {
         "lane_match": lane.get("lane") == "native-production-oauth-account-transfer",
@@ -1399,6 +1515,8 @@ def production_oauth_failure_diagnostic(
         "service_start_failure_components": service_start_failure_components,
         "service_start_failure_causes": service_start_failure_causes,
         "service_start_database_sqlstates": service_start_database_sqlstates,
+        "service_start_database_relations": service_start_database_relations,
+        "service_start_failure_stages": service_start_failure_stages,
         "public_signing_key_created": bool(
             HEX_64.fullmatch(str(lane.get("public_signing_key_sha256", "")))
         ),

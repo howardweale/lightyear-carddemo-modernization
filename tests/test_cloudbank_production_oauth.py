@@ -21,9 +21,11 @@ from lightyear_data.cloudbank_production_oauth import (
     _classify_service_start_cause,
     _classify_service_start_component,
     _classify_service_start_failure,
+    _classify_service_start_stage,
     _create_authorization_database,
     _isolated_postgres_jdbc_urls,
     _oauth_user_bootstrap_environment,
+    _postgres_relation,
     _postgres_sqlstate,
     _start_oauth_service,
     build_artifacts,
@@ -213,6 +215,8 @@ class CloudBankProductionOAuthTests(unittest.TestCase):
         self.assertEqual("oauth-jwt-decoder", exception.component)
         self.assertEqual("illegal-argument", exception.cause)
         self.assertIsNone(exception.database_sqlstate)
+        self.assertIsNone(exception.database_relation)
+        self.assertEqual("oauth-security-initialization", exception.stage)
         self.assertNotIn("never-emit", str(exception))
 
     def test_start_failure_categories_are_allowlisted(self) -> None:
@@ -271,6 +275,39 @@ class CloudBankProductionOAuthTests(unittest.TestCase):
             _postgres_sqlstate(b"SQLSTATE[42p07]: secret=hidden"),
         )
         self.assertIsNone(_postgres_sqlstate(b"SQL State: ABCDE secret=hidden"))
+        self.assertEqual(
+            "accounts",
+            _postgres_relation(b'ERROR: relation "accounts" does not exist'),
+        )
+        self.assertEqual(
+            "authorization-users",
+            _postgres_relation(
+                b'ERROR: relation "user_repo"."users" does not exist'
+            ),
+        )
+        self.assertIsNone(
+            _postgres_relation(
+                b'ERROR: relation "secret_customer_table" does not exist'
+            )
+        )
+        self.assertEqual(
+            "account-seed-migration",
+            _classify_service_start_stage(
+                "account",
+                b"Migration failed for changeset db/changelog/data.sql::"
+                b"postgresql-transaction-core-data-1::account",
+            ),
+        )
+        self.assertEqual(
+            "jpa-schema-validation",
+            _classify_service_start_stage(
+                "account", b"SchemaManagementException: Schema-validation"
+            ),
+        )
+        self.assertEqual(
+            "unclassified",
+            _classify_service_start_stage("account", b"secret=hidden"),
+        )
         self.assertEqual("unclassified", _classify_service_start_component(b"secret"))
         self.assertEqual("unclassified", _classify_service_start_cause(b"secret"))
 
@@ -420,6 +457,18 @@ class CloudBankProductionOAuthTests(unittest.TestCase):
                     "transfer": None,
                     "password": "28P01",
                 },
+                "service_start_database_relations": {
+                    "azn-server": "accounts",
+                    "account": "secret=should-not-leak",
+                    "transfer": None,
+                    "password": "journal",
+                },
+                "service_start_failure_stages": {
+                    "azn-server": "account-seed-migration",
+                    "account": "secret=should-not-leak",
+                    "transfer": None,
+                    "password": "application-context",
+                },
                 "packaging": {
                     "executable_jars": 3,
                     "oracle_runtime_libraries": 0,
@@ -481,6 +530,18 @@ class CloudBankProductionOAuthTests(unittest.TestCase):
         self.assertEqual(
             {"azn-server": "42P07", "account": None, "transfer": None},
             diagnostic["service_start_database_sqlstates"],
+        )
+        self.assertEqual(
+            {"azn-server": "accounts", "account": None, "transfer": None},
+            diagnostic["service_start_database_relations"],
+        )
+        self.assertEqual(
+            {
+                "azn-server": "account-seed-migration",
+                "account": None,
+                "transfer": None,
+            },
+            diagnostic["service_start_failure_stages"],
         )
         self.assertTrue(diagnostic["public_signing_key_created"])
         self.assertTrue(diagnostic["jwks_observed"])

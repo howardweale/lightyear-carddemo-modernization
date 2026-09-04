@@ -22,6 +22,7 @@ from lightyear_data.cloudbank_production_oauth import (
     _classify_service_start_component,
     _classify_service_start_failure,
     _oauth_user_bootstrap_environment,
+    _postgres_sqlstate,
     _start_oauth_service,
     build_artifacts,
     changed_paths,
@@ -174,6 +175,7 @@ class CloudBankProductionOAuthTests(unittest.TestCase):
         self.assertEqual("bean-creation-failed", exception.category)
         self.assertEqual("oauth-jwt-decoder", exception.component)
         self.assertEqual("illegal-argument", exception.cause)
+        self.assertIsNone(exception.database_sqlstate)
         self.assertNotIn("never-emit", str(exception))
 
     def test_start_failure_categories_are_allowlisted(self) -> None:
@@ -209,6 +211,29 @@ class CloudBankProductionOAuthTests(unittest.TestCase):
             "unsatisfied-dependency",
             _classify_service_start_cause(b"UnsatisfiedDependencyException: secret=hidden"),
         )
+        self.assertEqual(
+            "database-object-conflict",
+            _classify_service_start_cause(
+                b"PSQLException: relation already exists; SQL State  : 42P07"
+            ),
+        )
+        self.assertEqual(
+            "database-statement-failed",
+            _classify_service_start_cause(b"PSQLException: secret=hidden"),
+        )
+        self.assertEqual(
+            "database-permission-denied",
+            _classify_service_start_cause(b"ERROR: permission denied for schema user_repo"),
+        )
+        self.assertEqual(
+            "database-connection-failed",
+            _classify_service_start_cause(b"Connection refused"),
+        )
+        self.assertEqual(
+            "42P07",
+            _postgres_sqlstate(b"SQLSTATE[42p07]: secret=hidden"),
+        )
+        self.assertIsNone(_postgres_sqlstate(b"SQL State: ABCDE secret=hidden"))
         self.assertEqual("unclassified", _classify_service_start_component(b"secret"))
         self.assertEqual("unclassified", _classify_service_start_cause(b"secret"))
 
@@ -347,10 +372,16 @@ class CloudBankProductionOAuthTests(unittest.TestCase):
                     "password": "datasource",
                 },
                 "service_start_failure_causes": {
-                    "azn-server": "illegal-argument",
+                    "azn-server": "database-object-conflict",
                     "account": "secret=should-not-leak",
                     "transfer": None,
                     "password": "missing-bean",
+                },
+                "service_start_database_sqlstates": {
+                    "azn-server": "42P07",
+                    "account": "ABCDE",
+                    "transfer": None,
+                    "password": "28P01",
                 },
                 "packaging": {
                     "executable_jars": 3,
@@ -404,11 +435,15 @@ class CloudBankProductionOAuthTests(unittest.TestCase):
         )
         self.assertEqual(
             {
-                "azn-server": "illegal-argument",
+                "azn-server": "database-object-conflict",
                 "account": None,
                 "transfer": None,
             },
             diagnostic["service_start_failure_causes"],
+        )
+        self.assertEqual(
+            {"azn-server": "42P07", "account": None, "transfer": None},
+            diagnostic["service_start_database_sqlstates"],
         )
         self.assertTrue(diagnostic["public_signing_key_created"])
         self.assertTrue(diagnostic["jwks_observed"])

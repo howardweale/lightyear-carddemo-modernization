@@ -52,6 +52,7 @@ RECEIPT_TYPE = "lightyear-cloudbank-production-oauth-execution"
 RECEIPT_NAME = "cloudbank-production-oauth.receipt.json"
 FAILURE_NAME = "cloudbank-production-oauth.failure.json"
 DIAGNOSTIC_MARKER = "CLOUDBANK_PRODUCTION_OAUTH_ACCEPTANCE_DIAGNOSTIC="
+AUTHORIZATION_DATABASE = "cloudbank_azn"
 HEX_64 = re.compile(r"^[0-9a-f]{64}$")
 SCENARIO_IDS = [
     "authorization-server-discovery-and-jwks",
@@ -80,6 +81,7 @@ SAFE_FAILURE_REASONS = {
     "runtime-gate-failed:postgresql-query-failed",
     "runtime-gate-failed:rsa-key-generation-failed",
     "runtime-gate-failed:required-token-issuance-failed",
+    "runtime-gate-failed:authorization-database-create-failed",
 }
 SAFE_EXCEPTION_TYPE = re.compile(r"^[A-Za-z][A-Za-z0-9_.]{0,199}$")
 SAFE_SERVICE_START_CATEGORIES = {
@@ -560,6 +562,36 @@ def _generate_keys(
     return private_key, public_key, _sha256(public_key)
 
 
+def _create_authorization_database(
+    container: str,
+    run: Callable[..., subprocess.CompletedProcess[str]],
+) -> None:
+    """Create the isolated Authorization Server database inside PostgreSQL."""
+    created = run(
+        [
+            "docker",
+            "exec",
+            container,
+            "createdb",
+            "-U",
+            "postgres",
+            AUTHORIZATION_DATABASE,
+        ],
+        timeout=30,
+    )
+    if created.returncode:
+        raise RuntimeError("authorization-database-create-failed")
+
+
+def _isolated_postgres_jdbc_urls(host: str, port: int) -> dict[str, str]:
+    """Keep authorization metadata separate from the Account transaction database."""
+    root = f"jdbc:postgresql://{host}:{port}"
+    return {
+        "authorization": f"{root}/{AUTHORIZATION_DATABASE}",
+        "account": f"{root}/cloudbank",
+    }
+
+
 def _oauth_user_bootstrap_environment() -> dict[str, str]:
     """Disable browser-user seeding in the client-credentials qualification lane."""
     return {"AZN_BOOTSTRAP_USERS_ENABLED": "false"}
@@ -853,8 +885,9 @@ def _native_oauth_lane(
 
     try:
         _wait_postgres(name, run, pause)
+        _create_authorization_database(name, run)
         database_host, database_port = _container_endpoint(name, 5432, run)
-        jdbc_url = f"jdbc:postgresql://{database_host}:{database_port}/cloudbank"
+        jdbc_urls = _isolated_postgres_jdbc_urls(database_host, database_port)
         with tempfile.TemporaryDirectory(prefix="lightyear-ms62-keys-") as key_dir:
             private_key, public_key, public_key_sha256 = _generate_keys(Path(key_dir), run)
             issuer = f"http://127.0.0.1:{azn_port}"
@@ -874,10 +907,10 @@ def _native_oauth_lane(
                 **common,
                 **_oauth_user_bootstrap_environment(),
                 "SERVER_PORT": str(azn_port),
-                "SPRING_DATASOURCE_URL": jdbc_url,
+                "SPRING_DATASOURCE_URL": jdbc_urls["authorization"],
                 "SPRING_DATASOURCE_USERNAME": "postgres",
                 "SPRING_DATASOURCE_PASSWORD": database_password,
-                "LIQUIBASE_DATASOURCE_URL": jdbc_url,
+                "LIQUIBASE_DATASOURCE_URL": jdbc_urls["authorization"],
                 "LIQUIBASE_DATASOURCE_USERNAME": "postgres",
                 "LIQUIBASE_DATASOURCE_PASSWORD": database_password,
                 "AZN_AUTHORIZATION_SERVER_ISSUER": issuer,
@@ -900,10 +933,10 @@ def _native_oauth_lane(
             account_env = {
                 **common,
                 "SERVER_PORT": str(account_port),
-                "SPRING_DATASOURCE_URL": jdbc_url,
+                "SPRING_DATASOURCE_URL": jdbc_urls["account"],
                 "SPRING_DATASOURCE_USERNAME": "postgres",
                 "SPRING_DATASOURCE_PASSWORD": database_password,
-                "LIQUIBASE_DATASOURCE_URL": jdbc_url,
+                "LIQUIBASE_DATASOURCE_URL": jdbc_urls["account"],
                 "LIQUIBASE_DATASOURCE_USERNAME": "postgres",
                 "LIQUIBASE_DATASOURCE_PASSWORD": database_password,
             }
@@ -1153,6 +1186,7 @@ def _native_oauth_lane(
             "postgresql-query-failed",
             "rsa-key-generation-failed",
             "required-token-issuance-failed",
+            "authorization-database-create-failed",
         }
         if safe_reason not in allowed:
             safe_reason = type(exception).__name__

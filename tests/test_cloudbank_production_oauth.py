@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 import copy
+import hashlib
 import io
 import json
 import tempfile
 import unittest
 from contextlib import redirect_stdout
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import Mock, patch
 
 from lightyear_data.cloudbank_oracle_equivalence import RECEIPT_TYPE as MS61_RECEIPT_TYPE
 from lightyear_data.cloudbank_production_oauth import (
@@ -16,7 +17,10 @@ from lightyear_data.cloudbank_production_oauth import (
     OUTPUT_ROOT,
     RECEIPT_TYPE,
     SCENARIO_IDS,
+    _claim_contains,
+    _classify_service_start_failure,
     _oauth_user_bootstrap_environment,
+    _start_oauth_service,
     build_artifacts,
     changed_paths,
     compatibility_ledger,
@@ -131,6 +135,51 @@ class CloudBankProductionOAuthTests(unittest.TestCase):
         environment = _oauth_user_bootstrap_environment()
         self.assertEqual({"AZN_BOOTSTRAP_USERS_ENABLED": "false"}, environment)
         self.assertFalse(any(name.endswith("PASSWORD") for name in environment))
+
+    def test_claim_membership_accepts_string_and_array_jwt_encodings(self) -> None:
+        self.assertTrue(_claim_contains("cloudbank.read cloudbank.transfer", "cloudbank.transfer"))
+        self.assertTrue(_claim_contains(["cloudbank.internal"], "cloudbank.internal"))
+        self.assertTrue(_claim_contains(["cloudbank-account"], "cloudbank-account"))
+        self.assertFalse(_claim_contains("cloudbank.read", "cloudbank.transfer"))
+        self.assertFalse(_claim_contains({"scope": "cloudbank.transfer"}, "cloudbank.transfer"))
+
+    def test_failed_service_start_retains_only_bounded_evidence(self) -> None:
+        raw_log = b"secret=never-emit\nBeanCreationException\n"
+        process = Mock()
+        process.poll.return_value = 1
+        log = io.BytesIO(raw_log)
+        with patch(
+            "lightyear_data.cloudbank_production_oauth.subprocess.Popen",
+            return_value=process,
+        ), patch(
+            "lightyear_data.cloudbank_production_oauth.tempfile.TemporaryFile",
+            return_value=log,
+        ), patch(
+            "lightyear_data.cloudbank_production_oauth._wait_health",
+            side_effect=RuntimeError("account-exited-before-health"),
+        ):
+            with self.assertRaisesRegex(RuntimeError, "account-exited-before-health") as raised:
+                _start_oauth_service(
+                    "account", ROOT / "account.jar", 12345, {}, lambda _: None
+                )
+        exception = raised.exception
+        self.assertEqual("account", exception.service)
+        self.assertEqual(1, exception.exit_code)
+        self.assertEqual(hashlib.sha256(raw_log).hexdigest(), exception.log_sha256)
+        self.assertEqual("bean-creation-failed", exception.category)
+        self.assertNotIn("never-emit", str(exception))
+
+    def test_start_failure_categories_are_allowlisted(self) -> None:
+        self.assertEqual(
+            "configuration-placeholder-missing",
+            _classify_service_start_failure(b"Could not resolve placeholder 'secret'", 1),
+        )
+        self.assertEqual(
+            "database-migration-failed",
+            _classify_service_start_failure(b"LiquibaseException: password=hidden", 1),
+        )
+        self.assertEqual("resource-exhausted", _classify_service_start_failure(b"", 137))
+        self.assertEqual("unclassified", _classify_service_start_failure(b"private", 1))
 
     @unittest.skipUnless(SOURCE.is_dir(), "pinned CloudBank source is unavailable")
     def test_materialization_preserves_source_and_creates_oauth_target(self) -> None:
@@ -248,6 +297,18 @@ class CloudBankProductionOAuthTests(unittest.TestCase):
                     "transfer": [],
                     "password": ["should-not-leak"],
                 },
+                "service_exit_codes": {
+                    "azn-server": 1,
+                    "account": 100_000,
+                    "transfer": None,
+                    "password": 1,
+                },
+                "service_start_failure_categories": {
+                    "azn-server": "bean-creation-failed",
+                    "account": "secret=should-not-leak",
+                    "transfer": None,
+                    "password": "configuration-placeholder-missing",
+                },
                 "packaging": {
                     "executable_jars": 3,
                     "oracle_runtime_libraries": 0,
@@ -277,6 +338,18 @@ class CloudBankProductionOAuthTests(unittest.TestCase):
         self.assertEqual(
             {"azn-server": 1, "account": 0, "transfer": 0},
             diagnostic["service_log_counts"],
+        )
+        self.assertEqual(
+            {"azn-server": 1, "account": None, "transfer": None},
+            diagnostic["service_exit_codes"],
+        )
+        self.assertEqual(
+            {
+                "azn-server": "bean-creation-failed",
+                "account": None,
+                "transfer": None,
+            },
+            diagnostic["service_start_failure_categories"],
         )
         self.assertTrue(diagnostic["public_signing_key_created"])
         self.assertTrue(diagnostic["jwks_observed"])

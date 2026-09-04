@@ -14,6 +14,7 @@ from lightyear_data.cloudbank_oracle_equivalence import (
     DIAGNOSTIC_MARKER,
     EXPECTED_TESTS,
     OBSERVATION_SHA256,
+    ORACLE_AQ_PACKAGES,
     OUTPUT_ROOT,
     RECEIPT_TYPE,
     TEST_PATCHES,
@@ -25,6 +26,8 @@ from lightyear_data.cloudbank_oracle_equivalence import (
     execute_equivalence,
     execution_plan,
     _failure_phase,
+    _bootstrap_oracle_aq_privileges,
+    _lane_passed,
     _oracle_lane,
     _safe_database_diagnostics,
     _test_result,
@@ -65,7 +68,7 @@ def ms60_receipt() -> dict[str, object]:
 
 
 def passed_lane(name: str, image_id: str) -> dict[str, object]:
-    return {
+    lane: dict[str, object] = {
         "lane": name,
         "status": "passed",
         "tests": EXPECTED_TESTS,
@@ -85,6 +88,13 @@ def passed_lane(name: str, image_id: str) -> dict[str, object]:
         "raw_output_persisted": False,
         "synthetic_data_only": True,
     }
+    if name == "oracle":
+        lane["aq_privilege_bootstrap"] = True
+        lane["identity_login_checks"] = {
+            "application": True,
+            "migration": True,
+        }
+    return lane
 
 
 class CloudBankOracleEquivalenceTests(unittest.TestCase):
@@ -104,6 +114,7 @@ class CloudBankOracleEquivalenceTests(unittest.TestCase):
                     state = {"Status": "running", "OOMKilled": False}
                     return subprocess.CompletedProcess(argv, 0, json.dumps(state), "")
                 if argv[:3] == ["docker", "exec", "-i"]:
+                    captured.setdefault("exec_calls", []).append((argv, kwargs))
                     marker = next(
                         (
                             line.split("'")[1]
@@ -166,6 +177,81 @@ class CloudBankOracleEquivalenceTests(unittest.TestCase):
                 {"application": True, "migration": True},
                 result["identity_login_checks"],
             )
+            self.assertTrue(result["aq_privilege_bootstrap"])
+            exec_calls = captured["exec_calls"]
+            self.assertIsInstance(exec_calls, list)
+            bootstrap_calls = [
+                call
+                for call in exec_calls
+                if call[0][-1] == "sqlplus -L -s / as sysdba"
+            ]
+            self.assertEqual(1, len(bootstrap_calls))
+
+    def test_aq_bootstrap_is_fixed_bounded_and_pdb_scoped(self) -> None:
+        self.assertEqual(
+            (
+                "DBMS_AQ",
+                "DBMS_AQADM",
+                "DBMS_AQIN",
+                "DBMS_AQJMS",
+                "DBMS_AQJMS_INTERNAL",
+            ),
+            ORACLE_AQ_PACKAGES,
+        )
+        captured: dict[str, object] = {}
+
+        def fake_run(
+            argv: list[str], **kwargs: object
+        ) -> subprocess.CompletedProcess[str]:
+            captured["argv"] = argv
+            captured["input"] = kwargs["input"]
+            return subprocess.CompletedProcess(
+                argv, 0, "CLOUDBANK_ORACLE_AQ_BOOTSTRAP_OK\n", ""
+            )
+
+        self.assertTrue(_bootstrap_oracle_aq_privileges("fixed-container", fake_run))
+        self.assertEqual("sqlplus -L -s / as sysdba", captured["argv"][-1])
+        script = captured["input"]
+        self.assertIsInstance(script, str)
+        self.assertIn("ALTER SESSION SET CONTAINER=FREEPDB1;", script)
+        self.assertEqual(5, script.count(" TO SYSTEM WITH GRANT OPTION;"))
+        for package in ORACLE_AQ_PACKAGES:
+            self.assertEqual(
+                1,
+                script.count(
+                    f"GRANT EXECUTE ON SYS.{package} TO SYSTEM WITH GRANT OPTION;"
+                ),
+            )
+        self.assertNotIn("ACCOUNT", script)
+        self.assertNotIn("password", script.lower())
+
+        def failed_run(
+            argv: list[str], **kwargs: object
+        ) -> subprocess.CompletedProcess[str]:
+            return subprocess.CompletedProcess(
+                argv, 1, "CLOUDBANK_ORACLE_AQ_BOOTSTRAP_OK\n", "hidden"
+            )
+
+        self.assertFalse(
+            _bootstrap_oracle_aq_privileges("fixed-container", failed_run)
+        )
+
+    def test_oracle_lane_fails_closed_without_bootstrap_and_identity_proofs(
+        self,
+    ) -> None:
+        lane = passed_lane("oracle", HEX_B)
+        self.assertTrue(_lane_passed(lane, "oracle", HEX_B))
+        lane["aq_privilege_bootstrap"] = False
+        self.assertFalse(_lane_passed(lane, "oracle", HEX_B))
+        lane["aq_privilege_bootstrap"] = True
+        lane["identity_login_checks"] = {
+            "application": True,
+            "migration": False,
+        }
+        self.assertFalse(_lane_passed(lane, "oracle", HEX_B))
+
+        postgres = passed_lane("postgresql", HEX_C)
+        self.assertTrue(_lane_passed(postgres, "postgresql", HEX_C))
 
     def test_database_diagnostic_exposes_only_allowlisted_codes_and_changesets(
         self,
@@ -287,6 +373,7 @@ Caused by: java.sql.SQLException: password=should-not-leak
                     "migration": False,
                     "password": "should-not-leak",
                 },
+                "aq_privilege_bootstrap": True,
             }
         )
         postgres = passed_lane("postgresql", HEX_C)
@@ -311,6 +398,7 @@ Caused by: java.sql.SQLException: password=should-not-leak
             {"application": True, "migration": False},
             diagnostic["oracle"]["identity_login_checks"],
         )
+        self.assertTrue(diagnostic["oracle"]["aq_privilege_bootstrap"])
         self.assertTrue(diagnostic["cross_lane_observation_match"])
         self.assertEqual("invalid", diagnostic["postgresql"]["failure_phase"])
         self.assertFalse(diagnostic["raw_output_persisted"])

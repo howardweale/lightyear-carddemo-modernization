@@ -16,6 +16,7 @@ from lightyear_data.cloudbank_production_oauth import (
     OUTPUT_ROOT,
     RECEIPT_TYPE,
     SCENARIO_IDS,
+    _oauth_user_bootstrap_environment,
     build_artifacts,
     changed_paths,
     compatibility_ledger,
@@ -125,6 +126,11 @@ class CloudBankProductionOAuthTests(unittest.TestCase):
         self.assertIn("AZN_AUTHORIZATION_SERVER_DEFAULT_CLIENT_SECRET", application)
         self.assertNotIn("password123", application)
         self.assertIn("private-key-path", application)
+
+    def test_client_credentials_lane_disables_browser_user_bootstrap(self) -> None:
+        environment = _oauth_user_bootstrap_environment()
+        self.assertEqual({"AZN_BOOTSTRAP_USERS_ENABLED": "false"}, environment)
+        self.assertFalse(any(name.endswith("PASSWORD") for name in environment))
 
     @unittest.skipUnless(SOURCE.is_dir(), "pinned CloudBank source is unavailable")
     def test_materialization_preserves_source_and_creates_oauth_target(self) -> None:

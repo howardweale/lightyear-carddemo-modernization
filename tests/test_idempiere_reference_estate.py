@@ -1,4 +1,5 @@
 import importlib.util
+import inspect
 import json
 import unittest
 from pathlib import Path
@@ -87,6 +88,12 @@ class IdempiereReferenceEstateTests(unittest.TestCase):
         self.assertIsNotNone(spec.loader)
         spec.loader.exec_module(module)
         self.assertEqual(PINNED_COMMIT, module.PINNED_COMMIT)
+        self.assertFalse(
+            inspect.signature(module.build_inventory)
+            .parameters["include_structural_graph"]
+            .default
+        )
+        self.assertNotIn("structural_graph", self.inventory)
 
     def test_upstream_source_is_not_vendored_and_boundaries_are_explicit(self) -> None:
         self.assertFalse(list(REFERENCE.rglob("*.java")))

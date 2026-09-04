@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import copy
 import importlib.util
+import inspect
 import json
 import unittest
 from pathlib import Path
@@ -195,6 +196,12 @@ class CloudBankReferenceEstateTests(unittest.TestCase):
         spec.loader.exec_module(module)
         self.assertEqual(PINNED_COMMIT, module.PINNED_COMMIT)
         self.assertEqual("main", module.PINNED_BRANCH)
+        self.assertFalse(
+            inspect.signature(module.build_inventory)
+            .parameters["include_structural_graph"]
+            .default
+        )
+        self.assertNotIn("structural_graph", self.inventory)
 
     def test_tampering_and_target_overclaim_fail_closed(self) -> None:
         changed = copy.deepcopy(self.fragment)

@@ -230,7 +230,9 @@ def structural_graph(
     }
 
 
-def build_inventory(source_root: Path) -> dict[str, Any]:
+def build_inventory(
+    source_root: Path, *, include_structural_graph: bool = False
+) -> dict[str, Any]:
     commit = git(source_root, "rev-parse", "HEAD")
     if commit != PINNED_COMMIT:
         raise ValueError(f"expected pinned commit {PINNED_COMMIT}; found {commit}")
@@ -273,7 +275,7 @@ def build_inventory(source_root: Path) -> dict[str, Any]:
     deployable_units = sorted(str(Path(path).parent) for path in values_paths)
     root_scripts = sorted(path for path in shell_paths if "/" not in path)
 
-    return {
+    inventory = {
         "schema_version": "1.0",
         "claim_class": "upstream-static-modern-oracle-inventory",
         "source": {
@@ -319,11 +321,9 @@ def build_inventory(source_root: Path) -> dict[str, Any]:
         },
         "database_surface": {
             "ddl_objects": ddl_objects(source_root, sql_paths),
-            "ddl_declarations": ddl_declarations(source_root, sql_paths),
             "sql_paths": sql_paths,
         },
         "coupling_signals": signals,
-        "structural_graph": structural_graph(paths, texts),
         "inventory_method": {
             "scope": "tracked files under the pinned cloudbank-v5 subtree",
             "endpoint_scope": "Spring mapping and JAX-RS verb annotations in tracked Java source",
@@ -335,21 +335,31 @@ def build_inventory(source_root: Path) -> dict[str, Any]:
                 "observed transaction outcomes",
                 "PostgreSQL compatibility or target equivalence",
             ],
-            "structural_projection": (
-                "tracked source files, package-qualified Java types, and deterministic "
-                "internal Java source dependencies"
-            ),
         },
     }
+    if include_structural_graph:
+        inventory["database_surface"]["ddl_declarations"] = ddl_declarations(
+            source_root, sql_paths
+        )
+        inventory["structural_graph"] = structural_graph(paths, texts)
+        inventory["inventory_method"]["structural_projection"] = (
+            "tracked source files, package-qualified Java types, and deterministic "
+            "internal Java source dependencies"
+        )
+    return inventory
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--source-root", type=Path, required=True)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT / "inventory.json")
+    parser.add_argument("--include-structural-graph", action="store_true")
     parser.add_argument("--verify", action="store_true")
     args = parser.parse_args()
-    inventory = build_inventory(args.source_root.resolve())
+    inventory = build_inventory(
+        args.source_root.resolve(),
+        include_structural_graph=args.include_structural_graph,
+    )
     rendered = json.dumps(inventory, indent=2, sort_keys=True) + "\n"
     if args.verify:
         if not args.output.is_file() or args.output.read_text(encoding="utf-8") != rendered:

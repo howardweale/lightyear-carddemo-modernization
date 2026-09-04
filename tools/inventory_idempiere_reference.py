@@ -145,6 +145,8 @@ def slice_graph(
     nodes: dict[str, str],
     edges: set[tuple[str, str]],
     source_root: Path,
+    *,
+    include_structural_graph: bool = False,
 ) -> dict[str, Any]:
     seeds = set(SLICE_SEEDS[slice_id])
     missing = sorted(seeds - set(nodes))
@@ -153,14 +155,20 @@ def slice_graph(
     direct_edges = sorted(edge for edge in edges if edge[0] in seeds)
     graph_nodes = sorted(seeds | {target for _, target in direct_edges})
     seed_lines = sum(len(read_text(source_root / nodes[node]).splitlines()) for node in seeds)
-    return {
+    result = {
         "dependency_depth": 1,
         "edge_definition": "unique internal Java source-unit references from a seed source unit",
         "edges": len(direct_edges),
         "nodes": len(graph_nodes),
         "seed_nodes": len(seeds),
         "seed_source_lines": seed_lines,
-        "source_units": [
+        "seeds": [
+            {"node": node, "path": nodes[node]}
+            for node in sorted(seeds)
+        ],
+    }
+    if include_structural_graph:
+        result["source_units"] = [
             {
                 "node": node,
                 "package": node.rsplit(".", 1)[0],
@@ -168,16 +176,12 @@ def slice_graph(
                 "role": "seed" if node in seeds else "direct-dependency",
             }
             for node in graph_nodes
-        ],
-        "dependency_edges": [
+        ]
+        result["dependency_edges"] = [
             {"source": source, "target": target}
             for source, target in direct_edges
-        ],
-        "seeds": [
-            {"node": node, "path": nodes[node]}
-            for node in sorted(seeds)
-        ],
-    }
+        ]
+    return result
 
 
 def oracle_signals(source_root: Path, paths: list[str]) -> dict[str, Any]:
@@ -203,7 +207,9 @@ def oracle_signals(source_root: Path, paths: list[str]) -> dict[str, Any]:
     return result
 
 
-def build_inventory(source_root: Path) -> dict[str, Any]:
+def build_inventory(
+    source_root: Path, *, include_structural_graph: bool = False
+) -> dict[str, Any]:
     commit = git(source_root, "rev-parse", "HEAD")
     if commit != PINNED_COMMIT:
         raise ValueError(f"expected pinned commit {PINNED_COMMIT}; found {commit}")
@@ -220,11 +226,17 @@ def build_inventory(source_root: Path) -> dict[str, Any]:
     commit_time = git(source_root, "show", "-s", "--format=%cI", "HEAD")
 
     slices = {
-        slice_id: slice_graph(slice_id, nodes, edges, source_root)
+        slice_id: slice_graph(
+            slice_id,
+            nodes,
+            edges,
+            source_root,
+            include_structural_graph=include_structural_graph,
+        )
         for slice_id in sorted(SLICE_SEEDS)
     }
     shared_seeds = set(SLICE_SEEDS["order-to-cash"]) & set(SLICE_SEEDS["procure-to-pay"])
-    return {
+    inventory = {
         "schema_version": "1.0",
         "claim_class": "upstream-static-inventory",
         "source": {
@@ -277,7 +289,11 @@ def build_inventory(source_root: Path) -> dict[str, Any]:
             ],
         },
         "oracle_semantic_signals": oracle_signals(source_root, paths),
-        "structural_graph": {
+        "slices": slices,
+        "shared_slice_seed_nodes": len(shared_seeds),
+    }
+    if include_structural_graph:
+        inventory["structural_graph"] = {
             "dependency_edges": [
                 {"source": source, "target": target}
                 for source, target in sorted(edges)
@@ -290,19 +306,21 @@ def build_inventory(source_root: Path) -> dict[str, Any]:
                 }
                 for node in sorted(nodes)
             ],
-        },
-        "slices": slices,
-        "shared_slice_seed_nodes": len(shared_seeds),
-    }
+        }
+    return inventory
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--source-root", type=Path, required=True)
     parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT / "inventory.json")
+    parser.add_argument("--include-structural-graph", action="store_true")
     parser.add_argument("--verify", action="store_true")
     args = parser.parse_args()
-    inventory = build_inventory(args.source_root.resolve())
+    inventory = build_inventory(
+        args.source_root.resolve(),
+        include_structural_graph=args.include_structural_graph,
+    )
     rendered = json.dumps(inventory, indent=2, sort_keys=True) + "\n"
     if args.verify:
         if not args.output.is_file() or args.output.read_text(encoding="utf-8") != rendered:

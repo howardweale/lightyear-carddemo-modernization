@@ -37,6 +37,7 @@ if [[ "$action" == "build-full" ]]; then
   mkdir -p "$generated"
   "$LIGHTYEAR_PYTHON_BIN" "$project_dir/tools/inventory_idempiere_reference.py" \
     --source-root "$source_root" \
+    --include-structural-graph \
     --output "$generated/inventory.json"
   build_projection "$generated/oracle-reference.fragment.json.gz" \
     "$generated/oracle-reference.receipt.json" \

@@ -31,7 +31,7 @@ if ($Action -eq "build-full") {
     $GeneratedFragment = Join-Path $Generated "oracle-reference.fragment.json.gz"
     $GeneratedReceipt = Join-Path $Generated "oracle-reference.receipt.json"
     Run-Python (Join-Path $ProjectDir "tools\inventory_idempiere_reference.py") `
-        --source-root $args[1] --output $GeneratedInventory
+        --source-root $args[1] --include-structural-graph --output $GeneratedInventory
     if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
     Build-Projection $GeneratedFragment $GeneratedReceipt $GeneratedInventory
     Run-Python -m lightyear_knowledge_graph validate-oracle-reference `

@@ -17,6 +17,7 @@ from lightyear_data.cloudbank_production_oauth import (
     OUTPUT_ROOT,
     RECEIPT_TYPE,
     SCENARIO_IDS,
+    _account_schema_relation_presence,
     _claim_contains,
     _classify_service_start_cause,
     _classify_service_start_component,
@@ -277,17 +278,41 @@ class CloudBankProductionOAuthTests(unittest.TestCase):
         self.assertIsNone(_postgres_sqlstate(b"SQL State: ABCDE secret=hidden"))
         self.assertEqual(
             "accounts",
-            _postgres_relation(b'ERROR: relation "accounts" does not exist'),
+            _postgres_relation(
+                b'PSQLException: ERROR: relation "accounts" does not exist\n'
+                b"SQL State  : 42P01"
+            ),
         )
         self.assertEqual(
             "authorization-users",
             _postgres_relation(
-                b'ERROR: relation "user_repo"."users" does not exist'
+                b'ERROR: relation "user_repo"."users" does not exist\n'
+                b"SQLSTATE[42P01]"
             ),
         )
         self.assertIsNone(
             _postgres_relation(
-                b'ERROR: relation "secret_customer_table" does not exist'
+                b'ERROR: relation "secret_customer_table" does not exist\n'
+                b"SQL State: 42P01"
+            )
+        )
+        self.assertIsNone(
+            _postgres_relation(
+                b'NOTICE: table "transfer_commands" does not exist, skipping\n'
+                b"SQL State: 42P01"
+            )
+        )
+        self.assertEqual(
+            "journal",
+            _postgres_relation(
+                b'NOTICE: table "transfer_commands" does not exist, skipping\n'
+                b'PSQLException: ERROR: relation "journal" does not exist\n'
+                b"SQL State: 42P01"
+            ),
+        )
+        self.assertIsNone(
+            _postgres_relation(
+                b'ERROR: relation "accounts" does not exist\nSQL State: 23505'
             )
         )
         self.assertEqual(
@@ -310,6 +335,36 @@ class CloudBankProductionOAuthTests(unittest.TestCase):
         )
         self.assertEqual("unclassified", _classify_service_start_component(b"secret"))
         self.assertEqual("unclassified", _classify_service_start_cause(b"secret"))
+
+    def test_account_schema_relation_presence_is_strictly_bounded(self) -> None:
+        supplied = {
+            "accounts": True,
+            "journal": False,
+            "transfer-commands": True,
+            "liquibase-history": True,
+            "liquibase-lock": "secret=should-not-leak",
+            "secret-table": True,
+        }
+        with patch(
+            "lightyear_data.cloudbank_production_oauth._psql",
+            return_value=json.dumps(supplied),
+        ) as psql:
+            presence = _account_schema_relation_presence(
+                "postgres-container", lambda *_args, **_kwargs: Mock()
+            )
+        self.assertEqual(
+            {
+                "accounts": True,
+                "journal": False,
+                "transfer-commands": True,
+                "liquibase-history": True,
+                "liquibase-lock": None,
+            },
+            presence,
+        )
+        query = psql.call_args.args[1]
+        self.assertIn("to_regclass('public.transfer_commands')", query)
+        self.assertNotIn("secret", query)
 
     @unittest.skipUnless(SOURCE.is_dir(), "pinned CloudBank source is unavailable")
     def test_materialization_preserves_source_and_creates_oauth_target(self) -> None:
@@ -469,6 +524,14 @@ class CloudBankProductionOAuthTests(unittest.TestCase):
                     "transfer": None,
                     "password": "application-context",
                 },
+                "account_schema_relation_presence": {
+                    "accounts": True,
+                    "journal": False,
+                    "transfer-commands": "secret=should-not-leak",
+                    "liquibase-history": True,
+                    "liquibase-lock": None,
+                    "password": True,
+                },
                 "packaging": {
                     "executable_jars": 3,
                     "oracle_runtime_libraries": 0,
@@ -542,6 +605,16 @@ class CloudBankProductionOAuthTests(unittest.TestCase):
                 "transfer": None,
             },
             diagnostic["service_start_failure_stages"],
+        )
+        self.assertEqual(
+            {
+                "accounts": True,
+                "journal": False,
+                "transfer-commands": None,
+                "liquibase-history": True,
+                "liquibase-lock": None,
+            },
+            diagnostic["account_schema_relation_presence"],
         )
         self.assertTrue(diagnostic["public_signing_key_created"])
         self.assertTrue(diagnostic["jwks_observed"])

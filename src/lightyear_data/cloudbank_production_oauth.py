@@ -157,7 +157,7 @@ POSTGRES_SQLSTATE_PATTERN = re.compile(
     re.IGNORECASE,
 )
 POSTGRES_UNDEFINED_RELATION_PATTERN = re.compile(
-    rb"(?:relation|table)\s+[\"']?([A-Z0-9_.\"]+)[\"']?\s+does not exist",
+    rb"\bERROR:\s*(?:relation|table)\s+[\"']?([A-Z0-9_.\"]+)[\"']?\s+does not exist",
     re.IGNORECASE,
 )
 POSTGRES_RELATIONS = {
@@ -169,6 +169,13 @@ POSTGRES_RELATIONS = {
     "journal_journal_id_seq": "journal-identity-sequence",
     "transfer_commands": "transfer-commands",
     "user_repo.users": "authorization-users",
+}
+ACCOUNT_SCHEMA_RELATIONS = {
+    "accounts": "accounts",
+    "journal": "journal",
+    "transfer_commands": "transfer-commands",
+    "databasechangelog": "liquibase-history",
+    "databasechangeloglock": "liquibase-lock",
 }
 SAFE_SERVICE_START_STAGES = {
     "account-liquibase-migration",
@@ -687,12 +694,40 @@ def _postgres_sqlstate(raw_log: bytes) -> str | None:
 
 
 def _postgres_relation(raw_log: bytes) -> str | None:
-    """Return only a known MS62 relation named in an undefined-relation error."""
+    """Return only a known relation from a SQLSTATE 42P01 error, never a notice."""
+    sqlstates = {
+        match.group(1).decode("ascii").upper()
+        for match in POSTGRES_SQLSTATE_PATTERN.finditer(raw_log)
+    }
+    if "42P01" not in sqlstates:
+        return None
     for match in POSTGRES_UNDEFINED_RELATION_PATTERN.finditer(raw_log):
         name = match.group(1).decode("ascii").replace('"', "").lower()
         if name in POSTGRES_RELATIONS:
             return POSTGRES_RELATIONS[name]
     return None
+
+
+def _account_schema_relation_presence(
+    container: str,
+    run: Callable[..., subprocess.CompletedProcess[str]],
+) -> dict[str, bool | None]:
+    """Inspect only fixed Account relation names after a bounded startup failure."""
+    unavailable = {label: None for label in ACCOUNT_SCHEMA_RELATIONS.values()}
+    sql = "SELECT json_build_object(" + ", ".join(
+        f"'{label}', to_regclass('public.{relation}') IS NOT NULL"
+        for relation, label in ACCOUNT_SCHEMA_RELATIONS.items()
+    ) + ")::text;"
+    try:
+        supplied = json.loads(_psql(container, sql, run))
+    except (RuntimeError, TypeError, ValueError, json.JSONDecodeError):
+        return unavailable
+    if not isinstance(supplied, Mapping):
+        return unavailable
+    return {
+        label: supplied.get(label) if isinstance(supplied.get(label), bool) else None
+        for label in ACCOUNT_SCHEMA_RELATIONS.values()
+    }
 
 
 def _classify_service_start_stage(service: str, raw_log: bytes) -> str:
@@ -938,6 +973,9 @@ def _native_oauth_lane(
         "azn-server": None,
         "account": None,
         "transfer": None,
+    }
+    account_schema_relation_presence: dict[str, bool | None] = {
+        label: None for label in ACCOUNT_SCHEMA_RELATIONS.values()
     }
     scenarios: list[dict[str, Any]] = []
     failure_reason: str | None = None
@@ -1267,6 +1305,10 @@ def _native_oauth_lane(
                 exception.database_relation
             )
             service_start_failure_stages[exception.service] = exception.stage
+            if exception.service == "account":
+                account_schema_relation_presence = _account_schema_relation_presence(
+                    name, run
+                )
         safe_reason = str(exception)
         allowed = {
             "azn-server-exited-before-health",
@@ -1318,6 +1360,7 @@ def _native_oauth_lane(
         "service_start_database_sqlstates": service_start_database_sqlstates,
         "service_start_database_relations": service_start_database_relations,
         "service_start_failure_stages": service_start_failure_stages,
+        "account_schema_relation_presence": account_schema_relation_presence,
         "public_signing_key_sha256": public_key_sha256,
         "jwks_sha256": jwks_sha256,
         "packaging": packaging,
@@ -1486,6 +1529,17 @@ def production_oauth_failure_diagnostic(
         service_start_failure_stages[service] = (
             value if isinstance(value, str) and value in SAFE_SERVICE_START_STAGES else None
         )
+    supplied_presence = lane.get("account_schema_relation_presence", {})
+    account_schema_relation_presence = {}
+    for relation in ACCOUNT_SCHEMA_RELATIONS.values():
+        value = (
+            supplied_presence.get(relation)
+            if isinstance(supplied_presence, Mapping)
+            else None
+        )
+        account_schema_relation_presence[relation] = (
+            value if isinstance(value, bool) else None
+        )
 
     return {
         "lane_match": lane.get("lane") == "native-production-oauth-account-transfer",
@@ -1517,6 +1571,7 @@ def production_oauth_failure_diagnostic(
         "service_start_database_sqlstates": service_start_database_sqlstates,
         "service_start_database_relations": service_start_database_relations,
         "service_start_failure_stages": service_start_failure_stages,
+        "account_schema_relation_presence": account_schema_relation_presence,
         "public_signing_key_created": bool(
             HEX_64.fullmatch(str(lane.get("public_signing_key_sha256", "")))
         ),

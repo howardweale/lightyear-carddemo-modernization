@@ -53,6 +53,7 @@ RECEIPT_NAME = "cloudbank-production-oauth.receipt.json"
 FAILURE_NAME = "cloudbank-production-oauth.failure.json"
 DIAGNOSTIC_MARKER = "CLOUDBANK_PRODUCTION_OAUTH_ACCEPTANCE_DIAGNOSTIC="
 AUTHORIZATION_DATABASE = "cloudbank_azn"
+POSTGRES_HIBERNATE_DIALECT = "org.hibernate.dialect.PostgreSQLDialect"
 HEX_64 = re.compile(r"^[0-9a-f]{64}$")
 SCENARIO_IDS = [
     "authorization-server-discovery-and-jwks",
@@ -629,6 +630,26 @@ def _oauth_user_bootstrap_environment() -> dict[str, str]:
     return {"AZN_BOOTSTRAP_USERS_ENABLED": "false"}
 
 
+def _oauth_account_environment(
+    common: Mapping[str, str],
+    account_port: int,
+    jdbc_url: str,
+    database_password: str,
+) -> dict[str, str]:
+    """Pin Account to PostgreSQL above the imported common Oracle default."""
+    return {
+        **common,
+        "SERVER_PORT": str(account_port),
+        "SPRING_DATASOURCE_URL": jdbc_url,
+        "SPRING_DATASOURCE_USERNAME": "postgres",
+        "SPRING_DATASOURCE_PASSWORD": database_password,
+        "LIQUIBASE_DATASOURCE_URL": jdbc_url,
+        "LIQUIBASE_DATASOURCE_USERNAME": "postgres",
+        "LIQUIBASE_DATASOURCE_PASSWORD": database_password,
+        "SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT": POSTGRES_HIBERNATE_DIALECT,
+    }
+
+
 def _claim_contains(value: Any, expected: str) -> bool:
     """Accept the JSON string and array representations used for JWT claims."""
     if isinstance(value, str):
@@ -1056,16 +1077,12 @@ def _native_oauth_lane(
                 "AZN_AUTHORIZATION_SERVER_ADMIN_CLIENT_SECRET": attacker_secret,
                 "AZN_AUTHORIZATION_SERVER_ADMIN_CLIENT_SCOPES": "cloudbank.transfer",
             }
-            account_env = {
-                **common,
-                "SERVER_PORT": str(account_port),
-                "SPRING_DATASOURCE_URL": jdbc_urls["account"],
-                "SPRING_DATASOURCE_USERNAME": "postgres",
-                "SPRING_DATASOURCE_PASSWORD": database_password,
-                "LIQUIBASE_DATASOURCE_URL": jdbc_urls["account"],
-                "LIQUIBASE_DATASOURCE_USERNAME": "postgres",
-                "LIQUIBASE_DATASOURCE_PASSWORD": database_password,
-            }
+            account_env = _oauth_account_environment(
+                common,
+                account_port,
+                jdbc_urls["account"],
+                database_password,
+            )
             transfer_env = {
                 **common,
                 "SERVER_PORT": str(transfer_port),

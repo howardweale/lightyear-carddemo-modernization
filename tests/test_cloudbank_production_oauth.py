@@ -25,6 +25,7 @@ from lightyear_data.cloudbank_production_oauth import (
     _classify_service_start_stage,
     _create_authorization_database,
     _isolated_postgres_jdbc_urls,
+    _oauth_account_environment,
     _oauth_user_bootstrap_environment,
     _postgres_relation,
     _postgres_sqlstate,
@@ -155,6 +156,29 @@ class CloudBankProductionOAuthTests(unittest.TestCase):
             urls["account"],
         )
         self.assertNotEqual(urls["authorization"], urls["account"])
+
+    def test_oauth_account_runtime_overrides_imported_oracle_dialect(self) -> None:
+        environment = _oauth_account_environment(
+            {
+                "SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT": (
+                    "org.hibernate.dialect.OracleDialect"
+                ),
+                "SAFE_PARENT_VALUE": "retained",
+            },
+            54321,
+            "jdbc:postgresql://127.0.0.1:5432/cloudbank",
+            "synthetic-password",
+        )
+        self.assertEqual(
+            "org.hibernate.dialect.PostgreSQLDialect",
+            environment["SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT"],
+        )
+        self.assertEqual("retained", environment["SAFE_PARENT_VALUE"])
+        self.assertEqual("54321", environment["SERVER_PORT"])
+        self.assertEqual(
+            environment["SPRING_DATASOURCE_URL"],
+            environment["LIQUIBASE_DATASOURCE_URL"],
+        )
 
     def test_authorization_database_creation_is_fail_closed(self) -> None:
         run = Mock()

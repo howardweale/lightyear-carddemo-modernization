@@ -6,6 +6,24 @@ service and the MS #63 five-service target into one isolated eight-service packa
 records `azn-server`, `checks`, `testrunner`, `creditscore`, and `chatbot` as migrated, regenerates
 each target workcell, and executes a dedicated Java test class for every one in the MS #64 lane.
 
+The generated parent POM pins HttpCore (`httpcore5` and `httpcore5-h2`) to **5.4.3**,
+embedded Tomcat to **10.1.59**, and PostgreSQL JDBC to **42.7.12** across the eight services.
+These updates address the six findings reported by the MS67 Authorization Server image scan:
+CVE-2026-54399, CVE-2026-54428, CVE-2026-65182, CVE-2026-65905, CVE-2026-68525,
+and CVE-2026-54291. The pinned Oracle source checkout is preserved.
+
+Release references: [HttpCore 5.4.3](https://hc.apache.org/news.html),
+[Tomcat security fixes](https://tomcat.apache.org/security-10.html), and
+[PostgreSQL JDBC 42.7.12](https://jdbc.postgresql.org/changelogs/2026-06-29-42.7.12-release/).
+Tomcat 10.1.58, listed by the scanner as a fixed version, failed its release vote; 10.1.59
+is the released version containing those fixes.
+
+The dependency versions are bound into the MS64 execution plan and signed receipt. After updating
+these pins, run MS64 again in a fresh output directory using the existing signed MS57/MS63 inputs.
+Use that new MS64 receipt and its generated workspace to rebuild the service images. The MS67
+image builder still requires fresh signature, provenance, and zero-high/zero-critical scan results
+for every image before producing its image lock.
+
 Credit Score requires an issuer-, audience-, lifetime-, signature-, and scope-valid JWT. It replaces
 the random demo response with a stable, subject-and-date-bound HMAC result labelled `synthetic-v1`.
 The runtime pepper is never persisted. This proves the application boundary, not a real credit-bureau

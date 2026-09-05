@@ -3,7 +3,7 @@
     "ms63-five-service-target",
     "ms57-qualified-customer-target"
   ],
-  "content_sha256": "0d606c27eccf572a593072e9d0817cae93b87e6d5fed440b368997b43d733139",
+  "content_sha256": "6e6278875c2ee458a528f9498f30fdd76562f5db62e24b0ec24918c3cde86649",
   "customer_target_paths": [
     "customer/pom.xml",
     "customer/src/main/java/com/example/customer/model/Customers.java",
@@ -148,6 +148,11 @@
     "same-evidence-key",
     "same-postgresql-image"
   ],
+  "runtime_dependency_versions": {
+    "httpcore5.version": "5.4.3",
+    "postgresql.version": "42.7.12",
+    "tomcat.version": "10.1.59"
+  },
   "schema_version": "1.0",
   "services": [
     "azn-server",
@@ -164,6 +169,7 @@
     "validate-signed-ms63-ms57-and-pinned-source",
     "materialize-fresh-isolated-eight-service-target",
     "carry-qualified-postgresql-customer-target",
+    "pin-reviewed-runtime-dependency-versions-in-target-parent",
     "replace-random-score-with-subject-bound-synthetic-provider",
     "bind-credit-and-chat-tokens-to-distinct-audiences",
     "enforce-chat-input-output-rate-and-egress-guardrails",

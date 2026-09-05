@@ -2,12 +2,18 @@ from __future__ import annotations
 
 import copy
 import json
+import re
 import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import patch
 
 from lightyear_data.cloudbank_edge_ai import RECEIPT_TYPE as MS64_RECEIPT_TYPE
+from lightyear_data.cloudbank_production_oauth import (
+    _oauth_account_environment,
+    _oauth_transfer_environment,
+    _oauth_user_bootstrap_environment,
+)
 from lightyear_data.cloudbank_production_readiness import (
     CONTRACT_SHA256,
     OUTPUT_ROOT,
@@ -168,6 +174,36 @@ class CloudBankProductionReadinessTests(unittest.TestCase):
         self.assertEqual(8, bundle["resource_counts"]["deployments"])
         self.assertEqual(0, bundle["resource_counts"]["secret_objects"])
         self.assertFalse(bundle["production_environment"])
+
+    def test_deployment_carries_the_qualified_native_runtime_overrides(self) -> None:
+        manifest, _ = render_deployment_bundle(image_lock(), environment(), HEX_A)
+        deployed = {}
+        for document in manifest.split("---\n"):
+            if "kind: Deployment\n" not in document:
+                continue
+            service = re.search(r"^  name: (\S+)$", document, re.MULTILINE).group(1)
+            # Read only explicit container env entries, which override envFrom/imported defaults.
+            deployed[service] = {
+                name: value.strip('"') for name, value in re.findall(
+                    r'^        - \{name: ([A-Z_]+), value: ([^}]+)\}$', document, re.MULTILINE
+                )
+            }
+        self.assertEqual(set(SERVICES), set(deployed))
+        native_account = _oauth_account_environment({}, 8080, "jdbc:postgresql://test/db", "test")
+        native_transfer = _oauth_transfer_environment({}, 8080, 8080, "http://test/token", "test")
+        for service, values in deployed.items():
+            self.assertEqual(native_account["SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT"],
+                             values["SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT"], service)
+            self.assertEqual("8080", values["SERVER_PORT"], service)
+            self.assertEqual("true", values["MANAGEMENT_ENDPOINT_HEALTH_PROBES_ENABLED"], service)
+            self.assertEqual("never", values["MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS"], service)
+            self.assertFalse(any("PASSWORD" in name or "SECRET" in name for name in values))
+        self.assertEqual(_oauth_user_bootstrap_environment()["AZN_BOOTSTRAP_USERS_ENABLED"],
+                         deployed["azn-server"]["AZN_BOOTSTRAP_USERS_ENABLED"])
+        for service in ("account", "transfer"):
+            self.assertEqual("cloudbank-oauth", deployed[service]["SPRING_PROFILES_ACTIVE"])
+        self.assertEqual(native_transfer["CLOUDBANK_SECURITY_SERVICE_TOKEN_ENABLED"],
+                         deployed["transfer"]["CLOUDBANK_SECURITY_SERVICE_TOKEN_ENABLED"])
 
     def test_unbounded_network_and_mutable_image_are_rejected(self) -> None:
         env = environment()

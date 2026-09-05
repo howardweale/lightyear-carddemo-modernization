@@ -6,6 +6,13 @@ service and the MS #63 five-service target into one isolated eight-service packa
 records `azn-server`, `checks`, `testrunner`, `creditscore`, and `chatbot` as migrated, regenerates
 each target workcell, and executes a dedicated Java test class for every one in the MS #64 lane.
 
+The lane also executes Account and Transfer probe-security tests. Its **37 Java tests** include
+16 HTTP filter-chain checks across Account, Transfer, Credit Score, and Chatbot: the exact health,
+liveness, and readiness paths permit anonymous probes; business endpoints still require a token
+and the correct scope; other actuator paths remain protected. These tests use test token decoders
+and handler stubs to isolate authorization, while MS62 supplies native JWT validation evidence.
+The probe corrections are applied only when composing the MS64 target, preserving MS57/MS63 inputs.
+
 The generated parent POM pins HttpCore (`httpcore5` and `httpcore5-h2`) to **5.4.3**,
 embedded Tomcat to **10.1.59**, and PostgreSQL JDBC to **42.7.12** across the eight services.
 These updates address the six findings reported by the MS67 Authorization Server image scan:

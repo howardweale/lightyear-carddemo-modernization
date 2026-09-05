@@ -8,9 +8,12 @@ import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.Map;
 
+import com.example.creditscore.config.CreditScoreOAuthSecurityConfiguration;
 import com.example.creditscore.controller.CreditScoreController;
 import com.example.creditscore.service.SyntheticCreditScoreService;
+import com.example.qualification.AbstractKubernetesProbeSecurityTest;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.oauth2.jwt.Jwt;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,7 +21,28 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class CreditscoreApplicationTests {
+class CreditscoreApplicationTests extends AbstractKubernetesProbeSecurityTest {
+
+    @Override
+    protected Class<?> securityConfiguration() {
+        return CreditScoreOAuthSecurityConfiguration.class;
+    }
+
+    @Override
+    protected String businessPath() {
+        return "/api/v1/creditscore";
+    }
+
+    @Override
+    protected HttpMethod businessMethod() {
+        return HttpMethod.GET;
+    }
+
+    @Override
+    protected String requiredScope() {
+        return "cloudbank.read";
+    }
+
 
     private static final String PEPPER = "unit-test-pepper-with-at-least-32-characters";
     private static final Clock CLOCK = Clock.fixed(Instant.parse("2026-09-03T00:00:00Z"), ZoneOffset.UTC);

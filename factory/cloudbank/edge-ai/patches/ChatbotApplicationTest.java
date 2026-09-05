@@ -10,7 +10,9 @@ import java.time.ZoneOffset;
 import java.util.List;
 
 import com.example.chatbot.config.ChatbotEndpointPolicy;
+import com.example.chatbot.config.ChatbotOAuthSecurityConfiguration;
 import com.example.chatbot.controller.ChatController;
+import com.example.qualification.AbstractKubernetesProbeSecurityTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,6 +23,7 @@ import org.springframework.ai.chat.model.ChatModel;
 import org.springframework.ai.chat.model.ChatResponse;
 import org.springframework.ai.chat.model.Generation;
 import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.authentication.TestingAuthenticationToken;
@@ -33,7 +36,28 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class ChatbotApplicationTest {
+class ChatbotApplicationTest extends AbstractKubernetesProbeSecurityTest {
+
+    @Override
+    protected Class<?> securityConfiguration() {
+        return ChatbotOAuthSecurityConfiguration.class;
+    }
+
+    @Override
+    protected String businessPath() {
+        return "/chat";
+    }
+
+    @Override
+    protected HttpMethod businessMethod() {
+        return HttpMethod.POST;
+    }
+
+    @Override
+    protected String requiredScope() {
+        return "cloudbank.read";
+    }
+
 
     @Mock
     private ChatModel chatModel;

@@ -93,7 +93,7 @@ class CloudBankEdgeAITests(unittest.TestCase):
         plan = execution_plan(ROOT)
         self.assertEqual(8, len(plan["services"]))
         self.assertEqual(
-            ["azn-server", "checks", "testrunner", "creditscore", "chatbot"],
+            ["account", "transfer", "azn-server", "checks", "testrunner", "creditscore", "chatbot"],
             [item["service"] for item in plan["remaining_service_workcells"]],
         )
         self.assertTrue(all(

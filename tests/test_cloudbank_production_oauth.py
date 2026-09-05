@@ -26,6 +26,7 @@ from lightyear_data.cloudbank_production_oauth import (
     _create_authorization_database,
     _isolated_postgres_jdbc_urls,
     _oauth_account_environment,
+    _oauth_transfer_environment,
     _oauth_user_bootstrap_environment,
     _postgres_relation,
     _postgres_sqlstate,
@@ -178,6 +179,35 @@ class CloudBankProductionOAuthTests(unittest.TestCase):
         self.assertEqual(
             environment["SPRING_DATASOURCE_URL"],
             environment["LIQUIBASE_DATASOURCE_URL"],
+        )
+
+    def test_oauth_transfer_runtime_enables_its_own_service_identity(self) -> None:
+        common = {
+            "CLOUDBANK_SECURITY_SERVICE_TOKEN_ENABLED": "false",
+            "CLOUDBANK_SECURITY_SERVICE_TOKEN_SCOPE": "cloudbank.transfer",
+            "SAFE_PARENT_VALUE": "retained",
+        }
+        environment = _oauth_transfer_environment(
+            common, 54321, 54322, "http://127.0.0.1:54323/oauth2/token", "synthetic-secret"
+        )
+        self.assertEqual("true", environment["CLOUDBANK_SECURITY_SERVICE_TOKEN_ENABLED"])
+        self.assertEqual("false", common["CLOUDBANK_SECURITY_SERVICE_TOKEN_ENABLED"])
+        self.assertEqual("retained", environment["SAFE_PARENT_VALUE"])
+        self.assertEqual("54321", environment["SERVER_PORT"])
+        self.assertEqual(
+            "http://127.0.0.1:54322/api/v1/transfers", environment["ACCOUNT_TRANSACTION_URL"]
+        )
+        self.assertEqual(
+            "cloudbank-transfer-service", environment["CLOUDBANK_SECURITY_SERVICE_TOKEN_CLIENT_ID"]
+        )
+        self.assertEqual(
+            "cloudbank.internal", environment["CLOUDBANK_SECURITY_SERVICE_TOKEN_SCOPE"]
+        )
+        self.assertEqual(
+            "http://127.0.0.1:54323/oauth2/token", environment["CLOUDBANK_SECURITY_SERVICE_TOKEN_URI"]
+        )
+        self.assertEqual(
+            "synthetic-secret", environment["CLOUDBANK_SECURITY_SERVICE_TOKEN_CLIENT_SECRET"]
         )
 
     def test_authorization_database_creation_is_fail_closed(self) -> None:

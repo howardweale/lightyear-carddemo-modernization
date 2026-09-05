@@ -19,8 +19,17 @@ account:
 cloudbank:
   security:
     service-token:
-      enabled: true
       token-uri: ${CLOUDBANK_SECURITY_SERVICE_TOKEN_URI}
       client-id: ${CLOUDBANK_SECURITY_SERVICE_TOKEN_CLIENT_ID}
       client-secret: ${CLOUDBANK_SECURITY_SERVICE_TOKEN_CLIENT_SECRET}
       scope: cloudbank.internal
+---
+# Apply after the imported common.yaml, which disables service tokens by default.
+spring:
+  config:
+    activate:
+      on-profile: cloudbank-oauth
+cloudbank:
+  security:
+    service-token:
+      enabled: ${CLOUDBANK_SECURITY_SERVICE_TOKEN_ENABLED:true}

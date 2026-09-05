@@ -650,6 +650,26 @@ def _oauth_account_environment(
     }
 
 
+def _oauth_transfer_environment(
+    common: Mapping[str, str],
+    transfer_port: int,
+    account_port: int,
+    token_uri: str,
+    service_secret: str,
+) -> dict[str, str]:
+    """Enable Transfer's required token provider above imported or inherited defaults."""
+    return {
+        **common,
+        "SERVER_PORT": str(transfer_port),
+        "ACCOUNT_TRANSACTION_URL": f"http://127.0.0.1:{account_port}/api/v1/transfers",
+        "CLOUDBANK_SECURITY_SERVICE_TOKEN_ENABLED": "true",
+        "CLOUDBANK_SECURITY_SERVICE_TOKEN_URI": token_uri,
+        "CLOUDBANK_SECURITY_SERVICE_TOKEN_CLIENT_ID": "cloudbank-transfer-service",
+        "CLOUDBANK_SECURITY_SERVICE_TOKEN_CLIENT_SECRET": service_secret,
+        "CLOUDBANK_SECURITY_SERVICE_TOKEN_SCOPE": "cloudbank.internal",
+    }
+
+
 def _claim_contains(value: Any, expected: str) -> bool:
     """Accept the JSON string and array representations used for JWT claims."""
     if isinstance(value, str):
@@ -1083,16 +1103,9 @@ def _native_oauth_lane(
                 jdbc_urls["account"],
                 database_password,
             )
-            transfer_env = {
-                **common,
-                "SERVER_PORT": str(transfer_port),
-                "ACCOUNT_TRANSACTION_URL": (
-                    f"http://127.0.0.1:{account_port}/api/v1/transfers"
-                ),
-                "CLOUDBANK_SECURITY_SERVICE_TOKEN_URI": token_uri,
-                "CLOUDBANK_SECURITY_SERVICE_TOKEN_CLIENT_ID": "cloudbank-transfer-service",
-                "CLOUDBANK_SECURITY_SERVICE_TOKEN_CLIENT_SECRET": service_secret,
-            }
+            transfer_env = _oauth_transfer_environment(
+                common, transfer_port, account_port, token_uri, service_secret
+            )
             jars = {
                 "azn-server": workspace / "azn-server/target/azn-server-0.0.1-SNAPSHOT.jar",
                 "account": workspace / "account/target/account-0.0.1-SNAPSHOT.jar",

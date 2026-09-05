@@ -8,6 +8,9 @@ import java.util.List;
 
 import com.example.common.security.CloudBankServiceTokenProvider;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.NoSuchBeanDefinitionException;
+import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
+import org.springframework.boot.test.context.runner.WebApplicationContextRunner;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,6 +19,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.test.web.client.MockRestServiceServer;
 import org.springframework.web.client.RestTemplate;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -28,6 +32,45 @@ import static org.springframework.test.web.client.match.MockRestRequestMatchers.
 import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
 
 class TransferServiceTests {
+
+    @Test
+    void oauthContextStartsWithTheRealServiceTokenProvider() {
+        oauthContext().run(context -> {
+            assertThat(context).hasNotFailed()
+                    .hasSingleBean(CloudBankServiceTokenProvider.class)
+                    .hasSingleBean(TransferService.class);
+            assertThat(context.getEnvironment().getProperty(
+                    "cloudbank.security.service-token.enabled", Boolean.class)).isTrue();
+        });
+    }
+
+    @Test
+    void explicitlyDisabledServiceTokenProviderFailsStartup() {
+        oauthContext()
+                .withPropertyValues("CLOUDBANK_SECURITY_SERVICE_TOKEN_ENABLED=false")
+                .run(context -> {
+                    assertThat(context).hasFailed();
+                    assertThat(context.getStartupFailure())
+                            .hasRootCauseInstanceOf(NoSuchBeanDefinitionException.class)
+                            .hasStackTraceContaining("CloudBankServiceTokenProvider");
+                });
+    }
+
+    private static WebApplicationContextRunner oauthContext() {
+        return new WebApplicationContextRunner()
+                .withInitializer(new ConfigDataApplicationContextInitializer())
+                .withUserConfiguration(TransferApplication.class)
+                .withPropertyValues(
+                        "spring.profiles.active=cloudbank-oauth",
+                        "spring.cloud.config.enabled=false",
+                        "spring.cloud.discovery.enabled=false",
+                        "eureka.client.enabled=false",
+                        "CLOUDBANK_SECURITY_ISSUER_URI=http://127.0.0.1:1",
+                        "CLOUDBANK_SECURITY_JWK_SET_URI=http://127.0.0.1:1/oauth2/jwks",
+                        "CLOUDBANK_SECURITY_SERVICE_TOKEN_URI=http://127.0.0.1:1/oauth2/token",
+                        "CLOUDBANK_SECURITY_SERVICE_TOKEN_CLIENT_ID=cloudbank-transfer-service",
+                        "CLOUDBANK_SECURITY_SERVICE_TOKEN_CLIENT_SECRET=ci-synthetic-secret");
+    }
 
     @Test
     void exchangesServiceCredentialsAndKeepsCallerIdentitySeparate() {

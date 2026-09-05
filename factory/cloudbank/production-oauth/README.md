@@ -37,6 +37,13 @@ The run needs Java 21, Maven, Docker, OpenSSL, and the already-pulled pinned Pos
 uses synthetic data and loopback-only ephemeral ports. Client secrets, access credentials, the
 private signing key, and raw service logs are never written to the receipt.
 
+The runner explicitly enables Transfer's service-token provider and pins its requested scope to
+`cloudbank.internal`. The generated Transfer configuration also enables the provider in a later
+`cloudbank-oauth` YAML document, after the imported `common.yaml` disabled default. An explicit
+disable outside the runner fails startup because Transfer requires its own service identity.
+The `TransferServiceTests` CI suite loads the real Spring application context and imported
+configuration to check both provider creation and failure when the provider is disabled.
+
 ## Evidence boundary
 
 A passing signed receipt qualifies the production-shaped OAuth application profile for the

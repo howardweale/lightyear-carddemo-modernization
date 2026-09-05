@@ -1,11 +1,11 @@
 {
   "bindings": {
-    "acceptance_contract_sha256": "a22876e209f77051fdfb55ea597b44d7cce7664916e08a28339eb1a25585b8be",
+    "acceptance_contract_sha256": "7ebe42aa8747f92133c929a6f8c1a189066637b0566a6a73e3cddb42d9a8d29e",
     "compatibility_ledger_sha256": "ceeeb448d895aa379146d20aea6107091b8c82e1cb216c80c7bf1311161bd220",
-    "execution_plan_sha256": "683fdbbcbc47590c86eca6b1b4a9a5eb0455073e4fcea209e2d6e87281ea4724",
+    "execution_plan_sha256": "1226ccaafb5c32213e61ad4bb565f27b74e5ee7559a8511cf6d6b3bca96dd399",
     "security_contract_sha256": "914f4b2dafa5bed21cdbb8cd7a9f224e3faf7b05e5388a1ec999c127c55ffad5"
   },
-  "content_sha256": "2eb6dc69734bf98763c9dade162bab6d6d2eb719413320846a3675451d23cc75",
+  "content_sha256": "00e4e991c4331e7589753dcc9cee825188b4f32623e780b3f975f9ac24a21fb3",
   "gate_status": "ready-for-signed-ms61-and-native-oauth-run",
   "migration_complete": false,
   "native_messaging_observed": false,

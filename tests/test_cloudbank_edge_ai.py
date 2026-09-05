@@ -4,6 +4,7 @@ import copy
 import json
 import tempfile
 import unittest
+import xml.etree.ElementTree as ET
 from pathlib import Path
 from unittest.mock import patch
 
@@ -13,8 +14,10 @@ from lightyear_data.cloudbank_edge_ai import (
     OUTPUT_ROOT,
     PATCHES,
     REQUIRED_TESTS,
+    RUNTIME_DEPENDENCY_VERSIONS,
     RECEIPT_TYPE,
     SCENARIO_IDS,
+    _pin_runtime_dependencies,
     acceptance_contract,
     build_artifacts,
     compatibility_ledger,
@@ -100,6 +103,11 @@ class CloudBankEdgeAITests(unittest.TestCase):
         self.assertEqual(sorted(PATCHES), sorted(item["path"] for item in plan["patches"]))
         self.assertTrue(plan["fresh_output_required"])
         self.assertFalse(plan["external_model_called_by_acceptance"])
+        self.assertEqual({
+            "httpcore5.version": "5.4.3",
+            "tomcat.version": "10.1.59",
+            "postgresql.version": "42.7.12",
+        }, plan["runtime_dependency_versions"])
 
     def test_ledger_preserves_bureau_model_and_equivalence_boundaries(self) -> None:
         ledger = compatibility_ledger()
@@ -130,6 +138,7 @@ class CloudBankEdgeAITests(unittest.TestCase):
     @unittest.skipUnless(SOURCE.is_dir(), "pinned CloudBank source is unavailable")
     def test_materialization_preserves_source_and_assembles_all_services(self) -> None:
         source_head = (SOURCE / ".git/HEAD").read_bytes()
+        source_pom = (SOURCE / "cloudbank-v5/pom.xml").read_bytes()
         with tempfile.TemporaryDirectory() as directory:
             workspace = materialize_target(ROOT, SOURCE, Path(directory) / "workspace")
             for service in execution_plan(ROOT)["services"]:
@@ -139,7 +148,31 @@ class CloudBankEdgeAITests(unittest.TestCase):
             customer_pom = (workspace / "customer/pom.xml").read_text(encoding="utf-8")
             self.assertIn("postgresql", customer_pom)
             self.assertNotIn("oracle-spring-boot", customer_pom)
+            properties = ET.parse(workspace / "pom.xml").getroot().find(
+                "{http://maven.apache.org/POM/4.0.0}properties"
+            )
+            for name, version in RUNTIME_DEPENDENCY_VERSIONS.items():
+                self.assertEqual(version, properties.findtext(
+                    f"{{http://maven.apache.org/POM/4.0.0}}{name}"
+                ))
         self.assertEqual(source_head, (SOURCE / ".git/HEAD").read_bytes())
+        self.assertEqual(source_pom, (SOURCE / "cloudbank-v5/pom.xml").read_bytes())
+
+    def test_runtime_dependency_pins_reject_unexpected_parent_without_rewriting_it(self) -> None:
+        cases = (
+            "<project/>",
+            "<project><properties>\n    </properties><properties>\n    </properties></project>",
+            "<project><properties><tomcat.version>10.1.55</tomcat.version>\n    </properties></project>",
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            root_pom = Path(directory) / "pom.xml"
+            for content in cases:
+                with self.subTest(content=content):
+                    root_pom.write_text(content, encoding="utf-8")
+                    original = root_pom.read_bytes()
+                    with self.assertRaisesRegex(ValueError, "runtime-dependency-pom-drift"):
+                        _pin_runtime_dependencies(root_pom)
+                    self.assertEqual(original, root_pom.read_bytes())
 
     @patch("lightyear_data.cloudbank_edge_ai.validate_ms57_receipt", return_value=[])
     @patch("lightyear_data.cloudbank_edge_ai.validate_ms63_receipt", return_value=[])
@@ -163,6 +196,9 @@ class CloudBankEdgeAITests(unittest.TestCase):
             self.assertFalse(receipt["model_quality_qualified"])
             self.assertFalse(receipt["whole_application_equivalent"])
             self.assertEqual([], validate_execution_receipt(receipt, KEY, ROOT))
+            with patch.dict(RUNTIME_DEPENDENCY_VERSIONS, {"tomcat.version": "10.1.55"}):
+                self.assertIn("cloudbank-edge-ai-receipt-binding-invalid",
+                              validate_execution_receipt(receipt, KEY, ROOT))
             tampered = copy.deepcopy(receipt)
             tampered["production_ready"] = True
             errors = validate_execution_receipt(tampered, KEY, ROOT)

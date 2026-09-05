@@ -12,7 +12,7 @@ import zipfile
 from pathlib import Path
 from typing import Any, Callable, Mapping
 
-from lightyear_common.io import write_json
+from lightyear_common.io import write_json, write_text
 
 from .cloudbank_baseline import PINNED_COMMIT, PINNED_ROOT_TREE, PINNED_SUBTREE, PINNED_SUBTREE_TREE
 from .cloudbank_checks_messaging import (
@@ -38,6 +38,12 @@ RECEIPT_TYPE = "lightyear-cloudbank-edge-ai-execution"
 RECEIPT_NAME = "cloudbank-edge-ai.receipt.json"
 FAILURE_NAME = "cloudbank-edge-ai.failure.json"
 HEX_64 = re.compile(r"^[0-9a-f]{64}$")
+# Generated-target overrides for the vulnerabilities found by the MS67 image scan.
+RUNTIME_DEPENDENCY_VERSIONS = {
+    "httpcore5.version": "5.4.3",
+    "tomcat.version": "10.1.59",
+    "postgresql.version": "42.7.12",
+}
 
 SCENARIO_IDS = [
     "eight-service-target-packaged",
@@ -270,6 +276,7 @@ def execution_plan(project_root: Path) -> dict[str, Any]:
         "services": ["azn-server", "customer", "account", "transfer", "checks", "testrunner",
                      "creditscore", "chatbot"],
         "base_targets": ["ms63-five-service-target", "ms57-qualified-customer-target"],
+        "runtime_dependency_versions": dict(RUNTIME_DEPENDENCY_VERSIONS),
         "remaining_service_workcells": [
             {
                 "service": spec["service"],
@@ -290,6 +297,7 @@ def execution_plan(project_root: Path) -> dict[str, Any]:
             "validate-signed-ms63-ms57-and-pinned-source",
             "materialize-fresh-isolated-eight-service-target",
             "carry-qualified-postgresql-customer-target",
+            "pin-reviewed-runtime-dependency-versions-in-target-parent",
             "replace-random-score-with-subject-bound-synthetic-provider",
             "bind-credit-and-chat-tokens-to-distinct-audiences",
             "enforce-chat-input-output-rate-and-egress-guardrails",
@@ -445,8 +453,24 @@ def validate_edge_source(source_root: Path) -> list[str]:
     return sorted(set(errors))
 
 
+def _pin_runtime_dependencies(root_pom: Path) -> None:
+    text = root_pom.read_text(encoding="utf-8")
+    marker = "    </properties>"
+    if text.count(marker) != 1 or any(
+        f"<{name}>" in text for name in RUNTIME_DEPENDENCY_VERSIONS
+    ):
+        raise ValueError("cloudbank-edge-ai-runtime-dependency-pom-drift")
+    overrides = "        <!-- Reviewed MS67 runtime security updates for the generated target. -->\n"
+    overrides += "".join(
+        f"        <{name}>{version}</{name}>\n"
+        for name, version in sorted(RUNTIME_DEPENDENCY_VERSIONS.items())
+    )
+    write_text(root_pom, text.replace(marker, overrides + marker, 1))
+
+
 def materialize_target(project_root: Path, source_root: Path, output: Path) -> Path:
     workspace = materialize_ms63_target(project_root, source_root, output)
+    _pin_runtime_dependencies(workspace / "pom.xml")
     for target, (template, _) in CUSTOMER_PATCHES.items():
         destination = workspace / target
         destination.parent.mkdir(parents=True, exist_ok=True)

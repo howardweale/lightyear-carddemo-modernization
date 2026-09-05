@@ -228,6 +228,36 @@ class CloudBankPlatformQualificationTests(unittest.TestCase):
         self.assertIn("cloudbank-platform-qualification-profile-ingress-invalid", errors)
         self.assertIn("cloudbank-platform-qualification-profile-authorization-invalid", errors)
 
+    def test_http01_solver_ingress_is_bounded_under_default_deny(self) -> None:
+        rendered = rendered_addons()
+        policies = [document for document in rendered.split("---\n")
+                    if "kind: NetworkPolicy\n" in document
+                    and "name: cloudbank-acme-http01-ingress\n" in document]
+        self.assertEqual(1, len(policies), "HTTP-01 solver needs an ingress allowance")
+        policy = policies[0]
+        self.assertIn('namespace: "cloudbank-ms67"\n', policy)
+        self.assertIn('podSelector:\n    matchLabels:\n'
+                      '      acme.cert-manager.io/http01-solver: "true"\n', policy)
+        # Both selectors must be on the same peer: namespace AND controller pod.
+        self.assertIn('  - from:\n    - namespaceSelector:\n        matchLabels:\n'
+                      '          kubernetes.io/metadata.name: ingress-nginx\n'
+                      '      podSelector:\n        matchLabels:\n'
+                      '          app.kubernetes.io/name: ingress-nginx\n'
+                      '          app.kubernetes.io/instance: ingress-nginx\n'
+                      '          app.kubernetes.io/component: controller\n', policy)
+        self.assertEqual(["8089"], re.findall(r"protocol: TCP, port: (\d+)", policy))
+        self.assertIn('policyTypes: ["Ingress"]', policy)
+        for forbidden in ("egress:", "ipBlock:", "podSelector: {}", "namespaceSelector: {}",
+                          "    - podSelector:", "app.kubernetes.io/part-of: cloudbank"):
+            self.assertNotIn(forbidden, policy)
+        ms65 = (ROOT / "factory/cloudbank/production-readiness/kubernetes/"
+                "cloudbank-template.yaml").read_text()
+        deny = next(document for document in ms65.split("---\n")
+                    if "kind: NetworkPolicy\n" in document and "name: default-deny\n" in document)
+        self.assertIn("podSelector: {}", deny)
+        self.assertIn("  - Ingress\n  - Egress", deny)
+        self.assertIn('nginx.ingress.kubernetes.io/ssl-redirect: "true"', rendered)
+
     def test_collector_has_explicit_project_health_and_configuration_rollout(self) -> None:
         rendered = rendered_addons()
         self.assertIn('googlecloud:\n        project: "test-project"', rendered)

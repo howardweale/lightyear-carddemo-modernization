@@ -107,6 +107,7 @@ class CloudBankEdgeAITests(unittest.TestCase):
             "httpcore5.version": "5.4.3",
             "tomcat.version": "10.1.59",
             "postgresql.version": "42.7.12",
+            "spring-ai.version": "1.0.7",
         }, plan["runtime_dependency_versions"])
 
     def test_ledger_preserves_bureau_model_and_equivalence_boundaries(self) -> None:
@@ -152,6 +153,9 @@ class CloudBankEdgeAITests(unittest.TestCase):
                 "{http://maven.apache.org/POM/4.0.0}properties"
             )
             for name, version in RUNTIME_DEPENDENCY_VERSIONS.items():
+                self.assertEqual(1, len(properties.findall(
+                    f"{{http://maven.apache.org/POM/4.0.0}}{name}"
+                )))
                 self.assertEqual(version, properties.findtext(
                     f"{{http://maven.apache.org/POM/4.0.0}}{name}"
                 ))
@@ -163,6 +167,14 @@ class CloudBankEdgeAITests(unittest.TestCase):
             "<project/>",
             "<project><properties>\n    </properties><properties>\n    </properties></project>",
             "<project><properties><tomcat.version>10.1.55</tomcat.version>\n    </properties></project>",
+            "<project><properties>\n    </properties></project>",
+            "<project><properties><spring-ai.version>1.0.6</spring-ai.version>\n    </properties></project>",
+            "<project><properties><spring-ai.version>1.0.5</spring-ai.version>"
+            "<spring-ai.version>1.0.5</spring-ai.version>\n    </properties></project>",
+            "<project><properties><spring-ai.version>1.0.5</spring-ai.version>"
+            "<spring-ai.version>1.0.6</spring-ai.version>\n    </properties></project>",
+            "<project><properties><spring-ai.version>1.0.5</spring-ai.version>"
+            "<tomcat.version>10.1.55</tomcat.version>\n    </properties></project>",
         )
         with tempfile.TemporaryDirectory() as directory:
             root_pom = Path(directory) / "pom.xml"
@@ -196,9 +208,12 @@ class CloudBankEdgeAITests(unittest.TestCase):
             self.assertFalse(receipt["model_quality_qualified"])
             self.assertFalse(receipt["whole_application_equivalent"])
             self.assertEqual([], validate_execution_receipt(receipt, KEY, ROOT))
-            with patch.dict(RUNTIME_DEPENDENCY_VERSIONS, {"tomcat.version": "10.1.55"}):
-                self.assertIn("cloudbank-edge-ai-receipt-binding-invalid",
-                              validate_execution_receipt(receipt, KEY, ROOT))
+            for name, old_version in (("tomcat.version", "10.1.55"), ("spring-ai.version", "1.0.5")):
+                with self.subTest(dependency=name), patch.dict(
+                    RUNTIME_DEPENDENCY_VERSIONS, {name: old_version}
+                ):
+                    self.assertIn("cloudbank-edge-ai-receipt-binding-invalid",
+                                  validate_execution_receipt(receipt, KEY, ROOT))
             tampered = copy.deepcopy(receipt)
             tampered["production_ready"] = True
             errors = validate_execution_receipt(tampered, KEY, ROOT)

@@ -18,6 +18,14 @@ Release references: [HttpCore 5.4.3](https://hc.apache.org/news.html),
 Tomcat 10.1.58, listed by the scanner as a fixed version, failed its release vote; 10.1.59
 is the released version containing those fixes.
 
+The generated parent also updates the Spring AI BOM from **1.0.5** to **1.0.7**. This keeps
+Chatbot's Spring AI modules aligned and addresses its three HIGH findings across
+`spring-ai-client-chat` and `spring-ai-model`: [CVE-2026-41712](https://spring.io/security/cve-2026-41712)
+and [CVE-2026-41713](https://spring.io/security/cve-2026-41713). Spring confirms both fixes in the
+[1.0.7 release](https://spring.io/blog/2026/05/08/spring-ai-1-0-7-1-1-6-2-0-0-M6-available-now).
+Generation requires exactly the expected source BOM property and rejects missing, duplicate,
+or changed declarations before writing the parent POM.
+
 The dependency versions are bound into the MS64 execution plan and signed receipt. After updating
 these pins, run MS64 again in a fresh output directory using the existing signed MS57/MS63 inputs.
 Use that new MS64 receipt and its generated workspace to rebuild the service images. The MS67

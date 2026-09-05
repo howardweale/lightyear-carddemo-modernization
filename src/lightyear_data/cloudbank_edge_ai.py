@@ -43,6 +43,7 @@ RUNTIME_DEPENDENCY_VERSIONS = {
     "httpcore5.version": "5.4.3",
     "tomcat.version": "10.1.59",
     "postgresql.version": "42.7.12",
+    "spring-ai.version": "1.0.7",
 }
 
 SCENARIO_IDS = [
@@ -456,15 +457,22 @@ def validate_edge_source(source_root: Path) -> list[str]:
 def _pin_runtime_dependencies(root_pom: Path) -> None:
     text = root_pom.read_text(encoding="utf-8")
     marker = "    </properties>"
-    if text.count(marker) != 1 or any(
-        f"<{name}>" in text for name in RUNTIME_DEPENDENCY_VERSIONS
-    ):
+    if text.count(marker) != 1:
         raise ValueError("cloudbank-edge-ai-runtime-dependency-pom-drift")
+    # The pinned source already declares its Spring AI BOM property.
+    source_versions = {"spring-ai.version": "1.0.5"}
     overrides = "        <!-- Reviewed MS67 runtime security updates for the generated target. -->\n"
-    overrides += "".join(
-        f"        <{name}>{version}</{name}>\n"
-        for name, version in sorted(RUNTIME_DEPENDENCY_VERSIONS.items())
-    )
+    for name, version in sorted(RUNTIME_DEPENDENCY_VERSIONS.items()):
+        replacement = f"<{name}>{version}</{name}>"
+        if name in source_versions:
+            expected = f"<{name}>{source_versions[name]}</{name}>"
+            if text.count(f"<{name}>") != 1 or text.count(expected) != 1:
+                raise ValueError("cloudbank-edge-ai-runtime-dependency-pom-drift")
+            text = text.replace(expected, replacement, 1)
+        elif f"<{name}>" in text:
+            raise ValueError("cloudbank-edge-ai-runtime-dependency-pom-drift")
+        else:
+            overrides += f"        {replacement}\n"
     write_text(root_pom, text.replace(marker, overrides + marker, 1))
 
 

@@ -92,6 +92,7 @@ class Heartbeat:
 def main(argv=None):
     args = parser().parse_args(argv)
     runtime = None
+    environment_ready = False
     output = None
     key = ""
     upload_failed = False
@@ -128,12 +129,12 @@ def main(argv=None):
             run_id = "journeys-" + uuid.uuid4().hex
             bindings = {"ms64_receipt_sha256": receipt["content_sha256"],
                         "image_lock_sha256": image_lock["content_sha256"], "lane": "gke-postgresql-target"}
-        output = args.output_root
-        if output:
-            output = output.resolve()
-            require(not output.exists(), "fresh-output-directory-required")
-            require(not output.is_relative_to(PROJECT_ROOT), "evidence-output-must-be-outside-checkout")
-            output.mkdir(parents=True, mode=0o700)
+        if args.output_root:
+            candidate_output = args.output_root.resolve()
+            require(not candidate_output.exists(), "fresh-output-directory-required")
+            require(not candidate_output.is_relative_to(PROJECT_ROOT), "evidence-output-must-be-outside-checkout")
+            candidate_output.mkdir(parents=True, mode=0o700)
+            output = candidate_output
         else:
             parent = Path.home() / "ms67-evidence"
             parent.mkdir(parents=True, exist_ok=True)
@@ -142,6 +143,7 @@ def main(argv=None):
             namespace=args.namespace, images=images, run_id=run_id, output=output,
             probe_image=args.probe_image, progress=heartbeat.progress, signing_key=key, signer=args.signer)
         bindings["environment"] = runtime.environment()
+        environment_ready = True
         if args.action == "recover":
             restore_state(runtime, state, key)
             result = {"status": "recovered", "recovery": runtime.close(), "run_id": run_id}
@@ -164,7 +166,7 @@ def main(argv=None):
         result = {**result, "status": "failed", "reason": str(exc) if isinstance(exc, JourneyFailure)
                   else "operator-interrupted" if isinstance(exc, KeyboardInterrupt) else "operator-input-or-runtime-error"}
     finally:
-        if runtime:
+        if runtime and environment_ready:
             try:
                 recovery = runtime.close()
                 result["recovery"] = recovery

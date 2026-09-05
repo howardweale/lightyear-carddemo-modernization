@@ -362,6 +362,21 @@ class CommandTests(unittest.TestCase):
         self.assertIn("non-production-mutation-ack-required", output.getvalue())
         command.assert_not_called()
 
+    def test_rejected_output_directory_does_not_overwrite_existing_evidence(self):
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory)
+            evidence = output / "journeys.json"
+            evidence.write_text("existing-evidence")
+            env = {"GCP_PROJECT_ID": "test-project", "GCP_REGION": "us-west1", "GKE_CLUSTER_NAME": "test-cluster",
+                   "LIGHTYEAR_CLOUDBANK_BASELINE_EVIDENCE_KEY": "key"}
+            with patch.dict(os.environ, env), patch.object(self.cli, "load", return_value={"content_sha256": "a", "images": []}), \
+                    patch.object(self.cli, "validate_execution_receipt", return_value=[]), \
+                    patch.object(self.cli, "validate_image_lock", return_value=[]), redirect_stdout(io.StringIO()):
+                code = self.cli.main(["preflight", "--image-lock", "unused.json", "--output-root", str(output), "--signer", "test"])
+            self.assertEqual(code, 1)
+            self.assertEqual(evidence.read_text(), "existing-evidence")
+            self.assertEqual(list(output.iterdir()), [evidence])
+
     def test_tampered_recovery_state_rejected_before_mutations(self):
         state = sign({"stopped_services": ["account"]}, "key", "test")
         state["stopped_services"] = ["checks"]

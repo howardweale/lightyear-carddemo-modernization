@@ -107,3 +107,12 @@ bounded certificate status with the deployment evidence.
 
 Customer IdP integration, representative customer data volume, customer workload, the customer's
 formal approval process, production deployment, and final production readiness remain MS #68.
+
+## Shared business journey executor
+
+After deployment and the read-only operational baseline are ready, use the
+[shared journey runner](../../shared-journeys/README.md). Start with
+`cloudbank-journeys.sh preflight`; it checks all eight live image identities and
+five OAuth roles. The subsequent run exercises actual business state and process
+recovery with signed bounded evidence. It does not replace the MS65/MS66 receipt
+requirements or the remaining MS67 operational scenarios.

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import gzip
 import hmac
 import ipaddress
 import json
@@ -601,7 +602,17 @@ class GraphExplorerIndex:
         )
 
     def perspectives(self) -> list[dict[str, Any]]:
-        return [item for item in DEFAULT_PERSPECTIVES if item["root"] in self.node_by_id]
+        perspectives = []
+        for definition in DEFAULT_PERSPECTIVES:
+            node = self.node_by_id.get(definition["root"])
+            if node is None:
+                continue
+            item = dict(definition)
+            item["customer_id"] = node.get("properties", {}).get(
+                "customer_id", "carddemo-reference"
+            )
+            perspectives.append(item)
+        return perspectives
 
     def operator_context(self) -> dict[str, Any]:
         counts: dict[str, int] = defaultdict(int)
@@ -713,8 +724,12 @@ class GraphExplorerIndex:
         }
         estate_node_counts: dict[str, int] = defaultdict(int)
         estate_edge_counts: dict[str, int] = defaultdict(int)
+        estate_rule_counts: dict[str, int] = defaultdict(int)
         for estate_id in estate_by_node.values():
             estate_node_counts[estate_id] += 1
+        for node_id, estate_id in estate_by_node.items():
+            if self.node_by_id[node_id]["kind"] == "business_rule":
+                estate_rule_counts[estate_id] += 1
         for edge in self.edge_by_id.values():
             source_estate = estate_by_node.get(edge["source"])
             if source_estate and source_estate == estate_by_node.get(edge["target"]):
@@ -726,6 +741,7 @@ class GraphExplorerIndex:
             item = dict(definition)
             item["node_count"] = estate_node_counts[item["id"]]
             item["edge_count"] = estate_edge_counts[item["id"]]
+            item["rule_count"] = estate_rule_counts[item["id"]]
             companies.append(item)
         limitations = [
             "A static path does not prove that a transaction executed in production.",
@@ -766,6 +782,7 @@ class GraphExplorerIndex:
         kind: str = "",
         limit: int = 25,
         audience: str = "implementer",
+        customer_id: str = "",
     ) -> list[dict[str, Any]]:
         audience = self._audience(audience)
         normalized = query.strip().casefold()
@@ -776,6 +793,11 @@ class GraphExplorerIndex:
             if self._hidden(node, audience):
                 continue
             if kind and node["kind"] != kind:
+                continue
+            node_customer_id = node.get("properties", {}).get(
+                "customer_id", "carddemo-reference"
+            )
+            if customer_id and node_customer_id != customer_id:
                 continue
             haystack = " ".join(
                 [node["id"], node["name"], str(node.get("properties", {}).get("statement", ""))]
@@ -1609,6 +1631,7 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
                         self._value(query, "kind"),
                         self._integer(query, "limit", 25),
                         self._value(query, "audience") or "implementer",
+                        self._value(query, "customer"),
                     )
                 }
             )
@@ -1726,21 +1749,40 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
             return
         content_type, _ = mimetypes.guess_type(candidate.name)
         body = candidate.read_bytes()
-        self.send_response(HTTPStatus.OK)
-        self.send_header("Content-Type", content_type or "application/octet-stream")
-        self.send_header("Content-Length", str(len(body)))
-        self.send_header("Cache-Control", "no-store")
-        self.end_headers()
-        self.wfile.write(body)
+        versioned = bool(urlparse(self.path).query)
+        cache_control = (
+            "public, max-age=31536000, immutable"
+            if versioned else "no-cache"
+        )
+        self._body(body, content_type or "application/octet-stream", cache_control)
 
     def _json(self, payload: Any, status: HTTPStatus = HTTPStatus.OK) -> None:
         body = (json.dumps(payload, sort_keys=True) + "\n").encode("utf-8")
+        self._body(
+            body,
+            "application/json; charset=utf-8",
+            "no-store",
+            status=status,
+        )
+
+    def _body(
+        self,
+        body: bytes,
+        content_type: str,
+        cache_control: str,
+        status: HTTPStatus = HTTPStatus.OK,
+    ) -> None:
+        accepts_gzip = "gzip" in self.headers.get("Accept-Encoding", "").casefold()
+        encoded = gzip.compress(body, compresslevel=6) if accepts_gzip and len(body) >= 1024 else body
         self.send_response(status)
-        self.send_header("Content-Type", "application/json; charset=utf-8")
-        self.send_header("Content-Length", str(len(body)))
-        self.send_header("Cache-Control", "no-store")
+        self.send_header("Content-Type", content_type)
+        self.send_header("Content-Length", str(len(encoded)))
+        self.send_header("Cache-Control", cache_control)
+        self.send_header("Vary", "Accept-Encoding")
+        if encoded is not body:
+            self.send_header("Content-Encoding", "gzip")
         self.end_headers()
-        self.wfile.write(body)
+        self.wfile.write(encoded)
 
     def _request_json(self) -> dict[str, Any]:
         content_length = int(self.headers.get("Content-Length", "0"))

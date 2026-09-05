@@ -36,6 +36,14 @@ const state = {
   fullSelection: null,
   densityBypass: false,
   graphFocusId: null,
+  graphLabels: new Map(),
+  graphRequestGeneration: 0,
+  inspectorRequestGeneration: 0,
+  searchRequestGeneration: 0,
+  traceSearchRequestGeneration: { start: 0, end: 0 },
+  neighborhoodController: null,
+  inspectorController: null,
+  layoutGeneration: 0,
 };
 
 const READABLE_NODE_LIMIT = 70;
@@ -65,7 +73,7 @@ const groups = {
 
 const $ = (id) => document.getElementById(id);
 
-async function api(path, params = {}) {
+async function api(path, params = {}, options = {}) {
   const query = new URLSearchParams();
   Object.entries(params).forEach(([key, value]) => {
     if (value !== "" && value !== undefined && value !== null) query.set(key, value);
@@ -73,10 +81,65 @@ async function api(path, params = {}) {
   const headers = state.verifierToken
     ? { Authorization: `Bearer ${state.verifierToken}` }
     : {};
-  const response = await fetch(`${path}?${query}`, { headers });
-  const payload = await response.json();
-  if (!response.ok) throw new Error(payload.error || `Request failed: ${response.status}`);
-  return payload;
+  const controller = new AbortController();
+  const forwardAbort = () => controller.abort();
+  if (options.signal?.aborted) controller.abort();
+  else options.signal?.addEventListener("abort", forwardAbort, { once: true });
+  let timedOut = false;
+  const timeout = setTimeout(() => {
+    timedOut = true;
+    controller.abort();
+  }, options.timeout || 20000);
+  try {
+    const response = await fetch(`${path}?${query}`, { headers, signal: controller.signal });
+    const payload = await response.json();
+    if (!response.ok) throw new Error(payload.error || `Request failed: ${response.status}`);
+    return payload;
+  } catch (error) {
+    if (timedOut && isAbortError(error)) {
+      const timeoutError = new Error("The request timed out. Check the connection and try again.");
+      timeoutError.name = "TimeoutError";
+      throw timeoutError;
+    }
+    throw error;
+  } finally {
+    clearTimeout(timeout);
+    options.signal?.removeEventListener("abort", forwardAbort);
+  }
+}
+
+function isAbortError(error) { return error?.name === "AbortError"; }
+
+function setGraphLoading(loading, message = "Loading estate…") {
+  $("graph-loading").hidden = !loading;
+  $("graph-loading-message").textContent = message;
+  $("graph").setAttribute("aria-busy", String(loading));
+  $("estate-trigger").classList.toggle("loading", loading);
+}
+
+function cancelInspectorRequest(message = "Loading estate context…") {
+  state.inspectorController?.abort();
+  state.inspectorController = null;
+  state.inspectorRequestGeneration += 1;
+  switchRightPanel("inspector");
+  $("inspector-placeholder").hidden = true;
+  $("inspector").hidden = true;
+  $("edge-inspector").hidden = true;
+  $("inspector-loading").hidden = false;
+  $("inspector-loading-message").textContent = message;
+}
+
+function finishInspectorLoading() {
+  $("inspector-loading").hidden = true;
+}
+
+function showInspectorFailure(message) {
+  finishInspectorLoading();
+  $("inspector").hidden = true;
+  $("edge-inspector").hidden = true;
+  $("inspector-placeholder").hidden = false;
+  $("inspector-placeholder-title").textContent = "Unable to load details";
+  $("inspector-placeholder-message").textContent = message;
 }
 
 async function apiPost(path, body) {
@@ -196,6 +259,15 @@ function refreshCombobox(id) {
       if (event.key === "Escape") {
         closeCombobox(item);
         item.trigger.focus();
+      } else if (["ArrowDown", "ArrowUp", "Home", "End"].includes(event.key)) {
+        event.preventDefault();
+        const enabled = [...item.list.querySelectorAll('[role="option"]:not([aria-disabled="true"])')];
+        const current = enabled.indexOf(event.currentTarget);
+        const next = event.key === "Home" ? 0
+          : event.key === "End" ? enabled.length - 1
+            : event.key === "ArrowDown" ? Math.min(enabled.length - 1, current + 1)
+              : Math.max(0, current - 1);
+        enabled[next]?.focus();
       }
     });
     item.list.appendChild(button);
@@ -245,8 +317,7 @@ async function initialize() {
     ]);
     renderGraphMetrics();
     renderEstateBoundary();
-    $("status-dot").classList.add("online");
-    setConnectionStatus("Control Tower loaded");
+    setConnectionStatus("Loading initial estate");
     $("live-endpoint").textContent = `Live endpoint · ${window.location.host}`;
     populateOperatorContext();
     initializeComboboxes();
@@ -256,9 +327,10 @@ async function initialize() {
     bindControls();
     state.operations = state.meta.operations || await api("/api/operations/status");
     renderLiveStatus();
-    connectLivePlane();
     await activateSelectedWorkload(false);
-    await Promise.all([loadFactoryRuns(false), loadPortfolio(false), loadRecovery(false), loadEvaluations(false), loadMemory(false), loadData(false), loadRuntimeRuns(false), loadAudit(false)]);
+    $("status-dot").classList.add("online");
+    setConnectionStatus("Control Tower loaded");
+    connectLivePlane();
   } catch (error) {
     setError(error);
   }
@@ -286,15 +358,20 @@ function renderEstateBoundary() {
   $("estate-boundary-statement").textContent = state.meta.claim_boundary?.statement || "Read-only composition of separately governed evidence.";
 }
 
-function populatePerspectives() {
+function populatePerspectives(preferredPerspectiveId = "") {
   const select = $("perspective");
+  const previous = select.value;
   select.replaceChildren();
-  state.meta.perspectives.forEach((item) => {
+  const companyId = selectedOperatorCompany()?.id;
+  const perspectives = state.meta.perspectives.filter((item) => !companyId || item.customer_id === companyId);
+  perspectives.forEach((item) => {
     const option = document.createElement("option");
     option.value = item.id;
     option.textContent = item.name;
     select.appendChild(option);
   });
+  const requested = preferredPerspectiveId || previous;
+  if ([...select.options].some((item) => item.value === requested)) select.value = requested;
 }
 
 function populateLegend() {
@@ -385,6 +462,15 @@ function populateWorkloadOptions(preferredWorkloadId) {
     });
   if ([...workloads.options].some((item) => item.value === preferredWorkloadId)) workloads.value = preferredWorkloadId;
   refreshCombobox("workload-context");
+  updateWorkloadVisibility();
+}
+
+function updateWorkloadVisibility() {
+  const control = $("workload-context-control");
+  if (!control) return;
+  const count = $("workload-context").options.length;
+  control.hidden = count <= 1;
+  control.setAttribute("aria-hidden", count <= 1 ? "true" : "false");
 }
 
 function selectedOperatorCompany() {
@@ -420,36 +506,46 @@ function renderOperatorContext() {
   $("customer-evidence-badge").textContent = workload.target_status
     ? `${customer.evidence_class} · ${workload.target_status}`
     : `${customer.evidence_class} evidence`;
+  $("metric-nodes").textContent = formatNumber(customer.node_count);
+  $("metric-edges").textContent = formatNumber(customer.edge_count);
+  $("metric-rules").textContent = formatNumber(customer.rule_count);
   renderEstateTrigger();
 }
 
-async function activateSelectedWorkload(syncScope = false) {
+async function activateSelectedWorkload(resetScope = false) {
   const workload = selectedOperatorWorkload();
   if (!workload) {
     renderOperatorContext();
     return;
   }
   if (
-    syncScope
-    && [...$("technology-scope").options].some((item) => item.value === workload.recommended_scope)
+    resetScope
+    && [...$("technology-scope").options].some((item) => item.value === "all-estate")
   ) {
-    $("technology-scope").value = workload.recommended_scope;
+    $("technology-scope").value = "all-estate";
+    refreshCombobox("technology-scope");
   }
+  if (resetScope) toggleEstatePopover(false);
+  populatePerspectives(workload.perspective_id);
   renderOperatorContext();
   const perspective = state.meta.perspectives.find((item) => item.id === workload.perspective_id);
   if (perspective) {
     $("perspective").value = perspective.id;
-    await loadPerspective();
+    if (!await loadPerspective()) return;
   } else {
     $("graph-title").textContent = workload.name;
-    await loadNeighborhood(workload.root, 3);
+    if (!await loadNeighborhood(workload.root, 3)) return;
   }
-  state.workloadNodeIds = new Set(state.selection.nodes.map((item) => item.id));
+  state.workloadNodeIds = new Set((state.fullSelection || state.selection).nodes.map((item) => item.id));
 }
 
 async function refreshWorkloadBoundary() {
   const workload = selectedOperatorWorkload();
   if (!workload) return;
+  if (state.fullSelection?.root === workload.root) {
+    state.workloadNodeIds = new Set(state.fullSelection.nodes.map((item) => item.id));
+    return;
+  }
   const perspective = state.meta.perspectives.find((item) => item.id === workload.perspective_id);
   const boundary = await api("/api/neighborhood", {
     node: workload.root,
@@ -648,6 +744,11 @@ function bindControls() {
       $("source-drawer").hidden = true;
       return;
     }
+    if (event.key === "Escape" && !$("estate-popover").hidden) {
+      toggleEstatePopover(false);
+      $("estate-trigger").focus();
+      return;
+    }
     if (event.key === "/" && document.activeElement !== $("search")) {
       event.preventDefault();
       $("search").focus();
@@ -826,7 +927,7 @@ function startLiveStatusPolling() {
       state.operations.connection = "reconnecting";
       renderLiveStatus();
     }
-  }, 5000);
+  }, navigator.connection?.saveData ? 30000 : 15000);
 }
 
 function scheduleLiveRefresh(source, hint) {
@@ -859,14 +960,21 @@ function selectedPerspective() {
 
 async function loadPerspective() {
   const perspective = selectedPerspective();
-  if (!perspective) return;
+  if (!perspective) return false;
   $("depth").value = String(perspective.depth);
   $("perspective-description").textContent = perspective.description;
   $("graph-title").textContent = perspective.name;
-  await loadNeighborhood(perspective.root, perspective.depth);
+  return loadNeighborhood(perspective.root, perspective.depth);
 }
 
 async function loadNeighborhood(nodeId, overrideDepth) {
+  state.neighborhoodController?.abort();
+  const controller = new AbortController();
+  state.neighborhoodController = controller;
+  const requestGeneration = ++state.graphRequestGeneration;
+  const requestedName = selectedOperatorWorkload()?.name || "selected estate";
+  setGraphLoading(true, `Loading ${requestedName}…`);
+  cancelInspectorRequest(`Loading ${requestedName} root…`);
   try {
     const depth = overrideDepth || Number($("depth").value);
     const selection = await api("/api/neighborhood", {
@@ -874,18 +982,38 @@ async function loadNeighborhood(nodeId, overrideDepth) {
       depth,
       audience: $("audience").value,
       limit: 1000,
-    });
-    state.selection = selection;
+    }, { signal: controller.signal, timeout: 30000 });
+    if (requestGeneration !== state.graphRequestGeneration) return false;
     state.fullSelection = selection;
-    state.densityBypass = false;
+    const collapsed = selection.nodes.length > READABLE_NODE_LIMIT
+      ? collapseImplementationPackages(selection)
+      : selection;
+    const autoReduced = selection.nodes.length > READABLE_NODE_LIMIT
+      && collapsed.nodes.length <= READABLE_NODE_LIMIT;
+    state.selection = autoReduced ? collapsed : selection;
+    state.densityBypass = autoReduced;
     state.selectedId = nodeId;
     state.selectedEdgeId = null;
     state.edgeDetail = null;
-    $("selection-count").textContent = `${state.selection.nodes.length} nodes · ${state.selection.edges.length} links${state.selection.truncated ? " · bounded" : ""}`;
+    $("density-reset").hidden = !autoReduced;
+    $("density-reset").textContent = autoReduced ? "Reduction options" : "Restore selection";
+    $("selection-count").textContent = autoReduced
+      ? `${state.selection.nodes.length} visible · ${selection.nodes.length} total · packages collapsed`
+      : `${state.selection.nodes.length} nodes · ${state.selection.edges.length} links${state.selection.truncated ? " · bounded" : ""}`;
     renderGraph();
     await inspectNode(nodeId);
+    return requestGeneration === state.graphRequestGeneration;
   } catch (error) {
-    setError(error);
+    if (!isAbortError(error) && requestGeneration === state.graphRequestGeneration) {
+      showInspectorFailure(error.message);
+      setError(error);
+    }
+    return false;
+  } finally {
+    if (requestGeneration === state.graphRequestGeneration) {
+      state.neighborhoodController = null;
+      setGraphLoading(false);
+    }
   }
 }
 
@@ -939,6 +1067,7 @@ function bindTraceSearch(role) {
 }
 
 async function runTraceSearch(role) {
+  const requestGeneration = ++state.traceSearchRequestGeneration[role];
   const input = $(`trace-${role}-search`);
   const container = $(`trace-${role}-results`);
   const query = input.value.trim();
@@ -956,7 +1085,13 @@ async function runTraceSearch(role) {
     return;
   }
   try {
-    const payload = await api("/api/search", { q: query, audience: $("audience").value, limit: 12 });
+    const payload = await api("/api/search", {
+      q: query,
+      audience: $("audience").value,
+      customer: selectedOperatorCompany()?.id,
+      limit: 12,
+    });
+    if (requestGeneration !== state.traceSearchRequestGeneration[role]) return;
     if (!payload.results.length) {
       container.textContent = "No matching graph entity.";
       return;
@@ -974,7 +1109,7 @@ async function runTraceSearch(role) {
       container.appendChild(button);
     });
   } catch (error) {
-    setError(error);
+    if (requestGeneration === state.traceSearchRequestGeneration[role] && !isAbortError(error)) setError(error);
   }
 }
 
@@ -1106,12 +1241,19 @@ function clearTrace() {
 }
 
 async function runSearch() {
+  const requestGeneration = ++state.searchRequestGeneration;
   const query = $("search").value.trim();
   const container = $("search-results");
   container.replaceChildren();
   if (query.length < 2) return;
   try {
-    const payload = await api("/api/search", { q: query, audience: $("audience").value, limit: 30 });
+    const payload = await api("/api/search", {
+      q: query,
+      audience: $("audience").value,
+      customer: selectedOperatorCompany()?.id,
+      limit: 30,
+    });
+    if (requestGeneration !== state.searchRequestGeneration) return;
     const estateId = selectedOperatorCompany()?.id;
     const results = payload.results.filter((item) => item.customer_id === estateId);
     if (!results.length) {
@@ -1136,7 +1278,7 @@ async function runSearch() {
       container.appendChild(button);
     });
   } catch (error) {
-    setError(error);
+    if (requestGeneration === state.searchRequestGeneration && !isAbortError(error)) setError(error);
   }
 }
 
@@ -1147,6 +1289,7 @@ function applyDensityReduction(mode) {
   else state.selection = legacyModernBridgeSelection(state.fullSelection);
   state.densityBypass = true;
   $("density-reset").hidden = false;
+  $("density-reset").textContent = "Restore selection";
   $("selection-count").textContent = `${state.selection.nodes.length} nodes · ${state.selection.edges.length} links · reduced view`;
   renderGraph();
   requestAnimationFrame(focusInitialGraphNode);
@@ -1247,7 +1390,61 @@ function boxesIntersect(a, b, padding = 3) {
   );
 }
 
-function labelPlacements(nodes, edges, positions, width, height, rootId) {
+function boxOverlapArea(a, b, padding = 3) {
+  const horizontal = Math.max(0, Math.min(a.x + a.width + padding, b.x + b.width + padding) - Math.max(a.x - padding, b.x - padding));
+  const vertical = Math.max(0, Math.min(a.y + a.height + padding, b.y + b.height + padding) - Math.max(a.y - padding, b.y - padding));
+  return horizontal * vertical;
+}
+
+function compactGraphLabel(value, limit = 42) {
+  const text = String(value || "Unnamed node");
+  if (text.length <= limit) return text;
+  const tailLength = Math.max(10, Math.floor((limit - 1) * 0.46));
+  const headLength = limit - tailLength - 1;
+  return `${text.slice(0, headLength)}…${text.slice(-tailLength)}`;
+}
+
+function nodeLabelQualifier(node) {
+  const properties = node.properties || {};
+  if (properties.program) return String(properties.program);
+  if (properties.type) return String(properties.type).split(".").at(-1);
+  if (properties.module) return String(properties.module);
+  if (properties.path) {
+    const parts = String(properties.path).split("/");
+    if (parts.length > 1) return parts.at(-2);
+  }
+  const parts = String(node.id || "").split(":");
+  return parts.length > 2 ? parts.at(-2) : String(node.kind || "node").replaceAll("_", " ");
+}
+
+function graphLabels(nodes, limit = 42) {
+  const nameCounts = new Map();
+  nodes.forEach((node) => nameCounts.set(node.name, (nameCounts.get(node.name) || 0) + 1));
+  const labels = new Map();
+  const used = new Set();
+  nodes.forEach((node) => {
+    const qualified = nameCounts.get(node.name) > 1
+      ? `${nodeLabelQualifier(node)} · ${node.name}`
+      : node.name;
+    let label = compactGraphLabel(qualified, limit);
+    if (used.has(label)) {
+      const suffix = ` · ${nodeLabelQualifier(node)}`;
+      label = compactGraphLabel(`${qualified}${suffix}`, limit);
+    }
+    let ordinal = 2;
+    const base = label;
+    while (used.has(label)) {
+      const suffix = ` · ${ordinal}`;
+      label = `${base.slice(0, Math.max(1, limit - suffix.length))}${suffix}`;
+      ordinal += 1;
+    }
+    used.add(label);
+    labels.set(node.id, label);
+  });
+  return labels;
+}
+
+function labelPlacements(nodes, edges, positions, width, height, rootId, labels = graphLabels(nodes)) {
   const degrees = new Map(nodes.map((node) => [node.id, 0]));
   edges.forEach((edge) => {
     degrees.set(edge.source, (degrees.get(edge.source) || 0) + 1);
@@ -1263,15 +1460,18 @@ function labelPlacements(nodes, edges, positions, width, height, rootId) {
   ordered.forEach((node) => {
     const point = positions.get(node.id);
     if (!point) return;
-    const labelWidth = Math.max(38, shorten(node.name, 30).length * 6.2 + 14);
+    const labelWidth = Math.max(38, (labels.get(node.id) || compactGraphLabel(node.name)).length * 6.2 + 16);
     const labelHeight = 19;
-    const candidates = [
-      { name: "north", x: -labelWidth / 2, y: -29 },
-      { name: "north-east", x: 9, y: -25 },
-      { name: "east", x: 9, y: -8 },
-      { name: "south-east", x: 9, y: 10 },
-      { name: "south", x: -labelWidth / 2, y: 10 },
-    ];
+    const candidates = [0, 18, 36, 54].flatMap((offset) => [
+      { name: `north-${offset}`, x: -labelWidth / 2, y: -29 - offset },
+      { name: `north-east-${offset}`, x: 9 + offset, y: -25 - offset },
+      { name: `east-${offset}`, x: 9 + offset, y: -8 },
+      { name: `south-east-${offset}`, x: 9 + offset, y: 10 + offset },
+      { name: `south-${offset}`, x: -labelWidth / 2, y: 10 + offset },
+      { name: `south-west-${offset}`, x: -labelWidth - 9 - offset, y: 10 + offset },
+      { name: `west-${offset}`, x: -labelWidth - 9 - offset, y: -8 },
+      { name: `north-west-${offset}`, x: -labelWidth - 9 - offset, y: -25 - offset },
+    ]);
     const placement = candidates.find((candidate) => {
       const box = {
         x: point.x + candidate.x,
@@ -1282,17 +1482,27 @@ function labelPlacements(nodes, edges, positions, width, height, rootId) {
       const inside = box.x >= 3 && box.y >= 3 && box.x + box.width <= width - 3 && box.y + box.height <= height - 3;
       return inside && !occupied.some((other) => boxesIntersect(box, other));
     });
-    if (!placement) {
-      placements.set(node.id, null);
-      return;
-    }
+    const visiblePlacement = placement || candidates
+      .map((candidate) => {
+        const absoluteX = Math.min(Math.max(3, point.x + candidate.x), Math.max(3, width - labelWidth - 3));
+        const absoluteY = Math.min(Math.max(3, point.y + candidate.y), Math.max(3, height - labelHeight - 3));
+        const box = { x: absoluteX, y: absoluteY, width: labelWidth, height: labelHeight };
+        const overlap = occupied.reduce((total, other) => total + boxOverlapArea(box, other), 0);
+        return {
+          name: `fallback-${candidate.name}`,
+          x: absoluteX - point.x,
+          y: absoluteY - point.y,
+          overlap,
+        };
+      })
+      .sort((a, b) => a.overlap - b.overlap)[0];
     occupied.push({
-      x: point.x + placement.x,
-      y: point.y + placement.y,
+      x: point.x + visiblePlacement.x,
+      y: point.y + visiblePlacement.y,
       width: labelWidth,
       height: labelHeight,
     });
-    placements.set(node.id, { ...placement, width: labelWidth, height: labelHeight });
+    placements.set(node.id, { ...visiblePlacement, width: labelWidth, height: labelHeight });
   });
   return placements;
 }
@@ -1355,6 +1565,7 @@ function handleGraphNodeKeydown(event, node) {
 }
 
 function renderGraph() {
+  const layoutGeneration = ++state.layoutGeneration;
   $("edges").replaceChildren();
   $("nodes").replaceChildren();
   state.positions.clear();
@@ -1373,6 +1584,7 @@ function renderGraph() {
   const width = graph.clientWidth || 800;
   const height = graph.clientHeight || 650;
   const nodes = state.selection.nodes;
+  state.graphLabels = graphLabels(nodes);
   const rootIndex = nodes.findIndex((node) => node.id === state.selection.root);
   nodes.forEach((node, index) => {
     const angle = (Math.PI * 2 * index) / Math.max(1, nodes.length);
@@ -1401,10 +1613,24 @@ function renderGraph() {
     hit.dataset.id = edge.id;
     hit.dataset.source = edge.source;
     hit.dataset.target = edge.target;
-    hit.addEventListener("click", (event) => {
+    hit.setAttribute("role", "button");
+    hit.setAttribute("tabindex", "0");
+    hit.setAttribute("aria-label", `Inspect ${edge.relation.replaceAll("_", " ")} relationship`);
+    const inspect = (event) => {
       event.stopPropagation();
       inspectEdge(edge.id);
+    };
+    hit.addEventListener("click", inspect);
+    hit.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        inspect(event);
+      }
     });
+    hit.addEventListener("pointerenter", () => line.classList.add("hovered"));
+    hit.addEventListener("pointerleave", () => line.classList.remove("hovered"));
+    hit.addEventListener("focus", () => line.classList.add("focused"));
+    hit.addEventListener("blur", () => line.classList.remove("focused"));
     $("edges").appendChild(hit);
   });
 
@@ -1424,12 +1650,12 @@ function renderGraph() {
     const title = document.createElementNS(NS, "title");
     title.textContent = `${node.name}\n${node.kind}`;
     circle.appendChild(title);
-    const labelText = shorten(node.name, 30);
+    const labelText = state.graphLabels.get(node.id) || compactGraphLabel(node.name);
     const pill = document.createElementNS(NS, "rect");
     pill.classList.add("node-label-pill");
     pill.setAttribute("x", "9");
     pill.setAttribute("y", "-8");
-    pill.setAttribute("width", String(Math.max(38, labelText.length * 6.2 + 14)));
+    pill.setAttribute("width", String(Math.max(38, labelText.length * 6.2 + 16)));
     pill.setAttribute("height", "19");
     pill.setAttribute("rx", "9.5");
     const label = document.createElementNS(NS, "text");
@@ -1447,14 +1673,20 @@ function renderGraph() {
     group.addEventListener("pointerdown", startNodeDrag);
     $("nodes").appendChild(group);
   });
-  relaxLayout(0);
+  relaxLayout(0, layoutGeneration);
   applyOperatorFocus();
-  setTimeout(fitGraph, 120);
+  requestAnimationFrame(fitGraph);
 }
 
-function relaxLayout(iteration) {
-  if (!state.selection || iteration > 150) return;
+function relaxLayout(iteration, layoutGeneration) {
+  if (!state.selection || layoutGeneration !== state.layoutGeneration) return;
   const nodes = state.selection.nodes;
+  const finalIteration = nodes.length > 50 ? 75 : 110;
+  if (iteration > finalIteration) {
+    updatePositions(true);
+    fitGraph();
+    return;
+  }
   const width = $("graph").clientWidth;
   const height = $("graph").clientHeight;
   for (let i = 0; i < nodes.length; i += 1) {
@@ -1487,11 +1719,11 @@ function relaxLayout(iteration) {
   state.positions.forEach((position) => {
     if (!position.fixed) { position.x += position.vx; position.y += position.vy; }
   });
-  updatePositions();
-  requestAnimationFrame(() => relaxLayout(iteration + 1));
+  updatePositions(iteration % 8 === 0 || iteration === finalIteration);
+  requestAnimationFrame(() => relaxLayout(iteration + 1, layoutGeneration));
 }
 
-function updatePositions() {
+function updatePositions(placeLabels = true) {
   document.querySelectorAll(".node").forEach((element) => {
     const point = state.positions.get(element.dataset.id);
     element.setAttribute("transform", `translate(${point.x},${point.y})`);
@@ -1504,6 +1736,7 @@ function updatePositions() {
     element.setAttribute("x2", target.x);
     element.setAttribute("y2", target.y);
   });
+  if (!placeLabels) return;
   const placements = labelPlacements(
     state.selection.nodes,
     state.selection.edges,
@@ -1511,6 +1744,7 @@ function updatePositions() {
     $("graph").clientWidth,
     $("graph").clientHeight,
     state.selection.root,
+    state.graphLabels,
   );
   document.querySelectorAll(".node").forEach((element) => {
     const placement = placements.get(element.dataset.id);
@@ -1554,15 +1788,30 @@ function inspectCollapsedPackage(node) {
 }
 
 async function inspectNode(nodeId) {
+  state.inspectorController?.abort();
+  const controller = new AbortController();
+  state.inspectorController = controller;
+  const requestGeneration = ++state.inspectorRequestGeneration;
+  switchRightPanel("inspector");
+  $("inspector-placeholder").hidden = true;
+  $("inspector").hidden = true;
+  $("edge-inspector").hidden = true;
+  $("inspector-loading").hidden = false;
+  $("inspector-loading-message").textContent = "Loading node details…";
+  document.querySelectorAll(".node").forEach((item) => item.classList.toggle("active", item.dataset.id === nodeId));
   try {
-    const node = await api("/api/node", { id: nodeId, audience: $("audience").value });
+    const node = await api(
+      "/api/node",
+      { id: nodeId, audience: $("audience").value },
+      { signal: controller.signal },
+    );
+    if (requestGeneration !== state.inspectorRequestGeneration) return false;
     state.inspectedNode = node;
     state.selectedId = nodeId;
     state.selectedEdgeId = null;
     state.edgeDetail = null;
     $("focus-node").disabled = false;
     $("trace-start-node").disabled = false;
-    document.querySelectorAll(".node").forEach((item) => item.classList.toggle("active", item.dataset.id === nodeId));
     document.querySelectorAll(".edge").forEach((item) => {
       item.classList.toggle("active", item.dataset.source === nodeId || item.dataset.target === nodeId);
       item.classList.remove("selected");
@@ -1582,14 +1831,39 @@ async function inspectNode(nodeId) {
     renderRuntimeProjection(node.runtime, $("detail-runtime"));
     renderRelations(node);
     $("chat-focus").textContent = `${node.name} · ${node.kind.replaceAll("_", " ")}`;
+    return true;
   } catch (error) {
-    setError(error);
+    if (!isAbortError(error) && requestGeneration === state.inspectorRequestGeneration) {
+      showInspectorFailure(error.message);
+      setError(error);
+    }
+    return false;
+  } finally {
+    if (requestGeneration === state.inspectorRequestGeneration) {
+      state.inspectorController = null;
+      finishInspectorLoading();
+    }
   }
 }
 
 async function inspectEdge(edgeId) {
+  state.inspectorController?.abort();
+  const controller = new AbortController();
+  state.inspectorController = controller;
+  const requestGeneration = ++state.inspectorRequestGeneration;
+  switchRightPanel("inspector");
+  $("inspector-placeholder").hidden = true;
+  $("inspector").hidden = true;
+  $("edge-inspector").hidden = true;
+  $("inspector-loading").hidden = false;
+  $("inspector-loading-message").textContent = "Loading relationship details…";
   try {
-    const edge = await api("/api/edge", { id: edgeId, audience: $("audience").value });
+    const edge = await api(
+      "/api/edge",
+      { id: edgeId, audience: $("audience").value },
+      { signal: controller.signal },
+    );
+    if (requestGeneration !== state.inspectorRequestGeneration) return false;
     state.selectedId = null;
     state.selectedEdgeId = edgeId;
     state.edgeDetail = edge;
@@ -1615,9 +1889,18 @@ async function inspectEdge(edgeId) {
     renderSupportingEvidence(edge.supporting_evidence || [], $("edge-evidence"));
     renderRuntimeProjection(edge.runtime, $("edge-runtime"));
     $("chat-focus").textContent = `${edge.source_node.name} —${edge.relation}→ ${edge.target_node.name}`;
-    switchRightPanel("inspector");
+    return true;
   } catch (error) {
-    setError(error);
+    if (!isAbortError(error) && requestGeneration === state.inspectorRequestGeneration) {
+      showInspectorFailure(error.message);
+      setError(error);
+    }
+    return false;
+  } finally {
+    if (requestGeneration === state.inspectorRequestGeneration) {
+      state.inspectorController = null;
+      finishInspectorLoading();
+    }
   }
 }
 
@@ -1840,7 +2123,7 @@ function startNodeDrag(event) {
   const nodeId = event.currentTarget.dataset.id;
   state.positions.get(nodeId).fixed = true;
   state.drag = { type: "node", nodeId };
-  $("graph").setPointerCapture(event.pointerId);
+  event.currentTarget.setPointerCapture(event.pointerId);
 }
 
 function applyZoom() {
@@ -1877,6 +2160,11 @@ function switchRightPanel(view) {
   const data = view === "data";
   const runtime = view === "runtime";
   const audit = view === "audit";
+  const globalEvidence = factory || portfolio || recovery || evaluation || memory || data || runtime || audit;
+  const companyName = selectedOperatorCompany()?.name || "Selected estate";
+  $("right-context-label").textContent = globalEvidence
+    ? "Global evidence plane · not estate-filtered"
+    : `${companyName} · estate context`;
   $("trace-view").hidden = !trace;
   $("chat-view").hidden = !chat;
   $("factory-view").hidden = !factory;
@@ -2827,6 +3115,7 @@ function highlightGrounding(nodeIds, edgeIds) {
 function shorten(value, limit) { return value.length > limit ? `${value.slice(0, limit - 1)}…` : value; }
 
 function setError(error) {
+  if (isAbortError(error)) return;
   $("status-dot").classList.remove("online");
   $("status-dot").classList.add("error");
   setConnectionStatus(error.message);
@@ -2834,6 +3123,6 @@ function setError(error) {
 }
 
 if (typeof module !== "undefined" && module.exports) {
-  module.exports = { boxesIntersect, labelPlacements };
+  module.exports = { boxesIntersect, compactGraphLabel, graphLabels, labelPlacements };
 }
 if (typeof document !== "undefined") initialize();

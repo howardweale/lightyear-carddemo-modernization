@@ -16,7 +16,7 @@ from lightyear_common.io import write_json
 
 from .cloudbank_baseline import PINNED_COMMIT, PINNED_ROOT_TREE, PINNED_SUBTREE, PINNED_SUBTREE_TREE
 from .cloudbank_customer_postgres import POSTGRES_IMAGE
-from .cloudbank_dark_factory import _inspect_image, _wait_postgres
+from .cloudbank_dark_factory import _inspect_image, _run, _wait_postgres
 from .cloudbank_native_wave import _psql
 from .cloudbank_production_oauth import (
     RECEIPT_TYPE as MS62_RECEIPT_TYPE,
@@ -438,7 +438,7 @@ def execute_checks_messaging(
     output_root.mkdir(parents=True, exist_ok=True)
     workspace = materialize_target(project_root, source_root, output_root / "workspace")
     if lane_runner is None:
-        lane = _native_lane(workspace, image_id, subprocess.run, time.sleep, progress)
+        lane = _native_lane(workspace, image_id, _run, time.sleep, progress)
     else:
         lane = lane_runner(workspace, image_id)
     required_packaging = {"executable_jars": 5, "oracle_runtime_libraries": 0,

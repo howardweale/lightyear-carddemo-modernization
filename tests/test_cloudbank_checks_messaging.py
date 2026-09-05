@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import copy
 import json
+import subprocess
+import sys
 import tempfile
 import unittest
 from pathlib import Path
@@ -9,7 +11,9 @@ from unittest.mock import patch
 
 from lightyear_data.cloudbank_checks_messaging import (
     CONTRACT_SHA256,
+    FAILURE_NAME,
     OUTPUT_ROOT,
+    RECEIPT_NAME,
     RECEIPT_TYPE,
     SCENARIO_IDS,
     build_artifacts,
@@ -157,6 +161,55 @@ class CloudBankChecksMessagingTests(unittest.TestCase):
             text = (output / "cloudbank-checks-messaging.failure.json").read_text()
             self.assertNotIn("password", text)
             self.assertNotIn("raw_stdout", text)
+
+    @patch("lightyear_data.cloudbank_checks_messaging._package_inventory")
+    @patch("lightyear_data.cloudbank_checks_messaging.validate_ms62_receipt", return_value=[])
+    @patch("lightyear_data.cloudbank_checks_messaging.validate_checks_source", return_value=[])
+    @patch("lightyear_data.cloudbank_checks_messaging.materialize_target")
+    def test_default_native_runner_captures_real_subprocess_output_and_fails_closed(
+        self, materialize: object, _source: object, _ms62: object, inventory: object
+    ) -> None:
+        real_run = subprocess.run
+        inventory.return_value = passed_lane()["packaging"]
+        cases = (
+            ("wrong-image", HEX_A, 0, "image-id-mismatch", ["docker"]),
+            ("failed-inspection", HEX_B, 1, "image-id-mismatch", ["docker"]),
+            ("failed-package", HEX_B, 0, "acceptance-failed", ["docker", "mvn"]),
+        )
+        for name, image, inspect_exit, error, expected_commands in cases:
+            with self.subTest(name=name), tempfile.TemporaryDirectory() as directory:
+                output = Path(directory)
+                workspace = output / "workspace"
+                workspace.mkdir()
+                materialize.return_value = workspace
+                commands = []
+
+                def run_command(argv: list[str], **kwargs: object) -> subprocess.CompletedProcess[str]:
+                    commands.append(argv[0])
+                    if argv[:3] == ["docker", "image", "inspect"]:
+                        stdout, exit_code = f"sha256:{image}", inspect_exit
+                    elif argv[0] == "mvn":
+                        stdout, exit_code = "package-output-marker", 1
+                    else:
+                        self.fail(f"Unexpected command: {argv}")
+                    # Keep real subprocess capture/decoding behavior; only substitute the executable.
+                    return real_run([
+                        sys.executable, "-c",
+                        "import sys; print(sys.argv[1]); "
+                        "print('stderr-output-marker', file=sys.stderr); sys.exit(int(sys.argv[2]))",
+                        stdout, str(exit_code),
+                    ], **kwargs)
+
+                with patch("lightyear_data.cloudbank_checks_messaging.subprocess.run", side_effect=run_command):
+                    with self.assertRaisesRegex(ValueError, error):
+                        execute_checks_messaging(ROOT, ROOT, ms62_receipt(), output, KEY, "unit-test")
+                self.assertEqual(expected_commands, commands)
+                self.assertFalse((output / RECEIPT_NAME).exists())
+                if name == "failed-package":
+                    diagnostic = (output / FAILURE_NAME).read_text(encoding="utf-8")
+                    self.assertEqual("failed", json.loads(diagnostic)["lane_status"])
+                    self.assertNotIn("package-output-marker", diagnostic)
+                    self.assertNotIn("stderr-output-marker", diagnostic)
 
     def test_launchers_and_schemas_exist(self) -> None:
         for relative in (

@@ -324,15 +324,23 @@ class GkeRuntime:
         deploy = self.deployment("checks")
         containers = deploy["spec"]["template"]["spec"]["containers"]
         index = next(i for i, container in enumerate(containers) if container["name"] == "checks")
-        old = containers[index].get("env", [])
-        updated = [item for item in old if item.get("name") != "ACCOUNT_JOURNAL_URL"]
-        if value is not None:
-            updated.append(value)
-        patch = [{"op": "test", "path": "/metadata/resourceVersion", "value": deploy["metadata"]["resourceVersion"]},
-                 {"op": "add", "path": f"/spec/template/spec/containers/{index}/env", "value": updated}]
-        # Patch on stdin: even pre-existing env entries must not enter process
-        # arguments or a retained command log.
-        self.kubectl("patch", "deployment/checks", "--type=json", "--patch-file=/dev/stdin", data=json.dumps(patch))
+        container = containers[index]
+        old = container.get("env", [])
+        matches = [i for i, item in enumerate(old) if item.get("name") == "ACCOUNT_JOURNAL_URL"]
+        require(len(matches) <= 1, "checks-delivery-configuration-ambiguous")
+        base = f"/spec/template/spec/containers/{index}/env"
+        patch = [{"op": "test", "path": "/metadata/resourceVersion", "value": deploy["metadata"]["resourceVersion"]}]
+        if matches:
+            change = {"op": "remove" if value is None else "replace", "path": base + "/" + str(matches[0])}
+            if value is not None:
+                change["value"] = value
+            patch.append(change)
+        elif value is not None:
+            patch.append({"op": "add", "path": base + "/-" if "env" in container else base,
+                          "value": value if "env" in container else [value]})
+        # Only the validated nonsecret endpoint/reference enters this patch.
+        # Never copy unrelated env entries into argv or a temporary file.
+        self.kubectl("patch", "deployment/checks", "--type=json", "--patch", json.dumps(patch))
 
     def block_checks_delivery(self):
         require(self.checks_delivery is None, "checks-delivery-already-overridden")

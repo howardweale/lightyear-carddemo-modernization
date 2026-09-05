@@ -270,14 +270,14 @@ class GkeAdapterTests(unittest.TestCase):
                 self.runtime.restore_checks_delivery()
         command.assert_not_called()
 
-    def test_patch_uses_version_precondition_and_stdin(self):
+    def test_patch_uses_version_precondition_and_bounded_fields(self):
         deployment = {"metadata": {"resourceVersion": "123"}, "spec": {"template": {"spec": {"containers": [
             {"name": "checks", "env": [{"name": "EXISTING", "value": "keep-in-memory"}]}]}}}}
         with patch.object(self.runtime, "deployment", return_value=deployment), patch.object(self.runtime, "kubectl") as command:
             self.runtime.patch_checks_delivery(None)
         args, kwargs = command.call_args
         self.assertNotIn("keep-in-memory", str(args))
-        self.assertEqual(json.loads(kwargs["data"])[0], {"op": "test", "path": "/metadata/resourceVersion", "value": "123"})
+        self.assertEqual(json.loads(args[4])[0], {"op": "test", "path": "/metadata/resourceVersion", "value": "123"})
 
     def test_queue_never_changes_database(self):
         with patch.object(self.runtime, "sql", return_value={"state": "PROCESSING", "attempts": 1}) as sql:

@@ -202,8 +202,9 @@ class CloudBankProductionReadinessTests(unittest.TestCase):
                          deployed["azn-server"]["AZN_BOOTSTRAP_USERS_ENABLED"])
         for service in ("account", "transfer"):
             self.assertEqual("cloudbank-oauth", deployed[service]["SPRING_PROFILES_ACTIVE"])
-        self.assertEqual(native_transfer["CLOUDBANK_SECURITY_SERVICE_TOKEN_ENABLED"],
-                         deployed["transfer"]["CLOUDBANK_SECURITY_SERVICE_TOKEN_ENABLED"])
+        for service in ("transfer", "checks"):
+            self.assertEqual(native_transfer["CLOUDBANK_SECURITY_SERVICE_TOKEN_ENABLED"],
+                             deployed[service]["CLOUDBANK_SECURITY_SERVICE_TOKEN_ENABLED"], service)
 
     def test_unbounded_network_and_mutable_image_are_rejected(self) -> None:
         env = environment()

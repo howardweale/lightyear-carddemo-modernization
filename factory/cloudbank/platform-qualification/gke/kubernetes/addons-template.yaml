@@ -30,8 +30,13 @@ data:
         detectors: [gcp]
         timeout: 10s
     exporters:
-      googlecloud: {}
+      googlecloud:
+        project: "{{PROJECT_ID}}"
+    extensions:
+      health_check:
+        endpoint: 0.0.0.0:13133
     service:
+      extensions: [health_check]
       pipelines:
         metrics:
           receivers: [otlp]
@@ -56,6 +61,8 @@ spec:
     metadata:
       labels:
         app: otel-collector
+      annotations:
+        lightyear.ai/otel-config-sha256: "{{OTEL_CONFIGURATION_SHA256}}"
     spec:
       serviceAccountName: otel-collector
       containers:
@@ -65,6 +72,20 @@ spec:
         ports:
         - {name: otlp-grpc, containerPort: 4317}
         - {name: otlp-http, containerPort: 4318}
+        - {name: health, containerPort: 13133}
+        startupProbe:
+          httpGet: {path: /, port: health}
+          periodSeconds: 5
+          timeoutSeconds: 2
+          failureThreshold: 60
+        livenessProbe:
+          httpGet: {path: /, port: health}
+          periodSeconds: 10
+          timeoutSeconds: 2
+        readinessProbe:
+          httpGet: {path: /, port: health}
+          periodSeconds: 5
+          timeoutSeconds: 2
         resources:
           requests:
             cpu: 100m
@@ -137,6 +158,12 @@ spec:
         cidr: "{{GOOGLE_APIS_CIDR}}"
     ports:
     - {protocol: TCP, port: 443}
+  - to:
+    - ipBlock:
+        cidr: 169.254.169.254/32
+    ports:
+    - {protocol: TCP, port: 80}
+    - {protocol: TCP, port: 8080}
   - to:
     - namespaceSelector:
         matchLabels:

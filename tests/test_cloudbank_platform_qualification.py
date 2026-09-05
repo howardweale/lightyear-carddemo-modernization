@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import copy
 import json
+import re
 import subprocess
 import tempfile
 import unittest
@@ -26,6 +27,7 @@ from lightyear_data.cloudbank_platform_qualification import (
     preflight_platform,
     readiness_receipt,
     render_gke_addons,
+    select_gke_telemetry_resources,
     validate_artifacts,
     validate_execution_receipt,
     validate_observation,
@@ -37,6 +39,16 @@ from lightyear_data.contracts import sign
 ROOT = Path(__file__).resolve().parents[1]
 KEY = "unit-test-cloudbank-ms67-key"
 HEX_A, HEX_B, HEX_C = "a" * 64, "b" * 64, "c" * 64
+
+
+def rendered_addons(project: str = "test-project") -> str:
+    return render_gke_addons(
+        project, "europe-west2", "cloudbank-ms67", "cloudbank-ms67",
+        "cloudbank.test.example.com", "owner@example.com",
+        "otel/opentelemetry-collector-contrib@sha256:" + "1" * 64,
+        "cloudbank-model", image("ollama-qwen2.5-0.5b", 90), "qwen2.5:0.5b",
+        HEX_A, "199.36.153.8/30",
+    )
 
 
 def image(service: str, index: int = 1) -> str:
@@ -215,6 +227,58 @@ class CloudBankPlatformQualificationTests(unittest.TestCase):
         errors = validate_profile(invalid, KEY)
         self.assertIn("cloudbank-platform-qualification-profile-ingress-invalid", errors)
         self.assertIn("cloudbank-platform-qualification-profile-authorization-invalid", errors)
+
+    def test_collector_has_explicit_project_health_and_configuration_rollout(self) -> None:
+        rendered = rendered_addons()
+        self.assertIn('googlecloud:\n        project: "test-project"', rendered)
+        self.assertIn("health_check:\n        endpoint: 0.0.0.0:13133", rendered)
+        self.assertIn("extensions: [health_check]", rendered)
+        collector = next(document for document in rendered.split("---\n")
+                         if "kind: Deployment\nmetadata:\n  name: otel-collector\n" in document)
+        for probe in ("startupProbe", "readinessProbe", "livenessProbe"):
+            self.assertIn(f"{probe}:\n          httpGet: {{path: /, port: health}}", collector)
+        service = next(document for document in rendered.split("---\n")
+                       if "kind: Service\nmetadata:\n  name: otel-collector\n" in document)
+        self.assertNotIn("13133", service)
+        pattern = r'lightyear.ai/otel-config-sha256: "([a-f0-9]{64})"'
+        original = re.search(pattern, rendered).group(1)
+        self.assertEqual(original, re.search(pattern, rendered_addons()).group(1))
+        self.assertNotEqual(original, re.search(pattern, rendered_addons("second-project")).group(1))
+        with patch("lightyear_data.cloudbank_platform_qualification.gke_addons_template",
+                   return_value=gke_addons_template().replace("batch: {}", "batch: {timeout: 10s}")):
+            self.assertNotEqual(original, re.search(pattern, rendered_addons()).group(1))
+
+    def test_metadata_access_is_limited_to_collector_and_dataplane_v2_endpoint(self) -> None:
+        rendered = rendered_addons()
+        policies = [document for document in rendered.split("---\n")
+                    if "169.254.169.254" in document]
+        self.assertEqual(1, len(policies))
+        policy = policies[0]
+        self.assertIn("kind: NetworkPolicy", policy)
+        self.assertIn("name: otel-collector-traffic\n  namespace: observability", policy)
+        self.assertIn("podSelector:\n    matchLabels:\n      app: otel-collector", policy)
+        metadata_rule = next(rule for rule in policy.split("  - to:\n")
+                             if "169.254.169.254" in rule)
+        self.assertIn("cidr: 169.254.169.254/32", metadata_rule)
+        self.assertEqual(["80", "8080"], re.findall(r"protocol: TCP, port: (\d+)", metadata_rule))
+        self.assertIn('cidr: "199.36.153.8/30"', policy)
+        self.assertNotIn("0.0.0.0/0", policy)
+
+    def test_telemetry_repair_excludes_application_model_and_secret_resources(self) -> None:
+        rendered = rendered_addons()
+        selected = select_gke_telemetry_resources(rendered)
+        identities = re.findall(r"kind: (\S+)\nmetadata:\n  name: (\S+)", selected)
+        self.assertEqual([
+            ("Namespace", "observability"), ("ServiceAccount", "otel-collector"),
+            ("ConfigMap", "otel-collector"), ("Deployment", "otel-collector"),
+            ("Service", "otel-collector"), ("NetworkPolicy", "observability-default-deny"),
+            ("NetworkPolicy", "otel-collector-traffic"),
+        ], identities)
+        for excluded in ("kind: SecretStore", "kind: ExternalSecret", "kind: ClusterIssuer",
+                         "kind: Ingress", "name: ollama", 'namespace: "cloudbank-ms67"'):
+            self.assertNotIn(excluded, selected)
+        with self.assertRaisesRegex(ValueError, "telemetry-resource-count-invalid"):
+            select_gke_telemetry_resources(rendered.split("---\n", 1)[1])
 
     @patch("lightyear_data.cloudbank_platform_qualification.shutil.which", return_value="/bin/tool")
     def test_preflight_uses_explicit_context_and_persists_only_hashes(self, _which: object) -> None:

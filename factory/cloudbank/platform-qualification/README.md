@@ -36,3 +36,30 @@ authorized, non-production platform.
 The GKE assets are an implementation profile, not evidence that this workspace contacted Google
 Cloud. Customer IdP integration, representative customer volumes, the customer's formal approval
 process, production deployment, and final production readiness remain for MS #68.
+
+## Recover an existing telemetry collector
+
+The collector's Google Cloud exporter receives `GCP_PROJECT_ID` explicitly. Its network policy
+allows the Dataplane V2 metadata endpoint `169.254.169.254/32` on TCP 80 and 8080 for Workload
+Identity credentials, alongside DNS and the restricted Google API VIP. These metadata ports follow
+[the GKE network policy requirements](https://docs.cloud.google.com/kubernetes-engine/docs/how-to/network-policy#network_policy_and_workload_identity_federation_for_gke).
+The collector keeps its existing Kubernetes service account and bootstrap IAM grants.
+
+After loading the qualification environment and non-production acknowledgement, run:
+
+```bash
+bash factory/cloudbank/platform-qualification/gke/repair-telemetry.sh \
+  "$(mktemp -d "$HOME/ms67-evidence/ms67-telemetry.XXXXXX")"
+```
+
+This helper verifies the cluster uses Dataplane V2, renders and applies only the seven
+observability resources, reports progress every 20 seconds while waiting, and requires two ready,
+updated collector replicas. The pod configuration hash triggers a rollout when the collector
+configuration changes. Startup, readiness, and liveness probes use its internal health extension.
+The regular deployment script also waits for collector readiness before applying the services.
+
+The helper saves configuration, checksums, and a small status record locally and under
+`gs://PROJECT-ms67-evidence/telemetry-recovery/`. A failed render or rollout is recorded as a failure.
+It does not modify application images, Cloud SQL, External Secrets, TLS, or the model deployment.
+Collector readiness does not establish Cloud Monitoring or Cloud Trace delivery; those checks and
+the remaining signed qualification gates still require live observations.

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import csv
+import gzip
 import json
 import subprocess
 import tempfile
@@ -209,6 +210,25 @@ class GraphExplorerTests(unittest.TestCase):
             with urlopen(f"{base}/fonts/IBMPlexSans-Regular-Latin1.woff2", timeout=3) as response:
                 self.assertGreater(len(response.read()), 1000)
 
+            compressed_meta = Request(
+                f"{base}/api/meta",
+                headers={"Accept-Encoding": "gzip"},
+            )
+            with urlopen(compressed_meta, timeout=3) as response:
+                self.assertEqual("gzip", response.headers["Content-Encoding"])
+                self.assertEqual("no-store", response.headers["Cache-Control"])
+                metadata = json.loads(gzip.decompress(response.read()))
+            self.assertEqual(self.payload["content_sha256"], metadata["content_sha256"])
+
+            versioned_script = Request(
+                f"{base}/app.js?v=test",
+                headers={"Accept-Encoding": "gzip"},
+            )
+            with urlopen(versioned_script, timeout=3) as response:
+                self.assertEqual("gzip", response.headers["Content-Encoding"])
+                self.assertIn("immutable", response.headers["Cache-Control"])
+                self.assertGreater(len(gzip.decompress(response.read())), 1000)
+
             protected = f"{base}/api/search?q=private+legacy&audience=verifier"
             with self.assertRaises(HTTPError) as denied:
                 urlopen(protected, timeout=3)
@@ -266,6 +286,80 @@ console.log(JSON.stringify({ visible: boxes.length }));
         )
         self.assertEqual(0, result.returncode, result.stderr)
         self.assertGreaterEqual(json.loads(result.stdout)["visible"], 3)
+
+    def test_graph_label_placement_never_drops_a_node(self) -> None:
+        script = r"""
+const { labelPlacements } = require(process.argv[1]);
+const nodes = Array.from({ length: 12 }, (_, index) => ({ id: `node-${index}`, name: `Node ${index}` }));
+const positions = new Map(nodes.map((node) => [node.id, { x: 160, y: 120 }]));
+const result = labelPlacements(nodes, [], positions, 320, 240, "node-0");
+for (const node of nodes) {
+  if (!result.get(node.id)) throw new Error(`missing-label:${node.id}`);
+}
+console.log(result.size);
+"""
+        result = subprocess.run(
+            ["node", "-e", script, str(ROOT / "knowledge" / "viewer" / "app.js")],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        self.assertEqual(0, result.returncode, result.stderr)
+        self.assertEqual("12", result.stdout.strip())
+
+    def test_graph_labels_preserve_distinguishing_identity(self) -> None:
+        script = r"""
+const { compactGraphLabel, graphLabels } = require(process.argv[1]);
+const nodes = [
+  { id: "legacy:cobol-paragraph:CBTRN01C:1000-EXIT", kind: "cobol_paragraph", name: "1000-EXIT", properties: { program: "CBTRN01C" } },
+  { id: "legacy:cobol-paragraph:CBTRN02C:1000-EXIT", kind: "cobol_paragraph", name: "1000-EXIT", properties: { program: "CBTRN02C" } },
+  { id: "modern:java-type:com.example.accounts.controller.AccountController", kind: "java_type", name: "com.example.accounts.controller.AccountController", properties: {} },
+  { id: "modern:java-type:com.example.accounts.controller.TransferController", kind: "java_type", name: "com.example.accounts.controller.TransferController", properties: {} },
+];
+const labels = graphLabels(nodes);
+const values = nodes.map((node) => labels.get(node.id));
+if (new Set(values).size !== values.length) throw new Error(`duplicate-labels:${values}`);
+if (!values[0].includes("CBTRN01C") || !values[1].includes("CBTRN02C")) throw new Error(`missing-qualifier:${values}`);
+if (!values[2].endsWith("AccountController") || !values[3].endsWith("TransferController")) throw new Error(`lost-tail:${values}`);
+if (values.some((value) => value.length > 42)) throw new Error(`label-too-long:${values}`);
+if (compactGraphLabel("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", 20).length !== 20) throw new Error("wrong-compact-length");
+console.log(JSON.stringify(values));
+"""
+        result = subprocess.run(
+            ["node", "-e", script, str(ROOT / "knowledge" / "viewer" / "app.js")],
+            check=False,
+            capture_output=True,
+            text=True,
+        )
+        self.assertEqual(0, result.returncode, result.stderr)
+
+    def test_graph_nodes_and_edges_expose_reliable_interactions(self) -> None:
+        script = (ROOT / "knowledge" / "viewer" / "app.js").read_text(encoding="utf-8")
+        styles = (ROOT / "knowledge" / "viewer" / "styles.css").read_text(encoding="utf-8")
+        markup = (ROOT / "knowledge" / "viewer" / "index.html").read_text(encoding="utf-8")
+        self.assertIn('event.currentTarget.setPointerCapture(event.pointerId)', script)
+        self.assertIn('hit.setAttribute("role", "button")', script)
+        self.assertIn('line.classList.add("hovered")', script)
+        self.assertIn('control.hidden = count <= 1', script)
+        self.assertIn('id="workload-context-control"', markup)
+        self.assertIn('.edge.hovered', styles)
+        self.assertIn('pointer-events: all', styles)
+        self.assertIn('id="graph-loading"', markup)
+        self.assertIn('id="inspector-loading"', markup)
+        self.assertIn('id="right-context-label"', markup)
+        self.assertIn("new AbortController()", script)
+        self.assertIn("graphRequestGeneration", script)
+        self.assertIn("layoutGeneration !== state.layoutGeneration", script)
+        self.assertIn("packages collapsed", script)
+        self.assertNotIn("Promise.all([loadFactoryRuns", script)
+        inspect_node = script[script.index("async function inspectNode"):script.index("async function inspectEdge")]
+        self.assertIn('switchRightPanel("inspector")', inspect_node)
+
+    def test_workload_selection_does_not_silently_mute_its_graph(self) -> None:
+        script = (ROOT / "knowledge" / "viewer" / "app.js").read_text(encoding="utf-8")
+        self.assertIn('$("technology-scope").value = "all-estate"', script)
+        self.assertIn('refreshCombobox("technology-scope")', script)
+        self.assertNotIn('$("technology-scope").value = workload.recommended_scope', script)
 
     def test_neo4j_projection_preserves_graph_counts_and_identity(self) -> None:
         with tempfile.TemporaryDirectory() as directory:

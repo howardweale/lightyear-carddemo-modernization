@@ -47,7 +47,17 @@ class CompositeEstateTests(unittest.TestCase):
 
     def test_explorer_navigates_pli_to_cobol_and_db2(self) -> None:
         index = GraphExplorerIndex(self.composite)
-        self.assertEqual(17, len(index.perspectives()))
+        perspectives = index.perspectives()
+        self.assertEqual(17, len(perspectives))
+        by_id = {item["id"]: item for item in perspectives}
+        self.assertEqual(
+            "oracle-customer-large",
+            by_id["oracle-reference-order-to-cash"]["customer_id"],
+        )
+        self.assertEqual(
+            "cloudbank-reference",
+            by_id["cloudbank-customer-account"]["customer_id"],
+        )
         self.assertEqual(self.base["content_sha256"], index.canonical_content_sha256)
         pli = "extension:pli-program:ACCTPL1"
         cobol = "legacy:cobol-program:CBACT04C"
@@ -109,6 +119,17 @@ class CompositeEstateTests(unittest.TestCase):
         self.assertEqual("upstream-static-reference", trace["evidence_class"])
         self.assertIn("not customer evidence", trace["limitation"])
         self.assertFalse(index.node(workload)["properties"]["runtime_observed"])
+        oracle_results = index.search(
+            "order to cash", limit=100, customer_id="oracle-customer-large"
+        )
+        self.assertTrue(oracle_results)
+        self.assertTrue(all(
+            item["customer_id"] == "oracle-customer-large"
+            for item in oracle_results
+        ))
+        self.assertEqual([], index.search(
+            "order to cash", limit=100, customer_id="cloudbank-reference"
+        ))
         self.assertIn(
             "no customer system or Oracle runtime is attached",
             " ".join(context["trace"]["limitations"]),

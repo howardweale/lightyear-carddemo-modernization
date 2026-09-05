@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>LIGHTYEAR Control Tower</title>
-  <link rel="stylesheet" href="styles.css?v=48.1">
+  <link rel="stylesheet" href="styles.css?v=48.4">
 </head>
 <body>
   <header class="masthead topbar">
@@ -45,7 +45,7 @@
       </section>
     </div>
     <section class="operator-context" aria-label="Operator context">
-      <div>
+      <div id="workload-context-control">
         <label for="workload-context">Workload</label>
         <select id="workload-context" aria-label="Workload"></select>
       </div>
@@ -165,6 +165,10 @@
           <button id="density-render-all" class="text-button" type="button">Render all nodes anyway</button>
         </div>
       </section>
+      <div id="graph-loading" class="graph-loading" role="status" aria-live="polite" hidden>
+        <span class="loading-spinner" aria-hidden="true"></span>
+        <strong id="graph-loading-message">Loading estate…</strong>
+      </div>
       <p id="graph-keyboard-help" class="visually-hidden">Use the arrow keys to move between graph nodes. Press Enter or Space to inspect a node. Press Home to return to the root node.</p>
       <svg id="graph" role="group" aria-label="Interactive knowledge graph" aria-describedby="graph-keyboard-help">
         <defs>
@@ -181,6 +185,7 @@
     </section>
 
     <aside class="right-panel panel">
+      <p id="right-context-label" class="right-context-label">Estate inspector</p>
       <nav class="right-tabs" aria-label="Entity tools">
         <button id="inspector-tab" class="right-tab active" type="button">Inspect</button>
         <button id="trace-tab" class="right-tab" type="button">Trace</button>
@@ -198,8 +203,12 @@
       <div id="inspector-view">
         <div id="inspector-placeholder" class="placeholder">
           <span class="placeholder-mark">◎</span>
-          <h2>Inspect an entity</h2>
-          <p>Select a node to see its meaning, properties, evidence, and relationships.</p>
+          <h2 id="inspector-placeholder-title">Inspect an entity</h2>
+          <p id="inspector-placeholder-message">Select a node to see its meaning, properties, evidence, and relationships.</p>
+        </div>
+        <div id="inspector-loading" class="inspector-loading" role="status" aria-live="polite" hidden>
+          <span class="loading-spinner" aria-hidden="true"></span>
+          <strong id="inspector-loading-message">Loading entity…</strong>
         </div>
         <div id="inspector" hidden>
           <p id="detail-kind" class="kind-pill"></p>
@@ -632,6 +641,6 @@
       </div>
     </form>
   </dialog>
-  <script src="app.js?v=47.3" defer></script>
+  <script src="app.js?v=48.4" defer></script>
 </body>
 </html>

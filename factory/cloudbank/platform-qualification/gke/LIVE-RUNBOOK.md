@@ -28,6 +28,15 @@ missing chart versions, and missing mutation acknowledgements.
   predicate. Verify both before continuing. Record only result hashes and aggregate counts.
 - Confirm all 16 service Pods are ready and every running image ID equals the image lock.
 
+The deployment supplies the same PostgreSQL dialect override used by the native qualification
+lane, above the imported Oracle defaults. Account and Transfer use the `cloudbank-oauth` profile;
+Transfer explicitly enables its service-token provider. Authorization disables sample human-user
+bootstrapping for this client-credentials lane. OAuth client secrets and the persistent signing key
+remain in External Secrets; this setting does not provision or qualify customer human-user login.
+Kubernetes health probes remain HTTP liveness/readiness checks on the application port. If probes
+return 401, rebuild from the corrected MS64 target rather than changing probes to TCP or exposing
+all actuator endpoints. Refresh the MS64 receipt and image lock after application patch changes.
+
 ## 3. TLS, secrets, and telemetry
 
 - Use OpenSSL and curl from an external network to prove certificate trust, SAN equality, at least

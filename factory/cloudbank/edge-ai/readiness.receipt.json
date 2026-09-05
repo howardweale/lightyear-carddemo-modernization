@@ -1,12 +1,12 @@
 {
   "bindings": {
-    "acceptance_contract_sha256": "492853b99198d7efa5d8e2f133da29b89e443f3f90e34747b513e9c06a90f899",
+    "acceptance_contract_sha256": "d71159ea9f2115885378661038bbc2d83b36cd70fcbfa6ba2534e64923a47bcd",
     "compatibility_ledger_sha256": "73bf8f3d6934d85b5573913fb0ededa994c676fa5af125c4590897163b2ccd4a",
     "edge_contract_sha256": "ddca81a27700fb141e9c9fdbc30382fc90c1823637d5db946297a4165024e9aa",
-    "execution_plan_sha256": "f0281cf5d7ca6d70e5fb3b425a80079c47f5782662b74ca473990d9d5ddd870a",
+    "execution_plan_sha256": "84ce57beabf4a8cfa67cb9c79f4655285cd8893f4389c260c2ec04e7f9e43d4a",
     "source_contract_sha256": "d9f15e024d74e630403308d776bc25928e575fbe756bc835befd963ae756f79f"
   },
-  "content_sha256": "eea4919219c158437cd7f350ec8672377e806958d246502c96de13b04537697d",
+  "content_sha256": "e8a71119765b8d93a43a2a2b6a6cd5e92aaacc85fd879e6c8beccba45222ab39",
   "eight_service_target_assembled": false,
   "gate_status": "ready-for-signed-ms63-ms57-edge-ai-run",
   "migration_complete": false,

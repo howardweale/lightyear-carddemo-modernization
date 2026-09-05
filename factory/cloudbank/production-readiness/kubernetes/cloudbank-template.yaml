@@ -75,6 +75,13 @@ spec:
             name: cloudbank-runtime
         - secretRef:
             name: "{{SECRET_AZN_SERVER}}"
+        env:
+        - {name: SERVER_PORT, value: "8080"}
+        - {name: SPRING_CLOUD_CONFIG_ENABLED, value: "false"}
+        - {name: SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT, value: org.hibernate.dialect.PostgreSQLDialect}
+        - {name: MANAGEMENT_ENDPOINT_HEALTH_PROBES_ENABLED, value: "true"}
+        - {name: MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS, value: never}
+        - {name: AZN_BOOTSTRAP_USERS_ENABLED, value: "false"}
         startupProbe:
           httpGet:
             path: /actuator/health/liveness
@@ -200,6 +207,12 @@ spec:
             name: cloudbank-runtime
         - secretRef:
             name: "{{SECRET_CUSTOMER}}"
+        env:
+        - {name: SERVER_PORT, value: "8080"}
+        - {name: SPRING_CLOUD_CONFIG_ENABLED, value: "false"}
+        - {name: SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT, value: org.hibernate.dialect.PostgreSQLDialect}
+        - {name: MANAGEMENT_ENDPOINT_HEALTH_PROBES_ENABLED, value: "true"}
+        - {name: MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS, value: never}
         startupProbe:
           httpGet:
             path: /actuator/health/liveness
@@ -314,6 +327,13 @@ spec:
             name: cloudbank-runtime
         - secretRef:
             name: "{{SECRET_ACCOUNT}}"
+        env:
+        - {name: SERVER_PORT, value: "8080"}
+        - {name: SPRING_CLOUD_CONFIG_ENABLED, value: "false"}
+        - {name: SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT, value: org.hibernate.dialect.PostgreSQLDialect}
+        - {name: MANAGEMENT_ENDPOINT_HEALTH_PROBES_ENABLED, value: "true"}
+        - {name: MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS, value: never}
+        - {name: SPRING_PROFILES_ACTIVE, value: cloudbank-oauth}
         startupProbe:
           httpGet:
             path: /actuator/health/liveness
@@ -428,6 +448,14 @@ spec:
             name: cloudbank-runtime
         - secretRef:
             name: "{{SECRET_TRANSFER}}"
+        env:
+        - {name: SERVER_PORT, value: "8080"}
+        - {name: SPRING_CLOUD_CONFIG_ENABLED, value: "false"}
+        - {name: SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT, value: org.hibernate.dialect.PostgreSQLDialect}
+        - {name: MANAGEMENT_ENDPOINT_HEALTH_PROBES_ENABLED, value: "true"}
+        - {name: MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS, value: never}
+        - {name: SPRING_PROFILES_ACTIVE, value: cloudbank-oauth}
+        - {name: CLOUDBANK_SECURITY_SERVICE_TOKEN_ENABLED, value: "true"}
         startupProbe:
           httpGet:
             path: /actuator/health/liveness
@@ -542,6 +570,12 @@ spec:
             name: cloudbank-runtime
         - secretRef:
             name: "{{SECRET_CHECKS}}"
+        env:
+        - {name: SERVER_PORT, value: "8080"}
+        - {name: SPRING_CLOUD_CONFIG_ENABLED, value: "false"}
+        - {name: SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT, value: org.hibernate.dialect.PostgreSQLDialect}
+        - {name: MANAGEMENT_ENDPOINT_HEALTH_PROBES_ENABLED, value: "true"}
+        - {name: MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS, value: never}
         startupProbe:
           httpGet:
             path: /actuator/health/liveness
@@ -656,6 +690,12 @@ spec:
             name: cloudbank-runtime
         - secretRef:
             name: "{{SECRET_TESTRUNNER}}"
+        env:
+        - {name: SERVER_PORT, value: "8080"}
+        - {name: SPRING_CLOUD_CONFIG_ENABLED, value: "false"}
+        - {name: SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT, value: org.hibernate.dialect.PostgreSQLDialect}
+        - {name: MANAGEMENT_ENDPOINT_HEALTH_PROBES_ENABLED, value: "true"}
+        - {name: MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS, value: never}
         startupProbe:
           httpGet:
             path: /actuator/health/liveness
@@ -770,6 +810,12 @@ spec:
             name: cloudbank-runtime
         - secretRef:
             name: "{{SECRET_CREDITSCORE}}"
+        env:
+        - {name: SERVER_PORT, value: "8080"}
+        - {name: SPRING_CLOUD_CONFIG_ENABLED, value: "false"}
+        - {name: SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT, value: org.hibernate.dialect.PostgreSQLDialect}
+        - {name: MANAGEMENT_ENDPOINT_HEALTH_PROBES_ENABLED, value: "true"}
+        - {name: MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS, value: never}
         startupProbe:
           httpGet:
             path: /actuator/health/liveness
@@ -884,6 +930,12 @@ spec:
             name: cloudbank-runtime
         - secretRef:
             name: "{{SECRET_CHATBOT}}"
+        env:
+        - {name: SERVER_PORT, value: "8080"}
+        - {name: SPRING_CLOUD_CONFIG_ENABLED, value: "false"}
+        - {name: SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT, value: org.hibernate.dialect.PostgreSQLDialect}
+        - {name: MANAGEMENT_ENDPOINT_HEALTH_PROBES_ENABLED, value: "true"}
+        - {name: MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS, value: never}
         startupProbe:
           httpGet:
             path: /actuator/health/liveness

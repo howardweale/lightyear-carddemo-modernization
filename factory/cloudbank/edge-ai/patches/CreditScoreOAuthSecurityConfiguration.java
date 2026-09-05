@@ -35,7 +35,8 @@ public class CreditScoreOAuthSecurityConfiguration {
     public SecurityFilterChain creditScoreSecurityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/actuator/health", "/actuator/info", "/error", "/error/**")
+                        .requestMatchers("/actuator/health", "/actuator/health/liveness",
+                                "/actuator/health/readiness", "/actuator/info", "/error", "/error/**")
                         .permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/creditscore")
                         .hasAuthority("SCOPE_cloudbank.read")

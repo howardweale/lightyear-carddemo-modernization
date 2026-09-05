@@ -3,7 +3,7 @@
     "ms63-five-service-target",
     "ms57-qualified-customer-target"
   ],
-  "content_sha256": "f0281cf5d7ca6d70e5fb3b425a80079c47f5782662b74ca473990d9d5ddd870a",
+  "content_sha256": "84ce57beabf4a8cfa67cb9c79f4655285cd8893f4389c260c2ec04e7f9e43d4a",
   "customer_target_paths": [
     "customer/pom.xml",
     "customer/src/main/java/com/example/customer/model/Customers.java",
@@ -16,6 +16,21 @@
   "external_model_called_by_acceptance": false,
   "fresh_output_required": true,
   "patches": [
+    {
+      "path": "account/src/main/java/com/example/accounts/config/AccountOAuthSecurityConfiguration.java",
+      "template": "patches/AccountOAuthSecurityConfiguration.java",
+      "template_sha256": "933824fa37371e2171514cef4d74aecb79ebaa63f3e728665c7df273e8650b74"
+    },
+    {
+      "path": "account/src/test/java/com/example/accounts/AccountKubernetesProbeSecurityTest.java",
+      "template": "patches/AccountKubernetesProbeSecurityTest.java",
+      "template_sha256": "d0e9325e88796233a61ac9e6d4f89e9324f39553156f23d1787b2b8c379625dc"
+    },
+    {
+      "path": "account/src/test/java/com/example/qualification/AbstractKubernetesProbeSecurityTest.java",
+      "template": "patches/AbstractKubernetesProbeSecurityTest.java",
+      "template_sha256": "f79f340421f3bc38369a3471dbed9b0309e5f67ad1e93d7d3622d51e5d7e5359"
+    },
     {
       "path": "azn-server/src/main/java/oracle/obaas/aznserver/securityconfig/ProductionAudienceTokenCustomizer.java",
       "template": "patches/ProductionAudienceTokenCustomizer.java",
@@ -44,7 +59,7 @@
     {
       "path": "chatbot/src/main/java/com/example/chatbot/config/ChatbotOAuthSecurityConfiguration.java",
       "template": "patches/ChatbotOAuthSecurityConfiguration.java",
-      "template_sha256": "14512770e8aa200e6ba240f156f61ee8cd9a7e92d1c8d7be62f1a8f70c7f0ce9"
+      "template_sha256": "61c64fe6d8a197bbc44ea3a015836a01ecf07e06ab3b0e5891044e718774ec46"
     },
     {
       "path": "chatbot/src/main/java/com/example/chatbot/controller/ChatController.java",
@@ -59,7 +74,12 @@
     {
       "path": "chatbot/src/test/java/com/example/chatbot/ChatbotApplicationTest.java",
       "template": "patches/ChatbotApplicationTest.java",
-      "template_sha256": "a6d0aa452e05c86e32788a06d331ec84b7bf4d3e615e64046862c956f21904fc"
+      "template_sha256": "6ebb129b2ede25f2e83ac66f89049e50a05b6ce845770ac4f15aace13e20cdad"
+    },
+    {
+      "path": "chatbot/src/test/java/com/example/qualification/AbstractKubernetesProbeSecurityTest.java",
+      "template": "patches/AbstractKubernetesProbeSecurityTest.java",
+      "template_sha256": "f79f340421f3bc38369a3471dbed9b0309e5f67ad1e93d7d3622d51e5d7e5359"
     },
     {
       "path": "checks/src/test/java/com/example/checks/ChecksTargetWorkcellTest.java",
@@ -74,7 +94,7 @@
     {
       "path": "creditscore/src/main/java/com/example/creditscore/config/CreditScoreOAuthSecurityConfiguration.java",
       "template": "patches/CreditScoreOAuthSecurityConfiguration.java",
-      "template_sha256": "af09aee3ef4eecaf1d2b57b6358a691098fbfba99ba4c96c48dec0b098131f21"
+      "template_sha256": "b54d8914327ffe46daa41584185e23dc939c00ad633cd5c4cc0ecd25ea7f49a9"
     },
     {
       "path": "creditscore/src/main/java/com/example/creditscore/controller/CreditScoreController.java",
@@ -94,18 +114,52 @@
     {
       "path": "creditscore/src/test/java/com/example/creditscore/CreditscoreApplicationTests.java",
       "template": "patches/CreditscoreApplicationTests.java",
-      "template_sha256": "d2ba1305dc931bc9f94c427284c929045fee44c2b2a720b9c282421e38e35452"
+      "template_sha256": "277918bd7f431a17528602cde961fa206204eaf894286138fa3515711ef90f38"
+    },
+    {
+      "path": "creditscore/src/test/java/com/example/qualification/AbstractKubernetesProbeSecurityTest.java",
+      "template": "patches/AbstractKubernetesProbeSecurityTest.java",
+      "template_sha256": "f79f340421f3bc38369a3471dbed9b0309e5f67ad1e93d7d3622d51e5d7e5359"
     },
     {
       "path": "testrunner/src/test/java/com/example/testrunner/TestrunnerTargetWorkcellTest.java",
       "template": "patches/TestrunnerTargetWorkcellTest.java",
       "template_sha256": "03af6f173c8553899e4529490dc8e37dd1ae2e61db63ce69648e95613542443b"
+    },
+    {
+      "path": "transfer/src/main/java/com/example/transfer/config/TransferOAuthSecurityConfiguration.java",
+      "template": "patches/TransferOAuthSecurityConfiguration.java",
+      "template_sha256": "a1b3d21613d6d806506b835b58ddd564346436860e72d0e3b0f87e38a97ae6d1"
+    },
+    {
+      "path": "transfer/src/test/java/com/example/qualification/AbstractKubernetesProbeSecurityTest.java",
+      "template": "patches/AbstractKubernetesProbeSecurityTest.java",
+      "template_sha256": "f79f340421f3bc38369a3471dbed9b0309e5f67ad1e93d7d3622d51e5d7e5359"
+    },
+    {
+      "path": "transfer/src/test/java/com/example/transfer/TransferKubernetesProbeSecurityTest.java",
+      "template": "patches/TransferKubernetesProbeSecurityTest.java",
+      "template_sha256": "d5122c64ba34333e08823c2822ecdc91f00ddf6f471c37c4f8c3d0bccc9f6908"
     }
   ],
   "plan_type": "lightyear-cloudbank-eight-service-edge-ai-wave",
   "production_data": false,
   "release": "0.64.0",
   "remaining_service_workcells": [
+    {
+      "disposition": "migrated",
+      "generated_and_executed_by_ms64": true,
+      "migration_milestone": 62,
+      "service": "account",
+      "test_class": "AccountKubernetesProbeSecurityTest"
+    },
+    {
+      "disposition": "migrated",
+      "generated_and_executed_by_ms64": true,
+      "migration_milestone": 62,
+      "service": "transfer",
+      "test_class": "TransferKubernetesProbeSecurityTest"
+    },
     {
       "disposition": "migrated",
       "generated_and_executed_by_ms64": true,
@@ -175,7 +229,7 @@
     "bind-credit-and-chat-tokens-to-distinct-audiences",
     "enforce-chat-input-output-rate-and-egress-guardrails",
     "package-eight-zero-oracle-zero-microtx-executable-jars",
-    "execute-azn-checks-testrunner-credit-and-chat-workcell-tests",
+    "execute-azn-checks-testrunner-credit-chat-and-kubernetes-probe-workcell-tests",
     "sign-bounded-edge-ai-receipt"
   ],
   "whole_application_equivalence": false

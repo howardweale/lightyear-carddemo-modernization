@@ -241,6 +241,21 @@ def deployment_template() -> str:
             "        - name: http", "          containerPort: 8080", "        envFrom:",
             "        - configMapRef:", "            name: cloudbank-runtime", "        - secretRef:",
             f"            name: \"{{{{SECRET_{service.upper().replace('-', '_')}}}}}\"",
+            "        env:",
+            "        - {name: SERVER_PORT, value: \"8080\"}",
+            "        - {name: SPRING_CLOUD_CONFIG_ENABLED, value: \"false\"}",
+            "        - {name: SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT, value: org.hibernate.dialect.PostgreSQLDialect}",
+            "        - {name: MANAGEMENT_ENDPOINT_HEALTH_PROBES_ENABLED, value: \"true\"}",
+            "        - {name: MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS, value: never}",
+        ])
+        if service == "azn-server":
+            # Match the qualified client-credentials lane; do not create sample human users.
+            lines.append("        - {name: AZN_BOOTSTRAP_USERS_ENABLED, value: \"false\"}")
+        if service in {"account", "transfer"}:
+            lines.append("        - {name: SPRING_PROFILES_ACTIVE, value: cloudbank-oauth}")
+        if service == "transfer":
+            lines.append("        - {name: CLOUDBANK_SECURITY_SERVICE_TOKEN_ENABLED, value: \"true\"}")
+        lines.extend([
             "        startupProbe:", "          httpGet:", "            path: /actuator/health/liveness",
             "            port: http", "          failureThreshold: 30", "          periodSeconds: 10",
             "        livenessProbe:", "          httpGet:", "            path: /actuator/health/liveness",

@@ -79,6 +79,19 @@ SCENARIO_IDS = [
 CONTRACT_SHA256 = hashlib.sha256(";".join(SCENARIO_IDS).encode()).hexdigest()
 
 PATCHES = {
+    "account/src/main/java/com/example/accounts/config/AccountOAuthSecurityConfiguration.java":
+        "AccountOAuthSecurityConfiguration.java",
+    "transfer/src/main/java/com/example/transfer/config/TransferOAuthSecurityConfiguration.java":
+        "TransferOAuthSecurityConfiguration.java",
+    "account/src/test/java/com/example/accounts/AccountKubernetesProbeSecurityTest.java":
+        "AccountKubernetesProbeSecurityTest.java",
+    "transfer/src/test/java/com/example/transfer/TransferKubernetesProbeSecurityTest.java":
+        "TransferKubernetesProbeSecurityTest.java",
+    **{
+        f"{service}/src/test/java/com/example/qualification/AbstractKubernetesProbeSecurityTest.java":
+            "AbstractKubernetesProbeSecurityTest.java"
+        for service in ("account", "transfer", "creditscore", "chatbot")
+    },
     "azn-server/src/main/resources/application.yaml": "azn-application.yaml",
     (
         "azn-server/src/main/java/oracle/obaas/aznserver/securityconfig/"
@@ -114,6 +127,22 @@ PATCHES = {
 }
 
 WORKCELL_TEST_SPECS = [
+    {
+        "service": "account",
+        "disposition": "migrated",
+        "migration_milestone": 62,
+        "test_class": "AccountKubernetesProbeSecurityTest",
+        "report": "account/target/surefire-reports/TEST-com.example.accounts.AccountKubernetesProbeSecurityTest.xml",
+        "tests": 4,
+    },
+    {
+        "service": "transfer",
+        "disposition": "migrated",
+        "migration_milestone": 62,
+        "test_class": "TransferKubernetesProbeSecurityTest",
+        "report": "transfer/target/surefire-reports/TEST-com.example.transfer.TransferKubernetesProbeSecurityTest.xml",
+        "tests": 4,
+    },
     {
         "service": "azn-server",
         "disposition": "migrated",
@@ -153,7 +182,7 @@ WORKCELL_TEST_SPECS = [
             "creditscore/target/surefire-reports/"
             "TEST-com.example.creditscore.CreditscoreApplicationTests.xml"
         ),
-        "tests": 4,
+        "tests": 8,
     },
     {
         "service": "chatbot",
@@ -161,10 +190,10 @@ WORKCELL_TEST_SPECS = [
         "migration_milestone": 64,
         "test_class": "ChatbotApplicationTest",
         "report": "chatbot/target/surefire-reports/TEST-com.example.chatbot.ChatbotApplicationTest.xml",
-        "tests": 6,
+        "tests": 10,
     },
 ]
-REQUIRED_TESTS = {"tests": 21, "failures": 0, "errors": 0, "skipped": 0}
+REQUIRED_TESTS = {"tests": 37, "failures": 0, "errors": 0, "skipped": 0}
 
 
 def required_workcells() -> list[dict[str, Any]]:
@@ -303,7 +332,7 @@ def execution_plan(project_root: Path) -> dict[str, Any]:
             "bind-credit-and-chat-tokens-to-distinct-audiences",
             "enforce-chat-input-output-rate-and-egress-guardrails",
             "package-eight-zero-oracle-zero-microtx-executable-jars",
-            "execute-azn-checks-testrunner-credit-and-chat-workcell-tests",
+            "execute-azn-checks-testrunner-credit-chat-and-kubernetes-probe-workcell-tests",
             "sign-bounded-edge-ai-receipt",
         ],
         "source_checkout_mutated": False,
@@ -550,10 +579,10 @@ def _native_lane(
     package = run(["mvn", "-pl", modules, "-am", "-DskipTests", *common, "package"],
                   cwd=workspace, env=os.environ.copy(), text=True, capture_output=True, timeout=1200)
     packaging = _package_inventory(workspace)
-    progress("Executing all five remaining target workcells")
+    progress("Executing target workcells and Kubernetes probe authorization tests")
     test_classes = ",".join(str(spec["test_class"]) for spec in WORKCELL_TEST_SPECS)
     tests = run([
-        "mvn", "-pl", "azn-server,checks,testrunner,creditscore,chatbot", "-am",
+        "mvn", "-pl", "account,transfer,azn-server,checks,testrunner,creditscore,chatbot", "-am",
         f"-Dtest={test_classes}",
         "-Dsurefire.failIfNoSpecifiedTests=false", *common, "test",
     ], cwd=workspace, env=os.environ.copy(), text=True, capture_output=True, timeout=1200)

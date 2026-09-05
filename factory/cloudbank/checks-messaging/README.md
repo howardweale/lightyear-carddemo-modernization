@@ -9,6 +9,10 @@ The workcell starts from the MS #62 target, so Checks uses the qualified client-
 when it calls Account. The generated five-service package gate requires executable Authorization,
 Account, Transfer, Checks, and Test Runner JARs with no Oracle or MicroTx runtime libraries.
 
+The native runner captures Docker, Maven, and PostgreSQL command output as text before checking
+image identity, package results, or queue observations. Raw command output stays in memory;
+receipts retain Maven output hashes, and failure reports contain aggregate diagnostics.
+
 Run deterministic verification:
 
 ```bash

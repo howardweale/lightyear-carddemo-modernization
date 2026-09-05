@@ -3,7 +3,7 @@
     "ms63-five-service-target",
     "ms57-qualified-customer-target"
   ],
-  "content_sha256": "6e6278875c2ee458a528f9498f30fdd76562f5db62e24b0ec24918c3cde86649",
+  "content_sha256": "f0281cf5d7ca6d70e5fb3b425a80079c47f5782662b74ca473990d9d5ddd870a",
   "customer_target_paths": [
     "customer/pom.xml",
     "customer/src/main/java/com/example/customer/model/Customers.java",
@@ -151,6 +151,7 @@
   "runtime_dependency_versions": {
     "httpcore5.version": "5.4.3",
     "postgresql.version": "42.7.12",
+    "spring-ai.version": "1.0.7",
     "tomcat.version": "10.1.59"
   },
   "schema_version": "1.0",

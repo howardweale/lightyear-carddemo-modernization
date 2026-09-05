@@ -186,6 +186,33 @@ class CloudBankProductionReadinessTests(unittest.TestCase):
         lock["content_sha256"] = content_hash(lock)
         self.assertTrue(any("reference" in item for item in validate_image_lock(lock, HEX_A)))
 
+    def test_environment_json_round_trip_preserves_validation_and_bundle(self) -> None:
+        lock, env = image_lock(), environment()
+        # render-site-inputs.sh writes sorted JSON, including the secret-name map.
+        serialized = json.loads(json.dumps(env, indent=2, sort_keys=True))
+        self.assertNotEqual(list(env["service_secret_names"]), list(serialized["service_secret_names"]))
+        self.assertEqual([], validate_environment(serialized))
+        self.assertEqual(
+            render_deployment_bundle(lock, env, HEX_A),
+            render_deployment_bundle(lock, serialized, HEX_A),
+        )
+
+    def test_environment_rejects_missing_extra_or_invalid_secret_names(self) -> None:
+        valid = environment()["service_secret_names"]
+        cases = (
+            {name: value for name, value in valid.items() if name != "chatbot"},
+            {**valid, "unexpected-service": "unexpected-secret"},
+            {**valid, "chatbot": "invalid/secret"},
+            list(valid),
+        )
+        for secrets in cases:
+            with self.subTest(secrets=secrets):
+                env = environment()
+                env["service_secret_names"] = secrets
+                env["content_sha256"] = content_hash(env)
+                self.assertIn("cloudbank-production-readiness-environment-secrets-invalid",
+                              validate_environment(env))
+
     @patch("lightyear_data.cloudbank_production_readiness.validate_ms64_receipt", return_value=[])
     @patch("lightyear_data.cloudbank_production_readiness.validate_edge_source", return_value=[])
     def test_execution_closes_only_rehearsal_claims(self, _source: object, _ms64: object) -> None:

@@ -459,7 +459,7 @@ def validate_environment(payload: dict[str, Any]) -> list[str]:
     if not isinstance(secrets, dict):
         errors.append("cloudbank-production-readiness-environment-secrets-invalid")
         secrets = {}
-    if list(secrets) != list(SERVICES) or any(
+    if set(secrets) != set(SERVICES) or any(
         not DNS_LABEL.fullmatch(str(secrets.get(service, ""))) for service in SERVICES
     ):
         errors.append("cloudbank-production-readiness-environment-secrets-invalid")

@@ -281,18 +281,30 @@ def gke_addons_template() -> str:
         "      otlp:", "        protocols:", "          grpc:", "            endpoint: 0.0.0.0:4317",
         "          http:", "            endpoint: 0.0.0.0:4318", "    processors:",
         "      batch: {}", "      resourcedetection:", "        detectors: [gcp]", "        timeout: 10s",
-        "    exporters:", "      googlecloud: {}", "    service:", "      pipelines:",
+        "    exporters:", "      googlecloud:", "        project: \"{{PROJECT_ID}}\"",
+        "    extensions:", "      health_check:", "        endpoint: 0.0.0.0:13133",
+        "    service:", "      extensions: [health_check]", "      pipelines:",
         "        metrics:", "          receivers: [otlp]", "          processors: [resourcedetection, batch]",
         "          exporters: [googlecloud]", "        traces:", "          receivers: [otlp]",
         "          processors: [resourcedetection, batch]", "          exporters: [googlecloud]", "---",
         "apiVersion: apps/v1", "kind: Deployment", "metadata:", "  name: otel-collector",
         "  namespace: observability", "spec:", "  replicas: 2", "  selector:", "    matchLabels:",
         "      app: otel-collector", "  template:", "    metadata:", "      labels:",
-        "        app: otel-collector", "    spec:", "      serviceAccountName: otel-collector",
+        "        app: otel-collector", "      annotations:",
+        "        lightyear.ai/otel-config-sha256: \"{{OTEL_CONFIGURATION_SHA256}}\"",
+        "    spec:", "      serviceAccountName: otel-collector",
         "      containers:", "      - name: collector", "        image: \"{{OTEL_COLLECTOR_IMAGE}}\"",
         "        args: [\"--config=/conf/config.yaml\"]", "        ports:",
         "        - {name: otlp-grpc, containerPort: 4317}",
-        "        - {name: otlp-http, containerPort: 4318}", "        resources:", "          requests:",
+        "        - {name: otlp-http, containerPort: 4318}",
+        "        - {name: health, containerPort: 13133}",
+        "        startupProbe:", "          httpGet: {path: /, port: health}",
+        "          periodSeconds: 5", "          timeoutSeconds: 2", "          failureThreshold: 60",
+        "        livenessProbe:", "          httpGet: {path: /, port: health}",
+        "          periodSeconds: 10", "          timeoutSeconds: 2",
+        "        readinessProbe:", "          httpGet: {path: /, port: health}",
+        "          periodSeconds: 5", "          timeoutSeconds: 2",
+        "        resources:", "          requests:",
         "            cpu: 100m", "            memory: 256Mi", "          limits:", "            cpu: 500m",
         "            memory: 512Mi", "        securityContext:", "          runAsNonRoot: true",
         "          runAsUser: 10001", "          allowPrivilegeEscalation: false",
@@ -316,6 +328,8 @@ def gke_addons_template() -> str:
         "          kubernetes.io/metadata.name: \"{{NAMESPACE}}\"", "    ports:",
         "    - {protocol: TCP, port: 4317}", "  egress:", "  - to:", "    - ipBlock:",
         "        cidr: \"{{GOOGLE_APIS_CIDR}}\"", "    ports:", "    - {protocol: TCP, port: 443}", "  - to:",
+        "    - ipBlock:", "        cidr: 169.254.169.254/32", "    ports:",
+        "    - {protocol: TCP, port: 80}", "    - {protocol: TCP, port: 8080}", "  - to:",
         "    - namespaceSelector:", "        matchLabels:",
         "          kubernetes.io/metadata.name: kube-system", "    ports:",
         "    - {protocol: UDP, port: 53}", "    - {protocol: TCP, port: 53}", "---",
@@ -463,6 +477,11 @@ def render_gke_addons(project_id: str, region: str, cluster_name: str, namespace
         "{{GOOGLE_APIS_CIDR}}": google_apis_cidr,
     }.items():
         rendered = rendered.replace(marker, value)
+    # Bind the pod template to the rendered collector configuration so a ConfigMap
+    # correction starts a new rollout instead of leaving existing processes unchanged.
+    collector_config = rendered.split("  config.yaml: |\n", 1)[1].split("---\n", 1)[0]
+    rendered = rendered.replace("{{OTEL_CONFIGURATION_SHA256}}",
+                                hashlib.sha256(collector_config.encode()).hexdigest())
     if "{{" in rendered or "}}" in rendered:
         raise ValueError("cloudbank-platform-qualification-gke-render-placeholder-invalid")
     return rendered
@@ -477,6 +496,17 @@ def build_artifacts() -> dict[str, dict[str, Any]]:
         "acceptance-contract.json": acceptance_contract(),
         "readiness.receipt.json": readiness_receipt(),
     }
+
+
+def select_gke_telemetry_resources(rendered: str) -> str:
+    """Select only the generated observability resources for a bounded collector repair."""
+    documents = [document for document in rendered.split("---\n") if (
+        "\n  namespace: observability\n" in document
+        or document.startswith("apiVersion: v1\nkind: Namespace\nmetadata:\n  name: observability\n")
+    )]
+    if len(documents) != 7:
+        raise ValueError("cloudbank-platform-qualification-telemetry-resource-count-invalid")
+    return "---\n".join(documents) + "---\n"
 
 
 def write_artifacts(project_root: Path) -> None:

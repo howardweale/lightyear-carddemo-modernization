@@ -14,6 +14,7 @@ from lightyear_data.cloudbank_platform_qualification import (
     execute_qualification,
     preflight_platform,
     render_gke_addons,
+    select_gke_telemetry_resources,
     validate_artifacts,
     validate_execution_receipt,
     write_artifacts,
@@ -45,6 +46,7 @@ def parser() -> argparse.ArgumentParser:
     render.add_argument("--ollama-model-manifest-sha256", required=True)
     render.add_argument("--google-apis-cidr", required=True)
     render.add_argument("--output", type=Path, required=True)
+    render.add_argument("--telemetry-only", action="store_true")
     admit = commands.add_parser("admit")
     admit.add_argument("--project-root", type=Path, default=Path("."))
     admit.add_argument("--ms65-receipt", type=Path, required=True)
@@ -93,6 +95,8 @@ def main(argv: list[str] | None = None) -> int:
                 args.ollama_model_manifest_sha256,
                 args.google_apis_cidr,
             )
+            if args.telemetry_only:
+                rendered = select_gke_telemetry_resources(rendered)
             args.output.parent.mkdir(parents=True, exist_ok=True)
             args.output.write_text(rendered, encoding="utf-8")
             result = {"status": "passed", "output": str(args.output)}

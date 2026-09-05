@@ -253,7 +253,7 @@ def deployment_template() -> str:
             lines.append("        - {name: AZN_BOOTSTRAP_USERS_ENABLED, value: \"false\"}")
         if service in {"account", "transfer"}:
             lines.append("        - {name: SPRING_PROFILES_ACTIVE, value: cloudbank-oauth}")
-        if service == "transfer":
+        if service in {"transfer", "checks"}:
             lines.append("        - {name: CLOUDBANK_SECURITY_SERVICE_TOKEN_ENABLED, value: \"true\"}")
         lines.extend([
             "        startupProbe:", "          httpGet:", "            path: /actuator/health/liveness",

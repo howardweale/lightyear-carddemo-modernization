@@ -1,13 +1,13 @@
 {
-  "acceptance_contract_sha256": "228f21d63fe865de8755528d6b2a7293938e50aa18d2032449ab2a9de55c80fd",
+  "acceptance_contract_sha256": "7a50ae709ad3ed5993ed4e1b077e0bf81472a36712641e3ef0b91c5a5729c77c",
   "bindings": {
     "compatibility_ledger_sha256": "f4d591cf5a771c87550e14c3bf0c4bebf5bd3eadd2e8fdfd639cf7625ef43f81",
     "cutover_contract_sha256": "44a949e2056aaec4e3db45f72ba15b30629d618fd0ad3b759dd63f8e399f175f",
     "deployment_contract_sha256": "b068b5c3b6ae84b037cf0a92a676701fe1b2106ed16ab47926d5cfc3ff255896",
-    "deployment_template_sha256": "8bba5984b4ea217027297d08b474fe28b05408eab4390c4b593e550d1f452ca4",
+    "deployment_template_sha256": "cc66c0aa77e9680fe12590dbc3b4faac894d4f0e691259efaca2cd11fa9173e1",
     "execution_plan_sha256": "104b9d30aca02d3ea2578fb21e6826f5b95da114b2aa051d0e332d229f1945e5"
   },
-  "content_sha256": "d420e7d949d4126c160594e0b3f52aba7ea418ca808d9690c70246b4c4cd67d5",
+  "content_sha256": "e3f5f9e190a3dbf49eb089663074aa23d168b13de91f47108d8d6951a291bbf7",
   "cutover_rehearsal_complete": false,
   "gate_status": "ready-for-signed-ms64-and-authorized-non-production-rehearsal",
   "migration_complete": false,

@@ -147,6 +147,14 @@ jobs:
           ./cloudbank-production-readiness.sh verify
           ./cloudbank-production-readiness.sh verify-source ../cloudbank-upstream
           ./cloudbank-production-readiness.sh materialize ../cloudbank-upstream work/cloudbank-ms65-ci
+          cp factory/cloudbank/production-readiness/tests/ChecksDeploymentContextTests.java \
+            work/cloudbank-ms65-ci/checks/src/test/java/com/example/checks/
+          (
+            cd work/cloudbank-ms65-ci
+            mvn -pl checks -am -Dtest=ChecksDeploymentContextTests \
+              -Dsurefire.failIfNoSpecifiedTests=false \
+              -Djkube.skip=true -Ddependency-check.skip=true test
+          )
           for service in azn-server customer account transfer checks testrunner creditscore chatbot; do
             test -f "work/cloudbank-ms65-ci/$service/pom.xml"
           done

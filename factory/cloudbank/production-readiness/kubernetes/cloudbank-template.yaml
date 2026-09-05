@@ -576,6 +576,7 @@ spec:
         - {name: SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT, value: org.hibernate.dialect.PostgreSQLDialect}
         - {name: MANAGEMENT_ENDPOINT_HEALTH_PROBES_ENABLED, value: "true"}
         - {name: MANAGEMENT_ENDPOINT_HEALTH_SHOW_DETAILS, value: never}
+        - {name: CLOUDBANK_SECURITY_SERVICE_TOKEN_ENABLED, value: "true"}
         startupProbe:
           httpGet:
             path: /actuator/health/liveness

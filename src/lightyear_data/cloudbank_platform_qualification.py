@@ -425,6 +425,19 @@ def gke_addons_template() -> str:
         "    ports:", "    - {protocol: TCP, port: 11434}", "---",
     ])
     lines.extend([
+        # The MS65 namespace-wide default deny also selects temporary ACME solver
+        # pods. Permit only the installed ingress controller to reach their HTTP port.
+        "apiVersion: networking.k8s.io/v1", "kind: NetworkPolicy", "metadata:",
+        "  name: cloudbank-acme-http01-ingress", "  namespace: \"{{NAMESPACE}}\"", "spec:",
+        "  podSelector:", "    matchLabels:",
+        "      acme.cert-manager.io/http01-solver: \"true\"",
+        "  policyTypes: [\"Ingress\"]", "  ingress:", "  - from:", "    - namespaceSelector:",
+        "        matchLabels:", "          kubernetes.io/metadata.name: ingress-nginx",
+        "      podSelector:", "        matchLabels:",
+        "          app.kubernetes.io/name: ingress-nginx",
+        "          app.kubernetes.io/instance: ingress-nginx",
+        "          app.kubernetes.io/component: controller", "    ports:",
+        "    - {protocol: TCP, port: 8089}", "---",
         "apiVersion: cert-manager.io/v1", "kind: ClusterIssuer", "metadata:",
         "  name: cloudbank-ms67-letsencrypt", "spec:", "  acme:",
         "    email: \"{{LETSENCRYPT_EMAIL}}\"", "    server: https://acme-v02.api.letsencrypt.org/directory",

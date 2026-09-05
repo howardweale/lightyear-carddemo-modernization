@@ -48,6 +48,22 @@ all actuator endpoints. Refresh the MS64 receipt and image lock after applicatio
 
 ## 3. TLS, secrets, and telemetry
 
+The GKE add-ons include `cloudbank-acme-http01-ingress`. MS65's namespace-wide default deny
+also selects cert-manager's temporary HTTP-01 solver pods, which do not carry the CloudBank
+application labels. This policy permits TCP 8089 only from the `ingress-nginx` controller pods
+in the `ingress-nginx` namespace to pods labelled `acme.cert-manager.io/http01-solver=true`.
+Both source selectors apply together; application isolation, solver egress isolation and the
+application HTTPS redirect remain in force. The rule also covers subsequent certificate renewals.
+
+If the issuer is Ready but a Challenge remains pending with a self-check timeout, inspect its
+Reason, the solver pod readiness, this policy and the ingress controller labels. Confirm public
+DNS resolves to the ingress address and test the exact challenge URL externally. A timeout alone
+does not distinguish missing network access from DNS, ingress or load-balancer issues. Apply the
+corrected policy to an existing deployment without rebuilding images or deleting the Certificate,
+Order or Secret; cert-manager retries a pending self-check. Observe Certificate Ready and externally
+verify trust and hostname before recording TLS success. Keep the applied policy and resulting
+bounded certificate status with the deployment evidence.
+
 - Use OpenSSL and curl from an external network to prove certificate trust, SAN equality, at least
   30 days remaining, TLS 1.2 or newer, and HTTP rejection or redirect to HTTPS.
 - Confirm all ExternalSecret resources are Ready. Add a new Secret Manager version for one bounded

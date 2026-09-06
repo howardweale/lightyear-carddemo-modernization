@@ -107,6 +107,11 @@ class CloudBankChecksMessagingTests(unittest.TestCase):
         account = (patches / "AccountService.java").read_text(encoding="utf-8")
         self.assertIn("CloudBankServiceTokenProvider", account)
         self.assertIn("Idempotency-Key", account)
+        self.assertIn('new Journal(0, "PENDING", accountId, messageId, "COMPLETED", amount)', account)
+        self.assertIn('messageId.equals(row.getLraId())', account)
+        self.assertIn('row.getJournalAmount() == amount', account)
+        self.assertIn('throw failure', account)
+        self.assertNotIn('new Journal("PENDING", accountId, amount)', account)
 
     @unittest.skipUnless(SOURCE.is_dir(), "pinned CloudBank source is unavailable")
     def test_materialization_preserves_source_and_removes_aq_listeners(self) -> None:

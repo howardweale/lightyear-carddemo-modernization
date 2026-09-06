@@ -1,11 +1,11 @@
 {
   "bindings": {
     "compatibility_ledger_sha256": "e507bce3a5eb4ddd43be6b8eb66f73429b72faacd6a7dbee27eca7c42c282098",
-    "execution_plan_sha256": "553ef79a5e14ecab0b4322aec50b5afbbc0066159f89810bc2dc7dce6b91a782",
+    "execution_plan_sha256": "42cd315de739cebd6a67ac201482e6e3471064c1e2c919dd4f1f01e1dfc07d63",
     "messaging_contract_sha256": "c72520ea7ab171f9ef2682f3b28ccb5082269f6955649f45b2b3fba02f952ef1",
     "source_contract_sha256": "2baaa0b66fcd15dc5b06c838fe24c42ea6a95f60c780e621fb97180865bbec35"
   },
-  "content_sha256": "0aa9a33a7862f78dd0631adac5bf046c4a569cc9ffe343303100389ef00d0b0e",
+  "content_sha256": "c4017f9174affb14d26740597cecc0e82386e861fbd32593f1d6f9c1fb9ddde1",
   "contract_type": "lightyear-cloudbank-checks-messaging-acceptance",
   "eligible_claim": {
     "checks_target_messaging_qualified": true,

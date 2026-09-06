@@ -429,6 +429,20 @@ class RecoveryTests(unittest.TestCase):
         self.assertEqual(saved["application_restoration_checks"][-1]["errors"], ["probe-cleanup-failed"])
         self.runtime.ready.assert_not_called()
 
+    def test_sql_restoration_records_grouped_timings_and_still_requires_http_readiness(self):
+        self.drill.observation = {}
+        recovery = {"status": "restored", "errors": [], "remaining_stopped_services": [],
+            "application_restoration": {"services": {"account": {"status": "ready", "elapsed_seconds": 80}}}}
+        self.runtime.close = Mock(return_value=recovery)
+        self.runtime.ready = Mock(side_effect=JourneyFailure("http-readiness-failed"))
+        with self.assertRaisesRegex(JourneyFailure, "http-readiness-failed"), self.drill.phase("application-restoration-after-clone-submit"):
+            self.drill.restore_apps()
+        self.runtime.close.assert_called_once_with(grouped_restoration=True)
+        self.runtime.ready.assert_called_once()
+        saved = verified(json.loads((self.root / "database-recovery.json").read_text()), "test-key")
+        self.assertEqual(saved["application_restoration_checks"], [recovery])
+        self.assertEqual(saved["failure_stage"], "application-restoration-after-clone-submit")
+
     def test_interrupt_restores_apps_and_writes_failure(self):
         result = self.engine(interrupted=True)
         self.assertEqual(result["status"], "failed")

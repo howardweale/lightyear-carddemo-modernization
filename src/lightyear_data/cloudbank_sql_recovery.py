@@ -476,7 +476,7 @@ class SqlRecovery:
             time.sleep(2)
 
     def restore_apps(self):
-        recovery = self.runtime.close()
+        recovery = self.runtime.close(grouped_restoration=True)
         if self.observation is not None:
             checks = self.observation.setdefault("application_restoration_checks", [])
             checks.append(recovery)

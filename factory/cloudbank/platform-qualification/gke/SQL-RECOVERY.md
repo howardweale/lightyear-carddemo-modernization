@@ -55,6 +55,23 @@ one-second termination grace period for these read-only clients and a two-hour
 active lifetime as a fallback. This does not pre-create the restored database.
 PITR still creates a fresh isolated Cloud SQL instance within the timed recovery.
 
+Source applications resume in four dependency groups while the clone provisions:
+Authorization; Customer, Account, CreditScore and Chatbot together; Transfer and
+Checks together; then TestRunner. Each group's scale-up requests are submitted
+before waiting for its members, so independent pods can initialize concurrently.
+Deployment UID, locked image and replica preconditions still apply, and a service's
+signed stop intent is cleared only after readiness is observed. Recovery journal
+writes remain serial. Failed members retain their intent; cleanup attempts the
+remaining groups and reports failure, allowing `recover` to retry safely.
+The existing shared business journey restart behavior is unchanged.
+
+`application_restoration_checks` records bounded per-service restoration timings
+and failure stages. These measure scale-up request through readiness observation
+and checkpointing; observation can lag actual pod readiness. All eight application
+HTTP readiness checks still run after restoration, inside the PITR recovery timer.
+Neither the 600-second RTO limit nor the 60-second recovery-point-age limit changes.
+Cloud SQL clone duration can still cause a live run to exceed RTO.
+
 The pool starts with no network ingress or egress. Before each snapshot the runner
 checks the policy UID and current rules, then replaces its single PostgreSQL /32
 destination using the observed resource version. Only the current validated source

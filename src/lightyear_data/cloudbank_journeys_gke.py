@@ -487,10 +487,10 @@ class GkeRuntime:
         for service in SERVICES:
             self.start(service)
 
-    def create_probe(self):
+    def create_probe(self, *, jdbc_url=None):
         require(bool(self.probe_image), "approved-postgresql-probe-image-required")
-        secret = self.secret_json("cloudbank-checks-external")
-        jdbc = secret.get("SPRING_DATASOURCE_URL", "")
+        jdbc = (jdbc_url if jdbc_url is not None else
+                self.secret_json("cloudbank-checks-external").get("SPRING_DATASOURCE_URL", ""))
         require(jdbc.startswith("jdbc:postgresql://"), "postgresql-checks-datasource-required")
         parsed = urlsplit(jdbc.removeprefix("jdbc:"))
         require(parsed.hostname is not None and parsed.username is None and parsed.password is None

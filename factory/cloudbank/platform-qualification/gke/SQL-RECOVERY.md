@@ -82,6 +82,20 @@ The read-only snapshot transaction may be attempted up to three times to allow
 network-policy propagation. All attempts count toward the same recovery timer;
 backup, clone, restore and delete submissions are never retried automatically.
 
+Polling an already submitted Cloud SQL operation tolerates at most two failed
+status reads per wait, with two- and four-second backoffs. Eligible failures are
+an unclassified CLI exit 1, command timeout/unavailability, or an explicit
+UNAVAILABLE, DEADLINE_EXCEEDED or INTERNAL code. An unclassified exit is recorded
+as unknown cause; it is not evidence of a network outage. Recognized authentication,
+permission and input errors, mismatched operation targets, malformed responses,
+and completed operations with errors remain fatal.
+Each retry reads the same operation ID. Successful intermediate polls do not
+reset the retry budget. Command timeouts and sleeps are capped by the original
+wait deadline; all retry time remains inside the recovery measurement. Signed
+operation journals and drill observations retain failure counts and the latest
+five bounded failure records, without raw CLI output. A later successful status
+read must still be followed by database state validation to pass the restore gate.
+
 ## Execute
 
 Set the existing input paths in the original authenticated shell. `JOURNEYS` points

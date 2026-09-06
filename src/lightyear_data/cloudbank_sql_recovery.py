@@ -25,6 +25,14 @@ from .contracts import content_hash, sign, verify_signature
 STATE_TYPE = "lightyear-cloudbank-sql-recovery-state"
 OBSERVATION_TYPE = "lightyear-cloudbank-isolated-sql-recovery"
 NAME = re.compile(r"[a-z][a-z0-9-]{0,62}")
+STATUS_READ_RETRY_LIMIT = 2
+RETRYABLE_STATUS_READ_ERRORS = {
+    "operator-command-failed-exit-1",
+    "command-unavailable-or-timeout-inspect-saved-intent",
+    "operator-command-failed-unavailable",
+    "operator-command-failed-deadline-exceeded",
+    "operator-command-failed-internal",
+}
 
 
 def utc() -> str:
@@ -114,9 +122,13 @@ def invoke(argv, *, data=None, timeout=90, sensitive=False):
         # API error codes help diagnose auth, quota and operation conflicts without
         # serializing arbitrary server messages, credentials or database content.
         codes = sorted(set(re.findall(r"\b(?:PERMISSION_DENIED|NOT_FOUND|ALREADY_EXISTS|"
-            r"RESOURCE_EXHAUSTED|UNAUTHENTICATED|INVALID_ARGUMENT|OPERATION_IN_PROGRESS)\b", result.stderr)))
+            r"RESOURCE_EXHAUSTED|UNAUTHENTICATED|INVALID_ARGUMENT|OPERATION_IN_PROGRESS|"
+            r"UNAVAILABLE|DEADLINE_EXCEEDED|INTERNAL)\b", result.stderr)))
         no_account = "active account" in result.stderr.lower()
-        hint = "active-account-required" if no_account else "-".join(codes).lower().replace("_", "-") or "exit-" + str(result.returncode)
+        auth_required = any(marker in result.stderr.lower() for marker in
+                            ("gcloud auth login", "reauthentication", "invalid_grant", "invalid_rapt"))
+        hint = ("active-account-required" if no_account else "authentication-required" if auth_required else
+                "-".join(codes).lower().replace("_", "-") or "exit-" + str(result.returncode))
         raise JourneyFailure("operator-command-failed-" + ("database-or-secret-access" if sensitive else hint[:70]))
     require(len(result.stdout) <= 8 * 1024 * 1024, "bounded-command-output-exceeded")
     return result.stdout
@@ -283,8 +295,29 @@ class SqlRecovery:
 
     def wait_operation(self, name, target, timeout=1800):
         deadline = time.monotonic() + timeout
+        failed_reads = 0
+        timeout_reason = "cloud-sql-operation-timeout-inspect-saved-operation"
         while True:
-            operation = self.cloud("operations", "describe", name)
+            remaining = deadline - time.monotonic()
+            require(remaining > 0, timeout_reason)
+            try:
+                # Only this read can be retried. The submitted operation and
+                # both the wait deadline and outer recovery timer stay fixed.
+                operation = self.cloud("operations", "describe", name, timeout=min(90, remaining))
+            except JourneyFailure as exc:
+                failed_reads += 1
+                remaining = deadline - time.monotonic()
+                retry = (str(exc) in RETRYABLE_STATUS_READ_ERRORS
+                         and failed_reads <= STATUS_READ_RETRY_LIMIT and remaining > 0)
+                delay = min(2 ** failed_reads, remaining) if retry else 0
+                self.record_status_read_failure(name, str(exc), retry, delay)
+                require(time.monotonic() < deadline, timeout_reason)
+                if not retry:
+                    raise
+                self.runtime.progress("Cloud SQL status read failed; retrying the same operation")
+                time.sleep(min(delay, max(0, deadline - time.monotonic())))
+                continue
+            require(time.monotonic() < deadline, timeout_reason)
             require(operation.get("targetId") == target and operation.get("targetProject") == self.runtime.project,
                     "cloud-sql-operation-target-mismatch")
             for intent in self.state["operations"].values():
@@ -296,9 +329,26 @@ class SqlRecovery:
                     break
             if operation.get("status") == "DONE":
                 require(not operation.get("error"), "cloud-sql-operation-failed-inspect-saved-operation")
+                require(time.monotonic() < deadline, timeout_reason)
                 return operation
-            require(time.monotonic() < deadline, "cloud-sql-operation-timeout-inspect-saved-operation")
-            time.sleep(10)
+            remaining = deadline - time.monotonic()
+            require(remaining > 0, timeout_reason)
+            time.sleep(min(10, remaining))
+
+    def record_status_read_failure(self, name, reason, retry, delay):
+        for phase, intent in self.state["operations"].items():
+            if intent.get("name") != name:
+                continue
+            diagnostic = intent.setdefault("status_read_failures", {"count": 0, "recent": []})
+            diagnostic["count"] += 1
+            diagnostic["recent"] = (diagnostic["recent"] + [{"observed_at": utc(), "reason": reason,
+                "retry_scheduled": retry, "retry_delay_seconds": delay,
+                "retry_limit_per_wait": STATUS_READ_RETRY_LIMIT}])[-5:]
+            self.save()
+            if self.observation is not None:
+                self.observation.setdefault("operation_status_read_failures", {})[phase] = diagnostic
+                write_signed(self.runtime.output / "database-recovery.json", self.observation, self.key, self.signer)
+            return
 
     def operation(self, phase: str, target: str, *args):
         require(phase not in self.state["operations"], "operation-intent-already-exists-use-recover")

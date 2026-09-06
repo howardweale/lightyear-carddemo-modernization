@@ -116,3 +116,8 @@ After deployment and the read-only operational baseline are ready, use the
 five OAuth roles. The subsequent run exercises actual business state and process
 recovery with signed bounded evidence. It does not replace the MS65/MS66 receipt
 requirements or the remaining MS67 operational scenarios.
+
+### Isolated database recovery executor
+
+See [SQL-RECOVERY.md](SQL-RECOVERY.md) for the signed Cloud SQL backup/PITR drill,
+its recover command, and the limits of its database-only timing observations.

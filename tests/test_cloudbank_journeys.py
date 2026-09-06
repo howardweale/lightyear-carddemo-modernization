@@ -415,6 +415,9 @@ class GkeAdapterTests(unittest.TestCase):
     def test_queue_rejects_unbounded_or_sensitive_error_text(self):
         message = "ly-" + "b" * 48
         with patch.object(self.runtime, "sql", return_value={"state": "DEAD", "attempts": 3,
+                "error_code": "ResourceAccessException"}):
+            self.assertEqual(self.runtime.queue(message)["error_code"], "ResourceAccessException")
+        with patch.object(self.runtime, "sql", return_value={"state": "DEAD", "attempts": 3,
                 "error_code": "PASSWORD=secret"}):
             with self.assertRaisesRegex(JourneyFailure, "queue-error-code-invalid"):
                 self.runtime.queue(message)

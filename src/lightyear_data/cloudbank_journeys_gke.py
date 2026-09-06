@@ -549,7 +549,7 @@ class GkeRuntime:
                     "queue-probe-values-invalid")
             error_code = result["error_code"]
             require(error_code is None or (isinstance(error_code, str)
-                    and re.fullmatch(r"[A-Z0-9_-]{1,80}", error_code) is not None),
+                    and re.fullmatch(r"[A-Za-z][A-Za-z0-9_$]{0,79}", error_code) is not None),
                     "queue-error-code-invalid")
         return result
 

@@ -13,7 +13,7 @@ import tempfile
 import unittest
 from unittest.mock import Mock, patch
 
-from lightyear_data.cloudbank_journeys import ACK, JourneyFailure, Response, SERVICES
+from lightyear_data.cloudbank_journeys import ACK, JourneyFailure, Response, SERVICES, hashed
 from lightyear_data.cloudbank_journeys_gke import GkeRuntime
 from lightyear_data.cloudbank_sql_ha import DATABASE_SERVICES, HaRuntime, SqlHa, ha_profile
 from lightyear_data.cloudbank_sql_recovery import verified, write_signed
@@ -192,6 +192,23 @@ class HaTests(unittest.TestCase):
         self.assertIsNone(self.drill.state["operation"])
         self.assertEqual(sum(c.args[:2] == ("account", "POST") for c in self.runtime.request.call_args_list), 1)
         self.assertNotIn("never-persist-this", (self.root / "sql-ha.json").read_text())
+
+    def test_dead_letter_records_bounded_checkpoint_diagnostic(self):
+        original = self.runtime.queue
+        def queue(message):
+            row = original(message)
+            if row["state"] == "PROCESSED":
+                row.update(state="DEAD", attempts=3, error_code="ACCOUNT_JOURNAL_REJECTED")
+            return row
+        self.runtime.queue = queue
+        result = self.execute()
+        self.assertEqual(result["reason"], "queue-message-dead-lettered")
+        self.assertEqual(result["failure_stage"], "synthetic-checkpoint")
+        message = next(iter(self.runtime.messages))
+        self.assertEqual(result["queue_failure"], {"phase": "deposit", "message_id_sha256":
+            hashed(message),
+            "state": "DEAD", "attempts": 3, "error_code": "ACCOUNT_JOURNAL_REJECTED"})
+        self.assertIsNone(self.drill.state["operation"])
 
     def test_transient_read_recovers_without_repeating_writes(self):
         original = self.runtime.request

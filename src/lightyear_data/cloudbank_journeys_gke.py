@@ -539,13 +539,18 @@ class GkeRuntime:
 
     def queue(self, message_id: str) -> dict:
         require(re.fullmatch(r"ly-[0-9a-f]{48}", message_id) is not None, "queue-message-identity-invalid")
-        result = self.sql("SELECT coalesce((SELECT json_build_object('state', state, 'attempts', attempts) "
+        result = self.sql("SELECT coalesce((SELECT json_build_object('state', state, 'attempts', attempts, "
+            "'error_code', last_error_code) "
             "FROM check_messages WHERE message_id = '" + message_id + "'), '{}'::json);")
-        require(set(result) in (set(), {"state", "attempts"}), "queue-probe-fields-invalid")
+        require(set(result) in (set(), {"state", "attempts", "error_code"}), "queue-probe-fields-invalid")
         if result:
             require(result["state"] in {"READY", "PROCESSING", "PROCESSED", "DEAD"}
                     and type(result["attempts"]) is int and 0 <= result["attempts"] <= 100,
                     "queue-probe-values-invalid")
+            error_code = result["error_code"]
+            require(error_code is None or (isinstance(error_code, str)
+                    and re.fullmatch(r"[A-Z0-9_-]{1,80}", error_code) is not None),
+                    "queue-error-code-invalid")
         return result
 
     def close(self, *, grouped_restoration=False) -> dict:

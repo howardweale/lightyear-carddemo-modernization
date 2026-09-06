@@ -108,6 +108,106 @@ class RecoveryTests(unittest.TestCase):
             with self.assertRaises(JourneyFailure):
                 self.drill.wait_operation("operation", "target")
 
+    def test_status_read_retries_same_operation_and_preserves_signed_diagnostics(self):
+        self.drill.observation = {}
+        self.drill.state["operations"]["backup-restore"] = {"name": "operation", "target": "target"}
+        done = {"targetId": "target", "targetProject": "test-project", "status": "DONE"}
+        self.drill.cloud = Mock(side_effect=[JourneyFailure("operator-command-failed-exit-1"),
+            {**done, "status": "RUNNING"}, JourneyFailure("operator-command-failed-unavailable"), done])
+        with patch("lightyear_data.cloudbank_sql_recovery.time.sleep") as pause:
+            self.assertEqual(self.drill.wait_operation("operation", "target"), done)
+        self.assertEqual([call.args for call in self.drill.cloud.call_args_list], [("operations", "describe", "operation")] * 4)
+        self.assertEqual([call.args[0] for call in pause.call_args_list], [2, 10, 4])
+        state = verified(json.loads((self.root / "sql-recovery-state.json").read_text()), "test-key")
+        result = verified(json.loads((self.root / "database-recovery.json").read_text()), "test-key")
+        diagnostic = state["operations"]["backup-restore"]["status_read_failures"]
+        self.assertEqual(diagnostic["count"], 2)
+        self.assertEqual(result["operation_status_read_failures"]["backup-restore"], diagnostic)
+        self.assertTrue(all(r["retry_scheduled"] for r in diagnostic["recent"]))
+        self.assertEqual(state["operations"]["backup-restore"]["observation"]["status"], "DONE")
+
+    def test_status_read_retry_budget_does_not_reset_after_successful_poll(self):
+        self.drill.observation = {}
+        self.drill.state["operations"]["backup-restore"] = {"name": "operation"}
+        error = JourneyFailure("operator-command-failed-exit-1")
+        running = {"targetId": "target", "targetProject": "test-project", "status": "RUNNING"}
+        self.drill.cloud = Mock(side_effect=[error, running, error, running, error])
+        with patch("lightyear_data.cloudbank_sql_recovery.time.sleep") as pause:
+            with self.assertRaisesRegex(JourneyFailure, "operator-command-failed-exit-1"):
+                self.drill.wait_operation("operation", "target")
+        self.assertEqual(self.drill.cloud.call_count, 5)
+        self.assertEqual([call.args[0] for call in pause.call_args_list], [2, 10, 4, 10])
+        diagnostic = self.drill.state["operations"]["backup-restore"]["status_read_failures"]
+        self.assertEqual(diagnostic["count"], 3)
+        self.assertFalse(diagnostic["recent"][-1]["retry_scheduled"])
+        for _ in range(6):
+            self.drill.record_status_read_failure("operation", str(error), False, 0)
+        self.assertEqual(diagnostic["count"], 9)
+        self.assertEqual(len(diagnostic["recent"]), 5)
+
+    def test_known_auth_permission_input_and_operation_errors_are_never_retried(self):
+        for reason in ("active-account-required", "authentication-required", "unauthenticated",
+                       "permission-denied", "not-found", "invalid-argument", "resource-exhausted"):
+            with self.subTest(reason=reason), patch("lightyear_data.cloudbank_sql_recovery.time.sleep") as pause:
+                self.drill.cloud = Mock(side_effect=JourneyFailure("operator-command-failed-" + reason))
+                with self.assertRaises(JourneyFailure):
+                    self.drill.wait_operation("operation", "target")
+                self.drill.cloud.assert_called_once()
+                pause.assert_not_called()
+        for response in ({"targetId": "other", "targetProject": "test-project", "status": "DONE"},
+                         {"targetId": "target", "targetProject": "other", "status": "DONE"},
+                         {"targetId": "target", "targetProject": "test-project", "status": "DONE", "error": {"code": "INTERNAL"}}):
+            with self.subTest(response=response), patch("lightyear_data.cloudbank_sql_recovery.time.sleep") as pause:
+                self.drill.cloud = Mock(return_value=response)
+                with self.assertRaises(JourneyFailure):
+                    self.drill.wait_operation("operation", "target")
+                self.drill.cloud.assert_called_once()
+                pause.assert_not_called()
+        with patch("lightyear_data.cloudbank_sql_recovery.time.sleep") as pause:
+            self.drill.cloud = Mock(side_effect=ValueError("invalid-json"))
+            with self.assertRaises(ValueError):
+                self.drill.wait_operation("operation", "target")
+            self.drill.cloud.assert_called_once()
+            pause.assert_not_called()
+
+    def test_status_read_timeout_and_backoff_share_original_deadline(self):
+        for failed_read in (True, False):
+            with self.subTest(failed_read=failed_read):
+                clock, delays = [0.0], []
+
+                def cloud(*args, **kwargs):
+                    self.assertEqual(kwargs["timeout"], 3)
+                    clock[0] += 2
+                    if failed_read:
+                        raise JourneyFailure("command-unavailable-or-timeout-inspect-saved-intent")
+                    return {"targetId": "target", "targetProject": "test-project", "status": "RUNNING"}
+
+                def pause(delay):
+                    delays.append(delay)
+                    clock[0] += delay
+
+                self.drill.cloud = Mock(side_effect=cloud)
+                with patch("lightyear_data.cloudbank_sql_recovery.time.monotonic", side_effect=lambda: clock[0]), \
+                        patch("lightyear_data.cloudbank_sql_recovery.time.sleep", side_effect=pause):
+                    with self.assertRaisesRegex(JourneyFailure, "cloud-sql-operation-timeout"):
+                        self.drill.wait_operation("operation", "target", timeout=3)
+                self.drill.cloud.assert_called_once()
+                self.assertEqual(delays, [1])
+                self.assertEqual(clock[0], 3)
+
+    def test_cli_auth_classification_and_retryable_codes_do_not_persist_raw_errors(self):
+        for stderr, reason in (("Please run gcloud auth login", "authentication-required"),
+                               ("reauthentication failed (invalid_rapt)", "authentication-required"),
+                               ("UNAVAILABLE", "unavailable"), ("DEADLINE_EXCEEDED", "deadline-exceeded"),
+                               ("INTERNAL", "internal")):
+            with self.subTest(reason=reason):
+                failure = subprocess.CompletedProcess([], 1, "private-result", stderr + " password=private-secret")
+                with patch("lightyear_data.cloudbank_sql_recovery.subprocess.run", return_value=failure):
+                    with self.assertRaises(JourneyFailure) as exc:
+                        invoke(["gcloud", "sql", "operations", "describe", "operation"])
+                self.assertEqual(str(exc.exception), "operator-command-failed-" + reason)
+                self.assertNotIn("private", str(exc.exception))
+
     def test_operation_intent_saved_before_submission_and_not_retried(self):
         def fail(*args):
             state = json.loads((self.root / "sql-recovery-state.json").read_text())
@@ -284,7 +384,7 @@ class RecoveryTests(unittest.TestCase):
                 recovery_point_age(incident, point, checkpoint)
 
     def engine(self, *, mismatch=False, pitr_rto=30, backup_rto=30, interrupted=False, cleanup_failure=False,
-               restore_wait_failure=False):
+               restore_wait_failure=False, retry_backup_poll=False):
         seconds = [0]
         baseline = {"state_sha256": "a" * 64, "databases": {"b" * 64: {"table_count": 3}}}
         self.drill.discover = Mock(return_value=source_profile(instance(), "test-project", "us-west1", "source"))
@@ -305,9 +405,22 @@ class RecoveryTests(unittest.TestCase):
         self.drill.wait_operation = Mock()
         if restore_wait_failure:
             self.drill.wait_operation.side_effect = [None, JourneyFailure("operator-command-failed-exit-1")]
+        if retry_backup_poll:
+            waits = [0]
+            def wait_operation(name, target):
+                waits[0] += 1
+                if waits[0] == 2:
+                    return SqlRecovery.wait_operation(self.drill, name, target)
+            self.drill.wait_operation.side_effect = wait_operation
         backup = {"id": "123", "instance": "source", "description": "test-run", "type": "ON_DEMAND", "status": "SUCCESSFUL",
                   "startTime": "2026-09-06T01:01:00Z", "endTime": "2026-09-06T01:02:00Z"}
-        def cloud(*args):
+        status_reads = [0]
+        def cloud(*args, **kwargs):
+            if args[:2] == ("operations", "describe"):
+                status_reads[0] += 1
+                if status_reads[0] == 1:
+                    raise JourneyFailure("operator-command-failed-exit-1")
+                return {"targetId": self.drill.state["target"], "targetProject": "test-project", "status": "DONE"}
             if args[:2] == ("backups", "list"):
                 seconds[0] = 60
                 return [backup]
@@ -324,9 +437,22 @@ class RecoveryTests(unittest.TestCase):
             self.timeline.attach_mock(getattr(self.drill, name), name)
         def now():
             return datetime.fromtimestamp(epoch("2026-09-06T01:00:30Z") + seconds[0], timezone.utc).isoformat().replace("+00:00", "Z")
+        def pause(delay):
+            seconds[0] += delay
         with patch("lightyear_data.cloudbank_sql_recovery.utc", side_effect=now), \
-             patch("lightyear_data.cloudbank_sql_recovery.time.monotonic", side_effect=lambda: seconds[0]):
+             patch("lightyear_data.cloudbank_sql_recovery.time.monotonic", side_effect=lambda: seconds[0]), \
+             patch("lightyear_data.cloudbank_sql_recovery.time.sleep", side_effect=pause):
             return self.drill.execute()
+
+    def test_recovered_status_read_requires_data_validation_and_retry_time_counts_toward_rto(self):
+        for validation_seconds, expected_rto, status in ((30, 32, "passed-isolated-database-recovery"), (599, 601, "failed")):
+            with self.subTest(validation_seconds=validation_seconds):
+                result = self.engine(backup_rto=validation_seconds, retry_backup_poll=True)
+                self.assertEqual(result["backup_restore"]["database_rto_seconds"], expected_rto)
+                self.assertTrue(result["backup_restore"]["state_matches"])
+                self.assertEqual(result["status"], status)
+                self.assertEqual(self.drill.snapshot.call_count, 5)
+                self.assertEqual(sum(c.args[0] == "backup-restore" for c in self.drill.operation.call_args_list), 1)
 
     def test_restore_poll_failure_preserves_pitr_and_identifies_stage(self):
         result = self.engine(restore_wait_failure=True)

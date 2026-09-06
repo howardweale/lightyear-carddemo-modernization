@@ -72,6 +72,23 @@ bounded certificate status with the deployment evidence.
 - Confirm Managed Prometheus metrics, Cloud Logging entries, and Cloud Trace spans for all eight
   services under one hashed correlation ID. Trigger one synthetic alert and prove it recovers.
 
+Before the correlation and alert exercise, collect a reproducible read-only delivery baseline. The
+operator needs Logs Viewer, Monitoring Viewer, and Cloud Trace User access; collector write roles do
+not grant human read access. Run it immediately after fresh journey traffic so logs and traces fall
+inside the selected window:
+
+```bash
+./cloudbank-operational-baseline.sh \
+  --project "$GCP_PROJECT_ID" --region "$GCP_REGION" --cluster "$GKE_CLUSTER_NAME" \
+  --namespace "$GKE_NAMESPACE" --lookback-minutes 60 \
+  --evidence-bucket "gs://${GCP_PROJECT_ID}-ms67-evidence/operational-baseline"
+```
+
+The observer reads only resource identities, timestamps, metric headers and span labels. It hashes
+entry and trace identities, retains structured API error identifiers without free-text messages,
+and uploads the bounded observation outside the checkout. `OBSERVED-ALL-BASELINE-SIGNALS` means
+delivery was seen; it does not prove correlation, alert behavior, rotation, MS65, MS66 or MS67.
+
 ## 4. Load and security
 
 - Run the same 18 MS #66 business journeys through k6 for at least 300 seconds, 1,000 requests and

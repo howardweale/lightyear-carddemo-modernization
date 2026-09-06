@@ -43,6 +43,50 @@ def recovery_point_age(incident: str, point: str, checkpoint: str) -> int:
     return math.ceil(age)
 
 
+def select_recovery_point(checkpoint, query, observe, *, timeout=600, clock=None, now=None, pause=None):
+    """Select one observed point after slow preparation, within a bounded wait.
+
+    The accepted API response and its observation time are used by the clone
+    request directly. Never replace an accepted point with an unchecked second
+    read. Runtime clocks stay in memory; only UTC timestamps/durations are saved.
+    """
+    clock, now, pause = clock or time.monotonic, now or utc, pause or time.sleep
+    began = clock()
+    checkpoint_epoch = epoch(checkpoint)
+    attempt = 0
+    while True:
+        attempt += 1
+        requested_at, requested_clock = now(), clock()
+        try:
+            point = query()
+            point_epoch = epoch(point)
+        except (ValueError, TypeError, AttributeError, KeyError):
+            observe({"attempt": attempt, "status": "failed", "reason": "invalid-recovery-time-response",
+                     "query_started_at": requested_at, "observed_at": now()})
+            raise JourneyFailure("pitr-recovery-time-response-invalid") from None
+        except JourneyFailure as exc:
+            observe({"attempt": attempt, "status": "failed", "reason": str(exc),
+                     "query_started_at": requested_at, "observed_at": now()})
+            raise
+        selected_clock, incident = clock(), now()
+        age = epoch(incident) - point_epoch
+        reason = ("point-precedes-checkpoint" if point_epoch < checkpoint_epoch else
+                  "point-in-future" if age < 0 else "point-too-old" if age > 60 else "accepted")
+        elapsed = selected_clock - began
+        expired = elapsed >= timeout
+        observe({"attempt": attempt, "status": "timed-out" if expired else "accepted" if reason == "accepted" else "waiting",
+                 "reason": reason, "checkpoint_captured_at": checkpoint, "latest_recovery_time": point,
+                 "query_started_at": requested_at, "observed_at": incident,
+                 "recovery_point_age_seconds": round(age, 6),
+                 "point_after_checkpoint_seconds": round(point_epoch - checkpoint_epoch, 6),
+                 "query_duration_seconds": round(selected_clock - requested_clock, 6),
+                 "wait_elapsed_seconds": round(elapsed, 6), "maximum_age_seconds": 60})
+        require(not expired, "pitr-recovery-window-timeout")
+        if reason == "accepted":
+            return point, incident, recovery_point_age(incident, point, checkpoint), selected_clock
+        pause(min(10, timeout - elapsed))
+
+
 def write_signed(path: Path, value: dict, key: str, signer: str):
     temporary = path.with_suffix(".tmp")
     with temporary.open("w", encoding="utf-8") as handle:
@@ -398,21 +442,22 @@ class SqlRecovery:
                     and epoch(backup_record["startTime"]) >= epoch(stable_after), "backup-checkpoint-binding-invalid")
             result["backup"] = {**backup_record, "metadata_sha256": hashed(backup_record),
                                 "managed_backup_bytes_sha256": None, "retained": True}
-            progress("Waiting for a recent recoverable timestamp after the checkpoint")
-            deadline = time.monotonic() + 600
-            while True:
-                latest = self.cloud("instances", "get-latest-recovery-time", self.state["source"])["latestRecoveryTime"]
-                if epoch(latest) >= epoch(stable_after) and 0 <= time.time() - epoch(latest) <= 60:
-                    break
-                require(time.monotonic() < deadline, "pitr-window-not-recent-enough")
-                time.sleep(10)
+            progress("Rechecking stable source state before selecting the recovery timestamp")
             require(self.snapshot(profile["private_ip"]) == before, "source-changed-during-checkpoint-window")
-            # Refresh the window after the second snapshot; slow probes count.
-            latest = self.cloud("instances", "get-latest-recovery-time", self.state["source"])["latestRecoveryTime"]
-            started = time.monotonic()
-            incident = utc()
-            rpo = recovery_point_age(incident, latest, stable_after)
+            progress("Waiting for a recent recoverable timestamp after the checkpoint")
+
+            def record_point(observation):
+                preflight = result.setdefault("pitr_preflight", {"recent_observations": []})
+                preflight.update(attempt_count=observation["attempt"], status=observation["status"])
+                preflight["recent_observations"] = (preflight["recent_observations"] + [observation])[-5:]
+                write_signed(self.runtime.output / "database-recovery.json", result, self.key, self.signer)
+
+            latest, incident, rpo, started = select_recovery_point(stable_after,
+                lambda: self.cloud("instances", "get-latest-recovery-time", self.state["source"])["latestRecoveryTime"],
+                record_point)
             progress("PITR cloning to the isolated validation instance")
+            # Revalidate source identity immediately before mutation. Its latency
+            # is part of RTO, which starts at the accepted point's observation.
             self.source_guard()
             self.operation("pitr", self.state["target"], "instances", "clone", self.state["source"],
                            self.state["target"], "--point-in-time", latest)
@@ -460,7 +505,11 @@ class SqlRecovery:
                                    else "cleanup-interrupted-or-runtime-error"})
             result["recovery"] = {"status": "failed" if errors else "restored", "errors": errors,
                 "remaining_stopped_services": sorted(self.runtime.stopped),
-                "validation_instance_deleted": self.state.get("target_deleted", False)}
+                "validation_instance_deleted": self.state.get("target_deleted", False),
+                "validation_instance_state": "deleted" if self.state.get("target_deleted") else
+                    "not-requested" if "pitr" not in self.state["operations"] else
+                    "submission-uncertain" if not self.state["operations"]["pitr"].get("name") else
+                    "created" if self.state.get("target_create_time") else "creation-requested"}
             if errors:
                 result["status"] = "failed"
             result["finished_at"] = utc()

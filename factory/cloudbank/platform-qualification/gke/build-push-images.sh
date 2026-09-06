@@ -21,6 +21,19 @@ mkdir -p "$output_root"
   echo "OUTPUT_ROOT must be fresh" >&2; exit 2;
 }
 
+retry_registry_push() {
+  local attempt delay=5
+  for attempt in 1 2 3 4 5; do
+    if docker push "$1"; then
+      return 0
+    fi
+    [[ "$attempt" -lt 5 ]] || return 1
+    echo "Artifact Registry push attempt $attempt failed; retrying in ${delay}s" >&2
+    sleep "$delay"
+    delay=$((delay * 2))
+  done
+}
+
 (cd "$target" && mvn -DskipTests -Djkube.skip=true -Ddependency-check.skip=true package)
 ms64_sha="$(jq -er '.content_sha256 | select(test("^[0-9a-f]{64}$"))' "$ms64_receipt")"
 registry="$GCP_REGION-docker.pkg.dev/$GCP_PROJECT_ID/$ARTIFACT_REPOSITORY"
@@ -37,7 +50,7 @@ for service in "${ms67_services[@]}"; do
   tag="$registry/$service:ms67-$(git -C "$ms67_project_root" rev-parse --short=12 HEAD)"
   docker build --build-arg BASE_IMAGE="$JAVA_BASE_IMAGE" --build-arg BUILD_GENERATION=baseline \
     --tag "$tag" "$stage"
-  docker push "$tag"
+  retry_registry_push "$tag"
   digest="$(gcloud artifacts docker images describe "$tag" --format='value(image_summary.digest)')"
   [[ "$digest" =~ ^sha256:[0-9a-f]{64}$ ]] || { echo "Missing registry digest for $service" >&2; exit 2; }
   reference="$registry/$service@$digest"

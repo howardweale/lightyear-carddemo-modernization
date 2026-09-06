@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import copy
 from contextlib import redirect_stdout
+from datetime import datetime, timezone
 import importlib.util
 import io
 import json
@@ -16,7 +17,8 @@ from unittest.mock import Mock, patch
 from lightyear_data.cloudbank_journeys import JourneyFailure, SERVICES
 from lightyear_data.cloudbank_journeys_gke import GkeRuntime
 from lightyear_data.cloudbank_sql_recovery import (
-    SNAPSHOT_SQL, SqlRecovery, epoch, invoke, normalize_snapshot, recovery_point_age, source_profile, verified, write_signed,
+    SNAPSHOT_SQL, SqlRecovery, epoch, invoke, normalize_snapshot, recovery_point_age, select_recovery_point,
+    source_profile, verified, write_signed,
 )
 from lightyear_data.contracts import sign, verify_signature
 
@@ -169,15 +171,17 @@ class RecoveryTests(unittest.TestCase):
         self.drill.wait_operation = Mock()
         backup = {"id": "123", "instance": "source", "description": "test-run", "type": "ON_DEMAND", "status": "SUCCESSFUL",
                   "startTime": "2026-09-06T01:01:00Z", "endTime": "2026-09-06T01:02:00Z"}
-        self.drill.cloud = Mock(side_effect=[[backup], {"latestRecoveryTime": "2026-09-06T01:04:50Z"},
-                                           {"latestRecoveryTime": "2026-09-06T01:04:50Z"}])
+        self.drill.cloud = Mock(side_effect=[[backup], {"latestRecoveryTime": "2026-09-06T01:04:50Z"}])
         self.drill.claim_target = Mock(return_value=instance(self.drill.state["target"], "10.20.0.3"))
         self.drill.target_guard = Mock(return_value=instance(self.drill.state["target"], "10.20.0.3"))
         self.drill.restore_apps = Mock()
         self.drill.cleanup = Mock(side_effect=JourneyFailure("cleanup-failed") if cleanup_failure else None)
-        with patch("lightyear_data.cloudbank_sql_recovery.utc", side_effect=["2026-09-06T01:00:30Z", "2026-09-06T01:05:00Z", "2026-09-06T01:10:00Z"]), \
-             patch("lightyear_data.cloudbank_sql_recovery.time.time", return_value=epoch("2026-09-06T01:05:00Z")), \
-             patch("lightyear_data.cloudbank_sql_recovery.time.monotonic", side_effect=[0, 100, 100 + pitr_rto, 1000, 1000 + backup_rto]):
+        self.timeline = Mock()
+        for name in ("snapshot", "cloud", "source_guard", "operation"):
+            self.timeline.attach_mock(getattr(self.drill, name), name)
+        with patch("lightyear_data.cloudbank_sql_recovery.utc", side_effect=["2026-09-06T01:00:30Z",
+                "2026-09-06T01:04:59Z", "2026-09-06T01:05:00Z", "2026-09-06T01:10:00Z"]), \
+             patch("lightyear_data.cloudbank_sql_recovery.time.monotonic", side_effect=[0, 50, 100, 100 + pitr_rto, 1000, 1000 + backup_rto]):
             return self.drill.execute()
 
     def test_drill_passes_only_isolated_scope(self):
@@ -188,6 +192,41 @@ class RecoveryTests(unittest.TestCase):
         self.assertIsNone(result["backup"]["managed_backup_bytes_sha256"])
         self.assertFalse(result["ms67_complete"])
         self.assertTrue(verify_signature(json.loads((self.root / "database-recovery.json").read_text()), "test-key"))
+
+    def test_snapshot_precedes_single_timestamp_query_and_clone_rechecks_source_identity(self):
+        result = self.engine()
+        events = self.timeline.mock_calls
+        queries = [i for i, event in enumerate(events) if event[0] == "cloud" and event.args[:2] == ("instances", "get-latest-recovery-time")]
+        self.assertEqual(len(queries), 1)
+        query_index = queries[0]
+        clone_index = next(i for i, event in enumerate(events) if event[0] == "operation" and event.args[0] == "pitr")
+        self.assertEqual(sum(event[0] == "snapshot" for event in events[:query_index]), 3)
+        self.assertEqual(events[query_index - 1][0], "snapshot")
+        self.assertEqual(events[query_index + 1][0], "source_guard")
+        self.assertEqual(clone_index, query_index + 2)
+        self.assertEqual(events[clone_index].args[-1], result["pitr"]["point_in_time"])
+        diagnostic = result["pitr_preflight"]["recent_observations"][-1]
+        self.assertEqual(diagnostic["latest_recovery_time"], result["pitr"]["point_in_time"])
+        self.assertEqual(diagnostic["observed_at"], result["pitr"]["incident_declared_at"])
+        self.assertEqual(diagnostic["recovery_point_age_seconds"], 10)
+
+    def test_failed_window_retains_bounded_diagnostics_and_restores_without_clone(self):
+        def fail_window(checkpoint, query, observe):
+            for attempt in range(1, 8):
+                observe({"attempt": attempt, "status": "timed-out" if attempt == 7 else "waiting",
+                         "reason": "point-too-old", "recovery_point_age_seconds": 61 + attempt})
+            raise JourneyFailure("pitr-recovery-window-timeout")
+        with patch("lightyear_data.cloudbank_sql_recovery.select_recovery_point", side_effect=fail_window):
+            result = self.engine()
+        self.assertEqual(result["status"], "failed")
+        self.assertEqual(result["pitr_preflight"]["attempt_count"], 7)
+        self.assertEqual([o["attempt"] for o in result["pitr_preflight"]["recent_observations"]], [3, 4, 5, 6, 7])
+        self.assertEqual(result["recovery"]["validation_instance_state"], "not-requested")
+        self.assertFalse(any(call.args[0] == "pitr" for call in self.drill.operation.call_args_list))
+        self.drill.restore_apps.assert_called_once()
+        saved = json.loads((self.root / "database-recovery.json").read_text())
+        self.assertTrue(verify_signature(saved, "test-key"))
+        self.assertEqual(saved["pitr_preflight"], result["pitr_preflight"])
 
     def test_changed_state_or_rto_overrun_or_cleanup_failure_cannot_pass(self):
         for fault in ({"mismatch": True}, {"pitr_rto": 601}, {"backup_rto": 601}, {"cleanup_failure": True}):
@@ -201,6 +240,7 @@ class RecoveryTests(unittest.TestCase):
         result = self.engine(interrupted=True)
         self.assertEqual(result["status"], "failed")
         self.assertEqual(result["reason"], "operator-interrupted")
+        self.assertEqual(result["recovery"]["validation_instance_state"], "not-requested")
         self.drill.restore_apps.assert_called_once()
         self.drill.cleanup.assert_called_once()
 
@@ -231,6 +271,68 @@ class RecoveryTests(unittest.TestCase):
         self.assertIn("MS67_SQL_RECOVERY_CLEANUP=PASSED", captured.getvalue())
         self.assertNotIn("MS67_ISOLATED_SQL_RECOVERY=PASSED", captured.getvalue())
         self.assertEqual((self.root / "database-recovery.json").read_bytes(), original)
+
+
+class RecoveryWindowTests(unittest.TestCase):
+    def setUp(self):
+        self.seconds = 0
+        self.base = epoch("2026-09-06T01:05:00Z")
+        self.observations = []
+
+    def timestamp(self, offset):
+        return datetime.fromtimestamp(self.base + offset, timezone.utc).isoformat().replace("+00:00", "Z")
+
+    def sleep(self, seconds):
+        self.seconds += seconds
+
+    def select(self, query, timeout=600):
+        return select_recovery_point(self.timestamp(-60), query, self.observations.append,
+            clock=lambda: self.seconds, now=lambda: self.timestamp(self.seconds), pause=self.sleep, timeout=timeout)
+
+    def test_stale_future_and_pre_checkpoint_points_wait_until_valid(self):
+        points = iter([self.timestamp(5), self.timestamp(-90), self.timestamp(-41), self.timestamp(20)])
+        query = Mock(side_effect=lambda: next(points))
+        point, incident, age, began = self.select(query)
+        self.assertEqual([o["reason"] for o in self.observations],
+                         ["point-in-future", "point-precedes-checkpoint", "point-too-old", "accepted"])
+        self.assertEqual(point, self.timestamp(20))
+        self.assertEqual(incident, self.timestamp(30))
+        self.assertEqual((age, began), (10, 30))
+        self.assertEqual(query.call_count, 4)
+
+    def test_query_latency_is_counted_and_an_aged_response_is_retried(self):
+        durations = iter([61, 2])
+        def query():
+            point = self.timestamp(self.seconds)
+            self.seconds += next(durations)
+            return point
+        point, incident, age, began = self.select(query)
+        self.assertEqual(self.observations[0]["reason"], "point-too-old")
+        self.assertEqual(self.observations[0]["query_duration_seconds"], 61)
+        self.assertEqual(self.observations[0]["recovery_point_age_seconds"], 61)
+        self.assertEqual((point, incident, age, began), (self.timestamp(71), self.timestamp(73), 2, 73))
+
+    def test_bounded_wait_saves_last_rejected_point(self):
+        with self.assertRaisesRegex(JourneyFailure, "pitr-recovery-window-timeout"):
+            self.select(lambda: self.timestamp(-100), timeout=20)
+        self.assertEqual(self.seconds, 20)
+        self.assertEqual(self.observations[-1]["status"], "timed-out")
+        self.assertEqual(self.observations[-1]["reason"], "point-precedes-checkpoint")
+        self.assertEqual(self.observations[-1]["wait_elapsed_seconds"], 20)
+
+    def test_fresh_response_after_wait_deadline_does_not_pass(self):
+        def query():
+            self.seconds += 31
+            return self.timestamp(self.seconds)
+        with self.assertRaisesRegex(JourneyFailure, "pitr-recovery-window-timeout"):
+            self.select(query, timeout=30)
+        self.assertEqual(self.observations[-1]["status"], "timed-out")
+
+    def test_malformed_response_is_not_persisted(self):
+        with self.assertRaisesRegex(JourneyFailure, "pitr-recovery-time-response-invalid"):
+            self.select(lambda: "unexpected-private-response")
+        self.assertEqual(self.observations[-1]["reason"], "invalid-recovery-time-response")
+        self.assertNotIn("unexpected-private-response", json.dumps(self.observations))
 
 
 @unittest.skipUnless(os.environ.get("LIGHTYEAR_SQL_RECOVERY_TEST_CONTAINER"), "requires disposable PostgreSQL 16 CI container")

@@ -25,8 +25,10 @@ does not grant permissions or change project, database or network configuration.
    persistent application table and sequence in its configured database.
 3. Save signed recovery intent before scaling each of the eight applications to
    zero. Wait for all writer pods, including Checks, to exit. Hash the stable state,
-   create an on-demand backup, and select a Cloud SQL recoverable timestamp after
-   the checkpoint. Repeat the state comparison before submitting the PITR clone.
+   create an on-demand backup, then repeat the state comparison. After that slow
+   preparation, poll for a Cloud SQL recoverable timestamp after the checkpoint
+   whose age is between zero and 60 seconds. Use that accepted response directly
+   for the PITR clone, revalidating source identity immediately before submission.
 4. Create a fresh `ly-sql-restore-*` instance at that timestamp. Restore the original
    application replica counts and readiness while the clone provisions. Probe the
    isolated instance and compare its state to the checkpoint.
@@ -98,6 +100,19 @@ A submission with no returned operation ID is explicitly inconclusive. Inspect
 the named target and Cloud SQL operations before any manual cleanup; do not simply
 resubmit the clone or change the source instance. A protected validation instance
 is retained for operator cleanup. No protection is disabled automatically.
+
+`pitr_preflight` records the last five recovery-time observations, total attempt
+count, API query durations, UTC observation times, checkpoint offsets and measured
+ages. A point that is old, in the future, or before the checkpoint is retried within
+the existing 600-second wait limit. The accepted response is not replaced by a
+second unvalidated query. Timeouts preserve the final rejected observations and
+restore applications. These diagnostics contain timestamps and durations only.
+
+`validation_instance_state: not-requested` means this run never submitted a clone;
+in that case `validation_instance_deleted: false` does not indicate a leaked clone.
+The other states distinguish an uncertain submission, a requested creation, a
+created instance and confirmed deletion. Check the signed operation journal when
+a submission is uncertain.
 
 The run writes `database-recovery.json`, `sql-recovery-state.json`,
 `recovery-state.json` and SHA256SUMS. Recovery additionally writes

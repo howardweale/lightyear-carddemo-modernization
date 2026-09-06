@@ -137,6 +137,133 @@ class RecoveryTests(unittest.TestCase):
             self.drill.remove_resources()
         self.assertFalse(any("delete" in call.args for call in self.runtime.kubectl.call_args_list))
 
+    def probe_cluster(self):
+        """Stateful API double; replacement enforces the observed UID and version."""
+        self.drill.databases = {"application": "cloudbank-customer-external"}
+        objects, created = {}, []
+        def kubectl(*args, data=None, **kwargs):
+            if args[0] == "create":
+                manifest = json.loads(data)
+                created.append(copy.deepcopy(manifest))
+                key = (manifest["kind"].lower(), manifest["metadata"]["name"])
+                self.assertNotIn(key, objects)
+                manifest["metadata"].update(uid="uid-" + str(len(created)), resourceVersion="1")
+                if manifest["kind"] == "Pod":
+                    manifest["status"] = {"phase": "Running", "conditions": [{"type": "Ready", "status": "True"}]}
+                objects[key] = manifest
+                return json.dumps(manifest)
+            if args[0] == "wait":
+                return "ready"
+            if args[0] == "replace":
+                manifest = json.loads(data)
+                key = (manifest["kind"].lower(), manifest["metadata"]["name"])
+                for field in ("uid", "resourceVersion"):
+                    self.assertEqual(manifest["metadata"][field], objects[key]["metadata"][field])
+                manifest["metadata"]["resourceVersion"] = str(int(manifest["metadata"]["resourceVersion"]) + 1)
+                objects[key] = manifest
+                return json.dumps(manifest)
+            if args[0] == "get":
+                row = objects.get((args[1], args[2]))
+                return json.dumps(row) if row else ""
+            if args[0] == "delete":
+                del objects[(args[1], args[2])]
+                return "deleted"
+            self.fail("unexpected API action: " + args[0])
+        self.runtime.kubectl = Mock(side_effect=kubectl)
+        self.runtime.get = Mock(side_effect=lambda kind, name: copy.deepcopy(objects[(kind, name)]))
+        raw = "\n".join(map(json.dumps, [{"unsupported": 0},
+            {"relation": "public.accounts", "rows": 3, "sha256": "a" * 64}, {"schema_sha256": "b" * 64}]))
+        return objects, created, raw
+
+    def test_snapshots_reuse_prepared_clients_with_exact_host_binding_and_final_cleanup(self):
+        objects, created, raw = self.probe_cluster()
+        with patch("lightyear_data.cloudbank_sql_recovery.invoke", return_value=raw) as query:
+            outputs = [self.drill.snapshot(host) for host in ("10.20.0.2", "10.20.0.2", "10.20.0.2", "10.20.0.3", "10.20.0.3")]
+        self.assertTrue(all(output == outputs[0] for output in outputs))
+        self.assertEqual(len(created), 2)
+        self.assertEqual(created[0]["spec"]["egress"], [])
+        pod = created[1]["spec"]
+        self.assertEqual(pod["terminationGracePeriodSeconds"], 1)
+        self.assertEqual(pod["securityContext"]["runAsUser"], 70)
+        self.assertFalse(pod["automountServiceAccountToken"])
+        self.assertTrue(pod["containers"][0]["securityContext"]["readOnlyRootFilesystem"])
+        self.assertEqual(pod["containers"][0]["image"], self.runtime.probe_image)
+        self.assertEqual(pod["activeDeadlineSeconds"], 7200)
+        self.assertEqual([a for call in query.call_args_list for a in call.args[0] if a.startswith("PGHOST=")],
+                         ["PGHOST=10.20.0.2"] * 3 + ["PGHOST=10.20.0.3"] * 2)
+        for call in query.call_args_list:
+            self.assertEqual(call.kwargs["data"], SNAPSHOT_SQL)
+            self.assertTrue(call.kwargs["sensitive"])
+            self.assertNotIn("PGPASSWORD=", str(call.args))
+        replacements = [c for c in self.runtime.kubectl.call_args_list if c.args[0] == "replace"]
+        self.assertEqual(len(replacements), 2)
+        self.assertEqual(json.loads(replacements[-1].kwargs["data"])["spec"], self.drill.probe_policy_spec("10.20.0.3"))
+        self.assertEqual(len(self.drill.state["resources"]), 2)
+        saved = json.loads((self.root / "sql-recovery-state.json").read_text())
+        resumed = SqlRecovery(self.runtime, "source", "test-key", "test-operator", state=verified(saved, "test-key"))
+        resumed.cleanup()
+        self.assertEqual(objects, {})
+        self.assertEqual(resumed.state["resources"], [])
+
+    def test_reused_probe_and_policy_drift_fail_before_database_access(self):
+        for fault in ("pod-uid", "pod-image", "pod-env", "pod-not-ready", "policy-uid", "policy-egress"):
+            with self.subTest(fault=fault):
+                self.drill = SqlRecovery(self.runtime, "source", "test-key", "test-operator")
+                objects, _, raw = self.probe_cluster()
+                with patch("lightyear_data.cloudbank_sql_recovery.invoke", return_value=raw) as query:
+                    self.drill.snapshot("10.20.0.2")
+                    pod = next(v for k, v in objects.items() if k[0] == "pod")
+                    policy = next(v for k, v in objects.items() if k[0] == "networkpolicy")
+                    if fault == "pod-uid":
+                        pod["metadata"]["uid"] = "replacement"
+                    elif fault == "pod-image":
+                        pod["spec"]["containers"][0]["image"] = "foreign/image"
+                    elif fault == "pod-env":
+                        pod["spec"]["containers"][0]["env"] = []
+                    elif fault == "pod-not-ready":
+                        pod["status"]["phase"] = "Failed"
+                    elif fault == "policy-uid":
+                        policy["metadata"]["uid"] = "replacement"
+                    else:
+                        policy["spec"]["egress"] = [{}]
+                    query.reset_mock()
+                    with self.assertRaises(JourneyFailure):
+                        self.drill.snapshot("10.20.0.3")
+                    query.assert_not_called()
+
+    def test_read_only_policy_convergence_retries_are_bounded_and_validate_result(self):
+        _, _, raw = self.probe_cluster()
+        failure = JourneyFailure("operator-command-failed-database-or-secret-access")
+        with patch("lightyear_data.cloudbank_sql_recovery.invoke", side_effect=[failure, raw]) as query, \
+             patch("lightyear_data.cloudbank_sql_recovery.time.sleep") as pause:
+            self.assertEqual(self.drill.snapshot("10.20.0.2")["databases"].popitem()[1]["row_count"], 3)
+            self.assertEqual(query.call_count, 2)
+            pause.assert_called_once_with(1)
+        with patch("lightyear_data.cloudbank_sql_recovery.invoke", side_effect=failure) as query, \
+             patch("lightyear_data.cloudbank_sql_recovery.time.sleep"):
+            with self.assertRaises(JourneyFailure):
+                self.drill.snapshot("10.20.0.3")
+            self.assertEqual(query.call_count, 3)
+        with patch("lightyear_data.cloudbank_sql_recovery.invoke", return_value="private-unexpected-data") as query:
+            with self.assertRaises(ValueError):
+                self.drill.snapshot("10.20.0.3")
+            self.assertEqual(query.call_count, 1)
+
+    def test_partial_pool_creation_is_journaled_for_cleanup(self):
+        objects, _, _ = self.probe_cluster()
+        original = self.runtime.kubectl.side_effect
+        def fail_pod(*args, **kwargs):
+            if args[0] == "create" and json.loads(kwargs["data"])["kind"] == "Pod":
+                raise JourneyFailure("operator-command-failed")
+            return original(*args, **kwargs)
+        self.runtime.kubectl.side_effect = fail_pod
+        with self.assertRaises(JourneyFailure):
+            self.drill.snapshot("10.20.0.2")
+        self.assertEqual(len(self.drill.state["resources"]), 2)
+        self.assertIsNone(self.drill.state["resources"][-1]["uid"])
+        self.drill.cleanup()
+        self.assertEqual(objects, {})
+
     def test_snapshot_fails_closed_and_changes_digest(self):
         rows = [{"unsupported": 0}, {"relation": "public.accounts", "rows": 3, "sha256": "a" * 64}, {"schema_sha256": "b" * 64}]
         raw = lambda: "\n".join(map(json.dumps, rows))
@@ -156,7 +283,9 @@ class RecoveryTests(unittest.TestCase):
             with self.subTest(point=point), self.assertRaises(JourneyFailure):
                 recovery_point_age(incident, point, checkpoint)
 
-    def engine(self, *, mismatch=False, pitr_rto=30, backup_rto=30, interrupted=False, cleanup_failure=False):
+    def engine(self, *, mismatch=False, pitr_rto=30, backup_rto=30, interrupted=False, cleanup_failure=False,
+               restore_wait_failure=False):
+        seconds = [0]
         baseline = {"state_sha256": "a" * 64, "databases": {"b" * 64: {"table_count": 3}}}
         self.drill.discover = Mock(return_value=source_profile(instance(), "test-project", "us-west1", "source"))
         self.drill.state["coverage"] = {"database_count": 1}
@@ -164,14 +293,28 @@ class RecoveryTests(unittest.TestCase):
         self.drill.quiesce = Mock()
         self.drill.source_guard = Mock()
         restored = {**baseline, "state_sha256": "d" * 64} if mismatch else baseline
-        self.drill.snapshot = Mock(side_effect=[baseline, baseline, baseline, restored, baseline])
+        snapshots = iter(enumerate([baseline, baseline, baseline, restored, baseline]))
+        def snapshot(*args):
+            index, value = next(snapshots)
+            seconds[0] += pitr_rto if index == 3 else backup_rto if index == 4 else 0
+            return value
+        self.drill.snapshot = Mock(side_effect=snapshot)
         self.drill.operation = Mock(return_value="operation")
         if interrupted:
             self.drill.operation.side_effect = KeyboardInterrupt()
         self.drill.wait_operation = Mock()
+        if restore_wait_failure:
+            self.drill.wait_operation.side_effect = [None, JourneyFailure("operator-command-failed-exit-1")]
         backup = {"id": "123", "instance": "source", "description": "test-run", "type": "ON_DEMAND", "status": "SUCCESSFUL",
                   "startTime": "2026-09-06T01:01:00Z", "endTime": "2026-09-06T01:02:00Z"}
-        self.drill.cloud = Mock(side_effect=[[backup], {"latestRecoveryTime": "2026-09-06T01:04:50Z"}])
+        def cloud(*args):
+            if args[:2] == ("backups", "list"):
+                seconds[0] = 60
+                return [backup]
+            self.assertEqual(args[:2], ("instances", "get-latest-recovery-time"))
+            seconds[0] = 270
+            return {"latestRecoveryTime": "2026-09-06T01:04:50Z"}
+        self.drill.cloud = Mock(side_effect=cloud)
         self.drill.claim_target = Mock(return_value=instance(self.drill.state["target"], "10.20.0.3"))
         self.drill.target_guard = Mock(return_value=instance(self.drill.state["target"], "10.20.0.3"))
         self.drill.restore_apps = Mock()
@@ -179,10 +322,50 @@ class RecoveryTests(unittest.TestCase):
         self.timeline = Mock()
         for name in ("snapshot", "cloud", "source_guard", "operation"):
             self.timeline.attach_mock(getattr(self.drill, name), name)
-        with patch("lightyear_data.cloudbank_sql_recovery.utc", side_effect=["2026-09-06T01:00:30Z",
-                "2026-09-06T01:04:59Z", "2026-09-06T01:05:00Z", "2026-09-06T01:10:00Z"]), \
-             patch("lightyear_data.cloudbank_sql_recovery.time.monotonic", side_effect=[0, 50, 100, 100 + pitr_rto, 1000, 1000 + backup_rto]):
+        def now():
+            return datetime.fromtimestamp(epoch("2026-09-06T01:00:30Z") + seconds[0], timezone.utc).isoformat().replace("+00:00", "Z")
+        with patch("lightyear_data.cloudbank_sql_recovery.utc", side_effect=now), \
+             patch("lightyear_data.cloudbank_sql_recovery.time.monotonic", side_effect=lambda: seconds[0]):
             return self.drill.execute()
+
+    def test_restore_poll_failure_preserves_pitr_and_identifies_stage(self):
+        result = self.engine(restore_wait_failure=True)
+        self.assertEqual(result["status"], "failed")
+        self.assertEqual(result["failure_stage"], "backup-restore-completion")
+        self.assertEqual(result["reason"], "operator-command-failed-exit-1")
+        self.assertTrue(result["pitr"]["state_matches"])
+        self.assertNotIn("backup_restore", result)
+        row = next(r for r in result["phases"] if r["phase"] == "backup-restore-completion")
+        self.assertEqual(row["status"], "failed")
+        self.drill.cleanup.assert_called_once()
+
+    def test_phase_duration_and_running_checkpoint_are_signed(self):
+        result = self.engine()
+        validation = next(r for r in result["phases"] if r["phase"] == "pitr-validation")
+        self.assertEqual(validation["elapsed_seconds"], 30)
+        self.assertEqual(validation["status"], "completed")
+        self.drill.observation = {}
+        with self.drill.phase("test-phase"):
+            saved = verified(json.loads((self.root / "database-recovery.json").read_text()), "test-key")
+            self.assertEqual(saved["phases"][-1]["status"], "running")
+            self.assertNotIn("finished_at", saved)
+
+    def test_unexpected_exception_and_operation_payloads_are_not_persisted(self):
+        self.drill.observation = {}
+        with self.assertRaises(ValueError), self.drill.phase("test-phase"):
+            raise ValueError("private-row-and-password")
+        saved = (self.root / "database-recovery.json").read_text()
+        self.assertNotIn("private-row-and-password", saved)
+        self.assertEqual(json.loads(saved)["failure_stage"], "test-phase")
+        self.drill.state["operations"]["pitr"] = {"name": "operation"}
+        self.drill.cloud = Mock(return_value={"targetId": "target", "targetProject": "test-project",
+            "status": "DONE", "operationType": "CLONE", "endTime": "2026-09-06T01:05:00Z",
+            "error": {"message": "private-server-error"}})
+        with self.assertRaises(JourneyFailure):
+            self.drill.wait_operation("operation", "target")
+        saved = verified(json.loads((self.root / "sql-recovery-state.json").read_text()), "test-key")
+        self.assertTrue(saved["operations"]["pitr"]["observation"]["has_error"])
+        self.assertNotIn("private-server-error", json.dumps(saved))
 
     def test_drill_passes_only_isolated_scope(self):
         result = self.engine()
@@ -229,12 +412,22 @@ class RecoveryTests(unittest.TestCase):
         self.assertEqual(saved["pitr_preflight"], result["pitr_preflight"])
 
     def test_changed_state_or_rto_overrun_or_cleanup_failure_cannot_pass(self):
-        for fault in ({"mismatch": True}, {"pitr_rto": 601}, {"backup_rto": 601}, {"cleanup_failure": True}):
+        for fault in ({"mismatch": True}, {"pitr_rto": 601}, {"pitr_rto": 643}, {"backup_rto": 601}, {"cleanup_failure": True}):
             with self.subTest(fault=fault):
                 result = self.engine(**fault)
                 self.assertEqual(result["status"], "failed")
                 self.drill.restore_apps.assert_called()
                 self.drill.cleanup.assert_called_once()
+
+    def test_restoration_failure_keeps_specific_bounded_error(self):
+        self.drill.observation = {}
+        self.runtime.close = Mock(return_value={"status": "failed", "errors": ["probe-cleanup-failed"], "remaining_stopped_services": []})
+        self.runtime.ready = Mock()
+        with self.assertRaisesRegex(JourneyFailure, "application-restoration-failed"), self.drill.phase("cleanup-application-restoration"):
+            self.drill.restore_apps()
+        saved = verified(json.loads((self.root / "database-recovery.json").read_text()), "test-key")
+        self.assertEqual(saved["application_restoration_checks"][-1]["errors"], ["probe-cleanup-failed"])
+        self.runtime.ready.assert_not_called()
 
     def test_interrupt_restores_apps_and_writes_failure(self):
         result = self.engine(interrupted=True)

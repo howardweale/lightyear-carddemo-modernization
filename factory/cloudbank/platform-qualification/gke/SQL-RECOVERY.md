@@ -9,7 +9,7 @@ under an immutable image digest. No image rebuild is required.
 
 The operator must have the existing nonproduction project/namespace authorization,
 Cloud SQL backup/clone/restore/delete access, Kubernetes deployment scale and
-temporary pod/network-policy access, read access to the evidence signing key and
+temporary pod/network-policy create, read, replace and delete access, read access to the evidence signing key and
 application Secret metadata, and access to the private evidence bucket. The runner
 does not grant permissions or change project, database or network configuration.
 
@@ -20,7 +20,8 @@ does not grant permissions or change project, database or network configuration.
    private PostgreSQL 16 instance and enabled backup/PITR configuration.
 2. Discover each application's JDBC database from synchronized Kubernetes Secrets
    in memory. Reject other hosts, embedded credentials and unsupported JDBC options.
-   Hash database state with a temporary read-only probe before stopping services,
+   Prepare a temporary read-only client pod for each configured database and hash
+   source state before stopping services,
    so missing SQL permissions fail early. A credential must be able to read every
    persistent application table and sequence in its configured database.
 3. Save signed recovery intent before scaling each of the eight applications to
@@ -46,6 +47,23 @@ Expect a service interruption during the stable checkpoint and backup preparatio
 and temporary Cloud SQL charges for the validation instance. Progress prints every
 20 seconds. Per-operation waits are bounded; reaching a wait limit records failure
 and invokes recovery. A Cloud SQL operation can continue after a local timeout.
+
+The client pods are prepared before the incident timestamp and reused for source,
+PITR and backup-restore comparisons. Image pulls and pod deletion are not repeated
+for every snapshot. The client pool is removed during final cleanup, with a
+one-second termination grace period for these read-only clients and a two-hour
+active lifetime as a fallback. This does not pre-create the restored database.
+PITR still creates a fresh isolated Cloud SQL instance within the timed recovery.
+
+The pool starts with no network ingress or egress. Before each snapshot the runner
+checks the policy UID and current rules, then replaces its single PostgreSQL /32
+destination using the observed resource version. Only the current validated source
+or restore address is allowed. Client UID, image, credential references and readiness
+are checked before execution. Credentials stay in secretKeyRef-backed pod environment
+variables; only the private destination address is supplied to `env PGHOST=...`.
+The read-only snapshot transaction may be attempted up to three times to allow
+network-policy propagation. All attempts count toward the same recovery timer;
+backup, clone, restore and delete submissions are never retried automatically.
 
 ## Execute
 
@@ -107,6 +125,17 @@ ages. A point that is old, in the future, or before the checkpoint is retried wi
 the existing 600-second wait limit. The accepted response is not replaced by a
 second unvalidated query. Timeouts preserve the final rejected observations and
 restore applications. These diagnostics contain timestamps and durations only.
+
+`phases` records up to 100 phase entries with UTC start/end timestamps, monotonic
+elapsed seconds and running/completed/failed status. Nested phases are included in
+their parent's duration; do not add all durations together. `failure_stage` identifies
+the innermost failed phase, such as backup-restore polling or snapshot validation.
+`application_restoration_checks` retains the last three restoration results with
+bounded failure codes and stopped-service names. The signed SQL operation journal
+also saves the latest observed operation status, provider timestamps and an error
+presence flag. Arbitrary server error messages and database output are not recorded.
+These diagnostics help separate provisioning, application recovery and validation
+time without changing the 60-second recovery-point or 600-second recovery-time gates.
 
 `validation_instance_state: not-requested` means this run never submitted a clone;
 in that case `validation_instance_deleted: false` does not indicate a leaked clone.

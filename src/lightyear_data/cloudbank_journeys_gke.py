@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import base64
 import contextlib
+from datetime import datetime, timezone
 import json
 import os
 from pathlib import Path
@@ -20,6 +21,17 @@ from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 from .contracts import sign
 from .cloudbank_journeys import JourneyFailure, Response, ROLE_SCOPES, SERVICES, hashed, require
+
+
+# Authorization precedes its clients; Account precedes Transfer and Checks.
+# TestRunner resumes after the services it exercises. Group members can start
+# together, without concurrent access to the signed recovery journal.
+RESTORATION_GROUPS = (
+    ("azn-server",),
+    ("customer", "account", "creditscore", "chatbot"),
+    ("transfer", "checks"),
+    ("testrunner",),
+)
 
 
 def command(argv: list[str], *, data: str | None = None, timeout=45) -> str:
@@ -389,7 +401,7 @@ class GkeRuntime:
                 require(time.monotonic() < deadline, "service-stop-timeout")
                 time.sleep(1)
 
-    def start(self, service: str):
+    def _request_start(self, service: str):
         require(service in self.stopped, "restoration-intent-required")
         self.progress("Restoring " + service)
         deploy = self.deployment(service)
@@ -399,10 +411,57 @@ class GkeRuntime:
             self.kubectl("scale", "deployment/" + service, "--current-replicas=0", "--replicas=2")
         # Recovery may follow a failed scale command, so only require new pods
         # when the deployment was actually observed at zero replicas.
-        previous = self.pod_sets.get(service, set()) if replicas == 0 else None
+        return set(self.pod_sets.get(service, set())) if replicas == 0 else None
+
+    def _finish_start(self, service: str, previous):
         self.wait_ready(service, previous)
         self.stopped.remove(service)
-        self.recovery_checkpoint()
+        try:
+            self.recovery_checkpoint()
+        except BaseException:
+            self.stopped.add(service)
+            raise
+
+    def start(self, service: str):
+        self._finish_start(service, self._request_start(service))
+
+    def _restore_grouped(self):
+        errors, records = [], {}
+
+        def finish(service, began, status, stage=None):
+            records[service].update(status=status,
+                finished_at=datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
+                elapsed_seconds=round(time.monotonic() - began, 6))
+            if stage:
+                records[service]["failure_stage"] = stage
+
+        for group in RESTORATION_GROUPS:
+            pending = {}
+            # Submit every scale-up in this group before observing readiness.
+            # A failed request retains its recorded stop intent for recover.
+            for service in group:
+                if service not in self.stopped:
+                    continue
+                began = time.monotonic()
+                records[service] = {"started_at": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z")}
+                try:
+                    pending[service] = (self._request_start(service), began)
+                except Exception:
+                    errors.append("restore-" + service + "-failed")
+                    finish(service, began, "failed", "scale-up")
+            for service, (previous, began) in pending.items():
+                try:
+                    self._finish_start(service, previous)
+                    finish(service, began, "ready")
+                except Exception:
+                    errors.append("restore-" + service + "-failed")
+                    finish(service, began, "failed", "readiness-or-checkpoint")
+            # Cleanup remains best effort after a failure: attempt later groups
+            # too, but never report restoration success when a member failed.
+        return errors, {"strategy": "dependency-groups",
+            "groups": [list(group) for group in RESTORATION_GROUPS],
+            "timing_scope": "scale-up request through readiness observation and checkpoint; observation may lag pod readiness",
+            "services": records}
 
     def crash_stopped(self, service: str):
         require(service == "checks" and service in self.stopped, "checks-crash-requires-stop-intent")
@@ -489,18 +548,23 @@ class GkeRuntime:
                     "queue-probe-values-invalid")
         return result
 
-    def close(self) -> dict:
+    def close(self, *, grouped_restoration=False) -> dict:
         errors = []
         try:
             self.restore_checks_delivery()
         except Exception:
             errors.append("restore-checks-delivery-failed")
-        for service in SERVICES:
-            if service in self.stopped:
-                try:
-                    self.start(service)
-                except Exception:
-                    errors.append("restore-" + service + "-failed")
+        restoration = None
+        if grouped_restoration:
+            restore_errors, restoration = self._restore_grouped()
+            errors.extend(restore_errors)
+        else:
+            for service in SERVICES:
+                if service in self.stopped:
+                    try:
+                        self.start(service)
+                    except Exception:
+                        errors.append("restore-" + service + "-failed")
         for service in list(self.forwards):
             try:
                 self.close_forward(service)
@@ -518,5 +582,8 @@ class GkeRuntime:
         except Exception:
             errors.append("probe-cleanup-failed")
         self.recovery_checkpoint()
-        return {"status": "failed" if errors else "restored", "errors": errors,
-                "remaining_stopped_services": sorted(self.stopped)}
+        result = {"status": "failed" if errors or self.stopped else "restored", "errors": errors,
+                  "remaining_stopped_services": sorted(self.stopped)}
+        if restoration is not None:
+            result["application_restoration"] = restoration
+        return result

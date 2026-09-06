@@ -18,7 +18,7 @@ from urllib.parse import parse_qs, urlsplit
 from lightyear_data.cloudbank_journeys import (
     JourneyFailure, Journeys, OBSERVATION_TYPE, Response, SCENARIOS, SERVICES, execute_journeys,
 )
-from lightyear_data.cloudbank_journeys_gke import GkeRuntime
+from lightyear_data.cloudbank_journeys_gke import GkeRuntime, RESTORATION_GROUPS
 from lightyear_data.contracts import sign, verify_signature
 
 
@@ -260,6 +260,129 @@ class GkeAdapterTests(unittest.TestCase):
             self.runtime.start("account")
         wait.assert_called_once_with("account", None)
         command.assert_not_called()
+
+    def test_grouped_restoration_overlaps_starts_and_keeps_dependency_barriers(self):
+        clock, scaled, ready_at = [0.0], [], {}
+        self.runtime.stopped = set(SERVICES)
+        self.runtime.pod_sets = {s: {"old-" + s} for s in SERVICES}
+        self.runtime.recovery_checkpoint()
+
+        def command(*args, **kwargs):
+            if args[0] == "scale":
+                service = args[1].removeprefix("deployment/")
+                self.assertEqual(args[2:], ("--current-replicas=0", "--replicas=2"))
+                saved = json.loads((Path(self.temp.name) / "recovery-state.json").read_text())
+                self.assertTrue(verify_signature(saved, "key"))
+                self.assertIn(service, saved["stopped_services"])
+                scaled.append(service)
+                ready_at[service] = clock[0] + 80
+            return ""
+
+        def wait(service, previous):
+            group_index = next(i for i, group in enumerate(RESTORATION_GROUPS) if service in group)
+            self.assertTrue(set(RESTORATION_GROUPS[group_index]).issubset(scaled))
+            self.assertFalse(any(s in self.runtime.stopped for group in RESTORATION_GROUPS[:group_index] for s in group))
+            self.assertEqual(previous, {"old-" + service})
+            clock[0] = max(clock[0], ready_at[service])
+
+        with patch.object(self.runtime, "deployment", return_value={"spec": {"replicas": 0}}), \
+                patch.object(self.runtime, "kubectl", side_effect=command), \
+                patch.object(self.runtime, "wait_ready", side_effect=wait), \
+                patch("lightyear_data.cloudbank_journeys_gke.time.monotonic", side_effect=lambda: clock[0]):
+            result = self.runtime.close(grouped_restoration=True)
+        self.assertEqual(result["status"], "restored")
+        self.assertEqual(set(scaled), set(SERVICES))
+        self.assertEqual(len(scaled), 8)
+        # Eight simulated 80-second starts take four overlapping groups, not
+        # eight serial waits. This is a model assertion, not live GKE evidence.
+        self.assertEqual(clock[0], 320)
+        records = result["application_restoration"]["services"]
+        self.assertEqual(set(records), set(SERVICES))
+        self.assertTrue(all(r["status"] == "ready" and r["elapsed_seconds"] == 80 for r in records.values()))
+        saved = json.loads((Path(self.temp.name) / "recovery-state.json").read_text())
+        self.assertTrue(verify_signature(saved, "key"))
+        self.assertEqual(saved["stopped_services"], [])
+
+    def test_grouped_failure_retains_intent_and_recovers_without_rescaling(self):
+        for failure_stage in ("scale-up", "readiness-or-checkpoint"):
+            with self.subTest(failure_stage=failure_stage):
+                self.runtime.stopped = {"customer", "account"}
+                replicas, scaled, waited = {"customer": 0, "account": 0}, [], []
+                failing = [True]
+                self.runtime.recovery_checkpoint()
+
+                def command(*args, **kwargs):
+                    if args[0] == "scale":
+                        service = args[1].removeprefix("deployment/")
+                        scaled.append(service)
+                        replicas[service] = 2
+                        if service == "customer" and failure_stage == "scale-up" and failing[0]:
+                            raise RuntimeError("sensitive operator output must not persist")
+                    return ""
+
+                def wait(service, previous):
+                    waited.append(service)
+                    if service == "customer" and failure_stage == "readiness-or-checkpoint" and failing[0]:
+                        raise JourneyFailure("service-recovery-timeout")
+
+                with patch.object(self.runtime, "deployment", side_effect=lambda s: {"spec": {"replicas": replicas[s]}}), \
+                        patch.object(self.runtime, "kubectl", side_effect=command), \
+                        patch.object(self.runtime, "wait_ready", side_effect=wait):
+                    result = self.runtime.close(grouped_restoration=True)
+                    self.assertEqual(result["status"], "failed")
+                    self.assertEqual(result["remaining_stopped_services"], ["customer"])
+                    self.assertEqual(result["errors"], ["restore-customer-failed"])
+                    self.assertEqual(result["application_restoration"]["services"]["customer"]["failure_stage"], failure_stage)
+                    self.assertNotIn("sensitive", json.dumps(result))
+                    self.assertIn("account", waited)
+                    saved = json.loads((Path(self.temp.name) / "recovery-state.json").read_text())
+                    self.assertTrue(verify_signature(saved, "key"))
+                    self.assertEqual(saved["stopped_services"], ["customer"])
+                    failing[0] = False
+                    recovered = self.runtime.close(grouped_restoration=True)
+                self.assertEqual(recovered["status"], "restored")
+                self.assertEqual(scaled, ["customer", "account"])
+                self.assertEqual(waited[-1], "customer")
+
+    def test_grouped_interruption_preserves_every_pending_service(self):
+        self.runtime.stopped = {"customer", "account"}
+        self.runtime.recovery_checkpoint()
+        with patch.object(self.runtime, "deployment", return_value={"spec": {"replicas": 0}}), \
+                patch.object(self.runtime, "kubectl", return_value="") as command, \
+                patch.object(self.runtime, "wait_ready", side_effect=KeyboardInterrupt):
+            with self.assertRaises(KeyboardInterrupt):
+                self.runtime.close(grouped_restoration=True)
+        self.assertEqual([call.args[1] for call in command.call_args_list], ["deployment/customer", "deployment/account"])
+        saved = json.loads((Path(self.temp.name) / "recovery-state.json").read_text())
+        self.assertTrue(verify_signature(saved, "key"))
+        self.assertEqual(saved["stopped_services"], ["account", "customer"])
+        self.assertEqual(self.runtime.stopped, {"account", "customer"})
+
+    def test_grouped_restoration_refuses_deployment_drift(self):
+        for drift in ("image", "uid", "replicas"):
+            with self.subTest(drift=drift):
+                self.runtime.stopped = {"account"}
+                self.runtime.original["account"] = {"uid": "original", "replicas": 2}
+                deploy = {"metadata": {"uid": "other" if drift == "uid" else "original"}, "spec": {
+                    "replicas": 3 if drift == "replicas" else 0, "template": {"spec": {"containers": [{
+                        "name": "account", "image": "other:latest" if drift == "image" else self.runtime.images["account"]}]}}}}
+                with patch.object(self.runtime, "get", return_value=deploy), \
+                        patch.object(self.runtime, "kubectl", return_value="") as command, \
+                        patch.object(self.runtime, "wait_ready") as wait:
+                    result = self.runtime.close(grouped_restoration=True)
+                self.assertEqual(result["status"], "failed")
+                self.assertEqual(result["remaining_stopped_services"], ["account"])
+                self.assertFalse(any(call.args[0] == "scale" for call in command.call_args_list))
+                wait.assert_not_called()
+
+    def test_ready_service_retains_intent_when_checkpoint_write_fails(self):
+        self.runtime.stopped = {"account"}
+        with patch.object(self.runtime, "deployment", return_value={"spec": {"replicas": 2}}), \
+                patch.object(self.runtime, "wait_ready"), \
+                patch.object(self.runtime, "recovery_checkpoint", side_effect=OSError("disk full")):
+            with self.assertRaises(OSError):
+                self.runtime.start("account")
+        self.assertEqual(self.runtime.stopped, {"account"})
 
     def test_configuration_recovery_preserves_operator_changes(self):
         self.runtime.checks_delivery = {"original": None, "injected": {"name": "ACCOUNT_JOURNAL_URL", "value": "blocked"}}

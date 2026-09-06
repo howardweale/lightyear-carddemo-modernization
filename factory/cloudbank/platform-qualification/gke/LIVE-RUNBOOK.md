@@ -121,3 +121,11 @@ requirements or the remaining MS67 operational scenarios.
 
 See [SQL-RECOVERY.md](SQL-RECOVERY.md) for the signed Cloud SQL backup/PITR drill,
 its recover command, and the limits of its database-only timing observations.
+
+### Cloud SQL HA and application reconnection
+
+See [SQL-HA.md](SQL-HA.md) for a separate controlled standby failover drill. Start
+with `cloudbank-sql-ha.sh preflight`; the authorized run keeps applications running,
+checks all 16 process identities and acknowledged business data, and measures
+reconnection through new transactions. It does not close the PITR timing gate or
+the GKE node/failure-domain, MS65/MS66 prerequisite, or full MS67 gates.

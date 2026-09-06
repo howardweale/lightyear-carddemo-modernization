@@ -41,8 +41,10 @@ def parser():
     return root
 
 
-def upload(output: Path, bucket: str, project: str):
-    files = sorted(output.glob("*.json"))
+def upload(output: Path, bucket: str, project: str, *, marker="MS67_SQL_RECOVERY", file_names=None):
+    files = (sorted(output.glob("*.json")) if file_names is None else
+             sorted(output / name for name in file_names if (output / name).is_file()))
+    require(bool(files), "evidence-files-required")
     sums = output / "SHA256SUMS"
     sums.write_text("".join(hashlib.sha256(p.read_bytes()).hexdigest() + "  ./" + p.name + "\n" for p in files))
     destination = bucket.rstrip("/") + "/" + output.name + "/"
@@ -56,13 +58,36 @@ def upload(output: Path, bucket: str, project: str):
                     invoke(["gcloud", "storage", "cp", destination + path.name, str(copied),
                             "--project", project], timeout=180)
                     require(copied.read_bytes() == path.read_bytes(), "evidence-readback-mismatch")
-            print("MS67_SQL_RECOVERY_EVIDENCE_UPLOAD=PASSED", flush=True)
-            print("MS67_SQL_RECOVERY_READBACK=VERIFIED", flush=True)
+            print(marker + "_EVIDENCE_UPLOAD=PASSED", flush=True)
+            print(marker + "_READBACK=VERIFIED", flush=True)
             return
         except JourneyFailure:
             if attempt == 2:
                 raise
             time.sleep(20)
+
+
+def load_bound_inputs(args, key):
+    """Admit current signed MS64 images and the complete shared journey receipt."""
+    require(args.image_lock is not None and args.journeys is not None and bool(args.probe_image), "bound-inputs-and-probe-required")
+    receipt = load(args.ms64_receipt or args.image_lock.parent / "cloudbank-edge-ai.receipt.json")
+    require(not validate_execution_receipt(receipt, key, PROJECT_ROOT), "signed-current-ms64-receipt-required")
+    lock = load(args.image_lock)
+    require(not validate_image_lock(lock, receipt["content_sha256"]), "ms64-bound-image-lock-required")
+    journeys = verified(load(args.journeys), key)
+    binding = journeys.get("bindings", {})
+    rows = journeys.get("scenarios", [])
+    require(journeys.get("observation_type") == OBSERVATION_TYPE
+            and journeys.get("status") == "passed-shared-journeys"
+            and len(rows) == len(SCENARIOS)
+            and {r.get("id") for r in rows} == {identifier for identifier, _ in SCENARIOS}
+            and all(r.get("status") == "passed" and r.get("evidence_sha256") == hashed(r.get("evidence")) for r in rows)
+            and binding.get("journey_contract_sha256") == journey_contract()["content_sha256"]
+            and journeys.get("recovery", {}).get("status") == "restored"
+            and binding.get("ms64_receipt_sha256") == receipt["content_sha256"]
+            and binding.get("image_lock_sha256") == lock["content_sha256"], "passed-bound-journeys-required")
+    images = {row["service"]: row["reference"] for row in lock["images"]}
+    return receipt, lock, journeys, images, binding
 
 
 def main(argv=None):
@@ -92,24 +117,7 @@ def main(argv=None):
                     and state.get("context") == f"gke_{args.project}_{args.region}_{args.cluster}", "recovery-environment-mismatch")
             images, run_id, probe_image = state["images"], state["run_id"], state["probe_image"]
         else:
-            require(args.image_lock is not None and args.journeys is not None and bool(args.probe_image), "bound-inputs-and-probe-required")
-            receipt = load(args.ms64_receipt or args.image_lock.parent / "cloudbank-edge-ai.receipt.json")
-            require(not validate_execution_receipt(receipt, key, PROJECT_ROOT), "signed-current-ms64-receipt-required")
-            lock = load(args.image_lock)
-            require(not validate_image_lock(lock, receipt["content_sha256"]), "ms64-bound-image-lock-required")
-            journeys = verified(load(args.journeys), key)
-            binding = journeys.get("bindings", {})
-            rows = journeys.get("scenarios", [])
-            require(journeys.get("observation_type") == OBSERVATION_TYPE
-                    and journeys.get("status") == "passed-shared-journeys"
-                    and len(rows) == len(SCENARIOS)
-                    and {r.get("id") for r in rows} == {identifier for identifier, _ in SCENARIOS}
-                    and all(r.get("status") == "passed" and r.get("evidence_sha256") == hashed(r.get("evidence")) for r in rows)
-                    and binding.get("journey_contract_sha256") == journey_contract()["content_sha256"]
-                    and journeys.get("recovery", {}).get("status") == "restored"
-                    and binding.get("ms64_receipt_sha256") == receipt["content_sha256"]
-                    and binding.get("image_lock_sha256") == lock["content_sha256"], "passed-bound-journeys-required")
-            images = {row["service"]: row["reference"] for row in lock["images"]}
+            receipt, lock, journeys, images, binding = load_bound_inputs(args, key)
             run_id, probe_image = "sql-recovery-" + uuid.uuid4().hex, args.probe_image
             parent = Path.home() / "ms67-evidence"
             parent.mkdir(parents=True, exist_ok=True)

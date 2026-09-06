@@ -152,7 +152,8 @@ def main(argv=None):
         signal.signal(signal.SIGTERM, prior_term)
     print(json.dumps(result, indent=2, sort_keys=True))
     passed = result.get("status") in {"passed-isolated-database-recovery", "recovered"}
-    print("MS67_ISOLATED_SQL_RECOVERY=" + ("PASSED" if passed else "FAILED"), flush=True)
+    marker = "MS67_SQL_RECOVERY_CLEANUP" if args.action == "recover" else "MS67_ISOLATED_SQL_RECOVERY"
+    print(marker + "=" + ("PASSED" if passed else "FAILED"), flush=True)
     print("Database recovery drill only; full MS65/MS66/MS67 qualification remains open.", flush=True)
     return 0 if passed else 1
 

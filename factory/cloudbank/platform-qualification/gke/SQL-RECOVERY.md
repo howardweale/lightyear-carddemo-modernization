@@ -81,6 +81,8 @@ following with the same project/region/cluster/source arguments. This validates 
 signed recovery journals, restores any stopped applications and cleans up only the
 run's owned temporary resources. It never resumes database mutations or converts a
 failed drill into a passed observation.
+Its success marker is `MS67_SQL_RECOVERY_CLEANUP=PASSED`; the original drill result
+remains unchanged.
 
 ```bash
 bash ./cloudbank-sql-recovery.sh recover \

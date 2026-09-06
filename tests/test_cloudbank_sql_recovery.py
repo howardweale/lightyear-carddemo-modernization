@@ -1,10 +1,14 @@
 from __future__ import annotations
 
 import copy
+from contextlib import redirect_stdout
+import importlib.util
+import io
 import json
 import os
 from pathlib import Path
 import subprocess
+import sys
 import tempfile
 import unittest
 from unittest.mock import Mock, patch
@@ -199,6 +203,34 @@ class RecoveryTests(unittest.TestCase):
         self.assertEqual(result["reason"], "operator-interrupted")
         self.drill.restore_apps.assert_called_once()
         self.drill.cleanup.assert_called_once()
+
+    def test_cleanup_cli_does_not_emit_drill_pass_or_replace_failed_observation(self):
+        tool = Path(__file__).resolve().parents[1] / "tools" / "cloudbank_sql_recovery.py"
+        spec = importlib.util.spec_from_file_location("sql_recovery_cli_test", tool)
+        cli = importlib.util.module_from_spec(spec)
+        with patch.object(sys, "path", [str(tool.parent), *sys.path]):
+            spec.loader.exec_module(cli)
+        environment = {"project": "test-project"}
+        state = {**self.drill.state, "environment": environment}
+        write_signed(self.root / "sql-recovery-state.json", state, "test-key", "test-operator")
+        write_signed(self.root / "recovery-state.json", {}, "test-key", "test-operator")
+        original = b'{"status":"failed"}\n'
+        (self.root / "database-recovery.json").write_bytes(original)
+        self.runtime.environment = Mock(return_value=environment)
+        self.runtime.close = Mock(return_value={"status": "restored"})
+        self.runtime.ready = Mock()
+        captured = io.StringIO()
+        with patch.dict(os.environ, {"LIGHTYEAR_CLOUDBANK_BASELINE_EVIDENCE_KEY": "test-key",
+                "LIGHTYEAR_NON_PRODUCTION_ACK": "I-AUTHORIZE-MS67-NON-PRODUCTION-MUTATIONS"}), \
+             patch.object(cli, "GkeRuntime", return_value=self.runtime), patch.object(cli, "restore_state"), \
+             patch.object(cli, "upload"), redirect_stdout(captured):
+            code = cli.main(["recover", "--project", "test-project", "--region", "us-west1", "--cluster", "test-cluster",
+                "--namespace", "test-ns", "--source-instance", "source", "--recovery-root", str(self.root),
+                "--evidence-bucket", "gs://private-test", "--signer", "test-operator"])
+        self.assertEqual(code, 0)
+        self.assertIn("MS67_SQL_RECOVERY_CLEANUP=PASSED", captured.getvalue())
+        self.assertNotIn("MS67_ISOLATED_SQL_RECOVERY=PASSED", captured.getvalue())
+        self.assertEqual((self.root / "database-recovery.json").read_bytes(), original)
 
 
 @unittest.skipUnless(os.environ.get("LIGHTYEAR_SQL_RECOVERY_TEST_CONTAINER"), "requires disposable PostgreSQL 16 CI container")

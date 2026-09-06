@@ -4,7 +4,7 @@
     "account",
     "transfer"
   ],
-  "content_sha256": "553ef79a5e14ecab0b4322aec50b5afbbc0066159f89810bc2dc7dce6b91a782",
+  "content_sha256": "42cd315de739cebd6a67ac201482e6e3471064c1e2c919dd4f1f01e1dfc07d63",
   "native_oracle_aq_lane": false,
   "patches": [
     {
@@ -35,7 +35,7 @@
     {
       "path": "checks/src/main/java/com/example/checks/service/AccountService.java",
       "template": "patches/AccountService.java",
-      "template_sha256": "5cab17e2c3b64a61d43c2e3ed84c074b5f57bb12d9d95a3e61c5bfd13e020518"
+      "template_sha256": "93b2ff8abb399dfba8bd5462df775b3a6ad4e207ce2a956f5308fefe12488984"
     },
     {
       "path": "checks/src/main/resources/application.yaml",

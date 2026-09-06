@@ -10,7 +10,10 @@ import com.example.common.security.CloudBankServiceTokenProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Service
@@ -29,8 +32,24 @@ public class AccountService {
     /** Delivers one idempotently identified pending check journal. */
     public void journal(String messageId, long accountId, long amount) {
         HttpHeaders headers = headers(messageId);
-        restTemplate.postForEntity(journalUri,
-                new HttpEntity<>(new Journal("PENDING", accountId, amount), headers), String.class);
+        Journal command = new Journal(0, "PENDING", accountId, messageId, "COMPLETED", amount);
+        try {
+            restTemplate.postForEntity(journalUri, new HttpEntity<>(command, headers), String.class);
+        } catch (HttpServerErrorException failure) {
+            // Account may have committed before an HTTP response was lost. Only
+            // suppress the retry when the exact message effect is observable.
+            URI accountJournalUri = journalUri.resolve("./" + accountId + "/journal");
+            ResponseEntity<Journal[]> response = restTemplate.exchange(accountJournalUri,
+                    HttpMethod.GET, new HttpEntity<>(headers), Journal[].class);
+            Journal[] rows = response.getBody();
+            if (rows == null || !java.util.Arrays.stream(rows).anyMatch(row ->
+                    messageId.equals(row.getLraId())
+                    && "PENDING".equals(row.getJournalType())
+                    && row.getAccountId() == accountId
+                    && row.getJournalAmount() == amount)) {
+                throw failure;
+            }
+        }
     }
 
     /** Delivers one idempotently identified check clearance. */

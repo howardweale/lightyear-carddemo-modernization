@@ -9,6 +9,33 @@ permissions:
   contents: read
 
 jobs:
+  cloudbank-sql-recovery:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Exercise recovery fingerprints against real PostgreSQL 16
+        env:
+          PYTHONPATH: src
+          LIGHTYEAR_SQL_RECOVERY_TEST_CONTAINER: lightyear-sql-recovery-test
+        run: |
+          docker run --detach --name "$LIGHTYEAR_SQL_RECOVERY_TEST_CONTAINER" \
+            -e POSTGRES_HOST_AUTH_METHOD=trust postgres:16-alpine
+          trap 'docker rm --force "$LIGHTYEAR_SQL_RECOVERY_TEST_CONTAINER" >/dev/null' EXIT
+          ready=false
+          for attempt in {1..60}; do
+            if docker exec "$LIGHTYEAR_SQL_RECOVERY_TEST_CONTAINER" pg_isready -U postgres; then
+              ready=true
+              break
+            fi
+            sleep 1
+          done
+          [[ "$ready" == true ]]
+          python -m unittest discover -s tests -p test_cloudbank_sql_recovery.py -v
+
   cloudbank-source-build:
     runs-on: ubuntu-latest
     timeout-minutes: 30

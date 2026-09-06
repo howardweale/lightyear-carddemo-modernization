@@ -363,7 +363,7 @@ class SqlHa:
                            "gke-node-recovery", "full-ms67-qualification"],
             "timing_scope": "before failover submission through provider, process, data and business validation; includes polling",
             "recovery_limit_seconds": RECOVERY_LIMIT_SECONDS}
-        began, stage = None, "preflight"
+        began, stage, journey = None, "preflight", None
         try:
             self.observation["preflight"] = self.preflight()
             self.save()
@@ -391,6 +391,8 @@ class SqlHa:
                 self.observation["status"] = "passed-cloud-sql-ha-failover"
         except (Exception, KeyboardInterrupt) as exc:
             self.observation.update(status="failed", reason=reason(exc), failure_stage=stage)
+            if journey is not None and journey.last_queue_observation is not None:
+                self.observation["queue_failure"] = journey.last_queue_observation
             if began is not None:
                 self.observation["elapsed_before_cleanup_seconds"] = round(time.monotonic() - began, 6)
         finally:

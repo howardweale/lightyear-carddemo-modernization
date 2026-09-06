@@ -112,7 +112,7 @@ class StatefulRuntime:
         row["state"] = "PROCESSED"
 
     def queue(self, key):
-        return {k: self.messages[key][k] for k in ("state", "attempts")}
+        return {k: self.messages[key].get(k) for k in ("state", "attempts", "error_code")}
 
     def stop(self, service):
         self.stopped.add(service)
@@ -403,13 +403,21 @@ class GkeAdapterTests(unittest.TestCase):
         self.assertEqual(json.loads(args[4])[0], {"op": "test", "path": "/metadata/resourceVersion", "value": "123"})
 
     def test_queue_never_changes_database(self):
-        with patch.object(self.runtime, "sql", return_value={"state": "PROCESSING", "attempts": 1}) as sql:
+        with patch.object(self.runtime, "sql", return_value={"state": "PROCESSING", "attempts": 1,
+                "error_code": None}) as sql:
             self.runtime.queue("ly-" + "b" * 48)
         query = sql.call_args.args[0]
         self.assertTrue(query.startswith("SELECT "))
         self.assertNotIn("UPDATE", query)
         with self.assertRaises(JourneyFailure):
             self.runtime.queue("' OR TRUE --")
+
+    def test_queue_rejects_unbounded_or_sensitive_error_text(self):
+        message = "ly-" + "b" * 48
+        with patch.object(self.runtime, "sql", return_value={"state": "DEAD", "attempts": 3,
+                "error_code": "PASSWORD=secret"}):
+            with self.assertRaisesRegex(JourneyFailure, "queue-error-code-invalid"):
+                self.runtime.queue(message)
 
     def test_http_redirect_never_forwards_bearer(self):
         seen = []

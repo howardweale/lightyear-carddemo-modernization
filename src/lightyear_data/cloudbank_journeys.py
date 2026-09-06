@@ -90,6 +90,7 @@ class Journeys:
         self.deposit_journal: int | None = None
         self.deposit_id = self.message_id("deposit")
         self.clear_id = self.message_id("clearance")
+        self.last_queue_observation: dict | None = None
 
     def message_id(self, suffix: str) -> str:
         return "ly-" + hashlib.sha256(f"{self.run_id}:{suffix}".encode()).hexdigest()[:48]
@@ -223,9 +224,11 @@ class Journeys:
         body = {"accountId": self.accounts[0], "amount": amount} if journal is None else {"journalId": journal}
         return self.runtime.request("testrunner", "POST", path, "test", body, {"Idempotency-Key": message})
 
-    def delivered(self, message: str) -> dict:
+    def delivered(self, message: str, phase: str) -> dict:
         row = self.wait(lambda: self.runtime.queue(message), lambda r: r.get("state") in {"PROCESSED", "DEAD"},
                         "queue-delivery-timeout")
+        self.last_queue_observation = {"phase": phase, "message_id_sha256": hashed(message),
+            "state": row.get("state"), "attempts": row.get("attempts"), "error_code": row.get("error_code")}
         require(row.get("state") == "PROCESSED", "queue-message-dead-lettered")
         return row
 
@@ -246,7 +249,7 @@ class Journeys:
         before = self.state()
         response = self.enqueue(self.deposit_id)
         require(response.status == 201, "check-deposit-enqueue-failed")
-        queue = self.delivered(self.deposit_id)
+        queue = self.delivered(self.deposit_id, "deposit")
         after = self.state()
         self.deposit_journal = self.assert_deposit(before, after, 30)
         return {"queue": queue, "before_sha256": hashed(before), "after_sha256": hashed(after)}
@@ -256,7 +259,7 @@ class Journeys:
         before = self.state()
         response = self.enqueue(self.clear_id, journal=self.deposit_journal)
         require(response.status == 201, "check-clearance-enqueue-failed")
-        queue = self.delivered(self.clear_id)
+        queue = self.delivered(self.clear_id, "clearance")
         expected = json.loads(json.dumps(before))
         for row in expected["journals"]:
             if row["id"] == self.deposit_journal:
@@ -266,7 +269,7 @@ class Journeys:
         # Replay must not cause a second journal effect.
         require(self.enqueue(self.clear_id, journal=self.deposit_journal).status == 200,
                 "check-clearance-replay-not-suppressed")
-        self.delivered(self.clear_id)
+        self.delivered(self.clear_id, "clearance-replay")
         require(self.state() == after, "check-clearance-replay-mutated-state")
         return {"queue": queue, "after_sha256": hashed(after), "replay_unchanged": True}
 
@@ -274,7 +277,7 @@ class Journeys:
         before = self.state()
         response = self.enqueue(self.deposit_id)
         require(response.status == 200, "duplicate-message-not-suppressed")
-        queue = self.delivered(self.deposit_id)
+        queue = self.delivered(self.deposit_id, "deposit-replay")
         require(self.state() == before, "duplicate-message-mutated-state")
         return {"queue": queue, "unchanged_state_sha256": hashed(before)}
 
@@ -327,7 +330,7 @@ class Journeys:
             self.runtime.restore_checks_delivery()
             self.runtime.start("checks")
             stopped = False
-            completed = self.delivered(message)
+            completed = self.delivered(message, "inflight-redelivery")
             require(completed.get("attempts", 0) > processing["attempts"], "inflight-redelivery-not-observed")
             after = self.state()
             self.assert_deposit(before, after, 7)

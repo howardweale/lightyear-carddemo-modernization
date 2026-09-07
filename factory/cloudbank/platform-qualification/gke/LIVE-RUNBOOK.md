@@ -134,6 +134,12 @@ five OAuth roles. The subsequent run exercises actual business state and process
 recovery with signed bounded evidence. It does not replace the MS65/MS66 receipt
 requirements or the remaining MS67 operational scenarios.
 
+For an execution host that may disconnect, use `submit-shared-journeys.sh` as
+documented by the shared journey runner. It launches the same fail-closed executor
+as an asynchronous Cloud Build using a pinned source commit and private,
+content-addressed inputs. Do not run the Cloud Shell and Cloud Build launchers at
+the same time; the submission script refuses another tagged active build.
+
 ### Isolated database recovery executor
 
 See [SQL-RECOVERY.md](SQL-RECOVERY.md) for the signed Cloud SQL backup/PITR drill,

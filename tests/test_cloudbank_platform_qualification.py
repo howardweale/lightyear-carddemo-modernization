@@ -400,8 +400,10 @@ class CloudBankPlatformQualificationTests(unittest.TestCase):
             "factory/cloudbank/platform-qualification/gke/destroy.sh",
             "factory/cloudbank/platform-qualification/gke/Dockerfile.evidence-runner",
             "factory/cloudbank/platform-qualification/gke/cloudbuild-prerequisite-chain.yaml",
+            "factory/cloudbank/platform-qualification/gke/cloudbuild-shared-journeys.yaml",
             "factory/cloudbank/platform-qualification/gke/run-prerequisite-chain.sh",
             "factory/cloudbank/platform-qualification/gke/submit-prerequisite-chain.sh",
+            "factory/cloudbank/platform-qualification/gke/submit-shared-journeys.sh",
         ):
             self.assertTrue((ROOT / relative).is_file(), relative)
         bootstrap = (ROOT / "factory/cloudbank/platform-qualification/gke/bootstrap.sh").read_text()
@@ -467,6 +469,33 @@ class CloudBankPlatformQualificationTests(unittest.TestCase):
         self.assertEqual(sorted(offsets), offsets)
         self.assertIn("Expected 12 prerequisite receipts", runner)
         self.assertIn("credentials_persisted\": False", runner)
+
+    def test_cloud_build_shared_journeys_is_pinned_private_and_asynchronous(self) -> None:
+        gke = ROOT / "factory/cloudbank/platform-qualification/gke"
+        cloudbuild = (gke / "cloudbuild-shared-journeys.yaml").read_text()
+        submit = (gke / "submit-shared-journeys.sh").read_text()
+
+        self.assertIn("checkout-pinned-source", cloudbuild)
+        self.assertIn('${_SOURCE_COMMIT}', cloudbuild)
+        self.assertIn("secretEnv:", cloudbuild)
+        self.assertIn("LIGHTYEAR_CLOUDBANK_BASELINE_EVIDENCE_KEY", cloudbuild)
+        self.assertIn("--dns-endpoint", cloudbuild)
+        self.assertIn("--output-root", cloudbuild)
+        self.assertIn("ms67-shared-journeys", cloudbuild)
+        self.assertIn("CLOUD_LOGGING_ONLY", cloudbuild)
+        self.assertNotIn("howard.weale@gmail.com", cloudbuild + submit)
+        self.assertIn("status --porcelain --untracked-files=normal", submit)
+        self.assertIn("'@{upstream}'", submit)
+        self.assertIn("Evidence secret must have exactly one enabled version", submit)
+        self.assertIn("roles/container.developer", submit)
+        self.assertIn("roles/serviceusage.serviceUsageConsumer", submit)
+        self.assertIn("cloudbank-azn-server-external", submit)
+        self.assertIn("cloudbank-checks-external", submit)
+        self.assertIn("roles/storage.objectAdmin", submit)
+        self.assertIn("--no-source", submit)
+        self.assertIn("--async", submit)
+        self.assertIn("ACTIVE_SHARED_JOURNEY_BUILD", submit)
+        self.assertNotIn("operator-held-value", cloudbuild + submit)
 
 
 if __name__ == "__main__":

@@ -112,6 +112,33 @@ passing result. The harness uses Kubernetes API tunnels, so this evidence does
 not itself prove ingress, TLS policy, service-mesh routing, or distributed trace
 correlation.
 
+### Durable Cloud Build execution
+
+Use the asynchronous Cloud Build launcher when an operator workstation or Cloud
+Shell cannot remain stable for the complete run. The launcher requires the same
+explicit nonproduction mutation acknowledgement, copies only the image lock and
+MS64 receipt to a private content-addressed bucket prefix, and checks out the
+exact committed source revision. The dedicated evidence service account becomes
+the receipt signer and receives Kubernetes developer, private evidence-bucket,
+and only the three required Secret Manager permissions. It does not receive raw
+credentials as command arguments.
+
+```bash
+factory/cloudbank/platform-qualification/gke/submit-shared-journeys.sh \
+  "$MS67_IMAGE_LOCK" \
+  "$MS67_MS64_RECEIPT" \
+  "$MS67_POSTGRESQL_PROBE_IMAGE"
+```
+
+The command submits asynchronously and writes the build ID to
+`~/ms67-shared-journeys-build-id`. Re-running the launcher while a tagged journey
+build is active reports that build instead of starting a concurrent executor.
+The Cloud Build step obtains the GKE DNS endpoint, runs all 18 scenarios and
+uploads success or failure evidence directly to the existing private shared-
+journeys prefix. A browser or Cloud Shell disconnect after submission cannot
+interrupt the build. This execution still proves only the bounded shared journeys;
+it cannot declare MS65, MS66 or MS67 complete.
+
 ## Evidence and recovery
 
 Small JSON files go to a fresh directory under `~/ms67-evidence` (or a fresh

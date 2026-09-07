@@ -412,6 +412,39 @@ class GkeAdapterTests(unittest.TestCase):
         with self.assertRaises(JourneyFailure):
             self.runtime.queue("' OR TRUE --")
 
+    def test_read_only_probe_retries_transient_exec_failure(self):
+        self.runtime.probe_uid = "probe-uid"
+        pod = {"metadata": {"uid": "probe-uid"}}
+        with patch.object(self.runtime, "get", return_value=pod), \
+                patch.object(self.runtime, "kubectl", side_effect=[
+                    JourneyFailure("operator-command-failed"), '{"state":"PROCESSING"}']) as command, \
+                patch("lightyear_data.cloudbank_journeys_gke.time.sleep") as pause:
+            self.assertEqual(self.runtime.sql("SELECT 1;"), {"state": "PROCESSING"})
+        self.assertEqual(command.call_count, 2)
+        pause.assert_called_once_with(1)
+
+    def test_read_only_probe_reports_bounded_failure_after_retries(self):
+        self.runtime.probe_uid = "probe-uid"
+        pod = {"metadata": {"uid": "probe-uid"}}
+        with patch.object(self.runtime, "get", return_value=pod), \
+                patch.object(self.runtime, "kubectl",
+                             side_effect=JourneyFailure("operator-command-failed")) as command, \
+                patch("lightyear_data.cloudbank_journeys_gke.time.sleep") as pause:
+            with self.assertRaisesRegex(JourneyFailure, "postgresql-probe-command-failed"):
+                self.runtime.sql("SELECT 1;")
+        self.assertEqual(command.call_count, 3)
+        self.assertEqual([call.args[0] for call in pause.call_args_list], [1, 2])
+
+    def test_read_only_probe_does_not_retry_identity_drift(self):
+        self.runtime.probe_uid = "expected-uid"
+        with patch.object(self.runtime, "get", return_value={"metadata": {"uid": "changed-uid"}}), \
+                patch.object(self.runtime, "kubectl") as command, \
+                patch("lightyear_data.cloudbank_journeys_gke.time.sleep") as pause:
+            with self.assertRaisesRegex(JourneyFailure, "postgresql-probe-identity-drift"):
+                self.runtime.sql("SELECT 1;")
+        command.assert_not_called()
+        pause.assert_not_called()
+
     def test_queue_rejects_unbounded_or_sensitive_error_text(self):
         message = "ly-" + "b" * 48
         with patch.object(self.runtime, "sql", return_value={"state": "DEAD", "attempts": 3,

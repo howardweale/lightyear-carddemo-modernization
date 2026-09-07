@@ -526,10 +526,23 @@ class GkeRuntime:
 
     def sql(self, query: str) -> dict:
         require(self.probe_uid is not None, "postgresql-probe-required")
-        pod = self.get("pod", self.probe_name)
-        require(pod["metadata"]["uid"] == self.probe_uid, "postgresql-probe-identity-drift")
-        raw = self.kubectl("exec", "-i", "pod/" + self.probe_name, "--", "psql", "-X", "-qAt",
-                           "--no-password", "--set=ON_ERROR_STOP=1", data=query + "\n")
+        raw = ""
+        # Every probe statement is forced read-only by PGOPTIONS. A transient
+        # Kubernetes exec transport failure is therefore safe to retry, while
+        # identity drift and all other validation failures remain immediate.
+        for attempt in range(3):
+            try:
+                pod = self.get("pod", self.probe_name)
+                require(pod["metadata"]["uid"] == self.probe_uid, "postgresql-probe-identity-drift")
+                raw = self.kubectl("exec", "-i", "pod/" + self.probe_name, "--", "psql", "-X", "-qAt",
+                                   "--no-password", "--set=ON_ERROR_STOP=1", data=query + "\n")
+                break
+            except JourneyFailure as exc:
+                if str(exc) != "operator-command-failed":
+                    raise
+                if attempt == 2:
+                    raise JourneyFailure("postgresql-probe-command-failed") from None
+                time.sleep(2 ** attempt)
         try:
             result = json.loads(raw)
         except (ValueError, UnicodeError):

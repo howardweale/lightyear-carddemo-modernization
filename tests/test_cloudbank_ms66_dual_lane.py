@@ -375,6 +375,9 @@ class CloudBankMs66DualLaneTests(unittest.TestCase):
         self.assertNotIn("docker pull latest", build)
         self.assertIn('short="$${source_commit:0:12}"', build)
         self.assertNotIn('short="${_SOURCE_COMMIT:', build)
+        self.assertIn('build_id="$BUILD_ID"', build)
+        self.assertIn('isolated_namespace="cloudbank-ms66-$${build_id:0:8}"', build)
+        self.assertNotIn('$${BUILD_ID:', build)
         self.assertNotIn("operator-held-value", build + recovery + submit + recover_submit)
         self.assertTrue((gke / "Dockerfile.ms66-oracle-source").is_file())
 

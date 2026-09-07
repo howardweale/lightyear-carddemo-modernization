@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.66.3 — 2026-09-07
+
+- Captured Cloud Build's built-in build ID before using Bash substring expansion in the durable
+  MS #66 execution step, preventing an unbound runtime variable from stopping the job before the
+  isolated namespace is created.
+- Added a regression guard for the Cloud Build/Bash escaping boundary. This release fixes the
+  controller handoff only and does not claim that the MS #66 live execution passed.
+
 ## 0.66.2 — 2026-09-07
 
 - Corrected the default Oracle Transaction Manager for Microservices image from the nonexistent

@@ -13,7 +13,11 @@ steps:
     git -C /workspace/source checkout --detach FETCH_HEAD
     [[ "$$(git -C /workspace/source rev-parse HEAD)" == "${_SOURCE_COMMIT}" ]]
 - id: run-shared-journeys
-  name: gcr.io/cloud-builders/gcloud
+  # The legacy cloud-builders/gcloud image is based on Ubuntu 22.04 and only
+  # provides Python 3.10. The journeys require Python 3.11 or newer; this
+  # versioned all-components Cloud CLI image also includes kubectl and the GKE
+  # authentication plugin used below.
+  name: gcr.io/google.com/cloudsdktool/google-cloud-cli:573.0.0
   waitFor:
   - checkout-pinned-source
   entrypoint: /bin/bash
@@ -40,6 +44,10 @@ steps:
       --region "${_REGION}" --dns-endpoint --project "$PROJECT_ID"
     command -v kubectl >/dev/null
     command -v python3 >/dev/null
+    command -v gke-gcloud-auth-plugin >/dev/null
+    python3 --version
+    kubectl version --client=true
+    gke-gcloud-auth-plugin --version
     python3 -c 'import sys; raise SystemExit(0 if sys.version_info >= (3, 11) else 1)'
     cd /workspace/source
     export LIGHTYEAR_PYTHON=python3

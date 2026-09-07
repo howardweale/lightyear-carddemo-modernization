@@ -10,6 +10,9 @@
     "lane",
     "bindings",
     "database_engine",
+    "application_identity",
+    "native_runtime",
+    "source_checkout_mutated",
     "services",
     "scenarios",
     "normalized_marker",
@@ -18,29 +21,207 @@
     "production_environment",
     "credentials_persisted",
     "raw_output_persisted",
+    "recovery",
     "content_sha256",
     "signature"
   ],
   "properties": {
+    "schema_version": {"const": "1.0"},
     "observation_type": {"const": "lightyear-cloudbank-ms66-lane-observation"},
-    "release": {"const": "0.66.0"},
+    "release": {"const": "0.66.1"},
     "lane": {"enum": ["oracle", "postgresql"]},
+    "bindings": {
+      "type": "object",
+      "required": [
+        "source_ms61_receipt_sha256",
+        "source_ms64_receipt_sha256",
+        "oracle_image_id_sha256",
+        "postgresql_image_id_sha256",
+        "lane_contract_sha256",
+        "journey_contract_sha256",
+        "oracle_hardening_contract_sha256",
+        "oracle_hardening_patch_sha256",
+        "oracle_source_image_lock_sha256",
+        "postgresql_image_lock_sha256",
+        "oracle_journey_sha256",
+        "postgresql_journey_sha256",
+        "comparison_run_id"
+      ],
+      "properties": {
+        "source_ms61_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "source_ms64_receipt_sha256": {"$ref": "#/$defs/sha256"},
+        "oracle_image_id_sha256": {"$ref": "#/$defs/sha256"},
+        "postgresql_image_id_sha256": {"$ref": "#/$defs/sha256"},
+        "lane_contract_sha256": {
+          "const": "1c15bc48e99693e0b85d1a3bca775173f37b419cf3761611d6de384b9de58acd"
+        },
+        "journey_contract_sha256": {
+          "const": "08d5a55f285432fca2c60e0c36768d58d5b5f3e26cba78104e63d87c836e6b7c"
+        },
+        "oracle_hardening_contract_sha256": {
+          "const": "3bb813ae28187f01a557de19c431d36b4d2cf938da688d58fc324d7bd52d868e"
+        },
+        "oracle_hardening_patch_sha256": {
+          "const": "68b23365133d0b0237962d89f5253c1cea5d24397f267022d1fb5a4c6d3fcd30"
+        },
+        "oracle_source_image_lock_sha256": {"$ref": "#/$defs/sha256"},
+        "postgresql_image_lock_sha256": {"$ref": "#/$defs/sha256"},
+        "oracle_journey_sha256": {"$ref": "#/$defs/sha256"},
+        "postgresql_journey_sha256": {"$ref": "#/$defs/sha256"},
+        "comparison_run_id": {"type": "string", "minLength": 1, "maxLength": 128}
+      },
+      "additionalProperties": false
+    },
     "database_engine": {"enum": ["oracle", "postgresql"]},
-    "services": {"type": "array", "minItems": 8, "maxItems": 8},
-    "scenarios": {"type": "array", "minItems": 18, "maxItems": 18},
-    "normalized_observation_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "application_identity": {
+      "enum": ["pinned-source-plus-governed-hardening", "exact-ms64-generated-target"]
+    },
+    "native_runtime": {
+      "type": "object",
+      "required": ["database", "messaging", "transactions"],
+      "properties": {
+        "database": {"enum": ["oracle-free", "postgresql"]},
+        "messaging": {"enum": ["oracle-aq-jms", "postgresql-durable-work-queue"]},
+        "transactions": {"enum": ["oracle-microtx-lra", "postgresql-atomic-transaction"]}
+      },
+      "additionalProperties": false
+    },
+    "source_checkout_mutated": {"const": false},
+    "services": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/service"}
+    },
+    "scenarios": {
+      "type": "array",
+      "minItems": 18,
+      "maxItems": 18,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/scenario"}
+    },
+    "normalized_marker": {"type": "string", "minLength": 1},
+    "normalized_observation_sha256": {
+      "const": "71458ecf2e1b2ae89f1dad763d4a8898899e19834c7744f3683733ccaf9a2bc9"
+    },
     "synthetic_data_only": {"const": true},
     "production_environment": {"const": false},
     "credentials_persisted": {"const": false},
     "raw_output_persisted": {"const": false},
-    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "recovery": {
+      "type": "object",
+      "required": ["status", "errors"],
+      "properties": {
+        "status": {"const": "restored"},
+        "errors": {"type": "array", "maxItems": 0}
+      },
+      "additionalProperties": false
+    },
+    "content_sha256": {"$ref": "#/$defs/sha256"},
+    "signature": {"$ref": "#/$defs/signature"}
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {"properties": {"lane": {"const": "oracle"}}, "required": ["lane"]},
+      "then": {
+        "properties": {
+          "database_engine": {"const": "oracle"},
+          "application_identity": {"const": "pinned-source-plus-governed-hardening"},
+          "native_runtime": {
+            "const": {
+              "database": "oracle-free",
+              "messaging": "oracle-aq-jms",
+              "transactions": "oracle-microtx-lra"
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {"properties": {"lane": {"const": "postgresql"}}, "required": ["lane"]},
+      "then": {
+        "properties": {
+          "database_engine": {"const": "postgresql"},
+          "application_identity": {"const": "exact-ms64-generated-target"},
+          "native_runtime": {
+            "const": {
+              "database": "postgresql",
+              "messaging": "postgresql-durable-work-queue",
+              "transactions": "postgresql-atomic-transaction"
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "service": {
+      "type": "object",
+      "required": ["service", "executable_sha256", "start_count", "final_status"],
+      "properties": {
+        "service": {
+          "enum": [
+            "azn-server", "customer", "account", "transfer", "checks", "testrunner",
+            "creditscore", "chatbot"
+          ]
+        },
+        "executable_sha256": {"$ref": "#/$defs/sha256"},
+        "start_count": {"type": "integer", "minimum": 2},
+        "final_status": {"const": "ready"}
+      },
+      "additionalProperties": false
+    },
+    "scenario": {
+      "type": "object",
+      "required": ["id", "normalized_result", "evidence_sha256"],
+      "properties": {
+        "id": {
+          "enum": [
+            "eight-services-ready",
+            "authorization-token-issued",
+            "unauthenticated-request-rejected",
+            "customer-owner-read",
+            "account-balance-read",
+            "transfer-success-conserves-value",
+            "transfer-invalid-no-mutation",
+            "transfer-insufficient-funds-no-mutation",
+            "check-deposit-applied-once",
+            "check-clearance-applied-once",
+            "duplicate-message-suppressed",
+            "credit-score-contract-served",
+            "chatbot-boundary-served",
+            "account-restart-preserves-state",
+            "checks-restart-redelivers-inflight",
+            "transfer-dependency-failure-recovers",
+            "concurrent-opposite-transfers-conserve-value",
+            "full-stack-restart-restores-journey"
+          ]
+        },
+        "normalized_result": {
+          "enum": [
+            "all-ready", "token-issued", "401", "owner-visible", "balance-visible",
+            "conserved", "400-no-mutation", "rejected-no-mutation", "deposit-once",
+            "clearance-once", "duplicate-suppressed", "score-in-declared-range",
+            "bounded-response", "state-preserved", "redelivered-once", "restored",
+            "journey-restored"
+          ]
+        },
+        "evidence_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
     "signature": {
       "type": "object",
       "required": ["algorithm", "signer", "value"],
       "properties": {
         "algorithm": {"const": "hmac-sha256"},
-        "value": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
-      }
+        "signer": {"type": "string", "minLength": 1},
+        "value": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
     }
   }
 }

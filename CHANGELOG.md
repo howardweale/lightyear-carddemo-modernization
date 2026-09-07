@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.66.1 — 2026-09-07
+
+- Added a durable asynchronous MS #66 GKE executor that builds eight governed source images from the
+  exact pinned Oracle CloudBank checkout, provisions an isolated native Oracle Free, Oracle AQ/JMS,
+  and MicroTx LRA lane, runs the same 18 journeys against both lanes, and emits the existing bounded
+  whole-application equivalence receipt only after exact normalized comparison.
+- Added one reviewed, content-addressed compatibility hardening patch for restart-safe synthetic
+  seeds, Oracle AQ message identity and redelivery observation, Account command idempotency, and
+  insufficient-funds rejection without a zero-value journal. The patch is applied only to a fresh
+  materialization; the pinned checkout remains unchanged.
+- Bound the materialization tree, hardening contract, hardening patch, controller commit, build ID,
+  eight source image digests, native runtime digests, target image lock, and both signed journey
+  hashes into the lane observations and final receipt.
+- Added mutation-intent checkpoints before namespace and model-policy creation, identity-checked
+  cleanup, a separate asynchronous recovery job, bounded failure evidence for both lane restorations,
+  two schemas, cross-platform launchers, live-operator documentation, and adversarial unit tests.
+- Explicitly classify the Oracle lane as `pinned-source-plus-governed-hardening`; this release does
+  not claim exact unchanged upstream identity, production execution, migration completion, or
+  production readiness.
+
 ## 0.67.0 — 2026-09-03
 
 - Added an MS #65/MS #66-chained real non-production Kubernetes platform qualification gate for

@@ -19,10 +19,16 @@ from .cloudbank_oracle_equivalence import (
     RECEIPT_TYPE as MS61_RECEIPT_TYPE,
     validate_execution_receipt as validate_ms61_receipt,
 )
+from .cloudbank_ms66_hardening import (
+    HARDENING_CONTRACT_SHA256,
+    PATCH_SHA256 as HARDENING_PATCH_SHA256,
+    hardening_contract,
+    validate_hardening,
+)
 from .contracts import content_hash, seal, sign, verify_signature
 
 
-RELEASE = "0.66.0"
+RELEASE = "0.66.1"
 OUTPUT_ROOT = Path("factory/cloudbank/whole-application-equivalence")
 RECEIPT_TYPE = "lightyear-cloudbank-whole-application-equivalence-execution"
 RECEIPT_NAME = "cloudbank-whole-application-equivalence.receipt.json"
@@ -78,7 +84,10 @@ def lane_contract() -> dict[str, Any]:
         "services": list(SERVICES),
         "lanes": {
             "oracle": {
-                "application": "exact-pinned-cloudbank-source",
+                "application": "pinned-source-plus-governed-hardening",
+                "exact_unchanged_upstream_application": False,
+                "governed_hardening_contract_sha256": HARDENING_CONTRACT_SHA256,
+                "governed_hardening_patch_sha256": HARDENING_PATCH_SHA256,
                 "database": "native-oracle",
                 "messaging": "oracle-transactional-event-queue",
                 "transactions": "microtx-lra",
@@ -132,6 +141,7 @@ def execution_plan() -> dict[str, Any]:
         "requires": [
             "signed-ms61-oracle-postgresql-core-equivalence-receipt",
             "signed-ms64-eight-service-target-receipt",
+            "signed-governed-oracle-source-image-lock",
             "same-evidence-key",
             "same-postgresql-image",
             "operator-signed-oracle-and-postgresql-observations",
@@ -141,7 +151,9 @@ def execution_plan() -> dict[str, Any]:
         "stages": [
             "validate-contracts-pinned-source-and-signed-ms61-ms64",
             "materialize-fresh-ms64-eight-service-target",
-            "start-all-eight-pinned-source-services-on-native-oracle",
+            "validate-pinned-source-without-mutating-checkout",
+            "apply-content-addressed-governed-hardening-in-fresh-workspace",
+            "start-all-eight-governed-source-services-on-native-oracle",
             "run-shared-business-failure-concurrency-and-recovery-harness",
             "restart-and-recover-all-eight-source-services",
             "start-all-eight-generated-target-services-on-native-postgresql",
@@ -153,6 +165,8 @@ def execution_plan() -> dict[str, Any]:
         "required_scenarios": SCENARIO_IDS,
         "fresh_output_required": True,
         "source_checkout_mutated": False,
+        "oracle_source_hardening_applied": True,
+        "exact_unchanged_upstream_application": False,
         "production_data": False,
         "production_environment": False,
         "production_ready": False,
@@ -168,6 +182,10 @@ def compatibility_ledger() -> dict[str, Any]:
         ("checks-messaging", "normalized-equivalent", "once-only-and-redelivery"),
         ("oracle-aq-versus-postgresql-queue", "intentional-change", "same-business-outcome"),
         ("microtx-lra-versus-atomic-transaction", "intentional-change", "same-recovery-outcome"),
+        ("oracle-source-governed-hardening", "bounded-compatibility-change",
+         "content-addressed-restart-idempotency-and-business-rejection-patch"),
+        ("exact-unchanged-upstream-application", "not-qualified",
+         "oracle-lane-runs-pinned-source-plus-governed-hardening"),
         ("credit-score", "contract-equivalent", "range-not-exact-value"),
         ("real-credit-decision", "not-qualified", "approved-provider-required"),
         ("chatbot", "contract-equivalent", "boundary-not-answer-quality"),
@@ -201,6 +219,8 @@ def acceptance_contract() -> dict[str, Any]:
             "journey_contract_sha256": journey_contract()["content_sha256"],
             "execution_plan_sha256": execution_plan()["content_sha256"],
             "compatibility_ledger_sha256": compatibility_ledger()["content_sha256"],
+            "oracle_hardening_contract_sha256": HARDENING_CONTRACT_SHA256,
+            "oracle_hardening_patch_sha256": HARDENING_PATCH_SHA256,
         },
         "required_receipts": [MS61_RECEIPT_TYPE, MS64_RECEIPT_TYPE],
         "required_services": list(SERVICES),
@@ -228,6 +248,8 @@ def readiness_receipt() -> dict[str, Any]:
         "bindings": acceptance_contract()["bindings"],
         "acceptance_contract_sha256": acceptance_contract()["content_sha256"],
         "gate_status": "ready-for-signed-ms61-ms64-and-dual-lane-observations",
+        "oracle_source_hardening_reviewed": True,
+        "exact_unchanged_upstream_application": False,
         "all_eight_services_observed_in_both_lanes": False,
         "bounded_whole_application_equivalent": False,
         "whole_application_equivalent": False,
@@ -244,6 +266,7 @@ def build_artifacts() -> dict[str, dict[str, Any]]:
         "journey-contract.json": journey_contract(),
         "execution-plan.json": execution_plan(),
         "compatibility-ledger.json": compatibility_ledger(),
+        "oracle-hardening-contract.json": hardening_contract(),
         "acceptance-contract.json": acceptance_contract(),
         "readiness.receipt.json": readiness_receipt(),
     }
@@ -257,7 +280,7 @@ def write_artifacts(project_root: Path) -> None:
 
 
 def validate_artifacts(project_root: Path) -> list[str]:
-    errors: list[str] = []
+    errors: list[str] = validate_hardening(project_root)
     root = project_root / OUTPUT_ROOT
     for name, expected in build_artifacts().items():
         try:
@@ -278,7 +301,9 @@ def validate_artifacts(project_root: Path) -> list[str]:
 
 def _observation_bindings(
     ms61_sha256: str, ms64_sha256: str, oracle_image: str, postgres_image: str,
-    comparison_run_id: str,
+    comparison_run_id: str, oracle_source_image_lock_sha256: str,
+    postgresql_image_lock_sha256: str, oracle_journey_sha256: str,
+    postgresql_journey_sha256: str,
 ) -> dict[str, str]:
     return {
         "source_ms61_receipt_sha256": ms61_sha256,
@@ -287,6 +312,12 @@ def _observation_bindings(
         "postgresql_image_id_sha256": postgres_image,
         "lane_contract_sha256": lane_contract()["content_sha256"],
         "journey_contract_sha256": journey_contract()["content_sha256"],
+        "oracle_hardening_contract_sha256": HARDENING_CONTRACT_SHA256,
+        "oracle_hardening_patch_sha256": HARDENING_PATCH_SHA256,
+        "oracle_source_image_lock_sha256": oracle_source_image_lock_sha256,
+        "postgresql_image_lock_sha256": postgresql_image_lock_sha256,
+        "oracle_journey_sha256": oracle_journey_sha256,
+        "postgresql_journey_sha256": postgresql_journey_sha256,
         "comparison_run_id": comparison_run_id,
     }
 
@@ -294,13 +325,18 @@ def _observation_bindings(
 def validate_lane_observation(
     observation: Mapping[str, Any], key: str, lane: str, *, ms61_sha256: str,
     ms64_sha256: str, oracle_image: str, postgres_image: str, comparison_run_id: str,
+    oracle_source_image_lock_sha256: str, postgresql_image_lock_sha256: str,
+    oracle_journey_sha256: str, postgresql_journey_sha256: str,
 ) -> list[str]:
+    if lane not in {"oracle", "postgresql"}:
+        return ["cloudbank-whole-application-lane-invalid"]
     errors: list[str] = []
     expected_fields = {
         "schema_version", "observation_type", "release", "lane", "bindings",
         "database_engine", "services", "scenarios", "normalized_marker",
         "normalized_observation_sha256", "synthetic_data_only", "production_environment",
         "credentials_persisted", "raw_output_persisted", "content_sha256", "signature",
+        "application_identity", "native_runtime", "source_checkout_mutated", "recovery",
     }
     if set(observation) != expected_fields:
         errors.append(f"cloudbank-whole-application-{lane}-observation-fields-invalid")
@@ -312,12 +348,28 @@ def validate_lane_observation(
         errors.append(f"cloudbank-whole-application-{lane}-observation-signature-invalid")
     expected_bindings = _observation_bindings(
         ms61_sha256, ms64_sha256, oracle_image, postgres_image, comparison_run_id,
+        oracle_source_image_lock_sha256, postgresql_image_lock_sha256,
+        oracle_journey_sha256, postgresql_journey_sha256,
     )
     if observation.get("bindings") != expected_bindings:
         errors.append(f"cloudbank-whole-application-{lane}-observation-binding-invalid")
     expected_engine = "oracle" if lane == "oracle" else "postgresql"
     if observation.get("database_engine") != expected_engine:
         errors.append(f"cloudbank-whole-application-{lane}-database-invalid")
+    expected_application = (
+        "pinned-source-plus-governed-hardening" if lane == "oracle"
+        else "exact-ms64-generated-target"
+    )
+    expected_runtime = {
+        "oracle": {"database": "oracle-free", "messaging": "oracle-aq-jms",
+                   "transactions": "oracle-microtx-lra"},
+        "postgresql": {"database": "postgresql", "messaging": "postgresql-durable-work-queue",
+                       "transactions": "postgresql-atomic-transaction"},
+    }[lane]
+    if observation.get("application_identity") != expected_application \
+            or observation.get("native_runtime") != expected_runtime \
+            or observation.get("source_checkout_mutated") is not False:
+        errors.append(f"cloudbank-whole-application-{lane}-runtime-identity-invalid")
     services = observation.get("services") or []
     if not isinstance(services, list) or any(not isinstance(item, Mapping) for item in services):
         services = []
@@ -327,7 +379,7 @@ def validate_lane_observation(
         service_rows_invalid = any(
             set(item) != {"service", "executable_sha256", "start_count", "final_status"}
             or not HEX_64.fullmatch(str(item.get("executable_sha256", "")))
-            or not isinstance(item.get("start_count"), int)
+            or type(item.get("start_count")) is not int
             or item.get("start_count", 0) < MINIMUM_START_COUNTS[str(item.get("service"))]
             or item.get("final_status") != "ready"
             for item in services
@@ -356,6 +408,10 @@ def validate_lane_observation(
     }
     if any(observation.get(name) is not value for name, value in safety.items()):
         errors.append(f"cloudbank-whole-application-{lane}-safety-invalid")
+    raw_recovery = observation.get("recovery")
+    recovery = raw_recovery if isinstance(raw_recovery, Mapping) else {}
+    if recovery.get("status") != "restored" or recovery.get("errors") != []:
+        errors.append(f"cloudbank-whole-application-{lane}-recovery-invalid")
     return sorted(set(errors))
 
 
@@ -393,17 +449,36 @@ def execute_equivalence(
     workspace = materializer(project_root, source_root, resolved_output / "target-workspace")
     if any(not (workspace / service / "pom.xml").is_file() for service in SERVICES):
         raise ValueError("cloudbank-whole-application-eight-service-target-invalid")
-    comparison_id = str((oracle_observation.get("bindings") or {}).get("comparison_run_id", ""))
+    raw_oracle_bindings = oracle_observation.get("bindings")
+    oracle_bindings = raw_oracle_bindings if isinstance(raw_oracle_bindings, Mapping) else {}
+    comparison_id = str(oracle_bindings.get("comparison_run_id", ""))
+    source_lock_sha256 = str(oracle_bindings.get("oracle_source_image_lock_sha256", ""))
+    target_lock_sha256 = str(oracle_bindings.get("postgresql_image_lock_sha256", ""))
+    oracle_journey_sha256 = str(oracle_bindings.get("oracle_journey_sha256", ""))
+    postgresql_journey_sha256 = str(oracle_bindings.get("postgresql_journey_sha256", ""))
+    if any(not HEX_64.fullmatch(value) for value in (
+        source_lock_sha256, target_lock_sha256, oracle_journey_sha256,
+        postgresql_journey_sha256,
+    )):
+        raise ValueError("cloudbank-whole-application-governed-source-binding-invalid")
     observation_errors = validate_lane_observation(
         oracle_observation, key, "oracle",
         ms61_sha256=str(ms61_receipt["content_sha256"]),
         ms64_sha256=str(ms64_receipt["content_sha256"]), oracle_image=oracle_image,
         postgres_image=postgres_image, comparison_run_id=comparison_id,
+        oracle_source_image_lock_sha256=source_lock_sha256,
+        postgresql_image_lock_sha256=target_lock_sha256,
+        oracle_journey_sha256=oracle_journey_sha256,
+        postgresql_journey_sha256=postgresql_journey_sha256,
     ) + validate_lane_observation(
         postgres_observation, key, "postgresql",
         ms61_sha256=str(ms61_receipt["content_sha256"]),
         ms64_sha256=str(ms64_receipt["content_sha256"]), oracle_image=oracle_image,
         postgres_image=postgres_image, comparison_run_id=comparison_id,
+        oracle_source_image_lock_sha256=source_lock_sha256,
+        postgresql_image_lock_sha256=target_lock_sha256,
+        oracle_journey_sha256=oracle_journey_sha256,
+        postgresql_journey_sha256=postgresql_journey_sha256,
     )
     if not comparison_id.strip():
         observation_errors.append("cloudbank-whole-application-comparison-run-id-invalid")
@@ -429,6 +504,12 @@ def execute_equivalence(
         "postgresql_image_id_sha256": postgres_image,
         "oracle_observation_sha256": oracle_observation["content_sha256"],
         "postgresql_observation_sha256": postgres_observation["content_sha256"],
+        "oracle_source_image_lock_sha256": source_lock_sha256,
+        "postgresql_image_lock_sha256": target_lock_sha256,
+        "oracle_journey_sha256": oracle_journey_sha256,
+        "postgresql_journey_sha256": postgresql_journey_sha256,
+        "oracle_hardening_contract_sha256": HARDENING_CONTRACT_SHA256,
+        "oracle_hardening_patch_sha256": HARDENING_PATCH_SHA256,
         "normalized_observation_sha256": OBSERVATION_SHA256,
         "services": list(SERVICES), "scenario_count": len(SCENARIOS),
         "status": "passed-bounded-whole-application-equivalence",
@@ -440,7 +521,9 @@ def execute_equivalence(
         "migration_complete": False, "production_deployed": False, "production_ready": False,
         "security": {"synthetic_data_only": True, "production_environment": False,
                      "credentials_persisted": False, "raw_output_persisted": False,
-                     "source_checkout_mutated": False},
+                     "source_checkout_mutated": False,
+                     "oracle_source_hardening_applied": True,
+                     "exact_unchanged_upstream_application": False},
     }, key, signer)
     write_json(resolved_output / RECEIPT_NAME, receipt)
     return receipt
@@ -455,6 +538,10 @@ def validate_execution_receipt(
         "signer", "bindings", "source_ms61_receipt_sha256", "source_ms64_receipt_sha256",
         "oracle_image_id_sha256", "postgresql_image_id_sha256",
         "oracle_observation_sha256", "postgresql_observation_sha256",
+        "oracle_source_image_lock_sha256", "oracle_journey_sha256",
+        "postgresql_image_lock_sha256", "postgresql_journey_sha256",
+        "oracle_hardening_contract_sha256",
+        "oracle_hardening_patch_sha256",
         "normalized_observation_sha256", "services", "scenario_count", "status",
         "all_eight_services_observed_in_both_lanes",
         "bounded_whole_application_equivalent", "exact_internal_implementation_equivalent",
@@ -477,6 +564,10 @@ def validate_execution_receipt(
         "source_ms61_receipt_sha256", "source_ms64_receipt_sha256",
         "oracle_image_id_sha256", "postgresql_image_id_sha256",
         "oracle_observation_sha256", "postgresql_observation_sha256",
+        "oracle_source_image_lock_sha256", "oracle_journey_sha256",
+        "postgresql_image_lock_sha256", "postgresql_journey_sha256",
+        "oracle_hardening_contract_sha256",
+        "oracle_hardening_patch_sha256",
         "normalized_observation_sha256",
     ):
         if not HEX_64.fullmatch(str(receipt.get(name, ""))):
@@ -485,6 +576,9 @@ def validate_execution_receipt(
             or receipt.get("services") != list(SERVICES) \
             or receipt.get("scenario_count") != len(SCENARIOS):
         errors.append("cloudbank-whole-application-receipt-coverage-invalid")
+    if receipt.get("oracle_hardening_contract_sha256") != HARDENING_CONTRACT_SHA256 \
+            or receipt.get("oracle_hardening_patch_sha256") != HARDENING_PATCH_SHA256:
+        errors.append("cloudbank-whole-application-receipt-hardening-binding-invalid")
     expected = {
         "all_eight_services_observed_in_both_lanes": True,
         "bounded_whole_application_equivalent": True,
@@ -501,7 +595,9 @@ def validate_execution_receipt(
     security = receipt.get("security") or {}
     expected_security = {"synthetic_data_only": True, "production_environment": False,
                          "credentials_persisted": False, "raw_output_persisted": False,
-                         "source_checkout_mutated": False}
+                         "source_checkout_mutated": False,
+                         "oracle_source_hardening_applied": True,
+                         "exact_unchanged_upstream_application": False}
     if security != expected_security:
         errors.append("cloudbank-whole-application-receipt-security-invalid")
     if not str(receipt.get("comparison_run_id", "")).strip() \

@@ -15,6 +15,7 @@ import re
 import socket
 import subprocess
 import time
+from typing import Callable
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode, urlsplit
 from urllib.request import HTTPRedirectHandler, Request, build_opener
@@ -52,7 +53,10 @@ class NoRedirect(HTTPRedirectHandler):
 class GkeRuntime:
     def __init__(self, *, project: str, region: str, cluster: str, namespace: str,
                  images: dict[str, str], run_id: str, output: Path, probe_image: str | None = None,
-                 progress=lambda _: None, signing_key: str = "", signer: str = ""):
+                 progress=lambda _: None, signing_key: str = "", signer: str = "",
+                 checks_delivery_env: str = "ACCOUNT_JOURNAL_URL",
+                 checks_blocked_url: str = "http://192.0.2.1:8080/api/v1/account/journal",
+                 recovery_sink: Callable[[dict], None] | None = None):
         for value in (project, region, cluster, namespace, run_id):
             require(isinstance(value, str) and re.fullmatch(r"[a-z0-9][a-z0-9-]{0,62}", value) is not None,
                     "gke-identity-invalid")
@@ -77,6 +81,16 @@ class GkeRuntime:
         self.start_counts = {s: 0 for s in SERVICES}
         self.probe_uid: str | None = None
         self.signing_key, self.signer = signing_key, signer
+        self.recovery_sink = recovery_sink
+        require(re.fullmatch(r"[A-Z][A-Z0-9_]{0,79}", checks_delivery_env) is not None,
+                "checks-delivery-environment-name-invalid")
+        blocked = urlsplit(checks_blocked_url)
+        require(blocked.scheme == "http" and blocked.hostname == "192.0.2.1"
+                and blocked.username is None and blocked.password is None
+                and not blocked.query and not blocked.fragment,
+                "checks-blocked-delivery-url-invalid")
+        self.checks_delivery_env = checks_delivery_env
+        self.checks_blocked_url = checks_blocked_url
         self.checks_delivery: dict | None = None
         self.opener = build_opener(NoRedirect())
 
@@ -331,6 +345,8 @@ class GkeRuntime:
         temporary.write_text(json.dumps(payload, sort_keys=True, indent=2) + "\n")
         temporary.chmod(0o600)
         temporary.replace(path)
+        if self.recovery_sink is not None:
+            self.recovery_sink(payload)
 
     def patch_checks_delivery(self, value: dict | None):
         deploy = self.deployment("checks")
@@ -338,7 +354,7 @@ class GkeRuntime:
         index = next(i for i, container in enumerate(containers) if container["name"] == "checks")
         container = containers[index]
         old = container.get("env", [])
-        matches = [i for i, item in enumerate(old) if item.get("name") == "ACCOUNT_JOURNAL_URL"]
+        matches = [i for i, item in enumerate(old) if item.get("name") == self.checks_delivery_env]
         require(len(matches) <= 1, "checks-delivery-configuration-ambiguous")
         base = f"/spec/template/spec/containers/{index}/env"
         patch = [{"op": "test", "path": "/metadata/resourceVersion", "value": deploy["metadata"]["resourceVersion"]}]
@@ -358,14 +374,14 @@ class GkeRuntime:
         require(self.checks_delivery is None, "checks-delivery-already-overridden")
         deploy = self.deployment("checks")
         container = next(c for c in deploy["spec"]["template"]["spec"]["containers"] if c["name"] == "checks")
-        existing = [item for item in container.get("env", []) if item.get("name") == "ACCOUNT_JOURNAL_URL"]
+        existing = [item for item in container.get("env", []) if item.get("name") == self.checks_delivery_env]
         require(len(existing) <= 1, "checks-delivery-configuration-ambiguous")
         original = existing[0] if existing else None
         if original and "value" in original:
             url = urlsplit(original["value"])
             require(url.scheme in {"http", "https"} and url.username is None and url.password is None
                     and not url.query and not url.fragment, "checks-delivery-url-contains-sensitive-material")
-        blocked = {"name": "ACCOUNT_JOURNAL_URL", "value": "http://192.0.2.1:8080/api/v1/account/journal"}
+        blocked = {"name": self.checks_delivery_env, "value": self.checks_blocked_url}
         self.checks_delivery = {"original": original, "injected": blocked}
         self.recovery_checkpoint()
         previous = set(self.pod_sets.get("checks", set()))
@@ -377,7 +393,7 @@ class GkeRuntime:
             return
         deploy = self.deployment("checks")
         container = next(c for c in deploy["spec"]["template"]["spec"]["containers"] if c["name"] == "checks")
-        current = [item for item in container.get("env", []) if item.get("name") == "ACCOUNT_JOURNAL_URL"]
+        current = [item for item in container.get("env", []) if item.get("name") == self.checks_delivery_env]
         original = self.checks_delivery["original"]
         if current != ([] if original is None else [original]):
             require(current == [self.checks_delivery["injected"]], "checks-delivery-changed-by-another-operator")

@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schemas/cloudbank/ms66-governed-source-image-lock.schema.json",
+  "title": "CloudBank MS66 governed Oracle source image lock",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "lock_type",
+    "release",
+    "source",
+    "materialized_application_identity",
+    "exact_unchanged_upstream_application",
+    "hardening_contract_sha256",
+    "hardening_patch_sha256",
+    "hardening_materialization_sha256",
+    "materialized_tree_sha256",
+    "controller_commit",
+    "cloud_build_id",
+    "java_base_image",
+    "native_runtime_images",
+    "images",
+    "source_checkout_mutated",
+    "synthetic_data_only",
+    "production_environment",
+    "content_sha256",
+    "signature"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "lock_type": {"const": "lightyear-cloudbank-ms66-governed-oracle-source-image-lock"},
+    "release": {"const": "0.66.1"},
+    "source": {
+      "type": "object",
+      "required": ["repository", "commit", "root_tree", "subtree", "subtree_tree"],
+      "properties": {
+        "repository": {"const": "https://github.com/oracle/microservices-backend.git"},
+        "commit": {"const": "4f41b16d00c45503f691836fee8138010c969e86"},
+        "root_tree": {"const": "6aa92e89c783f123c4da8d7ae18108004a4f4a99"},
+        "subtree": {"const": "cloudbank-v5"},
+        "subtree_tree": {"const": "bd918386209f284a1ed31802555740eb34b75348"}
+      },
+      "additionalProperties": false
+    },
+    "materialized_application_identity": {"const": "pinned-source-plus-governed-hardening"},
+    "exact_unchanged_upstream_application": {"const": false},
+    "hardening_contract_sha256": {
+      "const": "3bb813ae28187f01a557de19c431d36b4d2cf938da688d58fc324d7bd52d868e"
+    },
+    "hardening_patch_sha256": {
+      "const": "68b23365133d0b0237962d89f5253c1cea5d24397f267022d1fb5a4c6d3fcd30"
+    },
+    "hardening_materialization_sha256": {"$ref": "#/$defs/sha256"},
+    "materialized_tree_sha256": {"$ref": "#/$defs/sha256"},
+    "controller_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "cloud_build_id": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$"
+    },
+    "java_base_image": {"$ref": "#/$defs/image"},
+    "native_runtime_images": {
+      "type": "object",
+      "required": ["oracle", "microtx"],
+      "properties": {
+        "oracle": {"$ref": "#/$defs/image"},
+        "microtx": {"$ref": "#/$defs/image"}
+      },
+      "additionalProperties": false
+    },
+    "images": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "required": ["service", "reference"],
+        "properties": {
+          "service": {
+            "enum": [
+              "azn-server", "customer", "account", "transfer", "checks", "testrunner",
+              "creditscore", "chatbot"
+            ]
+          },
+          "reference": {"$ref": "#/$defs/image"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "source_checkout_mutated": {"const": false},
+    "synthetic_data_only": {"const": true},
+    "production_environment": {"const": false},
+    "content_sha256": {"$ref": "#/$defs/sha256"},
+    "signature": {"$ref": "#/$defs/signature"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "image": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+([._:-][a-z0-9]+)*(/[a-z0-9]+([._-][a-z0-9]+)*)+@sha256:[0-9a-f]{64}$"
+    },
+    "signature": {
+      "type": "object",
+      "required": ["algorithm", "signer", "value"],
+      "properties": {
+        "algorithm": {"const": "hmac-sha256"},
+        "signer": {"type": "string", "minLength": 1},
+        "value": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

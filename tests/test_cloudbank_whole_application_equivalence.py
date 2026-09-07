@@ -9,11 +9,16 @@ from unittest.mock import patch
 
 from lightyear_data.cloudbank_edge_ai import RECEIPT_TYPE as MS64_RECEIPT_TYPE
 from lightyear_data.cloudbank_oracle_equivalence import RECEIPT_TYPE as MS61_RECEIPT_TYPE
+from lightyear_data.cloudbank_ms66_hardening import (
+    HARDENING_CONTRACT_SHA256,
+    PATCH_SHA256,
+)
 from lightyear_data.cloudbank_whole_application_equivalence import (
     MINIMUM_START_COUNTS,
     NORMALIZED_MARKER,
     OBSERVATION_SHA256,
     OUTPUT_ROOT,
+    RELEASE,
     RECEIPT_TYPE,
     SCENARIOS,
     SCENARIO_IDS,
@@ -39,6 +44,10 @@ HEX_A = "a" * 64
 HEX_B = "b" * 64
 HEX_C = "c" * 64
 HEX_D = "d" * 64
+HEX_E = "e" * 64
+HEX_F = "f" * 64
+HEX_1 = "1" * 64
+HEX_2 = "2" * 64
 PAIR_ID = "ms66-unit-comparison"
 
 
@@ -56,7 +65,7 @@ def observation(lane: str, *, pair_id: str = PAIR_ID) -> dict[str, object]:
     payload: dict[str, object] = {
         "schema_version": "1.0",
         "observation_type": "lightyear-cloudbank-ms66-lane-observation",
-        "release": "0.66.0",
+        "release": RELEASE,
         "lane": lane,
         "bindings": {
             "source_ms61_receipt_sha256": HEX_A,
@@ -65,9 +74,27 @@ def observation(lane: str, *, pair_id: str = PAIR_ID) -> dict[str, object]:
             "postgresql_image_id_sha256": HEX_D,
             "lane_contract_sha256": lane_contract()["content_sha256"],
             "journey_contract_sha256": journey_contract()["content_sha256"],
+            "oracle_hardening_contract_sha256": HARDENING_CONTRACT_SHA256,
+            "oracle_hardening_patch_sha256": PATCH_SHA256,
+            "oracle_source_image_lock_sha256": HEX_E,
+            "postgresql_image_lock_sha256": HEX_F,
+            "oracle_journey_sha256": HEX_1,
+            "postgresql_journey_sha256": HEX_2,
             "comparison_run_id": pair_id,
         },
         "database_engine": lane,
+        "application_identity": (
+            "pinned-source-plus-governed-hardening"
+            if lane == "oracle" else "exact-ms64-generated-target"
+        ),
+        "native_runtime": ({
+            "database": "oracle-free", "messaging": "oracle-aq-jms",
+            "transactions": "oracle-microtx-lra",
+        } if lane == "oracle" else {
+            "database": "postgresql", "messaging": "postgresql-durable-work-queue",
+            "transactions": "postgresql-atomic-transaction",
+        }),
+        "source_checkout_mutated": False,
         "services": [
             {"service": service, "executable_sha256": f"{index:064x}",
              "start_count": MINIMUM_START_COUNTS[service], "final_status": "ready"}
@@ -84,6 +111,7 @@ def observation(lane: str, *, pair_id: str = PAIR_ID) -> dict[str, object]:
         "production_environment": False,
         "credentials_persisted": False,
         "raw_output_persisted": False,
+        "recovery": {"status": "restored", "errors": []},
     }
     return sign(payload, KEY, f"unit-{lane}-observer")
 
@@ -127,6 +155,13 @@ class CloudBankWholeApplicationEquivalenceTests(unittest.TestCase):
         self.assertEqual("intentional-change", entries["oracle-aq-versus-postgresql-queue"]["classification"])
         self.assertEqual("not-qualified", entries["real-credit-decision"]["classification"])
         self.assertEqual("not-qualified", entries["production-platform"]["classification"])
+        self.assertEqual(
+            "bounded-compatibility-change",
+            entries["oracle-source-governed-hardening"]["classification"],
+        )
+        self.assertEqual(
+            "not-qualified", entries["exact-unchanged-upstream-application"]["classification"],
+        )
         self.assertTrue(ledger["whole_application_equivalence_eligible"])
         self.assertFalse(ledger["exact_internal_implementation_equivalent"])
 
@@ -135,6 +170,9 @@ class CloudBankWholeApplicationEquivalenceTests(unittest.TestCase):
             self.assertEqual([], validate_lane_observation(
                 observation(lane), KEY, lane, ms61_sha256=HEX_A, ms64_sha256=HEX_B,
                 oracle_image=HEX_C, postgres_image=HEX_D, comparison_run_id=PAIR_ID,
+                oracle_source_image_lock_sha256=HEX_E,
+                postgresql_image_lock_sha256=HEX_F,
+                oracle_journey_sha256=HEX_1, postgresql_journey_sha256=HEX_2,
             ))
         damaged = observation("oracle")
         damaged["services"][0]["start_count"] = 1
@@ -142,6 +180,9 @@ class CloudBankWholeApplicationEquivalenceTests(unittest.TestCase):
         errors = validate_lane_observation(
             damaged, KEY, "oracle", ms61_sha256=HEX_A, ms64_sha256=HEX_B,
             oracle_image=HEX_C, postgres_image=HEX_D, comparison_run_id=PAIR_ID,
+            oracle_source_image_lock_sha256=HEX_E,
+            postgresql_image_lock_sha256=HEX_F,
+            oracle_journey_sha256=HEX_1, postgresql_journey_sha256=HEX_2,
         )
         self.assertIn("cloudbank-whole-application-oracle-services-invalid", errors)
 
@@ -165,6 +206,9 @@ class CloudBankWholeApplicationEquivalenceTests(unittest.TestCase):
             self.assertFalse(receipt["migration_complete"])
             self.assertFalse(receipt["production_deployed"])
             self.assertFalse(receipt["production_ready"])
+            self.assertEqual(HEX_E, receipt["oracle_source_image_lock_sha256"])
+            self.assertEqual(HEX_F, receipt["postgresql_image_lock_sha256"])
+            self.assertEqual(PATCH_SHA256, receipt["oracle_hardening_patch_sha256"])
             self.assertEqual([], validate_execution_receipt(receipt, KEY, ROOT))
             tampered = copy.deepcopy(receipt)
             tampered["production_ready"] = True
@@ -235,6 +279,11 @@ class CloudBankWholeApplicationEquivalenceTests(unittest.TestCase):
             "reference-estates/cloudbank/schema/whole-application-equivalence-readiness.schema.json",
             "reference-estates/cloudbank/schema/whole-application-equivalence-lane-observation.schema.json",
             "reference-estates/cloudbank/schema/whole-application-equivalence-execution-receipt.schema.json",
+            "reference-estates/cloudbank/schema/ms66-governed-source-image-lock.schema.json",
+            "reference-estates/cloudbank/schema/ms66-isolated-lane-recovery.schema.json",
+            "cloudbank-ms66-dual-lane.sh",
+            "cloudbank-ms66-dual-lane.ps1",
+            "tools/cloudbank_ms66_dual_lane.py",
         ):
             self.assertTrue((ROOT / relative).is_file(), relative)
         acceptance = acceptance_contract()

@@ -1,0 +1,55 @@
+{
+  "changes": [
+    {
+      "classification": "bounded-compatibility-hardening",
+      "id": "restart-safe-synthetic-seeds",
+      "reason": "prevent-service-restart-from-truncating-live-journey-fixtures"
+    },
+    {
+      "classification": "bounded-observability-and-idempotency-hardening",
+      "id": "oracle-aq-message-identity-ledger",
+      "reason": "identify-native-aq-delivery-replay-and-crash-redelivery"
+    },
+    {
+      "classification": "bounded-idempotency-hardening",
+      "id": "account-journal-command-deduplication",
+      "reason": "suppress-aq-redelivery-double-effect"
+    },
+    {
+      "classification": "bounded-api-semantics-hardening",
+      "id": "insufficient-funds-business-rejection",
+      "reason": "return-422-without-zero-value-journal-mutation"
+    },
+    {
+      "classification": "bounded-deployment-hardening",
+      "id": "isolated-account-service-address",
+      "reason": "make-checks-failure-injection-explicit-and-recoverable"
+    }
+  ],
+  "content_sha256": "3bb813ae28187f01a557de19c431d36b4d2cf938da688d58fc324d7bd52d868e",
+  "contract_type": "lightyear-cloudbank-ms66-governed-oracle-source-hardening",
+  "exact_unchanged_upstream_application": false,
+  "materialized_application_identity": "pinned-source-plus-governed-hardening",
+  "patch": {
+    "changed_file_count": 13,
+    "format": "git-unified-diff",
+    "path": "factory/cloudbank/whole-application-equivalence/oracle-hardening/source-hardening.patch",
+    "sha256": "68b23365133d0b0237962d89f5253c1cea5d24397f267022d1fb5a4c6d3fcd30"
+  },
+  "preserved_native_runtime": {
+    "database": "oracle-free",
+    "distributed_transactions": "oracle-microtx-lra",
+    "messaging": "oracle-aq-jms"
+  },
+  "production_approved": false,
+  "release": "0.66.1",
+  "schema_version": "1.0",
+  "source": {
+    "commit": "4f41b16d00c45503f691836fee8138010c969e86",
+    "repository": "https://github.com/oracle/microservices-backend.git",
+    "root_tree": "6aa92e89c783f123c4da8d7ae18108004a4f4a99",
+    "subtree": "cloudbank-v5",
+    "subtree_tree": "bd918386209f284a1ed31802555740eb34b75348"
+  },
+  "source_checkout_mutated": false
+}

@@ -1,11 +1,13 @@
 {
-  "content_sha256": "f152995a4bea33456704dc1bb20ba5d9b5ebd87152ea12c68338bc2289d10569",
+  "content_sha256": "91c542a8acd77db4cf7d571553197e72eec055e9bf6fa21eb3ea811b6f8fcebb",
+  "exact_unchanged_upstream_application": false,
   "fresh_output_required": true,
+  "oracle_source_hardening_applied": true,
   "plan_type": "lightyear-cloudbank-whole-application-dual-lane-equivalence",
   "production_data": false,
   "production_environment": false,
   "production_ready": false,
-  "release": "0.66.0",
+  "release": "0.66.1",
   "required_scenarios": [
     "eight-services-ready",
     "authorization-token-issued",
@@ -29,6 +31,7 @@
   "requires": [
     "signed-ms61-oracle-postgresql-core-equivalence-receipt",
     "signed-ms64-eight-service-target-receipt",
+    "signed-governed-oracle-source-image-lock",
     "same-evidence-key",
     "same-postgresql-image",
     "operator-signed-oracle-and-postgresql-observations"
@@ -49,7 +52,9 @@
   "stages": [
     "validate-contracts-pinned-source-and-signed-ms61-ms64",
     "materialize-fresh-ms64-eight-service-target",
-    "start-all-eight-pinned-source-services-on-native-oracle",
+    "validate-pinned-source-without-mutating-checkout",
+    "apply-content-addressed-governed-hardening-in-fresh-workspace",
+    "start-all-eight-governed-source-services-on-native-oracle",
     "run-shared-business-failure-concurrency-and-recovery-harness",
     "restart-and-recover-all-eight-source-services",
     "start-all-eight-generated-target-services-on-native-postgresql",

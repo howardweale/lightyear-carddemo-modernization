@@ -1,0 +1,586 @@
+diff --git a/cloudbank-v5/account/src/main/java/com/example/accounts/controller/AccountController.java b/cloudbank-v5/account/src/main/java/com/example/accounts/controller/AccountController.java
+index 761446d8..5ff0406f 100644
+--- a/cloudbank-v5/account/src/main/java/com/example/accounts/controller/AccountController.java
++++ b/cloudbank-v5/account/src/main/java/com/example/accounts/controller/AccountController.java
+@@ -12,6 +12,7 @@ import com.example.accounts.model.Account;
+ import com.example.accounts.model.Journal;
+ import com.example.accounts.repository.AccountRepository;
+ import com.example.accounts.repository.JournalRepository;
++import org.springframework.dao.DataIntegrityViolationException;
+ import org.springframework.http.HttpStatus;
+ import org.springframework.http.ResponseEntity;
+ import org.springframework.security.core.Authentication;
+@@ -181,16 +182,29 @@ public class AccountController {
+         if (authorization != null) {
+             return new ResponseEntity<>(authorization.getStatusCode());
+         }
+-        boolean exists = journalRepository.existsById(journalEntry.getJournalId());
+-        if (!exists) {
+-            try {
+-                Journal newJournalEntry = journalRepository.saveAndFlush(journalEntry);
+-                return new ResponseEntity<>(newJournalEntry, HttpStatus.CREATED);
+-            } catch (Exception e) {
+-                return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
++        if (journalEntry.getLraId() == null || journalEntry.getLraId().isBlank()
++                || journalEntry.getJournalType() == null || journalEntry.getJournalType().isBlank()) {
++            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
++        }
++        Journal existing = journalRepository.findJournalByLraIdAndJournalType(
++                journalEntry.getLraId(), journalEntry.getJournalType());
++        if (existing != null) {
++            return sameJournalCommand(existing, journalEntry)
++                    ? new ResponseEntity<>(existing, HttpStatus.OK)
++                    : new ResponseEntity<>(existing, HttpStatus.CONFLICT);
++        }
++        try {
++            Journal newJournalEntry = journalRepository.saveAndFlush(journalEntry);
++            return new ResponseEntity<>(newJournalEntry, HttpStatus.CREATED);
++        } catch (DataIntegrityViolationException concurrentReplay) {
++            existing = journalRepository.findJournalByLraIdAndJournalType(
++                    journalEntry.getLraId(), journalEntry.getJournalType());
++            if (existing != null && sameJournalCommand(existing, journalEntry)) {
++                return new ResponseEntity<>(existing, HttpStatus.OK);
+             }
+-        } else {
+-            return new ResponseEntity<>(journalEntry, HttpStatus.CONFLICT);
++            return new ResponseEntity<>(existing, HttpStatus.CONFLICT);
++        } catch (Exception e) {
++            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+         }
+     }
+ 
+@@ -245,6 +259,11 @@ public class AccountController {
+         return new ResponseEntity<>(account, HttpStatus.OK);
+     }
+ 
++    private static boolean sameJournalCommand(Journal existing, Journal requested) {
++        return existing.getAccountId() == requested.getAccountId()
++                && existing.getJournalAmount() == requested.getJournalAmount();
++    }
++
+     private ResponseEntity<HttpStatus> authorizeAccountAccess(long accountId, Authentication authentication) {
+         Optional<Account> accountData = accountRepository.findById(accountId);
+         if (accountData.isEmpty()) {
+diff --git a/cloudbank-v5/account/src/main/java/com/example/accounts/services/WithdrawService.java b/cloudbank-v5/account/src/main/java/com/example/accounts/services/WithdrawService.java
+index d070ec82..1ba435c5 100644
+--- a/cloudbank-v5/account/src/main/java/com/example/accounts/services/WithdrawService.java
++++ b/cloudbank-v5/account/src/main/java/com/example/accounts/services/WithdrawService.java
+@@ -12,6 +12,7 @@ import com.oracle.microtx.springboot.lra.annotation.LRA;
+ import com.oracle.microtx.springboot.lra.annotation.ParticipantStatus;
+ import com.oracle.microtx.springboot.lra.annotation.Status;
+ import lombok.extern.slf4j.Slf4j;
++import org.springframework.http.HttpStatus;
+ import org.springframework.http.ResponseEntity;
+ import org.springframework.transaction.annotation.Transactional;
+ import org.springframework.web.bind.annotation.PostMapping;
+@@ -50,25 +51,13 @@ public class WithdrawService {
+         Account account = AccountTransferDAO.instance().getAccountForAccountId(accountId);
+         if (account == null) {
+             log.info("withdraw failed: account does not exist");
+-            AccountTransferDAO.instance().saveJournal(
+-                    new Journal(
+-                            WITHDRAW,
+-                            accountId,
+-                            0,
+-                            lraId,
+-                            AccountTransferDAO.getStatusString(ParticipantStatus.Active)));
+-            return ResponseEntity.ok("withdraw failed: account does not exist");
++            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
++                    .body("withdraw failed: account does not exist");
+         }
+         if (account.getAccountBalance() < withdrawAmount) {
+             log.info("withdraw failed: insufficient funds");
+-            AccountTransferDAO.instance().saveJournal(
+-                    new Journal(
+-                            WITHDRAW,
+-                            accountId,
+-                            0,
+-                            lraId,
+-                            AccountTransferDAO.getStatusString(ParticipantStatus.Active)));
+-            return ResponseEntity.ok("withdraw failed: insufficient funds");
++            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
++                    .body("withdraw failed: insufficient funds");
+         }
+         log.info("withdraw current balance:" + account.getAccountBalance() 
+             + " new balance:" + (account.getAccountBalance() - withdrawAmount));
+diff --git a/cloudbank-v5/account/src/main/resources/db/changelog/data.sql b/cloudbank-v5/account/src/main/resources/db/changelog/data.sql
+index d5946816..1f4bf698 100644
+--- a/cloudbank-v5/account/src/main/resources/db/changelog/data.sql
++++ b/cloudbank-v5/account/src/main/resources/db/changelog/data.sql
+@@ -1,20 +1,23 @@
+ -- liquibase formatted sql
+ 
+--- changeset account:1 runAlways:true
+-DELETE FROM ACCOUNT.JOURNAL;
+-TRUNCATE TABLE ACCOUNT.ACCOUNTS;
+-
+-INSERT INTO ACCOUNT.ACCOUNTS (ACCOUNT_NAME,ACCOUNT_TYPE,CUSTOMER_ID,ACCOUNT_OTHER_DETAILS,ACCOUNT_BALANCE)
+-VALUES ('Andy''s checking','CH','qwertysdwr','Account Info',-20);
+-INSERT INTO ACCOUNT.ACCOUNTS (ACCOUNT_NAME,ACCOUNT_TYPE,CUSTOMER_ID,ACCOUNT_OTHER_DETAILS,ACCOUNT_BALANCE)
+-VALUES ('Mark''s CCard','CC','bkzLp8cozi','Mastercard account',1000);
+-INSERT INTO ACCOUNT.ACCOUNTS (ACCOUNT_NAME,ACCOUNT_TYPE,CUSTOMER_ID,ACCOUNT_OTHER_DETAILS,ACCOUNT_BALANCE)
+-VALUES ('Andy''s Saving','SA','qwertysdwr','Savings account',1035);
+-INSERT INTO ACCOUNT.ACCOUNTS (ACCOUNT_NAME,ACCOUNT_TYPE,CUSTOMER_ID,ACCOUNT_OTHER_DETAILS,ACCOUNT_BALANCE)
+-VALUES ('Sanjay''s Savings','SA','bkzLp8cozi','Savings Account',1040);
+-INSERT INTO ACCOUNT.ACCOUNTS (ACCOUNT_NAME,ACCOUNT_TYPE,CUSTOMER_ID,ACCOUNT_OTHER_DETAILS,ACCOUNT_BALANCE)
+-VALUES ('Sanjays Loan','LO','bkzLp8cozi','Car Loan',-80);
++-- changeset account:ms66-seed runAlways:true
+ INSERT INTO ACCOUNT.ACCOUNTS (ACCOUNT_NAME,ACCOUNT_TYPE,CUSTOMER_ID,ACCOUNT_OTHER_DETAILS,ACCOUNT_BALANCE)
+-VALUES ('Mark''s Checking','CH','bkzLp8cozi','Checking Account',-1100);
++SELECT seed.ACCOUNT_NAME, seed.ACCOUNT_TYPE, seed.CUSTOMER_ID,
++       seed.ACCOUNT_OTHER_DETAILS, seed.ACCOUNT_BALANCE
++  FROM (
++    SELECT 'Andy''s checking' ACCOUNT_NAME, 'CH' ACCOUNT_TYPE, 'qwertysdwr' CUSTOMER_ID,
++           'Account Info' ACCOUNT_OTHER_DETAILS, -20 ACCOUNT_BALANCE FROM DUAL UNION ALL
++    SELECT 'Mark''s CCard', 'CC', 'bkzLp8cozi', 'Mastercard account', 1000 FROM DUAL UNION ALL
++    SELECT 'Andy''s Saving', 'SA', 'qwertysdwr', 'Savings account', 1035 FROM DUAL UNION ALL
++    SELECT 'Sanjay''s Savings', 'SA', 'bkzLp8cozi', 'Savings Account', 1040 FROM DUAL UNION ALL
++    SELECT 'Sanjays Loan', 'LO', 'bkzLp8cozi', 'Car Loan', -80 FROM DUAL UNION ALL
++    SELECT 'Mark''s Checking', 'CH', 'bkzLp8cozi', 'Checking Account', -1100 FROM DUAL
++  ) seed
++ WHERE NOT EXISTS (
++    SELECT 1 FROM ACCOUNT.ACCOUNTS existing
++     WHERE existing.ACCOUNT_NAME = seed.ACCOUNT_NAME
++       AND existing.CUSTOMER_ID = seed.CUSTOMER_ID
++       AND existing.ACCOUNT_OTHER_DETAILS = seed.ACCOUNT_OTHER_DETAILS
++ );
+ 
+---rollback DELETE FROM ACCOUNT.ACCOUNTS;
+\ No newline at end of file
++--rollback DELETE FROM ACCOUNT.ACCOUNTS;
+diff --git a/cloudbank-v5/account/src/main/resources/db/changelog/table.sql b/cloudbank-v5/account/src/main/resources/db/changelog/table.sql
+index 6f7eee59..29bed2ef 100644
+--- a/cloudbank-v5/account/src/main/resources/db/changelog/table.sql
++++ b/cloudbank-v5/account/src/main/resources/db/changelog/table.sql
+@@ -34,7 +34,25 @@ CREATE TABLE ACCOUNT.JOURNAL (
+ ALTER TABLE ACCOUNT.JOURNAL ADD CONSTRAINT JOURNAL_PK PRIMARY KEY (JOURNAL_ID) USING INDEX LOGGING;
+ ALTER TABLE ACCOUNT.JOURNAL ADD CONSTRAINT JOURNAL_ACCOUNT_FK FOREIGN KEY ( ACCOUNT_ID )
+     REFERENCES ACCOUNT.ACCOUNTS ( ACCOUNT_ID );
++ALTER TABLE ACCOUNT.JOURNAL ADD CONSTRAINT JOURNAL_COMMAND_KIND_UQ UNIQUE (LRA_ID, JOURNAL_TYPE);
+ COMMENT ON TABLE ACCOUNT.JOURNAL is 'CLOUDBANK JOURNAL TABLE';
+ 
++CREATE TABLE ACCOUNT.MS66_CHECK_MESSAGES (
++    MESSAGE_ID VARCHAR2(80) NOT NULL,
++    MESSAGE_TYPE VARCHAR2(16) NOT NULL,
++    STATE VARCHAR2(16) DEFAULT 'READY' NOT NULL,
++    ATTEMPTS NUMBER DEFAULT 0 NOT NULL,
++    LAST_ERROR_CODE VARCHAR2(80),
++    CREATED_AT TIMESTAMP DEFAULT SYSTIMESTAMP NOT NULL,
++    UPDATED_AT TIMESTAMP DEFAULT SYSTIMESTAMP NOT NULL,
++    CONSTRAINT MS66_CHECK_MESSAGES_PK PRIMARY KEY (MESSAGE_ID),
++    CONSTRAINT MS66_CHECK_MESSAGES_TYPE_CK CHECK (MESSAGE_TYPE IN ('DEPOSIT', 'CLEARANCE')),
++    CONSTRAINT MS66_CHECK_MESSAGES_STATE_CK CHECK (STATE IN ('READY', 'PROCESSING', 'PROCESSED')),
++    CONSTRAINT MS66_CHECK_MESSAGES_ATTEMPTS_CK CHECK (ATTEMPTS >= 0)
++) LOGGING;
++COMMENT ON TABLE ACCOUNT.MS66_CHECK_MESSAGES IS
++    'MS66 governed AQ message identity and redelivery observation ledger';
++
+ --rollback DROP TABLE ACCOUNT.ACCOUNTS;
+---rollback DROP TABLE ACCOUNT.JOURNAL;
+\ No newline at end of file
++--rollback DROP TABLE ACCOUNT.JOURNAL;
++--rollback DROP TABLE ACCOUNT.MS66_CHECK_MESSAGES;
+diff --git a/cloudbank-v5/account/src/main/resources/db/changelog/txeventq.sql b/cloudbank-v5/account/src/main/resources/db/changelog/txeventq.sql
+index 5359c355..88550913 100644
+--- a/cloudbank-v5/account/src/main/resources/db/changelog/txeventq.sql
++++ b/cloudbank-v5/account/src/main/resources/db/changelog/txeventq.sql
+@@ -1,19 +1,9 @@
+ -- liquibase formatted sql
+ 
+---changeset account:1
+-grant execute on dbms_aq to account;
+-grant execute on dbms_aqadm to account;
+-grant execute on dbms_aqin to account;
+-grant execute on dbms_aqjms TO account;
+-grant execute on dbms_aqjms_internal to account;
++-- MS66 provisions the ACCOUNT user and AQ package grants as a bounded SYS bootstrap
++-- before this application-owned Liquibase changelog runs.
+ 
+---rollback revoke dbms_aq from ACCOUNT;
+---rollback revoke dbms_aqadm from ACCOUNT;
+---rollback revoke dbms_aqin from ACCOUNT;
+---rollback revoke dbms_aqjms from ACCOUNT;
+---rollback revoke dbms_aqjms_internal from ACCOUNT;
+-
+---changeset account:2 endDelimiter:/
++--changeset account:ms66-queues endDelimiter:/
+ begin
+     -- deposits
+     begin
+@@ -48,4 +38,4 @@ end;
+ /
+ 
+ --rollback exec DBMS_AQADM.DROP_QUEUE_TABLE(queue_table => 'ACCOUNT.clearances_qt', force => TRUE);
+---rollback exec DBMS_AQADM.DROP_QUEUE_TABLE(queue_table => 'ACCOUNT.deposits_qt', force => TRUE);
+\ No newline at end of file
++--rollback exec DBMS_AQADM.DROP_QUEUE_TABLE(queue_table => 'ACCOUNT.deposits_qt', force => TRUE);
+diff --git a/cloudbank-v5/checks/src/main/java/com/example/checks/clients/AccountClient.java b/cloudbank-v5/checks/src/main/java/com/example/checks/clients/AccountClient.java
+index 93d22336..2b9c3b06 100644
+--- a/cloudbank-v5/checks/src/main/java/com/example/checks/clients/AccountClient.java
++++ b/cloudbank-v5/checks/src/main/java/com/example/checks/clients/AccountClient.java
+@@ -7,14 +7,15 @@ import org.springframework.cloud.openfeign.FeignClient;
+ import org.springframework.web.bind.annotation.PathVariable;
+ import org.springframework.web.bind.annotation.PostMapping;
+ import org.springframework.web.bind.annotation.RequestBody;
++import org.springframework.web.bind.annotation.RequestHeader;
+ 
+-@FeignClient("account")
++@FeignClient(name = "account", url = "${ACCOUNT_BASE_URL:http://account:8080}")
+ public interface AccountClient {
+ 
+     @PostMapping("/api/v1/account/journal")
+-    void journal(@RequestBody Journal journal);
++    void journal(@RequestHeader("Idempotency-Key") String messageId, @RequestBody Journal journal);
+ 
+     @PostMapping("/api/v1/account/journal/{journalId}/clear")
+-    void clear(@PathVariable long journalId);
++    void clear(@RequestHeader("Idempotency-Key") String messageId, @PathVariable long journalId);
+ 
+-}
+\ No newline at end of file
++}
+diff --git a/cloudbank-v5/checks/src/main/java/com/example/checks/controller/CheckReceiver.java b/cloudbank-v5/checks/src/main/java/com/example/checks/controller/CheckReceiver.java
+index aac72108..5feea67b 100644
+--- a/cloudbank-v5/checks/src/main/java/com/example/checks/controller/CheckReceiver.java
++++ b/cloudbank-v5/checks/src/main/java/com/example/checks/controller/CheckReceiver.java
+@@ -7,21 +7,36 @@ import com.example.checks.clients.Journal;
+ import com.example.checks.service.AccountService;
+ import com.example.testrunner.model.CheckDeposit;
+ import org.springframework.jms.annotation.JmsListener;
++import org.springframework.jms.support.JmsHeaders;
++import org.springframework.messaging.handler.annotation.Header;
+ import org.springframework.stereotype.Component;
+ 
+ @Component
+ public class CheckReceiver {
+ 
+     private AccountService accountService;
++    private MessageLedger messageLedger;
+ 
+-    public CheckReceiver(AccountService accountService) {
++    public CheckReceiver(AccountService accountService, MessageLedger messageLedger) {
+         this.accountService = accountService;
++        this.messageLedger = messageLedger;
+     }
+ 
+     @JmsListener(destination = "deposits", containerFactory = "factory")
+-    public void receiveMessage(CheckDeposit deposit) {
+-        System.out.println("Received deposit <" + deposit + ">");
+-        accountService.journal(new Journal("PENDING", deposit.getAccountId(), deposit.getAmount()));
++    public void receiveMessage(CheckDeposit deposit,
++            @Header("MS66_MESSAGE_ID") String messageId,
++            @Header(name = JmsHeaders.REDELIVERED, required = false) Boolean redelivered) {
++        if (!messageLedger.claim(messageId, "DEPOSIT", Boolean.TRUE.equals(redelivered))) {
++            return;
++        }
++        try {
++            accountService.journal(messageId, new Journal(0, "PENDING", deposit.getAccountId(),
++                    messageId, "COMPLETED", deposit.getAmount()));
++            messageLedger.complete(messageId);
++        } catch (RuntimeException failure) {
++            messageLedger.fail(messageId, failure.getClass().getSimpleName());
++            throw failure;
++        }
+     }
+ 
+-}
+\ No newline at end of file
++}
+diff --git a/cloudbank-v5/checks/src/main/java/com/example/checks/controller/ClearanceReceiver.java b/cloudbank-v5/checks/src/main/java/com/example/checks/controller/ClearanceReceiver.java
+index bb33d448..1d98fb96 100644
+--- a/cloudbank-v5/checks/src/main/java/com/example/checks/controller/ClearanceReceiver.java
++++ b/cloudbank-v5/checks/src/main/java/com/example/checks/controller/ClearanceReceiver.java
+@@ -6,21 +6,35 @@ package com.example.checks.controller;
+ import com.example.checks.service.AccountService;
+ import com.example.testrunner.model.Clearance;
+ import org.springframework.jms.annotation.JmsListener;
++import org.springframework.jms.support.JmsHeaders;
++import org.springframework.messaging.handler.annotation.Header;
+ import org.springframework.stereotype.Component;
+ 
+ @Component
+ public class ClearanceReceiver {
+ 
+     private AccountService accountService;
++    private MessageLedger messageLedger;
+ 
+-    public ClearanceReceiver(AccountService accountService) {
++    public ClearanceReceiver(AccountService accountService, MessageLedger messageLedger) {
+         this.accountService = accountService;
++        this.messageLedger = messageLedger;
+     }
+ 
+     @JmsListener(destination = "clearances", containerFactory = "factory")
+-    public void receiveMessage(Clearance clearance) {
+-        System.out.println("Received clearance <" + clearance + ">");
+-        accountService.clear(clearance);
++    public void receiveMessage(Clearance clearance,
++            @Header("MS66_MESSAGE_ID") String messageId,
++            @Header(name = JmsHeaders.REDELIVERED, required = false) Boolean redelivered) {
++        if (!messageLedger.claim(messageId, "CLEARANCE", Boolean.TRUE.equals(redelivered))) {
++            return;
++        }
++        try {
++            accountService.clear(messageId, clearance);
++            messageLedger.complete(messageId);
++        } catch (RuntimeException failure) {
++            messageLedger.fail(messageId, failure.getClass().getSimpleName());
++            throw failure;
++        }
+     }
+ 
+-}
+\ No newline at end of file
++}
+diff --git a/cloudbank-v5/checks/src/main/java/com/example/checks/controller/MessageLedger.java b/cloudbank-v5/checks/src/main/java/com/example/checks/controller/MessageLedger.java
+new file mode 100644
+index 00000000..5b65c85d
+--- /dev/null
++++ b/cloudbank-v5/checks/src/main/java/com/example/checks/controller/MessageLedger.java
+@@ -0,0 +1,60 @@
++// Copyright (c) 2026, Oracle and/or its affiliates.
++// Licensed under the Universal Permissive License v 1.0.
++
++package com.example.checks.controller;
++
++import org.springframework.jdbc.core.JdbcTemplate;
++import org.springframework.stereotype.Repository;
++import org.springframework.transaction.annotation.Propagation;
++import org.springframework.transaction.annotation.Transactional;
++
++@Repository
++public class MessageLedger {
++
++    private final JdbcTemplate jdbc;
++
++    public MessageLedger(JdbcTemplate jdbc) {
++        this.jdbc = jdbc;
++    }
++
++    /** Records one AQ delivery attempt; client-created duplicates are acknowledged without an effect. */
++    @Transactional(propagation = Propagation.REQUIRES_NEW)
++    public boolean claim(String messageId, String messageType, boolean redelivered) {
++        String eligibleState = redelivered
++                ? "STATE IN ('READY', 'PROCESSING')"
++                : "STATE = 'READY'";
++        int updated = jdbc.update("UPDATE MS66_CHECK_MESSAGES "
++                + "SET STATE = 'PROCESSING', ATTEMPTS = ATTEMPTS + 1, "
++                + "LAST_ERROR_CODE = NULL, UPDATED_AT = SYSTIMESTAMP "
++                + "WHERE MESSAGE_ID = ? AND MESSAGE_TYPE = ? AND " + eligibleState,
++                messageId, messageType);
++        return updated == 1;
++    }
++
++    /** Marks the one observed business effect complete. */
++    @Transactional(propagation = Propagation.REQUIRES_NEW)
++    public void complete(String messageId) {
++        int updated = jdbc.update("UPDATE MS66_CHECK_MESSAGES "
++                + "SET STATE = 'PROCESSED', LAST_ERROR_CODE = NULL, UPDATED_AT = SYSTIMESTAMP "
++                + "WHERE MESSAGE_ID = ? AND STATE = 'PROCESSING'", messageId);
++        if (updated != 1) {
++            throw new IllegalStateException("message completion transition was rejected");
++        }
++    }
++
++    /** Keeps PROCESSING durable so an AQ redelivery is observable after a crash. */
++    @Transactional(propagation = Propagation.REQUIRES_NEW)
++    public void fail(String messageId, String errorCode) {
++        jdbc.update("UPDATE MS66_CHECK_MESSAGES "
++                + "SET LAST_ERROR_CODE = ?, UPDATED_AT = SYSTIMESTAMP "
++                + "WHERE MESSAGE_ID = ? AND STATE = 'PROCESSING'",
++                bounded(errorCode), messageId);
++    }
++
++    private static String bounded(String value) {
++        if (value == null || value.isBlank()) {
++            return "DeliveryFailed";
++        }
++        return value.substring(0, Math.min(value.length(), 80));
++    }
++}
+diff --git a/cloudbank-v5/checks/src/main/java/com/example/checks/service/AccountService.java b/cloudbank-v5/checks/src/main/java/com/example/checks/service/AccountService.java
+index 9209401b..e5d32ac8 100644
+--- a/cloudbank-v5/checks/src/main/java/com/example/checks/service/AccountService.java
++++ b/cloudbank-v5/checks/src/main/java/com/example/checks/service/AccountService.java
+@@ -15,12 +15,12 @@ public class AccountService {
+ 
+     private final AccountClient accountClient;
+ 
+-    public void journal(Journal journal) {
+-        accountClient.journal(journal);
++    public void journal(String messageId, Journal journal) {
++        accountClient.journal(messageId, journal);
+     }
+ 
+-    public void clear(Clearance clearance) {
+-        accountClient.clear(clearance.getJournalId());
++    public void clear(String messageId, Clearance clearance) {
++        accountClient.clear(messageId, clearance.getJournalId());
+     }
+ 
+-}
+\ No newline at end of file
++}
+diff --git a/cloudbank-v5/customer/src/main/resources/db/changelog/data.sql b/cloudbank-v5/customer/src/main/resources/db/changelog/data.sql
+index 5f9e3d91..435ad1e6 100644
+--- a/cloudbank-v5/customer/src/main/resources/db/changelog/data.sql
++++ b/cloudbank-v5/customer/src/main/resources/db/changelog/data.sql
+@@ -1,14 +1,21 @@
+ -- liquibase formatted sql
+ 
+--- changeset customer:1 runAlways:true
+-TRUNCATE TABLE CUSTOMER.CUSTOMERS;
+-
+-INSERT INTO CUSTOMER.CUSTOMERS (CUSTOMER_ID,CUSTOMER_NAME,CUSTOMER_EMAIL,CUSTOMER_OTHER_DETAILS,PASSWORD,ROLE) 
+-VALUES ('qwertysdwr','Andy','andy@andy.com','Somekind of Info','SuperSecret','USER_ROLE');
+-INSERT INTO CUSTOMER.CUSTOMERS (CUSTOMER_ID,CUSTOMER_NAME,CUSTOMER_EMAIL,CUSTOMER_OTHER_DETAILS,PASSWORD,ROLE) 
+-VALUES ('aerg45sffd','Sanjay','sanjay@sanjay.com','Information','Welcome','USER_ROLE');
+-INSERT INTO CUSTOMER.CUSTOMERS (CUSTOMER_ID,CUSTOMER_NAME,CUSTOMER_EMAIL,CUSTOMER_OTHER_DETAILS,PASSWORD,ROLE) 
+-VALUES ('bkzLp8cozi','Mark','mark@mark.com','Important Info','Secret','USER_ROLE');
++-- changeset customer:ms66-seed runAlways:true
++MERGE INTO CUSTOMER.CUSTOMERS target
++USING (
++    SELECT 'qwertysdwr' CUSTOMER_ID, 'Andy' CUSTOMER_NAME, 'andy@andy.com' CUSTOMER_EMAIL,
++           'Somekind of Info' CUSTOMER_OTHER_DETAILS, 'SuperSecret' PASSWORD,
++           'USER_ROLE' ROLE FROM DUAL UNION ALL
++    SELECT 'aerg45sffd', 'Sanjay', 'sanjay@sanjay.com', 'Information', 'Welcome',
++           'USER_ROLE' FROM DUAL UNION ALL
++    SELECT 'bkzLp8cozi', 'Mark', 'mark@mark.com', 'Important Info', 'Secret',
++           'USER_ROLE' FROM DUAL
++) seed ON (target.CUSTOMER_ID = seed.CUSTOMER_ID)
++WHEN NOT MATCHED THEN INSERT
++    (CUSTOMER_ID,CUSTOMER_NAME,CUSTOMER_EMAIL,CUSTOMER_OTHER_DETAILS,PASSWORD,ROLE)
++VALUES
++    (seed.CUSTOMER_ID,seed.CUSTOMER_NAME,seed.CUSTOMER_EMAIL,
++     seed.CUSTOMER_OTHER_DETAILS,seed.PASSWORD,seed.ROLE);
+ COMMIT;
+ 
+---rollback DELETE FROM CUSTOMER.CUSTOMERS;
+\ No newline at end of file
++--rollback DELETE FROM CUSTOMER.CUSTOMERS;
+diff --git a/cloudbank-v5/testrunner/src/main/java/com/example/testrunner/controller/TestRunnerController.java b/cloudbank-v5/testrunner/src/main/java/com/example/testrunner/controller/TestRunnerController.java
+index 483b1da4..dd79489e 100644
+--- a/cloudbank-v5/testrunner/src/main/java/com/example/testrunner/controller/TestRunnerController.java
++++ b/cloudbank-v5/testrunner/src/main/java/com/example/testrunner/controller/TestRunnerController.java
+@@ -5,12 +5,14 @@ package com.example.testrunner.controller;
+ 
+ import com.example.testrunner.model.CheckDeposit;
+ import com.example.testrunner.model.Clearance;
+-import org.springframework.beans.factory.annotation.Autowired;
++import org.springframework.dao.DuplicateKeyException;
+ import org.springframework.http.HttpStatus;
+ import org.springframework.http.ResponseEntity;
++import org.springframework.jdbc.core.JdbcTemplate;
+ import org.springframework.jms.core.JmsTemplate;
+ import org.springframework.web.bind.annotation.PostMapping;
+ import org.springframework.web.bind.annotation.RequestBody;
++import org.springframework.web.bind.annotation.RequestHeader;
+ import org.springframework.web.bind.annotation.RequestMapping;
+ import org.springframework.web.bind.annotation.RestController;
+ 
+@@ -18,18 +20,61 @@ import org.springframework.web.bind.annotation.RestController;
+ @RequestMapping("/api/v1/testrunner")
+ public class TestRunnerController {
+ 
+-    @Autowired
+-    private JmsTemplate jmsTemplate;
++    private static final String MESSAGE_ID_PROPERTY = "MS66_MESSAGE_ID";
++    private final JmsTemplate jmsTemplate;
++    private final JdbcTemplate jdbc;
++
++    public TestRunnerController(JmsTemplate jmsTemplate, JdbcTemplate jdbc) {
++        this.jmsTemplate = jmsTemplate;
++        this.jdbc = jdbc;
++    }
+ 
+     @PostMapping("/deposit")
+-    public ResponseEntity<CheckDeposit> depositCheck(@RequestBody CheckDeposit deposit) {
+-        jmsTemplate.convertAndSend("deposits", deposit);
+-        return new ResponseEntity<CheckDeposit>(deposit, HttpStatus.CREATED);
++    public ResponseEntity<CheckDeposit> depositCheck(
++            @RequestHeader("Idempotency-Key") String messageId,
++            @RequestBody CheckDeposit deposit) {
++        boolean created = enqueue(messageId, "DEPOSIT", "deposits", deposit);
++        return new ResponseEntity<>(deposit, created ? HttpStatus.CREATED : HttpStatus.OK);
+     }
+ 
+     @PostMapping("/clear")
+-    public ResponseEntity<Clearance> clearCheck(@RequestBody Clearance clearance) {
+-        jmsTemplate.convertAndSend("clearances", clearance);
+-        return new ResponseEntity<Clearance>(clearance, HttpStatus.CREATED);
++    public ResponseEntity<Clearance> clearCheck(
++            @RequestHeader("Idempotency-Key") String messageId,
++            @RequestBody Clearance clearance) {
++        boolean created = enqueue(messageId, "CLEARANCE", "clearances", clearance);
++        return new ResponseEntity<>(clearance, created ? HttpStatus.CREATED : HttpStatus.OK);
++    }
++
++    private boolean enqueue(String messageId, String messageType, String destination, Object payload) {
++        if (messageId == null || !messageId.matches("[A-Za-z0-9._:-]{1,80}")) {
++            throw new IllegalArgumentException("invalid idempotency key");
++        }
++        boolean created = true;
++        try {
++            jdbc.update("INSERT INTO MS66_CHECK_MESSAGES "
++                    + "(MESSAGE_ID, MESSAGE_TYPE, STATE, ATTEMPTS) VALUES (?, ?, 'READY', 0)",
++                    messageId, messageType);
++        } catch (DuplicateKeyException replay) {
++            Integer retryable = jdbc.queryForObject("SELECT COUNT(*) FROM MS66_CHECK_MESSAGES "
++                    + "WHERE MESSAGE_ID = ? AND MESSAGE_TYPE = ? AND STATE = 'READY' AND ATTEMPTS = 0",
++                    Integer.class, messageId, messageType);
++            if (retryable == null || retryable != 1) {
++                return false;
++            }
++            created = false;
++        }
++        try {
++            jmsTemplate.convertAndSend(destination, payload, message -> {
++                message.setStringProperty(MESSAGE_ID_PROPERTY, messageId);
++                return message;
++            });
++            return created;
++        } catch (RuntimeException failure) {
++            if (created) {
++                jdbc.update("DELETE FROM MS66_CHECK_MESSAGES WHERE MESSAGE_ID = ? AND STATE = 'READY'",
++                        messageId);
++            }
++            throw failure;
++        }
+     }
+-}
+\ No newline at end of file
++}
+diff --git a/cloudbank-v5/transfer/src/main/java/com/example/transfer/TransferService.java b/cloudbank-v5/transfer/src/main/java/com/example/transfer/TransferService.java
+index 4bbdb991..5066c5c3 100644
+--- a/cloudbank-v5/transfer/src/main/java/com/example/transfer/TransferService.java
++++ b/cloudbank-v5/transfer/src/main/java/com/example/transfer/TransferService.java
+@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
+ import org.springframework.web.bind.annotation.RequestHeader;
+ import org.springframework.web.bind.annotation.RequestParam;
+ import org.springframework.web.bind.annotation.RestController;
++import org.springframework.web.client.HttpStatusCodeException;
+ import org.springframework.web.client.RestClientException;
+ import org.springframework.web.client.RestTemplate;
+ import org.springframework.web.util.UriComponentsBuilder;
+@@ -89,7 +90,20 @@ public class TransferService {
+         String returnString = "";
+ 
+         // perform the withdrawal
+-        returnString += withdraw(lraId, fromAccount, amount);
++        try {
++            returnString += withdraw(lraId, fromAccount, amount);
++        } catch (HttpStatusCodeException businessRejection) {
++            if (businessRejection.getStatusCode().value() != HttpStatus.UNPROCESSABLE_ENTITY.value()) {
++                throw businessRejection;
++            }
++            HttpHeaders headers = new HttpHeaders();
++            headers.setContentType(MediaType.TEXT_PLAIN);
++            headers.set(TRANSFER_ID, lraId);
++            HttpEntity<String> request = new HttpEntity<>("", headers);
++            restTemplate.postForEntity(transferCancelUri.toString(), request, String.class);
++            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
++                    .body("transfer rejected: withdraw precondition failed");
++        }
+         log.info(returnString);
+         if (returnString.contains("succeeded")) {
+             // if it worked, perform the deposit

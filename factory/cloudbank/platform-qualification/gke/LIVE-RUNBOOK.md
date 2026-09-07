@@ -21,7 +21,8 @@ missing chart versions, and missing mutation acknowledgements.
 
 ## 2. Build and deploy
 
-- Produce signed MS #65 and MS #66 execution receipts with the same operator-held evidence key.
+- Retain the signed MS #61 and MS #64 prerequisite receipts; MS #65 and MS #66 live execution
+  follows deployment and uses the same evidence key.
 - Materialize the exact MS #64 eight-service target into a fresh directory.
 - Run `render-site-inputs.sh`, then `build-push-images.sh`, then `deploy.sh`.
 - Sign every digest with the configured Cloud KMS key and attach a content-addressed provenance
@@ -234,6 +235,121 @@ The canary deliberately uses the same approved locked digest. This qualifies the
 bounded deployment and traffic-control rehearsal, not a software-delta rollout.
 The signed receipt can close MS65 only. It cannot establish the native Oracle lane,
 MS66 equivalence, the remaining MS67 operational scenarios, or production readiness.
+
+### Durable MS66 governed dual-lane execution
+
+Run MS66 only after the deployed PostgreSQL target is healthy and the signed MS61 and MS64
+prerequisites are available. The Oracle lane does not edit the pinned checkout. Cloud Build checks
+the exact upstream commit and both Git tree identities, copies it to a fresh workspace, applies the
+reviewed hardening patch by its SHA-256, compiles eight source images, and resolves every source,
+Oracle Free, and MicroTx image to an immutable digest before creating a namespace. The isolated
+namespace is labelled with the build run ID and is removed before the PostgreSQL lane begins.
+
+The launcher also requires the immutable Java 21 base image already approved for the MS67 image
+build. The default native runtime candidates use explicit tags; override either candidate only with
+another explicitly reviewed, non-`latest` tag that the Cloud Build worker can read. Submit from a
+clean `main` checkout matching `origin/main`:
+
+```bash
+set +e
+set +u
+set +o pipefail
+
+cd "$HOME/lightyear-carddemo-modernization"
+source "$HOME/ms67-qualification.env"
+
+export MS67_MS61_RECEIPT="$HOME/ms67-evidence/prerequisite-chain-$PREREQUISITE_BUILD_ID/ms61-equivalence.receipt.json"
+export MS67_MS64_RECEIPT="$HOME/ms67-evidence/prerequisite-chain-$PREREQUISITE_BUILD_ID/ms64-edge-ai.receipt.json"
+export MS67_IMAGE_LOCK="$HOME/ms67-evidence/ms67-image-build/image-lock.json"
+export MS67_POSTGRESQL_PROBE_IMAGE="REGISTRY/PROJECT/REPOSITORY/journey-probe@sha256:REPLACE"
+export JAVA_BASE_IMAGE="REGISTRY/PROJECT/REPOSITORY/java21-patched@sha256:REPLACE"
+export LIGHTYEAR_NON_PRODUCTION_ACK=I-AUTHORIZE-MS67-NON-PRODUCTION-MUTATIONS
+
+bash factory/cloudbank/platform-qualification/gke/submit-ms66-dual-lane.sh \
+  "$MS67_MS61_RECEIPT" \
+  "$MS67_MS64_RECEIPT" \
+  "$MS67_IMAGE_LOCK" \
+  "$MS67_POSTGRESQL_PROBE_IMAGE"
+```
+
+The submitter prints and saves `MS66_DUAL_LANE_BUILD_ID`; it refuses a second active tagged build.
+The job is asynchronous, so a Cloud Shell disconnect does not terminate it. Reconnect and monitor
+without relying on shell-session variables:
+
+```bash
+set +e
+set +u
+set +o pipefail
+
+MS66_DUAL_LANE_BUILD_ID="$(sed -n '1p' "$HOME/ms66-dual-lane-build-id" 2>/dev/null)"
+echo "MS66_DUAL_LANE_BUILD_ID=$MS66_DUAL_LANE_BUILD_ID"
+
+gcloud builds describe "$MS66_DUAL_LANE_BUILD_ID" \
+  --region us-west1 --project lightyear-ms67-nonproduction \
+  --format='yaml(id,status,createTime,startTime,finishTime,steps.id,steps.status,failureInfo,logUrl)'
+
+gcloud beta builds log --stream "$MS66_DUAL_LANE_BUILD_ID" \
+  --region us-west1 --project lightyear-ms67-nonproduction
+```
+
+Only `status: SUCCESS` is eligible. Inspect and independently verify the signed MS66 receipt; build
+success alone is not the qualification claim:
+
+```bash
+set +e
+set +u
+set +o pipefail
+
+MS66_EVIDENCE_URI="gs://${GCP_PROJECT_ID}-ms67-evidence/ms66-dual-lane/ms66-${MS66_DUAL_LANE_BUILD_ID}"
+MS66_RECEIPT="$HOME/ms67-evidence/ms66-receipt-${MS66_DUAL_LANE_BUILD_ID}.json"
+gcloud storage cp "$MS66_EVIDENCE_URI/cloudbank-whole-application-equivalence.receipt.json" \
+  "$MS66_RECEIPT" --project "$GCP_PROJECT_ID"
+
+export LIGHTYEAR_CLOUDBANK_BASELINE_EVIDENCE_KEY="$(gcloud secrets versions access latest \
+  --secret cloudbank-ms67-evidence-key --project "$GCP_PROJECT_ID")"
+./cloudbank-whole-application-equivalence.sh verify-receipt "$MS66_RECEIPT"
+unset LIGHTYEAR_CLOUDBANK_BASELINE_EVIDENCE_KEY
+
+jq '{receipt_type,status,scenario_count,all_eight_services_observed_in_both_lanes,
+     bounded_whole_application_equivalent,whole_application_equivalent,
+     exact_internal_implementation_equivalent,oracle_source_image_lock_sha256,
+     postgresql_image_lock_sha256,oracle_hardening_patch_sha256,
+     migration_complete,production_ready,signature}' "$MS66_RECEIPT"
+```
+
+The workflow uploads a signed isolated `recovery-state.json` before every namespace or model-policy
+mutation and a signed `postgresql-recovery-state.json` before every target scale or delivery-route
+mutation. Normal error handling restores both lanes. If a build is forcibly cancelled or loses its
+worker, download whichever state still records active work and submit the durable recovery job:
+
+```bash
+set +e
+set +u
+set +o pipefail
+
+MS66_EVIDENCE_URI="gs://${GCP_PROJECT_ID}-ms67-evidence/ms66-dual-lane/ms66-${MS66_DUAL_LANE_BUILD_ID}"
+MS66_RECOVERY_STATE="$HOME/ms67-evidence/ms66-recovery-state-${MS66_DUAL_LANE_BUILD_ID}.json"
+
+gcloud storage cp "$MS66_EVIDENCE_URI/recovery-state.json" "$MS66_RECOVERY_STATE" \
+  --project "$GCP_PROJECT_ID"
+jq '{state_type,run_id,phase,cleanup_required,namespace,namespace_uid,
+     model_namespace,model_policy_name,model_policy_uid}' "$MS66_RECOVERY_STATE"
+
+export LIGHTYEAR_NON_PRODUCTION_ACK=I-AUTHORIZE-MS67-NON-PRODUCTION-MUTATIONS
+bash factory/cloudbank/platform-qualification/gke/submit-ms66-recovery.sh \
+  "$MS66_RECOVERY_STATE"
+```
+
+If that isolated state says `cleanup_required: false`, it is already restored. If the failure
+occurred in the PostgreSQL lane, download `postgresql-recovery-state.json` instead and pass it to
+the same submitter. The recovery job verifies the state signature and refuses to delete or alter a
+resource whose recorded UID, immutable image, run ID, or ownership labels no longer match. Resolve
+identity drift manually; never bypass that refusal with an unscoped namespace deletion.
+
+A passing MS66 receipt establishes only the declared bounded whole-application equivalence between
+the governed Oracle source materialization and the exact MS64 PostgreSQL target. It explicitly keeps
+unchanged-upstream identity, migration completion, production deployment, and production readiness
+false.
 
 ### Isolated database recovery executor
 

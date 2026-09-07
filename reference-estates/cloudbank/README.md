@@ -266,19 +266,24 @@ see the live runbook. Do not assemble a passing 24-row observation manually.
 ## Run the whole-application dual-lane equivalence gate
 
 MS #66 chains the signed MS #61 Oracle/PostgreSQL core receipt to the signed MS #64 complete target
-and requires two isolated, operator-observed native lanes.
+and requires two isolated, operator-observed native lanes. The live executor validates and preserves
+the exact pinned source checkout, then applies one reviewed content-addressed compatibility patch to
+a fresh Oracle-lane workspace. The resulting identity is
+`pinned-source-plus-governed-hardening`, never the exact unchanged upstream application.
 
 ```bash
 ./cloudbank-whole-application-equivalence.sh verify
 ./cloudbank-whole-application-equivalence.sh verify-source /path/to/oracle-microservices-backend
 ```
 
-The Oracle lane starts the eight pinned source deployables with Oracle AQ and MicroTx LRA. The
-PostgreSQL lane starts the eight generated target deployables with the durable PostgreSQL queue and
-atomic transaction replacement. Each lane must run the same 18 normalized business, failure,
-concurrency, restart, and recovery scenarios; every deployable must be restarted and finish ready.
-A passing receipt proves bounded business equivalence for those scenarios, not identical internals,
-real credit scoring, model-answer quality, production execution, or production readiness.
+The Oracle lane starts all eight governed source deployables with native Oracle Free, Oracle AQ/JMS,
+and MicroTx LRA. The PostgreSQL lane starts the eight generated target deployables with the durable
+PostgreSQL queue and atomic transaction replacement. Each lane must run the same 18 normalized
+business, failure, concurrency, restart, and recovery scenarios; every deployable must be restarted
+and finish ready. The asynchronous GKE workflow and its identity-bound recovery workflow are in the
+live runbook. A passing receipt proves bounded business equivalence for those scenarios, not
+unchanged upstream identity, identical internals, real credit scoring, model-answer quality,
+production execution, or production readiness.
 
 ## Run the real non-production platform qualification gate
 
@@ -319,7 +324,7 @@ Customer, Account, and Transfer scope. MS #62 adds the production OAuth applicat
 Authorization, Account, and Transfer. MS #63 adds the bounded PostgreSQL Checks messaging target.
 MS #64 adds the Credit Score and Chatbot control boundaries and assembles the eight-service target.
 MS #65 adds the immutable deployment renderer and signed non-production cutover/rollback rehearsal.
-MS #66 adds the signed eight-service native Oracle/PostgreSQL comparison and closes only the bounded
-whole-application business-equivalence claim. MS #67 adds the GKE implementation and live
+MS #66 adds the signed eight-service governed-source Oracle/PostgreSQL comparison and closes only
+the bounded whole-application business-equivalence claim. MS #67 adds the GKE implementation and live
 non-production platform gate without fabricating a run. Customer IdP, representative customer data
 and workload, customer approval, production deployment, and production readiness remain unclaimed.

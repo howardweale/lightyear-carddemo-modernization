@@ -200,7 +200,9 @@ database drill, not an MS65/MS66/MS67 completion receipt.
   nonconfigured databases and complete schema-object equivalence are outside scope.
 - The managed backup's ID and metadata are bound to the evidence. A metadata hash
   is not a checksum of backup bytes. `managed_backup_bytes_sha256` is explicitly
-  null; this runner does not populate the admission contracts' `backup_sha256`.
+  null. The subsequent bounded MS65 GKE rehearsal may use `metadata_sha256` as the
+  content address of the provider backup identity and timestamps in its historical
+  `backup_sha256` field; it does not relabel that value as a backup-byte checksum.
 - Signed MS65/MS66 admission, continuous-load/correlated telemetry, alert recovery,
   secret rotation, failure-domain recovery and cutover/rollback remain separate
   gates. No acceptance contract is relaxed by this runner.

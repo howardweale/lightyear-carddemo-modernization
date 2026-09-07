@@ -259,6 +259,10 @@ recovery, and a bounded SLO window. A passing receipt proves only a synthetic, n
 rehearsal; it does not authorize customer production or establish migration completion or production
 readiness.
 
+The real GKE observation must be produced by the durable
+`factory/cloudbank/platform-qualification/gke/submit-ms65-rehearsal.sh` workflow;
+see the live runbook. Do not assemble a passing 24-row observation manually.
+
 ## Run the whole-application dual-lane equivalence gate
 
 MS #66 chains the signed MS #61 Oracle/PostgreSQL core receipt to the signed MS #64 complete target

@@ -46,8 +46,9 @@ upstream_commit="$(git -C "$ms67_project_root" rev-parse '@{upstream}' 2>/dev/nu
 active_builds="$(gcloud builds list \
   --project "$GCP_PROJECT_ID" \
   --region "$GCP_REGION" \
-  --filter='tags=ms67-shared-journeys AND (status=PENDING OR status=QUEUED OR status=WORKING OR status=CANCELING)' \
-  --format=json)"
+  --ongoing \
+  --format=json | \
+  jq '[.[] | select(((.tags // []) | index("ms67-shared-journeys")) != null)]')"
 if [[ "$(jq 'length' <<<"$active_builds")" -ne 0 ]]; then
   jq -r '.[] | "ACTIVE_SHARED_JOURNEY_BUILD=\(.id) status=\(.status)"' <<<"$active_builds"
   exit 0

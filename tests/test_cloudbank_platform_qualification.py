@@ -494,6 +494,9 @@ class CloudBankPlatformQualificationTests(unittest.TestCase):
         self.assertIn("roles/storage.objectAdmin", submit)
         self.assertIn("--no-source", submit)
         self.assertIn("--async", submit)
+        self.assertIn("--ongoing", submit)
+        self.assertIn('index("ms67-shared-journeys")', submit)
+        self.assertNotIn("status=CANCELING", submit)
         self.assertIn("ACTIVE_SHARED_JOURNEY_BUILD", submit)
         self.assertNotIn("operator-held-value", cloudbuild + submit)
 

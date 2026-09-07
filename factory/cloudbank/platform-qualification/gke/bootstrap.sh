@@ -13,7 +13,8 @@ ms67_require_non_production_project
 gcloud config set project "$GCP_PROJECT_ID" >/dev/null
 gcloud services enable \
   artifactregistry.googleapis.com cloudbuild.googleapis.com cloudkms.googleapis.com \
-  compute.googleapis.com container.googleapis.com dns.googleapis.com iam.googleapis.com \
+  cloudresourcemanager.googleapis.com compute.googleapis.com container.googleapis.com \
+  dns.googleapis.com iam.googleapis.com \
   iamcredentials.googleapis.com serviceusage.googleapis.com \
   logging.googleapis.com monitoring.googleapis.com secretmanager.googleapis.com \
   servicenetworking.googleapis.com sqladmin.googleapis.com cloudtrace.googleapis.com

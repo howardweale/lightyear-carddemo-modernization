@@ -408,6 +408,7 @@ class CloudBankPlatformQualificationTests(unittest.TestCase):
             self.assertTrue((ROOT / relative).is_file(), relative)
         bootstrap = (ROOT / "factory/cloudbank/platform-qualification/gke/bootstrap.sh").read_text()
         for service_api in (
+            "cloudresourcemanager.googleapis.com",
             "compute.googleapis.com",
             "container.googleapis.com",
             "iam.googleapis.com",
@@ -497,6 +498,7 @@ class CloudBankPlatformQualificationTests(unittest.TestCase):
         self.assertIn("Evidence secret must have exactly one enabled version", submit)
         self.assertIn("roles/container.developer", submit)
         self.assertIn("roles/serviceusage.serviceUsageConsumer", submit)
+        self.assertIn("gcloud services enable cloudresourcemanager.googleapis.com", submit)
         self.assertIn("cloudbank-azn-server-external", submit)
         self.assertIn("cloudbank-checks-external", submit)
         self.assertIn("roles/storage.objectAdmin", submit)

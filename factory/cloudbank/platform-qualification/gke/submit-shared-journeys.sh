@@ -66,6 +66,11 @@ gcloud secrets describe cloudbank-checks-external --project "$GCP_PROJECT_ID" >/
 gcloud iam service-accounts describe "$service_account" --project "$GCP_PROJECT_ID" >/dev/null
 gcloud storage buckets describe "gs://$evidence_bucket" --project "$GCP_PROJECT_ID" >/dev/null
 
+# GkeRuntime independently reads the environment label under the dedicated
+# build identity. Keep that fail-closed check usable even when an older
+# bootstrap predates this required API.
+gcloud services enable cloudresourcemanager.googleapis.com \
+  --project "$GCP_PROJECT_ID" >/dev/null
 gcloud projects add-iam-policy-binding "$GCP_PROJECT_ID" \
   --member "serviceAccount:$service_account" \
   --role roles/container.developer >/dev/null

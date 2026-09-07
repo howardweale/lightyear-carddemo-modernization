@@ -1,21 +1,25 @@
 {
-  "acceptance_contract_sha256": "ff3882a70fd74837d74900234656d7950382671d8105e650639e09671969cf1e",
+  "acceptance_contract_sha256": "5d6a3d7a96f96fc2c2cd38c47025f1609a09048898af4892019b745a5253fbb7",
   "all_eight_services_observed_in_both_lanes": false,
   "bindings": {
-    "compatibility_ledger_sha256": "54af946233573f20011d943a416297b477ee319c1b9cd5508bee71daec15b6c9",
-    "execution_plan_sha256": "f152995a4bea33456704dc1bb20ba5d9b5ebd87152ea12c68338bc2289d10569",
-    "journey_contract_sha256": "27afe95a18beba97389b2c1775d57ff151eefad1259d3d27e43e7fcf14ee4f66",
-    "lane_contract_sha256": "834d69d823e766611839b11ef3c7d833195db902f7457d527455c27625a5db8c"
+    "compatibility_ledger_sha256": "a22c7aa03afb6ed356f708abfad9e5775ab019c49e33dfe2b1d6e562683b7818",
+    "execution_plan_sha256": "91c542a8acd77db4cf7d571553197e72eec055e9bf6fa21eb3ea811b6f8fcebb",
+    "journey_contract_sha256": "08d5a55f285432fca2c60e0c36768d58d5b5f3e26cba78104e63d87c836e6b7c",
+    "lane_contract_sha256": "1c15bc48e99693e0b85d1a3bca775173f37b419cf3761611d6de384b9de58acd",
+    "oracle_hardening_contract_sha256": "3bb813ae28187f01a557de19c431d36b4d2cf938da688d58fc324d7bd52d868e",
+    "oracle_hardening_patch_sha256": "68b23365133d0b0237962d89f5253c1cea5d24397f267022d1fb5a4c6d3fcd30"
   },
   "bounded_whole_application_equivalent": false,
-  "content_sha256": "3adf64b8b9a842189eeafdebb9d1dcfeea178e0ff1f64fb099e142bf2a5497de",
+  "content_sha256": "db0ad142dde0de99fe58147d8097ebab1914133c5b1bc89ced37b3bf611ae1b7",
   "exact_internal_implementation_equivalent": false,
+  "exact_unchanged_upstream_application": false,
   "gate_status": "ready-for-signed-ms61-ms64-and-dual-lane-observations",
   "migration_complete": false,
+  "oracle_source_hardening_reviewed": true,
   "production_deployed": false,
   "production_ready": false,
   "receipt_type": "lightyear-cloudbank-whole-application-equivalence-readiness",
-  "release": "0.66.0",
+  "release": "0.66.1",
   "schema_version": "1.0",
   "whole_application_equivalent": false
 }

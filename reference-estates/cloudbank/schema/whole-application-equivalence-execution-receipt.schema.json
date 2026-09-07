@@ -17,6 +17,12 @@
     "postgresql_image_id_sha256",
     "oracle_observation_sha256",
     "postgresql_observation_sha256",
+    "oracle_source_image_lock_sha256",
+    "postgresql_image_lock_sha256",
+    "oracle_journey_sha256",
+    "postgresql_journey_sha256",
+    "oracle_hardening_contract_sha256",
+    "oracle_hardening_patch_sha256",
     "normalized_observation_sha256",
     "services",
     "scenario_count",
@@ -35,8 +41,53 @@
     "signature"
   ],
   "properties": {
+    "schema_version": {"const": "1.0"},
     "receipt_type": {"const": "lightyear-cloudbank-whole-application-equivalence-execution"},
-    "release": {"const": "0.66.0"},
+    "release": {"const": "0.66.1"},
+    "run_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "comparison_run_id": {"type": "string", "minLength": 1, "maxLength": 128},
+    "signer": {"type": "string", "minLength": 1},
+    "bindings": {
+      "const": {
+        "lane_contract_sha256": "1c15bc48e99693e0b85d1a3bca775173f37b419cf3761611d6de384b9de58acd",
+        "journey_contract_sha256": "08d5a55f285432fca2c60e0c36768d58d5b5f3e26cba78104e63d87c836e6b7c",
+        "execution_plan_sha256": "91c542a8acd77db4cf7d571553197e72eec055e9bf6fa21eb3ea811b6f8fcebb",
+        "compatibility_ledger_sha256": "a22c7aa03afb6ed356f708abfad9e5775ab019c49e33dfe2b1d6e562683b7818",
+        "oracle_hardening_contract_sha256": "3bb813ae28187f01a557de19c431d36b4d2cf938da688d58fc324d7bd52d868e",
+        "oracle_hardening_patch_sha256": "68b23365133d0b0237962d89f5253c1cea5d24397f267022d1fb5a4c6d3fcd30"
+      }
+    },
+    "source_ms61_receipt_sha256": {"$ref": "#/$defs/sha256"},
+    "source_ms64_receipt_sha256": {"$ref": "#/$defs/sha256"},
+    "oracle_image_id_sha256": {"$ref": "#/$defs/sha256"},
+    "postgresql_image_id_sha256": {"$ref": "#/$defs/sha256"},
+    "oracle_observation_sha256": {"$ref": "#/$defs/sha256"},
+    "postgresql_observation_sha256": {"$ref": "#/$defs/sha256"},
+    "oracle_source_image_lock_sha256": {"$ref": "#/$defs/sha256"},
+    "postgresql_image_lock_sha256": {"$ref": "#/$defs/sha256"},
+    "oracle_journey_sha256": {"$ref": "#/$defs/sha256"},
+    "postgresql_journey_sha256": {"$ref": "#/$defs/sha256"},
+    "oracle_hardening_contract_sha256": {
+      "const": "3bb813ae28187f01a557de19c431d36b4d2cf938da688d58fc324d7bd52d868e"
+    },
+    "oracle_hardening_patch_sha256": {
+      "const": "68b23365133d0b0237962d89f5253c1cea5d24397f267022d1fb5a4c6d3fcd30"
+    },
+    "normalized_observation_sha256": {
+      "const": "71458ecf2e1b2ae89f1dad763d4a8898899e19834c7744f3683733ccaf9a2bc9"
+    },
+    "services": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "azn-server", "customer", "account", "transfer", "checks", "testrunner",
+          "creditscore", "chatbot"
+        ]
+      }
+    },
     "scenario_count": {"const": 18},
     "status": {"const": "passed-bounded-whole-application-equivalence"},
     "all_eight_services_observed_in_both_lanes": {"const": true},
@@ -48,14 +99,43 @@
     "migration_complete": {"const": false},
     "production_deployed": {"const": false},
     "production_ready": {"const": false},
-    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "security": {
+      "type": "object",
+      "required": [
+        "synthetic_data_only",
+        "production_environment",
+        "credentials_persisted",
+        "raw_output_persisted",
+        "source_checkout_mutated",
+        "oracle_source_hardening_applied",
+        "exact_unchanged_upstream_application"
+      ],
+      "properties": {
+        "synthetic_data_only": {"const": true},
+        "production_environment": {"const": false},
+        "credentials_persisted": {"const": false},
+        "raw_output_persisted": {"const": false},
+        "source_checkout_mutated": {"const": false},
+        "oracle_source_hardening_applied": {"const": true},
+        "exact_unchanged_upstream_application": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "content_sha256": {"$ref": "#/$defs/sha256"},
+    "signature": {"$ref": "#/$defs/signature"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
     "signature": {
       "type": "object",
       "required": ["algorithm", "signer", "value"],
       "properties": {
         "algorithm": {"const": "hmac-sha256"},
-        "value": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
-      }
+        "signer": {"type": "string", "minLength": 1},
+        "value": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
     }
   }
 }

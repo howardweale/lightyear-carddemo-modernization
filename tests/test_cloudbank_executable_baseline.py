@@ -228,6 +228,8 @@ class CloudBankExecutableBaselineTests(unittest.TestCase):
                 "whole-application-equivalence-execution-receipt.schema.json",
                 "whole-application-equivalence-lane-observation.schema.json",
                 "whole-application-equivalence-readiness.schema.json",
+                "ms66-governed-source-image-lock.schema.json",
+                "ms66-isolated-lane-recovery.schema.json",
                 "platform-qualification-profile.schema.json",
                 "platform-qualification-observation.schema.json",
                 "platform-qualification-execution-receipt.schema.json",

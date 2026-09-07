@@ -1,11 +1,14 @@
 {
   "comparison": "exact-normalized-business-observations",
-  "content_sha256": "834d69d823e766611839b11ef3c7d833195db902f7457d527455c27625a5db8c",
+  "content_sha256": "1c15bc48e99693e0b85d1a3bca775173f37b419cf3761611d6de384b9de58acd",
   "contract_type": "lightyear-cloudbank-whole-application-lanes",
   "lanes": {
     "oracle": {
-      "application": "exact-pinned-cloudbank-source",
+      "application": "pinned-source-plus-governed-hardening",
       "database": "native-oracle",
+      "exact_unchanged_upstream_application": false,
+      "governed_hardening_contract_sha256": "3bb813ae28187f01a557de19c431d36b4d2cf938da688d58fc324d7bd52d868e",
+      "governed_hardening_patch_sha256": "68b23365133d0b0237962d89f5253c1cea5d24397f267022d1fb5a4c6d3fcd30",
       "messaging": "oracle-transactional-event-queue",
       "transactions": "microtx-lra"
     },
@@ -16,7 +19,7 @@
       "transactions": "postgresql-atomic-transaction"
     }
   },
-  "release": "0.66.0",
+  "release": "0.66.1",
   "required_service_state": {
     "account": {
       "final_status": "ready",

@@ -1,0 +1,154 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schemas/cloudbank/ms66-isolated-lane-recovery.schema.json",
+  "title": "CloudBank MS66 isolated Oracle lane recovery journal",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "state_type",
+    "release",
+    "run_id",
+    "context",
+    "namespace",
+    "namespace_uid",
+    "expected_namespace_labels",
+    "source_image_lock_sha256",
+    "model_namespace",
+    "model_policy_name",
+    "model_policy_uid",
+    "phase",
+    "cleanup_required",
+    "credentials_persisted",
+    "production_environment",
+    "content_sha256",
+    "signature"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "state_type": {"const": "lightyear-cloudbank-ms66-isolated-lane-recovery"},
+    "release": {"const": "0.66.1"},
+    "run_id": {"type": "string", "pattern": "^ms66-[a-z0-9-]{1,54}$"},
+    "context": {"type": "string", "pattern": "^gke_[a-z0-9-]+_[a-z0-9-]+_[a-z0-9-]+$"},
+    "namespace": {"$ref": "#/$defs/dnsLabel"},
+    "namespace_uid": {"$ref": "#/$defs/optionalIdentity"},
+    "expected_namespace_labels": {
+      "type": "object",
+      "required": ["environment", "lightyear.ai/ms66-run"],
+      "properties": {
+        "environment": {"const": "non-production"},
+        "lightyear.ai/ms66-run": {"type": "string", "pattern": "^ms66-[a-z0-9-]{1,54}$"}
+      },
+      "additionalProperties": false
+    },
+    "source_image_lock_sha256": {"$ref": "#/$defs/sha256"},
+    "model_namespace": {"$ref": "#/$defs/dnsLabel"},
+    "model_policy_name": {"$ref": "#/$defs/dnsLabel"},
+    "model_policy_uid": {"$ref": "#/$defs/optionalIdentity"},
+    "phase": {
+      "enum": [
+        "planned",
+        "namespace-create-pending",
+        "namespace-created",
+        "model-policy-create-pending",
+        "model-policy-created",
+        "native-runtime-ready",
+        "eight-source-services-ready",
+        "journeys-complete",
+        "cleanup-pending",
+        "restored"
+      ]
+    },
+    "cleanup_required": {"type": "boolean"},
+    "credentials_persisted": {"const": false},
+    "production_environment": {"const": false},
+    "content_sha256": {"$ref": "#/$defs/sha256"},
+    "signature": {"$ref": "#/$defs/signature"}
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {"properties": {"phase": {"enum": ["planned", "restored"]}}, "required": ["phase"]},
+      "then": {"properties": {"cleanup_required": {"const": false}}},
+      "else": {"properties": {"cleanup_required": {"const": true}}}
+    },
+    {
+      "if": {
+        "properties": {
+          "phase": {"enum": ["planned", "namespace-create-pending", "restored"]}
+        },
+        "required": ["phase"]
+      },
+      "then": {
+        "properties": {
+          "namespace_uid": {"type": "null"},
+          "model_policy_uid": {"type": "null"}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "phase": {"enum": ["namespace-created", "model-policy-create-pending"]}
+        },
+        "required": ["phase"]
+      },
+      "then": {
+        "properties": {
+          "namespace_uid": {"$ref": "#/$defs/identity"},
+          "model_policy_uid": {"type": "null"}
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "phase": {
+            "enum": [
+              "model-policy-created",
+              "native-runtime-ready",
+              "eight-source-services-ready",
+              "journeys-complete"
+            ]
+          }
+        },
+        "required": ["phase"]
+      },
+      "then": {
+        "properties": {
+          "namespace_uid": {"$ref": "#/$defs/identity"},
+          "model_policy_uid": {"$ref": "#/$defs/identity"}
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "dnsLabel": {
+      "type": "string",
+      "maxLength": 63,
+      "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?$"
+    },
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "identity": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 128,
+      "pattern": "^\\S(?:.*\\S)?$"
+    },
+    "optionalIdentity": {
+      "anyOf": [
+        {"$ref": "#/$defs/identity"},
+        {"type": "null"}
+      ]
+    },
+    "signature": {
+      "type": "object",
+      "required": ["algorithm", "signer", "value"],
+      "properties": {
+        "algorithm": {"const": "hmac-sha256"},
+        "signer": {"type": "string", "minLength": 1},
+        "value": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

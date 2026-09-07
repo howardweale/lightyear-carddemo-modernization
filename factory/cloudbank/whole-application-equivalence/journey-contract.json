@@ -1,6 +1,6 @@
 {
   "chatbot_comparison": "bounded-response-contract-not-model-answer",
-  "content_sha256": "27afe95a18beba97389b2c1775d57ff151eefad1259d3d27e43e7fcf14ee4f66",
+  "content_sha256": "08d5a55f285432fca2c60e0c36768d58d5b5f3e26cba78104e63d87c836e6b7c",
   "contract_type": "lightyear-cloudbank-whole-application-journeys",
   "coverage": {
     "business_journeys": true,
@@ -12,7 +12,7 @@
   "credit_score_comparison": "declared-range-contract-not-exact-value",
   "normalized_marker": "eight-services-ready:all-ready;authorization-token-issued:token-issued;unauthenticated-request-rejected:401;customer-owner-read:owner-visible;account-balance-read:balance-visible;transfer-success-conserves-value:conserved;transfer-invalid-no-mutation:400-no-mutation;transfer-insufficient-funds-no-mutation:rejected-no-mutation;check-deposit-applied-once:deposit-once;check-clearance-applied-once:clearance-once;duplicate-message-suppressed:duplicate-suppressed;credit-score-contract-served:score-in-declared-range;chatbot-boundary-served:bounded-response;account-restart-preserves-state:state-preserved;checks-restart-redelivers-inflight:redelivered-once;transfer-dependency-failure-recovers:restored;concurrent-opposite-transfers-conserve-value:conserved;full-stack-restart-restores-journey:journey-restored",
   "normalized_observation_sha256": "71458ecf2e1b2ae89f1dad763d4a8898899e19834c7744f3683733ccaf9a2bc9",
-  "release": "0.66.0",
+  "release": "0.66.1",
   "scenario_count": 18,
   "scenarios": [
     {

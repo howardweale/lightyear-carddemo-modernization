@@ -1,0 +1,15 @@
+ARG BASE_IMAGE
+FROM ${BASE_IMAGE}
+ARG SOURCE_COMMIT
+ARG HARDENING_PATCH_SHA256
+ARG SERVICE
+LABEL org.opencontainers.image.title="CloudBank governed MS66 Oracle source service" \
+      org.opencontainers.image.revision="${SOURCE_COMMIT}" \
+      lightyear.ai/ms66-service="${SERVICE}" \
+      lightyear.ai/ms66-application-identity="pinned-source-plus-governed-hardening" \
+      lightyear.ai/ms66-hardening-patch-sha256="${HARDENING_PATCH_SHA256}"
+WORKDIR /opt/cloudbank
+COPY --chown=65532:65532 application.jar application.jar
+USER 65532:65532
+EXPOSE 8080
+ENTRYPOINT ["java", "-XX:MaxRAMPercentage=75", "-jar", "/opt/cloudbank/application.jar"]

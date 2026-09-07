@@ -69,8 +69,13 @@ script is undocumented, and that every POSIX entry point has a PowerShell twin.
   Build launcher survives Cloud Shell disconnects, checkpoints recovery intent before its bounded
   CreditScore traffic switch, restores the original selector, and admits the resulting MS65 receipt.
 - `./cloudbank-whole-application-equivalence.sh verify` checks the MS #66 paired eight-service
-  Oracle/source and PostgreSQL/target contract; `run` additionally requires signed MS #61/MS #64
-  receipts and two same-run signed lane observations without fabricating native execution.
+  governed Oracle/source and PostgreSQL/target contract; `run` additionally requires signed
+  MS #61/MS #64 receipts and two same-run signed lane observations without fabricating native
+  execution. `./cloudbank-ms66-dual-lane.sh` is the low-level cross-platform executor used by the
+  asynchronous GKE submitter: it preserves the pinned checkout, applies only the hash-bound patch in
+  a fresh workspace, runs native Oracle/AQ/MicroTx in an isolated namespace, cleans that namespace,
+  and then exercises the deployed PostgreSQL lane. Its `recover` command accepts only a signed,
+  identity-bound isolated-lane recovery journal.
 - `./cloudbank-platform-qualification.sh verify` checks the MS #67 real non-production platform
   contract and GKE implementation; `preflight` performs read-only checks against one signed explicit
   context, while `admit` requires passing signed MS #65/MS #66 receipts and all 28 signed live

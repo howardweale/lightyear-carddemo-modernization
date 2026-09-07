@@ -246,9 +246,10 @@ Oracle Free, and MicroTx image to an immutable digest before creating a namespac
 namespace is labelled with the build run ID and is removed before the PostgreSQL lane begins.
 
 The launcher also requires the immutable Java 21 base image already approved for the MS67 image
-build. The default native runtime candidates use explicit tags; override either candidate only with
-another explicitly reviewed, non-`latest` tag that the Cloud Build worker can read. Submit from a
-clean `main` checkout matching `origin/main`:
+build. The default MicroTx image is `container-registry.oracle.com/database/otmm:24.4.1`, matching
+the version declared by the pinned CloudBank source. The default native runtime candidates use
+explicit tags; override either candidate only with another explicitly reviewed, non-`latest` tag
+that the Cloud Build worker can read. Submit from a clean `main` checkout matching `origin/main`:
 
 ```bash
 set +e

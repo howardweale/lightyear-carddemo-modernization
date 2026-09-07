@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.66.2 — 2026-09-07
+
+- Corrected the default Oracle Transaction Manager for Microservices image from the nonexistent
+  `container-registry.oracle.com/database/otmm:24.4` tag to the exact `24.4.1` version declared by
+  the pinned CloudBank source and Oracle's governed image list.
+- Preserved the explicit non-`latest` override and immutable mirror resolution gates. This release
+  fixes native-image acquisition only and does not claim that the MS #66 live execution passed.
+
 ## 0.66.1 — 2026-09-07
 
 - Added a durable asynchronous MS #66 GKE executor that builds eight governed source images from the

@@ -40,7 +40,7 @@ jq -e '.lock_type == "lightyear-cloudbank-ms65-image-lock" and (.images | length
 }
 
 oracle_candidate="${MS66_ORACLE_IMAGE_CANDIDATE:-gvenzl/oracle-free:23.26.1-slim-faststart}"
-microtx_candidate="${MS66_MICROTX_IMAGE_CANDIDATE:-container-registry.oracle.com/database/otmm:24.4}"
+microtx_candidate="${MS66_MICROTX_IMAGE_CANDIDATE:-container-registry.oracle.com/database/otmm:24.4.1}"
 [[ "$oracle_candidate" =~ ^[^[:space:]]+:[^[:space:]]+$ \
    && "$microtx_candidate" =~ ^[^[:space:]]+:[^[:space:]]+$ ]] || {
   echo "Native runtime candidates must use explicit, non-latest tags" >&2

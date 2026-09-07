@@ -367,7 +367,11 @@ class CloudBankMs66DualLaneTests(unittest.TestCase):
         for marker in ("--async", "--ongoing", 'index("ms67-ms66-recovery")'):
             self.assertIn(marker, recover_submit)
         self.assertIn("gvenzl/oracle-free:23.26.1-slim-faststart", submit)
-        self.assertIn("container-registry.oracle.com/database/otmm:24.4", submit)
+        self.assertIn(
+            'MS66_MICROTX_IMAGE_CANDIDATE:-container-registry.oracle.com/database/otmm:24.4.1',
+            submit,
+        )
+        self.assertNotIn("container-registry.oracle.com/database/otmm:24.4}", submit)
         self.assertNotIn("docker pull latest", build)
         self.assertIn('short="$${source_commit:0:12}"', build)
         self.assertNotIn('short="${_SOURCE_COMMIT:', build)

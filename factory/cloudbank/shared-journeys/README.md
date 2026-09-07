@@ -136,8 +136,10 @@ build is active reports that build instead of starting a concurrent executor.
 The Cloud Build step obtains the GKE DNS endpoint, runs all 18 scenarios and
 uploads success or failure evidence directly to the existing private shared-
 journeys prefix. A browser or Cloud Shell disconnect after submission cannot
-interrupt the build. This execution still proves only the bounded shared journeys;
-it cannot declare MS65, MS66 or MS67 complete.
+interrupt the build. It uses a versioned Google Cloud CLI all-components image
+that supplies Python 3.11 or newer, `kubectl`, and the GKE authentication plugin;
+their versions are printed before the run starts. This execution still proves
+only the bounded shared journeys; it cannot declare MS65, MS66 or MS67 complete.
 
 ## Evidence and recovery
 

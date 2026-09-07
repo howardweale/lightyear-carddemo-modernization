@@ -483,6 +483,14 @@ class CloudBankPlatformQualificationTests(unittest.TestCase):
         self.assertIn("--output-root", cloudbuild)
         self.assertIn("ms67-shared-journeys", cloudbuild)
         self.assertIn("CLOUD_LOGGING_ONLY", cloudbuild)
+        self.assertIn(
+            "gcr.io/google.com/cloudsdktool/google-cloud-cli:573.0.0",
+            cloudbuild,
+        )
+        self.assertNotIn("name: gcr.io/cloud-builders/gcloud", cloudbuild)
+        self.assertIn("python3 --version", cloudbuild)
+        self.assertIn("gke-gcloud-auth-plugin --version", cloudbuild)
+        self.assertIn("sys.version_info >= (3, 11)", cloudbuild)
         self.assertNotIn("howard.weale@gmail.com", cloudbuild + submit)
         self.assertIn("status --porcelain --untracked-files=normal", submit)
         self.assertIn("'@{upstream}'", submit)

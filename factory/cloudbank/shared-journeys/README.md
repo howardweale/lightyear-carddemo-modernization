@@ -133,6 +133,8 @@ factory/cloudbank/platform-qualification/gke/submit-shared-journeys.sh \
 The command submits asynchronously and writes the build ID to
 `~/ms67-shared-journeys-build-id`. Re-running the launcher while a tagged journey
 build is active reports that build instead of starting a concurrent executor.
+The launcher also enables the Cloud Resource Manager API required for the
+dedicated build identity to verify the target project's nonproduction label.
 The Cloud Build step obtains the GKE DNS endpoint, runs all 18 scenarios and
 uploads success or failure evidence directly to the existing private shared-
 journeys prefix. A browser or Cloud Shell disconnect after submission cannot

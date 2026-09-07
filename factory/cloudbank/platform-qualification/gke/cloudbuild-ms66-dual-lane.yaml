@@ -145,6 +145,8 @@ steps:
   - -ceu
   - |
     trap 'rm -f /workspace/ms66-kubeconfig' EXIT
+    build_id="$BUILD_ID"
+    [[ "$$build_id" =~ ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$ ]]
     mkdir -p /workspace/inputs /workspace/locks
     fetch_input() {
       local uri="$$1" digest="$$2" output="$$3"
@@ -191,7 +193,7 @@ steps:
       --images /workspace/locks/source-images.json \
       --materialization /workspace/hardened/oracle-hardening.materialization.json \
       --controller-commit "${_SOURCE_COMMIT}" \
-      --cloud-build-id "$BUILD_ID" \
+      --cloud-build-id "$$build_id" \
       --java-base-image "${_JAVA_BASE_IMAGE}" \
       --oracle-runtime-image "$$oracle_image" \
       --microtx-runtime-image "$$microtx_image" \
@@ -204,8 +206,8 @@ steps:
     command -v gke-gcloud-auth-plugin >/dev/null
     python3 -c 'import sys; raise SystemExit(0 if sys.version_info >= (3, 11) else 1)'
     export LIGHTYEAR_NON_PRODUCTION_ACK=I-AUTHORIZE-MS67-NON-PRODUCTION-MUTATIONS
-    isolated_namespace="cloudbank-ms66-$${BUILD_ID:0:8}"
-    evidence="${_EVIDENCE_BUCKET_PREFIX}/ms66-$BUILD_ID"
+    isolated_namespace="cloudbank-ms66-$${build_id:0:8}"
+    evidence="${_EVIDENCE_BUCKET_PREFIX}/ms66-$$build_id"
     bash ./cloudbank-ms66-dual-lane.sh run \
       --project-root /workspace/controller \
       --source-root /workspace/upstream \
@@ -218,8 +220,8 @@ steps:
       --isolated-namespace "$$isolated_namespace" \
       --model-namespace "${_MODEL_NAMESPACE}" --model-name "${_MODEL_NAME}" \
       --postgresql-probe-image "${_POSTGRESQL_PROBE_IMAGE}" \
-      --output-root "/workspace/ms66-$BUILD_ID" \
-      --evidence-prefix "$$evidence" --signer "${_SIGNER}" --run-id "ms66-$BUILD_ID"
+      --output-root "/workspace/ms66-$$build_id" \
+      --evidence-prefix "$$evidence" --signer "${_SIGNER}" --run-id "ms66-$$build_id"
     echo "MS66_DUAL_LANE_EVIDENCE=$$evidence/"
     echo "MS66_DUAL_LANE_RUN=PASSED"
 

@@ -401,9 +401,14 @@ class CloudBankPlatformQualificationTests(unittest.TestCase):
             "factory/cloudbank/platform-qualification/gke/Dockerfile.evidence-runner",
             "factory/cloudbank/platform-qualification/gke/cloudbuild-prerequisite-chain.yaml",
             "factory/cloudbank/platform-qualification/gke/cloudbuild-shared-journeys.yaml",
+            "factory/cloudbank/platform-qualification/gke/cloudbuild-ms65-rehearsal.yaml",
             "factory/cloudbank/platform-qualification/gke/run-prerequisite-chain.sh",
             "factory/cloudbank/platform-qualification/gke/submit-prerequisite-chain.sh",
             "factory/cloudbank/platform-qualification/gke/submit-shared-journeys.sh",
+            "factory/cloudbank/platform-qualification/gke/submit-ms65-rehearsal.sh",
+            "cloudbank-ms65-rehearsal.sh",
+            "cloudbank-ms65-rehearsal.ps1",
+            "tools/cloudbank_ms65_rehearsal.py",
         ):
             self.assertTrue((ROOT / relative).is_file(), relative)
         bootstrap = (ROOT / "factory/cloudbank/platform-qualification/gke/bootstrap.sh").read_text()
@@ -509,6 +514,41 @@ class CloudBankPlatformQualificationTests(unittest.TestCase):
         self.assertNotIn("status=CANCELING", submit)
         self.assertIn("ACTIVE_SHARED_JOURNEY_BUILD", submit)
         self.assertNotIn("operator-held-value", cloudbuild + submit)
+
+    def test_cloud_build_ms65_rehearsal_is_pinned_recoverable_and_asynchronous(self) -> None:
+        gke = ROOT / "factory/cloudbank/platform-qualification/gke"
+        cloudbuild = (gke / "cloudbuild-ms65-rehearsal.yaml").read_text()
+        submit = (gke / "submit-ms65-rehearsal.sh").read_text()
+        runner = (ROOT / "tools/cloudbank_ms65_rehearsal.py").read_text()
+
+        for value in (
+            "checkout-pinned-controller", "checkout-pinned-cloudbank",
+            "4f41b16d00c45503f691836fee8138010c969e86",
+            "6aa92e89c783f123c4da8d7ae18108004a4f4a99",
+            "bd918386209f284a1ed31802555740eb34b75348",
+            "secretEnv:", "--dns-endpoint", "CLOUD_LOGGING_ONLY",
+            "gcr.io/google.com/cloudsdktool/google-cloud-cli:573.0.0",
+            "cloudbank-ms65-rehearsal.sh run", "--database-recovery",
+        ):
+            self.assertIn(value, cloudbuild)
+        for value in (
+            "status --porcelain --untracked-files=normal", "'@{upstream}'",
+            '"$branch" == "main"', '"$upstream_name" == "origin/main"',
+            "Evidence secret must have exactly one enabled version",
+            "roles/container.developer", "roles/serviceusage.serviceUsageConsumer",
+            "gcloud services enable cloudresourcemanager.googleapis.com",
+            "roles/storage.objectAdmin", "--no-source", "--async", "--ongoing",
+            'index("ms67-ms65-rehearsal")', "ACTIVE_MS65_REHEARSAL_BUILD",
+            ".bindings.journeys_content_sha256 == $journeys_sha",
+        ):
+            self.assertIn(value, submit)
+        self.assertIn("ms65-recovery-state.json", runner)
+        self.assertIn("MS65_REHEARSAL_READBACK=VERIFIED", runner)
+        self.assertIn("authorization_preflight", runner)
+        self.assertIn("clear_runtime_credentials", runner)
+        self.assertIn("passed-isolated-database-recovery", submit)
+        self.assertIn("passed-shared-journeys", submit)
+        self.assertNotIn("operator-held-value", cloudbuild + submit + runner)
 
 
 if __name__ == "__main__":

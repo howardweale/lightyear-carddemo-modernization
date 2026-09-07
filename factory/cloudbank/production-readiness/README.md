@@ -28,6 +28,15 @@ rehearsal ran against its bound non-production cluster and synthetic data.
 ./cloudbank-production-readiness.sh verify-receipt RECEIPT
 ```
 
+For the real GKE PostgreSQL target, do not hand-author the observation consumed by
+`run`. After a passing signed shared-journey execution and isolated Cloud SQL
+recovery drill, use the durable launcher documented in
+`../platform-qualification/gke/LIVE-RUNBOOK.md`. It checks the deployed bundle,
+rehearses an isolated CreditScore canary traffic switch and rollback, measures a
+60-second/100-request business SLO window, emits the signed observation, invokes
+this controller, independently verifies the resulting receipt, and uploads only
+bounded evidence. The asynchronous Cloud Build continues if Cloud Shell closes.
+
 No secret values, production data, raw logs, prompts, responses, or database backup bodies are
 admitted to repository evidence. Production deployment, production authorization, native CDC,
 whole-application equivalence, migration completion, and production readiness remain false.

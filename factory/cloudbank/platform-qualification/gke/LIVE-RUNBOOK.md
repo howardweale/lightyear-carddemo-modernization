@@ -140,6 +140,101 @@ as an asynchronous Cloud Build using a pinned source commit and private,
 content-addressed inputs. Do not run the Cloud Shell and Cloud Build launchers at
 the same time; the submission script refuses another tagged active build.
 
+### Durable MS65 rehearsal
+
+After the shared journey build passes all 18 scenarios and the isolated Cloud SQL
+recovery drill passes, admit those separately signed observations into a live MS65
+rehearsal. This executor does not infer business or recovery success from Pod
+readiness. It verifies both prior signatures and requires the same environment and
+eight-image binding. It then checks all eight deployed controls, creates one
+isolated CreditScore canary from the locked digest, switches only the CreditScore
+Service selector, runs a 60-second/100-request credit-contract SLO window, restores
+the original selector, deletes the owned canary, and invokes the existing MS65
+admission controller against the pinned CloudBank source.
+
+Download the successful journey observation if it is not already local, and use
+the `database-recovery.json` from the passing isolated recovery root. The journey
+file must be the exact signed observation named by that recovery receipt. Confirm
+the content hashes before submission:
+
+```bash
+BUILD_ID=REPLACE_WITH_SUCCESSFUL_SHARED_JOURNEY_BUILD
+MS65_JOURNEYS="$HOME/ms67-evidence/shared-journeys-$BUILD_ID.json"
+gcloud storage cp \
+  "gs://${GCP_PROJECT_ID}-ms67-evidence/shared-journeys/ms67-journeys-$BUILD_ID/journeys.json" \
+  "$MS65_JOURNEYS"
+jq -e --arg journey "$(jq -r .content_sha256 "$MS65_JOURNEYS")" \
+  '.bindings.journeys_content_sha256 == $journey' \
+  "$MS67_SQL_RECOVERY_ROOT/database-recovery.json"
+
+export LIGHTYEAR_NON_PRODUCTION_ACK=I-AUTHORIZE-MS67-NON-PRODUCTION-MUTATIONS
+bash factory/cloudbank/platform-qualification/gke/submit-ms65-rehearsal.sh \
+  "$MS67_IMAGE_LOCK" \
+  "$MS67_MS64_RECEIPT" \
+  "$MS67_SITE_INPUTS/ms65-environment.json" \
+  "$MS65_JOURNEYS" \
+  "$MS67_SQL_RECOVERY_ROOT/database-recovery.json"
+```
+
+The launcher requires local, bounded JSON inputs so it can hash and upload an exact
+content-addressed set, and a clean `main` checkout tracking `origin/main`. It runs
+asynchronously and prints `MS65_REHEARSAL_BUILD_ID`. Cloud Shell disconnects do
+not stop the build. Follow it with:
+
+```bash
+gcloud beta builds log --stream "$MS65_REHEARSAL_BUILD_ID" \
+  --region "$GCP_REGION" --project "$GCP_PROJECT_ID"
+
+gcloud builds describe "$MS65_REHEARSAL_BUILD_ID" \
+  --region "$GCP_REGION" --project "$GCP_PROJECT_ID" \
+  --format='yaml(id,status,createTime,startTime,finishTime,failureInfo,logUrl)'
+```
+
+Only `status: SUCCESS` is eligible. Inspect the signed admitted receipt rather
+than inferring completion from the final build step:
+
+```bash
+MS65_EVIDENCE_URI="gs://${GCP_PROJECT_ID}-ms67-evidence/ms65-rehearsal/ms65-rehearsal-${MS65_REHEARSAL_BUILD_ID}/"
+gcloud storage ls "$MS65_EVIDENCE_URI"
+gcloud storage cat "${MS65_EVIDENCE_URI}cloudbank-production-readiness.receipt.json" |
+  jq '{receipt_type, rehearsal_status: .rehearsal.status,
+       scenario_count: .rehearsal.scenario_count,
+       production_like_rehearsal_complete, cutover_rehearsal_complete,
+       rollback_rehearsal_complete, production_ready,
+       whole_application_equivalent, migration_complete, signature}'
+```
+
+Before every mutation, `ms65-recovery-state.json` is signed and persisted under
+the printed private evidence prefix. Normal failure handling restores the exact
+recorded Service selector and deletes only the run-labelled canary. If the build
+is forcibly terminated between checkpoints, download that state and recover with
+the same explicit project, region, cluster and namespace:
+
+```bash
+RECOVERY_PREFIX="gs://${GCP_PROJECT_ID}-ms67-evidence/ms65-rehearsal/ms65-rehearsal-${MS65_REHEARSAL_BUILD_ID}"
+MS65_RECOVERY_STATE="$HOME/ms67-evidence/ms65-recovery-${MS65_REHEARSAL_BUILD_ID}.json"
+gcloud storage cp "$RECOVERY_PREFIX/ms65-recovery-state.json" "$MS65_RECOVERY_STATE"
+
+export LIGHTYEAR_NON_PRODUCTION_ACK=I-AUTHORIZE-MS67-NON-PRODUCTION-MUTATIONS
+bash ./cloudbank-ms65-rehearsal.sh recover \
+  --project "$GCP_PROJECT_ID" \
+  --region "$GCP_REGION" \
+  --cluster "$GKE_CLUSTER_NAME" \
+  --namespace "$GKE_NAMESPACE" \
+  --recovery-state "$MS65_RECOVERY_STATE" \
+  --evidence-bucket "gs://${GCP_PROJECT_ID}-ms67-evidence/ms65-rehearsal-recovery" \
+  --signer "${MS67_SIGNER:?Set MS67_SIGNER to the active operator identity}"
+```
+
+If selector restoration cannot be proved, recovery deliberately preserves the
+canary rather than deleting the Service's possible remaining endpoints. Never
+start another rehearsal while the selector or canary requires reconciliation.
+
+The canary deliberately uses the same approved locked digest. This qualifies the
+bounded deployment and traffic-control rehearsal, not a software-delta rollout.
+The signed receipt can close MS65 only. It cannot establish the native Oracle lane,
+MS66 equivalence, the remaining MS67 operational scenarios, or production readiness.
+
 ### Isolated database recovery executor
 
 See [SQL-RECOVERY.md](SQL-RECOVERY.md) for the signed Cloud SQL backup/PITR drill,

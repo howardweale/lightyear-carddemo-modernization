@@ -12,7 +12,7 @@ script is undocumented, and that every POSIX entry point has a PowerShell twin.
 | `release-gated` | Deterministic evidence build and verification | Included in the complete verifier |
 | `developer` | Interactive exploration, tests, benchmarks, and focused gauntlets | Covered by tests or dedicated CI |
 | `operator` | Inputs that require a human-selected catalog or evaluation | Never started implicitly |
-| `live-authorized` | Credentialed, read-only customer-system collection | Only the offline `verify` action is automatic |
+| `live-authorized` | Credentialed live collection or explicitly acknowledged non-production mutation | Never started by release verification |
 | `internal` | Shared runtime helpers sourced by other scripts | Not a standalone workflow |
 
 ## Which command should I run?
@@ -64,6 +64,10 @@ script is undocumented, and that every POSIX entry point has a PowerShell twin.
   Kubernetes hardening, and cutover/rollback rehearsal contracts; `render` requires an eight-image
   lock and non-production environment profile, while `run` additionally requires the signed MS #64
   receipt and signed 24-scenario operator observation produced with the same evidence key.
+- `./cloudbank-ms65-rehearsal.sh run` produces that observation from the bound live GKE target,
+  passed signed shared journeys and passed signed isolated SQL recovery. The asynchronous Cloud
+  Build launcher survives Cloud Shell disconnects, checkpoints recovery intent before its bounded
+  CreditScore traffic switch, restores the original selector, and admits the resulting MS65 receipt.
 - `./cloudbank-whole-application-equivalence.sh verify` checks the MS #66 paired eight-service
   Oracle/source and PostgreSQL/target contract; `run` additionally requires signed MS #61/MS #64
   receipts and two same-run signed lane observations without fabricating native execution.

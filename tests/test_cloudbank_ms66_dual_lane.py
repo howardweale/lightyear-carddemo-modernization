@@ -15,6 +15,7 @@ from lightyear_data.cloudbank_ms66_dual_lane import (
     validate_shared_journey,
 )
 from lightyear_data.cloudbank_ms66_dual_lane_gke import (
+    OracleGkeRuntime,
     cleanup_from_recovery_state,
     isolated_lane_resources,
 )
@@ -143,10 +144,18 @@ def authorization() -> dict[str, str]:
         "public.pem": "-----BEGIN PUBLIC KEY-----\nunit\n-----END PUBLIC KEY-----",
         "AZN_AUTHORIZATION_SERVER_DEFAULT_CLIENT_ID": "owner-client",
         "AZN_AUTHORIZATION_SERVER_DEFAULT_CLIENT_SECRET": "owner-secret",
+        "AZN_AUTHORIZATION_SERVER_DEFAULT_CLIENT_SCOPES":
+            "cloudbank.read,cloudbank.write,cloudbank.transfer",
         "AZN_AUTHORIZATION_SERVER_SERVICE_CLIENT_ID": "service-client",
         "AZN_AUTHORIZATION_SERVER_SERVICE_CLIENT_SECRET": "service-secret",
-        "AZN_AUTHORIZATION_SERVER_TEST_CLIENT_ID": "test-client",
-        "AZN_AUTHORIZATION_SERVER_TEST_CLIENT_SECRET": "test-secret",
+        "AZN_AUTHORIZATION_SERVER_SERVICE_CLIENT_SCOPES":
+            "cloudbank.internal,cloudbank.test",
+        "AZN_AUTHORIZATION_SERVER_CREDITSCORE_CLIENT_ID": "credit-client",
+        "AZN_AUTHORIZATION_SERVER_CREDITSCORE_CLIENT_SECRET": "credit-secret",
+        "AZN_AUTHORIZATION_SERVER_CREDITSCORE_CLIENT_SCOPES": "cloudbank.read",
+        "AZN_AUTHORIZATION_SERVER_CHATBOT_CLIENT_ID": "chat-client",
+        "AZN_AUTHORIZATION_SERVER_CHATBOT_CLIENT_SECRET": "chat-secret",
+        "AZN_AUTHORIZATION_SERVER_CHATBOT_CLIENT_SCOPES": "cloudbank.read",
     }
 
 
@@ -247,6 +256,47 @@ class CloudBankMs66DualLaneTests(unittest.TestCase):
             self.assertEqual(["ALL"], container["securityContext"]["capabilities"]["drop"])
         self.assertEqual("NetworkPolicy", model_policy["kind"])
         self.assertEqual("cloudbank-model", model_policy["metadata"]["namespace"])
+        authorization_secret = next(
+            row for row in resources
+            if row["kind"] == "Secret" and row["metadata"]["name"] == "ms66-authorization"
+        )
+        self.assertNotIn(
+            "AZN_AUTHORIZATION_SERVER_TEST_CLIENT_ID", authorization_secret["stringData"]
+        )
+        azn_environment = {
+            row["name"]: row for row in
+            deployments["azn-server"]["spec"]["template"]["spec"]["containers"][0]["env"]
+        }
+        expected_client_slots = {
+            "AZN_AUTHORIZATION_SERVER_TEST_CLIENT_ID":
+                "AZN_AUTHORIZATION_SERVER_CREDITSCORE_CLIENT_ID",
+            "AZN_AUTHORIZATION_SERVER_TEST_CLIENT_SECRET":
+                "AZN_AUTHORIZATION_SERVER_CREDITSCORE_CLIENT_SECRET",
+            "AZN_AUTHORIZATION_SERVER_ADMIN_CLIENT_ID":
+                "AZN_AUTHORIZATION_SERVER_CHATBOT_CLIENT_ID",
+            "AZN_AUTHORIZATION_SERVER_ADMIN_CLIENT_SECRET":
+                "AZN_AUTHORIZATION_SERVER_CHATBOT_CLIENT_SECRET",
+        }
+        for environment_name, secret_key in expected_client_slots.items():
+            self.assertEqual(
+                {"name": "ms66-authorization", "key": secret_key},
+                azn_environment[environment_name]["valueFrom"]["secretKeyRef"],
+            )
+        expected_scope_slots = {
+            "AZN_AUTHORIZATION_SERVER_DEFAULT_CLIENT_SCOPES":
+                "AZN_AUTHORIZATION_SERVER_DEFAULT_CLIENT_SCOPES",
+            "AZN_AUTHORIZATION_SERVER_SERVICE_CLIENT_SCOPES":
+                "AZN_AUTHORIZATION_SERVER_SERVICE_CLIENT_SCOPES",
+            "AZN_AUTHORIZATION_SERVER_TEST_CLIENT_SCOPES":
+                "AZN_AUTHORIZATION_SERVER_CREDITSCORE_CLIENT_SCOPES",
+            "AZN_AUTHORIZATION_SERVER_ADMIN_CLIENT_SCOPES":
+                "AZN_AUTHORIZATION_SERVER_CHATBOT_CLIENT_SCOPES",
+        }
+        for environment_name, secret_key in expected_scope_slots.items():
+            self.assertEqual(
+                {"name": "ms66-authorization", "key": secret_key},
+                azn_environment[environment_name]["valueFrom"]["secretKeyRef"],
+            )
         serialized_lock = json.dumps(lock, sort_keys=True)
         self.assertNotIn("owner-secret", serialized_lock)
         self.assertNotIn("L" + "1" * 32, serialized_lock)
@@ -259,6 +309,62 @@ class CloudBankMs66DualLaneTests(unittest.TestCase):
                 schema_password="S" + "2" * 32, model_namespace="cloudbank-model",
                 model_name="bad\nmodel",
             )
+
+    def test_oracle_lane_uses_the_deployed_authorization_client_contract(self) -> None:
+        runtime = OracleGkeRuntime(
+            project="test-project", region="us-west1", cluster="test-cluster",
+            namespace="cloudbank-ms66-unit", images=source_images(), run_id="ms66-unit-run",
+            output=ROOT, signing_key=KEY, signer=SIGNER,
+        )
+        with patch.object(runtime, "secret_json", return_value=authorization()):
+            runtime.load_credentials()
+        self.assertEqual(("owner-client", "owner-secret"), runtime.credentials["owner"])
+        self.assertEqual(("service-client", "service-secret"), runtime.credentials["account"])
+        self.assertEqual(runtime.credentials["account"], runtime.credentials["test"])
+        self.assertEqual(("credit-client", "credit-secret"), runtime.credentials["credit"])
+        self.assertEqual(("chat-client", "chat-secret"), runtime.credentials["chat"])
+
+        for missing in (
+            "AZN_AUTHORIZATION_SERVER_DEFAULT_CLIENT_ID",
+            "AZN_AUTHORIZATION_SERVER_SERVICE_CLIENT_SECRET",
+            "AZN_AUTHORIZATION_SERVER_CREDITSCORE_CLIENT_ID",
+            "AZN_AUTHORIZATION_SERVER_CHATBOT_CLIENT_SECRET",
+        ):
+            damaged = authorization()
+            damaged.pop(missing)
+            with self.subTest(missing=missing), self.assertRaisesRegex(
+                ValueError, "authorization-secret-shape-invalid"
+            ):
+                isolated_lane_resources(
+                    namespace="cloudbank-ms66-unit", run_id="ms66-unit-run",
+                    images=source_images(),
+                    oracle_image=immutable("oracle-free-ms66", 91),
+                    microtx_image=immutable("microtx-ms66", 92),
+                    authorization=damaged, oracle_password="L" + "1" * 32,
+                    schema_password="S" + "2" * 32, model_namespace="cloudbank-model",
+                    model_name="qwen2.5:0.5b",
+                )
+
+        for prefix, scopes in (
+            ("DEFAULT", "cloudbank.transfer"),
+            ("SERVICE", "cloudbank.internal"),
+            ("CREDITSCORE", "cloudbank.read,cloudbank.write"),
+            ("CHATBOT", "cloudbank.read,cloudbank.admin"),
+        ):
+            damaged = authorization()
+            damaged[f"AZN_AUTHORIZATION_SERVER_{prefix}_CLIENT_SCOPES"] = scopes
+            with self.subTest(prefix=prefix), self.assertRaisesRegex(
+                ValueError, "authorization-scope-contract-invalid"
+            ):
+                isolated_lane_resources(
+                    namespace="cloudbank-ms66-unit", run_id="ms66-unit-run",
+                    images=source_images(),
+                    oracle_image=immutable("oracle-free-ms66", 91),
+                    microtx_image=immutable("microtx-ms66", 92),
+                    authorization=damaged, oracle_password="L" + "1" * 32,
+                    schema_password="S" + "2" * 32, model_namespace="cloudbank-model",
+                    model_name="qwen2.5:0.5b",
+                )
 
     def test_recovery_journal_covers_crash_gaps_and_cleanup_checks_identity(self) -> None:
         pending = recovery_state(
@@ -356,6 +462,10 @@ class CloudBankMs66DualLaneTests(unittest.TestCase):
             "--async", "--ongoing", "Evidence secret must have exactly one enabled version",
             "roles/container.developer", "roles/storage.objectAdmin",
             'index("ms67-ms66-dual-lane")', "ACTIVE_MS66_DUAL_LANE_BUILD",
+            "Authorization secret does not match the four-client MS66 scope contract",
+            "AZN_AUTHORIZATION_SERVER_CREDITSCORE_CLIENT_ID",
+            "AZN_AUTHORIZATION_SERVER_CHATBOT_CLIENT_ID",
+            '["cloudbank.internal", "cloudbank.test"]',
         ):
             self.assertIn(marker, submit)
         for marker in (

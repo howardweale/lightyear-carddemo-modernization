@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.66.4 — 2026-09-08
+
+- Aligned the isolated Oracle lane with the authorization-client contract already proven by the
+  PostgreSQL target: DEFAULT for the synthetic owner, SERVICE for internal and test calls,
+  CREDITSCORE for credit reads, and CHATBOT for chat reads.
+- Removed the obsolete TEST-client secret requirement, mapped the existing CREDITSCORE and CHATBOT
+  credentials and scopes into the pinned source server's third and fourth client slots, and added
+  fail-closed exact-scope regression coverage. No secret value is changed or persisted by this
+  release.
+
 ## 0.66.3 — 2026-09-07
 
 - Captured Cloud Build's built-in build ID before using Bash substring expansion in the durable

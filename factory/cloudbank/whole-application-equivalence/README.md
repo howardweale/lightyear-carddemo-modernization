@@ -44,6 +44,13 @@ use `submit-ms66-recovery.sh` with the downloaded signed recovery state; cleanup
 or model policy whose UID or ownership labels drift. See `LIVE-RUNBOOK.md` for exact inputs,
 monitoring, receipt verification, and PostgreSQL target recovery.
 
+The isolated lane consumes the same four-client authorization contract as the deployed target:
+DEFAULT grants `cloudbank.read`, `cloudbank.write`, and `cloudbank.transfer`; SERVICE grants
+`cloudbank.internal` and `cloudbank.test`; CREDITSCORE and CHATBOT each grant only
+`cloudbank.read`. The runner validates these exact scope sets and the corresponding client
+credentials before starting services. It does not require legacy TEST-client secret fields, expand
+grants, rotate credentials, or persist secret values.
+
 The committed readiness receipt does not say the native lanes ran. A passing execution receipt
 establishes bounded, normalized whole-application equivalence for the 18 declared scenarios. It does
 not claim unchanged upstream identity, identical internals, a real credit decision, model-answer

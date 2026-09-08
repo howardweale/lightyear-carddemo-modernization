@@ -98,6 +98,34 @@ enabled_versions="$(gcloud secrets versions list "$evidence_secret" --project "$
   exit 2
 }
 gcloud secrets describe cloudbank-azn-server-external --project "$GCP_PROJECT_ID" >/dev/null
+if ! gcloud secrets versions access latest --secret cloudbank-azn-server-external \
+  --project "$GCP_PROJECT_ID" | jq -e '
+    def nonempty($name): (.[$name] | type == "string" and length > 0);
+    def scopes($name):
+      .[$name] | split(",") | map(gsub("^\\s+|\\s+$"; "")) | sort;
+    . as $secret |
+    ["private.pem", "public.pem",
+     "AZN_AUTHORIZATION_SERVER_DEFAULT_CLIENT_ID",
+     "AZN_AUTHORIZATION_SERVER_DEFAULT_CLIENT_SECRET",
+     "AZN_AUTHORIZATION_SERVER_SERVICE_CLIENT_ID",
+     "AZN_AUTHORIZATION_SERVER_SERVICE_CLIENT_SECRET",
+     "AZN_AUTHORIZATION_SERVER_CREDITSCORE_CLIENT_ID",
+     "AZN_AUTHORIZATION_SERVER_CREDITSCORE_CLIENT_SECRET",
+     "AZN_AUTHORIZATION_SERVER_CHATBOT_CLIENT_ID",
+     "AZN_AUTHORIZATION_SERVER_CHATBOT_CLIENT_SECRET"] as $required |
+    (all($required[]; . as $name | $secret | nonempty($name))) and
+    (scopes("AZN_AUTHORIZATION_SERVER_DEFAULT_CLIENT_SCOPES") ==
+      ["cloudbank.read", "cloudbank.transfer", "cloudbank.write"]) and
+    (scopes("AZN_AUTHORIZATION_SERVER_SERVICE_CLIENT_SCOPES") ==
+      ["cloudbank.internal", "cloudbank.test"]) and
+    (scopes("AZN_AUTHORIZATION_SERVER_CREDITSCORE_CLIENT_SCOPES") ==
+      ["cloudbank.read"]) and
+    (scopes("AZN_AUTHORIZATION_SERVER_CHATBOT_CLIENT_SCOPES") ==
+      ["cloudbank.read"])
+  ' >/dev/null; then
+  echo "Authorization secret does not match the four-client MS66 scope contract" >&2
+  exit 2
+fi
 gcloud iam service-accounts describe "$service_account" --project "$GCP_PROJECT_ID" >/dev/null
 gcloud storage buckets describe "gs://$evidence_bucket" --project "$GCP_PROJECT_ID" >/dev/null
 

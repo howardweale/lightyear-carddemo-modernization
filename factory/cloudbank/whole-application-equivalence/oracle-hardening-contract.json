@@ -11,6 +11,11 @@
       "reason": "identify-native-aq-delivery-replay-and-crash-redelivery"
     },
     {
+      "classification": "bounded-durability-hardening",
+      "id": "oracle-aq-transactional-listener-acknowledgement",
+      "reason": "commit-aq-dequeue-only-after-successful-listener-execution"
+    },
+    {
       "classification": "bounded-idempotency-hardening",
       "id": "account-journal-command-deduplication",
       "reason": "suppress-aq-redelivery-double-effect"
@@ -26,15 +31,15 @@
       "reason": "make-checks-failure-injection-explicit-and-recoverable"
     }
   ],
-  "content_sha256": "6bf02c58c966c035118bb6a4fcf6212be74e4fa4b4b7576f8181b5b5c5a16e1d",
+  "content_sha256": "1919619947b14697e5c4a748224b244d29b867acb27d1ddd03e60560fe385ba8",
   "contract_type": "lightyear-cloudbank-ms66-governed-oracle-source-hardening",
   "exact_unchanged_upstream_application": false,
   "materialized_application_identity": "pinned-source-plus-governed-hardening",
   "patch": {
-    "changed_file_count": 16,
+    "changed_file_count": 18,
     "format": "git-unified-diff",
     "path": "factory/cloudbank/whole-application-equivalence/oracle-hardening/source-hardening.patch",
-    "sha256": "092a982c5037f41bf7a7c762fde961848ed3b751bed262c9b7bceb810307f349"
+    "sha256": "4d416cb437ae363843d2f43b895cff3cf331c1c27aa93f3a2717449a66239cd0"
   },
   "preserved_native_runtime": {
     "database": "oracle-free",

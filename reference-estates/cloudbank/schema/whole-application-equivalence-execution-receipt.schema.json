@@ -53,8 +53,8 @@
         "journey_contract_sha256": "08d5a55f285432fca2c60e0c36768d58d5b5f3e26cba78104e63d87c836e6b7c",
         "execution_plan_sha256": "91c542a8acd77db4cf7d571553197e72eec055e9bf6fa21eb3ea811b6f8fcebb",
         "compatibility_ledger_sha256": "a22c7aa03afb6ed356f708abfad9e5775ab019c49e33dfe2b1d6e562683b7818",
-        "oracle_hardening_contract_sha256": "6bf02c58c966c035118bb6a4fcf6212be74e4fa4b4b7576f8181b5b5c5a16e1d",
-        "oracle_hardening_patch_sha256": "092a982c5037f41bf7a7c762fde961848ed3b751bed262c9b7bceb810307f349"
+        "oracle_hardening_contract_sha256": "1919619947b14697e5c4a748224b244d29b867acb27d1ddd03e60560fe385ba8",
+        "oracle_hardening_patch_sha256": "4d416cb437ae363843d2f43b895cff3cf331c1c27aa93f3a2717449a66239cd0"
       }
     },
     "source_ms61_receipt_sha256": {"$ref": "#/$defs/sha256"},
@@ -68,10 +68,10 @@
     "oracle_journey_sha256": {"$ref": "#/$defs/sha256"},
     "postgresql_journey_sha256": {"$ref": "#/$defs/sha256"},
     "oracle_hardening_contract_sha256": {
-      "const": "6bf02c58c966c035118bb6a4fcf6212be74e4fa4b4b7576f8181b5b5c5a16e1d"
+      "const": "1919619947b14697e5c4a748224b244d29b867acb27d1ddd03e60560fe385ba8"
     },
     "oracle_hardening_patch_sha256": {
-      "const": "092a982c5037f41bf7a7c762fde961848ed3b751bed262c9b7bceb810307f349"
+      "const": "4d416cb437ae363843d2f43b895cff3cf331c1c27aa93f3a2717449a66239cd0"
     },
     "normalized_observation_sha256": {
       "const": "71458ecf2e1b2ae89f1dad763d4a8898899e19834c7744f3683733ccaf9a2bc9"

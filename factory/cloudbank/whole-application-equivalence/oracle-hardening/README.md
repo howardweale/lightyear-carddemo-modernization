@@ -9,6 +9,7 @@ The bounded patch adds the controls needed to execute the common 18-scenario jou
 
 - restart-safe synthetic fixtures;
 - Oracle AQ/JMS message identity and a processing ledger;
+- transactional AQ listener acknowledgement for crash-safe redelivery;
 - account journal command deduplication;
 - a 422/no-mutation insufficient-funds outcome that leaves cancellation to the Transfer initiator
   and whose no-effect LRA callbacks are idempotent; and

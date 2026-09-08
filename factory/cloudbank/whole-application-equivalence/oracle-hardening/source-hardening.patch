@@ -375,6 +375,21 @@ index 5359c355..88550913 100644
 ---rollback exec DBMS_AQADM.DROP_QUEUE_TABLE(queue_table => 'ACCOUNT.deposits_qt', force => TRUE);
 \ No newline at end of file
 +--rollback exec DBMS_AQADM.DROP_QUEUE_TABLE(queue_table => 'ACCOUNT.deposits_qt', force => TRUE);
+diff --git a/cloudbank-v5/checks/src/main/java/com/example/checks/ChecksApplication.java b/cloudbank-v5/checks/src/main/java/com/example/checks/ChecksApplication.java
+index 062771c..e3b8e9b 100644
+--- a/cloudbank-v5/checks/src/main/java/com/example/checks/ChecksApplication.java
++++ b/cloudbank-v5/checks/src/main/java/com/example/checks/ChecksApplication.java
+@@ -84,6 +84,9 @@ public class ChecksApplication {
+         // This provides all boot's default to this factory, including the message
+         // converter
+         configurer.configure(factory, connectionFactory);
+-        // You could still override some of Boot's default if necessary.
++        // Commit the AQ dequeue only after the listener returns successfully so a
++        // listener exception or pod termination leaves the message available for
++        // redelivery. The message ledger suppresses the narrow crash-window duplicate.
++        factory.setSessionTransacted(true);
+         return factory;
+     }
 diff --git a/cloudbank-v5/checks/src/main/java/com/example/checks/clients/AccountClient.java b/cloudbank-v5/checks/src/main/java/com/example/checks/clients/AccountClient.java
 index 93d22336..2b9c3b06 100644
 --- a/cloudbank-v5/checks/src/main/java/com/example/checks/clients/AccountClient.java
@@ -581,6 +596,47 @@ index 9209401b..e5d32ac8 100644
  
 -}
 \ No newline at end of file
++}
+diff --git a/cloudbank-v5/checks/src/test/java/com/example/checks/Ms66ChecksTransactionalRedeliveryTests.java b/cloudbank-v5/checks/src/test/java/com/example/checks/Ms66ChecksTransactionalRedeliveryTests.java
+new file mode 100644
+index 0000000..afe9d59
+--- /dev/null
++++ b/cloudbank-v5/checks/src/test/java/com/example/checks/Ms66ChecksTransactionalRedeliveryTests.java
+@@ -0,0 +1,35 @@
++// Copyright (c) 2026, Oracle and/or its affiliates.
++// Licensed under the Universal Permissive License v 1.0.
++
++package com.example.checks;
++
++import jakarta.jms.ConnectionFactory;
++import org.junit.jupiter.api.Test;
++import org.junit.jupiter.api.extension.ExtendWith;
++import org.mockito.Mock;
++import org.mockito.junit.jupiter.MockitoExtension;
++import org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFactoryConfigurer;
++import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
++import org.springframework.test.util.ReflectionTestUtils;
++
++import static org.junit.jupiter.api.Assertions.assertEquals;
++
++@ExtendWith(MockitoExtension.class)
++class Ms66ChecksTransactionalRedeliveryTests {
++
++    @Mock
++    private ConnectionFactory connectionFactory;
++
++    @Mock
++    private DefaultJmsListenerContainerFactoryConfigurer configurer;
++
++    @Test
++    void listenerAcknowledgementIsTransactionalForCrashRedelivery() {
++        DefaultJmsListenerContainerFactory factory =
++                (DefaultJmsListenerContainerFactory) new ChecksApplication()
++                        .factory(connectionFactory, configurer);
++
++        assertEquals(Boolean.TRUE,
++                ReflectionTestUtils.getField(factory, "sessionTransacted"));
++    }
 +}
 diff --git a/cloudbank-v5/customer/src/main/resources/db/changelog/data.sql b/cloudbank-v5/customer/src/main/resources/db/changelog/data.sql
 index 5f9e3d91..435ad1e6 100644

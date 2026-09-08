@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.66.6 — 2026-09-08
+
+- Replaced the isolated Oracle lane's listener-only readiness probe with the pinned image's
+  `/opt/oracle/healthcheck.sh`, which remains non-ready through first-start initialization and
+  requires the database to be open read/write before governed schema bootstrap begins.
+- Added regression coverage and operator documentation for the startup ordering contract. This
+  controller fix responds to the live MS #66 readiness race and does not claim a passing run.
+
 ## 0.66.5 — 2026-09-08
 
 - Corrected the isolated Oracle Free `slim-faststart` StatefulSet so it no longer mounts an empty

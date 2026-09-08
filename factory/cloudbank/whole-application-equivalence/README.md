@@ -51,6 +51,12 @@ DEFAULT grants `cloudbank.read`, `cloudbank.write`, and `cloudbank.transfer`; SE
 credentials before starting services. It does not require legacy TEST-client secret fields, expand
 grants, rotate credentials, or persist secret values.
 
+The native database mirror uses the pinned Oracle Free `slim-faststart` flavor. Its pre-expanded
+database remains at `/opt/oracle/oradata` in the disposable container layer; the runner must not
+mount a fresh Kubernetes volume over that path because doing so masks the image's control files.
+The container has an 8 GiB ephemeral-storage limit, and deleting the isolated namespace removes the
+entire source lane. This is bounded rehearsal storage, not a production persistence design.
+
 The committed readiness receipt does not say the native lanes ran. A passing execution receipt
 establishes bounded, normalized whole-application equivalence for the 18 declared scenarios. It does
 not claim unchanged upstream identity, identical internals, a real credit decision, model-answer

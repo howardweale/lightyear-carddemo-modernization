@@ -416,10 +416,17 @@ def isolated_lane_resources(
                         "readinessProbe": {"tcpSocket": {"port": "oracle"},
                                            "initialDelaySeconds": 20, "periodSeconds": 10,
                                            "failureThreshold": 60},
-                        "resources": {"requests": {"cpu": "1", "memory": "2Gi"},
-                                      "limits": {"cpu": "2", "memory": "4Gi"}},
-                        "volumeMounts": [{"name": "data", "mountPath": "/opt/oracle/oradata"}],
-                    }], "volumes": [{"name": "data", "emptyDir": {"sizeLimit": "8Gi"}}]},
+                        # The mirrored *-faststart image contains an already expanded database at
+                        # /opt/oracle/oradata. A Kubernetes volume mounted there would hide its
+                        # control files; the isolated lane instead uses the disposable container
+                        # layer and bounds all writable-layer/log usage as ephemeral storage.
+                        "resources": {
+                            "requests": {"cpu": "1", "memory": "2Gi",
+                                         "ephemeral-storage": "2Gi"},
+                            "limits": {"cpu": "2", "memory": "4Gi",
+                                       "ephemeral-storage": "8Gi"},
+                        },
+                    }]},
                 },
             },
         },

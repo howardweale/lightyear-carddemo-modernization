@@ -246,6 +246,17 @@ class CloudBankMs66DualLaneTests(unittest.TestCase):
         deployments = {row["metadata"]["name"]: row for row in resources
                        if row["kind"] == "Deployment"}
         self.assertEqual(set(SERVICES) | {"microtx"}, set(deployments))
+        oracle = next(row for row in resources if row["kind"] == "StatefulSet")
+        oracle_pod = oracle["spec"]["template"]["spec"]
+        oracle_container = oracle_pod["containers"][0]
+        self.assertNotIn("volumes", oracle_pod)
+        self.assertNotIn("volumeMounts", oracle_container)
+        self.assertEqual(
+            "2Gi", oracle_container["resources"]["requests"]["ephemeral-storage"]
+        )
+        self.assertEqual(
+            "8Gi", oracle_container["resources"]["limits"]["ephemeral-storage"]
+        )
         for service in SERVICES:
             pod = deployments[service]["spec"]["template"]["spec"]
             container = pod["containers"][0]

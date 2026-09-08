@@ -1,14 +1,14 @@
 {
   "comparison": "exact-normalized-business-observations",
-  "content_sha256": "1c15bc48e99693e0b85d1a3bca775173f37b419cf3761611d6de384b9de58acd",
+  "content_sha256": "62c5b6078ce85c7188e1769dbc6f606c4c51e61569ae696ebb80231d9df6b56d",
   "contract_type": "lightyear-cloudbank-whole-application-lanes",
   "lanes": {
     "oracle": {
       "application": "pinned-source-plus-governed-hardening",
       "database": "native-oracle",
       "exact_unchanged_upstream_application": false,
-      "governed_hardening_contract_sha256": "3bb813ae28187f01a557de19c431d36b4d2cf938da688d58fc324d7bd52d868e",
-      "governed_hardening_patch_sha256": "68b23365133d0b0237962d89f5253c1cea5d24397f267022d1fb5a4c6d3fcd30",
+      "governed_hardening_contract_sha256": "ae518b6b1cb12df071281d2be7dd11d38b9bf9c30ec396413b220f7463e481ff",
+      "governed_hardening_patch_sha256": "4ed3146e86aa172e938cb1b14e1e3cc4d228803f3d71acdb9e813f17a66ae9c2",
       "messaging": "oracle-transactional-event-queue",
       "transactions": "microtx-lra"
     },

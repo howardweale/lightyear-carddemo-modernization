@@ -169,6 +169,10 @@ class CloudBankMs66DualLaneTests(unittest.TestCase):
             "STATE = 'READY'",
             "STATE IN ('READY', 'PROCESSING')",
             "STATE = 'READY' AND ATTEMPTS = 0",
+            "findJournalForLRAidOrNull",
+            "withdraw compensate has no local effect for rejected LRA",
+            "Ms66WithdrawNoEffectCallbacksTests",
+            "Ms66InsufficientFundsTransferTests",
         ):
             self.assertIn(marker, patch_text)
         self.assertEqual([], validate_materialization_receipt(materialization()))
@@ -471,6 +475,7 @@ class CloudBankMs66DualLaneTests(unittest.TestCase):
             PATCH_SHA256,
             "checkout-exact-upstream",
             "materialize-governed-hardening",
+            "-Dtest=Ms66WithdrawNoEffectCallbacksTests,Ms66InsufficientFundsTransferTests",
             "run-durable-ms66-dual-lane",
             "diskSizeGb: '100'",
         ):

@@ -18,7 +18,7 @@
     {
       "classification": "bounded-api-semantics-hardening",
       "id": "insufficient-funds-business-rejection",
-      "reason": "return-422-without-zero-value-journal-mutation"
+      "reason": "return-422-without-journal-mutation-and-settle-no-effect-lra-callbacks"
     },
     {
       "classification": "bounded-deployment-hardening",
@@ -26,15 +26,15 @@
       "reason": "make-checks-failure-injection-explicit-and-recoverable"
     }
   ],
-  "content_sha256": "3bb813ae28187f01a557de19c431d36b4d2cf938da688d58fc324d7bd52d868e",
+  "content_sha256": "ae518b6b1cb12df071281d2be7dd11d38b9bf9c30ec396413b220f7463e481ff",
   "contract_type": "lightyear-cloudbank-ms66-governed-oracle-source-hardening",
   "exact_unchanged_upstream_application": false,
   "materialized_application_identity": "pinned-source-plus-governed-hardening",
   "patch": {
-    "changed_file_count": 13,
+    "changed_file_count": 16,
     "format": "git-unified-diff",
     "path": "factory/cloudbank/whole-application-equivalence/oracle-hardening/source-hardening.patch",
-    "sha256": "68b23365133d0b0237962d89f5253c1cea5d24397f267022d1fb5a4c6d3fcd30"
+    "sha256": "4ed3146e86aa172e938cb1b14e1e3cc4d228803f3d71acdb9e813f17a66ae9c2"
   },
   "preserved_native_runtime": {
     "database": "oracle-free",

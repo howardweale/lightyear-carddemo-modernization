@@ -10,7 +10,7 @@ The bounded patch adds the controls needed to execute the common 18-scenario jou
 - restart-safe synthetic fixtures;
 - Oracle AQ/JMS message identity and a processing ledger;
 - account journal command deduplication;
-- a 422/no-mutation insufficient-funds outcome; and
+- a 422/no-mutation insufficient-funds outcome whose no-effect LRA callbacks are idempotent; and
 - an explicit Checks-to-Account endpoint for controlled dependency failure.
 
 The resulting application identity is `pinned-source-plus-governed-hardening`, not unchanged

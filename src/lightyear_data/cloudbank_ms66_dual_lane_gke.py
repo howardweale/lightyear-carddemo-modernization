@@ -50,6 +50,19 @@ from .contracts import content_hash, sign
 DNS_LABEL = re.compile(r"^[a-z0-9]([-a-z0-9]*[a-z0-9])?$")
 HEX_64 = re.compile(r"^[0-9a-f]{64}$")
 AUTH_SECRET = "cloudbank-azn-server-external"
+AUTH_ROLE_CLIENTS = {
+    "owner": "DEFAULT",
+    "account": "SERVICE",
+    "test": "SERVICE",
+    "credit": "CREDITSCORE",
+    "chat": "CHATBOT",
+}
+AUTH_CLIENT_SCOPES = {
+    "DEFAULT": {"cloudbank.read", "cloudbank.write", "cloudbank.transfer"},
+    "SERVICE": {"cloudbank.internal", "cloudbank.test"},
+    "CREDITSCORE": {"cloudbank.read"},
+    "CHATBOT": {"cloudbank.read"},
+}
 APP_ORDER = (
     "azn-server", "customer", "account", "transfer", "checks", "testrunner",
     "creditscore", "chatbot",
@@ -190,21 +203,35 @@ def _service_environment(service: str, namespace: str, model_namespace: str,
                  secret_key="AZN_AUTHORIZATION_SERVER_DEFAULT_CLIENT_SECRET",
                  secret_name="ms66-authorization"),
             _env("AZN_AUTHORIZATION_SERVER_DEFAULT_CLIENT_SCOPES",
-                 "cloudbank.read,cloudbank.write,cloudbank.transfer"),
+                 secret_key="AZN_AUTHORIZATION_SERVER_DEFAULT_CLIENT_SCOPES",
+                 secret_name="ms66-authorization"),
             _env("AZN_AUTHORIZATION_SERVER_SERVICE_CLIENT_ID",
                  secret_key="AZN_AUTHORIZATION_SERVER_SERVICE_CLIENT_ID",
                  secret_name="ms66-authorization"),
             _env("AZN_AUTHORIZATION_SERVER_SERVICE_CLIENT_SECRET",
                  secret_key="AZN_AUTHORIZATION_SERVER_SERVICE_CLIENT_SECRET",
                  secret_name="ms66-authorization"),
-            _env("AZN_AUTHORIZATION_SERVER_SERVICE_CLIENT_SCOPES", "cloudbank.internal"),
+            _env("AZN_AUTHORIZATION_SERVER_SERVICE_CLIENT_SCOPES",
+                 secret_key="AZN_AUTHORIZATION_SERVER_SERVICE_CLIENT_SCOPES",
+                 secret_name="ms66-authorization"),
             _env("AZN_AUTHORIZATION_SERVER_TEST_CLIENT_ID",
-                 secret_key="AZN_AUTHORIZATION_SERVER_TEST_CLIENT_ID",
+                 secret_key="AZN_AUTHORIZATION_SERVER_CREDITSCORE_CLIENT_ID",
                  secret_name="ms66-authorization"),
             _env("AZN_AUTHORIZATION_SERVER_TEST_CLIENT_SECRET",
-                 secret_key="AZN_AUTHORIZATION_SERVER_TEST_CLIENT_SECRET",
+                 secret_key="AZN_AUTHORIZATION_SERVER_CREDITSCORE_CLIENT_SECRET",
                  secret_name="ms66-authorization"),
-            _env("AZN_AUTHORIZATION_SERVER_TEST_CLIENT_SCOPES", "cloudbank.test"),
+            _env("AZN_AUTHORIZATION_SERVER_TEST_CLIENT_SCOPES",
+                 secret_key="AZN_AUTHORIZATION_SERVER_CREDITSCORE_CLIENT_SCOPES",
+                 secret_name="ms66-authorization"),
+            _env("AZN_AUTHORIZATION_SERVER_ADMIN_CLIENT_ID",
+                 secret_key="AZN_AUTHORIZATION_SERVER_CHATBOT_CLIENT_ID",
+                 secret_name="ms66-authorization"),
+            _env("AZN_AUTHORIZATION_SERVER_ADMIN_CLIENT_SECRET",
+                 secret_key="AZN_AUTHORIZATION_SERVER_CHATBOT_CLIENT_SECRET",
+                 secret_name="ms66-authorization"),
+            _env("AZN_AUTHORIZATION_SERVER_ADMIN_CLIENT_SCOPES",
+                 secret_key="AZN_AUTHORIZATION_SERVER_CHATBOT_CLIENT_SCOPES",
+                 secret_name="ms66-authorization"),
             _env("AZN_AUTHORIZATION_SERVER_SIGNING_KEY_PRIVATE_KEY_PATH",
                  "/var/run/secrets/cloudbank/signing/private.pem"),
             _env("AZN_AUTHORIZATION_SERVER_SIGNING_KEY_PUBLIC_KEY_PATH",
@@ -329,15 +356,27 @@ def isolated_lane_resources(
     required_auth = {
         "private.pem", "public.pem", "AZN_AUTHORIZATION_SERVER_DEFAULT_CLIENT_ID",
         "AZN_AUTHORIZATION_SERVER_DEFAULT_CLIENT_SECRET",
+        "AZN_AUTHORIZATION_SERVER_DEFAULT_CLIENT_SCOPES",
         "AZN_AUTHORIZATION_SERVER_SERVICE_CLIENT_ID",
         "AZN_AUTHORIZATION_SERVER_SERVICE_CLIENT_SECRET",
-        "AZN_AUTHORIZATION_SERVER_TEST_CLIENT_ID",
-        "AZN_AUTHORIZATION_SERVER_TEST_CLIENT_SECRET",
+        "AZN_AUTHORIZATION_SERVER_SERVICE_CLIENT_SCOPES",
+        "AZN_AUTHORIZATION_SERVER_CREDITSCORE_CLIENT_ID",
+        "AZN_AUTHORIZATION_SERVER_CREDITSCORE_CLIENT_SECRET",
+        "AZN_AUTHORIZATION_SERVER_CREDITSCORE_CLIENT_SCOPES",
+        "AZN_AUTHORIZATION_SERVER_CHATBOT_CLIENT_ID",
+        "AZN_AUTHORIZATION_SERVER_CHATBOT_CLIENT_SECRET",
+        "AZN_AUTHORIZATION_SERVER_CHATBOT_CLIENT_SCOPES",
     }
     if not required_auth <= set(authorization) \
             or any(not isinstance(authorization[name], str) or not authorization[name]
                    for name in required_auth):
         raise ValueError("cloudbank-ms66-authorization-secret-shape-invalid")
+    for prefix, expected in AUTH_CLIENT_SCOPES.items():
+        value = authorization[f"AZN_AUTHORIZATION_SERVER_{prefix}_CLIENT_SCOPES"]
+        scopes = [item.strip() for item in value.split(",")]
+        if any(not re.fullmatch(r"cloudbank\.[a-z]+", item) for item in scopes) \
+                or len(scopes) != len(set(scopes)) or set(scopes) != expected:
+            raise ValueError("cloudbank-ms66-authorization-scope-contract-invalid")
     auth_data = {name: authorization[name] for name in required_auth}
     auth_data.update({
         "service-client-id": authorization["AZN_AUTHORIZATION_SERVER_SERVICE_CLIENT_ID"],
@@ -711,9 +750,7 @@ class OracleGkeRuntime(GkeRuntime):
 
     def load_credentials(self):
         secret = self.secret_json(AUTH_SECRET)
-        prefixes = {"owner": "DEFAULT", "account": "SERVICE", "test": "TEST",
-                    "credit": "DEFAULT", "chat": "DEFAULT"}
-        for role, prefix in prefixes.items():
+        for role, prefix in AUTH_ROLE_CLIENTS.items():
             client = secret.get(f"AZN_AUTHORIZATION_SERVER_{prefix}_CLIENT_ID", "")
             password = secret.get(f"AZN_AUTHORIZATION_SERVER_{prefix}_CLIENT_SECRET", "")
             require(bool(client and password), "oauth-client-configuration-missing")

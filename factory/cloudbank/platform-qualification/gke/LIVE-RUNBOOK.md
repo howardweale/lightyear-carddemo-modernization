@@ -245,6 +245,14 @@ reviewed hardening patch by its SHA-256, compiles eight source images, and resol
 Oracle Free, and MicroTx image to an immutable digest before creating a namespace. The isolated
 namespace is labelled with the build run ID and is removed before the PostgreSQL lane begins.
 
+Before uploading inputs or starting the build, the launcher reads the authorization secret into a
+bounded in-memory validation pipe and checks the four-client scope contract: DEFAULT must have
+`cloudbank.read,cloudbank.write,cloudbank.transfer`; SERVICE must have
+`cloudbank.internal,cloudbank.test`; and CREDITSCORE and CHATBOT must each have `cloudbank.read`.
+The check never prints or persists client IDs, client secrets, or signing keys. Correct a drifted
+Secret Manager version through the established non-production secret workflow and roll the target
+authorization-server deployment before resubmitting; do not add obsolete TEST-client fields.
+
 The launcher also requires the immutable Java 21 base image already approved for the MS67 image
 build. The default MicroTx image is `container-registry.oracle.com/database/otmm:24.4.1`, matching
 the version declared by the pinned CloudBank source. The default native runtime candidates use

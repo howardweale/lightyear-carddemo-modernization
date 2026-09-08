@@ -34,11 +34,27 @@ class ProductionAudienceTokenCustomizerTest {
     }
 
     @Test
-    void unknownClientFailsToUnassignedAudience() {
-        assertAudience("unknown-client", "cloudbank-unassigned");
+    void scopeDerivedAudiencesRemainLeastPrivileged() {
+        assertAudiences(
+                "owner-client",
+                Set.of("cloudbank.read", "cloudbank.write", "cloudbank.transfer"),
+                List.of("cloudbank-account", "cloudbank-transfer"));
+        assertAudiences(
+                "service-client",
+                Set.of("cloudbank.internal", "cloudbank.test"),
+                List.of("cloudbank-account"));
+        assertAudiences(
+                "transfer-client",
+                Set.of("cloudbank.transfer"),
+                List.of("cloudbank-transfer"));
+        assertAudiences("unknown-client", Set.of(), List.of("cloudbank-unassigned"));
     }
 
     private void assertAudience(String clientId, String audience) {
+        assertAudiences(clientId, Set.of(), List.of(audience));
+    }
+
+    private void assertAudiences(String clientId, Set<String> scopes, List<String> audiences) {
         RegisteredClient client = RegisteredClient.withId(clientId + "-id")
                 .clientId(clientId)
                 .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
@@ -47,12 +63,12 @@ class ProductionAudienceTokenCustomizerTest {
                         JwsHeader.with(org.springframework.security.oauth2.jose.jws.SignatureAlgorithm.RS256),
                         JwtClaimsSet.builder())
                 .registeredClient(client)
-                .authorizedScopes(Set.of())
+                .authorizedScopes(scopes)
                 .tokenType(OAuth2TokenType.ACCESS_TOKEN)
                 .build();
 
         customizer.customize(context);
 
-        assertEquals(List.of(audience), context.getClaims().build().getClaim("aud"));
+        assertEquals(audiences, context.getClaims().build().getClaim("aud"));
     }
 }

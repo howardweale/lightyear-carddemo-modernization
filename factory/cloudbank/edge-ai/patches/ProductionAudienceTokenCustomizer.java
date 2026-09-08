@@ -3,6 +3,7 @@
 
 package oracle.obaas.aznserver.securityconfig;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -39,12 +40,16 @@ public class ProductionAudienceTokenCustomizer
             context.getClaims().audience(List.of("cloudbank-creditscore"));
         } else if (chatbotClientId.equals(clientId)) {
             context.getClaims().audience(List.of("cloudbank-chatbot"));
-        } else if (scopes.contains("cloudbank.internal")) {
-            context.getClaims().audience(List.of("cloudbank-account"));
-        } else if (scopes.contains("cloudbank.transfer")) {
-            context.getClaims().audience(List.of("cloudbank-transfer"));
         } else {
-            context.getClaims().audience(List.of("cloudbank-unassigned"));
+            List<String> audiences = new ArrayList<>();
+            if (scopes.contains("cloudbank.internal") || scopes.contains("cloudbank.write")) {
+                audiences.add("cloudbank-account");
+            }
+            if (scopes.contains("cloudbank.transfer")) {
+                audiences.add("cloudbank-transfer");
+            }
+            context.getClaims().audience(
+                    audiences.isEmpty() ? List.of("cloudbank-unassigned") : List.copyOf(audiences));
         }
     }
 }

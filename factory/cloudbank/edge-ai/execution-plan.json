@@ -3,7 +3,7 @@
     "ms63-five-service-target",
     "ms57-qualified-customer-target"
   ],
-  "content_sha256": "84ce57beabf4a8cfa67cb9c79f4655285cd8893f4389c260c2ec04e7f9e43d4a",
+  "content_sha256": "df280aa07a8d76f72dfb821e54895f59ba262650ed83abfb4cb8161f77a3d4bf",
   "customer_target_paths": [
     "customer/pom.xml",
     "customer/src/main/java/com/example/customer/model/Customers.java",
@@ -34,7 +34,7 @@
     {
       "path": "azn-server/src/main/java/oracle/obaas/aznserver/securityconfig/ProductionAudienceTokenCustomizer.java",
       "template": "patches/ProductionAudienceTokenCustomizer.java",
-      "template_sha256": "16b73cadbfa71227f773a3e9604d240bc59da8c75cfe55278a74e6c005730758"
+      "template_sha256": "abcee84b5b19f48f269168562b22a53c70bdf0018c3a8f8aae8c8a27c0eb96c4"
     },
     {
       "path": "azn-server/src/main/resources/application.yaml",
@@ -44,7 +44,7 @@
     {
       "path": "azn-server/src/test/java/oracle/obaas/aznserver/securityconfig/ProductionAudienceTokenCustomizerTest.java",
       "template": "patches/ProductionAudienceTokenCustomizerTest.java",
-      "template_sha256": "a08853659a54aa512a648c6aa051577b3b0d9e703539759f301bc68076e4cc7d"
+      "template_sha256": "b0b42de99c1cc3022fb5e6e3f872d23d07756d19ad9bcd789bd903f6627f603e"
     },
     {
       "path": "chatbot/pom.xml",

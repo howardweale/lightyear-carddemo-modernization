@@ -128,6 +128,14 @@ class CloudBankEdgeAITests(unittest.TestCase):
         chat_security = (patches / "ChatbotOAuthSecurityConfiguration.java").read_text()
         self.assertIn("cloudbank-creditscore", credit_security)
         self.assertIn("cloudbank-chatbot", chat_security)
+        audience = (patches / "ProductionAudienceTokenCustomizer.java").read_text()
+        self.assertIn(
+            'scopes.contains("cloudbank.internal") || scopes.contains("cloudbank.write")',
+            audience,
+        )
+        self.assertIn('audiences.add("cloudbank-account")', audience)
+        self.assertIn('scopes.contains("cloudbank.transfer")', audience)
+        self.assertIn('audiences.add("cloudbank-transfer")', audience)
         chat = (patches / "ChatController.java").read_text(encoding="utf-8")
         self.assertIn("BLOCKED_INPUT", chat)
         self.assertIn("TOO_MANY_REQUESTS", chat)

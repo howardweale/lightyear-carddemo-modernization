@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.66.11 — 2026-09-08
+
+- Made the governed Oracle Checks listener use a transacted JMS session so an AQ dequeue commits
+  only after successful listener completion. A listener exception or pod termination now rolls the
+  dequeue back for redelivery while the existing message ledger suppresses the crash-window
+  duplicate effect.
+- Added a listener-factory regression and refreshed every content-addressed MS #66 binding. This
+  hardening responds to live build `38a463a2-7a88-4f82-8e04-67611c19b487` and does not claim that
+  the dual-lane execution passed.
+
 ## 0.66.10 — 2026-09-08
 
 - Kept HTTP client errors returned by the governed Oracle Account withdrawal participant under the

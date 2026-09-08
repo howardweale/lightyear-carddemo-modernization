@@ -31,7 +31,7 @@ RELEASE = "0.66.1"
 PATCH_RELATIVE_PATH = Path(
     "factory/cloudbank/whole-application-equivalence/oracle-hardening/source-hardening.patch"
 )
-PATCH_SHA256 = "092a982c5037f41bf7a7c762fde961848ed3b751bed262c9b7bceb810307f349"
+PATCH_SHA256 = "4d416cb437ae363843d2f43b895cff3cf331c1c27aa93f3a2717449a66239cd0"
 MATERIALIZATION_RECEIPT = "oracle-hardening.materialization.json"
 SOURCE_IMAGE_LOCK_TYPE = "lightyear-cloudbank-ms66-governed-oracle-source-image-lock"
 HEX_64 = re.compile(r"^[0-9a-f]{64}$")
@@ -68,7 +68,7 @@ def hardening_contract() -> dict[str, Any]:
             "path": PATCH_RELATIVE_PATH.as_posix(),
             "sha256": PATCH_SHA256,
             "format": "git-unified-diff",
-            "changed_file_count": 16,
+            "changed_file_count": 18,
         },
         "changes": [
             {
@@ -80,6 +80,11 @@ def hardening_contract() -> dict[str, Any]:
                 "id": "oracle-aq-message-identity-ledger",
                 "classification": "bounded-observability-and-idempotency-hardening",
                 "reason": "identify-native-aq-delivery-replay-and-crash-redelivery",
+            },
+            {
+                "id": "oracle-aq-transactional-listener-acknowledgement",
+                "classification": "bounded-durability-hardening",
+                "reason": "commit-aq-dequeue-only-after-successful-listener-execution",
             },
             {
                 "id": "account-journal-command-deduplication",
@@ -143,7 +148,7 @@ def validate_hardening(project_root: Path) -> list[str]:
         return errors
     text = patch.read_text(encoding="utf-8")
     changed = re.findall(r"^diff --git a/(\S+) b/(\S+)$", text, re.MULTILINE)
-    if len(changed) != 16 or any(
+    if len(changed) != hardening_contract()["patch"]["changed_file_count"] or any(
         left != right or not left.startswith(PINNED_SUBTREE + "/")
         or ".." in Path(left).parts or Path(left).is_absolute()
         for left, right in changed
@@ -157,6 +162,7 @@ def validate_hardening(project_root: Path) -> list[str]:
         "cancelOnFamily = {}",
         "findJournalForLRAidOrNull",
         "ACCOUNT_BASE_URL",
+        "setSessionTransacted(true)",
         "source_checkout_mutated",
     )
     combined = text + json.dumps(hardening_contract(), sort_keys=True)

@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.66.5 — 2026-09-08
+
+- Corrected the isolated Oracle Free `slim-faststart` StatefulSet so it no longer mounts an empty
+  Kubernetes volume over `/opt/oracle/oradata`, which had hidden the image's pre-expanded database
+  control files and produced `ORA-00205` during the live MS #66 run.
+- Retained bounded disposable storage with explicit 2 GiB/8 GiB ephemeral-storage request and limit,
+  documented the non-production persistence boundary, and added regression coverage forbidding an
+  Oracle data-path mount. This controller fix does not claim that MS #66 execution passed.
+
 ## 0.66.4 — 2026-09-08
 
 - Aligned the isolated Oracle lane with the authorization-client contract already proven by the

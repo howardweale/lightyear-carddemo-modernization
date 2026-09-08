@@ -253,6 +253,13 @@ The check never prints or persists client IDs, client secrets, or signing keys. 
 Secret Manager version through the established non-production secret workflow and roll the target
 authorization-server deployment before resubmitting; do not add obsolete TEST-client fields.
 
+The pinned Oracle Free `slim-faststart` image already contains its expanded database at
+`/opt/oracle/oradata`. The isolated StatefulSet intentionally leaves that image path unmounted;
+mounting a fresh Kubernetes volume there would hide the supplied control files and prevent Oracle
+from opening. Writable-layer and log usage remain bounded by an 8 GiB ephemeral-storage limit, and
+namespace cleanup removes the disposable database. Do not reinterpret this rehearsal layout as a
+production Oracle persistence design.
+
 The launcher also requires the immutable Java 21 base image already approved for the MS67 image
 build. The default MicroTx image is `container-registry.oracle.com/database/otmm:24.4.1`, matching
 the version declared by the pinned CloudBank source. The default native runtime candidates use

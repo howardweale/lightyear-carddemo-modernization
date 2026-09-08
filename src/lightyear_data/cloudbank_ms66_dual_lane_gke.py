@@ -413,9 +413,16 @@ def isolated_lane_resources(
                             _env("ORACLE_PASSWORD", secret_key="oracle-password"),
                             _env("ENABLE_ARCHIVELOG", "false"),
                         ],
-                        "readinessProbe": {"tcpSocket": {"port": "oracle"},
-                                           "initialDelaySeconds": 20, "periodSeconds": 10,
-                                           "failureThreshold": 60},
+                        # Listener readiness precedes database initialization. The image's own
+                        # healthcheck remains non-ready while its first-start markers exist and
+                        # proves that the requested database is open read/write before bootstrap.
+                        "readinessProbe": {
+                            "exec": {"command": ["/opt/oracle/healthcheck.sh"]},
+                            "initialDelaySeconds": 10,
+                            "periodSeconds": 10,
+                            "timeoutSeconds": 5,
+                            "failureThreshold": 90,
+                        },
                         # The mirrored *-faststart image contains an already expanded database at
                         # /opt/oracle/oradata. A Kubernetes volume mounted there would hide its
                         # control files; the isolated lane instead uses the disposable container

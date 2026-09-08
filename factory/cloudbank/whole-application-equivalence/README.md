@@ -57,6 +57,10 @@ mount a fresh Kubernetes volume over that path because doing so masks the image'
 The container has an 8 GiB ephemeral-storage limit, and deleting the isolated namespace removes the
 entire source lane. This is bounded rehearsal storage, not a production persistence design.
 
+The Oracle pod uses the image's `/opt/oracle/healthcheck.sh` for readiness instead of treating an
+open listener socket as database readiness. The runner therefore waits for first-start
+initialization to finish and for the database to report read/write status before schema bootstrap.
+
 The committed readiness receipt does not say the native lanes ran. A passing execution receipt
 establishes bounded, normalized whole-application equivalence for the 18 declared scenarios. It does
 not claim unchanged upstream identity, identical internals, a real credit decision, model-answer

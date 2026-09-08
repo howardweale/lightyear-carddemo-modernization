@@ -260,6 +260,11 @@ from opening. Writable-layer and log usage remain bounded by an 8 GiB ephemeral-
 namespace cleanup removes the disposable database. Do not reinterpret this rehearsal layout as a
 production Oracle persistence design.
 
+Oracle readiness executes the image's `/opt/oracle/healthcheck.sh`; a TCP listener alone is not a
+readiness signal. The image healthcheck remains non-ready while first-start initialization is in
+progress and requires the database to be open read/write. This prevents the runner from beginning
+schema bootstrap while the image is still resetting credentials and completing its startup state.
+
 The launcher also requires the immutable Java 21 base image already approved for the MS67 image
 build. The default MicroTx image is `container-registry.oracle.com/database/otmm:24.4.1`, matching
 the version declared by the pinned CloudBank source. The default native runtime candidates use

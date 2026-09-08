@@ -251,6 +251,12 @@ class CloudBankMs66DualLaneTests(unittest.TestCase):
         oracle_container = oracle_pod["containers"][0]
         self.assertNotIn("volumes", oracle_pod)
         self.assertNotIn("volumeMounts", oracle_container)
+        self.assertNotIn("tcpSocket", oracle_container["readinessProbe"])
+        self.assertEqual(
+            ["/opt/oracle/healthcheck.sh"],
+            oracle_container["readinessProbe"]["exec"]["command"],
+        )
+        self.assertEqual(5, oracle_container["readinessProbe"]["timeoutSeconds"])
         self.assertEqual(
             "2Gi", oracle_container["resources"]["requests"]["ephemeral-storage"]
         )

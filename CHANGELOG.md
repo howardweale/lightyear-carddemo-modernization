@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.66.8 — 2026-09-08
+
+- Made shared transfer observations wait for bounded state convergence after an HTTP success,
+  covering Oracle MicroTx's valid interval between returning from the initiating request and
+  committing participant completion callbacks. A missing or incorrect balance effect remains a
+  hard failure under the existing code.
+- Made opposite concurrent transfers wait for both participant-journal pairs as well as conserved
+  balances, so the unchanged starting balance cannot be mistaken for completed work. Added delayed
+  LRA-effect regression coverage. This controller fix responds to live MS #66 evidence and does not
+  claim that the dual-lane execution passed.
+
 ## 0.66.7 — 2026-09-08
 
 - Corrected the shared journey fixture setup to create customer-owned accounts with the owner's

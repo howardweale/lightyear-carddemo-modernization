@@ -203,7 +203,15 @@ class Journeys:
         before = self.state()
         response = self.transfer(0, 1, amount, key)
         require(response.status == 200, "transfer-http-failed")
-        after = self.state()
+        expected = list(before["balances"])
+        expected[0] -= amount
+        expected[1] += amount
+        # Oracle MicroTx can return from the initiating HTTP request while its
+        # LRA completion callbacks are still committing the participant state.
+        # Observe bounded convergence instead of racing that valid callback
+        # window; a transfer that never produces the real effects still fails.
+        after = self.wait(self.state, lambda state: state["balances"] == expected,
+                          "transfer-balance-delta-invalid")
         self.assert_transfer(before, after, 0, 1, amount)
         return {"http_status": response.status, "before_sha256": hashed(before), "after_sha256": hashed(after)}
 
@@ -368,7 +376,16 @@ class Journeys:
             second = pool.submit(self.transfer, 1, 0, 5, "concurrent-reverse")
             responses = [first.result(), second.result()]
         require(all(response.status == 200 for response in responses), "concurrent-transfer-request-failed")
-        after = self.state()
+        # The opposite transfers conserve the original balances, so balances
+        # alone cannot distinguish "not started" from "both completed". Wait
+        # for both pairs of participant journals as well as final conservation.
+        expected_journals = len(before["journals"]) + 4
+        after = self.wait(
+            self.state,
+            lambda state: state["balances"] == before["balances"]
+            and len(state["journals"]) == expected_journals,
+            "concurrent-transfer-settlement-timeout",
+        )
         require(after["balances"] == before["balances"], "concurrent-transfer-conservation-failed")
         prior = {row["id"] for row in before["journals"]}
         require([r for r in after["journals"] if r["id"] in prior] == before["journals"],

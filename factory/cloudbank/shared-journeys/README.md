@@ -83,8 +83,12 @@ secret `cloudbank-ms67-evidence-key`. Override the secret reference with
 
 Execution creates three synthetic accounts through the Account API, with a unique
 run marker, and retains their bounded records for inspection. Transfers require
-exact balance/journal deltas and rejection without mutation. Check deposit and
-clearance require a processed queue record plus their precise journal effects;
+exact balance/journal deltas and rejection without mutation. After an HTTP success,
+the runner waits only within its declared bound for those effects because an Oracle
+MicroTx LRA can still be committing participant completion callbacks. Opposite
+concurrent transfers additionally require all four participant journals before an
+unchanged balance can qualify as conservation. Check deposit and clearance require
+a processed queue record plus their precise journal effects;
 replaying producer keys must not change state. CloudBank's declared check
 clearance changes PENDING to DEPOSIT; this test does not invent a balance-credit
 settlement behavior. Credit-score and chatbot checks validate their declared

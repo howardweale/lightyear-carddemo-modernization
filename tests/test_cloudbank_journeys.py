@@ -17,6 +17,7 @@ from urllib.parse import parse_qs, urlsplit
 
 from lightyear_data.cloudbank_journeys import (
     JourneyFailure, Journeys, OBSERVATION_TYPE, Response, SCENARIOS, SERVICES, execute_journeys,
+    hashed,
 )
 from lightyear_data.cloudbank_journeys_gke import GkeRuntime, RESTORATION_GROUPS
 from lightyear_data.contracts import sign, verify_signature
@@ -137,10 +138,19 @@ class StatefulRuntime:
                     if self.fault != "no-redelivery-attempt":
                         row["attempts"] += 1
                     self.deliver(key)
+        if self.fault == "invalid-replacement-evidence" and service == "checks":
+            return {"ready_replicas": 2}
+        return {"ready_replicas": 2,
+                "pod_identity_sha256": hashed([service, "replacement"])}
 
-    def crash_stopped(self, service):
-        if service not in self.stopped:
-            raise AssertionError("crash before stopping")
+    def crash_stop(self, service):
+        if service in self.stopped:
+            raise AssertionError("crash requires running service")
+        self.stopped.add(service)
+        return {"termination_mode": "bounded-test-process-crash",
+                "termination_grace_seconds": 1,
+                "terminated_pod_count": 2,
+                "terminated_pod_identity_sha256": hashed([service, "original"])}
 
     def block_checks_delivery(self):
         self.blocked = True
@@ -191,7 +201,8 @@ class JourneyTests(unittest.TestCase):
                     "insufficient-500": "insufficient-funds-not-business-rejection",
                     "duplicate-effects": "duplicate-message-mutated-state",
                     "clearance-no-effects": "check-clearance-state-invalid",
-                    "no-redelivery-attempt": "inflight-redelivery-not-observed"}
+                    "no-redelivery-attempt": "inflight-redelivery-not-observed",
+                    "invalid-replacement-evidence": "checks-replacement-evidence-invalid"}
         for fault, reason in expected.items():
             with self.subTest(fault=fault):
                 result = self.execute(fault)
@@ -288,6 +299,73 @@ class GkeAdapterTests(unittest.TestCase):
             with self.assertRaises(JourneyFailure):
                 self.runtime.stop("account")
         self.assertEqual(self.runtime.stopped, {"account"})
+
+    def test_checks_crash_records_intent_and_deletes_pods_before_scale(self):
+        pods = [
+            {"metadata": {"name": "checks-a", "uid": "uid-a"}},
+            {"metadata": {"name": "checks-b", "uid": "uid-b"}},
+        ]
+        self.runtime.original["checks"] = {"uid": "deployment-uid", "replicas": 2}
+        self.runtime.pod_sets["checks"] = {"uid-a", "uid-b"}
+        seen = []
+
+        def command(*args, **kwargs):
+            seen.append(args)
+            if args[0] == "delete":
+                state = json.loads((Path(self.temp.name) / "recovery-state.json").read_text())
+                self.assertTrue(verify_signature(state, "key"))
+                self.assertEqual(state["stopped_services"], ["checks"])
+            return ""
+
+        def get(kind, name=None, selector=None):
+            self.assertEqual(kind, "pod")
+            match = next(row for row in pods if row["metadata"]["name"] == name)
+            return {"metadata": dict(match["metadata"])}
+
+        with patch.object(self.runtime, "deployment", return_value={"spec": {"replicas": 2}}), \
+                patch.object(self.runtime, "pods", side_effect=[pods, []]), \
+                patch.object(self.runtime, "get", side_effect=get), \
+                patch.object(self.runtime, "kubectl", side_effect=command):
+            evidence = self.runtime.crash_stop("checks")
+
+        self.assertEqual([row[0] for row in seen], ["delete", "delete", "scale"])
+        self.assertEqual(seen[0], ("delete", "pod/checks-a", "--grace-period=1", "--wait=false"))
+        self.assertEqual(seen[1], ("delete", "pod/checks-b", "--grace-period=1", "--wait=false"))
+        self.assertEqual(seen[2],
+                         ("scale", "deployment/checks", "--current-replicas=2", "--replicas=0"))
+        self.assertNotIn("--force", str(seen))
+        self.assertEqual(self.runtime.stopped, {"checks"})
+        self.assertEqual(evidence["termination_grace_seconds"], 1)
+        self.assertEqual(evidence["terminated_pod_count"], 2)
+        self.assertEqual(evidence["terminated_pod_identity_sha256"], hashed(["uid-a", "uid-b"]))
+
+    def test_checks_crash_rejects_pod_drift_before_mutation_intent(self):
+        pods = [{"metadata": {"name": "checks-a", "uid": "uid-a"}},
+                {"metadata": {"name": "checks-b", "uid": "uid-b"}}]
+        self.runtime.pod_sets["checks"] = {"old-a", "old-b"}
+        with patch.object(self.runtime, "deployment", return_value={"spec": {"replicas": 2}}), \
+                patch.object(self.runtime, "pods", return_value=pods), \
+                patch.object(self.runtime, "get") as get, \
+                patch.object(self.runtime, "kubectl") as command:
+            with self.assertRaisesRegex(JourneyFailure, "checks-crash-pod-set-drift"):
+                self.runtime.crash_stop("checks")
+        get.assert_not_called()
+        command.assert_not_called()
+        self.assertEqual(self.runtime.stopped, set())
+
+    def test_ordinary_checks_stop_scales_before_waiting_for_pod_deletion(self):
+        self.runtime.original["checks"] = {"uid": "deployment-uid", "replicas": 2}
+        pod = {"metadata": {"name": "checks-a", "uid": "uid-a"}}
+        with patch.object(self.runtime, "deployment"), \
+                patch.object(self.runtime, "pods", side_effect=[[pod], []]) as pods, \
+                patch.object(self.runtime, "kubectl", return_value="") as command, \
+                patch("lightyear_data.cloudbank_journeys_gke.time.sleep") as pause:
+            self.runtime.stop("checks")
+        command.assert_called_once_with(
+            "scale", "deployment/checks", "--current-replicas=2", "--replicas=0")
+        self.assertEqual(pods.call_count, 2)
+        pause.assert_called_once_with(1)
+        self.assertEqual(self.runtime.stopped, {"checks"})
 
     def test_failed_scale_can_restore_existing_healthy_pods(self):
         self.runtime.stopped.add("account")

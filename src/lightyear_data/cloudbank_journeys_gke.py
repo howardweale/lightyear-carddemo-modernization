@@ -33,6 +33,7 @@ RESTORATION_GROUPS = (
     ("transfer", "checks"),
     ("testrunner",),
 )
+CHECKS_CRASH_GRACE_SECONDS = 1
 
 
 def command(argv: list[str], *, data: str | None = None, timeout=45) -> str:
@@ -172,11 +173,11 @@ class GkeRuntime:
             result[service]["http_readiness"] = 200
         return result
 
-    def wait_ready(self, service: str, previous: set[str] | None = None) -> None:
+    def wait_ready(self, service: str, previous: set[str] | None = None) -> dict:
         deadline = time.monotonic() + 300
         while True:
             try:
-                self.service_ready(service)
+                observation = self.service_ready(service)
                 if previous is None or not (previous & self.pod_sets[service]):
                     break
             except JourneyFailure as exc:
@@ -185,6 +186,7 @@ class GkeRuntime:
             require(time.monotonic() < deadline, "service-recovery-timeout")
             time.sleep(2)
         self.close_forward(service)
+        return observation
 
     def secret_json(self, name: str) -> dict:
         require(re.fullmatch(r"[a-z0-9-]{1,100}", name) is not None, "secret-reference-invalid")
@@ -411,11 +413,10 @@ class GkeRuntime:
         self.recovery_checkpoint()
         self.close_forward(service)
         self.kubectl("scale", "deployment/" + service, "--current-replicas=2", "--replicas=0")
-        if service != "checks":
-            deadline = time.monotonic() + 180
-            while self.pods(service):
-                require(time.monotonic() < deadline, "service-stop-timeout")
-                time.sleep(1)
+        deadline = time.monotonic() + 180
+        while self.pods(service):
+            require(time.monotonic() < deadline, "service-stop-timeout")
+            time.sleep(1)
 
     def _request_start(self, service: str):
         require(service in self.stopped, "restoration-intent-required")
@@ -430,16 +431,17 @@ class GkeRuntime:
         return set(self.pod_sets.get(service, set())) if replicas == 0 else None
 
     def _finish_start(self, service: str, previous):
-        self.wait_ready(service, previous)
+        observation = self.wait_ready(service, previous)
         self.stopped.remove(service)
         try:
             self.recovery_checkpoint()
         except BaseException:
             self.stopped.add(service)
             raise
+        return observation
 
     def start(self, service: str):
-        self._finish_start(service, self._request_start(service))
+        return self._finish_start(service, self._request_start(service))
 
     def _restore_grouped(self):
         errors, records = [], {}
@@ -479,16 +481,46 @@ class GkeRuntime:
             "timing_scope": "scale-up request through readiness observation and checkpoint; observation may lag pod readiness",
             "services": records}
 
-    def crash_stopped(self, service: str):
-        require(service == "checks" and service in self.stopped, "checks-crash-requires-stop-intent")
-        require(self.deployment(service)["spec"].get("replicas") == 0, "checks-must-remain-scaled-down")
+    def crash_stop(self, service: str) -> dict:
+        require(service == "checks" and service not in self.stopped,
+                "checks-crash-requires-running-service")
+        require(self.deployment(service)["spec"].get("replicas") == 2,
+                "checks-crash-requires-two-replica-baseline")
         pods = self.pods(service)
-        require(bool(pods), "checks-process-exit-preceded-crash-injection")
+        require(len(pods) == 2, "checks-crash-pod-count-invalid")
+        identities = {pod["metadata"]["uid"] for pod in pods}
+        require(identities == self.pod_sets.get(service), "checks-crash-pod-set-drift")
         for pod in pods:
             name, uid = pod["metadata"]["name"], pod["metadata"]["uid"]
             current = self.get("pod", name)
-            require(current["metadata"]["uid"] == uid, "checks-pod-identity-drift")
-            self.kubectl("delete", "pod/" + name, "--grace-period=0", "--force", "--wait=false")
+            require(current["metadata"]["uid"] == uid
+                    and not current["metadata"].get("deletionTimestamp"),
+                    "checks-pod-identity-drift")
+
+        # Record recoverable stop intent before the first mutation. Delete the
+        # validated running pods before changing desired replicas: scaling to
+        # zero first sends the normal SIGTERM path and can close UCP while an AQ
+        # listener still needs its transactional rollback connection. A
+        # one-second pod grace bounds that shutdown before Kubernetes sends
+        # SIGKILL, while retaining the Pod objects until node-side termination
+        # is observed instead of force-removing them from the API immediately.
+        self.stopped.add(service)
+        self.recovery_checkpoint()
+        self.close_forward(service)
+        for pod in pods:
+            self.kubectl("delete", "pod/" + pod["metadata"]["name"],
+                         "--grace-period=" + str(CHECKS_CRASH_GRACE_SECONDS), "--wait=false")
+        self.kubectl("scale", "deployment/" + service, "--current-replicas=2", "--replicas=0")
+        deadline = time.monotonic() + 180
+        while self.pods(service):
+            require(time.monotonic() < deadline, "checks-crash-stop-timeout")
+            time.sleep(1)
+        return {
+            "termination_mode": "bounded-kubernetes-process-crash",
+            "termination_grace_seconds": CHECKS_CRASH_GRACE_SECONDS,
+            "terminated_pod_count": len(identities),
+            "terminated_pod_identity_sha256": hashed(sorted(identities)),
+        }
 
     def restart(self, service: str):
         previous = set(self.pod_sets.get(service, set()))

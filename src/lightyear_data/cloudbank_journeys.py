@@ -132,7 +132,9 @@ class Journeys:
 
     def prepare_accounts(self) -> dict:
         for index, balance in enumerate((1000, 250, 5)):
-            response = self.runtime.request("account", "POST", "/api/v1/account", "account", {
+            # Account creation is a customer-owned write.  The internal service identity is used
+            # for the subsequent Account reads, but it deliberately has no cloudbank.write grant.
+            response = self.runtime.request("account", "POST", "/api/v1/account", "owner", {
                 "accountId": 0, "accountName": f"LIGHTYEAR journey {index}", "accountType": "CH",
                 "accountCustomerId": self.runtime.owner, "accountOtherDetails": self.marker,
                 "accountBalance": balance})

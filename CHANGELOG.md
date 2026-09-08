@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.66.7 — 2026-09-08
+
+- Corrected the shared journey fixture setup to create customer-owned accounts with the owner's
+  `cloudbank.write` token. The governed Oracle source correctly rejected the prior
+  `cloudbank.internal` service token before the Account controller, while subsequent internal
+  Account reads continue to exercise the service identity.
+- Added regression coverage for the request identity. This controller fix responds to the live
+  MS #66 Oracle journey failure and does not claim a passing run.
+
 ## 0.66.6 — 2026-09-08
 
 - Replaced the isolated Oracle lane's listener-only readiness probe with the pinned image's

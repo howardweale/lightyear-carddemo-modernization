@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.66.10 — 2026-09-08
+
+- Kept HTTP client errors returned by the governed Oracle Account withdrawal participant under the
+  Transfer initiator's cancellation control. Oracle MicroTx otherwise cancels an `end=false` LRA
+  from the participant because its default `cancelOnFamily` includes client errors, causing the
+  initiator's explicit cancellation to act on an LRA that has already ended.
+- Added a reflection regression for the exact participant annotation boundary. This hardening
+  responds to live MS #66 build `064c98d2-77d8-4f7f-a067-597d731320e0` and does not claim that the
+  dual-lane execution passed.
+
 ## 0.66.9 — 2026-09-08
 
 - Made the governed Oracle withdrawal participant treat completion, compensation, status, and

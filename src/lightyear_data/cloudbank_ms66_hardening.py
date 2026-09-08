@@ -31,7 +31,7 @@ RELEASE = "0.66.1"
 PATCH_RELATIVE_PATH = Path(
     "factory/cloudbank/whole-application-equivalence/oracle-hardening/source-hardening.patch"
 )
-PATCH_SHA256 = "4ed3146e86aa172e938cb1b14e1e3cc4d228803f3d71acdb9e813f17a66ae9c2"
+PATCH_SHA256 = "092a982c5037f41bf7a7c762fde961848ed3b751bed262c9b7bceb810307f349"
 MATERIALIZATION_RECEIPT = "oracle-hardening.materialization.json"
 SOURCE_IMAGE_LOCK_TYPE = "lightyear-cloudbank-ms66-governed-oracle-source-image-lock"
 HEX_64 = re.compile(r"^[0-9a-f]{64}$")
@@ -89,7 +89,7 @@ def hardening_contract() -> dict[str, Any]:
             {
                 "id": "insufficient-funds-business-rejection",
                 "classification": "bounded-api-semantics-hardening",
-                "reason": "return-422-without-journal-mutation-and-settle-no-effect-lra-callbacks",
+                "reason": "return-422-under-initiator-cancel-control-and-settle-no-effect-lra-callbacks",
             },
             {
                 "id": "isolated-account-service-address",
@@ -154,6 +154,7 @@ def validate_hardening(project_root: Path) -> list[str]:
         "JOURNAL_COMMAND_KIND_UQ",
         "Idempotency-Key",
         "HttpStatus.UNPROCESSABLE_ENTITY",
+        "cancelOnFamily = {}",
         "findJournalForLRAidOrNull",
         "ACCOUNT_BASE_URL",
         "source_checkout_mutated",

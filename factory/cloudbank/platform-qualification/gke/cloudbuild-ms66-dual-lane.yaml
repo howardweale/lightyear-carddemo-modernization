@@ -97,7 +97,7 @@ steps:
       docker build --pull \
         --build-arg "BASE_IMAGE=${_JAVA_BASE_IMAGE}" \
         --build-arg "SOURCE_COMMIT=${_SOURCE_COMMIT}" \
-        --build-arg "HARDENING_PATCH_SHA256=4ed3146e86aa172e938cb1b14e1e3cc4d228803f3d71acdb9e813f17a66ae9c2" \
+        --build-arg "HARDENING_PATCH_SHA256=092a982c5037f41bf7a7c762fde961848ed3b751bed262c9b7bceb810307f349" \
         --build-arg "SERVICE=$$service" --tag "$$tag" "$$stage"
       retry_push "$$tag"
       printf '%s\t%s\n' "$$service" "$$tag" >> /workspace/source-tags.tsv

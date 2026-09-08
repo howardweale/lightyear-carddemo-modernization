@@ -44,10 +44,10 @@
     "materialized_application_identity": {"const": "pinned-source-plus-governed-hardening"},
     "exact_unchanged_upstream_application": {"const": false},
     "hardening_contract_sha256": {
-      "const": "ae518b6b1cb12df071281d2be7dd11d38b9bf9c30ec396413b220f7463e481ff"
+      "const": "6bf02c58c966c035118bb6a4fcf6212be74e4fa4b4b7576f8181b5b5c5a16e1d"
     },
     "hardening_patch_sha256": {
-      "const": "4ed3146e86aa172e938cb1b14e1e3cc4d228803f3d71acdb9e813f17a66ae9c2"
+      "const": "092a982c5037f41bf7a7c762fde961848ed3b751bed262c9b7bceb810307f349"
     },
     "hardening_materialization_sha256": {"$ref": "#/$defs/sha256"},
     "materialized_tree_sha256": {"$ref": "#/$defs/sha256"},

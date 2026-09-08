@@ -169,6 +169,7 @@ class CloudBankMs66DualLaneTests(unittest.TestCase):
             "STATE = 'READY'",
             "STATE IN ('READY', 'PROCESSING')",
             "STATE = 'READY' AND ATTEMPTS = 0",
+            "cancelOnFamily = {}",
             "findJournalForLRAidOrNull",
             "withdraw compensate has no local effect for rejected LRA",
             "Ms66WithdrawNoEffectCallbacksTests",

@@ -90,7 +90,7 @@ index ea75a64e..a9a5852c 100644
 +
 +}
 diff --git a/cloudbank-v5/account/src/main/java/com/example/accounts/services/WithdrawService.java b/cloudbank-v5/account/src/main/java/com/example/accounts/services/WithdrawService.java
-index d070ec82..96a159e1 100644
+index d070ec82..fff1644f 100644
 --- a/cloudbank-v5/account/src/main/java/com/example/accounts/services/WithdrawService.java
 +++ b/cloudbank-v5/account/src/main/java/com/example/accounts/services/WithdrawService.java
 @@ -12,6 +12,7 @@ import com.oracle.microtx.springboot.lra.annotation.LRA;
@@ -101,6 +101,15 @@ index d070ec82..96a159e1 100644
  import org.springframework.http.ResponseEntity;
  import org.springframework.transaction.annotation.Transactional;
  import org.springframework.web.bind.annotation.PostMapping;
+@@ -38,7 +39,7 @@ public class WithdrawService {
+     * Both actions in same local tx
+     */
+     @PostMapping
+-    @LRA(value = LRA.Type.MANDATORY, end = false)
++    @LRA(value = LRA.Type.MANDATORY, end = false, cancelOnFamily = {})
+     @Transactional
+     public ResponseEntity<String> withdraw(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId,
+             @RequestParam("accountId") long accountId,
 @@ -50,25 +51,13 @@ public class WithdrawService {
          Account account = AccountTransferDAO.instance().getAccountForAccountId(accountId);
          if (account == null) {
@@ -176,10 +185,10 @@ index d070ec82..96a159e1 100644
      }
 diff --git a/cloudbank-v5/account/src/test/java/com/example/accounts/services/Ms66WithdrawNoEffectCallbacksTests.java b/cloudbank-v5/account/src/test/java/com/example/accounts/services/Ms66WithdrawNoEffectCallbacksTests.java
 new file mode 100644
-index 00000000..cdd3f00d
+index 00000000..b980c30c
 --- /dev/null
 +++ b/cloudbank-v5/account/src/test/java/com/example/accounts/services/Ms66WithdrawNoEffectCallbacksTests.java
-@@ -0,0 +1,63 @@
+@@ -0,0 +1,75 @@
 +// Copyright (c) 2023, Oracle and/or its affiliates.
 +// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
 +
@@ -189,6 +198,7 @@ index 00000000..cdd3f00d
 +import com.example.accounts.model.Journal;
 +import com.example.accounts.repository.AccountRepository;
 +import com.example.accounts.repository.JournalRepository;
++import com.oracle.microtx.springboot.lra.annotation.LRA;
 +import com.oracle.microtx.springboot.lra.annotation.ParticipantStatus;
 +import org.junit.jupiter.api.BeforeEach;
 +import org.junit.jupiter.api.Test;
@@ -218,6 +228,17 @@ index 00000000..cdd3f00d
 +    void createService() {
 +        new AccountTransferDAO(accounts, journals);
 +        withdraw = new WithdrawService();
++    }
++
++    @Test
++    void clientErrorsRemainUnderInitiatorCancellationControl() throws Exception {
++        LRA boundary = WithdrawService.class
++                .getDeclaredMethod("withdraw", String.class, long.class, long.class)
++                .getAnnotation(LRA.class);
++        assertEquals(LRA.Type.MANDATORY, boundary.value());
++        assertEquals(false, boundary.end());
++        assertEquals(0, boundary.cancelOnFamily().length);
++        assertEquals(0, boundary.cancelOn().length);
 +    }
 +
 +    @Test

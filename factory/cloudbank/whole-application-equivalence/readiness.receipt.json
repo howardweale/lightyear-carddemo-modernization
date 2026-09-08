@@ -1,16 +1,16 @@
 {
-  "acceptance_contract_sha256": "5d6a3d7a96f96fc2c2cd38c47025f1609a09048898af4892019b745a5253fbb7",
+  "acceptance_contract_sha256": "18d4adc5eb3669f81285898fab06cf20d3a7ec6c1fe4353733cc7f0075d84eab",
   "all_eight_services_observed_in_both_lanes": false,
   "bindings": {
     "compatibility_ledger_sha256": "a22c7aa03afb6ed356f708abfad9e5775ab019c49e33dfe2b1d6e562683b7818",
     "execution_plan_sha256": "91c542a8acd77db4cf7d571553197e72eec055e9bf6fa21eb3ea811b6f8fcebb",
     "journey_contract_sha256": "08d5a55f285432fca2c60e0c36768d58d5b5f3e26cba78104e63d87c836e6b7c",
-    "lane_contract_sha256": "1c15bc48e99693e0b85d1a3bca775173f37b419cf3761611d6de384b9de58acd",
-    "oracle_hardening_contract_sha256": "3bb813ae28187f01a557de19c431d36b4d2cf938da688d58fc324d7bd52d868e",
-    "oracle_hardening_patch_sha256": "68b23365133d0b0237962d89f5253c1cea5d24397f267022d1fb5a4c6d3fcd30"
+    "lane_contract_sha256": "62c5b6078ce85c7188e1769dbc6f606c4c51e61569ae696ebb80231d9df6b56d",
+    "oracle_hardening_contract_sha256": "ae518b6b1cb12df071281d2be7dd11d38b9bf9c30ec396413b220f7463e481ff",
+    "oracle_hardening_patch_sha256": "4ed3146e86aa172e938cb1b14e1e3cc4d228803f3d71acdb9e813f17a66ae9c2"
   },
   "bounded_whole_application_equivalent": false,
-  "content_sha256": "db0ad142dde0de99fe58147d8097ebab1914133c5b1bc89ced37b3bf611ae1b7",
+  "content_sha256": "57c1d8155ca598f358e690728f7b0a777e885f6af594d51dd1dbab449e5db6a6",
   "exact_internal_implementation_equivalent": false,
   "exact_unchanged_upstream_application": false,
   "gate_status": "ready-for-signed-ms61-ms64-and-dual-lane-observations",

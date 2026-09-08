@@ -57,6 +57,10 @@ steps:
     cd /workspace/hardened/cloudbank-v5
     mvn -B -ntp -DskipTests -Dcheckstyle.skip=true -Ddependency-check.skip=true \
       -Djkube.skip=true clean package
+    mvn -B -ntp -pl account,transfer -am \
+      -Dtest=Ms66WithdrawNoEffectCallbacksTests,Ms66InsufficientFundsTransferTests \
+      -Dsurefire.failIfNoSpecifiedTests=false -Dcheckstyle.skip=true \
+      -Ddependency-check.skip=true -Djkube.skip=true test
     for service in azn-server customer account transfer checks testrunner creditscore chatbot; do
       test -f "$$service/target/$$service-0.0.1-SNAPSHOT.jar"
     done
@@ -93,7 +97,7 @@ steps:
       docker build --pull \
         --build-arg "BASE_IMAGE=${_JAVA_BASE_IMAGE}" \
         --build-arg "SOURCE_COMMIT=${_SOURCE_COMMIT}" \
-        --build-arg "HARDENING_PATCH_SHA256=68b23365133d0b0237962d89f5253c1cea5d24397f267022d1fb5a4c6d3fcd30" \
+        --build-arg "HARDENING_PATCH_SHA256=4ed3146e86aa172e938cb1b14e1e3cc4d228803f3d71acdb9e813f17a66ae9c2" \
         --build-arg "SERVICE=$$service" --tag "$$tag" "$$stage"
       retry_push "$$tag"
       printf '%s\t%s\n' "$$service" "$$tag" >> /workspace/source-tags.tsv

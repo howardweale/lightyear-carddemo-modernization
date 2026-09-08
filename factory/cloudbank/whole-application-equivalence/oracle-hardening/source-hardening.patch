@@ -61,8 +61,36 @@ index 761446d8..5ff0406f 100644
      private ResponseEntity<HttpStatus> authorizeAccountAccess(long accountId, Authentication authentication) {
          Optional<Account> accountData = accountRepository.findById(accountId);
          if (accountData.isEmpty()) {
+diff --git a/cloudbank-v5/account/src/main/java/com/example/accounts/services/AccountTransferDAO.java b/cloudbank-v5/account/src/main/java/com/example/accounts/services/AccountTransferDAO.java
+index ea75a64e..a9a5852c 100644
+--- a/cloudbank-v5/account/src/main/java/com/example/accounts/services/AccountTransferDAO.java
++++ b/cloudbank-v5/account/src/main/java/com/example/accounts/services/AccountTransferDAO.java
+@@ -123,7 +123,11 @@ public class AccountTransferDAO {
+         return account;
+     }
+-
+-    Journal getJournalForLRAid(String lraId, String journalType) throws Exception {
+-        Journal journal = journalRepository.findJournalByLraIdAndJournalType(lraId, journalType);
++
++    Journal findJournalForLRAidOrNull(String lraId, String journalType) {
++        return journalRepository.findJournalByLraIdAndJournalType(lraId, journalType);
++    }
++
++    Journal getJournalForLRAid(String lraId, String journalType) throws Exception {
++        Journal journal = findJournalForLRAidOrNull(lraId, journalType);
+         if (journal == null) {
+             journalRepository.save(new Journal("unknown", -1, 0, lraId,
+@@ -136,5 +140,5 @@ public class AccountTransferDAO {
+     public void saveJournal(Journal journal) {
+         journalRepository.save(journal);
+     }
+-
+-}
+\ No newline at end of file
++
++}
 diff --git a/cloudbank-v5/account/src/main/java/com/example/accounts/services/WithdrawService.java b/cloudbank-v5/account/src/main/java/com/example/accounts/services/WithdrawService.java
-index d070ec82..1ba435c5 100644
+index d070ec82..96a159e1 100644
 --- a/cloudbank-v5/account/src/main/java/com/example/accounts/services/WithdrawService.java
 +++ b/cloudbank-v5/account/src/main/java/com/example/accounts/services/WithdrawService.java
 @@ -12,6 +12,7 @@ import com.oracle.microtx.springboot.lra.annotation.LRA;
@@ -103,6 +131,118 @@ index d070ec82..1ba435c5 100644
          }
          log.info("withdraw current balance:" + account.getAccountBalance() 
              + " new balance:" + (account.getAccountBalance() - withdrawAmount));
+@@ -91,7 +80,11 @@ public class WithdrawService {
+     @Complete
+     public ResponseEntity<String> completeWork(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId) throws Exception {
+         log.info("withdraw complete called for LRA : " + lraId);
+-        Journal journal = AccountTransferDAO.instance().getJournalForLRAid(lraId, WITHDRAW);
++        Journal journal = AccountTransferDAO.instance().findJournalForLRAidOrNull(lraId, WITHDRAW);
++        if (journal == null) {
++            log.info("withdraw complete has no local effect for rejected LRA : " + lraId);
++            return ResponseEntity.ok(ParticipantStatus.Completed.name());
++        }
+         journal.setLraState(AccountTransferDAO.getStatusString(ParticipantStatus.Completed));
+         AccountTransferDAO.instance().saveJournal(journal);
+         return ResponseEntity.ok(ParticipantStatus.Completed.name());
+@@ -108,5 +101,9 @@ public class WithdrawService {
+         throws Exception {
+         log.info("Account withdraw compensate() called for LRA : " + lraId);
+-        Journal journal = AccountTransferDAO.instance().getJournalForLRAid(lraId, WITHDRAW);
++        Journal journal = AccountTransferDAO.instance().findJournalForLRAidOrNull(lraId, WITHDRAW);
++        if (journal == null) {
++            log.info("withdraw compensate has no local effect for rejected LRA : " + lraId);
++            return ResponseEntity.ok(ParticipantStatus.Compensated.name());
++        }
+         journal.setLraState(AccountTransferDAO.getStatusString(ParticipantStatus.Compensating));
+         Account account = AccountTransferDAO.instance().getAccountForAccountId(journal.getAccountId());
+@@ -122,5 +119,8 @@ public class WithdrawService {
+     @Status
+     public ResponseEntity<ParticipantStatus> status(@RequestHeader(LRA_HTTP_CONTEXT_HEADER) String lraId,
+             @RequestHeader(LRA_HTTP_PARENT_CONTEXT_HEADER) String parentLRA) throws Exception {
++        if (AccountTransferDAO.instance().findJournalForLRAidOrNull(lraId, WITHDRAW) == null) {
++            return ResponseEntity.ok(ParticipantStatus.Compensated);
++        }
+         return AccountTransferDAO.instance().status(lraId, WITHDRAW);
+     }
+@@ -134,5 +134,9 @@ public class WithdrawService {
+         String status) throws Exception {
+         log.info("After LRA Called : " + lraId);
++        if (AccountTransferDAO.instance().findJournalForLRAidOrNull(lraId, WITHDRAW) == null) {
++            log.info("withdraw after LRA has no local effect for rejected LRA : " + lraId);
++            return ResponseEntity.ok("");
++        }
+         AccountTransferDAO.instance().afterLRA(lraId, status, WITHDRAW);
+         return ResponseEntity.ok("");
+     }
+diff --git a/cloudbank-v5/account/src/test/java/com/example/accounts/services/Ms66WithdrawNoEffectCallbacksTests.java b/cloudbank-v5/account/src/test/java/com/example/accounts/services/Ms66WithdrawNoEffectCallbacksTests.java
+new file mode 100644
+index 00000000..cdd3f00d
+--- /dev/null
++++ b/cloudbank-v5/account/src/test/java/com/example/accounts/services/Ms66WithdrawNoEffectCallbacksTests.java
+@@ -0,0 +1,63 @@
++// Copyright (c) 2023, Oracle and/or its affiliates.
++// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
++
++package com.example.accounts.services;
++
++import com.example.accounts.model.Account;
++import com.example.accounts.model.Journal;
++import com.example.accounts.repository.AccountRepository;
++import com.example.accounts.repository.JournalRepository;
++import com.oracle.microtx.springboot.lra.annotation.ParticipantStatus;
++import org.junit.jupiter.api.BeforeEach;
++import org.junit.jupiter.api.Test;
++import org.junit.jupiter.api.extension.ExtendWith;
++import org.mockito.Mock;
++import org.mockito.junit.jupiter.MockitoExtension;
++import org.springframework.http.HttpStatus;
++
++import static org.junit.jupiter.api.Assertions.assertEquals;
++import static org.mockito.ArgumentMatchers.any;
++import static org.mockito.Mockito.never;
++import static org.mockito.Mockito.verify;
++import static org.mockito.Mockito.when;
++
++@ExtendWith(MockitoExtension.class)
++class Ms66WithdrawNoEffectCallbacksTests {
++
++    @Mock
++    private AccountRepository accounts;
++
++    @Mock
++    private JournalRepository journals;
++
++    private WithdrawService withdraw;
++
++    @BeforeEach
++    void createService() {
++        new AccountTransferDAO(accounts, journals);
++        withdraw = new WithdrawService();
++    }
++
++    @Test
++    void insufficientFundsStayJournalFreeAcrossRetriedCancellationCallbacks() throws Exception {
++        Account account = new Account("Empty", "CH", "MS66 synthetic", "cust-empty");
++        account.setAccountId(7);
++        account.setAccountBalance(5);
++        when(accounts.findByAccountId(7)).thenReturn(account);
++
++        String lra = "oracle-funds";
++        assertEquals(HttpStatus.UNPROCESSABLE_ENTITY,
++                withdraw.withdraw(lra, 7, 10).getStatusCode());
++        assertEquals(ParticipantStatus.Compensated.name(), withdraw.compensateWork(lra).getBody());
++        assertEquals(ParticipantStatus.Compensated.name(), withdraw.compensateWork(lra).getBody());
++        assertEquals(ParticipantStatus.Compensated, withdraw.status(lra, "oracle-parent").getBody());
++        assertEquals(HttpStatus.OK, withdraw.afterLRA(lra, "Cancelled").getStatusCode());
++        assertEquals(HttpStatus.OK, withdraw.afterLRA(lra, "Cancelled").getStatusCode());
++        assertEquals(ParticipantStatus.Completed.name(),
++                withdraw.completeWork("oracle-no-effect-complete").getBody());
++
++        assertEquals(5, account.getAccountBalance());
++        verify(accounts, never()).save(any(Account.class));
++        verify(journals, never()).save(any(Journal.class));
++    }
++}
 diff --git a/cloudbank-v5/account/src/main/resources/db/changelog/data.sql b/cloudbank-v5/account/src/main/resources/db/changelog/data.sql
 index d5946816..1f4bf698 100644
 --- a/cloudbank-v5/account/src/main/resources/db/changelog/data.sql
@@ -584,3 +724,77 @@ index 4bbdb991..5066c5c3 100644
          log.info(returnString);
          if (returnString.contains("succeeded")) {
              // if it worked, perform the deposit
+diff --git a/cloudbank-v5/transfer/src/test/java/com/example/transfer/Ms66InsufficientFundsTransferTests.java b/cloudbank-v5/transfer/src/test/java/com/example/transfer/Ms66InsufficientFundsTransferTests.java
+new file mode 100644
+index 00000000..38fb0527
+--- /dev/null
++++ b/cloudbank-v5/transfer/src/test/java/com/example/transfer/Ms66InsufficientFundsTransferTests.java
+@@ -0,0 +1,68 @@
++// Copyright (c) 2023, Oracle and/or its affiliates.
++// Licensed under the Universal Permissive License v 1.0 as shown at https://oss.oracle.com/licenses/upl/
++
++package com.example.transfer;
++
++import java.net.URI;
++import java.util.concurrent.atomic.AtomicReference;
++
++import org.junit.jupiter.api.BeforeEach;
++import org.junit.jupiter.api.Test;
++import org.springframework.boot.web.client.RestTemplateBuilder;
++import org.springframework.http.HttpMethod;
++import org.springframework.http.HttpStatus;
++import org.springframework.http.MediaType;
++import org.springframework.security.authentication.TestingAuthenticationToken;
++import org.springframework.test.web.client.MockRestServiceServer;
++import org.springframework.web.client.RestTemplate;
++
++import static org.junit.jupiter.api.Assertions.assertEquals;
++import static org.springframework.test.web.client.ExpectedCount.once;
++import static org.springframework.test.web.client.match.MockRestRequestMatchers.method;
++import static org.springframework.test.web.client.match.MockRestRequestMatchers.requestTo;
++import static org.springframework.test.web.client.response.MockRestResponseCreators.withStatus;
++import static org.springframework.test.web.client.response.MockRestResponseCreators.withSuccess;
++
++class Ms66InsufficientFundsTransferTests {
++
++    private TransferService service;
++    private MockRestServiceServer server;
++
++    @BeforeEach
++    void createService() {
++        AtomicReference<RestTemplate> captured = new AtomicReference<>();
++        RestTemplateBuilder builder = new RestTemplateBuilder().customizers(captured::set);
++        service = new TransferService(builder);
++        service.accountLookupUri = URI.create("http://account/api/v1/accounts");
++        service.withdrawUri = URI.create("http://account/withdraw");
++        service.depositUri = URI.create("http://account/deposit");
++        service.transferCancelUri = URI.create("http://transfer/cancel");
++        service.transferConfirmUri = URI.create("http://transfer/confirm");
++        server = MockRestServiceServer.bindTo(captured.get()).build();
++    }
++
++    @Test
++    void insufficientFundsCancelTheLraAndReturnUnprocessableEntity() {
++        server.expect(once(), requestTo("http://account/api/v1/accounts/1"))
++                .andExpect(method(HttpMethod.GET))
++                .andRespond(withSuccess(
++                        "{\"accountCustomerId\":\"cust-source\"}",
++                        MediaType.APPLICATION_JSON));
++        server.expect(once(), requestTo("http://account/withdraw?accountId=1&amount=1001"))
++                .andExpect(method(HttpMethod.POST))
++                .andRespond(withStatus(HttpStatus.UNPROCESSABLE_ENTITY)
++                        .contentType(MediaType.TEXT_PLAIN)
++                        .body("withdraw failed: insufficient funds"));
++        server.expect(once(), requestTo("http://transfer/cancel"))
++                .andExpect(method(HttpMethod.POST))
++                .andRespond(withSuccess("cancelled", null));
++
++        assertEquals(HttpStatus.UNPROCESSABLE_ENTITY, service.transfer(
++                1, 2, 1001, "oracle-funds", authenticated()).getStatusCode());
++        server.verify();
++    }
++
++    private TestingAuthenticationToken authenticated() {
++        return new TestingAuthenticationToken("cust-source", "synthetic");
++    }
++}

@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.66.9 — 2026-09-08
+
+- Made the governed Oracle withdrawal participant treat completion, compensation, status, and
+  after-LRA callbacks as idempotent no-ops when a rejected withdrawal correctly created no local
+  journal effect. This lets MicroTx settle the cancelled LRA while preserving the required 422
+  insufficient-funds response and zero mutation.
+- Added account-participant and transfer-orchestration regressions for the exact rejection path.
+  This hardening responds to live MS #66 evidence and does not claim that dual-lane execution
+  passed.
+
 ## 0.66.8 — 2026-09-08
 
 - Made shared transfer observations wait for bounded state convergence after an HTTP success,

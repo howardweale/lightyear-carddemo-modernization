@@ -31,7 +31,7 @@ RELEASE = "0.66.1"
 PATCH_RELATIVE_PATH = Path(
     "factory/cloudbank/whole-application-equivalence/oracle-hardening/source-hardening.patch"
 )
-PATCH_SHA256 = "68b23365133d0b0237962d89f5253c1cea5d24397f267022d1fb5a4c6d3fcd30"
+PATCH_SHA256 = "4ed3146e86aa172e938cb1b14e1e3cc4d228803f3d71acdb9e813f17a66ae9c2"
 MATERIALIZATION_RECEIPT = "oracle-hardening.materialization.json"
 SOURCE_IMAGE_LOCK_TYPE = "lightyear-cloudbank-ms66-governed-oracle-source-image-lock"
 HEX_64 = re.compile(r"^[0-9a-f]{64}$")
@@ -68,7 +68,7 @@ def hardening_contract() -> dict[str, Any]:
             "path": PATCH_RELATIVE_PATH.as_posix(),
             "sha256": PATCH_SHA256,
             "format": "git-unified-diff",
-            "changed_file_count": 13,
+            "changed_file_count": 16,
         },
         "changes": [
             {
@@ -89,7 +89,7 @@ def hardening_contract() -> dict[str, Any]:
             {
                 "id": "insufficient-funds-business-rejection",
                 "classification": "bounded-api-semantics-hardening",
-                "reason": "return-422-without-zero-value-journal-mutation",
+                "reason": "return-422-without-journal-mutation-and-settle-no-effect-lra-callbacks",
             },
             {
                 "id": "isolated-account-service-address",
@@ -143,7 +143,7 @@ def validate_hardening(project_root: Path) -> list[str]:
         return errors
     text = patch.read_text(encoding="utf-8")
     changed = re.findall(r"^diff --git a/(\S+) b/(\S+)$", text, re.MULTILINE)
-    if len(changed) != 13 or any(
+    if len(changed) != 16 or any(
         left != right or not left.startswith(PINNED_SUBTREE + "/")
         or ".." in Path(left).parts or Path(left).is_absolute()
         for left, right in changed
@@ -154,6 +154,7 @@ def validate_hardening(project_root: Path) -> list[str]:
         "JOURNAL_COMMAND_KIND_UQ",
         "Idempotency-Key",
         "HttpStatus.UNPROCESSABLE_ENTITY",
+        "findJournalForLRAidOrNull",
         "ACCOUNT_BASE_URL",
         "source_checkout_mutated",
     )

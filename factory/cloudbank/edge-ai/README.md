@@ -13,6 +13,12 @@ and the correct scope; other actuator paths remain protected. These tests use te
 and handler stubs to isolate authorization, while MS62 supplies native JWT validation evidence.
 The probe corrections are applied only when composing the MS64 target, preserving MS57/MS63 inputs.
 
+The final issuer derives Account and Transfer audiences from the token's authorized scopes. A
+customer token carrying both `cloudbank.write` and `cloudbank.transfer` is valid at both owned
+Account endpoints and the Transfer facade; an internal-only token remains Account-only and a
+transfer-only token remains Transfer-only. Credit Score and Chatbot client identities continue to
+override scope-derived routing with their distinct single-service audiences.
+
 The generated parent POM pins HttpCore (`httpcore5` and `httpcore5-h2`) to **5.4.3**,
 embedded Tomcat to **10.1.59**, and PostgreSQL JDBC to **42.7.12** across the eight services.
 These updates address the six findings reported by the MS67 Authorization Server image scan:

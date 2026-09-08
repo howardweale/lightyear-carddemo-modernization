@@ -334,7 +334,7 @@ class RuntimeTests(unittest.TestCase):
                 "imageID": "private/account@sha256:" + "a" * 64}]}} for i in (1, 2)]
 
     def test_all_mutation_methods_and_recovery_intents_are_blocked(self):
-        for method in ("stop", "start", "restart", "restart_all", "crash_stopped", "block_checks_delivery", "patch_checks_delivery"):
+        for method in ("stop", "start", "restart", "restart_all", "crash_stop", "block_checks_delivery", "patch_checks_delivery"):
             with self.subTest(method=method), self.assertRaises(JourneyFailure):
                 getattr(self.runtime, method)("account")
         self.runtime.stopped.add("account")

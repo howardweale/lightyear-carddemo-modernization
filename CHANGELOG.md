@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.66.12 — 2026-09-08
+
+- Replaced MS #66's scale-first Checks failure choreography with a recovery-journaled bounded
+  process crash that requests one-second termination for both validated pod identities before
+  scaling the Deployment to zero. This prevents graceful Spring/UCP shutdown from racing the
+  transactional AQ rollback and binds the terminated and replacement pod identities into signed
+  journey evidence.
+- Made ordinary service stops, including Checks, wait for pod disappearance and added regressions
+  for mutation ordering, identity drift, replacement identity, and signed recovery intent. This
+  controller correction responds to live build `d5fcce5b-bac1-40e0-9591-3780cb5f223f` and does not
+  claim that the dual-lane execution passed.
+
 ## 0.66.11 — 2026-09-08
 
 - Made the governed Oracle Checks listener use a transacted JMS session so an AQ dequeue commits

@@ -55,8 +55,8 @@ class Runtime(Protocol):
                 body: Any = None, headers: dict | None = None) -> Response: ...
     def queue(self, message_id: str) -> dict: ...
     def stop(self, service: str) -> None: ...
-    def start(self, service: str) -> None: ...
-    def crash_stopped(self, service: str) -> None: ...
+    def start(self, service: str) -> dict: ...
+    def crash_stop(self, service: str) -> dict: ...
     def block_checks_delivery(self) -> None: ...
     def restore_checks_delivery(self) -> None: ...
     def restart(self, service: str) -> None: ...
@@ -334,17 +334,28 @@ class Journeys:
                                    "inflight-claim-not-observed")
             require(integer(processing.get("attempts"), "queue-attempts-invalid") >= 1,
                     "inflight-claim-not-observed")
-            self.runtime.stop("checks")
+            crash = self.runtime.crash_stop("checks")
             stopped = True
-            self.runtime.crash_stopped("checks")
             self.runtime.restore_checks_delivery()
-            self.runtime.start("checks")
+            replacement = self.runtime.start("checks")
             stopped = False
+            require(isinstance(crash, dict)
+                    and crash.get("terminated_pod_count") == 2
+                    and re.fullmatch(r"[0-9a-f]{64}", str(
+                        crash.get("terminated_pod_identity_sha256", ""))) is not None,
+                    "checks-crash-evidence-invalid")
+            require(isinstance(replacement, dict)
+                    and replacement.get("ready_replicas") == 2
+                    and re.fullmatch(r"[0-9a-f]{64}", str(
+                        replacement.get("pod_identity_sha256", ""))) is not None,
+                    "checks-replacement-evidence-invalid")
             completed = self.delivered(message, "inflight-redelivery")
             require(completed.get("attempts", 0) > processing["attempts"], "inflight-redelivery-not-observed")
             after = self.state()
             self.assert_deposit(before, after, 7)
             return {"claimed": processing, "redelivered": completed,
+                    "crash": crash,
+                    "replacement_pod_identity_sha256": replacement["pod_identity_sha256"],
                     "before_sha256": hashed(before), "after_sha256": hashed(after)}
         finally:
             # Adapter also journals restoration intent before each scale-down;

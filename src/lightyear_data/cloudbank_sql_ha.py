@@ -63,7 +63,7 @@ class HaRuntime(GkeRuntime):
     def forbidden(self, *args, **kwargs):
         raise JourneyFailure("ha-drill-must-not-restart-or-reconfigure-applications")
 
-    stop = start = restart = restart_all = crash_stopped = forbidden
+    stop = start = restart = restart_all = crash_stop = forbidden
     block_checks_delivery = patch_checks_delivery = forbidden
 
     def close(self, **kwargs):

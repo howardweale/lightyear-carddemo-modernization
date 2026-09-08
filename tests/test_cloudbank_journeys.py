@@ -29,6 +29,7 @@ class StatefulRuntime:
     def __init__(self, fault=""):
         self.customer_row = None
         self.accounts, self.journals, self.messages = {}, [], {}
+        self.pending_transfers = []
         self.stopped, self.blocked, self.closed = set(), False, False
         self.fault = fault
         self.lock = threading.Lock()
@@ -76,7 +77,9 @@ class StatefulRuntime:
                 return response(400)
             if amount > self.accounts[source]["accountBalance"]:
                 return response(500 if self.fault == "insufficient-500" else 400)
-            if self.fault != "accepted-no-effects":
+            if self.fault == "delayed-transfer-effects":
+                self.pending_transfers.append((source, target, amount))
+            elif self.fault != "accepted-no-effects":
                 self.accounts[source]["accountBalance"] -= amount
                 self.accounts[target]["accountBalance"] += amount
                 self.journal(source, "WITHDRAW", amount)
@@ -101,6 +104,15 @@ class StatefulRuntime:
     def journal(self, account, kind, amount):
         self.journals.append({"journalId": 1000 + len(self.journals), "accountId": account,
                              "journalType": kind, "journalAmount": amount})
+
+    def settle_transfers(self, _seconds=0):
+        with self.lock:
+            for source, target, amount in self.pending_transfers:
+                self.accounts[source]["accountBalance"] -= amount
+                self.accounts[target]["accountBalance"] += amount
+                self.journal(source, "WITHDRAW", amount)
+                self.journal(target, "DEPOSIT", amount)
+            self.pending_transfers.clear()
 
     def deliver(self, key):
         row = self.messages[key]
@@ -154,6 +166,8 @@ class StatefulRuntime:
 class JourneyTests(unittest.TestCase):
     def execute(self, fault="", **kwargs):
         runtime = StatefulRuntime(fault)
+        kwargs.setdefault("timeout", 0)
+        kwargs.setdefault("pause", lambda _: None)
         result = execute_journeys(runtime, {"test_double": True}, "test-key", "unit-test-only",
                                   run_id="unit-test", **kwargs)
         self.assertTrue(runtime.closed)
@@ -222,6 +236,18 @@ class JourneyTests(unittest.TestCase):
         account_creates = [call for call in request.call_args_list
                            if call.args[:3] == ("account", "POST", "/api/v1/account")]
         self.assertEqual([call.args[3] for call in account_creates], ["owner", "owner", "owner"])
+
+    def test_transfer_observation_waits_for_delayed_lra_completion(self):
+        runtime = StatefulRuntime("delayed-transfer-effects")
+        driver = Journeys(runtime, "unit-test", timeout=1,
+                          pause=runtime.settle_transfers, clock=lambda: 0)
+        driver.customer()
+        driver.prepare_accounts()
+
+        driver.success()
+        driver.concurrent()
+
+        self.assertEqual(runtime.pending_transfers, [])
 
 
 class GkeAdapterTests(unittest.TestCase):

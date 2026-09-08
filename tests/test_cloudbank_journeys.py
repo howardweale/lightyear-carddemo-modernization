@@ -213,6 +213,16 @@ class JourneyTests(unittest.TestCase):
         self.assertEqual(result["status"], "failed")
         self.assertFalse(runtime.accounts)
 
+    def test_customer_owner_write_identity_creates_account_fixtures(self):
+        runtime = StatefulRuntime()
+        driver = Journeys(runtime, "unit-test")
+        driver.customer()
+        with patch.object(runtime, "request", wraps=runtime.request) as request:
+            driver.prepare_accounts()
+        account_creates = [call for call in request.call_args_list
+                           if call.args[:3] == ("account", "POST", "/api/v1/account")]
+        self.assertEqual([call.args[3] for call in account_creates], ["owner", "owner", "owner"])
+
 
 class GkeAdapterTests(unittest.TestCase):
     def setUp(self):

@@ -51,6 +51,10 @@ DEFAULT grants `cloudbank.read`, `cloudbank.write`, and `cloudbank.transfer`; SE
 credentials before starting services. It does not require legacy TEST-client secret fields, expand
 grants, rotate credentials, or persist secret values.
 
+Synthetic account fixtures are customer-owned writes and therefore use the DEFAULT identity's
+`cloudbank.write` grant. The SERVICE identity remains limited to internal callbacks and Account
+reads; it is not granted customer-write authority merely to prepare test data.
+
 The native database mirror uses the pinned Oracle Free `slim-faststart` flavor. Its pre-expanded
 database remains at `/opt/oracle/oradata` in the disposable container layer; the runner must not
 mount a fresh Kubernetes volume over that path because doing so masks the image's control files.

@@ -9,6 +9,28 @@ permissions:
   contents: read
 
 jobs:
+  windows-gcloud-recovery:
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+      - uses: google-github-actions/setup-gcloud@v3
+        with:
+          version: "564.0.0"
+      - name: Exercise Windows SDK launch and secret recovery guards
+        shell: pwsh
+        env:
+          PYTHONPATH: src
+          LIGHTYEAR_TEST_WINDOWS_GCLOUD: "1"
+        run: |
+          python -m unittest discover -s tests -p test_cloudbank_gke_command.py -v
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python -m unittest discover -s tests -p test_cloudbank_secret_rotation.py -v
+          exit $LASTEXITCODE
+
   cloudbank-sql-recovery:
     runs-on: ubuntu-latest
     timeout-minutes: 10

@@ -12,8 +12,10 @@ import json
 import os
 from pathlib import Path
 import re
+import shutil
 import socket
 import subprocess
+import sys
 import time
 from typing import Callable
 from urllib.error import HTTPError, URLError
@@ -36,10 +38,26 @@ RESTORATION_GROUPS = (
 CHECKS_CRASH_GRACE_SECONDS = 1
 
 
+def _command_argv(argv: list[str]) -> list[str]:
+    if sys.platform != "win32" or Path(argv[0]).name.lower() not in {"gcloud", "gcloud.cmd", "gcloud.bat"}:
+        return argv
+    launcher = shutil.which(argv[0])
+    require(launcher is not None, "operator-command-unavailable-or-timed-out")
+    if Path(launcher).suffix.lower() in {".cmd", ".bat"}:
+        # Windows CreateProcess does not resolve the bare gcloud batch launcher.
+        # Invoke this installation's Python entrypoint directly so cmd.exe cannot
+        # reinterpret JSON, file paths or shell metacharacters in the arguments.
+        entrypoint = Path(launcher).resolve().parent.parent / "lib" / "gcloud.py"
+        require(entrypoint.is_file(), "operator-gcloud-sdk-entrypoint-missing")
+        return [sys.executable, "-X", "utf8", str(entrypoint), *argv[1:]]
+    return [launcher, *argv[1:]]
+
+
 def command(argv: list[str], *, data: str | None = None, timeout=45) -> str:
     try:
-        result = subprocess.run(argv, input=data, text=True, capture_output=True, timeout=timeout, check=False)
-    except (OSError, subprocess.TimeoutExpired):
+        result = subprocess.run(_command_argv(argv), input=data, text=True, encoding="utf-8",
+                                capture_output=True, timeout=timeout, check=False)
+    except (OSError, UnicodeError, subprocess.TimeoutExpired):
         raise JourneyFailure("operator-command-unavailable-or-timed-out") from None
     require(result.returncode == 0, "operator-command-failed")
     require(len(result.stdout) <= 4 * 1024 * 1024, "operator-command-output-too-large")

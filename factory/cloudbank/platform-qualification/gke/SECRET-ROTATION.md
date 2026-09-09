@@ -118,6 +118,42 @@ Changed resource UIDs, unrelated configuration, another operator's version or
 an invalid signature also block cleanup rather than overwriting that state.
 Do not remove the Lease or edit/sign a recovery record to bypass those checks.
 
+### Recovery from Windows PowerShell
+
+After confirming that the original process has stopped, recovery can run from
+an authenticated Windows computer with Git, `kubectl`, the GKE authentication
+plugin and Google Cloud SDK installed. Select the SDK's Python interpreter
+(Python 3.11 or newer) for the controller:
+
+```powershell
+$env:LIGHTYEAR_PYTHON = (gcloud info --format="value(basic.python_location)").Trim()
+$env:CLOUDSDK_CORE_ACCOUNT = $MS67_SIGNER
+$env:CLOUDSDK_CORE_PROJECT = $GCP_PROJECT_ID
+gcloud container clusters get-credentials $GKE_CLUSTER_NAME --region $GCP_REGION
+if ($LASTEXITCODE -ne 0) { throw "Cluster authentication failed." }
+
+gcloud storage cp $MS67_SECRET_RECOVERY_URI $MS67_SECRET_RECOVERY_FILE
+if ($LASTEXITCODE -ne 0) { throw "Recovery checkpoint download failed." }
+
+$env:LIGHTYEAR_NON_PRODUCTION_ACK = "I-AUTHORIZE-MS67-NON-PRODUCTION-MUTATIONS"
+$recoveryArgs = @(
+    "--project", $GCP_PROJECT_ID, "--region", $GCP_REGION,
+    "--cluster", $GKE_CLUSTER_NAME, "--namespace", $GKE_NAMESPACE,
+    "--recovery-state", $MS67_SECRET_RECOVERY_FILE,
+    "--evidence-bucket", "gs://${GCP_PROJECT_ID}-ms67-evidence/secret-rotation",
+    "--signer", $MS67_SIGNER
+)
+.\cloudbank-secret-rotation.ps1 recover @recoveryArgs
+```
+
+The GKE command adapter resolves the Windows `gcloud.cmd` installation and runs
+its `lib/gcloud.py` entrypoint using the controller's Python interpreter. Arguments
+remain separate from secret values on stdin, with UTF-8 input and output. An
+incomplete SDK installation fails before the batch launcher runs. CI exercises
+this path with the real Windows SDK 564.0.0 and Python 3.13, as well as synthetic
+arguments containing spaces, quotes and shell metacharacters. Keep the computer
+awake and the PowerShell window open until recovery returns.
+
 ## Verify evidence
 
 Only `passed-secret-rotation-and-restoration` with two fresh replicas for both

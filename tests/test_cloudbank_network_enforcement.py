@@ -9,6 +9,7 @@ import socket
 import subprocess
 import tempfile
 import time
+from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
@@ -177,6 +178,19 @@ def engine():
     return NetworkRun(backend, journal, state, PROFILE, ARTIFACT), backend, journal
 
 
+def cli_module():
+    import sys
+    tools = ROOT / "tools"
+    sys.path.insert(0, str(tools))
+    try:
+        spec = importlib.util.spec_from_file_location("network_cli", tools / "cloudbank_network_enforcement.py")
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module
+    finally:
+        sys.path.remove(str(tools))
+
+
 class SelectorAndRoutingTests(unittest.TestCase):
     def test_selector_expressions_and_union(self):
         self.assertTrue(selector_matches({"matchExpressions": [{"key": "a", "operator": "NotIn", "values": ["x"]}]}, {}))
@@ -298,6 +312,20 @@ class RunnerTests(unittest.TestCase):
             run.run()
         self.assertEqual(backend.commands, [])
 
+    def test_lost_lock_prevents_each_resource_create(self):
+        for kind in ("Namespace", "ServiceAccount", "ConfigMap", "NetworkPolicy", "Pod"):
+            with self.subTest(kind=kind):
+                run, backend, journal = engine()
+                run.acquire()
+                backend.objects[(APP, "lease", LEASE)]["spec"]["holderIdentity"] = "another-run"
+                commands, checkpoints = len(backend.commands), len(journal.writes)
+                obj = mark({"apiVersion": "v1", "kind": kind, "metadata": {"name": "unused"}}, RUN)
+                with self.assertRaisesRegex(JourneyFailure, "lock-ownership-mismatch"):
+                    run.create(obj)
+                self.assertEqual(len(backend.commands), commands)
+                self.assertEqual(len(journal.writes), checkpoints)
+                self.assertEqual(run.s["resources"], [])
+
     def test_service_routing_conflict_prevents_mutation(self):
         run, backend, _ = engine()
         backend.objects[(APP, "service", "account")]["spec"]["publishNotReadyAddresses"] = True
@@ -415,6 +443,67 @@ class JavaProbeTests(unittest.TestCase):
 
 
 class BackendGuards(unittest.TestCase):
+    def test_full_matrix_through_real_backend_commands(self):
+        # Mock only the subprocess boundary. The real Backend must create the
+        # lease, serialize all resources and probes, and perform UID deletes.
+        run, model, _ = engine()
+        original = copy.deepcopy(model.objects)
+        calls = []
+
+        def invoke(argv, **kwargs):
+            calls.append((argv, kwargs))
+            if argv[0] == "gcloud":
+                self.assertEqual(argv[1:4], ["sql", "instances", "describe"])
+                self.assertEqual(argv[-3:], ["--project", ENV["project"], "--format=json"])
+                return json.dumps(model.sql_instance(argv[4]))
+            self.assertEqual(argv[:3], ["kubectl", "--context", "explicit-context"])
+            self.assertRegex(argv[3], r"^--request-timeout=[0-9]+s$")
+            args, namespace = argv[4:], None
+            if args[0] == "--namespace":
+                namespace, args = args[1], args[2:]
+            if args[0] == "get":
+                kind = args[1]
+                if "," in kind:
+                    return json.dumps({"items": model.namespace_snapshot(namespace)})
+                name = args[2] if args[2] != "-o" else None
+                value = model.get(namespace, kind, name)
+                return json.dumps(value) if value is not None else ""
+            if args[0] == "create":
+                self.assertEqual(args, ["create", "-f", "-", "-o", "json"])
+                obj = json.loads(kwargs["data"])
+                self.assertEqual(namespace, obj["metadata"].get("namespace"))
+                return json.dumps(model.create(obj))
+            if args[0] == "exec":
+                self.assertEqual(args[1], "-i")
+                self.assertEqual(args[-1], "connect")
+                cases = []
+                for line in kwargs["data"].splitlines():
+                    case_id, ip, port, timeout, nonce = line.split()
+                    self.assertEqual(timeout, "3000")
+                    cases.append({"id": case_id, "ip": ip, "port": int(port),
+                                  **({"nonce": nonce} if nonce != "-" else {})})
+                return "\n".join(json.dumps(row) for row in model.connections(namespace, args[2], cases))
+            if args[0] == "delete":
+                self.assertEqual(args[1], "--raw")
+                options = json.loads(Path(args[-1]).read_text(encoding="utf-8"))
+                uid = options["preconditions"]["uid"]
+                obj = next(o for o in model.objects.values() if o["metadata"]["uid"] == uid)
+                self.assertTrue(args[2].endswith("/" + obj["metadata"]["name"]))
+                model.delete(obj)
+                return "{}"
+            self.fail("Unexpected backend operation: " + args[0])
+
+        with tempfile.TemporaryDirectory() as work:
+            run.b = Backend(SimpleNamespace(context="explicit-context", project=ENV["project"], output=Path(work)))
+            with patch("lightyear_data.cloudbank_network_enforcement.command", invoke):
+                result = run.run()
+        verify_observation(sign(result, KEY, "operator"), KEY, BINDINGS, IMAGES, ENV, ARTIFACT)
+        self.assertEqual(len(result["checks"]), 130)
+        self.assertEqual(model.objects, original)
+        self.assertEqual(model.commands[0][1]["kind"], "Lease")
+        self.assertEqual(sum(obj["kind"] == "Pod" for _, obj in model.commands), 12)
+        self.assertTrue(any("exec" in argv for argv, _ in calls))
+
     def test_delete_uses_raw_uid_precondition_and_explicit_context(self):
         with tempfile.TemporaryDirectory() as work:
             class Runtime:
@@ -432,23 +521,47 @@ class BackendGuards(unittest.TestCase):
             self.assertFalse((Path(work) / "network-delete-options.json").exists())
 
     def test_cli_help_and_recovery_state_scope(self):
-        import sys
-        tools = ROOT / "tools"
-        sys.path.insert(0, str(tools))
-        try:
-            spec = importlib.util.spec_from_file_location("network_cli", tools / "cloudbank_network_enforcement.py")
-            module = importlib.util.module_from_spec(spec)
-            spec.loader.exec_module(module)
-            run, _, _ = engine()
-            run.preflight()
-            run.setup()
-            module.verified_state(sign(run.s, KEY, "operator"), KEY, BINDINGS, IMAGES, ENV, PROFILE)
-            value = copy.deepcopy(run.s)
-            value["resources"][0]["object"]["metadata"]["name"] = "unrelated-namespace"
-            with self.assertRaisesRegex(JourneyFailure, "namespace-invalid"):
-                module.verified_state(sign(value, KEY, "operator"), KEY, BINDINGS, IMAGES, ENV, PROFILE)
-        finally:
-            sys.path.remove(str(tools))
+        module = cli_module()
+        run, _, _ = engine()
+        run.preflight()
+        run.setup()
+        module.verified_state(sign(run.s, KEY, "operator"), KEY, BINDINGS, IMAGES, ENV, PROFILE)
+        value = copy.deepcopy(run.s)
+        value["resources"][0]["object"]["metadata"]["name"] = "unrelated-namespace"
+        with self.assertRaisesRegex(JourneyFailure, "namespace-invalid"):
+            module.verified_state(sign(value, KEY, "operator"), KEY, BINDINGS, IMAGES, ENV, PROFILE)
+
+    def test_failure_preserves_original_phase_without_exception_payload(self):
+        module = cli_module()
+        for cleanup_failure in (False, True):
+            with self.subTest(cleanup_failure=cleanup_failure):
+                run, backend, journal = engine()
+                original = copy.deepcopy(backend.objects)
+                with patch.object(backend, "create", side_effect=AttributeError("private-payload-must-not-be-saved")):
+                    try:
+                        run.run()
+                    except AttributeError as exc:
+                        if cleanup_failure:
+                            journal.fail = "restoring"
+                        result = module.failure_result(exc, run, "run")
+                    else:
+                        self.fail("Expected setup failure")
+                self.assertEqual(result["status"], "failed")
+                self.assertEqual(result["reason"], "network-input-or-runtime-error")
+                self.assertEqual(result["error_type"], "AttributeError")
+                self.assertEqual(result["failed_phase"], "before-lock")
+                self.assertEqual(result["phase"], "restoring" if cleanup_failure else "restored")
+                self.assertEqual(result["recovery"]["status"], "recovery-required" if cleanup_failure else "restored")
+                self.assertEqual(backend.objects, original)
+                self.assertFalse(result["ms67_complete"])
+                self.assertNotIn("private-payload", json.dumps(result))
+                self.assertNotIn("traceback", json.dumps(result))
+
+        arbitrary = type("private_exception_subclass_name", (Exception,), {})
+        result = module.failure_result(arbitrary("private-value"), None, "run")
+        self.assertEqual(result["error_type"], "Exception")
+        self.assertEqual(result["failed_phase"], "before-run")
+        self.assertNotIn("private", json.dumps(result))
 
 
 if __name__ == "__main__":

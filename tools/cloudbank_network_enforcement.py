@@ -85,6 +85,31 @@ def reason(exc):
         "operator-interrupted" if isinstance(exc, KeyboardInterrupt) else "network-input-or-runtime-error")
 
 
+def error_type(exc):
+    # Use fixed class names, never provider messages, exception arguments,
+    # arbitrary subclass names, tracebacks or frame locals.
+    for cls in (JourneyFailure, KeyboardInterrupt, AttributeError, KeyError,
+                TypeError, ValueError, TimeoutError, OSError, RuntimeError):
+        if isinstance(exc, cls):
+            return cls.__name__
+    return "Exception"
+
+
+def failure_result(exc, engine, action):
+    failed_phase = engine.s.get("phase") if engine else "before-run"
+    recovery = {"status": "not-started", "errors": []}
+    if engine and engine.s.get("lease_object") and action in {"run", "recover"}:
+        try:
+            recovery = engine.recover()
+        except (Exception, KeyboardInterrupt) as cleanup:
+            recovery = {"status": "recovery-required", "errors": [reason(cleanup)], "error_type": error_type(cleanup)}
+    return {"status": "failed", "reason": reason(exc), "error_type": error_type(exc),
+            "failed_phase": failed_phase, "recovery": recovery,
+            "phase": engine.s.get("phase") if engine else "before-run",
+            "failed_checks": engine.s.get("failed_checks", []) if engine else [],
+            "ms67_complete": False, "production_ready": False}
+
+
 def main(argv=None):
     args = parser().parse_args(argv)
     heartbeat, engine, output, key = Heartbeat(), None, None, None
@@ -164,16 +189,7 @@ def main(argv=None):
         print(json.dumps({k: v for k, v in result.items() if k not in {"baseline", "final", "cases", "checks", "images"}}, indent=2, sort_keys=True))
         return 0
     except (Exception, KeyboardInterrupt) as exc:
-        recovery = {"status": "not-started", "errors": []}
-        if engine and engine.s.get("lease_object") and args.action in {"run", "recover"}:
-            try:
-                recovery = engine.recover()
-            except (Exception, KeyboardInterrupt) as cleanup:
-                recovery = {"status": "recovery-required", "errors": [reason(cleanup)]}
-        result = {"status": "failed", "reason": reason(exc), "recovery": recovery,
-                  "phase": engine.s.get("phase") if engine else "before-run",
-                  "failed_checks": engine.s.get("failed_checks", []) if engine else [],
-                  "ms67_complete": False, "production_ready": False}
+        result = failure_result(exc, engine, args.action)
         if output and output.is_dir() and key:
             save_observation(output / "network-enforcement.result.json", result, key, args.signer)
         print(json.dumps(result, indent=2))

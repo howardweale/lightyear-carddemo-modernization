@@ -58,7 +58,9 @@ creation. Its successful final marker is `MS67_NETWORK_VERIFICATION=PASSED` afte
 independent signature, binding, matrix and cleanup verification. The signed
 observation is uploaded and read back under the project's private
 `network-enforcement/<run-id>/` prefix. An interrupted or failed run never emits
-that marker. Failure details include bounded case IDs and outcomes, not raw logs.
+that marker. Failure details preserve the original `failed_phase` and a bounded
+`error_type` separately from the post-cleanup `phase`. Case IDs and outcomes are
+included; raw exception messages, logs, tracebacks and credentials are excluded.
 
 ## Recovery
 

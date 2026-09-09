@@ -12,7 +12,7 @@ import json
 import re
 import time
 from urllib.error import HTTPError, URLError
-from urllib.parse import quote, urlencode
+from urllib.parse import urlencode
 from urllib.request import Request, build_opener
 
 from .cloudbank_journeys import JourneyFailure, require
@@ -31,6 +31,42 @@ PHASE_SECONDS = 720
 RUN_PATTERN = r"ms67-alert-[0-9a-f]{32}"
 IDENTITY_PATTERN = r"[a-z0-9][a-z0-9-]{0,62}"
 BINDINGS = {"image_lock_sha256", "ms64_receipt_sha256", "platform_profile_sha256"}
+API_COLLECTIONS = {"metricDescriptors", "alertPolicies", "alerts", "timeSeries"}
+ERROR_STATUSES = {"CANCELLED", "UNKNOWN", "INVALID_ARGUMENT", "DEADLINE_EXCEEDED", "NOT_FOUND",
+                  "ALREADY_EXISTS", "PERMISSION_DENIED", "RESOURCE_EXHAUSTED", "FAILED_PRECONDITION",
+                  "ABORTED", "OUT_OF_RANGE", "UNIMPLEMENTED", "INTERNAL", "UNAVAILABLE", "DATA_LOSS",
+                  "UNAUTHENTICATED"}
+ERROR_FIELDS = {"name", "parent", "filter", "orderBy", "order_by", "pageSize", "page_size", "pageToken",
+                "page_token", "metric_descriptor", "metricDescriptor", "metric_descriptor.type", "metricDescriptor.type",
+                "alert_policy", "alertPolicy", "time_series", "timeSeries", "interval", "interval.start_time",
+                "interval.end_time", "interval.startTime", "interval.endTime"}
+
+
+def error_metadata(raw):
+    """Retain only known status/field identifiers, never provider messages or values."""
+    if len(raw) > 16384:
+        return {}
+    try:
+        value = json.loads(raw)
+        error = value.get("error", {}) if isinstance(value, dict) else {}
+        if not isinstance(error, dict):
+            return {}
+        result = {}
+        if isinstance(error.get("status"), str) and error["status"] in ERROR_STATUSES:
+            result["provider_status"] = error["status"]
+        fields = set()
+        for detail in error.get("details", []):
+            if not isinstance(detail, dict) or detail.get("@type") != "type.googleapis.com/google.rpc.BadRequest":
+                continue
+            for row in detail.get("fieldViolations", []):
+                field = row.get("field") if isinstance(row, dict) else None
+                if isinstance(field, str) and field in ERROR_FIELDS:
+                    fields.add(field)
+        if fields:
+            result["invalid_fields"] = sorted(fields)
+        return result
+    except (TypeError, ValueError, UnicodeError):
+        return {}
 
 
 def matches(pattern, value):
@@ -141,8 +177,12 @@ def policy_version(value):
 
 
 class ApiFailure(JourneyFailure):
-    def __init__(self, code):
+    def __init__(self, code, *, method=None, collection=None, metadata=None):
         self.code = code
+        self.diagnostic = {"http_status": code}
+        if method in {"GET", "POST", "DELETE"} and collection in API_COLLECTIONS:
+            self.diagnostic.update(method=method, collection=collection)
+        self.diagnostic.update(metadata or {})
         super().__init__("alert-api-http-" + str(code))
 
 
@@ -157,8 +197,10 @@ class Monitoring:
 
     def request(self, method, path, *, query=None, body=None, absent=False):
         require(method in {"GET", "POST", "DELETE"} and path.startswith(self.prefix + "/")
-                and ".." not in path and re.fullmatch(r"[A-Za-z0-9/_.%\-]+", path) is not None,
+                and ".." not in path and re.fullmatch(r"[A-Za-z0-9/_.\-]+", path) is not None,
                 "alert-api-boundary-invalid")
+        collection = path.removeprefix(self.prefix + "/").split("/", 1)[0]
+        require(collection in API_COLLECTIONS, "alert-api-collection-invalid")
         if not self.token or time.monotonic() - self.token_at > 900:
             self.token = self.invoke(["gcloud", "auth", "print-access-token", "--project", self.project]).strip()
             require(bool(self.token) and not any(c.isspace() for c in self.token), "alert-access-token-invalid")
@@ -178,10 +220,15 @@ class Monitoring:
             return value
         except HTTPError as exc:
             code = exc.code
-            exc.close()
+            try:
+                metadata = error_metadata(exc.read(16385))
+            except (OSError, ValueError):
+                metadata = {}
+            finally:
+                exc.close()
             if code == 404 and absent and method == "GET":
                 return None
-            raise ApiFailure(code) from None
+            raise ApiFailure(code, method=method, collection=collection, metadata=metadata) from None
         except (URLError, TimeoutError, OSError):
             raise JourneyFailure("alert-api-unavailable-or-timed-out") from None
 
@@ -205,7 +252,10 @@ class Monitoring:
         return self.request("GET", self.descriptor_path(run_id), absent=True)
 
     def descriptor_path(self, run_id):
-        return self.prefix + "/metricDescriptors/" + quote(metric_type(run_id), safe="")
+        # Google binds name=projects/*/metricDescriptors/**. The metric's slashes
+        # are resource-path separators, not an encoded single path segment.
+        # metric_type only contains a fixed prefix and a validated UUID.
+        return self.prefix + "/metricDescriptors/" + metric_type(run_id)
 
     def check_descriptor(self, run_id, value):
         expected = descriptor_spec(run_id)

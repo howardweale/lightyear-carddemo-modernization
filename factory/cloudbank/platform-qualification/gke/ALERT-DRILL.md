@@ -53,15 +53,22 @@ $common = @(
 )
 $inputs = @('--image-lock', $imageLock, '--ms64-receipt', $ms64Receipt,
             '--platform-profile', $platformProfile)
-& $python $tool preflight @common @inputs
-if ($LASTEXITCODE -ne 0) { throw 'Alert preflight failed' }
 $env:LIGHTYEAR_NON_PRODUCTION_ACK = 'I-AUTHORIZE-MS67-NON-PRODUCTION-MUTATIONS'
 $output = Join-Path $env:USERPROFILE ('ms67-alert-run-' + [guid]::NewGuid().ToString('N'))
-& $python $tool run @common @inputs --output-root $output
-if ($LASTEXITCODE -ne 0) { throw 'Read the bounded failure and recovery status before continuing' }
-& $python $tool verify @common --observation (Join-Path $output 'alert-drill.observation.json')
-if ($LASTEXITCODE -ne 0) { throw 'Independent alert verification failed' }
+& {
+  & $python $tool preflight @common @inputs
+  if ($LASTEXITCODE -ne 0) { throw 'Alert preflight failed' }
+  & $python $tool run @common @inputs --output-root $output
+  if ($LASTEXITCODE -ne 0) { throw 'Read the bounded failure and recovery status before continuing' }
+  & $python $tool verify @common --observation (Join-Path $output 'alert-drill.observation.json')
+  if ($LASTEXITCODE -ne 0) { throw 'Independent alert verification failed' }
+  Write-Output 'MS67_ALERT_VERIFICATION=PASSED'
+}
 ```
+
+Paste the execution block together, including its braces. An exception stops the
+remaining commands inside that block; a separately pasted unconditional print
+statement cannot establish success.
 
 Keep the terminal and computer running until the command exits. This executor
 runs locally; it is not a Cloud Build submission. Progress is printed every 20
@@ -77,6 +84,13 @@ timestamps, input bindings, and confirmed resource removal. Tokens and API
 response bodies are not persisted. The runner prints the private observation URI
 and recovery-state URI.
 
+Every invocation uses a unique observation URI under its run ID, even when local
+output folders have the same basename or recovery is repeated. HTTP failures
+record the method, API collection, and allowlisted status/field identifiers.
+Provider messages, field descriptions, tokens, and response bodies are omitted.
+An HTTP error during the initial checks remains a failed run. Recovery must
+confirm resource absence before another run starts.
+
 ## Interrupted execution
 
 Stop the original process before recovery. Do not run recovery concurrently with
@@ -84,8 +98,10 @@ it. Download the printed `MS67_ALERT_RECOVERY_STATE` object to a local JSON file
 then invoke the same controller with the same `$common` context:
 
 ```powershell
-& $python $tool recover @common --recovery-state $checkpoint --original-process-stopped
-if ($LASTEXITCODE -ne 0) { throw 'Resource reconciliation is still required' }
+& {
+  & $python $tool recover @common --recovery-state $checkpoint --original-process-stopped
+  if ($LASTEXITCODE -ne 0) { throw 'Resource reconciliation is still required' }
+}
 ```
 
 The local file locates the latest signed, generation-pinned checkpoint in Cloud
@@ -112,3 +128,6 @@ defines the 60-second window and missing-data behavior. Creation of a
 [custom metric descriptor](https://docs.cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.metricDescriptors/create)
 can become visible asynchronously, so the runner waits for readback without
 issuing another creation request.
+Google's [metric service HTTP bindings](https://github.com/googleapis/googleapis/blob/master/google/monitoring/v3/metric_service.proto)
+use a multi-segment descriptor name for GET and DELETE. The executor preserves
+the validated metric path separators when constructing those URLs.

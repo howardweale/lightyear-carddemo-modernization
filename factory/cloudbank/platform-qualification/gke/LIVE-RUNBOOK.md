@@ -70,6 +70,11 @@ bounded certificate status with the deployment evidence.
 - Confirm all ExternalSecret resources are Ready. Add a new Secret Manager version for one bounded
   synthetic value, wait for propagation, restart its workload, prove the new version is active, and
   disable the prior version. Record no value.
+
+The bounded CreditScore runner and its crash-recovery procedure are documented
+in [SECRET-ROTATION.md](SECRET-ROTATION.md). It proves the changed scoring value
+on both replicas, restores the original values, and retires its temporary version.
+
 - Confirm Managed Prometheus metrics, Cloud Logging entries, and Cloud Trace spans for all eight
   services under one hashed correlation ID. Trigger one synthetic alert and prove it recovers.
 

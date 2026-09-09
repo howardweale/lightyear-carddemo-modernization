@@ -1,10 +1,11 @@
 {
   "catalog_type": "lightyear-entrypoint-catalog",
-  "content_sha256": "286e1e57d020958f7728ac8fcaea844c44b49fa7d8c58146f1ef821bb3c774ad",
+  "content_sha256": "d3ee8b777dccd338185cac674296038693e1ef43af612b2cbe520272aa256f87",
   "entries": [
     {"name": "asm-readiness", "purpose": "Build or verify HLASM readiness evidence.", "role": "release-gated", "verification": "verify.sh and verify.ps1"},
     {"name": "audit-control-tower", "purpose": "Build or verify the audit evidence projection.", "role": "release-gated", "verification": "verify.sh and verify.ps1"},
     {"name": "cics-vsam-readiness", "purpose": "Build or verify CICS and VSAM readiness evidence.", "role": "release-gated", "verification": "verify.sh and verify.ps1"},
+    {"name": "cloudbank-alert-drill", "purpose": "Observe and recover one owned synthetic Cloud Monitoring alert with signed durable checkpoints and verified cleanup.", "role": "live-authorized", "verification": "verify.sh and verify.ps1 unit tests; Windows SDK CI; live mutation requires signed bound MS64 images, an authorized MS67 profile and explicit mutation acknowledgment"},
     {"name": "cloudbank-customer-postgresql", "purpose": "Build, verify, or natively execute the bounded CloudBank customer Oracle-to-PostgreSQL mapping.", "role": "release-gated", "verification": "verify.sh, verify.ps1, and an admitted MS #54 Oracle receipt for native execution"},
     {"name": "cloudbank-dark-factory", "purpose": "Build, verify, or execute the first bounded CloudBank Oracle-to-PostgreSQL application factory workcell.", "role": "release-gated", "verification": "verify.sh, verify.ps1, and admitted signed MS #54 and MS #55 receipts for native dual-run execution"},
     {"name": "cloudbank-edge-ai", "purpose": "Build, verify, materialize, or execute the CloudBank Credit Score and Chatbot application-boundary gate and eight-service target package.", "role": "release-gated", "verification": "verify.sh, verify.ps1, and admitted signed MS #63 and MS #57 receipts for native application tests and packaging"},

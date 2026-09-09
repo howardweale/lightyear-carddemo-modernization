@@ -403,7 +403,10 @@ class JavaProbeTests(unittest.TestCase):
                     with socket.create_connection(("127.0.0.1", 19067), timeout=0.3) as client:
                         self.assertEqual(client.recv(100), ("a" * 32 + "\n").encode())
                     break
-                except ConnectionRefusedError:
+                except (ConnectionRefusedError, TimeoutError):
+                    # Windows may time out instead of refusing the first SYN
+                    # while the Java process is starting. This is a bounded
+                    # listener startup wait, not a policy-denial observation.
                     self.assertLess(time.monotonic(), deadline)
                     time.sleep(0.1)
         finally:

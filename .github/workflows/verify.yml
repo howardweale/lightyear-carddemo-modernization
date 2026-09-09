@@ -29,6 +29,10 @@ jobs:
           PYTHONPATH: src
           LIGHTYEAR_TEST_WINDOWS_GCLOUD: "1"
         run: |
+          $tokens = $null
+          $parseErrors = $null
+          $null = [System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD 'factory/cloudbank/platform-qualification/gke/run-runtime-identity.ps1'), [ref]$tokens, [ref]$parseErrors)
+          if ($parseErrors.Count -ne 0) { throw 'Runtime identity launcher syntax failed' }
           python -m unittest discover -s tests -p test_cloudbank_gke_command.py -v
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           python -m unittest discover -s tests -p test_cloudbank_secret_rotation.py -v
@@ -38,6 +42,8 @@ jobs:
           python -m unittest discover -s tests -p test_cloudbank_log_correlation.py -v
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           python -m unittest discover -s tests -p test_cloudbank_image_security.py -v
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python -m unittest discover -s tests -p test_cloudbank_runtime_identity.py -v
           exit $LASTEXITCODE
 
   cloudbank-sql-recovery:

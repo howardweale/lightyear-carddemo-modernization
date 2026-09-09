@@ -78,8 +78,7 @@ def locations(spec, service):
             (pod, "volumes", "/spec/template/spec/volumes")]
 
 
-def baseline(deployment, service, project=None):
-    spec = deployment["spec"]
+def logging_settings(spec, service, project=None):
     require(spec.get("replicas") == 2 and spec.get("strategy") == {
         "type": "RollingUpdate", "rollingUpdate": {"maxUnavailable": 0, "maxSurge": 1}},
         "logging-two-replica-rolling-strategy-required")
@@ -94,6 +93,13 @@ def baseline(deployment, service, project=None):
         require(not any(row.get("name") == expected["name"] or
                         (key == "volumeMounts" and row.get("mountPath", "").startswith(MOUNT))
                         for row in parent.get(key, [])), "logging-existing-configuration-conflict")
+    return fields, already_installed
+
+
+def baseline(deployment, service, project=None):
+    spec = deployment["spec"]
+    fields, already_installed = logging_settings(spec, service, project)
+    require(bool(deployment.get("metadata", {}).get("uid")), "logging-live-deployment-uid-required")
     return {"uid": deployment["metadata"]["uid"], "spec_sha256": hashed(spec),
             "logging_preexisting": already_installed,
             "absent_lists": [path for parent, key, path in fields if key not in parent]}
@@ -152,7 +158,8 @@ def instrument_bundle(bundle, project, namespace):
             continue
         require(item["metadata"].get("namespace") == namespace and name not in seen,
                 "logging-bundle-context-invalid")
-        baseline(item, name)
+        # Fresh client-side manifests have no server-assigned UID yet.
+        logging_settings(item["spec"], name)
         for (parent, key, _), expected in zip(locations(item["spec"], name), controlled(project)):
             parent.setdefault(key, []).append(copy.deepcopy(expected))
         seen.add(name)

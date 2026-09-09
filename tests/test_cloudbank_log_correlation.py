@@ -186,6 +186,16 @@ class ConfigurationTests(unittest.TestCase):
             with self.assertRaises(JourneyFailure):
                 instrument_bundle({"kind": "List", "items": items}, PROJECT, "other-namespace")
 
+    def test_fresh_manifests_do_not_require_live_metadata_but_rollout_does(self):
+        bundle = {"kind": "List", "items": [deployment(s) for s in SERVICES]}
+        for item in bundle["items"]:
+            item["metadata"].pop("uid")
+            item["metadata"].pop("resourceVersion")
+        rendered = instrument_bundle(bundle, PROJECT, ENVIRONMENT["namespace"])
+        self.assertTrue(all("uid" not in row["metadata"] for row in rendered["items"]))
+        with self.assertRaisesRegex(JourneyFailure, "live-deployment-uid-required"):
+            baseline(bundle["items"][0], SERVICES[0])
+
 
 class CorrelationTests(unittest.TestCase):
     def test_exact_server_span_matches_for_all_eight_services(self):

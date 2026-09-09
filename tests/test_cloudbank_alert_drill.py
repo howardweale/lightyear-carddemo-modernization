@@ -15,7 +15,7 @@ from urllib.error import HTTPError
 
 from lightyear_data.cloudbank_alert_drill import (
     AlertDrill, ApiFailure, LABEL, Monitoring, STATE_FILE, STATE_TYPE, descriptor_spec,
-    instant, metric_type, policy_spec, stamp, validate_state, verify_observation,
+    error_metadata, instant, metric_type, policy_spec, stamp, validate_state, verify_observation,
 )
 from lightyear_data.cloudbank_journeys import ACK, JourneyFailure
 from lightyear_data.cloudbank_secret_rotation_gke import hashed
@@ -353,6 +353,68 @@ class ObservationTests(unittest.TestCase):
 
 
 class TransportTests(unittest.TestCase):
+    def test_descriptor_get_and_delete_use_literal_multisegment_wire_url(self):
+        api = Monitoring(PROJECT, NUMBER, invoke=lambda _: "memory-only-token")
+        expected = ("https://monitoring.googleapis.com/v3/projects/233419964177/metricDescriptors/"
+                    "custom.googleapis.com/lightyear/ms67/alert_probe_" + "a" * 32)
+        # Do not construct the expected URL through the production path helper.
+        for method in ("GET", "DELETE"):
+            with self.subTest(method=method), patch.object(api.opener, "open", return_value=io.BytesIO(b"{}")) as call:
+                if method == "GET":
+                    api.descriptor(RUN)
+                else:
+                    api.request("DELETE", api.descriptor_path(RUN))
+                request = call.call_args.args[0]
+                self.assertEqual(request.full_url, expected)
+                self.assertEqual(request.get_method(), method)
+                self.assertNotIn("%2F", request.full_url)
+
+    def test_encoded_or_unrelated_paths_are_rejected_before_authentication(self):
+        api = Monitoring(PROJECT, NUMBER)
+        for path in (api.prefix + "/metricDescriptors/custom.googleapis.com%2Flightyear%2Fms67",
+                     api.prefix + "/notificationChannels", "projects/99/metricDescriptors/example"):
+            with self.subTest(path=path), patch.object(api, "invoke") as invoke, \
+                    patch.object(api.opener, "open") as send, self.assertRaises(JourneyFailure):
+                api.request("GET", path)
+            invoke.assert_not_called()
+            send.assert_not_called()
+
+    def test_http_error_diagnostics_retain_only_bounded_identifiers(self):
+        api = Monitoring(PROJECT, NUMBER, invoke=lambda _: "token-never-in-evidence")
+        body = {"error": {"code": 400, "status": "INVALID_ARGUMENT", "message": "private-response-message",
+                "details": [{"@type": "type.googleapis.com/google.rpc.BadRequest", "fieldViolations": [
+                    {"field": "name", "description": "private-field-value"},
+                    {"field": "name", "description": "token-never-in-evidence"},
+                    {"field": "private-unknown-field", "description": "private-description"}]},
+                    {"@type": "type.googleapis.com/google.rpc.ErrorInfo", "metadata": {"token": "private-token"}}]}}
+        error = HTTPError("https://monitoring.googleapis.com/", 400, "bad request", {},
+                          io.BytesIO(json.dumps(body).encode()))
+        with patch.object(api.opener, "open", side_effect=error), self.assertRaises(ApiFailure) as failure:
+            api.descriptor(RUN)
+        self.assertEqual(str(failure.exception), "alert-api-http-400")
+        self.assertEqual(failure.exception.diagnostic, {"http_status": 400, "method": "GET",
+            "collection": "metricDescriptors", "provider_status": "INVALID_ARGUMENT", "invalid_fields": ["name"]})
+        self.assertNotIn("private", json.dumps(failure.exception.diagnostic))
+        self.assertNotIn("token", json.dumps(failure.exception.diagnostic))
+        for malformed in (b"private-not-json", b"\xff", b"[]", b'{"error":null}',
+                          b'{"error":{"details":null}}', b'{"error":{"status":"private-status"}}',
+                          json.dumps(body).encode() + b" " * 16384):
+            with self.subTest(body_length=len(malformed)):
+                self.assertEqual(error_metadata(malformed), {})
+
+    def test_only_explicit_get_404_is_treated_as_absent(self):
+        api = Monitoring(PROJECT, NUMBER, invoke=lambda _: "memory-only-token")
+        for method, code, absent in (("GET", 404, True), ("GET", 400, True),
+                                     ("GET", 404, False), ("DELETE", 404, True)):
+            with self.subTest(method=method, code=code, absent=absent):
+                error = HTTPError("https://monitoring.googleapis.com/", code, "bounded-error", {}, io.BytesIO(b"{}"))
+                with patch.object(api.opener, "open", side_effect=error):
+                    if method == "GET" and code == 404 and absent:
+                        self.assertIsNone(api.descriptor(RUN))
+                    else:
+                        with self.assertRaises(ApiFailure):
+                            api.request(method, api.descriptor_path(RUN), absent=absent)
+
     def test_unrelated_incidents_are_ignored_and_same_policy_wrong_metric_rejected(self):
         api, _, engine = make()
         engine.run()
@@ -490,6 +552,79 @@ class CliTests(unittest.TestCase):
         verify_observation(sign(journals[-1].records[-1], KEY, "unit-test"), KEY)
         self.assertEqual(api.policies, [])
         self.assertIsNone(api.descriptor_value)
+
+    def test_before_run_http_failure_recovers_without_mutations_or_false_pass(self):
+        api = Monitoring(PROJECT, NUMBER, invoke=lambda _: "memory-only-token")
+        journals = []
+
+        def journal(*args, **kwargs):
+            value = MemoryJournal()
+            journals.append(value)
+            return value
+
+        def rejected(request, **kwargs):
+            self.assertEqual(request.get_method(), "GET")
+            raise HTTPError(request.full_url, 400, "private-message", {}, io.BytesIO(json.dumps({"error": {
+                "status": "INVALID_ARGUMENT", "message": "private-message"}}).encode()))
+
+        def absent(request, **kwargs):
+            self.assertEqual(request.get_method(), "GET")
+            raise HTTPError(request.full_url, 404, "not found", {}, io.BytesIO(b"{}"))
+
+        with tempfile.TemporaryDirectory() as folder, patch.dict("os.environ", {"LIGHTYEAR_NON_PRODUCTION_ACK": ACK}), \
+                patch.object(self.cli, "evidence_key", return_value=KEY), patch.object(self.cli, "command", return_value=NUMBER), \
+                patch.object(self.cli, "Monitoring", return_value=api), patch.object(self.cli, "initial_state", return_value=state()), \
+                patch.object(self.cli, "Journal", side_effect=journal), patch("sys.stdout", new_callable=io.StringIO):
+            with patch.object(api.opener, "open", side_effect=rejected) as send:
+                self.assertEqual(self.cli.main(self.args("run") + ["--output-root", str(Path(folder) / "failed")]), 1)
+                self.assertEqual(send.call_count, 2)  # Initial check and automatic cleanup both reject.
+            checkpoint, failure = journals[0].records[-1], journals[1].records[-1]
+            self.assertEqual(checkpoint["phase"], "before-run")
+            self.assertEqual(checkpoint["descriptor_phase"], "not-started")
+            self.assertEqual(checkpoint["policy_phase"], "not-started")
+            self.assertFalse(checkpoint["cleanup_complete"])
+            self.assertEqual(failure["status"], "failed")
+            self.assertEqual(failure["recovery"]["status"], "recovery-required")
+            self.assertEqual(failure["api_error"], failure["recovery"]["api_error"])
+            self.assertEqual(failure["api_error"]["collection"], "metricDescriptors")
+            self.assertNotIn("private-message", json.dumps(failure))
+            self.assertFalse(failure["alert_fired"])
+            with patch.object(api.opener, "open", side_effect=absent) as send, \
+                    patch.object(self.cli, "current_recovery", return_value=(checkpoint, "123")):
+                self.assertEqual(self.cli.main(self.args("recover") + ["--recovery-state", "old.json",
+                    "--original-process-stopped", "--output-root", str(Path(folder) / "recovery")]), 0)
+                self.assertEqual(send.call_count, 2)  # Positive absence checks; no POST or DELETE.
+            self.assertTrue(journals[2].records[-1]["cleanup_complete"])
+            restored = journals[3].records[-1]
+            self.assertEqual(restored["recovery"]["status"], "restored")
+            self.assertFalse(restored["alert_fired"])
+            self.assertFalse(restored["alert_recovered"])
+            with self.assertRaisesRegex(JourneyFailure, "passing-observation-required"):
+                verify_observation(sign(restored, KEY, "unit-test"), KEY)
+
+    def test_same_output_basename_and_repeated_recovery_never_reuse_observation_uri(self):
+        api, _, _ = make()
+        observation_uris = []
+
+        def journal(path, uri, *args, **kwargs):
+            if path.name == "alert-drill.observation.json":
+                self.assertNotIn(uri, observation_uris)
+                self.assertNotIn("generation", kwargs)  # New objects retain generation-zero precondition.
+                observation_uris.append(uri)
+            return MemoryJournal()
+
+        with tempfile.TemporaryDirectory() as folder, patch.dict("os.environ", {"LIGHTYEAR_NON_PRODUCTION_ACK": ACK}), \
+                patch.object(self.cli, "evidence_key", return_value=KEY), patch.object(self.cli, "command", return_value=NUMBER), \
+                patch.object(self.cli, "Monitoring", return_value=api), patch.object(self.cli, "Journal", side_effect=journal), \
+                patch.object(self.cli, "current_recovery", side_effect=lambda *_: (state(), "123")), \
+                patch("sys.stdout", new_callable=io.StringIO):
+            for attempt in ("first", "second"):
+                self.assertEqual(self.cli.main(self.args("recover") + ["--recovery-state", "old.json",
+                    "--original-process-stopped", "--output-root", str(Path(folder) / attempt / "run")]), 0)
+        self.assertEqual(len(set(observation_uris)), 2)
+        for uri in observation_uris:
+            self.assertRegex(uri, "^" + BUCKET + "/observations/" + RUN + "/[0-9a-f]{32}/alert-drill.observation.json$")
+        self.assertEqual(api.mutations, [])
 
     def test_existing_output_directory_is_never_written_even_for_failure(self):
         with tempfile.TemporaryDirectory() as folder, patch.dict("os.environ", {"LIGHTYEAR_NON_PRODUCTION_ACK": ACK}), \

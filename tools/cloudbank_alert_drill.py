@@ -14,7 +14,7 @@ import uuid
 from cloudbank_journeys import Heartbeat
 from cloudbank_ms65_rehearsal import cluster_identity, evidence_key, load
 from lightyear_data.cloudbank_alert_drill import (
-    AlertDrill, IDENTITY_PATTERN, Monitoring, OBSERVATION_FILE, STATE_FILE, STATE_TYPE,
+    AlertDrill, ApiFailure, IDENTITY_PATTERN, Monitoring, OBSERVATION_FILE, STATE_FILE, STATE_TYPE,
     matches, stamp, validate_state, verify_observation,
 )
 from lightyear_data.cloudbank_edge_ai import validate_execution_receipt as validate_ms64
@@ -100,6 +100,9 @@ def main(argv=None):
     heartbeat.thread.start()
     previous_term = signal.signal(signal.SIGTERM, lambda *_: (_ for _ in ()).throw(KeyboardInterrupt()))
     engine, output, key = None, None, ""
+    # Output directory basenames can repeat (for example two different .../run
+    # folders). Every invocation, including recovery, needs its own object URI.
+    attempt_id = uuid.uuid4().hex
     result = {"status": "failed", "ms67_complete": False, "production_ready": False}
     try:
         require(all(matches(IDENTITY_PATTERN, getattr(args, k)) for k in
@@ -156,15 +159,20 @@ def main(argv=None):
                 cleanup = engine.cleanup()
             except (Exception, KeyboardInterrupt) as recovery_exc:
                 cleanup = {"status": "recovery-required", "errors": [safe_reason(recovery_exc)]}
+                if isinstance(recovery_exc, ApiFailure):
+                    cleanup["api_error"] = recovery_exc.diagnostic
         result = (engine.observation("failed", cleanup) if engine else result)
         result.update(status="failed", reason=safe_reason(exc), recovery=cleanup)
+        if isinstance(exc, ApiFailure):
+            result["api_error"] = exc.diagnostic
     finally:
         if output and key:
             try:
                 if result.get("status") == "passed-synthetic-alert-and-recovery":
                     verify_observation(sign(result, key, args.signer), key)
                 # Recovery writes a new observation; it does not overwrite an earlier pass.
-                uri = args.evidence_bucket + "/observations/" + output.name + "/" + OBSERVATION_FILE
+                run_name = engine.state["run_id"] if engine else "unstarted"
+                uri = args.evidence_bucket + "/observations/" + run_name + "/" + attempt_id + "/" + OBSERVATION_FILE
                 observation = Journal(output / OBSERVATION_FILE, uri, args.project, key, args.signer).write(result)
                 if result.get("status") == "passed-synthetic-alert-and-recovery":
                     verify_observation(observation, key)

@@ -18,7 +18,8 @@ import sys
 
 from .cloudbank_journeys import JourneyFailure, SERVICES, require
 from .cloudbank_journeys_gke import command
-from .contracts import content_hash, verify_signature
+from .cloudbank_secret_rotation_gke import Journal
+from .contracts import content_hash, sign, verify_signature
 
 
 OBSERVATION_TYPE = "lightyear-cloudbank-ms67-image-security-observation"
@@ -28,6 +29,59 @@ SOURCE_URI = "git+https://github.com/howardweale/lightyear-carddemo-modernizatio
 HEX64 = r"[0-9a-f]{64}"
 MAX_OUTPUT = 32 * 1024 * 1024
 HELPER = "lightyear-ms67"
+
+
+class CheckpointFailure(JourneyFailure):
+    """The intended evidence object has not been independently confirmed."""
+
+
+def save_observation(path, state, key, signer):
+    payload = sign(state, key, signer)
+    temporary = path.with_suffix(".tmp")
+    temporary.touch(mode=0o600, exist_ok=True)
+    temporary.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    temporary.replace(path)
+    return payload
+
+
+class ImageJournal(Journal):
+    """Retry one image checkpoint without overwriting an unrecognized generation.
+
+    A lost upload response is resolved by reading the exact observed generation.
+    Only identical signed bytes acknowledge that upload. Other executors' data
+    must never advance our generation precondition.
+    """
+
+    def write(self, state):
+        payload = save_observation(self.path, state, self.key, self.signer)
+        raw = json.dumps(payload, indent=2, sort_keys=True) + "\n"
+        uploaded, stage = False, "upload"
+        for _ in range(3):
+            if not uploaded:
+                try:
+                    self.invoke(["gcloud", "storage", "cp", str(self.path), self.uri, "--project", self.project,
+                                 "--if-generation-match=" + self.generation], timeout=90)
+                    uploaded = True
+                except JourneyFailure:
+                    # The upload may have committed despite a lost response.
+                    pass
+            try:
+                stage = "generation"
+                generation = self.invoke(["gcloud", "storage", "objects", "describe", self.uri,
+                                          "--project", self.project, "--format=value(generation)"], timeout=60).strip()
+                require(re.fullmatch(r"[1-9][0-9]*", generation), "image-security-checkpoint-generation-invalid")
+                stage = "readback"
+                readback = self.invoke(["gcloud", "storage", "cat", self.uri + "#" + generation,
+                                       "--project", self.project], timeout=90)
+            except JourneyFailure:
+                continue
+            if readback == raw:
+                self.generation = generation
+                return payload
+            if generation != self.generation or uploaded:
+                raise CheckpointFailure("image-security-checkpoint-conflict")
+            stage = "upload"
+        raise CheckpointFailure("image-security-checkpoint-" + stage + "-unconfirmed")
 
 
 def credential_helper():
@@ -228,6 +282,30 @@ def execute_tool(argv, *, workspace, env, timeout=300):
         raise JourneyFailure("image-security-tool-output-invalid") from None
 
 
+def signing_public_key(project, region, *, invoke=command):
+    number = invoke(["gcloud", "projects", "describe", project,
+                     "--format=value(projectNumber)"]).strip()
+    require(number.isdigit(), "image-security-project-number-required")
+    versions = json.loads(invoke(["gcloud", "kms", "keys", "versions", "list", "--key", "image-signing",
+        "--keyring", "cloudbank-ms67", "--location", region, "--project", project,
+        "--format=json(name,state,algorithm)"]))
+    require(isinstance(versions, list) and len(versions) <= 100, "image-security-key-version-list-invalid")
+    enabled = [v for v in versions if v.get("state") == "ENABLED"]
+    require(len(enabled) == 1, "image-security-single-enabled-signing-version-required")
+    version = enabled[0]
+    parent = f"locations/{region}/keyRings/cloudbank-ms67/cryptoKeys/image-signing/cryptoKeyVersions/"
+    require(any(re.fullmatch(re.escape(f"projects/{p}/" + parent) + r"[1-9][0-9]*", version.get("name", ""))
+                for p in (project, number))
+            and "SIGN" in version.get("algorithm", ""), "image-security-key-identity-invalid")
+    raw = invoke(["gcloud", "kms", "keys", "versions", "get-public-key", version["name"].split("/")[-1],
+                  "--key", "image-signing", "--keyring", "cloudbank-ms67", "--location", region,
+                  "--project", project, "--public-key-format=pem"])
+    require(raw.startswith("-----BEGIN PUBLIC KEY-----") and "-----END PUBLIC KEY-----" in raw,
+            "image-security-public-key-invalid")
+    return raw, {"version": version["name"], "algorithm": version["algorithm"],
+                 "project_number": number, "public_key_sha256": sha(raw)}
+
+
 class ImageScanner:
     def __init__(self, project, region, workspace, *, invoke=command, run=execute_tool):
         self.project, self.region, self.workspace = project, region, Path(workspace)
@@ -260,28 +338,9 @@ class ImageScanner:
             match = re.search(pattern, raw)
             require(match is not None, "image-security-tool-version-invalid")
             tools[name] = {"version": match[1], "output_sha256": sha(raw)}
-        number = self.invoke(["gcloud", "projects", "describe", self.project,
-                              "--format=value(projectNumber)"]).strip()
-        require(number.isdigit(), "image-security-project-number-required")
-        versions = json.loads(self.invoke(["gcloud", "kms", "keys", "versions", "list", "--key", "image-signing",
-            "--keyring", "cloudbank-ms67", "--location", self.region, "--project", self.project,
-            "--format=json(name,state,algorithm)"]))
-        require(isinstance(versions, list) and len(versions) <= 100, "image-security-key-version-list-invalid")
-        enabled = [v for v in versions if v.get("state") == "ENABLED"]
-        require(len(enabled) == 1, "image-security-single-enabled-signing-version-required")
-        version = enabled[0]
-        parent = f"locations/{self.region}/keyRings/cloudbank-ms67/cryptoKeys/image-signing/cryptoKeyVersions/"
-        require(any(re.fullmatch(re.escape(f"projects/{p}/" + parent) + r"[1-9][0-9]*", version.get("name", ""))
-                    for p in (self.project, number))
-                and "SIGN" in version.get("algorithm", ""), "image-security-key-identity-invalid")
-        raw = self.invoke(["gcloud", "kms", "keys", "versions", "get-public-key", version["name"].split("/")[-1],
-                           "--key", "image-signing", "--keyring", "cloudbank-ms67", "--location", self.region,
-                           "--project", self.project, "--public-key-format=pem"])
-        require(raw.startswith("-----BEGIN PUBLIC KEY-----") and "-----END PUBLIC KEY-----" in raw,
-                "image-security-public-key-invalid")
+        raw, identity = signing_public_key(self.project, self.region, invoke=self.invoke)
         self.public_key.write_text(raw, encoding="utf-8")
-        return tools, {"version": version["name"], "algorithm": version["algorithm"],
-                       "project_number": number, "public_key_sha256": sha(raw)}
+        return tools, identity
 
     def signature(self, image):
         raw = self.tool(["cosign", "verify", "--key", str(self.public_key), "--output=json", image], self.token())
@@ -307,12 +366,12 @@ class ImageScanner:
         return result
 
 
-def verify_observation(value, key, images, bindings, source_commit, environment, profile):
+def _verify_scan_evidence(value, key, images, bindings, source_commit, environment, profile):
     require(value.get("content_sha256") == content_hash(value) and verify_signature(value, key),
             "image-security-observation-signature-invalid")
-    require(value.get("observation_type") == OBSERVATION_TYPE and value.get("status") == PASS
+    require(value.get("observation_type") == OBSERVATION_TYPE
             and value.get("schema_version") == "1.0" and re.fullmatch(r"ms67-images-[0-9a-f]{32}", value.get("run_id", "")),
-            "image-security-passing-observation-required")
+            "image-security-observation-identity-required")
     require(value.get("images") == images and value.get("bindings") == bindings
             and value.get("source_commit") == source_commit
             and value.get("cluster_identity_sha256") == profile["cluster_uid_sha256"]
@@ -372,13 +431,58 @@ def verify_observation(value, key, images, bindings, source_commit, environment,
             require(database.get("version") == version and instant(database.get("updated_at")) <= scanned
                     < instant(database.get("next_update")) and re.fullmatch(HEX64, database.get("metadata_sha256", "")),
                     "image-security-current-database-required")
-    for phase in ("before", "after"):
+    _verify_live(value, images, ("before",))
+    require(set(value.get("deployment_specs_before", {})) == set(SERVICES)
+            and all(re.fullmatch(HEX64, h) for h in value["deployment_specs_before"].values()),
+            "image-security-deployment-baseline-required")
+
+
+def _verify_live(value, images, phases):
+    for phase in phases:
         live = value.get("live", {}).get(phase, {})
         require(set(live) == set(SERVICES) and all(live[s].get("image") == images[s]
                 and type(live[s].get("ready_replicas")) is int and live[s]["ready_replicas"] == 2
                 and re.fullmatch(HEX64, live[s].get("pod_identity_sha256", ""))
                 for s in SERVICES), "image-security-live-image-checks-required")
-    require(value.get("deployment_specs_before") == value.get("deployment_specs_after")
-            and set(value.get("deployment_specs_before", {})) == set(SERVICES)
-            and all(re.fullmatch(HEX64, h) for h in value["deployment_specs_before"].values()),
+
+
+def verify_checkpoint(value, key, images, bindings, source_commit, environment, profile, *, at):
+    """Accept only complete signed scans stopped by a final transport failure."""
+    _verify_scan_evidence(value, key, images, bindings, source_commit, environment, profile)
+    require(value.get("status") == "failed" and "scan_checkpoint" not in value
+            and value.get("reason") in {
+                "operator-command-unavailable-or-timed-out",
+                "image-security-checkpoint-upload-unconfirmed",
+                "image-security-checkpoint-generation-unconfirmed",
+                "image-security-checkpoint-readback-unconfirmed",
+            }
+            and value.get("failed_phase") in {
+                "chatbot-scan",  # Legacy runner mislabeled the completed row's checkpoint.
+                "chatbot-checkpoint", "final-live-binding-check", "final-evidence-checkpoint",
+            }, "image-security-finalizable-checkpoint-required")
+    require(instant(value["finished_at"]) <= instant(at), "image-security-checkpoint-from-future")
+    for row in value["services"]:
+        require(all(instant(at) < instant(db["next_update"]) for db in row["scan"]["databases"].values()),
+                "image-security-checkpoint-databases-expired")
+
+
+def verify_observation(value, key, images, bindings, source_commit, environment, profile):
+    _verify_scan_evidence(value, key, images, bindings, source_commit, environment, profile)
+    require(value.get("status") == PASS and not any(k in value for k in ("reason", "failed_phase", "evidence_upload")),
+            "image-security-passing-observation-required")
+    _verify_live(value, images, ("after",))
+    require(value["deployment_specs_before"] == value.get("deployment_specs_after"),
             "image-security-deployment-drift")
+    if "scan_checkpoint" in value:
+        prior = value["scan_checkpoint"]
+        verify_checkpoint(prior, key, images, bindings, source_commit, environment, profile, at=value["finished_at"])
+        require(prior["run_id"] != value["run_id"]
+                and instant(prior["finished_at"]) <= instant(value.get("finalization_started_at")) <= instant(value["finished_at"])
+                and value.get("finalization_key") == prior["verification_key"]
+                and all(value.get(k) == prior.get(k) for k in (
+                    "started_at", "services", "tools", "verification_key", "deployment_specs_before", "environment"))
+                and value["live"]["before"] == prior["live"]["before"],
+                "image-security-checkpoint-lineage-invalid")
+    else:
+        require(not any(k in value for k in ("finalization_started_at", "finalization_key")),
+                "image-security-checkpoint-lineage-required")

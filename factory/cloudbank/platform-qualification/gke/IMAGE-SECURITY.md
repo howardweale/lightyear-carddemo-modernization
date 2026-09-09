@@ -19,7 +19,8 @@ The runner reads the cluster and registry and writes private evidence. It does
 not restart applications or change images, secrets, IAM or network policies. It
 creates temporary scanner caches and deletes them on normal exit. An interrupted
 scan can be started again with a fresh output directory; no workload recovery is
-needed. This observation covers image signatures, provenance and vulnerabilities.
+needed. A complete signed scan checkpoint can also be finalized as described
+below. This observation covers image signatures, provenance and vulnerabilities.
 Manifest scanning, runtime and network controls, load testing and final MS67
 admission remain separate requirements.
 
@@ -95,3 +96,43 @@ observation URI. A readback marker by itself is not a passing scan. Only a zero
 exit code, `passed-eight-image-security` status and successful independent
 `verify` establish this bounded result. `ms67_complete` and `production_ready`
 remain false.
+
+## Finalize a completed scan after a transport failure
+
+If all eight service rows were saved as `passed` but a final checkpoint or live
+read timed out, `finalize` can finish the observation without rerunning Cosign or
+Trivy. It requires the original signed local failure, the same three signed or
+hash-bound inputs and build source commit. It rejects incomplete scans, findings,
+invalid signatures, changed bindings, and failures caused by deployment drift.
+Both scanner databases must still be within their recorded `next_update` windows
+when finalization finishes. Expired evidence requires a fresh scan.
+
+Finalization checks the current enabled KMS signing key, the live cluster and
+namespace identities, all eight ready image digests, and the original deployment
+UID/specification hashes. It creates a fresh run and output directory, embeds the
+original signed checkpoint unchanged, and independently verifies the entire
+linked result. The original failed file and its remote object are preserved.
+
+With `$imageArgs`, `$imageTool` and `$python` from the preceding example:
+
+```powershell
+& {
+    $ErrorActionPreference = 'Stop'
+    $finalOutput = Join-Path $env:USERPROFILE ('ms67-image-finalized-' + [guid]::NewGuid().ToString('N'))
+    & $python $imageTool finalize @imageArgs --observation $failedObservation --output-root $finalOutput
+    if ($LASTEXITCODE -ne 0) { throw "Image finalization failed; inspect $finalOutput" }
+    & $python $imageTool verify @imageArgs --observation "$finalOutput\image-security.observation.json"
+    if ($LASTEXITCODE -ne 0) { throw 'Independent image security verification failed' }
+    Write-Output 'MS67_IMAGE_SECURITY_VERIFICATION=PASSED'
+}
+```
+
+Image checkpoint publication now makes at most three attempts. Uploads retain
+their original [generation precondition](https://cloud.google.com/storage/docs/request-preconditions),
+and readback names an exact object generation. If an upload response is lost,
+identical signed bytes from that generation can confirm completion; conflicting
+bytes cannot advance the precondition. Exhausted attempts leave a signed local
+failure with `evidence_upload: unconfirmed`. Checkpoint phases are identified
+separately from scanner phases, including `chatbot-checkpoint` and
+`final-evidence-checkpoint`. This retry behavior applies only to image evidence;
+it does not change the mutation journals used by other drills.

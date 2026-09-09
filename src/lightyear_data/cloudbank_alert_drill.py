@@ -322,7 +322,9 @@ class Monitoring:
     def matching_alerts(self, run_id, policy_name):
         result = []
         policy_name = self.policy_name(policy_name)
-        for value in self.listing("alerts", {"orderBy": "openTime desc"}):
+        # Use the same default query as preflight. Incident identity matching
+        # consumes every page and does not depend on the provider's ordering.
+        for value in self.listing("alerts"):
             observed_policy = canonical_resource_name(value.get("policy", {}).get("name"),
                                                        self.project, self.number, "alertPolicies")
             if observed_policy != policy_name:

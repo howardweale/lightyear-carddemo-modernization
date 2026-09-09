@@ -78,6 +78,11 @@ on both replicas, restores the original values, and retires its temporary versio
 - Confirm Managed Prometheus metrics, Cloud Logging entries, and Cloud Trace spans for all eight
   services under one hashed correlation ID. Trigger one synthetic alert and prove it recovers.
 
+The bounded synthetic alert runner, Windows commands, evidence verification, and
+interruption recovery are documented in [ALERT-DRILL.md](ALERT-DRILL.md). Its
+observation covers alert firing and recovery; eight-service correlation requires
+its own evidence.
+
 Before the correlation and alert exercise, collect a reproducible read-only delivery baseline. The
 operator needs Logs Viewer, Monitoring Viewer, and Cloud Trace User access; collector write roles do
 not grant human read access. Run it immediately after fresh journey traffic so logs and traces fall

@@ -20,7 +20,7 @@ jobs:
       - uses: google-github-actions/setup-gcloud@v3
         with:
           version: "564.0.0"
-      - name: Exercise Windows SDK launch and secret recovery guards
+      - name: Exercise Windows SDK launch, secret recovery, and alert drill guards
         shell: pwsh
         env:
           PYTHONPATH: src
@@ -29,6 +29,8 @@ jobs:
           python -m unittest discover -s tests -p test_cloudbank_gke_command.py -v
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           python -m unittest discover -s tests -p test_cloudbank_secret_rotation.py -v
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python -m unittest discover -s tests -p test_cloudbank_alert_drill.py -v
           exit $LASTEXITCODE
 
   cloudbank-sql-recovery:

@@ -107,6 +107,7 @@ def failure_result(exc, engine, action):
             "failed_phase": failed_phase, "recovery": recovery,
             "phase": engine.s.get("phase") if engine else "before-run",
             "failed_checks": engine.s.get("failed_checks", []) if engine else [],
+            "resource_mismatches": engine.s.get("resource_mismatches", []) if engine else [],
             "ms67_complete": False, "production_ready": False}
 
 

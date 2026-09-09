@@ -7,6 +7,11 @@ locked TestRunner Java image, overriding its command with the small reviewed
 in Windows CI with JDK 17. The operator needs Python, gcloud and kubectl, without
 an additional Java installation or image build.
 
+Windows CI also passes every created probe through the pinned Kubernetes v1.35
+API types (`k8s.io/api v0.35.0`) before running the network and recovery regression
+suite. This exercises real typed JSON encoding without contacting a cluster.
+Go is needed only in CI, not on the operator's machine.
+
 The checks cover all eight applications' database access, rejection of a reachable
 database-port listener outside the approved destination, same-namespace application
 access, both model replicas, wrong-service and wrong-namespace model ingress,
@@ -61,6 +66,15 @@ observation is uploaded and read back under the project's private
 that marker. Failure details preserve the original `failed_phase` and a bounded
 `error_type` separately from the post-cleanup `phase`. Case IDs and outcomes are
 included; raw exception messages, logs, tracebacks and credentials are excluded.
+Resource mismatches report bounded JSON field paths without field values.
+
+Creation and recovery tolerate Kubernetes' representation of an empty environment
+value: [`EnvVar.Value` defaults to an empty string and is omitted when empty](https://github.com/kubernetes/api/blob/v0.35.0/core/v1/types.go).
+The comparison applies only to those Pod environment entries, in memory; it does
+not rewrite the original signed intent or its annotation. A nonempty value,
+`valueFrom` source, missing variable, changed sandbox, image, command, owner or
+run label remains a mismatch. Previously signed checkpoints containing explicit
+empty values can therefore be recovered using this same comparison.
 
 ## Recovery
 

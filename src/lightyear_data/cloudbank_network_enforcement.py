@@ -153,6 +153,44 @@ def subset(expected, actual):
     return expected == actual
 
 
+def resource_differences(expected, actual):
+    """Return bounded field paths; tolerate only EnvVar's empty-value encoding.
+
+    Kubernetes core/v1.EnvVar.Value uses json omitempty and defaults to "".
+    The signed intent remains unchanged. A valueFrom source, nonempty value,
+    missing variable, changed image or changed sandbox is still a mismatch.
+    """
+    differences = []
+
+    def mismatch(path):
+        if len(differences) < 16:
+            differences.append("/" + "/".join(str(k).replace("~", "~0").replace("/", "~1") for k in path))
+
+    def compare(wanted, observed, path=()):
+        if isinstance(wanted, dict) and isinstance(observed, dict):
+            if (expected.get("kind") == "Pod" and len(path) == 5
+                    and path[:2] == ("spec", "containers") and path[3] == "env" and wanted.get("value") == ""):
+                if "valueFrom" in observed:
+                    mismatch(path + ("valueFrom",))
+                observed = {"value": "", **observed}
+            for key, value in wanted.items():
+                if key not in observed:
+                    mismatch(path + (key,))
+                else:
+                    compare(value, observed[key], path + (key,))
+        elif isinstance(wanted, list) and isinstance(observed, list):
+            if len(wanted) != len(observed):
+                mismatch(path)
+            else:
+                for index, (left, right) in enumerate(zip(wanted, observed)):
+                    compare(left, right, path + (index,))
+        elif type(wanted) is not type(observed) or wanted != observed:
+            mismatch(path)
+
+    compare(expected, actual)
+    return differences
+
+
 class Backend:
     def __init__(self, runtime):
         self.r = runtime
@@ -236,8 +274,11 @@ class NetworkRun:
         self.s["resources"].append(row)
         self.save("before-create-" + obj["kind"].lower())
         value = self.b.create(obj)
-        require(subset(obj, value), "network-created-resource-mutated")
         row["uid"] = value["metadata"]["uid"]
+        differences = resource_differences(obj, value)
+        if differences:
+            self.s["resource_mismatches"] = [{"kind": obj["kind"], "paths": differences}]
+        require(not differences, "network-created-resource-mutated")
         # The next pre-mutation checkpoint commits this UID. A lost create reply
         # is recoverable from the already durable intent and exact owned object.
         return value
@@ -491,7 +532,12 @@ class NetworkRun:
                 if live is None:
                     row["removed"] = True
                     continue
-                require(uid in {None, live["metadata"]["uid"]} and subset(obj, live), "network-recovery-resource-ownership-mismatch")
+                differences = resource_differences(obj, live)
+                if uid not in {None, live["metadata"]["uid"]}:
+                    differences = ["/metadata/uid", *differences][:16]
+                if differences and not self.s.get("resource_mismatches"):
+                    self.s["resource_mismatches"] = [{"kind": obj["kind"], "paths": differences}]
+                require(not differences, "network-recovery-resource-ownership-mismatch")
                 # Do not garbage-collect surviving pods through a ConfigMap or
                 # namespace when an earlier deletion failed.
                 require(not errors or obj["kind"] not in {"ConfigMap", "Namespace"}, "network-recovery-parent-preserved")

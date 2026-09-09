@@ -13,10 +13,10 @@ import unittest
 from unittest.mock import Mock, patch
 
 from lightyear_data.cloudbank_image_security import (
-    ImageScanner, OBSERVATION_FILE, OBSERVATION_TYPE, PASS, SOURCE_URI,
+    CheckpointFailure, ImageJournal, ImageScanner, OBSERVATION_FILE, OBSERVATION_TYPE, PASS, SOURCE_URI,
     child_environment, database_summary, documents, execute_tool,
     install_credential_helper, provenance_summary, scan_summary, sha,
-    signature_summary, stamp, verify_observation,
+    signature_summary, stamp, verify_checkpoint, verify_observation,
 )
 from lightyear_data.cloudbank_journeys import JourneyFailure, SERVICES, hashed
 from lightyear_data.contracts import sign, verify_signature
@@ -251,8 +251,142 @@ class ObservationTests(unittest.TestCase):
                 verify(sign(value, KEY, "unit-test-operator"))
 
 
+class CheckpointTests(unittest.TestCase):
+    def checkpoint(self):
+        value = copy.deepcopy(fixture())
+        value.update(status="failed", reason="operator-command-unavailable-or-timed-out", failed_phase="chatbot-scan")
+        value["live"].pop("after")
+        value.pop("deployment_specs_after")
+        return value
+
+    def check(self, value, at=END):
+        return verify_checkpoint(value, KEY, IMAGES, BINDINGS, COMMIT, ENVIRONMENT, PROFILE, at=at)
+
+    def test_legacy_completed_checkpoint_is_eligible_but_is_not_a_passing_observation(self):
+        value = sign(self.checkpoint(), KEY, "unit-test-operator")
+        self.check(value)
+        with self.assertRaises(JourneyFailure):
+            verify(value)
+
+    def test_invalid_or_incomplete_checkpoint_cannot_be_finalized(self):
+        changes = (
+            lambda v: v["services"].pop(),
+            lambda v: v["services"][-1].update(status="in-progress"),
+            lambda v: v["services"][0]["signature"].update(verified=False),
+            lambda v: v["services"][0]["scan"].update(high=1),
+            lambda v: v["services"][0]["scan"]["coverage"].update(java_packages=0),
+            lambda v: v["bindings"].update(image_lock_sha256="0" * 64),
+            lambda v: v.update(reason="image-security-live-environment-or-deployment-drift"),
+            lambda v: v.update(failed_phase="account-scan"),
+            lambda v: v.update(status=PASS),
+            lambda v: v.update(scan_checkpoint={}),
+            lambda v: v["deployment_specs_before"].pop("account"),
+        )
+        for i, change in enumerate(changes):
+            value = self.checkpoint(); change(value)
+            with self.subTest(case=i), self.assertRaises(JourneyFailure):
+                self.check(sign(value, KEY, "unit-test-operator"))
+
+    def test_expired_databases_and_tampered_checkpoint_are_rejected(self):
+        value = sign(self.checkpoint(), KEY, "unit-test-operator")
+        with self.assertRaisesRegex(JourneyFailure, "databases-expired"):
+            self.check(value, at="2026-09-10T00:00:00Z")
+        with self.assertRaisesRegex(JourneyFailure, "from-future"):
+            self.check(value, at=SCANNED)
+        value["services"][0]["scan"]["scan_sha256"] = "0" * 64
+        with self.assertRaisesRegex(JourneyFailure, "signature-invalid"):
+            self.check(value)
+
+    def test_independent_finalization_verification_requires_exact_signed_lineage(self):
+        prior = sign(self.checkpoint(), KEY, "unit-test-operator")
+        final = fixture()
+        final.update(run_id="ms67-images-" + "3" * 32, scan_checkpoint=prior,
+                     finalization_started_at=END, finalization_key=prior["verification_key"])
+        verify(sign(final, KEY, "unit-test-operator"))
+        changes = (
+            lambda v: v["scan_checkpoint"]["services"][0]["scan"].update(scan_sha256="0" * 64),
+            lambda v: v["services"][0]["scan"].update(scan_sha256="0" * 64),
+            lambda v: v.update(run_id=prior["run_id"]),
+            lambda v: v.update(finalization_started_at=START),
+            lambda v: v.update(finalization_key={}),
+            lambda v: v.update(finished_at="2026-09-10T00:00:00Z"),
+            lambda v: v.pop("scan_checkpoint"),
+            lambda v: v["live"]["after"]["account"].update(ready_replicas=1),
+        )
+        for i, change in enumerate(changes):
+            value = copy.deepcopy(final); change(value)
+            with self.subTest(case=i), self.assertRaises(JourneyFailure):
+                verify(sign(value, KEY, "unit-test-operator"))
+
+
+class JournalTests(unittest.TestCase):
+    def exercise(self, *, lost_upload=False, failed_read=False, unavailable=False, conflict=False):
+        remote = {"generation": "0", "raw": None, "uploads": [], "reads": 0}
+        def invoke(argv, *, timeout):
+            self.assertLessEqual(timeout, 90)
+            if argv[2] == "cp":
+                expected = argv[-1].split("=")[-1]
+                remote["uploads"].append(expected)
+                if expected != remote["generation"]:
+                    raise JourneyFailure("operator-command-failed")
+                remote["generation"] = str(int(remote["generation"]) + 1)
+                remote["raw"] = Path(argv[3]).read_text(encoding="utf-8")
+                if lost_upload and len(remote["uploads"]) == 1:
+                    raise JourneyFailure("operator-command-unavailable-or-timed-out")
+                return ""
+            if argv[2:4] == ["objects", "describe"]:
+                return remote["generation"]
+            self.assertEqual(argv[2], "cat")
+            self.assertTrue(argv[3].endswith("#" + remote["generation"]))
+            remote["reads"] += 1
+            if unavailable or (failed_read and remote["reads"] == 1):
+                raise JourneyFailure("operator-command-unavailable-or-timed-out")
+            return "other-executor-data" if conflict else remote["raw"]
+        with tempfile.TemporaryDirectory() as directory:
+            path = Path(directory) / OBSERVATION_FILE
+            journal = ImageJournal(path, "gs://test-project-ms67-evidence/image-security/run/observation.json",
+                                   "test-project", KEY, "unit-test-operator", invoke=invoke)
+            value = fixture()
+            if unavailable or conflict:
+                with self.assertRaisesRegex(CheckpointFailure, "conflict" if conflict else "readback-unconfirmed"):
+                    journal.write(value)
+                self.assertEqual(journal.generation, "0")
+                self.assertTrue(verify_signature(json.loads(path.read_text()), KEY))
+            else:
+                verify(journal.write(value))
+                self.assertEqual(journal.generation, "1")
+                value["finished_at"] = "2026-09-09T00:00:11Z"
+                verify(journal.write(value))
+                self.assertEqual(journal.generation, "2")
+            return remote
+
+    def test_lost_upload_response_is_reconciled_by_exact_generation_readback(self):
+        remote = self.exercise(lost_upload=True)
+        self.assertEqual(remote["uploads"], ["0", "1"])
+
+    def test_readback_retry_does_not_upload_a_second_generation(self):
+        remote = self.exercise(failed_read=True)
+        self.assertEqual(remote["uploads"], ["0", "1"])
+        self.assertEqual(remote["reads"], 3)
+
+    def test_lost_upload_and_readback_retry_retains_original_precondition(self):
+        remote = self.exercise(lost_upload=True, failed_read=True)
+        self.assertEqual(remote["uploads"], ["0", "0", "1"])
+
+    def test_exhausted_readback_remains_unconfirmed(self):
+        remote = self.exercise(unavailable=True)
+        self.assertEqual(remote["uploads"], ["0"])
+        self.assertEqual(remote["reads"], 3)
+
+    def test_conflicting_remote_object_is_never_overwritten(self):
+        remote = self.exercise(conflict=True)
+        self.assertEqual(remote["uploads"], ["0"])
+        self.assertEqual(remote["reads"], 1)
+
+
 class WorkflowTests(unittest.TestCase):
-    def exercise(self, *, finding=False, upload_failure=False):
+    def exercise(self, *, finding=False, upload_failure=False, checkpoint_failure=False,
+                 finalize=False, drift=False, key_changed=False, final_upload_failure=False):
         root = Path(__file__).resolve().parents[1]
         with patch.object(sys, "path", [str(root / "tools"), *sys.path]):
             spec = importlib.util.spec_from_file_location("ms67_image_security_cli_test", root / "tools/cloudbank_image_security.py")
@@ -282,7 +416,10 @@ class WorkflowTests(unittest.TestCase):
                 self.path = path
             def write(self, value):
                 if upload_failure and value.get("status") == PASS:
-                    raise JourneyFailure("test-independent-readback-failed")
+                    raise CheckpointFailure("test-independent-readback-failed")
+                if (checkpoint_failure and value.get("status") == "in-progress"
+                        and len(value["services"]) == 8 and value["services"][-1]["status"] == "passed"):
+                    raise CheckpointFailure("image-security-checkpoint-readback-unconfirmed")
                 signed = sign(value, KEY, "unit-test-operator")
                 self.path.write_text(json.dumps(signed), encoding="utf-8")
                 return signed
@@ -300,18 +437,48 @@ class WorkflowTests(unittest.TestCase):
             with patch.multiple(cli, evidence_key=Mock(return_value=KEY), validate_ms64=Mock(return_value=[]),
                                 validate_image_lock=Mock(return_value=[]), validate_profile=Mock(return_value=[]),
                                 cluster_identity=Mock(return_value=PROFILE["cluster_uid_sha256"]),
-                                GkeRuntime=Mock(return_value=runtime), ImageScanner=Mock(return_value=scanner), Journal=FakeJournal), \
+                                GkeRuntime=Mock(return_value=runtime), ImageScanner=Mock(return_value=scanner), ImageJournal=FakeJournal,
+                                signing_public_key=Mock(return_value=("public-key", observed["verification_key"]))), \
                     patch("sys.stdout", new_callable=io.StringIO) as stdout:
                 code = cli.main(args)
                 result = json.loads((output / OBSERVATION_FILE).read_text())
                 self.assertEqual(scanner.scan.call_count, 8)
                 self.assertTrue(verify_signature(result, KEY))
-                if not finding and not upload_failure:
+                if not finding and not upload_failure and not checkpoint_failure:
                     verify(result)
                     self.assertEqual(cli.main(["verify", *args[1:], "--observation", str(output / OBSERVATION_FILE)]), 0)
                 else:
                     self.assertEqual(result["status"], "failed")
                     self.assertNotIn("MS67_IMAGE_SECURITY_OBSERVATION=", stdout.getvalue())
+                if checkpoint_failure:
+                    self.assertEqual(result["failed_phase"], "chatbot-checkpoint")
+                    self.assertEqual(result["evidence_upload"], "unconfirmed")
+                    self.assertNotIn("after", result["live"])
+                    self.assertNotIn("deployment_specs_after", result)
+                if finalize:
+                    prior = (output / OBSERVATION_FILE).read_bytes()
+                    cli.ImageScanner.reset_mock()
+                    runtime.service_ready.reset_mock()
+                    if final_upload_failure:
+                        upload_failure = True
+                    if drift:
+                        runtime.deployment.side_effect = lambda s: {"metadata": {"uid": s}, "spec": {"replicas": 3}}
+                    if key_changed:
+                        cli.signing_public_key.return_value = ("different-key", {**observed["verification_key"], "public_key_sha256": "0" * 64})
+                    final_args = ["finalize", *args[1:], "--observation", str(output / OBSERVATION_FILE)]
+                    final_args[final_args.index("--output-root") + 1] = str(work / "finalized")
+                    code = cli.main(final_args)
+                    result = json.loads((work / "finalized" / OBSERVATION_FILE).read_text())
+                    self.assertEqual(prior, (output / OBSERVATION_FILE).read_bytes())
+                    cli.ImageScanner.assert_not_called()
+                    if not key_changed:
+                        self.assertEqual(runtime.service_ready.call_count, 8)
+                    if not drift and not key_changed and not final_upload_failure:
+                        verify(result)
+                        self.assertEqual(result["scan_checkpoint"], json.loads(prior))
+                        self.assertNotEqual(result["run_id"], result["scan_checkpoint"]["run_id"])
+                    else:
+                        self.assertNotIn("MS67_IMAGE_SECURITY_OBSERVATION=", stdout.getvalue())
                 return code, result
 
     def test_complete_run_and_independent_verifier(self):
@@ -326,6 +493,26 @@ class WorkflowTests(unittest.TestCase):
         code, result = self.exercise(upload_failure=True)
         self.assertEqual(code, 1)
         self.assertEqual(result["reason"], "test-independent-readback-failed")
+
+    def test_last_scan_checkpoint_failure_can_be_finalized_without_rescanning(self):
+        self.assertEqual(self.exercise(checkpoint_failure=True, finalize=True)[0], 0)
+
+    def test_finalization_rejects_changed_deployments(self):
+        code, result = self.exercise(checkpoint_failure=True, finalize=True, drift=True)
+        self.assertEqual(code, 1)
+        self.assertEqual(result["reason"], "image-security-live-environment-or-deployment-drift")
+
+    def test_finalization_rejects_changed_signing_key(self):
+        code, result = self.exercise(checkpoint_failure=True, finalize=True, key_changed=True)
+        self.assertEqual(code, 1)
+        self.assertEqual(result["reason"], "image-security-checkpoint-signing-key-changed")
+
+    def test_finalization_cannot_pass_without_confirmed_publication(self):
+        code, result = self.exercise(checkpoint_failure=True, finalize=True, final_upload_failure=True)
+        self.assertEqual(code, 1)
+        self.assertEqual(result["failed_phase"], "final-evidence-checkpoint")
+        self.assertEqual(result["evidence_upload"], "unconfirmed")
+        self.assertTrue(verify_signature(result, KEY))
 
 
 if __name__ == "__main__":

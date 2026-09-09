@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import copy
 import hashlib
 import json
 from pathlib import Path
@@ -15,13 +16,13 @@ from cloudbank_journeys import Heartbeat
 from cloudbank_ms65_rehearsal import cluster_identity, evidence_key, load
 from lightyear_data.cloudbank_edge_ai import validate_execution_receipt as validate_ms64
 from lightyear_data.cloudbank_image_security import (
-    ImageScanner, OBSERVATION_TYPE, OBSERVATION_FILE, PASS, stamp, verify_observation,
+    CheckpointFailure, ImageJournal, ImageScanner, OBSERVATION_TYPE, OBSERVATION_FILE, PASS,
+    save_observation, signing_public_key, stamp, verify_checkpoint, verify_observation,
 )
 from lightyear_data.cloudbank_journeys import JourneyFailure, SERVICES, hashed, require
 from lightyear_data.cloudbank_journeys_gke import GkeRuntime
 from lightyear_data.cloudbank_platform_qualification import validate_profile
 from lightyear_data.cloudbank_production_readiness import validate_image_lock
-from lightyear_data.cloudbank_secret_rotation_gke import Journal
 from lightyear_data.contracts import sign
 
 
@@ -30,7 +31,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def parser():
     result = argparse.ArgumentParser(description=__doc__)
-    result.add_argument("action", choices=("run", "verify"))
+    result.add_argument("action", choices=("run", "finalize", "verify"))
     for field in ("project", "region", "cluster", "namespace", "signer", "evidence-bucket", "build-source-commit"):
         result.add_argument("--" + field, required=True)
     for field in ("image-lock", "ms64-receipt", "platform-profile"):
@@ -81,6 +82,13 @@ def main(argv=None):
             verify_observation(load(args.observation), key, images, bindings, args.build_source_commit, explicit_environment, profile)
             print(json.dumps({"status": "passed", "errors": []}))
             return 0
+        prior = None
+        if args.action == "finalize":
+            phase = "checkpoint-validation"
+            require(args.observation is not None, "image-security-observation-required")
+            prior = load(args.observation)
+            verify_checkpoint(prior, key, images, bindings, args.build_source_commit,
+                              explicit_environment, profile, at=stamp())
         run_id = "ms67-images-" + uuid.uuid4().hex
         output = args.output_root or Path.home() / "ms67-evidence" / run_id
         output = output.resolve()
@@ -90,6 +98,11 @@ def main(argv=None):
         uri = args.evidence_bucket + "/" + run_id + "/" + OBSERVATION_FILE
         observation.update(run_id=run_id, started_at=stamp(), images=images, bindings=bindings,
                            source_commit=args.build_source_commit, services=[], live={}, status="in-progress")
+        if prior is not None:
+            observation.update({k: copy.deepcopy(prior[k]) for k in (
+                "started_at", "services", "tools", "verification_key", "deployment_specs_before")})
+            observation.update(scan_checkpoint=prior, finalization_started_at=stamp(),
+                               live={"before": copy.deepcopy(prior["live"]["before"])})
         runtime = GkeRuntime(project=args.project, region=args.region, cluster=args.cluster,
                              namespace=args.namespace, images=images, run_id=run_id, output=output)
         phase = "live-input-validation"
@@ -104,32 +117,44 @@ def main(argv=None):
                 "image-security-profile-live-environment-mismatch")
         observation.update(environment=environment, cluster_identity_sha256=cluster,
                            profile_namespace_uid_sha256=hashlib.sha256(ns_uid.encode()).hexdigest())
-        observation["live"]["before"], observation["deployment_specs_before"] = live_snapshot(runtime)
-        journal = Journal(output / OBSERVATION_FILE, uri, args.project, key, args.signer)
-        journal.write(observation)
-        # Raw scanner data and temporary public/config/cache files never enter the evidence bundle.
-        with tempfile.TemporaryDirectory(prefix="ms67-image-scanner-") as workspace:
-            scanner = ImageScanner(args.project, args.region, Path(workspace))
-            phase = "tools-and-public-key"
-            heartbeat.progress("Checking Cosign, Trivy and the configured KMS image signing public key")
-            observation["tools"], observation["verification_key"] = scanner.prepare()
+        journal = ImageJournal(output / OBSERVATION_FILE, uri, args.project, key, args.signer)
+        if prior is not None:
+            require(environment == prior["environment"], "image-security-checkpoint-live-environment-mismatch")
+            phase = "finalization-key-check"
+            heartbeat.progress("Validating the complete signed scan checkpoint and current image signing key")
+            _, observation["finalization_key"] = signing_public_key(args.project, args.region)
+            require(observation["finalization_key"] == prior["verification_key"],
+                    "image-security-checkpoint-signing-key-changed")
+        else:
+            observation["live"]["before"], observation["deployment_specs_before"] = live_snapshot(runtime)
+            phase = "initial-evidence-checkpoint"
             journal.write(observation)
-            for index, service in enumerate(SERVICES, 1):
-                row = {"service": service, "image": images[service], "status": "in-progress"}
-                observation["services"].append(row)
-                for operation in ("signature", "provenance", "scan"):
-                    phase = service + "-" + operation
-                    heartbeat.progress(f"Image {index}/8: {service}, {operation}")
-                    if operation == "signature":
-                        row[operation] = scanner.signature(row["image"])
-                    elif operation == "provenance":
-                        row[operation] = scanner.provenance(row["image"], service, args.build_source_commit)
-                    else:
-                        row[operation] = scanner.scan(row["image"])
-                    journal.write(observation)
-                row["status"] = "findings" if row["scan"]["high"] or row["scan"]["critical"] else "passed"
-                print(f"MS67_IMAGE={service} HIGH={row['scan']['high']} CRITICAL={row['scan']['critical']}", flush=True)
+            # Raw scanner data and temporary public/config/cache files never enter the evidence bundle.
+            with tempfile.TemporaryDirectory(prefix="ms67-image-scanner-") as workspace:
+                scanner = ImageScanner(args.project, args.region, Path(workspace))
+                phase = "tools-and-public-key"
+                heartbeat.progress("Checking Cosign, Trivy and the configured KMS image signing public key")
+                observation["tools"], observation["verification_key"] = scanner.prepare()
+                phase = "tools-evidence-checkpoint"
                 journal.write(observation)
+                for index, service in enumerate(SERVICES, 1):
+                    row = {"service": service, "image": images[service], "status": "in-progress"}
+                    observation["services"].append(row)
+                    for operation in ("signature", "provenance", "scan"):
+                        phase = service + "-" + operation
+                        heartbeat.progress(f"Image {index}/8: {service}, {operation}")
+                        if operation == "signature":
+                            row[operation] = scanner.signature(row["image"])
+                        elif operation == "provenance":
+                            row[operation] = scanner.provenance(row["image"], service, args.build_source_commit)
+                        else:
+                            row[operation] = scanner.scan(row["image"])
+                        phase += "-checkpoint"
+                        journal.write(observation)
+                    row["status"] = "findings" if row["scan"]["high"] or row["scan"]["critical"] else "passed"
+                    print(f"MS67_IMAGE={service} HIGH={row['scan']['high']} CRITICAL={row['scan']['critical']}", flush=True)
+                    phase = service + "-checkpoint"
+                    journal.write(observation)
         phase = "final-live-binding-check"
         heartbeat.progress("Rechecking the deployed image identities and saving the signed result")
         observation["live"]["after"], observation["deployment_specs_after"] = live_snapshot(runtime)
@@ -142,6 +167,7 @@ def main(argv=None):
         observation["status"] = PASS
         verify_observation(sign(observation, key, args.signer), key, images, bindings,
                            args.build_source_commit, explicit_environment, profile)
+        phase = "final-evidence-checkpoint"
         observation = journal.write(observation)
         print("MS67_IMAGE_SECURITY_EVIDENCE_READBACK=VERIFIED", flush=True)
         print("MS67_IMAGE_SECURITY_OBSERVATION=" + uri, flush=True)
@@ -150,15 +176,17 @@ def main(argv=None):
             "operator-interrupted" if isinstance(exc, KeyboardInterrupt) else "image-security-input-or-runtime-error")
         observation.update(status="failed", reason=reason, failed_phase=phase, finished_at=stamp())
         if output and key:
-            # Preserve a bounded signed local failure even if GCS admission/readback failed.
-            path = output / OBSERVATION_FILE
-            path.write_text(json.dumps(sign(observation, key, args.signer), indent=2) + "\n", encoding="utf-8")
-            if journal:
+            # An ambiguous checkpoint must not be overwritten with a new payload.
+            # The signed local failure remains available for bounded finalization.
+            if isinstance(exc, CheckpointFailure):
+                observation["evidence_upload"] = "unconfirmed"
+            elif journal:
                 try:
                     observation = journal.write(observation)
                     print("MS67_IMAGE_SECURITY_EVIDENCE_READBACK=VERIFIED", flush=True)
                 except Exception:
                     observation["evidence_upload"] = "unconfirmed"
+            observation = save_observation(output / OBSERVATION_FILE, observation, key, args.signer)
     finally:
         heartbeat.done.set()
         heartbeat.thread.join(timeout=1)

@@ -110,6 +110,9 @@ delivery was seen; it does not prove correlation, alert behavior, rotation, MS65
   concurrency 10. The gate requires zero errors and p95 latency no greater than 500 ms.
 - Verify all eight image signatures and provenance statements with Cosign.
 - Scan every digest with Trivy. The gate permits zero critical and zero high findings.
+  Use [the eight-image security runner](IMAGE-SECURITY.md) to bind the signature,
+  provenance and scan results to the current image lock and deployed environment,
+  including from Windows PowerShell.
 - Scan the rendered manifests and the live cluster configuration; prove zero critical/high findings,
   zero runtime policy violations, default deny, bounded PostgreSQL egress, and Chatbot-only model
   egress.

@@ -1,0 +1,2 @@
+# Native Windows credential-helper launcher. No dependencies or credential store.
+distlib==0.4.3 --hash=sha256:4b0ce306c966eb73bc3a7b6abad017c556dadd92c44701562cd528ac7fde4d5b

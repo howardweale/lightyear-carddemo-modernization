@@ -31,6 +31,8 @@ jobs:
           python -m unittest discover -s tests -p test_cloudbank_secret_rotation.py -v
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           python -m unittest discover -s tests -p test_cloudbank_alert_drill.py -v
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python -m unittest discover -s tests -p test_cloudbank_log_correlation.py -v
           exit $LASTEXITCODE
 
   cloudbank-sql-recovery:
@@ -83,6 +85,9 @@ jobs:
         with:
           distribution: temurin
           java-version: "21"
+
+      - name: Verify request log privacy and real OpenTelemetry span correlation
+        run: python tools/test_cloudbank_request_logging.py
 
       - name: Verify and compile the pinned upstream service set
         run: |

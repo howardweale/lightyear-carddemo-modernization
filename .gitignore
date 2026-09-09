@@ -7,6 +7,7 @@ build/
 
 # Java / Maven
 candidate-java/target/
+tests/fixtures/request-logging/target/
 
 # Harness output
 work/

@@ -32,6 +32,12 @@ PYTHONPATH="$ms67_project_root/src" python "$python_tool" render-gke-addons \
 PYTHONPATH="$ms67_project_root/src" python "$ms67_project_root/tools/cloudbank_production_readiness.py" render \
   --ms64-receipt "$ms64_receipt" --image-lock "$image_lock" --environment "$environment" \
   --output-root "$output_root/ms65-bundle"
+kubectl --context "$kube_context" create --dry-run=client \
+  -f "$output_root/ms65-bundle/cloudbank-production-readiness.yaml" -o json \
+  > "$output_root/ms65-bundle.json"
+PYTHONPATH="$ms67_project_root/src" python "$ms67_project_root/tools/cloudbank_log_correlation.py" render \
+  --project "$GCP_PROJECT_ID" --namespace "$GKE_NAMESPACE" \
+  --bundle "$output_root/ms65-bundle.json" --output "$output_root/ms67-services-with-logging.json"
 
 kubectl --context "$kube_context" apply -f "$output_root/gke-addons.yaml"
 kubectl --context "$kube_context" -n observability rollout status deployment/otel-collector --timeout=10m
@@ -39,7 +45,7 @@ for service in "${ms67_services[@]}"; do
   kubectl --context "$kube_context" -n "$GKE_NAMESPACE" wait "externalsecret/cloudbank-$service" \
     --for=condition=Ready --timeout=10m
 done
-kubectl --context "$kube_context" apply -f "$output_root/ms65-bundle/cloudbank-production-readiness.yaml"
+kubectl --context "$kube_context" apply -f "$output_root/ms67-services-with-logging.json"
 model_host="ollama.${MODEL_NAMESPACE}.svc.cluster.local"
 kubectl --context "$kube_context" -n "$GKE_NAMESPACE" set env deployment/chatbot \
   CLOUDBANK_CHAT_MODEL_BASE_URL="http://${model_host}:11434" \

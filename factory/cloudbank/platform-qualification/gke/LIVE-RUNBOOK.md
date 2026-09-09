@@ -83,6 +83,10 @@ interruption recovery are documented in [ALERT-DRILL.md](ALERT-DRILL.md). Its
 observation covers alert firing and recovery; eight-service correlation requires
 its own evidence.
 
+The request logging configuration, Windows rollout, signed correlation probe and
+interruption recovery are documented in [LOG-CORRELATION.md](LOG-CORRELATION.md).
+The probe requires actual log/span matches from the current pods and image lock.
+
 Before the correlation and alert exercise, collect a reproducible read-only delivery baseline. The
 operator needs Logs Viewer, Monitoring Viewer, and Cloud Trace User access; collector write roles do
 not grant human read access. Run it immediately after fresh journey traffic so logs and traces fall

@@ -27,6 +27,12 @@ in the specified project. The runner grants no IAM roles. Incident-list access
 is checked before any Monitoring resource is created. Use one alert drill at a
 time, and finish or recover it before starting another.
 
+Preflight and incident polling use the same paginated `alerts.list` request, with
+`pageSize` and, when needed, `pageToken`. Polling adds no sort override to the
+request already checked by preflight. Matching examines every returned page and
+requires the exact project, policy, metric, and run identity. An API error or
+incomplete pagination still fails the attempt, even if an earlier page matched.
+
 ## Windows execution
 
 Use Windows PowerShell with the authenticated Google Cloud SDK, Git, kubectl,
@@ -150,6 +156,8 @@ history and requires no manual edits to policy names or receipts.
 The implementation uses the documented [incident list](https://docs.cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.alerts/list)
 and [incident fields](https://docs.cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.alerts)
 to observe the provider's state and policy association.
+The list reference specifies `openTime desc` as the default ordering when
+`orderBy` is omitted; the executor does not need an explicit sort parameter.
 [Metric-threshold configuration](https://docs.cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.alertPolicies)
 defines the 60-second window and missing-data behavior. Creation of a
 [custom metric descriptor](https://docs.cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.metricDescriptors/create)

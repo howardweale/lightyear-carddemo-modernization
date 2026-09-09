@@ -219,6 +219,24 @@ def make(provider_type=Provider):
 
 
 class AlertTests(unittest.TestCase):
+    def test_full_drill_uses_default_alert_listing_after_preflight(self):
+        api, _, engine = make(ProjectIdProvider)
+        dispatch = api.request
+
+        def reject_sort_override(method, path, **kwargs):
+            if path == api.prefix + "/alerts" and "orderBy" in (kwargs.get("query") or {}):
+                raise ApiFailure(400, method=method, collection="alerts",
+                                 metadata={"provider_status": "INVALID_ARGUMENT"})
+            return dispatch(method, path, **kwargs)
+
+        # The live preflight succeeded, but polling with an explicit sort got 400.
+        with patch.object(api, "request", side_effect=reject_sort_override):
+            result = engine.run()
+        verify_observation(sign(result, KEY, "unit-test"), KEY)
+        self.assertTrue(result["alert_fired"])
+        self.assertTrue(result["alert_recovered"])
+        self.assertEqual(api.mutations[-2:], ["delete-policy", "delete-descriptor"])
+
     def test_full_drill_accepts_project_id_responses_and_dotted_incident_ids(self):
         for switch_alias in (False, True):
             with self.subTest(number_after_close=switch_alias):
@@ -532,6 +550,62 @@ class ObservationTests(unittest.TestCase):
 
 
 class TransportTests(unittest.TestCase):
+    def test_preflight_and_matching_use_same_wire_query_across_pages(self):
+        api = Monitoring(PROJECT, NUMBER, invoke=lambda _: "memory-only-token")
+        engine = AlertDrill(api, MemoryJournal(), state())
+        policy_name = "projects/" + PROJECT + "/alertPolicies/policy1"
+        alert = {"name": "projects/" + PROJECT + "/alerts/0.opqiw61fsv7p", "state": "OPEN",
+                 "openTime": "2026-09-09T15:01:00Z",
+                 "policy": {"name": policy_name, "userLabels": {LABEL: RUN}},
+                 "metric": {"type": metric_type(RUN), "labels": {"run_id": RUN}},
+                 "resource": {"type": "global", "labels": {"project_id": PROJECT}}}
+        unrelated = {"policy": {"name": "projects/" + NUMBER + "/alertPolicies/other"}}
+        base_url = "https://monitoring.googleapis.com/v3/projects/233419964177"
+        first_url = base_url + "/alerts?pageSize=100"
+        second_url = first_url + "&pageToken=next%2Bpage%2F%3D"
+        alert_urls = []
+
+        def respond(request, **_):
+            self.assertEqual(request.get_method(), "GET")
+            url = request.full_url
+            if "/metricDescriptors/" in url:
+                raise HTTPError(url, 404, "not found", {}, io.BytesIO(b"{}"))
+            if url == base_url + "/alertPolicies?pageSize=100":
+                return io.BytesIO(b"{}")
+            alert_urls.append(url)
+            if url == first_url:
+                value = {"alerts": [unrelated], "nextPageToken": "next+page/="}
+            elif url == second_url:
+                value = {"alerts": [alert]}
+            else:
+                raise HTTPError(url, 400, "bad request", {}, io.BytesIO(
+                    b'{"error":{"status":"INVALID_ARGUMENT"}}'))
+            return io.BytesIO(json.dumps(value).encode())
+
+        with patch.object(api.opener, "open", side_effect=respond):
+            engine.fresh()
+            result = api.matching_alerts(RUN, policy_name)
+        self.assertEqual(alert_urls, [first_url, second_url, first_url, second_url])
+        self.assertEqual(len(result), 1)
+        self.assertEqual(result[0]["state"], "OPEN")
+        self.assertEqual(result[0]["alert_identity_sha256"],
+                         hashed("projects/233419964177/alerts/0.opqiw61fsv7p"))
+        self.assertEqual(engine.journal.records, [])
+
+    def test_later_alert_page_error_does_not_return_partial_match_or_retry(self):
+        fixture, _, engine = make()
+        engine.run()
+        api = Monitoring(PROJECT, NUMBER, invoke=lambda _: "memory-only-token")
+        page = {"alerts": fixture.incidents, "nextPageToken": "later-page"}
+        error = HTTPError("https://monitoring.googleapis.com/", 400, "bad request", {}, io.BytesIO(
+            b'{"error":{"status":"INVALID_ARGUMENT","message":"private-provider-message"}}'))
+        with patch.object(api.opener, "open", side_effect=[io.BytesIO(json.dumps(page).encode()), error]) as send:
+            with self.assertRaises(ApiFailure) as failure:
+                api.matching_alerts(RUN, engine.state["policy_name"])
+        self.assertEqual(send.call_count, 2)
+        self.assertEqual(failure.exception.diagnostic, {"http_status": 400, "method": "GET",
+                         "collection": "alerts", "provider_status": "INVALID_ARGUMENT"})
+
     def test_policy_wire_read_uses_verified_number_and_checks_exact_returned_id(self):
         api = Monitoring(PROJECT, NUMBER, invoke=lambda _: "memory-only-token")
         value = policy_spec(PROJECT, RUN)

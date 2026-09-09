@@ -166,7 +166,6 @@ class Backend:
         return json.loads(raw) if raw.strip() else None
 
     def create(self, obj):
-        self.owned_lock()
         return json.loads(self.q(obj["metadata"].get("namespace"), "create", "-f", "-", "-o", "json", data=json.dumps(obj)))
 
     def delete(self, obj):
@@ -225,6 +224,9 @@ class NetworkRun:
         self.j.write(self.s)
 
     def create(self, obj):
+        # Lease acquisition itself uses the transport directly; subsequent
+        # resource creates must recheck ownership in the execution controller.
+        self.owned_lock()
         meta = obj["metadata"]
         identity = (obj["kind"], meta.get("namespace"), meta["name"])
         require(not any((r["object"]["kind"], r["object"]["metadata"].get("namespace"), r["object"]["metadata"]["name"]) == identity
@@ -372,7 +374,6 @@ class NetworkRun:
                             "ports": [{"protocol": "TCP", "port": 11434}]}]}}, self.s["run_id"]))
         self.s["probes"] = {}
         for role, info in roles.items():
-            self.owned_lock()
             namespace = info["namespace"]
             obj = pod_object(namespace, self.prefix + "-" + role, info["labels"], self.s["images"]["testrunner"],
                              configs[namespace], self.nonce, self.s["run_id"], role,

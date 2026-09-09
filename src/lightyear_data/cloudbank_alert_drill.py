@@ -28,6 +28,7 @@ OBSERVATION_FILE = "alert-drill.observation.json"
 LABEL = "lightyear_ms67_run"
 POLL_SECONDS = 20
 PHASE_SECONDS = 720
+REMOVAL_SECONDS = 180
 RUN_PATTERN = r"ms67-alert-[0-9a-f]{32}"
 IDENTITY_PATTERN = r"[a-z0-9][a-z0-9-]{0,62}"
 BINDINGS = {"image_lock_sha256", "ms64_receipt_sha256", "platform_profile_sha256"}
@@ -469,6 +470,27 @@ class AlertDrill:
             self.publish(value)
         raise JourneyFailure("alert-" + stage + "-timeout")
 
+    def wait_removed(self, kind):
+        """Confirm absence without repeating DELETE while its result becomes visible."""
+        require(kind in {"policy", "descriptor"}, "alert-removal-kind-invalid")
+        state, run_id = self.state, self.state["run_id"]
+        deadline = self.monotonic() + REMOVAL_SECONDS
+        self.progress("Confirming removal of the owned alert " + kind)
+        while True:
+            current = (self.api.policy(state["policy_name"]) if kind == "policy"
+                       else self.api.descriptor(run_id))
+            if current is None:
+                return
+            require(state[kind + "_phase"] == "deleting", "alert-unowned-" + kind)
+            if kind == "policy":
+                self.api.check_policy(run_id, current)
+                require(policy_version(current) == state["policy_version_sha256"], "alert-policy-changed-during-drill")
+            else:
+                self.api.check_descriptor(run_id, current)
+            remaining = deadline - self.monotonic()
+            require(remaining > 0, "alert-" + kind + "-removal-unconfirmed")
+            self.sleep(min(POLL_SECONDS, remaining))
+
     def cleanup(self):
         require(not self.checkpoint_failed, "alert-checkpoint-not-confirmed-recovery-required")
         self.reconcile()
@@ -486,7 +508,7 @@ class AlertDrill:
                 state["policy_phase"] = "deleting"
                 self.save("before-policy-deletion")
                 self.api.request("DELETE", name)
-            require(self.api.policy(name) is None, "alert-policy-removal-unconfirmed")
+            self.wait_removed("policy")
             state["policy_phase"] = "deleted"
             self.save("policy-removed")
         current = self.api.descriptor(run_id)
@@ -496,7 +518,7 @@ class AlertDrill:
             state["descriptor_phase"] = "deleting"
             self.save("before-descriptor-deletion")
             self.api.request("DELETE", self.api.descriptor_path(run_id))
-        require(self.api.descriptor(run_id) is None, "alert-descriptor-removal-unconfirmed")
+        self.wait_removed("descriptor")
         state.update(descriptor_phase="deleted", policy_phase="deleted", cleanup_complete=True)
         self.save("restored")
         return {"status": "restored", "policy_absent": True, "metric_descriptor_absent": True, "errors": []}

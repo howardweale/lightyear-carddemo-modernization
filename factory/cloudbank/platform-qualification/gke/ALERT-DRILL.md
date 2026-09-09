@@ -118,6 +118,19 @@ resources are preserved for reconciliation. Recovery produces
 `recovered-alert-drill`, which cannot pass the qualification verifier. After
 confirmed cleanup, a new drill can collect fresh firing and recovery evidence.
 
+After an acknowledged DELETE, the controller polls GET within a 180-second
+visibility window. It rechecks ownership, configuration, and the recorded policy
+version on every still-visible response. Polling does not repeat DELETE; only a
+confirmed absent response completes removal. An API error, changed resource, or
+expired window still fails the attempt.
+
+A result can report `status: failed` with `recovery.status: restored`: the attempt
+failed, then the exception handler's cleanup confirmed that the resources were
+absent. The failed observation is preserved. Run `recover` against the latest
+signed checkpoint to confirm absence again and produce a fresh recovery result
+before starting the next drill. Successful cleanup alone cannot qualify alert
+firing or recovery behavior.
+
 Policy and incident names can contain either the project ID or its verified
 project number. The controller compares those two forms as the same project,
 keeps the exact resource ID, and sends policy reads/deletes to the numeric project

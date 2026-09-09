@@ -15,7 +15,7 @@ from urllib.error import HTTPError
 
 from lightyear_data.cloudbank_alert_drill import (
     AlertDrill, ApiFailure, LABEL, Monitoring, STATE_FILE, STATE_TYPE, descriptor_spec,
-    error_metadata, instant, metric_type, policy_spec, stamp, validate_state, verify_observation,
+    canonical_resource_name, error_metadata, instant, metric_type, policy_spec, stamp, validate_state, verify_observation,
 )
 from lightyear_data.cloudbank_journeys import ACK, JourneyFailure
 from lightyear_data.cloudbank_secret_rotation_gke import hashed
@@ -153,15 +153,118 @@ class Provider(Monitoring):
         raise AssertionError((method, path))
 
 
-def make():
+class ProjectIdProvider(Provider):
+    """Google may return project IDs even when requests use the verified number."""
+    def __init__(self, clock):
+        super().__init__(clock)
+        self.number_after_close = False
+        self.requests = []
+
+    def request(self, method, path, **kwargs):
+        self.requests.append((method, path))
+        value = super().request(method, path, **kwargs)
+        closed = self.incidents and self.incidents[0]["state"] == "CLOSED"
+        response_project = NUMBER if self.number_after_close and closed else PROJECT
+
+        def wire_names(row):
+            if isinstance(row, dict):
+                for key, item in list(row.items()):
+                    if key == "name" and isinstance(item, str) and item.startswith("projects/" + NUMBER + "/"):
+                        row[key] = item.replace("projects/" + NUMBER + "/", "projects/" + response_project + "/", 1)
+                        if "/alerts/" in row[key]:
+                            row[key] = "projects/" + response_project + "/alerts/0.opqiw61fsv7p"
+                    else:
+                        wire_names(item)
+            elif isinstance(row, list):
+                for item in row:
+                    wire_names(item)
+
+        wire_names(value)
+        return value
+
+
+def make(provider_type=Provider):
     clock, journal = Clock(), MemoryJournal()
-    api = Provider(clock)
+    api = provider_type(clock)
     engine = AlertDrill(api, journal, state(), now=clock.now, sleep=clock.sleep,
                         monotonic=lambda: clock.seconds, phase_seconds=240)
     return api, journal, engine
 
 
 class AlertTests(unittest.TestCase):
+    def test_full_drill_accepts_project_id_responses_and_dotted_incident_ids(self):
+        for switch_alias in (False, True):
+            with self.subTest(number_after_close=switch_alias):
+                api, journal, engine = make(ProjectIdProvider)
+                api.number_after_close = switch_alias
+                result = engine.run()
+                verify_observation(sign(result, KEY, "unit-test"), KEY)
+                self.assertEqual(engine.state["policy_name"], "projects/233419964177/alertPolicies/policy1")
+                self.assertEqual(result["observations"]["opened"]["alert_identity_sha256"],
+                                 hashed("projects/233419964177/alerts/0.opqiw61fsv7p"))
+                self.assertEqual(result["observations"]["opened"]["alert_identity_sha256"],
+                                 result["observations"]["closed"]["alert_identity_sha256"])
+                self.assertEqual(api.mutations[-2:], ["delete-policy", "delete-descriptor"])
+                self.assertTrue(all(path.startswith("projects/233419964177/") for _, path in api.requests))
+                self.assertEqual(api.policies, [])
+                self.assertIsNone(api.descriptor_value)
+
+    def test_recovery_adopts_policy_rejected_by_previous_numeric_only_name_check(self):
+        api, journal, engine = make(ProjectIdProvider)
+        engine.create("descriptor")
+        engine.wait("baseline", 0)
+        current_check = api.check_policy
+
+        def previous_name_check(run_id, value):
+            current_check(run_id, value)
+            if not value["name"].startswith("projects/" + NUMBER + "/"):
+                raise JourneyFailure("alert-policy-project-or-name-invalid")
+
+        with patch.object(api, "check_policy", side_effect=previous_name_check):
+            with self.assertRaisesRegex(JourneyFailure, "alert-policy-project-or-name-invalid"):
+                engine.create("policy")
+            with self.assertRaisesRegex(JourneyFailure, "alert-policy-project-or-name-invalid"):
+                engine.cleanup()
+        checkpoint = sign(copy.deepcopy(journal.records[-1]), KEY, "unit-test")
+        self.assertEqual(checkpoint["phase"], "before-policy-creation")
+        self.assertEqual(checkpoint["policy_phase"], "creating")
+        self.assertIsNone(checkpoint["policy_name"])
+        self.assertEqual(checkpoint["descriptor_phase"], "created")
+        engine.state = validate_state(checkpoint, KEY, **{
+            **{k: ENVIRONMENT[k] for k in ("project", "region", "cluster", "namespace")},
+            "project_number": NUMBER, "evidence_bucket": BUCKET})
+        before = len(api.mutations)
+        result = engine.observation("recovered-alert-drill", engine.cleanup())
+        self.assertEqual(api.mutations[before:], ["delete-policy", "delete-descriptor"])
+        self.assertEqual(api.mutations.count("create-policy"), 1)
+        self.assertEqual(result["recovery"]["status"], "restored")
+        self.assertFalse(result["alert_fired"])
+        self.assertFalse(result["alert_recovered"])
+        with self.assertRaisesRegex(JourneyFailure, "passing-observation-required"):
+            verify_observation(sign(result, KEY, "unit-test"), KEY)
+
+    def test_recovery_of_recorded_project_id_name_uses_same_resource_and_version(self):
+        for changed in (False, True):
+            with self.subTest(changed_version=changed):
+                api, _, engine = make(ProjectIdProvider)
+                engine.create("descriptor")
+                engine.create("policy")
+                engine.state["policy_name"] = "projects/" + PROJECT + "/alertPolicies/policy1"
+                checkpoint = sign(engine.state, KEY, "unit-test")
+                engine.state = validate_state(checkpoint, KEY, **{
+                    **{k: ENVIRONMENT[k] for k in ("project", "region", "cluster", "namespace")},
+                    "project_number": NUMBER, "evidence_bucket": BUCKET})
+                if changed:
+                    api.policies[0]["mutationRecord"]["mutateTime"] = "2026-09-09T16:00:00Z"
+                    with self.assertRaisesRegex(JourneyFailure, "alert-policy-changed-during-drill"):
+                        engine.cleanup()
+                    self.assertNotIn("delete-policy", api.mutations)
+                    self.assertNotIn("delete-descriptor", api.mutations)
+                else:
+                    engine.cleanup()
+                    self.assertIn(("DELETE", "projects/233419964177/alertPolicies/policy1"), api.requests)
+                    self.assertTrue(engine.state["cleanup_complete"])
+
     def test_observes_provider_open_and_close_before_deleting(self):
         api, journal, engine = make()
         result = engine.run()
@@ -353,6 +456,52 @@ class ObservationTests(unittest.TestCase):
 
 
 class TransportTests(unittest.TestCase):
+    def test_policy_wire_read_uses_verified_number_and_checks_exact_returned_id(self):
+        api = Monitoring(PROJECT, NUMBER, invoke=lambda _: "memory-only-token")
+        value = policy_spec(PROJECT, RUN)
+        value["name"] = "projects/" + PROJECT + "/alertPolicies/policy1"
+        with patch.object(api.opener, "open", return_value=io.BytesIO(json.dumps(value).encode())) as send:
+            self.assertEqual(api.policy(value["name"]), value)
+        self.assertEqual(send.call_args.args[0].full_url,
+                         "https://monitoring.googleapis.com/v3/projects/233419964177/alertPolicies/policy1")
+        for changed_name in ("projects/" + PROJECT + "/alertPolicies/different", "projects/99/alertPolicies/policy1"):
+            response = {**value, "name": changed_name}
+            with patch.object(api.opener, "open", return_value=io.BytesIO(json.dumps(response).encode())), \
+                    self.assertRaises(JourneyFailure):
+                api.policy(value["name"])
+
+    def test_foreign_or_malformed_aliases_stop_before_policy_request(self):
+        api = Monitoring(PROJECT, NUMBER)
+        names = ("projects/foreign-project/alertPolicies/policy1", "projects/99/alertPolicies/policy1",
+                 "projects/" + PROJECT + "-other/alertPolicies/policy1",
+                 "projects/" + PROJECT + "/alertPolicies/../policy1",
+                 "projects/" + PROJECT + "/alertPolicies/policy1?token=private",
+                 "projects/" + PROJECT + "/alertPolicies/policy1%2Fother",
+                 "projects/" + PROJECT + "/alertPolicies/policy1/conditions/condition1", None)
+        for name in names:
+            with self.subTest(name=name), patch.object(api, "request") as send:
+                with self.assertRaisesRegex(JourneyFailure, "alert-policy-project-or-name-invalid"):
+                    api.policy(name)
+                send.assert_not_called()
+                self.assertIsNone(canonical_resource_name(name, PROJECT, NUMBER, "alertPolicies"))
+
+    def test_matching_incident_requires_bound_project_policy_and_resource_ids(self):
+        api, _, engine = make()
+        engine.run()
+        matching = copy.deepcopy(api.incidents[0])
+        for name in ("projects/foreign-project/alerts/incident1", "projects/99/alerts/incident1",
+                     "projects/" + PROJECT + "/alerts/../incident1",
+                     "projects/" + PROJECT + "/alerts/0..incident1",
+                     "projects/" + PROJECT + "/alerts/incident1%2Fother"):
+            api.incidents = [{**copy.deepcopy(matching), "name": name}]
+            with self.subTest(name=name), self.assertRaisesRegex(JourneyFailure, "alert-incident-identity-mismatch"):
+                api.matching_alerts(RUN, engine.state["policy_name"])
+        for policy in ("projects/99/alertPolicies/policy1", "projects/" + PROJECT + "/alertPolicies/different"):
+            candidate = copy.deepcopy(matching)
+            candidate["policy"]["name"] = policy
+            api.incidents = [candidate]
+            self.assertEqual(api.matching_alerts(RUN, engine.state["policy_name"]), [])
+
     def test_descriptor_get_and_delete_use_literal_multisegment_wire_url(self):
         api = Monitoring(PROJECT, NUMBER, invoke=lambda _: "memory-only-token")
         expected = ("https://monitoring.googleapis.com/v3/projects/233419964177/metricDescriptors/"

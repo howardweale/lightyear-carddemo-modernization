@@ -118,6 +118,20 @@ resources are preserved for reconciliation. Recovery produces
 `recovered-alert-drill`, which cannot pass the qualification verifier. After
 confirmed cleanup, a new drill can collect fresh firing and recovery evidence.
 
+Policy and incident names can contain either the project ID or its verified
+project number. The controller compares those two forms as the same project,
+keeps the exact resource ID, and sends policy reads/deletes to the numeric project
+path. Readback must identify the requested policy; configuration and mutation
+version checks still apply. Other projects, malformed paths, and changed policies
+remain rejected. Incident hashes use the numeric form so a provider switch between
+the two project names cannot break the OPEN/CLOSED identity comparison.
+
+A checkpoint left at `before-policy-creation` by the former numeric-only name
+check can be recovered with the current controller. Recovery first finds exactly
+one policy with the run label and verifies its full configuration, then records
+its identity and version before deletion. It preserves the signed checkpoint
+history and requires no manual edits to policy names or receipts.
+
 ## Provider references
 
 The implementation uses the documented [incident list](https://docs.cloud.google.com/monitoring/api/ref_v3/rest/v3/projects.alerts/list)
@@ -131,3 +145,6 @@ issuing another creation request.
 Google's [metric service HTTP bindings](https://github.com/googleapis/googleapis/blob/master/google/monitoring/v3/metric_service.proto)
 use a multi-segment descriptor name for GET and DELETE. The executor preserves
 the validated metric path separators when constructing those URLs.
+The policy and incident references above explicitly permit project IDs or numbers
+in resource names. Google's [notification example](https://docs.cloud.google.com/monitoring/support/notification-options)
+also shows dotted incident IDs, which the bounded incident-name validator accepts.

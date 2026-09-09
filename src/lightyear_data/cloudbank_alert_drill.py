@@ -73,6 +73,18 @@ def matches(pattern, value):
     return isinstance(value, str) and re.fullmatch(pattern, value) is not None
 
 
+def canonical_resource_name(value, project, project_number, collection):
+    """Resolve only the verified project's ID/number aliases, retaining the resource ID."""
+    patterns = {"alertPolicies": r"[A-Za-z0-9_-]{1,160}",
+                "alerts": r"[A-Za-z0-9_-][A-Za-z0-9_.-]{0,159}"}
+    parts = value.split("/") if isinstance(value, str) else []
+    if (collection not in patterns or len(parts) != 4 or parts[0] != "projects"
+            or parts[1] not in {project, project_number} or parts[2] != collection
+            or ".." in parts[3] or not matches(patterns[collection], parts[3])):
+        return None
+    return f"projects/{project_number}/{collection}/{parts[3]}"
+
+
 def validate_bindings(value):
     require(isinstance(value, dict) and set(value) == BINDINGS
             and all(matches(r"[0-9a-f]{64}", v) for v in value.values()), "alert-bindings-invalid")
@@ -104,7 +116,7 @@ def validate_state(value, key, *, project, region, cluster, namespace, project_n
         require(value.get(kind + "_phase") in {"not-started", "creating", "created", "rejected", "deleting", "deleted"},
                 "alert-recovery-resource-phase-invalid")
     name = value.get("policy_name")
-    require(name is None or matches(r"projects/" + re.escape(project_number) + r"/alertPolicies/[A-Za-z0-9_-]{1,160}", name),
+    require(name is None or canonical_resource_name(name, project, project_number, "alertPolicies") is not None,
             "alert-recovery-policy-identity-invalid")
     require(value["policy_phase"] not in {"created", "deleting"} or
             (name is not None and matches(r"[0-9a-f]{64}", value.get("policy_version_sha256"))),
@@ -265,17 +277,23 @@ class Monitoring:
         require(actual == expected,
                 "alert-descriptor-ownership-or-config-drift")
 
+    def policy_name(self, name):
+        canonical = canonical_resource_name(name, self.project, self.number, "alertPolicies")
+        require(canonical is not None, "alert-policy-project-or-name-invalid")
+        return canonical
+
     def policy(self, name):
-        require(re.fullmatch(re.escape(self.prefix) + r"/alertPolicies/[A-Za-z0-9_-]{1,160}", name) is not None,
-                "alert-policy-project-or-name-invalid")
-        return self.request("GET", name, absent=True)
+        canonical = self.policy_name(name)
+        value = self.request("GET", canonical, absent=True)
+        if value is not None:
+            require(self.policy_name(value.get("name")) == canonical, "alert-policy-readback-identity-mismatch")
+        return value
 
     def check_policy(self, run_id, value):
         require(value is not None and not value.get("validity")
                 and normalized_policy(value) == policy_spec(self.project, run_id),
                 "alert-policy-ownership-or-config-drift")
-        require(re.fullmatch(re.escape(self.prefix) + r"/alertPolicies/[A-Za-z0-9_-]{1,160}", value.get("name", ""))
-                is not None, "alert-policy-project-or-name-invalid")
+        return self.policy_name(value.get("name"))
 
     def point(self, run_id, value, timestamp):
         require(type(value) is int and value in {0, 1}, "alert-synthetic-value-invalid")
@@ -302,17 +320,20 @@ class Monitoring:
 
     def matching_alerts(self, run_id, policy_name):
         result = []
+        policy_name = self.policy_name(policy_name)
         for value in self.listing("alerts", {"orderBy": "openTime desc"}):
-            if value.get("policy", {}).get("name") != policy_name:
+            observed_policy = canonical_resource_name(value.get("policy", {}).get("name"),
+                                                       self.project, self.number, "alertPolicies")
+            if observed_policy != policy_name:
                 continue
+            alert_name = canonical_resource_name(value.get("name"), self.project, self.number, "alerts")
             require(value.get("policy", {}).get("userLabels", {}).get(LABEL) == run_id
                     and value.get("metric", {}).get("type") == metric_type(run_id)
                     and value.get("metric", {}).get("labels", {}).get("run_id") == run_id
                     and value.get("resource", {}).get("type") == "global"
                     and value.get("resource", {}).get("labels", {}).get("project_id") in {self.project, self.number}
-                    and re.fullmatch(re.escape(self.prefix) + r"/alerts/[A-Za-z0-9_-]{1,160}", value.get("name", ""))
-                    is not None, "alert-incident-identity-mismatch")
-            result.append({"alert_identity_sha256": hashed(value["name"]), "state": value.get("state"),
+                    and alert_name is not None, "alert-incident-identity-mismatch")
+            result.append({"alert_identity_sha256": hashed(alert_name), "state": value.get("state"),
                            "open_time": value.get("openTime"), "close_time": value.get("closeTime"),
                            "policy_sha256": hashed(policy_spec(self.project, run_id))})
         return result
@@ -357,8 +378,8 @@ class AlertDrill:
         if kind == "descriptor":
             self.api.check_descriptor(run_id, result)
         else:
-            self.api.check_policy(run_id, result)
-            state.update(policy_name=result["name"], policy_version_sha256=policy_version(result))
+            name = self.api.check_policy(run_id, result)
+            state.update(policy_name=name, policy_version_sha256=policy_version(result))
         self.save(kind + "-creation-acknowledged")
         started = self.monotonic()
         while True:
@@ -382,12 +403,12 @@ class AlertDrill:
         if state["policy_phase"] == "creating":
             rows = [p for p in self.api.listing("alertPolicies") if p.get("userLabels", {}).get(LABEL) == run_id]
             require(len(rows) == 1, "alert-policy-creation-ambiguous")
-            self.api.check_policy(run_id, rows[0])
+            name = self.api.check_policy(run_id, rows[0])
             if state.get("policy_name"):
-                require(rows[0]["name"] == state["policy_name"]
+                require(name == self.api.policy_name(state["policy_name"])
                         and policy_version(rows[0]) == state.get("policy_version_sha256"),
                         "alert-policy-changed-after-creation-acknowledgment")
-            state.update(policy_name=rows[0]["name"], policy_phase="created",
+            state.update(policy_name=name, policy_phase="created",
                          policy_version_sha256=policy_version(rows[0]))
             self.save("policy-reconciled")
 
@@ -455,6 +476,8 @@ class AlertDrill:
         # Remove the owned policy first: no synthetic series is written after this point.
         name = state.get("policy_name")
         if name:
+            name = self.api.policy_name(name)
+            state["policy_name"] = name
             current = self.api.policy(name)
             if current is not None:
                 require(state["policy_phase"] in {"created", "deleting"}, "alert-unowned-policy")

@@ -20,6 +20,10 @@ jobs:
       - uses: google-github-actions/setup-gcloud@v3
         with:
           version: "564.0.0"
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: "17"
       - name: Install the pinned native credential-helper launcher
         run: |
           python -m pip install --require-hashes --only-binary=:all: -r factory/cloudbank/platform-qualification/gke/image-security-requirements.txt
@@ -33,6 +37,12 @@ jobs:
           $parseErrors = $null
           $null = [System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD 'factory/cloudbank/platform-qualification/gke/run-runtime-identity.ps1'), [ref]$tokens, [ref]$parseErrors)
           if ($parseErrors.Count -ne 0) { throw 'Runtime identity launcher syntax failed' }
+          $null = [System.Management.Automation.Language.Parser]::ParseFile((Join-Path $PWD 'factory/cloudbank/platform-qualification/gke/run-network-enforcement.ps1'), [ref]$tokens, [ref]$parseErrors)
+          if ($parseErrors.Count -ne 0) { throw 'Network enforcement launcher syntax failed' }
+          python tools/test_cloudbank_network_probe.py
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          python -m unittest discover -s tests -p test_cloudbank_network_enforcement.py -v
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           python -m unittest discover -s tests -p test_cloudbank_gke_command.py -v
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           python -m unittest discover -s tests -p test_cloudbank_secret_rotation.py -v

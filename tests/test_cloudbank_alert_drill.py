@@ -14,7 +14,7 @@ from unittest.mock import patch
 from urllib.error import HTTPError
 
 from lightyear_data.cloudbank_alert_drill import (
-    AlertDrill, ApiFailure, LABEL, Monitoring, STATE_FILE, STATE_TYPE, descriptor_spec,
+    AlertDrill, ApiFailure, LABEL, Monitoring, REMOVAL_SECONDS, STATE_FILE, STATE_TYPE, descriptor_spec,
     canonical_resource_name, error_metadata, instant, metric_type, policy_spec, stamp, validate_state, verify_observation,
 )
 from lightyear_data.cloudbank_journeys import ACK, JourneyFailure
@@ -181,6 +181,33 @@ class ProjectIdProvider(Provider):
 
         wire_names(value)
         return value
+
+
+class DelayedDeletionProvider(ProjectIdProvider):
+    """DELETE succeeds before GET stops returning the old resource snapshot."""
+    def __init__(self, clock):
+        super().__init__(clock)
+        self.visibility_reads = {"policy": 2, "descriptor": 3}
+        self.pending_reads = {}
+        self.corrupt_snapshot = lambda kind, value: None
+        self.read_error = None
+
+    def request(self, method, path, **kwargs):
+        if method == "DELETE":
+            snapshot = super().request("GET", path, absent=True)
+            result = super().request(method, path, **kwargs)
+            kind = "policy" if "/alertPolicies/" in path else "descriptor"
+            self.corrupt_snapshot(kind, snapshot)
+            self.pending_reads[path] = [snapshot, self.visibility_reads[kind]]
+            return result
+        if method == "GET" and path in self.pending_reads:
+            if self.read_error:
+                raise self.read_error
+            snapshot, remaining = self.pending_reads[path]
+            if remaining:
+                self.pending_reads[path][1] -= 1
+                return copy.deepcopy(snapshot)
+        return super().request(method, path, **kwargs)
 
 
 def make(provider_type=Provider):
@@ -372,13 +399,62 @@ class AlertTests(unittest.TestCase):
             self.assertTrue(result["recovery"]["policy_absent"])
 
     def test_delete_response_without_confirmed_absence_is_not_cleanup(self):
-        api, _, engine = make()
+        for kind in ("policy", "descriptor"):
+            with self.subTest(kind=kind):
+                api, _, engine = make()
+                engine.create("descriptor")
+                if kind == "policy":
+                    engine.create("policy")
+                api.delete_noop = True
+                started = api.clock.seconds
+                with self.assertRaisesRegex(JourneyFailure, "alert-" + kind + "-removal-unconfirmed"):
+                    engine.cleanup()
+                self.assertEqual(api.clock.seconds - started, REMOVAL_SECONDS)
+                self.assertFalse(engine.state["cleanup_complete"])
+                self.assertEqual(api.mutations.count("delete-" + kind), 1)
+                if kind == "policy":
+                    self.assertNotIn("delete-descriptor", api.mutations)
+
+    def test_delayed_removal_passes_only_after_absence_without_repeating_delete(self):
+        api, journal, engine = make(DelayedDeletionProvider)
+        result = engine.run()
+        verify_observation(sign(result, KEY, "unit-test"), KEY)
+        self.assertEqual(api.mutations.count("delete-policy"), 1)
+        self.assertEqual(api.mutations.count("delete-descriptor"), 1)
+        self.assertTrue(all(remaining == 0 for _, remaining in api.pending_reads.values()))
+        self.assertTrue(journal.records[-1]["cleanup_complete"])
+        self.assertEqual(result["recovery"]["status"], "restored")
+        self.assertEqual(api.policies, [])
+        self.assertIsNone(api.descriptor_value)
+
+    def test_deletion_poll_rechecks_configuration_and_policy_version(self):
+        changes = (("policy", lambda value: value.update(enabled=False)),
+                   ("policy", lambda value: value["mutationRecord"].update(mutateTime="2026-09-09T16:00:00Z")),
+                   ("descriptor", lambda value: value.update(description="changed-after-delete")))
+        for kind, change in changes:
+            with self.subTest(kind=kind):
+                api, journal, engine = make(DelayedDeletionProvider)
+                api.corrupt_snapshot = lambda actual_kind, value: change(value) if actual_kind == kind else None
+                engine.create("descriptor")
+                engine.create("policy")
+                with self.assertRaises(JourneyFailure):
+                    engine.cleanup()
+                self.assertFalse(engine.state["cleanup_complete"])
+                self.assertFalse(journal.records[-1]["cleanup_complete"])
+                self.assertEqual(api.mutations.count("delete-" + kind), 1)
+                if kind == "policy":
+                    self.assertNotIn("delete-descriptor", api.mutations)
+
+    def test_deletion_poll_http_error_is_not_absence(self):
+        api, journal, engine = make(DelayedDeletionProvider)
         engine.create("descriptor")
         engine.create("policy")
-        api.delete_noop = True
-        with self.assertRaisesRegex(JourneyFailure, "removal-unconfirmed"):
+        api.read_error = ApiFailure(403)
+        with self.assertRaisesRegex(ApiFailure, "alert-api-http-403"):
             engine.cleanup()
         self.assertFalse(engine.state["cleanup_complete"])
+        self.assertFalse(journal.records[-1]["cleanup_complete"])
+        self.assertEqual(api.mutations.count("delete-policy"), 1)
         self.assertNotIn("delete-descriptor", api.mutations)
 
     def test_checkpoint_failure_fences_further_mutation_including_cleanup(self):
@@ -774,6 +850,47 @@ class CliTests(unittest.TestCase):
         for uri in observation_uris:
             self.assertRegex(uri, "^" + BUCKET + "/observations/" + RUN + "/[0-9a-f]{32}/alert-drill.observation.json$")
         self.assertEqual(api.mutations, [])
+
+    def test_cleanup_after_timeout_keeps_failure_and_fresh_recovery_confirms_absence(self):
+        api, _, clocked = make(DelayedDeletionProvider)
+        clocked.create("descriptor")
+        # One more visible read than fits in the confirmation window. The exception
+        # handler then sees absence, matching the live failed/restored result.
+        api.visibility_reads["descriptor"] = REMOVAL_SECONDS // 20 + 1
+        checkpoint, journals = copy.deepcopy(clocked.state), []
+
+        def journal(*args, **kwargs):
+            sink = MemoryJournal()
+            journals.append(sink)
+            return sink
+
+        def engine(provider, sink, payload, **kwargs):
+            return AlertDrill(provider, sink, payload, now=clocked.now, sleep=clocked.sleep,
+                              monotonic=clocked.monotonic, phase_seconds=240)
+
+        with tempfile.TemporaryDirectory() as folder, patch.dict("os.environ", {"LIGHTYEAR_NON_PRODUCTION_ACK": ACK}), \
+                patch.object(self.cli, "evidence_key", return_value=KEY), patch.object(self.cli, "command", return_value=NUMBER), \
+                patch.object(self.cli, "Monitoring", return_value=api), patch.object(self.cli, "Journal", side_effect=journal), \
+                patch.object(self.cli, "AlertDrill", side_effect=engine), patch("sys.stdout", new_callable=io.StringIO):
+            with patch.object(self.cli, "current_recovery", return_value=(checkpoint, "123")):
+                self.assertEqual(self.cli.main(self.args("recover") + ["--recovery-state", "old.json",
+                    "--original-process-stopped", "--output-root", str(Path(folder) / "first")]), 1)
+            failure = journals[1].records[-1]
+            self.assertEqual(failure["status"], "failed")
+            self.assertEqual(failure["reason"], "alert-descriptor-removal-unconfirmed")
+            self.assertEqual(failure["recovery"]["status"], "restored")
+            self.assertTrue(journals[0].records[-1]["cleanup_complete"])
+            before = list(api.mutations)
+            with patch.object(self.cli, "current_recovery", return_value=(copy.deepcopy(journals[0].records[-1]), "124")):
+                self.assertEqual(self.cli.main(self.args("recover") + ["--recovery-state", "old.json",
+                    "--original-process-stopped", "--output-root", str(Path(folder) / "second")]), 0)
+            self.assertEqual(api.mutations, before)
+            recovered = journals[3].records[-1]
+            self.assertEqual(recovered["status"], "recovered-alert-drill")
+            self.assertFalse(recovered["alert_fired"])
+            self.assertFalse(recovered["alert_recovered"])
+            with self.assertRaisesRegex(JourneyFailure, "passing-observation-required"):
+                verify_observation(sign(recovered, KEY, "unit-test"), KEY)
 
     def test_existing_output_directory_is_never_written_even_for_failure(self):
         with tempfile.TemporaryDirectory() as folder, patch.dict("os.environ", {"LIGHTYEAR_NON_PRODUCTION_ACK": ACK}), \

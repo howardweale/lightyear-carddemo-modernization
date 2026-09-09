@@ -1,5 +1,10 @@
 # MS #67 GKE live qualification runbook
 
+For bounded live network enforcement after the image and runtime-identity checks,
+use [NETWORK-ENFORCEMENT.md](NETWORK-ENFORCEMENT.md). Its Windows launcher performs
+the connection controls, signed evidence upload, independent verification and
+owned-resource cleanup in one run.
+
 This runbook creates real, chargeable, non-production effects. Use a dedicated project labelled
 `environment=non-production`. Keep the evidence key and every secret outside the repository. The
 scripts use an IAM-authenticated GKE DNS endpoint and refuse mutable base-image tags, production-labelled projects,

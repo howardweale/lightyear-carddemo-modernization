@@ -28,13 +28,14 @@ from lightyear_data import cloudbank_secret_rotation_gke as checkpoint_module
 from lightyear_data.cloudbank_image_security import ImageJournal
 from lightyear_data.cloudbank_journeys import ACK, SERVICES, JourneyFailure, require, hashed
 from lightyear_data.cloudbank_journeys_gke import GkeRuntime
-from lightyear_data.cloudbank_ms67_drills import FinalDrills, verify_observation as verify_drills
+from lightyear_data.cloudbank_ms67_drills import FinalDrills, verify_observation as verify_drills, verify_continuation
 from lightyear_data.cloudbank_sql_recovery import invoke, verified, write_signed
 from lightyear_data.contracts import content_hash, sign
 
 REGION = "us-west1"
 CLUSTER = NAMESPACE = "cloudbank-ms67"
 STATE_TYPE = "lightyear-ms67-resumable-final-closeout"
+DRILL_CONTINUATION_SOURCE = "9c159d2b87d411a23b7dbb4e7cc8c41e3398d532"
 CHILDREN = {"secret-rotation": "cloudbank_secret_rotation", "log-correlation": "cloudbank_log_correlation",
             "alert-drill": "cloudbank_alert_drill", "network-enforcement": "cloudbank_network_enforcement",
             "runtime-identity": "cloudbank_runtime_identity"}
@@ -106,7 +107,7 @@ def observer(callback):
 
 
 class Session:
-    def __init__(self, directory, context, key, commit, retry_of=None):
+    def __init__(self, directory, context, key, commit, retry_of=None, resume_drills=False):
         self.directory, self.context, self.key, self.commit = directory, context, key, commit
         self.path = directory / "finish-state.json"
         wanted = {"state_type": STATE_TYPE, "controller_commit": commit,
@@ -114,6 +115,7 @@ class Session:
         if retry_of is not None:
             wanted["retry_of"] = retry_of
         generation = "0"
+        source_update = False
         if self.path.exists():
             local = verified(load(self.path), key)
             self.prefix = BUCKET + "/final-closeout/" + local["run_id"]
@@ -127,7 +129,10 @@ class Session:
             else:
                 generation = cloud("storage", "objects", "describe", uri, "--format=value(generation)").strip()
                 self.state = verified(json.loads(cloud("storage", "cat", uri + "#" + generation)), key)
-            require(self.state["run_id"] == local["run_id"] and all(self.state.get(k) == v for k, v in wanted.items()),
+            source_update = self.state.get("controller_commit") != commit
+            require(self.state["run_id"] == local["run_id"]
+                    and all(self.state.get(k) == v for k, v in wanted.items() if k != "controller_commit")
+                    and (not source_update or resume_drills),
                     "final-session-source-or-retained-inputs-changed")
         else:
             self.state = {**wanted, "run_id": "ms67-final-" + uuid.uuid4().hex, "completed": {},
@@ -136,7 +141,39 @@ class Session:
         require(re.fullmatch(r"ms67-final-[0-9a-f]{32}", self.state["run_id"]), "final-state-run-id-invalid")
         self.journal = ImageJournal(self.path, self.prefix + "/finish-state.json", PROJECT, key, ACCOUNT,
                                     generation=generation, invoke=invoke)
+        if source_update:
+            self.continue_drill_controller()
         self.save()
+
+    def continue_drill_controller(self):
+        """Record an explicit source transition; never relabel original evidence."""
+        old = self.state
+        require(old.get("controller_commit") == DRILL_CONTINUATION_SOURCE
+                and not old.get("controller_transition") and old.get("ms67_complete") is False
+                and set(old.get("completed", {})) == {"candidates", *CHILDREN}
+                and (old.get("active") or {}).get("phase") == "drills",
+                "reviewed-restored-drill-continuation-required")
+        context = {"run_id": old["run_id"], "controller_commit": DRILL_CONTINUATION_SOURCE,
+                   "images": self.context["images"], "bindings": self.context["bindings"]}
+        security = self.read(old["completed"]["candidates"])
+        images = candidate_tools.verify_result(security, context, self.key)
+        require(security.get("cloud_build_id") == old["candidate_build"].get("build_id"),
+                "retained-candidate-build-binding-mismatch")
+        for phase in CHILDREN:
+            verify_child(phase, self.read(old["completed"][phase]), self.context, self.key)
+        checkpoint = self.read(old["active"]["recovery"])
+        require(checkpoint.get("run_id") == old["run_id"], "retained-drill-run-mismatch")
+        verify_continuation(checkpoint, self.key, drill_inputs(self, security), self.context["images"], images,
+                            self.context["environment"])
+        parent_ref = self.publish("retained-controller-" + old["content_sha256"] + ".json", old)
+        checkpoint_ref = self.publish("retained-domain-failure-" + checkpoint["content_sha256"] + ".json", checkpoint)
+        self.state = {**old, "controller_commit": self.commit,
+            "candidate_controller_commit": DRILL_CONTINUATION_SOURCE,
+            "controller_transition": {"from": DRILL_CONTINUATION_SOURCE, "to": self.commit,
+                "previous_parent": parent_ref, "previous_drill_failure": checkpoint_ref,
+                "retained_context_sha256": hashed(self.context), "measurements_changed": False,
+                "reason": "retain-database-differences-and-continue-only-missing-drills"}}
+        print("MS67_FINAL_CONTINUATION=VERIFIED; retained images, controls, rolling and node evacuation", flush=True)
 
     def save(self):
         with observer(None):
@@ -278,7 +315,8 @@ def verify_build(build, config):
 
 
 def candidates(session):
-    context = {"run_id": session.state["run_id"], "controller_commit": session.commit,
+    context = {"run_id": session.state["run_id"],
+               "controller_commit": session.state.get("candidate_controller_commit", session.commit),
                "images": session.context["images"], "bindings": session.context["bindings"]}
     if "candidates" in session.state["completed"]:
         value = session.read(session.state["completed"]["candidates"])
@@ -398,6 +436,9 @@ def run_drills(session, security, images):
     with observer(session.checkpoint):
         result = FinalDrills(runtime, images, bindings, session.key, ACCOUNT, uri, state=state).run()
     reference = session.publish("drills-observation-" + uuid.uuid4().hex + ".json", result)
+    if result.get("status") == "failed":
+        print("MS67_FINAL_DRILL_RESULT=" + reference["uri"], flush=True)
+        raise JourneyFailure(result.get("reason") or "final-drill-failed-inspect-observation")
     verify_drills(result, session.key, bindings, session.context["images"], images, session.context["environment"])
     session.finish_phase("drills", reference)
     return result
@@ -541,6 +582,8 @@ def main(argv=None):
     parser.add_argument("--evidence-root", type=Path, default=Path.home() / "ms67-evidence")
     parser.add_argument("--retry-candidate-build", metavar="FAILED_BUILD_ID",
                         help="verify a failed pre-drill build and resume a separate signed retry session")
+    parser.add_argument("--resume-drills", action="store_true",
+                        help="retain the restored domain-failure evidence and continue only unfinished drills")
     args = parser.parse_args(argv)
     os.umask(0o077)
     for tool in ("git", "gcloud", "kubectl"):
@@ -570,7 +613,7 @@ def main(argv=None):
         retry_of = None
         if args.retry_candidate_build:
             directory, retry_of = candidate_retry(directory, context, key, args.retry_candidate_build)
-        session = Session(directory, context, key, commit, retry_of=retry_of)
+        session = Session(directory, context, key, commit, retry_of=retry_of, resume_drills=args.resume_drills)
         print("MS67_FINAL_RETAINED=MS65,MS66,SQL_630,300_SECOND_LOAD", flush=True)
         if session.state.get("ms67_complete"):
             receipt = session.read(session.state["completed"]["admission"])
@@ -584,6 +627,9 @@ def main(argv=None):
         if args.recover:
             recover(session, paths, security, images)
             return 0
+        if args.resume_drills and session.state["active"] is not None:
+            require(session.state["active"].get("phase") == "drills", "resume-drills-cannot-recover-other-active-phase")
+            recover(session, paths, security, images)
         require(session.state["active"] is None, "active-phase-needs-explicit-recover; no-duplicate-drill-started")
         children = {phase: run_child(session, phase, paths) for phase in CHILDREN}
         drills = run_drills(session, security, images)
@@ -615,6 +661,7 @@ def main(argv=None):
         require(not platform.validate_execution_receipt(session.read(receipt_ref), key, ROOT), "final-receipt-readback-invalid")
         session.publish("evidence-index-" + uuid.uuid4().hex + ".json", {"run_id": session.state["run_id"],
             "retained": refs, "phases": session.state["completed"], "observation": observation_ref,
+            "controller_transition": session.state.get("controller_transition"),
             "receipt": receipt_ref, "ms67_complete": True, "production_ready": False})
         session.state["completed"]["admission"] = receipt_ref
         session.state["ms67_complete"] = True

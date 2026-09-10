@@ -30,6 +30,88 @@ LEASE = "ly-ms67-final-drills"
 HEX = r"[0-9a-f]{64}"
 
 
+def detailed_snapshot(raw):
+    # The shared SQL emits only metadata, row counts and digests. Preserve those
+    # records without changing the existing whole-database hash or acceptance.
+    result = normalize_snapshot(raw)
+    result["objects"] = [json.loads(line) for line in raw.splitlines() if line.strip()][1:]
+    return result
+
+
+def snapshot_difference(before, after):
+    def objects(value):
+        return {(r.get("relation") or r.get("sequence") or "<schema>"): r for r in value.get("objects", [])}
+    left, right = objects(before), objects(after)
+    return {"state_matches": before == after, "pre_state_sha256": before["state_sha256"],
+            "post_state_sha256": after["state_sha256"],
+            "detail_available": bool(left and right),
+            "changed_objects": [{"name": name, "before": left.get(name), "after": right.get(name)}
+                                for name in sorted(left.keys() | right.keys()) if left.get(name) != right.get(name)],
+            "scope": "all persistent application tables, sequences and column schema; counts and hashes only"}
+
+
+def verify_availability(row, minimum):
+    require(type(row.get("samples")) is int and row["samples"] >= 2
+            and 0 <= row.get("maximum_observation_gap_seconds", 46) <= 45
+            and set(row.get("minimum_available_by_service", {})) == set(SERVICES)
+            and all(type(n) is int and n >= minimum for n in row["minimum_available_by_service"].values()),
+            "drill-availability-measurement-invalid")
+
+
+def verify_continuation(state, key, bindings, images, candidates, environment):
+    """Validate exactly the completed prefix from the restored domain failure."""
+    verified(state, key)
+    require(state.get("state_type") == STATE_TYPE and state.get("bindings") == bindings
+            and state.get("environment") == environment and state.get("baseline_images") == images
+            and state.get("candidate_images") == candidates and state.get("credentials_persisted") is False
+            and state.get("phase") == "baseline-restored" and state.get("cleanup_required") is False
+            and state.get("pending") is None and state.get("canaries") == {}
+            and state.get("recovery") == {"status": "restored", "errors": []}
+            and state.get("failure") == "evacuation-normalized-database-state-changed",
+            "restored-failure-domain-checkpoint-required")
+    done = state.get("completed", {})
+    require(set(done) == {"rolling", "resilience"} and set(done["resilience"]) == {"node"},
+            "retained-rolling-and-node-only-required")
+    rolling = done["rolling"]
+    require(rolling.get("baseline_restored") is True
+            and [r.get("service") for r in rolling.get("rows", [])] == list(SERVICES), "retained-eight-rollouts-required")
+    for row in rolling["rows"]:
+        service = row["service"]
+        require(row.get("previous_image") == images[service] and row.get("candidate_image") == candidates[service]
+                and row.get("completed") is True and row.get("maximum_unavailable") == 0, "retained-rollout-invalid")
+        verify_availability(row["availability"], 2)
+    node = done["resilience"]["node"]
+    require(node.get("pre_state") == node.get("post_state") and node.get("affected_pods", 0) > 0
+            and re.fullmatch(HEX, node.get("pre_state", {}).get("state_sha256", ""))
+            and node.get("all_services_recovered") is True and node.get("node_scheduling_restored") is True
+            and node.get("nodes_sha256") == hashed(state["node_plan"]["node"]), "retained-node-evacuation-invalid")
+    verify_availability(node["availability"], 1)
+    return state
+
+
+def remaining_node_plan(nodes, saved, completed, occupied):
+    current = node_plan(nodes)  # Keeps the existing ready/region/capacity checks.
+    if "node" not in completed:
+        return current
+    require("node" in saved and bool(saved["node"]), "retained-node-plan-required")
+    result = copy.deepcopy(saved)
+    if "failure-domain" in completed:
+        return result
+    # Uncordoning does not move evacuated pods back. Choose a currently occupied
+    # domain different from the already-qualified single-node domain.
+    avoid = {n["zone"] for n in saved["node"]}
+    groups = {}
+    for node in nodes:
+        meta = node["metadata"]
+        zone = meta["labels"]["topology.kubernetes.io/zone"]
+        groups.setdefault(zone, []).append({"name": meta["name"], "uid": meta["uid"], "zone": zone})
+    choices = [sorted(group, key=lambda n: n["name"]) for zone, group in groups.items()
+               if zone not in avoid and len(nodes)-len(group) >= 2 and any(n["name"] in occupied for n in group)]
+    require(bool(choices), "occupied-failure-domain-with-two-survivors-required")
+    result["failure-domain"] = min(choices, key=lambda group: (len(group), group[0]["zone"]))
+    return result
+
+
 def main_container(deployment, service):
     rows = deployment["spec"]["template"]["spec"].get("containers", [])
     matches = [(i, row) for i, row in enumerate(rows) if row.get("name") == service]
@@ -219,7 +301,9 @@ class FinalDrills:
         require(not self.r.kubectl("get", "lease/" + LEASE, "--ignore-not-found", "-o", "name").strip(),
                 "another-final-drill-lease-exists")
         self.r.ready()
-        self.s["node_plan"] = node_plan(self.r.get("nodes")["items"])
+        self.s["node_plan"] = remaining_node_plan(self.r.get("nodes")["items"], self.s.get("node_plan", {}),
+            self.s["completed"].get("resilience", {}),
+            {p["spec"].get("nodeName") for s in SERVICES for p in self.r.pods(s)})
         for service in SERVICES:
             d, svc = self.r.deployment(service), self.r.get("service", service)
             index, container = main_container(d, service)
@@ -233,10 +317,14 @@ class FinalDrills:
             pods = self.r.pods(service)
             hashes = {p["metadata"]["labels"].get("pod-template-hash") for p in pods}
             require(len(hashes) == 1 and None not in hashes, "stable-baseline-replicaset-required")
-            self.s["baseline"][service] = {"uid": d["metadata"]["uid"], "container_index": index,
+            baseline = {"uid": d["metadata"]["uid"], "container_index": index,
                 "spec_sha256": hashed(d["spec"]), "service_uid": svc["metadata"]["uid"],
                 "selector": svc["spec"]["selector"], "strategy": d["spec"]["strategy"],
                 "baseline_pod_hash": hashes.pop()}
+            old = self.s["baseline"].get(service)
+            require(old is None or all(old.get(k) == v for k, v in baseline.items() if k != "baseline_pod_hash"),
+                    "retained-baseline-identity-or-spec-drift")
+            self.s["baseline"][service] = baseline
         for verb, resource in (("patch", "nodes"), ("create", "pods/eviction"), ("patch", "services"),
                                ("create", "deployments"), ("patch", "deployments"), ("create", "leases")):
             require(self.r.kubectl("auth", "can-i", verb, resource).strip() == "yes",
@@ -325,7 +413,7 @@ class FinalDrills:
             raw = invoke(["kubectl", "--context", self.r.context, "-n", self.r.namespace,
                           "exec", "-i", self.r.probe_name, "--", "psql", "-X", "-qAt", "--no-password",
                           "--set=ON_ERROR_STOP=1"], data=SNAPSHOT_SQL, timeout=180, sensitive=True)
-            return normalize_snapshot(raw)
+            return detailed_snapshot(raw)
         finally:
             recovery = self.r.close()
             require(recovery["status"] == "restored", "snapshot-probe-cleanup-failed")
@@ -334,6 +422,9 @@ class FinalDrills:
         first = self.snapshot()
         self.pause(2)
         second = self.snapshot()
+        if first != second:
+            self.s["unstable_snapshot"] = snapshot_difference(first, second)
+            self.save("database-snapshot-unstable")
         require(first == second, "concurrent-database-writes-prevent-exact-drill-comparison")
         return second
 
@@ -350,10 +441,16 @@ class FinalDrills:
         self.save("node-scheduling-updated")
 
     def resilience(self):
-        results = {}
+        results = copy.deepcopy(self.s["completed"].get("resilience", {}))
         for kind, nodes in self.s["node_plan"].items():
+            if kind in results:
+                self.r.progress("MS67_FINAL_REUSED=evacuation-" + kind)
+                continue
             self.assert_lease()
             before = self.stable_snapshot()
+            comparisons = self.s.setdefault("evacuation_comparisons", [])
+            comparison = {"kind": kind, "nodes_sha256": hashed(nodes), "pre_state": before}
+            comparisons.append(comparison)
             names = {n["name"] for n in nodes}
             affected = [p["metadata"]["uid"] for s in SERVICES for p in self.r.pods(s)
                         if p.get("spec", {}).get("nodeName") in names]
@@ -380,6 +477,10 @@ class FinalDrills:
             availability = monitor.result()
             self.r.ready()
             after = self.stable_snapshot()
+            comparison.update(post_state=after, difference=snapshot_difference(before, after))
+            self.save("evacuation-comparison-" + kind)
+            if before != after:
+                self.r.progress("MS67_FINAL_DATABASE_DIFFERENCE=" + json.dumps(comparison["difference"], sort_keys=True))
             require(before == after, "evacuation-normalized-database-state-changed")
             for n in nodes:
                 self.cordon(n, False)
@@ -608,10 +709,15 @@ class FinalDrills:
     def run(self):
         self.preflight()
         self.claim()
+        if self.s.get("failure"):
+            self.s.setdefault("prior_failures", []).append(self.s.pop("failure"))
+            self.save("continuing-missing-drills")
         failure = None
         try:
             if "rolling" not in self.s["completed"]:
                 self.rolling()
+            else:
+                self.r.progress("MS67_FINAL_REUSED=rolling")
             if set(self.s["completed"].get("resilience", {})) != {"node", "failure-domain"}:
                 self.resilience()
             if "cutover" not in self.s["completed"]:
@@ -645,12 +751,6 @@ def verify_observation(value, key, bindings, images, candidates, environment):
             and value.get("credentials_persisted") is False, "final-drills-passing-bound-evidence-required")
     done = value.get("completed", {})
     require(set(done) == {"rolling", "resilience", "cutover"}, "all-final-drill-groups-required")
-    def availability(row, minimum):
-        require(type(row.get("samples")) is int and row["samples"] >= 2
-                and 0 <= row.get("maximum_observation_gap_seconds", 46) <= 45
-                and set(row.get("minimum_available_by_service", {})) == set(SERVICES)
-                and all(type(n) is int and n >= minimum for n in row["minimum_available_by_service"].values()),
-                "drill-availability-measurement-invalid")
     rolling = done["rolling"]
     require(rolling.get("baseline_restored") is True and [r.get("service") for r in rolling.get("rows", [])] == list(SERVICES),
             "eight-measured-rollouts-required")
@@ -659,14 +759,14 @@ def verify_observation(value, key, bindings, images, candidates, environment):
         require(row.get("previous_image") == images[s] and row.get("candidate_image") == candidates[s]
                 and images[s].split("@")[1] != candidates[s].split("@")[1]
                 and row.get("completed") is True and row.get("maximum_unavailable") == 0, "measured-rollout-invalid")
-        availability(row["availability"], 2)
+        verify_availability(row["availability"], 2)
     require(set(done["resilience"]) == {"node", "failure-domain"}, "both-evacuations-required")
     for row in done["resilience"].values():
         require(row.get("affected_pods", 0) > 0 and row.get("pre_state") == row.get("post_state")
                 and re.fullmatch(HEX, row.get("pre_state", {}).get("state_sha256", ""))
                 and row.get("all_services_recovered") is True and row.get("node_scheduling_restored") is True,
                 "evacuation-state-or-recovery-invalid")
-        availability(row["availability"], 1)
+        verify_availability(row["availability"], 1)
     cutover = done["cutover"]
     require(cutover.get("states") == CUTOVER_STATES and cutover.get("canary_percent") == 50
             and cutover.get("target_traffic_percent") == 100 and cutover.get("business_journey_count") == 18

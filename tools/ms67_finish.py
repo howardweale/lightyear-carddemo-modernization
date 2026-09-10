@@ -30,7 +30,7 @@ from lightyear_data.cloudbank_journeys import ACK, SERVICES, JourneyFailure, req
 from lightyear_data.cloudbank_journeys_gke import GkeRuntime
 from lightyear_data.cloudbank_ms67_drills import FinalDrills, verify_observation as verify_drills
 from lightyear_data.cloudbank_sql_recovery import invoke, verified, write_signed
-from lightyear_data.contracts import sign
+from lightyear_data.contracts import content_hash, sign
 
 REGION = "us-west1"
 CLUSTER = NAMESPACE = "cloudbank-ms67"
@@ -161,12 +161,25 @@ class Session:
         require(value["content_sha256"] == reference["sha256"], "final-evidence-readback-hash-mismatch")
         return value
 
+    def retain(self, name, value):
+        if "signature" in value:
+            return self.publish(name, value)
+        # Image locks are sealed documents with an exact schema, not signed
+        # observations. Adding a signature would invalidate their contract.
+        require(value.get("content_sha256") == content_hash(value), "retained-document-content-invalid")
+        path, uri = self.directory / name, self.prefix + "/" + name
+        path.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n")
+        cloud("storage", "cp", str(path), uri, "--if-generation-match=0", timeout=180)
+        require(json.loads(cloud("storage", "cat", uri)) == value, "retained-document-readback-mismatch")
+        return {"uri": uri, "sha256": value["content_sha256"], "format": "sealed-document"}
+
     def checkpoint(self, value, uri):
         verified(value, self.key)
         phase = self.state["active"]["phase"]
         prefix = BUCKET + "/" + ("final-drills" if phase == "drills" else phase) + "/"
         require(uri.startswith(prefix) and uri.endswith(".json"), "child-checkpoint-prefix-mismatch")
-        field = "observation" if "observation_type" in value else "recovery"
+        field = ("recovery" if "state_type" in value else
+                 "observation" if "observation_type" in value else "result")
         self.state["active"][field] = {"uri": uri, "sha256": value["content_sha256"]}
         self.save()
 
@@ -535,7 +548,7 @@ def main(argv=None):
         # originals and their signatures remain unchanged.
         refs = {}
         for name, value in values.items():
-            refs[name] = session.publish("retained-" + name + "-" + uuid.uuid4().hex + ".json", value)
+            refs[name] = session.retain("retained-" + name + "-" + uuid.uuid4().hex + ".json", value)
         observation = assemble(session, values, security, children, drills, current)
         observation_ref = session.publish("platform-observation-" + uuid.uuid4().hex + ".json", observation)
         output = directory / ("admission-" + uuid.uuid4().hex)

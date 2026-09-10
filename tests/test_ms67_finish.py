@@ -330,6 +330,20 @@ class FinalDrillTests(unittest.TestCase):
 
 
 class EvidenceTests(unittest.TestCase):
+    def test_failed_child_summary_cannot_replace_its_recovery_checkpoint(self):
+        with tempfile.TemporaryDirectory() as directory:
+            cloud = Cloud()
+            with patch.object(finish, "invoke", cloud):
+                session = finish.Session(Path(directory), {}, KEY, COMMIT)
+                session.state["active"] = {"phase": "secret-rotation"}
+                uri = finish.BUCKET + "/secret-rotation/unit/recovery-state.json"
+                session.checkpoint(sign({"state_type": "secret-recovery", "phase": "before-add"}, KEY, "unit"), uri)
+                reference = session.state["active"]["recovery"].copy()
+                session.checkpoint(sign({"status": "failed", "recovery": {"status": "recovery-required"}}, KEY, "unit"),
+                                   finish.BUCKET + "/secret-rotation/unit/secret-rotation.observation.json")
+                self.assertEqual(session.state["active"]["recovery"], reference)
+                self.assertIn("result", session.state["active"])
+
     @unittest.skipUnless(os.environ.get("LIGHTYEAR_MS67_TRIVY_TEST") == "1", "real Trivy contract check runs in CI")
     def test_real_trivy_report_and_privileged_container_rejection(self):
         with tempfile.TemporaryDirectory() as directory, patch.dict(os.environ):
@@ -372,6 +386,9 @@ class EvidenceTests(unittest.TestCase):
                 value = sign({"status": "passed", "measurement": 622}, KEY, "original-cloud-build-signer")
                 ref = session.publish("original.json", value)
                 self.assertEqual(session.read(ref), value)
+                lock = seal({"lock_type": "unit-lock", "images": []})
+                retained = session.retain("lock.json", lock)
+                self.assertEqual(json.loads(cloud.objects[retained["uri"]][1]), lock)
                 session.finish_phase("sql", ref)
                 reloaded = finish.Session(Path(directory), {"retained": "original"}, KEY, COMMIT)
                 self.assertEqual(reloaded.state["completed"]["sql"], ref)

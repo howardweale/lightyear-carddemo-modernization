@@ -207,4 +207,12 @@ def verify_result(value, context, key):
     require(len(value.get("metrics", {}).get("pods", {})) == 16
             and value["metrics"].get("services") == list(SERVICES)
             and all(value["manifest_scan"].get(k) == 0 for k in ("critical", "high")), "current-metrics-or-manifest-invalid")
+    for service in SERVICES:
+        rows = [r for r in value["metrics"]["pods"].values() if r.get("service") == service]
+        require(len(rows) == 2 and {r.get("pod_uid_sha256") for r in rows} ==
+                set(value["identities"][service]["pod_uid_sha256"])
+                and all(type(r.get("samples")) is int and r["samples"] > 0 for r in rows),
+                "current-metrics-runtime-pod-binding-invalid")
+    require(value["tls"].get("legacy_protocols_rejected") == {"TLSv1": True, "TLSv1.1": True},
+            "current-legacy-tls-proof-invalid")
     return value

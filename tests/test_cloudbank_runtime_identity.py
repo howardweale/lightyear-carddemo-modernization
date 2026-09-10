@@ -42,11 +42,14 @@ def apply(value, operations):
         parent = result
         for part in parts[:-1]:
             parent = parent[int(part)] if isinstance(parent, list) else parent[part]
+        final = int(parts[-1]) if isinstance(parent, list) and parts[-1] != '-' else parts[-1]
         if op["op"] == "test":
-            if parent[parts[-1]] != op["value"]:
+            if parent[final] != op["value"]:
                 raise JourneyFailure("test-json-patch-conflict")
+        elif isinstance(parent, list) and final == '-':
+            parent.append(copy.deepcopy(op['value']))
         else:
-            parent[parts[-1]] = op["value"]
+            parent[final] = op["value"]
     result["metadata"]["resourceVersion"] = str(int(result["metadata"]["resourceVersion"]) + 1)
     return result
 

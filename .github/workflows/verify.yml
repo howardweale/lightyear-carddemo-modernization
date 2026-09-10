@@ -150,6 +150,7 @@ jobs:
           LIGHTYEAR_MS67_TRIVY_TEST=1 python -m unittest discover -s tests -p test_ms67_finish.py -v
           LIGHTYEAR_MS67_DOCKER_TEST=1 python -m unittest discover -s tests -p test_ms67_candidate_retry.py -v
           python -m unittest discover -s tests -p test_ms67_drill_continuation.py -v
+          python -m unittest discover -s tests -p test_ms67_customer_startup.py -v
           python -m unittest discover -s tests -p test_cloudbank_platform_qualification.py -v
 
   cloudbank-source-build:
@@ -291,6 +292,7 @@ jobs:
               -Djkube.skip=true -Ddependency-check.skip=true test
           )
           ./cloudbank-production-readiness.sh verify
+          python tools/test_ms67_customer_startup.py --jar work/cloudbank-ms64-ci/customer/target/customer-0.0.1-SNAPSHOT.jar
           ./cloudbank-production-readiness.sh verify-source ../cloudbank-upstream
           ./cloudbank-production-readiness.sh materialize ../cloudbank-upstream work/cloudbank-ms65-ci
           cp factory/cloudbank/production-readiness/tests/ChecksDeploymentContextTests.java \

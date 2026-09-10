@@ -29,6 +29,52 @@ LABEL = "lightyear.ai/ms67-final-target"
 LEASE = "ly-ms67-final-drills"
 HEX = r"[0-9a-f]{64}"
 
+# Only metadata is returned. The already initialized release keeps its schema;
+# serving replicas must not execute the destructive customer fixture again.
+CUSTOMER_MIGRATIONS_SQL = r"""
+BEGIN READ ONLY;
+SET LOCAL statement_timeout = '30s';
+SELECT json_build_object('customer_changesets', count(*),
+ 'expected_changesets', count(*) FILTER (WHERE (id IN ('1','2') AND filename LIKE '%/table.sql')
+ OR (id='3' AND filename LIKE '%/data.sql')),
+ 'successful_changesets', count(*) FILTER (WHERE exectype IN ('EXECUTED','RERAN') AND md5sum IS NOT NULL))
+FROM public.databasechangelog WHERE author='customer';
+SELECT json_build_object('locks', count(*), 'unlocked', count(*) FILTER (WHERE locked=false))
+FROM public.databasechangeloglock;
+COMMIT;
+"""
+
+
+def verify_customer_failure(state):
+    comparisons = state.get('evacuation_comparisons', [])
+    require(bool(comparisons), 'customer-reseed-comparison-required')
+    row = comparisons[-1]
+    before, after = row.get('pre_state', {}), row.get('post_state', {})
+    difference = snapshot_difference(before, after)
+    require(row.get('kind') == 'failure-domain' and difference == row.get('difference')
+            and difference['detail_available'] and not difference['state_matches']
+            and [r['name'] for r in difference['changed_objects']] ==
+            ['cloudbank_customer.customers', 'public.databasechangelog']
+            and all(r['before']['rows'] == r['after']['rows'] for r in difference['changed_objects']),
+            'exact-customer-reseed-failure-required')
+
+
+def occupied_node_plan(nodes, occupied):
+    # Keep the ordinary node readiness/region/capacity checks, then avoid a
+    # domain emptied by the previous failed attempt.
+    node_plan(nodes)
+    records = [{'name': n['metadata']['name'], 'uid': n['metadata']['uid'],
+                'zone': n['metadata']['labels']['topology.kubernetes.io/zone']}
+               for n in nodes if not n.get('spec', {}).get('unschedulable', False)]
+    for first in sorted(records, key=lambda n: n['name']):
+        if first['name'] not in occupied:
+            continue
+        for zone in sorted({n['zone'] for n in records} - {first['zone']}):
+            domain = sorted([n for n in records if n['zone'] == zone], key=lambda n: n['name'])
+            if len(records) - len(domain) >= 2 and any(n['name'] in occupied for n in domain):
+                return {'node': [first], 'failure-domain': domain}
+    raise JourneyFailure('two-occupied-distinct-evacuation-domains-required')
+
 
 def detailed_snapshot(raw):
     # The shared SQL emits only metadata, row counts and digests. Preserve those
@@ -92,7 +138,7 @@ def verify_continuation(state, key, bindings, images, candidates, environment):
 def remaining_node_plan(nodes, saved, completed, occupied):
     current = node_plan(nodes)  # Keeps the existing ready/region/capacity checks.
     if "node" not in completed:
-        return current
+        return occupied_node_plan(nodes, occupied)
     require("node" in saved and bool(saved["node"]), "retained-node-plan-required")
     result = copy.deepcopy(saved)
     if "failure-domain" in completed:
@@ -369,8 +415,13 @@ class FinalDrills:
         self.save("image-ready-" + service)
 
     def rolling(self):
+        retained = {r['service']: r for r in self.s.get('rolling_reuse', [])}
         rows = []
         for service in SERVICES:
+            if service in retained:
+                rows.append(copy.deepcopy(retained[service]))
+                self.r.progress('MS67_FINAL_REUSED=rolling-' + service)
+                continue
             self.assert_lease()
             with Availability(self.r, 2) as monitor:
                 self.set_image(service, self.candidates[service])
@@ -383,6 +434,8 @@ class FinalDrills:
             self.save("rolling-measured-" + service)
         # Return to the retained release before the separate traffic cutover.
         for service in reversed(SERVICES):
+            if service in retained:
+                continue
             with Availability(self.r, 2) as monitor:
                 self.set_image(service, self.baseline_images[service])
             monitor.result()
@@ -390,7 +443,7 @@ class FinalDrills:
             "candidate_scope": "OCI packaging revision; application layers and configuration retained"}
         self.save("rolling-passed")
 
-    def snapshot(self):
+    def database_query(self, sql):
         """Hash all tables/sequences with the existing read-only SQL statement."""
         urls = set()
         for service in SERVICES:
@@ -412,11 +465,91 @@ class FinalDrills:
         try:
             raw = invoke(["kubectl", "--context", self.r.context, "-n", self.r.namespace,
                           "exec", "-i", self.r.probe_name, "--", "psql", "-X", "-qAt", "--no-password",
-                          "--set=ON_ERROR_STOP=1"], data=SNAPSHOT_SQL, timeout=180, sensitive=True)
-            return detailed_snapshot(raw)
+                          "--set=ON_ERROR_STOP=1"], data=sql, timeout=180, sensitive=True)
+            return raw
         finally:
             recovery = self.r.close()
             require(recovery["status"] == "restored", "snapshot-probe-cleanup-failed")
+
+    def snapshot(self):
+        return detailed_snapshot(self.database_query(SNAPSHOT_SQL))
+
+    def adopt_customer_mode(self):
+        """Resolve an interrupted guarded patch without reverting to reseeding."""
+        mode = self.s.get('customer_startup')
+        if not mode:
+            return
+        current = self.r.deployment('customer')
+        require(current['metadata']['uid'] == self.s['baseline']['customer']['uid'],
+                'customer-startup-deployment-identity-drift')
+        actual = hashed(current['spec'])
+        require(actual in {mode['old_spec_sha256'], mode['new_spec_sha256']},
+                'customer-startup-unexpected-deployment-spec')
+        self.s['baseline']['customer']['spec_sha256'] = actual
+        if actual == mode['new_spec_sha256']:
+            mode['applied'] = True
+
+    def repair_customer_startup(self):
+        mode = self.s.get('customer_startup')
+        if mode and mode.get('status') == 'passed':
+            return
+        if mode is None:
+            metadata = [json.loads(line) for line in self.database_query(CUSTOMER_MIGRATIONS_SQL).splitlines() if line.strip()]
+            require(metadata == [{'customer_changesets': 3, 'expected_changesets': 3, 'successful_changesets': 3},
+                                 {'locks': 1, 'unlocked': 1}], 'initialized-unlocked-customer-schema-required')
+            current = self.r.deployment('customer')
+            require(hashed(current['spec']) == self.s['baseline']['customer']['spec_sha256'],
+                    'customer-startup-baseline-spec-drift')
+            index, container = main_container(current, 'customer')
+            env = container.get('env', [])
+            indexes = [i for i, r in enumerate(env) if r.get('name') == 'LIQUIBASE_ENABLED']
+            require(len(indexes) <= 1 and (not indexes or env[indexes[0]] == {'name': 'LIQUIBASE_ENABLED', 'value': 'true'})
+                    and 'env' in container
+                    and not any(r.get('name') == 'SPRING_LIQUIBASE_ENABLED' for r in env)
+                    and not any('liquibase' in a.lower() for a in container.get('args', []) + container.get('command', [])),
+                    'explicit-customer-liquibase-true-without-override-required')
+            new_spec = copy.deepcopy(current['spec'])
+            new_env = new_spec['template']['spec']['containers'][index]['env']
+            if indexes:
+                new_env[indexes[0]]['value'] = 'false'
+            else:
+                new_env.append({'name': 'LIQUIBASE_ENABLED', 'value': 'false'})
+            mode = {'status': 'prepared', 'applied': False, 'service': 'customer',
+                    'setting': 'LIQUIBASE_ENABLED', 'before': 'true' if indexes else 'absent-default-true', 'after': 'false',
+                    'container_index': index, 'env_index': indexes[0] if indexes else None, 'migration_metadata': metadata,
+                    'old_spec_sha256': hashed(current['spec']), 'new_spec_sha256': hashed(new_spec),
+                    'pre_state': self.stable_snapshot(),
+                    'previous_completed': copy.deepcopy(self.s['completed']),
+                    'scope': 'existing initialized nonproduction database; future schema changes require explicit migration'}
+            self.s['customer_startup'] = mode
+        current = self.r.deployment('customer')
+        self.adopt_customer_mode()
+        with Availability(self.r, 2) as monitor:
+            if not mode['applied']:
+                self.intent('customer-startup-mode', {'service': 'customer', 'setting': 'LIQUIBASE_ENABLED', 'value': 'false'})
+                path = f"/spec/template/spec/containers/{mode['container_index']}/env"
+                operations = ([{'op': 'add', 'path': path + '/-', 'value': {'name': 'LIQUIBASE_ENABLED', 'value': 'false'}}]
+                              if mode['env_index'] is None else [
+                    {'op': 'test', 'path': path + f"/{mode['env_index']}/value", 'value': 'true'},
+                    {'op': 'replace', 'path': path + f"/{mode['env_index']}/value", 'value': 'false'}])
+                self.patch('deployment', 'customer', current, operations)
+                self.adopt_customer_mode()
+                self.s['pending'] = None
+                self.save('customer-startup-mode-applied')
+            self.r.wait_ready('customer')
+        mode['availability'] = monitor.result()
+        mode['post_state'] = self.stable_snapshot()
+        mode['difference'] = snapshot_difference(mode['pre_state'], mode['post_state'])
+        self.save('customer-startup-mode-comparison')
+        require(mode['pre_state'] == mode['post_state'], 'customer-startup-mode-database-state-changed')
+        mode['status'] = 'passed'
+        # Seven deployment specs did not change. Refresh the customer's rollout
+        # and both evacuation proofs under the corrected runtime configuration.
+        self.s['rolling_reuse'] = [r for r in mode['previous_completed']['rolling']['rows'] if r['service'] != 'customer']
+        self.s['completed'] = {}
+        self.s['node_plan'] = occupied_node_plan(self.r.get('nodes')['items'],
+            {p['spec'].get('nodeName') for s in SERVICES for p in self.r.pods(s)})
+        self.save('customer-startup-mode-passed')
 
     def stable_snapshot(self):
         first = self.snapshot()
@@ -662,6 +795,10 @@ class FinalDrills:
             return self.s["recovery"]
         self.assert_lease()
         errors = []
+        try:
+            self.adopt_customer_mode()
+        except Exception:
+            errors.append('customer-startup-mode-recovery-drift')
         for record in self.s["nodes"].values():
             try:
                 self.cordon(record, record["original_unschedulable"])
@@ -706,7 +843,7 @@ class FinalDrills:
         self.save("recovery-incomplete" if errors else "baseline-restored")
         return self.s["recovery"]
 
-    def run(self):
+    def run(self, *, repair_customer_startup=False):
         self.preflight()
         self.claim()
         if self.s.get("failure"):
@@ -714,6 +851,8 @@ class FinalDrills:
             self.save("continuing-missing-drills")
         failure = None
         try:
+            if repair_customer_startup or self.s.get('customer_startup'):
+                self.repair_customer_startup()
             if "rolling" not in self.s["completed"]:
                 self.rolling()
             else:
@@ -734,6 +873,7 @@ class FinalDrills:
                  "status": PASS if failure is None and recovery["status"] == "restored" else "failed",
                  "reason": failure, "completed": self.s["completed"], "recovery": recovery,
                  "target_journeys": self.s.get("target_journeys"),
+                 "customer_startup": self.s.get('customer_startup'),
                  "credentials_persisted": False, "ms67_complete": False,
                  "limitations": ["Controlled drains qualify evacuation, not unplanned power/region failure.",
                                  "Availability is sampled; sub-sample interruptions are not ruled out.",
@@ -750,6 +890,20 @@ def verify_observation(value, key, bindings, images, candidates, environment):
             and value.get("recovery") == {"status": "restored", "errors": []}
             and value.get("credentials_persisted") is False, "final-drills-passing-bound-evidence-required")
     done = value.get("completed", {})
+    mode = value.get('customer_startup')
+    if mode is not None:
+        require(mode.get('status') == 'passed' and mode.get('applied') is True
+                and mode.get('service') == 'customer' and mode.get('setting') == 'LIQUIBASE_ENABLED'
+                and mode.get('before') in {'true', 'absent-default-true'} and mode.get('after') == 'false'
+                and mode.get('pre_state') == mode.get('post_state')
+                and re.fullmatch(HEX, mode.get('pre_state', {}).get('state_sha256', ''))
+                and re.fullmatch(HEX, mode.get('old_spec_sha256', ''))
+                and re.fullmatch(HEX, mode.get('new_spec_sha256', ''))
+                and mode['old_spec_sha256'] != mode['new_spec_sha256']
+                and mode.get('migration_metadata') == [
+                    {'customer_changesets': 3, 'expected_changesets': 3, 'successful_changesets': 3},
+                    {'locks': 1, 'unlocked': 1}], 'customer-startup-mode-proof-invalid')
+        verify_availability(mode['availability'], 2)
     require(set(done) == {"rolling", "resilience", "cutover"}, "all-final-drill-groups-required")
     rolling = done["rolling"]
     require(rolling.get("baseline_restored") is True and [r.get("service") for r in rolling.get("rows", [])] == list(SERVICES),

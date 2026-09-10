@@ -46,6 +46,50 @@ this bounded nonproduction environment; it does not claim production readiness.
 
 ## Resume and recovery
 
+### Customer fixture reset on restart
+
+The PostgreSQL customer `data.sql` contains `customer:3 runAlways:true`, truncates
+the customer table, and reinserts fixtures. The fourth fixture receives a new
+default timestamp. Repeated Liquibase initialization also updates its changelog
+record. The recorded failure changed exactly `cloudbank_customer.customers` and
+`public.databasechangelog` with equal row counts. These changes remain failures;
+neither table nor any timestamp is excluded from the database comparison.
+
+For the restored failure recorded by controller `9595747e91c75ad33607512932d65d9a6cff7ef6`,
+the reviewed correction supports:
+
+```sh
+python3 tools/ms67_finish.py --execute \
+  --retry-candidate-build 43bee3ac-7b44-4407-bafe-bdfedca5bd8e \
+  --resume-drills --repair-customer-startup
+```
+
+This verifies the signed controller history, candidate provenance, existing
+controls and exact two-table failure. It archives the preceding signed parent
+and failed drill state. It then checks that all three expected customer
+changesets were applied and the migration lock is free, and changes only the
+customer Deployment's `LIQUIBASE_ENABLED` setting to `false`. This is a persistent
+runtime correction for the **already initialized nonproduction database**.
+Fresh databases and future schema upgrades still require an explicit migration
+step before serving replicas start. This does not rewrite the fixture source,
+rebuild images, modify database rows or change any acceptance threshold.
+
+The guarded patch has a signed intent before mutation, retains the exact before
+and after spec hashes, and can recover an interrupted response by accepting only
+the expected old or new spec. Cleanup keeps the corrected serving configuration;
+it does not re-enable the destructive fixture. A whole-database comparison and
+zero-unavailable rollout must pass. Seven unchanged service rollouts are reused;
+the customer rollout and both evacuation measurements are refreshed under the
+new configuration, followed by cutover/rollback and final admission. Prior
+measurements are retained in the archive and the configuration observation.
+MS65, MS66, accepted SQL and sustained load are retained with their original
+scope; the runtime correction concerns initialization, not request handling.
+
+CI starts the actual materialized Customer JAR against isolated PostgreSQL,
+reproduces the two-table difference with initialization enabled, then edits and
+adds customer rows and verifies two corrected restarts preserve every table and
+sequence. This is regression coverage, not live MS67 acceptance.
+
 Repeat the same `--execute` command to resume an existing image build or reuse
 completed phases. An uncertain submission is reconciled by its unique tag;
 the launcher refuses to submit a duplicate when the outcome is unknown.

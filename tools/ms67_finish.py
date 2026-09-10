@@ -110,6 +110,7 @@ class Session:
     def __init__(self, directory, context, key, commit, retry_of=None, resume_drills=False):
         self.directory, self.context, self.key, self.commit = directory, context, key, commit
         self.path = directory / "finish-state.json"
+        require(not resume_drills or self.path.is_file(), "resume-drills-requires-existing-final-session")
         wanted = {"state_type": STATE_TYPE, "controller_commit": commit,
                   "context_sha256": hashed(context), "credentials_persisted": False}
         if retry_of is not None:

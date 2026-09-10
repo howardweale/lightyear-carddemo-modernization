@@ -56,6 +56,12 @@ def candidate_security(run_id):
 
 
 class DrillContinuationTests(unittest.TestCase):
+    def test_resume_cannot_start_a_new_session(self):
+        with tempfile.TemporaryDirectory() as folder, patch.object(finish, "cloud") as cloud:
+            with self.assertRaisesRegex(JourneyFailure, "requires-existing-final-session"):
+                finish.Session(Path(folder), {}, KEY, COMMIT, resume_drills=True)
+            cloud.assert_not_called()
+
     def test_difference_reports_changed_object_without_altering_shared_hash(self):
         before, after = snapshot(), snapshot(sequence_hash="d"*64)
         raw = "\n".join(json.dumps(r) for r in [{"unsupported": 0}, *before["objects"]])

@@ -237,8 +237,13 @@ def main(argv=None):
             heartbeat.done.set()
             heartbeat.thread.join(timeout=1)
             signal.signal(signal.SIGTERM, prior_signal)
-    print(json.dumps({k: result[k] for k in ("status", "run_id", "reason", "failed_phase", "load", "summary",
-                                           "local_processes_stopped", "ms67_complete") if k in result}, indent=2))
+    report = {k: result[k] for k in ("status", "run_id", "reason", "failed_phase", "load",
+                                   "local_processes_stopped", "ms67_complete") if k in result}
+    if "summary" in result:
+        report["summary"] = {k: result["summary"].get(k) for k in (
+            "configured_duration_seconds", "configured_vus", "measured_duration_ms", "requests", "errors",
+            "http_failures", "p95_ms", "cycles_started", "cycles_completed", "failure_diagnostics")}
+    print(json.dumps(report, indent=2))
     return 0 if result.get("status") == PASS else 1
 
 

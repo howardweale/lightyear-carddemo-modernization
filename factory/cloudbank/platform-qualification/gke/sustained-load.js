@@ -19,10 +19,19 @@ const started = new Counter('business_cycles_started');
 const effects = new Counter('checks_effects');
 const checkLatency = new Trend('checks_delivery_latency', true);
 const opCounts = {}, opLatency = {}, opErrors = {}, vuCycles = {}, replicas = {};
+const failureKinds = ['transport', 'http_status', 'response_body', 'response_json', 'business_contract'];
+const transportCauses = ['unexpected_eof', 'connection_closed', 'decompression', 'timeout', 'other'];
+const failureMetrics = {};
 for (const op of operations) {
   opCounts[op] = new Counter('requests_' + op);
   opLatency[op] = new Trend('latency_' + op, true);
   opErrors[op] = new Counter('errors_' + op);
+  failureMetrics[op] = {
+    kinds: Object.fromEntries(failureKinds.map(kind => [kind, new Counter('failure_' + op + '_' + kind)])),
+    causes: Object.fromEntries(transportCauses.map(cause => [cause, new Counter('transport_' + op + '_' + cause)])),
+    status: new Trend('failure_status_' + op), code: new Trend('failure_code_' + op),
+    replica: new Trend('failure_replica_' + op),
+  };
 }
 for (let i = 1; i <= CONFIG.vus; i++) vuCycles[i] = new Counter('cycles_vu_' + i);
 for (const service of Object.keys(CONFIG.endpoints)) {
@@ -45,15 +54,32 @@ export const options = {
 
 const tokens = {};
 let currentOperation = 'oauth';
-function reject() {
-  errors.add(1);
+let currentResponse = null, currentReplica = 0;
+function reject(kind = 'business_contract') {
+  const metrics = failureMetrics[currentOperation];
+  metrics.status.add(currentResponse ? currentResponse.status : 0);
+  metrics.code.add(currentResponse ? currentResponse.error_code || 0 : 0);
+  metrics.replica.add(currentReplica);
+  if (kind === 'transport') {
+    // Map client messages to a closed vocabulary. Never emit the raw error:
+    // it can contain the URL, query parameters or part of a broken response.
+    const message = currentResponse ? String(currentResponse.error || '') : '';
+    const cause = (currentResponse && currentResponse.error_code === 1701)
+      || /gzip|decompress|brotli|flate/i.test(message) ? 'decompression'
+      : /unexpected EOF/i.test(message) ? 'unexpected_eof'
+      : /timeout|timed out|deadline/i.test(message) ? 'timeout'
+      : /EOF|closed|reset|broken pipe|connection refused/i.test(message) ? 'connection_closed' : 'other';
+    metrics.causes[cause].add(1);
+  }
+  metrics.kinds[kind].add(1);
   opErrors[currentOperation].add(1);
+  errors.add(1);
   execution.test.abort('load-business-contract-failed');
   throw new Error('load-business-contract-failed');
 }
 function must(value) { if (!value) reject(); }
 function json(response) {
-  try { return response.json(); } catch (_) { reject(); }
+  try { return response.json(); } catch (_) { reject('response_json'); }
 }
 function call(op, service, method, path, role, body, statuses = [200], extra = {}) {
   const headers = { ...extra };
@@ -64,6 +90,8 @@ function call(op, service, method, path, role, body, statuses = [200], extra = {
     headers['Content-Type'] = 'application/json';
   }
   const replica = (__VU + __ITER) % 2;
+  currentReplica = replica;
+  currentResponse = null;
   const response = http.request(method, CONFIG.endpoints[service][replica] + path, body, {
     headers, timeout: '45s', redirects: 0, tags: { name: op },
     responseCallback: http.expectedStatuses(...statuses),
@@ -73,8 +101,14 @@ function call(op, service, method, path, role, body, statuses = [200], extra = {
   replicas[service + '_' + replica].add(1);
   latency.add(response.timings.duration);
   opLatency[op].add(response.timings.duration);
-  must(statuses.includes(response.status)
-    && typeof response.body === 'string' && response.body.length <= 262144);
+  currentResponse = response;
+  const code = response.error_code || 0;
+  // k6 also assigns 14xx/15xx codes to ordinary HTTP error responses. Those
+  // remain eligible only on their explicitly expected negative-test paths.
+  const httpErrorCode = response.status >= 400 && response.status <= 599 && code === 1000 + response.status;
+  if (response.status === 0 || (code !== 0 && !httpErrorCode)) reject('transport');
+  if (!statuses.includes(response.status)) reject('http_status');
+  if (typeof response.body !== 'string' || response.body.length > 262144) reject('response_body');
   return response;
 }
 function token(role) {
@@ -189,15 +223,25 @@ export default function () {
 export function handleSummary(data) {
   function values(name) { return data.metrics[name] ? data.metrics[name].values : {}; }
   function count(name) { return values(name).count || 0; }
-  const byOperation = {}, byVu = {}, byReplica = {};
+  const byOperation = {}, byVu = {}, byReplica = {}, failures = [];
   for (const op of operations) byOperation[op] = {
     requests: count('requests_' + op), p95_ms: values('latency_' + op)['p(95)'] ?? null,
     latency_samples: count('latency_' + op), errors: count('errors_' + op),
   };
   for (let i = 1; i <= CONFIG.vus; i++) byVu[String(i)] = count('cycles_vu_' + i);
   for (const name of Object.keys(replicas)) byReplica[name] = count('replica_' + name.replace(/-/g, '_'));
+  function range(name) { return { min: values(name).min ?? null, max: values(name).max ?? null }; }
+  for (const op of operations) {
+    if (!count('errors_' + op)) continue;
+    failures.push({ operation: op,
+      kinds: Object.fromEntries(failureKinds.map(kind => [kind, count('failure_' + op + '_' + kind)]).filter(([, n]) => n)),
+      transport_causes: Object.fromEntries(transportCauses.map(cause => [cause, count('transport_' + op + '_' + cause)]).filter(([, n]) => n)),
+      http_status: range('failure_status_' + op), k6_error_code: range('failure_code_' + op),
+      replica_index: range('failure_replica_' + op),
+    });
+  }
   const result = {
-    format: 'lightyear-k6-business-summary-v1', run_id: CONFIG.run_id,
+    format: 'lightyear-k6-business-summary-v2', run_id: CONFIG.run_id,
     configured_duration_seconds: CONFIG.duration_seconds, configured_vus: CONFIG.vus,
     cycle_seconds: CONFIG.cycle_seconds, measured_duration_ms: data.state.testRunDurationMs,
     requests: count('business_requests'), errors: count('business_errors'),
@@ -206,7 +250,7 @@ export function handleSummary(data) {
     cycles_started: count('business_cycles_started'), cycles_completed: count('business_cycles'),
     checks_effects: count('checks_effects'), checks_delivery_p95_ms: values('checks_delivery_latency')['p(95)'] ?? null,
     iterations: count('iterations'), vus_max: values('vus_max').max ?? null,
-    operations: byOperation, vu_cycles: byVu, replica_requests: byReplica,
+    operations: byOperation, vu_cycles: byVu, replica_requests: byReplica, failure_diagnostics: failures,
   };
   return { stdout: 'MS67_K6_SUMMARY=' + JSON.stringify(result) + '\n' };
 }

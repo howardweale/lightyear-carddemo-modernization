@@ -28,6 +28,7 @@ class Application:
         self.fault, self.lock, self.requests, self.next_journal = fault, threading.Lock(), 0, 1
         self.accounts, self.journals, self.commands, self.fixtures = {}, {}, {}, []
         self.methods = set()
+        self.transfer_response_statuses = []
         for vu in range(10):
             accounts = []
             marker = "lightyear-synthetic-journey:load-test-" + str(vu)
@@ -71,6 +72,8 @@ class Application:
                 key = int(bits[4])
                 return 200, self.journals[key] if route.endswith("/journal") else self.accounts[key]
             if service == "transfer":
+                if self.fault == "transfer_http":
+                    return 503, {"private": "private-test-response"}
                 params = parse_qs(parts.query)
                 source, target, amount = (int(params[n][0]) for n in ("fromAccount", "toAccount", "amount"))
                 if amount <= 0:
@@ -127,9 +130,19 @@ def exercise(fault="", *, full=False):
             raw = self.rfile.read(int(self.headers.get("Content-Length", "0"))).decode()
             status, value = app.reply(self.command, self.path, self.headers, raw)
             body = value.encode() if isinstance(value, str) else json.dumps(value).encode()
+            transfer = urlsplit(self.path).path == "/transfer/transfer"
+            if transfer:
+                app.transfer_response_statuses.append(status)
+            broken_body = transfer and fault == "transfer_truncated"
+            broken_encoding = transfer and fault == "transfer_encoding"
             self.send_response(status)
             self.send_header("Content-Type", "text/plain" if isinstance(value, str) else "application/json")
-            self.send_header("Content-Length", str(len(body)))
+            if broken_encoding:
+                self.send_header("Content-Encoding", "gzip")
+            self.send_header("Content-Length", str(len(body) + (100 if broken_body else 0)))
+            if broken_body or broken_encoding:
+                self.send_header("Connection", "close")
+                self.close_connection = True
             self.end_headers()
             try:
                 self.wfile.write(body)
@@ -171,12 +184,29 @@ def exercise(fault="", *, full=False):
             raise AssertionError("short local test admitted as live evidence")
     if fault:
         assert code != 0 and value["errors"] > 0
+        assert value["failure_diagnostics"], json.dumps(value)
+        if fault.startswith("transfer_"):
+            diagnostics = [row for row in value["failure_diagnostics"] if row["operation"] == "transfer"]
+            assert diagnostics, json.dumps(value)
+            kind = "http_status" if fault == "transfer_http" else "transport"
+            assert any(row["kinds"].get(kind) for row in diagnostics), json.dumps(diagnostics)
+            assert value["http_failures"] > 0
+            if fault != "transfer_http":
+                assert app.transfer_response_statuses and set(app.transfer_response_statuses) == {200}
+                assert any(app.journals.values()), "the server must commit before the client-side failure"
+                cause = "unexpected_eof" if fault == "transfer_truncated" else "decompression"
+                assert any(row["transport_causes"].get(cause) for row in diagnostics), json.dumps(diagnostics)
+                assert all(row["k6_error_code"]["min"] > 0 for row in diagnostics)
+                if fault == "transfer_encoding":
+                    assert all(row["k6_error_code"]["min"] == row["k6_error_code"]["max"] == 1701 for row in diagnostics)
+                print("K6_SERVER_200_CLIENT_FAILURE=" + fault + " " + json.dumps(diagnostics))
         if fault == "http":
             assert value["http_failures"] > 0
         print("K6_NATIVE_NEGATIVE_CONTROL=" + fault + " PASSED")
         return
     assert code == 0, json.dumps({"code": code, "summary": value})
     assert value["errors"] == value["http_failures"] == 0
+    assert value["failure_diagnostics"] == []
     assert value["cycles_started"] == value["cycles_completed"] == value["iterations"]
     assert value["checks_effects"] == 2 * value["cycles_completed"]
     assert value["operations"]["oauth"]["requests"] > 50, "short-lived tokens were not refreshed"
@@ -202,3 +232,6 @@ if __name__ == "__main__":
         exercise()
         exercise("semantic")
         exercise("http")
+        exercise("transfer_http")
+        exercise("transfer_truncated")
+        exercise("transfer_encoding")

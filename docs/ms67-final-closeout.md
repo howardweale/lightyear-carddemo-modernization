@@ -66,6 +66,41 @@ retry uses a new run ID and image tags. Repeat this same command to resume it;
 include the same `--retry-candidate-build` argument with `--recover` if a later
 live phase needs recovery. Never manually edit or delete either session's state.
 
+### Continue the restored failure-domain attempt
+
+The `evacuation-normalized-database-state-changed` failure on controller
+`9c159d2b87d411a23b7dbb4e7cc8c41e3398d532` retained a passed rolling test and
+single-node evacuation. Its old aggregate snapshots cannot reveal which table
+or sequence differed, and this correction does not retrospectively pass it.
+
+From the reviewed corrective checkout, use:
+
+```sh
+python3 tools/ms67_finish.py --execute \
+  --retry-candidate-build 43bee3ac-7b44-4407-bafe-bdfedca5bd8e \
+  --resume-drills
+```
+
+The continuation verifies the restored signed checkpoint, candidate security,
+completed controls, rolling evidence and node evacuation. It archives unchanged
+copies of the old parent and failed drill checkpoint before recording a signed
+controller transition. Existing image provenance keeps its original controller
+commit; no images or prerequisite receipts are rebuilt. Repeating the command
+resumes that same continuation.
+
+The runner skips the completed rolling and node tests. It chooses an occupied
+failure domain different from the passed node's domain, since uncordoning alone
+does not repopulate evacuated nodes. It records the new target and requires two
+surviving workers. Existing deployment identities, specifications and Service
+identities/selectors must still match the retained baseline.
+
+New snapshots preserve table/sequence names, row counts and digests, plus the
+schema digest. Both snapshots and their differences are checkpointed before an
+equality failure is raised. No row values or credentials are included. Every
+table, sequence and schema comparison remains mandatory; no object is excluded
+or normalized away. A new difference prints `MS67_FINAL_DATABASE_DIFFERENCE` and
+stops after cleanup, with the actual reason and signed result URI exposed.
+
 After an interrupted live phase, stop the original CLI process and run:
 
 ```sh

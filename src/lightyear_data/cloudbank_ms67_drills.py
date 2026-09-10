@@ -490,7 +490,12 @@ class FinalDrills:
         current = self.r.deployment('customer')
         require(current['metadata']['uid'] == self.s['baseline']['customer']['uid'],
                 'customer-startup-deployment-identity-drift')
-        actual = hashed(current['spec'])
+        index, container = main_container(current, 'customer')
+        require(index == mode['container_index'] and container['image'] in
+                {self.baseline_images['customer'], self.candidates['customer']}, 'customer-startup-image-drift')
+        normalized = copy.deepcopy(current['spec'])
+        normalized['template']['spec']['containers'][index]['image'] = self.baseline_images['customer']
+        actual = hashed(normalized)
         require(actual in {mode['old_spec_sha256'], mode['new_spec_sha256']},
                 'customer-startup-unexpected-deployment-spec')
         self.s['baseline']['customer']['spec_sha256'] = actual

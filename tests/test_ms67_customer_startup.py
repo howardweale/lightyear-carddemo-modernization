@@ -118,6 +118,9 @@ class CustomerStartupTests(unittest.TestCase):
             resumed.preflight(); resumed.claim()
             with patch.object(resumed, 'stable_snapshot', return_value=snapshot()): resumed.repair_customer_startup()
             self.assertEqual(resumed.s['customer_startup']['status'], 'passed')
+            # An interruption while the customer's measured rollout is at the
+            # candidate image must still recover to the revised baseline spec.
+            resumed.set_image('customer', CANDIDATES['customer'])
             self.assertEqual(resumed.cleanup()['status'], 'restored')
 
     def test_missing_migrations_and_unrelated_spec_drift_fail_before_patch(self):

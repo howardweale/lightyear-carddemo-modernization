@@ -16,7 +16,7 @@ from unittest.mock import patch
 from lightyear_data.cloudbank_journeys import JourneyFailure, SERVICES, hashed
 from lightyear_data.cloudbank_network_enforcement import (
     Backend, GATE, INTENT, LABEL, LEASE, NetworkRun, PASS, ROLE, STATE_TYPE,
-    compiled_probe, mark, pod_object, route_guard, selected, selector_matches, verify_observation,
+    compiled_probe, mark, pod_object, resource_differences, route_guard, selected, selector_matches, subset, verify_observation,
 )
 from lightyear_data.contracts import sign
 
@@ -108,6 +108,15 @@ class FakeBackend:
             obj["status"] = {"phase": "Running", "podIP": "10.40.0." + str(self.next_id),
                 "conditions": [{"type": "Ready", "status": "False"}],
                 "containerStatuses": [{"name": "probe", "imageID": IMAGES["testrunner"], "state": {"running": {}}, "ready": True}]}
+            api = os.environ.get("LIGHTYEAR_NETWORK_API_ROUNDTRIP")
+            if api:
+                reply = subprocess.run([api], input=json.dumps(obj), capture_output=True, text=True, timeout=10, check=True)
+                obj = json.loads(reply.stdout)
+            else:
+                for container in obj["spec"]["containers"]:
+                    for variable in container.get("env", []):
+                        if variable.get("value") == "":
+                            variable.pop("value")
         value = self.put(obj)
         if obj["kind"] == self.create_lost_kind:
             self.create_lost_kind = None
@@ -224,6 +233,37 @@ class SelectorAndRoutingTests(unittest.TestCase):
         self.assertNotIn("envFrom", obj["spec"]["containers"][0])
         self.assertNotIn("8080", json.dumps(obj["spec"]))
 
+    def test_api_empty_environment_encoding_preserves_signed_intent(self):
+        backend = FakeBackend()
+        expected = pod_object(APP, "probe", {}, IMAGES["testrunner"],
+                              {"metadata": {"uid": "config-uid", "name": "probe-config"}}, "1" * 32, RUN, "account")
+        original = copy.deepcopy(expected)
+        actual = backend.create(expected)
+        self.assertTrue(all("value" not in row for row in actual["spec"]["containers"][0]["env"]))
+        self.assertFalse(subset(expected, actual), "The old strict comparison must reproduce the mismatch")
+        self.assertEqual(resource_differences(expected, actual), [])
+        self.assertEqual(expected, original)
+
+        mutations = [
+            lambda p: p["spec"]["containers"][0]["env"][0].update(value="private-injected-value"),
+            lambda p: p["spec"]["containers"][0]["env"][0].update(value=None),
+            lambda p: p["spec"]["containers"][0]["env"][0].update(valueFrom={"secretKeyRef": {"name": "private-secret", "key": "x"}}),
+            lambda p: p["spec"]["containers"][0]["env"].pop(),
+            lambda p: p["spec"]["containers"][0].update(image="private-wrong-image"),
+            lambda p: p["spec"]["containers"][0]["command"].__setitem__(-1, "private-wrong-nonce"),
+            lambda p: p["spec"]["containers"][0]["securityContext"].update(readOnlyRootFilesystem=False),
+            lambda p: p["spec"].pop("automountServiceAccountToken"),
+            lambda p: p["metadata"]["ownerReferences"][0].update(uid="replacement-owner"),
+            lambda p: p["metadata"]["labels"].update({LABEL: "replacement-run"}),
+        ]
+        for mutate in mutations:
+            changed = copy.deepcopy(actual)
+            mutate(changed)
+            differences = resource_differences(expected, changed)
+            self.assertTrue(differences)
+            self.assertNotIn("private", json.dumps(differences))
+        self.assertTrue(resource_differences({"kind": "ConfigMap", "data": {"value": ""}}, {"kind": "ConfigMap", "data": {}}))
+
 
 class RunnerTests(unittest.TestCase):
     def test_full_matrix_signed_verification_and_cleanup(self):
@@ -269,6 +309,67 @@ class RunnerTests(unittest.TestCase):
             recovered = NetworkRun(backend, journal, durable, PROFILE, ARTIFACT)
             self.assertEqual(recovered.recover()["status"], "restored")
             self.assertEqual(backend.objects, original)
+
+    def test_legacy_checkpoint_recovers_omitted_values_without_rewriting_intent(self):
+        run, backend, journal = engine()
+        original = copy.deepcopy(backend.objects)
+        backend.create_lost_kind = "Pod"
+        with self.assertRaisesRegex(JourneyFailure, "create-response-lost"):
+            run.run()
+        durable = copy.deepcopy(journal.writes[-1])
+        durable["phase"] = "recovery-required"
+        signed = sign(durable, KEY, "operator")
+        cli_module().verified_state(signed, KEY, BINDINGS, IMAGES, ENV, PROFILE)
+        obj = durable["resources"][-1]["object"]
+        intent = copy.deepcopy(obj)
+        self.assertIsNone(durable["resources"][-1]["uid"])
+        self.assertEqual(obj["spec"]["containers"][0]["env"][0]["value"], "")
+        live = backend.get(obj["metadata"]["namespace"], "Pod", obj["metadata"]["name"])
+        self.assertFalse(subset(obj, live))
+        recovered = NetworkRun(backend, journal, durable, PROFILE, ARTIFACT)
+        self.assertEqual(recovered.recover()["status"], "restored")
+        self.assertEqual(obj, intent)
+        self.assertEqual(backend.objects, original)
+
+    def test_changed_pod_environment_blocks_recovery_and_preserves_parent(self):
+        run, backend, _ = engine()
+        run.preflight()
+        run.setup()
+        row = next(r for r in run.s["resources"] if r["object"]["kind"] == "Pod")
+        meta = row["object"]["metadata"]
+        backend.objects[(meta["namespace"], "pod", meta["name"])]["spec"]["containers"][0]["env"][0]["valueFrom"] = {"secretKeyRef": {"name": "private-secret", "key": "x"}}
+        result = run.recover()
+        self.assertEqual(result["status"], "recovery-required")
+        self.assertIsNotNone(backend.get(meta["namespace"], "Pod", meta["name"]))
+        self.assertIsNotNone(backend.get(meta["namespace"], "ConfigMap", run.prefix))
+        self.assertIsNotNone(backend.get(APP, "Lease", LEASE))
+        self.assertEqual(run.s["resource_mismatches"][0]["paths"], ["/spec/containers/0/env/0/valueFrom"])
+        self.assertNotIn("private-secret", json.dumps(run.s["resource_mismatches"]))
+
+    def test_admission_mutation_keeps_created_uid_and_reports_paths_only(self):
+        run, backend, _ = engine()
+        create = backend.create
+
+        def mutated(obj):
+            value = create(obj)
+            if obj["kind"] == "Pod":
+                value["spec"]["containers"][0]["env"][0]["value"] = "private-admission-value"
+                value = backend.put(value)
+            return value
+
+        with patch.object(backend, "create", mutated):
+            try:
+                run.run()
+            except JourneyFailure as exc:
+                self.assertEqual(str(exc), "network-created-resource-mutated")
+                result = cli_module().failure_result(exc, run, "run")
+            else:
+                self.fail("Changed environment must stop setup")
+        self.assertIsNotNone(run.s["resources"][-1]["uid"])
+        self.assertEqual(result["failed_phase"], "before-create-pod")
+        self.assertEqual(result["resource_mismatches"], [{"kind": "Pod", "paths": ["/spec/containers/0/env/0/value"]}])
+        self.assertEqual(result["recovery"]["status"], "recovery-required")
+        self.assertNotIn("private-admission-value", json.dumps(result))
 
     def test_checkpoint_failure_prevents_next_create(self):
         run, backend, journal = engine()

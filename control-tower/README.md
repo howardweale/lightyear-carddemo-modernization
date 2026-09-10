@@ -21,10 +21,11 @@ events to the browser with Server-Sent Events (SSE). Graph changes refresh the l
 invalidate a mismatched source-evidence pack, Runtime projection, or Audit projection until
 graph-bound evidence is regenerated.
 
-The event stream is not an execution bus. The browser has no approve, lease, retry, recover,
-dispatch, promote, or exception-authoring endpoint. Production commands remain disabled until an
-authenticated command API can bind SSO identity, role authorization, signed intent, policy,
-idempotency, and audit evidence.
+The event stream remains read-only. The separately authenticated **Work queue** now produces signed
+normalization decisions and dispatches the bounded INTCALC reference proof through `/api/decisions`.
+It uses individual local credentials, role checks, same-origin requests, idempotency, and an
+Ed25519-signed audit journal. Production commands, claim promotion, and customer SSO remain outside
+this local command surface. See [the operator workflow](../docs/ms68-control-tower-decisions.md).
 
 ## Run locally
 
@@ -77,7 +78,8 @@ evidence, unavailable recovery projections, and blocked release promotion.
 - `GET /api/operations/status` — live connection, source freshness, sequence and alerts;
 - `GET /api/operations/events?after=N` — bounded replay for diagnostics;
 - `GET /api/operations/stream?after=N` — resumable SSE stream;
-- all existing domain APIs remain read-only.
+- all existing domain projection APIs remain read-only;
+- `/api/decisions/*` provides the separately authenticated local operator workflow.
 
 ## Production hardening path
 
@@ -89,5 +91,5 @@ evidence, unavailable recovery projections, and blocked release promotion.
 6. Connect z/OSMF/JES/SMF capture and surface source-system lag and collection health.
 7. Route alerts to the enterprise incident system with acknowledgement and escalation evidence.
 
-The Control Tower may explain and observe authority. It may not become authority merely because a
-button exists in a browser.
+A decision becomes evidence through its authenticated identity, exact content binding, current
+review date, signed record, and enforced gate. A browser button alone conveys no authority.

@@ -375,6 +375,7 @@ def build_parser() -> argparse.ArgumentParser:
         "--verifier-token",
         help="Use an operator-supplied verifier bearer token instead of generating one",
     )
+    explorer.add_argument("--decision-config", type=Path, help="Individual operator authority for the local decision service")
     explorer.add_argument("--port", type=int, default=8765)
     explorer.add_argument("--no-browser", action="store_true")
     explorer.add_argument("--factory-runs", type=Path, default=Path("work"))
@@ -620,6 +621,7 @@ def main(argv: list[str] | None = None) -> int:
                 args.audit_snapshot,
                 args.i_understand_this_is_unauthenticated,
                 args.verifier_token,
+                args.decision_config,
             )
             return 0
         except ValueError as exc:

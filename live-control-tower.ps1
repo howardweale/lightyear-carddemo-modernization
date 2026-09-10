@@ -1,5 +1,5 @@
 param(
-  [ValidateSet("serve", "validate", "events", "verify")][string]$Command = "serve",
+  [ValidateSet("serve", "validate", "events", "verify", "init-operator", "qualify", "verify-session")][string]$Command = "serve",
   [Parameter(ValueFromRemainingArguments=$true)][string[]]$Rest
 )
 $ErrorActionPreference = "Stop"

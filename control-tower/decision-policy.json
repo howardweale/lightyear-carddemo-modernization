@@ -1,0 +1,27 @@
+{
+  "schema_version": "1.0",
+  "policy_type": "control-tower-human-decision-contract",
+  "implementation": "lightyear_control_tower.decisions.DecisionService",
+  "scope": "local-reference-normalization-approval",
+  "transport": "explicit-loopback-and-same-origin",
+  "authentication": "individual-local-credential",
+  "session_ttl_seconds": 3600,
+  "signature_algorithm": "Ed25519",
+  "signer": "control-tower-service-countersigning-authenticated-operator-intent",
+  "allowed_decisions": ["normalization"],
+  "normalization_roles": ["normalization-approver"],
+  "proof_roles": ["proof-runner"],
+  "proof_workloads": ["workload:carddemo-intcalc"],
+  "proof_executor": "lightyear_factory.private_benchmark",
+  "ledger": "spec/comparison-normalizations.json",
+  "gate": "lightyear-control-tower qualify",
+  "gate_requirements": [
+    "passing-proof-with-current-source-graph-and-ledger-bindings",
+    "valid-signatures-and-continuous-journal",
+    "current-approved-decision-for-every-normalization",
+    "reason-named-owner-and-future-review-date",
+    "current-entry-reviewed-in-the-approver-session"
+  ],
+  "claim_promotion_enabled": false,
+  "customer_readiness_enabled": false
+}

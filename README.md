@@ -1324,6 +1324,10 @@ approval authorizes dispatch only: each cell must still pass its independent pri
 included CardDemo portfolio coordinates INTCALC, POSTTRAN and statement generation, and its
 read-only dashboard cannot approve, resolve, or launch work.
 
+The Control Tower now has a [signed normalization work queue](docs/ms68-control-tower-decisions.md)
+for the MS68 operator workflow: review, decide, dispatch a bounded proof, and verify the human-decision gate.
+This local reference workflow does not certify customer production readiness.
+
 ## What it does
 
 The complete customer-readable milestone history is published in the

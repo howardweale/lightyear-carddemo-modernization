@@ -1,0 +1,35 @@
+name: Control Tower human decisions
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  signed-decisions:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-15, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+      - name: Install decision signing support
+        run: python -m pip install -e ".[control-tower]"
+      - name: Verify signed human decisions, real proof dispatch, and existing projections
+        env:
+          PYTHONPATH: src
+        run: |
+          python -m unittest discover -s tests -p test_control_tower_decisions.py -v
+          python -m unittest discover -s tests -p test_graph_explorer.py -v
+          python -m unittest discover -s tests -p test_live_control_tower.py -v
+          python -m unittest discover -s tests -p test_comparator_escape.py -v
+          node --check knowledge/viewer/app.js
+          node --check knowledge/viewer/decisions.js

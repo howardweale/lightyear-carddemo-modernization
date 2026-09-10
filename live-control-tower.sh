@@ -16,8 +16,8 @@ case "$action" in
   validate)
     exec "$LIGHTYEAR_PYTHON_BIN" -m lightyear_control_tower validate "$@"
     ;;
-  events)
-    exec "$LIGHTYEAR_PYTHON_BIN" -m lightyear_control_tower events "$@"
+  events|init-operator|qualify|verify-session)
+    exec "$LIGHTYEAR_PYTHON_BIN" -m lightyear_control_tower "$action" "$@"
     ;;
   verify)
     "$LIGHTYEAR_PYTHON_BIN" -m unittest tests.test_live_control_tower -v
@@ -25,7 +25,7 @@ case "$action" in
       --database "$project_dir/work/control-tower/events.sqlite3"
     ;;
   *)
-    echo "Usage: ./live-control-tower.sh [serve|validate|events|verify]" >&2
+    echo "Usage: ./live-control-tower.sh [serve|validate|events|verify|init-operator|qualify|verify-session]" >&2
     exit 2
     ;;
 esac

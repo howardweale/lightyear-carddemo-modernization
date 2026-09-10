@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>LIGHTYEAR Control Tower</title>
   <link rel="stylesheet" href="styles.css?v=48.4">
+  <link rel="stylesheet" href="decisions.css?v=68.0">
 </head>
 <body>
   <header class="masthead topbar">
@@ -79,7 +80,33 @@
     <span id="estate-composite-hash" hidden>—</span>
   </section>
 
-  <main class="workspace">
+  <nav class="tower-navigation" aria-label="Control Tower workspace">
+    <button id="show-work-queue" type="button" aria-pressed="true">Work queue <span id="decision-count"></span></button>
+    <button id="show-discovery" type="button" aria-pressed="false">Discovery</button>
+    <span id="operator-session-label">No operator session</span>
+    <button id="operator-sign-in" type="button">Sign in to decide</button>
+    <button id="operator-sign-out" type="button" hidden>End session</button>
+  </nav>
+  <main id="decision-workspace" class="decision-workspace">
+    <header class="decision-heading">
+      <div><p class="decision-eyebrow">Human decisions</p><h1>What needs me?</h1></div>
+      <button id="refresh-decisions" class="secondary-button" type="button">Refresh queue</button>
+    </header>
+    <p id="decision-message" class="decision-message" role="status">Connecting to the decision service…</p>
+    <div class="decision-layout">
+      <section class="decision-queue" aria-label="Normalization work queue">
+        <label for="decision-filter">Show</label>
+        <select id="decision-filter"><option value="pending">Needs a decision</option><option value="all">All normalizations</option><option value="approved">Approved</option></select>
+        <div id="decision-items"></div>
+      </section>
+      <section id="decision-detail" class="decision-detail" aria-label="Review and decision">
+        <h2>Select a normalization</h2><p>Review the difference and its evidence before taking ownership of the decision.</p>
+      </section>
+    </div>
+    <section class="decision-runs" aria-label="Proof runs"><h2>Proof runs</h2><p>Automated checks run unattended. Human approval controls acceptance of normalization differences.</p><div id="decision-runs"></div></section>
+    <details class="decision-audit"><summary>Session record and decision trail</summary><button id="download-session" class="secondary-button" type="button" disabled>Download signed session record</button><div id="decision-events"></div></details>
+  </main>
+  <main id="discovery-workspace" class="workspace" hidden>
     <aside class="left-panel panel">
       <section>
         <label for="perspective">Perspective</label>
@@ -642,5 +669,15 @@
     </form>
   </dialog>
   <script src="app.js?v=48.4" defer></script>
+  <script src="decisions.js?v=68.0" defer></script>
+  <dialog id="operator-dialog" class="verifier-dialog" aria-labelledby="operator-title">
+    <form id="operator-form">
+      <h2 id="operator-title">Start an operator session</h2>
+      <p>Use your individually issued operator credential. Your registered name will be attached to every decision.</p>
+      <label for="operator-credential">Operator credential</label><input id="operator-credential" type="password" autocomplete="off" required>
+      <p id="operator-error" role="alert"></p>
+      <div class="dialog-actions"><button id="cancel-operator" class="secondary-button" type="button">Cancel</button><button class="primary-button" type="submit">Start session</button></div>
+    </form>
+  </dialog>
 </body>
 </html>

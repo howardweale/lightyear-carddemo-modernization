@@ -89,6 +89,16 @@ class AdmissionTests(unittest.TestCase):
         with self.assertRaises(JourneyFailure):
             validate_failure_diagnostics(original * 2)
 
+    def test_framing_failures_are_retained_and_never_admitted(self):
+        for cause in ("duplicate_transfer_encoding", "invalid_chunked_response"):
+            failed = failed_transfer()
+            failed["failure_diagnostics"][0].update(
+                transport_causes={cause: 1}, http_status={"min": 0, "max": 0})
+            with self.subTest(cause=cause):
+                validate_failure_diagnostics(failed["failure_diagnostics"])
+                with self.assertRaisesRegex(JourneyFailure, "load-client-transport-error"):
+                    validate_summary(failed, failed["run_id"])
+
     def test_failed_incomplete_or_relabelled_runs_are_rejected(self):
         cases = {"run_id": "another", "configured_duration_seconds": 3, "configured_vus": 1,
                  "cycle_seconds": 0, "measured_duration_ms": 299999, "vus_max": 9,

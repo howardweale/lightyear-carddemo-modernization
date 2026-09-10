@@ -20,7 +20,8 @@ const effects = new Counter('checks_effects');
 const checkLatency = new Trend('checks_delivery_latency', true);
 const opCounts = {}, opLatency = {}, opErrors = {}, vuCycles = {}, replicas = {};
 const failureKinds = ['transport', 'http_status', 'response_body', 'response_json', 'business_contract'];
-const transportCauses = ['unexpected_eof', 'connection_closed', 'decompression', 'timeout', 'other'];
+const transportCauses = ['duplicate_transfer_encoding', 'invalid_chunked_response',
+  'unexpected_eof', 'connection_closed', 'decompression', 'timeout', 'other'];
 const failureMetrics = {};
 for (const op of operations) {
   opCounts[op] = new Counter('requests_' + op);
@@ -66,6 +67,8 @@ function reject(kind = 'business_contract') {
     const message = currentResponse ? String(currentResponse.error || '') : '';
     const cause = (currentResponse && currentResponse.error_code === 1701)
       || /gzip|decompress|brotli|flate/i.test(message) ? 'decompression'
+      : /too many transfer encodings/i.test(message) ? 'duplicate_transfer_encoding'
+      : /chunk length|malformed chunked encoding|invalid CR in chunked line/i.test(message) ? 'invalid_chunked_response'
       : /unexpected EOF/i.test(message) ? 'unexpected_eof'
       : /timeout|timed out|deadline/i.test(message) ? 'timeout'
       : /EOF|closed|reset|broken pipe|connection refused/i.test(message) ? 'connection_closed' : 'other';

@@ -1,6 +1,6 @@
 {
   "base_target": "ms60-generated-postgresql-account-transfer",
-  "content_sha256": "1226ccaafb5c32213e61ad4bb565f27b74e5ee7559a8511cf6d6b3bca96dd399",
+  "content_sha256": "eb8fa50e3f22a811c0b01767c753ff7bc7a1dc2522a5817ae49e825d081e064f",
   "external_tls_termination": false,
   "patches": [
     {
@@ -55,7 +55,7 @@
       "operation": "replace-or-create-in-isolated-target",
       "path": "transfer/src/main/java/com/example/transfer/TransferService.java",
       "template": "patches/TransferOAuthService.java",
-      "template_sha256": "d08f004a543893dbdc13c9912bbef6ab71fdf2d112eae9b768cce644d4683d06"
+      "template_sha256": "840966a0c225ce8e4948707d757f571e7ff9cccc75903a6f7ba059d6ef149687"
     },
     {
       "operation": "replace-or-create-in-isolated-target",
@@ -73,7 +73,7 @@
       "operation": "replace-or-create-in-isolated-target",
       "path": "transfer/src/test/java/com/example/transfer/TransferServiceTests.java",
       "template": "patches/TransferOAuthServiceTests.java",
-      "template_sha256": "2fb89a15345b663f22a5f950276da3cb4f43b19b55a1259d6e43ec92637ef4ec"
+      "template_sha256": "760a6ff5b527d0d0f3d460f36c007391c55506d2ab6bb649fc59de8cae4d7162"
     }
   ],
   "plan_type": "lightyear-cloudbank-production-oauth",

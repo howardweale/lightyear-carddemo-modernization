@@ -12,6 +12,7 @@ import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.boot.test.context.ConfigDataApplicationContextInitializer;
 import org.springframework.boot.test.context.runner.WebApplicationContextRunner;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -84,7 +85,12 @@ class TransferServiceTests {
                 .andExpect(header("Authorization", "Bearer service-jwt"))
                 .andExpect(header("Idempotency-Key", "command-oauth"))
                 .andExpect(header("X-CloudBank-Actor", "cust-source"))
-                .andRespond(withSuccess("{\"accepted\":true}", MediaType.APPLICATION_JSON));
+                .andRespond(withSuccess("{\"accepted\":true}", MediaType.APPLICATION_JSON)
+                        .header(HttpHeaders.TRANSFER_ENCODING, "chunked")
+                        .header(HttpHeaders.CONNECTION, "X-Upstream-Hop")
+                        .header("X-Upstream-Hop", "upstream-only")
+                        .header(HttpHeaders.CONTENT_LENGTH, "999999")
+                        .header(HttpHeaders.SET_COOKIE, "upstream-only=value"));
         TransferService service = service(client, tokenProvider);
 
         ResponseEntity<String> response = service.transfer(
@@ -92,6 +98,9 @@ class TransferServiceTests {
                 new UsernamePasswordAuthenticationToken("cust-source", "n/a", List.of()));
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("{\"accepted\":true}", response.getBody());
+        assertEquals(MediaType.APPLICATION_JSON, response.getHeaders().getContentType());
+        assertThat(response.getHeaders().keySet()).containsExactly(HttpHeaders.CONTENT_TYPE);
         verify(tokenProvider).getAuthorizationHeader();
         server.verify();
     }

@@ -13,6 +13,7 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -85,7 +86,17 @@ public class TransferService {
         headers.set("X-CloudBank-Actor", authentication.getName());
         headers.set(HttpHeaders.AUTHORIZATION, serviceTokenProvider.getAuthorizationHeader());
         try {
-            return restTemplate.postForEntity(uri, new HttpEntity<>("", headers), String.class);
+            ResponseEntity<String> upstream = restTemplate.postForEntity(
+                    uri, new HttpEntity<>("", headers), String.class);
+            // RestTemplate has consumed the upstream transfer framing. The
+            // servlet must frame this response itself; copying Transfer-Encoding
+            // produces duplicate chunked headers rejected by strict HTTP clients.
+            ResponseEntity.BodyBuilder response = ResponseEntity.status(upstream.getStatusCode());
+            MediaType contentType = upstream.getHeaders().getContentType();
+            if (contentType != null) {
+                response.contentType(contentType);
+            }
+            return response.body(upstream.getBody());
         } catch (HttpStatusCodeException exception) {
             return ResponseEntity.status(exception.getStatusCode())
                     .body(exception.getResponseBodyAsString());

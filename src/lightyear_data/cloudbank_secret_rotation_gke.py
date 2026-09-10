@@ -97,6 +97,19 @@ def normalized_deployment(value: dict) -> dict:
     return spec
 
 
+_checkpoint_observer = None
+
+
+def observe_checkpoint(payload, uri):
+    """Optional enclosing executor hook, called after durable readback.
+
+    A hook failure propagates before the caller may act on its mutation intent.
+    Standalone runners retain their existing behavior.
+    """
+    if _checkpoint_observer is not None:
+        _checkpoint_observer(payload, uri)
+
+
 class Journal:
     """Signed, atomically replaced local checkpoint, uploaded and read back."""
 
@@ -123,6 +136,7 @@ class Journal:
                                "--project", self.project], timeout=180)
         require(readback == raw, "secret-rotation-checkpoint-readback-mismatch")
         self.generation = generation
+        observe_checkpoint(payload, self.uri)
         return payload
 
 

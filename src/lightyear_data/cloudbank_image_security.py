@@ -18,7 +18,7 @@ import sys
 
 from .cloudbank_journeys import JourneyFailure, SERVICES, require
 from .cloudbank_journeys_gke import command
-from .cloudbank_secret_rotation_gke import Journal
+from .cloudbank_secret_rotation_gke import Journal, observe_checkpoint
 from .contracts import content_hash, sign, verify_signature
 
 
@@ -77,6 +77,7 @@ class ImageJournal(Journal):
                 continue
             if readback == raw:
                 self.generation = generation
+                observe_checkpoint(payload, self.uri)
                 return payload
             if generation != self.generation or uploaded:
                 raise CheckpointFailure("image-security-checkpoint-conflict")

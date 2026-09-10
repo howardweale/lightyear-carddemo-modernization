@@ -31,6 +31,7 @@ BINDINGS = {k: "c" * 64 for k in ("image_lock_sha256", "ms64_receipt_sha256", "p
 KEY = "unit-test-only-evidence-key"
 ARTIFACT = compiled_probe(ROOT)
 RUN = "ms67-network-" + "1" * 32
+ZONE, REGION = "topology.kubernetes.io/zone", "topology.kubernetes.io/region"
 
 
 def policy(name, selector, types, namespace):
@@ -50,6 +51,9 @@ class FakeBackend:
         self.create_lost_kind = None
         self.bad_outcomes = {}
         self.before_connection = None
+        for zone in ("a", "b", "c"):
+            self.put({"apiVersion": "v1", "kind": "Node", "metadata": {"name": "node-" + zone,
+                      "labels": {ZONE: "us-west1-" + zone, REGION: "us-west1"}}})
         for namespace in (APP, MODEL):
             self.put({"apiVersion": "v1", "kind": "Namespace", "metadata": {"name": namespace,
                 "labels": {"environment": "non-production", "kubernetes.io/metadata.name": namespace}}})
@@ -72,9 +76,12 @@ class FakeBackend:
             rs = self.put({"apiVersion": "apps/v1", "kind": "ReplicaSet", "metadata": {"name": service, "namespace": namespace,
                 "ownerReferences": [{"controller": True, "uid": dep["metadata"]["uid"]}]}, "spec": {}})
             for i in range(2):
+                node = self.get(None, "Node", "node-" + ("a" if i == 0 else "b"))
                 self.put({"apiVersion": "v1", "kind": "Pod", "metadata": {"name": service + "-" + str(i), "namespace": namespace,
-                    "labels": labels, "ownerReferences": [{"controller": True, "uid": rs["metadata"]["uid"]}]},
-                    "spec": spec, "status": {"phase": "Running", "podIP": f"10.30.{index}.{i + 1}",
+                    "labels": {**labels, **node["metadata"]["labels"]},
+                    "ownerReferences": [{"controller": True, "uid": rs["metadata"]["uid"]}]},
+                    "spec": {**spec, "nodeName": node["metadata"]["name"]},
+                    "status": {"phase": "Running", "podIP": f"10.30.{index}.{i + 1}",
                     "containerStatuses": [{"name": service, "imageID": image, "ready": True, "state": {"running": {}},
                                            "user": {"linux": {"uid": 65532, "gid": 65532}}}]}})
             self.put({"apiVersion": "v1", "kind": "Service", "metadata": {"name": service, "namespace": namespace},
@@ -105,6 +112,12 @@ class FakeBackend:
             raise JourneyFailure("test-create-conflict")
         if obj["kind"] == "Pod":
             obj = copy.deepcopy(obj)
+            # Kubernetes v1.35 PodTopologyLabels admission copies the assigned
+            # Node's zone/region at binding, overwriting existing Pod labels.
+            # Probes deliberately land outside both application replica zones.
+            node = self.get(None, "Node", "node-c")
+            obj["spec"]["nodeName"] = node["metadata"]["name"]
+            obj["metadata"]["labels"].update(node["metadata"]["labels"])
             obj["status"] = {"phase": "Running", "podIP": "10.40.0." + str(self.next_id),
                 "conditions": [{"type": "Ready", "status": "False"}],
                 "containerStatuses": [{"name": "probe", "imageID": IMAGES["testrunner"], "state": {"running": {}}, "ready": True}]}
@@ -225,13 +238,16 @@ class SelectorAndRoutingTests(unittest.TestCase):
             route_guard([pod], [], [])
 
     def test_probe_has_controller_owner_and_no_credentials_or_application_port(self):
-        obj = pod_object(APP, "probe", {"app.kubernetes.io/name": "account"}, IMAGES["testrunner"],
+        obj = pod_object(APP, "probe", {"app.kubernetes.io/name": "account", ZONE: "us-west1-a", REGION: "us-west1"}, IMAGES["testrunner"],
                          {"metadata": {"uid": "config-uid", "name": "probe-config"}}, "1" * 32, RUN, "account")
         self.assertTrue(obj["metadata"]["ownerReferences"][0]["controller"])
         self.assertEqual(obj["spec"]["readinessGates"], [{"conditionType": GATE}])
         self.assertFalse(obj["spec"]["automountServiceAccountToken"])
         self.assertNotIn("envFrom", obj["spec"]["containers"][0])
         self.assertNotIn("8080", json.dumps(obj["spec"]))
+        self.assertNotIn(ZONE, obj["metadata"]["labels"])
+        self.assertNotIn(REGION, obj["metadata"]["labels"])
+        self.assertEqual(obj["metadata"]["labels"]["app.kubernetes.io/name"], "account")
 
     def test_api_empty_environment_encoding_preserves_signed_intent(self):
         backend = FakeBackend()
@@ -266,6 +282,120 @@ class SelectorAndRoutingTests(unittest.TestCase):
 
 
 class RunnerTests(unittest.TestCase):
+    def legacy_pending(self, copied_region=None):
+        run, backend, journal = engine()
+        original = copy.deepcopy(backend.objects)
+        backend.create_lost_kind = "Pod"
+
+        def legacy_pod(*args, **kwargs):
+            obj = pod_object(*args, **kwargs)
+            obj["metadata"]["labels"].update(args[2])
+            if copied_region:
+                obj["metadata"]["labels"][REGION] = copied_region
+            obj["metadata"]["annotations"].pop(INTENT)
+            return mark(obj, args[6])
+
+        with patch("lightyear_data.cloudbank_network_enforcement.pod_object", legacy_pod):
+            with self.assertRaisesRegex(JourneyFailure, "create-response-lost"):
+                run.run()
+        durable = copy.deepcopy(journal.writes[-1])
+        durable["phase"] = "recovery-required"
+        row = durable["resources"][-1]
+        obj = row["object"]
+        live = backend.objects[(obj["metadata"]["namespace"], "pod", obj["metadata"]["name"])]
+        self.assertIsNone(row["uid"])
+        expected = ["/metadata/labels/topology.kubernetes.io~1" + key for key in (["zone", "region"] if copied_region else ["zone"])]
+        self.assertEqual(resource_differences(obj, live), expected)
+        durable["resource_mismatches"] = [{"kind": "Pod", "paths": expected}]
+        return NetworkRun(backend, journal, durable, PROFILE, ARTIFACT), backend, journal, original, row, live
+
+    def test_bound_node_reconciles_legacy_signed_checkpoint_and_expired_pod(self):
+        for known_uid, changed_region in ((False, False), (True, False), (False, True)):
+            with self.subTest(known_uid=known_uid, changed_region=changed_region):
+                run, backend, journal, original, row, live = self.legacy_pending("old-region" if changed_region else None)
+                if known_uid:
+                    row["uid"] = live["metadata"]["uid"]
+                live["status"]["phase"] = "Failed"  # activeDeadlineSeconds elapsed
+                signed = sign(run.s, KEY, "operator")
+                cli_module().verified_state(signed, KEY, BINDINGS, IMAGES, ENV, PROFILE)
+                intent = copy.deepcopy(row["object"])
+                result = run.recover()
+                self.assertEqual(result["status"], "restored")
+                self.assertEqual(backend.objects, original)
+                self.assertEqual(row["object"], intent)
+                self.assertNotIn("resource_mismatches", run.s)
+                self.assertEqual(row["reconciled_topology"]["keys"], sorted([ZONE, REGION] if changed_region else [ZONE]))
+                self.assertEqual(row["reconciled_topology"]["node_uid_sha256"], hashed(backend.get(None, "Node", "node-c")["metadata"]["uid"]))
+                checkpoint = next(s for s in journal.writes if s["phase"] == "before-delete-bound-pod")
+                self.assertEqual(checkpoint["resources"][-1]["reconciled_topology"], row["reconciled_topology"])
+                self.assertEqual(run.recover()["status"], "restored")
+
+    def test_topology_recovery_requires_real_assigned_node_and_preserves_other_guards(self):
+        mutations = {
+            "missing-node": lambda b, r, p: b.objects.pop((None, "node", "node-c")),
+            "unbound-pod": lambda b, r, p: p["spec"].pop("nodeName"),
+            "wrong-node": lambda b, r, p: p["spec"].update(nodeName="node-b"),
+            "node-without-zone": lambda b, r, p: b.objects[(None, "node", "node-c")]["metadata"]["labels"].pop(ZONE),
+            "wrong-pod-zone": lambda b, r, p: p["metadata"]["labels"].update({ZONE: "unverified-zone"}),
+            "missing-pod-zone": lambda b, r, p: p["metadata"]["labels"].pop(ZONE),
+            "changed-app-label": lambda b, r, p: p["metadata"]["labels"].update({"app.kubernetes.io/name": "foreign"}),
+            "changed-run": lambda b, r, p: p["metadata"]["labels"].update({LABEL: "foreign"}),
+            "changed-owner": lambda b, r, p: p["metadata"]["ownerReferences"][0].update(uid="foreign"),
+            "changed-intent": lambda b, r, p: p["metadata"]["annotations"].update({INTENT: "foreign"}),
+            "changed-image": lambda b, r, p: p["spec"]["containers"][0].update(image="foreign"),
+            "changed-command": lambda b, r, p: p["spec"]["containers"][0]["command"].__setitem__(-1, "foreign"),
+            "changed-sandbox": lambda b, r, p: p["spec"]["securityContext"].update(runAsUser=0),
+            "changed-uid": lambda b, r, p: r.update(uid="different-saved-uid"),
+        }
+        for name, mutate in mutations.items():
+            with self.subTest(name=name):
+                run, backend, _, _, row, live = self.legacy_pending()
+                mutate(backend, row, live)
+                result = run.recover()
+                self.assertEqual(result["status"], "recovery-required")
+                meta = row["object"]["metadata"]
+                self.assertIsNotNone(backend.get(meta["namespace"], "Pod", meta["name"]))
+                self.assertIsNotNone(backend.get(meta["namespace"], "ConfigMap", run.prefix))
+                self.assertIsNotNone(backend.get(None, "Namespace", run.control))
+                self.assertIsNotNone(backend.get(APP, "Lease", LEASE))
+                self.assertNotIn("reconciled_topology", row)
+                if name == "changed-owner":
+                    self.assertEqual(run.s["resource_mismatches"], [{"kind": "Pod", "paths": ["/metadata/ownerReferences/0/uid"]}])
+
+    def test_topology_recovery_checkpoint_failure_prevents_pod_delete(self):
+        run, backend, journal, _, row, _ = self.legacy_pending()
+        journal.fail = "before-delete-bound-pod"
+        self.assertEqual(run.recover()["status"], "recovery-required")
+        meta = row["object"]["metadata"]
+        self.assertIsNotNone(backend.get(meta["namespace"], "Pod", meta["name"]))
+        self.assertIsNotNone(backend.get(meta["namespace"], "ConfigMap", run.prefix))
+        journal.fail = None
+        self.assertEqual(run.recover()["status"], "restored")
+
+    def test_placement_dependent_subject_peer_and_service_selectors_stop_before_mutation(self):
+        selectors = [{"matchLabels": {ZONE: "us-west1-c"}},
+                     {"matchExpressions": [{"key": REGION, "operator": "Exists"}]}]
+        for selector in selectors:
+            specs = [{"podSelector": selector, "policyTypes": ["Ingress"]},
+                     {"podSelector": {}, "ingress": [{"from": [{"podSelector": selector}]}]},
+                     {"podSelector": {}, "egress": [{"to": [{"podSelector": selector}]}]}]
+            for spec in specs:
+                with self.subTest(spec=spec):
+                    run, backend, _ = engine()
+                    extra = policy("topology-policy", {}, ["Ingress"], APP)
+                    extra["spec"] = spec
+                    backend.put(extra)
+                    with self.assertRaisesRegex(JourneyFailure, "placement-dependent-policy"):
+                        run.run()
+                    self.assertEqual(backend.commands, [])
+        for key in (ZONE, REGION):
+            run, backend, _ = engine()
+            backend.put({"kind": "Service", "metadata": {"name": "zonal", "namespace": MODEL},
+                         "spec": {"selector": {key: "us-west1-c"}, "publishNotReadyAddresses": True}})
+            with self.assertRaisesRegex(JourneyFailure, "placement-dependent-service"):
+                run.run()
+            self.assertEqual(backend.commands, [])
+
     def test_full_matrix_signed_verification_and_cleanup(self):
         run, backend, journal = engine()
         original = copy.deepcopy(backend.objects)
@@ -278,6 +408,10 @@ class RunnerTests(unittest.TestCase):
         self.assertTrue(run.s["cleanup_complete"])
         self.assertGreater(len(journal.writes), 20)
         self.assertFalse(any(obj["kind"] in {"Deployment", "Secret", "Service"} for _, obj in backend.commands))
+        pods = [obj for _, obj in backend.commands if obj["kind"] == "Pod"]
+        self.assertEqual(len(pods), 12)
+        self.assertTrue(all(ZONE not in p["metadata"]["labels"] and REGION not in p["metadata"]["labels"] for p in pods))
+        self.assertTrue(all(p["metadata"]["labels"][ZONE] == "us-west1-c" for p in backend.deleted if p["kind"] == "Pod"))
 
     def test_refused_and_read_timeout_cannot_count_as_denied(self):
         for outcome in ("connected", "connection-refused", "read-timeout", "transport-error"):

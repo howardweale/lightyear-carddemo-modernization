@@ -10,6 +10,8 @@ an additional Java installation or image build.
 Windows CI also passes every created probe through the pinned Kubernetes v1.35
 API types (`k8s.io/api v0.35.0`) before running the network and recovery regression
 suite. This exercises real typed JSON encoding without contacting a cluster.
+The transport fixtures also model scheduling across three zones, including the
+zone/region label overwrite performed when Kubernetes binds a Pod to a Node.
 Go is needed only in CI, not on the operator's machine.
 
 The checks cover all eight applications' database access, rejection of a reachable
@@ -33,6 +35,14 @@ sets must match the original pods exactly throughout the drill. The evidence
 explicitly identifies these as policy-equivalent probes, not commands executed
 inside the application processes. The original two pods per workload must remain
 ready, with their locked image and UID/GID 65532 runtime sandbox.
+
+New probes omit the source pod's `topology.kubernetes.io/zone` and
+`topology.kubernetes.io/region` labels. Kubernetes assigns those from the probe's
+own Node through [PodTopologyLabels admission](https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/#podtopologylabels).
+Before creating resources, the runner rejects NetworkPolicy subject or peer Pod
+selectors, and Service selectors, that depend on either placement label. This
+keeps placement changes from altering the traffic controls being exercised.
+All other copied labels and the live policy equivalence checks remain intact.
 
 Probe pods have an unsatisfied readiness gate and a ConfigMap controller owner.
 They cannot be adopted by existing ReplicaSets. The runner rejects any matching
@@ -94,6 +104,15 @@ run-owned objects. Deletes use Kubernetes UID preconditions. A replacement objec
 is preserved, as are parent ConfigMaps/namespaces if a child cannot be removed.
 The run lease is deleted only after all owned resources are confirmed absent.
 Recovery is idempotent and cannot award a passing network qualification result.
+
+For older signed intents that copied zone/region labels, recovery reads the Pod's
+assigned Node using the explicit cluster context. It reconciles only those two
+label differences, and only when each current Pod value equals that Node's
+label. The original signed resource and intent annotation remain unchanged;
+the reconciliation hashes are checkpointed before deletion. An unavailable Node,
+missing or unexplained label, or any changed owner, run label, image, command,
+sandbox or recorded UID keeps the Pod and its parents protected. This also
+recovers probes whose 30-minute lifetime has already expired.
 
 The result supplies the bounded network/runtime evidence for MS67. It does not
 close MS67 itself or replace load, node/failure-domain disruption, distinct-image

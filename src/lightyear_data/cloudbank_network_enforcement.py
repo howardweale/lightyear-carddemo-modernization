@@ -32,6 +32,7 @@ ROLE = "lightyear.ai/network-role"
 INTENT = "lightyear.ai/network-intent"
 LEASE = "ly-ms67-network-enforcement"
 GATE = "lightyear.ai/never-serve-application-traffic"
+TOPOLOGY_LABELS = frozenset({"topology.kubernetes.io/zone", "topology.kubernetes.io/region"})
 JAVA = ["java", "-Xms8m", "-Xmx24m", "-XX:ActiveProcessorCount=1", "-XX:-UsePerfData", "-cp", "/probe", "NetworkProbe"]
 RESOURCES = {"Namespace": ("v1", "namespaces"), "ServiceAccount": ("v1", "serviceaccounts"),
              "ConfigMap": ("v1", "configmaps"), "Pod": ("v1", "pods"),
@@ -72,6 +73,35 @@ def selected(policies, labels, direction=None):
     return sorted(result, key=lambda row: row["uid"])
 
 
+def probe_labels(labels):
+    # PodTopologyLabels admission derives these from the probe's own bound
+    # Node. A live application's placement must not become probe intent.
+    return {key: value for key, value in labels.items() if key not in TOPOLOGY_LABELS}
+
+
+def placement_selector_guard(items):
+    # Check peer selectors as well as policy subjects: identical subject policy
+    # sets alone cannot prove equivalent ingress/egress when peers use zones.
+    def check(value):
+        if isinstance(value, dict):
+            if "podSelector" in value:
+                selector = value["podSelector"]
+                keys = set(selector.get("matchLabels", {})) | {r.get("key") for r in selector.get("matchExpressions", [])}
+                require(not keys & TOPOLOGY_LABELS, "network-placement-dependent-policy-unsupported")
+            for child in value.values():
+                check(child)
+        elif isinstance(value, list):
+            for child in value:
+                check(child)
+
+    for item in items:
+        if item["kind"] == "NetworkPolicy":
+            check(item["spec"])
+        elif item["kind"] == "Service":
+            require(not set(item.get("spec", {}).get("selector", {})) & TOPOLOGY_LABELS,
+                    "network-placement-dependent-service-unsupported")
+
+
 def ipv4(value):
     try:
         parsed = ipaddress.IPv4Address(value)
@@ -104,7 +134,7 @@ def pod_object(namespace, name, labels, image, config, nonce, run_id, role, serv
     # copies its selector labels. The unsatisfied readiness gate excludes it
     # from Services while its policy selector labels remain identical.
     return mark({"apiVersion": "v1", "kind": "Pod", "metadata": {
-        "name": name, "namespace": namespace, "labels": {**labels, ROLE: role},
+        "name": name, "namespace": namespace, "labels": {**probe_labels(labels), ROLE: role},
         "ownerReferences": [{"apiVersion": "v1", "kind": "ConfigMap", "name": config["metadata"]["name"],
                              "uid": config["metadata"]["uid"], "controller": True, "blockOwnerDeletion": False}]},
         "spec": {"serviceAccountName": service_account, "automountServiceAccountToken": False,
@@ -360,15 +390,16 @@ class NetworkRun:
         public_ip = ipv4(addresses.pop())
         require(ipaddress.ip_address(public_ip).is_global, "network-public-control-required")
         for namespace, items in inventories.items():
+            placement_selector_guard(items)
             for lease in [o for o in items if o["kind"] == "Lease"]:
                 require(not lease.get("spec", {}).get("holderIdentity"), "network-other-drill-lock-held")
             for role, info in roles.items():
                 if info["namespace"] != namespace:
                     continue
-                probe_labels = {**info["labels"], LABEL: self.s["run_id"], ROLE: role}
+                labels = {**probe_labels(info["labels"]), LABEL: self.s["run_id"], ROLE: role}
                 policies = [o for o in items if o["kind"] == "NetworkPolicy"]
-                require(selected(policies, probe_labels) == info["policies"], "network-probe-policy-equivalence-invalid")
-                route_guard([{"metadata": {"labels": probe_labels}}], [o for o in items if o["kind"] == "Service"], [])
+                require(selected(policies, labels) == info["policies"], "network-probe-policy-equivalence-invalid")
+                route_guard([{"metadata": {"labels": labels}}], [o for o in items if o["kind"] == "Service"], [])
         self.s.update(baseline=baseline, roles=roles, database_ip=database_ip, public_ip=public_ip,
                       sql_identity_sha256=hashed({"name": sql["name"], "connectionName": sql.get("connectionName"), "ip": database_ip}),
                       ingress_identity_sha256=hashed([minimized(i) for i in ingress]))
@@ -523,6 +554,7 @@ class NetworkRun:
         else:
             self.owned_lock()
         # Delete pods before their ConfigMaps and all children before namespace.
+        self.s.pop("resource_mismatches", None)  # Report this attempt's live differences.
         self.save("restoring")
         for row in reversed(self.s.get("resources", [])):
             obj, uid = row["object"], row.get("uid")
@@ -532,7 +564,7 @@ class NetworkRun:
                 if live is None:
                     row["removed"] = True
                     continue
-                differences = resource_differences(obj, live)
+                differences, topology = self.recovery_differences(obj, live)
                 if uid not in {None, live["metadata"]["uid"]}:
                     differences = ["/metadata/uid", *differences][:16]
                 if differences and not self.s.get("resource_mismatches"):
@@ -541,6 +573,9 @@ class NetworkRun:
                 # Do not garbage-collect surviving pods through a ConfigMap or
                 # namespace when an earlier deletion failed.
                 require(not errors or obj["kind"] not in {"ConfigMap", "Namespace"}, "network-recovery-parent-preserved")
+                if topology:
+                    row["reconciled_topology"] = topology
+                    self.save("before-delete-bound-pod")
                 self.b.delete(live)
                 deadline = time.monotonic() + 60
                 while self.b.get(meta.get("namespace"), obj["kind"], meta["name"]) is not None:
@@ -561,6 +596,39 @@ class NetworkRun:
             self.save("recovery-required")
         return {"status": "restored" if not errors else "recovery-required", "errors": sorted(set(errors)),
                 "owned_resources_removed": not errors}
+
+    def recovery_differences(self, obj, live):
+        """Reconcile old intents only against the Pod's actual assigned Node.
+
+        Kubernetes v1.35 PodTopologyLabels overwrites these two labels during
+        binding. Neither the signed object nor its intent annotation is changed;
+        every other field and the saved Pod UID retain their normal checks.
+        """
+        differences = resource_differences(obj, live)
+        paths = {"/metadata/labels/" + key.replace("/", "~1"): key for key in TOPOLOGY_LABELS}
+        changed = sorted(paths[path] for path in differences if path in paths)
+        if obj["kind"] != "Pod" or not changed:
+            return differences, None
+        node_name = live.get("spec", {}).get("nodeName")
+        if not isinstance(node_name, str) or not node_name:
+            return differences, None
+        node = self.b.get(None, "Node", node_name)
+        if (not node or node.get("kind") != "Node" or node["metadata"].get("name") != node_name
+                or not node["metadata"].get("uid")):
+            return differences, None
+        wanted = obj["metadata"]["labels"]
+        labels = live["metadata"].get("labels", {})
+        node_labels = node["metadata"].get("labels", {})
+        if not all(isinstance(labels.get(key), str) and labels[key]
+                   and labels[key] == node_labels.get(key) for key in changed):
+            return differences, None
+        view = copy.deepcopy(live)
+        for key in changed:
+            view["metadata"]["labels"][key] = wanted[key]
+        return resource_differences(obj, view), {
+            "keys": changed, "node_uid_sha256": hashed(node["metadata"]["uid"]),
+            "pod_uid_sha256": hashed(live["metadata"]["uid"]),
+            "bound_labels_sha256": hashed({key: labels[key] for key in changed})}
 
     def run(self):
         self.preflight()

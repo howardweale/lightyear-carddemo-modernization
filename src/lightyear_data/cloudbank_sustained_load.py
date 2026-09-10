@@ -31,7 +31,8 @@ MAX_RUN_SECONDS = MINIMUM_LOAD_SECONDS + 150
 SUMMARY_PREFIX = "MS67_K6_SUMMARY="
 HEX = r"[0-9a-f]{64}"
 FAILURE_KINDS = {"transport", "http_status", "response_body", "response_json", "business_contract"}
-TRANSPORT_CAUSES = {"unexpected_eof", "connection_closed", "decompression", "timeout", "other"}
+TRANSPORT_CAUSES = {"duplicate_transfer_encoding", "invalid_chunked_response", "unexpected_eof",
+                    "connection_closed", "decompression", "timeout", "other"}
 
 
 def workload(root):

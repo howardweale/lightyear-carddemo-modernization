@@ -88,7 +88,8 @@ The signed object is stored under the printed URI:
 Failures save bounded phase, error counters and per-operation latency when
 available. Summary v2 also records the failing operation, replica index range,
 observed HTTP status and k6 error-code ranges, and fixed failure categories.
-Client messages are reduced to `unexpected_eof`, `connection_closed`,
+Client messages are reduced to `duplicate_transfer_encoding`,
+`invalid_chunked_response`, `unexpected_eof`, `connection_closed`,
 `decompression`, `timeout` or `other`; their raw text is never retained.
 HTTP 200 at the server does not admit a truncated or undecodable client response.
 The controller reports the client/HTTP/body/business failure before the short
@@ -119,6 +120,21 @@ both must fail with the client cause preserved. Linux and macOS CI run these
 native checks. The optional `--full-duration` test exercises the full 300-second
 schedule locally. These are
 runner tests and never issue signed GKE qualification evidence.
+
+`tools/test_cloudbank_transfer_framing.py` copies the governed OAuth Transfer
+controller into a local Spring Boot 3.5.15 application and exercises it using
+native k6. Its negative control reproduces the former response passthrough:
+duplicate `Transfer-Encoding: chunked` headers cause status 0 and k6 code 1000.
+The corrected facade preserves the upstream status, content type and decoded
+body, while its own HTTP server generates the response framing. Ten concurrent
+clients verify complete JSON responses and preserved rejection behavior.
+
+The transfer framing correction changes the governed application source. An
+existing deployed image does not acquire this fix by updating the load script.
+Rebuild and qualify the changed source through the signed prerequisite and image
+pipeline, deploy the resulting verified images, and bind a fresh load run to the
+new receipts, image lock and platform profile. Keep previous observations with
+their original bindings; do not relabel old evidence or weaken the load gates.
 
 References: [k6 constant VUs](https://grafana.com/docs/k6/latest/using-k6/scenarios/executors/constant-vus/),
 [custom summaries](https://grafana.com/docs/k6/latest/results-output/end-of-test/custom-summary/),

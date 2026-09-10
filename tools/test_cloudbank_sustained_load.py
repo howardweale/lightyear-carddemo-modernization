@@ -135,12 +135,20 @@ def exercise(fault="", *, full=False):
                 app.transfer_response_statuses.append(status)
             broken_body = transfer and fault == "transfer_truncated"
             broken_encoding = transfer and fault == "transfer_encoding"
+            duplicate_encoding = transfer and fault == "transfer_duplicate_encoding"
+            broken_chunk = transfer and fault == "transfer_invalid_chunk"
             self.send_response(status)
             self.send_header("Content-Type", "text/plain" if isinstance(value, str) else "application/json")
             if broken_encoding:
                 self.send_header("Content-Encoding", "gzip")
-            self.send_header("Content-Length", str(len(body) + (100 if broken_body else 0)))
-            if broken_body or broken_encoding:
+            if duplicate_encoding or broken_chunk:
+                self.send_header("Transfer-Encoding", "chunked")
+                if duplicate_encoding:
+                    self.send_header("Transfer-Encoding", "chunked")
+                body = (b"not-a-hex-size\r\n" if broken_chunk else f"{len(body):x}\r\n".encode()) + body + b"\r\n0\r\n\r\n"
+            else:
+                self.send_header("Content-Length", str(len(body) + (100 if broken_body else 0)))
+            if broken_body or broken_encoding or duplicate_encoding or broken_chunk:
                 self.send_header("Connection", "close")
                 self.close_connection = True
             self.end_headers()
@@ -194,11 +202,16 @@ def exercise(fault="", *, full=False):
             if fault != "transfer_http":
                 assert app.transfer_response_statuses and set(app.transfer_response_statuses) == {200}
                 assert any(app.journals.values()), "the server must commit before the client-side failure"
-                cause = "unexpected_eof" if fault == "transfer_truncated" else "decompression"
+                cause = {"transfer_truncated": "unexpected_eof", "transfer_encoding": "decompression",
+                         "transfer_duplicate_encoding": "duplicate_transfer_encoding",
+                         "transfer_invalid_chunk": "invalid_chunked_response"}[fault]
                 assert any(row["transport_causes"].get(cause) for row in diagnostics), json.dumps(diagnostics)
                 assert all(row["k6_error_code"]["min"] > 0 for row in diagnostics)
                 if fault == "transfer_encoding":
                     assert all(row["k6_error_code"]["min"] == row["k6_error_code"]["max"] == 1701 for row in diagnostics)
+                if fault == "transfer_duplicate_encoding":
+                    assert all(row["k6_error_code"] == {"min": 1000, "max": 1000}
+                               and row["http_status"] == {"min": 0, "max": 0} for row in diagnostics)
                 print("K6_SERVER_200_CLIENT_FAILURE=" + fault + " " + json.dumps(diagnostics))
         if fault == "http":
             assert value["http_failures"] > 0
@@ -235,3 +248,5 @@ if __name__ == "__main__":
         exercise("transfer_http")
         exercise("transfer_truncated")
         exercise("transfer_encoding")
+        exercise("transfer_duplicate_encoding")
+        exercise("transfer_invalid_chunk")

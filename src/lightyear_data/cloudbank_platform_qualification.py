@@ -21,6 +21,10 @@ from .cloudbank_whole_application_equivalence import (
     validate_execution_receipt as validate_ms66_receipt,
 )
 from .contracts import content_hash, seal, sign, verify_signature
+from .cloudbank_recovery_policy import (
+    MAXIMUM_PITR_RTO_SECONDS, MAXIMUM_BACKUP_RESTORE_RTO_SECONDS,
+    recovery_acceptance_policy,
+)
 
 
 RELEASE = "0.67.0"
@@ -47,7 +51,7 @@ MINIMUM_LOAD_CONCURRENCY = 10
 MAXIMUM_LOAD_ERRORS = 0
 MAXIMUM_P95_MS = 500
 MAXIMUM_RPO_SECONDS = 60
-MAXIMUM_RTO_SECONDS = 600
+MAXIMUM_RTO_SECONDS = MAXIMUM_PITR_RTO_SECONDS
 
 SCENARIO_IDS = [
     "signed-ms65-deployment-rehearsal-admitted",
@@ -122,7 +126,9 @@ def platform_contract() -> dict[str, Any]:
                                  "chatbot_only_ingress": True},
             "backup_restore": {"exact_normalized_restore": True,
                                "maximum_rpo_seconds": MAXIMUM_RPO_SECONDS,
-                               "maximum_rto_seconds": MAXIMUM_RTO_SECONDS},
+                               "maximum_rto_seconds": MAXIMUM_RTO_SECONDS,
+                               "maximum_backup_restore_rto_seconds": MAXIMUM_BACKUP_RESTORE_RTO_SECONDS,
+                               "acceptance_policy_sha256": recovery_acceptance_policy()["content_sha256"]},
             "availability": {"node_disruption": True, "failure_domain_disruption": True,
                              "zero_data_loss": True},
             "rolling_deployment": {"all_services": True, "maximum_unavailable": 0},
@@ -824,7 +830,7 @@ def _validate_recovery(observation: Mapping[str, Any]) -> list[str]:
             or not isinstance(backup.get("rpo_seconds"), int) \
             or backup.get("rpo_seconds", 61) > MAXIMUM_RPO_SECONDS \
             or not isinstance(backup.get("rto_seconds"), int) \
-            or backup.get("rto_seconds", 601) > MAXIMUM_RTO_SECONDS \
+            or backup.get("rto_seconds", MAXIMUM_RTO_SECONDS + 1) > MAXIMUM_RTO_SECONDS \
             or backup.get("point_in_time_restore") is not True:
         errors.append("cloudbank-platform-qualification-observation-backup-invalid")
     resilience = observation.get("resilience") or {}
@@ -996,7 +1002,7 @@ def validate_execution_receipt(receipt: Mapping[str, Any], key: str, project_roo
             or summary.get("load_requests", 0) < MINIMUM_LOAD_REQUESTS \
             or summary.get("load_p95_ms", 501) > MAXIMUM_P95_MS \
             or summary.get("rpo_seconds", 61) > MAXIMUM_RPO_SECONDS \
-            or summary.get("rto_seconds", 601) > MAXIMUM_RTO_SECONDS:
+            or summary.get("rto_seconds", MAXIMUM_RTO_SECONDS + 1) > MAXIMUM_RTO_SECONDS:
         errors.append("cloudbank-platform-qualification-receipt-summary-invalid")
     if receipt.get("security") != {
         "non_production": True, "synthetic_data_only": True, "production_accessed": False,

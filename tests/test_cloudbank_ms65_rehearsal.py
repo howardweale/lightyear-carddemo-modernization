@@ -1,6 +1,12 @@
 from __future__ import annotations
 
+import copy
+from contextlib import redirect_stdout
+import importlib.util
+import io
 import json
+import sys
+from unittest.mock import patch
 from pathlib import Path
 import tempfile
 import unittest
@@ -13,6 +19,7 @@ from lightyear_data.cloudbank_ms65_rehearsal_gke import (
     Ms65GkeRehearsal,
     build_observation,
     validate_database_recovery,
+    reassess_database_recovery,
     validate_shared_journeys,
 )
 from lightyear_data.cloudbank_production_readiness import (
@@ -23,6 +30,7 @@ from lightyear_data.cloudbank_production_readiness import (
     validate_observation,
 )
 from lightyear_data.contracts import content_hash, sign, verify_signature
+from lightyear_data.cloudbank_recovery_policy import recovery_acceptance_policy
 
 
 KEY = "unit-ms65-live-key"
@@ -342,6 +350,128 @@ class Ms65LiveTests(unittest.TestCase):
                 recovery, KEY, images=images, environment=live_environment(),
                 journeys_sha256=journeys["content_sha256"],
             )
+
+
+    def reassessment_source(self, duration=622):
+        lock = image_lock()
+        images = {row["service"]: row["reference"] for row in lock["images"]}
+        journeys = journey_evidence(lock)
+        value = recovery_evidence(images, journeys)
+        value.update(run_id="sql-recovery-" + "a" * 32, status="failed", reason=None)
+        value["pitr"].update(database_rto_seconds=duration, rto_within_limit=False, recovery_point_age_seconds=18)
+        value["backup_restore"]["database_rto_seconds"] = 455
+        return sign(value, KEY, "original-observer"), dict(
+            images=images, environment=live_environment(), journeys_sha256=journeys["content_sha256"])
+
+    def test_reassessment_preserves_signed_original_and_accepts_revised_boundary(self):
+        for duration in (622, 626, 630):
+            with self.subTest(duration=duration):
+                source, inputs = self.reassessment_source(duration)
+                original = copy.deepcopy(source)
+                result = reassess_database_recovery(source, KEY, "authorized-observer", **inputs)
+                validate_database_recovery(result, KEY, **inputs)
+                self.assertEqual(source, original)
+                self.assertEqual(result["reassessment"]["source_observation"], original)
+                self.assertTrue(verify_signature(result["reassessment"]["source_observation"], KEY))
+                self.assertEqual(result["pitr"]["database_rto_seconds"], duration)
+                self.assertFalse(result["ms67_complete"])
+                self.assertFalse(result["reassessment"]["new_recovery_run"])
+                self.assertEqual(result["acceptance_policy"], recovery_acceptance_policy())
+
+    def test_reassessment_rejects_overrun_other_failures_and_stale_bindings(self):
+        changes = [
+            lambda x: x["pitr"].update(database_rto_seconds=631),
+            lambda x: x["pitr"].update(recovery_point_age_seconds=61),
+            lambda x: x["backup_restore"].update(database_rto_seconds=601),
+            lambda x: x["backup_restore"].update(state_matches=False),
+            lambda x: x["recovery"].update(errors=["cleanup-failed"]),
+            lambda x: x["recovery"].update(validation_instance_deleted=False),
+            lambda x: x.update(reason="other-runtime-failure"),
+            lambda x: x["bindings"].update(journeys_content_sha256="e" * 64),
+            lambda x: x.update(run_id="unbound-run"),
+        ]
+        for change in changes:
+            source, inputs = self.reassessment_source()
+            change(source)
+            with self.subTest(change=change), self.assertRaises(Exception):
+                reassess_database_recovery(sign(source, KEY, "original-observer"), KEY, "observer", **inputs)
+
+    def test_reassessment_rejects_rewritten_measurements_and_invalid_source_signature(self):
+        source, inputs = self.reassessment_source()
+        result = reassess_database_recovery(source, KEY, "observer", **inputs)
+        result["pitr"]["database_rto_seconds"] = 600
+        with self.assertRaisesRegex(Exception, "changed-measurements"):
+            validate_database_recovery(sign(result, KEY, "observer"), KEY, **inputs)
+        result = reassess_database_recovery(source, KEY, "observer", **inputs)
+        result["reassessment"]["source_observation"]["pitr"]["database_rto_seconds"] = 620
+        with self.assertRaises(Exception):
+            validate_database_recovery(sign(result, KEY, "observer"), KEY, **inputs)
+
+    def test_new_policy_is_explicit_and_does_not_accept_the_old_failed_receipt(self):
+        source, inputs = self.reassessment_source()
+        with self.assertRaises(Exception):
+            validate_database_recovery(source, KEY, **inputs)
+        source["status"] = "passed-isolated-database-recovery"
+        source["pitr"]["rto_within_limit"] = True
+        with self.assertRaises(Exception):
+            validate_database_recovery(sign(source, KEY, "observer"), KEY, **inputs)
+        source["acceptance_policy"] = recovery_acceptance_policy()
+        validate_database_recovery(sign(source, KEY, "observer"), KEY, **inputs)
+        source["pitr"]["database_rto_seconds"] = 631
+        with self.assertRaises(Exception):
+            validate_database_recovery(sign(source, KEY, "observer"), KEY, **inputs)
+
+
+    def test_reassessment_cli_preserves_original_and_resumes_same_assessment(self):
+        tools_path = Path(__file__).resolve().parents[1] / "tools"
+        prior_path = list(sys.path)
+        sys.path.insert(0, str(tools_path))
+        try:
+            spec = importlib.util.spec_from_file_location("ms67_accept_sql_recovery_test", tools_path / "ms67_accept_sql_recovery.py")
+            cli = importlib.util.module_from_spec(spec)
+            spec.loader.exec_module(cli)
+        finally:
+            sys.path[:] = prior_path
+        source, inputs = self.reassessment_source()
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            refresh = root / ("load-fix-run-" + cli.IMAGE_BUILD) / "qualification-refresh" / ("from-" + cli.LOAD_RUN)
+            original_dir = refresh / "sql-attempt-2"
+            original_dir.mkdir(parents=True)
+            source_path = original_dir / "database-recovery.json"
+            original = json.dumps(source, indent=2)
+            source_path.write_text(original)
+            state = sign({
+                "state_type": "lightyear-ms67-recovery-ms65-refresh",
+                "controller_commit": "22ac6a4c0dcb39fbfdb7eab28cad5eebc4b9ea8e",
+                "passing_load_sha256": "f23c637611400f8ec9acebc49c3de6ddbcd1ec6d03c9ac3637ce8f837aa34fbf",
+                "run_id": "ms67-refresh-" + "a" * 32,
+                "sql": {"status": "failed", "attempt": 2, "run_id": source["run_id"]},
+                "inputs": {"probe_image": "pinned-probe"},
+            }, KEY, "operator")
+            (refresh / "refresh-state.json").write_text(json.dumps(state))
+            def cloud(*args):
+                if args[:3] == ("secrets", "versions", "list"):
+                    return json.dumps([{"name": "projects/233419964177/secrets/cloudbank-ms67-evidence-key/versions/1", "state": "ENABLED"}])
+                if args[:3] == ("secrets", "versions", "access"):
+                    return KEY
+                if args[:2] == ("storage", "cat"):
+                    return original
+                raise AssertionError(args)
+            bound = (None, None, {"content_sha256": inputs["journeys_sha256"]}, inputs["images"], {"environment": inputs["environment"]})
+            def upload(output, *args, **kwargs):
+                value = json.loads((output / "database-recovery.json").read_text())
+                validate_database_recovery(value, KEY, **inputs)
+            with patch.object(cli, "cloud", side_effect=cloud), patch.object(cli, "load_bound_inputs", return_value=bound), \
+                    patch.object(cli, "upload", side_effect=upload), redirect_stdout(io.StringIO()):
+                self.assertEqual(0, cli.main(["--evidence-root", str(root)]))
+                outputs = list(refresh.glob("sql-reassessment-630-*/database-recovery.json"))
+                self.assertEqual(1, len(outputs))
+                assessed = outputs[0].read_bytes()
+                self.assertEqual(0, cli.main(["--evidence-root", str(root)]))
+                self.assertEqual(assessed, outputs[0].read_bytes())
+            self.assertEqual(original, source_path.read_text())
+            self.assertEqual("failed", json.loads((refresh / "refresh-state.json").read_text())["sql"]["status"])
 
     def test_live_static_controls_cover_all_eight_services(self):
         lock, env = image_lock(), environment()

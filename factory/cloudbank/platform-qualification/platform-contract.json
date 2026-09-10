@@ -1,5 +1,5 @@
 {
-  "content_sha256": "5bd3b40717bb40380742792b64f465cef38ad95d6d6c50de22f40cbf23132a98",
+  "content_sha256": "3fa565c8f2784a77331f9df53810cca6b8dec23cf3ac0aeef1b8b9e65a3db508",
   "contract_type": "lightyear-cloudbank-real-non-production-kubernetes-platform",
   "controls": {
     "availability": {
@@ -8,9 +8,11 @@
       "zero_data_loss": true
     },
     "backup_restore": {
+      "acceptance_policy_sha256": "2eea140507d6d5d8260b811f24eb69d1ef241720ee8e31071ea6a6a153e156d8",
       "exact_normalized_restore": true,
+      "maximum_backup_restore_rto_seconds": 600,
       "maximum_rpo_seconds": 60,
-      "maximum_rto_seconds": 600
+      "maximum_rto_seconds": 630
     },
     "cutover_rollback": {
       "business_journeys": 18,

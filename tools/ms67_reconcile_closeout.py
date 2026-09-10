@@ -133,6 +133,8 @@ def local_paths(root):
 
 def family(value):
     kind = value.get("receipt_type") or value.get("observation_type")
+    if not isinstance(kind, str):
+        return []
     if kind in TYPES:
         return [TYPES[kind]]
     if isinstance(kind, str) and "closeout" not in kind:
@@ -282,6 +284,8 @@ def read_remote(uri):
     try:
         raw = cloud("storage", "cat", uri).encode()
         return decode(raw), uri, digest(raw), None
+    except JourneyFailure as error:
+        return None, uri, None, safe_text(str(error)) or "cloud-candidate-read-rejected"
     except Exception:
         return None, uri, None, "cloud-candidate-unreadable-or-invalid"
 
@@ -339,7 +343,7 @@ def main(argv=None):
     key = cloud("secrets", "versions", "access", "1", "--secret=cloudbank-ms67-evidence-key").strip()
     require(bool(key), "evidence-key-required")
     paths, gaps = local_paths(root)
-    documents = []
+    documents, failed_reads = [], []
     for path in paths:
         try:
             value, sha = read_local(path)
@@ -347,6 +351,7 @@ def main(argv=None):
                 documents.append((value, str(path), sha))
         except Exception:
             gaps.append("local-candidate-unreadable-or-invalid")
+            failed_reads.append({"locator": str(path), "reason": "local-candidate-unreadable-or-invalid"})
     print("MS67_CLOSEOUT_PHASE=verify retained load and accepted SQL", flush=True)
     context, retained = anchors(root, documents, key)
     print("MS67_CLOSEOUT_RETAINED=LOAD_AND_SQL_VERIFIED", flush=True)
@@ -366,7 +371,8 @@ def main(argv=None):
         with ThreadPoolExecutor(max_workers=4) as pool:
             for index, (value, uri, sha, error) in enumerate(pool.map(read_remote, uris[:args.max_cloud_candidates]), 1):
                 if error:
-                    gaps.append(error)
+                    gaps.append("cloud-candidate-unreadable-or-invalid")
+                    failed_reads.append({"locator": uri, "reason": error})
                 elif value is not None:
                     row = inspect(value, key, context, uri, sha)
                     if row:
@@ -378,12 +384,13 @@ def main(argv=None):
     # Keep every locator, but count each identical signed payload only once per
     # group in the compact summary. Full records preserve readback provenance.
     report = build_report(records, retained, gaps, len(paths), len(uris))
+    report = seal({**report, "failed_reads": failed_reads})
     output = root / "ms67-closeout" / ("reconcile-" + uuid.uuid4().hex)
     output.mkdir(parents=True, mode=0o700)
     destination = output / "closeout-reconciliation.json"
     destination.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print("MS67_CLOSEOUT_REPORT=" + str(destination), flush=True)
-    print(json.dumps({k: report[k] for k in ("status", "retained", "groups", "gaps", "ms67_complete")}, indent=2), flush=True)
+    print(json.dumps({k: report[k] for k in ("status", "retained", "groups", "gaps", "failed_reads", "ms67_complete")}, indent=2), flush=True)
     if args.resume_ms65:
         if should_resume(report):
             print("MS67_CLOSEOUT_NEXT=resume missing current-build MS65 receipt", flush=True)

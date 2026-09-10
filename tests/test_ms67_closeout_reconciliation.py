@@ -208,3 +208,9 @@ class CloseoutTests(unittest.TestCase):
             result = review.read_remote(review.BUCKET + "/receipt.json")
         self.assertEqual("cloud-candidate-unreadable-or-invalid", result[-1])
         self.assertNotIn("SECRET_SERVER_RESPONSE", repr(result))
+
+    def test_malformed_type_is_ignored_and_permission_failures_keep_bounded_reason(self):
+        self.assertEqual([], review.family({"receipt_type": {"untrusted": "value"}}))
+        with patch.object(review, "cloud", side_effect=review.JourneyFailure("operator-command-failed-permission-denied")):
+            result = review.read_remote(review.BUCKET + "/receipt.json")
+        self.assertEqual("operator-command-failed-permission-denied", result[-1])

@@ -146,6 +146,7 @@ jobs:
           python -m unittest discover -s tests -p test_cloudbank_sql_recovery.py -v
           python -m unittest discover -s tests -p test_cloudbank_ms65_rehearsal.py -v
           python -m unittest discover -s tests -p test_ms67_ms65_continuation.py -v
+          python -m unittest discover -s tests -p test_ms67_closeout_reconciliation.py -v
           python -m unittest discover -s tests -p test_cloudbank_platform_qualification.py -v
 
   cloudbank-source-build:

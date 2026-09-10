@@ -28,7 +28,8 @@ from lightyear_data import cloudbank_secret_rotation_gke as checkpoint_module
 from lightyear_data.cloudbank_image_security import ImageJournal
 from lightyear_data.cloudbank_journeys import ACK, SERVICES, JourneyFailure, require, hashed
 from lightyear_data.cloudbank_journeys_gke import GkeRuntime
-from lightyear_data.cloudbank_ms67_drills import FinalDrills, verify_observation as verify_drills, verify_continuation
+from lightyear_data.cloudbank_ms67_drills import (FinalDrills, verify_observation as verify_drills,
+                                                verify_continuation, verify_customer_failure)
 from lightyear_data.cloudbank_sql_recovery import invoke, verified, write_signed
 from lightyear_data.contracts import content_hash, sign
 
@@ -36,6 +37,7 @@ REGION = "us-west1"
 CLUSTER = NAMESPACE = "cloudbank-ms67"
 STATE_TYPE = "lightyear-ms67-resumable-final-closeout"
 DRILL_CONTINUATION_SOURCE = "9c159d2b87d411a23b7dbb4e7cc8c41e3398d532"
+CUSTOMER_REPAIR_SOURCE = "9595747e91c75ad33607512932d65d9a6cff7ef6"
 CHILDREN = {"secret-rotation": "cloudbank_secret_rotation", "log-correlation": "cloudbank_log_correlation",
             "alert-drill": "cloudbank_alert_drill", "network-enforcement": "cloudbank_network_enforcement",
             "runtime-identity": "cloudbank_runtime_identity"}
@@ -107,10 +109,13 @@ def observer(callback):
 
 
 class Session:
-    def __init__(self, directory, context, key, commit, retry_of=None, resume_drills=False):
+    def __init__(self, directory, context, key, commit, retry_of=None, resume_drills=False, repair_customer_startup=False):
         self.directory, self.context, self.key, self.commit = directory, context, key, commit
         self.path = directory / "finish-state.json"
         require(not resume_drills or self.path.is_file(), "resume-drills-requires-existing-final-session")
+        require(not repair_customer_startup or (resume_drills and self.path.is_file()),
+                'customer-startup-repair-requires-existing-drill-continuation')
+        self.repair_customer_startup = repair_customer_startup
         wanted = {"state_type": STATE_TYPE, "controller_commit": commit,
                   "context_sha256": hashed(context), "credentials_persisted": False}
         if retry_of is not None:
@@ -144,13 +149,21 @@ class Session:
                                     generation=generation, invoke=invoke)
         if source_update:
             self.continue_drill_controller()
+        require(not repair_customer_startup or self.state.get('customer_startup_repair') is True,
+                'verified-customer-reseed-source-transition-required')
         self.save()
 
     def continue_drill_controller(self):
         """Record an explicit source transition; never relabel original evidence."""
         old = self.state
-        require(old.get("controller_commit") == DRILL_CONTINUATION_SOURCE
-                and not old.get("controller_transition") and old.get("ms67_complete") is False
+        repair = self.repair_customer_startup
+        source = CUSTOMER_REPAIR_SOURCE if repair else DRILL_CONTINUATION_SOURCE
+        previous = old.get('controller_transition')
+        require(old.get("controller_commit") == source
+                and ((repair and previous and previous.get('from') == DRILL_CONTINUATION_SOURCE
+                      and previous.get('to') == source
+                      and old.get('candidate_controller_commit') == DRILL_CONTINUATION_SOURCE)
+                     or (not repair and not previous)) and old.get("ms67_complete") is False
                 and set(old.get("completed", {})) == {"candidates", *CHILDREN}
                 and (old.get("active") or {}).get("phase") == "drills",
                 "reviewed-restored-drill-continuation-required")
@@ -166,15 +179,29 @@ class Session:
         require(checkpoint.get("run_id") == old["run_id"], "retained-drill-run-mismatch")
         verify_continuation(checkpoint, self.key, drill_inputs(self, security), self.context["images"], images,
                             self.context["environment"])
+        if repair:
+            # Read back the preceding signed controller archive as well as the
+            # latest exact failure before changing any continuation state.
+            prior_parent = self.read(previous['previous_parent'])
+            require(prior_parent.get('controller_commit') == DRILL_CONTINUATION_SOURCE
+                    and prior_parent.get('run_id') == old['run_id']
+                    and prior_parent.get('context_sha256') == old['context_sha256'],
+                    'customer-repair-controller-history-invalid')
+            verify_customer_failure(checkpoint)
         parent_ref = self.publish("retained-controller-" + old["content_sha256"] + ".json", old)
         checkpoint_ref = self.publish("retained-domain-failure-" + checkpoint["content_sha256"] + ".json", checkpoint)
         self.state = {**old, "controller_commit": self.commit,
             "candidate_controller_commit": DRILL_CONTINUATION_SOURCE,
-            "controller_transition": {"from": DRILL_CONTINUATION_SOURCE, "to": self.commit,
+            "controller_transition": {"from": source, "to": self.commit,
                 "previous_parent": parent_ref, "previous_drill_failure": checkpoint_ref,
+                "previous_transition": previous,
                 "retained_context_sha256": hashed(self.context), "measurements_changed": False,
-                "reason": "retain-database-differences-and-continue-only-missing-drills"}}
-        print("MS67_FINAL_CONTINUATION=VERIFIED; retained images, controls, rolling and node evacuation", flush=True)
+                "reason": ('stop-customer-fixture-reseeding-on-serving-replica-startup' if repair else
+                           "retain-database-differences-and-continue-only-missing-drills")}}
+        if repair:
+            self.state['customer_startup_repair'] = True
+        print(('MS67_FINAL_CONTINUATION=VERIFIED; retained images and controls; customer startup repair bound to failed evidence'
+               if repair else 'MS67_FINAL_CONTINUATION=VERIFIED; retained images, controls, rolling and node evacuation'), flush=True)
 
     def save(self):
         with observer(None):
@@ -435,7 +462,8 @@ def run_drills(session, security, images):
     session.state["active"] = {"phase": "drills", "output": str(output)}
     session.save()
     with observer(session.checkpoint):
-        result = FinalDrills(runtime, images, bindings, session.key, ACCOUNT, uri, state=state).run()
+        result = FinalDrills(runtime, images, bindings, session.key, ACCOUNT, uri, state=state).run(
+            repair_customer_startup=session.state.get('customer_startup_repair', False))
     reference = session.publish("drills-observation-" + uuid.uuid4().hex + ".json", result)
     if result.get("status") == "failed":
         print("MS67_FINAL_DRILL_RESULT=" + reference["uri"], flush=True)
@@ -520,7 +548,8 @@ def assemble(session, retained_values, security, children, drills, current):
     for phase, value in children.items():
         verify_child(phase, value, context, key)
     current_tools.verify_result(current, context, key)
-    image_context = {"run_id": session.state["run_id"], "controller_commit": session.commit,
+    image_context = {"run_id": session.state["run_id"],
+                     "controller_commit": session.state.get('candidate_controller_commit', session.commit),
                      "images": context["images"], "bindings": context["bindings"]}
     images = candidate_tools.verify_result(security, image_context, key)
     verify_drills(drills, key, drill_inputs(session, security), context["images"], images, context["environment"])
@@ -585,6 +614,8 @@ def main(argv=None):
                         help="verify a failed pre-drill build and resume a separate signed retry session")
     parser.add_argument("--resume-drills", action="store_true",
                         help="retain the restored domain-failure evidence and continue only unfinished drills")
+    parser.add_argument('--repair-customer-startup', action='store_true',
+                        help='verify the recorded customer reseed failure and disable repeat Liquibase initialization')
     args = parser.parse_args(argv)
     os.umask(0o077)
     for tool in ("git", "gcloud", "kubectl"):
@@ -614,7 +645,8 @@ def main(argv=None):
         retry_of = None
         if args.retry_candidate_build:
             directory, retry_of = candidate_retry(directory, context, key, args.retry_candidate_build)
-        session = Session(directory, context, key, commit, retry_of=retry_of, resume_drills=args.resume_drills)
+        session = Session(directory, context, key, commit, retry_of=retry_of, resume_drills=args.resume_drills,
+                          repair_customer_startup=args.repair_customer_startup)
         print("MS67_FINAL_RETAINED=MS65,MS66,SQL_630,300_SECOND_LOAD", flush=True)
         if session.state.get("ms67_complete"):
             receipt = session.read(session.state["completed"]["admission"])

@@ -86,7 +86,7 @@ def expanded(value, substitutions, build_id):
     value = value.replace("$$", "\x00")
     variables = {**substitutions, "PROJECT_ID": PROJECT, "BUILD_ID": build_id}
     for name, replacement in variables.items():
-        value = value.replace(" + name + ", replacement)
+        value = value.replace("$" + "{" + name + "}", replacement)
         value = re.sub(r"\$" + re.escape(name) + r"\b", lambda _: replacement, value)
     return value.replace("\x00", "$")
 

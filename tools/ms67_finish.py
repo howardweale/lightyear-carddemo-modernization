@@ -106,11 +106,13 @@ def observer(callback):
 
 
 class Session:
-    def __init__(self, directory, context, key, commit):
+    def __init__(self, directory, context, key, commit, retry_of=None):
         self.directory, self.context, self.key, self.commit = directory, context, key, commit
         self.path = directory / "finish-state.json"
         wanted = {"state_type": STATE_TYPE, "controller_commit": commit,
                   "context_sha256": hashed(context), "credentials_persisted": False}
+        if retry_of is not None:
+            wanted["retry_of"] = retry_of
         generation = "0"
         if self.path.exists():
             local = verified(load(self.path), key)
@@ -190,6 +192,48 @@ class Session:
         print("MS67_FINAL_VERIFIED=" + phase, flush=True)
 
 
+def candidate_retry(directory, context, key, build_id):
+    """Verify the old attempt read-only; continue in a distinct signed session.
+
+    No signed state is edited to accept a new controller. The deterministic
+    child directory resumes the same retry after a disconnected submission.
+    """
+    require(re.fullmatch(r"[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}", build_id), "candidate-retry-build-id-invalid")
+    local = verified(load(directory / "finish-state.json"), key)
+    require(re.fullmatch(r"ms67-final-[0-9a-f]{32}", local.get("run_id", "")), "final-state-run-id-invalid")
+    prefix = BUCKET + "/final-closeout/" + local["run_id"]
+    uri = prefix + "/finish-state.json"
+    generation = cloud("storage", "objects", "describe", uri, "--format=value(generation)").strip()
+    require(re.fullmatch(r"[1-9][0-9]*", generation), "candidate-retry-generation-invalid")
+    state = verified(json.loads(cloud("storage", "cat", uri + "#" + generation)), key)
+    require(state.get("state_type") == STATE_TYPE and state.get("run_id") == local["run_id"]
+            and state.get("context_sha256") == hashed(context) and state.get("credentials_persisted") is False
+            and state.get("ms67_complete") is False and state.get("completed") == {} and state.get("active") is None,
+            "candidate-retry-requires-unchanged-inputs-and-no-live-phases")
+    candidate = state.get("candidate_build", {})
+    require(candidate.get("build_id") == build_id and candidate.get("phase") == "submitted",
+            "candidate-retry-saved-build-mismatch")
+    config = json.loads((directory / "candidate-cloudbuild.json").read_text())
+    require(hashed(config) == candidate.get("config_sha256"), "candidate-retry-config-hash-mismatch")
+    build = json.loads(cloud("builds", "describe", build_id, "--region=" + REGION, "--format=json"))
+    verify_build(build, config)
+    require(build.get("id") == build_id and build.get("status") == "FAILURE", "candidate-retry-requires-confirmed-failed-build")
+    old_context = verified(json.loads(cloud("storage", "cat", prefix + "/candidate-context.json")), key)
+    require(all(old_context.get(k) == v for k, v in {
+        "run_id": state["run_id"], "controller_commit": state["controller_commit"],
+        "images": context["images"], "bindings": context["bindings"]}.items()), "candidate-retry-input-binding-mismatch")
+    # Keep the original state and the failed build immutable. Record their exact
+    # identity in every checkpoint of the new session, including after resume.
+    reference = {"build_id": build_id, "controller_commit": state["controller_commit"],
+                 "run_id": state["run_id"], "state_uri": uri, "state_generation": generation,
+                 "state_sha256": state["content_sha256"], "config_sha256": candidate["config_sha256"],
+                 "build_status": "FAILURE", "retained_context_sha256": hashed(context)}
+    target = directory / ("candidate-retry-" + build_id)
+    target.mkdir(exist_ok=True)
+    print("MS67_FINAL_CANDIDATE_RETRY_OF=" + build_id, flush=True)
+    return target, reference
+
+
 def candidate_config(context, previous, prefix):
     git = builder(previous, "checkout-fix")
     sdk = builder(previous, "sign-verify-and-scan-images")
@@ -209,7 +253,10 @@ def candidate_config(context, previous, prefix):
         {"id": "prepare-packaging-revision", "name": sdk, "entrypoint": "bash", "args": ["-ceu",
          f"gcloud storage cp {prefix}/candidate-context.json /workspace/final-context.json\n" +
          " ".join(common + ["prepare"] + options)], "secretEnv": ["LIGHTYEAR_CLOUDBANK_BASELINE_EVIDENCE_KEY"]},
-        {"id": "build-eight-packaging-revisions", "name": docker, "entrypoint": "sh", "args": ["/workspace/final-images/package.sh"]},
+        {"id": "save-eight-baseline-images", "name": docker, "entrypoint": "sh", "args": ["/workspace/final-images/save.sh"]},
+        {"id": "preserve-config-and-layers", "name": sdk, "entrypoint": "python3", "args": common[1:] + ["revise"] + options,
+         "secretEnv": ["LIGHTYEAR_CLOUDBANK_BASELINE_EVIDENCE_KEY"]},
+        {"id": "push-eight-packaging-revisions", "name": docker, "entrypoint": "sh", "args": ["/workspace/final-images/publish.sh"]},
         {"id": "sign-scan-and-verify-revisions", "name": sdk, "entrypoint": "python3", "args": common[1:] + ["secure"] + options,
          "secretEnv": ["LIGHTYEAR_CLOUDBANK_BASELINE_EVIDENCE_KEY"], "env": ["MS67_FINAL_BUILD_ID=$BUILD_ID"]}]
     return {"steps": steps, "serviceAccount": sa, "tags": ["ms67-final-images", context["run_id"]],
@@ -264,6 +311,10 @@ def candidates(session):
         verify_build(build, config)
         status = build.get("status")
         print("MS67_FINAL_IMAGES=" + str(status), flush=True)
+        if status == "FAILURE":
+            for step in build.get("steps", []):
+                if step.get("status") == "FAILURE":
+                    print("MS67_FINAL_IMAGE_FAILED_STEP=" + step["id"] + "; exit=" + str(step.get("exitCode")), flush=True)
         if status == "SUCCESS":
             break
         require(status in {"QUEUED", "WORKING", "PENDING"}, "candidate-image-build-failed-inspect-build-" + build_id)
@@ -488,6 +539,8 @@ def main(argv=None):
     action.add_argument("--execute", action="store_true")
     action.add_argument("--recover", action="store_true")
     parser.add_argument("--evidence-root", type=Path, default=Path.home() / "ms67-evidence")
+    parser.add_argument("--retry-candidate-build", metavar="FAILED_BUILD_ID",
+                        help="verify a failed pre-drill build and resume a separate signed retry session")
     args = parser.parse_args(argv)
     os.umask(0o077)
     for tool in ("git", "gcloud", "kubectl"):
@@ -514,7 +567,10 @@ def main(argv=None):
     try:
         print("MS67_FINAL=VERIFYING_RETAINED_EVIDENCE", flush=True)
         context, values, paths = retained(root, key)
-        session = Session(directory, context, key, commit)
+        retry_of = None
+        if args.retry_candidate_build:
+            directory, retry_of = candidate_retry(directory, context, key, args.retry_candidate_build)
+        session = Session(directory, context, key, commit, retry_of=retry_of)
         print("MS67_FINAL_RETAINED=MS65,MS66,SQL_630,300_SECOND_LOAD", flush=True)
         if session.state.get("ms67_complete"):
             receipt = session.read(session.state["completed"]["admission"])

@@ -14,7 +14,10 @@ The original measurements, signatures and failed attempts remain intact.
 
 1. Create eight signed OCI packaging revisions in Cloud Build using the existing
    successful image build's account and resolved builder digests. Each revision
-   changes only one image label. Docker inspection must prove identical layers,
+   changes only one image label. The runner saves each baseline image, copies its
+   complete image configuration with that label added, streams unchanged layers
+   into a load archive, then loads and pushes it. It does not rebuild a Dockerfile,
+   which can rewrite inherited configuration. Docker inspection must prove identical layers,
    platform and execution configuration, with a distinct image/config digest.
    Both baseline and candidate signatures/provenance are verified. Fresh Trivy
    scans cover OS and Java packages with zero high/critical findings. Baseline
@@ -46,6 +49,22 @@ this bounded nonproduction environment; it does not claim production readiness.
 Repeat the same `--execute` command to resume an existing image build or reuse
 completed phases. An uncertain submission is reconciled by its unique tag;
 the launcher refuses to submit a duplicate when the outcome is unknown.
+
+For the confirmed failed candidate build `43bee3ac-7b44-4407-bafe-bdfedca5bd8e`,
+use the reviewed corrective commit and run:
+
+```sh
+python3 tools/ms67_finish.py --execute \
+  --retry-candidate-build 43bee3ac-7b44-4407-bafe-bdfedca5bd8e
+```
+
+This verifies the original signed checkpoint, unchanged retained inputs, exact
+build configuration, and terminal build failure. It requires that no live phase
+started or completed. The failed session remains unchanged; a separate signed
+session records its build ID, controller, checkpoint generation and hash. The
+retry uses a new run ID and image tags. Repeat this same command to resume it;
+include the same `--retry-candidate-build` argument with `--recover` if a later
+live phase needs recovery. Never manually edit or delete either session's state.
 
 After an interrupted live phase, stop the original CLI process and run:
 

@@ -170,6 +170,22 @@ the same time; the submission script refuses another tagged active build.
 
 ### Durable MS65 rehearsal
 
+For the recorded September 10 SQL acceptance under the 630-second PITR policy,
+run `python3 tools/ms67_resume_ms65.py` from the updated controller checkout.
+This continuation verifies the accepted SQL receipt and matching image/journey
+inputs, fetches the previously successful MS65 environment, and runs the
+canonical three-step Cloud Build using controller `b482699` and resolved builder
+digests. It uses the existing service account and evidence key version 1.
+It starts no SQL drill, image rebuild or sustained load run. The MS65 worker
+performs its documented temporary CreditScore canary and rollback.
+
+The helper records the submission before starting it. Run the same command after
+a disconnect to adopt the existing build. An uncertain or failed submission is
+never automatically replaced with another build. Success is printed only after
+validating the signed receipt and exact release/recovery bindings:
+`MS67_MS65_REFRESH=VERIFIED`. Full MS67 platform admission remains separate.
+
+
 After the shared journey build passes all 18 scenarios and the isolated Cloud SQL
 recovery drill passes, admit those separately signed observations into a live MS65
 rehearsal. This executor does not infer business or recovery success from Pod

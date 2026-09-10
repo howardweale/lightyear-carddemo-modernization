@@ -23,6 +23,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 
 from cloudbank_sql_recovery import load_bound_inputs
+from cloudbank_sustained_load import bound_inputs as load_bound_sustained_inputs
 from ms67_accept_sql_recovery import ACCOUNT, BUCKET, IMAGE_BUILD, LOAD_RUN, PROJECT
 from lightyear_data import cloudbank_platform_qualification as platform
 from lightyear_data import cloudbank_production_readiness as ms65
@@ -176,6 +177,9 @@ def context_match(value, context):
         return (bindings.get("images_sha256") == hashed(context["images"])
                 and bindings.get("environment") == context["environment"]
                 and bindings.get("journeys_content_sha256") == context["journeys_sha256"])
+    if kind == sustained.OBSERVATION_TYPE:
+        return (bindings == context["load_bindings"] and value.get("images") == context["images"]
+                and value.get("environment") == context["environment"])
     return (bindings == context["bindings"] and value.get("environment") == context["environment"]
             and ("images" not in value or value["images"] == context["images"]))
 
@@ -187,7 +191,7 @@ def verify_contract(value, key, context):
     elif kind == ms66.RECEIPT_TYPE:
         require(not ms66.validate_execution_receipt(value, key, ROOT), "ms66-contract-rejected")
     elif kind == sustained.OBSERVATION_TYPE:
-        sustained.verify_observation(value, key, bindings=context["bindings"], images=context["images"],
+        sustained.verify_observation(value, key, bindings=context["load_bindings"], images=context["images"],
                                      environment=context["environment"], profile=context["profile"], root=ROOT)
     elif kind == "lightyear-cloudbank-isolated-sql-recovery":
         validate_database_recovery(value, key, images=context["images"],
@@ -241,6 +245,36 @@ def inspect(value, key, context, locator, file_sha):
     return result
 
 
+def retained_load_inputs(bundle, documents, observation, key):
+    """Use the canonical loader for all five load-specific evidence bindings."""
+    verified(observation, key)
+    observed_bindings = observation.get("bindings") or {}
+
+    def locate(field, kind, expected_hash, code):
+        require(isinstance(expected_hash, str) and re.fullmatch(r"[0-9a-f]{64}", expected_hash), code)
+        matches = [(value, locator) for value, locator, _sha in documents
+                   if value.get(field) == kind and value.get("content_sha256") == expected_hash]
+        require(bool(matches), code)
+        value, locator = matches[0]
+        verified(value, key)
+        current, _sha = read_local(Path(locator))
+        require(current == value, "closeout-evidence-changed-during-read")
+        return Path(locator)
+
+    profile_path = locate("profile_type", "lightyear-cloudbank-ms67-platform-profile",
+                          observed_bindings.get("platform_profile_sha256"),
+                          "closeout-matching-profile-not-located")
+    ms66_path = locate("receipt_type", ms66.RECEIPT_TYPE,
+                       observed_bindings.get("ms66_receipt_sha256"),
+                       "closeout-matching-ms66-receipt-not-located")
+    args = argparse.Namespace(
+        image_lock=bundle / "image-lock.json", ms64_receipt=bundle / "ms64-receipt.json",
+        journeys=bundle / "journeys.json", platform_profile=profile_path, ms66_receipt=ms66_path,
+        project=PROJECT, region="us-west1", cluster="cloudbank-ms67", namespace="cloudbank-ms67")
+    # This function only reads/validates receipts; it does not call the load runner.
+    return load_bound_sustained_inputs(args, key)
+
+
 def anchors(root, documents, key):
     execution = root / ("load-fix-run-" + IMAGE_BUILD)
     refresh = execution / "qualification-refresh" / ("from-" + LOAD_RUN)
@@ -255,17 +289,16 @@ def anchors(root, documents, key):
              and v.get("run_id") == LOAD_RUN and v.get("content_sha256") == LOAD_SHA]
     require(bool(loads), "closeout-recorded-passing-load-not-located")
     load = verified(loads[0], key)
-    profiles = [v for v, _locator, _sha in documents
-                if v.get("profile_type") == "lightyear-cloudbank-ms67-platform-profile"
-                and v.get("content_sha256") == load.get("bindings", {}).get("platform_profile_sha256")]
-    require(bool(profiles) and not platform.validate_profile(profiles[0], key),
-            "closeout-matching-profile-not-located")
-    context = {"images": images, "environment": binding["environment"], "profile": profiles[0],
+    load_images, profile, load_bindings, load_environment = retained_load_inputs(bundle, documents, load, key)
+    require(load_images == images and load_environment == binding["environment"],
+            "closeout-load-and-sql-input-context-mismatch")
+    context = {"images": images, "environment": binding["environment"], "profile": profile,
+               "load_bindings": load_bindings,
                "journeys_sha256": journeys["content_sha256"],
                "ms65_environment_sha256": state["inputs"]["ms65_environment_sha256"],
                "bindings": {"image_lock_sha256": lock["content_sha256"],
                             "ms64_receipt_sha256": receipt["content_sha256"],
-                            "platform_profile_sha256": profiles[0]["content_sha256"]}}
+                            "platform_profile_sha256": profile["content_sha256"]}}
     require(all(context["environment"].get(k) == v for k, v in
                 {"project": PROJECT, "region": "us-west1", "cluster": "cloudbank-ms67", "namespace": "cloudbank-ms67"}.items()),
             "closeout-nonproduction-scope-mismatch")
@@ -275,7 +308,8 @@ def anchors(root, documents, key):
     require(sql.get("reassessment", {}).get("source_observation", {}).get("content_sha256") == SQL_SOURCE,
             "closeout-accepted-sql-source-mismatch")
     verify_contract(sql, key, context)
-    retained = {"load": {"run_id": LOAD_RUN, "content_sha256": LOAD_SHA, "status": "verified"},
+    retained = {"ms66": {"content_sha256": load_bindings["ms66_receipt_sha256"], "status": "verified"},
+                "load": {"run_id": LOAD_RUN, "content_sha256": LOAD_SHA, "status": "verified"},
                 "sql": {"content_sha256": sql["content_sha256"], "status": "verified-under-approved-630-policy"}}
     return context, retained
 

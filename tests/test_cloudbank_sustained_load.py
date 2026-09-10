@@ -16,7 +16,8 @@ from unittest.mock import patch
 
 from lightyear_data.cloudbank_journeys import JourneyFailure, SERVICES, hashed
 from lightyear_data.cloudbank_sustained_load import (
-    HTTP_SERVICES, OPERATIONS, OBSERVATION_TYPE, PASS, validate_summary, verify_observation, workload,
+    HTTP_SERVICES, OPERATIONS, OBSERVATION_TYPE, PASS, validate_summary, validate_failure_diagnostics,
+    verify_observation, workload,
 )
 from lightyear_data.contracts import sign
 
@@ -29,18 +30,64 @@ def summary():
     requests = sum(counts.values())
     replicas = {f"{s}_{i}": 1 for s in HTTP_SERVICES for i in range(2)}
     replicas["account_0"] += requests - len(replicas)
-    return {"format": "lightyear-k6-business-summary-v1", "run_id": "ms67-load-test",
+    return {"format": "lightyear-k6-business-summary-v2", "run_id": "ms67-load-test",
             "configured_duration_seconds": 300, "configured_vus": 10, "cycle_seconds": 10,
             "measured_duration_ms": 301000, "requests": requests, "errors": 0,
             "http_requests": requests, "http_failures": 0, "p95_ms": 500, "latency_samples": requests,
             "cycles_started": 40, "cycles_completed": 40, "checks_effects": 80, "checks_delivery_p95_ms": 1500,
             "iterations": 40, "vus_max": 10, "operations": {name: {"requests": n, "latency_samples": n, "p95_ms": 400, "errors": 0}
-                for name, n in counts.items()}, "vu_cycles": {str(i): 4 for i in range(1, 11)}, "replica_requests": replicas}
+                for name, n in counts.items()}, "vu_cycles": {str(i): 4 for i in range(1, 11)}, "replica_requests": replicas,
+            "failure_diagnostics": []}
+
+
+def failed_transfer():
+    value = summary()
+    value.update(measured_duration_ms=7000, errors=1, http_failures=1)
+    value["operations"]["transfer"]["errors"] = 1
+    value["failure_diagnostics"] = [{"operation": "transfer", "kinds": {"transport": 1},
+        "transport_causes": {"unexpected_eof": 1}, "http_status": {"min": 200, "max": 200},
+        "k6_error_code": {"min": 1000, "max": 1000}, "replica_index": {"min": 1, "max": 1}}]
+    return value
 
 
 class AdmissionTests(unittest.TestCase):
     def test_exact_threshold_can_pass(self):
         self.assertEqual(validate_summary(summary(), "ms67-load-test")["p95_ms"], 500)
+
+    def test_client_failure_precedes_duration_even_when_server_returned_200(self):
+        failed = failed_transfer()
+        with self.assertRaisesRegex(JourneyFailure, "load-client-transport-error"):
+            validate_summary(failed, failed["run_id"])
+        # Removing/relabeling counters cannot turn retained failure evidence
+        # into a passing observation, even with a full-duration measurement.
+        failed.update(errors=0, http_failures=0, measured_duration_ms=301000)
+        with self.assertRaisesRegex(JourneyFailure, "load-client-transport-error"):
+            validate_summary(failed, failed["run_id"])
+        for kind, reason in (("http_status", "load-unexpected-http-status"),
+                             ("response_json", "load-response-json-invalid"),
+                             ("response_body", "load-response-body-invalid"),
+                             ("business_contract", "load-business-contract-failed")):
+            failed = failed_transfer()
+            failed["failure_diagnostics"][0].update(kinds={kind: 1}, transport_causes={})
+            with self.subTest(kind=kind), self.assertRaisesRegex(JourneyFailure, reason):
+                validate_summary(failed, failed["run_id"])
+
+    def test_failure_diagnostics_reject_unbounded_or_raw_response_fields(self):
+        original = failed_transfer()["failure_diagnostics"]
+        validate_failure_diagnostics(original)
+        changes = (("url", "http://private.invalid/?secret=PRIVATE"),
+                   ("response", "PRIVATE"), ("operation", "PRIVATE"),
+                   ("transport_causes", {"PRIVATE": 1}), ("kinds", {"transport": 11}),
+                   ("http_status", {"min": 200, "max": 199}),
+                   ("k6_error_code", {"min": 0, "max": float("inf")}),
+                   ("replica_index", {"min": True, "max": 1}))
+        for name, value in changes:
+            changed = copy.deepcopy(original)
+            changed[0][name] = value
+            with self.subTest(field=name), self.assertRaisesRegex(JourneyFailure, "load-failure-diagnostics-invalid"):
+                validate_failure_diagnostics(changed)
+        with self.assertRaises(JourneyFailure):
+            validate_failure_diagnostics(original * 2)
 
     def test_failed_incomplete_or_relabelled_runs_are_rejected(self):
         cases = {"run_id": "another", "configured_duration_seconds": 3, "configured_vus": 1,
@@ -182,7 +229,9 @@ class AdmissionTests(unittest.TestCase):
             def close(self):
                 pass
 
-        for fail_upload in (False, True):
+        for outcome in ("passed", "upload-failure", "client-failure"):
+            fail_upload = outcome == "upload-failure"
+            client_failure = outcome == "client-failure"
             class Journal:
                 def __init__(self, path, uri, project, key, signer):
                     self.path, self.key, self.signer = path, key, signer
@@ -194,7 +243,7 @@ class AdmissionTests(unittest.TestCase):
                         raise CheckpointFailure("load-test-upload-unconfirmed")
                     return save_observation(self.path, value, self.key, self.signer)
 
-            with self.subTest(fail_upload=fail_upload), tempfile.TemporaryDirectory() as directory, contextlib.ExitStack() as stack:
+            with self.subTest(outcome=outcome), tempfile.TemporaryDirectory() as directory, contextlib.ExitStack() as stack:
                 stack.enter_context(patch.dict(os.environ, LIGHTYEAR_NON_PRODUCTION_ACK="I-AUTHORIZE-MS67-NON-PRODUCTION-MUTATIONS"))
                 replacements = {
                     "evidence_key": lambda _: "test-key",
@@ -204,7 +253,7 @@ class AdmissionTests(unittest.TestCase):
                     "live_snapshot": lambda _: (baseline["live"]["before"], baseline["deployment_specs"]["before"]),
                     "model_snapshot": lambda *_: baseline["model"]["before"],
                     "cluster_identity": lambda *_: profile["cluster_uid_sha256"],
-                    "execute_k6": lambda *_: (0, summary()),
+                    "execute_k6": lambda *_: (108, failed_transfer()) if client_failure else (0, summary()),
                 }
                 for name, replacement in replacements.items():
                     stack.enter_context(patch.object(tool, name, replacement))
@@ -223,9 +272,15 @@ class AdmissionTests(unittest.TestCase):
                     code = tool.main(argv)
                 result = json.loads((output / "sustained-load.observation.json").read_text())
                 self.assertNotIn("private-test", printed.getvalue())
-                self.assertEqual(code, 1 if fail_upload else 0, printed.getvalue())
+                self.assertEqual(code, 0 if outcome == "passed" else 1, printed.getvalue())
                 if fail_upload:
                     self.assertEqual(result["evidence_upload"], "unconfirmed")
+                    with self.assertRaises(JourneyFailure):
+                        verify_observation(result, "test-key", **verification)
+                elif client_failure:
+                    self.assertEqual(result["reason"], "load-client-transport-error")
+                    self.assertEqual(result["summary"]["failure_diagnostics"], failed_transfer()["failure_diagnostics"])
+                    self.assertIn("unexpected_eof", printed.getvalue())
                     with self.assertRaises(JourneyFailure):
                         verify_observation(result, "test-key", **verification)
                 else:

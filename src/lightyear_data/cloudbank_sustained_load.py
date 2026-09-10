@@ -30,6 +30,8 @@ CYCLE_SECONDS = 10
 MAX_RUN_SECONDS = MINIMUM_LOAD_SECONDS + 150
 SUMMARY_PREFIX = "MS67_K6_SUMMARY="
 HEX = r"[0-9a-f]{64}"
+FAILURE_KINDS = {"transport", "http_status", "response_body", "response_json", "business_contract"}
+TRANSPORT_CAUSES = {"unexpected_eof", "connection_closed", "decompression", "timeout", "other"}
 
 
 def workload(root):
@@ -50,15 +52,52 @@ def counter(value):
     return number(value) and value == int(value)
 
 
+def validate_failure_diagnostics(rows):
+    """Only fixed categories and bounded numbers may enter saved diagnostics."""
+    require(isinstance(rows, list) and len(rows) <= len(OPERATIONS), "load-failure-diagnostics-invalid")
+    seen = set()
+    for row in rows:
+        require(isinstance(row, dict) and set(row) == {
+            "operation", "kinds", "transport_causes", "http_status", "k6_error_code", "replica_index"},
+            "load-failure-diagnostics-invalid")
+        operation = row["operation"]
+        require(isinstance(operation, str) and operation in OPERATIONS and operation not in seen,
+                "load-failure-diagnostics-invalid")
+        seen.add(operation)
+        for field, allowed in (("kinds", FAILURE_KINDS), ("transport_causes", TRANSPORT_CAUSES)):
+            counts = row[field]
+            require(isinstance(counts, dict) and set(counts) <= allowed
+                    and all(counter(n) and 1 <= n <= MINIMUM_LOAD_CONCURRENCY for n in counts.values()),
+                    "load-failure-diagnostics-invalid")
+        require(bool(row["kinds"]), "load-failure-diagnostics-invalid")
+        for field, maximum in (("http_status", 599), ("k6_error_code", 9999), ("replica_index", 1)):
+            bounds = row[field]
+            require(isinstance(bounds, dict) and set(bounds) == {"min", "max"}
+                    and all(counter(n) and n <= maximum for n in bounds.values())
+                    and bounds["min"] <= bounds["max"], "load-failure-diagnostics-invalid")
+
+
 def validate_summary(value, run_id):
     """Recompute the gate independently; never trust k6's exit status alone."""
-    require(isinstance(value, dict) and value.get("format") == "lightyear-k6-business-summary-v1"
+    require(isinstance(value, dict) and value.get("format") == "lightyear-k6-business-summary-v2"
             and value.get("run_id") == run_id, "load-summary-identity-invalid")
     expected = {"format", "run_id", "configured_duration_seconds", "configured_vus", "cycle_seconds",
                 "measured_duration_ms", "requests", "errors", "http_requests", "http_failures", "p95_ms",
                 "latency_samples", "cycles_started", "cycles_completed", "checks_effects", "checks_delivery_p95_ms",
-                "iterations", "vus_max", "operations", "vu_cycles", "replica_requests"}
+                "iterations", "vus_max", "operations", "vu_cycles", "replica_requests", "failure_diagnostics"}
     require(set(value) == expected, "load-summary-fields-invalid")
+    validate_failure_diagnostics(value["failure_diagnostics"])
+    for field in ("requests", "errors", "http_requests", "http_failures", "latency_samples", "cycles_started",
+                  "cycles_completed", "checks_effects", "iterations"):
+        require(counter(value[field]), "load-summary-counter-invalid")
+    # Report the request failure that caused the global abort before its short
+    # duration. Every duration/concurrency/request/latency gate still applies.
+    reasons = {"transport": "load-client-transport-error", "http_status": "load-unexpected-http-status",
+               "response_body": "load-response-body-invalid", "response_json": "load-response-json-invalid",
+               "business_contract": "load-business-contract-failed"}
+    for kind, reason in reasons.items():
+        require(not any(row["kinds"].get(kind) for row in value["failure_diagnostics"]), reason)
+    require(value["errors"] == 0 and value["http_failures"] == 0, "load-business-or-http-errors")
     require(value["configured_duration_seconds"] == MINIMUM_LOAD_SECONDS
             and value["configured_vus"] == MINIMUM_LOAD_CONCURRENCY
             and value["cycle_seconds"] == CYCLE_SECONDS
@@ -66,10 +105,6 @@ def validate_summary(value, run_id):
             and number(value["measured_duration_ms"])
             and MINIMUM_LOAD_SECONDS * 1000 <= value["measured_duration_ms"] <= MAX_RUN_SECONDS * 1000,
             "load-duration-or-concurrency-invalid")
-    for field in ("requests", "errors", "http_requests", "http_failures", "latency_samples", "cycles_started",
-                  "cycles_completed", "checks_effects", "iterations"):
-        require(counter(value[field]), "load-summary-counter-invalid")
-    require(value["errors"] == 0 and value["http_failures"] == 0, "load-business-or-http-errors")
     require(number(value["p95_ms"]) and value["p95_ms"] <= MAXIMUM_P95_MS, "load-p95-threshold-exceeded")
     require(MINIMUM_LOAD_REQUESTS <= value["requests"] <= 50000
             and value["latency_samples"] == value["requests"] == value["http_requests"],
@@ -128,6 +163,7 @@ def execute_k6(root, configuration, *, executable="k6", timeout=MAX_RUN_SECONDS)
             require(len(lines) == 1, "load-k6-summary-missing")
             result = json.loads(lines[0][len(SUMMARY_PREFIX):])
             require(isinstance(result, dict), "load-k6-summary-invalid")
+            validate_failure_diagnostics(result.get("failure_diagnostics"))
             return process.returncode, result
         except subprocess.TimeoutExpired:
             raise JourneyFailure("load-k6-timeout") from None

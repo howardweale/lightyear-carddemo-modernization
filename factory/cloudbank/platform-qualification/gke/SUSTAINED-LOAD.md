@@ -56,6 +56,7 @@ authorized operator. From the reviewed controller checkout:
 
 ```bash
 export LIGHTYEAR_NON_PRODUCTION_ACK=I-AUTHORIZE-MS67-NON-PRODUCTION-MUTATIONS
+unset LIGHTYEAR_CLOUDBANK_BASELINE_EVIDENCE_KEY
 caffeinate -i bash factory/cloudbank/platform-qualification/gke/run-sustained-load.sh
 ```
 
@@ -68,6 +69,9 @@ Supply an `INPUTS_ROOT` argument to use another explicitly selected set with
 `ms66-receipt.json` and `journeys.json`. Project, region, cluster and namespace
 use the same `GCP_PROJECT_ID`, `GCP_REGION`, `GKE_CLUSTER_NAME` and
 `GKE_NAMESPACE` variables as the other GKE launchers.
+Unsetting the local evidence-key override makes the controller read the active
+key from the project's `cloudbank-ms67-evidence-key` Secret Manager secret. This
+avoids a stale local development key rejecting otherwise valid live receipts.
 
 The runner prints progress every 20 seconds. Setup and final checks add time to
 the five-minute measurement. Keep Terminal open; `caffeinate` prevents idle
@@ -82,7 +86,14 @@ MS67_LOAD_VERIFICATION=PASSED
 The signed object is stored under the printed URI:
 `gs://PROJECT-ms67-evidence/sustained-load/RUN_ID/sustained-load.observation.json`.
 Failures save bounded phase, error counters and per-operation latency when
-available. A process exit, an in-progress checkpoint, or a failed threshold is
+available. Summary v2 also records the failing operation, replica index range,
+observed HTTP status and k6 error-code ranges, and fixed failure categories.
+Client messages are reduced to `unexpected_eof`, `connection_closed`,
+`decompression`, `timeout` or `other`; their raw text is never retained.
+HTTP 200 at the server does not admit a truncated or undecodable client response.
+The controller reports the client/HTTP/body/business failure before the short
+duration caused by its abort; the 300-second, 10-user and latency gates are unchanged.
+A process exit, an in-progress checkpoint, or a failed threshold is
 never a passing observation. If interrupted, terminate the original launcher
 before starting a fresh run. The only owned infrastructure resources are local
 k6/port-forward processes; the runner creates no Kubernetes resources and never
@@ -93,7 +104,8 @@ Credentials and bearer tokens reach k6 through an anonymous stdin pipe. They
 are never saved in a script, argv, environment, output or metric tag. k6 runs with
 an empty config and a restricted environment, with debugging, cloud outputs,
 usage reporting, trace exports and the control API disabled. The script emits
-only aggregate counts and timings; no response, token or chatbot text is kept.
+only aggregate counts, timings and the bounded failure fields above; no response,
+token, raw client error or chatbot text is kept.
 
 ## Verification development
 
@@ -101,10 +113,14 @@ only aggregate counts and timings; no response, token or chatbot text is kept.
 `tools/test_cloudbank_sustained_load.py` runs the actual pinned k6 binary against
 a local HTTP application double, including expiring OAuth tokens, body validation,
 expected business rejections, real HTTP failures and isolation from inherited
-k6 debug/export settings. Linux and macOS CI run these native checks. The optional
-`--full-duration` test exercises the full 300-second schedule locally. These are
+k6 debug/export settings. Transfer controls also commit successfully and return
+HTTP 200 before deliberately truncating the response or mislabeling its encoding;
+both must fail with the client cause preserved. Linux and macOS CI run these
+native checks. The optional `--full-duration` test exercises the full 300-second
+schedule locally. These are
 runner tests and never issue signed GKE qualification evidence.
 
 References: [k6 constant VUs](https://grafana.com/docs/k6/latest/using-k6/scenarios/executors/constant-vus/),
 [custom summaries](https://grafana.com/docs/k6/latest/results-output/end-of-test/custom-summary/),
-[expected HTTP statuses](https://grafana.com/docs/k6/latest/javascript-api/k6-http/expected-statuses/).
+[expected HTTP statuses](https://grafana.com/docs/k6/latest/javascript-api/k6-http/expected-statuses/),
+[client error codes](https://grafana.com/docs/k6/latest/javascript-api/error-codes/).

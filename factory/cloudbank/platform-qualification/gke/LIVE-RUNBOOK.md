@@ -111,8 +111,11 @@ delivery was seen; it does not prove correlation, alert behavior, rotation, MS65
 
 ## 4. Load and security
 
-- Run the same 18 MS #66 business journeys through k6 for at least 300 seconds, 1,000 requests and
-  concurrency 10. The gate requires zero errors and p95 latency no greater than 500 ms.
+- Retain the signed MS #66 receipt and its exact 18-journey PostgreSQL observation. Run the
+  [bounded k6 business workload](SUSTAINED-LOAD.md) against the same image lock and environment
+  for at least 300 seconds, 1,000 requests and concurrency 10. The gate requires zero unexpected
+  HTTP/business errors and p95 latency no greater than 500 ms. The deliberate restart and
+  recovery scenarios remain in the separately verified MS66 evidence, outside this steady-load window.
 - Verify all eight image signatures and provenance statements with Cosign.
 - Scan every digest with Trivy. The gate permits zero critical and zero high findings.
   Use [the eight-image security runner](IMAGE-SECURITY.md) to bind the signature,

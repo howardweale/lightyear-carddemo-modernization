@@ -9,6 +9,59 @@ permissions:
   contents: read
 
 jobs:
+  cloudbank-sustained-load:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-15]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.13"
+      - name: Install checksum-pinned native k6 for runner tests
+        shell: bash
+        run: |
+          python - <<'PY'
+          import hashlib, os, pathlib, platform, tarfile, urllib.request, zipfile
+          archives = {
+              ('Linux', 'x86_64'): ('linux-amd64.tar.gz', 'b5a8003c86f35f5cd5ceef1490312c48e587696c94d998cefc6d7b3b4cb1597d'),
+              ('Darwin', 'x86_64'): ('macos-amd64.zip', '45a08590511c8a6a9c6331645e60c41624924e848e29472e87c60ac956d50372'),
+              ('Darwin', 'arm64'): ('macos-arm64.zip', '37a028506bf13578de66c906296803775df28cc2504b1a8c5d786b2803e757c7'),
+          }
+          suffix, digest = archives[(platform.system(), platform.machine())]
+          name = 'k6-v2.2.0-' + suffix
+          root = pathlib.Path(os.environ['RUNNER_TEMP']) / 'lightyear-k6-test'
+          root.mkdir()
+          archive = root / name
+          with urllib.request.urlopen('https://github.com/grafana/k6/releases/download/v2.2.0/' + name, timeout=60) as response:
+              archive.write_bytes(response.read())
+          if hashlib.sha256(archive.read_bytes()).hexdigest() != digest:
+              raise SystemExit('k6 checksum mismatch')
+          if suffix.endswith('.zip'):
+              with zipfile.ZipFile(archive) as source:
+                  source.extractall(root)
+          else:
+              with tarfile.open(archive) as source:
+                  source.extractall(root, filter='data')
+          binaries = list(root.rglob('k6'))
+          if len(binaries) != 1:
+              raise SystemExit('k6 executable missing or ambiguous')
+          binaries[0].chmod(0o755)
+          with open(os.environ['GITHUB_PATH'], 'a') as out:
+              out.write(str(binaries[0].parent) + '\n')
+          PY
+      - name: Verify native business traffic and fail-closed evidence
+        shell: bash
+        env:
+          PYTHONPATH: src
+        run: |
+          bash -n factory/cloudbank/platform-qualification/gke/run-sustained-load.sh
+          python -m unittest discover -s tests -p test_cloudbank_sustained_load.py -v
+          python tools/test_cloudbank_sustained_load.py
+
   windows-gcloud-recovery:
     runs-on: windows-latest
     timeout-minutes: 10

@@ -639,8 +639,7 @@ function bindControls() {
   $("fit").addEventListener("click", fitGraph);
   $("focus-node").addEventListener("click", () => loadNeighborhood(state.selectedId));
   $("open-proof-run").addEventListener("click", async () => {
-    switchRightPanel("factory");
-    await loadFactoryRuns(true);
+    await window.controlTowerDecisions.openProof(selectedOperatorWorkload()?.root);
   });
   $("trace-start-node").addEventListener("click", () => chooseTraceEndpoint("start", state.inspectedNode));
   $("density-collapse").addEventListener("click", () => applyDensityReduction("packages"));

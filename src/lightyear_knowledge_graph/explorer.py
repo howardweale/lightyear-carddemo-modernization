@@ -17,6 +17,8 @@ from pathlib import Path
 from typing import Any
 from urllib.parse import parse_qs, unquote, urlparse
 
+from lightyear_control_tower.decisions import DecisionService, DecisionConflict, DecisionUnauthorized
+
 from .chat import ChatError, GraphChatService
 from .evidence_pack import EvidenceStore, load_evidence_pack, validate_evidence_pack
 from .model import load_graph
@@ -1119,6 +1121,7 @@ class ExplorerServer(ThreadingHTTPServer):
         graph_path: Path | None = None,
         evidence_pack_path: Path | None = None,
         verifier_token: str | None = None,
+        decision_service: DecisionService | None = None,
     ) -> None:
         super().__init__(address, ExplorerRequestHandler)
         self.index = index
@@ -1129,6 +1132,7 @@ class ExplorerServer(ThreadingHTTPServer):
             evidence_pack_path or self.graph_path.parent / "evidence" / "source.pack.json.gz"
         ).resolve()
         self.verifier_token = verifier_token or secrets.token_urlsafe(32)
+        self.decision_service = decision_service
         self._projection_lock = threading.RLock()
         self._binding_errors: dict[str, str] = {}
         self.chat_service = chat_service or GraphChatService.from_environment(index)
@@ -1432,7 +1436,9 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
     def do_GET(self) -> None:  # noqa: N802 - standard-library handler API
         parsed = urlparse(self.path)
         try:
-            if parsed.path.startswith("/api/"):
+            if parsed.path.startswith("/api/decisions/"):
+                self._decisions(parsed.path, parse_qs(parsed.query))
+            elif parsed.path.startswith("/api/"):
                 query = parse_qs(parsed.query)
                 if self._value(query, "audience") == "verifier" and not self._verifier_authorized():
                     self._verifier_required()
@@ -1440,6 +1446,10 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
                 self._api(parsed.path, query)
             else:
                 self._static(parsed.path)
+        except DecisionUnauthorized as exc:
+            self._json({"error": str(exc)}, HTTPStatus.UNAUTHORIZED)
+        except DecisionConflict as exc:
+            self._json({"error": str(exc)}, HTTPStatus.CONFLICT)
         except KeyError as exc:
             self._json(
                 {"error": f"Unknown or hidden graph entity: {exc.args[0]}"},
@@ -1453,6 +1463,9 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
     def do_POST(self) -> None:  # noqa: N802 - standard-library handler API
         parsed = urlparse(self.path)
         try:
+            if parsed.path.startswith("/api/decisions/"):
+                self._decisions(parsed.path, {}, self._request_json())
+                return
             if parsed.path == "/api/chat":
                 payload = self._request_json()
                 if payload.get("audience") == "verifier" and not self._verifier_authorized():
@@ -1461,6 +1474,10 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
                 self._json(self.server.chat_service.answer(payload))
                 return
             self._json({"error": f"Unknown API route: {parsed.path}"}, HTTPStatus.NOT_FOUND)
+        except DecisionUnauthorized as exc:
+            self._json({"error": str(exc)}, HTTPStatus.UNAUTHORIZED)
+        except DecisionConflict as exc:
+            self._json({"error": str(exc)}, HTTPStatus.CONFLICT)
         except KeyError as exc:
             self._json(
                 {"error": f"Unknown or hidden graph entity: {exc.args[0]}"},
@@ -1470,6 +1487,48 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
             self._json({"error": str(exc)}, HTTPStatus.BAD_REQUEST)
         except Exception as exc:  # pragma: no cover - defensive HTTP boundary
             self._json({"error": f"Chat request failed: {exc}"}, HTTPStatus.INTERNAL_SERVER_ERROR)
+
+    def _decisions(self, path: str, query: dict, payload: dict | None = None) -> None:
+        service = self.server.decision_service
+        if path == "/api/decisions/status" and payload is None:
+            self._json({"enabled": service is not None, "supported_decisions": ["normalization"],
+                        "authentication": "individual-local-credential",
+                        "message": "Sign in to review normalizations and run proofs." if service else
+                        "Decision service is not configured. Start the local Control Tower with an individual operator authority."})
+            return
+        if service is None:
+            self._json({"error": "Decision service is not configured"}, HTTPStatus.SERVICE_UNAVAILABLE)
+            return
+        # This first command surface is local-only, even when read-only discovery is
+        # explicitly bound to a network interface. No forwarded identity is trusted.
+        if not is_loopback_host(self.client_address[0]):
+            raise DecisionUnauthorized("Decision commands require a local operator connection")
+        host = self.headers.get("Host", "")
+        allowed = {f"127.0.0.1:{self.server.server_port}", f"localhost:{self.server.server_port}", f"[::1]:{self.server.server_port}"}
+        if host not in allowed:
+            raise DecisionUnauthorized("Untrusted decision service host")
+        if payload is not None and self.headers.get("Origin") != f"http://{host}":
+            raise DecisionUnauthorized("A same-origin operator request is required")
+        token = self.headers.get("Authorization", "").removeprefix("Bearer ")
+        if payload is not None:
+            routes = {
+                "/api/decisions/session": lambda: service.login(payload.get("credential")),
+                "/api/decisions/logout": lambda: service.logout(token),
+                "/api/decisions/review": lambda: service.review(token, payload.get("entry_id")),
+                "/api/decisions/approve": lambda: service.decide(token, payload),
+                "/api/decisions/proof-runs": lambda: service.dispatch(token, payload),
+            }
+        else:
+            service.authenticate(token)
+            routes = {
+                "/api/decisions/queue": lambda: service.queue(token),
+                "/api/decisions/session-export": lambda: service.export_session(token),
+                "/api/decisions/gate": lambda: service.gate(self._value(query, "run_id", required=True)),
+            }
+        if path not in routes:
+            self._json({"error": "Unknown decision route"}, HTTPStatus.NOT_FOUND)
+            return
+        self._json(routes[path]())
 
     def log_message(self, format: str, *args: Any) -> None:
         return
@@ -1824,6 +1883,7 @@ def serve(
     audit_snapshot_path: Path | None = None,
     allow_unauthenticated_network: bool = False,
     verifier_token: str | None = None,
+    decision_config: Path | None = None,
 ) -> None:
     validate_bind_host(host, allow_unauthenticated_network)
     if not is_loopback_host(host):
@@ -1851,10 +1911,18 @@ def serve(
         graph_path=graph_path, evidence_pack_path=pack_path,
         verifier_token=verifier_token,
     )
+    authority = decision_config or viewer_root.resolve().parents[1] / "work/control-tower/authority.json"
+    if authority.is_file():
+        if not is_loopback_host(host):
+            raise ValueError("The operator decision service currently requires an explicit loopback bind")
+        server.decision_service = DecisionService(server.project_root, authority, graph_identity=lambda: server.index.canonical_content_sha256)
+    elif decision_config is not None:
+        raise ValueError("Configured operator authority does not exist")
     display_host = f"[{host.strip('[]')}]" if ":" in host else host
     url = f"http://{display_host}:{server.server_port}/"
     print(f"LIGHTYEAR Graph Explorer: {url}")
-    print("Live Evidence Plane: connected (read-only command posture)")
+    print("Live Evidence Plane: connected")
+    print("Operator decisions: " + ("enabled; individual sign-in required" if server.decision_service else "not configured"))
     print(f"Verifier token (this session only): {server.verifier_token}")
     print("Customer deployments must place the Control Tower behind approved SSO/OIDC.")
     print("Press Ctrl-C to stop.")
@@ -1867,4 +1935,6 @@ def serve(
         pass
     finally:
         server.operational_monitor.stop()
+        if server.decision_service:
+            server.decision_service.close()
         server.server_close()

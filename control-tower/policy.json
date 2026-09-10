@@ -11,14 +11,47 @@
   },
   "external_assets": "disabled",
   "sources": {
-    "graph": {"expected_interval_seconds": 5, "trust_class": "content-addressed-graph"},
-    "factory": {"expected_interval_seconds": 2, "trust_class": "controller-receipt"},
-    "portfolio": {"expected_interval_seconds": 5, "trust_class": "approved-plan"},
-    "recovery": {"expected_interval_seconds": 2, "trust_class": "transactional-ledger"},
-    "quality": {"expected_interval_seconds": 10, "trust_class": "evaluation-receipt"},
-    "memory": {"expected_interval_seconds": 15, "trust_class": "verified-semantic-memory"},
-    "data": {"expected_interval_seconds": 15, "trust_class": "data-equivalence-receipt"},
-    "runtime": {"expected_interval_seconds": 30, "trust_class": "runtime-observation"},
-    "audit": {"expected_interval_seconds": 5, "trust_class": "hash-chained-audit"}
+    "graph": {
+      "expected_interval_seconds": 5,
+      "trust_class": "content-addressed-graph"
+    },
+    "factory": {
+      "expected_interval_seconds": 2,
+      "trust_class": "controller-receipt"
+    },
+    "portfolio": {
+      "expected_interval_seconds": 5,
+      "trust_class": "approved-plan"
+    },
+    "recovery": {
+      "expected_interval_seconds": 2,
+      "trust_class": "transactional-ledger"
+    },
+    "quality": {
+      "expected_interval_seconds": 10,
+      "trust_class": "evaluation-receipt"
+    },
+    "memory": {
+      "expected_interval_seconds": 15,
+      "trust_class": "verified-semantic-memory"
+    },
+    "data": {
+      "expected_interval_seconds": 15,
+      "trust_class": "data-equivalence-receipt"
+    },
+    "runtime": {
+      "expected_interval_seconds": 30,
+      "trust_class": "runtime-observation"
+    },
+    "audit": {
+      "expected_interval_seconds": 5,
+      "trust_class": "hash-chained-audit"
+    }
+  },
+  "decision_service": {
+    "policy": "control-tower/decision-policy.json",
+    "enabled_when": "individual-authority-configured",
+    "route_prefix": "/api/decisions",
+    "independent_of_read_only_operational_stream": true
   }
 }

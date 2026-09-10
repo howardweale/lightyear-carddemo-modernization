@@ -1,0 +1,31 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Control Tower signed human-decision journal event",
+  "type": "object",
+  "required": ["schema_version", "record_type", "sequence", "previous_sha256", "occurred_at", "kind", "actor", "session_id", "payload", "content_sha256", "signature"],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "record_type": {"const": "control-tower-decision-event"},
+    "sequence": {"type": "integer", "minimum": 1},
+    "previous_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "occurred_at": {"type": "string", "format": "date-time"},
+    "kind": {"enum": ["session_started", "session_ended", "normalization_viewed", "normalization_decided", "proof_started", "proof_finished"]},
+    "actor": {"type": "object", "required": ["id", "name", "kind"], "properties": {"id": {"type": "string", "minLength": 1}, "name": {"type": "string", "minLength": 1}, "kind": {"enum": ["operator", "service"]}}},
+    "session_id": {"type": ["string", "null"]},
+    "payload": {"type": "object"},
+    "content_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "signature": {"type": "object", "required": ["algorithm", "key_id", "value"], "properties": {"algorithm": {"const": "Ed25519"}, "key_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"}, "value": {"type": "string", "minLength": 1}}}
+  },
+  "allOf": [{
+    "if": {"properties": {"kind": {"const": "normalization_decided"}}},
+    "then": {"properties": {
+      "actor": {"properties": {"kind": {"const": "operator"}}},
+      "session_id": {"type": "string", "minLength": 1},
+      "payload": {"required": ["entry_id", "entry_sha256", "ledger_sha256", "workload_id", "outcome", "reason", "owner", "review_after", "request_id", "request_sha256", "previous_decision_sha256", "channel", "authentication"], "properties": {
+        "outcome": {"enum": ["approved", "rejected"]}, "reason": {"type": "string", "minLength": 1, "maxLength": 2000}, "owner": {"type": "string", "minLength": 1, "maxLength": 200},
+        "channel": {"const": "control-tower"}, "authentication": {"const": "individual-local-credential"}
+      }, "allOf": [{"if": {"properties": {"outcome": {"const": "approved"}}}, "then": {"properties": {"review_after": {"type": "string", "format": "date"}}}, "else": {"properties": {"review_after": {"type": "null"}}}}]}
+    }}
+  }],
+  "additionalProperties": false
+}

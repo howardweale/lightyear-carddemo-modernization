@@ -197,6 +197,8 @@ class CloseoutTests(unittest.TestCase):
                 reports = list((root / "ms67-closeout").glob("*/closeout-reconciliation.json"))
                 self.assertEqual(1, len(reports))
                 result = json.loads(reports[0].read_text())
+                self.assertEqual("inventory-collected", result["status"])
+                self.assertEqual(2, len(result["records"]))
                 self.assertEqual(0, result["cloud_mutations"])
                 self.assertEqual(1, result["groups"][0]["contract_verified_current_context"])
                 self.assertNotIn(KEY, reports[0].read_text() + output.getvalue())

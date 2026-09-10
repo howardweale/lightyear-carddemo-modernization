@@ -92,7 +92,7 @@ def candidate_name(name):
             and any(part in base for part in (
                 "observation", "receipt", "recovery", "resilien", "disruption", "rolling", "rollout",
                 "cutover", "rollback", "rotation", "alert", "correlation", "identity", "enforcement",
-                "security", "operations", "metrics", "profile", "journeys", "ms65", "ms66")))
+                "security", "image-build", "operations", "metrics", "profile", "journeys", "ms65", "ms66")))
 
 
 def decode(raw):

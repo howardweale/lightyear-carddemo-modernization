@@ -3,10 +3,12 @@
 from __future__ import annotations
 
 import hashlib
+import copy
+import io
 import json
 import os
 import platform
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 import re
 import subprocess
 import sys
@@ -95,6 +97,10 @@ def packaging_proof(service, base, candidate, run_id):
     before, after = dict(base["Config"]), dict(candidate["Config"])
     labels = before.pop("Labels", None) or {}
     require(after.pop("Labels", None) == {**labels, REVISION_LABEL: run_id}, "candidate-label-delta-invalid")
+    if before != after:
+        # Report field names only; image environment/command values stay private.
+        fields = sorted(k for k in before.keys() | after.keys() if before.get(k) != after.get(k) or (k in before) != (k in after))
+        print("MS67_CANDIDATE_CONFIG_DELTA=" + service + "; fields=" + ",".join(fields), flush=True)
     require(before == after, "candidate-runtime-configuration-changed")
     def reference(value):
         refs = [r for r in value.get("RepoDigests", []) if r.startswith(REGISTRY + "/" + service + "@sha256:")]
@@ -110,27 +116,91 @@ def packaging_proof(service, base, candidate, run_id):
 
 
 def prepare(context, work):
+    import shlex
     images, run_id = context["images"], context["run_id"]
     require(re.fullmatch(r"ms67-final-[0-9a-f]{32}", run_id), "final-run-id-invalid")
+    save, publish = ["#!/bin/sh", "set -eu"], ["#!/bin/sh", "set -eu"]
     for service in SERVICES:
         require(re.fullmatch(re.escape(REGISTRY + "/" + service) + r"@sha256:[0-9a-f]{64}", images[service]),
                 "baseline-registry-image-invalid")
-        target = work / "candidates" / service
-        target.mkdir(parents=True, exist_ok=True)
-        (target / "Dockerfile").write_text(f"FROM {images[service]}\nLABEL {REVISION_LABEL}=\"{run_id}\"\n")
-    import shlex
-    commands = ["#!/bin/sh", "set -eu"]
-    for service in SERVICES:
         original = images[service]
         tag = REGISTRY + "/" + service + ":" + run_id
-        folder = str(work / "candidates" / service)
-        for argv in (["docker", "pull", original], ["docker", "build", "--platform=linux/amd64", "--pull=false", "--tag", tag, folder],
-                     ["docker", "push", tag]):
-            commands.append(shlex.join(argv))
-        for image, suffix in ((original, "base"), (tag, "candidate")):
+        save.extend(shlex.join(argv) for argv in (
+            ["docker", "pull", original], ["docker", "image", "save", "--output", str(work / (service + "-base.tar")), original]))
+        publish.extend(shlex.join(argv) for argv in (
+            ["docker", "image", "load", "--input", str(work / (service + "-candidate.tar"))], ["docker", "push", tag]))
+        for commands, image, suffix in ((save, original, "base"), (publish, tag, "candidate")):
             commands.append(shlex.join(["docker", "image", "inspect", image]) + " > " +
                             shlex.quote(str(work / f"{service}-{suffix}.inspect.json")))
-    (work / "package.sh").write_text("\n".join(commands) + "\n")
+        publish.append(shlex.join(["rm", str(work / (service + "-candidate.tar"))]))
+    (work / "save.sh").write_text("\n".join(save) + "\n")
+    (work / "publish.sh").write_text("\n".join(publish) + "\n")
+
+
+def revise_archive(source, target, tag, run_id, expected_config_digest):
+    """Copy the image config and layers without invoking Dockerfile defaults.
+
+    Do not extract the archive. A Docker load archive needs its manifest, config
+    and referenced layer files only; optional OCI indexes would still point at
+    the old config, so construct an unambiguous single-image Docker manifest.
+    """
+    require(re.fullmatch(r"ms67-final-[0-9a-f]{32}", run_id), "final-run-id-invalid")
+    with tarfile.open(source, "r:*") as archive:
+        members = archive.getmembers()
+        require(len(members) <= 10000 and len({m.name for m in members}) == len(members),
+                "bounded-unique-image-archive-required")
+        names = {m.name: m for m in members}
+        def member(name):
+            path = PurePosixPath(name)
+            require(not path.is_absolute() and ".." not in path.parts and name in names
+                    and names[name].isfile(), "regular-relative-image-member-required")
+            return names[name]
+        def document(name):
+            row = member(name)
+            require(row.size <= 8*1024*1024, "bounded-image-metadata-required")
+            with archive.extractfile(row) as stream:
+                return stream.read()
+        manifest = json.loads(document("manifest.json"))
+        require(isinstance(manifest, list) and len(manifest) == 1, "single-image-archive-required")
+        row = manifest[0]
+        raw = document(row["Config"])
+        require("sha256:" + hashlib.sha256(raw).hexdigest() == expected_config_digest,
+                "saved-baseline-config-digest-mismatch")
+        original = json.loads(raw)
+        require(original.get("os") == "linux" and original.get("architecture") == "amd64"
+                and isinstance(original.get("config"), dict), "linux-amd64-image-config-required")
+        revised = copy.deepcopy(original)
+        labels = revised["config"].get("Labels") or {}
+        require(isinstance(labels, dict) and REVISION_LABEL not in labels, "new-packaging-label-required")
+        revised["config"]["Labels"] = {**labels, REVISION_LABEL: run_id}
+        revised_raw = json.dumps(revised, separators=(",", ":")).encode()
+        digest = hashlib.sha256(revised_raw).hexdigest()
+        config_name = digest + ".json"
+        layers = row.get("Layers", [])
+        require(isinstance(layers, list) and 0 < len(layers) <= 1000
+                and len(layers) == len(original.get("rootfs", {}).get("diff_ids", [])), "image-layers-required")
+        require(config_name not in layers and "manifest.json" not in layers, "image-member-name-conflict")
+        with tarfile.open(target, "w") as output:
+            for name in dict.fromkeys(layers):
+                info = member(name)
+                with archive.extractfile(info) as stream:
+                    output.addfile(info, stream)
+            for name, payload in ((config_name, revised_raw), ("manifest.json", json.dumps([
+                    {**row, "Config": config_name, "RepoTags": [tag]}], separators=(",", ":")).encode())):
+                info = tarfile.TarInfo(name)
+                info.size, info.mode = len(payload), 0o644
+                output.addfile(info, io.BytesIO(payload))
+    return "sha256:" + digest
+
+
+def revise(context, work):
+    for service in SERVICES:
+        base = json.loads((work / f"{service}-base.inspect.json").read_text())[0]
+        source = work / (service + "-base.tar")
+        revise_archive(source, work / (service + "-candidate.tar"),
+                       REGISTRY + "/" + service + ":" + context["run_id"], context["run_id"], base["Id"])
+        source.unlink()
+        print("MS67_CANDIDATE_CONFIG_PRESERVED=" + service, flush=True)
 
 
 def finish_packaging(context, work):
@@ -145,28 +215,6 @@ def finish_packaging(context, work):
         proofs.append(packaging_proof(service, base, candidate, context["run_id"]))
     (work / "packaging.json").write_text(json.dumps(proofs))
     return proofs
-
-
-def build(context, work):
-    proofs = []
-    for service in SERVICES:
-        original = context["images"][service]
-        tag = REGISTRY + "/" + service + ":" + context["run_id"]
-        # No shell and no credentials in arguments or files.
-        for argv in (["docker", "pull", original],
-                     ["docker", "build", "--platform=linux/amd64", "--pull=false", "--tag", tag,
-                      str(work / "candidates" / service)], ["docker", "push", tag]):
-            subprocess.run(argv, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=1200)
-        base = json.loads(invoke(["docker", "image", "inspect", original]))[0]
-        revised = json.loads(invoke(["docker", "image", "inspect", tag]))[0]
-        # Docker may retain multiple repo digest aliases. Select the resolved
-        # reference for this pull/push without accepting an arbitrary alias.
-        revised["RepoDigests"] = [r for r in revised["RepoDigests"]
-                                  if r.startswith(REGISTRY + "/" + service + "@") and r != original]
-        base["RepoDigests"] = [original]
-        proofs.append(packaging_proof(service, base, revised, context["run_id"]))
-        print("MS67_CANDIDATE_BUILT=" + service, flush=True)
-    (work / "packaging.json").write_text(json.dumps(proofs))
 
 
 def secure(context, work, key, signer):
@@ -275,7 +323,7 @@ def verify_result(value, context, key):
 def main(argv=None):
     import argparse
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("action", choices=("prepare", "secure"))
+    parser.add_argument("action", choices=("prepare", "revise", "secure"))
     parser.add_argument("--context", required=True, type=Path)
     parser.add_argument("--work", required=True, type=Path)
     parser.add_argument("--signer", required=True)
@@ -288,6 +336,8 @@ def main(argv=None):
     args.work.mkdir(parents=True, exist_ok=True)
     if args.action == "prepare":
         prepare(context, args.work)
+    elif args.action == "revise":
+        revise(context, args.work)
     else:
         finish_packaging(context, args.work)
         result = secure(context, args.work, key, args.signer)

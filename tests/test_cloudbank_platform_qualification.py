@@ -198,6 +198,18 @@ class CloudBankPlatformQualificationTests(unittest.TestCase):
         self.assertFalse(contract["production_ready"])
         self.assertEqual(SCENARIO_IDS, execution_plan()["required_scenarios"])
 
+    def test_revised_recovery_limit_accepts_630_and_rejects_631(self) -> None:
+        from lightyear_data.cloudbank_platform_qualification import _validate_recovery
+        site, prior65, prior66 = profile(), ms65_receipt(), ms66_receipt()
+        observed = observation(site, prior65, prior66)
+        self.assertEqual(630, platform_contract()["controls"]["backup_restore"]["maximum_rto_seconds"])
+        self.assertEqual(600, platform_contract()["controls"]["backup_restore"]["maximum_backup_restore_rto_seconds"])
+        for duration in (622, 626, 630):
+            observed["backup_restore"]["rto_seconds"] = duration
+            self.assertEqual([], _validate_recovery(observed))
+        observed["backup_restore"]["rto_seconds"] = 631
+        self.assertIn("cloudbank-platform-qualification-observation-backup-invalid", _validate_recovery(observed))
+
     def test_gke_template_has_external_secrets_tls_telemetry_and_no_values(self) -> None:
         template = gke_addons_template()
         self.assertEqual(8, template.count("kind: ExternalSecret"))

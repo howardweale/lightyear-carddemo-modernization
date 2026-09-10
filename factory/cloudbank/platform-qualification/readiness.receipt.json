@@ -1,13 +1,13 @@
 {
-  "acceptance_contract_sha256": "dd4315411ce4c5abdfe16475c7e5afadcbd79b8752ac54ec07a706d2b3a865c7",
+  "acceptance_contract_sha256": "a23ac6f82a9fe2d780e87eaaa5bf7c93782c7745c9ef936ff780685b6fed4832",
   "backup_restore_qualified": false,
   "bindings": {
     "compatibility_ledger_sha256": "978fe4798c5853c330976a90cf70270bbfde4a574ae60bc42866a0b5d664a467",
     "evidence_contract_sha256": "d7af86a231d673c15dce39d14bce42d799f9794095e900831ed4f17e55b766f7",
     "execution_plan_sha256": "42bb20ffcdc43921ed5e0556edd146b9222c8a934c5775cb7e56e9b43362f199",
-    "platform_contract_sha256": "5bd3b40717bb40380742792b64f465cef38ad95d6d6c50de22f40cbf23132a98"
+    "platform_contract_sha256": "3fa565c8f2784a77331f9df53810cca6b8dec23cf3ac0aeef1b8b9e65a3db508"
   },
-  "content_sha256": "7d4b11232ab42d4cc177ae8be54106489303ff55ad105377f7ad625c89febb56",
+  "content_sha256": "36df2b1c3a6649eaf5161642b0afdc2c7118e5a808a29b1bbe27d9e9db75e2a7",
   "customer_approval_complete": false,
   "customer_idp_qualified": false,
   "cutover_rollback_qualified": false,

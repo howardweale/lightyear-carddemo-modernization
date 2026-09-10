@@ -69,7 +69,8 @@ The existing shared business journey restart behavior is unchanged.
 and failure stages. These measure scale-up request through readiness observation
 and checkpointing; observation can lag actual pod readiness. All eight application
 HTTP readiness checks still run after restoration, inside the PITR recovery timer.
-Neither the 600-second RTO limit nor the 60-second recovery-point-age limit changes.
+The current owner-approved limits are 630 seconds for PITR, 600 seconds for backup restore,
+and 60 seconds for recovery-point age; see the policy revision below.
 Cloud SQL clone duration can still cause a live run to exceed RTO.
 
 The pool starts with no network ingress or egress. Before each snapshot the runner
@@ -166,7 +167,7 @@ bounded failure codes and stopped-service names. The signed SQL operation journa
 also saves the latest observed operation status, provider timestamps and an error
 presence flag. Arbitrary server error messages and database output are not recorded.
 These diagnostics help separate provisioning, application recovery and validation
-time without changing the 60-second recovery-point or 600-second recovery-time gates.
+time without altering the measured durations or the current recovery acceptance policy.
 
 `validation_instance_state: not-requested` means this run never submitted a clone;
 in that case `validation_instance_deleted: false` does not indicate a leaked clone.
@@ -190,8 +191,8 @@ database drill, not an MS65/MS66/MS67 completion receipt.
   source workload is quiesced; continuous-write RPO is not demonstrated.
 - PITR database RTO includes the clone request, source service recovery, target
   provisioning and read-only state validation. Backup restore RTO covers restoration
-  into the already provisioned isolated target and validation. Each must be no more
-  than 600 seconds. These are database timings; application failover, endpoint
+  into the already provisioned isolated target and validation. The PITR limit is
+  630 seconds; the backup restore limit remains 600 seconds. These are database timings; application failover, endpoint
   redirection and business-journey recovery on the restored database remain open.
 - State hashes preserve row values, duplicate counts, columns and sequence state
   in configured application databases. Table names/rows are not persisted. SQL
@@ -205,8 +206,39 @@ database drill, not an MS65/MS66/MS67 completion receipt.
   `backup_sha256` field; it does not relabel that value as a backup-byte checksum.
 - Signed MS65/MS66 admission, continuous-load/correlated telemetry, alert recovery,
   secret rotation, failure-domain recovery and cutover/rollback remain separate
-  gates. No acceptance contract is relaxed by this runner.
+  gates. This runner enforces the explicitly versioned nonproduction policy.
 
 Provider references: [Cloud SQL PITR](https://docs.cloud.google.com/sql/docs/postgres/backup-recovery/pitr),
 [clone command](https://docs.cloud.google.com/sdk/gcloud/reference/sql/instances/clone),
 [backup restore command](https://docs.cloud.google.com/sdk/gcloud/reference/sql/backups/restore).
+
+## Approved PITR requirement revision — 2026-09-10
+
+Howard Weale approved a 630-second PITR RTO for this synthetic, noncustomer
+MS67 environment, replacing the prior 600-second limit. Backup restore remains
+600 seconds, RPO remains 60 seconds, and exact-state and cleanup requirements
+remain mandatory. This is a nonproduction acceptance decision, not a production SLA.
+
+The reported attempts of 626 and 622 seconds pass the revised PITR requirement.
+Their original signed observations still record failure under the 600-second
+requirement. Do not edit those files or their signatures.
+
+After updating the controller source, run:
+
+```bash
+python3 tools/ms67_accept_sql_recovery.py
+```
+
+This helper targets the recorded second attempt, verifies its signature and
+remote readback, and validates the matching MS64/image/journey inputs. It writes
+a separate signed assessment with the full signed original embedded, an explicit
+policy identity, the unchanged measurements, and an assessment timestamp.
+It uploads to a distinct prefix and verifies the readback. Repeating the command
+reuses that assessment. No additional recovery or load execution is needed to
+assess this completed measurement.
+
+The new path is printed as `MS67_SQL_ACCEPTED_LOCAL` and can be supplied to the
+current MS65 rehearsal controller as its database-recovery input. The old pinned
+refresh launcher still enforces its historical 600-second policy; it must not be
+used to assess the new receipt. MS65 and the other MS67 qualification controls
+remain separate from this SQL acceptance.

@@ -34,6 +34,10 @@ from .cloudbank_production_readiness import (
 )
 from .cloudbank_sql_recovery import OBSERVATION_TYPE as SQL_RECOVERY_OBSERVATION_TYPE
 from .contracts import sign, verify_signature
+from .cloudbank_recovery_policy import (
+    MAXIMUM_PITR_RTO_SECONDS, MAXIMUM_BACKUP_RESTORE_RTO_SECONDS,
+    PREVIOUS_MAXIMUM_PITR_RTO_SECONDS, recovery_acceptance_policy,
+)
 
 
 STATE_TYPE = "lightyear-cloudbank-ms65-gke-recovery"
@@ -108,9 +112,9 @@ def validate_shared_journeys(
     }
 
 
-def validate_database_recovery(
+def _validate_database_recovery(
     value: dict[str, Any], key: str, *, images: dict[str, str],
-    environment: dict[str, Any], journeys_sha256: str,
+    environment: dict[str, Any], journeys_sha256: str, reassessment_source: bool = False,
 ) -> dict[str, str]:
     verified(value, key, "passed-signed-database-recovery-required")
     bindings = value.get("bindings") or {}
@@ -129,7 +133,11 @@ def validate_database_recovery(
     )}
     require(
         value.get("observation_type") == SQL_RECOVERY_OBSERVATION_TYPE
-        and value.get("status") == "passed-isolated-database-recovery"
+        and value.get("status") == ("failed" if reassessment_source else "passed-isolated-database-recovery")
+        and (not reassessment_source or (
+            value.get("reason") is None and not value.get("failure_stage")
+            and "reassessment" not in value and "acceptance_policy" not in value
+            and re.fullmatch(r"sql-recovery-[0-9a-f]{32}", value.get("run_id", ""))))
         and bindings.get("environment") == environment
         and bindings.get("images_sha256") == hashed(images)
         and bindings.get("journeys_content_sha256") == journeys_sha256
@@ -144,15 +152,20 @@ def validate_database_recovery(
         and backup_sha == hashed(backup_record)
         and pitr.get("state_matches") is True
         and pitr.get("rpo_within_limit") is True
-        and pitr.get("rto_within_limit") is True
+        and pitr.get("rto_within_limit") is (False if reassessment_source else True)
         and type(pitr.get("recovery_point_age_seconds")) in {int, float}
         and 0 <= pitr["recovery_point_age_seconds"] <= 60
         and type(pitr.get("database_rto_seconds")) in {int, float}
-        and 0 <= pitr["database_rto_seconds"] <= 600
+        and 0 <= pitr["database_rto_seconds"] <= MAXIMUM_PITR_RTO_SECONDS
+        and (not reassessment_source or pitr["database_rto_seconds"] > PREVIOUS_MAXIMUM_PITR_RTO_SECONDS)
+        and (reassessment_source or (
+            value.get("acceptance_policy") == recovery_acceptance_policy()
+            or ("acceptance_policy" not in value
+                and pitr["database_rto_seconds"] <= PREVIOUS_MAXIMUM_PITR_RTO_SECONDS)))
         and restored.get("state_matches") is True
         and restored.get("rto_within_limit") is True
         and type(restored.get("database_rto_seconds")) in {int, float}
-        and 0 <= restored["database_rto_seconds"] <= 600
+        and 0 <= restored["database_rto_seconds"] <= MAXIMUM_BACKUP_RESTORE_RTO_SECONDS
         and backup.get("status") == "SUCCESSFUL"
         and backup.get("type") == "ON_DEMAND"
         and backup.get("retained") is True
@@ -176,6 +189,62 @@ def validate_database_recovery(
         "backup_sha256": backup_sha,
         "restored_state_sha256": restored_sha,
     }
+
+
+def _reassessed_payload(source, assessed_at):
+    result = copy.deepcopy(source)
+    for name in ("signature", "content_sha256"):
+        result.pop(name, None)
+    result["status"] = "passed-isolated-database-recovery"
+    result["pitr"]["rto_within_limit"] = True
+    result["acceptance_policy"] = recovery_acceptance_policy()
+    result["reassessment"] = {
+        "type": "authorized-nonproduction-rto-reassessment",
+        "assessed_at": assessed_at,
+        "source_observation_sha256": source["content_sha256"],
+        "source_observation": copy.deepcopy(source),
+        "measurements_changed": False,
+        "new_recovery_run": False,
+    }
+    return result
+
+
+def validate_database_recovery(
+    value: dict[str, Any], key: str, *, images: dict[str, str],
+    environment: dict[str, Any], journeys_sha256: str,
+) -> dict[str, str]:
+    arguments = dict(images=images, environment=environment, journeys_sha256=journeys_sha256)
+    mapped = _validate_database_recovery(value, key, **arguments)
+    if "reassessment" in value:
+        assessment = value["reassessment"]
+        require(isinstance(assessment, dict), "database-recovery-reassessment-invalid")
+        source = assessment.get("source_observation")
+        require(isinstance(source, dict), "database-recovery-reassessment-source-required")
+        _validate_database_recovery(source, key, reassessment_source=True, **arguments)
+        assessed_at = assessment.get("assessed_at")
+        try:
+            timestamp = datetime.fromisoformat(str(assessed_at).replace("Z", "+00:00"))
+            valid_time = timestamp.tzinfo is not None and timestamp.date().isoformat() >= "2026-09-10"
+        except (ValueError, TypeError):
+            valid_time = False
+        require(valid_time, "database-recovery-reassessment-time-invalid")
+        unsigned = {k: v for k, v in value.items() if k not in ("signature", "content_sha256")}
+        require(unsigned == _reassessed_payload(source, assessed_at),
+                "database-recovery-reassessment-changed-measurements-or-provenance")
+    return mapped
+
+
+def reassess_database_recovery(
+    source: dict[str, Any], key: str, signer: str, *, images: dict[str, str],
+    environment: dict[str, Any], journeys_sha256: str,
+) -> dict[str, Any]:
+    """Reissue a separate assessment; the signed failed observation stays intact."""
+    require(bool(signer.strip()), "database-recovery-reassessment-signer-required")
+    arguments = dict(images=images, environment=environment, journeys_sha256=journeys_sha256)
+    _validate_database_recovery(source, key, reassessment_source=True, **arguments)
+    result = sign(_reassessed_payload(source, utc()), key, signer)
+    validate_database_recovery(result, key, **arguments)
+    return result
 
 
 class DurableJournal:

@@ -537,8 +537,17 @@ class RecoveryTests(unittest.TestCase):
         self.assertTrue(verify_signature(saved, "test-key"))
         self.assertEqual(saved["pitr_preflight"], result["pitr_preflight"])
 
+    def test_approved_pitr_limit_includes_630_without_changing_measurements(self):
+        for duration in (600, 601, 622, 626, 630):
+            with self.subTest(duration=duration):
+                result = self.engine(pitr_rto=duration, backup_rto=455)
+                self.assertEqual(result["status"], "passed-isolated-database-recovery")
+                self.assertEqual(result["pitr"]["database_rto_seconds"], duration)
+                self.assertEqual(result["acceptance_policy"]["maximum_pitr_rto_seconds"], 630)
+                self.assertEqual(result["acceptance_policy"]["maximum_backup_restore_rto_seconds"], 600)
+
     def test_changed_state_or_rto_overrun_or_cleanup_failure_cannot_pass(self):
-        for fault in ({"mismatch": True}, {"pitr_rto": 601}, {"pitr_rto": 643}, {"backup_rto": 601}, {"cleanup_failure": True}):
+        for fault in ({"mismatch": True}, {"pitr_rto": 631}, {"pitr_rto": 643}, {"backup_rto": 601}, {"cleanup_failure": True}):
             with self.subTest(fault=fault):
                 result = self.engine(**fault)
                 self.assertEqual(result["status"], "failed")

@@ -21,6 +21,10 @@ from urllib.parse import urlsplit
 from .cloudbank_journeys import JourneyFailure, SERVICES, hashed, require
 from .cloudbank_journeys_gke import GkeRuntime
 from .contracts import content_hash, sign, verify_signature
+from .cloudbank_recovery_policy import (
+    MAXIMUM_PITR_RTO_SECONDS, MAXIMUM_BACKUP_RESTORE_RTO_SECONDS,
+    recovery_acceptance_policy,
+)
 
 STATE_TYPE = "lightyear-cloudbank-sql-recovery-state"
 OBSERVATION_TYPE = "lightyear-cloudbank-isolated-sql-recovery"
@@ -563,6 +567,7 @@ class SqlRecovery:
     def execute(self):
         progress = self.runtime.progress
         result = {"observation_type": OBSERVATION_TYPE, "run_id": self.runtime.run_id, "status": "failed",
+                  "acceptance_policy": recovery_acceptance_policy(),
                   "bindings": {"environment": self.state.get("environment"),
                       "journeys_content_sha256": self.state.get("journeys_content_sha256"),
                       "images_sha256": hashed(self.runtime.images)},
@@ -636,7 +641,7 @@ class SqlRecovery:
             result["pitr"] = {"incident_declared_at": incident, "point_in_time": latest, "recovery_point_age_seconds": rpo,
                 "database_rto_seconds": pitr_rto, "restored_state": recovered,
                 "state_matches": recovered == before, "rpo_within_limit": 0 <= rpo <= 60,
-                "rto_within_limit": pitr_rto <= 600}
+                "rto_within_limit": pitr_rto <= MAXIMUM_PITR_RTO_SECONDS}
             write_signed(self.runtime.output / "database-recovery.json", result, self.key, self.signer)
             progress("Restoring the explicit backup into the same isolated instance")
             with self.phase("backup-restore-target-check"):
@@ -655,7 +660,7 @@ class SqlRecovery:
                 recovered = self.snapshot(target_profile["private_ip"])
             backup_rto = math.ceil(time.monotonic() - started)
             result["backup_restore"] = {"restored_state": recovered, "state_matches": recovered == before,
-                "database_rto_seconds": backup_rto, "rto_within_limit": backup_rto <= 600,
+                "database_rto_seconds": backup_rto, "rto_within_limit": backup_rto <= MAXIMUM_BACKUP_RESTORE_RTO_SECONDS,
                 "timing_scope": "restore into an existing isolated instance through database state validation"}
             passed = (result["pitr"]["state_matches"] and result["pitr"]["rto_within_limit"]
                       and result["backup_restore"]["state_matches"] and result["backup_restore"]["rto_within_limit"])

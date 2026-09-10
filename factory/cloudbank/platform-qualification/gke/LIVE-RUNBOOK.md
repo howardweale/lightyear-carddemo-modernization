@@ -129,7 +129,9 @@ delivery was seen; it does not prove correlation, alert behavior, rotation, MS65
 
 - Create an on-demand Cloud SQL backup and verify it. Restore/clone it into an isolated validation
   instance, run the normalized state query, and require the restored hash to equal the pre-backup
-  hash. RPO must be at most 60 seconds and RTO at most 600 seconds.
+  hash. RPO must be at most 60 seconds, PITR RTO at most 630 seconds, and backup
+  restore RTO at most 600 seconds. The owner-approved nonproduction revision and
+  reassessment of existing signed measurements are documented in [SQL-RECOVERY.md](SQL-RECOVERY.md).
 - Cordon and drain one worker node, verify all eight services and business journeys, then uncordon.
   Repeat for all nodes in one failure domain. This is a controlled evacuation test, not a claim that
   Google Cloud suffered a zone outage. Require zero normalized data loss.

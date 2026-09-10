@@ -53,9 +53,13 @@ def main():
                 env = {**os.environ, 'SERVER_ADDRESS': '127.0.0.1', 'SERVER_PORT': str(http_port),
                        'SPRING_DATASOURCE_URL': f'jdbc:postgresql://127.0.0.1:{port}/postgres',
                        'SPRING_DATASOURCE_USERNAME': 'postgres', 'SPRING_DATASOURCE_PASSWORD': '',
+                       'SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT': 'org.hibernate.dialect.PostgreSQLDialect',
                        'LIQUIBASE_ENABLED': str(enabled).lower(), 'EUREKA_CLIENT_ENABLED': 'false',
                        'SPRING_CLOUD_CONFIG_ENABLED': 'false', 'SPRING_CLOUD_DISCOVERY_ENABLED': 'false',
                        'MANAGEMENT_ENDPOINT_HEALTH_PROBES_ENABLED': 'true',
+                       'CLOUDBANK_SECURITY_ISSUER_URI': 'http://127.0.0.1:9',
+                       'CLOUDBANK_OAUTH_ISSUER': 'http://127.0.0.1:9',
+                       'CLOUDBANK_OAUTH_JWK_SET_URI': 'http://127.0.0.1:9/oauth2/jwks',
                        'SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_JWK_SET_URI': 'http://127.0.0.1:9/oauth2/jwks',
                        'CLOUDBANK_SECURITY_JWK_SET_URI': 'http://127.0.0.1:9/oauth2/jwks'}
                 log = Path(directory) / 'customer.log'

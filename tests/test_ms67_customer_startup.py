@@ -19,6 +19,9 @@ METADATA = [{'customer_changesets': 3, 'expected_changesets': 3, 'successful_cha
 
 def setup(folder, explicit=True):
     obj, runtime, cloud = engine(folder)
+    for service in ('transfer', 'checks'):
+        runtime.resources['deployment', service]['spec']['template']['spec']['containers'][0].setdefault('env', []).append(
+            {'name': 'CLOUDBANK_SECURITY_SERVICE_TOKEN_ENABLED', 'value': 'true'})
     env = runtime.resources['deployment', 'customer']['spec']['template']['spec']['containers'][0].setdefault('env', [])
     if explicit:
         env.append({'name': 'LIQUIBASE_ENABLED', 'value': 'true'})
@@ -29,6 +32,12 @@ def setup(folder, explicit=True):
 
 
 class CustomerStartupTests(unittest.TestCase):
+    def test_cutover_allows_only_known_public_token_booleans(self):
+        self.assertTrue(drills.safe_candidate_env({'name': 'CLOUDBANK_SECURITY_SERVICE_TOKEN_ENABLED', 'value': 'true'}))
+        for name in ('CLOUDBANK_SECURITY_SERVICE_TOKEN_ENABLED', 'SERVICE_TOKEN', 'DATABASE_PASSWORD', 'CLIENT_SECRET'):
+            self.assertFalse(drills.safe_candidate_env({'name': name, 'value': 'literal-credential'}))
+            self.assertTrue(drills.safe_candidate_env({'name': name, 'valueFrom': {'secretKeyRef': {'name': 'existing', 'key': 'key'}}}))
+
     def test_admission_uses_original_candidate_controller_after_continuation(self):
         values = {name: {'content_sha256': name} for name in ('ms65', 'ms66-receipt', 'sql', 'load')}
         context = {'images': IMAGES, 'bindings': BINDINGS,

@@ -90,6 +90,11 @@ reproduces the two-table difference with initialization enabled, then edits and
 adds customer rows and verifies two corrected restarts preserve every table and
 sequence. This is regression coverage, not live MS67 acceptance.
 
+Cutover preserves the existing public OAuth boolean flags. They are not token
+credentials; other literal password, secret, private-key and token values remain
+rejected. Candidate provenance is checked against its original controller even
+after the final runner advances to a reviewed corrective controller.
+
 Repeat the same `--execute` command to resume an existing image build or reuse
 completed phases. An uncertain submission is reconciled by its unique tag;
 the launcher refuses to submit a duplicate when the outcome is unknown.

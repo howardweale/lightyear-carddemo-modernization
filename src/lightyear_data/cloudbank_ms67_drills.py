@@ -165,6 +165,14 @@ def main_container(deployment, service):
     return matches[0]
 
 
+def safe_candidate_env(row):
+    # These two existing switches contain TOKEN in their names but their values
+    # are public booleans. Unknown token/secret/password values remain forbidden.
+    if row.get('name') in {'CLOUDBANK_SECURITY_SERVICE_TOKEN_ENABLED', 'CLOUDBANK_SECURITY_REQUIRE_INTERNAL_TOKEN'}:
+        return 'value' not in row or row['value'] in {'true', 'false'}
+    return 'value' not in row or not re.search(r'PASSWORD|SECRET|TOKEN|PRIVATE_KEY', row.get('name', ''), re.I)
+
+
 def candidate_name(service, run_id):
     require(service in SERVICES and re.fullmatch(r"ms67-final-[0-9a-f]{32}", run_id), "final-run-identity-invalid")
     return "ly-final-" + service + "-" + run_id[-10:]
@@ -687,8 +695,7 @@ class FinalDrills:
                     LABEL: self.r.run_id, "app.kubernetes.io/name": service}},
                     "strategy": copy.deepcopy(d["spec"]["strategy"]), "template": template}}
             # Raw environment values are forbidden; credentials must remain secret references.
-            require(all(not re.search(r"PASSWORD|SECRET|TOKEN|PRIVATE_KEY", e.get("name", ""), re.I)
-                        or "value" not in e for c in template["spec"].get("containers", []) for e in c.get("env", [])),
+            require(all(safe_candidate_env(e) for c in template["spec"].get("containers", []) for e in c.get("env", [])),
                     "candidate-literal-credential-environment-not-supported")
             self.s["canaries"][service] = {"uid": None, "name": name, "intent_spec_sha256": hashed(manifest["spec"])}
             self.intent("create-candidate-" + service, {"service": service})

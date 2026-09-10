@@ -214,3 +214,131 @@ class CloseoutTests(unittest.TestCase):
         with patch.object(review, "cloud", side_effect=review.JourneyFailure("operator-command-failed-permission-denied")):
             result = review.read_remote(review.BUCKET + "/receipt.json")
         self.assertEqual("operator-command-failed-permission-denied", result[-1])
+
+
+    def load_fixture(self):
+        from test_cloudbank_sustained_load import AdmissionTests
+        from test_cloudbank_platform_qualification import profile as profile_fixture
+        from test_cloudbank_ms65_rehearsal import journey_evidence
+        value, _ = AdmissionTests().observation()
+        lock = image_lock()
+        images = {r["service"]: r["reference"] for r in lock["images"]}
+        journeys = journey_evidence(lock)
+        journeys["bindings"]["environment"].update(project=review.PROJECT, cluster="cloudbank-ms67")
+        journeys = sign(journeys, KEY, "unit-observer")
+        site = profile_fixture(region="us-west1", context="gke_test_us-west1_cloudbank-ms67",
+                               model_image=value["model"]["before"]["image"])
+        site = sign(site, KEY, site["signer"])
+        # Deep MS64/MS66 receipt qualification is covered by their own suites;
+        # the tests below retain the canonical cross-receipt binding checks.
+        prior = sign({"receipt_type": review.ms66.RECEIPT_TYPE,
+                      "source_ms64_receipt_sha256": HEX_A,
+                      "postgresql_image_lock_sha256": lock["content_sha256"],
+                      "postgresql_journey_sha256": journeys["content_sha256"]}, KEY, "unit-observer")
+        common = {"image_lock_sha256": lock["content_sha256"], "ms64_receipt_sha256": HEX_A,
+                  "platform_profile_sha256": site["content_sha256"]}
+        full = {**common, "ms66_receipt_sha256": prior["content_sha256"],
+                "journeys_sha256": journeys["content_sha256"]}
+        value.update(bindings=full, images=images, environment=journeys["bindings"]["environment"],
+                     run_id=review.LOAD_RUN)
+        value["summary"]["run_id"] = review.LOAD_RUN
+        value["load"] = review.sustained.validate_summary(value["summary"], review.LOAD_RUN)
+        for phase in ("before", "after"):
+            for service in images:
+                value["live"][phase][service]["image"] = images[service]
+        value = sign(value, KEY, "unit-observer")
+        context = {"bindings": common, "load_bindings": full, "images": images, "profile": site,
+                   "environment": journeys["bindings"]["environment"],
+                   "journeys_sha256": journeys["content_sha256"]}
+        return value, context, lock, journeys, prior
+
+    def test_full_load_bindings_pass_without_weakening_operational_or_load_validation(self):
+        value, context, _lock, _journeys, _prior = self.load_fixture()
+        self.assertEqual(3, len(context["bindings"]))
+        self.assertEqual(5, len(context["load_bindings"]))
+        self.assertTrue(review.verify_contract(value, KEY, context))
+        self.assertTrue(review.context_match(value, context))
+        self.assertEqual("contract-verified-current-context", row(value, context)["verification"])
+        operational = {"observation_type": review.PREFIX + "secret-rotation-observation",
+                       "bindings": context["bindings"], "environment": context["environment"]}
+        self.assertTrue(review.context_match(operational, context))
+        operational["bindings"] = context["load_bindings"]
+        self.assertFalse(review.context_match(operational, context))
+        for name in context["load_bindings"]:
+            for remove in (True, False):
+                broken = copy.deepcopy(value)
+                if remove:
+                    broken["bindings"].pop(name)
+                else:
+                    broken["bindings"][name] = "9" * 64
+                broken = sign(broken, KEY, "unit-observer")
+                with self.subTest(binding=name, remove=remove), self.assertRaisesRegex(
+                        review.JourneyFailure, "load-observation-bindings-invalid"):
+                    review.verify_contract(broken, KEY, context)
+        for field, replacement in (("images", {}), ("environment", {}), ("workload", {})):
+            broken = sign({**value, field: replacement}, KEY, "unit-observer")
+            with self.subTest(field=field), self.assertRaisesRegex(
+                    review.JourneyFailure, "load-observation-bindings-invalid"):
+                review.verify_contract(broken, KEY, context)
+
+    def test_anchor_integration_uses_canonical_five_input_loader_and_reuses_sql(self):
+        from test_cloudbank_ms65_rehearsal import recovery_evidence
+        from lightyear_data.cloudbank_ms65_rehearsal_gke import reassess_database_recovery
+        value, context, lock, journeys, prior = self.load_fixture()
+        source = recovery_evidence(context["images"], journeys)
+        source["bindings"]["environment"] = context["environment"]
+        source.update(status="failed", run_id="sql-recovery-" + "a" * 32)
+        source["pitr"].update(database_rto_seconds=622, rto_within_limit=False,
+                              recovery_point_age_seconds=18)
+        source["backup_restore"]["database_rto_seconds"] = 455
+        source = sign(source, KEY, "original-observer")
+        sql = reassess_database_recovery(source, KEY, "authorized-observer",
+                                        images=context["images"], environment=context["environment"],
+                                        journeys_sha256=journeys["content_sha256"])
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            execution = root / ("load-fix-run-" + review.IMAGE_BUILD)
+            bundle = execution / "regional-load/retry-4f7ccc6c-347d-4d78-a1dc-aede161165eb/bundle"
+            refresh = execution / "qualification-refresh" / ("from-" + review.LOAD_RUN)
+            bundle.mkdir(parents=True)
+            refresh.mkdir(parents=True)
+            state = sign({"state_type": "lightyear-ms67-recovery-ms65-refresh",
+                          "passing_load_sha256": value["content_sha256"],
+                          "inputs": {"probe_image": "pinned-test-probe", "ms65_environment_sha256": "e" * 64}},
+                         KEY, "operator")
+            payloads = {bundle / "image-lock.json": lock, bundle / "ms64-receipt.json": {"content_sha256": HEX_A},
+                        bundle / "journeys.json": journeys, bundle / "platform-profile.json": context["profile"],
+                        bundle / "ms66-receipt.json": prior, refresh / "refresh-state.json": state,
+                        execution / "sustained-load.observation.json": value,
+                        refresh / ("sql-reassessment-630-" + source["content_sha256"]) / "database-recovery.json": sql}
+            documents, snapshots = [], {}
+            for path, payload in payloads.items():
+                path.parent.mkdir(parents=True, exist_ok=True)
+                path.write_text(json.dumps(payload))
+                snapshots[path] = path.read_bytes()
+                documents.append((payload, str(path), review.digest(path.read_bytes())))
+            bound_sql = ({"content_sha256": HEX_A}, lock, journeys, context["images"], journeys["bindings"])
+            with patch.object(review, "LOAD_SHA", value["content_sha256"]), \
+                 patch.object(review, "SQL_SOURCE", source["content_sha256"]), \
+                 patch.object(review, "load_bound_inputs", return_value=bound_sql), \
+                 patch.dict(review.load_bound_sustained_inputs.__globals__, {
+                     "validate_ms64": lambda *_: [], "validate_ms66": lambda *_: []}), \
+                 patch.object(review, "cloud", side_effect=AssertionError("No cloud reads required")), \
+                 patch.object(review.subprocess, "run", side_effect=AssertionError("No process execution required")):
+                actual, retained = review.anchors(root, documents, KEY)
+                self.assertEqual(context["load_bindings"], actual["load_bindings"])
+                self.assertEqual(context["bindings"], actual["bindings"])
+                self.assertEqual("verified", retained["load"]["status"])
+                self.assertEqual("verified", retained["ms66"]["status"])
+                self.assertEqual("verified-under-approved-630-policy", retained["sql"]["status"])
+                self.assertEqual("contract-verified-current-context", row(value, actual)["verification"])
+                for path, before in snapshots.items():
+                    self.assertEqual(before, path.read_bytes())
+                without_prior = [d for d in documents if d[0].get("receipt_type") != review.ms66.RECEIPT_TYPE]
+                with self.assertRaisesRegex(review.JourneyFailure, "matching-ms66-receipt-not-located"):
+                    review.anchors(root, without_prior, KEY)
+                # A modified receipt on disk cannot silently replace the indexed evidence.
+                (bundle / "ms66-receipt.json").write_text(json.dumps(sign(
+                    {**prior, "postgresql_image_lock_sha256": "9" * 64}, KEY, "unit-observer")))
+                with self.assertRaisesRegex(review.JourneyFailure, "evidence-changed-during-read"):
+                    review.anchors(root, documents, KEY)

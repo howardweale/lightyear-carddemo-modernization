@@ -79,7 +79,7 @@ def outputs(p: dict) -> dict[Path, str]:
 <footer>LIGHTYEAR · Synthetic nonproduction execution evidence · Published from GitHub</footer></body></html>
 '''
     readme = f"# CloudBank execution receipts\n\nMS67 is complete for the bound synthetic nonproduction platform.\n\n[Published evidence index](https://howardweale.github.io/lightyear-carddemo-modernization/receipts/) · [Final receipt]({local_link(p['receipt_path'])}) · [Catalog](catalog.json)\n\nThe 31 original JSON files and exporter manifest are preserved byte for byte. Public verification checks file hashes, canonical content hashes and bindings. HMAC verification was performed by the operator exporter before upload; the public publisher does not have the key.\n\n{NOTE}\n\nDeterministic `factory/cloudbank/*/readiness.receipt.json` files remain admission contracts. The actual signed execution records are published here. Earlier milestones retain their own scope and flags; later qualification does not rewrite historical receipts.\n\nRebuild or verify these projections without cloud access:\n\n```bash\npython3 tools/publish_cloudbank_receipts.py build\npython3 tools/publish_cloudbank_receipts.py verify\n```\n"
-    site = (ROOT / "docs/index.html").read_text()
+    site = (ROOT / "docs/index.html").read_text(encoding="utf-8")
     if site.count(START) != 1 or site.count(END) != 1:
         raise ValueError("website receipt block markers missing or duplicated")
     before, rest = site.split(START)
@@ -94,10 +94,10 @@ def main() -> int:
     publication = load_publication()
     for path, value in outputs(publication).items():
         if args.command == "build":
-            path.write_text(value)
-        elif not path.is_file() or path.read_text() != value:
+            path.write_text(value, encoding="utf-8")
+        elif not path.is_file() or path.read_text(encoding="utf-8") != value:
             raise ValueError(f"stale receipt projection: {path.relative_to(ROOT)}")
-    catalog = json.loads((ROOT / "docs/milestones/catalog.json").read_text())
+    catalog = json.loads((ROOT / "docs/milestones/catalog.json").read_text(encoding="utf-8"))
     for row in publication['milestones']:
         entry = next(x for x in catalog['milestones'] if x['number'] == row['number'])
         if entry.get('execution_receipts') != [x['path'] for x in row['receipts']] or entry.get('status') != ('Plan admitted' if row['number'] == 58 else 'Complete — execution passed'):

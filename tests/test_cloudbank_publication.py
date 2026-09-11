@@ -48,7 +48,7 @@ class CloudBankPublicationTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "bytes changed"):
                 load_publication(root)
             value = json.loads(original); value["summary"]["p95_ms"] = 1
-            path.write_text(json.dumps(value))
+            path.write_text(json.dumps(value), encoding="utf-8")
             with self.assertRaises(ValueError):
                 load_publication(root)
             path.unlink()
@@ -81,18 +81,18 @@ class CloudBankPublicationTests(unittest.TestCase):
         spec = importlib.util.spec_from_file_location('receipt_publisher', ROOT / 'tools/publish_cloudbank_receipts.py')
         module = importlib.util.module_from_spec(spec); spec.loader.exec_module(module)
         for path, expected in module.outputs(load_publication()).items():
-            self.assertEqual(expected, path.read_text(), str(path))
-        parser = Links(); parser.feed((ROOT / 'docs/receipts/index.html').read_text())
+            self.assertEqual(expected, path.read_text(encoding="utf-8"), str(path))
+        parser = Links(); parser.feed((ROOT / 'docs/receipts/index.html').read_text(encoding="utf-8"))
         for href in parser.hrefs:
             if href.startswith(('https://', '#')):
                 continue
             self.assertTrue((ROOT / 'docs/receipts' / href.split('#')[0]).exists(), href)
-        catalog = json.loads((ROOT / 'docs/milestones/catalog.json').read_text())
+        catalog = json.loads((ROOT / 'docs/milestones/catalog.json').read_text(encoding="utf-8"))
         for row in load_publication()['milestones']:
             entry = next(e for e in catalog['milestones'] if e['number'] == row['number'])
             self.assertEqual([f['path'] for f in row['receipts']], entry['execution_receipts'])
             self.assertEqual('Plan admitted' if row['number'] == 58 else 'Complete — execution passed', entry['status'])
-        page = (ROOT / 'docs/index.html').read_text()
+        page = (ROOT / 'docs/index.html').read_text(encoding="utf-8")
         self.assertIn('MS67 complete. Nonproduction platform qualified.', page)
         self.assertIn('chat p95 was 21.36 seconds', page)
         self.assertIn('Mainframe equivalence claims remain gated', page)

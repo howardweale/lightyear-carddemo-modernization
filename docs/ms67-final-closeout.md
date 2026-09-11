@@ -74,6 +74,55 @@ latency/recovery acceptance limit is relaxed.
 
 ## Resume and recovery
 
+### Restored operator failure during rollback routing
+
+The retained checkpoint history for `drills-observation-026d1822e6d948a7b23f39c56c6d0f9e.json`
+locates the failure at `route-azn-server-intent`, after all 18 target journeys,
+the pre-rollback database snapshot and restoration of baseline Checks passed.
+Cleanup restored the baseline. The original command suppressed stderr, so the
+history identifies the failed Service update but does not establish its API
+error code. A version conflict is plausible, not a confirmed historical cause.
+
+The preceding runner captured a Service's `resourceVersion` before uploading
+and reading back route intent. A controller update during that delay invalidates
+the subsequent guarded patch. The correction reads the Service after intent,
+keeps atomic UID/version preconditions, and requires its complete spec to match
+the original or exactly requested spec. It reads the result back even when the
+command reports success. A lost response can be adopted only when the same UID
+has exactly the requested spec. Failed patches are retried at most three times,
+and only after observing a different version with the complete original spec
+intact. Unchanged-version errors, identity/spec drift and lost lease ownership
+remain failures. These semantics follow the Kubernetes
+[conditional update contract](https://kubernetes.io/docs/reference/using-api/api-concepts/#updates-to-existing-resources).
+
+From the reviewed successor to controller
+`e05aa131badbdcd63b3698a0a73d860d6ccf0782`, use:
+
+```sh
+python3 tools/ms67_finish.py --execute \
+  --retry-candidate-build 43bee3ac-7b44-4407-bafe-bdfedca5bd8e \
+  --resume-drills --repair-rollback-routes
+```
+
+The source transition verifies the signed restored failure, passed target
+journeys, their attempt and image bindings, Checks isolation/restoration,
+pre-rollback snapshot, customer startup correction, rollouts and both evacuations.
+It archives the original controller, failed checkpoint and passed journeys with
+their signatures unchanged. The read-only diagnostic is not acceptance evidence.
+Existing candidate images and the five completed controls remain bound to their
+original proofs; MS65, MS66, SQL and sustained load are retained.
+
+Only unfinished cutover is retried, with a fresh child journey identity, followed
+by current controls and final admission. The preceding runner did not durably
+record the intermediate canary/target route proofs, so its passed journeys and
+successful cleanup alone cannot complete rollback acceptance. Fresh route and
+before/after database proofs are required. Each new attempt archives and clears
+the preceding snapshot so an earlier snapshot cannot masquerade as a new one.
+Future failures print `MS67_FINAL_FAILURE_CONTEXT`, including the failed phase,
+pending route and command operation, with resource versions and spec hashes;
+this record is frozen before cleanup and included in the signed observation.
+Command arguments, stderr and credentials are not included.
+
 ### Customer fixture reset on restart
 
 The PostgreSQL customer `data.sql` contains `customer:3 runAlways:true`, truncates

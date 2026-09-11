@@ -6,14 +6,15 @@ Oracle and PostgreSQL migration scripts in the already-pinned iDempiere release 
 | Milestone | Scope | Status |
 |---|---|---|
 | MS #68 | Inventory, pairing and premise check | Complete |
-| MS #69 | Deterministic semantic comparison | Planned; order-to-cash pilot first |
+| MS #69 | Deterministic semantic comparison | Complete bounded baseline; unresolved semantics reported |
 | MS #70 | Bounded triage and evidence assembly | Planned; comparator findings only |
 
 Customer production readiness, governed cutover and continuous assurance remain future unnumbered
 work. Reassigning these milestone numbers does not change earlier signed CloudBank evidence.
 
 The governing execution rule is **deterministic sweep first; models only on the bounded set that
-the comparator cannot resolve**. Stage 1 is complete and used no model calls.
+the comparator cannot resolve**. Stages 1 and 2 use no model calls. MS #69's baseline leaves most
+SQL unresolved; it does not unlock an unattended model sweep or a whole-migration equivalence claim.
 
 ## What Stage 1 established
 
@@ -86,10 +87,10 @@ provenance unresolved until source history supports a per-pair classification.
 Build the 1,078-pair manifest, retain unpaired files as findings, select the 93-pair order-to-cash
 pilot, and publish a content-addressed receipt. The committed receipt proves pairing coverage only.
 
-### Stage 2 — deterministic semantic comparison (MS #69 next)
+### Stage 2 — deterministic semantic comparison (MS #69 bounded baseline complete)
 
-Build dialect parsers and a normalization layer against the existing semantic core. The comparator
-must distinguish at least:
+The bounded dialect parsers and normalization layer use the existing semantic-core canonical types
+and five compatibility classes. They distinguish:
 
 - Oracle `ALTER TABLE ... MODIFY` from PostgreSQL `t_alter_column` helper semantics;
 - `NUMBER` precision and scale from `NUMERIC` behavior;
@@ -98,9 +99,40 @@ must distinguish at least:
 - defaults, nullability, constraints, indexes and schema-object changes;
 - DML effects and explicitly unsupported procedural or session-dependent behavior.
 
-Coverage is the primary output. Each construct is counted as parsed-and-compared,
+Coverage is the primary output. SQL units are counted as parsed-and-compared,
 parsed-but-indeterminate, or unparsed. An unknown construct can never be treated as equivalent.
-The order-to-cash pilot runs before the remaining 985 pairs.
+The order-to-cash pilot runs and is sealed before the remaining 985 pairs. The frozen lexical
+pilot membership is retained; the SQL lexer excludes comments from executable units.
+
+The exact admission rules and primary language references are in
+[comparison-policy.json](comparison-policy.json). The verdict compares **ordered declared schema
+effects**, not final database state or native execution. Equal explicit decimal facets are admitted
+only for a bounded finite-number projection; PostgreSQL NaN/infinity and unconstrained numeric
+domains are not equated. Character, datetime, index, constraint and catalog-dependent behavior
+retains policy obligations. Typed literals are preserved; other expressions are opaque.
+
+`INSERT VALUES`, `UPDATE` assignments and `DELETE` predicates are projected, but DML remains
+indeterminate without baseline column domains, trigger and coercion evidence. Unknown statement
+forms and procedural blocks remain unparsed. Ordered effect identities must match exactly; the
+comparator neither guesses a resynchronization nor collapses repeated writes. Different statement
+counts can align only through fully parsed column-effect expansion.
+
+The bounded helper-definition exception is `db/postgresql/functions/altercolumn.sql` at the same
+pin. Its five positional arguments are decoded, including the distinction between SQL NULL and
+the string 'NULL'. Requested column facets are recorded, while dynamic catalog lookups,
+dependent-view recreation, grants, coercion and historical helper deployment remain unresolved.
+No historical migrations or additional Java files become comparison targets.
+
+The known `SET DEFINE OFF`, `SET SQLBLANKLINES ON`, and migration-registration call forms are
+counted separately and excluded from SQL-effect coverage. All other client/session commands are
+unparsed. This policy assumes literal SQL execution and an existing schema-name mapping; it does
+not certify SQL*Plus behavior, migration-log side effects, transactions or search paths.
+
+The unit denominator is **statements and opaque blocks on both dialect sides**, not the original
+plan's estimated 25,157 lexical occurrences. A lexically malformed file or unterminated Oracle
+block can become one opaque remainder unit; unsupported inner statements are not invented.
+Adjacent units with the same category/reasons are compacted into source-range segments. Each
+segment retains its unit interval, line span and a digest of the ordered unit hashes.
 
 ### Stage 3 — bounded triage (MS #70 planned)
 
@@ -142,7 +174,66 @@ Windows:
 
 ## Current claim boundary
 
-Stage 1 proves deterministic pairing and pilot selection for one exact public-source commit. It
-does not prove independent hand maintenance, parser coverage, semantic equivalence, native Oracle
-or PostgreSQL behavior, iDempiere application equivalence, migration completion, customer
-readiness, or production readiness.
+Stage 1 proves deterministic pairing and pilot selection for one exact public-source commit.
+Stage 2 adds a bounded static comparison and measures its substantial unresolved surface.
+Neither proves independent hand maintenance, complete migration equivalence, native Oracle or
+PostgreSQL behavior, iDempiere application equivalence, migration completion, customer readiness,
+or production readiness. No signed CloudBank evidence is changed or reused as iDempiere proof.
+
+## MS69 measured baseline
+
+| Scope | Pairs | Equivalent under static policy | Divergent under static policy | Indeterminate |
+|---|---:|---:|---:|---:|
+| Order-to-cash pilot | 93 | 0 | 0 | 93 |
+| All current pairs | 1,078 | 1 | 0 | 1,077 |
+
+| SQL unit coverage | Oracle | PostgreSQL | Combined |
+|---|---:|---:|---:|
+| Parsed and compared | 388 | 388 | 776 |
+| Parsed but indeterminate | 55,455 | 48,467 | 103,922 |
+| Unparsed | 5,518 | 1,077 | 6,595 |
+| SQL unit denominator | 61,361 | 49,932 | 111,293 |
+| Administrative units excluded | 3,053 | 1,074 | 4,127 |
+
+Decision coverage is **0.70%**, not 94% semantic equivalence because most statements were
+structurally recognized. The pilot has 65,536 SQL units, of which 288 are decided, 59,957 are
+parsed but indeterminate and 5,291 are unparsed. A pair can contain decided units and still be
+indeterminate overall. Unknown constructs never inherit an equivalent verdict from file identity.
+
+The only equivalent pair is `migration/iD11/*/202304171928_IDEMPIERE-5567.sql`: both dialects
+declare a single-space default on `t_selection.t_selection_uu` and
+`t_selection_infowindow.t_selection_uu`. The verdict excludes registration/client effects and
+runtime coercion or constraints. It does not claim that either migration executed successfully.
+
+The large flagged set means the original small-queue budget assumptions are not established.
+MS70 must first select a bounded sample and consider repeated reasons. The existing workcell has
+`ModelAgentSet.plan` and `analyze_failure`, backed by `BoundedModelProvider`; its current schemas
+are factory plan/failure schemas, not an IDDA triage API. MS70 must add audit-specific payloads and
+deterministic gates around those existing controls. MS69 intentionally does not instantiate it.
+
+## Run and verify Stage 2
+
+```bash
+./idempiere-divergence-audit.sh compare /path/to/idempiere-release-13
+./idempiere-divergence-audit.sh verify-comparison
+./idempiere-divergence-audit.sh verify-comparison-source /path/to/idempiere-release-13
+```
+
+```powershell
+.\idempiere-divergence-audit.ps1 compare C:\path\to\idempiere-release-13
+.\idempiere-divergence-audit.ps1 verify-comparison
+.\idempiere-divergence-audit.ps1 verify-comparison-source C:\path\to\idempiere-release-13
+```
+
+Outputs are [comparison-policy.json](comparison-policy.json),
+[stage2-pilot.json](stage2-pilot.json), [stage2-comparison.json](stage2-comparison.json) and
+[stage2.receipt.json](stage2.receipt.json). Stage 1 artifacts remain unchanged.
+Each pair ID resolves its exact source paths and logical hashes through the Stage 1 manifest;
+segments identify the implicated ranges and reasons. Unequal structured schema values are retained
+as declared differences, but policy-dependent differences are not promoted to proven divergences.
+
+`verify-comparison` checks hashes, current implementation/policy/schema bindings, denominator,
+source ranges, pilot prefix, claim boundaries and the derived receipt. These are **unsigned**
+artifacts: offline integrity is not evidence authentication or a new semantic replay.
+`verify-comparison-source` additionally admits the clean exact pin and rebuilds every result;
+it rejects re-sealed results that disagree with source-derived semantics. Neither executes SQL.

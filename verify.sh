@@ -64,6 +64,7 @@ fi
 "$project_dir/ims-readiness.sh" verify
 "$project_dir/audit-control-tower.sh" verify
 "$project_dir/idempiere-divergence-audit.sh" verify
+"$project_dir/idempiere-divergence-audit.sh" verify-comparison
 "$project_dir/source-only-pilot.sh" verify
 "$project_dir/integrated-pilot-qualification.sh" verify
 

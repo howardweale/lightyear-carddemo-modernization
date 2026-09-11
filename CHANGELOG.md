@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.69.0 — 2026-09-11
+
+- Completed the MS #69 bounded static comparison baseline against the unchanged MS #68 pin and
+  pairing manifest. Ran and sealed the 93-pair order-to-cash pilot before the remaining 985 pairs.
+- Added a quote-aware SQL lexer, fully consumed bounded schema productions, typed literal/DML
+  projections, Oracle MODIFY and PostgreSQL t_alter_column effect expansion, and strict ordered
+  alignment using the MS #33 canonical types and compatibility classes.
+- Published coverage for 111,293 SQL units across both dialect sides: 776 parsed-and-compared
+  (0.70%), 103,922 parsed-but-indeterminate and 6,595 unparsed. Separately excluded 4,127 known
+  administrative units. These are statement/block counts, not dialect-token occurrences.
+- Recorded one pair equivalent only under the declared-effect policy, zero proven declared-effect
+  divergences and 1,077 indeterminate pairs. Low decision coverage is an open engineering limit,
+  not evidence of clean migrations or an authorization for an unattended model sweep.
+- Bound the pinned PostgreSQL altercolumn helper definition and preserved its unresolved catalog,
+  view, permission and deployment obligations. DML, character and datetime semantics remain
+  indeterminate without admitted domains and context; maintenance provenance remains unclassified.
+- Added source-range findings, pilot/full reports, an unsigned content-addressed receipt, schema,
+  cross-platform commands, release verification and adversarial tests. Source-bound verification
+  replays SQL; offline verification checks integrity/accounting only. No agents, model calls,
+  work orders, database execution, native equivalence or production claims were added.
+- Added the MS #69 milestone brief without changing earlier milestone bodies or signed receipts.
+  MS #70 remains planned and will adapt the existing Planner/Analyst workcell to bounded findings.
+
 ## 0.68.0 — 2026-09-11
 
 - Completed MS #68 iDempiere dialect inventory and pairing. Assigned MS #69 to deterministic

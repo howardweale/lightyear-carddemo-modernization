@@ -12,6 +12,12 @@ from lightyear_data.idempiere_divergence import (
     build_stage1_artifacts,
     validate_stage1_artifacts,
 )
+from lightyear_data.idempiere_comparison import (
+    ROOT_PATH as STAGE2_ROOT,
+    REPORT_PATH as STAGE2_REPORT,
+    build_stage2_artifacts,
+    validate_stage2_artifacts,
+)
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -19,18 +25,26 @@ ROOT = Path(__file__).resolve().parents[1]
 
 def main() -> int:
     parser = argparse.ArgumentParser(
-        description="Build or verify the deterministic iDempiere Oracle/PostgreSQL Stage 1 audit evidence."
+        description="Build or verify deterministic iDempiere pairing (MS68) and bounded semantic comparison (MS69)."
     )
-    parser.add_argument("action", choices=("build", "verify", "verify-source"))
+    parser.add_argument("action", choices=("build", "verify", "verify-source", "compare", "verify-comparison", "verify-comparison-source"))
     parser.add_argument("--project-root", type=Path, default=ROOT)
     parser.add_argument("--source-root", type=Path)
     args = parser.parse_args()
     project_root = args.project_root.resolve()
 
-    if args.action in {"build", "verify-source"} and args.source_root is None:
+    if args.action in {"build", "verify-source", "compare", "verify-comparison-source"} and args.source_root is None:
         parser.error(f"{args.action} requires --source-root")
 
-    if args.action == "build":
+    if args.action == "compare":
+        artifacts = build_stage2_artifacts(project_root, args.source_root.resolve())
+        for name, payload in artifacts.items():
+            write_json(project_root / STAGE2_ROOT / name, payload)
+        result = {"status": "written", "comparison": str(project_root / STAGE2_REPORT), "statistics": artifacts[STAGE2_REPORT.name]["statistics"], "model_calls": 0, "audit_complete": False, "production_ready": False}
+    elif args.action in {"verify-comparison", "verify-comparison-source"}:
+        errors = validate_stage2_artifacts(project_root, source_root=args.source_root.resolve() if args.source_root else None)
+        result = {"status": "passed" if not errors else "failed", "verification": "source-bound-semantic-replay" if args.source_root else "committed-integrity-and-accounting-only", "errors": errors, "audit_complete": False, "production_ready": False}
+    elif args.action == "build":
         artifacts = build_stage1_artifacts(project_root, args.source_root.resolve())
         write_json(project_root / MANIFEST_PATH, artifacts["pairing-manifest.json"])
         write_json(project_root / RECEIPT_PATH, artifacts["stage1.receipt.json"])

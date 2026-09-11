@@ -83,5 +83,10 @@ script is undocumented, and that every POSIX entry point has a PowerShell twin.
 - `./idempiere-divergence-audit.sh verify` checks the committed IDDA Stage 1 pairing and premise
   evidence. `build` and `verify-source` require the exact clean MS #48 iDempiere checkout; neither
   action executes a database or calls a model.
+- `./idempiere-divergence-audit.sh compare IDEMPIERE_ROOT` builds the MS #69 pilot followed by
+  the full bounded static comparison. `verify-comparison` checks committed integrity and accounting;
+  `verify-comparison-source IDEMPIERE_ROOT` also replays every pair from the exact clean source pin.
+  Known client/registration commands are counted outside the SQL coverage denominator. Unresolved
+  constructs remain findings; none of these commands calls agents or executes SQL.
 
 See `scripts.catalog.json` for the exact purpose, role, and verification owner of all entry points.

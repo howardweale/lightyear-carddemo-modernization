@@ -1,0 +1,107 @@
+{
+  "artifacts": [
+    {
+      "module": "azn-server",
+      "path": "azn-server/target/azn-server-0.0.1-SNAPSHOT.jar",
+      "sha256": "d05795b33fa900a376b053f8a6a621ee29875f675bca04583de9cf00506c7f8d",
+      "size_bytes": 107587105
+    },
+    {
+      "module": "account",
+      "path": "account/target/account-0.0.1-SNAPSHOT.jar",
+      "sha256": "8caec9fa8e1ebe51935d8044965be51b30b2d1d6848ddd3c923e22150118805c",
+      "size_bytes": 113811676
+    },
+    {
+      "module": "customer",
+      "path": "customer/target/customer-0.0.1-SNAPSHOT.jar",
+      "sha256": "d651703b60437a5d61b14dc427e0af3131f38fd71fdd71234b10b8f57f14879a",
+      "size_bytes": 106956338
+    },
+    {
+      "module": "transfer",
+      "path": "transfer/target/transfer-0.0.1-SNAPSHOT.jar",
+      "sha256": "18a0415c46316f6afd661beb86d11a52be3668a1ab4f198fc7b06aed144f4c7c",
+      "size_bytes": 80501070
+    },
+    {
+      "module": "checks",
+      "path": "checks/target/checks-0.0.1-SNAPSHOT.jar",
+      "sha256": "030aff31ef75761e8d1f08d5ced6e13d6b0c158daf0134508994b45a4a20f79a",
+      "size_bytes": 77158761
+    },
+    {
+      "module": "creditscore",
+      "path": "creditscore/target/creditscore-0.0.1-SNAPSHOT.jar",
+      "sha256": "749da3d602c3aa508fed646dbf1d54c8731799a61ff66227865d9d263c39ad24",
+      "size_bytes": 70925678
+    },
+    {
+      "module": "testrunner",
+      "path": "testrunner/target/testrunner-0.0.1-SNAPSHOT.jar",
+      "sha256": "9a32d43b633a6c65a589f23c675bd4c992541060946e7d622bc256a89caa5ebc",
+      "size_bytes": 74690115
+    }
+  ],
+  "build_plan_sha256": "8e4a65f4bd33eb03981f76caaf3853d9268968250ea4eeb1203d1ae13c3d862c",
+  "cloudbank_source_baseline_complete": false,
+  "commands": [
+    {
+      "argv_sha256": "e61d87342a41d1a259cc778a73fd6ebdfd696c9d860241a5c4945aede012ba42",
+      "exit_code": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "8ace980a4cace74e3e3581f50c803183e4308e79c2e5d3517e56fadf29386ebc"
+    },
+    {
+      "argv_sha256": "d10cb402d2df779ccda4b4f18b09243724e79b38ebd1a7d1109528f187209f75",
+      "exit_code": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "9aa39fe1ca33995ca5d642ce4d5c25628c418e8300030f2f1136df373d1d4213"
+    },
+    {
+      "argv_sha256": "edbeb7609595fc743f83bbd6339d02412e4314198ae8ad26d38c17b7bf27a6b9",
+      "exit_code": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "8b9a5ee5fa59f417fbc4e2dd908e6586ca205772e8a06d866ad74bcde3819bf0"
+    },
+    {
+      "argv_sha256": "1cff76a590c71311b4b5cf570b5818d23f630e2f39cf725d48d4b4548d47a62f",
+      "exit_code": 0,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_sha256": "05086fd751bb35346903adb07618ed74e6d99580de151126673b20404158ed7c"
+    }
+  ],
+  "content_sha256": "883018600388dd5c7154c48713d4417210dc489113fb04adb5394e17e772a2b2",
+  "migration_complete": false,
+  "oracle_runtime_observed": false,
+  "postgresql_mapping_complete": false,
+  "production_ready": false,
+  "receipt_type": "lightyear-cloudbank-source-build-execution-receipt",
+  "release": "0.54.0",
+  "schema_version": "1.0",
+  "security": {
+    "credentials_persisted": false,
+    "raw_stderr_persisted": false,
+    "raw_stdout_persisted": false
+  },
+  "signature": {
+    "algorithm": "hmac-sha256",
+    "signer": "howard.weale@gmail.com",
+    "value": "1c02b07ed5bbbabcf5c6772f6435ad8397945358f2763b5c1a544578aca12e1a"
+  },
+  "source": {
+    "commit": "4f41b16d00c45503f691836fee8138010c969e86",
+    "repository": "https://github.com/oracle/microservices-backend",
+    "root_tree": "6aa92e89c783f123c4da8d7ae18108004a4f4a99",
+    "subtree": "cloudbank-v5",
+    "subtree_tree": "bd918386209f284a1ed31802555740eb34b75348"
+  },
+  "source_build_observed": true,
+  "status": "passed",
+  "target_equivalent": false,
+  "toolchain": {
+    "java_major": 21,
+    "java_version": "21.0.12",
+    "maven_version": "3.9.16"
+  }
+}

@@ -1,0 +1,703 @@
+{
+  "bindings": {
+    "image_lock_sha256": "eb3c808a5af30fe2a212ded0f27a9810a867bf651f8e759b04cd54547244a778",
+    "ms64_receipt_sha256": "f78f85eb8342d81483f389918b7ed48601b19cf4374ac62fb12e27d01db2d146",
+    "platform_profile_sha256": "cfa845d9f93c143ec87563a0c510fe4d0f517d8baad07d92d65a203786f2c9f4"
+  },
+  "candidate_lock": {
+    "content_sha256": "529f5f7f514c2fd04599641ba966d29380a06d10e483699e0035af11922e87b7",
+    "images": [
+      {
+        "reference": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/azn-server@sha256:0a316110da9a5b1193e7187055f2a0b2113d77266b667535173923e04801c52f",
+        "service": "azn-server"
+      },
+      {
+        "reference": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/customer@sha256:186031dbaf39bf786fd2470c6613fd057e39787591d78a240ab6d480663d1c31",
+        "service": "customer"
+      },
+      {
+        "reference": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/account@sha256:1cc68d435455b0ba83d66579d586eee437b47ff5b5d2ae93fb01a95d0e059c97",
+        "service": "account"
+      },
+      {
+        "reference": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/transfer@sha256:964dc034bc58375b83c3ddf8efa42991dd5ba45e313ac3ee9f28a839795390f4",
+        "service": "transfer"
+      },
+      {
+        "reference": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/checks@sha256:aae640ec26d6cd1d5897da14b8f6e521c5096b1997300e20d7a54f0fa578dcad",
+        "service": "checks"
+      },
+      {
+        "reference": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/testrunner@sha256:b3ac474b57b65cdb615c1dc37ade674893786297c0cb6dfd856535f8122d30cb",
+        "service": "testrunner"
+      },
+      {
+        "reference": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/creditscore@sha256:126344f7f560801f4c61ce029946cfeefed536a95db6850f0537ba3a5e796f58",
+        "service": "creditscore"
+      },
+      {
+        "reference": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/chatbot@sha256:29ce673fdb299800e2bcb1326fbb55606f1064c4678ce7941588525d1626699f",
+        "service": "chatbot"
+      }
+    ],
+    "lock_type": "lightyear-cloudbank-ms65-image-lock",
+    "release": "0.65.0",
+    "schema_version": "1.0",
+    "source_ms64_receipt_sha256": "f78f85eb8342d81483f389918b7ed48601b19cf4374ac62fb12e27d01db2d146"
+  },
+  "cloud_build_id": "eb9d51f6-5f54-4b91-b5f4-988bfbb5964a",
+  "content_sha256": "736acaf40463b52dca4a3c1a670ed97380c035f9103055a2b230536910996244",
+  "controller_commit": "9c159d2b87d411a23b7dbb4e7cc8c41e3398d532",
+  "credentials_persisted": false,
+  "ms67_complete": false,
+  "observation_type": "lightyear-ms67-final-candidate-security",
+  "run_id": "ms67-final-635689566db6425aadf6fb1fc6cf3de7",
+  "scan_reuse_scope": "Fresh candidate scan applies to the byte-identical baseline filesystem; both image signatures and provenance verified",
+  "schema_version": "1.0",
+  "services": [
+    {
+      "baseline_provenance": {
+        "count": 1,
+        "output_sha256": "8369aa042132fe9b24dce05759d9eb24e4d9f73d4735ca6a757326da6e1dcbe0",
+        "source_commit": "22ac6a4c0dcb39fbfdb7eab28cad5eebc4b9ea8e",
+        "statement_sha256": [
+          "0664103c8c6947904f5bbb01f12c92bd02e94f1db4256dabf5983fde77d712fb"
+        ],
+        "verified": true
+      },
+      "baseline_signature": {
+        "count": 2,
+        "output_sha256": "3cf9e393fe0f3decdb361f00c5efbca2b0527688f84a2381d0c74c479fcd8e84",
+        "verified": true
+      },
+      "packaging": {
+        "baseline_config_digest": "sha256:fe4a378f03fc87a68292736b695d044235eae049693cdff13a9c8c2c959b7a70",
+        "baseline_image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/azn-server@sha256:24ba43de59cf22f95c962981b49542eb55e332fc2dd91f9b4a9c724d06dd474a",
+        "candidate_config_digest": "sha256:996944df299828c0c8b7d24a88e943d2bae97e4c2c2434b3a0eda20889a7dda8",
+        "candidate_image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/azn-server@sha256:0a316110da9a5b1193e7187055f2a0b2113d77266b667535173923e04801c52f",
+        "revision_label": "ai.lightyr.ms67.packaging-revision",
+        "revision_value": "ms67-final-635689566db6425aadf6fb1fc6cf3de7",
+        "rootfs_sha256": "fff17329a72123353a3edb3fb89ee9a153b1d1856b64fe90a2a49c92df902c07",
+        "runtime_configuration_sha256": "ee97c3f4c753c48b46406c171de52c538012e092f7686b2ccab396ea95477bd5",
+        "scope": "metadata-only OCI packaging revision; no application or filesystem change",
+        "service": "azn-server"
+      },
+      "provenance": {
+        "count": 1,
+        "output_sha256": "c3b00236a12520c9d167a5c385a6be9730c5b035148517c72fbbc0dadd5aa28c",
+        "source_commit": "9c159d2b87d411a23b7dbb4e7cc8c41e3398d532",
+        "statement_sha256": [
+          "7f95e036c4b152c4cad7c0b57d054854b8063dae28a1e6313ee191de1c525d6c"
+        ],
+        "verified": true
+      },
+      "scan": {
+        "coverage": {
+          "java_packages": 155,
+          "os_packages": 73
+        },
+        "critical": 0,
+        "databases": {
+          "db": {
+            "metadata_sha256": "c0842910c79328192620f74a85bb59206df0ff9118ac40e3c964f6ae557dd81f",
+            "next_update": "2026-09-11T13:49:36.447576545Z",
+            "updated_at": "2026-09-10T13:49:36.447576998Z",
+            "version": 2
+          },
+          "java-db": {
+            "metadata_sha256": "63775982522ba53fafcf2db3bb52722279ff4e84805fea04d902afc6a4f0a1d6",
+            "next_update": "2026-09-13T01:06:43.672075684Z",
+            "updated_at": "2026-09-10T01:06:43.672075804Z",
+            "version": 1
+          }
+        },
+        "finding_ids": [],
+        "finding_ids_complete": true,
+        "high": 0,
+        "observed_at": "2026-09-10T19:32:57.310763Z",
+        "scan_sha256": "e463b2e1395b9cf028c677d97e261bb8ea966bd284ec98af64a543c78182cdae",
+        "severity_counts": {
+          "CRITICAL": 0,
+          "HIGH": 0,
+          "LOW": 0,
+          "MEDIUM": 8,
+          "UNKNOWN": 0
+        }
+      },
+      "service": "azn-server",
+      "signature": {
+        "count": 2,
+        "output_sha256": "ce816dd2a573565fcc01a639b982c5d4e31f062af670cb5264aaf293ea34f155",
+        "verified": true
+      }
+    },
+    {
+      "baseline_provenance": {
+        "count": 1,
+        "output_sha256": "9a35a8216476e00404a2c15be6335e2bad9ec32d6a89cbecff42001c897bc401",
+        "source_commit": "22ac6a4c0dcb39fbfdb7eab28cad5eebc4b9ea8e",
+        "statement_sha256": [
+          "03545cfa98cb54502d8819b429882aec96d0709830f9f55d5bf83b41e73d9e21"
+        ],
+        "verified": true
+      },
+      "baseline_signature": {
+        "count": 2,
+        "output_sha256": "194333a9a8d4b57f0b374133f0bd7c1fde694c69faab6345267dab9325bfb7bd",
+        "verified": true
+      },
+      "packaging": {
+        "baseline_config_digest": "sha256:8714f4e410528ee20fda6b9e47fdb29f5ca52957f31207c6fd21786215d37c52",
+        "baseline_image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/customer@sha256:47c50deffc67b480aa67ce4cffa4145eb4f91382ef091e72e89fbbfd0884456d",
+        "candidate_config_digest": "sha256:8fb1e54b8085000ce34a2c7a683e537a82f4523fb463d9dd218f93c551acd3b7",
+        "candidate_image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/customer@sha256:186031dbaf39bf786fd2470c6613fd057e39787591d78a240ab6d480663d1c31",
+        "revision_label": "ai.lightyr.ms67.packaging-revision",
+        "revision_value": "ms67-final-635689566db6425aadf6fb1fc6cf3de7",
+        "rootfs_sha256": "aa8ad551890c8f41d374d66e1d9cd2f7a3be7e8cdfea0f55f810fb971f112e4b",
+        "runtime_configuration_sha256": "2e87ce1deee16dcf3b51cdfd26bc7f1cd3242602746385f845cdd029a01b7749",
+        "scope": "metadata-only OCI packaging revision; no application or filesystem change",
+        "service": "customer"
+      },
+      "provenance": {
+        "count": 1,
+        "output_sha256": "d66c57a49a3fba7485c0fd87b3ba73fdd42d3f32785da6df8a400d70c9d388f8",
+        "source_commit": "9c159d2b87d411a23b7dbb4e7cc8c41e3398d532",
+        "statement_sha256": [
+          "15c6dad2a19b63f0685ab242edcbea06813699f2c472f28e5e7f80be905aba8e"
+        ],
+        "verified": true
+      },
+      "scan": {
+        "coverage": {
+          "java_packages": 155,
+          "os_packages": 73
+        },
+        "critical": 0,
+        "databases": {
+          "db": {
+            "metadata_sha256": "c0842910c79328192620f74a85bb59206df0ff9118ac40e3c964f6ae557dd81f",
+            "next_update": "2026-09-11T13:49:36.447576545Z",
+            "updated_at": "2026-09-10T13:49:36.447576998Z",
+            "version": 2
+          },
+          "java-db": {
+            "metadata_sha256": "63775982522ba53fafcf2db3bb52722279ff4e84805fea04d902afc6a4f0a1d6",
+            "next_update": "2026-09-13T01:06:43.672075684Z",
+            "updated_at": "2026-09-10T01:06:43.672075804Z",
+            "version": 1
+          }
+        },
+        "finding_ids": [],
+        "finding_ids_complete": true,
+        "high": 0,
+        "observed_at": "2026-09-10T19:33:14.002274Z",
+        "scan_sha256": "6cae52a0038d1cb99169484d454133d4ddb066124f4f15608207d9dd0fc50f92",
+        "severity_counts": {
+          "CRITICAL": 0,
+          "HIGH": 0,
+          "LOW": 0,
+          "MEDIUM": 7,
+          "UNKNOWN": 0
+        }
+      },
+      "service": "customer",
+      "signature": {
+        "count": 2,
+        "output_sha256": "0e4d5abaf0a8d55d74df0c554a67fb380349cae2b7f71164b1bc135f6f5f9029",
+        "verified": true
+      }
+    },
+    {
+      "baseline_provenance": {
+        "count": 1,
+        "output_sha256": "d0a7719884d4fac6b7d31a0408d1485a9be718f4f7b32bdd35c7a87f39665d48",
+        "source_commit": "22ac6a4c0dcb39fbfdb7eab28cad5eebc4b9ea8e",
+        "statement_sha256": [
+          "ae7531b786214e8a81ca9a3ec0fcf714662096b2256e012e92b13acf7857933e"
+        ],
+        "verified": true
+      },
+      "baseline_signature": {
+        "count": 2,
+        "output_sha256": "2e536a1953471f1fa0260b79e38a228c5be451549ff7e396dfc0a7c7320ac0b6",
+        "verified": true
+      },
+      "packaging": {
+        "baseline_config_digest": "sha256:ca5e13d2f2613cef631505cf69e4cfc759334defdae9eb7756db523d7a57e6aa",
+        "baseline_image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/account@sha256:87e675066d0c6edf77346b2ddee81bb46687365dbc9c8760307d7104764c59cf",
+        "candidate_config_digest": "sha256:2c6d7af7b46fed2c7c391ddfa37e4794bb2a49b92e22b824733bf2a244fa80db",
+        "candidate_image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/account@sha256:1cc68d435455b0ba83d66579d586eee437b47ff5b5d2ae93fb01a95d0e059c97",
+        "revision_label": "ai.lightyr.ms67.packaging-revision",
+        "revision_value": "ms67-final-635689566db6425aadf6fb1fc6cf3de7",
+        "rootfs_sha256": "aaa138e08d974eadabbed6a350b39a9ce0c83749e6c1b2435520c57067ea07a0",
+        "runtime_configuration_sha256": "564a54a4ae0b7a9600dccfaaaeba6e431138d64f8040ee7ef9ee604635b458ed",
+        "scope": "metadata-only OCI packaging revision; no application or filesystem change",
+        "service": "account"
+      },
+      "provenance": {
+        "count": 1,
+        "output_sha256": "2e1d4675eeb885f7c4e0c36ae40edd8571730346f5b7408c29450d059e17be7d",
+        "source_commit": "9c159d2b87d411a23b7dbb4e7cc8c41e3398d532",
+        "statement_sha256": [
+          "bd4baead35c9308bf4954a8ef27bdb18e6088853a47f0837771584914b00de9c"
+        ],
+        "verified": true
+      },
+      "scan": {
+        "coverage": {
+          "java_packages": 155,
+          "os_packages": 73
+        },
+        "critical": 0,
+        "databases": {
+          "db": {
+            "metadata_sha256": "c0842910c79328192620f74a85bb59206df0ff9118ac40e3c964f6ae557dd81f",
+            "next_update": "2026-09-11T13:49:36.447576545Z",
+            "updated_at": "2026-09-10T13:49:36.447576998Z",
+            "version": 2
+          },
+          "java-db": {
+            "metadata_sha256": "63775982522ba53fafcf2db3bb52722279ff4e84805fea04d902afc6a4f0a1d6",
+            "next_update": "2026-09-13T01:06:43.672075684Z",
+            "updated_at": "2026-09-10T01:06:43.672075804Z",
+            "version": 1
+          }
+        },
+        "finding_ids": [],
+        "finding_ids_complete": true,
+        "high": 0,
+        "observed_at": "2026-09-10T19:33:29.929856Z",
+        "scan_sha256": "418c23da5a0cbe72a7b9ad4229d78dab7594e580414a6335dc9fa03ac3809e8a",
+        "severity_counts": {
+          "CRITICAL": 0,
+          "HIGH": 0,
+          "LOW": 0,
+          "MEDIUM": 7,
+          "UNKNOWN": 0
+        }
+      },
+      "service": "account",
+      "signature": {
+        "count": 2,
+        "output_sha256": "f7ecfacef4f1d2e99a154817878985ffe116277b8b5c90df3870e2fb7471b58d",
+        "verified": true
+      }
+    },
+    {
+      "baseline_provenance": {
+        "count": 1,
+        "output_sha256": "025ab395a31d85ac4eff03378a985a87bfdebb40e64c38f0d503e388d985187f",
+        "source_commit": "22ac6a4c0dcb39fbfdb7eab28cad5eebc4b9ea8e",
+        "statement_sha256": [
+          "e804c2ca86b3b07b306d5688205f3e7e08e938aaeab5e11ea28a3d895e0dbdcb"
+        ],
+        "verified": true
+      },
+      "baseline_signature": {
+        "count": 2,
+        "output_sha256": "3e760b6dead5003abdbf2b2b8cf5897b6c2610b3d8e387a32b4e2d84b4dcabce",
+        "verified": true
+      },
+      "packaging": {
+        "baseline_config_digest": "sha256:c9456a7b406118bbc2b82a0a5008f74eac568af55fe37aafbd2a69207d4d2ff5",
+        "baseline_image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/transfer@sha256:fd99a626b3b1d8d47c3aed397119d9eaab70887da88b89d6c6070eb4fcb3caaa",
+        "candidate_config_digest": "sha256:7659c13b38eec763882128364349fdf34ffeb3e646e96289e4b57e05a1d06384",
+        "candidate_image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/transfer@sha256:964dc034bc58375b83c3ddf8efa42991dd5ba45e313ac3ee9f28a839795390f4",
+        "revision_label": "ai.lightyr.ms67.packaging-revision",
+        "revision_value": "ms67-final-635689566db6425aadf6fb1fc6cf3de7",
+        "rootfs_sha256": "df63d6e0b87709f07278fa040471a9eb425979e52d0a890eadc5d7902098ca85",
+        "runtime_configuration_sha256": "b582846c5cad0959e2abed06d37cef247f50396c080c54e0f2cc0cbc41f3ac12",
+        "scope": "metadata-only OCI packaging revision; no application or filesystem change",
+        "service": "transfer"
+      },
+      "provenance": {
+        "count": 1,
+        "output_sha256": "80a65d373f0bf6b87cf112ad7ab672ff16479af299e72d446c63388e0275bb71",
+        "source_commit": "9c159d2b87d411a23b7dbb4e7cc8c41e3398d532",
+        "statement_sha256": [
+          "6c3a0ae6fffd030addd24511803c55135b06323b0d90a2f026d9fe60d567c5b6"
+        ],
+        "verified": true
+      },
+      "scan": {
+        "coverage": {
+          "java_packages": 127,
+          "os_packages": 73
+        },
+        "critical": 0,
+        "databases": {
+          "db": {
+            "metadata_sha256": "c0842910c79328192620f74a85bb59206df0ff9118ac40e3c964f6ae557dd81f",
+            "next_update": "2026-09-11T13:49:36.447576545Z",
+            "updated_at": "2026-09-10T13:49:36.447576998Z",
+            "version": 2
+          },
+          "java-db": {
+            "metadata_sha256": "63775982522ba53fafcf2db3bb52722279ff4e84805fea04d902afc6a4f0a1d6",
+            "next_update": "2026-09-13T01:06:43.672075684Z",
+            "updated_at": "2026-09-10T01:06:43.672075804Z",
+            "version": 1
+          }
+        },
+        "finding_ids": [],
+        "finding_ids_complete": true,
+        "high": 0,
+        "observed_at": "2026-09-10T19:33:45.121848Z",
+        "scan_sha256": "c2cad4dbe6322fd9f126b07f9d57f34296ee9501bdfa8889f22a00283359d402",
+        "severity_counts": {
+          "CRITICAL": 0,
+          "HIGH": 0,
+          "LOW": 0,
+          "MEDIUM": 7,
+          "UNKNOWN": 0
+        }
+      },
+      "service": "transfer",
+      "signature": {
+        "count": 2,
+        "output_sha256": "3712313964605fe1b0ee25f01e960299c4f48fbc0adfe82e005b2ca247f58924",
+        "verified": true
+      }
+    },
+    {
+      "baseline_provenance": {
+        "count": 1,
+        "output_sha256": "4f2a58911be9f6c413019af41d5e5ba1a3ba48bc3efba56dcf3e92ca18dd8185",
+        "source_commit": "22ac6a4c0dcb39fbfdb7eab28cad5eebc4b9ea8e",
+        "statement_sha256": [
+          "e0ac5434e4b032bcd14479341449d864043c3ef75f8d994f9cf74a99d61d6dea"
+        ],
+        "verified": true
+      },
+      "baseline_signature": {
+        "count": 2,
+        "output_sha256": "82c3e5e6891176f5017f20661f36f5875a3247b9874f19c524b324375a0bd35d",
+        "verified": true
+      },
+      "packaging": {
+        "baseline_config_digest": "sha256:a3736df958fa4992c20a4836544295a57361f97a618e38b05951b01b36c0d7b0",
+        "baseline_image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/checks@sha256:7717ca2c871f8b6179145d871c91e31f5b6fa1632af8c9f8aa0d93c0d84d8432",
+        "candidate_config_digest": "sha256:8342aa687c2fe275c4d9c42fb1ac39721a48920b98bc88fc6079e80f229961bc",
+        "candidate_image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/checks@sha256:aae640ec26d6cd1d5897da14b8f6e521c5096b1997300e20d7a54f0fa578dcad",
+        "revision_label": "ai.lightyr.ms67.packaging-revision",
+        "revision_value": "ms67-final-635689566db6425aadf6fb1fc6cf3de7",
+        "rootfs_sha256": "5a9dbbe035f0bd7f74c5ff14867c463b0774aab6da127ca30b2c0bfdb8b16dad",
+        "runtime_configuration_sha256": "1b1440442131df7313b43473f37d7a25201f9d579902057e1ff0167fbb76c663",
+        "scope": "metadata-only OCI packaging revision; no application or filesystem change",
+        "service": "checks"
+      },
+      "provenance": {
+        "count": 1,
+        "output_sha256": "6f3f45662d824bf3dfa16a3b6b1e988bc5d78e4d9d2f8b390cec6384db7bc80c",
+        "source_commit": "9c159d2b87d411a23b7dbb4e7cc8c41e3398d532",
+        "statement_sha256": [
+          "c37f03765345df278ba88a066180cf46237e1e8db67952d8501b213778c1c3a3"
+        ],
+        "verified": true
+      },
+      "scan": {
+        "coverage": {
+          "java_packages": 131,
+          "os_packages": 73
+        },
+        "critical": 0,
+        "databases": {
+          "db": {
+            "metadata_sha256": "c0842910c79328192620f74a85bb59206df0ff9118ac40e3c964f6ae557dd81f",
+            "next_update": "2026-09-11T13:49:36.447576545Z",
+            "updated_at": "2026-09-10T13:49:36.447576998Z",
+            "version": 2
+          },
+          "java-db": {
+            "metadata_sha256": "63775982522ba53fafcf2db3bb52722279ff4e84805fea04d902afc6a4f0a1d6",
+            "next_update": "2026-09-13T01:06:43.672075684Z",
+            "updated_at": "2026-09-10T01:06:43.672075804Z",
+            "version": 1
+          }
+        },
+        "finding_ids": [],
+        "finding_ids_complete": true,
+        "high": 0,
+        "observed_at": "2026-09-10T19:34:00.451655Z",
+        "scan_sha256": "a0b911929c08625f54fbdba77db2562f52122de9980f1abdcde03c1942c2717f",
+        "severity_counts": {
+          "CRITICAL": 0,
+          "HIGH": 0,
+          "LOW": 0,
+          "MEDIUM": 7,
+          "UNKNOWN": 0
+        }
+      },
+      "service": "checks",
+      "signature": {
+        "count": 2,
+        "output_sha256": "ef1ceacf4c2368c66318872df0f0ceadf63ebf140a3d6d8d502640a60e278f5d",
+        "verified": true
+      }
+    },
+    {
+      "baseline_provenance": {
+        "count": 1,
+        "output_sha256": "03ce13706a28b7de47cc67bcf8846646670b824247c7a38b65e730b9b933dc3a",
+        "source_commit": "22ac6a4c0dcb39fbfdb7eab28cad5eebc4b9ea8e",
+        "statement_sha256": [
+          "d1a2a0ac2ff957f451bd7b43a1c231a210769584bc15d413233c889c4ab933b4"
+        ],
+        "verified": true
+      },
+      "baseline_signature": {
+        "count": 2,
+        "output_sha256": "aebc3ce27a83c8d1beaf55a0827de96f0b4853f63b7ea4380a94a313d6a4551c",
+        "verified": true
+      },
+      "packaging": {
+        "baseline_config_digest": "sha256:784f6241d0382c7165042a84f77fe276eed2afdd96daa1d9206cbd6bb62b41a2",
+        "baseline_image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/testrunner@sha256:256d107cc707d537c98f1260362577bbdb9d2ede3e88005076e464a227351693",
+        "candidate_config_digest": "sha256:18f29c7c103a912053737d30db97cb8dbe0d647dc1f4512a420afbd88d99d42e",
+        "candidate_image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/testrunner@sha256:b3ac474b57b65cdb615c1dc37ade674893786297c0cb6dfd856535f8122d30cb",
+        "revision_label": "ai.lightyr.ms67.packaging-revision",
+        "revision_value": "ms67-final-635689566db6425aadf6fb1fc6cf3de7",
+        "rootfs_sha256": "b9b109f44c81a29107db68b5bbd7abdded833c3f1a7cda6f0c229dd24044765b",
+        "runtime_configuration_sha256": "d9f2dd6f0ca78e4ae4c1b46b92b600acbf6ceef42450de53fb8d8d64ba8bf78a",
+        "scope": "metadata-only OCI packaging revision; no application or filesystem change",
+        "service": "testrunner"
+      },
+      "provenance": {
+        "count": 1,
+        "output_sha256": "78306932339f27ddbf68cd2c3c6535ff8f21cad97dfca9d1e52159993a52ce9b",
+        "source_commit": "9c159d2b87d411a23b7dbb4e7cc8c41e3398d532",
+        "statement_sha256": [
+          "8de3a32c94246361bfdc8b74fdefb6dbafa914aecd2b24fff571d52f499d4ebf"
+        ],
+        "verified": true
+      },
+      "scan": {
+        "coverage": {
+          "java_packages": 131,
+          "os_packages": 73
+        },
+        "critical": 0,
+        "databases": {
+          "db": {
+            "metadata_sha256": "c0842910c79328192620f74a85bb59206df0ff9118ac40e3c964f6ae557dd81f",
+            "next_update": "2026-09-11T13:49:36.447576545Z",
+            "updated_at": "2026-09-10T13:49:36.447576998Z",
+            "version": 2
+          },
+          "java-db": {
+            "metadata_sha256": "63775982522ba53fafcf2db3bb52722279ff4e84805fea04d902afc6a4f0a1d6",
+            "next_update": "2026-09-13T01:06:43.672075684Z",
+            "updated_at": "2026-09-10T01:06:43.672075804Z",
+            "version": 1
+          }
+        },
+        "finding_ids": [],
+        "finding_ids_complete": true,
+        "high": 0,
+        "observed_at": "2026-09-10T19:34:15.969521Z",
+        "scan_sha256": "ce053a878295ab4ee1527ebf014a7916caabbca7db68fa2ba1c19058b516d7e6",
+        "severity_counts": {
+          "CRITICAL": 0,
+          "HIGH": 0,
+          "LOW": 0,
+          "MEDIUM": 7,
+          "UNKNOWN": 0
+        }
+      },
+      "service": "testrunner",
+      "signature": {
+        "count": 2,
+        "output_sha256": "403902b3cacc3b775b481f5e18d68a265801c48567d4552d8e17f1f3e7f86e8c",
+        "verified": true
+      }
+    },
+    {
+      "baseline_provenance": {
+        "count": 1,
+        "output_sha256": "8448ad956077dcf643c674b3b580266cb92bdf616c7f68c2aa813f30900d96e7",
+        "source_commit": "22ac6a4c0dcb39fbfdb7eab28cad5eebc4b9ea8e",
+        "statement_sha256": [
+          "0374cee0931a73659ffd5353b00b40fdb5bd1cd23f9fe30d588967e6be97f631"
+        ],
+        "verified": true
+      },
+      "baseline_signature": {
+        "count": 2,
+        "output_sha256": "096ec1b22ee190ba3a01da4db0febd32867641dc579a39bd8f257582d370a313",
+        "verified": true
+      },
+      "packaging": {
+        "baseline_config_digest": "sha256:68b793a48e8ee07e7e4865686b0bea8db27838351f29e47c620375a66188b65d",
+        "baseline_image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/creditscore@sha256:45b848793a4a3de7e72f2ae25d243250803846a8f9885594e1e3db8edf48fae1",
+        "candidate_config_digest": "sha256:6bb9e97317a7680f86c2718733b2310d4255566fcb2d52f3f5d1eb02164bb450",
+        "candidate_image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/creditscore@sha256:126344f7f560801f4c61ce029946cfeefed536a95db6850f0537ba3a5e796f58",
+        "revision_label": "ai.lightyr.ms67.packaging-revision",
+        "revision_value": "ms67-final-635689566db6425aadf6fb1fc6cf3de7",
+        "rootfs_sha256": "451055542e088e187200a47e5f1540dfc6aa604b9175b8fb9d14b5ff1060dd9d",
+        "runtime_configuration_sha256": "d057bf7a8584a4c911e1301c41506b01daa0cc98ae94aac53f838bc283cd29ec",
+        "scope": "metadata-only OCI packaging revision; no application or filesystem change",
+        "service": "creditscore"
+      },
+      "provenance": {
+        "count": 1,
+        "output_sha256": "fda807be0990be367fe8dab5a32311c9e07e275c7c058c5a1db86054957c3a7e",
+        "source_commit": "9c159d2b87d411a23b7dbb4e7cc8c41e3398d532",
+        "statement_sha256": [
+          "51e6dfc11b8501110b97f62da3fbf9516e0a9fbd8c5f0afef31913462b8fd4b0"
+        ],
+        "verified": true
+      },
+      "scan": {
+        "coverage": {
+          "java_packages": 127,
+          "os_packages": 73
+        },
+        "critical": 0,
+        "databases": {
+          "db": {
+            "metadata_sha256": "c0842910c79328192620f74a85bb59206df0ff9118ac40e3c964f6ae557dd81f",
+            "next_update": "2026-09-11T13:49:36.447576545Z",
+            "updated_at": "2026-09-10T13:49:36.447576998Z",
+            "version": 2
+          },
+          "java-db": {
+            "metadata_sha256": "63775982522ba53fafcf2db3bb52722279ff4e84805fea04d902afc6a4f0a1d6",
+            "next_update": "2026-09-13T01:06:43.672075684Z",
+            "updated_at": "2026-09-10T01:06:43.672075804Z",
+            "version": 1
+          }
+        },
+        "finding_ids": [],
+        "finding_ids_complete": true,
+        "high": 0,
+        "observed_at": "2026-09-10T19:34:30.621773Z",
+        "scan_sha256": "988cab54bd96d51df9da1b936ee78f075299480e04ccf210336c46d0e421b641",
+        "severity_counts": {
+          "CRITICAL": 0,
+          "HIGH": 0,
+          "LOW": 0,
+          "MEDIUM": 7,
+          "UNKNOWN": 0
+        }
+      },
+      "service": "creditscore",
+      "signature": {
+        "count": 2,
+        "output_sha256": "311769e8150a95f25a2e7ab85ed8bbf55167e5e907a197395e50db4a7728b3f8",
+        "verified": true
+      }
+    },
+    {
+      "baseline_provenance": {
+        "count": 1,
+        "output_sha256": "95510f9de7c957b052dabb937918d93520f15f4e16dbd9fe4046db8333b975b4",
+        "source_commit": "22ac6a4c0dcb39fbfdb7eab28cad5eebc4b9ea8e",
+        "statement_sha256": [
+          "53644e5a2f3a953b6fb9ea1e78c5ce8e40119aa6b91bf78e19402f10752b7d77"
+        ],
+        "verified": true
+      },
+      "baseline_signature": {
+        "count": 2,
+        "output_sha256": "566ed99874bd7503769ddec26a3a808502150df25550f282d06109fd1f7ca894",
+        "verified": true
+      },
+      "packaging": {
+        "baseline_config_digest": "sha256:cd32f5a5ced355fb67bd41e9545461604dee2330d38e993c0f52871d3131806a",
+        "baseline_image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/chatbot@sha256:ab2180b081ad8f92043c9bd8c7f72b74ef89ed22b656f9afbc9c8fd0067d0703",
+        "candidate_config_digest": "sha256:6753be382b4fadb68571311b1ad83c96693a35bccf32df7c9283ba0706931792",
+        "candidate_image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/chatbot@sha256:29ce673fdb299800e2bcb1326fbb55606f1064c4678ce7941588525d1626699f",
+        "revision_label": "ai.lightyr.ms67.packaging-revision",
+        "revision_value": "ms67-final-635689566db6425aadf6fb1fc6cf3de7",
+        "rootfs_sha256": "e2acff3989e80f1c62f6b3f4f2d164d09829baa83d504262dc47232c3638fce9",
+        "runtime_configuration_sha256": "1cdc6bc29df3ec4610b900c6db738d27e02b33692facfc97881d4d62e04c7778",
+        "scope": "metadata-only OCI packaging revision; no application or filesystem change",
+        "service": "chatbot"
+      },
+      "provenance": {
+        "count": 1,
+        "output_sha256": "34d38d49fd4e58c3580b70deee65a70242312ffd214d0df6ae1e346cc5994428",
+        "source_commit": "9c159d2b87d411a23b7dbb4e7cc8c41e3398d532",
+        "statement_sha256": [
+          "1d5cb6a6e24aaad03fd9cdb2bf5ecf0fc1f84ed8504a855dee0e1392fda53489"
+        ],
+        "verified": true
+      },
+      "scan": {
+        "coverage": {
+          "java_packages": 154,
+          "os_packages": 73
+        },
+        "critical": 0,
+        "databases": {
+          "db": {
+            "metadata_sha256": "c0842910c79328192620f74a85bb59206df0ff9118ac40e3c964f6ae557dd81f",
+            "next_update": "2026-09-11T13:49:36.447576545Z",
+            "updated_at": "2026-09-10T13:49:36.447576998Z",
+            "version": 2
+          },
+          "java-db": {
+            "metadata_sha256": "63775982522ba53fafcf2db3bb52722279ff4e84805fea04d902afc6a4f0a1d6",
+            "next_update": "2026-09-13T01:06:43.672075684Z",
+            "updated_at": "2026-09-10T01:06:43.672075804Z",
+            "version": 1
+          }
+        },
+        "finding_ids": [],
+        "finding_ids_complete": true,
+        "high": 0,
+        "observed_at": "2026-09-10T19:34:45.937536Z",
+        "scan_sha256": "d210d4ab7b5bdd2bded6e9c04c0db9e155557cbb5590b742d82816c092e5ba96",
+        "severity_counts": {
+          "CRITICAL": 0,
+          "HIGH": 0,
+          "LOW": 0,
+          "MEDIUM": 7,
+          "UNKNOWN": 0
+        }
+      },
+      "service": "chatbot",
+      "signature": {
+        "count": 2,
+        "output_sha256": "26110b003e0e8f40b5aeaaedf021f1520ba4c7ec630b60281c86052fc13dadb0",
+        "verified": true
+      }
+    }
+  ],
+  "signature": {
+    "algorithm": "hmac-sha256",
+    "signer": "cloudbank-ms67-evidence@lightyear-ms67-nonproduction.iam.gserviceaccount.com",
+    "value": "96c97e81e6dd66101c7946de10590b517dd62177eaf7937cbf6cfdbe3499f73a"
+  },
+  "signing_key": {
+    "algorithm": "EC_SIGN_P256_SHA256",
+    "project_number": "233419964177",
+    "public_key_sha256": "cf01a442fd3b2917b519b4fe5318bfe8b0347135357d6bcaafbae9195587e061",
+    "version": "projects/lightyear-ms67-nonproduction/locations/us-west1/keyRings/cloudbank-ms67/cryptoKeys/image-signing/cryptoKeyVersions/1"
+  },
+  "status": "passed",
+  "tool_assets": [
+    {
+      "asset": "cosign-linux-amd64",
+      "repository": "sigstore/cosign",
+      "sha256": "f7622ed3cf22e55e1ae6377c080979ff77a22da9981c11df222a2e444991e7cf",
+      "version": "v3.1.2"
+    },
+    {
+      "asset": "trivy_0.74.0_Linux-64bit.tar.gz",
+      "repository": "aquasecurity/trivy",
+      "sha256": "2ae6fe3ee734b7fdf11335663e18c75ea12dccc76062f09f164a3b0f8be4371a",
+      "version": "v0.74.0"
+    }
+  ],
+  "tools": {
+    "cosign": {
+      "output_sha256": "80f5232e208bffb33c3a30992d6fd394b2a2cf215cdd387da7ac514d1a2d2959",
+      "version": "v3.1.2"
+    },
+    "trivy": {
+      "output_sha256": "41e22ed321a4c139a4fae57e92d8fa971cf7e91a8c1c4444d9a948c52a72c73a",
+      "version": "0.74.0"
+    }
+  }
+}

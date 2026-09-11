@@ -1,0 +1,229 @@
+{
+  "acceptance_contract_sha256": "9ba637e24f8a43b934b57da1893b222f2bd98bad1eea981ded9af15aea96e4ef",
+  "authorization_code_flow_observed": false,
+  "changed_paths": [
+    "account/src/main/java/com/example/accounts/config/AccountOAuthSecurityConfiguration.java",
+    "account/src/main/java/com/example/accounts/controller/TransactionCoreController.java",
+    "account/src/main/resources/application.yaml",
+    "azn-server/pom.xml",
+    "azn-server/src/main/java/oracle/obaas/aznserver/securityconfig/ProductionAudienceTokenCustomizer.java",
+    "azn-server/src/main/resources/application.yaml",
+    "azn-server/src/main/resources/db/changelog/controller.yaml",
+    "azn-server/src/main/resources/db/changelog/table.sql",
+    "transfer/src/main/java/com/example/transfer/TransferService.java",
+    "transfer/src/main/java/com/example/transfer/config/TransferOAuthSecurityConfiguration.java",
+    "transfer/src/main/resources/application.yaml",
+    "transfer/src/test/java/com/example/transfer/TransferServiceTests.java"
+  ],
+  "compatibility_ledger_sha256": "ceeeb448d895aa379146d20aea6107091b8c82e1cb216c80c7bf1311161bd220",
+  "content_sha256": "5b0aa07534b923a76731d72e82af4a6a0396c7ffa6a979f4598a7a3e131b5a0f",
+  "execution_plan_sha256": "57afa5873f2d07541e665e6c35f40dc1dae822a096150da48e1cbf4990d9e561",
+  "external_idp_federation_observed": false,
+  "external_tls_termination_observed": false,
+  "jwt_resource_servers_observed": true,
+  "managed_secret_rotation_observed": false,
+  "migration_complete": false,
+  "native_authorization_server_observed": true,
+  "native_messaging_observed": false,
+  "oauth_lane": {
+    "account_schema_relation_presence": {
+      "accounts": null,
+      "journal": null,
+      "liquibase-history": null,
+      "liquibase-lock": null,
+      "transfer-commands": null
+    },
+    "contract_sha256": "aa774c829a654153cae795d25e6f397c060626a2490525e9df3fcf4f317123fb",
+    "credentials_persisted": false,
+    "database_image_id_sha256": "75f5a96988cdf694a215073c3e9c001b706b371e2f94df3967f2efdec2787f6b",
+    "jwks_sha256": "a6663c79810409ccaa47bc14390bfe34122ddcd82138d2add8b8ca3f2886c982",
+    "lane": "native-production-oauth-account-transfer",
+    "maven_exit_code": 0,
+    "maven_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "maven_stdout_sha256": "8a877660597fdbc1fc551d5c5b700035be7f686b5bbc8cb563cbf44061b41405",
+    "packaging": {
+      "executable_jars": 3,
+      "microtx_runtime_libraries": 0,
+      "oracle_runtime_libraries": 0
+    },
+    "ports": "ephemeral-loopback-only",
+    "public_signing_key_sha256": "77dd9b79b58c6e41fb5ad54bd85101fb1608e13dce8d05a9fa67a53d620f3a5a",
+    "raw_output_persisted": false,
+    "reason": null,
+    "scenario_count": 12,
+    "scenarios": [
+      {
+        "id": "authorization-server-discovery-and-jwks",
+        "jwks_status": 200,
+        "key_count": 1,
+        "metadata_status": 200,
+        "status": "passed"
+      },
+      {
+        "http_status": 401,
+        "id": "invalid-client-rejected",
+        "status": "passed"
+      },
+      {
+        "http_status": 400,
+        "id": "scope-escalation-rejected",
+        "status": "passed"
+      },
+      {
+        "audience": "cloudbank-transfer",
+        "http_status": 200,
+        "id": "caller-token-claims-bound",
+        "scope": "cloudbank.transfer",
+        "status": "passed",
+        "subject": "cust-source"
+      },
+      {
+        "audience": "cloudbank-account",
+        "http_status": 200,
+        "id": "service-token-claims-bound",
+        "scope": "cloudbank.internal",
+        "status": "passed",
+        "subject": "cloudbank-transfer-service"
+      },
+      {
+        "http_status": 401,
+        "id": "missing-bearer-rejected",
+        "status": "passed"
+      },
+      {
+        "http_status": 403,
+        "id": "insufficient-scope-rejected",
+        "status": "passed"
+      },
+      {
+        "http_status": 401,
+        "id": "tampered-token-rejected",
+        "status": "passed"
+      },
+      {
+        "http_status": 401,
+        "id": "cross-audience-token-rejected",
+        "status": "passed"
+      },
+      {
+        "http_status": 400,
+        "id": "owner-authorization-before-mutation",
+        "status": "passed"
+      },
+      {
+        "database_state": {
+          "balance_1": 875,
+          "balance_2": 375,
+          "balance_3": 5,
+          "command_count": 1,
+          "journal_count": 2,
+          "journal_net": 0
+        },
+        "http_status": 200,
+        "id": "authenticated-transfer-conserves-value",
+        "status": "passed"
+      },
+      {
+        "database_state": {
+          "balance_1": 850,
+          "balance_2": 400,
+          "balance_3": 5,
+          "command_count": 2,
+          "journal_count": 4,
+          "journal_net": 0
+        },
+        "id": "persistent-key-restart-continuity",
+        "jwks_stable": true,
+        "pre_restart_caller_credential_accepted": true,
+        "status": "passed"
+      }
+    ],
+    "service_exit_codes": {
+      "account": null,
+      "azn-server": null,
+      "transfer": null
+    },
+    "service_log_sha256": {
+      "account": [
+        "a7218096a3f0656390ce462afbf3c8f104915c3c3a6033ee10c48fad7c62a1a7",
+        "8c71242a7d5018e2426fdf944cff98a468fc4dc5f4328e7781510f4ef40b2828"
+      ],
+      "azn-server": [
+        "9a46901877df557b4b722c16b794f0d64fc0e010b2e1a92166691c3b39646b15",
+        "9acb6b58fbbfc39a22cb05dae8bdbe8c436c2e19d9d78646b9b87f2ea8698014"
+      ],
+      "transfer": [
+        "ac62cc0fbec760808fce9191a68b1fb3a7146ede1e6c7cc2e272e397727000b2",
+        "b1f9df62973a72241f12bc5aad9f760fda5cf0d2c8c2dfcfe7e614c7e26d9033"
+      ]
+    },
+    "service_start_database_relations": {
+      "account": null,
+      "azn-server": null,
+      "transfer": null
+    },
+    "service_start_database_sqlstates": {
+      "account": null,
+      "azn-server": null,
+      "transfer": null
+    },
+    "service_start_failure_categories": {
+      "account": null,
+      "azn-server": null,
+      "transfer": null
+    },
+    "service_start_failure_causes": {
+      "account": null,
+      "azn-server": null,
+      "transfer": null
+    },
+    "service_start_failure_components": {
+      "account": null,
+      "azn-server": null,
+      "transfer": null
+    },
+    "service_start_failure_stages": {
+      "account": null,
+      "azn-server": null,
+      "transfer": null
+    },
+    "service_starts": {
+      "account": 2,
+      "azn-server": 2,
+      "transfer": 2
+    },
+    "status": "passed",
+    "synthetic_data_only": true
+  },
+  "persistent_signing_key_restart_observed": true,
+  "postgresql_image_id_sha256": "75f5a96988cdf694a215073c3e9c001b706b371e2f94df3967f2efdec2787f6b",
+  "production_oauth_application_profile_qualified": true,
+  "production_oauth_operational_deployment_qualified": false,
+  "production_ready": false,
+  "receipt_type": "lightyear-cloudbank-production-oauth-execution",
+  "release": "0.62.0",
+  "remaining_service_workcells_complete": false,
+  "run_id": "cloudbank-production-oauth-20260910T031019Z",
+  "schema_version": "1.0",
+  "security": {
+    "application_protocol": "oauth2-oidc-jwt",
+    "credentials_persisted": false,
+    "human_promotion_authorized": false,
+    "ports": "ephemeral-loopback-only",
+    "private_key_persisted": false,
+    "raw_service_logs_persisted": false,
+    "source_checkout_mutated": false,
+    "synthetic_data_only": true,
+    "transport_boundary": "loopback-http-production-tls-required-separately"
+  },
+  "security_contract_sha256": "914f4b2dafa5bed21cdbb8cd7a9f224e3faf7b05e5388a1ec999c127c55ffad5",
+  "service_to_service_client_credentials_observed": true,
+  "signature": {
+    "algorithm": "hmac-sha256",
+    "signer": "howard.weale@gmail.com",
+    "value": "e8fb5ec866f64d3500cf61a4f40d370b9d0e5208047daa9c301a062c3a157331"
+  },
+  "source_ms61_receipt_sha256": "a9d102eeda6552ffc7e715beed2d8a24dcfb8ca0067330db3f2ddbe092cf1036",
+  "status": "passed-production-oauth-application-boundary",
+  "whole_application_equivalent": false
+}

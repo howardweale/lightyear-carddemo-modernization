@@ -1,0 +1,29 @@
+{
+  "cluster_uid_sha256": "73225fb68347496beff8a441f7d8bc989ec1dc45ea9cc776cceeffc17fffba00",
+  "content_sha256": "cfa845d9f93c143ec87563a0c510fe4d0f517d8baad07d92d65a203786f2c9f4",
+  "context": "gke_lightyear-ms67-nonproduction_us-west1_cloudbank-ms67",
+  "expected_hostname": "cloudbank.ms67.lightyr.ai",
+  "ingress_url": "https://cloudbank.ms67.lightyr.ai",
+  "model_external_egress": false,
+  "model_image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/ollama-qwen2.5-0.5b@sha256:5afc92b3f706d6cadd26dc4c02417afec52ec3797e829178579d2fdedb269a8d",
+  "model_manifest_sha256": "a8b0c51577010a279d933d14c2a8ab4b268079d44c5c8830c0a93900f1827c67",
+  "model_mode": "in-cluster-ollama",
+  "model_name": "qwen2.5:0.5b",
+  "model_namespace": "cloudbank-model",
+  "mutating_drills_authorized": true,
+  "namespace": "cloudbank-ms67",
+  "namespace_uid_sha256": "4e4ae1fc7748b7325c7afa954ed7b74005f29ebdefa79eea29f4c32645ef3aba",
+  "non_production": true,
+  "production_access_authorized": false,
+  "profile_type": "lightyear-cloudbank-ms67-platform-profile",
+  "provider": "google-gke-standard-regional",
+  "region": "us-west1",
+  "release": "0.67.0",
+  "schema_version": "1.0",
+  "signature": {
+    "algorithm": "hmac-sha256",
+    "signer": "howard.weale@gmail.com",
+    "value": "3fe408f92781203d78bfcc44992ba9011f44ecb3f05de98de6abfd2a113a979b"
+  },
+  "signer": "howard.weale@gmail.com"
+}

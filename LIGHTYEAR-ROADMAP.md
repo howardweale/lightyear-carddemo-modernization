@@ -36,23 +36,27 @@ production-qualified.
 | MS #51 | Oracle Native Execution Admission Gate | Admission contract complete; SQL harnesses and authorized native runs pending |
 | MS #52 | Oracle Customer (Large) Control Tower Projection | Complete |
 | MS #53 | CloudBank Modern Oracle Reference Estate | Complete |
-| MS #54 | CloudBank Executable Source Baseline | Complete; signed execution receipts remain operator-held evidence |
-| MS #55 | CloudBank Customer PostgreSQL Mapping | Mapping qualified; signed native receipt remains operator-held evidence |
-| MS #56 | First CloudBank Dark Factory Run | Factory contract complete; operator dual-run receipt pending |
-| MS #57 | CloudBank Customer Production-Readiness Qualification | Qualification contract complete; signed native receipt pending |
-| MS #58 | CloudBank Whole-Application Transaction Wave | Eight-service plan and transaction-wave admission contract complete; native Account/Transfer execution pending |
-| MS #59 | CloudBank PostgreSQL Transaction-Core Factory Run | Account/Transfer target generated; signed native PostgreSQL execution remains operator-held evidence |
-| MS #60 | CloudBank Native Account/Transfer Transaction Wave | Integrated target ready; signed native HTTP/restart/concurrency receipt remains operator-held evidence |
-| MS #61 | CloudBank Bounded Oracle/PostgreSQL Equivalence | Contract complete; signed sequential native Oracle/PostgreSQL comparison receipt remains operator-held evidence |
-| MS #62 | CloudBank Production OAuth Application Boundary | OAuth target and contract complete; signed native Authorization/Account/Transfer receipt remains operator-held evidence |
-| MS #63 | CloudBank Checks Durable Messaging | PostgreSQL queue target and contract complete; signed native messaging receipt remains operator-held evidence |
-| MS #64 | CloudBank Credit Decision and AI Boundary | Eight-service target and edge-control contract complete; signed native application receipt remains operator-held evidence |
-| MS #65 | CloudBank Production-Like Deployment and Cutover Rehearsal | Deployment and rehearsal gate complete; signed non-production operator observation remains required |
-| MS #66 | CloudBank Whole-Application Dual-Lane Equivalence | Eight-service comparison gate complete; paired signed Oracle and PostgreSQL observations remain operator-held evidence |
-| MS #67 | CloudBank Real Non-Production Platform Qualification | Ephemeral GKE implementation and live-evidence gate complete; actual platform run remains operator-held evidence |
+| MS #54 | CloudBank Executable Source Baseline | Passed; [published execution evidence](docs/receipts/index.html#ms54) |
+| MS #55 | CloudBank Customer PostgreSQL Mapping | Passed; [published execution evidence](docs/receipts/index.html#ms55) |
+| MS #56 | First CloudBank Dark Factory Run | Passed; [published execution evidence](docs/receipts/index.html#ms56) |
+| MS #57 | CloudBank Customer Production-Readiness Qualification | Passed; [published execution evidence](docs/receipts/index.html#ms57) |
+| MS #58 | CloudBank Whole-Application Transaction Wave | Plan admitted; [published execution evidence](docs/receipts/index.html#ms58) |
+| MS #59 | CloudBank PostgreSQL Transaction-Core Factory Run | Passed; [published execution evidence](docs/receipts/index.html#ms59) |
+| MS #60 | CloudBank Native Account/Transfer Transaction Wave | Passed; [published execution evidence](docs/receipts/index.html#ms60) |
+| MS #61 | CloudBank Bounded Oracle/PostgreSQL Equivalence | Passed; [published execution evidence](docs/receipts/index.html#ms61) |
+| MS #62 | CloudBank Production OAuth Application Boundary | Passed; [published execution evidence](docs/receipts/index.html#ms62) |
+| MS #63 | CloudBank Checks Durable Messaging | Passed; [published execution evidence](docs/receipts/index.html#ms63) |
+| MS #64 | CloudBank Credit Decision and AI Boundary | Passed; [published execution evidence](docs/receipts/index.html#ms64) |
+| MS #65 | CloudBank Production-Like Deployment and Cutover Rehearsal | Passed; [published execution evidence](docs/receipts/index.html#ms65) |
+| MS #66 | CloudBank Whole-Application Dual-Lane Equivalence | Passed; [published execution evidence](docs/receipts/index.html#ms66) |
+| MS #67 | CloudBank Real Non-Production Platform Qualification | Passed; [published execution evidence](docs/receipts/index.html#ms67) |
 
 The v0.35.0 stored-logic qualification core is retained as supporting MS #34 evidence. It does not
 replace the planned DB2 milestone.
+
+The [MS54–67 receipt index](docs/receipts/) publishes 31 original evidence documents from the completed
+MS67 run. The milestone sections below describe each stage’s own bounded scope. Readiness fixture
+states describe admission contracts; current execution results are the linked signed receipts.
 
 ## Governing compatibility classifications
 
@@ -697,8 +701,10 @@ image signatures/provenance and security scans, default-deny networking, content
 and exact PITR restore, node and failure-domain evacuation, zero-unavailable rolling updates across
 all eight services, canary cutover, all 18 business journeys, mandatory rollback, and recovery.
 
-This repository has no Google Cloud credential, Kubernetes context, or live platform observation,
-so its committed readiness receipt stays false. A later passing receipt qualifies only the exact
-authorized non-production platform and synthetic run. Customer IdP, representative customer data
+The [published MS67 receipt](docs/receipts/index.html#ms67) now qualifies the exact authorized
+non-production platform and synthetic run: all 28 scenarios passed. The retained load measured
+5,451 requests with zero errors and aggregate p95 160.69 ms. PITR measured 622 seconds under the
+approved 630-second nonproduction requirement; backup restore measured 455 seconds and RPO 18 seconds.
+Deterministic readiness fixtures remain separate admission contracts. Customer IdP, representative customer data
 volume and workload, the customer's approval process, production deployment, and final signed
 production readiness remain MS #68.

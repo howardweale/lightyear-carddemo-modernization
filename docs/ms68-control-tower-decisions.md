@@ -5,7 +5,7 @@ ledger for CardDemo interest calculation. Discovery remains available in the adj
 
 This is one bounded operator-workflow increment for MS68. It does not redefine the existing MS68
 customer-representative production-readiness milestone. That milestone still requires a passing
-MS67 receipt, customer IdP, representative customer data and workload, customer infrastructure,
+MS67 receipt (now [published and passed](receipts/)), customer IdP, representative customer data and workload, customer infrastructure,
 and a signed readiness decision. No MS67 execution inputs or existing receipts are changed here.
 
 ## What an operator does

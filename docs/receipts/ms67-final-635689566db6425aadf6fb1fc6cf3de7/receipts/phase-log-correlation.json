@@ -1,0 +1,137 @@
+{
+  "bindings": {
+    "image_lock_sha256": "eb3c808a5af30fe2a212ded0f27a9810a867bf651f8e759b04cd54547244a778",
+    "ms64_receipt_sha256": "f78f85eb8342d81483f389918b7ed48601b19cf4374ac62fb12e27d01db2d146",
+    "platform_profile_sha256": "cfa845d9f93c143ec87563a0c510fe4d0f517d8baad07d92d65a203786f2c9f4"
+  },
+  "business_journey_qualified": false,
+  "configuration_retained": true,
+  "configuration_sha256": "1405a27f1d20f625f18431f66c9ee6aa1a99fe6a74786f6b0395ecfb10605213",
+  "content_sha256": "5d09d7c24032dbe8aa3355f11d98a0c5f70fc935e096ae9ac98a87a1054d94aa",
+  "credentials_persisted": false,
+  "environment": {
+    "cluster": "cloudbank-ms67",
+    "namespace": "cloudbank-ms67",
+    "namespace_uid_sha256": "0a397f173a1dfab91edeebc3d91bbfa1a3e0dd39caa086df1ff6f92822f71fff",
+    "project": "lightyear-ms67-nonproduction",
+    "region": "us-west1"
+  },
+  "images": {
+    "account": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/account@sha256:87e675066d0c6edf77346b2ddee81bb46687365dbc9c8760307d7104764c59cf",
+    "azn-server": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/azn-server@sha256:24ba43de59cf22f95c962981b49542eb55e332fc2dd91f9b4a9c724d06dd474a",
+    "chatbot": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/chatbot@sha256:ab2180b081ad8f92043c9bd8c7f72b74ef89ed22b656f9afbc9c8fd0067d0703",
+    "checks": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/checks@sha256:7717ca2c871f8b6179145d871c91e31f5b6fa1632af8c9f8aa0d93c0d84d8432",
+    "creditscore": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/creditscore@sha256:45b848793a4a3de7e72f2ae25d243250803846a8f9885594e1e3db8edf48fae1",
+    "customer": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/customer@sha256:47c50deffc67b480aa67ce4cffa4145eb4f91382ef091e72e89fbbfd0884456d",
+    "testrunner": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/testrunner@sha256:256d107cc707d537c98f1260362577bbdb9d2ede3e88005076e464a227351693",
+    "transfer": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/transfer@sha256:fd99a626b3b1d8d47c3aed397119d9eaab70887da88b89d6c6070eb4fcb3caaa"
+  },
+  "ms67_complete": false,
+  "observation_type": "lightyear-cloudbank-ms67-log-correlation-observation",
+  "production_environment": false,
+  "production_ready": false,
+  "query_window": {
+    "end": "2026-09-10T19:52:12.435410Z",
+    "start": "2026-09-10T19:51:23.154309Z"
+  },
+  "raw_output_persisted": false,
+  "ready_replicas": {
+    "account": 2,
+    "azn-server": 2,
+    "chatbot": 2,
+    "checks": 2,
+    "creditscore": 2,
+    "customer": 2,
+    "testrunner": 2,
+    "transfer": 2
+  },
+  "recovery": {
+    "errors": [],
+    "status": "not-required"
+  },
+  "run_id": "ms67-logs-3e940baa736f4cfaa2254bfb06a3987e",
+  "schema_version": "1.0",
+  "scope": "eight-service-readiness-probes-with-common-client-trace-context",
+  "service_correlation_qualified": true,
+  "services": {
+    "account": {
+      "log_identity_sha256": "840885d362c55af5b126a52dad2a6984807981366c047b1f415cc5efac105d2e",
+      "log_timestamp": "2026-09-10T19:51:42.730179633Z",
+      "pod_identity_sha256": "e25c462b0ab07709247e3b09d1a952f6eaf1526ae356159cdae31028784cb39c",
+      "span_end": "2026-09-10T19:51:42.730353016Z",
+      "span_identity_sha256": "131d28b3b09f74bd3787f4cca46242c6412c27260606cc9534fa8dd9bf31dd33",
+      "span_start": "2026-09-10T19:51:42.726626977Z",
+      "trace_identity_sha256": "daa83f4a02a832f185d613d93422d284610cd1392bb7b7d0cd1e55ad9aaf7427"
+    },
+    "azn-server": {
+      "log_identity_sha256": "b97227fb30d7378f83fcff33e05796c6ab26fa36dc5d753ab1968762fb8d4283",
+      "log_timestamp": "2026-09-10T19:51:29.697757372Z",
+      "pod_identity_sha256": "fa060b9853fddf2add6006a7fb2e8610e6cb8d1eac310f4b611bb92cc97f870b",
+      "span_end": "2026-09-10T19:51:29.698039047Z",
+      "span_identity_sha256": "c060b5ca47e06fe447ec69b14cfda95282bc2c28f70f115a0da70e7f98ac36b2",
+      "span_start": "2026-09-10T19:51:29.694976463Z",
+      "trace_identity_sha256": "daa83f4a02a832f185d613d93422d284610cd1392bb7b7d0cd1e55ad9aaf7427"
+    },
+    "chatbot": {
+      "log_identity_sha256": "fecf6703acc9718abe05b25be7a8953acb5b7539b50423bf90aeed33ffaacf7c",
+      "log_timestamp": "2026-09-10T19:52:12.405705682Z",
+      "pod_identity_sha256": "b440662a6b92eded642971eacce115010a9718c67c8a706bc542cb2eb9387e77",
+      "span_end": "2026-09-10T19:52:12.406085795Z",
+      "span_identity_sha256": "2f417a4c500b5029ccfee49972d4ce5d44f1fa117eaaebc2fa12ba97f8fdc977",
+      "span_start": "2026-09-10T19:52:12.401950937Z",
+      "trace_identity_sha256": "daa83f4a02a832f185d613d93422d284610cd1392bb7b7d0cd1e55ad9aaf7427"
+    },
+    "checks": {
+      "log_identity_sha256": "17ee2f249cc2521093050af6190b2f8716b90eccac79bb7ef5d23d81441758d0",
+      "log_timestamp": "2026-09-10T19:51:54.707285880Z",
+      "pod_identity_sha256": "09a770ce7c933ac4eb12078dba63572deafac8dadcafd87242bdcfcd1f2edcb5",
+      "span_end": "2026-09-10T19:51:54.707456423Z",
+      "span_identity_sha256": "715b320f64e905abb9c4cb7fe337975adf2aba396a101e29a0b2fbe0bb57dd7a",
+      "span_start": "2026-09-10T19:51:54.703766123Z",
+      "trace_identity_sha256": "daa83f4a02a832f185d613d93422d284610cd1392bb7b7d0cd1e55ad9aaf7427"
+    },
+    "creditscore": {
+      "log_identity_sha256": "1623073e798dd62eace9ad9f0f78a9e4ce731cf3b7e306a55002fa7bfbf11dd7",
+      "log_timestamp": "2026-09-10T19:52:06.433173117Z",
+      "pod_identity_sha256": "139e622c6511a6f986c26269620093acee7490371284e6494d33c857cfa03034",
+      "span_end": "2026-09-10T19:52:06.434151676Z",
+      "span_identity_sha256": "93eb66e2867a10a5ccce95e600988c3ae54c26ce930c2bfbc9d1e9e441a5c7bd",
+      "span_start": "2026-09-10T19:52:06.427729839Z",
+      "trace_identity_sha256": "daa83f4a02a832f185d613d93422d284610cd1392bb7b7d0cd1e55ad9aaf7427"
+    },
+    "customer": {
+      "log_identity_sha256": "b30723e0bed5e2acc72b5c960aeadb9dc5a22749c12d1ae7cf57c363820e8103",
+      "log_timestamp": "2026-09-10T19:51:36.476550588Z",
+      "pod_identity_sha256": "fa7b61d9682f15fc5f26eb94416b5811f4f686b4ec58975df49feb9e58db41c8",
+      "span_end": "2026-09-10T19:51:36.477059187Z",
+      "span_identity_sha256": "deaaf394d2672dc3d8b584de58692a4ec981ab96a57785621ca5960b57464a4b",
+      "span_start": "2026-09-10T19:51:36.472194776Z",
+      "trace_identity_sha256": "daa83f4a02a832f185d613d93422d284610cd1392bb7b7d0cd1e55ad9aaf7427"
+    },
+    "testrunner": {
+      "log_identity_sha256": "607feaa25454730db884393b6fd967e1401ec3e74e3def107f7cca8674b8b7f8",
+      "log_timestamp": "2026-09-10T19:52:00.614633439Z",
+      "pod_identity_sha256": "aab94f1ad426aa1920e281cc275b3a85c3aa394df27c2dec1519bf630302c7b0",
+      "span_end": "2026-09-10T19:52:00.615114933Z",
+      "span_identity_sha256": "ff26e6da07aebcd667484d2689e9552cac3066350a581b62946d109eda20c983",
+      "span_start": "2026-09-10T19:52:00.611748093Z",
+      "trace_identity_sha256": "daa83f4a02a832f185d613d93422d284610cd1392bb7b7d0cd1e55ad9aaf7427"
+    },
+    "transfer": {
+      "log_identity_sha256": "56c2ec0213e72d8bfc3526984992aaa68e37afebe4e777c3e5196211e6926581",
+      "log_timestamp": "2026-09-10T19:51:48.497266654Z",
+      "pod_identity_sha256": "3055350323b3527194801b4ba509f3dfb2a832cdc28205728194cd65eedbebca",
+      "span_end": "2026-09-10T19:51:48.497357515Z",
+      "span_identity_sha256": "1ff5ee1151853ba8341e15b27ad4fefe842709a9aac0e9190e36db90b7a4accf",
+      "span_start": "2026-09-10T19:51:48.492748528Z",
+      "trace_identity_sha256": "daa83f4a02a832f185d613d93422d284610cd1392bb7b7d0cd1e55ad9aaf7427"
+    }
+  },
+  "signature": {
+    "algorithm": "hmac-sha256",
+    "signer": "howard.weale@gmail.com",
+    "value": "b843c81dbb3cce5111e100c4771783a4ef92273957ff963cab66e3933ce66c57"
+  },
+  "status": "passed-service-log-trace-correlation",
+  "trace_identity_sha256": "daa83f4a02a832f185d613d93422d284610cd1392bb7b7d0cd1e55ad9aaf7427"
+}

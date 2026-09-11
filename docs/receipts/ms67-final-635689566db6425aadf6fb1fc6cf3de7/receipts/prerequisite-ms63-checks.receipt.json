@@ -1,0 +1,98 @@
+{
+  "bindings": {
+    "acceptance_contract_sha256": "c4017f9174affb14d26740597cecc0e82386e861fbd32593f1d6f9c1fb9ddde1",
+    "compatibility_ledger_sha256": "e507bce3a5eb4ddd43be6b8eb66f73429b72faacd6a7dbee27eca7c42c282098",
+    "execution_plan_sha256": "42cd315de739cebd6a67ac201482e6e3471064c1e2c919dd4f1f01e1dfc07d63",
+    "messaging_contract_sha256": "c72520ea7ab171f9ef2682f3b28ccb5082269f6955649f45b2b3fba02f952ef1",
+    "source_contract_sha256": "2baaa0b66fcd15dc5b06c838fe24c42ea6a95f60c780e621fb97180865bbec35"
+  },
+  "checks_target_messaging_qualified": true,
+  "content_sha256": "e7afa4d791f40148cd7c1839294ae4246cb0e3d7ba08d5077dbb77e5ab6555f5",
+  "messaging_lane": {
+    "contract_sha256": "28c44c4cb9f6d88df745808cb0d1f5d0538ab529f786da43ec4aa00fef8a5b29",
+    "database_image_id_sha256": "75f5a96988cdf694a215073c3e9c001b706b371e2f94df3967f2efdec2787f6b",
+    "lane": "native-postgresql-checks-messaging",
+    "maven_exit_code": 0,
+    "maven_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "maven_stdout_sha256": "10bb078a11d52dfcf218ac358f4d5523a88f06040d611b3df4fb81e221a15c3f",
+    "packaging": {
+      "executable_jars": 5,
+      "microtx_runtime_libraries": 0,
+      "oracle_runtime_libraries": 0
+    },
+    "ports": "container-internal-only",
+    "raw_output_persisted": false,
+    "reason": null,
+    "scenario_count": 12,
+    "scenarios": [
+      {
+        "id": "deposit-enqueued-atomically",
+        "status": "passed"
+      },
+      {
+        "id": "duplicate-message-suppressed",
+        "status": "passed"
+      },
+      {
+        "id": "clearance-enqueued-atomically",
+        "status": "passed"
+      },
+      {
+        "id": "per-aggregate-order-preserved",
+        "status": "passed"
+      },
+      {
+        "id": "exclusive-skip-locked-claim",
+        "status": "passed"
+      },
+      {
+        "id": "successful-delivery-acknowledged",
+        "status": "passed"
+      },
+      {
+        "id": "consumer-crash-redelivered-after-lease",
+        "status": "passed"
+      },
+      {
+        "id": "bounded-retry-backoff",
+        "status": "passed"
+      },
+      {
+        "id": "poison-message-dead-lettered",
+        "status": "passed"
+      },
+      {
+        "id": "dead-letter-replay-idempotent",
+        "status": "passed"
+      },
+      {
+        "id": "queue-drain-has-no-loss",
+        "status": "passed"
+      },
+      {
+        "id": "oracle-aq-runtime-removed-from-target",
+        "status": "passed"
+      }
+    ],
+    "status": "passed",
+    "synthetic_data_only": true
+  },
+  "migration_complete": false,
+  "native_oracle_aq_equivalence": false,
+  "native_postgresql_queue_observed": true,
+  "postgresql_image_id_sha256": "75f5a96988cdf694a215073c3e9c001b706b371e2f94df3967f2efdec2787f6b",
+  "production_ready": false,
+  "receipt_type": "lightyear-cloudbank-checks-messaging-execution",
+  "release": "0.63.0",
+  "remaining_service_workcells_complete": false,
+  "run_id": "cloudbank-checks-messaging-20260910T031159Z",
+  "schema_version": "1.0",
+  "signature": {
+    "algorithm": "hmac-sha256",
+    "signer": "howard.weale@gmail.com",
+    "value": "d650e6d5036b7dc7fa6d6e56c2f2840ab1d80c5f1e4bad94df32e1d9c91f2012"
+  },
+  "source_ms62_receipt_sha256": "5b0aa07534b923a76731d72e82af4a6a0396c7ffa6a979f4598a7a3e131b5a0f",
+  "status": "passed-checks-target-messaging",
+  "whole_application_equivalent": false
+}

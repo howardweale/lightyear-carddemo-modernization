@@ -458,12 +458,28 @@ code{font-family:var(--mono);font-size:.93em;color:var(--ink);background:var(--f
     </div>
   </div>
 
+<!-- BEGIN CLOUDBANK EXECUTION RECEIPTS -->
+  <div class="band"><div class="wrap">
+    <div class="eyebrow">CloudBank execution evidence · 2026-09-11</div>
+    <h2 style="margin:16px 0 20px">MS67 complete. Nonproduction platform qualified.</h2>
+    <p class="lead">All 28 platform scenarios passed across 8 services and 16 ready replicas. The published chain retains the MS54–66 results and the accepted load and database recovery evidence.</p>
+    <div class="grid4">
+      <div class="stat"><div class="n">5,451</div><div class="l">requests · 300 seconds<br>10 virtual users · 0 errors</div></div>
+      <div class="stat"><div class="n">160.7 ms</div><div class="l">aggregate HTTP p95<br>bounded regional load</div></div>
+      <div class="stat"><div class="n">622 s</div><div class="l">PITR recovery<br>approved limit 630 seconds</div></div>
+      <div class="stat"><div class="n">18</div><div class="l">business journeys<br>bounded whole-application equivalence</div></div>
+    </div>
+    <p><a href="receipts/">Read all MS54–67 receipts and measured results →</a></p>
+    <p class="note">MS67 qualifies the bound synthetic nonproduction platform. Customer IdP, representative customer data and workload, customer approval, production deployment and final production readiness remain MS68. Aggregate p95 includes all operations; chat p95 was 21.36 seconds.</p>
+  </div></div>
+<!-- END CLOUDBANK EXECUTION RECEIPTS -->
+
   <div class="band tight">
     <div class="wrap">
       <div class="grid4">
         <div class="stat"><div class="n">11,336</div><div class="l">graph nodes bound to<br>exact source locations</div></div>
-        <div class="stat"><div class="n">49</div><div class="l">shipped milestones, each with<br>a published evidence boundary</div></div>
-        <div class="stat"><div class="n">455</div><div class="l">tests, every guard verified<br>by breaking what it protects</div></div>
+        <div class="stat"><div class="n">67</div><div class="l">shipped milestones, each with<br>a published evidence boundary</div></div>
+        <div class="stat"><div class="n">31</div><div class="l">published CloudBank evidence files<br>original bytes and receipt bindings</div></div>
         <div class="stat"><div class="n"><em>0</em></div><div class="l">third-party runtime<br>dependencies</div></div>
       </div>
     </div>
@@ -518,7 +534,7 @@ code{font-family:var(--mono);font-size:.93em;color:var(--ink);background:var(--f
       <h2 style="margin:16px 0 0">What we have not done yet</h2>
       <div class="rule"></div>
       <div class="grid2" style="align-items:start">
-        <div class="card"><h3>No live mainframe baseline</h3><p>Every equivalence claim in the product is gated pending authorised z/OS capture. That is deliberate, and it is the next value inflection. A verification company that quietly promotes simulated evidence has nothing to sell.</p></div>
+        <div class="card"><h3>No live mainframe baseline</h3><p>Mainframe equivalence claims remain gated pending authorised z/OS capture. CloudBank’s bounded Oracle/PostgreSQL and nonproduction platform results are published above. That is deliberate, and it is the next value inflection. A verification company that quietly promotes simulated evidence has nothing to sell.</p></div>
         <div class="card"><h3>One workload family proven</h3><p>Breadth across genuinely different estates is unproven. We would rather tell you that now than have you discover it in month three of a programme.</p></div>
       </div>
     </div>
@@ -708,7 +724,7 @@ lightyr audit verify        <span class="c"># replay the hash-chained ledger</sp
 
         <div class="docsec" id="d-record">
           <h3>Body of record</h3>
-          <p>Every milestone ships with a published document: what it delivered, what evidence supports it, and — the part that matters — what it explicitly does not claim. Forty-nine of them, generated from the same catalog the platform validates against, so the narrative and the code cannot drift apart.</p>
+          <p>Every milestone ships with a published document: what it delivered, what evidence supports it, and — the part that matters — what it explicitly does not claim. Sixty-seven of them, generated from the same catalog the platform validates against, so the narrative and the code cannot drift apart.</p>
           <pre>lightyr milestones build     <span class="c"># regenerate the record from source</span>
 lightyr milestones verify    <span class="c"># catalog, hashes and boundaries</span>
 lightyr receipt-claims       <span class="c"># reject literal promotion anywhere in the tree</span>

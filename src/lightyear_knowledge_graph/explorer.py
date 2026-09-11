@@ -18,6 +18,7 @@ from typing import Any
 from urllib.parse import parse_qs, unquote, urlparse
 
 from lightyear_control_tower.decisions import DecisionService, DecisionConflict, DecisionUnauthorized
+from lightyear_data.cloudbank_publication import load_publication, workload_publication
 
 from .chat import ChatError, GraphChatService
 from .evidence_pack import EvidenceStore, load_evidence_pack, validate_evidence_pack
@@ -344,7 +345,7 @@ OPERATOR_WORKLOADS = [
         "problem_id": "cloudbank-customer-account",
         "perspective_id": "cloudbank-customer-account",
         "recommended_scope": "database",
-        "description": "Customer is qualified, all eight services are planned, and MS #61 adds bounded normalized Oracle/PostgreSQL equivalence for Customer, Account, and Transfer.",
+        "description": "Customer, Account and Transfer have bounded normalized Oracle/PostgreSQL comparison evidence; the published chain records subsequent eight-service and nonproduction platform qualification.",
         "target_dialect": "postgresql-16",
         "target_status": "bounded equivalence ready · operator receipt required",
         "mapping_artifact": "reference-estates/cloudbank/customer-postgresql/mapping.json",
@@ -558,6 +559,12 @@ class GraphExplorerIndex:
         self.ontology = ontology or load_ontology()
         self.relation_definitions = self.ontology["relations"]
         self.runtime_store = runtime_store
+        try:
+            self.cloudbank_publication = load_publication()
+        except (OSError, ValueError, KeyError, TypeError):
+            # A packaged installation may not contain the repository evidence.
+            # Missing or changed evidence must leave the admission posture intact.
+            self.cloudbank_publication = None
         self.node_by_id = {node["id"]: node for node in payload["nodes"]}
         self.edge_by_id = {edge["id"]: edge for edge in payload["edges"]}
         self.adjacency: dict[str, list[tuple[str, str]]] = defaultdict(list)
@@ -705,6 +712,8 @@ class GraphExplorerIndex:
             if node is None:
                 continue
             item = dict(definition)
+            if self.cloudbank_publication is not None:
+                item.update(workload_publication(item["id"], self.cloudbank_publication))
             item["name"] = node["name"]
             item["root"] = node["id"]
             item["status"] = node.get("properties", {}).get("status", "unknown")
@@ -758,7 +767,9 @@ class GraphExplorerIndex:
             limitations.append("No Oracle customer integration edges are currently projected.")
         if "cloudbank-reference" in available_company_ids:
             limitations.append(
-                "CloudBank is pinned modern-Oracle reference evidence. The Customer qualification result remains operator-held and the whole application has an ordered wave plan; Account/Transfer native execution, messaging, LRA replacement, whole-estate equivalence, and migration completion are not attached."
+                "CloudBank has published MS54–67 execution evidence, including bounded whole-application equivalence and nonproduction platform qualification. The archived result applies to its bound sources, images and synthetic run; customer production approval and migration completion remain unclaimed."
+                if self.cloudbank_publication is not None else
+                "CloudBank reference evidence is projected, but its published execution bundle is unavailable or failed integrity checks. Execution claims remain unverified in this view."
             )
         limitations.append("No SAP ASE customer integration edges are currently projected.")
         return {

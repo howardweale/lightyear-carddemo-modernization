@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.67.1 — 2026-09-11
+
+- Published the completed MS54–67 execution chain: 31 original JSON evidence files with their
+  byte hashes, content hashes, source locations and final scenario bindings preserved.
+- Updated the website, Control Tower, roadmap and milestone briefs to display the actual passing
+  MS65 rehearsal, MS66 bounded equivalence and MS67 nonproduction platform qualification.
+- Recorded the measured regional load and owner-approved 630-second PITR acceptance without
+  changing measurements, rewriting historical receipts or performing another qualification run.
+- Kept customer IdP, representative data, customer approval and production readiness in MS68.
+
 ## 0.66.12 — 2026-09-08
 
 - Replaced MS #66's scale-first Checks failure choreography with a recovery-journaled bounded

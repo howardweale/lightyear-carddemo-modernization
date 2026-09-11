@@ -4,12 +4,13 @@
 
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.68.0 — iDempiere Dialect Inventory and Pairing**
+Release: **v0.69.0 — iDempiere Deterministic Semantic Comparison**
 
-MS #68 completes the deterministic inventory and pairing stage of the iDempiere Oracle/PostgreSQL
-divergence audit. All 1,078 candidate pairs are accounted for, including the 93-pair order-to-cash
-pilot. MS #69 will implement deterministic comparison; MS #70 will add bounded triage and evidence
-assembly. See the [MS #68 brief](docs/milestones/MS-68/MS-68.md) and
+MS #69 adds a bounded, deterministic comparison baseline for all 1,078 paired migrations,
+running the 93-pair order-to-cash pilot first. Decision coverage remains low: most SQL needs
+schema, session or procedural context and is explicitly indeterminate. This is not a semantic
+equivalence certificate. MS #70 will reuse the existing Planner and Analyst for bounded triage;
+MS #69 calls neither agent and leaves Builder idle. See the [MS #69 brief](docs/milestones/MS-69/MS-69.md) and
 [project contract](factory/idempiere-divergence-audit/README.md).
 
 Previous release: **v0.67.0 — CloudBank Real Non-Production Platform Qualification**
@@ -45,12 +46,14 @@ them. Its deterministic Stage 1 paired all 1,078 Oracle/PostgreSQL current-migra
 order-to-cash slice selects 93 pairs for the first comparator pilot.
 
 The source also contains an explicit Oracle-to-PostgreSQL conversion layer, so independent manual
-maintenance is not assumed. Script provenance and semantic comparison remain open gates; no model
-was called and no equivalence or production claim is made. See the
+maintenance is not assumed. The MS #69 baseline now records statement coverage, supported declared
+schema effects, unresolved DML and unsupported constructs. Provenance and complete semantic
+equivalence remain open gates. No model was called and no native or production claim is made. See the
 [IDDA project contract](factory/idempiere-divergence-audit/README.md) or run:
 
 ```bash
 ./idempiere-divergence-audit.sh verify
+./idempiere-divergence-audit.sh verify-comparison
 ```
 
 Previous release: **v0.66.0 — CloudBank Whole-Application Dual-Lane Equivalence**

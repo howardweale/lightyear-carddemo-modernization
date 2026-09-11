@@ -8,7 +8,7 @@ export PYTHONPATH="$project_dir/src"
 
 action="${1:-verify}"
 case "$action" in
-  build|verify-source)
+  build|verify-source|compare|verify-comparison-source)
     source_root="${2:-}"
     if [[ -z "$source_root" ]]; then
       echo "Pinned iDempiere upstream checkout is required for $action." >&2
@@ -17,12 +17,12 @@ case "$action" in
     exec "$LIGHTYEAR_PYTHON_BIN" "$project_dir/tools/idempiere_divergence_audit.py" \
       "$action" --project-root "$project_dir" --source-root "$source_root"
     ;;
-  verify)
+  verify|verify-comparison)
     exec "$LIGHTYEAR_PYTHON_BIN" "$project_dir/tools/idempiere_divergence_audit.py" \
-      verify --project-root "$project_dir"
+      "$action" --project-root "$project_dir"
     ;;
   *)
-    echo "Usage: ./idempiere-divergence-audit.sh [build|verify|verify-source] [IDEMPIERE_ROOT]" >&2
+    echo "Usage: ./idempiere-divergence-audit.sh [build|verify|verify-source|compare|verify-comparison|verify-comparison-source] [IDEMPIERE_ROOT]" >&2
     exit 2
     ;;
 esac

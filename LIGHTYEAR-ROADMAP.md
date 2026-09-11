@@ -51,7 +51,7 @@ production-qualified.
 | MS #66 | CloudBank Whole-Application Dual-Lane Equivalence | Passed; [published execution evidence](docs/receipts/index.html#ms66) |
 | MS #67 | CloudBank Real Non-Production Platform Qualification | Passed; [published execution evidence](docs/receipts/index.html#ms67) |
 | MS #68 | iDempiere Dialect Inventory and Pairing | Complete; deterministic source-bound evidence |
-| MS #69 | iDempiere Deterministic Semantic Comparison | Planned; order-to-cash pilot first |
+| MS #69 | iDempiere Deterministic Semantic Comparison | Complete bounded baseline; low decision coverage, open findings |
 | MS #70 | iDempiere Bounded Triage and Evidence Assembly | Planned; comparator findings only |
 
 ## MS #68–#70 project stream — IDDA
@@ -66,9 +66,9 @@ Its deterministic Stage 1 is complete: the exact MS #48 source pin yields 1,078 
 PostgreSQL current migration files, resolved into 1,078 pairs with 100% file-level pairing
 coverage. The existing order-to-cash slice selects 93 pilot pairs. Because iDempiere includes an
 Oracle-to-PostgreSQL conversion layer, generated-versus-independent maintenance provenance remains
-an explicit gate. Semantic comparison, agent triage, application equivalence and production
-readiness remain incomplete. The [IDDA contract](factory/idempiere-divergence-audit/README.md)
-defines the non-duplicative scope and next deterministic comparator stage.
+an explicit gate. MS #69 completes the bounded deterministic baseline, not complete semantic
+equivalence. Agent triage, application equivalence and production readiness remain incomplete.
+The [IDDA contract](factory/idempiere-divergence-audit/README.md) records coverage and open gates.
 
 The v0.35.0 stored-logic qualification core is retained as supporting MS #34 evidence. It does not
 replace the planned DB2 milestone.
@@ -739,16 +739,20 @@ pairing and coverage, not independent maintenance or semantic equivalence. The
 
 ## MS #69 — iDempiere Deterministic Semantic Comparison
 
-Planned. Implement dialect parsing and normalization against the existing database semantic core,
-beginning with the 93-pair order-to-cash pilot before the remaining 985 pairs. Report parsed and
-compared, indeterminate and unparsed constructs separately. Classify script maintenance provenance
-where history supports it; unsupported or session-dependent semantics cannot pass as equivalent.
-This stage makes no model calls.
+Complete as a bounded static baseline. The quote-aware parser and ordered-effect comparator reuse
+the MS #33 semantic vocabulary and the unchanged MS #68 manifest. The 93-pair order-to-cash pilot
+runs before the remaining 985 pairs. Reports distinguish parsed-and-compared,
+parsed-but-indeterminate and unparsed SQL units, with known administration separately excluded.
+Decision coverage is low because DML requires a baseline schema and runtime semantics; this is
+not complete migration equivalence. The PostgreSQL helper's catalog and dependent-view effects
+remain unresolved, as does per-pair maintenance provenance. No model calls or work orders are made.
+See the [MS #69 brief](docs/milestones/MS-69/MS-69.md) and the IDDA comparison policy.
 
 ## MS #70 — iDempiere Bounded Triage and Evidence Assembly
 
 Planned. Feed only MS #69 findings to the existing Planner and Analyst workcell with existing token
 preflight and context limits. Keep Builder idle and deterministic verification authoritative.
-Calibrate the first twenty flagged comparisons, then assemble the divergence register, coverage
+Start with a bounded, stratified sample rather than the entire large MS #69 flagged set. Calibrate
+the first twenty flagged comparisons, then assemble the divergence register, coverage
 denominator, provenance classifications, indeterminate list and content-addressed run receipt.
 Community engagement and external publication require separate authorization.

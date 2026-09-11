@@ -25,14 +25,14 @@ BRAND_ROOT = ROOT / "brand"
 BRAND_ASSETS = BRAND_ROOT / "assets"
 BRAND_LOGO_SVG = BRAND_ASSETS / "lightyear-primary.svg"
 BRAND_LOGO_PNG = BRAND_ASSETS / "lightyear-primary.png"
-GENERATOR_VERSION = "1.20"
+GENERATOR_VERSION = "1.21"
 REPOSITORY = "howardweale/lightyear-carddemo-modernization"
 DEFAULT_BRANCH = "main"
 GITHUB_BLOB_ROOT = f"https://github.com/{REPOSITORY}/blob/{DEFAULT_BRANCH}"
 GITHUB_RAW_ROOT = f"https://raw.githubusercontent.com/{REPOSITORY}/{DEFAULT_BRANCH}"
 PAGES_INDEX = f"https://howardweale.github.io/{REPOSITORY.split('/', 1)[1]}/milestones/"
 FIXED_TIME = datetime(2026, 8, 31, 12, 0, 0, tzinfo=timezone.utc)
-EXPECTED_MILESTONES = tuple(range(1, 69))
+EXPECTED_MILESTONES = tuple(range(1, 70))
 EXPECTED_ARTIFACTS = len(EXPECTED_MILESTONES) * 3
 BOUNDARY_TERMS = (
     "remain false", "remains false", "remain blocked", "remains blocked",
@@ -142,7 +142,7 @@ def build_model(
         "deliverables": [finish_sentence(item) for item in deliverables],
         "boundaries": [finish_sentence(item) for item in boundaries],
         "relationship": relationship,
-        "executive_summary": (
+        "executive_summary": entry.get("executive_summary") or (
             f"MS #{number} - {entry['title']} converts a specific part of the LIGHTYEAR modernization approach "
             f"into a governed, reviewable capability. {entry['customer_value']}"
         ),

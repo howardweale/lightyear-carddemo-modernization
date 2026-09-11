@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schema/idempiere-semantic-comparison.schema.json",
+  "title": "MS69 bounded iDempiere static comparison report or receipt",
+  "oneOf": [{"$ref": "#/$defs/report"}, {"$ref": "#/$defs/receipt"}],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "verdict": {"enum": ["equivalent", "divergent", "indeterminate"]},
+    "compatibility": {"enum": ["exact", "normalized-equivalent", "policy-decision-required", "lossy", "unsupported"]},
+    "claims": {
+      "type": "object",
+      "required": ["deterministic_sweep_complete", "all_constructs_decided", "agent_triage_complete", "audit_complete", "native_execution", "application_equivalence", "production_ready"],
+      "properties": {
+        "deterministic_sweep_complete": {"const": true},
+        "all_constructs_decided": {"const": false},
+        "agent_triage_complete": {"const": false},
+        "audit_complete": {"const": false},
+        "native_execution": {"const": false},
+        "application_equivalence": {"const": false},
+        "production_ready": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "coverage": {
+      "type": "object",
+      "required": ["input_units", "administrative_units_excluded", "sql_units", "parsed-and-compared", "parsed-but-indeterminate", "unparsed"],
+      "properties": {
+        "input_units": {"type": "integer", "minimum": 0},
+        "administrative_units_excluded": {"type": "integer", "minimum": 0},
+        "sql_units": {"type": "integer", "minimum": 0},
+        "parsed-and-compared": {"type": "integer", "minimum": 0},
+        "parsed-but-indeterminate": {"type": "integer", "minimum": 0},
+        "unparsed": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "segment": {
+      "type": "object",
+      "required": ["first_unit", "last_unit", "start_line", "end_line", "category", "kind", "outcomes", "reason_codes", "unit_hashes_sha256"],
+      "properties": {
+        "first_unit": {"type": "integer", "minimum": 1},
+        "last_unit": {"type": "integer", "minimum": 1},
+        "start_line": {"type": "integer", "minimum": 1},
+        "end_line": {"type": "integer", "minimum": 1},
+        "category": {"enum": ["parsed-and-compared", "parsed-but-indeterminate", "unparsed", "administrative-excluded"]},
+        "kind": {"type": "string", "minLength": 1},
+        "outcomes": {"type": "array", "items": {"$ref": "#/$defs/verdict"}, "uniqueItems": true},
+        "reason_codes": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+        "unit_hashes_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "pair": {
+      "type": "object",
+      "required": ["pair_id", "verdict", "compatibility_class", "ordered_effects_aligned", "coverage", "segments", "declared_differences", "compared_effects_sha256", "compared_effect_count", "maintenance_provenance", "content_sha256"],
+      "properties": {
+        "pair_id": {"type": "string", "minLength": 1},
+        "verdict": {"$ref": "#/$defs/verdict"},
+        "compatibility_class": {"$ref": "#/$defs/compatibility"},
+        "ordered_effects_aligned": {"type": "boolean"},
+        "coverage": {"type": "object", "required": ["oracle", "postgresql"], "properties": {"oracle": {"$ref": "#/$defs/coverage"}, "postgresql": {"$ref": "#/$defs/coverage"}}, "additionalProperties": false},
+        "segments": {"type": "object", "required": ["oracle", "postgresql"], "properties": {"oracle": {"type": "array", "items": {"$ref": "#/$defs/segment"}}, "postgresql": {"type": "array", "items": {"$ref": "#/$defs/segment"}}}, "additionalProperties": false},
+        "declared_differences": {"type": "array", "items": {"type": "object"}},
+        "compared_effects_sha256": {"$ref": "#/$defs/sha256"},
+        "compared_effect_count": {"type": "integer", "minimum": 0},
+        "maintenance_provenance": {"const": "not-classified"},
+        "content_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "report": {
+      "type": "object",
+      "required": ["schema_version", "artifact_type", "milestone", "project_id", "scope", "bindings", "helper_definition", "pilot_content_sha256", "statistics", "results", "model_calls", "claims", "content_sha256"],
+      "properties": {
+        "schema_version": {"const": "1.0"},
+        "artifact_type": {"const": "lightyear-idempiere-semantic-comparison"},
+        "milestone": {"const": 69},
+        "project_id": {"const": "idempiere-release13-oracle-postgresql-divergence-audit"},
+        "scope": {"enum": ["order-to-cash-pilot", "all-current-pairs"]},
+        "bindings": {"type": "object"},
+        "helper_definition": {"type": "object"},
+        "pilot_content_sha256": {"oneOf": [{"$ref": "#/$defs/sha256"}, {"type": "null"}]},
+        "statistics": {"type": "object"},
+        "results": {"type": "array", "items": {"$ref": "#/$defs/pair"}},
+        "model_calls": {"const": 0},
+        "claims": {"$ref": "#/$defs/claims"},
+        "content_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "receipt": {
+      "type": "object",
+      "required": ["schema_version", "artifact_type", "milestone", "project_id", "bindings", "pilot_sha256", "comparison_sha256", "status", "statistics", "execution_order", "station_usage", "ms70_handoff", "claims", "content_sha256"],
+      "properties": {
+        "schema_version": {"const": "1.0"},
+        "artifact_type": {"const": "lightyear-idempiere-semantic-comparison-receipt"},
+        "milestone": {"const": 69},
+        "project_id": {"const": "idempiere-release13-oracle-postgresql-divergence-audit"},
+        "bindings": {"type": "object"},
+        "pilot_sha256": {"$ref": "#/$defs/sha256"},
+        "comparison_sha256": {"$ref": "#/$defs/sha256"},
+        "status": {"const": "bounded-sweep-complete-with-open-findings"},
+        "statistics": {"type": "object"},
+        "execution_order": {"type": "array", "minItems": 2, "maxItems": 2},
+        "station_usage": {"type": "object"},
+        "ms70_handoff": {"type": "object"},
+        "claims": {"$ref": "#/$defs/claims"},
+        "content_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

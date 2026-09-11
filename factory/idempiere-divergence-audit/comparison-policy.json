@@ -1,0 +1,46 @@
+{
+  "administrative_boundary": "These known client settings and migration-registration effects are separately counted outside SQL-effect coverage; literal SQL execution and an existing search-path/schema mapping are assumptions, not verified client/runtime behavior. Any other session/client command remains unparsed.",
+  "administrative_exclusions": [
+    "Oracle SET DEFINE OFF",
+    "Oracle SET SQLBLANKLINES ON",
+    "SELECT register_migration_script with one filename literal FROM dual"
+  ],
+  "alignment_policy": "Keep order and repetitions. If ordered effect identities differ, all nonadministrative parsed units are indeterminate; do not guess resynchronization or silently drop unmatched operations.",
+  "authorities": [
+    "https://docs.oracle.com/en/database/oracle/oracle-database/19/sqlrf/Data-Types.html",
+    "https://docs.oracle.com/en/database/oracle/oracle-database/19/sqlrf/Nulls.html",
+    "https://www.postgresql.org/docs/16/datatype-numeric.html",
+    "https://www.postgresql.org/docs/16/datatype-character.html",
+    "https://www.postgresql.org/docs/16/datatype-datetime.html"
+  ],
+  "character_policy": "Empty string vs NULL, BYTE/CHAR length units, encoding and collation remain policy decisions even for equal declared lengths.",
+  "compatibility_classes": [
+    "exact",
+    "normalized-equivalent",
+    "policy-decision-required",
+    "lossy",
+    "unsupported"
+  ],
+  "content_sha256": "4ec8c13d317121492fed5b04e3c45abacf483b6daea3b0a3425862a020dcf85a",
+  "coverage_unit": "Non-comment top-level SQL statement or opaque procedural block on each dialect side, NOT token occurrences. A lexically broken file or unterminated Oracle block may form one opaque remainder unit. Expanded column effects never inflate the statement denominator.",
+  "datetime_policy": "Oracle DATE retains seconds; PostgreSQL DATE does not. Timestamp precision, time-zone and range differences remain unresolved without an admitted domain.",
+  "dml_policy": "Record INSERT VALUES, UPDATE assignments and DELETE predicates; literals are typed, nonliteral expressions opaque. Baseline column domains, triggers, predicates and coercions are not admitted; DML remains indeterminate, including identical text.",
+  "documentation_boundary": "Language references define this bounded profile; they do not establish the runtime database versions or configuration used by iDempiere deployments.",
+  "equivalence_requires": [
+    "all-in-scope-units-fully-parsed-and-decided",
+    "identical-ordered-effect-keys-without-resynchronization",
+    "at-least-one-in-scope-effect",
+    "no-opaque-expression-or-unresolved-domain"
+  ],
+  "finite_numeric_projection": "Compare explicit precision and scale only, 1<=p<=38 and 0<=s<=p. Excludes PostgreSQL NaN/infinities, runtime conversions and storage; no unrestricted NUMBER/NUMERIC equivalence.",
+  "helper_policy": "Project the five positional t_alter_column arguments using the pinned altercolumn.sql implementation. Never discharge catalog lookups, coercion, dependent views, permissions or helper deployment/version history.",
+  "milestone": 69,
+  "models_called": 0,
+  "ms70_handoff": "References to flagged source ranges only; no prompts, work orders, agents or billable calls are created by MS69. MS70 must bound and budget individual contexts using existing workcell controls.",
+  "policy_id": "idda-static-declared-effects-v1",
+  "provenance": "not-classified; generated-or-maintained output audit, not evidence of independent hand maintenance",
+  "schema_policy": "Compare declared column type facets, explicit defaults and nullability. Constraints, indexes and drops retain domain/catalog obligations. No baseline schema reconstruction, final-state proof, transaction or application claim.",
+  "schema_version": "1.0",
+  "semantic_core": "data-modernization/semantic-core/database-semantic-core.json",
+  "verdict_scope": "ordered-declared-schema-effects-not-final-state-or-execution"
+}

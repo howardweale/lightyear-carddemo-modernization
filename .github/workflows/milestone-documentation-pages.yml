@@ -6,6 +6,10 @@ on:
       - "docs/index.html"
       - "docs/assets/**"
       - "docs/milestones/**"
+      - "docs/receipts/**"
+      - "src/lightyear_data/cloudbank_publication.py"
+      - "tools/publish_cloudbank_receipts.py"
+      - "tests/test_cloudbank_publication.py"
       - "tests/test_website.py"
       - "tools/generate_milestone_documentation.py"
       - "milestone-documentation.*"
@@ -16,6 +20,10 @@ on:
       - "docs/index.html"
       - "docs/assets/**"
       - "docs/milestones/**"
+      - "docs/receipts/**"
+      - "src/lightyear_data/cloudbank_publication.py"
+      - "tools/publish_cloudbank_receipts.py"
+      - "tests/test_cloudbank_publication.py"
       - "tests/test_website.py"
       - "tools/generate_milestone_documentation.py"
       - "milestone-documentation.*"
@@ -44,8 +52,9 @@ jobs:
 
       - name: Verify documentation and index
         run: |
+          python3 tools/publish_cloudbank_receipts.py verify
           ./milestone-documentation.sh verify
-          PYTHONPATH=src python3 -m unittest tests.test_milestone_documentation tests.test_website -v
+          PYTHONPATH=src python3 -m unittest tests.test_milestone_documentation tests.test_website tests.test_cloudbank_publication -v
 
   deploy:
     if: github.event_name != 'pull_request'

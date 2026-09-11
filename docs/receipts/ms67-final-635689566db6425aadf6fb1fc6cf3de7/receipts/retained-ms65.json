@@ -1,0 +1,245 @@
+{
+  "bindings": {
+    "compatibility_ledger_sha256": "f4d591cf5a771c87550e14c3bf0c4bebf5bd3eadd2e8fdfd639cf7625ef43f81",
+    "cutover_contract_sha256": "44a949e2056aaec4e3db45f72ba15b30629d618fd0ad3b759dd63f8e399f175f",
+    "deployment_contract_sha256": "b068b5c3b6ae84b037cf0a92a676701fe1b2106ed16ab47926d5cfc3ff255896",
+    "deployment_template_sha256": "cc66c0aa77e9680fe12590dbc3b4faac894d4f0e691259efaca2cd11fa9173e1",
+    "execution_plan_sha256": "104b9d30aca02d3ea2578fb21e6826f5b95da114b2aa051d0e332d229f1945e5"
+  },
+  "cluster_identity_sha256": "73225fb68347496beff8a441f7d8bc989ec1dc45ea9cc776cceeffc17fffba00",
+  "content_sha256": "78dc62ffd6ccd5040d6899971c1e2e0262d5353b52c38df0dbadd909b190d600",
+  "cutover_rehearsal_complete": true,
+  "deployment_bundle_sha256": "cd25d4b06d79769b77f2fa3884cb3053102531fa4380ea073802b0616f8a470a",
+  "environment_sha256": "7e65dff98ae89997fc6a21282da5b7d236c709af9c3533ef68278995bebb6b66",
+  "image_lock_sha256": "eb3c808a5af30fe2a212ded0f27a9810a867bf651f8e759b04cd54547244a778",
+  "migration_complete": false,
+  "observation_sha256": "3ae91ef6c19e734f6190aef3e99b990e84c1c207a0acd92ece0fed127ebc055c",
+  "production_deployed": false,
+  "production_like_rehearsal_complete": true,
+  "production_ready": false,
+  "receipt_type": "lightyear-cloudbank-production-readiness-rehearsal-execution",
+  "rehearsal": {
+    "backup_restore": {
+      "backup_sha256": "8a583a8f9b4051cb10934d61bafffe1806950a9a43664b6c1c24e8c04ba7fbe7",
+      "pre_cutover_state_sha256": "168a0ade3b0447e61d24f8cd966b1688b6f45c77bfe7a66aebe1ee24cbcda7c3",
+      "restored_state_sha256": "168a0ade3b0447e61d24f8cd966b1688b6f45c77bfe7a66aebe1ee24cbcda7c3"
+    },
+    "contract_sha256": "a4e18de13a9617d34f1a5ff9debd9ba8bbf2ad31c0b0bcfeaaddc3a899c8d54a",
+    "cutover_states": [
+      "admitted",
+      "backup-verified",
+      "candidate-ready",
+      "smoke-passed",
+      "traffic-switched",
+      "business-checks-passed",
+      "rollback-exercised",
+      "recovered"
+    ],
+    "production_environment": false,
+    "raw_output_persisted": false,
+    "scenario_count": 24,
+    "scenarios": [
+      {
+        "evidence_sha256": "17bfb1766cdbeb616010b1b742e13ce27a71ea6c5978208afc60f15cdc8d2e87",
+        "id": "signed-ms64-eight-service-receipt-admitted",
+        "status": "passed"
+      },
+      {
+        "evidence_sha256": "c584528ee9e23ea77b0c75fdd06b4f7f8950e1de0b04ebb1f03d1722e2ff5b98",
+        "id": "eight-immutable-container-images-bound",
+        "status": "passed"
+      },
+      {
+        "evidence_sha256": "650f6b5ce4abeaf406f9b5d7ad3866019172c02a6e715e96ffd0d281ac239d76",
+        "id": "deployment-manifest-placeholder-free",
+        "status": "passed"
+      },
+      {
+        "evidence_sha256": "5c40e1e5c87252aa2506ab5ea9a4f3715b653af5471ab9376276f2dd8cc3a145",
+        "id": "eight-deployments-and-services-present",
+        "status": "passed"
+      },
+      {
+        "evidence_sha256": "7ff4897ea9546362463f38010876496ccf69a1501a551ab0c1ef64b39d00793a",
+        "id": "dedicated-service-accounts-and-token-automount-disabled",
+        "status": "passed"
+      },
+      {
+        "evidence_sha256": "6a6afbe227e03c474e16d3ddc1b381b6e1967968f5f10730cd3dfaa52bee21d9",
+        "id": "non-root-read-only-least-privilege-containers",
+        "status": "passed"
+      },
+      {
+        "evidence_sha256": "6a6afbe227e03c474e16d3ddc1b381b6e1967968f5f10730cd3dfaa52bee21d9",
+        "id": "cpu-and-memory-requests-and-limits-enforced",
+        "status": "passed"
+      },
+      {
+        "evidence_sha256": "6a6afbe227e03c474e16d3ddc1b381b6e1967968f5f10730cd3dfaa52bee21d9",
+        "id": "startup-liveness-and-readiness-probes-enforced",
+        "status": "passed"
+      },
+      {
+        "evidence_sha256": "6a6afbe227e03c474e16d3ddc1b381b6e1967968f5f10730cd3dfaa52bee21d9",
+        "id": "zero-unavailable-rolling-update-policy-enforced",
+        "status": "passed"
+      },
+      {
+        "evidence_sha256": "6fefedd0c1303fe7c749d80fc2c80ce465ae861cb2d2e50d38065995d51400f1",
+        "id": "pod-disruption-budgets-cover-all-services",
+        "status": "passed"
+      },
+      {
+        "evidence_sha256": "fc96458e90fba9f5185c2d589c068bc97e8fdbb4bbd23768dca0e897dfe33247",
+        "id": "default-deny-network-policy-enforced",
+        "status": "passed"
+      },
+      {
+        "evidence_sha256": "ee5cd8282e65d80652f36f98c7dcb4cfb56cc7610e8b567123455eae1d5c885b",
+        "id": "database-model-and-dns-egress-bounded",
+        "status": "passed"
+      },
+      {
+        "evidence_sha256": "d47a4bd1ae48c8b76b08139cf4c970895c8fc353a03b7227298a7495b55857ff",
+        "id": "external-secret-references-contain-no-values",
+        "status": "passed"
+      },
+      {
+        "evidence_sha256": "6a6afbe227e03c474e16d3ddc1b381b6e1967968f5f10730cd3dfaa52bee21d9",
+        "id": "release-and-configuration-hashes-projected",
+        "status": "passed"
+      },
+      {
+        "evidence_sha256": "c5591af5358269bb310d2e9192aefc75cc45771edb92f19884fd11b04418940d",
+        "id": "all-eight-service-rollouts-ready",
+        "status": "passed"
+      },
+      {
+        "evidence_sha256": "6188b4d2af9b14e7a7778f4639d48b6883754e292514c12bbfa81366e730c433",
+        "id": "pre-cutover-backup-created-and-verified",
+        "status": "passed"
+      },
+      {
+        "evidence_sha256": "76011d15e059259d4815aecae13edd2df165e734d72a22cd4fd277de8beb8ab4",
+        "id": "backup-restore-reproduces-pre-cutover-state",
+        "status": "passed"
+      },
+      {
+        "evidence_sha256": "3a36d03eb582eff57aa804ca5925340692870f6f0e7c934328f674629b9a5c42",
+        "id": "synthetic-smoke-suite-passes",
+        "status": "passed"
+      },
+      {
+        "evidence_sha256": "d402f7ac082266cf7dd1199b79968a84df108a43ffacc1ecda45dc542d7a4996",
+        "id": "candidate-canary-readiness-observed",
+        "status": "passed"
+      },
+      {
+        "evidence_sha256": "0bebfaebc9e980cc9c759e11a75bf19be9e6f026b6981b94b2066371899c23b3",
+        "id": "traffic-switch-checkpoint-recorded",
+        "status": "passed"
+      },
+      {
+        "evidence_sha256": "a71ccacb3082dfa01fa0161bf995b18d5e9561bb400fedd054ccf2789009181a",
+        "id": "post-cutover-business-checks-pass",
+        "status": "passed"
+      },
+      {
+        "evidence_sha256": "9ab072f1bf3a1bb2564807ac0e2747e5053617aaece0c310f07bca105c96eece",
+        "id": "rollback-drill-restores-checkpoint",
+        "status": "passed"
+      },
+      {
+        "evidence_sha256": "999f0467cba85d2d8f14801eb8b152df7d0b77b072b9d287c9f3bfc686a0203b",
+        "id": "bounded-slo-window-meets-threshold",
+        "status": "passed"
+      },
+      {
+        "evidence_sha256": "7f7b336cb9984ab2fa9150af26f10441b6f8a6f487ffb754c9beeb2bc27667fe",
+        "id": "raw-output-secrets-and-production-data-not-persisted",
+        "status": "passed"
+      }
+    ],
+    "secret_values_persisted": false,
+    "service_rollouts": [
+      {
+        "desired_replicas": 2,
+        "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/azn-server@sha256:24ba43de59cf22f95c962981b49542eb55e332fc2dd91f9b4a9c724d06dd474a",
+        "ready_replicas": 2,
+        "service": "azn-server"
+      },
+      {
+        "desired_replicas": 2,
+        "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/customer@sha256:47c50deffc67b480aa67ce4cffa4145eb4f91382ef091e72e89fbbfd0884456d",
+        "ready_replicas": 2,
+        "service": "customer"
+      },
+      {
+        "desired_replicas": 2,
+        "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/account@sha256:87e675066d0c6edf77346b2ddee81bb46687365dbc9c8760307d7104764c59cf",
+        "ready_replicas": 2,
+        "service": "account"
+      },
+      {
+        "desired_replicas": 2,
+        "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/transfer@sha256:fd99a626b3b1d8d47c3aed397119d9eaab70887da88b89d6c6070eb4fcb3caaa",
+        "ready_replicas": 2,
+        "service": "transfer"
+      },
+      {
+        "desired_replicas": 2,
+        "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/checks@sha256:7717ca2c871f8b6179145d871c91e31f5b6fa1632af8c9f8aa0d93c0d84d8432",
+        "ready_replicas": 2,
+        "service": "checks"
+      },
+      {
+        "desired_replicas": 2,
+        "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/testrunner@sha256:256d107cc707d537c98f1260362577bbdb9d2ede3e88005076e464a227351693",
+        "ready_replicas": 2,
+        "service": "testrunner"
+      },
+      {
+        "desired_replicas": 2,
+        "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/creditscore@sha256:45b848793a4a3de7e72f2ae25d243250803846a8f9885594e1e3db8edf48fae1",
+        "ready_replicas": 2,
+        "service": "creditscore"
+      },
+      {
+        "desired_replicas": 2,
+        "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/chatbot@sha256:ab2180b081ad8f92043c9bd8c7f72b74ef89ed22b656f9afbc9c8fd0067d0703",
+        "ready_replicas": 2,
+        "service": "chatbot"
+      }
+    ],
+    "services": [
+      "azn-server",
+      "customer",
+      "account",
+      "transfer",
+      "checks",
+      "testrunner",
+      "creditscore",
+      "chatbot"
+    ],
+    "slo_window": {
+      "duration_seconds": 61,
+      "errors": 0,
+      "p95_ms": 42.199,
+      "requests": 100
+    },
+    "status": "passed",
+    "synthetic_data_only": true
+  },
+  "release": "0.65.0",
+  "rollback_rehearsal_complete": true,
+  "run_id": "ms65-be0193d2-a9e8-4329-97a3-bacecf2a9dd6",
+  "schema_version": "1.0",
+  "signature": {
+    "algorithm": "hmac-sha256",
+    "signer": "cloudbank-ms67-evidence@lightyear-ms67-nonproduction.iam.gserviceaccount.com",
+    "value": "b5275016277fe2d231e6eaf2e5b4975d35b48eb958cb24d454358c2595ccf17b"
+  },
+  "signer": "cloudbank-ms67-evidence@lightyear-ms67-nonproduction.iam.gserviceaccount.com",
+  "source_ms64_receipt_sha256": "f78f85eb8342d81483f389918b7ed48601b19cf4374ac62fb12e27d01db2d146",
+  "whole_application_equivalent": false
+}

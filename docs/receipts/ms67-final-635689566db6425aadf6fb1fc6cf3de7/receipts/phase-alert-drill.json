@@ -1,0 +1,74 @@
+{
+  "alert_fired": true,
+  "alert_recovered": true,
+  "application_mutations": 0,
+  "bindings": {
+    "image_lock_sha256": "eb3c808a5af30fe2a212ded0f27a9810a867bf651f8e759b04cd54547244a778",
+    "ms64_receipt_sha256": "f78f85eb8342d81483f389918b7ed48601b19cf4374ac62fb12e27d01db2d146",
+    "platform_profile_sha256": "cfa845d9f93c143ec87563a0c510fe4d0f517d8baad07d92d65a203786f2c9f4"
+  },
+  "content_sha256": "2e4c6c3a7e0e5618525b5bb8dc331fda0e042027da06548079cedd1041a04dcc",
+  "credentials_persisted": false,
+  "environment": {
+    "cluster": "cloudbank-ms67",
+    "namespace": "cloudbank-ms67",
+    "namespace_uid_sha256": "0a397f173a1dfab91edeebc3d91bbfa1a3e0dd39caa086df1ff6f92822f71fff",
+    "project": "lightyear-ms67-nonproduction",
+    "region": "us-west1"
+  },
+  "ms67_complete": false,
+  "notification_recipients": 0,
+  "observation_type": "lightyear-cloudbank-ms67-alert-drill-observation",
+  "observations": {
+    "baseline": {
+      "point": {
+        "point_sha256": "cf4df53de89110c3824ec7567cf0d2f2fc86bef8ecadace3fd9a68eeccb89127",
+        "timestamp": "2026-09-10T19:54:54.151189Z",
+        "value": 0
+      }
+    },
+    "closed": {
+      "alert_identity_sha256": "2baa484799427f588073f6c3d359eb26e41c66cc3dbea8a7b2554d432f92ff72",
+      "close_time": "2026-09-10T20:03:28Z",
+      "open_time": "2026-09-10T19:59:42Z",
+      "point": {
+        "point_sha256": "544338a2a7652d24d1e25b9e6f62df1695c6e0ef8fda27db15cf5732cf4ed1ef",
+        "timestamp": "2026-09-10T20:00:00.826171Z",
+        "value": 0
+      },
+      "policy_sha256": "c804de81bd0507044808c3d83f757df8ba61ad2c4caf2456c3a1656069fad738",
+      "state": "CLOSED"
+    },
+    "opened": {
+      "alert_identity_sha256": "2baa484799427f588073f6c3d359eb26e41c66cc3dbea8a7b2554d432f92ff72",
+      "close_time": null,
+      "open_time": "2026-09-10T19:59:42Z",
+      "point": {
+        "point_sha256": "9b18a074ba364acfe96a7ce0ef2531586319e86a040b021cbfbaf4d3639c0e48",
+        "timestamp": "2026-09-10T19:55:44.077260Z",
+        "value": 1
+      },
+      "policy_sha256": "c804de81bd0507044808c3d83f757df8ba61ad2c4caf2456c3a1656069fad738",
+      "state": "OPEN"
+    }
+  },
+  "policy_sha256": "c804de81bd0507044808c3d83f757df8ba61ad2c4caf2456c3a1656069fad738",
+  "production_environment": false,
+  "production_ready": false,
+  "raw_output_persisted": false,
+  "recovery": {
+    "errors": [],
+    "metric_descriptor_absent": true,
+    "policy_absent": true,
+    "status": "restored"
+  },
+  "run_id": "ms67-alert-b0d8f3ef7ad94c11882344a3ef3069ad",
+  "schema_version": "1.0",
+  "service_correlation_qualified": false,
+  "signature": {
+    "algorithm": "hmac-sha256",
+    "signer": "howard.weale@gmail.com",
+    "value": "814c4f89790ae76056074e95bac0f59ca76cf99bcdfa6d1a44a46fb00c85ae7d"
+  },
+  "status": "passed-synthetic-alert-and-recovery"
+}

@@ -1,0 +1,58 @@
+{
+  "application_equivalent": false,
+  "application_refactored": false,
+  "behavior_contract_sha256": "680a7a740ec1038b4323245f71f00ee4b1ca8711fc201e387390f260db500c55",
+  "bounded_database_mapping_qualified": true,
+  "checks": {
+    "CB_COLUMNS": "7",
+    "CB_COMMIT_ROWS": "1",
+    "CB_DEFAULTED_DATES": "4",
+    "CB_EMAIL_CONTAINS": "2",
+    "CB_EMPTY_TO_NULL": "1",
+    "CB_FINAL_ROWS": "4",
+    "CB_MUTATED_ROWS": "4",
+    "CB_NAME_CONTAINS": "2",
+    "CB_PK": "1",
+    "CB_ROLLBACK_EMAIL": "alice@example.test",
+    "CB_ROLLBACK_ROWS": "4",
+    "CB_ROWS": "4"
+  },
+  "compatibility_ledger_sha256": "b7245d1a4677093a364460acebbb8d745226bd3d80bbf168aeb4b7559e4920bc",
+  "content_sha256": "5878d46b3ddcb728822013092aed08f4fd8fed3877915c28eddd3d9a00203d6b",
+  "mapping_sha256": "7564c41281176e0363bc7c0328cba59602bb00673575413956869f9a8eadb011",
+  "migration_complete": false,
+  "native_postgresql_observed": true,
+  "postgresql_image": "postgres:16-alpine",
+  "postgresql_image_id_sha256": "75f5a96988cdf694a215073c3e9c001b706b371e2f94df3967f2efdec2787f6b",
+  "postgresql_mapping_complete": true,
+  "production_ready": false,
+  "psql_exit_code": 0,
+  "receipt_type": "lightyear-cloudbank-customer-postgresql-execution-receipt",
+  "release": "0.55.0",
+  "schema_version": "1.0",
+  "security": {
+    "credentials_persisted": false,
+    "production_data_persisted": false,
+    "raw_stderr_persisted": false,
+    "raw_stdout_persisted": false
+  },
+  "signature": {
+    "algorithm": "hmac-sha256",
+    "signer": "howard.weale@gmail.com",
+    "value": "2489a9f6fad354732c9411a0979d313f26342747e87e40616d80e3bf966b1366"
+  },
+  "source": {
+    "commit": "4f41b16d00c45503f691836fee8138010c969e86",
+    "module": "customer",
+    "repository": "https://github.com/oracle/microservices-backend",
+    "root_tree": "6aa92e89c783f123c4da8d7ae18108004a4f4a99",
+    "subtree": "cloudbank-v5",
+    "subtree_tree": "bd918386209f284a1ed31802555740eb34b75348"
+  },
+  "source_oracle_image_id_sha256": "ace4a0fd96c3ad31f9c93e7c918c47b9d0e75dfe00eb301775afd374f4a8f8f0",
+  "source_oracle_receipt_sha256": "58aead9278caa45fc395015b4b4f0d63958975cb68aa385f95216b311ae686f3",
+  "status": "passed-bounded-database-mapping",
+  "stderr_sha256": "ca5df6cd9358c9baf9838bfb1765020b75a8b9cc8b0356013e52e67ef8b30a54",
+  "stdout_sha256": "5d993b240cb9fad25015954a2cfa4f447ea190d483cacf9239cacddbbaf63afc",
+  "target_equivalent": false
+}

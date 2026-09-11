@@ -1,0 +1,55 @@
+{
+  "build_receipt_sha256": "883018600388dd5c7154c48713d4417210dc489113fb04adb5394e17e772a2b2",
+  "cloudbank_source_baseline_complete": true,
+  "command": {
+    "argv_sha256": "237d27cd6741ed6371caa5ba97073d6fd07a50efce77f36e80da18a44a16debd",
+    "exit_code": 0,
+    "stderr_sha256": "315aa3829f3b0861ff132fc314ff8b107cf7387fe54000b27618b98698a66f7a",
+    "stdout_sha256": "2f1f0fb78f6f267221495210e8a24339657bf5351f7f5922d5f3949819d8d7be"
+  },
+  "content_sha256": "58aead9278caa45fc395015b4b4f0d63958975cb68aa385f95216b311ae686f3",
+  "customer_service_runtime_observed": false,
+  "migration_complete": false,
+  "oracle_image": "gvenzl/oracle-free:23.26.1-slim-faststart",
+  "oracle_image_id_sha256": "ace4a0fd96c3ad31f9c93e7c918c47b9d0e75dfe00eb301775afd374f4a8f8f0",
+  "oracle_runtime_observed": true,
+  "oracle_runtime_plan_sha256": "0972a89d1182b03b89ae52cce85d499f079afba57588b90cc886276226c055ab",
+  "postgresql_mapping_complete": false,
+  "production_data_observed": false,
+  "production_ready": false,
+  "receipt_type": "lightyear-cloudbank-oracle-runtime-execution-receipt",
+  "release": "0.54.0",
+  "schema_version": "1.0",
+  "security": {
+    "credentials_persisted": false,
+    "raw_stderr_persisted": false,
+    "raw_stdout_persisted": false
+  },
+  "signature": {
+    "algorithm": "hmac-sha256",
+    "signer": "howard.weale@gmail.com",
+    "value": "2e831e10b31af64e032e5be6503e4c50a8e8908c6fa431c0d13840ee0a4d7acd"
+  },
+  "source": {
+    "commit": "4f41b16d00c45503f691836fee8138010c969e86",
+    "repository": "https://github.com/oracle/microservices-backend",
+    "root_tree": "6aa92e89c783f123c4da8d7ae18108004a4f4a99",
+    "subtree": "cloudbank-v5",
+    "subtree_tree": "bd918386209f284a1ed31802555740eb34b75348"
+  },
+  "source_build_observed": true,
+  "status": "passed",
+  "target_equivalent": false,
+  "test_results": {
+    "classes": 3,
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0,
+    "tests": 7
+  },
+  "toolchain": {
+    "java_major": 21,
+    "java_version": "21.0.12",
+    "maven_version": "3.9.16"
+  }
+}

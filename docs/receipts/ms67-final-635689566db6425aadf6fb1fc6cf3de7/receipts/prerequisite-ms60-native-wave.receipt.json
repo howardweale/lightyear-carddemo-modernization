@@ -1,0 +1,152 @@
+{
+  "acceptance_contract_sha256": "34fdbd63fc20fe76a63f7dab6095de38d22b0c86cce6c5004a8399555903d792",
+  "changed_paths": [
+    "account/src/main/java/com/example/accounts/config/AccountWaveSecurityConfiguration.java",
+    "transfer/src/main/java/com/example/transfer/TransferService.java",
+    "transfer/src/main/java/com/example/transfer/config/TransferWaveSecurityConfiguration.java"
+  ],
+  "concurrent_value_conservation_observed": true,
+  "content_sha256": "90fbdeef23f623de692a6cd91b2be21b846a2942ec0773897574873c7ff9f40b",
+  "durable_restart_replay_observed": true,
+  "execution_plan_sha256": "7ccf449e3e5fe8b6389af54801ce9ccdf27b47ecb21e2fc42599bdecc74d0844",
+  "integrated_target_generated": true,
+  "migration_complete": false,
+  "native_lra_replacement_observed": true,
+  "native_messaging_observed": false,
+  "native_postgresql_transaction_core_observed": true,
+  "native_transaction_wave_observed": true,
+  "native_wave_lane": {
+    "contract_sha256": "8742aa235460de6cd688ee90e0642df2752ac40091a38668b6cec35ff948b6d3",
+    "database_image_id_sha256": "75f5a96988cdf694a215073c3e9c001b706b371e2f94df3967f2efdec2787f6b",
+    "lane": "native-account-transfer-http",
+    "maven_exit_code": 0,
+    "maven_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "maven_stdout_sha256": "e1bb7f00ef0af8d8f6885c381092ea68a41f241ac92dd002710d493dae857b4c",
+    "packaging": {
+      "executable_jars": 2,
+      "microtx_runtime_libraries": 0,
+      "oracle_runtime_libraries": 0
+    },
+    "ports": "ephemeral-loopback-only",
+    "raw_output_persisted": false,
+    "reason": null,
+    "scenario_count": 11,
+    "scenarios": [
+      {
+        "account": true,
+        "id": "services-healthy",
+        "status": "passed",
+        "transfer": true
+      },
+      {
+        "http_status": 401,
+        "id": "external-authentication-required",
+        "status": "passed"
+      },
+      {
+        "http_status": 403,
+        "id": "internal-token-rejected",
+        "status": "passed"
+      },
+      {
+        "http_status": 400,
+        "id": "invalid-amount-rejected",
+        "status": "passed"
+      },
+      {
+        "http_status": 400,
+        "id": "owner-authorization-rejected",
+        "status": "passed"
+      },
+      {
+        "http_status": 400,
+        "id": "insufficient-funds-rejected",
+        "status": "passed"
+      },
+      {
+        "database_state": {
+          "balance_1": 875,
+          "balance_2": 375,
+          "balance_3": 5,
+          "command_count": 1,
+          "journal_count": 2,
+          "journal_net": 0
+        },
+        "http_status": 200,
+        "id": "successful-value-conservation",
+        "status": "passed"
+      },
+      {
+        "http_status": 200,
+        "id": "duplicate-command-replayed",
+        "status": "passed"
+      },
+      {
+        "http_status": 200,
+        "id": "transfer-restart-replayed",
+        "status": "passed"
+      },
+      {
+        "database_state": {
+          "balance_1": 1000,
+          "balance_2": 250,
+          "balance_3": 5,
+          "command_count": 8,
+          "journal_count": 16,
+          "journal_net": 0
+        },
+        "id": "concurrent-opposite-transfers-conserve-value",
+        "requests": 8,
+        "status": "passed"
+      },
+      {
+        "http_status": 200,
+        "id": "account-restart-replayed",
+        "status": "passed"
+      }
+    ],
+    "service_log_sha256": {
+      "account": [
+        "eb7d03a6e8cdab618679ea97d7f97a25d6454a4546c4eca060f79395d7c1f8b5",
+        "7cf7bf9ef69f89f37ae14e169e7082c2e87b398bec08033b19f7167e67780e6f"
+      ],
+      "transfer": [
+        "5a43a58c28373504659007cdb02a93d39e27552b0b4e2100f2ed5cf8b7b30f35",
+        "9ba5f87f712a43f631efe9b498007c565393c159f6f992a8007ca2ef61c6826d"
+      ]
+    },
+    "service_starts": {
+      "account": 2,
+      "transfer": 2
+    },
+    "status": "passed",
+    "synthetic_data_only": true
+  },
+  "oracle_postgresql_equivalent": false,
+  "oracle_transaction_wave_observed": false,
+  "postgresql_image_id_sha256": "75f5a96988cdf694a215073c3e9c001b706b371e2f94df3967f2efdec2787f6b",
+  "production_identity_qualified": false,
+  "production_ready": false,
+  "receipt_type": "lightyear-cloudbank-native-transaction-wave-execution",
+  "release": "0.60.0",
+  "remaining_service_workcells_complete": false,
+  "run_id": "cloudbank-native-wave-20260910T030812Z",
+  "schema_version": "1.0",
+  "security": {
+    "authentication_profile": "development-basic-auth-only",
+    "credentials_persisted": false,
+    "human_promotion_authorized": false,
+    "ports": "ephemeral-loopback-only",
+    "raw_service_logs_persisted": false,
+    "source_checkout_mutated": false,
+    "synthetic_data_only": true
+  },
+  "signature": {
+    "algorithm": "hmac-sha256",
+    "signer": "howard.weale@gmail.com",
+    "value": "ec0372b1273130de8fae1b9e1fb5dd4da240d70e705ba216a63455f8e3b7408b"
+  },
+  "source_ms59_receipt_sha256": "f8608413bd15540bd1e01ee378fcef40473354eb140275b52aceae0ae1b81166",
+  "status": "passed-bounded-native-account-transfer-wave",
+  "whole_application_equivalent": false
+}

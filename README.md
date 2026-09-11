@@ -19,9 +19,13 @@ cutover, and rollback controls.
 ./cloudbank-platform-qualification.sh preflight PROFILE OUTPUT_ROOT
 ```
 
-The committed receipt remains negative because this workspace has no Google Cloud credentials or
-Kubernetes context. Only a signed 28-scenario live observation can qualify the bound non-production
-platform. Customer IdP, representative customer volumes and workload, customer approval, production
+**MS67 completed on 2026-09-11.** The [published MS54–67 execution receipt chain](docs/receipts/)
+contains all 31 original evidence documents. All 28 platform scenarios passed across eight services
+and 16 replicas. The 300-second, 10-VU regional load completed 5,451 requests with zero errors and
+aggregate p95 160.69 ms. PITR was accepted at 622 seconds under the approved 630-second nonproduction
+requirement; backup restore took 455 seconds and RPO was 18 seconds. The measured evidence is unchanged.
+
+The original signed execution receipts are distinct from deterministic readiness fixtures. Customer IdP, representative customer volumes and workload, customer approval, production
 deployment, and final production readiness remain MS #68.
 
 Previous release: **v0.66.0 — CloudBank Whole-Application Dual-Lane Equivalence**
@@ -39,9 +43,9 @@ run on Oracle and all eight generated services run on PostgreSQL.
 Both isolated lanes must start and restart every service, finish ready, and produce the exact same
 normalized results for 18 business, negative, messaging, dependency-failure, concurrency, targeted
 restart, and full-stack recovery scenarios. Oracle AQ versus the PostgreSQL work queue and MicroTx
-LRA versus an atomic PostgreSQL transaction remain intentional internal changes. The committed
-receipt proves gate readiness only; production infrastructure qualification is MS #67 and customer
-production-readiness certification is MS #68.
+LRA versus an atomic PostgreSQL transaction remain intentional internal changes. The [published MS66 execution receipt](docs/receipts/index.html#ms66) passes all 18 declared
+scenarios. MS67 nonproduction platform qualification is also complete; customer production-readiness
+certification remains MS68.
 
 Earlier release: **v0.65.0 — CloudBank Production-Like Deployment and Cutover Rehearsal**
 
@@ -60,7 +64,8 @@ startup/liveness/readiness probes, resource bounds, disruption budgets, non-root
 containers, dedicated service accounts, default-deny networking, bounded database/model egress,
 and external secret references without secret values. A passing signed receipt establishes only an
 authorized production-like rehearsal against synthetic data. Production deployment, native CDC,
-whole-application equivalence, migration completion, and production readiness remain false.
+migration completion and production readiness remain false in the MS65 receipt. The separately
+published MS66 receipt establishes bounded whole-application equivalence.
 
 Previous release: **v0.64.0 — CloudBank Credit Decision and AI boundary**
 

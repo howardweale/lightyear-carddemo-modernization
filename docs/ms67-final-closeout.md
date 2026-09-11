@@ -1,5 +1,9 @@
 # Finish MS67 from the retained evidence
 
+**Completed 2026-09-11:** [MS67 final receipt and full MS54–67 evidence chain](receipts/).
+All 28 platform scenarios passed. The instructions below are the retained operator runbook;
+publishing the completed result does not require another load, recovery or platform drill.
+
 Run `python3 tools/ms67_finish.py --execute` from a clean checkout of the reviewed
 commit on the existing Mac CLI. It uses `howard.weale@gmail.com`, project
 `lightyear-ms67-nonproduction`, region `us-west1`, cluster and namespace

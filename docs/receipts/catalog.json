@@ -1,0 +1,786 @@
+{
+  "files": [
+    {
+      "bytes": 4412,
+      "content_sha256": "2b2e4cb796945b656deca325b47976aa8aa761f84ab600ac825d1e2d25437ea7",
+      "file_sha256": "ab667b81c956959d5c740f3d48b6a0f63cb3370dc4633a843b9721f0803a3b35",
+      "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/ms54-ms64-chain.json",
+      "receipt_type": "lightyear-cloudbank-ms54-ms64-execution-chain",
+      "role": "ms54-ms64-chain",
+      "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/prerequisite-chain/0b9433cd-4a4a-4cc2-a2ef-f6f7602c2271/ms54-ms64-chain.receipt.json",
+      "status": "passed",
+      "verification": "content-hash-and-hmac-verified"
+    },
+    {
+      "bytes": 10255,
+      "content_sha256": "2d8f999437e26ad3ffabf55f20c727010cd7b1f91c8233f4e279e9b8649e6ce7",
+      "file_sha256": "88eeb755f9e410eb9ea04eae8e3e05db549586b00d029af806cc58e0e37304d2",
+      "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/ms67-evidence-index.json",
+      "receipt_type": null,
+      "role": "ms67-evidence-index",
+      "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/final-closeout/ms67-final-635689566db6425aadf6fb1fc6cf3de7/evidence-index-1c4cd1fe53694f6bb7400b0bafff5ae7.json",
+      "status": null,
+      "verification": "content-hash-and-hmac-verified"
+    },
+    {
+      "bytes": 2983,
+      "content_sha256": "9ab88762bbe1b3ab37f966fa17eb20164e6c8a068376a889f2548e1e449f29a0",
+      "file_sha256": "c0e5684375cb1e73f6669c54533164f939542d2e886f856cedc5fd0b3318a210",
+      "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/ms67-platform-receipt.json",
+      "receipt_type": "lightyear-cloudbank-non-production-platform-qualification-execution",
+      "role": "ms67-platform-receipt",
+      "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/final-closeout/ms67-final-635689566db6425aadf6fb1fc6cf3de7/platform-receipt-ab329d68252842bfafa5b12e301bf001.json",
+      "status": "passed-real-non-production-platform-qualification",
+      "verification": "content-hash-and-hmac-verified"
+    },
+    {
+      "bytes": 2813,
+      "content_sha256": "2e4c6c3a7e0e5618525b5bb8dc331fda0e042027da06548079cedd1041a04dcc",
+      "file_sha256": "74da44a19157a11e5795b47ddfc445385c901d1d5a0b603dfbe818c37ed0cc52",
+      "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/phase-alert-drill.json",
+      "receipt_type": "lightyear-cloudbank-ms67-alert-drill-observation",
+      "role": "phase-alert-drill",
+      "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/alert-drill/observations/ms67-alert-b0d8f3ef7ad94c11882344a3ef3069ad/537fc5f152cb40cc8245f818dc1ab9de/alert-drill.observation.json",
+      "status": "passed-synthetic-alert-and-recovery",
+      "verification": "content-hash-and-hmac-verified"
+    },
+    {
+      "bytes": 30637,
+      "content_sha256": "736acaf40463b52dca4a3c1a670ed97380c035f9103055a2b230536910996244",
+      "file_sha256": "028fda06bee67785dabe3fcbb147dbc95282c508318732c55fb21fafb58ec1a8",
+      "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/phase-candidates.json",
+      "receipt_type": "lightyear-ms67-final-candidate-security",
+      "role": "phase-candidates",
+      "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/final-closeout/ms67-final-635689566db6425aadf6fb1fc6cf3de7/candidate-security.json",
+      "status": "passed",
+      "verification": "content-hash-and-hmac-verified"
+    },
+    {
+      "bytes": 16827,
+      "content_sha256": "da58a5df76a5f1f109c084f41527fc7c4876e45bf940bfd2c4190fe9832f46d0",
+      "file_sha256": "919211f0411b5b2e496831a198ac377690ff260044d33263e162753736bdafe1",
+      "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/phase-current-controls.json",
+      "receipt_type": "lightyear-ms67-final-current-controls",
+      "role": "phase-current-controls",
+      "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/final-closeout/ms67-final-635689566db6425aadf6fb1fc6cf3de7/current-controls-821a759d597742b4a6367f2ffcdaef97.json",
+      "status": "passed",
+      "verification": "content-hash-and-hmac-verified"
+    },
+    {
+      "bytes": 67815,
+      "content_sha256": "eda51b30d08de54964b0a63574fe176a266e595b96057180851cb43f5f61ec4c",
+      "file_sha256": "0895125a6972a57ed57003b3ca8154e3289758301a9abf4b11f403943ee1a8bf",
+      "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/phase-drills.json",
+      "receipt_type": "lightyear-ms67-final-drills-observation",
+      "role": "phase-drills",
+      "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/final-closeout/ms67-final-635689566db6425aadf6fb1fc6cf3de7/drills-observation-a56a8a514a4a481a90ca5d33a4af58dc.json",
+      "status": "passed-ms67-final-platform-drills",
+      "verification": "content-hash-and-hmac-verified"
+    },
+    {
+      "bytes": 7959,
+      "content_sha256": "5d09d7c24032dbe8aa3355f11d98a0c5f70fc935e096ae9ac98a87a1054d94aa",
+      "file_sha256": "c4f2aee37240a6374fef5118623e974ce6a0537ec72f77e94c860b016d1e1886",
+      "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/phase-log-correlation.json",
+      "receipt_type": "lightyear-cloudbank-ms67-log-correlation-observation",
+      "role": "phase-log-correlation",
+      "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/log-correlation/observations/ms67-logs-3e940baa736f4cfaa2254bfb06a3987e/log-correlation.observation.json",
+      "status": "passed-service-log-trace-correlation",
+      "verification": "content-hash-and-hmac-verified"
+    },
+    {
+      "bytes": 77801,
+      "content_sha256": "c2980fa89cafa0ce7fd42bba1d9599d993f5472f0b7abf7cac1d6ec1a7ed389f",
+      "file_sha256": "e32e11b7ae950cca1f42e8d7eff9670fb24eb9961bbb97c36a24fd15de0ba19b",
+      "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/phase-network-enforcement.json",
+      "receipt_type": "lightyear-cloudbank-ms67-network-enforcement-observation",
+      "role": "phase-network-enforcement",
+      "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/network-enforcement/ms67-network-01a800a8ef7742c7913b1ad2e3dfde87/network-enforcement.observation.json",
+      "status": "passed-bounded-network-enforcement",
+      "verification": "content-hash-and-hmac-verified"
+    },
+    {
+      "bytes": 17808,
+      "content_sha256": "8cab544d61c61131b178881d8d0e8f180ab464eabd6d329be7d0691ca15ce52c",
+      "file_sha256": "75d84a80de78a48c98a0a7b7615ac3a7a87cc1a9daa736cde063693a9ce469ff",
+      "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/phase-runtime-identity.json",
+      "receipt_type": "lightyear-cloudbank-ms67-runtime-identity-observation",
+      "role": "phase-runtime-identity",
+      "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/runtime-identity/ms67-identity-9e7f7d9a39e94946a1bd6e8b0cf0187f/runtime-identity.observation.json",
+      "status": "passed-eight-runtime-identities",
+      "verification": "content-hash-and-hmac-verified"
+    },
+    {
+      "bytes": 3012,
+      "content_sha256": "643c530038c0add06e3601155cbd8f37027cd1955ac13b512ec69a13131c0cbf",
+      "file_sha256": "8c846b0daab063b79e89269d1c1cdf356ce7f70b92ebf85e2539c90ff836fb44",
+      "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/phase-secret-rotation.json",
+      "receipt_type": "lightyear-cloudbank-ms67-secret-rotation-observation",
+      "role": "phase-secret-rotation",
+      "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/secret-rotation/secret-rotation-83417739ee1b44a09e5f8eb6c19af3e5/secret-rotation.observation.json",
+      "status": "passed-secret-rotation-and-restoration",
+      "verification": "content-hash-and-hmac-verified"
+    },
+    {
+      "bytes": 19454,
+      "content_sha256": "4a5d813659cdc9cde6989a4924afe5cf9136599f5e32ada5cbd895e12e829c7f",
+      "file_sha256": "5b00f37711fff33692eb2628821141b37e34b78719a514a49c0e194b7fd39b60",
+      "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/platform-observation.json",
+      "receipt_type": "lightyear-cloudbank-ms67-platform-observation",
+      "role": "platform-observation",
+      "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/final-closeout/ms67-final-635689566db6425aadf6fb1fc6cf3de7/platform-observation-e148ee9fad864e638220efab31bae7dd.json",
+      "status": null,
+      "verification": "content-hash-and-hmac-verified"
+    },
+    {
+      "bytes": 2039,
+      "content_sha256": "58aead9278caa45fc395015b4b4f0d63958975cb68aa385f95216b311ae686f3",
+      "file_sha256": "709f2707ccff4d96a38b1f3974ea124ed2f9a9c801bb32833ecdffe5d42b608e",
+      "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/prerequisite-ms54-oracle-runtime.receipt.json",
+      "receipt_type": "lightyear-cloudbank-oracle-runtime-execution-receipt",
+      "role": "prerequisite-ms54-oracle-runtime.receipt",
+      "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/prerequisite-chain/0b9433cd-4a4a-4cc2-a2ef-f6f7602c2271/ms54-oracle-runtime.receipt.json",
+      "status": "passed",
+      "verification": "content-hash-and-hmac-verified"
+    },
+    {
+      "bytes": 4059,
+      "content_sha256": "883018600388dd5c7154c48713d4417210dc489113fb04adb5394e17e772a2b2",
+      "file_sha256": "3bbb1e91e28fb5558d0e47008ab87bf7779796884d59c602e705fdc653b07921",
+      "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/prerequisite-ms54-source-build.receipt.json",
+      "receipt_type": "lightyear-cloudbank-source-build-execution-receipt",
+      "role": "prerequisite-ms54-source-build.receipt",
+      "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/prerequisite-chain/0b9433cd-4a4a-4cc2-a2ef-f6f7602c2271/ms54-source-build.receipt.json",
+      "status": "passed",
+      "verification": "content-hash-and-hmac-verified"
+    },
+    {
+      "bytes": 2405,
+      "content_sha256": "5878d46b3ddcb728822013092aed08f4fd8fed3877915c28eddd3d9a00203d6b",
+      "file_sha256": "2c9a070c7d54390f415dd283d435c759ae79974ea017d947e563ab2abf59bad1",
+      "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/prerequisite-ms55-postgresql.receipt.json",
+      "receipt_type": "lightyear-cloudbank-customer-postgresql-execution-receipt",
+      "role": "prerequisite-ms55-postgresql.receipt",
+      "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/prerequisite-chain/0b9433cd-4a4a-4cc2-a2ef-f6f7602c2271/ms55-postgresql.receipt.json",
+      "status": "passed-bounded-database-mapping",
+      "verification": "content-hash-and-hmac-verified"
+    },
+    {
+      "bytes": 3587,
+      "content_sha256": "4011a1b663327f238d5c67dba49c525c51af3ac1545d12ef1a531f46a4060783",
+      "file_sha256": "ef6ea296346d648181d8799901752c9fa3f0d0db60435122d62c92fdfb48026f",
+      "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/prerequisite-ms56-dark-factory.receipt.json",
+      "receipt_type": "lightyear-cloudbank-customer-dark-factory-execution-receipt",
+      "role": "prerequisite-ms56-dark-factory.receipt",
+      "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/prerequisite-chain/0b9433cd-4a4a-4cc2-a2ef-f6f7602c2271/ms56-dark-factory.receipt.json",
+      "status": "passed-bounded-customer-dark-factory-run",
+      "verification": "content-hash-and-hmac-verified"
+    },
+    {
+      "bytes": 4126,
+      "content_sha256": "2fb0bdfa0b911c73a92c44daa9636159a91b085f681fdfa387e632710f308a89",
+      "file_sha256": "c39b5798011be48763cbf98b25fcf558ad1df1e22bb2ccca173d5942295c5c5a",
+      "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/prerequisite-ms57-production-qualification.receipt.json",
+      "receipt_type": "lightyear-cloudbank-customer-production-qualification-execution",
+      "role": "prerequisite-ms57-production-qualification.receipt",
+      "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/prerequisite-chain/0b9433cd-4a4a-4cc2-a2ef-f6f7602c2271/ms57-production-qualification.receipt.json",
+      "status": "passed-bounded-customer-production-readiness-qualification",
+      "verification": "content-hash-and-hmac-verified"
+    },
+    {
+      "bytes": 2027,
+      "content_sha256": "880892e35715b265284030dd733ea49325551908ea51d58f96ee13ef323826de",
+      "file_sha256": "34ad99e003265403686a4d8f043c0065ae69aacf2036bfb5a1ab4c550574daa6",
+      "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/prerequisite-ms58-transaction-wave.receipt.json",
+      "receipt_type": "lightyear-cloudbank-transaction-wave-admission",
+      "role": "prerequisite-ms58-transaction-wave.receipt",
+      "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/prerequisite-chain/0b9433cd-4a4a-4cc2-a2ef-f6f7602c2271/ms58-transaction-wave.receipt.json",
+      "status": "passed-transaction-wave-plan-admitted",
+      "verification": "content-hash-and-hmac-verified"
+    },
+    {
+      "bytes": 3766,
+      "content_sha256": "f8608413bd15540bd1e01ee378fcef40473354eb140275b52aceae0ae1b81166",
+      "file_sha256": "7edee8685ed102969c63c201cc702813a373ba2069b360c2739aee39ae357207",
+      "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/prerequisite-ms59-transaction-core.receipt.json",
+      "receipt_type": "lightyear-cloudbank-transaction-core-postgresql-execution",
+      "role": "prerequisite-ms59-transaction-core.receipt",
+      "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/prerequisite-chain/0b9433cd-4a4a-4cc2-a2ef-f6f7602c2271/ms59-transaction-core.receipt.json",
+      "status": "passed-bounded-postgresql-transaction-core",
+      "verification": "content-hash-and-hmac-verified"
+    },
+    {
+      "bytes": 5084,
+      "content_sha256": "90fbdeef23f623de692a6cd91b2be21b846a2942ec0773897574873c7ff9f40b",
+      "file_sha256": "880d58cd10dcd83e8f829c2566aa1ea54f8a3072eec65e62e7fab095068c5988",
+      "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/prerequisite-ms60-native-wave.receipt.json",
+      "receipt_type": "lightyear-cloudbank-native-transaction-wave-execution",
+      "role": "prerequisite-ms60-native-wave.receipt",
+      "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/prerequisite-chain/0b9433cd-4a4a-4cc2-a2ef-f6f7602c2271/ms60-native-wave.receipt.json",
+      "status": "passed-bounded-native-account-transfer-wave",
+      "verification": "content-hash-and-hmac-verified"
+    },
+    {
+      "bytes": 4466,
+      "content_sha256": "a9d102eeda6552ffc7e715beed2d8a24dcfb8ca0067330db3f2ddbe092cf1036",
+      "file_sha256": "99534ffeb6177223dd2e129e2b139f920bf48a6d990e05208f643277236969f5",
+      "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/prerequisite-ms61-equivalence.receipt.json",
+      "receipt_type": "lightyear-cloudbank-oracle-postgresql-equivalence-execution",
+      "role": "prerequisite-ms61-equivalence.receipt",
+      "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/prerequisite-chain/0b9433cd-4a4a-4cc2-a2ef-f6f7602c2271/ms61-equivalence.receipt.json",
+      "status": "passed-bounded-normalized-customer-account-transfer-equivalence",
+      "verification": "content-hash-and-hmac-verified"
+    },
+    {
+      "bytes": 7995,
+      "content_sha256": "5b0aa07534b923a76731d72e82af4a6a0396c7ffa6a979f4598a7a3e131b5a0f",
+      "file_sha256": "c13d70bfcad04590afccd04dd6fff3e1f238ce3aefd1f09727ef1b73bec1e0c9",
+      "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/prerequisite-ms62-oauth.receipt.json",
+      "receipt_type": "lightyear-cloudbank-production-oauth-execution",
+      "role": "prerequisite-ms62-oauth.receipt",
+      "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/prerequisite-chain/0b9433cd-4a4a-4cc2-a2ef-f6f7602c2271/ms62-oauth.receipt.json",
+      "status": "passed-production-oauth-application-boundary",
+      "verification": "content-hash-and-hmac-verified"
+    },
+    {
+      "bytes": 3395,
+      "content_sha256": "e7afa4d791f40148cd7c1839294ae4246cb0e3d7ba08d5077dbb77e5ab6555f5",
+      "file_sha256": "f361122b7f0116587c6b6e20384de6bc2f37cc94938a07f3530166f95a7a4eee",
+      "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/prerequisite-ms63-checks.receipt.json",
+      "receipt_type": "lightyear-cloudbank-checks-messaging-execution",
+      "role": "prerequisite-ms63-checks.receipt",
+      "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/prerequisite-chain/0b9433cd-4a4a-4cc2-a2ef-f6f7602c2271/ms63-checks.receipt.json",
+      "status": "passed-checks-target-messaging",
+      "verification": "content-hash-and-hmac-verified"
+    },
+    {
+      "bytes": 7140,
+      "content_sha256": "f78f85eb8342d81483f389918b7ed48601b19cf4374ac62fb12e27d01db2d146",
+      "file_sha256": "e70c27c62a2ee2f34880d953ef3fa5217f027fa6fcd0762a1cf204e3f05ab087",
+      "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/prerequisite-ms64-edge-ai.receipt.json",
+      "receipt_type": "lightyear-cloudbank-edge-ai-execution",
+      "role": "prerequisite-ms64-edge-ai.receipt",
+      "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/prerequisite-chain/0b9433cd-4a4a-4cc2-a2ef-f6f7602c2271/ms64-edge-ai.receipt.json",
+      "status": "passed-edge-ai-application-boundary",
+      "verification": "content-hash-and-hmac-verified"
+    },
+    {
+      "bytes": 2015,
+      "content_sha256": "eb3c808a5af30fe2a212ded0f27a9810a867bf651f8e759b04cd54547244a778",
+      "file_sha256": "98e7834421c1fc6e8018c53c59e498d332aa3464be4d7df3fca4f8c0033a72a4",
+      "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/retained-image-lock.json",
+      "receipt_type": null,
+      "role": "retained-image-lock",
+      "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/final-closeout/ms67-final-635689566db6425aadf6fb1fc6cf3de7/retained-image-lock-d0f625f52a8b4f7d8cd545c23188091c.json",
+      "status": null,
+      "verification": "content-hash-verified"
+    },
+    {
+      "bytes": 18187,
+      "content_sha256": "f23c637611400f8ec9acebc49c3de6ddbcd1ec6d03c9ac3637ce8f837aa34fbf",
+      "file_sha256": "81ec260fc2cc0d7ff096941d8a6f065b9a045ed8d3bb22362d17a98a46fe88b1",
+      "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/retained-load.json",
+      "receipt_type": "lightyear-cloudbank-ms67-sustained-load-observation",
+      "role": "retained-load",
+      "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/final-closeout/ms67-final-635689566db6425aadf6fb1fc6cf3de7/retained-load-01b7e88f6a0e4b71ad67abf5ca4024e7.json",
+      "status": "passed-bounded-sustained-business-load",
+      "verification": "content-hash-and-hmac-verified"
+    },
+    {
+      "bytes": 7140,
+      "content_sha256": "f78f85eb8342d81483f389918b7ed48601b19cf4374ac62fb12e27d01db2d146",
+      "file_sha256": "e70c27c62a2ee2f34880d953ef3fa5217f027fa6fcd0762a1cf204e3f05ab087",
+      "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/retained-ms64-receipt.json",
+      "receipt_type": "lightyear-cloudbank-edge-ai-execution",
+      "role": "retained-ms64-receipt",
+      "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/final-closeout/ms67-final-635689566db6425aadf6fb1fc6cf3de7/retained-ms64-receipt-d8fc958641e646a08da85a3f419ad5aa.json",
+      "status": "passed-edge-ai-application-boundary",
+      "verification": "content-hash-and-hmac-verified"
+    },
+    {
+      "bytes": 10087,
+      "content_sha256": "78dc62ffd6ccd5040d6899971c1e2e0262d5353b52c38df0dbadd909b190d600",
+      "file_sha256": "4c6445fddd109f3cf2fc78287f9642536db14334f1e1869b16341a452f15f2ef",
+      "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/retained-ms65.json",
+      "receipt_type": "lightyear-cloudbank-production-readiness-rehearsal-execution",
+      "role": "retained-ms65",
+      "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/final-closeout/ms67-final-635689566db6425aadf6fb1fc6cf3de7/retained-ms65-a88dce470066437abac2eb0b5cdd9c16.json",
+      "status": null,
+      "verification": "content-hash-and-hmac-verified"
+    },
+    {
+      "bytes": 3502,
+      "content_sha256": "b296fa32369ee7a836f278c94c78a61c254a0383db05c4a583d3e45073ed4c80",
+      "file_sha256": "2d3122f81aae68e9345edabf8d20b5a14e94f2ac716abb5c5d7d347ddf296f0e",
+      "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/retained-ms66-receipt.json",
+      "receipt_type": "lightyear-cloudbank-whole-application-equivalence-execution",
+      "role": "retained-ms66-receipt",
+      "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/final-closeout/ms67-final-635689566db6425aadf6fb1fc6cf3de7/retained-ms66-receipt-c439f52134be45bda1fafabf65b55f27.json",
+      "status": "passed-bounded-whole-application-equivalence",
+      "verification": "content-hash-and-hmac-verified"
+    },
+    {
+      "bytes": 1407,
+      "content_sha256": "cfa845d9f93c143ec87563a0c510fe4d0f517d8baad07d92d65a203786f2c9f4",
+      "file_sha256": "73500b7e10ee3f057cc0dce5261e9c31d34168cf52ca5c91cd689c31590c7ede",
+      "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/retained-platform-profile.json",
+      "receipt_type": null,
+      "role": "retained-platform-profile",
+      "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/final-closeout/ms67-final-635689566db6425aadf6fb1fc6cf3de7/retained-platform-profile-00890494a9e34a068bf34bbbf2470946.json",
+      "status": null,
+      "verification": "content-hash-and-hmac-verified"
+    },
+    {
+      "bytes": 35688,
+      "content_sha256": "f19fd540ec8c97351520f77c08f6ed10e61094db1be48ec86db0ddab4586e32d",
+      "file_sha256": "a890094dafcdd830c0da818d07e17b3a120d0ba99e99205df033e54a3725d424",
+      "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/retained-sql.json",
+      "receipt_type": "lightyear-cloudbank-isolated-sql-recovery",
+      "role": "retained-sql",
+      "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/final-closeout/ms67-final-635689566db6425aadf6fb1fc6cf3de7/retained-sql-9e632f03ba284e3f91294fab6f82350c.json",
+      "status": "passed-isolated-database-recovery",
+      "verification": "content-hash-and-hmac-verified"
+    }
+  ],
+  "milestones": [
+    {
+      "number": 54,
+      "receipts": [
+        {
+          "bytes": 2039,
+          "content_sha256": "58aead9278caa45fc395015b4b4f0d63958975cb68aa385f95216b311ae686f3",
+          "file_sha256": "709f2707ccff4d96a38b1f3974ea124ed2f9a9c801bb32833ecdffe5d42b608e",
+          "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/prerequisite-ms54-oracle-runtime.receipt.json",
+          "receipt_type": "lightyear-cloudbank-oracle-runtime-execution-receipt",
+          "role": "prerequisite-ms54-oracle-runtime.receipt",
+          "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/prerequisite-chain/0b9433cd-4a4a-4cc2-a2ef-f6f7602c2271/ms54-oracle-runtime.receipt.json",
+          "status": "passed",
+          "verification": "content-hash-and-hmac-verified"
+        },
+        {
+          "bytes": 4059,
+          "content_sha256": "883018600388dd5c7154c48713d4417210dc489113fb04adb5394e17e772a2b2",
+          "file_sha256": "3bbb1e91e28fb5558d0e47008ab87bf7779796884d59c602e705fdc653b07921",
+          "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/prerequisite-ms54-source-build.receipt.json",
+          "receipt_type": "lightyear-cloudbank-source-build-execution-receipt",
+          "role": "prerequisite-ms54-source-build.receipt",
+          "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/prerequisite-chain/0b9433cd-4a4a-4cc2-a2ef-f6f7602c2271/ms54-source-build.receipt.json",
+          "status": "passed",
+          "verification": "content-hash-and-hmac-verified"
+        }
+      ],
+      "scope": "Source build and bounded Oracle runtime",
+      "status": "Passed"
+    },
+    {
+      "number": 55,
+      "receipts": [
+        {
+          "bytes": 2405,
+          "content_sha256": "5878d46b3ddcb728822013092aed08f4fd8fed3877915c28eddd3d9a00203d6b",
+          "file_sha256": "2c9a070c7d54390f415dd283d435c759ae79974ea017d947e563ab2abf59bad1",
+          "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/prerequisite-ms55-postgresql.receipt.json",
+          "receipt_type": "lightyear-cloudbank-customer-postgresql-execution-receipt",
+          "role": "prerequisite-ms55-postgresql.receipt",
+          "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/prerequisite-chain/0b9433cd-4a4a-4cc2-a2ef-f6f7602c2271/ms55-postgresql.receipt.json",
+          "status": "passed-bounded-database-mapping",
+          "verification": "content-hash-and-hmac-verified"
+        }
+      ],
+      "scope": "Customer PostgreSQL database mapping",
+      "status": "Passed"
+    },
+    {
+      "number": 56,
+      "receipts": [
+        {
+          "bytes": 3587,
+          "content_sha256": "4011a1b663327f238d5c67dba49c525c51af3ac1545d12ef1a531f46a4060783",
+          "file_sha256": "ef6ea296346d648181d8799901752c9fa3f0d0db60435122d62c92fdfb48026f",
+          "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/prerequisite-ms56-dark-factory.receipt.json",
+          "receipt_type": "lightyear-cloudbank-customer-dark-factory-execution-receipt",
+          "role": "prerequisite-ms56-dark-factory.receipt",
+          "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/prerequisite-chain/0b9433cd-4a4a-4cc2-a2ef-f6f7602c2271/ms56-dark-factory.receipt.json",
+          "status": "passed-bounded-customer-dark-factory-run",
+          "verification": "content-hash-and-hmac-verified"
+        }
+      ],
+      "scope": "Customer application dark factory run",
+      "status": "Passed"
+    },
+    {
+      "number": 57,
+      "receipts": [
+        {
+          "bytes": 4126,
+          "content_sha256": "2fb0bdfa0b911c73a92c44daa9636159a91b085f681fdfa387e632710f308a89",
+          "file_sha256": "c39b5798011be48763cbf98b25fcf558ad1df1e22bb2ccca173d5942295c5c5a",
+          "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/prerequisite-ms57-production-qualification.receipt.json",
+          "receipt_type": "lightyear-cloudbank-customer-production-qualification-execution",
+          "role": "prerequisite-ms57-production-qualification.receipt",
+          "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/prerequisite-chain/0b9433cd-4a4a-4cc2-a2ef-f6f7602c2271/ms57-production-qualification.receipt.json",
+          "status": "passed-bounded-customer-production-readiness-qualification",
+          "verification": "content-hash-and-hmac-verified"
+        }
+      ],
+      "scope": "Bounded Customer qualification",
+      "status": "Passed"
+    },
+    {
+      "number": 58,
+      "receipts": [
+        {
+          "bytes": 2027,
+          "content_sha256": "880892e35715b265284030dd733ea49325551908ea51d58f96ee13ef323826de",
+          "file_sha256": "34ad99e003265403686a4d8f043c0065ae69aacf2036bfb5a1ab4c550574daa6",
+          "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/prerequisite-ms58-transaction-wave.receipt.json",
+          "receipt_type": "lightyear-cloudbank-transaction-wave-admission",
+          "role": "prerequisite-ms58-transaction-wave.receipt",
+          "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/prerequisite-chain/0b9433cd-4a4a-4cc2-a2ef-f6f7602c2271/ms58-transaction-wave.receipt.json",
+          "status": "passed-transaction-wave-plan-admitted",
+          "verification": "content-hash-and-hmac-verified"
+        }
+      ],
+      "scope": "Transaction wave plan admission",
+      "status": "Plan admitted"
+    },
+    {
+      "number": 59,
+      "receipts": [
+        {
+          "bytes": 3766,
+          "content_sha256": "f8608413bd15540bd1e01ee378fcef40473354eb140275b52aceae0ae1b81166",
+          "file_sha256": "7edee8685ed102969c63c201cc702813a373ba2069b360c2739aee39ae357207",
+          "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/prerequisite-ms59-transaction-core.receipt.json",
+          "receipt_type": "lightyear-cloudbank-transaction-core-postgresql-execution",
+          "role": "prerequisite-ms59-transaction-core.receipt",
+          "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/prerequisite-chain/0b9433cd-4a4a-4cc2-a2ef-f6f7602c2271/ms59-transaction-core.receipt.json",
+          "status": "passed-bounded-postgresql-transaction-core",
+          "verification": "content-hash-and-hmac-verified"
+        }
+      ],
+      "scope": "PostgreSQL transaction core",
+      "status": "Passed"
+    },
+    {
+      "number": 60,
+      "receipts": [
+        {
+          "bytes": 5084,
+          "content_sha256": "90fbdeef23f623de692a6cd91b2be21b846a2942ec0773897574873c7ff9f40b",
+          "file_sha256": "880d58cd10dcd83e8f829c2566aa1ea54f8a3072eec65e62e7fab095068c5988",
+          "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/prerequisite-ms60-native-wave.receipt.json",
+          "receipt_type": "lightyear-cloudbank-native-transaction-wave-execution",
+          "role": "prerequisite-ms60-native-wave.receipt",
+          "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/prerequisite-chain/0b9433cd-4a4a-4cc2-a2ef-f6f7602c2271/ms60-native-wave.receipt.json",
+          "status": "passed-bounded-native-account-transfer-wave",
+          "verification": "content-hash-and-hmac-verified"
+        }
+      ],
+      "scope": "Native Account and Transfer wave",
+      "status": "Passed"
+    },
+    {
+      "number": 61,
+      "receipts": [
+        {
+          "bytes": 4466,
+          "content_sha256": "a9d102eeda6552ffc7e715beed2d8a24dcfb8ca0067330db3f2ddbe092cf1036",
+          "file_sha256": "99534ffeb6177223dd2e129e2b139f920bf48a6d990e05208f643277236969f5",
+          "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/prerequisite-ms61-equivalence.receipt.json",
+          "receipt_type": "lightyear-cloudbank-oracle-postgresql-equivalence-execution",
+          "role": "prerequisite-ms61-equivalence.receipt",
+          "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/prerequisite-chain/0b9433cd-4a4a-4cc2-a2ef-f6f7602c2271/ms61-equivalence.receipt.json",
+          "status": "passed-bounded-normalized-customer-account-transfer-equivalence",
+          "verification": "content-hash-and-hmac-verified"
+        }
+      ],
+      "scope": "Normalized Customer, Account and Transfer equivalence",
+      "status": "Passed"
+    },
+    {
+      "number": 62,
+      "receipts": [
+        {
+          "bytes": 7995,
+          "content_sha256": "5b0aa07534b923a76731d72e82af4a6a0396c7ffa6a979f4598a7a3e131b5a0f",
+          "file_sha256": "c13d70bfcad04590afccd04dd6fff3e1f238ce3aefd1f09727ef1b73bec1e0c9",
+          "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/prerequisite-ms62-oauth.receipt.json",
+          "receipt_type": "lightyear-cloudbank-production-oauth-execution",
+          "role": "prerequisite-ms62-oauth.receipt",
+          "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/prerequisite-chain/0b9433cd-4a4a-4cc2-a2ef-f6f7602c2271/ms62-oauth.receipt.json",
+          "status": "passed-production-oauth-application-boundary",
+          "verification": "content-hash-and-hmac-verified"
+        }
+      ],
+      "scope": "OAuth application boundary",
+      "status": "Passed"
+    },
+    {
+      "number": 63,
+      "receipts": [
+        {
+          "bytes": 3395,
+          "content_sha256": "e7afa4d791f40148cd7c1839294ae4246cb0e3d7ba08d5077dbb77e5ab6555f5",
+          "file_sha256": "f361122b7f0116587c6b6e20384de6bc2f37cc94938a07f3530166f95a7a4eee",
+          "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/prerequisite-ms63-checks.receipt.json",
+          "receipt_type": "lightyear-cloudbank-checks-messaging-execution",
+          "role": "prerequisite-ms63-checks.receipt",
+          "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/prerequisite-chain/0b9433cd-4a4a-4cc2-a2ef-f6f7602c2271/ms63-checks.receipt.json",
+          "status": "passed-checks-target-messaging",
+          "verification": "content-hash-and-hmac-verified"
+        }
+      ],
+      "scope": "Checks durable messaging",
+      "status": "Passed"
+    },
+    {
+      "number": 64,
+      "receipts": [
+        {
+          "bytes": 7140,
+          "content_sha256": "f78f85eb8342d81483f389918b7ed48601b19cf4374ac62fb12e27d01db2d146",
+          "file_sha256": "e70c27c62a2ee2f34880d953ef3fa5217f027fa6fcd0762a1cf204e3f05ab087",
+          "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/prerequisite-ms64-edge-ai.receipt.json",
+          "receipt_type": "lightyear-cloudbank-edge-ai-execution",
+          "role": "prerequisite-ms64-edge-ai.receipt",
+          "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/prerequisite-chain/0b9433cd-4a4a-4cc2-a2ef-f6f7602c2271/ms64-edge-ai.receipt.json",
+          "status": "passed-edge-ai-application-boundary",
+          "verification": "content-hash-and-hmac-verified"
+        }
+      ],
+      "scope": "Eight-service target and edge controls",
+      "status": "Passed"
+    },
+    {
+      "number": 65,
+      "receipts": [
+        {
+          "bytes": 10087,
+          "content_sha256": "78dc62ffd6ccd5040d6899971c1e2e0262d5353b52c38df0dbadd909b190d600",
+          "file_sha256": "4c6445fddd109f3cf2fc78287f9642536db14334f1e1869b16341a452f15f2ef",
+          "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/retained-ms65.json",
+          "receipt_type": "lightyear-cloudbank-production-readiness-rehearsal-execution",
+          "role": "retained-ms65",
+          "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/final-closeout/ms67-final-635689566db6425aadf6fb1fc6cf3de7/retained-ms65-a88dce470066437abac2eb0b5cdd9c16.json",
+          "status": null,
+          "verification": "content-hash-and-hmac-verified"
+        }
+      ],
+      "scope": "Nonproduction deployment, cutover and rollback rehearsal",
+      "status": "Passed"
+    },
+    {
+      "number": 66,
+      "receipts": [
+        {
+          "bytes": 3502,
+          "content_sha256": "b296fa32369ee7a836f278c94c78a61c254a0383db05c4a583d3e45073ed4c80",
+          "file_sha256": "2d3122f81aae68e9345edabf8d20b5a14e94f2ac716abb5c5d7d347ddf296f0e",
+          "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/retained-ms66-receipt.json",
+          "receipt_type": "lightyear-cloudbank-whole-application-equivalence-execution",
+          "role": "retained-ms66-receipt",
+          "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/final-closeout/ms67-final-635689566db6425aadf6fb1fc6cf3de7/retained-ms66-receipt-c439f52134be45bda1fafabf65b55f27.json",
+          "status": "passed-bounded-whole-application-equivalence",
+          "verification": "content-hash-and-hmac-verified"
+        }
+      ],
+      "scope": "Bounded eight-service Oracle/PostgreSQL equivalence",
+      "status": "Passed"
+    },
+    {
+      "number": 67,
+      "receipts": [
+        {
+          "bytes": 2983,
+          "content_sha256": "9ab88762bbe1b3ab37f966fa17eb20164e6c8a068376a889f2548e1e449f29a0",
+          "file_sha256": "c0e5684375cb1e73f6669c54533164f939542d2e886f856cedc5fd0b3318a210",
+          "path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/ms67-platform-receipt.json",
+          "receipt_type": "lightyear-cloudbank-non-production-platform-qualification-execution",
+          "role": "ms67-platform-receipt",
+          "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/final-closeout/ms67-final-635689566db6425aadf6fb1fc6cf3de7/platform-receipt-ab329d68252842bfafa5b12e301bf001.json",
+          "status": "passed-real-non-production-platform-qualification",
+          "verification": "content-hash-and-hmac-verified"
+        }
+      ],
+      "scope": "Real nonproduction platform qualification",
+      "status": "Passed"
+    }
+  ],
+  "ms67_complete": true,
+  "production_deployed": false,
+  "production_ready": false,
+  "published_on": "2026-09-11",
+  "receipt_content_sha256": "9ab88762bbe1b3ab37f966fa17eb20164e6c8a068376a889f2548e1e449f29a0",
+  "receipt_path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/ms67-platform-receipt.json",
+  "receipt_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/final-closeout/ms67-final-635689566db6425aadf6fb1fc6cf3de7/platform-receipt-ab329d68252842bfafa5b12e301bf001.json",
+  "run_id": "ms67-final-635689566db6425aadf6fb1fc6cf3de7",
+  "scenarios": [
+    {
+      "evidence_sha256": "78dc62ffd6ccd5040d6899971c1e2e0262d5353b52c38df0dbadd909b190d600",
+      "id": "signed-ms65-deployment-rehearsal-admitted",
+      "status": "passed"
+    },
+    {
+      "evidence_sha256": "b296fa32369ee7a836f278c94c78a61c254a0383db05c4a583d3e45073ed4c80",
+      "id": "signed-ms66-whole-application-equivalence-admitted",
+      "status": "passed"
+    },
+    {
+      "evidence_sha256": "da58a5df76a5f1f109c084f41527fc7c4876e45bf940bfd2c4190fe9832f46d0",
+      "id": "explicit-non-production-context-selected",
+      "status": "passed"
+    },
+    {
+      "evidence_sha256": "da58a5df76a5f1f109c084f41527fc7c4876e45bf940bfd2c4190fe9832f46d0",
+      "id": "live-kubernetes-api-and-cluster-identity-observed",
+      "status": "passed"
+    },
+    {
+      "evidence_sha256": "da58a5df76a5f1f109c084f41527fc7c4876e45bf940bfd2c4190fe9832f46d0",
+      "id": "minimum-kubernetes-version-observed",
+      "status": "passed"
+    },
+    {
+      "evidence_sha256": "da58a5df76a5f1f109c084f41527fc7c4876e45bf940bfd2c4190fe9832f46d0",
+      "id": "three-node-two-failure-domain-capacity-observed",
+      "status": "passed"
+    },
+    {
+      "evidence_sha256": "78dc62ffd6ccd5040d6899971c1e2e0262d5353b52c38df0dbadd909b190d600",
+      "id": "ms65-deployment-bundle-applied",
+      "status": "passed"
+    },
+    {
+      "evidence_sha256": "da58a5df76a5f1f109c084f41527fc7c4876e45bf940bfd2c4190fe9832f46d0",
+      "id": "eight-immutable-image-digests-running",
+      "status": "passed"
+    },
+    {
+      "evidence_sha256": "da58a5df76a5f1f109c084f41527fc7c4876e45bf940bfd2c4190fe9832f46d0",
+      "id": "sixteen-service-replicas-ready",
+      "status": "passed"
+    },
+    {
+      "evidence_sha256": "da58a5df76a5f1f109c084f41527fc7c4876e45bf940bfd2c4190fe9832f46d0",
+      "id": "trusted-hostname-valid-tls-certificate-observed",
+      "status": "passed"
+    },
+    {
+      "evidence_sha256": "da58a5df76a5f1f109c084f41527fc7c4876e45bf940bfd2c4190fe9832f46d0",
+      "id": "tls12-or-newer-and-plaintext-rejection-observed",
+      "status": "passed"
+    },
+    {
+      "evidence_sha256": "da58a5df76a5f1f109c084f41527fc7c4876e45bf940bfd2c4190fe9832f46d0",
+      "id": "external-secrets-controller-and-store-ready",
+      "status": "passed"
+    },
+    {
+      "evidence_sha256": "da58a5df76a5f1f109c084f41527fc7c4876e45bf940bfd2c4190fe9832f46d0",
+      "id": "eight-service-secrets-synchronized",
+      "status": "passed"
+    },
+    {
+      "evidence_sha256": "643c530038c0add06e3601155cbd8f37027cd1955ac13b512ec69a13131c0cbf",
+      "id": "external-secret-rotation-propagated",
+      "status": "passed"
+    },
+    {
+      "evidence_sha256": "da58a5df76a5f1f109c084f41527fc7c4876e45bf940bfd2c4190fe9832f46d0",
+      "id": "all-service-metrics-scraped",
+      "status": "passed"
+    },
+    {
+      "evidence_sha256": "5d09d7c24032dbe8aa3355f11d98a0c5f70fc935e096ae9ac98a87a1054d94aa",
+      "id": "all-service-logs-and-traces-correlated",
+      "status": "passed"
+    },
+    {
+      "evidence_sha256": "2e4c6c3a7e0e5618525b5bb8dc331fda0e042027da06548079cedd1041a04dcc",
+      "id": "alert-fire-and-recovery-observed",
+      "status": "passed"
+    },
+    {
+      "evidence_sha256": "f23c637611400f8ec9acebc49c3de6ddbcd1ec6d03c9ac3637ce8f837aa34fbf",
+      "id": "bounded-sustained-load-threshold-passed",
+      "status": "passed"
+    },
+    {
+      "evidence_sha256": "736acaf40463b52dca4a3c1a670ed97380c035f9103055a2b230536910996244",
+      "id": "eight-image-signatures-and-provenance-verified",
+      "status": "passed"
+    },
+    {
+      "evidence_sha256": "736acaf40463b52dca4a3c1a670ed97380c035f9103055a2b230536910996244",
+      "id": "eight-image-vulnerability-scans-passed",
+      "status": "passed"
+    },
+    {
+      "evidence_sha256": "da58a5df76a5f1f109c084f41527fc7c4876e45bf940bfd2c4190fe9832f46d0",
+      "id": "manifest-and-runtime-policy-scans-passed",
+      "status": "passed"
+    },
+    {
+      "evidence_sha256": "c2980fa89cafa0ce7fd42bba1d9599d993f5472f0b7abf7cac1d6ec1a7ed389f",
+      "id": "default-deny-and-bounded-egress-observed",
+      "status": "passed"
+    },
+    {
+      "evidence_sha256": "f19fd540ec8c97351520f77c08f6ed10e61094db1be48ec86db0ddab4586e32d",
+      "id": "content-addressed-backup-created-and-verified",
+      "status": "passed"
+    },
+    {
+      "evidence_sha256": "f19fd540ec8c97351520f77c08f6ed10e61094db1be48ec86db0ddab4586e32d",
+      "id": "exact-restore-within-rpo-rto-observed",
+      "status": "passed"
+    },
+    {
+      "evidence_sha256": "eda51b30d08de54964b0a63574fe176a266e595b96057180851cb43f5f61ec4c",
+      "id": "node-and-failure-domain-disruption-recovered",
+      "status": "passed"
+    },
+    {
+      "evidence_sha256": "eda51b30d08de54964b0a63574fe176a266e595b96057180851cb43f5f61ec4c",
+      "id": "zero-unavailable-eight-service-rolling-deployment-observed",
+      "status": "passed"
+    },
+    {
+      "evidence_sha256": "eda51b30d08de54964b0a63574fe176a266e595b96057180851cb43f5f61ec4c",
+      "id": "canary-cutover-business-journeys-passed",
+      "status": "passed"
+    },
+    {
+      "evidence_sha256": "eda51b30d08de54964b0a63574fe176a266e595b96057180851cb43f5f61ec4c",
+      "id": "rollback-and-post-rollback-recovery-observed",
+      "status": "passed"
+    }
+  ],
+  "schema_version": "1.0",
+  "scope": "Bounded CloudBank synthetic nonproduction qualification",
+  "summary": {
+    "backup_restore_rto_seconds": 455,
+    "business_journeys": 18,
+    "chat_p95_ms": 21360.039874,
+    "load_duration_seconds": 300,
+    "load_errors": 0,
+    "load_p95_ms": 160.6914815,
+    "load_requests": 5451,
+    "load_vus": 10,
+    "measurements_changed": false,
+    "pitr_limit_seconds": 630,
+    "pitr_rto_seconds": 622,
+    "platform_scenarios": 28,
+    "ready_replicas": 16,
+    "rpo_seconds": 18,
+    "services": 8,
+    "sql_policy_id": "ms67-nonproduction-pitr-rto-630-2026-09-10"
+  },
+  "verification": {
+    "export_manifest_path": "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/publication-export.json",
+    "export_manifest_sha256": "6f622d50ac114964c705ab9021a7edd26ecb1ef2ae3bb05af98851557da46a7b",
+    "hmac_verification": "performed by operator exporter before upload; not independently repeated by public publisher",
+    "public_checks": "original-file-hashes, content-hashes and evidence bindings"
+  }
+}

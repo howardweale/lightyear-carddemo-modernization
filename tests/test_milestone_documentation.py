@@ -192,19 +192,19 @@ class MilestoneDocumentationTests(unittest.TestCase):
         self.assertIn("five business workloads and 20 curated migration-risk scenarios", roadmap)
         self.assertIn("MS #54 — CloudBank Executable Source Baseline", roadmap)
         self.assertIn(
-            "| MS #54 | CloudBank Executable Source Baseline | Complete; signed execution receipts remain operator-held evidence |",
+            "| MS #54 | CloudBank Executable Source Baseline | Passed; [published execution evidence](docs/receipts/index.html#ms54) |",
             roadmap,
         )
         self.assertIn("integration classes and seven native Oracle tests", roadmap)
         self.assertIn("MS #55 — CloudBank Customer PostgreSQL Mapping", roadmap)
         self.assertIn(
-            "| MS #55 | CloudBank Customer PostgreSQL Mapping | Mapping qualified; signed native receipt remains operator-held evidence |",
+            "| MS #55 | CloudBank Customer PostgreSQL Mapping | Passed; [published execution evidence](docs/receipts/index.html#ms55) |",
             roadmap,
         )
         self.assertIn("all seven columns", roadmap)
         self.assertIn("MS #56 — First CloudBank Dark Factory Run", roadmap)
         self.assertIn(
-            "| MS #56 | First CloudBank Dark Factory Run | Factory contract complete; operator dual-run receipt pending |",
+            "| MS #56 | First CloudBank Dark Factory Run | Passed; [published execution evidence](docs/receipts/index.html#ms56) |",
             roadmap,
         )
         self.assertIn("exactly six customer-service paths", roadmap)

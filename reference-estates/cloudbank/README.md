@@ -301,15 +301,26 @@ telemetry, KMS-backed image signing, security scans, and controlled teardown.
 Twenty-eight signed live scenarios require every service and operational control to pass, including
 secret rotation, alert recovery, sustained load, exact restore, node and failure-domain evacuation,
 zero-unavailable rolling deployment, canary cutover, all 18 business journeys, and mandatory
-rollback. The committed receipt does not claim a cluster was contacted. A later passing receipt
-qualifies only the bound non-production platform; customer IdP, representative customer workload,
+rollback. All 28 scenarios passed in the [published MS67 execution receipt](../../docs/receipts/index.html#ms67).
+This qualifies the bound non-production platform; customer IdP, representative customer workload,
 customer approval, production deployment, and final readiness remain MS #68.
 
 The projection is composed with the existing PL/I and iDempiere reference fragments. It does
 not change the canonical CardDemo graph or the identity to which runtime and audit evidence are
 bound.
 
+## Published execution results
+
+The [MS54–67 receipt index](../../docs/receipts/) contains 31 original documents from the completed
+MS67 evidence chain. MS65 rehearsal, MS66 eight-service bounded equivalence and MS67 real
+nonproduction platform qualification passed. Regional load: 5,451 requests, zero errors, aggregate
+p95 160.69 ms. PITR: 622 seconds under the approved 630-second requirement; backup restore: 455
+seconds; RPO: 18 seconds. No new execution was needed to publish these results.
+
 ## Evidence boundary
+
+The following describes each milestone’s own scope; later qualification is recorded separately in
+the published execution chain. Deterministic readiness receipts remain admission contracts.
 
 MS #53 is upstream static inventory and curated migration-risk evidence. MS #54 adds the exact
 source-build and bounded Oracle-runtime admission path. MS #55 generates the customer-table
@@ -326,5 +337,5 @@ MS #64 adds the Credit Score and Chatbot control boundaries and assembles the ei
 MS #65 adds the immutable deployment renderer and signed non-production cutover/rollback rehearsal.
 MS #66 adds the signed eight-service governed-source Oracle/PostgreSQL comparison and closes only
 the bounded whole-application business-equivalence claim. MS #67 adds the GKE implementation and live
-non-production platform gate without fabricating a run. Customer IdP, representative customer data
+non-production platform qualification, now supported by its completed signed run. Customer IdP, representative customer data
 and workload, customer approval, production deployment, and production readiness remain unclaimed.

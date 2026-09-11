@@ -12,6 +12,7 @@ from lightyear_knowledge_graph.composite import (
 )
 from lightyear_knowledge_graph.explorer import ExplorerServer, GraphExplorerIndex
 from lightyear_knowledge_graph.model import load_graph
+from lightyear_data.cloudbank_publication import BUNDLE, RUN_ID
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -173,7 +174,7 @@ class CompositeEstateTests(unittest.TestCase):
         )
         self.assertEqual("postgresql-16", customer_workcell["target_dialect"])
         self.assertEqual(
-            "bounded equivalence ready · operator receipt required",
+            "MS #61 passed · Normalized Customer, Account and Transfer equivalence",
             customer_workcell["target_status"],
         )
         self.assertEqual(
@@ -181,7 +182,7 @@ class CompositeEstateTests(unittest.TestCase):
             customer_workcell["mapping_artifact"],
         )
         self.assertEqual(
-            "factory/cloudbank/oracle-equivalence/readiness.receipt.json",
+            (BUNDLE / "receipts/prerequisite-ms61-equivalence.receipt.json").as_posix(),
             customer_workcell["factory_artifact"],
         )
         money_workcell = next(
@@ -189,7 +190,7 @@ class CompositeEstateTests(unittest.TestCase):
             if item["id"] == "cloudbank-reference:workload:money-transfer"
         )
         self.assertEqual(
-            "production OAuth application boundary ready · operator receipt required",
+            "MS #62 passed · OAuth application boundary",
             money_workcell["target_status"],
         )
         identity_workcell = next(
@@ -198,7 +199,7 @@ class CompositeEstateTests(unittest.TestCase):
         )
         self.assertEqual("postgresql-16", identity_workcell["target_dialect"])
         self.assertEqual(
-            "factory/cloudbank/production-oauth/readiness.receipt.json",
+            (BUNDLE / "receipts/prerequisite-ms62-oauth.receipt.json").as_posix(),
             identity_workcell["factory_artifact"],
         )
         checks_workcell = next(
@@ -207,7 +208,7 @@ class CompositeEstateTests(unittest.TestCase):
         )
         self.assertEqual("postgresql-16", checks_workcell["target_dialect"])
         self.assertEqual(
-            "factory/cloudbank/checks-messaging/readiness.receipt.json",
+            (BUNDLE / "receipts/prerequisite-ms63-checks.receipt.json").as_posix(),
             checks_workcell["factory_artifact"],
         )
         edge_workcell = next(
@@ -216,40 +217,45 @@ class CompositeEstateTests(unittest.TestCase):
         )
         self.assertEqual("postgresql-16", edge_workcell["target_dialect"])
         self.assertEqual(
-            "eight-service edge and AI boundary ready · operator receipt required",
+            "MS #64 passed · Eight-service target and edge controls",
             edge_workcell["target_status"],
         )
         self.assertEqual(
-            "factory/cloudbank/edge-ai/readiness.receipt.json",
+            (BUNDLE / "receipts/prerequisite-ms64-edge-ai.receipt.json").as_posix(),
             edge_workcell["factory_artifact"],
         )
         for workload in (
             customer_workcell, money_workcell, checks_workcell, identity_workcell, edge_workcell,
         ):
             self.assertEqual(
-                "production-like deployment and cutover rehearsal ready · operator evidence required",
+                "MS #65 passed · Nonproduction deployment, cutover and rollback rehearsal",
                 workload["production_readiness_status"],
             )
             self.assertEqual(
-                "factory/cloudbank/production-readiness/readiness.receipt.json",
+                (BUNDLE / "receipts/retained-ms65.json").as_posix(),
                 workload["production_readiness_artifact"],
             )
             self.assertEqual(
-                "dual-lane whole-application equivalence ready · operator evidence required",
+                "MS #66 passed · Bounded eight-service Oracle/PostgreSQL equivalence",
                 workload["whole_application_status"],
             )
             self.assertEqual(
-                "factory/cloudbank/whole-application-equivalence/readiness.receipt.json",
+                (BUNDLE / "receipts/retained-ms66-receipt.json").as_posix(),
                 workload["whole_application_artifact"],
             )
             self.assertEqual(
-                "real non-production GKE qualification ready · live operator evidence required",
+                "MS #67 passed · Real nonproduction platform qualification",
                 workload["platform_qualification_status"],
             )
             self.assertEqual(
-                "factory/cloudbank/platform-qualification/readiness.receipt.json",
+                (BUNDLE / "receipts/ms67-platform-receipt.json").as_posix(),
                 workload["platform_qualification_artifact"],
             )
+            self.assertEqual(RUN_ID, workload["publication_run_id"])
+            self.assertFalse(workload["production_ready"])
+            receipt = json.loads((ROOT / workload["platform_qualification_artifact"]).read_text(encoding="utf-8"))
+            self.assertTrue(receipt["non_production_platform_qualified"])
+            self.assertFalse(receipt["production_ready"])
 
     def test_runtime_and_audit_remain_bound_to_canonical_identity(self) -> None:
         index = GraphExplorerIndex(self.composite)

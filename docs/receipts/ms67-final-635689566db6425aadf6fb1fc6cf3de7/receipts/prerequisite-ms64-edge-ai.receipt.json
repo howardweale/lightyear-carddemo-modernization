@@ -1,0 +1,251 @@
+{
+  "bindings": {
+    "acceptance_contract_sha256": "ab924665bd9b3dab5bfc18c9dba41c1c7e945995d80342cc3cdc0e69a0460773",
+    "compatibility_ledger_sha256": "73bf8f3d6934d85b5573913fb0ededa994c676fa5af125c4590897163b2ccd4a",
+    "edge_contract_sha256": "ddca81a27700fb141e9c9fdbc30382fc90c1823637d5db946297a4165024e9aa",
+    "execution_plan_sha256": "df280aa07a8d76f72dfb821e54895f59ba262650ed83abfb4cb8161f77a3d4bf",
+    "source_contract_sha256": "d9f15e024d74e630403308d776bc25928e575fbe756bc835befd963ae756f79f"
+  },
+  "content_sha256": "f78f85eb8342d81483f389918b7ed48601b19cf4374ac62fb12e27d01db2d146",
+  "edge_ai_lane": {
+    "contract_sha256": "56bcf8142ae852eb75cc8742d97090411470179f69675500e676ab9534042433",
+    "external_credit_bureau_called": false,
+    "external_model_called": false,
+    "lane": "native-cloudbank-eight-service-edge-ai",
+    "package_exit_code": 0,
+    "package_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "package_stdout_sha256": "b7babfe1ffc90db4566934e817bbeaf079349bb5e13f5c0d792ec1308dfb48aa",
+    "packaging": {
+      "executable_jars": 8,
+      "microtx_runtime_libraries": 0,
+      "oracle_runtime_libraries": 0
+    },
+    "raw_output_persisted": false,
+    "reason": null,
+    "scenario_count": 28,
+    "scenarios": [
+      {
+        "id": "eight-service-target-packaged",
+        "status": "passed"
+      },
+      {
+        "id": "oracle-and-microtx-runtime-absent",
+        "status": "passed"
+      },
+      {
+        "id": "azn-server-target-workcell-generated",
+        "status": "passed"
+      },
+      {
+        "id": "azn-server-target-workcell-executed",
+        "status": "passed"
+      },
+      {
+        "id": "checks-target-workcell-generated",
+        "status": "passed"
+      },
+      {
+        "id": "checks-target-workcell-executed",
+        "status": "passed"
+      },
+      {
+        "id": "testrunner-target-workcell-generated",
+        "status": "passed"
+      },
+      {
+        "id": "testrunner-target-workcell-executed",
+        "status": "passed"
+      },
+      {
+        "id": "creditscore-target-workcell-generated",
+        "status": "passed"
+      },
+      {
+        "id": "creditscore-target-workcell-executed",
+        "status": "passed"
+      },
+      {
+        "id": "chatbot-target-workcell-generated",
+        "status": "passed"
+      },
+      {
+        "id": "chatbot-target-workcell-executed",
+        "status": "passed"
+      },
+      {
+        "id": "creditscore-missing-token-rejected",
+        "status": "passed"
+      },
+      {
+        "id": "creditscore-wrong-audience-rejected",
+        "status": "passed"
+      },
+      {
+        "id": "creditscore-missing-scope-rejected",
+        "status": "passed"
+      },
+      {
+        "id": "creditscore-subject-bound",
+        "status": "passed"
+      },
+      {
+        "id": "creditscore-same-subject-date-stable",
+        "status": "passed"
+      },
+      {
+        "id": "creditscore-declared-range-enforced",
+        "status": "passed"
+      },
+      {
+        "id": "creditscore-synthetic-provenance-returned",
+        "status": "passed"
+      },
+      {
+        "id": "chatbot-missing-token-rejected",
+        "status": "passed"
+      },
+      {
+        "id": "chatbot-wrong-audience-rejected",
+        "status": "passed"
+      },
+      {
+        "id": "chatbot-missing-scope-rejected",
+        "status": "passed"
+      },
+      {
+        "id": "chatbot-input-policy-fails-closed",
+        "status": "passed"
+      },
+      {
+        "id": "chatbot-output-policy-fails-closed",
+        "status": "passed"
+      },
+      {
+        "id": "chatbot-caller-rate-limit-enforced",
+        "status": "passed"
+      },
+      {
+        "id": "chatbot-model-egress-policy-enforced",
+        "status": "passed"
+      },
+      {
+        "id": "chatbot-model-failure-safe",
+        "status": "passed"
+      },
+      {
+        "id": "raw-prompts-responses-and-secrets-not-persisted",
+        "status": "passed"
+      }
+    ],
+    "status": "passed",
+    "synthetic_data_only": true,
+    "test_exit_code": 0,
+    "test_stderr_sha256": "b082118318483b24b2dcdda62625336e2db7f2782ddbf40ea3a5f88fd6178b7e",
+    "test_stdout_sha256": "64638d8b1678e70919037d15c2135b6b2e2c082ae724a1eed50506520bd5aa61",
+    "tests": {
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "tests": 37
+    },
+    "workcells": [
+      {
+        "disposition": "migrated",
+        "errors": 0,
+        "executed": true,
+        "failures": 0,
+        "generated": true,
+        "migration_milestone": 62,
+        "service": "account",
+        "skipped": 0,
+        "tests": 4
+      },
+      {
+        "disposition": "migrated",
+        "errors": 0,
+        "executed": true,
+        "failures": 0,
+        "generated": true,
+        "migration_milestone": 62,
+        "service": "transfer",
+        "skipped": 0,
+        "tests": 4
+      },
+      {
+        "disposition": "migrated",
+        "errors": 0,
+        "executed": true,
+        "failures": 0,
+        "generated": true,
+        "migration_milestone": 62,
+        "service": "azn-server",
+        "skipped": 0,
+        "tests": 3
+      },
+      {
+        "disposition": "migrated",
+        "errors": 0,
+        "executed": true,
+        "failures": 0,
+        "generated": true,
+        "migration_milestone": 63,
+        "service": "checks",
+        "skipped": 0,
+        "tests": 4
+      },
+      {
+        "disposition": "migrated",
+        "errors": 0,
+        "executed": true,
+        "failures": 0,
+        "generated": true,
+        "migration_milestone": 63,
+        "service": "testrunner",
+        "skipped": 0,
+        "tests": 4
+      },
+      {
+        "disposition": "migrated",
+        "errors": 0,
+        "executed": true,
+        "failures": 0,
+        "generated": true,
+        "migration_milestone": 64,
+        "service": "creditscore",
+        "skipped": 0,
+        "tests": 8
+      },
+      {
+        "disposition": "migrated",
+        "errors": 0,
+        "executed": true,
+        "failures": 0,
+        "generated": true,
+        "migration_milestone": 64,
+        "service": "chatbot",
+        "skipped": 0,
+        "tests": 10
+      }
+    ]
+  },
+  "eight_service_target_assembled": true,
+  "migration_complete": false,
+  "model_quality_qualified": false,
+  "postgresql_image_id_sha256": "75f5a96988cdf694a215073c3e9c001b706b371e2f94df3967f2efdec2787f6b",
+  "production_ready": false,
+  "real_credit_decision_equivalent": false,
+  "receipt_type": "lightyear-cloudbank-edge-ai-execution",
+  "release": "0.64.0",
+  "remaining_service_workcells_complete": true,
+  "run_id": "cloudbank-edge-ai-20260910T031245Z",
+  "schema_version": "1.0",
+  "signature": {
+    "algorithm": "hmac-sha256",
+    "signer": "howard.weale@gmail.com",
+    "value": "3eeaa2856c793a5c46766014082a1ec19d8081f99392750303cb923493fb8d58"
+  },
+  "source_ms57_receipt_sha256": "2fb0bdfa0b911c73a92c44daa9636159a91b085f681fdfa387e632710f308a89",
+  "source_ms63_receipt_sha256": "e7afa4d791f40148cd7c1839294ae4246cb0e3d7ba08d5077dbb77e5ab6555f5",
+  "status": "passed-edge-ai-application-boundary",
+  "whole_application_equivalent": false
+}

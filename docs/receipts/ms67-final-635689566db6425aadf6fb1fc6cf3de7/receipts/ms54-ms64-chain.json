@@ -1,0 +1,104 @@
+{
+  "content_sha256": "2b2e4cb796945b656deca325b47976aa8aa761f84ab600ac825d1e2d25437ea7",
+  "credentials_persisted": false,
+  "production_data_observed": false,
+  "raw_output_persisted": false,
+  "receipt_count": 12,
+  "receipt_type": "lightyear-cloudbank-ms54-ms64-execution-chain",
+  "receipts": [
+    {
+      "content_sha256": "58aead9278caa45fc395015b4b4f0d63958975cb68aa385f95216b311ae686f3",
+      "file": "ms54-oracle-runtime.receipt.json",
+      "receipt_type": "lightyear-cloudbank-oracle-runtime-execution-receipt",
+      "release": "0.54.0",
+      "status": "passed"
+    },
+    {
+      "content_sha256": "883018600388dd5c7154c48713d4417210dc489113fb04adb5394e17e772a2b2",
+      "file": "ms54-source-build.receipt.json",
+      "receipt_type": "lightyear-cloudbank-source-build-execution-receipt",
+      "release": "0.54.0",
+      "status": "passed"
+    },
+    {
+      "content_sha256": "5878d46b3ddcb728822013092aed08f4fd8fed3877915c28eddd3d9a00203d6b",
+      "file": "ms55-postgresql.receipt.json",
+      "receipt_type": "lightyear-cloudbank-customer-postgresql-execution-receipt",
+      "release": "0.55.0",
+      "status": "passed-bounded-database-mapping"
+    },
+    {
+      "content_sha256": "4011a1b663327f238d5c67dba49c525c51af3ac1545d12ef1a531f46a4060783",
+      "file": "ms56-dark-factory.receipt.json",
+      "receipt_type": "lightyear-cloudbank-customer-dark-factory-execution-receipt",
+      "release": "0.56.0",
+      "status": "passed-bounded-customer-dark-factory-run"
+    },
+    {
+      "content_sha256": "2fb0bdfa0b911c73a92c44daa9636159a91b085f681fdfa387e632710f308a89",
+      "file": "ms57-production-qualification.receipt.json",
+      "receipt_type": "lightyear-cloudbank-customer-production-qualification-execution",
+      "release": "0.57.0",
+      "status": "passed-bounded-customer-production-readiness-qualification"
+    },
+    {
+      "content_sha256": "880892e35715b265284030dd733ea49325551908ea51d58f96ee13ef323826de",
+      "file": "ms58-transaction-wave.receipt.json",
+      "receipt_type": "lightyear-cloudbank-transaction-wave-admission",
+      "release": "0.58.0",
+      "status": "passed-transaction-wave-plan-admitted"
+    },
+    {
+      "content_sha256": "f8608413bd15540bd1e01ee378fcef40473354eb140275b52aceae0ae1b81166",
+      "file": "ms59-transaction-core.receipt.json",
+      "receipt_type": "lightyear-cloudbank-transaction-core-postgresql-execution",
+      "release": "0.59.0",
+      "status": "passed-bounded-postgresql-transaction-core"
+    },
+    {
+      "content_sha256": "90fbdeef23f623de692a6cd91b2be21b846a2942ec0773897574873c7ff9f40b",
+      "file": "ms60-native-wave.receipt.json",
+      "receipt_type": "lightyear-cloudbank-native-transaction-wave-execution",
+      "release": "0.60.0",
+      "status": "passed-bounded-native-account-transfer-wave"
+    },
+    {
+      "content_sha256": "a9d102eeda6552ffc7e715beed2d8a24dcfb8ca0067330db3f2ddbe092cf1036",
+      "file": "ms61-equivalence.receipt.json",
+      "receipt_type": "lightyear-cloudbank-oracle-postgresql-equivalence-execution",
+      "release": "0.61.0",
+      "status": "passed-bounded-normalized-customer-account-transfer-equivalence"
+    },
+    {
+      "content_sha256": "5b0aa07534b923a76731d72e82af4a6a0396c7ffa6a979f4598a7a3e131b5a0f",
+      "file": "ms62-oauth.receipt.json",
+      "receipt_type": "lightyear-cloudbank-production-oauth-execution",
+      "release": "0.62.0",
+      "status": "passed-production-oauth-application-boundary"
+    },
+    {
+      "content_sha256": "e7afa4d791f40148cd7c1839294ae4246cb0e3d7ba08d5077dbb77e5ab6555f5",
+      "file": "ms63-checks.receipt.json",
+      "receipt_type": "lightyear-cloudbank-checks-messaging-execution",
+      "release": "0.63.0",
+      "status": "passed-checks-target-messaging"
+    },
+    {
+      "content_sha256": "f78f85eb8342d81483f389918b7ed48601b19cf4374ac62fb12e27d01db2d146",
+      "file": "ms64-edge-ai.receipt.json",
+      "receipt_type": "lightyear-cloudbank-edge-ai-execution",
+      "release": "0.64.0",
+      "status": "passed-edge-ai-application-boundary"
+    }
+  ],
+  "release": "0.67.0",
+  "schema_version": "1.0",
+  "signature": {
+    "algorithm": "hmac-sha256",
+    "signer": "howard.weale@gmail.com",
+    "value": "eae52b365454d40801fa0b8ae68f2d1621dfc6dcf7b6d5cadd45b86c94359c7e"
+  },
+  "signer": "howard.weale@gmail.com",
+  "source_commit": "4f41b16d00c45503f691836fee8138010c969e86",
+  "status": "passed"
+}

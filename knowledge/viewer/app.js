@@ -506,6 +506,20 @@ function renderOperatorContext() {
   $("customer-evidence-badge").textContent = workload.target_status
     ? `${customer.evidence_class} · ${workload.target_status}`
     : `${customer.evidence_class} evidence`;
+  const published = $("published-qualification");
+  published.replaceChildren();
+  published.hidden = !workload.publication_run_id;
+  if (workload.publication_run_id) {
+    for (const [label, field] of [["MS65 rehearsal passed", "production_readiness_artifact"], ["MS66 equivalence passed", "whole_application_artifact"], ["MS67 nonproduction passed", "platform_qualification_artifact"]]) {
+      const link = document.createElement("a");
+      link.textContent = label;
+      link.href = `https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/${workload[field]}`;
+      link.target = "_blank";
+      link.rel = "noopener noreferrer";
+      published.append(link, document.createTextNode(" · "));
+    }
+    published.append(document.createTextNode("Customer production approval remains MS68."));
+  }
   $("metric-nodes").textContent = formatNumber(customer.node_count);
   $("metric-edges").textContent = formatNumber(customer.edge_count);
   $("metric-rules").textContent = formatNumber(customer.rule_count);

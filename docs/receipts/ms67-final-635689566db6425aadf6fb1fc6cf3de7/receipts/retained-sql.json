@@ -1,0 +1,993 @@
+{
+  "acceptance_policy": {
+    "authorized_by": "Howard Weale",
+    "authorized_on": "2026-09-10",
+    "cleanup_required": true,
+    "content_sha256": "2eea140507d6d5d8260b811f24eb69d1ef241720ee8e31071ea6a6a153e156d8",
+    "exact_state_required": true,
+    "maximum_backup_restore_rto_seconds": 600,
+    "maximum_pitr_rto_seconds": 630,
+    "maximum_rpo_seconds": 60,
+    "policy_id": "ms67-nonproduction-pitr-rto-630-2026-09-10",
+    "previous_maximum_pitr_rto_seconds": 600,
+    "production_sla": false,
+    "reason": "Owner-approved noncustomer PITR recovery target; re-evaluate existing measurements.",
+    "schema_version": "1.0",
+    "scope": "ms67-synthetic-nonproduction-database-recovery"
+  },
+  "application_restoration_checks": [
+    {
+      "application_restoration": {
+        "groups": [
+          [
+            "azn-server"
+          ],
+          [
+            "customer",
+            "account",
+            "creditscore",
+            "chatbot"
+          ],
+          [
+            "transfer",
+            "checks"
+          ],
+          [
+            "testrunner"
+          ]
+        ],
+        "services": {
+          "account": {
+            "elapsed_seconds": 105.587661,
+            "finished_at": "2026-09-10T15:43:02.332753Z",
+            "started_at": "2026-09-10T15:41:16.745303Z",
+            "status": "ready"
+          },
+          "azn-server": {
+            "elapsed_seconds": 95.141198,
+            "finished_at": "2026-09-10T15:41:15.080573Z",
+            "started_at": "2026-09-10T15:39:39.939519Z",
+            "status": "ready"
+          },
+          "chatbot": {
+            "elapsed_seconds": 107.402921,
+            "finished_at": "2026-09-10T15:43:07.365242Z",
+            "started_at": "2026-09-10T15:41:19.962521Z",
+            "status": "ready"
+          },
+          "checks": {
+            "elapsed_seconds": 65.37606,
+            "finished_at": "2026-09-10T15:44:14.568468Z",
+            "started_at": "2026-09-10T15:43:09.192570Z",
+            "status": "ready"
+          },
+          "creditscore": {
+            "elapsed_seconds": 106.530485,
+            "finished_at": "2026-09-10T15:43:04.957589Z",
+            "started_at": "2026-09-10T15:41:18.427314Z",
+            "status": "ready"
+          },
+          "customer": {
+            "elapsed_seconds": 104.594399,
+            "finished_at": "2026-09-10T15:42:59.674868Z",
+            "started_at": "2026-09-10T15:41:15.080622Z",
+            "status": "ready"
+          },
+          "testrunner": {
+            "elapsed_seconds": 65.47906,
+            "finished_at": "2026-09-10T15:45:20.047468Z",
+            "started_at": "2026-09-10T15:44:14.568511Z",
+            "status": "ready"
+          },
+          "transfer": {
+            "elapsed_seconds": 64.657155,
+            "finished_at": "2026-09-10T15:44:12.022338Z",
+            "started_at": "2026-09-10T15:43:07.365289Z",
+            "status": "ready"
+          }
+        },
+        "strategy": "dependency-groups",
+        "timing_scope": "scale-up request through readiness observation and checkpoint; observation may lag pod readiness"
+      },
+      "errors": [],
+      "remaining_stopped_services": [],
+      "status": "restored"
+    },
+    {
+      "application_restoration": {
+        "groups": [
+          [
+            "azn-server"
+          ],
+          [
+            "customer",
+            "account",
+            "creditscore",
+            "chatbot"
+          ],
+          [
+            "transfer",
+            "checks"
+          ],
+          [
+            "testrunner"
+          ]
+        ],
+        "services": {},
+        "strategy": "dependency-groups",
+        "timing_scope": "scale-up request through readiness observation and checkpoint; observation may lag pod readiness"
+      },
+      "errors": [],
+      "remaining_stopped_services": [],
+      "status": "restored"
+    }
+  ],
+  "backup": {
+    "endTime": "2026-09-10T15:34:44.751Z",
+    "id": "1789054393461",
+    "instance": "cloudbank-ms67-postgres",
+    "managed_backup_bytes_sha256": null,
+    "metadata_sha256": "8a583a8f9b4051cb10934d61bafffe1806950a9a43664b6c1c24e8c04ba7fbe7",
+    "retained": true,
+    "startTime": "2026-09-10T15:33:13.466Z",
+    "status": "SUCCESSFUL",
+    "type": "ON_DEMAND"
+  },
+  "backup_restore": {
+    "database_rto_seconds": 455,
+    "restored_state": {
+      "databases": {
+        "cc370ea0f8bd857ce6af71e0f7fdc1b13c04c33296b875f96568daa2ec2b7de9": {
+          "row_count": 6061,
+          "sequence_count": 3,
+          "state_sha256": "606b1b885fa1a016a8cd525e1e1291b517b06d45c740414db1fec53d944b96e8",
+          "table_count": 8
+        }
+      },
+      "state_sha256": "168a0ade3b0447e61d24f8cd966b1688b6f45c77bfe7a66aebe1ee24cbcda7c3"
+    },
+    "rto_within_limit": true,
+    "state_matches": true,
+    "timing_scope": "restore into an existing isolated instance through database state validation"
+  },
+  "bindings": {
+    "environment": {
+      "cluster": "cloudbank-ms67",
+      "namespace": "cloudbank-ms67",
+      "namespace_uid_sha256": "0a397f173a1dfab91edeebc3d91bbfa1a3e0dd39caa086df1ff6f92822f71fff",
+      "project": "lightyear-ms67-nonproduction",
+      "region": "us-west1"
+    },
+    "images_sha256": "58472577e687bc8887168960f60ad6dcf82a918fcd4d90c399cc8e26d36db4b7",
+    "journeys_content_sha256": "be1d7779a0faae838d94cac8c618a185bb4a1d75e2aaea0b4638aafb669e6882"
+  },
+  "checkpoint": {
+    "databases": {
+      "cc370ea0f8bd857ce6af71e0f7fdc1b13c04c33296b875f96568daa2ec2b7de9": {
+        "row_count": 6061,
+        "sequence_count": 3,
+        "state_sha256": "606b1b885fa1a016a8cd525e1e1291b517b06d45c740414db1fec53d944b96e8",
+        "table_count": 8
+      }
+    },
+    "state_sha256": "168a0ade3b0447e61d24f8cd966b1688b6f45c77bfe7a66aebe1ee24cbcda7c3"
+  },
+  "checkpoint_captured_at": "2026-09-10T15:33:11.648299Z",
+  "content_sha256": "f19fd540ec8c97351520f77c08f6ed10e61094db1be48ec86db0ddab4586e32d",
+  "coverage": {
+    "database_count": 1,
+    "database_names_sha256": "960cb9c450e6ed3e54b11bc8943e2a7e162be6ff19193babe9e5889c351a9b75",
+    "scope": "all persistent tables and sequences in configured application databases; no roles, grants, large objects or application failover",
+    "services_with_datasource": [
+      "azn-server",
+      "customer",
+      "account",
+      "checks",
+      "testrunner"
+    ]
+  },
+  "credentials_persisted": false,
+  "finished_at": "2026-09-10T15:59:44.470066Z",
+  "ms65_complete": false,
+  "ms66_complete": false,
+  "ms67_complete": false,
+  "observation_type": "lightyear-cloudbank-isolated-sql-recovery",
+  "phases": [
+    {
+      "elapsed_seconds": 53.538657,
+      "finished_at": "2026-09-10T15:32:14.772607Z",
+      "phase": "source-preflight",
+      "started_at": "2026-09-10T15:31:21.234038Z",
+      "status": "completed"
+    },
+    {
+      "elapsed_seconds": 6.446318,
+      "finished_at": "2026-09-10T15:32:09.989844Z",
+      "phase": "probe-pool-preparation",
+      "started_at": "2026-09-10T15:32:03.543678Z",
+      "status": "completed"
+    },
+    {
+      "elapsed_seconds": 2.26573,
+      "finished_at": "2026-09-10T15:32:12.258367Z",
+      "phase": "snapshot-network-binding",
+      "started_at": "2026-09-10T15:32:09.992720Z",
+      "status": "completed"
+    },
+    {
+      "elapsed_seconds": 2.510157,
+      "finished_at": "2026-09-10T15:32:14.770287Z",
+      "phase": "snapshot-data-validation",
+      "started_at": "2026-09-10T15:32:12.260209Z",
+      "status": "completed"
+    },
+    {
+      "elapsed_seconds": 56.873249,
+      "finished_at": "2026-09-10T15:33:11.647251Z",
+      "phase": "source-checkpoint",
+      "started_at": "2026-09-10T15:32:14.774090Z",
+      "status": "completed"
+    },
+    {
+      "elapsed_seconds": 0.584491,
+      "finished_at": "2026-09-10T15:33:09.391869Z",
+      "phase": "snapshot-network-binding",
+      "started_at": "2026-09-10T15:33:08.807465Z",
+      "status": "completed"
+    },
+    {
+      "elapsed_seconds": 2.251346,
+      "finished_at": "2026-09-10T15:33:11.645402Z",
+      "phase": "snapshot-data-validation",
+      "started_at": "2026-09-10T15:33:09.394125Z",
+      "status": "completed"
+    },
+    {
+      "elapsed_seconds": 2.121159,
+      "finished_at": "2026-09-10T15:33:13.769525Z",
+      "phase": "backup-submit",
+      "started_at": "2026-09-10T15:33:11.648384Z",
+      "status": "completed"
+    },
+    {
+      "elapsed_seconds": 98.168555,
+      "finished_at": "2026-09-10T15:34:51.938301Z",
+      "phase": "backup-completion",
+      "started_at": "2026-09-10T15:33:13.769891Z",
+      "status": "completed"
+    },
+    {
+      "elapsed_seconds": 3.063675,
+      "finished_at": "2026-09-10T15:34:55.002800Z",
+      "phase": "source-stability-recheck",
+      "started_at": "2026-09-10T15:34:51.939150Z",
+      "status": "completed"
+    },
+    {
+      "elapsed_seconds": 0.595845,
+      "finished_at": "2026-09-10T15:34:52.535269Z",
+      "phase": "snapshot-network-binding",
+      "started_at": "2026-09-10T15:34:51.939505Z",
+      "status": "completed"
+    },
+    {
+      "elapsed_seconds": 2.462387,
+      "finished_at": "2026-09-10T15:34:55.000224Z",
+      "phase": "snapshot-data-validation",
+      "started_at": "2026-09-10T15:34:52.537920Z",
+      "status": "completed"
+    },
+    {
+      "elapsed_seconds": 281.525047,
+      "finished_at": "2026-09-10T15:39:36.529247Z",
+      "phase": "recovery-point-selection",
+      "started_at": "2026-09-10T15:34:55.004539Z",
+      "status": "completed"
+    },
+    {
+      "elapsed_seconds": 3.408781,
+      "finished_at": "2026-09-10T15:39:39.938498Z",
+      "phase": "pitr-submit",
+      "started_at": "2026-09-10T15:39:36.529734Z",
+      "status": "completed"
+    },
+    {
+      "elapsed_seconds": 376.332106,
+      "finished_at": "2026-09-10T15:45:56.270683Z",
+      "phase": "application-restoration-after-clone-submit",
+      "started_at": "2026-09-10T15:39:39.939061Z",
+      "status": "completed"
+    },
+    {
+      "elapsed_seconds": 236.414678,
+      "finished_at": "2026-09-10T15:49:52.690631Z",
+      "phase": "pitr-clone-completion",
+      "started_at": "2026-09-10T15:45:56.276247Z",
+      "status": "completed"
+    },
+    {
+      "elapsed_seconds": 4.858713,
+      "finished_at": "2026-09-10T15:49:57.550537Z",
+      "phase": "pitr-validation",
+      "started_at": "2026-09-10T15:49:52.691839Z",
+      "status": "completed"
+    },
+    {
+      "elapsed_seconds": 2.084376,
+      "finished_at": "2026-09-10T15:49:54.776962Z",
+      "phase": "snapshot-network-binding",
+      "started_at": "2026-09-10T15:49:52.692644Z",
+      "status": "completed"
+    },
+    {
+      "elapsed_seconds": 2.769042,
+      "finished_at": "2026-09-10T15:49:57.548274Z",
+      "phase": "snapshot-data-validation",
+      "started_at": "2026-09-10T15:49:54.779284Z",
+      "status": "completed"
+    },
+    {
+      "elapsed_seconds": 0.646865,
+      "finished_at": "2026-09-10T15:49:58.200655Z",
+      "phase": "backup-restore-target-check",
+      "started_at": "2026-09-10T15:49:57.553817Z",
+      "status": "completed"
+    },
+    {
+      "elapsed_seconds": 0.995118,
+      "finished_at": "2026-09-10T15:49:59.196793Z",
+      "phase": "backup-restore-submit",
+      "started_at": "2026-09-10T15:49:58.201691Z",
+      "status": "completed"
+    },
+    {
+      "elapsed_seconds": 449.827059,
+      "finished_at": "2026-09-10T15:57:29.022797Z",
+      "phase": "backup-restore-completion",
+      "started_at": "2026-09-10T15:49:59.197448Z",
+      "status": "completed"
+    },
+    {
+      "elapsed_seconds": 3.809757,
+      "finished_at": "2026-09-10T15:57:32.833948Z",
+      "phase": "backup-restore-validation",
+      "started_at": "2026-09-10T15:57:29.024234Z",
+      "status": "completed"
+    },
+    {
+      "elapsed_seconds": 0.685479,
+      "finished_at": "2026-09-10T15:57:30.355946Z",
+      "phase": "snapshot-network-binding",
+      "started_at": "2026-09-10T15:57:29.670549Z",
+      "status": "completed"
+    },
+    {
+      "elapsed_seconds": 2.472029,
+      "finished_at": "2026-09-10T15:57:32.831072Z",
+      "phase": "snapshot-data-validation",
+      "started_at": "2026-09-10T15:57:30.359133Z",
+      "status": "completed"
+    },
+    {
+      "elapsed_seconds": 36.215815,
+      "finished_at": "2026-09-10T15:58:09.051058Z",
+      "phase": "cleanup-application-restoration",
+      "started_at": "2026-09-10T15:57:32.835412Z",
+      "status": "completed"
+    },
+    {
+      "elapsed_seconds": 95.413062,
+      "finished_at": "2026-09-10T15:59:44.469369Z",
+      "phase": "cleanup-isolated-resource-cleanup",
+      "started_at": "2026-09-10T15:58:09.056478Z",
+      "status": "completed"
+    }
+  ],
+  "pitr": {
+    "database_rto_seconds": 622,
+    "incident_declared_at": "2026-09-10T15:39:36.528237Z",
+    "point_in_time": "2026-09-10T15:39:19.369471316Z",
+    "recovery_point_age_seconds": 18,
+    "restored_state": {
+      "databases": {
+        "cc370ea0f8bd857ce6af71e0f7fdc1b13c04c33296b875f96568daa2ec2b7de9": {
+          "row_count": 6061,
+          "sequence_count": 3,
+          "state_sha256": "606b1b885fa1a016a8cd525e1e1291b517b06d45c740414db1fec53d944b96e8",
+          "table_count": 8
+        }
+      },
+      "state_sha256": "168a0ade3b0447e61d24f8cd966b1688b6f45c77bfe7a66aebe1ee24cbcda7c3"
+    },
+    "rpo_within_limit": true,
+    "rto_within_limit": true,
+    "state_matches": true
+  },
+  "pitr_preflight": {
+    "attempt_count": 27,
+    "recent_observations": [
+      {
+        "attempt": 23,
+        "checkpoint_captured_at": "2026-09-10T15:33:11.648299Z",
+        "latest_recovery_time": "2026-09-10T15:33:03.736105148Z",
+        "maximum_age_seconds": 60,
+        "observed_at": "2026-09-10T15:38:53.604137Z",
+        "point_after_checkpoint_seconds": -7.912194,
+        "query_duration_seconds": 0.715601,
+        "query_started_at": "2026-09-10T15:38:52.888458Z",
+        "reason": "point-precedes-checkpoint",
+        "recovery_point_age_seconds": 349.868032,
+        "status": "waiting",
+        "wait_elapsed_seconds": 238.598802
+      },
+      {
+        "attempt": 24,
+        "checkpoint_captured_at": "2026-09-10T15:33:11.648299Z",
+        "latest_recovery_time": "2026-09-10T15:33:03.736105148Z",
+        "maximum_age_seconds": 60,
+        "observed_at": "2026-09-10T15:39:04.293842Z",
+        "point_after_checkpoint_seconds": -7.912194,
+        "query_duration_seconds": 0.683569,
+        "query_started_at": "2026-09-10T15:39:03.610193Z",
+        "reason": "point-precedes-checkpoint",
+        "recovery_point_age_seconds": 360.557737,
+        "status": "waiting",
+        "wait_elapsed_seconds": 249.288519
+      },
+      {
+        "attempt": 25,
+        "checkpoint_captured_at": "2026-09-10T15:33:11.648299Z",
+        "latest_recovery_time": "2026-09-10T15:33:03.736105148Z",
+        "maximum_age_seconds": 60,
+        "observed_at": "2026-09-10T15:39:15.044399Z",
+        "point_after_checkpoint_seconds": -7.912194,
+        "query_duration_seconds": 0.744211,
+        "query_started_at": "2026-09-10T15:39:14.300113Z",
+        "reason": "point-precedes-checkpoint",
+        "recovery_point_age_seconds": 371.308294,
+        "status": "waiting",
+        "wait_elapsed_seconds": 260.039089
+      },
+      {
+        "attempt": 26,
+        "checkpoint_captured_at": "2026-09-10T15:33:11.648299Z",
+        "latest_recovery_time": "2026-09-10T15:33:03.736105148Z",
+        "maximum_age_seconds": 60,
+        "observed_at": "2026-09-10T15:39:25.772979Z",
+        "point_after_checkpoint_seconds": -7.912194,
+        "query_duration_seconds": 0.722458,
+        "query_started_at": "2026-09-10T15:39:25.050462Z",
+        "reason": "point-precedes-checkpoint",
+        "recovery_point_age_seconds": 382.036874,
+        "status": "waiting",
+        "wait_elapsed_seconds": 270.767682
+      },
+      {
+        "attempt": 27,
+        "checkpoint_captured_at": "2026-09-10T15:33:11.648299Z",
+        "latest_recovery_time": "2026-09-10T15:39:19.369471316Z",
+        "maximum_age_seconds": 60,
+        "observed_at": "2026-09-10T15:39:36.528237Z",
+        "point_after_checkpoint_seconds": 367.721172,
+        "query_duration_seconds": 0.749137,
+        "query_started_at": "2026-09-10T15:39:35.779017Z",
+        "reason": "accepted",
+        "recovery_point_age_seconds": 17.158766,
+        "status": "accepted",
+        "wait_elapsed_seconds": 281.522953
+      }
+    ],
+    "status": "accepted"
+  },
+  "raw_database_rows_persisted": false,
+  "reassessment": {
+    "assessed_at": "2026-09-10T16:18:53.248290Z",
+    "measurements_changed": false,
+    "new_recovery_run": false,
+    "source_observation": {
+      "application_restoration_checks": [
+        {
+          "application_restoration": {
+            "groups": [
+              [
+                "azn-server"
+              ],
+              [
+                "customer",
+                "account",
+                "creditscore",
+                "chatbot"
+              ],
+              [
+                "transfer",
+                "checks"
+              ],
+              [
+                "testrunner"
+              ]
+            ],
+            "services": {
+              "account": {
+                "elapsed_seconds": 105.587661,
+                "finished_at": "2026-09-10T15:43:02.332753Z",
+                "started_at": "2026-09-10T15:41:16.745303Z",
+                "status": "ready"
+              },
+              "azn-server": {
+                "elapsed_seconds": 95.141198,
+                "finished_at": "2026-09-10T15:41:15.080573Z",
+                "started_at": "2026-09-10T15:39:39.939519Z",
+                "status": "ready"
+              },
+              "chatbot": {
+                "elapsed_seconds": 107.402921,
+                "finished_at": "2026-09-10T15:43:07.365242Z",
+                "started_at": "2026-09-10T15:41:19.962521Z",
+                "status": "ready"
+              },
+              "checks": {
+                "elapsed_seconds": 65.37606,
+                "finished_at": "2026-09-10T15:44:14.568468Z",
+                "started_at": "2026-09-10T15:43:09.192570Z",
+                "status": "ready"
+              },
+              "creditscore": {
+                "elapsed_seconds": 106.530485,
+                "finished_at": "2026-09-10T15:43:04.957589Z",
+                "started_at": "2026-09-10T15:41:18.427314Z",
+                "status": "ready"
+              },
+              "customer": {
+                "elapsed_seconds": 104.594399,
+                "finished_at": "2026-09-10T15:42:59.674868Z",
+                "started_at": "2026-09-10T15:41:15.080622Z",
+                "status": "ready"
+              },
+              "testrunner": {
+                "elapsed_seconds": 65.47906,
+                "finished_at": "2026-09-10T15:45:20.047468Z",
+                "started_at": "2026-09-10T15:44:14.568511Z",
+                "status": "ready"
+              },
+              "transfer": {
+                "elapsed_seconds": 64.657155,
+                "finished_at": "2026-09-10T15:44:12.022338Z",
+                "started_at": "2026-09-10T15:43:07.365289Z",
+                "status": "ready"
+              }
+            },
+            "strategy": "dependency-groups",
+            "timing_scope": "scale-up request through readiness observation and checkpoint; observation may lag pod readiness"
+          },
+          "errors": [],
+          "remaining_stopped_services": [],
+          "status": "restored"
+        },
+        {
+          "application_restoration": {
+            "groups": [
+              [
+                "azn-server"
+              ],
+              [
+                "customer",
+                "account",
+                "creditscore",
+                "chatbot"
+              ],
+              [
+                "transfer",
+                "checks"
+              ],
+              [
+                "testrunner"
+              ]
+            ],
+            "services": {},
+            "strategy": "dependency-groups",
+            "timing_scope": "scale-up request through readiness observation and checkpoint; observation may lag pod readiness"
+          },
+          "errors": [],
+          "remaining_stopped_services": [],
+          "status": "restored"
+        }
+      ],
+      "backup": {
+        "endTime": "2026-09-10T15:34:44.751Z",
+        "id": "1789054393461",
+        "instance": "cloudbank-ms67-postgres",
+        "managed_backup_bytes_sha256": null,
+        "metadata_sha256": "8a583a8f9b4051cb10934d61bafffe1806950a9a43664b6c1c24e8c04ba7fbe7",
+        "retained": true,
+        "startTime": "2026-09-10T15:33:13.466Z",
+        "status": "SUCCESSFUL",
+        "type": "ON_DEMAND"
+      },
+      "backup_restore": {
+        "database_rto_seconds": 455,
+        "restored_state": {
+          "databases": {
+            "cc370ea0f8bd857ce6af71e0f7fdc1b13c04c33296b875f96568daa2ec2b7de9": {
+              "row_count": 6061,
+              "sequence_count": 3,
+              "state_sha256": "606b1b885fa1a016a8cd525e1e1291b517b06d45c740414db1fec53d944b96e8",
+              "table_count": 8
+            }
+          },
+          "state_sha256": "168a0ade3b0447e61d24f8cd966b1688b6f45c77bfe7a66aebe1ee24cbcda7c3"
+        },
+        "rto_within_limit": true,
+        "state_matches": true,
+        "timing_scope": "restore into an existing isolated instance through database state validation"
+      },
+      "bindings": {
+        "environment": {
+          "cluster": "cloudbank-ms67",
+          "namespace": "cloudbank-ms67",
+          "namespace_uid_sha256": "0a397f173a1dfab91edeebc3d91bbfa1a3e0dd39caa086df1ff6f92822f71fff",
+          "project": "lightyear-ms67-nonproduction",
+          "region": "us-west1"
+        },
+        "images_sha256": "58472577e687bc8887168960f60ad6dcf82a918fcd4d90c399cc8e26d36db4b7",
+        "journeys_content_sha256": "be1d7779a0faae838d94cac8c618a185bb4a1d75e2aaea0b4638aafb669e6882"
+      },
+      "checkpoint": {
+        "databases": {
+          "cc370ea0f8bd857ce6af71e0f7fdc1b13c04c33296b875f96568daa2ec2b7de9": {
+            "row_count": 6061,
+            "sequence_count": 3,
+            "state_sha256": "606b1b885fa1a016a8cd525e1e1291b517b06d45c740414db1fec53d944b96e8",
+            "table_count": 8
+          }
+        },
+        "state_sha256": "168a0ade3b0447e61d24f8cd966b1688b6f45c77bfe7a66aebe1ee24cbcda7c3"
+      },
+      "checkpoint_captured_at": "2026-09-10T15:33:11.648299Z",
+      "content_sha256": "96e8efcffb192bcad2c6d53c9d54b475908d10c67cb4c3a192c2ca12ccf1161d",
+      "coverage": {
+        "database_count": 1,
+        "database_names_sha256": "960cb9c450e6ed3e54b11bc8943e2a7e162be6ff19193babe9e5889c351a9b75",
+        "scope": "all persistent tables and sequences in configured application databases; no roles, grants, large objects or application failover",
+        "services_with_datasource": [
+          "azn-server",
+          "customer",
+          "account",
+          "checks",
+          "testrunner"
+        ]
+      },
+      "credentials_persisted": false,
+      "finished_at": "2026-09-10T15:59:44.470066Z",
+      "ms65_complete": false,
+      "ms66_complete": false,
+      "ms67_complete": false,
+      "observation_type": "lightyear-cloudbank-isolated-sql-recovery",
+      "phases": [
+        {
+          "elapsed_seconds": 53.538657,
+          "finished_at": "2026-09-10T15:32:14.772607Z",
+          "phase": "source-preflight",
+          "started_at": "2026-09-10T15:31:21.234038Z",
+          "status": "completed"
+        },
+        {
+          "elapsed_seconds": 6.446318,
+          "finished_at": "2026-09-10T15:32:09.989844Z",
+          "phase": "probe-pool-preparation",
+          "started_at": "2026-09-10T15:32:03.543678Z",
+          "status": "completed"
+        },
+        {
+          "elapsed_seconds": 2.26573,
+          "finished_at": "2026-09-10T15:32:12.258367Z",
+          "phase": "snapshot-network-binding",
+          "started_at": "2026-09-10T15:32:09.992720Z",
+          "status": "completed"
+        },
+        {
+          "elapsed_seconds": 2.510157,
+          "finished_at": "2026-09-10T15:32:14.770287Z",
+          "phase": "snapshot-data-validation",
+          "started_at": "2026-09-10T15:32:12.260209Z",
+          "status": "completed"
+        },
+        {
+          "elapsed_seconds": 56.873249,
+          "finished_at": "2026-09-10T15:33:11.647251Z",
+          "phase": "source-checkpoint",
+          "started_at": "2026-09-10T15:32:14.774090Z",
+          "status": "completed"
+        },
+        {
+          "elapsed_seconds": 0.584491,
+          "finished_at": "2026-09-10T15:33:09.391869Z",
+          "phase": "snapshot-network-binding",
+          "started_at": "2026-09-10T15:33:08.807465Z",
+          "status": "completed"
+        },
+        {
+          "elapsed_seconds": 2.251346,
+          "finished_at": "2026-09-10T15:33:11.645402Z",
+          "phase": "snapshot-data-validation",
+          "started_at": "2026-09-10T15:33:09.394125Z",
+          "status": "completed"
+        },
+        {
+          "elapsed_seconds": 2.121159,
+          "finished_at": "2026-09-10T15:33:13.769525Z",
+          "phase": "backup-submit",
+          "started_at": "2026-09-10T15:33:11.648384Z",
+          "status": "completed"
+        },
+        {
+          "elapsed_seconds": 98.168555,
+          "finished_at": "2026-09-10T15:34:51.938301Z",
+          "phase": "backup-completion",
+          "started_at": "2026-09-10T15:33:13.769891Z",
+          "status": "completed"
+        },
+        {
+          "elapsed_seconds": 3.063675,
+          "finished_at": "2026-09-10T15:34:55.002800Z",
+          "phase": "source-stability-recheck",
+          "started_at": "2026-09-10T15:34:51.939150Z",
+          "status": "completed"
+        },
+        {
+          "elapsed_seconds": 0.595845,
+          "finished_at": "2026-09-10T15:34:52.535269Z",
+          "phase": "snapshot-network-binding",
+          "started_at": "2026-09-10T15:34:51.939505Z",
+          "status": "completed"
+        },
+        {
+          "elapsed_seconds": 2.462387,
+          "finished_at": "2026-09-10T15:34:55.000224Z",
+          "phase": "snapshot-data-validation",
+          "started_at": "2026-09-10T15:34:52.537920Z",
+          "status": "completed"
+        },
+        {
+          "elapsed_seconds": 281.525047,
+          "finished_at": "2026-09-10T15:39:36.529247Z",
+          "phase": "recovery-point-selection",
+          "started_at": "2026-09-10T15:34:55.004539Z",
+          "status": "completed"
+        },
+        {
+          "elapsed_seconds": 3.408781,
+          "finished_at": "2026-09-10T15:39:39.938498Z",
+          "phase": "pitr-submit",
+          "started_at": "2026-09-10T15:39:36.529734Z",
+          "status": "completed"
+        },
+        {
+          "elapsed_seconds": 376.332106,
+          "finished_at": "2026-09-10T15:45:56.270683Z",
+          "phase": "application-restoration-after-clone-submit",
+          "started_at": "2026-09-10T15:39:39.939061Z",
+          "status": "completed"
+        },
+        {
+          "elapsed_seconds": 236.414678,
+          "finished_at": "2026-09-10T15:49:52.690631Z",
+          "phase": "pitr-clone-completion",
+          "started_at": "2026-09-10T15:45:56.276247Z",
+          "status": "completed"
+        },
+        {
+          "elapsed_seconds": 4.858713,
+          "finished_at": "2026-09-10T15:49:57.550537Z",
+          "phase": "pitr-validation",
+          "started_at": "2026-09-10T15:49:52.691839Z",
+          "status": "completed"
+        },
+        {
+          "elapsed_seconds": 2.084376,
+          "finished_at": "2026-09-10T15:49:54.776962Z",
+          "phase": "snapshot-network-binding",
+          "started_at": "2026-09-10T15:49:52.692644Z",
+          "status": "completed"
+        },
+        {
+          "elapsed_seconds": 2.769042,
+          "finished_at": "2026-09-10T15:49:57.548274Z",
+          "phase": "snapshot-data-validation",
+          "started_at": "2026-09-10T15:49:54.779284Z",
+          "status": "completed"
+        },
+        {
+          "elapsed_seconds": 0.646865,
+          "finished_at": "2026-09-10T15:49:58.200655Z",
+          "phase": "backup-restore-target-check",
+          "started_at": "2026-09-10T15:49:57.553817Z",
+          "status": "completed"
+        },
+        {
+          "elapsed_seconds": 0.995118,
+          "finished_at": "2026-09-10T15:49:59.196793Z",
+          "phase": "backup-restore-submit",
+          "started_at": "2026-09-10T15:49:58.201691Z",
+          "status": "completed"
+        },
+        {
+          "elapsed_seconds": 449.827059,
+          "finished_at": "2026-09-10T15:57:29.022797Z",
+          "phase": "backup-restore-completion",
+          "started_at": "2026-09-10T15:49:59.197448Z",
+          "status": "completed"
+        },
+        {
+          "elapsed_seconds": 3.809757,
+          "finished_at": "2026-09-10T15:57:32.833948Z",
+          "phase": "backup-restore-validation",
+          "started_at": "2026-09-10T15:57:29.024234Z",
+          "status": "completed"
+        },
+        {
+          "elapsed_seconds": 0.685479,
+          "finished_at": "2026-09-10T15:57:30.355946Z",
+          "phase": "snapshot-network-binding",
+          "started_at": "2026-09-10T15:57:29.670549Z",
+          "status": "completed"
+        },
+        {
+          "elapsed_seconds": 2.472029,
+          "finished_at": "2026-09-10T15:57:32.831072Z",
+          "phase": "snapshot-data-validation",
+          "started_at": "2026-09-10T15:57:30.359133Z",
+          "status": "completed"
+        },
+        {
+          "elapsed_seconds": 36.215815,
+          "finished_at": "2026-09-10T15:58:09.051058Z",
+          "phase": "cleanup-application-restoration",
+          "started_at": "2026-09-10T15:57:32.835412Z",
+          "status": "completed"
+        },
+        {
+          "elapsed_seconds": 95.413062,
+          "finished_at": "2026-09-10T15:59:44.469369Z",
+          "phase": "cleanup-isolated-resource-cleanup",
+          "started_at": "2026-09-10T15:58:09.056478Z",
+          "status": "completed"
+        }
+      ],
+      "pitr": {
+        "database_rto_seconds": 622,
+        "incident_declared_at": "2026-09-10T15:39:36.528237Z",
+        "point_in_time": "2026-09-10T15:39:19.369471316Z",
+        "recovery_point_age_seconds": 18,
+        "restored_state": {
+          "databases": {
+            "cc370ea0f8bd857ce6af71e0f7fdc1b13c04c33296b875f96568daa2ec2b7de9": {
+              "row_count": 6061,
+              "sequence_count": 3,
+              "state_sha256": "606b1b885fa1a016a8cd525e1e1291b517b06d45c740414db1fec53d944b96e8",
+              "table_count": 8
+            }
+          },
+          "state_sha256": "168a0ade3b0447e61d24f8cd966b1688b6f45c77bfe7a66aebe1ee24cbcda7c3"
+        },
+        "rpo_within_limit": true,
+        "rto_within_limit": false,
+        "state_matches": true
+      },
+      "pitr_preflight": {
+        "attempt_count": 27,
+        "recent_observations": [
+          {
+            "attempt": 23,
+            "checkpoint_captured_at": "2026-09-10T15:33:11.648299Z",
+            "latest_recovery_time": "2026-09-10T15:33:03.736105148Z",
+            "maximum_age_seconds": 60,
+            "observed_at": "2026-09-10T15:38:53.604137Z",
+            "point_after_checkpoint_seconds": -7.912194,
+            "query_duration_seconds": 0.715601,
+            "query_started_at": "2026-09-10T15:38:52.888458Z",
+            "reason": "point-precedes-checkpoint",
+            "recovery_point_age_seconds": 349.868032,
+            "status": "waiting",
+            "wait_elapsed_seconds": 238.598802
+          },
+          {
+            "attempt": 24,
+            "checkpoint_captured_at": "2026-09-10T15:33:11.648299Z",
+            "latest_recovery_time": "2026-09-10T15:33:03.736105148Z",
+            "maximum_age_seconds": 60,
+            "observed_at": "2026-09-10T15:39:04.293842Z",
+            "point_after_checkpoint_seconds": -7.912194,
+            "query_duration_seconds": 0.683569,
+            "query_started_at": "2026-09-10T15:39:03.610193Z",
+            "reason": "point-precedes-checkpoint",
+            "recovery_point_age_seconds": 360.557737,
+            "status": "waiting",
+            "wait_elapsed_seconds": 249.288519
+          },
+          {
+            "attempt": 25,
+            "checkpoint_captured_at": "2026-09-10T15:33:11.648299Z",
+            "latest_recovery_time": "2026-09-10T15:33:03.736105148Z",
+            "maximum_age_seconds": 60,
+            "observed_at": "2026-09-10T15:39:15.044399Z",
+            "point_after_checkpoint_seconds": -7.912194,
+            "query_duration_seconds": 0.744211,
+            "query_started_at": "2026-09-10T15:39:14.300113Z",
+            "reason": "point-precedes-checkpoint",
+            "recovery_point_age_seconds": 371.308294,
+            "status": "waiting",
+            "wait_elapsed_seconds": 260.039089
+          },
+          {
+            "attempt": 26,
+            "checkpoint_captured_at": "2026-09-10T15:33:11.648299Z",
+            "latest_recovery_time": "2026-09-10T15:33:03.736105148Z",
+            "maximum_age_seconds": 60,
+            "observed_at": "2026-09-10T15:39:25.772979Z",
+            "point_after_checkpoint_seconds": -7.912194,
+            "query_duration_seconds": 0.722458,
+            "query_started_at": "2026-09-10T15:39:25.050462Z",
+            "reason": "point-precedes-checkpoint",
+            "recovery_point_age_seconds": 382.036874,
+            "status": "waiting",
+            "wait_elapsed_seconds": 270.767682
+          },
+          {
+            "attempt": 27,
+            "checkpoint_captured_at": "2026-09-10T15:33:11.648299Z",
+            "latest_recovery_time": "2026-09-10T15:39:19.369471316Z",
+            "maximum_age_seconds": 60,
+            "observed_at": "2026-09-10T15:39:36.528237Z",
+            "point_after_checkpoint_seconds": 367.721172,
+            "query_duration_seconds": 0.749137,
+            "query_started_at": "2026-09-10T15:39:35.779017Z",
+            "reason": "accepted",
+            "recovery_point_age_seconds": 17.158766,
+            "status": "accepted",
+            "wait_elapsed_seconds": 281.522953
+          }
+        ],
+        "status": "accepted"
+      },
+      "raw_database_rows_persisted": false,
+      "recovery": {
+        "errors": [],
+        "remaining_stopped_services": [],
+        "status": "restored",
+        "validation_instance_deleted": true,
+        "validation_instance_state": "deleted"
+      },
+      "run_id": "sql-recovery-46f6b351c3324b8db4b131ee8c21a5ad",
+      "signature": {
+        "algorithm": "hmac-sha256",
+        "signer": "howard.weale@gmail.com",
+        "value": "f89083619461dd9a98e3d250afd5816082ced8af029e11bec1910edca8a396a4"
+      },
+      "source": "cloudbank-ms67-postgres",
+      "status": "failed",
+      "target": "ly-sql-restore-65e8b67fe23d78cf474b",
+      "timing_scope": "database provisioning through read-only state validation; application failover not exercised",
+      "workload_scope": "quiesced synthetic checkpoint; continuous-write RPO not demonstrated"
+    },
+    "source_observation_sha256": "96e8efcffb192bcad2c6d53c9d54b475908d10c67cb4c3a192c2ca12ccf1161d",
+    "type": "authorized-nonproduction-rto-reassessment"
+  },
+  "recovery": {
+    "errors": [],
+    "remaining_stopped_services": [],
+    "status": "restored",
+    "validation_instance_deleted": true,
+    "validation_instance_state": "deleted"
+  },
+  "run_id": "sql-recovery-46f6b351c3324b8db4b131ee8c21a5ad",
+  "signature": {
+    "algorithm": "hmac-sha256",
+    "signer": "howard.weale@gmail.com",
+    "value": "d8fbe0850f01bb670072988f50b9eb967421e7e00826f9cbef7d3a970d4a590a"
+  },
+  "source": "cloudbank-ms67-postgres",
+  "status": "passed-isolated-database-recovery",
+  "target": "ly-sql-restore-65e8b67fe23d78cf474b",
+  "timing_scope": "database provisioning through read-only state validation; application failover not exercised",
+  "workload_scope": "quiesced synthetic checkpoint; continuous-write RPO not demonstrated"
+}

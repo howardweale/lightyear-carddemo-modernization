@@ -25,7 +25,7 @@ BRAND_ROOT = ROOT / "brand"
 BRAND_ASSETS = BRAND_ROOT / "assets"
 BRAND_LOGO_SVG = BRAND_ASSETS / "lightyear-primary.svg"
 BRAND_LOGO_PNG = BRAND_ASSETS / "lightyear-primary.png"
-GENERATOR_VERSION = "1.18"
+GENERATOR_VERSION = "1.19"
 REPOSITORY = "howardweale/lightyear-carddemo-modernization"
 DEFAULT_BRANCH = "main"
 GITHUB_BLOB_ROOT = f"https://github.com/{REPOSITORY}/blob/{DEFAULT_BRANCH}"
@@ -164,6 +164,12 @@ def markdown_text(model: dict[str, Any], audience: str) -> str:
         "delivery, security, and assurance teams can review the same record.", "",
         "## What the milestone delivers", "",
     ]
+    if model.get("execution_receipts"):
+        insertion = lines.index("## What the milestone delivers")
+        evidence = ["## Published execution result", "", model["execution_summary"], ""]
+        evidence.extend(f"- [Original signed receipt {i}]({github_blob(path)})" for i, path in enumerate(model["execution_receipts"], 1))
+        evidence.extend(["- [Full MS54–67 execution evidence index](https://howardweale.github.io/lightyear-carddemo-modernization/receipts/)", ""])
+        lines[insertion:insertion] = evidence
     lines.extend(f"- {item}" for item in model["deliverables"])
     lines.extend([
         "", "## How it differs from earlier work", "", model["relationship"], "",
@@ -209,6 +215,26 @@ def set_run_font(run: Any, name: str = "Arial") -> None:
     fonts = run._element.get_or_add_rPr().get_or_add_rFonts()
     fonts.set(qn("w:ascii"), name)
     fonts.set(qn("w:hAnsi"), name)
+
+
+def add_execution_links(document: Any, model: dict[str, Any]) -> None:
+    from docx.oxml import OxmlElement
+    from docx.oxml.ns import qn
+    from docx.opc.constants import RELATIONSHIP_TYPE
+    document.add_heading("Published execution result", level=1)
+    document.add_paragraph(model["execution_summary"])
+    links = [(f"Original signed receipt {i}", github_blob(path)) for i, path in enumerate(model["execution_receipts"], 1)]
+    links.append(("Full MS54–67 execution evidence index", "https://howardweale.github.io/lightyear-carddemo-modernization/receipts/"))
+    for label, url in links:
+        paragraph = document.add_paragraph()
+        hyperlink = OxmlElement("w:hyperlink")
+        hyperlink.set(qn("r:id"), paragraph.part.relate_to(url, RELATIONSHIP_TYPE.HYPERLINK, is_external=True))
+        run = OxmlElement("w:r")
+        properties = OxmlElement("w:rPr")
+        color = OxmlElement("w:color"); color.set(qn("w:val"), "6942D6"); properties.append(color)
+        run.append(properties)
+        text = OxmlElement("w:t"); text.text = label; run.append(text)
+        hyperlink.append(run); paragraph._p.append(hyperlink)
 
 
 def set_table_geometry(table: Any, widths: list[int], indent: int = 120) -> None:
@@ -399,6 +425,8 @@ def build_docx(model: dict[str, Any], audience: str, output: Path) -> None:
         ("Boundaries and claims not made", model["boundaries"], True),
         ("Source of record", [f"CHANGELOG.md release section(s): {model['release']}", "README.md product and operating guidance", "LIGHTYEAR-ROADMAP.md governing sequence and claim classifications", "docs/milestones/catalog.json metadata and docs/milestones/manifest.json artifact integrity"], True),
     ]
+    if model.get("execution_receipts"):
+        add_execution_links(document, model)
     for heading, values, bullets in content:
         document.add_heading(heading, level=1)
         for value in values:
@@ -468,6 +496,11 @@ def build_pdf(model: dict[str, Any], audience: str, output: Path) -> None:
         ("Boundaries and claims not made", model["boundaries"], True),
         ("Source of record", [f"CHANGELOG.md release section(s): {model['release']}", "README.md product and operating guidance", "LIGHTYEAR-ROADMAP.md governing sequence and claim classifications", "docs/milestones/catalog.json metadata and docs/milestones/manifest.json artifact integrity"], True),
     ]
+    if model.get("execution_receipts"):
+        story.append(KeepTogether([Paragraph("Published execution result", heading), Paragraph(safe(model["execution_summary"]), body)]))
+        for i, path in enumerate(model["execution_receipts"], 1):
+            story.append(Paragraph(f'<link href="{github_blob(path)}" color="#6942d6">Original signed receipt {i}</link>', body))
+        story.append(Paragraph('<link href="https://howardweale.github.io/lightyear-carddemo-modernization/receipts/" color="#6942d6">Full MS54–67 execution evidence index</link>', body))
     for title, values, bullets in content:
         item_style = bullet if bullets else body
         first, *remaining = values
@@ -540,7 +573,7 @@ def write_html_index(models: list[dict[str, Any]]) -> None:
             f'''<tr class="milestone" data-phase="{phase_value}" data-search="{html.escape(searchable, quote=True)}">
               <td class="number"><span>MS #{model['number']:02d}</span></td>
               <td><a class="title" href="{markdown}">{html.escape(model['title'])}</a><p>{html.escape(model['customer_value'])}</p></td>
-              <td class="phase"><span>{phase_label}</span><small>{html.escape(model['release'])}</small></td>
+              <td class="phase"><span>{phase_label}</span><small>{html.escape(model['release'])}</small><small>{html.escape(model['status'])}</small>{f'<a href="../receipts/#ms{model["number"]}">Execution receipts</a>' if model.get('execution_receipts') else ''}</td>
               <td class="formats"><a href="{markdown}">Read</a><a href="{pdf}">PDF</a><a href="{word}" download>Word</a></td>
             </tr>'''
         )

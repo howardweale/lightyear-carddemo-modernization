@@ -88,5 +88,11 @@ script is undocumented, and that every POSIX entry point has a PowerShell twin.
   `verify-comparison-source IDEMPIERE_ROOT` also replays every pair from the exact clean source pin.
   Known client/registration commands are counted outside the SQL coverage denominator. Unresolved
   constructs remain findings; none of these commands calls agents or executes SQL.
+- `./idempiere-divergence-audit.sh triage` builds the MS #70 deterministic twenty-case work package,
+  safe-floor role-contract calibration and evidence registers. `verify-triage` checks committed
+  derivation and claim boundaries; `verify-triage-source IDEMPIERE_ROOT` additionally replays the
+  exact source and bounded context windows. These release commands call no model and no Builder.
+  Credentialed `run-triage` is an explicit Python-controller action requiring an output path,
+  current nonzero model pricing and `OPENAI_API_KEY`; it never rewrites committed evidence.
 
 See `scripts.catalog.json` for the exact purpose, role, and verification owner of all entry points.

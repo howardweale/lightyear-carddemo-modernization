@@ -131,6 +131,8 @@ if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 & (Join-Path $ProjectDir "idempiere-divergence-audit.ps1") verify-comparison
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+& (Join-Path $ProjectDir "idempiere-divergence-audit.ps1") verify-triage
+if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
 & (Join-Path $ProjectDir "source-only-pilot.ps1") verify
 if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

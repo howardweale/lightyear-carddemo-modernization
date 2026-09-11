@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.70.0 — 2026-09-11
+
+- Completed the deterministic MS #70 bounded-triage package over the unchanged 1,078-pair MS #69
+  report. Selected 20 unique flagged pairs: one admissible pilot case and one remaining-estate case
+  for each of ten repeated reason strata.
+- Added audit-specific Planner and Analyst structured-output contracts. Each role is limited to 20
+  calls, 60,000 input tokens and 25,000 output tokens per call, 80,000-byte case context, and an
+  aggregate USD 200 ceiling. Builder remains absent; deterministic verification is authoritative.
+- Bound every case to the MS #68 source paths and logical hashes and to the MS #69 result hash.
+  Source-bound verification hydrates only implicated ranges plus two context lines, caps each
+  dialect excerpt at 48 lines, and replays the exact clean source pin.
+- Published the full 1,077-pair indeterminate register, zero-entry divergence register, sampled
+  provenance register, denominator/coverage artifact, safe-floor calibration, work package, policy,
+  schema and content-addressed receipt.
+- Preserved the claim boundary: committed model calls and Builder calls are zero, the calibration
+  is not live-model performance, all 1,077 flagged semantic verdicts remain indeterminate, per-pair
+  maintenance provenance is unclassified, and audit/native/application/production claims are false.
+- Added explicit live-run plumbing for a cheap Planner and strong Analyst with token preflight and
+  mandatory current pricing inputs, plus offline/source-bound commands and adversarial tests. No
+  credentialed run or community contact was performed.
+- Added the MS #70 milestone brief without rewriting earlier milestone bodies or signed CloudBank
+  receipts.
+
 ## 0.69.0 — 2026-09-11
 
 - Completed the MS #69 bounded static comparison baseline against the unchanged MS #68 pin and

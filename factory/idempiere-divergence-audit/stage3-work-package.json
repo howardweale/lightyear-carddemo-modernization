@@ -1,0 +1,1116 @@
+{
+  "artifact_type": "lightyear-idempiere-triage-work-package",
+  "bindings": {
+    "implementation_logical_sha256": {
+      "src/lightyear_common/io.py": "8ead1c4e2221cca5a65b3e3ef3cb5d4a841f7d89d33f8b416357076056b3621e",
+      "src/lightyear_data/contracts.py": "a9f8cae57a0c256c3d405ec06468bc45734314b4f7692438726259e4bee56575",
+      "src/lightyear_data/idempiere_comparison.py": "c6ae90d2bfc5855377fae4c22671927c42d59b26d08b60d63bb2789bd2f026b2",
+      "src/lightyear_data/idempiere_triage.py": "576f5f0f4df7939263775afaefdd50245043ab8b57db31b808cd1459f7511450",
+      "src/lightyear_factory/contracts.py": "c25d4f549fb18179b161bf24386fe3f1f55382216cae80a7ccae4671d6537d13",
+      "src/lightyear_factory/providers.py": "f44ee1ce22fe78eb712ee16be560c8d6ef2c4ab498d9937b98dc6f1fd7b4e52d"
+    },
+    "pairing_manifest_sha256": "acf3f2b21fb2ff205028a5a9239602f497ee09f99f82feaa56368e3f74add510",
+    "schema_logical_sha256": "5826a0ef9ddeba03c3f83a965235c51aaa84d90e94478e8f541c7df4da24a586",
+    "source_commit": "731515dcdd5278b843db33b9d3109d155b881951",
+    "source_tree": "041320460a02d4ec23c837d46befa7420c162d0a",
+    "stage2_comparison_sha256": "3ac96b87608118ea31e79e22eac42bc4954eda611855a310ef3abf277c910083",
+    "stage2_receipt_sha256": "1a5db2dd371fdefba20b8fdc09fd7df630fde0493feaa421d589746e3dc1fae4",
+    "triage_policy_sha256": "66ce4d6032fa4597f2756da2f8047a76faa4a365328be755906ef892df10e57a"
+  },
+  "cases": [
+    {
+      "case_id": "ms70-01",
+      "content_identical": false,
+      "content_sha256": "1b0034dbc0a350532d873c7c84cf07789b05d124b036005b3b16949715602e19",
+      "declared_difference_count": 2,
+      "focus": {
+        "oracle": {
+          "category": "unparsed",
+          "end_line": 199,
+          "first_unit": 46,
+          "kind": "unparsed",
+          "last_unit": 46,
+          "start_line": 177,
+          "unit_hashes_sha256": "c29f82cfb0f474d8f0a01c33d757482241555ed12704b258ab4447371a0ab050"
+        },
+        "postgresql": {
+          "category": "parsed-but-indeterminate",
+          "end_line": 4,
+          "first_unit": 1,
+          "kind": "insert",
+          "last_unit": 1,
+          "start_line": 3,
+          "unit_hashes_sha256": "3d389c487d7ecd9ecf818df4e1aab15552e91e6bc869d633fe7df361cfaf7266"
+        }
+      },
+      "ordered_effects_aligned": true,
+      "pair_id": "pair:041a57766aae7b9b1dd65f39849f5b6be340e9fd8a58dd9ec1f445310d78abd9",
+      "reason_codes": [
+        "default-coercion-context-required",
+        "dml-schema-trigger-and-coercion-context-required",
+        "expression-requires-dialect-or-session-semantics",
+        "procedural-block",
+        "unbounded-or-nonportable-numeric-domain",
+        "unsupported-syntax"
+      ],
+      "scope": "order-to-cash-pilot",
+      "source": {
+        "oracle": {
+          "lines": 203,
+          "logical_sha256": "dafca1715105106e9eeff40d41837ab107032d612a91b0c22a0c67acbbc10b91",
+          "path": "migration/i4.1/oracle/201701131446_IDEMPIERE-3279.sql"
+        },
+        "postgresql": {
+          "lines": 200,
+          "logical_sha256": "13d27d0e1e963368764bafc0c8ea51c0289b323ed7dfb22122405a21b4f88a84",
+          "path": "migration/i4.1/postgresql/201701131446_IDEMPIERE-3279.sql"
+        }
+      },
+      "stage2_compatibility_class": "unsupported",
+      "stage2_result_sha256": "51702bc7aa5ed6252ab2c55cba60cc0c2cdcaa08b90e6ff0bb3cff118dadf52e",
+      "stage2_verdict": "indeterminate",
+      "stratum": "procedural-block",
+      "stratum_reason_code": "procedural-block"
+    },
+    {
+      "case_id": "ms70-02",
+      "content_identical": false,
+      "content_sha256": "9e95417bf72e1c1e6ea8429f465d345bf50f7d6f5e56fee00f41fd473f56f22b",
+      "declared_difference_count": 0,
+      "focus": {
+        "oracle": {
+          "category": "unparsed",
+          "end_line": 255,
+          "first_unit": 57,
+          "kind": "unparsed",
+          "last_unit": 57,
+          "start_line": 245,
+          "unit_hashes_sha256": "f360afe52e615253ad8bd0ac77c6b9a68af0df3f4a5ce836fc0d5c5b05363fb8"
+        },
+        "postgresql": {
+          "category": "parsed-but-indeterminate",
+          "end_line": 29,
+          "first_unit": 1,
+          "kind": "update",
+          "last_unit": 4,
+          "start_line": 2,
+          "unit_hashes_sha256": "8218e7342c60d80a865bf5301daf7903ad922de9eb75988e6bee484fd980e6d7"
+        }
+      },
+      "ordered_effects_aligned": false,
+      "pair_id": "pair:9d5997aaf2d45e0e158d6e0fd74f75fd095cd9d64d1ec85426f927f59d994280",
+      "reason_codes": [
+        "dml-schema-trigger-and-coercion-context-required",
+        "expression-requires-dialect-or-session-semantics",
+        "ordered-effect-alignment-required",
+        "procedural-block",
+        "unconsumed-syntax",
+        "unsupported-syntax"
+      ],
+      "scope": "remaining-current-pairs",
+      "source": {
+        "oracle": {
+          "lines": 263,
+          "logical_sha256": "1a8d89fa68eba42e124eb0e471e31c7d3d1bee5a3bdd723914bb46d2a1bdfe13",
+          "path": "migration/i8.2z/oracle/202105091048_IDEMPIERE-4771.sql"
+        },
+        "postgresql": {
+          "lines": 266,
+          "logical_sha256": "b31ed875e1bbb2530fbd63ff72f3b85b97b627ea99a142d8e22824a62fa095dd",
+          "path": "migration/i8.2z/postgresql/202105091048_IDEMPIERE-4771.sql"
+        }
+      },
+      "stage2_compatibility_class": "unsupported",
+      "stage2_result_sha256": "afa0ca920af2ebbd83c8050f521da505c53506d2fe5b947d6554ff9f18369114",
+      "stage2_verdict": "indeterminate",
+      "stratum": "procedural-block",
+      "stratum_reason_code": "procedural-block"
+    },
+    {
+      "case_id": "ms70-03",
+      "content_identical": false,
+      "content_sha256": "16d77fbe92ddc876dfedd2a88e2e02a8ecc8dd26faafb89d1a57997dac41205d",
+      "declared_difference_count": 0,
+      "focus": {
+        "oracle": {
+          "category": "parsed-but-indeterminate",
+          "end_line": 7,
+          "first_unit": 3,
+          "kind": "insert",
+          "last_unit": 3,
+          "start_line": 6,
+          "unit_hashes_sha256": "a2facf2ce3d2d0a5cd96b0a4798778fd4d9da96e4c4038c5a4ce4141fb45e982"
+        },
+        "postgresql": {
+          "category": "parsed-but-indeterminate",
+          "end_line": 4,
+          "first_unit": 1,
+          "kind": "insert",
+          "last_unit": 1,
+          "start_line": 3,
+          "unit_hashes_sha256": "2aec6310b0302dee85c2fa8130bf82c77c6ec0b80eee866c661db15f51eae681"
+        }
+      },
+      "ordered_effects_aligned": false,
+      "pair_id": "pair:58f3d9ef89a8c362b965025aee050c6fc8da6a9c93a29c9ed37c9b0c5d970d24",
+      "reason_codes": [
+        "dml-schema-trigger-and-coercion-context-required",
+        "expression-requires-dialect-or-session-semantics",
+        "ordered-effect-alignment-required",
+        "unsupported-syntax"
+      ],
+      "scope": "order-to-cash-pilot",
+      "source": {
+        "oracle": {
+          "lines": 1019,
+          "logical_sha256": "36f9a688779cdf88bf7f562acdeb553b5062a1cbd08cf031bc45d8926e070ee8",
+          "path": "migration/i7.1z/oracle/202010031628_IDEMPIERE-4297.sql"
+        },
+        "postgresql": {
+          "lines": 1016,
+          "logical_sha256": "911c7bbc7b05e70d3ca34613cbf75fa66310e2c4867e43d1715817dbeda4eacb",
+          "path": "migration/i7.1z/postgresql/202010031628_IDEMPIERE-4297.sql"
+        }
+      },
+      "stage2_compatibility_class": "unsupported",
+      "stage2_result_sha256": "f5ce45ed8e49dc3339e3aa97149c9d429236fb86f404105877e03089a4e42e7e",
+      "stage2_verdict": "indeterminate",
+      "stratum": "ordered-effect-alignment",
+      "stratum_reason_code": "ordered-effect-alignment-required"
+    },
+    {
+      "case_id": "ms70-04",
+      "content_identical": false,
+      "content_sha256": "5952badb5193e49c46d2e9054b6b06a0dc7d81d994e61562c1b74d8d9b45a1c6",
+      "declared_difference_count": 0,
+      "focus": {
+        "oracle": {
+          "category": "parsed-but-indeterminate",
+          "end_line": 7,
+          "first_unit": 3,
+          "kind": "update",
+          "last_unit": 3,
+          "start_line": 6,
+          "unit_hashes_sha256": "9e85ff19863de30cfa3c5b32b27709dff70e053984a3333e3ea7ab74f894e097"
+        },
+        "postgresql": {
+          "category": "parsed-but-indeterminate",
+          "end_line": 4,
+          "first_unit": 1,
+          "kind": "update",
+          "last_unit": 1,
+          "start_line": 3,
+          "unit_hashes_sha256": "4ec7e13880304842c0ecd352a38eead2c5a59df1200ba3a58ef8e0d15b420de0"
+        }
+      },
+      "ordered_effects_aligned": false,
+      "pair_id": "pair:5681cbe4472e30ce857c8bb49c174be1cb9971a0cbf527f75a08a9e3c8ea1d32",
+      "reason_codes": [
+        "dml-schema-trigger-and-coercion-context-required",
+        "expression-requires-dialect-or-session-semantics",
+        "helper-catalog-and-dependent-view-effects",
+        "ordered-effect-alignment-required",
+        "unsupported-data-type"
+      ],
+      "scope": "remaining-current-pairs",
+      "source": {
+        "oracle": {
+          "lines": 15,
+          "logical_sha256": "5e90e61ae9c33b43c231c4d958f82ebb3209da47d0f050348f21f63655b10d9d",
+          "path": "migration/i4.1/oracle/201702011823_IDEMPIERE-3291.sql"
+        },
+        "postgresql": {
+          "lines": 12,
+          "logical_sha256": "d5b6d91c1d52690f7ef1c88a9557f8e1b026e168b0c40737f0b66c062edf6cb6",
+          "path": "migration/i4.1/postgresql/201702011823_IDEMPIERE-3291.sql"
+        }
+      },
+      "stage2_compatibility_class": "unsupported",
+      "stage2_result_sha256": "f2ce78f221bbc3cbd6654dfc2c9e944b0c45546bedc1e777fe0c6520ef06e9b8",
+      "stage2_verdict": "indeterminate",
+      "stratum": "ordered-effect-alignment",
+      "stratum_reason_code": "ordered-effect-alignment-required"
+    },
+    {
+      "case_id": "ms70-05",
+      "content_identical": false,
+      "content_sha256": "57a662ad185eaecc3d20d81d937b8682f2e3e137f783f69c02d64c87ff690e6d",
+      "declared_difference_count": 1,
+      "focus": {
+        "oracle": {
+          "category": "parsed-but-indeterminate",
+          "end_line": 756,
+          "first_unit": 182,
+          "kind": "modify",
+          "last_unit": 182,
+          "start_line": 755,
+          "unit_hashes_sha256": "f54d54232a4c20d435722f8a9d33712c6549bc6c183f21b41cf7387a0c904eba"
+        },
+        "postgresql": {
+          "category": "parsed-but-indeterminate",
+          "end_line": 753,
+          "first_unit": 180,
+          "kind": "modify",
+          "last_unit": 180,
+          "start_line": 752,
+          "unit_hashes_sha256": "631f3087cffc8d2081f335fe7679e4acde8f33bd3aec3dfd6c7041826956d59e"
+        }
+      },
+      "ordered_effects_aligned": true,
+      "pair_id": "pair:2421edc3d29361e11d5619df9a24fdd9e9e7147d998f99570f61162fd7f9f8ec",
+      "reason_codes": [
+        "character-empty-string-length-and-collation-policy",
+        "constraint-column-domain-required",
+        "dml-schema-trigger-and-coercion-context-required",
+        "expression-requires-dialect-or-session-semantics",
+        "helper-catalog-and-dependent-view-effects",
+        "unconsumed-syntax",
+        "unsupported-column-clause",
+        "unsupported-constraint",
+        "unsupported-data-type",
+        "unsupported-syntax"
+      ],
+      "scope": "order-to-cash-pilot",
+      "source": {
+        "oracle": {
+          "lines": 958,
+          "logical_sha256": "12441ff7d638b0cb780172d812ff1588d10e6e52ebd3d9127d4ea17cc85dbcdb",
+          "path": "migration/i4.1/oracle/201704112221_IDEMPIERE-3338.sql"
+        },
+        "postgresql": {
+          "lines": 955,
+          "logical_sha256": "b1f96d3bcc03e40dc5d4bfbb661dfadb4b5fa1a8894a097f4073d1a834b4183f",
+          "path": "migration/i4.1/postgresql/201704112221_IDEMPIERE-3338.sql"
+        }
+      },
+      "stage2_compatibility_class": "unsupported",
+      "stage2_result_sha256": "5805f63f6e89c72d3ecf1c0d074a976a5b4026d555835a7f885d9b096cce89e1",
+      "stage2_verdict": "indeterminate",
+      "stratum": "helper-catalog-effects",
+      "stratum_reason_code": "helper-catalog-and-dependent-view-effects"
+    },
+    {
+      "case_id": "ms70-06",
+      "content_identical": false,
+      "content_sha256": "44542eafb48974d576f829bb91371ebe78fc18c05dc01cf56e33267b66272148",
+      "declared_difference_count": 5,
+      "focus": {
+        "oracle": {
+          "category": "parsed-but-indeterminate",
+          "end_line": 47,
+          "first_unit": 12,
+          "kind": "modify",
+          "last_unit": 13,
+          "start_line": 42,
+          "unit_hashes_sha256": "1c6e59d41fce6fdb4f6e03bd6f0ca0217b67ac1aa0b9bf1fa5bdc3c5fbbb3849"
+        },
+        "postgresql": {
+          "category": "parsed-but-indeterminate",
+          "end_line": 44,
+          "first_unit": 10,
+          "kind": "modify",
+          "last_unit": 11,
+          "start_line": 39,
+          "unit_hashes_sha256": "1f005a73d2f6864d4a30367a44ee5a0e33cd3d813b3dedfacfc84b113a66b0b9"
+        }
+      },
+      "ordered_effects_aligned": true,
+      "pair_id": "pair:441c226f9ca538a005a39f010299b393127802e7a2d5b474ddf0f9eff1c46d69",
+      "reason_codes": [
+        "character-empty-string-length-and-collation-policy",
+        "datetime-precision-range-and-zone-policy",
+        "dml-schema-trigger-and-coercion-context-required",
+        "expression-requires-dialect-or-session-semantics",
+        "helper-catalog-and-dependent-view-effects",
+        "opaque-default-expression",
+        "unconsumed-syntax"
+      ],
+      "scope": "remaining-current-pairs",
+      "source": {
+        "oracle": {
+          "lines": 119,
+          "logical_sha256": "1c13ab45ec9416e64bc64d5b2dee9ec5246280f087913cb1d9b00b888822392f",
+          "path": "migration/i4.1/oracle/201612212302_IDEMPIERE-2558.sql"
+        },
+        "postgresql": {
+          "lines": 116,
+          "logical_sha256": "b6e473013478509f04ce3ce91ad57cb38e225c8feab94cae086b7739090a7b37",
+          "path": "migration/i4.1/postgresql/201612212302_IDEMPIERE-2558.sql"
+        }
+      },
+      "stage2_compatibility_class": "unsupported",
+      "stage2_result_sha256": "2ced2d2b0855ce37fb83f6c5b7a375159459c19a3d9ba315120cbb41f2d2ca39",
+      "stage2_verdict": "indeterminate",
+      "stratum": "helper-catalog-effects",
+      "stratum_reason_code": "helper-catalog-and-dependent-view-effects"
+    },
+    {
+      "case_id": "ms70-07",
+      "content_identical": false,
+      "content_sha256": "04a5d1b421a5f80d2c8ffa01e3f6d01df9a163900dd0685627f30bc33fd48aee",
+      "declared_difference_count": 9,
+      "focus": {
+        "oracle": {
+          "category": "parsed-but-indeterminate",
+          "end_line": 12,
+          "first_unit": 4,
+          "kind": "add",
+          "last_unit": 4,
+          "start_line": 11,
+          "unit_hashes_sha256": "4de45c17dbf1be598fd9095c3ec599dd9befb510c0c12e3495bb20b52351725a"
+        },
+        "postgresql": {
+          "category": "parsed-but-indeterminate",
+          "end_line": 9,
+          "first_unit": 2,
+          "kind": "add",
+          "last_unit": 2,
+          "start_line": 8,
+          "unit_hashes_sha256": "fef4f14636b1699df2715f019f4d5c585307c915a409525b1cb986ba0a612c0c"
+        }
+      },
+      "ordered_effects_aligned": true,
+      "pair_id": "pair:aae86740497af5a70640729c60a5334886bcc64d901e79faae2ee293569bdba0",
+      "reason_codes": [
+        "character-empty-string-length-and-collation-policy",
+        "dml-schema-trigger-and-coercion-context-required",
+        "expression-requires-dialect-or-session-semantics"
+      ],
+      "scope": "order-to-cash-pilot",
+      "source": {
+        "oracle": {
+          "lines": 712,
+          "logical_sha256": "b16ea8b72edf5d64e3dcea4acd4857548965d834baf2bd4990795dc182294072",
+          "path": "migration/i4.1/oracle/201701140900_IDEMPIERE-3039.sql"
+        },
+        "postgresql": {
+          "lines": 710,
+          "logical_sha256": "836b19d995b28dd0c9361fe195130762223484ce2c7cab32dde9dbcb87fd4200",
+          "path": "migration/i4.1/postgresql/201701140900_IDEMPIERE-3039.sql"
+        }
+      },
+      "stage2_compatibility_class": "policy-decision-required",
+      "stage2_result_sha256": "f95b0487d4e95554f393d476213feab019e2da3875f07bac2ef6175ee66e90fe",
+      "stage2_verdict": "indeterminate",
+      "stratum": "character-domain",
+      "stratum_reason_code": "character-empty-string-length-and-collation-policy"
+    },
+    {
+      "case_id": "ms70-08",
+      "content_identical": false,
+      "content_sha256": "898543533a55718e8caa6464e96e593e17fe819fa3ba5068c72338b1744befe8",
+      "declared_difference_count": 1,
+      "focus": {
+        "oracle": {
+          "category": "parsed-but-indeterminate",
+          "end_line": 15,
+          "first_unit": 5,
+          "kind": "add",
+          "last_unit": 5,
+          "start_line": 14,
+          "unit_hashes_sha256": "b3b1b9ed205c0e0359001c02f9a258b72315e0e8f2dd5804c2a437f377bc673b"
+        },
+        "postgresql": {
+          "category": "parsed-but-indeterminate",
+          "end_line": 12,
+          "first_unit": 3,
+          "kind": "add",
+          "last_unit": 3,
+          "start_line": 11,
+          "unit_hashes_sha256": "70328ef5e45085c37f974c7a2086f8799d1fa94da02d4e342c2ed626de2083b0"
+        }
+      },
+      "ordered_effects_aligned": true,
+      "pair_id": "pair:6b2b4ced709b226bb9ea6821ab0fd9d50e4994cedf71914c897da73c14553eb5",
+      "reason_codes": [
+        "character-empty-string-length-and-collation-policy",
+        "dml-schema-trigger-and-coercion-context-required",
+        "expression-requires-dialect-or-session-semantics",
+        "opaque-default-expression"
+      ],
+      "scope": "remaining-current-pairs",
+      "source": {
+        "oracle": {
+          "lines": 118,
+          "logical_sha256": "bd1fb395864758c1c3ea87e0f64d96de7b4bef06529f42e586e31d450f820b5e",
+          "path": "migration/i4.1/oracle/201704201534_IDEMPIERE-3352.sql"
+        },
+        "postgresql": {
+          "lines": 117,
+          "logical_sha256": "30b5e317dea35038cfe28aa927ff5743df349220d7e8bfde5ea217f96ce19dbb",
+          "path": "migration/i4.1/postgresql/201704201534_IDEMPIERE-3352.sql"
+        }
+      },
+      "stage2_compatibility_class": "policy-decision-required",
+      "stage2_result_sha256": "f7f409526583b07e3a080ea323ea537b99827a87dc83a1c37c50ae24314b24c4",
+      "stage2_verdict": "indeterminate",
+      "stratum": "character-domain",
+      "stratum_reason_code": "character-empty-string-length-and-collation-policy"
+    },
+    {
+      "case_id": "ms70-09",
+      "content_identical": false,
+      "content_sha256": "e136cd5d1b2e7381f29ef4680634442f0854911e5917130dce2aebc632e00a74",
+      "declared_difference_count": 0,
+      "focus": {
+        "oracle": {
+          "category": "parsed-but-indeterminate",
+          "end_line": 11,
+          "first_unit": 4,
+          "kind": "add",
+          "last_unit": 4,
+          "start_line": 10,
+          "unit_hashes_sha256": "f62a7623b403d5f9eb4d1389a9dab69aae59f6d80e34f70fec1b511051d978f4"
+        },
+        "postgresql": {
+          "category": "parsed-but-indeterminate",
+          "end_line": 8,
+          "first_unit": 2,
+          "kind": "add",
+          "last_unit": 2,
+          "start_line": 7,
+          "unit_hashes_sha256": "27baec46a9e03d715432e3c85dad53dba3ccbf18922460745098c3a0cc0f1fcc"
+        }
+      },
+      "ordered_effects_aligned": true,
+      "pair_id": "pair:e26ab6b320af10860ae3187b8d23fbc2687720656912c4002e4a5370652d8022",
+      "reason_codes": [
+        "dml-schema-trigger-and-coercion-context-required",
+        "expression-requires-dialect-or-session-semantics",
+        "unbounded-or-nonportable-numeric-domain"
+      ],
+      "scope": "order-to-cash-pilot",
+      "source": {
+        "oracle": {
+          "lines": 45,
+          "logical_sha256": "a2d8e461f424e3d597acb54d84ab797cc4f9f64cae20ee7ddb3a001f70f2ceb7",
+          "path": "migration/i7.1z/oracle/202007211800_IDEMPIERE-4083.sql"
+        },
+        "postgresql": {
+          "lines": 42,
+          "logical_sha256": "fd1fad700ff85ac5dee541b84a933f7b46a675a5d310ff3d67fa9ed36963a921",
+          "path": "migration/i7.1z/postgresql/202007211800_IDEMPIERE-4083.sql"
+        }
+      },
+      "stage2_compatibility_class": "policy-decision-required",
+      "stage2_result_sha256": "58f91ff17a858598159b4aad7326405284c918f22d2e6089b19eb9ba6683ce24",
+      "stage2_verdict": "indeterminate",
+      "stratum": "numeric-domain",
+      "stratum_reason_code": "unbounded-or-nonportable-numeric-domain"
+    },
+    {
+      "case_id": "ms70-10",
+      "content_identical": false,
+      "content_sha256": "f1244618a4a7bf387d0e53785ab27ccecc53a6a794e1544a1c8910be86b0f27b",
+      "declared_difference_count": 0,
+      "focus": {
+        "oracle": {
+          "category": "parsed-but-indeterminate",
+          "end_line": 15,
+          "first_unit": 5,
+          "kind": "add",
+          "last_unit": 5,
+          "start_line": 14,
+          "unit_hashes_sha256": "7a192d8bab20ee849f3e612dff4b355567184254c18ee4641d7562ed07b9a633"
+        },
+        "postgresql": {
+          "category": "parsed-but-indeterminate",
+          "end_line": 12,
+          "first_unit": 3,
+          "kind": "add",
+          "last_unit": 3,
+          "start_line": 11,
+          "unit_hashes_sha256": "8ae232660f998349931b41b72cc628551eff182d17b59ec116aac3297e1c8d98"
+        }
+      },
+      "ordered_effects_aligned": true,
+      "pair_id": "pair:ef7d9eea68bd260077eedbe9f72f46805b7e3a9652bf066c5b03826e334afc03",
+      "reason_codes": [
+        "dml-schema-trigger-and-coercion-context-required",
+        "expression-requires-dialect-or-session-semantics",
+        "unbounded-or-nonportable-numeric-domain",
+        "unsupported-syntax"
+      ],
+      "scope": "remaining-current-pairs",
+      "source": {
+        "oracle": {
+          "lines": 203,
+          "logical_sha256": "db41ac382e7ff5d4679fce0fa655930ce41d46eab61f6dcdca1dcf4edb6d96ac",
+          "path": "migration/i7.1/oracle/202009251357_IDEMPIERE-4474.sql"
+        },
+        "postgresql": {
+          "lines": 200,
+          "logical_sha256": "eb97f21fa1c53108fbf12a197342e6734338ac79783b84672b2db79b040310e1",
+          "path": "migration/i7.1/postgresql/202009251357_IDEMPIERE-4474.sql"
+        }
+      },
+      "stage2_compatibility_class": "unsupported",
+      "stage2_result_sha256": "75953307aed1dffd0e57f8abaebca021c60804ee6518db594c7239e6be74745b",
+      "stage2_verdict": "indeterminate",
+      "stratum": "numeric-domain",
+      "stratum_reason_code": "unbounded-or-nonportable-numeric-domain"
+    },
+    {
+      "case_id": "ms70-11",
+      "content_identical": false,
+      "content_sha256": "25ce8a6b5ab0aca21c966a055423a7678422fc36ebd48523295e037fec055c73",
+      "declared_difference_count": 0,
+      "focus": {
+        "oracle": {
+          "category": "parsed-but-indeterminate",
+          "end_line": 11,
+          "first_unit": 5,
+          "kind": "constraint",
+          "last_unit": 5,
+          "start_line": 10,
+          "unit_hashes_sha256": "cb0467831798d3cc212acc5b44ee1b45040fdde955dd9f785596d6345cf200da"
+        },
+        "postgresql": {
+          "category": "parsed-but-indeterminate",
+          "end_line": 8,
+          "first_unit": 3,
+          "kind": "constraint",
+          "last_unit": 3,
+          "start_line": 7,
+          "unit_hashes_sha256": "cb0467831798d3cc212acc5b44ee1b45040fdde955dd9f785596d6345cf200da"
+        }
+      },
+      "ordered_effects_aligned": true,
+      "pair_id": "pair:9cf129615316c85dd88a2c35dc3359d337c8f0bb923cdc9358fd07b06ea3579c",
+      "reason_codes": [
+        "baseline-object-required",
+        "constraint-column-domain-required",
+        "dml-schema-trigger-and-coercion-context-required",
+        "expression-requires-dialect-or-session-semantics"
+      ],
+      "scope": "order-to-cash-pilot",
+      "source": {
+        "oracle": {
+          "lines": 6938,
+          "logical_sha256": "add786eeba56879f4358895a5d074966f322a38a72e85db06a94f611ad357bbf",
+          "path": "migration/iD11/oracle/202304091547_IDEMPIERE-5567_Constraints.sql"
+        },
+        "postgresql": {
+          "lines": 6935,
+          "logical_sha256": "7a5fa9e80353a89a5784be76ab8b3092bf39dd07c0d8a0482afb9410c2b42574",
+          "path": "migration/iD11/postgresql/202304091547_IDEMPIERE-5567_Constraints.sql"
+        }
+      },
+      "stage2_compatibility_class": "policy-decision-required",
+      "stage2_result_sha256": "0ed8d70fd1c2b612aa725248bd0430a2531bf128ea59cb8353a837e76ce6cd92",
+      "stage2_verdict": "indeterminate",
+      "stratum": "constraint-domain",
+      "stratum_reason_code": "constraint-column-domain-required"
+    },
+    {
+      "case_id": "ms70-12",
+      "content_identical": false,
+      "content_sha256": "2f7c5bab874f4404a0335180807886d3cafb1571ae8c2eee511a4a768fe2d3c7",
+      "declared_difference_count": 0,
+      "focus": {
+        "oracle": {
+          "category": "parsed-but-indeterminate",
+          "end_line": 15,
+          "first_unit": 5,
+          "kind": "constraint",
+          "last_unit": 5,
+          "start_line": 14,
+          "unit_hashes_sha256": "02b91551d5e82474a39e3b201443ab4b99162095997b965ca72b7e7a5ecaf169"
+        },
+        "postgresql": {
+          "category": "parsed-but-indeterminate",
+          "end_line": 12,
+          "first_unit": 3,
+          "kind": "constraint",
+          "last_unit": 3,
+          "start_line": 11,
+          "unit_hashes_sha256": "02b91551d5e82474a39e3b201443ab4b99162095997b965ca72b7e7a5ecaf169"
+        }
+      },
+      "ordered_effects_aligned": true,
+      "pair_id": "pair:d60031ff247441139533996e2a36fd4cba686376a083196d5f2074c16e5c726f",
+      "reason_codes": [
+        "constraint-column-domain-required",
+        "dml-schema-trigger-and-coercion-context-required",
+        "expression-requires-dialect-or-session-semantics",
+        "unconsumed-syntax"
+      ],
+      "scope": "remaining-current-pairs",
+      "source": {
+        "oracle": {
+          "lines": 27,
+          "logical_sha256": "0b38dd2152144ae32505d69b5c7d38e2277b15539de012a391d4f45c186eeec6",
+          "path": "migration/i6.2/oracle/201906171230_IDEMPIERE-2389.sql"
+        },
+        "postgresql": {
+          "lines": 24,
+          "logical_sha256": "6a80dee0f135b77dcd3e1ea5c66b4d239dbd15e5d959948b352e99ef1218d193",
+          "path": "migration/i6.2/postgresql/201906171230_IDEMPIERE-2389.sql"
+        }
+      },
+      "stage2_compatibility_class": "unsupported",
+      "stage2_result_sha256": "ace48353171189a9702628f592cf1215ee847a3c3bb49ae029b184bc063ee3be",
+      "stage2_verdict": "indeterminate",
+      "stratum": "constraint-domain",
+      "stratum_reason_code": "constraint-column-domain-required"
+    },
+    {
+      "case_id": "ms70-13",
+      "content_identical": false,
+      "content_sha256": "7404bccca1e6ac674ea7ec861117843e2c8314efd8b311d5368f50e25f47dd7c",
+      "declared_difference_count": 0,
+      "focus": {
+        "oracle": {
+          "category": "parsed-but-indeterminate",
+          "end_line": 15,
+          "first_unit": 5,
+          "kind": "index",
+          "last_unit": 5,
+          "start_line": 14,
+          "unit_hashes_sha256": "4738991cede3e3f5decf8e0b72b278a5706b8a76705056995f2c0fc3b0dd02fc"
+        },
+        "postgresql": {
+          "category": "parsed-but-indeterminate",
+          "end_line": 12,
+          "first_unit": 3,
+          "kind": "index",
+          "last_unit": 3,
+          "start_line": 11,
+          "unit_hashes_sha256": "4738991cede3e3f5decf8e0b72b278a5706b8a76705056995f2c0fc3b0dd02fc"
+        }
+      },
+      "ordered_effects_aligned": true,
+      "pair_id": "pair:f554bcef32b01fa4095fce79d97dd4648ec4f1bfe3310e117520764a0db73c75",
+      "reason_codes": [
+        "dml-schema-trigger-and-coercion-context-required",
+        "expression-requires-dialect-or-session-semantics",
+        "index-null-collation-and-column-domain-required"
+      ],
+      "scope": "order-to-cash-pilot",
+      "source": {
+        "oracle": {
+          "lines": 23,
+          "logical_sha256": "34c64a7c7f708c47d44bdf38c2637daf46eeba026dd4954d533427a1c358b547",
+          "path": "migration/i8.2z/oracle/202111210850_IDEMPIERE-5040.sql"
+        },
+        "postgresql": {
+          "lines": 20,
+          "logical_sha256": "43f150f7e386a3b70cc90dbded719512f2d88b900c0e845425b8d7b70b22558c",
+          "path": "migration/i8.2z/postgresql/202111210850_IDEMPIERE-5040.sql"
+        }
+      },
+      "stage2_compatibility_class": "policy-decision-required",
+      "stage2_result_sha256": "8a515cb39fc0d024b3a96ce5d08d0a8cf9339995236158ffc8168b27e098b56e",
+      "stage2_verdict": "indeterminate",
+      "stratum": "index-domain",
+      "stratum_reason_code": "index-null-collation-and-column-domain-required"
+    },
+    {
+      "case_id": "ms70-14",
+      "content_identical": false,
+      "content_sha256": "40dbb31dacba8892f0540de69e052bdf559db6921fdf5b0d1f5e1af46afdf81a",
+      "declared_difference_count": 0,
+      "focus": {
+        "oracle": {
+          "category": "parsed-but-indeterminate",
+          "end_line": 19,
+          "first_unit": 6,
+          "kind": "index",
+          "last_unit": 6,
+          "start_line": 18,
+          "unit_hashes_sha256": "61f770e087a995755fed690051e13123cc7701395d04ac95c9b668d58ad332ae"
+        },
+        "postgresql": {
+          "category": "parsed-but-indeterminate",
+          "end_line": 16,
+          "first_unit": 4,
+          "kind": "index",
+          "last_unit": 4,
+          "start_line": 15,
+          "unit_hashes_sha256": "61f770e087a995755fed690051e13123cc7701395d04ac95c9b668d58ad332ae"
+        }
+      },
+      "ordered_effects_aligned": true,
+      "pair_id": "pair:7db0c4d28548f627ff7dcacf9645bc7325d459a45cd6ce193aaf1e27a0fa2cfc",
+      "reason_codes": [
+        "dml-schema-trigger-and-coercion-context-required",
+        "expression-requires-dialect-or-session-semantics",
+        "index-null-collation-and-column-domain-required"
+      ],
+      "scope": "remaining-current-pairs",
+      "source": {
+        "oracle": {
+          "lines": 23,
+          "logical_sha256": "a3566aa8b8623524c445bce908a4a05d81efa1a8e3baa32c54d7d7f2e6843bec",
+          "path": "migration/i4.1/oracle/201704291856_IDEMPIERE-3358_ws_webservicetype_value_idx.sql"
+        },
+        "postgresql": {
+          "lines": 20,
+          "logical_sha256": "54ed485b607e07b5a0207e501f946ac3845ecef339ede1bf31e9c4ea1a26178b",
+          "path": "migration/i4.1/postgresql/201704291856_IDEMPIERE-3358_ws_webservicetype_value_idx.sql"
+        }
+      },
+      "stage2_compatibility_class": "policy-decision-required",
+      "stage2_result_sha256": "d35adf93c41a5a2dab688d44510b12ceb190655ab11f10643269bbd0753386e9",
+      "stage2_verdict": "indeterminate",
+      "stratum": "index-domain",
+      "stratum_reason_code": "index-null-collation-and-column-domain-required"
+    },
+    {
+      "case_id": "ms70-15",
+      "content_identical": false,
+      "content_sha256": "bad590e3e44abdfb1c49367a5173c59795c824509938cfeef54da81765acf3e4",
+      "declared_difference_count": 0,
+      "focus": {
+        "oracle": {
+          "category": "unparsed",
+          "end_line": 23,
+          "first_unit": 7,
+          "kind": "unparsed",
+          "last_unit": 7,
+          "start_line": 22,
+          "unit_hashes_sha256": "3f6179c943bb0b40eabcd7172fb0c8f2df66ee8199ba5dcf21a879d327b47c7c"
+        },
+        "postgresql": {
+          "category": "unparsed",
+          "end_line": 20,
+          "first_unit": 5,
+          "kind": "unparsed",
+          "last_unit": 5,
+          "start_line": 19,
+          "unit_hashes_sha256": "3f6179c943bb0b40eabcd7172fb0c8f2df66ee8199ba5dcf21a879d327b47c7c"
+        }
+      },
+      "ordered_effects_aligned": true,
+      "pair_id": "pair:f590d17abcfa6e9f2cdde3d813904f8682fd77f89058a40e0639bc8b294a2dae",
+      "reason_codes": [
+        "dml-schema-trigger-and-coercion-context-required",
+        "expression-requires-dialect-or-session-semantics",
+        "unconsumed-syntax"
+      ],
+      "scope": "order-to-cash-pilot",
+      "source": {
+        "oracle": {
+          "lines": 46,
+          "logical_sha256": "680c35757043812c42f9c7da05dfb0c39007456a0e27e603804d7e243963d3ce",
+          "path": "migration/i6.2/oracle/201907251130_IDEMPIERE-918_Invoice_RelatedInvoice_ID.sql"
+        },
+        "postgresql": {
+          "lines": 43,
+          "logical_sha256": "d23639219c06450b2074431cb3d5ed3a38eb35c01a72ba394ae61f296d22a149",
+          "path": "migration/i6.2/postgresql/201907251130_IDEMPIERE-918_Invoice_RelatedInvoice_ID.sql"
+        }
+      },
+      "stage2_compatibility_class": "unsupported",
+      "stage2_result_sha256": "5981fa1038a91a2d1445c2e376b5d2378dded11e5f3c97337d0958d2ff401580",
+      "stage2_verdict": "indeterminate",
+      "stratum": "unconsumed-syntax",
+      "stratum_reason_code": "unconsumed-syntax"
+    },
+    {
+      "case_id": "ms70-16",
+      "content_identical": false,
+      "content_sha256": "8fa4e03a9f4225bdb5044c6e78f8b7ebf4f2dbbf0b50e2f7fa7dc1fcf53a2b71",
+      "declared_difference_count": 0,
+      "focus": {
+        "oracle": {
+          "category": "unparsed",
+          "end_line": 64,
+          "first_unit": 17,
+          "kind": "unparsed",
+          "last_unit": 17,
+          "start_line": 63,
+          "unit_hashes_sha256": "3bf6e9ff52ea98189be53f19f70ba8427a25f206bf9f49e127b2fa591343371a"
+        },
+        "postgresql": {
+          "category": "unparsed",
+          "end_line": 61,
+          "first_unit": 15,
+          "kind": "unparsed",
+          "last_unit": 15,
+          "start_line": 60,
+          "unit_hashes_sha256": "3bf6e9ff52ea98189be53f19f70ba8427a25f206bf9f49e127b2fa591343371a"
+        }
+      },
+      "ordered_effects_aligned": true,
+      "pair_id": "pair:4ae62d20b5a9ffa4f5cb13737391728f1acd7f258adc02fb70f78853c0625cb7",
+      "reason_codes": [
+        "dml-schema-trigger-and-coercion-context-required",
+        "expression-requires-dialect-or-session-semantics",
+        "unconsumed-syntax"
+      ],
+      "scope": "remaining-current-pairs",
+      "source": {
+        "oracle": {
+          "lines": 72,
+          "logical_sha256": "f6091a625889d93d80adc52175dbc9a17f864951d7f2aae80ba6f567f6db3c1b",
+          "path": "migration/i4.1/oracle/201605231800_Ticket_1006008.sql"
+        },
+        "postgresql": {
+          "lines": 69,
+          "logical_sha256": "5213b3aef1a5d9a3ddc9a4d45f1747a5329f6d7a76d867a7bcb52534a2fd6984",
+          "path": "migration/i4.1/postgresql/201605231800_Ticket_1006008.sql"
+        }
+      },
+      "stage2_compatibility_class": "unsupported",
+      "stage2_result_sha256": "81bfca140d59991088e8dd5d6bfb01bdebc6c13d75cce572a29334f24c43e33a",
+      "stage2_verdict": "indeterminate",
+      "stratum": "unconsumed-syntax",
+      "stratum_reason_code": "unconsumed-syntax"
+    },
+    {
+      "case_id": "ms70-17",
+      "content_identical": false,
+      "content_sha256": "9d947af09a4f92e57382a4a3bdc3a602fa7e7c78f3151047f42bcf893de8b51e",
+      "declared_difference_count": 0,
+      "focus": {
+        "oracle": {
+          "category": "unparsed",
+          "end_line": 420,
+          "first_unit": 1,
+          "kind": "unparsed",
+          "last_unit": 2,
+          "start_line": 1,
+          "unit_hashes_sha256": "8a2f1a339f8a6abc144b34ff069e08c0cee5e82c44962fcdd44e2bb00347439f"
+        },
+        "postgresql": {
+          "category": "unparsed",
+          "end_line": 420,
+          "first_unit": 1,
+          "kind": "unparsed",
+          "last_unit": 2,
+          "start_line": 1,
+          "unit_hashes_sha256": "741b67c273ad6c81f83bd163cfcb74ca3197015b0ffee588397ec7b7e1e92464"
+        }
+      },
+      "ordered_effects_aligned": true,
+      "pair_id": "pair:1e8761204dd51b1ddc2a6f2d5213a8084c0363019b006b3e75319881a7dbe190",
+      "reason_codes": [
+        "unsupported-syntax"
+      ],
+      "scope": "order-to-cash-pilot",
+      "source": {
+        "oracle": {
+          "lines": 424,
+          "logical_sha256": "dee4799beae332fe3fe26ec82da0dd3bf86663faeb75e2b32e4481269a060ee8",
+          "path": "migration/i4.1/oracle/201612061508_IDEMPIERE-3252.sql"
+        },
+        "postgresql": {
+          "lines": 424,
+          "logical_sha256": "09270564adcb3d170a240ea3a2729a1fb51131b9c7171d627ce89c469dd65b7c",
+          "path": "migration/i4.1/postgresql/201612061508_IDEMPIERE-3252.sql"
+        }
+      },
+      "stage2_compatibility_class": "unsupported",
+      "stage2_result_sha256": "2c614134b7787957deb32785913739767ac09d0be14ea8c01118c6a719ec35cd",
+      "stage2_verdict": "indeterminate",
+      "stratum": "unsupported-syntax",
+      "stratum_reason_code": "unsupported-syntax"
+    },
+    {
+      "case_id": "ms70-18",
+      "content_identical": false,
+      "content_sha256": "231ad9304824cfde3c691c54579f90f99879c89256307957d2437fbc11d36575",
+      "declared_difference_count": 0,
+      "focus": {
+        "oracle": {
+          "category": "unparsed",
+          "end_line": 212,
+          "first_unit": 49,
+          "kind": "unparsed",
+          "last_unit": 50,
+          "start_line": 190,
+          "unit_hashes_sha256": "7d5dcd2e190fbb3eef8f9634aec2816971df959430c09c2b5a49e9c437d1cce3"
+        },
+        "postgresql": {
+          "category": "unparsed",
+          "end_line": 224,
+          "first_unit": 47,
+          "kind": "unparsed",
+          "last_unit": 48,
+          "start_line": 187,
+          "unit_hashes_sha256": "147debc0f15d0f2e108bd6b1896a43dbcf725c218e9679358072657fb019745e"
+        }
+      },
+      "ordered_effects_aligned": true,
+      "pair_id": "pair:86122c7fff3448ccb41cf55c22c9341b71f13c80000543aa0cea3bf848a105d0",
+      "reason_codes": [
+        "dml-schema-trigger-and-coercion-context-required",
+        "expression-requires-dialect-or-session-semantics",
+        "unsupported-syntax"
+      ],
+      "scope": "remaining-current-pairs",
+      "source": {
+        "oracle": {
+          "lines": 216,
+          "logical_sha256": "4a2ef72788f3991f52c3942a7d4af965a9a6b5e3333f59c70bbb05fe1962087b",
+          "path": "migration/i4.1/oracle/201605101800_System_Ticket_1006008.sql"
+        },
+        "postgresql": {
+          "lines": 229,
+          "logical_sha256": "000bb551a59ef3bb088a2a743a2e9d1c6108f7aeafbc2db85461c3938c3f583d",
+          "path": "migration/i4.1/postgresql/201605101800_System_Ticket_1006008.sql"
+        }
+      },
+      "stage2_compatibility_class": "unsupported",
+      "stage2_result_sha256": "e33f8cb73b1e9eb4389181fde7ef44c997aa0fb5f8ec0fdc8bd1d0268d1bd1a3",
+      "stage2_verdict": "indeterminate",
+      "stratum": "unsupported-syntax",
+      "stratum_reason_code": "unsupported-syntax"
+    },
+    {
+      "case_id": "ms70-19",
+      "content_identical": false,
+      "content_sha256": "21101c72fed95a630c320e6a9186817bdd4cc24ae95f1671e23023e9c2987161",
+      "declared_difference_count": 0,
+      "focus": {
+        "oracle": {
+          "category": "parsed-but-indeterminate",
+          "end_line": 7,
+          "first_unit": 3,
+          "kind": "update",
+          "last_unit": 3,
+          "start_line": 6,
+          "unit_hashes_sha256": "00904ade9fea7f87be3dbb8d1099711ccf6d3259a4d989477a89d14618ec4863"
+        },
+        "postgresql": {
+          "category": "parsed-but-indeterminate",
+          "end_line": 4,
+          "first_unit": 1,
+          "kind": "update",
+          "last_unit": 1,
+          "start_line": 3,
+          "unit_hashes_sha256": "a2585a3c0e4d960459916d6ecfefb9c65b842e09a1bbbd7f6efaa295fa7363ba"
+        }
+      },
+      "ordered_effects_aligned": true,
+      "pair_id": "pair:be43e9788cf1356d25be823fc5f2ca23ac28b4438010077e6ba1b1929bb3da71",
+      "reason_codes": [
+        "dml-schema-trigger-and-coercion-context-required",
+        "expression-requires-dialect-or-session-semantics"
+      ],
+      "scope": "order-to-cash-pilot",
+      "source": {
+        "oracle": {
+          "lines": 11,
+          "logical_sha256": "a64e01640fc806681cd48ce239d25cf812db562836bdb8629fed4c30d2b72ecf",
+          "path": "migration/i4.1/oracle/201710231841_IDEMPIERE-3338.sql"
+        },
+        "postgresql": {
+          "lines": 8,
+          "logical_sha256": "4257db9c756c463cbb4b99e00054258e9700e7b28b245b9caeb52d66edba63d0",
+          "path": "migration/i4.1/postgresql/201710231841_IDEMPIERE-3338.sql"
+        }
+      },
+      "stage2_compatibility_class": "policy-decision-required",
+      "stage2_result_sha256": "60c41f4c33c39fffeee36a0581fe21eae5f84d24273448f1c62f5e57f329285a",
+      "stage2_verdict": "indeterminate",
+      "stratum": "dml-context",
+      "stratum_reason_code": "dml-schema-trigger-and-coercion-context-required"
+    },
+    {
+      "case_id": "ms70-20",
+      "content_identical": false,
+      "content_sha256": "a3563cf98774474371938e7b4fc376704c7e3400ec25d969880c2044046cd05d",
+      "declared_difference_count": 0,
+      "focus": {
+        "oracle": {
+          "category": "parsed-but-indeterminate",
+          "end_line": 7,
+          "first_unit": 3,
+          "kind": "update",
+          "last_unit": 3,
+          "start_line": 6,
+          "unit_hashes_sha256": "993aaf50e81d878317e42c5b3752494bd69d5bc0376f3167053eedcc216039e5"
+        },
+        "postgresql": {
+          "category": "parsed-but-indeterminate",
+          "end_line": 4,
+          "first_unit": 1,
+          "kind": "update",
+          "last_unit": 1,
+          "start_line": 3,
+          "unit_hashes_sha256": "993aaf50e81d878317e42c5b3752494bd69d5bc0376f3167053eedcc216039e5"
+        }
+      },
+      "ordered_effects_aligned": true,
+      "pair_id": "pair:53d9a4e23ebd790539b306dff84df57cb2bbadcab2575ecc95214900e2ccc654",
+      "reason_codes": [
+        "dml-schema-trigger-and-coercion-context-required",
+        "expression-requires-dialect-or-session-semantics"
+      ],
+      "scope": "remaining-current-pairs",
+      "source": {
+        "oracle": {
+          "lines": 154,
+          "logical_sha256": "20cb28c061a764b1542102cbe1e1e9c10ed1e41afa2c9478cc4ab6dcdfd57e2f",
+          "path": "migration/i4.1/oracle/201607191600_Ticket_1006181.sql"
+        },
+        "postgresql": {
+          "lines": 151,
+          "logical_sha256": "8766cd239beb5e850087dc6d614ad064d6eb40169c5c7f05741757aaec5fca4b",
+          "path": "migration/i4.1/postgresql/201607191600_Ticket_1006181.sql"
+        }
+      },
+      "stage2_compatibility_class": "policy-decision-required",
+      "stage2_result_sha256": "9312dbb364cdf15ed0f6386825f7eebd37f9919ef40e3179568abb7672b668a8",
+      "stage2_verdict": "indeterminate",
+      "stratum": "dml-context",
+      "stratum_reason_code": "dml-schema-trigger-and-coercion-context-required"
+    }
+  ],
+  "content_sha256": "1cec108870563a5de5116517523e046366944caa935d01565352957ba571d5ce",
+  "milestone": 70,
+  "project_id": "idempiere-release13-oracle-postgresql-divergence-audit",
+  "schema_version": "1.0",
+  "selection": {
+    "one_case_per_scope_and_stratum": true,
+    "scopes": [
+      "order-to-cash-pilot",
+      "remaining-current-pairs"
+    ],
+    "strata": [
+      {
+        "id": "procedural-block",
+        "reason_code": "procedural-block"
+      },
+      {
+        "id": "ordered-effect-alignment",
+        "reason_code": "ordered-effect-alignment-required"
+      },
+      {
+        "id": "helper-catalog-effects",
+        "reason_code": "helper-catalog-and-dependent-view-effects"
+      },
+      {
+        "id": "character-domain",
+        "reason_code": "character-empty-string-length-and-collation-policy"
+      },
+      {
+        "id": "numeric-domain",
+        "reason_code": "unbounded-or-nonportable-numeric-domain"
+      },
+      {
+        "id": "constraint-domain",
+        "reason_code": "constraint-column-domain-required"
+      },
+      {
+        "id": "index-domain",
+        "reason_code": "index-null-collation-and-column-domain-required"
+      },
+      {
+        "id": "unconsumed-syntax",
+        "reason_code": "unconsumed-syntax"
+      },
+      {
+        "id": "unsupported-syntax",
+        "reason_code": "unsupported-syntax"
+      },
+      {
+        "id": "dml-context",
+        "reason_code": "dml-schema-trigger-and-coercion-context-required"
+      }
+    ],
+    "tie_break": "first-pair-with-bilateral-sql-evidence-in-sealed-ms69-report-order"
+  }
+}

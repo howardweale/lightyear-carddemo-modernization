@@ -1,0 +1,136 @@
+{
+  "artifact_type": "lightyear-idempiere-provenance-register",
+  "bindings": {
+    "implementation_logical_sha256": {
+      "src/lightyear_common/io.py": "8ead1c4e2221cca5a65b3e3ef3cb5d4a841f7d89d33f8b416357076056b3621e",
+      "src/lightyear_data/contracts.py": "a9f8cae57a0c256c3d405ec06468bc45734314b4f7692438726259e4bee56575",
+      "src/lightyear_data/idempiere_comparison.py": "c6ae90d2bfc5855377fae4c22671927c42d59b26d08b60d63bb2789bd2f026b2",
+      "src/lightyear_data/idempiere_triage.py": "576f5f0f4df7939263775afaefdd50245043ab8b57db31b808cd1459f7511450",
+      "src/lightyear_factory/contracts.py": "c25d4f549fb18179b161bf24386fe3f1f55382216cae80a7ccae4671d6537d13",
+      "src/lightyear_factory/providers.py": "f44ee1ce22fe78eb712ee16be560c8d6ef2c4ab498d9937b98dc6f1fd7b4e52d"
+    },
+    "pairing_manifest_sha256": "acf3f2b21fb2ff205028a5a9239602f497ee09f99f82feaa56368e3f74add510",
+    "schema_logical_sha256": "5826a0ef9ddeba03c3f83a965235c51aaa84d90e94478e8f541c7df4da24a586",
+    "source_commit": "731515dcdd5278b843db33b9d3109d155b881951",
+    "source_tree": "041320460a02d4ec23c837d46befa7420c162d0a",
+    "stage2_comparison_sha256": "3ac96b87608118ea31e79e22eac42bc4954eda611855a310ef3abf277c910083",
+    "stage2_receipt_sha256": "1a5db2dd371fdefba20b8fdc09fd7df630fde0493feaa421d589746e3dc1fae4",
+    "triage_policy_sha256": "66ce4d6032fa4597f2756da2f8047a76faa4a365328be755906ef892df10e57a"
+  },
+  "content_sha256": "fc26031947a641a9dbf57b066f1155ebdfde712e9dbcdc0400fa025cd2a99d0f",
+  "entries": [
+    {
+      "classification": "generation-path-present-per-pair-unclassified",
+      "history_evidence_admitted": false,
+      "pair_id": "pair:041a57766aae7b9b1dd65f39849f5b6be340e9fd8a58dd9ec1f445310d78abd9"
+    },
+    {
+      "classification": "generation-path-present-per-pair-unclassified",
+      "history_evidence_admitted": false,
+      "pair_id": "pair:9d5997aaf2d45e0e158d6e0fd74f75fd095cd9d64d1ec85426f927f59d994280"
+    },
+    {
+      "classification": "generation-path-present-per-pair-unclassified",
+      "history_evidence_admitted": false,
+      "pair_id": "pair:58f3d9ef89a8c362b965025aee050c6fc8da6a9c93a29c9ed37c9b0c5d970d24"
+    },
+    {
+      "classification": "generation-path-present-per-pair-unclassified",
+      "history_evidence_admitted": false,
+      "pair_id": "pair:5681cbe4472e30ce857c8bb49c174be1cb9971a0cbf527f75a08a9e3c8ea1d32"
+    },
+    {
+      "classification": "generation-path-present-per-pair-unclassified",
+      "history_evidence_admitted": false,
+      "pair_id": "pair:2421edc3d29361e11d5619df9a24fdd9e9e7147d998f99570f61162fd7f9f8ec"
+    },
+    {
+      "classification": "generation-path-present-per-pair-unclassified",
+      "history_evidence_admitted": false,
+      "pair_id": "pair:441c226f9ca538a005a39f010299b393127802e7a2d5b474ddf0f9eff1c46d69"
+    },
+    {
+      "classification": "generation-path-present-per-pair-unclassified",
+      "history_evidence_admitted": false,
+      "pair_id": "pair:aae86740497af5a70640729c60a5334886bcc64d901e79faae2ee293569bdba0"
+    },
+    {
+      "classification": "generation-path-present-per-pair-unclassified",
+      "history_evidence_admitted": false,
+      "pair_id": "pair:6b2b4ced709b226bb9ea6821ab0fd9d50e4994cedf71914c897da73c14553eb5"
+    },
+    {
+      "classification": "generation-path-present-per-pair-unclassified",
+      "history_evidence_admitted": false,
+      "pair_id": "pair:e26ab6b320af10860ae3187b8d23fbc2687720656912c4002e4a5370652d8022"
+    },
+    {
+      "classification": "generation-path-present-per-pair-unclassified",
+      "history_evidence_admitted": false,
+      "pair_id": "pair:ef7d9eea68bd260077eedbe9f72f46805b7e3a9652bf066c5b03826e334afc03"
+    },
+    {
+      "classification": "generation-path-present-per-pair-unclassified",
+      "history_evidence_admitted": false,
+      "pair_id": "pair:9cf129615316c85dd88a2c35dc3359d337c8f0bb923cdc9358fd07b06ea3579c"
+    },
+    {
+      "classification": "generation-path-present-per-pair-unclassified",
+      "history_evidence_admitted": false,
+      "pair_id": "pair:d60031ff247441139533996e2a36fd4cba686376a083196d5f2074c16e5c726f"
+    },
+    {
+      "classification": "generation-path-present-per-pair-unclassified",
+      "history_evidence_admitted": false,
+      "pair_id": "pair:f554bcef32b01fa4095fce79d97dd4648ec4f1bfe3310e117520764a0db73c75"
+    },
+    {
+      "classification": "generation-path-present-per-pair-unclassified",
+      "history_evidence_admitted": false,
+      "pair_id": "pair:7db0c4d28548f627ff7dcacf9645bc7325d459a45cd6ce193aaf1e27a0fa2cfc"
+    },
+    {
+      "classification": "generation-path-present-per-pair-unclassified",
+      "history_evidence_admitted": false,
+      "pair_id": "pair:f590d17abcfa6e9f2cdde3d813904f8682fd77f89058a40e0639bc8b294a2dae"
+    },
+    {
+      "classification": "generation-path-present-per-pair-unclassified",
+      "history_evidence_admitted": false,
+      "pair_id": "pair:4ae62d20b5a9ffa4f5cb13737391728f1acd7f258adc02fb70f78853c0625cb7"
+    },
+    {
+      "classification": "generation-path-present-per-pair-unclassified",
+      "history_evidence_admitted": false,
+      "pair_id": "pair:1e8761204dd51b1ddc2a6f2d5213a8084c0363019b006b3e75319881a7dbe190"
+    },
+    {
+      "classification": "generation-path-present-per-pair-unclassified",
+      "history_evidence_admitted": false,
+      "pair_id": "pair:86122c7fff3448ccb41cf55c22c9341b71f13c80000543aa0cea3bf848a105d0"
+    },
+    {
+      "classification": "generation-path-present-per-pair-unclassified",
+      "history_evidence_admitted": false,
+      "pair_id": "pair:be43e9788cf1356d25be823fc5f2ca23ac28b4438010077e6ba1b1929bb3da71"
+    },
+    {
+      "classification": "generation-path-present-per-pair-unclassified",
+      "history_evidence_admitted": false,
+      "pair_id": "pair:53d9a4e23ebd790539b306dff84df57cb2bbadcab2575ecc95214900e2ccc654"
+    }
+  ],
+  "milestone": 70,
+  "project_id": "idempiere-release13-oracle-postgresql-divergence-audit",
+  "project_premise": {
+    "conversion_layer_present": true,
+    "dual_dialect_migration_log_writer_present": true,
+    "generated_variants_ruled_out": false,
+    "independent_parallel_maintenance_proven": false
+  },
+  "schema_version": "1.0",
+  "statistics": {
+    "per_pair_provenance_classified": 0,
+    "sampled_pairs": 20
+  }
+}

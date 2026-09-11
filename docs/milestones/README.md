@@ -4,7 +4,7 @@
 
 # LIGHTYEAR milestone documentation library
 
-This library is the customer-readable body of record for MS #1 through MS #69. Every milestone is
+This library is the customer-readable body of record for MS #1 through MS #70. Every milestone is
 published from one governed catalog in Markdown, Microsoft Word (`.docx`), and PDF.
 
 **[Open the searchable milestone index](https://howardweale.github.io/lightyear-carddemo-modernization/milestones/)** to filter by milestone number, title,
@@ -87,6 +87,7 @@ or policy decisions.
 | MS #67 | CloudBank Real Non-Production Platform Qualification | Complete — execution passed | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-67/MS-67.md) - [Download Word](https://raw.githubusercontent.com/howardweale/lightyear-carddemo-modernization/main/docs/milestones/MS-67/MS-67.docx) - [PDF](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-67/MS-67.pdf) |
 | MS #68 | iDempiere Dialect Inventory and Pairing | Complete — deterministic source-bound evidence | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-68/MS-68.md) - [Download Word](https://raw.githubusercontent.com/howardweale/lightyear-carddemo-modernization/main/docs/milestones/MS-68/MS-68.docx) - [PDF](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-68/MS-68.pdf) |
 | MS #69 | iDempiere Deterministic Semantic Comparison | Complete bounded baseline with open semantic findings | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-69/MS-69.md) - [Download Word](https://raw.githubusercontent.com/howardweale/lightyear-carddemo-modernization/main/docs/milestones/MS-69/MS-69.docx) - [PDF](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-69/MS-69.pdf) |
+| MS #70 | iDempiere Bounded Triage and Evidence Assembly | Complete bounded safe-floor package; live model run remains gated | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-70/MS-70.md) - [Download Word](https://raw.githubusercontent.com/howardweale/lightyear-carddemo-modernization/main/docs/milestones/MS-70/MS-70.docx) - [PDF](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-70/MS-70.pdf) |
 
 ## Build and verification
 

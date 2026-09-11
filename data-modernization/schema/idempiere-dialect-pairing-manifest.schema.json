@@ -1,0 +1,240 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schema/idempiere-dialect-pairing-manifest.schema.json",
+  "title": "LIGHTYEAR iDempiere Oracle/PostgreSQL pairing manifest",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "manifest_type",
+    "milestone",
+    "project_id",
+    "source",
+    "bindings",
+    "scope",
+    "pairing_policy",
+    "statistics",
+    "premise_check",
+    "conversion_boundary",
+    "pairs",
+    "unpaired",
+    "stage1_complete",
+    "semantic_comparison_complete",
+    "agent_triage_complete",
+    "audit_complete",
+    "application_equivalence",
+    "production_ready",
+    "content_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "manifest_type": {"const": "lightyear-idempiere-dialect-pairing-manifest"},
+    "milestone": {"const": 68},
+    "project_id": {"const": "idempiere-release13-oracle-postgresql-divergence-audit"},
+    "source": {
+      "type": "object",
+      "required": ["repository", "branch", "commit", "tree"],
+      "properties": {
+        "repository": {"type": "string", "minLength": 1},
+        "branch": {"type": "string", "minLength": 1},
+        "commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "tree": {"type": "string", "pattern": "^[0-9a-f]{40}$"}
+      },
+      "additionalProperties": false
+    },
+    "bindings": {
+      "type": "object",
+      "required": [
+        "source_pin_file_sha256",
+        "inventory_file_sha256",
+        "business_slices_file_sha256",
+        "database_semantic_core_sha256",
+        "pairing_manifest_schema_sha256",
+        "stage1_receipt_schema_sha256"
+      ],
+      "properties": {
+        "source_pin_file_sha256": {"$ref": "#/$defs/sha256"},
+        "inventory_file_sha256": {"$ref": "#/$defs/sha256"},
+        "business_slices_file_sha256": {"$ref": "#/$defs/sha256"},
+        "database_semantic_core_sha256": {"$ref": "#/$defs/sha256"},
+        "pairing_manifest_schema_sha256": {"$ref": "#/$defs/sha256"},
+        "stage1_receipt_schema_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "scope": {
+      "type": "object",
+      "required": [
+        "included",
+        "excluded",
+        "pilot_slice",
+        "pilot_tables",
+        "pilot_selection_method"
+      ],
+      "properties": {
+        "included": {"type": "array", "items": {"type": "string"}, "minItems": 1, "uniqueItems": true},
+        "excluded": {"type": "array", "items": {"type": "string"}, "minItems": 1, "uniqueItems": true},
+        "pilot_slice": {"const": "order-to-cash"},
+        "pilot_tables": {"type": "array", "items": {"type": "string"}, "minItems": 1, "uniqueItems": true},
+        "pilot_selection_method": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "pairing_policy": {
+      "type": "object",
+      "required": ["primary", "fallback", "unpaired_is_finding", "many_to_many_pairing_allowed"],
+      "properties": {
+        "primary": {"type": "string", "minLength": 1},
+        "fallback": {"type": "string", "minLength": 1},
+        "unpaired_is_finding": {"const": true},
+        "many_to_many_pairing_allowed": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "statistics": {"$ref": "#/$defs/coverage"},
+    "premise_check": {
+      "type": "object",
+      "required": [
+        "conversion_layer_present",
+        "dual_dialect_migration_log_writer_present",
+        "independent_parallel_maintenance_proven",
+        "generated_variants_ruled_out",
+        "status",
+        "reason"
+      ],
+      "properties": {
+        "conversion_layer_present": {"const": true},
+        "dual_dialect_migration_log_writer_present": {"const": true},
+        "independent_parallel_maintenance_proven": {"const": false},
+        "generated_variants_ruled_out": {"const": false},
+        "status": {"const": "history-classification-required"},
+        "reason": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "conversion_boundary": {
+      "type": "array",
+      "minItems": 9,
+      "maxItems": 9,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "required": ["path", "role", "logical_sha256", "transport_sha256"],
+        "properties": {
+          "path": {"type": "string", "minLength": 1},
+          "role": {"type": "string", "minLength": 1},
+          "logical_sha256": {"$ref": "#/$defs/sha256"},
+          "transport_sha256": {"$ref": "#/$defs/sha256"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "pairs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "pair_id",
+          "release_segment",
+          "ticket_id",
+          "pairing_method",
+          "oracle",
+          "postgresql",
+          "content_identical",
+          "pilot_slices",
+          "pilot_tables_referenced",
+          "maintenance_provenance",
+          "comparison_status"
+        ],
+        "properties": {
+          "pair_id": {"type": "string", "pattern": "^pair:[0-9a-f]{64}$"},
+          "release_segment": {"type": "string", "minLength": 1},
+          "ticket_id": {"type": ["string", "null"]},
+          "pairing_method": {
+            "enum": ["exact-version-and-filename", "unique-version-and-ticket-id"]
+          },
+          "oracle": {"$ref": "#/$defs/script"},
+          "postgresql": {"$ref": "#/$defs/script"},
+          "content_identical": {"type": "boolean"},
+          "pilot_slices": {
+            "type": "array",
+            "items": {"const": "order-to-cash"},
+            "maxItems": 1,
+            "uniqueItems": true
+          },
+          "pilot_tables_referenced": {
+            "type": "array",
+            "items": {"type": "string"},
+            "uniqueItems": true
+          },
+          "maintenance_provenance": {"const": "not-classified"},
+          "comparison_status": {"const": "not-run"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "unpaired": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["dialect", "path", "reason"],
+        "properties": {
+          "dialect": {"enum": ["oracle", "postgresql"]},
+          "path": {"type": "string", "minLength": 1},
+          "reason": {"const": "no-unique-counterpart"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "stage1_complete": {"const": true},
+    "semantic_comparison_complete": {"const": false},
+    "agent_triage_complete": {"const": false},
+    "audit_complete": {"const": false},
+    "application_equivalence": {"const": false},
+    "production_ready": {"const": false},
+    "content_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "script": {
+      "type": "object",
+      "required": ["path", "logical_sha256", "transport_sha256", "bytes", "lines"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "logical_sha256": {"$ref": "#/$defs/sha256"},
+        "transport_sha256": {"$ref": "#/$defs/sha256"},
+        "bytes": {"type": "integer", "minimum": 0},
+        "lines": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "coverage": {
+      "type": "object",
+      "required": [
+        "oracle_scripts",
+        "postgresql_scripts",
+        "paired_script_pairs",
+        "exact_version_and_filename_pairs",
+        "unique_version_and_ticket_id_pairs",
+        "unpaired_oracle_scripts",
+        "unpaired_postgresql_scripts",
+        "paired_script_coverage",
+        "order_to_cash_pilot_pairs",
+        "content_identical_pairs"
+      ],
+      "properties": {
+        "oracle_scripts": {"type": "integer", "minimum": 0},
+        "postgresql_scripts": {"type": "integer", "minimum": 0},
+        "paired_script_pairs": {"type": "integer", "minimum": 0},
+        "exact_version_and_filename_pairs": {"type": "integer", "minimum": 0},
+        "unique_version_and_ticket_id_pairs": {"type": "integer", "minimum": 0},
+        "unpaired_oracle_scripts": {"type": "integer", "minimum": 0},
+        "unpaired_postgresql_scripts": {"type": "integer", "minimum": 0},
+        "paired_script_coverage": {"type": "number", "minimum": 0, "maximum": 1},
+        "order_to_cash_pilot_pairs": {"type": "integer", "minimum": 0},
+        "content_identical_pairs": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

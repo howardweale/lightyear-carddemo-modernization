@@ -80,5 +80,8 @@ script is undocumented, and that every POSIX entry point has a PowerShell twin.
   contract and GKE implementation; `preflight` performs read-only checks against one signed explicit
   context, while `admit` requires passing signed MS #65/MS #66 receipts and all 28 signed live
   platform scenarios. Chargeable GKE mutation and teardown remain separately acknowledged scripts.
+- `./idempiere-divergence-audit.sh verify` checks the committed IDDA Stage 1 pairing and premise
+  evidence. `build` and `verify-source` require the exact clean MS #48 iDempiere checkout; neither
+  action executes a database or calls a model.
 
 See `scripts.catalog.json` for the exact purpose, role, and verification owner of all entry points.

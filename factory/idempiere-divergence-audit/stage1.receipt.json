@@ -1,0 +1,61 @@
+{
+  "agent_triage_complete": false,
+  "application_equivalence": false,
+  "audit_complete": false,
+  "bindings": {
+    "business_slices_file_sha256": "8ab67ac585bb858d369f36f4e1428ff4aedd4c194b032c4fb9b75ec2f0eab9f1",
+    "database_semantic_core_sha256": "e8f5580ba690cc0f742886bf17a488a062ade29c8faaf1a6adc6e55d54b42b34",
+    "inventory_file_sha256": "ecb5a8b989587249ba837a4ff30319d1440e52ceb9ab7a3f16feb7429b3ec73d",
+    "pairing_manifest_schema_sha256": "734247bf150224845af23ebe287c879718fb8bef968bd5a0e79563ae72d7c5ca",
+    "pairing_manifest_sha256": "acf3f2b21fb2ff205028a5a9239602f497ee09f99f82feaa56368e3f74add510",
+    "source_commit": "731515dcdd5278b843db33b9d3109d155b881951",
+    "source_pin_file_sha256": "6e82b6438ffef5ff3e3e1d8629bb52224d56c9865318d094aadce8171bf76717",
+    "source_tree": "041320460a02d4ec23c837d46befa7420c162d0a",
+    "stage1_receipt_schema_sha256": "8ad6d76f23037f18cb684e2a4d77237d2360cd2af0e20295ac5e4af270e9cb64"
+  },
+  "checks": {
+    "conversion_boundary_bound": true,
+    "current_migrations_only": true,
+    "existing_database_semantic_core_reused": true,
+    "existing_order_to_cash_slice_reused": true,
+    "existing_source_pin_reused": true,
+    "maintenance_premise_not_overclaimed": true,
+    "model_calls_zero": true,
+    "ms48_inventory_reconciled": true,
+    "pairing_coverage_measured": true
+  },
+  "claim_unlocked": "LIGHTYEAR deterministically paired and measured the pinned iDempiere current Oracle/PostgreSQL migration surface, selected the existing order-to-cash pilot, and bound the database conversion layer without claiming semantic equivalence.",
+  "content_sha256": "db7c89f5fb2e408aeaff399c6e79986643316313ed4140280cf807de6f56e43e",
+  "coverage": {
+    "content_identical_pairs": 31,
+    "exact_version_and_filename_pairs": 1077,
+    "oracle_scripts": 1078,
+    "order_to_cash_pilot_pairs": 93,
+    "paired_script_coverage": 1.0,
+    "paired_script_pairs": 1078,
+    "postgresql_scripts": 1078,
+    "unique_version_and_ticket_id_pairs": 1,
+    "unpaired_oracle_scripts": 0,
+    "unpaired_postgresql_scripts": 0
+  },
+  "milestone": 68,
+  "open_gates": [
+    "classify generated versus independently edited script provenance",
+    "implement parser coverage and semantic comparison",
+    "calibrate the first twenty flagged comparisons",
+    "run bounded agent triage only after deterministic flagging"
+  ],
+  "production_ready": false,
+  "project_id": "idempiere-release13-oracle-postgresql-divergence-audit",
+  "receipt_type": "lightyear-idempiere-divergence-audit-stage1-receipt",
+  "schema_version": "1.0",
+  "semantic_comparison_complete": false,
+  "stage": "inventory-pairing-and-premise-check",
+  "station_usage": {
+    "analyst": "not-used-stage1-deterministic",
+    "builder": "not-used-audit-does-not-generate-candidate",
+    "planner": "not-used-stage1-deterministic",
+    "verifier": "deterministic-contract-validation"
+  },
+  "status": "passed"
+}

@@ -1,5 +1,28 @@
 # Changelog
 
+## 0.68.0 — 2026-09-11
+
+- Completed MS #68 iDempiere dialect inventory and pairing. Assigned MS #69 to deterministic
+  semantic comparison and MS #70 to bounded triage and evidence assembly; both remain planned.
+- Returned customer production readiness, governed cutover and continuous assurance to the
+  unnumbered backlog without changing the completed CloudBank evidence or its claim boundaries.
+- Reused the exact MS #48 release-13 source pin, inventory and order-to-cash slice, the MS #33
+  database semantic core, the MS #49–#51 Oracle authority boundary and the existing model budget
+  controls rather than duplicating them.
+- Deterministically paired all 1,078 Oracle and 1,078 PostgreSQL current migration scripts: 1,077
+  by exact release/filename and the remaining `IDEMPIERE-5963` pair by unique same-release ticket
+  identity. Selected 93 order-to-cash pilot pairs and recorded 31 logically identical pairs.
+- Bound nine database-provider, dual-file migration logger and SQL-conversion Java files as the
+  only Java exception to the SQL audit. Kept independent hand maintenance and absence of
+  generation explicitly unproven because iDempiere contains an Oracle-to-PostgreSQL conversion
+  layer.
+- Added content-addressed pairing and Stage 1 receipts, two schemas, POSIX and PowerShell launchers,
+  source-bound drift verification and adversarial claim-boundary tests. No model was called;
+  semantic comparison, agent triage, application equivalence and production readiness remain false.
+- Corrected the MS #48 checkout instructions to fetch the exact recorded commit before detached
+  checkout; cloning the moving `release-13` branch tip no longer produces an immediately rejected
+  source tree.
+
 ## 0.67.1 — 2026-09-11
 
 - Published the completed MS54–67 execution chain: 31 original JSON evidence files with their

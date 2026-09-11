@@ -13,9 +13,10 @@ import socket
 import subprocess
 import threading
 import time
+import uuid
 from pathlib import Path
 
-from .cloudbank_journeys import SERVICES, JourneyFailure, execute_journeys, hashed, require
+from .cloudbank_journeys import SERVICES, SCENARIOS, JourneyFailure, execute_journeys, hashed, require, journey_contract
 from .cloudbank_journeys_gke import GkeRuntime
 from .cloudbank_platform_qualification import CUTOVER_STATES
 from .cloudbank_sql_recovery import SNAPSHOT_SQL, invoke, normalize_snapshot, verified, write_signed
@@ -104,20 +105,22 @@ def verify_availability(row, minimum):
             "drill-availability-measurement-invalid")
 
 
-def verify_continuation(state, key, bindings, images, candidates, environment):
-    """Validate exactly the completed prefix from the restored domain failure."""
+def verify_continuation(state, key, bindings, images, candidates, environment, *, cutover=False):
+    """Validate the measured prefix from the specified restored failure."""
     verified(state, key)
     require(state.get("state_type") == STATE_TYPE and state.get("bindings") == bindings
             and state.get("environment") == environment and state.get("baseline_images") == images
             and state.get("candidate_images") == candidates and state.get("credentials_persisted") is False
             and state.get("phase") == "baseline-restored" and state.get("cleanup_required") is False
-            and state.get("pending") is None and state.get("canaries") == {}
+            and state.get("pending") is None and (cutover or state.get("canaries") == {})
             and state.get("recovery") == {"status": "restored", "errors": []}
-            and state.get("failure") == "evacuation-normalized-database-state-changed",
-            "restored-failure-domain-checkpoint-required")
+            and state.get("failure") == ("target-cutover-business-journeys-failed" if cutover else
+                                         "evacuation-normalized-database-state-changed"),
+            "restored-cutover-checkpoint-required" if cutover else "restored-failure-domain-checkpoint-required")
     done = state.get("completed", {})
-    require(set(done) == {"rolling", "resilience"} and set(done["resilience"]) == {"node"},
-            "retained-rolling-and-node-only-required")
+    require(set(done) == {"rolling", "resilience"} and set(done["resilience"]) ==
+            ({"node", "failure-domain"} if cutover else {"node"}),
+            "retained-rolling-and-both-evacuations-required" if cutover else "retained-rolling-and-node-only-required")
     rolling = done["rolling"]
     require(rolling.get("baseline_restored") is True
             and [r.get("service") for r in rolling.get("rows", [])] == list(SERVICES), "retained-eight-rollouts-required")
@@ -126,12 +129,44 @@ def verify_continuation(state, key, bindings, images, candidates, environment):
         require(row.get("previous_image") == images[service] and row.get("candidate_image") == candidates[service]
                 and row.get("completed") is True and row.get("maximum_unavailable") == 0, "retained-rollout-invalid")
         verify_availability(row["availability"], 2)
-    node = done["resilience"]["node"]
-    require(node.get("pre_state") == node.get("post_state") and node.get("affected_pods", 0) > 0
+    for kind, node in done["resilience"].items():
+        require(node.get("pre_state") == node.get("post_state") and node.get("affected_pods", 0) > 0
             and re.fullmatch(HEX, node.get("pre_state", {}).get("state_sha256", ""))
             and node.get("all_services_recovered") is True and node.get("node_scheduling_restored") is True
-            and node.get("nodes_sha256") == hashed(state["node_plan"]["node"]), "retained-node-evacuation-invalid")
-    verify_availability(node["availability"], 1)
+            and node.get("nodes_sha256") == hashed(state["node_plan"][kind]), "retained-node-evacuation-invalid")
+        verify_availability(node["availability"], 1)
+    return state
+
+
+def verify_cutover_failure(state, journeys, key, bindings, images, candidates, environment):
+    """Admit only the restored, fully evacuated prefix and its exact failed journey."""
+    verify_continuation(state, key, bindings, images, candidates, environment, cutover=True)
+    verify_customer_mode(state.get('customer_startup'))
+    require(state.get('customer_startup') is not None, 'retained-customer-startup-proof-required')
+    verified(journeys, key)
+    require(journeys.get('observation_type') == 'lightyear-cloudbank-shared-journey-execution'
+            and journeys.get('run_id') == state['run_id'] and journeys.get('status') == 'failed'
+            and journeys.get('bindings') == {
+                'ms64_receipt_sha256': bindings['ms64_receipt_sha256'],
+                'image_lock_sha256': bindings['candidate_image_lock_sha256'],
+                'environment': environment, 'lane': 'gke-postgresql-target',
+                'journey_contract_sha256': journey_contract()['content_sha256']}
+            and journeys.get('recovery') == {'status': 'restored', 'errors': [], 'remaining_stopped_services': []}
+            and journeys.get('credentials_persisted') is False
+            and journeys.get('scenario_count') == 18
+            and [r.get('id') for r in journeys.get('scenarios', [])] == [i for i, _ in SCENARIOS],
+            'retained-cutover-journey-binding-invalid')
+    failed = False
+    for row, (identifier, normalized) in zip(journeys['scenarios'], SCENARIOS, strict=True):
+        if identifier == 'checks-restart-redelivers-inflight':
+            require(row.get('status') == 'failed' and row.get('reason') == 'inflight-claim-not-observed',
+                    'retained-inflight-claim-failure-required')
+            failed = True
+        elif not failed:
+            require(row.get('status') == 'passed' and row.get('normalized_result') == normalized
+                    and row.get('evidence_sha256') == hashed(row.get('evidence')), 'retained-journey-prefix-invalid')
+        else:
+            require(row.get('status') == 'not-run', 'retained-journey-suffix-invalid')
     return state
 
 
@@ -711,7 +746,78 @@ class FinalDrills:
             self.save("candidate-created-" + service)
             self.r.kubectl("rollout", "status", "deployment/" + name, "--timeout=600s", timeout=630)
 
+    def baseline_checks(self):
+        current = self.r.get('deployment', 'checks')
+        saved = self.s['baseline']['checks']
+        normalized = copy.deepcopy(current['spec'])
+        require(normalized.get('replicas') in {0, 2}, 'baseline-checks-replicas-drift')
+        normalized['replicas'] = 2
+        require(current['metadata']['uid'] == saved['uid']
+                and hashed(normalized) == saved['spec_sha256'], 'baseline-checks-identity-or-spec-drift')
+        return current
+
+    def isolate_baseline_checks(self):
+        # Service routing does not control PostgreSQL queue polling. Observe
+        # candidate capacity before retiring the competing baseline consumers.
+        self.assert_lease()
+        candidates = {p['metadata']['uid'] for p in self.canary_pods('checks')}
+        self.endpoints('checks', candidates)
+        current = self.baseline_checks()
+        require(current['spec']['replicas'] == 2, 'two-baseline-checks-replicas-required')
+        self.s['checks_isolation'] = {'status': 'prepared', 'baseline_uid': current['metadata']['uid'],
+            'baseline_spec_sha256': self.s['baseline']['checks']['spec_sha256'],
+            'journey_run_id': self.s['cutover_attempt']['run_id'], 'original_replicas': 2,
+            'scope': 'baseline Checks queue consumers paused while candidate Checks owns the target journeys'}
+        self.intent('isolate-baseline-checks', {})
+        self.r.close_forward('checks')
+        self.patch('deployment', 'checks', current, [{'op': 'replace', 'path': '/spec/replicas', 'value': 0}])
+        deadline = self.clock() + 180
+        while self.r.pods('checks'):
+            require(self.clock() < deadline, 'baseline-checks-stop-timeout')
+            self.pause(1)
+        require(self.baseline_checks()['spec']['replicas'] == 0, 'baseline-checks-not-stopped')
+        # Reject other Checks pods, including terminating pods; a ready Service
+        # endpoint count alone cannot exclude an out-of-route queue consumer.
+        all_checks = [p for p in self.r.get('pods', selector='app.kubernetes.io/name=checks')['items']
+                      if p['metadata'].get('labels', {}).get('app.kubernetes.io/name') == 'checks']
+        require({p['metadata']['uid'] for p in all_checks} == candidates,
+                'unexpected-checks-queue-consumers')
+        self.endpoints('checks', candidates)
+        self.s['checks_isolation'].update(status='isolated', baseline_pods_observed=0,
+            candidate_pods_observed=2, candidate_pod_uids_sha256=hashed(sorted(candidates)))
+        self.s['pending'] = None
+        self.save('baseline-checks-isolated')
+
+    def restore_baseline_checks(self):
+        saved = self.s.get('checks_isolation')
+        if not saved:
+            return
+        self.assert_lease()
+        current = self.baseline_checks()
+        require(saved['baseline_uid'] == current['metadata']['uid']
+                and saved['baseline_spec_sha256'] == self.s['baseline']['checks']['spec_sha256'],
+                'baseline-checks-restoration-binding-invalid')
+        if current['spec']['replicas'] == 0:
+            self.intent('restore-baseline-checks', {})
+            self.patch('deployment', 'checks', current, [{'op': 'replace', 'path': '/spec/replicas', 'value': 2}])
+        self.r.wait_ready('checks')
+        pods = self.r.pods('checks')
+        require(len(pods) == 2 and hashed(self.baseline_checks()['spec']) == saved['baseline_spec_sha256'],
+                'baseline-checks-restoration-incomplete')
+        saved.update(status='restored', restored_replicas=2,
+                     restored_pod_uids_sha256=hashed(sorted(p['metadata']['uid'] for p in pods)))
+        self.s['pending'] = None
+        self.save('baseline-checks-restored')
+
     def cutover(self):
+        if self.s.get('cutover_attempt'):
+            self.s.setdefault('prior_cutover_attempts', []).append({k: copy.deepcopy(self.s.get(k))
+                for k in ('cutover_attempt', 'target_journeys', 'checks_isolation')})
+        self.s.pop('target_journeys', None)
+        self.s.pop('checks_isolation', None)
+        attempt = {'run_id': 'ms67-cutover-' + uuid.uuid4().hex, 'parent_run_id': self.r.run_id}
+        self.s['cutover_attempt'] = attempt
+        self.save('cutover-attempt-prepared')
         states = [CUTOVER_STATES[0]]
         self.create_canaries()
         candidates = {s: {p["metadata"]["uid"] for p in self.canary_pods(s)} for s in SERVICES}
@@ -732,8 +838,9 @@ class FinalDrills:
             self.route(service, {LABEL: self.r.run_id, "app.kubernetes.io/name": service})
             routes["target"][service] = self.endpoints(service, candidates[service])
         states.append("target-traffic-100-percent")
-        candidate_output = self.r.output / "target-journeys"
-        candidate_output.mkdir(exist_ok=True)
+        self.isolate_baseline_checks()
+        candidate_output = self.r.output / ('target-journeys-' + attempt['run_id'])
+        candidate_output.mkdir()
         runtime = CandidateRuntime(project=self.r.project, region=self.r.region, cluster=self.r.cluster,
             namespace=self.r.namespace, images=self.candidates.copy(), run_id=self.r.run_id,
             output=candidate_output, probe_image=self.r.probe_image, signing_key=self.key, signer=self.signer,
@@ -742,16 +849,24 @@ class FinalDrills:
         bindings = {"ms64_receipt_sha256": self.bindings["ms64_receipt_sha256"],
                     "image_lock_sha256": self.bindings["candidate_image_lock_sha256"], "environment": runtime.environment(),
                     "lane": "gke-postgresql-target"}
-        journeys = execute_journeys(runtime, bindings, self.key, self.signer, run_id=self.r.run_id,
-            progress=self.r.progress, checkpoint=lambda v: write_signed(candidate_output / "journeys.json", v, self.key, self.signer))
-        require(journeys["status"] == "passed-shared-journeys", "target-cutover-business-journeys-failed")
+        def checkpoint(value):
+            signed = sign(copy.deepcopy(value), self.key, self.signer)
+            write_signed(candidate_output / 'journeys.json', signed, self.key, self.signer)
+            # Persist the nested result even on failure, before outer cleanup.
+            self.s['target_journeys'] = signed
+            self.save('target-journey-result')
+        journeys = execute_journeys(runtime, bindings, self.key, self.signer, run_id=attempt['run_id'],
+            progress=self.r.progress, checkpoint=checkpoint)
         self.s["target_journeys"] = journeys
+        self.save('target-journeys-finished')
+        require(journeys["status"] == "passed-shared-journeys", "target-cutover-business-journeys-failed")
         states.append("business-journeys-passed")
         # Preserve all acknowledged target transactions across rollback.
         before_rollback = self.stable_snapshot()
         self.s["pre_rollback_state"] = before_rollback
         self.save("before-rollback-state-verified")
         states.append("rollback-triggered")
+        self.restore_baseline_checks()
         for service in SERVICES:
             baseline = {p["metadata"]["uid"] for p in self.r.pods(service)}
             self.route(service, {**self.s["baseline"][service]["selector"],
@@ -768,6 +883,7 @@ class FinalDrills:
         self.s["completed"]["cutover"] = {"states": states, "canary_percent": 50, "target_traffic_percent": 100,
             "canary_percent_scope": "equal ready baseline/candidate endpoint capacity, not exact request share",
             "business_journey_count": journeys["scenario_count"], "journeys_sha256": journeys["content_sha256"],
+            "journey_attempt": attempt, "checks_isolation": copy.deepcopy(self.s['checks_isolation']),
             "rollback_exercised": True, "all_services_recovered": True,
             "pre_state_sha256": before_rollback["state_sha256"], "post_rollback_state_sha256": after["state_sha256"],
             "state_scope": "all application tables and sequences immediately before and after rollback; target writes retained",
@@ -807,6 +923,10 @@ class FinalDrills:
             return self.s["recovery"]
         self.assert_lease()
         errors = []
+        try:
+            self.restore_baseline_checks()
+        except Exception:
+            errors.append('baseline-checks-restoration-failed')
         try:
             self.adopt_customer_mode()
         except Exception:
@@ -885,6 +1005,8 @@ class FinalDrills:
                  "status": PASS if failure is None and recovery["status"] == "restored" else "failed",
                  "reason": failure, "completed": self.s["completed"], "recovery": recovery,
                  "target_journeys": self.s.get("target_journeys"),
+                 "cutover_attempt": self.s.get('cutover_attempt'),
+                 "checks_isolation": self.s.get('checks_isolation'),
                  "customer_startup": self.s.get('customer_startup'),
                  "credentials_persisted": False, "ms67_complete": False,
                  "limitations": ["Controlled drains qualify evacuation, not unplanned power/region failure.",
@@ -893,16 +1015,7 @@ class FinalDrills:
         return sign(value, self.key, self.signer)
 
 
-def verify_observation(value, key, bindings, images, candidates, environment):
-    from .cloudbank_ms65_rehearsal_gke import validate_shared_journeys
-    verified(value, key)
-    require(value.get("observation_type") == OBSERVATION_TYPE and value.get("status") == PASS
-            and value.get("bindings") == bindings and value.get("baseline_images") == images
-            and value.get("candidate_images") == candidates and value.get("environment") == environment
-            and value.get("recovery") == {"status": "restored", "errors": []}
-            and value.get("credentials_persisted") is False, "final-drills-passing-bound-evidence-required")
-    done = value.get("completed", {})
-    mode = value.get('customer_startup')
+def verify_customer_mode(mode):
     if mode is not None:
         require(mode.get('status') == 'passed' and mode.get('applied') is True
                 and mode.get('service') == 'customer' and mode.get('setting') == 'LIQUIBASE_ENABLED'
@@ -916,6 +1029,18 @@ def verify_observation(value, key, bindings, images, candidates, environment):
                     {'customer_changesets': 3, 'expected_changesets': 3, 'successful_changesets': 3},
                     {'locks': 1, 'unlocked': 1}], 'customer-startup-mode-proof-invalid')
         verify_availability(mode['availability'], 2)
+
+
+def verify_observation(value, key, bindings, images, candidates, environment):
+    from .cloudbank_ms65_rehearsal_gke import validate_shared_journeys
+    verified(value, key)
+    require(value.get("observation_type") == OBSERVATION_TYPE and value.get("status") == PASS
+            and value.get("bindings") == bindings and value.get("baseline_images") == images
+            and value.get("candidate_images") == candidates and value.get("environment") == environment
+            and value.get("recovery") == {"status": "restored", "errors": []}
+            and value.get("credentials_persisted") is False, "final-drills-passing-bound-evidence-required")
+    done = value.get("completed", {})
+    verify_customer_mode(value.get('customer_startup'))
     require(set(done) == {"rolling", "resilience", "cutover"}, "all-final-drill-groups-required")
     rolling = done["rolling"]
     require(rolling.get("baseline_restored") is True and [r.get("service") for r in rolling.get("rows", [])] == list(SERVICES),
@@ -949,6 +1074,19 @@ def verify_observation(value, key, bindings, images, candidates, environment):
     journeys = value.get("target_journeys") or {}
     validate_shared_journeys(journeys, key, ms64_sha256=bindings["ms64_receipt_sha256"],
                             image_lock_sha256=bindings["candidate_image_lock_sha256"], environment=environment)
-    require(journeys.get("run_id") == value.get("run_id") and cutover.get("journeys_sha256") == journeys["content_sha256"],
+    attempt = cutover.get('journey_attempt', {})
+    isolation = cutover.get('checks_isolation', {})
+    require(attempt == value.get('cutover_attempt') and attempt.get('parent_run_id') == value.get('run_id')
+            and re.fullmatch(r'ms67-cutover-[0-9a-f]{32}', attempt.get('run_id', ''))
+            and journeys.get("run_id") == attempt['run_id']
+            and cutover.get("journeys_sha256") == journeys["content_sha256"],
             "cutover-journey-binding-invalid")
+    require(isolation == value.get('checks_isolation') and isolation.get('status') == 'restored'
+            and isolation.get('journey_run_id') == attempt['run_id']
+            and isolation.get('original_replicas') == isolation.get('restored_replicas') == 2
+            and isolation.get('baseline_pods_observed') == 0 and isolation.get('candidate_pods_observed') == 2
+            and bool(isolation.get('baseline_uid'))
+            and all(re.fullmatch(HEX, isolation.get(k, '')) for k in
+                ('baseline_spec_sha256', 'candidate_pod_uids_sha256', 'restored_pod_uids_sha256')),
+            'cutover-checks-consumer-isolation-proof-invalid')
     return value

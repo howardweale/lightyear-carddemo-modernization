@@ -36,6 +36,12 @@ The original measurements, signatures and failed attempts remain intact.
    exclusively to candidate endpoints, execute the unchanged 18 shared journeys,
    then route back and remove the candidates. Compare database state immediately
    before and after rollback, retaining acknowledged target transactions.
+   During target journeys, the baseline Checks deployment is temporarily scaled
+   to zero: HTTP routing does not stop its workers polling the shared database
+   queue. The runner first proves two ready candidate endpoints, journals the
+   stop intent, observes no baseline or additional Checks consumers, and restores
+   the exact baseline deployment to two ready replicas before rollback routing.
+   Cleanup also restores it after interruption, using UID and full-spec guards.
 5. Read current runtime identity, image and replica state; scan deployment
    policies; verify TLS, External Secrets, and fresh metrics for all sixteen
    current application pods. Assemble all 28 scenarios, run the canonical
@@ -43,6 +49,28 @@ The original measurements, signatures and failed attempts remain intact.
 
 Only a verified final platform receipt produces `MS67_CLOSEOUT=YES`. It qualifies
 this bounded nonproduction environment; it does not claim production readiness.
+
+## Continue the restored Checks claim failure
+
+For the recorded `inflight-claim-not-observed` failure from controller
+`f6e1b33248299b624dd54fd8e2f291f7da69fa5c`, run the reviewed successor with
+`--execute --retry-candidate-build 43bee3ac-7b44-4407-bafe-bdfedca5bd8e
+--resume-drills --isolate-cutover-checks`.
+
+This verifies the signed failed journey in `drills/target-journeys/journeys.json`,
+its exact release bindings, successful recovery, customer startup correction,
+all eight rollouts, and both evacuations. It archives the original failed journey,
+drill checkpoint and controller state with their signatures unchanged before
+recording the source transition. Existing candidate images, five controls,
+rolling, node and failure-domain results are retained. Execution continues with
+cutover, current-control readback and final admission.
+
+Each cutover attempt uses a new child journey run ID, bound to the final run in
+the signed observation and admission checks. This gives all idempotency keys and
+synthetic account markers fresh identities while retaining earlier records. Each
+attempt has its own output directory; nested journey progress and final failures
+are also included in the cloud recovery checkpoint. No journey assertion or
+latency/recovery acceptance limit is relaxed.
 
 ## Resume and recovery
 

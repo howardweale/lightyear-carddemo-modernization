@@ -106,7 +106,7 @@ class Runtime:
                     "ownerReferences": [{"uid": "rs-"+name, "controller": True}]},
                  "spec": {"nodeName": available[i % len(available)]},
                  "status": {"containerStatuses": [{"name": main["name"], "ready": True, "imageID": main["image"]}]}}
-                for i in range(2)]
+                for i in range(d["spec"].get("replicas", 2))]
 
     def pods(self, service):
         return self.all_pods(service)
@@ -165,8 +165,9 @@ class Runtime:
             return json.dumps(value)
         if args[0] == "patch":
             kind, name = args[1].split("/", 1)
-            self.resources[kind, name] = apply(self.resources[kind, name], json.loads(args[-1]))
-            if kind == "deployment":
+            before = self.resources[kind, name]
+            self.resources[kind, name] = apply(before, json.loads(args[-1]))
+            if kind == "deployment" and before["spec"]["template"] != self.resources[kind, name]["spec"]["template"]:
                 self.generations[name] += 1
         elif args[0] == "delete":
             kind, name = args[1].split("/", 1)
@@ -186,10 +187,10 @@ def engine(directory):
     return obj, runtime, cloud
 
 
-def target_journeys(bindings):
+def target_journeys(bindings, run_id=RUN):
     rows = [{"id": identifier, "normalized_result": result, "status": "passed", "evidence": {"observed": identifier},
              "evidence_sha256": hashed({"observed": identifier})} for identifier, result in SCENARIOS]
-    return sign({"observation_type": "lightyear-cloudbank-shared-journey-execution", "run_id": RUN,
+    return sign({"observation_type": "lightyear-cloudbank-shared-journey-execution", "run_id": run_id,
         "bindings": {**bindings, "journey_contract_sha256": journey_contract()["content_sha256"]},
         "status": "passed-shared-journeys", "scenario_count": 18, "scenarios": rows,
         "recovery": {"status": "restored", "errors": [], "remaining_stopped_services": []},
@@ -206,7 +207,7 @@ class FinalDrillTests(unittest.TestCase):
                 direct_candidate_health=lambda s, p: {"http_status": 200, "pod_uid_sha256": hashed(p["metadata"]["uid"])})
             snapshot = {"state_sha256": "e"*64, "table_count": 8, "row_count": 100, "sequence_count": 3}
             with patch.object(drills, "CandidateRuntime", return_value=fake), patch.object(obj, "stable_snapshot", return_value=snapshot), \
-                 patch.object(drills, "execute_journeys", side_effect=lambda r, b, *a, **kw: target_journeys(b)):
+                 patch.object(drills, "execute_journeys", side_effect=lambda r, b, *a, **kw: target_journeys(b, kw["run_id"])):
                 result = obj.run()
             verify = lambda v: drills.verify_observation(v, KEY, obj.bindings, IMAGES, CANDIDATES, ENV)
             verify(result)
@@ -296,7 +297,7 @@ class FinalDrillTests(unittest.TestCase):
                 direct_candidate_health=lambda s, p: {"http_status": 200, "pod_uid_sha256": hashed(p["metadata"]["uid"])})
             snapshot = {"state_sha256": "e"*64, "table_count": 8, "row_count": 100, "sequence_count": 3}
             with patch.object(drills, "CandidateRuntime", return_value=fake), patch.object(obj, "stable_snapshot", return_value=snapshot), \
-                 patch.object(drills, "execute_journeys", side_effect=lambda r, b, *a, **kw: target_journeys(b)):
+                 patch.object(drills, "execute_journeys", side_effect=lambda r, b, *a, **kw: target_journeys(b, kw["run_id"])):
                 obj.cutover()
             self.assertEqual(obj.s["completed"]["cutover"]["states"], drills.CUTOVER_STATES)
             for s in SERVICES:

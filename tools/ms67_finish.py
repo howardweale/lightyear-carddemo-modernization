@@ -29,7 +29,7 @@ from lightyear_data.cloudbank_image_security import ImageJournal
 from lightyear_data.cloudbank_journeys import ACK, SERVICES, JourneyFailure, require, hashed
 from lightyear_data.cloudbank_journeys_gke import GkeRuntime
 from lightyear_data.cloudbank_ms67_drills import (FinalDrills, verify_observation as verify_drills,
-                                                verify_continuation, verify_customer_failure)
+                                                verify_continuation, verify_customer_failure, verify_cutover_failure)
 from lightyear_data.cloudbank_sql_recovery import invoke, verified, write_signed
 from lightyear_data.contracts import content_hash, sign
 
@@ -38,6 +38,7 @@ CLUSTER = NAMESPACE = "cloudbank-ms67"
 STATE_TYPE = "lightyear-ms67-resumable-final-closeout"
 DRILL_CONTINUATION_SOURCE = "9c159d2b87d411a23b7dbb4e7cc8c41e3398d532"
 CUSTOMER_REPAIR_SOURCE = "9595747e91c75ad33607512932d65d9a6cff7ef6"
+CUTOVER_REPAIR_SOURCE = "f6e1b33248299b624dd54fd8e2f291f7da69fa5c"
 CHILDREN = {"secret-rotation": "cloudbank_secret_rotation", "log-correlation": "cloudbank_log_correlation",
             "alert-drill": "cloudbank_alert_drill", "network-enforcement": "cloudbank_network_enforcement",
             "runtime-identity": "cloudbank_runtime_identity"}
@@ -109,13 +110,17 @@ def observer(callback):
 
 
 class Session:
-    def __init__(self, directory, context, key, commit, retry_of=None, resume_drills=False, repair_customer_startup=False):
+    def __init__(self, directory, context, key, commit, retry_of=None, resume_drills=False, repair_customer_startup=False,
+                 isolate_cutover_checks=False):
         self.directory, self.context, self.key, self.commit = directory, context, key, commit
         self.path = directory / "finish-state.json"
         require(not resume_drills or self.path.is_file(), "resume-drills-requires-existing-final-session")
         require(not repair_customer_startup or (resume_drills and self.path.is_file()),
                 'customer-startup-repair-requires-existing-drill-continuation')
         self.repair_customer_startup = repair_customer_startup
+        require(not isolate_cutover_checks or (resume_drills and self.path.is_file()),
+                'cutover-isolation-requires-existing-drill-continuation')
+        self.isolate_cutover_checks = isolate_cutover_checks
         wanted = {"state_type": STATE_TYPE, "controller_commit": commit,
                   "context_sha256": hashed(context), "credentials_persisted": False}
         if retry_of is not None:
@@ -151,11 +156,16 @@ class Session:
             self.continue_drill_controller()
         require(not repair_customer_startup or self.state.get('customer_startup_repair') is True,
                 'verified-customer-reseed-source-transition-required')
+        require(not isolate_cutover_checks or self.state.get('cutover_checks_isolation') is True,
+                'verified-cutover-isolation-source-transition-required')
         self.save()
 
     def continue_drill_controller(self):
         """Record an explicit source transition; never relabel original evidence."""
         old = self.state
+        if self.isolate_cutover_checks:
+            self.continue_cutover_controller()
+            return
         repair = self.repair_customer_startup
         source = CUSTOMER_REPAIR_SOURCE if repair else DRILL_CONTINUATION_SOURCE
         previous = old.get('controller_transition')
@@ -202,6 +212,46 @@ class Session:
             self.state['customer_startup_repair'] = True
         print(('MS67_FINAL_CONTINUATION=VERIFIED; retained images and controls; customer startup repair bound to failed evidence'
                if repair else 'MS67_FINAL_CONTINUATION=VERIFIED; retained images, controls, rolling and node evacuation'), flush=True)
+
+    def continue_cutover_controller(self):
+        old = self.state
+        previous = old.get('controller_transition') or {}
+        require(old.get('controller_commit') == CUTOVER_REPAIR_SOURCE
+                and previous.get('from') == CUSTOMER_REPAIR_SOURCE and previous.get('to') == CUTOVER_REPAIR_SOURCE
+                and old.get('candidate_controller_commit') == DRILL_CONTINUATION_SOURCE
+                and old.get('customer_startup_repair') is True and old.get('ms67_complete') is False
+                and set(old.get('completed', {})) == {'candidates', *CHILDREN}
+                and (old.get('active') or {}).get('phase') == 'drills',
+                'reviewed-restored-cutover-continuation-required')
+        prior = self.read(previous['previous_parent'])
+        require(prior.get('controller_commit') == CUSTOMER_REPAIR_SOURCE and prior.get('run_id') == old['run_id']
+                and prior.get('context_sha256') == old['context_sha256'], 'cutover-controller-history-invalid')
+        security = self.read(old['completed']['candidates'])
+        images = candidate_tools.verify_result(security, {'run_id': old['run_id'],
+            'controller_commit': DRILL_CONTINUATION_SOURCE, 'images': self.context['images'],
+            'bindings': self.context['bindings']}, self.key)
+        require(security.get('cloud_build_id') == old['candidate_build'].get('build_id'),
+                'retained-candidate-build-binding-mismatch')
+        for phase in CHILDREN:
+            verify_child(phase, self.read(old['completed'][phase]), self.context, self.key)
+        checkpoint = self.read(old['active']['recovery'])
+        require(checkpoint.get('run_id') == old['run_id'], 'retained-drill-run-mismatch')
+        # The preceding worker wrote this signed result locally before cleanup,
+        # but failed before attaching it to its outer observation. Preserve it
+        # verbatim in immutable cloud evidence before any retry can overwrite it.
+        journeys = load(self.directory / 'drills' / 'target-journeys' / 'journeys.json')
+        verify_cutover_failure(checkpoint, journeys, self.key, drill_inputs(self, security),
+                               self.context['images'], images, self.context['environment'])
+        parent_ref = self.publish('retained-controller-' + old['content_sha256'] + '.json', old)
+        checkpoint_ref = self.publish('retained-cutover-failure-' + checkpoint['content_sha256'] + '.json', checkpoint)
+        journey_ref = self.publish('retained-target-journeys-' + journeys['content_sha256'] + '.json', journeys)
+        self.state = {**old, 'controller_commit': self.commit, 'cutover_checks_isolation': True,
+            'controller_transition': {'from': CUTOVER_REPAIR_SOURCE, 'to': self.commit,
+                'previous_parent': parent_ref, 'previous_drill_failure': checkpoint_ref,
+                'previous_target_journeys': journey_ref, 'previous_transition': previous,
+                'retained_context_sha256': hashed(self.context), 'measurements_changed': False,
+                'reason': 'isolate-cutover-queue-consumers-and-use-fresh-journey-fixtures'}}
+        print('MS67_FINAL_CONTINUATION=VERIFIED; retained images, controls, customer startup, rolling and both evacuations', flush=True)
 
     def save(self):
         with observer(None):
@@ -616,6 +666,8 @@ def main(argv=None):
                         help="retain the restored domain-failure evidence and continue only unfinished drills")
     parser.add_argument('--repair-customer-startup', action='store_true',
                         help='verify the recorded customer reseed failure and disable repeat Liquibase initialization')
+    parser.add_argument('--isolate-cutover-checks', action='store_true',
+                        help='verify the restored in-flight claim failure and continue only cutover with isolated consumers')
     args = parser.parse_args(argv)
     os.umask(0o077)
     for tool in ("git", "gcloud", "kubectl"):
@@ -646,7 +698,8 @@ def main(argv=None):
         if args.retry_candidate_build:
             directory, retry_of = candidate_retry(directory, context, key, args.retry_candidate_build)
         session = Session(directory, context, key, commit, retry_of=retry_of, resume_drills=args.resume_drills,
-                          repair_customer_startup=args.repair_customer_startup)
+                          repair_customer_startup=args.repair_customer_startup,
+                          isolate_cutover_checks=args.isolate_cutover_checks)
         print("MS67_FINAL_RETAINED=MS65,MS66,SQL_630,300_SECOND_LOAD", flush=True)
         if session.state.get("ms67_complete"):
             receipt = session.read(session.state["completed"]["admission"])

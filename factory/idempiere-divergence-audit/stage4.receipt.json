@@ -1,0 +1,59 @@
+{
+  "artifact_type": "lightyear-idempiere-triage-receipt",
+  "bindings": {
+    "calibration_sha256": "f592c518a34ad894d6a99380582299a987e21f34bc62c1184de30f3486ec877f",
+    "coverage_sha256": "d3c1db79a22ba3f858007584caceaab8847feaa768ec0e602cad4133bab42db9",
+    "divergence_register_sha256": "15dd3ceeaa4d01a80fd7ff4a2d53be638ebd7d763e5535c0e08ed12183cc2fa4",
+    "implementation_logical_sha256": {
+      "src/lightyear_common/io.py": "8ead1c4e2221cca5a65b3e3ef3cb5d4a841f7d89d33f8b416357076056b3621e",
+      "src/lightyear_data/contracts.py": "a9f8cae57a0c256c3d405ec06468bc45734314b4f7692438726259e4bee56575",
+      "src/lightyear_data/idempiere_comparison.py": "c6ae90d2bfc5855377fae4c22671927c42d59b26d08b60d63bb2789bd2f026b2",
+      "src/lightyear_data/idempiere_triage.py": "576f5f0f4df7939263775afaefdd50245043ab8b57db31b808cd1459f7511450",
+      "src/lightyear_factory/contracts.py": "c25d4f549fb18179b161bf24386fe3f1f55382216cae80a7ccae4671d6537d13",
+      "src/lightyear_factory/providers.py": "f44ee1ce22fe78eb712ee16be560c8d6ef2c4ab498d9937b98dc6f1fd7b4e52d"
+    },
+    "indeterminate_register_sha256": "a21e97c47adc9fdb2b361e7048ac49fe5d1c9ddb939f20aa0ad53ff8a992b51a",
+    "pairing_manifest_sha256": "acf3f2b21fb2ff205028a5a9239602f497ee09f99f82feaa56368e3f74add510",
+    "provenance_register_sha256": "fc26031947a641a9dbf57b066f1155ebdfde712e9dbcdc0400fa025cd2a99d0f",
+    "schema_logical_sha256": "5826a0ef9ddeba03c3f83a965235c51aaa84d90e94478e8f541c7df4da24a586",
+    "source_commit": "731515dcdd5278b843db33b9d3109d155b881951",
+    "source_tree": "041320460a02d4ec23c837d46befa7420c162d0a",
+    "stage2_comparison_sha256": "3ac96b87608118ea31e79e22eac42bc4954eda611855a310ef3abf277c910083",
+    "stage2_receipt_sha256": "1a5db2dd371fdefba20b8fdc09fd7df630fde0493feaa421d589746e3dc1fae4",
+    "triage_policy_sha256": "66ce4d6032fa4597f2756da2f8047a76faa4a365328be755906ef892df10e57a",
+    "work_package_sha256": "1cec108870563a5de5116517523e046366944caa935d01565352957ba571d5ce"
+  },
+  "claims": {
+    "all_flagged_pairs_triaged": false,
+    "application_equivalence": false,
+    "audit_complete": false,
+    "bounded_sample_selected": true,
+    "deterministic_sweep_complete": true,
+    "live_model_triage_complete": false,
+    "native_execution": false,
+    "production_ready": false,
+    "role_contract_calibration_complete": true
+  },
+  "community_contact": "not-authorized-and-not-performed",
+  "content_sha256": "753a66e62a983172fab9667d19613b103d199414574e771c579dd46e5306701e",
+  "milestone": 70,
+  "project_id": "idempiere-release13-oracle-postgresql-divergence-audit",
+  "schema_version": "1.0",
+  "station_usage": {
+    "analyst": "audit-specific-schema-calibrated-on-twenty-bounded-findings",
+    "builder": "not-used-audit-does-not-generate-or-edit-upstream-source",
+    "planner": "audit-specific-schema-calibrated-on-twenty-bounded-findings",
+    "verifier": "deterministic-authority-preserves-ms69-verdict-and-evidence-boundary"
+  },
+  "statistics": {
+    "analyst_contract_cases": 20,
+    "builder_calls": 0,
+    "calibration_cases": 20,
+    "flagged_pairs": 1077,
+    "indeterminate_pairs": 1077,
+    "model_calls": 0,
+    "planner_contract_cases": 20,
+    "proven_divergences": 0
+  },
+  "status": "bounded-role-calibration-and-evidence-assembly-complete"
+}

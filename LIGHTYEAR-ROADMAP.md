@@ -52,7 +52,7 @@ production-qualified.
 | MS #67 | CloudBank Real Non-Production Platform Qualification | Passed; [published execution evidence](docs/receipts/index.html#ms67) |
 | MS #68 | iDempiere Dialect Inventory and Pairing | Complete; deterministic source-bound evidence |
 | MS #69 | iDempiere Deterministic Semantic Comparison | Complete bounded baseline; low decision coverage, open findings |
-| MS #70 | iDempiere Bounded Triage and Evidence Assembly | Planned; comparator findings only |
+| MS #70 | iDempiere Bounded Triage and Evidence Assembly | Complete bounded safe-floor package; live model run remains gated |
 
 ## MS #68–#70 project stream — IDDA
 
@@ -750,9 +750,23 @@ See the [MS #69 brief](docs/milestones/MS-69/MS-69.md) and the IDDA comparison p
 
 ## MS #70 — iDempiere Bounded Triage and Evidence Assembly
 
-Planned. Feed only MS #69 findings to the existing Planner and Analyst workcell with existing token
-preflight and context limits. Keep Builder idle and deterministic verification authoritative.
-Start with a bounded, stratified sample rather than the entire large MS #69 flagged set. Calibrate
-the first twenty flagged comparisons, then assemble the divergence register, coverage
-denominator, provenance classifications, indeterminate list and content-addressed run receipt.
-Community engagement and external publication require separate authorization.
+Complete as a bounded deterministic safe-floor package. Twenty unique MS #69 findings are selected
+across ten repeated reason strata, with one case per stratum from the frozen order-to-cash pilot and
+one from the remaining estate. Each case binds the source paths, logical hashes, implicated ranges,
+MS #69 result hash and reason codes. Runtime hydration admits only the implicated construct and two
+context lines, capped at 48 lines per dialect and 80,000 bytes per role context.
+
+Audit-specific Planner and Analyst schemas now run through the existing bounded-provider controls.
+Each role is capped at 20 calls, 60,000 input tokens and 25,000 output tokens per call; Planner and
+Analyst cost ceilings are USD 50 and USD 150. A live OpenAI run requires token preflight and explicit
+nonzero pricing. Builder is absent. The deterministic verifier rejects invented evidence and cannot
+change the MS #69 semantic verdict; unsupported divergence classifications fall back to
+indeterminate.
+
+The committed calibration deliberately makes no live-model claim: model calls and Builder calls are
+zero. Its assembled evidence preserves all 1,077 flagged pairs as semantically indeterminate,
+records zero proven divergences, and leaves every sampled pair's maintenance provenance unclassified.
+Audit completion, native execution, application equivalence and production readiness remain false.
+Community engagement was not authorized or performed. See the
+[MS #70 brief](docs/milestones/MS-70/MS-70.md) and the
+[IDDA project contract](factory/idempiere-divergence-audit/README.md).

@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schema/idempiere-triage.schema.json",
+  "title": "MS70 bounded iDempiere triage artifacts",
+  "oneOf": [
+    {"$ref": "#/$defs/policy"},
+    {"$ref": "#/$defs/work_package"},
+    {"$ref": "#/$defs/calibration"},
+    {"$ref": "#/$defs/coverage"},
+    {"$ref": "#/$defs/divergence"},
+    {"$ref": "#/$defs/indeterminate"},
+    {"$ref": "#/$defs/provenance"},
+    {"$ref": "#/$defs/receipt"},
+    {"$ref": "#/$defs/model_run"}
+  ],
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "artifact": {
+      "type": "object",
+      "required": ["schema_version", "artifact_type", "milestone", "project_id", "content_sha256"],
+      "properties": {
+        "schema_version": {"const": "1.0"},
+        "artifact_type": {"type": "string"},
+        "milestone": {"const": 70},
+        "project_id": {"const": "idempiere-release13-oracle-postgresql-divergence-audit"},
+        "content_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "claims": {
+      "type": "object",
+      "required": ["deterministic_sweep_complete", "bounded_sample_selected", "role_contract_calibration_complete", "live_model_triage_complete", "all_flagged_pairs_triaged", "audit_complete", "native_execution", "application_equivalence", "production_ready"],
+      "properties": {
+        "deterministic_sweep_complete": {"const": true},
+        "bounded_sample_selected": {"const": true},
+        "role_contract_calibration_complete": {"const": true},
+        "live_model_triage_complete": {"type": "boolean"},
+        "all_flagged_pairs_triaged": {"const": false},
+        "audit_complete": {"const": false},
+        "native_execution": {"const": false},
+        "application_equivalence": {"const": false},
+        "production_ready": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "policy": {
+      "type": "object",
+      "required": ["schema_version", "policy_id", "milestone", "sample_size", "selection", "context", "model_budgets", "roles", "allowed_classifications", "verification_rules", "publication", "content_sha256"],
+      "properties": {
+        "schema_version": {"const": "1.0"},
+        "policy_id": {"const": "idda-bounded-triage-v1"},
+        "milestone": {"const": 70},
+        "sample_size": {"const": 20},
+        "selection": {"type": "object"},
+        "context": {"type": "object"},
+        "model_budgets": {"type": "object"},
+        "roles": {"type": "object"},
+        "allowed_classifications": {"type": "array"},
+        "verification_rules": {"type": "array"},
+        "publication": {"type": "object"},
+        "content_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "work_package": {
+      "allOf": [
+        {"$ref": "#/$defs/artifact"},
+        {"type": "object", "required": ["bindings", "selection", "cases"], "properties": {"artifact_type": {"const": "lightyear-idempiere-triage-work-package"}, "bindings": {"type": "object"}, "selection": {"type": "object"}, "cases": {"type": "array", "minItems": 20, "maxItems": 20}}}
+      ],
+      "unevaluatedProperties": false
+    },
+    "calibration": {
+      "allOf": [
+        {"$ref": "#/$defs/artifact"},
+        {"type": "object", "required": ["bindings", "calibration_class", "cases", "statistics"], "properties": {"artifact_type": {"const": "lightyear-idempiere-triage-calibration"}, "bindings": {"type": "object"}, "calibration_class": {"const": "deterministic-safe-floor-not-model-performance"}, "cases": {"type": "array", "minItems": 20, "maxItems": 20}, "statistics": {"type": "object"}}}
+      ],
+      "unevaluatedProperties": false
+    },
+    "coverage": {
+      "allOf": [
+        {"$ref": "#/$defs/artifact"},
+        {"type": "object", "required": ["bindings", "pairing", "semantic_comparison", "triage"], "properties": {"artifact_type": {"const": "lightyear-idempiere-triage-coverage"}, "bindings": {"type": "object"}, "pairing": {"type": "object"}, "semantic_comparison": {"type": "object"}, "triage": {"type": "object"}}}
+      ],
+      "unevaluatedProperties": false
+    },
+    "divergence": {
+      "allOf": [
+        {"$ref": "#/$defs/artifact"},
+        {"type": "object", "required": ["bindings", "entries", "statistics", "boundary"], "properties": {"artifact_type": {"const": "lightyear-idempiere-divergence-register"}, "bindings": {"type": "object"}, "entries": {"type": "array", "maxItems": 0}, "statistics": {"type": "object"}, "boundary": {"type": "string"}}}
+      ],
+      "unevaluatedProperties": false
+    },
+    "indeterminate": {
+      "allOf": [
+        {"$ref": "#/$defs/artifact"},
+        {"type": "object", "required": ["bindings", "entries", "statistics"], "properties": {"artifact_type": {"const": "lightyear-idempiere-indeterminate-register"}, "bindings": {"type": "object"}, "entries": {"type": "array", "minItems": 1077, "maxItems": 1077}, "statistics": {"type": "object"}}}
+      ],
+      "unevaluatedProperties": false
+    },
+    "provenance": {
+      "allOf": [
+        {"$ref": "#/$defs/artifact"},
+        {"type": "object", "required": ["bindings", "project_premise", "entries", "statistics"], "properties": {"artifact_type": {"const": "lightyear-idempiere-provenance-register"}, "bindings": {"type": "object"}, "project_premise": {"type": "object"}, "entries": {"type": "array", "minItems": 20, "maxItems": 20}, "statistics": {"type": "object"}}}
+      ],
+      "unevaluatedProperties": false
+    },
+    "receipt": {
+      "allOf": [
+        {"$ref": "#/$defs/artifact"},
+        {"type": "object", "required": ["status", "bindings", "statistics", "station_usage", "claims", "community_contact"], "properties": {"artifact_type": {"const": "lightyear-idempiere-triage-receipt"}, "status": {"const": "bounded-role-calibration-and-evidence-assembly-complete"}, "bindings": {"type": "object"}, "statistics": {"type": "object"}, "station_usage": {"type": "object"}, "claims": {"$ref": "#/$defs/claims"}, "community_contact": {"const": "not-authorized-and-not-performed"}}}
+      ],
+      "unevaluatedProperties": false
+    },
+    "model_run": {
+      "allOf": [
+        {"$ref": "#/$defs/artifact"},
+        {"type": "object", "required": ["work_package_sha256", "records", "model_call_evidence", "intelligence", "statistics", "claims"], "properties": {"artifact_type": {"const": "lightyear-idempiere-model-triage-run"}, "work_package_sha256": {"$ref": "#/$defs/sha256"}, "records": {"type": "array", "minItems": 20, "maxItems": 20}, "model_call_evidence": {"type": "array", "minItems": 40, "maxItems": 40}, "intelligence": {"type": "object"}, "statistics": {"type": "object"}, "claims": {"$ref": "#/$defs/claims"}}}
+      ],
+      "unevaluatedProperties": false
+    }
+  }
+}

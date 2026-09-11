@@ -1,0 +1,94 @@
+{
+  "artifact_type": "lightyear-idempiere-triage-coverage",
+  "bindings": {
+    "implementation_logical_sha256": {
+      "src/lightyear_common/io.py": "8ead1c4e2221cca5a65b3e3ef3cb5d4a841f7d89d33f8b416357076056b3621e",
+      "src/lightyear_data/contracts.py": "a9f8cae57a0c256c3d405ec06468bc45734314b4f7692438726259e4bee56575",
+      "src/lightyear_data/idempiere_comparison.py": "c6ae90d2bfc5855377fae4c22671927c42d59b26d08b60d63bb2789bd2f026b2",
+      "src/lightyear_data/idempiere_triage.py": "576f5f0f4df7939263775afaefdd50245043ab8b57db31b808cd1459f7511450",
+      "src/lightyear_factory/contracts.py": "c25d4f549fb18179b161bf24386fe3f1f55382216cae80a7ccae4671d6537d13",
+      "src/lightyear_factory/providers.py": "f44ee1ce22fe78eb712ee16be560c8d6ef2c4ab498d9937b98dc6f1fd7b4e52d"
+    },
+    "pairing_manifest_sha256": "acf3f2b21fb2ff205028a5a9239602f497ee09f99f82feaa56368e3f74add510",
+    "schema_logical_sha256": "5826a0ef9ddeba03c3f83a965235c51aaa84d90e94478e8f541c7df4da24a586",
+    "source_commit": "731515dcdd5278b843db33b9d3109d155b881951",
+    "source_tree": "041320460a02d4ec23c837d46befa7420c162d0a",
+    "stage2_comparison_sha256": "3ac96b87608118ea31e79e22eac42bc4954eda611855a310ef3abf277c910083",
+    "stage2_receipt_sha256": "1a5db2dd371fdefba20b8fdc09fd7df630fde0493feaa421d589746e3dc1fae4",
+    "triage_policy_sha256": "66ce4d6032fa4597f2756da2f8047a76faa4a365328be755906ef892df10e57a"
+  },
+  "content_sha256": "d3c1db79a22ba3f858007584caceaab8847feaa768ec0e602cad4133bab42db9",
+  "milestone": 70,
+  "pairing": {
+    "content_identical_pairs": 31,
+    "exact_version_and_filename_pairs": 1077,
+    "oracle_scripts": 1078,
+    "order_to_cash_pilot_pairs": 93,
+    "paired_script_coverage": 1.0,
+    "paired_script_pairs": 1078,
+    "postgresql_scripts": 1078,
+    "unique_version_and_ticket_id_pairs": 1,
+    "unpaired_oracle_scripts": 0,
+    "unpaired_postgresql_scripts": 0
+  },
+  "project_id": "idempiere-release13-oracle-postgresql-divergence-audit",
+  "schema_version": "1.0",
+  "semantic_comparison": {
+    "coverage_by_dialect": {
+      "oracle": {
+        "administrative_units_excluded": 3053,
+        "input_units": 64414,
+        "parsed-and-compared": 388,
+        "parsed-but-indeterminate": 55455,
+        "sql_units": 61361,
+        "unparsed": 5518
+      },
+      "postgresql": {
+        "administrative_units_excluded": 1074,
+        "input_units": 51006,
+        "parsed-and-compared": 388,
+        "parsed-but-indeterminate": 48467,
+        "sql_units": 49932,
+        "unparsed": 1077
+      }
+    },
+    "coverage_combined": {
+      "administrative_units_excluded": 4127,
+      "input_units": 115420,
+      "parsed-and-compared": 776,
+      "parsed-but-indeterminate": 103922,
+      "sql_units": 111293,
+      "unparsed": 6595
+    },
+    "decided_sql_unit_fraction": 0.00697259,
+    "flagged_pairs": 1077,
+    "pairs": 1078,
+    "verdicts": {
+      "divergent": 0,
+      "equivalent": 1,
+      "indeterminate": 1077
+    }
+  },
+  "triage": {
+    "flagged_pairs": 1077,
+    "sampled_flagged_fraction": 0.0185701,
+    "sampled_pairs": 20,
+    "scope_counts": {
+      "order-to-cash-pilot": 10,
+      "remaining-current-pairs": 10
+    },
+    "stratum_counts": {
+      "character-domain": 2,
+      "constraint-domain": 2,
+      "dml-context": 2,
+      "helper-catalog-effects": 2,
+      "index-domain": 2,
+      "numeric-domain": 2,
+      "ordered-effect-alignment": 2,
+      "procedural-block": 2,
+      "unconsumed-syntax": 2,
+      "unsupported-syntax": 2
+    },
+    "unsampled_flagged_pairs": 1057
+  }
+}

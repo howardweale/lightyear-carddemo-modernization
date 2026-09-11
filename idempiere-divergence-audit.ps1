@@ -5,7 +5,7 @@ $ProjectDir = $PSScriptRoot
 $env:PYTHONPATH = Join-Path $ProjectDir "src"
 $Action = if ($args.Count -gt 0) { $args[0] } else { "verify" }
 
-if ($Action -in @("build", "verify-source", "compare", "verify-comparison-source")) {
+if ($Action -in @("build", "verify-source", "compare", "verify-comparison-source", "verify-triage-source")) {
     if ($args.Count -lt 2) {
         Write-Error "Pinned iDempiere upstream checkout is required for $Action."
         exit 2
@@ -15,11 +15,11 @@ if ($Action -in @("build", "verify-source", "compare", "verify-comparison-source
     exit $LASTEXITCODE
 }
 
-if ($Action -in @("verify", "verify-comparison")) {
+if ($Action -in @("verify", "verify-comparison", "triage", "verify-triage")) {
     Invoke-FactoryDarkPython (Join-Path $ProjectDir "tools\idempiere_divergence_audit.py") `
         $Action --project-root $ProjectDir
     exit $LASTEXITCODE
 }
 
-Write-Error "Usage: .\idempiere-divergence-audit.ps1 [build|verify|verify-source|compare|verify-comparison|verify-comparison-source] [IDEMPIERE_ROOT]"
+Write-Error "Usage: .\idempiere-divergence-audit.ps1 [build|verify|verify-source|compare|verify-comparison|verify-comparison-source|triage|verify-triage|verify-triage-source] [IDEMPIERE_ROOT]"
 exit 2

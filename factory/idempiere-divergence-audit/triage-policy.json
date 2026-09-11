@@ -1,0 +1,107 @@
+{
+  "allowed_classifications": [
+    "deliberate-dialect-adaptation",
+    "cosmetic-difference",
+    "genuine-semantic-divergence",
+    "indeterminate"
+  ],
+  "content_sha256": "66ce4d6032fa4597f2756da2f8047a76faa4a365328be755906ef892df10e57a",
+  "context": {
+    "additional_java_in_scope": false,
+    "historical_migrations_in_scope": false,
+    "immediate_context_lines": 2,
+    "max_excerpt_lines_per_dialect": 48,
+    "max_role_context_bytes": 80000,
+    "source": "pinned-source-ranges-from-ms69-findings-only"
+  },
+  "milestone": 70,
+  "model_budgets": {
+    "analyst": {
+      "max_calls": 20,
+      "max_context_bytes": 80000,
+      "max_cost_usd": 150.0,
+      "max_input_tokens_per_call": 60000,
+      "max_output_tokens_per_call": 25000
+    },
+    "max_total_cost_usd": 200.0,
+    "planner": {
+      "max_calls": 20,
+      "max_context_bytes": 80000,
+      "max_cost_usd": 50.0,
+      "max_input_tokens_per_call": 60000,
+      "max_output_tokens_per_call": 25000
+    },
+    "token_preflight_required": true
+  },
+  "policy_id": "idda-bounded-triage-v1",
+  "publication": {
+    "community_contact_authorized": false,
+    "publish_zero-divergence_and-indeterminate-outcomes": true
+  },
+  "roles": {
+    "analyst": "classifies the bounded difference and states missing evidence",
+    "builder": "not-used-audit-does-not-generate-or-edit-upstream-source",
+    "planner": "selects only supplied evidence ids and narrows analyst questions",
+    "verifier": "deterministic-and-authoritative; preserves the MS69 semantic verdict"
+  },
+  "sample_size": 20,
+  "schema_version": "1.0",
+  "selection": {
+    "one_case_per_scope_and_stratum": true,
+    "scopes": [
+      "order-to-cash-pilot",
+      "remaining-current-pairs"
+    ],
+    "strata": [
+      {
+        "id": "procedural-block",
+        "reason_code": "procedural-block"
+      },
+      {
+        "id": "ordered-effect-alignment",
+        "reason_code": "ordered-effect-alignment-required"
+      },
+      {
+        "id": "helper-catalog-effects",
+        "reason_code": "helper-catalog-and-dependent-view-effects"
+      },
+      {
+        "id": "character-domain",
+        "reason_code": "character-empty-string-length-and-collation-policy"
+      },
+      {
+        "id": "numeric-domain",
+        "reason_code": "unbounded-or-nonportable-numeric-domain"
+      },
+      {
+        "id": "constraint-domain",
+        "reason_code": "constraint-column-domain-required"
+      },
+      {
+        "id": "index-domain",
+        "reason_code": "index-null-collation-and-column-domain-required"
+      },
+      {
+        "id": "unconsumed-syntax",
+        "reason_code": "unconsumed-syntax"
+      },
+      {
+        "id": "unsupported-syntax",
+        "reason_code": "unsupported-syntax"
+      },
+      {
+        "id": "dml-context",
+        "reason_code": "dml-schema-trigger-and-coercion-context-required"
+      }
+    ],
+    "tie_break": "first-pair-with-bilateral-sql-evidence-in-sealed-ms69-report-order"
+  },
+  "verification_rules": [
+    "model-output-cannot-change-ms69-semantic-verdict",
+    "genuine-divergence-requires-ms69-divergent-verdict-and-declared-difference",
+    "deliberate-adaptation-requires-the-bound-postgresql-helper-reason",
+    "cosmetic-difference-requires-identical-logical-source",
+    "all-evidence-identifiers-must-resolve-to-the-hydrated-case-context",
+    "per-pair-maintenance-provenance-remains-unclassified-without-history-evidence"
+  ]
+}

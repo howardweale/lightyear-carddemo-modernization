@@ -4,13 +4,15 @@
 
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.69.0 — iDempiere Deterministic Semantic Comparison**
+Release: **v0.70.0 — iDempiere Bounded Triage Controls and Evidence Assembly**
 
-MS #69 adds a bounded, deterministic comparison baseline for all 1,078 paired migrations,
-running the 93-pair order-to-cash pilot first. Decision coverage remains low: most SQL needs
-schema, session or procedural context and is explicitly indeterminate. This is not a semantic
-equivalence certificate. MS #70 will reuse the existing Planner and Analyst for bounded triage;
-MS #69 calls neither agent and leaves Builder idle. See the [MS #69 brief](docs/milestones/MS-69/MS-69.md) and
+MS #70 turns the 1,077 MS #69 findings into a deterministic 20-case work package: ten reason
+strata, each represented once in the order-to-cash pilot and once in the remaining estate. It adds
+audit-specific Planner and Analyst schemas, hard token/context/cost limits, an authoritative
+verifier, coverage and finding registers, and a content-addressed receipt. The committed evidence
+is a deterministic safe-floor calibration, not live-model performance: model and Builder calls are
+both zero, all 1,077 semantic findings remain indeterminate, and no divergence is promoted. See the
+[MS #70 brief](docs/milestones/MS-70/MS-70.md) and
 [project contract](factory/idempiere-divergence-audit/README.md).
 
 Previous release: **v0.67.0 — CloudBank Real Non-Production Platform Qualification**
@@ -46,14 +48,17 @@ them. Its deterministic Stage 1 paired all 1,078 Oracle/PostgreSQL current-migra
 order-to-cash slice selects 93 pairs for the first comparator pilot.
 
 The source also contains an explicit Oracle-to-PostgreSQL conversion layer, so independent manual
-maintenance is not assumed. The MS #69 baseline now records statement coverage, supported declared
-schema effects, unresolved DML and unsupported constructs. Provenance and complete semantic
-equivalence remain open gates. No model was called and no native or production claim is made. See the
+maintenance is not assumed. The MS #69 baseline records statement coverage, supported declared
+schema effects, unresolved DML and unsupported constructs. MS #70 adds a bounded 20-case
+role-contract calibration and evidence assembly while preserving the deterministic verdict floor.
+Provenance, live-model performance and complete semantic equivalence remain open gates. No
+committed model run, native execution or production claim is made. See the
 [IDDA project contract](factory/idempiere-divergence-audit/README.md) or run:
 
 ```bash
 ./idempiere-divergence-audit.sh verify
 ./idempiere-divergence-audit.sh verify-comparison
+./idempiere-divergence-audit.sh verify-triage
 ```
 
 Previous release: **v0.66.0 — CloudBank Whole-Application Dual-Lane Equivalence**

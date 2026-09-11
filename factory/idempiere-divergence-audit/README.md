@@ -7,7 +7,7 @@ Oracle and PostgreSQL migration scripts in the already-pinned iDempiere release 
 |---|---|---|
 | MS #68 | Inventory, pairing and premise check | Complete |
 | MS #69 | Deterministic semantic comparison | Complete bounded baseline; unresolved semantics reported |
-| MS #70 | Bounded triage and evidence assembly | Planned; comparator findings only |
+| MS #70 | Bounded triage and evidence assembly | Complete bounded safe-floor package; live model run gated |
 
 Customer production readiness, governed cutover and continuous assurance remain future unnumbered
 work. Reassigning these milestone numbers does not change earlier signed CloudBank evidence.
@@ -134,19 +134,32 @@ block can become one opaque remainder unit; unsupported inner statements are not
 Adjacent units with the same category/reasons are compacted into source-range segments. Each
 segment retains its unit interval, line span and a digest of the ordered unit hashes.
 
-### Stage 3 — bounded triage (MS #70 planned)
+### Stage 3 — bounded triage controls (MS #70 complete)
 
-Only Stage 2 findings enter the model workcell. Planner bounds the implicated construct; Analyst
-classifies deliberate adaptation, cosmetic difference, genuine divergence, or indeterminate.
-The existing token preflight and per-role context limit apply. Builder remains unused. A
-deterministic verifier checks evidence and policy; a model classification cannot create a verdict
-by itself.
+Only Stage 2 findings enter the work package. The deterministic sampler selects twenty unique
+cases: one bilateral-evidence case from the frozen pilot and one from the remaining estate for each
+of ten repeated reason strata. Planner bounds the implicated construct; Analyst classifies
+deliberate adaptation, cosmetic difference, genuine divergence, or indeterminate. Runtime context
+contains only the bound source ranges plus two lines, with a 48-line cap per dialect and an
+80,000-byte cap per role.
 
-### Stage 4 — evidence and publication (MS #70 planned)
+Each role is limited to twenty calls, 60,000 input tokens and 25,000 output tokens per call. Planner
+and Analyst cost ceilings are USD 50 and USD 150. A live OpenAI run must use token preflight and
+explicit nonzero pricing. Builder remains unused. A deterministic verifier resolves every cited
+evidence id and reason code, preserves the Stage 2 semantic verdict and downgrades unsupported
+classifications to indeterminate.
 
-Publish the coverage denominator, paired/unpaired register, divergence register, indeterminate
-list, provenance classifications, and one content-addressed run receipt. Community engagement is a
-separate authorized activity; nothing in this repository contacts iDempiere maintainers.
+The committed calibration validates these contracts against the twenty cases without representing
+model performance: it records zero model calls and zero Builder calls. Live model execution remains
+an optional, separately recorded operator action.
+
+### Stage 4 — evidence assembly (MS #70 complete)
+
+The repository publishes the unchanged coverage denominator, a zero-entry proven-divergence
+register, all 1,077 flagged pairs in the semantic-indeterminate register, sampled provenance
+classifications and one content-addressed receipt. Each sampled provenance result remains
+`generation-path-present-per-pair-unclassified`; no history evidence was admitted. Community
+engagement remains a separate authorized activity and was not performed.
 
 ## Run Stage 1
 
@@ -176,9 +189,11 @@ Windows:
 
 Stage 1 proves deterministic pairing and pilot selection for one exact public-source commit.
 Stage 2 adds a bounded static comparison and measures its substantial unresolved surface.
-Neither proves independent hand maintenance, complete migration equivalence, native Oracle or
-PostgreSQL behavior, iDempiere application equivalence, migration completion, customer readiness,
-or production readiness. No signed CloudBank evidence is changed or reused as iDempiere proof.
+Stages 3 and 4 add bounded role contracts, deterministic safe-floor calibration and finding
+registers without claiming live-model performance. None proves independent hand maintenance,
+complete migration equivalence, native Oracle or PostgreSQL behavior, iDempiere application
+equivalence, migration completion, customer readiness, or production readiness. No signed
+CloudBank evidence is changed or reused as iDempiere proof.
 
 ## MS69 measured baseline
 
@@ -206,10 +221,10 @@ declare a single-space default on `t_selection.t_selection_uu` and
 runtime coercion or constraints. It does not claim that either migration executed successfully.
 
 The large flagged set means the original small-queue budget assumptions are not established.
-MS70 must first select a bounded sample and consider repeated reasons. The existing workcell has
-`ModelAgentSet.plan` and `analyze_failure`, backed by `BoundedModelProvider`; its current schemas
-are factory plan/failure schemas, not an IDDA triage API. MS70 must add audit-specific payloads and
-deterministic gates around those existing controls. MS69 intentionally does not instantiate it.
+MS70 consequently selected a bounded sample across repeated reasons instead of admitting the full
+flagged set. Audit-specific Planner and Analyst payloads now sit around `BoundedModelProvider`, with
+deterministic gates retaining verdict authority. The committed release proves contract calibration
+and evidence accounting, not live-model classification quality.
 
 ## Run and verify Stage 2
 
@@ -237,3 +252,29 @@ source ranges, pilot prefix, claim boundaries and the derived receipt. These are
 artifacts: offline integrity is not evidence authentication or a new semantic replay.
 `verify-comparison-source` additionally admits the clean exact pin and rebuilds every result;
 it rejects re-sealed results that disagree with source-derived semantics. Neither executes SQL.
+
+## Run and verify Stages 3 and 4
+
+```bash
+./idempiere-divergence-audit.sh triage
+./idempiere-divergence-audit.sh verify-triage
+./idempiere-divergence-audit.sh verify-triage-source /path/to/idempiere-release-13
+```
+
+```powershell
+.\idempiere-divergence-audit.ps1 triage
+.\idempiere-divergence-audit.ps1 verify-triage
+.\idempiere-divergence-audit.ps1 verify-triage-source C:\path\to\idempiere-release-13
+```
+
+`triage` deterministically rebuilds the policy, twenty-case work package, safe-floor calibration,
+coverage, divergence, indeterminate and provenance registers, and receipt. `verify-triage` checks
+their content hashes, current code/schema/policy bindings, exact derivation, budgets, counts and
+claim boundary. `verify-triage-source` also replays the MS #69 source comparison and hydrates every
+bounded source excerpt from the clean exact pin.
+
+Credentialed execution is intentionally outside the release verifier. The Python controller's
+`run-triage` action requires `OPENAI_API_KEY`, an explicit output path and current positive input and
+output prices for both models. It uses `gpt-5.6-luna` for Planner and `gpt-6-astra` for Analyst by
+default, performs input-token preflight, emits all forty call-evidence records, never invokes
+Builder, and does not rewrite the committed deterministic registers.

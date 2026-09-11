@@ -50,6 +50,25 @@ production-qualified.
 | MS #65 | CloudBank Production-Like Deployment and Cutover Rehearsal | Passed; [published execution evidence](docs/receipts/index.html#ms65) |
 | MS #66 | CloudBank Whole-Application Dual-Lane Equivalence | Passed; [published execution evidence](docs/receipts/index.html#ms66) |
 | MS #67 | CloudBank Real Non-Production Platform Qualification | Passed; [published execution evidence](docs/receipts/index.html#ms67) |
+| MS #68 | iDempiere Dialect Inventory and Pairing | Complete; deterministic source-bound evidence |
+| MS #69 | iDempiere Deterministic Semantic Comparison | Planned; order-to-cash pilot first |
+| MS #70 | iDempiere Bounded Triage and Evidence Assembly | Planned; comparator findings only |
+
+## MS #68–#70 project stream — IDDA
+
+MS #68–#70 are assigned to the iDempiere Oracle/PostgreSQL divergence audit. IDDA reuses MS #33,
+#34, #48–#52 and the existing model-workcell controls. Customer production readiness, governed
+production cutover and continuous production assurance remain future unnumbered work. Historical
+references to MS #68 in earlier signed receipts and milestone briefs retain their original meaning;
+they do not describe this new audit or confer production qualification on it.
+
+Its deterministic Stage 1 is complete: the exact MS #48 source pin yields 1,078 Oracle and 1,078
+PostgreSQL current migration files, resolved into 1,078 pairs with 100% file-level pairing
+coverage. The existing order-to-cash slice selects 93 pilot pairs. Because iDempiere includes an
+Oracle-to-PostgreSQL conversion layer, generated-versus-independent maintenance provenance remains
+an explicit gate. Semantic comparison, agent triage, application equivalence and production
+readiness remain incomplete. The [IDDA contract](factory/idempiere-divergence-audit/README.md)
+defines the non-duplicative scope and next deterministic comparator stage.
 
 The v0.35.0 stored-logic qualification core is retained as supporting MS #34 evidence. It does not
 replace the planned DB2 milestone.
@@ -677,7 +696,7 @@ business equivalence true for the declared synthetic scenarios. Oracle AQ and Mi
 not described as identical to their PostgreSQL replacements; real credit decisions, model-answer
 quality, production data, native CDC, customer infrastructure and IdP, migration completion,
 production deployment, and production readiness remain false. MS #67 owns platform qualification
-and MS #68 owns customer production-readiness certification.
+and customer production-readiness certification remains in the unnumbered backlog.
 
 ## MS #67 — CloudBank Real Non-Production Platform Qualification
 
@@ -707,4 +726,29 @@ non-production platform and synthetic run: all 28 scenarios passed. The retained
 approved 630-second nonproduction requirement; backup restore measured 455 seconds and RPO 18 seconds.
 Deterministic readiness fixtures remain separate admission contracts. Customer IdP, representative customer data
 volume and workload, the customer's approval process, production deployment, and final signed
-production readiness remain MS #68.
+production readiness remain in the unnumbered customer-production backlog.
+
+## MS #68 — iDempiere Dialect Inventory and Pairing
+
+MS #68 completes IDDA Stage 1 using the existing release-13 commit and tree. Its manifest accounts
+for every current Oracle and PostgreSQL migration file, selects the existing order-to-cash pilot,
+and binds the nine-file conversion and dual-file logging boundary. The receipt proves deterministic
+pairing and coverage, not independent maintenance or semantic equivalence. The
+[MS #68 brief](docs/milestones/MS-68/MS-68.md) and
+[IDDA contract](factory/idempiere-divergence-audit/README.md) record the exact evidence and limits.
+
+## MS #69 — iDempiere Deterministic Semantic Comparison
+
+Planned. Implement dialect parsing and normalization against the existing database semantic core,
+beginning with the 93-pair order-to-cash pilot before the remaining 985 pairs. Report parsed and
+compared, indeterminate and unparsed constructs separately. Classify script maintenance provenance
+where history supports it; unsupported or session-dependent semantics cannot pass as equivalent.
+This stage makes no model calls.
+
+## MS #70 — iDempiere Bounded Triage and Evidence Assembly
+
+Planned. Feed only MS #69 findings to the existing Planner and Analyst workcell with existing token
+preflight and context limits. Keep Builder idle and deterministic verification authoritative.
+Calibrate the first twenty flagged comparisons, then assemble the divergence register, coverage
+denominator, provenance classifications, indeterminate list and content-addressed run receipt.
+Community engagement and external publication require separate authorization.

@@ -4,7 +4,15 @@
 
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.67.0 — CloudBank Real Non-Production Platform Qualification**
+Release: **v0.68.0 — iDempiere Dialect Inventory and Pairing**
+
+MS #68 completes the deterministic inventory and pairing stage of the iDempiere Oracle/PostgreSQL
+divergence audit. All 1,078 candidate pairs are accounted for, including the 93-pair order-to-cash
+pilot. MS #69 will implement deterministic comparison; MS #70 will add bounded triage and evidence
+assembly. See the [MS #68 brief](docs/milestones/MS-68/MS-68.md) and
+[project contract](factory/idempiere-divergence-audit/README.md).
+
+Previous release: **v0.67.0 — CloudBank Real Non-Production Platform Qualification**
 
 v0.67 turns the MS #65 deployment design into a deployable real-platform package and chains its
 admission to both the signed MS #65 rehearsal and signed MS #66 whole-application equivalence result.
@@ -26,7 +34,24 @@ aggregate p95 160.69 ms. PITR was accepted at 622 seconds under the approved 630
 requirement; backup restore took 455 seconds and RPO was 18 seconds. The measured evidence is unchanged.
 
 The original signed execution receipts are distinct from deterministic readiness fixtures. Customer IdP, representative customer volumes and workload, customer approval, production
-deployment, and final production readiness remain MS #68.
+deployment, and final production readiness remain in the unnumbered customer-production backlog.
+
+## MS #68–#70 — iDempiere dialect divergence audit
+
+The IDDA project reuses the MS #48 iDempiere release-13 pin, MS #33 database semantic
+core, MS #49–#51 Oracle authority program, and MS #52 order-to-cash estate instead of rebuilding
+them. Its deterministic Stage 1 paired all 1,078 Oracle/PostgreSQL current-migration candidates:
+1,077 by exact release/filename and one by a unique same-release ticket id. The existing
+order-to-cash slice selects 93 pairs for the first comparator pilot.
+
+The source also contains an explicit Oracle-to-PostgreSQL conversion layer, so independent manual
+maintenance is not assumed. Script provenance and semantic comparison remain open gates; no model
+was called and no equivalence or production claim is made. See the
+[IDDA project contract](factory/idempiere-divergence-audit/README.md) or run:
+
+```bash
+./idempiere-divergence-audit.sh verify
+```
 
 Previous release: **v0.66.0 — CloudBank Whole-Application Dual-Lane Equivalence**
 
@@ -45,7 +70,7 @@ normalized results for 18 business, negative, messaging, dependency-failure, con
 restart, and full-stack recovery scenarios. Oracle AQ versus the PostgreSQL work queue and MicroTx
 LRA versus an atomic PostgreSQL transaction remain intentional internal changes. The [published MS66 execution receipt](docs/receipts/index.html#ms66) passes all 18 declared
 scenarios. MS67 nonproduction platform qualification is also complete; customer production-readiness
-certification remains MS68.
+certification remains in the unnumbered customer-production backlog.
 
 Earlier release: **v0.65.0 — CloudBank Production-Like Deployment and Cutover Rehearsal**
 

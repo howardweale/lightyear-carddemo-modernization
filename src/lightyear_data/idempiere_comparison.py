@@ -62,7 +62,7 @@ def policy() -> dict[str, Any]:
         "policy_id": "idda-static-declared-effects-v1",
         "milestone": 69,
         "verdict_scope": "ordered-declared-schema-effects-not-final-state-or-execution",
-        "semantic_core": str(SEMANTIC_CORE_PATH),
+        "semantic_core": SEMANTIC_CORE_PATH.as_posix(),
         "compatibility_classes": [item.value for item in CompatibilityClass],
         "equivalence_requires": [
             "all-in-scope-units-fully-parsed-and-decided",

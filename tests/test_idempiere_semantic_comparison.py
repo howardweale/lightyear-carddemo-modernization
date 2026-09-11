@@ -213,6 +213,12 @@ class IdempiereComparisonEvidenceTests(unittest.TestCase):
     def test_committed_reports_verify(self):
         self.assertEqual([], validate_stage2_artifacts(ROOT))
 
+    def test_policy_uses_portable_semantic_core_path(self):
+        self.assertEqual(
+            "data-modernization/semantic-core/database-semantic-core.json",
+            policy()["semantic_core"],
+        )
+
     def test_pilot_is_first_and_full_denominator_is_preserved(self):
         pilot, report = self.artifacts[PILOT_PATH.name], self.artifacts[REPORT_PATH.name]
         self.assertEqual(93, len(pilot["results"]))

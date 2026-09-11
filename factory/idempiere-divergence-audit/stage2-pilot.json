@@ -4,7 +4,7 @@
     "implementation_logical_sha256": {
       "src/lightyear_common/io.py": "8ead1c4e2221cca5a65b3e3ef3cb5d4a841f7d89d33f8b416357076056b3621e",
       "src/lightyear_data/contracts.py": "a9f8cae57a0c256c3d405ec06468bc45734314b4f7692438726259e4bee56575",
-      "src/lightyear_data/idempiere_comparison.py": "859f13c2446069961a527251a44af94604e671d9dcb11f31089abdb5b4817ad6",
+      "src/lightyear_data/idempiere_comparison.py": "c6ae90d2bfc5855377fae4c22671927c42d59b26d08b60d63bb2789bd2f026b2",
       "src/lightyear_data/idempiere_divergence.py": "c11cfc5a0dc53f7bd2c7c13faabe854e55aa6af00520acbac156005fdd9097da",
       "src/lightyear_data/idempiere_sql.py": "7d3337a9b4f6a01c7df62e3849a027ff27e1ca099828781ac6a368a704976ee0",
       "src/lightyear_data/semantic_core.py": "872e17477a138eec8f8fe37eb692acb971e76c0faa8596645fa3f775f9036c35"
@@ -25,7 +25,7 @@
     "native_execution": false,
     "production_ready": false
   },
-  "content_sha256": "a30f8e6b321e2f4b17f3cad7d1c365cb196cc6c4439163b6123eef212d898f6d",
+  "content_sha256": "a4e155070a20fe1c7efff61d24f2e8c76f6d38b52264d2e8336cbefec5b7003d",
   "helper_definition": {
     "deployment_and_historical_version_verified": false,
     "logical_sha256": "b484deffa18b8f0fefaec025b0ce123878245dabd440b33042785d0bd7c6130e",

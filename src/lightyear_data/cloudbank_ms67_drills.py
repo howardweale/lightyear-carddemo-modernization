@@ -850,7 +850,7 @@ class FinalDrills:
                     "image_lock_sha256": self.bindings["candidate_image_lock_sha256"], "environment": runtime.environment(),
                     "lane": "gke-postgresql-target"}
         def checkpoint(value):
-            signed = sign(value, self.key, self.signer)
+            signed = sign(copy.deepcopy(value), self.key, self.signer)
             write_signed(candidate_output / 'journeys.json', signed, self.key, self.signer)
             # Persist the nested result even on failure, before outer cleanup.
             self.s['target_journeys'] = signed

@@ -131,7 +131,15 @@ class CutoverChecksTests(unittest.TestCase):
             def failed(r, b, *a, **kw):
                 self.assertEqual(runtime.pods('checks'), [])
                 value = failed_journeys(b, kw['run_id']); kw['checkpoint'](value)
-                return value
+                retained = copy.deepcopy(value)
+                # The canonical runner appends skipped scenarios after a failed
+                # checkpoint, then performs recovery IO before its final save.
+                value['scenarios'].append({'id': 'later-progress', 'status': 'not-run'})
+                obj.save('recovery-after-more-journey-progress')
+                durable = json.loads(cloud.objects[obj.journal.uri][1])
+                self.assertEqual(durable['target_journeys'], retained)
+                drills.verified(durable['target_journeys'], KEY)
+                return retained
             with patch.object(obj, 'database_query', return_value='\n'.join(map(json.dumps, METADATA))), \
                  patch.object(obj, 'stable_snapshot', return_value=snapshot()), \
                  patch.object(drills, 'CandidateRuntime', return_value=fake_candidate()), \

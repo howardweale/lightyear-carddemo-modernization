@@ -79,7 +79,7 @@ class CustomerStartupTests(unittest.TestCase):
                 with patch.object(obj, 'database_query', return_value='\n'.join(map(json.dumps, METADATA))), \
                      patch.object(obj, 'stable_snapshot', return_value=snapshot()), \
                      patch.object(drills, 'CandidateRuntime', return_value=fake), \
-                     patch.object(drills, 'execute_journeys', side_effect=lambda r, b, *a, **kw: target_journeys(b)):
+                     patch.object(drills, 'execute_journeys', side_effect=lambda r, b, *a, **kw: target_journeys(b, kw["run_id"])):
                     result = obj.run(repair_customer_startup=True)
                 self.assertIsNone(result['reason'], result)
                 drills.verify_observation(result, KEY, obj.bindings, IMAGES, CANDIDATES, ENV)

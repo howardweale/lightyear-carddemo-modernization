@@ -151,6 +151,7 @@ jobs:
           LIGHTYEAR_MS67_DOCKER_TEST=1 python -m unittest discover -s tests -p test_ms67_candidate_retry.py -v
           python -m unittest discover -s tests -p test_ms67_drill_continuation.py -v
           python -m unittest discover -s tests -p test_ms67_customer_startup.py -v
+          python -m unittest discover -s tests -p test_ms67_cutover_checks.py -v
           python -m unittest discover -s tests -p test_cloudbank_platform_qualification.py -v
 
   cloudbank-source-build:

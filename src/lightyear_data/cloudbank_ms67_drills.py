@@ -105,16 +105,18 @@ def verify_availability(row, minimum):
             "drill-availability-measurement-invalid")
 
 
-def verify_continuation(state, key, bindings, images, candidates, environment, *, cutover=False):
+def verify_continuation(state, key, bindings, images, candidates, environment, *, cutover=False, rollback=False):
     """Validate the measured prefix from the specified restored failure."""
     verified(state, key)
+    require(not rollback or cutover, 'rollback-continuation-requires-cutover-prefix')
     require(state.get("state_type") == STATE_TYPE and state.get("bindings") == bindings
             and state.get("environment") == environment and state.get("baseline_images") == images
             and state.get("candidate_images") == candidates and state.get("credentials_persisted") is False
             and state.get("phase") == "baseline-restored" and state.get("cleanup_required") is False
             and state.get("pending") is None and (cutover or state.get("canaries") == {})
             and state.get("recovery") == {"status": "restored", "errors": []}
-            and state.get("failure") == ("target-cutover-business-journeys-failed" if cutover else
+            and state.get("failure") == ("operator-command-failed" if rollback else
+                                         "target-cutover-business-journeys-failed" if cutover else
                                          "evacuation-normalized-database-state-changed"),
             "restored-cutover-checkpoint-required" if cutover else "restored-failure-domain-checkpoint-required")
     done = state.get("completed", {})
@@ -135,6 +137,23 @@ def verify_continuation(state, key, bindings, images, candidates, environment, *
             and node.get("all_services_recovered") is True and node.get("node_scheduling_restored") is True
             and node.get("nodes_sha256") == hashed(state["node_plan"][kind]), "retained-node-evacuation-invalid")
         verify_availability(node["availability"], 1)
+    return state
+
+
+def verify_rollback_failure(state, key, bindings, images, candidates, environment):
+    """Retain the signed passed journeys; an unfinished rollback is still failed."""
+    from .cloudbank_ms65_rehearsal_gke import validate_shared_journeys
+    verify_continuation(state, key, bindings, images, candidates, environment, cutover=True, rollback=True)
+    verify_customer_mode(state.get('customer_startup'))
+    require(state.get('customer_startup') is not None, 'retained-customer-startup-proof-required')
+    journeys = state.get('target_journeys') or {}
+    validate_shared_journeys(journeys, key, ms64_sha256=bindings['ms64_receipt_sha256'],
+                            image_lock_sha256=bindings['candidate_image_lock_sha256'], environment=environment)
+    verify_cutover_attempt(state, journeys, state.get('cutover_attempt') or {}, state.get('checks_isolation') or {})
+    before = state.get('pre_rollback_state') or {}
+    require(bool(before.get('objects')) and before == detailed_snapshot('\n'.join(
+        json.dumps(row) for row in [{'unsupported': 0}, *before['objects']])),
+        'retained-pre-rollback-database-snapshot-required')
     return state
 
 
@@ -673,6 +692,7 @@ class FinalDrills:
             self.save("evacuation-passed-" + kind)
 
     def route(self, service, selector):
+        self.s['route_operation'] = {'service': service, 'operation': 'read-service', 'patch_attempts': 0}
         current = self.r.get("service", service)
         original = self.s["baseline"][service]
         allowed = [original["selector"], {**original["selector"], "pod-template-hash": original["baseline_pod_hash"]},
@@ -681,12 +701,58 @@ class FinalDrills:
                 and current["spec"].get("selector") in allowed and selector in allowed,
                 "service-route-changed-by-another-operator")
         if current["spec"]["selector"] != selector:
-            self.intent("route-" + service, {"service": service, "selector": selector})
-            self.patch("service", service, current,
-                       [{"op": "replace", "path": "/spec/selector", "value": selector}])
+            before = copy.deepcopy(current['spec'])
+            desired = {**before, 'selector': copy.deepcopy(selector)}
+            self.intent("route-" + service, {"service": service, "selector": selector,
+                'before_spec_sha256': hashed(before), 'desired_spec_sha256': hashed(desired)})
+            self.patch_route(service, original['service_uid'], before, desired)
         self.r.close_forward(service)
         self.s["pending"] = None
         self.save("route-updated-" + service)
+
+    def patch_route(self, service, uid, before, desired):
+        """Re-read after durable intent; never retry over a changed Service spec."""
+        detail = self.s['route_operation']
+        def read():
+            detail['operation'] = 'read-service'
+            value = self.r.get('service', service)
+            require(value['metadata']['uid'] == uid and not value['metadata'].get('deletionTimestamp')
+                    and value['spec'] in (before, desired), 'service-route-identity-or-spec-drift-' + service)
+            detail['observed_resource_version'] = value['metadata']['resourceVersion']
+            detail['observed_spec_sha256'] = hashed(value['spec'])
+            return value
+        for attempt in range(1, 4):
+            detail['operation'] = 'verify-lease'
+            self.assert_lease()
+            # The checkpoint upload can take seconds. Do not use the version
+            # captured before it. UID/resourceVersion tests remain atomic.
+            current = read()
+            if current['spec'] == desired:
+                detail['operation'] = 'desired-route-verified'
+                return
+            detail.update(operation='patch-service-selector', patch_attempts=attempt,
+                          patched_resource_version=current['metadata']['resourceVersion'])
+            try:
+                self.patch('service', service, current,
+                    [{'op': 'replace', 'path': '/spec/selector', 'value': desired['selector']}])
+            except JourneyFailure as exc:
+                if str(exc) not in {'operator-command-failed', 'operator-command-unavailable-or-timed-out'}:
+                    raise
+                # An error may follow a committed update. Adopt only a readback
+                # of the exact desired spec. Otherwise retry solely when the
+                # version changed and the complete original spec is intact.
+                observed = read()
+                if observed['spec'] == desired:
+                    detail['operation'] = 'desired-route-verified-after-command-error'
+                    return
+                changed = observed['metadata']['resourceVersion'] != current['metadata']['resourceVersion']
+                detail.update(operation='patch-service-selector-failed', version_changed=changed)
+                require(changed and attempt < 3, 'service-route-patch-failed-' + service)
+                self.pause(.2)
+                continue
+            require(read()['spec'] == desired, 'service-route-readback-mismatch-' + service)
+            detail['operation'] = 'desired-route-verified'
+            return
 
     def canary_pods(self, service):
         name = candidate_name(service, self.r.run_id)
@@ -812,9 +878,9 @@ class FinalDrills:
     def cutover(self):
         if self.s.get('cutover_attempt'):
             self.s.setdefault('prior_cutover_attempts', []).append({k: copy.deepcopy(self.s.get(k))
-                for k in ('cutover_attempt', 'target_journeys', 'checks_isolation')})
-        self.s.pop('target_journeys', None)
-        self.s.pop('checks_isolation', None)
+                for k in ('cutover_attempt', 'target_journeys', 'checks_isolation', 'pre_rollback_state', 'failure_context')})
+        for key in ('target_journeys', 'checks_isolation', 'pre_rollback_state', 'failure_context', 'route_operation'):
+            self.s.pop(key, None)
         attempt = {'run_id': 'ms67-cutover-' + uuid.uuid4().hex, 'parent_run_id': self.r.run_id}
         self.s['cutover_attempt'] = attempt
         self.save('cutover-attempt-prepared')
@@ -996,6 +1062,8 @@ class FinalDrills:
         except (Exception, KeyboardInterrupt) as exc:
             failure = str(exc) if isinstance(exc, JourneyFailure) else "final-drill-interrupted-or-runtime-error"
             self.s["failure"] = failure
+            self.s['failure_context'] = copy.deepcopy({'phase': self.s.get('phase'),
+                'pending': self.s.get('pending'), 'last_route_operation': self.s.get('route_operation')})
             self.save("drill-failed")
         finally:
             recovery = self.cleanup()
@@ -1004,6 +1072,7 @@ class FinalDrills:
                  "baseline_images": self.baseline_images, "candidate_images": self.candidates,
                  "status": PASS if failure is None and recovery["status"] == "restored" else "failed",
                  "reason": failure, "completed": self.s["completed"], "recovery": recovery,
+                 "failure_context": self.s.get('failure_context'),
                  "target_journeys": self.s.get("target_journeys"),
                  "cutover_attempt": self.s.get('cutover_attempt'),
                  "checks_isolation": self.s.get('checks_isolation'),
@@ -1076,10 +1145,15 @@ def verify_observation(value, key, bindings, images, candidates, environment):
                             image_lock_sha256=bindings["candidate_image_lock_sha256"], environment=environment)
     attempt = cutover.get('journey_attempt', {})
     isolation = cutover.get('checks_isolation', {})
+    require(cutover.get('journeys_sha256') == journeys['content_sha256'], 'cutover-journey-binding-invalid')
+    verify_cutover_attempt(value, journeys, attempt, isolation)
+    return value
+
+
+def verify_cutover_attempt(value, journeys, attempt, isolation):
     require(attempt == value.get('cutover_attempt') and attempt.get('parent_run_id') == value.get('run_id')
             and re.fullmatch(r'ms67-cutover-[0-9a-f]{32}', attempt.get('run_id', ''))
-            and journeys.get("run_id") == attempt['run_id']
-            and cutover.get("journeys_sha256") == journeys["content_sha256"],
+            and journeys.get("run_id") == attempt['run_id'],
             "cutover-journey-binding-invalid")
     require(isolation == value.get('checks_isolation') and isolation.get('status') == 'restored'
             and isolation.get('journey_run_id') == attempt['run_id']

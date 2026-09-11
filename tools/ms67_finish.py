@@ -29,7 +29,8 @@ from lightyear_data.cloudbank_image_security import ImageJournal
 from lightyear_data.cloudbank_journeys import ACK, SERVICES, JourneyFailure, require, hashed
 from lightyear_data.cloudbank_journeys_gke import GkeRuntime
 from lightyear_data.cloudbank_ms67_drills import (FinalDrills, verify_observation as verify_drills,
-                                                verify_continuation, verify_customer_failure, verify_cutover_failure)
+                                                verify_continuation, verify_customer_failure, verify_cutover_failure,
+                                                verify_rollback_failure)
 from lightyear_data.cloudbank_sql_recovery import invoke, verified, write_signed
 from lightyear_data.contracts import content_hash, sign
 
@@ -39,6 +40,7 @@ STATE_TYPE = "lightyear-ms67-resumable-final-closeout"
 DRILL_CONTINUATION_SOURCE = "9c159d2b87d411a23b7dbb4e7cc8c41e3398d532"
 CUSTOMER_REPAIR_SOURCE = "9595747e91c75ad33607512932d65d9a6cff7ef6"
 CUTOVER_REPAIR_SOURCE = "f6e1b33248299b624dd54fd8e2f291f7da69fa5c"
+ROUTE_REPAIR_SOURCE = "e05aa131badbdcd63b3698a0a73d860d6ccf0782"
 CHILDREN = {"secret-rotation": "cloudbank_secret_rotation", "log-correlation": "cloudbank_log_correlation",
             "alert-drill": "cloudbank_alert_drill", "network-enforcement": "cloudbank_network_enforcement",
             "runtime-identity": "cloudbank_runtime_identity"}
@@ -111,7 +113,7 @@ def observer(callback):
 
 class Session:
     def __init__(self, directory, context, key, commit, retry_of=None, resume_drills=False, repair_customer_startup=False,
-                 isolate_cutover_checks=False):
+                 isolate_cutover_checks=False, repair_rollback_routes=False):
         self.directory, self.context, self.key, self.commit = directory, context, key, commit
         self.path = directory / "finish-state.json"
         require(not resume_drills or self.path.is_file(), "resume-drills-requires-existing-final-session")
@@ -121,6 +123,10 @@ class Session:
         require(not isolate_cutover_checks or (resume_drills and self.path.is_file()),
                 'cutover-isolation-requires-existing-drill-continuation')
         self.isolate_cutover_checks = isolate_cutover_checks
+        require(not repair_rollback_routes or (resume_drills and self.path.is_file()
+                and not repair_customer_startup and not isolate_cutover_checks),
+                'rollback-route-repair-requires-existing-drill-continuation')
+        self.repair_rollback_routes = repair_rollback_routes
         wanted = {"state_type": STATE_TYPE, "controller_commit": commit,
                   "context_sha256": hashed(context), "credentials_persisted": False}
         if retry_of is not None:
@@ -158,11 +164,16 @@ class Session:
                 'verified-customer-reseed-source-transition-required')
         require(not isolate_cutover_checks or self.state.get('cutover_checks_isolation') is True,
                 'verified-cutover-isolation-source-transition-required')
+        require(not repair_rollback_routes or self.state.get('rollback_route_repair') is True,
+                'verified-rollback-route-source-transition-required')
         self.save()
 
     def continue_drill_controller(self):
         """Record an explicit source transition; never relabel original evidence."""
         old = self.state
+        if self.repair_rollback_routes:
+            self.continue_rollback_controller()
+            return
         if self.isolate_cutover_checks:
             self.continue_cutover_controller()
             return
@@ -252,6 +263,45 @@ class Session:
                 'retained_context_sha256': hashed(self.context), 'measurements_changed': False,
                 'reason': 'isolate-cutover-queue-consumers-and-use-fresh-journey-fixtures'}}
         print('MS67_FINAL_CONTINUATION=VERIFIED; retained images, controls, customer startup, rolling and both evacuations', flush=True)
+
+    def continue_rollback_controller(self):
+        old = self.state
+        previous = old.get('controller_transition') or {}
+        require(old.get('controller_commit') == ROUTE_REPAIR_SOURCE
+                and previous.get('from') == CUTOVER_REPAIR_SOURCE and previous.get('to') == ROUTE_REPAIR_SOURCE
+                and old.get('candidate_controller_commit') == DRILL_CONTINUATION_SOURCE
+                and old.get('customer_startup_repair') is True and old.get('cutover_checks_isolation') is True
+                and old.get('ms67_complete') is False
+                and set(old.get('completed', {})) == {'candidates', *CHILDREN}
+                and (old.get('active') or {}).get('phase') == 'drills',
+                'reviewed-restored-rollback-continuation-required')
+        prior = self.read(previous['previous_parent'])
+        require(prior.get('controller_commit') == CUTOVER_REPAIR_SOURCE and prior.get('run_id') == old['run_id']
+                and prior.get('context_sha256') == old['context_sha256'], 'rollback-controller-history-invalid')
+        security = self.read(old['completed']['candidates'])
+        images = candidate_tools.verify_result(security, {'run_id': old['run_id'],
+            'controller_commit': DRILL_CONTINUATION_SOURCE, 'images': self.context['images'],
+            'bindings': self.context['bindings']}, self.key)
+        require(security.get('cloud_build_id') == old['candidate_build'].get('build_id'),
+                'retained-candidate-build-binding-mismatch')
+        for phase in CHILDREN:
+            verify_child(phase, self.read(old['completed'][phase]), self.context, self.key)
+        checkpoint = self.read(old['active']['recovery'])
+        require(checkpoint.get('run_id') == old['run_id'], 'retained-drill-run-mismatch')
+        verify_rollback_failure(checkpoint, self.key, drill_inputs(self, security),
+                                self.context['images'], images, self.context['environment'])
+        journeys = checkpoint['target_journeys']
+        parent_ref = self.publish('retained-controller-' + old['content_sha256'] + '.json', old)
+        checkpoint_ref = self.publish('retained-rollback-failure-' + checkpoint['content_sha256'] + '.json', checkpoint)
+        journey_ref = self.publish('retained-target-journeys-' + journeys['content_sha256'] + '.json', journeys)
+        self.state = {**old, 'controller_commit': self.commit, 'rollback_route_repair': True,
+            'controller_transition': {'from': ROUTE_REPAIR_SOURCE, 'to': self.commit,
+                'previous_parent': parent_ref, 'previous_drill_failure': checkpoint_ref,
+                'previous_target_journeys': journey_ref, 'previous_transition': previous,
+                'retained_context_sha256': hashed(self.context), 'measurements_changed': False,
+                'reason': 'refresh-guarded-service-version-after-durable-route-intent'}}
+        print('MS67_FINAL_CONTINUATION=VERIFIED; retained passed journeys and database snapshot; '
+              'unfinished cutover requires fresh rollback proof', flush=True)
 
     def save(self):
         with observer(None):
@@ -517,6 +567,8 @@ def run_drills(session, security, images):
     reference = session.publish("drills-observation-" + uuid.uuid4().hex + ".json", result)
     if result.get("status") == "failed":
         print("MS67_FINAL_DRILL_RESULT=" + reference["uri"], flush=True)
+        if result.get('failure_context'):
+            print('MS67_FINAL_FAILURE_CONTEXT=' + json.dumps(result['failure_context'], sort_keys=True), flush=True)
         raise JourneyFailure(result.get("reason") or "final-drill-failed-inspect-observation")
     verify_drills(result, session.key, bindings, session.context["images"], images, session.context["environment"])
     session.finish_phase("drills", reference)
@@ -668,6 +720,8 @@ def main(argv=None):
                         help='verify the recorded customer reseed failure and disable repeat Liquibase initialization')
     parser.add_argument('--isolate-cutover-checks', action='store_true',
                         help='verify the restored in-flight claim failure and continue only cutover with isolated consumers')
+    parser.add_argument('--repair-rollback-routes', action='store_true',
+                        help='verify the restored operator failure after passed journeys and retry unfinished cutover')
     args = parser.parse_args(argv)
     os.umask(0o077)
     for tool in ("git", "gcloud", "kubectl"):
@@ -699,7 +753,8 @@ def main(argv=None):
             directory, retry_of = candidate_retry(directory, context, key, args.retry_candidate_build)
         session = Session(directory, context, key, commit, retry_of=retry_of, resume_drills=args.resume_drills,
                           repair_customer_startup=args.repair_customer_startup,
-                          isolate_cutover_checks=args.isolate_cutover_checks)
+                          isolate_cutover_checks=args.isolate_cutover_checks,
+                          repair_rollback_routes=args.repair_rollback_routes)
         print("MS67_FINAL_RETAINED=MS65,MS66,SQL_630,300_SECOND_LOAD", flush=True)
         if session.state.get("ms67_complete"):
             receipt = session.read(session.state["completed"]["admission"])

@@ -90,5 +90,9 @@
  .tower-navigation { padding:10px 16px; }
  #operator-session-label { width:100%; margin-left:0; order:3; }
  .decision-mode .operator-context, .decision-mode .estate-control, .decision-mode #live-alerts { display:none; }
- .decision-mode .masthead { flex-wrap:wrap; }
+ .decision-mode .masthead { grid-template-columns:minmax(0,1fr) auto; padding-inline:16px; }
+ .decision-mode .estate-boundary.claim { flex-wrap:wrap; padding-inline:16px; }
+ .decision-mode .claim p { min-width:0; flex-basis:100%; }
+ .decision-mode .claim-metadata { grid-template-columns:repeat(3,minmax(0,1fr)); max-width:100%; }
+ .decision-heading h1 { white-space:normal; }
 }

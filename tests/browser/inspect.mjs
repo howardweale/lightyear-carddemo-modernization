@@ -46,9 +46,13 @@ try {
         assert.equal(await page.locator('.execution-service').count(), 8);
         assert.equal(await page.locator('.execution-service .decision-badge.approved').count(), 8);
         assert(await page.locator('img[alt="LIGHTYEAR primary logo"]').evaluate((image) => image.complete && image.naturalWidth > 0));
-        const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
-        assert.equal(overflow, false, `${name}/${layout} has horizontal overflow`);
         await page.screenshot({ path: resolve(output, `${name}-${layout}-overview.png`), fullPage: true });
+        const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1);
+        if (overflow) {
+          const elements = await page.evaluate(() => [...document.querySelectorAll('body *')].filter((node) => node.getBoundingClientRect().right > window.innerWidth + 1).slice(0, 20).map((node) => ({ tag: node.tagName, id: node.id, classes: node.className, right: node.getBoundingClientRect().right })));
+          await writeFile(resolve(output, `${name}-${layout}-overflow.json`), JSON.stringify(elements, null, 2));
+        }
+        assert.equal(overflow, false, `${name}/${layout} has horizontal overflow`);
         await page.locator('[data-service="account"] > summary').click();
         await page.locator('#execution-provenance > summary').click();
         const receipt = page.locator('[data-service="account"] .execution-receipt code').first();

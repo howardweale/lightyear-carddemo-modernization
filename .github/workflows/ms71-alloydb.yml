@@ -1,0 +1,36 @@
+name: MS71 managed target contracts
+on:
+  pull_request:
+    paths:
+      - 'src/lightyear_data/**'
+      - 'tools/cloudbank_ms71.py'
+      - 'tests/test_cloudbank_*.py'
+      - 'factory/cloudbank/alloydb-second-target/**'
+      - '.github/workflows/ms71-alloydb.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'src/lightyear_data/**'
+      - 'tools/cloudbank_ms71.py'
+      - 'tests/test_cloudbank_*.py'
+      - 'factory/cloudbank/alloydb-second-target/**'
+      - '.github/workflows/ms71-alloydb.yml'
+permissions:
+  contents: read
+jobs:
+  contracts:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    env:
+      PYTHONPATH: src
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m unittest discover -s tests -p test_cloudbank_ms71.py -v
+      - run: python -m unittest discover -s tests -p test_cloudbank_ms66_dual_lane.py -v
+      - run: python -m unittest discover -s tests -p test_cloudbank_whole_application_equivalence.py -v
+      - run: python -m unittest discover -s tests -p test_cloudbank_journeys.py -v

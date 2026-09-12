@@ -19,7 +19,7 @@ import sys
 import time
 from typing import Callable
 from urllib.error import HTTPError, URLError
-from urllib.parse import urlencode, urlsplit
+from urllib.parse import urlencode, urlsplit, parse_qsl
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 from .contracts import sign
@@ -561,13 +561,17 @@ class GkeRuntime:
         parsed = urlsplit(jdbc.removeprefix("jdbc:"))
         require(parsed.hostname is not None and parsed.username is None and parsed.password is None
                 and re.fullmatch(r"/[a-zA-Z0-9_-]+", parsed.path) is not None
-                and not parsed.query and not parsed.fragment, "postgresql-datasource-shape-invalid")
+                and not parsed.fragment
+                and parse_qsl(parsed.query, keep_blank_values=True) in ([], [("sslmode", "require")]),
+                "postgresql-datasource-shape-invalid")
         secret_name = "cloudbank-checks-external"
         env = [{"name": "PGHOST", "value": parsed.hostname},
                {"name": "PGPORT", "value": str(parsed.port or 5432)},
                {"name": "PGDATABASE", "value": parsed.path[1:]},
                {"name": "PGCONNECT_TIMEOUT", "value": "10"},
                {"name": "PGOPTIONS", "value": "-c default_transaction_read_only=on -c statement_timeout=10000"}]
+        if parsed.query:
+            env.append({"name": "PGSSLMODE", "value": "require"})
         for name, key in (("PGUSER", "SPRING_DATASOURCE_USERNAME"), ("PGPASSWORD", "SPRING_DATASOURCE_PASSWORD")):
             env.append({"name": name, "valueFrom": {"secretKeyRef": {"name": secret_name, "key": key}}})
         pod = {"apiVersion": "v1", "kind": "Pod", "metadata": {"name": self.probe_name,

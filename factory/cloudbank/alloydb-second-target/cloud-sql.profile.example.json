@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "profile_type": "lightyear-cloudbank-managed-target",
+  "provider": "cloud-sql-postgresql",
+  "project": "your-project",
+  "region": "us-west1",
+  "cluster": "cloudbank-ms67",
+  "namespace": "cloudbank-ms67",
+  "resource": "projects/your-project/instances/cloudbank-ms67-postgres",
+  "database_version": "POSTGRES_16",
+  "databases": {
+    "azn-server": "cloudbank",
+    "customer": "cloudbank",
+    "account": "cloudbank",
+    "transfer": null,
+    "checks": "cloudbank",
+    "testrunner": "cloudbank",
+    "creditscore": null,
+    "chatbot": null
+  },
+  "require_tls": false,
+  "synthetic_data_only": true,
+  "production_environment": false
+}

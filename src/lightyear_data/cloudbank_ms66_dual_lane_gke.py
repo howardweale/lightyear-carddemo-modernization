@@ -863,6 +863,7 @@ def execute_dual_lane(
     model_name: str, postgres_probe_image: str, output: Path, evidence_prefix: str | None,
     key: str, signer: str, run_id: str,
     progress: Callable[[str], None] = lambda _: None,
+    managed_target: dict | None = None, campaign_id: str | None = None,
 ) -> dict[str, Any]:
     """Run the isolated source and bound deployed target, then emit the MS66 receipt."""
     if not key or not signer.strip():
@@ -877,12 +878,20 @@ def execute_dual_lane(
     preflight_errors += validate_ms61_receipt(dict(ms61), key, project_root)
     preflight_errors += validate_ms64_receipt(dict(ms64), key, project_root)
     preflight_errors += validate_image_lock(dict(target_lock), str(ms64.get("content_sha256", "")))
-    if source_lock.get("controller_commit") != subprocess.run(
+    controller_commit = subprocess.run(
         ["git", "rev-parse", "HEAD"], cwd=project_root, capture_output=True, text=True, check=False,
-    ).stdout.strip():
+    ).stdout.strip()
+    if source_lock.get("controller_commit") != controller_commit and managed_target is None:
         preflight_errors.append("cloudbank-ms66-controller-commit-binding-invalid")
     if preflight_errors:
         raise ValueError(",".join(sorted(set(preflight_errors))))
+    if managed_target is not None:
+        from .cloudbank_managed_target import validate_profile
+        validate_profile(managed_target)
+        require(isinstance(campaign_id, str) and re.fullmatch(r"ms71-[a-z0-9-]{1,35}", campaign_id)
+                and all(managed_target[f] == v for f, v in (
+                    ("project", project), ("region", region), ("cluster", cluster),
+                    ("namespace", target_namespace))), "ms71-campaign-target-mismatch")
     oracle_image = str(ms61.get("oracle_image_id_sha256", ""))
     postgres_image = str(ms61.get("postgresql_image_id_sha256", ""))
     if any(not HEX_64.fullmatch(value) for value in (
@@ -898,7 +907,7 @@ def execute_dual_lane(
             or resolved_output.is_relative_to(source_root.resolve()):
         raise ValueError("cloudbank-ms66-evidence-output-inside-source")
     signature = source_lock.get("signature") or {}
-    if not isinstance(signature, Mapping) or signature.get("signer") != signer:
+    if not isinstance(signature, Mapping) or (signature.get("signer") != signer and managed_target is None):
         raise ValueError("cloudbank-ms66-source-lock-signer-invalid")
 
     store = EvidenceStore(output, project, evidence_prefix)
@@ -913,6 +922,7 @@ def execute_dual_lane(
     postgres_journey: dict[str, Any] | None = None
     postgres_runtime: GkeRuntime | None = None
     receipt: dict[str, Any] | None = None
+    managed_before = managed_probe = None
     caught: BaseException | None = None
     cleanup = {"status": "failed", "errors": ["isolated-lane-not-cleaned"]}
     target_cleanup = {"status": "not-started", "errors": [],
@@ -954,20 +964,36 @@ def execute_dual_lane(
             raise ValueError("cloudbank-ms66-isolated-lane-restoration-failed")
 
         progress("Running all 18 shared journeys on the bound deployed PostgreSQL target lane")
-        postgres_runtime = GkeRuntime(
+        runtime_class = GkeRuntime
+        if managed_target is not None:
+            from .cloudbank_managed_target import ManagedGkeRuntime
+            runtime_class = ManagedGkeRuntime
+        postgres_runtime = runtime_class(
             project=project, region=region, cluster=cluster, namespace=target_namespace,
             images=target_images, run_id=run_id + "-postgresql", output=output / "postgres-runtime",
             probe_image=postgres_probe_image, progress=progress, signing_key=key, signer=signer,
             recovery_sink=lambda value: store.put("postgresql-recovery-state.json", value),
         )
         postgres_runtime.output.mkdir(parents=True, exist_ok=True)
+        if managed_target is not None:
+            from .cloudbank_managed_target import observe_target
+            managed_before = observe_target(postgres_runtime, managed_target, command)
         postgres_runtime.create_probe()
+        if managed_target is not None:
+            managed_probe = postgres_runtime.sql(
+                "SELECT json_build_object('database', current_database(), "
+                "'server_version_num', current_setting('server_version_num')::int, "
+                "'tls', coalesce((SELECT ssl FROM pg_stat_ssl WHERE pid=pg_backend_pid()), false));")
         postgres_bindings = {
             "lane": "gke-postgresql-target",
             "ms64_receipt_sha256": ms64["content_sha256"],
             "image_lock_sha256": target_lock["content_sha256"],
             "environment": postgres_runtime.environment(),
         }
+        if managed_target is not None:
+            postgres_bindings.update({"ms71_campaign_id": campaign_id,
+                "managed_target_sha256": managed_before["content_sha256"],
+                "managed_probe_sql": managed_probe})
         postgres_journey = execute_journeys(
             postgres_runtime, postgres_bindings, key, signer, run_id=run_id + "-postgresql",
             progress=progress, checkpoint=lambda value: checkpoint("postgresql-journeys.json", value),
@@ -1053,6 +1079,18 @@ def execute_dual_lane(
         raise ValueError("cloudbank-ms66-dual-lane-execution-failed") from None
     if receipt is None:
         raise ValueError("cloudbank-ms66-receipt-not-produced")
+    if managed_target is not None:
+        from .cloudbank_managed_target import observe_target
+        from .cloudbank_ms71 import comparison_receipt, COMPARISON_FILE
+        managed_after = observe_target(postgres_runtime, managed_target, command)
+        managed_receipt = comparison_receipt(
+            campaign_id=campaign_id, controller_commit=controller_commit,
+            profile=managed_target, before=managed_before, after=managed_after, probe_sql=managed_probe,
+            comparison=receipt, oracle_journey=oracle_journey, target_journey=postgres_journey,
+            source_images=source_images, target_images=target_images,
+            recovery={"oracle": cleanup, "target": target_cleanup},
+            key=key, signer=signer, root=project_root)
+        store.put(COMPARISON_FILE, managed_receipt)
     store.put(RECEIPT_NAME, receipt)
     store.sums()
     return receipt

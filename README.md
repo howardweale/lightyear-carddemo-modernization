@@ -6,6 +6,11 @@
 
 Release: **v0.67.0 — CloudBank Real Non-Production Platform Qualification**
 
+Next CloudBank milestone: **[MS71 — AlloyDB Second Target](docs/ms71-cloudbank-alloydb-second-target.md)**.
+Add AlloyDB alongside Cloud SQL with the same eight services, shared 18-scenario harness, and
+comparator. The [managed-target workflow](factory/cloudbank/alloydb-second-target/) implements
+provisioning, deployment, preflight, both comparisons, and signed acceptance. Live qualification is pending.
+
 v0.67 turns the MS #65 deployment design into a deployable real-platform package and chains its
 admission to both the signed MS #65 rehearsal and signed MS #66 whole-application equivalence result.
 The first implementation provisions an ephemeral regional Google Kubernetes Engine environment with

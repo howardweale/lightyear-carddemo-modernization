@@ -50,6 +50,12 @@ production-qualified.
 | MS #65 | CloudBank Production-Like Deployment and Cutover Rehearsal | Passed; [published execution evidence](docs/receipts/index.html#ms65) |
 | MS #66 | CloudBank Whole-Application Dual-Lane Equivalence | Passed; [published execution evidence](docs/receipts/index.html#ms66) |
 | MS #67 | CloudBank Real Non-Production Platform Qualification | Passed; [published execution evidence](docs/receipts/index.html#ms67) |
+| MS #71 | CloudBank AlloyDB Second Target | Implementation available; [scope and acceptance plan](docs/ms71-cloudbank-alloydb-second-target.md); live qualification pending |
+
+MS #71 is the next CloudBank delivery milestone by explicit project direction. It adds AlloyDB
+alongside Cloud SQL using the same eight services and comparator. The numbering skips to MS #71;
+it does not renumber or complete MS #68–70. Existing customer production-readiness scope remains
+separate.
 
 The v0.35.0 stored-logic qualification core is retained as supporting MS #34 evidence. It does not
 replace the planned DB2 milestone.
@@ -708,3 +714,18 @@ approved 630-second nonproduction requirement; backup restore measured 455 secon
 Deterministic readiness fixtures remain separate admission contracts. Customer IdP, representative customer data
 volume and workload, the customer's approval process, production deployment, and final signed
 production readiness remain MS #68.
+
+## MS #71 — CloudBank AlloyDB Second Target
+
+MS #71 adds managed AlloyDB for PostgreSQL as a second CloudBank target alongside Cloud SQL.
+The same eight generated service images, synthetic fixtures, shared 18-scenario journey harness,
+and exact normalized comparator must pass in two comparisons: Oracle to Cloud SQL and Oracle to
+AlloyDB. Each comparison uses isolated source and target execution with its own signed evidence;
+both target deployments coexist without sharing mutable application data or queue consumers.
+
+Completion requires both comparisons to pass under one bound campaign, verified managed-database
+identities, successful recovery and cleanup, and an MS71 receipt linking both results. The existing
+MS67 Cloud SQL platform receipt stays historical evidence for its original deployment; it does not
+qualify AlloyDB automatically. See the [MS71 plan](docs/ms71-cloudbank-alloydb-second-target.md)
+for implementation boundaries and the single acceptance gate. The [managed-target workflow](factory/cloudbank/alloydb-second-target/)
+is implemented; live qualification remains pending until both comparisons pass.

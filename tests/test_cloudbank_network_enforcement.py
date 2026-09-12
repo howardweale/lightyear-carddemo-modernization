@@ -657,6 +657,16 @@ class JavaProbeTests(unittest.TestCase):
             self.assertNotIn("private-secret", raw.stderr)
 
     def test_real_listener_uses_run_nonce(self):
+        # The isolated pod serves all three fixed ports. A developer's local
+        # Ollama or PostgreSQL may already own one; never interrupt that service.
+        for port in (19067, 5432, 11434):
+            with socket.socket() as available:
+                if hasattr(socket, "SO_EXCLUSIVEADDRUSE"):
+                    available.setsockopt(socket.SOL_SOCKET, socket.SO_EXCLUSIVEADDRUSE, 1)
+                try:
+                    available.bind(("0.0.0.0", port))
+                except OSError:
+                    self.skipTest(f"local service already occupies probe port {port}")
         proc = subprocess.Popen([*self.base, "serve", "a" * 32], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
         try:
             deadline = time.monotonic() + 5

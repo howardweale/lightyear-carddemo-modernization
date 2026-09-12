@@ -18,6 +18,7 @@ from pathlib import Path
 
 from .cloudbank_journeys import SERVICES, SCENARIOS, JourneyFailure, execute_journeys, hashed, require, journey_contract
 from .cloudbank_journeys_gke import GkeRuntime
+from .cloudbank_managed_target import ManagedGkeRuntime
 from .cloudbank_platform_qualification import CUTOVER_STATES
 from .cloudbank_sql_recovery import SNAPSHOT_SQL, invoke, normalize_snapshot, verified, write_signed
 from .contracts import sign
@@ -313,7 +314,7 @@ class Availability:
                 "scope": "Kubernetes deployment availability sampled during this mutation window"}
 
 
-class CandidateRuntime(GkeRuntime):
+class CandidateRuntime(ManagedGkeRuntime):
     """Run the unchanged 18 journeys against the isolated candidate deployments."""
     def kubectl(self, *args, **kwargs):
         mapped = list(args)

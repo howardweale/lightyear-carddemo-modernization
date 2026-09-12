@@ -17,7 +17,8 @@ from cloudbank_image_security import live_snapshot
 from lightyear_data.cloudbank_edge_ai import validate_execution_receipt as validate_ms64
 from lightyear_data.cloudbank_image_security import ImageJournal, CheckpointFailure, save_observation, stamp
 from lightyear_data.cloudbank_journeys import ACK, JourneyFailure, Journeys, ROLE_SCOPES, SERVICES, hashed, require
-from lightyear_data.cloudbank_journeys_gke import GkeRuntime, command
+from lightyear_data.cloudbank_journeys_gke import command
+from lightyear_data.cloudbank_managed_target import ManagedGkeRuntime as GkeRuntime
 from lightyear_data.cloudbank_ms65_rehearsal_gke import validate_shared_journeys
 from lightyear_data.cloudbank_platform_qualification import validate_profile, MINIMUM_LOAD_CONCURRENCY, MINIMUM_LOAD_SECONDS
 from lightyear_data.cloudbank_production_readiness import validate_image_lock

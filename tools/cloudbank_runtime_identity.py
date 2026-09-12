@@ -15,7 +15,7 @@ from cloudbank_ms65_rehearsal import cluster_identity, evidence_key, load
 from lightyear_data.cloudbank_edge_ai import validate_execution_receipt as validate_ms64
 from lightyear_data.cloudbank_image_security import ImageJournal, save_observation
 from lightyear_data.cloudbank_journeys import ACK, JourneyFailure, hashed, require
-from lightyear_data.cloudbank_journeys_gke import GkeRuntime
+from lightyear_data.cloudbank_managed_target import ManagedGkeRuntime as GkeRuntime
 from lightyear_data.cloudbank_platform_qualification import validate_profile
 from lightyear_data.cloudbank_production_readiness import validate_image_lock
 from lightyear_data.cloudbank_runtime_identity import (

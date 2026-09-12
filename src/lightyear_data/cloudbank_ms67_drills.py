@@ -355,6 +355,7 @@ class CandidateRuntime(ManagedGkeRuntime):
 
 
 class FinalDrills:
+    snapshot_sql = SNAPSHOT_SQL
     def __init__(self, runtime, candidates, bindings, key, signer, prefix, *, state=None,
                  cloud=invoke, pause=time.sleep, clock=time.monotonic):
         self.r, self.candidates, self.bindings = runtime, candidates, bindings
@@ -535,7 +536,7 @@ class FinalDrills:
             require(recovery["status"] == "restored", "snapshot-probe-cleanup-failed")
 
     def snapshot(self):
-        return detailed_snapshot(self.database_query(SNAPSHOT_SQL))
+        return detailed_snapshot(self.database_query(self.snapshot_sql))
 
     def adopt_customer_mode(self):
         """Resolve an interrupted guarded patch without reverting to reseeding."""

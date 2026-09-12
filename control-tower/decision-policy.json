@@ -23,5 +23,10 @@
     "current-entry-reviewed-in-the-approver-session"
   ],
   "claim_promotion_enabled": false,
-  "customer_readiness_enabled": false
+  "customer_readiness_enabled": false,
+  "browser_proof_dispatch_enabled": false,
+  "browser_qualification_receipts_enabled": false,
+  "customer_decision_deployment_enabled": false,
+  "customer_identity_requirement": "implemented-and-tested-approved-sso-oidc",
+  "workflow_proposals": "read-only-engine-output-until-exact-terms-and-blast-radius-are-bound"
 }

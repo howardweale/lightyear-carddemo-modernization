@@ -1,5 +1,12 @@
 # Changelog
 
+## Unreleased — MS #72 Control Tower workflow
+
+- Assign the Control Tower workflow to MS #72; MS #71 is assigned to AlloyDB work.
+- Carry Step 1 action emission and Step 2 bounded headless engine execution under
+  MS #72, with CloudBank as the Step 2 test estate and browser visual inspection
+  fixes in scope. Step 2 remains in progress.
+
 ## 0.70.0 — 2026-09-11
 
 - Completed the deterministic MS #70 bounded-triage package over the unchanged 1,078-pair MS #69

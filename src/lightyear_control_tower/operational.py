@@ -47,14 +47,18 @@ class OperationalSource:
 class OperationalEventStore:
     """Append-only SQLite event ledger with an in-process subscription fan-out."""
 
-    def __init__(self, path: Path, now: Callable[[], datetime] = _utc_now) -> None:
+    def __init__(self, path: Path, now: Callable[[], datetime] = _utc_now, *, read_only: bool = False) -> None:
         self.path = path.resolve()
         self.now = now
+        self.read_only = read_only
         self._lock = threading.RLock()
         self._subscribers: set[queue.Queue[dict[str, Any]]] = set()
-        self.initialize()
+        if not read_only:
+            self.initialize()
 
     def initialize(self) -> None:
+        if self.read_only:
+            raise ValueError("The Tower cannot initialize an engine evidence store")
         self.path.parent.mkdir(parents=True, exist_ok=True)
         with closing(sqlite3.connect(self.path)) as connection, connection:
             connection.executescript(
@@ -101,6 +105,8 @@ class OperationalEventStore:
         correlation_id: str | None = None,
         occurred_at: datetime | None = None,
     ) -> dict[str, Any]:
+        if self.read_only:
+            raise ValueError("The Tower cannot append engine observations")
         if severity not in {"info", "warning", "critical"}:
             raise ValueError("Operational event severity is invalid")
         observed = self.now()
@@ -157,6 +163,8 @@ class OperationalEventStore:
         fingerprint: str,
         path_count: int,
     ) -> tuple[bool, str | None]:
+        if self.read_only:
+            raise ValueError("The Tower cannot record engine observations")
         observed = _stamp(self.now())
         with self._lock, closing(sqlite3.connect(self.path)) as connection, connection:
             existing = connection.execute(
@@ -184,13 +192,17 @@ class OperationalEventStore:
         return changed, existing[0] if existing else None
 
     def observations(self) -> dict[str, dict[str, Any]]:
-        with closing(sqlite3.connect(self.path)) as connection:
+        if self.read_only and not self.path.exists():
+            return {}
+        with closing(sqlite3.connect(self.path.as_uri() + "?mode=ro", uri=True)) as connection:
             connection.row_factory = sqlite3.Row
             rows = connection.execute("SELECT * FROM source_observations").fetchall()
         return {row["source"]: dict(row) for row in rows}
 
     def events(self, after: int = 0, limit: int = 200) -> list[dict[str, Any]]:
-        with closing(sqlite3.connect(self.path)) as connection:
+        if self.read_only and not self.path.exists():
+            return []
+        with closing(sqlite3.connect(self.path.as_uri() + "?mode=ro", uri=True)) as connection:
             connection.row_factory = sqlite3.Row
             rows = connection.execute(
                 """

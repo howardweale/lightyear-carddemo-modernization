@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>LIGHTYEAR Control Tower</title>
   <link rel="stylesheet" href="styles.css?v=48.4">
-  <link rel="stylesheet" href="decisions.css?v=workflow.1">
+  <link rel="stylesheet" href="decisions.css?v=workflow.2">
 </head>
 <body>
   <header class="masthead topbar">
@@ -93,6 +93,16 @@
       <div><p class="decision-eyebrow">Evidence into action</p><h1>What happens next?</h1></div>
       <button id="refresh-decisions" class="secondary-button" type="button">Refresh queue</button>
     </header>
+    <section class="workflow-plan" aria-label="CloudBank execution">
+      <div class="workflow-heading"><div><p class="decision-eyebrow">CloudBank · Eight services</p><h2>Evidence execution</h2></div><span class="decision-badge">Headless engine</span></div>
+      <p id="execution-status" role="status">Reading the engine journal…</p>
+      <div id="execution-counts" class="workflow-counts"></div>
+      <p id="execution-scope" class="decision-signing-note">Service contracts and retained execution evidence. Fresh cloud execution is a separate lane.</p>
+      <div class="workflow-controls"><label for="execution-filter">Service checks</label><select id="execution-filter"><option value="all">All services</option><option value="unresolved">Unresolved</option><option value="resolved">Verified evidence</option></select><button id="execution-refresh" class="secondary-button" type="button">Refresh evidence</button></div>
+      <div id="execution-services" class="execution-services"></div>
+      <details id="execution-provenance"><summary>Run provenance and limits</summary><dl id="execution-details"></dl></details>
+    </section>
+    <details class="legacy-workflow"><summary>Oracle Customer (Large) · Step 1 action plan</summary>
     <section class="workflow-plan" aria-label="Engine action plan">
       <div class="workflow-heading"><h2>Oracle Customer (Large) · Action plan</h2><span class="decision-badge">Step 1 · Actions only</span></div>
       <p id="workflow-status" role="status">Reading the engine's published plan…</p>
@@ -106,6 +116,7 @@
       <div id="workflow-actions"></div>
       <div class="workflow-controls"><button id="workflow-previous" class="secondary-button" type="button">Previous</button><span id="workflow-page"></span><button id="workflow-next" class="secondary-button" type="button">Next</button></div>
     </section>
+    </details>
     <h2>Human decisions</h2>
     <p id="decision-message" class="decision-message" role="status">Connecting to the decision service…</p>
     <div class="decision-layout">
@@ -686,6 +697,7 @@
   <script src="app.js?v=48.4" defer></script>
   <script src="decisions.js?v=workflow.1" defer></script>
   <script src="workflow.js?v=1" defer></script>
+  <script src="execution.js?v=2" defer></script>
   <dialog id="operator-dialog" class="verifier-dialog" aria-labelledby="operator-title">
     <form id="operator-form">
       <h2 id="operator-title">Start an operator session</h2>

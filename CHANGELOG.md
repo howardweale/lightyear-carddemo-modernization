@@ -5,7 +5,16 @@
 - Assign the Control Tower workflow to MS #72; MS #71 is assigned to AlloyDB work.
 - Carry Step 1 action emission and Step 2 bounded headless engine execution under
   MS #72, with CloudBank as the Step 2 test estate and browser visual inspection
-  fixes in scope. Step 2 remains in progress.
+  fixes in scope.
+- Complete Step 2's bounded CloudBank contract/retained-evidence executor: eight
+  services, two observation lanes, single-writer transactional checkpoints,
+  persistent action/iteration/time/retry limits, source and policy drift rejection,
+  deterministic receipt replay, and read-only Tower progress.
+- Preserve raw evidence mismatches, classify absent evidence as unavailable,
+  reject worker-authored verdict upgrades and leave application claims unchanged.
+- Add repeatable Chromium/WebKit desktop/mobile inspection in CI with retained
+  screenshots, layout and filtering checks, and a no-browser-writes assertion.
+  No new cloud execution, model calls, ledger application or claim promotion.
 
 ## 0.70.0 — 2026-09-11
 

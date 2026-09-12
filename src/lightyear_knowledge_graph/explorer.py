@@ -20,6 +20,7 @@ from urllib.parse import parse_qs, unquote, urlparse
 from lightyear_control_tower.decisions import DecisionService, DecisionConflict, DecisionUnauthorized
 from lightyear_data.cloudbank_publication import load_publication, workload_publication
 from lightyear_workflow.artifacts import read_snapshot, project_snapshot
+from lightyear_workflow.execution import read_execution
 
 from .chat import ChatError, GraphChatService
 from .evidence_pack import EvidenceStore, load_evidence_pack, validate_evidence_pack
@@ -1562,6 +1563,9 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
         self.wfile.write(body)
 
     def _api(self, path: str, query: dict[str, list[str]]) -> None:
+        if path == "/api/workflow/execution":
+            self._json(read_execution(self.server.project_root))
+            return
         if path == "/api/workflow/plan":
             self._json(project_snapshot(read_snapshot(self.server.project_root),
                 kind=self._value(query, "kind"), action_class=self._value(query, "class"),

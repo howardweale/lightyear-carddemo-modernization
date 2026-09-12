@@ -1,0 +1,68 @@
+{
+  "cloud_build_id": "65d2e95a-24c7-4ca5-8726-f19f1c231c1b",
+  "content_sha256": "ee48647c99ae3f4bdef7c8381c6a6c7153e47da861a601ed3800b82c8c2744d4",
+  "controller_commit": "22ac6a4c0dcb39fbfdb7eab28cad5eebc4b9ea8e",
+  "exact_unchanged_upstream_application": false,
+  "hardening_contract_sha256": "1919619947b14697e5c4a748224b244d29b867acb27d1ddd03e60560fe385ba8",
+  "hardening_materialization_sha256": "e955e6c8f109f35a46944b3ef9dbb35623919d2446aaf97e456c8eda4869c6c4",
+  "hardening_patch_sha256": "4d416cb437ae363843d2f43b895cff3cf331c1c27aa93f3a2717449a66239cd0",
+  "images": [
+    {
+      "reference": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/azn-server-ms66-oracle@sha256:34359ef9d14564676f1a3c073ff2051f93fc03c52675b14c68dfc97ebb979bc7",
+      "service": "azn-server"
+    },
+    {
+      "reference": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/customer-ms66-oracle@sha256:39742766dbfeca5b9f2a18b2a775b76d272351cca640e9698be524bb617371b5",
+      "service": "customer"
+    },
+    {
+      "reference": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/account-ms66-oracle@sha256:58b01fd803c98bd2b5a6ce000b69f546c7a2f8810274ab20eeafc33a8a55f144",
+      "service": "account"
+    },
+    {
+      "reference": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/transfer-ms66-oracle@sha256:56163f342a1e60d7daf8d563900b92ebe3c5cb7b814aa368ec5aa64a0e1b5295",
+      "service": "transfer"
+    },
+    {
+      "reference": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/checks-ms66-oracle@sha256:b9d241a5964639d0bb070e8256b807d8a316db3c4e89e880b677569c06469d55",
+      "service": "checks"
+    },
+    {
+      "reference": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/testrunner-ms66-oracle@sha256:b5ceceaeb1c10bf80719406d67fddfe329bebe60cb9a04db87053f427580e586",
+      "service": "testrunner"
+    },
+    {
+      "reference": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/creditscore-ms66-oracle@sha256:f0c07968ad97db8989ffda6b119a2d7e5dc7dc477c0bdbcf8002ad88482a60fc",
+      "service": "creditscore"
+    },
+    {
+      "reference": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/chatbot-ms66-oracle@sha256:147797652890e4cb5bece0886f142486a041676cd20cea6ddaab8b7ff08fdec6",
+      "service": "chatbot"
+    }
+  ],
+  "java_base_image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/java21-patched@sha256:f31f393ea7f57bd415630b5cd6d140045a39271fa1449e4fab2bdc9efe83910a",
+  "lock_type": "lightyear-cloudbank-ms66-governed-oracle-source-image-lock",
+  "materialized_application_identity": "pinned-source-plus-governed-hardening",
+  "materialized_tree_sha256": "4c29262b63c4dd21dca7c1c622fec987205e6f83f163326b4ad8eaa1774c58a6",
+  "native_runtime_images": {
+    "microtx": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/microtx-ms66@sha256:ea69fb189bdd4c94eb4b68773577e4327949d649c42bbb2c5ec9803c6006902b",
+    "oracle": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/oracle-free-ms66@sha256:3eec001c0886d1c547f3abc29f8343cceff4ac89fd4c2c8cb4b8d9f7f5dd96dc"
+  },
+  "production_environment": false,
+  "release": "0.66.1",
+  "schema_version": "1.0",
+  "signature": {
+    "algorithm": "hmac-sha256",
+    "signer": "cloudbank-ms67-evidence@lightyear-ms67-nonproduction.iam.gserviceaccount.com",
+    "value": "9c3ecaa0b550e4af17fa4468a657524cb8a944be9742c9a442fa9d3de169587d"
+  },
+  "source": {
+    "commit": "4f41b16d00c45503f691836fee8138010c969e86",
+    "repository": "https://github.com/oracle/microservices-backend.git",
+    "root_tree": "6aa92e89c783f123c4da8d7ae18108004a4f4a99",
+    "subtree": "cloudbank-v5",
+    "subtree_tree": "bd918386209f284a1ed31802555740eb34b75348"
+  },
+  "source_checkout_mutated": false,
+  "synthetic_data_only": true
+}

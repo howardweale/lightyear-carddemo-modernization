@@ -11,6 +11,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 from lightyear_data.cloudbank_publication import load_publication  # noqa: E402
+from lightyear_data.cloudbank_ms71_publication import load_ms71_publication  # noqa: E402
 
 START = "<!-- BEGIN CLOUDBANK EXECUTION RECEIPTS -->"
 END = "<!-- END CLOUDBANK EXECUTION RECEIPTS -->"
@@ -35,12 +36,24 @@ def website_block(p: dict) -> str:
       <div class="stat"><div class="n">{s['business_journeys']}</div><div class="l">business journeys<br>bounded whole-application equivalence</div></div>
     </div>
     <p><a href="receipts/">Read all MS54–67 receipts and measured results →</a></p>
+    <p><a href="receipts/#ms71">MS71 complete: Oracle-to-Cloud SQL and Oracle-to-AlloyDB each passed all 18 business scenarios with the same eight services and comparator.</a> AlloyDB platform qualification and production readiness remain outside this acceptance.</p>
     <p class="note">{NOTE} Aggregate p95 includes all operations; chat p95 was {s['chat_p95_ms']/1000:.2f} seconds.</p>
   </div></div>
 {END}'''
 
 
 def outputs(p: dict) -> dict[Path, str]:
+    ms71 = load_ms71_publication()
+    acceptance = ms71["receipt"]
+    bundle = local_link(ms71["bundle"])
+    ms71_links = " · ".join(f'<a href="{bundle}/{f["name"]}">{html.escape(f["name"])}</a>' for f in ms71["manifest"]["files"])
+    ms71_section = f'''<section id="ms71"><h2>MS71 complete · AlloyDB second target</h2>
+<p>Campaign <code>{acceptance['campaign_id']}</code> passed on 2026-09-12 with the same eight target service images and unchanged comparator. Each comparison used a fresh Oracle baseline. Both target deployments coexist; all execution recovery checks passed.</p>
+<table><thead><tr><th>Comparison</th><th>Business scenarios</th></tr></thead><tbody><tr><td>Oracle → Cloud SQL PostgreSQL</td><td class="passed">18 / 18 passed</td></tr><tr><td>Oracle → AlloyDB PostgreSQL</td><td class="passed">18 / 18 passed</td></tr></tbody></table>
+<p class="boundary">Bounded synthetic nonproduction business equivalence. AlloyDB platform qualification and production readiness remain false. The original MS67 qualification retains its original Cloud SQL scope.</p>
+<p>{ms71_links} · <a href="{bundle}/publication-export.json">Signed publication manifest</a></p>
+<p>The Cloud SQL runtime observations passed, but receipt assembly initially rejected Windows-converted source line endings. Exact pinned source bytes were restored and the unchanged comparator reassembled the original signed observations. The original failure and signed reassembly record are preserved above.</p>
+<p>The operator verified HMAC signatures and durable storage readbacks. Public checks verify pinned original bytes, canonical hashes and receipt bindings without possessing the signing key. Controller: <code>{acceptance['controller_commit']}</code>. Final receipt content SHA-256: <code>{acceptance['content_sha256']}</code>.</p></section>'''
     s = p["summary"]
     rows = []
     for row in p["milestones"]:
@@ -54,7 +67,7 @@ def outputs(p: dict) -> dict[Path, str]:
     scenarios = ''.join(f'<li>{html.escape(r["id"])} · <a href="{local_link(proof_by_hash[r["evidence_sha256"]]["path"])}">passed evidence</a></li>' for r in p['scenarios'])
     page = f'''<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CloudBank MS54–67 execution receipts | LIGHTYEAR</title>
+<title>CloudBank MS71 and MS54–67 execution receipts | LIGHTYEAR</title>
 <meta name="description" content="Completed CloudBank MS67 nonproduction qualification and the original MS54–67 execution receipt chain.">
 <style>
 :root{{color-scheme:light;--ink:#15184d;--muted:#676985;--line:#ddd7f2;--violet:#6942d6}}
@@ -80,6 +93,8 @@ def outputs(p: dict) -> dict[Path, str]:
 '''
     readme = f"# CloudBank execution receipts\n\nMS67 is complete for the bound synthetic nonproduction platform.\n\n[Published evidence index](https://howardweale.github.io/lightyear-carddemo-modernization/receipts/) · [Final receipt]({local_link(p['receipt_path'])}) · [Catalog](catalog.json)\n\nThe 31 original JSON files and exporter manifest are preserved byte for byte. Public verification checks file hashes, canonical content hashes and bindings. HMAC verification was performed by the operator exporter before upload; the public publisher does not have the key.\n\n{NOTE}\n\nDeterministic `factory/cloudbank/*/readiness.receipt.json` files remain admission contracts. The actual signed execution records are published here. Earlier milestones retain their own scope and flags; later qualification does not rewrite historical receipts.\n\nRebuild or verify these projections without cloud access:\n\n```bash\npython3 tools/publish_cloudbank_receipts.py build\npython3 tools/publish_cloudbank_receipts.py verify\n```\n"
     site = (ROOT / "docs/index.html").read_text(encoding="utf-8")
+    page = page.replace("<main>", "<main>" + ms71_section, 1)
+    readme = readme.replace("# CloudBank execution receipts\n\n", f"# CloudBank execution receipts\n\nMS71 is complete: Oracle to Cloud SQL and Oracle to AlloyDB each passed all 18 business scenarios with the same eight services and unchanged comparator. All execution recovery checks passed. This is bounded synthetic nonproduction equivalence; AlloyDB platform qualification and production readiness remain false.\n\n[MS71 signed receipt]({bundle}/ms71-alloydb-second-target.receipt.json) · [Export manifest]({bundle}/publication-export.json) · [Cloud SQL comparison]({bundle}/sql-managed-comparison.json) · [AlloyDB comparison]({bundle}/alloydb-managed-comparison.json)\n\nThe [original Cloud SQL assembly failure]({bundle}/sql-original-assembly-failure.json) and [signed reassembly record]({bundle}/sql-reassembly.json) preserve the Windows line-ending correction; completed runtime observations were reused unchanged.\n\n", 1)
     if site.count(START) != 1 or site.count(END) != 1:
         raise ValueError("website receipt block markers missing or duplicated")
     before, rest = site.split(START)
@@ -102,7 +117,7 @@ def main() -> int:
         entry = next(x for x in catalog['milestones'] if x['number'] == row['number'])
         if entry.get('execution_receipts') != [x['path'] for x in row['receipts']] or entry.get('status') != ('Plan admitted' if row['number'] == 58 else 'Complete — execution passed'):
             raise ValueError(f"milestone MS{row['number']} publication mismatch")
-    print("MS54_MS67_PUBLICATION=VERIFIED; 31 original files; 28 bound scenarios; no new qualification run")
+    print("MS54_MS67_PUBLICATION=VERIFIED; 31 original files; 28 bound scenarios; MS71_PUBLICATION=VERIFIED; two 18-scenario comparisons; no new qualification run")
     return 0
 
 

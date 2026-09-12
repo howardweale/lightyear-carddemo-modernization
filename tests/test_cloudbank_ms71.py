@@ -249,6 +249,19 @@ class TargetTests(unittest.TestCase):
 
 
 class CliTests(unittest.TestCase):
+    def test_preflight_rejects_source_byte_drift_before_cloud_access(self):
+        spec = importlib.util.spec_from_file_location("ms71_cli", ROOT / "tools/cloudbank_ms71.py")
+        cli = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(cli)
+        source = ROOT / "source-checkout"
+        with patch.object(cli, "validate_edge_source", return_value=["source-drift"]) as validate, \
+                patch.object(cli, "command") as command, patch.object(cli, "ManagedGkeRuntime") as runtime:
+            with self.assertRaisesRegex(JourneyFailure, "pinned-source-bytes-invalid"):
+                cli.preflight({}, {}, [], source)
+            validate.assert_called_once_with(source)
+            command.assert_not_called()
+            runtime.assert_not_called()
+
     def test_new_attempt_refuses_unfinished_signed_target_recovery(self):
         spec = importlib.util.spec_from_file_location("ms71_cli", ROOT / "tools/cloudbank_ms71.py")
         cli = importlib.util.module_from_spec(spec)

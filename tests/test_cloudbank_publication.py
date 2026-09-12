@@ -11,6 +11,7 @@ from pathlib import Path
 from unittest.mock import patch
 
 from lightyear_data.cloudbank_publication import BUNDLE, ROOT, load_publication, workload_publication
+from lightyear_data.cloudbank_ms71_publication import BUNDLE as MS71_BUNDLE, load_ms71_publication
 from lightyear_knowledge_graph.explorer import GraphExplorerIndex, OPERATOR_WORKLOADS
 
 
@@ -24,6 +25,22 @@ class Links(HTMLParser):
 
 
 class CloudBankPublicationTests(unittest.TestCase):
+    def test_ms71_acceptance_and_original_bytes_are_bound(self):
+        p = load_ms71_publication()
+        self.assertTrue(p["receipt"]["ms71_complete"])
+        self.assertFalse(p["receipt"]["alloydb_platform_qualified"])
+        self.assertEqual(2, len(p["receipt"]["comparisons"]))
+        with tempfile.TemporaryDirectory() as temp:
+            root = Path(temp)
+            shutil.copytree(ROOT / MS71_BUNDLE, root / MS71_BUNDLE)
+            for name in ("publication-export.json", "sql-managed-comparison.json", "sql-original-assembly-failure.json"):
+                path = root / MS71_BUNDLE / name
+                original = path.read_bytes()
+                path.write_bytes(original + b"\n")
+                with self.subTest(name=name), self.assertRaisesRegex(ValueError, "bytes changed"):
+                    load_ms71_publication(root)
+                path.write_bytes(original)
+
     def test_complete_chain_preserves_scope_and_measured_results(self):
         p = load_publication()
         self.assertTrue(p["ms67_complete"])

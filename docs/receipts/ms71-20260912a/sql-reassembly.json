@@ -1,0 +1,21 @@
+{
+  "campaign_id": "ms71-20260912a",
+  "comparison_sha256": "b43ff3a751585bf4867d5ad8037b22d1d14933865b2b87a160019e19c5aea788",
+  "content_sha256": "9d950f7266e2d9dea8e6bd8a4b14c6fc857f2d074a4219c38755e434c4bbbe27",
+  "controller_commit": "1fad7e6ee03d9e6b5f5c12f2dca67a57771b75d8",
+  "correction": "Restored exact pinned Git source bytes after Windows CRLF checkout conversion.",
+  "managed_binding_sha256": "03b0e0447f44ddfc229ec7a1df2b53f8200e5f26a7ba62fdc32101a87e0a0957",
+  "ms71_complete": false,
+  "oracle_journey_sha256": "0b3e6e2d95f340291aeccde448d5a4ebe507f75c1d0d426afabbfb51f1edf6e5",
+  "original_failure_sha256": "1c1519a41b09a4cbbcf3a2858903f985b342ead3003663248d28370f5cd3a559",
+  "production_ready": false,
+  "record_type": "lightyear-ms71-receipt-reassembly",
+  "runtime_observations_reexecuted": false,
+  "schema_version": "1.0",
+  "signature": {
+    "algorithm": "hmac-sha256",
+    "signer": "howard.weale@gmail.com",
+    "value": "4e4c218fe53628c63c705b0a42702f2882f3e50f58d9858835e665025da01982"
+  },
+  "target_journey_sha256": "6e11d031a52df38b1bedae7a51efd1cd7e6e0bcfba8813439406fb179ba768cb"
+}

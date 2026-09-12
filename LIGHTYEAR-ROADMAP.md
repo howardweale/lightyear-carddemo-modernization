@@ -50,9 +50,9 @@ production-qualified.
 | MS #65 | CloudBank Production-Like Deployment and Cutover Rehearsal | Passed; [published execution evidence](docs/receipts/index.html#ms65) |
 | MS #66 | CloudBank Whole-Application Dual-Lane Equivalence | Passed; [published execution evidence](docs/receipts/index.html#ms66) |
 | MS #67 | CloudBank Real Non-Production Platform Qualification | Passed; [published execution evidence](docs/receipts/index.html#ms67) |
-| MS #71 | CloudBank AlloyDB Second Target | Implementation available; [scope and acceptance plan](docs/ms71-cloudbank-alloydb-second-target.md); live qualification pending |
+| MS #71 | CloudBank AlloyDB Second Target | Complete — both live 18-scenario comparisons passed; [acceptance and evidence](docs/ms71-cloudbank-alloydb-second-target.md) |
 
-MS #71 is the next CloudBank delivery milestone by explicit project direction. It adds AlloyDB
+MS #71 is the completed CloudBank delivery milestone selected by explicit project direction. It adds AlloyDB
 alongside Cloud SQL using the same eight services and comparator. The numbering skips to MS #71;
 it does not renumber or complete MS #68–70. Existing customer production-readiness scope remains
 separate.
@@ -728,4 +728,6 @@ identities, successful recovery and cleanup, and an MS71 receipt linking both re
 MS67 Cloud SQL platform receipt stays historical evidence for its original deployment; it does not
 qualify AlloyDB automatically. See the [MS71 plan](docs/ms71-cloudbank-alloydb-second-target.md)
 for implementation boundaries and the single acceptance gate. The [managed-target workflow](factory/cloudbank/alloydb-second-target/)
-is implemented; live qualification remains pending until both comparisons pass.
+is implemented. Campaign `ms71-20260912a` passed both live comparisons on 2026-09-12, with all
+18 scenarios passing per comparison and recovery verified. The [signed acceptance receipt](docs/receipts/ms71-20260912a/ms71-alloydb-second-target.receipt.json)
+closes MS71. AlloyDB platform qualification and production readiness remain false.

@@ -89,6 +89,16 @@ available for the campaign; the command does not remove these durable target res
 
 ## Run the single milestone gate
 
+The accepted campaign is [ms71-20260912a](../../../docs/receipts/ms71-20260912a/ms71-alloydb-second-target.receipt.json):
+both live comparisons passed all 18 scenarios, with recovery verified. AlloyDB platform qualification
+and production readiness remain false.
+
+The pinned upstream checkout must retain exact source bytes. On Windows, create it with
+`git clone --config core.autocrlf=false https://github.com/oracle/microservices-backend.git`
+and check out revision `4f41b16d00c45503f691836fee8138010c969e86`. A clean Git status alone does not
+prove raw byte equality when checkout conversion is enabled. Preflight validates pinned source
+hashes before contacting either managed target.
+
 Supply the signed MS61 and MS64 receipts, the signed governed Oracle source image lock, the target
 image lock, and the two sealed profiles in the campaign input file. Existing source images can be
 reused when their signed pinned-source and hardening contracts still validate. Their original build

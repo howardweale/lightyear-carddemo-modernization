@@ -12,6 +12,7 @@ import uuid
 
 from lightyear_data.cloudbank_journeys import ACK, require, JourneyFailure, hashed
 from lightyear_data.cloudbank_journeys_gke import command
+from lightyear_data.cloudbank_edge_ai import validate_edge_source
 from lightyear_data.cloudbank_managed_target import ManagedGkeRuntime, PROVIDERS, observe_target, validate_profile, resolve_database
 from lightyear_data.cloudbank_ms66_dual_lane import image_rows, validate_recovery_state
 from lightyear_data.cloudbank_ms66_dual_lane_gke import execute_dual_lane
@@ -102,7 +103,8 @@ def inputs(path: Path):
     return config, loaded, profiles, local(config["source_root"])
 
 
-def preflight(config, loaded, profiles):
+def preflight(config, loaded, profiles, source):
+    require(not validate_edge_source(source), "ms71-pinned-source-bytes-invalid")
     images = image_rows(loaded["target_image_lock"])
     observations = []
     for p in profiles:
@@ -124,7 +126,7 @@ def run_campaign(args, key):
     require(not state.stdout.strip(), "ms71-committed-clean-controller-required")
     controller_commit = subprocess.run(["git", "rev-parse", "HEAD"], cwd=ROOT,
         capture_output=True, text=True, check=True).stdout.strip()
-    observations = preflight(config, loaded, profiles)
+    observations = preflight(config, loaded, profiles, source)
     output = args.output_root.resolve()
     require(not output.is_relative_to(ROOT) and not output.is_relative_to(source), "ms71-evidence-outside-source-required")
     require(args.resume or not output.exists(), "ms71-fresh-output-or-resume-required")
@@ -250,8 +252,8 @@ def main(argv=None):
             write(args.output_root / "managed-database.json", database)
             result = {"status": "rendered", "MS71_COMPLETE": False}
         elif args.command == "preflight":
-            config, loaded, profiles, _ = inputs(args.inputs)
-            preflight(config, loaded, profiles)
+            config, loaded, profiles, source = inputs(args.inputs)
+            preflight(config, loaded, profiles, source)
             result = {"status": "preflight-passed", "MS71_COMPLETE": False}
         elif args.command == "verify":
             verify_receipt(load(args.receipt), key, ROOT)

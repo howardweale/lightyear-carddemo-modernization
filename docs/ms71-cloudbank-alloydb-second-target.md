@@ -1,8 +1,30 @@
 # MS71 — CloudBank AlloyDB Second Target
 
-Status: implementation available; live qualification pending. Scope recorded on 2026-09-12.
+Status: complete — both live 18-scenario comparisons passed on 2026-09-12.
 The [managed-target runbook](../factory/cloudbank/alloydb-second-target/README.md) describes the
 implemented commands. MS71 is the explicitly selected number; MS68–70 are not renumbered or marked complete.
+
+Campaign `ms71-20260912a` ran on controller commit `1fad7e6ee03d9e6b5f5c12f2dca67a57771b75d8`.
+Oracle to Cloud SQL and Oracle to AlloyDB each passed all 18 business scenarios using the same
+eight target service images and unchanged comparator. Both comparisons used fresh Oracle baselines;
+all recovery checks passed and both managed target deployments were restored.
+
+- [Final signed acceptance receipt](receipts/ms71-20260912a/ms71-alloydb-second-target.receipt.json)
+- [Cloud SQL comparison](receipts/ms71-20260912a/sql-managed-comparison.json)
+- [AlloyDB comparison](receipts/ms71-20260912a/alloydb-managed-comparison.json)
+- [Signed export manifest and original-byte hashes](receipts/ms71-20260912a/publication-export.json)
+
+The operator verified signatures and storage readbacks before exporting these original bytes.
+Durable acceptance: `gs://lightyear-ms67-nonproduction-ms67-evidence/ms71/ms71-20260912a/ms71-alloydb-second-target.receipt.json`.
+The receipt records `ms71_complete: true`, `production_ready: false`, and
+`alloydb_platform_qualified: false`: this acceptance covers bounded synthetic business equivalence.
+
+The first Cloud SQL runtime execution passed, but receipt assembly rejected source files converted
+to CRLF by the Windows checkout. Restoring exact pinned Git bytes allowed the unchanged comparator
+to reassemble the original signed runtime observations. The [original failure](receipts/ms71-20260912a/sql-original-assembly-failure.json)
+and [signed reassembly record](receipts/ms71-20260912a/sql-reassembly.json) preserve that history.
+The CLI now checks source bytes before cloud preflight; this closeout guard postdates the recorded
+live controller commit and does not change its evidence.
 
 ## Outcome
 

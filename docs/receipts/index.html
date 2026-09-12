@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CloudBank MS54–67 execution receipts | LIGHTYEAR</title>
+<title>CloudBank MS71 and MS54–67 execution receipts | LIGHTYEAR</title>
 <meta name="description" content="Completed CloudBank MS67 nonproduction qualification and the original MS54–67 execution receipt chain.">
 <style>
 :root{color-scheme:light;--ink:#15184d;--muted:#676985;--line:#ddd7f2;--violet:#6942d6}
@@ -10,7 +10,13 @@
 <p class="kicker">COMPLETED · 2026-09-11 · us-west1</p><h1>MS67 nonproduction qualification passed</h1>
 <p class="lead">The final signed receipt closes all 28 platform scenarios for 8 services and 16 ready replicas. MS65 rehearsal and MS66 bounded whole-application equivalence are retained in the same evidence chain.</p>
 <p><a href="ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/ms67-platform-receipt.json">Open the final MS67 receipt</a></p></header>
-<main><div class="metrics"><div class="metric"><b>5,451</b><span>requests · 0 errors</span></div><div class="metric"><b>160.7 ms</b><span>aggregate HTTP p95</span></div><div class="metric"><b>622 / 630 s</b><span>PITR recovery / limit</span></div><div class="metric"><b>18</b><span>business journeys</span></div></div>
+<main><section id="ms71"><h2>MS71 complete · AlloyDB second target</h2>
+<p>Campaign <code>ms71-20260912a</code> passed on 2026-09-12 with the same eight target service images and unchanged comparator. Each comparison used a fresh Oracle baseline. Both target deployments coexist; all execution recovery checks passed.</p>
+<table><thead><tr><th>Comparison</th><th>Business scenarios</th></tr></thead><tbody><tr><td>Oracle → Cloud SQL PostgreSQL</td><td class="passed">18 / 18 passed</td></tr><tr><td>Oracle → AlloyDB PostgreSQL</td><td class="passed">18 / 18 passed</td></tr></tbody></table>
+<p class="boundary">Bounded synthetic nonproduction business equivalence. AlloyDB platform qualification and production readiness remain false. The original MS67 qualification retains its original Cloud SQL scope.</p>
+<p><a href="ms71-20260912a/ms71-alloydb-second-target.receipt.json">ms71-alloydb-second-target.receipt.json</a> · <a href="ms71-20260912a/sql-managed-comparison.json">sql-managed-comparison.json</a> · <a href="ms71-20260912a/alloydb-managed-comparison.json">alloydb-managed-comparison.json</a> · <a href="ms71-20260912a/oracle-source-image-lock.json">oracle-source-image-lock.json</a> · <a href="ms71-20260912a/sql-original-assembly-failure.json">sql-original-assembly-failure.json</a> · <a href="ms71-20260912a/sql-reassembly.json">sql-reassembly.json</a> · <a href="ms71-20260912a/publication-export.json">Signed publication manifest</a></p>
+<p>The Cloud SQL runtime observations passed, but receipt assembly initially rejected Windows-converted source line endings. Exact pinned source bytes were restored and the unchanged comparator reassembled the original signed observations. The original failure and signed reassembly record are preserved above.</p>
+<p>The operator verified HMAC signatures and durable storage readbacks. Public checks verify pinned original bytes, canonical hashes and receipt bindings without possessing the signing key. Controller: <code>1fad7e6ee03d9e6b5f5c12f2dca67a57771b75d8</code>. Final receipt content SHA-256: <code>029749b5cca1182b726093e4e6a11908bf3ba30866b6ee526ad5168db317597d</code>.</p></section><div class="metrics"><div class="metric"><b>5,451</b><span>requests · 0 errors</span></div><div class="metric"><b>160.7 ms</b><span>aggregate HTTP p95</span></div><div class="metric"><b>622 / 630 s</b><span>PITR recovery / limit</span></div><div class="metric"><b>18</b><span>business journeys</span></div></div>
 <p>The regional load ran for a configured 300 seconds with 10 virtual users. Aggregate p95 covers all operations; chat p95 was 21.36 seconds. Backup restore took 455 seconds; recovery point age was 18 seconds.</p>
 <p>PITR was accepted under the owner-approved 630-second nonproduction requirement, <code>ms67-nonproduction-pitr-rto-630-2026-09-10</code>. The original 622-second measurement and prior failed assessment are preserved inside the SQL receipt. No recovery measurement was changed.</p>
 <p class="boundary">MS67 qualifies the bound synthetic nonproduction platform. Customer IdP, representative customer data and workload, customer approval, production deployment and final production readiness remain MS68.</p>

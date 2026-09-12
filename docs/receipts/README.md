@@ -1,5 +1,11 @@
 # CloudBank execution receipts
 
+MS71 is complete: Oracle to Cloud SQL and Oracle to AlloyDB each passed all 18 business scenarios with the same eight services and unchanged comparator. All execution recovery checks passed. This is bounded synthetic nonproduction equivalence; AlloyDB platform qualification and production readiness remain false.
+
+[MS71 signed receipt](ms71-20260912a/ms71-alloydb-second-target.receipt.json) · [Export manifest](ms71-20260912a/publication-export.json) · [Cloud SQL comparison](ms71-20260912a/sql-managed-comparison.json) · [AlloyDB comparison](ms71-20260912a/alloydb-managed-comparison.json)
+
+The [original Cloud SQL assembly failure](ms71-20260912a/sql-original-assembly-failure.json) and [signed reassembly record](ms71-20260912a/sql-reassembly.json) preserve the Windows line-ending correction; completed runtime observations were reused unchanged.
+
 MS67 is complete for the bound synthetic nonproduction platform.
 
 [Published evidence index](https://howardweale.github.io/lightyear-carddemo-modernization/receipts/) · [Final receipt](ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts/ms67-platform-receipt.json) · [Catalog](catalog.json)

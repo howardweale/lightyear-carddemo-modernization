@@ -1,0 +1,67 @@
+{
+  "alloydb_platform_qualified": false,
+  "campaign_id": "ms71-20260912a",
+  "content_sha256": "8887c048eb3c0c19a87407accbec3ceafee9d5d833bfe7b8b46b5f2e96dc6d63",
+  "controller_commit": "1fad7e6ee03d9e6b5f5c12f2dca67a57771b75d8",
+  "export_type": "lightyear-cloudbank-ms71-publication-export",
+  "exported_at_utc": "2026-09-12T19:51:17.034524+00:00",
+  "files": [
+    {
+      "content_sha256": "029749b5cca1182b726093e4e6a11908bf3ba30866b6ee526ad5168db317597d",
+      "file_sha256": "e49486a7746ec97ff077342eda5601344ae3aefc4cb83ef86f70ec337108e87a",
+      "name": "ms71-alloydb-second-target.receipt.json",
+      "size_bytes": 128431,
+      "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/ms71/ms71-20260912a/ms71-alloydb-second-target.receipt.json"
+    },
+    {
+      "content_sha256": "b43ff3a751585bf4867d5ad8037b22d1d14933865b2b87a160019e19c5aea788",
+      "file_sha256": "73bcc28364e03c77ebbcecc0a0c37a5ada0366fef177050380eff6ed7e9a7ea2",
+      "name": "sql-managed-comparison.json",
+      "size_bytes": 56778,
+      "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/ms71/ms71-20260912a/sql-765c0827-reassembly/ms71-managed-comparison.json"
+    },
+    {
+      "content_sha256": "3c462bec8b84681e65acb0c8711aec0452357276228cceab16350f1b6762d5d2",
+      "file_sha256": "35a406237d7c4cb2854593292ee8b9395fa83f4e146bc0a5dcccce6b3d8e004e",
+      "name": "alloydb-managed-comparison.json",
+      "size_bytes": 56922,
+      "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/ms71/ms71-20260912a/alloydb-e59b3d30/ms71-managed-comparison.json"
+    },
+    {
+      "content_sha256": "ee48647c99ae3f4bdef7c8381c6a6c7153e47da861a601ed3800b82c8c2744d4",
+      "file_sha256": "b891412a0f29c7f4fe3a2626cb64878083f29067e49d660fa5f7690947b312e8",
+      "name": "oracle-source-image-lock.json",
+      "size_bytes": 3881,
+      "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/ms71/ms71-20260912a/sql-765c0827/oracle-source-image-lock.json"
+    },
+    {
+      "content_sha256": "1c1519a41b09a4cbbcf3a2858903f985b342ead3003663248d28370f5cd3a559",
+      "file_sha256": "72b5bdd478971fec01523b26f78eb3fc0e169de39e50631751246adcba91e88f",
+      "name": "sql-original-assembly-failure.json",
+      "size_bytes": 898,
+      "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/ms71/ms71-20260912a/sql-765c0827/ms66-failure.json"
+    },
+    {
+      "content_sha256": "9d950f7266e2d9dea8e6bd8a4b14c6fc857f2d074a4219c38755e434c4bbbe27",
+      "file_sha256": "44ab44898b9625be599fd3b195fc937136db19b6b2990a80d440f0704395d8b1",
+      "name": "sql-reassembly.json",
+      "size_bytes": 1119,
+      "source_uri": "gs://lightyear-ms67-nonproduction-ms67-evidence/ms71/ms71-20260912a/sql-765c0827-reassembly/ms71-reassembly.json"
+    }
+  ],
+  "ms71_complete": true,
+  "production_ready": false,
+  "receipt_content_sha256": "029749b5cca1182b726093e4e6a11908bf3ba30866b6ee526ad5168db317597d",
+  "receipt_file": "ms71-alloydb-second-target.receipt.json",
+  "schema_version": "1.0",
+  "signature": {
+    "algorithm": "hmac-sha256",
+    "signer": "howard.weale@gmail.com",
+    "value": "5c1ff501fe901dbfa230d969d75345eef59eeb2b75c03fb74ac19feb755330d9"
+  },
+  "verification": {
+    "durable_readbacks_verified": true,
+    "operator_hmac_verified": true,
+    "original_evidence_bytes_preserved": true
+  }
+}

@@ -6,10 +6,12 @@
 
 Release: **v0.67.0 — CloudBank Real Non-Production Platform Qualification**
 
-Next CloudBank milestone: **[MS71 — AlloyDB Second Target](docs/ms71-cloudbank-alloydb-second-target.md)**.
-Add AlloyDB alongside Cloud SQL with the same eight services, shared 18-scenario harness, and
-comparator. The [managed-target workflow](factory/cloudbank/alloydb-second-target/) implements
-provisioning, deployment, preflight, both comparisons, and signed acceptance. Live qualification is pending.
+Completed CloudBank milestone: **[MS71 — AlloyDB Second Target](docs/ms71-cloudbank-alloydb-second-target.md)**.
+Oracle to Cloud SQL and Oracle to AlloyDB each passed all 18 scenarios with the same eight service
+images and unchanged comparator. The [signed acceptance receipt](docs/receipts/ms71-20260912a/ms71-alloydb-second-target.receipt.json)
+records campaign `ms71-20260912a` and successful recovery. The [managed-target workflow](factory/cloudbank/alloydb-second-target/)
+implements provisioning through acceptance. This result covers bounded synthetic nonproduction
+business equivalence; AlloyDB platform qualification and production readiness remain false.
 
 v0.67 turns the MS #65 deployment design into a deployable real-platform package and chains its
 admission to both the signed MS #65 rehearsal and signed MS #66 whole-application equivalence result.

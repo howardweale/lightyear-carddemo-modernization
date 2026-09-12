@@ -65,7 +65,11 @@ This copies the bound service specifications, configuration, service accounts, d
 and network rules from the synthetic Cloud SQL deployment. Database egress is replaced with the
 AlloyDB address. New Secret Manager objects feed External Secrets in the isolated namespace;
 database credentials are distinct, while the application OAuth/model contracts are retained.
+Both Spring and Liquibase datasource settings point to AlloyDB. The namespace's secret-reader
+receives access only to the eight new secrets, including direct Kubernetes workload identities.
 The existing `cloudbank-model` namespace receives a narrowly selected Chatbot ingress rule.
+The `observability` collector receives a scoped ingress rule, with telemetry attributed to MS71
+and the new namespace.
 
 A temporary, digest-pinned PostgreSQL pod takes a consistent `pg_dump` snapshot from the synthetic
 source database and imports it over TLS into AlloyDB. The existing CloudBank deployment uses one
@@ -104,7 +108,8 @@ rewritten. The MS66-only execution path retains its existing same-controller/sig
 Use lowercase letters, digits, and hyphens for the campaign ID (the portion after `ms71-` has at
 most 35 characters). Preflight reads both providers and the actual deployment configuration,
 rejects shared database addresses/namespaces, and checks the probe's datasource. It does not prove
-equivalence. Each comparison creates a separate temporary Oracle lane, executes the unchanged
+equivalence. Application and probe configuration is read from the actual namespace's Kubernetes
+secrets, and auxiliary JDBC settings must resolve to the same database. Each comparison creates a separate temporary Oracle lane, executes the unchanged
 18 scenarios, recovers it, and executes the same scenarios on its managed target.
 
 The signed managed comparison envelope embeds both journey records and the unchanged comparator

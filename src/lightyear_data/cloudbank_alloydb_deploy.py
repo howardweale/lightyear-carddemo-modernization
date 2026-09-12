@@ -52,12 +52,31 @@ def copy_resource(value, namespace, source_address, target_address):
         require(value["spec"].get("type", "ClusterIP") == "ClusterIP", "ms71-service-type-unsupported")
     if value["kind"] == "Deployment":
         value["spec"]["replicas"] = 0
+        for container in value["spec"]["template"]["spec"].get("containers", []):
+            for env in container.get("env", []):
+                if env["name"] == "OTEL_RESOURCE_ATTRIBUTES" and "value" in env:
+                    env["value"] = telemetry_attributes(env["value"], namespace)
     if value["kind"] == "NetworkPolicy":
         for rule in value["spec"].get("egress", []):
             for peer in rule.get("to", []):
                 if peer.get("ipBlock", {}).get("cidr") == source_address + "/32":
                     peer["ipBlock"]["cidr"] = target_address + "/32"
     return value
+
+
+def telemetry_attributes(value, namespace):
+    rows = [v for v in value.split(",") if v and v.split("=", 1)[0] not in
+            {"lightyear.milestone", "k8s.namespace.name"}]
+    return ",".join(rows + ["lightyear.milestone=ms71", "k8s.namespace.name=" + namespace])
+
+
+def telemetry_policy(namespace):
+    return {"apiVersion": "networking.k8s.io/v1", "kind": "NetworkPolicy",
+        "metadata": {"name": "ms71-alloydb-otel-ingress", "namespace": "observability"},
+        "spec": {"podSelector": {"matchLabels": {"app": "otel-collector"}}, "policyTypes": ["Ingress"],
+            "ingress": [{"from": [{"namespaceSelector": {"matchLabels": {"kubernetes.io/metadata.name": namespace}},
+                "podSelector": {"matchLabels": {"app.kubernetes.io/part-of": "cloudbank"}}}],
+                "ports": [{"protocol": "TCP", "port": 4317}]}]}}
 
 
 def application_secret(values, address, database, username, password):
@@ -266,6 +285,7 @@ def deploy(source_profile, target_profile, image_lock, *, admin_secret, output: 
                 "podSelector": {"matchLabels": {"app.kubernetes.io/name": "chatbot"}}}],
                 "ports": [{"protocol": "TCP", "port": 11434}]}]}}
     apply(model_policy)
+    apply(telemetry_policy(namespace))
     kube("-n", namespace, "wait", "externalsecret", "--all", "--for=condition=Ready", "--timeout=5m", timeout=330)
     for service in SERVICES:
         progress("MS71_DEPLOY_PHASE=start-" + service)

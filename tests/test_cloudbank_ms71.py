@@ -330,6 +330,17 @@ class ProvisionTests(unittest.TestCase):
 
 
 class DeploymentTests(unittest.TestCase):
+    def test_telemetry_is_scoped_and_attributed_to_the_new_target(self):
+        from lightyear_data.cloudbank_alloydb_deploy import telemetry_attributes, telemetry_policy
+        value = telemetry_attributes("deployment.environment=non-production,lightyear.milestone=ms67", "alloydb")
+        self.assertNotIn("ms67", value)
+        self.assertIn("k8s.namespace.name=alloydb", value)
+        policy = telemetry_policy("alloydb")["spec"]
+        self.assertEqual(policy["ingress"][0]["ports"], [{"protocol": "TCP", "port": 4317}])
+        peer = policy["ingress"][0]["from"][0]
+        self.assertEqual(peer["namespaceSelector"]["matchLabels"]["kubernetes.io/metadata.name"], "alloydb")
+        self.assertIn("podSelector", peer)
+
     def test_migration_and_runtime_connections_both_use_alloydb_credentials(self):
         from lightyear_data.cloudbank_alloydb_deploy import application_secret
         values = {"LIQUIBASE_DATASOURCE_URL": "jdbc:postgresql://10.1.0.2/cloudbank",

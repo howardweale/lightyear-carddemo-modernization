@@ -1,0 +1,30 @@
+{
+  "schema_version": "1.0",
+  "mode": "emit-only",
+  "autonomy": {
+    "rerun": "auto",
+    "escalate-lane": "auto",
+    "extend-corpus": "auto-within-declared-scope",
+    "reparse": "auto",
+    "widen-observation": "auto",
+    "apply-ledger-entry": "auto-if-unexpired",
+    "propose-normalization": "always-ask",
+    "classify-intentional-change": "always-ask",
+    "accept-contract-equivalence": "always-ask",
+    "promote-claim": "always-ask",
+    "widen-scope": "always-ask",
+    "require-authorised-baseline": "blocked",
+    "require-customer-authorization": "blocked",
+    "require-approved-provider": "blocked",
+    "require-parser-work": "blocked"
+  },
+  "max_autonomous_iterations": 8,
+  "halt_on": [
+    "budget",
+    "divergent",
+    "scope-boundary"
+  ],
+  "owners": {
+    "parser-maintainer": "LIGHTYEAR parser engineering"
+  }
+}

@@ -4,6 +4,15 @@
 
 # LIGHTYEAR CardDemo Modernization Factory
 
+**MS #72 — Control Tower workflow, Step 1.** The headless engine
+emits a source-bound [action plan](docs/control-tower-action-plan.md) from existing
+verdicts. The Tower displays actions, parser backlog and approval proposals, and
+records authenticated human decisions. No actions execute and no claims change.
+See the [architecture, policy boundary and run instructions](docs/control-tower-workflow.md).
+
+MS #71 is assigned to AlloyDB work. MS #72 continues with Step 2 bounded engine
+execution, using CloudBank as the test estate, and browser visual inspection fixes.
+
 Release: **v0.70.0 — iDempiere Bounded Triage Controls and Evidence Assembly**
 
 MS #70 turns the 1,077 MS #69 findings into a deterministic 20-case work package: ten reason
@@ -1363,7 +1372,8 @@ included CardDemo portfolio coordinates INTCALC, POSTTRAN and statement generati
 read-only dashboard cannot approve, resolve, or launch work.
 
 The Control Tower now has a [signed normalization work queue](docs/ms68-control-tower-decisions.md)
-for the MS68 operator workflow: review, decide, dispatch a bounded proof, and verify the human-decision gate.
+for the operator workflow: review and sign decisions. The headless engine owns proof
+dispatch and qualification; those commands are no longer available from the browser.
 This local reference workflow does not certify customer production readiness.
 
 ## What it does

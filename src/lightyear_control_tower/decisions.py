@@ -104,9 +104,10 @@ def verify_envelope(envelope: dict, public_key: bytes) -> bool:
 
 
 class DecisionService:
-    def __init__(self, root: Path, authority: Path, database: Path | None = None, graph_identity=None, recover_runs: bool = True):
+    def __init__(self, root: Path, authority: Path, database: Path | None = None, graph_identity=None, recover_runs: bool = True, decision_only: bool = True):
         from cryptography.hazmat.primitives import serialization
         self.root = root.resolve()
+        self.decision_only = decision_only
         self.authority_path = authority.resolve()
         config = json.loads(self.authority_path.read_text())
         if config.get("schema_version") != "1.0":
@@ -136,7 +137,7 @@ class DecisionService:
         # An interrupted process is never silently retried or reported as a pass.
         with self.transaction() as db:
             for run in self.runs(self.events(db)):
-                if recover_runs and run["status"] == "running":
+                if recover_runs and not decision_only and run["status"] == "running":
                     self.append(db, "proof_finished", {**run, "status": "interrupted", "reason": "server-restarted"}, self.system_actor())
 
     def _acquire_writer_lock(self):
@@ -328,6 +329,8 @@ class DecisionService:
         return {path.relative_to(self.root).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest() for path in sorted(paths)}
 
     def dispatch(self, token: str, payload: dict) -> dict:
+        if self.decision_only:
+            raise DecisionUnauthorized("The Control Tower records human decisions only; use the headless engine for proofs")
         session = self.authenticate(token, "proof-runner")
         if payload.get("workload_id") != WORKLOAD:
             raise ValueError("No approved proof runner is configured for this workload")
@@ -385,6 +388,8 @@ class DecisionService:
 
     def gate(self, run_id: str) -> dict:
         """Always checks authoritative current state; no trust in a caller-supplied pass."""
+        if self.decision_only:
+            raise DecisionUnauthorized("Qualification receipts are produced by the headless engine")
         with self.transaction() as db:
             events = self.events(db)
             run = next((run for run in self.runs(events) if run["run_id"] == run_id), None)

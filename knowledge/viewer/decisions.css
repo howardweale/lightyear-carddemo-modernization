@@ -48,7 +48,26 @@
 .decision-workspace :focus-visible, .tower-navigation :focus-visible { outline:3px solid var(--accent-2); outline-offset:3px; }
 #operator-dialog input { font-size:16px; width:100%; padding:10px; }
 #operator-error { color:var(--critical); }
+.workflow-plan { margin:24px 0 36px; padding:24px; background:var(--surface); border:1px solid var(--border); border-top:4px solid var(--accent); border-radius:4px; }
+.workflow-heading, .workflow-controls { display:flex; align-items:center; flex-wrap:wrap; gap:14px; }
+.workflow-heading { justify-content:space-between; }
+.workflow-heading h2 { margin:0; }
+.workflow-counts { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; margin:20px 0; }
+.workflow-metric { background:var(--surface-2); border:1px solid var(--border); padding:16px; display:flex; flex-direction:column; gap:8px; }
+.workflow-metric strong { font-size:32px; line-height:1; }
+.workflow-metric span { font-size:14px; }
+.workflow-controls { margin:20px 0 12px; }
+.workflow-controls select { font:inherit; padding:8px; max-width:100%; background:var(--surface); color:var(--ink); border:1px solid var(--border); }
+.workflow-action { border-top:1px solid var(--border); padding-top:14px; overflow-wrap:anywhere; }
+.workflow-action > summary { display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
+.workflow-action > summary::before { content:'+'; color:var(--accent); font-weight:bold; }
+.workflow-action[open] > summary::before { content:'−'; }
+.workflow-file { margin-left:auto; color:var(--muted); font-size:14px; }
+.workflow-action details a { display:block; margin:8px 0; }
 @media (max-width:800px) {
+ .workflow-counts { grid-template-columns:repeat(2,minmax(0,1fr)); }
+ .workflow-plan { padding:16px; }
+ .workflow-file { width:100%; margin-left:0; }
  .decision-workspace { padding:20px 16px 40px; }
  .decision-layout { grid-template-columns:1fr; }
  .decision-heading { align-items:flex-start; }

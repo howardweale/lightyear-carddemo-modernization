@@ -30,6 +30,21 @@ class ManagedPlatformTests(unittest.TestCase):
     def test_cutover_candidate_uses_deployed_namespace_credentials(self):
         self.assertTrue(issubclass(CandidateRuntime, ManagedGkeRuntime))
 
+    def test_ha_requires_changed_zone_and_unchanged_database_identity(self):
+        from lightyear_data.cloudbank_alloydb_ha import AlloyHa, AlloyHaRuntime
+        self.assertTrue(issubclass(AlloyHaRuntime, ManagedGkeRuntime))
+        drill = object.__new__(AlloyHa)
+        before = {"active_zone": "us-west1-a", "instance_uid": "original", "private_ip": "10.1.2.3"}
+        drill.state = {"source_profile": before}
+        drill.profile = Mock(return_value=dict(before))
+        with self.assertRaisesRegex(JourneyFailure, "zone-promotion-or-endpoint-invalid"):
+            drill.promoted()
+        drill.profile.return_value = {**before, "active_zone": "us-west1-b", "instance_uid": "replacement"}
+        with self.assertRaisesRegex(JourneyFailure, "zone-promotion-or-endpoint-invalid"):
+            drill.promoted()
+        drill.profile.return_value = {**before, "active_zone": "us-west1-b"}
+        self.assertEqual(drill.promoted()["instance_uid"], "original")
+
     def test_managed_network_evidence_must_bind_the_actual_probe_address(self):
         from test_cloudbank_network_enforcement import engine, KEY, BINDINGS, IMAGES, ENV, ARTIFACT
         from lightyear_data.cloudbank_network_enforcement import verify_observation

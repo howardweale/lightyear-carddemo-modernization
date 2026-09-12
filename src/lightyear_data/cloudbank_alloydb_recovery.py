@@ -31,7 +31,7 @@ APPLICATION_SNAPSHOT_SQL = SNAPSHOT_SQL.replace("n.nspname <> 'information_schem
 class AlloyRecovery(SqlRecovery):
     snapshot_sql = APPLICATION_SNAPSHOT_SQL
 
-    def __init__(self, runtime, profile, key, signer, prefix, *, state=None):
+    def __init__(self, runtime, profile, key, signer, prefix, *, state=None, generation="0"):
         validate_profile(profile)
         require(profile["provider"] == "alloydb-postgresql", "alloydb-recovery-provider-required")
         source = profile["resource"].split("/")[-3]
@@ -40,11 +40,22 @@ class AlloyRecovery(SqlRecovery):
         self.region_path = f"projects/{runtime.project}/locations/{runtime.region}"
         self.cluster_path = self.region_path + "/clusters/" + source
         self.journal = Journal(runtime.output / "alloydb-recovery-state.json",
-            self.prefix + "/alloydb-recovery-state.json", runtime.project, key, signer)
+            self.prefix + "/alloydb-recovery-state.json", runtime.project, key, signer, generation=generation)
         if state is not None:
-            raise JourneyFailure("alloydb-recovery-resume-requires-explicit-operation-reconciliation")
-        self.state.update(state_type=TYPE, profile=profile, targets={}, backup=None,
-                          source_cluster_uid=None, cleanup_complete=False, alloydb_platform_qualified=False)
+            verified(state, key)
+            require(state.get("state_type") == TYPE and state.get("profile") == profile
+                    and state.get("run_id") == runtime.run_id and state.get("images") == runtime.images
+                    and state.get("context") == runtime.context and state.get("namespace") == runtime.namespace,
+                    "alloydb-recovery-saved-context-mismatch")
+            self.state = {k: v for k, v in state.items() if k not in {"signature", "content_sha256"}}
+            for kind, record in self.state["targets"].items():
+                expected = "ly-alloy-" + kind + "-" + hashed(runtime.run_id)[:16]
+                require(kind in {"pitr", "backup"} and record["name"] == expected
+                        and record["resource"] == self.region_path + "/clusters/" + expected,
+                        "alloydb-recovery-saved-target-mismatch")
+        else:
+            self.state.update(state_type=TYPE, profile=profile, targets={}, backup=None,
+                              source_cluster_uid=None, cleanup_complete=False, alloydb_platform_qualified=False)
 
     def save(self):
         self.journal.write(self.state)
@@ -163,10 +174,19 @@ class AlloyRecovery(SqlRecovery):
         for kind, record in self.state["targets"].items():
             if record["deleted"]:
                 continue
+            if kind + "-delete" in self.state["operations"]:
+                self.wait(kind + "-delete")
+                require(not any(c["name"] == record["resource"] for c in self.cloud("clusters", "list")),
+                        "alloydb-restore-deletion-unverified")
+                record["deleted"] = True
+                self.save()
+                continue
             op = self.state["operations"].get(kind)
             require(op and op.get("name"), "alloydb-restore-submission-uncertain")
             self.wait(kind)
             self.target_guard(kind)
+            if kind + "-delete-primary" in self.state["operations"]:
+                self.wait(kind + "-delete-primary")
             instances = self.cloud("instances", "list", "--cluster=" + record["name"])
             require(len(instances) <= 1, "alloydb-unexpected-restore-instances")
             if instances:

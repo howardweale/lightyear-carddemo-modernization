@@ -10,7 +10,7 @@ import uuid
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
-from cloudbank_journeys import Heartbeat
+from cloudbank_journeys import Heartbeat, restore_state
 from lightyear_data.cloudbank_alloydb_recovery import AlloyRecovery, verify_recovery
 from lightyear_data.cloudbank_journeys import ACK, require
 from lightyear_data.cloudbank_journeys_gke import command
@@ -22,11 +22,12 @@ from lightyear_data.cloudbank_sql_recovery import verified
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("action", choices=("run", "verify"))
+    parser.add_argument("action", choices=("run", "recover", "verify"))
     parser.add_argument("--context", required=True, type=Path)
     parser.add_argument("--ms71-receipt", required=True, type=Path)
     parser.add_argument("--output-root", type=Path)
     parser.add_argument("--observation", type=Path)
+    parser.add_argument("--original-process-stopped", action="store_true")
     args = parser.parse_args(argv)
     context = json.loads(args.context.read_bytes())
     key = os.environ.get("LIGHTYEAR_CLOUDBANK_BASELINE_EVIDENCE_KEY") or command([
@@ -52,10 +53,24 @@ def main(argv=None):
     commit = command(["git", "rev-parse", "HEAD"]).strip()
     require(args.output_root is not None, "fresh-evidence-root-required")
     output = args.output_root.resolve()
-    require(not output.exists() and not output.is_relative_to(ROOT), "fresh-private-evidence-outside-checkout-required")
-    output.mkdir(parents=True)
-    run_id = "alloydb-recovery-" + uuid.uuid4().hex[:24]
+    require(not output.is_relative_to(ROOT), "private-evidence-outside-checkout-required")
+    state, generation = None, "0"
+    if args.action == "recover":
+        require(args.original_process_stopped, "original-executor-must-be-stopped-before-recovery")
+        state = verified(json.loads((output / "alloydb-recovery-state.json").read_bytes()), key)
+        run_id = state["run_id"]
+    else:
+        require(not output.exists(), "fresh-output-required")
+        output.mkdir(parents=True)
+        run_id = "alloydb-recovery-" + uuid.uuid4().hex[:24]
     prefix = f'gs://{context["project"]}-ms67-evidence/alloydb-platform/{context["run_id"]}/{run_id}'
+    if state:
+        uri = prefix + "/alloydb-recovery-state.json"
+        generation = command(["gcloud", "--project=" + context["project"], "storage", "objects", "describe", uri,
+                              "--format=value(generation)"]).strip()
+        state = verified(json.loads(command(["gcloud", "--project=" + context["project"], "storage", "cat", uri + "#" + generation])), key)
+        require(state.get("context_sha256") == context["content_sha256"] and state["run_id"] == run_id,
+                "alloydb-recovery-durable-context-mismatch")
     heartbeat = Heartbeat()
     heartbeat.thread.start()
     prior = signal.signal(signal.SIGTERM, lambda *_: (_ for _ in ()).throw(KeyboardInterrupt()))
@@ -64,7 +79,19 @@ def main(argv=None):
             images=context["images"], run_id=run_id, output=output, probe_image=context["probe_image"],
             signing_key=key, signer=context["signer"], progress=heartbeat.progress)
         require(runtime.environment() == context["environment"], "alloydb-live-namespace-drift")
-        drill = AlloyRecovery(runtime, context["managed_profile"], key, context["signer"], prefix)
+        drill = AlloyRecovery(runtime, context["managed_profile"], key, context["signer"], prefix, state=state, generation=generation)
+        if args.action == "recover":
+            journey = verified(json.loads((output / "recovery-state.json").read_bytes()), key)
+            restore_state(runtime, journey, key)
+            try:
+                drill.restore_apps()
+            finally:
+                drill.cleanup()
+            Journal(output / "cleanup-result.json", prefix + "/cleanup-result.json", context["project"], key,
+                    context["signer"]).write({"status": "restored", "alloydb_platform_qualified": False,
+                                             "original_controller_commit": state["controller_commit"], "recovery_controller_commit": commit})
+            print("ALLOYDB_RECOVERY_CLEANUP=VERIFIED")
+            return 0
         drill.state.update(controller_commit=commit, context_sha256=context["content_sha256"])
         drill.save()
         runtime.recovery_checkpoint()

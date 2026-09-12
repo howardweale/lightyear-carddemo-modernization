@@ -220,6 +220,7 @@ def source_profile(instance: dict, project: str, region: str, name: str, *, requ
 
 
 class SqlRecovery:
+    snapshot_sql = SNAPSHOT_SQL
     def __init__(self, runtime: GkeRuntime, source: str, key: str, signer: str, *, state=None):
         require(NAME.fullmatch(source) is not None, "source-instance-name-invalid")
         self.runtime, self.key, self.signer = runtime, key, signer
@@ -510,7 +511,7 @@ class SqlRecovery:
                         raw = invoke(["kubectl", "--context", self.runtime.context, "-n", self.runtime.namespace,
                             "exec", "-i", record["name"], "--", "env", "PGHOST=" + host,
                             "psql", "-X", "-qAt", "--no-password", "--set=ON_ERROR_STOP=1"],
-                            data=SNAPSHOT_SQL, timeout=180, sensitive=True)
+                            data=self.snapshot_sql, timeout=180, sensitive=True)
                         break
                     except JourneyFailure as exc:
                         if attempt == 2 or str(exc) != "operator-command-failed-database-or-secret-access":

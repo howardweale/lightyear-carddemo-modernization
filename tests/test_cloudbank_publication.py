@@ -71,7 +71,9 @@ class CloudBankPublicationTests(unittest.TestCase):
         page = generated[ROOT / 'docs/receipts/index.html']
         self.assertIn('AlloyDB nonproduction platform qualified', page)
         self.assertIn('458.91 ms aggregate p95', page)
-        self.assertIn('original MS71 receipt records AlloyDB platform qualification', page)
+        self.assertIn('original MS71 receipt covers equivalence only and retains its historical false qualification flag', page)
+        self.assertIn('alloydb_platform_qualified: true', page)
+        self.assertIn('passed-alloydb-nonproduction-platform-qualification', page)
         self.assertIn('receipts/#alloydb-platform', generated[ROOT / 'docs/index.html'])
 
     def test_ms71_acceptance_and_original_bytes_are_bound(self):

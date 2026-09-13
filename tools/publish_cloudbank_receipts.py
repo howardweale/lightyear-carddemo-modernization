@@ -106,15 +106,17 @@ def outputs(p: dict) -> dict[Path, str]:
     if alloydb is not None:
         summary = publication_summary(alloydb)
         catalog = {**p, "alloydb_platform_qualification": summary}
-        original_scope = "The original MS71 receipt records AlloyDB platform qualification and production readiness as false; later platform qualification is recorded separately."
+        original_scope = "The original MS71 receipt covers equivalence only and retains its historical false qualification flag. Current AlloyDB platform qualification is true in the separate 29-scenario platform receipt; production readiness remains false."
         page = page.replace("AlloyDB platform qualification and production readiness remain false.", original_scope)
-        readme = readme.replace("AlloyDB platform qualification and production readiness remain false.", original_scope)
+        readme = readme.replace("; AlloyDB platform qualification and production readiness remain false.", ". " + original_scope)
+        readme = readme.replace("# CloudBank execution receipts\n\n", "# CloudBank execution receipts\n\n**Current AlloyDB status: `alloydb_platform_qualified: true`.**\n\n", 1)
         receipt_link = html.escape(local_link(summary["receipt_path"]), quote=True)
         export_link = html.escape(local_link(summary["export_manifest_path"]), quote=True)
         load = summary["load"]
         links = " · ".join(f'<a href="{html.escape(local_link(alloydb["bundle"]), quote=True)}/{f["name"]}">{html.escape(f["name"])}</a>'
                            for f in alloydb["manifest"]["files"])
         section = f'''<section id="alloydb-platform"><h2>AlloyDB nonproduction platform qualified</h2>
+<p><strong>Current status: <code>alloydb_platform_qualified: true</code>.</strong> The separate platform receipt records <code>{html.escape(summary['status'])}</code>; it adds operational qualification to the original two-target equivalence acceptance.</p>
 <p>Campaign <code>{html.escape(summary['campaign_id'])}</code>: all {summary['scenario_count']} operational scenarios passed for {summary['service_count']} services. Published {summary['published_on']}. The original MS67 Cloud SQL and MS71 business-equivalence receipts remain unchanged.</p>
 <table><thead><tr><th>Measured control</th><th>AlloyDB result</th></tr></thead><tbody>
 <tr><td>Sustained load</td><td>{load['requests']:,} requests; {load['errors']} errors; {load['p95_ms']:.2f} ms aggregate p95</td></tr>

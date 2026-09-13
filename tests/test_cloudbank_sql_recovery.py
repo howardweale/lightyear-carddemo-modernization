@@ -46,6 +46,9 @@ class RecoveryTests(unittest.TestCase):
         self.assertFalse(run.call_args.kwargs.get("shell", False))
 
     def setUp(self):
+        launcher = patch("lightyear_data.cloudbank_sql_recovery._command_argv", side_effect=lambda argv: argv)
+        launcher.start()
+        self.addCleanup(launcher.stop)
         self.directory = tempfile.TemporaryDirectory()
         self.addCleanup(self.directory.cleanup)
         self.root = Path(self.directory.name)

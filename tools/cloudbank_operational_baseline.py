@@ -100,7 +100,8 @@ def safe_api_error(raw: bytes) -> dict:
 
 
 def command(args: list[str], timeout: int = 60) -> str:
-    result = subprocess.run(args, capture_output=True, text=True, timeout=timeout, check=False)
+    from lightyear_data.cloudbank_journeys_gke import _command_argv
+    result = subprocess.run(_command_argv(args), capture_output=True, text=True, timeout=timeout, check=False)
     if result.returncode:
         raise ObservationError("command-failed", result.returncode)
     return result.stdout

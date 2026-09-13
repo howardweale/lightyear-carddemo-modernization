@@ -124,6 +124,10 @@ class SixActionTests(unittest.TestCase):
         self.assertEqual(ENTRY_ID, validate_approval(self.root, trust, events, now)["entry_id"])
         with self.assertRaisesRegex(ValueError, "expired"):
             validate_approval(self.root, trust, events, now + timedelta(days=3))
+        expiry = datetime.fromisoformat(events[-1]["payload"]["review_after"]).replace(tzinfo=timezone.utc)
+        for offset in (-12, 0, 14):
+            with self.subTest(expiry_offset=offset), self.assertRaisesRegex(ValueError, "expired"):
+                validate_approval(self.root, trust, events, expiry.astimezone(timezone(timedelta(hours=offset))))
         with self.assertRaises(ValueError):
             validate_approval(self.root, trust, events[1:], now)
         for mutate in (lambda e: e["payload"].update(workload_id="different-estate"),

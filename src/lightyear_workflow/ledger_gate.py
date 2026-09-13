@@ -49,6 +49,8 @@ def validate_approval(root: Path, trust: dict, events: list[dict], at: datetime)
     """Verify the full chain, authenticated review, exact terms, latest decision and expiry."""
     if at.tzinfo is None:
         raise ValueError("Application time must include timezone")
+    # Review dates are UTC dates; a different offset cannot extend an approval.
+    at = at.astimezone(timezone.utc)
     ledger = decision_ledger(root)
     rule = ledger["rules"][0]
     binding = {"entry_id": ENTRY_ID, "entry_sha256": digest(rule),
@@ -65,6 +67,7 @@ def validate_approval(root: Path, trust: dict, events: list[dict], at: datetime)
         when = datetime.fromisoformat(event["occurred_at"])
         if when.tzinfo is None or when > at or (last_time and when < last_time):
             raise ValueError("Invalid human decision time")
+        when = when.astimezone(timezone.utc)
         previous, last_time = event["content_sha256"], when
         kind, payload, actor, sid = event["kind"], event["payload"], event["actor"], event["session_id"]
         if kind not in {"session_started", "session_ended", "normalization_viewed", "normalization_decided"}:

@@ -104,7 +104,8 @@ CardDemo credentials, ledger and historical proof workflow remain separate.
 The headless executor receives no signing key or operator credential. It checks
 Ed25519 signatures, continuous journal order, trusted human identity, an active
 session at decision time, review before approval, exact workload/entry/ledger
-bindings, latest decision and expiry. Immediately before application it checks
+bindings, latest decision and expiry at midnight UTC on the review date.
+Immediately before application it checks
 again while reserving the decision database against a concurrent writer, keeping
 that reservation through the engine's receipt commit. Revocation during a worker
 therefore prevents application. The engine does not write the decision journal.

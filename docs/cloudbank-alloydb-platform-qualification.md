@@ -2,6 +2,14 @@
 
 Status: implementation and live campaign in progress. Authorized on 2026-09-12.
 
+The active campaign is `alloydb-platform-20260912a`. Current controls (TLS, manifests,
+External Secrets synchronization and metrics for all 16 current pods), runtime identity,
+retained immutable-image security and synthetic alert fire/recovery have passing evidence.
+The first measured load completed 5,314 requests with zero errors but failed the unchanged
+500 ms aggregate p95 limit at 589.44 ms. The first completed backup and PITR restore had
+matching table data but advanced sequence counters; that failed evidence remains retained.
+Qualification is still pending the remaining operational results and complete admission.
+
 This follow-up qualifies the synthetic nonproduction AlloyDB deployment created by MS71.
 It preserves the original MS71 business-equivalence acceptance and MS67 Cloud SQL evidence.
 The new platform receipt must bind the actual AlloyDB resource, namespace UID, eight immutable
@@ -58,6 +66,13 @@ a [temporary system and display execution request](https://learn.microsoft.com/e
 while running, and release it on exit. They use one storage worker for small evidence checkpoints.
 These process-scoped settings do not change the saved power plan or gcloud configuration. Failed
 attempts and their subsequent recovery records remain retained separately from passing evidence.
+
+An External Secrets status update raced with a rotation version patch during a later attempt.
+The version-pinning adapter now permits at most three attempts only when a fresh read proves
+that just status/resource-version bookkeeping changed. Each attempt rechecks lease ownership,
+the original specification, UID and current resource version. Changed specifications, owners,
+unchanged resource versions and ambiguous transport timeouts still fail closed. The failed
+attempt restored the original values and version policy and disabled its temporary version.
 
 Provider operations follow Google's [backup and recovery documentation](https://docs.cloud.google.com/alloydb/docs/backup/overview),
 [point-in-time recovery instructions](https://docs.cloud.google.com/alloydb/docs/backup/restore-pitr),

@@ -19,6 +19,12 @@ Durable acceptance: `gs://lightyear-ms67-nonproduction-ms67-evidence/ms71/ms71-2
 The receipt records `ms71_complete: true`, `production_ready: false`, and
 `alloydb_platform_qualified: false`: this acceptance covers bounded synthetic business equivalence.
 
+The separately authorized [AlloyDB platform follow-up](cloudbank-alloydb-platform-qualification.md)
+completed on 2026-09-13: all 29 operational scenarios passed for the same eight services.
+Its [new signed platform receipt](receipts/alloydb-platform-20260912a/alloydb-platform.receipt.json)
+records `alloydb_platform_qualified: true` for synthetic nonproduction. The original MS71 receipt
+above remains unchanged; production readiness and customer certification remain false.
+
 The first Cloud SQL runtime execution passed, but receipt assembly rejected source files converted
 to CRLF by the Windows checkout. Restoring exact pinned Git bytes allowed the unchanged comparator
 to reassemble the original signed runtime observations. The [original failure](receipts/ms71-20260912a/sql-original-assembly-failure.json)

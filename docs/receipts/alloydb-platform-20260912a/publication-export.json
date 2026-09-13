@@ -1,0 +1,134 @@
+{
+  "campaign_id": "alloydb-platform-20260912a",
+  "cloud_readback_repeated_at_export": false,
+  "complete_gate_reconstructed": true,
+  "content_sha256": "8e670ed0feb17ce3293054d9929cedc32c114cc83954444fd346477d766ecd37",
+  "exported_at": "2026-09-13T07:10:46.511665+00:00",
+  "files": [
+    {
+      "content_sha256": "37ace7e81628956c0c5191e5f9a27e3c2e677bc0e286f8ac94096f9b96fcc0ce",
+      "file_sha256": "287b01793cabd5d18be74cd892d124575e236052213c8d1edae305a78098cacc",
+      "name": "alert-drill.json",
+      "size_bytes": 2895
+    },
+    {
+      "content_sha256": "8db149b008ab171fe8589a499d962ac1864fe275549fd584b834999e8dcd37f2",
+      "file_sha256": "5cf787db5b83275d7d2f9630bfa1d1cd20015bc0b2164811633e3f314acbb4ef",
+      "name": "alert-drill.managed-boundary.json",
+      "size_bytes": 14241
+    },
+    {
+      "content_sha256": "973e8f8dc3f70db61bfe197dd0d49f61dff980af714069ff420b66f3224fa926",
+      "file_sha256": "f8eb4d39719c24b992ceff164da5b76304e7c51d308873d59537d82f5af9865a",
+      "name": "alloydb-platform.receipt.json",
+      "size_bytes": 588245
+    },
+    {
+      "content_sha256": "163aef725f4045d3bc560b78e99862b499315622f54959326f0037356980514a",
+      "file_sha256": "5f536dc6467ab50f3f49958ab2702dc7afed32003304bf019e2a1711315cfd5b",
+      "name": "campaign-context.json",
+      "size_bytes": 13504
+    },
+    {
+      "content_sha256": "2475cbb312bc999c62bab55df3221c269fb053326677405530b74fbf7ffc7aac",
+      "file_sha256": "e89b741f32f957dd62645c27d1a75c0c71511bb6c1464fae07f127702ee81c61",
+      "name": "current-controls.json",
+      "size_bytes": 17271
+    },
+    {
+      "content_sha256": "a5ad6a27c21d83d76f5e699724867aab0f4e9452faf7cf0c2fbec870de3d7e3b",
+      "file_sha256": "fa3e69194cd8299c01f888c786ea7847b6a546475c7a7212c3b7f0866e08d004",
+      "name": "database-recovery.json",
+      "size_bytes": 41472
+    },
+    {
+      "content_sha256": "420ab1cbe37fdb56ba223a709a1be11b21d1c1043ac457e4860d4394e573dbad",
+      "file_sha256": "0c35de5628d8e842c65f4e4d4e962f6229e58763f901afdb627c055337f3b2fd",
+      "name": "drills.json",
+      "size_bytes": 55026
+    },
+    {
+      "content_sha256": "c1b0e5e802647a03b2359aefc4879665f8e985120aa0e375723241d1668fde01",
+      "file_sha256": "d7eeb45199f8fa90d9b0ab4f9973f8a9e5e5e44a1d9fddac856154d12e91561b",
+      "name": "ha.json",
+      "size_bytes": 30904
+    },
+    {
+      "content_sha256": "ed5ea7f816797e57b9cffecc006aa48ad3770feb6207558703ebafe6a6ee29c7",
+      "file_sha256": "00e0b11b33a508ac251b8faf87a831b3a780dfa21324d5e6900252e64701f370",
+      "name": "image-security.json",
+      "size_bytes": 34766
+    },
+    {
+      "content_sha256": "0fac584924b439b6af1a1f41a28fec2204b74937093ed9da86f065d0ded98f96",
+      "file_sha256": "de2c6d4e7038f2efeec4b7ce21bb72e2ba8897ca7896f838553ab292a467912a",
+      "name": "log-correlation.json",
+      "size_bytes": 8104
+    },
+    {
+      "content_sha256": "5c5c5c0f586dd626e2acf85ce0fe086178b371e5d9bfcfa2e62ad96632ec9c75",
+      "file_sha256": "ad7a0d8ca2fbdacf3d7e8a4070b9b607ecd99ee7fba29d3ba5abcb2d301d5746",
+      "name": "log-correlation.managed-boundary.json",
+      "size_bytes": 14552
+    },
+    {
+      "content_sha256": "029749b5cca1182b726093e4e6a11908bf3ba30866b6ee526ad5168db317597d",
+      "file_sha256": "e49486a7746ec97ff077342eda5601344ae3aefc4cb83ef86f70ec337108e87a",
+      "name": "ms71-business-equivalence.receipt.json",
+      "size_bytes": 128431
+    },
+    {
+      "content_sha256": "75724f2e5223f4803427a83bd59b6391d77f44131ed7c519c3130b7ebd6960e4",
+      "file_sha256": "41e76871782e1fc58556f660dede8e1080e2df93d07c1f512b2414d6c2aa6a08",
+      "name": "network-enforcement.json",
+      "size_bytes": 87625
+    },
+    {
+      "content_sha256": "e0f27e3f1d094c0ece0b8e60f0f8b8cdf8b695724f802af3d42d4dc7d89efcfb",
+      "file_sha256": "bb820f9ac839dc8d16f120e06af404b90dddb304b0b5399951c1cf916d1da4f1",
+      "name": "network-enforcement.managed-boundary.json",
+      "size_bytes": 14249
+    },
+    {
+      "content_sha256": "49534383e2efcc6c59f389de78de32c28d8e8dc6c59f6f69defa43116ed9bd45",
+      "file_sha256": "00074d70391c966214c1a8627abd7af9836c75f65fa9e8befaaf213140a8d7fb",
+      "name": "runtime-identity.json",
+      "size_bytes": 18227
+    },
+    {
+      "content_sha256": "f1cdaa7e4d0507560db2e464cbc77979d38d064dae48d11fe3fc39a6173acb62",
+      "file_sha256": "f8326bf4c3e60a53b7d60db170d5b733aae977f5233eb12085195de41cc8df46",
+      "name": "secret-rotation.json",
+      "size_bytes": 3103
+    },
+    {
+      "content_sha256": "46dbd52d3d49e7d464a59958e21d54cdb9f51d840dfef7cde5eb1b30b4b7d8c8",
+      "file_sha256": "33fdb63127f2c823476a886011f17f1e2f0baf95d723624e14d85d7d16906871",
+      "name": "secret-rotation.managed-boundary.json",
+      "size_bytes": 14245
+    },
+    {
+      "content_sha256": "4ac981b96f824577e4499aee232b0577de383e797c22756a9cb204defb409394",
+      "file_sha256": "504eb6a50c705dc6df4bab8ae1db15d336f3d2d2c55b3091fd9d259d592be994",
+      "name": "sustained-load.json",
+      "size_bytes": 18599
+    },
+    {
+      "content_sha256": "b4cf5ed7722ab80996b2dd071e6d1cba5b5b941e37d3722f02a83615649d4e07",
+      "file_sha256": "52b6d12f12bf08d3addbc6c4be5ed64a56f2a52e78608ebd42155330ab77b080",
+      "name": "sustained-load.managed-boundary.json",
+      "size_bytes": 14244
+    }
+  ],
+  "operator_signatures_verified": true,
+  "original_bytes_preserved": true,
+  "receipt_content_sha256": "973e8f8dc3f70db61bfe197dd0d49f61dff980af714069ff420b66f3224fa926",
+  "receipt_file": "alloydb-platform.receipt.json",
+  "record_type": "lightyear-alloydb-platform-publication-export",
+  "schema_version": "1.0",
+  "signature": {
+    "algorithm": "hmac-sha256",
+    "signer": "howard.weale@gmail.com",
+    "value": "cf8365b00ea71931b191afe4f6168a339fc5019c7908ff2bb4b6977e8f979682"
+  }
+}

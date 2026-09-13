@@ -1,0 +1,411 @@
+{
+  "baseline": {
+    "account": {
+      "already_configured": true,
+      "before": {
+        "deployment_spec_sha256": "020e1b02b07f63243b53f7b2c54701ab3a01476e972cc2490a134c54b931650e",
+        "deployment_uid": "8321a18c-1a5a-41a0-bbcf-bfa236690ca2",
+        "http_readiness": 200,
+        "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/account@sha256:87e675066d0c6edf77346b2ddee81bb46687365dbc9c8760307d7104764c59cf",
+        "observed_at": "2026-09-12T22:42:50.638131Z",
+        "pod_uid_sha256": [
+          "7b19bf0b616fb572ede394bca838a430fa30910f8c59f6a36458b149b0fda2ea",
+          "bcd1c1db14c750dfc9a100b23622056fdb3e4d4ed83e280daae0cb955f0c1044"
+        ],
+        "ready_replicas": 2,
+        "startup_gids": [
+          65532,
+          65532
+        ],
+        "startup_uids": [
+          65532,
+          65532
+        ]
+      },
+      "before_spec_sha256": "020e1b02b07f63243b53f7b2c54701ab3a01476e972cc2490a134c54b931650e",
+      "deployment_uid": "8321a18c-1a5a-41a0-bbcf-bfa236690ca2",
+      "target_spec_sha256": "020e1b02b07f63243b53f7b2c54701ab3a01476e972cc2490a134c54b931650e"
+    },
+    "azn-server": {
+      "already_configured": true,
+      "before": {
+        "deployment_spec_sha256": "c153b0585dc5837169e2601795f4754fc41b38920abc7f1ca444be9adf565373",
+        "deployment_uid": "d78f5cac-a449-4240-ad02-e1123cc1c3e1",
+        "http_readiness": 200,
+        "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/azn-server@sha256:24ba43de59cf22f95c962981b49542eb55e332fc2dd91f9b4a9c724d06dd474a",
+        "observed_at": "2026-09-12T22:42:31.449233Z",
+        "pod_uid_sha256": [
+          "04993643fe95278fc59170ec07b354787647166c9dfe9feda17e705f8f0c7ceb",
+          "95d4c687755563622ffcf74900cd000761204c8fa902e74fa2e797acfdddea7d"
+        ],
+        "ready_replicas": 2,
+        "startup_gids": [
+          65532,
+          65532
+        ],
+        "startup_uids": [
+          65532,
+          65532
+        ]
+      },
+      "before_spec_sha256": "c153b0585dc5837169e2601795f4754fc41b38920abc7f1ca444be9adf565373",
+      "deployment_uid": "d78f5cac-a449-4240-ad02-e1123cc1c3e1",
+      "target_spec_sha256": "c153b0585dc5837169e2601795f4754fc41b38920abc7f1ca444be9adf565373"
+    },
+    "chatbot": {
+      "already_configured": true,
+      "before": {
+        "deployment_spec_sha256": "914f87b5b089e2b6d76df8a98b5b8204a1799bb28d21843ccd00d014ed5aa485",
+        "deployment_uid": "1e621692-08c0-462f-81ee-6dc1f774c827",
+        "http_readiness": 200,
+        "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/chatbot@sha256:ab2180b081ad8f92043c9bd8c7f72b74ef89ed22b656f9afbc9c8fd0067d0703",
+        "observed_at": "2026-09-12T22:43:38.497313Z",
+        "pod_uid_sha256": [
+          "4b28b2eccecbca83c24829e624b5ebbaaee558f3557269f2cef0c0a503737a0e",
+          "d66cd6f9965302e29e0092199c9fcf0153caa0cdd5be072d4f5d43dd569c9b08"
+        ],
+        "ready_replicas": 2,
+        "startup_gids": [
+          65532,
+          65532
+        ],
+        "startup_uids": [
+          65532,
+          65532
+        ]
+      },
+      "before_spec_sha256": "914f87b5b089e2b6d76df8a98b5b8204a1799bb28d21843ccd00d014ed5aa485",
+      "deployment_uid": "1e621692-08c0-462f-81ee-6dc1f774c827",
+      "target_spec_sha256": "914f87b5b089e2b6d76df8a98b5b8204a1799bb28d21843ccd00d014ed5aa485"
+    },
+    "checks": {
+      "already_configured": true,
+      "before": {
+        "deployment_spec_sha256": "8d0d005dce432b323a36a09a6b67f0e8781e77e47b9824b82467d011e605903b",
+        "deployment_uid": "09b0b809-ec4d-4881-aa99-ffe9387e8e9f",
+        "http_readiness": 200,
+        "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/checks@sha256:7717ca2c871f8b6179145d871c91e31f5b6fa1632af8c9f8aa0d93c0d84d8432",
+        "observed_at": "2026-09-12T22:43:09.637635Z",
+        "pod_uid_sha256": [
+          "603054452085d9a1afdce44d4035b885b258d7ae715838dca6e2644f00ee481b",
+          "eb7f26319c42914a0d67c0a19ede888e584ebd4c8fc15fe1d617e1ae793c9fb3"
+        ],
+        "ready_replicas": 2,
+        "startup_gids": [
+          65532,
+          65532
+        ],
+        "startup_uids": [
+          65532,
+          65532
+        ]
+      },
+      "before_spec_sha256": "8d0d005dce432b323a36a09a6b67f0e8781e77e47b9824b82467d011e605903b",
+      "deployment_uid": "09b0b809-ec4d-4881-aa99-ffe9387e8e9f",
+      "target_spec_sha256": "8d0d005dce432b323a36a09a6b67f0e8781e77e47b9824b82467d011e605903b"
+    },
+    "creditscore": {
+      "already_configured": true,
+      "before": {
+        "deployment_spec_sha256": "1592c1cc72f40fa81e5bfdeac1cf6e6e2d97f11a872c5bdcbec276b581d1c387",
+        "deployment_uid": "bc772be5-6243-4e36-a4bf-e1e40b5a3685",
+        "http_readiness": 200,
+        "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/creditscore@sha256:45b848793a4a3de7e72f2ae25d243250803846a8f9885594e1e3db8edf48fae1",
+        "observed_at": "2026-09-12T22:43:29.178548Z",
+        "pod_uid_sha256": [
+          "53f40e1147b621140b39dc46246fe92d3d080c31173373c6c50b58bce032d143",
+          "9eba740a0157600039fdd8f4cf770e3cd8f7836974aaff931d13248746a60b3f"
+        ],
+        "ready_replicas": 2,
+        "startup_gids": [
+          65532,
+          65532
+        ],
+        "startup_uids": [
+          65532,
+          65532
+        ]
+      },
+      "before_spec_sha256": "1592c1cc72f40fa81e5bfdeac1cf6e6e2d97f11a872c5bdcbec276b581d1c387",
+      "deployment_uid": "bc772be5-6243-4e36-a4bf-e1e40b5a3685",
+      "target_spec_sha256": "1592c1cc72f40fa81e5bfdeac1cf6e6e2d97f11a872c5bdcbec276b581d1c387"
+    },
+    "customer": {
+      "already_configured": true,
+      "before": {
+        "deployment_spec_sha256": "f9d5c4699e846a304e0ec4ff06a7686faff7e270984c2abf51c677712fe5a1c9",
+        "deployment_uid": "3de85089-fdff-4787-aa35-05d196b2e073",
+        "http_readiness": 200,
+        "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/customer@sha256:47c50deffc67b480aa67ce4cffa4145eb4f91382ef091e72e89fbbfd0884456d",
+        "observed_at": "2026-09-12T22:42:41.081289Z",
+        "pod_uid_sha256": [
+          "e240240f4fa3c1240c02de3deb500776a783303ce9d15cdb752236ae168a7528",
+          "eae7dc9fd566b6a93ce1306d956881aa80e15d37598b00690d687af236ba4add"
+        ],
+        "ready_replicas": 2,
+        "startup_gids": [
+          65532,
+          65532
+        ],
+        "startup_uids": [
+          65532,
+          65532
+        ]
+      },
+      "before_spec_sha256": "f9d5c4699e846a304e0ec4ff06a7686faff7e270984c2abf51c677712fe5a1c9",
+      "deployment_uid": "3de85089-fdff-4787-aa35-05d196b2e073",
+      "target_spec_sha256": "f9d5c4699e846a304e0ec4ff06a7686faff7e270984c2abf51c677712fe5a1c9"
+    },
+    "testrunner": {
+      "already_configured": true,
+      "before": {
+        "deployment_spec_sha256": "2e0d2e17c03fe821bf88e34657131713154a4a3a6738f295bc47d589362046c1",
+        "deployment_uid": "1f19804f-e719-4883-a09a-b2765295e344",
+        "http_readiness": 200,
+        "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/testrunner@sha256:256d107cc707d537c98f1260362577bbdb9d2ede3e88005076e464a227351693",
+        "observed_at": "2026-09-12T22:43:19.310892Z",
+        "pod_uid_sha256": [
+          "200cc17127d5fce99da85f8ca87ee8688cec42b8021bba7a1ab987e7e8e6d9a6",
+          "9c36e81974de1520f5eb669e3eb0595f109052c90db4e4f72dcba4be30319356"
+        ],
+        "ready_replicas": 2,
+        "startup_gids": [
+          65532,
+          65532
+        ],
+        "startup_uids": [
+          65532,
+          65532
+        ]
+      },
+      "before_spec_sha256": "2e0d2e17c03fe821bf88e34657131713154a4a3a6738f295bc47d589362046c1",
+      "deployment_uid": "1f19804f-e719-4883-a09a-b2765295e344",
+      "target_spec_sha256": "2e0d2e17c03fe821bf88e34657131713154a4a3a6738f295bc47d589362046c1"
+    },
+    "transfer": {
+      "already_configured": true,
+      "before": {
+        "deployment_spec_sha256": "1bda79ec4ebbd6adb793217fd9b19671d78b4ced3effa598abb9f9cce2ffc240",
+        "deployment_uid": "b7d69ab1-589d-419d-afe9-35cde31b5c0b",
+        "http_readiness": 200,
+        "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/transfer@sha256:fd99a626b3b1d8d47c3aed397119d9eaab70887da88b89d6c6070eb4fcb3caaa",
+        "observed_at": "2026-09-12T22:43:00.545334Z",
+        "pod_uid_sha256": [
+          "233ffae342eb40fa8dabe2a86c0fa06719369b1be9715c633af35268851100b2",
+          "dcf66a9cd259d5b53a8489cefdda1665f19d1c5c8d29905efa2c2bff13da15d1"
+        ],
+        "ready_replicas": 2,
+        "startup_gids": [
+          65532,
+          65532
+        ],
+        "startup_uids": [
+          65532,
+          65532
+        ]
+      },
+      "before_spec_sha256": "1bda79ec4ebbd6adb793217fd9b19671d78b4ced3effa598abb9f9cce2ffc240",
+      "deployment_uid": "b7d69ab1-589d-419d-afe9-35cde31b5c0b",
+      "target_spec_sha256": "1bda79ec4ebbd6adb793217fd9b19671d78b4ced3effa598abb9f9cce2ffc240"
+    }
+  },
+  "bindings": {
+    "image_lock_sha256": "eb3c808a5af30fe2a212ded0f27a9810a867bf651f8e759b04cd54547244a778",
+    "ms64_receipt_sha256": "f78f85eb8342d81483f389918b7ed48601b19cf4374ac62fb12e27d01db2d146",
+    "platform_profile_sha256": "4b7118239fdfbd91607cd7c3ace14e91223a16f6d85b7ec4b43a9e95ba190eab"
+  },
+  "content_sha256": "49534383e2efcc6c59f389de78de32c28d8e8dc6c59f6f69defa43116ed9bd45",
+  "credentials_persisted": false,
+  "environment": {
+    "cluster": "cloudbank-ms67",
+    "namespace": "cloudbank-ms71-alloydb",
+    "namespace_uid_sha256": "c7d6db875fdf24ad13aaa023b98794427a31ed6da6df28127c2ae80e72177ebf",
+    "project": "lightyear-ms67-nonproduction",
+    "region": "us-west1"
+  },
+  "images": {
+    "account": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/account@sha256:87e675066d0c6edf77346b2ddee81bb46687365dbc9c8760307d7104764c59cf",
+    "azn-server": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/azn-server@sha256:24ba43de59cf22f95c962981b49542eb55e332fc2dd91f9b4a9c724d06dd474a",
+    "chatbot": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/chatbot@sha256:ab2180b081ad8f92043c9bd8c7f72b74ef89ed22b656f9afbc9c8fd0067d0703",
+    "checks": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/checks@sha256:7717ca2c871f8b6179145d871c91e31f5b6fa1632af8c9f8aa0d93c0d84d8432",
+    "creditscore": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/creditscore@sha256:45b848793a4a3de7e72f2ae25d243250803846a8f9885594e1e3db8edf48fae1",
+    "customer": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/customer@sha256:47c50deffc67b480aa67ce4cffa4145eb4f91382ef091e72e89fbbfd0884456d",
+    "testrunner": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/testrunner@sha256:256d107cc707d537c98f1260362577bbdb9d2ede3e88005076e464a227351693",
+    "transfer": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/transfer@sha256:fd99a626b3b1d8d47c3aed397119d9eaab70887da88b89d6c6070eb4fcb3caaa"
+  },
+  "ms67_complete": false,
+  "observation_type": "lightyear-cloudbank-ms67-runtime-identity-observation",
+  "production_environment": false,
+  "production_ready": false,
+  "raw_output_persisted": false,
+  "run_id": "ms67-identity-163d9c8d581a4eb995cfd03ab2262a89",
+  "schema_version": "1.0",
+  "services": {
+    "account": {
+      "deployment_spec_sha256": "020e1b02b07f63243b53f7b2c54701ab3a01476e972cc2490a134c54b931650e",
+      "deployment_uid": "8321a18c-1a5a-41a0-bbcf-bfa236690ca2",
+      "http_readiness": 200,
+      "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/account@sha256:87e675066d0c6edf77346b2ddee81bb46687365dbc9c8760307d7104764c59cf",
+      "observed_at": "2026-09-12T22:46:54.587544Z",
+      "pod_uid_sha256": [
+        "7b19bf0b616fb572ede394bca838a430fa30910f8c59f6a36458b149b0fda2ea",
+        "bcd1c1db14c750dfc9a100b23622056fdb3e4d4ed83e280daae0cb955f0c1044"
+      ],
+      "ready_replicas": 2,
+      "startup_gids": [
+        65532,
+        65532
+      ],
+      "startup_uids": [
+        65532,
+        65532
+      ]
+    },
+    "azn-server": {
+      "deployment_spec_sha256": "c153b0585dc5837169e2601795f4754fc41b38920abc7f1ca444be9adf565373",
+      "deployment_uid": "d78f5cac-a449-4240-ad02-e1123cc1c3e1",
+      "http_readiness": 200,
+      "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/azn-server@sha256:24ba43de59cf22f95c962981b49542eb55e332fc2dd91f9b4a9c724d06dd474a",
+      "observed_at": "2026-09-12T22:46:41.725362Z",
+      "pod_uid_sha256": [
+        "04993643fe95278fc59170ec07b354787647166c9dfe9feda17e705f8f0c7ceb",
+        "95d4c687755563622ffcf74900cd000761204c8fa902e74fa2e797acfdddea7d"
+      ],
+      "ready_replicas": 2,
+      "startup_gids": [
+        65532,
+        65532
+      ],
+      "startup_uids": [
+        65532,
+        65532
+      ]
+    },
+    "chatbot": {
+      "deployment_spec_sha256": "914f87b5b089e2b6d76df8a98b5b8204a1799bb28d21843ccd00d014ed5aa485",
+      "deployment_uid": "1e621692-08c0-462f-81ee-6dc1f774c827",
+      "http_readiness": 200,
+      "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/chatbot@sha256:ab2180b081ad8f92043c9bd8c7f72b74ef89ed22b656f9afbc9c8fd0067d0703",
+      "observed_at": "2026-09-12T22:47:26.985098Z",
+      "pod_uid_sha256": [
+        "4b28b2eccecbca83c24829e624b5ebbaaee558f3557269f2cef0c0a503737a0e",
+        "d66cd6f9965302e29e0092199c9fcf0153caa0cdd5be072d4f5d43dd569c9b08"
+      ],
+      "ready_replicas": 2,
+      "startup_gids": [
+        65532,
+        65532
+      ],
+      "startup_uids": [
+        65532,
+        65532
+      ]
+    },
+    "checks": {
+      "deployment_spec_sha256": "8d0d005dce432b323a36a09a6b67f0e8781e77e47b9824b82467d011e605903b",
+      "deployment_uid": "09b0b809-ec4d-4881-aa99-ffe9387e8e9f",
+      "http_readiness": 200,
+      "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/checks@sha256:7717ca2c871f8b6179145d871c91e31f5b6fa1632af8c9f8aa0d93c0d84d8432",
+      "observed_at": "2026-09-12T22:47:07.748825Z",
+      "pod_uid_sha256": [
+        "603054452085d9a1afdce44d4035b885b258d7ae715838dca6e2644f00ee481b",
+        "eb7f26319c42914a0d67c0a19ede888e584ebd4c8fc15fe1d617e1ae793c9fb3"
+      ],
+      "ready_replicas": 2,
+      "startup_gids": [
+        65532,
+        65532
+      ],
+      "startup_uids": [
+        65532,
+        65532
+      ]
+    },
+    "creditscore": {
+      "deployment_spec_sha256": "1592c1cc72f40fa81e5bfdeac1cf6e6e2d97f11a872c5bdcbec276b581d1c387",
+      "deployment_uid": "bc772be5-6243-4e36-a4bf-e1e40b5a3685",
+      "http_readiness": 200,
+      "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/creditscore@sha256:45b848793a4a3de7e72f2ae25d243250803846a8f9885594e1e3db8edf48fae1",
+      "observed_at": "2026-09-12T22:47:20.095711Z",
+      "pod_uid_sha256": [
+        "53f40e1147b621140b39dc46246fe92d3d080c31173373c6c50b58bce032d143",
+        "9eba740a0157600039fdd8f4cf770e3cd8f7836974aaff931d13248746a60b3f"
+      ],
+      "ready_replicas": 2,
+      "startup_gids": [
+        65532,
+        65532
+      ],
+      "startup_uids": [
+        65532,
+        65532
+      ]
+    },
+    "customer": {
+      "deployment_spec_sha256": "f9d5c4699e846a304e0ec4ff06a7686faff7e270984c2abf51c677712fe5a1c9",
+      "deployment_uid": "3de85089-fdff-4787-aa35-05d196b2e073",
+      "http_readiness": 200,
+      "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/customer@sha256:47c50deffc67b480aa67ce4cffa4145eb4f91382ef091e72e89fbbfd0884456d",
+      "observed_at": "2026-09-12T22:46:48.454072Z",
+      "pod_uid_sha256": [
+        "e240240f4fa3c1240c02de3deb500776a783303ce9d15cdb752236ae168a7528",
+        "eae7dc9fd566b6a93ce1306d956881aa80e15d37598b00690d687af236ba4add"
+      ],
+      "ready_replicas": 2,
+      "startup_gids": [
+        65532,
+        65532
+      ],
+      "startup_uids": [
+        65532,
+        65532
+      ]
+    },
+    "testrunner": {
+      "deployment_spec_sha256": "2e0d2e17c03fe821bf88e34657131713154a4a3a6738f295bc47d589362046c1",
+      "deployment_uid": "1f19804f-e719-4883-a09a-b2765295e344",
+      "http_readiness": 200,
+      "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/testrunner@sha256:256d107cc707d537c98f1260362577bbdb9d2ede3e88005076e464a227351693",
+      "observed_at": "2026-09-12T22:47:14.397820Z",
+      "pod_uid_sha256": [
+        "200cc17127d5fce99da85f8ca87ee8688cec42b8021bba7a1ab987e7e8e6d9a6",
+        "9c36e81974de1520f5eb669e3eb0595f109052c90db4e4f72dcba4be30319356"
+      ],
+      "ready_replicas": 2,
+      "startup_gids": [
+        65532,
+        65532
+      ],
+      "startup_uids": [
+        65532,
+        65532
+      ]
+    },
+    "transfer": {
+      "deployment_spec_sha256": "1bda79ec4ebbd6adb793217fd9b19671d78b4ced3effa598abb9f9cce2ffc240",
+      "deployment_uid": "b7d69ab1-589d-419d-afe9-35cde31b5c0b",
+      "http_readiness": 200,
+      "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/transfer@sha256:fd99a626b3b1d8d47c3aed397119d9eaab70887da88b89d6c6070eb4fcb3caaa",
+      "observed_at": "2026-09-12T22:47:01.234048Z",
+      "pod_uid_sha256": [
+        "233ffae342eb40fa8dabe2a86c0fa06719369b1be9715c633af35268851100b2",
+        "dcf66a9cd259d5b53a8489cefdda1665f19d1c5c8d29905efa2c2bff13da15d1"
+      ],
+      "ready_replicas": 2,
+      "startup_gids": [
+        65532,
+        65532
+      ],
+      "startup_uids": [
+        65532,
+        65532
+      ]
+    }
+  },
+  "signature": {
+    "algorithm": "hmac-sha256",
+    "signer": "howard.weale@gmail.com",
+    "value": "64204e15f9170935ede6093e687ff55d6c9bd5348069e5c9bde2fc43ffb96501"
+  },
+  "status": "passed-eight-runtime-identities"
+}

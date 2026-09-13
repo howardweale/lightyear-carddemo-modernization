@@ -1,8 +1,15 @@
 # CloudBank AlloyDB platform qualification
 
-Status: implementation and live campaign in progress. Authorized on 2026-09-12.
+Status: complete — all 29 scenarios across 11 operational phases passed; admitted on 2026-09-13.
+Authorized on 2026-09-12. The [new signed platform receipt](receipts/alloydb-platform-20260912a/alloydb-platform.receipt.json)
+records `alloydb_platform_qualified: true` for synthetic nonproduction. Production readiness,
+customer certification and unplanned regional-failure qualification remain false.
+The [export manifest](receipts/alloydb-platform-20260912a/publication-export.json) binds all 19
+original signed evidence files. Receipt content SHA-256:
+`973e8f8dc3f70db61bfe197dd0d49f61dff980af714069ff420b66f3224fa926`.
+Admission controller: `11e65d2`.
 
-The active campaign is `alloydb-platform-20260912a`. Current controls (TLS, manifests,
+The completed campaign is `alloydb-platform-20260912a`. Current controls (TLS, manifests,
 External Secrets synchronization and metrics for all 16 current pods), runtime identity,
 retained immutable-image security and synthetic alert fire/recovery have passing evidence.
 The corrected recovery run also passed: PITR 507 seconds, backup restore 451 seconds, RPO
@@ -26,7 +33,7 @@ allowed traffic; all 18 owned resources were removed. AlloyDB primary failover p
 private address. Acknowledged data, idempotent replay, new business operations and all 16
 application process identities passed their checks. The failover observation content hash is
 `c1b0e5e802647a03b2359aefc4879665f8e985120aa0e375723241d1668fde01`.
-Ten of eleven operational phases have passing evidence. The application drill passed all
+All eleven operational phases have passing evidence. The application drill passed all
 eight forward and return rollouts and the single-node evacuation, with exact database state
 preservation. Its subsequent concurrent failure-domain evacuation failed the existing readiness
 timeout: sixteen replacement JVMs from the two database namespaces concentrated on one 4-vCPU
@@ -44,7 +51,7 @@ The continuation controller was `949c861`; its signed provenance retains the ori
 attempt and the previously passing rollout and single-node evidence. The final read-only audit
 found two ready baseline replicas per service in both namespaces, all three nodes schedulable,
 no temporary restore clusters or canary deployments, and both persistent coordination leases
-released. Qualification is still pending fresh trace correlation and complete admission.
+released. Fresh trace correlation and complete admission subsequently passed.
 
 The corrected planned-evacuation procedure uses Kubernetes
 [`drain --pod-selector`](https://kubernetes.io/docs/reference/kubectl/generated/kubectl_drain/)
@@ -64,10 +71,9 @@ closed and remove its owned probes. The guard must remain strict.
 The first correlation attempt found 16 request-log records but no exported trace spans. The
 shared collector reported `ResourceExhausted` and the project had a 3,000,000-span daily Cloud
 Trace ingestion quota. The original logging configuration was retained and recovery completed.
-A quota increase request is prepared locally; it has not been submitted. Correlation still
-requires a fresh passing live observation after trace ingestion is available.
+A quota increase request was prepared locally and never submitted.
 Google documents that [daily quotas reset at midnight Pacific](https://docs.cloud.google.com/docs/quotas/overview).
-The campaign is waiting for that reset to retry under its existing quota.
+The campaign retried after that reset using its existing quota.
 
 The fresh correlation run after midnight Pacific on 2026-09-13 observed matching logs and
 spans for all eight services using the existing quota. Its signed observation was read back
@@ -76,6 +82,10 @@ as signed evidence and stopped before creating its managed-target boundary. The 
 wrapper selects the canonical signed observation file. Its completion path requires the stopped
 executor, signed original intent, matching completed and released state, original cloud readbacks,
 and a fresh target observation; it retains the original measurement and collection controller.
+That completion passed, followed by the full qualification gate. The original collection ran on
+`05caa54`; boundary completion and admission ran on `11e65d2`. The [signed boundary](receipts/alloydb-platform-20260912a/log-correlation.managed-boundary.json)
+records both controllers and the original intent hash. The integrated qualification and
+publication suite passed 249 tests, with four environment-dependent skips.
 
 This follow-up qualifies the synthetic nonproduction AlloyDB deployment created by MS71.
 It preserves the original MS71 business-equivalence acceptance and MS67 Cloud SQL evidence.

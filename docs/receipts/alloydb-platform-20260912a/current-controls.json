@@ -1,0 +1,423 @@
+{
+  "bindings": {
+    "image_lock_sha256": "eb3c808a5af30fe2a212ded0f27a9810a867bf651f8e759b04cd54547244a778",
+    "ms64_receipt_sha256": "f78f85eb8342d81483f389918b7ed48601b19cf4374ac62fb12e27d01db2d146",
+    "platform_profile_sha256": "4b7118239fdfbd91607cd7c3ace14e91223a16f6d85b7ec4b43a9e95ba190eab"
+  },
+  "cluster": {
+    "cluster_uid_sha256": "fe31e42055e410836722c6711c83ecdc47be07b5ffae7379b6c6052bb9685282",
+    "context": "gke_lightyear-ms67-nonproduction_us-west1_cloudbank-ms67",
+    "failure_domains": [
+      "us-west1-a",
+      "us-west1-b",
+      "us-west1-c"
+    ],
+    "kubernetes_version": "v1.35.7-gke.1222000",
+    "namespace": "cloudbank-ms71-alloydb",
+    "namespace_uid_sha256": "396c15056faf17bce3cc01a5e9f404a07d931f965964a8648e638ab44dc2e2bb",
+    "node_count": 3,
+    "provider": "google-gke-standard-regional",
+    "region": "us-west1"
+  },
+  "content_sha256": "2475cbb312bc999c62bab55df3221c269fb053326677405530b74fbf7ffc7aac",
+  "credentials_persisted": false,
+  "environment": {
+    "cluster": "cloudbank-ms67",
+    "namespace": "cloudbank-ms71-alloydb",
+    "namespace_uid_sha256": "c7d6db875fdf24ad13aaa023b98794427a31ed6da6df28127c2ae80e72177ebf",
+    "project": "lightyear-ms67-nonproduction",
+    "region": "us-west1"
+  },
+  "identities": {
+    "account": {
+      "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/account@sha256:87e675066d0c6edf77346b2ddee81bb46687365dbc9c8760307d7104764c59cf",
+      "pod_uid_sha256": [
+        "05e627b2fa5dbfc229d1766d45e2adae6d951fd39a6c44ca70af1e7a1cc8b40e",
+        "1e6cb4874155dacc1d4df94b6fdcaa9caa49f3eaad85aaa1c1e9544377412c68"
+      ],
+      "ready_replicas": 2,
+      "startup_gids": [
+        65532,
+        65532
+      ],
+      "startup_uids": [
+        65532,
+        65532
+      ]
+    },
+    "azn-server": {
+      "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/azn-server@sha256:24ba43de59cf22f95c962981b49542eb55e332fc2dd91f9b4a9c724d06dd474a",
+      "pod_uid_sha256": [
+        "35b3ab3bbc3b43471ba676dfcefd70cae874db657f4cdf65d778f20ae0575787",
+        "7b8c154bce8e2446a479f8aeb26eeb4809c6f6e2810c52d8e8cc9ca54953e43a"
+      ],
+      "ready_replicas": 2,
+      "startup_gids": [
+        65532,
+        65532
+      ],
+      "startup_uids": [
+        65532,
+        65532
+      ]
+    },
+    "chatbot": {
+      "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/chatbot@sha256:ab2180b081ad8f92043c9bd8c7f72b74ef89ed22b656f9afbc9c8fd0067d0703",
+      "pod_uid_sha256": [
+        "86a81de7bf6775aa2276cd079a2d7c7e68b627da275ba93c68b23d059bb310ee",
+        "af729078d52676e35fb86dd48bf97b02bdd57add1b6b4ebafa4755bfbe7f94a4"
+      ],
+      "ready_replicas": 2,
+      "startup_gids": [
+        65532,
+        65532
+      ],
+      "startup_uids": [
+        65532,
+        65532
+      ]
+    },
+    "checks": {
+      "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/checks@sha256:7717ca2c871f8b6179145d871c91e31f5b6fa1632af8c9f8aa0d93c0d84d8432",
+      "pod_uid_sha256": [
+        "0879b68354947b18aeeaa91b9ef8ac0f339400b4583182a2a9a6f84b435c048c",
+        "caf45d3b5819086fe773ebe2bef471aae7fafe5ced0d5147df181afa0aa4a0dd"
+      ],
+      "ready_replicas": 2,
+      "startup_gids": [
+        65532,
+        65532
+      ],
+      "startup_uids": [
+        65532,
+        65532
+      ]
+    },
+    "creditscore": {
+      "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/creditscore@sha256:45b848793a4a3de7e72f2ae25d243250803846a8f9885594e1e3db8edf48fae1",
+      "pod_uid_sha256": [
+        "222165fc1580f1c6659995b2561772e4142d73432951c98d531ca49990ad8e05",
+        "aa85403ef7466a6a464ef0303c45b412ebd3ac699c201f38e20765dc40b95cb8"
+      ],
+      "ready_replicas": 2,
+      "startup_gids": [
+        65532,
+        65532
+      ],
+      "startup_uids": [
+        65532,
+        65532
+      ]
+    },
+    "customer": {
+      "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/customer@sha256:47c50deffc67b480aa67ce4cffa4145eb4f91382ef091e72e89fbbfd0884456d",
+      "pod_uid_sha256": [
+        "5d5bd39f7996e93534522d88084eac15a27b519006a60a153714c5abc09f0abf",
+        "b0cf9506980f4f0c13104abe9d1e13aea4146f6ed44fb212796835f7f75ee0f1"
+      ],
+      "ready_replicas": 2,
+      "startup_gids": [
+        65532,
+        65532
+      ],
+      "startup_uids": [
+        65532,
+        65532
+      ]
+    },
+    "testrunner": {
+      "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/testrunner@sha256:256d107cc707d537c98f1260362577bbdb9d2ede3e88005076e464a227351693",
+      "pod_uid_sha256": [
+        "c15e2ca972851c3878e8f2289007ec89affb620d4956a66c0d7e012e06999dce",
+        "c1d5fea6daabc45b6ae670ac461e016ed6db93f790d1bdaf89d6001f7b4e419f"
+      ],
+      "ready_replicas": 2,
+      "startup_gids": [
+        65532,
+        65532
+      ],
+      "startup_uids": [
+        65532,
+        65532
+      ]
+    },
+    "transfer": {
+      "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/transfer@sha256:fd99a626b3b1d8d47c3aed397119d9eaab70887da88b89d6c6070eb4fcb3caaa",
+      "pod_uid_sha256": [
+        "3ab05b8407bac88111274b037a2d58685f4edb69eef531499766b5ad193b3b6c",
+        "9b172af5d6820d09633fda56b9e15a0d36559d0a05203fab73bf22e8a9e1faa5"
+      ],
+      "ready_replicas": 2,
+      "startup_gids": [
+        65532,
+        65532
+      ],
+      "startup_uids": [
+        65532,
+        65532
+      ]
+    }
+  },
+  "images": {
+    "account": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/account@sha256:87e675066d0c6edf77346b2ddee81bb46687365dbc9c8760307d7104764c59cf",
+    "azn-server": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/azn-server@sha256:24ba43de59cf22f95c962981b49542eb55e332fc2dd91f9b4a9c724d06dd474a",
+    "chatbot": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/chatbot@sha256:ab2180b081ad8f92043c9bd8c7f72b74ef89ed22b656f9afbc9c8fd0067d0703",
+    "checks": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/checks@sha256:7717ca2c871f8b6179145d871c91e31f5b6fa1632af8c9f8aa0d93c0d84d8432",
+    "creditscore": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/creditscore@sha256:45b848793a4a3de7e72f2ae25d243250803846a8f9885594e1e3db8edf48fae1",
+    "customer": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/customer@sha256:47c50deffc67b480aa67ce4cffa4145eb4f91382ef091e72e89fbbfd0884456d",
+    "testrunner": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/testrunner@sha256:256d107cc707d537c98f1260362577bbdb9d2ede3e88005076e464a227351693",
+    "transfer": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/transfer@sha256:fd99a626b3b1d8d47c3aed397119d9eaab70887da88b89d6c6070eb4fcb3caaa"
+  },
+  "manifest_scan": {
+    "critical": 0,
+    "deployment_specs": {
+      "account": "020e1b02b07f63243b53f7b2c54701ab3a01476e972cc2490a134c54b931650e",
+      "azn-server": "c153b0585dc5837169e2601795f4754fc41b38920abc7f1ca444be9adf565373",
+      "chatbot": "914f87b5b089e2b6d76df8a98b5b8204a1799bb28d21843ccd00d014ed5aa485",
+      "checks": "8d0d005dce432b323a36a09a6b67f0e8781e77e47b9824b82467d011e605903b",
+      "creditscore": "1592c1cc72f40fa81e5bfdeac1cf6e6e2d97f11a872c5bdcbec276b581d1c387",
+      "customer": "f9d5c4699e846a304e0ec4ff06a7686faff7e270984c2abf51c677712fe5a1c9",
+      "testrunner": "2e0d2e17c03fe821bf88e34657131713154a4a3a6738f295bc47d589362046c1",
+      "transfer": "1bda79ec4ebbd6adb793217fd9b19671d78b4ced3effa598abb9f9cce2ffc240"
+    },
+    "high": 0,
+    "scan_sha256": "b3c84812d50ab09dd92da7d85950b44eaa313a3ba36636f03a82390a0ef8f7c1"
+  },
+  "metrics": {
+    "end": "2026-09-13T01:57:54.037527+00:00",
+    "pods": {
+      "account-9b9d86566-nzs45": {
+        "latest_sample": "2026-09-13T01:57:31.140969Z",
+        "pod_uid_sha256": "05e627b2fa5dbfc229d1766d45e2adae6d951fd39a6c44ca70af1e7a1cc8b40e",
+        "samples": 10,
+        "series_sha256": "f53cb2bf11274aab9d44e1f98fbf7e229c0a45abb4f26392edc42de8dc445131",
+        "service": "account"
+      },
+      "account-9b9d86566-sbbwk": {
+        "latest_sample": "2026-09-13T01:57:18.403410Z",
+        "pod_uid_sha256": "1e6cb4874155dacc1d4df94b6fdcaa9caa49f3eaad85aaa1c1e9544377412c68",
+        "samples": 10,
+        "series_sha256": "b8f9d186e5f8e4c4aea7b0f48e4691bc0031d87e0ce20fcc52bd9faedc6d0b20",
+        "service": "account"
+      },
+      "azn-server-cb8765c96-bnkhm": {
+        "latest_sample": "2026-09-13T01:57:31.140969Z",
+        "pod_uid_sha256": "35b3ab3bbc3b43471ba676dfcefd70cae874db657f4cdf65d778f20ae0575787",
+        "samples": 10,
+        "series_sha256": "5056f95430e4cffd7993f8b2985c700b7d00b293a11e0636cabf492de6eb8a57",
+        "service": "azn-server"
+      },
+      "azn-server-cb8765c96-vwpzp": {
+        "latest_sample": "2026-09-13T01:57:10.991884Z",
+        "pod_uid_sha256": "7b8c154bce8e2446a479f8aeb26eeb4809c6f6e2810c52d8e8cc9ca54953e43a",
+        "samples": 10,
+        "series_sha256": "9470e5fd4ff15d0a646ded2ebd32c77b89ca751c0b9d7c433be66aceaab8d14f",
+        "service": "azn-server"
+      },
+      "chatbot-6559545844-kjrdv": {
+        "latest_sample": "2026-09-13T01:57:18.403410Z",
+        "pod_uid_sha256": "af729078d52676e35fb86dd48bf97b02bdd57add1b6b4ebafa4755bfbe7f94a4",
+        "samples": 10,
+        "series_sha256": "ea88151d83ba527398488b00e87264517ea4549961c569afd2f2a5383fef3690",
+        "service": "chatbot"
+      },
+      "chatbot-6559545844-t4nqq": {
+        "latest_sample": "2026-09-13T01:57:31.140969Z",
+        "pod_uid_sha256": "86a81de7bf6775aa2276cd079a2d7c7e68b627da275ba93c68b23d059bb310ee",
+        "samples": 10,
+        "series_sha256": "d817b058a66b77fb936eedc34f988318bbb0724e26f0f4d0b8223bfa41a5ffda",
+        "service": "chatbot"
+      },
+      "checks-6f6549dbc8-kck9g": {
+        "latest_sample": "2026-09-13T01:57:31.140969Z",
+        "pod_uid_sha256": "0879b68354947b18aeeaa91b9ef8ac0f339400b4583182a2a9a6f84b435c048c",
+        "samples": 10,
+        "series_sha256": "1e4d01f85c36b4394d520f5bebc7fc9d54c4abaa1d6ed93906c5ba4ee2204eba",
+        "service": "checks"
+      },
+      "checks-6f6549dbc8-zr26d": {
+        "latest_sample": "2026-09-13T01:57:10.991884Z",
+        "pod_uid_sha256": "caf45d3b5819086fe773ebe2bef471aae7fafe5ced0d5147df181afa0aa4a0dd",
+        "samples": 10,
+        "series_sha256": "e0110d803f7c8c0fc622ed7e98d50e42b43600f621c63c030d7220540c6e8317",
+        "service": "checks"
+      },
+      "creditscore-5f7f5f8c44-nt9cq": {
+        "latest_sample": "2026-09-13T01:57:10.991884Z",
+        "pod_uid_sha256": "aa85403ef7466a6a464ef0303c45b412ebd3ac699c201f38e20765dc40b95cb8",
+        "samples": 10,
+        "series_sha256": "d06252eeea081b8e9b1200f10563459f41305c78ffa238d29824bcc1f7aacd6c",
+        "service": "creditscore"
+      },
+      "creditscore-5f7f5f8c44-wfpdk": {
+        "latest_sample": "2026-09-13T01:57:18.403410Z",
+        "pod_uid_sha256": "222165fc1580f1c6659995b2561772e4142d73432951c98d531ca49990ad8e05",
+        "samples": 10,
+        "series_sha256": "7dde845b27f95b0acb3755ae1310e3819465b9a84433e94d41e2cbe3be9364f6",
+        "service": "creditscore"
+      },
+      "customer-6674967d9-8kz6l": {
+        "latest_sample": "2026-09-13T01:57:10.991884Z",
+        "pod_uid_sha256": "5d5bd39f7996e93534522d88084eac15a27b519006a60a153714c5abc09f0abf",
+        "samples": 10,
+        "series_sha256": "71bd0c4e8887ee3ed3f8e74b1aeb6a1bb1035bb4ee6c3bc767b36feb078e0ca1",
+        "service": "customer"
+      },
+      "customer-6674967d9-npmdg": {
+        "latest_sample": "2026-09-13T01:57:31.140969Z",
+        "pod_uid_sha256": "b0cf9506980f4f0c13104abe9d1e13aea4146f6ed44fb212796835f7f75ee0f1",
+        "samples": 10,
+        "series_sha256": "5d2728d970f5939d9980df6b616e691b674ff1aaa75f46618d208f78e8755660",
+        "service": "customer"
+      },
+      "testrunner-5474d88649-8glcl": {
+        "latest_sample": "2026-09-13T01:57:18.403410Z",
+        "pod_uid_sha256": "c1d5fea6daabc45b6ae670ac461e016ed6db93f790d1bdaf89d6001f7b4e419f",
+        "samples": 10,
+        "series_sha256": "e2f654d02111f3718e0df3d33277cd95cab3ab9bfccf773eb09fb544fabaff69",
+        "service": "testrunner"
+      },
+      "testrunner-5474d88649-p2s4m": {
+        "latest_sample": "2026-09-13T01:57:10.991884Z",
+        "pod_uid_sha256": "c15e2ca972851c3878e8f2289007ec89affb620d4956a66c0d7e012e06999dce",
+        "samples": 10,
+        "series_sha256": "396f859ec32d70f7f001d18e94ea7db52f50bbb13ce434d813f593ff3d040532",
+        "service": "testrunner"
+      },
+      "transfer-556c96d66c-jq6bt": {
+        "latest_sample": "2026-09-13T01:57:18.403410Z",
+        "pod_uid_sha256": "9b172af5d6820d09633fda56b9e15a0d36559d0a05203fab73bf22e8a9e1faa5",
+        "samples": 10,
+        "series_sha256": "b10ecd6a810710fbad747388e63ab97623984c5addb2b5ef761abd322706fd47",
+        "service": "transfer"
+      },
+      "transfer-556c96d66c-pbfxr": {
+        "latest_sample": "2026-09-13T01:57:31.140969Z",
+        "pod_uid_sha256": "3ab05b8407bac88111274b037a2d58685f4edb69eef531499766b5ad193b3b6c",
+        "samples": 10,
+        "series_sha256": "1bd9409e06bdb4b0b87a591439078915c86752cb67ccdc6e7fb946b5e5819a5d",
+        "service": "transfer"
+      }
+    },
+    "scope": "GKE container CPU metrics for all sixteen current application pods; not JVM or business metrics",
+    "services": [
+      "azn-server",
+      "customer",
+      "account",
+      "transfer",
+      "checks",
+      "testrunner",
+      "creditscore",
+      "chatbot"
+    ],
+    "start": "2026-09-13T01:47:54.037527+00:00"
+  },
+  "ms67_complete": false,
+  "observation_type": "lightyear-ms67-final-current-controls",
+  "observed_at": "2026-09-13T01:57:39.349606+00:00",
+  "schema_version": "1.0",
+  "secrets": {
+    "controller": {
+      "available": 1,
+      "current_generation": true,
+      "desired": 1,
+      "ready": 1,
+      "status": "ready",
+      "updated": 1
+    },
+    "rotation_observed": false,
+    "secret_values_read": false,
+    "services": {
+      "account": {
+        "ready_condition": true,
+        "refresh_age_seconds": 24,
+        "refresh_within_tolerance": true,
+        "status": "synced",
+        "store_reference_matches": true,
+        "target_matches": true
+      },
+      "azn-server": {
+        "ready_condition": true,
+        "refresh_age_seconds": 21,
+        "refresh_within_tolerance": true,
+        "status": "synced",
+        "store_reference_matches": true,
+        "target_matches": true
+      },
+      "chatbot": {
+        "ready_condition": true,
+        "refresh_age_seconds": 23,
+        "refresh_within_tolerance": true,
+        "status": "synced",
+        "store_reference_matches": true,
+        "target_matches": true
+      },
+      "checks": {
+        "ready_condition": true,
+        "refresh_age_seconds": 22,
+        "refresh_within_tolerance": true,
+        "status": "synced",
+        "store_reference_matches": true,
+        "target_matches": true
+      },
+      "creditscore": {
+        "ready_condition": true,
+        "refresh_age_seconds": 25,
+        "refresh_within_tolerance": true,
+        "status": "synced",
+        "store_reference_matches": true,
+        "target_matches": true
+      },
+      "customer": {
+        "ready_condition": true,
+        "refresh_age_seconds": 21,
+        "refresh_within_tolerance": true,
+        "status": "synced",
+        "store_reference_matches": true,
+        "target_matches": true
+      },
+      "testrunner": {
+        "ready_condition": true,
+        "refresh_age_seconds": 21,
+        "refresh_within_tolerance": true,
+        "status": "synced",
+        "store_reference_matches": true,
+        "target_matches": true
+      },
+      "transfer": {
+        "ready_condition": true,
+        "refresh_age_seconds": 21,
+        "refresh_within_tolerance": true,
+        "status": "synced",
+        "store_reference_matches": true,
+        "target_matches": true
+      }
+    },
+    "status": "observed",
+    "store_identity_matches": true,
+    "store_ready": true,
+    "store_reference_sha256": "da4164fe6341306a0924e82439c7f03b5648c7a01e6ad2def4e920d0c8d1dd83"
+  },
+  "signature": {
+    "algorithm": "hmac-sha256",
+    "signer": "howard.weale@gmail.com",
+    "value": "5188e28dc8e35ec65f9428212900cdb98fcd68a1faa486ea2c44434fc36c429d"
+  },
+  "status": "passed",
+  "tls": {
+    "certificate_sha256": "4c4654aff8838ab601a748d82020fec1bc188932864fc0efd250d98b008d6069",
+    "legacy_protocols_rejected": {
+      "TLSv1": true,
+      "TLSv1.1": true
+    },
+    "plaintext_status": 308,
+    "summary": {
+      "certificate_days_remaining": 89,
+      "hostname": "alloydb.35.230.87.134.sslip.io",
+      "minimum_protocol": "TLSv1.2",
+      "plaintext_rejected": true,
+      "san_match": true,
+      "trusted_chain": true
+    }
+  }
+}

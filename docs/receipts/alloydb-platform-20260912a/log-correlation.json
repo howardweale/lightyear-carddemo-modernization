@@ -1,0 +1,137 @@
+{
+  "bindings": {
+    "image_lock_sha256": "eb3c808a5af30fe2a212ded0f27a9810a867bf651f8e759b04cd54547244a778",
+    "ms64_receipt_sha256": "f78f85eb8342d81483f389918b7ed48601b19cf4374ac62fb12e27d01db2d146",
+    "platform_profile_sha256": "4b7118239fdfbd91607cd7c3ace14e91223a16f6d85b7ec4b43a9e95ba190eab"
+  },
+  "business_journey_qualified": false,
+  "configuration_retained": true,
+  "configuration_sha256": "1405a27f1d20f625f18431f66c9ee6aa1a99fe6a74786f6b0395ecfb10605213",
+  "content_sha256": "0fac584924b439b6af1a1f41a28fec2204b74937093ed9da86f065d0ded98f96",
+  "credentials_persisted": false,
+  "environment": {
+    "cluster": "cloudbank-ms67",
+    "namespace": "cloudbank-ms71-alloydb",
+    "namespace_uid_sha256": "c7d6db875fdf24ad13aaa023b98794427a31ed6da6df28127c2ae80e72177ebf",
+    "project": "lightyear-ms67-nonproduction",
+    "region": "us-west1"
+  },
+  "images": {
+    "account": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/account@sha256:87e675066d0c6edf77346b2ddee81bb46687365dbc9c8760307d7104764c59cf",
+    "azn-server": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/azn-server@sha256:24ba43de59cf22f95c962981b49542eb55e332fc2dd91f9b4a9c724d06dd474a",
+    "chatbot": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/chatbot@sha256:ab2180b081ad8f92043c9bd8c7f72b74ef89ed22b656f9afbc9c8fd0067d0703",
+    "checks": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/checks@sha256:7717ca2c871f8b6179145d871c91e31f5b6fa1632af8c9f8aa0d93c0d84d8432",
+    "creditscore": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/creditscore@sha256:45b848793a4a3de7e72f2ae25d243250803846a8f9885594e1e3db8edf48fae1",
+    "customer": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/customer@sha256:47c50deffc67b480aa67ce4cffa4145eb4f91382ef091e72e89fbbfd0884456d",
+    "testrunner": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/testrunner@sha256:256d107cc707d537c98f1260362577bbdb9d2ede3e88005076e464a227351693",
+    "transfer": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/transfer@sha256:fd99a626b3b1d8d47c3aed397119d9eaab70887da88b89d6c6070eb4fcb3caaa"
+  },
+  "ms67_complete": false,
+  "observation_type": "lightyear-cloudbank-ms67-log-correlation-observation",
+  "production_environment": false,
+  "production_ready": false,
+  "query_window": {
+    "end": "2026-09-13T07:04:01.909660Z",
+    "start": "2026-09-13T07:03:23.585993Z"
+  },
+  "raw_output_persisted": false,
+  "ready_replicas": {
+    "account": 2,
+    "azn-server": 2,
+    "chatbot": 2,
+    "checks": 2,
+    "creditscore": 2,
+    "customer": 2,
+    "testrunner": 2,
+    "transfer": 2
+  },
+  "recovery": {
+    "errors": [],
+    "status": "not-required"
+  },
+  "run_id": "ms67-logs-9cd1ff07bea34410ae45a7ec91860f62",
+  "schema_version": "1.0",
+  "scope": "eight-service-readiness-probes-with-common-client-trace-context",
+  "service_correlation_qualified": true,
+  "services": {
+    "account": {
+      "log_identity_sha256": "922931db47a12ebbc1ffb57b8425c6e81f79f8b0b095f8a7ecc4af64c259be97",
+      "log_timestamp": "2026-09-13T07:03:38.121568894Z",
+      "pod_identity_sha256": "920a6ac14ea4a84a94415b9af2843f6e12b9e7ad78f5b7877a41d5245377c942",
+      "span_end": "2026-09-13T07:03:38.122042674Z",
+      "span_identity_sha256": "f77da5e304161eef590973368c7bb4a1bdf98cb01d1d97a1d3ddb1c81f6cf0fe",
+      "span_start": "2026-09-13T07:03:38.118597117Z",
+      "trace_identity_sha256": "0d8b53c96dd3cab83b18a957f17044c2b5c2bed1350da285d28f9ede151016e2"
+    },
+    "azn-server": {
+      "log_identity_sha256": "223bad3cb0c208b30f5baa4a81e924acea0b8d1405f37bb1332b8b2b378e5e27",
+      "log_timestamp": "2026-09-13T07:03:28.424496306Z",
+      "pod_identity_sha256": "58213b6d2f478fe2e57f7b897e1551bf8bba28b0d278423398e6430e6fe8802c",
+      "span_end": "2026-09-13T07:03:28.424732970Z",
+      "span_identity_sha256": "aaa48185737e5827d7972c18309bf862d7c405dd20fe4e64c61a5a6ef7e5e934",
+      "span_start": "2026-09-13T07:03:28.421819919Z",
+      "trace_identity_sha256": "0d8b53c96dd3cab83b18a957f17044c2b5c2bed1350da285d28f9ede151016e2"
+    },
+    "chatbot": {
+      "log_identity_sha256": "07292b024ca66bfedf0e4961c199ccdeacbd681aa9da52ce7ac5991ccfe0371b",
+      "log_timestamp": "2026-09-13T07:04:01.907556404Z",
+      "pod_identity_sha256": "d085f5744ffe42539c5abcc9dc32c365649c0f325dea09d19e836140a454b17d",
+      "span_end": "2026-09-13T07:04:01.909429739Z",
+      "span_identity_sha256": "59ce8b0c97554c38896700205b8d16020f52eff9ac8f6342054c08cf1d473f42",
+      "span_start": "2026-09-13T07:04:01.906427589Z",
+      "trace_identity_sha256": "0d8b53c96dd3cab83b18a957f17044c2b5c2bed1350da285d28f9ede151016e2"
+    },
+    "checks": {
+      "log_identity_sha256": "0fbfcf782a88f998ef52e3c0eec9ae8e8370d5b020a55ed403c9d56d93c603fd",
+      "log_timestamp": "2026-09-13T07:03:47.561390559Z",
+      "pod_identity_sha256": "75138ff1de82b8ea5eb52f080e168f02b8cd38ed2d0b8c88be1b5974b78beb2a",
+      "span_end": "2026-09-13T07:03:47.561726418Z",
+      "span_identity_sha256": "cd2671ea13971ea61aefc2e3ee0c4263fa1174b9cb0c2ff192ac0afd8235a967",
+      "span_start": "2026-09-13T07:03:47.558032293Z",
+      "trace_identity_sha256": "0d8b53c96dd3cab83b18a957f17044c2b5c2bed1350da285d28f9ede151016e2"
+    },
+    "creditscore": {
+      "log_identity_sha256": "2a0e20762edf0c2cc9912ac675c6da8178a0c3d2cd12f6e3c458df85a4c3490c",
+      "log_timestamp": "2026-09-13T07:03:57.141305163Z",
+      "pod_identity_sha256": "f637b8f834505407a87594a4c844e2330a18ec313c882d5bdea81dfca6edc4fc",
+      "span_end": "2026-09-13T07:03:57.141744945Z",
+      "span_identity_sha256": "da4e8fffee11b78090c14cdc270e04ec836d196a8b50ca1ed3386aea5720af72",
+      "span_start": "2026-09-13T07:03:57.138779947Z",
+      "trace_identity_sha256": "0d8b53c96dd3cab83b18a957f17044c2b5c2bed1350da285d28f9ede151016e2"
+    },
+    "customer": {
+      "log_identity_sha256": "8e94bcbe1e48c8b2d1522321d275b5f56057429452770fb0d8862d2d02972452",
+      "log_timestamp": "2026-09-13T07:03:33.244330568Z",
+      "pod_identity_sha256": "a9670109ca489b1d2cd2b11d1da58fb751675a5a73edadada481d022a155a46c",
+      "span_end": "2026-09-13T07:03:33.244783589Z",
+      "span_identity_sha256": "4e5dfa15def39e72a6e555551b65d318ecb57532fda01b92cc47486d9bc8c812",
+      "span_start": "2026-09-13T07:03:33.241783323Z",
+      "trace_identity_sha256": "0d8b53c96dd3cab83b18a957f17044c2b5c2bed1350da285d28f9ede151016e2"
+    },
+    "testrunner": {
+      "log_identity_sha256": "0ca4f539de8d423fc6bd022033f3ba46a752237e7aeec462fcd87d0cc53adce0",
+      "log_timestamp": "2026-09-13T07:03:52.405490312Z",
+      "pod_identity_sha256": "3e6120a84091bed9ba742462480c49bc5f42cf08897f7f83549af70f25a77d17",
+      "span_end": "2026-09-13T07:03:52.406803598Z",
+      "span_identity_sha256": "b0e793bae89f18ae4a77bf9bd44360da0bb6abe028cd2b2b51691d78f3652d0a",
+      "span_start": "2026-09-13T07:03:52.404345261Z",
+      "trace_identity_sha256": "0d8b53c96dd3cab83b18a957f17044c2b5c2bed1350da285d28f9ede151016e2"
+    },
+    "transfer": {
+      "log_identity_sha256": "8e7970375b8a198f2761abc249017082050185e0d27eb752b43af49699593c02",
+      "log_timestamp": "2026-09-13T07:03:42.821052335Z",
+      "pod_identity_sha256": "2081eb2e0ced928e7d53ae9e60c3c1ae06feb7e90f8a99dc087c22e5fb519906",
+      "span_end": "2026-09-13T07:03:42.821585172Z",
+      "span_identity_sha256": "8a3072d19acb378b0b0a8416644288ddb4cc87647071e97331868ca8426b37ad",
+      "span_start": "2026-09-13T07:03:42.817980049Z",
+      "trace_identity_sha256": "0d8b53c96dd3cab83b18a957f17044c2b5c2bed1350da285d28f9ede151016e2"
+    }
+  },
+  "signature": {
+    "algorithm": "hmac-sha256",
+    "signer": "howard.weale@gmail.com",
+    "value": "064eda2ee1c13f9d809d020b8a993df5adbdddd58179602f146cac1911cdd4a6"
+  },
+  "status": "passed-service-log-trace-correlation",
+  "trace_identity_sha256": "0d8b53c96dd3cab83b18a957f17044c2b5c2bed1350da285d28f9ede151016e2"
+}

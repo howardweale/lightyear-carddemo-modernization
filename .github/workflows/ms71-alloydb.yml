@@ -4,6 +4,7 @@ on:
     paths:
       - 'src/lightyear_data/**'
       - 'tools/cloudbank_ms71.py'
+      - 'tools/cloudbank_alloydb_*.py'
       - 'cloudbank-ms71.*'
       - 'docs/receipts/ms71-20260912a/**'
       - 'tests/test_cloudbank_*.py'
@@ -14,6 +15,7 @@ on:
     paths:
       - 'src/lightyear_data/**'
       - 'tools/cloudbank_ms71.py'
+      - 'tools/cloudbank_alloydb_*.py'
       - 'cloudbank-ms71.*'
       - 'docs/receipts/ms71-20260912a/**'
       - 'tests/test_cloudbank_*.py'
@@ -35,6 +37,7 @@ jobs:
         with:
           python-version: '3.12'
       - run: python -m unittest discover -s tests -p test_cloudbank_ms71.py -v
+      - run: python -m unittest discover -s tests -p test_cloudbank_alloydb_*.py -v
       - run: python -m unittest discover -s tests -p test_cloudbank_ms66_dual_lane.py -v
       - run: python -m unittest discover -s tests -p test_cloudbank_whole_application_equivalence.py -v
       - run: python -m unittest discover -s tests -p test_cloudbank_journeys.py -v

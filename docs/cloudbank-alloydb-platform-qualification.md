@@ -7,8 +7,9 @@ It preserves the original MS71 business-equivalence acceptance and MS67 Cloud SQ
 The new platform receipt must bind the actual AlloyDB resource, namespace UID, eight immutable
 application images, signed platform profile, controller commit, and all operational evidence.
 
-The acceptance thresholds remain those of the existing MS67 platform contract: 28 operational
-controls, at least three Kubernetes nodes across two failure domains, two ready replicas of each
+The acceptance gate contains the 28 existing MS67 platform scenarios plus an explicit AlloyDB
+primary-failover scenario, for 29 in total. Thresholds require at least three Kubernetes nodes
+across two failure domains, two ready replicas of each
 service, trusted TLS with at least 30 certificate days remaining, verified external-secret rotation,
 metrics/logs/traces and alert recovery, zero high/critical image findings, and observed network policy.
 Load must run for at least 300 seconds at 10 concurrent users, exceed 1,000 requests, have zero errors,

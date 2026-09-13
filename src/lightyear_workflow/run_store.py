@@ -4,6 +4,7 @@ from __future__ import annotations
 from contextlib import closing
 from datetime import datetime, timezone
 import json
+import os
 from pathlib import Path
 import sqlite3
 
@@ -24,14 +25,14 @@ class RunStore:
             self.directory.mkdir(parents=True, exist_ok=True)
             if self.path.is_symlink() or (self.directory / "writer.lock").is_symlink():
                 raise ValueError("Symbolic journal or writer lock is not allowed")
-            self.lock = open(self.directory / "writer.lock", "a+b")
-            self.lock.seek(0)
-            if not self.lock.read(1):
-                self.lock.write(b"0")
-                self.lock.flush()
-            self.lock.seek(0)
             try:
-                import os
+                self.lock = open(self.directory / "writer.lock", "a+b")
+                # Windows byte-range locks also prohibit reading the locked byte.
+                # Inspect file size without touching another writer's lock range.
+                if os.fstat(self.lock.fileno()).st_size == 0:
+                    self.lock.write(b"0")
+                    self.lock.flush()
+                self.lock.seek(0)
                 if os.name == "nt":
                     import msvcrt
                     msvcrt.locking(self.lock.fileno(), msvcrt.LK_NBLCK, 1)

@@ -1,8 +1,8 @@
 {
   "events": [
     {
-      "at": "2026-09-12T23:48:46.305301+00:00",
-      "content_sha256": "d8767cae859495b905a7f0876a15253e2657011abf1815dbe25a06b242c028eb",
+      "at": "2026-09-13T00:06:01.919740+00:00",
+      "content_sha256": "7d0c6f27e9ef6d56c6b6cb66fff504823510528f70d6a0ce2f24c46786f68948",
       "payload": {
         "action_policy": {
           "autonomy": {
@@ -44,7 +44,7 @@
           "production_ready": false,
           "semantic_verdicts_changed": 0
         },
-        "content_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+        "content_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
         "estate": "CloudBank",
         "inputs": {
           "files": {
@@ -522,10 +522,10 @@
             "src/lightyear_workflow/execution_policy.py": "f4002308cb4c966c8480774f4374110242c729a38ce4665eb456206d91916d47",
             "src/lightyear_workflow/planner.py": "c3bf0b6d9664e9db9cd41f8002489067be359954fc340bf18bd00ae08c366c00",
             "src/lightyear_workflow/policy.py": "bfc57201f68deb1bd2c5ebb86d1439be5676e2f3ed3030609e348cced7afc12c",
-            "src/lightyear_workflow/run_store.py": "2be05796596d2197db967058177eff16e8653a8b7f9f7ab62c42434f8e2f5bc2",
+            "src/lightyear_workflow/run_store.py": "f5d17a43fe6003066cb44a8e70df7c67d4861767132c424d04e11db4c4c97d89",
             "src/lightyear_workflow/worker.py": "e2c6d7b24d648615466741c5052e55d3c6b099e054e7d53a25cf6f0c34a7c5a5"
           },
-          "logical_sha256": "d88684dd82651affd43bf8ea25a9f0f754e8546f862f3b84ad476f72b1a26bfd"
+          "logical_sha256": "15c19dda7e50929546705ad7954134fd4773ab944f29156908c2bfa8fb1cc269"
         },
         "lanes": [
           "contract",
@@ -564,107 +564,107 @@
       "type": "started"
     },
     {
-      "at": "2026-09-12T23:48:46.472269+00:00",
-      "content_sha256": "23e6cae94dcf45276ed32be6f181fdb880feac0436c92dff91d77d73439fc631",
+      "at": "2026-09-13T00:06:02.089044+00:00",
+      "content_sha256": "ff4d535d8fed815ad8bf71a272a6df07e4fad5eab6b3a6b626c19f65a3be7c98",
       "payload": {
         "actions": [
           {
-            "id": "c6254194828f9018f28ccf6821c63a1f49c3278b6d337ba7297e978288d4acdd",
+            "id": "104d13dce48b88ae7364975fb3b65eb9af026dfcffe9d8bdae683540f60ed4ca",
             "kind": "widen-observation",
             "lane": "contract",
-            "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+            "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
             "scope": "service-contract-and-retained-execution-integrity",
             "service": "account"
           },
           {
-            "id": "ec576057553cb7d8d675ab4c2e0f9c660cf11a585841e9e3511ead7783316aa7",
+            "id": "a98a4a92e5d82bb67e88815465db4c590dc07fa52fe10be1bbdd6ddfb89c0d52",
             "kind": "widen-observation",
             "lane": "contract",
-            "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+            "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
             "scope": "service-contract-and-retained-execution-integrity",
             "service": "azn-server"
           },
           {
-            "id": "0d043100d4333df4ea9e10d6773508c72fdda2e1e6c2e521c3d15b6565c2248b",
+            "id": "11f1350ce8055b2401d0a0cd8f8ca2d4a2787fdd3baba173cfe48f37f28c13c1",
             "kind": "widen-observation",
             "lane": "contract",
-            "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+            "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
             "scope": "service-contract-and-retained-execution-integrity",
             "service": "chatbot"
           },
           {
-            "id": "436ec55f52b4d9a6aeac4d698b00bc479bbe5a9b8b6c666a59fd9b52403c2120",
+            "id": "7442aa1f49c1d0447237fcad8192c99cfc8e409edf38adee427a7ee055ff7f05",
             "kind": "widen-observation",
             "lane": "contract",
-            "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+            "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
             "scope": "service-contract-and-retained-execution-integrity",
             "service": "checks"
           },
           {
-            "id": "a29b1fe7e56c3771b2162f24931c7d1fccc9a1a4afaf3b2a3b064210dce3f906",
+            "id": "84dce846a21c8177dbdd017450bfca97a8483159d66035a38421e260a4cacaa3",
             "kind": "widen-observation",
             "lane": "contract",
-            "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+            "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
             "scope": "service-contract-and-retained-execution-integrity",
             "service": "creditscore"
           },
           {
-            "id": "e8115e7a0e379dc2f01a466ffb185bae4a24a174fbffb8e383bb5ac183aa46df",
+            "id": "9361bc5c4cf748641d6c0c1703c223262d2102d96ace5f95e26d16a892218d1a",
             "kind": "widen-observation",
             "lane": "contract",
-            "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+            "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
             "scope": "service-contract-and-retained-execution-integrity",
             "service": "customer"
           },
           {
-            "id": "4971faa79fa9acc5e7df729a061794072a9309f65d812ecc77733c4427bfd499",
+            "id": "004488421622e9a9f39ecd44d537676feea6418f09cce1e97e861f02513c5e4d",
             "kind": "widen-observation",
             "lane": "contract",
-            "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+            "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
             "scope": "service-contract-and-retained-execution-integrity",
             "service": "testrunner"
           },
           {
-            "id": "7da9aab69465ffd39999dc82661960c48c2b69761b9133dadad870fa42513c0d",
+            "id": "9a0e01fda9217fe2a792ed5c9a4b66ab3831ac94e79a88afdf8413424b161964",
             "kind": "widen-observation",
             "lane": "contract",
-            "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+            "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
             "scope": "service-contract-and-retained-execution-integrity",
             "service": "transfer"
           }
         ]
       },
-      "previous_sha256": "d8767cae859495b905a7f0876a15253e2657011abf1815dbe25a06b242c028eb",
+      "previous_sha256": "7d0c6f27e9ef6d56c6b6cb66fff504823510528f70d6a0ce2f24c46786f68948",
       "sequence": 2,
       "type": "round"
     },
     {
-      "at": "2026-09-12T23:48:46.543037+00:00",
-      "content_sha256": "af78c196ed257a9523d5f3ea4c792429b51945174886d959b69ac4426131e5a0",
+      "at": "2026-09-13T00:06:02.188687+00:00",
+      "content_sha256": "af1c0eb888cd7c2eb2273523c3273d79c2d3e4dfdb78e0ea66a8c1c8647d7913",
       "payload": {
         "action": {
-          "id": "c6254194828f9018f28ccf6821c63a1f49c3278b6d337ba7297e978288d4acdd",
+          "id": "104d13dce48b88ae7364975fb3b65eb9af026dfcffe9d8bdae683540f60ed4ca",
           "kind": "widen-observation",
           "lane": "contract",
-          "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+          "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
           "scope": "service-contract-and-retained-execution-integrity",
           "service": "account"
         },
         "attempt": 1
       },
-      "previous_sha256": "23e6cae94dcf45276ed32be6f181fdb880feac0436c92dff91d77d73439fc631",
+      "previous_sha256": "ff4d535d8fed815ad8bf71a272a6df07e4fad5eab6b3a6b626c19f65a3be7c98",
       "sequence": 3,
       "type": "attempt"
     },
     {
-      "at": "2026-09-12T23:48:47.074458+00:00",
-      "content_sha256": "188abb066b1dfc9bb87a6435cd4cecf360a4b2822f1fa18c4c686ad64708e24b",
+      "at": "2026-09-13T00:06:02.680055+00:00",
+      "content_sha256": "7b3b2d24f8ef7b7ddd4a5b7b874de831601ea8633e268e52ec0beb69956db782",
       "payload": {
         "action": {
-          "id": "c6254194828f9018f28ccf6821c63a1f49c3278b6d337ba7297e978288d4acdd",
+          "id": "104d13dce48b88ae7364975fb3b65eb9af026dfcffe9d8bdae683540f60ed4ca",
           "kind": "widen-observation",
           "lane": "contract",
-          "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+          "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
           "scope": "service-contract-and-retained-execution-integrity",
           "service": "account"
         },
@@ -681,7 +681,7 @@
           "production_ready": false,
           "semantic_verdicts_changed": 0
         },
-        "content_sha256": "c6ab52cafd5e033dabf2598da78d7fa05fdc8d213cac55dcd316adf6ee6a93ac",
+        "content_sha256": "ae5cbb4448bd6d25655cfd1c70c4ac3b6087d608157df4849f4b27e6ce5cc088",
         "observation": {
           "boundary": {
             "decisions_created": 0,
@@ -705,37 +705,37 @@
           "service": "account"
         }
       },
-      "previous_sha256": "af78c196ed257a9523d5f3ea4c792429b51945174886d959b69ac4426131e5a0",
+      "previous_sha256": "af1c0eb888cd7c2eb2273523c3273d79c2d3e4dfdb78e0ea66a8c1c8647d7913",
       "sequence": 4,
       "type": "result"
     },
     {
-      "at": "2026-09-12T23:48:47.146748+00:00",
-      "content_sha256": "24eb905ce6bb3176b4b991895c3d06f1f8898250a73b0df4ad0b7663ce7300b8",
+      "at": "2026-09-13T00:06:02.759376+00:00",
+      "content_sha256": "ce08b580f33af8129b81067d407b9091f4087abc0fcd0770c47888de1a350744",
       "payload": {
         "action": {
-          "id": "ec576057553cb7d8d675ab4c2e0f9c660cf11a585841e9e3511ead7783316aa7",
+          "id": "a98a4a92e5d82bb67e88815465db4c590dc07fa52fe10be1bbdd6ddfb89c0d52",
           "kind": "widen-observation",
           "lane": "contract",
-          "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+          "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
           "scope": "service-contract-and-retained-execution-integrity",
           "service": "azn-server"
         },
         "attempt": 1
       },
-      "previous_sha256": "188abb066b1dfc9bb87a6435cd4cecf360a4b2822f1fa18c4c686ad64708e24b",
+      "previous_sha256": "7b3b2d24f8ef7b7ddd4a5b7b874de831601ea8633e268e52ec0beb69956db782",
       "sequence": 5,
       "type": "attempt"
     },
     {
-      "at": "2026-09-12T23:48:47.555460+00:00",
-      "content_sha256": "d2aebd6a4f76f8aeea9f159d9955ed76749d867128f047e6b413d4d7f69a4284",
+      "at": "2026-09-13T00:06:03.189233+00:00",
+      "content_sha256": "39d65159fcfdd3750e92c2ef55e02e89a8183f38074a46d3c11364dace80ea26",
       "payload": {
         "action": {
-          "id": "ec576057553cb7d8d675ab4c2e0f9c660cf11a585841e9e3511ead7783316aa7",
+          "id": "a98a4a92e5d82bb67e88815465db4c590dc07fa52fe10be1bbdd6ddfb89c0d52",
           "kind": "widen-observation",
           "lane": "contract",
-          "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+          "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
           "scope": "service-contract-and-retained-execution-integrity",
           "service": "azn-server"
         },
@@ -752,7 +752,7 @@
           "production_ready": false,
           "semantic_verdicts_changed": 0
         },
-        "content_sha256": "d8cc58dcb8fdad2b90efe0299f8ef6ceda6ee8d2667aad00ba3a66ef4c3f1140",
+        "content_sha256": "705e194b42dcdb15a4b26b6f7e17668308d56056d51773fb781302b7adf9ac56",
         "observation": {
           "boundary": {
             "decisions_created": 0,
@@ -777,37 +777,37 @@
           "service": "azn-server"
         }
       },
-      "previous_sha256": "24eb905ce6bb3176b4b991895c3d06f1f8898250a73b0df4ad0b7663ce7300b8",
+      "previous_sha256": "ce08b580f33af8129b81067d407b9091f4087abc0fcd0770c47888de1a350744",
       "sequence": 6,
       "type": "result"
     },
     {
-      "at": "2026-09-12T23:48:47.643510+00:00",
-      "content_sha256": "abecfe4f8f5f32c735c41c7d6e5562b1da21100dd328eeaff5f80acfd323521a",
+      "at": "2026-09-13T00:06:03.276982+00:00",
+      "content_sha256": "33713c4a95767b263ac787e7baa96c3c26132978cb0803c3349ba5da1b4d55a3",
       "payload": {
         "action": {
-          "id": "0d043100d4333df4ea9e10d6773508c72fdda2e1e6c2e521c3d15b6565c2248b",
+          "id": "11f1350ce8055b2401d0a0cd8f8ca2d4a2787fdd3baba173cfe48f37f28c13c1",
           "kind": "widen-observation",
           "lane": "contract",
-          "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+          "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
           "scope": "service-contract-and-retained-execution-integrity",
           "service": "chatbot"
         },
         "attempt": 1
       },
-      "previous_sha256": "d2aebd6a4f76f8aeea9f159d9955ed76749d867128f047e6b413d4d7f69a4284",
+      "previous_sha256": "39d65159fcfdd3750e92c2ef55e02e89a8183f38074a46d3c11364dace80ea26",
       "sequence": 7,
       "type": "attempt"
     },
     {
-      "at": "2026-09-12T23:48:48.103978+00:00",
-      "content_sha256": "0349a6f8a8b088c7541d57980a05fdceda8fc5a98bd5705d7cae568c9ad49e91",
+      "at": "2026-09-13T00:06:03.748909+00:00",
+      "content_sha256": "f888f700d35a438bb351af145a7174fd20ff8edca2c26aa7aa237b1687fd3ea9",
       "payload": {
         "action": {
-          "id": "0d043100d4333df4ea9e10d6773508c72fdda2e1e6c2e521c3d15b6565c2248b",
+          "id": "11f1350ce8055b2401d0a0cd8f8ca2d4a2787fdd3baba173cfe48f37f28c13c1",
           "kind": "widen-observation",
           "lane": "contract",
-          "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+          "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
           "scope": "service-contract-and-retained-execution-integrity",
           "service": "chatbot"
         },
@@ -824,7 +824,7 @@
           "production_ready": false,
           "semantic_verdicts_changed": 0
         },
-        "content_sha256": "0e3730f48dedb99393a076bb8626db15815ff1966b2429f388eabdbb2f9a010e",
+        "content_sha256": "29b317aee1dc7d26994169b242b44890186c40e3d277c0d5cbe4d710915b90d9",
         "observation": {
           "boundary": {
             "decisions_created": 0,
@@ -850,37 +850,37 @@
           "service": "chatbot"
         }
       },
-      "previous_sha256": "abecfe4f8f5f32c735c41c7d6e5562b1da21100dd328eeaff5f80acfd323521a",
+      "previous_sha256": "33713c4a95767b263ac787e7baa96c3c26132978cb0803c3349ba5da1b4d55a3",
       "sequence": 8,
       "type": "result"
     },
     {
-      "at": "2026-09-12T23:48:48.203399+00:00",
-      "content_sha256": "7adbd605ed107d5cdc6015369fc7dd3cfec51a4811fc698361cf8a5809dd6750",
+      "at": "2026-09-13T00:06:03.856634+00:00",
+      "content_sha256": "214a2de2776360a5e833c0fdb0f7997ec49b50305ca13bfb8526a33b514fbad0",
       "payload": {
         "action": {
-          "id": "436ec55f52b4d9a6aeac4d698b00bc479bbe5a9b8b6c666a59fd9b52403c2120",
+          "id": "7442aa1f49c1d0447237fcad8192c99cfc8e409edf38adee427a7ee055ff7f05",
           "kind": "widen-observation",
           "lane": "contract",
-          "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+          "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
           "scope": "service-contract-and-retained-execution-integrity",
           "service": "checks"
         },
         "attempt": 1
       },
-      "previous_sha256": "0349a6f8a8b088c7541d57980a05fdceda8fc5a98bd5705d7cae568c9ad49e91",
+      "previous_sha256": "f888f700d35a438bb351af145a7174fd20ff8edca2c26aa7aa237b1687fd3ea9",
       "sequence": 9,
       "type": "attempt"
     },
     {
-      "at": "2026-09-12T23:48:48.580069+00:00",
-      "content_sha256": "ae190cdf4800ff79aa04bbfe3ced4613d66233019050840f7dbfe0816098955f",
+      "at": "2026-09-13T00:06:04.342801+00:00",
+      "content_sha256": "1e8416a21c667cd92c0257a3f7e7827d35f93cbb2c61fdf4529f9441dad6082b",
       "payload": {
         "action": {
-          "id": "436ec55f52b4d9a6aeac4d698b00bc479bbe5a9b8b6c666a59fd9b52403c2120",
+          "id": "7442aa1f49c1d0447237fcad8192c99cfc8e409edf38adee427a7ee055ff7f05",
           "kind": "widen-observation",
           "lane": "contract",
-          "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+          "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
           "scope": "service-contract-and-retained-execution-integrity",
           "service": "checks"
         },
@@ -897,7 +897,7 @@
           "production_ready": false,
           "semantic_verdicts_changed": 0
         },
-        "content_sha256": "7b7391dfcf0f0e078db192cfc086fca55d8ceb363c7e9ee6efc6153063145a34",
+        "content_sha256": "6e00bb9a1a73efcbc0a0c33a0608949fb7a0d19dbeab0e5cfb43efbfcf69a0ac",
         "observation": {
           "boundary": {
             "decisions_created": 0,
@@ -923,37 +923,37 @@
           "service": "checks"
         }
       },
-      "previous_sha256": "7adbd605ed107d5cdc6015369fc7dd3cfec51a4811fc698361cf8a5809dd6750",
+      "previous_sha256": "214a2de2776360a5e833c0fdb0f7997ec49b50305ca13bfb8526a33b514fbad0",
       "sequence": 10,
       "type": "result"
     },
     {
-      "at": "2026-09-12T23:48:48.684718+00:00",
-      "content_sha256": "28893e9fe4c0337b9f47b021abe09c5bc60fec712c0b3b988819f217d9014938",
+      "at": "2026-09-13T00:06:04.452450+00:00",
+      "content_sha256": "aab14167bd60fb3748483d9884f85a214ef97543ce1b551550c4a0bd1647043f",
       "payload": {
         "action": {
-          "id": "a29b1fe7e56c3771b2162f24931c7d1fccc9a1a4afaf3b2a3b064210dce3f906",
+          "id": "84dce846a21c8177dbdd017450bfca97a8483159d66035a38421e260a4cacaa3",
           "kind": "widen-observation",
           "lane": "contract",
-          "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+          "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
           "scope": "service-contract-and-retained-execution-integrity",
           "service": "creditscore"
         },
         "attempt": 1
       },
-      "previous_sha256": "ae190cdf4800ff79aa04bbfe3ced4613d66233019050840f7dbfe0816098955f",
+      "previous_sha256": "1e8416a21c667cd92c0257a3f7e7827d35f93cbb2c61fdf4529f9441dad6082b",
       "sequence": 11,
       "type": "attempt"
     },
     {
-      "at": "2026-09-12T23:48:49.150490+00:00",
-      "content_sha256": "1006c3c66aba7959c9857a910a98ad5a52f26cb2f85cbaf4140e5dddceaf7509",
+      "at": "2026-09-13T00:06:04.933300+00:00",
+      "content_sha256": "ddd3d1c38e7dbc8490e35bba6841464fb16c09af6f4fb6904ffc2c40cdbdaba3",
       "payload": {
         "action": {
-          "id": "a29b1fe7e56c3771b2162f24931c7d1fccc9a1a4afaf3b2a3b064210dce3f906",
+          "id": "84dce846a21c8177dbdd017450bfca97a8483159d66035a38421e260a4cacaa3",
           "kind": "widen-observation",
           "lane": "contract",
-          "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+          "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
           "scope": "service-contract-and-retained-execution-integrity",
           "service": "creditscore"
         },
@@ -970,7 +970,7 @@
           "production_ready": false,
           "semantic_verdicts_changed": 0
         },
-        "content_sha256": "04ee28317e8729c9b9bb7653d9cd913b6ae70ffac74657228e87c1ea390e0ca0",
+        "content_sha256": "4b23daa99ee0b48234255cf1a972d87ba2d005b705bd1cf5497bc165633b6024",
         "observation": {
           "boundary": {
             "decisions_created": 0,
@@ -996,37 +996,37 @@
           "service": "creditscore"
         }
       },
-      "previous_sha256": "28893e9fe4c0337b9f47b021abe09c5bc60fec712c0b3b988819f217d9014938",
+      "previous_sha256": "aab14167bd60fb3748483d9884f85a214ef97543ce1b551550c4a0bd1647043f",
       "sequence": 12,
       "type": "result"
     },
     {
-      "at": "2026-09-12T23:48:49.325281+00:00",
-      "content_sha256": "c94768c8bc8f8b2c3a6290d6b2ac3d71bf42854823c2b85acc7d2a8adabec54d",
+      "at": "2026-09-13T00:06:05.070633+00:00",
+      "content_sha256": "e562fb18292229fc70798f423cd7854a31d47f6abfece603666fea29c7bfbb64",
       "payload": {
         "action": {
-          "id": "e8115e7a0e379dc2f01a466ffb185bae4a24a174fbffb8e383bb5ac183aa46df",
+          "id": "9361bc5c4cf748641d6c0c1703c223262d2102d96ace5f95e26d16a892218d1a",
           "kind": "widen-observation",
           "lane": "contract",
-          "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+          "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
           "scope": "service-contract-and-retained-execution-integrity",
           "service": "customer"
         },
         "attempt": 1
       },
-      "previous_sha256": "1006c3c66aba7959c9857a910a98ad5a52f26cb2f85cbaf4140e5dddceaf7509",
+      "previous_sha256": "ddd3d1c38e7dbc8490e35bba6841464fb16c09af6f4fb6904ffc2c40cdbdaba3",
       "sequence": 13,
       "type": "attempt"
     },
     {
-      "at": "2026-09-12T23:48:49.601802+00:00",
-      "content_sha256": "fe43d741127d739eac6600106ff84e83a0310324170ee3ce0c5142164d35e4dc",
+      "at": "2026-09-13T00:06:05.324548+00:00",
+      "content_sha256": "9cc9dc177570eed3cf9fe7b9fbe1acf89b5a6e19e5189990997c4dcee5975a01",
       "payload": {
         "action": {
-          "id": "e8115e7a0e379dc2f01a466ffb185bae4a24a174fbffb8e383bb5ac183aa46df",
+          "id": "9361bc5c4cf748641d6c0c1703c223262d2102d96ace5f95e26d16a892218d1a",
           "kind": "widen-observation",
           "lane": "contract",
-          "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+          "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
           "scope": "service-contract-and-retained-execution-integrity",
           "service": "customer"
         },
@@ -1043,7 +1043,7 @@
           "production_ready": false,
           "semantic_verdicts_changed": 0
         },
-        "content_sha256": "19ea6a382cd9ab8d73be2431407103f007bcf99afb0abedd31f913697ed009af",
+        "content_sha256": "3527bfb432cb735bc8935090b8e9f74b73ed5d511765ec53186f9f981fd512b2",
         "observation": {
           "boundary": {
             "decisions_created": 0,
@@ -1070,37 +1070,37 @@
           "service": "customer"
         }
       },
-      "previous_sha256": "c94768c8bc8f8b2c3a6290d6b2ac3d71bf42854823c2b85acc7d2a8adabec54d",
+      "previous_sha256": "e562fb18292229fc70798f423cd7854a31d47f6abfece603666fea29c7bfbb64",
       "sequence": 14,
       "type": "result"
     },
     {
-      "at": "2026-09-12T23:48:49.730506+00:00",
-      "content_sha256": "ce7b3db2bf3544014778fad3d918e911e4f0689a87ce6cd55e05e9707eda51ac",
+      "at": "2026-09-13T00:06:05.452913+00:00",
+      "content_sha256": "209df6468682371ac8b06f79fef47ea35026feaa5cd7c249e381a342c6e26641",
       "payload": {
         "action": {
-          "id": "4971faa79fa9acc5e7df729a061794072a9309f65d812ecc77733c4427bfd499",
+          "id": "004488421622e9a9f39ecd44d537676feea6418f09cce1e97e861f02513c5e4d",
           "kind": "widen-observation",
           "lane": "contract",
-          "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+          "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
           "scope": "service-contract-and-retained-execution-integrity",
           "service": "testrunner"
         },
         "attempt": 1
       },
-      "previous_sha256": "fe43d741127d739eac6600106ff84e83a0310324170ee3ce0c5142164d35e4dc",
+      "previous_sha256": "9cc9dc177570eed3cf9fe7b9fbe1acf89b5a6e19e5189990997c4dcee5975a01",
       "sequence": 15,
       "type": "attempt"
     },
     {
-      "at": "2026-09-12T23:48:50.178222+00:00",
-      "content_sha256": "5376058bf86fda77f9595ccea19052d27e9160c0fb1f7b6adfcfe3bb1f6be48f",
+      "at": "2026-09-13T00:06:05.851734+00:00",
+      "content_sha256": "b4b4e7ab0d2b678a2a3d0c59a261b89bf12ab4fd91f509e87957d24a229764a7",
       "payload": {
         "action": {
-          "id": "4971faa79fa9acc5e7df729a061794072a9309f65d812ecc77733c4427bfd499",
+          "id": "004488421622e9a9f39ecd44d537676feea6418f09cce1e97e861f02513c5e4d",
           "kind": "widen-observation",
           "lane": "contract",
-          "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+          "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
           "scope": "service-contract-and-retained-execution-integrity",
           "service": "testrunner"
         },
@@ -1117,7 +1117,7 @@
           "production_ready": false,
           "semantic_verdicts_changed": 0
         },
-        "content_sha256": "b468dee4aa1c60b0d4c1b9ad076d2b43539e64c58da5e75cb17c7efa60695410",
+        "content_sha256": "15af65d521ab52a9a53efc109e239813503bfaf6609dc3b2b4dfe81cc397aaad",
         "observation": {
           "boundary": {
             "decisions_created": 0,
@@ -1144,37 +1144,37 @@
           "service": "testrunner"
         }
       },
-      "previous_sha256": "ce7b3db2bf3544014778fad3d918e911e4f0689a87ce6cd55e05e9707eda51ac",
+      "previous_sha256": "209df6468682371ac8b06f79fef47ea35026feaa5cd7c249e381a342c6e26641",
       "sequence": 16,
       "type": "result"
     },
     {
-      "at": "2026-09-12T23:48:50.324054+00:00",
-      "content_sha256": "36ca968e79266fbc963c98e5baea8d310cb906ac29c54822e5b711c4b95ba519",
+      "at": "2026-09-13T00:06:05.980345+00:00",
+      "content_sha256": "3e7e1d9b843b1593c05750067c44e066d08f55e89837ced23c6fc6b669d39122",
       "payload": {
         "action": {
-          "id": "7da9aab69465ffd39999dc82661960c48c2b69761b9133dadad870fa42513c0d",
+          "id": "9a0e01fda9217fe2a792ed5c9a4b66ab3831ac94e79a88afdf8413424b161964",
           "kind": "widen-observation",
           "lane": "contract",
-          "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+          "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
           "scope": "service-contract-and-retained-execution-integrity",
           "service": "transfer"
         },
         "attempt": 1
       },
-      "previous_sha256": "5376058bf86fda77f9595ccea19052d27e9160c0fb1f7b6adfcfe3bb1f6be48f",
+      "previous_sha256": "b4b4e7ab0d2b678a2a3d0c59a261b89bf12ab4fd91f509e87957d24a229764a7",
       "sequence": 17,
       "type": "attempt"
     },
     {
-      "at": "2026-09-12T23:48:50.714254+00:00",
-      "content_sha256": "44434991252a3a7f9f5b55d0cfbc6d8b6f069d855b77dcf974b6eedf111eb0f2",
+      "at": "2026-09-13T00:06:06.415843+00:00",
+      "content_sha256": "dd53dadcea17e03b2ade1fb8157379f3dd672f29482487357a63b1386dd36ca0",
       "payload": {
         "action": {
-          "id": "7da9aab69465ffd39999dc82661960c48c2b69761b9133dadad870fa42513c0d",
+          "id": "9a0e01fda9217fe2a792ed5c9a4b66ab3831ac94e79a88afdf8413424b161964",
           "kind": "widen-observation",
           "lane": "contract",
-          "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+          "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
           "scope": "service-contract-and-retained-execution-integrity",
           "service": "transfer"
         },
@@ -1191,7 +1191,7 @@
           "production_ready": false,
           "semantic_verdicts_changed": 0
         },
-        "content_sha256": "218fde363a23c6e174c1d8651627db512423023a13b51882d3b14b9f4de6b103",
+        "content_sha256": "245ab36c7f8e9a5bfaa09c9e3cf2e6e33ea8c34c9105778a2e7e112ef2e3d134",
         "observation": {
           "boundary": {
             "decisions_created": 0,
@@ -1215,112 +1215,112 @@
           "service": "transfer"
         }
       },
-      "previous_sha256": "36ca968e79266fbc963c98e5baea8d310cb906ac29c54822e5b711c4b95ba519",
+      "previous_sha256": "3e7e1d9b843b1593c05750067c44e066d08f55e89837ced23c6fc6b669d39122",
       "sequence": 18,
       "type": "result"
     },
     {
-      "at": "2026-09-12T23:48:50.935230+00:00",
-      "content_sha256": "7146d75f4b99a1265ce8c9eb0da38bccd78391d4056ca311ebb7cb41f30737a8",
+      "at": "2026-09-13T00:06:06.547251+00:00",
+      "content_sha256": "468281ec6200b5d22de3dc8b28b436ab7adea12f8fa0f8e27b4465e6b6bb6c4e",
       "payload": {
         "actions": [
           {
-            "id": "42fdede2d3e9d0f8c7246718a67fd73add71c361e41fcf2dfb78afe25e2c54b6",
+            "id": "e9859c473935d1dcf57c875dd8658b8983816a8613a0a7c95893be96f7fb0a3b",
             "kind": "escalate-lane",
             "lane": "retained-execution",
-            "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+            "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
             "scope": "service-contract-and-retained-execution-integrity",
             "service": "account"
           },
           {
-            "id": "af58623f62f19bdff88cb5506a6e3cd2c7111ce5568bf469a3983b2938de225e",
+            "id": "d0d2c02022fef72cf1e43980ae3b85d15c61c9342d6df1a356856f1145ac3cbc",
             "kind": "escalate-lane",
             "lane": "retained-execution",
-            "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+            "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
             "scope": "service-contract-and-retained-execution-integrity",
             "service": "azn-server"
           },
           {
-            "id": "6026901c218620c33c269beaed8101111a32d5cf29a48af4d7319dc7c565a052",
+            "id": "68692c90a4f978cbac51eb529ababc0fb365a29888d898c0e085d012d5b3cdd6",
             "kind": "escalate-lane",
             "lane": "retained-execution",
-            "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+            "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
             "scope": "service-contract-and-retained-execution-integrity",
             "service": "chatbot"
           },
           {
-            "id": "1a00a9d6cec8a602f312c892d0dae6d46239e48f61c13ac29da953651e8e5e00",
+            "id": "f1d082c9135cf207bba45783c974d56409f74b49d9ae0eaecf5c9ef7c9351826",
             "kind": "escalate-lane",
             "lane": "retained-execution",
-            "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+            "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
             "scope": "service-contract-and-retained-execution-integrity",
             "service": "checks"
           },
           {
-            "id": "7a376fdc87bcc116ff420a527ec9f65ec5408b42c17add4ba095207a8f9a5983",
+            "id": "17b2b75748b5fe150b8b969a0cb5dace785ec92910f1942bb9f8f8cc44e9a7f8",
             "kind": "escalate-lane",
             "lane": "retained-execution",
-            "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+            "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
             "scope": "service-contract-and-retained-execution-integrity",
             "service": "creditscore"
           },
           {
-            "id": "f1feb0b09eef423fd9e7aa5b6889dde4cfab44467abef382b77822fed72f8541",
+            "id": "fa6cea02a8900e1cb7f688289c1d8a12099d071374f25c475f3ad1329985332f",
             "kind": "escalate-lane",
             "lane": "retained-execution",
-            "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+            "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
             "scope": "service-contract-and-retained-execution-integrity",
             "service": "customer"
           },
           {
-            "id": "218ec2ad3d21dcdcc77869562ed11b6b25465f9e16a9bed09d56c58cfd7b621f",
+            "id": "2691246bd6f60c1a27b713adc47dee405273a30e6b2ac3ab1d8b4465fce39cfc",
             "kind": "escalate-lane",
             "lane": "retained-execution",
-            "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+            "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
             "scope": "service-contract-and-retained-execution-integrity",
             "service": "testrunner"
           },
           {
-            "id": "ed98e205dfb80b3974a73e20675175cacf35b55b019b3e32e828045a3c7ae5f5",
+            "id": "913f6b8d4664f70a72cbd1016bdb2f3d424f710737774665e63da1f4fa73a421",
             "kind": "escalate-lane",
             "lane": "retained-execution",
-            "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+            "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
             "scope": "service-contract-and-retained-execution-integrity",
             "service": "transfer"
           }
         ]
       },
-      "previous_sha256": "44434991252a3a7f9f5b55d0cfbc6d8b6f069d855b77dcf974b6eedf111eb0f2",
+      "previous_sha256": "dd53dadcea17e03b2ade1fb8157379f3dd672f29482487357a63b1386dd36ca0",
       "sequence": 19,
       "type": "round"
     },
     {
-      "at": "2026-09-12T23:48:51.112807+00:00",
-      "content_sha256": "bfd8a20eca6c6558a3a8711bbc9f054a5dc05b02ff3fb3ed5f912a47e375fda2",
+      "at": "2026-09-13T00:06:06.684688+00:00",
+      "content_sha256": "93b1443e3dbacc46d3a18fc240b6062c5483f2905a40681046ce61650148335a",
       "payload": {
         "action": {
-          "id": "42fdede2d3e9d0f8c7246718a67fd73add71c361e41fcf2dfb78afe25e2c54b6",
+          "id": "e9859c473935d1dcf57c875dd8658b8983816a8613a0a7c95893be96f7fb0a3b",
           "kind": "escalate-lane",
           "lane": "retained-execution",
-          "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+          "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
           "scope": "service-contract-and-retained-execution-integrity",
           "service": "account"
         },
         "attempt": 1
       },
-      "previous_sha256": "7146d75f4b99a1265ce8c9eb0da38bccd78391d4056ca311ebb7cb41f30737a8",
+      "previous_sha256": "468281ec6200b5d22de3dc8b28b436ab7adea12f8fa0f8e27b4465e6b6bb6c4e",
       "sequence": 20,
       "type": "attempt"
     },
     {
-      "at": "2026-09-12T23:48:51.360129+00:00",
-      "content_sha256": "e9d94d23b28a246cd273c13b1405cf6a8210ad48d7c6ed3e6601d84803d1047f",
+      "at": "2026-09-13T00:06:06.947932+00:00",
+      "content_sha256": "23709bae09eb466f592b63810df74a1a7bd5d8e36007213d8004ca2db72436d2",
       "payload": {
         "action": {
-          "id": "42fdede2d3e9d0f8c7246718a67fd73add71c361e41fcf2dfb78afe25e2c54b6",
+          "id": "e9859c473935d1dcf57c875dd8658b8983816a8613a0a7c95893be96f7fb0a3b",
           "kind": "escalate-lane",
           "lane": "retained-execution",
-          "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+          "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
           "scope": "service-contract-and-retained-execution-integrity",
           "service": "account"
         },
@@ -1337,7 +1337,7 @@
           "production_ready": false,
           "semantic_verdicts_changed": 0
         },
-        "content_sha256": "dca84ae3fa5577522670c275f2a3eee5ca7c195da936a41063f8ad3baa573563",
+        "content_sha256": "9a9f0d67f5a00032be72386d1610d82c5ae1b87149f1d4a3ce073adc0fb2f92a",
         "observation": {
           "boundary": {
             "decisions_created": 0,
@@ -1387,37 +1387,37 @@
           "service": "account"
         }
       },
-      "previous_sha256": "bfd8a20eca6c6558a3a8711bbc9f054a5dc05b02ff3fb3ed5f912a47e375fda2",
+      "previous_sha256": "93b1443e3dbacc46d3a18fc240b6062c5483f2905a40681046ce61650148335a",
       "sequence": 21,
       "type": "result"
     },
     {
-      "at": "2026-09-12T23:48:51.538843+00:00",
-      "content_sha256": "92b55e5dfe6dfc4ad3f7c6c11ae043735455e94dd0e03b50f4f1e798f6cd9ae9",
+      "at": "2026-09-13T00:06:07.094569+00:00",
+      "content_sha256": "9b4e6c6787f25c47f1ee08912fcfc26fffbe60e7df64acbeb921066fbe5d6e45",
       "payload": {
         "action": {
-          "id": "af58623f62f19bdff88cb5506a6e3cd2c7111ce5568bf469a3983b2938de225e",
+          "id": "d0d2c02022fef72cf1e43980ae3b85d15c61c9342d6df1a356856f1145ac3cbc",
           "kind": "escalate-lane",
           "lane": "retained-execution",
-          "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+          "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
           "scope": "service-contract-and-retained-execution-integrity",
           "service": "azn-server"
         },
         "attempt": 1
       },
-      "previous_sha256": "e9d94d23b28a246cd273c13b1405cf6a8210ad48d7c6ed3e6601d84803d1047f",
+      "previous_sha256": "23709bae09eb466f592b63810df74a1a7bd5d8e36007213d8004ca2db72436d2",
       "sequence": 22,
       "type": "attempt"
     },
     {
-      "at": "2026-09-12T23:48:51.806332+00:00",
-      "content_sha256": "a00ce83610f141b7adba5ff8c16360d4e4e3afc820658e9aea071f4bdae07000",
+      "at": "2026-09-13T00:06:07.347367+00:00",
+      "content_sha256": "ca61ccff40d31bedacd8e633d7893824a669d7f78f1f7c481cd72b945266fb11",
       "payload": {
         "action": {
-          "id": "af58623f62f19bdff88cb5506a6e3cd2c7111ce5568bf469a3983b2938de225e",
+          "id": "d0d2c02022fef72cf1e43980ae3b85d15c61c9342d6df1a356856f1145ac3cbc",
           "kind": "escalate-lane",
           "lane": "retained-execution",
-          "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+          "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
           "scope": "service-contract-and-retained-execution-integrity",
           "service": "azn-server"
         },
@@ -1434,7 +1434,7 @@
           "production_ready": false,
           "semantic_verdicts_changed": 0
         },
-        "content_sha256": "94e453a1a530be6f907a2b43eb8551183f3812ce99e14287a645e1abf8865409",
+        "content_sha256": "9aa3591db4c7464537219e48ac1467eee1ed2c55eafe8e0a53b7643c973d53e1",
         "observation": {
           "boundary": {
             "decisions_created": 0,
@@ -1484,37 +1484,37 @@
           "service": "azn-server"
         }
       },
-      "previous_sha256": "92b55e5dfe6dfc4ad3f7c6c11ae043735455e94dd0e03b50f4f1e798f6cd9ae9",
+      "previous_sha256": "9b4e6c6787f25c47f1ee08912fcfc26fffbe60e7df64acbeb921066fbe5d6e45",
       "sequence": 23,
       "type": "result"
     },
     {
-      "at": "2026-09-12T23:48:51.966509+00:00",
-      "content_sha256": "091b414763d626014a7e2c53d3ea3e8f3f2674835610fcb2df061689719a5cbd",
+      "at": "2026-09-13T00:06:07.499617+00:00",
+      "content_sha256": "fd955215e2051d222218d01e4662883f8140bc26e97c5de1b88db8d51ea226f6",
       "payload": {
         "action": {
-          "id": "6026901c218620c33c269beaed8101111a32d5cf29a48af4d7319dc7c565a052",
+          "id": "68692c90a4f978cbac51eb529ababc0fb365a29888d898c0e085d012d5b3cdd6",
           "kind": "escalate-lane",
           "lane": "retained-execution",
-          "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+          "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
           "scope": "service-contract-and-retained-execution-integrity",
           "service": "chatbot"
         },
         "attempt": 1
       },
-      "previous_sha256": "a00ce83610f141b7adba5ff8c16360d4e4e3afc820658e9aea071f4bdae07000",
+      "previous_sha256": "ca61ccff40d31bedacd8e633d7893824a669d7f78f1f7c481cd72b945266fb11",
       "sequence": 24,
       "type": "attempt"
     },
     {
-      "at": "2026-09-12T23:48:52.203616+00:00",
-      "content_sha256": "03fd687d87156a6eed6434bf62c7f54e8fe7267bb03195b5d033ae245985844f",
+      "at": "2026-09-13T00:06:07.748677+00:00",
+      "content_sha256": "18b6fea76543ffad8cbd6d25928a221f164c18b4151c1e508527a9484e8e999a",
       "payload": {
         "action": {
-          "id": "6026901c218620c33c269beaed8101111a32d5cf29a48af4d7319dc7c565a052",
+          "id": "68692c90a4f978cbac51eb529ababc0fb365a29888d898c0e085d012d5b3cdd6",
           "kind": "escalate-lane",
           "lane": "retained-execution",
-          "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+          "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
           "scope": "service-contract-and-retained-execution-integrity",
           "service": "chatbot"
         },
@@ -1531,7 +1531,7 @@
           "production_ready": false,
           "semantic_verdicts_changed": 0
         },
-        "content_sha256": "bdbd1556cf66a4ab6c7c2d524bf39af856db5ee4696e8138e00b0bc1fe5c16b5",
+        "content_sha256": "b816c2856a50895c12ec466fd4511bd5a31f0b026b42a0afc57d850d038f0904",
         "observation": {
           "boundary": {
             "decisions_created": 0,
@@ -1581,37 +1581,37 @@
           "service": "chatbot"
         }
       },
-      "previous_sha256": "091b414763d626014a7e2c53d3ea3e8f3f2674835610fcb2df061689719a5cbd",
+      "previous_sha256": "fd955215e2051d222218d01e4662883f8140bc26e97c5de1b88db8d51ea226f6",
       "sequence": 25,
       "type": "result"
     },
     {
-      "at": "2026-09-12T23:48:52.409149+00:00",
-      "content_sha256": "2c00d48d98b5182ef64e660e78364d6280c9b51bd0e16b460225d25b7337ee09",
+      "at": "2026-09-13T00:06:07.912680+00:00",
+      "content_sha256": "29a6dca8b720c53d598845cec3aa42131f8071ed647d71b43e92abb1347250d2",
       "payload": {
         "action": {
-          "id": "1a00a9d6cec8a602f312c892d0dae6d46239e48f61c13ac29da953651e8e5e00",
+          "id": "f1d082c9135cf207bba45783c974d56409f74b49d9ae0eaecf5c9ef7c9351826",
           "kind": "escalate-lane",
           "lane": "retained-execution",
-          "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+          "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
           "scope": "service-contract-and-retained-execution-integrity",
           "service": "checks"
         },
         "attempt": 1
       },
-      "previous_sha256": "03fd687d87156a6eed6434bf62c7f54e8fe7267bb03195b5d033ae245985844f",
+      "previous_sha256": "18b6fea76543ffad8cbd6d25928a221f164c18b4151c1e508527a9484e8e999a",
       "sequence": 26,
       "type": "attempt"
     },
     {
-      "at": "2026-09-12T23:48:52.693919+00:00",
-      "content_sha256": "d669060033f4839d1bf89cb5105e70a0036b28f3946ef8143c95ce2d397c8c82",
+      "at": "2026-09-13T00:06:08.154276+00:00",
+      "content_sha256": "72fe1fd076835c719cdc0b2cc951d91504e00e3ceb4dc15b5eef8d3cc20bc2d8",
       "payload": {
         "action": {
-          "id": "1a00a9d6cec8a602f312c892d0dae6d46239e48f61c13ac29da953651e8e5e00",
+          "id": "f1d082c9135cf207bba45783c974d56409f74b49d9ae0eaecf5c9ef7c9351826",
           "kind": "escalate-lane",
           "lane": "retained-execution",
-          "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+          "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
           "scope": "service-contract-and-retained-execution-integrity",
           "service": "checks"
         },
@@ -1628,7 +1628,7 @@
           "production_ready": false,
           "semantic_verdicts_changed": 0
         },
-        "content_sha256": "9c89106b263168e0aac9461bd1d2f24a57c7aa5fd1b3907893e6f37a75675a5a",
+        "content_sha256": "9c95e05944cfca2fd9aae25ee152b1cef25d8a0774ba7de4b8c4e7de15d58f1f",
         "observation": {
           "boundary": {
             "decisions_created": 0,
@@ -1678,37 +1678,37 @@
           "service": "checks"
         }
       },
-      "previous_sha256": "2c00d48d98b5182ef64e660e78364d6280c9b51bd0e16b460225d25b7337ee09",
+      "previous_sha256": "29a6dca8b720c53d598845cec3aa42131f8071ed647d71b43e92abb1347250d2",
       "sequence": 27,
       "type": "result"
     },
     {
-      "at": "2026-09-12T23:48:52.877472+00:00",
-      "content_sha256": "87b89660407a472037e7b901f4944a0131dccf17c2e529e8d81b1352ed8ed2e8",
+      "at": "2026-09-13T00:06:08.346916+00:00",
+      "content_sha256": "d205f83b665b8beca1e5eae8cbfae86768b3abaea3798915e1c7f1014857ca93",
       "payload": {
         "action": {
-          "id": "7a376fdc87bcc116ff420a527ec9f65ec5408b42c17add4ba095207a8f9a5983",
+          "id": "17b2b75748b5fe150b8b969a0cb5dace785ec92910f1942bb9f8f8cc44e9a7f8",
           "kind": "escalate-lane",
           "lane": "retained-execution",
-          "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+          "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
           "scope": "service-contract-and-retained-execution-integrity",
           "service": "creditscore"
         },
         "attempt": 1
       },
-      "previous_sha256": "d669060033f4839d1bf89cb5105e70a0036b28f3946ef8143c95ce2d397c8c82",
+      "previous_sha256": "72fe1fd076835c719cdc0b2cc951d91504e00e3ceb4dc15b5eef8d3cc20bc2d8",
       "sequence": 28,
       "type": "attempt"
     },
     {
-      "at": "2026-09-12T23:48:53.111347+00:00",
-      "content_sha256": "8f1d7c5bdfc58aa748375806b58c44ad2c7d9bb452fc8009599c6a5bb17e1ee5",
+      "at": "2026-09-13T00:06:08.590706+00:00",
+      "content_sha256": "7d6fd3a155dee0c3abe9fbf08b0fa48fcf6dfd2f56f06de9eab14eac9ba5e83b",
       "payload": {
         "action": {
-          "id": "7a376fdc87bcc116ff420a527ec9f65ec5408b42c17add4ba095207a8f9a5983",
+          "id": "17b2b75748b5fe150b8b969a0cb5dace785ec92910f1942bb9f8f8cc44e9a7f8",
           "kind": "escalate-lane",
           "lane": "retained-execution",
-          "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+          "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
           "scope": "service-contract-and-retained-execution-integrity",
           "service": "creditscore"
         },
@@ -1725,7 +1725,7 @@
           "production_ready": false,
           "semantic_verdicts_changed": 0
         },
-        "content_sha256": "482092f28168ad779f8ab4824198b0bc1a7d850813b3fb143ef9ae415af3da67",
+        "content_sha256": "e8a76a086d92983249d352e9b13159f9408ea5b12435c9ec9ca03ecd04731fc8",
         "observation": {
           "boundary": {
             "decisions_created": 0,
@@ -1775,37 +1775,37 @@
           "service": "creditscore"
         }
       },
-      "previous_sha256": "87b89660407a472037e7b901f4944a0131dccf17c2e529e8d81b1352ed8ed2e8",
+      "previous_sha256": "d205f83b665b8beca1e5eae8cbfae86768b3abaea3798915e1c7f1014857ca93",
       "sequence": 29,
       "type": "result"
     },
     {
-      "at": "2026-09-12T23:48:53.324311+00:00",
-      "content_sha256": "c5a46d08bcf8baee8a9b60faa14d0df9a02c82999e70e82e1dd8bc1d3f963c62",
+      "at": "2026-09-13T00:06:08.788419+00:00",
+      "content_sha256": "5adf13f7beea838fdd47721afd01561be9d5c8b55f028905ff76b18b85db79ba",
       "payload": {
         "action": {
-          "id": "f1feb0b09eef423fd9e7aa5b6889dde4cfab44467abef382b77822fed72f8541",
+          "id": "fa6cea02a8900e1cb7f688289c1d8a12099d071374f25c475f3ad1329985332f",
           "kind": "escalate-lane",
           "lane": "retained-execution",
-          "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+          "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
           "scope": "service-contract-and-retained-execution-integrity",
           "service": "customer"
         },
         "attempt": 1
       },
-      "previous_sha256": "8f1d7c5bdfc58aa748375806b58c44ad2c7d9bb452fc8009599c6a5bb17e1ee5",
+      "previous_sha256": "7d6fd3a155dee0c3abe9fbf08b0fa48fcf6dfd2f56f06de9eab14eac9ba5e83b",
       "sequence": 30,
       "type": "attempt"
     },
     {
-      "at": "2026-09-12T23:48:53.568145+00:00",
-      "content_sha256": "151a3d7d38abcd2464b885915fa8c3714ffb283dfeab397b1514b484db7775f1",
+      "at": "2026-09-13T00:06:09.014719+00:00",
+      "content_sha256": "6263a2b997e2fcbb345da07a7be679cbf96fada9926a4307fa85f9bbf115be4d",
       "payload": {
         "action": {
-          "id": "f1feb0b09eef423fd9e7aa5b6889dde4cfab44467abef382b77822fed72f8541",
+          "id": "fa6cea02a8900e1cb7f688289c1d8a12099d071374f25c475f3ad1329985332f",
           "kind": "escalate-lane",
           "lane": "retained-execution",
-          "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+          "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
           "scope": "service-contract-and-retained-execution-integrity",
           "service": "customer"
         },
@@ -1822,7 +1822,7 @@
           "production_ready": false,
           "semantic_verdicts_changed": 0
         },
-        "content_sha256": "0faa4b856aa4558092fb2f2568f43fc5bca0c9ff94b009810a2dcaedc05966ce",
+        "content_sha256": "ca48fa8d985dd34c10e90cf6a07d928c4e2ec6b8c499712fa355ba33ccfbfe4c",
         "observation": {
           "boundary": {
             "decisions_created": 0,
@@ -1872,37 +1872,37 @@
           "service": "customer"
         }
       },
-      "previous_sha256": "c5a46d08bcf8baee8a9b60faa14d0df9a02c82999e70e82e1dd8bc1d3f963c62",
+      "previous_sha256": "5adf13f7beea838fdd47721afd01561be9d5c8b55f028905ff76b18b85db79ba",
       "sequence": 31,
       "type": "result"
     },
     {
-      "at": "2026-09-12T23:48:53.788126+00:00",
-      "content_sha256": "888ff63789f2de208afe577a6c10123cafe7a3d18787b2ef503a13a92a138ed1",
+      "at": "2026-09-13T00:06:09.231197+00:00",
+      "content_sha256": "38359e09e7df54941c69d6ed4045237c5cbf07a2fc4a57752a3e3e08585d11b0",
       "payload": {
         "action": {
-          "id": "218ec2ad3d21dcdcc77869562ed11b6b25465f9e16a9bed09d56c58cfd7b621f",
+          "id": "2691246bd6f60c1a27b713adc47dee405273a30e6b2ac3ab1d8b4465fce39cfc",
           "kind": "escalate-lane",
           "lane": "retained-execution",
-          "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+          "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
           "scope": "service-contract-and-retained-execution-integrity",
           "service": "testrunner"
         },
         "attempt": 1
       },
-      "previous_sha256": "151a3d7d38abcd2464b885915fa8c3714ffb283dfeab397b1514b484db7775f1",
+      "previous_sha256": "6263a2b997e2fcbb345da07a7be679cbf96fada9926a4307fa85f9bbf115be4d",
       "sequence": 32,
       "type": "attempt"
     },
     {
-      "at": "2026-09-12T23:48:54.018031+00:00",
-      "content_sha256": "69a07b3109fa1bf7e825670bfb51c3f83bdc88b16b7f2a80f8d0a22c8fc1388e",
+      "at": "2026-09-13T00:06:09.512710+00:00",
+      "content_sha256": "0de41f00c6d72319326c241c067723553d7be2f6ce0b61ceaffc4bc70c8a6ac2",
       "payload": {
         "action": {
-          "id": "218ec2ad3d21dcdcc77869562ed11b6b25465f9e16a9bed09d56c58cfd7b621f",
+          "id": "2691246bd6f60c1a27b713adc47dee405273a30e6b2ac3ab1d8b4465fce39cfc",
           "kind": "escalate-lane",
           "lane": "retained-execution",
-          "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+          "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
           "scope": "service-contract-and-retained-execution-integrity",
           "service": "testrunner"
         },
@@ -1919,7 +1919,7 @@
           "production_ready": false,
           "semantic_verdicts_changed": 0
         },
-        "content_sha256": "6dfdb378d2e74b29e40c751a2f468a98557786a3705fb52339d64a99778443db",
+        "content_sha256": "10f914cb5fa7875c7768b8ca545f64a74db9c7a8796eacaf6683469bfae04520",
         "observation": {
           "boundary": {
             "decisions_created": 0,
@@ -1969,37 +1969,37 @@
           "service": "testrunner"
         }
       },
-      "previous_sha256": "888ff63789f2de208afe577a6c10123cafe7a3d18787b2ef503a13a92a138ed1",
+      "previous_sha256": "38359e09e7df54941c69d6ed4045237c5cbf07a2fc4a57752a3e3e08585d11b0",
       "sequence": 33,
       "type": "result"
     },
     {
-      "at": "2026-09-12T23:48:54.292411+00:00",
-      "content_sha256": "d263fa7372f5f7c5d34959c89408818e79ae66b5cd764dd0780887944c3e717a",
+      "at": "2026-09-13T00:06:09.737960+00:00",
+      "content_sha256": "56e8e7938125d90cd94fe97d43ecb87e58dbdc8a40594d02efef36260e8aa272",
       "payload": {
         "action": {
-          "id": "ed98e205dfb80b3974a73e20675175cacf35b55b019b3e32e828045a3c7ae5f5",
+          "id": "913f6b8d4664f70a72cbd1016bdb2f3d424f710737774665e63da1f4fa73a421",
           "kind": "escalate-lane",
           "lane": "retained-execution",
-          "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+          "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
           "scope": "service-contract-and-retained-execution-integrity",
           "service": "transfer"
         },
         "attempt": 1
       },
-      "previous_sha256": "69a07b3109fa1bf7e825670bfb51c3f83bdc88b16b7f2a80f8d0a22c8fc1388e",
+      "previous_sha256": "0de41f00c6d72319326c241c067723553d7be2f6ce0b61ceaffc4bc70c8a6ac2",
       "sequence": 34,
       "type": "attempt"
     },
     {
-      "at": "2026-09-12T23:48:54.539236+00:00",
-      "content_sha256": "8747deef77c17c311e0be0f13ee93e35be0543358cba943eb320f4b447412b9c",
+      "at": "2026-09-13T00:06:09.982700+00:00",
+      "content_sha256": "fed152c04ec94db4c38a6157640f44a997d4eba5089ff760cd8f246e0f1c4cf6",
       "payload": {
         "action": {
-          "id": "ed98e205dfb80b3974a73e20675175cacf35b55b019b3e32e828045a3c7ae5f5",
+          "id": "913f6b8d4664f70a72cbd1016bdb2f3d424f710737774665e63da1f4fa73a421",
           "kind": "escalate-lane",
           "lane": "retained-execution",
-          "plan_sha256": "96eec1e710aa06fbdc0f333888479b9683f9185aedaad628dcdf27d727734d7c",
+          "plan_sha256": "82e348d5ab271288d47049df7c204179acee959e0af6d260704c0eec028199da",
           "scope": "service-contract-and-retained-execution-integrity",
           "service": "transfer"
         },
@@ -2016,7 +2016,7 @@
           "production_ready": false,
           "semantic_verdicts_changed": 0
         },
-        "content_sha256": "436963bebe54e1e613a563a3ff5081e492f3f11466345d468a18bb0b87487e19",
+        "content_sha256": "011ab760915813adf4c570e68cd0ef7fe813302a9dcbbffba025bf747940682f",
         "observation": {
           "boundary": {
             "decisions_created": 0,
@@ -2066,17 +2066,17 @@
           "service": "transfer"
         }
       },
-      "previous_sha256": "d263fa7372f5f7c5d34959c89408818e79ae66b5cd764dd0780887944c3e717a",
+      "previous_sha256": "56e8e7938125d90cd94fe97d43ecb87e58dbdc8a40594d02efef36260e8aa272",
       "sequence": 35,
       "type": "result"
     },
     {
-      "at": "2026-09-12T23:48:54.803369+00:00",
-      "content_sha256": "0c5c7ad97a78af59f14bd782d03814bb9e1f452f503ca3ad2b60a7cf3645f2c0",
+      "at": "2026-09-13T00:06:10.214438+00:00",
+      "content_sha256": "d2110cabe64b9ec8705be34131c144da7891a25cf635b8b3adf5079c5338b921",
       "payload": {
         "reason": "completed"
       },
-      "previous_sha256": "8747deef77c17c311e0be0f13ee93e35be0543358cba943eb320f4b447412b9c",
+      "previous_sha256": "fed152c04ec94db4c38a6157640f44a997d4eba5089ff760cd8f246e0f1c4cf6",
       "sequence": 36,
       "type": "halted"
     }

@@ -192,6 +192,10 @@ class CloudBankWorkflowTests(unittest.TestCase):
             RunStore(self.directory)
         with self.assertRaisesRegex(ValueError, "Read-only"):
             RunStore(self.directory, read_only=True).append("started", {})
+        store.close()
+        replacement = RunStore(self.directory)
+        self.addCleanup(replacement.close)
+        self.assertEqual(1, replacement.append("started", {})["sequence"])
 
     def test_real_worker_timeout_and_output_limits_are_enforced(self):
         plan = build_execution_plan(self.root)

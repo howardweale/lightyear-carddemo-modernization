@@ -127,7 +127,7 @@ def main(argv=None):
             return 0
 
         version = command(["k6", "version"]).strip()
-        require(re.fullmatch(r"k6 v2\.2\.0 .+", version), "load-tested-k6-v2-2-0-required")
+        require(re.fullmatch(r"k6(?:\.exe)? v2\.2\.0 .+", version), "load-tested-k6-v2-2-0-required")
         run_id = "ms67-load-" + uuid.uuid4().hex
         output = (args.output_root or Path.home() / "ms67-evidence" / run_id).resolve()
         require(not output.exists() and not output.is_relative_to(ROOT), "load-fresh-private-output-required")

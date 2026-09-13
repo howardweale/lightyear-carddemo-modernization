@@ -250,7 +250,7 @@ def verify_observation(value, key, *, bindings, images, environment, profile, ro
             "load-observation-profile-identity-invalid")
     require(value.get("load") == validate_summary(value.get("summary"), value.get("run_id")), "load-metrics-mismatch")
     require(re.fullmatch(r"ms67-load-[a-z0-9-]{1,45}", value.get("run_id", ""))
-            and re.fullmatch(r"k6 v2\.2\.0 .+", value.get("k6_version", "")), "load-tool-or-run-identity-invalid")
+            and re.fullmatch(r"k6(?:\.exe)? v2\.2\.0 .+", value.get("k6_version", "")), "load-tool-or-run-identity-invalid")
     try:
         moments = [datetime.fromisoformat(value[k].replace("Z", "+00:00")) for k in
                    ("started_at", "load_started_at", "load_finished_at", "finished_at")]

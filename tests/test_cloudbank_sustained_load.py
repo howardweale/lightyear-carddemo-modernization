@@ -187,6 +187,14 @@ class AdmissionTests(unittest.TestCase):
                 with self.assertRaises(JourneyFailure):
                     verify_observation(sign(current, "test-key", "test"), "test-key", **args)
 
+    def test_windows_binary_name_preserves_the_exact_tested_k6_version_requirement(self):
+        value, args = self.observation()
+        value["k6_version"] = "k6.exe v2.2.0 (commit/00a9a1b7f5, go1.26.5, windows/amd64)"
+        verify_observation(sign(value, "test-key", "test"), "test-key", **args)
+        value["k6_version"] = "k6.exe v2.1.0 (windows/amd64)"
+        with self.assertRaisesRegex(JourneyFailure, "load-tool-or-run-identity-invalid"):
+            verify_observation(sign(value, "test-key", "test"), "test-key", **args)
+
     def test_controller_produces_verifiable_evidence_and_upload_failure_cannot_pass(self):
         sys.path.insert(0, str(ROOT / "tools"))
         import cloudbank_sustained_load as tool

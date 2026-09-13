@@ -55,6 +55,23 @@ class AlloyDbDrillTests(unittest.TestCase):
                 obj.drain_node({"name": "node", "uid": "node-uid"})
             obj.r.kubectl.assert_not_called()
 
+    def test_incomplete_pacing_proof_cannot_be_admitted_even_when_resigned(self):
+        procedure = {"mode": "service-paced-controlled-evacuation", "node_uid_sha256": "a" * 64,
+                     "final_drain_completed": True, "steps": [{"service": service,
+                     "selector": "app.kubernetes.io/name=" + service,
+                     "alloydb_replicas_recovered": True, "pdb_enforced": True} for service in SERVICES]}
+        for mutate in (lambda p: p.update(final_drain_completed=False), lambda p: p["steps"].pop(),
+                       lambda p: p["steps"][0].update(pdb_enforced=False),
+                       lambda p: p["steps"][0].update(alloydb_replicas_recovered=False)):
+            bad = copy.deepcopy(procedure)
+            mutate(bad)
+            value = sign({"observation_type": drills.OBSERVATION_TYPE, "status": drills.PASS, "bindings": {},
+                          "baseline_images": IMAGES, "candidate_images": CANDIDATES, "environment": ENV,
+                          "recovery": {"status": "restored", "errors": []}, "credentials_persisted": False,
+                          "evacuation_procedures": [bad]}, KEY, "unit-operator")
+            with self.assertRaisesRegex(JourneyFailure, "paced-evacuation-proof-incomplete"):
+                drills.verify_observation(value, KEY, {}, IMAGES, CANDIDATES, ENV)
+
     def test_timeout_continuation_requires_exact_restored_failure_and_measured_prefix(self):
         with tempfile.TemporaryDirectory() as folder:
             obj, _, cloud = engine(folder)

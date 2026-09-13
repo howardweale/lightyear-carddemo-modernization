@@ -35,8 +35,9 @@ retained one ready replica. All eight subsequently recovered; the failed observa
 retained. The cleanup retry restored all selectors, removed the probe and released the owned
 drill lease with no errors. Two rejected recovery eviction attempts were reconciled against
 the exact original pod UIDs; those pods recovered without an observed eviction.
-Canary, business-journey cutover and rollback still require completed evidence, as does trace
-correlation.
+The paced failure-domain continuation passed all eight service recoveries, final evacuation,
+exact database-state comparison and scheduling restoration. Canary, business-journey cutover
+and rollback still require completed evidence, as does trace correlation.
 Qualification is still pending the remaining operational results and complete admission.
 
 The corrected planned-evacuation procedure uses Kubernetes
@@ -116,7 +117,10 @@ and copies all 19 original signed input and receipt files without changing their
 signed export manifest records both byte and content hashes. The public reader requires a
 reviewed, committed manifest byte hash and verifies every file plus the original MS71 binding.
 An incomplete gate cannot create an export. Export is local and does not claim a new cloud
-readback or publish a website; publication wiring awaits the completed live evidence.
+readback or publish a website. The local publisher reads `docs/receipts/alloydb-platform.anchor.json`
+only after that reviewed anchor is created from a complete verified export. Without it, current
+projections remain unchanged. The anchor contains only the bundle path and export byte hash;
+its loader rejects missing or altered evidence before projecting qualification.
 
 Windows Modern Standby interrupted early attempts. Live control and recovery entry points now hold
 a [temporary system and display execution request](https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-setthreadexecutionstate)

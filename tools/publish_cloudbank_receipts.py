@@ -12,6 +12,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "src"))
 from lightyear_data.cloudbank_publication import load_publication  # noqa: E402
 from lightyear_data.cloudbank_ms71_publication import load_ms71_publication  # noqa: E402
+from lightyear_data.cloudbank_alloydb_publication import load_configured_alloydb, publication_summary  # noqa: E402
 
 START = "<!-- BEGIN CLOUDBANK EXECUTION RECEIPTS -->"
 END = "<!-- END CLOUDBANK EXECUTION RECEIPTS -->"
@@ -99,7 +100,35 @@ def outputs(p: dict) -> dict[Path, str]:
         raise ValueError("website receipt block markers missing or duplicated")
     before, rest = site.split(START)
     _, after = rest.split(END)
-    return {ROOT / "docs/receipts/catalog.json": json.dumps(p, indent=2, sort_keys=True) + "\n", ROOT / "docs/receipts/index.html": page, ROOT / "docs/receipts/README.md": readme, ROOT / "docs/index.html": before + website_block(p) + after}
+    site_block = website_block(p)
+    catalog = p
+    alloydb = load_configured_alloydb(ROOT)
+    if alloydb is not None:
+        summary = publication_summary(alloydb)
+        catalog = {**p, "alloydb_platform_qualification": summary}
+        original_scope = "The original MS71 receipt records AlloyDB platform qualification and production readiness as false; later platform qualification is recorded separately."
+        page = page.replace("AlloyDB platform qualification and production readiness remain false.", original_scope)
+        readme = readme.replace("AlloyDB platform qualification and production readiness remain false.", original_scope)
+        receipt_link = html.escape(local_link(summary["receipt_path"]), quote=True)
+        export_link = html.escape(local_link(summary["export_manifest_path"]), quote=True)
+        load = summary["load"]
+        links = " · ".join(f'<a href="{html.escape(local_link(alloydb["bundle"]), quote=True)}/{f["name"]}">{html.escape(f["name"])}</a>'
+                           for f in alloydb["manifest"]["files"])
+        section = f'''<section id="alloydb-platform"><h2>AlloyDB nonproduction platform qualified</h2>
+<p>Campaign <code>{html.escape(summary['campaign_id'])}</code>: all {summary['scenario_count']} operational scenarios passed for {summary['service_count']} services. Published {summary['published_on']}. The original MS67 Cloud SQL and MS71 business-equivalence receipts remain unchanged.</p>
+<table><thead><tr><th>Measured control</th><th>AlloyDB result</th></tr></thead><tbody>
+<tr><td>Sustained load</td><td>{load['requests']:,} requests; {load['errors']} errors; {load['p95_ms']:.2f} ms aggregate p95</td></tr>
+<tr><td>Exact quiesced PITR / backup restore</td><td>{summary['pitr_rto_seconds']} / {summary['backup_restore_rto_seconds']} seconds; RPO {summary['rpo_seconds']} seconds</td></tr>
+<tr><td>Regional primary failover</td><td>{summary['ha_recovery_seconds']} seconds</td></tr></tbody></table>
+<p class="boundary">Synthetic nonproduction qualification. Production readiness, deployment and customer certification remain false. Availability scope: {html.escape(summary['availability_scope'])}. Unplanned regional failure is not qualified.</p>
+<p>Image security: {html.escape(summary['image_security_scope'])}. Observability: {html.escape(summary['observability_scope'])}.</p>
+<p><a href="{receipt_link}">Signed AlloyDB platform receipt</a> · <a href="{export_link}">Signed export manifest</a> · <a href="../cloudbank-alloydb-platform-qualification.md">Campaign log, failed attempts and recovery</a></p>
+<details><summary>All 19 original evidence files</summary><p>{links}</p></details>
+<p>Receipt content SHA-256: <code>{summary['receipt_content_sha256']}</code>. The operator verified signatures and reconstructed the complete gate before export; the public reader verifies pinned original bytes and bindings.</p></section>'''
+        page = page.replace("<main>", "<main>" + section, 1)
+        readme = readme.replace("# CloudBank execution receipts\n\n", f"# CloudBank execution receipts\n\nAlloyDB is platform qualified for synthetic nonproduction: {summary['scenario_count']} scenarios and {summary['service_count']} services. Load: {load['requests']:,} requests, {load['errors']} errors, {load['p95_ms']:.2f} ms aggregate p95. Exact quiesced PITR / backup restore: {summary['pitr_rto_seconds']} / {summary['backup_restore_rto_seconds']} seconds; RPO {summary['rpo_seconds']} seconds. Primary failover: {summary['ha_recovery_seconds']} seconds. Production readiness remains false.\n\n[AlloyDB platform receipt]({local_link(summary['receipt_path'])}) · [Export manifest]({local_link(summary['export_manifest_path'])}) · [Campaign log and scope](../cloudbank-alloydb-platform-qualification.md)\n\n", 1)
+        site_block = site_block.replace('    <p class="note">', f'    <p><a href="receipts/#alloydb-platform">AlloyDB platform qualification passed: {summary["scenario_count"]} operational scenarios for the same eight services.</a> Synthetic nonproduction scope; production readiness remains false.</p>\n    <p class="note">', 1)
+    return {ROOT / "docs/receipts/catalog.json": json.dumps(catalog, indent=2, sort_keys=True) + "\n", ROOT / "docs/receipts/index.html": page, ROOT / "docs/receipts/README.md": readme, ROOT / "docs/index.html": before + site_block + after}
 
 
 def main() -> int:

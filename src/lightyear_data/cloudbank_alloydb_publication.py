@@ -15,6 +15,38 @@ PHASE_NAMES = {"current-controls", "runtime-identity", "image-security", "secret
                "log-correlation", "alert-drill", "network-enforcement", "sustained-load",
                "database-recovery", "ha", "drills"}
 BOUNDARY_NAMES = {"secret-rotation", "log-correlation", "alert-drill", "network-enforcement", "sustained-load"}
+ANCHOR_PATH = Path("docs/receipts/alloydb-platform.anchor.json")
+
+
+def load_configured_alloydb(root=ROOT):
+    """No qualification is projected until a reviewed export anchor exists."""
+    path = Path(root) / ANCHOR_PATH
+    if not path.exists():
+        return None
+    anchor = json.loads(path.read_bytes())
+    _require(set(anchor) == {"bundle", "export_file_sha256"}, "AlloyDB publication anchor fields invalid")
+    return load_alloydb_publication(anchor["bundle"], anchor["export_file_sha256"], root)
+
+
+def publication_summary(publication):
+    receipt = publication["receipt"]
+    phases = receipt["phases"]
+    recovery = phases["database-recovery"]
+    return {"campaign_id": receipt["campaign_id"], "published_on": publication["manifest"]["exported_at"][:10],
+        "status": receipt["status"], "alloydb_platform_qualified": receipt["alloydb_platform_qualified"],
+        "production_ready": receipt["production_ready"], "production_deployed": receipt["production_deployed"],
+        "customer_certification_complete": receipt["customer_certification_complete"],
+        "unplanned_region_failure_qualified": receipt["unplanned_region_failure_qualified"],
+        "synthetic_data_only": receipt["synthetic_data_only"], "scenario_count": receipt["scenario_count"],
+        "service_count": len(receipt["services"]), "load": phases["sustained-load"]["load"],
+        "pitr_rto_seconds": recovery["pitr"]["database_rto_seconds"],
+        "backup_restore_rto_seconds": recovery["backup_restore"]["database_rto_seconds"],
+        "rpo_seconds": recovery["pitr"]["recovery_point_age_seconds"],
+        "ha_recovery_seconds": phases["ha"]["recovery_seconds"], "availability_scope": receipt["availability_scope"],
+        "image_security_scope": receipt["image_security_scope"], "observability_scope": receipt["observability_scope"],
+        "receipt_content_sha256": receipt["content_sha256"],
+        "receipt_path": publication["bundle"] + "/alloydb-platform.receipt.json",
+        "export_manifest_path": publication["bundle"] + "/publication-export.json"}
 
 
 def load_alloydb_publication(bundle, expected_export_sha256, root=ROOT):

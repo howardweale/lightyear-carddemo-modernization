@@ -106,17 +106,22 @@ def verify_availability(row, minimum):
             "drill-availability-measurement-invalid")
 
 
-def verify_continuation(state, key, bindings, images, candidates, environment, *, cutover=False, rollback=False):
+def verify_continuation(state, key, bindings, images, candidates, environment, *, cutover=False, rollback=False,
+                        readiness_timeout=False):
     """Validate the measured prefix from the specified restored failure."""
     verified(state, key)
     require(not rollback or cutover, 'rollback-continuation-requires-cutover-prefix')
+    require(not readiness_timeout or (not cutover and not rollback
+            and state.get('failure_context', {}).get('phase') == 'drained-failure-domain'),
+            'failure-domain-readiness-timeout-required')
     require(state.get("state_type") == STATE_TYPE and state.get("bindings") == bindings
             and state.get("environment") == environment and state.get("baseline_images") == images
             and state.get("candidate_images") == candidates and state.get("credentials_persisted") is False
             and state.get("phase") == "baseline-restored" and state.get("cleanup_required") is False
             and state.get("pending") is None and (cutover or state.get("canaries") == {})
             and state.get("recovery") == {"status": "restored", "errors": []}
-            and state.get("failure") == ("operator-command-failed" if rollback else
+            and state.get("failure") == ("service-recovery-timeout" if readiness_timeout else
+                                         "operator-command-failed" if rollback else
                                          "target-cutover-business-journeys-failed" if cutover else
                                          "evacuation-normalized-database-state-changed"),
             "restored-cutover-checkpoint-required" if cutover else "restored-failure-domain-checkpoint-required")
@@ -642,6 +647,11 @@ class FinalDrills:
         self.s["pending"] = None
         self.save("node-scheduling-updated")
 
+    def drain_node(self, node):
+        # No force, no disabled eviction, and no PDB override.
+        self.r.kubectl("drain", node["name"], "--ignore-daemonsets", "--delete-emptydir-data",
+                       "--timeout=600s", timeout=630)
+
     def resilience(self):
         results = copy.deepcopy(self.s["completed"].get("resilience", {}))
         for kind, nodes in self.s["node_plan"].items():
@@ -665,9 +675,7 @@ class FinalDrills:
                     self.cordon(n, True)
                 for n in nodes:
                     self.intent("drain-" + kind, {"node": n["name"]})
-                    # No force, no disabled eviction, and no PDB override.
-                    self.r.kubectl("drain", n["name"], "--ignore-daemonsets", "--delete-emptydir-data",
-                                   "--timeout=600s", timeout=630)
+                    self.drain_node(n)
                     self.s["pending"] = None
                     self.save("drained-" + kind)
                 for service in SERVICES:
@@ -1079,6 +1087,8 @@ class FinalDrills:
                  "cutover_attempt": self.s.get('cutover_attempt'),
                  "checks_isolation": self.s.get('checks_isolation'),
                  "customer_startup": self.s.get('customer_startup'),
+                 **({"evacuation_procedures": self.s["evacuation_procedures"]} if "evacuation_procedures" in self.s else {}),
+                 **({"controller_provenance": self.s["controller_provenance"]} if "controller_provenance" in self.s else {}),
                  "credentials_persisted": False, "ms67_complete": False,
                  "limitations": ["Controlled drains qualify evacuation, not unplanned power/region failure.",
                                  "Availability is sampled; sub-sample interruptions are not ruled out.",
@@ -1111,6 +1121,14 @@ def verify_observation(value, key, bindings, images, candidates, environment):
             and value.get("recovery") == {"status": "restored", "errors": []}
             and value.get("credentials_persisted") is False, "final-drills-passing-bound-evidence-required")
     done = value.get("completed", {})
+    for procedure in value.get("evacuation_procedures", []):
+        require(procedure.get("mode") == "service-paced-controlled-evacuation"
+                and re.fullmatch(HEX, procedure.get("node_uid_sha256", ""))
+                and procedure.get("final_drain_completed") is True
+                and [r.get("service") for r in procedure.get("steps", [])] == list(SERVICES)
+                and all(r.get("selector") == "app.kubernetes.io/name=" + r["service"]
+                        and r.get("alloydb_replicas_recovered") is True and r.get("pdb_enforced") is True
+                        for r in procedure["steps"]), "paced-evacuation-proof-incomplete")
     verify_customer_mode(value.get('customer_startup'))
     require(set(done) == {"rolling", "resilience", "cutover"}, "all-final-drill-groups-required")
     rolling = done["rolling"]

@@ -4,6 +4,7 @@ import argparse
 import json
 import os
 from pathlib import Path
+import re
 import signal
 import sys
 import uuid
@@ -19,7 +20,8 @@ from lightyear_data.cloudbank_sql_recovery import verified
 from lightyear_data.cloudbank_secret_rotation_gke import Journal
 from lightyear_data.cloudbank_alloydb_recovery import APPLICATION_SNAPSHOT_SQL
 from lightyear_data.cloudbank_alloydb_ha import AlloyHa, AlloyHaRuntime, verify_ha
-from lightyear_data.cloudbank_ms67_drills import FinalDrills, verify_observation as verify_drills
+from lightyear_data.cloudbank_ms67_drills import verify_continuation, verify_observation as verify_drills
+from lightyear_data.cloudbank_alloydb_drills import AlloyDrills
 from lightyear_data.cloudbank_operator_session import operator_session
 import ms67_final_controls
 import ms67_final_images
@@ -31,6 +33,8 @@ def main(argv=None):
     parser.add_argument("--context", type=Path, required=True)
     parser.add_argument("--ms71-receipt", type=Path, required=True)
     parser.add_argument("--output-parent", type=Path, required=True)
+    parser.add_argument("--resume-state", type=Path)
+    parser.add_argument("--original-process-stopped", action="store_true")
     args = parser.parse_args(argv)
     require(os.environ.get("LIGHTYEAR_NON_PRODUCTION_ACK") == ACK, "non-production-mutation-ack-required")
     context = json.loads(args.context.read_bytes())
@@ -51,11 +55,18 @@ def main(argv=None):
             "accepted-alloydb-comparison-required")
     require(not command(["git", "status", "--porcelain"]).strip(), "committed-clean-controller-required")
     commit = command(["git", "rev-parse", "HEAD"]).strip()
-    run_id = "ms67-final-" + uuid.uuid4().hex if args.phase == "drills" else "alloydb-" + args.phase + "-" + uuid.uuid4().hex[:16]
-    output = args.output_parent.resolve() / run_id
+    resume = None
+    if args.resume_state:
+        require(args.phase == "drills" and args.original_process_stopped, "stopped-drill-controller-required")
+        resume = verified(json.loads(args.resume_state.read_bytes()), key)
+        require(re.fullmatch(r"ms67-final-[0-9a-f]{32}", resume.get("run_id", "")), "original-drill-run-required")
+    run_id = resume["run_id"] if resume else (
+        "ms67-final-" + uuid.uuid4().hex if args.phase == "drills" else "alloydb-" + args.phase + "-" + uuid.uuid4().hex[:16])
+    directory_id = "alloydb-drill-continuation-" + uuid.uuid4().hex[:16] if resume else run_id
+    output = args.output_parent.resolve() / directory_id
     require(not output.is_relative_to(ROOT), "private-evidence-outside-checkout-required")
     output.mkdir(parents=True)
-    prefix = f'gs://{project}-ms67-evidence/alloydb-platform/{context["run_id"]}/{run_id}'
+    prefix = f'gs://{project}-ms67-evidence/alloydb-platform/{context["run_id"]}/{directory_id}'
     signer = context["signer"]
     heartbeat = Heartbeat()
     heartbeat.thread.start()
@@ -68,7 +79,8 @@ def main(argv=None):
         require(managed["database"] == context["managed_target"]["database"]
                 and runtime.environment() == context["environment"], "managed-platform-identity-drift")
         Journal(output / "intent.json", prefix + "/intent.json", project, key, signer).write({
-            "phase": args.phase, "controller_commit": commit, "context_sha256": context["content_sha256"],
+            "phase": args.phase, "run_id": run_id, "controller_commit": commit, "context_sha256": context["content_sha256"],
+            "resumed_from_state_sha256": resume["content_sha256"] if resume else None,
             "managed_target": managed, "alloydb_platform_qualified": False})
         print("ALLOYDB_EXTENDED=" + args.phase + "; OUTPUT=" + str(output), flush=True)
         if args.phase in {"drills", "image-security"}:
@@ -88,13 +100,18 @@ def main(argv=None):
             drill.state.update(bindings=context["bindings"], controller_commit=commit, context_sha256=context["content_sha256"])
             value = drill.execute()
         else:
-            class AlloyDrills(FinalDrills):
-                snapshot_sql = APPLICATION_SNAPSHOT_SQL
             bindings = {**context["bindings"], "candidate_image_lock_sha256": retained["candidate_lock"]["content_sha256"],
                 "managed_target_profile_sha256": context["managed_profile"]["content_sha256"],
                 "snapshot_query_sha256": hashed(APPLICATION_SNAPSHOT_SQL)}
+            if resume:
+                verify_continuation(resume, key, bindings, context["images"], candidates, context["environment"],
+                                    readiness_timeout=True)
+                Journal(output / "prior-state.json", prefix + "/prior-state.json", project, key, signer).write(resume)
             drill = AlloyDrills(runtime, candidates, bindings, key, signer,
-                               f"gs://{project}-ms67-evidence/final-drills/{run_id}")
+                               f"gs://{project}-ms67-evidence/final-drills/{run_id}", state=resume)
+            if resume:
+                drill.s.setdefault("controller_provenance", []).append({"controller_commit": commit,
+                    "previous_state_sha256": resume["content_sha256"], "original_process_stopped": True})
             value = drill.run()
         value = Journal(output / (args.phase + ".json"), prefix + "/" + args.phase + ".json", project, key, signer).write(value)
         if args.phase == "ha":

@@ -26,9 +26,26 @@ allowed traffic; all 18 owned resources were removed. AlloyDB primary failover p
 private address. Acknowledged data, idempotent replay, new business operations and all 16
 application process identities passed their checks. The failover observation content hash is
 `c1b0e5e802647a03b2359aefc4879665f8e985120aa0e375723241d1668fde01`.
-Nine of eleven operational phases have passing evidence. The rolling deployment, evacuation,
-canary and rollback phase is running; trace correlation still requires a passing rerun.
+Nine of eleven operational phases have passing evidence. The application drill passed all
+eight forward and return rollouts and the single-node evacuation, with exact database state
+preservation. Its subsequent concurrent failure-domain evacuation failed the existing readiness
+timeout: sixteen replacement JVMs from the two database namespaces concentrated on one 4-vCPU
+node, reached 101% reported CPU and repeatedly failed startup probes. Each AlloyDB service
+retained one ready replica. All eight subsequently recovered; the failed observation remains
+retained. Recovery is restoring the remaining selectors and releasing the owned drill lease.
+Canary, business-journey cutover and rollback still require completed evidence, as does trace
+correlation.
 Qualification is still pending the remaining operational results and complete admission.
+
+The corrected planned-evacuation procedure uses Kubernetes
+[`drain --pod-selector`](https://kubernetes.io/docs/reference/kubectl/generated/kubectl_drain/)
+to pace cold starts by service on this shared cluster. It waits for that AlloyDB service to
+recover before evicting the next service, then performs the original full drain for remaining
+workloads. Disruption budgets, availability sampling, readiness checks, database-state equality,
+application images, resource settings and acceptance thresholds remain unchanged. This qualifies
+the paced maintenance procedure; simultaneous unplanned node or region loss is not established.
+Continuation requires the exact signed, fully restored failure checkpoint and revalidates the
+retained eight rollouts and node evacuation before collecting the unfinished evidence.
 
 Run network enforcement after all restore probes and their policies are removed, and without
 overlapping another configuration or pod change. Its baseline deliberately includes all observed

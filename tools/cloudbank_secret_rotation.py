@@ -216,6 +216,7 @@ def main(argv=None):
             heartbeat.progress("Rotating CreditScore, verifying both replicas, then restoring original values")
             result = engine.run(original)
     except (Exception, KeyboardInterrupt) as exc:
+        heartbeat.progress("Secret rotation failed: " + safe_reason(exc))
         cleanup = {"status": "not-started", "errors": []}
         if engine and args.action != "preflight":
             try:

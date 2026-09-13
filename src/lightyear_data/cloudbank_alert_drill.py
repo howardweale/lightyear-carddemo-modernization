@@ -208,7 +208,7 @@ class Monitoring:
         self.token, self.token_at = "", 0.0
         self.opener = build_opener(NoRedirect())
 
-    def request(self, method, path, *, query=None, body=None, absent=False):
+    def request(self, method, path, *, query=None, body=None, absent=False, _read_attempt=0):
         require(method in {"GET", "POST", "DELETE"} and path.startswith(self.prefix + "/")
                 and ".." not in path and re.fullmatch(r"[A-Za-z0-9/_.\-]+", path) is not None,
                 "alert-api-boundary-invalid")
@@ -242,8 +242,18 @@ class Monitoring:
             if code == 404 and absent and method == "GET":
                 return None
             raise ApiFailure(code, method=method, collection=collection, metadata=metadata) from None
-        except (URLError, TimeoutError, OSError):
-            raise JourneyFailure("alert-api-unavailable-or-timed-out") from None
+        except (URLError, TimeoutError, OSError) as exc:
+            if method == "GET" and _read_attempt < 2:
+                # Retry only reads. The enclosing phase deadline still includes
+                # every failed request; a lost mutation response is reconciled.
+                time.sleep(2 ** _read_attempt)
+                return self.request(method, path, query=query, body=body, absent=absent,
+                                    _read_attempt=_read_attempt + 1)
+            failure = ApiFailure(None, method=method, collection=collection)
+            failure.args = ("alert-api-unavailable-or-timed-out",)
+            failure.diagnostic = {"method": method, "collection": collection,
+                "transport_error_type": type(getattr(exc, "reason", exc)).__name__, "read_attempts": _read_attempt + 1}
+            raise failure from None
 
     def listing(self, kind, query=None):
         require(kind in {"alertPolicies", "alerts", "timeSeries"}, "alert-list-kind-invalid")

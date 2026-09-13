@@ -114,7 +114,7 @@ def assemble(context, ms71, phases, boundaries, key):
         "synthetic_data_only": True, "unplanned_region_failure_qualified": False,
         "image_security_scope": "retained original signed signature/provenance/scan evidence for identical immutable digests",
         "observability_scope": "current-pod GKE CPU metrics and correlated readiness-request logs/traces",
-        "availability_scope": "controlled evacuation and primary failover; sampled availability"}
+        "availability_scope": "controlled evacuation, paced by service where recorded, and primary failover; sampled availability"}
 
 
 def verify_receipt(receipt, key):

@@ -32,7 +32,9 @@ preservation. Its subsequent concurrent failure-domain evacuation failed the exi
 timeout: sixteen replacement JVMs from the two database namespaces concentrated on one 4-vCPU
 node, reached 101% reported CPU and repeatedly failed startup probes. Each AlloyDB service
 retained one ready replica. All eight subsequently recovered; the failed observation remains
-retained. Recovery is restoring the remaining selectors and releasing the owned drill lease.
+retained. The cleanup retry restored all selectors, removed the probe and released the owned
+drill lease with no errors. Two rejected recovery eviction attempts were reconciled against
+the exact original pod UIDs; those pods recovered without an observed eviction.
 Canary, business-journey cutover and rollback still require completed evidence, as does trace
 correlation.
 Qualification is still pending the remaining operational results and complete admission.

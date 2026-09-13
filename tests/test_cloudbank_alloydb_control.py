@@ -2,6 +2,7 @@
 import importlib.util
 import json
 from pathlib import Path
+import sys
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -12,7 +13,8 @@ from lightyear_data.contracts import sign
 
 spec = importlib.util.spec_from_file_location("alloydb_control", Path(__file__).resolve().parents[1] / "tools/cloudbank_alloydb_control.py")
 control = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(control)
+with patch.object(sys, "path", list(sys.path)):
+    spec.loader.exec_module(control)
 KEY, SIGNER = "test-key", "test-signer"
 
 

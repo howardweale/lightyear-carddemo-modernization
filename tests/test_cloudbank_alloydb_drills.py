@@ -1,15 +1,17 @@
 """Paced maintenance must retain eviction guards and stop on failed recovery."""
 import copy
 import json
+import sys
 import tempfile
 import unittest
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 from lightyear_data.cloudbank_alloydb_drills import AlloyDrills
 from lightyear_data.cloudbank_journeys import SERVICES, JourneyFailure
 from lightyear_data.contracts import sign
-from test_ms67_drill_continuation import failed_domain
-from test_ms67_finish import engine, KEY, IMAGES, CANDIDATES, ENV, drills
+with patch.object(sys, "path", list(sys.path)):
+    from test_ms67_drill_continuation import failed_domain
+    from test_ms67_finish import engine, KEY, IMAGES, CANDIDATES, ENV, drills
 
 
 class AlloyDbDrillTests(unittest.TestCase):

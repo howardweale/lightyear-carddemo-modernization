@@ -225,7 +225,7 @@ class AlloyRecovery(SqlRecovery):
             name = "ly-alloy-backup-" + hashed(self.runtime.run_id)[:16]
             self.source_guard()
             self.submit("backup-create", self.region_path + "/backups/" + name, "backups", "create", name,
-                        "--cluster=" + self.state["source"], "--description=" + self.runtime.run_id)
+                        "--cluster=" + self.state["source"])
             self.wait("backup-create")
             backup = self.cloud("backups", "describe", name)
             require(backup["state"] == "READY" and backup["clusterName"] == self.cluster_path

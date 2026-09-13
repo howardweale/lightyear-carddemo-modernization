@@ -374,6 +374,39 @@ class JournalTests(unittest.TestCase):
 
 
 class ProviderBoundaryTests(unittest.TestCase):
+    def test_pin_retries_only_status_race_with_fresh_snapshot(self):
+        old = {"metadata": {"uid": "external-uid", "resourceVersion": "1"},
+               "spec": {"dataFrom": [{"extract": {"version": "1"}}]}, "status": {"refresh": "old"}}
+        new = copy.deepcopy(old)
+        new["metadata"]["resourceVersion"] = "2"
+        new["status"] = {"refresh": "new"}
+        backend = GkeSecretBackend(SimpleNamespace(get=lambda *args: copy.deepcopy(new)))
+        with patch.object(backend.r, "get", side_effect=[old, new]), patch.object(
+                backend, "patch", side_effect=[JourneyFailure("operator-command-failed"), None]) as mutate:
+            backend.pin("2")
+        self.assertEqual(mutate.call_count, 2)
+        self.assertEqual(mutate.call_args.args[1], new)
+
+    def test_pin_does_not_retry_spec_owner_or_ambiguous_changes(self):
+        old = {"metadata": {"uid": "external-uid", "resourceVersion": "1"},
+               "spec": {"dataFrom": [{"extract": {"version": "1"}}]}}
+        for scenario in ("spec", "uid", "unchanged", "timeout"):
+            with self.subTest(scenario=scenario):
+                new = copy.deepcopy(old)
+                if scenario != "unchanged":
+                    new["metadata"]["resourceVersion"] = "2"
+                if scenario == "spec":
+                    new["spec"]["dataFrom"][0]["extract"]["version"] = "2"
+                if scenario == "uid":
+                    new["metadata"]["uid"] = "replacement"
+                reason = "operator-command-unavailable-or-timed-out" if scenario == "timeout" else "operator-command-failed"
+                backend = GkeSecretBackend(SimpleNamespace(get=lambda *args: new))
+                with patch.object(backend.r, "get", side_effect=[old, new]), patch.object(
+                        backend, "patch", side_effect=JourneyFailure(reason)) as mutate:
+                    with self.assertRaisesRegex(JourneyFailure, reason):
+                        backend.pin("2")
+                self.assertEqual(mutate.call_count, 1)
+
     def test_old_executor_cannot_release_recoverys_lock(self):
         current = state()
         current["lease_uid"] = "lease-uid"

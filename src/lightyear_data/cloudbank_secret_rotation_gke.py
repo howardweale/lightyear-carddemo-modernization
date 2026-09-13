@@ -339,7 +339,27 @@ class GkeSecretBackend:
         else:
             changes = [] if extract.get("version") == number else [{"op": "add", "path": path, "value": number}]
         if changes:
-            self.patch("externalsecret", external, changes)
+            for attempt in range(3):
+                try:
+                    self.patch("externalsecret", external, changes)
+                    break
+                except JourneyFailure as exc:
+                    if str(exc) != "operator-command-failed" or attempt == 2:
+                        raise
+                    current = self.r.get("externalsecret", EXTERNAL)
+                    # ESO updates status while we check lease ownership. Retry
+                    # only a proven status-only race, with a fresh UID/RV test.
+                    # Spec changes (including a possibly successful pin), owner
+                    # changes and ambiguous transport failures are not retried.
+                    def stable(value):
+                        return {k: ({m: v for m, v in item.items()
+                                     if m not in {"resourceVersion", "managedFields"}}
+                                    if k == "metadata" else item)
+                                for k, item in value.items() if k != "status"}
+                    if (current["metadata"]["resourceVersion"] == external["metadata"]["resourceVersion"]
+                            or stable(current) != stable(external)):
+                        raise
+                    external = current
 
     def sync(self, state: dict, payload: dict):
         deadline = time.monotonic() + 180

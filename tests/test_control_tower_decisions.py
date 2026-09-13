@@ -39,7 +39,7 @@ class DecisionTests(unittest.TestCase):
         self.authority = self.root / "work/control-tower/authority.json"
         credential = initialize_authority(self.authority, "test-operator", "Test Operator")
         self.credential = credential.read_text().strip()
-        self.service = DecisionService(self.root, self.authority, graph_identity=lambda: "graph-test")
+        self.service = DecisionService(self.root, self.authority, graph_identity=lambda: "graph-test", decision_only=False)
         self.addCleanup(self.service.close)
         self.session = self.service.login(self.credential)
         self.token = self.session["token"]
@@ -162,7 +162,7 @@ class DecisionTests(unittest.TestCase):
         self.assertEqual(first['run_id'], second['run_id'])
         self.service.workers[-1].join(10)
         self.service.close()
-        reloaded = DecisionService(self.root, self.authority, graph_identity=lambda: 'graph-test')
+        reloaded = DecisionService(self.root, self.authority, graph_identity=lambda: 'graph-test', decision_only=False)
         self.addCleanup(reloaded.close)
         self.assertEqual('blocked', reloaded.gate(first['run_id'])['status'])
         with self.assertRaises(DecisionUnauthorized): reloaded.queue(self.token)
@@ -204,7 +204,7 @@ class DecisionTests(unittest.TestCase):
 class DecisionHTTPTests(unittest.TestCase):
     setUp = DecisionTests.setUp
 
-    def test_http_authentication_origin_and_real_dispatch(self):
+    def test_http_authentication_origin_and_decision_only_boundary(self):
         index = GraphExplorerIndex(load_graph(ROOT / 'knowledge/graph.snapshot.json.gz'))
         server = ExplorerServer(('127.0.0.1', 0), index, ROOT / 'knowledge/viewer', decision_service=self.service)
         thread = threading.Thread(target=server.serve_forever, daemon=True); thread.start()
@@ -215,6 +215,20 @@ class DecisionHTTPTests(unittest.TestCase):
             req = Request(origin + '/api/decisions/' + route, data=json.dumps(data).encode() if data is not None else None, headers=headers)
             with urlopen(req, timeout=5) as response: return json.load(response)
         self.assertTrue(call('status')['enabled'])
+        before_plan = (ROOT / 'control-tower/action-plan.snapshot.json.gz').read_bytes()
+        with urlopen(origin + '/api/workflow/plan?class=approval-required&limit=2', timeout=30) as response:
+            plan = json.load(response)
+        self.assertEqual(223, plan['total'])
+        self.assertEqual(2, len(plan['items']))
+        self.assertEqual(0, plan['execution']['actions_executed'])
+        self.assertEqual(before_plan, (ROOT / 'control-tower/action-plan.snapshot.json.gz').read_bytes())
+        with urlopen(origin + '/api/workflow/execution', timeout=30) as response:
+            self.assertTrue(json.load(response)['read_only'])
+        for route in ('execution', 'run', 'resume', 'plan'):
+            request = Request(origin + '/api/workflow/' + route, data=b'{}', headers={'Content-Type': 'application/json'})
+            with self.assertRaises(HTTPError) as error:
+                urlopen(request, timeout=5)
+            self.assertEqual(404, error.exception.code)
         with self.assertRaises(HTTPError) as error: call('queue')
         self.assertEqual(401, error.exception.code)
         for bad_origin in ('https://attacker.invalid', None):
@@ -223,12 +237,27 @@ class DecisionHTTPTests(unittest.TestCase):
         session = call('session', {'credential': self.credential}, {'Origin': origin})
         headers = {'Origin': origin, 'Authorization': 'Bearer ' + session['token']}
         self.assertEqual(3, len(call('queue', headers=headers)['items']))
-        run = call('proof-runs', {'workload_id': WORKLOAD, 'request_id': str(uuid.uuid4())}, headers)
-        self.service.workers[-1].join(10)
-        gate = call('gate?run_id=' + run['run_id'], headers=headers)
-        self.assertEqual('blocked', gate['status'])
+        self.assertIn('workflow_proposals', call('queue', headers=headers))
+        for route, payload in [('proof-runs', {'workload_id': WORKLOAD, 'request_id': str(uuid.uuid4())}), ('gate?run_id=anything', None)]:
+            with self.assertRaises(HTTPError) as error: call(route, payload, headers)
+            self.assertEqual(404, error.exception.code)
+        self.assertEqual([], self.service.workers)
         with self.assertRaises(HTTPError) as error: call('queue', headers={**headers, 'Host': 'attacker.invalid'})
         self.assertEqual(401, error.exception.code)
+
+    def test_server_constructor_rejects_network_decision_service(self):
+        index = GraphExplorerIndex(load_graph(ROOT / 'knowledge/graph.snapshot.json.gz'))
+        with self.assertRaisesRegex(ValueError, 'loopback'):
+            ExplorerServer(('0.0.0.0', 0), index, ROOT / 'knowledge/viewer', decision_service=self.service)
+
+    def test_decision_only_service_cannot_dispatch_or_issue_gate_receipts(self):
+        self.service.close()
+        service = DecisionService(self.root, self.authority, decision_only=True)
+        self.addCleanup(service.close)
+        token = service.login(self.credential)['token']
+        with self.assertRaises(DecisionUnauthorized): service.dispatch(token, {})
+        with self.assertRaises(DecisionUnauthorized): service.gate('anything')
+        self.assertEqual(3, len(service.queue(token)['items']))
 
 
 if __name__ == '__main__':

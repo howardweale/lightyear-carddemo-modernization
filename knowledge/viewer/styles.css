@@ -1006,3 +1006,16 @@ body { background: var(--bg); }
   .product-name { font-size: 12px; }
   .topbar { grid-template-columns: max-content minmax(160px, 190px) minmax(400px, 1fr) 10px minmax(230px, 320px); }
 }
+
+/* Six action kinds retain readable evidence on narrow screens. */
+.execution-actions { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .75rem; margin: 1rem 0; }
+.execution-action { min-width: 0; border: 1px solid var(--border, #d7dce4); border-radius: .6rem; padding: .8rem; }
+.execution-action > summary { display: flex; flex-direction: column; gap: .35rem; cursor: pointer; }
+.execution-action > summary span { font-size: .85rem; }
+.execution-action code, .execution-action p { overflow-wrap: anywhere; }
+.execution-action pre { white-space: pre-wrap; overflow-wrap: anywhere; max-height: 24rem; overflow-y: auto; font-size: .75rem; }
+.execution-action .execution-receipt { display: block; min-width: 0; }
+@media (max-width: 800px) { .execution-actions { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 500px) { .execution-actions { grid-template-columns: minmax(0, 1fr); } }
+
+.decision-evidence + details pre { white-space: pre-wrap; overflow-wrap: anywhere; }

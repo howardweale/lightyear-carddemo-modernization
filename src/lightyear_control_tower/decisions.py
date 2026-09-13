@@ -53,11 +53,14 @@ class DecisionUnauthorized(ValueError):
     pass
 
 
-def initialize_authority(path: Path, operator_id: str, operator_name: str) -> Path:
+def initialize_authority(path: Path, operator_id: str, operator_name: str, *, workload_id: str = WORKLOAD) -> Path:
     """Provision a local individual credential; deliberately cannot approve anything."""
     from cryptography.hazmat.primitives import serialization
     from cryptography.hazmat.primitives.asymmetric.ed25519 import Ed25519PrivateKey
 
+    from lightyear_workflow.cloudbank_extensions import WORKLOAD as CLOUDBANK
+    if workload_id not in {WORKLOAD, CLOUDBANK}:
+        raise ValueError("Unsupported normalization workload")
     operator_id = text_field(operator_id, "Operator ID", 200)
     operator_name = text_field(operator_name, "Operator name", 200)
     if path.exists():
@@ -73,7 +76,7 @@ def initialize_authority(path: Path, operator_id: str, operator_name: str) -> Pa
         private_path: private.private_bytes(serialization.Encoding.PEM, serialization.PrivateFormat.PKCS8, serialization.NoEncryption()),
         public_path: public,
         credential_path: token.encode() + b"\n",
-        path: canonical({"schema_version": "1.0", "private_key": private_path.name,
+        path: canonical({"schema_version": "1.0", "normalization_workload": workload_id, "private_key": private_path.name,
                          "public_key": public_path.name, "operators": [{"id": operator_id,
                          "name": operator_name, "token_sha256": hashlib.sha256(token.encode()).hexdigest(),
                          "roles": ["normalization-approver", "proof-runner"]}]}) + b"\n",
@@ -81,6 +84,13 @@ def initialize_authority(path: Path, operator_id: str, operator_name: str) -> Pa
     for target in files:
         if target.exists():
             raise ValueError(f"Refusing to overwrite existing authority file: {target.name}")
+    if workload_id == CLOUDBANK:
+        trust_path = path.parent / "cloudbank-trust.json"
+        if trust_path.exists():
+            raise ValueError("Refusing to replace CloudBank trust")
+        files[trust_path] = canonical({"schema_version": "1.0", "workload_id": CLOUDBANK,
+                                      "public_key_pem": public.decode(), "operators": [{"id": operator_id,
+                                      "name": operator_name, "roles": ["normalization-approver"]}]}) + b"\n"
     for target, data in files.items():
         with os.fdopen(os.open(target, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600), "wb") as stream:
             stream.write(data)
@@ -104,13 +114,20 @@ def verify_envelope(envelope: dict, public_key: bytes) -> bool:
 
 
 class DecisionService:
-    def __init__(self, root: Path, authority: Path, database: Path | None = None, graph_identity=None, recover_runs: bool = True):
+    def __init__(self, root: Path, authority: Path, database: Path | None = None, graph_identity=None, recover_runs: bool = True, decision_only: bool = True):
         from cryptography.hazmat.primitives import serialization
         self.root = root.resolve()
+        self.decision_only = decision_only
         self.authority_path = authority.resolve()
         config = json.loads(self.authority_path.read_text())
         if config.get("schema_version") != "1.0":
             raise ValueError("Unsupported decision authority configuration")
+        from lightyear_workflow.cloudbank_extensions import WORKLOAD as CLOUDBANK
+        self.workload_id = config.get("normalization_workload", WORKLOAD)
+        if self.workload_id not in {WORKLOAD, CLOUDBANK}:
+            raise ValueError("Unsupported normalization workload")
+        if self.workload_id == CLOUDBANK and not decision_only:
+            raise ValueError("CloudBank authority is human-decision-only")
         key_path = self.authority_path.parent / config["private_key"]
         self.public_key = (self.authority_path.parent / config["public_key"]).read_bytes()
         self.key = serialization.load_pem_private_key(key_path.read_bytes(), password=None)
@@ -119,7 +136,7 @@ class DecisionService:
         ids = [operator["id"] for operator in self.operators]
         if not ids or len(ids) != len(set(ids)):
             raise ValueError("Operator identities must be nonempty and unique")
-        self.database = database or self.root / "work/control-tower/decisions.sqlite3"
+        self.database = database or self.root / "work/control-tower" / ("decisions.sqlite3" if self.workload_id == WORKLOAD else "cloudbank-decisions.sqlite3")
         self.database.parent.mkdir(parents=True, exist_ok=True)
         self.graph_identity = graph_identity or (lambda: "")
         self.sessions: dict[str, dict] = {}
@@ -136,7 +153,7 @@ class DecisionService:
         # An interrupted process is never silently retried or reported as a pass.
         with self.transaction() as db:
             for run in self.runs(self.events(db)):
-                if recover_runs and run["status"] == "running":
+                if recover_runs and not decision_only and run["status"] == "running":
                     self.append(db, "proof_finished", {**run, "status": "interrupted", "reason": "server-restarted"}, self.system_actor())
 
     def _acquire_writer_lock(self):
@@ -231,6 +248,10 @@ class DecisionService:
         return {"status": "ended"}
 
     def ledger(self) -> tuple[dict, str]:
+        if self.workload_id != WORKLOAD:
+            from lightyear_workflow.cloudbank_extensions import decision_ledger
+            ledger = decision_ledger(self.root)
+            return ledger, digest(ledger)
         path = self.root / "spec/comparison-normalizations.json"
         validation = validate_normalization_ledger(path)
         if validation["status"] != "passed":
@@ -242,7 +263,7 @@ class DecisionService:
         ledger, ledger_hash = self.ledger()
         result = []
         for rule in ledger["rules"]:
-            latest = next((event for event in reversed(events) if event["kind"] == "normalization_decided" and event["payload"]["entry_id"] == rule["id"]), None)
+            latest = next((event for event in reversed(events) if event["kind"] == "normalization_decided" and event["payload"].get("workload_id") == self.workload_id and event["payload"]["entry_id"] == rule["id"]), None)
             status = "pending"
             if latest:
                 decision = latest["payload"]
@@ -254,7 +275,8 @@ class DecisionService:
                     status = "expired"
                 else:
                     status = "approved"
-            result.append({"id": rule["id"], "workload_id": WORKLOAD, "workload_name": "CardDemo · Interest calculation",
+            result.append({"id": rule["id"], "workload_id": self.workload_id, "workload_name": "CardDemo · Interest calculation" if self.workload_id == WORKLOAD else "CloudBank · Retained value conservation",
+                           "ledger_path": "spec/comparison-normalizations.json" if self.workload_id == WORKLOAD else ledger["source_ledger"],
                            "kind": "normalization", "rule": rule, "entry_sha256": digest(rule), "ledger_sha256": ledger_hash,
                            "status": status, "latest_decision": latest})
         return result
@@ -265,7 +287,7 @@ class DecisionService:
             events = self.events(db)
             return {"items": self.items(events), "runs": self.runs(events), "session": session,
                     "events": events[-100:], "supported_decisions": ["normalization"],
-                    "proof_workloads": [WORKLOAD]}
+                    "proof_workloads": [WORKLOAD] if self.workload_id == WORKLOAD else []}
 
     def review(self, token: str, entry_id: str) -> dict:
         session = self.authenticate(token)
@@ -274,7 +296,7 @@ class DecisionService:
             if item is None:
                 raise KeyError(entry_id)
             self.append(db, "normalization_viewed", {"entry_id": entry_id, "entry_sha256": item["entry_sha256"],
-                        "ledger_sha256": item["ledger_sha256"], "workload_id": WORKLOAD}, session["actor"], session["id"])
+                        "ledger_sha256": item["ledger_sha256"], "workload_id": self.workload_id}, session["actor"], session["id"])
             return item
 
     def decide(self, token: str, payload: dict) -> dict:
@@ -307,7 +329,7 @@ class DecisionService:
             if outcome == "approved" and review_after > date.fromisoformat(item["rule"]["review_after"]):
                 raise ValueError("Review date cannot extend the governed ledger review date")
             return self.append(db, "normalization_decided", {"entry_id": item["id"], "entry_sha256": item["entry_sha256"],
-                        "ledger_sha256": item["ledger_sha256"], "workload_id": WORKLOAD, "outcome": outcome, "reason": reason,
+                        "ledger_sha256": item["ledger_sha256"], "workload_id": self.workload_id, "outcome": outcome, "reason": reason,
                         "owner": owner, "review_after": review_after.isoformat() if outcome == "approved" else None,
                         "request_id": request_id, "request_sha256": digest(payload),
                         "previous_decision_sha256": payload.get("previous_decision_sha256"), "channel": "control-tower",
@@ -328,6 +350,8 @@ class DecisionService:
         return {path.relative_to(self.root).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest() for path in sorted(paths)}
 
     def dispatch(self, token: str, payload: dict) -> dict:
+        if self.decision_only:
+            raise DecisionUnauthorized("The Control Tower records human decisions only; use the headless engine for proofs")
         session = self.authenticate(token, "proof-runner")
         if payload.get("workload_id") != WORKLOAD:
             raise ValueError("No approved proof runner is configured for this workload")
@@ -385,6 +409,8 @@ class DecisionService:
 
     def gate(self, run_id: str) -> dict:
         """Always checks authoritative current state; no trust in a caller-supplied pass."""
+        if self.decision_only:
+            raise DecisionUnauthorized("Qualification receipts are produced by the headless engine")
         with self.transaction() as db:
             events = self.events(db)
             run = next((run for run in self.runs(events) if run["run_id"] == run_id), None)

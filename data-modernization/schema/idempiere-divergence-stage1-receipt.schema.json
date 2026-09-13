@@ -1,0 +1,143 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lightyear.example/schema/idempiere-divergence-stage1-receipt.schema.json",
+  "title": "LIGHTYEAR iDempiere divergence-audit Stage 1 receipt",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "receipt_type",
+    "milestone",
+    "project_id",
+    "stage",
+    "status",
+    "bindings",
+    "checks",
+    "coverage",
+    "station_usage",
+    "open_gates",
+    "semantic_comparison_complete",
+    "agent_triage_complete",
+    "audit_complete",
+    "application_equivalence",
+    "production_ready",
+    "claim_unlocked",
+    "content_sha256"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0"},
+    "receipt_type": {"const": "lightyear-idempiere-divergence-audit-stage1-receipt"},
+    "milestone": {"const": 68},
+    "project_id": {"const": "idempiere-release13-oracle-postgresql-divergence-audit"},
+    "stage": {"const": "inventory-pairing-and-premise-check"},
+    "status": {"const": "passed"},
+    "bindings": {
+      "type": "object",
+      "required": [
+        "pairing_manifest_sha256",
+        "source_commit",
+        "source_tree",
+        "source_pin_file_sha256",
+        "inventory_file_sha256",
+        "business_slices_file_sha256",
+        "database_semantic_core_sha256",
+        "pairing_manifest_schema_sha256",
+        "stage1_receipt_schema_sha256"
+      ],
+      "properties": {
+        "pairing_manifest_sha256": {"$ref": "#/$defs/sha256"},
+        "source_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "source_tree": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "source_pin_file_sha256": {"$ref": "#/$defs/sha256"},
+        "inventory_file_sha256": {"$ref": "#/$defs/sha256"},
+        "business_slices_file_sha256": {"$ref": "#/$defs/sha256"},
+        "database_semantic_core_sha256": {"$ref": "#/$defs/sha256"},
+        "pairing_manifest_schema_sha256": {"$ref": "#/$defs/sha256"},
+        "stage1_receipt_schema_sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "checks": {
+      "type": "object",
+      "required": [
+        "existing_source_pin_reused",
+        "ms48_inventory_reconciled",
+        "existing_order_to_cash_slice_reused",
+        "existing_database_semantic_core_reused",
+        "current_migrations_only",
+        "conversion_boundary_bound",
+        "pairing_coverage_measured",
+        "maintenance_premise_not_overclaimed",
+        "model_calls_zero"
+      ],
+      "properties": {
+        "existing_source_pin_reused": {"const": true},
+        "ms48_inventory_reconciled": {"const": true},
+        "existing_order_to_cash_slice_reused": {"const": true},
+        "existing_database_semantic_core_reused": {"const": true},
+        "current_migrations_only": {"const": true},
+        "conversion_boundary_bound": {"const": true},
+        "pairing_coverage_measured": {"const": true},
+        "maintenance_premise_not_overclaimed": {"const": true},
+        "model_calls_zero": {"const": true}
+      },
+      "additionalProperties": false
+    },
+    "coverage": {"$ref": "#/$defs/coverage"},
+    "station_usage": {
+      "type": "object",
+      "required": ["planner", "analyst", "builder", "verifier"],
+      "properties": {
+        "planner": {"const": "not-used-stage1-deterministic"},
+        "analyst": {"const": "not-used-stage1-deterministic"},
+        "builder": {"const": "not-used-audit-does-not-generate-candidate"},
+        "verifier": {"const": "deterministic-contract-validation"}
+      },
+      "additionalProperties": false
+    },
+    "open_gates": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "minItems": 1,
+      "uniqueItems": true
+    },
+    "semantic_comparison_complete": {"const": false},
+    "agent_triage_complete": {"const": false},
+    "audit_complete": {"const": false},
+    "application_equivalence": {"const": false},
+    "production_ready": {"const": false},
+    "claim_unlocked": {"type": "string", "minLength": 1},
+    "content_sha256": {"$ref": "#/$defs/sha256"}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "coverage": {
+      "type": "object",
+      "required": [
+        "oracle_scripts",
+        "postgresql_scripts",
+        "paired_script_pairs",
+        "exact_version_and_filename_pairs",
+        "unique_version_and_ticket_id_pairs",
+        "unpaired_oracle_scripts",
+        "unpaired_postgresql_scripts",
+        "paired_script_coverage",
+        "order_to_cash_pilot_pairs",
+        "content_identical_pairs"
+      ],
+      "properties": {
+        "oracle_scripts": {"type": "integer", "minimum": 0},
+        "postgresql_scripts": {"type": "integer", "minimum": 0},
+        "paired_script_pairs": {"type": "integer", "minimum": 0},
+        "exact_version_and_filename_pairs": {"type": "integer", "minimum": 0},
+        "unique_version_and_ticket_id_pairs": {"type": "integer", "minimum": 0},
+        "unpaired_oracle_scripts": {"type": "integer", "minimum": 0},
+        "unpaired_postgresql_scripts": {"type": "integer", "minimum": 0},
+        "paired_script_coverage": {"type": "number", "minimum": 0, "maximum": 1},
+        "order_to_cash_pilot_pairs": {"type": "integer", "minimum": 0},
+        "content_identical_pairs": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

@@ -80,5 +80,19 @@ script is undocumented, and that every POSIX entry point has a PowerShell twin.
   contract and GKE implementation; `preflight` performs read-only checks against one signed explicit
   context, while `admit` requires passing signed MS #65/MS #66 receipts and all 28 signed live
   platform scenarios. Chargeable GKE mutation and teardown remain separately acknowledged scripts.
+- `./idempiere-divergence-audit.sh verify` checks the committed IDDA Stage 1 pairing and premise
+  evidence. `build` and `verify-source` require the exact clean MS #48 iDempiere checkout; neither
+  action executes a database or calls a model.
+- `./idempiere-divergence-audit.sh compare IDEMPIERE_ROOT` builds the MS #69 pilot followed by
+  the full bounded static comparison. `verify-comparison` checks committed integrity and accounting;
+  `verify-comparison-source IDEMPIERE_ROOT` also replays every pair from the exact clean source pin.
+  Known client/registration commands are counted outside the SQL coverage denominator. Unresolved
+  constructs remain findings; none of these commands calls agents or executes SQL.
+- `./idempiere-divergence-audit.sh triage` builds the MS #70 deterministic twenty-case work package,
+  safe-floor role-contract calibration and evidence registers. `verify-triage` checks committed
+  derivation and claim boundaries; `verify-triage-source IDEMPIERE_ROOT` additionally replays the
+  exact source and bounded context windows. These release commands call no model and no Builder.
+  Credentialed `run-triage` is an explicit Python-controller action requiring an output path,
+  current nonzero model pricing and `OPENAI_API_KEY`; it never rewrites committed evidence.
 
 See `scripts.catalog.json` for the exact purpose, role, and verification owner of all entry points.

@@ -1,0 +1,323 @@
+{
+  "artifact_type": "lightyear-idempiere-triage-calibration",
+  "bindings": {
+    "implementation_logical_sha256": {
+      "src/lightyear_common/io.py": "8ead1c4e2221cca5a65b3e3ef3cb5d4a841f7d89d33f8b416357076056b3621e",
+      "src/lightyear_data/contracts.py": "a9f8cae57a0c256c3d405ec06468bc45734314b4f7692438726259e4bee56575",
+      "src/lightyear_data/idempiere_comparison.py": "c6ae90d2bfc5855377fae4c22671927c42d59b26d08b60d63bb2789bd2f026b2",
+      "src/lightyear_data/idempiere_triage.py": "576f5f0f4df7939263775afaefdd50245043ab8b57db31b808cd1459f7511450",
+      "src/lightyear_factory/contracts.py": "c25d4f549fb18179b161bf24386fe3f1f55382216cae80a7ccae4671d6537d13",
+      "src/lightyear_factory/providers.py": "f44ee1ce22fe78eb712ee16be560c8d6ef2c4ab498d9937b98dc6f1fd7b4e52d"
+    },
+    "pairing_manifest_sha256": "acf3f2b21fb2ff205028a5a9239602f497ee09f99f82feaa56368e3f74add510",
+    "schema_logical_sha256": "5826a0ef9ddeba03c3f83a965235c51aaa84d90e94478e8f541c7df4da24a586",
+    "source_commit": "731515dcdd5278b843db33b9d3109d155b881951",
+    "source_tree": "041320460a02d4ec23c837d46befa7420c162d0a",
+    "stage2_comparison_sha256": "3ac96b87608118ea31e79e22eac42bc4954eda611855a310ef3abf277c910083",
+    "stage2_receipt_sha256": "1a5db2dd371fdefba20b8fdc09fd7df630fde0493feaa421d589746e3dc1fae4",
+    "triage_policy_sha256": "66ce4d6032fa4597f2756da2f8047a76faa4a365328be755906ef892df10e57a",
+    "work_package_sha256": "1cec108870563a5de5116517523e046366944caa935d01565352957ba571d5ce"
+  },
+  "calibration_class": "deterministic-safe-floor-not-model-performance",
+  "cases": [
+    {
+      "allowed_safe_classifications": [
+        "indeterminate"
+      ],
+      "analyst_schema_validated": true,
+      "case_id": "ms70-01",
+      "content_sha256": "24a8fe37162b86b1f9796110d5f94c0f914698dc1065710aebcfbfd6bc25aac2",
+      "deterministic_verifier_authoritative": true,
+      "pair_id": "pair:041a57766aae7b9b1dd65f39849f5b6be340e9fd8a58dd9ec1f445310d78abd9",
+      "planner_schema_validated": true,
+      "provenance_floor": "generation-path-present-per-pair-unclassified",
+      "semantic_verdict_floor": "indeterminate",
+      "stratum": "procedural-block"
+    },
+    {
+      "allowed_safe_classifications": [
+        "indeterminate"
+      ],
+      "analyst_schema_validated": true,
+      "case_id": "ms70-02",
+      "content_sha256": "f30cc59ea7bfec72ba5333174ffd495b31e9279e12854cd23356e6eee15736d7",
+      "deterministic_verifier_authoritative": true,
+      "pair_id": "pair:9d5997aaf2d45e0e158d6e0fd74f75fd095cd9d64d1ec85426f927f59d994280",
+      "planner_schema_validated": true,
+      "provenance_floor": "generation-path-present-per-pair-unclassified",
+      "semantic_verdict_floor": "indeterminate",
+      "stratum": "procedural-block"
+    },
+    {
+      "allowed_safe_classifications": [
+        "indeterminate"
+      ],
+      "analyst_schema_validated": true,
+      "case_id": "ms70-03",
+      "content_sha256": "3d440e2e0616004576c611581de08396143bf88c61f8aebe5282efd696e29846",
+      "deterministic_verifier_authoritative": true,
+      "pair_id": "pair:58f3d9ef89a8c362b965025aee050c6fc8da6a9c93a29c9ed37c9b0c5d970d24",
+      "planner_schema_validated": true,
+      "provenance_floor": "generation-path-present-per-pair-unclassified",
+      "semantic_verdict_floor": "indeterminate",
+      "stratum": "ordered-effect-alignment"
+    },
+    {
+      "allowed_safe_classifications": [
+        "indeterminate"
+      ],
+      "analyst_schema_validated": true,
+      "case_id": "ms70-04",
+      "content_sha256": "8186c71a0f3e7eb78d2539cd3a9d9b57bb3ef6313c9b4b4cd13e7ce803925e8f",
+      "deterministic_verifier_authoritative": true,
+      "pair_id": "pair:5681cbe4472e30ce857c8bb49c174be1cb9971a0cbf527f75a08a9e3c8ea1d32",
+      "planner_schema_validated": true,
+      "provenance_floor": "generation-path-present-per-pair-unclassified",
+      "semantic_verdict_floor": "indeterminate",
+      "stratum": "ordered-effect-alignment"
+    },
+    {
+      "allowed_safe_classifications": [
+        "deliberate-dialect-adaptation",
+        "indeterminate"
+      ],
+      "analyst_schema_validated": true,
+      "case_id": "ms70-05",
+      "content_sha256": "1d0828804688d4ed824121e04bcdb6c41004fdde41b87b16b9d55cb64ede90cb",
+      "deterministic_verifier_authoritative": true,
+      "pair_id": "pair:2421edc3d29361e11d5619df9a24fdd9e9e7147d998f99570f61162fd7f9f8ec",
+      "planner_schema_validated": true,
+      "provenance_floor": "generation-path-present-per-pair-unclassified",
+      "semantic_verdict_floor": "indeterminate",
+      "stratum": "helper-catalog-effects"
+    },
+    {
+      "allowed_safe_classifications": [
+        "deliberate-dialect-adaptation",
+        "indeterminate"
+      ],
+      "analyst_schema_validated": true,
+      "case_id": "ms70-06",
+      "content_sha256": "2abd7d1b793bce1cb89b1ac19173d6aef1d88a398076866758fce63720ae64af",
+      "deterministic_verifier_authoritative": true,
+      "pair_id": "pair:441c226f9ca538a005a39f010299b393127802e7a2d5b474ddf0f9eff1c46d69",
+      "planner_schema_validated": true,
+      "provenance_floor": "generation-path-present-per-pair-unclassified",
+      "semantic_verdict_floor": "indeterminate",
+      "stratum": "helper-catalog-effects"
+    },
+    {
+      "allowed_safe_classifications": [
+        "indeterminate"
+      ],
+      "analyst_schema_validated": true,
+      "case_id": "ms70-07",
+      "content_sha256": "1fe50c25e7ed727c4d003075778f26d5f52160149d83270c6270904ec13856d4",
+      "deterministic_verifier_authoritative": true,
+      "pair_id": "pair:aae86740497af5a70640729c60a5334886bcc64d901e79faae2ee293569bdba0",
+      "planner_schema_validated": true,
+      "provenance_floor": "generation-path-present-per-pair-unclassified",
+      "semantic_verdict_floor": "indeterminate",
+      "stratum": "character-domain"
+    },
+    {
+      "allowed_safe_classifications": [
+        "indeterminate"
+      ],
+      "analyst_schema_validated": true,
+      "case_id": "ms70-08",
+      "content_sha256": "61c59a342860586c7a0a1789f7d3fdd4b64160f25e642ad9f8b90b6875ef941e",
+      "deterministic_verifier_authoritative": true,
+      "pair_id": "pair:6b2b4ced709b226bb9ea6821ab0fd9d50e4994cedf71914c897da73c14553eb5",
+      "planner_schema_validated": true,
+      "provenance_floor": "generation-path-present-per-pair-unclassified",
+      "semantic_verdict_floor": "indeterminate",
+      "stratum": "character-domain"
+    },
+    {
+      "allowed_safe_classifications": [
+        "indeterminate"
+      ],
+      "analyst_schema_validated": true,
+      "case_id": "ms70-09",
+      "content_sha256": "929fa9264d05eabe89b914a62a4bacac85beac03fa176e53420ac958b6446c5c",
+      "deterministic_verifier_authoritative": true,
+      "pair_id": "pair:e26ab6b320af10860ae3187b8d23fbc2687720656912c4002e4a5370652d8022",
+      "planner_schema_validated": true,
+      "provenance_floor": "generation-path-present-per-pair-unclassified",
+      "semantic_verdict_floor": "indeterminate",
+      "stratum": "numeric-domain"
+    },
+    {
+      "allowed_safe_classifications": [
+        "indeterminate"
+      ],
+      "analyst_schema_validated": true,
+      "case_id": "ms70-10",
+      "content_sha256": "794cac231752b66d740afa38753b7dc49be271ef667bcdc572b11bafe9d2db88",
+      "deterministic_verifier_authoritative": true,
+      "pair_id": "pair:ef7d9eea68bd260077eedbe9f72f46805b7e3a9652bf066c5b03826e334afc03",
+      "planner_schema_validated": true,
+      "provenance_floor": "generation-path-present-per-pair-unclassified",
+      "semantic_verdict_floor": "indeterminate",
+      "stratum": "numeric-domain"
+    },
+    {
+      "allowed_safe_classifications": [
+        "indeterminate"
+      ],
+      "analyst_schema_validated": true,
+      "case_id": "ms70-11",
+      "content_sha256": "d434ecd7d3f946e43c4287000c24c1fd34a5f7c812fad6f0a430754ca7833d3d",
+      "deterministic_verifier_authoritative": true,
+      "pair_id": "pair:9cf129615316c85dd88a2c35dc3359d337c8f0bb923cdc9358fd07b06ea3579c",
+      "planner_schema_validated": true,
+      "provenance_floor": "generation-path-present-per-pair-unclassified",
+      "semantic_verdict_floor": "indeterminate",
+      "stratum": "constraint-domain"
+    },
+    {
+      "allowed_safe_classifications": [
+        "indeterminate"
+      ],
+      "analyst_schema_validated": true,
+      "case_id": "ms70-12",
+      "content_sha256": "48964545efc6e696d68182709a8a2fafe671c9095a2d3ca6b4a70f1568bbce4d",
+      "deterministic_verifier_authoritative": true,
+      "pair_id": "pair:d60031ff247441139533996e2a36fd4cba686376a083196d5f2074c16e5c726f",
+      "planner_schema_validated": true,
+      "provenance_floor": "generation-path-present-per-pair-unclassified",
+      "semantic_verdict_floor": "indeterminate",
+      "stratum": "constraint-domain"
+    },
+    {
+      "allowed_safe_classifications": [
+        "indeterminate"
+      ],
+      "analyst_schema_validated": true,
+      "case_id": "ms70-13",
+      "content_sha256": "e11764e983a0da15bcb112c3d3f39181f0f663d2d8008e058cbb22b767a4ea10",
+      "deterministic_verifier_authoritative": true,
+      "pair_id": "pair:f554bcef32b01fa4095fce79d97dd4648ec4f1bfe3310e117520764a0db73c75",
+      "planner_schema_validated": true,
+      "provenance_floor": "generation-path-present-per-pair-unclassified",
+      "semantic_verdict_floor": "indeterminate",
+      "stratum": "index-domain"
+    },
+    {
+      "allowed_safe_classifications": [
+        "indeterminate"
+      ],
+      "analyst_schema_validated": true,
+      "case_id": "ms70-14",
+      "content_sha256": "51e9666c3613ba7c8dc61a6159dd9b23f1ae802f0f3c020a10f73875e41ad944",
+      "deterministic_verifier_authoritative": true,
+      "pair_id": "pair:7db0c4d28548f627ff7dcacf9645bc7325d459a45cd6ce193aaf1e27a0fa2cfc",
+      "planner_schema_validated": true,
+      "provenance_floor": "generation-path-present-per-pair-unclassified",
+      "semantic_verdict_floor": "indeterminate",
+      "stratum": "index-domain"
+    },
+    {
+      "allowed_safe_classifications": [
+        "indeterminate"
+      ],
+      "analyst_schema_validated": true,
+      "case_id": "ms70-15",
+      "content_sha256": "4587dc240b52d20099c217e72b36ac880fc5e76ea626910f1d9ec752f81b8e46",
+      "deterministic_verifier_authoritative": true,
+      "pair_id": "pair:f590d17abcfa6e9f2cdde3d813904f8682fd77f89058a40e0639bc8b294a2dae",
+      "planner_schema_validated": true,
+      "provenance_floor": "generation-path-present-per-pair-unclassified",
+      "semantic_verdict_floor": "indeterminate",
+      "stratum": "unconsumed-syntax"
+    },
+    {
+      "allowed_safe_classifications": [
+        "indeterminate"
+      ],
+      "analyst_schema_validated": true,
+      "case_id": "ms70-16",
+      "content_sha256": "8ea202d2487bac17069b7953c3b711acb3d2131c05007641c416fe1cb333256e",
+      "deterministic_verifier_authoritative": true,
+      "pair_id": "pair:4ae62d20b5a9ffa4f5cb13737391728f1acd7f258adc02fb70f78853c0625cb7",
+      "planner_schema_validated": true,
+      "provenance_floor": "generation-path-present-per-pair-unclassified",
+      "semantic_verdict_floor": "indeterminate",
+      "stratum": "unconsumed-syntax"
+    },
+    {
+      "allowed_safe_classifications": [
+        "indeterminate"
+      ],
+      "analyst_schema_validated": true,
+      "case_id": "ms70-17",
+      "content_sha256": "dccee83dfc1a4ba7a2056f9384fcd2019779c10c0bbda35048b5afd667b42698",
+      "deterministic_verifier_authoritative": true,
+      "pair_id": "pair:1e8761204dd51b1ddc2a6f2d5213a8084c0363019b006b3e75319881a7dbe190",
+      "planner_schema_validated": true,
+      "provenance_floor": "generation-path-present-per-pair-unclassified",
+      "semantic_verdict_floor": "indeterminate",
+      "stratum": "unsupported-syntax"
+    },
+    {
+      "allowed_safe_classifications": [
+        "indeterminate"
+      ],
+      "analyst_schema_validated": true,
+      "case_id": "ms70-18",
+      "content_sha256": "88f8215d324fea6a7de384dad6be222b427eb5e5b2f7b63f0d1f66f864c36425",
+      "deterministic_verifier_authoritative": true,
+      "pair_id": "pair:86122c7fff3448ccb41cf55c22c9341b71f13c80000543aa0cea3bf848a105d0",
+      "planner_schema_validated": true,
+      "provenance_floor": "generation-path-present-per-pair-unclassified",
+      "semantic_verdict_floor": "indeterminate",
+      "stratum": "unsupported-syntax"
+    },
+    {
+      "allowed_safe_classifications": [
+        "indeterminate"
+      ],
+      "analyst_schema_validated": true,
+      "case_id": "ms70-19",
+      "content_sha256": "8cd96b0b65100bd4ce62f3a10f5ee931da19808632f436dc7027ddda79ada0f4",
+      "deterministic_verifier_authoritative": true,
+      "pair_id": "pair:be43e9788cf1356d25be823fc5f2ca23ac28b4438010077e6ba1b1929bb3da71",
+      "planner_schema_validated": true,
+      "provenance_floor": "generation-path-present-per-pair-unclassified",
+      "semantic_verdict_floor": "indeterminate",
+      "stratum": "dml-context"
+    },
+    {
+      "allowed_safe_classifications": [
+        "indeterminate"
+      ],
+      "analyst_schema_validated": true,
+      "case_id": "ms70-20",
+      "content_sha256": "759aee2cd65ebb986325f28f1b0040bb4bc079946e16eb3573fec639402f5060",
+      "deterministic_verifier_authoritative": true,
+      "pair_id": "pair:53d9a4e23ebd790539b306dff84df57cb2bbadcab2575ecc95214900e2ccc654",
+      "planner_schema_validated": true,
+      "provenance_floor": "generation-path-present-per-pair-unclassified",
+      "semantic_verdict_floor": "indeterminate",
+      "stratum": "dml-context"
+    }
+  ],
+  "content_sha256": "f592c518a34ad894d6a99380582299a987e21f34bc62c1184de30f3486ec877f",
+  "milestone": 70,
+  "project_id": "idempiere-release13-oracle-postgresql-divergence-audit",
+  "schema_version": "1.0",
+  "statistics": {
+    "analyst_contract_cases": 20,
+    "builder_calls": 0,
+    "cases": 20,
+    "model_calls": 0,
+    "planner_contract_cases": 20,
+    "preferred_safe_classifications": {
+      "cosmetic-difference": 0,
+      "deliberate-dialect-adaptation": 2,
+      "genuine-semantic-divergence": 0,
+      "indeterminate": 18
+    }
+  }
+}

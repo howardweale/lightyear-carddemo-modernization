@@ -1,5 +1,96 @@
 # Changelog
 
+## Unreleased — MS #72 Control Tower workflow
+
+- Assign the Control Tower workflow to MS #72; MS #71 is assigned to AlloyDB work.
+- Carry Step 1 action emission and Step 2 bounded headless engine execution under
+  MS #72, with CloudBank as the Step 2 test estate and browser visual inspection
+  fixes in scope.
+- Complete Step 2's bounded CloudBank contract/retained-evidence executor: eight
+  services, two observation lanes, single-writer transactional checkpoints,
+  persistent action/iteration/time/retry limits, source and policy drift rejection,
+  deterministic receipt replay, and read-only Tower progress.
+- Preserve raw evidence mismatches, classify absent evidence as unavailable,
+  reject worker-authored verdict upgrades and leave application claims unchanged.
+- Add repeatable Chromium/WebKit desktop/mobile inspection in CI with retained
+  screenshots, layout and filtering checks, and a no-browser-writes assertion.
+  The initial two-kind run performed no ledger applications.
+- Expand Step 2 to all six autonomous action kinds with typed scenario reparsing,
+  a scoped 36-case evidence corpus, reruns over changed admitted inputs, and one
+  exactly bound ledger projection after a current signed human decision.
+- Retain raw lane differences, enforce review, expiry and revocation at application
+  time, and show six-kind coverage and current approval validity in the Tower.
+  No fresh cloud execution, model calls or claim promotion.
+
+## 0.70.0 — 2026-09-11
+
+- Completed the deterministic MS #70 bounded-triage package over the unchanged 1,078-pair MS #69
+  report. Selected 20 unique flagged pairs: one admissible pilot case and one remaining-estate case
+  for each of ten repeated reason strata.
+- Added audit-specific Planner and Analyst structured-output contracts. Each role is limited to 20
+  calls, 60,000 input tokens and 25,000 output tokens per call, 80,000-byte case context, and an
+  aggregate USD 200 ceiling. Builder remains absent; deterministic verification is authoritative.
+- Bound every case to the MS #68 source paths and logical hashes and to the MS #69 result hash.
+  Source-bound verification hydrates only implicated ranges plus two context lines, caps each
+  dialect excerpt at 48 lines, and replays the exact clean source pin.
+- Published the full 1,077-pair indeterminate register, zero-entry divergence register, sampled
+  provenance register, denominator/coverage artifact, safe-floor calibration, work package, policy,
+  schema and content-addressed receipt.
+- Preserved the claim boundary: committed model calls and Builder calls are zero, the calibration
+  is not live-model performance, all 1,077 flagged semantic verdicts remain indeterminate, per-pair
+  maintenance provenance is unclassified, and audit/native/application/production claims are false.
+- Added explicit live-run plumbing for a cheap Planner and strong Analyst with token preflight and
+  mandatory current pricing inputs, plus offline/source-bound commands and adversarial tests. No
+  credentialed run or community contact was performed.
+- Added the MS #70 milestone brief without rewriting earlier milestone bodies or signed CloudBank
+  receipts.
+
+## 0.69.0 — 2026-09-11
+
+- Completed the MS #69 bounded static comparison baseline against the unchanged MS #68 pin and
+  pairing manifest. Ran and sealed the 93-pair order-to-cash pilot before the remaining 985 pairs.
+- Added a quote-aware SQL lexer, fully consumed bounded schema productions, typed literal/DML
+  projections, Oracle MODIFY and PostgreSQL t_alter_column effect expansion, and strict ordered
+  alignment using the MS #33 canonical types and compatibility classes.
+- Published coverage for 111,293 SQL units across both dialect sides: 776 parsed-and-compared
+  (0.70%), 103,922 parsed-but-indeterminate and 6,595 unparsed. Separately excluded 4,127 known
+  administrative units. These are statement/block counts, not dialect-token occurrences.
+- Recorded one pair equivalent only under the declared-effect policy, zero proven declared-effect
+  divergences and 1,077 indeterminate pairs. Low decision coverage is an open engineering limit,
+  not evidence of clean migrations or an authorization for an unattended model sweep.
+- Bound the pinned PostgreSQL altercolumn helper definition and preserved its unresolved catalog,
+  view, permission and deployment obligations. DML, character and datetime semantics remain
+  indeterminate without admitted domains and context; maintenance provenance remains unclassified.
+- Added source-range findings, pilot/full reports, an unsigned content-addressed receipt, schema,
+  cross-platform commands, release verification and adversarial tests. Source-bound verification
+  replays SQL; offline verification checks integrity/accounting only. No agents, model calls,
+  work orders, database execution, native equivalence or production claims were added.
+- Added the MS #69 milestone brief without changing earlier milestone bodies or signed receipts.
+  MS #70 remains planned and will adapt the existing Planner/Analyst workcell to bounded findings.
+
+## 0.68.0 — 2026-09-11
+
+- Completed MS #68 iDempiere dialect inventory and pairing. Assigned MS #69 to deterministic
+  semantic comparison and MS #70 to bounded triage and evidence assembly; both remain planned.
+- Returned customer production readiness, governed cutover and continuous assurance to the
+  unnumbered backlog without changing the completed CloudBank evidence or its claim boundaries.
+- Reused the exact MS #48 release-13 source pin, inventory and order-to-cash slice, the MS #33
+  database semantic core, the MS #49–#51 Oracle authority boundary and the existing model budget
+  controls rather than duplicating them.
+- Deterministically paired all 1,078 Oracle and 1,078 PostgreSQL current migration scripts: 1,077
+  by exact release/filename and the remaining `IDEMPIERE-5963` pair by unique same-release ticket
+  identity. Selected 93 order-to-cash pilot pairs and recorded 31 logically identical pairs.
+- Bound nine database-provider, dual-file migration logger and SQL-conversion Java files as the
+  only Java exception to the SQL audit. Kept independent hand maintenance and absence of
+  generation explicitly unproven because iDempiere contains an Oracle-to-PostgreSQL conversion
+  layer.
+- Added content-addressed pairing and Stage 1 receipts, two schemas, POSIX and PowerShell launchers,
+  source-bound drift verification and adversarial claim-boundary tests. No model was called;
+  semantic comparison, agent triage, application equivalence and production readiness remain false.
+- Corrected the MS #48 checkout instructions to fetch the exact recorded commit before detached
+  checkout; cloning the moving `release-13` branch tip no longer produces an immediately rejected
+  source tree.
+
 ## 0.67.1 — 2026-09-11
 
 - Published the completed MS54–67 execution chain: 31 original JSON evidence files with their

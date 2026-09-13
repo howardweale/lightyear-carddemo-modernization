@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>LIGHTYEAR Control Tower</title>
   <link rel="stylesheet" href="styles.css?v=48.4">
-  <link rel="stylesheet" href="decisions.css?v=68.0.1">
+  <link rel="stylesheet" href="decisions.css?v=workflow.2">
 </head>
 <body>
   <header class="masthead topbar">
@@ -90,9 +90,35 @@
   </nav>
   <main id="decision-workspace" class="decision-workspace">
     <header class="decision-heading">
-      <div><p class="decision-eyebrow">Human decisions</p><h1>What needs me?</h1></div>
+      <div><p class="decision-eyebrow">Evidence into action</p><h1>What happens next?</h1></div>
       <button id="refresh-decisions" class="secondary-button" type="button">Refresh queue</button>
     </header>
+    <section class="workflow-plan" aria-label="CloudBank execution">
+      <div class="workflow-heading"><div><p class="decision-eyebrow">CloudBank · Eight services</p><h2>Evidence execution</h2></div><span class="decision-badge">Headless engine</span></div>
+      <p id="execution-status" role="status">Reading the engine journal…</p>
+      <div id="execution-counts" class="workflow-counts"></div>
+      <p id="execution-scope" class="decision-signing-note">Six action kinds over retained CloudBank evidence. Ledger application requires a signed human decision.</p>
+      <div class="workflow-controls"><label for="execution-filter">Service checks</label><select id="execution-filter"><option value="all">All services</option><option value="unresolved">Unresolved</option><option value="resolved">Verified evidence</option></select><button id="execution-refresh" class="secondary-button" type="button">Refresh evidence</button></div>
+      <div id="execution-actions" class="execution-actions" aria-label="Action kind coverage"></div>
+      <div id="execution-services" class="execution-services"></div>
+      <details id="execution-provenance"><summary>Run provenance and limits</summary><dl id="execution-details"></dl></details>
+    </section>
+    <details class="legacy-workflow"><summary>Oracle Customer (Large) · Step 1 action plan</summary>
+    <section class="workflow-plan" aria-label="Engine action plan">
+      <div class="workflow-heading"><h2>Oracle Customer (Large) · Action plan</h2><span class="decision-badge">Step 1 · Actions only</span></div>
+      <p id="workflow-status" role="status">Reading the engine's published plan…</p>
+      <div id="workflow-counts" class="workflow-counts"></div>
+      <p id="workflow-count-note" class="decision-signing-note"></p>
+      <div class="workflow-controls">
+        <label for="workflow-filter">Next action</label>
+        <select id="workflow-filter"><option value="">All actions</option><option value="approval-required">Needs a decision design</option><option value="parser">Our parser backlog</option><option value="blocked">All blockers</option><option value="autonomous">Autonomous candidates</option></select>
+        <button id="workflow-refresh" class="secondary-button" type="button">Refresh plan</button>
+      </div>
+      <div id="workflow-actions"></div>
+      <div class="workflow-controls"><button id="workflow-previous" class="secondary-button" type="button">Previous</button><span id="workflow-page"></span><button id="workflow-next" class="secondary-button" type="button">Next</button></div>
+    </section>
+    </details>
+    <h2>Human decisions</h2>
     <p id="decision-message" class="decision-message" role="status">Connecting to the decision service…</p>
     <div class="decision-layout">
       <section class="decision-queue" aria-label="Normalization work queue">
@@ -104,7 +130,7 @@
         <h2>Select a normalization</h2><p>Review the difference and its evidence before taking ownership of the decision.</p>
       </section>
     </div>
-    <section class="decision-runs" aria-label="Proof runs"><h2>Proof runs</h2><p>Automated checks run unattended. Human approval controls acceptance of normalization differences.</p><div id="decision-runs"></div></section>
+    <section class="decision-runs" aria-label="Historical proof runs"><h2>Historical proof runs</h2><p>Execution and qualification belong to the headless engine. This view cannot start a run or issue a qualification receipt.</p><div id="decision-runs"></div></section>
     <details class="decision-audit"><summary>Session record and decision trail</summary><button id="download-session" class="secondary-button" type="button" disabled>Download signed session record</button><div id="decision-events"></div></details>
   </main>
   <main id="discovery-workspace" class="workspace" hidden>
@@ -244,7 +270,7 @@
           <code id="detail-id"></code>
           <p id="detail-statement" class="statement"></p>
           <div class="button-stack">
-            <button id="open-proof-run" class="primary-button action-button" type="button">Open proof run for this workload</button>
+            <button id="open-proof-run" class="primary-button action-button" type="button">View proof history for this workload</button>
             <button id="focus-node" class="secondary-button" type="button">Focus subgraph</button>
             <button id="trace-start-node" class="secondary-button" type="button">Set as trace start</button>
           </div>
@@ -670,7 +696,9 @@
     </form>
   </dialog>
   <script src="app.js?v=48.4" defer></script>
-  <script src="decisions.js?v=68.0" defer></script>
+  <script src="decisions.js?v=workflow.1" defer></script>
+  <script src="workflow.js?v=1" defer></script>
+  <script src="execution.js?v=2" defer></script>
   <dialog id="operator-dialog" class="verifier-dialog" aria-labelledby="operator-title">
     <form id="operator-form">
       <h2 id="operator-title">Start an operator session</h2>

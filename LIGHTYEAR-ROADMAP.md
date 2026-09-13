@@ -50,12 +50,30 @@ production-qualified.
 | MS #65 | CloudBank Production-Like Deployment and Cutover Rehearsal | Passed; [published execution evidence](docs/receipts/index.html#ms65) |
 | MS #66 | CloudBank Whole-Application Dual-Lane Equivalence | Passed; [published execution evidence](docs/receipts/index.html#ms66) |
 | MS #67 | CloudBank Real Non-Production Platform Qualification | Passed; [published execution evidence](docs/receipts/index.html#ms67) |
+| MS #68 | iDempiere Dialect Inventory and Pairing | Complete; deterministic source-bound evidence |
+| MS #69 | iDempiere Deterministic Semantic Comparison | Complete bounded baseline; low decision coverage, open findings |
+| MS #70 | iDempiere Bounded Triage and Evidence Assembly | Complete bounded safe-floor package; live model run remains gated |
 | MS #71 | CloudBank AlloyDB Second Target | Complete — both live 18-scenario comparisons passed; [acceptance and evidence](docs/ms71-cloudbank-alloydb-second-target.md) |
 
 MS #71 is the completed CloudBank delivery milestone selected by explicit project direction. It adds AlloyDB
-alongside Cloud SQL using the same eight services and comparator. The numbering skips to MS #71;
-it does not renumber or complete MS #68–70. Existing customer production-readiness scope remains
-separate.
+alongside Cloud SQL using the same eight services and comparator. It is separate from the
+MS #68–70 IDDA stream and the customer production-readiness scope.
+
+## MS #68–#70 project stream — IDDA
+
+MS #68–#70 are assigned to the iDempiere Oracle/PostgreSQL divergence audit. IDDA reuses MS #33,
+#34, #48–#52 and the existing model-workcell controls. Customer production readiness, governed
+production cutover and continuous production assurance remain future unnumbered work. Historical
+references to MS #68 in earlier signed receipts and milestone briefs retain their original meaning;
+they do not describe this new audit or confer production qualification on it.
+
+Its deterministic Stage 1 is complete: the exact MS #48 source pin yields 1,078 Oracle and 1,078
+PostgreSQL current migration files, resolved into 1,078 pairs with 100% file-level pairing
+coverage. The existing order-to-cash slice selects 93 pilot pairs. Because iDempiere includes an
+Oracle-to-PostgreSQL conversion layer, generated-versus-independent maintenance provenance remains
+an explicit gate. MS #69 completes the bounded deterministic baseline, not complete semantic
+equivalence. Agent triage, application equivalence and production readiness remain incomplete.
+The [IDDA contract](factory/idempiere-divergence-audit/README.md) records coverage and open gates.
 
 The v0.35.0 stored-logic qualification core is retained as supporting MS #34 evidence. It does not
 replace the planned DB2 milestone.
@@ -683,7 +701,7 @@ business equivalence true for the declared synthetic scenarios. Oracle AQ and Mi
 not described as identical to their PostgreSQL replacements; real credit decisions, model-answer
 quality, production data, native CDC, customer infrastructure and IdP, migration completion,
 production deployment, and production readiness remain false. MS #67 owns platform qualification
-and MS #68 owns customer production-readiness certification.
+and customer production-readiness certification remains in the unnumbered backlog.
 
 ## MS #67 — CloudBank Real Non-Production Platform Qualification
 
@@ -713,7 +731,7 @@ non-production platform and synthetic run: all 28 scenarios passed. The retained
 approved 630-second nonproduction requirement; backup restore measured 455 seconds and RPO 18 seconds.
 Deterministic readiness fixtures remain separate admission contracts. Customer IdP, representative customer data
 volume and workload, the customer's approval process, production deployment, and final signed
-production readiness remain MS #68.
+production readiness remain in the unnumbered customer-production backlog.
 
 ## MS #71 — CloudBank AlloyDB Second Target
 
@@ -730,4 +748,50 @@ qualify AlloyDB automatically. See the [MS71 plan](docs/ms71-cloudbank-alloydb-s
 for implementation boundaries and the single acceptance gate. The [managed-target workflow](factory/cloudbank/alloydb-second-target/)
 is implemented. Campaign `ms71-20260912a` passed both live comparisons on 2026-09-12, with all
 18 scenarios passing per comparison and recovery verified. The [signed acceptance receipt](docs/receipts/ms71-20260912a/ms71-alloydb-second-target.receipt.json)
-closes MS71. AlloyDB platform qualification and production readiness remain false.
+closes MS71. Its original platform-qualification flag remains historical. The separately
+authorized [AlloyDB platform follow-up](docs/cloudbank-alloydb-platform-qualification.md)
+passed all 29 operational scenarios on 2026-09-13 and records platform qualification for
+synthetic nonproduction. Production readiness remains false.
+
+## MS #68 — iDempiere Dialect Inventory and Pairing
+
+MS #68 completes IDDA Stage 1 using the existing release-13 commit and tree. Its manifest accounts
+for every current Oracle and PostgreSQL migration file, selects the existing order-to-cash pilot,
+and binds the nine-file conversion and dual-file logging boundary. The receipt proves deterministic
+pairing and coverage, not independent maintenance or semantic equivalence. The
+[MS #68 brief](docs/milestones/MS-68/MS-68.md) and
+[IDDA contract](factory/idempiere-divergence-audit/README.md) record the exact evidence and limits.
+
+## MS #69 — iDempiere Deterministic Semantic Comparison
+
+Complete as a bounded static baseline. The quote-aware parser and ordered-effect comparator reuse
+the MS #33 semantic vocabulary and the unchanged MS #68 manifest. The 93-pair order-to-cash pilot
+runs before the remaining 985 pairs. Reports distinguish parsed-and-compared,
+parsed-but-indeterminate and unparsed SQL units, with known administration separately excluded.
+Decision coverage is low because DML requires a baseline schema and runtime semantics; this is
+not complete migration equivalence. The PostgreSQL helper's catalog and dependent-view effects
+remain unresolved, as does per-pair maintenance provenance. No model calls or work orders are made.
+See the [MS #69 brief](docs/milestones/MS-69/MS-69.md) and the IDDA comparison policy.
+
+## MS #70 — iDempiere Bounded Triage and Evidence Assembly
+
+Complete as a bounded deterministic safe-floor package. Twenty unique MS #69 findings are selected
+across ten repeated reason strata, with one case per stratum from the frozen order-to-cash pilot and
+one from the remaining estate. Each case binds the source paths, logical hashes, implicated ranges,
+MS #69 result hash and reason codes. Runtime hydration admits only the implicated construct and two
+context lines, capped at 48 lines per dialect and 80,000 bytes per role context.
+
+Audit-specific Planner and Analyst schemas now run through the existing bounded-provider controls.
+Each role is capped at 20 calls, 60,000 input tokens and 25,000 output tokens per call; Planner and
+Analyst cost ceilings are USD 50 and USD 150. A live OpenAI run requires token preflight and explicit
+nonzero pricing. Builder is absent. The deterministic verifier rejects invented evidence and cannot
+change the MS #69 semantic verdict; unsupported divergence classifications fall back to
+indeterminate.
+
+The committed calibration deliberately makes no live-model claim: model calls and Builder calls are
+zero. Its assembled evidence preserves all 1,077 flagged pairs as semantically indeterminate,
+records zero proven divergences, and leaves every sampled pair's maintenance provenance unclassified.
+Audit completion, native execution, application equivalence and production readiness remain false.
+Community engagement was not authorized or performed. See the
+[MS #70 brief](docs/milestones/MS-70/MS-70.md) and the
+[IDDA project contract](factory/idempiere-divergence-audit/README.md).

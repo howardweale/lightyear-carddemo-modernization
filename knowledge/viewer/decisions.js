@@ -93,7 +93,7 @@
     detailField(evidence, 'Ledger review date', item.rule.review_after);
     container.append(evidence);
     const binding = node('details'); binding.append(node('summary', 'Evidence binding'));
-    binding.append(node('p', 'spec/comparison-normalizations.json'), node('code', `Entry ${item.entry_sha256}`), node('code', `Ledger ${item.ledger_sha256}`)); container.append(binding);
+    binding.append(node('p', item.ledger_path || 'spec/comparison-normalizations.json'), node('code', `Entry ${item.entry_sha256}`), node('code', `Ledger ${item.ledger_sha256}`)); binding.append(node('pre', JSON.stringify(item.rule, null, 2))); container.append(binding);
     if (item.latest_decision) container.append(decisionTrace(item.latest_decision, item.status));
     const form = node('form', undefined, 'normalization-form');
     form.append(node('h3', item.latest_decision ? 'Record a new decision' : 'Own the decision'));
@@ -128,8 +128,6 @@
       finally { state.busy = false; }
     });
     container.append(form);
-    const run = node('button', 'Run proof for this workload', 'secondary-button'); run.type = 'button';
-    run.disabled = !state.session.roles.includes('proof-runner'); run.addEventListener('click', () => openProof(item.workload_id)); container.append(run);
   }
   function download(value, filename) {
     const url = URL.createObjectURL(new Blob([JSON.stringify(value, null, 2) + '\n'], { type: 'application/json' }));
@@ -137,21 +135,11 @@
   }
   async function renderRuns() {
     const container = byId('decision-runs'); container.replaceChildren();
-    if (!state.runs.length) container.append(node('p', 'No proof has been dispatched in this decision journal. Select a normalization to run its workload.', 'decision-empty'));
+    if (!state.runs.length) container.append(node('p', 'No historical proof is recorded here. The headless engine owns new proof runs.', 'decision-empty'));
     for (const run of state.runs.slice(0, 10)) {
       const card = node('article', undefined, 'decision-run');
       card.append(node('strong', `INTCALC · ${title(run.status)}`), node('small', `${run.run_id} · Local reference proof`));
-      if (run.status === 'running') card.append(node('p', 'The automated proof is running. Progress refreshes here.'));
-      else {
-        try {
-          const gate = await request(`gate?run_id=${encodeURIComponent(run.run_id)}`);
-          card.append(node('p', gate.status === 'passed' ? 'Normalization gate passed. This proof has current signed human decisions.' : 'Normalization gate blocked.'));
-          if (gate.reason_codes.length) card.append(node('p', gate.reason_codes.map((code) => title(code.replaceAll(':', ' · '))).join('; ')));
-          card.append(node('small', 'This receipt covers normalization approval and local proof. Customer readiness and claim promotion remain separate.'));
-          const button = node('button', 'Download signed gate receipt', 'secondary-button'); button.type = 'button';
-          button.addEventListener('click', async () => { try { download(await request(`gate?run_id=${encodeURIComponent(run.run_id)}`), `${run.run_id}-gate.json`); } catch (error) { message(error.message, true); } }); card.append(button);
-        } catch (error) { card.append(node('p', error.message, 'decision-error')); }
-      }
+      card.append(node('p', 'Historical journal state. Current execution health and qualification must be checked against engine receipts.'));
       container.append(card);
     }
   }
@@ -175,20 +163,13 @@
     } catch (error) { message(error.message, true); }
     finally { refreshing = false; }
   }
-  let dispatching = false;
   async function openProof(workloadId) {
     showQueue();
-    if (!state.enabled) { message('Start the local decision service before dispatching a proof run.', true); return; }
-    if (workloadId !== 'workload:carddemo-intcalc') { message('No approved proof runner is configured for this workload. INTCALC is the first supported workload.', true); return; }
+    if (!state.enabled) { message('Start the local decision service to view the decision journal.', true); return; }
+    if (workloadId !== 'workload:carddemo-intcalc') { message('This journal has historical INTCALC proofs only. See the engine action plan for other estates.'); return; }
     if (!state.token) { state.pendingWorkload = workloadId; byId('operator-dialog').showModal(); return; }
-    if (dispatching) return;
-    dispatching = true;
-    try {
-      const run = await request('proof-runs', { workload_id: workloadId, request_id: crypto.randomUUID() });
-      message(`Proof run ${run.run_id} started. Automated checks will continue without further clicks.`);
-      await refresh(); byId('decision-runs').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    } catch (error) { message(error.message, true); }
-    finally { dispatching = false; }
+    await refresh(); byId('decision-runs').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    message('Viewing historical proofs. The Control Tower cannot dispatch work.');
   }
   window.controlTowerDecisions = { openProof, showQueue };
   byId('show-work-queue').addEventListener('click', () => showQueue());
@@ -220,5 +201,5 @@
   });
   showQueue(); sessionChrome();
   request('status').then((status) => { state.enabled = status.enabled; byId('operator-sign-in').disabled = !status.enabled; message(status.message, !status.enabled); }).catch((error) => { byId('operator-sign-in').disabled = true; message(error.message, true); });
-  setInterval(() => { if (state.runs.some((run) => run.status === 'running')) refresh(); }, 2000);
+  setInterval(() => { if (state.token) refresh(); }, 30000);
 })();

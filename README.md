@@ -4,7 +4,34 @@
 
 # LIGHTYEAR CardDemo Modernization Factory
 
-Release: **v0.67.0 — CloudBank Real Non-Production Platform Qualification**
+**MS #72 — Control Tower workflow, Steps 1–2.** The headless engine now runs
+all six autonomous action kinds over CloudBank evidence, with transactional
+checkpoints, retries, deterministic receipt verification and measured completion
+within the declared scope. Five kinds run on the published evidence; ledger application
+requires a current signed human decision. The Tower reads the journal and records
+those human decisions.
+Step 1's [action plan](docs/control-tower-action-plan.md) remains available.
+
+The CloudBank adapter verifies eight services, reparses and extends the retained
+evidence corpus, reruns local checks, and applies an approved ledger entry to a
+derived view that retains raw differences. It does not rerun cloud workloads or
+change the original application verdicts.
+See the [Step 2 runbook](docs/control-tower-execution.md) and
+[architecture and policy boundary](docs/control-tower-workflow.md).
+MS #71 remains assigned to AlloyDB work.
+
+Release: **v0.70.0 — iDempiere Bounded Triage Controls and Evidence Assembly**
+
+MS #70 turns the 1,077 MS #69 findings into a deterministic 20-case work package: ten reason
+strata, each represented once in the order-to-cash pilot and once in the remaining estate. It adds
+audit-specific Planner and Analyst schemas, hard token/context/cost limits, an authoritative
+verifier, coverage and finding registers, and a content-addressed receipt. The committed evidence
+is a deterministic safe-floor calibration, not live-model performance: model and Builder calls are
+both zero, all 1,077 semantic findings remain indeterminate, and no divergence is promoted. See the
+[MS #70 brief](docs/milestones/MS-70/MS-70.md) and
+[project contract](factory/idempiere-divergence-audit/README.md).
+
+Previous release: **v0.67.0 — CloudBank Real Non-Production Platform Qualification**
 
 Completed CloudBank milestone: **[MS71 — AlloyDB Second Target](docs/ms71-cloudbank-alloydb-second-target.md)**.
 Oracle to Cloud SQL and Oracle to AlloyDB each passed all 18 scenarios with the same eight service
@@ -33,7 +60,29 @@ aggregate p95 160.69 ms. PITR was accepted at 622 seconds under the approved 630
 requirement; backup restore took 455 seconds and RPO was 18 seconds. The measured evidence is unchanged.
 
 The original signed execution receipts are distinct from deterministic readiness fixtures. Customer IdP, representative customer volumes and workload, customer approval, production
-deployment, and final production readiness remain MS #68.
+deployment, and final production readiness remain in the unnumbered customer-production backlog.
+
+## MS #68–#70 — iDempiere dialect divergence audit
+
+The IDDA project reuses the MS #48 iDempiere release-13 pin, MS #33 database semantic
+core, MS #49–#51 Oracle authority program, and MS #52 order-to-cash estate instead of rebuilding
+them. Its deterministic Stage 1 paired all 1,078 Oracle/PostgreSQL current-migration candidates:
+1,077 by exact release/filename and one by a unique same-release ticket id. The existing
+order-to-cash slice selects 93 pairs for the first comparator pilot.
+
+The source also contains an explicit Oracle-to-PostgreSQL conversion layer, so independent manual
+maintenance is not assumed. The MS #69 baseline records statement coverage, supported declared
+schema effects, unresolved DML and unsupported constructs. MS #70 adds a bounded 20-case
+role-contract calibration and evidence assembly while preserving the deterministic verdict floor.
+Provenance, live-model performance and complete semantic equivalence remain open gates. No
+committed model run, native execution or production claim is made. See the
+[IDDA project contract](factory/idempiere-divergence-audit/README.md) or run:
+
+```bash
+./idempiere-divergence-audit.sh verify
+./idempiere-divergence-audit.sh verify-comparison
+./idempiere-divergence-audit.sh verify-triage
+```
 
 Previous release: **v0.66.0 — CloudBank Whole-Application Dual-Lane Equivalence**
 
@@ -52,7 +101,7 @@ normalized results for 18 business, negative, messaging, dependency-failure, con
 restart, and full-stack recovery scenarios. Oracle AQ versus the PostgreSQL work queue and MicroTx
 LRA versus an atomic PostgreSQL transaction remain intentional internal changes. The [published MS66 execution receipt](docs/receipts/index.html#ms66) passes all 18 declared
 scenarios. MS67 nonproduction platform qualification is also complete; customer production-readiness
-certification remains MS68.
+certification remains in the unnumbered customer-production backlog.
 
 Earlier release: **v0.65.0 — CloudBank Production-Like Deployment and Cutover Rehearsal**
 
@@ -1337,7 +1386,8 @@ included CardDemo portfolio coordinates INTCALC, POSTTRAN and statement generati
 read-only dashboard cannot approve, resolve, or launch work.
 
 The Control Tower now has a [signed normalization work queue](docs/ms68-control-tower-decisions.md)
-for the MS68 operator workflow: review, decide, dispatch a bounded proof, and verify the human-decision gate.
+for the operator workflow: review and sign decisions. The headless engine owns proof
+dispatch and qualification; those commands are no longer available from the browser.
 This local reference workflow does not certify customer production readiness.
 
 ## What it does

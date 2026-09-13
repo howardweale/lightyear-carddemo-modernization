@@ -1,5 +1,11 @@
 # Control Tower: human decisions as evidence
 
+> Superseded execution boundary: [Control Tower workflow Step 1](control-tower-workflow.md)
+> removes UI proof dispatch and UI qualification receipt generation. The Tower now
+> records human decisions and reads engine output. The proof-run instructions below
+> describe the historical increment; they are not current UI commands. Individual
+> authentication, signed decisions and the same-session review gate remain current.
+
 The Control Tower now opens on **Work queue**. Its first decision type is the existing normalization
 ledger for CardDemo interest calculation. Discovery remains available in the adjacent navigation.
 

@@ -19,9 +19,10 @@ def build_parser() -> argparse.ArgumentParser:
     events.add_argument("--limit", type=int, default=100)
     provision = subparsers.add_parser("init-operator", help="Provision an individual local operator credential; grants no approvals")
     provision.add_argument("--authority", type=Path, default=Path("work/control-tower/authority.json"))
+    provision.add_argument("--workload", choices=("workload:carddemo-intcalc", "cloudbank:retained-value-conservation"), default="workload:carddemo-intcalc")
     provision.add_argument("--operator-id", required=True)
     provision.add_argument("--operator-name", required=True)
-    qualify = subparsers.add_parser("qualify", help="Require current signed normalizations and a passing UI-dispatched proof")
+    qualify = subparsers.add_parser("qualify", help="Headless qualification of current signed normalizations and a recorded proof")
     qualify.add_argument("--authority", type=Path, default=Path("work/control-tower/authority.json"))
     qualify.add_argument("--root", type=Path, default=Path("."))
     qualify.add_argument("--graph", type=Path, default=Path("knowledge/composite/estate.snapshot.json.gz"))
@@ -36,14 +37,14 @@ def build_parser() -> argparse.ArgumentParser:
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
     if args.command == "init-operator":
-        credential = initialize_authority(args.authority, args.operator_id, args.operator_name)
+        credential = initialize_authority(args.authority, args.operator_id, args.operator_name, workload_id=args.workload)
         print(json.dumps({"status": "provisioned", "credential_file": str(credential),
                           "next": "Start the Control Tower and use the individual credential to sign in. No decisions have been made."}, indent=2))
         return 0
     if args.command == "qualify":
         from lightyear_knowledge_graph.model import load_graph
         graph = load_graph(args.graph)
-        service = DecisionService(args.root, args.authority, graph_identity=lambda: graph["content_sha256"], recover_runs=False)
+        service = DecisionService(args.root, args.authority, graph_identity=lambda: graph["content_sha256"], recover_runs=False, decision_only=False)
         result = service.gate(args.run_id)
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n")

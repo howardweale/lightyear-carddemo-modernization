@@ -23,13 +23,45 @@ jobs:
           node-version: '22'
       - name: Install decision signing support
         run: python -m pip install -e ".[control-tower]"
-      - name: Verify signed human decisions, real proof dispatch, and existing projections
+      - name: Verify signed human decisions, headless action plans, and read-only projections
         env:
           PYTHONPATH: src
         run: |
           python -m unittest discover -s tests -p test_control_tower_decisions.py -v
+          python -m unittest discover -s tests -p test_evidence_action_plan.py -v
+          python -m unittest discover -s tests -p test_cloudbank_workflow_execution.py -v
+          python -m unittest discover -s tests -p test_cloudbank_six_actions.py -v
           python -m unittest discover -s tests -p test_graph_explorer.py -v
           python -m unittest discover -s tests -p test_live_control_tower.py -v
           python -m unittest discover -s tests -p test_comparator_escape.py -v
           node --check knowledge/viewer/app.js
           node --check knowledge/viewer/decisions.js
+          node --check knowledge/viewer/workflow.js
+          node --check knowledge/viewer/execution.js
+          python -m lightyear_workflow verify --output control-tower/action-plan.snapshot.json.gz
+  browser-inspection:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+      - name: Install pinned browser test dependencies
+        working-directory: tests/browser
+        run: |
+          npm ci
+          npx playwright install --with-deps chromium webkit
+      - name: Inspect CloudBank evidence in desktop and mobile browsers
+        working-directory: tests/browser
+        run: npm test
+      - name: Retain browser screenshots and inspection results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ms72-browser-inspection
+          path: work/browser-inspection/
+          if-no-files-found: error

@@ -184,9 +184,8 @@ class LiveControlTowerTests(unittest.TestCase):
         thread.start()
         try:
             base = f"http://127.0.0.1:{server.server_port}"
-            # The status route performs an initial repository projection scan. On
-            # loaded Windows CI runners that bounded scan can exceed five seconds;
-            # this test verifies the read-only HTTP contract, not scan latency.
+            # Viewing status must not manufacture engine observations or freshness.
+            before = self.store.events()
             with urlopen(
                 f"{base}/api/operations/status",
                 timeout=HTTP_TEST_TIMEOUT_SECONDS,
@@ -197,19 +196,45 @@ class LiveControlTowerTests(unittest.TestCase):
             self.assertEqual(payload["content_sha256"], status["graph_binding"]["identity"]["content_sha256"])
             self.assertEqual("bound", status["graph_binding"]["identity"]["binding_status"])
             self.assertIn("graph", {item["source"] for item in status["sources"]})
+            self.assertEqual(before, self.store.events())
+            self.assertEqual({}, self.store.observations())
+            self.assertTrue(all(s['freshness'] == 'unavailable' for s in status['sources']))
             with urlopen(
-                f"{base}/api/operations/stream?after=9999",
+                f"{base}/api/operations/stream?after=0",
                 timeout=HTTP_TEST_TIMEOUT_SECONDS,
             ) as response:
                 self.assertEqual("text/event-stream; charset=utf-8", response.headers["Content-Type"])
                 self.assertEqual("retry: 2000", response.readline().decode().strip())
                 self.assertEqual("event: ready", response.readline().decode().strip())
+                # A separate engine process/store instance does not share the
+                # Tower's in-memory subscriber list. SSE must still see its write.
+                writer = OperationalEventStore(self.store.path)
+                event = writer.append('engine.projection.changed', 'engine', 'test', {})
+                lines = []
+                for _ in range(10):
+                    line = response.readline().decode().strip()
+                    lines.append(line)
+                    if line.startswith('data: ') and 'engine.projection.changed' in line:
+                        break
+                self.assertIn(f"id: {event['sequence']}", lines)
+                self.assertTrue(any('engine.projection.changed' in line for line in lines))
         finally:
             server.shutdown()
             server.server_close()
             thread.join(timeout=3)
         explorer = (ROOT / "src/lightyear_knowledge_graph/explorer.py").read_text()
         self.assertNotIn('path == "/api/operations/command"', explorer)
+
+    def test_read_only_store_cannot_create_or_append_engine_evidence(self):
+        path = self.root / 'never-created.sqlite3'
+        reader = OperationalEventStore(path, read_only=True)
+        self.assertEqual([], reader.events())
+        self.assertEqual({}, reader.observations())
+        self.assertFalse(path.exists())
+        with self.assertRaises(ValueError):
+            reader.append('fake-event', 'engine', 'anything', {})
+        with self.assertRaises(ValueError): reader.initialize()
+        self.assertFalse(path.exists())
 
 
 if __name__ == "__main__":

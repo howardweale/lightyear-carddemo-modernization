@@ -15,12 +15,18 @@ The inventory establishes four bounded facts:
 ## Build the complete inventory and projection locally
 
 ```bash
-git clone --depth 1 --branch release-13 --filter=blob:none --no-tags \
+git clone --filter=blob:none --no-checkout --no-tags \
   https://github.com/idempiere/idempiere.git /path/to/idempiere-release-13
+git -C /path/to/idempiere-release-13 fetch --depth 1 origin \
+  731515dcdd5278b843db33b9d3109d155b881951
+git -C /path/to/idempiere-release-13 checkout --detach \
+  731515dcdd5278b843db33b9d3109d155b881951
 ./oracle-reference-estate.sh build-full /path/to/idempiere-release-13
 ```
 
-The tool refuses a dirty checkout or a commit other than the recorded pin. It writes the complete
+The explicit commit fetch is required because the supported `release-13` branch can advance after
+the inventory pin is recorded. The tool refuses a dirty checkout or a commit other than the
+recorded pin. It writes the complete
 inventory, compressed projection, and receipt beneath `work/reference-estates/idempiere/`, which
 is ignored by Git. The complete upstream-derived structural graph is intentionally not committed.
 
@@ -70,3 +76,7 @@ selected slices; `IsSOTrx` and `IsReceipt` are part of the slice definition and 
 CloudBank remains the intended modern destination and reference architecture, but no CloudBank
 mapping is asserted by this inventory milestone. The SAP ASE reference estate remains separately
 bounded and synthetic unless a sanitized customer or partner corpus is obtained.
+
+The later [IDDA project](../../factory/idempiere-divergence-audit/README.md) reuses this exact pin,
+inventory and order-to-cash slice for a deterministic Oracle/PostgreSQL migration-script audit. It
+does not alter this inventory receipt or promote its static evidence into application equivalence.

@@ -1,5 +1,9 @@
 # Live Evidence and Control Tower Plane
 
+**Current workflow increment:** [Step 1 — emit actions](../docs/control-tower-workflow.md).
+The headless engine publishes a work plan; the Tower projects it and records human
+decisions. [Current action report](../docs/control-tower-action-plan.md).
+
 v0.47.3 makes the canonical Knowledge Graph and source-evidence pack a first-class source in the
 live, read-only operational projection first introduced in v0.17. The browser uses the approved
 paper-white, stone, and burnt-orange visual system with locally served IBM Plex typography.
@@ -14,15 +18,16 @@ Technology scope → Operator lens**. Company and problem determine the permitte
 the workload supplies the graph root and curated perspective; scope and lens visually refine that
 bounded graph without silently changing the selected business problem.
 
-The plane
-observes the authoritative stores already owned by Factory, Portfolio, Recovery, Quality, Memory,
-Data, Runtime, and Audit; emits canonical events when their identities change; and streams those
-events to the browser with Server-Sent Events (SSE). Graph changes refresh the live explorer and
+The plane reads authoritative stores owned by Factory, Portfolio, Recovery, Quality, Memory,
+Data, Runtime, and Audit, and streams independently persisted events to the browser with
+Server-Sent Events (SSE). The Tower does not start the observer or refresh its evidence on reads.
+Graph changes refresh the live explorer and
 invalidate a mismatched source-evidence pack, Runtime projection, or Audit projection until
 graph-bound evidence is regenerated.
 
 The event stream remains read-only. The separately authenticated **Work queue** now produces signed
-normalization decisions and dispatches the bounded INTCALC reference proof through `/api/decisions`.
+normalization decisions through `/api/decisions`. Proof execution and qualification receipt
+generation are headless responsibilities; their former browser routes are removed.
 It uses individual local credentials, role checks, same-origin requests, idempotency, and an
 Ed25519-signed audit journal. Production commands, claim promotion, and customer SSO remain outside
 this local command surface. See [the operator workflow](../docs/ms68-control-tower-decisions.md).
@@ -46,7 +51,8 @@ Open `http://127.0.0.1:8765`. The server refuses `0.0.0.0`, LAN addresses, and h
 operator supplies `--i-understand-this-is-unauthenticated`; the warning does not replace enterprise
 authentication. `127.0.0.0` is the loopback network identifier, not the Control Tower address. A
 per-session bearer token printed in the terminal is required for verifier-audience routes. For a
-customer deployment, place the service behind the customer's approved SSO/OIDC reverse proxy. Do
+customer decision deployment, the approved SSO/OIDC integration must first be implemented and
+tested. A reverse proxy alone does not satisfy that gate. Do
 not open `knowledge/viewer/index.html` directly; static file mode cannot use the API or SSE stream.
 
 ## Operational contract

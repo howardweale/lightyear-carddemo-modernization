@@ -19,6 +19,8 @@ from urllib.parse import parse_qs, unquote, urlparse
 
 from lightyear_control_tower.decisions import DecisionService, DecisionConflict, DecisionUnauthorized
 from lightyear_data.cloudbank_publication import load_publication, workload_publication
+from lightyear_workflow.artifacts import read_snapshot, project_snapshot
+from lightyear_workflow.execution import read_execution
 
 from .chat import ChatError, GraphChatService
 from .evidence_pack import EvidenceStore, load_evidence_pack, validate_evidence_pack
@@ -34,7 +36,6 @@ from lightyear_audit.store import AuditStore
 from lightyear_control_tower.operational import (
     OperationalControlTower,
     OperationalEventStore,
-    OperationalMonitor,
     OperationalSource,
 )
 
@@ -1134,6 +1135,8 @@ class ExplorerServer(ThreadingHTTPServer):
         verifier_token: str | None = None,
         decision_service: DecisionService | None = None,
     ) -> None:
+        if decision_service is not None and not is_loopback_host(address[0]):
+            raise ValueError("The operator decision service requires an explicit loopback bind")
         super().__init__(address, ExplorerRequestHandler)
         self.index = index
         self.viewer_root = viewer_root.resolve()
@@ -1144,6 +1147,8 @@ class ExplorerServer(ThreadingHTTPServer):
         ).resolve()
         self.verifier_token = verifier_token or secrets.token_urlsafe(32)
         self.decision_service = decision_service
+        if decision_service is not None:
+            decision_service.decision_only = True
         self._projection_lock = threading.RLock()
         self._binding_errors: dict[str, str] = {}
         self.chat_service = chat_service or GraphChatService.from_environment(index)
@@ -1206,7 +1211,7 @@ class ExplorerServer(ThreadingHTTPServer):
         self._graph_file_state = self._file_state(self.graph_path)
         self._evidence_file_state = self._file_state(self.evidence_pack_path)
         self.operational_store = operational_store or OperationalEventStore(
-            self.project_root / "work" / "control-tower" / "events.sqlite3"
+            self.project_root / "work" / "control-tower" / "events.sqlite3", read_only=True
         )
         sources = (
             OperationalSource(
@@ -1248,7 +1253,6 @@ class ExplorerServer(ThreadingHTTPServer):
             ),
         )
         self.control_tower = OperationalControlTower(self.operational_store, sources)
-        self.operational_monitor = OperationalMonitor(self.control_tower)
 
     @staticmethod
     def _file_state(path: Path) -> tuple[int, int] | None:
@@ -1504,7 +1508,7 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
         if path == "/api/decisions/status" and payload is None:
             self._json({"enabled": service is not None, "supported_decisions": ["normalization"],
                         "authentication": "individual-local-credential",
-                        "message": "Sign in to review normalizations and run proofs." if service else
+                        "message": "Sign in to review and sign human decisions. The headless engine owns proof execution." if service else
                         "Decision service is not configured. Start the local Control Tower with an individual operator authority."})
             return
         if service is None:
@@ -1527,14 +1531,13 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
                 "/api/decisions/logout": lambda: service.logout(token),
                 "/api/decisions/review": lambda: service.review(token, payload.get("entry_id")),
                 "/api/decisions/approve": lambda: service.decide(token, payload),
-                "/api/decisions/proof-runs": lambda: service.dispatch(token, payload),
             }
         else:
             service.authenticate(token)
             routes = {
-                "/api/decisions/queue": lambda: service.queue(token),
+                "/api/decisions/queue": lambda: {**service.queue(token),
+                    "workflow_proposals": project_snapshot(read_snapshot(self.server.project_root), action_class="approval-required", limit=20)},
                 "/api/decisions/session-export": lambda: service.export_session(token),
-                "/api/decisions/gate": lambda: service.gate(self._value(query, "run_id", required=True)),
             }
         if path not in routes:
             self._json({"error": "Unknown decision route"}, HTTPStatus.NOT_FOUND)
@@ -1560,13 +1563,21 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
         self.wfile.write(body)
 
     def _api(self, path: str, query: dict[str, list[str]]) -> None:
+        if path == "/api/workflow/execution":
+            self._json(read_execution(self.server.project_root))
+            return
+        if path == "/api/workflow/plan":
+            self._json(project_snapshot(read_snapshot(self.server.project_root),
+                kind=self._value(query, "kind"), action_class=self._value(query, "class"),
+                entity_id=self._value(query, "entity_id"),
+                offset=int(self._value(query, "offset") or 0), limit=int(self._value(query, "limit") or 50)))
+            return
         self.server.refresh_live_projections()
         index = self.server.index
         if path == "/api/operations/stream":
             self._event_stream(query)
             return
         if path == "/api/operations/status":
-            self.server.control_tower.scan()
             self._json(self.server.control_tower.status())
             return
         if path == "/api/operations/events":
@@ -1760,12 +1771,19 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
             self.wfile.flush()
             while True:
                 try:
-                    event = channel.get(timeout=15)
+                    event = channel.get(timeout=2)
+                    if event["sequence"] <= after:
+                        continue
+                    after = event["sequence"]
                     body = json.dumps(event, sort_keys=True, separators=(",", ":"))
                     packet = (
                         f"id: {event['sequence']}\nevent: operational-event\ndata: {body}\n\n"
                     ).encode("utf-8")
                 except queue.Empty:
+                    # An independent engine process writes the ledger. Tail its
+                    # records without inventing an observation on a browser read.
+                    for event in self.server.operational_store.events(after=after, limit=256):
+                        channel.put_nowait(event)
                     packet = b": heartbeat\n\n"
                 self.wfile.write(packet)
                 self.wfile.flush()
@@ -1926,7 +1944,7 @@ def serve(
     if authority.is_file():
         if not is_loopback_host(host):
             raise ValueError("The operator decision service currently requires an explicit loopback bind")
-        server.decision_service = DecisionService(server.project_root, authority, graph_identity=lambda: server.index.canonical_content_sha256)
+        server.decision_service = DecisionService(server.project_root, authority, graph_identity=lambda: server.index.canonical_content_sha256, decision_only=True)
     elif decision_config is not None:
         raise ValueError("Configured operator authority does not exist")
     display_host = f"[{host.strip('[]')}]" if ":" in host else host
@@ -1940,12 +1958,10 @@ def serve(
     if open_browser:
         threading.Timer(0.35, lambda: webbrowser.open(url)).start()
     try:
-        server.operational_monitor.start()
         server.serve_forever()
     except KeyboardInterrupt:
         pass
     finally:
-        server.operational_monitor.stop()
         if server.decision_service:
             server.decision_service.close()
         server.server_close()

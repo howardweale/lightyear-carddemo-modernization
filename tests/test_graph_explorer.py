@@ -160,7 +160,7 @@ class GraphExplorerTests(unittest.TestCase):
             self.assertIn('for="problem-context"', body)
             self.assertIn('for="workload-context"', body)
             self.assertIn('id="density-guard"', body)
-            self.assertIn("Open proof run for this workload", body)
+            self.assertIn("View proof history for this workload", body)
             self.assertIn('id="verifier-dialog"', body)
             self.assertIn("Search selected estate", body)
             self.assertIn("assets/lightyear-primary.svg", body)

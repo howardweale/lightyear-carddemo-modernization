@@ -1,7 +1,7 @@
 {
   "schema_version": "1.0",
-  "adapter": "cloudbank-retained-evidence-v1",
-  "scope": "service-contract-and-retained-execution-integrity",
+  "adapter": "cloudbank-evidence-actions-v2",
+  "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
   "max_iterations": 8,
   "max_actions": 32,
   "max_attempts": 2,

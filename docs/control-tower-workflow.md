@@ -12,9 +12,12 @@ The signed decision service described in `ms68-control-tower-decisions.md` is re
 
 Step 1 emits actions from the existing comparison evidence, as documented below.
 Step 2 adds bounded execution in the headless engine and uses CloudBank as the
-test estate. Step 2 is implemented for service-contract and retained-execution
-integrity checks, with durable restart, bounded workers and measured completion
-within that scope. Browser inspection runs beside the app in CI. See the
+test estate. Step 2 supports all six autonomous action kinds: widening observation,
+escalating a lane, reparsing evidence, extending the corpus, rerunning local checks
+and applying an exactly bound, human-approved ledger entry. Five kinds can run
+without a new human decision; the sixth is explicitly gated. Durable restart,
+bounded workers and measured completion apply to the expanded scope. Browser
+inspection runs beside the app in CI. See the
 [Step 2 runbook](control-tower-execution.md). Step 1 evidence still establishes
 neither execution nor convergence; the two evidence streams stay separate.
 
@@ -182,12 +185,13 @@ even resealed changes to action classes, verdicts or resolution counts.
 
 ## Remaining customer-funded work
 
-1. Extend the implemented Step 2 contract/retained-evidence lane to additional
-   specifically admitted actions and fresh customer runtime observations. The
+1. Extend the implemented six-kind Step 2 adapter to fresh customer runtime
+   observations and separately authorized captures. The
    bounded executor, restart, retry, monotonicity and tamper checks are delivered;
    arbitrary commands and cloud mutations are not admitted by this lane.
-2. Bind engine proposals with exact terms and blast radius to signed decisions;
-   retain reviewed-before-approved, expiry, rejection and identity checks.
+2. Generalize the delivered CloudBank value-conservation terms and human approval
+   gate to additional proposals and measured suppression radii; retain exact scope,
+   reviewed-before-approved, expiry, rejection and identity checks.
 3. Extend Step 2's measured per-run completion receipts with weekly owner-level
    changes. A completed evidence-integrity check is not a claim that nothing
    more can be learned about the application.

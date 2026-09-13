@@ -14,7 +14,10 @@ await mkdir(output, { recursive: true });
 const env = { ...process.env, PYTHONPATH: resolve(root, 'src') };
 const python = process.env.PYTHON || 'python';
 const engine = spawnSync(python, ['-m', 'lightyear_workflow.execution', 'run'], { cwd: root, env, encoding: 'utf8', timeout: 120000 });
-assert.equal(engine.status, 0, engine.stdout + engine.stderr);
+assert.equal(engine.status, 1, engine.stdout + engine.stderr);
+const execution = JSON.parse(engine.stdout);
+assert.equal(execution.halt_reason, 'human-decision-required');
+assert.equal(execution.summary.action_kinds_executed, 5);
 const journal = resolve(root, 'work/workflow/cloudbank/events.sqlite3');
 const digest = async () => createHash('sha256').update(await readFile(journal)).digest('hex');
 const before = await digest();
@@ -42,8 +45,9 @@ try {
         page.on('pageerror', (error) => errors.push(error.message));
         page.on('request', (request) => { if (request.url().includes('/api/workflow/') && request.method() !== 'GET') writes.push(request.method()); });
         await page.goto(base, { waitUntil: 'domcontentloaded' });
-        await page.waitForFunction(() => document.getElementById('execution-status').textContent.includes('Completed within declared scope'), undefined, { timeout: 30000 });
+        await page.waitForFunction(() => document.getElementById('execution-status').textContent.includes('Human decision required'), undefined, { timeout: 30000 });
         assert.equal(await page.locator('.execution-service').count(), 8);
+        assert.equal(await page.locator('.execution-action').count(), 6);
         assert.equal(await page.locator('.execution-service .decision-badge.approved').count(), 8);
         assert(await page.locator('img[alt="LIGHTYEAR primary logo"]').evaluate((image) => image.complete && image.naturalWidth > 0));
         await page.screenshot({ path: resolve(output, `${name}-${layout}-overview.png`), fullPage: true });
@@ -53,6 +57,9 @@ try {
           await writeFile(resolve(output, `${name}-${layout}-overflow.json`), JSON.stringify(elements, null, 2));
         }
         assert.equal(overflow, false, `${name}/${layout} has horizontal overflow`);
+        await page.locator('[data-kind="extend-corpus"] > summary').click();
+        await page.locator('[data-kind="apply-ledger-entry"] > summary').click();
+        assert.match(await page.locator('[data-kind="apply-ledger-entry"]').textContent(), /Human decision required/);
         await page.locator('[data-service="account"] > summary').click();
         await page.locator('#execution-provenance > summary').click();
         const receipt = page.locator('[data-service="account"] .execution-receipt code').first();
@@ -68,10 +75,11 @@ try {
         await page.waitForFunction(() => document.getElementById('execution-status').textContent.includes('Evidence cannot be verified'));
         assert.equal(await page.locator('.execution-service').count(), 0);
         assert.equal(await page.locator('#execution-provenance').isVisible(), false);
+        assert.equal(await page.locator('.execution-action').count(), 0);
         await page.screenshot({ path: resolve(output, `${name}-${layout}-invalid.png`), fullPage: true });
         assert.deepEqual(writes, []);
         assert.deepEqual(errors, []);
-        observations.push({ browser: name, layout, services: 8, logo_loaded: true, receipt_column_readable: true, horizontal_overflow: false, filter_and_invalid_state: 'passed', workflow_writes: 0, javascript_errors: [] });
+        observations.push({ browser: name, layout, services: 8, action_kinds: 6, executed_kinds: 5, human_approval_gated: true, logo_loaded: true, receipt_column_readable: true, horizontal_overflow: false, filter_and_invalid_state: 'passed', workflow_writes: 0, javascript_errors: [] });
         await page.close();
       }
     } finally { await browser.close(); }

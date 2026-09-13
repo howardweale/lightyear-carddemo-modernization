@@ -5,13 +5,17 @@
 # LIGHTYEAR CardDemo Modernization Factory
 
 **MS #72 — Control Tower workflow, Steps 1–2.** The headless engine now runs
-bounded CloudBank evidence checks across eight services, with transactional
+all six autonomous action kinds over CloudBank evidence, with transactional
 checkpoints, retries, deterministic receipt verification and measured completion
-within the declared scope. The Tower reads its journal and creates human decisions.
+within the declared scope. Five kinds run on the published evidence; ledger application
+requires a current signed human decision. The Tower reads the journal and records
+those human decisions.
 Step 1's [action plan](docs/control-tower-action-plan.md) remains available.
 
-The CloudBank lane verifies service contracts and original retained execution
-evidence; it does not rerun cloud workloads or change application verdicts.
+The CloudBank adapter verifies eight services, reparses and extends the retained
+evidence corpus, reruns local checks, and applies an approved ledger entry to a
+derived view that retains raw differences. It does not rerun cloud workloads or
+change the original application verdicts.
 See the [Step 2 runbook](docs/control-tower-execution.md) and
 [architecture and policy boundary](docs/control-tower-workflow.md).
 MS #71 remains assigned to AlloyDB work.

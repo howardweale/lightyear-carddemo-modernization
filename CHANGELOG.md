@@ -14,7 +14,13 @@
   reject worker-authored verdict upgrades and leave application claims unchanged.
 - Add repeatable Chromium/WebKit desktop/mobile inspection in CI with retained
   screenshots, layout and filtering checks, and a no-browser-writes assertion.
-  No new cloud execution, model calls, ledger application or claim promotion.
+  The initial two-kind run performed no ledger applications.
+- Expand Step 2 to all six autonomous action kinds with typed scenario reparsing,
+  a scoped 36-case evidence corpus, reruns over changed admitted inputs, and one
+  exactly bound ledger projection after a current signed human decision.
+- Retain raw lane differences, enforce review, expiry and revocation at application
+  time, and show six-kind coverage and current approval validity in the Tower.
+  No fresh cloud execution, model calls or claim promotion.
 
 ## 0.70.0 — 2026-09-11
 

@@ -16,6 +16,10 @@ version 9. Its receipt content hash is
 The first measured load completed 5,314 requests with zero errors but failed the unchanged
 500 ms aggregate p95 limit at 589.44 ms. The first completed backup and PITR restore had
 matching table data but advanced sequence counters; that failed evidence remains retained.
+The isolated load rerun passed the same unchanged workload and limit: 5,428 requests,
+zero errors, 458.91 ms aggregate p95, 300 seconds and ten users. All 207 cycles completed;
+final balances and journal effects matched. No application image, resource limit, workload,
+comparator or performance threshold was changed to obtain that result.
 Qualification is still pending the remaining operational results and complete admission.
 
 Run network enforcement after all restore probes and their policies are removed, and without

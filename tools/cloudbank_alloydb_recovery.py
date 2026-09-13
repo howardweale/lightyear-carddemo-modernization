@@ -18,6 +18,7 @@ from lightyear_data.cloudbank_managed_target import ManagedGkeRuntime
 from lightyear_data.cloudbank_ms71 import verify_receipt
 from lightyear_data.cloudbank_secret_rotation_gke import Journal
 from lightyear_data.cloudbank_sql_recovery import verified
+from lightyear_data.cloudbank_operator_session import operator_session
 
 
 def main(argv=None):
@@ -110,4 +111,5 @@ def main(argv=None):
 
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    with operator_session():
+        raise SystemExit(main())

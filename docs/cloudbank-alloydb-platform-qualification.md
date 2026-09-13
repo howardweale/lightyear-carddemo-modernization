@@ -36,6 +36,19 @@ Production readiness, customer certification, and unplanned regional-failure qua
 outside this synthetic nonproduction campaign. Failed measurements remain recorded and cannot be
 converted to passing results by changing a threshold after the run.
 
+The tracked `tools/cloudbank_alloydb_control.py` runner binds secret rotation, log correlation,
+alert recovery, network enforcement, runtime identity and sustained load to the signed campaign
+context and accepted MS71 receipt. `tools/cloudbank_alloydb_recovery.py` owns isolated backup/PITR
+restores; `tools/cloudbank_alloydb_platform.py` admits the final complete evidence chain. The context
+directory retains the signed platform profile, managed profile, accepted AlloyDB MS66 receipt and
+target journey. All commands require the existing nonproduction acknowledgement for live mutations.
+
+Windows Modern Standby interrupted early attempts. Live control and recovery entry points now hold
+a [temporary system execution request](https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-setthreadexecutionstate)
+while running, and release it on exit. They use one storage worker for small evidence checkpoints.
+These process-scoped settings do not change the saved power plan or gcloud configuration. Failed
+attempts and their subsequent recovery records remain retained separately from passing evidence.
+
 Provider operations follow Google's [backup and recovery documentation](https://docs.cloud.google.com/alloydb/docs/backup/overview),
 [point-in-time recovery instructions](https://docs.cloud.google.com/alloydb/docs/backup/restore-pitr),
 and [primary failover procedure](https://docs.cloud.google.com/alloydb/docs/instance-primary-secondary-failover).

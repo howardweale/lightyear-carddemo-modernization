@@ -46,6 +46,7 @@ class CloudBankPublicationTests(unittest.TestCase):
         # Cryptographic admission is exercised by the export/reader tests;
         # this fixture checks presentation and preservation of historical scope.
         receipt = {"campaign_id": "test-alloydb", "status": "passed-alloydb-nonproduction-platform-qualification",
+                   "admission_controller_commit": "a" * 40,
                    "alloydb_platform_qualified": True, "production_ready": False, "production_deployed": False,
                    "customer_certification_complete": False, "unplanned_region_failure_qualified": False,
                    "synthetic_data_only": True, "scenario_count": 29, "services": list(range(8)),

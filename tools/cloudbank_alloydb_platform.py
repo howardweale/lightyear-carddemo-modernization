@@ -8,6 +8,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -120,7 +121,10 @@ def assemble(context, ms71, phases, boundaries, key):
 def verify_receipt(receipt, key):
     verified(receipt, key)
     expected = assemble(receipt["context"], receipt["ms71_receipt"], receipt["phases"], receipt["managed_boundaries"], key)
-    require({k: v for k, v in receipt.items() if k not in {"signature", "content_sha256"}} == expected,
+    controller = receipt.get("admission_controller_commit")
+    require(isinstance(controller, str) and re.fullmatch(r"[0-9a-f]{40}", controller),
+            "alloydb-platform-admission-controller-required")
+    require({k: v for k, v in receipt.items() if k not in {"signature", "content_sha256", "admission_controller_commit"}} == expected,
             "alloydb-platform-receipt-reconstruction-mismatch")
     return receipt
 
@@ -195,7 +199,10 @@ def main(argv=None):
         context, ms71 = local(inputs["context"]), local(inputs["ms71_receipt"])
         phases = {k: local(v) for k, v in inputs["phases"].items()}
         boundaries = {k: local(v) for k, v in inputs["managed_boundaries"].items()}
+        require(not command(["git", "status", "--porcelain"]).strip(), "committed-clean-admission-controller-required")
+        commit = command(["git", "rev-parse", "HEAD"]).strip()
         value = assemble(context, ms71, phases, boundaries, key)
+        value["admission_controller_commit"] = commit
         require(args.output and not args.output.exists() and args.evidence_uri.startswith(
             f'gs://{context["project"]}-ms67-evidence/alloydb-platform/{context["run_id"]}/'), "alloydb-platform-fresh-durable-output-required")
         receipt = Journal(args.output, args.evidence_uri, context["project"], key, context["signer"]).write(value)

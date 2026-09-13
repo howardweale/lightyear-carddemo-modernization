@@ -60,6 +60,19 @@ class AlloyDbAdmissionTests(unittest.TestCase):
                 gate.export_bundle(root / "missing-inputs.json", root / "receipt.json", root / "export", KEY)
             self.assertFalse((root / "export").exists())
 
+    def test_admission_controller_is_required_and_signed(self):
+        payload = {"context": {}, "ms71_receipt": {}, "phases": {}, "managed_boundaries": {}}
+        with patch.object(gate, "assemble", return_value=payload):
+            value = sign({**payload, "admission_controller_commit": "a" * 40}, KEY, SIGNER)
+            self.assertEqual(gate.verify_receipt(value, KEY), value)
+            value["admission_controller_commit"] = "b" * 40
+            with self.assertRaises(JourneyFailure):
+                gate.verify_receipt(value, KEY)
+            for controller in (None, "not-a-commit", "a" * 39):
+                bad = sign({**payload, "admission_controller_commit": controller}, KEY, SIGNER)
+                with self.assertRaises(JourneyFailure):
+                    gate.verify_receipt(bad, KEY)
+
     def test_export_preserves_original_crlf_bytes_and_rejects_source_drift(self):
         from lightyear_data.contracts import verify_signature
         from lightyear_data import cloudbank_alloydb_publication as publication
@@ -72,6 +85,7 @@ class AlloyDbAdmissionTests(unittest.TestCase):
             boundaries = {phase: sign({"boundary": phase}, KEY, SIGNER) for phase in
                           ("secret-rotation", "log-correlation", "alert-drill", "network-enforcement", "sustained-load")}
             receipt = sign({"campaign_id": "test", "context": context, "ms71_receipt": ms71,
+                "admission_controller_commit": "a" * 40,
                 "phases": phases, "managed_boundaries": boundaries, "receipt_type": gate.TYPE,
                 "status": "passed-alloydb-nonproduction-platform-qualification", "scenario_count": 29,
                 "scenarios": [{"id": name, "status": "passed"} for name in gate.SCENARIOS],

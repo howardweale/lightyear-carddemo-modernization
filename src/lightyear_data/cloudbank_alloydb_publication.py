@@ -45,6 +45,7 @@ def publication_summary(publication):
         "ha_recovery_seconds": phases["ha"]["recovery_seconds"], "availability_scope": receipt["availability_scope"],
         "image_security_scope": receipt["image_security_scope"], "observability_scope": receipt["observability_scope"],
         "receipt_content_sha256": receipt["content_sha256"],
+        "admission_controller_commit": receipt["admission_controller_commit"],
         "receipt_path": publication["bundle"] + "/alloydb-platform.receipt.json",
         "export_manifest_path": publication["bundle"] + "/publication-export.json"}
 
@@ -81,6 +82,8 @@ def load_alloydb_publication(bundle, expected_export_sha256, root=ROOT):
     _require(receipt["content_sha256"] == manifest["receipt_content_sha256"]
              and receipt["campaign_id"] == manifest["campaign_id"], "AlloyDB receipt binding changed")
     _require(receipt.get("receipt_type") == "lightyear-alloydb-nonproduction-platform-qualification"
+             and isinstance(receipt.get("admission_controller_commit"), str)
+             and re.fullmatch(r"[0-9a-f]{40}", receipt.get("admission_controller_commit", ""))
              and receipt.get("status") == "passed-alloydb-nonproduction-platform-qualification"
              and receipt.get("alloydb_platform_qualified") is True and receipt.get("synthetic_data_only") is True
              and all(receipt.get(k) is False for k in ("production_ready", "production_deployed",

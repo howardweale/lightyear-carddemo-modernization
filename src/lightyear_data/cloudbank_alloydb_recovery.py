@@ -151,7 +151,7 @@ class AlloyRecovery(SqlRecovery):
             self.save()
         return current
 
-    def finish_restore(self, kind):
+    def provision_primary(self, kind):
         self.wait(kind)
         cluster = self.target_guard(kind)
         require(cluster["state"] == "READY", "alloydb-restored-cluster-not-ready")
@@ -159,7 +159,14 @@ class AlloyRecovery(SqlRecovery):
         resource = cluster["name"] + "/instances/primary"
         self.submit(kind + "-primary", resource, "instances", "create", "primary", "--cluster=" + name,
                     "--instance-type=PRIMARY", "--availability-type=REGIONAL", "--cpu-count=2", "--ssl-mode=ENCRYPTED_ONLY")
+
+    def finish_restore(self, kind):
+        if kind + "-primary" not in self.state["operations"]:
+            self.provision_primary(kind)
         self.wait(kind + "-primary")
+        cluster = self.target_guard(kind)
+        name = self.state["targets"][kind]["name"]
+        resource = cluster["name"] + "/instances/primary"
         primary = self.cloud("instances", "describe", "primary", "--cluster=" + name)
         address = primary["ipAddress"]
         require(primary["name"] == resource and primary["state"] == "READY" and
@@ -246,6 +253,10 @@ class AlloyRecovery(SqlRecovery):
             require(epoch(point) > epoch(checkpoint), "alloydb-pitr-point-precedes-checkpoint")
             began = time.monotonic()
             self.start_restore("pitr", ["--source-cluster=" + self.state["source"], "--point-in-time=" + point])
+            # Start provider provisioning before restoring application writers.
+            # Both can progress concurrently, with one serialized local journal
+            # and the same end-to-end recovery timer.
+            self.provision_primary("pitr")
             self.restore_apps()
             restored = self.finish_restore("pitr")
             rto = math.ceil(time.monotonic() - began)

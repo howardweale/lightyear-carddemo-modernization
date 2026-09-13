@@ -23,6 +23,33 @@ MODULES = {p: "cloudbank_" + p.replace("-", "_") for p in (
 RETAINED = ROOT / "docs/receipts/ms67-final-635689566db6425aadf6fb1fc6cf3de7/receipts"
 
 
+def signed_observation(output, phase, key):
+    # Collectors also write unsigned display summaries. Only their canonical
+    # observation file is an admission input; never infer one from its status.
+    proof = verified(json.loads((output / (phase + ".observation.json")).read_bytes()), key)
+    require(proof.get("observation_type") and proof.get("status", "").startswith("passed"),
+            "passing-control-observation-required")
+    return proof
+
+
+def completed_log_inputs(output, context, key):
+    from lightyear_data.cloudbank_log_correlation import verify_observation, STATE_FILE, STATE_TYPE
+    intent = verified(json.loads(output.with_name(output.name + "-intent.json").read_bytes()), key)
+    proof = signed_observation(output, "log-correlation", key)
+    verify_observation(proof, key)
+    state = verified(json.loads((output / STATE_FILE).read_bytes()), key)
+    require(intent.get("record_type") == "lightyear-alloydb-platform-control-intent"
+            and intent.get("phase") == "log-correlation" and intent.get("action") == "run"
+            and intent.get("context_sha256") == context["content_sha256"]
+            and intent.get("output_root") == str(output), "logging-completion-intent-invalid")
+    require(state.get("state_type") == STATE_TYPE and state.get("cleanup_complete") is True
+            and state.get("phase") == "installed-and-verified" and state.get("run_id") == proof["run_id"],
+            "logging-completion-verified-released-state-required")
+    require(all(state.get(k) == proof[k] == context[k] for k in ("environment", "images", "bindings")),
+            "logging-completion-context-drift")
+    return intent, proof, state
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("phase", choices=MODULES)
@@ -31,6 +58,8 @@ def main(argv=None):
     parser.add_argument("--output-root", type=Path, required=True)
     parser.add_argument("--recovery-state", type=Path)
     parser.add_argument("--original-process-stopped", action="store_true")
+    parser.add_argument("--complete-log-boundary", action="store_true",
+                        help="Bind an already signed, released logging run after wrapper assembly failure")
     args = parser.parse_args(argv)
     require(os.environ.get("LIGHTYEAR_NON_PRODUCTION_ACK") == ACK, "non-production-mutation-ack-required")
     context = json.loads(args.context.read_bytes())
@@ -59,6 +88,33 @@ def main(argv=None):
     if action == "recover":
         require(args.original_process_stopped, "original-executor-must-be-stopped-before-recovery")
     output = args.output_root.resolve()
+    if args.complete_log_boundary:
+        require(args.phase == "log-correlation" and not args.recovery_state and args.original_process_stopped
+                and output.is_dir() and not output.is_relative_to(ROOT)
+                and not (output / "managed-boundary.json").exists(), "logging-completion-fresh-boundary-required")
+        intent, proof, state = completed_log_inputs(output, context, key)
+        uri = f'gs://{project}-ms67-evidence/log-correlation/observations/{proof["run_id"]}/log-correlation.observation.json'
+        require(verified(json.loads(command(["gcloud", "storage", "cat", uri, "--project", project])), key) == proof,
+                "logging-completion-original-observation-readback-mismatch")
+        require(verified(json.loads(command(["gcloud", "storage", "cat", state["recovery_uri"], "--project", project])), key) == state,
+                "logging-completion-released-state-readback-mismatch")
+        runtime = ManagedGkeRuntime(**{k: context[k] for k in ("project", "region", "cluster", "namespace")},
+            images=context["images"], run_id=proof["run_id"], output=output, probe_image=context["probe_image"])
+        after = observe_target(runtime, context["managed_profile"], command)
+        before = intent["managed_before"]
+        require(all(target["database"] == context["managed_target"]["database"]
+                    and target["environment"] == context["environment"] for target in (before, after)),
+                "logging-completion-target-drift")
+        Journal(output / "managed-boundary.json",
+            f'gs://{project}-ms67-evidence/alloydb-platform/{context["run_id"]}/log-boundary-completion-{proof["run_id"]}/managed-boundary.json',
+            project, key, context["signer"]).write({"record_type": "lightyear-alloydb-control-managed-boundary",
+                "phase": "log-correlation", "controller_commit": command(["git", "rev-parse", "HEAD"]).strip(),
+                "collection_controller_commit": intent["controller_commit"], "collection_intent_sha256": intent["content_sha256"],
+                "completion_scope": "original signed observation and released state read back; fresh target observation; no collector rerun",
+                "control_observation_sha256": proof["content_sha256"], "context_sha256": context["content_sha256"],
+                "before": before, "after": after, "alloydb_platform_qualified": False})
+        print("ALLOYDB_LOG_BOUNDARY_COMPLETED; ORIGINAL_OBSERVATION_UNCHANGED")
+        return 0
     require(not output.exists() and not output.is_relative_to(ROOT), "fresh-private-evidence-root-required")
     commit = command(["git", "rev-parse", "HEAD"]).strip()
     run_id = args.phase + "-" + uuid.uuid4().hex[:16]
@@ -101,15 +157,10 @@ def main(argv=None):
             after = observe_target(runtime, context["managed_profile"], command)
             require(after["database"] == before["database"] and after["environment"] == before["environment"],
                     "alloydb-control-final-target-drift")
-            proofs = set()
-            for path in output.glob("*.json"):
-                proof = json.loads(path.read_bytes())
-                if proof.get("observation_type") and proof.get("status", "").startswith("passed"):
-                    proofs.add(verified(proof, key)["content_sha256"])
-            require(len(proofs) == 1, "unique-passing-control-observation-required")
+            proof = signed_observation(output, args.phase, key)
             Journal(output / "managed-boundary.json", prefix + "/managed-boundary.json", project, key,
                     context["signer"]).write({"record_type": "lightyear-alloydb-control-managed-boundary",
-                "phase": args.phase, "controller_commit": commit, "control_observation_sha256": proofs.pop(),
+                "phase": args.phase, "controller_commit": commit, "control_observation_sha256": proof["content_sha256"],
                 "context_sha256": context["content_sha256"], "before": before, "after": after,
                 "alloydb_platform_qualified": False})
         return code

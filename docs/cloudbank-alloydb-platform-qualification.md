@@ -69,6 +69,14 @@ requires a fresh passing live observation after trace ingestion is available.
 Google documents that [daily quotas reset at midnight Pacific](https://docs.cloud.google.com/docs/quotas/overview).
 The campaign is waiting for that reset to retry under its existing quota.
 
+The fresh correlation run after midnight Pacific on 2026-09-13 observed matching logs and
+spans for all eight services using the existing quota. Its signed observation was read back
+successfully. The outer wrapper then tried to verify the collector's unsigned display summary
+as signed evidence and stopped before creating its managed-target boundary. The corrected
+wrapper selects the canonical signed observation file. Its completion path requires the stopped
+executor, signed original intent, matching completed and released state, original cloud readbacks,
+and a fresh target observation; it retains the original measurement and collection controller.
+
 This follow-up qualifies the synthetic nonproduction AlloyDB deployment created by MS71.
 It preserves the original MS71 business-equivalence acceptance and MS67 Cloud SQL evidence.
 The new platform receipt must bind the actual AlloyDB resource, namespace UID, eight immutable

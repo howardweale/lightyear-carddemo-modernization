@@ -324,7 +324,19 @@ def verify_recovery(value, key, profile, images, environment):
                  "backup", "backup-primary", "backup-delete-primary", "backup-delete"):
         operation = value.get("operations", {}).get(name, {})
         result = operation.get("result", {})
+        region_path = profile["resource"].split("/clusters/", 1)[0]
+        suffix = hashed(value["run_id"])[:16]
+        if name == "backup-create":
+            target = region_path + "/backups/ly-alloy-backup-" + suffix
+            require(backup["metadata"].get("name") == target, "alloydb-recovery-backup-operation-binding-invalid")
+        else:
+            kind = name.split("-", 1)[0]
+            target = region_path + "/clusters/ly-alloy-" + kind + "-" + suffix
+            require(value["targets"][kind].get("resource") == target, "alloydb-recovery-owned-target-binding-invalid")
+            if name.endswith("primary"):
+                target += "/instances/primary"
         require(operation.get("name") and result.get("name") == operation["name"]
+                and operation["name"].startswith(region_path + "/operations/") and operation.get("target") == target
                 and result.get("done") is True and not result.get("error")
                 and result.get("metadata", {}).get("target") == operation.get("target"),
                 "alloydb-recovery-operation-incomplete-" + name)

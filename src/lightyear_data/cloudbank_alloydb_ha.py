@@ -11,7 +11,7 @@ from .cloudbank_managed_target import ManagedGkeRuntime, observe_target, validat
 from .cloudbank_secret_rotation_gke import Journal
 from .cloudbank_sql_ha import HaRuntime, SqlHa, reason
 from .cloudbank_sql_recovery import utc, verified
-from .contracts import sign
+from .contracts import sign, content_hash
 
 TYPE = "lightyear-alloydb-controlled-primary-failover"
 
@@ -148,14 +148,39 @@ def verify_ha(value, key, profile, images, environment):
             and value.get("profile") == profile and value.get("images") == images
             and value.get("environment") == environment, "alloydb-ha-result-binding-invalid")
     before, after = value["preflight"]["source_profile"], value["promoted_profile"]
+    validate_profile(profile)
+    managed = value["preflight"].get("managed_target", {})
+    require(managed.get("content_sha256") == content_hash(managed)
+            and managed.get("profile_sha256") == profile["content_sha256"]
+            and managed.get("images_sha256") == hashed(images) and managed.get("environment") == environment
+            and managed.get("database", {}).get("resource") == profile["resource"]
+            and managed["database"].get("address") == before["private_ip"], "alloydb-ha-managed-target-binding-invalid")
     require(before["resource"] == profile["resource"] and before["availability_type"] == "REGIONAL"
             and before["active_zone"] != after["active_zone"] and
             all(before[k] == after[k] for k in before if k != "active_zone"), "alloydb-ha-promotion-unproven")
     require(value["preflight"]["processes"] == value["after"]["processes"] and
+            set(value["preflight"]["processes"]) == set(images) and
             value["after"]["acknowledged_state_matches"] is True and value["after"]["transfer_replay_no_extra_effects"] is True
             and value["recovery_within_limit"] is True and 0 < value["recovery_seconds"] <= 600
             and value["recovery"]["status"] == "restored" and value["recovery"]["errors"] == []
             and value["recovery"]["operation_completion_observed"] is True, "alloydb-ha-recovery-unproven")
+    operation = value.get("operation", {})
+    result = operation.get("result", {})
+    require(operation.get("target") == profile["resource"]
+            and operation.get("name", "").startswith(profile["resource"].split("/clusters/", 1)[0] + "/operations/")
+            and result.get("name") == operation["name"] and result.get("done") is True and not result.get("error")
+            and result.get("metadata", {}).get("target") == profile["resource"], "alloydb-ha-provider-operation-unproven")
+    for side in (value["preflight"], value["after"], value["recovery"]):
+        require(set(side.get("services", {})) == set(images)
+                and all(row.get("ready_replicas") == 2 and row.get("http_readiness") == 200
+                        for row in side["services"].values()), "alloydb-ha-eight-services-readiness-unproven")
+    post = value["after"]
+    require(post.get("new_transfer", {}).get("http_status") == 200
+            and post.get("new_clearance", {}).get("replay_unchanged") is True
+            and post.get("credit", {}).get("score_in_declared_range") is True
+            and post.get("chat", {}).get("bounded_response") is True
+            and all(post.get(name, {}).get("queue", {}).get("state") == "PROCESSED"
+                    for name in ("new_deposit", "new_clearance")), "alloydb-ha-new-business-writes-unproven")
     require(all(value.get(k) is False for k in ("production_ready", "alloydb_platform_qualified", "credentials_persisted",
                                                "raw_database_rows_persisted")), "alloydb-ha-scope-invalid")
     return value

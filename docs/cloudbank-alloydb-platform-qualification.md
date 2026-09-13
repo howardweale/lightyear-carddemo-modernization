@@ -5,6 +5,14 @@ Status: implementation and live campaign in progress. Authorized on 2026-09-12.
 The active campaign is `alloydb-platform-20260912a`. Current controls (TLS, manifests,
 External Secrets synchronization and metrics for all 16 current pods), runtime identity,
 retained immutable-image security and synthetic alert fire/recovery have passing evidence.
+The corrected recovery run also passed: PITR 507 seconds, backup restore 451 seconds, RPO
+30 seconds, exact coverage of 7,999 rows, eight tables and three sequences. Both isolated
+restore targets were deleted. Its receipt content hash is
+`a5ad6a27c21d83d76f5e699724867aab0f4e9452faf7cf0c2fbec870de3d7e3b`.
+The corrected rotation run verified the new and restored values on both replicas, restored
+the original template/version policy, disabled temporary version 8 and retained restored
+version 9. Its receipt content hash is
+`f1cdaa7e4d0507560db2e464cbc77979d38d064dae48d11fe3fc39a6173acb62`.
 The first measured load completed 5,314 requests with zero errors but failed the unchanged
 500 ms aggregate p95 limit at 589.44 ms. The first completed backup and PITR restore had
 matching table data but advanced sequence counters; that failed evidence remains retained.

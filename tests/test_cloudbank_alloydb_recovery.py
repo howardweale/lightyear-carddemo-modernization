@@ -31,6 +31,14 @@ class AlloyRecoveryGuards(unittest.TestCase):
         with self.assertRaisesRegex(JourneyFailure, "target-mismatch"):
             runner.wait("pitr")
 
+    def test_overlapped_primary_with_lost_submission_response_is_not_created_twice(self):
+        runner = self.runner()
+        runner.state["operations"]["pitr-primary"] = {"name": None}
+        runner.provision_primary = Mock()
+        with self.assertRaisesRegex(JourneyFailure, "response-uncertain"):
+            runner.finish_restore("pitr")
+        runner.provision_primary.assert_not_called()
+
     def test_cleanup_never_adopts_a_recreated_cluster(self):
         runner = self.runner()
         runner.state["targets"]["pitr"] = {"name": "temporary", "resource": "owned", "absent_before": True, "uid": "original"}

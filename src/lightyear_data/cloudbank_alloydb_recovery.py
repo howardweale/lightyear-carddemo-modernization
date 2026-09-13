@@ -198,10 +198,15 @@ class AlloyRecovery(SqlRecovery):
             require(len(instances) <= 1, "alloydb-unexpected-restore-instances")
             if instances:
                 instance = instances[0]
+                self.wait(kind + "-primary")
+                if not record.get("primary_uid"):
+                    # A completed, target-bound create operation also supplies
+                    # the original UID if the following instance read was lost.
+                    record["primary_uid"] = self.state["operations"][kind + "-primary"]["result"].get("response", {}).get("uid")
                 require(instance["name"] == record["resource"] + "/instances/primary"
                         and record.get("primary_uid") and instance.get("uid") == record["primary_uid"],
                         "alloydb-unowned-or-recreated-instance")
-                self.wait(kind + "-primary")
+                self.save()
                 self.submit(kind + "-delete-primary", instance["name"], "instances", "delete", "primary", "--cluster=" + record["name"])
                 self.wait(kind + "-delete-primary")
             self.target_guard(kind)

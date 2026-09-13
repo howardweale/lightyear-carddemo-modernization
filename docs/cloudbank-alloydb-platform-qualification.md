@@ -10,6 +10,17 @@ The first measured load completed 5,314 requests with zero errors but failed the
 matching table data but advanced sequence counters; that failed evidence remains retained.
 Qualification is still pending the remaining operational results and complete admission.
 
+Run network enforcement after all restore probes and their policies are removed, and without
+overlapping another configuration or pod change. Its baseline deliberately includes all observed
+policies; a concurrent isolated-restore policy change caused the first network attempt to fail
+closed and remove its owned probes. The guard must remain strict.
+
+The first correlation attempt found 16 request-log records but no exported trace spans. The
+shared collector reported `ResourceExhausted` and the project had a 3,000,000-span daily Cloud
+Trace ingestion quota. The original logging configuration was retained and recovery completed.
+A quota increase request is prepared locally; it has not been submitted. Correlation still
+requires a fresh passing live observation after trace ingestion is available.
+
 This follow-up qualifies the synthetic nonproduction AlloyDB deployment created by MS71.
 It preserves the original MS71 business-equivalence acceptance and MS67 Cloud SQL evidence.
 The new platform receipt must bind the actual AlloyDB resource, namespace UID, eight immutable

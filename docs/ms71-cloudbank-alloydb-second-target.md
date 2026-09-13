@@ -1,5 +1,11 @@
 # MS71 — CloudBank AlloyDB Second Target
 
+**Current AlloyDB status: `alloydb_platform_qualified: true`.** The separate
+[platform qualification receipt](receipts/alloydb-platform-20260912a/alloydb-platform.receipt.json)
+passed 29 operational scenarios on 2026-09-13. This is additional to the original equivalence
+acceptance below. See the [platform campaign and scope](cloudbank-alloydb-platform-qualification.md);
+production readiness remains false.
+
 Status: complete — both live 18-scenario comparisons passed on 2026-09-12.
 The [managed-target runbook](../factory/cloudbank/alloydb-second-target/README.md) describes the
 implemented commands. MS71 is the explicitly selected number; MS68–70 are not renumbered or marked complete.
@@ -16,8 +22,9 @@ all recovery checks passed and both managed target deployments were restored.
 
 The operator verified signatures and storage readbacks before exporting these original bytes.
 Durable acceptance: `gs://lightyear-ms67-nonproduction-ms67-evidence/ms71/ms71-20260912a/ms71-alloydb-second-target.receipt.json`.
-The receipt records `ms71_complete: true`, `production_ready: false`, and
-`alloydb_platform_qualified: false`: this acceptance covers bounded synthetic business equivalence.
+The original equivalence receipt records `ms71_complete: true`, `production_ready: false`, and
+`alloydb_platform_qualified: false`: that historical acceptance covers bounded synthetic business
+equivalence. It does not represent the later platform qualification status.
 
 The separately authorized [AlloyDB platform follow-up](cloudbank-alloydb-platform-qualification.md)
 completed on 2026-09-13: all 29 operational scenarios passed for the same eight services.

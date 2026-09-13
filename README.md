@@ -37,8 +37,15 @@ Completed CloudBank milestone: **[MS71 — AlloyDB Second Target](docs/ms71-clou
 Oracle to Cloud SQL and Oracle to AlloyDB each passed all 18 scenarios with the same eight service
 images and unchanged comparator. The [signed acceptance receipt](docs/receipts/ms71-20260912a/ms71-alloydb-second-target.receipt.json)
 records campaign `ms71-20260912a` and successful recovery. The [managed-target workflow](factory/cloudbank/alloydb-second-target/)
-implements provisioning through acceptance. This result covers bounded synthetic nonproduction
-business equivalence; AlloyDB platform qualification and production readiness remain false.
+implements provisioning through acceptance. That original receipt covers bounded synthetic
+nonproduction business equivalence.
+
+**Current AlloyDB status: `alloydb_platform_qualified: true`.** The separate
+[signed platform qualification receipt](docs/receipts/alloydb-platform-20260912a/alloydb-platform.receipt.json)
+passed all 29 operational scenarios across 11 phases on 2026-09-13, in addition to the two-target
+equivalence result. See the [platform campaign and measured scope](docs/cloudbank-alloydb-platform-qualification.md).
+This qualifies synthetic nonproduction, including quiesced database recovery and paced planned
+evacuations. Production readiness remains false. The original equivalence receipt is retained unchanged.
 
 v0.67 turns the MS #65 deployment design into a deployable real-platform package and chains its
 admission to both the signed MS #65 rehearsal and signed MS #66 whole-application equivalence result.

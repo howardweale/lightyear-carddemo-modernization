@@ -10,7 +10,7 @@ import json
 import math
 import time
 
-from .cloudbank_journeys import JourneyFailure, hashed, require
+from .cloudbank_journeys import JourneyFailure, SERVICES, hashed, require
 from .cloudbank_managed_target import observe_target, validate_profile
 from .cloudbank_journeys_gke import command
 from .cloudbank_secret_rotation_gke import Journal
@@ -26,6 +26,29 @@ APPLICATION_SNAPSHOT_SQL = SNAPSHOT_SQL.replace("n.nspname <> 'information_schem
     "n.nspname <> 'information_schema' AND NOT EXISTS (SELECT 1 FROM pg_depend ed "
     "WHERE ed.classid='pg_class'::regclass AND ed.objid=c.oid AND ed.deptype='e' "
     "AND ed.refclassid='pg_extension'::regclass)")
+
+# PostgreSQL may WAL-log future sequence allocations. Re-log the *unchanged*
+# current counters while writers are quiesced, before selecting the backup point.
+# No table rows, counter values, or credentials are exported by this statement.
+SEQUENCE_CHECKPOINT_SQL = r"""
+BEGIN READ WRITE;
+SET LOCAL synchronous_commit = on;
+DO $$ BEGIN
+IF EXISTS (SELECT 1 FROM pg_stat_activity WHERE datname=current_database()
+  AND usename=current_user AND pid<>pg_backend_pid() AND backend_type='client backend')
+THEN RAISE EXCEPTION 'concurrent application sessions prevent sequence checkpoint'; END IF;
+END $$;
+SELECT format($q$SELECT json_build_object('sequence',%L,'sha256',
+encode(sha256(convert_to(json_build_array(setval(%L::regclass,last_value,is_called),is_called)::text,'UTF8')),'hex'))
+FROM %I.%I$q$,n.nspname||'.'||c.relname,format('%I.%I',n.nspname,c.relname),n.nspname,c.relname)
+FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace
+WHERE n.nspname !~ '^pg_' AND n.nspname <> 'information_schema' AND c.relkind='S'
+AND NOT EXISTS (SELECT 1 FROM pg_depend ed WHERE ed.classid='pg_class'::regclass
+AND ed.objid=c.oid AND ed.deptype='e' AND ed.refclassid='pg_extension'::regclass)
+ORDER BY n.nspname,c.relname
+\gexec
+COMMIT;
+"""
 
 
 class AlloyRecovery(SqlRecovery):
@@ -123,6 +146,31 @@ class AlloyRecovery(SqlRecovery):
             "scope": "all non-extension-owned persistent application tables, materialized views and sequences; no raw rows exported"}
         self.save()
         return target["database"]["address"]
+
+    def checkpoint_sequences(self, address, before):
+        require(self.runtime.stopped == set(SERVICES)
+                and all(not self.runtime.pods(s) for s in SERVICES), "sequence-checkpoint-requires-quiesced-writers")
+        self.source_guard()
+        require(address == self.state["managed_target"]["database"]["address"], "sequence-checkpoint-source-address-drift")
+        record = {"status": "prepared", "before": before, "query_sha256": hashed(SEQUENCE_CHECKPOINT_SQL),
+                  "method": "setval-to-current-value-and-is-called-while-quiesced", "sequence_hashes": {}}
+        self.state["sequence_checkpoint"] = record
+        self.save()
+        self.connect_probes(address)
+        for database, probe in self.probes.items():
+            self.owned_resource(probe)
+            raw = self.runtime.kubectl("exec", "-i", probe["name"], "--", "env", "PGHOST=" + address,
+                "PGOPTIONS=-c default_transaction_read_only=off -c statement_timeout=60000",
+                "psql", "-X", "-qAt", "--no-password", "--set=ON_ERROR_STOP=1", data=SEQUENCE_CHECKPOINT_SQL, timeout=90)
+            rows = [json.loads(line) for line in raw.splitlines() if line.strip()]
+            require(len(rows) == before["databases"][hashed(database)]["sequence_count"]
+                    and all(set(row) == {"sequence", "sha256"} for row in rows), "sequence-checkpoint-coverage-invalid")
+            record["sequence_hashes"][hashed(database)] = rows
+        record["after"] = self.snapshot(address)
+        record["status"] = "passed" if record["after"] == before else "failed"
+        self.save()
+        require(record["status"] == "passed", "sequence-checkpoint-changed-application-state")
+        return record
 
     def start_restore(self, kind, selector):
         name = "ly-alloy-" + kind + "-" + hashed(self.runtime.run_id)[:16]
@@ -234,6 +282,7 @@ class AlloyRecovery(SqlRecovery):
             self.runtime.progress("ALLOYDB_RECOVERY=quiescing synthetic application writers")
             self.quiesce()
             before = self.snapshot(address)
+            result["sequence_checkpoint"] = self.checkpoint_sequences(address, before)
             checkpoint = utc()
             result.update(checkpoint=before, checkpoint_captured_at=checkpoint, coverage=self.state["coverage"])
             name = "ly-alloy-backup-" + hashed(self.runtime.run_id)[:16]
@@ -318,6 +367,14 @@ def verify_recovery(value, key, profile, images, environment):
     checkpoint = value.get("checkpoint", {})
     require(checkpoint.get("databases") and checkpoint.get("state_sha256") == hashed(checkpoint["databases"]),
             "alloydb-recovery-checkpoint-invalid")
+    sequence_checkpoint = value.get("sequence_checkpoint", {})
+    require(sequence_checkpoint.get("status") == "passed"
+            and sequence_checkpoint.get("before") == checkpoint and sequence_checkpoint.get("after") == checkpoint
+            and sequence_checkpoint.get("query_sha256") == hashed(SEQUENCE_CHECKPOINT_SQL)
+            and set(sequence_checkpoint.get("sequence_hashes", {})) == set(checkpoint["databases"])
+            and all(len(rows) == checkpoint["databases"][database]["sequence_count"]
+                    for database, rows in sequence_checkpoint["sequence_hashes"].items()),
+            "alloydb-recovery-unchanged-sequence-checkpoint-required")
     backup = value.get("backup", {})
     require(backup.get("metadata_sha256") == hashed(backup.get("metadata"))
             and backup.get("metadata", {}).get("clusterName") == profile["resource"].rsplit("/instances/", 1)[0]

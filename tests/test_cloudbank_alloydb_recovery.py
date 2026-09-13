@@ -3,7 +3,7 @@ import unittest
 from unittest.mock import Mock
 
 from lightyear_data.cloudbank_alloydb_recovery import AlloyRecovery, APPLICATION_SNAPSHOT_SQL
-from lightyear_data.cloudbank_journeys import JourneyFailure
+from lightyear_data.cloudbank_journeys import JourneyFailure, SERVICES, hashed
 
 
 class AlloyRecoveryGuards(unittest.TestCase):
@@ -52,3 +52,24 @@ class AlloyRecoveryGuards(unittest.TestCase):
         self.assertIn("REPEATABLE READ READ ONLY", APPLICATION_SNAPSHOT_SQL)
         self.assertIn("row_security = off", APPLICATION_SNAPSHOT_SQL)
         self.assertIn("ORDER BY h", APPLICATION_SNAPSHOT_SQL)
+
+    def test_sequence_checkpoint_refuses_running_writers_and_any_state_change(self):
+        runner = self.runner()
+        runner.runtime.stopped = set(SERVICES) - {"account"}
+        runner.source_guard = Mock()
+        with self.assertRaisesRegex(JourneyFailure, "quiesced-writers"):
+            runner.checkpoint_sequences("10.1.2.3", {})
+        runner.source_guard.assert_not_called()
+        runner.runtime.stopped = set(SERVICES)
+        runner.runtime.pods.return_value = []
+        runner.state["managed_target"] = {"database": {"address": "10.1.2.3"}}
+        runner.probes = {"cloudbank": {"name": "probe"}}
+        runner.connect_probes = runner.owned_resource = Mock()
+        runner.runtime.kubectl.return_value = '{"sequence":"public.id_seq","sha256":"' + "a" * 64 + '"}'
+        before = {"databases": {hashed("cloudbank"): {"sequence_count": 1}}, "state_sha256": "before"}
+        runner.snapshot = Mock(return_value=before)
+        self.assertEqual(runner.checkpoint_sequences("10.1.2.3", before)["status"], "passed")
+        runner.snapshot.return_value = {**before, "state_sha256": "changed"}
+        with self.assertRaisesRegex(JourneyFailure, "changed-application-state"):
+            runner.checkpoint_sequences("10.1.2.3", before)
+        self.assertEqual(runner.state["sequence_checkpoint"]["status"], "failed")

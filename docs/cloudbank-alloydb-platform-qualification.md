@@ -36,6 +36,16 @@ Production readiness, customer certification, and unplanned regional-failure qua
 outside this synthetic nonproduction campaign. Failed measurements remain recorded and cannot be
 converted to passing results by changing a threshold after the run.
 
+The first complete restore attempt exposed PostgreSQL sequence WAL allocation: account and journal
+sequence counters restored 30 and 31 ahead, while replacing only those sequence hashes reconstructed
+the exact original checkpoint hash. Backup preparation now records each sequence's existing value
+and `is_called` state with `setval` while all application writers are stopped and no other application
+role sessions exist. This changes neither counter values nor table data; the full before/after hash
+must match. The resulting backup and PITR restores must still match the entire checkpoint exactly.
+The qualification covers this quiesced procedure; it does not claim exact sequence counters during
+continuous-write recovery. PostgreSQL's [sequence WAL implementation](https://github.com/postgres/postgres/blob/REL_16_STABLE/src/backend/commands/sequence.c)
+documents the allocation and `setval` behavior used by this procedure.
+
 The tracked `tools/cloudbank_alloydb_control.py` runner binds secret rotation, log correlation,
 alert recovery, network enforcement, runtime identity and sustained load to the signed campaign
 context and accepted MS71 receipt. `tools/cloudbank_alloydb_recovery.py` owns isolated backup/PITR

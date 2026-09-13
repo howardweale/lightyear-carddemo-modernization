@@ -15,12 +15,15 @@ from pathlib import Path
 import re
 import shutil
 import subprocess
+import sys
 import tempfile
 import time
 from datetime import datetime, timedelta, timezone
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
 from urllib.request import HTTPRedirectHandler, Request, build_opener
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 
 SERVICES = ("azn-server", "customer", "account", "transfer", "checks",

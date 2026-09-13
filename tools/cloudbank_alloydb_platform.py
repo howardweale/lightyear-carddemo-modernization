@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import argparse
+from datetime import datetime, timezone
+import hashlib
 import json
 import os
 from pathlib import Path
@@ -123,9 +125,56 @@ def verify_receipt(receipt, key):
     return receipt
 
 
+def export_bundle(inputs_path, receipt_path, output, key):
+    """Copy original signed bytes only after complete admission verifies.
+
+    This is a local export. Phase controllers performed the cloud readbacks;
+    export does not claim to have repeated those reads or publish a website.
+    """
+    inputs_path, receipt_path, output = map(Path, (inputs_path, receipt_path, output))
+    receipt_raw = receipt_path.read_bytes()
+    receipt = verify_receipt(json.loads(receipt_raw), key)
+    require(not output.exists(), "alloydb-platform-fresh-export-required")
+    inputs = json.loads(inputs_path.read_bytes())
+    base = inputs_path.resolve().parent
+    require(set(inputs.get("phases", {})) == PHASES
+            and set(inputs.get("managed_boundaries", {})) == set(receipt["managed_boundaries"]),
+            "alloydb-platform-export-inputs-incomplete")
+    sources = {
+        "campaign-context.json": (inputs["context"], receipt["context"]),
+        "ms71-business-equivalence.receipt.json": (inputs["ms71_receipt"], receipt["ms71_receipt"]),
+        **{phase + ".json": (path, receipt["phases"][phase]) for phase, path in inputs["phases"].items()},
+        **{phase + ".managed-boundary.json": (path, receipt["managed_boundaries"][phase])
+           for phase, path in inputs["managed_boundaries"].items()},
+    }
+    originals = {"alloydb-platform.receipt.json": receipt_raw}
+    for name, (path, expected) in sources.items():
+        raw = (base / path).read_bytes()
+        require(json.loads(raw) == expected, "alloydb-platform-export-source-drift")
+        originals[name] = raw
+    # All verification precedes directory creation, avoiding a misleading
+    # partial export when a required phase is absent or has changed.
+    manifest = sign({"schema_version": "1.0", "record_type": "lightyear-alloydb-platform-publication-export",
+        "campaign_id": receipt["campaign_id"], "exported_at": datetime.now(timezone.utc).isoformat(),
+        "receipt_file": "alloydb-platform.receipt.json", "receipt_content_sha256": receipt["content_sha256"],
+        "operator_signatures_verified": True, "complete_gate_reconstructed": True,
+        "cloud_readback_repeated_at_export": False, "original_bytes_preserved": True,
+        "files": [{"name": name, "size_bytes": len(raw), "file_sha256": hashlib.sha256(raw).hexdigest(),
+                   "content_sha256": json.loads(raw)["content_sha256"]}
+                  for name, raw in sorted(originals.items())]}, key, receipt["context"]["signer"])
+    output.mkdir(parents=True)
+    for name, raw in originals.items():
+        (output / name).write_bytes(raw)
+    raw = (json.dumps(manifest, indent=2, sort_keys=True) + "\n").encode("utf-8")
+    (output / "publication-export.json").write_bytes(raw)
+    return {"directory": str(output.resolve()), "file_count": len(originals),
+            "export_file_sha256": hashlib.sha256(raw).hexdigest(),
+            "receipt_content_sha256": receipt["content_sha256"]}
+
+
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("action", choices=("admit", "verify"))
+    parser.add_argument("action", choices=("admit", "verify", "export"))
     parser.add_argument("--inputs", type=Path)
     parser.add_argument("--receipt", type=Path)
     parser.add_argument("--output", type=Path)
@@ -136,6 +185,9 @@ def main(argv=None):
     load = lambda p: json.loads(Path(p).read_bytes())
     if args.action == "verify":
         verify_receipt(load(args.receipt), key)
+    elif args.action == "export":
+        require(args.inputs and args.receipt and args.output, "alloydb-platform-export-paths-required")
+        print(json.dumps(export_bundle(args.inputs, args.receipt, args.output, key), indent=2))
     else:
         inputs = load(args.inputs)
         base = args.inputs.resolve().parent

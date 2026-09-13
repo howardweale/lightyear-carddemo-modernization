@@ -319,6 +319,25 @@ class ContractTests(unittest.TestCase):
 
 
 class JournalTests(unittest.TestCase):
+    def test_lost_upload_acknowledgement_requires_exact_remote_generation_readback(self):
+        with tempfile.TemporaryDirectory() as directory:
+            remote, uploads = {}, []
+            def invoke(argv, **kwargs):
+                if argv[1:3] == ["storage", "cp"]:
+                    uploads.append(argv)
+                    remote["body"] = Path(argv[3]).read_text(encoding="utf-8")
+                    raise JourneyFailure("operator-command-unavailable-or-timed-out")
+                if argv[1:4] == ["storage", "objects", "describe"]:
+                    return "123"
+                self.assertTrue(argv[3].endswith("#123"))
+                return remote["body"]
+            journal = Journal(Path(directory) / "state.json", "gs://test/secret-rotation/state.json",
+                              "test", KEY, "tester", invoke)
+            result = journal.write(state())
+            self.assertEqual(result, verified(json.loads(remote["body"]), KEY))
+            self.assertEqual(journal.generation, "123")
+            self.assertEqual(len(uploads), 1)
+
     def test_generation_fences_stale_writer_and_readback_is_checked(self):
         with tempfile.TemporaryDirectory() as directory:
             remote = {"generation": 0, "body": ""}

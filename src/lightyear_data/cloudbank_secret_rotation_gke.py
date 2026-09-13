@@ -127,13 +127,22 @@ class Journal:
         temporary.touch(mode=0o600, exist_ok=True)
         temporary.write_text(raw, encoding="utf-8")
         temporary.replace(self.path)
-        self.invoke(["gcloud", "storage", "cp", str(self.path), self.uri, "--project", self.project,
-                     "--if-generation-match=" + self.generation], timeout=180)
+        upload_error = None
+        try:
+            self.invoke(["gcloud", "storage", "cp", str(self.path), self.uri, "--project", self.project,
+                         "--if-generation-match=" + self.generation], timeout=180)
+        except JourneyFailure as exc:
+            # The upload may have committed before its acknowledgement was lost.
+            # Read the exact remote generation; never repeat the write or accept
+            # another writer's different checkpoint.
+            upload_error = exc
         generation = self.invoke(["gcloud", "storage", "objects", "describe", self.uri,
                                   "--project", self.project, "--format=value(generation)"]).strip()
         require(generation.isdigit(), "secret-rotation-checkpoint-generation-invalid")
         readback = self.invoke(["gcloud", "storage", "cat", self.uri + "#" + generation,
                                "--project", self.project], timeout=180)
+        if readback != raw and upload_error is not None:
+            raise upload_error
         require(readback == raw, "secret-rotation-checkpoint-readback-mismatch")
         self.generation = generation
         observe_checkpoint(payload, self.uri)

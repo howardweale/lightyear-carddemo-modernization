@@ -80,6 +80,11 @@ script is undocumented, and that every POSIX entry point has a PowerShell twin.
   contract and GKE implementation; `preflight` performs read-only checks against one signed explicit
   context, while `admit` requires passing signed MS #65/MS #66 receipts and all 28 signed live
   platform scenarios. Chargeable GKE mutation and teardown remain separately acknowledged scripts.
+- `./cloudbank-ms71.sh` runs the bounded Cloud SQL and AlloyDB second-target campaign. Its
+  `verify` action validates an existing signed receipt; provisioning, deployment and execution
+  require explicit target profiles, bound evidence and the nonproduction mutation acknowledgment.
+  The [managed-target runbook](factory/cloudbank/alloydb-second-target/README.md) documents inputs
+  and recovery. The Linux and Windows MS71 contract workflow verifies its admission guards.
 - `./idempiere-divergence-audit.sh verify` checks the committed IDDA Stage 1 pairing and premise
   evidence. `build` and `verify-source` require the exact clean MS #48 iDempiere checkout; neither
   action executes a database or calls a model.

@@ -19,7 +19,9 @@ def operator_session():
             power = ctypes.windll.kernel32.SetThreadExecutionState
             power.argtypes = [ctypes.c_uint32]
             power.restype = ctypes.c_uint32
-            previous_power = power(0x80000001)  # ES_CONTINUOUS | ES_SYSTEM_REQUIRED
+            # Modern Standby still suspended background work after screen-off
+            # with a system-only request on the qualification host.
+            previous_power = power(0x80000003)  # CONTINUOUS | SYSTEM_REQUIRED | DISPLAY_REQUIRED
             require(bool(previous_power), "operator-idle-sleep-hold-failed")
         os.environ.update(settings)
         yield

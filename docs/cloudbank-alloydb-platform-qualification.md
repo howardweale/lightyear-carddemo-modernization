@@ -44,7 +44,7 @@ directory retains the signed platform profile, managed profile, accepted AlloyDB
 target journey. All commands require the existing nonproduction acknowledgement for live mutations.
 
 Windows Modern Standby interrupted early attempts. Live control and recovery entry points now hold
-a [temporary system execution request](https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-setthreadexecutionstate)
+a [temporary system and display execution request](https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-setthreadexecutionstate)
 while running, and release it on exit. They use one storage worker for small evidence checkpoints.
 These process-scoped settings do not change the saved power plan or gcloud configuration. Failed
 attempts and their subsequent recovery records remain retained separately from passing evidence.

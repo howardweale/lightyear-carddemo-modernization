@@ -33,6 +33,7 @@ PHASES = {"current-controls", "runtime-identity", "secret-rotation", "log-correl
 SCENARIOS = ["signed-alloydb-deployment-contract-admitted", "signed-ms71-alloydb-business-equivalence-admitted",
              *SCENARIO_IDS[2:]]
 SCENARIOS[6] = "alloydb-deployment-materialization-observed"
+SCENARIOS[22] = "managed-alloydb-backup-created-and-metadata-verified"
 SCENARIOS.append("regional-alloydb-primary-failover-with-acknowledged-data")
 
 

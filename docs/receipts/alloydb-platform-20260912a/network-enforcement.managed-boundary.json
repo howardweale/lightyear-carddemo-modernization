@@ -1,0 +1,446 @@
+{
+  "after": {
+    "content_sha256": "6e8458b05671601b2f831f772c487e30925cbf3bbf0de5ccd2f8bb8867e8cd01",
+    "database": {
+      "address": "10.151.44.2",
+      "content_sha256": "f0dc06b4682df96ae5517d846fdc0c001aac36bd526ebd9cbe4b76bd7f724707",
+      "created_at": "2026-09-12T16:30:54.191513295Z",
+      "database_version": "POSTGRES_16",
+      "provider": "alloydb-postgresql",
+      "resource": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/cloudbank-ms71-alloydb/instances/primary"
+    },
+    "environment": {
+      "cluster": "cloudbank-ms67",
+      "namespace": "cloudbank-ms71-alloydb",
+      "namespace_uid_sha256": "c7d6db875fdf24ad13aaa023b98794427a31ed6da6df28127c2ae80e72177ebf",
+      "project": "lightyear-ms67-nonproduction",
+      "region": "us-west1"
+    },
+    "images_sha256": "58472577e687bc8887168960f60ad6dcf82a918fcd4d90c399cc8e26d36db4b7",
+    "probe_connection": {
+      "address": "10.151.44.2",
+      "database": "cloudbank",
+      "port": 5432,
+      "tls": true
+    },
+    "profile_sha256": "a15cf9ebbd601270835936b54b81ed0a32325ab0e726f34acf60f17285fca4e7",
+    "services": {
+      "account": {
+        "auxiliary_connections": {
+          "LIQUIBASE_DATASOURCE_URL": {
+            "address": "10.151.44.2",
+            "database": "cloudbank",
+            "port": 5432,
+            "tls": true
+          }
+        },
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "dcd6f950-7468-4c0b-bcb8-38cef4c582fd",
+            "version": "1789231510479055008"
+          },
+          {
+            "name": "cloudbank-account-external",
+            "uid": "ff9970ab-95bc-46dd-9f64-a1ba5b33954a",
+            "version": "1789233966016079018"
+          }
+        ],
+        "connection": {
+          "address": "10.151.44.2",
+          "database": "cloudbank",
+          "port": 5432,
+          "tls": true
+        }
+      },
+      "azn-server": {
+        "auxiliary_connections": {
+          "LIQUIBASE_DATASOURCE_URL": {
+            "address": "10.151.44.2",
+            "database": "cloudbank",
+            "port": 5432,
+            "tls": true
+          }
+        },
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "dcd6f950-7468-4c0b-bcb8-38cef4c582fd",
+            "version": "1789231510479055008"
+          },
+          {
+            "name": "cloudbank-azn-server-external",
+            "uid": "8b0b9a87-eb8c-482f-9768-07ce79b9d826",
+            "version": "1789233966250687006"
+          }
+        ],
+        "connection": {
+          "address": "10.151.44.2",
+          "database": "cloudbank",
+          "port": 5432,
+          "tls": true
+        }
+      },
+      "chatbot": {
+        "auxiliary_connections": {},
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "dcd6f950-7468-4c0b-bcb8-38cef4c582fd",
+            "version": "1789231510479055008"
+          },
+          {
+            "name": "cloudbank-chatbot-external",
+            "uid": "949f0a20-671a-42ec-b273-30911448ab3b",
+            "version": "1789233966483919020"
+          }
+        ],
+        "connection": null
+      },
+      "checks": {
+        "auxiliary_connections": {
+          "LIQUIBASE_DATASOURCE_URL": {
+            "address": "10.151.44.2",
+            "database": "cloudbank",
+            "port": 5432,
+            "tls": true
+          }
+        },
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "dcd6f950-7468-4c0b-bcb8-38cef4c582fd",
+            "version": "1789231510479055008"
+          },
+          {
+            "name": "cloudbank-checks-external",
+            "uid": "94bb395d-8739-4aa3-8fa0-0820f280674b",
+            "version": "1789233966817439009"
+          }
+        ],
+        "connection": {
+          "address": "10.151.44.2",
+          "database": "cloudbank",
+          "port": 5432,
+          "tls": true
+        }
+      },
+      "creditscore": {
+        "auxiliary_connections": {},
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "dcd6f950-7468-4c0b-bcb8-38cef4c582fd",
+            "version": "1789231510479055008"
+          },
+          {
+            "name": "cloudbank-creditscore-external",
+            "uid": "dc2572d5-88b3-418e-9fe6-6505eb720128",
+            "version": "1789268608879631011"
+          }
+        ],
+        "connection": null
+      },
+      "customer": {
+        "auxiliary_connections": {
+          "LIQUIBASE_DATASOURCE_URL": {
+            "address": "10.151.44.2",
+            "database": "cloudbank",
+            "port": 5432,
+            "tls": true
+          }
+        },
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "dcd6f950-7468-4c0b-bcb8-38cef4c582fd",
+            "version": "1789231510479055008"
+          },
+          {
+            "name": "cloudbank-customer-external",
+            "uid": "408ec5c9-d414-4a31-b47f-3be93e37dcb8",
+            "version": "1789233967118447003"
+          }
+        ],
+        "connection": {
+          "address": "10.151.44.2",
+          "database": "cloudbank",
+          "port": 5432,
+          "tls": true
+        }
+      },
+      "testrunner": {
+        "auxiliary_connections": {
+          "LIQUIBASE_DATASOURCE_URL": {
+            "address": "10.151.44.2",
+            "database": "cloudbank",
+            "port": 5432,
+            "tls": true
+          }
+        },
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "dcd6f950-7468-4c0b-bcb8-38cef4c582fd",
+            "version": "1789231510479055008"
+          },
+          {
+            "name": "cloudbank-testrunner-external",
+            "uid": "435cc83c-ef2e-4346-97ae-322f08efcc3d",
+            "version": "1789233967286031017"
+          }
+        ],
+        "connection": {
+          "address": "10.151.44.2",
+          "database": "cloudbank",
+          "port": 5432,
+          "tls": true
+        }
+      },
+      "transfer": {
+        "auxiliary_connections": {},
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "dcd6f950-7468-4c0b-bcb8-38cef4c582fd",
+            "version": "1789231510479055008"
+          },
+          {
+            "name": "cloudbank-transfer-external",
+            "uid": "a9149bfa-a117-43e5-9f24-a2b5cb3c8144",
+            "version": "1789233967440015016"
+          }
+        ],
+        "connection": null
+      }
+    }
+  },
+  "alloydb_platform_qualified": false,
+  "before": {
+    "content_sha256": "6e8458b05671601b2f831f772c487e30925cbf3bbf0de5ccd2f8bb8867e8cd01",
+    "database": {
+      "address": "10.151.44.2",
+      "content_sha256": "f0dc06b4682df96ae5517d846fdc0c001aac36bd526ebd9cbe4b76bd7f724707",
+      "created_at": "2026-09-12T16:30:54.191513295Z",
+      "database_version": "POSTGRES_16",
+      "provider": "alloydb-postgresql",
+      "resource": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/cloudbank-ms71-alloydb/instances/primary"
+    },
+    "environment": {
+      "cluster": "cloudbank-ms67",
+      "namespace": "cloudbank-ms71-alloydb",
+      "namespace_uid_sha256": "c7d6db875fdf24ad13aaa023b98794427a31ed6da6df28127c2ae80e72177ebf",
+      "project": "lightyear-ms67-nonproduction",
+      "region": "us-west1"
+    },
+    "images_sha256": "58472577e687bc8887168960f60ad6dcf82a918fcd4d90c399cc8e26d36db4b7",
+    "probe_connection": {
+      "address": "10.151.44.2",
+      "database": "cloudbank",
+      "port": 5432,
+      "tls": true
+    },
+    "profile_sha256": "a15cf9ebbd601270835936b54b81ed0a32325ab0e726f34acf60f17285fca4e7",
+    "services": {
+      "account": {
+        "auxiliary_connections": {
+          "LIQUIBASE_DATASOURCE_URL": {
+            "address": "10.151.44.2",
+            "database": "cloudbank",
+            "port": 5432,
+            "tls": true
+          }
+        },
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "dcd6f950-7468-4c0b-bcb8-38cef4c582fd",
+            "version": "1789231510479055008"
+          },
+          {
+            "name": "cloudbank-account-external",
+            "uid": "ff9970ab-95bc-46dd-9f64-a1ba5b33954a",
+            "version": "1789233966016079018"
+          }
+        ],
+        "connection": {
+          "address": "10.151.44.2",
+          "database": "cloudbank",
+          "port": 5432,
+          "tls": true
+        }
+      },
+      "azn-server": {
+        "auxiliary_connections": {
+          "LIQUIBASE_DATASOURCE_URL": {
+            "address": "10.151.44.2",
+            "database": "cloudbank",
+            "port": 5432,
+            "tls": true
+          }
+        },
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "dcd6f950-7468-4c0b-bcb8-38cef4c582fd",
+            "version": "1789231510479055008"
+          },
+          {
+            "name": "cloudbank-azn-server-external",
+            "uid": "8b0b9a87-eb8c-482f-9768-07ce79b9d826",
+            "version": "1789233966250687006"
+          }
+        ],
+        "connection": {
+          "address": "10.151.44.2",
+          "database": "cloudbank",
+          "port": 5432,
+          "tls": true
+        }
+      },
+      "chatbot": {
+        "auxiliary_connections": {},
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "dcd6f950-7468-4c0b-bcb8-38cef4c582fd",
+            "version": "1789231510479055008"
+          },
+          {
+            "name": "cloudbank-chatbot-external",
+            "uid": "949f0a20-671a-42ec-b273-30911448ab3b",
+            "version": "1789233966483919020"
+          }
+        ],
+        "connection": null
+      },
+      "checks": {
+        "auxiliary_connections": {
+          "LIQUIBASE_DATASOURCE_URL": {
+            "address": "10.151.44.2",
+            "database": "cloudbank",
+            "port": 5432,
+            "tls": true
+          }
+        },
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "dcd6f950-7468-4c0b-bcb8-38cef4c582fd",
+            "version": "1789231510479055008"
+          },
+          {
+            "name": "cloudbank-checks-external",
+            "uid": "94bb395d-8739-4aa3-8fa0-0820f280674b",
+            "version": "1789233966817439009"
+          }
+        ],
+        "connection": {
+          "address": "10.151.44.2",
+          "database": "cloudbank",
+          "port": 5432,
+          "tls": true
+        }
+      },
+      "creditscore": {
+        "auxiliary_connections": {},
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "dcd6f950-7468-4c0b-bcb8-38cef4c582fd",
+            "version": "1789231510479055008"
+          },
+          {
+            "name": "cloudbank-creditscore-external",
+            "uid": "dc2572d5-88b3-418e-9fe6-6505eb720128",
+            "version": "1789268608879631011"
+          }
+        ],
+        "connection": null
+      },
+      "customer": {
+        "auxiliary_connections": {
+          "LIQUIBASE_DATASOURCE_URL": {
+            "address": "10.151.44.2",
+            "database": "cloudbank",
+            "port": 5432,
+            "tls": true
+          }
+        },
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "dcd6f950-7468-4c0b-bcb8-38cef4c582fd",
+            "version": "1789231510479055008"
+          },
+          {
+            "name": "cloudbank-customer-external",
+            "uid": "408ec5c9-d414-4a31-b47f-3be93e37dcb8",
+            "version": "1789233967118447003"
+          }
+        ],
+        "connection": {
+          "address": "10.151.44.2",
+          "database": "cloudbank",
+          "port": 5432,
+          "tls": true
+        }
+      },
+      "testrunner": {
+        "auxiliary_connections": {
+          "LIQUIBASE_DATASOURCE_URL": {
+            "address": "10.151.44.2",
+            "database": "cloudbank",
+            "port": 5432,
+            "tls": true
+          }
+        },
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "dcd6f950-7468-4c0b-bcb8-38cef4c582fd",
+            "version": "1789231510479055008"
+          },
+          {
+            "name": "cloudbank-testrunner-external",
+            "uid": "435cc83c-ef2e-4346-97ae-322f08efcc3d",
+            "version": "1789233967286031017"
+          }
+        ],
+        "connection": {
+          "address": "10.151.44.2",
+          "database": "cloudbank",
+          "port": 5432,
+          "tls": true
+        }
+      },
+      "transfer": {
+        "auxiliary_connections": {},
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "dcd6f950-7468-4c0b-bcb8-38cef4c582fd",
+            "version": "1789231510479055008"
+          },
+          {
+            "name": "cloudbank-transfer-external",
+            "uid": "a9149bfa-a117-43e5-9f24-a2b5cb3c8144",
+            "version": "1789233967440015016"
+          }
+        ],
+        "connection": null
+      }
+    }
+  },
+  "content_sha256": "e0f27e3f1d094c0ece0b8e60f0f8b8cdf8b695724f802af3d42d4dc7d89efcfb",
+  "context_sha256": "163aef725f4045d3bc560b78e99862b499315622f54959326f0037356980514a",
+  "control_observation_sha256": "75724f2e5223f4803427a83bd59b6391d77f44131ed7c519c3130b7ebd6960e4",
+  "controller_commit": "84582a8c632bb200fef27f02f90fd0e2f0995de6",
+  "phase": "network-enforcement",
+  "record_type": "lightyear-alloydb-control-managed-boundary",
+  "signature": {
+    "algorithm": "hmac-sha256",
+    "signer": "howard.weale@gmail.com",
+    "value": "86d786fa7791408822b3e5ecf0e9403013c126d38435556b4ae0bcbf531a4d5e"
+  }
+}

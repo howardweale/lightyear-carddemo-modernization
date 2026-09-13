@@ -17,6 +17,7 @@ from lightyear_data.cloudbank_edge_ai import validate_execution_receipt as valid
 from lightyear_data.cloudbank_image_security import ImageJournal, save_observation
 from lightyear_data.cloudbank_journeys import ACK, JourneyFailure, require
 from lightyear_data.cloudbank_journeys_gke import GkeRuntime, command
+from lightyear_data.cloudbank_managed_target import ManagedGkeRuntime, validate_profile as validate_managed_profile
 from lightyear_data.cloudbank_network_enforcement import (
     Backend, INTENT, LABEL, LEASE, NetworkRun, OBSERVATION_FILE, STATE_FILE, STATE_TYPE,
     compiled_probe, verify_observation,
@@ -38,6 +39,7 @@ def parser():
     for name in ("output-root", "observation", "recovery-state"):
         root.add_argument("--" + name, type=Path)
     root.add_argument("--source-instance", default="cloudbank-ms67-postgres")
+    root.add_argument("--managed-target-profile", type=Path)
     root.add_argument("--evidence-key-secret", default="cloudbank-ms67-evidence-key")
     root.add_argument("--original-process-stopped", action="store_true")
     return root
@@ -133,6 +135,11 @@ def main(argv=None):
         bindings = {"image_lock_sha256": lock["content_sha256"], "ms64_receipt_sha256": ms64["content_sha256"],
                     "platform_profile_sha256": profile["content_sha256"]}
         environment = {k: getattr(args, k) for k in ("project", "region", "cluster", "namespace")}
+        managed = load(args.managed_target_profile) if args.managed_target_profile else None
+        if managed:
+            validate_managed_profile(managed)
+            require(all(managed[k] == environment[k] for k in environment), "network-managed-context-mismatch")
+            bindings["managed_target_profile_sha256"] = managed["content_sha256"]
         if args.action == "verify":
             require(args.observation, "network-observation-required")
             verify_observation(load(args.observation), key, bindings, images, environment, artifact)
@@ -143,7 +150,7 @@ def main(argv=None):
         require(not output.exists() and not output.is_relative_to(ROOT), "network-fresh-private-output-required")
         output.mkdir(mode=0o700, parents=True)
         run_id = "ms67-network-" + uuid.uuid4().hex
-        runtime = GkeRuntime(**environment, images=images, run_id=run_id, output=output)
+        runtime = (ManagedGkeRuntime if managed else GkeRuntime)(**environment, images=images, run_id=run_id, output=output)
         environment = runtime.environment()
         namespace_uid = runtime.get("namespace", args.namespace)["metadata"]["uid"]
         require(profile["context"] == runtime.context and profile["namespace"] == args.namespace
@@ -157,6 +164,8 @@ def main(argv=None):
                  "resources": [], "lease_uid": None, "cleanup_complete": False, "phase": "validating",
                  "credentials_persisted": False, "raw_output_persisted": False, "production_environment": False}
         generation = "0"
+        if managed:
+            state["managed_target_profile"] = managed
         if args.action == "recover":
             local = load(args.recovery_state)
             verified_state(local, key, bindings, images, environment, profile)
@@ -166,6 +175,7 @@ def main(argv=None):
             require(re.fullmatch(r"[1-9][0-9]*", generation), "network-recovery-generation-invalid")
             state = json.loads(command(["gcloud", "storage", "cat", uri + "#" + generation, "--project", args.project]))
             verified_state(state, key, bindings, images, environment, profile)
+            require(state.get("managed_target_profile") == managed, "network-recovery-managed-profile-mismatch")
             require(state.get("run_id") == local["run_id"] and state.get("recovery_uri") == uri, "network-latest-checkpoint-mismatch")
             state = {k: v for k, v in state.items() if k not in {"content_sha256", "signature"}}
         journal = ImageJournal(output / STATE_FILE, state["recovery_uri"], args.project, key, args.signer, generation=generation)

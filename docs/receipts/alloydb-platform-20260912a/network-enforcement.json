@@ -1,0 +1,2403 @@
+{
+  "application_mutations": 0,
+  "baseline": {
+    "cloudbank-model": {
+      "namespace": {
+        "labels_sha256": "f30943a0c69d2efc4bbb482bb91151744321e10043ba2f4ae3ef134950f289c9",
+        "uid": "7c78dad6-401d-4b07-a4e1-2b4b2d188c32"
+      },
+      "policies": [
+        {
+          "spec_sha256": "3ec9af3bdb8e51106bdb9507e4dd7e65ab3800deb05ad9946b9e59968716133d",
+          "uid": "222a5875-ac19-454a-8519-07ee0176a0ef"
+        },
+        {
+          "spec_sha256": "79558fd7757e83a7e26bf87d1840b7c975e8571d0e2a458ed61e159d9d578d27",
+          "uid": "7e415b4d-552e-44b0-a418-fd82f575f581"
+        },
+        {
+          "spec_sha256": "1d3c043b1097f38d16cecf99d8948e0eb1aea6d8833103a97c0b6b1435753445",
+          "uid": "c4e119fd-4970-4415-82b6-a62a4164a48b"
+        }
+      ],
+      "services": [
+        {
+          "spec_sha256": "2983504b89b41362b5f431e6830dee2dfe69f55519eb1204cc846a36dfe6875f",
+          "uid": "83f4892c-d6a2-47fe-8255-e403cd186e29"
+        }
+      ],
+      "workloads": {
+        "ollama": {
+          "pods_sha256": "9f49b15b672e7c455a354dec24aa891ff4f27887de074943ea0cda21068c0dff",
+          "policy_selection": [
+            {
+              "spec_sha256": "3ec9af3bdb8e51106bdb9507e4dd7e65ab3800deb05ad9946b9e59968716133d",
+              "uid": "222a5875-ac19-454a-8519-07ee0176a0ef"
+            },
+            {
+              "spec_sha256": "79558fd7757e83a7e26bf87d1840b7c975e8571d0e2a458ed61e159d9d578d27",
+              "uid": "7e415b4d-552e-44b0-a418-fd82f575f581"
+            },
+            {
+              "spec_sha256": "1d3c043b1097f38d16cecf99d8948e0eb1aea6d8833103a97c0b6b1435753445",
+              "uid": "c4e119fd-4970-4415-82b6-a62a4164a48b"
+            }
+          ],
+          "ready_replicas": 2,
+          "spec_sha256": "20b5733dd1eeaa354c865adaf726acc36f74c9a43404ad6426b4d3c383022a74",
+          "uid": "e208bf17-e1c0-4175-b9de-0de2bc0a697c"
+        }
+      }
+    },
+    "cloudbank-ms71-alloydb": {
+      "namespace": {
+        "labels_sha256": "3106be6f5d6d974adee277bb1c6551b1bc084ce089214a447d0f1c3ca7307bb4",
+        "uid": "f9c6ef77-5159-4eb7-b286-d85011178275"
+      },
+      "policies": [
+        {
+          "spec_sha256": "46ae0c24a296d79b11ec39ef80aa1c7f39eef48ae401b64f232ca7ecc51d155b",
+          "uid": "076028a4-99c3-470c-83b5-28c139ec6baf"
+        },
+        {
+          "spec_sha256": "79558fd7757e83a7e26bf87d1840b7c975e8571d0e2a458ed61e159d9d578d27",
+          "uid": "539beb74-67a8-4374-9df4-c371849aa7ce"
+        },
+        {
+          "spec_sha256": "974eaf085a253919014a7b34f7914cdd7a8f0f562a2534e59c54f5bc0c661955",
+          "uid": "6c253c5d-b850-47a3-8db9-0fbe71687d6c"
+        },
+        {
+          "spec_sha256": "8729dc474445f2f37b558492379ec383e7c2e5bac7796e02edfcf712df55b465",
+          "uid": "b88e9ce0-5809-463d-93fe-3381f7c39c02"
+        },
+        {
+          "spec_sha256": "eac18f961c5d78c2b4eb44cbc04e65eeb812ee92f3067206b1897beca9e20644",
+          "uid": "d4c8533a-ad7c-4669-8bb0-00b4c654e468"
+        },
+        {
+          "spec_sha256": "5b3909dc80225e19cdfcd5fc0ca7de035da89b5ebdcc9ebc2792940b8264765c",
+          "uid": "fbb127fd-e95a-498c-ad03-24f13ca54120"
+        }
+      ],
+      "services": [
+        {
+          "spec_sha256": "01f010d307898571ff3d50a6ddd54f899d200311fff052a514f55c5daa22ed9a",
+          "uid": "031dfc89-6cef-498f-b8f2-90d8b2cf0aea"
+        },
+        {
+          "spec_sha256": "adff5b51796afa5e6e11c0ef210a6b5b10eb18baed7062bf592f79d3cc33fdd0",
+          "uid": "25e8f86b-de58-4acf-8106-36ebd1041881"
+        },
+        {
+          "spec_sha256": "2495bc621321a034b9376e6e97bc8bd544340323d3115af8eab8d156db318398",
+          "uid": "6339874c-b3bd-4157-9bfa-df3e61f28cd8"
+        },
+        {
+          "spec_sha256": "80d23f8cc0e35471e2491ddb0f9649c9c3718d5695ae38f4dbc41ca76b340e06",
+          "uid": "6dfd9035-b3ff-4b3b-89a5-3cd35f0d9b79"
+        },
+        {
+          "spec_sha256": "3be1f7e9e8c5a74c8f63a1ea10f71289f7ed29960c5fa072776a2f7cceb82a50",
+          "uid": "8adabd09-2886-4b8b-bbb6-aff299538ce9"
+        },
+        {
+          "spec_sha256": "1534c650d4e448da034c98f9ab2d3fd79ffb30e21e88f39d000d19e0b2e0679a",
+          "uid": "b1d6ead7-bc27-4937-a12a-58c971bb0a40"
+        },
+        {
+          "spec_sha256": "df258522f861e6852c02e09d06657c8acac53f40e22e71ad2e563fb55a8c77c7",
+          "uid": "dba743e3-438e-4ffc-adf6-9c763be683d2"
+        },
+        {
+          "spec_sha256": "742406698bc644da610291bfbee7ed75892d9baac3871296eb044fb3fab70d40",
+          "uid": "df585fb0-03f6-4605-a63c-da2c5d38a5f3"
+        }
+      ],
+      "workloads": {
+        "account": {
+          "pods_sha256": "162c89d75bb53ff462757a92090dbc168da0da4eb03f54f34c2b297bc3304f19",
+          "policy_selection": [
+            {
+              "spec_sha256": "79558fd7757e83a7e26bf87d1840b7c975e8571d0e2a458ed61e159d9d578d27",
+              "uid": "539beb74-67a8-4374-9df4-c371849aa7ce"
+            },
+            {
+              "spec_sha256": "8729dc474445f2f37b558492379ec383e7c2e5bac7796e02edfcf712df55b465",
+              "uid": "b88e9ce0-5809-463d-93fe-3381f7c39c02"
+            },
+            {
+              "spec_sha256": "5b3909dc80225e19cdfcd5fc0ca7de035da89b5ebdcc9ebc2792940b8264765c",
+              "uid": "fbb127fd-e95a-498c-ad03-24f13ca54120"
+            }
+          ],
+          "ready_replicas": 2,
+          "spec_sha256": "020e1b02b07f63243b53f7b2c54701ab3a01476e972cc2490a134c54b931650e",
+          "uid": "8321a18c-1a5a-41a0-bbcf-bfa236690ca2"
+        },
+        "azn-server": {
+          "pods_sha256": "4681b1a50ecb2bbc285d5dcb589c3695a5a235c095d76f9d1ed2c8f4a6d59512",
+          "policy_selection": [
+            {
+              "spec_sha256": "79558fd7757e83a7e26bf87d1840b7c975e8571d0e2a458ed61e159d9d578d27",
+              "uid": "539beb74-67a8-4374-9df4-c371849aa7ce"
+            },
+            {
+              "spec_sha256": "8729dc474445f2f37b558492379ec383e7c2e5bac7796e02edfcf712df55b465",
+              "uid": "b88e9ce0-5809-463d-93fe-3381f7c39c02"
+            },
+            {
+              "spec_sha256": "5b3909dc80225e19cdfcd5fc0ca7de035da89b5ebdcc9ebc2792940b8264765c",
+              "uid": "fbb127fd-e95a-498c-ad03-24f13ca54120"
+            }
+          ],
+          "ready_replicas": 2,
+          "spec_sha256": "c153b0585dc5837169e2601795f4754fc41b38920abc7f1ca444be9adf565373",
+          "uid": "d78f5cac-a449-4240-ad02-e1123cc1c3e1"
+        },
+        "chatbot": {
+          "pods_sha256": "707fd86b569142470799fbd5b58d222c1dabad17226b8c3081deb5072711daa2",
+          "policy_selection": [
+            {
+              "spec_sha256": "79558fd7757e83a7e26bf87d1840b7c975e8571d0e2a458ed61e159d9d578d27",
+              "uid": "539beb74-67a8-4374-9df4-c371849aa7ce"
+            },
+            {
+              "spec_sha256": "974eaf085a253919014a7b34f7914cdd7a8f0f562a2534e59c54f5bc0c661955",
+              "uid": "6c253c5d-b850-47a3-8db9-0fbe71687d6c"
+            },
+            {
+              "spec_sha256": "8729dc474445f2f37b558492379ec383e7c2e5bac7796e02edfcf712df55b465",
+              "uid": "b88e9ce0-5809-463d-93fe-3381f7c39c02"
+            },
+            {
+              "spec_sha256": "eac18f961c5d78c2b4eb44cbc04e65eeb812ee92f3067206b1897beca9e20644",
+              "uid": "d4c8533a-ad7c-4669-8bb0-00b4c654e468"
+            },
+            {
+              "spec_sha256": "5b3909dc80225e19cdfcd5fc0ca7de035da89b5ebdcc9ebc2792940b8264765c",
+              "uid": "fbb127fd-e95a-498c-ad03-24f13ca54120"
+            }
+          ],
+          "ready_replicas": 2,
+          "spec_sha256": "914f87b5b089e2b6d76df8a98b5b8204a1799bb28d21843ccd00d014ed5aa485",
+          "uid": "1e621692-08c0-462f-81ee-6dc1f774c827"
+        },
+        "checks": {
+          "pods_sha256": "7f3686e53abf0180e514b78c9a5769d7768fe5e4c2953b3476ec0bdcedaafc2a",
+          "policy_selection": [
+            {
+              "spec_sha256": "79558fd7757e83a7e26bf87d1840b7c975e8571d0e2a458ed61e159d9d578d27",
+              "uid": "539beb74-67a8-4374-9df4-c371849aa7ce"
+            },
+            {
+              "spec_sha256": "8729dc474445f2f37b558492379ec383e7c2e5bac7796e02edfcf712df55b465",
+              "uid": "b88e9ce0-5809-463d-93fe-3381f7c39c02"
+            },
+            {
+              "spec_sha256": "5b3909dc80225e19cdfcd5fc0ca7de035da89b5ebdcc9ebc2792940b8264765c",
+              "uid": "fbb127fd-e95a-498c-ad03-24f13ca54120"
+            }
+          ],
+          "ready_replicas": 2,
+          "spec_sha256": "8d0d005dce432b323a36a09a6b67f0e8781e77e47b9824b82467d011e605903b",
+          "uid": "09b0b809-ec4d-4881-aa99-ffe9387e8e9f"
+        },
+        "creditscore": {
+          "pods_sha256": "3b3dea6e4210515087987a95a9738c88d3a14bb1676d8390b2ef9f5f567520ff",
+          "policy_selection": [
+            {
+              "spec_sha256": "79558fd7757e83a7e26bf87d1840b7c975e8571d0e2a458ed61e159d9d578d27",
+              "uid": "539beb74-67a8-4374-9df4-c371849aa7ce"
+            },
+            {
+              "spec_sha256": "8729dc474445f2f37b558492379ec383e7c2e5bac7796e02edfcf712df55b465",
+              "uid": "b88e9ce0-5809-463d-93fe-3381f7c39c02"
+            },
+            {
+              "spec_sha256": "5b3909dc80225e19cdfcd5fc0ca7de035da89b5ebdcc9ebc2792940b8264765c",
+              "uid": "fbb127fd-e95a-498c-ad03-24f13ca54120"
+            }
+          ],
+          "ready_replicas": 2,
+          "spec_sha256": "1592c1cc72f40fa81e5bfdeac1cf6e6e2d97f11a872c5bdcbec276b581d1c387",
+          "uid": "bc772be5-6243-4e36-a4bf-e1e40b5a3685"
+        },
+        "customer": {
+          "pods_sha256": "b7bb021c9fb884ad3304cd7db10ad4585f20e61747b854dd18cabb97d7367afc",
+          "policy_selection": [
+            {
+              "spec_sha256": "79558fd7757e83a7e26bf87d1840b7c975e8571d0e2a458ed61e159d9d578d27",
+              "uid": "539beb74-67a8-4374-9df4-c371849aa7ce"
+            },
+            {
+              "spec_sha256": "8729dc474445f2f37b558492379ec383e7c2e5bac7796e02edfcf712df55b465",
+              "uid": "b88e9ce0-5809-463d-93fe-3381f7c39c02"
+            },
+            {
+              "spec_sha256": "5b3909dc80225e19cdfcd5fc0ca7de035da89b5ebdcc9ebc2792940b8264765c",
+              "uid": "fbb127fd-e95a-498c-ad03-24f13ca54120"
+            }
+          ],
+          "ready_replicas": 2,
+          "spec_sha256": "f9d5c4699e846a304e0ec4ff06a7686faff7e270984c2abf51c677712fe5a1c9",
+          "uid": "3de85089-fdff-4787-aa35-05d196b2e073"
+        },
+        "testrunner": {
+          "pods_sha256": "6be42ea6ee70e0006aa32d01b44e8963acc6c2261279e06c72105161dcefb0dc",
+          "policy_selection": [
+            {
+              "spec_sha256": "79558fd7757e83a7e26bf87d1840b7c975e8571d0e2a458ed61e159d9d578d27",
+              "uid": "539beb74-67a8-4374-9df4-c371849aa7ce"
+            },
+            {
+              "spec_sha256": "8729dc474445f2f37b558492379ec383e7c2e5bac7796e02edfcf712df55b465",
+              "uid": "b88e9ce0-5809-463d-93fe-3381f7c39c02"
+            },
+            {
+              "spec_sha256": "5b3909dc80225e19cdfcd5fc0ca7de035da89b5ebdcc9ebc2792940b8264765c",
+              "uid": "fbb127fd-e95a-498c-ad03-24f13ca54120"
+            }
+          ],
+          "ready_replicas": 2,
+          "spec_sha256": "2e0d2e17c03fe821bf88e34657131713154a4a3a6738f295bc47d589362046c1",
+          "uid": "1f19804f-e719-4883-a09a-b2765295e344"
+        },
+        "transfer": {
+          "pods_sha256": "c6b9d0f221d61a71570a9a30d3acab58674e5de3890d2fa538e7d4e980a9411d",
+          "policy_selection": [
+            {
+              "spec_sha256": "79558fd7757e83a7e26bf87d1840b7c975e8571d0e2a458ed61e159d9d578d27",
+              "uid": "539beb74-67a8-4374-9df4-c371849aa7ce"
+            },
+            {
+              "spec_sha256": "8729dc474445f2f37b558492379ec383e7c2e5bac7796e02edfcf712df55b465",
+              "uid": "b88e9ce0-5809-463d-93fe-3381f7c39c02"
+            },
+            {
+              "spec_sha256": "5b3909dc80225e19cdfcd5fc0ca7de035da89b5ebdcc9ebc2792940b8264765c",
+              "uid": "fbb127fd-e95a-498c-ad03-24f13ca54120"
+            }
+          ],
+          "ready_replicas": 2,
+          "spec_sha256": "1bda79ec4ebbd6adb793217fd9b19671d78b4ced3effa598abb9f9cce2ffc240",
+          "uid": "b7d69ab1-589d-419d-afe9-35cde31b5c0b"
+        }
+      }
+    }
+  },
+  "bindings": {
+    "image_lock_sha256": "eb3c808a5af30fe2a212ded0f27a9810a867bf651f8e759b04cd54547244a778",
+    "managed_target_profile_sha256": "a15cf9ebbd601270835936b54b81ed0a32325ab0e726f34acf60f17285fca4e7",
+    "ms64_receipt_sha256": "f78f85eb8342d81483f389918b7ed48601b19cf4374ac62fb12e27d01db2d146",
+    "platform_profile_sha256": "4b7118239fdfbd91607cd7c3ace14e91223a16f6d85b7ec4b43a9e95ba190eab"
+  },
+  "cases": [
+    {
+      "expected": "nonce-matched",
+      "id": "azn-server-self",
+      "role": "azn-server",
+      "target_sha256": "77b60feec01898d8d4738dee88e0ce3489e88817dc82d81cdd88b3bd8ccd3e78"
+    },
+    {
+      "expected": "nonce-matched",
+      "id": "customer-self",
+      "role": "customer",
+      "target_sha256": "77b60feec01898d8d4738dee88e0ce3489e88817dc82d81cdd88b3bd8ccd3e78"
+    },
+    {
+      "expected": "nonce-matched",
+      "id": "account-self",
+      "role": "account",
+      "target_sha256": "77b60feec01898d8d4738dee88e0ce3489e88817dc82d81cdd88b3bd8ccd3e78"
+    },
+    {
+      "expected": "nonce-matched",
+      "id": "transfer-self",
+      "role": "transfer",
+      "target_sha256": "77b60feec01898d8d4738dee88e0ce3489e88817dc82d81cdd88b3bd8ccd3e78"
+    },
+    {
+      "expected": "nonce-matched",
+      "id": "checks-self",
+      "role": "checks",
+      "target_sha256": "77b60feec01898d8d4738dee88e0ce3489e88817dc82d81cdd88b3bd8ccd3e78"
+    },
+    {
+      "expected": "nonce-matched",
+      "id": "testrunner-self",
+      "role": "testrunner",
+      "target_sha256": "77b60feec01898d8d4738dee88e0ce3489e88817dc82d81cdd88b3bd8ccd3e78"
+    },
+    {
+      "expected": "nonce-matched",
+      "id": "creditscore-self",
+      "role": "creditscore",
+      "target_sha256": "77b60feec01898d8d4738dee88e0ce3489e88817dc82d81cdd88b3bd8ccd3e78"
+    },
+    {
+      "expected": "nonce-matched",
+      "id": "chatbot-self",
+      "role": "chatbot",
+      "target_sha256": "77b60feec01898d8d4738dee88e0ce3489e88817dc82d81cdd88b3bd8ccd3e78"
+    },
+    {
+      "expected": "nonce-matched",
+      "id": "model-self",
+      "role": "model",
+      "target_sha256": "77b60feec01898d8d4738dee88e0ce3489e88817dc82d81cdd88b3bd8ccd3e78"
+    },
+    {
+      "expected": "nonce-matched",
+      "id": "sink-self",
+      "role": "sink",
+      "target_sha256": "77b60feec01898d8d4738dee88e0ce3489e88817dc82d81cdd88b3bd8ccd3e78"
+    },
+    {
+      "expected": "nonce-matched",
+      "id": "default-self",
+      "role": "default",
+      "target_sha256": "77b60feec01898d8d4738dee88e0ce3489e88817dc82d81cdd88b3bd8ccd3e78"
+    },
+    {
+      "expected": "nonce-matched",
+      "id": "wrong-service-self",
+      "role": "wrong-service",
+      "target_sha256": "77b60feec01898d8d4738dee88e0ce3489e88817dc82d81cdd88b3bd8ccd3e78"
+    },
+    {
+      "expected": "nonce-matched",
+      "id": "control-listener",
+      "role": "sink",
+      "target_sha256": "a120f0ce5d760b0d803211ab258f0b00f1f45302ad552705c625f6b81e22487c"
+    },
+    {
+      "expected": "nonce-matched",
+      "id": "control-sink-route",
+      "role": "sink",
+      "target_sha256": "1b914336f5a1376be6646ab2487bf159ce2db980edb859c818a26b3e56817ab1"
+    },
+    {
+      "expected": "connected",
+      "id": "control-database",
+      "role": "sink",
+      "target_sha256": "88de2c6df270445bd269271845112863bb39568693f7e300136ae4b50ffc318d"
+    },
+    {
+      "expected": "connected",
+      "id": "control-public-ingress",
+      "role": "sink",
+      "target_sha256": "26482b49647925efd56db61441a7443381aadcac00d6492e0f37860bacf488fb"
+    },
+    {
+      "expected": "connect-timeout",
+      "id": "default-ingress-denied",
+      "role": "sink",
+      "target_sha256": "6fdbde99b690ebb8159ee5f4a98835b3fa91fec4e833e5998516d35590a5bf7c"
+    },
+    {
+      "expected": "connect-timeout",
+      "id": "default-egress-denied",
+      "role": "default",
+      "target_sha256": "1b914336f5a1376be6646ab2487bf159ce2db980edb859c818a26b3e56817ab1"
+    },
+    {
+      "expected": "connect-timeout",
+      "id": "model-cross-namespace-egress-denied",
+      "role": "model",
+      "target_sha256": "1b914336f5a1376be6646ab2487bf159ce2db980edb859c818a26b3e56817ab1"
+    },
+    {
+      "expected": "connect-timeout",
+      "id": "model-database-egress-denied",
+      "role": "model",
+      "target_sha256": "88de2c6df270445bd269271845112863bb39568693f7e300136ae4b50ffc318d"
+    },
+    {
+      "expected": "connect-timeout",
+      "id": "model-public-egress-denied",
+      "role": "model",
+      "target_sha256": "26482b49647925efd56db61441a7443381aadcac00d6492e0f37860bacf488fb"
+    },
+    {
+      "expected": "connected",
+      "id": "azn-server-database-allowed",
+      "role": "azn-server",
+      "target_sha256": "88de2c6df270445bd269271845112863bb39568693f7e300136ae4b50ffc318d"
+    },
+    {
+      "expected": "connect-timeout",
+      "id": "azn-server-other-database-denied",
+      "role": "azn-server",
+      "target_sha256": "a120f0ce5d760b0d803211ab258f0b00f1f45302ad552705c625f6b81e22487c"
+    },
+    {
+      "expected": "connected",
+      "id": "azn-server-application-allowed",
+      "role": "azn-server",
+      "target_sha256": "0693a2e1cc7e7e2ba54b0ce01d666f1a4ad500fdff96da04ac87ca98fa1577a5"
+    },
+    {
+      "expected": "connect-timeout",
+      "id": "azn-server-model-0",
+      "role": "azn-server",
+      "target_sha256": "a0705c7bc81e6a99d8bf0ea51a0b579a3b4d98b27a203d04f8c00be16ee9c482"
+    },
+    {
+      "expected": "connect-timeout",
+      "id": "azn-server-model-1",
+      "role": "azn-server",
+      "target_sha256": "db3f992532df9fa394ac73f531b907c7341c7b13ee6e0671ad8cd38025099742"
+    },
+    {
+      "expected": "connected",
+      "id": "customer-database-allowed",
+      "role": "customer",
+      "target_sha256": "88de2c6df270445bd269271845112863bb39568693f7e300136ae4b50ffc318d"
+    },
+    {
+      "expected": "connect-timeout",
+      "id": "customer-other-database-denied",
+      "role": "customer",
+      "target_sha256": "a120f0ce5d760b0d803211ab258f0b00f1f45302ad552705c625f6b81e22487c"
+    },
+    {
+      "expected": "connected",
+      "id": "customer-application-allowed",
+      "role": "customer",
+      "target_sha256": "0693a2e1cc7e7e2ba54b0ce01d666f1a4ad500fdff96da04ac87ca98fa1577a5"
+    },
+    {
+      "expected": "connect-timeout",
+      "id": "customer-model-0",
+      "role": "customer",
+      "target_sha256": "a0705c7bc81e6a99d8bf0ea51a0b579a3b4d98b27a203d04f8c00be16ee9c482"
+    },
+    {
+      "expected": "connect-timeout",
+      "id": "customer-model-1",
+      "role": "customer",
+      "target_sha256": "db3f992532df9fa394ac73f531b907c7341c7b13ee6e0671ad8cd38025099742"
+    },
+    {
+      "expected": "connected",
+      "id": "account-database-allowed",
+      "role": "account",
+      "target_sha256": "88de2c6df270445bd269271845112863bb39568693f7e300136ae4b50ffc318d"
+    },
+    {
+      "expected": "connect-timeout",
+      "id": "account-other-database-denied",
+      "role": "account",
+      "target_sha256": "a120f0ce5d760b0d803211ab258f0b00f1f45302ad552705c625f6b81e22487c"
+    },
+    {
+      "expected": "connected",
+      "id": "account-application-allowed",
+      "role": "account",
+      "target_sha256": "0693a2e1cc7e7e2ba54b0ce01d666f1a4ad500fdff96da04ac87ca98fa1577a5"
+    },
+    {
+      "expected": "connect-timeout",
+      "id": "account-model-0",
+      "role": "account",
+      "target_sha256": "a0705c7bc81e6a99d8bf0ea51a0b579a3b4d98b27a203d04f8c00be16ee9c482"
+    },
+    {
+      "expected": "connect-timeout",
+      "id": "account-model-1",
+      "role": "account",
+      "target_sha256": "db3f992532df9fa394ac73f531b907c7341c7b13ee6e0671ad8cd38025099742"
+    },
+    {
+      "expected": "connected",
+      "id": "transfer-database-allowed",
+      "role": "transfer",
+      "target_sha256": "88de2c6df270445bd269271845112863bb39568693f7e300136ae4b50ffc318d"
+    },
+    {
+      "expected": "connect-timeout",
+      "id": "transfer-other-database-denied",
+      "role": "transfer",
+      "target_sha256": "a120f0ce5d760b0d803211ab258f0b00f1f45302ad552705c625f6b81e22487c"
+    },
+    {
+      "expected": "connected",
+      "id": "transfer-application-allowed",
+      "role": "transfer",
+      "target_sha256": "0693a2e1cc7e7e2ba54b0ce01d666f1a4ad500fdff96da04ac87ca98fa1577a5"
+    },
+    {
+      "expected": "connect-timeout",
+      "id": "transfer-model-0",
+      "role": "transfer",
+      "target_sha256": "a0705c7bc81e6a99d8bf0ea51a0b579a3b4d98b27a203d04f8c00be16ee9c482"
+    },
+    {
+      "expected": "connect-timeout",
+      "id": "transfer-model-1",
+      "role": "transfer",
+      "target_sha256": "db3f992532df9fa394ac73f531b907c7341c7b13ee6e0671ad8cd38025099742"
+    },
+    {
+      "expected": "connected",
+      "id": "checks-database-allowed",
+      "role": "checks",
+      "target_sha256": "88de2c6df270445bd269271845112863bb39568693f7e300136ae4b50ffc318d"
+    },
+    {
+      "expected": "connect-timeout",
+      "id": "checks-other-database-denied",
+      "role": "checks",
+      "target_sha256": "a120f0ce5d760b0d803211ab258f0b00f1f45302ad552705c625f6b81e22487c"
+    },
+    {
+      "expected": "connected",
+      "id": "checks-application-allowed",
+      "role": "checks",
+      "target_sha256": "0693a2e1cc7e7e2ba54b0ce01d666f1a4ad500fdff96da04ac87ca98fa1577a5"
+    },
+    {
+      "expected": "connect-timeout",
+      "id": "checks-model-0",
+      "role": "checks",
+      "target_sha256": "a0705c7bc81e6a99d8bf0ea51a0b579a3b4d98b27a203d04f8c00be16ee9c482"
+    },
+    {
+      "expected": "connect-timeout",
+      "id": "checks-model-1",
+      "role": "checks",
+      "target_sha256": "db3f992532df9fa394ac73f531b907c7341c7b13ee6e0671ad8cd38025099742"
+    },
+    {
+      "expected": "connected",
+      "id": "testrunner-database-allowed",
+      "role": "testrunner",
+      "target_sha256": "88de2c6df270445bd269271845112863bb39568693f7e300136ae4b50ffc318d"
+    },
+    {
+      "expected": "connect-timeout",
+      "id": "testrunner-other-database-denied",
+      "role": "testrunner",
+      "target_sha256": "a120f0ce5d760b0d803211ab258f0b00f1f45302ad552705c625f6b81e22487c"
+    },
+    {
+      "expected": "connected",
+      "id": "testrunner-application-allowed",
+      "role": "testrunner",
+      "target_sha256": "0693a2e1cc7e7e2ba54b0ce01d666f1a4ad500fdff96da04ac87ca98fa1577a5"
+    },
+    {
+      "expected": "connect-timeout",
+      "id": "testrunner-model-0",
+      "role": "testrunner",
+      "target_sha256": "a0705c7bc81e6a99d8bf0ea51a0b579a3b4d98b27a203d04f8c00be16ee9c482"
+    },
+    {
+      "expected": "connect-timeout",
+      "id": "testrunner-model-1",
+      "role": "testrunner",
+      "target_sha256": "db3f992532df9fa394ac73f531b907c7341c7b13ee6e0671ad8cd38025099742"
+    },
+    {
+      "expected": "connected",
+      "id": "creditscore-database-allowed",
+      "role": "creditscore",
+      "target_sha256": "88de2c6df270445bd269271845112863bb39568693f7e300136ae4b50ffc318d"
+    },
+    {
+      "expected": "connect-timeout",
+      "id": "creditscore-other-database-denied",
+      "role": "creditscore",
+      "target_sha256": "a120f0ce5d760b0d803211ab258f0b00f1f45302ad552705c625f6b81e22487c"
+    },
+    {
+      "expected": "connected",
+      "id": "creditscore-application-allowed",
+      "role": "creditscore",
+      "target_sha256": "0693a2e1cc7e7e2ba54b0ce01d666f1a4ad500fdff96da04ac87ca98fa1577a5"
+    },
+    {
+      "expected": "connect-timeout",
+      "id": "creditscore-model-0",
+      "role": "creditscore",
+      "target_sha256": "a0705c7bc81e6a99d8bf0ea51a0b579a3b4d98b27a203d04f8c00be16ee9c482"
+    },
+    {
+      "expected": "connect-timeout",
+      "id": "creditscore-model-1",
+      "role": "creditscore",
+      "target_sha256": "db3f992532df9fa394ac73f531b907c7341c7b13ee6e0671ad8cd38025099742"
+    },
+    {
+      "expected": "connected",
+      "id": "chatbot-database-allowed",
+      "role": "chatbot",
+      "target_sha256": "88de2c6df270445bd269271845112863bb39568693f7e300136ae4b50ffc318d"
+    },
+    {
+      "expected": "connect-timeout",
+      "id": "chatbot-other-database-denied",
+      "role": "chatbot",
+      "target_sha256": "a120f0ce5d760b0d803211ab258f0b00f1f45302ad552705c625f6b81e22487c"
+    },
+    {
+      "expected": "connected",
+      "id": "chatbot-application-allowed",
+      "role": "chatbot",
+      "target_sha256": "0693a2e1cc7e7e2ba54b0ce01d666f1a4ad500fdff96da04ac87ca98fa1577a5"
+    },
+    {
+      "expected": "connected",
+      "id": "chatbot-model-0",
+      "role": "chatbot",
+      "target_sha256": "a0705c7bc81e6a99d8bf0ea51a0b579a3b4d98b27a203d04f8c00be16ee9c482"
+    },
+    {
+      "expected": "connected",
+      "id": "chatbot-model-1",
+      "role": "chatbot",
+      "target_sha256": "db3f992532df9fa394ac73f531b907c7341c7b13ee6e0671ad8cd38025099742"
+    },
+    {
+      "expected": "connect-timeout",
+      "id": "model-wrong-namespace-0",
+      "role": "sink",
+      "target_sha256": "a0705c7bc81e6a99d8bf0ea51a0b579a3b4d98b27a203d04f8c00be16ee9c482"
+    },
+    {
+      "expected": "connect-timeout",
+      "id": "model-wrong-service-0",
+      "role": "wrong-service",
+      "target_sha256": "a0705c7bc81e6a99d8bf0ea51a0b579a3b4d98b27a203d04f8c00be16ee9c482"
+    },
+    {
+      "expected": "connect-timeout",
+      "id": "model-wrong-namespace-1",
+      "role": "sink",
+      "target_sha256": "db3f992532df9fa394ac73f531b907c7341c7b13ee6e0671ad8cd38025099742"
+    },
+    {
+      "expected": "connect-timeout",
+      "id": "model-wrong-service-1",
+      "role": "wrong-service",
+      "target_sha256": "db3f992532df9fa394ac73f531b907c7341c7b13ee6e0671ad8cd38025099742"
+    }
+  ],
+  "checks": [
+    {
+      "elapsed_ms": 25,
+      "expected": "nonce-matched",
+      "id": "account-self",
+      "outcome": "nonce-matched",
+      "phase": "positive-before",
+      "role": "account",
+      "target_sha256": "77b60feec01898d8d4738dee88e0ce3489e88817dc82d81cdd88b3bd8ccd3e78"
+    },
+    {
+      "elapsed_ms": 2,
+      "expected": "connected",
+      "id": "account-database-allowed",
+      "outcome": "connected",
+      "phase": "positive-before",
+      "role": "account",
+      "target_sha256": "88de2c6df270445bd269271845112863bb39568693f7e300136ae4b50ffc318d"
+    },
+    {
+      "elapsed_ms": 3,
+      "expected": "connected",
+      "id": "account-application-allowed",
+      "outcome": "connected",
+      "phase": "positive-before",
+      "role": "account",
+      "target_sha256": "0693a2e1cc7e7e2ba54b0ce01d666f1a4ad500fdff96da04ac87ca98fa1577a5"
+    },
+    {
+      "elapsed_ms": 59,
+      "expected": "nonce-matched",
+      "id": "azn-server-self",
+      "outcome": "nonce-matched",
+      "phase": "positive-before",
+      "role": "azn-server",
+      "target_sha256": "77b60feec01898d8d4738dee88e0ce3489e88817dc82d81cdd88b3bd8ccd3e78"
+    },
+    {
+      "elapsed_ms": 2,
+      "expected": "connected",
+      "id": "azn-server-database-allowed",
+      "outcome": "connected",
+      "phase": "positive-before",
+      "role": "azn-server",
+      "target_sha256": "88de2c6df270445bd269271845112863bb39568693f7e300136ae4b50ffc318d"
+    },
+    {
+      "elapsed_ms": 0,
+      "expected": "connected",
+      "id": "azn-server-application-allowed",
+      "outcome": "connected",
+      "phase": "positive-before",
+      "role": "azn-server",
+      "target_sha256": "0693a2e1cc7e7e2ba54b0ce01d666f1a4ad500fdff96da04ac87ca98fa1577a5"
+    },
+    {
+      "elapsed_ms": 40,
+      "expected": "nonce-matched",
+      "id": "chatbot-self",
+      "outcome": "nonce-matched",
+      "phase": "positive-before",
+      "role": "chatbot",
+      "target_sha256": "77b60feec01898d8d4738dee88e0ce3489e88817dc82d81cdd88b3bd8ccd3e78"
+    },
+    {
+      "elapsed_ms": 2,
+      "expected": "connected",
+      "id": "chatbot-database-allowed",
+      "outcome": "connected",
+      "phase": "positive-before",
+      "role": "chatbot",
+      "target_sha256": "88de2c6df270445bd269271845112863bb39568693f7e300136ae4b50ffc318d"
+    },
+    {
+      "elapsed_ms": 2,
+      "expected": "connected",
+      "id": "chatbot-application-allowed",
+      "outcome": "connected",
+      "phase": "positive-before",
+      "role": "chatbot",
+      "target_sha256": "0693a2e1cc7e7e2ba54b0ce01d666f1a4ad500fdff96da04ac87ca98fa1577a5"
+    },
+    {
+      "elapsed_ms": 2,
+      "expected": "connected",
+      "id": "chatbot-model-0",
+      "outcome": "connected",
+      "phase": "positive-before",
+      "role": "chatbot",
+      "target_sha256": "a0705c7bc81e6a99d8bf0ea51a0b579a3b4d98b27a203d04f8c00be16ee9c482"
+    },
+    {
+      "elapsed_ms": 1,
+      "expected": "connected",
+      "id": "chatbot-model-1",
+      "outcome": "connected",
+      "phase": "positive-before",
+      "role": "chatbot",
+      "target_sha256": "db3f992532df9fa394ac73f531b907c7341c7b13ee6e0671ad8cd38025099742"
+    },
+    {
+      "elapsed_ms": 75,
+      "expected": "nonce-matched",
+      "id": "checks-self",
+      "outcome": "nonce-matched",
+      "phase": "positive-before",
+      "role": "checks",
+      "target_sha256": "77b60feec01898d8d4738dee88e0ce3489e88817dc82d81cdd88b3bd8ccd3e78"
+    },
+    {
+      "elapsed_ms": 2,
+      "expected": "connected",
+      "id": "checks-database-allowed",
+      "outcome": "connected",
+      "phase": "positive-before",
+      "role": "checks",
+      "target_sha256": "88de2c6df270445bd269271845112863bb39568693f7e300136ae4b50ffc318d"
+    },
+    {
+      "elapsed_ms": 0,
+      "expected": "connected",
+      "id": "checks-application-allowed",
+      "outcome": "connected",
+      "phase": "positive-before",
+      "role": "checks",
+      "target_sha256": "0693a2e1cc7e7e2ba54b0ce01d666f1a4ad500fdff96da04ac87ca98fa1577a5"
+    },
+    {
+      "elapsed_ms": 16,
+      "expected": "nonce-matched",
+      "id": "creditscore-self",
+      "outcome": "nonce-matched",
+      "phase": "positive-before",
+      "role": "creditscore",
+      "target_sha256": "77b60feec01898d8d4738dee88e0ce3489e88817dc82d81cdd88b3bd8ccd3e78"
+    },
+    {
+      "elapsed_ms": 1,
+      "expected": "connected",
+      "id": "creditscore-database-allowed",
+      "outcome": "connected",
+      "phase": "positive-before",
+      "role": "creditscore",
+      "target_sha256": "88de2c6df270445bd269271845112863bb39568693f7e300136ae4b50ffc318d"
+    },
+    {
+      "elapsed_ms": 2,
+      "expected": "connected",
+      "id": "creditscore-application-allowed",
+      "outcome": "connected",
+      "phase": "positive-before",
+      "role": "creditscore",
+      "target_sha256": "0693a2e1cc7e7e2ba54b0ce01d666f1a4ad500fdff96da04ac87ca98fa1577a5"
+    },
+    {
+      "elapsed_ms": 88,
+      "expected": "nonce-matched",
+      "id": "customer-self",
+      "outcome": "nonce-matched",
+      "phase": "positive-before",
+      "role": "customer",
+      "target_sha256": "77b60feec01898d8d4738dee88e0ce3489e88817dc82d81cdd88b3bd8ccd3e78"
+    },
+    {
+      "elapsed_ms": 4,
+      "expected": "connected",
+      "id": "customer-database-allowed",
+      "outcome": "connected",
+      "phase": "positive-before",
+      "role": "customer",
+      "target_sha256": "88de2c6df270445bd269271845112863bb39568693f7e300136ae4b50ffc318d"
+    },
+    {
+      "elapsed_ms": 1,
+      "expected": "connected",
+      "id": "customer-application-allowed",
+      "outcome": "connected",
+      "phase": "positive-before",
+      "role": "customer",
+      "target_sha256": "0693a2e1cc7e7e2ba54b0ce01d666f1a4ad500fdff96da04ac87ca98fa1577a5"
+    },
+    {
+      "elapsed_ms": 45,
+      "expected": "nonce-matched",
+      "id": "default-self",
+      "outcome": "nonce-matched",
+      "phase": "positive-before",
+      "role": "default",
+      "target_sha256": "77b60feec01898d8d4738dee88e0ce3489e88817dc82d81cdd88b3bd8ccd3e78"
+    },
+    {
+      "elapsed_ms": 49,
+      "expected": "nonce-matched",
+      "id": "model-self",
+      "outcome": "nonce-matched",
+      "phase": "positive-before",
+      "role": "model",
+      "target_sha256": "77b60feec01898d8d4738dee88e0ce3489e88817dc82d81cdd88b3bd8ccd3e78"
+    },
+    {
+      "elapsed_ms": 55,
+      "expected": "nonce-matched",
+      "id": "sink-self",
+      "outcome": "nonce-matched",
+      "phase": "positive-before",
+      "role": "sink",
+      "target_sha256": "77b60feec01898d8d4738dee88e0ce3489e88817dc82d81cdd88b3bd8ccd3e78"
+    },
+    {
+      "elapsed_ms": 0,
+      "expected": "nonce-matched",
+      "id": "control-listener",
+      "outcome": "nonce-matched",
+      "phase": "positive-before",
+      "role": "sink",
+      "target_sha256": "a120f0ce5d760b0d803211ab258f0b00f1f45302ad552705c625f6b81e22487c"
+    },
+    {
+      "elapsed_ms": 0,
+      "expected": "nonce-matched",
+      "id": "control-sink-route",
+      "outcome": "nonce-matched",
+      "phase": "positive-before",
+      "role": "sink",
+      "target_sha256": "1b914336f5a1376be6646ab2487bf159ce2db980edb859c818a26b3e56817ab1"
+    },
+    {
+      "elapsed_ms": 1,
+      "expected": "connected",
+      "id": "control-database",
+      "outcome": "connected",
+      "phase": "positive-before",
+      "role": "sink",
+      "target_sha256": "88de2c6df270445bd269271845112863bb39568693f7e300136ae4b50ffc318d"
+    },
+    {
+      "elapsed_ms": 1,
+      "expected": "connected",
+      "id": "control-public-ingress",
+      "outcome": "connected",
+      "phase": "positive-before",
+      "role": "sink",
+      "target_sha256": "26482b49647925efd56db61441a7443381aadcac00d6492e0f37860bacf488fb"
+    },
+    {
+      "elapsed_ms": 84,
+      "expected": "nonce-matched",
+      "id": "testrunner-self",
+      "outcome": "nonce-matched",
+      "phase": "positive-before",
+      "role": "testrunner",
+      "target_sha256": "77b60feec01898d8d4738dee88e0ce3489e88817dc82d81cdd88b3bd8ccd3e78"
+    },
+    {
+      "elapsed_ms": 1,
+      "expected": "connected",
+      "id": "testrunner-database-allowed",
+      "outcome": "connected",
+      "phase": "positive-before",
+      "role": "testrunner",
+      "target_sha256": "88de2c6df270445bd269271845112863bb39568693f7e300136ae4b50ffc318d"
+    },
+    {
+      "elapsed_ms": 3,
+      "expected": "connected",
+      "id": "testrunner-application-allowed",
+      "outcome": "connected",
+      "phase": "positive-before",
+      "role": "testrunner",
+      "target_sha256": "0693a2e1cc7e7e2ba54b0ce01d666f1a4ad500fdff96da04ac87ca98fa1577a5"
+    },
+    {
+      "elapsed_ms": 24,
+      "expected": "nonce-matched",
+      "id": "transfer-self",
+      "outcome": "nonce-matched",
+      "phase": "positive-before",
+      "role": "transfer",
+      "target_sha256": "77b60feec01898d8d4738dee88e0ce3489e88817dc82d81cdd88b3bd8ccd3e78"
+    },
+    {
+      "elapsed_ms": 2,
+      "expected": "connected",
+      "id": "transfer-database-allowed",
+      "outcome": "connected",
+      "phase": "positive-before",
+      "role": "transfer",
+      "target_sha256": "88de2c6df270445bd269271845112863bb39568693f7e300136ae4b50ffc318d"
+    },
+    {
+      "elapsed_ms": 3,
+      "expected": "connected",
+      "id": "transfer-application-allowed",
+      "outcome": "connected",
+      "phase": "positive-before",
+      "role": "transfer",
+      "target_sha256": "0693a2e1cc7e7e2ba54b0ce01d666f1a4ad500fdff96da04ac87ca98fa1577a5"
+    },
+    {
+      "elapsed_ms": 74,
+      "expected": "nonce-matched",
+      "id": "wrong-service-self",
+      "outcome": "nonce-matched",
+      "phase": "positive-before",
+      "role": "wrong-service",
+      "target_sha256": "77b60feec01898d8d4738dee88e0ce3489e88817dc82d81cdd88b3bd8ccd3e78"
+    },
+    {
+      "elapsed_ms": 3020,
+      "expected": "connect-timeout",
+      "id": "account-other-database-denied",
+      "outcome": "connect-timeout",
+      "phase": "denied-first",
+      "role": "account",
+      "target_sha256": "a120f0ce5d760b0d803211ab258f0b00f1f45302ad552705c625f6b81e22487c"
+    },
+    {
+      "elapsed_ms": 3002,
+      "expected": "connect-timeout",
+      "id": "account-model-0",
+      "outcome": "connect-timeout",
+      "phase": "denied-first",
+      "role": "account",
+      "target_sha256": "a0705c7bc81e6a99d8bf0ea51a0b579a3b4d98b27a203d04f8c00be16ee9c482"
+    },
+    {
+      "elapsed_ms": 3003,
+      "expected": "connect-timeout",
+      "id": "account-model-1",
+      "outcome": "connect-timeout",
+      "phase": "denied-first",
+      "role": "account",
+      "target_sha256": "db3f992532df9fa394ac73f531b907c7341c7b13ee6e0671ad8cd38025099742"
+    },
+    {
+      "elapsed_ms": 3039,
+      "expected": "connect-timeout",
+      "id": "azn-server-other-database-denied",
+      "outcome": "connect-timeout",
+      "phase": "denied-first",
+      "role": "azn-server",
+      "target_sha256": "a120f0ce5d760b0d803211ab258f0b00f1f45302ad552705c625f6b81e22487c"
+    },
+    {
+      "elapsed_ms": 3002,
+      "expected": "connect-timeout",
+      "id": "azn-server-model-0",
+      "outcome": "connect-timeout",
+      "phase": "denied-first",
+      "role": "azn-server",
+      "target_sha256": "a0705c7bc81e6a99d8bf0ea51a0b579a3b4d98b27a203d04f8c00be16ee9c482"
+    },
+    {
+      "elapsed_ms": 3003,
+      "expected": "connect-timeout",
+      "id": "azn-server-model-1",
+      "outcome": "connect-timeout",
+      "phase": "denied-first",
+      "role": "azn-server",
+      "target_sha256": "db3f992532df9fa394ac73f531b907c7341c7b13ee6e0671ad8cd38025099742"
+    },
+    {
+      "elapsed_ms": 3022,
+      "expected": "connect-timeout",
+      "id": "chatbot-other-database-denied",
+      "outcome": "connect-timeout",
+      "phase": "denied-first",
+      "role": "chatbot",
+      "target_sha256": "a120f0ce5d760b0d803211ab258f0b00f1f45302ad552705c625f6b81e22487c"
+    },
+    {
+      "elapsed_ms": 3020,
+      "expected": "connect-timeout",
+      "id": "checks-other-database-denied",
+      "outcome": "connect-timeout",
+      "phase": "denied-first",
+      "role": "checks",
+      "target_sha256": "a120f0ce5d760b0d803211ab258f0b00f1f45302ad552705c625f6b81e22487c"
+    },
+    {
+      "elapsed_ms": 3001,
+      "expected": "connect-timeout",
+      "id": "checks-model-0",
+      "outcome": "connect-timeout",
+      "phase": "denied-first",
+      "role": "checks",
+      "target_sha256": "a0705c7bc81e6a99d8bf0ea51a0b579a3b4d98b27a203d04f8c00be16ee9c482"
+    },
+    {
+      "elapsed_ms": 3003,
+      "expected": "connect-timeout",
+      "id": "checks-model-1",
+      "outcome": "connect-timeout",
+      "phase": "denied-first",
+      "role": "checks",
+      "target_sha256": "db3f992532df9fa394ac73f531b907c7341c7b13ee6e0671ad8cd38025099742"
+    },
+    {
+      "elapsed_ms": 3016,
+      "expected": "connect-timeout",
+      "id": "creditscore-other-database-denied",
+      "outcome": "connect-timeout",
+      "phase": "denied-first",
+      "role": "creditscore",
+      "target_sha256": "a120f0ce5d760b0d803211ab258f0b00f1f45302ad552705c625f6b81e22487c"
+    },
+    {
+      "elapsed_ms": 3003,
+      "expected": "connect-timeout",
+      "id": "creditscore-model-0",
+      "outcome": "connect-timeout",
+      "phase": "denied-first",
+      "role": "creditscore",
+      "target_sha256": "a0705c7bc81e6a99d8bf0ea51a0b579a3b4d98b27a203d04f8c00be16ee9c482"
+    },
+    {
+      "elapsed_ms": 3001,
+      "expected": "connect-timeout",
+      "id": "creditscore-model-1",
+      "outcome": "connect-timeout",
+      "phase": "denied-first",
+      "role": "creditscore",
+      "target_sha256": "db3f992532df9fa394ac73f531b907c7341c7b13ee6e0671ad8cd38025099742"
+    },
+    {
+      "elapsed_ms": 3080,
+      "expected": "connect-timeout",
+      "id": "customer-other-database-denied",
+      "outcome": "connect-timeout",
+      "phase": "denied-first",
+      "role": "customer",
+      "target_sha256": "a120f0ce5d760b0d803211ab258f0b00f1f45302ad552705c625f6b81e22487c"
+    },
+    {
+      "elapsed_ms": 3003,
+      "expected": "connect-timeout",
+      "id": "customer-model-0",
+      "outcome": "connect-timeout",
+      "phase": "denied-first",
+      "role": "customer",
+      "target_sha256": "a0705c7bc81e6a99d8bf0ea51a0b579a3b4d98b27a203d04f8c00be16ee9c482"
+    },
+    {
+      "elapsed_ms": 3003,
+      "expected": "connect-timeout",
+      "id": "customer-model-1",
+      "outcome": "connect-timeout",
+      "phase": "denied-first",
+      "role": "customer",
+      "target_sha256": "db3f992532df9fa394ac73f531b907c7341c7b13ee6e0671ad8cd38025099742"
+    },
+    {
+      "elapsed_ms": 3078,
+      "expected": "connect-timeout",
+      "id": "default-egress-denied",
+      "outcome": "connect-timeout",
+      "phase": "denied-first",
+      "role": "default",
+      "target_sha256": "1b914336f5a1376be6646ab2487bf159ce2db980edb859c818a26b3e56817ab1"
+    },
+    {
+      "elapsed_ms": 3068,
+      "expected": "connect-timeout",
+      "id": "model-cross-namespace-egress-denied",
+      "outcome": "connect-timeout",
+      "phase": "denied-first",
+      "role": "model",
+      "target_sha256": "1b914336f5a1376be6646ab2487bf159ce2db980edb859c818a26b3e56817ab1"
+    },
+    {
+      "elapsed_ms": 3003,
+      "expected": "connect-timeout",
+      "id": "model-database-egress-denied",
+      "outcome": "connect-timeout",
+      "phase": "denied-first",
+      "role": "model",
+      "target_sha256": "88de2c6df270445bd269271845112863bb39568693f7e300136ae4b50ffc318d"
+    },
+    {
+      "elapsed_ms": 3003,
+      "expected": "connect-timeout",
+      "id": "model-public-egress-denied",
+      "outcome": "connect-timeout",
+      "phase": "denied-first",
+      "role": "model",
+      "target_sha256": "26482b49647925efd56db61441a7443381aadcac00d6492e0f37860bacf488fb"
+    },
+    {
+      "elapsed_ms": 3045,
+      "expected": "connect-timeout",
+      "id": "default-ingress-denied",
+      "outcome": "connect-timeout",
+      "phase": "denied-first",
+      "role": "sink",
+      "target_sha256": "6fdbde99b690ebb8159ee5f4a98835b3fa91fec4e833e5998516d35590a5bf7c"
+    },
+    {
+      "elapsed_ms": 3002,
+      "expected": "connect-timeout",
+      "id": "model-wrong-namespace-0",
+      "outcome": "connect-timeout",
+      "phase": "denied-first",
+      "role": "sink",
+      "target_sha256": "a0705c7bc81e6a99d8bf0ea51a0b579a3b4d98b27a203d04f8c00be16ee9c482"
+    },
+    {
+      "elapsed_ms": 3003,
+      "expected": "connect-timeout",
+      "id": "model-wrong-namespace-1",
+      "outcome": "connect-timeout",
+      "phase": "denied-first",
+      "role": "sink",
+      "target_sha256": "db3f992532df9fa394ac73f531b907c7341c7b13ee6e0671ad8cd38025099742"
+    },
+    {
+      "elapsed_ms": 3049,
+      "expected": "connect-timeout",
+      "id": "testrunner-other-database-denied",
+      "outcome": "connect-timeout",
+      "phase": "denied-first",
+      "role": "testrunner",
+      "target_sha256": "a120f0ce5d760b0d803211ab258f0b00f1f45302ad552705c625f6b81e22487c"
+    },
+    {
+      "elapsed_ms": 3002,
+      "expected": "connect-timeout",
+      "id": "testrunner-model-0",
+      "outcome": "connect-timeout",
+      "phase": "denied-first",
+      "role": "testrunner",
+      "target_sha256": "a0705c7bc81e6a99d8bf0ea51a0b579a3b4d98b27a203d04f8c00be16ee9c482"
+    },
+    {
+      "elapsed_ms": 3002,
+      "expected": "connect-timeout",
+      "id": "testrunner-model-1",
+      "outcome": "connect-timeout",
+      "phase": "denied-first",
+      "role": "testrunner",
+      "target_sha256": "db3f992532df9fa394ac73f531b907c7341c7b13ee6e0671ad8cd38025099742"
+    },
+    {
+      "elapsed_ms": 3088,
+      "expected": "connect-timeout",
+      "id": "transfer-other-database-denied",
+      "outcome": "connect-timeout",
+      "phase": "denied-first",
+      "role": "transfer",
+      "target_sha256": "a120f0ce5d760b0d803211ab258f0b00f1f45302ad552705c625f6b81e22487c"
+    },
+    {
+      "elapsed_ms": 3002,
+      "expected": "connect-timeout",
+      "id": "transfer-model-0",
+      "outcome": "connect-timeout",
+      "phase": "denied-first",
+      "role": "transfer",
+      "target_sha256": "a0705c7bc81e6a99d8bf0ea51a0b579a3b4d98b27a203d04f8c00be16ee9c482"
+    },
+    {
+      "elapsed_ms": 3003,
+      "expected": "connect-timeout",
+      "id": "transfer-model-1",
+      "outcome": "connect-timeout",
+      "phase": "denied-first",
+      "role": "transfer",
+      "target_sha256": "db3f992532df9fa394ac73f531b907c7341c7b13ee6e0671ad8cd38025099742"
+    },
+    {
+      "elapsed_ms": 3018,
+      "expected": "connect-timeout",
+      "id": "model-wrong-service-0",
+      "outcome": "connect-timeout",
+      "phase": "denied-first",
+      "role": "wrong-service",
+      "target_sha256": "a0705c7bc81e6a99d8bf0ea51a0b579a3b4d98b27a203d04f8c00be16ee9c482"
+    },
+    {
+      "elapsed_ms": 3003,
+      "expected": "connect-timeout",
+      "id": "model-wrong-service-1",
+      "outcome": "connect-timeout",
+      "phase": "denied-first",
+      "role": "wrong-service",
+      "target_sha256": "db3f992532df9fa394ac73f531b907c7341c7b13ee6e0671ad8cd38025099742"
+    },
+    {
+      "elapsed_ms": 3083,
+      "expected": "connect-timeout",
+      "id": "account-other-database-denied",
+      "outcome": "connect-timeout",
+      "phase": "denied-second",
+      "role": "account",
+      "target_sha256": "a120f0ce5d760b0d803211ab258f0b00f1f45302ad552705c625f6b81e22487c"
+    },
+    {
+      "elapsed_ms": 3003,
+      "expected": "connect-timeout",
+      "id": "account-model-0",
+      "outcome": "connect-timeout",
+      "phase": "denied-second",
+      "role": "account",
+      "target_sha256": "a0705c7bc81e6a99d8bf0ea51a0b579a3b4d98b27a203d04f8c00be16ee9c482"
+    },
+    {
+      "elapsed_ms": 3002,
+      "expected": "connect-timeout",
+      "id": "account-model-1",
+      "outcome": "connect-timeout",
+      "phase": "denied-second",
+      "role": "account",
+      "target_sha256": "db3f992532df9fa394ac73f531b907c7341c7b13ee6e0671ad8cd38025099742"
+    },
+    {
+      "elapsed_ms": 3066,
+      "expected": "connect-timeout",
+      "id": "azn-server-other-database-denied",
+      "outcome": "connect-timeout",
+      "phase": "denied-second",
+      "role": "azn-server",
+      "target_sha256": "a120f0ce5d760b0d803211ab258f0b00f1f45302ad552705c625f6b81e22487c"
+    },
+    {
+      "elapsed_ms": 3003,
+      "expected": "connect-timeout",
+      "id": "azn-server-model-0",
+      "outcome": "connect-timeout",
+      "phase": "denied-second",
+      "role": "azn-server",
+      "target_sha256": "a0705c7bc81e6a99d8bf0ea51a0b579a3b4d98b27a203d04f8c00be16ee9c482"
+    },
+    {
+      "elapsed_ms": 3003,
+      "expected": "connect-timeout",
+      "id": "azn-server-model-1",
+      "outcome": "connect-timeout",
+      "phase": "denied-second",
+      "role": "azn-server",
+      "target_sha256": "db3f992532df9fa394ac73f531b907c7341c7b13ee6e0671ad8cd38025099742"
+    },
+    {
+      "elapsed_ms": 3088,
+      "expected": "connect-timeout",
+      "id": "chatbot-other-database-denied",
+      "outcome": "connect-timeout",
+      "phase": "denied-second",
+      "role": "chatbot",
+      "target_sha256": "a120f0ce5d760b0d803211ab258f0b00f1f45302ad552705c625f6b81e22487c"
+    },
+    {
+      "elapsed_ms": 3019,
+      "expected": "connect-timeout",
+      "id": "checks-other-database-denied",
+      "outcome": "connect-timeout",
+      "phase": "denied-second",
+      "role": "checks",
+      "target_sha256": "a120f0ce5d760b0d803211ab258f0b00f1f45302ad552705c625f6b81e22487c"
+    },
+    {
+      "elapsed_ms": 3002,
+      "expected": "connect-timeout",
+      "id": "checks-model-0",
+      "outcome": "connect-timeout",
+      "phase": "denied-second",
+      "role": "checks",
+      "target_sha256": "a0705c7bc81e6a99d8bf0ea51a0b579a3b4d98b27a203d04f8c00be16ee9c482"
+    },
+    {
+      "elapsed_ms": 3003,
+      "expected": "connect-timeout",
+      "id": "checks-model-1",
+      "outcome": "connect-timeout",
+      "phase": "denied-second",
+      "role": "checks",
+      "target_sha256": "db3f992532df9fa394ac73f531b907c7341c7b13ee6e0671ad8cd38025099742"
+    },
+    {
+      "elapsed_ms": 3017,
+      "expected": "connect-timeout",
+      "id": "creditscore-other-database-denied",
+      "outcome": "connect-timeout",
+      "phase": "denied-second",
+      "role": "creditscore",
+      "target_sha256": "a120f0ce5d760b0d803211ab258f0b00f1f45302ad552705c625f6b81e22487c"
+    },
+    {
+      "elapsed_ms": 3002,
+      "expected": "connect-timeout",
+      "id": "creditscore-model-0",
+      "outcome": "connect-timeout",
+      "phase": "denied-second",
+      "role": "creditscore",
+      "target_sha256": "a0705c7bc81e6a99d8bf0ea51a0b579a3b4d98b27a203d04f8c00be16ee9c482"
+    },
+    {
+      "elapsed_ms": 3003,
+      "expected": "connect-timeout",
+      "id": "creditscore-model-1",
+      "outcome": "connect-timeout",
+      "phase": "denied-second",
+      "role": "creditscore",
+      "target_sha256": "db3f992532df9fa394ac73f531b907c7341c7b13ee6e0671ad8cd38025099742"
+    },
+    {
+      "elapsed_ms": 3090,
+      "expected": "connect-timeout",
+      "id": "customer-other-database-denied",
+      "outcome": "connect-timeout",
+      "phase": "denied-second",
+      "role": "customer",
+      "target_sha256": "a120f0ce5d760b0d803211ab258f0b00f1f45302ad552705c625f6b81e22487c"
+    },
+    {
+      "elapsed_ms": 3002,
+      "expected": "connect-timeout",
+      "id": "customer-model-0",
+      "outcome": "connect-timeout",
+      "phase": "denied-second",
+      "role": "customer",
+      "target_sha256": "a0705c7bc81e6a99d8bf0ea51a0b579a3b4d98b27a203d04f8c00be16ee9c482"
+    },
+    {
+      "elapsed_ms": 3003,
+      "expected": "connect-timeout",
+      "id": "customer-model-1",
+      "outcome": "connect-timeout",
+      "phase": "denied-second",
+      "role": "customer",
+      "target_sha256": "db3f992532df9fa394ac73f531b907c7341c7b13ee6e0671ad8cd38025099742"
+    },
+    {
+      "elapsed_ms": 3040,
+      "expected": "connect-timeout",
+      "id": "default-egress-denied",
+      "outcome": "connect-timeout",
+      "phase": "denied-second",
+      "role": "default",
+      "target_sha256": "1b914336f5a1376be6646ab2487bf159ce2db980edb859c818a26b3e56817ab1"
+    },
+    {
+      "elapsed_ms": 3084,
+      "expected": "connect-timeout",
+      "id": "model-cross-namespace-egress-denied",
+      "outcome": "connect-timeout",
+      "phase": "denied-second",
+      "role": "model",
+      "target_sha256": "1b914336f5a1376be6646ab2487bf159ce2db980edb859c818a26b3e56817ab1"
+    },
+    {
+      "elapsed_ms": 3003,
+      "expected": "connect-timeout",
+      "id": "model-database-egress-denied",
+      "outcome": "connect-timeout",
+      "phase": "denied-second",
+      "role": "model",
+      "target_sha256": "88de2c6df270445bd269271845112863bb39568693f7e300136ae4b50ffc318d"
+    },
+    {
+      "elapsed_ms": 3002,
+      "expected": "connect-timeout",
+      "id": "model-public-egress-denied",
+      "outcome": "connect-timeout",
+      "phase": "denied-second",
+      "role": "model",
+      "target_sha256": "26482b49647925efd56db61441a7443381aadcac00d6492e0f37860bacf488fb"
+    },
+    {
+      "elapsed_ms": 3042,
+      "expected": "connect-timeout",
+      "id": "default-ingress-denied",
+      "outcome": "connect-timeout",
+      "phase": "denied-second",
+      "role": "sink",
+      "target_sha256": "6fdbde99b690ebb8159ee5f4a98835b3fa91fec4e833e5998516d35590a5bf7c"
+    },
+    {
+      "elapsed_ms": 3003,
+      "expected": "connect-timeout",
+      "id": "model-wrong-namespace-0",
+      "outcome": "connect-timeout",
+      "phase": "denied-second",
+      "role": "sink",
+      "target_sha256": "a0705c7bc81e6a99d8bf0ea51a0b579a3b4d98b27a203d04f8c00be16ee9c482"
+    },
+    {
+      "elapsed_ms": 3004,
+      "expected": "connect-timeout",
+      "id": "model-wrong-namespace-1",
+      "outcome": "connect-timeout",
+      "phase": "denied-second",
+      "role": "sink",
+      "target_sha256": "db3f992532df9fa394ac73f531b907c7341c7b13ee6e0671ad8cd38025099742"
+    },
+    {
+      "elapsed_ms": 3015,
+      "expected": "connect-timeout",
+      "id": "testrunner-other-database-denied",
+      "outcome": "connect-timeout",
+      "phase": "denied-second",
+      "role": "testrunner",
+      "target_sha256": "a120f0ce5d760b0d803211ab258f0b00f1f45302ad552705c625f6b81e22487c"
+    },
+    {
+      "elapsed_ms": 3002,
+      "expected": "connect-timeout",
+      "id": "testrunner-model-0",
+      "outcome": "connect-timeout",
+      "phase": "denied-second",
+      "role": "testrunner",
+      "target_sha256": "a0705c7bc81e6a99d8bf0ea51a0b579a3b4d98b27a203d04f8c00be16ee9c482"
+    },
+    {
+      "elapsed_ms": 3000,
+      "expected": "connect-timeout",
+      "id": "testrunner-model-1",
+      "outcome": "connect-timeout",
+      "phase": "denied-second",
+      "role": "testrunner",
+      "target_sha256": "db3f992532df9fa394ac73f531b907c7341c7b13ee6e0671ad8cd38025099742"
+    },
+    {
+      "elapsed_ms": 3090,
+      "expected": "connect-timeout",
+      "id": "transfer-other-database-denied",
+      "outcome": "connect-timeout",
+      "phase": "denied-second",
+      "role": "transfer",
+      "target_sha256": "a120f0ce5d760b0d803211ab258f0b00f1f45302ad552705c625f6b81e22487c"
+    },
+    {
+      "elapsed_ms": 3002,
+      "expected": "connect-timeout",
+      "id": "transfer-model-0",
+      "outcome": "connect-timeout",
+      "phase": "denied-second",
+      "role": "transfer",
+      "target_sha256": "a0705c7bc81e6a99d8bf0ea51a0b579a3b4d98b27a203d04f8c00be16ee9c482"
+    },
+    {
+      "elapsed_ms": 3002,
+      "expected": "connect-timeout",
+      "id": "transfer-model-1",
+      "outcome": "connect-timeout",
+      "phase": "denied-second",
+      "role": "transfer",
+      "target_sha256": "db3f992532df9fa394ac73f531b907c7341c7b13ee6e0671ad8cd38025099742"
+    },
+    {
+      "elapsed_ms": 3016,
+      "expected": "connect-timeout",
+      "id": "model-wrong-service-0",
+      "outcome": "connect-timeout",
+      "phase": "denied-second",
+      "role": "wrong-service",
+      "target_sha256": "a0705c7bc81e6a99d8bf0ea51a0b579a3b4d98b27a203d04f8c00be16ee9c482"
+    },
+    {
+      "elapsed_ms": 3000,
+      "expected": "connect-timeout",
+      "id": "model-wrong-service-1",
+      "outcome": "connect-timeout",
+      "phase": "denied-second",
+      "role": "wrong-service",
+      "target_sha256": "db3f992532df9fa394ac73f531b907c7341c7b13ee6e0671ad8cd38025099742"
+    },
+    {
+      "elapsed_ms": 84,
+      "expected": "nonce-matched",
+      "id": "account-self",
+      "outcome": "nonce-matched",
+      "phase": "positive-after",
+      "role": "account",
+      "target_sha256": "77b60feec01898d8d4738dee88e0ce3489e88817dc82d81cdd88b3bd8ccd3e78"
+    },
+    {
+      "elapsed_ms": 1,
+      "expected": "connected",
+      "id": "account-database-allowed",
+      "outcome": "connected",
+      "phase": "positive-after",
+      "role": "account",
+      "target_sha256": "88de2c6df270445bd269271845112863bb39568693f7e300136ae4b50ffc318d"
+    },
+    {
+      "elapsed_ms": 2,
+      "expected": "connected",
+      "id": "account-application-allowed",
+      "outcome": "connected",
+      "phase": "positive-after",
+      "role": "account",
+      "target_sha256": "0693a2e1cc7e7e2ba54b0ce01d666f1a4ad500fdff96da04ac87ca98fa1577a5"
+    },
+    {
+      "elapsed_ms": 90,
+      "expected": "nonce-matched",
+      "id": "azn-server-self",
+      "outcome": "nonce-matched",
+      "phase": "positive-after",
+      "role": "azn-server",
+      "target_sha256": "77b60feec01898d8d4738dee88e0ce3489e88817dc82d81cdd88b3bd8ccd3e78"
+    },
+    {
+      "elapsed_ms": 2,
+      "expected": "connected",
+      "id": "azn-server-database-allowed",
+      "outcome": "connected",
+      "phase": "positive-after",
+      "role": "azn-server",
+      "target_sha256": "88de2c6df270445bd269271845112863bb39568693f7e300136ae4b50ffc318d"
+    },
+    {
+      "elapsed_ms": 0,
+      "expected": "connected",
+      "id": "azn-server-application-allowed",
+      "outcome": "connected",
+      "phase": "positive-after",
+      "role": "azn-server",
+      "target_sha256": "0693a2e1cc7e7e2ba54b0ce01d666f1a4ad500fdff96da04ac87ca98fa1577a5"
+    },
+    {
+      "elapsed_ms": 37,
+      "expected": "nonce-matched",
+      "id": "chatbot-self",
+      "outcome": "nonce-matched",
+      "phase": "positive-after",
+      "role": "chatbot",
+      "target_sha256": "77b60feec01898d8d4738dee88e0ce3489e88817dc82d81cdd88b3bd8ccd3e78"
+    },
+    {
+      "elapsed_ms": 1,
+      "expected": "connected",
+      "id": "chatbot-database-allowed",
+      "outcome": "connected",
+      "phase": "positive-after",
+      "role": "chatbot",
+      "target_sha256": "88de2c6df270445bd269271845112863bb39568693f7e300136ae4b50ffc318d"
+    },
+    {
+      "elapsed_ms": 4,
+      "expected": "connected",
+      "id": "chatbot-application-allowed",
+      "outcome": "connected",
+      "phase": "positive-after",
+      "role": "chatbot",
+      "target_sha256": "0693a2e1cc7e7e2ba54b0ce01d666f1a4ad500fdff96da04ac87ca98fa1577a5"
+    },
+    {
+      "elapsed_ms": 2,
+      "expected": "connected",
+      "id": "chatbot-model-0",
+      "outcome": "connected",
+      "phase": "positive-after",
+      "role": "chatbot",
+      "target_sha256": "a0705c7bc81e6a99d8bf0ea51a0b579a3b4d98b27a203d04f8c00be16ee9c482"
+    },
+    {
+      "elapsed_ms": 0,
+      "expected": "connected",
+      "id": "chatbot-model-1",
+      "outcome": "connected",
+      "phase": "positive-after",
+      "role": "chatbot",
+      "target_sha256": "db3f992532df9fa394ac73f531b907c7341c7b13ee6e0671ad8cd38025099742"
+    },
+    {
+      "elapsed_ms": 57,
+      "expected": "nonce-matched",
+      "id": "checks-self",
+      "outcome": "nonce-matched",
+      "phase": "positive-after",
+      "role": "checks",
+      "target_sha256": "77b60feec01898d8d4738dee88e0ce3489e88817dc82d81cdd88b3bd8ccd3e78"
+    },
+    {
+      "elapsed_ms": 2,
+      "expected": "connected",
+      "id": "checks-database-allowed",
+      "outcome": "connected",
+      "phase": "positive-after",
+      "role": "checks",
+      "target_sha256": "88de2c6df270445bd269271845112863bb39568693f7e300136ae4b50ffc318d"
+    },
+    {
+      "elapsed_ms": 0,
+      "expected": "connected",
+      "id": "checks-application-allowed",
+      "outcome": "connected",
+      "phase": "positive-after",
+      "role": "checks",
+      "target_sha256": "0693a2e1cc7e7e2ba54b0ce01d666f1a4ad500fdff96da04ac87ca98fa1577a5"
+    },
+    {
+      "elapsed_ms": 17,
+      "expected": "nonce-matched",
+      "id": "creditscore-self",
+      "outcome": "nonce-matched",
+      "phase": "positive-after",
+      "role": "creditscore",
+      "target_sha256": "77b60feec01898d8d4738dee88e0ce3489e88817dc82d81cdd88b3bd8ccd3e78"
+    },
+    {
+      "elapsed_ms": 1,
+      "expected": "connected",
+      "id": "creditscore-database-allowed",
+      "outcome": "connected",
+      "phase": "positive-after",
+      "role": "creditscore",
+      "target_sha256": "88de2c6df270445bd269271845112863bb39568693f7e300136ae4b50ffc318d"
+    },
+    {
+      "elapsed_ms": 2,
+      "expected": "connected",
+      "id": "creditscore-application-allowed",
+      "outcome": "connected",
+      "phase": "positive-after",
+      "role": "creditscore",
+      "target_sha256": "0693a2e1cc7e7e2ba54b0ce01d666f1a4ad500fdff96da04ac87ca98fa1577a5"
+    },
+    {
+      "elapsed_ms": 92,
+      "expected": "nonce-matched",
+      "id": "customer-self",
+      "outcome": "nonce-matched",
+      "phase": "positive-after",
+      "role": "customer",
+      "target_sha256": "77b60feec01898d8d4738dee88e0ce3489e88817dc82d81cdd88b3bd8ccd3e78"
+    },
+    {
+      "elapsed_ms": 2,
+      "expected": "connected",
+      "id": "customer-database-allowed",
+      "outcome": "connected",
+      "phase": "positive-after",
+      "role": "customer",
+      "target_sha256": "88de2c6df270445bd269271845112863bb39568693f7e300136ae4b50ffc318d"
+    },
+    {
+      "elapsed_ms": 1,
+      "expected": "connected",
+      "id": "customer-application-allowed",
+      "outcome": "connected",
+      "phase": "positive-after",
+      "role": "customer",
+      "target_sha256": "0693a2e1cc7e7e2ba54b0ce01d666f1a4ad500fdff96da04ac87ca98fa1577a5"
+    },
+    {
+      "elapsed_ms": 89,
+      "expected": "nonce-matched",
+      "id": "default-self",
+      "outcome": "nonce-matched",
+      "phase": "positive-after",
+      "role": "default",
+      "target_sha256": "77b60feec01898d8d4738dee88e0ce3489e88817dc82d81cdd88b3bd8ccd3e78"
+    },
+    {
+      "elapsed_ms": 56,
+      "expected": "nonce-matched",
+      "id": "model-self",
+      "outcome": "nonce-matched",
+      "phase": "positive-after",
+      "role": "model",
+      "target_sha256": "77b60feec01898d8d4738dee88e0ce3489e88817dc82d81cdd88b3bd8ccd3e78"
+    },
+    {
+      "elapsed_ms": 22,
+      "expected": "nonce-matched",
+      "id": "sink-self",
+      "outcome": "nonce-matched",
+      "phase": "positive-after",
+      "role": "sink",
+      "target_sha256": "77b60feec01898d8d4738dee88e0ce3489e88817dc82d81cdd88b3bd8ccd3e78"
+    },
+    {
+      "elapsed_ms": 1,
+      "expected": "nonce-matched",
+      "id": "control-listener",
+      "outcome": "nonce-matched",
+      "phase": "positive-after",
+      "role": "sink",
+      "target_sha256": "a120f0ce5d760b0d803211ab258f0b00f1f45302ad552705c625f6b81e22487c"
+    },
+    {
+      "elapsed_ms": 31,
+      "expected": "nonce-matched",
+      "id": "control-sink-route",
+      "outcome": "nonce-matched",
+      "phase": "positive-after",
+      "role": "sink",
+      "target_sha256": "1b914336f5a1376be6646ab2487bf159ce2db980edb859c818a26b3e56817ab1"
+    },
+    {
+      "elapsed_ms": 2,
+      "expected": "connected",
+      "id": "control-database",
+      "outcome": "connected",
+      "phase": "positive-after",
+      "role": "sink",
+      "target_sha256": "88de2c6df270445bd269271845112863bb39568693f7e300136ae4b50ffc318d"
+    },
+    {
+      "elapsed_ms": 0,
+      "expected": "connected",
+      "id": "control-public-ingress",
+      "outcome": "connected",
+      "phase": "positive-after",
+      "role": "sink",
+      "target_sha256": "26482b49647925efd56db61441a7443381aadcac00d6492e0f37860bacf488fb"
+    },
+    {
+      "elapsed_ms": 51,
+      "expected": "nonce-matched",
+      "id": "testrunner-self",
+      "outcome": "nonce-matched",
+      "phase": "positive-after",
+      "role": "testrunner",
+      "target_sha256": "77b60feec01898d8d4738dee88e0ce3489e88817dc82d81cdd88b3bd8ccd3e78"
+    },
+    {
+      "elapsed_ms": 1,
+      "expected": "connected",
+      "id": "testrunner-database-allowed",
+      "outcome": "connected",
+      "phase": "positive-after",
+      "role": "testrunner",
+      "target_sha256": "88de2c6df270445bd269271845112863bb39568693f7e300136ae4b50ffc318d"
+    },
+    {
+      "elapsed_ms": 2,
+      "expected": "connected",
+      "id": "testrunner-application-allowed",
+      "outcome": "connected",
+      "phase": "positive-after",
+      "role": "testrunner",
+      "target_sha256": "0693a2e1cc7e7e2ba54b0ce01d666f1a4ad500fdff96da04ac87ca98fa1577a5"
+    },
+    {
+      "elapsed_ms": 85,
+      "expected": "nonce-matched",
+      "id": "transfer-self",
+      "outcome": "nonce-matched",
+      "phase": "positive-after",
+      "role": "transfer",
+      "target_sha256": "77b60feec01898d8d4738dee88e0ce3489e88817dc82d81cdd88b3bd8ccd3e78"
+    },
+    {
+      "elapsed_ms": 1,
+      "expected": "connected",
+      "id": "transfer-database-allowed",
+      "outcome": "connected",
+      "phase": "positive-after",
+      "role": "transfer",
+      "target_sha256": "88de2c6df270445bd269271845112863bb39568693f7e300136ae4b50ffc318d"
+    },
+    {
+      "elapsed_ms": 3,
+      "expected": "connected",
+      "id": "transfer-application-allowed",
+      "outcome": "connected",
+      "phase": "positive-after",
+      "role": "transfer",
+      "target_sha256": "0693a2e1cc7e7e2ba54b0ce01d666f1a4ad500fdff96da04ac87ca98fa1577a5"
+    },
+    {
+      "elapsed_ms": 18,
+      "expected": "nonce-matched",
+      "id": "wrong-service-self",
+      "outcome": "nonce-matched",
+      "phase": "positive-after",
+      "role": "wrong-service",
+      "target_sha256": "77b60feec01898d8d4738dee88e0ce3489e88817dc82d81cdd88b3bd8ccd3e78"
+    }
+  ],
+  "content_sha256": "75724f2e5223f4803427a83bd59b6391d77f44131ed7c519c3130b7ebd6960e4",
+  "credentials_persisted": false,
+  "database_mutations": 0,
+  "environment": {
+    "cluster": "cloudbank-ms67",
+    "namespace": "cloudbank-ms71-alloydb",
+    "namespace_uid_sha256": "c7d6db875fdf24ad13aaa023b98794427a31ed6da6df28127c2ae80e72177ebf",
+    "project": "lightyear-ms67-nonproduction",
+    "region": "us-west1"
+  },
+  "existing_policy_mutations": 0,
+  "final": {
+    "cloudbank-model": {
+      "namespace": {
+        "labels_sha256": "f30943a0c69d2efc4bbb482bb91151744321e10043ba2f4ae3ef134950f289c9",
+        "uid": "7c78dad6-401d-4b07-a4e1-2b4b2d188c32"
+      },
+      "policies": [
+        {
+          "spec_sha256": "3ec9af3bdb8e51106bdb9507e4dd7e65ab3800deb05ad9946b9e59968716133d",
+          "uid": "222a5875-ac19-454a-8519-07ee0176a0ef"
+        },
+        {
+          "spec_sha256": "79558fd7757e83a7e26bf87d1840b7c975e8571d0e2a458ed61e159d9d578d27",
+          "uid": "7e415b4d-552e-44b0-a418-fd82f575f581"
+        },
+        {
+          "spec_sha256": "1d3c043b1097f38d16cecf99d8948e0eb1aea6d8833103a97c0b6b1435753445",
+          "uid": "c4e119fd-4970-4415-82b6-a62a4164a48b"
+        }
+      ],
+      "services": [
+        {
+          "spec_sha256": "2983504b89b41362b5f431e6830dee2dfe69f55519eb1204cc846a36dfe6875f",
+          "uid": "83f4892c-d6a2-47fe-8255-e403cd186e29"
+        }
+      ],
+      "workloads": {
+        "ollama": {
+          "pods_sha256": "9f49b15b672e7c455a354dec24aa891ff4f27887de074943ea0cda21068c0dff",
+          "policy_selection": [
+            {
+              "spec_sha256": "3ec9af3bdb8e51106bdb9507e4dd7e65ab3800deb05ad9946b9e59968716133d",
+              "uid": "222a5875-ac19-454a-8519-07ee0176a0ef"
+            },
+            {
+              "spec_sha256": "79558fd7757e83a7e26bf87d1840b7c975e8571d0e2a458ed61e159d9d578d27",
+              "uid": "7e415b4d-552e-44b0-a418-fd82f575f581"
+            },
+            {
+              "spec_sha256": "1d3c043b1097f38d16cecf99d8948e0eb1aea6d8833103a97c0b6b1435753445",
+              "uid": "c4e119fd-4970-4415-82b6-a62a4164a48b"
+            }
+          ],
+          "ready_replicas": 2,
+          "spec_sha256": "20b5733dd1eeaa354c865adaf726acc36f74c9a43404ad6426b4d3c383022a74",
+          "uid": "e208bf17-e1c0-4175-b9de-0de2bc0a697c"
+        }
+      }
+    },
+    "cloudbank-ms71-alloydb": {
+      "namespace": {
+        "labels_sha256": "3106be6f5d6d974adee277bb1c6551b1bc084ce089214a447d0f1c3ca7307bb4",
+        "uid": "f9c6ef77-5159-4eb7-b286-d85011178275"
+      },
+      "policies": [
+        {
+          "spec_sha256": "46ae0c24a296d79b11ec39ef80aa1c7f39eef48ae401b64f232ca7ecc51d155b",
+          "uid": "076028a4-99c3-470c-83b5-28c139ec6baf"
+        },
+        {
+          "spec_sha256": "79558fd7757e83a7e26bf87d1840b7c975e8571d0e2a458ed61e159d9d578d27",
+          "uid": "539beb74-67a8-4374-9df4-c371849aa7ce"
+        },
+        {
+          "spec_sha256": "974eaf085a253919014a7b34f7914cdd7a8f0f562a2534e59c54f5bc0c661955",
+          "uid": "6c253c5d-b850-47a3-8db9-0fbe71687d6c"
+        },
+        {
+          "spec_sha256": "8729dc474445f2f37b558492379ec383e7c2e5bac7796e02edfcf712df55b465",
+          "uid": "b88e9ce0-5809-463d-93fe-3381f7c39c02"
+        },
+        {
+          "spec_sha256": "eac18f961c5d78c2b4eb44cbc04e65eeb812ee92f3067206b1897beca9e20644",
+          "uid": "d4c8533a-ad7c-4669-8bb0-00b4c654e468"
+        },
+        {
+          "spec_sha256": "5b3909dc80225e19cdfcd5fc0ca7de035da89b5ebdcc9ebc2792940b8264765c",
+          "uid": "fbb127fd-e95a-498c-ad03-24f13ca54120"
+        }
+      ],
+      "services": [
+        {
+          "spec_sha256": "01f010d307898571ff3d50a6ddd54f899d200311fff052a514f55c5daa22ed9a",
+          "uid": "031dfc89-6cef-498f-b8f2-90d8b2cf0aea"
+        },
+        {
+          "spec_sha256": "adff5b51796afa5e6e11c0ef210a6b5b10eb18baed7062bf592f79d3cc33fdd0",
+          "uid": "25e8f86b-de58-4acf-8106-36ebd1041881"
+        },
+        {
+          "spec_sha256": "2495bc621321a034b9376e6e97bc8bd544340323d3115af8eab8d156db318398",
+          "uid": "6339874c-b3bd-4157-9bfa-df3e61f28cd8"
+        },
+        {
+          "spec_sha256": "80d23f8cc0e35471e2491ddb0f9649c9c3718d5695ae38f4dbc41ca76b340e06",
+          "uid": "6dfd9035-b3ff-4b3b-89a5-3cd35f0d9b79"
+        },
+        {
+          "spec_sha256": "3be1f7e9e8c5a74c8f63a1ea10f71289f7ed29960c5fa072776a2f7cceb82a50",
+          "uid": "8adabd09-2886-4b8b-bbb6-aff299538ce9"
+        },
+        {
+          "spec_sha256": "1534c650d4e448da034c98f9ab2d3fd79ffb30e21e88f39d000d19e0b2e0679a",
+          "uid": "b1d6ead7-bc27-4937-a12a-58c971bb0a40"
+        },
+        {
+          "spec_sha256": "df258522f861e6852c02e09d06657c8acac53f40e22e71ad2e563fb55a8c77c7",
+          "uid": "dba743e3-438e-4ffc-adf6-9c763be683d2"
+        },
+        {
+          "spec_sha256": "742406698bc644da610291bfbee7ed75892d9baac3871296eb044fb3fab70d40",
+          "uid": "df585fb0-03f6-4605-a63c-da2c5d38a5f3"
+        }
+      ],
+      "workloads": {
+        "account": {
+          "pods_sha256": "162c89d75bb53ff462757a92090dbc168da0da4eb03f54f34c2b297bc3304f19",
+          "policy_selection": [
+            {
+              "spec_sha256": "79558fd7757e83a7e26bf87d1840b7c975e8571d0e2a458ed61e159d9d578d27",
+              "uid": "539beb74-67a8-4374-9df4-c371849aa7ce"
+            },
+            {
+              "spec_sha256": "8729dc474445f2f37b558492379ec383e7c2e5bac7796e02edfcf712df55b465",
+              "uid": "b88e9ce0-5809-463d-93fe-3381f7c39c02"
+            },
+            {
+              "spec_sha256": "5b3909dc80225e19cdfcd5fc0ca7de035da89b5ebdcc9ebc2792940b8264765c",
+              "uid": "fbb127fd-e95a-498c-ad03-24f13ca54120"
+            }
+          ],
+          "ready_replicas": 2,
+          "spec_sha256": "020e1b02b07f63243b53f7b2c54701ab3a01476e972cc2490a134c54b931650e",
+          "uid": "8321a18c-1a5a-41a0-bbcf-bfa236690ca2"
+        },
+        "azn-server": {
+          "pods_sha256": "4681b1a50ecb2bbc285d5dcb589c3695a5a235c095d76f9d1ed2c8f4a6d59512",
+          "policy_selection": [
+            {
+              "spec_sha256": "79558fd7757e83a7e26bf87d1840b7c975e8571d0e2a458ed61e159d9d578d27",
+              "uid": "539beb74-67a8-4374-9df4-c371849aa7ce"
+            },
+            {
+              "spec_sha256": "8729dc474445f2f37b558492379ec383e7c2e5bac7796e02edfcf712df55b465",
+              "uid": "b88e9ce0-5809-463d-93fe-3381f7c39c02"
+            },
+            {
+              "spec_sha256": "5b3909dc80225e19cdfcd5fc0ca7de035da89b5ebdcc9ebc2792940b8264765c",
+              "uid": "fbb127fd-e95a-498c-ad03-24f13ca54120"
+            }
+          ],
+          "ready_replicas": 2,
+          "spec_sha256": "c153b0585dc5837169e2601795f4754fc41b38920abc7f1ca444be9adf565373",
+          "uid": "d78f5cac-a449-4240-ad02-e1123cc1c3e1"
+        },
+        "chatbot": {
+          "pods_sha256": "707fd86b569142470799fbd5b58d222c1dabad17226b8c3081deb5072711daa2",
+          "policy_selection": [
+            {
+              "spec_sha256": "79558fd7757e83a7e26bf87d1840b7c975e8571d0e2a458ed61e159d9d578d27",
+              "uid": "539beb74-67a8-4374-9df4-c371849aa7ce"
+            },
+            {
+              "spec_sha256": "974eaf085a253919014a7b34f7914cdd7a8f0f562a2534e59c54f5bc0c661955",
+              "uid": "6c253c5d-b850-47a3-8db9-0fbe71687d6c"
+            },
+            {
+              "spec_sha256": "8729dc474445f2f37b558492379ec383e7c2e5bac7796e02edfcf712df55b465",
+              "uid": "b88e9ce0-5809-463d-93fe-3381f7c39c02"
+            },
+            {
+              "spec_sha256": "eac18f961c5d78c2b4eb44cbc04e65eeb812ee92f3067206b1897beca9e20644",
+              "uid": "d4c8533a-ad7c-4669-8bb0-00b4c654e468"
+            },
+            {
+              "spec_sha256": "5b3909dc80225e19cdfcd5fc0ca7de035da89b5ebdcc9ebc2792940b8264765c",
+              "uid": "fbb127fd-e95a-498c-ad03-24f13ca54120"
+            }
+          ],
+          "ready_replicas": 2,
+          "spec_sha256": "914f87b5b089e2b6d76df8a98b5b8204a1799bb28d21843ccd00d014ed5aa485",
+          "uid": "1e621692-08c0-462f-81ee-6dc1f774c827"
+        },
+        "checks": {
+          "pods_sha256": "7f3686e53abf0180e514b78c9a5769d7768fe5e4c2953b3476ec0bdcedaafc2a",
+          "policy_selection": [
+            {
+              "spec_sha256": "79558fd7757e83a7e26bf87d1840b7c975e8571d0e2a458ed61e159d9d578d27",
+              "uid": "539beb74-67a8-4374-9df4-c371849aa7ce"
+            },
+            {
+              "spec_sha256": "8729dc474445f2f37b558492379ec383e7c2e5bac7796e02edfcf712df55b465",
+              "uid": "b88e9ce0-5809-463d-93fe-3381f7c39c02"
+            },
+            {
+              "spec_sha256": "5b3909dc80225e19cdfcd5fc0ca7de035da89b5ebdcc9ebc2792940b8264765c",
+              "uid": "fbb127fd-e95a-498c-ad03-24f13ca54120"
+            }
+          ],
+          "ready_replicas": 2,
+          "spec_sha256": "8d0d005dce432b323a36a09a6b67f0e8781e77e47b9824b82467d011e605903b",
+          "uid": "09b0b809-ec4d-4881-aa99-ffe9387e8e9f"
+        },
+        "creditscore": {
+          "pods_sha256": "3b3dea6e4210515087987a95a9738c88d3a14bb1676d8390b2ef9f5f567520ff",
+          "policy_selection": [
+            {
+              "spec_sha256": "79558fd7757e83a7e26bf87d1840b7c975e8571d0e2a458ed61e159d9d578d27",
+              "uid": "539beb74-67a8-4374-9df4-c371849aa7ce"
+            },
+            {
+              "spec_sha256": "8729dc474445f2f37b558492379ec383e7c2e5bac7796e02edfcf712df55b465",
+              "uid": "b88e9ce0-5809-463d-93fe-3381f7c39c02"
+            },
+            {
+              "spec_sha256": "5b3909dc80225e19cdfcd5fc0ca7de035da89b5ebdcc9ebc2792940b8264765c",
+              "uid": "fbb127fd-e95a-498c-ad03-24f13ca54120"
+            }
+          ],
+          "ready_replicas": 2,
+          "spec_sha256": "1592c1cc72f40fa81e5bfdeac1cf6e6e2d97f11a872c5bdcbec276b581d1c387",
+          "uid": "bc772be5-6243-4e36-a4bf-e1e40b5a3685"
+        },
+        "customer": {
+          "pods_sha256": "b7bb021c9fb884ad3304cd7db10ad4585f20e61747b854dd18cabb97d7367afc",
+          "policy_selection": [
+            {
+              "spec_sha256": "79558fd7757e83a7e26bf87d1840b7c975e8571d0e2a458ed61e159d9d578d27",
+              "uid": "539beb74-67a8-4374-9df4-c371849aa7ce"
+            },
+            {
+              "spec_sha256": "8729dc474445f2f37b558492379ec383e7c2e5bac7796e02edfcf712df55b465",
+              "uid": "b88e9ce0-5809-463d-93fe-3381f7c39c02"
+            },
+            {
+              "spec_sha256": "5b3909dc80225e19cdfcd5fc0ca7de035da89b5ebdcc9ebc2792940b8264765c",
+              "uid": "fbb127fd-e95a-498c-ad03-24f13ca54120"
+            }
+          ],
+          "ready_replicas": 2,
+          "spec_sha256": "f9d5c4699e846a304e0ec4ff06a7686faff7e270984c2abf51c677712fe5a1c9",
+          "uid": "3de85089-fdff-4787-aa35-05d196b2e073"
+        },
+        "testrunner": {
+          "pods_sha256": "6be42ea6ee70e0006aa32d01b44e8963acc6c2261279e06c72105161dcefb0dc",
+          "policy_selection": [
+            {
+              "spec_sha256": "79558fd7757e83a7e26bf87d1840b7c975e8571d0e2a458ed61e159d9d578d27",
+              "uid": "539beb74-67a8-4374-9df4-c371849aa7ce"
+            },
+            {
+              "spec_sha256": "8729dc474445f2f37b558492379ec383e7c2e5bac7796e02edfcf712df55b465",
+              "uid": "b88e9ce0-5809-463d-93fe-3381f7c39c02"
+            },
+            {
+              "spec_sha256": "5b3909dc80225e19cdfcd5fc0ca7de035da89b5ebdcc9ebc2792940b8264765c",
+              "uid": "fbb127fd-e95a-498c-ad03-24f13ca54120"
+            }
+          ],
+          "ready_replicas": 2,
+          "spec_sha256": "2e0d2e17c03fe821bf88e34657131713154a4a3a6738f295bc47d589362046c1",
+          "uid": "1f19804f-e719-4883-a09a-b2765295e344"
+        },
+        "transfer": {
+          "pods_sha256": "c6b9d0f221d61a71570a9a30d3acab58674e5de3890d2fa538e7d4e980a9411d",
+          "policy_selection": [
+            {
+              "spec_sha256": "79558fd7757e83a7e26bf87d1840b7c975e8571d0e2a458ed61e159d9d578d27",
+              "uid": "539beb74-67a8-4374-9df4-c371849aa7ce"
+            },
+            {
+              "spec_sha256": "8729dc474445f2f37b558492379ec383e7c2e5bac7796e02edfcf712df55b465",
+              "uid": "b88e9ce0-5809-463d-93fe-3381f7c39c02"
+            },
+            {
+              "spec_sha256": "5b3909dc80225e19cdfcd5fc0ca7de035da89b5ebdcc9ebc2792940b8264765c",
+              "uid": "fbb127fd-e95a-498c-ad03-24f13ca54120"
+            }
+          ],
+          "ready_replicas": 2,
+          "spec_sha256": "1bda79ec4ebbd6adb793217fd9b19671d78b4ced3effa598abb9f9cce2ffc240",
+          "uid": "b7d69ab1-589d-419d-afe9-35cde31b5c0b"
+        }
+      }
+    }
+  },
+  "images": {
+    "account": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/account@sha256:87e675066d0c6edf77346b2ddee81bb46687365dbc9c8760307d7104764c59cf",
+    "azn-server": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/azn-server@sha256:24ba43de59cf22f95c962981b49542eb55e332fc2dd91f9b4a9c724d06dd474a",
+    "chatbot": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/chatbot@sha256:ab2180b081ad8f92043c9bd8c7f72b74ef89ed22b656f9afbc9c8fd0067d0703",
+    "checks": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/checks@sha256:7717ca2c871f8b6179145d871c91e31f5b6fa1632af8c9f8aa0d93c0d84d8432",
+    "creditscore": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/creditscore@sha256:45b848793a4a3de7e72f2ae25d243250803846a8f9885594e1e3db8edf48fae1",
+    "customer": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/customer@sha256:47c50deffc67b480aa67ce4cffa4145eb4f91382ef091e72e89fbbfd0884456d",
+    "testrunner": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/testrunner@sha256:256d107cc707d537c98f1260362577bbdb9d2ede3e88005076e464a227351693",
+    "transfer": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/transfer@sha256:fd99a626b3b1d8d47c3aed397119d9eaab70887da88b89d6c6070eb4fcb3caaa"
+  },
+  "managed_target": {
+    "content_sha256": "6e8458b05671601b2f831f772c487e30925cbf3bbf0de5ccd2f8bb8867e8cd01",
+    "database": {
+      "address": "10.151.44.2",
+      "content_sha256": "f0dc06b4682df96ae5517d846fdc0c001aac36bd526ebd9cbe4b76bd7f724707",
+      "created_at": "2026-09-12T16:30:54.191513295Z",
+      "database_version": "POSTGRES_16",
+      "provider": "alloydb-postgresql",
+      "resource": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/cloudbank-ms71-alloydb/instances/primary"
+    },
+    "environment": {
+      "cluster": "cloudbank-ms67",
+      "namespace": "cloudbank-ms71-alloydb",
+      "namespace_uid_sha256": "c7d6db875fdf24ad13aaa023b98794427a31ed6da6df28127c2ae80e72177ebf",
+      "project": "lightyear-ms67-nonproduction",
+      "region": "us-west1"
+    },
+    "images_sha256": "58472577e687bc8887168960f60ad6dcf82a918fcd4d90c399cc8e26d36db4b7",
+    "probe_connection": {
+      "address": "10.151.44.2",
+      "database": "cloudbank",
+      "port": 5432,
+      "tls": true
+    },
+    "profile_sha256": "a15cf9ebbd601270835936b54b81ed0a32325ab0e726f34acf60f17285fca4e7",
+    "services": {
+      "account": {
+        "auxiliary_connections": {
+          "LIQUIBASE_DATASOURCE_URL": {
+            "address": "10.151.44.2",
+            "database": "cloudbank",
+            "port": 5432,
+            "tls": true
+          }
+        },
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "dcd6f950-7468-4c0b-bcb8-38cef4c582fd",
+            "version": "1789231510479055008"
+          },
+          {
+            "name": "cloudbank-account-external",
+            "uid": "ff9970ab-95bc-46dd-9f64-a1ba5b33954a",
+            "version": "1789233966016079018"
+          }
+        ],
+        "connection": {
+          "address": "10.151.44.2",
+          "database": "cloudbank",
+          "port": 5432,
+          "tls": true
+        }
+      },
+      "azn-server": {
+        "auxiliary_connections": {
+          "LIQUIBASE_DATASOURCE_URL": {
+            "address": "10.151.44.2",
+            "database": "cloudbank",
+            "port": 5432,
+            "tls": true
+          }
+        },
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "dcd6f950-7468-4c0b-bcb8-38cef4c582fd",
+            "version": "1789231510479055008"
+          },
+          {
+            "name": "cloudbank-azn-server-external",
+            "uid": "8b0b9a87-eb8c-482f-9768-07ce79b9d826",
+            "version": "1789233966250687006"
+          }
+        ],
+        "connection": {
+          "address": "10.151.44.2",
+          "database": "cloudbank",
+          "port": 5432,
+          "tls": true
+        }
+      },
+      "chatbot": {
+        "auxiliary_connections": {},
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "dcd6f950-7468-4c0b-bcb8-38cef4c582fd",
+            "version": "1789231510479055008"
+          },
+          {
+            "name": "cloudbank-chatbot-external",
+            "uid": "949f0a20-671a-42ec-b273-30911448ab3b",
+            "version": "1789233966483919020"
+          }
+        ],
+        "connection": null
+      },
+      "checks": {
+        "auxiliary_connections": {
+          "LIQUIBASE_DATASOURCE_URL": {
+            "address": "10.151.44.2",
+            "database": "cloudbank",
+            "port": 5432,
+            "tls": true
+          }
+        },
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "dcd6f950-7468-4c0b-bcb8-38cef4c582fd",
+            "version": "1789231510479055008"
+          },
+          {
+            "name": "cloudbank-checks-external",
+            "uid": "94bb395d-8739-4aa3-8fa0-0820f280674b",
+            "version": "1789233966817439009"
+          }
+        ],
+        "connection": {
+          "address": "10.151.44.2",
+          "database": "cloudbank",
+          "port": 5432,
+          "tls": true
+        }
+      },
+      "creditscore": {
+        "auxiliary_connections": {},
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "dcd6f950-7468-4c0b-bcb8-38cef4c582fd",
+            "version": "1789231510479055008"
+          },
+          {
+            "name": "cloudbank-creditscore-external",
+            "uid": "dc2572d5-88b3-418e-9fe6-6505eb720128",
+            "version": "1789268608879631011"
+          }
+        ],
+        "connection": null
+      },
+      "customer": {
+        "auxiliary_connections": {
+          "LIQUIBASE_DATASOURCE_URL": {
+            "address": "10.151.44.2",
+            "database": "cloudbank",
+            "port": 5432,
+            "tls": true
+          }
+        },
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "dcd6f950-7468-4c0b-bcb8-38cef4c582fd",
+            "version": "1789231510479055008"
+          },
+          {
+            "name": "cloudbank-customer-external",
+            "uid": "408ec5c9-d414-4a31-b47f-3be93e37dcb8",
+            "version": "1789233967118447003"
+          }
+        ],
+        "connection": {
+          "address": "10.151.44.2",
+          "database": "cloudbank",
+          "port": 5432,
+          "tls": true
+        }
+      },
+      "testrunner": {
+        "auxiliary_connections": {
+          "LIQUIBASE_DATASOURCE_URL": {
+            "address": "10.151.44.2",
+            "database": "cloudbank",
+            "port": 5432,
+            "tls": true
+          }
+        },
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "dcd6f950-7468-4c0b-bcb8-38cef4c582fd",
+            "version": "1789231510479055008"
+          },
+          {
+            "name": "cloudbank-testrunner-external",
+            "uid": "435cc83c-ef2e-4346-97ae-322f08efcc3d",
+            "version": "1789233967286031017"
+          }
+        ],
+        "connection": {
+          "address": "10.151.44.2",
+          "database": "cloudbank",
+          "port": 5432,
+          "tls": true
+        }
+      },
+      "transfer": {
+        "auxiliary_connections": {},
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "dcd6f950-7468-4c0b-bcb8-38cef4c582fd",
+            "version": "1789231510479055008"
+          },
+          {
+            "name": "cloudbank-transfer-external",
+            "uid": "a9149bfa-a117-43e5-9f24-a2b5cb3c8144",
+            "version": "1789233967440015016"
+          }
+        ],
+        "connection": null
+      }
+    }
+  },
+  "ms67_complete": false,
+  "observation_type": "lightyear-cloudbank-ms67-network-enforcement-observation",
+  "probe_class_sha256": "8cfba24ff75f15400c8a70cc16ec2edac3130e4c345423e2bf6ede8d387836c4",
+  "probe_image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/testrunner@sha256:256d107cc707d537c98f1260362577bbdb9d2ede3e88005076e464a227351693",
+  "production_environment": false,
+  "production_ready": false,
+  "raw_output_persisted": false,
+  "recovery": {
+    "errors": [],
+    "owned_resources_removed": true,
+    "status": "restored"
+  },
+  "run_id": "ms67-network-1ce9e8763ae54d64ac8b50cb29a4f95f",
+  "schema_version": "1.0",
+  "scope": "policy-equivalent-non-serving-probe-pods",
+  "signature": {
+    "algorithm": "hmac-sha256",
+    "signer": "howard.weale@gmail.com",
+    "value": "955e5f5c9301e4f657f6011bf1ba476319cc7551a35efab1aeb5ff53a86d5289"
+  },
+  "status": "passed-bounded-network-enforcement"
+}

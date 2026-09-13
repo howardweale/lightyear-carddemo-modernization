@@ -606,6 +606,20 @@ class TransportTests(unittest.TestCase):
         self.assertEqual(failure.exception.diagnostic, {"http_status": 400, "method": "GET",
                          "collection": "alerts", "provider_status": "INVALID_ARGUMENT"})
 
+    def test_transport_read_can_retry_but_mutation_is_never_repeated(self):
+        api = Monitoring(PROJECT, NUMBER, invoke=lambda _: "memory-only-token")
+        with patch("lightyear_data.cloudbank_alert_drill.time.sleep"), patch.object(api.opener, "open",
+                side_effect=[TimeoutError("private"), io.BytesIO(b'{"alerts":[]}')]) as send:
+            self.assertEqual(api.listing("alerts"), [])
+            self.assertEqual(send.call_count, 2)
+        with patch.object(api.opener, "open", side_effect=TimeoutError("private")) as send:
+            with self.assertRaises(ApiFailure) as failure:
+                api.request("POST", api.prefix + "/timeSeries", body={})
+            self.assertEqual(send.call_count, 1)
+            self.assertEqual(str(failure.exception), "alert-api-unavailable-or-timed-out")
+            self.assertEqual(failure.exception.diagnostic["collection"], "timeSeries")
+            self.assertNotIn("private", json.dumps(failure.exception.diagnostic))
+
     def test_policy_wire_read_uses_verified_number_and_checks_exact_returned_id(self):
         api = Monitoring(PROJECT, NUMBER, invoke=lambda _: "memory-only-token")
         value = policy_spec(PROJECT, RUN)

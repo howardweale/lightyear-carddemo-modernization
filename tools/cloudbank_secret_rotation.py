@@ -16,7 +16,8 @@ from cloudbank_journeys import Heartbeat
 from cloudbank_ms65_rehearsal import cluster_identity, evidence_key, load
 from lightyear_data.cloudbank_edge_ai import validate_execution_receipt as validate_ms64
 from lightyear_data.cloudbank_journeys import ACK, JourneyFailure, require
-from lightyear_data.cloudbank_journeys_gke import GkeRuntime, command
+from lightyear_data.cloudbank_journeys_gke import command
+from lightyear_data.cloudbank_managed_target import ManagedGkeRuntime as GkeRuntime
 from lightyear_data.cloudbank_platform_qualification import validate_profile
 from lightyear_data.cloudbank_production_readiness import validate_image_lock
 from lightyear_data.cloudbank_secret_rotation_gke import (
@@ -38,6 +39,7 @@ def parser():
         root.add_argument("--" + name, type=Path)
     root.add_argument("--evidence-bucket", required=True)
     root.add_argument("--evidence-key-secret", default="cloudbank-ms67-evidence-key")
+    root.add_argument("--provider-secret", default="cloudbank-creditscore-external")
     return root
 
 
@@ -160,7 +162,7 @@ def main(argv=None):
         runtime = GkeRuntime(project=args.project, region=args.region, cluster=args.cluster, namespace=args.namespace,
                              images=images, run_id=state["run_id"] if args.action == "recover" else run_id,
                              output=output, progress=heartbeat.progress)
-        backend = GkeSecretBackend(runtime)
+        backend = GkeSecretBackend(runtime, provider_secret=args.provider_secret)
         if args.action == "recover":
             backend.load_credit_credentials(state)
         else:
@@ -214,6 +216,7 @@ def main(argv=None):
             heartbeat.progress("Rotating CreditScore, verifying both replicas, then restoring original values")
             result = engine.run(original)
     except (Exception, KeyboardInterrupt) as exc:
+        heartbeat.progress("Secret rotation failed: " + safe_reason(exc))
         cleanup = {"status": "not-started", "errors": []}
         if engine and args.action != "preflight":
             try:

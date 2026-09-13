@@ -53,6 +53,11 @@ production-qualified.
 | MS #68 | iDempiere Dialect Inventory and Pairing | Complete; deterministic source-bound evidence |
 | MS #69 | iDempiere Deterministic Semantic Comparison | Complete bounded baseline; low decision coverage, open findings |
 | MS #70 | iDempiere Bounded Triage and Evidence Assembly | Complete bounded safe-floor package; live model run remains gated |
+| MS #71 | CloudBank AlloyDB Second Target | Complete — both live 18-scenario comparisons passed; [acceptance and evidence](docs/ms71-cloudbank-alloydb-second-target.md) |
+
+MS #71 is the completed CloudBank delivery milestone selected by explicit project direction. It adds AlloyDB
+alongside Cloud SQL using the same eight services and comparator. It is separate from the
+MS #68–70 IDDA stream and the customer production-readiness scope.
 
 ## MS #68–#70 project stream — IDDA
 
@@ -727,6 +732,26 @@ approved 630-second nonproduction requirement; backup restore measured 455 secon
 Deterministic readiness fixtures remain separate admission contracts. Customer IdP, representative customer data
 volume and workload, the customer's approval process, production deployment, and final signed
 production readiness remain in the unnumbered customer-production backlog.
+
+## MS #71 — CloudBank AlloyDB Second Target
+
+MS #71 adds managed AlloyDB for PostgreSQL as a second CloudBank target alongside Cloud SQL.
+The same eight generated service images, synthetic fixtures, shared 18-scenario journey harness,
+and exact normalized comparator must pass in two comparisons: Oracle to Cloud SQL and Oracle to
+AlloyDB. Each comparison uses isolated source and target execution with its own signed evidence;
+both target deployments coexist without sharing mutable application data or queue consumers.
+
+Completion requires both comparisons to pass under one bound campaign, verified managed-database
+identities, successful recovery and cleanup, and an MS71 receipt linking both results. The existing
+MS67 Cloud SQL platform receipt stays historical evidence for its original deployment; it does not
+qualify AlloyDB automatically. See the [MS71 plan](docs/ms71-cloudbank-alloydb-second-target.md)
+for implementation boundaries and the single acceptance gate. The [managed-target workflow](factory/cloudbank/alloydb-second-target/)
+is implemented. Campaign `ms71-20260912a` passed both live comparisons on 2026-09-12, with all
+18 scenarios passing per comparison and recovery verified. The [signed acceptance receipt](docs/receipts/ms71-20260912a/ms71-alloydb-second-target.receipt.json)
+closes MS71. Its original platform-qualification flag remains historical. The separately
+authorized [AlloyDB platform follow-up](docs/cloudbank-alloydb-platform-qualification.md)
+passed all 29 operational scenarios on 2026-09-13 and records platform qualification for
+synthetic nonproduction. Production readiness remains false.
 
 ## MS #68 — iDempiere Dialect Inventory and Pairing
 

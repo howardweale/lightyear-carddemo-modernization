@@ -15,12 +15,15 @@ from pathlib import Path
 import re
 import shutil
 import subprocess
+import sys
 import tempfile
 import time
 from datetime import datetime, timedelta, timezone
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
 from urllib.request import HTTPRedirectHandler, Request, build_opener
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 
 SERVICES = ("azn-server", "customer", "account", "transfer", "checks",
@@ -100,7 +103,8 @@ def safe_api_error(raw: bytes) -> dict:
 
 
 def command(args: list[str], timeout: int = 60) -> str:
-    result = subprocess.run(args, capture_output=True, text=True, timeout=timeout, check=False)
+    from lightyear_data.cloudbank_journeys_gke import _command_argv
+    result = subprocess.run(_command_argv(args), capture_output=True, text=True, timeout=timeout, check=False)
     if result.returncode:
         raise ObservationError("command-failed", result.returncode)
     return result.stdout

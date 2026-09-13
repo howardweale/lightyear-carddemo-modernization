@@ -1,4 +1,37 @@
 {
+  "alloydb_platform_qualification": {
+    "admission_controller_commit": "11e65d234561228fd8ea6f3d1cb7a3ba4624ce02",
+    "alloydb_platform_qualified": true,
+    "availability_scope": "controlled evacuation, paced by service where recorded, and primary failover; sampled availability",
+    "backup_restore_rto_seconds": 451,
+    "campaign_id": "alloydb-platform-20260912a",
+    "customer_certification_complete": false,
+    "export_manifest_path": "docs/receipts/alloydb-platform-20260912a/publication-export.json",
+    "ha_recovery_seconds": 333,
+    "image_security_scope": "retained original signed signature/provenance/scan evidence for identical immutable digests",
+    "load": {
+      "concurrency": 10,
+      "duration_seconds": 300,
+      "errors": 0,
+      "p95_ms": 458.9082899999994,
+      "requests": 5428,
+      "requests_per_second": 17.338459222861708,
+      "tool": "k6"
+    },
+    "observability_scope": "current-pod GKE CPU metrics and correlated readiness-request logs/traces",
+    "pitr_rto_seconds": 507,
+    "production_deployed": false,
+    "production_ready": false,
+    "published_on": "2026-09-13",
+    "receipt_content_sha256": "973e8f8dc3f70db61bfe197dd0d49f61dff980af714069ff420b66f3224fa926",
+    "receipt_path": "docs/receipts/alloydb-platform-20260912a/alloydb-platform.receipt.json",
+    "rpo_seconds": 30,
+    "scenario_count": 29,
+    "service_count": 8,
+    "status": "passed-alloydb-nonproduction-platform-qualification",
+    "synthetic_data_only": true,
+    "unplanned_region_failure_qualified": false
+  },
   "files": [
     {
       "bytes": 4412,

@@ -1,0 +1,24 @@
+{
+  "schema_version": "1.0",
+  "profile_type": "lightyear-cloudbank-managed-target",
+  "provider": "alloydb-postgresql",
+  "project": "your-project",
+  "region": "us-west1",
+  "cluster": "cloudbank-ms67",
+  "namespace": "cloudbank-ms71-alloydb",
+  "resource": "projects/your-project/locations/us-west1/clusters/cloudbank-ms71-alloydb/instances/primary",
+  "database_version": "POSTGRES_16",
+  "databases": {
+    "azn-server": "cloudbank",
+    "customer": "cloudbank",
+    "account": "cloudbank",
+    "transfer": null,
+    "checks": "cloudbank",
+    "testrunner": "cloudbank",
+    "creditscore": null,
+    "chatbot": null
+  },
+  "require_tls": true,
+  "synthetic_data_only": true,
+  "production_environment": false
+}

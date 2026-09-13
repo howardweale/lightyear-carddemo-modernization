@@ -319,6 +319,25 @@ class ContractTests(unittest.TestCase):
 
 
 class JournalTests(unittest.TestCase):
+    def test_lost_upload_acknowledgement_requires_exact_remote_generation_readback(self):
+        with tempfile.TemporaryDirectory() as directory:
+            remote, uploads = {}, []
+            def invoke(argv, **kwargs):
+                if argv[1:3] == ["storage", "cp"]:
+                    uploads.append(argv)
+                    remote["body"] = Path(argv[3]).read_text(encoding="utf-8")
+                    raise JourneyFailure("operator-command-unavailable-or-timed-out")
+                if argv[1:4] == ["storage", "objects", "describe"]:
+                    return "123"
+                self.assertTrue(argv[3].endswith("#123"))
+                return remote["body"]
+            journal = Journal(Path(directory) / "state.json", "gs://test/secret-rotation/state.json",
+                              "test", KEY, "tester", invoke)
+            result = journal.write(state())
+            self.assertEqual(result, verified(json.loads(remote["body"]), KEY))
+            self.assertEqual(journal.generation, "123")
+            self.assertEqual(len(uploads), 1)
+
     def test_generation_fences_stale_writer_and_readback_is_checked(self):
         with tempfile.TemporaryDirectory() as directory:
             remote = {"generation": 0, "body": ""}
@@ -355,6 +374,39 @@ class JournalTests(unittest.TestCase):
 
 
 class ProviderBoundaryTests(unittest.TestCase):
+    def test_pin_retries_only_status_race_with_fresh_snapshot(self):
+        old = {"metadata": {"uid": "external-uid", "resourceVersion": "1"},
+               "spec": {"dataFrom": [{"extract": {"version": "1"}}]}, "status": {"refresh": "old"}}
+        new = copy.deepcopy(old)
+        new["metadata"]["resourceVersion"] = "2"
+        new["status"] = {"refresh": "new"}
+        backend = GkeSecretBackend(SimpleNamespace(get=lambda *args: copy.deepcopy(new)))
+        with patch.object(backend.r, "get", side_effect=[old, new]), patch.object(
+                backend, "patch", side_effect=[JourneyFailure("operator-command-failed"), None]) as mutate:
+            backend.pin("2")
+        self.assertEqual(mutate.call_count, 2)
+        self.assertEqual(mutate.call_args.args[1], new)
+
+    def test_pin_does_not_retry_spec_owner_or_ambiguous_changes(self):
+        old = {"metadata": {"uid": "external-uid", "resourceVersion": "1"},
+               "spec": {"dataFrom": [{"extract": {"version": "1"}}]}}
+        for scenario in ("spec", "uid", "unchanged", "timeout"):
+            with self.subTest(scenario=scenario):
+                new = copy.deepcopy(old)
+                if scenario != "unchanged":
+                    new["metadata"]["resourceVersion"] = "2"
+                if scenario == "spec":
+                    new["spec"]["dataFrom"][0]["extract"]["version"] = "2"
+                if scenario == "uid":
+                    new["metadata"]["uid"] = "replacement"
+                reason = "operator-command-unavailable-or-timed-out" if scenario == "timeout" else "operator-command-failed"
+                backend = GkeSecretBackend(SimpleNamespace(get=lambda *args: new))
+                with patch.object(backend.r, "get", side_effect=[old, new]), patch.object(
+                        backend, "patch", side_effect=JourneyFailure(reason)) as mutate:
+                    with self.assertRaisesRegex(JourneyFailure, reason):
+                        backend.pin("2")
+                self.assertEqual(mutate.call_count, 1)
+
     def test_old_executor_cannot_release_recoverys_lock(self):
         current = state()
         current["lease_uid"] = "lease-uid"

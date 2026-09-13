@@ -377,12 +377,22 @@ class NetworkRun:
     def preflight(self):
         require(self.b.get(self.app, "lease", LEASE) is None, "network-lock-held-recover-before-another-run")
         baseline, roles, inventories = self.snapshot()
-        sql = self.b.sql_instance(self.s["source_instance"])
-        ips = [row["ipAddress"] for row in sql.get("ipAddresses", []) if row.get("type") == "PRIVATE"]
-        require(sql.get("name") == self.s["source_instance"] and sql.get("region") == self.s["environment"]["region"]
-                and sql.get("databaseVersion", "").startswith("POSTGRES_") and sql.get("state") == "RUNNABLE"
-                and len(ips) == 1, "network-postgresql-instance-invalid")
-        database_ip = ipv4(ips[0])
+        if self.s.get("managed_target_profile"):
+            from .cloudbank_managed_target import observe_target
+            managed = observe_target(self.b.r, self.s["managed_target_profile"], command)
+            require(managed["profile_sha256"] == self.s["bindings"]["managed_target_profile_sha256"],
+                    "network-managed-profile-binding-mismatch")
+            self.s["managed_target"] = managed
+            database_ip = ipv4(managed["database"]["address"])
+            database_identity = managed["database"]["content_sha256"]
+        else:
+            sql = self.b.sql_instance(self.s["source_instance"])
+            ips = [row["ipAddress"] for row in sql.get("ipAddresses", []) if row.get("type") == "PRIVATE"]
+            require(sql.get("name") == self.s["source_instance"] and sql.get("region") == self.s["environment"]["region"]
+                    and sql.get("databaseVersion", "").startswith("POSTGRES_") and sql.get("state") == "RUNNABLE"
+                    and len(ips) == 1, "network-postgresql-instance-invalid")
+            database_ip = ipv4(ips[0])
+            database_identity = hashed({"name": sql["name"], "connectionName": sql.get("connectionName"), "ip": database_ip})
         ingress = [o for o in inventories[self.app] if o["kind"] == "Ingress"
                    and any(r.get("host") == self.profile["expected_hostname"] for r in o["spec"].get("rules", []))]
         addresses = {row.get("ip") for o in ingress for row in o.get("status", {}).get("loadBalancer", {}).get("ingress", [])}
@@ -401,7 +411,7 @@ class NetworkRun:
                 require(selected(policies, labels) == info["policies"], "network-probe-policy-equivalence-invalid")
                 route_guard([{"metadata": {"labels": labels}}], [o for o in items if o["kind"] == "Service"], [])
         self.s.update(baseline=baseline, roles=roles, database_ip=database_ip, public_ip=public_ip,
-                      sql_identity_sha256=hashed({"name": sql["name"], "connectionName": sql.get("connectionName"), "ip": database_ip}),
+                      sql_identity_sha256=database_identity,
                       ingress_identity_sha256=hashed([minimized(i) for i in ingress]))
 
     def acquire(self):
@@ -646,6 +656,7 @@ class NetworkRun:
         final, _, _ = self.snapshot()
         require(final == self.s["baseline"], "network-final-baseline-drift")
         return {"schema_version": "1.0", "observation_type": OBSERVATION_TYPE, "run_id": self.s["run_id"], "status": PASS,
+                **({"managed_target": self.s["managed_target"]} if "managed_target" in self.s else {}),
                 "environment": self.s["environment"], "bindings": self.s["bindings"], "images": self.s["images"],
                 "scope": "policy-equivalent-non-serving-probe-pods", "probe_class_sha256": self.artifact["class_sha256"],
                 "probe_image": self.s["images"]["testrunner"], "baseline": self.s["baseline"], "final": final,
@@ -658,6 +669,18 @@ class NetworkRun:
 
 def verify_observation(value, key, bindings, images, environment, artifact):
     require(value.get("content_sha256") == content_hash(value) and verify_signature(value, key), "network-observation-signature-invalid")
+    if "managed_target_profile_sha256" in bindings:
+        managed = value.get("managed_target", {})
+        database = managed.get("database", {})
+        require(managed.get("content_sha256") == content_hash(managed)
+                and managed.get("profile_sha256") == bindings["managed_target_profile_sha256"]
+                and managed.get("images_sha256") == hashed(images)
+                and all(managed.get("environment", {}).get(k) == v for k, v in environment.items())
+                and database.get("content_sha256") == content_hash(database), "network-managed-observation-invalid")
+        database_target = hashed({"ip": ipv4(database["address"]), "port": 5432})
+        require(all(row.get("target_sha256") == database_target for row in value.get("cases", [])
+                    if row.get("id", "").endswith("-database-allowed") or row.get("id") == "control-database"),
+                "network-managed-database-probes-mismatch")
     require(value.get("schema_version") == "1.0" and value.get("observation_type") == OBSERVATION_TYPE
             and value.get("status") == PASS and re.fullmatch(r"ms67-network-[0-9a-f]{32}", value.get("run_id", ""))
             and value.get("scope") == "policy-equivalent-non-serving-probe-pods"

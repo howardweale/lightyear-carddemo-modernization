@@ -11,7 +11,7 @@ import json
 import math
 import re
 import time
-from urllib.parse import quote, urlsplit
+from urllib.parse import quote, urlsplit, parse_qsl
 
 from .cloudbank_journeys import JourneyFailure, Journeys, SERVICES, hashed, require
 from .cloudbank_journeys_gke import GkeRuntime
@@ -110,7 +110,8 @@ class HaRuntime(GkeRuntime):
             parsed = urlsplit(jdbc.removeprefix("jdbc:"))
             require(jdbc.startswith("jdbc:postgresql://") and parsed.hostname == profile["private_ip"]
                     and (parsed.port or 5432) == 5432 and not parsed.username and not parsed.password
-                    and not parsed.query and not parsed.fragment and re.fullmatch(r"/[A-Za-z0-9_-]+", parsed.path),
+                    and parse_qsl(parsed.query, keep_blank_values=True) in ([], [("sslmode", "require")])
+                    and not parsed.fragment and re.fullmatch(r"/[A-Za-z0-9_-]+", parsed.path),
                     "datasource-source-binding-invalid-" + service)
             require(all(k in secret["data"] for k in ("SPRING_DATASOURCE_USERNAME", "SPRING_DATASOURCE_PASSWORD")),
                     "database-credentials-missing-" + service)
@@ -165,7 +166,7 @@ class SqlHa:
         require(isinstance(rows, list) and not rows, "source-has-active-operations")
 
     def preflight(self):
-        self.runtime.progress("Checking regional Cloud SQL, running processes, datasources and OAuth")
+        self.runtime.progress("Checking regional managed PostgreSQL, running processes, datasources and OAuth")
         profile = self.profile()
         self.idle()
         services = self.runtime.ready()

@@ -127,13 +127,22 @@ class Journal:
         temporary.touch(mode=0o600, exist_ok=True)
         temporary.write_text(raw, encoding="utf-8")
         temporary.replace(self.path)
-        self.invoke(["gcloud", "storage", "cp", str(self.path), self.uri, "--project", self.project,
-                     "--if-generation-match=" + self.generation], timeout=180)
+        upload_error = None
+        try:
+            self.invoke(["gcloud", "storage", "cp", str(self.path), self.uri, "--project", self.project,
+                         "--if-generation-match=" + self.generation], timeout=180)
+        except JourneyFailure as exc:
+            # The upload may have committed before its acknowledgement was lost.
+            # Read the exact remote generation; never repeat the write or accept
+            # another writer's different checkpoint.
+            upload_error = exc
         generation = self.invoke(["gcloud", "storage", "objects", "describe", self.uri,
                                   "--project", self.project, "--format=value(generation)"]).strip()
         require(generation.isdigit(), "secret-rotation-checkpoint-generation-invalid")
         readback = self.invoke(["gcloud", "storage", "cat", self.uri + "#" + generation,
                                "--project", self.project], timeout=180)
+        if readback != raw and upload_error is not None:
+            raise upload_error
         require(readback == raw, "secret-rotation-checkpoint-readback-mismatch")
         self.generation = generation
         observe_checkpoint(payload, self.uri)
@@ -141,8 +150,11 @@ class Journal:
 
 
 class GkeSecretBackend:
-    def __init__(self, runtime: GkeRuntime, invoke=command):
+    def __init__(self, runtime: GkeRuntime, invoke=command, *, provider_secret=SECRET):
         self.r, self.invoke = runtime, invoke
+        require(re.fullmatch(r"[a-zA-Z0-9][a-zA-Z0-9_-]{0,254}", provider_secret) is not None,
+                "secret-rotation-provider-secret-invalid")
+        self.provider_secret = provider_secret
         self.state = None
 
     def provider(self, *args: str, data=None) -> str:
@@ -150,32 +162,32 @@ class GkeSecretBackend:
                            data=data, timeout=120)
 
     def parent(self) -> dict:
-        value = json.loads(self.provider("describe", SECRET, "--format=json"))
+        value = json.loads(self.provider("describe", self.provider_secret, "--format=json"))
         return {k: value[k] for k in ("name", "createTime")}
 
     def version(self, number: str) -> dict:
         require(number == "latest" or re.fullmatch(r"[1-9][0-9]*", number) is not None,
                 "secret-rotation-version-invalid")
-        value = json.loads(self.provider("versions", "describe", number, "--secret", SECRET, "--format=json"))
+        value = json.loads(self.provider("versions", "describe", number, "--secret", self.provider_secret, "--format=json"))
         require(value["name"].startswith(self.parent()["name"] + "/versions/"),
                 "secret-rotation-version-parent-mismatch")
         return value
 
     def payload(self, number: str) -> dict:
         require(re.fullmatch(r"[1-9][0-9]*", number) is not None, "numeric-secret-version-required")
-        value = json.loads(self.provider("versions", "access", number, "--secret", SECRET))
+        value = json.loads(self.provider("versions", "access", number, "--secret", self.provider_secret))
         require(isinstance(value, dict) and set(value) == {PEPPER, MARKER}
                 and all(isinstance(v, str) for v in value.values())
                 and 32 <= len(value[PEPPER]) <= 4096, "bounded-creditscore-secret-required")
         return value
 
     def versions(self) -> list[dict]:
-        return json.loads(self.provider("versions", "list", SECRET, "--sort-by=~createTime", "--limit=50", "--format=json"))
+        return json.loads(self.provider("versions", "list", self.provider_secret, "--sort-by=~createTime", "--limit=50", "--format=json"))
 
     def add(self, payload: dict) -> str:
         self.owned(self.state)
         # Secret bytes go only to stdin, never argv, a temporary file or a log.
-        value = json.loads(self.provider("versions", "add", SECRET, "--data-file=-", "--format=json",
+        value = json.loads(self.provider("versions", "add", self.provider_secret, "--data-file=-", "--format=json",
                                          data=canonical_bytes(payload).decode()))
         require(value["name"].startswith(self.parent()["name"] + "/versions/"),
                 "secret-rotation-added-version-parent-mismatch")
@@ -190,7 +202,7 @@ class GkeSecretBackend:
             return
         require(metadata["state"] == "ENABLED" and bool(metadata.get("etag")),
                 "secret-rotation-version-not-disablable")
-        self.provider("versions", "disable", number, "--secret", SECRET, "--etag", metadata["etag"])
+        self.provider("versions", "disable", number, "--secret", self.provider_secret, "--etag", metadata["etag"])
         deadline = time.monotonic() + 120
         while self.version(number)["state"] != "DISABLED":
             require(time.monotonic() < deadline, "secret-rotation-disable-not-observed")
@@ -220,7 +232,7 @@ class GkeSecretBackend:
                 and len(spec.get("dataFrom", [])) == 1
                 and set(spec["dataFrom"][0]) == {"extract"}, "secret-rotation-external-mapping-invalid")
         extract = spec["dataFrom"][0]["extract"]
-        require(extract.get("key") == SECRET and extract.get("version", "latest") == "latest"
+        require(extract.get("key") == self.provider_secret and extract.get("version", "latest") == "latest"
                 and not extract.get("property") and extract.get("decodingStrategy", "None") == "None"
                 and extract.get("conversionStrategy", "Default") == "Default",
                 "secret-rotation-extract-mapping-invalid")
@@ -327,7 +339,27 @@ class GkeSecretBackend:
         else:
             changes = [] if extract.get("version") == number else [{"op": "add", "path": path, "value": number}]
         if changes:
-            self.patch("externalsecret", external, changes)
+            for attempt in range(3):
+                try:
+                    self.patch("externalsecret", external, changes)
+                    break
+                except JourneyFailure as exc:
+                    if str(exc) != "operator-command-failed" or attempt == 2:
+                        raise
+                    current = self.r.get("externalsecret", EXTERNAL)
+                    # ESO updates status while we check lease ownership. Retry
+                    # only a proven status-only race, with a fresh UID/RV test.
+                    # Spec changes (including a possibly successful pin), owner
+                    # changes and ambiguous transport failures are not retried.
+                    def stable(value):
+                        return {k: ({m: v for m, v in item.items()
+                                     if m not in {"resourceVersion", "managedFields"}}
+                                    if k == "metadata" else item)
+                                for k, item in value.items() if k != "status"}
+                    if (current["metadata"]["resourceVersion"] == external["metadata"]["resourceVersion"]
+                            or stable(current) != stable(external)):
+                        raise
+                    external = current
 
     def sync(self, state: dict, payload: dict):
         deadline = time.monotonic() + 180

@@ -1,0 +1,1386 @@
+{
+  "after": {
+    "content_sha256": "03b0e0447f44ddfc229ec7a1df2b53f8200e5f26a7ba62fdc32101a87e0a0957",
+    "database": {
+      "address": "10.151.0.2",
+      "content_sha256": "f6b6d24b25d59376f485439bc1b222893ef1c43a5cb94cdba06f5bca13e09610",
+      "created_at": "2026-09-03T16:22:08.393Z",
+      "database_version": "POSTGRES_16",
+      "provider": "cloud-sql-postgresql",
+      "resource": "projects/lightyear-ms67-nonproduction/instances/cloudbank-ms67-postgres"
+    },
+    "environment": {
+      "cluster": "cloudbank-ms67",
+      "namespace": "cloudbank-ms67",
+      "namespace_uid_sha256": "0a397f173a1dfab91edeebc3d91bbfa1a3e0dd39caa086df1ff6f92822f71fff",
+      "project": "lightyear-ms67-nonproduction",
+      "region": "us-west1"
+    },
+    "images_sha256": "58472577e687bc8887168960f60ad6dcf82a918fcd4d90c399cc8e26d36db4b7",
+    "probe_connection": {
+      "address": "10.151.0.2",
+      "database": "cloudbank",
+      "port": 5432,
+      "tls": false
+    },
+    "profile_sha256": "da0f55716eea3a78368be65702ede59a8d9da648750aa71adf6c56ad6894da4c",
+    "services": {
+      "account": {
+        "auxiliary_connections": {
+          "LIQUIBASE_DATASOURCE_URL": {
+            "address": "10.151.0.2",
+            "database": "cloudbank",
+            "port": 5432,
+            "tls": false
+          }
+        },
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "45d766e8-dd00-4c12-a34d-62e51f3380b1",
+            "version": "1788634293177103011"
+          },
+          {
+            "name": "cloudbank-account-external",
+            "uid": "a873382a-39da-4c52-872f-2639060b87d7",
+            "version": "1788634284939647008"
+          }
+        ],
+        "connection": {
+          "address": "10.151.0.2",
+          "database": "cloudbank",
+          "port": 5432,
+          "tls": false
+        }
+      },
+      "azn-server": {
+        "auxiliary_connections": {
+          "LIQUIBASE_DATASOURCE_URL": {
+            "address": "10.151.0.2",
+            "database": "cloudbank",
+            "port": 5432,
+            "tls": false
+          }
+        },
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "45d766e8-dd00-4c12-a34d-62e51f3380b1",
+            "version": "1788634293177103011"
+          },
+          {
+            "name": "cloudbank-azn-server-external",
+            "uid": "ac5fe62a-ba01-4530-8556-e8d6fadf06e4",
+            "version": "1788828416390015019"
+          }
+        ],
+        "connection": {
+          "address": "10.151.0.2",
+          "database": "cloudbank",
+          "port": 5432,
+          "tls": false
+        }
+      },
+      "chatbot": {
+        "auxiliary_connections": {},
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "45d766e8-dd00-4c12-a34d-62e51f3380b1",
+            "version": "1788634293177103011"
+          },
+          {
+            "name": "cloudbank-chatbot-external",
+            "uid": "d3630903-67e9-48b5-9e2c-20484fffa6fe",
+            "version": "1788634286129423021"
+          }
+        ],
+        "connection": null
+      },
+      "checks": {
+        "auxiliary_connections": {
+          "LIQUIBASE_DATASOURCE_URL": {
+            "address": "10.151.0.2",
+            "database": "cloudbank",
+            "port": 5432,
+            "tls": false
+          }
+        },
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "45d766e8-dd00-4c12-a34d-62e51f3380b1",
+            "version": "1788634293177103011"
+          },
+          {
+            "name": "cloudbank-checks-external",
+            "uid": "36340744-8a2d-4ee1-a4d5-6b97d45f0134",
+            "version": "1788634285345007015"
+          }
+        ],
+        "connection": {
+          "address": "10.151.0.2",
+          "database": "cloudbank",
+          "port": 5432,
+          "tls": false
+        }
+      },
+      "creditscore": {
+        "auxiliary_connections": {},
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "45d766e8-dd00-4c12-a34d-62e51f3380b1",
+            "version": "1788634293177103011"
+          },
+          {
+            "name": "cloudbank-creditscore-external",
+            "uid": "2e8166fa-2f9f-46cd-8298-e905be7715f8",
+            "version": "1789069257791887021"
+          }
+        ],
+        "connection": null
+      },
+      "customer": {
+        "auxiliary_connections": {
+          "LIQUIBASE_DATASOURCE_URL": {
+            "address": "10.151.0.2",
+            "database": "cloudbank",
+            "port": 5432,
+            "tls": false
+          }
+        },
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "45d766e8-dd00-4c12-a34d-62e51f3380b1",
+            "version": "1788634293177103011"
+          },
+          {
+            "name": "cloudbank-customer-external",
+            "uid": "5378e7e6-32c6-48a0-aa47-16ff24858c5d",
+            "version": "1788634284756783023"
+          }
+        ],
+        "connection": {
+          "address": "10.151.0.2",
+          "database": "cloudbank",
+          "port": 5432,
+          "tls": false
+        }
+      },
+      "testrunner": {
+        "auxiliary_connections": {
+          "LIQUIBASE_DATASOURCE_URL": {
+            "address": "10.151.0.2",
+            "database": "cloudbank",
+            "port": 5432,
+            "tls": false
+          }
+        },
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "45d766e8-dd00-4c12-a34d-62e51f3380b1",
+            "version": "1788634293177103011"
+          },
+          {
+            "name": "cloudbank-testrunner-external",
+            "uid": "35902faf-c600-4cfd-8e0a-ffc1ec537b1b",
+            "version": "1788634285702047001"
+          }
+        ],
+        "connection": {
+          "address": "10.151.0.2",
+          "database": "cloudbank",
+          "port": 5432,
+          "tls": false
+        }
+      },
+      "transfer": {
+        "auxiliary_connections": {},
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "45d766e8-dd00-4c12-a34d-62e51f3380b1",
+            "version": "1788634293177103011"
+          },
+          {
+            "name": "cloudbank-transfer-external",
+            "uid": "9d3b1078-8566-4e99-afc5-2b825532acf9",
+            "version": "1788634285128687011"
+          }
+        ],
+        "connection": null
+      }
+    }
+  },
+  "before": {
+    "content_sha256": "03b0e0447f44ddfc229ec7a1df2b53f8200e5f26a7ba62fdc32101a87e0a0957",
+    "database": {
+      "address": "10.151.0.2",
+      "content_sha256": "f6b6d24b25d59376f485439bc1b222893ef1c43a5cb94cdba06f5bca13e09610",
+      "created_at": "2026-09-03T16:22:08.393Z",
+      "database_version": "POSTGRES_16",
+      "provider": "cloud-sql-postgresql",
+      "resource": "projects/lightyear-ms67-nonproduction/instances/cloudbank-ms67-postgres"
+    },
+    "environment": {
+      "cluster": "cloudbank-ms67",
+      "namespace": "cloudbank-ms67",
+      "namespace_uid_sha256": "0a397f173a1dfab91edeebc3d91bbfa1a3e0dd39caa086df1ff6f92822f71fff",
+      "project": "lightyear-ms67-nonproduction",
+      "region": "us-west1"
+    },
+    "images_sha256": "58472577e687bc8887168960f60ad6dcf82a918fcd4d90c399cc8e26d36db4b7",
+    "probe_connection": {
+      "address": "10.151.0.2",
+      "database": "cloudbank",
+      "port": 5432,
+      "tls": false
+    },
+    "profile_sha256": "da0f55716eea3a78368be65702ede59a8d9da648750aa71adf6c56ad6894da4c",
+    "services": {
+      "account": {
+        "auxiliary_connections": {
+          "LIQUIBASE_DATASOURCE_URL": {
+            "address": "10.151.0.2",
+            "database": "cloudbank",
+            "port": 5432,
+            "tls": false
+          }
+        },
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "45d766e8-dd00-4c12-a34d-62e51f3380b1",
+            "version": "1788634293177103011"
+          },
+          {
+            "name": "cloudbank-account-external",
+            "uid": "a873382a-39da-4c52-872f-2639060b87d7",
+            "version": "1788634284939647008"
+          }
+        ],
+        "connection": {
+          "address": "10.151.0.2",
+          "database": "cloudbank",
+          "port": 5432,
+          "tls": false
+        }
+      },
+      "azn-server": {
+        "auxiliary_connections": {
+          "LIQUIBASE_DATASOURCE_URL": {
+            "address": "10.151.0.2",
+            "database": "cloudbank",
+            "port": 5432,
+            "tls": false
+          }
+        },
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "45d766e8-dd00-4c12-a34d-62e51f3380b1",
+            "version": "1788634293177103011"
+          },
+          {
+            "name": "cloudbank-azn-server-external",
+            "uid": "ac5fe62a-ba01-4530-8556-e8d6fadf06e4",
+            "version": "1788828416390015019"
+          }
+        ],
+        "connection": {
+          "address": "10.151.0.2",
+          "database": "cloudbank",
+          "port": 5432,
+          "tls": false
+        }
+      },
+      "chatbot": {
+        "auxiliary_connections": {},
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "45d766e8-dd00-4c12-a34d-62e51f3380b1",
+            "version": "1788634293177103011"
+          },
+          {
+            "name": "cloudbank-chatbot-external",
+            "uid": "d3630903-67e9-48b5-9e2c-20484fffa6fe",
+            "version": "1788634286129423021"
+          }
+        ],
+        "connection": null
+      },
+      "checks": {
+        "auxiliary_connections": {
+          "LIQUIBASE_DATASOURCE_URL": {
+            "address": "10.151.0.2",
+            "database": "cloudbank",
+            "port": 5432,
+            "tls": false
+          }
+        },
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "45d766e8-dd00-4c12-a34d-62e51f3380b1",
+            "version": "1788634293177103011"
+          },
+          {
+            "name": "cloudbank-checks-external",
+            "uid": "36340744-8a2d-4ee1-a4d5-6b97d45f0134",
+            "version": "1788634285345007015"
+          }
+        ],
+        "connection": {
+          "address": "10.151.0.2",
+          "database": "cloudbank",
+          "port": 5432,
+          "tls": false
+        }
+      },
+      "creditscore": {
+        "auxiliary_connections": {},
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "45d766e8-dd00-4c12-a34d-62e51f3380b1",
+            "version": "1788634293177103011"
+          },
+          {
+            "name": "cloudbank-creditscore-external",
+            "uid": "2e8166fa-2f9f-46cd-8298-e905be7715f8",
+            "version": "1789069257791887021"
+          }
+        ],
+        "connection": null
+      },
+      "customer": {
+        "auxiliary_connections": {
+          "LIQUIBASE_DATASOURCE_URL": {
+            "address": "10.151.0.2",
+            "database": "cloudbank",
+            "port": 5432,
+            "tls": false
+          }
+        },
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "45d766e8-dd00-4c12-a34d-62e51f3380b1",
+            "version": "1788634293177103011"
+          },
+          {
+            "name": "cloudbank-customer-external",
+            "uid": "5378e7e6-32c6-48a0-aa47-16ff24858c5d",
+            "version": "1788634284756783023"
+          }
+        ],
+        "connection": {
+          "address": "10.151.0.2",
+          "database": "cloudbank",
+          "port": 5432,
+          "tls": false
+        }
+      },
+      "testrunner": {
+        "auxiliary_connections": {
+          "LIQUIBASE_DATASOURCE_URL": {
+            "address": "10.151.0.2",
+            "database": "cloudbank",
+            "port": 5432,
+            "tls": false
+          }
+        },
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "45d766e8-dd00-4c12-a34d-62e51f3380b1",
+            "version": "1788634293177103011"
+          },
+          {
+            "name": "cloudbank-testrunner-external",
+            "uid": "35902faf-c600-4cfd-8e0a-ffc1ec537b1b",
+            "version": "1788634285702047001"
+          }
+        ],
+        "connection": {
+          "address": "10.151.0.2",
+          "database": "cloudbank",
+          "port": 5432,
+          "tls": false
+        }
+      },
+      "transfer": {
+        "auxiliary_connections": {},
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "45d766e8-dd00-4c12-a34d-62e51f3380b1",
+            "version": "1788634293177103011"
+          },
+          {
+            "name": "cloudbank-transfer-external",
+            "uid": "9d3b1078-8566-4e99-afc5-2b825532acf9",
+            "version": "1788634285128687011"
+          }
+        ],
+        "connection": null
+      }
+    }
+  },
+  "campaign_id": "ms71-20260912a",
+  "comparison": {
+    "all_eight_services_observed_in_both_lanes": true,
+    "bindings": {
+      "compatibility_ledger_sha256": "a22c7aa03afb6ed356f708abfad9e5775ab019c49e33dfe2b1d6e562683b7818",
+      "execution_plan_sha256": "91c542a8acd77db4cf7d571553197e72eec055e9bf6fa21eb3ea811b6f8fcebb",
+      "journey_contract_sha256": "08d5a55f285432fca2c60e0c36768d58d5b5f3e26cba78104e63d87c836e6b7c",
+      "lane_contract_sha256": "6799001022aef5ec32ed248df08573e954b4862f49461f5c4c8d0030717a2d41",
+      "oracle_hardening_contract_sha256": "1919619947b14697e5c4a748224b244d29b867acb27d1ddd03e60560fe385ba8",
+      "oracle_hardening_patch_sha256": "4d416cb437ae363843d2f43b895cff3cf331c1c27aa93f3a2717449a66239cd0"
+    },
+    "bounded_whole_application_equivalent": true,
+    "comparison_run_id": "ms66-ms71-524c0a50879c1de4210f04e9",
+    "content_sha256": "6abccc4839e6e6cad620bd1461425c8b58848e601be09d31f3406fe7a459925e",
+    "exact_internal_implementation_equivalent": false,
+    "migration_complete": false,
+    "model_quality_qualified": false,
+    "normalized_observation_sha256": "71458ecf2e1b2ae89f1dad763d4a8898899e19834c7744f3683733ccaf9a2bc9",
+    "oracle_hardening_contract_sha256": "1919619947b14697e5c4a748224b244d29b867acb27d1ddd03e60560fe385ba8",
+    "oracle_hardening_patch_sha256": "4d416cb437ae363843d2f43b895cff3cf331c1c27aa93f3a2717449a66239cd0",
+    "oracle_image_id_sha256": "ace4a0fd96c3ad31f9c93e7c918c47b9d0e75dfe00eb301775afd374f4a8f8f0",
+    "oracle_journey_sha256": "0b3e6e2d95f340291aeccde448d5a4ebe507f75c1d0d426afabbfb51f1edf6e5",
+    "oracle_observation_sha256": "02c607124dc128d6452c614864dd2466e17492160503b0c850d9b092f4cd92a3",
+    "oracle_source_image_lock_sha256": "ee48647c99ae3f4bdef7c8381c6a6c7153e47da861a601ed3800b82c8c2744d4",
+    "postgresql_image_id_sha256": "75f5a96988cdf694a215073c3e9c001b706b371e2f94df3967f2efdec2787f6b",
+    "postgresql_image_lock_sha256": "eb3c808a5af30fe2a212ded0f27a9810a867bf651f8e759b04cd54547244a778",
+    "postgresql_journey_sha256": "6e11d031a52df38b1bedae7a51efd1cd7e6e0bcfba8813439406fb179ba768cb",
+    "postgresql_observation_sha256": "315300abc458ba8a9ccdec43babcd9fa75655bbbe416469fc09fddd99f885982",
+    "production_deployed": false,
+    "production_ready": false,
+    "real_credit_decision_equivalent": false,
+    "receipt_type": "lightyear-cloudbank-whole-application-equivalence-execution",
+    "release": "0.66.1",
+    "run_id": "ms66-ms71-524c0a50879c1de4210f04e9",
+    "scenario_count": 18,
+    "schema_version": "1.0",
+    "security": {
+      "credentials_persisted": false,
+      "exact_unchanged_upstream_application": false,
+      "oracle_source_hardening_applied": true,
+      "production_environment": false,
+      "raw_output_persisted": false,
+      "source_checkout_mutated": false,
+      "synthetic_data_only": true
+    },
+    "services": [
+      "azn-server",
+      "customer",
+      "account",
+      "transfer",
+      "checks",
+      "testrunner",
+      "creditscore",
+      "chatbot"
+    ],
+    "signature": {
+      "algorithm": "hmac-sha256",
+      "signer": "howard.weale@gmail.com",
+      "value": "e883a474f64249d6f17ae0c953de7ca63bb7869cd25aec6e75752de4122ff647"
+    },
+    "signer": "howard.weale@gmail.com",
+    "source_ms61_receipt_sha256": "a9d102eeda6552ffc7e715beed2d8a24dcfb8ca0067330db3f2ddbe092cf1036",
+    "source_ms64_receipt_sha256": "f78f85eb8342d81483f389918b7ed48601b19cf4374ac62fb12e27d01db2d146",
+    "status": "passed-bounded-whole-application-equivalence",
+    "whole_application_equivalent": true
+  },
+  "content_sha256": "b43ff3a751585bf4867d5ad8037b22d1d14933865b2b87a160019e19c5aea788",
+  "controller_commit": "1fad7e6ee03d9e6b5f5c12f2dca67a57771b75d8",
+  "ms71_complete": false,
+  "oracle_journey": {
+    "bindings": {
+      "environment": {
+        "cluster": "cloudbank-ms67",
+        "namespace": "ms66-ms71-524c0a50879c1de4210f04e9-oracle",
+        "namespace_uid_sha256": "c0813f621560359b58b1e43a2a821f75b95a6ef603c4c0ac3b6f58c3562c28c5",
+        "project": "lightyear-ms67-nonproduction",
+        "region": "us-west1"
+      },
+      "hardening_contract_sha256": "1919619947b14697e5c4a748224b244d29b867acb27d1ddd03e60560fe385ba8",
+      "hardening_patch_sha256": "4d416cb437ae363843d2f43b895cff3cf331c1c27aa93f3a2717449a66239cd0",
+      "journey_contract_sha256": "08d5a55f285432fca2c60e0c36768d58d5b5f3e26cba78104e63d87c836e6b7c",
+      "lane": "gke-oracle-governed-source",
+      "source_image_lock_sha256": "ee48647c99ae3f4bdef7c8381c6a6c7153e47da861a601ed3800b82c8c2744d4"
+    },
+    "content_sha256": "0b3e6e2d95f340291aeccde448d5a4ebe507f75c1d0d426afabbfb51f1edf6e5",
+    "credentials_persisted": false,
+    "finished_at_unix": 1789236540,
+    "fixture_account_ids": [
+      7,
+      8,
+      9
+    ],
+    "fixture_records_retained": true,
+    "ms65_complete": false,
+    "ms66_complete": false,
+    "ms67_complete": false,
+    "observation_type": "lightyear-cloudbank-shared-journey-execution",
+    "production_environment": false,
+    "raw_output_persisted": false,
+    "recovery": {
+      "errors": [],
+      "remaining_stopped_services": [],
+      "status": "restored"
+    },
+    "run_id": "ms66-ms71-524c0a50879c1de4210f04e9-oracle",
+    "scenario_count": 18,
+    "scenarios": [
+      {
+        "evidence": {
+          "account": {
+            "http_readiness": 200,
+            "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/account-ms66-oracle@sha256:58b01fd803c98bd2b5a6ce000b69f546c7a2f8810274ab20eeafc33a8a55f144",
+            "observed_start_count": 1,
+            "pod_identity_sha256": "c754bf16e4d90f847e514a3ba87cf33975c5fad4d77e4378f866a1f887cc9282",
+            "ready_replicas": 2
+          },
+          "azn-server": {
+            "http_readiness": 200,
+            "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/azn-server-ms66-oracle@sha256:34359ef9d14564676f1a3c073ff2051f93fc03c52675b14c68dfc97ebb979bc7",
+            "observed_start_count": 1,
+            "pod_identity_sha256": "a61732e05025a4f62a806693a2b9fc0b95fce0f2d9ac260e657ec361e6757106",
+            "ready_replicas": 2
+          },
+          "chatbot": {
+            "http_readiness": 200,
+            "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/chatbot-ms66-oracle@sha256:147797652890e4cb5bece0886f142486a041676cd20cea6ddaab8b7ff08fdec6",
+            "observed_start_count": 1,
+            "pod_identity_sha256": "8dce3822e3e8957e96019519d658f3c44f6dcf94c8f90a9c027a1110f66b413e",
+            "ready_replicas": 2
+          },
+          "checks": {
+            "http_readiness": 200,
+            "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/checks-ms66-oracle@sha256:b9d241a5964639d0bb070e8256b807d8a316db3c4e89e880b677569c06469d55",
+            "observed_start_count": 1,
+            "pod_identity_sha256": "0e97362d763f4daaf300c5e1bcf082e1242c3a5ee1d1cc6aae17dc3aeda033e4",
+            "ready_replicas": 2
+          },
+          "creditscore": {
+            "http_readiness": 200,
+            "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/creditscore-ms66-oracle@sha256:f0c07968ad97db8989ffda6b119a2d7e5dc7dc477c0bdbcf8002ad88482a60fc",
+            "observed_start_count": 1,
+            "pod_identity_sha256": "3764c06518939ffd370aac10d38dee9a5a37c4d13b9125ea6c269b07fd17c4dc",
+            "ready_replicas": 2
+          },
+          "customer": {
+            "http_readiness": 200,
+            "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/customer-ms66-oracle@sha256:39742766dbfeca5b9f2a18b2a775b76d272351cca640e9698be524bb617371b5",
+            "observed_start_count": 1,
+            "pod_identity_sha256": "094c797fa1aa5f8e5ac1229f5f30c0b2016927ea280252997270e4b06ba006ee",
+            "ready_replicas": 2
+          },
+          "testrunner": {
+            "http_readiness": 200,
+            "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/testrunner-ms66-oracle@sha256:b5ceceaeb1c10bf80719406d67fddfe329bebe60cb9a04db87053f427580e586",
+            "observed_start_count": 1,
+            "pod_identity_sha256": "7b58b7f9b5016f50af5d98d0cbeeee8c240572f7db927d5831a1ef974e2c0a27",
+            "ready_replicas": 2
+          },
+          "transfer": {
+            "http_readiness": 200,
+            "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/transfer-ms66-oracle@sha256:56163f342a1e60d7daf8d563900b92ebe3c5cb7b814aa368ec5aa64a0e1b5295",
+            "observed_start_count": 1,
+            "pod_identity_sha256": "b94e0ba3f01d7f5c814eddd46892fd15c0f1b23c1938e28f64a97bf1233fad2c",
+            "ready_replicas": 2
+          }
+        },
+        "evidence_sha256": "1b26ca2e25c077a5d622ce7aef1e9f24ec92f566f8740ac259970963f0d367a6",
+        "id": "eight-services-ready",
+        "normalized_result": "all-ready",
+        "status": "passed"
+      },
+      {
+        "evidence": {
+          "account": {
+            "issued": true,
+            "required_scopes_granted": true
+          },
+          "chat": {
+            "issued": true,
+            "required_scopes_granted": true
+          },
+          "credit": {
+            "issued": true,
+            "required_scopes_granted": true
+          },
+          "owner": {
+            "issued": true,
+            "required_scopes_granted": true
+          },
+          "test": {
+            "issued": true,
+            "required_scopes_granted": true
+          }
+        },
+        "evidence_sha256": "f82a4434e3adce9b60f37b593eb84194592a35b1e9d96eff708a92a831069a3f",
+        "id": "authorization-token-issued",
+        "normalized_result": "token-issued",
+        "status": "passed"
+      },
+      {
+        "evidence": {
+          "http_status": 401
+        },
+        "evidence_sha256": "54b2a2041cf8407930bab199188c4afc63d615698853b134ce66a7a9d6dc80c1",
+        "id": "unauthenticated-request-rejected",
+        "normalized_result": "401",
+        "status": "passed"
+      },
+      {
+        "evidence": {
+          "owner_visible": true,
+          "visible_customer_count": 1
+        },
+        "evidence_sha256": "eb2b0a140abd436dc1b28245e82c0d19cf0a50c2eb552cee22385239c0eed705",
+        "id": "customer-owner-read",
+        "normalized_result": "owner-visible",
+        "status": "passed"
+      },
+      {
+        "evidence": {
+          "fixture_account_count": 3,
+          "state_sha256": "880ae8f7e4fcae469a9aa344c03134666f7c4bed39ddcb831ccf12165d48cc90"
+        },
+        "evidence_sha256": "743b210223dfb367622e03bd1cef684db7c36b5b06137a182c053c355a58c334",
+        "id": "account-balance-read",
+        "normalized_result": "balance-visible",
+        "status": "passed"
+      },
+      {
+        "evidence": {
+          "after_sha256": "54c0b89dea63644baab42ebbe2872e9390d2644fdf486571deffbdfeda45db12",
+          "before_sha256": "880ae8f7e4fcae469a9aa344c03134666f7c4bed39ddcb831ccf12165d48cc90",
+          "http_status": 200
+        },
+        "evidence_sha256": "0d29a9b79444921bab883f186a973d384aafcf01fd8e3b7109c8ddc6188d47eb",
+        "id": "transfer-success-conserves-value",
+        "normalized_result": "conserved",
+        "status": "passed"
+      },
+      {
+        "evidence": {
+          "http_status": 400,
+          "unchanged_state_sha256": "54c0b89dea63644baab42ebbe2872e9390d2644fdf486571deffbdfeda45db12"
+        },
+        "evidence_sha256": "4f8526634eed160b2aa54cd0fd64a73588045cd8b16e694e25b1c3b09de24b69",
+        "id": "transfer-invalid-no-mutation",
+        "normalized_result": "400-no-mutation",
+        "status": "passed"
+      },
+      {
+        "evidence": {
+          "http_status": 422,
+          "unchanged_state_sha256": "54c0b89dea63644baab42ebbe2872e9390d2644fdf486571deffbdfeda45db12"
+        },
+        "evidence_sha256": "77f0b63be5a97fa00c13d5ce8a71faa865d5f78b0839e18df194762cfda1b728",
+        "id": "transfer-insufficient-funds-no-mutation",
+        "normalized_result": "rejected-no-mutation",
+        "status": "passed"
+      },
+      {
+        "evidence": {
+          "after_sha256": "61d95c19a061ceefbbfe3c4e593486f47289c82ea365d4b231d6c2c4f674b19f",
+          "before_sha256": "54c0b89dea63644baab42ebbe2872e9390d2644fdf486571deffbdfeda45db12",
+          "queue": {
+            "attempts": 1,
+            "error_code": null,
+            "state": "PROCESSED"
+          }
+        },
+        "evidence_sha256": "2a2ab349feb0c5dd488c1b1147040bddf320ee4ee28b56c932100642089e6450",
+        "id": "check-deposit-applied-once",
+        "normalized_result": "deposit-once",
+        "status": "passed"
+      },
+      {
+        "evidence": {
+          "after_sha256": "f0836411a02ce17fb856c8ef39616aa5771ae0328c803d1a1a5a1852454250e9",
+          "queue": {
+            "attempts": 1,
+            "error_code": null,
+            "state": "PROCESSED"
+          },
+          "replay_unchanged": true
+        },
+        "evidence_sha256": "c4a3c8610e4cc07e1740bfe32528b3b7e0c9b9a9e9323bec8bf7438934e726e8",
+        "id": "check-clearance-applied-once",
+        "normalized_result": "clearance-once",
+        "status": "passed"
+      },
+      {
+        "evidence": {
+          "queue": {
+            "attempts": 1,
+            "error_code": null,
+            "state": "PROCESSED"
+          },
+          "unchanged_state_sha256": "f0836411a02ce17fb856c8ef39616aa5771ae0328c803d1a1a5a1852454250e9"
+        },
+        "evidence_sha256": "aafeb111974f35dc1a0879f85b3b9917c51d394d73d0a4f17f6ab819e7011ca0",
+        "id": "duplicate-message-suppressed",
+        "normalized_result": "duplicate-suppressed",
+        "status": "passed"
+      },
+      {
+        "evidence": {
+          "http_status": 200,
+          "score_in_declared_range": true
+        },
+        "evidence_sha256": "5067ea63a89edd1aec0acb365e3e4da15b3d5a542c12810b00790117ae6887f3",
+        "id": "credit-score-contract-served",
+        "normalized_result": "score-in-declared-range",
+        "status": "passed"
+      },
+      {
+        "evidence": {
+          "bounded_response": true,
+          "http_status": 200,
+          "response_characters": 171
+        },
+        "evidence_sha256": "46fd060cdd5166d6e0effe822896e9e33a78da99b210626b3fce04603a009af3",
+        "id": "chatbot-boundary-served",
+        "normalized_result": "bounded-response",
+        "status": "passed"
+      },
+      {
+        "evidence": {
+          "unchanged_state_sha256": "f0836411a02ce17fb856c8ef39616aa5771ae0328c803d1a1a5a1852454250e9"
+        },
+        "evidence_sha256": "af39fdd8d917eecf5f81c50d9ab857f18b440a445c2eabe87859e249a76c4ae7",
+        "id": "account-restart-preserves-state",
+        "normalized_result": "state-preserved",
+        "status": "passed"
+      },
+      {
+        "evidence": {
+          "after_sha256": "719d30c49810b9637a4083869c3458800bd40126eeae61420657a33e865bbfc3",
+          "before_sha256": "f0836411a02ce17fb856c8ef39616aa5771ae0328c803d1a1a5a1852454250e9",
+          "claimed": {
+            "attempts": 1,
+            "error_code": null,
+            "state": "PROCESSING"
+          },
+          "crash": {
+            "terminated_pod_count": 2,
+            "terminated_pod_identity_sha256": "5e9cda86252349caa96dc63141878c49e72cff4ae76397515ccb99259283caaf",
+            "termination_grace_seconds": 1,
+            "termination_mode": "bounded-kubernetes-process-crash"
+          },
+          "redelivered": {
+            "attempts": 2,
+            "error_code": null,
+            "state": "PROCESSED"
+          },
+          "replacement_pod_identity_sha256": "268ec0c0191733e54826ae46ba41e74d5a8bb4b6e250fd8f953c133d9fe0aa08"
+        },
+        "evidence_sha256": "ad65de1ae2c3f4b059ba1dbc3abf6fa00c921f202f9cd5d2f1a118c2fe733d8c",
+        "id": "checks-restart-redelivers-inflight",
+        "normalized_result": "redelivered-once",
+        "status": "passed"
+      },
+      {
+        "evidence": {
+          "after_sha256": "3cf2a205fa8004226ef62b431750c837b6a1318540c3f6ddeb88d6ce6c605904",
+          "before_sha256": "719d30c49810b9637a4083869c3458800bd40126eeae61420657a33e865bbfc3",
+          "http_status": 200
+        },
+        "evidence_sha256": "9d32af0a4abdf1041c76bea0fa03f0723fa63ea5646bd023075254e5dace4f94",
+        "id": "transfer-dependency-failure-recovers",
+        "normalized_result": "restored",
+        "status": "passed"
+      },
+      {
+        "evidence": {
+          "after_sha256": "dd2f828db369f664ce3aaeca6770560e3f9cb7fef463a8555a9254f2c98d77c3",
+          "before_sha256": "3cf2a205fa8004226ef62b431750c837b6a1318540c3f6ddeb88d6ce6c605904",
+          "concurrent_requests": 2
+        },
+        "evidence_sha256": "38cc443e11782052faa2ac526c2d96fee5ce534a884a0ff9bbc5c4f72e7eedd7",
+        "id": "concurrent-opposite-transfers-conserve-value",
+        "normalized_result": "conserved",
+        "status": "passed"
+      },
+      {
+        "evidence": {
+          "after_sha256": "745907fe342aca229d5bc0f8613102fbae61d2413d67e93e4af5f377280123ad",
+          "before_sha256": "dd2f828db369f664ce3aaeca6770560e3f9cb7fef463a8555a9254f2c98d77c3",
+          "chat": {
+            "bounded_response": true,
+            "http_status": 200,
+            "response_characters": 177
+          },
+          "credit": {
+            "http_status": 200,
+            "score_in_declared_range": true
+          },
+          "http_status": 200,
+          "services": {
+            "account": {
+              "http_readiness": 200,
+              "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/account-ms66-oracle@sha256:58b01fd803c98bd2b5a6ce000b69f546c7a2f8810274ab20eeafc33a8a55f144",
+              "observed_start_count": 4,
+              "pod_identity_sha256": "9b089e9b497419408592695258d141fc8c247e50ae1ba82df587fd7ed7ffb4ec",
+              "ready_replicas": 2
+            },
+            "azn-server": {
+              "http_readiness": 200,
+              "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/azn-server-ms66-oracle@sha256:34359ef9d14564676f1a3c073ff2051f93fc03c52675b14c68dfc97ebb979bc7",
+              "observed_start_count": 2,
+              "pod_identity_sha256": "1ce65ac75365fff6c960b01311b02c60dfeaaa83f51807a118ea09d908bbbfe6",
+              "ready_replicas": 2
+            },
+            "chatbot": {
+              "http_readiness": 200,
+              "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/chatbot-ms66-oracle@sha256:147797652890e4cb5bece0886f142486a041676cd20cea6ddaab8b7ff08fdec6",
+              "observed_start_count": 2,
+              "pod_identity_sha256": "4764648aeaedbf935563438c8c4cbfdb2296a455996126c1b77af14cd3879c5f",
+              "ready_replicas": 2
+            },
+            "checks": {
+              "http_readiness": 200,
+              "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/checks-ms66-oracle@sha256:b9d241a5964639d0bb070e8256b807d8a316db3c4e89e880b677569c06469d55",
+              "observed_start_count": 4,
+              "pod_identity_sha256": "efbbd3d72b02c2ddb5133323522bdf30d6f7117552c2d7d16a0df5a98d1967a5",
+              "ready_replicas": 2
+            },
+            "creditscore": {
+              "http_readiness": 200,
+              "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/creditscore-ms66-oracle@sha256:f0c07968ad97db8989ffda6b119a2d7e5dc7dc477c0bdbcf8002ad88482a60fc",
+              "observed_start_count": 2,
+              "pod_identity_sha256": "855a81331f58bcda71e6315fedab94496f50a964a0796fa6ce2feb1ed9eaf8c9",
+              "ready_replicas": 2
+            },
+            "customer": {
+              "http_readiness": 200,
+              "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/customer-ms66-oracle@sha256:39742766dbfeca5b9f2a18b2a775b76d272351cca640e9698be524bb617371b5",
+              "observed_start_count": 2,
+              "pod_identity_sha256": "fd3b76bb31973609250aa2955f4e23b6467a901b415716cc1967cda8791ba215",
+              "ready_replicas": 2
+            },
+            "testrunner": {
+              "http_readiness": 200,
+              "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/testrunner-ms66-oracle@sha256:b5ceceaeb1c10bf80719406d67fddfe329bebe60cb9a04db87053f427580e586",
+              "observed_start_count": 2,
+              "pod_identity_sha256": "5bfc0739798b6fe0091fc63220556df933167fd366d100f6732f81a4779d7800",
+              "ready_replicas": 2
+            },
+            "transfer": {
+              "http_readiness": 200,
+              "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/transfer-ms66-oracle@sha256:56163f342a1e60d7daf8d563900b92ebe3c5cb7b814aa368ec5aa64a0e1b5295",
+              "observed_start_count": 3,
+              "pod_identity_sha256": "12ab5c7f491e4ccb2e3d9b26f5e096ccf58cedcc7a2f1f575f2b45b2f41c8ef1",
+              "ready_replicas": 2
+            }
+          }
+        },
+        "evidence_sha256": "3c1dea2d88de6788186b57a415ad01f8b2622b8bfe22eae55fb475d05d8b0333",
+        "id": "full-stack-restart-restores-journey",
+        "normalized_result": "journey-restored",
+        "status": "passed"
+      }
+    ],
+    "schema_version": "1.0",
+    "signature": {
+      "algorithm": "hmac-sha256",
+      "signer": "howard.weale@gmail.com",
+      "value": "dc980385cf0ed644280dae7d514d24076a19fcb72d5a3299d0c0ab158130c6a5"
+    },
+    "started_at_unix": 1789235341,
+    "status": "passed-shared-journeys",
+    "synthetic_data_only": true,
+    "whole_application_equivalent": false
+  },
+  "probe_sql": {
+    "database": "cloudbank",
+    "server_version_num": 160014,
+    "tls": true
+  },
+  "production_ready": false,
+  "profile": {
+    "cluster": "cloudbank-ms67",
+    "content_sha256": "da0f55716eea3a78368be65702ede59a8d9da648750aa71adf6c56ad6894da4c",
+    "database_version": "POSTGRES_16",
+    "databases": {
+      "account": "cloudbank",
+      "azn-server": "cloudbank",
+      "chatbot": null,
+      "checks": "cloudbank",
+      "creditscore": null,
+      "customer": "cloudbank",
+      "testrunner": "cloudbank",
+      "transfer": null
+    },
+    "namespace": "cloudbank-ms67",
+    "production_environment": false,
+    "profile_type": "lightyear-cloudbank-managed-target",
+    "project": "lightyear-ms67-nonproduction",
+    "provider": "cloud-sql-postgresql",
+    "region": "us-west1",
+    "require_tls": false,
+    "resource": "projects/lightyear-ms67-nonproduction/instances/cloudbank-ms67-postgres",
+    "schema_version": "1.0",
+    "synthetic_data_only": true
+  },
+  "receipt_type": "lightyear-cloudbank-ms71-managed-comparison",
+  "recovery": {
+    "oracle": {
+      "errors": [],
+      "remaining_isolated_namespace": null,
+      "remaining_model_policy": null,
+      "status": "restored"
+    },
+    "target": {
+      "errors": [],
+      "remaining_stopped_services": [],
+      "status": "restored"
+    }
+  },
+  "schema_version": "1.0",
+  "signature": {
+    "algorithm": "hmac-sha256",
+    "signer": "howard.weale@gmail.com",
+    "value": "f8412624cb3e43489ae35068e126822a3841e04a9edc10d105f4f58d126840ce"
+  },
+  "source_images": {
+    "account": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/account-ms66-oracle@sha256:58b01fd803c98bd2b5a6ce000b69f546c7a2f8810274ab20eeafc33a8a55f144",
+    "azn-server": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/azn-server-ms66-oracle@sha256:34359ef9d14564676f1a3c073ff2051f93fc03c52675b14c68dfc97ebb979bc7",
+    "chatbot": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/chatbot-ms66-oracle@sha256:147797652890e4cb5bece0886f142486a041676cd20cea6ddaab8b7ff08fdec6",
+    "checks": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/checks-ms66-oracle@sha256:b9d241a5964639d0bb070e8256b807d8a316db3c4e89e880b677569c06469d55",
+    "creditscore": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/creditscore-ms66-oracle@sha256:f0c07968ad97db8989ffda6b119a2d7e5dc7dc477c0bdbcf8002ad88482a60fc",
+    "customer": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/customer-ms66-oracle@sha256:39742766dbfeca5b9f2a18b2a775b76d272351cca640e9698be524bb617371b5",
+    "testrunner": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/testrunner-ms66-oracle@sha256:b5ceceaeb1c10bf80719406d67fddfe329bebe60cb9a04db87053f427580e586",
+    "transfer": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/transfer-ms66-oracle@sha256:56163f342a1e60d7daf8d563900b92ebe3c5cb7b814aa368ec5aa64a0e1b5295"
+  },
+  "target_images": {
+    "account": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/account@sha256:87e675066d0c6edf77346b2ddee81bb46687365dbc9c8760307d7104764c59cf",
+    "azn-server": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/azn-server@sha256:24ba43de59cf22f95c962981b49542eb55e332fc2dd91f9b4a9c724d06dd474a",
+    "chatbot": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/chatbot@sha256:ab2180b081ad8f92043c9bd8c7f72b74ef89ed22b656f9afbc9c8fd0067d0703",
+    "checks": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/checks@sha256:7717ca2c871f8b6179145d871c91e31f5b6fa1632af8c9f8aa0d93c0d84d8432",
+    "creditscore": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/creditscore@sha256:45b848793a4a3de7e72f2ae25d243250803846a8f9885594e1e3db8edf48fae1",
+    "customer": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/customer@sha256:47c50deffc67b480aa67ce4cffa4145eb4f91382ef091e72e89fbbfd0884456d",
+    "testrunner": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/testrunner@sha256:256d107cc707d537c98f1260362577bbdb9d2ede3e88005076e464a227351693",
+    "transfer": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/transfer@sha256:fd99a626b3b1d8d47c3aed397119d9eaab70887da88b89d6c6070eb4fcb3caaa"
+  },
+  "target_journey": {
+    "bindings": {
+      "environment": {
+        "cluster": "cloudbank-ms67",
+        "namespace": "cloudbank-ms67",
+        "namespace_uid_sha256": "0a397f173a1dfab91edeebc3d91bbfa1a3e0dd39caa086df1ff6f92822f71fff",
+        "project": "lightyear-ms67-nonproduction",
+        "region": "us-west1"
+      },
+      "image_lock_sha256": "eb3c808a5af30fe2a212ded0f27a9810a867bf651f8e759b04cd54547244a778",
+      "journey_contract_sha256": "08d5a55f285432fca2c60e0c36768d58d5b5f3e26cba78104e63d87c836e6b7c",
+      "lane": "gke-postgresql-target",
+      "managed_probe_sql": {
+        "database": "cloudbank",
+        "server_version_num": 160014,
+        "tls": true
+      },
+      "managed_target_sha256": "03b0e0447f44ddfc229ec7a1df2b53f8200e5f26a7ba62fdc32101a87e0a0957",
+      "ms64_receipt_sha256": "f78f85eb8342d81483f389918b7ed48601b19cf4374ac62fb12e27d01db2d146",
+      "ms71_campaign_id": "ms71-20260912a"
+    },
+    "content_sha256": "6e11d031a52df38b1bedae7a51efd1cd7e6e0bcfba8813439406fb179ba768cb",
+    "credentials_persisted": false,
+    "finished_at_unix": 1789238398,
+    "fixture_account_ids": [
+      259,
+      260,
+      261
+    ],
+    "fixture_records_retained": true,
+    "ms65_complete": false,
+    "ms66_complete": false,
+    "ms67_complete": false,
+    "observation_type": "lightyear-cloudbank-shared-journey-execution",
+    "production_environment": false,
+    "raw_output_persisted": false,
+    "recovery": {
+      "errors": [],
+      "remaining_stopped_services": [],
+      "status": "restored"
+    },
+    "run_id": "ms66-ms71-524c0a50879c1de4210f04e9-postgresql",
+    "scenario_count": 18,
+    "scenarios": [
+      {
+        "evidence": {
+          "account": {
+            "http_readiness": 200,
+            "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/account@sha256:87e675066d0c6edf77346b2ddee81bb46687365dbc9c8760307d7104764c59cf",
+            "observed_start_count": 1,
+            "pod_identity_sha256": "c4280fb07225cfd3ea98553102cb07ff38ecaae48ec831cb652e8a3ac92dfcc1",
+            "ready_replicas": 2
+          },
+          "azn-server": {
+            "http_readiness": 200,
+            "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/azn-server@sha256:24ba43de59cf22f95c962981b49542eb55e332fc2dd91f9b4a9c724d06dd474a",
+            "observed_start_count": 1,
+            "pod_identity_sha256": "d717ffa9911899515aa9b5bcb9e6960561605cf7428051b34bede029cb70390f",
+            "ready_replicas": 2
+          },
+          "chatbot": {
+            "http_readiness": 200,
+            "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/chatbot@sha256:ab2180b081ad8f92043c9bd8c7f72b74ef89ed22b656f9afbc9c8fd0067d0703",
+            "observed_start_count": 1,
+            "pod_identity_sha256": "85f61fe5af1c4bac2fd6fed5be26fc06bb40e0421b277394b11e5370cf0f0069",
+            "ready_replicas": 2
+          },
+          "checks": {
+            "http_readiness": 200,
+            "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/checks@sha256:7717ca2c871f8b6179145d871c91e31f5b6fa1632af8c9f8aa0d93c0d84d8432",
+            "observed_start_count": 1,
+            "pod_identity_sha256": "e36ce7e51177f2ad52a0df10dd5d2d9d4075e86e747b44b671a8b845e6beecd1",
+            "ready_replicas": 2
+          },
+          "creditscore": {
+            "http_readiness": 200,
+            "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/creditscore@sha256:45b848793a4a3de7e72f2ae25d243250803846a8f9885594e1e3db8edf48fae1",
+            "observed_start_count": 1,
+            "pod_identity_sha256": "11955e1fbaa22ab646c485ee49cab84a8f4dd78a50f959b62168f9315d6a96a1",
+            "ready_replicas": 2
+          },
+          "customer": {
+            "http_readiness": 200,
+            "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/customer@sha256:47c50deffc67b480aa67ce4cffa4145eb4f91382ef091e72e89fbbfd0884456d",
+            "observed_start_count": 1,
+            "pod_identity_sha256": "0e6d32893c7bd67fb6c21f5536eaf9f1874c9807385ad266c86927c0996e2397",
+            "ready_replicas": 2
+          },
+          "testrunner": {
+            "http_readiness": 200,
+            "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/testrunner@sha256:256d107cc707d537c98f1260362577bbdb9d2ede3e88005076e464a227351693",
+            "observed_start_count": 1,
+            "pod_identity_sha256": "391b56ad12644436d706d9b1e1e66487b463b7b1421b8138fae2a49b532a8483",
+            "ready_replicas": 2
+          },
+          "transfer": {
+            "http_readiness": 200,
+            "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/transfer@sha256:fd99a626b3b1d8d47c3aed397119d9eaab70887da88b89d6c6070eb4fcb3caaa",
+            "observed_start_count": 1,
+            "pod_identity_sha256": "666364bf56b441d2c27f3683a4d244514a5b6c6e7e4d7bebcf969701c34750ad",
+            "ready_replicas": 2
+          }
+        },
+        "evidence_sha256": "7855cf704728639260e89661c1190990c60fc3fa16f3e7fa7cec16f9465abe4b",
+        "id": "eight-services-ready",
+        "normalized_result": "all-ready",
+        "status": "passed"
+      },
+      {
+        "evidence": {
+          "account": {
+            "issued": true,
+            "required_scopes_granted": true
+          },
+          "chat": {
+            "issued": true,
+            "required_scopes_granted": true
+          },
+          "credit": {
+            "issued": true,
+            "required_scopes_granted": true
+          },
+          "owner": {
+            "issued": true,
+            "required_scopes_granted": true
+          },
+          "test": {
+            "issued": true,
+            "required_scopes_granted": true
+          }
+        },
+        "evidence_sha256": "f82a4434e3adce9b60f37b593eb84194592a35b1e9d96eff708a92a831069a3f",
+        "id": "authorization-token-issued",
+        "normalized_result": "token-issued",
+        "status": "passed"
+      },
+      {
+        "evidence": {
+          "http_status": 401
+        },
+        "evidence_sha256": "54b2a2041cf8407930bab199188c4afc63d615698853b134ce66a7a9d6dc80c1",
+        "id": "unauthenticated-request-rejected",
+        "normalized_result": "401",
+        "status": "passed"
+      },
+      {
+        "evidence": {
+          "owner_visible": true,
+          "visible_customer_count": 1
+        },
+        "evidence_sha256": "eb2b0a140abd436dc1b28245e82c0d19cf0a50c2eb552cee22385239c0eed705",
+        "id": "customer-owner-read",
+        "normalized_result": "owner-visible",
+        "status": "passed"
+      },
+      {
+        "evidence": {
+          "fixture_account_count": 3,
+          "state_sha256": "880ae8f7e4fcae469a9aa344c03134666f7c4bed39ddcb831ccf12165d48cc90"
+        },
+        "evidence_sha256": "743b210223dfb367622e03bd1cef684db7c36b5b06137a182c053c355a58c334",
+        "id": "account-balance-read",
+        "normalized_result": "balance-visible",
+        "status": "passed"
+      },
+      {
+        "evidence": {
+          "after_sha256": "b016f7a8cf5dbe0390ab0fd551b50dd8680d7d10081bf26415a871178bfca07a",
+          "before_sha256": "880ae8f7e4fcae469a9aa344c03134666f7c4bed39ddcb831ccf12165d48cc90",
+          "http_status": 200
+        },
+        "evidence_sha256": "f0cf374d79eb1d5de77d9eadae50c44b090c61a9fa32ff97a1df55fc841573c8",
+        "id": "transfer-success-conserves-value",
+        "normalized_result": "conserved",
+        "status": "passed"
+      },
+      {
+        "evidence": {
+          "http_status": 400,
+          "unchanged_state_sha256": "b016f7a8cf5dbe0390ab0fd551b50dd8680d7d10081bf26415a871178bfca07a"
+        },
+        "evidence_sha256": "8b11768ffda5d8f8687ea5fb853d4e4745e6254a9db649eb8d0ec8f75af8fd24",
+        "id": "transfer-invalid-no-mutation",
+        "normalized_result": "400-no-mutation",
+        "status": "passed"
+      },
+      {
+        "evidence": {
+          "http_status": 400,
+          "unchanged_state_sha256": "b016f7a8cf5dbe0390ab0fd551b50dd8680d7d10081bf26415a871178bfca07a"
+        },
+        "evidence_sha256": "8b11768ffda5d8f8687ea5fb853d4e4745e6254a9db649eb8d0ec8f75af8fd24",
+        "id": "transfer-insufficient-funds-no-mutation",
+        "normalized_result": "rejected-no-mutation",
+        "status": "passed"
+      },
+      {
+        "evidence": {
+          "after_sha256": "4d8f709c466b9e4247cadeee9dc24c8c8a38e1770f864690c62e763a4a8b9b50",
+          "before_sha256": "b016f7a8cf5dbe0390ab0fd551b50dd8680d7d10081bf26415a871178bfca07a",
+          "queue": {
+            "attempts": 1,
+            "error_code": null,
+            "state": "PROCESSED"
+          }
+        },
+        "evidence_sha256": "9cff6d8aedbb0250669c298e6d4b9bfb5c0cd0313c04cca33e9d290177257376",
+        "id": "check-deposit-applied-once",
+        "normalized_result": "deposit-once",
+        "status": "passed"
+      },
+      {
+        "evidence": {
+          "after_sha256": "c55249dc2e3f899f77147845728d9abb74b9b74adda753cc4ad1ae8c6993a378",
+          "queue": {
+            "attempts": 1,
+            "error_code": null,
+            "state": "PROCESSED"
+          },
+          "replay_unchanged": true
+        },
+        "evidence_sha256": "d22a74bac5eface6a492d53dfc79db74d978f6a0f80c7058a3db396f47e13c40",
+        "id": "check-clearance-applied-once",
+        "normalized_result": "clearance-once",
+        "status": "passed"
+      },
+      {
+        "evidence": {
+          "queue": {
+            "attempts": 1,
+            "error_code": null,
+            "state": "PROCESSED"
+          },
+          "unchanged_state_sha256": "c55249dc2e3f899f77147845728d9abb74b9b74adda753cc4ad1ae8c6993a378"
+        },
+        "evidence_sha256": "58f72cb95be42eb838fee80edee3435c273bf1ee0254d07bc4ff76b63c3e7df3",
+        "id": "duplicate-message-suppressed",
+        "normalized_result": "duplicate-suppressed",
+        "status": "passed"
+      },
+      {
+        "evidence": {
+          "http_status": 200,
+          "score_in_declared_range": true
+        },
+        "evidence_sha256": "5067ea63a89edd1aec0acb365e3e4da15b3d5a542c12810b00790117ae6887f3",
+        "id": "credit-score-contract-served",
+        "normalized_result": "score-in-declared-range",
+        "status": "passed"
+      },
+      {
+        "evidence": {
+          "bounded_response": true,
+          "http_status": 200,
+          "response_characters": 276
+        },
+        "evidence_sha256": "b3ba635420897dc7bc1dd5181949fcbfe2b4ca77175377dd3a106d53ef2f1cf6",
+        "id": "chatbot-boundary-served",
+        "normalized_result": "bounded-response",
+        "status": "passed"
+      },
+      {
+        "evidence": {
+          "unchanged_state_sha256": "c55249dc2e3f899f77147845728d9abb74b9b74adda753cc4ad1ae8c6993a378"
+        },
+        "evidence_sha256": "5b1cbd850cbb97417419b2e944e62180cdf9c2958033e9ce72ecb5a6cb41f0fc",
+        "id": "account-restart-preserves-state",
+        "normalized_result": "state-preserved",
+        "status": "passed"
+      },
+      {
+        "evidence": {
+          "after_sha256": "d163d766d77775fbadb7e5811d6422e174daa43b218616601c4767b1231b92a4",
+          "before_sha256": "c55249dc2e3f899f77147845728d9abb74b9b74adda753cc4ad1ae8c6993a378",
+          "claimed": {
+            "attempts": 1,
+            "error_code": null,
+            "state": "PROCESSING"
+          },
+          "crash": {
+            "terminated_pod_count": 2,
+            "terminated_pod_identity_sha256": "e48db204c0f62bceebdedc7241453e151aacf60b85914ae9f63172b3646d8169",
+            "termination_grace_seconds": 1,
+            "termination_mode": "bounded-kubernetes-process-crash"
+          },
+          "redelivered": {
+            "attempts": 2,
+            "error_code": null,
+            "state": "PROCESSED"
+          },
+          "replacement_pod_identity_sha256": "809a6a12c0f4833fcd4321310e6a25b360f403aea5b0eabf6fae4cd37ae5056f"
+        },
+        "evidence_sha256": "5c51c1804bf2c40e6f2043dd3497449e4ae9093004deb4419b5e72fbec956b4f",
+        "id": "checks-restart-redelivers-inflight",
+        "normalized_result": "redelivered-once",
+        "status": "passed"
+      },
+      {
+        "evidence": {
+          "after_sha256": "48f293878326e66710dff15e780b0088a2412865cbee326a98c4ada926fd1639",
+          "before_sha256": "d163d766d77775fbadb7e5811d6422e174daa43b218616601c4767b1231b92a4",
+          "http_status": 200
+        },
+        "evidence_sha256": "41fcbd5285f4ef27f370a9fc346bd23f705708d13640e6e486e75db0d38470bb",
+        "id": "transfer-dependency-failure-recovers",
+        "normalized_result": "restored",
+        "status": "passed"
+      },
+      {
+        "evidence": {
+          "after_sha256": "4a5df31c34546c5ced37d4ea6d6c5497aaa01af9597e57e359db717f6381d129",
+          "before_sha256": "48f293878326e66710dff15e780b0088a2412865cbee326a98c4ada926fd1639",
+          "concurrent_requests": 2
+        },
+        "evidence_sha256": "ac16dcf42e2976a7270e07eb883a7058e899b4e76156d4e864abfb3832e8bd66",
+        "id": "concurrent-opposite-transfers-conserve-value",
+        "normalized_result": "conserved",
+        "status": "passed"
+      },
+      {
+        "evidence": {
+          "after_sha256": "11ffa34236f94bd11251ab43c6494b4c113baf4b7c2667f76c460c3317af6935",
+          "before_sha256": "4a5df31c34546c5ced37d4ea6d6c5497aaa01af9597e57e359db717f6381d129",
+          "chat": {
+            "bounded_response": true,
+            "http_status": 200,
+            "response_characters": 276
+          },
+          "credit": {
+            "http_status": 200,
+            "score_in_declared_range": true
+          },
+          "http_status": 200,
+          "services": {
+            "account": {
+              "http_readiness": 200,
+              "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/account@sha256:87e675066d0c6edf77346b2ddee81bb46687365dbc9c8760307d7104764c59cf",
+              "observed_start_count": 4,
+              "pod_identity_sha256": "ca2f18d8fbfe8b36f9ff48fbd07187dbbe1a0fba52d76031c5d8cfcd942acb88",
+              "ready_replicas": 2
+            },
+            "azn-server": {
+              "http_readiness": 200,
+              "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/azn-server@sha256:24ba43de59cf22f95c962981b49542eb55e332fc2dd91f9b4a9c724d06dd474a",
+              "observed_start_count": 2,
+              "pod_identity_sha256": "2e05b0fc8595844fcfbf9efe7a40a4d24fde4b758b32358586275e8eead45924",
+              "ready_replicas": 2
+            },
+            "chatbot": {
+              "http_readiness": 200,
+              "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/chatbot@sha256:ab2180b081ad8f92043c9bd8c7f72b74ef89ed22b656f9afbc9c8fd0067d0703",
+              "observed_start_count": 2,
+              "pod_identity_sha256": "f6e8efb79f6b785571fea08416adae225c4c3cc11515b5d9841b4cb81d0c56fd",
+              "ready_replicas": 2
+            },
+            "checks": {
+              "http_readiness": 200,
+              "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/checks@sha256:7717ca2c871f8b6179145d871c91e31f5b6fa1632af8c9f8aa0d93c0d84d8432",
+              "observed_start_count": 4,
+              "pod_identity_sha256": "05728e3254cca523cf36e4cc8c4ecc229a8208360f362fd1517740f842ec72ef",
+              "ready_replicas": 2
+            },
+            "creditscore": {
+              "http_readiness": 200,
+              "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/creditscore@sha256:45b848793a4a3de7e72f2ae25d243250803846a8f9885594e1e3db8edf48fae1",
+              "observed_start_count": 2,
+              "pod_identity_sha256": "40281bd7d0060e70b07347cfe5f7dad87fdf9ca80f28ff9defc041f7271bf60c",
+              "ready_replicas": 2
+            },
+            "customer": {
+              "http_readiness": 200,
+              "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/customer@sha256:47c50deffc67b480aa67ce4cffa4145eb4f91382ef091e72e89fbbfd0884456d",
+              "observed_start_count": 2,
+              "pod_identity_sha256": "195b20996d1064ff22bbf957387ab073a2a33e40ce50704140f2c295ae0793c4",
+              "ready_replicas": 2
+            },
+            "testrunner": {
+              "http_readiness": 200,
+              "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/testrunner@sha256:256d107cc707d537c98f1260362577bbdb9d2ede3e88005076e464a227351693",
+              "observed_start_count": 2,
+              "pod_identity_sha256": "df3e5665aaed4b77efcc356f582e804bf09c32fcbc7cf49f2fa596082cbb107a",
+              "ready_replicas": 2
+            },
+            "transfer": {
+              "http_readiness": 200,
+              "image": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/transfer@sha256:fd99a626b3b1d8d47c3aed397119d9eaab70887da88b89d6c6070eb4fcb3caaa",
+              "observed_start_count": 3,
+              "pod_identity_sha256": "1bdaf31364383d7272d8b7e08a578374754d62b7bda1838f5157202762215d8c",
+              "ready_replicas": 2
+            }
+          }
+        },
+        "evidence_sha256": "61e98d8f210654bf2e8ef348b2b1df31bd846298b7aa9b20a9bea968ff310819",
+        "id": "full-stack-restart-restores-journey",
+        "normalized_result": "journey-restored",
+        "status": "passed"
+      }
+    ],
+    "schema_version": "1.0",
+    "signature": {
+      "algorithm": "hmac-sha256",
+      "signer": "howard.weale@gmail.com",
+      "value": "1a3a565e5cc20c6c70cf665b32be457283c3598386736eded25f9f044c0a6e88"
+    },
+    "started_at_unix": 1789236645,
+    "status": "passed-shared-journeys",
+    "synthetic_data_only": true,
+    "whole_application_equivalent": false
+  }
+}

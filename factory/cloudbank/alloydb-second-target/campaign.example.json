@@ -1,0 +1,11 @@
+{
+  "source_root": "../cloudbank-upstream",
+  "ms61_receipt": "ms61.receipt.json",
+  "ms64_receipt": "ms64.receipt.json",
+  "source_image_lock": "oracle-source-image-lock.json",
+  "target_image_lock": "target-image-lock.json",
+  "target_profiles": ["cloud-sql.profile.json", "alloydb.profile.json"],
+  "model_namespace": "cloudbank-model",
+  "model_name": "REPLACE_WITH_PINNED_MODEL_NAME",
+  "postgresql_probe_image": "REPLACE_WITH_APPROVED_IMAGE_AT_SHA256_DIGEST"
+}

@@ -1,0 +1,31 @@
+{
+  "content_sha256": "1c1519a41b09a4cbbcf3a2858903f985b342ead3003663248d28370f5cd3a559",
+  "credentials_persisted": false,
+  "failure_type": "lightyear-cloudbank-ms66-dual-lane-failure",
+  "ms66_complete": false,
+  "ms67_complete": false,
+  "raw_output_persisted": false,
+  "reason_codes": [
+    "bounded-ms66-execution-failed"
+  ],
+  "recovery": {
+    "isolated_oracle_lane": {
+      "errors": [],
+      "remaining_isolated_namespace": null,
+      "remaining_model_policy": null,
+      "status": "restored"
+    },
+    "postgresql_target_lane": {
+      "errors": [],
+      "remaining_stopped_services": [],
+      "status": "restored"
+    }
+  },
+  "run_id": "ms66-ms71-524c0a50879c1de4210f04e9",
+  "schema_version": "1.0",
+  "signature": {
+    "algorithm": "hmac-sha256",
+    "signer": "howard.weale@gmail.com",
+    "value": "10f86587e68c0b312f65077a16026e263a4b15edb3682a39985132d88fb42457"
+  }
+}

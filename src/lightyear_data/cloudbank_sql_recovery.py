@@ -19,7 +19,7 @@ import time
 from urllib.parse import urlsplit
 
 from .cloudbank_journeys import JourneyFailure, SERVICES, hashed, require
-from .cloudbank_journeys_gke import GkeRuntime
+from .cloudbank_journeys_gke import GkeRuntime, _command_argv
 from .contracts import content_hash, sign, verify_signature
 from .cloudbank_recovery_policy import (
     MAXIMUM_PITR_RTO_SECONDS, MAXIMUM_BACKUP_RESTORE_RTO_SECONDS,
@@ -118,7 +118,7 @@ def verified(value: dict, key: str):
 def invoke(argv, *, data=None, timeout=90, sensitive=False):
     """No shell. Secret/SQL output and errors never reach logs or exception text."""
     try:
-        result = subprocess.run(argv, input=data, text=True, stdout=subprocess.PIPE,
+        result = subprocess.run(_command_argv(argv), input=data, text=True, encoding="utf-8", stdout=subprocess.PIPE,
                                 stderr=subprocess.PIPE, timeout=timeout, check=False)
     except (OSError, subprocess.TimeoutExpired):
         raise JourneyFailure("command-unavailable-or-timeout-inspect-saved-intent") from None
@@ -220,6 +220,7 @@ def source_profile(instance: dict, project: str, region: str, name: str, *, requ
 
 
 class SqlRecovery:
+    snapshot_sql = SNAPSHOT_SQL
     def __init__(self, runtime: GkeRuntime, source: str, key: str, signer: str, *, state=None):
         require(NAME.fullmatch(source) is not None, "source-instance-name-invalid")
         self.runtime, self.key, self.signer = runtime, key, signer
@@ -510,7 +511,7 @@ class SqlRecovery:
                         raw = invoke(["kubectl", "--context", self.runtime.context, "-n", self.runtime.namespace,
                             "exec", "-i", record["name"], "--", "env", "PGHOST=" + host,
                             "psql", "-X", "-qAt", "--no-password", "--set=ON_ERROR_STOP=1"],
-                            data=SNAPSHOT_SQL, timeout=180, sensitive=True)
+                            data=self.snapshot_sql, timeout=180, sensitive=True)
                         break
                     except JourneyFailure as exc:
                         if attempt == 2 or str(exc) != "operator-command-failed-database-or-secret-access":

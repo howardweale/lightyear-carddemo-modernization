@@ -1,0 +1,1059 @@
+{
+  "acceptance_policy": {
+    "authorized_by": "Howard Weale",
+    "authorized_on": "2026-09-10",
+    "cleanup_required": true,
+    "content_sha256": "2eea140507d6d5d8260b811f24eb69d1ef241720ee8e31071ea6a6a153e156d8",
+    "exact_state_required": true,
+    "maximum_backup_restore_rto_seconds": 600,
+    "maximum_pitr_rto_seconds": 630,
+    "maximum_rpo_seconds": 60,
+    "policy_id": "ms67-nonproduction-pitr-rto-630-2026-09-10",
+    "previous_maximum_pitr_rto_seconds": 600,
+    "production_sla": false,
+    "reason": "Owner-approved noncustomer PITR recovery target; re-evaluate existing measurements.",
+    "schema_version": "1.0",
+    "scope": "ms67-synthetic-nonproduction-database-recovery"
+  },
+  "alloydb_platform_qualified": false,
+  "application_restoration_checks": [
+    {
+      "application_restoration": {
+        "groups": [
+          [
+            "azn-server"
+          ],
+          [
+            "customer",
+            "account",
+            "creditscore",
+            "chatbot"
+          ],
+          [
+            "transfer",
+            "checks"
+          ],
+          [
+            "testrunner"
+          ]
+        ],
+        "services": {
+          "account": {
+            "elapsed_seconds": 94.0,
+            "finished_at": "2026-09-13T02:40:37.629276Z",
+            "started_at": "2026-09-13T02:39:03.621889Z",
+            "status": "ready"
+          },
+          "azn-server": {
+            "elapsed_seconds": 87.219,
+            "finished_at": "2026-09-13T02:39:02.198790Z",
+            "started_at": "2026-09-13T02:37:34.993388Z",
+            "status": "ready"
+          },
+          "chatbot": {
+            "elapsed_seconds": 95.813,
+            "finished_at": "2026-09-13T02:40:42.130385Z",
+            "started_at": "2026-09-13T02:39:06.321058Z",
+            "status": "ready"
+          },
+          "checks": {
+            "elapsed_seconds": 64.484,
+            "finished_at": "2026-09-13T02:41:48.102466Z",
+            "started_at": "2026-09-13T02:40:43.619535Z",
+            "status": "ready"
+          },
+          "creditscore": {
+            "elapsed_seconds": 94.891,
+            "finished_at": "2026-09-13T02:40:39.866651Z",
+            "started_at": "2026-09-13T02:39:04.975335Z",
+            "status": "ready"
+          },
+          "customer": {
+            "elapsed_seconds": 75.047,
+            "finished_at": "2026-09-13T02:40:17.245584Z",
+            "started_at": "2026-09-13T02:39:02.198790Z",
+            "status": "ready"
+          },
+          "testrunner": {
+            "elapsed_seconds": 65.391,
+            "finished_at": "2026-09-13T02:42:53.484372Z",
+            "started_at": "2026-09-13T02:41:48.102466Z",
+            "status": "ready"
+          },
+          "transfer": {
+            "elapsed_seconds": 63.937,
+            "finished_at": "2026-09-13T02:41:46.059719Z",
+            "started_at": "2026-09-13T02:40:42.130385Z",
+            "status": "ready"
+          }
+        },
+        "strategy": "dependency-groups",
+        "timing_scope": "scale-up request through readiness observation and checkpoint; observation may lag pod readiness"
+      },
+      "errors": [],
+      "remaining_stopped_services": [],
+      "status": "restored"
+    },
+    {
+      "application_restoration": {
+        "groups": [
+          [
+            "azn-server"
+          ],
+          [
+            "customer",
+            "account",
+            "creditscore",
+            "chatbot"
+          ],
+          [
+            "transfer",
+            "checks"
+          ],
+          [
+            "testrunner"
+          ]
+        ],
+        "services": {},
+        "strategy": "dependency-groups",
+        "timing_scope": "scale-up request through readiness observation and checkpoint; observation may lag pod readiness"
+      },
+      "errors": [],
+      "remaining_stopped_services": [],
+      "status": "restored"
+    }
+  ],
+  "backup": {
+    "managed_backup_bytes_sha256": null,
+    "metadata": {
+      "clusterName": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/cloudbank-ms71-alloydb",
+      "clusterUid": "323489a9-9ccc-4955-a441-6832c8fc6388",
+      "createCompletionTime": "2026-09-13T02:34:22.163935341Z",
+      "createTime": "2026-09-13T02:33:55.872793533Z",
+      "databaseVersion": "POSTGRES_16",
+      "encryptionInfo": {
+        "encryptionType": "GOOGLE_DEFAULT_ENCRYPTION"
+      },
+      "expiryTime": "2027-09-13T02:33:57.078711Z",
+      "name": "projects/lightyear-ms67-nonproduction/locations/us-west1/backups/ly-alloy-backup-1f53330f88cb42e7",
+      "reconciling": false,
+      "sizeBytes": "57635987",
+      "state": "READY",
+      "type": "ON_DEMAND",
+      "uid": "f4eca30a-ed6f-4c8e-acf4-f85ac1743142",
+      "updateTime": "2026-09-13T02:34:25.137302111Z"
+    },
+    "metadata_sha256": "fcfe6cf08f5be08eb2533027aa3dd152d677af1a9be9d3a4e124d41421f3c5ff",
+    "retained": true
+  },
+  "backup_restore": {
+    "database_rto_seconds": 451,
+    "restored_state": {
+      "databases": {
+        "cc370ea0f8bd857ce6af71e0f7fdc1b13c04c33296b875f96568daa2ec2b7de9": {
+          "row_count": 7999,
+          "sequence_count": 3,
+          "state_sha256": "4eb05a9f094f9c681dcb28cd621354c2ad7f6007dd8ddc53a1401863aa5299a0",
+          "table_count": 8
+        }
+      },
+      "state_sha256": "83fef714a5e5400a978b9b49d8950a91027cc5a0918dba4b5d45b17a78e680f4"
+    },
+    "rto_within_limit": true,
+    "state_matches": true,
+    "timing_scope": "fresh cluster and regional primary provisioning through exact read-only state validation"
+  },
+  "checkpoint": {
+    "databases": {
+      "cc370ea0f8bd857ce6af71e0f7fdc1b13c04c33296b875f96568daa2ec2b7de9": {
+        "row_count": 7999,
+        "sequence_count": 3,
+        "state_sha256": "4eb05a9f094f9c681dcb28cd621354c2ad7f6007dd8ddc53a1401863aa5299a0",
+        "table_count": 8
+      }
+    },
+    "state_sha256": "83fef714a5e5400a978b9b49d8950a91027cc5a0918dba4b5d45b17a78e680f4"
+  },
+  "checkpoint_captured_at": "2026-09-13T02:33:43.830896Z",
+  "content_sha256": "a5ad6a27c21d83d76f5e699724867aab0f4e9452faf7cf0c2fbec870de3d7e3b",
+  "coverage": {
+    "database_count": 1,
+    "database_names_sha256": "960cb9c450e6ed3e54b11bc8943e2a7e162be6ff19193babe9e5889c351a9b75",
+    "query_sha256": "7f1047827169a502ed21aa727aed2db957d8e09cc642dae4e705b6dea61c91a4",
+    "scope": "all non-extension-owned persistent application tables, materialized views and sequences; no raw rows exported"
+  },
+  "credentials_persisted": false,
+  "environment": {
+    "cluster": "cloudbank-ms67",
+    "namespace": "cloudbank-ms71-alloydb",
+    "namespace_uid_sha256": "c7d6db875fdf24ad13aaa023b98794427a31ed6da6df28127c2ae80e72177ebf",
+    "project": "lightyear-ms67-nonproduction",
+    "region": "us-west1"
+  },
+  "images": {
+    "account": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/account@sha256:87e675066d0c6edf77346b2ddee81bb46687365dbc9c8760307d7104764c59cf",
+    "azn-server": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/azn-server@sha256:24ba43de59cf22f95c962981b49542eb55e332fc2dd91f9b4a9c724d06dd474a",
+    "chatbot": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/chatbot@sha256:ab2180b081ad8f92043c9bd8c7f72b74ef89ed22b656f9afbc9c8fd0067d0703",
+    "checks": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/checks@sha256:7717ca2c871f8b6179145d871c91e31f5b6fa1632af8c9f8aa0d93c0d84d8432",
+    "creditscore": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/creditscore@sha256:45b848793a4a3de7e72f2ae25d243250803846a8f9885594e1e3db8edf48fae1",
+    "customer": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/customer@sha256:47c50deffc67b480aa67ce4cffa4145eb4f91382ef091e72e89fbbfd0884456d",
+    "testrunner": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/testrunner@sha256:256d107cc707d537c98f1260362577bbdb9d2ede3e88005076e464a227351693",
+    "transfer": "us-west1-docker.pkg.dev/lightyear-ms67-nonproduction/cloudbank-ms67/transfer@sha256:fd99a626b3b1d8d47c3aed397119d9eaab70887da88b89d6c6070eb4fcb3caaa"
+  },
+  "managed_target": {
+    "content_sha256": "fd06505f97cf6b57d625ef60c73373371bac90c34777adaa3fff08d73deaf714",
+    "database": {
+      "address": "10.151.44.2",
+      "content_sha256": "f0dc06b4682df96ae5517d846fdc0c001aac36bd526ebd9cbe4b76bd7f724707",
+      "created_at": "2026-09-12T16:30:54.191513295Z",
+      "database_version": "POSTGRES_16",
+      "provider": "alloydb-postgresql",
+      "resource": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/cloudbank-ms71-alloydb/instances/primary"
+    },
+    "environment": {
+      "cluster": "cloudbank-ms67",
+      "namespace": "cloudbank-ms71-alloydb",
+      "namespace_uid_sha256": "c7d6db875fdf24ad13aaa023b98794427a31ed6da6df28127c2ae80e72177ebf",
+      "project": "lightyear-ms67-nonproduction",
+      "region": "us-west1"
+    },
+    "images_sha256": "58472577e687bc8887168960f60ad6dcf82a918fcd4d90c399cc8e26d36db4b7",
+    "probe_connection": {
+      "address": "10.151.44.2",
+      "database": "cloudbank",
+      "port": 5432,
+      "tls": true
+    },
+    "profile_sha256": "a15cf9ebbd601270835936b54b81ed0a32325ab0e726f34acf60f17285fca4e7",
+    "services": {
+      "account": {
+        "auxiliary_connections": {
+          "LIQUIBASE_DATASOURCE_URL": {
+            "address": "10.151.44.2",
+            "database": "cloudbank",
+            "port": 5432,
+            "tls": true
+          }
+        },
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "dcd6f950-7468-4c0b-bcb8-38cef4c582fd",
+            "version": "1789231510479055008"
+          },
+          {
+            "name": "cloudbank-account-external",
+            "uid": "ff9970ab-95bc-46dd-9f64-a1ba5b33954a",
+            "version": "1789233966016079018"
+          }
+        ],
+        "connection": {
+          "address": "10.151.44.2",
+          "database": "cloudbank",
+          "port": 5432,
+          "tls": true
+        }
+      },
+      "azn-server": {
+        "auxiliary_connections": {
+          "LIQUIBASE_DATASOURCE_URL": {
+            "address": "10.151.44.2",
+            "database": "cloudbank",
+            "port": 5432,
+            "tls": true
+          }
+        },
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "dcd6f950-7468-4c0b-bcb8-38cef4c582fd",
+            "version": "1789231510479055008"
+          },
+          {
+            "name": "cloudbank-azn-server-external",
+            "uid": "8b0b9a87-eb8c-482f-9768-07ce79b9d826",
+            "version": "1789233966250687006"
+          }
+        ],
+        "connection": {
+          "address": "10.151.44.2",
+          "database": "cloudbank",
+          "port": 5432,
+          "tls": true
+        }
+      },
+      "chatbot": {
+        "auxiliary_connections": {},
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "dcd6f950-7468-4c0b-bcb8-38cef4c582fd",
+            "version": "1789231510479055008"
+          },
+          {
+            "name": "cloudbank-chatbot-external",
+            "uid": "949f0a20-671a-42ec-b273-30911448ab3b",
+            "version": "1789233966483919020"
+          }
+        ],
+        "connection": null
+      },
+      "checks": {
+        "auxiliary_connections": {
+          "LIQUIBASE_DATASOURCE_URL": {
+            "address": "10.151.44.2",
+            "database": "cloudbank",
+            "port": 5432,
+            "tls": true
+          }
+        },
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "dcd6f950-7468-4c0b-bcb8-38cef4c582fd",
+            "version": "1789231510479055008"
+          },
+          {
+            "name": "cloudbank-checks-external",
+            "uid": "94bb395d-8739-4aa3-8fa0-0820f280674b",
+            "version": "1789233966817439009"
+          }
+        ],
+        "connection": {
+          "address": "10.151.44.2",
+          "database": "cloudbank",
+          "port": 5432,
+          "tls": true
+        }
+      },
+      "creditscore": {
+        "auxiliary_connections": {},
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "dcd6f950-7468-4c0b-bcb8-38cef4c582fd",
+            "version": "1789231510479055008"
+          },
+          {
+            "name": "cloudbank-creditscore-external",
+            "uid": "dc2572d5-88b3-418e-9fe6-6505eb720128",
+            "version": "1789261563599487011"
+          }
+        ],
+        "connection": null
+      },
+      "customer": {
+        "auxiliary_connections": {
+          "LIQUIBASE_DATASOURCE_URL": {
+            "address": "10.151.44.2",
+            "database": "cloudbank",
+            "port": 5432,
+            "tls": true
+          }
+        },
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "dcd6f950-7468-4c0b-bcb8-38cef4c582fd",
+            "version": "1789231510479055008"
+          },
+          {
+            "name": "cloudbank-customer-external",
+            "uid": "408ec5c9-d414-4a31-b47f-3be93e37dcb8",
+            "version": "1789233967118447003"
+          }
+        ],
+        "connection": {
+          "address": "10.151.44.2",
+          "database": "cloudbank",
+          "port": 5432,
+          "tls": true
+        }
+      },
+      "testrunner": {
+        "auxiliary_connections": {
+          "LIQUIBASE_DATASOURCE_URL": {
+            "address": "10.151.44.2",
+            "database": "cloudbank",
+            "port": 5432,
+            "tls": true
+          }
+        },
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "dcd6f950-7468-4c0b-bcb8-38cef4c582fd",
+            "version": "1789231510479055008"
+          },
+          {
+            "name": "cloudbank-testrunner-external",
+            "uid": "435cc83c-ef2e-4346-97ae-322f08efcc3d",
+            "version": "1789233967286031017"
+          }
+        ],
+        "connection": {
+          "address": "10.151.44.2",
+          "database": "cloudbank",
+          "port": 5432,
+          "tls": true
+        }
+      },
+      "transfer": {
+        "auxiliary_connections": {},
+        "configuration_refs": [
+          {
+            "name": "cloudbank-runtime",
+            "uid": "dcd6f950-7468-4c0b-bcb8-38cef4c582fd",
+            "version": "1789231510479055008"
+          },
+          {
+            "name": "cloudbank-transfer-external",
+            "uid": "a9149bfa-a117-43e5-9f24-a2b5cb3c8144",
+            "version": "1789233967440015016"
+          }
+        ],
+        "connection": null
+      }
+    }
+  },
+  "observation_type": "lightyear-alloydb-platform-database-recovery",
+  "operations": {
+    "backup": {
+      "name": "projects/lightyear-ms67-nonproduction/locations/us-west1/operations/operation-1789267464334-65b544b9eaaf2-b0152464-9e1d3ad8",
+      "requested_at": "2026-09-13T02:44:13.305341Z",
+      "result": {
+        "done": true,
+        "metadata": {
+          "@type": "type.googleapis.com/google.cloud.alloydb.v1.OperationMetadata",
+          "apiVersion": "v1",
+          "createTime": "2026-09-13T02:44:24.610467516Z",
+          "endTime": "2026-09-13T02:45:02.524468580Z",
+          "requestedCancellation": false,
+          "target": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/ly-alloy-backup-1f53330f88cb42e7",
+          "verb": "create"
+        },
+        "name": "projects/lightyear-ms67-nonproduction/locations/us-west1/operations/operation-1789267464334-65b544b9eaaf2-b0152464-9e1d3ad8",
+        "response": {
+          "@type": "type.googleapis.com/google.cloud.alloydb.v1.Cluster",
+          "automatedBackupPolicy": {
+            "backupWindow": "3600s",
+            "enabled": false,
+            "location": "us-west1",
+            "timeBasedRetention": {
+              "retentionPeriod": "1209600s"
+            },
+            "weeklySchedule": {
+              "daysOfWeek": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "startTimes": [
+                {
+                  "hours": 23
+                }
+              ]
+            }
+          },
+          "backupSource": {
+            "backupName": "projects/233419964177/locations/us-west1/backups/ly-alloy-backup-1f53330f88cb42e7",
+            "backupUid": "f4eca30a-ed6f-4c8e-acf4-f85ac1743142"
+          },
+          "clusterType": "PRIMARY",
+          "continuousBackupConfig": {
+            "enabled": true,
+            "recoveryWindowDays": 14
+          },
+          "continuousBackupInfo": {
+            "enabledTime": "2026-09-13T02:44:24.390578753Z",
+            "encryptionInfo": {
+              "encryptionType": "GOOGLE_DEFAULT_ENCRYPTION"
+            },
+            "schedule": [
+              "MONDAY",
+              "TUESDAY",
+              "WEDNESDAY",
+              "THURSDAY",
+              "FRIDAY",
+              "SATURDAY",
+              "SUNDAY"
+            ]
+          },
+          "createTime": "2026-09-13T02:44:24.567761429Z",
+          "databaseVersion": "POSTGRES_16",
+          "dataplexConfig": {
+            "enabled": true
+          },
+          "encryptionInfo": {
+            "encryptionType": "GOOGLE_DEFAULT_ENCRYPTION"
+          },
+          "name": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/ly-alloy-backup-1f53330f88cb42e7",
+          "network": "projects/233419964177/global/networks/cloudbank-ms67",
+          "networkConfig": {
+            "network": "projects/233419964177/global/networks/cloudbank-ms67"
+          },
+          "reconciling": false,
+          "state": "READY",
+          "subscriptionType": "STANDARD",
+          "uid": "912f8071-4df4-4984-adae-557f01e7fca7",
+          "updateTime": "2026-09-13T02:44:24.567761429Z"
+        }
+      },
+      "target": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/ly-alloy-backup-1f53330f88cb42e7"
+    },
+    "backup-create": {
+      "name": "projects/lightyear-ms67-nonproduction/locations/us-west1/operations/operation-1789266835766-65b5426277e04-cc4088ab-c068959f",
+      "requested_at": "2026-09-13T02:33:45.275872Z",
+      "result": {
+        "done": true,
+        "metadata": {
+          "@type": "type.googleapis.com/google.cloud.alloydb.v1.OperationMetadata",
+          "apiVersion": "v1",
+          "createTime": "2026-09-13T02:33:55.879103917Z",
+          "endTime": "2026-09-13T02:34:25.045281272Z",
+          "requestedCancellation": false,
+          "target": "projects/lightyear-ms67-nonproduction/locations/us-west1/backups/ly-alloy-backup-1f53330f88cb42e7",
+          "verb": "create"
+        },
+        "name": "projects/lightyear-ms67-nonproduction/locations/us-west1/operations/operation-1789266835766-65b5426277e04-cc4088ab-c068959f",
+        "response": {
+          "@type": "type.googleapis.com/google.cloud.alloydb.v1.Backup",
+          "clusterName": "projects/233419964177/locations/us-west1/clusters/cloudbank-ms71-alloydb",
+          "clusterUid": "323489a9-9ccc-4955-a441-6832c8fc6388",
+          "createCompletionTime": "2026-09-13T02:34:22.163935341Z",
+          "createTime": "2026-09-13T02:33:55.872793533Z",
+          "databaseVersion": "POSTGRES_16",
+          "encryptionInfo": {
+            "encryptionType": "GOOGLE_DEFAULT_ENCRYPTION"
+          },
+          "expiryTime": "2027-09-13T02:33:57.078711Z",
+          "name": "projects/lightyear-ms67-nonproduction/locations/us-west1/backups/ly-alloy-backup-1f53330f88cb42e7",
+          "reconciling": false,
+          "sizeBytes": "57635987",
+          "state": "READY",
+          "type": "ON_DEMAND",
+          "uid": "f4eca30a-ed6f-4c8e-acf4-f85ac1743142",
+          "updateTime": "2026-09-13T02:33:55.872793533Z"
+        }
+      },
+      "target": "projects/lightyear-ms67-nonproduction/locations/us-west1/backups/ly-alloy-backup-1f53330f88cb42e7"
+    },
+    "backup-delete": {
+      "name": "projects/lightyear-ms67-nonproduction/locations/us-west1/operations/operation-1789268787249-65b549a78c0f0-e7eb4c84-50d625f6",
+      "requested_at": "2026-09-13T03:06:16.475899Z",
+      "result": {
+        "done": true,
+        "metadata": {
+          "@type": "type.googleapis.com/google.cloud.alloydb.v1.OperationMetadata",
+          "apiVersion": "v1",
+          "createTime": "2026-09-13T03:06:27.261009773Z",
+          "endTime": "2026-09-13T03:06:44.457495047Z",
+          "requestedCancellation": false,
+          "target": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/ly-alloy-backup-1f53330f88cb42e7",
+          "verb": "delete"
+        },
+        "name": "projects/lightyear-ms67-nonproduction/locations/us-west1/operations/operation-1789268787249-65b549a78c0f0-e7eb4c84-50d625f6",
+        "response": {
+          "@type": "type.googleapis.com/google.protobuf.Empty"
+        }
+      },
+      "target": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/ly-alloy-backup-1f53330f88cb42e7"
+    },
+    "backup-delete-primary": {
+      "name": "projects/lightyear-ms67-nonproduction/locations/us-west1/operations/operation-1789268410968-65b54840b2b88-85c18ad6-25ea9690",
+      "requested_at": "2026-09-13T03:00:00.292064Z",
+      "result": {
+        "done": true,
+        "metadata": {
+          "@type": "type.googleapis.com/google.cloud.alloydb.v1.OperationMetadata",
+          "apiVersion": "v1",
+          "createTime": "2026-09-13T03:00:11.022946132Z",
+          "endTime": "2026-09-13T03:06:05.033744620Z",
+          "requestedCancellation": false,
+          "target": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/ly-alloy-backup-1f53330f88cb42e7/instances/primary",
+          "verb": "delete"
+        },
+        "name": "projects/lightyear-ms67-nonproduction/locations/us-west1/operations/operation-1789268410968-65b54840b2b88-85c18ad6-25ea9690",
+        "response": {
+          "@type": "type.googleapis.com/google.protobuf.Empty"
+        }
+      },
+      "target": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/ly-alloy-backup-1f53330f88cb42e7/instances/primary"
+    },
+    "backup-primary": {
+      "name": "projects/lightyear-ms67-nonproduction/locations/us-west1/operations/operation-1789267544494-65b545065d03a-d36db122-afa3fba9",
+      "requested_at": "2026-09-13T02:45:33.112555Z",
+      "result": {
+        "done": true,
+        "metadata": {
+          "@type": "type.googleapis.com/google.cloud.alloydb.v1.OperationMetadata",
+          "apiVersion": "v1",
+          "createTime": "2026-09-13T02:45:44.815521684Z",
+          "endTime": "2026-09-13T02:51:02.806287590Z",
+          "requestedCancellation": false,
+          "target": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/ly-alloy-backup-1f53330f88cb42e7/instances/primary",
+          "verb": "create"
+        },
+        "name": "projects/lightyear-ms67-nonproduction/locations/us-west1/operations/operation-1789267544494-65b545065d03a-d36db122-afa3fba9",
+        "response": {
+          "@type": "type.googleapis.com/google.cloud.alloydb.v1.Instance",
+          "activationPolicy": "ALWAYS",
+          "availabilityType": "REGIONAL",
+          "clientConnectionConfig": {
+            "sslConfig": {
+              "sslMode": "ENCRYPTED_ONLY"
+            }
+          },
+          "createTime": "2026-09-13T02:45:44.805245522Z",
+          "instanceType": "PRIMARY",
+          "ipAddress": "10.151.44.14",
+          "machineConfig": {
+            "cpuCount": 2
+          },
+          "maintenanceVersionName": "POSTGRES_16.20260701.01_04",
+          "name": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/ly-alloy-backup-1f53330f88cb42e7/instances/primary",
+          "nodes": [
+            {
+              "zoneId": "us-west1-c"
+            }
+          ],
+          "observabilityConfig": {
+            "enabled": false,
+            "maxQueryStringLength": 10240,
+            "preserveComments": false,
+            "queryPlansPerMinute": 20,
+            "recordApplicationTags": false,
+            "trackActiveQueries": false,
+            "trackWaitEventTypes": true,
+            "trackWaitEvents": true
+          },
+          "queryInsightsConfig": {
+            "queryPlansPerMinute": 5,
+            "queryStringLength": 1024,
+            "recordApplicationTags": false,
+            "recordClientAddress": false
+          },
+          "reconciling": false,
+          "state": "READY",
+          "uid": "dc3f64bd-e6f1-4bd0-9350-d0ece52edfec",
+          "updateTime": "2026-09-13T02:45:44.805245522Z",
+          "writableNode": {
+            "zoneId": "us-west1-b"
+          }
+        }
+      },
+      "target": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/ly-alloy-backup-1f53330f88cb42e7/instances/primary"
+    },
+    "pitr": {
+      "name": "projects/lightyear-ms67-nonproduction/locations/us-west1/operations/operation-1789266947019-65b542cc9128a-7ff60e99-eb73a85c",
+      "requested_at": "2026-09-13T02:35:36.563087Z",
+      "result": {
+        "done": true,
+        "metadata": {
+          "@type": "type.googleapis.com/google.cloud.alloydb.v1.OperationMetadata",
+          "apiVersion": "v1",
+          "createTime": "2026-09-13T02:35:47.232550677Z",
+          "endTime": "2026-09-13T02:36:54.057149455Z",
+          "requestedCancellation": false,
+          "target": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/ly-alloy-pitr-1f53330f88cb42e7",
+          "verb": "create"
+        },
+        "name": "projects/lightyear-ms67-nonproduction/locations/us-west1/operations/operation-1789266947019-65b542cc9128a-7ff60e99-eb73a85c",
+        "response": {
+          "@type": "type.googleapis.com/google.cloud.alloydb.v1.Cluster",
+          "automatedBackupPolicy": {
+            "backupWindow": "3600s",
+            "enabled": false,
+            "location": "us-west1",
+            "timeBasedRetention": {
+              "retentionPeriod": "1209600s"
+            },
+            "weeklySchedule": {
+              "daysOfWeek": [
+                "MONDAY",
+                "TUESDAY",
+                "WEDNESDAY",
+                "THURSDAY",
+                "FRIDAY",
+                "SATURDAY",
+                "SUNDAY"
+              ],
+              "startTimes": [
+                {
+                  "hours": 23
+                }
+              ]
+            }
+          },
+          "backupSource": {
+            "backupName": "projects/233419964177/locations/us-west1/backups/ly-alloy-backup-1f53330f88cb42e7",
+            "backupUid": "f4eca30a-ed6f-4c8e-acf4-f85ac1743142"
+          },
+          "clusterType": "PRIMARY",
+          "continuousBackupConfig": {
+            "enabled": true,
+            "recoveryWindowDays": 14
+          },
+          "continuousBackupInfo": {
+            "enabledTime": "2026-09-13T02:35:47.092728655Z",
+            "encryptionInfo": {
+              "encryptionType": "GOOGLE_DEFAULT_ENCRYPTION"
+            },
+            "schedule": [
+              "MONDAY",
+              "TUESDAY",
+              "WEDNESDAY",
+              "THURSDAY",
+              "FRIDAY",
+              "SATURDAY",
+              "SUNDAY"
+            ]
+          },
+          "createTime": "2026-09-13T02:35:47.228585498Z",
+          "databaseVersion": "POSTGRES_16",
+          "dataplexConfig": {
+            "enabled": true
+          },
+          "encryptionInfo": {
+            "encryptionType": "GOOGLE_DEFAULT_ENCRYPTION"
+          },
+          "name": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/ly-alloy-pitr-1f53330f88cb42e7",
+          "network": "projects/233419964177/global/networks/cloudbank-ms67",
+          "networkConfig": {
+            "network": "projects/233419964177/global/networks/cloudbank-ms67"
+          },
+          "reconciling": false,
+          "state": "READY",
+          "subscriptionType": "STANDARD",
+          "uid": "42281768-5812-4622-8229-509660f4ec74",
+          "updateTime": "2026-09-13T02:35:47.228585498Z"
+        }
+      },
+      "target": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/ly-alloy-pitr-1f53330f88cb42e7"
+    },
+    "pitr-delete": {
+      "name": "projects/lightyear-ms67-nonproduction/locations/us-west1/operations/operation-1789268322812-65b547eca03f5-f7764670-fb755e50",
+      "requested_at": "2026-09-13T02:58:31.720418Z",
+      "result": {
+        "done": true,
+        "metadata": {
+          "@type": "type.googleapis.com/google.cloud.alloydb.v1.OperationMetadata",
+          "apiVersion": "v1",
+          "createTime": "2026-09-13T02:58:42.826151247Z",
+          "endTime": "2026-09-13T02:59:00.706808227Z",
+          "requestedCancellation": false,
+          "target": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/ly-alloy-pitr-1f53330f88cb42e7",
+          "verb": "delete"
+        },
+        "name": "projects/lightyear-ms67-nonproduction/locations/us-west1/operations/operation-1789268322812-65b547eca03f5-f7764670-fb755e50",
+        "response": {
+          "@type": "type.googleapis.com/google.protobuf.Empty"
+        }
+      },
+      "target": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/ly-alloy-pitr-1f53330f88cb42e7"
+    },
+    "pitr-delete-primary": {
+      "name": "projects/lightyear-ms67-nonproduction/locations/us-west1/operations/operation-1789267991236-65b546b069041-f557979b-56de1a30",
+      "requested_at": "2026-09-13T02:53:00.396317Z",
+      "result": {
+        "done": true,
+        "metadata": {
+          "@type": "type.googleapis.com/google.cloud.alloydb.v1.OperationMetadata",
+          "apiVersion": "v1",
+          "createTime": "2026-09-13T02:53:11.288721762Z",
+          "endTime": "2026-09-13T02:58:19.872493198Z",
+          "requestedCancellation": false,
+          "target": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/ly-alloy-pitr-1f53330f88cb42e7/instances/primary",
+          "verb": "delete"
+        },
+        "name": "projects/lightyear-ms67-nonproduction/locations/us-west1/operations/operation-1789267991236-65b546b069041-f557979b-56de1a30",
+        "response": {
+          "@type": "type.googleapis.com/google.protobuf.Empty"
+        }
+      },
+      "target": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/ly-alloy-pitr-1f53330f88cb42e7/instances/primary"
+    },
+    "pitr-primary": {
+      "name": "projects/lightyear-ms67-nonproduction/locations/us-west1/operations/operation-1789267045333-65b5432a53829-3c761fb4-d43e6c17",
+      "requested_at": "2026-09-13T02:37:14.871150Z",
+      "result": {
+        "done": true,
+        "metadata": {
+          "@type": "type.googleapis.com/google.cloud.alloydb.v1.OperationMetadata",
+          "apiVersion": "v1",
+          "createTime": "2026-09-13T02:37:25.637002061Z",
+          "endTime": "2026-09-13T02:42:40.494215349Z",
+          "requestedCancellation": false,
+          "target": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/ly-alloy-pitr-1f53330f88cb42e7/instances/primary",
+          "verb": "create"
+        },
+        "name": "projects/lightyear-ms67-nonproduction/locations/us-west1/operations/operation-1789267045333-65b5432a53829-3c761fb4-d43e6c17",
+        "response": {
+          "@type": "type.googleapis.com/google.cloud.alloydb.v1.Instance",
+          "activationPolicy": "ALWAYS",
+          "availabilityType": "REGIONAL",
+          "clientConnectionConfig": {
+            "sslConfig": {
+              "sslMode": "ENCRYPTED_ONLY"
+            }
+          },
+          "createTime": "2026-09-13T02:37:25.630874172Z",
+          "instanceType": "PRIMARY",
+          "ipAddress": "10.151.44.11",
+          "machineConfig": {
+            "cpuCount": 2
+          },
+          "maintenanceVersionName": "POSTGRES_16.20260701.01_04",
+          "name": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/ly-alloy-pitr-1f53330f88cb42e7/instances/primary",
+          "nodes": [
+            {
+              "zoneId": "us-west1-c"
+            }
+          ],
+          "observabilityConfig": {
+            "enabled": false,
+            "maxQueryStringLength": 10240,
+            "preserveComments": false,
+            "queryPlansPerMinute": 20,
+            "recordApplicationTags": false,
+            "trackActiveQueries": false,
+            "trackWaitEventTypes": true,
+            "trackWaitEvents": true
+          },
+          "queryInsightsConfig": {
+            "queryPlansPerMinute": 5,
+            "queryStringLength": 1024,
+            "recordApplicationTags": false,
+            "recordClientAddress": false
+          },
+          "reconciling": false,
+          "state": "READY",
+          "uid": "897505f2-baa5-4180-9a75-79004275f024",
+          "updateTime": "2026-09-13T02:37:25.630874172Z",
+          "writableNode": {
+            "zoneId": "us-west1-b"
+          }
+        }
+      },
+      "target": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/ly-alloy-pitr-1f53330f88cb42e7/instances/primary"
+    }
+  },
+  "phases": [
+    {
+      "elapsed_seconds": 39.453,
+      "finished_at": "2026-09-13T02:31:59.341334Z",
+      "phase": "probe-pool-preparation",
+      "started_at": "2026-09-13T02:31:19.891523Z",
+      "status": "completed"
+    },
+    {
+      "elapsed_seconds": 1.485,
+      "finished_at": "2026-09-13T02:32:00.828017Z",
+      "phase": "snapshot-network-binding",
+      "started_at": "2026-09-13T02:31:59.342860Z",
+      "status": "completed"
+    },
+    {
+      "elapsed_seconds": 1.859,
+      "finished_at": "2026-09-13T02:32:02.686971Z",
+      "phase": "snapshot-data-validation",
+      "started_at": "2026-09-13T02:32:00.830018Z",
+      "status": "completed"
+    },
+    {
+      "elapsed_seconds": 0.579,
+      "finished_at": "2026-09-13T02:33:03.998326Z",
+      "phase": "snapshot-network-binding",
+      "started_at": "2026-09-13T02:33:03.417713Z",
+      "status": "completed"
+    },
+    {
+      "elapsed_seconds": 2.312,
+      "finished_at": "2026-09-13T02:33:06.314088Z",
+      "phase": "snapshot-data-validation",
+      "started_at": "2026-09-13T02:33:04.000326Z",
+      "status": "completed"
+    },
+    {
+      "elapsed_seconds": 0.516,
+      "finished_at": "2026-09-13T02:33:33.110533Z",
+      "phase": "snapshot-network-binding",
+      "started_at": "2026-09-13T02:33:32.599099Z",
+      "status": "completed"
+    },
+    {
+      "elapsed_seconds": 1.859,
+      "finished_at": "2026-09-13T02:33:34.977127Z",
+      "phase": "snapshot-data-validation",
+      "started_at": "2026-09-13T02:33:33.118470Z",
+      "status": "completed"
+    },
+    {
+      "elapsed_seconds": 0.547,
+      "finished_at": "2026-09-13T02:34:49.037330Z",
+      "phase": "snapshot-network-binding",
+      "started_at": "2026-09-13T02:34:48.480916Z",
+      "status": "completed"
+    },
+    {
+      "elapsed_seconds": 1.859,
+      "finished_at": "2026-09-13T02:34:50.893255Z",
+      "phase": "snapshot-data-validation",
+      "started_at": "2026-09-13T02:34:49.039427Z",
+      "status": "completed"
+    },
+    {
+      "elapsed_seconds": 1.468,
+      "finished_at": "2026-09-13T02:43:50.179021Z",
+      "phase": "snapshot-network-binding",
+      "started_at": "2026-09-13T02:43:48.700056Z",
+      "status": "completed"
+    },
+    {
+      "elapsed_seconds": 1.907,
+      "finished_at": "2026-09-13T02:43:52.086782Z",
+      "phase": "snapshot-data-validation",
+      "started_at": "2026-09-13T02:43:50.180019Z",
+      "status": "completed"
+    },
+    {
+      "elapsed_seconds": 1.469,
+      "finished_at": "2026-09-13T02:51:30.193684Z",
+      "phase": "snapshot-network-binding",
+      "started_at": "2026-09-13T02:51:28.720177Z",
+      "status": "completed"
+    },
+    {
+      "elapsed_seconds": 1.953,
+      "finished_at": "2026-09-13T02:51:32.144765Z",
+      "phase": "snapshot-data-validation",
+      "started_at": "2026-09-13T02:51:30.195682Z",
+      "status": "completed"
+    }
+  ],
+  "pitr": {
+    "database_rto_seconds": 507,
+    "incident_declared_at": "2026-09-13T02:35:25.894997+00:00",
+    "point_in_time": "2026-09-13T02:34:55.894997Z",
+    "recovery_point_age_seconds": 30,
+    "restored_state": {
+      "databases": {
+        "cc370ea0f8bd857ce6af71e0f7fdc1b13c04c33296b875f96568daa2ec2b7de9": {
+          "row_count": 7999,
+          "sequence_count": 3,
+          "state_sha256": "4eb05a9f094f9c681dcb28cd621354c2ad7f6007dd8ddc53a1401863aa5299a0",
+          "table_count": 8
+        }
+      },
+      "state_sha256": "83fef714a5e5400a978b9b49d8950a91027cc5a0918dba4b5d45b17a78e680f4"
+    },
+    "rpo_within_limit": true,
+    "rto_within_limit": true,
+    "state_matches": true
+  },
+  "production_ready": false,
+  "profile": {
+    "cluster": "cloudbank-ms67",
+    "content_sha256": "a15cf9ebbd601270835936b54b81ed0a32325ab0e726f34acf60f17285fca4e7",
+    "database_version": "POSTGRES_16",
+    "databases": {
+      "account": "cloudbank",
+      "azn-server": "cloudbank",
+      "chatbot": null,
+      "checks": "cloudbank",
+      "creditscore": null,
+      "customer": "cloudbank",
+      "testrunner": "cloudbank",
+      "transfer": null
+    },
+    "namespace": "cloudbank-ms71-alloydb",
+    "production_environment": false,
+    "profile_type": "lightyear-cloudbank-managed-target",
+    "project": "lightyear-ms67-nonproduction",
+    "provider": "alloydb-postgresql",
+    "region": "us-west1",
+    "require_tls": true,
+    "resource": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/cloudbank-ms71-alloydb/instances/primary",
+    "schema_version": "1.0",
+    "synthetic_data_only": true
+  },
+  "raw_database_rows_persisted": false,
+  "recovery": {
+    "errors": [],
+    "status": "restored"
+  },
+  "run_id": "alloydb-recovery-f4369f0c47da4a8aad366d20",
+  "schema_version": "1.0",
+  "sequence_checkpoint": {
+    "after": {
+      "databases": {
+        "cc370ea0f8bd857ce6af71e0f7fdc1b13c04c33296b875f96568daa2ec2b7de9": {
+          "row_count": 7999,
+          "sequence_count": 3,
+          "state_sha256": "4eb05a9f094f9c681dcb28cd621354c2ad7f6007dd8ddc53a1401863aa5299a0",
+          "table_count": 8
+        }
+      },
+      "state_sha256": "83fef714a5e5400a978b9b49d8950a91027cc5a0918dba4b5d45b17a78e680f4"
+    },
+    "before": {
+      "databases": {
+        "cc370ea0f8bd857ce6af71e0f7fdc1b13c04c33296b875f96568daa2ec2b7de9": {
+          "row_count": 7999,
+          "sequence_count": 3,
+          "state_sha256": "4eb05a9f094f9c681dcb28cd621354c2ad7f6007dd8ddc53a1401863aa5299a0",
+          "table_count": 8
+        }
+      },
+      "state_sha256": "83fef714a5e5400a978b9b49d8950a91027cc5a0918dba4b5d45b17a78e680f4"
+    },
+    "method": "setval-to-current-value-and-is-called-while-quiesced",
+    "query_sha256": "386e1f66e54b83a610a92ec9bc601382af4a9de002a41e77d69cf411673fd376",
+    "sequence_hashes": {
+      "cc370ea0f8bd857ce6af71e0f7fdc1b13c04c33296b875f96568daa2ec2b7de9": [
+        {
+          "sequence": "public.accounts_account_id_seq",
+          "sha256": "5db86fc426feaa409606e400785b22f64053ce3422b5110d1ca492f8cc253fd1"
+        },
+        {
+          "sequence": "public.journal_journal_id_seq",
+          "sha256": "56dd7d7aff81ece188373418178d3e57c30f1a3ba1afc134a9ddd9a7ef0f5e62"
+        },
+        {
+          "sequence": "user_repo.users_user_id_seq",
+          "sha256": "5271e664002aeaa07dfabe9799ff9c64d5c00d98f55ccb0e874d525dac45250a"
+        }
+      ]
+    },
+    "status": "passed"
+  },
+  "signature": {
+    "algorithm": "hmac-sha256",
+    "signer": "howard.weale@gmail.com",
+    "value": "41f7c9f70b35c53948561350f049c5517dad3cbfa9af6f3f3c1bfbf92faa5a47"
+  },
+  "source_cluster_uid": "323489a9-9ccc-4955-a441-6832c8fc6388",
+  "status": "passed-isolated-alloydb-recovery",
+  "targets": {
+    "backup": {
+      "absent_before": true,
+      "deleted": true,
+      "name": "ly-alloy-backup-1f53330f88cb42e7",
+      "primary_uid": "dc3f64bd-e6f1-4bd0-9350-d0ece52edfec",
+      "resource": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/ly-alloy-backup-1f53330f88cb42e7",
+      "uid": "912f8071-4df4-4984-adae-557f01e7fca7"
+    },
+    "pitr": {
+      "absent_before": true,
+      "deleted": true,
+      "name": "ly-alloy-pitr-1f53330f88cb42e7",
+      "primary_uid": "897505f2-baa5-4180-9a75-79004275f024",
+      "resource": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/ly-alloy-pitr-1f53330f88cb42e7",
+      "uid": "42281768-5812-4622-8229-509660f4ec74"
+    }
+  }
+}

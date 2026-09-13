@@ -15,7 +15,8 @@ from cloudbank_journeys import Heartbeat
 from cloudbank_ms65_rehearsal import cluster_identity, evidence_key, load
 from lightyear_data.cloudbank_edge_ai import validate_execution_receipt as validate_ms64
 from lightyear_data.cloudbank_journeys import ACK, JourneyFailure, SERVICES, hashed, require
-from lightyear_data.cloudbank_journeys_gke import GkeRuntime, command
+from lightyear_data.cloudbank_journeys_gke import command
+from lightyear_data.cloudbank_managed_target import ManagedGkeRuntime as GkeRuntime
 from lightyear_data.cloudbank_log_correlation import (
     LoggingRollout, Telemetry, STATE_TYPE, STATE_FILE, OBSERVATION_FILE, LEASE, MANAGER,
     configuration, instrument_bundle, stamp, verify_observation,

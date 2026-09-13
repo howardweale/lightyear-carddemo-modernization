@@ -32,7 +32,23 @@ def instance(name="source", address="10.20.0.2"):
 
 
 class RecoveryTests(unittest.TestCase):
+    def test_invoke_uses_safe_sdk_launcher_and_preserves_stdin(self):
+        argv = ["gcloud", "storage", "cat", "gs://test/evidence"]
+        resolved = ["python", "sdk/lib/gcloud.py", *argv[1:]]
+        with patch("lightyear_data.cloudbank_sql_recovery._command_argv", return_value=resolved) as normalize, \
+             patch("lightyear_data.cloudbank_sql_recovery.subprocess.run", return_value=
+                   subprocess.CompletedProcess(resolved, 0, "bounded-result", "")) as run:
+            self.assertEqual(invoke(argv, data="private-stdin", sensitive=True), "bounded-result")
+        normalize.assert_called_once_with(argv)
+        self.assertEqual(run.call_args.args[0], resolved)
+        self.assertEqual(run.call_args.kwargs["input"], "private-stdin")
+        self.assertNotIn("private-stdin", run.call_args.args[0])
+        self.assertFalse(run.call_args.kwargs.get("shell", False))
+
     def setUp(self):
+        launcher = patch("lightyear_data.cloudbank_sql_recovery._command_argv", side_effect=lambda argv: argv)
+        launcher.start()
+        self.addCleanup(launcher.stop)
         self.directory = tempfile.TemporaryDirectory()
         self.addCleanup(self.directory.cleanup)
         self.root = Path(self.directory.name)

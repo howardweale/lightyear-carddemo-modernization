@@ -50,3 +50,9 @@ reference-estates/oracle/corpus/** -whitespace
 
 # Preserve exact third-party license and notice bytes for hash-verifiable attribution.
 LICENSES/** -whitespace
+
+# Immutable signed MS71 exports retain their original bytes on every platform.
+docs/receipts/ms71-20260912a/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+
+# Preserve original signed AlloyDB platform evidence and its export byte hashes.
+docs/receipts/alloydb-platform-20260912a/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

@@ -166,7 +166,7 @@ class SqlHa:
         require(isinstance(rows, list) and not rows, "source-has-active-operations")
 
     def preflight(self):
-        self.runtime.progress("Checking regional Cloud SQL, running processes, datasources and OAuth")
+        self.runtime.progress("Checking regional managed PostgreSQL, running processes, datasources and OAuth")
         profile = self.profile()
         self.idle()
         services = self.runtime.ready()

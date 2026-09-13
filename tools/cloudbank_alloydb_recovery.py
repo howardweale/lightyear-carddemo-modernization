@@ -75,6 +75,7 @@ def main(argv=None):
     heartbeat = Heartbeat()
     heartbeat.thread.start()
     prior = signal.signal(signal.SIGTERM, lambda *_: (_ for _ in ()).throw(KeyboardInterrupt()))
+    runtime = None
     try:
         runtime = ManagedGkeRuntime(**{k: context[k] for k in ("project", "region", "cluster", "namespace")},
             images=context["images"], run_id=run_id, output=output, probe_image=context["probe_image"],
@@ -105,9 +106,19 @@ def main(argv=None):
         print("ALLOYDB_RECOVERY=VERIFIED; URI=" + prefix + "/alloydb-recovery.observation.json")
         return 0
     finally:
+        # Final readiness opens fresh local tunnels after application recovery.
+        # They must not outlive the controller, including on failed admission.
+        tunnel_errors = []
+        if runtime is not None:
+            for service in list(runtime.forwards):
+                try:
+                    runtime.close_forward(service)
+                except Exception:
+                    tunnel_errors.append(service)
         heartbeat.done.set()
         heartbeat.thread.join(timeout=1)
         signal.signal(signal.SIGTERM, prior)
+        require(not tunnel_errors, "alloydb-recovery-local-tunnel-cleanup-failed")
 
 
 if __name__ == "__main__":

@@ -12,6 +12,9 @@ tests/fixtures/request-logging/target/
 # Harness output
 work/
 
+# Pinned browser test dependencies
+tests/browser/node_modules/
+
 # Editors and operating systems
 .idea/
 .vscode/

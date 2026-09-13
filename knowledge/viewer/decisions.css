@@ -26,7 +26,7 @@
 .decision-workspace h2 { font-size:24px; line-height:1.3; margin:4px 0 16px; }
 .decision-workspace h3 { font-size:17px; letter-spacing:normal; text-transform:none; margin:20px 0 12px; }
 .decision-workspace dl { display:block; margin:0; }
-.decision-workspace dl div { display:grid; grid-template-columns:150px 1fr; gap:20px; padding:9px 0; border-bottom:1px solid var(--border); }
+.decision-workspace dl div { display:grid; grid-template-columns:150px minmax(0,1fr); gap:20px; padding:9px 0; border-bottom:1px solid var(--border); }
 .decision-workspace dt { font-size:14px; color:var(--muted); }
 .decision-workspace dd { margin:0; overflow-wrap:anywhere; }
 .decision-workspace details { margin-top:18px; }
@@ -64,6 +64,20 @@
 .workflow-action[open] > summary::before { content:'−'; }
 .workflow-file { margin-left:auto; color:var(--muted); font-size:14px; }
 .workflow-action details a { display:block; margin:8px 0; }
+.execution-services { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:12px; align-items:start; }
+.decision-workspace .execution-service { margin:0; min-width:0; padding:16px; border:1px solid var(--border); background:var(--surface-2); overflow-wrap:anywhere; }
+.execution-service > summary { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+.execution-service > summary strong { font-size:17px; }
+.execution-receipt { border-top:1px solid var(--border); margin-top:16px; }
+.execution-receipt code { line-height:1.5; }
+.legacy-workflow > summary { padding:14px 0; }
+#execution-status { overflow-wrap:anywhere; }
+@media(max-width:650px) {
+ .execution-services { grid-template-columns:1fr; }
+ .decision-workspace { padding:20px 16px 40px; }
+ .decision-workspace dl div { grid-template-columns:1fr; gap:4px; }
+ .decision-heading { flex-wrap:wrap; }
+}
 @media (max-width:800px) {
  .workflow-counts { grid-template-columns:repeat(2,minmax(0,1fr)); }
  .workflow-plan { padding:16px; }
@@ -76,5 +90,9 @@
  .tower-navigation { padding:10px 16px; }
  #operator-session-label { width:100%; margin-left:0; order:3; }
  .decision-mode .operator-context, .decision-mode .estate-control, .decision-mode #live-alerts { display:none; }
- .decision-mode .masthead { flex-wrap:wrap; }
+ .decision-mode .masthead { grid-template-columns:minmax(0,1fr) auto; padding-inline:16px; }
+ .decision-mode .estate-boundary.claim { flex-wrap:wrap; padding-inline:16px; }
+ .decision-mode .claim p { min-width:0; flex-basis:100%; }
+ .decision-mode .claim-metadata { grid-template-columns:repeat(3,minmax(0,1fr)); max-width:100%; }
+ .decision-heading h1 { white-space:normal; }
 }

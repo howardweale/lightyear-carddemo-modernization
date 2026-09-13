@@ -4,14 +4,17 @@
 
 # LIGHTYEAR CardDemo Modernization Factory
 
-**MS #72 — Control Tower workflow, Step 1.** The headless engine
-emits a source-bound [action plan](docs/control-tower-action-plan.md) from existing
-verdicts. The Tower displays actions, parser backlog and approval proposals, and
-records authenticated human decisions. No actions execute and no claims change.
-See the [architecture, policy boundary and run instructions](docs/control-tower-workflow.md).
+**MS #72 — Control Tower workflow, Steps 1–2.** The headless engine now runs
+bounded CloudBank evidence checks across eight services, with transactional
+checkpoints, retries, deterministic receipt verification and measured completion
+within the declared scope. The Tower reads its journal and creates human decisions.
+Step 1's [action plan](docs/control-tower-action-plan.md) remains available.
 
-MS #71 is assigned to AlloyDB work. MS #72 continues with Step 2 bounded engine
-execution, using CloudBank as the test estate, and browser visual inspection fixes.
+The CloudBank lane verifies service contracts and original retained execution
+evidence; it does not rerun cloud workloads or change application verdicts.
+See the [Step 2 runbook](docs/control-tower-execution.md) and
+[architecture and policy boundary](docs/control-tower-workflow.md).
+MS #71 remains assigned to AlloyDB work.
 
 Release: **v0.70.0 — iDempiere Bounded Triage Controls and Evidence Assembly**
 

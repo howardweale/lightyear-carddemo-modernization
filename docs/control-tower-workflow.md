@@ -12,8 +12,11 @@ The signed decision service described in `ms68-control-tower-decisions.md` is re
 
 Step 1 emits actions from the existing comparison evidence, as documented below.
 Step 2 adds bounded execution in the headless engine and uses CloudBank as the
-test estate. Browser visual inspection fixes are also in scope. Step 2 remains
-in progress; the Step 1 evidence does not establish execution or convergence.
+test estate. Step 2 is implemented for service-contract and retained-execution
+integrity checks, with durable restart, bounded workers and measured completion
+within that scope. Browser inspection runs beside the app in CI. See the
+[Step 2 runbook](control-tower-execution.md). Step 1 evidence still establishes
+neither execution nor convergence; the two evidence streams stay separate.
 
 ## The boundary
 
@@ -25,9 +28,9 @@ in progress; the Step 1 evidence does not establish execution or convergence.
 | Verdicts and comparison receipts | Deterministic authority | Read |
 | Action plan and parser backlog | Emit and persist | Read, filter, inspect |
 | Human decisions | Consume independently verified decisions | Authenticated operator intent, countersigned by the service |
-| Action execution | Future engine work | No execution route |
+| Action execution | Bounded CloudBank evidence workers in Step 2 | No execution route |
 | Claim promotion | Requires a separate signed decision and evidence gate | No promotion command in this release |
-| Convergence | Future measured engine output | Snapshot preview only in Step 1 |
+| Convergence | Measured within the Step 2 evidence scope | Read verified journal; Step 1 remains a preview |
 
 The engine runs without a web server or operator session. Stopping the Tower does
 not remove the plan or its proposals. An absent plan is unavailable; a plan older
@@ -79,7 +82,9 @@ Blocked actions cannot be made autonomous. `extend-corpus` cannot lose its scope
 condition; `apply-ledger-entry` cannot lose its expiry condition. Unknown actions,
 missing locks, duplicate JSON keys, unsupported modes, invalid owners, boolean or
 out-of-range iteration caps, and removed halt conditions fail at policy parsing.
-Only `emit-only` is supported. The iteration cap is reserved; zero iterations run.
+The Step 1 policy remains `emit-only`. Step 2 uses a separate execution policy
+that can only reduce code-owned bounds and also honors this policy's autonomy
+reductions and iteration cap. Step 1 still runs zero iterations.
 
 Applying a prior human approval is distinct from creating one. The catalog
 requires a trusted signature and journal, current nonrevoked decision, exact
@@ -177,13 +182,15 @@ even resealed changes to action classes, verdicts or resolution counts.
 
 ## Remaining customer-funded work
 
-1. Execute permitted evidence actions in a headless service with budgets, scoped
-   authorization, monotonicity checks, retries and bounded iteration. Preserve
-   raw divergence and test unauthorized verdict upgrades as deliberate mutations.
+1. Extend the implemented Step 2 contract/retained-evidence lane to additional
+   specifically admitted actions and fresh customer runtime observations. The
+   bounded executor, restart, retry, monotonicity and tamper checks are delivered;
+   arbitrary commands and cloud mutations are not admitted by this lane.
 2. Bind engine proposals with exact terms and blast radius to signed decisions;
    retain reviewed-before-approved, expiry, rejection and identity checks.
-3. Emit measured convergence receipts and weekly owner-level changes. A completed
-   static result is not a claim that nothing more can be learned.
+3. Extend Step 2's measured per-run completion receipts with weekly owner-level
+   changes. A completed evidence-integrity check is not a claim that nothing
+   more can be learned about the application.
 4. Add agent drafting after the typed contracts exist. Agents may draft content,
    never select action authority, issue verdicts or approve their proposals.
 

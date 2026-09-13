@@ -222,6 +222,13 @@ class DecisionHTTPTests(unittest.TestCase):
         self.assertEqual(2, len(plan['items']))
         self.assertEqual(0, plan['execution']['actions_executed'])
         self.assertEqual(before_plan, (ROOT / 'control-tower/action-plan.snapshot.json.gz').read_bytes())
+        with urlopen(origin + '/api/workflow/execution', timeout=30) as response:
+            self.assertTrue(json.load(response)['read_only'])
+        for route in ('execution', 'run', 'resume', 'plan'):
+            request = Request(origin + '/api/workflow/' + route, data=b'{}', headers={'Content-Type': 'application/json'})
+            with self.assertRaises(HTTPError) as error:
+                urlopen(request, timeout=5)
+            self.assertEqual(404, error.exception.code)
         with self.assertRaises(HTTPError) as error: call('queue')
         self.assertEqual(401, error.exception.code)
         for bad_origin in ('https://attacker.invalid', None):

@@ -26,7 +26,7 @@ allowed traffic; all 18 owned resources were removed. AlloyDB primary failover p
 private address. Acknowledged data, idempotent replay, new business operations and all 16
 application process identities passed their checks. The failover observation content hash is
 `c1b0e5e802647a03b2359aefc4879665f8e985120aa0e375723241d1668fde01`.
-Nine of eleven operational phases have passing evidence. The application drill passed all
+Ten of eleven operational phases have passing evidence. The application drill passed all
 eight forward and return rollouts and the single-node evacuation, with exact database state
 preservation. Its subsequent concurrent failure-domain evacuation failed the existing readiness
 timeout: sixteen replacement JVMs from the two database namespaces concentrated on one 4-vCPU
@@ -36,9 +36,15 @@ retained. The cleanup retry restored all selectors, removed the probe and releas
 drill lease with no errors. Two rejected recovery eviction attempts were reconciled against
 the exact original pod UIDs; those pods recovered without an observed eviction.
 The paced failure-domain continuation passed all eight service recoveries, final evacuation,
-exact database-state comparison and scheduling restoration. Canary, business-journey cutover
-and rollback still require completed evidence, as does trace correlation.
-Qualification is still pending the remaining operational results and complete admission.
+exact database-state comparison and scheduling restoration. Canary routing, all 18 business
+journeys, mandatory rollback with exact database-state preservation, and final baseline recovery
+also passed. The completed drill observation content hash is
+`420ab1cbe37fdb56ba223a709a1be11b21d1c1043ac457e4860d4394e573dbad`.
+The continuation controller was `949c861`; its signed provenance retains the original failed
+attempt and the previously passing rollout and single-node evidence. The final read-only audit
+found two ready baseline replicas per service in both namespaces, all three nodes schedulable,
+no temporary restore clusters or canary deployments, and both persistent coordination leases
+released. Qualification is still pending fresh trace correlation and complete admission.
 
 The corrected planned-evacuation procedure uses Kubernetes
 [`drain --pod-selector`](https://kubernetes.io/docs/reference/kubectl/generated/kubectl_drain/)
@@ -60,6 +66,8 @@ shared collector reported `ResourceExhausted` and the project had a 3,000,000-sp
 Trace ingestion quota. The original logging configuration was retained and recovery completed.
 A quota increase request is prepared locally; it has not been submitted. Correlation still
 requires a fresh passing live observation after trace ingestion is available.
+Google documents that [daily quotas reset at midnight Pacific](https://docs.cloud.google.com/docs/quotas/overview).
+The campaign is waiting for that reset to retry under its existing quota.
 
 This follow-up qualifies the synthetic nonproduction AlloyDB deployment created by MS71.
 It preserves the original MS71 business-equivalence acceptance and MS67 Cloud SQL evidence.

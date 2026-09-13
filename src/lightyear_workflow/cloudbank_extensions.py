@@ -95,6 +95,8 @@ def rerun(root: Path) -> dict:
 def decision_ledger(root: Path) -> dict:
     """Exact, reviewable terms for the existing ledger's value-conservation entry."""
     ledger = read_json(root / LEDGER)
+    if content_hash(ledger) != ledger.get("content_sha256"):
+        raise ValueError("CloudBank ledger content hash changed")
     entry = next(e for e in ledger["entries"] if e["capability"] == ENTRY_ID)
     if entry != {"capability": ENTRY_ID, "classification": "normalized-equivalent", "evidence": "native-dual-lane"}:
         raise ValueError("Unsupported CloudBank ledger entry")

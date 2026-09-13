@@ -17,9 +17,11 @@ import uuid
 
 from lightyear_control_tower.decisions import DecisionService, initialize_authority
 from lightyear_data.cloudbank_publication import BUNDLE
+from lightyear_data.contracts import content_hash
 from lightyear_workflow.cloudbank import observe
 from lightyear_workflow.cloudbank_extensions import (ENTRY_ID, WORKLOAD, GRAMMAR, PREVIOUS_GRAMMAR,
-                                                    PLATFORM, extended, parse_scenarios, reparsed, rerun)
+                                                    LEDGER, PLATFORM, decision_ledger, ledger_projection,
+                                                    extended, parse_scenarios, reparsed, rerun)
 from lightyear_workflow.execution import execute, read_execution, replay
 from lightyear_workflow.ledger_gate import approval_guard, current_approval, read_events, trust_config, validate_approval, verify_application_history
 from lightyear_workflow.run_store import RunStore
@@ -115,6 +117,21 @@ class SixActionTests(unittest.TestCase):
             parse_scenarios(value, GRAMMAR)
         with self.assertRaisesRegex(ValueError, "Unregistered"):
             parse_scenarios(value, "submitted-parser")
+
+    def test_changed_ledger_body_cannot_reuse_original_receipt_binding(self):
+        path = self.root / LEDGER
+        ledger = json.loads(path.read_text())
+        self.assertTrue(ledger_projection(self.root)["raw_differences_retained"])
+        ledger["entries"] = [entry for entry in ledger["entries"]
+                             if entry["capability"] == ENTRY_ID]
+        path.write_text(json.dumps(ledger), encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "ledger content"):
+            decision_ledger(self.root)
+        self.assertEqual("mismatch", observe(self.root, "estate", "apply-ledger-entry")["outcome"])
+        ledger["content_sha256"] = content_hash(ledger)
+        path.write_text(json.dumps(ledger), encoding="utf-8")
+        with self.assertRaisesRegex(ValueError, "receipt and ledger binding"):
+            ledger_projection(self.root)
 
     def test_missing_signature_wrong_scope_actor_chain_review_and_expiry_are_rejected(self):
         self.provision()

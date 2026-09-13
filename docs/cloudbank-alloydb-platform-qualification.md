@@ -20,6 +20,14 @@ The isolated load rerun passed the same unchanged workload and limit: 5,428 requ
 zero errors, 458.91 ms aggregate p95, 300 seconds and ten users. All 207 cycles completed;
 final balances and journal effects matched. No application image, resource limit, workload,
 comparator or performance threshold was changed to obtain that result.
+The isolated network rerun passed 130 TCP checks, including two denied rounds and restored
+allowed traffic; all 18 owned resources were removed. AlloyDB primary failover passed in
+333 seconds, moving from `us-west1-c` to `us-west1-b` with the same primary identity and
+private address. Acknowledged data, idempotent replay, new business operations and all 16
+application process identities passed their checks. The failover observation content hash is
+`c1b0e5e802647a03b2359aefc4879665f8e985120aa0e375723241d1668fde01`.
+Nine of eleven operational phases have passing evidence. The rolling deployment, evacuation,
+canary and rollback phase is running; trace correlation still requires a passing rerun.
 Qualification is still pending the remaining operational results and complete admission.
 
 Run network enforcement after all restore probes and their policies are removed, and without
@@ -83,6 +91,13 @@ context and accepted MS71 receipt. `tools/cloudbank_alloydb_recovery.py` owns is
 restores; `tools/cloudbank_alloydb_platform.py` admits the final complete evidence chain. The context
 directory retains the signed platform profile, managed profile, accepted AlloyDB MS66 receipt and
 target journey. All commands require the existing nonproduction acknowledgement for live mutations.
+
+After complete admission, the platform runner's `export` action verifies the receipt again
+and copies all 19 original signed input and receipt files without changing their bytes. Its
+signed export manifest records both byte and content hashes. The public reader requires a
+reviewed, committed manifest byte hash and verifies every file plus the original MS71 binding.
+An incomplete gate cannot create an export. Export is local and does not claim a new cloud
+readback or publish a website; publication wiring awaits the completed live evidence.
 
 Windows Modern Standby interrupted early attempts. Live control and recovery entry points now hold
 a [temporary system and display execution request](https://learn.microsoft.com/en-us/windows/win32/api/winbase/nf-winbase-setthreadexecutionstate)

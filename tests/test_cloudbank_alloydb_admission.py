@@ -62,6 +62,7 @@ class AlloyDbAdmissionTests(unittest.TestCase):
 
     def test_export_preserves_original_crlf_bytes_and_rejects_source_drift(self):
         from lightyear_data.contracts import verify_signature
+        from lightyear_data import cloudbank_alloydb_publication as publication
         # Admission is tested separately; this test exercises the export boundary.
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)
@@ -71,7 +72,12 @@ class AlloyDbAdmissionTests(unittest.TestCase):
             boundaries = {phase: sign({"boundary": phase}, KEY, SIGNER) for phase in
                           ("secret-rotation", "log-correlation", "alert-drill", "network-enforcement", "sustained-load")}
             receipt = sign({"campaign_id": "test", "context": context, "ms71_receipt": ms71,
-                            "phases": phases, "managed_boundaries": boundaries}, KEY, SIGNER)
+                "phases": phases, "managed_boundaries": boundaries, "receipt_type": gate.TYPE,
+                "status": "passed-alloydb-nonproduction-platform-qualification", "scenario_count": 29,
+                "scenarios": [{"id": name, "status": "passed"} for name in gate.SCENARIOS],
+                "alloydb_platform_qualified": True, "synthetic_data_only": True, "production_ready": False,
+                "production_deployed": False, "customer_certification_complete": False,
+                "unplanned_region_failure_qualified": False}, KEY, SIGNER)
             inputs = {"context": "context.json", "ms71_receipt": "ms71.json",
                       "phases": {p: p + ".json" for p in phases},
                       "managed_boundaries": {p: p + "-boundary.json" for p in boundaries}}
@@ -82,15 +88,27 @@ class AlloyDbAdmissionTests(unittest.TestCase):
                 (root / name).write_bytes((json.dumps(value, indent=2) + "\n").replace("\n", "\r\n").encode())
             (root / "inputs.json").write_text(json.dumps(inputs))
             with patch.object(gate, "verify_receipt", return_value=receipt) as verify:
-                result = gate.export_bundle(root / "inputs.json", root / "receipt.json", root / "export", KEY)
+                bundle = Path("docs/receipts/test-export")
+                destination = root / bundle
+                result = gate.export_bundle(root / "inputs.json", root / "receipt.json", destination, KEY)
                 verify.assert_called_once_with(receipt, KEY)
                 self.assertEqual(result["file_count"], 19)
                 for phase in phases:
-                    self.assertEqual((root / "export" / (phase + ".json")).read_bytes(),
+                    self.assertEqual((destination / (phase + ".json")).read_bytes(),
                                      (root / inputs["phases"][phase]).read_bytes())
-                manifest = json.loads((root / "export/publication-export.json").read_bytes())
+                manifest = json.loads((destination / "publication-export.json").read_bytes())
                 self.assertTrue(verify_signature(manifest, KEY))
                 self.assertFalse(manifest["cloud_readback_repeated_at_export"])
+                self.assertEqual(publication.PHASE_NAMES, gate.PHASES)
+                with patch.object(publication, "load_ms71_publication", return_value={"receipt": ms71}):
+                    value = publication.load_alloydb_publication(bundle, result["export_file_sha256"], root)
+                    self.assertEqual(value["receipt"], receipt)
+                    with self.assertRaisesRegex(ValueError, "export bytes changed"):
+                        publication.load_alloydb_publication(bundle, "0" * 64, root)
+                    raw = (destination / "ha.json").read_bytes()
+                    (destination / "ha.json").write_bytes(raw + b"\n")
+                    with self.assertRaisesRegex(ValueError, "ha.json bytes changed"):
+                        publication.load_alloydb_publication(bundle, result["export_file_sha256"], root)
                 (root / "ha.json").write_text(json.dumps(sign({"phase": "changed"}, KEY, SIGNER)))
                 with self.assertRaisesRegex(JourneyFailure, "export-source-drift"):
                     gate.export_bundle(root / "inputs.json", root / "receipt.json", root / "drift-export", KEY)

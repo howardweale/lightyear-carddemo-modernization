@@ -17,12 +17,14 @@ from lightyear_data.contracts import content_hash, seal
 from .artifacts import _atomic_write
 from .cloudbank import BOUNDARY, SERVICES, action_for, build_execution_plan, observe, observed_status
 from .execution_policy import permitted
-from .policy import _unique_object
+from .policy import CATALOG, _unique_object
 from .run_store import RunStore
+from .cloudbank_extensions import KINDS, DEPENDENCIES
+from .ledger_gate import approval_guard, current_approval, validate_approval, verify_application_history
 
 RUN_PATH = Path("work/workflow/cloudbank")
 EXAMPLE_PATH = Path("control-tower/cloudbank-execution.example.json")
-FAILURES = {"worker-timeout", "worker-failed", "worker-output-limit", "interrupted"}
+FAILURES = {"worker-timeout", "worker-failed", "worker-output-limit", "interrupted", "approval-changed"}
 
 
 class WorkerFailure(ValueError):
@@ -77,7 +79,33 @@ def candidates(plan: dict, state: dict) -> list[dict]:
         action = action_for(plan, service, lane)
         if permitted(action["kind"], plan["action_policy"]) and state["attempts"].get(action["id"], 0) < plan["policy"]["max_attempts"]:
             result.append(action)
+    if all(v == "retained-evidence-verified" for v in state["services"].values()):
+        for kind in KINDS:
+            if state["extensions"][kind] != "unobserved" or not all(state["extensions"][d] == "verified" for d in DEPENDENCIES[kind]):
+                continue
+            action = action_for(plan, "estate", kind)
+            if permitted(kind, plan["action_policy"]) and state["attempts"].get(action["id"], 0) < plan["policy"]["max_attempts"]:
+                result.append(action)
     return result
+
+
+def completed(state: dict) -> bool:
+    return all(v == "retained-evidence-verified" for v in state["services"].values()) and all(v == "verified" for v in state["extensions"].values())
+
+
+def divergent(state: dict) -> bool:
+    return "divergent" in [*state["services"].values(), *state["extensions"].values()]
+
+
+def make_receipt(state: dict, action: dict, observation: dict, approval=None) -> dict:
+    before = state["extensions"][action["kind"]] if action["service"] == "estate" else state["services"][action["service"]]
+    boundary = {**BOUNDARY, "ledger_entries_applied": int(approval is not None)}
+    receipt = {"artifact_type": "lightyear-evidence-action-receipt", "action": action,
+               "attempt": state["attempts"][action["id"]], "before": before,
+               "after": observed_status(observation), "observation": observation, "boundary": boundary}
+    if approval is not None:
+        receipt["human_approval"] = approval
+    return seal(receipt)
 
 
 def _require(condition: bool, message: str):
@@ -92,7 +120,8 @@ def replay(root: Path, events: list[dict]) -> dict:
     _require(plan == build_execution_plan(root), "Execution inputs, implementation or policy changed")
     state = {"plan": plan, "services": {s: "unobserved" for s in SERVICES}, "attempts": {},
              "iterations": 0, "actions_executed": 0, "queue": [], "in_flight": None,
-             "receipts": [], "failures": [], "status": "running", "halt_reason": None}
+             "receipts": [], "failures": [], "status": "running", "halt_reason": None,
+             "extensions": {kind: "unobserved" for kind in KINDS}, "blocks": []}
     previous, last_time = None, None
     for index, event in enumerate(events):
         _require(event.get("sequence") == index + 1 and event.get("previous_sha256") == previous and event.get("content_sha256") == content_hash(event), "Execution event chain changed")
@@ -104,7 +133,7 @@ def replay(root: Path, events: list[dict]) -> dict:
             continue
         _require(state["halt_reason"] is None, "Events after terminal halt")
         kind, payload = event["type"], event["payload"]
-        if "divergent" in state["services"].values():
+        if divergent(state):
             _require(kind == "halted" and payload == {"reason": "divergent"}, "Execution continued after raw divergence")
         if kind == "round":
             _require(not state["queue"] and not state["in_flight"], "Round overlaps existing work")
@@ -124,6 +153,7 @@ def replay(root: Path, events: list[dict]) -> dict:
             state["actions_executed"] += 1
             _require(state["actions_executed"] <= plan["policy"]["max_actions"], "Action budget exceeded")
             state["in_flight"] = action
+            state["attempted_at"] = event["at"]
             state["status"] = "running"
         elif kind in {"result", "failed"}:
             action = state["in_flight"]
@@ -134,34 +164,70 @@ def replay(root: Path, events: list[dict]) -> dict:
             else:
                 observation = observe(root, action["service"], action["lane"])
                 status = observed_status(observation)
-                receipt = seal({"artifact_type": "lightyear-evidence-action-receipt", "action": action,
-                                "attempt": state["attempts"][action["id"]],
-                                "before": state["services"][action["service"]], "after": status,
-                                "observation": observation, "boundary": BOUNDARY})
+                approval = None
+                if action["kind"] == "apply-ledger-entry" and status == "verified":
+                    claimed = payload.get("human_approval", {})
+                    checked_at = datetime.fromisoformat(claimed["checked_at"])
+                    _require(datetime.fromisoformat(state["attempted_at"]) <= checked_at <= when, "Approval was not checked at application time")
+                    approval = validate_approval(root, plan["decision_trust"], claimed["events"], checked_at)
+                    _require(claimed == approval and status == "verified", "Invalid ledger application")
+                    verify_application_history(root, approval)
+                _require((when - started).total_seconds() < plan["policy"]["max_seconds"], "Result committed after run deadline")
+                receipt = make_receipt(state, action, observation, approval)
                 _require(payload == receipt, "Worker evidence or verdict transition does not match deterministic verification")
-                state["services"][action["service"]] = status
+                if action["service"] == "estate":
+                    state["extensions"][action["kind"]] = status
+                else:
+                    state["services"][action["service"]] = status
                 state["receipts"].append(receipt)
             state["queue"].pop(0)
             state["in_flight"] = None
+        elif kind == "blocked":
+            _require(not state["in_flight"] and bool(state["queue"]), "Block without pending action")
+            action = state["queue"][0]
+            _require(action["kind"] == "apply-ledger-entry" and set(payload) == {"action", "reason"} and payload["action"] == action and isinstance(payload["reason"], str), "Invalid human approval block")
+            state["extensions"][action["kind"]] = "blocked"
+            state["blocks"].append(payload)
+            state["queue"].pop(0)
         elif kind == "paused":
             _require(not state["in_flight"] and payload == {}, "Invalid pause checkpoint")
             state["status"] = "paused"
         elif kind == "halted":
             _require(set(payload) == {"reason"}, "Invalid halt receipt")
             reason = payload["reason"]
-            _require(reason in {"completed", "divergent", "budget", "no-permitted-action", "scope-boundary", "untrusted-worker"}, "Unknown halt reason")
+            _require(reason in {"completed", "divergent", "budget", "no-permitted-action", "scope-boundary", "untrusted-worker", "human-decision-required"}, "Unknown halt reason")
             if reason == "completed":
-                _require(all(v == "retained-evidence-verified" for v in state["services"].values()), "Unsupported convergence claim")
+                _require(completed(state), "Unsupported convergence claim")
             if reason == "divergent":
-                _require("divergent" in state["services"].values(), "Invented divergence")
+                _require(divergent(state), "Invented divergence")
             if reason == "no-permitted-action":
                 _require(not state["queue"] and not candidates(plan, state), "Permitted work remains")
+            if reason == "human-decision-required":
+                _require(bool(state["blocks"]), "Invented human approval block")
             state["halt_reason"] = reason
             state["status"] = "completed" if reason == "completed" else "halted"
         else:
             raise ValueError("Unknown execution event")
     state.update(journal_head_sha256=previous, last_event_at=events[-1]["at"], started_at=events[0]["at"])
     return state
+
+
+def kind_coverage(state: dict) -> list[dict]:
+    rows = []
+    for kind in ("widen-observation", "escalate-lane", *KINDS):
+        receipts = [r for r in state["receipts"] if r["action"]["kind"] == kind]
+        verified = sum(r["observation"]["outcome"] == "verified" for r in receipts)
+        status = state["extensions"].get(kind)
+        if status is None:
+            status = "divergent" if any(r["after"] == "divergent" for r in receipts) else "verified" if verified == len(SERVICES) else "pending"
+        reason = None
+        if not permitted(kind, state["plan"]["action_policy"]):
+            reason = "Human decision required by narrowed action policy"
+        elif kind in DEPENDENCIES and not all(state["extensions"][d] == "verified" for d in DEPENDENCIES[kind]):
+            reason = "Waiting for verified prerequisite actions"
+        rows.append({"kind": kind, "receipts": receipts, "executed": len(receipts), "verified": verified,
+                     "status": status, "reason": reason, "preconditions": list(CATALOG[kind].preconditions)})
+    return rows
 
 
 def summary(state: dict) -> dict:
@@ -184,11 +250,15 @@ def summary(state: dict) -> dict:
                  "halt_reason": state["halt_reason"], "plan_sha256": plan["content_sha256"],
                  "journal_head_sha256": state["journal_head_sha256"],
                  "started_at": state["started_at"], "last_event_at": state["last_event_at"],
-                 "source_run_id": plan["source_run_id"], "boundary": BOUNDARY,
+                 "source_run_id": plan["source_run_id"],
+                 "boundary": {**BOUNDARY, "ledger_entries_applied": sum(r["boundary"]["ledger_entries_applied"] for r in state["receipts"])},
+                 "action_kinds": kind_coverage(state),
+                 "blocks": state["blocks"],
                  "summary": {"services": len(SERVICES), "resolved": resolved,
                              "unresolved": len(SERVICES) - resolved,
                              "divergent": sum(v == "divergent" for v in state["services"].values()),
                              "actions_executed": state["actions_executed"], "iterations": state["iterations"],
+                             "action_kinds_supported": 6, "action_kinds_executed": len({r["action"]["kind"] for r in state["receipts"]}),
                              "worker_failures": len(state["failures"]),
                              "claims_promoted": 0, "measured": True,
                              "converged_within_scope": state["halt_reason"] == "completed",
@@ -222,10 +292,12 @@ def execute(root: Path, directory: Path, *, max_steps: int | None = None) -> dic
             plan, policy = state["plan"], state["plan"]["policy"]
             elapsed = (datetime.now(timezone.utc) - datetime.fromisoformat(state["started_at"])).total_seconds()
             reason = None
-            if "divergent" in state["services"].values():
+            if divergent(state):
                 reason = "divergent"
-            elif all(v == "retained-evidence-verified" for v in state["services"].values()):
+            elif completed(state):
                 reason = "completed"
+            elif state["blocks"]:
+                reason = "human-decision-required"
             elif elapsed >= policy["max_seconds"] or state["actions_executed"] >= policy["max_actions"]:
                 reason = "budget"
             elif not state["queue"]:
@@ -243,6 +315,11 @@ def execute(root: Path, directory: Path, *, max_steps: int | None = None) -> dic
                 store.append("round", {"actions": candidates(plan, state)})
                 continue
             action = state["queue"][0]
+            if action["kind"] == "apply-ledger-entry":
+                gate = current_approval(root)
+                if gate["status"] != "approved":
+                    store.append("blocked", {"action": action, "reason": gate["reason"]})
+                    continue
             attempt = state["attempts"].get(action["id"], 0) + 1
             store.append("attempt", {"action": action, "attempt": attempt})
             try:
@@ -268,10 +345,22 @@ def execute(root: Path, directory: Path, *, max_steps: int | None = None) -> dic
                     break
                 if (datetime.now(timezone.utc) - datetime.fromisoformat(state["started_at"])).total_seconds() >= policy["max_seconds"]:
                     raise WorkerFailure("worker-timeout")
-                status = observed_status(result)
-                store.append("result", seal({"artifact_type": "lightyear-evidence-action-receipt", "action": action,
-                    "attempt": attempt, "before": state["services"][action["service"]], "after": status,
-                    "observation": expected, "boundary": BOUNDARY}))
+                # Replay the attempt before constructing the receipt; counters are journal-owned.
+                attempted = replay(root, store.events())
+                if action["kind"] == "apply-ledger-entry" and result["outcome"] == "verified":
+                    try:
+                        with approval_guard(root) as approval:
+                            if (datetime.now(timezone.utc) - datetime.fromisoformat(state["started_at"])).total_seconds() >= policy["max_seconds"]:
+                                raise WorkerFailure("worker-timeout")
+                            store.append("result", make_receipt(attempted, action, expected, approval))
+                    except WorkerFailure:
+                        raise
+                    except (ValueError, OSError, KeyError, TypeError, sqlite3.Error, ImportError):
+                        store.append("failed", {"action_id": action["id"], "reason": "approval-changed"})
+                        store.append("halted", {"reason": "scope-boundary"})
+                        break
+                else:
+                    store.append("result", make_receipt(attempted, action, expected))
             except WorkerFailure as exc:
                 store.append("failed", {"action_id": action["id"], "reason": str(exc)})
             steps += 1
@@ -297,7 +386,7 @@ def read_execution(root: Path, directory: Path | None = None) -> dict:
         result = summary(replay(root, events))
         age = (datetime.now(timezone.utc) - datetime.fromisoformat(result["last_event_at"])).total_seconds()
         _require(age >= -60, "Execution time is in the future")
-        return {**result, "read_only": True, "source": source,
+        return {**result, "read_only": True, "source": source, "current_ledger_approval": current_approval(root),
                 "activity": "historical" if source == "recorded-example" or result["status"] != "running" else ("recent-engine-activity" if age < 45 else "interrupted-or-unobserved"),
                 "age_seconds": max(0, int(age))}
     except (ValueError, OSError, KeyError, TypeError, sqlite3.Error) as exc:
@@ -325,8 +414,8 @@ def main(argv=None) -> int:
                 _require(bool(events), "Export requires the original engine journal")
                 output = args.output if args.output.is_absolute() else root / args.output
                 _atomic_write(output, (json.dumps({"events": events}, sort_keys=True, indent=2) + "\n").encode())
-        print(json.dumps({k: v for k, v in result.items() if k not in {"items", "failures"}}, indent=2))
-        return 0 if result["status"] in {"completed", "paused"} else 1
+        print(json.dumps({k: v for k, v in result.items() if k not in {"items", "failures", "action_kinds"}}, indent=2))
+        return 0 if args.command == "export" or result["status"] in {"completed", "paused"} else 1
     except (ValueError, OSError, sqlite3.Error) as exc:
         print(json.dumps({"status": "failed", "reason": str(exc)}))
         return 1

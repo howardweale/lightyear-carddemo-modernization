@@ -38,15 +38,16 @@ class CloudBankWorkflowTests(unittest.TestCase):
         value.update(changes)
         path.write_text(json.dumps(value))
 
-    def test_real_workers_complete_two_lanes_and_resume_without_repeating(self):
+    def test_real_workers_complete_five_kinds_and_gate_sixth_after_resume(self):
         first = execute(self.root, self.directory, max_steps=3)
         self.assertEqual("paused", first["status"])
         self.assertEqual(3, first["summary"]["actions_executed"])
         result = execute(self.root, self.directory)
-        self.assertEqual("completed", result["status"])
+        self.assertEqual("human-decision-required", result["halt_reason"])
         self.assertEqual(8, result["summary"]["resolved"])
-        self.assertEqual(16, result["summary"]["actions_executed"])
-        self.assertEqual(2, result["summary"]["iterations"])
+        self.assertEqual(19, result["summary"]["actions_executed"])
+        self.assertEqual(5, result["summary"]["action_kinds_executed"])
+        self.assertEqual(6, result["summary"]["iterations"])
         events = RunStore(self.directory, read_only=True).events()
         self.assertEqual(result, execute(self.root, self.directory))
         self.assertEqual(events, RunStore(self.directory, read_only=True).events())
@@ -62,7 +63,7 @@ class CloudBankWorkflowTests(unittest.TestCase):
         store.close()
         with patch("lightyear_workflow.execution.run_worker", side_effect=lambda root, action, *_: observe(root, action["service"], action["lane"])):
             result = execute(self.root, self.directory)
-        self.assertEqual(17, result["summary"]["actions_executed"])
+        self.assertEqual(20, result["summary"]["actions_executed"])
         self.assertEqual(1, result["summary"]["worker_failures"])
         self.assertEqual("interrupted", result["failures"][0]["reason"])
         self.assertEqual(8, result["summary"]["resolved"])

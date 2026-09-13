@@ -93,7 +93,7 @@
     detailField(evidence, 'Ledger review date', item.rule.review_after);
     container.append(evidence);
     const binding = node('details'); binding.append(node('summary', 'Evidence binding'));
-    binding.append(node('p', 'spec/comparison-normalizations.json'), node('code', `Entry ${item.entry_sha256}`), node('code', `Ledger ${item.ledger_sha256}`)); container.append(binding);
+    binding.append(node('p', item.ledger_path || 'spec/comparison-normalizations.json'), node('code', `Entry ${item.entry_sha256}`), node('code', `Ledger ${item.ledger_sha256}`)); binding.append(node('pre', JSON.stringify(item.rule, null, 2))); container.append(binding);
     if (item.latest_decision) container.append(decisionTrace(item.latest_decision, item.status));
     const form = node('form', undefined, 'normalization-form');
     form.append(node('h3', item.latest_decision ? 'Record a new decision' : 'Own the decision'));

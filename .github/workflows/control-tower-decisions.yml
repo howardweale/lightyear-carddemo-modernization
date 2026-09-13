@@ -30,6 +30,7 @@ jobs:
           python -m unittest discover -s tests -p test_control_tower_decisions.py -v
           python -m unittest discover -s tests -p test_evidence_action_plan.py -v
           python -m unittest discover -s tests -p test_cloudbank_workflow_execution.py -v
+          python -m unittest discover -s tests -p test_cloudbank_six_actions.py -v
           python -m unittest discover -s tests -p test_graph_explorer.py -v
           python -m unittest discover -s tests -p test_live_control_tower.py -v
           python -m unittest discover -s tests -p test_comparator_escape.py -v

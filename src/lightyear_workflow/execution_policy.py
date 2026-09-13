@@ -11,8 +11,8 @@ POLICY_PATH = Path("control-tower/execution-policy.json")
 
 def default_execution_policy() -> dict:
     return {
-        "schema_version": "1.0", "adapter": "cloudbank-retained-evidence-v1",
-        "scope": "service-contract-and-retained-execution-integrity",
+        "schema_version": "1.0", "adapter": "cloudbank-evidence-actions-v2",
+        "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
         "max_iterations": 8, "max_actions": 32, "max_attempts": 2,
         "max_seconds": 300, "action_timeout_seconds": 15,
         "max_input_bytes": 16777216, "max_output_bytes": 65536,

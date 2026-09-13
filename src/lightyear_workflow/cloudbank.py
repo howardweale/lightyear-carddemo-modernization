@@ -15,6 +15,8 @@ from lightyear_data.contracts import content_hash, seal
 from lightyear_data.cloudbank_publication import BUNDLE, RUN_ID, load_publication
 from .execution_policy import load_execution_policy
 from .policy import load_policy
+from .cloudbank_extensions import KINDS, observe_extension, GRAMMAR, PREVIOUS_GRAMMAR
+from .ledger_gate import trust_config
 
 SERVICES = MappingProxyType({
     "account": "cloudbank_transaction_core",
@@ -71,21 +73,25 @@ def build_execution_plan(root: Path) -> dict:
         "estate": "CloudBank", "services": list(SERVICES), "lanes": list(LANES),
         "scope": policy["scope"], "policy": policy, "action_policy": action_policy,
         "inputs": inputs, "boundary": BOUNDARY,
-        "source_run_id": RUN_ID,
+        "source_run_id": RUN_ID, "extension_kinds": list(KINDS),
+        "grammar": GRAMMAR, "previous_grammar": PREVIOUS_GRAMMAR,
+        "decision_trust": trust_config(root),
     })
 
 
 def action_for(plan: dict, service: str, lane: str) -> dict:
-    if service not in SERVICES or lane not in LANES:
+    if not ((service in SERVICES and lane in LANES) or (service == "estate" and lane in KINDS)):
         raise ValueError("Unregistered service or observation lane")
     action = {"service": service, "lane": lane,
-              "kind": "widen-observation" if lane == "contract" else "escalate-lane",
+              "kind": lane if service == "estate" else "widen-observation" if lane == "contract" else "escalate-lane",
               "plan_sha256": plan["content_sha256"], "scope": plan["scope"]}
     return {**action, "id": content_hash(action)}
 
 
 def observe(root: Path, service: str, lane: str) -> dict:
     """Deterministic observation only; the controller owns status transitions."""
+    if service == "estate":
+        return observe_extension(root, lane)
     if service not in SERVICES or lane not in LANES:
         raise ValueError("Unregistered service or lane")
     errors, evidence = [], []
@@ -122,4 +128,6 @@ def observed_status(observation: dict) -> str:
         return "unavailable"
     if observation["outcome"] == "mismatch":
         return "divergent"
+    if observation["service"] == "estate":
+        return "verified"
     return "contract-verified" if observation["lane"] == "contract" else "retained-evidence-verified"

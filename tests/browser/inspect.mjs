@@ -88,7 +88,7 @@ try {
             actions_completed: completedActions, awaiting_human: observedExecution.blocks.length,
             blocked_access: 0, blocked_internal: 0 }], storage: null,
         } }));
-        await page.reload({ waitUntil: 'domcontentloaded' });
+        await page.evaluate(() => window.LightyearConvergence.reload());
         await page.locator('#convergence .convergence-table').waitFor();
         assert.match(await page.locator('#convergence').innerText(), /Completed actions/);
         assert.match(await page.locator('#convergence').innerText(), /not distinct resolved findings/);
@@ -96,7 +96,7 @@ try {
         assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1), false);
         await page.unroute('**/api/workflow/convergence');
         await page.route('**/api/workflow/convergence', (route) => route.fulfill({ json: { weeks: [], reason: 'invalid-run-index' } }));
-        await page.reload({ waitUntil: 'domcontentloaded' });
+        await page.evaluate(() => window.LightyearConvergence.reload());
         await page.locator('#convergence').getByText('Run history is unavailable.', { exact: false }).waitFor();
         assert.equal(await page.locator('#convergence .convergence-card').count(), 0);
         await assert.rejects(readFile(resolve(root, 'control-tower/run-index.sqlite3')), { code: 'ENOENT' });

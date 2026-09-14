@@ -93,6 +93,8 @@ or policy decisions.
 
 [MS73 — Run history and action activity](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-73/MS-73.md) (Markdown; engine recording remains MS74).
 
+[MS75 — Four-panel workspace](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-75/MS-75.md) (Markdown).
+
 
 ## Build and verification
 

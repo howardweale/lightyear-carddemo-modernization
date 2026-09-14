@@ -40,6 +40,7 @@ jobs:
           node --check knowledge/viewer/workflow.js
           node --check knowledge/viewer/execution.js
           node --check knowledge/viewer/convergence.js
+          node --check knowledge/viewer/run.js
           python -m lightyear_workflow verify --output control-tower/action-plan.snapshot.json.gz
   browser-inspection:
     runs-on: ubuntu-latest

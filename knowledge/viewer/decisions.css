@@ -5,7 +5,7 @@
 .tower-navigation button[aria-pressed="true"] { background:var(--ink); color:var(--surface); border-color:var(--ink); }
 #operator-session-label { margin-left:auto; color:var(--muted); font-size:14px; }
 #decision-count:not(:empty) { display:inline-block; padding:0 6px; margin-left:5px; border-radius:3px; background:var(--accent); color:white; }
-.decision-mode { min-width:0; }
+.decision-mode, .report-mode { min-width:0; }
 .decision-workspace { max-width:1440px; margin:auto; padding:28px 32px 60px; font-size:16px; line-height:1.5; }
 .decision-heading { display:flex; justify-content:space-between; align-items:center; gap:20px; }
 .decision-heading h1 { font-size:32px; line-height:1.2; margin:0; }
@@ -89,10 +89,10 @@
  .decision-workspace dl div { grid-template-columns:1fr; gap:3px; }
  .tower-navigation { padding:10px 16px; }
  #operator-session-label { width:100%; margin-left:0; order:3; }
- .decision-mode .operator-context, .decision-mode .estate-control, .decision-mode #live-alerts { display:none; }
- .decision-mode .masthead { grid-template-columns:minmax(0,1fr) auto; padding-inline:16px; }
- .decision-mode .estate-boundary.claim { flex-wrap:wrap; padding-inline:16px; }
- .decision-mode .claim p { min-width:0; flex-basis:100%; }
- .decision-mode .claim-metadata { grid-template-columns:repeat(3,minmax(0,1fr)); max-width:100%; }
+ :is(.decision-mode, .report-mode) .operator-context, :is(.decision-mode, .report-mode) .estate-control, :is(.decision-mode, .report-mode) #live-alerts { display:none; }
+ :is(.decision-mode, .report-mode) .masthead { grid-template-columns:minmax(0,1fr) auto; padding-inline:16px; }
+ :is(.decision-mode, .report-mode) .estate-boundary.claim { flex-wrap:wrap; padding-inline:16px; }
+ :is(.decision-mode, .report-mode) .claim p { min-width:0; flex-basis:100%; }
+ :is(.decision-mode, .report-mode) .claim-metadata { grid-template-columns:repeat(3,minmax(0,1fr)); max-width:100%; }
  .decision-heading h1 { white-space:normal; }
 }

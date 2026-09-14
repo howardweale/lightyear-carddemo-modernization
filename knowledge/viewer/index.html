@@ -6,6 +6,7 @@
   <title>LIGHTYEAR Control Tower</title>
   <link rel="stylesheet" href="styles.css?v=48.4">
   <link rel="stylesheet" href="decisions.css?v=workflow.2">
+  <link rel="stylesheet" href="convergence.css?v=73.1">
 </head>
 <body>
   <header class="masthead topbar">
@@ -102,6 +103,10 @@
       <div id="execution-actions" class="execution-actions" aria-label="Action kind coverage"></div>
       <div id="execution-services" class="execution-services"></div>
       <details id="execution-provenance"><summary>Run provenance and limits</summary><dl id="execution-details"></dl></details>
+    </section>
+    <section class="workflow-plan workflow-convergence" aria-label="Convergence across runs">
+      <h2>Run history</h2>
+      <div id="convergence" role="status" aria-live="polite"></div>
     </section>
     <details class="legacy-workflow"><summary>Oracle Customer (Large) · Step 1 action plan</summary>
     <section class="workflow-plan" aria-label="Engine action plan">
@@ -708,5 +713,6 @@
       <div class="dialog-actions"><button id="cancel-operator" class="secondary-button" type="button">Cancel</button><button class="primary-button" type="submit">Start session</button></div>
     </form>
   </dialog>
+  <script src="convergence.js?v=73.1" defer></script>
 </body>
 </html>

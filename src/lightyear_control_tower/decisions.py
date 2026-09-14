@@ -159,7 +159,7 @@ class DecisionService:
     def _acquire_writer_lock(self):
         stream = open(self.database.with_suffix(".lock"), "a+b")
         stream.seek(0)
-        if stream.read(1) == b"":
+        if os.fstat(stream.fileno()).st_size == 0:
             stream.write(b"0")
             stream.flush()
         stream.seek(0)

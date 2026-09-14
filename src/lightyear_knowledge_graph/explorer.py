@@ -21,6 +21,7 @@ from lightyear_control_tower.decisions import DecisionService, DecisionConflict,
 from lightyear_data.cloudbank_publication import load_publication, workload_publication
 from lightyear_workflow.artifacts import read_snapshot, project_snapshot
 from lightyear_workflow.execution import read_execution
+from lightyear_workflow.convergence import read_convergence
 
 from .chat import ChatError, GraphChatService
 from .evidence_pack import EvidenceStore, load_evidence_pack, validate_evidence_pack
@@ -1571,6 +1572,10 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
                 kind=self._value(query, "kind"), action_class=self._value(query, "class"),
                 entity_id=self._value(query, "entity_id"),
                 offset=int(self._value(query, "offset") or 0), limit=int(self._value(query, "limit") or 50)))
+            return
+        if path == "/api/workflow/convergence":
+            self._json(read_convergence(self.server.project_root,
+                estate=self._value(query, "estate"), weeks=self._integer(query, "weeks", 12)))
             return
         self.server.refresh_live_projections()
         index = self.server.index

@@ -29,6 +29,7 @@ jobs:
         run: |
           python -m unittest discover -s tests -p test_control_tower_decisions.py -v
           python -m unittest discover -s tests -p test_evidence_action_plan.py -v
+          python -m unittest discover -s tests -p test_run_index.py -v
           python -m unittest discover -s tests -p test_cloudbank_workflow_execution.py -v
           python -m unittest discover -s tests -p test_cloudbank_six_actions.py -v
           python -m unittest discover -s tests -p test_graph_explorer.py -v
@@ -38,6 +39,7 @@ jobs:
           node --check knowledge/viewer/decisions.js
           node --check knowledge/viewer/workflow.js
           node --check knowledge/viewer/execution.js
+          node --check knowledge/viewer/convergence.js
           python -m lightyear_workflow verify --output control-tower/action-plan.snapshot.json.gz
   browser-inspection:
     runs-on: ubuntu-latest

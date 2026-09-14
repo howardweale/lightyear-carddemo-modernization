@@ -25,6 +25,12 @@ class MilestoneDocumentationTests(unittest.TestCase):
     def test_manifest_is_complete_and_content_addressed(self) -> None:
         manifest = json.loads((DOC_ROOT / "manifest.json").read_text(encoding="utf-8"))
         self.assertEqual(manifest["schema_version"], "1.1")
+        supplemental = manifest["supplemental_artifacts"]
+        self.assertEqual([a["path"] for a in supplemental], ["docs/milestones/MS-73/MS-73.md"])
+        for artifact in supplemental:
+            data = (ROOT / artifact["path"]).read_bytes()
+            self.assertEqual(len(data), artifact["bytes"])
+            self.assertEqual(hashlib.sha256(data).hexdigest(), artifact["sha256"])
         self.assertEqual(manifest["milestone_count"], 70)
         self.assertEqual(manifest["artifact_count"], 210)
         self.assertEqual(set(manifest["formats"]), {"md", "docx", "pdf"})
@@ -51,7 +57,7 @@ class MilestoneDocumentationTests(unittest.TestCase):
         readme = (DOC_ROOT / "README.md").read_text(encoding="utf-8")
         page = (DOC_ROOT / "index.html").read_text(encoding="utf-8")
         self.assertIn("Open the searchable milestone index", readme)
-        self.assertEqual(readme.count("https://github.com/"), 141)
+        self.assertEqual(readme.count("https://github.com/"), 142)
         self.assertEqual(readme.count("https://raw.githubusercontent.com/"), 70)
         self.assertNotRegex(readme, r"\]\(MS-\d{2}/")
         self.assertEqual(page.count('class="milestone"'), 70)

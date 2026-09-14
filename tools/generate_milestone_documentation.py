@@ -34,6 +34,7 @@ PAGES_INDEX = f"https://howardweale.github.io/{REPOSITORY.split('/', 1)[1]}/mile
 FIXED_TIME = datetime(2026, 8, 31, 12, 0, 0, tzinfo=timezone.utc)
 EXPECTED_MILESTONES = tuple(range(1, 71))
 EXPECTED_ARTIFACTS = len(EXPECTED_MILESTONES) * 3
+SUPPLEMENTAL_MARKDOWN = ("MS-73/MS-73.md",)
 BOUNDARY_TERMS = (
     "remain false", "remains false", "remain blocked", "remains blocked",
     "unclaimed", "not claim", "does not", "no customer", "non-production",
@@ -515,7 +516,7 @@ def build_pdf(model: dict[str, Any], audience: str, output: Path) -> None:
 
 def source_sha256() -> str:
     digest = hashlib.sha256()
-    for path in (Path(__file__).resolve(), CATALOG_PATH, CHANGELOG_PATH, BRAND_ROOT / "tokens.json", BRAND_LOGO_SVG, BRAND_LOGO_PNG):
+    for path in (Path(__file__).resolve(), CATALOG_PATH, CHANGELOG_PATH, BRAND_ROOT / "tokens.json", BRAND_LOGO_SVG, BRAND_LOGO_PNG, *(DOC_ROOT / p for p in SUPPLEMENTAL_MARKDOWN)):
         digest.update(path.relative_to(ROOT).as_posix().encode()); digest.update(b"\0")
         digest.update(path.read_bytes()); digest.update(b"\0")
     return digest.hexdigest()
@@ -544,6 +545,7 @@ def write_markdown_index(models: list[dict[str, Any]]) -> None:
     for model in models:
         markdown, word, pdf = format_links(model)
         lines.append(f"| MS #{model['number']:02d} | {model['title']} | {model['status']} | [Markdown]({markdown}) - [Download Word]({word}) - [PDF]({pdf}) |")
+    lines.extend(["", "## Additional implementation records", "", "[MS73 — Run history and action activity](" + github_blob("docs/milestones/MS-73/MS-73.md") + ") (Markdown; engine recording remains MS74).", ""])
     lines.extend(["", "## Build and verification", "", "```bash", "./milestone-documentation.sh verify", "./milestone-documentation.sh build", "```", "", "Windows:", "", "```powershell", ".\\milestone-documentation.ps1 verify", ".\\milestone-documentation.ps1 build", "```", "", "`verify` uses only the Python standard library. `build` requires the `docs` optional dependency set.", "", f"The content-addressed [manifest]({github_blob('docs/milestones/manifest.json')}) fails verification if a canonical source changes, an artifact is missing or modified, or an untracked milestone artifact appears.", ""])
     (DOC_ROOT / "README.md").write_text("\n".join(lines), encoding="utf-8")
 
@@ -650,6 +652,10 @@ def write_html_index(models: list[dict[str, Any]]) -> None:
       </tbody></table>
       <p id="empty">No milestones match those filters. Clear the search or select another phase.</p>
     </section>
+    <section aria-label="Additional implementation records">
+      <h2>Additional implementation records</h2>
+      <p><a href="{github_blob('docs/milestones/MS-73/MS-73.md')}">MS73 — Run history and action activity</a> (Markdown; engine recording remains MS74).</p>
+    </section>
   </main>
   <footer>These briefs package committed repository evidence. Underlying receipts, ledgers, gates, tests, and policy decisions remain authoritative.</footer>
   <script>
@@ -698,10 +704,10 @@ def build() -> None:
     catalog, releases = load_catalog(), parse_changelog()
     titles = {entry["number"]: entry["title"] for entry in catalog["milestones"]}
     models = [build_model(entry, releases, titles) for entry in catalog["milestones"]]
-    expected = {f"MS-{number:02d}" for number in EXPECTED_MILESTONES}
+    expected = {f"MS-{number:02d}" for number in EXPECTED_MILESTONES} | {Path(p).parent.name for p in SUPPLEMENTAL_MARKDOWN}
     for path in DOC_ROOT.glob("MS-*"):
         if path.is_dir() and path.name not in expected:
-            shutil.rmtree(path)
+            raise ValueError(f"Undeclared milestone directory: {path.name}")
     for model in models:
         stem = f"MS-{model['number']:02d}"; directory = DOC_ROOT / stem
         directory.mkdir(parents=True, exist_ok=True)
@@ -735,9 +741,15 @@ def build() -> None:
     library_files = []
     for path in (DOC_ROOT / "README.md", DOC_ROOT / "index.html", DOC_ROOT / "assets" / "lightyear-reversed.svg"):
         library_files.append({"path": path.relative_to(ROOT).as_posix(), "bytes": path.stat().st_size, "sha256": sha256_path(path)})
-    manifest = {"schema_version": "1.1", "generator_version": GENERATOR_VERSION, "source_sha256": source_sha256(), "milestone_count": len(EXPECTED_MILESTONES), "artifact_count": EXPECTED_ARTIFACTS, "formats": ["md", "docx", "pdf"], "artifacts": artifacts, "library_files": library_files}
+    manifest = {"schema_version": "1.1", "generator_version": GENERATOR_VERSION, "source_sha256": source_sha256(), "milestone_count": len(EXPECTED_MILESTONES), "artifact_count": EXPECTED_ARTIFACTS, "formats": ["md", "docx", "pdf"], "artifacts": artifacts, "library_files": library_files, "supplemental_artifacts": supplemental_artifacts()}
     MANIFEST_PATH.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(json.dumps({"status": "built", "milestones": len(EXPECTED_MILESTONES), "artifacts": EXPECTED_ARTIFACTS}, sort_keys=True))
+
+
+def supplemental_artifacts() -> list[dict]:
+    return [{"path": (DOC_ROOT / p).relative_to(ROOT).as_posix(),
+             "bytes": (DOC_ROOT / p).stat().st_size, "sha256": sha256_path(DOC_ROOT / p)}
+            for p in SUPPLEMENTAL_MARKDOWN]
 
 
 def verify() -> None:
@@ -747,7 +759,9 @@ def verify() -> None:
     if manifest.get("milestone_count") != len(EXPECTED_MILESTONES): errors.append(f"manifest milestone count is not {len(EXPECTED_MILESTONES)}")
     if manifest.get("artifact_count") != EXPECTED_ARTIFACTS: errors.append(f"manifest artifact count is not {EXPECTED_ARTIFACTS}")
     declared = set()
-    for artifact in manifest.get("artifacts", []):
+    if manifest.get("supplemental_artifacts") != supplemental_artifacts():
+        errors.append("supplemental implementation records changed or are missing")
+    for artifact in [*manifest.get("artifacts", []), *manifest.get("supplemental_artifacts", [])]:
         relative = artifact["path"]; declared.add(relative); path = ROOT / relative
         if not path.is_file(): errors.append(f"missing artifact: {relative}"); continue
         if path.stat().st_size != artifact["bytes"]: errors.append(f"size mismatch: {relative}")

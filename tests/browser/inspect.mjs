@@ -36,6 +36,8 @@ try {
     await new Promise((r) => setTimeout(r, 200));
   }
   assert(ready, 'Control Tower did not become ready');
+  const observedExecution = await (await fetch(base + '/api/workflow/execution')).json();
+  assert.equal(observedExecution.source, 'engine-journal');
   for (const [name, driver] of [['chromium', chromium], ['webkit', webkit]]) {
     const browser = await driver.launch({ headless: true });
     try {
@@ -46,6 +48,8 @@ try {
         page.on('request', (request) => { if (request.url().includes('/api/workflow/') && request.method() !== 'GET') writes.push(request.method()); });
         await page.goto(base, { waitUntil: 'domcontentloaded' });
         await page.waitForFunction(() => document.getElementById('execution-status').textContent.includes('Human decision required'), undefined, { timeout: 30000 });
+        await page.locator('#convergence').getByText('No completed runs recorded yet.', { exact: false }).waitFor();
+        assert.equal((await (await fetch(base + '/api/workflow/convergence')).json()).reason, 'no-runs-recorded');
         assert.equal(await page.locator('.execution-service').count(), 8);
         assert.equal(await page.locator('.execution-action').count(), 6);
         assert.equal(await page.locator('.execution-service .decision-badge.approved').count(), 8);
@@ -77,6 +81,25 @@ try {
         assert.equal(await page.locator('#execution-provenance').isVisible(), false);
         assert.equal(await page.locator('.execution-action').count(), 0);
         await page.screenshot({ path: resolve(output, `${name}-${layout}-invalid.png`), fullPage: true });
+        // Test-only response derived from this test's engine run; never persist an index.
+        const completedActions = observedExecution.action_kinds.reduce((sum, kind) => sum + kind.executed, 0);
+        await page.route('**/api/workflow/convergence', (route) => route.fulfill({ json: {
+          metric_unit: 'action-events', weeks: [{ week: 'test-journal', runs: 1,
+            actions_completed: completedActions, awaiting_human: observedExecution.blocks.length,
+            blocked_access: 0, blocked_internal: 0 }], storage: null,
+        } }));
+        await page.evaluate(() => window.LightyearConvergence.reload());
+        await page.locator('#convergence .convergence-table').waitFor();
+        assert.match(await page.locator('#convergence').innerText(), /Completed actions/);
+        assert.match(await page.locator('#convergence').innerText(), /not distinct resolved findings/);
+        assert.equal(await page.locator('#convergence .convergence-card').first().locator('.convergence-figure').innerText(), String(completedActions));
+        assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1), false);
+        await page.unroute('**/api/workflow/convergence');
+        await page.route('**/api/workflow/convergence', (route) => route.fulfill({ json: { weeks: [], reason: 'invalid-run-index' } }));
+        await page.evaluate(() => window.LightyearConvergence.reload());
+        await page.locator('#convergence').getByText('Run history is unavailable.', { exact: false }).waitFor();
+        assert.equal(await page.locator('#convergence .convergence-card').count(), 0);
+        await assert.rejects(readFile(resolve(root, 'control-tower/run-index.sqlite3')), { code: 'ENOENT' });
         assert.deepEqual(writes, []);
         assert.deepEqual(errors, []);
         observations.push({ browser: name, layout, services: 8, action_kinds: 6, executed_kinds: 5, human_approval_gated: true, logo_loaded: true, receipt_column_readable: true, horizontal_overflow: false, filter_and_invalid_state: 'passed', workflow_writes: 0, javascript_errors: [] });

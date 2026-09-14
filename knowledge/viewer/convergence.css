@@ -1,0 +1,49 @@
+/* Convergence view. Scoped to #convergence so nothing leaks into the explorer. */
+#convergence .convergence-headline{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-bottom:18px}
+#convergence .convergence-card{background:var(--surface,#fff);border:1px solid var(--border,#E0D9CE);
+  border-radius:10px;padding:16px 18px}
+#convergence .convergence-figure{font-size:28px;font-weight:700;letter-spacing:-.02em;line-height:1}
+#convergence .convergence-label{font-size:12.5px;color:var(--muted,#5A5248);margin-top:6px}
+#convergence .convergence-delta{font-size:12px;color:var(--muted,#5A5248);margin-top:2px}
+#convergence .tone-ok .convergence-figure{color:#2F6B3F}
+#convergence .tone-ask .convergence-figure{color:#8A6B12}
+#convergence .tone-no .convergence-figure{color:#B03A28}
+#convergence .tone-flat .convergence-figure{color:var(--ink,#181513)}
+#convergence .convergence-spark{display:flex;gap:3px;align-items:flex-end;height:34px;margin-top:12px}
+#convergence .convergence-spark i{flex:1;border-radius:2px 2px 0 0;background:currentColor;opacity:.75;display:block}
+#convergence .tone-ok .convergence-spark{color:#2F6B3F}
+#convergence .tone-ask .convergence-spark{color:#C9A227}
+#convergence .tone-no .convergence-spark{color:#B03A28}
+#convergence .tone-flat .convergence-spark{color:#8A8074}
+#convergence .convergence-table{width:100%;border-collapse:collapse;font-size:13.5px;margin-bottom:14px}
+#convergence .convergence-table th{text-align:left;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted,#8A8074);padding:8px 10px;border-bottom:1px solid var(--border,#E0D9CE)}
+#convergence .convergence-table td{padding:9px 10px;border-bottom:1px solid var(--sunken,#F2EEE7)}
+#convergence .convergence-table td.right,#convergence .convergence-table th:not(:first-child){text-align:right}
+#convergence .convergence-table td.tone-ok{color:#2F6B3F}
+#convergence .convergence-table td.tone-ask{color:#8A6B12}
+#convergence .convergence-table td.tone-no{color:#B03A28}
+#convergence .convergence-table td:last-child{width:32%;min-width:150px}
+#convergence .convergence-bar{height:9px;border-radius:5px;background:var(--sunken,#F2EEE7);display:flex;overflow:hidden}
+#convergence .convergence-bar i{display:block;height:100%}
+#convergence .convergence-bar i.tone-ok{background:#2F6B3F}
+#convergence .convergence-bar i.tone-ask{background:#C9A227}
+#convergence .convergence-bar i.tone-flat{background:#8A8074}
+#convergence .convergence-bar i.tone-no{background:#B03A28}
+#convergence .convergence-note{font-size:13px;color:var(--muted,#5A5248);margin:10px 0 0;max-width:72ch}
+#convergence .convergence-eyebrow{font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;
+  color:#B4531F;font-weight:600;margin-bottom:8px}
+#convergence .convergence-storage{margin-top:20px;padding:16px 18px;background:var(--sunken,#F2EEE7);border-radius:10px}
+#convergence .convergence-storage dl{display:flex;flex-wrap:wrap;gap:22px 34px;margin:0}
+#convergence .convergence-storage div{min-width:120px}
+#convergence .convergence-storage dt{font-size:11.5px;color:var(--muted,#5A5248)}
+#convergence .convergence-storage dd{margin:2px 0 0;font-size:14px;color:var(--ink,#181513)}
+@media (max-width:900px){
+  #convergence .convergence-headline{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #convergence .convergence-storage dl{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+
+#convergence{min-width:0}
+#convergence .convergence-table-scroll{max-width:100%;overflow-x:auto}
+#convergence .convergence-table{min-width:660px}
+#convergence .convergence-card{min-width:0;overflow-wrap:anywhere}

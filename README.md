@@ -4,6 +4,11 @@
 
 # LIGHTYEAR CardDemo Modernization Factory
 
+**[MS #73 — Run history and action activity](docs/milestones/MS-73/MS-73.md)** adds
+a permanent run index, guarded journal retention and a read-only history view.
+No engine recording is wired yet; the view correctly reports no runs. Pattern
+reach remains separate from signing and semantic equivalence.
+
 **MS #72 — Control Tower workflow, Steps 1–2.** The headless engine now runs
 all six autonomous action kinds over CloudBank evidence, with transactional
 checkpoints, retries, deterministic receipt verification and measured completion

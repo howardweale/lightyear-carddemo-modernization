@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased — MS #73 Run history and action activity
+
+- Add a permanent run index and operator-invoked 396-day journal retention with
+  path containment, identity and content checks; preserve hashes and prune dates.
+- Add a read-only activity endpoint/view; never initialize an index from a GET.
+- Label completed actions separately from resolved findings and semantic progress.
+- Reject incompatible comparison registers as unmeasured; leave planner/signing
+  integration and engine halt-path recording for later milestones.
+- Add adversarial regressions and a declared MS73 Markdown implementation record.
+- Fix the existing Windows decision-lock size check so a second writer is rejected
+  through the intended error path without reading another process's locked byte.
+
 ## Unreleased — MS #72 Control Tower workflow
 
 - Assign the Control Tower workflow to MS #72; MS #71 is assigned to AlloyDB work.

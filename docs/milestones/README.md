@@ -89,6 +89,11 @@ or policy decisions.
 | MS #69 | iDempiere Deterministic Semantic Comparison | Complete bounded baseline with open semantic findings | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-69/MS-69.md) - [Download Word](https://raw.githubusercontent.com/howardweale/lightyear-carddemo-modernization/main/docs/milestones/MS-69/MS-69.docx) - [PDF](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-69/MS-69.pdf) |
 | MS #70 | iDempiere Bounded Triage and Evidence Assembly | Complete bounded safe-floor package; live model run remains gated | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-70/MS-70.md) - [Download Word](https://raw.githubusercontent.com/howardweale/lightyear-carddemo-modernization/main/docs/milestones/MS-70/MS-70.docx) - [PDF](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-70/MS-70.pdf) |
 
+## Additional implementation records
+
+[MS73 — Run history and action activity](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-73/MS-73.md) (Markdown; engine recording remains MS74).
+
+
 ## Build and verification
 
 ```bash

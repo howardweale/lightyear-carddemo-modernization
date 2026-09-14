@@ -20,3 +20,6 @@ tests/browser/node_modules/
 .vscode/
 .DS_Store
 Thumbs.db
+
+# Engine-owned local history is never a committed measurement fixture.
+control-tower/run-index.sqlite3*

@@ -36,6 +36,8 @@ try {
     await new Promise((r) => setTimeout(r, 200));
   }
   assert(ready, 'Control Tower did not become ready');
+  const observedExecution = await (await fetch(base + '/api/workflow/execution')).json();
+  assert.equal(observedExecution.source, 'engine-journal');
   for (const [name, driver] of [['chromium', chromium], ['webkit', webkit]]) {
     const browser = await driver.launch({ headless: true });
     try {
@@ -80,10 +82,10 @@ try {
         assert.equal(await page.locator('.execution-action').count(), 0);
         await page.screenshot({ path: resolve(output, `${name}-${layout}-invalid.png`), fullPage: true });
         // Test-only response derived from this test's engine run; never persist an index.
-        const completedActions = execution.action_kinds.reduce((sum, kind) => sum + kind.executed, 0);
+        const completedActions = observedExecution.action_kinds.reduce((sum, kind) => sum + kind.executed, 0);
         await page.route('**/api/workflow/convergence', (route) => route.fulfill({ json: {
           metric_unit: 'action-events', weeks: [{ week: 'test-journal', runs: 1,
-            actions_completed: completedActions, awaiting_human: execution.blocks.length,
+            actions_completed: completedActions, awaiting_human: observedExecution.blocks.length,
             blocked_access: 0, blocked_internal: 0 }], storage: null,
         } }));
         await page.reload({ waitUntil: 'domcontentloaded' });

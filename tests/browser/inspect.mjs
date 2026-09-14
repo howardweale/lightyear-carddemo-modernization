@@ -48,7 +48,27 @@ try {
         page.on('request', (request) => { if (request.url().includes('/api/workflow/') && request.method() !== 'GET') writes.push(request.method()); });
         await page.goto(base, { waitUntil: 'domcontentloaded' });
         await page.waitForFunction(() => document.getElementById('execution-status').textContent.includes('Human decision required'), undefined, { timeout: 30000 });
+        assert.equal(await page.locator('#show-queue').getAttribute('aria-pressed'), 'true');
+        for (const panel of ['queue', 'run', 'convergence', 'discovery']) {
+          assert.equal(await page.locator(`#show-${panel}`).isVisible(), true);
+        }
+        await page.locator('#show-run').click();
+        await page.locator('#run-view .run-figure').first().waitFor();
+        assert.deepEqual(await page.locator('#run-view .run-figure').allTextContents(), ['19', '6', '1', '0']);
+        assert.deepEqual(await page.locator('#run-view .run-step h3').allTextContents(),
+          ['Round 1', 'Round 2', 'Round 3', 'Round 4', 'Round 5', 'Round 6', 'Blocked · apply-ledger-entry', 'Run halted']);
+        assert.match(await page.locator('#run-view .run-step').first().innerText(), /8 × widen-observation/);
+        assert.match(await page.locator('#run-view .run-step').nth(1).innerText(), /8 × escalate-lane/);
+        assert.match(await page.locator('#run-view').innerText(), /unobserved → contract-verified/);
+        assert.match(await page.locator('#run-view').innerText(), /contract-verified → retained-evidence-verified/);
+        assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1), false);
+        await page.screenshot({ path: resolve(output, `${name}-${layout}-run.png`), fullPage: true });
+        await page.locator('#run-view').getByRole('button', { name: 'Go to the decision' }).click();
+        assert.equal(await page.locator('#decision-workspace').isVisible(), true);
+        assert.equal(await page.locator('#show-queue').getAttribute('aria-pressed'), 'true');
+        await page.locator('#show-convergence').click();
         await page.locator('#convergence').getByText('No completed runs recorded yet.', { exact: false }).waitFor();
+        await page.locator('#show-queue').click();
         assert.equal((await (await fetch(base + '/api/workflow/convergence')).json()).reason, 'no-runs-recorded');
         assert.equal(await page.locator('.execution-service').count(), 8);
         assert.equal(await page.locator('.execution-action').count(), 6);
@@ -81,6 +101,16 @@ try {
         assert.equal(await page.locator('#execution-provenance').isVisible(), false);
         assert.equal(await page.locator('.execution-action').count(), 0);
         await page.screenshot({ path: resolve(output, `${name}-${layout}-invalid.png`), fullPage: true });
+        await page.locator('#show-run').click();
+        await page.locator('#run-view').getByText('The run is unavailable.', { exact: false }).waitFor();
+        assert.equal(await page.locator('#run-view .run-figure').count(), 0);
+        await page.unroute('**/api/workflow/execution');
+        await page.route('**/api/workflow/execution', (route) => route.fulfill({ json: { status: 'unavailable', items: [] } }));
+        await page.evaluate(() => window.LightyearRun.reload());
+        await page.locator('#run-view').getByText('No run recorded yet.', { exact: false }).waitFor();
+        assert.equal(await page.locator('#run-view .run-figure').count(), 0);
+        await page.unroute('**/api/workflow/execution');
+        await page.locator('#show-convergence').click();
         // Test-only response derived from this test's engine run; never persist an index.
         const completedActions = observedExecution.action_kinds.reduce((sum, kind) => sum + kind.executed, 0);
         await page.route('**/api/workflow/convergence', (route) => route.fulfill({ json: {
@@ -100,6 +130,26 @@ try {
         await page.locator('#convergence').getByText('Run history is unavailable.', { exact: false }).waitFor();
         assert.equal(await page.locator('#convergence .convergence-card').count(), 0);
         await assert.rejects(readFile(resolve(root, 'control-tower/run-index.sqlite3')), { code: 'ENOENT' });
+        // A hidden graph must be fitted only after the Discovery workspace is visible.
+        await page.evaluate(() => {
+          window.ms75Fits = [];
+          const fit = window.fitGraph;
+          window.fitGraph = () => {
+            const graph = document.getElementById('graph');
+            window.ms75Fits.push({ visible: !document.getElementById('discovery-workspace').hidden,
+              width: graph.clientWidth, height: graph.clientHeight });
+            fit();
+          };
+        });
+        await page.locator('#show-discovery').click();
+        await page.waitForFunction(() => window.ms75Fits.some((fit) => fit.visible && fit.width > 0 && fit.height > 0));
+        await page.evaluate(() => window.controlTowerDecisions.showQueue());
+        assert.equal(await page.locator('#decision-workspace').isVisible(), true);
+        assert.equal(await page.locator('#show-queue').getAttribute('aria-pressed'), 'true');
+        await page.evaluate(() => window.controlTowerDecisions.showQueue(false));
+        await page.waitForFunction(() => window.ms75Fits.filter((fit) => fit.visible && fit.width > 0 && fit.height > 0).length >= 2);
+        await page.evaluate(() => window.controlTowerDecisions.showPanel('invalid-panel'));
+        assert.equal(await page.locator('#decision-workspace').isVisible(), true);
         assert.deepEqual(writes, []);
         assert.deepEqual(errors, []);
         observations.push({ browser: name, layout, services: 8, action_kinds: 6, executed_kinds: 5, human_approval_gated: true, logo_loaded: true, receipt_column_readable: true, horizontal_overflow: false, filter_and_invalid_state: 'passed', workflow_writes: 0, javascript_errors: [] });

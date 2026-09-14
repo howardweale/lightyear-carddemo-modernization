@@ -386,7 +386,8 @@ def read_execution(root: Path, directory: Path | None = None) -> dict:
         result = summary(replay(root, events))
         age = (datetime.now(timezone.utc) - datetime.fromisoformat(result["last_event_at"])).total_seconds()
         _require(age >= -60, "Execution time is in the future")
-        return {**result, "read_only": True, "source": source, "current_ledger_approval": current_approval(root),
+        return {**result, "read_only": True, "source": source, "events": events,
+                "current_ledger_approval": current_approval(root),
                 "activity": "historical" if source == "recorded-example" or result["status"] != "running" else ("recent-engine-activity" if age < 45 else "interrupted-or-unobserved"),
                 "age_seconds": max(0, int(age))}
     except (ValueError, OSError, KeyError, TypeError, sqlite3.Error) as exc:
@@ -414,7 +415,7 @@ def main(argv=None) -> int:
                 _require(bool(events), "Export requires the original engine journal")
                 output = args.output if args.output.is_absolute() else root / args.output
                 _atomic_write(output, (json.dumps({"events": events}, sort_keys=True, indent=2) + "\n").encode())
-        print(json.dumps({k: v for k, v in result.items() if k not in {"items", "failures", "action_kinds"}}, indent=2))
+        print(json.dumps({k: v for k, v in result.items() if k not in {"items", "failures", "action_kinds", "events"}}, indent=2))
         return 0 if args.command == "export" or result["status"] in {"completed", "paused"} else 1
     except (ValueError, OSError, sqlite3.Error) as exc:
         print(json.dumps({"status": "failed", "reason": str(exc)}))

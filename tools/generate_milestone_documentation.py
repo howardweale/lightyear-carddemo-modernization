@@ -34,7 +34,7 @@ PAGES_INDEX = f"https://howardweale.github.io/{REPOSITORY.split('/', 1)[1]}/mile
 FIXED_TIME = datetime(2026, 8, 31, 12, 0, 0, tzinfo=timezone.utc)
 EXPECTED_MILESTONES = tuple(range(1, 71))
 EXPECTED_ARTIFACTS = len(EXPECTED_MILESTONES) * 3
-SUPPLEMENTAL_MARKDOWN = ("MS-73/MS-73.md",)
+SUPPLEMENTAL_MARKDOWN = ("MS-73/MS-73.md", "MS-75/MS-75.md")
 BOUNDARY_TERMS = (
     "remain false", "remains false", "remain blocked", "remains blocked",
     "unclaimed", "not claim", "does not", "no customer", "non-production",
@@ -545,7 +545,7 @@ def write_markdown_index(models: list[dict[str, Any]]) -> None:
     for model in models:
         markdown, word, pdf = format_links(model)
         lines.append(f"| MS #{model['number']:02d} | {model['title']} | {model['status']} | [Markdown]({markdown}) - [Download Word]({word}) - [PDF]({pdf}) |")
-    lines.extend(["", "## Additional implementation records", "", "[MS73 — Run history and action activity](" + github_blob("docs/milestones/MS-73/MS-73.md") + ") (Markdown; engine recording remains MS74).", ""])
+    lines.extend(["", "## Additional implementation records", "", "[MS73 — Run history and action activity](" + github_blob("docs/milestones/MS-73/MS-73.md") + ") (Markdown; engine recording remains MS74).", "", "[MS75 — Four-panel workspace](" + github_blob("docs/milestones/MS-75/MS-75.md") + ") (Markdown).", ""])
     lines.extend(["", "## Build and verification", "", "```bash", "./milestone-documentation.sh verify", "./milestone-documentation.sh build", "```", "", "Windows:", "", "```powershell", ".\\milestone-documentation.ps1 verify", ".\\milestone-documentation.ps1 build", "```", "", "`verify` uses only the Python standard library. `build` requires the `docs` optional dependency set.", "", f"The content-addressed [manifest]({github_blob('docs/milestones/manifest.json')}) fails verification if a canonical source changes, an artifact is missing or modified, or an untracked milestone artifact appears.", ""])
     (DOC_ROOT / "README.md").write_text("\n".join(lines), encoding="utf-8")
 
@@ -654,6 +654,7 @@ def write_html_index(models: list[dict[str, Any]]) -> None:
     </section>
     <section aria-label="Additional implementation records">
       <h2>Additional implementation records</h2>
+      <p><a href="{github_blob('docs/milestones/MS-75/MS-75.md')}">MS75 — Four-panel workspace</a> (Markdown).</p>
       <p><a href="{github_blob('docs/milestones/MS-73/MS-73.md')}">MS73 — Run history and action activity</a> (Markdown; engine recording remains MS74).</p>
     </section>
   </main>

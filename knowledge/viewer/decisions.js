@@ -27,14 +27,22 @@
     }
     return result;
   }
-  function showQueue(show = true) {
-    byId('decision-workspace').hidden = !show;
-    byId('discovery-workspace').hidden = show;
-    byId('show-work-queue').setAttribute('aria-pressed', String(show));
-    byId('show-discovery').setAttribute('aria-pressed', String(!show));
-    document.body.classList.toggle('decision-mode', show);
-    if (!show && typeof window.fitGraph === 'function') requestAnimationFrame(window.fitGraph);
+  const PANELS = ['queue', 'run', 'convergence', 'discovery'];
+  const WORKSPACES = { queue: 'decision-workspace', run: 'run-workspace', convergence: 'convergence-workspace', discovery: 'discovery-workspace' };
+  function showPanel(panel = 'queue') {
+    if (!PANELS.includes(panel)) panel = 'queue';
+    PANELS.forEach((name) => {
+      byId(WORKSPACES[name]).hidden = name !== panel;
+      byId(`show-${name}`).setAttribute('aria-pressed', String(name === panel));
+    });
+    document.body.classList.toggle('decision-mode', panel === 'queue');
+    document.body.classList.toggle('report-mode', panel === 'run' || panel === 'convergence');
+    if (typeof window.updateGraphPresentation === 'function') window.updateGraphPresentation();
+    if (panel === 'discovery' && typeof window.fitGraph === 'function') requestAnimationFrame(window.fitGraph);
+    if (panel === 'run' && window.LightyearRun) window.LightyearRun.reload();
+    if (panel === 'convergence' && window.LightyearConvergence) window.LightyearConvergence.reload();
   }
+  function showQueue(show = true) { showPanel(show ? 'queue' : 'discovery'); }
   function sessionChrome() {
     byId('operator-session-label').textContent = state.session ? `${state.session.actor.name} · session ends ${new Date(state.session.expires_at).toLocaleTimeString()}` : 'No operator session';
     byId('operator-sign-in').hidden = !!state.session;
@@ -171,9 +179,8 @@
     await refresh(); byId('decision-runs').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
     message('Viewing historical proofs. The Control Tower cannot dispatch work.');
   }
-  window.controlTowerDecisions = { openProof, showQueue };
-  byId('show-work-queue').addEventListener('click', () => showQueue());
-  byId('show-discovery').addEventListener('click', () => showQueue(false));
+  window.controlTowerDecisions = { openProof, showQueue, showPanel };
+  PANELS.forEach((panel) => byId(`show-${panel}`).addEventListener('click', () => showPanel(panel)));
   byId('refresh-decisions').addEventListener('click', refresh);
   byId('decision-filter').addEventListener('change', renderItems);
   byId('operator-sign-in').addEventListener('click', () => { byId('operator-error').textContent = ''; byId('operator-dialog').showModal(); });

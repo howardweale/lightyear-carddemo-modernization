@@ -51,6 +51,12 @@ class CloudBankWorkflowTests(unittest.TestCase):
         events = RunStore(self.directory, read_only=True).events()
         self.assertEqual(result, execute(self.root, self.directory))
         self.assertEqual(events, RunStore(self.directory, read_only=True).events())
+        journal_before = (self.directory / "events.sqlite3").read_bytes()
+        view = read_execution(self.root, self.directory)
+        self.assertEqual(events, view["events"])
+        self.assertEqual(6, sum(event["type"] == "round" for event in view["events"]))
+        self.assertEqual(1, sum(event["type"] == "blocked" for event in view["events"]))
+        self.assertEqual(journal_before, (self.directory / "events.sqlite3").read_bytes())
         self.assertFalse(result["boundary"]["fresh_cloud_execution"])
         self.assertEqual(0, result["boundary"]["semantic_verdicts_changed"])
 
@@ -142,7 +148,9 @@ class CloudBankWorkflowTests(unittest.TestCase):
         before = RunStore(self.directory, read_only=True).events()
         with self.assertRaisesRegex(ValueError, "inputs, implementation or policy changed"):
             execute(self.root, self.directory)
-        self.assertEqual("invalid", read_execution(self.root, self.directory)["status"])
+        view = read_execution(self.root, self.directory)
+        self.assertEqual("invalid", view["status"])
+        self.assertNotIn("events", view)
         self.assertEqual(before, RunStore(self.directory, read_only=True).events())
 
     def test_missing_evidence_does_not_become_proven_divergence(self):
@@ -185,7 +193,9 @@ class CloudBankWorkflowTests(unittest.TestCase):
         self.assertEqual("no-permitted-action", result["halt_reason"])
 
     def test_read_only_projection_and_writer_lock(self):
-        self.assertEqual("unavailable", read_execution(self.root)["status"])
+        view = read_execution(self.root)
+        self.assertEqual("unavailable", view["status"])
+        self.assertNotIn("events", view)
         self.assertFalse(self.directory.exists())
         store = RunStore(self.directory)
         self.addCleanup(store.close)

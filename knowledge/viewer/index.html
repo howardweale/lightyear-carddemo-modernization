@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>LIGHTYEAR Control Tower</title>
   <link rel="stylesheet" href="styles.css?v=48.4">
-  <link rel="stylesheet" href="decisions.css?v=workflow.2">
+  <link rel="stylesheet" href="decisions.css?v=75.1">
   <link rel="stylesheet" href="convergence.css?v=73.1">
+  <link rel="stylesheet" href="run.css?v=75.1">
 </head>
 <body>
   <header class="masthead topbar">
@@ -83,7 +84,9 @@
   </section>
 
   <nav class="tower-navigation" aria-label="Control Tower workspace">
-    <button id="show-work-queue" type="button" aria-pressed="true">Work queue <span id="decision-count"></span></button>
+    <button id="show-queue" type="button" aria-pressed="true">Work queue <span id="decision-count"></span></button>
+    <button id="show-run" type="button" aria-pressed="false">The run</button>
+    <button id="show-convergence" type="button" aria-pressed="false">Convergence</button>
     <button id="show-discovery" type="button" aria-pressed="false">Discovery</button>
     <span id="operator-session-label">No operator session</span>
     <button id="operator-sign-in" type="button">Sign in to decide</button>
@@ -103,10 +106,6 @@
       <div id="execution-actions" class="execution-actions" aria-label="Action kind coverage"></div>
       <div id="execution-services" class="execution-services"></div>
       <details id="execution-provenance"><summary>Run provenance and limits</summary><dl id="execution-details"></dl></details>
-    </section>
-    <section class="workflow-plan workflow-convergence" aria-label="Convergence across runs">
-      <h2>Run history</h2>
-      <div id="convergence" role="status" aria-live="polite"></div>
     </section>
     <details class="legacy-workflow"><summary>Oracle Customer (Large) · Step 1 action plan</summary>
     <section class="workflow-plan" aria-label="Engine action plan">
@@ -138,6 +137,13 @@
     <section class="decision-runs" aria-label="Historical proof runs"><h2>Historical proof runs</h2><p>Execution and qualification belong to the headless engine. This view cannot start a run or issue a qualification receipt.</p><div id="decision-runs"></div></section>
     <details class="decision-audit"><summary>Session record and decision trail</summary><button id="download-session" class="secondary-button" type="button" disabled>Download signed session record</button><div id="decision-events"></div></details>
   </main>
+  <section id="run-workspace" aria-label="The run" hidden>
+    <div id="run-view" aria-live="polite"></div>
+  </section>
+  <section id="convergence-workspace" class="decision-workspace" aria-label="Convergence across runs" hidden>
+    <h1>Convergence</h1>
+    <div id="convergence" role="status" aria-live="polite"></div>
+  </section>
   <main id="discovery-workspace" class="workspace" hidden>
     <aside class="left-panel panel">
       <section>
@@ -701,7 +707,7 @@
     </form>
   </dialog>
   <script src="app.js?v=48.4" defer></script>
-  <script src="decisions.js?v=workflow.1" defer></script>
+  <script src="decisions.js?v=75.1" defer></script>
   <script src="workflow.js?v=1" defer></script>
   <script src="execution.js?v=2" defer></script>
   <dialog id="operator-dialog" class="verifier-dialog" aria-labelledby="operator-title">
@@ -714,5 +720,6 @@
     </form>
   </dialog>
   <script src="convergence.js?v=73.1" defer></script>
+  <script src="run.js?v=75.4" defer></script>
 </body>
 </html>

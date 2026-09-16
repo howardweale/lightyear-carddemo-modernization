@@ -1,0 +1,37 @@
+name: Runtime verifier qualification
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  synthetic-transfer-challenges:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    env:
+      PYTHONPATH: src
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+      - name: Check executable faults and observation boundaries
+        run: python -m unittest tests.test_verifier_qualification -v
+      - name: Produce reproducible public development report
+        run: python -m lightyear_qualification run --output work/verifier-qualification/ci
+      - name: Retain raw synthetic observations and report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: verifier-qualification-${{ matrix.os }}-${{ github.sha }}
+          path: work/verifier-qualification/ci/
+          if-no-files-found: warn

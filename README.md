@@ -4,6 +4,12 @@
 
 # LIGHTYEAR CardDemo Modernization Factory
 
+**[Runtime verifier qualification kit](factory/verifier-qualification/README.md)**
+challenges a bounded account-transfer comparator with two executable implementations,
+eight business faults and strict observation/normalization checks. It produces a
+reproducible public development report and a freeze for later independent review.
+Partner qualification and independent blind validation remain pending.
+
 **[MS #73 — Run history and action activity](docs/milestones/MS-73/MS-73.md)** adds
 a permanent run index, guarded journal retention and a read-only history view.
 No engine recording is wired yet; the view correctly reports no runs. Pattern

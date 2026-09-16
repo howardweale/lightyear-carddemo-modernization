@@ -21,6 +21,8 @@ assert.equal(execution.summary.action_kinds_executed, 5);
 const journal = resolve(root, 'work/workflow/cloudbank/events.sqlite3');
 const digest = async () => createHash('sha256').update(await readFile(journal)).digest('hex');
 const before = await digest();
+const historyIndex = resolve(root, 'control-tower/run-index.sqlite3');
+const indexBefore = await readFile(historyIndex);
 const reservation = createServer();
 await new Promise((done, reject) => { reservation.once('error', reject); reservation.listen(0, '127.0.0.1', done); });
 const port = reservation.address().port;
@@ -38,6 +40,12 @@ try {
   assert(ready, 'Control Tower did not become ready');
   const observedExecution = await (await fetch(base + '/api/workflow/execution')).json();
   assert.equal(observedExecution.source, 'engine-journal');
+  const observedHistory = await (await fetch(base + '/api/workflow/convergence')).json();
+  assert.equal(observedHistory.metric_unit, 'action-events');
+  assert(observedHistory.storage.runs >= 1, 'The terminal engine run was not recorded');
+  const completedActions = observedExecution.action_kinds.reduce((sum, kind) => sum + kind.executed, 0);
+  assert(observedHistory.weeks.reduce((sum, week) => sum + week.actions_completed, 0) >= completedActions);
+  const latestWeek = observedHistory.weeks.at(-1);
   for (const [name, driver] of [['chromium', chromium], ['webkit', webkit]]) {
     const browser = await driver.launch({ headless: true });
     try {
@@ -67,9 +75,14 @@ try {
         assert.equal(await page.locator('#decision-workspace').isVisible(), true);
         assert.equal(await page.locator('#show-queue').getAttribute('aria-pressed'), 'true');
         await page.locator('#show-convergence').click();
-        await page.locator('#convergence').getByText('No completed runs recorded yet.', { exact: false }).waitFor();
+        await page.locator('#convergence .convergence-table').waitFor();
+        assert.deepEqual(await page.locator('#convergence .convergence-figure').allTextContents(),
+          [latestWeek.actions_completed, latestWeek.awaiting_human, latestWeek.blocked_access, latestWeek.blocked_internal].map(String));
+        assert.match(await page.locator('#convergence').innerText(), /Runs recorded/);
+        assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1), false);
+        await page.screenshot({ path: resolve(output, `${name}-${layout}-history.png`), fullPage: true });
         await page.locator('#show-queue').click();
-        assert.equal((await (await fetch(base + '/api/workflow/convergence')).json()).reason, 'no-runs-recorded');
+        assert.deepEqual(await (await fetch(base + '/api/workflow/convergence')).json(), observedHistory);
         assert.equal(await page.locator('.execution-service').count(), 8);
         assert.equal(await page.locator('.execution-action').count(), 6);
         assert.equal(await page.locator('.execution-service .decision-badge.approved').count(), 8);
@@ -111,25 +124,21 @@ try {
         assert.equal(await page.locator('#run-view .run-figure').count(), 0);
         await page.unroute('**/api/workflow/execution');
         await page.locator('#show-convergence').click();
-        // Test-only response derived from this test's engine run; never persist an index.
-        const completedActions = observedExecution.action_kinds.reduce((sum, kind) => sum + kind.executed, 0);
-        await page.route('**/api/workflow/convergence', (route) => route.fulfill({ json: {
-          metric_unit: 'action-events', weeks: [{ week: 'test-journal', runs: 1,
-            actions_completed: completedActions, awaiting_human: observedExecution.blocks.length,
-            blocked_access: 0, blocked_internal: 0 }], storage: null,
-        } }));
+        // Empty and invalid API states remain covered without altering the real index.
+        await page.route('**/api/workflow/convergence', (route) => route.fulfill({ json: { weeks: [], reason: 'no-runs-recorded' } }));
+        await page.evaluate(() => window.LightyearConvergence.reload());
+        await page.locator('#convergence').getByText('No completed runs recorded yet.', { exact: false }).waitFor();
+        assert.equal(await page.locator('#convergence .convergence-card').count(), 0);
+        await page.unroute('**/api/workflow/convergence');
         await page.evaluate(() => window.LightyearConvergence.reload());
         await page.locator('#convergence .convergence-table').waitFor();
-        assert.match(await page.locator('#convergence').innerText(), /Completed actions/);
         assert.match(await page.locator('#convergence').innerText(), /not distinct resolved findings/);
-        assert.equal(await page.locator('#convergence .convergence-card').first().locator('.convergence-figure').innerText(), String(completedActions));
-        assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1), false);
-        await page.unroute('**/api/workflow/convergence');
+        assert.equal(await page.locator('#convergence .convergence-card').first().locator('.convergence-figure').innerText(), String(latestWeek.actions_completed));
         await page.route('**/api/workflow/convergence', (route) => route.fulfill({ json: { weeks: [], reason: 'invalid-run-index' } }));
         await page.evaluate(() => window.LightyearConvergence.reload());
         await page.locator('#convergence').getByText('Run history is unavailable.', { exact: false }).waitFor();
         assert.equal(await page.locator('#convergence .convergence-card').count(), 0);
-        await assert.rejects(readFile(resolve(root, 'control-tower/run-index.sqlite3')), { code: 'ENOENT' });
+        assert.deepEqual(await readFile(historyIndex), indexBefore, 'Browser viewing changed the history index');
         // A hidden graph must be fitted only after the Discovery workspace is visible.
         await page.evaluate(() => {
           window.ms75Fits = [];
@@ -158,7 +167,7 @@ try {
     } finally { await browser.close(); }
   }
   assert.equal(await digest(), before, 'Browser viewing changed the engine journal');
-  await writeFile(resolve(output, 'browser-inspection.json'), JSON.stringify({ status: 'passed', journal_unchanged: true, observations }, null, 2) + '\n');
+  await writeFile(resolve(output, 'browser-inspection.json'), JSON.stringify({ status: 'passed', journal_unchanged: true, history_index_unchanged: true, history: observedHistory, observations }, null, 2) + '\n');
   console.log('MS72_BROWSER_INSPECTION=PASSED');
 } finally {
   server.kill();

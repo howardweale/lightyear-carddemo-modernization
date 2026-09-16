@@ -25,13 +25,15 @@ jobs:
         with:
           python-version: "3.12"
       - name: Check executable faults and observation boundaries
-        run: python -m unittest tests.test_verifier_qualification -v
+        run: python -m unittest tests.test_verifier_qualification tests.test_runtime_gate_qualification -v
       - name: Produce reproducible public development report
         run: python -m lightyear_qualification run --output work/verifier-qualification/ci
+      - name: Qualify existing runtime acceptance paths (MS76)
+        run: python -m lightyear_qualification runtime-gates --output work/verifier-qualification/runtime-gates
       - name: Retain raw synthetic observations and report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: verifier-qualification-${{ matrix.os }}-${{ github.sha }}
-          path: work/verifier-qualification/ci/
+          path: work/verifier-qualification/
           if-no-files-found: warn

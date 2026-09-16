@@ -189,6 +189,12 @@ class RunIndex:
                 "cutoff": cutoff, "run_ids": removed[:20], "dry_run": dry_run}
 
     # ── reading ──────────────────────────────────────────────────────────
+    def lookup(self, run_id: str) -> dict | None:
+        _run_id(run_id)
+        with closing(self._db()) as db:
+            row = db.execute("SELECT * FROM runs WHERE run_id=?", (run_id,)).fetchone()
+        return dict(row) if row else None
+
     def convergence(self, estate: str, weeks: int = 12) -> list[dict]:
         """Weekly action activity, not resolved findings. Reads rows, never journals."""
         if type(weeks) is not int or not 1 <= weeks <= 52:

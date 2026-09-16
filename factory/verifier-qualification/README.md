@@ -8,7 +8,29 @@ It reuses the CloudBank MS66 business-scenario concepts (transfer, rejection,
 concurrency, restart), and existing content-sealing/I/O utilities. It does **not**
 run the CloudBank applications, extend their signed receipts, or prove that the
 existing CloudBank or CardDemo gates detect these faults. Connecting a production
-gate to this same challenge interface is a separate integration task.
+gate to this same challenge interface was a separate integration task. MS76 now
+adds the bounded existing-gate campaign below; the original `run` command retains
+its development-comparator scope.
+
+## MS76: existing runtime gate paths
+
+```bash
+PYTHONPATH=src python3 -m lightyear_qualification runtime-gates --output work/verifier-qualification/ms76
+```
+
+This calls five existing CloudBank journey methods against both executable local
+targets and the existing CardDemo compare CLI against real oracle output and
+persisted file mutations. It retains raw observations, separate defect witnesses,
+gate outcomes and bound source identities. Correct cases must pass; witnessed
+critical defects must be detected; absent observations cannot pass. The report
+keeps each gate's denominator and excluded scope separate.
+
+Read [MS76](../../docs/milestones/MS-76/MS-76.md) and
+[runtime-gates.json](runtime-gates.json) for exact acceptance boundaries. CloudBank
+observations use a projection into five of eighteen journey scenarios; native
+participant journals, HTTP/auth, messaging and full-stack qualification remain
+outside the campaign. The original sixteen-case development corpus is not silently
+relabelled as existing-gate coverage. No partner qualification is claimed.
 
 ## Run the public campaign
 

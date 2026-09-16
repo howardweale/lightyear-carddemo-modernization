@@ -1,0 +1,24 @@
+{
+  "milestone": "MS76",
+  "scope": "selected-existing-runtime-acceptance-paths",
+  "cloudbank": {
+    "entry_point": "lightyear_data.cloudbank_journeys.Journeys",
+    "critical_methods": ["success", "invalid", "insufficient", "concurrent", "account_restart"],
+    "faults": ["wrong-recipient", "lost-on-restart", "lost-update"],
+    "units": "one synthetic cent maps exactly to one integer journey unit",
+    "observation_boundary": "local process outputs; transfer operations project to paired journals, not native participant journal observations"
+  },
+  "carddemo": {
+    "entry_point": "carddemo_oracle.cli.main(compare)",
+    "faults": ["balance", "amount", "card-identity", "date", "description", "duplicate", "missing"],
+    "fault_mechanism": "persisted-output-mutation-after-oracle-execution"
+  },
+  "acceptance": {
+    "correct_cases": "all passed",
+    "critical_faults": "all witnessed and detected; no missed or blocked critical fault",
+    "absent_or_malformed_evidence": "cannot pass",
+    "unexercised_faults": "reported separately and excluded from detection denominator",
+    "source_changes_during_campaign": "fail"
+  },
+  "claims_excluded": ["whole-application-gate-qualification", "native-runtime-reexecution", "independent-blind-validation", "partner-qualification", "production-readiness"]
+}

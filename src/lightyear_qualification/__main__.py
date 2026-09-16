@@ -17,6 +17,8 @@ def main(argv=None):
     actions = parser.add_subparsers(dest="action", required=True)
     run = actions.add_parser("run", help="Run the public executable challenge campaign")
     run.add_argument("--output", type=Path, required=True)
+    gates = actions.add_parser("runtime-gates", help="MS76: challenge existing CloudBank and CardDemo gate paths")
+    gates.add_argument("--output", type=Path, required=True)
     frozen = actions.add_parser("freeze", help="Freeze code, contract and public corpus before external challenge review")
     frozen.add_argument("--output", type=Path, required=True)
     evaluate = actions.add_parser("evaluate", help="Evaluate a local adapter against reviewer-provided cases")
@@ -28,6 +30,12 @@ def main(argv=None):
     try:
         if args.output.exists():
             raise ValueError("output already exists; choose a new evidence path")
+        if args.action == "runtime-gates":
+            from .runtime_gates import run, save
+            report = run()
+            save(report, args.output)
+            print(json.dumps({"status": report["status"], "report": str(args.output / "report.md")}))
+            return 0 if report["status"] == "passed" else 1
         if args.action == "run":
             report = development_campaign()
             save_report(report, args.output)

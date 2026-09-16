@@ -91,9 +91,13 @@ or policy decisions.
 
 ## Additional implementation records
 
-[MS73 — Run history and action activity](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-73/MS-73.md) (Markdown; engine recording remains MS74).
+[MS73 — Run history and action activity](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-73/MS-73.md) (Markdown; engine integration delivered by MS74).
+
+[MS74 — Engine-to-history recording](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-74/MS-74.md) (Markdown).
 
 [MS75 — Four-panel workspace](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-75/MS-75.md) (Markdown).
+
+[MS76 — Existing runtime gate qualification](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-76/MS-76.md) (Markdown).
 
 
 ## Build and verification

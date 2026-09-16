@@ -165,3 +165,14 @@ screenshots for visual review. Locally, run `npm ci`,
 
 Fresh runtime adapters, new customer captures, broader normalization proposals,
 weekly owner reports, agent drafting and customer SSO/OIDC remain later work.
+
+## MS74 history recording
+
+Terminal replay-admitted engine runs now populate the local history index and
+Convergence view. Archives default to `work/workflow/history/journals`; select a
+different archive directory inside `work/` with `--history-dir`. Paused runs are
+not indexed. Repeating a terminal run repairs pending publication without adding
+duplicate history or repeating actions. Archive/index failures are surfaced, and
+retention-pruned archives are not recreated. Browser reads remain read-only.
+
+See [MS74](milestones/MS-74/MS-74.md) for identity, recovery and retention details.

@@ -19,6 +19,7 @@ from .cloudbank import BOUNDARY, SERVICES, action_for, build_execution_plan, obs
 from .execution_policy import permitted
 from .policy import CATALOG, _unique_object
 from .run_store import RunStore
+from .history import HISTORY_PATH, record_finished
 from .cloudbank_extensions import KINDS, DEPENDENCIES
 from .ledger_gate import approval_guard, current_approval, validate_approval, verify_application_history
 
@@ -272,9 +273,12 @@ def _output_scope(root: Path, directory: Path):
     _require(not any(p.is_symlink() for p in [directory, *directory.parents] if p != root.parent), "Symbolic execution output path")
 
 
-def execute(root: Path, directory: Path, *, max_steps: int | None = None) -> dict:
+def execute(root: Path, directory: Path, *, max_steps: int | None = None,
+            history_dir: Path | None = None) -> dict:
     root = root.resolve()
     _output_scope(root, directory)
+    history_dir = history_dir or root / HISTORY_PATH
+    _output_scope(root, history_dir)
     if max_steps is not None and (type(max_steps) is not int or not 1 <= max_steps <= 32):
         raise ValueError("max_steps must be an integer from 1 to 32")
     store = RunStore(directory)
@@ -283,7 +287,7 @@ def execute(root: Path, directory: Path, *, max_steps: int | None = None) -> dic
             store.append("started", build_execution_plan(root))
         state = replay(root, store.events())
         if state["halt_reason"]:
-            return summary(state)
+            return _finish(root, directory, store.events(), history_dir)
         if state["in_flight"]:
             store.append("failed", {"action_id": state["in_flight"]["id"], "reason": "interrupted"})
         steps = 0
@@ -364,11 +368,18 @@ def execute(root: Path, directory: Path, *, max_steps: int | None = None) -> dic
             except WorkerFailure as exc:
                 store.append("failed", {"action_id": action["id"], "reason": str(exc)})
             steps += 1
-        result = summary(replay(root, store.events()))
-        _atomic_write(directory / "convergence.receipt.json", (json.dumps(result, indent=2, sort_keys=True) + "\n").encode())
-        return result
+        return _finish(root, directory, store.events(), history_dir)
     finally:
         store.close()
+
+
+def _finish(root: Path, directory: Path, events: list[dict], history_dir: Path) -> dict:
+    state = replay(root, events)
+    result = summary(state)
+    _atomic_write(directory / "convergence.receipt.json", (json.dumps(result, indent=2, sort_keys=True) + "\n").encode())
+    if state["halt_reason"] is not None:
+        record_finished(root, events, history_dir)
+    return result
 
 
 def read_execution(root: Path, directory: Path | None = None) -> dict:
@@ -400,13 +411,16 @@ def main(argv=None) -> int:
     parser.add_argument("--root", type=Path, default=Path("."))
     parser.add_argument("--run-dir", type=Path, default=RUN_PATH)
     parser.add_argument("--max-steps", type=int)
+    parser.add_argument("--history-dir", type=Path, default=HISTORY_PATH,
+                        help="Customer-controlled archive directory inside repository work/")
     parser.add_argument("--output", type=Path)
     args = parser.parse_args(argv)
     root = args.root.resolve()
     directory = args.run_dir if args.run_dir.is_absolute() else root / args.run_dir
     try:
         if args.command == "run":
-            result = execute(root, directory, max_steps=args.max_steps)
+            history = args.history_dir if args.history_dir.is_absolute() else root / args.history_dir
+            result = execute(root, directory, max_steps=args.max_steps, history_dir=history)
         else:
             result = read_execution(root, directory)
             if args.command == "export":

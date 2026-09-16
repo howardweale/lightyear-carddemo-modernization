@@ -1,27 +1,5 @@
 # Changelog
 
-## Unreleased — Runtime verifier qualification kit
-
-- Add integer/SQLite and Decimal/event-journal transfer programs, exact behavioral
-  examples, process-crash recovery and bounded concurrent execution challenges.
-- Inject eight executable business faults and confirm them independently from raw
-  observations; distinguish detection, indeterminate blocking, misses and unexercised faults.
-- Add strict adapter admission, exact representation normalizations, reproducible
-  reports, code/corpus freezes, a reviewer protocol and partner intake worksheet.
-- Keep independent review, vendor compatibility and production claims pending;
-  preserve existing CloudBank and CardDemo evidence and comparison contracts.
-
-## Unreleased — Runtime verifier qualification kit
-
-- Add integer/SQLite and Decimal/event-journal transfer programs, exact behavioral
-  examples, process-crash recovery and bounded concurrent execution challenges.
-- Inject eight executable business faults and confirm them independently from raw
-  observations; distinguish detection, indeterminate blocking, misses and unexercised faults.
-- Add strict adapter admission, exact representation normalizations, reproducible
-  reports, code/corpus freezes, a reviewer protocol and partner intake worksheet.
-- Keep independent review, vendor compatibility and production claims pending;
-  preserve existing CloudBank and CardDemo evidence and comparison contracts.
-
 ## Unreleased — MS #73 Run history and action activity
 
 - Add a permanent run index and operator-invoked 396-day journal retention with

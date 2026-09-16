@@ -1,0 +1,26 @@
+{
+  "contract_id": "synthetic-transfer-qualification-v1",
+  "purpose": "Public development qualification of a bounded runtime comparison path",
+  "currency": "USD",
+  "opening_accounts": "Explicit per case; all account identities and owners must be observed",
+  "amount_input": "Unsigned plain decimal string; 1-9 integer digits and up to 4 fractional digits; round once to cents using half-even; rounded amount must be positive",
+  "amount_observation": "Exact nonnegative integer cents or a plain decimal string representing exact cents; sub-cent observations are never rounded",
+  "date": "Valid exact YYYY-MM-DD business date; no clock or time-zone normalization",
+  "authorization": "Actor must own the source account; recipient may have a different owner",
+  "idempotency": "Successful request id binds source, recipient, rounded cents, business date and actor; same payload replays without effect; changed payload conflicts without effect",
+  "rejections": "Invalid amount/date/account, same-account transfers, unauthorized actor and insufficient funds leave all balances and the committed-operation registry unchanged",
+  "atomicity": "A process exit at the declared precommit crash hook leaves no committed debit, credit or operation; replay after recovery applies exactly once",
+  "concurrency": "In-process concurrent workers, with sufficient funds for every operation; all effects persist; outcomes and operation registries are unordered identity-keyed sets",
+  "restart": "Every command is a fresh OS process using the same per-case persisted state directory",
+  "observation": "Full account inventory with ownership, committed-operation registry and every command outcome; collection ordering is not semantic; duplicates are rejected",
+  "normalization_rules": ["exact-decimal-to-cents", "identity-keyed-collection-order"],
+  "fault_outcomes": ["detected", "blocked-indeterminate", "missed", "not-exercised"],
+  "acceptance_for_public_development_campaign": "All declared correct cases pass on both implementations, every seeded fault has a raw witness and a failed comparison, all normalization/admission challenges pass, and the no-trigger control remains not-exercised",
+  "reused_assets": [
+    "CloudBank MS66 transfer, negative-path, concurrency and restart scenario concepts",
+    "lightyear_common.io logical hashing and JSON output",
+    "lightyear_data.contracts unsigned content sealing"
+  ],
+  "existing_gate_relationship": "This is a new bounded observation comparator under challenge. It does not requalify the existing CardDemo or CloudBank comparators, nor change their receipts or normalization ledgers.",
+  "excluded": ["vendor code", "COBOL runtime", "Oracle/PostgreSQL/AlloyDB execution", "distributed concurrency", "contention-dependent success ordering", "host power-loss durability", "message brokers", "batch/file formats", "foreign exchange", "interest calculation", "customer production data", "independent blind evaluation", "production readiness"]
+}

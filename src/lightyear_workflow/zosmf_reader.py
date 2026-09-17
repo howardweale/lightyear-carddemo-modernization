@@ -1,7 +1,7 @@
 """Observation-only binding of job packs to the existing JES collector.
 
-Dataset names require explicit mappings to retained spool DDs in the mapping's
-optional ``datasets`` object. Catalogued MVS datasets are not silently replaced
+Dataset names require explicit bindings to retained spool DDs, separate from
+the qualified graph mapping. Catalogued MVS datasets are not silently replaced
 by spool text or read from their current, potentially unrelated contents.
 """
 from __future__ import annotations
@@ -10,7 +10,7 @@ from dataclasses import asdict
 from datetime import datetime
 import json
 from pathlib import Path
-from typing import Any
+from typing import Any, Mapping
 
 from lightyear_runtime.zosmf import ZosmfClient, ZosmfConfig, ZosmfError, ZosmfJobsAdapter
 from .batch_pack import DATASET, JOBNAME
@@ -20,7 +20,8 @@ class ZosmfReader:
     """Read completed jobs and explicitly bound spool outputs; never submit."""
 
     def __init__(self, client: ZosmfClient, config: ZosmfConfig, mapping_path: Path,
-                 *, attest_real_zos: bool = False, owner: str = "*"):
+                 *, attest_real_zos: bool = False, owner: str = "*",
+                 datasets: Mapping[str, Mapping[str, str]] | None = None):
         config.validate()
         if type(attest_real_zos) is not bool:
             raise ZosmfError("attest_real_zos must be an explicit boolean")
@@ -29,6 +30,7 @@ class ZosmfReader:
         self._client, self._config = client, config
         self._mapping_path = Path(mapping_path)
         self._mapping = json.loads(self._mapping_path.read_text(encoding="utf-8"))
+        self._datasets = {name: dict(binding) for name, binding in (datasets or {}).items()}
         self._attest, self._owner = attest_real_zos, owner
         self._selected: tuple[str, str] | None = None
 
@@ -84,7 +86,7 @@ class ZosmfReader:
             raise ZosmfError("Select a completed job before reading its outputs")
         if not isinstance(name, str) or not DATASET.fullmatch(name) or len(name) > 44:
             raise ZosmfError("Invalid dataset name")
-        binding = self._mapping.get("datasets", {}).get(name)
+        binding = self._datasets.get(name)
         if not isinstance(binding, dict) or not binding.get("ddname") or not binding.get("stepname"):
             raise ZosmfError("Dataset needs an explicit spool ddname and stepname binding")
         jobname, job_id = self._selected

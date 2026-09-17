@@ -20,7 +20,7 @@ class ReaderTests(unittest.TestCase):
         self.addCleanup(self.temp.cleanup)
         self.mapping = Path(self.temp.name) / 'mapping.json'
         self.mapping_data = json.loads(MAPPING.read_text())
-        self.mapping_data['datasets'] = {
+        self.datasets = {
             'CARDDEMO.TRANFILE': {'ddname': 'TRANSACT', 'stepname': 'STEP15'},
             'CARDDEMO.ACCTFILE': {'ddname': 'ACCTFILE', 'stepname': 'STEP15'},
         }
@@ -37,12 +37,13 @@ class ReaderTests(unittest.TestCase):
 
     def reader(self, *, attest=False):
         return ZosmfReader(ZosmfClient(self.transport, ZosmfCredentials()), self.config,
-                           self.mapping, attest_real_zos=attest)
+                           self.mapping, attest_real_zos=attest, datasets=self.datasets)
 
     def test_loopback_pack_observation_remains_simulated_and_only_gets(self):
         with RunningMockZosmf(self.fixture) as mock:
             config = ZosmfConfig(mock.base_url, 'mock', allow_loopback_http=True)
-            reader = ZosmfReader(ZosmfClient(HttpClientTransport(config), ZosmfCredentials()), config, self.mapping)
+            reader = ZosmfReader(ZosmfClient(HttpClientTransport(config), ZosmfCredentials()), config,
+                                 self.mapping, datasets=self.datasets)
             receipt = SourceLane(reader).observe(self.pack.jobs[0])
         self.assertEqual('simulated', receipt['evidence_class'])
         self.assertEqual({'simulated'}, {o['evidence_class'] for o in receipt['evidence']['observations']})

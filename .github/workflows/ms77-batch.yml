@@ -1,0 +1,42 @@
+name: MS77 batch invocation contracts
+on:
+  pull_request:
+    paths:
+      - 'src/lightyear_workflow/batch_pack.py'
+      - 'src/lightyear_workflow/zosmf_reader.py'
+      - 'src/lightyear_runtime/**'
+      - 'spec/batch-packs/**'
+      - 'tests/test_batch_pack.py'
+      - 'tests/test_zosmf_reader.py'
+      - 'tests/test_zosmf_adapter.py'
+      - '.github/workflows/ms77-batch.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'src/lightyear_workflow/batch_pack.py'
+      - 'src/lightyear_workflow/zosmf_reader.py'
+      - 'src/lightyear_runtime/**'
+      - 'spec/batch-packs/**'
+      - 'tests/test_batch_pack.py'
+      - 'tests/test_zosmf_reader.py'
+      - 'tests/test_zosmf_adapter.py'
+      - '.github/workflows/ms77-batch.yml'
+permissions:
+  contents: read
+jobs:
+  mock-contracts:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Verify read-only observation and evidence provenance
+        env:
+          PYTHONPATH: src
+        run: python -m unittest tests.test_batch_pack tests.test_zosmf_reader tests.test_zosmf_adapter -v

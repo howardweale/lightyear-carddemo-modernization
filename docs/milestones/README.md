@@ -99,6 +99,8 @@ or policy decisions.
 
 [MS76 — Existing runtime gate qualification](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-76/MS-76.md) (Markdown).
 
+[MS77 — Declarative batch invocation](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-77/MS-77.md) (Markdown; partial, awaiting an authorised z/OS environment).
+
 
 ## Build and verification
 

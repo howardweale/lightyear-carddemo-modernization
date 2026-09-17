@@ -1,0 +1,169 @@
+{
+  "actor": {
+    "id": "codex-delegated-operator",
+    "kind": "operator",
+    "name": "Codex acting on user authorization"
+  },
+  "authorized_at": "2026-09-17T22:27:14.528655+00:00",
+  "campaign_id": "oracle26ai-alloydb-number",
+  "content_sha256": "1677a6a920373ec70e2d1acb34f07ae2800ecf8091773a64d5e6785f97b3a6c7",
+  "plan": {
+    "alloydb_cluster": "cloudbank-ms71-alloydb",
+    "alloydb_instance": "primary",
+    "campaign_id": "oracle26ai-alloydb-number",
+    "cases": [
+      {
+        "alloydb_sql_sha256": "25e2a3352edc5d6a3b0bca8cb1d54b2c808c34b9ab9e91f5364bd56eb160d00a",
+        "behavior_id": "ORA-TYPE-001",
+        "id": "ORA-TYPE-001-CASE-01",
+        "oracle_sql_sha256": "144a9718d5f2d2fd72d06f93e1247200d7c303d141b5209a0a471bf6321c2d42"
+      },
+      {
+        "alloydb_sql_sha256": "fb8aa7d3b125be953cda9c0ac8502459054f565fd0d18fd6db7352dabc185230",
+        "behavior_id": "ORA-TYPE-001",
+        "id": "ORA-TYPE-001-CASE-02",
+        "oracle_sql_sha256": "a8be6cdcf8102c2425cfc1e369f15626584e88c13b62b4adbdf3cbb857ff5dea"
+      },
+      {
+        "alloydb_sql_sha256": "377668800352e6846b39cfe28f5d4ed6607870fbcbc96a22a3850f78b92e63b0",
+        "behavior_id": "ORA-TYPE-001",
+        "id": "ORA-TYPE-001-CASE-03",
+        "oracle_sql_sha256": "9c6c6f8379a37cb788513454b96c77d02be33ff1e7330f724db7a2596849a8d0"
+      },
+      {
+        "alloydb_sql_sha256": "5fe2cadf8cbc0e2c4a86c6e99f05a1cb057deac89886b6e700aea6044e0e009c",
+        "behavior_id": "ORA-TYPE-001",
+        "id": "ORA-TYPE-001-CASE-04",
+        "oracle_sql_sha256": "8e6b01b42bddff5ff852532dbadd9be769b4dfb771e7f3edb892c62ebaf18662"
+      },
+      {
+        "alloydb_sql_sha256": "96684a9d731541ea4bf1480306a8223934049265d756e8b515e955bfe8cd90a5",
+        "behavior_id": "ORA-TYPE-002",
+        "id": "ORA-TYPE-002-CASE-01",
+        "oracle_sql_sha256": "aaa964c566b03e3b13b5cfc760614c50e349a1046741249385c3354b2474e1ed"
+      },
+      {
+        "alloydb_sql_sha256": "298be4ef6a417338474e8c9a5d6e04020ad3ae2b1033b30d6a0399d87c617dfb",
+        "behavior_id": "ORA-TYPE-002",
+        "id": "ORA-TYPE-002-CASE-02",
+        "oracle_sql_sha256": "3e46716457ffac81750ac233c1c381ef9506bc671bd852e907639dd3c6b76a70"
+      },
+      {
+        "alloydb_sql_sha256": "1d4978161a5026e2a031323374e6b5c0a3b92a1445fbfe96b7eecabf018b33e1",
+        "behavior_id": "ORA-TYPE-002",
+        "id": "ORA-TYPE-002-CASE-03",
+        "oracle_sql_sha256": "8438619aa0cda872f8a59b59f65869480ae48b02af8515378b0b73153d3c40a0"
+      },
+      {
+        "alloydb_sql_sha256": "f4fc1d80f03e5e2e14236d742e406a144b1175e67d0865e537be5f42124c5a99",
+        "behavior_id": "ORA-TYPE-002",
+        "id": "ORA-TYPE-002-CASE-04",
+        "oracle_sql_sha256": "0bdef8959d0b0be502c550a6b68d295df2c182dde0ed51a75d174e552aa62408"
+      },
+      {
+        "alloydb_sql_sha256": "cdd74983d01177b55863bd9a043712b30fc476d55d6dd4c6bf17e13a7c4a30e6",
+        "behavior_id": "ORA-TYPE-003",
+        "id": "ORA-TYPE-003-CASE-01",
+        "oracle_sql_sha256": "04eff1b2618099e61ce29b25003943962df31cc4ac95c00c703bbad71cf74132"
+      },
+      {
+        "alloydb_sql_sha256": "82b0ac96944a8a37a308332c6a0ae98d4b099e229d395616d04af68ee598475d",
+        "behavior_id": "ORA-TYPE-003",
+        "id": "ORA-TYPE-003-CASE-02",
+        "oracle_sql_sha256": "c049d479b4a15089822e3fcf7f94db0f25c137d504c761c9b71e0326a008dc43"
+      },
+      {
+        "alloydb_sql_sha256": "809113140f7b80d1a18bfa860d86e5d6783c6208cfc3345784db4145b70c44f7",
+        "behavior_id": "ORA-TYPE-003",
+        "id": "ORA-TYPE-003-CASE-03",
+        "oracle_sql_sha256": "4b667b5067f54c7469dd84b41597dc5d2c016870ce9124b4139a3145182c0e7e"
+      },
+      {
+        "alloydb_sql_sha256": "e22ce2abd86d9b6707d384784254ec6f7b8e6a5c23b7ba62dbd1f6215f1e5176",
+        "behavior_id": "ORA-TYPE-003",
+        "id": "ORA-TYPE-003-CASE-04",
+        "oracle_sql_sha256": "17e87dd977bb3e107fb707b5cd4ddadd7f038c3c764a52e8ce1e61c67a9d1ab8"
+      },
+      {
+        "alloydb_sql_sha256": "922c924ad5eff6a92404216d24dd930e7d3cc8f55530fbc4b2075b2394ce1e42",
+        "behavior_id": "ORA-TYPE-004",
+        "id": "ORA-TYPE-004-CASE-01",
+        "oracle_sql_sha256": "2c1783c682fbc1df71e4d0cabca8fb9a2eaae452d9815d55924c57f0214199b4"
+      },
+      {
+        "alloydb_sql_sha256": "d7cde50fd40dd5f7f4f8b69e32764296029bab0f85d72a93c0b1d4d12209c658",
+        "behavior_id": "ORA-TYPE-004",
+        "id": "ORA-TYPE-004-CASE-02",
+        "oracle_sql_sha256": "f4ef8476c3deff9f733c00cbc78d893db5c9921924b4623535db072e21b758a9"
+      },
+      {
+        "alloydb_sql_sha256": "7c808332460e0f8ef380339202d321917388619d64dc6ffe2efe5472e2fefc29",
+        "behavior_id": "ORA-TYPE-004",
+        "id": "ORA-TYPE-004-CASE-03",
+        "oracle_sql_sha256": "f239df1dfdb04b44bc6435d70585112829157cc407caf131a60299452a22e50d"
+      },
+      {
+        "alloydb_sql_sha256": "9b3e660e8b07d99f9d9ea12dc333643d5ac98425a60fdb60d7e33bd36b5699fa",
+        "behavior_id": "ORA-TYPE-004",
+        "id": "ORA-TYPE-004-CASE-04",
+        "oracle_sql_sha256": "05c9d9eb7062420b9c68a8ab574bed94db7cf5e79a0f3557e9ff9e35487f4118"
+      },
+      {
+        "alloydb_sql_sha256": "cdd2efc7def41e11c4708d2cd34ad3f81698e26ab7a71993406ebaf548f44d84",
+        "behavior_id": "ORA-TYPE-005",
+        "id": "ORA-TYPE-005-CASE-01",
+        "oracle_sql_sha256": "1587604da0fbb41699781b6155cc6bdd0eb477e949966d75e27d8e13efe8dc56"
+      },
+      {
+        "alloydb_sql_sha256": "7fe3c7e5861780183a35fb03a7a58d546dff01f043f1303f48c1d851cf015426",
+        "behavior_id": "ORA-TYPE-005",
+        "id": "ORA-TYPE-005-CASE-02",
+        "oracle_sql_sha256": "7c4dca2b3846063fee5ac5a53b95b60a47330a4af65af3bed0660a4ab463700f"
+      },
+      {
+        "alloydb_sql_sha256": "c771bac7539db840e397df514e2bf350a22737b56bb9326bcc0c2bffd062c727",
+        "behavior_id": "ORA-TYPE-005",
+        "id": "ORA-TYPE-005-CASE-03",
+        "oracle_sql_sha256": "db78a48b21383f7facd9bb86132e83e0b5b2e24b51e36748695e041c0981c5cf"
+      },
+      {
+        "alloydb_sql_sha256": "93e15e4e60aa83f9def071458113b2142eb63e62f76392f7f2f4eac667a3b3b1",
+        "behavior_id": "ORA-TYPE-005",
+        "id": "ORA-TYPE-005-CASE-04",
+        "oracle_sql_sha256": "6daf2e0cec3839151e9cfd0533d74a8d48c53b0eb48889e387e3587051953ba0"
+      }
+    ],
+    "comparison_policy": "Exact values and nulls; approved ORA-01438/22003 overflow-class mapping. Target SQL explicitly renders decimal separators; raw observations are retained.",
+    "cost_policy": "Estimated incremental budget; elapsed-time guard is enforceable, dollar cap is not a billing guarantee. Existing storage charges continue.",
+    "data_policy": "Synthetic expressions only; PostgreSQL transaction rollback; no application data read or changed.",
+    "implementation": {
+      "campaign_engine.py": "11fd0f8d61c137873ab44d8f59fc254957a18785c1ee06d0e57f902cae349711",
+      "campaign_gcp.py": "6db58e23c64658425de5050643060f559d304113c1eba6d8089828c20a23144f",
+      "oracle_number_native.py": "81ae94e570a27cc90704cab4fbea1a0bfe03b195795a38bc681645c3187c13e9",
+      "paired_number.py": "c3c7796ead8c67d280523cf6f5c719240b7cf6b4f2e8fd6b222076efbee68e4d"
+    },
+    "interruption_policy": "No automatic replay of SQL after interruption. Record cleanup separately; unresolved cleanup requires recovery. Closing the browser does not stop the worker.",
+    "plan_sha256": "5883ad23c0ec3e0dc6553d08f7dfbbcbe3bac8ddb65ac9c9a871e7c50eee31d2",
+    "profile": {
+      "budget_usd": 10,
+      "estimated_hourly_usd": 2,
+      "max_seconds": 3600,
+      "oracle_image": "container-registry.oracle.com/database/free@sha256:770ca58ab319d8cfde610b0db25c06899ce0af9591c4addfa10d2cb8f0318e65",
+      "runner_zone": "us-west1-a"
+    },
+    "project": "lightyear-ms67-nonproduction",
+    "qualification": "Bounded NUMBER equivalence only; no new platform or application qualification.",
+    "region": "us-west1",
+    "resource_policy": "Create one ephemeral e2-standard-2 runner; resume only the stopped AlloyDB primary. Delete owned runner and IAP firewall; restore AlloyDB to STOPPED."
+  },
+  "reason": "Codex acting on the user authorization in this conversation. Retry the same 20-case Oracle 26ai / AlloyDB NUMBER pilot after confirmed cleanup of three preparation failures. The corrected identity query leaves unread isolation metadata unknown; the shared Oracle implementation is now bound in the plan. Cumulative estimated incremental budget remains $10, active runtime 3600 seconds, with the same reviewed comparison and cleanup terms. Earlier attempts executed no catalog cases.",
+  "record_type": "paired-campaign-authorization",
+  "request_id": "616e3c24-23c8-49f9-a726-e12e73f21777",
+  "run_id": "number-7742a8bfe7cf4ed19a6f72c0d26b7856",
+  "signature": {
+    "algorithm": "Ed25519",
+    "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+    "value": "yku04ydFIfgxR+1oASkzKPbVSg1tnKPr0yRPhTuhL5iMqXT8GwSomuiyKJ7kSD+6HUQZLXCLxQjtKYAZoilhBQ=="
+  },
+  "start_before": "2026-09-17T22:37:14.528655+00:00"
+}

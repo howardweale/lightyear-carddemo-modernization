@@ -1,0 +1,26 @@
+{
+  "at": "2026-09-17T23:10:29.601919+00:00",
+  "authorization_sha256": "e37e5fb8cc5ac58eabd3d044058b838f785ed6374c9a26d37cfcf675d47a52da",
+  "cleanup": {
+    "complete": true,
+    "resources": {
+      "alloydb": "stopped",
+      "firewall": "deleted",
+      "vm": "deleted"
+    }
+  },
+  "content_sha256": "56d0b921bc3d80f5a6f8c7a3ec5ff7d69839734c63d754a4dff29fffa0d348d9",
+  "evidence_class": "native-database-observed",
+  "journal_head_sha256": "74afa33d6dfe5db631d98ed111ccce5f7ffa66c4b63e4b3ac6fb0fe0ef9914d2",
+  "matched": 20,
+  "record_type": "paired-campaign-summary",
+  "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+  "signature": {
+    "algorithm": "Ed25519",
+    "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+    "value": "k0xEyLciAK7ARFuZlyCx15yiWwrsex3Sfu5TIObRuxFDiIqKD9B9ktEBhvTStYOYmF3H7sT+LsYnVSOEH8qkCw=="
+  },
+  "source_completed": 20,
+  "status": "passed-bounded-native",
+  "target_completed": 20
+}

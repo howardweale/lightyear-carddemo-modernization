@@ -37,7 +37,7 @@ jobs:
           python -m unittest discover -s tests -p test_comparator_escape.py -v
           python -m unittest discover -s tests -p test_workflow_campaigns.py -v
           python -m unittest discover -s tests -p test_workflow_history.py -v
-          python -m unittest discover -s tests -p test_paired_campaign.py -v
+          python -m unittest discover -s tests -p 'test_paired_campaign*.py' -v
           node --check knowledge/viewer/paired.js
           node --check knowledge/viewer/context.js
           node --check knowledge/viewer/campaign.js

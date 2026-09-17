@@ -1,0 +1,21 @@
+{
+  "at": "2026-09-17T21:58:28.384493+00:00",
+  "authorization_sha256": "fec08e87584cf5c1970f6558dc7efd2f2f27a7c6ea6ff0e00f981a2b3666e80f",
+  "cleanup": {
+    "complete": true,
+    "resources": {
+      "alloydb": "stopped",
+      "firewall": "deleted",
+      "vm": "deleted"
+    }
+  },
+  "content_sha256": "0693b195aeb102e15c60dba47a117a58fa6da94a835fe4471a6cc99c1385ca6e",
+  "record_type": "paired-campaign-recovery",
+  "run_id": "number-e72fb057ad9a422c9d6c99f217200e15",
+  "signature": {
+    "algorithm": "Ed25519",
+    "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+    "value": "HMuq0K7tsBL1rVa24tCtX4/AYDRYAc7KivH0hK1RIGNPW2TzARTZXwAMU7SzsgFn31Y3CBUmFMvNvYuEtpKkBQ=="
+  },
+  "sql_retried": false
+}

@@ -1,0 +1,288 @@
+{
+  "events": [
+    {
+      "at": "2026-09-17T21:44:33.313334+00:00",
+      "content_sha256": "c0aa9b5f798037cbfb914a62e5d42440d7f37984e18dda95cd2c6a7b85dc6ff8",
+      "payload": {
+        "content_sha256": "5c18db5b2ef6f956c7b3adc9e1625914a2a49fae0133acb1794a74bf75f1cc74",
+        "event_type": "started",
+        "message": "Detached engine accepted the signed campaign authorization.",
+        "plan_sha256": "e51b90fbedb2a9293d592a2f36b60dbe48817e035a90e7911fb20a95563ef245",
+        "previous_event_sha256": null,
+        "run_id": "number-e72fb057ad9a422c9d6c99f217200e15",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "M8FboiayEOCh9lBFy04meBXWuGAkAh/2I5+siPYUpqZzYPmJO1eEbE3gbTRqQsuIq7sSgEgIw/27jSagRh4IBg=="
+        }
+      },
+      "previous_sha256": null,
+      "sequence": 1,
+      "type": "started"
+    },
+    {
+      "at": "2026-09-17T21:44:35.091018+00:00",
+      "content_sha256": "9d56883753e82f2050fe014d33de6311501be17b844fbcc2f41e2b8175e99262",
+      "payload": {
+        "content_sha256": "117681defd03d12fcbc08d3aeb7d8d0a3f20db5ba9c1ae9456c7b7b1e77c0fb6",
+        "event_type": "resource-state",
+        "plan_sha256": "e51b90fbedb2a9293d592a2f36b60dbe48817e035a90e7911fb20a95563ef245",
+        "previous_event_sha256": "c0aa9b5f798037cbfb914a62e5d42440d7f37984e18dda95cd2c6a7b85dc6ff8",
+        "run_id": "number-e72fb057ad9a422c9d6c99f217200e15",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "C83tby5Uc8960RhEg8h5LUbt7QJ4x/sN7zXb9v0maJZ+CJCJDoLav9LXzvHsk0RxJUEilaa+5tCH5hAdQVIGDw=="
+        },
+        "state": {
+          "alloydb_before": "STOPPED",
+          "alloydb_name": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/cloudbank-ms71-alloydb/instances/primary",
+          "alloydb_start_requested": false,
+          "firewall": "ly-number-e72fb057ad9a422c9d6c-iap",
+          "firewall_create_requested": false,
+          "run_id": "number-e72fb057ad9a422c9d6c99f217200e15",
+          "vm": "ly-number-e72fb057ad9a422c9d6c",
+          "vm_create_requested": false,
+          "zone": "us-west1-a"
+        }
+      },
+      "previous_sha256": "c0aa9b5f798037cbfb914a62e5d42440d7f37984e18dda95cd2c6a7b85dc6ff8",
+      "sequence": 2,
+      "type": "resource-state"
+    },
+    {
+      "at": "2026-09-17T21:44:38.375646+00:00",
+      "content_sha256": "2e5be112e81a0d3380841518ec845518a4bc5adb53b6236a9fd25bbc88ba46fb",
+      "payload": {
+        "content_sha256": "3220b166a8bbff4f16c60bf8c43eab1e4f9998161a5bf4033515a511a148b049",
+        "event_type": "stage",
+        "message": "Resuming the bound AlloyDB primary and preparing an owned runner.",
+        "plan_sha256": "e51b90fbedb2a9293d592a2f36b60dbe48817e035a90e7911fb20a95563ef245",
+        "previous_event_sha256": "9d56883753e82f2050fe014d33de6311501be17b844fbcc2f41e2b8175e99262",
+        "run_id": "number-e72fb057ad9a422c9d6c99f217200e15",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "BNoO/aIPkwlfQ+q6ohWuwciBHPbZmcSAAfQ1qAFXTCeQYgb2g+S2n2v460fD1KfeQTvgy4SGhx+ZApr2FohBAw=="
+        },
+        "stage": "environment-start"
+      },
+      "previous_sha256": "9d56883753e82f2050fe014d33de6311501be17b844fbcc2f41e2b8175e99262",
+      "sequence": 3,
+      "type": "stage"
+    },
+    {
+      "at": "2026-09-17T21:44:38.387843+00:00",
+      "content_sha256": "bb7acf2d89b58715d123ca381ae25c8dfb3100a19d89ce826f859aa9f521c516",
+      "payload": {
+        "content_sha256": "4a20d83ebe65d0d97c97c2e62a417fd27a52b48096e808fce56d087c8280c365",
+        "event_type": "resource-state",
+        "plan_sha256": "e51b90fbedb2a9293d592a2f36b60dbe48817e035a90e7911fb20a95563ef245",
+        "previous_event_sha256": "2e5be112e81a0d3380841518ec845518a4bc5adb53b6236a9fd25bbc88ba46fb",
+        "run_id": "number-e72fb057ad9a422c9d6c99f217200e15",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "8LnVOXVHO+mN0QziGCZ9jB0dpNoyRUxU7kbx46AN8FNY5wIeY+lKKFDWpFTUpQBkRfaaBxEgxZU/7FSqlSEPCQ=="
+        },
+        "state": {
+          "alloydb_before": "STOPPED",
+          "alloydb_name": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/cloudbank-ms71-alloydb/instances/primary",
+          "alloydb_start_requested": true,
+          "firewall": "ly-number-e72fb057ad9a422c9d6c-iap",
+          "firewall_create_requested": false,
+          "run_id": "number-e72fb057ad9a422c9d6c99f217200e15",
+          "vm": "ly-number-e72fb057ad9a422c9d6c",
+          "vm_create_requested": false,
+          "zone": "us-west1-a"
+        }
+      },
+      "previous_sha256": "2e5be112e81a0d3380841518ec845518a4bc5adb53b6236a9fd25bbc88ba46fb",
+      "sequence": 4,
+      "type": "resource-state"
+    },
+    {
+      "at": "2026-09-17T21:44:40.081077+00:00",
+      "content_sha256": "29b1885e139187053a6811e6a8815cc99d2fbf83be3010a28e45916d26d0429f",
+      "payload": {
+        "content_sha256": "5bcceb35c9e2c0f0bf2bd5caf2eebee8d7c74b52ae688ac88f5e97dc365edf81",
+        "event_type": "resource-state",
+        "plan_sha256": "e51b90fbedb2a9293d592a2f36b60dbe48817e035a90e7911fb20a95563ef245",
+        "previous_event_sha256": "bb7acf2d89b58715d123ca381ae25c8dfb3100a19d89ce826f859aa9f521c516",
+        "run_id": "number-e72fb057ad9a422c9d6c99f217200e15",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "Jvm6ATChTG0s50WCog0dX+ZC7/p9H9S5CWgK7Z15ZC4kUsHoV1V7crm9+RdBm/+96bGk0vHCZta7osRCve4cCw=="
+        },
+        "state": {
+          "alloydb_before": "STOPPED",
+          "alloydb_name": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/cloudbank-ms71-alloydb/instances/primary",
+          "alloydb_start_requested": true,
+          "firewall": "ly-number-e72fb057ad9a422c9d6c-iap",
+          "firewall_create_requested": true,
+          "run_id": "number-e72fb057ad9a422c9d6c99f217200e15",
+          "vm": "ly-number-e72fb057ad9a422c9d6c",
+          "vm_create_requested": false,
+          "zone": "us-west1-a"
+        }
+      },
+      "previous_sha256": "bb7acf2d89b58715d123ca381ae25c8dfb3100a19d89ce826f859aa9f521c516",
+      "sequence": 5,
+      "type": "resource-state"
+    },
+    {
+      "at": "2026-09-17T21:44:47.637990+00:00",
+      "content_sha256": "5652889bc1d741c2c472ff35bd6f47882cc24daf1b25be643326fd23cb9718a7",
+      "payload": {
+        "content_sha256": "8e3002e7fd353c215210b93c52584ce0700fc710cfb73e2e0364900d24c3ec5b",
+        "event_type": "resource-state",
+        "plan_sha256": "e51b90fbedb2a9293d592a2f36b60dbe48817e035a90e7911fb20a95563ef245",
+        "previous_event_sha256": "29b1885e139187053a6811e6a8815cc99d2fbf83be3010a28e45916d26d0429f",
+        "run_id": "number-e72fb057ad9a422c9d6c99f217200e15",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "L2ZVllosPKngBGe6hC/STozCM0kzOZKkAQBsxbwtxhpfVA0TtsdPk5q5IsMWH2o4JPonx3FfO3Bwmf5A09IGDw=="
+        },
+        "state": {
+          "alloydb_before": "STOPPED",
+          "alloydb_name": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/cloudbank-ms71-alloydb/instances/primary",
+          "alloydb_start_requested": true,
+          "firewall": "ly-number-e72fb057ad9a422c9d6c-iap",
+          "firewall_create_requested": true,
+          "run_id": "number-e72fb057ad9a422c9d6c99f217200e15",
+          "vm": "ly-number-e72fb057ad9a422c9d6c",
+          "vm_create_requested": true,
+          "zone": "us-west1-a"
+        }
+      },
+      "previous_sha256": "29b1885e139187053a6811e6a8815cc99d2fbf83be3010a28e45916d26d0429f",
+      "sequence": 6,
+      "type": "resource-state"
+    },
+    {
+      "at": "2026-09-17T21:52:33.753666+00:00",
+      "content_sha256": "a0e60486c243f591c8cebc3d3be2da3a2349c7fe5281aff6af368318b60639fe",
+      "payload": {
+        "content_sha256": "383db4f359ee5e84f11b87052d939dc1b4bb513052821137dc40e8f5ee29de95",
+        "event_type": "error",
+        "message": "GCP operation failed: compute ssh ly-number-e72fb057ad9a422c9d6c",
+        "plan_sha256": "e51b90fbedb2a9293d592a2f36b60dbe48817e035a90e7911fb20a95563ef245",
+        "previous_event_sha256": "5652889bc1d741c2c472ff35bd6f47882cc24daf1b25be643326fd23cb9718a7",
+        "run_id": "number-e72fb057ad9a422c9d6c99f217200e15",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "XOIBFq/ZvGOBA0iMtBgz3sV7cuLTuNztBu981/6iE1jP52/AiEOgC4DdBPM60IYy1mvxN33i34QqXD/+XBY0CA=="
+        }
+      },
+      "previous_sha256": "5652889bc1d741c2c472ff35bd6f47882cc24daf1b25be643326fd23cb9718a7",
+      "sequence": 7,
+      "type": "error"
+    },
+    {
+      "at": "2026-09-17T21:52:33.769953+00:00",
+      "content_sha256": "b21adee6711aefb844fa11c9dae778cc2f472d1b648604668bf54b5ec47a0ff1",
+      "payload": {
+        "content_sha256": "24ca1117eb83c8c1cde723856779c31dc72831d264950a61710197f17590744e",
+        "event_type": "stage",
+        "message": "Restoring stopped resources and deleting owned runner resources.",
+        "plan_sha256": "e51b90fbedb2a9293d592a2f36b60dbe48817e035a90e7911fb20a95563ef245",
+        "previous_event_sha256": "a0e60486c243f591c8cebc3d3be2da3a2349c7fe5281aff6af368318b60639fe",
+        "run_id": "number-e72fb057ad9a422c9d6c99f217200e15",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "dw/8Qv1/+w4Pdoxm30iILIzTQ4JbmpbvsmtwwRfNjIo66cPbYvWe6zrUDVk09pDfMYgeX5hfaXqc4tgvyUiOCQ=="
+        },
+        "stage": "cleanup"
+      },
+      "previous_sha256": "a0e60486c243f591c8cebc3d3be2da3a2349c7fe5281aff6af368318b60639fe",
+      "sequence": 8,
+      "type": "stage"
+    },
+    {
+      "at": "2026-09-17T21:53:35.227507+00:00",
+      "content_sha256": "42fe36edaf0f29570af524dc318d8e7739c211e1d4404891150b684969594be3",
+      "payload": {
+        "content_sha256": "3886e759abcf9f8718aeb6bc5f7746bdb694f5ed7f6422e948e2a2cf1cbf0357",
+        "event_type": "resource-state",
+        "plan_sha256": "e51b90fbedb2a9293d592a2f36b60dbe48817e035a90e7911fb20a95563ef245",
+        "previous_event_sha256": "b21adee6711aefb844fa11c9dae778cc2f472d1b648604668bf54b5ec47a0ff1",
+        "run_id": "number-e72fb057ad9a422c9d6c99f217200e15",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "IiGkftjbo5cXxZkMDL2OaqtwDlEHzjjcifCSDF7x9c1OVS83OoSTCWN7bgCnRhtk78bwMaYmgKhLdNNFrLynCQ=="
+        },
+        "state": {
+          "alloydb_before": "STOPPED",
+          "alloydb_name": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/cloudbank-ms71-alloydb/instances/primary",
+          "alloydb_start_requested": true,
+          "cleanup": {
+            "alloydb": "unconfirmed",
+            "firewall": "deleted",
+            "vm": "deleted"
+          },
+          "firewall": "ly-number-e72fb057ad9a422c9d6c-iap",
+          "firewall_create_requested": true,
+          "run_id": "number-e72fb057ad9a422c9d6c99f217200e15",
+          "vm": "ly-number-e72fb057ad9a422c9d6c",
+          "vm_create_requested": true,
+          "zone": "us-west1-a"
+        }
+      },
+      "previous_sha256": "b21adee6711aefb844fa11c9dae778cc2f472d1b648604668bf54b5ec47a0ff1",
+      "sequence": 9,
+      "type": "resource-state"
+    },
+    {
+      "at": "2026-09-17T21:53:35.240169+00:00",
+      "content_sha256": "f55c7a343a2a73095227c4f5a916982a2bcc82aa1b51c22018e54376cbf1c1d9",
+      "payload": {
+        "cleanup": {
+          "complete": false,
+          "resources": {
+            "alloydb": "unconfirmed",
+            "firewall": "deleted",
+            "vm": "deleted"
+          }
+        },
+        "content_sha256": "7402e98606c80cfdde768d732b62d341329f002fdb6894121fbef4c53f70cb81",
+        "event_type": "cleanup",
+        "plan_sha256": "e51b90fbedb2a9293d592a2f36b60dbe48817e035a90e7911fb20a95563ef245",
+        "previous_event_sha256": "42fe36edaf0f29570af524dc318d8e7739c211e1d4404891150b684969594be3",
+        "run_id": "number-e72fb057ad9a422c9d6c99f217200e15",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "NKBKdfNcX4CtMfIJ6PQLY9TX2BAgcxL5pUHEZ5gBU9fiE8r7H6MUOjCju275SPFI51/42grzLjPGeHvaNZJ1CQ=="
+        }
+      },
+      "previous_sha256": "42fe36edaf0f29570af524dc318d8e7739c211e1d4404891150b684969594be3",
+      "sequence": 10,
+      "type": "cleanup"
+    },
+    {
+      "at": "2026-09-17T21:53:35.253918+00:00",
+      "content_sha256": "250db5d6d3f7f8d6fafd85ef7af52f4a0d2fb42404babd923e047bf1e294b08e",
+      "payload": {
+        "content_sha256": "16367b84ea6117b62539e496811459177e1edbc7967fd678bbc1a6345469edaa",
+        "event_type": "terminal",
+        "plan_sha256": "e51b90fbedb2a9293d592a2f36b60dbe48817e035a90e7911fb20a95563ef245",
+        "previous_event_sha256": "f55c7a343a2a73095227c4f5a916982a2bcc82aa1b51c22018e54376cbf1c1d9",
+        "run_id": "number-e72fb057ad9a422c9d6c99f217200e15",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "7dMzuJ9sgMR0V68DctmBrTqpXbpCBKV1NG/H9hB1ls+i3MqnwyHgH42O9kCcjR1YEB3Ttw7zHVxcnvMFMFV4CQ=="
+        },
+        "status": "cleanup-required"
+      },
+      "previous_sha256": "f55c7a343a2a73095227c4f5a916982a2bcc82aa1b51c22018e54376cbf1c1d9",
+      "sequence": 11,
+      "type": "terminal"
+    }
+  ]
+}

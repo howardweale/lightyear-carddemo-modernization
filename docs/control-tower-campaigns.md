@@ -75,6 +75,8 @@ Oracle `-1438` and PostgreSQL SQLSTATE `22003` remain different raw codes. Only 
 
 These results establish bounded NUMBER behaviour under this transformation. They do not establish full Oracle compatibility, application equivalence, production readiness or ten-dimension platform qualification. Repeated cases do not add distinct catalog coverage. This campaign's receipt is not automatically admitted into the separate native-catalog coverage gate.
 
+Identity metadata can also be unknown: the paired pilot leaves isolation level null because Oracle's `USERENV` context does not expose that parameter. The separate wallet-based catalog runner explicitly configures READ COMMITTED and labels that value as accepted session configuration, rather than a metadata readback. See [Oracle's SYS_CONTEXT parameter reference](https://docs.oracle.com/en/database/oracle/oracle-database/19/sqlrf/SYS_CONTEXT.html).
+
 ## Provision the local lab
 
 Install the project with Control Tower dependencies and configure the existing Google Cloud CLI account. Provision a separate authority:

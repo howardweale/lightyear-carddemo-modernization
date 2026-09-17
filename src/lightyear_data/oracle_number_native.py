@@ -129,7 +129,7 @@ SELECT 'LY_NUMBER_IDENTITY=' || JSON_OBJECT(
     'nls_numeric_characters' VALUE (SELECT value FROM nls_session_parameters WHERE parameter='NLS_NUMERIC_CHARACTERS'),
     'nls_sort' VALUE (SELECT value FROM nls_session_parameters WHERE parameter='NLS_SORT'),
     'nls_comp' VALUE (SELECT value FROM nls_session_parameters WHERE parameter='NLS_COMP'),
-    'isolation_level' VALUE SYS_CONTEXT('USERENV','ISOLATION_LEVEL'))
+    'isolation_level' VALUE NULL)
   RETURNING CLOB) FROM dual;
 """
 
@@ -204,6 +204,11 @@ ALTER SESSION SET ISOLATION_LEVEL = READ COMMITTED;
     if lane == "26ai" and not re.search(r"26\s*ai", banner, re.I):
         raise ValueError("Database banner does not identify Oracle 26ai")
     session = identity.pop("session")
+    # USERENV has no ISOLATION_LEVEL parameter. This runner explicitly set it
+    # above and accepted the SQL client's success; distinguish that provenance
+    # from the settings actually read back by IDENTITY_SQL.
+    session["isolation_level"] = "READ COMMITTED"
+    session["isolation_level_provenance"] = "explicit ALTER SESSION accepted"
     identity.update(database_lane=lane,
                     version_banner_sha256=hashlib.sha256(banner.encode()).hexdigest(),
                     dbid_sha256=hashlib.sha256(identity.pop("dbid").encode()).hexdigest(),

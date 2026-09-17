@@ -229,7 +229,7 @@ class GcpRunner:
                             break
                         time.sleep(3)
                     results[name] = "stopped" if state["state"] == "STOPPED" and state.get("activationPolicy") == "NEVER" else "unconfirmed"
-            except (ValueError, RuntimeError, KeyError):
+            except (ValueError, RuntimeError, KeyError, TypeError, OSError):
                 results[name] = "unconfirmed"
         self.password = None
         self.state["cleanup"] = results

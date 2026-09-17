@@ -108,6 +108,7 @@ def plan(root: Path) -> dict:
     cases = number_cases(root)
     sources = {name: hashlib.sha256((root / "src/lightyear_workflow" / name).read_bytes()).hexdigest()
                for name in ("paired_number.py", "campaign_engine.py", "campaign_gcp.py")}
+    sources["oracle_number_native.py"] = hashlib.sha256((root / "src/lightyear_data/oracle_number_native.py").read_bytes()).hexdigest()
     value = {
         "campaign_id": CAMPAIGN, "project": PROJECT, "region": REGION, "profile": config,
         "cases": [{"id": c["id"], "behavior_id": c["behavior_id"],

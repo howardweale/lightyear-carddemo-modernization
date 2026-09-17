@@ -62,7 +62,7 @@ class NumberPilotTests(unittest.TestCase):
                         "current_schema": "NUMBER_TEST", "current_edition": "ORA$BASE",
                         "session_timezone": "+00:00", "nls_date_format": "YYYY-MM-DD HH24:MI:SS",
                         "nls_timestamp_format": "YYYY-MM-DD HH24:MI:SS.FF6", "nls_numeric_characters": ".,",
-                        "nls_sort": "BINARY", "nls_comp": "BINARY", "isolation_level": "READ COMMITTED"}}
+                        "nls_sort": "BINARY", "nls_comp": "BINARY", "isolation_level": None}}
         lines = [IDENTITY + json.dumps(identity)]
         for case in number_cases(ROOT):
             lines.append(MARKER + json.dumps({"case_id": case["id"],
@@ -94,6 +94,10 @@ class NumberPilotTests(unittest.TestCase):
             self.assertFalse(receipt["native_oracle_conformance"])
             self.assertFalse(receipt["target_equivalence_observed"])
             self.assertEqual(["sqlplus", "-L", "-S", "/@number_test"], client.call_args.args[0])
+            self.assertNotIn("SYS_CONTEXT('USERENV','ISOLATION_LEVEL')", client.call_args.kwargs['input'])
+            self.assertIn('ALTER SESSION SET ISOLATION_LEVEL = READ COMMITTED;', client.call_args.kwargs['input'])
+            self.assertEqual('READ COMMITTED', receipt['session_settings']['isolation_level'])
+            self.assertEqual('explicit ALTER SESSION accepted', receipt['session_settings']['isolation_level_provenance'])
             changed = copy.deepcopy(receipt)
             changed["results"][0]["harness_sql_sha256"] = "a" * 64
             changed = sign(changed, "test-only-key", "test-runner")

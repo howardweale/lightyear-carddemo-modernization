@@ -34,7 +34,7 @@
       const terms = node('section', undefined, 'paired-terms');
       const cost = proposed.profile;
       terms.append(node('p', `20 Oracle cases + 20 AlloyDB cases · Estimated budget $${cost.budget_usd} · Maximum active runtime ${cost.max_seconds / 60} minutes`));
-      for (const key of ['resource_policy', 'data_policy', 'comparison_policy', 'cost_policy', 'interruption_policy', 'qualification']) terms.append(node('p', proposed[key]));
+      for (const key of ['resource_policy', 'data_policy', 'identity_policy', 'comparison_policy', 'cost_policy', 'interruption_policy', 'qualification']) terms.append(node('p', proposed[key]));
       terms.append(node('p', `Project: ${proposed.project} · Region: ${proposed.region}`));
       const details = node('details'); details.append(node('summary', 'Inspect the exact plan and SQL bindings'), node('pre', JSON.stringify(proposed, null, 2))); terms.append(details);
       controls.append(terms);

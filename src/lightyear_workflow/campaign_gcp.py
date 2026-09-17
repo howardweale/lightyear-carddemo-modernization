@@ -172,6 +172,12 @@ class GcpRunner:
         return result["stdout"] + "\n" + result["stderr"]
 
     def identities(self):
+        current = self.instance()
+        if current.get("name") != self.state["alloydb_name"] or current.get("state") != "READY":
+            raise ValueError("The bound AlloyDB resource is not ready for identity verification")
+        # The GCP API supplies the connection endpoint. Managed routing can
+        # expose a different socket address through inet_server_addr().
+        self.address = current["ipAddress"]
         prefix = "SET ECHO OFF FEEDBACK OFF HEADING OFF PAGESIZE 0 VERIFY OFF\nSET LONG 100000 LONGCHUNKSIZE 100000 LINESIZE 32767\nWHENEVER SQLERROR EXIT SQL.SQLCODE\nALTER SESSION SET CONTAINER=FREEPDB1;\n"
         raw = self.sql("oracle", prefix + IDENTITY_SQL + "\nEXIT\n")
         rows = [line.split("LY_NUMBER_IDENTITY=", 1)[1] for line in raw.splitlines() if "LY_NUMBER_IDENTITY=" in line]
@@ -182,13 +188,20 @@ class GcpRunner:
             raise ValueError("Oracle runtime is not the authorized 26ai Free PDB")
         target_sql = "SELECT json_build_object('version',version(),'server_address',inet_server_addr()::text,'database',current_database(),'user',current_user,'server_version',current_setting('server_version'),'timezone',current_setting('TimeZone'));"
         target = json.loads(self.sql("alloydb", target_sql).strip())
-        if target["server_address"] != self.address or not target["server_version"].startswith("16."):
-            raise ValueError("Target SQL connection is not the bound AlloyDB endpoint/version")
+        if not target["server_version"].startswith("16."):
+            raise ValueError("Target SQL version is not PostgreSQL 16: " + target["server_version"][:32])
+        if target["database"] != "postgres" or target["user"] != "postgres":
+            raise ValueError("Target SQL database or user differs from the authorized connection")
         return {"oracle": {"version": source["version_full"], "banner": source["banner"], "container": source["container_name"],
                             "image": self.plan["profile"]["oracle_image"], "dbid_sha256": hashlib.sha256(source["dbid"].encode()).hexdigest(),
                             "session": source["session"], "evidence_class": self.evidence_class},
                 "alloydb": {"version": target["server_version"], "resource": self.state["alloydb_name"],
-                            "database": target["database"], "endpoint_verified": True, "evidence_class": self.evidence_class}}
+                            "database": target["database"], "endpoint_verified": True,
+                            "endpoint_binding": "PGHOST from fresh fixed-resource GCP API readback",
+                            "version_banner": target["version"],
+                            "server_address_matches_endpoint": target["server_address"] == self.address,
+                            "server_address_sha256": hashlib.sha256(target["server_address"].encode()).hexdigest() if target["server_address"] else None,
+                            "evidence_class": self.evidence_class}}
 
     def observe(self, lane, case):
         sql = postgres_case(case) if lane == "alloydb" else (

@@ -102,6 +102,8 @@ Create ignored `work/campaigns/oracle26ai-alloydb-number/profile.json` with thes
 
 The $2/hour value is a conservative planning allowance for this lab, not a live pricing quote. Review current GCP pricing before adapting the plan. The engine rejects mutable image tags and checks fresh runtime identities. Review and serve:
 
+The AlloyDB connection uses the private endpoint from a fresh read of the fixed GCP instance resource, and verifies the SQL version, database and user. Its internal server socket address is retained as a hash and a separate comparison field; it is not assumed to equal the managed connection endpoint.
+
 ```powershell
 py -3.12 -m lightyear_workflow.campaign_service review --root .
 py -3.12 -m lightyear_knowledge_graph serve --port 8766 --no-browser

@@ -117,6 +117,7 @@ def plan(root: Path) -> dict:
         "implementation": sources, "alloydb_cluster": "cloudbank-ms71-alloydb", "alloydb_instance": "primary",
         "resource_policy": "Create one ephemeral e2-standard-2 runner; resume only the stopped AlloyDB primary. Delete owned runner and IAP firewall; restore AlloyDB to STOPPED.",
         "data_policy": "Synthetic expressions only; PostgreSQL transaction rollback; no application data read or changed.",
+        "identity_policy": "Oracle digest, 26ai version and PDB are verified. AlloyDB PGHOST is bound to fresh fixed-resource GCP API readback and PostgreSQL 16; the separately recorded server socket address may differ behind managed routing.",
         "comparison_policy": "Exact values and nulls; approved ORA-01438/22003 overflow-class mapping. Target SQL explicitly renders decimal separators; raw observations are retained.",
         "cost_policy": "Estimated incremental budget; elapsed-time guard is enforceable, dollar cap is not a billing guarantee. Existing storage charges continue.",
         "interruption_policy": "No automatic replay of SQL after interruption. Record cleanup separately; unresolved cleanup requires recovery. Closing the browser does not stop the worker.",

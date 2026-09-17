@@ -249,3 +249,23 @@ class PairedCampaignTests(unittest.TestCase):
         self.assertEqual(command.call_args.kwargs['env']['CLOUDSDK_SSH_PUTTY_FORCE_CONNECT'], 'false')
         self.assertEqual(command.call_args.kwargs['input'], 'private-input')
         self.assertNotIn('private-input', str(command.call_args.args))
+
+    def test_alloydb_identity_binds_api_endpoint_and_checks_version_separately(self):
+        from lightyear_workflow.campaign_gcp import GcpRunner
+        with patch('lightyear_workflow.campaign_gcp.shutil.which', return_value='gcloud'):
+            runner = GcpRunner(self.root, 'number-' + '1'*32, plan(self.root), lambda *_: None)
+        runner.state['alloydb_name'] = 'bound-resource'
+        source = 'LY_NUMBER_IDENTITY=' + json.dumps({'banner':'Oracle Database 26ai Free','version_full':'23.26.0.0.0','container_name':'FREEPDB1','dbid':'test','session':{'isolation_level':None}})
+        target = {'version':'PostgreSQL 16.3','server_version':'16.3','server_address':'192.0.2.2','database':'postgres','user':'postgres'}
+        resource = {'name':'bound-resource','state':'READY','ipAddress':'192.0.2.1'}
+        with patch.object(runner,'instance',return_value=resource), patch.object(runner,'sql',side_effect=[source,json.dumps(target)]):
+            identity = runner.identities()
+        self.assertEqual(runner.address,resource['ipAddress'])
+        self.assertTrue(identity['alloydb']['endpoint_verified'])
+        self.assertFalse(identity['alloydb']['server_address_matches_endpoint'])
+        self.assertNotIn('192.0.2.',json.dumps(identity))
+        with patch.object(runner,'instance',return_value=resource), patch.object(runner,'sql',side_effect=[source,json.dumps({**target,'server_version':'17.1'})]):
+            with self.assertRaisesRegex(ValueError,'PostgreSQL 16'): runner.identities()
+        with patch.object(runner,'instance',return_value={**resource,'name':'other-resource'}), patch.object(runner,'sql') as sql:
+            with self.assertRaises(ValueError): runner.identities()
+            sql.assert_not_called()

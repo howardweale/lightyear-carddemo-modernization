@@ -114,7 +114,8 @@
       row.append(node('h3', run.status), node('p', `${run.run_id} · ${new Date(run.at).toLocaleString()}`),
         node('p', `${run.source_completed} Oracle observations · ${run.target_completed} AlloyDB observations · ${run.matched} equivalent pairs · ${run.evidence_class}`),
         node('p', `Original cleanup ${run.cleanup.complete ? 'confirmed' : 'requires attention'}`));
-      if (run.recovery) row.append(node('p', `Later recovery: ${run.recovery.cleanup.complete ? 'cleanup confirmed' : 'action required'}. Original verdict retained.`));
+      const recovery = value.recoveries?.[run.run_id];
+      if (recovery) row.append(node('p', `Later recovery: ${recovery.cleanup.complete ? 'cleanup confirmed' : 'action required'}. Original verdict retained.`));
       host.append(row);
     }
   }

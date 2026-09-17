@@ -37,10 +37,11 @@ def history(root):
     # verifiable after the customer's journal retention policy removes detail.
     try:
         rows = records(root)
-        terminal = [{**r["terminal"], "recovery": r["recovery"]} for r in rows if r["terminal"]]
+        terminal = [r["terminal"] for r in rows if r["terminal"]]
         return {"campaign_id": CAMPAIGN, "metric_unit": "paired-cases", "read_only": True,
                 "weeks": [],
                 "runs": terminal, "reason": None if terminal else "no-runs-recorded",
+                "recoveries": {r["authorization"]["run_id"]: r["recovery"] for r in rows if r["recovery"]},
                 "limit": 100, "note": "Latest 100 authorizations; simulated runs remain labelled. Repeated cases are not distinct catalog coverage."}
     except (ValueError, OSError, KeyError, TypeError, sqlite3.Error):
         return {"campaign_id": CAMPAIGN, "runs": [], "reason": "invalid-run-index", "metric_unit": "paired-cases"}

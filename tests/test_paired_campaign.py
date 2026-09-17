@@ -12,7 +12,7 @@ import uuid
 from urllib.request import Request, urlopen
 from urllib.error import HTTPError
 
-from lightyear_control_tower.decisions import DecisionUnauthorized, canonical
+from lightyear_control_tower.decisions import DecisionUnauthorized, canonical, verify_envelope
 from lightyear_data.oracle_number_native import EXPECTED, number_cases, probes
 from lightyear_workflow import campaign_engine as engine
 from lightyear_workflow.campaign_service import CampaignService, history, initialize, list_runs
@@ -84,6 +84,7 @@ class PairedCampaignTests(unittest.TestCase):
         self.assertEqual(journal.read_bytes(), before)
         with patch.object(RunStore, "events", side_effect=AssertionError("History must not open journals")):
             self.assertEqual(history(self.root)["runs"][0]["status"], "passed-simulated")
+            self.assertTrue(verify_envelope(history(self.root)["runs"][0], engine.public_key(self.root)))
             self.assertEqual(len(list_runs(self.root)["runs"]), 1)
         self.assertEqual(engine.execute(self.root, run_id, runner_factory=SimulatedRunner)["status"], "passed-simulated")
         self.assertEqual(journal.read_bytes(), before)

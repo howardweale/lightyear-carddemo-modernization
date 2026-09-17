@@ -5,9 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>LIGHTYEAR Control Tower</title>
   <link rel="stylesheet" href="styles.css?v=48.4">
-  <link rel="stylesheet" href="decisions.css?v=75.1">
+  <link rel="stylesheet" href="decisions.css?v=76.1">
   <link rel="stylesheet" href="convergence.css?v=73.1">
   <link rel="stylesheet" href="run.css?v=75.1">
+  <link rel="stylesheet" href="campaign.css?v=1">
 </head>
 <body>
   <header class="masthead topbar">
@@ -92,12 +93,19 @@
     <button id="operator-sign-in" type="button">Sign in to decide</button>
     <button id="operator-sign-out" type="button" hidden>End session</button>
   </nav>
+  <section id="workflow-context" aria-label="Campaign and recorded run">
+    <div><label for="workflow-campaign">Campaign</label><select id="workflow-campaign"></select></div>
+    <div><label for="workflow-run">Recorded run</label><select id="workflow-run"></select></div>
+    <button id="refresh-run-list" class="secondary-button" type="button">Refresh view</button>
+    <p id="workflow-context-note" role="status"></p>
+  </section>
   <main id="decision-workspace" class="decision-workspace">
     <header class="decision-heading">
       <div><p class="decision-eyebrow">Evidence into action</p><h1>What happens next?</h1></div>
       <button id="refresh-decisions" class="secondary-button" type="button">Refresh queue</button>
     </header>
-    <section class="workflow-plan" aria-label="CloudBank execution">
+    <section id="campaign-view" aria-label="Campaign preparation" hidden></section>
+    <section id="cloudbank-execution" class="workflow-plan" aria-label="CloudBank execution">
       <div class="workflow-heading"><div><p class="decision-eyebrow">CloudBank · Eight services</p><h2>Evidence execution</h2></div><span class="decision-badge">Headless engine</span></div>
       <p id="execution-status" role="status">Reading the engine journal…</p>
       <div id="execution-counts" class="workflow-counts"></div>
@@ -706,10 +714,12 @@
       </div>
     </form>
   </dialog>
-  <script src="app.js?v=48.4" defer></script>
-  <script src="decisions.js?v=75.1" defer></script>
+  <script src="context.js?v=1" defer></script>
+  <script src="app.js?v=48.5" defer></script>
+  <script src="campaign.js?v=1" defer></script>
+  <script src="decisions.js?v=76.1" defer></script>
   <script src="workflow.js?v=1" defer></script>
-  <script src="execution.js?v=2" defer></script>
+  <script src="execution.js?v=3" defer></script>
   <dialog id="operator-dialog" class="verifier-dialog" aria-labelledby="operator-title">
     <form id="operator-form">
       <h2 id="operator-title">Start an operator session</h2>
@@ -719,7 +729,7 @@
       <div class="dialog-actions"><button id="cancel-operator" class="secondary-button" type="button">Cancel</button><button class="primary-button" type="submit">Start session</button></div>
     </form>
   </dialog>
-  <script src="convergence.js?v=73.1" defer></script>
-  <script src="run.js?v=75.4" defer></script>
+  <script src="convergence.js?v=76.1" defer></script>
+  <script src="run.js?v=76.1" defer></script>
 </body>
 </html>

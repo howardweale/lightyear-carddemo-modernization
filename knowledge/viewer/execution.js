@@ -97,8 +97,11 @@
   }
   async function refresh() {
     const request = ++sequence;
+    currentResult = null;
+    render({ status: 'unavailable', reason: 'Reading the selected estate and run…' });
+    if ((window.LightyearContext.state.estate !== 'cloudbank' || window.LightyearContext.state.campaignId !== 'retained')) return;
     try {
-      const response = await fetch('/api/workflow/execution', { cache: 'no-store', credentials: 'omit' });
+      const response = await fetch(`/api/workflow/execution?${window.LightyearContext.query()}`, { cache: 'no-store', credentials: 'omit' });
       if (!response.ok || !(response.headers.get('content-type') || '').includes('application/json')) throw new Error('Engine evidence service unavailable');
       const result = await response.json();
       if (request !== sequence) return;
@@ -111,6 +114,7 @@
   }
   $('execution-refresh').addEventListener('click', refresh);
   $('execution-filter').addEventListener('change', () => { if (currentResult) render(currentResult); });
+  document.addEventListener('tower-context-change', refresh);
   refresh();
   setInterval(refresh, 15000);
 })();

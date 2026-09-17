@@ -393,16 +393,21 @@ def read_execution(root: Path, directory: Path | None = None) -> dict:
             source = "recorded-example"
         if not events:
             return {"status": "unavailable", "read_only": True, "reason": "No CloudBank execution has been recorded.", "items": []}
-        _require(len(events) <= 256, "Execution journal exceeds bounded event count")
-        result = summary(replay(root, events))
-        age = (datetime.now(timezone.utc) - datetime.fromisoformat(result["last_event_at"])).total_seconds()
-        _require(age >= -60, "Execution time is in the future")
-        return {**result, "read_only": True, "source": source, "events": events,
-                "current_ledger_approval": current_approval(root),
-                "activity": "historical" if source == "recorded-example" or result["status"] != "running" else ("recent-engine-activity" if age < 45 else "interrupted-or-unobserved"),
-                "age_seconds": max(0, int(age))}
+        return project_events(root, events, source)
     except (ValueError, OSError, KeyError, TypeError, sqlite3.Error) as exc:
         return {"status": "invalid", "read_only": True, "reason": str(exc), "items": []}
+
+
+def project_events(root: Path, events: list[dict], source: str) -> dict:
+    """Replay a selected journal; callers verify archive identity before projection."""
+    _require(len(events) <= 256, "Execution journal exceeds bounded event count")
+    result = summary(replay(root, events))
+    age = (datetime.now(timezone.utc) - datetime.fromisoformat(result["last_event_at"])).total_seconds()
+    _require(age >= -60, "Execution time is in the future")
+    return {**result, "read_only": True, "source": source, "events": events,
+            "current_ledger_approval": current_approval(root),
+            "activity": "historical" if source == "recorded-example" or result["status"] != "running" else ("recent-engine-activity" if age < 45 else "interrupted-or-unobserved"),
+            "age_seconds": max(0, int(age))}
 
 
 def main(argv=None) -> int:

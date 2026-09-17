@@ -215,6 +215,20 @@ class DecisionHTTPTests(unittest.TestCase):
             req = Request(origin + '/api/decisions/' + route, data=json.dumps(data).encode() if data is not None else None, headers=headers)
             with urlopen(req, timeout=5) as response: return json.load(response)
         self.assertTrue(call('status')['enabled'])
+        self.assertEqual(call('status')['workload_id'], WORKLOAD)
+        for route in ('execution', 'runs', 'convergence', 'campaign'):
+            suffix = '?estate=cloudbank&campaign_id=oracle26ai-alloydb-number'
+            with urlopen(origin + '/api/workflow/' + route + suffix, timeout=30) as response:
+                pilot = json.load(response)
+            self.assertEqual(pilot['campaign_id'], 'oracle26ai-alloydb-number')
+            if route == 'execution':
+                self.assertEqual(pilot['status'], 'unavailable')
+                self.assertEqual(pilot['items'], [])
+            if route == 'runs': self.assertEqual(pilot['runs'], [])
+            if route == 'convergence': self.assertEqual(pilot['weeks'], [])
+            with self.assertRaises(HTTPError) as bad_scope:
+                urlopen(origin + '/api/workflow/' + route + suffix.replace('cloudbank', 'carddemo'), timeout=30)
+            self.assertEqual(bad_scope.exception.code, 400)
         before_plan = (ROOT / 'control-tower/action-plan.snapshot.json.gz').read_bytes()
         with urlopen(origin + '/api/workflow/plan?class=approval-required&limit=2', timeout=30) as response:
             plan = json.load(response)

@@ -5,6 +5,7 @@ import gzip
 import hashlib
 import json
 import os
+import sqlite3
 from pathlib import Path
 import tempfile
 
@@ -61,3 +62,73 @@ def record_finished(root: Path, events: list[dict], journals: Path) -> dict:
     if path.is_symlink() or path.read_bytes() != raw:
         raise ValueError("History archive differs from the admitted terminal run")
     return index.record(**metadata, events=events, journal_path=path)
+
+
+ESTATES = {"cloudbank": "CloudBank", "carddemo": "CardDemo", "oracle": "Oracle", "idempiere": "iDempiere"}
+
+
+def estate_name(estate: str) -> str:
+    if estate not in ESTATES:
+        raise ValueError("Unknown workflow estate")
+    return ESTATES[estate]
+
+
+def _read_index(root: Path) -> RunIndex:
+    path = root / INDEX_RELATIVE
+    if any(p.is_symlink() for p in (path, *path.parents)):
+        raise ValueError("Symbolic history index")
+    return RunIndex(path, read_only=True)
+
+
+def read_runs(root: Path, estate: str = "cloudbank") -> dict:
+    name = estate_name(estate)
+    result = {"estate": estate, "estate_name": name, "read_only": True, "limit": 100}
+    try:
+        rows = _read_index(root).runs(estate) if (root / INDEX_RELATIVE).exists() else []
+        return {**result, "runs": [{k: v for k, v in row.items() if k != "journal_path"} for row in rows],
+                "reason": None if rows else "no-runs-recorded"}
+    except (OSError, ValueError, sqlite3.Error):
+        return {**result, "runs": [], "reason": "invalid-run-index"}
+
+
+def read_selected(root: Path, estate: str = "cloudbank", run_id: str | None = None) -> dict:
+    """Resolve IDs through the index; verify bounded archive bytes and replay."""
+    from .execution import read_execution, project_events
+    from .policy import _unique_object
+    context = {"estate_id": estate, "estate_name": estate_name(estate), "run_id": run_id or "current", "read_only": True}
+    empty = {**context, "status": "unavailable", "items": []}
+    if estate != "cloudbank":
+        return {**empty, "reason": "No run adapter is recorded for this estate."}
+    if not run_id or run_id == "current":
+        return {**read_execution(root), **context}
+    try:
+        row = _read_index(root).lookup(run_id)
+        if not row or row["estate"] != estate:
+            return {**empty, "reason": "This run is not recorded for the selected estate."}
+        if row["journal_pruned_at"]:
+            return {**empty, "reason": "Journal pruned by retention policy. Indexed history remains available."}
+        path = Path(row["journal_path"])
+        if any(p.is_symlink() for p in (path, *path.parents)) or not path.resolve().is_relative_to((root / "work").resolve()):
+            raise ValueError("Journal archive is outside the permitted workspace")
+        if path.stat().st_size != row["journal_bytes"] or not 0 < row["journal_bytes"] <= 16 * 1024 * 1024:
+            raise ValueError("Journal archive size is invalid")
+        raw = path.read_bytes()
+        if hashlib.sha256(raw).hexdigest() != row["journal_sha256"]:
+            raise ValueError("Journal archive hash is invalid")
+        with gzip.open(path, "rb") as stream:
+            decoded = stream.read(16 * 1024 * 1024 + 1)
+        if len(decoded) > 16 * 1024 * 1024:
+            raise ValueError("Journal exceeds bounded size")
+        archive = json.loads(decoded, object_pairs_hook=_unique_object)
+        if any(archive[k] != row[k] for k in ("run_id", "estate", "workload")):
+            raise ValueError("Journal context differs from its index")
+        events = archive["events"]
+        if run_id != "cloudbank-" + events[0]["content_sha256"]:
+            raise ValueError("Journal identity mismatch")
+        result = project_events(root, events, "engine-journal")
+        expected = summarise(run_id, estate, row["workload"], events)
+        if any(expected[k] != row[k] for k in expected):
+            raise ValueError("Journal summary differs from its index")
+        return {**result, **context}
+    except (ValueError, OSError, KeyError, IndexError, TypeError, sqlite3.Error):
+        return {**context, "status": "invalid", "reason": "Selected journal could not be verified.", "items": []}

@@ -89,8 +89,10 @@
  .decision-workspace dl div { grid-template-columns:1fr; gap:3px; }
  .tower-navigation { padding:10px 16px; }
  #operator-session-label { width:100%; margin-left:0; order:3; }
- :is(.decision-mode, .report-mode) .operator-context, :is(.decision-mode, .report-mode) .estate-control, :is(.decision-mode, .report-mode) #live-alerts { display:none; }
+ :is(.decision-mode, .report-mode) .operator-context, :is(.decision-mode, .report-mode) #live-alerts { display:none; }
  :is(.decision-mode, .report-mode) .masthead { grid-template-columns:minmax(0,1fr) auto; padding-inline:16px; }
+ :is(.decision-mode, .report-mode) .estate-control { grid-column:1 / -1; grid-row:2; }
+ :is(.decision-mode, .report-mode) .estate-popover { width:min(440px, calc(100vw - 32px)); }
  :is(.decision-mode, .report-mode) .estate-boundary.claim { flex-wrap:wrap; padding-inline:16px; }
  :is(.decision-mode, .report-mode) .claim p { min-width:0; flex-basis:100%; }
  :is(.decision-mode, .report-mode) .claim-metadata { grid-template-columns:repeat(3,minmax(0,1fr)); max-width:100%; }

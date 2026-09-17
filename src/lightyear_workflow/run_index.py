@@ -189,6 +189,15 @@ class RunIndex:
                 "cutoff": cutoff, "run_ids": removed[:20], "dry_run": dry_run}
 
     # ── reading ──────────────────────────────────────────────────────────
+    def runs(self, estate: str, limit: int = 100) -> list[dict]:
+        """Read index rows only, without touching archived journals."""
+        if type(limit) is not int or not 1 <= limit <= 100:
+            raise ValueError("History limit must be between 1 and 100")
+        with closing(self._db()) as db:
+            return [dict(row) for row in db.execute(
+                "SELECT * FROM runs WHERE estate=? ORDER BY started_at DESC, run_id DESC LIMIT ?",
+                (estate, limit))]
+
     def lookup(self, run_id: str) -> dict | None:
         _run_id(run_id)
         with closing(self._db()) as db:

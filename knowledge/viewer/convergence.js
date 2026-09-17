@@ -131,7 +131,7 @@
     const weeks = payload.weeks || [];
     if (!weeks.length) {
       host.appendChild(node('p',
-        'No completed runs recorded yet. Convergence appears once the engine has finished a run.',
+        `No completed runs recorded yet. ${window.LightyearContext.state.campaignId === 'retained' ? window.LightyearContext.state.name : 'NUMBER campaign'} has no indexed runs. Verified terminal runs are recorded by the engine; this is not a measurement of zero activity.`,
         'convergence-note'));
       return;
     }
@@ -140,7 +140,7 @@
       host.appendChild(node('p', 'Run history is unavailable: unsupported measurement unit.', 'convergence-note'));
       return;
     }
-    host.appendChild(node('p', `CloudBank action activity · latest recorded week: ${weeks[weeks.length - 1].week}`, 'convergence-note'));
+    host.appendChild(node('p', `${window.LightyearContext.state.name} action activity · latest recorded week: ${weeks[weeks.length - 1].week}`, 'convergence-note'));
     host.appendChild(headline(weeks));
     const scroll = node('div', undefined, 'convergence-table-scroll');
     scroll.tabIndex = 0;
@@ -156,20 +156,27 @@
     if (payload.storage) host.appendChild(storage(payload.storage));
   }
 
+  let sequence = 0;
   async function load() {
+    const request = ++sequence;
     const host = $('convergence');
     if (!host) return;
+    host.replaceChildren(node('p', 'Reading selected estate history…'));
     try {
-      const response = await fetch('/api/workflow/convergence');
+      const response = await fetch(`/api/workflow/convergence?${window.LightyearContext.query()}`, { cache: 'no-store' });
       if (!response.ok) throw new Error(String(response.status));
-      render(await response.json());
+      const payload = await response.json();
+      if (request !== sequence) return;
+      render(payload);
     } catch (error) {
+      if (request !== sequence) return;
       host.replaceChildren(node('p',
         'Convergence is unavailable. The run index could not be read; the engine is unaffected.',
         'convergence-note'));
     }
   }
 
+  document.addEventListener('tower-context-change', load);
   document.addEventListener('DOMContentLoaded', load);
   window.LightyearConvergence = { reload: load };
 })();

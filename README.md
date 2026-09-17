@@ -4,9 +4,15 @@
 
 # LIGHTYEAR CardDemo Modernization Factory
 
+**[Control Tower campaign preparation](docs/control-tower-campaigns.md)** adds
+shared estate/campaign/run selection and a read-only Oracle 26ai / AlloyDB
+NUMBER pilot view. Prepared SQL, timestamped environment observations and
+execution results are kept distinct; campaign execution is not connected yet.
+
 **[MS #73 — Run history and action activity](docs/milestones/MS-73/MS-73.md)** adds
 a permanent run index, guarded journal retention and a read-only history view.
-No engine recording is wired yet; the view correctly reports no runs. Pattern
+MS #74 now records verified terminal engine runs. The new NUMBER campaign
+correctly reports no runs until its execution adapter is connected. Pattern
 reach remains separate from signing and semantic equivalence.
 
 **MS #72 — Control Tower workflow, Steps 1–2.** The headless engine now runs

@@ -35,6 +35,10 @@ jobs:
           python -m unittest discover -s tests -p test_graph_explorer.py -v
           python -m unittest discover -s tests -p test_live_control_tower.py -v
           python -m unittest discover -s tests -p test_comparator_escape.py -v
+          python -m unittest discover -s tests -p test_workflow_campaigns.py -v
+          python -m unittest discover -s tests -p test_workflow_history.py -v
+          node --check knowledge/viewer/context.js
+          node --check knowledge/viewer/campaign.js
           node --check knowledge/viewer/app.js
           node --check knowledge/viewer/decisions.js
           node --check knowledge/viewer/workflow.js

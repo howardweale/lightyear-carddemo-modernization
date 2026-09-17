@@ -524,6 +524,7 @@ function renderOperatorContext() {
   $("metric-edges").textContent = formatNumber(customer.edge_count);
   $("metric-rules").textContent = formatNumber(customer.rule_count);
   renderEstateTrigger();
+  window.LightyearContext?.setEstate(customer);
 }
 
 async function activateSelectedWorkload(resetScope = false) {

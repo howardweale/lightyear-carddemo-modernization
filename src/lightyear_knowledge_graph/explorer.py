@@ -20,7 +20,8 @@ from urllib.parse import parse_qs, unquote, urlparse
 from lightyear_control_tower.decisions import DecisionService, DecisionConflict, DecisionUnauthorized
 from lightyear_data.cloudbank_publication import load_publication, workload_publication
 from lightyear_workflow.artifacts import read_snapshot, project_snapshot
-from lightyear_workflow.execution import read_execution
+from lightyear_workflow.history import read_runs, read_selected
+from lightyear_workflow.campaigns import read_campaign, validate_context
 from lightyear_workflow.convergence import read_convergence
 
 from .chat import ChatError, GraphChatService
@@ -1508,6 +1509,7 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
         service = self.server.decision_service
         if path == "/api/decisions/status" and payload is None:
             self._json({"enabled": service is not None, "supported_decisions": ["normalization"],
+                        "workload_id": service.workload_id if service else None,
                         "authentication": "individual-local-credential",
                         "message": "Sign in to review and sign human decisions. The headless engine owns proof execution." if service else
                         "Decision service is not configured. Start the local Control Tower with an individual operator authority."})
@@ -1564,8 +1566,21 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
         self.wfile.write(body)
 
     def _api(self, path: str, query: dict[str, list[str]]) -> None:
+        if path in {"/api/workflow/campaign", "/api/workflow/runs", "/api/workflow/execution", "/api/workflow/convergence"}:
+            estate = self._value(query, "estate") or "cloudbank"
+            campaign = self._value(query, "campaign_id") or "retained"
+            validate_context(estate, campaign)
+        if path == "/api/workflow/campaign":
+            self._json(read_campaign(self.server.project_root, estate, campaign))
+            return
+        if path == "/api/workflow/runs":
+            self._json(read_runs(self.server.project_root, estate) if campaign == "retained" else
+                       {"estate": estate, "campaign_id": campaign, "runs": [], "reason": "no-runs-recorded", "read_only": True})
+            return
         if path == "/api/workflow/execution":
-            self._json(read_execution(self.server.project_root))
+            self._json(read_selected(self.server.project_root, estate, self._value(query, "run_id")) if campaign == "retained" else
+                       {"estate_id": estate, "campaign_id": campaign, "status": "unavailable", "read_only": True, "items": [],
+                        "reason": "Not run. The NUMBER campaign has no admitted execution journal; see its preparation and blockers in Work queue."})
             return
         if path == "/api/workflow/plan":
             self._json(project_snapshot(read_snapshot(self.server.project_root),
@@ -1575,7 +1590,8 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
             return
         if path == "/api/workflow/convergence":
             self._json(read_convergence(self.server.project_root,
-                estate=self._value(query, "estate"), weeks=self._integer(query, "weeks", 12)))
+                estate=estate, weeks=self._integer(query, "weeks", 12)) if campaign == "retained" else
+                {"weeks": [], "storage": None, "reason": "no-runs-recorded", "campaign_id": campaign})
             return
         self.server.refresh_live_projections()
         index = self.server.index

@@ -41,7 +41,7 @@
     const host = document.getElementById('run-view');
     host.replaceChildren();
     if (payload.status === 'unavailable') {
-      host.append(node('p', 'No run recorded yet. The run view appears once the engine has finished one.', 'run-note'));
+      host.append(node('p', payload.reason || 'No run recorded yet. No journal is available for the selected estate.', 'run-note'));
       return;
     }
     if (payload.status === 'invalid') throw new Error('The execution journal could not be verified.');
@@ -64,7 +64,7 @@
       throw new Error('An action boundary is incomplete.');
     }
     if (!Number.isSafeInteger(payload.summary?.iterations) || !Array.isArray(payload.blocks)) throw new Error('The run summary is incomplete.');
-    host.append(node('p', `CloudBank · ${payload.source === 'recorded-example' ? 'Recorded example journal' : 'Engine journal'} · ${payload.activity === 'historical' ? 'Historical evidence' : 'Current observation'}`, 'run-eyebrow'), node('h1', 'The run'));
+    host.append(node('p', `${payload.estate_name || 'CloudBank'} · ${payload.run_id || 'current'} · ${payload.source === 'recorded-example' ? 'Recorded example journal' : 'Engine journal'} · ${payload.activity === 'historical' ? 'Historical evidence' : 'Current observation'}`, 'run-eyebrow'), node('h1', 'The run'));
     host.append(node('p', `Started ${payload.started_at} · last event ${payload.last_event_at} · ${payload.status}${payload.halt_reason ? ' · ' + payload.halt_reason : ''}`, 'run-note'));
     if (events) host.append(node('p', `Hash-chained journal · ${number(events.length)} events · replay verified by the evidence service`, 'run-note'));
     const figures = node('div', undefined, 'run-figures');
@@ -120,7 +120,7 @@
     const request = ++sequence;
     host.replaceChildren(node('p', 'Reading the execution journal…', 'run-note'));
     try {
-      const response = await fetch('/api/workflow/execution', { cache: 'no-store', credentials: 'omit' });
+      const response = await fetch(`/api/workflow/execution?${window.LightyearContext.query()}`, { cache: 'no-store', credentials: 'omit' });
       if (!response.ok || !(response.headers.get('content-type') || '').includes('application/json')) throw new Error('The evidence service could not be reached.');
       const payload = await response.json();
       if (request === sequence) render(payload);
@@ -128,5 +128,6 @@
       if (request === sequence) host.replaceChildren(node('p', `The run is unavailable. ${error.message}`, 'run-note'));
     }
   }
+  document.addEventListener('tower-context-change', reload);
   window.LightyearRun = { reload };
 })();

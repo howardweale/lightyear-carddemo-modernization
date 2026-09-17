@@ -8,6 +8,9 @@
     if (className) item.className = className;
     return item;
   };
+  const estateFor = (workload) => workload?.startsWith('cloudbank:') ? 'cloudbank' : workload?.startsWith('workload:carddemo-') ? 'carddemo' : null;
+  const matchesEstate = (item) => window.LightyearContext.state.campaignId === 'retained' && estateFor(item.workload_id) === window.LightyearContext.state.estate;
+  let authorityWorkload = null;
   const title = (value) => value.replaceAll('-', ' ').replace(/^./, (letter) => letter.toUpperCase());
   const message = (text, error = false) => {
     byId('decision-message').textContent = text;
@@ -56,10 +59,16 @@
     byId('decision-count').textContent = ''; sessionChrome();
   }
   function renderItems() {
-    const pending = state.items.filter((item) => item.status !== 'approved');
+    if (window.LightyearContext.state.campaignId !== 'retained') {
+      byId('decision-count').textContent = '';
+      byId('decision-items').replaceChildren(node('p', 'Campaign decisions are not connected yet. Review the proposed scope and blockers above.', 'decision-empty'));
+      return;
+    }
+    const scoped = state.items.filter(matchesEstate);
+    const pending = scoped.filter((item) => item.status !== 'approved');
     byId('decision-count').textContent = String(pending.length);
     const filter = byId('decision-filter').value;
-    const items = state.items.filter((item) => filter === 'all' || (filter === 'approved' ? item.status === 'approved' : item.status !== 'approved'));
+    const items = scoped.filter((item) => filter === 'all' || (filter === 'approved' ? item.status === 'approved' : item.status !== 'approved'));
     const container = byId('decision-items'); container.replaceChildren();
     if (!items.length) container.append(node('p', filter === 'pending' ? 'No normalization decisions are waiting. Approved entries remain available under All normalizations.' : 'No entries match this view.', 'decision-empty'));
     for (const item of items) {
@@ -85,8 +94,11 @@
     section.append(list, node('small', `Signed record ${record.content_sha256.slice(0, 16)}…`)); return section;
   }
   async function review(id) {
+    const estate = window.LightyearContext.state.estate;
     try {
-      const item = await request('review', { entry_id: id }); state.selected = item; renderItems(); renderDetail(item);
+      const item = await request('review', { entry_id: id });
+      if (estate !== window.LightyearContext.state.estate || !matchesEstate(item)) return;
+      state.selected = item; renderItems(); renderDetail(item);
       message(`Reviewing ${title(item.id)}. This evidence view is recorded in your session.`);
     } catch (error) { message(error.message, true); }
   }
@@ -122,6 +134,7 @@
     let retryPayload = null;
     form.addEventListener('submit', async (event) => {
       event.preventDefault(); if (state.busy) return;
+      if (!matchesEstate(item)) { message('The selected estate changed. Review its decision before signing.', true); return; }
       const outcome = event.submitter?.value || 'approved';
       if (outcome === 'approved' && !expiry.value) { expiry.focus(); message('Choose a review date before approving.', true); return; }
       const values = { entry_id: item.id, entry_sha256: item.entry_sha256, ledger_sha256: item.ledger_sha256, previous_decision_sha256: item.latest_decision?.content_sha256 || null, outcome, reason: reason.value, owner: owner.value, review_after: expiry.value || null };
@@ -143,6 +156,7 @@
   }
   async function renderRuns() {
     const container = byId('decision-runs'); container.replaceChildren();
+    if (window.LightyearContext.state.estate !== 'carddemo') return;
     if (!state.runs.length) container.append(node('p', 'No historical proof is recorded here. The headless engine owns new proof runs.', 'decision-empty'));
     for (const run of state.runs.slice(0, 10)) {
       const card = node('article', undefined, 'decision-run');
@@ -153,7 +167,7 @@
   }
   function renderEvents(events) {
     const container = byId('decision-events'); container.replaceChildren();
-    for (const event of [...events].reverse()) {
+    for (const event of [...events].reverse().filter(event => window.LightyearContext.state.campaignId === 'retained' && estateFor(event.payload.workload_id || authorityWorkload) === window.LightyearContext.state.estate)) {
       const line = node('article', undefined, 'decision-event');
       line.append(node('strong', `${event.actor.name} · ${title(event.kind.replaceAll('_', '-'))}`), node('span', new Date(event.occurred_at).toLocaleString()));
       if (event.payload.entry_id) line.append(node('span', title(event.payload.entry_id)));
@@ -165,11 +179,17 @@
   async function refresh() {
     if (!state.token || refreshing) return;
     refreshing = true;
+    const estate = window.LightyearContext.state.estate;
     try {
-      const result = await request('queue'); state.items = result.items; state.runs = result.runs;
+      const result = await request('queue');
+      if (estate !== window.LightyearContext.state.estate) return;
+      state.items = result.items; state.runs = result.runs;
       renderItems(); renderEvents(result.events); await renderRuns();
     } catch (error) { message(error.message, true); }
-    finally { refreshing = false; }
+    finally {
+      refreshing = false;
+      if (estate !== window.LightyearContext.state.estate) refresh();
+    }
   }
   async function openProof(workloadId) {
     showQueue();
@@ -206,7 +226,19 @@
     try { download(await request('session-export'), `control-tower-session-${state.session.id}.json`); }
     catch (error) { message(error.message, true); }
   });
+  function contextChanged() {
+    state.selected = null;
+    byId('decision-detail').replaceChildren(node('h2', 'Select and review a decision for this estate'));
+    byId('decision-events').replaceChildren(); byId('decision-runs').replaceChildren();
+    renderItems();
+    byId('operator-sign-in').disabled = !state.enabled || (window.LightyearContext.state.campaignId !== 'retained' || estateFor(authorityWorkload) !== window.LightyearContext.state.estate);
+    if (window.LightyearContext.state.campaignId !== 'retained') message('Campaign authorization is not implemented yet. Existing normalization approvals do not authorize database execution or spending.');
+    else if (state.enabled && (window.LightyearContext.state.campaignId !== 'retained' || estateFor(authorityWorkload) !== window.LightyearContext.state.estate)) message('The configured decision authority belongs to another estate. Selecting an estate does not grant signing authority.');
+    else if (state.enabled) message('Review the selected estate decision. Approvals are current authority, not a historical run status.');
+    refresh();
+  }
+  document.addEventListener('tower-context-change', contextChanged);
   showQueue(); sessionChrome();
-  request('status').then((status) => { state.enabled = status.enabled; byId('operator-sign-in').disabled = !status.enabled; message(status.message, !status.enabled); }).catch((error) => { byId('operator-sign-in').disabled = true; message(error.message, true); });
+  request('status').then((status) => { state.enabled = status.enabled; authorityWorkload = status.workload_id; message(status.message, !status.enabled); contextChanged(); }).catch((error) => { byId('operator-sign-in').disabled = true; message(error.message, true); });
   setInterval(() => { if (state.token) refresh(); }, 30000);
 })();

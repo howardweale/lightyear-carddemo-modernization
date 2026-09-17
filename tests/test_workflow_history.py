@@ -11,7 +11,7 @@ from lightyear_data.contracts import seal
 from lightyear_workflow.cloudbank import observe
 from lightyear_workflow.convergence import INDEX_RELATIVE, read_convergence
 from lightyear_workflow.execution import execute, read_execution
-from lightyear_workflow.history import HISTORY_PATH, record_finished
+from lightyear_workflow.history import HISTORY_PATH, record_finished, read_runs, read_selected
 from lightyear_workflow.run_index import Retention, RunIndex
 from lightyear_workflow.run_store import RunStore
 from tests import test_cloudbank_workflow_execution as execution_tests
@@ -114,3 +114,38 @@ class WorkflowHistoryTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "work directory"):
             self.run_engine(history_dir=self.root / "outside-work")
         self.assertFalse(self.directory.exists())
+
+    def test_selected_run_replays_and_is_bound_to_estate_without_writes(self):
+        self.policy(max_actions=1)
+        self.run_engine()
+        rows = read_runs(self.root)["runs"]
+        self.assertEqual(len(rows), 1)
+        self.assertNotIn("journal_path", rows[0])
+        before = (self.root / INDEX_RELATIVE).read_bytes()
+        run_id = rows[0]["run_id"]
+        selected = read_selected(self.root, "cloudbank", run_id)
+        self.assertEqual(selected["status"], "halted")
+        self.assertEqual(selected["run_id"], run_id)
+        self.assertEqual(selected["events"], RunStore(self.directory, read_only=True).events())
+        self.assertEqual(read_selected(self.root, "carddemo", run_id)["status"], "unavailable")
+        self.assertEqual(read_selected(self.root, "cloudbank", "missing")["status"], "unavailable")
+        self.assertEqual(read_runs(self.root, "carddemo")["runs"], [])
+        self.assertEqual(before, (self.root / INDEX_RELATIVE).read_bytes())
+
+    def test_list_survives_pruning_and_corrupt_archive_clears_selected_details(self):
+        self.policy(max_actions=1)
+        self.run_engine()
+        row = read_runs(self.root)["runs"][0]
+        path = next((self.root / HISTORY_PATH).glob("*.json.gz"))
+        original = path.read_bytes()
+        path.write_bytes(b"corrupt")
+        self.assertEqual(read_selected(self.root, "cloudbank", row["run_id"])["status"], "invalid")
+        with patch.object(gzip, "open", side_effect=AssertionError("List must not read journals")):
+            self.assertEqual(len(read_runs(self.root)["runs"]), 1)
+        path.write_bytes(original)
+        RunIndex(self.root / INDEX_RELATIVE).prune(self.root / HISTORY_PATH, Retention(), datetime.now(timezone.utc) + timedelta(days=500))
+        self.assertIn("pruned", read_selected(self.root, "cloudbank", row["run_id"])["reason"])
+
+    def test_absent_run_list_does_not_create_index(self):
+        self.assertEqual(read_runs(self.root)["runs"], [])
+        self.assertFalse((self.root / INDEX_RELATIVE).exists())

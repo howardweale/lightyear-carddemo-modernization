@@ -25,7 +25,7 @@ BRAND_ROOT = ROOT / "brand"
 BRAND_ASSETS = BRAND_ROOT / "assets"
 BRAND_LOGO_SVG = BRAND_ASSETS / "lightyear-primary.svg"
 BRAND_LOGO_PNG = BRAND_ASSETS / "lightyear-primary.png"
-GENERATOR_VERSION = "1.23"
+GENERATOR_VERSION = "1.24"
 REPOSITORY = "howardweale/lightyear-carddemo-modernization"
 DEFAULT_BRANCH = "main"
 GITHUB_BLOB_ROOT = f"https://github.com/{REPOSITORY}/blob/{DEFAULT_BRANCH}"
@@ -34,7 +34,7 @@ PAGES_INDEX = f"https://howardweale.github.io/{REPOSITORY.split('/', 1)[1]}/mile
 FIXED_TIME = datetime(2026, 8, 31, 12, 0, 0, tzinfo=timezone.utc)
 EXPECTED_MILESTONES = tuple(range(1, 71))
 EXPECTED_ARTIFACTS = len(EXPECTED_MILESTONES) * 3
-SUPPLEMENTAL_MARKDOWN = ("MS-73/MS-73.md", "MS-74/MS-74.md", "MS-75/MS-75.md", "MS-76/MS-76.md")
+SUPPLEMENTAL_MARKDOWN = ("MS-73/MS-73.md", "MS-74/MS-74.md", "MS-75/MS-75.md", "MS-76/MS-76.md", "MS-77/MS-77.md")
 BOUNDARY_TERMS = (
     "remain false", "remains false", "remain blocked", "remains blocked",
     "unclaimed", "not claim", "does not", "no customer", "non-production",
@@ -545,9 +545,9 @@ def write_markdown_index(models: list[dict[str, Any]]) -> None:
     for model in models:
         markdown, word, pdf = format_links(model)
         lines.append(f"| MS #{model['number']:02d} | {model['title']} | {model['status']} | [Markdown]({markdown}) - [Download Word]({word}) - [PDF]({pdf}) |")
-    lines.extend(["", "## Additional implementation records", "", "[MS73 — Run history and action activity](" + github_blob("docs/milestones/MS-73/MS-73.md") + ") (Markdown; engine integration delivered by MS74).", "", "[MS74 — Engine-to-history recording](" + github_blob("docs/milestones/MS-74/MS-74.md") + ") (Markdown).", "", "[MS75 — Four-panel workspace](" + github_blob("docs/milestones/MS-75/MS-75.md") + ") (Markdown).", "", "[MS76 — Existing runtime gate qualification](" + github_blob("docs/milestones/MS-76/MS-76.md") + ") (Markdown).", ""])
+    lines.extend(["", "## Additional implementation records", "", "[MS73 — Run history and action activity](" + github_blob("docs/milestones/MS-73/MS-73.md") + ") (Markdown; engine integration delivered by MS74).", "", "[MS74 — Engine-to-history recording](" + github_blob("docs/milestones/MS-74/MS-74.md") + ") (Markdown).", "", "[MS75 — Four-panel workspace](" + github_blob("docs/milestones/MS-75/MS-75.md") + ") (Markdown).", "", "[MS76 — Existing runtime gate qualification](" + github_blob("docs/milestones/MS-76/MS-76.md") + ") (Markdown).", "", "[MS77 — Declarative batch invocation](" + github_blob("docs/milestones/MS-77/MS-77.md") + ") (Markdown; partial, awaiting an authorised z/OS environment).", ""])
     lines.extend(["", "## Build and verification", "", "```bash", "./milestone-documentation.sh verify", "./milestone-documentation.sh build", "```", "", "Windows:", "", "```powershell", ".\\milestone-documentation.ps1 verify", ".\\milestone-documentation.ps1 build", "```", "", "`verify` uses only the Python standard library. `build` requires the `docs` optional dependency set.", "", f"The content-addressed [manifest]({github_blob('docs/milestones/manifest.json')}) fails verification if a canonical source changes, an artifact is missing or modified, or an untracked milestone artifact appears.", ""])
-    (DOC_ROOT / "README.md").write_text("\n".join(lines), encoding="utf-8")
+    (DOC_ROOT / "README.md").write_text("\n".join(lines), encoding="utf-8", newline="\n")
 
 
 def roadmap_phase(number: int) -> tuple[str, str]:
@@ -657,6 +657,7 @@ def write_html_index(models: list[dict[str, Any]]) -> None:
       <p><a href="{github_blob('docs/milestones/MS-75/MS-75.md')}">MS75 — Four-panel workspace</a> (Markdown).</p>
       <p><a href="{github_blob('docs/milestones/MS-74/MS-74.md')}">MS74 — Engine-to-history recording</a> (Markdown).</p>
       <p><a href="{github_blob('docs/milestones/MS-76/MS-76.md')}">MS76 — Existing runtime gate qualification</a> (Markdown).</p>
+      <p><a href="{github_blob('docs/milestones/MS-77/MS-77.md')}">MS77 — Declarative batch invocation</a> (Markdown; partial, awaiting an authorised z/OS environment).</p>
       <p><a href="{github_blob('docs/milestones/MS-73/MS-73.md')}">MS73 — Run history and action activity</a> (Markdown; engine integration delivered by MS74).</p>
     </section>
   </main>
@@ -700,7 +701,7 @@ def write_html_index(models: list[dict[str, Any]]) -> None:
 </body>
 </html>
 '''
-    (DOC_ROOT / "index.html").write_text(page, encoding="utf-8")
+    (DOC_ROOT / "index.html").write_text(page, encoding="utf-8", newline="\n")
 
 
 def build() -> None:
@@ -722,7 +723,7 @@ def build() -> None:
             not markdown_path.is_file()
             or markdown_path.read_text(encoding="utf-8") != rendered_markdown
         )
-        markdown_path.write_text(rendered_markdown, encoding="utf-8")
+        markdown_path.write_text(rendered_markdown, encoding="utf-8", newline="\n")
         if content_changed or not docx_path.is_file():
             build_docx(model, catalog["audience"], docx_path)
         if content_changed or not pdf_path.is_file():
@@ -745,7 +746,7 @@ def build() -> None:
     for path in (DOC_ROOT / "README.md", DOC_ROOT / "index.html", DOC_ROOT / "assets" / "lightyear-reversed.svg"):
         library_files.append({"path": path.relative_to(ROOT).as_posix(), "bytes": path.stat().st_size, "sha256": sha256_path(path)})
     manifest = {"schema_version": "1.1", "generator_version": GENERATOR_VERSION, "source_sha256": source_sha256(), "milestone_count": len(EXPECTED_MILESTONES), "artifact_count": EXPECTED_ARTIFACTS, "formats": ["md", "docx", "pdf"], "artifacts": artifacts, "library_files": library_files, "supplemental_artifacts": supplemental_artifacts()}
-    MANIFEST_PATH.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    MANIFEST_PATH.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8", newline="\n")
     print(json.dumps({"status": "built", "milestones": len(EXPECTED_MILESTONES), "artifacts": EXPECTED_ARTIFACTS}, sort_keys=True))
 
 

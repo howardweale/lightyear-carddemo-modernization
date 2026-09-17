@@ -1,0 +1,43 @@
+{
+  "pack_type": "lightyear-batch-job-pack",
+  "schema_version": "1.0",
+  "pack_id": "carddemo-intcalc-v1",
+  "estate": "carddemo-zos",
+  "source": {
+    "adapter": "lightyear.zosmf-jobs",
+    "verbs": ["observe", "retrieve"],
+    "note": "Production runs are observed. Nothing is submitted to the legacy system."
+  },
+  "target": {
+    "adapter": "lightyear.target-batch",
+    "verbs": ["submit", "observe", "retrieve"]
+  },
+  "jobs": [
+    {
+      "id": "interest-calculation",
+      "jobname": "INTCALC",
+      "description": "Monthly interest accrual across all account groups.",
+      "inputs": ["CARDDEMO.ACCTFILE", "CARDDEMO.DISCGRP", "CARDDEMO.XREFFILE"],
+      "compare": [
+        { "dataset": "CARDDEMO.TRANFILE",
+          "kind": "set",
+          "key": ["acct_id", "tran_seq"],
+          "normalize": ["decimal-canonical-text", "fixed-width-right-padding"] },
+        { "dataset": "CARDDEMO.ACCTFILE",
+          "kind": "sequence",
+          "normalize": ["decimal-canonical-text", "copybook-filler"] }
+      ]
+    },
+    {
+      "id": "transaction-posting",
+      "jobname": "POSTTRAN",
+      "description": "Posts the day's transactions and updates balances.",
+      "inputs": ["CARDDEMO.DALYTRAN", "CARDDEMO.ACCTFILE"],
+      "compare": [
+        { "dataset": "CARDDEMO.ACCTFILE",
+          "kind": "sequence",
+          "normalize": ["decimal-canonical-text"] }
+      ]
+    }
+  ]
+}

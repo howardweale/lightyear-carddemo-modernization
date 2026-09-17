@@ -1,8 +1,8 @@
 {
   "events": [
     {
-      "at": "2026-09-17T22:42:35.570716+00:00",
-      "content_sha256": "5e05db74bfeaa3aa042469cc3f375845bd5d43f08e63627ea090bd6e562455f4",
+      "at": "2026-09-17T22:55:21.595854+00:00",
+      "content_sha256": "671b85695dc5a36f7cff40501b5453fe52e03d136d43ad0df5a2d92ab6cb7476",
       "payload": {
         "action_policy": {
           "autonomy": {
@@ -44,7 +44,7 @@
           "production_ready": false,
           "semantic_verdicts_changed": 0
         },
-        "content_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+        "content_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
         "decision_trust": null,
         "estate": "CloudBank",
         "extension_kinds": [
@@ -555,7 +555,7 @@
             "src/lightyear_workflow/batch_pack.py": "e7a1feada2f0d1469f55687f0ac54c98c57a846d301d97b8aca1d4066f0bd4f2",
             "src/lightyear_workflow/blast_radius.py": "8ad6dc70ffd0665e82bdd3999d60904c03894361824712cdf26c49a085ee1aa6",
             "src/lightyear_workflow/campaign_engine.py": "11fd0f8d61c137873ab44d8f59fc254957a18785c1ee06d0e57f902cae349711",
-            "src/lightyear_workflow/campaign_gcp.py": "37e5e408724e24a70042388a343ad16995138662878f2e8562f5beef6f983731",
+            "src/lightyear_workflow/campaign_gcp.py": "a449c387e02f77b1ed64ad642af845ab25f3ded39f32f7d5a12b7fb3a3305147",
             "src/lightyear_workflow/campaign_service.py": "741ea5f6a4a57757171592690e089768a4e86ef73880cf21df46805414f69171",
             "src/lightyear_workflow/campaigns.py": "f30a1fdca6097e2585f4a073687434b3f302fbb1e1d33f590d56444dd08b5e61",
             "src/lightyear_workflow/cloudbank.py": "18d4aed57fa5847b803a44fb6564f37738a9928c61c372017dda0c5f86e7746a",
@@ -573,7 +573,7 @@
             "src/lightyear_workflow/worker.py": "e2c6d7b24d648615466741c5052e55d3c6b099e054e7d53a25cf6f0c34a7c5a5",
             "src/lightyear_workflow/zosmf_reader.py": "583628ee9d529b6bd523af9bad217d79f7178f3ce2d9d210072d6da09d341513"
           },
-          "logical_sha256": "bf7353db46038470710eb6911f705305f25bedc08fbf862e6175e2210a4ac8da"
+          "logical_sha256": "13e2065bb0775f716c3ac5b6a1c69095c1754c5a371b827b5b89e1f1b902bb68"
         },
         "lanes": [
           "contract",
@@ -613,107 +613,107 @@
       "type": "started"
     },
     {
-      "at": "2026-09-17T22:42:35.727790+00:00",
-      "content_sha256": "3fd9d2f64a1af1a30aa64711bdffe1beba7e83c2323bc2a255d24a73fbb7b32a",
+      "at": "2026-09-17T22:55:21.760503+00:00",
+      "content_sha256": "c3489addc0f360a16201424ea27b6af93be46f89415007a7246e1099b326799f",
       "payload": {
         "actions": [
           {
-            "id": "cd916cfa3b83dcc2742762e5a546e5fb96cd12ad85c493d07416774f9d4d3500",
+            "id": "36f92e25b63a83bf366d1ebdc2e251617fc09994389ccd0c76fe8f82250eceb8",
             "kind": "widen-observation",
             "lane": "contract",
-            "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+            "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
             "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
             "service": "account"
           },
           {
-            "id": "02bed6e32e089c88b9e753f5702e96f24bebe77831629798c6d523b0ab2e8207",
+            "id": "14bc645a3eaafac997b5017ff8ec333b1df811d2afe585d0afa49046db5d3caf",
             "kind": "widen-observation",
             "lane": "contract",
-            "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+            "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
             "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
             "service": "azn-server"
           },
           {
-            "id": "3be4199c918b0222ac1dd7db12941405388bcb631df42e202fa576fc9d213d11",
+            "id": "2d48da7fd6abec6eba1acc96b8f9c3d032d22c7cf49c4b2465fa7b354b0770dd",
             "kind": "widen-observation",
             "lane": "contract",
-            "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+            "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
             "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
             "service": "chatbot"
           },
           {
-            "id": "a5d145fb9da1ae96a3e35adf30683934987407164e6b7d5e1782d2c053fa516a",
+            "id": "f9d326b5970cd6b23fca2144efa03a9894ed3a2ea2a2a7b18a253ac7eb455664",
             "kind": "widen-observation",
             "lane": "contract",
-            "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+            "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
             "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
             "service": "checks"
           },
           {
-            "id": "946c332b552a110266732260b69abb682ee394f86115eb6817e32578b20b70db",
+            "id": "e92f240f441ca71385b4e25b35b94602a9db773fe38d49fdba41170a769f641c",
             "kind": "widen-observation",
             "lane": "contract",
-            "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+            "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
             "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
             "service": "creditscore"
           },
           {
-            "id": "319709c58c44b33b86f835cf1ccacb1d803bc4695b8f791da5c8ac426122dffa",
+            "id": "42d48b845a13ee65660a57aa08d5bd5a3c6fff09e696e5ab8d7ae3e3a92ce36f",
             "kind": "widen-observation",
             "lane": "contract",
-            "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+            "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
             "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
             "service": "customer"
           },
           {
-            "id": "ce81765979006e210a854a46a2d6d43bf6c39f6cf1400e0aa034f89ff8e4836f",
+            "id": "4f4577942e92dc51f6a7491340ab6d0b7811b989bb395f5ae1cfcd6af66ad60a",
             "kind": "widen-observation",
             "lane": "contract",
-            "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+            "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
             "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
             "service": "testrunner"
           },
           {
-            "id": "5f8d2f2592ed040dd62a5cddbeb66ba338e37bebb939803075ae046a51af33e4",
+            "id": "87436e2b8478e4d1ef7ceb331908cb312960a7fdaf7e92255923a5930ef5491c",
             "kind": "widen-observation",
             "lane": "contract",
-            "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+            "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
             "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
             "service": "transfer"
           }
         ]
       },
-      "previous_sha256": "5e05db74bfeaa3aa042469cc3f375845bd5d43f08e63627ea090bd6e562455f4",
+      "previous_sha256": "671b85695dc5a36f7cff40501b5453fe52e03d136d43ad0df5a2d92ab6cb7476",
       "sequence": 2,
       "type": "round"
     },
     {
-      "at": "2026-09-17T22:42:35.813029+00:00",
-      "content_sha256": "844fee01ef77f70d7187cb8b5ddfcafba225ca4cd0093dfab7d1c3dfd5236ce8",
+      "at": "2026-09-17T22:55:21.847763+00:00",
+      "content_sha256": "b68641da54f53232b88500478ef2cccc0aa899f8656edd40369e0efa879a2d60",
       "payload": {
         "action": {
-          "id": "cd916cfa3b83dcc2742762e5a546e5fb96cd12ad85c493d07416774f9d4d3500",
+          "id": "36f92e25b63a83bf366d1ebdc2e251617fc09994389ccd0c76fe8f82250eceb8",
           "kind": "widen-observation",
           "lane": "contract",
-          "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+          "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
           "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
           "service": "account"
         },
         "attempt": 1
       },
-      "previous_sha256": "3fd9d2f64a1af1a30aa64711bdffe1beba7e83c2323bc2a255d24a73fbb7b32a",
+      "previous_sha256": "c3489addc0f360a16201424ea27b6af93be46f89415007a7246e1099b326799f",
       "sequence": 3,
       "type": "attempt"
     },
     {
-      "at": "2026-09-17T22:42:36.222025+00:00",
-      "content_sha256": "6a1d45c33ad8df98d40c5e5fdc631a2b70531cb03ae5073f862c16f5f8aa7822",
+      "at": "2026-09-17T22:55:22.266076+00:00",
+      "content_sha256": "5f0bec53c5a07811e24cf389c8aede3b3819c9d5f98300df7291fd75a464289e",
       "payload": {
         "action": {
-          "id": "cd916cfa3b83dcc2742762e5a546e5fb96cd12ad85c493d07416774f9d4d3500",
+          "id": "36f92e25b63a83bf366d1ebdc2e251617fc09994389ccd0c76fe8f82250eceb8",
           "kind": "widen-observation",
           "lane": "contract",
-          "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+          "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
           "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
           "service": "account"
         },
@@ -730,7 +730,7 @@
           "production_ready": false,
           "semantic_verdicts_changed": 0
         },
-        "content_sha256": "aa3cd81a97483a96cabc7e11fe5dcf3d4ff1cd5268cb77d6df7ba60c50528b8d",
+        "content_sha256": "0a1308cd27b0083f80b2890ae206ec87475b1018b9c16d24db07b05d348c4508",
         "observation": {
           "boundary": {
             "decisions_created": 0,
@@ -754,37 +754,37 @@
           "service": "account"
         }
       },
-      "previous_sha256": "844fee01ef77f70d7187cb8b5ddfcafba225ca4cd0093dfab7d1c3dfd5236ce8",
+      "previous_sha256": "b68641da54f53232b88500478ef2cccc0aa899f8656edd40369e0efa879a2d60",
       "sequence": 4,
       "type": "result"
     },
     {
-      "at": "2026-09-17T22:42:36.301778+00:00",
-      "content_sha256": "fe98c83920165ff3d622584e472f4f4928c7bbd78d7a94ba9bd7aeec3eb262a1",
+      "at": "2026-09-17T22:55:22.360248+00:00",
+      "content_sha256": "1d999fc373c17f544bb7059a7ce49426341a60243197adcfd8b0824ba73eb8e0",
       "payload": {
         "action": {
-          "id": "02bed6e32e089c88b9e753f5702e96f24bebe77831629798c6d523b0ab2e8207",
+          "id": "14bc645a3eaafac997b5017ff8ec333b1df811d2afe585d0afa49046db5d3caf",
           "kind": "widen-observation",
           "lane": "contract",
-          "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+          "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
           "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
           "service": "azn-server"
         },
         "attempt": 1
       },
-      "previous_sha256": "6a1d45c33ad8df98d40c5e5fdc631a2b70531cb03ae5073f862c16f5f8aa7822",
+      "previous_sha256": "5f0bec53c5a07811e24cf389c8aede3b3819c9d5f98300df7291fd75a464289e",
       "sequence": 5,
       "type": "attempt"
     },
     {
-      "at": "2026-09-17T22:42:36.712856+00:00",
-      "content_sha256": "b05ef92ab57e7de399ff6f997e01fb751889d99a2a33c1e88f6009540cd83453",
+      "at": "2026-09-17T22:55:22.757870+00:00",
+      "content_sha256": "9b00b1d838be435cb29675f4bc1161a4d311118ab4aa4512b89971200b1643c8",
       "payload": {
         "action": {
-          "id": "02bed6e32e089c88b9e753f5702e96f24bebe77831629798c6d523b0ab2e8207",
+          "id": "14bc645a3eaafac997b5017ff8ec333b1df811d2afe585d0afa49046db5d3caf",
           "kind": "widen-observation",
           "lane": "contract",
-          "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+          "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
           "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
           "service": "azn-server"
         },
@@ -801,7 +801,7 @@
           "production_ready": false,
           "semantic_verdicts_changed": 0
         },
-        "content_sha256": "a57b5efe9bb067428ef7d18fbd75344e3f60f56ccc38de7f16758de661307148",
+        "content_sha256": "a48e7c97aa42c56d409bd805fa0fc51bc16bc93bb8e2ec1cb214ac2a18462602",
         "observation": {
           "boundary": {
             "decisions_created": 0,
@@ -826,37 +826,37 @@
           "service": "azn-server"
         }
       },
-      "previous_sha256": "fe98c83920165ff3d622584e472f4f4928c7bbd78d7a94ba9bd7aeec3eb262a1",
+      "previous_sha256": "1d999fc373c17f544bb7059a7ce49426341a60243197adcfd8b0824ba73eb8e0",
       "sequence": 6,
       "type": "result"
     },
     {
-      "at": "2026-09-17T22:42:36.821774+00:00",
-      "content_sha256": "0566f3ca7245145063e9a5abc25f4de1e1e83a2295639c964c9d88ebd20be7d4",
+      "at": "2026-09-17T22:55:22.862048+00:00",
+      "content_sha256": "c97224b369d3f42f1590c749db26f3e4dfc4236be2e2e5868790f70d1611d401",
       "payload": {
         "action": {
-          "id": "3be4199c918b0222ac1dd7db12941405388bcb631df42e202fa576fc9d213d11",
+          "id": "2d48da7fd6abec6eba1acc96b8f9c3d032d22c7cf49c4b2465fa7b354b0770dd",
           "kind": "widen-observation",
           "lane": "contract",
-          "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+          "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
           "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
           "service": "chatbot"
         },
         "attempt": 1
       },
-      "previous_sha256": "b05ef92ab57e7de399ff6f997e01fb751889d99a2a33c1e88f6009540cd83453",
+      "previous_sha256": "9b00b1d838be435cb29675f4bc1161a4d311118ab4aa4512b89971200b1643c8",
       "sequence": 7,
       "type": "attempt"
     },
     {
-      "at": "2026-09-17T22:42:37.265221+00:00",
-      "content_sha256": "dbabacf3c6d5c47359566e9e76749eebf4281ed55e918216194f62f7a60ac7a7",
+      "at": "2026-09-17T22:55:23.316341+00:00",
+      "content_sha256": "c583343aff0bfbb36fb056b0a0a0e87ce6fd29116b14cc8a840663d3ec61ead0",
       "payload": {
         "action": {
-          "id": "3be4199c918b0222ac1dd7db12941405388bcb631df42e202fa576fc9d213d11",
+          "id": "2d48da7fd6abec6eba1acc96b8f9c3d032d22c7cf49c4b2465fa7b354b0770dd",
           "kind": "widen-observation",
           "lane": "contract",
-          "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+          "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
           "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
           "service": "chatbot"
         },
@@ -873,7 +873,7 @@
           "production_ready": false,
           "semantic_verdicts_changed": 0
         },
-        "content_sha256": "305992eb768a3d29abcc9c6857cc2988a25b362a9bca48542e5023bc5b93b723",
+        "content_sha256": "34c741241e5155e412a383c150f1c79ae4eb7e32a13ac8f18ef9bce6553fbc45",
         "observation": {
           "boundary": {
             "decisions_created": 0,
@@ -899,37 +899,37 @@
           "service": "chatbot"
         }
       },
-      "previous_sha256": "0566f3ca7245145063e9a5abc25f4de1e1e83a2295639c964c9d88ebd20be7d4",
+      "previous_sha256": "c97224b369d3f42f1590c749db26f3e4dfc4236be2e2e5868790f70d1611d401",
       "sequence": 8,
       "type": "result"
     },
     {
-      "at": "2026-09-17T22:42:37.380125+00:00",
-      "content_sha256": "eb61ea232e02be08a33abef185c046b5c1110aaf90829866d2f233b0de9e7667",
+      "at": "2026-09-17T22:55:23.434474+00:00",
+      "content_sha256": "9bf8625e944ba49d6dce240f637a095fdc811fa5222aba7695fcf840da64e096",
       "payload": {
         "action": {
-          "id": "a5d145fb9da1ae96a3e35adf30683934987407164e6b7d5e1782d2c053fa516a",
+          "id": "f9d326b5970cd6b23fca2144efa03a9894ed3a2ea2a2a7b18a253ac7eb455664",
           "kind": "widen-observation",
           "lane": "contract",
-          "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+          "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
           "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
           "service": "checks"
         },
         "attempt": 1
       },
-      "previous_sha256": "dbabacf3c6d5c47359566e9e76749eebf4281ed55e918216194f62f7a60ac7a7",
+      "previous_sha256": "c583343aff0bfbb36fb056b0a0a0e87ce6fd29116b14cc8a840663d3ec61ead0",
       "sequence": 9,
       "type": "attempt"
     },
     {
-      "at": "2026-09-17T22:42:37.804350+00:00",
-      "content_sha256": "61bb4eb4711079d5db6d43dd005c897e3d472905d13660f6546e6e68b58c318f",
+      "at": "2026-09-17T22:55:23.828065+00:00",
+      "content_sha256": "c56ab9842a0b171c20d2e0b8eea8eb4384955acfd2b4633a7e1acfcf4b666d55",
       "payload": {
         "action": {
-          "id": "a5d145fb9da1ae96a3e35adf30683934987407164e6b7d5e1782d2c053fa516a",
+          "id": "f9d326b5970cd6b23fca2144efa03a9894ed3a2ea2a2a7b18a253ac7eb455664",
           "kind": "widen-observation",
           "lane": "contract",
-          "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+          "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
           "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
           "service": "checks"
         },
@@ -946,7 +946,7 @@
           "production_ready": false,
           "semantic_verdicts_changed": 0
         },
-        "content_sha256": "d5007a6479d3024fcbbdd12a4aae9b046591bf9d0128becf1eed68b014bde1fd",
+        "content_sha256": "f7dbd6ce02f506a5726f62cb8ae7209d7230adf1af3f3e214ac0058713b7fef8",
         "observation": {
           "boundary": {
             "decisions_created": 0,
@@ -972,37 +972,37 @@
           "service": "checks"
         }
       },
-      "previous_sha256": "eb61ea232e02be08a33abef185c046b5c1110aaf90829866d2f233b0de9e7667",
+      "previous_sha256": "9bf8625e944ba49d6dce240f637a095fdc811fa5222aba7695fcf840da64e096",
       "sequence": 10,
       "type": "result"
     },
     {
-      "at": "2026-09-17T22:42:37.925504+00:00",
-      "content_sha256": "6fd18c93b92ad08b912479a9629cdee50b603fba7941c5ebbd326edad04e2160",
+      "at": "2026-09-17T22:55:23.965783+00:00",
+      "content_sha256": "ffd85fba1e006948952ba89623f4020c69c55836f91cf3643efda3f807f7d1fd",
       "payload": {
         "action": {
-          "id": "946c332b552a110266732260b69abb682ee394f86115eb6817e32578b20b70db",
+          "id": "e92f240f441ca71385b4e25b35b94602a9db773fe38d49fdba41170a769f641c",
           "kind": "widen-observation",
           "lane": "contract",
-          "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+          "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
           "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
           "service": "creditscore"
         },
         "attempt": 1
       },
-      "previous_sha256": "61bb4eb4711079d5db6d43dd005c897e3d472905d13660f6546e6e68b58c318f",
+      "previous_sha256": "c56ab9842a0b171c20d2e0b8eea8eb4384955acfd2b4633a7e1acfcf4b666d55",
       "sequence": 11,
       "type": "attempt"
     },
     {
-      "at": "2026-09-17T22:42:38.418213+00:00",
-      "content_sha256": "7054f444392a7b31e615eef3712e52020162b3825072c4643451b5d91b3d353a",
+      "at": "2026-09-17T22:55:24.409961+00:00",
+      "content_sha256": "f9854633b079c77e5457c153502e1b353a197555df77a6d1bfe2fe468762793a",
       "payload": {
         "action": {
-          "id": "946c332b552a110266732260b69abb682ee394f86115eb6817e32578b20b70db",
+          "id": "e92f240f441ca71385b4e25b35b94602a9db773fe38d49fdba41170a769f641c",
           "kind": "widen-observation",
           "lane": "contract",
-          "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+          "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
           "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
           "service": "creditscore"
         },
@@ -1019,7 +1019,7 @@
           "production_ready": false,
           "semantic_verdicts_changed": 0
         },
-        "content_sha256": "f6914e02e431e29dcefbb12633b59dbdc24b4cabc8711e6dddc2c6f748b40833",
+        "content_sha256": "4452454b193b72e0259268e377bd6857f809fb3bde341a1f51fdee7604c133e5",
         "observation": {
           "boundary": {
             "decisions_created": 0,
@@ -1045,37 +1045,37 @@
           "service": "creditscore"
         }
       },
-      "previous_sha256": "6fd18c93b92ad08b912479a9629cdee50b603fba7941c5ebbd326edad04e2160",
+      "previous_sha256": "ffd85fba1e006948952ba89623f4020c69c55836f91cf3643efda3f807f7d1fd",
       "sequence": 12,
       "type": "result"
     },
     {
-      "at": "2026-09-17T22:42:38.675754+00:00",
-      "content_sha256": "5cf4ae7f2300e7f86da770e822b5a28743366519069203098f18ef7725cf0e65",
+      "at": "2026-09-17T22:55:24.652265+00:00",
+      "content_sha256": "78c5e3f17f8398f2d230cae6f3f41b538cbc4ea33c09da0c63905c35dc28fa4b",
       "payload": {
         "action": {
-          "id": "319709c58c44b33b86f835cf1ccacb1d803bc4695b8f791da5c8ac426122dffa",
+          "id": "42d48b845a13ee65660a57aa08d5bd5a3c6fff09e696e5ab8d7ae3e3a92ce36f",
           "kind": "widen-observation",
           "lane": "contract",
-          "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+          "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
           "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
           "service": "customer"
         },
         "attempt": 1
       },
-      "previous_sha256": "7054f444392a7b31e615eef3712e52020162b3825072c4643451b5d91b3d353a",
+      "previous_sha256": "f9854633b079c77e5457c153502e1b353a197555df77a6d1bfe2fe468762793a",
       "sequence": 13,
       "type": "attempt"
     },
     {
-      "at": "2026-09-17T22:42:39.150387+00:00",
-      "content_sha256": "14126ff72c706749da7aadb62106725174ee9baf75bec80a313ee66a6215356e",
+      "at": "2026-09-17T22:55:25.173044+00:00",
+      "content_sha256": "183f584772e7edff305a9f15cfc159dae67b3c5509a78a5aa61a8b1ad5a6e0a9",
       "payload": {
         "action": {
-          "id": "319709c58c44b33b86f835cf1ccacb1d803bc4695b8f791da5c8ac426122dffa",
+          "id": "42d48b845a13ee65660a57aa08d5bd5a3c6fff09e696e5ab8d7ae3e3a92ce36f",
           "kind": "widen-observation",
           "lane": "contract",
-          "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+          "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
           "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
           "service": "customer"
         },
@@ -1092,7 +1092,7 @@
           "production_ready": false,
           "semantic_verdicts_changed": 0
         },
-        "content_sha256": "2719bf2813a133a82abdb78358b3d8e83bd07e600a87b3d35e39c3e9173722bf",
+        "content_sha256": "1f0893b6f363e3cbc088ce23719a7e0320fee14457805b24c1cb9ba6c553859d",
         "observation": {
           "boundary": {
             "decisions_created": 0,
@@ -1119,37 +1119,37 @@
           "service": "customer"
         }
       },
-      "previous_sha256": "5cf4ae7f2300e7f86da770e822b5a28743366519069203098f18ef7725cf0e65",
+      "previous_sha256": "78c5e3f17f8398f2d230cae6f3f41b538cbc4ea33c09da0c63905c35dc28fa4b",
       "sequence": 14,
       "type": "result"
     },
     {
-      "at": "2026-09-17T22:42:39.391650+00:00",
-      "content_sha256": "d3eb0a4c9f576b3d3fe6ab6b21378716025d71af26f3dc38b1c26383c85d5c8a",
+      "at": "2026-09-17T22:55:25.378417+00:00",
+      "content_sha256": "2a6aa6af4d69c2051ba7e31d6dcae71c0615965194b7044315050f9b87a2c9d8",
       "payload": {
         "action": {
-          "id": "ce81765979006e210a854a46a2d6d43bf6c39f6cf1400e0aa034f89ff8e4836f",
+          "id": "4f4577942e92dc51f6a7491340ab6d0b7811b989bb395f5ae1cfcd6af66ad60a",
           "kind": "widen-observation",
           "lane": "contract",
-          "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+          "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
           "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
           "service": "testrunner"
         },
         "attempt": 1
       },
-      "previous_sha256": "14126ff72c706749da7aadb62106725174ee9baf75bec80a313ee66a6215356e",
+      "previous_sha256": "183f584772e7edff305a9f15cfc159dae67b3c5509a78a5aa61a8b1ad5a6e0a9",
       "sequence": 15,
       "type": "attempt"
     },
     {
-      "at": "2026-09-17T22:42:39.948735+00:00",
-      "content_sha256": "7e2870b908a00ad9cdfb5151cac6b5e18e66c33dcf5027d68383287db919bd0e",
+      "at": "2026-09-17T22:55:25.916612+00:00",
+      "content_sha256": "661451295001b82f03485b8cc40b5a9bd368c29b343d7bcb0e50b00fe4db620a",
       "payload": {
         "action": {
-          "id": "ce81765979006e210a854a46a2d6d43bf6c39f6cf1400e0aa034f89ff8e4836f",
+          "id": "4f4577942e92dc51f6a7491340ab6d0b7811b989bb395f5ae1cfcd6af66ad60a",
           "kind": "widen-observation",
           "lane": "contract",
-          "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+          "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
           "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
           "service": "testrunner"
         },
@@ -1166,7 +1166,7 @@
           "production_ready": false,
           "semantic_verdicts_changed": 0
         },
-        "content_sha256": "914c1f2734c4452b0fdb2268cd58bbd9c6c95390339b4ffde9510cc79eea3f2f",
+        "content_sha256": "010ee14347e94a3d8228d11fce9e24972ac2e5f66b85a94a544b058d2c42bdb1",
         "observation": {
           "boundary": {
             "decisions_created": 0,
@@ -1193,37 +1193,37 @@
           "service": "testrunner"
         }
       },
-      "previous_sha256": "d3eb0a4c9f576b3d3fe6ab6b21378716025d71af26f3dc38b1c26383c85d5c8a",
+      "previous_sha256": "2a6aa6af4d69c2051ba7e31d6dcae71c0615965194b7044315050f9b87a2c9d8",
       "sequence": 16,
       "type": "result"
     },
     {
-      "at": "2026-09-17T22:42:40.193338+00:00",
-      "content_sha256": "18f7256b3882e2c2d48652185f9f7e24d3591a36294d3520368639f9278eb3f8",
+      "at": "2026-09-17T22:55:26.170732+00:00",
+      "content_sha256": "edd5eee44d67eb5a7883f81effede181d0afff57ec62b0c0bcb4d6925b5a8ae5",
       "payload": {
         "action": {
-          "id": "5f8d2f2592ed040dd62a5cddbeb66ba338e37bebb939803075ae046a51af33e4",
+          "id": "87436e2b8478e4d1ef7ceb331908cb312960a7fdaf7e92255923a5930ef5491c",
           "kind": "widen-observation",
           "lane": "contract",
-          "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+          "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
           "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
           "service": "transfer"
         },
         "attempt": 1
       },
-      "previous_sha256": "7e2870b908a00ad9cdfb5151cac6b5e18e66c33dcf5027d68383287db919bd0e",
+      "previous_sha256": "661451295001b82f03485b8cc40b5a9bd368c29b343d7bcb0e50b00fe4db620a",
       "sequence": 17,
       "type": "attempt"
     },
     {
-      "at": "2026-09-17T22:42:40.715729+00:00",
-      "content_sha256": "325d4d0ffac0f1383f09050b04fe9afff976f9b4825be19378ac7dd708973f8f",
+      "at": "2026-09-17T22:55:26.698084+00:00",
+      "content_sha256": "f5e4d2d5d27927512bdd0fe0c73f2db0e72fb7dfe5440a29fd3481a22fbc6001",
       "payload": {
         "action": {
-          "id": "5f8d2f2592ed040dd62a5cddbeb66ba338e37bebb939803075ae046a51af33e4",
+          "id": "87436e2b8478e4d1ef7ceb331908cb312960a7fdaf7e92255923a5930ef5491c",
           "kind": "widen-observation",
           "lane": "contract",
-          "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+          "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
           "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
           "service": "transfer"
         },
@@ -1240,7 +1240,7 @@
           "production_ready": false,
           "semantic_verdicts_changed": 0
         },
-        "content_sha256": "689ec2cdaac3213947bc8e3a9f273a4528d939c1acc194df1bcf9b1d563fd371",
+        "content_sha256": "d32d071a3554676550a60d66882eda63146b2cf8060a28e83668a7d4c6fd7b9f",
         "observation": {
           "boundary": {
             "decisions_created": 0,
@@ -1264,112 +1264,112 @@
           "service": "transfer"
         }
       },
-      "previous_sha256": "18f7256b3882e2c2d48652185f9f7e24d3591a36294d3520368639f9278eb3f8",
+      "previous_sha256": "edd5eee44d67eb5a7883f81effede181d0afff57ec62b0c0bcb4d6925b5a8ae5",
       "sequence": 18,
       "type": "result"
     },
     {
-      "at": "2026-09-17T22:42:40.987301+00:00",
-      "content_sha256": "aca54a042b10c6209bec3b392c9237486fd93c53c82f70503977d541ea82827c",
+      "at": "2026-09-17T22:55:26.915283+00:00",
+      "content_sha256": "2581586aa0c81c1fffe868a6b54a72132ec1c69b173e6c3b19c348d2424c6511",
       "payload": {
         "actions": [
           {
-            "id": "df04e06d687326b9c9012c72322d44017da7e2bfdfb87cbdb9364ff61126be9e",
+            "id": "920858793ceeae51326642e442c0b07083ea2fa1a7f9fde539870fff9840625d",
             "kind": "escalate-lane",
             "lane": "retained-execution",
-            "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+            "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
             "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
             "service": "account"
           },
           {
-            "id": "551765d8e5ae666b6c23d4ebbc126a073d79a918d758ed8dc5cf158562078469",
+            "id": "68290b12b0acabc860a66a039759402349dd4b374d8b211eb81c5ccb26ba4a64",
             "kind": "escalate-lane",
             "lane": "retained-execution",
-            "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+            "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
             "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
             "service": "azn-server"
           },
           {
-            "id": "50554e1caeee83cfaf8163f1e7e4ee7a472dd7c6fdc9f4df2c96024be58da051",
+            "id": "88c5591830e0c5ad9ec7a427a5b507228f1eec26cf7efad097e3c60b2486e0c2",
             "kind": "escalate-lane",
             "lane": "retained-execution",
-            "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+            "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
             "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
             "service": "chatbot"
           },
           {
-            "id": "4a9c00b988324735a9a36f50711a64c8e6e06f09bbf162ef099b84000cb4a858",
+            "id": "8b48c9026159ed05febd8f5dd243036da49da4bdeebed1b56402b22394a18db8",
             "kind": "escalate-lane",
             "lane": "retained-execution",
-            "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+            "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
             "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
             "service": "checks"
           },
           {
-            "id": "750181f62635166e05b8e9b7250706b8678e50cbee1deda752dc3841e1da937c",
+            "id": "75ea68245385a32702dc49606d60291916819dab578d218d7918230dabc18756",
             "kind": "escalate-lane",
             "lane": "retained-execution",
-            "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+            "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
             "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
             "service": "creditscore"
           },
           {
-            "id": "61888206a607e7a5a7a6cad65edb867cc988e4543e9d04f36b3e8fdda567453e",
+            "id": "df8c806cd73763ff4ae00ed13143c5c2db6c904b6557e23bcdd8f1e8c0b275bf",
             "kind": "escalate-lane",
             "lane": "retained-execution",
-            "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+            "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
             "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
             "service": "customer"
           },
           {
-            "id": "bebc7cbc0d3849ba0c1ca41e029730437b18537e401b4bf5bf5f382f05a36244",
+            "id": "6fb41c21a0802a6bdf9310533c0489a0f9fc6c0f0b587d192f060dd0dd96e84a",
             "kind": "escalate-lane",
             "lane": "retained-execution",
-            "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+            "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
             "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
             "service": "testrunner"
           },
           {
-            "id": "386dfc92ec508498b07e64a9382817b1716fe573da5c0676b0dff2525ff9757f",
+            "id": "4f80da4d282a6d0dba532896766a015a646acd1e2292e34e0aa8c4e8da8eea3c",
             "kind": "escalate-lane",
             "lane": "retained-execution",
-            "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+            "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
             "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
             "service": "transfer"
           }
         ]
       },
-      "previous_sha256": "325d4d0ffac0f1383f09050b04fe9afff976f9b4825be19378ac7dd708973f8f",
+      "previous_sha256": "f5e4d2d5d27927512bdd0fe0c73f2db0e72fb7dfe5440a29fd3481a22fbc6001",
       "sequence": 19,
       "type": "round"
     },
     {
-      "at": "2026-09-17T22:42:41.227094+00:00",
-      "content_sha256": "c0e7c8e46c24dfac51a761f34cefd6dfbb7c052f29df5ff4b8cc9c1d32233cd2",
+      "at": "2026-09-17T22:55:27.204354+00:00",
+      "content_sha256": "4e689714709b8b86991d89d496a0565c9c726c591e149478e9dce80cdd9e9396",
       "payload": {
         "action": {
-          "id": "df04e06d687326b9c9012c72322d44017da7e2bfdfb87cbdb9364ff61126be9e",
+          "id": "920858793ceeae51326642e442c0b07083ea2fa1a7f9fde539870fff9840625d",
           "kind": "escalate-lane",
           "lane": "retained-execution",
-          "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+          "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
           "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
           "service": "account"
         },
         "attempt": 1
       },
-      "previous_sha256": "aca54a042b10c6209bec3b392c9237486fd93c53c82f70503977d541ea82827c",
+      "previous_sha256": "2581586aa0c81c1fffe868a6b54a72132ec1c69b173e6c3b19c348d2424c6511",
       "sequence": 20,
       "type": "attempt"
     },
     {
-      "at": "2026-09-17T22:42:41.687453+00:00",
-      "content_sha256": "9ae5256f1c1a51f48db7b206b3682942c22036c8fb9cd2962f80e7615c8cdeeb",
+      "at": "2026-09-17T22:55:27.650716+00:00",
+      "content_sha256": "8e31d5df70ec4af13690f0be314ec79607a2418f3d7c4a737c4ace63d5b032d6",
       "payload": {
         "action": {
-          "id": "df04e06d687326b9c9012c72322d44017da7e2bfdfb87cbdb9364ff61126be9e",
+          "id": "920858793ceeae51326642e442c0b07083ea2fa1a7f9fde539870fff9840625d",
           "kind": "escalate-lane",
           "lane": "retained-execution",
-          "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+          "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
           "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
           "service": "account"
         },
@@ -1386,7 +1386,7 @@
           "production_ready": false,
           "semantic_verdicts_changed": 0
         },
-        "content_sha256": "1028c18281372c2c184a7719b7a84cf84f070e0c5035b1a4f1acf7dd8f82d4b1",
+        "content_sha256": "7e3cf06ef13463d63a65d2503536229b68bcd9520d885515a8f8ed1db2e3354f",
         "observation": {
           "boundary": {
             "decisions_created": 0,
@@ -1436,37 +1436,37 @@
           "service": "account"
         }
       },
-      "previous_sha256": "c0e7c8e46c24dfac51a761f34cefd6dfbb7c052f29df5ff4b8cc9c1d32233cd2",
+      "previous_sha256": "4e689714709b8b86991d89d496a0565c9c726c591e149478e9dce80cdd9e9396",
       "sequence": 21,
       "type": "result"
     },
     {
-      "at": "2026-09-17T22:42:41.975579+00:00",
-      "content_sha256": "c3efb06273419508595ca9e16ffd644a4be8497d21a5dc0358f05acefb6352a7",
+      "at": "2026-09-17T22:55:27.911899+00:00",
+      "content_sha256": "30713ead5a96c8c329f0390232586d9dfca9c9d8ea8f363d12fb727cb28ac1dd",
       "payload": {
         "action": {
-          "id": "551765d8e5ae666b6c23d4ebbc126a073d79a918d758ed8dc5cf158562078469",
+          "id": "68290b12b0acabc860a66a039759402349dd4b374d8b211eb81c5ccb26ba4a64",
           "kind": "escalate-lane",
           "lane": "retained-execution",
-          "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+          "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
           "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
           "service": "azn-server"
         },
         "attempt": 1
       },
-      "previous_sha256": "9ae5256f1c1a51f48db7b206b3682942c22036c8fb9cd2962f80e7615c8cdeeb",
+      "previous_sha256": "8e31d5df70ec4af13690f0be314ec79607a2418f3d7c4a737c4ace63d5b032d6",
       "sequence": 22,
       "type": "attempt"
     },
     {
-      "at": "2026-09-17T22:42:42.456174+00:00",
-      "content_sha256": "f2a9fca49e83d245fad9a9d2e1f46b683a00ad69907c70581cc7f81531fa3c16",
+      "at": "2026-09-17T22:55:28.379976+00:00",
+      "content_sha256": "5a5f675e94a616f57d5857b07e60d8abdf93cd57ffc061dd2f0eaddb6a4ecf63",
       "payload": {
         "action": {
-          "id": "551765d8e5ae666b6c23d4ebbc126a073d79a918d758ed8dc5cf158562078469",
+          "id": "68290b12b0acabc860a66a039759402349dd4b374d8b211eb81c5ccb26ba4a64",
           "kind": "escalate-lane",
           "lane": "retained-execution",
-          "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+          "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
           "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
           "service": "azn-server"
         },
@@ -1483,7 +1483,7 @@
           "production_ready": false,
           "semantic_verdicts_changed": 0
         },
-        "content_sha256": "643e22f8036bf5d4258b93d9414cc26a3e825967cc1b359901ced68714bd120f",
+        "content_sha256": "5faf3dd37b108de1e1d7e28adb0acf6d8e9a98174c4da6c53ce68bea0591863f",
         "observation": {
           "boundary": {
             "decisions_created": 0,
@@ -1533,37 +1533,37 @@
           "service": "azn-server"
         }
       },
-      "previous_sha256": "c3efb06273419508595ca9e16ffd644a4be8497d21a5dc0358f05acefb6352a7",
+      "previous_sha256": "30713ead5a96c8c329f0390232586d9dfca9c9d8ea8f363d12fb727cb28ac1dd",
       "sequence": 23,
       "type": "result"
     },
     {
-      "at": "2026-09-17T22:42:42.729607+00:00",
-      "content_sha256": "64811d6daf461d7cf79601cddf15b7203043b33f0618f888fa2c7fa43903cfca",
+      "at": "2026-09-17T22:55:28.595828+00:00",
+      "content_sha256": "77026b744bb1228d3a8cbc2714cfa459550b99808c5e8a9a486a2e1d727b45c0",
       "payload": {
         "action": {
-          "id": "50554e1caeee83cfaf8163f1e7e4ee7a472dd7c6fdc9f4df2c96024be58da051",
+          "id": "88c5591830e0c5ad9ec7a427a5b507228f1eec26cf7efad097e3c60b2486e0c2",
           "kind": "escalate-lane",
           "lane": "retained-execution",
-          "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+          "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
           "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
           "service": "chatbot"
         },
         "attempt": 1
       },
-      "previous_sha256": "f2a9fca49e83d245fad9a9d2e1f46b683a00ad69907c70581cc7f81531fa3c16",
+      "previous_sha256": "5a5f675e94a616f57d5857b07e60d8abdf93cd57ffc061dd2f0eaddb6a4ecf63",
       "sequence": 24,
       "type": "attempt"
     },
     {
-      "at": "2026-09-17T22:42:43.239714+00:00",
-      "content_sha256": "f86cb85509291244b19f9a776b5a675dbffee970ad5a961b7a1f8130c9fba08c",
+      "at": "2026-09-17T22:55:29.018511+00:00",
+      "content_sha256": "214b7eadb45242d0cf07eb7315101c8ce3607eb4fdeb12b3712d75a859ce1b07",
       "payload": {
         "action": {
-          "id": "50554e1caeee83cfaf8163f1e7e4ee7a472dd7c6fdc9f4df2c96024be58da051",
+          "id": "88c5591830e0c5ad9ec7a427a5b507228f1eec26cf7efad097e3c60b2486e0c2",
           "kind": "escalate-lane",
           "lane": "retained-execution",
-          "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+          "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
           "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
           "service": "chatbot"
         },
@@ -1580,7 +1580,7 @@
           "production_ready": false,
           "semantic_verdicts_changed": 0
         },
-        "content_sha256": "2e1202d5a25c30fcc2040830a616f7e6aaa2b9e495cf6fa9a5d81cfc71afd3eb",
+        "content_sha256": "df9d9da298ffa4dd4ba32607910b0d0428cc1cd9c8d2d289ec840c7bdda9de22",
         "observation": {
           "boundary": {
             "decisions_created": 0,
@@ -1630,37 +1630,37 @@
           "service": "chatbot"
         }
       },
-      "previous_sha256": "64811d6daf461d7cf79601cddf15b7203043b33f0618f888fa2c7fa43903cfca",
+      "previous_sha256": "77026b744bb1228d3a8cbc2714cfa459550b99808c5e8a9a486a2e1d727b45c0",
       "sequence": 25,
       "type": "result"
     },
     {
-      "at": "2026-09-17T22:42:43.510464+00:00",
-      "content_sha256": "d3cbecdb911652abb956e8257bd3ff849d805682adca13c9a57eb307bcd0d138",
+      "at": "2026-09-17T22:55:29.202752+00:00",
+      "content_sha256": "ec15983c8a7cd50416489cd28bdd099d9c78f73f94e3d505db36e49a3c43f915",
       "payload": {
         "action": {
-          "id": "4a9c00b988324735a9a36f50711a64c8e6e06f09bbf162ef099b84000cb4a858",
+          "id": "8b48c9026159ed05febd8f5dd243036da49da4bdeebed1b56402b22394a18db8",
           "kind": "escalate-lane",
           "lane": "retained-execution",
-          "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+          "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
           "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
           "service": "checks"
         },
         "attempt": 1
       },
-      "previous_sha256": "f86cb85509291244b19f9a776b5a675dbffee970ad5a961b7a1f8130c9fba08c",
+      "previous_sha256": "214b7eadb45242d0cf07eb7315101c8ce3607eb4fdeb12b3712d75a859ce1b07",
       "sequence": 26,
       "type": "attempt"
     },
     {
-      "at": "2026-09-17T22:42:44.001109+00:00",
-      "content_sha256": "c7ad58c2f321f63770504189edc8a088f7050a12b8ce1fee438623f459520cdb",
+      "at": "2026-09-17T22:55:29.656473+00:00",
+      "content_sha256": "59a7eb94698f2bd6ab2008e20675e76480828f3534701587aaf32884997b08b6",
       "payload": {
         "action": {
-          "id": "4a9c00b988324735a9a36f50711a64c8e6e06f09bbf162ef099b84000cb4a858",
+          "id": "8b48c9026159ed05febd8f5dd243036da49da4bdeebed1b56402b22394a18db8",
           "kind": "escalate-lane",
           "lane": "retained-execution",
-          "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+          "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
           "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
           "service": "checks"
         },
@@ -1677,7 +1677,7 @@
           "production_ready": false,
           "semantic_verdicts_changed": 0
         },
-        "content_sha256": "6d5d28a44dce1bbc26d678401ee2bad61dbe39c094e8acb5a2f9d3b0f55e836d",
+        "content_sha256": "184f5046e9113a524b656e3e9fa08584471167070afe7290a54e4e5cac1a6d82",
         "observation": {
           "boundary": {
             "decisions_created": 0,
@@ -1727,37 +1727,37 @@
           "service": "checks"
         }
       },
-      "previous_sha256": "d3cbecdb911652abb956e8257bd3ff849d805682adca13c9a57eb307bcd0d138",
+      "previous_sha256": "ec15983c8a7cd50416489cd28bdd099d9c78f73f94e3d505db36e49a3c43f915",
       "sequence": 27,
       "type": "result"
     },
     {
-      "at": "2026-09-17T22:42:44.335337+00:00",
-      "content_sha256": "2c25fbd895bc1480bddc26a2257ac3d5b5c46805677ad4c3ec6f78cfc1992159",
+      "at": "2026-09-17T22:55:29.880834+00:00",
+      "content_sha256": "9a261c69af9623276bc4268dc439d269504cb0cd631d13a47cd26594147ead8b",
       "payload": {
         "action": {
-          "id": "750181f62635166e05b8e9b7250706b8678e50cbee1deda752dc3841e1da937c",
+          "id": "75ea68245385a32702dc49606d60291916819dab578d218d7918230dabc18756",
           "kind": "escalate-lane",
           "lane": "retained-execution",
-          "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+          "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
           "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
           "service": "creditscore"
         },
         "attempt": 1
       },
-      "previous_sha256": "c7ad58c2f321f63770504189edc8a088f7050a12b8ce1fee438623f459520cdb",
+      "previous_sha256": "59a7eb94698f2bd6ab2008e20675e76480828f3534701587aaf32884997b08b6",
       "sequence": 28,
       "type": "attempt"
     },
     {
-      "at": "2026-09-17T22:42:44.914422+00:00",
-      "content_sha256": "a600608a9a49057ee6d5795c1099f3ab14d4d813074c3b1cc558853f21ec0d0a",
+      "at": "2026-09-17T22:55:30.384226+00:00",
+      "content_sha256": "348a4f38f6622748542def2be7a69022ab0ef23a79f78322bd7658df39e4c4e5",
       "payload": {
         "action": {
-          "id": "750181f62635166e05b8e9b7250706b8678e50cbee1deda752dc3841e1da937c",
+          "id": "75ea68245385a32702dc49606d60291916819dab578d218d7918230dabc18756",
           "kind": "escalate-lane",
           "lane": "retained-execution",
-          "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+          "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
           "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
           "service": "creditscore"
         },
@@ -1774,7 +1774,7 @@
           "production_ready": false,
           "semantic_verdicts_changed": 0
         },
-        "content_sha256": "fe52894097b3258a6f1caafb4504bdab12647dabf4a910ae6b0e952d8240a98b",
+        "content_sha256": "fb24e9915a21930771833bb3b71527979a100633e9c923d45de634a142dcda73",
         "observation": {
           "boundary": {
             "decisions_created": 0,
@@ -1824,37 +1824,37 @@
           "service": "creditscore"
         }
       },
-      "previous_sha256": "2c25fbd895bc1480bddc26a2257ac3d5b5c46805677ad4c3ec6f78cfc1992159",
+      "previous_sha256": "9a261c69af9623276bc4268dc439d269504cb0cd631d13a47cd26594147ead8b",
       "sequence": 29,
       "type": "result"
     },
     {
-      "at": "2026-09-17T22:42:45.259211+00:00",
-      "content_sha256": "03fc6b1b538afc0ea17eef83e7719ad5f647478b6e63d632db3be3bc69e7dc01",
+      "at": "2026-09-17T22:55:30.599845+00:00",
+      "content_sha256": "1b1c24080169b0b393f61579720a25ac26bba692d4803898efa9521cac8263e1",
       "payload": {
         "action": {
-          "id": "61888206a607e7a5a7a6cad65edb867cc988e4543e9d04f36b3e8fdda567453e",
+          "id": "df8c806cd73763ff4ae00ed13143c5c2db6c904b6557e23bcdd8f1e8c0b275bf",
           "kind": "escalate-lane",
           "lane": "retained-execution",
-          "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+          "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
           "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
           "service": "customer"
         },
         "attempt": 1
       },
-      "previous_sha256": "a600608a9a49057ee6d5795c1099f3ab14d4d813074c3b1cc558853f21ec0d0a",
+      "previous_sha256": "348a4f38f6622748542def2be7a69022ab0ef23a79f78322bd7658df39e4c4e5",
       "sequence": 30,
       "type": "attempt"
     },
     {
-      "at": "2026-09-17T22:42:45.783368+00:00",
-      "content_sha256": "853399a027fb0aa8688aa1673983140ac32feccab19b2a256923e72bf4f1b9cd",
+      "at": "2026-09-17T22:55:31.066721+00:00",
+      "content_sha256": "ae7f2ebaf1f1edc679de25c9553a1a5431d702a0a1de67e0e6f4d2bd827c89c0",
       "payload": {
         "action": {
-          "id": "61888206a607e7a5a7a6cad65edb867cc988e4543e9d04f36b3e8fdda567453e",
+          "id": "df8c806cd73763ff4ae00ed13143c5c2db6c904b6557e23bcdd8f1e8c0b275bf",
           "kind": "escalate-lane",
           "lane": "retained-execution",
-          "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+          "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
           "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
           "service": "customer"
         },
@@ -1871,7 +1871,7 @@
           "production_ready": false,
           "semantic_verdicts_changed": 0
         },
-        "content_sha256": "b6c901b86525905ee2c63a9f7abdc8a6f2e517f3d1f010a23fbd48190f6a95ac",
+        "content_sha256": "67a8f7bc6f157b1ddf1368155bd8ce15fb75f3e9bdadf23fcb853e8f2405c9e3",
         "observation": {
           "boundary": {
             "decisions_created": 0,
@@ -1921,37 +1921,37 @@
           "service": "customer"
         }
       },
-      "previous_sha256": "03fc6b1b538afc0ea17eef83e7719ad5f647478b6e63d632db3be3bc69e7dc01",
+      "previous_sha256": "1b1c24080169b0b393f61579720a25ac26bba692d4803898efa9521cac8263e1",
       "sequence": 31,
       "type": "result"
     },
     {
-      "at": "2026-09-17T22:42:46.040387+00:00",
-      "content_sha256": "aec7f4ef70a9ac464a399208ab1d80854b9bc43d6d2387a391f36020b028777b",
+      "at": "2026-09-17T22:55:31.318622+00:00",
+      "content_sha256": "d720139defa7037263dfbe51f299c311a96cdc18e02aad2c35380e0494f3d7b5",
       "payload": {
         "action": {
-          "id": "bebc7cbc0d3849ba0c1ca41e029730437b18537e401b4bf5bf5f382f05a36244",
+          "id": "6fb41c21a0802a6bdf9310533c0489a0f9fc6c0f0b587d192f060dd0dd96e84a",
           "kind": "escalate-lane",
           "lane": "retained-execution",
-          "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+          "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
           "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
           "service": "testrunner"
         },
         "attempt": 1
       },
-      "previous_sha256": "853399a027fb0aa8688aa1673983140ac32feccab19b2a256923e72bf4f1b9cd",
+      "previous_sha256": "ae7f2ebaf1f1edc679de25c9553a1a5431d702a0a1de67e0e6f4d2bd827c89c0",
       "sequence": 32,
       "type": "attempt"
     },
     {
-      "at": "2026-09-17T22:42:46.547401+00:00",
-      "content_sha256": "abf42dc90f678a3fcbd3ee4f243647d4984275448463ba8be04cc77b5e0dfbb5",
+      "at": "2026-09-17T22:55:31.822586+00:00",
+      "content_sha256": "b600bbb2e97d74bfafbd25eb181e33317c7d419399ec282bb8aeb4475b1da116",
       "payload": {
         "action": {
-          "id": "bebc7cbc0d3849ba0c1ca41e029730437b18537e401b4bf5bf5f382f05a36244",
+          "id": "6fb41c21a0802a6bdf9310533c0489a0f9fc6c0f0b587d192f060dd0dd96e84a",
           "kind": "escalate-lane",
           "lane": "retained-execution",
-          "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+          "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
           "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
           "service": "testrunner"
         },
@@ -1968,7 +1968,7 @@
           "production_ready": false,
           "semantic_verdicts_changed": 0
         },
-        "content_sha256": "ff54d616822ead4378f68fe73ff9cd057bf43d1b8047be30aef24067db42c94b",
+        "content_sha256": "851f5725e99118d7c96e3bad1575afcc3a98dad5378a965233d75023058e28b9",
         "observation": {
           "boundary": {
             "decisions_created": 0,
@@ -2018,37 +2018,37 @@
           "service": "testrunner"
         }
       },
-      "previous_sha256": "aec7f4ef70a9ac464a399208ab1d80854b9bc43d6d2387a391f36020b028777b",
+      "previous_sha256": "d720139defa7037263dfbe51f299c311a96cdc18e02aad2c35380e0494f3d7b5",
       "sequence": 33,
       "type": "result"
     },
     {
-      "at": "2026-09-17T22:42:46.837490+00:00",
-      "content_sha256": "e07e179eefc3648ede78bbe7b4aa2bd69705d6f255da8ab61228ccd959147a23",
+      "at": "2026-09-17T22:55:32.035645+00:00",
+      "content_sha256": "9ca15deac2b08eed8937554d71419d67beb7d8ed58497182f2df0acf30d9d46e",
       "payload": {
         "action": {
-          "id": "386dfc92ec508498b07e64a9382817b1716fe573da5c0676b0dff2525ff9757f",
+          "id": "4f80da4d282a6d0dba532896766a015a646acd1e2292e34e0aa8c4e8da8eea3c",
           "kind": "escalate-lane",
           "lane": "retained-execution",
-          "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+          "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
           "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
           "service": "transfer"
         },
         "attempt": 1
       },
-      "previous_sha256": "abf42dc90f678a3fcbd3ee4f243647d4984275448463ba8be04cc77b5e0dfbb5",
+      "previous_sha256": "b600bbb2e97d74bfafbd25eb181e33317c7d419399ec282bb8aeb4475b1da116",
       "sequence": 34,
       "type": "attempt"
     },
     {
-      "at": "2026-09-17T22:42:47.260623+00:00",
-      "content_sha256": "d897ecad054c1be82baa8a7ee5728fd65849d409252d54b92e882e0becd55d8b",
+      "at": "2026-09-17T22:55:32.576417+00:00",
+      "content_sha256": "45b99e35f1fe28c70b5b755a7ded3c45e61f251800c62aedeb0ba938a3d5e6ab",
       "payload": {
         "action": {
-          "id": "386dfc92ec508498b07e64a9382817b1716fe573da5c0676b0dff2525ff9757f",
+          "id": "4f80da4d282a6d0dba532896766a015a646acd1e2292e34e0aa8c4e8da8eea3c",
           "kind": "escalate-lane",
           "lane": "retained-execution",
-          "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+          "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
           "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
           "service": "transfer"
         },
@@ -2065,7 +2065,7 @@
           "production_ready": false,
           "semantic_verdicts_changed": 0
         },
-        "content_sha256": "86b5bb35ef6aa573bfaee8f60af2a69b1b59453a7c8545125703f7aef70985f5",
+        "content_sha256": "47371cac651772812c2634c00cc2ccc651eddc2dcead77697ba55fd1aa34c3c8",
         "observation": {
           "boundary": {
             "decisions_created": 0,
@@ -2115,56 +2115,56 @@
           "service": "transfer"
         }
       },
-      "previous_sha256": "e07e179eefc3648ede78bbe7b4aa2bd69705d6f255da8ab61228ccd959147a23",
+      "previous_sha256": "9ca15deac2b08eed8937554d71419d67beb7d8ed58497182f2df0acf30d9d46e",
       "sequence": 35,
       "type": "result"
     },
     {
-      "at": "2026-09-17T22:42:47.572228+00:00",
-      "content_sha256": "edc9d32422be9be7eb49d776700c45d556737c29a4090f2ca2a86afd6349b666",
+      "at": "2026-09-17T22:55:32.829252+00:00",
+      "content_sha256": "8ccd70496a5db98f3a1cb011300fb748f319fb880c318d95cfdc943b3e1651dc",
       "payload": {
         "actions": [
           {
-            "id": "d88ae1869840c4603ef90ac777eeb888b117b7e13a3fee48351b85359ab71e4a",
+            "id": "cbead1a20f0f06ba43ce668a211eeab6d5d8e1dd91b1b220f2e0faf2a5b50fad",
             "kind": "reparse",
             "lane": "reparse",
-            "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+            "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
             "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
             "service": "estate"
           }
         ]
       },
-      "previous_sha256": "d897ecad054c1be82baa8a7ee5728fd65849d409252d54b92e882e0becd55d8b",
+      "previous_sha256": "45b99e35f1fe28c70b5b755a7ded3c45e61f251800c62aedeb0ba938a3d5e6ab",
       "sequence": 36,
       "type": "round"
     },
     {
-      "at": "2026-09-17T22:42:47.872453+00:00",
-      "content_sha256": "aa8314d161620dce6dbd427441b3b3712079c42c543cda447f23d1f9aa8ad248",
+      "at": "2026-09-17T22:55:33.113046+00:00",
+      "content_sha256": "78a96eb08b50874c8a536c87e8481fbd2bd222e92f697eee1d96920748bc70dc",
       "payload": {
         "action": {
-          "id": "d88ae1869840c4603ef90ac777eeb888b117b7e13a3fee48351b85359ab71e4a",
+          "id": "cbead1a20f0f06ba43ce668a211eeab6d5d8e1dd91b1b220f2e0faf2a5b50fad",
           "kind": "reparse",
           "lane": "reparse",
-          "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+          "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
           "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
           "service": "estate"
         },
         "attempt": 1
       },
-      "previous_sha256": "edc9d32422be9be7eb49d776700c45d556737c29a4090f2ca2a86afd6349b666",
+      "previous_sha256": "8ccd70496a5db98f3a1cb011300fb748f319fb880c318d95cfdc943b3e1651dc",
       "sequence": 37,
       "type": "attempt"
     },
     {
-      "at": "2026-09-17T22:42:48.308764+00:00",
-      "content_sha256": "c2ee1c27474337b9a640d7f8dd5096c97190e85d70c6bb3a6916b40bf702fb8a",
+      "at": "2026-09-17T22:55:33.673716+00:00",
+      "content_sha256": "1221e8d176fbc3898f04051f02a3b88db4bb8c0ee56c6510de901b01e68da22a",
       "payload": {
         "action": {
-          "id": "d88ae1869840c4603ef90ac777eeb888b117b7e13a3fee48351b85359ab71e4a",
+          "id": "cbead1a20f0f06ba43ce668a211eeab6d5d8e1dd91b1b220f2e0faf2a5b50fad",
           "kind": "reparse",
           "lane": "reparse",
-          "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+          "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
           "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
           "service": "estate"
         },
@@ -2181,7 +2181,7 @@
           "production_ready": false,
           "semantic_verdicts_changed": 0
         },
-        "content_sha256": "77e1d0647424da0d7ec5c5d68173de13e9bed0085f9a566d10faf7df865deb08",
+        "content_sha256": "d3f5d335b45f5c465c75ed6ffa8a3b380473f57cfd75149850be22054cdc87d7",
         "observation": {
           "artifact": {
             "artifact_type": "cloudbank-reparsed-scenarios",
@@ -2357,56 +2357,56 @@
           "service": "estate"
         }
       },
-      "previous_sha256": "aa8314d161620dce6dbd427441b3b3712079c42c543cda447f23d1f9aa8ad248",
+      "previous_sha256": "78a96eb08b50874c8a536c87e8481fbd2bd222e92f697eee1d96920748bc70dc",
       "sequence": 38,
       "type": "result"
     },
     {
-      "at": "2026-09-17T22:42:48.588217+00:00",
-      "content_sha256": "bacd55d570e4c232886bcc4b20605aaa6df48a95df9d280cc798eea0e726bc37",
+      "at": "2026-09-17T22:55:33.950020+00:00",
+      "content_sha256": "34c6f07c9bc4e5b5c9bb925fe22c2a94bd5c45ca7bbca34b0249060a7d1ee731",
       "payload": {
         "actions": [
           {
-            "id": "ee44c9d0288044fa7d164f1cd6c07ca77a98636333a7d91874bd1319266ef674",
+            "id": "ec9c1542cf5f7652bf83313c2406e785dd909de7cbf2f380b9fa971d63963ec5",
             "kind": "extend-corpus",
             "lane": "extend-corpus",
-            "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+            "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
             "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
             "service": "estate"
           }
         ]
       },
-      "previous_sha256": "c2ee1c27474337b9a640d7f8dd5096c97190e85d70c6bb3a6916b40bf702fb8a",
+      "previous_sha256": "1221e8d176fbc3898f04051f02a3b88db4bb8c0ee56c6510de901b01e68da22a",
       "sequence": 39,
       "type": "round"
     },
     {
-      "at": "2026-09-17T22:42:48.860795+00:00",
-      "content_sha256": "84b676e2b6033404485a12d91d82ef6d5a0292eba65655e1fab88c5ca9d44b64",
+      "at": "2026-09-17T22:55:34.270200+00:00",
+      "content_sha256": "3edffd5d83b2e544d75a555bd964421a44806f7518ea8e472b2bd804afe64c47",
       "payload": {
         "action": {
-          "id": "ee44c9d0288044fa7d164f1cd6c07ca77a98636333a7d91874bd1319266ef674",
+          "id": "ec9c1542cf5f7652bf83313c2406e785dd909de7cbf2f380b9fa971d63963ec5",
           "kind": "extend-corpus",
           "lane": "extend-corpus",
-          "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+          "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
           "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
           "service": "estate"
         },
         "attempt": 1
       },
-      "previous_sha256": "bacd55d570e4c232886bcc4b20605aaa6df48a95df9d280cc798eea0e726bc37",
+      "previous_sha256": "34c6f07c9bc4e5b5c9bb925fe22c2a94bd5c45ca7bbca34b0249060a7d1ee731",
       "sequence": 40,
       "type": "attempt"
     },
     {
-      "at": "2026-09-17T22:42:49.344740+00:00",
-      "content_sha256": "d5266bd34b62eb6952c828cc3f612c96584d5c5cc4d8f455a5a7b4750ffda6b8",
+      "at": "2026-09-17T22:55:34.840729+00:00",
+      "content_sha256": "7de049ac340e26fb166ae86034b33aa8771eab4c803e48596777ad4090c3884b",
       "payload": {
         "action": {
-          "id": "ee44c9d0288044fa7d164f1cd6c07ca77a98636333a7d91874bd1319266ef674",
+          "id": "ec9c1542cf5f7652bf83313c2406e785dd909de7cbf2f380b9fa971d63963ec5",
           "kind": "extend-corpus",
           "lane": "extend-corpus",
-          "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+          "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
           "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
           "service": "estate"
         },
@@ -2423,7 +2423,7 @@
           "production_ready": false,
           "semantic_verdicts_changed": 0
         },
-        "content_sha256": "069085b42a6398e7b0892d348ed344350d2a22f5a77046a10bf9d8ed947982a1",
+        "content_sha256": "2c0be3d864253fbadd42d97afcc6476e9429d7e2551879c19dac1e14212737cf",
         "observation": {
           "artifact": {
             "added_count": 28,
@@ -2684,56 +2684,56 @@
           "service": "estate"
         }
       },
-      "previous_sha256": "84b676e2b6033404485a12d91d82ef6d5a0292eba65655e1fab88c5ca9d44b64",
+      "previous_sha256": "3edffd5d83b2e544d75a555bd964421a44806f7518ea8e472b2bd804afe64c47",
       "sequence": 41,
       "type": "result"
     },
     {
-      "at": "2026-09-17T22:42:49.673877+00:00",
-      "content_sha256": "47cbbecf048c7d9d1eb3eabae34215009f2c1b1147f2474af9666bf3772e0be6",
+      "at": "2026-09-17T22:55:35.138538+00:00",
+      "content_sha256": "00075a037eaa55fac5bbd4edb9f4d8dd7ae01650abaec5b92971b724178b7d39",
       "payload": {
         "actions": [
           {
-            "id": "a82ebba1003921b49918e280b8c55f3ba3ec94ac0e21a55c5166170ab8c6e8a7",
+            "id": "0a9a33f77e471a5fc478c779b3e76481aac2f2def59c5f54b46592075d20e71f",
             "kind": "rerun",
             "lane": "rerun",
-            "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+            "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
             "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
             "service": "estate"
           }
         ]
       },
-      "previous_sha256": "d5266bd34b62eb6952c828cc3f612c96584d5c5cc4d8f455a5a7b4750ffda6b8",
+      "previous_sha256": "7de049ac340e26fb166ae86034b33aa8771eab4c803e48596777ad4090c3884b",
       "sequence": 42,
       "type": "round"
     },
     {
-      "at": "2026-09-17T22:42:49.974788+00:00",
-      "content_sha256": "cf8f3a58a3df87b911127fd786be3879e15565a284838e51836d0ef8089be28c",
+      "at": "2026-09-17T22:55:35.476612+00:00",
+      "content_sha256": "ef14acd2385219b1c19adfc6f2109af326f8fd59f14ce2db9b81121c589b02a6",
       "payload": {
         "action": {
-          "id": "a82ebba1003921b49918e280b8c55f3ba3ec94ac0e21a55c5166170ab8c6e8a7",
+          "id": "0a9a33f77e471a5fc478c779b3e76481aac2f2def59c5f54b46592075d20e71f",
           "kind": "rerun",
           "lane": "rerun",
-          "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+          "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
           "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
           "service": "estate"
         },
         "attempt": 1
       },
-      "previous_sha256": "47cbbecf048c7d9d1eb3eabae34215009f2c1b1147f2474af9666bf3772e0be6",
+      "previous_sha256": "00075a037eaa55fac5bbd4edb9f4d8dd7ae01650abaec5b92971b724178b7d39",
       "sequence": 43,
       "type": "attempt"
     },
     {
-      "at": "2026-09-17T22:42:50.498101+00:00",
-      "content_sha256": "e8438fb2750cf029654b635edd3ccd272555f6433ae643c508b8efb094176786",
+      "at": "2026-09-17T22:55:36.070613+00:00",
+      "content_sha256": "0af4a1e10c055ebae0a9e51e485569660392085eed4413a27e3a152dc4ec3211",
       "payload": {
         "action": {
-          "id": "a82ebba1003921b49918e280b8c55f3ba3ec94ac0e21a55c5166170ab8c6e8a7",
+          "id": "0a9a33f77e471a5fc478c779b3e76481aac2f2def59c5f54b46592075d20e71f",
           "kind": "rerun",
           "lane": "rerun",
-          "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+          "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
           "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
           "service": "estate"
         },
@@ -2750,7 +2750,7 @@
           "production_ready": false,
           "semantic_verdicts_changed": 0
         },
-        "content_sha256": "24c389aa6c9bd96bac5c00ae9fba0a2b15fa4228e6a0621dc9b7e5fad6ddf9d9",
+        "content_sha256": "1991741bb25cf2dd271fee22a5b0dd8c15f046417dc1fe0d35e999213d0b030b",
         "observation": {
           "artifact": {
             "after_corpus_sha256": "a4a2e780d139a87e5b5645e8b622387b9f6a06cde3bdcba00474c7724a2476fb",
@@ -2892,54 +2892,54 @@
           "service": "estate"
         }
       },
-      "previous_sha256": "cf8f3a58a3df87b911127fd786be3879e15565a284838e51836d0ef8089be28c",
+      "previous_sha256": "ef14acd2385219b1c19adfc6f2109af326f8fd59f14ce2db9b81121c589b02a6",
       "sequence": 44,
       "type": "result"
     },
     {
-      "at": "2026-09-17T22:42:50.842316+00:00",
-      "content_sha256": "96cd908414e1d1488e01879eab86d4d0defe605e7e18cf7099b56dc734907b94",
+      "at": "2026-09-17T22:55:36.440586+00:00",
+      "content_sha256": "76aab149a1a9f3d18e977808da82e558c039bcc04ff17ad7b360f091516a25cf",
       "payload": {
         "actions": [
           {
-            "id": "12326bcd5ef4fd2aaa951a680c6240a3d66fdc8afa2992c91da89fe0f3bab2f0",
+            "id": "582122378e6dd02ce4dc928c755ea60b396f2711796ba7e291b8a7545e1260b4",
             "kind": "apply-ledger-entry",
             "lane": "apply-ledger-entry",
-            "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+            "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
             "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
             "service": "estate"
           }
         ]
       },
-      "previous_sha256": "e8438fb2750cf029654b635edd3ccd272555f6433ae643c508b8efb094176786",
+      "previous_sha256": "0af4a1e10c055ebae0a9e51e485569660392085eed4413a27e3a152dc4ec3211",
       "sequence": 45,
       "type": "round"
     },
     {
-      "at": "2026-09-17T22:42:51.090359+00:00",
-      "content_sha256": "1e231033afe5bbdaa07ea95bc7865b5cd5f3e6272c5bdaab8f04a1fb9f3766c2",
+      "at": "2026-09-17T22:55:36.767060+00:00",
+      "content_sha256": "1167c47f713f23bf1ded3aef98823519b00f0367e19b2949cd02639a2a3bfce1",
       "payload": {
         "action": {
-          "id": "12326bcd5ef4fd2aaa951a680c6240a3d66fdc8afa2992c91da89fe0f3bab2f0",
+          "id": "582122378e6dd02ce4dc928c755ea60b396f2711796ba7e291b8a7545e1260b4",
           "kind": "apply-ledger-entry",
           "lane": "apply-ledger-entry",
-          "plan_sha256": "7bc83c9e33a5df43587683a179c36402ade199029b654e91f67eebb3429317ad",
+          "plan_sha256": "f489e5181674e2d6c78506be731103928aa6370256834130cc3e69dea36e425c",
           "scope": "cloudbank-retained-evidence-and-approved-ledger-projection",
           "service": "estate"
         },
         "reason": "CloudBank human decision authority is not provisioned"
       },
-      "previous_sha256": "96cd908414e1d1488e01879eab86d4d0defe605e7e18cf7099b56dc734907b94",
+      "previous_sha256": "76aab149a1a9f3d18e977808da82e558c039bcc04ff17ad7b360f091516a25cf",
       "sequence": 46,
       "type": "blocked"
     },
     {
-      "at": "2026-09-17T22:42:51.395034+00:00",
-      "content_sha256": "9bf55fe4b460f0f80fa35240b69af9eca4016d07903d308a9915f7dd2919fc30",
+      "at": "2026-09-17T22:55:37.100627+00:00",
+      "content_sha256": "8464da9edcba144f44726092e04b23acb977826f3c630c54bf46d809ecf9c2f4",
       "payload": {
         "reason": "human-decision-required"
       },
-      "previous_sha256": "1e231033afe5bbdaa07ea95bc7865b5cd5f3e6272c5bdaab8f04a1fb9f3766c2",
+      "previous_sha256": "1167c47f713f23bf1ded3aef98823519b00f0367e19b2949cd02639a2a3bfce1",
       "sequence": 47,
       "type": "halted"
     }

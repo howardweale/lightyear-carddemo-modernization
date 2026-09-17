@@ -2,6 +2,7 @@ from contextlib import closing
 import sqlite3
 from datetime import datetime, timedelta, timezone
 import json
+import importlib.util
 from pathlib import Path
 import shutil
 import tempfile
@@ -37,6 +38,8 @@ class SimulatedRunner:
 
 class PairedCampaignTests(unittest.TestCase):
     def setUp(self):
+        if importlib.util.find_spec("cryptography") is None:
+            self.skipTest("Install .[control-tower] to run signing tests; dedicated decision CI requires it")
         self.temp = tempfile.TemporaryDirectory()
         self.addCleanup(self.temp.cleanup)
         self.root = Path(self.temp.name).resolve()
@@ -54,6 +57,19 @@ class PairedCampaignTests(unittest.TestCase):
                 "accept_terms": True, "reason": "Approve the exact synthetic test contract"}
 
     def start(self): return self.service.start(self.token, self.request())["run_id"]
+
+    def test_oracle_output_enabled_in_selected_container(self):
+        from lightyear_workflow.campaign_gcp import GcpRunner
+        case = number_cases(self.root)[0]
+        with patch('lightyear_workflow.campaign_gcp.shutil.which', return_value='gcloud'):
+            runner = GcpRunner(self.root, 'number-' + '1'*32, plan(self.root), lambda *_: None)
+        def container_scoped_output(lane, sql):
+            self.assertEqual(lane, 'oracle')
+            if sql.index('SET SERVEROUTPUT ON') < sql.index('ALTER SESSION SET CONTAINER'):
+                return ''  # Root package state does not enable PDB output.
+            return 'LY_NUMBER_OBSERVATION=' + json.dumps({'case_id': case['id'], 'observations': {p: EXPECTED[p] for p in probes(case)}})
+        with patch.object(runner, 'sql', side_effect=container_scoped_output):
+            self.assertEqual(runner.observe('oracle', case), {p: EXPECTED[p] for p in probes(case)})
 
     def test_roles_scope_terms_and_duplicate_submission(self):
         request = self.request()

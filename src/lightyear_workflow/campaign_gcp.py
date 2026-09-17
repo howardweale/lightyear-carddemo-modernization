@@ -205,7 +205,9 @@ class GcpRunner:
 
     def observe(self, lane, case):
         sql = postgres_case(case) if lane == "alloydb" else (
-            "SET ECHO OFF FEEDBACK OFF HEADING OFF PAGESIZE 0 VERIFY OFF DEFINE OFF\nSET SERVEROUTPUT ON SIZE UNLIMITED\nSET LINESIZE 32767\nWHENEVER SQLERROR EXIT SQL.SQLCODE\nALTER SESSION SET CONTAINER=FREEPDB1;\n" + render_case(case, "26ai") + "\nEXIT\n")
+            # DBMS_OUTPUT package state belongs to the selected container.
+            # Enable it after switching from the root to FREEPDB1.
+            "SET ECHO OFF FEEDBACK OFF HEADING OFF PAGESIZE 0 VERIFY OFF DEFINE OFF\nSET LINESIZE 32767\nWHENEVER SQLERROR EXIT SQL.SQLCODE\nALTER SESSION SET CONTAINER=FREEPDB1;\nSET SERVEROUTPUT ON SIZE UNLIMITED\n" + render_case(case, "26ai") + "\nEXIT\n")
         return parse_observation(self.sql(lane, sql), case, lane)
 
     def cleanup(self):

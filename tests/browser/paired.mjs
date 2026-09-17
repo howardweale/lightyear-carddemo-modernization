@@ -33,6 +33,10 @@ try {
     assert.deepEqual(await page.locator('#run-view .run-figure').allTextContents(), ['20 / 20','20 / 20','20 / 20','20 / 20']);
     assert.match(await page.locator('#run-view').innerText(), /unclassified-or-simulated/);
     assert.match(await page.locator('#workflow-run option:checked').innerText(), /20 equivalent pairs.*passed-simulated/);
+    await page.locator('#run-view summary').getByText('Signed campaign authorization', {exact:true}).click();
+    assert.match(await page.locator('#run-view').innerText(), /Browser test: explicitly simulated run, no cloud resources/);
+    assert.equal((await page.locator('#run-view').innerText()).includes(config.credential), false);
+    await page.locator('#run-view summary').getByText('Signed campaign authorization', {exact:true}).click();
     await page.locator('#run-view .paired-case summary').first().click();
     await page.waitForTimeout(3500);
     assert.equal(await page.locator('#run-view .paired-case').first().getAttribute('open'), '');

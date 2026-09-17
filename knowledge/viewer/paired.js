@@ -88,6 +88,11 @@
       const figure = node('div', undefined, 'run-card'); figure.append(node('strong', `${number} / 20`, 'run-figure'), node('p', label)); figures.append(figure);
     }
     host.append(figures);
+    const authorization = node('details');
+    authorization.append(node('summary', 'Signed campaign authorization'),
+      node('p', `${value.authorization.actor.name} · ${new Date(value.authorization.authorized_at).toLocaleString()}`),
+      node('p', value.authorization.reason), node('pre', JSON.stringify(value.authorization, null, 2)));
+    host.append(authorization);
     if (value.error) host.append(node('p', `Engine error: ${value.error}`, 'decision-error'));
     host.append(node('h2', 'Cleanup'), node('p', value.cleanup ? `${value.cleanup.complete ? 'Confirmed' : 'Action required'} · ${Object.entries(value.cleanup.resources).map(([k, v]) => `${k}: ${v}`).join(' · ')}` : 'Not yet recorded'));
     if (value.recovery) host.append(node('p', `Later recovery: ${value.recovery.cleanup.complete ? 'Cleanup confirmed' : 'Still requires attention'} · ${new Date(value.recovery.at).toLocaleString()}. Original run verdict is retained.`));

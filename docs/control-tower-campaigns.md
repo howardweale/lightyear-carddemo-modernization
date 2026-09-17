@@ -63,6 +63,8 @@ Under **Authorize this campaign**, review the exact plan, enter the separate cam
 
 The run opens automatically. It shows environment preparation, database identities, source observations, target observations, comparisons and cleanup. Expand a case to see raw values and the comparison result. Use **Refresh view** when another session starts a run. Closing the browser or web server does not stop the detached engine; keep the controller laptop awake and connected until cleanup is confirmed.
 
+Expand **Signed campaign authorization** in The run to inspect the recorded operator, reason, timestamp, exact plan and signature. These are the terms bound to that selected run, even if the currently proposed plan has since changed. No operator credential or private signing key is displayed.
+
 | Status | Meaning |
 | --- | --- |
 | `passed-bounded-native` | Twenty pairs passed with native identities/observations, no execution error, and confirmed cleanup. |
@@ -100,9 +102,11 @@ Create ignored `work/campaigns/oracle26ai-alloydb-number/profile.json` with thes
 }
 ```
 
-The $2/hour value is a conservative planning allowance for this lab, not a live pricing quote. Review current GCP pricing before adapting the plan. The engine rejects mutable image tags and checks fresh runtime identities. Review and serve:
+The $2/hour value is a conservative planning allowance for this lab, not a live pricing quote. Review current GCP pricing before adapting the plan. The engine rejects mutable image tags and checks fresh runtime identities.
 
 The AlloyDB connection uses the private endpoint from a fresh read of the fixed GCP instance resource, and verifies the SQL version, database and user. Its internal server socket address is retained as a hash and a separate comparison field; it is not assumed to equal the managed connection endpoint.
+
+Review and serve:
 
 ```powershell
 py -3.12 -m lightyear_workflow.campaign_service review --root .

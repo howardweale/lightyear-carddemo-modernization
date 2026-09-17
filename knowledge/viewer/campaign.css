@@ -18,6 +18,17 @@
 #campaign-view summary { cursor: pointer; font-weight: 600; }
 #campaign-view li { margin: 10px 0; line-height: 1.5; }
 #campaign-view code { display: block; padding: 12px; background: #f3f6fa; white-space: pre-wrap; }
+#campaign-controls { padding: 24px; border: 1px solid #ccd7e5; border-radius: 14px; background: white; margin-bottom: 24px; }
+#campaign-controls[hidden] { display: none; }
+#campaign-controls p { line-height: 1.55; overflow-wrap: anywhere; }
+#campaign-controls form { display: grid; gap: 16px; margin-top: 20px; }
+#campaign-controls label { display: grid; gap: 8px; }
+#campaign-controls .paired-accept { display: flex; align-items: start; }
+#campaign-controls .paired-accept input { width: auto; flex: 0 0 auto; }
+#campaign-controls textarea { min-height: 80px; max-width: 100%; padding: 10px; }
+#campaign-controls pre, #run-view pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 12px; background: #f5f7fb; padding: 12px; }
+#run-view .paired-case { margin: 10px 0; border: 1px solid #dce2ea; padding: 12px; border-radius: 8px; }
+#run-view .paired-case summary { cursor: pointer; }
 @media (max-width: 700px) {
   #workflow-context { grid-template-columns: minmax(0, 1fr); padding: 14px; }
   #campaign-view { padding: 16px; }

@@ -22,6 +22,8 @@ from lightyear_data.cloudbank_publication import load_publication, workload_publ
 from lightyear_workflow.artifacts import read_snapshot, project_snapshot
 from lightyear_workflow.history import read_runs, read_selected
 from lightyear_workflow.campaigns import read_campaign, validate_context
+from lightyear_workflow.campaign_service import CampaignService, list_runs as campaign_runs, history as campaign_history
+from lightyear_workflow.campaign_engine import AUTHORITY as CAMPAIGN_AUTHORITY, read_run as read_campaign_run
 from lightyear_workflow.convergence import read_convergence
 
 from .chat import ChatError, GraphChatService
@@ -1148,6 +1150,7 @@ class ExplorerServer(ThreadingHTTPServer):
             evidence_pack_path or self.graph_path.parent / "evidence" / "source.pack.json.gz"
         ).resolve()
         self.verifier_token = verifier_token or secrets.token_urlsafe(32)
+        self.campaign_service = None
         self.decision_service = decision_service
         if decision_service is not None:
             decision_service.decision_only = True
@@ -1453,6 +1456,9 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
     def do_GET(self) -> None:  # noqa: N802 - standard-library handler API
         parsed = urlparse(self.path)
         try:
+            if parsed.path.startswith("/api/campaign/"):
+                self._campaign(parsed.path)
+                return
             if parsed.path.startswith("/api/decisions/"):
                 self._decisions(parsed.path, parse_qs(parsed.query))
             elif parsed.path.startswith("/api/"):
@@ -1480,6 +1486,9 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
     def do_POST(self) -> None:  # noqa: N802 - standard-library handler API
         parsed = urlparse(self.path)
         try:
+            if parsed.path.startswith("/api/campaign/"):
+                self._campaign(parsed.path, self._request_json())
+                return
             if parsed.path.startswith("/api/decisions/"):
                 self._decisions(parsed.path, {}, self._request_json())
                 return
@@ -1504,6 +1513,30 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
             self._json({"error": str(exc)}, HTTPStatus.BAD_REQUEST)
         except Exception as exc:  # pragma: no cover - defensive HTTP boundary
             self._json({"error": f"Chat request failed: {exc}"}, HTTPStatus.INTERNAL_SERVER_ERROR)
+
+    def _campaign(self, path: str, payload: dict | None = None) -> None:
+        service = self.server.campaign_service
+        if path == "/api/campaign/status" and payload is None:
+            self._json(service.status() if service else {"enabled": False, "status": "unconfigured", "reason": "Campaign operator authority is not configured."})
+            return
+        if service is None:
+            raise DecisionUnauthorized("Campaign operator authority is not configured")
+        host = self.headers.get("Host", "")
+        allowed = {f"127.0.0.1:{self.server.server_port}", f"localhost:{self.server.server_port}", f"[::1]:{self.server.server_port}"}
+        if not is_loopback_host(self.client_address[0]) or host not in allowed:
+            raise DecisionUnauthorized("Campaign commands require a trusted local connection")
+        if payload is None or self.headers.get("Origin") != f"http://{host}":
+            raise DecisionUnauthorized("Campaign commands require a same-origin operator request")
+        token = self.headers.get("Authorization", "").removeprefix("Bearer ")
+        routes = {
+            "/api/campaign/session": lambda: service.login(payload.get("credential")),
+            "/api/campaign/logout": lambda: service.authority.logout(token),
+            "/api/campaign/start": lambda: service.start(token, payload),
+        }
+        if path not in routes:
+            self._json({"error": "Unknown campaign command"}, HTTPStatus.NOT_FOUND)
+            return
+        self._json(routes[path]())
 
     def _decisions(self, path: str, query: dict, payload: dict | None = None) -> None:
         service = self.server.decision_service
@@ -1566,21 +1599,23 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
         self.wfile.write(body)
 
     def _api(self, path: str, query: dict[str, list[str]]) -> None:
+        if path == "/api/campaign/status":
+            self._campaign(path)
+            return
         if path in {"/api/workflow/campaign", "/api/workflow/runs", "/api/workflow/execution", "/api/workflow/convergence"}:
             estate = self._value(query, "estate") or "cloudbank"
             campaign = self._value(query, "campaign_id") or "retained"
             validate_context(estate, campaign)
         if path == "/api/workflow/campaign":
-            self._json(read_campaign(self.server.project_root, estate, campaign))
+            self._json(read_campaign(self.server.project_root, estate, campaign, self._value(query, "run_id")))
             return
         if path == "/api/workflow/runs":
             self._json(read_runs(self.server.project_root, estate) if campaign == "retained" else
-                       {"estate": estate, "campaign_id": campaign, "runs": [], "reason": "no-runs-recorded", "read_only": True})
+                       campaign_runs(self.server.project_root))
             return
         if path == "/api/workflow/execution":
             self._json(read_selected(self.server.project_root, estate, self._value(query, "run_id")) if campaign == "retained" else
-                       {"estate_id": estate, "campaign_id": campaign, "status": "unavailable", "read_only": True, "items": [],
-                        "reason": "Not run. The NUMBER campaign has no admitted execution journal; see its preparation and blockers in Work queue."})
+                       {**read_campaign_run(self.server.project_root, self._value(query, "run_id")), "campaign_id": campaign})
             return
         if path == "/api/workflow/plan":
             self._json(project_snapshot(read_snapshot(self.server.project_root),
@@ -1591,7 +1626,7 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
         if path == "/api/workflow/convergence":
             self._json(read_convergence(self.server.project_root,
                 estate=estate, weeks=self._integer(query, "weeks", 12)) if campaign == "retained" else
-                {"weeks": [], "storage": None, "reason": "no-runs-recorded", "campaign_id": campaign})
+                campaign_history(self.server.project_root))
             return
         self.server.refresh_live_projections()
         index = self.server.index
@@ -1968,6 +2003,10 @@ def serve(
         server.decision_service = DecisionService(server.project_root, authority, graph_identity=lambda: server.index.canonical_content_sha256, decision_only=True)
     elif decision_config is not None:
         raise ValueError("Configured operator authority does not exist")
+    if (server.project_root / CAMPAIGN_AUTHORITY).is_file():
+        if not is_loopback_host(host):
+            raise ValueError("Campaign commands require a loopback bind")
+        server.campaign_service = CampaignService(server.project_root)
     display_host = f"[{host.strip('[]')}]" if ":" in host else host
     url = f"http://{display_host}:{server.server_port}/"
     print(f"LIGHTYEAR Graph Explorer: {url}")
@@ -1983,6 +2022,8 @@ def serve(
     except KeyboardInterrupt:
         pass
     finally:
+        if server.campaign_service:
+            server.campaign_service.close()
         if server.decision_service:
             server.decision_service.close()
         server.server_close()

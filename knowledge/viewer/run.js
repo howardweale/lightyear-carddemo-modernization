@@ -39,6 +39,7 @@
   }
   function render(payload) {
     const host = document.getElementById('run-view');
+    if (payload.campaign_id === 'oracle26ai-alloydb-number') { window.LightyearPaired.renderRun(host, payload); return; }
     host.replaceChildren();
     if (payload.status === 'unavailable') {
       host.append(node('p', payload.reason || 'No run recorded yet. No journal is available for the selected estate.', 'run-note'));
@@ -113,12 +114,14 @@
     limits.append(node('p', 'Asserted in the receipt, not inferred from the log. Values are recorded totals, including any permitted ledger applications; they are not a new qualification.', 'run-note'));
     host.append(limits);
   }
-  let sequence = 0;
+  let sequence = 0, previousContext = null;
   async function reload() {
     const host = document.getElementById('run-view');
     if (!host) return;
     const request = ++sequence;
-    host.replaceChildren(node('p', 'Reading the execution journal…', 'run-note'));
+    const selectedContext = window.LightyearContext.query();
+    if (previousContext !== selectedContext || window.LightyearContext.state.campaignId === 'retained') host.replaceChildren(node('p', 'Reading the execution journal…', 'run-note'));
+    previousContext = selectedContext;
     try {
       const response = await fetch(`/api/workflow/execution?${window.LightyearContext.query()}`, { cache: 'no-store', credentials: 'omit' });
       if (!response.ok || !(response.headers.get('content-type') || '').includes('application/json')) throw new Error('The evidence service could not be reached.');
@@ -129,5 +132,6 @@
     }
   }
   document.addEventListener('tower-context-change', reload);
+  setInterval(() => { if (window.LightyearContext.state.campaignId !== 'retained' && !document.getElementById('run-workspace').hidden) reload(); }, 3000);
   window.LightyearRun = { reload };
 })();

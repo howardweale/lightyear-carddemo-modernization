@@ -128,6 +128,7 @@
       host.appendChild(node('p', 'Run history is unavailable. The run index could not be verified.', 'convergence-note'));
       return;
     }
+    if (payload.metric_unit === 'paired-cases') { window.LightyearPaired.renderHistory(host, payload); return; }
     const weeks = payload.weeks || [];
     if (!weeks.length) {
       host.appendChild(node('p',

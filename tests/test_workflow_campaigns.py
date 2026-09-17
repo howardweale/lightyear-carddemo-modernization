@@ -3,6 +3,7 @@ from datetime import datetime, timedelta, timezone
 import json
 from pathlib import Path
 import subprocess
+import shutil
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -30,7 +31,9 @@ class CampaignTests(unittest.TestCase):
         return path
 
     def test_prepared_files_are_not_execution_or_authority(self):
-        value = c.read_campaign(ROOT, "cloudbank", c.CAMPAIGN)
+        for path in ('data-modernization/oracle-core-sql-coverage', 'data-modernization/oracle-native-execution-gate/cases'):
+            shutil.copytree(ROOT / path, self.root / path)
+        value = c.read_campaign(self.root, "cloudbank", c.CAMPAIGN)
         self.assertEqual(value["source_prepared_cases"], 20)
         self.assertEqual(len({case["behavior_id"] for case in value["cases"]}), 5)
         self.assertIsNone(value["native_executed_cases"])

@@ -1,7 +1,8 @@
 # Oracle native execution admission matrix
 
 MS #51 converts the completed bounded catalog into a governed two-version native execution
-contract. It does not claim that the required SQL harnesses or database runs already exist.
+contract. 40 of the 4,000 case/version SQL harnesses are
+materialized; database execution remains unobserved in this readiness receipt.
 
 | Domain | Catalog cases | Required 19c + 26ai runs | Native runs admitted |
 |---|---:|---:|---:|

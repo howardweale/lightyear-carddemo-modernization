@@ -18,12 +18,12 @@
       "required_acceptance_evidence": [
         {
           "name": "differential comparison",
-          "receipt_sha256": "e2a47d60de7346088a5b03128f28ca8564e7c6eb0a5af9a9d261819fa7e587be",
+          "receipt_sha256": "3c6a03bca0cdc3e6f3286506001d269639de3a092868d02f2f88e8a148b2d597",
           "status": "passed-bounded-synthetic"
         },
         {
           "name": "semantic mutation suite",
-          "receipt_sha256": "e2a47d60de7346088a5b03128f28ca8564e7c6eb0a5af9a9d261819fa7e587be",
+          "receipt_sha256": "3c6a03bca0cdc3e6f3286506001d269639de3a092868d02f2f88e8a148b2d597",
           "status": "passed-bounded-synthetic"
         }
       ],
@@ -76,12 +76,12 @@
       "required_acceptance_evidence": [
         {
           "name": "query checksums",
-          "receipt_sha256": "e2a47d60de7346088a5b03128f28ca8564e7c6eb0a5af9a9d261819fa7e587be",
+          "receipt_sha256": "3c6a03bca0cdc3e6f3286506001d269639de3a092868d02f2f88e8a148b2d597",
           "status": "passed-bounded-synthetic"
         },
         {
           "name": "data movement and rollback rehearsal",
-          "receipt_sha256": "e2a47d60de7346088a5b03128f28ca8564e7c6eb0a5af9a9d261819fa7e587be",
+          "receipt_sha256": "3c6a03bca0cdc3e6f3286506001d269639de3a092868d02f2f88e8a148b2d597",
           "status": "passed-bounded-synthetic"
         }
       ],
@@ -127,7 +127,7 @@
       "integrated_development_evidence_passed": true,
       "native_evidence_passed": false,
       "qualification_mechanism": {
-        "content_sha256": "21e1728158d8451b85c71ab589bba7cf08fac245c048beb00bab28136ddced26",
+        "content_sha256": "ad79d8cec7b4a0d0d8c032021484a1aa8d033e31095559f6671f8729fe8ec878",
         "exact_source_acceptance_implied": false,
         "identity": "lightyear-hlasm-qualification",
         "path": "readiness/asm-date/qualification.json"
@@ -135,12 +135,12 @@
       "required_acceptance_evidence": [
         {
           "name": "bit-level differential comparison",
-          "receipt_sha256": "e2a47d60de7346088a5b03128f28ca8564e7c6eb0a5af9a9d261819fa7e587be",
+          "receipt_sha256": "3c6a03bca0cdc3e6f3286506001d269639de3a092868d02f2f88e8a148b2d597",
           "status": "passed-bounded-synthetic"
         },
         {
           "name": "boundary mutation suite",
-          "receipt_sha256": "e2a47d60de7346088a5b03128f28ca8564e7c6eb0a5af9a9d261819fa7e587be",
+          "receipt_sha256": "3c6a03bca0cdc3e6f3286506001d269639de3a092868d02f2f88e8a148b2d597",
           "status": "passed-bounded-synthetic"
         }
       ],
@@ -195,12 +195,12 @@
       "required_acceptance_evidence": [
         {
           "name": "condition-flow comparison",
-          "receipt_sha256": "e2a47d60de7346088a5b03128f28ca8564e7c6eb0a5af9a9d261819fa7e587be",
+          "receipt_sha256": "3c6a03bca0cdc3e6f3286506001d269639de3a092868d02f2f88e8a148b2d597",
           "status": "passed-bounded-synthetic"
         },
         {
           "name": "restart-plan tests",
-          "receipt_sha256": "e2a47d60de7346088a5b03128f28ca8564e7c6eb0a5af9a9d261819fa7e587be",
+          "receipt_sha256": "3c6a03bca0cdc3e6f3286506001d269639de3a092868d02f2f88e8a148b2d597",
           "status": "passed-bounded-synthetic"
         }
       ],
@@ -254,12 +254,12 @@
       "required_acceptance_evidence": [
         {
           "name": "differential comparison",
-          "receipt_sha256": "e2a47d60de7346088a5b03128f28ca8564e7c6eb0a5af9a9d261819fa7e587be",
+          "receipt_sha256": "3c6a03bca0cdc3e6f3286506001d269639de3a092868d02f2f88e8a148b2d597",
           "status": "passed-bounded-synthetic"
         },
         {
           "name": "decimal and call-boundary mutations",
-          "receipt_sha256": "e2a47d60de7346088a5b03128f28ca8564e7c6eb0a5af9a9d261819fa7e587be",
+          "receipt_sha256": "3c6a03bca0cdc3e6f3286506001d269639de3a092868d02f2f88e8a148b2d597",
           "status": "passed-bounded-synthetic"
         }
       ],
@@ -297,16 +297,16 @@
       "technology": "PL/I"
     }
   ],
-  "conformance_sha256": "e2a47d60de7346088a5b03128f28ca8564e7c6eb0a5af9a9d261819fa7e587be",
-  "content_sha256": "6df79164a612b2de08028c3d79d33a2cb6429cfd14efaf3aabd6f3da3022730e",
+  "conformance_sha256": "3c6a03bca0cdc3e6f3286506001d269639de3a092868d02f2f88e8a148b2d597",
+  "content_sha256": "25746303b77bfe5bf2c7786c9b7b89e9397d630363f5c20ccab8f23cacbb0404",
   "factory_dispatch_allowed": false,
   "mainframe_equivalent": false,
   "matrix_type": "lightyear-integrated-pilot-evidence-matrix",
   "native_execution_observed": false,
   "production_ready": false,
   "schema_version": "1.0",
-  "selection_sha256": "7f81564a6a74809542129c9819f865a2b62d6e367f6e010481e04c34103c328a",
-  "source_graph_sha256": "dca65ecc8983406dccd10ab786cf06b4c82f974aacdc4fd221f4ea2e619b179f",
+  "selection_sha256": "6d3218cfb148a0b3e433e7f53801207146b5f9ccd13954b60eb2ec8028d01806",
+  "source_graph_sha256": "2a1cc8177d83cb30940167ee34ab9c3a12da786d14748fc8528716128fce49cf",
   "statistics": {
     "acceptance_evidence_count": 10,
     "blocked_live_evidence_count": 15,
@@ -316,5 +316,5 @@
     "technology_count": 5
   },
   "wave_2_integrated_development_ready": true,
-  "work_package_sha256": "6970bc0fe784575d70c36ffb036f9f58855a1a8dff54ce5094806c91e02a0e99"
+  "work_package_sha256": "3d07c82188b2d37d6a63032e5ca2ca31b869cc45d9595681f81a3c385dd990af"
 }

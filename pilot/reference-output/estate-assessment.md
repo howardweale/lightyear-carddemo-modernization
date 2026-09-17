@@ -1,6 +1,6 @@
 # LIGHTYEAR customer estate assessment
 
-**Assessment identity:** `eb1a33628bfca40eae5b7d663ff16970f7498db56b4c9670a5187f57450a22ca`
+**Assessment identity:** `fe34608cf501c52c2c2a7c6e393265104c674052bfbdb3b5d46ec2b441723d3b`
 
 ## Result
 

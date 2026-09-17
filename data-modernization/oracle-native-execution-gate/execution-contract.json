@@ -1,8 +1,8 @@
 {
   "conformance_rule": "A database lane is conformant only when all 2,000 manifest cases have unique, signed, passed-native results bound to one database identity and the exact materialized SQL harness hashes.",
-  "content_sha256": "421c351665f8796541472b17abb8cffd5b4a75dc919f960899fa21b42f347446",
+  "content_sha256": "574d1aa751026b7f5402d754fa1bfafefdee968b5e5eb6eb70ea66e31148fef0",
   "contract_type": "lightyear-oracle-native-execution-contract",
-  "manifest_sha256": "710e6b5f430db48f2cea3767507bd970bee70ed3cda0486fccbc88875c76780e",
+  "manifest_sha256": "0eee958550d47d6124e8e37251f0d37e71ca4a338c64ee610f78e5cac78c7159",
   "receipt_security": {
     "content_addressed": true,
     "signature_algorithm": "hmac-sha256",

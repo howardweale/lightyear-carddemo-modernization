@@ -4,13 +4,13 @@
   "bindings": {
     "compatibility_ledger_sha256": "905370a0b8dbe5ac87aa93b61ed0fa6067dfef49941e850cb8557f94d2724afa",
     "conformance_sha256": "3988bc10d78ede3c9be07b60f3189daa426e668dd3bb585b323bff5d401db702",
-    "date_comparison_sha256": "340162a28898fe3ee892d9bd94d0caa6b4d558dbe55cbfc4cace251f1b19a13f",
-    "date_readiness_sha256": "08e54af640a9929fcadfc79803ad71462ecabdbfcda5c72acb09511f12786ef5",
+    "date_comparison_sha256": "c117253469cd7ee793072638fddde81d859aa8c53ca00fcca9ae932c109f5c7e",
+    "date_readiness_sha256": "224dd416d9f886259ca8c7e8df6389f48dab6fcfdc77f8fb6a61d1e15fae5283",
     "graph_content_sha256": "d98bd92d752f23ee19263aa0957c28ee5aac52966d1322f6a31d4a9960394dc9",
     "manifest_sha256": "fc48e621e0d3166b2acaed9774867911603dbee7e3be29c13e49c0a89bfebc85"
   },
   "claim_unlocked": "LIGHTYEAR can inventory and fail-closed qualify the bounded COBDATFT/MVSWAIT HLASM subset without claiming native assembly, binding, linkage, system-service, CPU, runtime, mainframe, or production equivalence.",
-  "content_sha256": "21e1728158d8451b85c71ab589bba7cf08fac245c048beb00bab28136ddced26",
+  "content_sha256": "ad79d8cec7b4a0d0d8c032021484a1aa8d033e31095559f6671f8729fe8ec878",
   "development_ready": true,
   "inventory": {
     "assembler_dsects": 1,
@@ -157,8 +157,8 @@
     {
       "evidence": {
         "behavior_match": true,
-        "comparison_sha256": "340162a28898fe3ee892d9bd94d0caa6b4d558dbe55cbfc4cace251f1b19a13f",
-        "readiness_sha256": "08e54af640a9929fcadfc79803ad71462ecabdbfcda5c72acb09511f12786ef5"
+        "comparison_sha256": "c117253469cd7ee793072638fddde81d859aa8c53ca00fcca9ae932c109f5c7e",
+        "readiness_sha256": "224dd416d9f886259ca8c7e8df6389f48dab6fcfdc77f8fb6a61d1e15fae5283"
       },
       "gate": "cobdatft-private-differential-proof",
       "status": "passed-local-development"

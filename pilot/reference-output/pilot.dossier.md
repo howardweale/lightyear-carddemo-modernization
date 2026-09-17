@@ -2,7 +2,7 @@
 
 **Release:** 0.33.0
 **Pilot:** `lightyear-carddemo-source-only-v0.33.0`
-**Dossier identity:** `b595eb7e9c916d7f64fe8fdeb1aee1f19904be6509a12974e7f8cd8f4991e96b`
+**Dossier identity:** `6f6856a6186d7ace0cf40d137f2a3a808d66e4b772bc45237df9544af027f609`
 
 ## Executive result
 
@@ -72,10 +72,10 @@ Db2 log or production cutover authorization was observed.
 | data-development-proof | `data-modernization/receipts/authfrds.oracle-offline.receipt.json` | `ae8453104e8745628a6cad8893f8d22849a34847a5ffbfeb5a6d56eae61897b6` |
 | cdc-cutover-recovery-rehearsal | `data-modernization/rehearsal/receipt.json` | `d2f0d194f39325a86063bd6609fdb631190c6686c727e348c7f36c30fffff7fd` |
 | mainframe-collection-mechanism | `extensions/adapters/appliance/appliance.receipt.json` | `2e8b9f9e4e54243facb9685026c62afbd26b60c71277aa2f3a152e508287479b` |
-| bounded-runtime-readiness | `readiness/cics-vsam/readiness-receipt.json` | `2dd8e24e7a23814b6e643ff186f1272071f220b7ac0e03cc57fffc1abcd7dc5a` |
-| bounded-runtime-readiness | `readiness/ims-expiry/readiness-receipt.json` | `f95a3d2e5d06232ae2eb00671131a055c4024d6e1546152239c83b0de990a557` |
-| bounded-language-readiness | `readiness/asm-date/readiness-receipt.json` | `faf7a3109e4f6308a4ac71c706c2725e272fac666b5bba3d1a57ea63633dad92` |
-| auditor-projection | `audit/dossiers/carddemo-intcalc-v0.19-demo.json` | `c3ea49afe75bdbbe0df5a98b8924d75decddf51644173945a6ff3592e9ed4f9e` |
+| bounded-runtime-readiness | `readiness/cics-vsam/readiness-receipt.json` | `ff40a1225be4155d17e3a4252017c479bb97220979a6ea3400df98578a7b6ea1` |
+| bounded-runtime-readiness | `readiness/ims-expiry/readiness-receipt.json` | `3a04960f9c6a9e2558dc39d061f0d9411efaf40ea07c568e709b4f9bc1d6fe73` |
+| bounded-language-readiness | `readiness/asm-date/readiness-receipt.json` | `7c338e754496d7f9d9eaeab56c1cdc67d02df6f71be1fad6e6ce8c7ebd34cce6` |
+| auditor-projection | `audit/dossiers/carddemo-intcalc-v0.19-demo.json` | `518fd06e5e9002e78cbde325cbefe605c913e19cf0021c02acc5edadc0b4c826` |
 | database-platform-contract | `data-modernization/semantic-core/database-semantic-core.json` | `ca3114709057e766b26a5eb339c72ba80fc1620cd4f2d070a9bc92e852d803d8` |
 | database-semantic-difference-authority | `data-modernization/semantic-core/authfrds.compatibility-ledger.json` | `0cbd98a780b53a0b18977819f5115800ba1067612625e42075fa1f8a05b5586e` |
 | database-adapter-development-conformance | `data-modernization/semantic-core/authfrds.adapter-conformance.receipt.json` | `b3cde64bc0ac1ae9327bbf41a295af65ed167d770693e505fdb1b0d94f7972a7` |

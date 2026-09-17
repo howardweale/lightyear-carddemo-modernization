@@ -3,6 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 from typing import Any
+from lightyear_common.evidence import evidence_floor
 
 from .contracts import AuditContractError, ExceptionGrant, canonical_hash, safe_identifier
 
@@ -40,6 +41,15 @@ class AuditPolicyEngine:
         policy = self.by_id[policy_id]
         status = source["status"]
         gaps = list(source.get("gaps", []))
+        if policy_name == "mainframe_equivalence":
+            try:
+                observed = evidence_floor(*(event.get("evidence_class") for event in run["events"])) == "zos_observed"
+            except ValueError:
+                observed = False
+            if not observed:
+                status = "blocked"
+                if not gaps:
+                    gaps.append("mainframe-evidence-floor")
         return self._decision(
             decision_id=f"decision:{run['run_id']}:{policy_name}",
             policy=policy,
@@ -81,11 +91,11 @@ class AuditPolicyEngine:
         gaps = []
         if not development or any(item["status"] != "passed" for item in development):
             gaps.append("development-readiness")
-        if not mainframe or not any(item["status"] == "passed" for item in mainframe):
+        if not mainframe or any(item["status"] != "passed" for item in mainframe):
             gaps.append("mainframe-equivalence")
         execution_decisions = execution_decisions or []
-        if not execution_decisions or not any(
-            item["status"] == "passed" for item in execution_decisions
+        if not execution_decisions or any(
+            item["status"] != "passed" for item in execution_decisions
         ):
             gaps.append("hardened-execution-enforcement")
         status = "passed" if not gaps else "blocked"
@@ -130,6 +140,7 @@ class AuditPolicyEngine:
             receipt.get("hardened_execution_ready") is True
             and receipt.get("evidence_class") == "signed-admitted-oci-factory-run"
             and receipt.get("assurance") == "enforced"
+            and bool(receipt.get("checks"))
             and all(receipt.get("checks", {}).values())
         )
         gaps = [] if passed else list(receipt.get("gaps", ["execution-enforcement-unproven"]))

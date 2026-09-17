@@ -5,7 +5,7 @@
     "enterprise_mechanism_ready": true,
     "live_observed": false
   },
-  "content_sha256": "04027380e80c14998681a32fc468fb74074a6848374710af1b895b4dc5794f06",
+  "content_sha256": "53c37e02ebc02b9212dfe4de710a2ef16e56cb4d144e96ba49e10032ebcc6c92",
   "gates": {
     "6_authorized_original_execution": "blocked",
     "7_independent_comparison": "mechanism_ready",
@@ -19,7 +19,7 @@
     "approved test data, retention, redaction and evidence export policy",
     "approved execution, rollback, recovery and incident runbooks"
   ],
-  "intake_sha256": "d5a7969ba8596162bd3a0fc22e9c66eaaed74e29449bad18bd02d2b477019342",
+  "intake_sha256": "f2137a57931616116fcfd33caf7680b1ddcf9db72bf3abed1a5cc2d6b7fc7ff8",
   "limitations": [
     "Preflight describes prerequisites; it is not an authorization or live observation.",
     "The collection appliance cannot promote source-only or simulated evidence to equivalence."

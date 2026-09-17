@@ -4,6 +4,7 @@
   "title": "LIGHTYEAR Oracle PL/SQL cumulative coverage receipt",
   "type": "object",
   "required": [
+    "coverage_statement",
     "schema_version",
     "receipt_type",
     "release",
@@ -26,6 +27,7 @@
     "content_sha256"
   ],
   "properties": {
+    "coverage_statement": {"type": "string", "minLength": 1},
     "schema_version": {"const": "1.0"},
     "receipt_type": {"const": "lightyear-oracle-plsql-coverage"},
     "release": {"const": "0.50.2"},

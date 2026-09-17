@@ -48,7 +48,13 @@
           card.append(node('p', action.question), node('p', `If approved: ${action.if_approved}`), node('p', `If refused: ${action.if_refused}`));
           card.append(node('p', action.signature_blocker, 'decision-signing-note'));
         }
-        card.append(node('p', `Observed scope: ${action.impact.sql_units.toLocaleString()} SQL units across ${action.impact.files} files. Suppressed comparisons: 0; proposed suppression has not been assessed.`));
+        const radiusState = action.impact.suppression_estimate || 'not-assessed';
+        const reach = action.impact.suppressed_comparisons;
+        const radiusText = radiusState === 'measured' && Number.isInteger(reach) && reach >= 0
+          ? `Measured pattern reach: ${reach.toLocaleString()} comparison pairs. No verdict changes or suppression have been demonstrated.`
+          : `Pattern reach is unmeasured (${human(radiusState)}).`;
+        card.append(node('p', `Observed scope: ${action.impact.sql_units.toLocaleString()} SQL units across ${action.impact.files} files. ${radiusText}`));
+        if (action.proposed_normalization) card.append(node('p', `Proposed terms: ${action.proposed_normalization.terms}`));
         card.append(node('small', `Reasons: ${action.reason_codes.join(', ')}`));
         const evidence = node('details'); evidence.append(node('summary', `${action.evidence.length} evidence ranges · source and provenance`));
         evidence.append(node('p', `Original verdict receipt: ${action.source_verdict_sha256}`));

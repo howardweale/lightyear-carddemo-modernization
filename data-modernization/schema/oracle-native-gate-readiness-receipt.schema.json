@@ -32,7 +32,7 @@
     "catalog_behavior_count": {"const": 500},
     "catalog_case_count": {"const": 2000},
     "required_native_case_execution_count": {"const": 4000},
-    "materialized_harness_count": {"const": 0},
+    "materialized_harness_count": {"type": "integer", "minimum": 0, "maximum": 4000},
     "native_executed_case_count": {"const": 0},
     "native_verified_behavior_count": {"const": 0},
     "target_equivalent_behavior_count": {"const": 0},

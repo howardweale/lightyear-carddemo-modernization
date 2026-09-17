@@ -5,6 +5,7 @@ import json
 from collections import Counter, defaultdict
 from pathlib import Path
 from typing import Any, Iterable
+from lightyear_common.evidence import evidence_floor
 
 from .contracts import CaptureBundle, RuntimeContractError, canonical_hash
 
@@ -90,6 +91,8 @@ class RuntimeEvidenceEngine:
                 and event["evidence_class"] == "zos_observed"
                 for event in events
             )
+            or any(event["entity_id"] == entity_id and event["evidence_class"] != "zos_observed"
+                   for event in events)
         )
         development_status = "passed" if not development_gaps and not contradicted else "blocked"
         mainframe_status = "passed" if not zos_gaps and not contradicted else "blocked"
@@ -161,7 +164,7 @@ class RuntimeEvidenceEngine:
 def _projection(events: list[dict[str, Any]]) -> dict[str, Any]:
     contradicted = any(event["assertion"] == "contradicted" for event in events)
     classes = sorted({event["evidence_class"] for event in events})
-    score = 0.0 if contradicted else max(TRUST_SCORES[item] for item in classes)
+    score = 0.0 if contradicted else TRUST_SCORES[evidence_floor(*classes)]
     return {
         "state": "runtime_contradicted" if contradicted else "runtime_observed",
         "confidence": score,
@@ -225,4 +228,9 @@ def validate_snapshot(payload: dict[str, Any], graph: dict[str, Any]) -> list[st
             errors.append(f"{run_id} runtime ledger head is stale")
         if run.get("content_sha256") != canonical_hash(run, {"content_sha256"}):
             errors.append(f"{run_id} runtime receipt hash is invalid")
+    try:
+        if payload.get("projections") != RuntimeEvidenceEngine._projections(payload.get("runs", [])):
+            errors.append("runtime projections differ from admitted event evidence")
+    except (KeyError, TypeError, ValueError):
+        errors.append("runtime projection evidence is invalid")
     return errors

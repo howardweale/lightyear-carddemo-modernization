@@ -13,11 +13,14 @@ from lightyear_data.contracts import content_hash, seal
 from lightyear_data.idempiere_comparison import REPORT_PATH, validate_stage2_artifacts
 from lightyear_data.idempiere_divergence import MANIFEST_PATH, validate_stage1_artifacts
 from lightyear_common.io import source_hashes
-from .policy import CATALOG, parse_policy
+from .policy import CATALOG, parse_policy, _unique_object
+from .blast_radius import blast_radius, signature_blocker
 
 POLICY_PATH = Path("control-tower/workflow-policy.json")
+PROPOSALS_PATH = Path("control-tower/normalization-proposals.json")
 IMPLEMENTATION_PATHS = ("src/lightyear_workflow/policy.py", "src/lightyear_workflow/planner.py",
-                        "src/lightyear_workflow/artifacts.py", "src/lightyear_workflow/__main__.py")
+                        "src/lightyear_workflow/artifacts.py", "src/lightyear_workflow/__main__.py",
+                        "src/lightyear_workflow/blast_radius.py")
 SUB_VERDICTS = ("no-output", "unparsed", "undecidable", "uncovered", "unauthorised")
 # Exact reason codes, not substring matching or an agent's classification.
 POLICY_REASONS = frozenset({
@@ -77,7 +80,7 @@ def _action(kind: str, reasons: list[str], evidence: list[dict], record: dict, p
         "preconditions": list(spec.preconditions),
         "impact": {"sql_units": sum(e["unit_count"] for e in evidence),
                    "files": len({e["path"] for e in evidence}),
-                   "suppressed_comparisons": 0, "suppression_estimate": "not-assessed"},
+                   "suppressed_comparisons": None, "suppression_estimate": "not-assessed"},
         "decision_provenance": [],
     }
     if action_class == "approval-required":
@@ -92,6 +95,57 @@ def _action(kind: str, reasons: list[str], evidence: list[dict], record: dict, p
         })
     action["id"] = "action:" + content_hash(action)
     return action
+
+
+def comparison_register(records: list[dict], pairs: dict) -> list[dict]:
+    """One resolved register entry per compared pair; never count both lanes twice.
+
+    Patterns here match admitted reason codes and construct kinds, not SQL text.
+    A measured reach does not establish an actual verdict suppression.
+    """
+    register = []
+    for record in records:
+        if record["content_sha256"] != content_hash(record):
+            raise ValueError("Invalid source verdict hash")
+        segments = [segment for dialect in ("oracle", "postgresql")
+                    for segment in record["segments"][dialect]
+                    if segment["category"] != "administrative-excluded"]
+        if not segments:
+            continue
+        files = [pairs[record["pair_id"]][dialect]["path"] for dialect in ("oracle", "postgresql")]
+        register.append({"file": files[0], "files": files, "pair_id": record["pair_id"],
+                         "source_verdict_sha256": record["content_sha256"], "comparison_count": 1,
+                         "construct": " ".join(sorted({s["kind"] for s in segments})),
+                         "reason": " ".join(sorted({r for s in segments for r in s["reason_codes"]}))})
+    return register
+
+
+def measure_proposals(results: list[dict], proposals: list[dict], register: list[dict]) -> None:
+    actions = {(result["entity_id"], action["kind"]): action
+               for result in results for action in result["actions"]}
+    seen = set()
+    for proposal in proposals:
+        key = (proposal.get("entity_id"), proposal.get("kind"))
+        if key in seen or key not in actions or key[1] != "propose-normalization":
+            raise ValueError("Normalization proposal has a duplicate or unknown action scope")
+        seen.add(key)
+        if (proposal.get("match_basis") != "comparison-reasons-and-construct-kinds"
+                or not isinstance(proposal.get("terms"), str) or not proposal["terms"].strip()):
+            raise ValueError("Normalization proposal requires exact terms and supported match_basis")
+        action = actions[key]
+        radius = blast_radius(proposal.get("pattern"), register)
+        measured = radius["suppression_estimate"] == "measured"
+        action["proposed_normalization"] = proposal
+        action["blast_radius"] = {**radius, "register_sha256": content_hash({"entries": register}),
+                                  "counting_basis": "Matched comparison pairs, counted once across both dialects; reach only, not demonstrated verdict changes."}
+        action["impact"].update(suppression_estimate=radius["suppression_estimate"],
+                                suppressed_comparisons=radius["suppressed_comparisons"] if measured else None)
+        action["signature_blocker"] = signature_blocker(radius) or (
+            "Pattern reach is measured. Bound decision workflow and independent evidence of the proposed normalization are still required before signing.")
+        # This planner cannot grant signing authority, even when reach is zero.
+        action["signature_enabled"] = False
+        action.pop("id")
+        action["id"] = "action:" + content_hash(action)
 
 
 def plan_pair(record: dict, source_pair: dict, policy: dict) -> dict:
@@ -184,6 +238,11 @@ def build_plan(root: Path, policy: dict) -> dict:
     manifest = json.loads((root / MANIFEST_PATH).read_text(encoding="utf-8"))
     pairs = {p["pair_id"]: p for p in manifest["pairs"]}
     results = [plan_pair(r, pairs[r["pair_id"]], policy) for r in report["results"]]
+    proposals_path = root / PROPOSALS_PATH
+    proposals = json.loads(proposals_path.read_text(encoding="utf-8"), object_pairs_hook=_unique_object) if proposals_path.exists() else []
+    if not isinstance(proposals, list) or any(not isinstance(p, dict) for p in proposals):
+        raise ValueError("Normalization proposals must be an array of objects")
+    measure_proposals(results, proposals, comparison_register(report["results"], pairs))
     summary = _summary(results)
     summary["parser_units_reported_by_comparator"] = report["statistics"]["coverage_combined"]["unparsed"]
     return seal({
@@ -192,6 +251,7 @@ def build_plan(root: Path, policy: dict) -> dict:
         "bindings": {"source_report": REPORT_PATH.as_posix(), "source_report_sha256": report["content_sha256"],
                      "manifest_sha256": manifest["content_sha256"], "source_commit": report["bindings"]["source_commit"],
                      "policy_sha256": content_hash(policy),
+                     "normalization_proposals_sha256": content_hash({"proposals": proposals}),
                      "implementation_sha256": {p: source_hashes(root / p)[0] for p in IMPLEMENTATION_PATHS}},
         "policy": policy, "results": results, "summary": summary,
         "execution": {"actions_executed": 0, "model_calls": 0, "decisions_created": 0,

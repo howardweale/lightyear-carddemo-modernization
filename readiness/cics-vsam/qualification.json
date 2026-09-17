@@ -1,7 +1,7 @@
 {
   "bindings": {
-    "account_view_comparison_sha256": "18ffa8df47108e299c14e971c7a646ded82020e0853f0d2d897be1aa09e4a23b",
-    "account_view_readiness_sha256": "6bbe74439aa51d147bcb266f95af048a357f2e44dc32bcc200406a7884424389",
+    "account_view_comparison_sha256": "00c48e7b3eaa6f3da9f280b706a72fd08a19fc40991b2592c69129a52bfb783a",
+    "account_view_readiness_sha256": "efd0d11a9f5144effb026e786b4dfe764312cf09b2727fd245fcda467564cb51",
     "compatibility_ledger_sha256": "9c62679508d18b5e6bee6821b8f439fed4260aad4e08c41415aafce5d44c59fd",
     "conformance_sha256": "79639586a73fb9b0ea107a8de47fd561836a6fcdd7ebe2f9dc81de0e94bb6022",
     "graph_content_sha256": "d98bd92d752f23ee19263aa0957c28ee5aac52966d1322f6a31d4a9960394dc9",
@@ -9,7 +9,7 @@
   },
   "cics_runtime_equivalent": false,
   "claim_unlocked": "LIGHTYEAR can inventory and fail-closed qualify a bounded synthetic CICS/VSAM semantic subset without claiming native region, VSAM, RLS, recovery, or production equivalence.",
-  "content_sha256": "76cda31be60b8148b23bf08bd83a1659a4cae84dce77be2c7eefc8b2e5555eb8",
+  "content_sha256": "c9a00cfc936a27dad4bccb0c343fe031b874564b120d5c3b1096ec84ea927f24",
   "development_ready": true,
   "inventory": {
     "blocked_cases": 4,
@@ -135,8 +135,8 @@
     {
       "evidence": {
         "behavior_match": true,
-        "comparison_sha256": "18ffa8df47108e299c14e971c7a646ded82020e0853f0d2d897be1aa09e4a23b",
-        "readiness_sha256": "6bbe74439aa51d147bcb266f95af048a357f2e44dc32bcc200406a7884424389"
+        "comparison_sha256": "00c48e7b3eaa6f3da9f280b706a72fd08a19fc40991b2592c69129a52bfb783a",
+        "readiness_sha256": "efd0d11a9f5144effb026e786b4dfe764312cf09b2727fd245fcda467564cb51"
       },
       "gate": "account-view-private-differential-proof",
       "status": "passed-local-development"

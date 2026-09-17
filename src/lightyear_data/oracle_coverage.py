@@ -5,6 +5,7 @@ from pathlib import Path
 from typing import Any, Mapping
 
 from .contracts import content_hash, seal
+from .coverage_reporting import seal_coverage
 
 
 OUTPUT_ROOT = Path("data-modernization/oracle-semantic-coverage")
@@ -266,7 +267,7 @@ def build_behavior_catalog(project_root: Path) -> dict[str, Any]:
 
 
 def build_coverage_receipt(catalog: Mapping[str, Any]) -> dict[str, Any]:
-    return seal({
+    return seal_coverage({
         "schema_version": "1.0",
         "receipt_type": "lightyear-oracle-semantic-coverage",
         "catalog_id": CATALOG_ID,
@@ -307,6 +308,8 @@ behaviors have been implemented or executed.
 | **Total** | **{catalog['behavior_contract_count']}** | **{catalog['case_specification_count']}** |
 
 ## Evidence ladder
+
+{build_coverage_receipt(catalog)["coverage_statement"]}
 
 | Level | Behaviors | Cases | Meaning |
 |---|---:|---:|---|

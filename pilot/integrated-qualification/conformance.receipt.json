@@ -1,9 +1,9 @@
 {
   "bindings": {
     "manifest_sha256": "ab61a530f67e727f7f1996d88d988aeee29caba2b25e69889bf88ece5ed21011",
-    "selection_sha256": "7f81564a6a74809542129c9819f865a2b62d6e367f6e010481e04c34103c328a",
-    "source_graph_sha256": "dca65ecc8983406dccd10ab786cf06b4c82f974aacdc4fd221f4ea2e619b179f",
-    "work_package_sha256": "6970bc0fe784575d70c36ffb036f9f58855a1a8dff54ce5094806c91e02a0e99"
+    "selection_sha256": "6d3218cfb148a0b3e433e7f53801207146b5f9ccd13954b60eb2ec8028d01806",
+    "source_graph_sha256": "2a1cc8177d83cb30940167ee34ab9c3a12da786d14748fc8528716128fce49cf",
+    "work_package_sha256": "3d07c82188b2d37d6a63032e5ca2ca31b869cc45d9595681f81a3c385dd990af"
   },
   "claim_boundary": {
     "bounded_integrated_development_semantics": true,
@@ -13,7 +13,7 @@
     "native_runtime_qualified": false,
     "production_ready": false
   },
-  "content_sha256": "e2a47d60de7346088a5b03128f28ca8564e7c6eb0a5af9a9d261819fa7e587be",
+  "content_sha256": "3c6a03bca0cdc3e6f3286506001d269639de3a092868d02f2f88e8a148b2d597",
   "corpus": {
     "blocked_case_count": 4,
     "case_count": 40,

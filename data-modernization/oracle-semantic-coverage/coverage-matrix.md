@@ -19,6 +19,8 @@ behaviors have been implemented or executed.
 
 ## Evidence ladder
 
+This catalog receipt covers 500 catalogued behaviours: 8/500 bounded-model verified and 0/500 native-Oracle verified. These counts exclude separate application-level evidence such as CloudBank runs; they do not establish target equivalence or production readiness.
+
 | Level | Behaviors | Cases | Meaning |
 |---|---:|---:|---|
 | Catalogued | 500 | 2,000 | Governed scope with Oracle documentation authority |

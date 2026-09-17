@@ -3,6 +3,8 @@
 Release 0.50.4 executes the final bounded catalog tranche of the MS #50 Oracle Semantic Coverage
 Program. The evidence is deterministic bounded-model evidence, not native Oracle observation.
 
+This catalog receipt covers 500 catalogued behaviours: 500/500 bounded-model verified and 0/500 native-Oracle verified. These counts exclude separate application-level evidence such as CloudBank runs; they do not establish target equivalence or production readiness.
+
 | Evidence level | Behaviors | Cases / evidence records |
 |---|---:|---:|
 | Catalogued | 500 | 2000 |

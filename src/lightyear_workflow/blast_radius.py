@@ -55,7 +55,9 @@ def blast_radius(pattern: str, register: Iterable[Mapping[str, Any]]) -> dict:
                 or not any(isinstance(entry.get(k), str) and entry[k].strip()
                            for k in ("construct", "reason", "field"))
                 or type(entry.get("comparison_count", 1)) is not int
-                or entry.get("comparison_count", 1) < 1):
+                or entry.get("comparison_count", 1) < 1
+                or ("files" in entry and (not isinstance(entry["files"], list) or not entry["files"]
+                    or any(not isinstance(name, str) or not name.strip() for name in entry["files"])))):
             return _result(0, set(), "invalid-register",
                            error="Expected comparison records with file and construct/reason/field; "
                                  "resolve MS70 pair references against their bound comparison evidence first.")
@@ -74,6 +76,7 @@ def blast_radius(pattern: str, register: Iterable[Mapping[str, Any]]) -> dict:
         name = entry.get("file")
         if name:
             files.add(str(name))
+        files.update(entry.get("files", []))
 
     return _result(suppressed, files, "measured")
 

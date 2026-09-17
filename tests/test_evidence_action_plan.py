@@ -79,7 +79,7 @@ class ActionTests(unittest.TestCase):
         self.assertEqual('propose-normalization', action['kind'])
         self.assertIn('indeterminate remains unresolved', action['if_refused'])
         self.assertEqual(2, action['impact']['sql_units'])
-        self.assertEqual(0, action['impact']['suppressed_comparisons'])
+        self.assertIsNone(action['impact']['suppressed_comparisons'])
         self.assertIsNone(action['owner'])
         self.assertEqual([], action['decision_provenance'])
 

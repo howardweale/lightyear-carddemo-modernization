@@ -1,6 +1,9 @@
 # Live Evidence and Control Tower Plane
 
 **Current workflow increment:** [Step 1 — emit actions](../docs/control-tower-workflow.md).
+
+For explicit normalization proposals, measured pattern reach, and the distinction between
+CloudBank execution and Oracle catalog coverage, see the [evidence roadmap and operator notes](../docs/oracle-evidence-roadmap.md).
 The headless engine publishes a work plan; the Tower projects it and records human
 decisions. [Current action report](../docs/control-tower-action-plan.md).
 

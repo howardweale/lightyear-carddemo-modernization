@@ -26,7 +26,7 @@
     "behavior_count": {"const": 500},
     "case_count": {"const": 2000},
     "required_native_case_execution_count": {"const": 4000},
-    "materialized_harness_count": {"const": 0},
+    "materialized_harness_count": {"type": "integer", "minimum": 0, "maximum": 4000},
     "native_executed_case_count": {"const": 0},
     "native_oracle_execution_observed": {"const": false},
     "native_oracle_conformance": {"const": false},

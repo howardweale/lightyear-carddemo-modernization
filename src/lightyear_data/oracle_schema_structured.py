@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any, Mapping
 
 from .contracts import content_hash, seal
+from .coverage_reporting import seal_coverage
 from .oracle_coverage import BEHAVIOR_DIMENSIONS, build_behavior_catalog
 from .oracle_transaction_cdc import (
     build_oracle_transaction_cdc_artifacts,
@@ -584,7 +585,7 @@ def build_schema_structured_receipt(project_root: Path, corpus: Mapping[str, Any
     all_catalog_ids = {str(item["id"]) for item in catalog["behaviors"]}
     tranche_ids = {str(item["id"]) for item in catalog["behaviors"] if item["domain_id"] in DOMAIN_IDS}
     bootstrap_ids = {str(item["behavior_id"]) for item in catalog["bootstrap_bindings"]}
-    return seal({
+    return seal_coverage({
         "schema_version": "1.0",
         "receipt_type": "lightyear-oracle-schema-structured-coverage",
         "release": RELEASE,
@@ -683,6 +684,8 @@ def schema_structured_matrix_markdown(receipt: Mapping[str, Any], corpus: Mappin
 
 Release {RELEASE} executes the final bounded catalog tranche of the MS #50 Oracle Semantic Coverage
 Program. The evidence is deterministic bounded-model evidence, not native Oracle observation.
+
+{receipt["coverage_statement"]}
 
 | Evidence level | Behaviors | Cases / evidence records |
 |---|---:|---:|

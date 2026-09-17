@@ -4,6 +4,7 @@ import hashlib
 import json
 from dataclasses import dataclass
 from typing import Any
+from lightyear_common.evidence import evidence_floor
 
 
 RUNTIME_SCHEMA_VERSION = "1.0"
@@ -34,14 +35,14 @@ class RuntimeObservation:
 
     @classmethod
     def from_dict(
-        cls, payload: dict[str, Any], default_evidence_class: str = "simulated"
+        cls, payload: dict[str, Any], default_evidence_class: str | None = None
     ) -> "RuntimeObservation":
         entity_kind = str(payload.get("entity_kind", "")).strip()
         entity_id = str(payload.get("entity_id", "")).strip()
         assertion = str(payload.get("assertion", "observed")).strip()
         operation = str(payload.get("operation", "observed")).strip()
         evidence_class = str(
-            payload.get("evidence_class", default_evidence_class)
+            payload.get("evidence_class", default_evidence_class or "simulated")
         ).strip()
         details = payload.get("details", {})
         if entity_kind not in ENTITY_KINDS:
@@ -52,6 +53,11 @@ class RuntimeObservation:
             raise RuntimeContractError(f"Invalid runtime assertion: {assertion}")
         if evidence_class not in EVIDENCE_CLASSES:
             raise RuntimeContractError(f"Invalid runtime evidence class: {evidence_class}")
+        if default_evidence_class is not None:
+            try:
+                evidence_class = evidence_floor(evidence_class, default_evidence_class)
+            except ValueError as exc:
+                raise RuntimeContractError(str(exc)) from exc
         if not operation or len(operation) > 120:
             raise RuntimeContractError("Runtime operation must contain 1 to 120 characters")
         if not isinstance(details, dict):

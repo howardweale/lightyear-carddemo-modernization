@@ -7,9 +7,10 @@
     "typed_static_graph": true,
     "zos_observed_baseline": false
   },
-  "comparison_sha256": "f5825ba1acc6268ab318e00fb1826d68564641cf3ef8ea766940a5375b70d916",
-  "content_sha256": "fa80f81d50082342edbc33e10c53986b5e8fcdc7211a452e17c4a458cdefe4e9",
+  "comparison_sha256": "ea7f6f2409250ed8a55a974f3e1f3ef86897a37f1e5fe36c830b97f5279b9372",
+  "content_sha256": "e54d17fde43de73a12935b6c6cbea3160fe78735af5ed284e430b1fe5ee8ead4",
   "development_ready": true,
+  "evidence_class": "local_observed",
   "mainframe_equivalent": false,
   "receipt_type": "factorydark-ims-readiness",
   "schema_version": "1.0",

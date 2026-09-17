@@ -4,7 +4,7 @@
 
 **Decision:** **BLOCKED**
 
-**Dossier identity:** `00a5bfb4935e147aebf0b8f993a1fbeb23572e1347b0083587283e4cc8a5b81f`
+**Dossier identity:** `c64bab4e12af99a385fc0a23a13f247da1ce32ad628d17010c2da3728c4f656c`
 
 ## Promotion rationale
 
@@ -46,7 +46,7 @@ Release is blocked until every independent runtime and execution-security gate h
 | `decision_input` | `runtime-run:local-oracle-intcalc-reference` | `9ada6983de37a9aa…` |
 | `decision_input` | `runtime-run:recorded-zos-intcalc-replay` | `d7d2cb1562f26f1c…` |
 | `decision_input` | `runtime-run:zosmf-intcalc-job00001` | `c821cdbcd2ba17c4…` |
-| `cics_vsam_readiness_receipt` | `workload:carddemo-cics-vsam-account-view` | `6bbe74439aa51d14…` |
+| `cics_vsam_readiness_receipt` | `workload:carddemo-cics-vsam-account-view` | `efd0d11a9f5144ef…` |
 
 ## Verified semantic memory
 
@@ -67,7 +67,7 @@ Release is blocked until every independent runtime and execution-security gate h
 
 - Ledger: `lightyear:carddemo:audit`
 - Events: 21
-- Ledger head: `b49c9ea070a315b609f461f1ea5143db7395cf4fb60e49dd710344f6af30c144`
+- Ledger head: `16e7b52b5f234a05796f974348394c0adfb6aebcf3afbb3e5fbb0f189e1eb11f`
 - Signature algorithm: `none`
 
 ## CICS/VSAM readiness
@@ -76,7 +76,7 @@ Release is blocked until every independent runtime and execution-security gate h
 - Development ready: `True`
 - Mainframe equivalent: `False`
 - Signed: `False`
-- Receipt: `6bbe74439aa51d147bcb266f95af048a357f2e44dc32bcc200406a7884424389`
+- Receipt: `efd0d11a9f5144effb026e786b4dfe764312cf09b2727fd245fcda467564cb51`
 - Gap: No authorized zos_observed CAVW baseline is bound to this comparison.
 - Gap: No external equivalence signing key was configured.
 

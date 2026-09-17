@@ -7,9 +7,10 @@
     "typed_static_graph": true,
     "zos_observed_baseline": false
   },
-  "comparison_sha256": "18ffa8df47108e299c14e971c7a646ded82020e0853f0d2d897be1aa09e4a23b",
-  "content_sha256": "6bbe74439aa51d147bcb266f95af048a357f2e44dc32bcc200406a7884424389",
+  "comparison_sha256": "00c48e7b3eaa6f3da9f280b706a72fd08a19fc40991b2592c69129a52bfb783a",
+  "content_sha256": "efd0d11a9f5144effb026e786b4dfe764312cf09b2727fd245fcda467564cb51",
   "development_ready": true,
+  "evidence_class": "local_observed",
   "mainframe_equivalent": false,
   "receipt_type": "lightyear-cics-vsam-readiness",
   "schema_version": "1.0",

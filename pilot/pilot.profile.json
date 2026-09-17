@@ -15,7 +15,7 @@
     "production_ready": false,
     "source_only_pilot": true
   },
-  "content_sha256": "ea09bf2e876bb521aeec75663b211b905e249a447a03e8c873f3432d42ee1ca0",
+  "content_sha256": "d6223dc359277ce7e6b7cf68859bb7b4f5b85f3658c8a26811b03db9fa375807",
   "evidence_artifacts": [
     {
       "id": "pilot-runtime",
@@ -105,25 +105,25 @@
       "id": "cics-vsam-readiness",
       "path": "readiness/cics-vsam/readiness-receipt.json",
       "role": "bounded-runtime-readiness",
-      "sha256": "2dd8e24e7a23814b6e643ff186f1272071f220b7ac0e03cc57fffc1abcd7dc5a"
+      "sha256": "ff40a1225be4155d17e3a4252017c479bb97220979a6ea3400df98578a7b6ea1"
     },
     {
       "id": "ims-readiness",
       "path": "readiness/ims-expiry/readiness-receipt.json",
       "role": "bounded-runtime-readiness",
-      "sha256": "f95a3d2e5d06232ae2eb00671131a055c4024d6e1546152239c83b0de990a557"
+      "sha256": "3a04960f9c6a9e2558dc39d061f0d9411efaf40ea07c568e709b4f9bc1d6fe73"
     },
     {
       "id": "hlasm-readiness",
       "path": "readiness/asm-date/readiness-receipt.json",
       "role": "bounded-language-readiness",
-      "sha256": "faf7a3109e4f6308a4ac71c706c2725e272fac666b5bba3d1a57ea63633dad92"
+      "sha256": "7c338e754496d7f9d9eaeab56c1cdc67d02df6f71be1fad6e6ce8c7ebd34cce6"
     },
     {
       "id": "audit-dossier",
       "path": "audit/dossiers/carddemo-intcalc-v0.19-demo.json",
       "role": "auditor-projection",
-      "sha256": "c3ea49afe75bdbbe0df5a98b8924d75decddf51644173945a6ff3592e9ed4f9e"
+      "sha256": "518fd06e5e9002e78cbde325cbefe605c913e19cf0021c02acc5edadc0b4c826"
     },
     {
       "id": "database-semantic-core",

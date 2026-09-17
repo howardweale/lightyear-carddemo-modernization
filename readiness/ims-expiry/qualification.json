@@ -2,13 +2,13 @@
   "bindings": {
     "compatibility_ledger_sha256": "41fc3b470e8da7f6356431186ff34d238cdf28204858996a5a0ed90b0f8a4d22",
     "conformance_sha256": "fc3dd5e66da7d9b17a2304872ea041b1259a12c4e8258f0cc3fc4383fe3447d0",
-    "expiry_comparison_sha256": "f5825ba1acc6268ab318e00fb1826d68564641cf3ef8ea766940a5375b70d916",
-    "expiry_readiness_sha256": "fa80f81d50082342edbc33e10c53986b5e8fcdc7211a452e17c4a458cdefe4e9",
+    "expiry_comparison_sha256": "ea7f6f2409250ed8a55a974f3e1f3ef86897a37f1e5fe36c830b97f5279b9372",
+    "expiry_readiness_sha256": "e54d17fde43de73a12935b6c6cbea3160fe78735af5ed284e430b1fe5ee8ead4",
     "graph_content_sha256": "d98bd92d752f23ee19263aa0957c28ee5aac52966d1322f6a31d4a9960394dc9",
     "manifest_sha256": "9b971d6f4f0b1a443fa2877e5eb152f3c59e0d6c377d121ac7062f05b44ba40e"
   },
   "claim_unlocked": "LIGHTYEAR can inventory and fail-closed qualify a bounded synthetic IMS hierarchical semantic subset without claiming native region, scheduling, Fast Path, DBRC, restart, recovery, or production equivalence.",
-  "content_sha256": "ea963a20edcc7ecc40041c6a90435ca241ac58c199c9b405cff1a306beef2742",
+  "content_sha256": "2ffbe47652e239a4cca27736e53f5268945d23c86779412fa10d829a3f9ebe2d",
   "dbrc_recovery_equivalent": false,
   "development_ready": true,
   "fast_path_qualified": false,
@@ -148,8 +148,8 @@
     {
       "evidence": {
         "behavior_match": true,
-        "comparison_sha256": "f5825ba1acc6268ab318e00fb1826d68564641cf3ef8ea766940a5375b70d916",
-        "readiness_sha256": "fa80f81d50082342edbc33e10c53986b5e8fcdc7211a452e17c4a458cdefe4e9"
+        "comparison_sha256": "ea7f6f2409250ed8a55a974f3e1f3ef86897a37f1e5fe36c830b97f5279b9372",
+        "readiness_sha256": "e54d17fde43de73a12935b6c6cbea3160fe78735af5ed284e430b1fe5ee8ead4"
       },
       "gate": "cbpaup0c-private-differential-proof",
       "status": "passed-local-development"

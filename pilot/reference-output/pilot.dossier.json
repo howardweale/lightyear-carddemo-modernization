@@ -1,6 +1,6 @@
 {
-  "analysis_sha256": "6cbcd17d225324a34497772959713545d9de0fc0acd0dbbdfaa2547569aabbbb",
-  "assessment_sha256": "eb1a33628bfca40eae5b7d663ff16970f7498db56b4c9670a5187f57450a22ca",
+  "analysis_sha256": "b4338aa0d965e1a724a5234945bba16c97fa1d7a83eddbd1b0bd8ab883dab875",
+  "assessment_sha256": "fe34608cf501c52c2c2a7c6e393265104c674052bfbdb3b5d46ec2b441723d3b",
   "capabilities": [
     {
       "development_ready": true,
@@ -65,13 +65,13 @@
     "Offline rehearsal proves customer Db2 CDC or cutover."
   ],
   "compatibility_policy_sha256": "cfa5f17d272968a19021b9aedb5ec205533b66b5c92b0d74c735fd94f42824e3",
-  "content_sha256": "b595eb7e9c916d7f64fe8fdeb1aee1f19904be6509a12974e7f8cd8f4991e96b",
+  "content_sha256": "6f6856a6186d7ace0cf40d137f2a3a808d66e4b772bc45237df9544af027f609",
   "dossier_type": "lightyear-source-only-pilot-dossier",
   "estate": {
     "analysis_scope": "bounded-source-static-analysis",
-    "analysis_sha256": "6cbcd17d225324a34497772959713545d9de0fc0acd0dbbdfaa2547569aabbbb",
-    "graph_id": "lightyear:pilot-estate:d5a7969ba8596162bd3a0fc2",
-    "graph_sha256": "dca65ecc8983406dccd10ab786cf06b4c82f974aacdc4fd221f4ea2e619b179f",
+    "analysis_sha256": "b4338aa0d965e1a724a5234945bba16c97fa1d7a83eddbd1b0bd8ab883dab875",
+    "graph_id": "lightyear:pilot-estate:f2137a57931616116fcfd33c",
+    "graph_sha256": "2a1cc8177d83cb30940167ee34ab9c3a12da786d14748fc8528716128fce49cf",
     "kind": "customer-source-analysis",
     "nodes": 52,
     "reference_composite_sha256": "ddda1be84c6e9438835f6a0e49239d9b4ffa97c4d90382aefcae842a501cd006",
@@ -217,45 +217,45 @@
       "status": "passed"
     },
     {
-      "bytes": 822,
-      "content_sha256": "6bbe74439aa51d147bcb266f95af048a357f2e44dc32bcc200406a7884424389",
+      "bytes": 860,
+      "content_sha256": "efd0d11a9f5144effb026e786b4dfe764312cf09b2727fd245fcda467564cb51",
       "development_ready": true,
       "id": "cics-vsam-readiness",
       "mainframe_equivalent": false,
       "path": "readiness/cics-vsam/readiness-receipt.json",
       "role": "bounded-runtime-readiness",
-      "sha256": "2dd8e24e7a23814b6e643ff186f1272071f220b7ac0e03cc57fffc1abcd7dc5a",
+      "sha256": "ff40a1225be4155d17e3a4252017c479bb97220979a6ea3400df98578a7b6ea1",
       "status": "blocked"
     },
     {
-      "bytes": 839,
-      "content_sha256": "fa80f81d50082342edbc33e10c53986b5e8fcdc7211a452e17c4a458cdefe4e9",
+      "bytes": 877,
+      "content_sha256": "e54d17fde43de73a12935b6c6cbea3160fe78735af5ed284e430b1fe5ee8ead4",
       "development_ready": true,
       "id": "ims-readiness",
       "mainframe_equivalent": false,
       "path": "readiness/ims-expiry/readiness-receipt.json",
       "role": "bounded-runtime-readiness",
-      "sha256": "f95a3d2e5d06232ae2eb00671131a055c4024d6e1546152239c83b0de990a557",
+      "sha256": "3a04960f9c6a9e2558dc39d061f0d9411efaf40ea07c568e709b4f9bc1d6fe73",
       "status": "blocked"
     },
     {
-      "bytes": 821,
-      "content_sha256": "08e54af640a9929fcadfc79803ad71462ecabdbfcda5c72acb09511f12786ef5",
+      "bytes": 859,
+      "content_sha256": "224dd416d9f886259ca8c7e8df6389f48dab6fcfdc77f8fb6a61d1e15fae5283",
       "development_ready": true,
       "id": "hlasm-readiness",
       "mainframe_equivalent": false,
       "path": "readiness/asm-date/readiness-receipt.json",
       "role": "bounded-language-readiness",
-      "sha256": "faf7a3109e4f6308a4ac71c706c2725e272fac666b5bba3d1a57ea63633dad92",
+      "sha256": "7c338e754496d7f9d9eaeab56c1cdc67d02df6f71be1fad6e6ce8c7ebd34cce6",
       "status": "blocked"
     },
     {
       "bytes": 13423,
-      "content_sha256": "00a5bfb4935e147aebf0b8f993a1fbeb23572e1347b0083587283e4cc8a5b81f",
+      "content_sha256": "c64bab4e12af99a385fc0a23a13f247da1ce32ad628d17010c2da3728c4f656c",
       "id": "audit-dossier",
       "path": "audit/dossiers/carddemo-intcalc-v0.19-demo.json",
       "role": "auditor-projection",
-      "sha256": "c3ea49afe75bdbbe0df5a98b8924d75decddf51644173945a6ff3592e9ed4f9e",
+      "sha256": "518fd06e5e9002e78cbde325cbefe605c913e19cf0021c02acc5edadc0b4c826",
       "status": "blocked"
     },
     {
@@ -288,7 +288,7 @@
       "status": "passed"
     }
   ],
-  "intake_sha256": "d5a7969ba8596162bd3a0fc22e9c66eaaed74e29449bad18bd02d2b477019342",
+  "intake_sha256": "f2137a57931616116fcfd33caf7680b1ddcf9db72bf3abed1a5cc2d6b7fc7ff8",
   "limitations": [
     "All original-system execution and signed live-equivalence gates remain blocked.",
     "Customer-specific estate results are bounded static analysis; unresolved references remain visible.",
@@ -298,7 +298,7 @@
   ],
   "mainframe_equivalent": false,
   "modernization_plan": {
-    "assessment_sha256": "eb1a33628bfca40eae5b7d663ff16970f7498db56b4c9670a5187f57450a22ca",
+    "assessment_sha256": "fe34608cf501c52c2c2a7c6e393265104c674052bfbdb3b5d46ec2b441723d3b",
     "automatic_factory_dispatch": false,
     "business_priority_inferred": false,
     "clusters": 4,
@@ -333,7 +333,7 @@
   },
   "pilot_id": "lightyear-carddemo-source-only-v0.33.0",
   "pilot_ready": true,
-  "preflight_sha256": "04027380e80c14998681a32fc468fb74074a6848374710af1b895b4dc5794f06",
+  "preflight_sha256": "53c37e02ebc02b9212dfe4de710a2ef16e56cb4d144e96ba49e10032ebcc6c92",
   "production_ready": false,
   "proofs": {
     "collection_appliance": {

@@ -166,6 +166,9 @@ an observation: domain-specific identity, signature and admission checks remain 
 - Full local suite: 1,338 passed, 23 skipped, 673 subtests passed; one Windows
   `WinError 1314` symlink-privilege failure. The same test and failure are present
   in the retained MS77 baseline (1,324 passed, 23 skipped).
+- Regenerated CICS/VSAM, IMS, and HLASM reference receipts plus their dependent
+  unsigned audit and pilot fixtures. All five readiness/audit/pilot verifiers and
+  the source-only rehearsal byte comparisons passed.
 - Final focused regression after audit hardening: 69 passed, 24 subtests passed.
   This includes all 18 new roadmap tests.
 - UI rendering checks: measured zero, measured nonzero, and invalid/unmeasured

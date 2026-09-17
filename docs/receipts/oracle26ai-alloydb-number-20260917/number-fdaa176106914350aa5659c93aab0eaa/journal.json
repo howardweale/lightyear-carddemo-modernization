@@ -1,0 +1,2055 @@
+{
+  "events": [
+    {
+      "at": "2026-09-17T22:56:49.469156+00:00",
+      "content_sha256": "43ee7908d756e160981e3846391d5b40bbae4621eefa1ee1706377753490474b",
+      "payload": {
+        "content_sha256": "923dd50647afe38712bdd793823d632dafdb3a56ed3755f9f56d12d857def074",
+        "event_type": "started",
+        "message": "Detached engine accepted the signed campaign authorization.",
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": null,
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "o2wUf2u3HYJdgbvHZoKasZBWvcTKz53eGyCxumW5u/97YSw4O06Zr+rIMVuCqVmUm9TnMyVhShuRs+b0BlZFBg=="
+        }
+      },
+      "previous_sha256": null,
+      "sequence": 1,
+      "type": "started"
+    },
+    {
+      "at": "2026-09-17T22:56:50.863391+00:00",
+      "content_sha256": "a700f942222b56b8425b0a1d1ad11bde135c1c5e844749ba4849d21a834c01c3",
+      "payload": {
+        "content_sha256": "8cd52bd3eb3bfa4fcb34c9864572ae8b6d46afc4c80d85e580401a4978f940d1",
+        "event_type": "resource-state",
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "43ee7908d756e160981e3846391d5b40bbae4621eefa1ee1706377753490474b",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "b3FwX9Ic98ilrl2Yf1Rm13As1CPBDL6hRvO6hy1NjF1xZmGjY5z3czwLC+4nKy6UUzVIhFXLjQU6w/gjDOWGCw=="
+        },
+        "state": {
+          "alloydb_before": "STOPPED",
+          "alloydb_name": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/cloudbank-ms71-alloydb/instances/primary",
+          "alloydb_start_requested": false,
+          "firewall": "ly-number-fdaa176106914350aa56-iap",
+          "firewall_create_requested": false,
+          "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+          "vm": "ly-number-fdaa176106914350aa56",
+          "vm_create_requested": false,
+          "zone": "us-west1-a"
+        }
+      },
+      "previous_sha256": "43ee7908d756e160981e3846391d5b40bbae4621eefa1ee1706377753490474b",
+      "sequence": 2,
+      "type": "resource-state"
+    },
+    {
+      "at": "2026-09-17T22:56:54.036221+00:00",
+      "content_sha256": "fe3deadcdddeefae23838f82b3f5e90d0cf40dd31a25cb95f974bbbafa9921b4",
+      "payload": {
+        "content_sha256": "e0ca50fce9f429afb0037d2d195cbc8c8f38424b242e513adfe161e39e2c372a",
+        "event_type": "stage",
+        "message": "Resuming the bound AlloyDB primary and preparing an owned runner.",
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "a700f942222b56b8425b0a1d1ad11bde135c1c5e844749ba4849d21a834c01c3",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "v6m1qrRoDOjhA9jJ45XrJu/HqhMQqhGOwdEkYTTo7VJ7PJc6S2ZnxQnBjOYmFkdARmVWkGhcYBVZ214hJi2CDw=="
+        },
+        "stage": "environment-start"
+      },
+      "previous_sha256": "a700f942222b56b8425b0a1d1ad11bde135c1c5e844749ba4849d21a834c01c3",
+      "sequence": 3,
+      "type": "stage"
+    },
+    {
+      "at": "2026-09-17T22:56:54.124940+00:00",
+      "content_sha256": "7dfee93c0918c679fb6f547a85564a3f5447dd6d172f71b68d568d131edf5994",
+      "payload": {
+        "content_sha256": "1ae5a3d9d88ccbd12d260584e9c5e2d3fe4c8e9322d67a1c6dceaa92332fa3d7",
+        "event_type": "resource-state",
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "fe3deadcdddeefae23838f82b3f5e90d0cf40dd31a25cb95f974bbbafa9921b4",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "SdclWdmoXRLVbk9YV8aQWQ3jNl60wTZLOYQOEKjKVEvitWeynjGlqtYgUeKc00/K1IGM+3VHjc8gDE3DNAd4Dg=="
+        },
+        "state": {
+          "alloydb_before": "STOPPED",
+          "alloydb_name": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/cloudbank-ms71-alloydb/instances/primary",
+          "alloydb_start_requested": true,
+          "firewall": "ly-number-fdaa176106914350aa56-iap",
+          "firewall_create_requested": false,
+          "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+          "vm": "ly-number-fdaa176106914350aa56",
+          "vm_create_requested": false,
+          "zone": "us-west1-a"
+        }
+      },
+      "previous_sha256": "fe3deadcdddeefae23838f82b3f5e90d0cf40dd31a25cb95f974bbbafa9921b4",
+      "sequence": 4,
+      "type": "resource-state"
+    },
+    {
+      "at": "2026-09-17T22:56:56.043775+00:00",
+      "content_sha256": "22cb82c3002f1e37ec94118d0f1edadc44b8a88ccb5dc3a1035aa697aeae5d75",
+      "payload": {
+        "content_sha256": "f4c7328bb957d6003f56f4223e8936756d5c385085d6ab1a413b6f5490c68557",
+        "event_type": "resource-state",
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "7dfee93c0918c679fb6f547a85564a3f5447dd6d172f71b68d568d131edf5994",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "lNhP9PoqGGEArpPSqm8Yk2T7lOglVr5qimf2GmIM3VY8VTq5MNsBMABTfU6fxPQhLY9kgClzM2oE7MAoeBLEDA=="
+        },
+        "state": {
+          "alloydb_before": "STOPPED",
+          "alloydb_name": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/cloudbank-ms71-alloydb/instances/primary",
+          "alloydb_start_requested": true,
+          "firewall": "ly-number-fdaa176106914350aa56-iap",
+          "firewall_create_requested": true,
+          "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+          "vm": "ly-number-fdaa176106914350aa56",
+          "vm_create_requested": false,
+          "zone": "us-west1-a"
+        }
+      },
+      "previous_sha256": "7dfee93c0918c679fb6f547a85564a3f5447dd6d172f71b68d568d131edf5994",
+      "sequence": 5,
+      "type": "resource-state"
+    },
+    {
+      "at": "2026-09-17T22:57:03.569683+00:00",
+      "content_sha256": "54bd841c91b57874ae78c78485369ba72fe71f32d75176ad68da047e597f03bb",
+      "payload": {
+        "content_sha256": "484b7551d635d08177be5ebb200a7bbc5d253d9c07167bf1ca32181f4a3bdc5a",
+        "event_type": "resource-state",
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "22cb82c3002f1e37ec94118d0f1edadc44b8a88ccb5dc3a1035aa697aeae5d75",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "sqp9j48NQ/lPoTo2kuKiNmAVwxvfcDuvfcghpXvhe90o9aFoO+3sWsK9kuxDqBQpXkGT6yZwTKUQn/75i2k9DQ=="
+        },
+        "state": {
+          "alloydb_before": "STOPPED",
+          "alloydb_name": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/cloudbank-ms71-alloydb/instances/primary",
+          "alloydb_start_requested": true,
+          "firewall": "ly-number-fdaa176106914350aa56-iap",
+          "firewall_create_requested": true,
+          "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+          "vm": "ly-number-fdaa176106914350aa56",
+          "vm_create_requested": true,
+          "zone": "us-west1-a"
+        }
+      },
+      "previous_sha256": "22cb82c3002f1e37ec94118d0f1edadc44b8a88ccb5dc3a1035aa697aeae5d75",
+      "sequence": 6,
+      "type": "resource-state"
+    },
+    {
+      "at": "2026-09-17T22:57:54.234140+00:00",
+      "content_sha256": "7caf15dedf076263c28125811a3eb4a29e6d63d5fe7b4a9b8fb7d0dd37195fd7",
+      "payload": {
+        "content_sha256": "d6b0f0589089d1a9833e80840d19ab36177eca0dead107de7021e780230f6dfa",
+        "event_type": "stage",
+        "message": "Installing SQL clients and the authorized Oracle image on the owned runner.",
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "54bd841c91b57874ae78c78485369ba72fe71f32d75176ad68da047e597f03bb",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "8pcB6/6MnmneeytOPJJ8Eawkta8ADs0JaFJb015iytgTSoq0o039urJxF9/Y/6n40dRjvX43FkuW4j8DRIupDw=="
+        },
+        "stage": "oracle-install"
+      },
+      "previous_sha256": "54bd841c91b57874ae78c78485369ba72fe71f32d75176ad68da047e597f03bb",
+      "sequence": 7,
+      "type": "stage"
+    },
+    {
+      "at": "2026-09-17T22:59:37.095948+00:00",
+      "content_sha256": "183ee33fa6a7ea73f74a7ce87b587cf86443b2c095449a85a1ddfdf13a1ad353",
+      "payload": {
+        "content_sha256": "90d8ea1e67e3dc10167bcf6b886c84db401410d8bdd2d72a28dac334f90909fc",
+        "event_type": "stage",
+        "message": "Waiting for the Oracle container health check; no cases have executed.",
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "7caf15dedf076263c28125811a3eb4a29e6d63d5fe7b4a9b8fb7d0dd37195fd7",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "IFeajmYPGEV/SvmYFOOmu0J8klUfujRatPW/hZzSbeRkciWWRf1x+7zxdknYRZQqUi4wd8hgoZNva+fNVPx7BA=="
+        },
+        "stage": "oracle-startup"
+      },
+      "previous_sha256": "7caf15dedf076263c28125811a3eb4a29e6d63d5fe7b4a9b8fb7d0dd37195fd7",
+      "sequence": 8,
+      "type": "stage"
+    },
+    {
+      "at": "2026-09-17T23:04:33.329783+00:00",
+      "content_sha256": "3c39a6b0fe20a34a63b4f329f46cbb07ddf0bd4cfe98ed67c527098413257c43",
+      "payload": {
+        "content_sha256": "0db4bab3d2f50bff655289e9d0a6daa1fee15c928c5b7163a40f25f16ce67ca2",
+        "event_type": "stage",
+        "message": "Verifying fresh source and target database identities.",
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "183ee33fa6a7ea73f74a7ce87b587cf86443b2c095449a85a1ddfdf13a1ad353",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "ifxyDR2eph40h6bGgW+mrSKNA3wwcVdvjzx89Vf3kK39KJyHnSJo24GHGiOuxIo9cJHsCsMTCyLz+ZC7N63iDg=="
+        },
+        "stage": "identity"
+      },
+      "previous_sha256": "183ee33fa6a7ea73f74a7ce87b587cf86443b2c095449a85a1ddfdf13a1ad353",
+      "sequence": 9,
+      "type": "stage"
+    },
+    {
+      "at": "2026-09-17T23:04:44.279300+00:00",
+      "content_sha256": "ebff76601dc92b0525e1d4ae17880b191881215b2996cc04e79376387a1e58e0",
+      "payload": {
+        "content_sha256": "e3e3d17713b55ef3070a023056981cd376a95cdca6b704e01faf54b426dd3e6f",
+        "event_type": "identities",
+        "identities": {
+          "alloydb": {
+            "database": "postgres",
+            "endpoint_binding": "PGHOST from fresh fixed-resource GCP API readback",
+            "endpoint_verified": true,
+            "evidence_class": "native-database-observed",
+            "resource": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/cloudbank-ms71-alloydb/instances/primary",
+            "server_address_matches_endpoint": false,
+            "server_address_sha256": "ff32793b6a5c489eed8c0702051bab0fb5b6d801a83a3d7b14dda5f768c0caac",
+            "version": "16.13",
+            "version_banner": "PostgreSQL 16.13 on x86_64-pc-linux-gnu, compiled by Debian clang version 12.0.1, 64-bit"
+          },
+          "oracle": {
+            "banner": "Oracle AI Database 26ai Free Release 23.26.3.0.0 - Develop, Learn, and Run for Free\nVersion 23.26.3.0.0",
+            "container": "FREEPDB1",
+            "dbid_sha256": "2ba3e0f1587f54a6da89cda2dcd1bb9e7eba8def6251539ecb7ce36236c2148c",
+            "evidence_class": "native-database-observed",
+            "image": "container-registry.oracle.com/database/free@sha256:770ca58ab319d8cfde610b0db25c06899ce0af9591c4addfa10d2cb8f0318e65",
+            "session": {
+              "current_edition": "ORA$BASE",
+              "current_schema": "SYS",
+              "isolation_level": null,
+              "nls_comp": "BINARY",
+              "nls_date_format": "DD-MON-RR",
+              "nls_numeric_characters": ".,",
+              "nls_sort": "BINARY",
+              "nls_timestamp_format": "DD-MON-RR HH.MI.SSXFF AM",
+              "session_timezone": "+00:00"
+            },
+            "version": "23.26.3.0.0"
+          }
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "3c39a6b0fe20a34a63b4f329f46cbb07ddf0bd4cfe98ed67c527098413257c43",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "Ja8Ccc9NXVckVJnTEe3VWv/JCrf12kHSjzFB6SRRWTk8ss88/c2L6zO7leHnh4ffMgGclvEIGuC2rv26+/WFAw=="
+        }
+      },
+      "previous_sha256": "3c39a6b0fe20a34a63b4f329f46cbb07ddf0bd4cfe98ed67c527098413257c43",
+      "sequence": 10,
+      "type": "identities"
+    },
+    {
+      "at": "2026-09-17T23:04:44.287588+00:00",
+      "content_sha256": "4bf3938540a2a78c59a9bb582df80bfb6003bc65752d5375d087787ca9b37635",
+      "payload": {
+        "content_sha256": "9f933d744c4c05fed4cc6d169655586747ddfdf69c71a8a61ae1358bc0667f78",
+        "event_type": "stage",
+        "message": "Executing the 20 bound oracle cases.",
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "ebff76601dc92b0525e1d4ae17880b191881215b2996cc04e79376387a1e58e0",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "K5X8YE5Konqd0M2R53913rS8sC8BZyJNt++RZkTV5aLBUlfDS6QD3yGiEU9aadtmmj8Z8FqLe0/tNUg0c9v7Aw=="
+        },
+        "stage": "oracle"
+      },
+      "previous_sha256": "ebff76601dc92b0525e1d4ae17880b191881215b2996cc04e79376387a1e58e0",
+      "sequence": 11,
+      "type": "stage"
+    },
+    {
+      "at": "2026-09-17T23:04:48.398970+00:00",
+      "content_sha256": "f130a913267a606369d85c76969ae1afddfc5cd82a4646678301494f63573ff1",
+      "payload": {
+        "case_id": "ORA-TYPE-001-CASE-01",
+        "content_sha256": "202fccce7e88115f70e1323ccfc0c06e3ae99021ec4c0e7a38fadff4c8b06db0",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "oracle",
+        "observations": {
+          "arithmetic": "124.00"
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "4bf3938540a2a78c59a9bb582df80bfb6003bc65752d5375d087787ca9b37635",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "y6zzySZJz+Bw6QwZyFU/q3P09MHVyFgqTTgn21RO3T69O3LsjJpGsWdn397k6eD+/qLHMpY/4RBQgvfk/SUFBA=="
+        }
+      },
+      "previous_sha256": "4bf3938540a2a78c59a9bb582df80bfb6003bc65752d5375d087787ca9b37635",
+      "sequence": 12,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:04:52.341358+00:00",
+      "content_sha256": "50ad940ccd66af2fbc4acdebd8937eba5b1aa1dc6968644d903b8242dd987c34",
+      "payload": {
+        "case_id": "ORA-TYPE-001-CASE-02",
+        "content_sha256": "9bec2c742716aa8183d1a5042f1cb806ea01b7cfc7a2439fdcbc8a8e961d5856",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "oracle",
+        "observations": {
+          "arithmetic": "124.00",
+          "null_value": null
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "f130a913267a606369d85c76969ae1afddfc5cd82a4646678301494f63573ff1",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "MEGnZ0joJzV5vYTGtpKCN7IYR3t46hX55GDS7yIOYRIzCdOT0rUsbqu1H7THy42CISCCZEa6tyeFpoI9utBMCg=="
+        }
+      },
+      "previous_sha256": "f130a913267a606369d85c76969ae1afddfc5cd82a4646678301494f63573ff1",
+      "sequence": 13,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:04:56.537130+00:00",
+      "content_sha256": "2e049217d39af2213952c1c4eae2402e1b7acfdbccb0e67a259b971fb10c3c4c",
+      "payload": {
+        "case_id": "ORA-TYPE-001-CASE-03",
+        "content_sha256": "ab408d362be18ca1ab22a5460a2312fbf08a35d1c3b14d38b7b4eb7db5d22929",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "oracle",
+        "observations": {
+          "arithmetic": "124.00",
+          "nls_comma": "124,00",
+          "nls_dot": "124.00"
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "50ad940ccd66af2fbc4acdebd8937eba5b1aa1dc6968644d903b8242dd987c34",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "d8ceh1ZemrUZmFDGaEQ34vQdURnDeLYa88mEgleLEqSD4q1tDbAVE9jX7NZ555K5xPDC+A1+8rgBBf/aEY8NCA=="
+        }
+      },
+      "previous_sha256": "50ad940ccd66af2fbc4acdebd8937eba5b1aa1dc6968644d903b8242dd987c34",
+      "sequence": 14,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:05:00.514213+00:00",
+      "content_sha256": "e31731bd16fec8e48a60d558a8a016d49f7b9ee311ffc68453f96a09ab15363a",
+      "payload": {
+        "case_id": "ORA-TYPE-001-CASE-04",
+        "content_sha256": "787d408863b6d6a93aebc7259d18c532a85b4efcf77071ed848b4eab23dfbb39",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "oracle",
+        "observations": {
+          "arithmetic": "124.00",
+          "overflow_code": -1438,
+          "recovery": "124.00"
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "2e049217d39af2213952c1c4eae2402e1b7acfdbccb0e67a259b971fb10c3c4c",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "vaW+tK3pFom2QgLbgI3eNwdQ4gxvxJDp9kPGrf66diZUW5synkl0Poqa8Nkj1IKWCcOD5s9xUnSFBb4MgmM8CA=="
+        }
+      },
+      "previous_sha256": "2e049217d39af2213952c1c4eae2402e1b7acfdbccb0e67a259b971fb10c3c4c",
+      "sequence": 15,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:05:04.514847+00:00",
+      "content_sha256": "1bf86d2c0bc6cbdfcb2d051b73ca482e00e6c6bd1533b6ff7a2c53ed4703f90d",
+      "payload": {
+        "case_id": "ORA-TYPE-002-CASE-01",
+        "content_sha256": "165e6e48c21701b94423bb33da22f0373856760ba0c7b9aa79024b09ad04213d",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "oracle",
+        "observations": {
+          "null_value": null
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "e31731bd16fec8e48a60d558a8a016d49f7b9ee311ffc68453f96a09ab15363a",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "5QF3g0vCiCuNeF28kJ1B7OyM93lJSJg9eN2CT7SbJHgKe9Fnm/pZLO1ohWaszzgLXQzsSvP3EFO+qLBATbpjCg=="
+        }
+      },
+      "previous_sha256": "e31731bd16fec8e48a60d558a8a016d49f7b9ee311ffc68453f96a09ab15363a",
+      "sequence": 16,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:05:08.604411+00:00",
+      "content_sha256": "849a997b4c079a34e53bdda59335bbba2e2122fe7d8fd3edf421c6808e186ee6",
+      "payload": {
+        "case_id": "ORA-TYPE-002-CASE-02",
+        "content_sha256": "06c50fc7776f64fbb3ac64111f50c8cbf15d65e0901d5b78a6ea07ecb89cda25",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "oracle",
+        "observations": {
+          "null_value": null
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "1bf86d2c0bc6cbdfcb2d051b73ca482e00e6c6bd1533b6ff7a2c53ed4703f90d",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "kO227y7MB0aQ8/yPFkW5ZyIFTX2LqkPDIhVEl434atql/3JUYn4aadO1Q+hdJjY8/db45eRg8f64NWvnARvLAw=="
+        }
+      },
+      "previous_sha256": "1bf86d2c0bc6cbdfcb2d051b73ca482e00e6c6bd1533b6ff7a2c53ed4703f90d",
+      "sequence": 17,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:05:13.194625+00:00",
+      "content_sha256": "28fa8a1db58ac0be4aa67fe7feff58776c32ebc43c72ecd7e3b2a04d14196e19",
+      "payload": {
+        "case_id": "ORA-TYPE-002-CASE-03",
+        "content_sha256": "d9719256a03ce9bbf65bc3880d69774c858251651d20cac727aa3401c5964b0f",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "oracle",
+        "observations": {
+          "nls_comma": "124,00",
+          "nls_dot": "124.00",
+          "null_value": null
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "849a997b4c079a34e53bdda59335bbba2e2122fe7d8fd3edf421c6808e186ee6",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "AWrh3aVsq6C65aWO4u/XhTvaXCepTWiz/aswzUhpL3JjOLQUv8C0cFmecJzO5lMlbeERb3eykxaYE0mjjOv1BQ=="
+        }
+      },
+      "previous_sha256": "849a997b4c079a34e53bdda59335bbba2e2122fe7d8fd3edf421c6808e186ee6",
+      "sequence": 18,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:05:17.211399+00:00",
+      "content_sha256": "b59915f6170bc33a0974d1172f424eb35023c0438f720c568d147f76a8b506cc",
+      "payload": {
+        "case_id": "ORA-TYPE-002-CASE-04",
+        "content_sha256": "6e003d95ef40c649c6dadf1884463526376042e3376e92d3c2436885cf2ee439",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "oracle",
+        "observations": {
+          "null_value": null,
+          "overflow_code": -1438,
+          "recovery": "124.00"
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "28fa8a1db58ac0be4aa67fe7feff58776c32ebc43c72ecd7e3b2a04d14196e19",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "JpUEyOyi/6tbH6fJCikdmL4/bTC/dQrenuLXyfPC4iIWy43vohr5pdiSiYhDtET4Ld9Z8DHIIqr2DUGClx7WDg=="
+        }
+      },
+      "previous_sha256": "28fa8a1db58ac0be4aa67fe7feff58776c32ebc43c72ecd7e3b2a04d14196e19",
+      "sequence": 19,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:05:22.406524+00:00",
+      "content_sha256": "7b6158d54d4b35266193fa10de9eec06952738e05cd8cdda63420c844df2b5aa",
+      "payload": {
+        "case_id": "ORA-TYPE-003-CASE-01",
+        "content_sha256": "4e413d4869170c3c724d335543a3301fe7cd6a1db27255f52c5c6d0dcee487fb",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "oracle",
+        "observations": {
+          "maximum": "999.99",
+          "overflow_code": -1438,
+          "rounded": "2.35"
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "b59915f6170bc33a0974d1172f424eb35023c0438f720c568d147f76a8b506cc",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "1Ndsi4Hbobz49PPbnW2GQ7nByyO1YDbEqkGpmmot+sNia89tRXBo/R4Ohx0w0q3wndLdfz1YShAXzbgsebYkDA=="
+        }
+      },
+      "previous_sha256": "b59915f6170bc33a0974d1172f424eb35023c0438f720c568d147f76a8b506cc",
+      "sequence": 20,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:05:26.465140+00:00",
+      "content_sha256": "0c47801526c01dfe23b6d7b9e0483e24a64952a9ed51a59d93c2e7c29ca67d3a",
+      "payload": {
+        "case_id": "ORA-TYPE-003-CASE-02",
+        "content_sha256": "9479ea4ec7e28e52e81ead7d4aad330f09b9ad63b87014f8356d9a1a8a51c77e",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "oracle",
+        "observations": {
+          "maximum": "999.99",
+          "null_value": null,
+          "overflow_code": -1438,
+          "rounded": "2.35"
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "7b6158d54d4b35266193fa10de9eec06952738e05cd8cdda63420c844df2b5aa",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "Iu+EA/cMJd98/yAkhEl6GGpZSW2QwePR93jHPVrs5nfyAFw21lrxpNj7VvS7icpd7HM9STQw/6ZFdMCLcOM9Dg=="
+        }
+      },
+      "previous_sha256": "7b6158d54d4b35266193fa10de9eec06952738e05cd8cdda63420c844df2b5aa",
+      "sequence": 21,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:05:30.712146+00:00",
+      "content_sha256": "9d297fb6c4b04bde73355a79d6d402783240e931225cd2632a84b005d239fa8a",
+      "payload": {
+        "case_id": "ORA-TYPE-003-CASE-03",
+        "content_sha256": "bf16163ea4dbe3cafe1e56d1c8db096d0365d93f6f746c76f3fb46613573d1e0",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "oracle",
+        "observations": {
+          "maximum": "999.99",
+          "nls_comma": "124,00",
+          "nls_dot": "124.00",
+          "overflow_code": -1438,
+          "rounded": "2.35"
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "0c47801526c01dfe23b6d7b9e0483e24a64952a9ed51a59d93c2e7c29ca67d3a",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "qmKVrfmYD5scnn3mVMPkfrBkw/CR/i7MlKEUDMSCQLVY8QBfOMVqWLFLK8XWE00gLUSJvCBTkbc44Ir+wJytDQ=="
+        }
+      },
+      "previous_sha256": "0c47801526c01dfe23b6d7b9e0483e24a64952a9ed51a59d93c2e7c29ca67d3a",
+      "sequence": 22,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:05:34.932499+00:00",
+      "content_sha256": "7f16ce1be788923597f0dbfb697b557610325135b9d6c5dcd5d6e65f16e220c1",
+      "payload": {
+        "case_id": "ORA-TYPE-003-CASE-04",
+        "content_sha256": "56c37fe46fb0f277c3f84f891eafdb9d96171f0e3157f34d1e66a59845ffcc33",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "oracle",
+        "observations": {
+          "maximum": "999.99",
+          "overflow_code": -1438,
+          "recovery": "124.00",
+          "rounded": "2.35"
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "9d297fb6c4b04bde73355a79d6d402783240e931225cd2632a84b005d239fa8a",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "Uh+wyGCpoC8/0Cjg4CGNq4ej0A47gM9/6+OAn9HPhVDViB5V2BvGgfT/9BIX+aM4nqUW3ZQgtrjfu8AyChJOAQ=="
+        }
+      },
+      "previous_sha256": "9d297fb6c4b04bde73355a79d6d402783240e931225cd2632a84b005d239fa8a",
+      "sequence": 23,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:05:38.771449+00:00",
+      "content_sha256": "6c6de7cb996c255e433f15ca1d5d1fe224c3e537157739dda2398028a8f26053",
+      "payload": {
+        "case_id": "ORA-TYPE-004-CASE-01",
+        "content_sha256": "e4e8c96e7d8f15cfd3d03b4ccec33b79c65f7f8d313ad23940440591735c0aeb",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "oracle",
+        "observations": {
+          "nls_comma": "124,00",
+          "nls_dot": "124.00"
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "7f16ce1be788923597f0dbfb697b557610325135b9d6c5dcd5d6e65f16e220c1",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "/hLVMSs5jo7MXA1WyFzfWEoVCddv0ORF/4F587hbP850P7ec8c8QSDE15EN4zpDoJPKmQsn7sjAP6emT+F0AAA=="
+        }
+      },
+      "previous_sha256": "7f16ce1be788923597f0dbfb697b557610325135b9d6c5dcd5d6e65f16e220c1",
+      "sequence": 24,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:05:43.156932+00:00",
+      "content_sha256": "dd9773c527febca97ec7ceddfe057d71972c7b84ee32096d823912272b22e753",
+      "payload": {
+        "case_id": "ORA-TYPE-004-CASE-02",
+        "content_sha256": "e66c19b7007caf275dbac2c8dfee62009d6304e624e5df44ad03add29f090dd1",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "oracle",
+        "observations": {
+          "nls_comma": "124,00",
+          "nls_dot": "124.00",
+          "null_value": null
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "6c6de7cb996c255e433f15ca1d5d1fe224c3e537157739dda2398028a8f26053",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "0upQqUQhDUpptb/94ByZ5g+ySr56C3XPLBCvibEpkZDs0annWwdz+mAf2gbSab6gdAvTeWwkDfkfAxNjxrYiDA=="
+        }
+      },
+      "previous_sha256": "6c6de7cb996c255e433f15ca1d5d1fe224c3e537157739dda2398028a8f26053",
+      "sequence": 25,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:05:47.260580+00:00",
+      "content_sha256": "d237e4eef1a53904e8dded748fe1d107be879997de3aca36930b32e7debb6fe7",
+      "payload": {
+        "case_id": "ORA-TYPE-004-CASE-03",
+        "content_sha256": "580cccc117e2e13f2435d6a49404832678b9ecbbdd5268cc7fc24d833428245c",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "oracle",
+        "observations": {
+          "nls_comma": "124,00",
+          "nls_dot": "124.00"
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "dd9773c527febca97ec7ceddfe057d71972c7b84ee32096d823912272b22e753",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "jOZmUxa7t4O0H/Ao5avT+U5ZY3KEW0y/XR354TtsxsQJDHCD50YailLPG/Qp1hlSda/h1XuwwMZxF2kajntbBg=="
+        }
+      },
+      "previous_sha256": "dd9773c527febca97ec7ceddfe057d71972c7b84ee32096d823912272b22e753",
+      "sequence": 26,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:05:51.473223+00:00",
+      "content_sha256": "9013e53184e9feff2bd4de87848653b24612b0c23197715733fdbd8eba8006a9",
+      "payload": {
+        "case_id": "ORA-TYPE-004-CASE-04",
+        "content_sha256": "64f1d86047427a6ad5ea915fab31e19e341214a264a33934126b5b64a843cad4",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "oracle",
+        "observations": {
+          "nls_comma": "124,00",
+          "nls_dot": "124.00",
+          "overflow_code": -1438,
+          "recovery": "124.00"
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "d237e4eef1a53904e8dded748fe1d107be879997de3aca36930b32e7debb6fe7",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "qXUPwDbS/4ZNcgSqMGxrFV3JC6XVcYon31HnPi+MGxC+pLhr1Uee7saOjEOawcY0GVUTaBxyVQzjJLWqRfZfCw=="
+        }
+      },
+      "previous_sha256": "d237e4eef1a53904e8dded748fe1d107be879997de3aca36930b32e7debb6fe7",
+      "sequence": 27,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:05:56.023098+00:00",
+      "content_sha256": "2447b791c72204b65dd909bd48d34d00b57c8e3df8ba93bd175d2bc21bea7dfe",
+      "payload": {
+        "case_id": "ORA-TYPE-005-CASE-01",
+        "content_sha256": "1341c719ce487654ffcb85f8d6b9a9cc149b83f54d2c43ae7d725e4f9bfda027",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "oracle",
+        "observations": {
+          "overflow_code": -1438,
+          "recovery": "124.00"
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "9013e53184e9feff2bd4de87848653b24612b0c23197715733fdbd8eba8006a9",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "RPia3VNF0KT7qihL++rVw+VkwfJKFxF8LifG5aEqb3eLyIGgusuoMm2zX7QGChyW2PSZTM4UTniwWCmWoEQfBg=="
+        }
+      },
+      "previous_sha256": "9013e53184e9feff2bd4de87848653b24612b0c23197715733fdbd8eba8006a9",
+      "sequence": 28,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:06:00.366770+00:00",
+      "content_sha256": "bc69c0b3a59a5ab8e7ab416deb0ce23061c7ab79b26c3eda05465766a1a1e6a7",
+      "payload": {
+        "case_id": "ORA-TYPE-005-CASE-02",
+        "content_sha256": "547bdcd214c8638b37c37287d4cd1f1dcda39900d2637c55871e3dad0cc6d489",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "oracle",
+        "observations": {
+          "null_value": null,
+          "overflow_code": -1438,
+          "recovery": "124.00"
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "2447b791c72204b65dd909bd48d34d00b57c8e3df8ba93bd175d2bc21bea7dfe",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "pAEGt5gr2EAcw6ERGHuU3Woq9EDavd1vLJFFvwVCuH/ZWCHmwgG/UBguEFk8j24Ykf6cmlf1a29Izj6lRY5VAQ=="
+        }
+      },
+      "previous_sha256": "2447b791c72204b65dd909bd48d34d00b57c8e3df8ba93bd175d2bc21bea7dfe",
+      "sequence": 29,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:06:04.426707+00:00",
+      "content_sha256": "084abf2bf18e2defce7916f71d723e9854ca10139cf5c8648698de7e23e714b4",
+      "payload": {
+        "case_id": "ORA-TYPE-005-CASE-03",
+        "content_sha256": "74d78cb7d09b04e517c5c22e132ae21e1b237758b684b825b4187a5c99c52b88",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "oracle",
+        "observations": {
+          "nls_comma": "124,00",
+          "nls_dot": "124.00",
+          "overflow_code": -1438,
+          "recovery": "124.00"
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "bc69c0b3a59a5ab8e7ab416deb0ce23061c7ab79b26c3eda05465766a1a1e6a7",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "fTwz5ZyVrcq5EUlXNJpunuR51OmHsH2zr7n2unEa9xKOxWuzB13TSk24fOgcpS5Y+SBujCUR3gQBjnxPF6f+Bg=="
+        }
+      },
+      "previous_sha256": "bc69c0b3a59a5ab8e7ab416deb0ce23061c7ab79b26c3eda05465766a1a1e6a7",
+      "sequence": 30,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:06:08.467121+00:00",
+      "content_sha256": "374e7e8636e1b628ceda8ff8e0ddb81d0271d3772c32e83ab87cb39c11d195f6",
+      "payload": {
+        "case_id": "ORA-TYPE-005-CASE-04",
+        "content_sha256": "b42dada63adca68b4822858c2ea67078be0e0eafaebf73f657f7355fa2ff1ae8",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "oracle",
+        "observations": {
+          "overflow_code": -1438,
+          "recovery": "124.00"
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "084abf2bf18e2defce7916f71d723e9854ca10139cf5c8648698de7e23e714b4",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "py5X6Grkd6D/HC8Z4GGX+A/OeZtg7ww98rHLbQ3T1k5MH0DQRIZzlJctGBkzXm98CuWQLReZYyAxvNRdOlNJDA=="
+        }
+      },
+      "previous_sha256": "084abf2bf18e2defce7916f71d723e9854ca10139cf5c8648698de7e23e714b4",
+      "sequence": 31,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:06:08.478329+00:00",
+      "content_sha256": "15e765a503d1e562b82ba458515bc85e49438668ec350c40ccfbb6732c5e97da",
+      "payload": {
+        "content_sha256": "e902208f397bcc531be907abd15549c5558a5fb7ed69f2313236283b9296779e",
+        "event_type": "stage",
+        "message": "Executing the 20 bound alloydb cases.",
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "374e7e8636e1b628ceda8ff8e0ddb81d0271d3772c32e83ab87cb39c11d195f6",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "mCkq+dzmj5Xk3tfQnOJHgHXhDrUHaUxrkzGAv06ie1UpIETv3zFL2KWb7J/FEmp5djBK6ivNGpF1SipA7omoDg=="
+        },
+        "stage": "alloydb"
+      },
+      "previous_sha256": "374e7e8636e1b628ceda8ff8e0ddb81d0271d3772c32e83ab87cb39c11d195f6",
+      "sequence": 32,
+      "type": "stage"
+    },
+    {
+      "at": "2026-09-17T23:06:13.081063+00:00",
+      "content_sha256": "1e3242d24cda95831dbff75e4e6300ef158277b1e702bb0e27f771b7150a9517",
+      "payload": {
+        "case_id": "ORA-TYPE-001-CASE-01",
+        "content_sha256": "db7a701a995bce01dbb8a47e24cc86dc8b2fe4d5cb941fbd9f17797b03736539",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "alloydb",
+        "observations": {
+          "arithmetic": "124.00"
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "15e765a503d1e562b82ba458515bc85e49438668ec350c40ccfbb6732c5e97da",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "8ACmT53EcQTqDQ1IBUyjyh5qTDRFMI7TGCSZoVZ5NKLm0OI4g+XbtudVll8oBL+YATuPL878nFE6CCusLOwvBg=="
+        }
+      },
+      "previous_sha256": "15e765a503d1e562b82ba458515bc85e49438668ec350c40ccfbb6732c5e97da",
+      "sequence": 33,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:06:17.141935+00:00",
+      "content_sha256": "fddc467a07e2a9601e4d8924ec000072ab099e70fdc54a11ebb9d336fdb2a010",
+      "payload": {
+        "case_id": "ORA-TYPE-001-CASE-02",
+        "content_sha256": "27cc56c203f45a2cffba15ce0339dd21d9ad69691426e2677208638b98fbda87",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "alloydb",
+        "observations": {
+          "arithmetic": "124.00",
+          "null_value": null
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "1e3242d24cda95831dbff75e4e6300ef158277b1e702bb0e27f771b7150a9517",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "UendNbLesWeymymUP9bqoJ9zq/SwcCDJIs8figcxRAD3SY0TUJ9UT8+NddLIkWO9Wf53vsEW29w2Vnx2Ci7EBw=="
+        }
+      },
+      "previous_sha256": "1e3242d24cda95831dbff75e4e6300ef158277b1e702bb0e27f771b7150a9517",
+      "sequence": 34,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:06:21.229381+00:00",
+      "content_sha256": "e093e111a1425c619a92229bd5548e1511345d81b5938c23c39a787b89a767f6",
+      "payload": {
+        "case_id": "ORA-TYPE-001-CASE-03",
+        "content_sha256": "d1c7093f6002811b80494577c5b1c2c4d31591b09b7810b3828084c31bf9e0b3",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "alloydb",
+        "observations": {
+          "arithmetic": "124.00",
+          "nls_comma": "124,00",
+          "nls_dot": "124.00"
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "fddc467a07e2a9601e4d8924ec000072ab099e70fdc54a11ebb9d336fdb2a010",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "VMTVBuA73iTTrxD9l8Uxf4FgB1A+wGFQUgwqJOMmzaixcuzjhd4cV5+k6s5KSNWjGmHqC00SKuraCgIHGZ1uAQ=="
+        }
+      },
+      "previous_sha256": "fddc467a07e2a9601e4d8924ec000072ab099e70fdc54a11ebb9d336fdb2a010",
+      "sequence": 35,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:06:25.017948+00:00",
+      "content_sha256": "9a0fc571d8c60380a38a7ff5ac21cd5e8e1c59c22b9547787c2b50669b5cbcf5",
+      "payload": {
+        "case_id": "ORA-TYPE-001-CASE-04",
+        "content_sha256": "1c74631464a4ac5a4ec46dda96e4d9b1578882391f756f24e540299ab24431bb",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "alloydb",
+        "observations": {
+          "arithmetic": "124.00",
+          "overflow_code": "22003",
+          "recovery": "124.00"
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "e093e111a1425c619a92229bd5548e1511345d81b5938c23c39a787b89a767f6",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "21zCg/KbbJBXJwBGHrUVu0uIfN9uNehWatQKcXQXYu3Nd3FPNUsfQBF+QRYbM1d+KNgC6I8k/K1zHf1xEUOABg=="
+        }
+      },
+      "previous_sha256": "e093e111a1425c619a92229bd5548e1511345d81b5938c23c39a787b89a767f6",
+      "sequence": 36,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:06:28.799811+00:00",
+      "content_sha256": "70e0f9b3a9593b9163a9b3847825a3fcd784ba66ca3458134cf3ed64be50b027",
+      "payload": {
+        "case_id": "ORA-TYPE-002-CASE-01",
+        "content_sha256": "36afff086942fe4b1238631faf2f53f1d2bf4ae7ca108b505a4108ba6b384cb5",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "alloydb",
+        "observations": {
+          "null_value": null
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "9a0fc571d8c60380a38a7ff5ac21cd5e8e1c59c22b9547787c2b50669b5cbcf5",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "Hwc90BzYpWrduWVUcMCpPZavuuH60BZP9tBwxNznupDtajTmlR7YSLdmsCTA1nyv0P3GkzUXM0Q8IY3R4IR+Aw=="
+        }
+      },
+      "previous_sha256": "9a0fc571d8c60380a38a7ff5ac21cd5e8e1c59c22b9547787c2b50669b5cbcf5",
+      "sequence": 37,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:06:32.478387+00:00",
+      "content_sha256": "0443296abfa60a883c3730361cb91fbda2c5789a57a274d18f56fb8170646c4f",
+      "payload": {
+        "case_id": "ORA-TYPE-002-CASE-02",
+        "content_sha256": "ff24e572994d63a22c200f41db841d7a4d1d307a174c1d70b1172f636d3ddec0",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "alloydb",
+        "observations": {
+          "null_value": null
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "70e0f9b3a9593b9163a9b3847825a3fcd784ba66ca3458134cf3ed64be50b027",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "KDyicfP1GPyt+1AJ9lvNSd7avilSwPrYPuM1wWxZmD3th284NOTS7t2L4ndaFwKGBd1tgTfw2vHXvVHCY7tOAw=="
+        }
+      },
+      "previous_sha256": "70e0f9b3a9593b9163a9b3847825a3fcd784ba66ca3458134cf3ed64be50b027",
+      "sequence": 38,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:06:36.554850+00:00",
+      "content_sha256": "b87c6a2577059fdd5f8c6323e75b463d5a65e03405f7d582930f67ae50ebb7e3",
+      "payload": {
+        "case_id": "ORA-TYPE-002-CASE-03",
+        "content_sha256": "047c5a8236ac0273507512093f08376909a51f9fb3015297793d74ec7c95cbda",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "alloydb",
+        "observations": {
+          "nls_comma": "124,00",
+          "nls_dot": "124.00",
+          "null_value": null
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "0443296abfa60a883c3730361cb91fbda2c5789a57a274d18f56fb8170646c4f",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "XUMIrb/Iab/C63wWw7wVoZowpzJsHEKEuthOQ2HloGTDlg8SQTdOkAa4oAsatVAYFDntVSolkYvK6YcducD0Bw=="
+        }
+      },
+      "previous_sha256": "0443296abfa60a883c3730361cb91fbda2c5789a57a274d18f56fb8170646c4f",
+      "sequence": 39,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:06:40.470161+00:00",
+      "content_sha256": "96af75a805a3431b1b1fb95cf6ebded97802302622dacdc840ae81695b14edcc",
+      "payload": {
+        "case_id": "ORA-TYPE-002-CASE-04",
+        "content_sha256": "502f3fc8cdbd348801dd45eea772665f267519317a049350f21c6fe0b8665517",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "alloydb",
+        "observations": {
+          "null_value": null,
+          "overflow_code": "22003",
+          "recovery": "124.00"
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "b87c6a2577059fdd5f8c6323e75b463d5a65e03405f7d582930f67ae50ebb7e3",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "2y+ERltHGZS6NHrT276m55Xqa9nVIX9lLB2Ey5Nd5O2huSeD5WpVBAJb41rrjBcOpQ6QRU5OIsopdXeN7nwWBw=="
+        }
+      },
+      "previous_sha256": "b87c6a2577059fdd5f8c6323e75b463d5a65e03405f7d582930f67ae50ebb7e3",
+      "sequence": 40,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:06:44.617172+00:00",
+      "content_sha256": "153891d044393d7ec242157ffae894f4fa49d061ba81e5dc6c09fe9ec4e6726c",
+      "payload": {
+        "case_id": "ORA-TYPE-003-CASE-01",
+        "content_sha256": "0e25c344aa3431f8681a486edaf388fe453d8300800fc3c9e3a41dbfc4355060",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "alloydb",
+        "observations": {
+          "maximum": "999.99",
+          "overflow_code": "22003",
+          "rounded": "2.35"
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "96af75a805a3431b1b1fb95cf6ebded97802302622dacdc840ae81695b14edcc",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "JCOxnsCZ96yULrgf2Gmp3S4+KK91W85rtDiN3uH8NJOdDTH3+mV3eJzt+EBnJ+NNcwk50DmLVDEFrxle5J4QCw=="
+        }
+      },
+      "previous_sha256": "96af75a805a3431b1b1fb95cf6ebded97802302622dacdc840ae81695b14edcc",
+      "sequence": 41,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:06:48.569638+00:00",
+      "content_sha256": "2298c2850e1502c11c45d0b55dc20289f4ea27d00f951d8943e92d092ed8f321",
+      "payload": {
+        "case_id": "ORA-TYPE-003-CASE-02",
+        "content_sha256": "391a2b468d36a0c3cf091b64d44d21718cf6276b36e8bb9e052ffbb30656b0f8",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "alloydb",
+        "observations": {
+          "maximum": "999.99",
+          "null_value": null,
+          "overflow_code": "22003",
+          "rounded": "2.35"
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "153891d044393d7ec242157ffae894f4fa49d061ba81e5dc6c09fe9ec4e6726c",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "jYRRDCDyYw0TxkWNN4U8S1muPbN99s+2o8+bdIgs5SOn/xKdtdivQeHtIhOkeEJRTyix9VpDEAVgv1Y+8DakBg=="
+        }
+      },
+      "previous_sha256": "153891d044393d7ec242157ffae894f4fa49d061ba81e5dc6c09fe9ec4e6726c",
+      "sequence": 42,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:06:52.344203+00:00",
+      "content_sha256": "53016ab71c338f0b0375d79c6d27e7672935d10d5ce02b8d713fca542e24cfc7",
+      "payload": {
+        "case_id": "ORA-TYPE-003-CASE-03",
+        "content_sha256": "d51cf2d91e05c55ae891226e147fcfd58f6e80f6b5b4fac592925b2f34696714",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "alloydb",
+        "observations": {
+          "maximum": "999.99",
+          "nls_comma": "124,00",
+          "nls_dot": "124.00",
+          "overflow_code": "22003",
+          "rounded": "2.35"
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "2298c2850e1502c11c45d0b55dc20289f4ea27d00f951d8943e92d092ed8f321",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "UJC7dz/B4QspoeW8z5DzTtfpOR5Nvf6zxufke0ICSAyapENaHw/V4v+TCS5J3unaxbnjRrIgUrcCplVnH8N7Dw=="
+        }
+      },
+      "previous_sha256": "2298c2850e1502c11c45d0b55dc20289f4ea27d00f951d8943e92d092ed8f321",
+      "sequence": 43,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:06:56.426289+00:00",
+      "content_sha256": "c32d3b2b047282de07367fd2a220c03259946ed7d21481d99029c2d8f143e79e",
+      "payload": {
+        "case_id": "ORA-TYPE-003-CASE-04",
+        "content_sha256": "7db3af38a508ff792d6499ebbd92ced3412cc337888f8a59e1fb23a9f7b538c5",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "alloydb",
+        "observations": {
+          "maximum": "999.99",
+          "overflow_code": "22003",
+          "recovery": "124.00",
+          "rounded": "2.35"
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "53016ab71c338f0b0375d79c6d27e7672935d10d5ce02b8d713fca542e24cfc7",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "KSRNrn7Vfble66qrnCAqWUQn22iO6AHnfB0txy9K1M2ukcsAYnyEUBzszfzqkUR1GsyxBYhX9nLCqZQsryEXCg=="
+        }
+      },
+      "previous_sha256": "53016ab71c338f0b0375d79c6d27e7672935d10d5ce02b8d713fca542e24cfc7",
+      "sequence": 44,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:07:01.923088+00:00",
+      "content_sha256": "53ece02aaec27cc8bad4b732e5819b1277b42a3cf088d6e3fe57c2bf9e4e9cfc",
+      "payload": {
+        "case_id": "ORA-TYPE-004-CASE-01",
+        "content_sha256": "14f40db48c8b48d0aa12e0a58091b3601c3555a47876f702c165f8c55299a134",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "alloydb",
+        "observations": {
+          "nls_comma": "124,00",
+          "nls_dot": "124.00"
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "c32d3b2b047282de07367fd2a220c03259946ed7d21481d99029c2d8f143e79e",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "0EFiZOmrcZUkG3avKOP71zz1kRIb3XcNRE1ZG6LJJrVoPAegWVhz0MUCC3Kvhxj0COj+H9QUO2MHJ5+sQ8PQCg=="
+        }
+      },
+      "previous_sha256": "c32d3b2b047282de07367fd2a220c03259946ed7d21481d99029c2d8f143e79e",
+      "sequence": 45,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:07:05.866259+00:00",
+      "content_sha256": "2ff64ec35edb5a0dcf8e81f5e90fbf8e465ecdc576cd094b741c5820614c425a",
+      "payload": {
+        "case_id": "ORA-TYPE-004-CASE-02",
+        "content_sha256": "60998fac55976eecc56b47e72b1349dcce740e0fca7afaf87ce27707dde56b60",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "alloydb",
+        "observations": {
+          "nls_comma": "124,00",
+          "nls_dot": "124.00",
+          "null_value": null
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "53ece02aaec27cc8bad4b732e5819b1277b42a3cf088d6e3fe57c2bf9e4e9cfc",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "h0UigbHzgjruTA3fOuqcTqjivqt4ydlZj5G9j3/PBv1Li7XgApUEFFN2jX4l2VoWnP8jDAWRrJ50wYRKFDoLCw=="
+        }
+      },
+      "previous_sha256": "53ece02aaec27cc8bad4b732e5819b1277b42a3cf088d6e3fe57c2bf9e4e9cfc",
+      "sequence": 46,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:07:12.274123+00:00",
+      "content_sha256": "86cec7563bd20bca6c0af975c2f78b3df53abaf97e5bd8220ea9ae82d5fe1885",
+      "payload": {
+        "case_id": "ORA-TYPE-004-CASE-03",
+        "content_sha256": "faf04b715848fadade60f824dfccbf1ba3394f80c4fdc754db60cd1a9b1f88c1",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "alloydb",
+        "observations": {
+          "nls_comma": "124,00",
+          "nls_dot": "124.00"
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "2ff64ec35edb5a0dcf8e81f5e90fbf8e465ecdc576cd094b741c5820614c425a",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "ocKliLlLuZT/gsbWbeBwV8qhgSS5uE6vBaUkJhbEyY9i5bNM/WAWC67jr+rP7vBpgyoVmLSf/bIRPycQNEI7CQ=="
+        }
+      },
+      "previous_sha256": "2ff64ec35edb5a0dcf8e81f5e90fbf8e465ecdc576cd094b741c5820614c425a",
+      "sequence": 47,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:07:16.480810+00:00",
+      "content_sha256": "ae614c5c69acca3592e6deb9fa0e0532e763a8c2c0babc4d205f89202dab42ac",
+      "payload": {
+        "case_id": "ORA-TYPE-004-CASE-04",
+        "content_sha256": "737098463f705007fcf1125178c61db12f7b0b9da1729c4e6e16ccb97d32772b",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "alloydb",
+        "observations": {
+          "nls_comma": "124,00",
+          "nls_dot": "124.00",
+          "overflow_code": "22003",
+          "recovery": "124.00"
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "86cec7563bd20bca6c0af975c2f78b3df53abaf97e5bd8220ea9ae82d5fe1885",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "t0fMwdOAjPvg5pRb1QTZHZ5wOQzXjoY+PBqTC0whYQ5TKF2aIdhdrrHxNLk8iEaaNdakOuSyKujNUBWQIlWSAg=="
+        }
+      },
+      "previous_sha256": "86cec7563bd20bca6c0af975c2f78b3df53abaf97e5bd8220ea9ae82d5fe1885",
+      "sequence": 48,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:07:21.158724+00:00",
+      "content_sha256": "856ee0b76f8f2fade370912c105a29ac7ba1584328e658c8776d8c8864b7af18",
+      "payload": {
+        "case_id": "ORA-TYPE-005-CASE-01",
+        "content_sha256": "c52739d912e898779f83d338a7ec6292e0bcf0c9d5c56ed3e520113ff3e9c19b",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "alloydb",
+        "observations": {
+          "overflow_code": "22003",
+          "recovery": "124.00"
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "ae614c5c69acca3592e6deb9fa0e0532e763a8c2c0babc4d205f89202dab42ac",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "z3pRBGtB0LSDStVDc5opTiZrIjTKqrIJHrV4p75v3GrVS9n/dVR4sgrRdB9ZpzgUTePoWjj43RDqwIucCxwbDw=="
+        }
+      },
+      "previous_sha256": "ae614c5c69acca3592e6deb9fa0e0532e763a8c2c0babc4d205f89202dab42ac",
+      "sequence": 49,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:07:25.484194+00:00",
+      "content_sha256": "06f1e09a22b35cf891a6489e9674f3f3eb9ebad21070b3b4e993a121f6022580",
+      "payload": {
+        "case_id": "ORA-TYPE-005-CASE-02",
+        "content_sha256": "9903f44536ec5261f6248a8e9387c1e0388a5d78c8c9eadd7d8025d48e75d5a6",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "alloydb",
+        "observations": {
+          "null_value": null,
+          "overflow_code": "22003",
+          "recovery": "124.00"
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "856ee0b76f8f2fade370912c105a29ac7ba1584328e658c8776d8c8864b7af18",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "Ts+7tmkDMNmI54vWy/HbgrJL6793CHcnbPNA0bXxudjoKQsI49GZ7hxgNFBTeWlJNbOctVdVwtEL6OCUtl/PAQ=="
+        }
+      },
+      "previous_sha256": "856ee0b76f8f2fade370912c105a29ac7ba1584328e658c8776d8c8864b7af18",
+      "sequence": 50,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:07:29.610874+00:00",
+      "content_sha256": "4d416bbe15ddfd32b4914165630790998bc5093737a133b482a528a4244a6658",
+      "payload": {
+        "case_id": "ORA-TYPE-005-CASE-03",
+        "content_sha256": "25871e7fc89870270992576343a4d86151f529c371bc5d7e194045c9dd6ccf36",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "alloydb",
+        "observations": {
+          "nls_comma": "124,00",
+          "nls_dot": "124.00",
+          "overflow_code": "22003",
+          "recovery": "124.00"
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "06f1e09a22b35cf891a6489e9674f3f3eb9ebad21070b3b4e993a121f6022580",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "jrTQou4NY9lrCzMk35w+CLrpyU4Wl1qnetft7plL2wGiq4eFJNtcaLG32bSm265wfC7Cq2EP0rqv3ziSFKXvDg=="
+        }
+      },
+      "previous_sha256": "06f1e09a22b35cf891a6489e9674f3f3eb9ebad21070b3b4e993a121f6022580",
+      "sequence": 51,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:07:33.593971+00:00",
+      "content_sha256": "39d8967613cfe682b83dc3998d7f24a9cd1ff06580e50deb0d0821fe8a38ced9",
+      "payload": {
+        "case_id": "ORA-TYPE-005-CASE-04",
+        "content_sha256": "e0f99f49db3f6306acd45864b49bcedb1093f15d67e85533bcf24814df6dfd9e",
+        "event_type": "observation",
+        "evidence_class": "native-database-observed",
+        "lane": "alloydb",
+        "observations": {
+          "overflow_code": "22003",
+          "recovery": "124.00"
+        },
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "4d416bbe15ddfd32b4914165630790998bc5093737a133b482a528a4244a6658",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "Lla+5spwRS+uQDV8XAUPkmxZECitWLOBBsSACSFktzKH0yEnEF0co4TLZGGfAKQM5HwHokAtY6GyY8MFlaxFBQ=="
+        }
+      },
+      "previous_sha256": "4d416bbe15ddfd32b4914165630790998bc5093737a133b482a528a4244a6658",
+      "sequence": 52,
+      "type": "observation"
+    },
+    {
+      "at": "2026-09-17T23:07:33.606080+00:00",
+      "content_sha256": "031ea28ad994ef684d7d2c1ef6ec950e866f9a5c535dcab57df489f6804c1091",
+      "payload": {
+        "content_sha256": "0cc3858ce11311c1d8ad7b506f49f751ea2fb6e3c66676c720c5931d685adacc",
+        "event_type": "stage",
+        "message": "Replaying the deterministic comparison contract.",
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "39d8967613cfe682b83dc3998d7f24a9cd1ff06580e50deb0d0821fe8a38ced9",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "Q/47ADtCOzzFs1BlWOxtpRD5V47Cy/mJQY7K1uKB0uKQ7740nrKqjK8imBN/exlLz/3bkYK2nhY3m8VqiPzMDw=="
+        },
+        "stage": "comparison"
+      },
+      "previous_sha256": "39d8967613cfe682b83dc3998d7f24a9cd1ff06580e50deb0d0821fe8a38ced9",
+      "sequence": 53,
+      "type": "stage"
+    },
+    {
+      "at": "2026-09-17T23:07:33.614264+00:00",
+      "content_sha256": "8f8672f39e97996b9efa333cba997c77d6bb83e5c9d60994af814f68665b0d7d",
+      "payload": {
+        "comparison": {
+          "case_id": "ORA-TYPE-001-CASE-01",
+          "diagnostic_mapping": null,
+          "differences": [],
+          "equivalent": true,
+          "source_expectations_met": true,
+          "target_expectations_met": true
+        },
+        "content_sha256": "1df090b761e7994cfb7ffd3532cfb8b1f974dad725de31e5f69c0c282ecbdc35",
+        "event_type": "comparison",
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "031ea28ad994ef684d7d2c1ef6ec950e866f9a5c535dcab57df489f6804c1091",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "QWQ8f7N1ILwjXc2JbByZaoP8AyuLQ7st5/hlwwj9JUju1bDxA4vwQZv3NHQ8K02Xc4cSHzvSVcVT161PvFLLBg=="
+        }
+      },
+      "previous_sha256": "031ea28ad994ef684d7d2c1ef6ec950e866f9a5c535dcab57df489f6804c1091",
+      "sequence": 54,
+      "type": "comparison"
+    },
+    {
+      "at": "2026-09-17T23:07:33.624391+00:00",
+      "content_sha256": "7508d10aacb5829390d9f7f21ab4e5da9d14d66f627445a0d4bc255d83c7a5ab",
+      "payload": {
+        "comparison": {
+          "case_id": "ORA-TYPE-001-CASE-02",
+          "diagnostic_mapping": null,
+          "differences": [],
+          "equivalent": true,
+          "source_expectations_met": true,
+          "target_expectations_met": true
+        },
+        "content_sha256": "6c1e13d8a7b953cc5c9fa67580b78860c707d576ebd975dabdd7fe8b70c43845",
+        "event_type": "comparison",
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "8f8672f39e97996b9efa333cba997c77d6bb83e5c9d60994af814f68665b0d7d",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "G1ofFFYdBzXyRT6sVEYsn1G8p5BruVGl4Xo7ShZjp62wQXRKg9YJJ5lJQMOnE+w4z5BExzU/MPcvs9GrIjsJDQ=="
+        }
+      },
+      "previous_sha256": "8f8672f39e97996b9efa333cba997c77d6bb83e5c9d60994af814f68665b0d7d",
+      "sequence": 55,
+      "type": "comparison"
+    },
+    {
+      "at": "2026-09-17T23:07:33.633361+00:00",
+      "content_sha256": "d12b1f4f89a86c664da7469d6883f1a5221f3741f9bdeeee488875b842bffcc6",
+      "payload": {
+        "comparison": {
+          "case_id": "ORA-TYPE-001-CASE-03",
+          "diagnostic_mapping": null,
+          "differences": [],
+          "equivalent": true,
+          "source_expectations_met": true,
+          "target_expectations_met": true
+        },
+        "content_sha256": "4093475ea70143eed8f1d83e922041ed5e2b494d1944b26499547016768e8d8f",
+        "event_type": "comparison",
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "7508d10aacb5829390d9f7f21ab4e5da9d14d66f627445a0d4bc255d83c7a5ab",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "nRuuedQgaTUa/MNAVrP4+9gqp0FH9J6sSWDJ1LS6JFBtVlDWXC+V3xMW9pj6KlVo2XKZnsfyuTaZIzBg2Em3DQ=="
+        }
+      },
+      "previous_sha256": "7508d10aacb5829390d9f7f21ab4e5da9d14d66f627445a0d4bc255d83c7a5ab",
+      "sequence": 56,
+      "type": "comparison"
+    },
+    {
+      "at": "2026-09-17T23:07:33.643395+00:00",
+      "content_sha256": "843b6b5714378ecdbc57e57a4b26cf9ad931496a0d675a4a9781dfcdb5391a45",
+      "payload": {
+        "comparison": {
+          "case_id": "ORA-TYPE-001-CASE-04",
+          "diagnostic_mapping": "ORA-01438 \u2194 SQLSTATE 22003 (numeric precision overflow)",
+          "differences": [],
+          "equivalent": true,
+          "source_expectations_met": true,
+          "target_expectations_met": true
+        },
+        "content_sha256": "925506ef6064c56f1ff8db5b7b2db367c8209332b4b4a328b8d0592601c7a6d1",
+        "event_type": "comparison",
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "d12b1f4f89a86c664da7469d6883f1a5221f3741f9bdeeee488875b842bffcc6",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "60HOGu9L9PXiQlyHNpb5sT5Qzu1nMnMFSatfKzRqURCOSR0yuKFLpNzxwLv1sKdB6QyHDgkp2E72pCgjFhLtDA=="
+        }
+      },
+      "previous_sha256": "d12b1f4f89a86c664da7469d6883f1a5221f3741f9bdeeee488875b842bffcc6",
+      "sequence": 57,
+      "type": "comparison"
+    },
+    {
+      "at": "2026-09-17T23:07:33.651628+00:00",
+      "content_sha256": "a2105d1cb288bf20a2cba454b710c82535388360c3917284d51c76ea2f313c49",
+      "payload": {
+        "comparison": {
+          "case_id": "ORA-TYPE-002-CASE-01",
+          "diagnostic_mapping": null,
+          "differences": [],
+          "equivalent": true,
+          "source_expectations_met": true,
+          "target_expectations_met": true
+        },
+        "content_sha256": "d0580788876c1537db34f574b7849a2fd5319cf8ed285a92674eef101e3b5f5f",
+        "event_type": "comparison",
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "843b6b5714378ecdbc57e57a4b26cf9ad931496a0d675a4a9781dfcdb5391a45",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "kMI1lo/TXlu4YiRibJJn+gddLVrDRbJaqYGgwJUveRDtgxX5t9xUCyuYFrcxuiydr6aTturv2gqkpSH4hDjPAA=="
+        }
+      },
+      "previous_sha256": "843b6b5714378ecdbc57e57a4b26cf9ad931496a0d675a4a9781dfcdb5391a45",
+      "sequence": 58,
+      "type": "comparison"
+    },
+    {
+      "at": "2026-09-17T23:07:33.659531+00:00",
+      "content_sha256": "77751f0928be2443a6db8fc7d06252c1eaae9a506256f9cb664112c64375bad5",
+      "payload": {
+        "comparison": {
+          "case_id": "ORA-TYPE-002-CASE-02",
+          "diagnostic_mapping": null,
+          "differences": [],
+          "equivalent": true,
+          "source_expectations_met": true,
+          "target_expectations_met": true
+        },
+        "content_sha256": "8d5b12fdb2ba19ef532c837696d56699103477bfd37f9e076753a2273f74f5b3",
+        "event_type": "comparison",
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "a2105d1cb288bf20a2cba454b710c82535388360c3917284d51c76ea2f313c49",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "oBRmTiBcwmxTzvQRy1EBSWuQf0W4HozPufuQ95U3GpULQGqKLDfrrcLEXfpRMyyPX6GE+Ge3MVn6w48rtxNzDw=="
+        }
+      },
+      "previous_sha256": "a2105d1cb288bf20a2cba454b710c82535388360c3917284d51c76ea2f313c49",
+      "sequence": 59,
+      "type": "comparison"
+    },
+    {
+      "at": "2026-09-17T23:07:33.668221+00:00",
+      "content_sha256": "60af56850c419a22398562a56fbe17aa8c35cdce56cf94db0fce44b27f3a5477",
+      "payload": {
+        "comparison": {
+          "case_id": "ORA-TYPE-002-CASE-03",
+          "diagnostic_mapping": null,
+          "differences": [],
+          "equivalent": true,
+          "source_expectations_met": true,
+          "target_expectations_met": true
+        },
+        "content_sha256": "ba5752b55a495af4eceb37d3271487b109253dd94c495d3e191dd62a07abc888",
+        "event_type": "comparison",
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "77751f0928be2443a6db8fc7d06252c1eaae9a506256f9cb664112c64375bad5",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "4K5CMuLnX1VAaSOEEX3NPr+EoT0NMIqdxMJ2FA54FkjgkujmcEurqoUxl0q6M6rjOyflZYEq2A5h70vULx5lAg=="
+        }
+      },
+      "previous_sha256": "77751f0928be2443a6db8fc7d06252c1eaae9a506256f9cb664112c64375bad5",
+      "sequence": 60,
+      "type": "comparison"
+    },
+    {
+      "at": "2026-09-17T23:07:33.676074+00:00",
+      "content_sha256": "7c024f00aa5c4d221dfe9c10a03d2b93a8cd826356df3687af89998f27e434b2",
+      "payload": {
+        "comparison": {
+          "case_id": "ORA-TYPE-002-CASE-04",
+          "diagnostic_mapping": "ORA-01438 \u2194 SQLSTATE 22003 (numeric precision overflow)",
+          "differences": [],
+          "equivalent": true,
+          "source_expectations_met": true,
+          "target_expectations_met": true
+        },
+        "content_sha256": "19615ccd2fe0a7fac78355d46a6e78c3cb77995e617c469bb546437d7e5c6a82",
+        "event_type": "comparison",
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "60af56850c419a22398562a56fbe17aa8c35cdce56cf94db0fce44b27f3a5477",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "IRZ/vMyLxc7qBzYkLdKr2NaA15CRVG8pV+Lai89FXdsU/zaT5KmgtcaGnNsSW6z0GOj4nGgcJCdRhGaCa/rCCA=="
+        }
+      },
+      "previous_sha256": "60af56850c419a22398562a56fbe17aa8c35cdce56cf94db0fce44b27f3a5477",
+      "sequence": 61,
+      "type": "comparison"
+    },
+    {
+      "at": "2026-09-17T23:07:33.684833+00:00",
+      "content_sha256": "a0217c72d83eea100bc72dddb78c72792190248960030e62d2130ff4e36e0c39",
+      "payload": {
+        "comparison": {
+          "case_id": "ORA-TYPE-003-CASE-01",
+          "diagnostic_mapping": "ORA-01438 \u2194 SQLSTATE 22003 (numeric precision overflow)",
+          "differences": [],
+          "equivalent": true,
+          "source_expectations_met": true,
+          "target_expectations_met": true
+        },
+        "content_sha256": "7829cd68fdcd51ccef1ecb1807a657f6143b55d3b9241b5a145731e163bdeb08",
+        "event_type": "comparison",
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "7c024f00aa5c4d221dfe9c10a03d2b93a8cd826356df3687af89998f27e434b2",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "fsVCxu65I6h6fu3g8qOssxkiuepD/fJMTsWxJqktiaqmSJTzhfc1euNK3zOBLPrnXXs5QBnjxg8Oqi6B4EIKBg=="
+        }
+      },
+      "previous_sha256": "7c024f00aa5c4d221dfe9c10a03d2b93a8cd826356df3687af89998f27e434b2",
+      "sequence": 62,
+      "type": "comparison"
+    },
+    {
+      "at": "2026-09-17T23:07:33.693294+00:00",
+      "content_sha256": "f4e58151bc1a2ab01550b20cd8711d2f7ea25f068e1e90f1055719db31ecfd0a",
+      "payload": {
+        "comparison": {
+          "case_id": "ORA-TYPE-003-CASE-02",
+          "diagnostic_mapping": "ORA-01438 \u2194 SQLSTATE 22003 (numeric precision overflow)",
+          "differences": [],
+          "equivalent": true,
+          "source_expectations_met": true,
+          "target_expectations_met": true
+        },
+        "content_sha256": "0c5ba81037c25720970afaf4cb11c39b6becb6319861d2ccbd1aa7ef12e9bb28",
+        "event_type": "comparison",
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "a0217c72d83eea100bc72dddb78c72792190248960030e62d2130ff4e36e0c39",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "Ccxji1Mofr4jOPgmuk2zT9XqBXno/SmmR9+VemIZljOUF8tbOjN63hTJiJzMUEBNJvlPxcRBXvPM3diX09SEAA=="
+        }
+      },
+      "previous_sha256": "a0217c72d83eea100bc72dddb78c72792190248960030e62d2130ff4e36e0c39",
+      "sequence": 63,
+      "type": "comparison"
+    },
+    {
+      "at": "2026-09-17T23:07:33.700021+00:00",
+      "content_sha256": "32caa6a3f06d9bac661e913d22bb71d53e54b770be70dfc4a841e35296dd2d53",
+      "payload": {
+        "comparison": {
+          "case_id": "ORA-TYPE-003-CASE-03",
+          "diagnostic_mapping": "ORA-01438 \u2194 SQLSTATE 22003 (numeric precision overflow)",
+          "differences": [],
+          "equivalent": true,
+          "source_expectations_met": true,
+          "target_expectations_met": true
+        },
+        "content_sha256": "46b5dda2ab7d464692480933d9d364b9c58259e8402af290cd5f34d449b23ac3",
+        "event_type": "comparison",
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "f4e58151bc1a2ab01550b20cd8711d2f7ea25f068e1e90f1055719db31ecfd0a",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "RoqoPLS+uQv6iUwAQgA91cIWVAxqZjZIsMrF/ASE5o/qHa9ZPso6ITdAk0ClVZoicqSvVgDi7Pu9fZK1tC0HCw=="
+        }
+      },
+      "previous_sha256": "f4e58151bc1a2ab01550b20cd8711d2f7ea25f068e1e90f1055719db31ecfd0a",
+      "sequence": 64,
+      "type": "comparison"
+    },
+    {
+      "at": "2026-09-17T23:07:33.709013+00:00",
+      "content_sha256": "60e0d457ec21362dd5ed7e87b3449f40c11d7ea5cb4e6e6b0da4c3a341efdcfd",
+      "payload": {
+        "comparison": {
+          "case_id": "ORA-TYPE-003-CASE-04",
+          "diagnostic_mapping": "ORA-01438 \u2194 SQLSTATE 22003 (numeric precision overflow)",
+          "differences": [],
+          "equivalent": true,
+          "source_expectations_met": true,
+          "target_expectations_met": true
+        },
+        "content_sha256": "673c7e7c6c612949ac167fbe05596afabfc2c0e03b7bab57fc4e33b069f7017c",
+        "event_type": "comparison",
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "32caa6a3f06d9bac661e913d22bb71d53e54b770be70dfc4a841e35296dd2d53",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "U5wgupu97+jy7XV0QBxhspotYa51lClSrCK2zaBPyUrHy+0ZqnEbxpxjwahF2OQ8BA5v9IoEyw8u6o3F0ljnBA=="
+        }
+      },
+      "previous_sha256": "32caa6a3f06d9bac661e913d22bb71d53e54b770be70dfc4a841e35296dd2d53",
+      "sequence": 65,
+      "type": "comparison"
+    },
+    {
+      "at": "2026-09-17T23:07:33.717157+00:00",
+      "content_sha256": "46cdfb9afcef03a2d0bcb0c1e5aac7827b25a883868d0d4d2be08d038f5b478d",
+      "payload": {
+        "comparison": {
+          "case_id": "ORA-TYPE-004-CASE-01",
+          "diagnostic_mapping": null,
+          "differences": [],
+          "equivalent": true,
+          "source_expectations_met": true,
+          "target_expectations_met": true
+        },
+        "content_sha256": "3720d4bbc7f8af7811ef3353c9d2580dcc31cbd0673dcda6a4d2fb334eca1f96",
+        "event_type": "comparison",
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "60e0d457ec21362dd5ed7e87b3449f40c11d7ea5cb4e6e6b0da4c3a341efdcfd",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "0wA7oV788VKCgxRV4XoPumTb/KAlsbMf4KhKysdsAHszIZfNx9T0Md0ikWx6YFxDcqiq/WEkLCYw4jo5rkzIBA=="
+        }
+      },
+      "previous_sha256": "60e0d457ec21362dd5ed7e87b3449f40c11d7ea5cb4e6e6b0da4c3a341efdcfd",
+      "sequence": 66,
+      "type": "comparison"
+    },
+    {
+      "at": "2026-09-17T23:07:33.727203+00:00",
+      "content_sha256": "8f8e7243fa0b9632d524e61d8efee1ade78d347714b5a80f39681b3fe86953b9",
+      "payload": {
+        "comparison": {
+          "case_id": "ORA-TYPE-004-CASE-02",
+          "diagnostic_mapping": null,
+          "differences": [],
+          "equivalent": true,
+          "source_expectations_met": true,
+          "target_expectations_met": true
+        },
+        "content_sha256": "faf4b945ac30f64732f1e7e5349539d8e2ecfb6acb7f759c927d7fffec85bf7c",
+        "event_type": "comparison",
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "46cdfb9afcef03a2d0bcb0c1e5aac7827b25a883868d0d4d2be08d038f5b478d",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "NCgrE+DAPCIu+UdV4dGSiHMGEp+js2oX00X/qqgj4DGmSxDOIbpZkwHeYazGUMnalaplDYuydakvmGpPAMEKDQ=="
+        }
+      },
+      "previous_sha256": "46cdfb9afcef03a2d0bcb0c1e5aac7827b25a883868d0d4d2be08d038f5b478d",
+      "sequence": 67,
+      "type": "comparison"
+    },
+    {
+      "at": "2026-09-17T23:07:33.735987+00:00",
+      "content_sha256": "c9d209a1291b386c7d8f81e00f0223a6f697ba803429f5bbb8ccae8d405edfba",
+      "payload": {
+        "comparison": {
+          "case_id": "ORA-TYPE-004-CASE-03",
+          "diagnostic_mapping": null,
+          "differences": [],
+          "equivalent": true,
+          "source_expectations_met": true,
+          "target_expectations_met": true
+        },
+        "content_sha256": "2e4b41b3e5ea2442a825bda44038154733e558ca29b3907ca148fc0186723b7f",
+        "event_type": "comparison",
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "8f8e7243fa0b9632d524e61d8efee1ade78d347714b5a80f39681b3fe86953b9",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "pmvI57Xz8HLafRHejS8EutC4fACMVUpov5/G3hVgr7HCKeN8ajGmEtTTHkvXOdyW98ihqZ0PjkWvirrUkRG5Dw=="
+        }
+      },
+      "previous_sha256": "8f8e7243fa0b9632d524e61d8efee1ade78d347714b5a80f39681b3fe86953b9",
+      "sequence": 68,
+      "type": "comparison"
+    },
+    {
+      "at": "2026-09-17T23:07:33.742602+00:00",
+      "content_sha256": "8645f0653f2d3c9ab71849fe3fe7960a6db7d775cc090a97bec9f4ba4a309b0e",
+      "payload": {
+        "comparison": {
+          "case_id": "ORA-TYPE-004-CASE-04",
+          "diagnostic_mapping": "ORA-01438 \u2194 SQLSTATE 22003 (numeric precision overflow)",
+          "differences": [],
+          "equivalent": true,
+          "source_expectations_met": true,
+          "target_expectations_met": true
+        },
+        "content_sha256": "6078c92dc71d4a9755e2a4a9fc462add0313829ec48c088d49e14f5adc2133ad",
+        "event_type": "comparison",
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "c9d209a1291b386c7d8f81e00f0223a6f697ba803429f5bbb8ccae8d405edfba",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "aDh1iW295Oz9GVxztAO7XhM6LkRlAVpLDakUxDiSOyvwb6ASyK1P3iIC/Eye4ez9VD6dc0b2mtrQzMKHIzHFBA=="
+        }
+      },
+      "previous_sha256": "c9d209a1291b386c7d8f81e00f0223a6f697ba803429f5bbb8ccae8d405edfba",
+      "sequence": 69,
+      "type": "comparison"
+    },
+    {
+      "at": "2026-09-17T23:07:33.751449+00:00",
+      "content_sha256": "c9c71338fc29ef64be58d23d37c18db7b1fc96e821e953a35ad55e0bb34d212c",
+      "payload": {
+        "comparison": {
+          "case_id": "ORA-TYPE-005-CASE-01",
+          "diagnostic_mapping": "ORA-01438 \u2194 SQLSTATE 22003 (numeric precision overflow)",
+          "differences": [],
+          "equivalent": true,
+          "source_expectations_met": true,
+          "target_expectations_met": true
+        },
+        "content_sha256": "1b5da10478374e93b6f23320e293a8533a7bd08af562af0bf2b3b1c0ea6141df",
+        "event_type": "comparison",
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "8645f0653f2d3c9ab71849fe3fe7960a6db7d775cc090a97bec9f4ba4a309b0e",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "R7g544pB+Grmt2cB13Vh1iSWFI51zsau4VaoK5INxMp8Cez9haJOgzptZdNkhRc3AMyVHb/qGS6ohjW78q3NAA=="
+        }
+      },
+      "previous_sha256": "8645f0653f2d3c9ab71849fe3fe7960a6db7d775cc090a97bec9f4ba4a309b0e",
+      "sequence": 70,
+      "type": "comparison"
+    },
+    {
+      "at": "2026-09-17T23:07:33.760518+00:00",
+      "content_sha256": "6287e75cd8256728c4855f24a21e9acd9035743f009623e2c73cc7fc36532f15",
+      "payload": {
+        "comparison": {
+          "case_id": "ORA-TYPE-005-CASE-02",
+          "diagnostic_mapping": "ORA-01438 \u2194 SQLSTATE 22003 (numeric precision overflow)",
+          "differences": [],
+          "equivalent": true,
+          "source_expectations_met": true,
+          "target_expectations_met": true
+        },
+        "content_sha256": "89218cabe5d52811c597c81847ff742d59f78cb55f30b72fc111c44a05a688b4",
+        "event_type": "comparison",
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "c9c71338fc29ef64be58d23d37c18db7b1fc96e821e953a35ad55e0bb34d212c",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "UgapDVTtaqyfCfmX/wWNo4Nfqmbw04Qj4CQ41GBFmXLfEB98EANrY/qsx5E80hTCG2PhLNliwP+rb8qIFInXDQ=="
+        }
+      },
+      "previous_sha256": "c9c71338fc29ef64be58d23d37c18db7b1fc96e821e953a35ad55e0bb34d212c",
+      "sequence": 71,
+      "type": "comparison"
+    },
+    {
+      "at": "2026-09-17T23:07:33.767221+00:00",
+      "content_sha256": "97981963fc29aebdf68338c9028c8e6d73a5fc7fb1d477598caec9e7298048ee",
+      "payload": {
+        "comparison": {
+          "case_id": "ORA-TYPE-005-CASE-03",
+          "diagnostic_mapping": "ORA-01438 \u2194 SQLSTATE 22003 (numeric precision overflow)",
+          "differences": [],
+          "equivalent": true,
+          "source_expectations_met": true,
+          "target_expectations_met": true
+        },
+        "content_sha256": "625f4c020afeb8133505cf4a736cc4a662e14460a25adb6911dddd133dba5038",
+        "event_type": "comparison",
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "6287e75cd8256728c4855f24a21e9acd9035743f009623e2c73cc7fc36532f15",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "Nu96Uv3QRTJwv9U4tI6AIfpGgNb28xnjbiZmBsXCEzwmzjb80AOc8MbBQcIwuawCldVDogjECcdU/F+Kiu/ZAA=="
+        }
+      },
+      "previous_sha256": "6287e75cd8256728c4855f24a21e9acd9035743f009623e2c73cc7fc36532f15",
+      "sequence": 72,
+      "type": "comparison"
+    },
+    {
+      "at": "2026-09-17T23:07:33.777242+00:00",
+      "content_sha256": "eec9162772d5cbe1a98754159f0bf5ba815fcaed5e592ef57af7b43ce54d99c3",
+      "payload": {
+        "comparison": {
+          "case_id": "ORA-TYPE-005-CASE-04",
+          "diagnostic_mapping": "ORA-01438 \u2194 SQLSTATE 22003 (numeric precision overflow)",
+          "differences": [],
+          "equivalent": true,
+          "source_expectations_met": true,
+          "target_expectations_met": true
+        },
+        "content_sha256": "3e5ee29f8d91b8940fd443460eebd89ec11d3985fe2969c39b495a1b67ad9c80",
+        "event_type": "comparison",
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "97981963fc29aebdf68338c9028c8e6d73a5fc7fb1d477598caec9e7298048ee",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "IXnpquNTtuRr3Q+eEa0dgX2hAMn/+jfnZwou6PiRYV8jYgTBRs+vyWTOCG5CzHAToxo3r8q3cQ//Q/rLyiMgDw=="
+        }
+      },
+      "previous_sha256": "97981963fc29aebdf68338c9028c8e6d73a5fc7fb1d477598caec9e7298048ee",
+      "sequence": 73,
+      "type": "comparison"
+    },
+    {
+      "at": "2026-09-17T23:07:33.785271+00:00",
+      "content_sha256": "f50898b4dd336622d60c10349cc4d5b6527d4d98ed226ee63257765cce47ab8a",
+      "payload": {
+        "content_sha256": "0676da625561a0de733287aead06f0983d899ec2e01cc19686f5b4b28dbfa762",
+        "event_type": "stage",
+        "message": "Restoring stopped resources and deleting owned runner resources.",
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "eec9162772d5cbe1a98754159f0bf5ba815fcaed5e592ef57af7b43ce54d99c3",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "rzRl+Kn7Yel84ta2vwtGV9uyM/8C3jyLOMJT4FHWisex6b4Y6fF+JfoSVbcaXcNK8M6/WPiuZTz0qDuPV98nBg=="
+        },
+        "stage": "cleanup"
+      },
+      "previous_sha256": "eec9162772d5cbe1a98754159f0bf5ba815fcaed5e592ef57af7b43ce54d99c3",
+      "sequence": 74,
+      "type": "stage"
+    },
+    {
+      "at": "2026-09-17T23:10:29.529364+00:00",
+      "content_sha256": "7e4f3dc9f377941d962da74841ccbc69bc273357a83645861680ddc1b2569660",
+      "payload": {
+        "content_sha256": "e58965355e1a3d2dcb922b9c0329a8b527e6fd6d278335f35736284ab25cc542",
+        "event_type": "resource-state",
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "f50898b4dd336622d60c10349cc4d5b6527d4d98ed226ee63257765cce47ab8a",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "tHzxEfb9WnpBQDeOvMfJFQVyX8R4IH31Wa6UCjMUuw6KYRfUrjjNqYSaxN5EJICSW5R+PEqyR4EGvHvkIPDCBg=="
+        },
+        "state": {
+          "alloydb_before": "STOPPED",
+          "alloydb_name": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/cloudbank-ms71-alloydb/instances/primary",
+          "alloydb_start_requested": true,
+          "cleanup": {
+            "alloydb": "stopped",
+            "firewall": "deleted",
+            "vm": "deleted"
+          },
+          "firewall": "ly-number-fdaa176106914350aa56-iap",
+          "firewall_create_requested": true,
+          "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+          "vm": "ly-number-fdaa176106914350aa56",
+          "vm_create_requested": true,
+          "zone": "us-west1-a"
+        }
+      },
+      "previous_sha256": "f50898b4dd336622d60c10349cc4d5b6527d4d98ed226ee63257765cce47ab8a",
+      "sequence": 75,
+      "type": "resource-state"
+    },
+    {
+      "at": "2026-09-17T23:10:29.563634+00:00",
+      "content_sha256": "6d3df234c4078e931acf3fda280afae6e85dae52274a58aeee663c36fd115a73",
+      "payload": {
+        "cleanup": {
+          "complete": true,
+          "resources": {
+            "alloydb": "stopped",
+            "firewall": "deleted",
+            "vm": "deleted"
+          }
+        },
+        "content_sha256": "9d9a65c16075acf1036e1029c7e1de325c622c52a819a1969c8af297667b12e5",
+        "event_type": "cleanup",
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "7e4f3dc9f377941d962da74841ccbc69bc273357a83645861680ddc1b2569660",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "fvwRdA7+Tm+9EoygTRSo0pkl9JpFHXgTNWU/Q9TComH9ZFJXQK8rXGna2XbSjXOpV5j0WQy8ShD/w4PPkNEKBA=="
+        }
+      },
+      "previous_sha256": "7e4f3dc9f377941d962da74841ccbc69bc273357a83645861680ddc1b2569660",
+      "sequence": 76,
+      "type": "cleanup"
+    },
+    {
+      "at": "2026-09-17T23:10:29.584088+00:00",
+      "content_sha256": "74afa33d6dfe5db631d98ed111ccce5f7ffa66c4b63e4b3ac6fb0fe0ef9914d2",
+      "payload": {
+        "content_sha256": "031e030bf4a7db1b9b54fbe2caa3b029425e005f7a3404b2ccee81607ac6afc1",
+        "event_type": "terminal",
+        "plan_sha256": "b3fdd0e9f27bd3fd5d4a894ae1790f4c4a999cb84161e01de0b1dc4a4f7b22e0",
+        "previous_event_sha256": "6d3df234c4078e931acf3fda280afae6e85dae52274a58aeee663c36fd115a73",
+        "run_id": "number-fdaa176106914350aa5659c93aab0eaa",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "4JVmXMJB+5rtgK9JT3nfhQC92ovtpBc2zY+1eBMBOL9Jr/l+1LWPdbjcERjHaVuPuSPZMw2yQsSQT4kiGUv8CQ=="
+        },
+        "status": "passed-bounded-native"
+      },
+      "previous_sha256": "6d3df234c4078e931acf3fda280afae6e85dae52274a58aeee663c36fd115a73",
+      "sequence": 77,
+      "type": "terminal"
+    }
+  ]
+}

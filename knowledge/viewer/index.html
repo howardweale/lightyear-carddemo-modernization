@@ -8,7 +8,7 @@
   <link rel="stylesheet" href="decisions.css?v=76.1">
   <link rel="stylesheet" href="convergence.css?v=73.1">
   <link rel="stylesheet" href="run.css?v=75.1">
-  <link rel="stylesheet" href="campaign.css?v=1">
+  <link rel="stylesheet" href="campaign.css?v=3">
 </head>
 <body>
   <header class="masthead topbar">
@@ -105,6 +105,7 @@
       <button id="refresh-decisions" class="secondary-button" type="button">Refresh queue</button>
     </header>
     <section id="campaign-view" aria-label="Campaign preparation" hidden></section>
+    <section id="campaign-controls" aria-label="Campaign authorization" hidden></section>
     <section id="cloudbank-execution" class="workflow-plan" aria-label="CloudBank execution">
       <div class="workflow-heading"><div><p class="decision-eyebrow">CloudBank · Eight services</p><h2>Evidence execution</h2></div><span class="decision-badge">Headless engine</span></div>
       <p id="execution-status" role="status">Reading the engine journal…</p>
@@ -714,10 +715,11 @@
       </div>
     </form>
   </dialog>
-  <script src="context.js?v=1" defer></script>
+  <script src="context.js?v=3" defer></script>
   <script src="app.js?v=48.5" defer></script>
-  <script src="campaign.js?v=1" defer></script>
-  <script src="decisions.js?v=76.1" defer></script>
+  <script src="paired.js?v=2" defer></script>
+  <script src="campaign.js?v=3" defer></script>
+  <script src="decisions.js?v=76.2" defer></script>
   <script src="workflow.js?v=1" defer></script>
   <script src="execution.js?v=3" defer></script>
   <dialog id="operator-dialog" class="verifier-dialog" aria-labelledby="operator-title">
@@ -729,7 +731,7 @@
       <div class="dialog-actions"><button id="cancel-operator" class="secondary-button" type="button">Cancel</button><button class="primary-button" type="submit">Start session</button></div>
     </form>
   </dialog>
-  <script src="convergence.js?v=76.1" defer></script>
-  <script src="run.js?v=76.1" defer></script>
+  <script src="convergence.js?v=77.2" defer></script>
+  <script src="run.js?v=77.2" defer></script>
 </body>
 </html>

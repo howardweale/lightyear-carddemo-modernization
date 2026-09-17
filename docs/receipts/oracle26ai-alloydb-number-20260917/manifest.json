@@ -1,0 +1,31 @@
+{
+  "authorized_cumulative_estimated_budget_usd": 10,
+  "cost_basis": "Sum of authorization-to-terminal/recovery elapsed time multiplied by each authorized planning rate. Not a measured GCP bill.",
+  "exported_from_revision": "06cfb059a7548c87c63fc91e5b3bffcd456bf47d",
+  "files": {
+    "number-43a2c76cd0a640999f6999e43dc05ef1/authorization.json": "9ef7c07e8adff25e88e252eb6159aa80659c1ba0ace59275767e22aa67460815",
+    "number-43a2c76cd0a640999f6999e43dc05ef1/journal.json": "788eb94e8d52f4979d2404dbae3772d3b0810f1e12e4d533fc6b5ef0e1f2627f",
+    "number-43a2c76cd0a640999f6999e43dc05ef1/summary.json": "7c6fe193c485647e331e4a159ee7c55b8016b5718a6f657609c50ed957568a05",
+    "number-7198437ec91f4fc9a38b950b7880ca5c/authorization.json": "a22cf341adfaff71d52e7734fe244645eda268400ea0c6d5e2fed9cf8b415232",
+    "number-7198437ec91f4fc9a38b950b7880ca5c/journal.json": "83f86ec6a1bbb6a9d6056cf93476757c066ae64caecdf032ef436b0a28b04232",
+    "number-7198437ec91f4fc9a38b950b7880ca5c/summary.json": "21d4410782593b8748daadf0f3ae67a391528ec5f6b715770c1473f840c1efa9",
+    "number-7742a8bfe7cf4ed19a6f72c0d26b7856/authorization.json": "f1631ffe2336e5aa2982308050ecc4814548a554d4e3de2c3424570cac3f3253",
+    "number-7742a8bfe7cf4ed19a6f72c0d26b7856/journal.json": "386c9d0478bf8fabdf383ecc72b6d2d9cd27e1d783ad0064044f0f6232165da5",
+    "number-7742a8bfe7cf4ed19a6f72c0d26b7856/summary.json": "c9ff4ed54b75d73e122e9a12986ac0359d41eb670aac3e895a832443f4f7b078",
+    "number-dbe42bd3d4114de9aa10b9c4877f1051/authorization.json": "5af6c47dacb6645d1ae3f3211dbe2558e96fe3225bacf2a5f3ba2fd09dcc9119",
+    "number-dbe42bd3d4114de9aa10b9c4877f1051/journal.json": "298a140af20bd7fb47d8d9ee06b6697c59dfc4a4c63df2daec60ae840547a456",
+    "number-dbe42bd3d4114de9aa10b9c4877f1051/summary.json": "3fcffcf562ee71e1e2d5ac18efc607151b77556fd882aa0c0e81c1262f8b728a",
+    "number-e72fb057ad9a422c9d6c99f217200e15/authorization.json": "f3d292eeab0b838247ab2db7520ed66e05ada8d305d47bee05918c570a11c58f",
+    "number-e72fb057ad9a422c9d6c99f217200e15/journal.json": "4145223c696e391b254f8bef56c744d73be4fd4096afaba76f0b4cbe96177f9a",
+    "number-e72fb057ad9a422c9d6c99f217200e15/recovery.json": "ea5b76ac5f70d132d0987083c88450591fbbddc592e1be4d4aeaec6b4ca77cdf",
+    "number-e72fb057ad9a422c9d6c99f217200e15/summary.json": "f7a99426f62db06e9df8dfd4511de8d9250e36be06ed710d152d6d4a64b461b5",
+    "number-fdaa176106914350aa5659c93aab0eaa/authorization.json": "e5982331a65b5e9a53338863402d0f6e2f8247807ed8fed11108550a3c60de61",
+    "number-fdaa176106914350aa5659c93aab0eaa/journal.json": "ed835b126d1f8202f2cf745aa6b81bb5a73b547f7e9108d82bb53beedcc8c94d",
+    "number-fdaa176106914350aa5659c93aab0eaa/summary.json": "0f88d79e198a989486f38512fa9a986f9993d4d5383506ab7c1e71e96819501c",
+    "public-key.pem": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552"
+  },
+  "format": "lightyear-paired-campaign-export-v1",
+  "planning_allowance_usd": 2.4,
+  "scope": "20 NUMBER case pairs, 5 behaviours; no broader catalog admission or platform qualification.",
+  "successful_run_id": "number-fdaa176106914350aa5659c93aab0eaa"
+}

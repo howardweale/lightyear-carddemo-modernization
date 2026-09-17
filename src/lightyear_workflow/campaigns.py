@@ -80,7 +80,7 @@ def read_readiness(root: Path, *, now: datetime | None = None) -> dict:
         return {**empty, "status": "invalid", "reason": "Saved environment readback could not be validated."}
 
 
-def read_campaign(root: Path, estate: str, campaign: str) -> dict:
+def read_campaign(root: Path, estate: str, campaign: str, run_id: str | None = None) -> dict:
     validate_context(estate, campaign)
     if campaign == "retained":
         return {"campaign_id": campaign, "estate": estate, "read_only": True, "status": "retained-evidence"}
@@ -92,19 +92,27 @@ def read_campaign(root: Path, estate: str, campaign: str) -> dict:
         preparation = "verified-files"
     except (ValueError, OSError, KeyError):
         pass
+    from .campaign_service import review
+    from .campaign_engine import AUTHORITY, read_run
+    execution = read_run(root, run_id)
+    proposed = review(root)
+    measured = execution.get("identities") is not None and execution.get("evidence_class") == "native-database-observed"
     return {
         "campaign_id": CAMPAIGN, "estate": estate, "name": "Oracle 26ai → AlloyDB · NUMBER pilot",
-        "status": "planned", "read_only": True, "dispatch_available": False,
+        "status": execution["status"] if execution.get("run_id") else "planned", "read_only": True,
+        "dispatch_available": proposed["status"] == "reviewable" and (root / AUTHORITY).is_file(),
         "scope": "Independent database catalog tests in the CloudBank lab; not CloudBank application scenarios.",
         "planned_cases": 20, "planned_behaviors": 5, "topic_family": "types/number",
-        "source": "Oracle Database 26ai Free (proposed; runtime identity not recorded)",
+        "source": ("Oracle Database 26ai Free · " + execution["identities"]["oracle"]["version"] if measured else
+                   "Oracle Database 26ai Free (proposed; runtime identity not recorded)"),
         "target": "Managed AlloyDB · cloudbank-ms71-alloydb / primary",
         "project": PROJECT, "region": REGION, "preparation": preparation, "cases": cases,
         "source_prepared_cases": len(cases) if preparation == "verified-files" else None,
-        "native_executed_cases": None, "target_equivalent_cases": None,
-        "blockers": ["AlloyDB case harness and paired comparator execution are not connected.",
-                     "Fresh Oracle and AlloyDB runtime identities and access checks are required.",
-                     "Campaign-specific authorization, spending limit and cleanup policy are not recorded."],
+        "native_executed_cases": execution.get("source_completed") if measured else None,
+        "target_equivalent_cases": execution.get("matched") if measured and execution.get("comparisons_completed") else None,
+        "current_run_status": execution["status"],
+        "blockers": ([proposed["reason"]] if proposed["status"] != "reviewable" else
+                     ["Review and authorize the exact campaign terms below. Fresh database identities are checked by the detached engine before case execution."]),
         "readiness": read_readiness(root),
     }
 

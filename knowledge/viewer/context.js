@@ -13,6 +13,14 @@
     if (id !== 'current' && !state.runs.some(run => run.run_id === id)) return;
     state.runId = id; select.value = id; remembered.set(`${state.estate}/${state.campaignId}`, id); emit();
   }
+  function updatePairedRun(value) {
+    if (state.campaignId !== value.campaign_id || state.runId !== value.run_id) return;
+    const row = state.runs.find(run => run.run_id === value.run_id);
+    const item = [...select.options].find(option => option.value === value.run_id);
+    if (!row || !item) return;
+    row.actions_completed = value.matched; row.terminal = value.status;
+    item.textContent = `${new Date(row.started_at).toLocaleString()} · ${value.matched} equivalent pairs · ${value.status}`;
+  }
   async function refresh() {
     const request = ++sequence;
     select.disabled = true;
@@ -27,13 +35,13 @@
       select.replaceChildren();
       if (state.estate === 'cloudbank' && state.campaignId === 'retained') select.append(option('current', 'Current journal / recorded example'));
       for (const run of state.runs) {
-        select.append(option(run.run_id, `${new Date(run.started_at).toLocaleString()} · ${run.actions_completed} actions · ${run.terminal}${run.journal_pruned_at ? ' · pruned' : ''}`));
+        select.append(option(run.run_id, `${new Date(run.started_at).toLocaleString()} · ${run.actions_completed ?? 'Not recorded'} ${state.campaignId === 'retained' ? 'actions' : 'equivalent pairs'} · ${run.terminal}${run.journal_pruned_at ? ' · pruned' : ''}`));
       }
       if (!select.options.length) select.append(option('current', 'No runs recorded for this campaign'));
       const previous = remembered.get(`${state.estate}/${state.campaignId}`);
       state.runId = [...select.options].some(item => item.value === previous) ? previous : state.runs[0]?.run_id || 'current';
       select.value = state.runId; select.disabled = select.options.length < 2;
-      note.textContent = state.campaignId !== 'retained' ? 'NUMBER catalog pilot · Proposed 20 cases. No execution recorded. Discovery shows the selected estate workload, not the datatype test cases.' : `${state.name} · ${state.estate === 'cloudbank' ? 'Run evidence covers all eight services; Discovery shows the chosen workload. ' : ''}Convergence covers all indexed runs in this estate. ${state.runs.length ? 'Latest 100 runs available in the selector.' : 'No indexed history yet.'}`;
+      note.textContent = state.campaignId !== 'retained' ? 'NUMBER catalog pilot · 20 cases on each database. Run figures come from the selected engine journal. Discovery shows the selected estate workload, not the datatype test cases.' : `${state.name} · ${state.estate === 'cloudbank' ? 'Run evidence covers all eight services; Discovery shows the chosen workload. ' : ''}Convergence covers all indexed runs in this estate. ${state.runs.length ? 'Latest 100 runs available in the selector.' : 'No indexed history yet.'}`;
       emit();
     } catch (error) {
       if (request !== sequence) return;
@@ -65,5 +73,5 @@
   });
   select.addEventListener('change', () => setRun(select.value));
   document.getElementById('refresh-run-list').addEventListener('click', refresh);
-  window.LightyearContext = { state, query, setEstate, setRun, refresh };
+  window.LightyearContext = { state, query, setEstate, setRun, refresh, updatePairedRun };
 })();

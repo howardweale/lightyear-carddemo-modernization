@@ -1,0 +1,26 @@
+{
+  "at": "2026-09-17T22:53:19.642650+00:00",
+  "authorization_sha256": "f280e3bae3fd74d82483b81cc2b425f53c3fbff3e9a0d275dc820c66a94f28df",
+  "cleanup": {
+    "complete": true,
+    "resources": {
+      "alloydb": "stopped",
+      "firewall": "deleted",
+      "vm": "deleted"
+    }
+  },
+  "content_sha256": "5a7a230a076c807a36e63cfcd4d3cf54ae30d65e7a74ceae9b696bd202c169bd",
+  "evidence_class": "native-database-observed",
+  "journal_head_sha256": "41905bc25f82a75013ed4a639556a7065be31339f968e83523b8499c090058db",
+  "matched": 0,
+  "record_type": "paired-campaign-summary",
+  "run_id": "number-dbe42bd3d4114de9aa10b9c4877f1051",
+  "signature": {
+    "algorithm": "Ed25519",
+    "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+    "value": "PTNmd6+YJ0FNieME+GZO0ZMb4HOG7W1MwaF9RXqjCfvbcNbncKdSr39RvffCcfAKi2XDuXyhPPQH6iaThIyjDw=="
+  },
+  "source_completed": 0,
+  "status": "failed",
+  "target_completed": 0
+}

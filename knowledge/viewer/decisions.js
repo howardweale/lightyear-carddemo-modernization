@@ -61,7 +61,7 @@
   function renderItems() {
     if (window.LightyearContext.state.campaignId !== 'retained') {
       byId('decision-count').textContent = '';
-      byId('decision-items').replaceChildren(node('p', 'Campaign decisions are not connected yet. Review the proposed scope and blockers above.', 'decision-empty'));
+      byId('decision-items').replaceChildren(node('p', 'Use the campaign authorization above to accept database execution terms. Normalization approvals belong to the retained estate workflow.', 'decision-empty'));
       return;
     }
     const scoped = state.items.filter(matchesEstate);
@@ -232,7 +232,7 @@
     byId('decision-events').replaceChildren(); byId('decision-runs').replaceChildren();
     renderItems();
     byId('operator-sign-in').disabled = !state.enabled || (window.LightyearContext.state.campaignId !== 'retained' || estateFor(authorityWorkload) !== window.LightyearContext.state.estate);
-    if (window.LightyearContext.state.campaignId !== 'retained') message('Campaign authorization is not implemented yet. Existing normalization approvals do not authorize database execution or spending.');
+    if (window.LightyearContext.state.campaignId !== 'retained') message('Campaign authorization uses its own operator credential above. Existing normalization approvals do not authorize database execution or spending.');
     else if (state.enabled && (window.LightyearContext.state.campaignId !== 'retained' || estateFor(authorityWorkload) !== window.LightyearContext.state.estate)) message('The configured decision authority belongs to another estate. Selecting an estate does not grant signing authority.');
     else if (state.enabled) message('Review the selected estate decision. Approvals are current authority, not a historical run status.');
     refresh();

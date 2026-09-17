@@ -1,0 +1,351 @@
+{
+  "events": [
+    {
+      "at": "2026-09-17T22:12:29.513227+00:00",
+      "content_sha256": "6e7c75c0e1307be53c26a7647df729f758fcc3a9cdebe09cd3fb82a402c24d54",
+      "payload": {
+        "content_sha256": "f45d0e94d499560b8bf1196a110d3813da6376f06d2548c8066758415a73a821",
+        "event_type": "started",
+        "message": "Detached engine accepted the signed campaign authorization.",
+        "plan_sha256": "d9791a70980b0150f380815fab3c145ed12c0cf3f594aa4efa8137f73d6e7c16",
+        "previous_event_sha256": null,
+        "run_id": "number-43a2c76cd0a640999f6999e43dc05ef1",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "myafBpZLWuHRIfsqsqzZ9Y4TvVqqA6ckn1HAU2kliQf+Q19fPX2Eg7Dzkvxw14AaGkrCeIqn3Fb/sbTfJ5oNAA=="
+        }
+      },
+      "previous_sha256": null,
+      "sequence": 1,
+      "type": "started"
+    },
+    {
+      "at": "2026-09-17T22:12:30.776207+00:00",
+      "content_sha256": "b1fa1a051e9a3a8cfebb4eca5309d1dc1435c72f96f4df0ff98bfdaaae23b9c4",
+      "payload": {
+        "content_sha256": "d5545fe69c09c9aa3270f6bcf92abab68dfab7f67245e1239c44c687ec226364",
+        "event_type": "resource-state",
+        "plan_sha256": "d9791a70980b0150f380815fab3c145ed12c0cf3f594aa4efa8137f73d6e7c16",
+        "previous_event_sha256": "6e7c75c0e1307be53c26a7647df729f758fcc3a9cdebe09cd3fb82a402c24d54",
+        "run_id": "number-43a2c76cd0a640999f6999e43dc05ef1",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "05EPCqr1S7QDtgaQT+36pYpGigJe+GK3w4vBuSSzTxfWS52/B83MEeT2ifqhh81V1+utJMfaydUFmWPO5Vx3CA=="
+        },
+        "state": {
+          "alloydb_before": "STOPPED",
+          "alloydb_name": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/cloudbank-ms71-alloydb/instances/primary",
+          "alloydb_start_requested": false,
+          "firewall": "ly-number-43a2c76cd0a640999f69-iap",
+          "firewall_create_requested": false,
+          "run_id": "number-43a2c76cd0a640999f6999e43dc05ef1",
+          "vm": "ly-number-43a2c76cd0a640999f69",
+          "vm_create_requested": false,
+          "zone": "us-west1-a"
+        }
+      },
+      "previous_sha256": "6e7c75c0e1307be53c26a7647df729f758fcc3a9cdebe09cd3fb82a402c24d54",
+      "sequence": 2,
+      "type": "resource-state"
+    },
+    {
+      "at": "2026-09-17T22:12:33.687479+00:00",
+      "content_sha256": "d0a7761f8c4dee8f16d1ecf505e3227684a9a1b455073c3e875067e738d39253",
+      "payload": {
+        "content_sha256": "21c5db47f4ce9738c8aafe7ca2e09c92414ea4bfab15b059c8cea81dc8249dc2",
+        "event_type": "stage",
+        "message": "Resuming the bound AlloyDB primary and preparing an owned runner.",
+        "plan_sha256": "d9791a70980b0150f380815fab3c145ed12c0cf3f594aa4efa8137f73d6e7c16",
+        "previous_event_sha256": "b1fa1a051e9a3a8cfebb4eca5309d1dc1435c72f96f4df0ff98bfdaaae23b9c4",
+        "run_id": "number-43a2c76cd0a640999f6999e43dc05ef1",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "pAnt2c8kea7nCCuFHQnPSnaONwImX03DJSbX6qmCYumN24t1y/iIhBZ69gvFBquGvD2fNPMmvuKHUoT4NAqLDA=="
+        },
+        "stage": "environment-start"
+      },
+      "previous_sha256": "b1fa1a051e9a3a8cfebb4eca5309d1dc1435c72f96f4df0ff98bfdaaae23b9c4",
+      "sequence": 3,
+      "type": "stage"
+    },
+    {
+      "at": "2026-09-17T22:12:33.699814+00:00",
+      "content_sha256": "0fa887634c7b693d46cd020daef323e2e3fa0d4664f6382adaa8f7d1d95b7964",
+      "payload": {
+        "content_sha256": "8c3adb5a7f2ed47194656508ac8c67420f273cfd117c91827bb64bf47e170108",
+        "event_type": "resource-state",
+        "plan_sha256": "d9791a70980b0150f380815fab3c145ed12c0cf3f594aa4efa8137f73d6e7c16",
+        "previous_event_sha256": "d0a7761f8c4dee8f16d1ecf505e3227684a9a1b455073c3e875067e738d39253",
+        "run_id": "number-43a2c76cd0a640999f6999e43dc05ef1",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "k69J+xeQIPnkzQIneSHwHTmqyjeHg06tZGqBSIXBZeDBbGuvnllssdNWvjob29aT/W20lPYib0c7zxtJycG9Bg=="
+        },
+        "state": {
+          "alloydb_before": "STOPPED",
+          "alloydb_name": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/cloudbank-ms71-alloydb/instances/primary",
+          "alloydb_start_requested": true,
+          "firewall": "ly-number-43a2c76cd0a640999f69-iap",
+          "firewall_create_requested": false,
+          "run_id": "number-43a2c76cd0a640999f6999e43dc05ef1",
+          "vm": "ly-number-43a2c76cd0a640999f69",
+          "vm_create_requested": false,
+          "zone": "us-west1-a"
+        }
+      },
+      "previous_sha256": "d0a7761f8c4dee8f16d1ecf505e3227684a9a1b455073c3e875067e738d39253",
+      "sequence": 4,
+      "type": "resource-state"
+    },
+    {
+      "at": "2026-09-17T22:12:35.302954+00:00",
+      "content_sha256": "b5b0c2af9f2465777a466af4808cfe52dea1dd5dab7b1e5775be0bf3f044ab94",
+      "payload": {
+        "content_sha256": "ffb4d75cbbc5b874dac564ea73032b3cfcf13a6bec112fc426854147186ef962",
+        "event_type": "resource-state",
+        "plan_sha256": "d9791a70980b0150f380815fab3c145ed12c0cf3f594aa4efa8137f73d6e7c16",
+        "previous_event_sha256": "0fa887634c7b693d46cd020daef323e2e3fa0d4664f6382adaa8f7d1d95b7964",
+        "run_id": "number-43a2c76cd0a640999f6999e43dc05ef1",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "cHaSZ715ylGzLHL+1aFkfQShS0dZ+iNkY6c84W0Ga3iJnptJGmkdqTDNQAigG8/l+IUhr5MXRZ3Ph+ZjapPBCg=="
+        },
+        "state": {
+          "alloydb_before": "STOPPED",
+          "alloydb_name": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/cloudbank-ms71-alloydb/instances/primary",
+          "alloydb_start_requested": true,
+          "firewall": "ly-number-43a2c76cd0a640999f69-iap",
+          "firewall_create_requested": true,
+          "run_id": "number-43a2c76cd0a640999f6999e43dc05ef1",
+          "vm": "ly-number-43a2c76cd0a640999f69",
+          "vm_create_requested": false,
+          "zone": "us-west1-a"
+        }
+      },
+      "previous_sha256": "0fa887634c7b693d46cd020daef323e2e3fa0d4664f6382adaa8f7d1d95b7964",
+      "sequence": 5,
+      "type": "resource-state"
+    },
+    {
+      "at": "2026-09-17T22:12:46.039891+00:00",
+      "content_sha256": "58b3e0e9e1de60c37ce918075b82ac4ead5ba8e6a61d3ac3fa291365250be533",
+      "payload": {
+        "content_sha256": "c7340acb5cca4796da8fd5941937085d1832b6ef88501aa4dac0b8e39355d633",
+        "event_type": "resource-state",
+        "plan_sha256": "d9791a70980b0150f380815fab3c145ed12c0cf3f594aa4efa8137f73d6e7c16",
+        "previous_event_sha256": "b5b0c2af9f2465777a466af4808cfe52dea1dd5dab7b1e5775be0bf3f044ab94",
+        "run_id": "number-43a2c76cd0a640999f6999e43dc05ef1",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "2baiC0omiPnCpTArzFHT8Nad/yHZjgt5MkhkJtWOcWxEGWUzE4nak+0J3MNX6/SN7JygFHGcCCzf5/VpwVV5CA=="
+        },
+        "state": {
+          "alloydb_before": "STOPPED",
+          "alloydb_name": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/cloudbank-ms71-alloydb/instances/primary",
+          "alloydb_start_requested": true,
+          "firewall": "ly-number-43a2c76cd0a640999f69-iap",
+          "firewall_create_requested": true,
+          "run_id": "number-43a2c76cd0a640999f6999e43dc05ef1",
+          "vm": "ly-number-43a2c76cd0a640999f69",
+          "vm_create_requested": true,
+          "zone": "us-west1-a"
+        }
+      },
+      "previous_sha256": "b5b0c2af9f2465777a466af4808cfe52dea1dd5dab7b1e5775be0bf3f044ab94",
+      "sequence": 6,
+      "type": "resource-state"
+    },
+    {
+      "at": "2026-09-17T22:13:34.878016+00:00",
+      "content_sha256": "8876f66f02e4067c433d4ea5628e9b69942925238c8f03ba50643b66b4222ffb",
+      "payload": {
+        "content_sha256": "b6003d527557dc3e67c239944e000f807b571c99ba0a2f2be5e6dd6512e214f8",
+        "event_type": "stage",
+        "message": "Installing SQL clients and the authorized Oracle image on the owned runner.",
+        "plan_sha256": "d9791a70980b0150f380815fab3c145ed12c0cf3f594aa4efa8137f73d6e7c16",
+        "previous_event_sha256": "58b3e0e9e1de60c37ce918075b82ac4ead5ba8e6a61d3ac3fa291365250be533",
+        "run_id": "number-43a2c76cd0a640999f6999e43dc05ef1",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "s6nb2QrxWWKI7q0GY3696wBdOwkPUTOU/cscSO1bi7f/Lvsy5oCGzv8bH904ABxz5kOhv1h2GINZw5WfhJdFAA=="
+        },
+        "stage": "oracle-install"
+      },
+      "previous_sha256": "58b3e0e9e1de60c37ce918075b82ac4ead5ba8e6a61d3ac3fa291365250be533",
+      "sequence": 7,
+      "type": "stage"
+    },
+    {
+      "at": "2026-09-17T22:15:15.936528+00:00",
+      "content_sha256": "c9b7cb9616bb3154e1b54789e79b53bd57c27fe8bc84ecfcd2bc33be26f8ba8a",
+      "payload": {
+        "content_sha256": "a253cb56b4f10d7f6f837a4b1e1d6bc7d311a15efffcb9b8109de4130989fc65",
+        "event_type": "stage",
+        "message": "Waiting for the Oracle container health check; no cases have executed.",
+        "plan_sha256": "d9791a70980b0150f380815fab3c145ed12c0cf3f594aa4efa8137f73d6e7c16",
+        "previous_event_sha256": "8876f66f02e4067c433d4ea5628e9b69942925238c8f03ba50643b66b4222ffb",
+        "run_id": "number-43a2c76cd0a640999f6999e43dc05ef1",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "XxF16SiM3HnYSRARpadWTQsAAJHXyhAP6QcXxG2ZC86xH1WMb6xSKCl3XOyD+GHl+v3w3uprNwgZHqdJET4+CQ=="
+        },
+        "stage": "oracle-startup"
+      },
+      "previous_sha256": "8876f66f02e4067c433d4ea5628e9b69942925238c8f03ba50643b66b4222ffb",
+      "sequence": 8,
+      "type": "stage"
+    },
+    {
+      "at": "2026-09-17T22:20:29.187207+00:00",
+      "content_sha256": "735057967d4165d21a709211f9eeba7e8fd8eaf0347ab39fef4fcf2a0362f2e2",
+      "payload": {
+        "content_sha256": "edb106447c67b31260f98a07e606ddf261cd4b44e435afa1fae0f1f6afca4410",
+        "event_type": "stage",
+        "message": "Verifying fresh source and target database identities.",
+        "plan_sha256": "d9791a70980b0150f380815fab3c145ed12c0cf3f594aa4efa8137f73d6e7c16",
+        "previous_event_sha256": "c9b7cb9616bb3154e1b54789e79b53bd57c27fe8bc84ecfcd2bc33be26f8ba8a",
+        "run_id": "number-43a2c76cd0a640999f6999e43dc05ef1",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "eWbi/FDVYPvlsABbaktbq+DVKe1EmMmbS9MCUzT7I/Cl+9D9Z6kGEgvurF+Ug21aBeUpbZFsxpICvq4FZUR5Dw=="
+        },
+        "stage": "identity"
+      },
+      "previous_sha256": "c9b7cb9616bb3154e1b54789e79b53bd57c27fe8bc84ecfcd2bc33be26f8ba8a",
+      "sequence": 9,
+      "type": "stage"
+    },
+    {
+      "at": "2026-09-17T22:20:34.700615+00:00",
+      "content_sha256": "a216ea895ee08dae46bb9d20093c8c482add79b69afb07d2d93b08f1cc586a67",
+      "payload": {
+        "content_sha256": "234afd4a3451e88499413dc853427721a7709f75837c58f0a7c95b3b60a28d55",
+        "event_type": "error",
+        "message": "oracle SQL client failed (exit 211; ORA-02003); raw diagnostics are not published",
+        "plan_sha256": "d9791a70980b0150f380815fab3c145ed12c0cf3f594aa4efa8137f73d6e7c16",
+        "previous_event_sha256": "735057967d4165d21a709211f9eeba7e8fd8eaf0347ab39fef4fcf2a0362f2e2",
+        "run_id": "number-43a2c76cd0a640999f6999e43dc05ef1",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "EvdsN+tGV63BpQ486XCp8hES0wWPD/cNenLdKmVEeO9eHfhOW+ttz31KtyWOKm5HSuk2gthu43Urobo1HsctAw=="
+        }
+      },
+      "previous_sha256": "735057967d4165d21a709211f9eeba7e8fd8eaf0347ab39fef4fcf2a0362f2e2",
+      "sequence": 10,
+      "type": "error"
+    },
+    {
+      "at": "2026-09-17T22:20:34.711997+00:00",
+      "content_sha256": "25d30fd4d6b6ddccccd28ddcc2ac7f0622e09e173a58dd1a7236da85f6cc97e4",
+      "payload": {
+        "content_sha256": "603e267e1e3a2b9acd32479584dd844b250790bb9dbe253c569c5adfbf7acbbe",
+        "event_type": "stage",
+        "message": "Restoring stopped resources and deleting owned runner resources.",
+        "plan_sha256": "d9791a70980b0150f380815fab3c145ed12c0cf3f594aa4efa8137f73d6e7c16",
+        "previous_event_sha256": "a216ea895ee08dae46bb9d20093c8c482add79b69afb07d2d93b08f1cc586a67",
+        "run_id": "number-43a2c76cd0a640999f6999e43dc05ef1",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "0B1AlTKS/cPAT3T33W0dh1wR+dscra3WzylA58cZBgDaAywe3EOk51dNC3vF0a2KG6W84mmYZYH+qcQFytfRAA=="
+        },
+        "stage": "cleanup"
+      },
+      "previous_sha256": "a216ea895ee08dae46bb9d20093c8c482add79b69afb07d2d93b08f1cc586a67",
+      "sequence": 11,
+      "type": "stage"
+    },
+    {
+      "at": "2026-09-17T22:23:49.930443+00:00",
+      "content_sha256": "e763fc1821322ca5a6a796179dce1e093757af1baf7bda6558d108683b4e92e9",
+      "payload": {
+        "content_sha256": "29d548526d1a69cc37eb1e1c3fe5840d9a2aef76fd2ff7dd96a3b273c375477d",
+        "event_type": "resource-state",
+        "plan_sha256": "d9791a70980b0150f380815fab3c145ed12c0cf3f594aa4efa8137f73d6e7c16",
+        "previous_event_sha256": "25d30fd4d6b6ddccccd28ddcc2ac7f0622e09e173a58dd1a7236da85f6cc97e4",
+        "run_id": "number-43a2c76cd0a640999f6999e43dc05ef1",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "DWlfoDkrnduabR4J4HX8DjEckSYee8ee+D3dC0T0PAKJyJNkbeMsCuH90s0zVj6k21cIH77T4v19FwobIP/JDA=="
+        },
+        "state": {
+          "alloydb_before": "STOPPED",
+          "alloydb_name": "projects/lightyear-ms67-nonproduction/locations/us-west1/clusters/cloudbank-ms71-alloydb/instances/primary",
+          "alloydb_start_requested": true,
+          "cleanup": {
+            "alloydb": "stopped",
+            "firewall": "deleted",
+            "vm": "deleted"
+          },
+          "firewall": "ly-number-43a2c76cd0a640999f69-iap",
+          "firewall_create_requested": true,
+          "run_id": "number-43a2c76cd0a640999f6999e43dc05ef1",
+          "vm": "ly-number-43a2c76cd0a640999f69",
+          "vm_create_requested": true,
+          "zone": "us-west1-a"
+        }
+      },
+      "previous_sha256": "25d30fd4d6b6ddccccd28ddcc2ac7f0622e09e173a58dd1a7236da85f6cc97e4",
+      "sequence": 12,
+      "type": "resource-state"
+    },
+    {
+      "at": "2026-09-17T22:23:49.939240+00:00",
+      "content_sha256": "17c71f3b311474301116ba773362fdcd3fa434ff299754d9cbcee259f630f3d1",
+      "payload": {
+        "cleanup": {
+          "complete": true,
+          "resources": {
+            "alloydb": "stopped",
+            "firewall": "deleted",
+            "vm": "deleted"
+          }
+        },
+        "content_sha256": "52e9e1ac7de68c8d08283e5349053797f7fdf0e32418f36a143c493dc91c7603",
+        "event_type": "cleanup",
+        "plan_sha256": "d9791a70980b0150f380815fab3c145ed12c0cf3f594aa4efa8137f73d6e7c16",
+        "previous_event_sha256": "e763fc1821322ca5a6a796179dce1e093757af1baf7bda6558d108683b4e92e9",
+        "run_id": "number-43a2c76cd0a640999f6999e43dc05ef1",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "1wICMMhs5d+a9rwZV9kb3SIpJledMqDZdC3jmo9Cn/NDJiSOBtDaCaVy0AMS7n7F/9AODaoJo6vVLlcsar4jCA=="
+        }
+      },
+      "previous_sha256": "e763fc1821322ca5a6a796179dce1e093757af1baf7bda6558d108683b4e92e9",
+      "sequence": 13,
+      "type": "cleanup"
+    },
+    {
+      "at": "2026-09-17T22:23:49.952430+00:00",
+      "content_sha256": "569004a032ecda3ae31ab1f2a43f3e97c79fd73d81ab2a08649ac7bc3654b163",
+      "payload": {
+        "content_sha256": "1d61eae55b4900678baf8be671b04b4f2befa37215b047bef5fb73bcc45c3f8a",
+        "event_type": "terminal",
+        "plan_sha256": "d9791a70980b0150f380815fab3c145ed12c0cf3f594aa4efa8137f73d6e7c16",
+        "previous_event_sha256": "17c71f3b311474301116ba773362fdcd3fa434ff299754d9cbcee259f630f3d1",
+        "run_id": "number-43a2c76cd0a640999f6999e43dc05ef1",
+        "signature": {
+          "algorithm": "Ed25519",
+          "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+          "value": "q8Ff6zaaaQ8uR2h6iHzIgYKOIHXkUKV6Y6xNAiLy4ZyzUvRP26drY6EqbaQGCmoExMAu5tpNgMJe9+zQjaDACw=="
+        },
+        "status": "failed"
+      },
+      "previous_sha256": "17c71f3b311474301116ba773362fdcd3fa434ff299754d9cbcee259f630f3d1",
+      "sequence": 14,
+      "type": "terminal"
+    }
+  ]
+}

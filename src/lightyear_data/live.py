@@ -12,7 +12,8 @@ import uuid
 from pathlib import Path
 from typing import Any, Callable
 
-from .contracts import SCHEMA_VERSION, seal
+from .contracts import SCHEMA_VERSION, seal, content_hash
+from lightyear_common.evidence import evidence_floor
 from .postgres import PostgreSQLAdapter, TargetAdapter
 from .oracle import OracleAdapter
 
@@ -171,9 +172,23 @@ def aggregate_receipts(receipts: list[dict[str, Any]]) -> dict[str, Any]:
     targets = {receipt.get("target", "unknown"): {
         "status": receipt.get("status"), "content_sha256": receipt.get("content_sha256"),
         "adapter": receipt.get("adapter"), "image_identity": receipt.get("image_identity"),
+        "evidence_class": receipt.get("evidence_class", "simulated"),
     } for receipt in receipts}
     required = {"postgresql-16", "oracle-26ai-free"}
     errors = []
+    if len(receipts) != len(targets):
+        errors.append("duplicate-target-receipt")
+    if any(receipt.get("content_sha256") != content_hash(receipt) for receipt in receipts):
+        errors.append("target-receipt-integrity-invalid")
+    classes = [receipt.get("evidence_class") for receipt in receipts]
+    allowed = ("simulated", "live-container-target-equivalence")
+    if any(value not in allowed for value in classes):
+        errors.append("target-evidence-class-missing-or-unsupported")
+    floor = evidence_floor(*(value if value in allowed else None for value in classes), levels=allowed)
+    if floor != "live-container-target-equivalence":
+        errors.append("live-target-evidence-required")
+    observed = floor == "live-container-target-equivalence" and not any(
+        error in errors for error in ("target-receipt-integrity-invalid", "target-evidence-class-missing-or-unsupported"))
     if set(targets) != required:
         errors.append("required-target-set-incomplete")
     if any(item.get("status") != "passed" for item in targets.values()):
@@ -181,7 +196,7 @@ def aggregate_receipts(receipts: list[dict[str, Any]]) -> dict[str, Any]:
     return seal({
         "schema_version": SCHEMA_VERSION,
         "receipt_type": "factorydark-multi-target-data-equivalence",
-        "evidence_class": "live-container-multi-target-equivalence",
+        "evidence_class": "live-container-multi-target-equivalence" if observed else "simulated",
         "workload": "carddemo-authorization-authfrds",
         "status": "passed" if not errors else "failed",
         "production_ready": False,

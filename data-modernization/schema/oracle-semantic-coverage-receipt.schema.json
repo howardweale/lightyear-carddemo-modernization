@@ -4,6 +4,8 @@
   "title": "LIGHTYEAR Oracle semantic coverage receipt",
   "type": "object",
   "required": [
+    "catalogued_behavior_count",
+    "coverage_statement",
     "schema_version",
     "receipt_type",
     "catalog_sha256",
@@ -25,6 +27,8 @@
     "content_sha256"
   ],
   "properties": {
+    "catalogued_behavior_count": {"const": 500},
+    "coverage_statement": {"type": "string", "minLength": 1},
     "schema_version": {"const": "1.0"},
     "receipt_type": {"const": "lightyear-oracle-semantic-coverage"},
     "domain_count": {"const": 10},

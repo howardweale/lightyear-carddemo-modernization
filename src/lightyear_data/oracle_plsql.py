@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any, Mapping
 
 from .contracts import content_hash, seal
+from .coverage_reporting import seal_coverage
 from .oracle_core_sql import (
     CORE_DOMAIN_IDS,
     build_oracle_core_sql_artifacts,
@@ -354,7 +355,7 @@ def build_plsql_receipt(project_root: Path, corpus: Mapping[str, Any]) -> dict[s
         str(item["id"]) for item in catalog["behaviors"] if item["domain_id"] == PLSQL_DOMAIN_ID
     }
     bootstrap_ids = {str(item["behavior_id"]) for item in catalog["bootstrap_bindings"]}
-    return seal({
+    return seal_coverage({
         "schema_version": "1.0",
         "receipt_type": "lightyear-oracle-plsql-coverage",
         "release": RELEASE,
@@ -435,6 +436,8 @@ def plsql_matrix_markdown(receipt: Mapping[str, Any], corpus: Mapping[str, Any])
 
 Release {RELEASE} executes the PL/SQL tranche of the MS #50 Oracle Semantic Coverage Program.
 The evidence is deterministic bounded-model evidence, not native Oracle observation.
+
+{receipt["coverage_statement"]}
 
 | Evidence level | Behaviors | Cases / evidence records |
 |---|---:|---:|

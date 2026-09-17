@@ -1,0 +1,54 @@
+name: Oracle reporting and evidence boundaries
+on:
+  pull_request:
+    paths:
+      - 'src/lightyear_common/evidence.py'
+      - 'src/lightyear_audit/policy.py'
+      - 'src/lightyear_data/**'
+      - 'src/lightyear_runtime/**'
+      - 'src/lightyear_readiness/**'
+      - 'src/lightyear_workflow/**'
+      - 'data-modernization/oracle-*/**'
+      - 'data-modernization/schema/oracle-*.json'
+      - 'tests/test_oracle_roadmap.py'
+      - '.github/workflows/evidence-roadmap.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'src/lightyear_common/evidence.py'
+      - 'src/lightyear_audit/policy.py'
+      - 'src/lightyear_data/**'
+      - 'src/lightyear_runtime/**'
+      - 'src/lightyear_readiness/**'
+      - 'src/lightyear_workflow/**'
+      - 'data-modernization/oracle-*/**'
+      - 'tests/test_oracle_roadmap.py'
+      - '.github/workflows/evidence-roadmap.yml'
+permissions:
+  contents: read
+jobs:
+  local-contracts:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Test reporting, mock native client and evidence floors
+        env:
+          PYTHONPATH: src
+          PYTHONUTF8: '1'
+        run: python -m unittest tests.test_oracle_roadmap tests.test_oracle_native_execution_gate tests.test_multi_target_data tests.test_batch_pack tests.test_zosmf_reader tests.test_zosmf_adapter -v
+      - name: Verify final catalog wording and native materialization
+        env:
+          PYTHONPATH: src
+          PYTHONUTF8: '1'
+        run: |
+          python -m lightyear_data verify-oracle-schema-structured-coverage --project-root .
+          python -m lightyear_data.oracle_number_native verify --root .
+          python -m lightyear_data verify-oracle-native-execution-gate --project-root .

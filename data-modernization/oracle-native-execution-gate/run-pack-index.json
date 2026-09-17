@@ -88,7 +88,7 @@
       "database_lane": "19c",
       "domain_id": "types",
       "execution_status": "blocked-harness-and-authorized-database-required",
-      "materialized_harness_count": 0,
+      "materialized_harness_count": 20,
       "required_harness_count": 260
     },
     {
@@ -178,7 +178,7 @@
       "database_lane": "26ai",
       "domain_id": "types",
       "execution_status": "blocked-harness-and-authorized-database-required",
-      "materialized_harness_count": 0,
+      "materialized_harness_count": 20,
       "required_harness_count": 260
     }
   ],
@@ -189,10 +189,10 @@
     "path": "data-modernization/oracle-dialect-conformance/native-oracle-fixtures.sql",
     "reason": "fixture completion markers are not per-case native observations"
   },
-  "content_sha256": "425a12524e94e953d3fca2a74b964eeefb063fe844f21a1f9b986adf951f0359",
+  "content_sha256": "c443ccfb4c935bce5b2de885e8ce3954d7fb716cdc0fd0de14d6028dafe09b8c",
   "index_type": "lightyear-oracle-native-run-pack-index",
-  "manifest_sha256": "710e6b5f430db48f2cea3767507bd970bee70ed3cda0486fccbc88875c76780e",
-  "materialized_harness_count": 0,
+  "manifest_sha256": "0eee958550d47d6124e8e37251f0d37e71ca4a338c64ee610f78e5cac78c7159",
+  "materialized_harness_count": 40,
   "native_executed_case_count": 0,
   "release": "0.51.0",
   "required_native_case_execution_count": 4000,

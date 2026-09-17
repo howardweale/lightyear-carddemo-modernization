@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any, Mapping
 
 from .contracts import content_hash, seal
+from .coverage_reporting import seal_coverage
 from .oracle_core_sql import CORE_DOMAIN_IDS, build_oracle_core_sql_artifacts
 from .oracle_coverage import BEHAVIOR_DIMENSIONS, build_behavior_catalog
 from .oracle_plsql import build_oracle_plsql_artifacts, validate_oracle_plsql_artifacts
@@ -433,7 +434,7 @@ def build_transaction_cdc_receipt(project_root: Path, corpus: Mapping[str, Any])
         str(item["id"]) for item in catalog["behaviors"] if item["domain_id"] in DOMAIN_IDS
     }
     bootstrap_ids = {str(item["behavior_id"]) for item in catalog["bootstrap_bindings"]}
-    return seal({
+    return seal_coverage({
         "schema_version": "1.0",
         "receipt_type": "lightyear-oracle-transaction-cdc-coverage",
         "release": RELEASE,
@@ -559,6 +560,8 @@ def transaction_cdc_matrix_markdown(receipt: Mapping[str, Any], corpus: Mapping[
 Release {RELEASE} executes the transaction and operations tranche of the MS #50 Oracle Semantic
 Coverage Program. The evidence is deterministic bounded-model evidence, not native Oracle
 observation.
+
+{receipt["coverage_statement"]}
 
 | Evidence level | Behaviors | Cases / evidence records |
 |---|---:|---:|

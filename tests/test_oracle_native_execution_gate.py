@@ -11,7 +11,7 @@ import unittest
 from collections import Counter
 from pathlib import Path
 
-from lightyear_data.contracts import seal, sign
+from lightyear_data.contracts import seal, sign, content_hash
 from lightyear_data.oracle_native_gate import (
     REQUIRED_DATABASE_IDENTITY_FIELDS,
     REQUIRED_SESSION_FIELDS,
@@ -30,7 +30,7 @@ HASH = "a" * 64
 def valid_partial_receipt() -> dict[str, object]:
     artifacts = build_oracle_native_gate_artifacts(ROOT)
     manifest = artifacts["native-case-manifest.json"]
-    case = manifest["cases"][0]
+    case = next(item for item in manifest["cases"] if item["case_id"] == "ORA-TYPE-001-CASE-01")
     payload: dict[str, object] = {
         "schema_version": "1.0",
         "receipt_type": "lightyear-oracle-native-execution-receipt",
@@ -75,8 +75,9 @@ def valid_partial_receipt() -> dict[str, object]:
                 "behavior_id": case["behavior_id"],
                 "status": "passed-native",
                 "bounded_expectation_sha256": case["bounded_expectation_sha256"],
-                "harness_sql_sha256": HASH,
-                "observed_result_sha256": HASH,
+                "harness_sql_sha256": case["native_lanes"][0]["harness_sql_sha256"],
+                "observations": {"arithmetic": "124.00"},
+                "observed_result_sha256": content_hash({"observed": {"arithmetic": "124.00"}}),
                 "diagnostic_codes": [],
                 "started_at": "2026-09-01T18:00:00Z",
                 "completed_at": "2026-09-01T18:00:01Z",
@@ -84,7 +85,7 @@ def valid_partial_receipt() -> dict[str, object]:
         ],
         "native_executed_case_count": 1,
         "native_passed_case_count": 1,
-        "native_verified_behavior_count": 1,
+        "native_verified_behavior_count": 0,
         "native_oracle_conformance": False,
         "target_equivalence_observed": False,
         "idempiere_application_equivalence": False,
@@ -114,7 +115,7 @@ class OracleNativeExecutionGateTests(unittest.TestCase):
         )
         self.assertTrue(
             all(
-                lane["harness_status"] == "required-not-materialized"
+                lane["harness_status"] in {"required-not-materialized", "materialized-not-executed"}
                 and lane["execution_status"] == "not-executed"
                 for item in manifest["cases"]
                 for lane in item["native_lanes"]
@@ -127,12 +128,12 @@ class OracleNativeExecutionGateTests(unittest.TestCase):
         receipt = artifacts["readiness.receipt.json"]
         self.assertEqual(20, index["batch_count"])
         self.assertEqual(4000, sum(item["case_count"] for item in index["batches"]))
-        self.assertEqual(0, index["materialized_harness_count"])
+        self.assertEqual(40, index["materialized_harness_count"])
         self.assertFalse(
             index["bootstrap_harness"]["eligible_as_catalog_native_case_evidence"]
         )
         self.assertEqual(
-            {"passed": 5, "blocked": 3},
+            {"passed": 5, "blocked": 2, "partial": 1},
             Counter(item["status"] for item in receipt["gates"]),
         )
         self.assertEqual(0, receipt["native_executed_case_count"])

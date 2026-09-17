@@ -10,6 +10,7 @@ from pathlib import Path
 from typing import Any, Mapping
 
 from .contracts import content_hash, seal
+from .coverage_reporting import seal_coverage
 from .oracle_coverage import BEHAVIOR_DIMENSIONS, build_behavior_catalog
 
 
@@ -394,7 +395,7 @@ def build_core_sql_receipt(project_root: Path, corpus: Mapping[str, Any]) -> dic
     core_ids = {item["id"] for item in catalog["behaviors"] if item["domain_id"] in CORE_DOMAIN_IDS}
     bootstrap_ids = {item["behavior_id"] for item in catalog["bootstrap_bindings"]}
     bounded_ids = core_ids | bootstrap_ids
-    return seal({
+    return seal_coverage({
         "schema_version": "1.0",
         "receipt_type": "lightyear-oracle-core-sql-coverage",
         "release": RELEASE,
@@ -454,6 +455,8 @@ def core_sql_matrix_markdown(receipt: Mapping[str, Any], corpus: Mapping[str, An
 
 Release {RELEASE} executes the first broad tranche of the MS #50 Oracle Semantic Coverage Program.
 The evidence is deterministic bounded-model evidence, not native Oracle observation.
+
+{receipt["coverage_statement"]}
 
 | Evidence level | Behaviors | Cases / evidence records |
 |---|---:|---:|

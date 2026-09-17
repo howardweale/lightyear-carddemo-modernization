@@ -46996,13 +46996,15 @@
           "database_lane": "19c",
           "execution_status": "not-executed",
           "harness_path": "cases/19c/ORA-TYPE-001-CASE-01.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "fd3b62ee0851cf73bc74803c3159b27ae56672c840e1e78c5125772a0251c155",
+          "harness_status": "materialized-not-executed"
         },
         {
           "database_lane": "26ai",
           "execution_status": "not-executed",
           "harness_path": "cases/26ai/ORA-TYPE-001-CASE-01.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "144a9718d5f2d2fd72d06f93e1247200d7c303d141b5209a0a471bf6321c2d42",
+          "harness_status": "materialized-not-executed"
         }
       ],
       "native_oracle_verified": false,
@@ -47023,13 +47025,15 @@
           "database_lane": "19c",
           "execution_status": "not-executed",
           "harness_path": "cases/19c/ORA-TYPE-001-CASE-02.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "30d5371cdc67725f6c9f5e86c5fafa909053efd0064ffd5795310e994bf8f278",
+          "harness_status": "materialized-not-executed"
         },
         {
           "database_lane": "26ai",
           "execution_status": "not-executed",
           "harness_path": "cases/26ai/ORA-TYPE-001-CASE-02.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "a8be6cdcf8102c2425cfc1e369f15626584e88c13b62b4adbdf3cbb857ff5dea",
+          "harness_status": "materialized-not-executed"
         }
       ],
       "native_oracle_verified": false,
@@ -47050,13 +47054,15 @@
           "database_lane": "19c",
           "execution_status": "not-executed",
           "harness_path": "cases/19c/ORA-TYPE-001-CASE-03.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "fcb55cad349e8d96856b9063ab8a86d8e841a09cd225b7d2c9a6701a082cf28e",
+          "harness_status": "materialized-not-executed"
         },
         {
           "database_lane": "26ai",
           "execution_status": "not-executed",
           "harness_path": "cases/26ai/ORA-TYPE-001-CASE-03.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "9c6c6f8379a37cb788513454b96c77d02be33ff1e7330f724db7a2596849a8d0",
+          "harness_status": "materialized-not-executed"
         }
       ],
       "native_oracle_verified": false,
@@ -47077,13 +47083,15 @@
           "database_lane": "19c",
           "execution_status": "not-executed",
           "harness_path": "cases/19c/ORA-TYPE-001-CASE-04.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "7ad027bb32422e1d4981d2c056978b8d26d837c7d0b7ae1c3709f082be8a98cf",
+          "harness_status": "materialized-not-executed"
         },
         {
           "database_lane": "26ai",
           "execution_status": "not-executed",
           "harness_path": "cases/26ai/ORA-TYPE-001-CASE-04.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "8e6b01b42bddff5ff852532dbadd9be769b4dfb771e7f3edb892c62ebaf18662",
+          "harness_status": "materialized-not-executed"
         }
       ],
       "native_oracle_verified": false,
@@ -47104,13 +47112,15 @@
           "database_lane": "19c",
           "execution_status": "not-executed",
           "harness_path": "cases/19c/ORA-TYPE-002-CASE-01.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "05afe6922ddcec85747e642b250bd5fcff3b63533997457a0f73db5599eeea1a",
+          "harness_status": "materialized-not-executed"
         },
         {
           "database_lane": "26ai",
           "execution_status": "not-executed",
           "harness_path": "cases/26ai/ORA-TYPE-002-CASE-01.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "aaa964c566b03e3b13b5cfc760614c50e349a1046741249385c3354b2474e1ed",
+          "harness_status": "materialized-not-executed"
         }
       ],
       "native_oracle_verified": false,
@@ -47131,13 +47141,15 @@
           "database_lane": "19c",
           "execution_status": "not-executed",
           "harness_path": "cases/19c/ORA-TYPE-002-CASE-02.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "cc0c4734621229346dac9ba0121ed8958e41a0510417d41f241b96be0b0c60b9",
+          "harness_status": "materialized-not-executed"
         },
         {
           "database_lane": "26ai",
           "execution_status": "not-executed",
           "harness_path": "cases/26ai/ORA-TYPE-002-CASE-02.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "3e46716457ffac81750ac233c1c381ef9506bc671bd852e907639dd3c6b76a70",
+          "harness_status": "materialized-not-executed"
         }
       ],
       "native_oracle_verified": false,
@@ -47158,13 +47170,15 @@
           "database_lane": "19c",
           "execution_status": "not-executed",
           "harness_path": "cases/19c/ORA-TYPE-002-CASE-03.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "b50fca7d2a26f17e7a4d234d2b18dfca56c3c69a4095fc313ab851afbf01263f",
+          "harness_status": "materialized-not-executed"
         },
         {
           "database_lane": "26ai",
           "execution_status": "not-executed",
           "harness_path": "cases/26ai/ORA-TYPE-002-CASE-03.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "8438619aa0cda872f8a59b59f65869480ae48b02af8515378b0b73153d3c40a0",
+          "harness_status": "materialized-not-executed"
         }
       ],
       "native_oracle_verified": false,
@@ -47185,13 +47199,15 @@
           "database_lane": "19c",
           "execution_status": "not-executed",
           "harness_path": "cases/19c/ORA-TYPE-002-CASE-04.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "a2f03040c59cc7d5846c7bf2f8d77668c8e083317c26b43ea1f6e46f987e742e",
+          "harness_status": "materialized-not-executed"
         },
         {
           "database_lane": "26ai",
           "execution_status": "not-executed",
           "harness_path": "cases/26ai/ORA-TYPE-002-CASE-04.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "0bdef8959d0b0be502c550a6b68d295df2c182dde0ed51a75d174e552aa62408",
+          "harness_status": "materialized-not-executed"
         }
       ],
       "native_oracle_verified": false,
@@ -47212,13 +47228,15 @@
           "database_lane": "19c",
           "execution_status": "not-executed",
           "harness_path": "cases/19c/ORA-TYPE-003-CASE-01.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "e683d4dd79229470313dd0286ed6bac87ac7b6ddcf10173879c9822a8c574f13",
+          "harness_status": "materialized-not-executed"
         },
         {
           "database_lane": "26ai",
           "execution_status": "not-executed",
           "harness_path": "cases/26ai/ORA-TYPE-003-CASE-01.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "04eff1b2618099e61ce29b25003943962df31cc4ac95c00c703bbad71cf74132",
+          "harness_status": "materialized-not-executed"
         }
       ],
       "native_oracle_verified": false,
@@ -47239,13 +47257,15 @@
           "database_lane": "19c",
           "execution_status": "not-executed",
           "harness_path": "cases/19c/ORA-TYPE-003-CASE-02.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "8cc27c17aaf0790787ccf9b028ee526b568d1b3f11e1dd165e861b0737d78633",
+          "harness_status": "materialized-not-executed"
         },
         {
           "database_lane": "26ai",
           "execution_status": "not-executed",
           "harness_path": "cases/26ai/ORA-TYPE-003-CASE-02.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "c049d479b4a15089822e3fcf7f94db0f25c137d504c761c9b71e0326a008dc43",
+          "harness_status": "materialized-not-executed"
         }
       ],
       "native_oracle_verified": false,
@@ -47266,13 +47286,15 @@
           "database_lane": "19c",
           "execution_status": "not-executed",
           "harness_path": "cases/19c/ORA-TYPE-003-CASE-03.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "729d7f755eae2815a87386b91a297892e37702c3a87bc7495fb7152a51b366a6",
+          "harness_status": "materialized-not-executed"
         },
         {
           "database_lane": "26ai",
           "execution_status": "not-executed",
           "harness_path": "cases/26ai/ORA-TYPE-003-CASE-03.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "4b667b5067f54c7469dd84b41597dc5d2c016870ce9124b4139a3145182c0e7e",
+          "harness_status": "materialized-not-executed"
         }
       ],
       "native_oracle_verified": false,
@@ -47293,13 +47315,15 @@
           "database_lane": "19c",
           "execution_status": "not-executed",
           "harness_path": "cases/19c/ORA-TYPE-003-CASE-04.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "bd43190c1f54e9547d14af1ec54039f59c19d3ab5b54e1ad39f3cc3486bd4397",
+          "harness_status": "materialized-not-executed"
         },
         {
           "database_lane": "26ai",
           "execution_status": "not-executed",
           "harness_path": "cases/26ai/ORA-TYPE-003-CASE-04.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "17e87dd977bb3e107fb707b5cd4ddadd7f038c3c764a52e8ce1e61c67a9d1ab8",
+          "harness_status": "materialized-not-executed"
         }
       ],
       "native_oracle_verified": false,
@@ -47320,13 +47344,15 @@
           "database_lane": "19c",
           "execution_status": "not-executed",
           "harness_path": "cases/19c/ORA-TYPE-004-CASE-01.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "791af8d7ae3ab3cdf74583ec6c124d7554c150cf74b4236d99d21921c7aa23af",
+          "harness_status": "materialized-not-executed"
         },
         {
           "database_lane": "26ai",
           "execution_status": "not-executed",
           "harness_path": "cases/26ai/ORA-TYPE-004-CASE-01.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "2c1783c682fbc1df71e4d0cabca8fb9a2eaae452d9815d55924c57f0214199b4",
+          "harness_status": "materialized-not-executed"
         }
       ],
       "native_oracle_verified": false,
@@ -47347,13 +47373,15 @@
           "database_lane": "19c",
           "execution_status": "not-executed",
           "harness_path": "cases/19c/ORA-TYPE-004-CASE-02.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "76dd4ffcd048d9f12c3717805e68c4e46a66dca0efdb752ddc32e9b358d76b71",
+          "harness_status": "materialized-not-executed"
         },
         {
           "database_lane": "26ai",
           "execution_status": "not-executed",
           "harness_path": "cases/26ai/ORA-TYPE-004-CASE-02.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "f4ef8476c3deff9f733c00cbc78d893db5c9921924b4623535db072e21b758a9",
+          "harness_status": "materialized-not-executed"
         }
       ],
       "native_oracle_verified": false,
@@ -47374,13 +47402,15 @@
           "database_lane": "19c",
           "execution_status": "not-executed",
           "harness_path": "cases/19c/ORA-TYPE-004-CASE-03.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "ffdbc224b7a4a23b1f29e49ffeceec427c5b50327cc63931d7d7eff47bc80f62",
+          "harness_status": "materialized-not-executed"
         },
         {
           "database_lane": "26ai",
           "execution_status": "not-executed",
           "harness_path": "cases/26ai/ORA-TYPE-004-CASE-03.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "f239df1dfdb04b44bc6435d70585112829157cc407caf131a60299452a22e50d",
+          "harness_status": "materialized-not-executed"
         }
       ],
       "native_oracle_verified": false,
@@ -47401,13 +47431,15 @@
           "database_lane": "19c",
           "execution_status": "not-executed",
           "harness_path": "cases/19c/ORA-TYPE-004-CASE-04.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "f4d170c1d749ca0bcd3e60cc3db2d5cfe51edbac8652148eed9c3b7c252ba189",
+          "harness_status": "materialized-not-executed"
         },
         {
           "database_lane": "26ai",
           "execution_status": "not-executed",
           "harness_path": "cases/26ai/ORA-TYPE-004-CASE-04.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "05c9d9eb7062420b9c68a8ab574bed94db7cf5e79a0f3557e9ff9e35487f4118",
+          "harness_status": "materialized-not-executed"
         }
       ],
       "native_oracle_verified": false,
@@ -47428,13 +47460,15 @@
           "database_lane": "19c",
           "execution_status": "not-executed",
           "harness_path": "cases/19c/ORA-TYPE-005-CASE-01.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "2badb206a2f786600a48e537ee0df86cdc3019fe08e924fb0161041b4722da8e",
+          "harness_status": "materialized-not-executed"
         },
         {
           "database_lane": "26ai",
           "execution_status": "not-executed",
           "harness_path": "cases/26ai/ORA-TYPE-005-CASE-01.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "1587604da0fbb41699781b6155cc6bdd0eb477e949966d75e27d8e13efe8dc56",
+          "harness_status": "materialized-not-executed"
         }
       ],
       "native_oracle_verified": false,
@@ -47455,13 +47489,15 @@
           "database_lane": "19c",
           "execution_status": "not-executed",
           "harness_path": "cases/19c/ORA-TYPE-005-CASE-02.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "31b987da1107942f71efd64181866daae0f4977010f02006ee427e957eeefe8a",
+          "harness_status": "materialized-not-executed"
         },
         {
           "database_lane": "26ai",
           "execution_status": "not-executed",
           "harness_path": "cases/26ai/ORA-TYPE-005-CASE-02.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "7c4dca2b3846063fee5ac5a53b95b60a47330a4af65af3bed0660a4ab463700f",
+          "harness_status": "materialized-not-executed"
         }
       ],
       "native_oracle_verified": false,
@@ -47482,13 +47518,15 @@
           "database_lane": "19c",
           "execution_status": "not-executed",
           "harness_path": "cases/19c/ORA-TYPE-005-CASE-03.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "e1b435144ae2cb872a92a4e76509483892f152b1792508ef40ed3ad0d52ccfcc",
+          "harness_status": "materialized-not-executed"
         },
         {
           "database_lane": "26ai",
           "execution_status": "not-executed",
           "harness_path": "cases/26ai/ORA-TYPE-005-CASE-03.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "db78a48b21383f7facd9bb86132e83e0b5b2e24b51e36748695e041c0981c5cf",
+          "harness_status": "materialized-not-executed"
         }
       ],
       "native_oracle_verified": false,
@@ -47509,13 +47547,15 @@
           "database_lane": "19c",
           "execution_status": "not-executed",
           "harness_path": "cases/19c/ORA-TYPE-005-CASE-04.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "2307164afc7622c6391de2a74fbd3fd7ae28f8351290edd74081e60e021221d7",
+          "harness_status": "materialized-not-executed"
         },
         {
           "database_lane": "26ai",
           "execution_status": "not-executed",
           "harness_path": "cases/26ai/ORA-TYPE-005-CASE-04.sql",
-          "harness_status": "required-not-materialized"
+          "harness_sql_sha256": "6daf2e0cec3839151e9cfd0533d74a8d48c53b0eb48889e387e3587051953ba0",
+          "harness_status": "materialized-not-executed"
         }
       ],
       "native_oracle_verified": false,
@@ -54005,7 +54045,7 @@
   ],
   "catalog_id": "lightyear-oracle-semantic-coverage-v1",
   "catalog_sha256": "0bd7db2415ed3774c8aa2b6f432e512b0d94d26d0612df9bf5100d20fbcdecc1",
-  "content_sha256": "710e6b5f430db48f2cea3767507bd970bee70ed3cda0486fccbc88875c76780e",
+  "content_sha256": "0eee958550d47d6124e8e37251f0d37e71ca4a338c64ee610f78e5cac78c7159",
   "corpus_bindings": [
     {
       "case_count": 920,
@@ -54037,7 +54077,7 @@
     }
   ],
   "manifest_type": "lightyear-oracle-native-case-manifest",
-  "materialized_harness_count": 0,
+  "materialized_harness_count": 40,
   "native_executed_case_count": 0,
   "native_oracle_conformance": false,
   "native_oracle_execution_observed": false,

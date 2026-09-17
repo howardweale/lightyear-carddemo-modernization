@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from lightyear_common.evidence import evidence_floor
+
 import hashlib
 import hmac
 import importlib.util
@@ -188,6 +190,8 @@ def compare_captures(
         "candidate_sha256": candidate.get("content_sha256"),
         "baseline_evidence_class": baseline.get("evidence_class"),
         "candidate_evidence_class": candidate.get("evidence_class"),
+        "evidence_class": evidence_floor(baseline.get("evidence_class"), candidate.get("evidence_class"))
+            if not baseline_errors and not candidate_errors else "simulated",
         "validation_errors": {"baseline": baseline_errors, "candidate": candidate_errors},
         "differences": differences,
         "behavior_match": not baseline_errors and not candidate_errors and not differences,
@@ -204,8 +208,17 @@ def issue_receipt(
     signing_key: str | None = None,
     signing_key_id: str = "unconfigured",
 ) -> dict[str, Any]:
-    behavior_match = comparison.get("status") == "passed" and comparison.get("behavior_match") is True
-    live = comparison.get("mainframe_baseline") is True
+    try:
+        combined_class = evidence_floor(comparison.get("baseline_evidence_class"),
+                                        comparison.get("candidate_evidence_class"),
+                                        comparison.get("evidence_class"))
+    except ValueError:
+        combined_class = "simulated"
+    if comparison.get("content_sha256") != canonical_hash(comparison, {"content_sha256"}):
+        combined_class = "simulated"
+    behavior_match = (comparison.get("status") == "passed" and comparison.get("behavior_match") is True
+                      and combined_class != "simulated")
+    live = comparison.get("mainframe_baseline") is True and comparison.get("baseline_evidence_class") == "zos_observed"
     gaps = []
     if not live:
         gaps.append("No authorized zos_observed CAVW baseline is bound to this comparison.")
@@ -216,6 +229,7 @@ def issue_receipt(
         "receipt_type": "lightyear-cics-vsam-readiness",
         "workload_id": "workload:carddemo-cics-vsam-account-view",
         "comparison_sha256": comparison.get("content_sha256"),
+        "evidence_class": combined_class,
         "checks": {
             "typed_static_graph": True,
             "curated_behavior_contract": True,

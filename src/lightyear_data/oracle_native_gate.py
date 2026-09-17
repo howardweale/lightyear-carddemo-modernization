@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import json
+import hashlib
+from datetime import datetime
 import re
 from collections import Counter
 from pathlib import Path
@@ -136,6 +138,21 @@ def build_native_case_manifest(project_root: Path) -> dict[str, Any]:
                 }
             )
     cases.sort(key=lambda item: item["case_id"])
+    # Recognize only the reviewed NUMBER implementation, not any file that
+    # happens to exist at a manifest path.
+    from .oracle_number_native import number_cases, render_case
+    number_by_id = {item["id"]: item for item in number_cases(project_root)}
+    materialized = 0
+    for case in cases:
+        if case["case_id"] not in number_by_id:
+            continue
+        for lane in case["native_lanes"]:
+            path = project_root / OUTPUT_ROOT / lane["harness_path"]
+            expected = render_case(number_by_id[case["case_id"]], lane["database_lane"]).encode()
+            if path.is_file() and not path.is_symlink() and path.read_bytes() == expected:
+                lane["harness_status"] = "materialized-not-executed"
+                lane["harness_sql_sha256"] = hashlib.sha256(expected).hexdigest()
+                materialized += 1
     return seal(
         {
             "schema_version": "1.0",
@@ -148,7 +165,7 @@ def build_native_case_manifest(project_root: Path) -> dict[str, Any]:
             "behavior_count": len({item["behavior_id"] for item in cases}),
             "case_count": len(cases),
             "required_native_case_execution_count": len(cases) * len(VERSION_LANES),
-            "materialized_harness_count": 0,
+            "materialized_harness_count": materialized,
             "native_executed_case_count": 0,
             "native_verified_behavior_count": 0,
             "cases": cases,
@@ -203,6 +220,9 @@ def build_execution_contract(manifest: Mapping[str, Any]) -> dict[str, Any]:
 
 def build_run_pack_index(manifest: Mapping[str, Any]) -> dict[str, Any]:
     counts = Counter(item["domain_id"] for item in manifest["cases"])
+    materialized = Counter((item["domain_id"], lane["database_lane"])
+                           for item in manifest["cases"] for lane in item["native_lanes"]
+                           if lane["harness_status"] == "materialized-not-executed")
     batches = [
         {
             "batch_id": f"oracle-{lane}-{domain}",
@@ -210,7 +230,7 @@ def build_run_pack_index(manifest: Mapping[str, Any]) -> dict[str, Any]:
             "domain_id": domain,
             "case_count": count,
             "required_harness_count": count,
-            "materialized_harness_count": 0,
+            "materialized_harness_count": materialized[domain, lane],
             "execution_status": "blocked-harness-and-authorized-database-required",
         }
         for lane in VERSION_LANES
@@ -226,7 +246,7 @@ def build_run_pack_index(manifest: Mapping[str, Any]) -> dict[str, Any]:
             "required_native_case_execution_count": manifest[
                 "required_native_case_execution_count"
             ],
-            "materialized_harness_count": 0,
+            "materialized_harness_count": manifest["materialized_harness_count"],
             "native_executed_case_count": 0,
             "batches": batches,
             "bootstrap_harness": {
@@ -256,7 +276,7 @@ def build_readiness_receipt(
             "catalog_behavior_count": 500,
             "catalog_case_count": 2000,
             "required_native_case_execution_count": 4000,
-            "materialized_harness_count": 0,
+            "materialized_harness_count": manifest["materialized_harness_count"],
             "native_executed_case_count": 0,
             "native_verified_behavior_count": 0,
             "target_equivalent_behavior_count": 0,
@@ -267,13 +287,14 @@ def build_readiness_receipt(
                 {"id": "database-and-session-identity-contract", "status": "passed"},
                 {"id": "credential-isolation-policy", "status": "passed"},
                 {"id": "signed-receipt-verifier", "status": "passed"},
-                {"id": "native-sql-harness-materialization", "status": "blocked"},
+                {"id": "native-sql-harness-materialization", "status": "partial" if manifest["materialized_harness_count"] else "blocked"},
                 {"id": "authorized-oracle-19c-execution", "status": "blocked"},
                 {"id": "authorized-oracle-26ai-execution", "status": "blocked"},
             ],
             "claim_statement": (
                 "All 2,000 bounded catalog cases are mapped to 4,000 required 19c/26ai native "
-                "executions under a signed evidence contract; no catalog-native execution has "
+                f"executions under a signed evidence contract; {manifest['materialized_harness_count']} "
+                "case/version SQL harnesses are materialized. No catalog-native execution has "
                 "occurred and native Oracle and target-equivalent counts remain zero."
             ),
             "native_oracle_execution_observed": False,
@@ -298,7 +319,8 @@ def native_gate_matrix_markdown(
     return f"""# Oracle native execution admission matrix
 
 MS #51 converts the completed bounded catalog into a governed two-version native execution
-contract. It does not claim that the required SQL harnesses or database runs already exist.
+contract. {manifest['materialized_harness_count']} of the 4,000 case/version SQL harnesses are
+materialized; database execution remains unobserved in this readiness receipt.
 
 | Domain | Catalog cases | Required 19c + 26ai runs | Native runs admitted |
 |---|---:|---:|---:|
@@ -374,13 +396,18 @@ def validate_oracle_native_gate_artifacts(project_root: Path) -> list[str]:
     if manifest["required_native_case_execution_count"] != 4000:
         errors.append("oracle-native-gate-execution-target-invalid")
     if any(
-        lane["harness_status"] != "required-not-materialized"
+        lane["harness_status"] not in {"required-not-materialized", "materialized-not-executed"}
         or lane["execution_status"] != "not-executed"
         for item in manifest["cases"]
         for lane in item["native_lanes"]
     ):
         errors.append("oracle-native-gate-premature-native-state")
     receipt = actual_receipt or expected["readiness.receipt.json"]
+    from .oracle_number_native import verify_harnesses
+    try:
+        verify_harnesses(project_root)
+    except (OSError, ValueError) as exc:
+        errors.append(f"oracle-native-number-harness-invalid:{exc}")
     for name in (
         "native_oracle_execution_observed",
         "native_oracle_conformance",
@@ -407,6 +434,8 @@ def validate_native_execution_receipt(
     manifest_cases = {item["case_id"]: item for item in manifest["cases"]}
     if receipt.get("receipt_type") != RECEIPT_TYPE:
         errors.append("oracle-native-receipt-type-invalid")
+    if receipt.get("schema_version") != "1.0":
+        errors.append("oracle-native-receipt-schema-invalid")
     if receipt.get("release") != RELEASE:
         errors.append("oracle-native-receipt-release-invalid")
     if receipt.get("manifest_sha256") != manifest["content_sha256"]:
@@ -436,9 +465,11 @@ def validate_native_execution_receipt(
     if lane not in VERSION_LANES:
         errors.append("oracle-native-receipt-lane-invalid")
     version_full = str(database.get("version_full", ""))
-    if lane == "19c" and not version_full.startswith("19"):
+    if lane == "19c" and not re.fullmatch(r"19(?:\.\d+){4}", version_full):
         errors.append("oracle-native-receipt-version-lane-mismatch")
-    if lane == "26ai" and not version_full.startswith("26"):
+    # Oracle 26ai's VERSION_FULL is 23.26.x (not a 26.x major version).
+    # https://docs.oracle.com/en/database/oracle/oracle-database/26/upgrd/oracle-database-release-numbers.html
+    if lane == "26ai" and not re.fullmatch(r"23\.26(?:\.\d+){3}", version_full):
         errors.append("oracle-native-receipt-version-lane-mismatch")
     for name in (
         "version_banner_sha256",
@@ -477,7 +508,9 @@ def validate_native_execution_receipt(
         errors.append("oracle-native-receipt-results-missing")
         results = []
     seen: set[str] = set()
-    passed_behaviors: set[str] = set()
+    passed_cases: set[str] = set()
+    from .oracle_number_native import EXPECTED, number_cases, probes
+    number_by_id = {item["id"]: item for item in number_cases(project_root)}
     for result in results:
         if not isinstance(result, Mapping):
             errors.append("oracle-native-receipt-result-invalid")
@@ -504,7 +537,29 @@ def validate_native_execution_receipt(
         }:
             errors.append(f"oracle-native-receipt-status-invalid:{case_id}")
         if result.get("status") == "passed-native":
-            passed_behaviors.add(case["behavior_id"])
+            passed_cases.add(case_id)
+        harness = next((entry for entry in case["native_lanes"] if entry["database_lane"] == lane), {})
+        if harness.get("harness_status") != "materialized-not-executed":
+            errors.append(f"oracle-native-receipt-harness-not-materialized:{case_id}")
+        elif result.get("harness_sql_sha256") != harness.get("harness_sql_sha256"):
+            errors.append(f"oracle-native-receipt-harness-binding-invalid:{case_id}")
+        if case_id in number_by_id:
+            observed = result.get("observations")
+            expected = {name: EXPECTED[name] for name in probes(number_by_id[case_id])}
+            if not isinstance(observed, Mapping) or set(observed) != set(expected):
+                errors.append(f"oracle-native-receipt-observations-invalid:{case_id}")
+            else:
+                if result.get("observed_result_sha256") != content_hash({"observed": observed}):
+                    errors.append(f"oracle-native-receipt-observation-binding-invalid:{case_id}")
+                if result.get("status") == "passed-native" and observed != expected:
+                    errors.append(f"oracle-native-receipt-observation-mismatch:{case_id}")
+        try:
+            started = datetime.fromisoformat(result["started_at"])
+            completed = datetime.fromisoformat(result["completed_at"])
+            if started.tzinfo is None or completed.tzinfo is None or completed < started:
+                raise ValueError("Invalid interval")
+        except (ValueError, TypeError, KeyError):
+            errors.append(f"oracle-native-receipt-timestamps-invalid:{case_id}")
         for name in ("harness_sql_sha256", "observed_result_sha256"):
             if not HEX_64.fullmatch(str(result.get(name, ""))):
                 errors.append(f"oracle-native-receipt-result-hash-invalid:{case_id}:{name}")
@@ -514,14 +569,24 @@ def validate_native_execution_receipt(
         ):
             errors.append(f"oracle-native-receipt-diagnostics-invalid:{case_id}")
 
-    if receipt.get("native_executed_case_count") != len(results):
+    if receipt.get("native_executed_case_count") != sum(
+        isinstance(result, Mapping) and result.get("status") in {"passed-native", "failed-native"}
+        for result in results
+    ):
         errors.append("oracle-native-receipt-executed-count-invalid")
+    for name in ("native_executed_case_count", "native_passed_case_count", "native_verified_behavior_count"):
+        if type(receipt.get(name)) is not int or receipt[name] < 0:
+            errors.append(f"oracle-native-receipt-count-type-invalid:{name}")
     if receipt.get("native_passed_case_count") != sum(
         result.get("status") == "passed-native"
         for result in results
         if isinstance(result, Mapping)
     ):
         errors.append("oracle-native-receipt-passed-count-invalid")
+    behavior_cases: dict[str, set[str]] = {}
+    for case in manifest["cases"]:
+        behavior_cases.setdefault(case["behavior_id"], set()).add(case["case_id"])
+    passed_behaviors = {behavior for behavior, required in behavior_cases.items() if required <= passed_cases}
     if receipt.get("native_verified_behavior_count") != len(passed_behaviors):
         errors.append("oracle-native-receipt-behavior-count-invalid")
 

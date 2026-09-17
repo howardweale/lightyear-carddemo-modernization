@@ -363,6 +363,8 @@ def main(argv: list[str] | None = None) -> int:
             "status": "passed" if not errors else "failed",
             "errors": sorted(set(errors)),
             "output_root": str(output_root),
+            "coverage_statement": receipt["coverage_statement"],
+            "catalogued_behavior_count": receipt["catalogued_behavior_count"],
             "behavior_contract_count": receipt["behavior_contract_count"],
             "case_specification_count": receipt["case_specification_count"],
             "bounded_model_verified_behavior_count": receipt["bounded_model_verified_behavior_count"],
@@ -389,6 +391,8 @@ def main(argv: list[str] | None = None) -> int:
             "status": "passed" if not errors else "failed",
             "errors": sorted(set(errors)),
             "output_root": str(output_root),
+            "coverage_statement": receipt["coverage_statement"],
+            "catalogued_behavior_count": receipt["catalogued_behavior_count"],
             "core_behavior_verified_count": receipt["core_behavior_verified_count"],
             "catalog_case_verified_count": receipt["catalog_case_verified_count"],
             "bounded_model_verified_behavior_count": receipt["bounded_model_verified_behavior_count"],
@@ -415,6 +419,8 @@ def main(argv: list[str] | None = None) -> int:
             "status": "passed" if not errors else "failed",
             "errors": sorted(set(errors)),
             "output_root": str(output_root),
+            "coverage_statement": receipt["coverage_statement"],
+            "catalogued_behavior_count": receipt["catalogued_behavior_count"],
             "plsql_behavior_verified_count": receipt["plsql_behavior_verified_count"],
             "plsql_case_verified_count": receipt["plsql_case_verified_count"],
             "catalog_case_verified_count": receipt["catalog_case_verified_count"],
@@ -445,6 +451,8 @@ def main(argv: list[str] | None = None) -> int:
             "status": "passed" if not errors else "failed",
             "errors": sorted(set(errors)),
             "output_root": str(output_root),
+            "coverage_statement": receipt["coverage_statement"],
+            "catalogued_behavior_count": receipt["catalogued_behavior_count"],
             "transaction_cdc_behavior_verified_count": receipt[
                 "transaction_cdc_behavior_verified_count"
             ],
@@ -479,6 +487,8 @@ def main(argv: list[str] | None = None) -> int:
             "status": "passed" if not errors else "failed",
             "errors": sorted(set(errors)),
             "output_root": str(output_root),
+            "coverage_statement": receipt["coverage_statement"],
+            "catalogued_behavior_count": receipt["catalogued_behavior_count"],
             "schema_structured_behavior_verified_count": receipt[
                 "schema_structured_behavior_verified_count"
             ],

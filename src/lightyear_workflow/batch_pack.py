@@ -25,6 +25,8 @@ method, and `validate_pack` refuses a pack that asks the source to run anything.
 
 from __future__ import annotations
 
+from lightyear_common.evidence import evidence_floor
+
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Mapping, Protocol, Sequence
@@ -222,7 +224,7 @@ class TargetLane:
             "submitted_by_us": True,
             "source_evidence_class": source_class,
             "target_evidence_class": target_class,
-            "evidence_class": min((source_class, target_class), key=("simulated", "local_observed", "zos_observed").index),
+            "evidence_class": evidence_floor(source_class, target_class),
             "evidence": record.get("bundle"),
         }
 

@@ -1,11 +1,11 @@
 """Adversarial boundaries and real process/restart evidence for MS72 Step 2."""
 from __future__ import annotations
 
+from datetime import datetime, timedelta, timezone
 import json
 from pathlib import Path
 import shutil
 import tempfile
-import time
 import unittest
 from unittest.mock import patch
 
@@ -162,11 +162,22 @@ class CloudBankWorkflowTests(unittest.TestCase):
 
     def test_elapsed_budget_includes_worker_completion(self):
         self.policy(max_seconds=1, action_timeout_seconds=1)
+        # Advance only during the worker: filesystem speed must not exhaust the
+        # budget before dispatch, or this would test a different halt path.
+        now = datetime(2026, 1, 1, tzinfo=timezone.utc)
+        class Clock(datetime):
+            @classmethod
+            def now(cls, tz=None):
+                return now.astimezone(tz)
         def slow(root, action, *_):
-            time.sleep(1.05)
+            nonlocal now
+            now += timedelta(seconds=1.05)
             return observe(root, action["service"], action["lane"])
-        with patch("lightyear_workflow.execution.run_worker", side_effect=slow):
+        with patch("lightyear_workflow.execution.datetime", Clock), \
+                patch("lightyear_workflow.run_store.utcnow", side_effect=lambda: now.isoformat()), \
+                patch("lightyear_workflow.execution.run_worker", side_effect=slow) as worker:
             result = execute(self.root, self.directory)
+        worker.assert_called_once()
         self.assertEqual("budget", result["halt_reason"])
         self.assertEqual(0, result["summary"]["resolved"])
         self.assertEqual("worker-timeout", result["failures"][0]["reason"])

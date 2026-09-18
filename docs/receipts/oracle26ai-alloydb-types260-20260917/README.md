@@ -3,6 +3,8 @@
 **Result: `passed-bounded-native`, 260/260 equivalent pairs, 13 families,
 65 bounded behaviours. Cleanup confirmed.**
 
+**Scope cross-reference:** This campaign's 260 matched Oracle 26ai ↔ AlloyDB pairs establish bounded source-to-target equivalence; the separate [Oracle native execution gate](../../../data-modernization/oracle-native-execution-gate/README.md) reports `native_executed_case_count: 0` for admitted Oracle 19c + 26ai catalog-conformance executions under its own per-case harness-hash contract.
+
 Successful run: `types260-db44edf8ecce4c5b8b6860e698e79d97`.
 Oracle 26ai Free 23.26.3.0.0 in FREEPDB1 and managed AlloyDB PostgreSQL 16.13
 each produced 260 observations. All 260 comparisons matched; every family

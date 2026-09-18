@@ -4,6 +4,8 @@ MS #51 turns the completed 500-behavior, 2,000-case bounded catalog into a stric
 contract for Oracle Database 19c and Oracle AI Database 26ai. The manifest requires 4,000 native
 case executions: every case on both database lanes.
 
+**Scope cross-reference:** This gate's `native_executed_case_count: 0` counts admitted Oracle 19c + 26ai catalog-conformance executions under its per-case harness-hash contract; the separate [260-pair Oracle 26ai ↔ AlloyDB campaign](../../docs/receipts/oracle26ai-alloydb-types260-20260917/README.md) proves bounded source-to-target equivalence and does not populate this gate.
+
 The first native family, `types/number`, now has 40 materialized case/version harnesses
 (20 cases on each version). These files have been locally checked and mock-tested;
 native execution remains zero. See the [pilot runbook and evidence audit](../../docs/oracle-evidence-roadmap.md)

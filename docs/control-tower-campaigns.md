@@ -260,3 +260,9 @@ is needed to run again. The aggregate deduplicates these baseline case IDs.
 catalog aggregate shows 260 unique equivalent cases / 65 bounded behaviours,
 not 380 by adding the overlapping campaigns. This does not establish additional
 platform qualification. A green simulation contributes no native coverage.
+
+The [published native 260-pair result](receipts/oracle26ai-alloydb-types260-20260917/README.md)
+contains a successful 260/260 run and the earlier failed interval-harness attempt.
+Both retain their authorizations, observations and cleanup evidence. The combined
+planning estimate was $2.94 against the approved additional $10 allowance;
+the estimate excludes ongoing storage and is not a measured bill.

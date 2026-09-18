@@ -62,3 +62,6 @@ docs/receipts/oracle26ai-alloydb-number-20260917/** -text whitespace=blank-at-eo
 
 # Preserve the native 100-pair family journals, signatures and public key bytes.
 docs/receipts/oracle26ai-alloydb-core100-20260917/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+
+# Preserve both native 260-pair attempts, signatures and operational readback.
+docs/receipts/oracle26ai-alloydb-types260-20260917/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

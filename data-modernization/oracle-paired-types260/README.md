@@ -79,3 +79,8 @@ SQL files. Only the exact original signed plan hash may use those files during
 coverage admission, and each file must still match its authorized hash. This
 keeps the 220 observed results verifiable without rewriting the failed attempt
 or admitting its unexecuted interval cases as evidence.
+
+The [published native export](../../docs/receipts/oracle26ai-alloydb-types260-20260917/README.md)
+retains that failed attempt and the successful revision-2 run: 260/260 matching
+pairs, all thirteen families complete, cleanup confirmed. Their combined planning
+estimate was $2.94 under the approved cumulative additional $10 allowance.

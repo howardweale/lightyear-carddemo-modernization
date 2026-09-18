@@ -19,13 +19,14 @@ class PairedCoverageTests(unittest.TestCase):
         # Do not consume ignored local lab state in a repository test.
         with patch.object(engine, 'records', return_value=[]):
             entries = coverage.evidence(ROOT)
-        value = coverage.project(ROOT, entries)
+        value = coverage.project(ROOT, [row for row in entries if row[0]['campaign_id'] == engine.CAMPAIGN])
         self.assertEqual(value['oracle26ai_executed_case_count'], 20)
         self.assertEqual(value['alloydb_equivalent_case_count'], 20)
         self.assertEqual(value['oracle26ai_verified_behavior_count'], 5)
         self.assertEqual(value['bounded_model_verified_behavior_count'], 500)
-        self.assertFalse(value['alloydb_platform_qualified'])
-        auth, events, terminal, key = next(row for row in entries if row[2]['status'] == 'passed-bounded-native')
+        self.assertFalse(value['platform_qualification_established_by_this_campaign'])
+        self.assertNotIn('alloydb_platform_qualified', value)
+        auth, events, terminal, key = next(row for row in entries if row[0]['campaign_id'] == engine.CAMPAIGN and row[2]['status'] == 'passed-bounded-native')
         broken = copy.deepcopy(events)
         broken[0]['payload']['message'] = 'tampered'
         with self.assertRaises(ValueError):

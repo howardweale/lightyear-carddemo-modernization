@@ -1,0 +1,17 @@
+{
+  "authorization_to_terminal_seconds": 1481.357,
+  "authorized_cumulative_estimated_budget_usd": 10,
+  "cost_basis": "Authorization-to-terminal elapsed time multiplied by the authorized $2/hour planning rate, rounded up to cents. Includes preparation and cleanup. Not a measured GCP bill; existing storage/backups excluded.",
+  "exported_from_revision": "c1f1b2c2a95f043dd61f817f24f0c51aae429ef3",
+  "files": {
+    "core100-45bae6fc54684445a2b1dd5544c6e537/authorization.json": "3deed3c2ae78bd9a76c0cb7b9bdbd6babe70766db56a650b4014f0361945161f",
+    "core100-45bae6fc54684445a2b1dd5544c6e537/journal.json": "e5cf5178c7fa468d8102f7c85d869e8e30275a312a9c05db191059f182a5f5e0",
+    "core100-45bae6fc54684445a2b1dd5544c6e537/summary.json": "db825b5b0c434cb3e8d894298da716f33e77c50c1a3f846bdea8007d55f24aec",
+    "operational-readback.json": "c30de83a0dc57ea05e34377da8161f97ab6cd30995c9f469ca1e169bdf0c9e4a",
+    "public-key.pem": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552"
+  },
+  "format": "lightyear-paired-campaign-export-v1",
+  "planning_allowance_usd": 0.83,
+  "scope": "100 bounded Oracle 26ai/AlloyDB datatype pairs, five families, 25 behaviours. NUMBER reruns deduplicate with the prior 20. No additional platform qualification or Oracle 19c claim.",
+  "successful_run_id": "core100-45bae6fc54684445a2b1dd5544c6e537"
+}

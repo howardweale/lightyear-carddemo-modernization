@@ -1,0 +1,90 @@
+{
+  "at": "2026-09-18T00:47:13.988276+00:00",
+  "authorization_sha256": "88b51e4d6050efa50cd2809addca8e60d17eb4e6e6869b0b90ab6662d5345dd6",
+  "cleanup": {
+    "complete": true,
+    "resources": {
+      "alloydb": "stopped",
+      "firewall": "deleted",
+      "vm": "deleted"
+    }
+  },
+  "comparisons_completed": 100,
+  "content_sha256": "6d93aef8b5bf506ade7a1779e8b3c1be9897a16b0c21ba63a00d94e3c01d485c",
+  "evidence_class": "native-database-observed",
+  "families": [
+    {
+      "blocked": 0,
+      "comparisons_completed": 20,
+      "family": "number",
+      "matched": 20,
+      "mismatched": 0,
+      "pending": 0,
+      "planned": 20,
+      "source_completed": 20,
+      "status": "matched",
+      "target_completed": 20
+    },
+    {
+      "blocked": 0,
+      "comparisons_completed": 20,
+      "family": "char",
+      "matched": 20,
+      "mismatched": 0,
+      "pending": 0,
+      "planned": 20,
+      "source_completed": 20,
+      "status": "matched",
+      "target_completed": 20
+    },
+    {
+      "blocked": 0,
+      "comparisons_completed": 20,
+      "family": "varchar2",
+      "matched": 20,
+      "mismatched": 0,
+      "pending": 0,
+      "planned": 20,
+      "source_completed": 20,
+      "status": "matched",
+      "target_completed": 20
+    },
+    {
+      "blocked": 0,
+      "comparisons_completed": 20,
+      "family": "date",
+      "matched": 20,
+      "mismatched": 0,
+      "pending": 0,
+      "planned": 20,
+      "source_completed": 20,
+      "status": "matched",
+      "target_completed": 20
+    },
+    {
+      "blocked": 0,
+      "comparisons_completed": 20,
+      "family": "timestamp",
+      "matched": 20,
+      "mismatched": 0,
+      "pending": 0,
+      "planned": 20,
+      "source_completed": 20,
+      "status": "matched",
+      "target_completed": 20
+    }
+  ],
+  "journal_head_sha256": "954b5c9cb7152cee0655aadf1ed98870f473fdd2c17f29643dbedadc23326ffa",
+  "matched": 100,
+  "planned_cases": 100,
+  "record_type": "paired-campaign-summary",
+  "run_id": "core100-45bae6fc54684445a2b1dd5544c6e537",
+  "signature": {
+    "algorithm": "Ed25519",
+    "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+    "value": "Kz+64hFgeD6nMrZ/UK+umSW8ZLiosxjYUfZdTtPfedxdQaqxfbhI7eweLst24k+6RIoUaKMxMjnTLvqzzJsWAA=="
+  },
+  "source_completed": 100,
+  "status": "passed-bounded-native",
+  "target_completed": 100
+}

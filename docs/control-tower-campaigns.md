@@ -200,6 +200,9 @@ This overlay reports 26ai paired-probe coverage. The older 4,000-execution nativ
 gate requires 2,000 cases on Oracle 19c plus 2,000 on Oracle 26ai under a different
 wallet receipt contract. The overlay does not rewrite it, and AlloyDB is not a
 second Oracle lane. Neither report establishes full platform qualification.
+The existing [CloudBank AlloyDB nonproduction qualification](cloudbank-alloydb-platform-qualification.md)
+remains a separate retained result. This datatype campaign neither revokes it
+nor extends it to broader Oracle semantics or production workloads.
 
 Read the same aggregate without cloud calls:
 

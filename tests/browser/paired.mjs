@@ -82,7 +82,9 @@ try {
     await page.locator('#campaign-controls textarea').fill('Browser test: 260 explicitly simulated pairs; no cloud operations.');
     await page.locator('#campaign-controls input[type=checkbox]').check();
     await page.locator('#campaign-controls button[type=submit]').click();
-    await page.waitForFunction(() => [...document.querySelectorAll('#run-view .run-figure')].every(el => el.textContent === '260 / 260') && document.querySelectorAll('#run-view .run-figure').length === 4, {timeout:90000});
+    await page.waitForFunction(() => [...document.querySelectorAll('#run-view .run-figure')].every(el => el.textContent === '260 / 260') && document.querySelectorAll('#run-view .run-figure').length === 4, null, {timeout:90000}).catch(async error => {
+      throw new Error(`${error.message}\nControls: ${await page.locator('#campaign-controls [role=status]').textContent()}\nRun: ${(await page.locator('#run-view').textContent()).slice(0,2500)}\nServer: ${errors.slice(-2000)}`);
+    });
     await page.locator('#run-view').getByText('passed-simulated', {exact:false}).first().waitFor({timeout:90000});
     assert.equal(await page.locator('#run-view .paired-families tbody tr').count(), 13);
     assert.equal(await page.locator('#run-view .paired-case').count(), 260);

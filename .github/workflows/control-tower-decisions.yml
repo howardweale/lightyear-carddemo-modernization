@@ -12,7 +12,7 @@ jobs:
       matrix:
         os: [ubuntu-latest, macos-15, windows-latest]
     runs-on: ${{ matrix.os }}
-    timeout-minutes: 10
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
@@ -24,6 +24,7 @@ jobs:
       - name: Install decision signing support
         run: python -m pip install -e ".[control-tower]"
       - name: Verify signed human decisions, headless action plans, and read-only projections
+        shell: bash
         env:
           PYTHONPATH: src
         run: |

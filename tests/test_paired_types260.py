@@ -82,7 +82,7 @@ class Types260Tests(unittest.TestCase):
                 return value
         _, value = self.run_suite(ChangedBit)
         self.assertEqual(value['status'], 'failed')
-        self.assertEqual(value['comparisons_completed'], 260)
+        self.assertEqual(value['comparisons_completed'], 260, value.get('error'))
         self.assertEqual(value['matched'], 259)
         self.assertTrue(value['cleanup']['complete'])
 

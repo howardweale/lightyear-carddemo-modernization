@@ -8,43 +8,42 @@ from pathlib import Path
 import sqlite3
 
 from lightyear_control_tower.decisions import DecisionService, initialize_authority
-from .campaign_engine import AUTHORITY, authorize, dispatch, records
+from .campaign_engine import AUTHORITY, authorize, dispatch, records, campaign_plan
 from .campaigns import CAMPAIGN
-from .paired_number import plan
 
 
-def review(root):
+def review(root, campaign=CAMPAIGN):
     try:
-        return {"status": "reviewable", "plan": plan(root)}
+        return {"status": "reviewable", "plan": campaign_plan(root, campaign)}
     except (ValueError, OSError, KeyError, TypeError):
         return {"status": "unconfigured", "reason": "A validated campaign profile, digest-pinned Oracle image and campaign operator authority are required."}
 
 
-def list_runs(root):
+def list_runs(root, campaign=CAMPAIGN):
     try:
-        rows = records(root)
-        return {"campaign_id": CAMPAIGN, "estate": "cloudbank", "read_only": True,
+        rows = records(root, campaign)
+        return {"campaign_id": campaign, "estate": "cloudbank", "read_only": True,
                 "runs": [{"run_id": r["authorization"]["run_id"], "started_at": r["authorization"]["authorized_at"],
                           "actions_completed": (r["terminal"] or {}).get("matched"),
                           "terminal": (r["terminal"] or {}).get("status", "authorized / awaiting terminal result")}
                          for r in rows], "reason": None if rows else "no-runs-recorded"}
     except (ValueError, OSError, KeyError, TypeError, sqlite3.Error):
-        return {"campaign_id": CAMPAIGN, "runs": [], "reason": "invalid-run-index"}
+        return {"campaign_id": campaign, "runs": [], "reason": "invalid-run-index"}
 
 
-def history(root):
+def history(root, campaign=CAMPAIGN):
     # Never opens a run journal. Signed terminal summaries remain independently
     # verifiable after the customer's journal retention policy removes detail.
     try:
-        rows = records(root)
+        rows = records(root, campaign)
         terminal = [r["terminal"] for r in rows if r["terminal"]]
-        return {"campaign_id": CAMPAIGN, "metric_unit": "paired-cases", "read_only": True,
+        return {"campaign_id": campaign, "metric_unit": "paired-cases", "read_only": True,
                 "weeks": [],
                 "runs": terminal, "reason": None if terminal else "no-runs-recorded",
                 "recoveries": {r["authorization"]["run_id"]: r["recovery"] for r in rows if r["recovery"]},
                 "limit": 100, "note": "Latest 100 authorizations; simulated runs remain labelled. Repeated cases are not distinct catalog coverage."}
     except (ValueError, OSError, KeyError, TypeError, sqlite3.Error):
-        return {"campaign_id": CAMPAIGN, "runs": [], "reason": "invalid-run-index", "metric_unit": "paired-cases"}
+        return {"campaign_id": campaign, "runs": [], "reason": "invalid-run-index", "metric_unit": "paired-cases"}
 
 
 class CampaignService:
@@ -54,8 +53,8 @@ class CampaignService:
                                          recover_runs=False, decision_only=True)
         self.dispatcher = dispatcher
 
-    def status(self):
-        return {"enabled": True, **review(self.root)}
+    def status(self, campaign=CAMPAIGN):
+        return {"enabled": True, **review(self.root, campaign)}
 
     def login(self, credential):
         result = self.authority.login(credential)
@@ -94,13 +93,14 @@ def main():
     parser.add_argument("--root", type=Path, default=Path("."))
     parser.add_argument("--operator-id")
     parser.add_argument("--operator-name")
+    parser.add_argument('--campaign-id', default=CAMPAIGN)
     args = parser.parse_args()
     root = args.root.resolve()
     if args.command == "init-operator":
         credential = initialize(root, args.operator_id, args.operator_name)
         print(json.dumps({"status": "provisioned-not-authorized", "credential_file": str(credential)}))
     else:
-        print(json.dumps(review(root), indent=2))
+        print(json.dumps(review(root, args.campaign_id), indent=2))
     return 0
 
 

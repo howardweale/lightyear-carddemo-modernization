@@ -79,8 +79,8 @@ def compare(case: dict, oracle: dict, target: dict) -> dict:
             "diagnostic_mapping": "ORA-01438 ↔ SQLSTATE 22003 (numeric precision overflow)" if "overflow_code" in probes(case) else None}
 
 
-def profile(root: Path) -> dict:
-    path = root / PROFILE
+def profile(root: Path, relative: Path = PROFILE) -> dict:
+    path = root / relative
     if any(p.is_symlink() for p in (path, *path.parents)) or path.stat().st_size > 16384:
         raise ValueError("Invalid campaign profile path or size")
     value = json.loads(path.read_text(encoding="utf-8"))

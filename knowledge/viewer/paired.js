@@ -7,7 +7,7 @@
     if (className) el.className = className;
     return el;
   };
-  let token = null, proposed = null, sequence = 0, pendingRequest = null, pendingPayload = null;
+  let token = null, proposed = null, sequence = 0, pendingRequest = null, pendingPayload = null, formCampaign = null;
   async function api(path, body) {
     const headers = { Accept: 'application/json' };
     if (token) headers.Authorization = `Bearer ${token}`;
@@ -20,20 +20,27 @@
   }
   async function loadControls() {
     const request = ++sequence;
-    controls.hidden = window.LightyearContext.state.campaignId === 'retained';
+    const campaign = window.LightyearContext.state.campaignId;
+    if (formCampaign !== campaign) {
+      controls.replaceChildren(); proposed = null; pendingRequest = null; pendingPayload = null;
+      formCampaign = campaign;
+    }
+    controls.hidden = campaign === 'retained';
     if (controls.hidden) return;
     // A context refresh must not discard an operator's partly written decision.
     if (controls.querySelector('form')) return;
     controls.replaceChildren(node('h2', 'Authorize this campaign'), node('p', 'Reading the exact execution terms…'));
     try {
-      const status = await api('status');
+      const status = await api(`status?campaign_id=${encodeURIComponent(campaign)}&estate=cloudbank`);
       if (request !== sequence) return;
       controls.replaceChildren(node('h2', 'Authorize this campaign'));
       if (!status.enabled || !status.plan) { controls.append(node('p', status.reason)); return; }
       proposed = status.plan;
+      if (proposed.campaign_id !== campaign) throw new Error('Campaign terms do not match the selection.');
+      const formPlan = proposed;
       const terms = node('section', undefined, 'paired-terms');
       const cost = proposed.profile;
-      terms.append(node('p', `20 Oracle cases + 20 AlloyDB cases · Estimated budget $${cost.budget_usd} · Maximum active runtime ${cost.max_seconds / 60} minutes`));
+      terms.append(node('p', `${proposed.cases.length} Oracle cases + ${proposed.cases.length} AlloyDB cases · Estimated budget $${cost.budget_usd} · Maximum active runtime ${cost.max_seconds / 60} minutes`));
       for (const key of ['resource_policy', 'data_policy', 'identity_policy', 'comparison_policy', 'cost_policy', 'interruption_policy', 'qualification']) terms.append(node('p', proposed[key]));
       terms.append(node('p', `Project: ${proposed.project} · Region: ${proposed.region}`));
       const details = node('details'); details.append(node('summary', 'Inspect the exact plan and SQL bindings'), node('pre', JSON.stringify(proposed, null, 2))); terms.append(details);
@@ -52,15 +59,16 @@
       form.addEventListener('submit', async event => {
         event.preventDefault(); start.disabled = true;
         try {
-          if (window.LightyearContext.state.campaignId === 'retained') throw new Error('Select the NUMBER campaign before authorizing.');
+          if (window.LightyearContext.state.campaignId !== formPlan.campaign_id) throw new Error('Select and review this campaign before authorizing.');
           if (!token) {
             const session = await api('session', { credential: credential.value }); token = session.token;
             credential.value = ''; credential.required = false;
           }
           // Keep the same request and terms on an uncertain response. A double
           // click or retry must not create a second resource-consuming run.
+          if (window.LightyearContext.state.campaignId !== formPlan.campaign_id || proposed !== formPlan) throw new Error('Campaign changed while authenticating. Review its current terms.');
           pendingRequest ||= crypto.randomUUID();
-          pendingPayload ||= { plan_sha256: proposed.plan_sha256, request_id: pendingRequest, accept_terms: accepted.checked, reason: reason.value };
+          pendingPayload ||= { campaign_id: formPlan.campaign_id, plan_sha256: formPlan.plan_sha256, request_id: pendingRequest, accept_terms: accepted.checked, reason: reason.value };
           const result = await api('start', pendingPayload);
           message.textContent = `${result.status} · ${result.run_id}. Open The run to observe the engine.`;
           start.textContent = 'Authorization recorded';
@@ -75,7 +83,7 @@
   }
   function renderRun(host, value) {
     const opened = new Set([...host.querySelectorAll('details[open]')].map(el => el.querySelector('summary')?.textContent.split(' · ')[0]));
-    host.replaceChildren(node('h1', 'Oracle 26ai → AlloyDB · NUMBER run'));
+    host.replaceChildren(node('h1', value.authorization?.plan.name || (value.campaign_id === 'oracle26ai-alloydb-core100' ? 'Oracle 26ai → AlloyDB · 100 datatype pairs' : 'Oracle 26ai → AlloyDB · NUMBER run')));
     if (['invalid', 'unavailable'].includes(value.status)) { host.append(node('p', value.reason)); return; }
     window.LightyearContext.updatePairedRun(value);
     host.append(node('p', `${value.status} · ${value.run_id}`, 'run-note'));
@@ -85,9 +93,10 @@
     host.append(node('p', 'Updates every 3 seconds. Closing this browser does not stop the detached engine. Figures are completed observations, not estimates.', 'run-note'));
     const figures = node('div', undefined, 'run-figures');
     for (const [label, number] of [['Oracle observations', value.source_completed], ['AlloyDB observations', value.target_completed], ['Comparisons completed', value.comparisons_completed], ['Equivalent pairs', value.matched]]) {
-      const figure = node('div', undefined, 'run-card'); figure.append(node('strong', `${number} / 20`, 'run-figure'), node('p', label)); figures.append(figure);
+      const figure = node('div', undefined, 'run-card'); figure.append(node('strong', `${number} / ${value.planned_cases}`, 'run-figure'), node('p', label)); figures.append(figure);
     }
     host.append(figures);
+    if (value.families?.length) host.append(familyTable(value.families));
     const authorization = node('details');
     authorization.append(node('summary', 'Signed campaign authorization'),
       node('p', `${value.authorization.actor.name} · ${new Date(value.authorization.authorized_at).toLocaleString()}`),
@@ -112,7 +121,7 @@
   function renderHistory(host, value) {
     host.replaceChildren();
     if (value.reason === 'invalid-run-index') { host.append(node('p', 'Campaign history could not be verified.')); return; }
-    if (!value.runs.length) { host.append(node('p', 'No completed runs recorded yet. NUMBER campaign has no indexed runs.')); return; }
+    if (!value.runs.length) { host.append(node('p', 'No completed runs recorded yet for this campaign.')); return; }
     host.append(node('p', value.note));
     for (const run of value.runs) {
       const row = node('section', undefined, 'convergence-card');
@@ -121,8 +130,24 @@
         node('p', `Original cleanup ${run.cleanup.complete ? 'confirmed' : 'requires attention'}`));
       const recovery = value.recoveries?.[run.run_id];
       if (recovery) row.append(node('p', `Later recovery: ${recovery.cleanup.complete ? 'cleanup confirmed' : 'action required'}. Original verdict retained.`));
+      if (run.families?.length) row.append(familyTable(run.families));
       host.append(row);
     }
+  }
+  function familyTable(rows) {
+    const section = node('section', undefined, 'paired-families');
+    section.append(node('h2', 'Family progress'));
+    const table = node('table');
+    const header = node('tr');
+    for (const label of ['Family', 'Oracle', 'AlloyDB', 'Compared', 'Matched', 'Different', 'Blocked', 'Pending', 'Status']) header.append(node('th', label));
+    const head = node('thead'); head.append(header); table.append(head);
+    const body = node('tbody');
+    for (const item of rows) {
+      const row = node('tr');
+      for (const key of ['family', 'source_completed', 'target_completed', 'comparisons_completed', 'matched', 'mismatched', 'blocked', 'pending', 'status']) row.append(node('td', String(item[key])));
+      body.append(row);
+    }
+    table.append(body); section.append(table); return section;
   }
   document.addEventListener('tower-context-change', loadControls);
   window.LightyearPaired = { renderRun, renderHistory };

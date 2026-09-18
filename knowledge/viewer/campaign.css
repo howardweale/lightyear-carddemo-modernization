@@ -29,6 +29,9 @@
 #campaign-controls pre, #run-view pre { white-space: pre-wrap; overflow-wrap: anywhere; font-size: 12px; background: #f5f7fb; padding: 12px; }
 #run-view .paired-case { margin: 10px 0; border: 1px solid #dce2ea; padding: 12px; border-radius: 8px; }
 #run-view .paired-case summary { cursor: pointer; }
+#run-view .paired-families, #convergence .paired-families { overflow-x: auto; margin: 20px 0; }
+#run-view .paired-families table, #convergence .paired-families table { width: 100%; border-collapse: collapse; font-size: 13px; white-space: nowrap; }
+#run-view .paired-families th, #run-view .paired-families td, #convergence .paired-families th, #convergence .paired-families td { padding: 9px; text-align: left; border-bottom: 1px solid #dce2ea; }
 @media (max-width: 700px) {
   #workflow-context { grid-template-columns: minmax(0, 1fr); padding: 14px; }
   #campaign-view { padding: 16px; }

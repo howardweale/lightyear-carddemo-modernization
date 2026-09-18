@@ -17,6 +17,14 @@
       card.append(node('strong', count === null ? 'Not recorded' : String(count)), node('span', label)); figures.append(card);
     }
     host.append(figures);
+    if (value.catalog_coverage) {
+      const coverage = node('section'); coverage.append(node('h3', 'Catalog coverage across verified native runs'));
+      coverage.append(node('p', value.catalog_coverage.coverage_statement));
+      if (value.catalog_coverage.gate_note) coverage.append(node('p', value.catalog_coverage.gate_note));
+      if (value.catalog_coverage.trust_note) coverage.append(node('p', value.catalog_coverage.trust_note));
+      coverage.append(node('p', 'These aggregate figures differ from the selected run above. Simulated and unclassified runs cannot increase them.'));
+      host.append(coverage);
+    }
     const lanes = node('section'); lanes.append(node('h3', 'Proposed test lanes'), node('p', `Source: ${value.source}`), node('p', `Target: ${value.target}`), node('p', `${value.project} · ${value.region} · ${value.topic_family} · ${value.planned_behaviors} behaviours`));
     const readiness = node('section'); readiness.append(node('h3', 'Environment readback'));
     const observation = value.readiness;
@@ -36,7 +44,7 @@
     next.append(node('p', 'The factory prepares the code. The engine executes and compares observations. A person must accept the exact scope, risk and spending terms before this campaign can start.'));
     const cases = node('details'); cases.append(node('summary', `${value.cases.length} verified case bindings · inspect scope`));
     if (value.preparation !== 'verified-files') cases.append(node('p', 'Source preparation could not be verified. Expected counts are not treated as prepared files.'));
-    const list = node('ul'); value.cases.forEach(item => list.append(node('li', `${item.id} · ${item.focus} · ${item.dimension}`))); cases.append(list);
+    const list = node('ul'); value.cases.forEach(item => list.append(node('li', `${item.id} · ${item.topic} · ${item.focus} · ${item.dimension}`))); cases.append(list);
     host.append(lanes, readiness, next, cases);
   }
   async function reload() {

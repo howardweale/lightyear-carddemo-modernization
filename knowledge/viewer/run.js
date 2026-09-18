@@ -39,7 +39,7 @@
   }
   function render(payload) {
     const host = document.getElementById('run-view');
-    if (payload.campaign_id === 'oracle26ai-alloydb-number') { window.LightyearPaired.renderRun(host, payload); return; }
+    if (['oracle26ai-alloydb-number', 'oracle26ai-alloydb-core100'].includes(payload.campaign_id)) { window.LightyearPaired.renderRun(host, payload); return; }
     host.replaceChildren();
     if (payload.status === 'unavailable') {
       host.append(node('p', payload.reason || 'No run recorded yet. No journal is available for the selected estate.', 'run-note'));

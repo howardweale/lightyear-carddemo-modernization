@@ -51,6 +51,34 @@ try {
     await page.locator('#run-view').getByText('passed-simulated', {exact:false}).first().waitFor();
     await page.locator('#show-convergence').click();
     await page.locator('#convergence').getByText('passed-simulated', {exact:true}).waitFor();
+    await page.locator('#show-queue').click();
+    await page.locator('#campaign-controls textarea').fill('Unsubmitted NUMBER terms must not carry over.');
+    await page.locator('#workflow-campaign').selectOption('oracle26ai-alloydb-core100');
+    await page.locator('#campaign-controls').getByText('100 Oracle cases + 100 AlloyDB cases', {exact:false}).waitFor().catch(async error => {
+      throw new Error(`${error.message}\nControl text: ${await page.locator('#campaign-controls').textContent()}`);
+    });
+    assert.equal(await page.locator('#campaign-controls textarea').inputValue(), '');
+    assert.equal(await page.locator('#campaign-controls input[type=checkbox]').isChecked(), false);
+    await page.locator('#campaign-controls input[type=password]').fill(config.credential);
+    await page.locator('#campaign-controls textarea').fill('Browser test: 100 explicitly simulated pairs, no cloud operations.');
+    await page.locator('#campaign-controls input[type=checkbox]').check();
+    await page.locator('#campaign-controls button[type=submit]').click();
+    await page.locator('#run-view').getByText('passed-simulated', {exact:false}).first().waitFor({timeout:60000}).catch(async error => {
+      throw new Error(`${error.message}\nControls: ${(await page.locator('#campaign-controls [role=status]').textContent())}\nRun: ${(await page.locator('#run-view').textContent()).slice(0,2500)}\nServer: ${errors.slice(-2000)}`);
+    });
+    assert.deepEqual(await page.locator('#run-view .run-figure').allTextContents(), ['100 / 100','100 / 100','100 / 100','100 / 100']);
+    assert.equal(await page.locator('#run-view .paired-families tbody tr').count(), 5);
+    assert.equal(await page.locator('#run-view .paired-case').count(), 100);
+    await page.screenshot({path:resolve(root,'work/browser-inspection/core100-simulated-run.png'),fullPage:false});
+    await page.locator('#show-convergence').click();
+    await page.locator('#convergence .paired-families tbody tr').first().waitFor();
+    assert.equal(await page.locator('#convergence .paired-families tbody tr').count(), 5);
+    await page.locator('#workflow-campaign').selectOption('oracle26ai-alloydb-number');
+    await page.locator('#show-run').click();
+    await page.waitForFunction(() => document.querySelector('#run-view .run-figure')?.textContent === '20 / 20');
+    await page.locator('#show-discovery').click();
+    await page.waitForTimeout(500);
+    assert.ok(await page.locator('#graph').evaluate(el => el.getBoundingClientRect().width > 0));
     assert.deepEqual(pageErrors,[]);
   } finally {await browser.close();}
   console.log('PAIRED_BROWSER_SIMULATION=PASSED (no native evidence or cloud operations)');

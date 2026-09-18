@@ -67,7 +67,7 @@ Expand **Signed campaign authorization** in The run to inspect the recorded oper
 
 | Status | Meaning |
 | --- | --- |
-| `passed-bounded-native` | Twenty pairs passed with native identities/observations, no execution error, and confirmed cleanup. |
+| `passed-bounded-native` | All pairs in the authorized plan passed with native identities/observations, no execution error, and confirmed cleanup. |
 | `passed-simulated` | The workflow passed using simulated observations; never native evidence. |
 | `failed` | Preparation, execution or a comparison failed. Retained observations remain inspectable. |
 | `cleanup-required` | Resource restoration was not confirmed; recover before another launch. |
@@ -148,3 +148,76 @@ Convergence reads signed terminal summaries without opening journals. Pruned det
 **A simulated demonstration.** Priya sees twenty matching pairs labelled `passed-simulated`. She can evaluate the workflow but cannot call it native evidence; the weaker lane prevents that promotion.
 
 The factory prepares the transformation. The engine judges observed behaviour. The Tower records the person's acceptance of operational scope, risk and spending terms and exposes the resulting evidence.
+
+## The 100-pair campaign
+
+Select **CloudBank → Oracle 26ai → AlloyDB · 100 datatype pairs**. This is a
+separate campaign from the NUMBER pilot; its run selector and Convergence show
+only its own runs. The operator authority and resource lock are shared, so an
+active or unclean pilot blocks the larger campaign too.
+
+The proposed scope is NUMBER, CHAR, VARCHAR2, DATE and TIMESTAMP, 20 cases each:
+100 catalog case pairs, 200 lane executions and 25 bounded behaviours. NUMBER
+is a baseline rerun. These case dimensions exercise reviewed synthetic probes;
+they are not a claim to cover every value, collation or time-zone behaviour.
+See the [SQL contract and mappings](../data-modernization/oracle-paired-core100/README.md).
+
+Prepare `work/campaigns/oracle26ai-alloydb-core100/profile.json` using the profile
+schema above. Review it with:
+
+```powershell
+py -3.12 -m lightyear_workflow.campaign_service review --root . --campaign-id oracle26ai-alloydb-core100
+```
+
+The existing pilot approval does not authorize this expanded plan. Review the
+100-case terms, enter the reason and accept the scope and spending estimate.
+Changing campaign clears unfinished authorization fields. Refreshing the same
+campaign preserves them. The engine rejects a plan changed since review.
+
+In **The run**, counters use 100 as the denominator. **Family progress** shows
+source observations, target observations, comparisons, matches, differences,
+blocked cases and pending cases. Pending means comparison has not happened
+while the run is active. Blocked means a terminal run ended before those
+comparisons. A comparison mismatch does not discard other families; a client
+execution failure stops further SQL and proceeds to cleanup. A later retry is
+a newly authorized campaign, never automatic replay.
+
+Each family has a separate signed journal anchored to a checkpoint in the
+campaign journal. No journal needs more than 256 events. Expand **Case evidence**
+for observations or the timeline for verified events. **Convergence** retains
+the signed family summaries when detailed journals are pruned; the detailed
+view and catalog overlay then say unavailable rather than manufacturing counts.
+
+The work queue's **Catalog coverage across verified native runs** is an
+aggregate, separate from the selected run. It verifies published pilot evidence
+and locally installed authority evidence, replays comparisons and binds SQL to
+the current supported probe contract. NUMBER's earlier 20 cases plus a passing
+100-case run yield **100 unique paired cases**, not 120. A later native mismatch
+supersedes the earlier pass for that case; simulated runs cannot inflate or
+replace native coverage. Missing or corrupt evidence makes counts unknown.
+
+This overlay reports 26ai paired-probe coverage. The older 4,000-execution native
+gate requires 2,000 cases on Oracle 19c plus 2,000 on Oracle 26ai under a different
+wallet receipt contract. The overlay does not rewrite it, and AlloyDB is not a
+second Oracle lane. Neither report establishes full platform qualification.
+
+Read the same aggregate without cloud calls:
+
+```powershell
+py -3.12 -m lightyear_data.oracle_paired_coverage --root .
+```
+
+**Hypothetical: CHAR loses padding.** Alex sees NUMBER 20 matched, CHAR 19 matched
+and one different. The raw target string is shorter. The other families can
+finish; the overall run fails and cleanup is attempted. Alex reviews the
+transformation rather than approving a comparator that silently strips spaces.
+
+**Hypothetical: connection lost during DATE.** Sam sees completed earlier
+families and a partial DATE family. The remaining comparisons become blocked
+when the run terminates. Sam confirms cleanup (or invokes recovery with the
+displayed `core100-…` run ID) before authorizing another run. Recovery retries
+cleanup only and retains the original failure.
+
+**Hypothetical: 100 green simulated pairs.** Priya can evaluate progress and
+inspection in the browser. The run explicitly says `passed-simulated`, and its
+100 matches add zero native catalog coverage.

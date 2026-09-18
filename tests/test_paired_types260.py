@@ -46,8 +46,8 @@ class Types260Tests(unittest.TestCase):
         plan = suite.plan(self.root)
         self.assertEqual(len(plan['cases']), 260)
         self.assertEqual(len({c['behavior_id'] for c in plan['cases']}), 65)
-        self.assertEqual(len(list((self.root / suite.ARTIFACTS).rglob('*.sql'))), 520)
-        self.assertEqual(plan['families'], list(suite.FAMILIES))
+        self.assertEqual(len(list((self.root / suite.ARTIFACTS / 'cases').rglob('*.sql'))), 520)
+        self.assertEqual(plan['families'], list(suite.EXECUTION_FAMILIES))
         for case in previous.cases(self.root):
             for lane in ('oracle', 'alloydb'):
                 self.assertEqual(suite.render(case, lane), previous.render(case, lane))
@@ -86,15 +86,15 @@ class Types260Tests(unittest.TestCase):
         self.assertEqual(value['matched'], 259)
         self.assertTrue(value['cleanup']['complete'])
 
-    def test_interruption_retains_100_regression_pairs_and_blocks_160_new(self):
+    def test_interruption_retains_completed_families_and_blocks_only_remaining(self):
         class Broken(FamilySimulation):
             def observe(self, lane, case):
                 if case['topic'] == 'binary-float':
                     raise TimeoutError('Explicit simulated interruption')
                 return super().observe(lane, case)
         _, value = self.run_suite(Broken)
-        self.assertEqual(value['matched'], 100)
-        self.assertEqual(sum(f['blocked'] for f in value['families']), 160)
+        self.assertEqual(value['matched'], 140)
+        self.assertEqual(sum(f['blocked'] for f in value['families']), 120)
         self.assertTrue(value['cleanup']['complete'])
 
     def test_missing_late_family_cannot_preserve_a_verified_pass(self):

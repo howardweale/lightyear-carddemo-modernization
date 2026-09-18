@@ -41,7 +41,7 @@ def admitted(root, auth, events, terminal, key):
         if bound['id'] != case['id'] or bound['behavior_id'] != case['behavior_id']:
             raise ValueError('Coverage catalog binding differs')
         for lane in ('oracle', 'alloydb'):
-            if bound[lane + '_sql_sha256'] != hashlib.sha256(suite.render(case, lane).encode()).hexdigest():
+            if bound[lane + '_sql_sha256'] != hashlib.sha256(suite.bound_render(root, case, lane, auth['plan']).encode()).hexdigest():
                 raise ValueError('Coverage SQL contract differs')
         if auth['plan'].get('journal_layout') == 'family-v1':
             if (bound['family'] != case['topic'] or bound['catalog_expectation_sha256'] != digest(case['expected'])

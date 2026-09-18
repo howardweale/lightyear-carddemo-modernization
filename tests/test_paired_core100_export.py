@@ -31,7 +31,7 @@ class PublishedCore100Tests(unittest.TestCase):
         journals = Counter(e['payload']['journal_id'] for e in events)
         self.assertLess(journals['campaign'], 256)
         self.assertEqual({k: v for k, v in journals.items() if k != 'campaign'}, {f: 60 for f in suite.FAMILIES})
-        aggregate = coverage.project(ROOT, entries)
+        aggregate = coverage.project(ROOT, [row for row in entries if row[0]['campaign_id'] in (engine.CAMPAIGN, suite.CAMPAIGN)])
         self.assertEqual(aggregate['oracle26ai_executed_case_count'], 100)
         self.assertEqual(aggregate['alloydb_equivalent_case_count'], 100)
         self.assertEqual(aggregate['oracle26ai_verified_behavior_count'], 25)

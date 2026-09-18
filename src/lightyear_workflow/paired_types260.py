@@ -14,6 +14,10 @@ CAMPAIGN = 'oracle26ai-alloydb-types260'
 NAME = 'Oracle 26ai → AlloyDB · 260 datatype pairs'
 FAMILIES = previous.FAMILIES + ('binary-float', 'binary-double', 'nchar', 'raw',
                                'timestamp-tz', 'timestamp-ltz', 'interval-ym', 'interval-ds')
+EXECUTION_FAMILIES = ('interval-ym', 'interval-ds') + FAMILIES[:-2]
+# The initial native attempt completed 220 pairs before an interval compile
+# error. Its exact failed SQL remains reviewable; do not rewrite its binding.
+RETIRED_PLAN = '8af0836221c81282924e995d1980d1fa8faa836d4ca97fe49c10521710747ed0'
 ARTIFACTS = Path('data-modernization/oracle-paired-types260')
 PROFILE = Path('work/campaigns') / CAMPAIGN / 'profile.json'
 MARKER = previous.MARKER
@@ -103,9 +107,11 @@ def _expressions(topic, lane):
         microsecond = "INTERVAL '0.000001' SECOND" if ora else "INTERVAL '0.000001 second'"
         boundary = total("INTERVAL '100-1' YEAR(3) TO MONTH" if ora else "INTERVAL '100 years 1 month'") if ym else f'EXTRACT(SECOND FROM {microsecond}) * 1000000'
         null = 'CAST(NULL AS INTERVAL YEAR TO MONTH)' if ym and ora else 'CAST(NULL AS INTERVAL DAY TO SECOND)' if ora else 'NULL::interval'
-        return dict(canonical=fmt(total(value)), null_value=fmt(total(null)), boundary=fmt(boundary), session_value=fmt(total(f'(-{value})')),
-                    comparison=f'CASE WHEN {value} > -{value} THEN 1 ELSE 0 END',
-                    bad=("TO_YMINTERVAL('invalid')" if ym else "TO_DSINTERVAL('invalid')") if ora else "'invalid'::interval")
+        negative = ("INTERVAL '-1-2' YEAR TO MONTH" if ym else "INTERVAL '-1 02:03:04' DAY TO SECOND") if ora else f'(-{value})'
+        invalid = "TO_YMINTERVAL('invalid')" if ym else "TO_DSINTERVAL('invalid')"
+        return dict(canonical=fmt(total(value)), null_value=fmt(total(null)), boundary=fmt(boundary), session_value=fmt(total(negative)),
+                    comparison=f'CASE WHEN {value} > {negative if ora else "-" + value} THEN 1 ELSE 0 END',
+                    bad=f'TO_CHAR({invalid})' if ora else "'invalid'::interval")
     raise ValueError('No expression contract for family')
 
 
@@ -272,6 +278,17 @@ def verify(root):
                 raise ValueError('Types260 SQL binding drift: ' + case['id'])
 
 
+def bound_render(root, case, lane, authorized_plan):
+    """Only the exact retired signed plan can use the archived interval SQL."""
+    if (authorized_plan['plan_sha256'] == RETIRED_PLAN and lane == 'oracle'
+            and case['topic'] in ('interval-ym', 'interval-ds')):
+        path = root / ARTIFACTS / 'retired-v1/oracle' / (case['id'] + '.sql')
+        if path.is_symlink() or path.stat().st_size > 65536:
+            raise ValueError('Invalid retired SQL contract')
+        return path.read_text(encoding='utf-8')
+    return render(case, lane)
+
+
 def plan(root):
     verify(root)
     # Reuse the operational policy, never the historical scope or profile.
@@ -279,7 +296,7 @@ def plan(root):
     sources = ['lightyear_workflow/' + name for name in ('paired_types260.py', 'paired_types.py', 'paired_number.py', 'campaign_engine.py', 'campaign_gcp.py', 'campaign_journals.py')]
     sources.append('lightyear_data/oracle_number_native.py')
     body = dict(campaign_id=CAMPAIGN, name=NAME, project=paired_number.PROJECT, region=paired_number.REGION,
-                profile=config, journal_layout='family-v1', families=list(FAMILIES),
+                profile=config, contract_revision=2, journal_layout='family-v1', families=list(EXECUTION_FAMILIES),
                 implementation={name: hashlib.sha256((root / 'src' / name).read_bytes()).hexdigest() for name in sources},
                 cases=[dict(id=c['id'], behavior_id=c['behavior_id'], family=c['topic'],
                             catalog_expectation_sha256=digest(c['expected']),

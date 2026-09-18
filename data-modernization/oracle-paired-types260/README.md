@@ -63,3 +63,19 @@ If all cases pass natively, prior 20 + prior 100 + new 260 becomes **260 unique
 paired cases**, not 380. This is Oracle 26ai paired-probe coverage; it does not
 advance the separate Oracle 19c/26ai wallet gate or extend/revoke CloudBank's
 retained AlloyDB nonproduction platform qualification.
+
+## Interval correction and retained failed attempt
+
+The first native attempt completed 220 matching pairs, then Oracle rejected the
+YEAR TO MONTH program with ORA-00932/ORA-06550 before an observation was emitted.
+Forty pairs remained blocked and cleanup completed. Revision 2 uses explicit
+negative Oracle interval literals and `TO_CHAR` around the invalid-interval
+conversion probe; expected values and diagnostic mappings are unchanged.
+
+The retry executes the two interval families first. Case bindings and UI family
+order remain stable. The journal reader accepts only the original and revised
+fixed execution orders. `retired-v1/oracle` preserves the 40 original interval
+SQL files. Only the exact original signed plan hash may use those files during
+coverage admission, and each file must still match its authorized hash. This
+keeps the 220 observed results verifiable without rewriting the failed attempt
+or admitting its unexecuted interval cases as evidence.

@@ -19,14 +19,14 @@ def exit_code(result):
         return 3
     if status in {"comparison-failed", "execution-failed"}:
         return 1
-    if status in {"accepted", "dispatch-unconfirmed", "running-or-interrupted", "resume-requested"}:
+    if status in {"accepted", "queued", "dispatch-unconfirmed", "running-or-interrupted", "resume-requested"}:
         return 4
     return 0
 
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("command", choices=("init", "run", *OPERATIONS))
+    parser.add_argument("command", choices=("init", "worker", "run", *OPERATIONS))
     parser.add_argument("--project", type=Path, required=True)
     parser.add_argument("--evidence-root", type=Path)
     parser.add_argument("--project-id")
@@ -44,7 +44,13 @@ def main(argv=None):
             result = initialize(args.project, args.evidence_root, args.project_id)
         else:
             workflow = Workflow(args.project)
-            if args.command in {"start", "run"}:
+            if args.command == "worker":
+                try:
+                    workflow.serve_worker()
+                except KeyboardInterrupt:
+                    pass
+                return 0
+            elif args.command in {"start", "run"}:
                 if args.command == "start" and (not args.plan_sha256 or not args.request_id):
                     parser.error("start requires --plan-sha256 and --request-id")
                 if not 0 <= args.wait_seconds <= 600:

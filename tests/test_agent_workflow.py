@@ -5,6 +5,7 @@ from datetime import datetime, timedelta, timezone
 import hashlib
 import importlib.util
 import json
+import os
 from pathlib import Path
 import sqlite3
 import unittest
@@ -43,6 +44,15 @@ class AgentWorkflowTests(unittest.TestCase):
         self.assertFalse(self.workflow.directory.exists())
         self.assertEqual([], self.dispatched)
         self.assertNotEqual(self.root, self.project.parent)
+
+    @unittest.skipUnless(os.name == "nt", "Windows host job containment")
+    def test_windows_start_requires_independent_worker_before_accepting_run(self):
+        workflow = Workflow(self.project)
+        plan = workflow.invoke("plan")
+        result = workflow.invoke("start", plan_sha256=plan["plan_sha256"], request_id=str(uuid.uuid4()))
+        self.assertEqual("worker-required", result["error"]["code"])
+        with closing(workflow._db()) as db:
+            self.assertEqual(0, db.execute("SELECT COUNT(*) FROM runs").fetchone()[0])
 
     def test_concurrent_duplicate_start_dispatches_once_and_conflicts_fail(self):
         plan = self.workflow.invoke("plan")["plan_sha256"]

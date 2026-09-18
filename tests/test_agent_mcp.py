@@ -20,6 +20,27 @@ class MCPWorkflowTests(unittest.IsolatedAsyncioTestCase):
         self.root, self.project = fixture(self)
         self.environment = {**os.environ, "PYTHONPATH": str(ROOT / "src"), "PYTHONUTF8": "1", "PYTHONDONTWRITEBYTECODE": "1"}
 
+    async def start_worker(self):
+        if os.name != "nt":
+            return
+        # Deliberately outside the MCP client's kill-on-close Windows Job.
+        process = subprocess.Popen([sys.executable, "-m", "lightyear_agent.cli", "worker", "--project", str(self.project)],
+                                   env=self.environment, cwd=self.project.parent, stdin=subprocess.DEVNULL,
+                                   stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+                                   creationflags=subprocess.CREATE_NO_WINDOW)
+        def cleanup():
+            if process.poll() is None:
+                subprocess.run(["taskkill", "/PID", str(process.pid), "/T", "/F"],
+                               stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=False)
+            process.wait(timeout=15)
+        self.addCleanup(cleanup)
+        deadline = time.monotonic() + 30
+        observer = Workflow(self.project)
+        while not observer._broker_running():
+            self.assertIsNone(process.poll(), "Separate local worker exited during startup")
+            self.assertLess(time.monotonic(), deadline, "Separate local worker did not become ready")
+            await asyncio.sleep(0.1)
+
     @asynccontextmanager
     async def client(self):
         from mcp import ClientSession, StdioServerParameters
@@ -40,6 +61,7 @@ class MCPWorkflowTests(unittest.IsolatedAsyncioTestCase):
 
     async def test_complete_external_workflow_survives_mcp_disconnect(self):
         asyncio.get_running_loop().slow_callback_duration = 2
+        await self.start_worker()
         request_id = str(uuid.uuid4())
         async with self.client() as session:
             tools = (await session.list_tools()).tools

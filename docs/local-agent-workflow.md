@@ -59,6 +59,21 @@ For an immediate local example, use the included
 
 ## One workflow from the command line
 
+On **Windows**, first start the project worker in a separate terminal and leave
+it running while jobs execute (stop it with Ctrl+C when finished):
+
+```powershell
+lightyear-agent worker --project C:/projects/customer/lightyear.project.json
+```
+
+Start this worker independently of the MCP host. Windows MCP clients may place
+their server and its children in a kill-on-close job; a new process group alone
+does not survive that job closing. The independent worker owns execution, while
+MCP submits durable local requests. If the worker is absent, start returns
+`worker-required` before accepting a new run. Restart a stopped worker and use
+`resume` for a run interrupted during execution. Queued requests remain durable.
+Linux/macOS use a detached worker per run and do not require this separate step.
+
 Commands emit one JSON response on stdout. Diagnostics and the convenience
 runner's run ID go to stderr. These examples use an activated environment:
 
@@ -98,7 +113,7 @@ Persist the UUID in the calling workflow so a retry can find the same run.
 | 1 | Comparison or execution failed | Fail the check and retain evidence |
 | 2 | Invalid configuration, input, plan or evidence | Fix the reported error code; do not infer a result |
 | 3 | Verified run requires a human decision | Route to review; keep acceptance incomplete |
-| 4 | Accepted, running, uncertain dispatch or resume requested | Poll the same run; do not treat as failure or completion |
+| 4 | Accepted, queued, running, uncertain dispatch or resume requested | Poll the same run; do not treat as failure or completion |
 
 Every tool response has `schema_version`, `project_id`, `workflow`, `ok` and
 `status`. An unsuccessful operation has `error.code` and `error.message`.
@@ -114,6 +129,8 @@ The server supports **stdio only** and opens no network listener:
 ```powershell
 lightyear-mcp --project C:/projects/customer/lightyear.project.json
 ```
+
+On Windows, keep the independently started project worker running as described above.
 
 An MCP host launches that command and speaks the protocol on its stdin/stdout.
 Do not type normal CLI commands into those streams. A host using an
@@ -157,8 +174,9 @@ must check `ok` and `status`, even when the MCP protocol call itself succeeded.
 
 The engine process is detached from the MCP server and CLI client. Losing the
 client connection does not cancel it. The existing execution policy still bounds
-run time, action count and worker timeouts. A Windows worker starts without a
-visible console. The adapter neither forwards cloud credentials nor accepts
+run time, action count and worker timeouts. On Windows, the separately started
+worker owns queued execution; the MCP client never owns its lifetime.
+The adapter neither forwards cloud credentials nor accepts
 caller-supplied commands, SQL or file paths in tool arguments.
 
 `running-or-interrupted` deliberately does not assert that a process is alive.
@@ -189,7 +207,8 @@ python -m unittest tests.test_agent_workflow tests.test_agent_mcp -v
 ```
 
 CI runs the workflow and real stdio integration tests on Windows and Linux.
-The integration test launches a real detached engine from an external project,
+The integration test launches a real engine from an external project (using
+an independently started worker on Windows),
 disconnects MCP, reconnects, reads the export resource and checks the same
 journal hash through the CLI. Unit tests cover exact-plan binding, concurrent
 duplicate requests, interruption recovery, tamper rejection, project isolation,

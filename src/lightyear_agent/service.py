@@ -10,6 +10,7 @@ import re
 import sqlite3
 import subprocess
 import sys
+import time
 import uuid
 
 from lightyear_data.contracts import content_hash, seal
@@ -75,6 +76,7 @@ class Workflow:
         self.root = validate_manifest(self.config, self.project)
         self.identity = content_hash({"project": str(self.project), "config": self.config})
         self.directory = self.root / "work/agent-workflows" / self.identity
+        self.default_dispatch = dispatcher is None
         self.dispatcher = dispatcher or self._dispatch
 
     def _guard(self):
@@ -100,6 +102,7 @@ class Workflow:
         return {"status": "ready", "operations": list(OPERATIONS), "transport": ["json-cli", "stdio-mcp"],
                 "evidence_class": "retained-evidence-verification", "fresh_database_execution": False,
                 "cloud_execution": False, "creates_human_approval": False,
+                "separate_worker_required": os.name == "nt",
                 "project_scope": "Configured CloudBank evidence checkout; arbitrary customer adapters are not yet supported.",
                 "authorization": "Local operations obey the existing execution policy; ledger application also requires a separately signed human decision.",
                 "plan_resource": "lightyear://plan/current"}
@@ -183,6 +186,8 @@ class Workflow:
         plan = self._plan()
         if plan_sha256 != plan["content_sha256"]:
             raise WorkflowError("plan-changed", "Review the current plan before starting; the supplied digest is stale.")
+        if os.name == "nt" and self.default_dispatch:
+            self._require_broker()
         with closing(self._db(write=True)) as db, db:
             created = db.execute("INSERT OR IGNORE INTO runs VALUES (?,?,?,?,?)",
                                  (run_id, request_id, json.dumps(plan, sort_keys=True), "dispatch-unconfirmed", utcnow())).rowcount == 1
@@ -197,14 +202,57 @@ class Workflow:
         return {"status": "accepted", "run_id": run_id, "new_dispatch": created}
 
     def _dispatch(self, run_id):
+        if os.name == "nt":
+            # MCP hosts can own a non-breakaway, kill-on-close Windows Job.
+            # Queue to an operator-started worker instead of escaping that job.
+            self._require_broker()
+            self._set_dispatch(run_id, "queued")
+            return
         keep = {"PATH", "SYSTEMROOT", "WINDIR", "TEMP", "TMP", "TMPDIR", "LANG"}
         env = {k: v for k, v in os.environ.items() if k in keep}
         env.update(PYTHONPATH=str(SOURCE), PYTHONUTF8="1", PYTHONDONTWRITEBYTECODE="1")
-        options = {"start_new_session": True} if os.name != "nt" else {
-            "creationflags": subprocess.CREATE_NO_WINDOW | subprocess.CREATE_NEW_PROCESS_GROUP}
         subprocess.Popen([sys.executable, "-m", "lightyear_agent.worker", "--project", str(self.project), "--run-id", run_id],
                          cwd=self.root, env=env, stdin=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
-                         stderr=subprocess.DEVNULL, close_fds=True, **options)
+                         stderr=subprocess.DEVNULL, close_fds=True, start_new_session=True)
+
+    def _broker_running(self):
+        path = safe_path(self.directory / "broker-lease")
+        if not path.exists():
+            return False
+        try:
+            lease = RunStore(path)
+        except ValueError as exc:
+            if str(exc) == "Another headless engine owns this run":
+                return True
+            raise
+        lease.close()
+        return False
+
+    def _require_broker(self):
+        if not self._broker_running():
+            raise WorkflowError("worker-required", "Start lightyear-agent worker --project <this manifest> in a separate terminal before starting or resuming work.")
+
+    def serve_worker(self):
+        """Windows job owner, launched separately by the operator, never MCP."""
+        self._guard()
+        with closing(self._db(write=True)):
+            pass
+        lease = RunStore(safe_path(self.directory / "broker-lease"))
+        try:
+            while True:
+                self._guard()
+                with closing(self._db()) as db:
+                    rows = db.execute("SELECT run_id FROM runs WHERE dispatch_state='queued' ORDER BY created_at LIMIT 1").fetchall()
+                if not rows:
+                    time.sleep(0.25)
+                    continue
+                run_id = rows[0]["run_id"]
+                try:
+                    self.work(run_id)
+                except (ValueError, OSError, KeyError, TypeError, sqlite3.Error):
+                    self._set_dispatch(run_id, "execution-failed")
+        finally:
+            lease.close()
 
     def _verified(self, run_id):
         row = self._row(run_id)

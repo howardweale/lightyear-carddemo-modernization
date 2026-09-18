@@ -44,11 +44,11 @@ class GcpRunner:
     evidence_class = "native-database-observed"
 
     def __init__(self, root: Path, run_id: str, plan: dict, emit):
-        if not re.fullmatch(r"(?:number|core100)-[a-f0-9]{32}", run_id):
+        if not re.fullmatch(r"(?:number|core100|types260)-[a-f0-9]{32}", run_id):
             raise ValueError("Invalid campaign run ID")
         self.root, self.plan, self.emit = root, plan, emit
         self.run_id = run_id
-        self.vm = ('ly-types-' if run_id.startswith('core100-') else 'ly-number-') + run_id.split('-', 1)[1][:20]
+        self.vm = ('ly-types-' if run_id.startswith(('core100-', 'types260-')) else 'ly-number-') + run_id.split('-', 1)[1][:20]
         self.firewall = self.vm + "-iap"
         self.zone = plan["profile"]["runner_zone"]
         self.deadline = time.monotonic() + plan["profile"]["max_seconds"]
@@ -205,14 +205,15 @@ class GcpRunner:
                             "evidence_class": self.evidence_class}}
 
     def observe(self, lane, case):
-        from . import paired_types
-        core = self.plan['campaign_id'] == paired_types.CAMPAIGN
-        body = paired_types.render(case, lane) if core else postgres_case(case) if lane == 'alloydb' else render_case(case, '26ai')
+        from . import paired_types, paired_types260
+        suite = paired_types260 if self.plan['campaign_id'] == paired_types260.CAMPAIGN else paired_types
+        core = self.plan['campaign_id'] in (paired_types.CAMPAIGN, paired_types260.CAMPAIGN)
+        body = suite.render(case, lane) if core else postgres_case(case) if lane == 'alloydb' else render_case(case, '26ai')
         sql = body if lane == "alloydb" else (
             # DBMS_OUTPUT package state belongs to the selected container.
             # Enable it after switching from the root to FREEPDB1.
             "SET ECHO OFF FEEDBACK OFF HEADING OFF PAGESIZE 0 VERIFY OFF DEFINE OFF\nSET LINESIZE 32767\nWHENEVER SQLERROR EXIT SQL.SQLCODE\nALTER SESSION SET CONTAINER=FREEPDB1;\nSET SERVEROUTPUT ON SIZE UNLIMITED\n" + body + "\nEXIT\n")
-        return (paired_types.parse if core else parse_observation)(self.sql(lane, sql), case, lane)
+        return (suite.parse if core else parse_observation)(self.sql(lane, sql), case, lane)
 
     def cleanup(self):
         results = {}

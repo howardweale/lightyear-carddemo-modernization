@@ -8,12 +8,12 @@ import time
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path[:0] = [str(ROOT / 'src'), str(ROOT)]
-from tests.test_paired_core100 import Core100Tests, FamilySimulation
+from tests.test_paired_types260 import Types260Tests, FamilySimulation
 from lightyear_workflow.campaign_engine import execute
 from lightyear_knowledge_graph.explorer import ExplorerServer, GraphExplorerIndex
 from lightyear_knowledge_graph.model import load_graph
 
-fixture = Core100Tests()
+fixture = Types260Tests()
 fixture.setUp()
 shutil.copytree(ROOT / 'knowledge/viewer', fixture.root / 'knowledge/viewer')
 shutil.copytree(ROOT / 'data-modernization/oracle-schema-structured-coverage', fixture.root / 'data-modernization/oracle-schema-structured-coverage')

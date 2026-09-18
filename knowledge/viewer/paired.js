@@ -83,7 +83,7 @@
   }
   function renderRun(host, value) {
     const opened = new Set([...host.querySelectorAll('details[open]')].map(el => el.querySelector('summary')?.textContent.split(' · ')[0]));
-    host.replaceChildren(node('h1', value.authorization?.plan.name || (value.campaign_id === 'oracle26ai-alloydb-core100' ? 'Oracle 26ai → AlloyDB · 100 datatype pairs' : 'Oracle 26ai → AlloyDB · NUMBER run')));
+    host.replaceChildren(node('h1', value.authorization?.plan.name || (value.campaign_id === 'oracle26ai-alloydb-types260' ? 'Oracle 26ai → AlloyDB · 260 datatype pairs' : value.campaign_id === 'oracle26ai-alloydb-core100' ? 'Oracle 26ai → AlloyDB · 100 datatype pairs' : 'Oracle 26ai → AlloyDB · NUMBER run')));
     if (['invalid', 'unavailable'].includes(value.status)) { host.append(node('p', value.reason)); return; }
     window.LightyearContext.updatePairedRun(value);
     host.append(node('p', `${value.status} · ${value.run_id}`, 'run-note'));

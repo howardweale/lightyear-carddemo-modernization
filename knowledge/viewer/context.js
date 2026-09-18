@@ -41,7 +41,7 @@
       const previous = remembered.get(`${state.estate}/${state.campaignId}`);
       state.runId = [...select.options].some(item => item.value === previous) ? previous : state.runs[0]?.run_id || 'current';
       select.value = state.runId; select.disabled = select.options.length < 2;
-      note.textContent = state.campaignId !== 'retained' ? `${state.campaignId === 'oracle26ai-alloydb-core100' ? 'Five datatype families · 100' : 'NUMBER catalog pilot · 20'} cases on each database. Run figures come from the selected engine journal. Discovery shows the selected estate workload, not the datatype test cases.` : `${state.name} · ${state.estate === 'cloudbank' ? 'Run evidence covers all eight services; Discovery shows the chosen workload. ' : ''}Convergence covers all indexed runs in this estate. ${state.runs.length ? 'Latest 100 runs available in the selector.' : 'No indexed history yet.'}`;
+      note.textContent = state.campaignId !== 'retained' ? `${state.campaignId === 'oracle26ai-alloydb-types260' ? 'Thirteen datatype families · 260' : state.campaignId === 'oracle26ai-alloydb-core100' ? 'Five datatype families · 100' : 'NUMBER catalog pilot · 20'} cases on each database. Run figures come from the selected engine journal. Discovery shows the selected estate workload, not the datatype test cases.` : `${state.name} · ${state.estate === 'cloudbank' ? 'Run evidence covers all eight services; Discovery shows the chosen workload. ' : ''}Convergence covers all indexed runs in this estate. ${state.runs.length ? 'Latest 100 runs available in the selector.' : 'No indexed history yet.'}`;
       emit();
     } catch (error) {
       if (request !== sequence) return;
@@ -56,7 +56,7 @@
     if (state.estate === estate) return;
     state.campaignId = 'retained';
     campaigns.replaceChildren(option('retained', 'Retained estate evidence'));
-    if (estate === 'cloudbank') campaigns.append(option('oracle26ai-alloydb-number', 'Oracle 26ai → AlloyDB · NUMBER pilot'), option('oracle26ai-alloydb-core100', 'Oracle 26ai → AlloyDB · 100 datatype pairs'));
+    if (estate === 'cloudbank') campaigns.append(option('oracle26ai-alloydb-number', 'Oracle 26ai → AlloyDB · NUMBER pilot'), option('oracle26ai-alloydb-core100', 'Oracle 26ai → AlloyDB · 100 datatype pairs'), option('oracle26ai-alloydb-types260', 'Oracle 26ai → AlloyDB · 260 datatype pairs'));
     state.estate = estate; state.name = company.name; state.runId = 'current'; state.runs = [];
     note.textContent = `${state.name} · Reading history…`;
     document.querySelector('.legacy-workflow').hidden = estate !== 'idempiere';

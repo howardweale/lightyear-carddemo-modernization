@@ -21,7 +21,7 @@ from lightyear_data.oracle_number_native import number_cases
 from .campaigns import CAMPAIGN
 from .paired_number import ROOT, plan
 from .run_store import RunStore, utcnow
-from . import paired_types, campaign_journals
+from . import paired_types, paired_types260, campaign_journals
 
 AUTHORITY = ROOT / "operator/authority.json"
 INDEX = ROOT / "run-index.sqlite3"
@@ -30,6 +30,8 @@ INDEX = ROOT / "run-index.sqlite3"
 def campaign_plan(root, campaign=CAMPAIGN):
     if campaign == CAMPAIGN:
         return plan(root)
+    if campaign == paired_types260.CAMPAIGN:
+        return paired_types260.plan(root)
     if campaign == paired_types.CAMPAIGN:
         return paired_types.plan(root)
     raise ValueError('Unknown paired campaign')
@@ -38,17 +40,19 @@ def campaign_plan(root, campaign=CAMPAIGN):
 def campaign_cases(root, campaign):
     if campaign == CAMPAIGN:
         return number_cases(root)
+    if campaign == paired_types260.CAMPAIGN:
+        return paired_types260.cases(root)
     if campaign == paired_types.CAMPAIGN:
         return paired_types.cases(root)
     raise ValueError('Unknown paired campaign')
 
 
 def campaign_compare(case, source, target):
-    return paired_types.compare(case, source, target)
+    return paired_types260.compare(case, source, target)
 
 
 def run_path(root: Path, run_id: str) -> Path:
-    if not re.fullmatch(r"(?:number|core100)-[a-f0-9]{32}", run_id):
+    if not re.fullmatch(r"(?:number|core100|types260)-[a-f0-9]{32}", run_id):
         raise ValueError("Invalid campaign run ID")
     path = root.resolve() / ROOT / "runs" / run_id
     if any(p.is_symlink() for p in (path, *path.parents)):
@@ -113,13 +117,13 @@ def recovery_for(db, auth, key):
 
 
 def checked_authorization(value, key):
-    if not verify_envelope(value, key) or value.get("record_type") != "paired-campaign-authorization" or value.get("campaign_id") not in (CAMPAIGN, paired_types.CAMPAIGN):
+    if not verify_envelope(value, key) or value.get("record_type") != "paired-campaign-authorization" or value.get("campaign_id") not in (CAMPAIGN, paired_types.CAMPAIGN, paired_types260.CAMPAIGN):
         raise ValueError("Campaign authorization signature or scope invalid")
     run_path(Path("."), value["run_id"])
     bound = value["plan"]
     if bound.get('campaign_id') != value['campaign_id']:
         raise ValueError('Authorization and plan campaign differ')
-    prefix = 'number-' if value['campaign_id'] == CAMPAIGN else 'core100-'
+    prefix = {CAMPAIGN: 'number-', paired_types.CAMPAIGN: 'core100-', paired_types260.CAMPAIGN: 'types260-'}[value['campaign_id']]
     if not value['run_id'].startswith(prefix):
         raise ValueError('Run ID differs from campaign scope')
     if bound["plan_sha256"] != digest({k: v for k, v in bound.items() if k != "plan_sha256"}):
@@ -172,7 +176,7 @@ def authorize(root: Path, signer, actor: dict, request: dict) -> tuple[dict, boo
             if not terminal or not verify_envelope(terminal, public_key(root)) or terminal.get("authorization_sha256") != prior["content_sha256"] or not (terminal.get("cleanup", {}).get("complete") or (recovered or {}).get("cleanup", {}).get("complete")):
                 raise ValueError("Another campaign is active or requires cleanup recovery")
         auth = signer.sign({"record_type": "paired-campaign-authorization", "campaign_id": campaign,
-                            "run_id": ('number-' if campaign == CAMPAIGN else 'core100-') + uuid.uuid4().hex, "request_id": request_id, "actor": actor,
+                            "run_id": {CAMPAIGN: 'number-', paired_types.CAMPAIGN: 'core100-', paired_types260.CAMPAIGN: 'types260-'}[campaign] + uuid.uuid4().hex, "request_id": request_id, "actor": actor,
                             "authorized_at": utcnow(), "start_before": (datetime.now(timezone.utc) + timedelta(minutes=10)).isoformat(),
                             "reason": reason, "plan": current})
         db.execute("INSERT INTO runs VALUES (?, ?, ?, NULL)", (auth["run_id"], request_id, canonical(auth).decode()))

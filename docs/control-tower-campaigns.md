@@ -224,3 +224,45 @@ cleanup only and retains the original failure.
 **Hypothetical: 100 green simulated pairs.** Priya can evaluate progress and
 inspection in the browser. The run explicitly says `passed-simulated`, and its
 100 matches add zero native catalog coverage.
+
+## The 260-pair datatype campaign
+
+Select **CloudBank → Oracle 26ai → AlloyDB · 260 datatype pairs**. The campaign
+includes the previous 100 cases plus 160 new cases: BINARY_FLOAT, BINARY_DOUBLE,
+NCHAR, RAW, TIMESTAMP WITH TIME ZONE, TIMESTAMP WITH LOCAL TIME ZONE, INTERVAL
+YEAR TO MONTH and INTERVAL DAY TO SECOND. Each family contributes 20 pairs.
+Review the [bounded SQL contract](../data-modernization/oracle-paired-types260/README.md)
+before interpreting the coverage claim.
+
+Use the separate `oracle26ai-alloydb-types260` profile and campaign ID when
+reviewing or authorizing. Its 260-case scope requires its own authorization;
+earlier pilot approvals cannot launch it. The same authority and resource lock
+prevent overlapping campaigns. The run shows four counters out of 260, thirteen
+family rows, raw case observations, signed events and cleanup. Convergence shows
+this campaign's signed history. For cleanup recovery, use the exact displayed
+`types260-…` run ID with the recovery command above.
+
+**Hypothetical: one floating bit differs.** Morgan sees 259 equivalent pairs and
+one mismatch. The float's raw hex differs; the comparator does not round the
+values into agreement. The run fails while retaining every family's result.
+
+**Hypothetical: time-zone probes pass.** Lee can claim that the selected UTC
+instants and session displays matched. Lee cannot claim preservation of every
+original region name or daylight-saving transition: those probes are not in
+this contract.
+
+**Hypothetical: interruption after the original five families.** Jordan sees
+100 matches and 160 blocked comparisons. Cleanup proceeds; remaining pairs are
+not counted as failures of database semantics or as passes. A fresh authorization
+is needed to run again. The aggregate deduplicates these baseline case IDs.
+
+**Hypothetical: all 260 pass natively.** The selected run shows 260/260 and the
+catalog aggregate shows 260 unique equivalent cases / 65 bounded behaviours,
+not 380 by adding the overlapping campaigns. This does not establish additional
+platform qualification. A green simulation contributes no native coverage.
+
+The [published native 260-pair result](receipts/oracle26ai-alloydb-types260-20260917/README.md)
+contains a successful 260/260 run and the earlier failed interval-harness attempt.
+Both retain their authorizations, observations and cleanup evidence. The combined
+planning estimate was $2.94 against the approved additional $10 allowance;
+the estimate excludes ongoing storage and is not a measured bill.

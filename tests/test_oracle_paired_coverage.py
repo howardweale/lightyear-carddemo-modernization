@@ -86,6 +86,23 @@ class PairedCoverageTests(unittest.TestCase):
         self.assertEqual(value['alloydb_equivalent_case_count'], 99)
         self.assertEqual(value['alloydb_equivalent_behavior_count'], 24)
 
+    def test_100_plus_260_are_260_and_later_simulation_cannot_replace_native(self):
+        from lightyear_workflow import paired_types260 as expanded
+        def result(selected):
+            return {'case_results': [dict(case_id=c['id'], oracle=expanded.expected(c, 'oracle'),
+                                         alloydb=expanded.expected(c, 'alloydb'),
+                                         comparison=expanded.compare(c, expanded.expected(c, 'oracle'), expanded.expected(c, 'alloydb')))
+                                    for c in selected]}
+        entries = [({'run_id': name, 'campaign_id': campaign, 'authorized_at': f'2026-01-0{day}T00:00:00+00:00'}, [], {}, b'')
+                   for day, name, campaign in ((1, 'old', suite.CAMPAIGN), (2, 'expanded', expanded.CAMPAIGN), (3, 'simulation', expanded.CAMPAIGN))]
+        # Aggregation-only fixtures: no fabricated native signatures or receipts.
+        with patch.object(coverage, 'admitted', side_effect=[result(suite.cases(ROOT)), result(expanded.cases(ROOT)), None]):
+            value = coverage.project(ROOT, entries)
+        self.assertEqual(value['oracle26ai_executed_case_count'], 260)
+        self.assertEqual(value['alloydb_equivalent_case_count'], 260)
+        self.assertEqual(value['alloydb_equivalent_behavior_count'], 65)
+        self.assertEqual(value['excluded_simulated_or_unclassified_runs'], 1)
+
 
 if __name__ == '__main__':
     unittest.main()

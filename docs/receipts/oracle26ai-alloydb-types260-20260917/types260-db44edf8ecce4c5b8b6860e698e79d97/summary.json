@@ -1,0 +1,186 @@
+{
+  "at": "2026-09-18T03:13:18.321366+00:00",
+  "authorization_sha256": "9a95efd2ecbd468d9408e48cd4abcbfe83d98c4dfff7d63fa41d71d3b16e0d67",
+  "cleanup": {
+    "complete": true,
+    "resources": {
+      "alloydb": "stopped",
+      "firewall": "deleted",
+      "vm": "deleted"
+    }
+  },
+  "comparisons_completed": 260,
+  "content_sha256": "9ddd1545893c149a8749271be711a18865e2217c04214e1828cee0eada10bd3d",
+  "evidence_class": "native-database-observed",
+  "families": [
+    {
+      "blocked": 0,
+      "comparisons_completed": 20,
+      "family": "number",
+      "matched": 20,
+      "mismatched": 0,
+      "pending": 0,
+      "planned": 20,
+      "source_completed": 20,
+      "status": "matched",
+      "target_completed": 20
+    },
+    {
+      "blocked": 0,
+      "comparisons_completed": 20,
+      "family": "char",
+      "matched": 20,
+      "mismatched": 0,
+      "pending": 0,
+      "planned": 20,
+      "source_completed": 20,
+      "status": "matched",
+      "target_completed": 20
+    },
+    {
+      "blocked": 0,
+      "comparisons_completed": 20,
+      "family": "varchar2",
+      "matched": 20,
+      "mismatched": 0,
+      "pending": 0,
+      "planned": 20,
+      "source_completed": 20,
+      "status": "matched",
+      "target_completed": 20
+    },
+    {
+      "blocked": 0,
+      "comparisons_completed": 20,
+      "family": "date",
+      "matched": 20,
+      "mismatched": 0,
+      "pending": 0,
+      "planned": 20,
+      "source_completed": 20,
+      "status": "matched",
+      "target_completed": 20
+    },
+    {
+      "blocked": 0,
+      "comparisons_completed": 20,
+      "family": "timestamp",
+      "matched": 20,
+      "mismatched": 0,
+      "pending": 0,
+      "planned": 20,
+      "source_completed": 20,
+      "status": "matched",
+      "target_completed": 20
+    },
+    {
+      "blocked": 0,
+      "comparisons_completed": 20,
+      "family": "binary-float",
+      "matched": 20,
+      "mismatched": 0,
+      "pending": 0,
+      "planned": 20,
+      "source_completed": 20,
+      "status": "matched",
+      "target_completed": 20
+    },
+    {
+      "blocked": 0,
+      "comparisons_completed": 20,
+      "family": "binary-double",
+      "matched": 20,
+      "mismatched": 0,
+      "pending": 0,
+      "planned": 20,
+      "source_completed": 20,
+      "status": "matched",
+      "target_completed": 20
+    },
+    {
+      "blocked": 0,
+      "comparisons_completed": 20,
+      "family": "nchar",
+      "matched": 20,
+      "mismatched": 0,
+      "pending": 0,
+      "planned": 20,
+      "source_completed": 20,
+      "status": "matched",
+      "target_completed": 20
+    },
+    {
+      "blocked": 0,
+      "comparisons_completed": 20,
+      "family": "raw",
+      "matched": 20,
+      "mismatched": 0,
+      "pending": 0,
+      "planned": 20,
+      "source_completed": 20,
+      "status": "matched",
+      "target_completed": 20
+    },
+    {
+      "blocked": 0,
+      "comparisons_completed": 20,
+      "family": "timestamp-tz",
+      "matched": 20,
+      "mismatched": 0,
+      "pending": 0,
+      "planned": 20,
+      "source_completed": 20,
+      "status": "matched",
+      "target_completed": 20
+    },
+    {
+      "blocked": 0,
+      "comparisons_completed": 20,
+      "family": "timestamp-ltz",
+      "matched": 20,
+      "mismatched": 0,
+      "pending": 0,
+      "planned": 20,
+      "source_completed": 20,
+      "status": "matched",
+      "target_completed": 20
+    },
+    {
+      "blocked": 0,
+      "comparisons_completed": 20,
+      "family": "interval-ym",
+      "matched": 20,
+      "mismatched": 0,
+      "pending": 0,
+      "planned": 20,
+      "source_completed": 20,
+      "status": "matched",
+      "target_completed": 20
+    },
+    {
+      "blocked": 0,
+      "comparisons_completed": 20,
+      "family": "interval-ds",
+      "matched": 20,
+      "mismatched": 0,
+      "pending": 0,
+      "planned": 20,
+      "source_completed": 20,
+      "status": "matched",
+      "target_completed": 20
+    }
+  ],
+  "journal_head_sha256": "9371f3d67c9ec1c62bea91d6a81a9f758b60dabdf51d90005c9d81107d5f2541",
+  "matched": 260,
+  "planned_cases": 260,
+  "record_type": "paired-campaign-summary",
+  "run_id": "types260-db44edf8ecce4c5b8b6860e698e79d97",
+  "signature": {
+    "algorithm": "Ed25519",
+    "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+    "value": "6gz1XUCl3AIVUeqmWDmnbKlWi9l+ehmIOfdGYQUgyzCTH1NmlCd4oH49J3sPzFT71xe9BuX1LLhvLtvxI77xBw=="
+  },
+  "source_completed": 260,
+  "status": "passed-bounded-native",
+  "target_completed": 260
+}

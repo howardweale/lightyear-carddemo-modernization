@@ -1,0 +1,44 @@
+{
+  "attempts": [
+    {
+      "authorization_to_terminal_seconds": 2469.688,
+      "comparisons_completed": 220,
+      "execution_revision": "1572b0ea1e634299d4e0b8b5014edb510d55a2df",
+      "matched": 220,
+      "planning_allowance_usd": 1.38,
+      "run_id": "types260-a0da8b63ecf64777a220c01292f7f13f",
+      "source_completed": 220,
+      "status": "failed",
+      "target_completed": 220
+    },
+    {
+      "authorization_to_terminal_seconds": 2794.65,
+      "comparisons_completed": 260,
+      "execution_revision": "289cdc93f826d29a91123baa1166f8c1738a9dbb",
+      "matched": 260,
+      "planning_allowance_usd": 1.56,
+      "run_id": "types260-db44edf8ecce4c5b8b6860e698e79d97",
+      "source_completed": 260,
+      "status": "passed-bounded-native",
+      "target_completed": 260
+    }
+  ],
+  "authorization_to_terminal_seconds": 5264.338,
+  "authorized_cumulative_estimated_budget_usd": 10,
+  "cost_basis": "Authorization-to-terminal elapsed time at the authorized $2/hour planning rate, rounded up per attempt. Includes preparation and cleanup; not a measured GCP bill. Existing storage/backups excluded.",
+  "exported_from_revision": "ad7811521717c490a7835acb38e622c834ca7c24",
+  "files": {
+    "operational-readback.json": "c378adc1be8a524b34345d4f10016c0e26f8e7221e63a97a4ba41e1aae6ba834",
+    "public-key.pem": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+    "types260-a0da8b63ecf64777a220c01292f7f13f/authorization.json": "171e85eecf531fbb270ee0470889fe5994013b1349fd6c121e603644e062a64a",
+    "types260-a0da8b63ecf64777a220c01292f7f13f/journal.json": "eb47b21dae72c2313ca34eca688fcb876ffe22e038d41fdf5281f461586a49ad",
+    "types260-a0da8b63ecf64777a220c01292f7f13f/summary.json": "8666dc32ae2fe3d743115ae026e26787922799aa012721e4300d38183d4ae782",
+    "types260-db44edf8ecce4c5b8b6860e698e79d97/authorization.json": "d7ebd0cef68ed6c6710e8bab73e048df7a1ff852ce1a04a7e53f02282e48515f",
+    "types260-db44edf8ecce4c5b8b6860e698e79d97/journal.json": "b5e6be340a651b465cd375ecfa3d4c04b7af7750321cb73e3f50543e5aed701d",
+    "types260-db44edf8ecce4c5b8b6860e698e79d97/summary.json": "7f9971308b7d8d34520e5e29726e6c584bc73055c37330d735018f5745b233bf"
+  },
+  "format": "lightyear-paired-campaign-export-v1",
+  "planning_allowance_usd": 2.94,
+  "scope": "260 bounded Oracle 26ai/AlloyDB datatype pairs, thirteen families, 65 behaviours. Prior 20 and 100 cases deduplicate. No additional platform qualification or Oracle 19c claim.",
+  "successful_run_id": "types260-db44edf8ecce4c5b8b6860e698e79d97"
+}

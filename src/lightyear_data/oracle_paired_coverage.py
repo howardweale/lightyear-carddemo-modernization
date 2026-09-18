@@ -14,7 +14,7 @@ import sqlite3
 
 from lightyear_control_tower.decisions import digest, verify_envelope
 from lightyear_data.contracts import content_hash
-from lightyear_workflow import campaign_engine as engine, campaign_journals, paired_types as suite
+from lightyear_workflow import campaign_engine as engine, campaign_journals, paired_types260 as suite
 
 PUBLISHED_KEY = '36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552'
 BASELINE = Path('data-modernization/oracle-schema-structured-coverage/schema-structured.receipt.json')
@@ -41,9 +41,9 @@ def admitted(root, auth, events, terminal, key):
         if bound['id'] != case['id'] or bound['behavior_id'] != case['behavior_id']:
             raise ValueError('Coverage catalog binding differs')
         for lane in ('oracle', 'alloydb'):
-            if bound[lane + '_sql_sha256'] != hashlib.sha256(suite.render(case, lane).encode()).hexdigest():
+            if bound[lane + '_sql_sha256'] != hashlib.sha256(suite.bound_render(root, case, lane, auth['plan']).encode()).hexdigest():
                 raise ValueError('Coverage SQL contract differs')
-        if auth['campaign_id'] == suite.CAMPAIGN:
+        if auth['plan'].get('journal_layout') == 'family-v1':
             if (bound['family'] != case['topic'] or bound['catalog_expectation_sha256'] != digest(case['expected'])
                     or bound['probe_contract_sha256'] != digest({lane: suite.expected(case, lane) for lane in ('oracle', 'alloydb')})):
                 raise ValueError('Coverage expectation binding differs')
@@ -135,7 +135,7 @@ def project(root, entries):
             'alloydb_equivalent_case_count': paired_count, 'alloydb_equivalent_behavior_count': paired_behaviors,
             'native_run_ids': runs, 'excluded_simulated_or_unclassified_runs': excluded,
             'cases': list(latest.values()), 'platform_qualification_established_by_this_campaign': False,
-            'coverage_statement': f"{baseline['bounded_model_verified_behavior_count']}/{baseline['catalogued_behavior_count']} behaviours have bounded-model coverage. Under the paired probe contract: {source_count} unique Oracle 26ai cases observed, {native_behaviors} behaviours verified, and {paired_count} unique cases equivalent on AlloyDB. NUMBER reruns are deduplicated.",
+            'coverage_statement': f"{baseline['bounded_model_verified_behavior_count']}/{baseline['catalogued_behavior_count']} behaviours have bounded-model coverage. Under the paired probe contract: {source_count} unique Oracle 26ai cases observed, {native_behaviors} behaviours verified, and {paired_count} unique cases equivalent on AlloyDB. Repeated case IDs across campaigns are deduplicated.",
             'gate_note': 'The legacy 4,000-execution gate requires 2,000 cases on each of Oracle 19c and 26ai under its wallet receipt contract. This overlay does not alter that gate; AlloyDB executions never count as Oracle executions. This campaign adds no platform qualification claim and does not revoke the separate CloudBank AlloyDB nonproduction qualification.',
             'trust_note': 'Verified Ed25519 campaign authority, SQL bindings, journal chains and comparator replay. This is operator-signed evidence, not independent vendor certification. Latest native observation per case supersedes an earlier result.'}
 

@@ -63,8 +63,12 @@ def assemble(parent, load, auth, key):
     check(parent, auth, key, 'campaign')
     families = auth['plan']['families']
     # Family identifiers are a fixed allowlist, never filesystem paths from input.
-    from .paired_types import FAMILIES
-    if families != list(FAMILIES):
+    from . import paired_types, paired_types260
+    scopes = {paired_types.CAMPAIGN: paired_types.FAMILIES, paired_types260.CAMPAIGN: paired_types260.FAMILIES}
+    permitted_orders = [list(scopes.get(auth['campaign_id'], ()))]
+    if auth['campaign_id'] == paired_types260.CAMPAIGN:
+        permitted_orders.append(list(paired_types260.EXECUTION_FAMILIES))
+    if families not in permitted_orders:
         raise ValueError('Unknown family journal scope')
     opened, active, output = [], None, []
 

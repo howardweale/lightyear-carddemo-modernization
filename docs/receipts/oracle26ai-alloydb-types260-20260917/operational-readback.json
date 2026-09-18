@@ -1,0 +1,22 @@
+{
+  "alloydb": {
+    "activationPolicy": "NEVER",
+    "state": "STOPPED"
+  },
+  "cloud_sql": {
+    "settings": {
+      "activationPolicy": "NEVER"
+    },
+    "state": "STOPPED"
+  },
+  "evidence_class": "unsigned-operational-readback",
+  "observed_at": "2026-09-18T03:14:32.307809+00:00",
+  "owned_boot_disks": [],
+  "owned_firewalls": [],
+  "owned_vms": [],
+  "project": "lightyear-ms67-nonproduction",
+  "run_ids": [
+    "types260-db44edf8ecce4c5b8b6860e698e79d97",
+    "types260-a0da8b63ecf64777a220c01292f7f13f"
+  ]
+}

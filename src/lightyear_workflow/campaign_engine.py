@@ -19,15 +19,36 @@ import uuid
 from lightyear_control_tower.decisions import canonical, digest, verify_envelope
 from lightyear_data.oracle_number_native import number_cases
 from .campaigns import CAMPAIGN
-from .paired_number import ROOT, compare, plan
+from .paired_number import ROOT, plan
 from .run_store import RunStore, utcnow
+from . import paired_types, campaign_journals
 
 AUTHORITY = ROOT / "operator/authority.json"
 INDEX = ROOT / "run-index.sqlite3"
 
 
+def campaign_plan(root, campaign=CAMPAIGN):
+    if campaign == CAMPAIGN:
+        return plan(root)
+    if campaign == paired_types.CAMPAIGN:
+        return paired_types.plan(root)
+    raise ValueError('Unknown paired campaign')
+
+
+def campaign_cases(root, campaign):
+    if campaign == CAMPAIGN:
+        return number_cases(root)
+    if campaign == paired_types.CAMPAIGN:
+        return paired_types.cases(root)
+    raise ValueError('Unknown paired campaign')
+
+
+def campaign_compare(case, source, target):
+    return paired_types.compare(case, source, target)
+
+
 def run_path(root: Path, run_id: str) -> Path:
-    if not re.fullmatch(r"number-[a-f0-9]{32}", run_id):
+    if not re.fullmatch(r"(?:number|core100)-[a-f0-9]{32}", run_id):
         raise ValueError("Invalid campaign run ID")
     path = root.resolve() / ROOT / "runs" / run_id
     if any(p.is_symlink() for p in (path, *path.parents)):
@@ -92,16 +113,21 @@ def recovery_for(db, auth, key):
 
 
 def checked_authorization(value, key):
-    if not verify_envelope(value, key) or value.get("record_type") != "paired-campaign-authorization" or value.get("campaign_id") != CAMPAIGN:
+    if not verify_envelope(value, key) or value.get("record_type") != "paired-campaign-authorization" or value.get("campaign_id") not in (CAMPAIGN, paired_types.CAMPAIGN):
         raise ValueError("Campaign authorization signature or scope invalid")
     run_path(Path("."), value["run_id"])
     bound = value["plan"]
+    if bound.get('campaign_id') != value['campaign_id']:
+        raise ValueError('Authorization and plan campaign differ')
+    prefix = 'number-' if value['campaign_id'] == CAMPAIGN else 'core100-'
+    if not value['run_id'].startswith(prefix):
+        raise ValueError('Run ID differs from campaign scope')
     if bound["plan_sha256"] != digest({k: v for k, v in bound.items() if k != "plan_sha256"}):
         raise ValueError("Authorized plan digest invalid")
     return value
 
 
-def records(root: Path) -> list[dict]:
+def records(root: Path, campaign=None) -> list[dict]:
     if not (root / INDEX).exists():
         return []
     key = public_key(root)
@@ -117,12 +143,14 @@ def records(root: Path) -> list[dict]:
             raise ValueError("Campaign terminal summary invalid")
         with closing(database(root, read_only=True)) as db:
             recovery = recovery_for(db, auth, key)
-        result.append({"authorization": auth, "terminal": terminal, "recovery": recovery})
+        if campaign is None or auth['campaign_id'] == campaign:
+            result.append({"authorization": auth, "terminal": terminal, "recovery": recovery})
     return result
 
 
 def authorize(root: Path, signer, actor: dict, request: dict) -> tuple[dict, bool]:
-    current = plan(root)
+    campaign = request.get('campaign_id', CAMPAIGN)
+    current = campaign_plan(root, campaign)
     if request.get("plan_sha256") != current["plan_sha256"] or request.get("accept_terms") is not True:
         raise ValueError("Review and accept the current exact campaign terms before starting")
     request_id = str(uuid.UUID(request["request_id"]))
@@ -143,8 +171,8 @@ def authorize(root: Path, signer, actor: dict, request: dict) -> tuple[dict, boo
             recovered = recovery_for(db, prior, public_key(root))
             if not terminal or not verify_envelope(terminal, public_key(root)) or terminal.get("authorization_sha256") != prior["content_sha256"] or not (terminal.get("cleanup", {}).get("complete") or (recovered or {}).get("cleanup", {}).get("complete")):
                 raise ValueError("Another campaign is active or requires cleanup recovery")
-        auth = signer.sign({"record_type": "paired-campaign-authorization", "campaign_id": CAMPAIGN,
-                            "run_id": "number-" + uuid.uuid4().hex, "request_id": request_id, "actor": actor,
+        auth = signer.sign({"record_type": "paired-campaign-authorization", "campaign_id": campaign,
+                            "run_id": ('number-' if campaign == CAMPAIGN else 'core100-') + uuid.uuid4().hex, "request_id": request_id, "actor": actor,
                             "authorized_at": utcnow(), "start_before": (datetime.now(timezone.utc) + timedelta(minutes=10)).isoformat(),
                             "reason": reason, "plan": current})
         db.execute("INSERT INTO runs VALUES (?, ?, ?, NULL)", (auth["run_id"], request_id, canonical(auth).decode()))
@@ -164,17 +192,14 @@ def get_authorization(root, run_id):
 
 
 def verified_events(root, auth):
-    events = RunStore(run_path(root, auth["run_id"]), read_only=True).events()
-    key = public_key(root)
-    for event in events:
-        body = event["payload"]
-        if not verify_envelope(body, key) or body.get("run_id") != auth["run_id"] or body.get("plan_sha256") != auth["plan"]["plan_sha256"] or body.get("event_type") != event["type"] or body.get("previous_event_sha256") != event["previous_sha256"]:
-            raise ValueError("Campaign event signature, scope or chain invalid")
-    return events
+    return campaign_journals.read(run_path(root, auth['run_id']), auth, public_key(root))
 
 
 def project(root, auth, events):
-    case_map = {c["id"]: c for c in number_cases(root)}
+    case_map = {c["id"]: c for c in campaign_cases(root, auth['campaign_id'])}
+    if [c['id'] for c in auth['plan']['cases']] != list(case_map):
+        raise ValueError('Authorized cases differ from the supported catalog')
+    planned = len(case_map)
     source, target, comparisons = {}, {}, {}
     identity = None
     cleanup = None
@@ -205,7 +230,7 @@ def project(root, auth, events):
             case_id = p["comparison"]["case_id"]
             if case_id in comparisons or case_id not in source or case_id not in target:
                 raise ValueError("Comparison without a unique complete pair")
-            expected = compare(case_map[case_id], source[case_id], target[case_id])
+            expected = campaign_compare(case_map[case_id], source[case_id], target[case_id])
             if p["comparison"] != expected:
                 raise ValueError("Comparator replay differs from published result")
             comparisons[case_id] = expected
@@ -217,13 +242,13 @@ def project(root, auth, events):
             error = p["message"]
         elif kind == "terminal":
             terminal = p
-        elif kind not in {"started", "stage", "resource-state"}:
+        elif kind not in {"started", "stage", "resource-state", "family-start", "family-finished"}:
             raise ValueError("Unknown campaign journal event")
     matched = sum(v["equivalent"] for v in comparisons.values())
-    finished = len(source) == len(target) == len(comparisons) == matched == 20 and not error
-    result = {"campaign_id": CAMPAIGN, "run_id": auth["run_id"], "authorization": auth,
+    finished = len(source) == len(target) == len(comparisons) == matched == planned and not error
+    result = {"campaign_id": auth['campaign_id'], "run_id": auth["run_id"], "authorization": auth,
               "source_completed": len(source), "target_completed": len(target), "comparisons_completed": len(comparisons),
-              "matched": matched, "planned_cases": 20, "identities": identity, "cleanup": cleanup,
+              "matched": matched, "planned_cases": planned, "identities": identity, "cleanup": cleanup,
               "evidence_class": "native-database-observed" if native else "unclassified-or-simulated",
               "case_results": [{"case_id": c["id"], "oracle": source.get(c["id"]), "alloydb": target.get(c["id"]),
                                 "comparison": comparisons.get(c["id"])} for c in auth["plan"]["cases"]],
@@ -241,17 +266,39 @@ def project(root, auth, events):
     elif events:
         age = (datetime.now(timezone.utc) - datetime.fromisoformat(events[-1]["at"])).total_seconds()
         result["activity"] = "recent" if age < 120 else "interrupted-or-unobserved"
+    families = []
+    for topic in dict.fromkeys(c['topic'] for c in case_map.values()):
+        ids = {c['id'] for c in case_map.values() if c['topic'] == topic}
+        observed_source = sum(i in source for i in ids)
+        observed_target = sum(i in target for i in ids)
+        decided = sum(i in comparisons for i in ids)
+        equivalent = sum(comparisons[i]['equivalent'] for i in ids if i in comparisons)
+        row = {'family': topic, 'planned': len(ids), 'source_completed': observed_source,
+               'target_completed': observed_target, 'comparisons_completed': decided, 'matched': equivalent,
+               'mismatched': decided - equivalent, 'blocked': len(ids) - decided if terminal else 0,
+               'pending': 0 if terminal else len(ids) - decided}
+        row['status'] = ('matched' if equivalent == len(ids) else 'mismatched' if row['mismatched'] else
+                         'blocked' if terminal else 'running' if observed_source or observed_target else 'pending')
+        families.append(row)
+    result['families'] = families
+    for event in events:
+        if event['type'] == 'family-finished':
+            actual = next(f for f in families if f['family'] == event['payload']['family'])
+            if event['payload']['counts'] != {k: actual[k] for k in ('source_completed', 'target_completed', 'comparisons_completed', 'matched', 'mismatched')}:
+                raise ValueError('Signed family summary differs from comparator replay')
     return result
 
 
-def read_run(root, run_id=None):
+def read_run(root, run_id=None, campaign=CAMPAIGN):
     try:
-        rows = records(root)
+        rows = records(root, campaign)
         if run_id in (None, "", "current"):
             if not rows:
                 return {"status": "unavailable", "reason": "Not run. No paired campaign has been authorized.", "items": []}
             run_id = rows[0]["authorization"]["run_id"]
         auth = get_authorization(root, run_id)
+        if auth['campaign_id'] != campaign:
+            raise ValueError('Selected run belongs to another campaign')
         events = verified_events(root, auth)
         row = next((r for r in rows if r["authorization"]["run_id"] == run_id), None)
         if row and row["terminal"] and not events:
@@ -268,7 +315,9 @@ def finish_index(root, auth, result, signer):
                            "run_id": auth["run_id"], "status": result["status"], "at": utcnow(),
                            "source_completed": result["source_completed"], "target_completed": result["target_completed"],
                            "matched": result["matched"], "evidence_class": result["evidence_class"], "cleanup": result["cleanup"],
-                           "journal_head_sha256": result["events"][-1]["content_sha256"]})
+                           "journal_head_sha256": result["events"][-1]["content_sha256"],
+                           "families": result['families'], "planned_cases": result['planned_cases'],
+                           "comparisons_completed": result['comparisons_completed']})
     with closing(database(root)) as db, db:
         row = db.execute("SELECT terminal FROM runs WHERE run_id=?", (auth["run_id"],)).fetchone()
         if row[0] is not None:
@@ -284,6 +333,8 @@ def execute(root: Path, run_id: str, *, runner_factory=None):
     store = RunStore(directory)
     runner = None
     def emit(kind, payload):
+        if auth['plan'].get('journal_layout') == 'family-v1':
+            return campaign_journals.signed_append(store, signer, auth, kind, payload, 'campaign')
         previous = store.events()
         body = signer.sign({**payload, "run_id": run_id, "plan_sha256": auth["plan"]["plan_sha256"],
                             "event_type": kind, "previous_event_sha256": previous[-1]["content_sha256"] if previous else None})
@@ -305,21 +356,44 @@ def execute(root: Path, run_id: str, *, runner_factory=None):
         try:
             if datetime.now(timezone.utc) >= datetime.fromisoformat(auth["start_before"]):
                 raise ValueError("Campaign authorization expired before execution")
-            if plan(root)["plan_sha256"] != auth["plan"]["plan_sha256"]:
+            if campaign_plan(root, auth['campaign_id'])["plan_sha256"] != auth["plan"]["plan_sha256"]:
                 raise ValueError("Authorized SQL, implementation or resource terms changed")
             runner = (runner_factory or GcpRunner)(root, run_id, auth["plan"], emit)
             runner.prepare()
             emit("identities", {"identities": runner.identities()})
-            cases = number_cases(root)
-            source, target = {}, {}
-            for lane, bucket in (("oracle", source), ("alloydb", target)):
-                emit("stage", {"stage": lane, "message": "Executing the 20 bound " + lane + " cases."})
-                for case in cases:
-                    bucket[case["id"]] = runner.observe(lane, case)
-                    emit("observation", {"lane": lane, "case_id": case["id"], "observations": bucket[case["id"]], "evidence_class": runner.evidence_class})
-            emit("stage", {"stage": "comparison", "message": "Replaying the deterministic comparison contract."})
-            for case in cases:
-                emit("comparison", {"comparison": compare(case, source[case["id"]], target[case["id"]])})
+            cases = campaign_cases(root, auth['campaign_id'])
+            grouped = auth['plan'].get('families', ['number'])
+            for topic in grouped:
+                family = [c for c in cases if c['topic'] == topic]
+                child = None
+                if auth['plan'].get('journal_layout') == 'family-v1':
+                    emit('family-start', {'family': topic})
+                    child = RunStore(directory / 'families' / topic)
+                def case_emit(kind, payload):
+                    if child:
+                        return campaign_journals.signed_append(child, signer, auth, kind, {**payload, 'family': topic}, topic)
+                    return emit(kind, payload)
+                source, target, decisions = {}, {}, []
+                try:
+                    for lane, bucket in (("oracle", source), ("alloydb", target)):
+                        emit("stage", {"stage": lane, "message": f"Executing {topic}: {len(family)} bound {lane} cases."})
+                        for case in family:
+                            bucket[case["id"]] = runner.observe(lane, case)
+                            case_emit("observation", {"lane": lane, "case_id": case["id"], "observations": bucket[case["id"]], "evidence_class": runner.evidence_class})
+                    emit("stage", {"stage": "comparison", "message": f"Comparing the {topic} family."})
+                    for case in family:
+                        decision = campaign_compare(case, source[case['id']], target[case['id']])
+                        decisions.append(decision)
+                        case_emit('comparison', {'comparison': decision})
+                    if child:
+                        events = child.events()
+                        matched = sum(d['equivalent'] for d in decisions)
+                        emit('family-finished', {'family': topic, 'event_count': len(events), 'journal_head_sha256': events[-1]['content_sha256'],
+                             'counts': {'source_completed': len(source), 'target_completed': len(target), 'comparisons_completed': len(decisions),
+                                        'matched': matched, 'mismatched': len(decisions) - matched}})
+                finally:
+                    if child:
+                        child.close()
         except (Exception, KeyboardInterrupt) as exc:
             # Preserve useful, bounded stage diagnostics without client stderr.
             message = str(exc)[:500] if isinstance(exc, (ValueError, TimeoutError, RuntimeError)) else type(exc).__name__
@@ -332,7 +406,7 @@ def execute(root: Path, run_id: str, *, runner_factory=None):
                 cleanup = {"complete": False, "resources": {"all": "unconfirmed"}}
             emit("cleanup", {"cleanup": cleanup})
         interim = project(root, auth, verified_events(root, auth))
-        good = interim["matched"] == interim["source_completed"] == interim["target_completed"] == 20 and not interim["error"]
+        good = interim["matched"] == interim["source_completed"] == interim["target_completed"] == interim['planned_cases'] and not interim["error"]
         status = "passed-bounded-native" if good and interim["evidence_class"] == "native-database-observed" else "passed-simulated" if good else "failed"
         if not cleanup["complete"]:
             status = "cleanup-required"
@@ -374,6 +448,8 @@ def recover(root, run_id):
         def emit(kind, payload):
             if terminal_exists:
                 return
+            if auth['plan'].get('journal_layout') == 'family-v1':
+                return campaign_journals.signed_append(store, signer, auth, kind, payload, 'campaign')
             previous = store.events()
             body = signer.sign({**payload, "run_id": run_id, "plan_sha256": auth["plan"]["plan_sha256"],
                                 "event_type": kind, "previous_event_sha256": previous[-1]["content_sha256"] if previous else None})

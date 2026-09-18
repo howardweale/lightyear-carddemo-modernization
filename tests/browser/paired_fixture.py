@@ -8,17 +8,18 @@ import time
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path[:0] = [str(ROOT / 'src'), str(ROOT)]
-from tests.test_paired_campaign import PairedCampaignTests, SimulatedRunner
+from tests.test_paired_core100 import Core100Tests, FamilySimulation
 from lightyear_workflow.campaign_engine import execute
 from lightyear_knowledge_graph.explorer import ExplorerServer, GraphExplorerIndex
 from lightyear_knowledge_graph.model import load_graph
 
-fixture = PairedCampaignTests()
+fixture = Core100Tests()
 fixture.setUp()
 shutil.copytree(ROOT / 'knowledge/viewer', fixture.root / 'knowledge/viewer')
-class SlowSimulation(SimulatedRunner):
+shutil.copytree(ROOT / 'data-modernization/oracle-schema-structured-coverage', fixture.root / 'data-modernization/oracle-schema-structured-coverage')
+class SlowSimulation(FamilySimulation):
     def observe(self, lane, case):
-        time.sleep(.12)
+        time.sleep(.03)
         return super().observe(lane, case)
 def launch(root, run_id):
     threading.Thread(target=lambda: execute(root, run_id, runner_factory=SlowSimulation), daemon=True).start()

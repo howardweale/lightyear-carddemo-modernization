@@ -1457,7 +1457,10 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
         parsed = urlparse(self.path)
         try:
             if parsed.path.startswith("/api/campaign/"):
-                self._campaign(parsed.path)
+                if parsed.path == '/api/campaign/status':
+                    self._api(parsed.path, parse_qs(parsed.query))
+                else:
+                    self._campaign(parsed.path)
                 return
             if parsed.path.startswith("/api/decisions/"):
                 self._decisions(parsed.path, parse_qs(parsed.query))
@@ -1514,10 +1517,10 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
         except Exception as exc:  # pragma: no cover - defensive HTTP boundary
             self._json({"error": f"Chat request failed: {exc}"}, HTTPStatus.INTERNAL_SERVER_ERROR)
 
-    def _campaign(self, path: str, payload: dict | None = None) -> None:
+    def _campaign(self, path: str, payload: dict | None = None, campaign=None) -> None:
         service = self.server.campaign_service
         if path == "/api/campaign/status" and payload is None:
-            self._json(service.status() if service else {"enabled": False, "status": "unconfigured", "reason": "Campaign operator authority is not configured."})
+            self._json((service.status(campaign) if campaign else service.status()) if service else {"enabled": False, "status": "unconfigured", "reason": "Campaign operator authority is not configured."})
             return
         if service is None:
             raise DecisionUnauthorized("Campaign operator authority is not configured")
@@ -1600,7 +1603,10 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
 
     def _api(self, path: str, query: dict[str, list[str]]) -> None:
         if path == "/api/campaign/status":
-            self._campaign(path)
+            campaign = self._value(query, 'campaign_id')
+            if campaign:
+                validate_context('cloudbank', campaign)
+            self._campaign(path, campaign=campaign)
             return
         if path in {"/api/workflow/campaign", "/api/workflow/runs", "/api/workflow/execution", "/api/workflow/convergence"}:
             estate = self._value(query, "estate") or "cloudbank"
@@ -1611,11 +1617,11 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
             return
         if path == "/api/workflow/runs":
             self._json(read_runs(self.server.project_root, estate) if campaign == "retained" else
-                       campaign_runs(self.server.project_root))
+                       campaign_runs(self.server.project_root, campaign))
             return
         if path == "/api/workflow/execution":
             self._json(read_selected(self.server.project_root, estate, self._value(query, "run_id")) if campaign == "retained" else
-                       {**read_campaign_run(self.server.project_root, self._value(query, "run_id")), "campaign_id": campaign})
+                       {**read_campaign_run(self.server.project_root, self._value(query, "run_id"), campaign), "campaign_id": campaign})
             return
         if path == "/api/workflow/plan":
             self._json(project_snapshot(read_snapshot(self.server.project_root),
@@ -1626,7 +1632,7 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
         if path == "/api/workflow/convergence":
             self._json(read_convergence(self.server.project_root,
                 estate=estate, weeks=self._integer(query, "weeks", 12)) if campaign == "retained" else
-                campaign_history(self.server.project_root))
+                campaign_history(self.server.project_root, campaign))
             return
         self.server.refresh_live_projections()
         index = self.server.index

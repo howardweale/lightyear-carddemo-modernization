@@ -1,0 +1,961 @@
+{
+  "actor": {
+    "id": "codex-delegated-operator",
+    "kind": "operator",
+    "name": "Codex acting on user authorization"
+  },
+  "authorized_at": "2026-09-18T00:22:32.631520+00:00",
+  "campaign_id": "oracle26ai-alloydb-core100",
+  "content_sha256": "88b51e4d6050efa50cd2809addca8e60d17eb4e6e6869b0b90ab6662d5345dd6",
+  "plan": {
+    "alloydb_cluster": "cloudbank-ms71-alloydb",
+    "alloydb_instance": "primary",
+    "campaign_id": "oracle26ai-alloydb-core100",
+    "cases": [
+      {
+        "alloydb_sql_sha256": "25e2a3352edc5d6a3b0bca8cb1d54b2c808c34b9ab9e91f5364bd56eb160d00a",
+        "behavior_id": "ORA-TYPE-001",
+        "catalog_expectation_sha256": "e0973a5eea6cc33d6d495cb360ea1cb47140a21726fb46f17f7be6c99b5678f2",
+        "family": "number",
+        "id": "ORA-TYPE-001-CASE-01",
+        "oracle_sql_sha256": "144a9718d5f2d2fd72d06f93e1247200d7c303d141b5209a0a471bf6321c2d42",
+        "probe_contract_sha256": "11439f517f5caab65de3b056811ac76ba8caf4557f980c376292ccefd83720cb"
+      },
+      {
+        "alloydb_sql_sha256": "fb8aa7d3b125be953cda9c0ac8502459054f565fd0d18fd6db7352dabc185230",
+        "behavior_id": "ORA-TYPE-001",
+        "catalog_expectation_sha256": "d41ed74b30b3f89a14b38845ddc2591e8c61153e88ae256072e76c495965566a",
+        "family": "number",
+        "id": "ORA-TYPE-001-CASE-02",
+        "oracle_sql_sha256": "a8be6cdcf8102c2425cfc1e369f15626584e88c13b62b4adbdf3cbb857ff5dea",
+        "probe_contract_sha256": "8f0de09eb7777621bdf0667dea74a4919af926aeef7f3f3fd3ea7cafc2f5152f"
+      },
+      {
+        "alloydb_sql_sha256": "377668800352e6846b39cfe28f5d4ed6607870fbcbc96a22a3850f78b92e63b0",
+        "behavior_id": "ORA-TYPE-001",
+        "catalog_expectation_sha256": "7d2425b4d2795a42f63e980ea0e41004e31044a1058f168084ccab9321ec6664",
+        "family": "number",
+        "id": "ORA-TYPE-001-CASE-03",
+        "oracle_sql_sha256": "9c6c6f8379a37cb788513454b96c77d02be33ff1e7330f724db7a2596849a8d0",
+        "probe_contract_sha256": "f31aaea3abd8a2a2ce746ceecca6b9ff29af540dae6e33149743a164b8c6b277"
+      },
+      {
+        "alloydb_sql_sha256": "5fe2cadf8cbc0e2c4a86c6e99f05a1cb057deac89886b6e700aea6044e0e009c",
+        "behavior_id": "ORA-TYPE-001",
+        "catalog_expectation_sha256": "f105535582110cb45b0ce496f6c004bea36f1582b62f75fd44471bc62882dc57",
+        "family": "number",
+        "id": "ORA-TYPE-001-CASE-04",
+        "oracle_sql_sha256": "8e6b01b42bddff5ff852532dbadd9be769b4dfb771e7f3edb892c62ebaf18662",
+        "probe_contract_sha256": "2453e6afcbb95b05ef8c8471cab682ceb25f7d66fe5026ac63f69e7cd89c0a6d"
+      },
+      {
+        "alloydb_sql_sha256": "96684a9d731541ea4bf1480306a8223934049265d756e8b515e955bfe8cd90a5",
+        "behavior_id": "ORA-TYPE-002",
+        "catalog_expectation_sha256": "5e38e4a7f580e20b9a68e5c8e425a823de1f54147bd4c2393d12efcae5266797",
+        "family": "number",
+        "id": "ORA-TYPE-002-CASE-01",
+        "oracle_sql_sha256": "aaa964c566b03e3b13b5cfc760614c50e349a1046741249385c3354b2474e1ed",
+        "probe_contract_sha256": "d784f8bfdf3a86524ba129b1ae58ca13cec1405a815948227499dafe06cd63ea"
+      },
+      {
+        "alloydb_sql_sha256": "298be4ef6a417338474e8c9a5d6e04020ad3ae2b1033b30d6a0399d87c617dfb",
+        "behavior_id": "ORA-TYPE-002",
+        "catalog_expectation_sha256": "7fa44be63ce3cf49e739e34a7ddbe3351b1fb92e386f1cadae7437b20905048b",
+        "family": "number",
+        "id": "ORA-TYPE-002-CASE-02",
+        "oracle_sql_sha256": "3e46716457ffac81750ac233c1c381ef9506bc671bd852e907639dd3c6b76a70",
+        "probe_contract_sha256": "d784f8bfdf3a86524ba129b1ae58ca13cec1405a815948227499dafe06cd63ea"
+      },
+      {
+        "alloydb_sql_sha256": "1d4978161a5026e2a031323374e6b5c0a3b92a1445fbfe96b7eecabf018b33e1",
+        "behavior_id": "ORA-TYPE-002",
+        "catalog_expectation_sha256": "540ba7e94b46e54ce7a61b602ac52889c6b995153be656567c34f7296db315ea",
+        "family": "number",
+        "id": "ORA-TYPE-002-CASE-03",
+        "oracle_sql_sha256": "8438619aa0cda872f8a59b59f65869480ae48b02af8515378b0b73153d3c40a0",
+        "probe_contract_sha256": "24cf7a77205bd96843e50fafdfdd8820dbdc0ad13ac3d3bdfc55db4dbbeaa4f4"
+      },
+      {
+        "alloydb_sql_sha256": "f4fc1d80f03e5e2e14236d742e406a144b1175e67d0865e537be5f42124c5a99",
+        "behavior_id": "ORA-TYPE-002",
+        "catalog_expectation_sha256": "cf02b34eb9d2e41360f290a4b5edfc7d0300f93e1e76cfea7197efe84b02c398",
+        "family": "number",
+        "id": "ORA-TYPE-002-CASE-04",
+        "oracle_sql_sha256": "0bdef8959d0b0be502c550a6b68d295df2c182dde0ed51a75d174e552aa62408",
+        "probe_contract_sha256": "0b494e1217d876ad5718638b1034d9703cec3a188dfe93167edc0d7b6145e05b"
+      },
+      {
+        "alloydb_sql_sha256": "cdd74983d01177b55863bd9a043712b30fc476d55d6dd4c6bf17e13a7c4a30e6",
+        "behavior_id": "ORA-TYPE-003",
+        "catalog_expectation_sha256": "07e7ae3e5502596a8588fb139633b473c401cbb33f5ce038b1311f4fc6db75c3",
+        "family": "number",
+        "id": "ORA-TYPE-003-CASE-01",
+        "oracle_sql_sha256": "04eff1b2618099e61ce29b25003943962df31cc4ac95c00c703bbad71cf74132",
+        "probe_contract_sha256": "e221341e30cd6a5ffc9e330ecd4b439afc8b50df24bd6ee5a0d61b49b9a239ae"
+      },
+      {
+        "alloydb_sql_sha256": "82b0ac96944a8a37a308332c6a0ae98d4b099e229d395616d04af68ee598475d",
+        "behavior_id": "ORA-TYPE-003",
+        "catalog_expectation_sha256": "50abe1f9b32c47ecf579a99d3990dc62aaf406250438398f6e79adaa69b2d187",
+        "family": "number",
+        "id": "ORA-TYPE-003-CASE-02",
+        "oracle_sql_sha256": "c049d479b4a15089822e3fcf7f94db0f25c137d504c761c9b71e0326a008dc43",
+        "probe_contract_sha256": "cc3fff4dd085547a8d34b77373bbe9f332bfcf6a271febdd02ef0b961bd3e385"
+      },
+      {
+        "alloydb_sql_sha256": "809113140f7b80d1a18bfa860d86e5d6783c6208cfc3345784db4145b70c44f7",
+        "behavior_id": "ORA-TYPE-003",
+        "catalog_expectation_sha256": "39e55c6d0bbec675a58900f562cd233f994b00414cc0040c385db426df9e3267",
+        "family": "number",
+        "id": "ORA-TYPE-003-CASE-03",
+        "oracle_sql_sha256": "4b667b5067f54c7469dd84b41597dc5d2c016870ce9124b4139a3145182c0e7e",
+        "probe_contract_sha256": "8b9d5e018b64ee7a53a359c7460d0de541d863685904769a897b4f5337674fcd"
+      },
+      {
+        "alloydb_sql_sha256": "e22ce2abd86d9b6707d384784254ec6f7b8e6a5c23b7ba62dbd1f6215f1e5176",
+        "behavior_id": "ORA-TYPE-003",
+        "catalog_expectation_sha256": "509632fdf68e6da849b9baf209accb9c64ceb9476fbfae4bee037c4f0aa28cd3",
+        "family": "number",
+        "id": "ORA-TYPE-003-CASE-04",
+        "oracle_sql_sha256": "17e87dd977bb3e107fb707b5cd4ddadd7f038c3c764a52e8ce1e61c67a9d1ab8",
+        "probe_contract_sha256": "a99ee3c4446cc6d0b59fe978deea5daf562bb291632992657b747853a1d28a9f"
+      },
+      {
+        "alloydb_sql_sha256": "922c924ad5eff6a92404216d24dd930e7d3cc8f55530fbc4b2075b2394ce1e42",
+        "behavior_id": "ORA-TYPE-004",
+        "catalog_expectation_sha256": "8eed767510efacef88ca0941c862b787e1002b5bf136a321f758e06fd2454c33",
+        "family": "number",
+        "id": "ORA-TYPE-004-CASE-01",
+        "oracle_sql_sha256": "2c1783c682fbc1df71e4d0cabca8fb9a2eaae452d9815d55924c57f0214199b4",
+        "probe_contract_sha256": "c5317885066491397f9bb1aafc8dc9f90fc05ea77b3231ef7ee0d280ba4a57ca"
+      },
+      {
+        "alloydb_sql_sha256": "d7cde50fd40dd5f7f4f8b69e32764296029bab0f85d72a93c0b1d4d12209c658",
+        "behavior_id": "ORA-TYPE-004",
+        "catalog_expectation_sha256": "55a4c511890aad4b6f800c89b9c8135ad2f588402f6b37906bfde572fb212820",
+        "family": "number",
+        "id": "ORA-TYPE-004-CASE-02",
+        "oracle_sql_sha256": "f4ef8476c3deff9f733c00cbc78d893db5c9921924b4623535db072e21b758a9",
+        "probe_contract_sha256": "24cf7a77205bd96843e50fafdfdd8820dbdc0ad13ac3d3bdfc55db4dbbeaa4f4"
+      },
+      {
+        "alloydb_sql_sha256": "7c808332460e0f8ef380339202d321917388619d64dc6ffe2efe5472e2fefc29",
+        "behavior_id": "ORA-TYPE-004",
+        "catalog_expectation_sha256": "eed55c0f033297558f1f7afe02516b30d6709a97eaeaf9f6d81ebc99aa5a122c",
+        "family": "number",
+        "id": "ORA-TYPE-004-CASE-03",
+        "oracle_sql_sha256": "f239df1dfdb04b44bc6435d70585112829157cc407caf131a60299452a22e50d",
+        "probe_contract_sha256": "c5317885066491397f9bb1aafc8dc9f90fc05ea77b3231ef7ee0d280ba4a57ca"
+      },
+      {
+        "alloydb_sql_sha256": "9b3e660e8b07d99f9d9ea12dc333643d5ac98425a60fdb60d7e33bd36b5699fa",
+        "behavior_id": "ORA-TYPE-004",
+        "catalog_expectation_sha256": "ba603039f1c882f4ab80e26ca613d096b1301b5546ed61f508ecfeaa10989691",
+        "family": "number",
+        "id": "ORA-TYPE-004-CASE-04",
+        "oracle_sql_sha256": "05c9d9eb7062420b9c68a8ab574bed94db7cf5e79a0f3557e9ff9e35487f4118",
+        "probe_contract_sha256": "1b76f8be372c05f8deb1ef63c69f91479f74c10b4547dbc53dd2c5879d4a4ee8"
+      },
+      {
+        "alloydb_sql_sha256": "cdd2efc7def41e11c4708d2cd34ad3f81698e26ab7a71993406ebaf548f44d84",
+        "behavior_id": "ORA-TYPE-005",
+        "catalog_expectation_sha256": "7e4393195630c3445e8bd6335c46905669884f8e7bb84158ef71add7890df9bc",
+        "family": "number",
+        "id": "ORA-TYPE-005-CASE-01",
+        "oracle_sql_sha256": "1587604da0fbb41699781b6155cc6bdd0eb477e949966d75e27d8e13efe8dc56",
+        "probe_contract_sha256": "1a0566fae52275b0c861c38c85aa092f563c1130905435b61f5993e5cb49de9a"
+      },
+      {
+        "alloydb_sql_sha256": "7fe3c7e5861780183a35fb03a7a58d546dff01f043f1303f48c1d851cf015426",
+        "behavior_id": "ORA-TYPE-005",
+        "catalog_expectation_sha256": "c75c4417213bbdfaa30de69950b6c3b69ca12a7cfcd1eeefdb95875b2b574ecf",
+        "family": "number",
+        "id": "ORA-TYPE-005-CASE-02",
+        "oracle_sql_sha256": "7c4dca2b3846063fee5ac5a53b95b60a47330a4af65af3bed0660a4ab463700f",
+        "probe_contract_sha256": "0b494e1217d876ad5718638b1034d9703cec3a188dfe93167edc0d7b6145e05b"
+      },
+      {
+        "alloydb_sql_sha256": "c771bac7539db840e397df514e2bf350a22737b56bb9326bcc0c2bffd062c727",
+        "behavior_id": "ORA-TYPE-005",
+        "catalog_expectation_sha256": "56132b578ee251e3c828957d08ad85f16bb9aba1f4861e605386177f9c653c2b",
+        "family": "number",
+        "id": "ORA-TYPE-005-CASE-03",
+        "oracle_sql_sha256": "db78a48b21383f7facd9bb86132e83e0b5b2e24b51e36748695e041c0981c5cf",
+        "probe_contract_sha256": "1b76f8be372c05f8deb1ef63c69f91479f74c10b4547dbc53dd2c5879d4a4ee8"
+      },
+      {
+        "alloydb_sql_sha256": "93e15e4e60aa83f9def071458113b2142eb63e62f76392f7f2f4eac667a3b3b1",
+        "behavior_id": "ORA-TYPE-005",
+        "catalog_expectation_sha256": "3fd81ee3f3189f591980028602743be07371969ffebe11bc0c14d7f7c4355510",
+        "family": "number",
+        "id": "ORA-TYPE-005-CASE-04",
+        "oracle_sql_sha256": "6daf2e0cec3839151e9cfd0533d74a8d48c53b0eb48889e387e3587051953ba0",
+        "probe_contract_sha256": "1a0566fae52275b0c861c38c85aa092f563c1130905435b61f5993e5cb49de9a"
+      },
+      {
+        "alloydb_sql_sha256": "4c6896ecebe93ba9f81f3dafefa6f5164708eb141816c70f5dc768420d101f19",
+        "behavior_id": "ORA-TYPE-016",
+        "catalog_expectation_sha256": "94d52b89fb65ed729b271651da128e31bcce56c77a532824d0c53409fb4a6d16",
+        "family": "char",
+        "id": "ORA-TYPE-016-CASE-01",
+        "oracle_sql_sha256": "3336da3a26dd824e08612a0885e91a7b65ac39642c734c2125efc11b27b3c13f",
+        "probe_contract_sha256": "37cd542fd0b66961a3771539a2e3f117e5e7dd4126ccf242d684471fbaeec8c6"
+      },
+      {
+        "alloydb_sql_sha256": "a80702b9bbf81b192898e6ac7fdecdd1eae54b907f3a3791b038822c2753ae00",
+        "behavior_id": "ORA-TYPE-016",
+        "catalog_expectation_sha256": "beadd62a20b573fabe1d851b7b2b7a9b8c72f9b171bc409240b0bbe01fb22903",
+        "family": "char",
+        "id": "ORA-TYPE-016-CASE-02",
+        "oracle_sql_sha256": "96734d5cfc833c3f12e7a99bd2b75affa860501e816cd5d7432a72467a1e0626",
+        "probe_contract_sha256": "729c46112a5b0a316c16c6d976ede144ea10e3b6d099ed94e7ae30c966bc83e6"
+      },
+      {
+        "alloydb_sql_sha256": "91a2d8002742588e5526a375db6eaf1a7eef6f38c9b2c0c4cea775d270434692",
+        "behavior_id": "ORA-TYPE-016",
+        "catalog_expectation_sha256": "daba7f485c039acb6650702fcaec8011875f2777b1a9a38fafab0d46ae078b9f",
+        "family": "char",
+        "id": "ORA-TYPE-016-CASE-03",
+        "oracle_sql_sha256": "bc43f32c5d7850ed70818b33d6393e66c9f32ac77db824a0e9e67c19003246da",
+        "probe_contract_sha256": "ad22e281190ade2e2dac247f374ce52c2075ab706ecdfd3b96a7ec9ecb37ae53"
+      },
+      {
+        "alloydb_sql_sha256": "1a9e3aaf0709996ab8bdb396d15e2cbdd8e7b3a951cdd86c895da68e36c8d214",
+        "behavior_id": "ORA-TYPE-016",
+        "catalog_expectation_sha256": "363d2616f3731633a59c407f39e4af20f2fa56ba593788dbf94b912885bd63d2",
+        "family": "char",
+        "id": "ORA-TYPE-016-CASE-04",
+        "oracle_sql_sha256": "59e549019356c8f108fe8c6f2765a730e1517a6beab3851b0de3bf21d72813f4",
+        "probe_contract_sha256": "4b24b1843851965b06d9bfb699b34f181b10e222274fb035be7317a496c3fe14"
+      },
+      {
+        "alloydb_sql_sha256": "a31da83c7020e59103bfaa42c4ede174345ce6ee69f8205367c75d0dc5ba5901",
+        "behavior_id": "ORA-TYPE-017",
+        "catalog_expectation_sha256": "5e38e4a7f580e20b9a68e5c8e425a823de1f54147bd4c2393d12efcae5266797",
+        "family": "char",
+        "id": "ORA-TYPE-017-CASE-01",
+        "oracle_sql_sha256": "4c3fbc1e6f146aa661fe3039461b9983da46ac41bfe32b5c8114c8a5d96e57d0",
+        "probe_contract_sha256": "d784f8bfdf3a86524ba129b1ae58ca13cec1405a815948227499dafe06cd63ea"
+      },
+      {
+        "alloydb_sql_sha256": "02b1bcb5db6aa38890e41259bd17cdb0536d9bad190c5a4d40def104310d298e",
+        "behavior_id": "ORA-TYPE-017",
+        "catalog_expectation_sha256": "7fa44be63ce3cf49e739e34a7ddbe3351b1fb92e386f1cadae7437b20905048b",
+        "family": "char",
+        "id": "ORA-TYPE-017-CASE-02",
+        "oracle_sql_sha256": "4c42d01dde38fa00526a3e75bbe1f995e9836a80b0f4a0049430b328717db183",
+        "probe_contract_sha256": "d784f8bfdf3a86524ba129b1ae58ca13cec1405a815948227499dafe06cd63ea"
+      },
+      {
+        "alloydb_sql_sha256": "8c487186c195391d63026dcbb1e02ba9fea58b9f0b7c216f0e3855f5ebf68176",
+        "behavior_id": "ORA-TYPE-017",
+        "catalog_expectation_sha256": "540ba7e94b46e54ce7a61b602ac52889c6b995153be656567c34f7296db315ea",
+        "family": "char",
+        "id": "ORA-TYPE-017-CASE-03",
+        "oracle_sql_sha256": "f99451c47f40dbb4470dee042ac04c88a4f5f374f1cc30ae0dce87515ec68b8b",
+        "probe_contract_sha256": "9d5c02c8726e64651f688658976dc61dbe43cdb158163d5b36d2f7db3c75443a"
+      },
+      {
+        "alloydb_sql_sha256": "07ff989dadaa5a75bdc6704ce545dfadd88092e5a7560eb2a65d61522a93839a",
+        "behavior_id": "ORA-TYPE-017",
+        "catalog_expectation_sha256": "730b7503f8b50c45e1f291b84a43e1f20579ac6a34b88e8a076ff3b64191abd1",
+        "family": "char",
+        "id": "ORA-TYPE-017-CASE-04",
+        "oracle_sql_sha256": "093b76b60aeb4216da5cbf39fbe396f85c0687baf8275c1b4e9bff07801a657a",
+        "probe_contract_sha256": "0ee4c073fe61ef2d83b66d0c44e1168ec43ce07d27359260aeef6ce9024c3ecf"
+      },
+      {
+        "alloydb_sql_sha256": "a937a9930569b65f1d289c7b6d11fd2b246f3f1150553ea856d4598695f7da21",
+        "behavior_id": "ORA-TYPE-018",
+        "catalog_expectation_sha256": "614e3351c818181dc5a11b6749e0435f2cc762f41cbe9e1f1a9448344e8de94c",
+        "family": "char",
+        "id": "ORA-TYPE-018-CASE-01",
+        "oracle_sql_sha256": "22839d12e10b694f26b8bdd5d1da1b53fc531e55fd72716094fcf0c443d5cdcb",
+        "probe_contract_sha256": "9c8854df0df807f832e0189ce8069a3973c0e6a2609ef820432b70c7ca54ae90"
+      },
+      {
+        "alloydb_sql_sha256": "f8f1368ff6ace7d21c0cc3bad25abee47d3d5d7af9692d749962f6ec4673f383",
+        "behavior_id": "ORA-TYPE-018",
+        "catalog_expectation_sha256": "c3097639e8758ce84e8c66224b06ea04d703db9d1b732230b5d9c7a8d8f50b73",
+        "family": "char",
+        "id": "ORA-TYPE-018-CASE-02",
+        "oracle_sql_sha256": "fed5669878f5c3b573dc873dd179e387c447bfae006ed6124c2aa43802f24440",
+        "probe_contract_sha256": "408cb3893ef8b2dcd5381aa259ff28a1dfaa41110df1ad33a5e33272270d0716"
+      },
+      {
+        "alloydb_sql_sha256": "503c92a4746b625af3aa434fece23656d6c26c1c7bbff9101bdb96fd95d2590d",
+        "behavior_id": "ORA-TYPE-018",
+        "catalog_expectation_sha256": "ed52ba66f229c2cbacf2753041c3187fa084245856d37f65142a89ae6bf29a01",
+        "family": "char",
+        "id": "ORA-TYPE-018-CASE-03",
+        "oracle_sql_sha256": "b32ddeb3c2a43222b390b116b439ab2642123239b99da84648ffd2184dde1a4f",
+        "probe_contract_sha256": "3c91b4803406dac57350b429ca6cdcf44e6d840756177f3744566dda8c487f32"
+      },
+      {
+        "alloydb_sql_sha256": "3a0be6db789fbd91d9b03d1f46065712e2a1e132e6b60d531d39c81a9edb18ca",
+        "behavior_id": "ORA-TYPE-018",
+        "catalog_expectation_sha256": "14fdfebfcb9fbf63eea6cedc25ad1924381f008e1224301397ee7665b633caa5",
+        "family": "char",
+        "id": "ORA-TYPE-018-CASE-04",
+        "oracle_sql_sha256": "a1c7cb802a422da1d914a314a0b039e51ea41b8eb2f0ec1db1d624a14d1367c3",
+        "probe_contract_sha256": "4323b1d974c12bbd3b4badfa2064cee401e5ac0b93ec78e9a8749506c26774fa"
+      },
+      {
+        "alloydb_sql_sha256": "b38425f600ccc604bceb28e6f4543dc7092bf06b1d88fee5430f149824112473",
+        "behavior_id": "ORA-TYPE-019",
+        "catalog_expectation_sha256": "8eed767510efacef88ca0941c862b787e1002b5bf136a321f758e06fd2454c33",
+        "family": "char",
+        "id": "ORA-TYPE-019-CASE-01",
+        "oracle_sql_sha256": "8465e2d5abb2b69cc2369db2898703277e53e896ab88c36721a1edd17e4b4a96",
+        "probe_contract_sha256": "a402ced04e3827262f6fab0c46c0ccdd71382faa5a5118bc6c90fa9b5417e89e"
+      },
+      {
+        "alloydb_sql_sha256": "456b24de9dff05c4036d17fed32b90fa568d89f29776c1ea91aa4465dfa4f5d4",
+        "behavior_id": "ORA-TYPE-019",
+        "catalog_expectation_sha256": "55a4c511890aad4b6f800c89b9c8135ad2f588402f6b37906bfde572fb212820",
+        "family": "char",
+        "id": "ORA-TYPE-019-CASE-02",
+        "oracle_sql_sha256": "53294d55c32261dc3d6e739f943f30db676e3a7af40b2cee7d30b37f601d4a9d",
+        "probe_contract_sha256": "9d5c02c8726e64651f688658976dc61dbe43cdb158163d5b36d2f7db3c75443a"
+      },
+      {
+        "alloydb_sql_sha256": "dcac70b65b7e0d866ad97e610d24aef1449e8839ea79442c04f8504d539bcdb6",
+        "behavior_id": "ORA-TYPE-019",
+        "catalog_expectation_sha256": "eed55c0f033297558f1f7afe02516b30d6709a97eaeaf9f6d81ebc99aa5a122c",
+        "family": "char",
+        "id": "ORA-TYPE-019-CASE-03",
+        "oracle_sql_sha256": "5644700adbfa2772dd018ad737f250a4a6c2766ccf89c231f8376983d5844e8f",
+        "probe_contract_sha256": "a402ced04e3827262f6fab0c46c0ccdd71382faa5a5118bc6c90fa9b5417e89e"
+      },
+      {
+        "alloydb_sql_sha256": "d4e19b46d674f3fe602b1f3710008cbe6c8a2e6417f94f3b2b3cdfb7942260ca",
+        "behavior_id": "ORA-TYPE-019",
+        "catalog_expectation_sha256": "6b9efc6f30038f6c8a0ac80bad93acd139b268f0056d986a608461821846f7e2",
+        "family": "char",
+        "id": "ORA-TYPE-019-CASE-04",
+        "oracle_sql_sha256": "fe3c9a27002eb859d66dbda8161ed88f883e2f9ee9a915b05182b6ccd80f6312",
+        "probe_contract_sha256": "15d943a289b864149a2f3586c5d377976a470919a87be07b7eee722bf54d7041"
+      },
+      {
+        "alloydb_sql_sha256": "328e10107510b6902dd52a10f9f0f7171f04ff3972534cc765778257417d31d0",
+        "behavior_id": "ORA-TYPE-020",
+        "catalog_expectation_sha256": "148685ae7df33096a19c5dee875a4c5edd0f060f5f0799a4afa15d23a0fd2869",
+        "family": "char",
+        "id": "ORA-TYPE-020-CASE-01",
+        "oracle_sql_sha256": "eecbe456632312fa64a5d4fe769894ec791a76721553fd4618ee85afab864cc4",
+        "probe_contract_sha256": "d9a64a48f25476d6df8eb605489a8ff9fa0ffee534d8275df79a0dcae7718e5f"
+      },
+      {
+        "alloydb_sql_sha256": "696129e2151448efcdbf5d138bf20cfe0ae91c74d920073dd887615eaaad8c91",
+        "behavior_id": "ORA-TYPE-020",
+        "catalog_expectation_sha256": "866b3525ac6646bf07725ff077d0538b591636a78f6b97c6c5c11b00699ea173",
+        "family": "char",
+        "id": "ORA-TYPE-020-CASE-02",
+        "oracle_sql_sha256": "bf22958c02e11afc95aaa2c47eff04526a21cd8018272fb4bd46b8461ff28cc6",
+        "probe_contract_sha256": "0ee4c073fe61ef2d83b66d0c44e1168ec43ce07d27359260aeef6ce9024c3ecf"
+      },
+      {
+        "alloydb_sql_sha256": "162b85bd625dce688712becf8f4c7a61f756e2a2fef3a0306d0d77317a922674",
+        "behavior_id": "ORA-TYPE-020",
+        "catalog_expectation_sha256": "726d8fe7df7a35d5caa0253024d4f993b14df0b5c3481aea4b73627f04bded7e",
+        "family": "char",
+        "id": "ORA-TYPE-020-CASE-03",
+        "oracle_sql_sha256": "debc3a25be7cbcc3989dd4ce298e3b4f3a94280804e7914951be495268f3cabc",
+        "probe_contract_sha256": "15d943a289b864149a2f3586c5d377976a470919a87be07b7eee722bf54d7041"
+      },
+      {
+        "alloydb_sql_sha256": "76b53960dd932656b28629bfc86bb7bf8d0d58a7109382854a863278e11256e4",
+        "behavior_id": "ORA-TYPE-020",
+        "catalog_expectation_sha256": "fb1febe43a7dcc3bb0f47c609b914623c2c9105bda13233178cf67b0a7c8113e",
+        "family": "char",
+        "id": "ORA-TYPE-020-CASE-04",
+        "oracle_sql_sha256": "da40c5f76b3843da8ae22aca89de74db378108dcd5ad5fff6552f482e58109ca",
+        "probe_contract_sha256": "d9a64a48f25476d6df8eb605489a8ff9fa0ffee534d8275df79a0dcae7718e5f"
+      },
+      {
+        "alloydb_sql_sha256": "85d35cfc2341e5b2a9c698f62c22d0f466459dc2752b6dde193840e9ad71a1ed",
+        "behavior_id": "ORA-TYPE-021",
+        "catalog_expectation_sha256": "5b5d514ce1e7fa4d0ab76ff55903a7ccb27e4a05d5ba82e73f671ce267c788b6",
+        "family": "varchar2",
+        "id": "ORA-TYPE-021-CASE-01",
+        "oracle_sql_sha256": "eef575b97ce3439820e79f5797ee4bfd7c61e44a9729ce7e7eecb35d220f18fd",
+        "probe_contract_sha256": "ab85a5bef1a358461a39a176a34f73b4fc876c7a0188bf28727918ee1e453986"
+      },
+      {
+        "alloydb_sql_sha256": "83882d2aae86cf575d68976a4bed81f976f4bcfdeec3e53c1dceff78d60af27e",
+        "behavior_id": "ORA-TYPE-021",
+        "catalog_expectation_sha256": "5b6779a5e28a2bae199a4365fe034cbe21a2d357e4d1067083fb537571a06911",
+        "family": "varchar2",
+        "id": "ORA-TYPE-021-CASE-02",
+        "oracle_sql_sha256": "9d8ab78a04d5e7db5fbe78311a4093280b6b3c6dd28053743f9ce9a1c8118bc4",
+        "probe_contract_sha256": "7854c6970d20712eb168c4598c9816c9d25d5ccd6310ba7eeadbc045156d0331"
+      },
+      {
+        "alloydb_sql_sha256": "aedcd6c98ccb0d7f63dce070cf43c511645c8ba8683afca31d444455af609c0f",
+        "behavior_id": "ORA-TYPE-021",
+        "catalog_expectation_sha256": "b72bc57946a9e47db690285613cfb89a47bf934dd10fdc95d9841ef5c11f7977",
+        "family": "varchar2",
+        "id": "ORA-TYPE-021-CASE-03",
+        "oracle_sql_sha256": "01a8618ae69dddf0242843ccc1bdb8de604ad0d1f511309acd8513653bd009e9",
+        "probe_contract_sha256": "0420dd1c2950fb0fd65f14418f1fa5200958a515352ce8d7e05310876884288e"
+      },
+      {
+        "alloydb_sql_sha256": "2b9249e4b978fda8fe94bbc555777f59c52daf7d56345cab4e9784dcad65293f",
+        "behavior_id": "ORA-TYPE-021",
+        "catalog_expectation_sha256": "d38aa1155cba9731756caa9c7e168d777e472c2a75a22aae00fe83ea85253ff3",
+        "family": "varchar2",
+        "id": "ORA-TYPE-021-CASE-04",
+        "oracle_sql_sha256": "fbf2f11dc65e0de099d184ca0c0ba653abf7f0a5fc7351ff801512b7c6df4c53",
+        "probe_contract_sha256": "16ec9d8b696137e9e17e5484af033b3544775b8a2578fb212e080ca1c9e86471"
+      },
+      {
+        "alloydb_sql_sha256": "f84f786a1df29c79c6efb3a2f63486f9c9329ecd3b0e3db1ddd5c98f13413e3e",
+        "behavior_id": "ORA-TYPE-022",
+        "catalog_expectation_sha256": "9b0e9a4abb2c62cdf37e6ca7e5c46298e5a2d02afe8316c610e9e4faf806d7cf",
+        "family": "varchar2",
+        "id": "ORA-TYPE-022-CASE-01",
+        "oracle_sql_sha256": "763e8b720f3a673679abcebbbe7ce6ab61fc881251656a56951b5a266ff07d8a",
+        "probe_contract_sha256": "7854c6970d20712eb168c4598c9816c9d25d5ccd6310ba7eeadbc045156d0331"
+      },
+      {
+        "alloydb_sql_sha256": "973c5f7107a2f880efddf3d46d4448f82d3279d281e02fe94ba630ce8125e999",
+        "behavior_id": "ORA-TYPE-022",
+        "catalog_expectation_sha256": "4c7a3a56bb822753a973355abe09ce5d70a7370fbfaeb6c97c516ded88d4ba91",
+        "family": "varchar2",
+        "id": "ORA-TYPE-022-CASE-02",
+        "oracle_sql_sha256": "fe56922be80d2d29f98763747ef414c3904e2464c8a4e722ab0f8a2949c4e9d9",
+        "probe_contract_sha256": "7854c6970d20712eb168c4598c9816c9d25d5ccd6310ba7eeadbc045156d0331"
+      },
+      {
+        "alloydb_sql_sha256": "8468588f3ec5c345cf57a37d46c9abad63971a6b4a1e94a28d5c66913cfbeb72",
+        "behavior_id": "ORA-TYPE-022",
+        "catalog_expectation_sha256": "2656ecbd7368eca86463f042bec798a6136d609442b3cbb6ebeb7d528d650d71",
+        "family": "varchar2",
+        "id": "ORA-TYPE-022-CASE-03",
+        "oracle_sql_sha256": "eafa67822b05b529ed33352c1a3d29a38a6f2772a9457b15268522f65c0bb9fb",
+        "probe_contract_sha256": "b0b8f3fbb78d29a4bc4ed706a710fa6dbe54e1bd82bc337c53e918bcb5d72b0a"
+      },
+      {
+        "alloydb_sql_sha256": "4fc5fde7fc6e4222928d69d4067e7026ab0f89c27ccb18f4aacbe953dc4cb815",
+        "behavior_id": "ORA-TYPE-022",
+        "catalog_expectation_sha256": "85f9cd9a7710132e6b9dbaae21ff3c9881b2167c88380327e3052861ffec2fc9",
+        "family": "varchar2",
+        "id": "ORA-TYPE-022-CASE-04",
+        "oracle_sql_sha256": "bac719d94fbc54fb02254a11e46ee8ba71a338b48c0cbaff98ee57ba859fa072",
+        "probe_contract_sha256": "959574549fecd444eab6685a3d3c0adc0c2be3dccd25ff9ed8280df995462c35"
+      },
+      {
+        "alloydb_sql_sha256": "c4b10918139f47e57a707c5fe6a66bbef170a193be9b94a0930958adfb53b04e",
+        "behavior_id": "ORA-TYPE-023",
+        "catalog_expectation_sha256": "614e3351c818181dc5a11b6749e0435f2cc762f41cbe9e1f1a9448344e8de94c",
+        "family": "varchar2",
+        "id": "ORA-TYPE-023-CASE-01",
+        "oracle_sql_sha256": "334a67a598bc494e808a3582510c2917c27ebef02519ebe49ba3f6e233480db1",
+        "probe_contract_sha256": "3c36707c2a633108cd724412bef09b5adc6780242eb6bc3484094abd8505f735"
+      },
+      {
+        "alloydb_sql_sha256": "c1ab04397aa2b9545d58bc404d2d97b5f2fe78146b8aca19a57c42c5be912878",
+        "behavior_id": "ORA-TYPE-023",
+        "catalog_expectation_sha256": "a21eb70eecf059a0eb1c6555c0b09fc9b0237e30f855d1e9efb69017dba2a563",
+        "family": "varchar2",
+        "id": "ORA-TYPE-023-CASE-02",
+        "oracle_sql_sha256": "81ee9ad848efa4e555db293d6529ca60cb7b3cc686e84fe7cc256271e75731dc",
+        "probe_contract_sha256": "864ff71d80d9b4e5a083bbe58764f69293c8a095274fb2ab3ebf3951ffc8089c"
+      },
+      {
+        "alloydb_sql_sha256": "0ad1acdb3a6b6f5fe0a6620a76a48277509997d957fcf19da47c370a5585910c",
+        "behavior_id": "ORA-TYPE-023",
+        "catalog_expectation_sha256": "ed52ba66f229c2cbacf2753041c3187fa084245856d37f65142a89ae6bf29a01",
+        "family": "varchar2",
+        "id": "ORA-TYPE-023-CASE-03",
+        "oracle_sql_sha256": "febd75b790e7bb2e657bccfa1acbc985eec54be969fa62e727e1709d76651b74",
+        "probe_contract_sha256": "300b1f9594a697b0bf6397e2e8fbbfbbe17d5041929db293b1af7497167d2025"
+      },
+      {
+        "alloydb_sql_sha256": "4bdf9a8c45673a7cc7b3908d371105f42b96ac5d98d11b7dbee2e8c17bfd9484",
+        "behavior_id": "ORA-TYPE-023",
+        "catalog_expectation_sha256": "f8c6d7c34e2bf4ef1693528f4820b93a66a59a816a1c59b392421ca8511d0224",
+        "family": "varchar2",
+        "id": "ORA-TYPE-023-CASE-04",
+        "oracle_sql_sha256": "d3867f1f3554f5476d1261e687c884f70674453f72f6f56625bc442efbf26377",
+        "probe_contract_sha256": "2a7b00cca1b4d546292ff19207682879c439807decd81c0d6fed66f20a4bbb3a"
+      },
+      {
+        "alloydb_sql_sha256": "b8943fb735cd69fa9c86826cf5787ca63a1f79f67b27e68f4b9e0e934fc0182f",
+        "behavior_id": "ORA-TYPE-024",
+        "catalog_expectation_sha256": "8eed767510efacef88ca0941c862b787e1002b5bf136a321f758e06fd2454c33",
+        "family": "varchar2",
+        "id": "ORA-TYPE-024-CASE-01",
+        "oracle_sql_sha256": "cb12b58e4e552d2d096cb8a2205f503923592b7c8194a1c5423eaa40011f1e50",
+        "probe_contract_sha256": "47d814f3930ae8b37cdff2e8078ae1600900eda48fc1dd02b369ff6ec39eb9a2"
+      },
+      {
+        "alloydb_sql_sha256": "fb2e1055d0b5edd1d936f753d65e94d47c85f64320595623752a521259378164",
+        "behavior_id": "ORA-TYPE-024",
+        "catalog_expectation_sha256": "60cce87f0af85bd24b8be60216a55b51803e0976d8a9a1666398dcead33496a3",
+        "family": "varchar2",
+        "id": "ORA-TYPE-024-CASE-02",
+        "oracle_sql_sha256": "44a4812d2a9350d39e5bddfc3b81a7c68cbd5f5e76391c73ca2becfe48d6b319",
+        "probe_contract_sha256": "3ab8848b544bc4fc266ac79d9f49473694c77154d73c262938fd60b313f44cd0"
+      },
+      {
+        "alloydb_sql_sha256": "a4ed6537bd981dc36b8f7d7bc228f5d3a6b5bb72499fbd9eb4fa4b6a75e0c28c",
+        "behavior_id": "ORA-TYPE-024",
+        "catalog_expectation_sha256": "eed55c0f033297558f1f7afe02516b30d6709a97eaeaf9f6d81ebc99aa5a122c",
+        "family": "varchar2",
+        "id": "ORA-TYPE-024-CASE-03",
+        "oracle_sql_sha256": "b680d97d2f1e15275552c05c4b8e36a436ed1ca209d3f99f0b1c55339bde3ddf",
+        "probe_contract_sha256": "47d814f3930ae8b37cdff2e8078ae1600900eda48fc1dd02b369ff6ec39eb9a2"
+      },
+      {
+        "alloydb_sql_sha256": "4c9d269010fa14b635663dfb172045a69928f17badb7c7c4a8f50bca6deaf75c",
+        "behavior_id": "ORA-TYPE-024",
+        "catalog_expectation_sha256": "99dbac3c91ff61882dfe57d0863e937f468aa69006dec8a42cfeb1473f2447ac",
+        "family": "varchar2",
+        "id": "ORA-TYPE-024-CASE-04",
+        "oracle_sql_sha256": "43f5846d37003c75e8c0eab2d4083effe5e83ad7c8dc017d442b89a588568ddd",
+        "probe_contract_sha256": "f55e321657b0df68897398b81e254b4e16e7dc10a2f4f1151c9db17c699a190d"
+      },
+      {
+        "alloydb_sql_sha256": "f0d8c325d35007d3e3b623edadaa260ae7e0710ec300417e878eba6b6e175de3",
+        "behavior_id": "ORA-TYPE-025",
+        "catalog_expectation_sha256": "148685ae7df33096a19c5dee875a4c5edd0f060f5f0799a4afa15d23a0fd2869",
+        "family": "varchar2",
+        "id": "ORA-TYPE-025-CASE-01",
+        "oracle_sql_sha256": "60156993d4cbb9d7ddb85ee0ff019a80624a2d1d32e7d288902a8e2ad6ff57c3",
+        "probe_contract_sha256": "86bd6a3f7394d841923901f279951a0a3b8e9190f641e6311962c4872a23a279"
+      },
+      {
+        "alloydb_sql_sha256": "f2ec1f8de59c247531689bb6b75989b9a1bbb905280b31f14cb65a85801636cf",
+        "behavior_id": "ORA-TYPE-025",
+        "catalog_expectation_sha256": "f6ccc86e28f4a7a849b34d1a72d5abc2c0fca1260de97321ace05b407e63f50e",
+        "family": "varchar2",
+        "id": "ORA-TYPE-025-CASE-02",
+        "oracle_sql_sha256": "b7e881f422332957479250e79545a8cb48f1759094ea8376247fd026e049a229",
+        "probe_contract_sha256": "38db167669490501bd3df9edb9f6e2e159877f2788b0e482d132672bb7b8fea0"
+      },
+      {
+        "alloydb_sql_sha256": "2bcb2fdad7cb2e3d4e6e5290bd17b1588482cdea60389ed281207ffb85b64373",
+        "behavior_id": "ORA-TYPE-025",
+        "catalog_expectation_sha256": "726d8fe7df7a35d5caa0253024d4f993b14df0b5c3481aea4b73627f04bded7e",
+        "family": "varchar2",
+        "id": "ORA-TYPE-025-CASE-03",
+        "oracle_sql_sha256": "7aa680e8642f2d3837ea1d5af70605394c445cd972aa053d75ae6b951b5ac20f",
+        "probe_contract_sha256": "f55e321657b0df68897398b81e254b4e16e7dc10a2f4f1151c9db17c699a190d"
+      },
+      {
+        "alloydb_sql_sha256": "281bf8d73ff881d6814a064e9ac145bf725f115e0b48c75b2145c6c77bbba5b3",
+        "behavior_id": "ORA-TYPE-025",
+        "catalog_expectation_sha256": "ec7c09df4d92208f39b71c37555267a8cb64b332da5ebf83d7633c8e4ed5cbea",
+        "family": "varchar2",
+        "id": "ORA-TYPE-025-CASE-04",
+        "oracle_sql_sha256": "4d55cb3843a9c2d4b604baa9db68ef6b4f84c075b23a49bb1d3c47043d737ac5",
+        "probe_contract_sha256": "86bd6a3f7394d841923901f279951a0a3b8e9190f641e6311962c4872a23a279"
+      },
+      {
+        "alloydb_sql_sha256": "056f955ed0f156ee6ebe6570777f75bb3551be9daecb6de26fbfe5dfd5caa05b",
+        "behavior_id": "ORA-TYPE-036",
+        "catalog_expectation_sha256": "a2ef35d15630a378d50ca2a15252354e53bcc9b17339a1a52f724e05e35dd392",
+        "family": "date",
+        "id": "ORA-TYPE-036-CASE-01",
+        "oracle_sql_sha256": "b75763bf08e28441fd1a72d890ba8f4c36f02071c6d13d91b6d3419c52250555",
+        "probe_contract_sha256": "cb91d86db34d00eb9650ac97356bd595a48c7e4eeb0900eada7454bd2c2fb36a"
+      },
+      {
+        "alloydb_sql_sha256": "84b2e0de21a6704b096cf57604f5087c0234558e133aa43a4765d205af71697b",
+        "behavior_id": "ORA-TYPE-036",
+        "catalog_expectation_sha256": "eb2bd6278595e36f7535a65c0260872ebc06bd2db79c6d76316e75150711ab7f",
+        "family": "date",
+        "id": "ORA-TYPE-036-CASE-02",
+        "oracle_sql_sha256": "15621835a40e49a81d52c9cbbe3e0d5aaaec2546f49453eb0cc8dbb7aaf3715f",
+        "probe_contract_sha256": "3aeb7a11a671454c8fd98fba0c43fa19ac4949aa9fe112f33922af9639e1020a"
+      },
+      {
+        "alloydb_sql_sha256": "8dfe29450fdd741f7a399bc98f86f2ee0a2dd76b5a249073c26dcfb15202cd0e",
+        "behavior_id": "ORA-TYPE-036",
+        "catalog_expectation_sha256": "39cc7eede5b3aea229bc54f50e34027ed2fda64db48bd720de63dea29d8c24ff",
+        "family": "date",
+        "id": "ORA-TYPE-036-CASE-03",
+        "oracle_sql_sha256": "f5a734ad65c5758041eeff05f8eec22abdeefa362e62a956ed77ec26beaf0795",
+        "probe_contract_sha256": "6ca9c47cc62401baecf45a32afecde9d63c3928285f7ec4b9291e4410b9396db"
+      },
+      {
+        "alloydb_sql_sha256": "0d0db53b3a598e511be24514c81c3689db8ac27fc471c3d117e8bac2f4e36bbb",
+        "behavior_id": "ORA-TYPE-036",
+        "catalog_expectation_sha256": "f2aecc79f065d8a121f8518394310d8db2517d29457ff0368251dcd30151524c",
+        "family": "date",
+        "id": "ORA-TYPE-036-CASE-04",
+        "oracle_sql_sha256": "cd4df6cf73b7e1f6e6b89c792f8426e4d77cbd88fe7b2dc7ae170c59f354ac58",
+        "probe_contract_sha256": "a26b007f112d0d59022737fe27603f8cce5a080f7180ab6f4fd1a56697385c79"
+      },
+      {
+        "alloydb_sql_sha256": "69dc38f70f21098fbe438841e7227495e14c9cb7c3d595b97ebec4bbed2c7147",
+        "behavior_id": "ORA-TYPE-037",
+        "catalog_expectation_sha256": "5e38e4a7f580e20b9a68e5c8e425a823de1f54147bd4c2393d12efcae5266797",
+        "family": "date",
+        "id": "ORA-TYPE-037-CASE-01",
+        "oracle_sql_sha256": "fd5f4069310f39028c796fddb899fcba788691d1e0ad4518f0ef6f4c20335c17",
+        "probe_contract_sha256": "d784f8bfdf3a86524ba129b1ae58ca13cec1405a815948227499dafe06cd63ea"
+      },
+      {
+        "alloydb_sql_sha256": "c7e5bd929e94edb1b4dbc76941caab504dad9bde9134d2bc367ad9b294692caa",
+        "behavior_id": "ORA-TYPE-037",
+        "catalog_expectation_sha256": "7fa44be63ce3cf49e739e34a7ddbe3351b1fb92e386f1cadae7437b20905048b",
+        "family": "date",
+        "id": "ORA-TYPE-037-CASE-02",
+        "oracle_sql_sha256": "f76bf07f65fc4683e7ef1cf9d5a3dc8dc7d6b2207d64dc3ef71a50f2a564dee4",
+        "probe_contract_sha256": "d784f8bfdf3a86524ba129b1ae58ca13cec1405a815948227499dafe06cd63ea"
+      },
+      {
+        "alloydb_sql_sha256": "cc4f14033a9984bacfe7809698e7e1e8d309e608dfe1a975f38b78c96a67ab4b",
+        "behavior_id": "ORA-TYPE-037",
+        "catalog_expectation_sha256": "540ba7e94b46e54ce7a61b602ac52889c6b995153be656567c34f7296db315ea",
+        "family": "date",
+        "id": "ORA-TYPE-037-CASE-03",
+        "oracle_sql_sha256": "7a360ea88c06ad6282366728ead73c162e577e1edba72df840a0524b5209d70a",
+        "probe_contract_sha256": "dae6352ada5265fc53d1f05974ae42a741b163aee5718c7e9135ab5cbff9586c"
+      },
+      {
+        "alloydb_sql_sha256": "7cb20c9da6c0e21b00d4f23e9e5055eb6339f12b46eb7128dd969ddb2cb10144",
+        "behavior_id": "ORA-TYPE-037",
+        "catalog_expectation_sha256": "5078aae21717f51b15fc3f6932b7f0486c701e73827c7c4800f83689111ac3b4",
+        "family": "date",
+        "id": "ORA-TYPE-037-CASE-04",
+        "oracle_sql_sha256": "ade64df8a2c7f336f637f8cc465db01403bb8b78f9794f632d6e300ab536e40c",
+        "probe_contract_sha256": "3069a9b87852c9fd29bcdf58b715d029a0dcc202a43836a62edf0a574a3e7889"
+      },
+      {
+        "alloydb_sql_sha256": "37b5e7435729df359ff8f25bda9a134abf9c25837d36a5afc0696ae82756679f",
+        "behavior_id": "ORA-TYPE-038",
+        "catalog_expectation_sha256": "f121bb683727f5f219edbf8bcab6391012ae16af38dc2e0b7c311fd5ae4d88fd",
+        "family": "date",
+        "id": "ORA-TYPE-038-CASE-01",
+        "oracle_sql_sha256": "2ced63e6af32626c6d0468162b595a1b2ed53257be4b04a4b0c9c7ee898948b6",
+        "probe_contract_sha256": "06da6141d6610605c00081d99eeb03fa35ac7240919a5c7e8ca5ec872af2cf1a"
+      },
+      {
+        "alloydb_sql_sha256": "ff3f48fedbe55e83ac338c39d3371d8860dd1f7c712d5e816e57a8317dab0478",
+        "behavior_id": "ORA-TYPE-038",
+        "catalog_expectation_sha256": "978ed4adb5c1ef867c076d9d6036afdde0eedadfc7ea726ebf0cfcc5cf750375",
+        "family": "date",
+        "id": "ORA-TYPE-038-CASE-02",
+        "oracle_sql_sha256": "89cd459f6e0128549819d0974caa08fff1df3faecce1ab1938dc9b7ee96781ad",
+        "probe_contract_sha256": "f0b19d734d022b0834f1a866cdfc5f2fe8072b8e71d01c63c409cb911417930d"
+      },
+      {
+        "alloydb_sql_sha256": "7e8364713d3a5c007e944a960f5bc2154dfdb4a2c3da34719e8b38792c4504f8",
+        "behavior_id": "ORA-TYPE-038",
+        "catalog_expectation_sha256": "92c1b4c33b3bcdb73ff121b5891179c92d1ae9b5ae3d5a539dfe2cb8b1c38df5",
+        "family": "date",
+        "id": "ORA-TYPE-038-CASE-03",
+        "oracle_sql_sha256": "d7fb445d3bef06ab6dba64893d099982343c5bceea0cc0f8ccd20a984ee3d924",
+        "probe_contract_sha256": "4f830dd1ece38b8ada2273c56a2ce9eb758183c09e892f5e9a9a82407e147459"
+      },
+      {
+        "alloydb_sql_sha256": "0ea330220ca95b8959cc3cd5cf39e597133bae5db2e6a360824763e2c1348fca",
+        "behavior_id": "ORA-TYPE-038",
+        "catalog_expectation_sha256": "11e1b60efa4a397d5d809eadd8bd79917e8a51b2d1d2567c8556fc827fc7a2d0",
+        "family": "date",
+        "id": "ORA-TYPE-038-CASE-04",
+        "oracle_sql_sha256": "c715ba70f9a4a23d9c7b32365ed71c6590cdee4ad8a97ed4925dabc5e93322c0",
+        "probe_contract_sha256": "74fa7a345f3197444734e97c601cae7afb857e8953b6ddaa3c459f046386f8c7"
+      },
+      {
+        "alloydb_sql_sha256": "b1cbe92e72093167fd08a3194a1be7fbcdef654a43bb2e92532f098d33db47f0",
+        "behavior_id": "ORA-TYPE-039",
+        "catalog_expectation_sha256": "8eed767510efacef88ca0941c862b787e1002b5bf136a321f758e06fd2454c33",
+        "family": "date",
+        "id": "ORA-TYPE-039-CASE-01",
+        "oracle_sql_sha256": "f081d7ed312985ba32436f413b021b0f0e62621da94cba9c47414a717093f707",
+        "probe_contract_sha256": "75d7b48579cd1e1ecf9bef4acedcb41adc3631af4d6a3754b551a7d2d2f355b4"
+      },
+      {
+        "alloydb_sql_sha256": "729c7ff117bbf05310d1b72cf11032f0609837a9855f59b34d24829dc5ff879b",
+        "behavior_id": "ORA-TYPE-039",
+        "catalog_expectation_sha256": "55a4c511890aad4b6f800c89b9c8135ad2f588402f6b37906bfde572fb212820",
+        "family": "date",
+        "id": "ORA-TYPE-039-CASE-02",
+        "oracle_sql_sha256": "2f92cd27956df69226a352e2b4dca0e7dccf2ec061eb45a98b49141888f5faf5",
+        "probe_contract_sha256": "dae6352ada5265fc53d1f05974ae42a741b163aee5718c7e9135ab5cbff9586c"
+      },
+      {
+        "alloydb_sql_sha256": "27345d81ff1d1fa3620f3be3f62bb8ae33c01e9ef16e76881fcb7b14be25d88a",
+        "behavior_id": "ORA-TYPE-039",
+        "catalog_expectation_sha256": "eed55c0f033297558f1f7afe02516b30d6709a97eaeaf9f6d81ebc99aa5a122c",
+        "family": "date",
+        "id": "ORA-TYPE-039-CASE-03",
+        "oracle_sql_sha256": "fc040b1c72e951abfed331837f17adc07db1ccd987f0c9aa482b121beff7e032",
+        "probe_contract_sha256": "75d7b48579cd1e1ecf9bef4acedcb41adc3631af4d6a3754b551a7d2d2f355b4"
+      },
+      {
+        "alloydb_sql_sha256": "831b4648592ed897b5c7289d49ceb6bef33e1fd309676758b6b6639e2432c546",
+        "behavior_id": "ORA-TYPE-039",
+        "catalog_expectation_sha256": "ab4c1aef647e6064fcf11af895455c0b2f53de76ef2879b4969f1d38873808ee",
+        "family": "date",
+        "id": "ORA-TYPE-039-CASE-04",
+        "oracle_sql_sha256": "7f64445aea6fa1ff42fbe35567908fcdc997366c91864539e6afd104c83ca7c4",
+        "probe_contract_sha256": "fd7582acd842af0166b877163837e1f70e3b9ddc1ecfd22a49c759b261d4b266"
+      },
+      {
+        "alloydb_sql_sha256": "17f18ca77642da766aea23b27789413dba21ae89115b31f373b326dc9118eee8",
+        "behavior_id": "ORA-TYPE-040",
+        "catalog_expectation_sha256": "8d1f7fa559e594f55ffb045ac25391643e34ae6dd8ea727ecf472bfdbeac6add",
+        "family": "date",
+        "id": "ORA-TYPE-040-CASE-01",
+        "oracle_sql_sha256": "eaa240b56851efb8a4c0d388f91687a76cf3219d05cdd8c8e5343de781ccda26",
+        "probe_contract_sha256": "00b902c7946301888068cb1da16023c45cc97f49919cb8b07c29f4909d87c848"
+      },
+      {
+        "alloydb_sql_sha256": "bd16461bd43d1985370cad470073b8f36d3c4b85cc4651d8705100dc28b99c1d",
+        "behavior_id": "ORA-TYPE-040",
+        "catalog_expectation_sha256": "c2a59b723723c9796c830e1015c79aeb35a6ba10f8bd8f13652a684eb19e3be8",
+        "family": "date",
+        "id": "ORA-TYPE-040-CASE-02",
+        "oracle_sql_sha256": "7affa741ab9bd39c2287dee29b860d61e830463d917276c410ee570cf4f8c82b",
+        "probe_contract_sha256": "3069a9b87852c9fd29bcdf58b715d029a0dcc202a43836a62edf0a574a3e7889"
+      },
+      {
+        "alloydb_sql_sha256": "17203d241f1fc50c5ea6227b1fb4c47b3bec0cea694c0e13649469fe8e4f1cba",
+        "behavior_id": "ORA-TYPE-040",
+        "catalog_expectation_sha256": "caacd75a14306f3a5f3cb9c425b1189f9b56a2b29509e24e5df31caf109d3e6f",
+        "family": "date",
+        "id": "ORA-TYPE-040-CASE-03",
+        "oracle_sql_sha256": "acba1de2fe383cd1ae07c4fb01e95eb3d88b3c1811fa42981408a2daf8b6a7da",
+        "probe_contract_sha256": "fd7582acd842af0166b877163837e1f70e3b9ddc1ecfd22a49c759b261d4b266"
+      },
+      {
+        "alloydb_sql_sha256": "5e642bb8cb65098c056bfacee69280d0c3ae3b074297b0d3eb382ff6486d753b",
+        "behavior_id": "ORA-TYPE-040",
+        "catalog_expectation_sha256": "c66e0305451ce08b65f790704e4bf3c4e9920057cfe0cf96167d963b0dc499c0",
+        "family": "date",
+        "id": "ORA-TYPE-040-CASE-04",
+        "oracle_sql_sha256": "75864a96b8831aadd34f50e7e7ce54b36e454b9c8155edf2e93894ee451080d7",
+        "probe_contract_sha256": "00b902c7946301888068cb1da16023c45cc97f49919cb8b07c29f4909d87c848"
+      },
+      {
+        "alloydb_sql_sha256": "853b2949ed7331faef798e611c3f60e57092e714ebe2a1968cad5008ca4fb234",
+        "behavior_id": "ORA-TYPE-041",
+        "catalog_expectation_sha256": "a47518b1daaef293de66200537b47c64464e00bddd27e6786f3eeb7fd8bff779",
+        "family": "timestamp",
+        "id": "ORA-TYPE-041-CASE-01",
+        "oracle_sql_sha256": "0c83b56d515fb9fd17e430bc56bab56c7567950014cc232475896e5881c94b53",
+        "probe_contract_sha256": "33951e2489afb959243ec1883056cbea3c48b24fb1955330a8eb1f20809c5983"
+      },
+      {
+        "alloydb_sql_sha256": "fb9f4765df1d09bd0921043bc9aa8f92a7f3c2258387dbddaf56154965333a5b",
+        "behavior_id": "ORA-TYPE-041",
+        "catalog_expectation_sha256": "7f4d4dc8c39668bebcb6abff8d6a0f238b0613fbee2c1c76ef419d629c0190af",
+        "family": "timestamp",
+        "id": "ORA-TYPE-041-CASE-02",
+        "oracle_sql_sha256": "c18f4658516744595d836567520744f4ff4df7d17e6bf7daa9d5cac72f4e3319",
+        "probe_contract_sha256": "fb249e124ab31d3a4425ccfc0c539c782c193a003f67f2efbe627e3f5f94e90b"
+      },
+      {
+        "alloydb_sql_sha256": "58f15734a721adf38f4528676bfc2c4bfb8e2e798930236004faa3c9cf7437f7",
+        "behavior_id": "ORA-TYPE-041",
+        "catalog_expectation_sha256": "3a3f932e4be5b84d8e57ed52a26b80e2d5786719988b18dbe6c3bf55fd68a230",
+        "family": "timestamp",
+        "id": "ORA-TYPE-041-CASE-03",
+        "oracle_sql_sha256": "e85430d96c5ce5d733aabcd0f28f3f73f80fe5f468859e1d1e2471382c92098a",
+        "probe_contract_sha256": "d7413a16786be3de2edbe0199f152bad78b06c326c0e81071b787ce54f48554e"
+      },
+      {
+        "alloydb_sql_sha256": "339d5f047d4747694987f07ae60a38691162111c05f44fee06988be181663829",
+        "behavior_id": "ORA-TYPE-041",
+        "catalog_expectation_sha256": "24b5c86c97374ac13257eed2d04a00c050aba14b93c9a2206039cfc75f7f1010",
+        "family": "timestamp",
+        "id": "ORA-TYPE-041-CASE-04",
+        "oracle_sql_sha256": "e8f82d8ea353ab111a9032bab8bf22ad3d00aef00661312ccc9aeed51a76e04a",
+        "probe_contract_sha256": "00c7effddd4e11b9f702f5eaa0e51edb6e07b2dee41be803ec9368ad8220eae0"
+      },
+      {
+        "alloydb_sql_sha256": "b69ba1e4757b8403b2627556b0d12c9864a9b9ce39f0836e347140ed5506bf2f",
+        "behavior_id": "ORA-TYPE-042",
+        "catalog_expectation_sha256": "5e38e4a7f580e20b9a68e5c8e425a823de1f54147bd4c2393d12efcae5266797",
+        "family": "timestamp",
+        "id": "ORA-TYPE-042-CASE-01",
+        "oracle_sql_sha256": "c89db7928635ea4a1e480b4c7cd779535cf19e72a92a213ee9db856246ae27cb",
+        "probe_contract_sha256": "d784f8bfdf3a86524ba129b1ae58ca13cec1405a815948227499dafe06cd63ea"
+      },
+      {
+        "alloydb_sql_sha256": "5b18bacbb360498e3f33b168d5df73323bd096d89b82f4e28f04dd90536fa521",
+        "behavior_id": "ORA-TYPE-042",
+        "catalog_expectation_sha256": "7fa44be63ce3cf49e739e34a7ddbe3351b1fb92e386f1cadae7437b20905048b",
+        "family": "timestamp",
+        "id": "ORA-TYPE-042-CASE-02",
+        "oracle_sql_sha256": "013009f29385a3ab727677ec834e53385cdb7c62c661fd4abcd013da2e7463b5",
+        "probe_contract_sha256": "d784f8bfdf3a86524ba129b1ae58ca13cec1405a815948227499dafe06cd63ea"
+      },
+      {
+        "alloydb_sql_sha256": "62773d0d829ceb4e53c600fae89169940207f3ae592031c5caf64c5812b01677",
+        "behavior_id": "ORA-TYPE-042",
+        "catalog_expectation_sha256": "540ba7e94b46e54ce7a61b602ac52889c6b995153be656567c34f7296db315ea",
+        "family": "timestamp",
+        "id": "ORA-TYPE-042-CASE-03",
+        "oracle_sql_sha256": "46708b4a89c9deb72e9bc6d75cb67a30bda5899c8ccc7229fb4aa681d79a7988",
+        "probe_contract_sha256": "2abd4bebc1ecf00f5476447c5b42ca398d8678abfb4bb30ddf348e7116c9e3c4"
+      },
+      {
+        "alloydb_sql_sha256": "b9aea5894b8d2262c5017deb17592633e2a1bc5b4a1c807119adfd681318219a",
+        "behavior_id": "ORA-TYPE-042",
+        "catalog_expectation_sha256": "0e07270589231d9314753c9f2282ef452b0707711ac349bc41c22e0efb827753",
+        "family": "timestamp",
+        "id": "ORA-TYPE-042-CASE-04",
+        "oracle_sql_sha256": "d97f2d8da2bad051e23eca9cbf8b4ab2c2a67c634311bd333ac21554781a3a71",
+        "probe_contract_sha256": "cb1248f163f78b3de1214a6ea5e0f98fc35371cffbfd4f1d88afa70e9a73edbf"
+      },
+      {
+        "alloydb_sql_sha256": "fd77487310a041d00215ad4f400b0ad59dfbedc6251ee53b0b4130f7e8d216ce",
+        "behavior_id": "ORA-TYPE-043",
+        "catalog_expectation_sha256": "f121bb683727f5f219edbf8bcab6391012ae16af38dc2e0b7c311fd5ae4d88fd",
+        "family": "timestamp",
+        "id": "ORA-TYPE-043-CASE-01",
+        "oracle_sql_sha256": "63c330a4c5d024a35cb8814c9aafd18eafed728b5c96954b7242ed24bd8dcb14",
+        "probe_contract_sha256": "ad200838c3eee3693c5d5d55158461380dbeeadceaa7a5227dbe7bde2ea90b2e"
+      },
+      {
+        "alloydb_sql_sha256": "98db1546b32b6ad11e48eb9797c7a160d508acf9fedc3f8a917c57de0a997ebc",
+        "behavior_id": "ORA-TYPE-043",
+        "catalog_expectation_sha256": "978ed4adb5c1ef867c076d9d6036afdde0eedadfc7ea726ebf0cfcc5cf750375",
+        "family": "timestamp",
+        "id": "ORA-TYPE-043-CASE-02",
+        "oracle_sql_sha256": "383682c8b566752e2796433506dae3e39d6db2cd9709d47ffb9d6f66cdba6e18",
+        "probe_contract_sha256": "82194c8bd7dabfba2c44cdea8ee7bf9e12f5911a6d41a262789a9efd567f9600"
+      },
+      {
+        "alloydb_sql_sha256": "986e8b9b7620252473a64d05ad80c09893c3680ffd16065aef6ecaad8eccd8a1",
+        "behavior_id": "ORA-TYPE-043",
+        "catalog_expectation_sha256": "92c1b4c33b3bcdb73ff121b5891179c92d1ae9b5ae3d5a539dfe2cb8b1c38df5",
+        "family": "timestamp",
+        "id": "ORA-TYPE-043-CASE-03",
+        "oracle_sql_sha256": "fb5bec34299b4401d0b1b0ec50a4f727ce8e9218904dd58c36cbbec1a9710c70",
+        "probe_contract_sha256": "dcd8cd366ebdbee5fec7c0dd3597719035cf6642bd08c63efb92d0fd173de394"
+      },
+      {
+        "alloydb_sql_sha256": "4e890f9be4c08cb92cf1b978753b5c9b4c0b9f99e76814cc8218e3798e6508e6",
+        "behavior_id": "ORA-TYPE-043",
+        "catalog_expectation_sha256": "4aa09947cd1e75cef51672240424e148837c7757a7bb318639f6892ac51288d9",
+        "family": "timestamp",
+        "id": "ORA-TYPE-043-CASE-04",
+        "oracle_sql_sha256": "0e6c39beb3a95f8f0c2b89cc6528271ea43cbaa542f9504b7ddc005acd306519",
+        "probe_contract_sha256": "f8550a767e9cc025745273f12e1712e87eccfd6669672e3fc755811e1413284e"
+      },
+      {
+        "alloydb_sql_sha256": "5d705afe0b0179a150a1e91984a054cd17ef8609997bb05d682c6d09dcb27081",
+        "behavior_id": "ORA-TYPE-044",
+        "catalog_expectation_sha256": "8eed767510efacef88ca0941c862b787e1002b5bf136a321f758e06fd2454c33",
+        "family": "timestamp",
+        "id": "ORA-TYPE-044-CASE-01",
+        "oracle_sql_sha256": "02fbfe3e5a546305f009933ac897b93185992e4ebbadab741892da773f5a65ae",
+        "probe_contract_sha256": "0590a62925c9db8b395db373c33f8fd0db4b2fb620c467dc4df8f89e56aa9874"
+      },
+      {
+        "alloydb_sql_sha256": "6c80a03b70fdd9ecba973189af19e10850a08603c0a8fa8a1388a04cf8b90faf",
+        "behavior_id": "ORA-TYPE-044",
+        "catalog_expectation_sha256": "55a4c511890aad4b6f800c89b9c8135ad2f588402f6b37906bfde572fb212820",
+        "family": "timestamp",
+        "id": "ORA-TYPE-044-CASE-02",
+        "oracle_sql_sha256": "64c84972f626ff4b8a7f12ebfb1d63861abc0c28e3b17ab837f21643a06ce69a",
+        "probe_contract_sha256": "2abd4bebc1ecf00f5476447c5b42ca398d8678abfb4bb30ddf348e7116c9e3c4"
+      },
+      {
+        "alloydb_sql_sha256": "25f3ecb76b56b38ee356a007d8cc985de5c18e161f897d612369ecbfe9d15fd8",
+        "behavior_id": "ORA-TYPE-044",
+        "catalog_expectation_sha256": "eed55c0f033297558f1f7afe02516b30d6709a97eaeaf9f6d81ebc99aa5a122c",
+        "family": "timestamp",
+        "id": "ORA-TYPE-044-CASE-03",
+        "oracle_sql_sha256": "db111920023b7b5942c73cdac411553dd5f15dd4c4d134240620c2c68fd19276",
+        "probe_contract_sha256": "0590a62925c9db8b395db373c33f8fd0db4b2fb620c467dc4df8f89e56aa9874"
+      },
+      {
+        "alloydb_sql_sha256": "5c3acb8424efc161224e4e595dbd6bb79b484806404ca72242109264165c77ca",
+        "behavior_id": "ORA-TYPE-044",
+        "catalog_expectation_sha256": "28f1838bae150a133d934c439db1be6e6e309df70febe42ef2d656fc67b70637",
+        "family": "timestamp",
+        "id": "ORA-TYPE-044-CASE-04",
+        "oracle_sql_sha256": "f9344cfd1149cc38fb61bf60025096b3546f159e9d603ba7bb6b2804e5da2c0c",
+        "probe_contract_sha256": "ffb0487c8f9f0fc69792b276480d33413ae22e0282928c6f397114f43a09a4a5"
+      },
+      {
+        "alloydb_sql_sha256": "aff4359625a694e3291223cdeee168ad6b6de9104a85b0a41a3053936f3d3276",
+        "behavior_id": "ORA-TYPE-045",
+        "catalog_expectation_sha256": "8d1f7fa559e594f55ffb045ac25391643e34ae6dd8ea727ecf472bfdbeac6add",
+        "family": "timestamp",
+        "id": "ORA-TYPE-045-CASE-01",
+        "oracle_sql_sha256": "8505a2b3823ab1d4174fcfcdd0f2f0b5751c17867fd72c30aceaed8f573cbfa9",
+        "probe_contract_sha256": "dbf2e0c778352062f08064725a493bbc401d137f3bb3178ef8b0d84ca1fb62c7"
+      },
+      {
+        "alloydb_sql_sha256": "29db1a33a893e226ba190e286ba609a4baa9b6576bd4617b90be76d36109bdb8",
+        "behavior_id": "ORA-TYPE-045",
+        "catalog_expectation_sha256": "c2a59b723723c9796c830e1015c79aeb35a6ba10f8bd8f13652a684eb19e3be8",
+        "family": "timestamp",
+        "id": "ORA-TYPE-045-CASE-02",
+        "oracle_sql_sha256": "dce8ce8dd61209004ac1b4cec02e93a5a721672572c5227b6c97de257ad54b0b",
+        "probe_contract_sha256": "cb1248f163f78b3de1214a6ea5e0f98fc35371cffbfd4f1d88afa70e9a73edbf"
+      },
+      {
+        "alloydb_sql_sha256": "9a12a508600fa492b7cca2b1e98bf6b1d94eeff1cb55f12039c81717f3c7472b",
+        "behavior_id": "ORA-TYPE-045",
+        "catalog_expectation_sha256": "caacd75a14306f3a5f3cb9c425b1189f9b56a2b29509e24e5df31caf109d3e6f",
+        "family": "timestamp",
+        "id": "ORA-TYPE-045-CASE-03",
+        "oracle_sql_sha256": "74e6d35fc4c1420d919043fd2d0e9e6ce35daeea17789aa890ce17809b7672cd",
+        "probe_contract_sha256": "ffb0487c8f9f0fc69792b276480d33413ae22e0282928c6f397114f43a09a4a5"
+      },
+      {
+        "alloydb_sql_sha256": "1679264d3e83930d454075f71586ce72b07bd3867f1ce3651d1a2725bc7b06f6",
+        "behavior_id": "ORA-TYPE-045",
+        "catalog_expectation_sha256": "fbc7c7c42b4406978843d5d137f8f4c0f5a7bcc4010c47abc2f23fb4f56e909a",
+        "family": "timestamp",
+        "id": "ORA-TYPE-045-CASE-04",
+        "oracle_sql_sha256": "472033cc8478ff91e21eb28b3d61d6b02bad3ad404c5bf4ee09144a741221a0d",
+        "probe_contract_sha256": "dbf2e0c778352062f08064725a493bbc401d137f3bb3178ef8b0d84ca1fb62c7"
+      }
+    ],
+    "comparison_policy": "Exact typed values and nulls. Only reviewed -1438/22003, -12899/22001 and -1861/22007 diagnostic mappings. Explicit target empty-string normalization, padding and date/time rendering are part of the SQL, never comparator rewrites.",
+    "cost_policy": "Estimated incremental budget; runtime guard, not a guaranteed billing cap. Existing storage charges continue.",
+    "data_policy": "Synthetic data only. CHAR/VARCHAR2 use disposable tables in the isolated Oracle container and session-local pg_temp tables on AlloyDB; target transactions roll back. No application data or permanent target objects.",
+    "families": [
+      "number",
+      "char",
+      "varchar2",
+      "date",
+      "timestamp"
+    ],
+    "identity_policy": "Pinned Oracle 26ai image/PDB; fresh fixed-resource AlloyDB endpoint and PostgreSQL 16 identity. Unknown metadata remains unknown.",
+    "implementation": {
+      "lightyear_data/oracle_number_native.py": "81ae94e570a27cc90704cab4fbea1a0bfe03b195795a38bc681645c3187c13e9",
+      "lightyear_workflow/campaign_engine.py": "26426120a475de31ac8c89016f49f2f4b8b8f4fc491e64b87209a99b1d81b3c2",
+      "lightyear_workflow/campaign_gcp.py": "ec3bb86bd7ff689bfc3f551b6b0cc0c17b70fcfef7ba28ca29e601b567d0a27c",
+      "lightyear_workflow/campaign_journals.py": "e4acefef769a939b17d4151a6ee9255991c2d63ee17d5f6693204eef072b0878",
+      "lightyear_workflow/paired_number.py": "eda67fecd514e574703d8642d95661ece34560feae7e7bfa1be97ecc1b9489e1",
+      "lightyear_workflow/paired_types.py": "22aee59136777355d6fc3017c3dca2cfb3c3407b55e61b59ca3508e7227cc2b5"
+    },
+    "interruption_policy": "No automatic SQL replay. Signed per-family journals/checkpoints; failed observations retained. Cleanup before another launch.",
+    "journal_layout": "family-v1",
+    "name": "Oracle 26ai \u2192 AlloyDB \u00b7 100 datatype pairs",
+    "plan_sha256": "271d5390ae8e415e0c6775953888f69a5ad5c9477bed03278682858794bd0d8c",
+    "profile": {
+      "budget_usd": 10,
+      "estimated_hourly_usd": 2,
+      "max_seconds": 3600,
+      "oracle_image": "container-registry.oracle.com/database/free@sha256:770ca58ab319d8cfde610b0db25c06899ce0af9591c4addfa10d2cb8f0318e65",
+      "runner_zone": "us-west1-a"
+    },
+    "project": "lightyear-ms67-nonproduction",
+    "qualification": "100 bounded datatype pairs, five families/25 behaviours, Oracle 26ai only. No Oracle 19c, application or platform qualification.",
+    "region": "us-west1",
+    "resource_policy": "One owned ephemeral runner; resume only the stopped AlloyDB primary. Delete owned runner/firewall/disk and restore AlloyDB STOPPED."
+  },
+  "reason": "Codex acting on user authorization: user approved expanding to 100 catalog case pairs (NUMBER, CHAR, VARCHAR2, DATE, TIMESTAMP), then explicitly approved an additional $10 estimated GCP allowance. Execute the bound Oracle 26ai and AlloyDB SQL with a 60-minute active limit, retain native evidence, delete owned runner resources and restore AlloyDB STOPPED. No platform qualification claim.",
+  "record_type": "paired-campaign-authorization",
+  "request_id": "6688a865-2c4d-48cc-b6ef-1f41da4ceee0",
+  "run_id": "core100-45bae6fc54684445a2b1dd5544c6e537",
+  "signature": {
+    "algorithm": "Ed25519",
+    "key_id": "36fdf4766568b1880c1bddef92f450c6a41279d01ff11c0abd6f78e2215c6552",
+    "value": "bezRo6Xwva8MK/E+l9hEx4Wco1eEuaflKGPug6h1tVn9TGqRHuX6a4KautWMQ8sZ3EXZ23cPaLkm7QFsmfBfCA=="
+  },
+  "start_before": "2026-09-18T00:32:32.631520+00:00"
+}

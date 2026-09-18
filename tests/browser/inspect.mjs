@@ -41,6 +41,9 @@ try {
   const observedExecution = await (await fetch(base + '/api/workflow/execution')).json();
   assert.equal(observedExecution.source, 'engine-journal');
   const observedHistory = await (await fetch(base + '/api/workflow/convergence')).json();
+  const pairedQuery = 'estate=cloudbank&campaign_id=oracle26ai-alloydb-number';
+  const pairedPreparation = await (await fetch(base + '/api/workflow/campaign?' + pairedQuery)).json();
+  const pairedHistory = await (await fetch(base + '/api/workflow/convergence?' + pairedQuery)).json();
   assert.equal(observedHistory.metric_unit, 'action-events');
   assert(observedHistory.storage.runs >= 1, 'The terminal engine run was not recorded');
   const completedActions = observedExecution.action_kinds.reduce((sum, kind) => sum + kind.executed, 0);
@@ -66,17 +69,24 @@ try {
         }
         await page.locator('#workflow-campaign').selectOption('oracle26ai-alloydb-number');
         await page.locator('#campaign-view h2').waitFor();
-        assert.deepEqual(await page.locator('#campaign-view .campaign-card strong').allTextContents(), ['20', '20', 'Not recorded', 'Not recorded']);
+        assert.deepEqual(await page.locator('#campaign-view .campaign-card strong').allTextContents(),
+          [20, 20, pairedPreparation.native_executed_cases, pairedPreparation.target_equivalent_cases].map(v => v === null ? 'Not recorded' : String(v)));
         assert.equal(await page.locator('#cloudbank-execution').isVisible(), false);
         assert.equal(await page.locator('#operator-sign-in').isEnabled(), false);
         assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth + 1), false);
         await page.screenshot({ path: resolve(output, `${name}-${layout}-campaign.png`), fullPage: true });
         await page.locator('#show-run').click();
-        await page.locator('#run-view').getByText('Not run.', { exact: false }).waitFor();
-        assert.equal(await page.locator('#run-view .run-figure').count(), 0);
+        if (pairedHistory.runs.length) {
+          await page.locator('#run-view').getByText(pairedHistory.runs[0].status, { exact: false }).first().waitFor();
+          assert.equal(await page.locator('#run-view .run-figure').count(), 4);
+        } else {
+          await page.locator('#run-view').getByText('Not run.', { exact: false }).waitFor();
+          assert.equal(await page.locator('#run-view .run-figure').count(), 0);
+        }
         await page.locator('#show-convergence').click();
-        await page.locator('#convergence').getByText('NUMBER campaign has no indexed runs.', { exact: false }).waitFor();
-        assert.equal(await page.locator('#convergence .convergence-card').count(), 0);
+        if (pairedHistory.runs.length) await page.locator('#convergence .convergence-card').first().waitFor();
+        else await page.locator('#convergence').getByText('No completed runs recorded yet for this campaign.', { exact: false }).waitFor();
+        assert.equal(await page.locator('#convergence .convergence-card').count(), pairedHistory.runs.length);
         await page.locator('#workflow-campaign').selectOption('retained');
         await page.locator('#show-run').click();
         await page.locator('#run-view .run-figure').first().waitFor();

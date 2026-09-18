@@ -20,9 +20,10 @@ MAX_AGE_SECONDS = 900
 
 
 def validate_context(estate: str, campaign: str) -> None:
+    from .paired_types import CAMPAIGN as CORE100
     from .history import estate_name
     estate_name(estate)
-    if campaign != "retained" and (estate != "cloudbank" or campaign != CAMPAIGN):
+    if campaign != "retained" and (estate != "cloudbank" or campaign not in (CAMPAIGN, CORE100)):
         raise ValueError("Unknown campaign for the selected estate")
 
 
@@ -81,28 +82,32 @@ def read_readiness(root: Path, *, now: datetime | None = None) -> dict:
 
 
 def read_campaign(root: Path, estate: str, campaign: str, run_id: str | None = None) -> dict:
+    from . import paired_types
     validate_context(estate, campaign)
     if campaign == "retained":
         return {"campaign_id": campaign, "estate": estate, "read_only": True, "status": "retained-evidence"}
     cases = []
     preparation = "unavailable"
+    core = campaign == paired_types.CAMPAIGN
     try:
-        verify_harnesses(root)
-        cases = [{key: case[key] for key in ("id", "behavior_id", "focus", "dimension")} for case in number_cases(root)]
+        (paired_types.verify if core else verify_harnesses)(root)
+        cases = [{key: case[key] for key in ("id", "behavior_id", "focus", "dimension", "topic")} for case in (paired_types.cases if core else number_cases)(root)]
         preparation = "verified-files"
     except (ValueError, OSError, KeyError):
         pass
     from .campaign_service import review
     from .campaign_engine import AUTHORITY, read_run
-    execution = read_run(root, run_id)
-    proposed = review(root)
+    execution = read_run(root, run_id, campaign)
+    proposed = review(root, campaign)
     measured = execution.get("identities") is not None and execution.get("evidence_class") == "native-database-observed"
+    from lightyear_data.oracle_paired_coverage import report
     return {
-        "campaign_id": CAMPAIGN, "estate": estate, "name": "Oracle 26ai → AlloyDB · NUMBER pilot",
+        "campaign_id": campaign, "estate": estate, "name": paired_types.NAME if core else "Oracle 26ai → AlloyDB · NUMBER pilot",
         "status": execution["status"] if execution.get("run_id") else "planned", "read_only": True,
         "dispatch_available": proposed["status"] == "reviewable" and (root / AUTHORITY).is_file(),
         "scope": "Independent database catalog tests in the CloudBank lab; not CloudBank application scenarios.",
-        "planned_cases": 20, "planned_behaviors": 5, "topic_family": "types/number",
+        "planned_cases": 100 if core else 20, "planned_behaviors": 25 if core else 5,
+        "topic_family": ', '.join(paired_types.FAMILIES) if core else "types/number",
         "source": ("Oracle Database 26ai Free · " + execution["identities"]["oracle"]["version"] if measured else
                    "Oracle Database 26ai Free (proposed; runtime identity not recorded)"),
         "target": "Managed AlloyDB · cloudbank-ms71-alloydb / primary",
@@ -114,6 +119,7 @@ def read_campaign(root: Path, estate: str, campaign: str, run_id: str | None = N
         "blockers": ([proposed["reason"]] if proposed["status"] != "reviewable" else
                      ["Review and authorize the exact campaign terms below. Fresh database identities are checked by the detached engine before case execution."]),
         "readiness": read_readiness(root),
+        "catalog_coverage": report(root),
     }
 
 

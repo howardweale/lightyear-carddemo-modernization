@@ -59,3 +59,6 @@ docs/receipts/alloydb-platform-20260912a/** -text whitespace=blank-at-eol,blank-
 
 # Preserve signed paired-campaign export bytes and the public-key fingerprint.
 docs/receipts/oracle26ai-alloydb-number-20260917/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+
+# Preserve the native 100-pair family journals, signatures and public key bytes.
+docs/receipts/oracle26ai-alloydb-core100-20260917/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

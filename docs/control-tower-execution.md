@@ -5,6 +5,10 @@ operations, records attempts and evidence in a transactional journal, and resume
 unfinished work from a checkpoint. The Tower reads verified engine evidence and
 records authenticated human decisions. It never dispatches these workers.
 
+The [local agent workflow](local-agent-workflow.md) exposes this same engine through
+a project-bound JSON CLI and stdio MCP server, with detached runs, verification,
+export and the existing human-decision boundary.
+
 ## What the six kinds accomplish
 
 | Action kind | Prerequisite | Concrete CloudBank operation | Retained result |

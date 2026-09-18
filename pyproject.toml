@@ -10,6 +10,7 @@ requires-python = ">=3.11"
 
 [project.optional-dependencies]
 control-tower = ["cryptography>=46,<47"]
+agent = ["cryptography>=46,<47", "mcp==2.2.0"]
 docs = [
     "python-docx>=1.1,<2",
     "reportlab>=4,<5",
@@ -28,6 +29,8 @@ factorydark-readiness = "lightyear_readiness.cli:main"
 factorydark-data = "lightyear_data.cli:main"
 lightyear-extensions = "lightyear_extensions.cli:main"
 lightyear-pilot = "lightyear_pilot.cli:main"
+lightyear-agent = "lightyear_agent.cli:main"
+lightyear-mcp = "lightyear_agent.mcp:main"
 
 [tool.setuptools.packages.find]
 where = ["src", "extensions/runtime"]

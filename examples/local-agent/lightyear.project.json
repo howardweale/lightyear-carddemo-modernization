@@ -1,0 +1,6 @@
+{
+  "schema_version": "1.0",
+  "project_id": "cloudbank-local-example",
+  "workflow": "cloudbank-retained-v1",
+  "evidence_root": "../.."
+}

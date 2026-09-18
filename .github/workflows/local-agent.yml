@@ -1,0 +1,30 @@
+name: Local agent workflow
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  local-agent:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.13'
+      - name: Install local agent support
+        run: python -m pip install -e ".[agent]"
+      - name: Verify external-project workflow and real MCP disconnect recovery
+        shell: bash
+        env:
+          PYTHONPATH: src
+          PYTHONUTF8: '1'
+        run: python -m unittest tests.test_agent_workflow tests.test_agent_mcp -v
+      - name: Reject tracked evidence mutation
+        run: git diff --exit-code

@@ -4,11 +4,18 @@ MS #51 turns the completed 500-behavior, 2,000-case bounded catalog into a stric
 contract for Oracle Database 19c and Oracle AI Database 26ai. The manifest requires 4,000 native
 case executions: every case on both database lanes.
 
-**Scope cross-reference:** This gate's `native_executed_case_count: 0` counts admitted Oracle 19c + 26ai catalog-conformance executions under its per-case harness-hash contract; the separate [260-pair Oracle 26ai ↔ AlloyDB campaign](../../docs/receipts/oracle26ai-alloydb-types260-20260917/README.md) proves bounded source-to-target equivalence and does not populate this gate.
+| Evidence scope | Recorded result |
+| --- | --- |
+| Separate native Oracle 26ai ↔ AlloyDB campaign | **260/260 matching pairs** — [published execution evidence](../../docs/receipts/oracle26ai-alloydb-types260-20260917/README.md) |
+| This committed MS51 readiness snapshot | **`native_executed_case_count: 0`** under its per-case harness-hash contract |
+
+This snapshot does not aggregate the paired campaign's receipts. Its zero is not a
+project-wide native execution total or a requirement to finish all 4,000 executions
+before reporting partial progress. See [the count-scope guide](../../docs/oracle-native-evidence.md).
 
 The first native family, `types/number`, now has 40 materialized case/version harnesses
 (20 cases on each version). These files have been locally checked and mock-tested;
-native execution remains zero. See the [pilot runbook and evidence audit](../../docs/oracle-evidence-roadmap.md)
+this committed MS51 readiness snapshot retains zero native executions. See the [pilot runbook and evidence audit](../../docs/oracle-evidence-roadmap.md)
 for environment prerequisites, commands, reporting scope, and remaining work.
 
 ```bash
@@ -32,6 +39,6 @@ wallets, raw SQL output, and verification keys must not be committed.
 
 The original MS51 milestone established admission rather than native execution. The current
 readiness snapshot includes the first 40 harnesses; it does not execute an Oracle database.
-Native Oracle verified behaviors, native case executions, target-equivalent
-behaviors, iDempiere application equivalence, CloudBank mapping, migration completion, and
-production readiness remain zero or false.
+The zero counts and false qualification flags in this snapshot describe only its
+own evidence. Separate native paired results and CloudBank qualification receipts
+retain their own verified scope; this gate does not revoke or aggregate them.

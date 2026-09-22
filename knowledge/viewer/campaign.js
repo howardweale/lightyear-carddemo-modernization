@@ -18,7 +18,7 @@
     }
     host.append(figures);
     if (value.catalog_coverage) {
-      const coverage = node('section'); coverage.append(node('h3', 'Catalog coverage across verified native runs'));
+      const coverage = node('section'); coverage.append(node('h3', 'Native Oracle 26ai–AlloyDB paired coverage'));
       coverage.append(node('p', value.catalog_coverage.coverage_statement));
       if (value.catalog_coverage.gate_note) coverage.append(node('p', value.catalog_coverage.gate_note));
       if (value.catalog_coverage.trust_note) coverage.append(node('p', value.catalog_coverage.trust_note));

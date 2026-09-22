@@ -16,7 +16,7 @@ from lightyear_data.cloudbank_alloydb_publication import load_configured_alloydb
 
 START = "<!-- BEGIN CLOUDBANK EXECUTION RECEIPTS -->"
 END = "<!-- END CLOUDBANK EXECUTION RECEIPTS -->"
-NOTE = "MS67 qualifies the bound synthetic nonproduction platform. Customer IdP, representative customer data and workload, customer approval, production deployment and final production readiness remain MS68."
+NOTE = "MS67 qualifies the bound synthetic nonproduction platform. Customer IdP, representative customer data and workload, customer approval, production deployment and final production readiness remain in the customer-production backlog."
 
 
 def local_link(path: str) -> str:
@@ -37,6 +37,7 @@ def website_block(p: dict) -> str:
       <div class="stat"><div class="n">{s['business_journeys']}</div><div class="l">business journeys<br>bounded whole-application equivalence</div></div>
     </div>
     <p><a href="receipts/">Read all MS54–67 receipts and measured results →</a></p>
+    <p><a href="receipts/#oracle-paired"><strong>Native Oracle 26ai–AlloyDB PostgreSQL: 260/260 matching case pairs</strong> across 13 datatype families and 65 bounded behaviours.</a> The separate MS51 catalog readiness counter does not aggregate these campaign receipts.</p>
     <p><a href="receipts/#ms71">MS71 complete: Oracle-to-Cloud SQL and Oracle-to-AlloyDB each passed all 18 business scenarios with the same eight services and comparator.</a> AlloyDB platform qualification and production readiness remain outside this acceptance.</p>
     <p class="note">{NOTE} Aggregate p95 includes all operations; chat p95 was {s['chat_p95_ms']/1000:.2f} seconds.</p>
   </div></div>
@@ -68,8 +69,8 @@ def outputs(p: dict) -> dict[Path, str]:
     scenarios = ''.join(f'<li>{html.escape(r["id"])} · <a href="{local_link(proof_by_hash[r["evidence_sha256"]]["path"])}">passed evidence</a></li>' for r in p['scenarios'])
     page = f'''<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>CloudBank MS71 and MS54–67 execution receipts | LIGHTYEAR</title>
-<meta name="description" content="Completed CloudBank MS67 nonproduction qualification and the original MS54–67 execution receipt chain.">
+<title>Native Oracle / AlloyDB and CloudBank execution receipts | LIGHTYEAR</title>
+<meta name="description" content="260 matching native Oracle 26ai–AlloyDB PostgreSQL pairs, scoped catalog counts, and CloudBank nonproduction qualification receipts.">
 <style>
 :root{{color-scheme:light;--ink:#15184d;--muted:#676985;--line:#ddd7f2;--violet:#6942d6}}
 *{{box-sizing:border-box}}body{{margin:0;background:#f7f6fc;color:var(--ink);font:16px/1.6 system-ui,sans-serif}}header,main,footer{{max-width:1120px;margin:auto;padding:32px 24px}}header img{{width:130px}}nav{{display:flex;gap:24px;flex-wrap:wrap;margin-top:20px}}a{{color:var(--violet)}}h1{{font-size:clamp(2rem,5vw,3.4rem);line-height:1.12;margin:24px 0 16px}}h2{{margin-top:40px}}.kicker{{color:#456a43;font-weight:700}}.lead{{font-size:1.15rem;max-width:850px}}.metrics{{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin:24px 0}}.metric{{padding:18px;background:white;border:1px solid var(--line);border-radius:8px}}.metric b{{display:block;font-size:1.75rem}}.metric span,.muted{{color:var(--muted)}}.table-wrap{{overflow:auto}}table{{border-collapse:collapse;width:100%;background:white}}th,td{{text-align:left;padding:14px;border-bottom:1px solid var(--line)}}thead{{background:#efebfb}}.passed{{color:#2a682e;font-weight:650;white-space:nowrap}}code{{overflow-wrap:anywhere;white-space:normal;font-size:.85em}}li{{margin:12px 0}}details{{font-size:.9rem;margin-top:6px}}summary{{cursor:pointer;color:var(--muted)}}.boundary{{border-left:4px solid #a7702c;padding:10px 20px;background:white}}footer{{font-size:.9rem;color:var(--muted)}}@media(max-width:700px){{.metrics{{grid-template-columns:repeat(2,1fr)}}th,td{{padding:10px}}}}
@@ -130,6 +131,21 @@ def outputs(p: dict) -> dict[Path, str]:
         page = page.replace("<main>", "<main>" + section, 1)
         readme = readme.replace("# CloudBank execution receipts\n\n", f"# CloudBank execution receipts\n\nAlloyDB is platform qualified for synthetic nonproduction: {summary['scenario_count']} scenarios and {summary['service_count']} services. Load: {load['requests']:,} requests, {load['errors']} errors, {load['p95_ms']:.2f} ms aggregate p95. Exact quiesced PITR / backup restore: {summary['pitr_rto_seconds']} / {summary['backup_restore_rto_seconds']} seconds; RPO {summary['rpo_seconds']} seconds. Primary failover: {summary['ha_recovery_seconds']} seconds. Production readiness remains false.\n\n[AlloyDB platform receipt]({local_link(summary['receipt_path'])}) · [Export manifest]({local_link(summary['export_manifest_path'])}) · [Campaign log and scope](../cloudbank-alloydb-platform-qualification.md)\n\n", 1)
         site_block = site_block.replace('    <p class="note">', f'    <p><a href="receipts/#alloydb-platform">AlloyDB platform qualification passed: {summary["scenario_count"]} operational scenarios for the same eight services.</a> Synthetic nonproduction scope; production readiness remains false.</p>\n    <p class="note">', 1)
+    # Archived result, scoped to this published run. Live campaign aggregation is
+    # handled by oracle_paired_coverage, which verifies and replays native evidence.
+    native_bundle = "oracle26ai-alloydb-types260-20260917"
+    scope_guide = "https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/oracle-native-evidence.md"
+    native_section = f'''<section id="oracle-paired"><h2>Native Oracle 26ai–AlloyDB: 260/260 matching pairs</h2>
+<p><strong>The published native campaign passed across 13 datatype families and 65 bounded behaviours.</strong> Oracle 26ai Free 23.26.3.0.0 and managed AlloyDB PostgreSQL 16.13 each produced 260 observations: 520 lane observations compared as 260 pairs.</p>
+<div class="table-wrap"><table><thead><tr><th>Evidence scope</th><th>Recorded result</th></tr></thead><tbody>
+<tr><td>Published native paired campaign</td><td class="passed">260 / 260 matching pairs</td></tr>
+<tr><td>Separate MS51 catalog readiness snapshot</td><td><code>native_executed_case_count: 0</code> — this snapshot does not aggregate paired-campaign receipts</td></tr></tbody></table></div>
+<p>The MS51 field is not a project-wide execution total. Its contract requires 2,000 cases on each of Oracle 19c and 26ai, with different per-case admission bindings. Earlier 20- and 100-pair campaigns overlap the 260-pair scope; they are not added again.</p>
+<p>Successful run: <code>types260-db44edf8ecce4c5b8b6860e698e79d97</code>. The prior failed attempt retains 220 matching and 40 unexecuted pairs. Both original attempts and their cleanup evidence are preserved.</p>
+<p><a href="{native_bundle}/README.md">Published campaign and verification instructions</a> · <a href="{native_bundle}/manifest.json">Original native evidence manifest</a> · <a href="{scope_guide}">Evidence and count-scope guide</a></p>
+<p class="boundary">Archived bounded native equivalence, backed by operator-signed evidence. This is not exhaustive Oracle compatibility, Oracle 19c execution, vendor certification or customer production acceptance. The separate CloudBank platform qualification retains its own scope.</p></section>'''
+    page = page.replace("<main>", "<main>" + native_section, 1)
+    readme = readme.replace("# CloudBank execution receipts\n\n", f"# CloudBank execution receipts\n\n**Published native Oracle 26ai–AlloyDB PostgreSQL result: 260/260 matching case pairs across 13 datatype families and 65 bounded behaviours.** The successful run has 260 source and 260 target observations. Overlapping earlier campaigns are deduplicated. The separate MS51 readiness snapshot's `native_executed_case_count: 0` does not aggregate these receipts and is not a project-wide execution total.\n\n[Native campaign evidence]({native_bundle}/README.md) · [Original manifest]({native_bundle}/manifest.json) · [Evidence and count scopes](../oracle-native-evidence.md)\n\n", 1)
     return {ROOT / "docs/receipts/catalog.json": json.dumps(catalog, indent=2, sort_keys=True) + "\n", ROOT / "docs/receipts/index.html": page, ROOT / "docs/receipts/README.md": readme, ROOT / "docs/index.html": before + site_block + after}
 
 

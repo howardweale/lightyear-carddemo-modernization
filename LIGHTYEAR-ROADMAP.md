@@ -8,6 +8,13 @@ This is the governing sequence after the source-only pilot planning milestones. 
 development cells are planning scopes; they are not evidence that a language or platform is
 production-qualified.
 
+**Current native database evidence: 260/260 Oracle 26ai–AlloyDB PostgreSQL pairs
+matched across 13 datatype families and 65 bounded behaviours.** The separate MS51
+catalog readiness snapshot still records zero under its own admission contract.
+See [the evidence and count-scope guide](docs/oracle-native-evidence.md); the
+MS51 field is not a project-wide native execution total. Milestone sections below
+describe their original acceptance scope.
+
 | Milestone | Scope | Status |
 |---|---|---|
 | MS #33 | Database Semantic Core | Complete |
@@ -33,7 +40,7 @@ production-qualified.
 | MS #48 | iDempiere Oracle Reference Estate Inventory | Complete |
 | MS #49 | Oracle Dialect Authority Corpus and Executable Fixtures | Complete |
 | MS #50 | Oracle Semantic Coverage Program | Complete |
-| MS #51 | Oracle Native Execution Admission Gate | Admission contract complete; SQL harnesses and authorized native runs pending |
+| MS #51 | Oracle Native Execution Admission Gate | Admission contract complete; 40 NUMBER harnesses; 0 executions in this readiness snapshot. Separate [260-pair native campaign passed](docs/oracle-native-evidence.md). |
 | MS #52 | Oracle Customer (Large) Control Tower Projection | Complete |
 | MS #53 | CloudBank Modern Oracle Reference Estate | Complete |
 | MS #54 | CloudBank Executable Source Baseline | Passed; [published execution evidence](docs/receipts/index.html#ms54) |
@@ -340,13 +347,14 @@ partial conformance promotion, and target-equivalence overclaims.
 
 The eight-fixture MS #49 SQL file remains useful bootstrap harness material, but its fixture-level
 completion markers do not contain per-case native observations and are therefore ineligible as
-catalog-native evidence. Release 0.51.0 materializes zero of the 4,000 version-specific SQL
-harnesses and admits zero native executions. The milestone makes the next evidence rung precise
-and enforceable; it does not claim to have climbed it.
+catalog-native evidence. Release 0.51.0 originally materialized zero of the 4,000 version-specific
+SQL harnesses and admitted zero native executions. The current readiness snapshot has 40 NUMBER
+case/version harnesses and still records zero native executions under this contract.
 
-The next increment materializes governed SQL harness batches, followed by authorized 19c and 26ai
-execution. Native Oracle conformance, target equivalence, iDempiere application equivalence,
-CloudBank mapping, migration completion, and production readiness remain false.
+Further MS51 work requires governed harness batches and authorized 19c/26ai execution under
+its per-case admission contract. Its historical qualification flags are scoped to that artifact.
+The separate [260-pair native campaign](docs/oracle-native-evidence.md) and later CloudBank
+qualification receipts retain their own successful results; they do not rewrite MS51.
 
 ## MS #52 — Oracle Customer (Large) Control Tower Projection
 

@@ -150,6 +150,23 @@ class MCPWorkflowTests(unittest.IsolatedAsyncioTestCase):
             lease.close()
         async with self.client() as session:
             resumed = await self.call(session, "resume", {"run_id": run_id})
+            # The independent Windows worker can acknowledge cancellation before
+            # it finishes publishing the terminal archive. Reconnect may observe
+            # that publication window, or the worker may still own the run lease.
+            if resumed["status"] == "resume-requested":
+                self.assertEqual("Repair terminal archive publication only; no actions will repeat.", resumed["note"])
+            else:
+                self.assertIn(resumed["status"], {"cancel-requested", "cancelled"}, resumed)
+                self.assertFalse(resumed["new_dispatch"])
+            deadline = time.monotonic() + 60
+            while True:
+                status = await self.call(session, "status", {"run_id": run_id})
+                self.assertIn(status["status"], {"cancel-requested", "cancelled"}, status)
+                if status["status"] == "cancelled" and status["dispatch_state"] == "finished":
+                    break
+                self.assertLess(time.monotonic(), deadline, status)
+                await asyncio.sleep(0.1)
+            resumed = await self.call(session, "resume", {"run_id": run_id})
             self.assertEqual("cancelled", resumed["status"], resumed)
             self.assertFalse(resumed["new_dispatch"])
             verified = await self.call(session, "verify", {"run_id": run_id})

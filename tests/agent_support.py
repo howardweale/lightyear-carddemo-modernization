@@ -29,7 +29,7 @@ def finish_local(workflow, run_id):
     """Real observation and replay, omitting only subprocess creation in unit tests."""
     from unittest.mock import patch
     from lightyear_workflow.cloudbank import observe
-    def worker(root, action, *_):
+    def worker(root, action, *_, **kwargs):
         return observe(root, action["service"], action["lane"])
     with patch("lightyear_workflow.execution.run_worker", side_effect=worker):
         workflow.work(run_id)

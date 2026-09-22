@@ -2,7 +2,7 @@
 
 The first complete agent workflow is **`cloudbank-retained-v1`**. An external
 project can discover its capabilities, review a plan, start the existing headless
-engine, disconnect, reconnect, inspect progress, verify the journal and export
+engine, disconnect, reconnect, cancel a run, inspect progress, verify the journal and export
 evidence. The terminal run also appears in Control Tower's existing history.
 
 This adapter verifies CloudBank's retained evidence and, when separately
@@ -113,7 +113,8 @@ Persist the UUID in the calling workflow so a retry can find the same run.
 | 1 | Comparison or execution failed | Fail the check and retain evidence |
 | 2 | Invalid configuration, input, plan or evidence | Fix the reported error code; do not infer a result |
 | 3 | Verified run requires a human decision | Route to review; keep acceptance incomplete |
-| 4 | Accepted, queued, running, uncertain dispatch or resume requested | Poll the same run; do not treat as failure or completion |
+| 4 | Accepted, queued, running, uncertain dispatch, resume or cancellation requested | Poll the same run; do not treat as failure or completion |
+| 5 | Cancellation acknowledged by a terminal journal | Work stopped incomplete; retain the partial evidence |
 
 Every tool response has `schema_version`, `project_id`, `workflow`, `ok` and
 `status`. An unsuccessful operation has `error.code` and `error.message`.
@@ -163,12 +164,15 @@ and client details.
 | `verify(run_id)` | Verify the journal independently of the cached dispatch state |
 | `export(run_id)` | Exclusively publish a terminal bundle; return its path and byte hash |
 | `resume(run_id)` | Recover interrupted work under the unchanged plan |
+| `cancel(run_id)` | Durably request cancellation; poll until the journal acknowledges it |
 
 Read-only resources provide the full plan at `lightyear://plan/current`, the
 first event page at `lightyear://runs/{run_id}/events`, and terminal evidence at
 `lightyear://runs/{run_id}/evidence`. Subsequent pages use the events tool.
 Reading a resource never launches a worker or writes an export. Tool clients
 must check `ok` and `status`, even when the MCP protocol call itself succeeded.
+Every resource checks the configured project guard, including `current_plan`;
+a changed manifest requires restarting the server and reviewing a new plan.
 
 ## Disconnects, decisions and Control Tower
 
@@ -178,6 +182,37 @@ run time, action count and worker timeouts. On Windows, the separately started
 worker owns queued execution; the MCP client never owns its lifetime.
 The adapter neither forwards cloud credentials nor accepts
 caller-supplied commands, SQL or file paths in tool arguments.
+
+To stop a specific run explicitly, use the MCP `cancel(run_id)` tool or:
+
+```powershell
+lightyear-agent cancel --project $project --run-id $run.run_id
+lightyear-agent status --project $project --run-id $run.run_id
+```
+
+Cancellation is project-scoped and idempotent. The request is committed to the
+local run database before the adapter tries to stop work, so it survives client
+disconnects and restarts. **`cancel-requested` is pending, not an acknowledgement
+that the process has stopped.** The active engine checks the request while waiting
+for its observation subprocess and before committing further results. It terminates
+and reaps that subprocess, settles any admitted attempt, and records a terminal
+`cancelled` halt. Synchronous verification finishes at a cancellation checkpoint;
+this is cooperative cancellation, not an instantaneous kill of the engine or the
+Windows project broker.
+
+If no worker owns the run, `cancel` settles queued or interrupted work without
+launching actions. If an interruption occurs after the request is saved, retry
+`cancel` or call `resume`: either settles the cancellation, never restarts work.
+No running Windows broker is needed to cancel an idle run. Reusing the original
+start request ID still returns the same run and never dispatches it again.
+
+Poll until `terminal: true`. A cancelled journal remains verifiable and exportable,
+with `workflow_completed: false` and CLI exit 5; it is not a successful execution.
+Committed results and any already-applied ledger projection remain intact.
+Cancellation does not undo work, accept differences or create human approval.
+If completion or another terminal halt wins the race, its original outcome stays
+unchanged. Terminal runs cannot be resumed into execution; new work requires a
+new reviewed plan and request ID.
 
 `running-or-interrupted` deliberately does not assert that a process is alive.
 After a machine interruption or uncertain dispatch, call `resume` on the same
@@ -212,10 +247,14 @@ an independently started worker on Windows),
 disconnects MCP, reconnects, reads the export resource and checks the same
 journal hash through the CLI. Unit tests cover exact-plan binding, concurrent
 duplicate requests, interruption recovery, tamper rejection, project isolation,
-bounded pagination and separately signed synthetic test approvals.
+bounded pagination and separately signed synthetic test approvals. Cancellation
+tests cover queued and active runs, real subprocess termination, duplicate requests,
+disconnect/reconnect, interrupted acknowledgement, immutable terminal results,
+cross-project rejection, and non-success CLI exits. A real MCP resource test
+checks that `current_plan` rejects configuration changes.
 
 This local interface is not a sandbox against a malicious process with the same
 OS account. Use reviewed project configuration and a trusted evidence checkout.
 Remote transport, arbitrary customer adapters, fresh paired-database execution,
-remote identities, cancellation and customer production acceptance are future
+remote identities and customer production acceptance are future
 capabilities, not claims made by this workflow.

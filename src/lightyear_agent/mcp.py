@@ -16,7 +16,8 @@ def create_server(project: Path):
     workflow = Workflow(project)
     server = MCPServer("Lightyear local workflow", version="1.0.0", instructions=(
         "Use capabilities, then plan. Start only the reviewed plan with a UUID request_id; reuse that UUID on retries. "
-        "Poll status by run_id; client disconnect does not cancel a run. Check ok and status in every response. "
+        "Poll status by run_id; client disconnect does not cancel a run. Use cancel explicitly and poll until terminal. "
+        "Check ok and status in every response; cancel-requested is not yet cancelled. "
         "verified means replay-valid evidence, not completed work or fresh database execution. "
         "Human decisions happen separately in Control Tower. This server cannot approve them."))
     read = ToolAnnotations(readOnlyHint=True, destructiveHint=False, openWorldHint=False)
@@ -62,9 +63,15 @@ def create_server(project: Path):
         """Recover an interrupted run under its unchanged plan. OS locking excludes concurrent workers. Terminal runs stay terminal."""
         return workflow.invoke("resume", run_id=run_id)
 
+    @server.tool(annotations=write)
+    def cancel(run_id: str) -> dict[str, Any]:
+        """Request durable cancellation of a project-owned run. Poll status for terminal acknowledgement; completed results stay immutable."""
+        return workflow.invoke("cancel", run_id=run_id)
+
     @server.resource("lightyear://plan/current", mime_type="application/json")
     def current_plan() -> str:
         """Full current plan and input bindings; no execution or authorization."""
+        workflow._guard()
         return json.dumps(workflow._plan(), sort_keys=True)
 
     @server.resource("lightyear://runs/{run_id}/events", mime_type="application/json")

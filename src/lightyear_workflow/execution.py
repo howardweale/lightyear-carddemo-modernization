@@ -25,14 +25,19 @@ from .ledger_gate import approval_guard, current_approval, validate_approval, ve
 
 RUN_PATH = Path("work/workflow/cloudbank")
 EXAMPLE_PATH = Path("control-tower/cloudbank-execution.example.json")
-FAILURES = {"worker-timeout", "worker-failed", "worker-output-limit", "interrupted", "approval-changed"}
+FAILURES = {"worker-timeout", "worker-failed", "worker-output-limit", "interrupted", "approval-changed", "cancelled"}
 
 
 class WorkerFailure(ValueError):
     pass
 
 
-def run_worker(root: Path, action: dict, policy: dict, timeout: float) -> dict:
+def _check_cancellation(cancel_requested):
+    if cancel_requested is not None and cancel_requested():
+        raise WorkerFailure("cancelled")
+
+
+def run_worker(root: Path, action: dict, policy: dict, timeout: float, *, cancel_requested=None) -> dict:
     """No shell or supplied command. No credentials passed to the worker."""
     keep = {"PATH", "SYSTEMROOT", "WINDIR", "TEMP", "TMP", "TMPDIR", "LANG"}
     env = {k: v for k, v in os.environ.items() if k in keep}
@@ -40,6 +45,7 @@ def run_worker(root: Path, action: dict, policy: dict, timeout: float) -> dict:
     command = [sys.executable, "-m", "lightyear_workflow.worker"]
     job = json.dumps({"root": str(root), "service": action["service"], "lane": action["lane"]}).encode()
     with tempfile.TemporaryFile() as output, tempfile.TemporaryFile() as errors:
+        _check_cancellation(cancel_requested)
         process = subprocess.Popen(command, cwd=root, env=env, stdin=subprocess.PIPE,
                                    stdout=output, stderr=errors, start_new_session=os.name != "nt")
         deadline = time.monotonic() + timeout
@@ -47,11 +53,13 @@ def run_worker(root: Path, action: dict, policy: dict, timeout: float) -> dict:
             process.stdin.write(job)
             process.stdin.close()
             while process.poll() is None:
+                _check_cancellation(cancel_requested)
                 if time.monotonic() >= deadline:
                     raise WorkerFailure("worker-timeout")
                 if os.fstat(output.fileno()).st_size + os.fstat(errors.fileno()).st_size > policy["max_output_bytes"]:
                     raise WorkerFailure("worker-output-limit")
                 time.sleep(0.02)
+            _check_cancellation(cancel_requested)
             if process.returncode:
                 raise WorkerFailure("worker-failed")
             if os.fstat(output.fileno()).st_size + os.fstat(errors.fileno()).st_size > policy["max_output_bytes"]:
@@ -63,10 +71,13 @@ def run_worker(root: Path, action: dict, policy: dict, timeout: float) -> dict:
                 raise ValueError("Worker returned invalid structured evidence") from exc
         finally:
             if process.poll() is None:
-                if os.name == "nt":
-                    process.kill()
-                else:
-                    os.killpg(process.pid, signal.SIGKILL)
+                try:
+                    if os.name == "nt":
+                        process.kill()
+                    else:
+                        os.killpg(process.pid, signal.SIGKILL)
+                except ProcessLookupError:
+                    pass  # Worker exited between poll and termination.
             process.wait()
 
 
@@ -136,6 +147,8 @@ def replay(root: Path, events: list[dict]) -> dict:
         kind, payload = event["type"], event["payload"]
         if divergent(state):
             _require(kind == "halted" and payload == {"reason": "divergent"}, "Execution continued after raw divergence")
+        if state["failures"] and state["failures"][-1]["reason"] == "cancelled":
+            _require(kind == "halted" and payload == {"reason": "cancelled"}, "Execution continued after cancellation")
         if kind == "round":
             _require(not state["queue"] and not state["in_flight"], "Round overlaps existing work")
             expected = candidates(plan, state)
@@ -196,7 +209,9 @@ def replay(root: Path, events: list[dict]) -> dict:
         elif kind == "halted":
             _require(set(payload) == {"reason"}, "Invalid halt receipt")
             reason = payload["reason"]
-            _require(reason in {"completed", "divergent", "budget", "no-permitted-action", "scope-boundary", "untrusted-worker", "human-decision-required"}, "Unknown halt reason")
+            _require(reason in {"completed", "divergent", "budget", "no-permitted-action", "scope-boundary", "untrusted-worker", "human-decision-required", "cancelled"}, "Unknown halt reason")
+            if reason == "cancelled":
+                _require(state["in_flight"] is None, "Cancellation must settle the admitted attempt")
             if reason == "completed":
                 _require(completed(state), "Unsupported convergence claim")
             if reason == "divergent":
@@ -274,7 +289,7 @@ def _output_scope(root: Path, directory: Path):
 
 
 def execute(root: Path, directory: Path, *, max_steps: int | None = None,
-            history_dir: Path | None = None) -> dict:
+            history_dir: Path | None = None, cancel_requested=None) -> dict:
     root = root.resolve()
     _output_scope(root, directory)
     history_dir = history_dir or root / HISTORY_PATH
@@ -300,6 +315,10 @@ def execute(root: Path, directory: Path, *, max_steps: int | None = None,
                 reason = "divergent"
             elif completed(state):
                 reason = "completed"
+            elif state["failures"] and state["failures"][-1]["reason"] == "cancelled":
+                reason = "cancelled"
+            elif cancel_requested is not None and cancel_requested():
+                reason = "cancelled"
             elif state["blocks"]:
                 reason = "human-decision-required"
             elif elapsed >= policy["max_seconds"] or state["actions_executed"] >= policy["max_actions"]:
@@ -327,15 +346,20 @@ def execute(root: Path, directory: Path, *, max_steps: int | None = None,
             attempt = state["attempts"].get(action["id"], 0) + 1
             store.append("attempt", {"action": action, "attempt": attempt})
             try:
-                result = run_worker(root, action, policy, min(policy["action_timeout_seconds"], policy["max_seconds"] - elapsed))
+                options = {} if cancel_requested is None else {"cancel_requested": cancel_requested}
+                result = run_worker(root, action, policy, min(policy["action_timeout_seconds"], policy["max_seconds"] - elapsed), **options)
             except WorkerFailure as exc:
                 store.append("failed", {"action_id": action["id"], "reason": str(exc)})
+                if str(exc) == "cancelled":
+                    store.append("halted", {"reason": "cancelled"})
+                    break
                 steps += 1
                 continue
             except ValueError:
                 store.append("halted", {"reason": "untrusted-worker"})
                 break
             try:
+                _check_cancellation(cancel_requested)
                 try:
                     unchanged = build_execution_plan(root) == plan
                 except (ValueError, OSError):
@@ -354,6 +378,7 @@ def execute(root: Path, directory: Path, *, max_steps: int | None = None,
                 if action["kind"] == "apply-ledger-entry" and result["outcome"] == "verified":
                     try:
                         with approval_guard(root) as approval:
+                            _check_cancellation(cancel_requested)
                             if (datetime.now(timezone.utc) - datetime.fromisoformat(state["started_at"])).total_seconds() >= policy["max_seconds"]:
                                 raise WorkerFailure("worker-timeout")
                             store.append("result", make_receipt(attempted, action, expected, approval))
@@ -364,9 +389,13 @@ def execute(root: Path, directory: Path, *, max_steps: int | None = None,
                         store.append("halted", {"reason": "scope-boundary"})
                         break
                 else:
+                    _check_cancellation(cancel_requested)
                     store.append("result", make_receipt(attempted, action, expected))
             except WorkerFailure as exc:
                 store.append("failed", {"action_id": action["id"], "reason": str(exc)})
+                if str(exc) == "cancelled":
+                    store.append("halted", {"reason": "cancelled"})
+                    break
             steps += 1
         return _finish(root, directory, store.events(), history_dir)
     finally:

@@ -17,9 +17,11 @@ def exit_code(result):
     status = result["status"]
     if status == "human-decision-required":
         return 3
+    if status == "cancelled":
+        return 5
     if status in {"comparison-failed", "execution-failed"}:
         return 1
-    if status in {"accepted", "queued", "dispatch-unconfirmed", "running-or-interrupted", "resume-requested"}:
+    if status in {"accepted", "queued", "dispatch-unconfirmed", "running-or-interrupted", "resume-requested", "cancel-requested"}:
         return 4
     return 0
 

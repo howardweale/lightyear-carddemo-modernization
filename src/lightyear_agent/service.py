@@ -22,7 +22,7 @@ from lightyear_workflow.run_store import RunStore, utcnow
 
 WORKFLOW = "cloudbank-retained-v1"
 VERSION = "1.0"
-OPERATIONS = ("capabilities", "plan", "start", "status", "events", "verify", "export", "resume")
+OPERATIONS = ("capabilities", "plan", "start", "status", "events", "verify", "export", "resume", "cancel")
 SOURCE = Path(__file__).resolve().parents[1]
 
 
@@ -140,6 +140,7 @@ class Workflow:
             db = sqlite3.connect(path, timeout=15)
             db.execute("PRAGMA synchronous=FULL")
             db.execute("CREATE TABLE IF NOT EXISTS runs (run_id TEXT PRIMARY KEY, request_id TEXT UNIQUE NOT NULL, plan TEXT NOT NULL, dispatch_state TEXT NOT NULL, created_at TEXT NOT NULL)")
+            db.execute("CREATE TABLE IF NOT EXISTS cancellation_requests (run_id TEXT PRIMARY KEY, requested_at TEXT NOT NULL)")
             db.commit()
         else:
             if not path.is_file():
@@ -249,7 +250,14 @@ class Workflow:
                 run_id = rows[0]["run_id"]
                 try:
                     self.work(run_id)
-                except (ValueError, OSError, KeyError, TypeError, sqlite3.Error):
+                except ValueError as exc:
+                    if str(exc) == "Another headless engine owns this run":
+                        # cancel() may be settling an idle run under the same
+                        # lease. Do not overwrite that owner's terminal state.
+                        time.sleep(0.05)
+                    else:
+                        self._set_dispatch(run_id, "execution-failed")
+                except (OSError, KeyError, TypeError, sqlite3.Error):
                     self._set_dispatch(run_id, "execution-failed")
         finally:
             lease.close()
@@ -268,16 +276,20 @@ class Workflow:
 
     def status(self, run_id: str):
         row, events, view = self._verified(run_id)
+        cancellation = self._cancellation_request(run_id)
         result = {"run_id": run_id, "plan_sha256": row["plan"]["content_sha256"],
                   "dispatch_state": row["dispatch_state"], "evidence_class": "retained-evidence-verification",
+                  "cancellation_requested_at": cancellation,
                   "fresh_database_execution": False, "events_resource": f"lightyear://runs/{run_id}/events"}
         if view is None:
-            return {**result, "status": row["dispatch_state"], "terminal": False}
+            return {**result, "status": "cancel-requested" if cancellation else row["dispatch_state"], "terminal": False}
         halt = view["halt_reason"]
         status = {"human-decision-required": "human-decision-required", "completed": "completed",
-                  "divergent": "comparison-failed"}.get(halt, "execution-failed" if halt else "running-or-interrupted")
+                  "divergent": "comparison-failed", "cancelled": "cancelled"}.get(halt, "execution-failed" if halt else "running-or-interrupted")
         if halt is None and row["dispatch_state"] == "execution-failed":
             status = "execution-failed"
+        if halt is None and cancellation:
+            status = "cancel-requested"
         return {**result, "status": status, "terminal": halt is not None, "halt_reason": halt,
                 "summary": view["summary"], "boundary": view["boundary"],
                 "human_decision": view["current_ledger_approval"],
@@ -334,6 +346,30 @@ class Workflow:
         return {"status": "exported", "run_id": run_id, "path": str(path), "sha256": hashlib.sha256(raw).hexdigest(),
                 "resource_uri": f"lightyear://runs/{run_id}/evidence", "halt_reason": value["halt_reason"]}
 
+    def _cancellation_request(self, run_id):
+        with closing(self._db()) as db:
+            # Old project databases stay readable without a write-side migration.
+            if not db.execute("SELECT 1 FROM sqlite_master WHERE type='table' AND name='cancellation_requests'").fetchone():
+                return None
+            row = db.execute("SELECT requested_at FROM cancellation_requests WHERE run_id=?", (run_id,)).fetchone()
+        return row[0] if row else None
+
+    def cancel(self, run_id: str):
+        _, _, view = self._verified(run_id)
+        if view and view["halt_reason"] is not None:
+            return {**self.status(run_id), "new_request": False}
+        with closing(self._db(write=True)) as db, db:
+            created = db.execute("INSERT OR IGNORE INTO cancellation_requests VALUES (?,?)", (run_id, utcnow())).rowcount == 1
+        # An active worker owns this lease and observes the durable request. If
+        # none exists, settle queued/interrupted work here without dispatching any
+        # actions, including when the independent Windows broker is absent.
+        try:
+            self.work(run_id)
+        except ValueError as exc:
+            if str(exc) != "Another headless engine owns this run":
+                raise
+        return {**self.status(run_id), "new_request": created}
+
     def resume(self, run_id: str):
         row, _, view = self._verified(run_id)
         if view and view["halt_reason"] is not None:
@@ -343,6 +379,8 @@ class Workflow:
                         "note": "Repair terminal archive publication only; no actions will repeat."}
             return {**self.status(run_id), "new_dispatch": False,
                     "next_action": "Terminal runs remain immutable. After a human decision, plan and start with a new request ID."}
+        if self._cancellation_request(run_id):
+            return {**self.cancel(run_id), "new_dispatch": False}
         if self._plan() != row["plan"]:
             raise WorkflowError("plan-changed", "Inputs or policy changed; retain this run and review a new plan.")
         self.dispatcher(run_id)
@@ -369,7 +407,8 @@ class Workflow:
             if self._plan() != row["plan"]:
                 raise WorkflowError("plan-changed", "Reviewed inputs changed before execution.")
             self._set_dispatch(run_id, "running-or-interrupted")
-            execute(self.root, self._run_directory(run_id) / "journal")
+            execute(self.root, self._run_directory(run_id) / "journal",
+                    cancel_requested=lambda: self._cancellation_request(run_id) is not None)
             self._set_dispatch(run_id, "finished")
         except (ValueError, OSError, KeyError, TypeError, sqlite3.Error):
             self._set_dispatch(run_id, "execution-failed")

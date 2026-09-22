@@ -11,6 +11,7 @@ import unittest
 import uuid
 
 from lightyear_agent.service import Workflow
+from lightyear_workflow.run_store import RunStore
 from tests.agent_support import ROOT, fixture
 
 
@@ -65,7 +66,7 @@ class MCPWorkflowTests(unittest.IsolatedAsyncioTestCase):
         request_id = str(uuid.uuid4())
         async with self.client() as session:
             tools = (await session.list_tools()).tools
-            self.assertEqual({"capabilities", "plan", "start", "status", "events", "verify", "export", "resume"}, {t.name for t in tools})
+            self.assertEqual({"capabilities", "plan", "start", "status", "events", "verify", "export", "resume", "cancel"}, {t.name for t in tools})
             self.assertTrue(all(t.input_schema["type"] == "object" for t in tools))
             capabilities = await self.call(session, "capabilities")
             self.assertFalse(capabilities["creates_human_approval"])
@@ -111,6 +112,58 @@ class MCPWorkflowTests(unittest.IsolatedAsyncioTestCase):
                                       capture_output=True, text=True, timeout=60)
         self.assertEqual(3, cli.returncode, cli.stderr)
         self.assertEqual(verified["journal_head_sha256"], json.loads(cli.stdout)["journal_head_sha256"])
+
+    async def test_current_plan_resource_rejects_changed_project_configuration(self):
+        from mcp.shared.exceptions import MCPError
+        async with self.client() as session:
+            await session.read_resource("lightyear://plan/current")
+            original = self.project.read_text()
+            config = json.loads(original)
+            config["project_id"] = "changed-after-server-start"
+            self.project.write_text(json.dumps(config))
+            try:
+                with self.assertRaises(MCPError):
+                    await session.read_resource("lightyear://plan/current")
+                response = await self.call(session, "plan")
+                self.assertEqual("configuration-changed", response["error"]["code"])
+            finally:
+                self.project.write_text(original)
+
+    async def test_cancel_survives_disconnect_and_resume_only_settles_the_stop(self):
+        await self.start_worker()
+        observer = Workflow(self.project)
+        request_id = str(uuid.uuid4())
+        _, run_id = observer._run_id(request_id)
+        # Hold the worker lease to make the queued/in-flight race deterministic
+        # without changing the production runner or its bound implementation.
+        lease = RunStore(observer._run_directory(run_id) / "lease")
+        try:
+            async with self.client() as session:
+                plan = await self.call(session, "plan")
+                started = await self.call(session, "start", {"plan_sha256": plan["plan_sha256"], "request_id": request_id})
+                self.assertTrue(started["ok"], started)
+                request = await self.call(session, "cancel", {"run_id": run_id})
+                self.assertEqual("cancel-requested", request["status"], request)
+                self.assertFalse(request["terminal"])
+            self.assertEqual(request["cancellation_requested_at"], observer.invoke("status", run_id=run_id)["cancellation_requested_at"])
+        finally:
+            lease.close()
+        async with self.client() as session:
+            resumed = await self.call(session, "resume", {"run_id": run_id})
+            self.assertEqual("cancelled", resumed["status"], resumed)
+            self.assertFalse(resumed["new_dispatch"])
+            verified = await self.call(session, "verify", {"run_id": run_id})
+            self.assertTrue(verified["verified"])
+            self.assertFalse(verified["workflow_completed"])
+            self.assertEqual(0, verified["summary"]["actions_executed"])
+            exported = await self.call(session, "export", {"run_id": run_id})
+            resource = await session.read_resource(exported["resource_uri"])
+            self.assertEqual("cancelled", json.loads(resource.contents[0].text)["halt_reason"])
+        cli = await asyncio.to_thread(subprocess.run,
+            [sys.executable, "-m", "lightyear_agent.cli", "cancel", "--project", str(self.project), "--run-id", run_id],
+            cwd=self.project.parent, env=self.environment, capture_output=True, text=True, timeout=60)
+        self.assertEqual(5, cli.returncode, cli.stderr)
+        self.assertEqual("cancelled", json.loads(cli.stdout)["status"])
 
 
 if __name__ == "__main__":

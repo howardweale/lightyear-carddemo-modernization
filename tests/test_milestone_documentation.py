@@ -186,11 +186,11 @@ class MilestoneDocumentationTests(unittest.TestCase):
         self.assertIn("No governed catalog cases remain unexecuted", roadmap)
         self.assertIn("MS #51 — Oracle Native Execution Admission Gate", roadmap)
         self.assertIn(
-            "| MS #51 | Oracle Native Execution Admission Gate | Admission contract complete; SQL harnesses and authorized native runs pending |",
+            "| MS #51 | Oracle Native Execution Admission Gate | Admission contract complete; 40 NUMBER harnesses; 0 executions in this readiness snapshot. Separate [260-pair native campaign passed](docs/oracle-native-evidence.md). |",
             roadmap,
         )
         self.assertIn("4,000-execution native requirement", roadmap)
-        self.assertIn("materializes zero of the 4,000", roadmap)
+        self.assertIn("originally materialized zero of the 4,000", roadmap)
         self.assertIn("MS #52 — Oracle Customer (Large) Control Tower Projection", roadmap)
         self.assertIn(
             "| MS #52 | Oracle Customer (Large) Control Tower Projection | Complete |",

@@ -188,17 +188,22 @@ for observations or the timeline for verified events. **Convergence** retains
 the signed family summaries when detailed journals are pruned; the detailed
 view and catalog overlay then say unavailable rather than manufacturing counts.
 
-The work queue's **Catalog coverage across verified native runs** is an
+The work queue's **Native Oracle 26ai–AlloyDB paired coverage** is an
 aggregate, separate from the selected run. It verifies published pilot evidence
 and locally installed authority evidence, replays comparisons and binds SQL to
 the current supported probe contract. NUMBER's earlier 20 cases plus a passing
-100-case run yield **100 unique paired cases**, not 120. A later native mismatch
+100-case run yield **100 unique paired cases**, not 120; the published 260-pair
+campaign expands that aggregate to **260 unique pairs and 65 behaviours**, not
+380 pairs. A later native mismatch
 supersedes the earlier pass for that case; simulated runs cannot inflate or
 replace native coverage. Missing or corrupt evidence makes counts unknown.
 
 This overlay reports 26ai paired-probe coverage. The older 4,000-execution native
 gate requires 2,000 cases on Oracle 19c plus 2,000 on Oracle 26ai under a different
-wallet receipt contract. The overlay does not rewrite it, and AlloyDB is not a
+wallet receipt contract. Its committed `native_executed_case_count: 0` is not a
+project-wide execution total; the snapshot does not aggregate paired receipts.
+See [the evidence and count-scope guide](oracle-native-evidence.md).
+The overlay does not rewrite it, and AlloyDB is not a
 second Oracle lane. Neither report establishes full platform qualification.
 The existing [CloudBank AlloyDB nonproduction qualification](cloudbank-alloydb-platform-qualification.md)
 remains a separate retained result. This datatype campaign neither revokes it

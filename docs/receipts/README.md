@@ -1,5 +1,9 @@
 # CloudBank execution receipts
 
+**Published native Oracle 26ai–AlloyDB PostgreSQL result: 260/260 matching case pairs across 13 datatype families and 65 bounded behaviours.** The successful run has 260 source and 260 target observations. Overlapping earlier campaigns are deduplicated. The separate MS51 readiness snapshot's `native_executed_case_count: 0` does not aggregate these receipts and is not a project-wide execution total.
+
+[Native campaign evidence](oracle26ai-alloydb-types260-20260917/README.md) · [Original manifest](oracle26ai-alloydb-types260-20260917/manifest.json) · [Evidence and count scopes](../oracle-native-evidence.md)
+
 AlloyDB is platform qualified for synthetic nonproduction: 29 scenarios and 8 services. Load: 5,428 requests, 0 errors, 458.91 ms aggregate p95. Exact quiesced PITR / backup restore: 507 / 451 seconds; RPO 30 seconds. Primary failover: 333 seconds. Production readiness remains false.
 
 [AlloyDB platform receipt](alloydb-platform-20260912a/alloydb-platform.receipt.json) · [Export manifest](alloydb-platform-20260912a/publication-export.json) · [Campaign log and scope](../cloudbank-alloydb-platform-qualification.md)
@@ -18,7 +22,7 @@ MS67 is complete for the bound synthetic nonproduction platform.
 
 The 31 original JSON files and exporter manifest are preserved byte for byte. Public verification checks file hashes, canonical content hashes and bindings. HMAC verification was performed by the operator exporter before upload; the public publisher does not have the key.
 
-MS67 qualifies the bound synthetic nonproduction platform. Customer IdP, representative customer data and workload, customer approval, production deployment and final production readiness remain MS68.
+MS67 qualifies the bound synthetic nonproduction platform. Customer IdP, representative customer data and workload, customer approval, production deployment and final production readiness remain in the customer-production backlog.
 
 Deterministic `factory/cloudbank/*/readiness.receipt.json` files remain admission contracts. The actual signed execution records are published here. Earlier milestones retain their own scope and flags; later qualification does not rewrite historical receipts.
 

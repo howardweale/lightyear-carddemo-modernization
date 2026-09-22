@@ -1,5 +1,12 @@
 # Database semantic adapters and AUTHFRDS proof cell
 
+**Published native result: 260/260 Oracle 26ai–AlloyDB PostgreSQL pairs matched**
+across 13 datatype families and 65 bounded behaviours. The separate MS51 catalog
+readiness snapshot's `native_executed_case_count: 0` is not a project-wide execution
+counter. See [the evidence and count-scope guide](../docs/oracle-native-evidence.md)
+and [original campaign receipts](../docs/receipts/oracle26ai-alloydb-types260-20260917/README.md).
+The milestone summaries below describe their own historical scopes.
+
 MS #45 adds a genuine, target-neutral SAP ASE source adapter with deliberately broad semantic
 coverage. Its customer-shaped catalog contains two related tables, 31 columns, four user-defined
 datatypes, two identity columns, five constraints, three indexes, six procedures, four triggers,

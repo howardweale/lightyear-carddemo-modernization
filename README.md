@@ -4,15 +4,28 @@
 
 # LIGHTYEAR CardDemo Modernization Factory
 
+**Native Oracle 26ai → AlloyDB PostgreSQL: 260/260 matching case pairs**, across
+13 datatype families and 65 bounded behaviours. The successful run contains
+260 source and 260 target observations. Earlier overlapping campaigns are deduplicated.
+
+| Reporting scope | Result |
+| --- | --- |
+| Published native paired campaign | **260 matching pairs** — [original evidence](docs/receipts/oracle26ai-alloydb-types260-20260917/README.md) |
+| Separate MS51 catalog readiness snapshot | **`native_executed_case_count: 0`** — this snapshot does not aggregate paired-campaign receipts |
+
+See [Oracle native evidence and count scopes](docs/oracle-native-evidence.md).
+The MS51 field is not a project-wide execution total. Historical milestone
+summaries below retain their original scope; later execution evidence is reported separately.
+
 **[Control Tower campaign preparation](docs/control-tower-campaigns.md)** adds
-shared estate/campaign/run selection and a read-only Oracle 26ai / AlloyDB
-NUMBER pilot view. Prepared SQL, timestamped environment observations and
-execution results are kept distinct; campaign execution is not connected yet.
+shared estate/campaign/run selection and Oracle 26ai / AlloyDB campaign views.
+Prepared SQL, timestamped environment observations and signed execution results
+are kept distinct. The 260-pair campaign exposes both recorded attempts.
 
 **[MS #73 — Run history and action activity](docs/milestones/MS-73/MS-73.md)** adds
 a permanent run index, guarded journal retention and a read-only history view.
-MS #74 now records verified terminal engine runs. The new NUMBER campaign
-correctly reports no runs until its execution adapter is connected. Pattern
+MS #74 records verified terminal engine runs. Native campaign results and the
+deduplicated paired-coverage report are now available in Control Tower. Pattern
 reach remains separate from signing and semantic equivalence.
 
 **MS #72 — Control Tower workflow, Steps 1–2.** The headless engine now runs
@@ -344,9 +357,10 @@ PYTHONPATH=src python3 -m lightyear_data verify-oracle-native-execution-gate
 ./data-modernization.sh oracle-native-gate
 ```
 
-No version-specific catalog SQL harnesses have been materialized and no authorized Oracle database
-has executed the catalog. Native Oracle and target-equivalent counts therefore remain zero. The
-next increment materializes governed harness batches before authorized 19c/26ai execution.
+The initial MS51 release established admission without native execution. Its current readiness
+snapshot includes 40 NUMBER case/version harnesses and retains a native execution count of zero
+under that contract. The separate [260-pair native campaign](docs/oracle-native-evidence.md)
+passed on Oracle 26ai and AlloyDB; its receipts do not populate this MS51 snapshot.
 
 Previous release: **v0.50.4 — Oracle bounded catalog execution complete**
 

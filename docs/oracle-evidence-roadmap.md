@@ -1,8 +1,15 @@
 # Oracle evidence roadmap and operator notes
 
-Updated 2026-09-17. CloudBank's native Oracle application journeys remain valid
-evidence for their tested scope. The separate behaviour catalog has 500 bounded-model
-verified behaviours and 2,000 cases. A catalog-native zero does not erase CloudBank's runs.
+Reporting clarified 2026-09-22. **The published native Oracle 26ai–AlloyDB campaign
+passed 260/260 case pairs across 13 datatype families and 65 bounded behaviours.**
+CloudBank's application journeys and platform qualification remain separate valid
+evidence. The behaviour catalog has 500 bounded-model verified behaviours and
+2,000 cases. Its MS51 readiness snapshot does not aggregate the paired receipts;
+its zero is not a project-wide native execution count. See the
+[evidence and count-scope guide](oracle-native-evidence.md).
+
+The implementation and validation notes below record the earlier 2026-09-17
+catalog/readiness increment, not the results of the separate paired campaign.
 
 ## Reporting
 
@@ -19,7 +26,7 @@ $env:PYTHONPATH = 'src'
 py -3.12 -m lightyear_data verify-oracle-schema-structured-coverage --project-root .
 ```
 
-The resulting deck sentence is:
+The resulting sentence describes that bounded-model catalog receipt only:
 
 > This catalog receipt covers 500 catalogued behaviours: 500/500 bounded-model verified and 0/500 native-Oracle verified. These counts exclude separate application-level evidence such as CloudBank runs; they do not establish target equivalence or production readiness.
 
@@ -32,7 +39,8 @@ bounded coverage. No CloudBank execution receipt was rewritten or re-signed.
 The repository now contains 20 case-specific SQL harnesses for each of the two version
 lanes: **40 materialized harnesses, one topic family, five behaviours**. The existing
 manifest counts case/version harnesses, not family generators. The remaining materialization
-scope is 3,960 case/version harnesses. Native execution remains **0**, not 20 or 40.
+scope is 3,960 case/version harnesses. This MS51 readiness snapshot records **0**
+native executions; materializing 20 or 40 harnesses does not record a database run.
 
 The implementation probes NUMBER arithmetic, NULL propagation, scale rounding, precision
 limits, overflow diagnostics, recovery, and numeric formatting under both NLS decimal

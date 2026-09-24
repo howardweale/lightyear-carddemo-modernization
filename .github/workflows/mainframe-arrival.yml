@@ -1,0 +1,65 @@
+name: Mainframe inventory and arrival kit
+on:
+  pull_request:
+    paths:
+      - 'src/lightyear_mainframe/**'
+      - 'src/lightyear_workflow/batch_pack.py'
+      - 'src/lightyear_workflow/zosmf_reader.py'
+      - 'src/lightyear_runtime/**'
+      - 'spec/mainframe/**'
+      - 'spec/batch-packs/**'
+      - 'tests/test_mainframe_*.py'
+      - 'docs/mainframe/**'
+      - 'pyproject.toml'
+      - '.github/workflows/mainframe-arrival.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'src/lightyear_mainframe/**'
+      - 'src/lightyear_workflow/batch_pack.py'
+      - 'src/lightyear_workflow/zosmf_reader.py'
+      - 'src/lightyear_runtime/**'
+      - 'spec/mainframe/**'
+      - 'spec/batch-packs/**'
+      - 'tests/test_mainframe_*.py'
+      - 'docs/mainframe/**'
+      - 'pyproject.toml'
+      - '.github/workflows/mainframe-arrival.yml'
+permissions:
+  contents: read
+jobs:
+  contracts:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Verify inventory, record decoding and read-only mock lanes
+        env:
+          PYTHONPATH: src
+        run: python -m unittest tests.test_mainframe_inventory tests.test_mainframe_records tests.test_mainframe_arrival tests.test_mainframe_cli tests.test_batch_pack tests.test_zosmf_reader tests.test_zosmf_adapter -v
+  pinned-public-estate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7
+        with:
+          repository: aws-samples/aws-mainframe-modernization-carddemo
+          ref: 59cc6c2fd7ebd7ef7925cad552a01a4b8b6e4d5e
+          path: work/carddemo-public
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Reproduce the full denominator and public binary decoding receipts
+        env:
+          PYTHONPATH: src
+          CARDDEMO_SOURCE: work/carddemo-public
+        run: python -m unittest tests.test_mainframe_public -v

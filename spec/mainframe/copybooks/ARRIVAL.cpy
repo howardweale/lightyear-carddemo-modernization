@@ -1,0 +1,6 @@
+       01 ARRIVAL-RECORD.
+          05 ACCOUNT-ID PIC 9(11).
+          05 DESCRIPTION PIC X(12).
+          05 AMOUNT PIC S9(7)V99 COMP-3.
+          05 RATE PIC 9(3)V99.
+          05 FILLER PIC X(3).

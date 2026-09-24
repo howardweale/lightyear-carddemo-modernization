@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0",
+  "source_commit": "59cc6c2fd7ebd7ef7925cad552a01a4b8b6e4d5e",
+  "evidence_class": "local_observed",
+  "observation": "Local decoding of public repository fixtures; no program was executed on z/OS.",
+  "codec": "cp037",
+  "sign_policy": "preferred",
+  "datasets": [
+    {
+      "path": "app/data/EBCDIC/AWS.M2.CARDDEMO.ACCTDATA.PS",
+      "sha256": "23167cdff65ca6dfa2e5bccee89112e3e83a80247a38e251f3981377ab098ec9",
+      "copybook": "app/cpy/CVACT01Y.cpy",
+      "copybook_sha256": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728",
+      "record_length": 300,
+      "records": 50,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "app/data/EBCDIC/AWS.M2.CARDDEMO.DALYTRAN.PS",
+      "sha256": "479b1f99cb7adcd9b79e94708f04c8bde0a010ba87f2ed69ba8af1effe57d076",
+      "copybook": "app/cpy/CVTRA05Y.cpy",
+      "copybook_sha256": "d7bde0e78ff608497087b9909c889ed39e347269f964bda767b92b547fbb5fec",
+      "record_length": 350,
+      "records": 300,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "app/data/EBCDIC/AWS.M2.CARDDEMO.TCATBALF.PS",
+      "sha256": "725dbe47d34d67053090efde8819af686ce424ed9dc0c8fd3f33cd1bf786b68a",
+      "copybook": "app/cpy/CVTRA01Y.cpy",
+      "copybook_sha256": "50637f13692c89b17a2fc60d249dc54e9eb3569d933afca3cdcf65b491a9d5ba",
+      "record_length": 50,
+      "records": 50,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "app/data/EBCDIC/AWS.M2.CARDDEMO.DISCGRP.PS",
+      "sha256": "722df78926c1ac01ed8e1138d2bba72593ac21046c994685c64fc7c87a5851d3",
+      "copybook": "app/cpy/CVTRA02Y.cpy",
+      "copybook_sha256": "7828fae489c59944b4310e223028a8d3a525ccf4ead113c062bcaff04b52bf9c",
+      "record_length": 50,
+      "records": 51,
+      "original_bytes_preserved": true
+    },
+    {
+      "path": "app/data/EBCDIC/AWS.M2.CARDDEMO.CARDXREF.PS",
+      "sha256": "b07ab2e5fa2500501c1dcaffe478ee74c4562a290174020a093dfa6f0e6325d3",
+      "copybook": "app/cpy/CVACT03Y.cpy",
+      "copybook_sha256": "ffc6079e09b28739e154bf6c1e1c36d408209faa91f6cf7008078dc596a1c370",
+      "record_length": 50,
+      "records": 50,
+      "original_bytes_preserved": true
+    }
+  ],
+  "records": 501,
+  "mainframe_equivalent": false
+}

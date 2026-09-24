@@ -65,3 +65,9 @@ docs/receipts/oracle26ai-alloydb-core100-20260917/** -text whitespace=blank-at-e
 
 # Preserve both native 260-pair attempts, signatures and operational readback.
 docs/receipts/oracle26ai-alloydb-types260-20260917/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+
+# Copybook fingerprints and third-party attribution preserve exact input bytes.
+spec/mainframe/copybooks/** -text -whitespace
+
+# The packed probe is a fingerprinted fixture, including its line ending.
+spec/mainframe/packed-golden.hex -text

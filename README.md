@@ -4,6 +4,11 @@
 
 # LIGHTYEAR CardDemo Modernization Factory
 
+**[Mainframe preparation kit](docs/mainframe/README.md)** inventories 1,423 source decisions
+across 44 public CardDemo COBOL programs, decodes 501 public EBCDIC records, and
+rehearses both batch jobs against explicit mock spool bindings. Native coverage
+and equivalence remain unobserved.
+
 **Native Oracle 26ai → AlloyDB PostgreSQL: 260/260 matching case pairs**, across
 13 datatype families and 65 bounded behaviours. The successful run contains
 260 source and 260 target observations. Earlier overlapping campaigns are deduplicated.

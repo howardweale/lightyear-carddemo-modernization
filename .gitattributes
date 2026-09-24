@@ -68,3 +68,6 @@ docs/receipts/oracle26ai-alloydb-types260-20260917/** -text whitespace=blank-at-
 
 # Copybook fingerprints and third-party attribution preserve exact input bytes.
 spec/mainframe/copybooks/** -text -whitespace
+
+# The packed probe is a fingerprinted fixture, including its line ending.
+spec/mainframe/packed-golden.hex -text

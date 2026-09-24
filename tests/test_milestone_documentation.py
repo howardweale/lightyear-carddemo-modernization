@@ -1,4 +1,5 @@
 import hashlib
+from html.parser import HTMLParser
 import json
 import re
 import subprocess
@@ -26,12 +27,14 @@ class MilestoneDocumentationTests(unittest.TestCase):
         manifest = json.loads((DOC_ROOT / "manifest.json").read_text(encoding="utf-8"))
         self.assertEqual(manifest["schema_version"], "1.1")
         supplemental = manifest["supplemental_artifacts"]
-        self.assertEqual([a["path"] for a in supplemental], ["docs/milestones/MS-73/MS-73.md", "docs/milestones/MS-74/MS-74.md", "docs/milestones/MS-75/MS-75.md", "docs/milestones/MS-76/MS-76.md", "docs/milestones/MS-77/MS-77.md"])
+        self.assertEqual([a["path"] for a in supplemental], ["docs/milestones/MS-73/MS-73.md", "docs/milestones/MS-74/MS-74.md", "docs/milestones/MS-75/MS-75.md", "docs/milestones/MS-76/MS-76.md", "docs/milestones/MS-77/MS-77.md", "docs/milestones/MS-78/MS-78.md", "docs/milestones/MS-79/MS-79.md", "docs/milestones/MS-80/MS-80.md"])
         for artifact in supplemental:
             data = (ROOT / artifact["path"]).read_bytes()
             self.assertEqual(len(data), artifact["bytes"])
             self.assertEqual(hashlib.sha256(data).hexdigest(), artifact["sha256"])
         self.assertEqual(manifest["milestone_count"], 70)
+        self.assertEqual(manifest["supplemental_milestone_count"], 8)
+        self.assertEqual(manifest["searchable_milestone_count"], 78)
         self.assertEqual(manifest["artifact_count"], 210)
         self.assertEqual(set(manifest["formats"]), {"md", "docx", "pdf"})
         for artifact in manifest["artifacts"]:
@@ -57,10 +60,10 @@ class MilestoneDocumentationTests(unittest.TestCase):
         readme = (DOC_ROOT / "README.md").read_text(encoding="utf-8")
         page = (DOC_ROOT / "index.html").read_text(encoding="utf-8")
         self.assertIn("Open the searchable milestone index", readme)
-        self.assertEqual(readme.count("https://github.com/"), 146)
+        self.assertEqual(readme.count("https://github.com/"), 149)
         self.assertEqual(readme.count("https://raw.githubusercontent.com/"), 70)
         self.assertNotRegex(readme, r"\]\(MS-\d{2}/")
-        self.assertEqual(page.count('class="milestone"'), 70)
+        self.assertEqual(page.count('class="milestone"'), 78)
         self.assertIn('id="search"', page)
         self.assertIn('id="phase"', page)
         self.assertIn("URLSearchParams", page)
@@ -84,6 +87,51 @@ class MilestoneDocumentationTests(unittest.TestCase):
         self.assertEqual(len(raw_paths), 140)
         for relative in set(github_paths + raw_paths):
             self.assertTrue((ROOT / relative).is_file(), relative)
+
+    def test_later_records_are_in_the_working_search_and_phase_filters(self) -> None:
+        class Rows(HTMLParser):
+            def __init__(self):
+                super().__init__(); self.rows = []; self.current = None
+            def handle_starttag(self, tag, attrs):
+                attrs = dict(attrs)
+                if tag == "tr" and attrs.get("class") == "milestone":
+                    self.current = {"dataset": {"search": attrs["data-search"], "phase": attrs["data-phase"]}}
+                    self.rows.append(self.current)
+                if tag == "a" and attrs.get("class") == "title" and self.current is not None:
+                    self.current["url"] = attrs["href"]
+            def handle_endtag(self, tag):
+                if tag == "tr": self.current = None
+        page = (DOC_ROOT / "index.html").read_text(encoding="utf-8")
+        parsed = Rows(); parsed.feed(page)
+        later = [row for row in parsed.rows if row["dataset"]["phase"] == "implementation"]
+        self.assertEqual(8, len(later))
+        script = re.search(r"<script>(.*?)</script>", page, re.DOTALL).group(1)
+        harness = r'''const vm = require('node:vm');
+const fs = require('node:fs');
+const {rows, script} = JSON.parse(fs.readFileSync(0, 'utf8'));
+const search = {value:'', addEventListener(_, fn){this.apply=fn;}};
+const phase = {value:'all', options:[{value:'all'}, {value:'implementation'}, {value:'foundation'}],
+  addEventListener(_, fn){this.apply=fn;}};
+const count = {}, empty = {style:{}};
+const controls = {'#search':search, '#phase':phase, '#result-count':count, '#empty':empty};
+vm.runInNewContext(script, {document:{querySelector:q=>controls[q], querySelectorAll:()=>rows,
+  addEventListener(){}}, location:{search:'?q=service+packs&phase=implementation',pathname:'/milestones/'},
+  history:{replaceState(){}}, URLSearchParams});
+const visible = () => rows.filter(row=>!row.hidden).map(row=>row.url);
+const result = {initial:visible(), initialCount:count.textContent};
+search.value='decidability'; search.apply(); result.decidability=visible();
+search.value='cancellation'; search.apply(); result.cancellation=visible();
+search.value=''; phase.value='implementation'; phase.apply(); result.later=visible();
+phase.value='foundation'; phase.apply(); result.foundation=visible();
+console.log(JSON.stringify(result));'''
+        result = subprocess.run(["node", "-e", harness], input=json.dumps({"rows":parsed.rows,"script":script}),
+                                capture_output=True, text=True, check=False)
+        self.assertEqual(0, result.returncode, result.stderr)
+        output = json.loads(result.stdout)
+        for key, number in [("initial",79),("decidability",80),("cancellation",78)]:
+            self.assertTrue(any(f"/MS-{number}/MS-{number}.md" in url for url in output[key]), (key, output))
+        self.assertEqual(8, len(output["later"]))
+        self.assertEqual(10, len(output["foundation"]))
 
     def test_brand_assets_are_consistent_across_surfaces(self) -> None:
         canonical = ROOT / "brand" / "assets" / "lightyear-primary.svg"

@@ -26,6 +26,9 @@ OPERATIONS = ("capabilities", "plan", "start", "status", "events", "verify", "ex
 SOURCE = Path(__file__).resolve().parents[1]
 
 
+EVENT_PAGE_LIMIT = 25
+
+
 class WorkflowError(ValueError):
     def __init__(self, code, message):
         super().__init__(message)
@@ -198,7 +201,7 @@ class Workflow:
             try:
                 self.dispatcher(run_id)
             except OSError:
-                return {"status": "dispatch-unconfirmed", "run_id": run_id, "new_dispatch": True,
+                return {"status": "dispatch-unconfirmed", "run_id": run_id, "new_dispatch": True, "retriable": True,
                         "next_action": "Inspect status; use resume to recover this same run."}
         return {"status": "accepted", "run_id": run_id, "new_dispatch": created}
 
@@ -282,7 +285,9 @@ class Workflow:
                   "cancellation_requested_at": cancellation,
                   "fresh_database_execution": False, "events_resource": f"lightyear://runs/{run_id}/events"}
         if view is None:
-            return {**result, "status": "cancel-requested" if cancellation else row["dispatch_state"], "terminal": False}
+            status = "cancel-requested" if cancellation else row["dispatch_state"]
+            return {**result, "status": status, "terminal": False,
+                    "retriable": status == "dispatch-unconfirmed"}
         halt = view["halt_reason"]
         status = {"human-decision-required": "human-decision-required", "completed": "completed",
                   "divergent": "comparison-failed", "cancelled": "cancelled"}.get(halt, "execution-failed" if halt else "running-or-interrupted")
@@ -298,8 +303,8 @@ class Workflow:
                           "run_id": "cloudbank-" + events[0]["content_sha256"],
                           "available_in_history": halt is not None and row["dispatch_state"] == "finished"}}
 
-    def events(self, run_id: str, after: int = 0, limit: int = 10):
-        if type(after) is not int or after < 0 or type(limit) is not int or not 1 <= limit <= 25:
+    def events(self, run_id: str, after: int = 0, limit: int = EVENT_PAGE_LIMIT):
+        if type(after) is not int or after < 0 or type(limit) is not int or not 1 <= limit <= EVENT_PAGE_LIMIT:
             raise WorkflowError("invalid-page", "after must be nonnegative; limit must be 1 through 25.")
         _, events, _ = self._verified(run_id)
         if after > len(events):

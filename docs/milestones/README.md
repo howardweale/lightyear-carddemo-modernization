@@ -6,6 +6,7 @@
 
 This library is the customer-readable body of record for MS #1 through MS #70. Every milestone is
 published from one governed catalog in Markdown, Microsoft Word (`.docx`), and PDF.
+The same searchable index includes 8 later implementation records in Markdown.
 
 **[Open the searchable milestone index](https://howardweale.github.io/lightyear-carddemo-modernization/milestones/)** to filter by milestone number, title,
 customer value, capability, release, or roadmap phase.
@@ -91,16 +92,16 @@ or policy decisions.
 
 ## Additional implementation records
 
-[MS73 — Run history and action activity](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-73/MS-73.md) (Markdown; engine integration delivered by MS74).
-
-[MS74 — Engine-to-history recording](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-74/MS-74.md) (Markdown).
-
-[MS75 — Four-panel workspace](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-75/MS-75.md) (Markdown).
-
-[MS76 — Existing runtime gate qualification](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-76/MS-76.md) (Markdown).
-
-[MS77 — Declarative batch invocation](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-77/MS-77.md) (Markdown; partial, awaiting an authorised z/OS environment).
-
+| Milestone | Title | Status | Record |
+|---|---|---|---|
+| MS #73 | Run history and action activity | Engine integration delivered by MS74 | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-73/MS-73.md) |
+| MS #74 | Engine-to-history recording | Implemented | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-74/MS-74.md) |
+| MS #75 | Four-panel workspace | Implemented | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-75/MS-75.md) |
+| MS #76 | Existing runtime gate qualification | Implemented for declared scope | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-76/MS-76.md) |
+| MS #77 | Declarative batch invocation | Partial; awaiting an authorised z/OS environment | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-77/MS-77.md) |
+| MS #78 | Reliable local agent runs and cancellation | Implemented for retained CloudBank evidence | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-78/MS-78.md) |
+| MS #79 | Services and API journey packs | Implemented and contract-tested; customer execution unproven | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-79/MS-79.md) |
+| MS #80 | Decidability calibration instrument | Implemented for documented adapters | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-80/MS-80.md) |
 
 ## Build and verification
 

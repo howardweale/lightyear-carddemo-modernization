@@ -3,6 +3,8 @@ from concurrent.futures import ThreadPoolExecutor
 from contextlib import closing
 from datetime import datetime, timedelta, timezone
 import hashlib
+import io
+from contextlib import redirect_stdout
 import importlib.util
 import json
 import os
@@ -15,7 +17,7 @@ import unittest
 from unittest.mock import patch
 import uuid
 
-from lightyear_agent.cli import exit_code
+from lightyear_agent.cli import exit_code, main as cli_main
 from lightyear_agent.service import Workflow, initialize
 from lightyear_control_tower.decisions import DecisionService, initialize_authority
 from lightyear_data.contracts import seal
@@ -374,11 +376,40 @@ class AgentWorkflowTests(unittest.TestCase):
         self.assertEqual("unsupported-operation", self.workflow.invoke("approve")["error"]["code"])
         self.assertEqual("run-not-terminal", self.workflow.invoke("export", run_id=run_id)["error"]["code"])
 
+    def test_default_event_pages_match_cli_and_keep_cursor_continuity(self):
+        run_id, _ = self.start()
+        finish_local(self.workflow, run_id)
+        all_events = self.workflow._verified(run_id)[1]
+        self.assertGreater(len(all_events), 25)
+        first = self.workflow.invoke("events", run_id=run_id)
+        self.assertEqual(all_events[:25], first["events"])
+        self.assertEqual(25, first["next_cursor"])
+        self.assertTrue(first["has_more"])
+        following = self.workflow.invoke("events", run_id=run_id, after=first["next_cursor"])
+        self.assertEqual(all_events[25:50], following["events"])
+        for options, expected in [([], first), (["--limit", "3"],
+                self.workflow.invoke("events", run_id=run_id, limit=3))]:
+            output = io.StringIO()
+            with redirect_stdout(output):
+                code = cli_main(["events", "--project", str(self.project), "--run-id", run_id, *options])
+            self.assertEqual(0, code)
+            self.assertEqual(expected, json.loads(output.getvalue()))
+
     def test_dispatch_failure_retains_run_and_explicit_recovery(self):
         self.workflow.dispatcher = lambda _: (_ for _ in ()).throw(OSError("private diagnostic"))
-        run_id, plan = self.start()
+        plan = self.workflow.invoke("plan")
+        request_id = str(uuid.uuid4())
+        started = self.workflow.invoke("start", plan_sha256=plan["plan_sha256"], request_id=request_id)
+        run_id = started["run_id"]
+        self.assertEqual("dispatch-unconfirmed", started["status"])
+        self.assertIs(started["retriable"], True)
+        self.assertNotIn("private diagnostic", json.dumps(started))
+        duplicate = self.workflow.invoke("start", plan_sha256=plan["plan_sha256"], request_id=request_id)
+        self.assertEqual(run_id, duplicate["run_id"])
+        self.assertFalse(duplicate["new_dispatch"])
         result = self.workflow.invoke("status", run_id=run_id)
         self.assertEqual("dispatch-unconfirmed", result["status"])
+        self.assertIs(result["retriable"], True)
         self.assertEqual(4, exit_code(result))
         self.workflow.dispatcher = self.dispatched.append
         self.assertEqual("resume-requested", self.workflow.invoke("resume", run_id=run_id)["status"])

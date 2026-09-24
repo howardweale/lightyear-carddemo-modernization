@@ -1,5 +1,10 @@
 """Real stdio client/server, detached workers, reconnect and CI exit semantics."""
 import asyncio
+import builtins
+import io
+from contextlib import redirect_stdout, redirect_stderr
+from pathlib import Path
+from unittest.mock import patch
 from contextlib import asynccontextmanager
 import importlib.util
 import json
@@ -13,6 +18,29 @@ import uuid
 from lightyear_agent.service import Workflow
 from lightyear_workflow.run_store import RunStore
 from tests.agent_support import ROOT, fixture
+
+
+class MCPStartupTests(unittest.TestCase):
+    def test_missing_or_incompatible_sdk_has_structured_stderr_and_no_traceback(self):
+        from lightyear_agent import mcp as adapter
+        original = builtins.__import__
+        for failure in (ModuleNotFoundError("private installation path"), ImportError("private SDK details")):
+            def importing(name, *args, **kwargs):
+                if name == "mcp.server":
+                    raise failure
+                return original(name, *args, **kwargs)
+            stdout, stderr = io.StringIO(), io.StringIO()
+            with self.subTest(failure=type(failure).__name__), patch("builtins.__import__", side_effect=importing), \
+                    redirect_stdout(stdout), redirect_stderr(stderr):
+                code = adapter.main(["--project", "not-opened.json"])
+            self.assertEqual(2, code)
+            self.assertEqual("", stdout.getvalue())
+            result = json.loads(stderr.getvalue())
+            self.assertFalse(result["ok"])
+            self.assertEqual("mcp-dependency-unavailable", result["error"]["code"])
+            self.assertIn('python -m pip install ".[agent]"', result["error"]["message"])
+            self.assertNotIn("private", stderr.getvalue())
+            self.assertNotIn("Traceback", stderr.getvalue())
 
 
 @unittest.skipUnless(importlib.util.find_spec("mcp"), "Install .[agent]; mandatory in local-agent CI")
@@ -97,6 +125,13 @@ class MCPWorkflowTests(unittest.IsolatedAsyncioTestCase):
             verified = await self.call(session, "verify", {"run_id": run_id})
             self.assertTrue(verified["verified"])
             self.assertFalse(verified["workflow_completed"])
+            default_page = await self.call(session, "events", {"run_id": run_id})
+            self.assertEqual(25, len(default_page["events"]))
+            self.assertEqual(25, default_page["next_cursor"])
+            resource = await session.read_resource(f"lightyear://runs/{run_id}/events")
+            self.assertEqual(default_page, json.loads(resource.contents[0].text))
+            next_page = await self.call(session, "events", {"run_id": run_id, "after": 25})
+            self.assertEqual(observer.invoke("events", run_id=run_id, after=25), next_page)
             page = await self.call(session, "events", {"run_id": run_id, "limit": 3})
             self.assertEqual(3, len(page["events"]))
             self.assertTrue(page["has_more"])

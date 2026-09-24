@@ -8,7 +8,7 @@ import sys
 import time
 import uuid
 
-from .service import OPERATIONS, Workflow, WorkflowError, initialize
+from .service import EVENT_PAGE_LIMIT, OPERATIONS, Workflow, WorkflowError, initialize
 
 
 def exit_code(result):
@@ -36,7 +36,7 @@ def main(argv=None):
     parser.add_argument("--request-id")
     parser.add_argument("--run-id")
     parser.add_argument("--after", type=int, default=0)
-    parser.add_argument("--limit", type=int, default=10)
+    parser.add_argument("--limit", type=int, default=EVENT_PAGE_LIMIT)
     parser.add_argument("--wait-seconds", type=int, default=360)
     args = parser.parse_args(argv)
     try:

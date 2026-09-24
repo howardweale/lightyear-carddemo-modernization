@@ -1,0 +1,50 @@
+name: Declarative services and API journeys
+on:
+  pull_request:
+    paths:
+      - 'src/lightyear_workflow/service_pack.py'
+      - 'src/lightyear_data/**'
+      - 'src/lightyear_qualification/**'
+      - 'spec/service-packs/**'
+      - 'tests/test_service_pack.py'
+      - 'tests/test_cloudbank_journeys.py'
+      - 'tests/test_runtime_gate_qualification.py'
+      - 'pyproject.toml'
+      - '.github/workflows/service-packs.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'src/lightyear_workflow/service_pack.py'
+      - 'src/lightyear_data/**'
+      - 'src/lightyear_qualification/**'
+      - 'spec/service-packs/**'
+      - 'tests/test_service_pack.py'
+      - 'tests/test_cloudbank_journeys.py'
+      - 'tests/test_runtime_gate_qualification.py'
+      - 'pyproject.toml'
+      - '.github/workflows/service-packs.yml'
+permissions:
+  contents: read
+jobs:
+  contracts:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Validate and plan without runtime access
+        env:
+          PYTHONPATH: src
+        run: |
+          python -m lightyear_workflow.service_pack validate spec/service-packs/order-approval.pack.json
+          python -m lightyear_workflow.service_pack plan src/lightyear_data/packs/cloudbank.services.json
+      - name: Verify capabilities and existing acceptance paths
+        env:
+          PYTHONPATH: src
+        run: python -m unittest tests.test_service_pack tests.test_cloudbank_journeys tests.test_runtime_gate_qualification tests.test_batch_pack -v

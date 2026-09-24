@@ -1,0 +1,3602 @@
+{
+  "pack_type": "lightyear-service-journey-pack",
+  "schema_version": "1.0",
+  "pack_id": "cloudbank-shared-journeys-v1",
+  "estate": "cloudbank",
+  "description": "Synthetic nonproduction CloudBank reference; observe captured source evidence and invoke only an explicitly supplied target.",
+  "source": {
+    "verbs": [
+      "observe"
+    ]
+  },
+  "target": {
+    "verbs": [
+      "request",
+      "control"
+    ]
+  },
+  "services": [
+    "azn-server",
+    "customer",
+    "account",
+    "transfer",
+    "checks",
+    "testrunner",
+    "creditscore",
+    "chatbot"
+  ],
+  "roles": [
+    "owner",
+    "account",
+    "test",
+    "credit",
+    "chat"
+  ],
+  "inputs": {
+    "owner": "identifier",
+    "run_id": "identifier"
+  },
+  "state": {
+    "accounts": [],
+    "marker": {
+      "$op": "concat",
+      "args": [
+        "lightyear-synthetic-journey:",
+        {
+          "$ref": "run_id"
+        }
+      ]
+    },
+    "deposit_journal": null,
+    "deposit_id": {
+      "$op": "message_id",
+      "args": [
+        {
+          "$ref": "run_id"
+        },
+        "deposit"
+      ]
+    },
+    "clear_id": {
+      "$op": "message_id",
+      "args": [
+        {
+          "$ref": "run_id"
+        },
+        "clearance"
+      ]
+    },
+    "last_queue_observation": null,
+    "checks_stopped": false
+  },
+  "macros": {
+    "message_id": {
+      "params": [
+        "suffix"
+      ],
+      "steps": [
+        {
+          "op": "set",
+          "name": "message",
+          "value": {
+            "$op": "message_id",
+            "args": [
+              {
+                "$ref": "run_id"
+              },
+              {
+                "$ref": "suffix"
+              }
+            ]
+          }
+        }
+      ],
+      "return": {
+        "$ref": "message"
+      }
+    },
+    "ready": {
+      "params": [],
+      "steps": [
+        {
+          "op": "control",
+          "action": "ready",
+          "save": "result"
+        },
+        {
+          "op": "assert",
+          "test": {
+            "$op": "and",
+            "args": [
+              {
+                "$op": "is_object",
+                "args": [
+                  {
+                    "$ref": "result"
+                  }
+                ]
+              },
+              {
+                "$op": "ne",
+                "args": [
+                  {
+                    "$ref": "result"
+                  },
+                  {}
+                ]
+              }
+            ]
+          },
+          "code": "runtime-ready-observation-invalid"
+        }
+      ],
+      "return": {
+        "$ref": "result"
+      }
+    },
+    "authorize": {
+      "params": [],
+      "steps": [
+        {
+          "op": "control",
+          "action": "authorize",
+          "save": "result"
+        },
+        {
+          "op": "assert",
+          "test": {
+            "$op": "and",
+            "args": [
+              {
+                "$op": "is_object",
+                "args": [
+                  {
+                    "$ref": "result"
+                  }
+                ]
+              },
+              {
+                "$op": "ne",
+                "args": [
+                  {
+                    "$ref": "result"
+                  },
+                  {}
+                ]
+              }
+            ]
+          },
+          "code": "runtime-authorize-observation-invalid"
+        }
+      ],
+      "return": {
+        "$ref": "result"
+      }
+    },
+    "unauthenticated": {
+      "params": [],
+      "steps": [
+        {
+          "op": "request",
+          "service": "customer",
+          "method": "GET",
+          "path": "/api/v1/customer",
+          "save": "response"
+        },
+        {
+          "op": "assert",
+          "test": {
+            "$op": "eq",
+            "args": [
+              {
+                "$ref": "response.status"
+              },
+              401
+            ]
+          },
+          "code": "unauthenticated-request-not-rejected"
+        }
+      ],
+      "return": {
+        "http_status": 401
+      }
+    },
+    "customer": {
+      "params": [],
+      "steps": [
+        {
+          "op": "request",
+          "service": "customer",
+          "method": "GET",
+          "path": "/api/v1/customer/{owner}",
+          "save": "response",
+          "role": "owner",
+          "params": {
+            "owner": {
+              "$ref": "owner"
+            }
+          }
+        },
+        {
+          "op": "if",
+          "test": {
+            "$op": "eq",
+            "args": [
+              {
+                "$ref": "response.status"
+              },
+              404
+            ]
+          },
+          "then": [
+            {
+              "op": "request",
+              "service": "customer",
+              "method": "POST",
+              "path": "/api/v1/customer",
+              "save": "created",
+              "role": "owner",
+              "body": {
+                "customerId": {
+                  "$ref": "owner"
+                },
+                "customerName": "LIGHTYEAR synthetic journey",
+                "customerEmail": "journey@example.invalid",
+                "customerOtherDetails": "lightyear-synthetic-journey-owner"
+              }
+            },
+            {
+              "op": "assert",
+              "test": {
+                "$op": "eq",
+                "args": [
+                  {
+                    "$ref": "created.status"
+                  },
+                  201
+                ]
+              },
+              "code": "synthetic-customer-create-failed"
+            },
+            {
+              "op": "request",
+              "service": "customer",
+              "method": "GET",
+              "path": "/api/v1/customer/{owner}",
+              "save": "response",
+              "role": "owner",
+              "params": {
+                "owner": {
+                  "$ref": "owner"
+                }
+              }
+            }
+          ],
+          "else": []
+        },
+        {
+          "op": "assert",
+          "test": {
+            "$op": "eq",
+            "args": [
+              {
+                "$ref": "response.status"
+              },
+              200
+            ]
+          },
+          "code": "customer-owner-read-failed"
+        },
+        {
+          "op": "set",
+          "name": "row",
+          "value": {
+            "$op": "json",
+            "args": [
+              {
+                "$ref": "response"
+              }
+            ]
+          }
+        },
+        {
+          "op": "assert",
+          "test": {
+            "$op": "and",
+            "args": [
+              {
+                "$op": "is_object",
+                "args": [
+                  {
+                    "$ref": "row"
+                  }
+                ]
+              },
+              {
+                "$op": "eq",
+                "args": [
+                  {
+                    "$op": "lookup",
+                    "args": [
+                      {
+                        "$ref": "row"
+                      },
+                      "customerId",
+                      null
+                    ]
+                  },
+                  {
+                    "$ref": "owner"
+                  }
+                ]
+              }
+            ]
+          },
+          "code": "customer-owner-identity-mismatch"
+        },
+        {
+          "op": "assert",
+          "test": {
+            "$op": "eq",
+            "args": [
+              {
+                "$op": "lookup",
+                "args": [
+                  {
+                    "$ref": "row"
+                  },
+                  "customerOtherDetails",
+                  null
+                ]
+              },
+              "lightyear-synthetic-journey-owner"
+            ]
+          },
+          "code": "existing-customer-is-not-a-journey-fixture"
+        },
+        {
+          "op": "request",
+          "service": "customer",
+          "method": "GET",
+          "path": "/api/v1/customer",
+          "save": "visible",
+          "role": "owner"
+        },
+        {
+          "op": "assert",
+          "test": {
+            "$op": "eq",
+            "args": [
+              {
+                "$ref": "visible.status"
+              },
+              200
+            ]
+          },
+          "code": "customer-owner-list-failed"
+        },
+        {
+          "op": "set",
+          "name": "rows",
+          "value": {
+            "$op": "json",
+            "args": [
+              {
+                "$ref": "visible"
+              }
+            ]
+          }
+        },
+        {
+          "op": "assert",
+          "test": {
+            "$op": "and",
+            "args": [
+              {
+                "$op": "is_list",
+                "args": [
+                  {
+                    "$ref": "rows"
+                  }
+                ]
+              },
+              {
+                "$op": "eq",
+                "args": [
+                  {
+                    "$op": "len",
+                    "args": [
+                      {
+                        "$ref": "rows"
+                      }
+                    ]
+                  },
+                  1
+                ]
+              },
+              {
+                "$op": "eq",
+                "args": [
+                  {
+                    "$op": "lookup",
+                    "args": [
+                      {
+                        "$op": "get",
+                        "args": [
+                          {
+                            "$ref": "rows"
+                          },
+                          0
+                        ]
+                      },
+                      "customerId",
+                      null
+                    ]
+                  },
+                  {
+                    "$ref": "owner"
+                  }
+                ]
+              }
+            ]
+          },
+          "code": "customer-owner-list-leaks-other-owner"
+        }
+      ],
+      "return": {
+        "owner_visible": true,
+        "visible_customer_count": 1
+      }
+    },
+    "prepare_accounts": {
+      "params": [],
+      "steps": [
+        {
+          "op": "each",
+          "over": [
+            {
+              "index": 0,
+              "balance": 1000
+            },
+            {
+              "index": 1,
+              "balance": 250
+            },
+            {
+              "index": 2,
+              "balance": 5
+            }
+          ],
+          "as": "fixture",
+          "max_items": 3,
+          "steps": [
+            {
+              "op": "request",
+              "service": "account",
+              "method": "POST",
+              "path": "/api/v1/account",
+              "save": "response",
+              "role": "owner",
+              "body": {
+                "accountId": 0,
+                "accountName": {
+                  "$op": "concat",
+                  "args": [
+                    "LIGHTYEAR journey ",
+                    {
+                      "$ref": "fixture.index"
+                    }
+                  ]
+                },
+                "accountType": "CH",
+                "accountCustomerId": {
+                  "$ref": "owner"
+                },
+                "accountOtherDetails": {
+                  "$ref": "marker"
+                },
+                "accountBalance": {
+                  "$ref": "fixture.balance"
+                }
+              }
+            },
+            {
+              "op": "assert",
+              "test": {
+                "$op": "eq",
+                "args": [
+                  {
+                    "$ref": "response.status"
+                  },
+                  201
+                ]
+              },
+              "code": "synthetic-account-create-failed"
+            },
+            {
+              "op": "set",
+              "name": "account_id",
+              "value": {
+                "$op": "location_id",
+                "args": [
+                  {
+                    "$op": "lookup",
+                    "args": [
+                      {
+                        "$ref": "response.headers"
+                      },
+                      "location",
+                      ""
+                    ]
+                  },
+                  "/api/v1/account/"
+                ]
+              }
+            },
+            {
+              "op": "assert",
+              "test": {
+                "$op": "and",
+                "args": [
+                  {
+                    "$op": "gt",
+                    "args": [
+                      {
+                        "$ref": "account_id"
+                      },
+                      0
+                    ]
+                  },
+                  {
+                    "$op": "not",
+                    "args": [
+                      {
+                        "$op": "in",
+                        "args": [
+                          {
+                            "$ref": "account_id"
+                          },
+                          {
+                            "$ref": "accounts"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "code": "synthetic-account-id-invalid"
+            },
+            {
+              "op": "set",
+              "name": "accounts",
+              "value": {
+                "$op": "append",
+                "args": [
+                  {
+                    "$ref": "accounts"
+                  },
+                  {
+                    "$ref": "account_id"
+                  }
+                ]
+              },
+              "state": true
+            }
+          ]
+        },
+        {
+          "op": "call",
+          "macro": "state",
+          "args": {},
+          "save": "current"
+        },
+        {
+          "op": "assert",
+          "test": {
+            "$op": "and",
+            "args": [
+              {
+                "$op": "eq",
+                "args": [
+                  {
+                    "$ref": "current.balances"
+                  },
+                  [
+                    1000,
+                    250,
+                    5
+                  ]
+                ]
+              },
+              {
+                "$op": "eq",
+                "args": [
+                  {
+                    "$ref": "current.journals"
+                  },
+                  []
+                ]
+              }
+            ]
+          },
+          "code": "synthetic-account-initial-state-invalid"
+        }
+      ],
+      "return": {
+        "fixture_account_count": 3,
+        "state_sha256": {
+          "$op": "hash",
+          "args": [
+            {
+              "$ref": "current"
+            }
+          ]
+        }
+      }
+    },
+    "state": {
+      "params": [],
+      "steps": [
+        {
+          "op": "assert",
+          "test": {
+            "$op": "eq",
+            "args": [
+              {
+                "$op": "len",
+                "args": [
+                  {
+                    "$ref": "accounts"
+                  }
+                ]
+              },
+              3
+            ]
+          },
+          "code": "synthetic-account-fixture-incomplete"
+        },
+        {
+          "op": "set",
+          "name": "balances",
+          "value": []
+        },
+        {
+          "op": "set",
+          "name": "journals",
+          "value": []
+        },
+        {
+          "op": "each",
+          "over": [
+            0,
+            1,
+            2
+          ],
+          "as": "index",
+          "max_items": 3,
+          "steps": [
+            {
+              "op": "set",
+              "name": "account_id",
+              "value": {
+                "$op": "get",
+                "args": [
+                  {
+                    "$ref": "accounts"
+                  },
+                  {
+                    "$ref": "index"
+                  }
+                ]
+              }
+            },
+            {
+              "op": "request",
+              "service": "account",
+              "method": "GET",
+              "path": "/api/v1/account/{account}",
+              "save": "response",
+              "role": "account",
+              "params": {
+                "account": {
+                  "$ref": "account_id"
+                }
+              }
+            },
+            {
+              "op": "assert",
+              "test": {
+                "$op": "eq",
+                "args": [
+                  {
+                    "$ref": "response.status"
+                  },
+                  200
+                ]
+              },
+              "code": "account-state-read-failed"
+            },
+            {
+              "op": "set",
+              "name": "row",
+              "value": {
+                "$op": "json",
+                "args": [
+                  {
+                    "$ref": "response"
+                  }
+                ]
+              }
+            },
+            {
+              "op": "assert",
+              "test": {
+                "$op": "and",
+                "args": [
+                  {
+                    "$op": "is_object",
+                    "args": [
+                      {
+                        "$ref": "row"
+                      }
+                    ]
+                  },
+                  {
+                    "$op": "eq",
+                    "args": [
+                      {
+                        "$op": "lookup",
+                        "args": [
+                          {
+                            "$ref": "row"
+                          },
+                          "accountId",
+                          null
+                        ]
+                      },
+                      {
+                        "$ref": "account_id"
+                      }
+                    ]
+                  },
+                  {
+                    "$op": "eq",
+                    "args": [
+                      {
+                        "$op": "lookup",
+                        "args": [
+                          {
+                            "$ref": "row"
+                          },
+                          "accountCustomerId",
+                          null
+                        ]
+                      },
+                      {
+                        "$ref": "owner"
+                      }
+                    ]
+                  },
+                  {
+                    "$op": "eq",
+                    "args": [
+                      {
+                        "$op": "lookup",
+                        "args": [
+                          {
+                            "$ref": "row"
+                          },
+                          "accountOtherDetails",
+                          null
+                        ]
+                      },
+                      {
+                        "$ref": "marker"
+                      }
+                    ]
+                  }
+                ]
+              },
+              "code": "account-fixture-identity-mismatch"
+            },
+            {
+              "op": "assert",
+              "test": {
+                "$op": "is_int",
+                "args": [
+                  {
+                    "$op": "lookup",
+                    "args": [
+                      {
+                        "$ref": "row"
+                      },
+                      "accountBalance",
+                      null
+                    ]
+                  }
+                ]
+              },
+              "code": "account-balance-invalid"
+            },
+            {
+              "op": "set",
+              "name": "balances",
+              "value": {
+                "$op": "append",
+                "args": [
+                  {
+                    "$ref": "balances"
+                  },
+                  {
+                    "$ref": "row.accountBalance"
+                  }
+                ]
+              }
+            },
+            {
+              "op": "request",
+              "service": "account",
+              "method": "GET",
+              "path": "/api/v1/account/{account}/journal",
+              "save": "response",
+              "role": "account",
+              "params": {
+                "account": {
+                  "$ref": "account_id"
+                }
+              }
+            },
+            {
+              "op": "assert",
+              "test": {
+                "$op": "eq",
+                "args": [
+                  {
+                    "$ref": "response.status"
+                  },
+                  200
+                ]
+              },
+              "code": "journal-state-read-failed"
+            },
+            {
+              "op": "set",
+              "name": "rows",
+              "value": {
+                "$op": "json",
+                "args": [
+                  {
+                    "$ref": "response"
+                  }
+                ]
+              }
+            },
+            {
+              "op": "assert",
+              "test": {
+                "$op": "and",
+                "args": [
+                  {
+                    "$op": "is_list",
+                    "args": [
+                      {
+                        "$ref": "rows"
+                      }
+                    ]
+                  },
+                  {
+                    "$op": "le",
+                    "args": [
+                      {
+                        "$op": "len",
+                        "args": [
+                          {
+                            "$ref": "rows"
+                          }
+                        ]
+                      },
+                      200
+                    ]
+                  }
+                ]
+              },
+              "code": "journal-state-shape-invalid"
+            },
+            {
+              "op": "each",
+              "over": {
+                "$ref": "rows"
+              },
+              "as": "item",
+              "max_items": 200,
+              "steps": [
+                {
+                  "op": "assert",
+                  "test": {
+                    "$op": "and",
+                    "args": [
+                      {
+                        "$op": "is_object",
+                        "args": [
+                          {
+                            "$ref": "item"
+                          }
+                        ]
+                      },
+                      {
+                        "$op": "eq",
+                        "args": [
+                          {
+                            "$op": "lookup",
+                            "args": [
+                              {
+                                "$ref": "item"
+                              },
+                              "accountId",
+                              null
+                            ]
+                          },
+                          {
+                            "$ref": "account_id"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  "code": "journal-account-identity-mismatch"
+                },
+                {
+                  "op": "assert",
+                  "test": {
+                    "$op": "in",
+                    "args": [
+                      {
+                        "$op": "lookup",
+                        "args": [
+                          {
+                            "$ref": "item"
+                          },
+                          "journalType",
+                          null
+                        ]
+                      },
+                      [
+                        "WITHDRAW",
+                        "DEPOSIT",
+                        "PENDING"
+                      ]
+                    ]
+                  },
+                  "code": "journal-kind-invalid"
+                },
+                {
+                  "op": "assert",
+                  "test": {
+                    "$op": "is_int",
+                    "args": [
+                      {
+                        "$op": "lookup",
+                        "args": [
+                          {
+                            "$ref": "item"
+                          },
+                          "journalId",
+                          null
+                        ]
+                      }
+                    ]
+                  },
+                  "code": "journal-id-invalid"
+                },
+                {
+                  "op": "assert",
+                  "test": {
+                    "$op": "is_int",
+                    "args": [
+                      {
+                        "$op": "lookup",
+                        "args": [
+                          {
+                            "$ref": "item"
+                          },
+                          "journalAmount",
+                          null
+                        ]
+                      }
+                    ]
+                  },
+                  "code": "journal-amount-invalid"
+                },
+                {
+                  "op": "set",
+                  "name": "journals",
+                  "value": {
+                    "$op": "append",
+                    "args": [
+                      {
+                        "$ref": "journals"
+                      },
+                      {
+                        "account": {
+                          "$ref": "index"
+                        },
+                        "id": {
+                          "$ref": "item.journalId"
+                        },
+                        "type": {
+                          "$ref": "item.journalType"
+                        },
+                        "amount": {
+                          "$ref": "item.journalAmount"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "return": {
+        "balances": {
+          "$ref": "balances"
+        },
+        "journals": {
+          "$op": "sort_by",
+          "args": [
+            {
+              "$ref": "journals"
+            },
+            [
+              "account",
+              "id"
+            ]
+          ]
+        }
+      }
+    },
+    "transfer": {
+      "params": [
+        "source",
+        "target",
+        "amount",
+        "key"
+      ],
+      "steps": [
+        {
+          "op": "request",
+          "service": "transfer",
+          "method": "POST",
+          "path": "/transfer",
+          "save": "response",
+          "role": "owner",
+          "query": {
+            "fromAccount": {
+              "$op": "get",
+              "args": [
+                {
+                  "$ref": "accounts"
+                },
+                {
+                  "$ref": "source"
+                }
+              ]
+            },
+            "toAccount": {
+              "$op": "get",
+              "args": [
+                {
+                  "$ref": "accounts"
+                },
+                {
+                  "$ref": "target"
+                }
+              ]
+            },
+            "amount": {
+              "$ref": "amount"
+            }
+          },
+          "headers": {
+            "Idempotency-Key": {
+              "$op": "message_id",
+              "args": [
+                {
+                  "$ref": "run_id"
+                },
+                {
+                  "$ref": "key"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "return": {
+        "$ref": "response"
+      },
+      "defaults": {}
+    },
+    "assert_transfer": {
+      "params": [
+        "before",
+        "after",
+        "source",
+        "target",
+        "amount"
+      ],
+      "steps": [
+        {
+          "op": "assert",
+          "test": {
+            "$op": "eq",
+            "args": [
+              {
+                "$ref": "after.balances"
+              },
+              {
+                "$op": "replace_at",
+                "args": [
+                  {
+                    "$op": "replace_at",
+                    "args": [
+                      {
+                        "$ref": "before.balances"
+                      },
+                      {
+                        "$ref": "source"
+                      },
+                      {
+                        "$op": "sub",
+                        "args": [
+                          {
+                            "$op": "get",
+                            "args": [
+                              {
+                                "$ref": "before.balances"
+                              },
+                              {
+                                "$ref": "source"
+                              }
+                            ]
+                          },
+                          {
+                            "$ref": "amount"
+                          }
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "$ref": "target"
+                  },
+                  {
+                    "$op": "add",
+                    "args": [
+                      {
+                        "$op": "get",
+                        "args": [
+                          {
+                            "$ref": "before.balances"
+                          },
+                          {
+                            "$ref": "target"
+                          }
+                        ]
+                      },
+                      {
+                        "$ref": "amount"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "code": "transfer-balance-delta-invalid"
+        },
+        {
+          "op": "set",
+          "name": "prior",
+          "value": {
+            "$map": {
+              "over": {
+                "$ref": "before.journals"
+              },
+              "as": "old",
+              "value": {
+                "$ref": "old.id"
+              }
+            }
+          }
+        },
+        {
+          "op": "set",
+          "name": "additions",
+          "value": {
+            "$filter": {
+              "over": {
+                "$ref": "after.journals"
+              },
+              "as": "row",
+              "value": {
+                "$op": "not",
+                "args": [
+                  {
+                    "$op": "in",
+                    "args": [
+                      {
+                        "$ref": "row.id"
+                      },
+                      {
+                        "$ref": "prior"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "op": "assert",
+          "test": {
+            "$op": "eq",
+            "args": [
+              {
+                "$filter": {
+                  "over": {
+                    "$ref": "after.journals"
+                  },
+                  "as": "row",
+                  "value": {
+                    "$op": "in",
+                    "args": [
+                      {
+                        "$ref": "row.id"
+                      },
+                      {
+                        "$ref": "prior"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "$ref": "before.journals"
+              }
+            ]
+          },
+          "code": "transfer-mutated-prior-journal"
+        },
+        {
+          "op": "assert",
+          "test": {
+            "$op": "eq",
+            "args": [
+              {
+                "$op": "sort",
+                "args": [
+                  {
+                    "$map": {
+                      "over": {
+                        "$ref": "additions"
+                      },
+                      "as": "row",
+                      "value": [
+                        {
+                          "$ref": "row.account"
+                        },
+                        {
+                          "$ref": "row.type"
+                        },
+                        {
+                          "$ref": "row.amount"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              {
+                "$op": "sort",
+                "args": [
+                  [
+                    [
+                      {
+                        "$ref": "source"
+                      },
+                      "WITHDRAW",
+                      {
+                        "$ref": "amount"
+                      }
+                    ],
+                    [
+                      {
+                        "$ref": "target"
+                      },
+                      "DEPOSIT",
+                      {
+                        "$ref": "amount"
+                      }
+                    ]
+                  ]
+                ]
+              }
+            ]
+          },
+          "code": "transfer-journal-delta-invalid"
+        }
+      ],
+      "return": null
+    },
+    "success": {
+      "params": [
+        "key",
+        "amount"
+      ],
+      "steps": [
+        {
+          "op": "call",
+          "macro": "state",
+          "args": {},
+          "save": "before"
+        },
+        {
+          "op": "call",
+          "macro": "transfer",
+          "args": {
+            "source": 0,
+            "target": 1,
+            "amount": {
+              "$ref": "amount"
+            },
+            "key": {
+              "$ref": "key"
+            }
+          },
+          "save": "response"
+        },
+        {
+          "op": "assert",
+          "test": {
+            "$op": "eq",
+            "args": [
+              {
+                "$ref": "response.status"
+              },
+              200
+            ]
+          },
+          "code": "transfer-http-failed"
+        },
+        {
+          "op": "set",
+          "name": "expected",
+          "value": {
+            "$op": "replace_at",
+            "args": [
+              {
+                "$op": "replace_at",
+                "args": [
+                  {
+                    "$ref": "before.balances"
+                  },
+                  0,
+                  {
+                    "$op": "sub",
+                    "args": [
+                      {
+                        "$ref": "before.balances.0"
+                      },
+                      {
+                        "$ref": "amount"
+                      }
+                    ]
+                  }
+                ]
+              },
+              1,
+              {
+                "$op": "add",
+                "args": [
+                  {
+                    "$ref": "before.balances.1"
+                  },
+                  {
+                    "$ref": "amount"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "op": "poll",
+          "steps": [
+            {
+              "op": "call",
+              "macro": "state",
+              "args": {},
+              "save": "after"
+            }
+          ],
+          "until": {
+            "$op": "eq",
+            "args": [
+              {
+                "$ref": "after.balances"
+              },
+              {
+                "$ref": "expected"
+              }
+            ]
+          },
+          "code": "transfer-balance-delta-invalid",
+          "attempts": 181
+        },
+        {
+          "op": "call",
+          "macro": "assert_transfer",
+          "args": {
+            "before": {
+              "$ref": "before"
+            },
+            "after": {
+              "$ref": "after"
+            },
+            "source": 0,
+            "target": 1,
+            "amount": {
+              "$ref": "amount"
+            }
+          }
+        }
+      ],
+      "return": {
+        "http_status": {
+          "$ref": "response.status"
+        },
+        "before_sha256": {
+          "$op": "hash",
+          "args": [
+            {
+              "$ref": "before"
+            }
+          ]
+        },
+        "after_sha256": {
+          "$op": "hash",
+          "args": [
+            {
+              "$ref": "after"
+            }
+          ]
+        }
+      },
+      "defaults": {
+        "key": "transfer-success",
+        "amount": 25
+      }
+    },
+    "invalid": {
+      "params": [],
+      "steps": [
+        {
+          "op": "call",
+          "macro": "state",
+          "args": {},
+          "save": "before"
+        },
+        {
+          "op": "call",
+          "macro": "transfer",
+          "args": {
+            "source": 0,
+            "target": 1,
+            "amount": 0,
+            "key": "invalid"
+          },
+          "save": "response"
+        },
+        {
+          "op": "call",
+          "macro": "state",
+          "args": {},
+          "save": "after"
+        },
+        {
+          "op": "assert",
+          "test": {
+            "$op": "and",
+            "args": [
+              {
+                "$op": "eq",
+                "args": [
+                  {
+                    "$ref": "response.status"
+                  },
+                  400
+                ]
+              },
+              {
+                "$op": "eq",
+                "args": [
+                  {
+                    "$ref": "after"
+                  },
+                  {
+                    "$ref": "before"
+                  }
+                ]
+              }
+            ]
+          },
+          "code": "invalid-transfer-mutated-or-not-rejected"
+        }
+      ],
+      "return": {
+        "http_status": 400,
+        "unchanged_state_sha256": {
+          "$op": "hash",
+          "args": [
+            {
+              "$ref": "before"
+            }
+          ]
+        }
+      }
+    },
+    "insufficient": {
+      "params": [],
+      "steps": [
+        {
+          "op": "call",
+          "macro": "state",
+          "args": {},
+          "save": "before"
+        },
+        {
+          "op": "call",
+          "macro": "transfer",
+          "args": {
+            "source": 2,
+            "target": 0,
+            "amount": {
+              "$op": "add",
+              "args": [
+                {
+                  "$ref": "before.balances.2"
+                },
+                1
+              ]
+            },
+            "key": "insufficient"
+          },
+          "save": "response"
+        },
+        {
+          "op": "assert",
+          "test": {
+            "$op": "in",
+            "args": [
+              {
+                "$ref": "response.status"
+              },
+              [
+                400,
+                409,
+                422
+              ]
+            ]
+          },
+          "code": "insufficient-funds-not-business-rejection"
+        },
+        {
+          "op": "call",
+          "macro": "state",
+          "args": {},
+          "save": "after"
+        },
+        {
+          "op": "assert",
+          "test": {
+            "$op": "eq",
+            "args": [
+              {
+                "$ref": "after"
+              },
+              {
+                "$ref": "before"
+              }
+            ]
+          },
+          "code": "insufficient-funds-mutated-state"
+        }
+      ],
+      "return": {
+        "http_status": {
+          "$ref": "response.status"
+        },
+        "unchanged_state_sha256": {
+          "$op": "hash",
+          "args": [
+            {
+              "$ref": "before"
+            }
+          ]
+        }
+      }
+    },
+    "enqueue": {
+      "params": [
+        "message",
+        "journal",
+        "amount"
+      ],
+      "steps": [
+        {
+          "op": "if",
+          "test": {
+            "$op": "eq",
+            "args": [
+              {
+                "$ref": "journal"
+              },
+              null
+            ]
+          },
+          "then": [
+            {
+              "op": "request",
+              "service": "testrunner",
+              "method": "POST",
+              "path": "/api/v1/testrunner/deposit",
+              "save": "response",
+              "role": "test",
+              "body": {
+                "accountId": {
+                  "$ref": "accounts.0"
+                },
+                "amount": {
+                  "$ref": "amount"
+                }
+              },
+              "headers": {
+                "Idempotency-Key": {
+                  "$ref": "message"
+                }
+              }
+            }
+          ],
+          "else": [
+            {
+              "op": "request",
+              "service": "testrunner",
+              "method": "POST",
+              "path": "/api/v1/testrunner/clear",
+              "save": "response",
+              "role": "test",
+              "body": {
+                "journalId": {
+                  "$ref": "journal"
+                }
+              },
+              "headers": {
+                "Idempotency-Key": {
+                  "$ref": "message"
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "return": {
+        "$ref": "response"
+      },
+      "defaults": {
+        "journal": null,
+        "amount": 30
+      }
+    },
+    "delivered": {
+      "params": [
+        "message",
+        "phase"
+      ],
+      "steps": [
+        {
+          "op": "poll",
+          "steps": [
+            {
+              "op": "control",
+              "action": "queue",
+              "save": "row",
+              "service": "checks",
+              "message": {
+                "$ref": "message"
+              }
+            }
+          ],
+          "until": {
+            "$op": "in",
+            "args": [
+              {
+                "$op": "lookup",
+                "args": [
+                  {
+                    "$ref": "row"
+                  },
+                  "state",
+                  null
+                ]
+              },
+              [
+                "PROCESSED",
+                "DEAD"
+              ]
+            ]
+          },
+          "code": "queue-delivery-timeout",
+          "attempts": 181
+        },
+        {
+          "op": "set",
+          "name": "last_queue_observation",
+          "value": {
+            "phase": {
+              "$ref": "phase"
+            },
+            "message_id_sha256": {
+              "$op": "hash",
+              "args": [
+                {
+                  "$ref": "message"
+                }
+              ]
+            },
+            "state": {
+              "$op": "lookup",
+              "args": [
+                {
+                  "$ref": "row"
+                },
+                "state",
+                null
+              ]
+            },
+            "attempts": {
+              "$op": "lookup",
+              "args": [
+                {
+                  "$ref": "row"
+                },
+                "attempts",
+                null
+              ]
+            },
+            "error_code": {
+              "$op": "lookup",
+              "args": [
+                {
+                  "$ref": "row"
+                },
+                "error_code",
+                null
+              ]
+            }
+          },
+          "state": true
+        },
+        {
+          "op": "assert",
+          "test": {
+            "$op": "eq",
+            "args": [
+              {
+                "$op": "lookup",
+                "args": [
+                  {
+                    "$ref": "row"
+                  },
+                  "state",
+                  null
+                ]
+              },
+              "PROCESSED"
+            ]
+          },
+          "code": "queue-message-dead-lettered"
+        }
+      ],
+      "return": {
+        "$ref": "row"
+      }
+    },
+    "assert_deposit": {
+      "params": [
+        "before",
+        "after",
+        "amount"
+      ],
+      "steps": [
+        {
+          "op": "assert",
+          "test": {
+            "$op": "eq",
+            "args": [
+              {
+                "$ref": "after.balances"
+              },
+              {
+                "$ref": "before.balances"
+              }
+            ]
+          },
+          "code": "pending-check-mutated-balance"
+        },
+        {
+          "op": "set",
+          "name": "prior",
+          "value": {
+            "$map": {
+              "over": {
+                "$ref": "before.journals"
+              },
+              "as": "old",
+              "value": {
+                "$ref": "old.id"
+              }
+            }
+          }
+        },
+        {
+          "op": "set",
+          "name": "additions",
+          "value": {
+            "$filter": {
+              "over": {
+                "$ref": "after.journals"
+              },
+              "as": "row",
+              "value": {
+                "$op": "not",
+                "args": [
+                  {
+                    "$op": "in",
+                    "args": [
+                      {
+                        "$ref": "row.id"
+                      },
+                      {
+                        "$ref": "prior"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "op": "assert",
+          "test": {
+            "$op": "eq",
+            "args": [
+              {
+                "$filter": {
+                  "over": {
+                    "$ref": "after.journals"
+                  },
+                  "as": "row",
+                  "value": {
+                    "$op": "in",
+                    "args": [
+                      {
+                        "$ref": "row.id"
+                      },
+                      {
+                        "$ref": "prior"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "$ref": "before.journals"
+              }
+            ]
+          },
+          "code": "check-mutated-prior-journal"
+        },
+        {
+          "op": "assert",
+          "test": {
+            "$op": "and",
+            "args": [
+              {
+                "$op": "eq",
+                "args": [
+                  {
+                    "$op": "len",
+                    "args": [
+                      {
+                        "$ref": "additions"
+                      }
+                    ]
+                  },
+                  1
+                ]
+              },
+              {
+                "$op": "eq",
+                "args": [
+                  {
+                    "$ref": "additions.0.account"
+                  },
+                  0
+                ]
+              },
+              {
+                "$op": "eq",
+                "args": [
+                  {
+                    "$ref": "additions.0.type"
+                  },
+                  "PENDING"
+                ]
+              },
+              {
+                "$op": "eq",
+                "args": [
+                  {
+                    "$ref": "additions.0.amount"
+                  },
+                  {
+                    "$ref": "amount"
+                  }
+                ]
+              }
+            ]
+          },
+          "code": "check-deposit-not-applied-once"
+        }
+      ],
+      "return": {
+        "$ref": "additions.0.id"
+      }
+    },
+    "deposit": {
+      "params": [],
+      "steps": [
+        {
+          "op": "call",
+          "macro": "state",
+          "args": {},
+          "save": "before"
+        },
+        {
+          "op": "call",
+          "macro": "enqueue",
+          "args": {
+            "message": {
+              "$ref": "deposit_id"
+            },
+            "journal": null,
+            "amount": 30
+          },
+          "save": "response"
+        },
+        {
+          "op": "assert",
+          "test": {
+            "$op": "eq",
+            "args": [
+              {
+                "$ref": "response.status"
+              },
+              201
+            ]
+          },
+          "code": "check-deposit-enqueue-failed"
+        },
+        {
+          "op": "call",
+          "macro": "delivered",
+          "args": {
+            "message": {
+              "$ref": "deposit_id"
+            },
+            "phase": "deposit"
+          },
+          "save": "queue"
+        },
+        {
+          "op": "call",
+          "macro": "state",
+          "args": {},
+          "save": "after"
+        },
+        {
+          "op": "call",
+          "macro": "assert_deposit",
+          "args": {
+            "before": {
+              "$ref": "before"
+            },
+            "after": {
+              "$ref": "after"
+            },
+            "amount": 30
+          },
+          "save": "journal"
+        },
+        {
+          "op": "set",
+          "name": "deposit_journal",
+          "value": {
+            "$ref": "journal"
+          },
+          "state": true
+        }
+      ],
+      "return": {
+        "queue": {
+          "$ref": "queue"
+        },
+        "before_sha256": {
+          "$op": "hash",
+          "args": [
+            {
+              "$ref": "before"
+            }
+          ]
+        },
+        "after_sha256": {
+          "$op": "hash",
+          "args": [
+            {
+              "$ref": "after"
+            }
+          ]
+        }
+      }
+    },
+    "clearance": {
+      "params": [],
+      "steps": [
+        {
+          "op": "assert",
+          "test": {
+            "$op": "ne",
+            "args": [
+              {
+                "$ref": "deposit_journal"
+              },
+              null
+            ]
+          },
+          "code": "check-deposit-journal-missing"
+        },
+        {
+          "op": "call",
+          "macro": "state",
+          "args": {},
+          "save": "before"
+        },
+        {
+          "op": "call",
+          "macro": "enqueue",
+          "args": {
+            "message": {
+              "$ref": "clear_id"
+            },
+            "journal": {
+              "$ref": "deposit_journal"
+            },
+            "amount": 30
+          },
+          "save": "response"
+        },
+        {
+          "op": "assert",
+          "test": {
+            "$op": "eq",
+            "args": [
+              {
+                "$ref": "response.status"
+              },
+              201
+            ]
+          },
+          "code": "check-clearance-enqueue-failed"
+        },
+        {
+          "op": "call",
+          "macro": "delivered",
+          "args": {
+            "message": {
+              "$ref": "clear_id"
+            },
+            "phase": "clearance"
+          },
+          "save": "queue"
+        },
+        {
+          "op": "set",
+          "name": "expected_journals",
+          "value": []
+        },
+        {
+          "op": "each",
+          "over": {
+            "$ref": "before.journals"
+          },
+          "as": "item",
+          "steps": [
+            {
+              "op": "if",
+              "test": {
+                "$op": "eq",
+                "args": [
+                  {
+                    "$ref": "item.id"
+                  },
+                  {
+                    "$ref": "deposit_journal"
+                  }
+                ]
+              },
+              "then": [
+                {
+                  "op": "set",
+                  "name": "expected_journals",
+                  "value": {
+                    "$op": "append",
+                    "args": [
+                      {
+                        "$ref": "expected_journals"
+                      },
+                      {
+                        "$op": "merge",
+                        "args": [
+                          {
+                            "$ref": "item"
+                          },
+                          {
+                            "type": "DEPOSIT"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              ],
+              "else": [
+                {
+                  "op": "set",
+                  "name": "expected_journals",
+                  "value": {
+                    "$op": "append",
+                    "args": [
+                      {
+                        "$ref": "expected_journals"
+                      },
+                      {
+                        "$ref": "item"
+                      }
+                    ]
+                  }
+                }
+              ]
+            }
+          ],
+          "max_items": 200
+        },
+        {
+          "op": "call",
+          "macro": "state",
+          "args": {},
+          "save": "after"
+        },
+        {
+          "op": "assert",
+          "test": {
+            "$op": "eq",
+            "args": [
+              {
+                "$ref": "after"
+              },
+              {
+                "balances": {
+                  "$ref": "before.balances"
+                },
+                "journals": {
+                  "$ref": "expected_journals"
+                }
+              }
+            ]
+          },
+          "code": "check-clearance-state-invalid"
+        },
+        {
+          "op": "call",
+          "macro": "enqueue",
+          "args": {
+            "message": {
+              "$ref": "clear_id"
+            },
+            "journal": {
+              "$ref": "deposit_journal"
+            },
+            "amount": 30
+          },
+          "save": "replay"
+        },
+        {
+          "op": "assert",
+          "test": {
+            "$op": "eq",
+            "args": [
+              {
+                "$ref": "replay.status"
+              },
+              200
+            ]
+          },
+          "code": "check-clearance-replay-not-suppressed"
+        },
+        {
+          "op": "call",
+          "macro": "delivered",
+          "args": {
+            "message": {
+              "$ref": "clear_id"
+            },
+            "phase": "clearance-replay"
+          },
+          "save": "redelivery"
+        },
+        {
+          "op": "call",
+          "macro": "state",
+          "args": {},
+          "save": "replayed"
+        },
+        {
+          "op": "assert",
+          "test": {
+            "$op": "eq",
+            "args": [
+              {
+                "$ref": "replayed"
+              },
+              {
+                "$ref": "after"
+              }
+            ]
+          },
+          "code": "check-clearance-replay-mutated-state"
+        }
+      ],
+      "return": {
+        "queue": {
+          "$ref": "queue"
+        },
+        "after_sha256": {
+          "$op": "hash",
+          "args": [
+            {
+              "$ref": "after"
+            }
+          ]
+        },
+        "replay_unchanged": true
+      }
+    },
+    "duplicate": {
+      "params": [],
+      "steps": [
+        {
+          "op": "call",
+          "macro": "state",
+          "args": {},
+          "save": "before"
+        },
+        {
+          "op": "call",
+          "macro": "enqueue",
+          "args": {
+            "message": {
+              "$ref": "deposit_id"
+            },
+            "journal": null,
+            "amount": 30
+          },
+          "save": "response"
+        },
+        {
+          "op": "assert",
+          "test": {
+            "$op": "eq",
+            "args": [
+              {
+                "$ref": "response.status"
+              },
+              200
+            ]
+          },
+          "code": "duplicate-message-not-suppressed"
+        },
+        {
+          "op": "call",
+          "macro": "delivered",
+          "args": {
+            "message": {
+              "$ref": "deposit_id"
+            },
+            "phase": "deposit-replay"
+          },
+          "save": "queue"
+        },
+        {
+          "op": "call",
+          "macro": "state",
+          "args": {},
+          "save": "after"
+        },
+        {
+          "op": "assert",
+          "test": {
+            "$op": "eq",
+            "args": [
+              {
+                "$ref": "after"
+              },
+              {
+                "$ref": "before"
+              }
+            ]
+          },
+          "code": "duplicate-message-mutated-state"
+        }
+      ],
+      "return": {
+        "queue": {
+          "$ref": "queue"
+        },
+        "unchanged_state_sha256": {
+          "$op": "hash",
+          "args": [
+            {
+              "$ref": "before"
+            }
+          ]
+        }
+      }
+    },
+    "credit": {
+      "params": [],
+      "steps": [
+        {
+          "op": "request",
+          "service": "creditscore",
+          "method": "GET",
+          "path": "/api/v1/creditscore",
+          "save": "response",
+          "role": "credit"
+        },
+        {
+          "op": "assert",
+          "test": {
+            "$op": "eq",
+            "args": [
+              {
+                "$ref": "response.status"
+              },
+              200
+            ]
+          },
+          "code": "credit-score-request-failed"
+        },
+        {
+          "op": "set",
+          "name": "payload",
+          "value": {
+            "$op": "json",
+            "args": [
+              {
+                "$ref": "response"
+              }
+            ]
+          }
+        },
+        {
+          "op": "assert",
+          "test": {
+            "$op": "and",
+            "args": [
+              {
+                "$op": "is_object",
+                "args": [
+                  {
+                    "$ref": "payload"
+                  }
+                ]
+              },
+              {
+                "$op": "digits",
+                "args": [
+                  {
+                    "$op": "str",
+                    "args": [
+                      {
+                        "$op": "lookup",
+                        "args": [
+                          {
+                            "$ref": "payload"
+                          },
+                          "Credit Score",
+                          ""
+                        ]
+                      }
+                    ]
+                  },
+                  3
+                ]
+              }
+            ]
+          },
+          "code": "credit-score-contract-invalid"
+        },
+        {
+          "op": "set",
+          "name": "score",
+          "value": {
+            "$op": "int",
+            "args": [
+              {
+                "$op": "get",
+                "args": [
+                  {
+                    "$ref": "payload"
+                  },
+                  "Credit Score"
+                ]
+              }
+            ]
+          }
+        },
+        {
+          "op": "assert",
+          "test": {
+            "$op": "and",
+            "args": [
+              {
+                "$op": "le",
+                "args": [
+                  500,
+                  {
+                    "$ref": "score"
+                  }
+                ]
+              },
+              {
+                "$op": "le",
+                "args": [
+                  {
+                    "$ref": "score"
+                  },
+                  899
+                ]
+              }
+            ]
+          },
+          "code": "credit-score-outside-declared-range"
+        }
+      ],
+      "return": {
+        "http_status": 200,
+        "score_in_declared_range": true
+      }
+    },
+    "chat": {
+      "params": [],
+      "steps": [
+        {
+          "op": "request",
+          "service": "chatbot",
+          "method": "POST",
+          "path": "/chat",
+          "save": "response",
+          "role": "chat",
+          "body": "What is a checking account?"
+        },
+        {
+          "op": "assert",
+          "test": {
+            "$op": "eq",
+            "args": [
+              {
+                "$ref": "response.status"
+              },
+              200
+            ]
+          },
+          "code": "chatbot-request-failed"
+        },
+        {
+          "op": "set",
+          "name": "text",
+          "value": {
+            "$op": "text",
+            "args": [
+              {
+                "$ref": "response"
+              }
+            ]
+          }
+        },
+        {
+          "op": "assert",
+          "test": {
+            "$op": "safe_text",
+            "args": [
+              {
+                "$ref": "text"
+              }
+            ]
+          },
+          "code": "chatbot-response-policy-failed"
+        }
+      ],
+      "return": {
+        "http_status": 200,
+        "bounded_response": true,
+        "response_characters": {
+          "$op": "len",
+          "args": [
+            {
+              "$ref": "text"
+            }
+          ]
+        }
+      }
+    },
+    "account_restart": {
+      "params": [],
+      "steps": [
+        {
+          "op": "call",
+          "macro": "state",
+          "args": {},
+          "save": "before"
+        },
+        {
+          "op": "control",
+          "action": "restart",
+          "service": "account"
+        },
+        {
+          "op": "call",
+          "macro": "state",
+          "args": {},
+          "save": "after"
+        },
+        {
+          "op": "assert",
+          "test": {
+            "$op": "eq",
+            "args": [
+              {
+                "$ref": "after"
+              },
+              {
+                "$ref": "before"
+              }
+            ]
+          },
+          "code": "account-restart-lost-state"
+        }
+      ],
+      "return": {
+        "unchanged_state_sha256": {
+          "$op": "hash",
+          "args": [
+            {
+              "$ref": "before"
+            }
+          ]
+        }
+      }
+    },
+    "checks_restart": {
+      "params": [],
+      "steps": [
+        {
+          "op": "set",
+          "name": "message",
+          "value": {
+            "$op": "message_id",
+            "args": [
+              {
+                "$ref": "run_id"
+              },
+              "inflight"
+            ]
+          }
+        },
+        {
+          "op": "call",
+          "macro": "state",
+          "args": {},
+          "save": "before"
+        },
+        {
+          "op": "set",
+          "name": "checks_stopped",
+          "value": false,
+          "state": true
+        },
+        {
+          "op": "ensure",
+          "steps": [
+            {
+              "op": "control",
+              "action": "block_delivery"
+            },
+            {
+              "op": "call",
+              "macro": "enqueue",
+              "args": {
+                "message": {
+                  "$ref": "message"
+                },
+                "journal": null,
+                "amount": 7
+              },
+              "save": "response"
+            },
+            {
+              "op": "assert",
+              "test": {
+                "$op": "eq",
+                "args": [
+                  {
+                    "$ref": "response.status"
+                  },
+                  201
+                ]
+              },
+              "code": "inflight-enqueue-failed"
+            },
+            {
+              "op": "poll",
+              "steps": [
+                {
+                  "op": "control",
+                  "action": "queue",
+                  "save": "processing",
+                  "service": "checks",
+                  "message": {
+                    "$ref": "message"
+                  }
+                }
+              ],
+              "until": {
+                "$op": "eq",
+                "args": [
+                  {
+                    "$op": "lookup",
+                    "args": [
+                      {
+                        "$ref": "processing"
+                      },
+                      "state",
+                      null
+                    ]
+                  },
+                  "PROCESSING"
+                ]
+              },
+              "code": "inflight-claim-not-observed",
+              "attempts": 181
+            },
+            {
+              "op": "assert",
+              "test": {
+                "$op": "and",
+                "args": [
+                  {
+                    "$op": "is_int",
+                    "args": [
+                      {
+                        "$op": "lookup",
+                        "args": [
+                          {
+                            "$ref": "processing"
+                          },
+                          "attempts",
+                          null
+                        ]
+                      }
+                    ]
+                  },
+                  {
+                    "$op": "ge",
+                    "args": [
+                      {
+                        "$ref": "processing.attempts"
+                      },
+                      1
+                    ]
+                  }
+                ]
+              },
+              "code": "inflight-claim-not-observed"
+            },
+            {
+              "op": "control",
+              "action": "crash_stop",
+              "save": "crash",
+              "service": "checks"
+            },
+            {
+              "op": "set",
+              "name": "checks_stopped",
+              "value": true,
+              "state": true
+            },
+            {
+              "op": "control",
+              "action": "restore_delivery"
+            },
+            {
+              "op": "control",
+              "action": "start",
+              "save": "replacement",
+              "service": "checks"
+            },
+            {
+              "op": "set",
+              "name": "checks_stopped",
+              "value": false,
+              "state": true
+            },
+            {
+              "op": "assert",
+              "test": {
+                "$op": "and",
+                "args": [
+                  {
+                    "$op": "is_object",
+                    "args": [
+                      {
+                        "$ref": "crash"
+                      }
+                    ]
+                  },
+                  {
+                    "$op": "eq",
+                    "args": [
+                      {
+                        "$op": "lookup",
+                        "args": [
+                          {
+                            "$ref": "crash"
+                          },
+                          "terminated_pod_count",
+                          null
+                        ]
+                      },
+                      2
+                    ]
+                  },
+                  {
+                    "$op": "is_sha256",
+                    "args": [
+                      {
+                        "$op": "lookup",
+                        "args": [
+                          {
+                            "$ref": "crash"
+                          },
+                          "terminated_pod_identity_sha256",
+                          null
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "code": "checks-crash-evidence-invalid"
+            },
+            {
+              "op": "assert",
+              "test": {
+                "$op": "and",
+                "args": [
+                  {
+                    "$op": "is_object",
+                    "args": [
+                      {
+                        "$ref": "replacement"
+                      }
+                    ]
+                  },
+                  {
+                    "$op": "eq",
+                    "args": [
+                      {
+                        "$op": "lookup",
+                        "args": [
+                          {
+                            "$ref": "replacement"
+                          },
+                          "ready_replicas",
+                          null
+                        ]
+                      },
+                      2
+                    ]
+                  },
+                  {
+                    "$op": "is_sha256",
+                    "args": [
+                      {
+                        "$op": "lookup",
+                        "args": [
+                          {
+                            "$ref": "replacement"
+                          },
+                          "pod_identity_sha256",
+                          null
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "code": "checks-replacement-evidence-invalid"
+            },
+            {
+              "op": "call",
+              "macro": "delivered",
+              "args": {
+                "message": {
+                  "$ref": "message"
+                },
+                "phase": "inflight-redelivery"
+              },
+              "save": "completed"
+            },
+            {
+              "op": "assert",
+              "test": {
+                "$op": "gt",
+                "args": [
+                  {
+                    "$op": "lookup",
+                    "args": [
+                      {
+                        "$ref": "completed"
+                      },
+                      "attempts",
+                      0
+                    ]
+                  },
+                  {
+                    "$ref": "processing.attempts"
+                  }
+                ]
+              },
+              "code": "inflight-redelivery-not-observed"
+            },
+            {
+              "op": "call",
+              "macro": "state",
+              "args": {},
+              "save": "after"
+            },
+            {
+              "op": "call",
+              "macro": "assert_deposit",
+              "args": {
+                "before": {
+                  "$ref": "before"
+                },
+                "after": {
+                  "$ref": "after"
+                },
+                "amount": 7
+              },
+              "save": "journal"
+            }
+          ],
+          "finally": [
+            {
+              "op": "control",
+              "action": "restore_delivery"
+            },
+            {
+              "op": "if",
+              "test": {
+                "$ref": "checks_stopped"
+              },
+              "then": [
+                {
+                  "op": "control",
+                  "action": "start",
+                  "save": "restored",
+                  "service": "checks"
+                }
+              ],
+              "else": []
+            }
+          ]
+        }
+      ],
+      "return": {
+        "claimed": {
+          "$ref": "processing"
+        },
+        "redelivered": {
+          "$ref": "completed"
+        },
+        "crash": {
+          "$ref": "crash"
+        },
+        "replacement_pod_identity_sha256": {
+          "$ref": "replacement.pod_identity_sha256"
+        },
+        "before_sha256": {
+          "$op": "hash",
+          "args": [
+            {
+              "$ref": "before"
+            }
+          ]
+        },
+        "after_sha256": {
+          "$op": "hash",
+          "args": [
+            {
+              "$ref": "after"
+            }
+          ]
+        }
+      }
+    },
+    "dependency": {
+      "params": [],
+      "steps": [
+        {
+          "op": "call",
+          "macro": "state",
+          "args": {},
+          "save": "before"
+        },
+        {
+          "op": "control",
+          "action": "stop",
+          "service": "account"
+        },
+        {
+          "op": "ensure",
+          "steps": [
+            {
+              "op": "request",
+              "service": "transfer",
+              "method": "POST",
+              "path": "/transfer",
+              "save": "response",
+              "role": "owner",
+              "query": {
+                "fromAccount": {
+                  "$ref": "accounts.0"
+                },
+                "toAccount": {
+                  "$ref": "accounts.1"
+                },
+                "amount": 3
+              },
+              "headers": {
+                "Idempotency-Key": {
+                  "$op": "message_id",
+                  "args": [
+                    {
+                      "$ref": "run_id"
+                    },
+                    "dependency-failure"
+                  ]
+                }
+              },
+              "allow_error": "http-transport-failed"
+            },
+            {
+              "op": "assert",
+              "test": {
+                "$op": "or",
+                "args": [
+                  {
+                    "$op": "eq",
+                    "args": [
+                      {
+                        "$op": "lookup",
+                        "args": [
+                          {
+                            "$ref": "response"
+                          },
+                          "error",
+                          null
+                        ]
+                      },
+                      "http-transport-failed"
+                    ]
+                  },
+                  {
+                    "$op": "and",
+                    "args": [
+                      {
+                        "$op": "ge",
+                        "args": [
+                          {
+                            "$ref": "response.status"
+                          },
+                          500
+                        ]
+                      },
+                      {
+                        "$op": "le",
+                        "args": [
+                          {
+                            "$ref": "response.status"
+                          },
+                          599
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
+              "code": "dependency-failure-not-observed"
+            }
+          ],
+          "finally": [
+            {
+              "op": "control",
+              "action": "start",
+              "save": "restored",
+              "service": "account"
+            }
+          ]
+        },
+        {
+          "op": "call",
+          "macro": "state",
+          "args": {},
+          "save": "after"
+        },
+        {
+          "op": "assert",
+          "test": {
+            "$op": "eq",
+            "args": [
+              {
+                "$ref": "after"
+              },
+              {
+                "$ref": "before"
+              }
+            ]
+          },
+          "code": "dependency-failure-mutated-state"
+        },
+        {
+          "op": "control",
+          "action": "restart",
+          "service": "transfer"
+        },
+        {
+          "op": "call",
+          "macro": "success",
+          "args": {
+            "key": "dependency-recovered",
+            "amount": 3
+          },
+          "save": "recovered"
+        }
+      ],
+      "return": {
+        "$ref": "recovered"
+      }
+    },
+    "concurrent": {
+      "params": [],
+      "steps": [
+        {
+          "op": "call",
+          "macro": "state",
+          "args": {},
+          "save": "before"
+        },
+        {
+          "op": "parallel",
+          "calls": [
+            {
+              "op": "call",
+              "macro": "transfer",
+              "args": {
+                "source": 0,
+                "target": 1,
+                "amount": 5,
+                "key": "concurrent-forward"
+              }
+            },
+            {
+              "op": "call",
+              "macro": "transfer",
+              "args": {
+                "source": 1,
+                "target": 0,
+                "amount": 5,
+                "key": "concurrent-reverse"
+              }
+            }
+          ],
+          "save": "responses"
+        },
+        {
+          "op": "assert",
+          "test": {
+            "$op": "eq",
+            "args": [
+              {
+                "$map": {
+                  "over": {
+                    "$ref": "responses"
+                  },
+                  "as": "response",
+                  "value": {
+                    "$ref": "response.status"
+                  }
+                }
+              },
+              [
+                200,
+                200
+              ]
+            ]
+          },
+          "code": "concurrent-transfer-request-failed"
+        },
+        {
+          "op": "poll",
+          "steps": [
+            {
+              "op": "call",
+              "macro": "state",
+              "args": {},
+              "save": "after"
+            }
+          ],
+          "until": {
+            "$op": "and",
+            "args": [
+              {
+                "$op": "eq",
+                "args": [
+                  {
+                    "$ref": "after.balances"
+                  },
+                  {
+                    "$ref": "before.balances"
+                  }
+                ]
+              },
+              {
+                "$op": "eq",
+                "args": [
+                  {
+                    "$op": "len",
+                    "args": [
+                      {
+                        "$ref": "after.journals"
+                      }
+                    ]
+                  },
+                  {
+                    "$op": "add",
+                    "args": [
+                      {
+                        "$op": "len",
+                        "args": [
+                          {
+                            "$ref": "before.journals"
+                          }
+                        ]
+                      },
+                      4
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "code": "concurrent-transfer-settlement-timeout",
+          "attempts": 181
+        },
+        {
+          "op": "assert",
+          "test": {
+            "$op": "eq",
+            "args": [
+              {
+                "$ref": "after.balances"
+              },
+              {
+                "$ref": "before.balances"
+              }
+            ]
+          },
+          "code": "concurrent-transfer-conservation-failed"
+        },
+        {
+          "op": "set",
+          "name": "prior",
+          "value": {
+            "$map": {
+              "over": {
+                "$ref": "before.journals"
+              },
+              "as": "old",
+              "value": {
+                "$ref": "old.id"
+              }
+            }
+          }
+        },
+        {
+          "op": "assert",
+          "test": {
+            "$op": "eq",
+            "args": [
+              {
+                "$filter": {
+                  "over": {
+                    "$ref": "after.journals"
+                  },
+                  "as": "row",
+                  "value": {
+                    "$op": "in",
+                    "args": [
+                      {
+                        "$ref": "row.id"
+                      },
+                      {
+                        "$ref": "prior"
+                      }
+                    ]
+                  }
+                }
+              },
+              {
+                "$ref": "before.journals"
+              }
+            ]
+          },
+          "code": "concurrent-transfer-mutated-prior-journal"
+        },
+        {
+          "op": "set",
+          "name": "additions",
+          "value": {
+            "$filter": {
+              "over": {
+                "$ref": "after.journals"
+              },
+              "as": "row",
+              "value": {
+                "$op": "not",
+                "args": [
+                  {
+                    "$op": "in",
+                    "args": [
+                      {
+                        "$ref": "row.id"
+                      },
+                      {
+                        "$ref": "prior"
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "op": "assert",
+          "test": {
+            "$op": "eq",
+            "args": [
+              {
+                "$op": "sort",
+                "args": [
+                  {
+                    "$map": {
+                      "over": {
+                        "$ref": "additions"
+                      },
+                      "as": "row",
+                      "value": [
+                        {
+                          "$ref": "row.account"
+                        },
+                        {
+                          "$ref": "row.type"
+                        },
+                        {
+                          "$ref": "row.amount"
+                        }
+                      ]
+                    }
+                  }
+                ]
+              },
+              [
+                [
+                  0,
+                  "DEPOSIT",
+                  5
+                ],
+                [
+                  0,
+                  "WITHDRAW",
+                  5
+                ],
+                [
+                  1,
+                  "DEPOSIT",
+                  5
+                ],
+                [
+                  1,
+                  "WITHDRAW",
+                  5
+                ]
+              ]
+            ]
+          },
+          "code": "concurrent-transfer-journal-invalid"
+        }
+      ],
+      "return": {
+        "before_sha256": {
+          "$op": "hash",
+          "args": [
+            {
+              "$ref": "before"
+            }
+          ]
+        },
+        "after_sha256": {
+          "$op": "hash",
+          "args": [
+            {
+              "$ref": "after"
+            }
+          ]
+        },
+        "concurrent_requests": 2
+      }
+    },
+    "full_restart": {
+      "params": [],
+      "steps": [
+        {
+          "op": "call",
+          "macro": "state",
+          "args": {},
+          "save": "before"
+        },
+        {
+          "op": "control",
+          "action": "restart_all"
+        },
+        {
+          "op": "control",
+          "action": "authorize",
+          "save": "credentials"
+        },
+        {
+          "op": "call",
+          "macro": "state",
+          "args": {},
+          "save": "after"
+        },
+        {
+          "op": "assert",
+          "test": {
+            "$op": "eq",
+            "args": [
+              {
+                "$ref": "after"
+              },
+              {
+                "$ref": "before"
+              }
+            ]
+          },
+          "code": "full-stack-restart-lost-state"
+        },
+        {
+          "op": "call",
+          "macro": "customer",
+          "args": {},
+          "save": "customer"
+        },
+        {
+          "op": "call",
+          "macro": "success",
+          "args": {
+            "key": "full-stack-recovered",
+            "amount": 2
+          },
+          "save": "result"
+        },
+        {
+          "op": "call",
+          "macro": "credit",
+          "args": {},
+          "save": "credit"
+        },
+        {
+          "op": "call",
+          "macro": "chat",
+          "args": {},
+          "save": "chat"
+        },
+        {
+          "op": "control",
+          "action": "ready",
+          "save": "services"
+        }
+      ],
+      "return": {
+        "$op": "merge",
+        "args": [
+          {
+            "$ref": "result"
+          },
+          {
+            "credit": {
+              "$ref": "credit"
+            },
+            "chat": {
+              "$ref": "chat"
+            },
+            "services": {
+              "$ref": "services"
+            }
+          }
+        ]
+      }
+    }
+  },
+  "journeys": [
+    {
+      "id": "eight-services-ready",
+      "normalized_result": "all-ready",
+      "macro": "ready",
+      "args": {}
+    },
+    {
+      "id": "authorization-token-issued",
+      "normalized_result": "token-issued",
+      "macro": "authorize",
+      "args": {}
+    },
+    {
+      "id": "unauthenticated-request-rejected",
+      "normalized_result": "401",
+      "macro": "unauthenticated",
+      "args": {}
+    },
+    {
+      "id": "customer-owner-read",
+      "normalized_result": "owner-visible",
+      "macro": "customer",
+      "args": {}
+    },
+    {
+      "id": "account-balance-read",
+      "normalized_result": "balance-visible",
+      "macro": "prepare_accounts",
+      "args": {}
+    },
+    {
+      "id": "transfer-success-conserves-value",
+      "normalized_result": "conserved",
+      "macro": "success",
+      "args": {
+        "key": "transfer-success",
+        "amount": 25
+      }
+    },
+    {
+      "id": "transfer-invalid-no-mutation",
+      "normalized_result": "400-no-mutation",
+      "macro": "invalid",
+      "args": {}
+    },
+    {
+      "id": "transfer-insufficient-funds-no-mutation",
+      "normalized_result": "rejected-no-mutation",
+      "macro": "insufficient",
+      "args": {}
+    },
+    {
+      "id": "check-deposit-applied-once",
+      "normalized_result": "deposit-once",
+      "macro": "deposit",
+      "args": {}
+    },
+    {
+      "id": "check-clearance-applied-once",
+      "normalized_result": "clearance-once",
+      "macro": "clearance",
+      "args": {}
+    },
+    {
+      "id": "duplicate-message-suppressed",
+      "normalized_result": "duplicate-suppressed",
+      "macro": "duplicate",
+      "args": {}
+    },
+    {
+      "id": "credit-score-contract-served",
+      "normalized_result": "score-in-declared-range",
+      "macro": "credit",
+      "args": {}
+    },
+    {
+      "id": "chatbot-boundary-served",
+      "normalized_result": "bounded-response",
+      "macro": "chat",
+      "args": {}
+    },
+    {
+      "id": "account-restart-preserves-state",
+      "normalized_result": "state-preserved",
+      "macro": "account_restart",
+      "args": {}
+    },
+    {
+      "id": "checks-restart-redelivers-inflight",
+      "normalized_result": "redelivered-once",
+      "macro": "checks_restart",
+      "args": {}
+    },
+    {
+      "id": "transfer-dependency-failure-recovers",
+      "normalized_result": "restored",
+      "macro": "dependency",
+      "args": {}
+    },
+    {
+      "id": "concurrent-opposite-transfers-conserve-value",
+      "normalized_result": "conserved",
+      "macro": "concurrent",
+      "args": {}
+    },
+    {
+      "id": "full-stack-restart-restores-journey",
+      "normalized_result": "journey-restored",
+      "macro": "full_restart",
+      "args": {}
+    }
+  ]
+}

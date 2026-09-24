@@ -2006,3 +2006,14 @@ Once a candidate can pass the visible cases:
    and mainframe-backed verification policies pass.
 
 The pinned workload specification is in `spec/carddemo-intcalc.json`.
+
+
+### Declarative services and API journeys
+
+Service packs now express invocation and business assertions as validated data.
+The CloudBank reference uses one pack for all 18 journeys; customer packs use the
+same runner without new scenario handlers. Sources retrieve captured evidence
+with no invocation capability, targets receive explicit capabilities, and plans
+compute reachable calls including polling and recovery. See
+[Services and API journey packs](docs/service-journey-packs.md) for the format,
+example, commands and evidence boundaries.

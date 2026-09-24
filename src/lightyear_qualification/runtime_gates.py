@@ -11,7 +11,7 @@ from . import carddemo_gate, cloudbank_gate
 
 def identity():
     import hashlib
-    paths = sorted((ROOT / "src").rglob("*.py")) + [
+    paths = sorted((ROOT / "src").rglob("*.py")) + sorted((ROOT / "src/lightyear_data/packs").glob("*.json")) + [
         ROOT / "spec/comparison-normalizations.json",
         ROOT / "factory/verifier-qualification/contract.json",
         ROOT / "factory/verifier-qualification/runtime-gates.json"]

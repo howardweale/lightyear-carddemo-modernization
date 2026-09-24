@@ -34,3 +34,6 @@ lightyear-mcp = "lightyear_agent.mcp:main"
 
 [tool.setuptools.packages.find]
 where = ["src", "extensions/runtime"]
+
+[tool.setuptools.package-data]
+lightyear_data = ["packs/*.json"]

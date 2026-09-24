@@ -1,0 +1,61 @@
+{
+  "schema_version": "1.0",
+  "records": [
+    {
+      "number": 73,
+      "path": "MS-73/MS-73.md",
+      "title": "Run history and action activity",
+      "customer_value": "Inspect retained run history and recorded operator actions.",
+      "status": "Engine integration delivered by MS74"
+    },
+    {
+      "number": 74,
+      "path": "MS-74/MS-74.md",
+      "title": "Engine-to-history recording",
+      "customer_value": "Find replay-verified terminal engine runs in the durable history.",
+      "status": "Implemented"
+    },
+    {
+      "number": 75,
+      "path": "MS-75/MS-75.md",
+      "title": "Four-panel workspace",
+      "customer_value": "Navigate work queues, individual runs, convergence and estate discovery.",
+      "status": "Implemented"
+    },
+    {
+      "number": 76,
+      "path": "MS-76/MS-76.md",
+      "title": "Existing runtime gate qualification",
+      "customer_value": "Test documented gate paths against witnessed faults and missing evidence.",
+      "status": "Implemented for declared scope"
+    },
+    {
+      "number": 77,
+      "path": "MS-77/MS-77.md",
+      "title": "Declarative batch invocation",
+      "customer_value": "Review batch jobs, datasets and source/target capabilities before access.",
+      "status": "Partial; awaiting an authorised z/OS environment"
+    },
+    {
+      "number": 78,
+      "path": "MS-78/MS-78.md",
+      "title": "Reliable local agent runs and cancellation",
+      "customer_value": "Run, reconnect, recover and cancel project-bound verification through CLI and MCP.",
+      "status": "Implemented for retained CloudBank evidence"
+    },
+    {
+      "number": 79,
+      "path": "MS-79/MS-79.md",
+      "title": "Services and API journey packs",
+      "customer_value": "Declare customer service journeys and compute their invocation footprint before runtime access.",
+      "status": "Implemented and contract-tested; customer execution unproven"
+    },
+    {
+      "number": 80,
+      "path": "MS-80/MS-80.md",
+      "title": "Decidability calibration instrument",
+      "customer_value": "Measure what an unfamiliar corpus lets the gate decide, cluster unknowns and review normalization blast radius.",
+      "status": "Implemented for documented adapters"
+    }
+  ]
+}

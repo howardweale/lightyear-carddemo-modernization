@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build and verify the MS #1-70 customer documentation library."""
+"""Build and verify milestone briefs and searchable implementation records."""
 
 from __future__ import annotations
 
@@ -25,7 +25,7 @@ BRAND_ROOT = ROOT / "brand"
 BRAND_ASSETS = BRAND_ROOT / "assets"
 BRAND_LOGO_SVG = BRAND_ASSETS / "lightyear-primary.svg"
 BRAND_LOGO_PNG = BRAND_ASSETS / "lightyear-primary.png"
-GENERATOR_VERSION = "1.24"
+GENERATOR_VERSION = "1.25"
 REPOSITORY = "howardweale/lightyear-carddemo-modernization"
 DEFAULT_BRANCH = "main"
 GITHUB_BLOB_ROOT = f"https://github.com/{REPOSITORY}/blob/{DEFAULT_BRANCH}"
@@ -34,7 +34,32 @@ PAGES_INDEX = f"https://howardweale.github.io/{REPOSITORY.split('/', 1)[1]}/mile
 FIXED_TIME = datetime(2026, 8, 31, 12, 0, 0, tzinfo=timezone.utc)
 EXPECTED_MILESTONES = tuple(range(1, 71))
 EXPECTED_ARTIFACTS = len(EXPECTED_MILESTONES) * 3
-SUPPLEMENTAL_MARKDOWN = ("MS-73/MS-73.md", "MS-74/MS-74.md", "MS-75/MS-75.md", "MS-76/MS-76.md", "MS-77/MS-77.md")
+SUPPLEMENTAL_CATALOG = DOC_ROOT / "supplemental.json"
+
+
+def load_supplemental() -> list[dict[str, Any]]:
+    payload = json.loads(SUPPLEMENTAL_CATALOG.read_text(encoding="utf-8"))
+    if payload.get("schema_version") != "1.0" or not isinstance(payload.get("records"), list):
+        raise ValueError("invalid supplemental milestone catalog")
+    records = payload["records"]
+    numbers = []
+    for entry in records:
+        number = entry.get("number")
+        if type(number) is not int or number in EXPECTED_MILESTONES or number < 1:
+            raise ValueError("supplemental milestone number overlaps the main catalog or is invalid")
+        if entry.get("path") != f"MS-{number:02d}/MS-{number:02d}.md":
+            raise ValueError("supplemental record must use its canonical milestone path")
+        for key in ("title", "customer_value", "status"):
+            if not isinstance(entry.get(key), str) or not entry[key].strip():
+                raise ValueError(f"supplemental milestone requires {key}")
+        numbers.append(number)
+    if numbers != sorted(set(numbers)):
+        raise ValueError("supplemental milestone numbers must be unique and ordered")
+    return records
+
+
+SUPPLEMENTAL_MARKDOWN = tuple(entry["path"] for entry in load_supplemental())
+
 BOUNDARY_TERMS = (
     "remain false", "remains false", "remain blocked", "remains blocked",
     "unclaimed", "not claim", "does not", "no customer", "non-production",
@@ -516,7 +541,7 @@ def build_pdf(model: dict[str, Any], audience: str, output: Path) -> None:
 
 def source_sha256() -> str:
     digest = hashlib.sha256()
-    for path in (Path(__file__).resolve(), CATALOG_PATH, CHANGELOG_PATH, BRAND_ROOT / "tokens.json", BRAND_LOGO_SVG, BRAND_LOGO_PNG, *(DOC_ROOT / p for p in SUPPLEMENTAL_MARKDOWN)):
+    for path in (Path(__file__).resolve(), CATALOG_PATH, SUPPLEMENTAL_CATALOG, CHANGELOG_PATH, BRAND_ROOT / "tokens.json", BRAND_LOGO_SVG, BRAND_LOGO_PNG, *(DOC_ROOT / p for p in SUPPLEMENTAL_MARKDOWN)):
         digest.update(path.relative_to(ROOT).as_posix().encode()); digest.update(b"\0")
         digest.update(path.read_bytes()); digest.update(b"\0")
     return digest.hexdigest()
@@ -534,7 +559,8 @@ def write_markdown_index(models: list[dict[str, Any]]) -> None:
         "*Where context becomes trusted action.*", "",
         "# LIGHTYEAR milestone documentation library", "",
         f"This library is the customer-readable body of record for MS #1 through MS #{EXPECTED_MILESTONES[-1]}. Every milestone is",
-        "published from one governed catalog in Markdown, Microsoft Word (`.docx`), and PDF.", "",
+        "published from one governed catalog in Markdown, Microsoft Word (`.docx`), and PDF.",
+        f"The same searchable index includes {len(load_supplemental())} later implementation records in Markdown.", "",
         f"**[Open the searchable milestone index]({PAGES_INDEX})** to filter by milestone number, title,",
         "customer value, capability, release, or roadmap phase.", "",
         "The documents explain purpose, customer value, delivered capability, evidence posture, limitations, and",
@@ -545,7 +571,12 @@ def write_markdown_index(models: list[dict[str, Any]]) -> None:
     for model in models:
         markdown, word, pdf = format_links(model)
         lines.append(f"| MS #{model['number']:02d} | {model['title']} | {model['status']} | [Markdown]({markdown}) - [Download Word]({word}) - [PDF]({pdf}) |")
-    lines.extend(["", "## Additional implementation records", "", "[MS73 — Run history and action activity](" + github_blob("docs/milestones/MS-73/MS-73.md") + ") (Markdown; engine integration delivered by MS74).", "", "[MS74 — Engine-to-history recording](" + github_blob("docs/milestones/MS-74/MS-74.md") + ") (Markdown).", "", "[MS75 — Four-panel workspace](" + github_blob("docs/milestones/MS-75/MS-75.md") + ") (Markdown).", "", "[MS76 — Existing runtime gate qualification](" + github_blob("docs/milestones/MS-76/MS-76.md") + ") (Markdown).", "", "[MS77 — Declarative batch invocation](" + github_blob("docs/milestones/MS-77/MS-77.md") + ") (Markdown; partial, awaiting an authorised z/OS environment).", ""])
+    lines.extend(["", "## Additional implementation records", "",
+                  "| Milestone | Title | Status | Record |", "|---|---|---|---|"])
+    for record in load_supplemental():
+        url = github_blob("docs/milestones/" + record["path"])
+        lines.append(f"| MS #{record['number']:02d} | {record['title']} | {record['status']} | [Markdown]({url}) |")
+
     lines.extend(["", "## Build and verification", "", "```bash", "./milestone-documentation.sh verify", "./milestone-documentation.sh build", "```", "", "Windows:", "", "```powershell", ".\\milestone-documentation.ps1 verify", ".\\milestone-documentation.ps1 build", "```", "", "`verify` uses only the Python standard library. `build` requires the `docs` optional dependency set.", "", f"The content-addressed [manifest]({github_blob('docs/milestones/manifest.json')}) fails verification if a canonical source changes, an artifact is missing or modified, or an untracked milestone artifact appears.", ""])
     (DOC_ROOT / "README.md").write_text("\n".join(lines), encoding="utf-8", newline="\n")
 
@@ -579,12 +610,27 @@ def write_html_index(models: list[dict[str, Any]]) -> None:
               <td class="formats"><a href="{markdown}">Read</a><a href="{pdf}">PDF</a><a href="{word}" download>Word</a></td>
             </tr>'''
         )
+    supplemental = load_supplemental()
+    for record in supplemental:
+        url = github_blob("docs/milestones/" + record["path"])
+        body = (DOC_ROOT / record["path"]).read_text(encoding="utf-8")
+        searchable = re.sub(r"\s+", " ", " ".join([f"MS {record['number']} {record['number']:02d}", record["title"],
+                               record["customer_value"], record["status"], body])).lower()
+        rows.append(
+            f'''<tr class="milestone" data-phase="implementation" data-search="{html.escape(searchable, quote=True)}">
+              <td class="number"><span>MS #{record['number']:02d}</span></td>
+              <td><a class="title" href="{url}">{html.escape(record['title'])}</a><p>{html.escape(record['customer_value'])}</p></td>
+              <td class="phase"><span>Implementation</span><small>{html.escape(record['status'])}</small></td>
+              <td class="formats"><a href="{url}">Read</a></td>
+            </tr>'''
+        )
+    total = len(models) + len(supplemental)
     page = f'''<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Search the governed LIGHTYEAR documentation for milestones MS #1 through MS #{EXPECTED_MILESTONES[-1]}.">
+  <meta name="description" content="Search the governed LIGHTYEAR milestone briefs and later implementation records.">
   <title>LIGHTYEAR milestone library</title>
   <style>
     :root {{ color-scheme: light; --ink:#15184d; --muted:#676985; --line:#ddd7f2; --paper:#fefefe; --wash:#f7f6fc; --navy:#15184d; --violet:#7d57ea; --violet-dark:#6942d6; --lavender:#efebfb; --bronze:#a7702c; }}
@@ -638,28 +684,21 @@ def write_html_index(models: list[dict[str, Any]]) -> None:
     <div class="brand"><img src="assets/lightyear-reversed.svg" alt="LIGHTYEAR primary logo"><span>Documentation</span></div>
     <p class="eyebrow">Governed modernization evidence</p>
     <h1>Milestone library</h1>
-    <p>Search {len(models)} customer-readable milestone briefs by number, title, customer value, delivered capability, release, or roadmap phase.</p>
+    <p>Search {total} customer-readable milestone briefs and implementation records by number, title, customer value, delivered capability, release, or roadmap phase.</p>
   </header>
   <main>
     <section class="controls" aria-label="Milestone filters">
       <div><label for="search">Search milestones</label><input id="search" type="search" placeholder="Try Oracle, stored procedures, CDC, customer pilot…" autocomplete="off"></div>
-      <div><label for="phase">Roadmap phase</label><select id="phase"><option value="all">All phases</option><option value="foundation">Foundation (MS #1–10)</option><option value="trust-runtime">Trust and runtime (MS #11–20)</option><option value="pilot-preparation">Pilot preparation (MS #21–32)</option><option value="qualification">Qualification (MS #33–{EXPECTED_MILESTONES[-1]})</option></select></div>
+      <div><label for="phase">Roadmap phase</label><select id="phase"><option value="all">All phases</option><option value="foundation">Foundation (MS #1–10)</option><option value="trust-runtime">Trust and runtime (MS #11–20)</option><option value="pilot-preparation">Pilot preparation (MS #21–32)</option><option value="qualification">Qualification (MS #33–{EXPECTED_MILESTONES[-1]})</option><option value="implementation">Later implementation records</option></select></div>
     </section>
-    <div class="summary"><span id="result-count" aria-live="polite">{len(models)} milestones</span><a href="{github_blob('docs/milestones/README.md')}">Open repository index</a></div>
+    <div class="summary"><span id="result-count" aria-live="polite">{total} milestones</span><a href="{github_blob('docs/milestones/README.md')}">Open repository index</a></div>
     <section class="table-wrap" aria-label="Milestone results">
       <table><thead><tr><th>Milestone</th><th>Customer brief</th><th>Phase / release</th><th>Formats</th></tr></thead><tbody>
         {''.join(rows)}
       </tbody></table>
       <p id="empty">No milestones match those filters. Clear the search or select another phase.</p>
     </section>
-    <section aria-label="Additional implementation records">
-      <h2>Additional implementation records</h2>
-      <p><a href="{github_blob('docs/milestones/MS-75/MS-75.md')}">MS75 — Four-panel workspace</a> (Markdown).</p>
-      <p><a href="{github_blob('docs/milestones/MS-74/MS-74.md')}">MS74 — Engine-to-history recording</a> (Markdown).</p>
-      <p><a href="{github_blob('docs/milestones/MS-76/MS-76.md')}">MS76 — Existing runtime gate qualification</a> (Markdown).</p>
-      <p><a href="{github_blob('docs/milestones/MS-77/MS-77.md')}">MS77 — Declarative batch invocation</a> (Markdown; partial, awaiting an authorised z/OS environment).</p>
-      <p><a href="{github_blob('docs/milestones/MS-73/MS-73.md')}">MS73 — Run history and action activity</a> (Markdown; engine integration delivered by MS74).</p>
-    </section>
+
   </main>
   <footer>These briefs package committed repository evidence. Underlying receipts, ledgers, gates, tests, and policy decisions remain authoritative.</footer>
   <script>
@@ -745,9 +784,9 @@ def build() -> None:
     library_files = []
     for path in (DOC_ROOT / "README.md", DOC_ROOT / "index.html", DOC_ROOT / "assets" / "lightyear-reversed.svg"):
         library_files.append({"path": path.relative_to(ROOT).as_posix(), "bytes": path.stat().st_size, "sha256": sha256_path(path)})
-    manifest = {"schema_version": "1.1", "generator_version": GENERATOR_VERSION, "source_sha256": source_sha256(), "milestone_count": len(EXPECTED_MILESTONES), "artifact_count": EXPECTED_ARTIFACTS, "formats": ["md", "docx", "pdf"], "artifacts": artifacts, "library_files": library_files, "supplemental_artifacts": supplemental_artifacts()}
+    manifest = {"schema_version": "1.1", "generator_version": GENERATOR_VERSION, "source_sha256": source_sha256(), "milestone_count": len(EXPECTED_MILESTONES), "artifact_count": EXPECTED_ARTIFACTS, "formats": ["md", "docx", "pdf"], "artifacts": artifacts, "library_files": library_files, "supplemental_artifacts": supplemental_artifacts(), "supplemental_milestone_count": len(SUPPLEMENTAL_MARKDOWN), "searchable_milestone_count": len(models) + len(SUPPLEMENTAL_MARKDOWN)}
     MANIFEST_PATH.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8", newline="\n")
-    print(json.dumps({"status": "built", "milestones": len(EXPECTED_MILESTONES), "artifacts": EXPECTED_ARTIFACTS}, sort_keys=True))
+    print(json.dumps({"status": "built", "milestones": len(EXPECTED_MILESTONES), "artifacts": EXPECTED_ARTIFACTS, "supplemental_milestones": len(SUPPLEMENTAL_MARKDOWN), "searchable_milestones": len(EXPECTED_MILESTONES) + len(SUPPLEMENTAL_MARKDOWN)}, sort_keys=True))
 
 
 def supplemental_artifacts() -> list[dict]:
@@ -762,6 +801,10 @@ def verify() -> None:
     if manifest.get("source_sha256") != source_sha256(): errors.append("documentation sources changed without regeneration")
     if manifest.get("milestone_count") != len(EXPECTED_MILESTONES): errors.append(f"manifest milestone count is not {len(EXPECTED_MILESTONES)}")
     if manifest.get("artifact_count") != EXPECTED_ARTIFACTS: errors.append(f"manifest artifact count is not {EXPECTED_ARTIFACTS}")
+    if manifest.get("supplemental_milestone_count") != len(SUPPLEMENTAL_MARKDOWN):
+        errors.append("supplemental milestone count is incorrect")
+    if manifest.get("searchable_milestone_count") != len(EXPECTED_MILESTONES) + len(SUPPLEMENTAL_MARKDOWN):
+        errors.append("searchable milestone count is incorrect")
     declared = set()
     if manifest.get("supplemental_artifacts") != supplemental_artifacts():
         errors.append("supplemental implementation records changed or are missing")
@@ -780,7 +823,7 @@ def verify() -> None:
         if sha256_path(path) != library_file["sha256"]: errors.append(f"hash mismatch: {relative}")
     if errors:
         raise SystemExit("Milestone documentation verification failed:\n- " + "\n- ".join(errors))
-    print(json.dumps({"status": "verified", "milestones": len(EXPECTED_MILESTONES), "artifacts": EXPECTED_ARTIFACTS}, sort_keys=True))
+    print(json.dumps({"status": "verified", "milestones": len(EXPECTED_MILESTONES), "artifacts": EXPECTED_ARTIFACTS, "supplemental_milestones": len(SUPPLEMENTAL_MARKDOWN), "searchable_milestones": len(EXPECTED_MILESTONES) + len(SUPPLEMENTAL_MARKDOWN)}, sort_keys=True))
 
 
 def main() -> None:

@@ -30,6 +30,10 @@ py -3.12 -m venv .venv
 On Linux/macOS use `python3 -m venv .venv`, `.venv/bin/python` and
 `.venv/bin/lightyear-agent`. The optional `agent` dependency pins the official
 MCP Python SDK to the tested version; the base engine does not require MCP.
+If that SDK is missing or incompatible, MCP startup exits with code 2 and a
+structured `mcp-dependency-unavailable` message on stderr containing the install
+command. Stdout remains reserved for the MCP protocol; no import traceback is
+exposed.
 
 The manifest has exactly four fields:
 
@@ -90,7 +94,7 @@ $run = lightyear-agent start --project $project `
 if (-not $run.ok) { throw $run.error.message }
 
 lightyear-agent status --project $project --run-id $run.run_id
-lightyear-agent events --project $project --run-id $run.run_id --after 0 --limit 10
+lightyear-agent events --project $project --run-id $run.run_id --after 0 --limit 25
 lightyear-agent verify --project $project --run-id $run.run_id
 # Once terminal, including a human-decision halt:
 lightyear-agent export --project $project --run-id $run.run_id
@@ -258,3 +262,15 @@ OS account. Use reviewed project configuration and a trusted evidence checkout.
 Remote transport, arbitrary customer adapters, fresh paired-database execution,
 remote identities and customer production acceptance are future
 capabilities, not claims made by this workflow.
+
+### Event pages and dispatch recovery
+
+The service, CLI and MCP tools return up to 25 events by default. The first-page
+MCP resource uses the same default. Explicit page sizes from 1 to 25 remain
+supported; follow `next_cursor` while `has_more` is true.
+
+A `dispatch-unconfirmed` response includes `retriable: true` in both `start` and
+`status`. The run ID is already durable. Inspect that same run and use `resume`
+to recover it; repeating `start` with the same request ID remains idempotent and
+does not submit another worker. The flag indicates recoverability, not successful
+execution or permission to create another run.

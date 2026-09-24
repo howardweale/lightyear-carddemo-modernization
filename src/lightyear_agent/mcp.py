@@ -3,15 +3,24 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from pathlib import Path
 from typing import Any
 
-from .service import Workflow
+from .service import EVENT_PAGE_LIMIT, VERSION, Workflow, WorkflowError
 
 
 def create_server(project: Path):
-    from mcp.server import MCPServer
-    from mcp.types import ToolAnnotations
+    try:
+        from mcp.server import MCPServer
+        from mcp.types import ToolAnnotations
+    except ImportError:
+        raise WorkflowError(
+            "mcp-dependency-unavailable",
+            "The MCP SDK is missing or incompatible. From the Lightyear checkout, "
+            "install the agent dependencies in this Python environment: "
+            'python -m pip install ".[agent]"',
+        ) from None
 
     workflow = Workflow(project)
     server = MCPServer("Lightyear local workflow", version="1.0.0", instructions=(
@@ -44,7 +53,7 @@ def create_server(project: Path):
         return workflow.invoke("status", run_id=run_id)
 
     @server.tool(annotations=read)
-    def events(run_id: str, after: int = 0, limit: int = 10) -> dict[str, Any]:
+    def events(run_id: str, after: int = 0, limit: int = EVENT_PAGE_LIMIT) -> dict[str, Any]:
         """Read a verified journal page (at most 25 events); next_cursor supports bounded polling."""
         return workflow.invoke("events", run_id=run_id, after=after, limit=limit)
 
@@ -88,12 +97,21 @@ def create_server(project: Path):
     return server
 
 
-def main():
+def main(argv=None):
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--project", type=Path, required=True)
-    args = parser.parse_args()
-    create_server(args.project).run(transport="stdio")
+    args = parser.parse_args(argv)
+    try:
+        server = create_server(args.project)
+    except WorkflowError as exc:
+        # stdout belongs to the MCP transport, including during startup failure.
+        print(json.dumps({"schema_version": VERSION, "ok": False, "status": "error",
+                          "error": {"code": exc.code, "message": str(exc)}}, ensure_ascii=True),
+              file=sys.stderr)
+        return 2
+    server.run(transport="stdio")
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

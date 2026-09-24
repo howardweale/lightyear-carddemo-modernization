@@ -15,6 +15,8 @@ import threading
 from urllib.parse import parse_qs, urlsplit
 
 from lightyear_data.cloudbank_journeys import Journeys, JourneyFailure, Response
+from lightyear_data.service_journeys import cloudbank_pack
+from lightyear_workflow.service_pack import validate_pack
 
 from .campaign import builtin, invoke, fault_outcome
 from .protocol import ObservationError, normalize
@@ -33,6 +35,10 @@ class ProcessRuntime:
         self.pending, self.results = [], None
         self.barrier, self.lock = threading.Barrier(2, timeout=10), threading.Lock()
         self.concurrent = False
+
+    def close(self):
+        # Each invocation has already exited its process and closed its handles.
+        return {"status": "restored"}
 
     def initialize(self):
         initial = self.call({"kind": "initialize", "accounts": OPENING})
@@ -132,7 +138,10 @@ def run_challenge(method, target="sqlite", fault="", missing=False):
         try:
             runtime = ProcessRuntime(directory, builtin(target, fault), missing)
             runtime.initialize()
-            driver = Journeys(runtime, "ms76", timeout=0, pause=lambda _: None)
+            declaration = cloudbank_pack().raw
+            declaration["journeys"] = [j for j in declaration["journeys"] if j["macro"] in METHODS]
+            driver = Journeys(runtime, "ms76", timeout=0, pause=lambda _: None,
+                              pack=validate_pack(declaration))
             driver.accounts = [1, 2, 3]
             if method == "account_restart":
                 driver.success()

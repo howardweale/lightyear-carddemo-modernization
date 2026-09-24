@@ -16,6 +16,7 @@ import time
 import uuid
 from pathlib import Path
 
+from .service_journeys import cloudbank_pack
 from .cloudbank_journeys import SERVICES, SCENARIOS, JourneyFailure, execute_journeys, hashed, require, journey_contract
 from .cloudbank_journeys_gke import GkeRuntime
 from .cloudbank_managed_target import ManagedGkeRuntime
@@ -175,7 +176,9 @@ def verify_cutover_failure(state, journeys, key, bindings, images, candidates, e
                 'ms64_receipt_sha256': bindings['ms64_receipt_sha256'],
                 'image_lock_sha256': bindings['candidate_image_lock_sha256'],
                 'environment': environment, 'lane': 'gke-postgresql-target',
-                'journey_contract_sha256': journey_contract()['content_sha256']}
+                'journey_contract_sha256': journey_contract()['content_sha256'],
+                **({'journey_pack_sha256': cloudbank_pack().sha256}
+                   if 'journey_pack_sha256' in (journeys.get('bindings') or {}) else {})}
             and journeys.get('recovery') == {'status': 'restored', 'errors': [], 'remaining_stopped_services': []}
             and journeys.get('credentials_persisted') is False
             and journeys.get('scenario_count') == 18

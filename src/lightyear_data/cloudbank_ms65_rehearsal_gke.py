@@ -16,6 +16,7 @@ import re
 import time
 from typing import Any, Callable
 
+from .service_journeys import pack_binding_valid
 from .cloudbank_journeys import (
     OBSERVATION_TYPE as JOURNEY_OBSERVATION_TYPE,
     SCENARIOS as JOURNEY_SCENARIOS,
@@ -91,6 +92,7 @@ def validate_shared_journeys(
         and recovery.get("status") == "restored"
         and not recovery.get("errors")
         and not recovery.get("remaining_stopped_services")
+        and pack_binding_valid(bindings)
         and bindings.get("journey_contract_sha256") == journey_contract()["content_sha256"]
         and bindings.get("ms64_receipt_sha256") == ms64_sha256
         and bindings.get("image_lock_sha256") == image_lock_sha256

@@ -40,26 +40,10 @@ SERVICES = (
     "creditscore", "chatbot",
 )
 
-SCENARIOS = (
-    ("eight-services-ready", "all-ready"),
-    ("authorization-token-issued", "token-issued"),
-    ("unauthenticated-request-rejected", "401"),
-    ("customer-owner-read", "owner-visible"),
-    ("account-balance-read", "balance-visible"),
-    ("transfer-success-conserves-value", "conserved"),
-    ("transfer-invalid-no-mutation", "400-no-mutation"),
-    ("transfer-insufficient-funds-no-mutation", "rejected-no-mutation"),
-    ("check-deposit-applied-once", "deposit-once"),
-    ("check-clearance-applied-once", "clearance-once"),
-    ("duplicate-message-suppressed", "duplicate-suppressed"),
-    ("credit-score-contract-served", "score-in-declared-range"),
-    ("chatbot-boundary-served", "bounded-response"),
-    ("account-restart-preserves-state", "state-preserved"),
-    ("checks-restart-redelivers-inflight", "redelivered-once"),
-    ("transfer-dependency-failure-recovers", "restored"),
-    ("concurrent-opposite-transfers-conserve-value", "conserved"),
-    ("full-stack-restart-restores-journey", "journey-restored"),
-)
+# The executable service pack is the single source for journey IDs and labels.
+from .service_journeys import cloudbank_pack
+
+SCENARIOS = tuple((j["id"], j["normalized_result"]) for j in cloudbank_pack().journeys)
 SCENARIO_IDS = [identifier for identifier, _ in SCENARIOS]
 NORMALIZED_MARKER = ";".join(f"{identifier}:{result}" for identifier, result in SCENARIOS)
 OBSERVATION_SHA256 = hashlib.sha256(NORMALIZED_MARKER.encode()).hexdigest()

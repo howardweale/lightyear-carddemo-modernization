@@ -9,6 +9,7 @@ from __future__ import annotations
 import re
 from typing import Any, Mapping
 
+from .service_journeys import pack_binding_valid
 from .cloudbank_journeys import OBSERVATION_TYPE as JOURNEY_OBSERVATION_TYPE
 from .cloudbank_ms66_hardening import (
     HARDENING_CONTRACT_SHA256,
@@ -116,7 +117,7 @@ def _journey_binding_errors(
     expected_lane = "gke-oracle-governed-source" if lane == "oracle" else "gke-postgresql-target"
     lock_key = "source_image_lock_sha256" if lane == "oracle" else "image_lock_sha256"
     errors: list[str] = []
-    if bindings.get("lane") != expected_lane \
+    if not pack_binding_valid(bindings) or bindings.get("lane") != expected_lane \
             or bindings.get(lock_key) != image_lock_sha256 \
             or bindings.get("journey_contract_sha256") != journey_contract()["content_sha256"]:
         errors.append(f"cloudbank-ms66-{lane}-journey-binding-invalid")

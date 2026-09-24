@@ -1,0 +1,33 @@
+{
+  "pack_type": "lightyear-service-journey-pack",
+  "schema_version": "1.0",
+  "pack_id": "order-approval-example",
+  "estate": "orders-example",
+  "description": "Synthetic example only. Observe an existing source record; approve and verify an order on an authorized target.",
+  "source": {"verbs": ["observe"]},
+  "target": {"verbs": ["request"]},
+  "services": ["orders"],
+  "roles": ["operator"],
+  "inputs": {"order_id": "identifier"},
+  "state": {},
+  "macros": {
+    "approve": {
+      "params": [],
+      "steps": [
+        {"op": "request", "service": "orders", "method": "GET", "path": "/orders/{order_id}", "params": {"order_id": {"$ref": "order_id"}}, "role": "operator", "save": "before"},
+        {"op": "assert", "test": {"$op": "eq", "args": [{"$ref": "before.status"}, 200]}, "code": "order-read-failed"},
+        {"op": "set", "name": "original", "value": {"$op": "json", "args": [{"$ref": "before"}]}},
+        {"op": "request", "service": "orders", "method": "POST", "path": "/orders/{order_id}/approve", "params": {"order_id": {"$ref": "order_id"}}, "role": "operator", "body": {}, "save": "accepted"},
+        {"op": "assert", "test": {"$op": "eq", "args": [{"$ref": "accepted.status"}, 200]}, "code": "approval-request-failed"},
+        {"op": "request", "service": "orders", "method": "GET", "path": "/orders/{order_id}", "params": {"order_id": {"$ref": "order_id"}}, "role": "operator", "save": "after"},
+        {"op": "assert", "test": {"$op": "eq", "args": [{"$ref": "after.status"}, 200]}, "code": "approved-order-read-failed"},
+        {"op": "set", "name": "observed", "value": {"$op": "json", "args": [{"$ref": "after"}]}},
+        {"op": "assert", "test": {"$op": "eq", "args": [{"$ref": "observed.id"}, {"$ref": "order_id"}]}, "code": "wrong-order"},
+        {"op": "assert", "test": {"$op": "eq", "args": [{"$ref": "observed.status"}, "approved"]}, "code": "approval-not-applied"},
+        {"op": "assert", "test": {"$op": "eq", "args": [{"$ref": "observed.total_cents"}, {"$ref": "original.total_cents"}]}, "code": "approval-changed-total"}
+      ],
+      "return": {"$ref": "observed"}
+    }
+  },
+  "journeys": [{"id": "approve-order", "normalized_result": "approved-with-total-preserved", "macro": "approve", "args": {}}]
+}

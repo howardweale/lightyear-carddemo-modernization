@@ -1,0 +1,1 @@
+ALTER TABLE orders ADD amount NUMERIC(10,2);

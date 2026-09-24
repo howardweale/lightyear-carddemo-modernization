@@ -2017,3 +2017,16 @@ with no invocation capability, targets receive explicit capabilities, and plans
 compute reachable calls including polling and recovery. See
 [Services and API journey packs](docs/service-journey-packs.md) for the format,
 example, commands and evidence boundaries.
+
+## Decidability instrument
+
+Measure what a comparator can decide before a customer demonstration. The
+[calibration instrument](docs/decidability-instrument.md) scans complete SQL or
+captured-transfer corpora, clusters every unresolved result by cause, proposes
+review-only normalization entries with computed blast radii, and compares actual
+reruns without hiding old divergences. It also imports the complete retained
+iDempiere comparison, keeping statement and file-pair denominators separate.
+
+```bash
+PYTHONPATH=src python -m lightyear_calibration scan --manifest spec/calibration/sql/corpus.json --output work/calibration/orders
+```

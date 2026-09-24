@@ -1,0 +1,1 @@
+ALTER TABLE orders MODIFY status DEFAULT 1;

@@ -1,0 +1,52 @@
+name: Decidability instrument
+on:
+  pull_request:
+    paths:
+      - 'src/lightyear_calibration/**'
+      - 'src/lightyear_data/idempiere_*.py'
+      - 'src/lightyear_qualification/protocol.py'
+      - 'spec/calibration/**'
+      - 'tests/test_decidability.py'
+      - 'pyproject.toml'
+      - '.github/workflows/decidability.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'src/lightyear_calibration/**'
+      - 'src/lightyear_data/idempiere_*.py'
+      - 'src/lightyear_qualification/protocol.py'
+      - 'spec/calibration/**'
+      - 'tests/test_decidability.py'
+      - 'pyproject.toml'
+      - '.github/workflows/decidability.yml'
+permissions:
+  contents: read
+jobs:
+  calibration:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Verify cause accounting and safety boundaries
+        env:
+          PYTHONPATH: src
+        run: python -m unittest tests.test_decidability tests.test_idempiere_semantic_comparison -v
+      - name: Scan an unfamiliar corpus
+        env:
+          PYTHONPATH: src
+        run: |
+          python -m lightyear_calibration scan --manifest spec/calibration/sql/corpus.json --output work/calibration/orders
+          python -m lightyear_calibration validate work/calibration/orders/report.json
+      - name: Calibrate the retained estate
+        env:
+          PYTHONPATH: src
+        run: |
+          python -m lightyear_calibration import-idempiere --report factory/idempiere-divergence-audit/stage2-comparison.json --pairing-manifest factory/idempiere-divergence-audit/pairing-manifest.json --output work/calibration/idempiere
+          python -m lightyear_calibration validate work/calibration/idempiere/report.json

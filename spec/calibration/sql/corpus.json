@@ -1,0 +1,41 @@
+{
+  "adapter": "oracle-postgresql-sql",
+  "cases": [
+    {
+      "id": "01-numeric.sql",
+      "source": "01-numeric.sql",
+      "target": "01-numeric.sql"
+    },
+    {
+      "id": "02-difference.sql",
+      "source": "02-difference.sql",
+      "target": "02-difference.sql"
+    },
+    {
+      "id": "03-character.sql",
+      "source": "03-character.sql",
+      "target": "03-character.sql"
+    },
+    {
+      "id": "04-business-context.sql",
+      "source": "04-business-context.sql",
+      "target": "04-business-context.sql"
+    },
+    {
+      "id": "05-procedure.sql",
+      "source": "05-procedure.sql",
+      "target": "05-procedure.sql"
+    },
+    {
+      "id": "06-unpaired.sql",
+      "source": "06-unpaired.sql",
+      "target": null
+    }
+  ],
+  "corpus_id": "unfamiliar-orders-example",
+  "roots": {
+    "source": "source",
+    "target": "target"
+  },
+  "schema_version": "1.0"
+}

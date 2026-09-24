@@ -18,6 +18,7 @@ docs = [
 dependencies = []
 
 [project.scripts]
+lightyear-calibrate = "lightyear_calibration.cli:main"
 carddemo-oracle = "carddemo_oracle.cli:main"
 lightyear-graph = "lightyear_knowledge_graph.cli:main"
 lightyear-factory = "lightyear_factory.cli:main"

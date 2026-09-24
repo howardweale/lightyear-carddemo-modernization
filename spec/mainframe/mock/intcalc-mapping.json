@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "workload": "workload:carddemo-intcalc",
+  "job": {
+    "name": "INTCALC",
+    "node_id": "legacy:jcl-job:INTCALC"
+  },
+  "steps": [
+    {
+      "name": "STEP15",
+      "node_id": "legacy:jcl-step:INTCALC:STEP15",
+      "program": "CBACT04C",
+      "program_node_id": "legacy:cobol-program:CBACT04C",
+      "job_step_edge_id": "edge:41c665376569d66442a5",
+      "step_program_edge_id": "edge:0594254ade360b961aef"
+    }
+  ],
+  "dd_allocations": []
+}

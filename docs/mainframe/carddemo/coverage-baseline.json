@@ -1,0 +1,9 @@
+{
+  "inventory_sha256": "7e6cce0739adf97c685e7d17203279c82d26e347ba31a0bdea7ffee43d54fde5",
+  "denominator": 3605,
+  "observed_outcomes": null,
+  "coverage_percent": null,
+  "evidence_class": "unobserved",
+  "native_coverage_percent": null,
+  "mainframe_equivalent": false
+}

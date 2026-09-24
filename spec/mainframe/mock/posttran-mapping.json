@@ -1,0 +1,19 @@
+{
+  "schema_version": "1.0",
+  "workload": "workload:carddemo-posttran",
+  "job": {
+    "name": "POSTTRAN",
+    "node_id": "legacy:jcl-job:POSTTRAN"
+  },
+  "steps": [
+    {
+      "name": "STEP15",
+      "node_id": "legacy:jcl-step:POSTTRAN:STEP15",
+      "program": "CBTRN02C",
+      "program_node_id": "legacy:cobol-program:CBTRN02C",
+      "job_step_edge_id": "edge:7225dc7f8579be925b03",
+      "step_program_edge_id": "edge:eb68b17a0fc853d6966d"
+    }
+  ],
+  "dd_allocations": []
+}

@@ -1,0 +1,3074 @@
+{
+  "schema_version": "1.0",
+  "evidence_class": "simulated",
+  "status": "invocation-and-decoding-passed",
+  "plan": {
+    "pack_id": "carddemo-intcalc-v1",
+    "estate": "carddemo-zos",
+    "jobs": 2,
+    "comparisons": 3,
+    "source_reads": [
+      "CARDDEMO.ACCTFILE",
+      "CARDDEMO.DALYTRAN",
+      "CARDDEMO.DISCGRP",
+      "CARDDEMO.TRANFILE",
+      "CARDDEMO.XREFFILE"
+    ],
+    "source_submits": [],
+    "target_submits": [
+      "INTCALC",
+      "POSTTRAN"
+    ],
+    "normalization_referenced": [
+      "copybook-filler",
+      "decimal-canonical-text",
+      "fixed-width-right-padding"
+    ]
+  },
+  "artifacts": {
+    "arrival-kit.json": "0b4c22371ffe8fa9e557a8a6e47295000dbb43cfdc543d56128fb1ff434ffd5a",
+    "../batch-packs/carddemo-intcalc.pack.json": "95a947ad95dd0bdd88f58a568cb09224de66448b2b2d916bf65f106b79d99c3e",
+    "mock/intcalc-mapping.json": "40cdeb0c791bb69d559dd8565ce1d139db5527f0d14728e0e51d1deab63111a7",
+    "mock/intcalc-source.json": "ede13178bd66d1bd2f406f3dc76ab882de7c766dec3d9f672a9fb062975a5ea2",
+    "mock/intcalc-target.json": "5b9c1d0e8f02593905a41823befb894f568cb76530a8dd918dd6b92124c5161a",
+    "copybooks/CVTRA05Y.cpy": "d7bde0e78ff608497087b9909c889ed39e347269f964bda767b92b547fbb5fec",
+    "copybooks/CVACT01Y.cpy": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728",
+    "mock/posttran-mapping.json": "b16a82ac7f1c7e7be790d076748039b364bc6d8d1e358a8773ce97cd50f1f7aa",
+    "mock/posttran-source.json": "228d4636a68caaebcec3ac894f7bf8552a2fe56553a055115cb8917711bef07e",
+    "mock/posttran-target.json": "078bb795ec784fe4f0292ca79ef55fa663a9d4a8739720067a8865ac84c28bdd",
+    "copybooks/ARRIVAL.cpy": "18b0151eb3962d26b00446ce08057e2ed3d76bbeba1b114412d7709de29e8d7a",
+    "packed-golden.hex": "7d3b73aab2d111ea4724028df5ff788fedcb3163ce859fae2d2efc7f0c8da613"
+  },
+  "jobs": [
+    {
+      "job": "interest-calculation",
+      "lanes": {
+        "source": {
+          "run": "JOB00001",
+          "completed": "CC 0000",
+          "evidence_class": "simulated",
+          "submitted_by_us": false,
+          "decoded_outputs": {
+            "CARDDEMO.TRANFILE": {
+              "binding": {
+                "ddname": "TRANHEX",
+                "stepname": "EXPORT",
+                "procstep": "HEXOUT",
+                "copybook": "copybooks/CVTRA05Y.cpy",
+                "codec": "cp037",
+                "sign_policy": "preferred",
+                "transport": "lightyear-fb-hex-v1"
+              },
+              "jobname": "INTCALC",
+              "jobid": "JOB00001",
+              "spool_file_id": 6,
+              "transport_sha256": "ab05a15b3a359aa98a2b5e3555a553f44b0f6917f8c25127d0997a9af89ba2b2",
+              "layout": {
+                "schema_version": "1.0",
+                "name": "TRAN-RECORD",
+                "copybook_sha256": "d7bde0e78ff608497087b9909c889ed39e347269f964bda767b92b547fbb5fec",
+                "record_length": 350,
+                "fields": [
+                  {
+                    "path": "TRAN-RECORD.TRAN-ID",
+                    "offset": 0,
+                    "length": 16,
+                    "picture": "X(16)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 5
+                  },
+                  {
+                    "path": "TRAN-RECORD.TRAN-TYPE-CD",
+                    "offset": 16,
+                    "length": 2,
+                    "picture": "X(02)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 6
+                  },
+                  {
+                    "path": "TRAN-RECORD.TRAN-CAT-CD",
+                    "offset": 18,
+                    "length": 4,
+                    "picture": "9(04)",
+                    "usage": "DISPLAY",
+                    "digits": 4,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 7
+                  },
+                  {
+                    "path": "TRAN-RECORD.TRAN-SOURCE",
+                    "offset": 22,
+                    "length": 10,
+                    "picture": "X(10)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 8
+                  },
+                  {
+                    "path": "TRAN-RECORD.TRAN-DESC",
+                    "offset": 32,
+                    "length": 100,
+                    "picture": "X(100)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 9
+                  },
+                  {
+                    "path": "TRAN-RECORD.TRAN-AMT",
+                    "offset": 132,
+                    "length": 11,
+                    "picture": "S9(09)V99",
+                    "usage": "DISPLAY",
+                    "digits": 11,
+                    "scale": 2,
+                    "signed": true,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 10
+                  },
+                  {
+                    "path": "TRAN-RECORD.TRAN-MERCHANT-ID",
+                    "offset": 143,
+                    "length": 9,
+                    "picture": "9(09)",
+                    "usage": "DISPLAY",
+                    "digits": 9,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 11
+                  },
+                  {
+                    "path": "TRAN-RECORD.TRAN-MERCHANT-NAME",
+                    "offset": 152,
+                    "length": 50,
+                    "picture": "X(50)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 12
+                  },
+                  {
+                    "path": "TRAN-RECORD.TRAN-MERCHANT-CITY",
+                    "offset": 202,
+                    "length": 50,
+                    "picture": "X(50)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 13
+                  },
+                  {
+                    "path": "TRAN-RECORD.TRAN-MERCHANT-ZIP",
+                    "offset": 252,
+                    "length": 10,
+                    "picture": "X(10)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 14
+                  },
+                  {
+                    "path": "TRAN-RECORD.TRAN-CARD-NUM",
+                    "offset": 262,
+                    "length": 16,
+                    "picture": "X(16)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 15
+                  },
+                  {
+                    "path": "TRAN-RECORD.TRAN-ORIG-TS",
+                    "offset": 278,
+                    "length": 26,
+                    "picture": "X(26)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 16
+                  },
+                  {
+                    "path": "TRAN-RECORD.TRAN-PROC-TS",
+                    "offset": 304,
+                    "length": 26,
+                    "picture": "X(26)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 17
+                  },
+                  {
+                    "path": "TRAN-RECORD.#14.FILLER",
+                    "offset": 330,
+                    "length": 20,
+                    "picture": "X(20)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": true,
+                    "line": 18
+                  }
+                ]
+              },
+              "records": [
+                {
+                  "copybook_sha256": "d7bde0e78ff608497087b9909c889ed39e347269f964bda767b92b547fbb5fec",
+                  "record_sha256": "c6ea7577b5d2cbacfc098716d523bb60993ada7ce9b44c83a295712793cb511a",
+                  "raw_hex": "d4d6c3d2f0f0f0f0f0f0f0f0f0f0f0f14040f0f0f0f0d4d6c3d240d6d5d3e84040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040f0f0f0f0f0f0f1f0f0f2f5f0f0f0f0f0f0f0f0f0404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040",
+                  "codec": "cp037",
+                  "sign_policy": "preferred",
+                  "fields": [
+                    {
+                      "path": "TRAN-RECORD.TRAN-ID",
+                      "offset": 0,
+                      "length": 16,
+                      "raw_hex": "d4d6c3d2f0f0f0f0f0f0f0f0f0f0f0f1",
+                      "filler": false,
+                      "value": "MOCK000000000001"
+                    },
+                    {
+                      "path": "TRAN-RECORD.TRAN-TYPE-CD",
+                      "offset": 16,
+                      "length": 2,
+                      "raw_hex": "4040",
+                      "filler": false,
+                      "value": "  "
+                    },
+                    {
+                      "path": "TRAN-RECORD.TRAN-CAT-CD",
+                      "offset": 18,
+                      "length": 4,
+                      "raw_hex": "f0f0f0f0",
+                      "filler": false,
+                      "value": "0",
+                      "digits": "0000",
+                      "scale": 0,
+                      "sign_code": null,
+                      "negative_zero": false
+                    },
+                    {
+                      "path": "TRAN-RECORD.TRAN-SOURCE",
+                      "offset": 22,
+                      "length": 10,
+                      "raw_hex": "d4d6c3d240d6d5d3e840",
+                      "filler": false,
+                      "value": "MOCK ONLY "
+                    },
+                    {
+                      "path": "TRAN-RECORD.TRAN-DESC",
+                      "offset": 32,
+                      "length": 100,
+                      "raw_hex": "40404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040",
+                      "filler": false,
+                      "value": "                                                                                                    "
+                    },
+                    {
+                      "path": "TRAN-RECORD.TRAN-AMT",
+                      "offset": 132,
+                      "length": 11,
+                      "raw_hex": "f0f0f0f0f0f0f1f0f0f2f5",
+                      "filler": false,
+                      "value": "100.25",
+                      "digits": "00000010025",
+                      "scale": 2,
+                      "sign_code": 15,
+                      "negative_zero": false
+                    },
+                    {
+                      "path": "TRAN-RECORD.TRAN-MERCHANT-ID",
+                      "offset": 143,
+                      "length": 9,
+                      "raw_hex": "f0f0f0f0f0f0f0f0f0",
+                      "filler": false,
+                      "value": "0",
+                      "digits": "000000000",
+                      "scale": 0,
+                      "sign_code": null,
+                      "negative_zero": false
+                    },
+                    {
+                      "path": "TRAN-RECORD.TRAN-MERCHANT-NAME",
+                      "offset": 152,
+                      "length": 50,
+                      "raw_hex": "4040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040",
+                      "filler": false,
+                      "value": "                                                  "
+                    },
+                    {
+                      "path": "TRAN-RECORD.TRAN-MERCHANT-CITY",
+                      "offset": 202,
+                      "length": 50,
+                      "raw_hex": "4040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040",
+                      "filler": false,
+                      "value": "                                                  "
+                    },
+                    {
+                      "path": "TRAN-RECORD.TRAN-MERCHANT-ZIP",
+                      "offset": 252,
+                      "length": 10,
+                      "raw_hex": "40404040404040404040",
+                      "filler": false,
+                      "value": "          "
+                    },
+                    {
+                      "path": "TRAN-RECORD.TRAN-CARD-NUM",
+                      "offset": 262,
+                      "length": 16,
+                      "raw_hex": "40404040404040404040404040404040",
+                      "filler": false,
+                      "value": "                "
+                    },
+                    {
+                      "path": "TRAN-RECORD.TRAN-ORIG-TS",
+                      "offset": 278,
+                      "length": 26,
+                      "raw_hex": "4040404040404040404040404040404040404040404040404040",
+                      "filler": false,
+                      "value": "                          "
+                    },
+                    {
+                      "path": "TRAN-RECORD.TRAN-PROC-TS",
+                      "offset": 304,
+                      "length": 26,
+                      "raw_hex": "4040404040404040404040404040404040404040404040404040",
+                      "filler": false,
+                      "value": "                          "
+                    },
+                    {
+                      "path": "TRAN-RECORD.#14.FILLER",
+                      "offset": 330,
+                      "length": 20,
+                      "raw_hex": "4040404040404040404040404040404040404040",
+                      "filler": true,
+                      "value": "                    "
+                    }
+                  ]
+                }
+              ]
+            },
+            "CARDDEMO.ACCTFILE": {
+              "binding": {
+                "ddname": "ACCTHEX",
+                "stepname": "EXPORT",
+                "procstep": "HEXOUT",
+                "copybook": "copybooks/CVACT01Y.cpy",
+                "codec": "cp037",
+                "sign_policy": "preferred",
+                "transport": "lightyear-fb-hex-v1"
+              },
+              "jobname": "INTCALC",
+              "jobid": "JOB00001",
+              "spool_file_id": 7,
+              "transport_sha256": "6221c7368d8e05876b8ed5614cdb6627b5c34e2307e6f7658a6f77c49a892a68",
+              "layout": {
+                "schema_version": "1.0",
+                "name": "ACCOUNT-RECORD",
+                "copybook_sha256": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728",
+                "record_length": 300,
+                "fields": [
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-ID",
+                    "offset": 0,
+                    "length": 11,
+                    "picture": "9(11)",
+                    "usage": "DISPLAY",
+                    "digits": 11,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 5
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-ACTIVE-STATUS",
+                    "offset": 11,
+                    "length": 1,
+                    "picture": "X(01)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 6
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-CURR-BAL",
+                    "offset": 12,
+                    "length": 12,
+                    "picture": "S9(10)V99",
+                    "usage": "DISPLAY",
+                    "digits": 12,
+                    "scale": 2,
+                    "signed": true,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 7
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-CREDIT-LIMIT",
+                    "offset": 24,
+                    "length": 12,
+                    "picture": "S9(10)V99",
+                    "usage": "DISPLAY",
+                    "digits": 12,
+                    "scale": 2,
+                    "signed": true,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 8
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-CASH-CREDIT-LIMIT",
+                    "offset": 36,
+                    "length": 12,
+                    "picture": "S9(10)V99",
+                    "usage": "DISPLAY",
+                    "digits": 12,
+                    "scale": 2,
+                    "signed": true,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 9
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-OPEN-DATE",
+                    "offset": 48,
+                    "length": 10,
+                    "picture": "X(10)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 10
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-EXPIRAION-DATE",
+                    "offset": 58,
+                    "length": 10,
+                    "picture": "X(10)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 11
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-REISSUE-DATE",
+                    "offset": 68,
+                    "length": 10,
+                    "picture": "X(10)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 12
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-CURR-CYC-CREDIT",
+                    "offset": 78,
+                    "length": 12,
+                    "picture": "S9(10)V99",
+                    "usage": "DISPLAY",
+                    "digits": 12,
+                    "scale": 2,
+                    "signed": true,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 13
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-CURR-CYC-DEBIT",
+                    "offset": 90,
+                    "length": 12,
+                    "picture": "S9(10)V99",
+                    "usage": "DISPLAY",
+                    "digits": 12,
+                    "scale": 2,
+                    "signed": true,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 14
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-ADDR-ZIP",
+                    "offset": 102,
+                    "length": 10,
+                    "picture": "X(10)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 15
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-GROUP-ID",
+                    "offset": 112,
+                    "length": 10,
+                    "picture": "X(10)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 16
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.#13.FILLER",
+                    "offset": 122,
+                    "length": 178,
+                    "picture": "X(178)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": true,
+                    "line": 17
+                  }
+                ]
+              },
+              "records": [
+                {
+                  "copybook_sha256": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728",
+                  "record_sha256": "bea93e27efad6a2961c841d2c1a3f24372ae101dcfac4cd1e912429300e32140",
+                  "raw_hex": "f0f0f0f0f0f0f0f0f0f0f1e8f0f0f0f0f0f0f0f1f0f0f2f5f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0404040404040404040404040404040404040404040404040404040404040f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040",
+                  "codec": "cp037",
+                  "sign_policy": "preferred",
+                  "fields": [
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-ID",
+                      "offset": 0,
+                      "length": 11,
+                      "raw_hex": "f0f0f0f0f0f0f0f0f0f0f1",
+                      "filler": false,
+                      "value": "1",
+                      "digits": "00000000001",
+                      "scale": 0,
+                      "sign_code": null,
+                      "negative_zero": false
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-ACTIVE-STATUS",
+                      "offset": 11,
+                      "length": 1,
+                      "raw_hex": "e8",
+                      "filler": false,
+                      "value": "Y"
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-CURR-BAL",
+                      "offset": 12,
+                      "length": 12,
+                      "raw_hex": "f0f0f0f0f0f0f0f1f0f0f2f5",
+                      "filler": false,
+                      "value": "100.25",
+                      "digits": "000000010025",
+                      "scale": 2,
+                      "sign_code": 15,
+                      "negative_zero": false
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-CREDIT-LIMIT",
+                      "offset": 24,
+                      "length": 12,
+                      "raw_hex": "f0f0f0f0f0f0f0f0f0f0f0f0",
+                      "filler": false,
+                      "value": "0.00",
+                      "digits": "000000000000",
+                      "scale": 2,
+                      "sign_code": 15,
+                      "negative_zero": false
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-CASH-CREDIT-LIMIT",
+                      "offset": 36,
+                      "length": 12,
+                      "raw_hex": "f0f0f0f0f0f0f0f0f0f0f0f0",
+                      "filler": false,
+                      "value": "0.00",
+                      "digits": "000000000000",
+                      "scale": 2,
+                      "sign_code": 15,
+                      "negative_zero": false
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-OPEN-DATE",
+                      "offset": 48,
+                      "length": 10,
+                      "raw_hex": "40404040404040404040",
+                      "filler": false,
+                      "value": "          "
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-EXPIRAION-DATE",
+                      "offset": 58,
+                      "length": 10,
+                      "raw_hex": "40404040404040404040",
+                      "filler": false,
+                      "value": "          "
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-REISSUE-DATE",
+                      "offset": 68,
+                      "length": 10,
+                      "raw_hex": "40404040404040404040",
+                      "filler": false,
+                      "value": "          "
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-CURR-CYC-CREDIT",
+                      "offset": 78,
+                      "length": 12,
+                      "raw_hex": "f0f0f0f0f0f0f0f0f0f0f0f0",
+                      "filler": false,
+                      "value": "0.00",
+                      "digits": "000000000000",
+                      "scale": 2,
+                      "sign_code": 15,
+                      "negative_zero": false
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-CURR-CYC-DEBIT",
+                      "offset": 90,
+                      "length": 12,
+                      "raw_hex": "f0f0f0f0f0f0f0f0f0f0f0f0",
+                      "filler": false,
+                      "value": "0.00",
+                      "digits": "000000000000",
+                      "scale": 2,
+                      "sign_code": 15,
+                      "negative_zero": false
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-ADDR-ZIP",
+                      "offset": 102,
+                      "length": 10,
+                      "raw_hex": "40404040404040404040",
+                      "filler": false,
+                      "value": "          "
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-GROUP-ID",
+                      "offset": 112,
+                      "length": 10,
+                      "raw_hex": "40404040404040404040",
+                      "filler": false,
+                      "value": "          "
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.#13.FILLER",
+                      "offset": 122,
+                      "length": 178,
+                      "raw_hex": "40404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040",
+                      "filler": true,
+                      "value": "                                                                                                                                                                                  "
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "evidence": {
+            "run_id": "zosmf-intcalc-job00001",
+            "adapter_id": "lightyear.zosmf-jobs.v1",
+            "source_system": "arrival-mock-source",
+            "captured_at": "2022-07-18T00:00:03.000Z",
+            "observations": [
+              {
+                "entity_kind": "node",
+                "entity_id": "legacy:jcl-job:INTCALC",
+                "assertion": "observed",
+                "operation": "job_completed",
+                "evidence_class": "simulated",
+                "details": {
+                  "job_id": "JOB00001",
+                  "status": "OUTPUT",
+                  "return_code": "CC 0000",
+                  "exec_system": "SY1",
+                  "exec_started": "2022-07-18T00:00:01.000Z",
+                  "exec_ended": "2022-07-18T00:00:03.000Z"
+                }
+              },
+              {
+                "entity_kind": "node",
+                "entity_id": "legacy:jcl-step:INTCALC:STEP15",
+                "assertion": "observed",
+                "operation": "step_completed",
+                "evidence_class": "simulated",
+                "details": {
+                  "step_name": "STEP15",
+                  "completion_code": "CC 0000"
+                }
+              },
+              {
+                "entity_kind": "node",
+                "entity_id": "legacy:cobol-program:CBACT04C",
+                "assertion": "observed",
+                "operation": "program_invoked",
+                "evidence_class": "simulated",
+                "details": {
+                  "program_name": "CBACT04C"
+                }
+              },
+              {
+                "entity_kind": "edge",
+                "entity_id": "edge:41c665376569d66442a5",
+                "assertion": "observed",
+                "operation": "job_step_observed",
+                "evidence_class": "simulated",
+                "details": {
+                  "job_name": "INTCALC",
+                  "step_name": "STEP15"
+                }
+              },
+              {
+                "entity_kind": "edge",
+                "entity_id": "edge:0594254ade360b961aef",
+                "assertion": "observed",
+                "operation": "step_program_observed",
+                "evidence_class": "simulated",
+                "details": {
+                  "step_name": "STEP15",
+                  "program_name": "CBACT04C"
+                }
+              }
+            ],
+            "required_nodes": [
+              "legacy:jcl-job:INTCALC",
+              "legacy:jcl-step:INTCALC:STEP15",
+              "legacy:cobol-program:CBACT04C"
+            ],
+            "required_edges": [
+              "edge:41c665376569d66442a5",
+              "edge:0594254ade360b961aef"
+            ],
+            "artifacts": [
+              {
+                "kind": "jes-spool",
+                "ddname": "JESJCL",
+                "stepname": "JESE",
+                "record_count": 3,
+                "byte_count": 88,
+                "sha256": "5dc3b54856445c9ce7542e0c34e651ab02f7ca91cb24e7dfef8cb9563f8dbf4e",
+                "content_retained": false
+              },
+              {
+                "kind": "jes-spool",
+                "ddname": "JESMSGLG",
+                "stepname": "JESE",
+                "record_count": 2,
+                "byte_count": 100,
+                "sha256": "925ad54b8bfb7b46493ea49a8afc2b4954fa2c95a45424cf25cde23decc7352e",
+                "content_retained": false
+              },
+              {
+                "kind": "jes-spool",
+                "ddname": "JESYSMSG",
+                "stepname": "JESE",
+                "record_count": 1,
+                "byte_count": 40,
+                "sha256": "def467838c724b98aaefbd2d4d8f299be8a34c0d4dcc00bb8145df5a4c520f88",
+                "content_retained": false
+              }
+            ],
+            "limitations": [
+              "JES and spool evidence does not prove transactional locking or all subsystem behavior.",
+              "Spool bodies are hashed and discarded; only bounded metadata and matches are retained.",
+              "Local z/OSMF simulator evidence is synthetic, not mainframe evidence."
+            ]
+          }
+        },
+        "target": {
+          "run": "JOB00002",
+          "completed": "CC 0000",
+          "evidence_class": "simulated",
+          "submitted_by_us": true,
+          "decoded_outputs": {
+            "CARDDEMO.TRANFILE": {
+              "binding": {
+                "ddname": "TRANHEX",
+                "stepname": "EXPORT",
+                "procstep": "HEXOUT",
+                "copybook": "copybooks/CVTRA05Y.cpy",
+                "codec": "cp037",
+                "sign_policy": "preferred",
+                "transport": "lightyear-fb-hex-v1"
+              },
+              "jobname": "INTCALC",
+              "jobid": "JOB00002",
+              "spool_file_id": 6,
+              "transport_sha256": "ab05a15b3a359aa98a2b5e3555a553f44b0f6917f8c25127d0997a9af89ba2b2",
+              "layout": {
+                "schema_version": "1.0",
+                "name": "TRAN-RECORD",
+                "copybook_sha256": "d7bde0e78ff608497087b9909c889ed39e347269f964bda767b92b547fbb5fec",
+                "record_length": 350,
+                "fields": [
+                  {
+                    "path": "TRAN-RECORD.TRAN-ID",
+                    "offset": 0,
+                    "length": 16,
+                    "picture": "X(16)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 5
+                  },
+                  {
+                    "path": "TRAN-RECORD.TRAN-TYPE-CD",
+                    "offset": 16,
+                    "length": 2,
+                    "picture": "X(02)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 6
+                  },
+                  {
+                    "path": "TRAN-RECORD.TRAN-CAT-CD",
+                    "offset": 18,
+                    "length": 4,
+                    "picture": "9(04)",
+                    "usage": "DISPLAY",
+                    "digits": 4,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 7
+                  },
+                  {
+                    "path": "TRAN-RECORD.TRAN-SOURCE",
+                    "offset": 22,
+                    "length": 10,
+                    "picture": "X(10)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 8
+                  },
+                  {
+                    "path": "TRAN-RECORD.TRAN-DESC",
+                    "offset": 32,
+                    "length": 100,
+                    "picture": "X(100)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 9
+                  },
+                  {
+                    "path": "TRAN-RECORD.TRAN-AMT",
+                    "offset": 132,
+                    "length": 11,
+                    "picture": "S9(09)V99",
+                    "usage": "DISPLAY",
+                    "digits": 11,
+                    "scale": 2,
+                    "signed": true,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 10
+                  },
+                  {
+                    "path": "TRAN-RECORD.TRAN-MERCHANT-ID",
+                    "offset": 143,
+                    "length": 9,
+                    "picture": "9(09)",
+                    "usage": "DISPLAY",
+                    "digits": 9,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 11
+                  },
+                  {
+                    "path": "TRAN-RECORD.TRAN-MERCHANT-NAME",
+                    "offset": 152,
+                    "length": 50,
+                    "picture": "X(50)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 12
+                  },
+                  {
+                    "path": "TRAN-RECORD.TRAN-MERCHANT-CITY",
+                    "offset": 202,
+                    "length": 50,
+                    "picture": "X(50)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 13
+                  },
+                  {
+                    "path": "TRAN-RECORD.TRAN-MERCHANT-ZIP",
+                    "offset": 252,
+                    "length": 10,
+                    "picture": "X(10)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 14
+                  },
+                  {
+                    "path": "TRAN-RECORD.TRAN-CARD-NUM",
+                    "offset": 262,
+                    "length": 16,
+                    "picture": "X(16)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 15
+                  },
+                  {
+                    "path": "TRAN-RECORD.TRAN-ORIG-TS",
+                    "offset": 278,
+                    "length": 26,
+                    "picture": "X(26)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 16
+                  },
+                  {
+                    "path": "TRAN-RECORD.TRAN-PROC-TS",
+                    "offset": 304,
+                    "length": 26,
+                    "picture": "X(26)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 17
+                  },
+                  {
+                    "path": "TRAN-RECORD.#14.FILLER",
+                    "offset": 330,
+                    "length": 20,
+                    "picture": "X(20)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": true,
+                    "line": 18
+                  }
+                ]
+              },
+              "records": [
+                {
+                  "copybook_sha256": "d7bde0e78ff608497087b9909c889ed39e347269f964bda767b92b547fbb5fec",
+                  "record_sha256": "c6ea7577b5d2cbacfc098716d523bb60993ada7ce9b44c83a295712793cb511a",
+                  "raw_hex": "d4d6c3d2f0f0f0f0f0f0f0f0f0f0f0f14040f0f0f0f0d4d6c3d240d6d5d3e84040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040f0f0f0f0f0f0f1f0f0f2f5f0f0f0f0f0f0f0f0f0404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040",
+                  "codec": "cp037",
+                  "sign_policy": "preferred",
+                  "fields": [
+                    {
+                      "path": "TRAN-RECORD.TRAN-ID",
+                      "offset": 0,
+                      "length": 16,
+                      "raw_hex": "d4d6c3d2f0f0f0f0f0f0f0f0f0f0f0f1",
+                      "filler": false,
+                      "value": "MOCK000000000001"
+                    },
+                    {
+                      "path": "TRAN-RECORD.TRAN-TYPE-CD",
+                      "offset": 16,
+                      "length": 2,
+                      "raw_hex": "4040",
+                      "filler": false,
+                      "value": "  "
+                    },
+                    {
+                      "path": "TRAN-RECORD.TRAN-CAT-CD",
+                      "offset": 18,
+                      "length": 4,
+                      "raw_hex": "f0f0f0f0",
+                      "filler": false,
+                      "value": "0",
+                      "digits": "0000",
+                      "scale": 0,
+                      "sign_code": null,
+                      "negative_zero": false
+                    },
+                    {
+                      "path": "TRAN-RECORD.TRAN-SOURCE",
+                      "offset": 22,
+                      "length": 10,
+                      "raw_hex": "d4d6c3d240d6d5d3e840",
+                      "filler": false,
+                      "value": "MOCK ONLY "
+                    },
+                    {
+                      "path": "TRAN-RECORD.TRAN-DESC",
+                      "offset": 32,
+                      "length": 100,
+                      "raw_hex": "40404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040",
+                      "filler": false,
+                      "value": "                                                                                                    "
+                    },
+                    {
+                      "path": "TRAN-RECORD.TRAN-AMT",
+                      "offset": 132,
+                      "length": 11,
+                      "raw_hex": "f0f0f0f0f0f0f1f0f0f2f5",
+                      "filler": false,
+                      "value": "100.25",
+                      "digits": "00000010025",
+                      "scale": 2,
+                      "sign_code": 15,
+                      "negative_zero": false
+                    },
+                    {
+                      "path": "TRAN-RECORD.TRAN-MERCHANT-ID",
+                      "offset": 143,
+                      "length": 9,
+                      "raw_hex": "f0f0f0f0f0f0f0f0f0",
+                      "filler": false,
+                      "value": "0",
+                      "digits": "000000000",
+                      "scale": 0,
+                      "sign_code": null,
+                      "negative_zero": false
+                    },
+                    {
+                      "path": "TRAN-RECORD.TRAN-MERCHANT-NAME",
+                      "offset": 152,
+                      "length": 50,
+                      "raw_hex": "4040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040",
+                      "filler": false,
+                      "value": "                                                  "
+                    },
+                    {
+                      "path": "TRAN-RECORD.TRAN-MERCHANT-CITY",
+                      "offset": 202,
+                      "length": 50,
+                      "raw_hex": "4040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040",
+                      "filler": false,
+                      "value": "                                                  "
+                    },
+                    {
+                      "path": "TRAN-RECORD.TRAN-MERCHANT-ZIP",
+                      "offset": 252,
+                      "length": 10,
+                      "raw_hex": "40404040404040404040",
+                      "filler": false,
+                      "value": "          "
+                    },
+                    {
+                      "path": "TRAN-RECORD.TRAN-CARD-NUM",
+                      "offset": 262,
+                      "length": 16,
+                      "raw_hex": "40404040404040404040404040404040",
+                      "filler": false,
+                      "value": "                "
+                    },
+                    {
+                      "path": "TRAN-RECORD.TRAN-ORIG-TS",
+                      "offset": 278,
+                      "length": 26,
+                      "raw_hex": "4040404040404040404040404040404040404040404040404040",
+                      "filler": false,
+                      "value": "                          "
+                    },
+                    {
+                      "path": "TRAN-RECORD.TRAN-PROC-TS",
+                      "offset": 304,
+                      "length": 26,
+                      "raw_hex": "4040404040404040404040404040404040404040404040404040",
+                      "filler": false,
+                      "value": "                          "
+                    },
+                    {
+                      "path": "TRAN-RECORD.#14.FILLER",
+                      "offset": 330,
+                      "length": 20,
+                      "raw_hex": "4040404040404040404040404040404040404040",
+                      "filler": true,
+                      "value": "                    "
+                    }
+                  ]
+                }
+              ]
+            },
+            "CARDDEMO.ACCTFILE": {
+              "binding": {
+                "ddname": "ACCTHEX",
+                "stepname": "EXPORT",
+                "procstep": "HEXOUT",
+                "copybook": "copybooks/CVACT01Y.cpy",
+                "codec": "cp037",
+                "sign_policy": "preferred",
+                "transport": "lightyear-fb-hex-v1"
+              },
+              "jobname": "INTCALC",
+              "jobid": "JOB00002",
+              "spool_file_id": 7,
+              "transport_sha256": "ddfbd111656dd2a1c3499e72637e8f7948f7101d5ab4010c3c4820f32e4d504e",
+              "layout": {
+                "schema_version": "1.0",
+                "name": "ACCOUNT-RECORD",
+                "copybook_sha256": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728",
+                "record_length": 300,
+                "fields": [
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-ID",
+                    "offset": 0,
+                    "length": 11,
+                    "picture": "9(11)",
+                    "usage": "DISPLAY",
+                    "digits": 11,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 5
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-ACTIVE-STATUS",
+                    "offset": 11,
+                    "length": 1,
+                    "picture": "X(01)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 6
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-CURR-BAL",
+                    "offset": 12,
+                    "length": 12,
+                    "picture": "S9(10)V99",
+                    "usage": "DISPLAY",
+                    "digits": 12,
+                    "scale": 2,
+                    "signed": true,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 7
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-CREDIT-LIMIT",
+                    "offset": 24,
+                    "length": 12,
+                    "picture": "S9(10)V99",
+                    "usage": "DISPLAY",
+                    "digits": 12,
+                    "scale": 2,
+                    "signed": true,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 8
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-CASH-CREDIT-LIMIT",
+                    "offset": 36,
+                    "length": 12,
+                    "picture": "S9(10)V99",
+                    "usage": "DISPLAY",
+                    "digits": 12,
+                    "scale": 2,
+                    "signed": true,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 9
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-OPEN-DATE",
+                    "offset": 48,
+                    "length": 10,
+                    "picture": "X(10)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 10
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-EXPIRAION-DATE",
+                    "offset": 58,
+                    "length": 10,
+                    "picture": "X(10)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 11
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-REISSUE-DATE",
+                    "offset": 68,
+                    "length": 10,
+                    "picture": "X(10)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 12
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-CURR-CYC-CREDIT",
+                    "offset": 78,
+                    "length": 12,
+                    "picture": "S9(10)V99",
+                    "usage": "DISPLAY",
+                    "digits": 12,
+                    "scale": 2,
+                    "signed": true,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 13
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-CURR-CYC-DEBIT",
+                    "offset": 90,
+                    "length": 12,
+                    "picture": "S9(10)V99",
+                    "usage": "DISPLAY",
+                    "digits": 12,
+                    "scale": 2,
+                    "signed": true,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 14
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-ADDR-ZIP",
+                    "offset": 102,
+                    "length": 10,
+                    "picture": "X(10)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 15
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-GROUP-ID",
+                    "offset": 112,
+                    "length": 10,
+                    "picture": "X(10)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 16
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.#13.FILLER",
+                    "offset": 122,
+                    "length": 178,
+                    "picture": "X(178)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": true,
+                    "line": 17
+                  }
+                ]
+              },
+              "records": [
+                {
+                  "copybook_sha256": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728",
+                  "record_sha256": "032b7a2012c6ed9f8be42e55e82b124dd037ebb6ce25c0dc3e940376f6fed0e3",
+                  "raw_hex": "f0f0f0f0f0f0f0f0f0f0f1e8f0f0f0f0f0f0f0f1f0f0f2f6f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0404040404040404040404040404040404040404040404040404040404040f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040",
+                  "codec": "cp037",
+                  "sign_policy": "preferred",
+                  "fields": [
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-ID",
+                      "offset": 0,
+                      "length": 11,
+                      "raw_hex": "f0f0f0f0f0f0f0f0f0f0f1",
+                      "filler": false,
+                      "value": "1",
+                      "digits": "00000000001",
+                      "scale": 0,
+                      "sign_code": null,
+                      "negative_zero": false
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-ACTIVE-STATUS",
+                      "offset": 11,
+                      "length": 1,
+                      "raw_hex": "e8",
+                      "filler": false,
+                      "value": "Y"
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-CURR-BAL",
+                      "offset": 12,
+                      "length": 12,
+                      "raw_hex": "f0f0f0f0f0f0f0f1f0f0f2f6",
+                      "filler": false,
+                      "value": "100.26",
+                      "digits": "000000010026",
+                      "scale": 2,
+                      "sign_code": 15,
+                      "negative_zero": false
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-CREDIT-LIMIT",
+                      "offset": 24,
+                      "length": 12,
+                      "raw_hex": "f0f0f0f0f0f0f0f0f0f0f0f0",
+                      "filler": false,
+                      "value": "0.00",
+                      "digits": "000000000000",
+                      "scale": 2,
+                      "sign_code": 15,
+                      "negative_zero": false
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-CASH-CREDIT-LIMIT",
+                      "offset": 36,
+                      "length": 12,
+                      "raw_hex": "f0f0f0f0f0f0f0f0f0f0f0f0",
+                      "filler": false,
+                      "value": "0.00",
+                      "digits": "000000000000",
+                      "scale": 2,
+                      "sign_code": 15,
+                      "negative_zero": false
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-OPEN-DATE",
+                      "offset": 48,
+                      "length": 10,
+                      "raw_hex": "40404040404040404040",
+                      "filler": false,
+                      "value": "          "
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-EXPIRAION-DATE",
+                      "offset": 58,
+                      "length": 10,
+                      "raw_hex": "40404040404040404040",
+                      "filler": false,
+                      "value": "          "
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-REISSUE-DATE",
+                      "offset": 68,
+                      "length": 10,
+                      "raw_hex": "40404040404040404040",
+                      "filler": false,
+                      "value": "          "
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-CURR-CYC-CREDIT",
+                      "offset": 78,
+                      "length": 12,
+                      "raw_hex": "f0f0f0f0f0f0f0f0f0f0f0f0",
+                      "filler": false,
+                      "value": "0.00",
+                      "digits": "000000000000",
+                      "scale": 2,
+                      "sign_code": 15,
+                      "negative_zero": false
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-CURR-CYC-DEBIT",
+                      "offset": 90,
+                      "length": 12,
+                      "raw_hex": "f0f0f0f0f0f0f0f0f0f0f0f0",
+                      "filler": false,
+                      "value": "0.00",
+                      "digits": "000000000000",
+                      "scale": 2,
+                      "sign_code": 15,
+                      "negative_zero": false
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-ADDR-ZIP",
+                      "offset": 102,
+                      "length": 10,
+                      "raw_hex": "40404040404040404040",
+                      "filler": false,
+                      "value": "          "
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-GROUP-ID",
+                      "offset": 112,
+                      "length": 10,
+                      "raw_hex": "40404040404040404040",
+                      "filler": false,
+                      "value": "          "
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.#13.FILLER",
+                      "offset": 122,
+                      "length": 178,
+                      "raw_hex": "40404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040",
+                      "filler": true,
+                      "value": "                                                                                                                                                                                  "
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "evidence": {
+            "run_id": "zosmf-intcalc-job00002",
+            "adapter_id": "lightyear.zosmf-jobs.v1",
+            "source_system": "arrival-mock-target",
+            "captured_at": "2022-07-18T00:00:03.000Z",
+            "observations": [
+              {
+                "entity_kind": "node",
+                "entity_id": "legacy:jcl-job:INTCALC",
+                "assertion": "observed",
+                "operation": "job_completed",
+                "evidence_class": "simulated",
+                "details": {
+                  "job_id": "JOB00002",
+                  "status": "OUTPUT",
+                  "return_code": "CC 0000",
+                  "exec_system": "SY1",
+                  "exec_started": "2022-07-18T00:00:01.000Z",
+                  "exec_ended": "2022-07-18T00:00:03.000Z"
+                }
+              },
+              {
+                "entity_kind": "node",
+                "entity_id": "legacy:jcl-step:INTCALC:STEP15",
+                "assertion": "observed",
+                "operation": "step_completed",
+                "evidence_class": "simulated",
+                "details": {
+                  "step_name": "STEP15",
+                  "completion_code": "CC 0000"
+                }
+              },
+              {
+                "entity_kind": "node",
+                "entity_id": "legacy:cobol-program:CBACT04C",
+                "assertion": "observed",
+                "operation": "program_invoked",
+                "evidence_class": "simulated",
+                "details": {
+                  "program_name": "CBACT04C"
+                }
+              },
+              {
+                "entity_kind": "edge",
+                "entity_id": "edge:41c665376569d66442a5",
+                "assertion": "observed",
+                "operation": "job_step_observed",
+                "evidence_class": "simulated",
+                "details": {
+                  "job_name": "INTCALC",
+                  "step_name": "STEP15"
+                }
+              },
+              {
+                "entity_kind": "edge",
+                "entity_id": "edge:0594254ade360b961aef",
+                "assertion": "observed",
+                "operation": "step_program_observed",
+                "evidence_class": "simulated",
+                "details": {
+                  "step_name": "STEP15",
+                  "program_name": "CBACT04C"
+                }
+              }
+            ],
+            "required_nodes": [
+              "legacy:jcl-job:INTCALC",
+              "legacy:jcl-step:INTCALC:STEP15",
+              "legacy:cobol-program:CBACT04C"
+            ],
+            "required_edges": [
+              "edge:41c665376569d66442a5",
+              "edge:0594254ade360b961aef"
+            ],
+            "artifacts": [
+              {
+                "kind": "jes-spool",
+                "ddname": "JESJCL",
+                "stepname": "JESE",
+                "record_count": 3,
+                "byte_count": 88,
+                "sha256": "5dc3b54856445c9ce7542e0c34e651ab02f7ca91cb24e7dfef8cb9563f8dbf4e",
+                "content_retained": false
+              },
+              {
+                "kind": "jes-spool",
+                "ddname": "JESMSGLG",
+                "stepname": "JESE",
+                "record_count": 2,
+                "byte_count": 100,
+                "sha256": "925ad54b8bfb7b46493ea49a8afc2b4954fa2c95a45424cf25cde23decc7352e",
+                "content_retained": false
+              },
+              {
+                "kind": "jes-spool",
+                "ddname": "JESYSMSG",
+                "stepname": "JESE",
+                "record_count": 1,
+                "byte_count": 40,
+                "sha256": "def467838c724b98aaefbd2d4d8f299be8a34c0d4dcc00bb8145df5a4c520f88",
+                "content_retained": false
+              }
+            ],
+            "limitations": [
+              "JES and spool evidence does not prove transactional locking or all subsystem behavior.",
+              "Spool bodies are hashed and discarded; only bounded metadata and matches are retained.",
+              "Local z/OSMF simulator evidence is synthetic, not mainframe evidence."
+            ]
+          }
+        }
+      },
+      "raw_output_equal": {
+        "CARDDEMO.TRANFILE": true,
+        "CARDDEMO.ACCTFILE": false
+      },
+      "equivalence_verdict": "not-assessed"
+    },
+    {
+      "job": "transaction-posting",
+      "lanes": {
+        "source": {
+          "run": "JOB00001",
+          "completed": "CC 0000",
+          "evidence_class": "simulated",
+          "submitted_by_us": false,
+          "decoded_outputs": {
+            "CARDDEMO.ACCTFILE": {
+              "binding": {
+                "ddname": "ACCTHEX",
+                "stepname": "EXPORT",
+                "procstep": "HEXOUT",
+                "copybook": "copybooks/CVACT01Y.cpy",
+                "codec": "cp037",
+                "sign_policy": "preferred",
+                "transport": "lightyear-fb-hex-v1"
+              },
+              "jobname": "POSTTRAN",
+              "jobid": "JOB00001",
+              "spool_file_id": 6,
+              "transport_sha256": "6221c7368d8e05876b8ed5614cdb6627b5c34e2307e6f7658a6f77c49a892a68",
+              "layout": {
+                "schema_version": "1.0",
+                "name": "ACCOUNT-RECORD",
+                "copybook_sha256": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728",
+                "record_length": 300,
+                "fields": [
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-ID",
+                    "offset": 0,
+                    "length": 11,
+                    "picture": "9(11)",
+                    "usage": "DISPLAY",
+                    "digits": 11,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 5
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-ACTIVE-STATUS",
+                    "offset": 11,
+                    "length": 1,
+                    "picture": "X(01)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 6
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-CURR-BAL",
+                    "offset": 12,
+                    "length": 12,
+                    "picture": "S9(10)V99",
+                    "usage": "DISPLAY",
+                    "digits": 12,
+                    "scale": 2,
+                    "signed": true,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 7
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-CREDIT-LIMIT",
+                    "offset": 24,
+                    "length": 12,
+                    "picture": "S9(10)V99",
+                    "usage": "DISPLAY",
+                    "digits": 12,
+                    "scale": 2,
+                    "signed": true,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 8
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-CASH-CREDIT-LIMIT",
+                    "offset": 36,
+                    "length": 12,
+                    "picture": "S9(10)V99",
+                    "usage": "DISPLAY",
+                    "digits": 12,
+                    "scale": 2,
+                    "signed": true,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 9
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-OPEN-DATE",
+                    "offset": 48,
+                    "length": 10,
+                    "picture": "X(10)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 10
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-EXPIRAION-DATE",
+                    "offset": 58,
+                    "length": 10,
+                    "picture": "X(10)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 11
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-REISSUE-DATE",
+                    "offset": 68,
+                    "length": 10,
+                    "picture": "X(10)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 12
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-CURR-CYC-CREDIT",
+                    "offset": 78,
+                    "length": 12,
+                    "picture": "S9(10)V99",
+                    "usage": "DISPLAY",
+                    "digits": 12,
+                    "scale": 2,
+                    "signed": true,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 13
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-CURR-CYC-DEBIT",
+                    "offset": 90,
+                    "length": 12,
+                    "picture": "S9(10)V99",
+                    "usage": "DISPLAY",
+                    "digits": 12,
+                    "scale": 2,
+                    "signed": true,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 14
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-ADDR-ZIP",
+                    "offset": 102,
+                    "length": 10,
+                    "picture": "X(10)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 15
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-GROUP-ID",
+                    "offset": 112,
+                    "length": 10,
+                    "picture": "X(10)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 16
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.#13.FILLER",
+                    "offset": 122,
+                    "length": 178,
+                    "picture": "X(178)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": true,
+                    "line": 17
+                  }
+                ]
+              },
+              "records": [
+                {
+                  "copybook_sha256": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728",
+                  "record_sha256": "bea93e27efad6a2961c841d2c1a3f24372ae101dcfac4cd1e912429300e32140",
+                  "raw_hex": "f0f0f0f0f0f0f0f0f0f0f1e8f0f0f0f0f0f0f0f1f0f0f2f5f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0404040404040404040404040404040404040404040404040404040404040f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040",
+                  "codec": "cp037",
+                  "sign_policy": "preferred",
+                  "fields": [
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-ID",
+                      "offset": 0,
+                      "length": 11,
+                      "raw_hex": "f0f0f0f0f0f0f0f0f0f0f1",
+                      "filler": false,
+                      "value": "1",
+                      "digits": "00000000001",
+                      "scale": 0,
+                      "sign_code": null,
+                      "negative_zero": false
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-ACTIVE-STATUS",
+                      "offset": 11,
+                      "length": 1,
+                      "raw_hex": "e8",
+                      "filler": false,
+                      "value": "Y"
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-CURR-BAL",
+                      "offset": 12,
+                      "length": 12,
+                      "raw_hex": "f0f0f0f0f0f0f0f1f0f0f2f5",
+                      "filler": false,
+                      "value": "100.25",
+                      "digits": "000000010025",
+                      "scale": 2,
+                      "sign_code": 15,
+                      "negative_zero": false
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-CREDIT-LIMIT",
+                      "offset": 24,
+                      "length": 12,
+                      "raw_hex": "f0f0f0f0f0f0f0f0f0f0f0f0",
+                      "filler": false,
+                      "value": "0.00",
+                      "digits": "000000000000",
+                      "scale": 2,
+                      "sign_code": 15,
+                      "negative_zero": false
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-CASH-CREDIT-LIMIT",
+                      "offset": 36,
+                      "length": 12,
+                      "raw_hex": "f0f0f0f0f0f0f0f0f0f0f0f0",
+                      "filler": false,
+                      "value": "0.00",
+                      "digits": "000000000000",
+                      "scale": 2,
+                      "sign_code": 15,
+                      "negative_zero": false
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-OPEN-DATE",
+                      "offset": 48,
+                      "length": 10,
+                      "raw_hex": "40404040404040404040",
+                      "filler": false,
+                      "value": "          "
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-EXPIRAION-DATE",
+                      "offset": 58,
+                      "length": 10,
+                      "raw_hex": "40404040404040404040",
+                      "filler": false,
+                      "value": "          "
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-REISSUE-DATE",
+                      "offset": 68,
+                      "length": 10,
+                      "raw_hex": "40404040404040404040",
+                      "filler": false,
+                      "value": "          "
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-CURR-CYC-CREDIT",
+                      "offset": 78,
+                      "length": 12,
+                      "raw_hex": "f0f0f0f0f0f0f0f0f0f0f0f0",
+                      "filler": false,
+                      "value": "0.00",
+                      "digits": "000000000000",
+                      "scale": 2,
+                      "sign_code": 15,
+                      "negative_zero": false
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-CURR-CYC-DEBIT",
+                      "offset": 90,
+                      "length": 12,
+                      "raw_hex": "f0f0f0f0f0f0f0f0f0f0f0f0",
+                      "filler": false,
+                      "value": "0.00",
+                      "digits": "000000000000",
+                      "scale": 2,
+                      "sign_code": 15,
+                      "negative_zero": false
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-ADDR-ZIP",
+                      "offset": 102,
+                      "length": 10,
+                      "raw_hex": "40404040404040404040",
+                      "filler": false,
+                      "value": "          "
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-GROUP-ID",
+                      "offset": 112,
+                      "length": 10,
+                      "raw_hex": "40404040404040404040",
+                      "filler": false,
+                      "value": "          "
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.#13.FILLER",
+                      "offset": 122,
+                      "length": 178,
+                      "raw_hex": "40404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040",
+                      "filler": true,
+                      "value": "                                                                                                                                                                                  "
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "evidence": {
+            "run_id": "zosmf-posttran-job00001",
+            "adapter_id": "lightyear.zosmf-jobs.v1",
+            "source_system": "arrival-mock-source",
+            "captured_at": "2022-07-18T00:00:03.000Z",
+            "observations": [
+              {
+                "entity_kind": "node",
+                "entity_id": "legacy:jcl-job:POSTTRAN",
+                "assertion": "observed",
+                "operation": "job_completed",
+                "evidence_class": "simulated",
+                "details": {
+                  "job_id": "JOB00001",
+                  "status": "OUTPUT",
+                  "return_code": "CC 0000",
+                  "exec_system": "SY1",
+                  "exec_started": "2022-07-18T00:00:01.000Z",
+                  "exec_ended": "2022-07-18T00:00:03.000Z"
+                }
+              },
+              {
+                "entity_kind": "node",
+                "entity_id": "legacy:jcl-step:POSTTRAN:STEP15",
+                "assertion": "observed",
+                "operation": "step_completed",
+                "evidence_class": "simulated",
+                "details": {
+                  "step_name": "STEP15",
+                  "completion_code": "CC 0000"
+                }
+              },
+              {
+                "entity_kind": "node",
+                "entity_id": "legacy:cobol-program:CBTRN02C",
+                "assertion": "observed",
+                "operation": "program_invoked",
+                "evidence_class": "simulated",
+                "details": {
+                  "program_name": "CBTRN02C"
+                }
+              },
+              {
+                "entity_kind": "edge",
+                "entity_id": "edge:7225dc7f8579be925b03",
+                "assertion": "observed",
+                "operation": "job_step_observed",
+                "evidence_class": "simulated",
+                "details": {
+                  "job_name": "POSTTRAN",
+                  "step_name": "STEP15"
+                }
+              },
+              {
+                "entity_kind": "edge",
+                "entity_id": "edge:eb68b17a0fc853d6966d",
+                "assertion": "observed",
+                "operation": "step_program_observed",
+                "evidence_class": "simulated",
+                "details": {
+                  "step_name": "STEP15",
+                  "program_name": "CBTRN02C"
+                }
+              }
+            ],
+            "required_nodes": [
+              "legacy:jcl-job:POSTTRAN",
+              "legacy:jcl-step:POSTTRAN:STEP15",
+              "legacy:cobol-program:CBTRN02C"
+            ],
+            "required_edges": [
+              "edge:7225dc7f8579be925b03",
+              "edge:eb68b17a0fc853d6966d"
+            ],
+            "artifacts": [
+              {
+                "kind": "jes-spool",
+                "ddname": "JESJCL",
+                "stepname": "JESE",
+                "record_count": 3,
+                "byte_count": 89,
+                "sha256": "c928aaf4a44a988d25b92be48adba9877922986aecdeafe76a4fd6d7bba20d94",
+                "content_retained": false
+              },
+              {
+                "kind": "jes-spool",
+                "ddname": "JESMSGLG",
+                "stepname": "JESE",
+                "record_count": 2,
+                "byte_count": 102,
+                "sha256": "40b41ae5f1b33e507f0750e34fcea5a1cf7276b0c6af28f1f24b2a354e838f65",
+                "content_retained": false
+              },
+              {
+                "kind": "jes-spool",
+                "ddname": "JESYSMSG",
+                "stepname": "JESE",
+                "record_count": 1,
+                "byte_count": 40,
+                "sha256": "def467838c724b98aaefbd2d4d8f299be8a34c0d4dcc00bb8145df5a4c520f88",
+                "content_retained": false
+              }
+            ],
+            "limitations": [
+              "JES and spool evidence does not prove transactional locking or all subsystem behavior.",
+              "Spool bodies are hashed and discarded; only bounded metadata and matches are retained.",
+              "Local z/OSMF simulator evidence is synthetic, not mainframe evidence."
+            ]
+          }
+        },
+        "target": {
+          "run": "JOB00002",
+          "completed": "CC 0000",
+          "evidence_class": "simulated",
+          "submitted_by_us": true,
+          "decoded_outputs": {
+            "CARDDEMO.ACCTFILE": {
+              "binding": {
+                "ddname": "ACCTHEX",
+                "stepname": "EXPORT",
+                "procstep": "HEXOUT",
+                "copybook": "copybooks/CVACT01Y.cpy",
+                "codec": "cp037",
+                "sign_policy": "preferred",
+                "transport": "lightyear-fb-hex-v1"
+              },
+              "jobname": "POSTTRAN",
+              "jobid": "JOB00002",
+              "spool_file_id": 6,
+              "transport_sha256": "ddfbd111656dd2a1c3499e72637e8f7948f7101d5ab4010c3c4820f32e4d504e",
+              "layout": {
+                "schema_version": "1.0",
+                "name": "ACCOUNT-RECORD",
+                "copybook_sha256": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728",
+                "record_length": 300,
+                "fields": [
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-ID",
+                    "offset": 0,
+                    "length": 11,
+                    "picture": "9(11)",
+                    "usage": "DISPLAY",
+                    "digits": 11,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 5
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-ACTIVE-STATUS",
+                    "offset": 11,
+                    "length": 1,
+                    "picture": "X(01)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 6
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-CURR-BAL",
+                    "offset": 12,
+                    "length": 12,
+                    "picture": "S9(10)V99",
+                    "usage": "DISPLAY",
+                    "digits": 12,
+                    "scale": 2,
+                    "signed": true,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 7
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-CREDIT-LIMIT",
+                    "offset": 24,
+                    "length": 12,
+                    "picture": "S9(10)V99",
+                    "usage": "DISPLAY",
+                    "digits": 12,
+                    "scale": 2,
+                    "signed": true,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 8
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-CASH-CREDIT-LIMIT",
+                    "offset": 36,
+                    "length": 12,
+                    "picture": "S9(10)V99",
+                    "usage": "DISPLAY",
+                    "digits": 12,
+                    "scale": 2,
+                    "signed": true,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 9
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-OPEN-DATE",
+                    "offset": 48,
+                    "length": 10,
+                    "picture": "X(10)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 10
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-EXPIRAION-DATE",
+                    "offset": 58,
+                    "length": 10,
+                    "picture": "X(10)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 11
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-REISSUE-DATE",
+                    "offset": 68,
+                    "length": 10,
+                    "picture": "X(10)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 12
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-CURR-CYC-CREDIT",
+                    "offset": 78,
+                    "length": 12,
+                    "picture": "S9(10)V99",
+                    "usage": "DISPLAY",
+                    "digits": 12,
+                    "scale": 2,
+                    "signed": true,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 13
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-CURR-CYC-DEBIT",
+                    "offset": 90,
+                    "length": 12,
+                    "picture": "S9(10)V99",
+                    "usage": "DISPLAY",
+                    "digits": 12,
+                    "scale": 2,
+                    "signed": true,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 14
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-ADDR-ZIP",
+                    "offset": 102,
+                    "length": 10,
+                    "picture": "X(10)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 15
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.ACCT-GROUP-ID",
+                    "offset": 112,
+                    "length": 10,
+                    "picture": "X(10)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": false,
+                    "line": 16
+                  },
+                  {
+                    "path": "ACCOUNT-RECORD.#13.FILLER",
+                    "offset": 122,
+                    "length": 178,
+                    "picture": "X(178)",
+                    "usage": "DISPLAY",
+                    "digits": 0,
+                    "scale": 0,
+                    "signed": false,
+                    "sign": "TRAILING",
+                    "separate": false,
+                    "filler": true,
+                    "line": 17
+                  }
+                ]
+              },
+              "records": [
+                {
+                  "copybook_sha256": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728",
+                  "record_sha256": "032b7a2012c6ed9f8be42e55e82b124dd037ebb6ce25c0dc3e940376f6fed0e3",
+                  "raw_hex": "f0f0f0f0f0f0f0f0f0f0f1e8f0f0f0f0f0f0f0f1f0f0f2f6f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0404040404040404040404040404040404040404040404040404040404040f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040",
+                  "codec": "cp037",
+                  "sign_policy": "preferred",
+                  "fields": [
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-ID",
+                      "offset": 0,
+                      "length": 11,
+                      "raw_hex": "f0f0f0f0f0f0f0f0f0f0f1",
+                      "filler": false,
+                      "value": "1",
+                      "digits": "00000000001",
+                      "scale": 0,
+                      "sign_code": null,
+                      "negative_zero": false
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-ACTIVE-STATUS",
+                      "offset": 11,
+                      "length": 1,
+                      "raw_hex": "e8",
+                      "filler": false,
+                      "value": "Y"
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-CURR-BAL",
+                      "offset": 12,
+                      "length": 12,
+                      "raw_hex": "f0f0f0f0f0f0f0f1f0f0f2f6",
+                      "filler": false,
+                      "value": "100.26",
+                      "digits": "000000010026",
+                      "scale": 2,
+                      "sign_code": 15,
+                      "negative_zero": false
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-CREDIT-LIMIT",
+                      "offset": 24,
+                      "length": 12,
+                      "raw_hex": "f0f0f0f0f0f0f0f0f0f0f0f0",
+                      "filler": false,
+                      "value": "0.00",
+                      "digits": "000000000000",
+                      "scale": 2,
+                      "sign_code": 15,
+                      "negative_zero": false
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-CASH-CREDIT-LIMIT",
+                      "offset": 36,
+                      "length": 12,
+                      "raw_hex": "f0f0f0f0f0f0f0f0f0f0f0f0",
+                      "filler": false,
+                      "value": "0.00",
+                      "digits": "000000000000",
+                      "scale": 2,
+                      "sign_code": 15,
+                      "negative_zero": false
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-OPEN-DATE",
+                      "offset": 48,
+                      "length": 10,
+                      "raw_hex": "40404040404040404040",
+                      "filler": false,
+                      "value": "          "
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-EXPIRAION-DATE",
+                      "offset": 58,
+                      "length": 10,
+                      "raw_hex": "40404040404040404040",
+                      "filler": false,
+                      "value": "          "
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-REISSUE-DATE",
+                      "offset": 68,
+                      "length": 10,
+                      "raw_hex": "40404040404040404040",
+                      "filler": false,
+                      "value": "          "
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-CURR-CYC-CREDIT",
+                      "offset": 78,
+                      "length": 12,
+                      "raw_hex": "f0f0f0f0f0f0f0f0f0f0f0f0",
+                      "filler": false,
+                      "value": "0.00",
+                      "digits": "000000000000",
+                      "scale": 2,
+                      "sign_code": 15,
+                      "negative_zero": false
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-CURR-CYC-DEBIT",
+                      "offset": 90,
+                      "length": 12,
+                      "raw_hex": "f0f0f0f0f0f0f0f0f0f0f0f0",
+                      "filler": false,
+                      "value": "0.00",
+                      "digits": "000000000000",
+                      "scale": 2,
+                      "sign_code": 15,
+                      "negative_zero": false
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-ADDR-ZIP",
+                      "offset": 102,
+                      "length": 10,
+                      "raw_hex": "40404040404040404040",
+                      "filler": false,
+                      "value": "          "
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.ACCT-GROUP-ID",
+                      "offset": 112,
+                      "length": 10,
+                      "raw_hex": "40404040404040404040",
+                      "filler": false,
+                      "value": "          "
+                    },
+                    {
+                      "path": "ACCOUNT-RECORD.#13.FILLER",
+                      "offset": 122,
+                      "length": 178,
+                      "raw_hex": "40404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040",
+                      "filler": true,
+                      "value": "                                                                                                                                                                                  "
+                    }
+                  ]
+                }
+              ]
+            }
+          },
+          "evidence": {
+            "run_id": "zosmf-posttran-job00002",
+            "adapter_id": "lightyear.zosmf-jobs.v1",
+            "source_system": "arrival-mock-target",
+            "captured_at": "2022-07-18T00:00:03.000Z",
+            "observations": [
+              {
+                "entity_kind": "node",
+                "entity_id": "legacy:jcl-job:POSTTRAN",
+                "assertion": "observed",
+                "operation": "job_completed",
+                "evidence_class": "simulated",
+                "details": {
+                  "job_id": "JOB00002",
+                  "status": "OUTPUT",
+                  "return_code": "CC 0000",
+                  "exec_system": "SY1",
+                  "exec_started": "2022-07-18T00:00:01.000Z",
+                  "exec_ended": "2022-07-18T00:00:03.000Z"
+                }
+              },
+              {
+                "entity_kind": "node",
+                "entity_id": "legacy:jcl-step:POSTTRAN:STEP15",
+                "assertion": "observed",
+                "operation": "step_completed",
+                "evidence_class": "simulated",
+                "details": {
+                  "step_name": "STEP15",
+                  "completion_code": "CC 0000"
+                }
+              },
+              {
+                "entity_kind": "node",
+                "entity_id": "legacy:cobol-program:CBTRN02C",
+                "assertion": "observed",
+                "operation": "program_invoked",
+                "evidence_class": "simulated",
+                "details": {
+                  "program_name": "CBTRN02C"
+                }
+              },
+              {
+                "entity_kind": "edge",
+                "entity_id": "edge:7225dc7f8579be925b03",
+                "assertion": "observed",
+                "operation": "job_step_observed",
+                "evidence_class": "simulated",
+                "details": {
+                  "job_name": "POSTTRAN",
+                  "step_name": "STEP15"
+                }
+              },
+              {
+                "entity_kind": "edge",
+                "entity_id": "edge:eb68b17a0fc853d6966d",
+                "assertion": "observed",
+                "operation": "step_program_observed",
+                "evidence_class": "simulated",
+                "details": {
+                  "step_name": "STEP15",
+                  "program_name": "CBTRN02C"
+                }
+              }
+            ],
+            "required_nodes": [
+              "legacy:jcl-job:POSTTRAN",
+              "legacy:jcl-step:POSTTRAN:STEP15",
+              "legacy:cobol-program:CBTRN02C"
+            ],
+            "required_edges": [
+              "edge:7225dc7f8579be925b03",
+              "edge:eb68b17a0fc853d6966d"
+            ],
+            "artifacts": [
+              {
+                "kind": "jes-spool",
+                "ddname": "JESJCL",
+                "stepname": "JESE",
+                "record_count": 3,
+                "byte_count": 89,
+                "sha256": "c928aaf4a44a988d25b92be48adba9877922986aecdeafe76a4fd6d7bba20d94",
+                "content_retained": false
+              },
+              {
+                "kind": "jes-spool",
+                "ddname": "JESMSGLG",
+                "stepname": "JESE",
+                "record_count": 2,
+                "byte_count": 102,
+                "sha256": "40b41ae5f1b33e507f0750e34fcea5a1cf7276b0c6af28f1f24b2a354e838f65",
+                "content_retained": false
+              },
+              {
+                "kind": "jes-spool",
+                "ddname": "JESYSMSG",
+                "stepname": "JESE",
+                "record_count": 1,
+                "byte_count": 40,
+                "sha256": "def467838c724b98aaefbd2d4d8f299be8a34c0d4dcc00bb8145df5a4c520f88",
+                "content_retained": false
+              }
+            ],
+            "limitations": [
+              "JES and spool evidence does not prove transactional locking or all subsystem behavior.",
+              "Spool bodies are hashed and discarded; only bounded metadata and matches are retained.",
+              "Local z/OSMF simulator evidence is synthetic, not mainframe evidence."
+            ]
+          }
+        }
+      },
+      "raw_output_equal": {
+        "CARDDEMO.ACCTFILE": false
+      },
+      "equivalence_verdict": "not-assessed"
+    }
+  ],
+  "requests": [
+    {
+      "lane": "source",
+      "jobname": "INTCALC",
+      "method": "GET",
+      "path": "/zosmf/restjobs/jobs",
+      "query": {
+        "owner": [
+          "*"
+        ],
+        "prefix": [
+          "INTCALC"
+        ],
+        "max-jobs": [
+          "1000"
+        ],
+        "exec-data": [
+          "Y"
+        ]
+      },
+      "authorization_present": false,
+      "record_range": null
+    },
+    {
+      "lane": "source",
+      "jobname": "INTCALC",
+      "method": "GET",
+      "path": "/zosmf/restjobs/jobs/INTCALC/JOB00001",
+      "query": {
+        "step-data": [
+          "Y"
+        ],
+        "exec-data": [
+          "Y"
+        ]
+      },
+      "authorization_present": false,
+      "record_range": null
+    },
+    {
+      "lane": "source",
+      "jobname": "INTCALC",
+      "method": "GET",
+      "path": "/zosmf/restjobs/jobs/INTCALC/JOB00001/files",
+      "query": {},
+      "authorization_present": false,
+      "record_range": null
+    },
+    {
+      "lane": "source",
+      "jobname": "INTCALC",
+      "method": "GET",
+      "path": "/zosmf/restjobs/jobs/INTCALC/JOB00001/files/2/records",
+      "query": {},
+      "authorization_present": false,
+      "record_range": "0,5000"
+    },
+    {
+      "lane": "source",
+      "jobname": "INTCALC",
+      "method": "GET",
+      "path": "/zosmf/restjobs/jobs/INTCALC/JOB00001/files/3/records",
+      "query": {},
+      "authorization_present": false,
+      "record_range": "0,5000"
+    },
+    {
+      "lane": "source",
+      "jobname": "INTCALC",
+      "method": "GET",
+      "path": "/zosmf/restjobs/jobs/INTCALC/JOB00001/files/4/records",
+      "query": {},
+      "authorization_present": false,
+      "record_range": "0,5000"
+    },
+    {
+      "lane": "source",
+      "jobname": "INTCALC",
+      "method": "GET",
+      "path": "/zosmf/restjobs/jobs/INTCALC/JOB00001/files",
+      "query": {},
+      "authorization_present": false,
+      "record_range": null
+    },
+    {
+      "lane": "source",
+      "jobname": "INTCALC",
+      "method": "GET",
+      "path": "/zosmf/restjobs/jobs/INTCALC/JOB00001/files/6/records",
+      "query": {},
+      "authorization_present": false,
+      "record_range": "0,5000"
+    },
+    {
+      "lane": "source",
+      "jobname": "INTCALC",
+      "method": "GET",
+      "path": "/zosmf/restjobs/jobs/INTCALC/JOB00001/files",
+      "query": {},
+      "authorization_present": false,
+      "record_range": null
+    },
+    {
+      "lane": "source",
+      "jobname": "INTCALC",
+      "method": "GET",
+      "path": "/zosmf/restjobs/jobs/INTCALC/JOB00001/files/7/records",
+      "query": {},
+      "authorization_present": false,
+      "record_range": "0,5000"
+    },
+    {
+      "lane": "target",
+      "jobname": "INTCALC",
+      "method": "GET",
+      "path": "/zosmf/restjobs/jobs/INTCALC/JOB00002",
+      "query": {
+        "step-data": [
+          "Y"
+        ],
+        "exec-data": [
+          "Y"
+        ]
+      },
+      "authorization_present": false,
+      "record_range": null
+    },
+    {
+      "lane": "target",
+      "jobname": "INTCALC",
+      "method": "GET",
+      "path": "/zosmf/restjobs/jobs/INTCALC/JOB00002/files",
+      "query": {},
+      "authorization_present": false,
+      "record_range": null
+    },
+    {
+      "lane": "target",
+      "jobname": "INTCALC",
+      "method": "GET",
+      "path": "/zosmf/restjobs/jobs/INTCALC/JOB00002/files/2/records",
+      "query": {},
+      "authorization_present": false,
+      "record_range": "0,5000"
+    },
+    {
+      "lane": "target",
+      "jobname": "INTCALC",
+      "method": "GET",
+      "path": "/zosmf/restjobs/jobs/INTCALC/JOB00002/files/3/records",
+      "query": {},
+      "authorization_present": false,
+      "record_range": "0,5000"
+    },
+    {
+      "lane": "target",
+      "jobname": "INTCALC",
+      "method": "GET",
+      "path": "/zosmf/restjobs/jobs/INTCALC/JOB00002/files/4/records",
+      "query": {},
+      "authorization_present": false,
+      "record_range": "0,5000"
+    },
+    {
+      "lane": "target",
+      "jobname": "INTCALC",
+      "method": "GET",
+      "path": "/zosmf/restjobs/jobs/INTCALC/JOB00002/files",
+      "query": {},
+      "authorization_present": false,
+      "record_range": null
+    },
+    {
+      "lane": "target",
+      "jobname": "INTCALC",
+      "method": "GET",
+      "path": "/zosmf/restjobs/jobs/INTCALC/JOB00002/files/6/records",
+      "query": {},
+      "authorization_present": false,
+      "record_range": "0,5000"
+    },
+    {
+      "lane": "target",
+      "jobname": "INTCALC",
+      "method": "GET",
+      "path": "/zosmf/restjobs/jobs/INTCALC/JOB00002/files",
+      "query": {},
+      "authorization_present": false,
+      "record_range": null
+    },
+    {
+      "lane": "target",
+      "jobname": "INTCALC",
+      "method": "GET",
+      "path": "/zosmf/restjobs/jobs/INTCALC/JOB00002/files/7/records",
+      "query": {},
+      "authorization_present": false,
+      "record_range": "0,5000"
+    },
+    {
+      "lane": "source",
+      "jobname": "POSTTRAN",
+      "method": "GET",
+      "path": "/zosmf/restjobs/jobs",
+      "query": {
+        "owner": [
+          "*"
+        ],
+        "prefix": [
+          "POSTTRAN"
+        ],
+        "max-jobs": [
+          "1000"
+        ],
+        "exec-data": [
+          "Y"
+        ]
+      },
+      "authorization_present": false,
+      "record_range": null
+    },
+    {
+      "lane": "source",
+      "jobname": "POSTTRAN",
+      "method": "GET",
+      "path": "/zosmf/restjobs/jobs/POSTTRAN/JOB00001",
+      "query": {
+        "step-data": [
+          "Y"
+        ],
+        "exec-data": [
+          "Y"
+        ]
+      },
+      "authorization_present": false,
+      "record_range": null
+    },
+    {
+      "lane": "source",
+      "jobname": "POSTTRAN",
+      "method": "GET",
+      "path": "/zosmf/restjobs/jobs/POSTTRAN/JOB00001/files",
+      "query": {},
+      "authorization_present": false,
+      "record_range": null
+    },
+    {
+      "lane": "source",
+      "jobname": "POSTTRAN",
+      "method": "GET",
+      "path": "/zosmf/restjobs/jobs/POSTTRAN/JOB00001/files/2/records",
+      "query": {},
+      "authorization_present": false,
+      "record_range": "0,5000"
+    },
+    {
+      "lane": "source",
+      "jobname": "POSTTRAN",
+      "method": "GET",
+      "path": "/zosmf/restjobs/jobs/POSTTRAN/JOB00001/files/3/records",
+      "query": {},
+      "authorization_present": false,
+      "record_range": "0,5000"
+    },
+    {
+      "lane": "source",
+      "jobname": "POSTTRAN",
+      "method": "GET",
+      "path": "/zosmf/restjobs/jobs/POSTTRAN/JOB00001/files/4/records",
+      "query": {},
+      "authorization_present": false,
+      "record_range": "0,5000"
+    },
+    {
+      "lane": "source",
+      "jobname": "POSTTRAN",
+      "method": "GET",
+      "path": "/zosmf/restjobs/jobs/POSTTRAN/JOB00001/files",
+      "query": {},
+      "authorization_present": false,
+      "record_range": null
+    },
+    {
+      "lane": "source",
+      "jobname": "POSTTRAN",
+      "method": "GET",
+      "path": "/zosmf/restjobs/jobs/POSTTRAN/JOB00001/files/6/records",
+      "query": {},
+      "authorization_present": false,
+      "record_range": "0,5000"
+    },
+    {
+      "lane": "target",
+      "jobname": "POSTTRAN",
+      "method": "GET",
+      "path": "/zosmf/restjobs/jobs/POSTTRAN/JOB00002",
+      "query": {
+        "step-data": [
+          "Y"
+        ],
+        "exec-data": [
+          "Y"
+        ]
+      },
+      "authorization_present": false,
+      "record_range": null
+    },
+    {
+      "lane": "target",
+      "jobname": "POSTTRAN",
+      "method": "GET",
+      "path": "/zosmf/restjobs/jobs/POSTTRAN/JOB00002/files",
+      "query": {},
+      "authorization_present": false,
+      "record_range": null
+    },
+    {
+      "lane": "target",
+      "jobname": "POSTTRAN",
+      "method": "GET",
+      "path": "/zosmf/restjobs/jobs/POSTTRAN/JOB00002/files/2/records",
+      "query": {},
+      "authorization_present": false,
+      "record_range": "0,5000"
+    },
+    {
+      "lane": "target",
+      "jobname": "POSTTRAN",
+      "method": "GET",
+      "path": "/zosmf/restjobs/jobs/POSTTRAN/JOB00002/files/3/records",
+      "query": {},
+      "authorization_present": false,
+      "record_range": "0,5000"
+    },
+    {
+      "lane": "target",
+      "jobname": "POSTTRAN",
+      "method": "GET",
+      "path": "/zosmf/restjobs/jobs/POSTTRAN/JOB00002/files/4/records",
+      "query": {},
+      "authorization_present": false,
+      "record_range": "0,5000"
+    },
+    {
+      "lane": "target",
+      "jobname": "POSTTRAN",
+      "method": "GET",
+      "path": "/zosmf/restjobs/jobs/POSTTRAN/JOB00002/files",
+      "query": {},
+      "authorization_present": false,
+      "record_range": null
+    },
+    {
+      "lane": "target",
+      "jobname": "POSTTRAN",
+      "method": "GET",
+      "path": "/zosmf/restjobs/jobs/POSTTRAN/JOB00002/files/6/records",
+      "query": {},
+      "authorization_present": false,
+      "record_range": "0,5000"
+    }
+  ],
+  "submissions": [
+    {
+      "jobname": "INTCALC",
+      "inputs": [
+        "CARDDEMO.ACCTFILE",
+        "CARDDEMO.DISCGRP",
+        "CARDDEMO.XREFFILE"
+      ],
+      "evidence_class": "simulated",
+      "mode": "select-fixture-completion",
+      "staged_inputs": false
+    },
+    {
+      "jobname": "POSTTRAN",
+      "inputs": [
+        "CARDDEMO.DALYTRAN",
+        "CARDDEMO.ACCTFILE"
+      ],
+      "evidence_class": "simulated",
+      "mode": "select-fixture-completion",
+      "staged_inputs": false
+    }
+  ],
+  "packed_probe": [
+    {
+      "copybook_sha256": "18b0151eb3962d26b00446ce08057e2ed3d76bbeba1b114412d7709de29e8d7a",
+      "record_sha256": "a668c20bc861868f8f4dcec9b5b227cd295d8e60ae9e2e9d90b73a15e2301f44",
+      "raw_hex": "f0f0f0f0f0f0f0f0f0f0f1d4d6c3d240d6d5d3e8404040000012345df0f1f2f3f4404040",
+      "codec": "cp037",
+      "sign_policy": "preferred",
+      "fields": [
+        {
+          "path": "ARRIVAL-RECORD.ACCOUNT-ID",
+          "offset": 0,
+          "length": 11,
+          "raw_hex": "f0f0f0f0f0f0f0f0f0f0f1",
+          "filler": false,
+          "value": "1",
+          "digits": "00000000001",
+          "scale": 0,
+          "sign_code": null,
+          "negative_zero": false
+        },
+        {
+          "path": "ARRIVAL-RECORD.DESCRIPTION",
+          "offset": 11,
+          "length": 12,
+          "raw_hex": "d4d6c3d240d6d5d3e8404040",
+          "filler": false,
+          "value": "MOCK ONLY   "
+        },
+        {
+          "path": "ARRIVAL-RECORD.AMOUNT",
+          "offset": 23,
+          "length": 5,
+          "raw_hex": "000012345d",
+          "filler": false,
+          "value": "-123.45",
+          "digits": "000012345",
+          "scale": 2,
+          "sign_code": 13,
+          "negative_zero": false
+        },
+        {
+          "path": "ARRIVAL-RECORD.RATE",
+          "offset": 28,
+          "length": 5,
+          "raw_hex": "f0f1f2f3f4",
+          "filler": false,
+          "value": "12.34",
+          "digits": "01234",
+          "scale": 2,
+          "sign_code": null,
+          "negative_zero": false
+        },
+        {
+          "path": "ARRIVAL-RECORD.#5.FILLER",
+          "offset": 33,
+          "length": 3,
+          "raw_hex": "404040",
+          "filler": true,
+          "value": "   "
+        }
+      ]
+    }
+  ],
+  "normalization_rules_applied": [],
+  "equivalence_verdict": "not-assessed",
+  "mainframe_equivalent": false,
+  "runtime_branch_coverage": null,
+  "source_has_submit_capability": false,
+  "limitations": [
+    "Retained HEX export DDs are a synthetic handoff contract, not DDs already emitted by CardDemo.",
+    "No target business program runs; the submit callback selects a pre-existing simulated completion.",
+    "Pack inputs are declared, not staged or read by these lanes. Production JCL allocation closure remains required.",
+    "Pack normalization references are not applied. No equivalence verdict is emitted."
+  ]
+}

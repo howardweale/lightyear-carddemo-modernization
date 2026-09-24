@@ -1,0 +1,126 @@
+{
+  "files": [
+    {
+      "id": 2,
+      "ddname": "JESJCL",
+      "stepname": "JESE",
+      "procstep": null,
+      "jobname": "INTCALC",
+      "jobid": "JOB00001",
+      "record-count": 3,
+      "byte-count": 88,
+      "class": "H",
+      "subsystem": "JES2"
+    },
+    {
+      "id": 3,
+      "ddname": "JESMSGLG",
+      "stepname": "JESE",
+      "procstep": null,
+      "jobname": "INTCALC",
+      "jobid": "JOB00001",
+      "record-count": 2,
+      "byte-count": 100,
+      "class": "H",
+      "subsystem": "JES2"
+    },
+    {
+      "id": 4,
+      "ddname": "JESYSMSG",
+      "stepname": "JESE",
+      "procstep": null,
+      "jobname": "INTCALC",
+      "jobid": "JOB00001",
+      "record-count": 1,
+      "byte-count": 40,
+      "class": "H",
+      "subsystem": "JES2"
+    },
+    {
+      "id": 5,
+      "ddname": "SYSPRINT",
+      "stepname": "STEP15",
+      "procstep": null,
+      "jobname": "INTCALC",
+      "jobid": "JOB00001",
+      "record-count": 1,
+      "byte-count": 46,
+      "class": "H",
+      "subsystem": "JES2"
+    },
+    {
+      "id": 6,
+      "ddname": "TRANHEX",
+      "stepname": "EXPORT",
+      "procstep": "HEXOUT",
+      "jobname": "INTCALC",
+      "jobid": "JOB00001",
+      "record-count": 1,
+      "byte-count": 943,
+      "class": "H",
+      "subsystem": "JES2"
+    },
+    {
+      "id": 7,
+      "ddname": "ACCTHEX",
+      "stepname": "EXPORT",
+      "procstep": "HEXOUT",
+      "jobname": "INTCALC",
+      "jobid": "JOB00001",
+      "record-count": 1,
+      "byte-count": 843,
+      "class": "H",
+      "subsystem": "JES2"
+    },
+    {
+      "id": 8,
+      "ddname": "ACCTHEX",
+      "stepname": "UNRELATED",
+      "procstep": null,
+      "jobname": "INTCALC",
+      "jobid": "JOB00001",
+      "record-count": 1,
+      "byte-count": 39,
+      "class": "H",
+      "subsystem": "JES2"
+    }
+  ],
+  "job": {
+    "class": "A",
+    "exec-ended": "2022-07-18T00:00:03.000Z",
+    "exec-member": "SY1",
+    "exec-started": "2022-07-18T00:00:01.000Z",
+    "exec-submitted": "2022-07-18T00:00:00.000Z",
+    "exec-system": "SY1",
+    "jobid": "JOB00001",
+    "jobname": "INTCALC",
+    "owner": "IBMUSER",
+    "phase": 20,
+    "phase-name": "Job is on the hard copy queue",
+    "retcode": "CC 0000",
+    "status": "OUTPUT",
+    "step-data": [
+      {
+        "active": false,
+        "completion-code": "CC 0000",
+        "proc-step-name": "",
+        "program-name": "CBACT04C",
+        "smfid": "SY1",
+        "step-name": "STEP15",
+        "step-number": 1
+      }
+    ],
+    "subsystem": "JES2",
+    "type": "JOB"
+  },
+  "records": {
+    "2": "//INTCALC JOB (),CLASS=A,MSGCLASS=H\n//STEP15 EXEC PGM=CBACT04C\n//EXPORT EXEC PROC=LYHEX\n",
+    "3": "IEF142I INTCALC STEP15 - STEP WAS EXECUTED - COND CODE 0000\nIEF404I INTCALC - ENDED - TIME=00.00.03\n",
+    "4": "SYNTHETIC ALLOCATION AND COMPLETION LOG\n",
+    "5": "SYNTHETIC RUN. NO COBOL PROGRAM WAS EXECUTED.\n",
+    "6": "{\"copybook_sha256\": \"d7bde0e78ff608497087b9909c889ed39e347269f964bda767b92b547fbb5fec\", \"format\": \"lightyear-fb-hex-v1\", \"hex\": \"d4d6c3d2f0f0f0f0f0f0f0f0f0f0f0f14040f0f0f0f0d4d6c3d240d6d5d3e84040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040f0f0f0f0f0f0f1f0f0f2f5f0f0f0f0f0f0f0f0f0404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040\", \"lrecl\": 350, \"record_count\": 1, \"sha256\": \"c6ea7577b5d2cbacfc098716d523bb60993ada7ce9b44c83a295712793cb511a\"}\n",
+    "7": "{\"copybook_sha256\": \"81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728\", \"format\": \"lightyear-fb-hex-v1\", \"hex\": \"f0f0f0f0f0f0f0f0f0f0f1e8f0f0f0f0f0f0f0f1f0f0f2f5f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0404040404040404040404040404040404040404040404040404040404040f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040404040\", \"lrecl\": 300, \"record_count\": 1, \"sha256\": \"bea93e27efad6a2961c841d2c1a3f24372ae101dcfac4cd1e912429300e32140\"}\n",
+    "8": "wrong run context: must not be decoded\n"
+  },
+  "schema_version": "1.0"
+}

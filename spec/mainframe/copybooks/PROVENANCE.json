@@ -1,0 +1,11 @@
+{
+  "repository": "https://github.com/aws-samples/aws-mainframe-modernization-carddemo",
+  "commit": "59cc6c2fd7ebd7ef7925cad552a01a4b8b6e4d5e",
+  "files": {
+    "app/cpy/CVACT01Y.cpy": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728",
+    "app/cpy/CVACT03Y.cpy": "ffc6079e09b28739e154bf6c1e1c36d408209faa91f6cf7008078dc596a1c370",
+    "app/cpy/CVTRA01Y.cpy": "50637f13692c89b17a2fc60d249dc54e9eb3569d933afca3cdcf65b491a9d5ba",
+    "app/cpy/CVTRA02Y.cpy": "7828fae489c59944b4310e223028a8d3a525ccf4ead113c062bcaff04b52bf9c",
+    "app/cpy/CVTRA05Y.cpy": "d7bde0e78ff608497087b9909c889ed39e347269f964bda767b92b547fbb5fec"
+  }
+}

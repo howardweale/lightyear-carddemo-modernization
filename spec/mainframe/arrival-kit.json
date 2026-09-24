@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "pack": "../batch-packs/carddemo-intcalc.pack.json",
+  "evidence_class": "simulated",
+  "jobs": {
+    "INTCALC": {
+      "mapping": "mock/intcalc-mapping.json",
+      "bindings": {
+        "CARDDEMO.TRANFILE": {
+          "ddname": "TRANHEX",
+          "stepname": "EXPORT",
+          "procstep": "HEXOUT",
+          "copybook": "copybooks/CVTRA05Y.cpy",
+          "codec": "cp037",
+          "sign_policy": "preferred",
+          "transport": "lightyear-fb-hex-v1"
+        },
+        "CARDDEMO.ACCTFILE": {
+          "ddname": "ACCTHEX",
+          "stepname": "EXPORT",
+          "procstep": "HEXOUT",
+          "copybook": "copybooks/CVACT01Y.cpy",
+          "codec": "cp037",
+          "sign_policy": "preferred",
+          "transport": "lightyear-fb-hex-v1"
+        }
+      },
+      "source": "mock/intcalc-source.json",
+      "target": "mock/intcalc-target.json"
+    },
+    "POSTTRAN": {
+      "mapping": "mock/posttran-mapping.json",
+      "bindings": {
+        "CARDDEMO.ACCTFILE": {
+          "ddname": "ACCTHEX",
+          "stepname": "EXPORT",
+          "procstep": "HEXOUT",
+          "copybook": "copybooks/CVACT01Y.cpy",
+          "codec": "cp037",
+          "sign_policy": "preferred",
+          "transport": "lightyear-fb-hex-v1"
+        }
+      },
+      "source": "mock/posttran-source.json",
+      "target": "mock/posttran-target.json"
+    }
+  },
+  "packed_probe": {
+    "copybook": "copybooks/ARRIVAL.cpy",
+    "hex": "packed-golden.hex"
+  },
+  "limitations": [
+    "Retained HEX export DDs are a synthetic handoff contract, not DDs already emitted by CardDemo.",
+    "No target business program runs; the submit callback selects a pre-existing simulated completion.",
+    "Pack inputs are declared, not staged or read by these lanes. Production JCL allocation closure remains required.",
+    "Pack normalization references are not applied. No equivalence verdict is emitted."
+  ]
+}

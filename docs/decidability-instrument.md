@@ -199,3 +199,104 @@ collateral decisions in proposal scopes, escaped HTML, stale proposals, forged
 counts, unit partition changes and lost divergence detection. These are local
 product tests and retained-evidence calibration, not a new customer or native
 runtime qualification.
+
+## Measured iDempiere calibration
+
+[The measured results](calibration/idempiere/index.html) replay all 1,078 pinned
+pairs and retain the same 111,293 in-scope SQL units across both dialects.
+Decided units rise from **776 to 780**; unsupported units fall from **6,595 to
+1,405**. The parser-only stage still decides 776. The extra four decisions come
+from comparing an unambiguous positional prefix before a later mismatch. The
+gate never searches ahead, drops operations or silently reorders effects.
+Whole-pair results remain one equivalent and 1,077 indeterminate.
+
+This is evidence of a working loop and a small lift, not adequate customer
+coverage. The often-quoted 388 of 64,414 figure was Oracle-only and included
+administrative statements in its denominator. Do not compare that percentage
+directly with the combined SQL-only denominator.
+
+```sh
+PYTHONPATH=src python -m lightyear_calibration replay-idempiere \
+  --source /path/to/idempiere-at-731515dcdd5278b843db33b9d3109d155b881951 \
+  --report factory/idempiere-divergence-audit/stage2-comparison.json \
+  --pairing-manifest factory/idempiere-divergence-audit/pairing-manifest.json \
+  --output work/calibration/idempiere-lift
+```
+
+Add `--context /path/to/completed-schema-session-baseline.json` to the same pinned
+replay command when the baseline facts become available. Its corpus and per-file
+bindings are checked before comparison, its hash is recorded in the measurement,
+and `context-used.json` retains exactly what was supplied.
+
+The command verifies every paired file against its pinned logical hash, reproduces
+every original result, then measures parser-only and calibrated gates. It emits
+before/after reports, `comparison.json`, `measurement.json`, an HTML summary, and
+`schema-session-baseline.json`. The old audit parser and signed/hash-bound retained
+artifacts are unchanged. Unknown procedural bodies remain unsupported.
+The unit splitter is shared and unchanged. The measurement reconciles every
+statement ordinal and refuses publication if a prior decision or divergence is
+lost. The generic range-based comparison separately flags changed compressed
+report partitions; it does not silently assert a fraction delta across them.
+
+## Schema and session acquisition baseline
+
+```sh
+PYTHONPATH=src python -m lightyear_calibration baseline \
+  --manifest work/calibration/customer-corpus.json \
+  --output work/calibration/customer-context.json
+
+# After supplying catalog/session facts with evidence references in a separate
+# copy of the baseline, scan the unchanged input corpus again.
+PYTHONPATH=src python -m lightyear_calibration scan \
+  --manifest work/calibration/customer-corpus.json \
+  --context work/calibration/customer-context-reviewed.json \
+  --output work/calibration/customer-with-context
+```
+
+The JSON contract is documented by
+[the context schema](../spec/calibration/schema-session-baseline.schema.json).
+The baseline inventories DML tables/columns and observed DDL declarations with
+line ranges and hashes. It **does not infer a catalog snapshot from migrations**
+and does not treat absence of a trigger declaration as evidence of no triggers.
+For iDempiere it records 6,692 table references and 14,639 DDL facets across the
+paired cases. Those references repeat across files; they are not unique tables.
+No complete catalog or verified session is claimed.
+
+Each case binds its exact source and target paths/hashes. Required facts include:
+
+- Complete base-table columns, exact numeric precision/scale and nullability.
+- Explicit trigger, constraint, row-policy and rewrite-rule inventories.
+- Oracle current schema and numeric characters; PostgreSQL current schema,
+  a single admitted search-path schema, and `standard_conforming_strings`.
+- Optional timezone information, retained for future date support. This numeric
+  projection does not use it to decide timestamps or clocks.
+
+Unknown values remain `null`, and `complete: false` remains incomplete.
+`evidence.mode: template` cannot discharge context blockers. `declared-contract`
+and `captured-catalog` require evidence references, but labels and hashes do not
+prove source authenticity, approval or live deployment state. No catalog-query
+client, credentials or network invocation are added.
+
+The current admitted DML subset is deliberately narrow: exact numeric and NULL
+literal inserts/updates, numeric literal predicates, AND/OR, IN and IS NULL.
+INSERT must explicitly supply every catalog column. Tables with triggers,
+constraints, row policies or rewrite rules remain unresolved; supported inventories
+must be explicitly empty. Text/date coercions, function calls, qualified-name
+mappings and changed predicate/domain semantics remain unresolved. A schema,
+session or unknown operation invalidates the entry baseline for following DML.
+
+An equal result establishes only the static declared relational operation under
+the supplied contract. It does not prove affected row counts, transaction
+behavior, errors, stored procedure behavior or runtime equivalence. A different
+numeric assignment under the same predicate remains visible as a declared
+mismatch. Stale/partial context bindings and malformed contracts fail admission.
+
+The extra constraint grammar preserves deferrability, initial checking state and
+Oracle ENABLE/NOVALIDATE; none is erased to manufacture equality. These forms are
+specified in [Oracle's constraint reference](https://docs.oracle.com/en/database/oracle/oracle-database/21/sqlrf/constraint.html).
+PostgreSQL namespace/string settings are described in
+[client connection defaults](https://www.postgresql.org/docs/16/runtime-config-client.html).
+
+[The synthetic context before/after report](calibration/numeric-context/after/index.html)
+shows four decided units out of six, including one divergent pair. Its complete
+[comparison receipt](calibration/numeric-context/comparison.json) retains the zero-decision baseline.

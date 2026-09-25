@@ -1,0 +1,22 @@
+{
+  "evidence_class": "synthetic-independent-byte-vectors",
+  "copybook": "copybooks/BANKEXT.cpy",
+  "codec": "cp037",
+  "binary_byteorder": "big",
+  "binary_truncation": "std",
+  "redefines": {"BANK-RECORD.PAYLOAD": "IDENTIFIER"},
+  "records": [
+    {
+      "rdw_hex": "00110000",
+      "payload_hex": "000000000123456c0000007bc5",
+      "values": ["0", "1234.56", "123", "E"]
+    },
+    {
+      "rdw_hex": "00170000",
+      "payload_hex": "000200000123456c0000007b12345c00123dc5",
+      "values": ["2", "1234.56", "123", "123.45", "-1.23", "E"]
+    }
+  ],
+  "native_execution": false,
+  "equivalence_assessed": false
+}

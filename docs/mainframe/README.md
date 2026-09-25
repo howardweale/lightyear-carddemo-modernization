@@ -65,13 +65,13 @@ flowchart LR
     F --> G
 ```
 
-Supported layouts include one level-01 record, nested groups, fixed OCCURS, PIC X/A/9/S9/V, DISPLAY/zoned decimals, COMP-3, and leading/trailing separate signs. Supported EBCDIC code pages are explicitly selected: `cp037`, `cp500` or `cp1140`. The public fixture check uses `cp037`.
+Supported layouts include one level-01 record, nested groups, fixed OCCURS, PIC X/A/9/S9/V, DISPLAY/zoned decimals, COMP-3, leading/trailing separate signs, IBM binary fields, explicit REDEFINES selections, and one bounded OCCURS DEPENDING ON table. Supported EBCDIC code pages are explicitly selected: `cp037`, `cp500` or `cp1140`. The public fixture check uses `cp037`.
 
 Amounts are exact decimal strings with their original digit string and scale. Numeric identifiers keep their leading-zero digit string as well as their numeric value. Original field bytes, record bytes, filler and text padding are retained. Negative zero is preserved. No decimal tolerance, trimming, ignored filler or business equivalence rule is applied.
 
 The default `preferred` decoding policy accepts C/D/F for signed packed or overpunched data and F for unsigned packed data. Explicit `ibm-valid` additionally admits positive A/E and negative B sign nibbles. This is a byte-decoding policy; it is **not** a claim about the customer's compiler NUMPROC options. IBM documents the representation and compiler-option relationship in [sign representation](https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=arithmetic-sign-representation-zoned-packed-decimal-data) and [numeric formats](https://www.ibm.com/docs/en/cobol-zos/6.4.0?topic=arithmetic-formats-numeric-data).
 
-Bad digits, invalid signs, nonzero packed padding nibbles, short/long records and incomplete record streams are rejected. REDEFINES, variable OCCURS, binary COMP, alignment, edited pictures, multiple record alternatives and unsupported clauses are rejected with a layout error. VB/RDW/BDW framing is not assumed: the current input contract is raw fixed records with a known record length.
+Bad digits, invalid signs, nonzero packed padding nibbles, short/long records and incomplete record streams are rejected. Alignment, edited pictures, nested ODO, ODO inside repeated groups or overlays, multiple level-01 records and unsupported clauses are rejected with a layout error. Framing is explicit: fixed records, one record, or unblocked four-byte RDW records. BDW and spanned records remain unsupported. See [extended estate decoding](extended-decoding.md) for contracts and fixtures.
 
 The [public decoding receipt](public-decoding.json) records dataset and copybook hashes for 501 public records. It proves local decoder behavior on those fixtures. Packed decimal is independently checked with explicit golden byte vectors and the synthetic `ARRIVAL.cpy` probe; the five public dataset layouts use DISPLAY fields.
 

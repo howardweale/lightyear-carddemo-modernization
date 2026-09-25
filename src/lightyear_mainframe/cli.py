@@ -7,7 +7,7 @@ import sys
 
 from .arrival import dry_run
 from .inventory import coverage, inventory, markdown
-from .records import decode_fixed, load_copybook
+from .records import decode_fixed, decode_rdw, decode_record, load_copybook
 from .public_corpus import verify_public
 
 
@@ -27,6 +27,10 @@ def main(argv=None):
     dec.add_argument('--input', required=True, type=Path)
     dec.add_argument('--output', required=True, type=Path)
     dec.add_argument('--codec', required=True, choices=['cp037', 'cp500', 'cp1140'])
+    dec.add_argument('--framing', choices=['fixed', 'record', 'rdw'], default='fixed')
+    dec.add_argument('--binary-byteorder', choices=['big', 'little'])
+    dec.add_argument('--binary-truncation', choices=['std', 'bin'])
+    dec.add_argument('--redefines', type=Path, help='JSON mapping of overlay paths to selected names')
     dec.add_argument('--sign-policy', choices=['preferred', 'ibm-valid'], default='preferred')
     run = sub.add_parser('dry-run', help='exercise every pack job against loopback mocks')
     run.add_argument('--kit', required=True, type=Path)
@@ -52,7 +56,12 @@ def main(argv=None):
             write_json(args.output, verify_public(args.source))
         elif args.command == 'decode':
             layout = load_copybook(args.copybook)
-            write_json(args.output, dict(layout=layout.manifest(), records=decode_fixed(layout, args.input.read_bytes(), codec=args.codec, sign_policy=args.sign_policy)))
+            decoder = {'fixed': decode_fixed, 'rdw': decode_rdw, 'record': lambda *a, **kw: [decode_record(*a, **kw)]}[args.framing]
+            from lightyear_calibration.contracts import read_json
+            records = decoder(layout, args.input.read_bytes(), codec=args.codec, sign_policy=args.sign_policy,
+                              binary_byteorder=args.binary_byteorder, binary_truncation=args.binary_truncation,
+                              redefines=read_json(args.redefines) if args.redefines else None)
+            write_json(args.output, dict(layout=layout.manifest(), records=records))
         elif args.command == 'dry-run':
             result = dry_run(args.kit)
             write_json(args.output, result)

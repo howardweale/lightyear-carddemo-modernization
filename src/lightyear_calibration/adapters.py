@@ -5,7 +5,9 @@ import hashlib
 import json
 from pathlib import Path, PurePosixPath
 
-from lightyear_data.idempiere_comparison import compare_pair, _totals, policy
+from lightyear_data.idempiere_comparison import _totals, policy
+from .sql_gate import compare_pair
+from . import sql_parser, sql_gate, sql_context
 from lightyear_data import idempiere_comparison, idempiere_sql, semantic_core, contracts as data_contracts
 from lightyear_qualification import protocol
 from lightyear_common import io as common_io
@@ -19,10 +21,12 @@ MAX_CORPUS = 512 * 1024 * 1024
 
 
 def gate_identity(adapter):
-    modules = ([idempiere_comparison, idempiere_sql, semantic_core, data_contracts, common_io]
+    modules = ([idempiere_comparison, idempiere_sql, sql_parser, sql_gate, sql_context, semantic_core, data_contracts, common_io]
                if adapter == "oracle-postgresql-sql" else [protocol])
     return {"adapter": adapter, "implementation": implementation({m.__name__: Path(m.__file__) for m in modules}),
-            "policy": policy() if adapter == "oracle-postgresql-sql" else
+            "policy": {"retained_base": policy(), "calibration_version": "2.0",
+                       "alignment": "full ordered alignment or a positional prefix ending before the first unknown/mismatch; no resynchronization",
+                       "context": "Optional input-bound schema/session contract; numeric literal DML only; expires at schema/unknown operations; static declared effects, no execution equivalence"} if adapter == "oracle-postgresql-sql" else
             {"contract": "transfer-observation/1", "scope": "accounts, operations and outcomes in captured observations"}}
 
 
@@ -89,7 +93,7 @@ def sql_records(result, sources):
     return rows
 
 
-def scan(manifest, base=Path(".")):
+def scan(manifest, base=Path("."), *, context=None, include_texts=False):
     exact(manifest, {"schema_version", "corpus_id", "adapter", "roots", "cases"})
     require(manifest["schema_version"] == "1.0" and manifest["adapter"] in ADAPTERS, "Unsupported corpus contract")
     label(manifest["corpus_id"])
@@ -114,6 +118,7 @@ def scan(manifest, base=Path(".")):
         require(len(listed[side]) == len(set(listed[side])), "A corpus file occurs in multiple cases")
         require(sorted(listed[side]) == inventories[side][0], "Manifest must cover every eligible file: " + side)
     rows, case_results, inputs, total_bytes = [], [], [], 0
+    texts_by_case = {}
     for case in sorted(cases, key=lambda c: c["id"]):
         texts, sources = {}, {}
         for side in roots:
@@ -134,8 +139,18 @@ def scan(manifest, base=Path(".")):
                 raise CalibrationError("Corpus must use UTF-8; no partial report published") from exc
             sources[side] = {"path": case[side], "sha256": hashlib.sha256(raw).hexdigest()}
         inputs.append({"case_id": case["id"], **sources})
+        texts_by_case[case['id']] = texts
+    corpus_sha256 = digest({"adapter": manifest["adapter"], "inputs": inputs})
+    if context is not None:
+        require(manifest['adapter']=='oracle-postgresql-sql','Context only applies to SQL')
+        sql_context.admit(context,corpus_sha256,inputs)
+    for case, item in zip(sorted(cases,key=lambda c:c['id']), inputs):
+        texts = texts_by_case[case['id']]
+        sources = {side:item[side] for side in roots}
         if manifest["adapter"] == "oracle-postgresql-sql":
-            result = compare_pair(case["id"], texts["source"] or "", texts["target"] or "")
+            result = compare_pair(case["id"], texts["source"] or "", texts["target"] or "",
+                                  context_case=context['cases'][case['id']] if context else None,
+                                  context_enabled=context is not None and context['evidence']['mode']!='template')
             case_rows = sql_records(result, {"oracle": sources["source"], "postgresql": sources["target"]})
             if None in texts.values():
                 missing = "missing-source-file" if texts["source"] is None else "missing-target-file"
@@ -169,12 +184,17 @@ def scan(manifest, base=Path(".")):
             case_results.append({"id": case["id"], "verdict": verdict})
         require(len(rows) <= MAX_RECORDS, "Record bound exceeded")
     require(sum(r["units"] for r in rows) <= MAX_UNITS, "Unit bound exceeded")
-    return {"corpus_id": manifest["corpus_id"], "adapter": manifest["adapter"],
-            "corpus_sha256": digest({"adapter": manifest["adapter"], "inputs": inputs}),
+    snapshot = {"corpus_id": manifest["corpus_id"], "adapter": manifest["adapter"],
+            "corpus_sha256": corpus_sha256,
             "gate": gate_identity(manifest["adapter"]), "cases": case_results, "records": rows,
             "provenance": {"mode": "local-gate-replay", "runtime_invocations": 0, "source_authentication": "not-established",
                            "inputs": inputs, "excluded_files": {side: inventories[side][1] for side in roots},
                            "scope": "all eligible files in the declared roots; other extensions explicitly excluded"}}
+
+    if context is not None:
+        snapshot['gate']['context_sha256'] = digest(context)
+        snapshot['provenance']['context_evidence'] = context['evidence']
+    return (snapshot,texts_by_case) if include_texts else snapshot
 
 
 def import_idempiere(report, manifest):

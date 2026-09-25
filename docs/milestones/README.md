@@ -6,7 +6,7 @@
 
 This library is the customer-readable body of record for MS #1 through MS #70. Every milestone is
 published from one governed catalog in Markdown, Microsoft Word (`.docx`), and PDF.
-The same searchable index includes 8 later implementation records in Markdown.
+The same searchable index includes 10 later implementation records in Markdown.
 
 **[Open the searchable milestone index](https://howardweale.github.io/lightyear-carddemo-modernization/milestones/)** to filter by milestone number, title,
 customer value, capability, release, or roadmap phase.
@@ -102,6 +102,8 @@ or policy decisions.
 | MS #78 | Reliable local agent runs and cancellation | Implemented for retained CloudBank evidence | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-78/MS-78.md) |
 | MS #79 | Services and API journey packs | Implemented and contract-tested; customer execution unproven | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-79/MS-79.md) |
 | MS #80 | Decidability calibration instrument | Implemented for documented adapters | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-80/MS-80.md) |
+| MS #81 | Measured calibration and schema/session baselines | Measured on pinned public SQL; customer context still required | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-81/MS-81.md) |
+| MS #82 | Binary, overlay and variable-record decoding | Implemented and fixture-tested; native customer qualification unproven | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-82/MS-82.md) |
 
 ## Build and verification
 

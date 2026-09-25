@@ -56,6 +56,20 @@
       "title": "Decidability calibration instrument",
       "customer_value": "Measure what an unfamiliar corpus lets the gate decide, cluster unknowns and review normalization blast radius.",
       "status": "Implemented for documented adapters"
+    },
+    {
+      "number": 81,
+      "path": "MS-81/MS-81.md",
+      "title": "Measured calibration and schema/session baselines",
+      "customer_value": "Reproduce actual coverage gains and inventory missing catalog/session facts before customer demonstrations.",
+      "status": "Measured on pinned public SQL; customer context still required"
+    },
+    {
+      "number": 82,
+      "path": "MS-82/MS-82.md",
+      "title": "Binary, overlay and variable-record decoding",
+      "customer_value": "Read IBM binary fields, REDEFINES and bounded variable tables without guessing byte layouts.",
+      "status": "Implemented and fixture-tested; native customer qualification unproven"
     }
   ]
 }

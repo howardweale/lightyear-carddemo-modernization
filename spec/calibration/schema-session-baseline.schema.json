@@ -1,0 +1,479 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": "1.0"
+    },
+    "artifact_type": {
+      "const": "lightyear-sql-context-baseline"
+    },
+    "scope": {
+      "const": "static-declared-dml"
+    },
+    "corpus_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "enum": [
+            "template",
+            "declared-contract",
+            "captured-catalog"
+          ]
+        },
+        "references": {
+          "type": "array",
+          "maxItems": 1000,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "path": {
+                "type": "string"
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              }
+            },
+            "required": [
+              "path",
+              "sha256"
+            ]
+          }
+        }
+      },
+      "required": [
+        "mode",
+        "references"
+      ]
+    },
+    "cases": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "inputs": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "oracle": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "path": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "sha256": {
+                    "anyOf": [
+                      {
+                        "type": "null"
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{64}$"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "path",
+                  "sha256"
+                ]
+              },
+              "postgresql": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "path": {
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  },
+                  "sha256": {
+                    "anyOf": [
+                      {
+                        "type": "null"
+                      },
+                      {
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{64}$"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "path",
+                  "sha256"
+                ]
+              }
+            },
+            "required": [
+              "oracle",
+              "postgresql"
+            ]
+          },
+          "lanes": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "oracle": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "session": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "current_schema": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "search_path": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "numeric_characters": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "time_zone": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "standard_conforming_strings": {
+                        "type": [
+                          "boolean",
+                          "null"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "current_schema",
+                      "search_path",
+                      "numeric_characters",
+                      "time_zone",
+                      "standard_conforming_strings"
+                    ]
+                  },
+                  "tables": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "kind": {
+                          "enum": [
+                            null,
+                            "base-table",
+                            "view"
+                          ]
+                        },
+                        "complete": {
+                          "type": "boolean"
+                        },
+                        "columns": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "properties": {
+                              "type": {
+                                "anyOf": [
+                                  {
+                                    "type": "null"
+                                  },
+                                  {
+                                    "type": "object",
+                                    "additionalProperties": false,
+                                    "properties": {
+                                      "canonical_type": {
+                                        "const": "exact-decimal"
+                                      },
+                                      "precision": {
+                                        "type": "integer",
+                                        "minimum": 1,
+                                        "maximum": 38
+                                      },
+                                      "scale": {
+                                        "type": "integer",
+                                        "minimum": 0,
+                                        "maximum": 38
+                                      }
+                                    },
+                                    "required": [
+                                      "canonical_type",
+                                      "precision",
+                                      "scale"
+                                    ]
+                                  }
+                                ]
+                              },
+                              "nullable": {
+                                "type": [
+                                  "boolean",
+                                  "null"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "nullable"
+                            ]
+                          }
+                        },
+                        "triggers": {
+                          "type": [
+                            "array",
+                            "null"
+                          ]
+                        },
+                        "constraints": {
+                          "type": [
+                            "array",
+                            "null"
+                          ]
+                        },
+                        "row_policies": {
+                          "type": [
+                            "array",
+                            "null"
+                          ]
+                        },
+                        "rewrite_rules": {
+                          "type": [
+                            "array",
+                            "null"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "complete",
+                        "columns",
+                        "triggers",
+                        "constraints",
+                        "row_policies",
+                        "rewrite_rules"
+                      ]
+                    }
+                  },
+                  "observed_declarations": {
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "session",
+                  "tables",
+                  "observed_declarations"
+                ]
+              },
+              "postgresql": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "session": {
+                    "type": "object",
+                    "additionalProperties": false,
+                    "properties": {
+                      "current_schema": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "search_path": {
+                        "type": [
+                          "array",
+                          "null"
+                        ],
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "numeric_characters": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "time_zone": {
+                        "type": [
+                          "string",
+                          "null"
+                        ]
+                      },
+                      "standard_conforming_strings": {
+                        "type": [
+                          "boolean",
+                          "null"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "current_schema",
+                      "search_path",
+                      "numeric_characters",
+                      "time_zone",
+                      "standard_conforming_strings"
+                    ]
+                  },
+                  "tables": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "kind": {
+                          "enum": [
+                            null,
+                            "base-table",
+                            "view"
+                          ]
+                        },
+                        "complete": {
+                          "type": "boolean"
+                        },
+                        "columns": {
+                          "type": "object",
+                          "additionalProperties": {
+                            "type": "object",
+                            "additionalProperties": false,
+                            "properties": {
+                              "type": {
+                                "anyOf": [
+                                  {
+                                    "type": "null"
+                                  },
+                                  {
+                                    "type": "object",
+                                    "additionalProperties": false,
+                                    "properties": {
+                                      "canonical_type": {
+                                        "const": "exact-decimal"
+                                      },
+                                      "precision": {
+                                        "type": "integer",
+                                        "minimum": 1,
+                                        "maximum": 38
+                                      },
+                                      "scale": {
+                                        "type": "integer",
+                                        "minimum": 0,
+                                        "maximum": 38
+                                      }
+                                    },
+                                    "required": [
+                                      "canonical_type",
+                                      "precision",
+                                      "scale"
+                                    ]
+                                  }
+                                ]
+                              },
+                              "nullable": {
+                                "type": [
+                                  "boolean",
+                                  "null"
+                                ]
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "nullable"
+                            ]
+                          }
+                        },
+                        "triggers": {
+                          "type": [
+                            "array",
+                            "null"
+                          ]
+                        },
+                        "constraints": {
+                          "type": [
+                            "array",
+                            "null"
+                          ]
+                        },
+                        "row_policies": {
+                          "type": [
+                            "array",
+                            "null"
+                          ]
+                        },
+                        "rewrite_rules": {
+                          "type": [
+                            "array",
+                            "null"
+                          ]
+                        }
+                      },
+                      "required": [
+                        "kind",
+                        "complete",
+                        "columns",
+                        "triggers",
+                        "constraints",
+                        "row_policies",
+                        "rewrite_rules"
+                      ]
+                    }
+                  },
+                  "observed_declarations": {
+                    "type": "array"
+                  }
+                },
+                "required": [
+                  "session",
+                  "tables",
+                  "observed_declarations"
+                ]
+              }
+            },
+            "required": [
+              "oracle",
+              "postgresql"
+            ]
+          }
+        },
+        "required": [
+          "inputs",
+          "lanes"
+        ]
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "artifact_type",
+    "scope",
+    "corpus_sha256",
+    "evidence",
+    "cases"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Input-bound schema and session baseline",
+  "description": "Runtime admission additionally enforces exact corpus/case/input binding, numeric scale <= precision, bounds and evidence references. Unknown catalog facts are null; templates cannot authorize decisions."
+}

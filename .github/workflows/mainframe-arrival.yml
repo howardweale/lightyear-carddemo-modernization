@@ -43,7 +43,7 @@ jobs:
       - name: Verify inventory, record decoding and read-only mock lanes
         env:
           PYTHONPATH: src
-        run: python -m unittest tests.test_mainframe_inventory tests.test_mainframe_records tests.test_mainframe_arrival tests.test_mainframe_cli tests.test_batch_pack tests.test_zosmf_reader tests.test_zosmf_adapter -v
+        run: python -m unittest tests.test_mainframe_inventory tests.test_mainframe_records tests.test_mainframe_extended_records tests.test_mainframe_arrival tests.test_mainframe_cli tests.test_batch_pack tests.test_zosmf_reader tests.test_zosmf_adapter -v
   pinned-public-estate:
     runs-on: ubuntu-latest
     timeout-minutes: 10

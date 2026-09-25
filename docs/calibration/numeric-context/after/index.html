@@ -1,0 +1,27 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'">
+<title>Decidability report</title><style>body{font:17px/1.5 system-ui,sans-serif;max-width:1120px;margin:40px auto;padding:0 24px;color:#1d2d3f;background:#fff}h1{font-size:36px}h2{margin-top:40px}a{color:#5b36b5}table{border-collapse:collapse;width:100%;margin:18px 0}td,th{padding:10px 12px;border-bottom:1px solid #ddd;text-align:left;vertical-align:top;overflow-wrap:anywhere}summary{cursor:pointer;font-weight:600}details{padding:12px 0;border-bottom:1px solid #ddd}code{overflow-wrap:anywhere}small{color:#526174}.metric{font-size:30px;font-weight:650}.scroll{overflow-x:auto}</style>
+<h1>Decidability report</h1><p>synthetic-numeric-context</p>
+<p class="metric">66.667% of in-scope units decided</p>
+<p>4 decided / 6 in scope. 0 administrative units excluded.</p>
+<p><b>2 / 3 complete cases decided.</b> 1 equivalent, 1 divergent, 1 indeterminate.</p>
+<p>Decidability includes detected differences. It does not establish equivalence, production readiness or a customer engagement decision.</p>
+<p><b>Scope:</b> all eligible files in the declared roots; other extensions explicitly excluded<br><b>Evidence:</b> local-gate-replay. No runtime invocation. Source authentication is not established.</p>
+<p><b>Coverage threshold:</b> not-configured</p>
+<p><a href="report.json">Complete evidence and cluster membership</a> · <a href="proposals.json">Draft proposals</a> · <a href="report.md">Text report</a></p>
+<h2>Denominators by lane</h2><div class="scroll"><table><tr><th>Lane</th><th>All input</th><th>Excluded</th><th>In scope</th><th>Decided</th><th>Decided / all</th><th>Decided / in scope</th></tr>
+<tr><td>oracle</td><td>3</td><td>0</td><td>3</td><td>2</td><td>66.667%</td><td>66.667%</td></tr>
+<tr><td>postgresql</td><td>3</td><td>0</td><td>3</td><td>2</td><td>66.667%</td><td>66.667%</td></tr>
+</table></div><h2>Causes and required work</h2><p>A unit can have multiple causes. Counts in this table overlap.</p><div class="scroll"><table><tr><th>Cause</th><th>Work</th><th>Units</th><th>Sole blocker</th></tr>
+<tr><td>catalog-side-effects-context-required</td><td>semantic-evidence</td><td>2</td><td>2</td></tr>
+</table></div><h2>Disjoint unresolved clusters</h2>
+<p>1 clusters cover 2 unresolved units. Every unresolved record appears once. Expand for up to five examples; report.json retains every membership and source range.</p>
+<details><summary>update: 2 units in 1 cases</summary><p>catalog-side-effects-context-required</p><ul>
+<li>postgresql — unknown-trigger.sql:1–1 <small>(1 units; unit:07460470b835473c594b4dab)</small></li>
+<li>oracle — unknown-trigger.sql:1–1 <small>(1 units; unit:b1ee8c008d6c482c9d8b5c20)</small></li>
+</ul></details>
+<h2>Review-only normalization proposals</h2><p>Scopes show everything a proposed rule could affect in this corpus, including existing decisions. No normalization runs and no future gain is assumed.</p>
+<p>No normalization opportunity is classified by the current cause catalog. Unresolved cases still appear above as parser, evidence, alignment or investigation work.</p>
+<h2>Calibration loop</h2><p>Inspect a cause, narrow a draft scope, gather domain evidence and review the change. After a separately implemented and tested comparator change, rerun the identical corpus and compare reports. Lost divergences and reduced coverage require review.</p>
+<p><small>Unit basis: SQL statements on each dialect side, or paired transfer observations; never lines of code</small></p>
+<p><small>Corpus: <code>6066f185229a8c82a59ea7524051d026af905df10664e033672bec0af72f034f</code><br>Report: <code>e3af82d20a1d0698bfabc66adac06e1d016e92ac514e5c7449d35dcbc89b788f</code></small></p></html>

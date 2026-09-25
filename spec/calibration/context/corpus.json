@@ -1,0 +1,26 @@
+{
+  "schema_version": "1.0",
+  "corpus_id": "synthetic-numeric-context",
+  "adapter": "oracle-postgresql-sql",
+  "roots": {
+    "source": "source",
+    "target": "target"
+  },
+  "cases": [
+    {
+      "id": "equal.sql",
+      "source": "equal.sql",
+      "target": "equal.sql"
+    },
+    {
+      "id": "mismatch.sql",
+      "source": "mismatch.sql",
+      "target": "mismatch.sql"
+    },
+    {
+      "id": "unknown-trigger.sql",
+      "source": "unknown-trigger.sql",
+      "target": "unknown-trigger.sql"
+    }
+  ]
+}

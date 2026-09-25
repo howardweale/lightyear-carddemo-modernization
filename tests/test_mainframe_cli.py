@@ -49,3 +49,19 @@ class CliTests(unittest.TestCase):
                             '--input',data,'--codec','cp037','--output',self.root/'bad.json')
         self.assertEqual(2,result.returncode)
         self.assertFalse((self.root/'bad.json').exists())
+
+    def test_extended_rdw_decode_and_explicit_profiles(self):
+        fixture=json.loads((ROOT/'spec/mainframe/extended-golden.json').read_text())
+        data=self.root/'bank.rdw'
+        data.write_bytes(bytes.fromhex(''.join(r['rdw_hex']+r['payload_hex'] for r in fixture['records'])))
+        choices=self.root/'choices.json';choices.write_text(json.dumps(fixture['redefines']))
+        options=('decode','--copybook',ROOT/'spec/mainframe/copybooks/BANKEXT.cpy','--input',data,
+                 '--codec','cp037','--framing','rdw','--redefines',choices)
+        result=self.run_cli(*options,'--output',self.root/'missing.json')
+        self.assertEqual(2,result.returncode)
+        self.assertFalse((self.root/'missing.json').exists())
+        result=self.run_cli(*options,'--binary-byteorder','big','--binary-truncation','std','--output',self.root/'bank.json')
+        self.assertEqual(0,result.returncode,result.stderr)
+        records=json.loads((self.root/'bank.json').read_text())['records']
+        self.assertEqual(2,len(records))
+        self.assertEqual('-1.23',records[1]['fields'][-2]['value'])

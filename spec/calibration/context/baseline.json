@@ -1,0 +1,293 @@
+{
+  "schema_version": "1.0",
+  "artifact_type": "lightyear-sql-context-baseline",
+  "corpus_sha256": "6066f185229a8c82a59ea7524051d026af905df10664e033672bec0af72f034f",
+  "scope": "static-declared-dml",
+  "evidence": {
+    "mode": "declared-contract",
+    "references": [
+      {
+        "path": "catalog-contract.json",
+        "sha256": "dcb3f7afc74255ee59b08a96189aef82ca41834e3a1429eb601fcb8d26cec954"
+      }
+    ]
+  },
+  "cases": {
+    "equal.sql": {
+      "inputs": {
+        "oracle": {
+          "path": "equal.sql",
+          "sha256": "3822a5dbe4bd942dc12c947e9515383ab73e787879ae15c5332fc444b841a0bd"
+        },
+        "postgresql": {
+          "path": "equal.sql",
+          "sha256": "3822a5dbe4bd942dc12c947e9515383ab73e787879ae15c5332fc444b841a0bd"
+        }
+      },
+      "lanes": {
+        "oracle": {
+          "session": {
+            "current_schema": "app",
+            "numeric_characters": ".,",
+            "search_path": null,
+            "standard_conforming_strings": null,
+            "time_zone": null
+          },
+          "tables": {
+            "accounts": {
+              "kind": "base-table",
+              "complete": true,
+              "columns": {
+                "id": {
+                  "type": {
+                    "canonical_type": "exact-decimal",
+                    "precision": 10,
+                    "scale": 0
+                  },
+                  "nullable": false
+                },
+                "amount": {
+                  "type": {
+                    "canonical_type": "exact-decimal",
+                    "precision": 10,
+                    "scale": 2
+                  },
+                  "nullable": false
+                }
+              },
+              "triggers": [],
+              "constraints": [],
+              "row_policies": [],
+              "rewrite_rules": []
+            }
+          },
+          "observed_declarations": []
+        },
+        "postgresql": {
+          "session": {
+            "current_schema": "app",
+            "numeric_characters": null,
+            "search_path": [
+              "app"
+            ],
+            "standard_conforming_strings": true,
+            "time_zone": null
+          },
+          "tables": {
+            "accounts": {
+              "kind": "base-table",
+              "complete": true,
+              "columns": {
+                "id": {
+                  "type": {
+                    "canonical_type": "exact-decimal",
+                    "precision": 10,
+                    "scale": 0
+                  },
+                  "nullable": false
+                },
+                "amount": {
+                  "type": {
+                    "canonical_type": "exact-decimal",
+                    "precision": 10,
+                    "scale": 2
+                  },
+                  "nullable": false
+                }
+              },
+              "triggers": [],
+              "constraints": [],
+              "row_policies": [],
+              "rewrite_rules": []
+            }
+          },
+          "observed_declarations": []
+        }
+      }
+    },
+    "mismatch.sql": {
+      "inputs": {
+        "oracle": {
+          "path": "mismatch.sql",
+          "sha256": "3822a5dbe4bd942dc12c947e9515383ab73e787879ae15c5332fc444b841a0bd"
+        },
+        "postgresql": {
+          "path": "mismatch.sql",
+          "sha256": "d2155b50f394ae1cf67805b4553b6a5a996c940c96a6cb213fb42307fbfd7f5a"
+        }
+      },
+      "lanes": {
+        "oracle": {
+          "session": {
+            "current_schema": "app",
+            "numeric_characters": ".,",
+            "search_path": null,
+            "standard_conforming_strings": null,
+            "time_zone": null
+          },
+          "tables": {
+            "accounts": {
+              "kind": "base-table",
+              "complete": true,
+              "columns": {
+                "id": {
+                  "type": {
+                    "canonical_type": "exact-decimal",
+                    "precision": 10,
+                    "scale": 0
+                  },
+                  "nullable": false
+                },
+                "amount": {
+                  "type": {
+                    "canonical_type": "exact-decimal",
+                    "precision": 10,
+                    "scale": 2
+                  },
+                  "nullable": false
+                }
+              },
+              "triggers": [],
+              "constraints": [],
+              "row_policies": [],
+              "rewrite_rules": []
+            }
+          },
+          "observed_declarations": []
+        },
+        "postgresql": {
+          "session": {
+            "current_schema": "app",
+            "numeric_characters": null,
+            "search_path": [
+              "app"
+            ],
+            "standard_conforming_strings": true,
+            "time_zone": null
+          },
+          "tables": {
+            "accounts": {
+              "kind": "base-table",
+              "complete": true,
+              "columns": {
+                "id": {
+                  "type": {
+                    "canonical_type": "exact-decimal",
+                    "precision": 10,
+                    "scale": 0
+                  },
+                  "nullable": false
+                },
+                "amount": {
+                  "type": {
+                    "canonical_type": "exact-decimal",
+                    "precision": 10,
+                    "scale": 2
+                  },
+                  "nullable": false
+                }
+              },
+              "triggers": [],
+              "constraints": [],
+              "row_policies": [],
+              "rewrite_rules": []
+            }
+          },
+          "observed_declarations": []
+        }
+      }
+    },
+    "unknown-trigger.sql": {
+      "inputs": {
+        "oracle": {
+          "path": "unknown-trigger.sql",
+          "sha256": "3822a5dbe4bd942dc12c947e9515383ab73e787879ae15c5332fc444b841a0bd"
+        },
+        "postgresql": {
+          "path": "unknown-trigger.sql",
+          "sha256": "3822a5dbe4bd942dc12c947e9515383ab73e787879ae15c5332fc444b841a0bd"
+        }
+      },
+      "lanes": {
+        "oracle": {
+          "session": {
+            "current_schema": "app",
+            "numeric_characters": ".,",
+            "search_path": null,
+            "standard_conforming_strings": null,
+            "time_zone": null
+          },
+          "tables": {
+            "accounts": {
+              "kind": "base-table",
+              "complete": true,
+              "columns": {
+                "id": {
+                  "type": {
+                    "canonical_type": "exact-decimal",
+                    "precision": 10,
+                    "scale": 0
+                  },
+                  "nullable": false
+                },
+                "amount": {
+                  "type": {
+                    "canonical_type": "exact-decimal",
+                    "precision": 10,
+                    "scale": 2
+                  },
+                  "nullable": false
+                }
+              },
+              "triggers": null,
+              "constraints": [],
+              "row_policies": [],
+              "rewrite_rules": []
+            }
+          },
+          "observed_declarations": []
+        },
+        "postgresql": {
+          "session": {
+            "current_schema": "app",
+            "numeric_characters": null,
+            "search_path": [
+              "app"
+            ],
+            "standard_conforming_strings": true,
+            "time_zone": null
+          },
+          "tables": {
+            "accounts": {
+              "kind": "base-table",
+              "complete": true,
+              "columns": {
+                "id": {
+                  "type": {
+                    "canonical_type": "exact-decimal",
+                    "precision": 10,
+                    "scale": 0
+                  },
+                  "nullable": false
+                },
+                "amount": {
+                  "type": {
+                    "canonical_type": "exact-decimal",
+                    "precision": 10,
+                    "scale": 2
+                  },
+                  "nullable": false
+                }
+              },
+              "triggers": null,
+              "constraints": [],
+              "row_policies": [],
+              "rewrite_rules": []
+            }
+          },
+          "observed_declarations": []
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "evidence_class": "synthetic-contract-not-customer-capture",
+  "scope": "numeric UPDATE on a base table without catalog side effects",
+  "columns": {
+    "id": {
+      "type": {
+        "canonical_type": "exact-decimal",
+        "precision": 10,
+        "scale": 0
+      },
+      "nullable": false
+    },
+    "amount": {
+      "type": {
+        "canonical_type": "exact-decimal",
+        "precision": 10,
+        "scale": 2
+      },
+      "nullable": false
+    }
+  }
+}

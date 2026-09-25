@@ -37,8 +37,8 @@ class LayoutTests(unittest.TestCase):
         self.assertIn('ROWS[2]', l.fields[2].path)
 
     def test_refuses_layout_guesses(self):
-        declarations = ['05 A REDEFINES B PIC X.', '05 A PIC 9(4) COMP.',
-            '05 A PIC 9(4) BINARY.', '05 A PIC X OCCURS 1 TO 10 DEPENDING ON N.',
+        declarations = ['05 A REDEFINES B PIC X.', '05 A PIC 9(19) COMP.',
+            '05 A PIC X BINARY.', '05 A PIC X OCCURS 1 TO 10 DEPENDING ON N.',
             '05 A PIC 9(2) SYNC.', '05 A PIC ZZ9.99.', '05 A PIC 9(2) SIGN LEADING SEPARATE.',
             '05 A PIC X COMP-3.', '05 A PIC X(0).', '05 A PIC X(99999).', '05 A PIC S9(2) COMP-3 SIGN LEADING.',
             '05 A POINTER.', '05 A PIC X.\n       01 SECOND PIC X.', '05 A PIC X.\n       10 B PIC X.']

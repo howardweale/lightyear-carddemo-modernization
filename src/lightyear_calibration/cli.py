@@ -24,6 +24,16 @@ def parser():
     s.add_argument("--manifest", required=True, type=Path)
     s.add_argument("--output", required=True, type=Path)
     s.add_argument("--minimum-decidability", type=float)
+    s.add_argument("--context", type=Path, help="Input-bound schema/session baseline")
+    b = commands.add_parser("baseline", help="Inventory required schema/session facts without inventing a catalog")
+    b.add_argument("--manifest", required=True, type=Path)
+    b.add_argument("--output", required=True, type=Path)
+    r = commands.add_parser("replay-idempiere", help="Replay the pinned paired source and publish actual before/after counts")
+    r.add_argument("--source", required=True, type=Path)
+    r.add_argument("--report", required=True, type=Path)
+    r.add_argument("--pairing-manifest", required=True, type=Path)
+    r.add_argument("--output", required=True, type=Path)
+    r.add_argument("--context", type=Path, help="Optional reviewed baseline from a prior pinned replay")
     i = commands.add_parser("import-idempiere", help="Calibrate a retained comparison report without claiming a fresh source replay")
     i.add_argument("--report", required=True, type=Path)
     i.add_argument("--pairing-manifest", required=True, type=Path)
@@ -56,13 +66,26 @@ def main(argv=None):
             for root in (args.source, args.target):
                 require(not args.output.resolve().is_relative_to(root.resolve()), "Keep manifests outside corpus roots")
             write_new(args.output, result)
+        elif args.command == 'baseline':
+            from .sql_context import baseline
+            manifest=read_json(args.manifest)
+            require(manifest['adapter']=='oracle-postgresql-sql','Baseline requires SQL corpus')
+            for root in manifest['roots'].values():
+                require(not args.output.resolve().is_relative_to((args.manifest.parent/root).resolve()),'Keep baselines outside corpus roots')
+            snapshot,texts=scan(manifest,args.manifest.parent,include_texts=True)
+            write_new(args.output,baseline(snapshot,texts))
+        elif args.command == 'replay-idempiere':
+            from .replay import replay_idempiere
+            result=replay_idempiere(args.source,read_json(args.report),read_json(args.pairing_manifest),args.output,context=read_json(args.context) if args.context else None)
+            print(json.dumps(result['counts']))
+            return 0
         elif args.command in {"scan", "import-idempiere"}:
             require(not args.output.exists(), "Output already exists; choose a new evidence directory")
             if args.command == "scan":
                 manifest = read_json(args.manifest)
                 for root in manifest["roots"].values():
                     require(not args.output.resolve().is_relative_to((args.manifest.parent / root).resolve()), "Keep reports outside corpus roots")
-                snapshot = scan(manifest, args.manifest.parent)
+                snapshot = scan(manifest, args.manifest.parent, context=read_json(args.context) if args.context else None)
             else:
                 snapshot = import_idempiere(read_json(args.report), read_json(args.pairing_manifest))
             result = build_report(snapshot, args.minimum_decidability)

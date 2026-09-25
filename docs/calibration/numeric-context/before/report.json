@@ -1,0 +1,444 @@
+{
+  "accounting": {
+    "cause_counts_overlap": true,
+    "cluster_units": 6,
+    "clusters_are_disjoint": true,
+    "unit_basis": "SQL statements on each dialect side, or paired transfer observations; never lines of code",
+    "unresolved_units": 6
+  },
+  "adapter": "oracle-postgresql-sql",
+  "artifact_type": "lightyear-decidability-report",
+  "by_lane": {
+    "oracle": {
+      "cases": {
+        "decided": 0,
+        "decision_fraction": null,
+        "divergent": 0,
+        "equivalent": 0,
+        "indeterminate": 0,
+        "total": 0
+      },
+      "decidability": {
+        "denominator": 3,
+        "fraction": 0.0,
+        "numerator": 0
+      },
+      "decided_fraction_of_all_input_units": 0.0,
+      "decided_units": 0,
+      "excluded_units": 0,
+      "in_scope_units": 3,
+      "indeterminate_units": 3,
+      "input_units": 3,
+      "unsupported_units": 0
+    },
+    "postgresql": {
+      "cases": {
+        "decided": 0,
+        "decision_fraction": null,
+        "divergent": 0,
+        "equivalent": 0,
+        "indeterminate": 0,
+        "total": 0
+      },
+      "decidability": {
+        "denominator": 3,
+        "fraction": 0.0,
+        "numerator": 0
+      },
+      "decided_fraction_of_all_input_units": 0.0,
+      "decided_units": 0,
+      "excluded_units": 0,
+      "in_scope_units": 3,
+      "indeterminate_units": 3,
+      "input_units": 3,
+      "unsupported_units": 0
+    }
+  },
+  "cases": [
+    {
+      "id": "equal.sql",
+      "verdict": "indeterminate"
+    },
+    {
+      "id": "mismatch.sql",
+      "verdict": "indeterminate"
+    },
+    {
+      "id": "unknown-trigger.sql",
+      "verdict": "indeterminate"
+    }
+  ],
+  "causes": [
+    {
+      "cases": 3,
+      "hypothesis": null,
+      "kind": "semantic-evidence",
+      "reason_code": "dml-schema-trigger-and-coercion-context-required",
+      "record_ids": [
+        "unit:07460470b835473c594b4dab",
+        "unit:16c0fb9c8ba0ec49e0b50f34",
+        "unit:26525213ae5445a0727d25d8",
+        "unit:6992c1e9ab368b3d7cfb7dae",
+        "unit:b1ee8c008d6c482c9d8b5c20",
+        "unit:ceca41014efa408c85be620b"
+      ],
+      "required_evidence": [
+        "Source-bound reproducer",
+        "A test that remains unresolved or divergent when the proposed fix is invalid"
+      ],
+      "sole_blocker_units": 0,
+      "title": "Establish the schema, session and runtime semantics",
+      "units": 6
+    },
+    {
+      "cases": 3,
+      "hypothesis": null,
+      "kind": "semantic-evidence",
+      "reason_code": "expression-requires-dialect-or-session-semantics",
+      "record_ids": [
+        "unit:07460470b835473c594b4dab",
+        "unit:16c0fb9c8ba0ec49e0b50f34",
+        "unit:26525213ae5445a0727d25d8",
+        "unit:6992c1e9ab368b3d7cfb7dae",
+        "unit:b1ee8c008d6c482c9d8b5c20",
+        "unit:ceca41014efa408c85be620b"
+      ],
+      "required_evidence": [
+        "Source-bound reproducer",
+        "A test that remains unresolved or divergent when the proposed fix is invalid"
+      ],
+      "sole_blocker_units": 0,
+      "title": "Establish the schema, session and runtime semantics",
+      "units": 6
+    }
+  ],
+  "claims": {
+    "all_unresolved_records_clustered": true,
+    "normalizations_applied": false,
+    "predicted_lift_is_measured": false,
+    "production_ready": false,
+    "runtime_invocations": 0,
+    "whole_estate_equivalence": false
+  },
+  "clusters": [
+    {
+      "cases": 3,
+      "id": "cluster:7f654863d51159cb23a321bc",
+      "kind": "update",
+      "reason_codes": [
+        "dml-schema-trigger-and-coercion-context-required",
+        "expression-requires-dialect-or-session-semantics"
+      ],
+      "record_ids": [
+        "unit:07460470b835473c594b4dab",
+        "unit:16c0fb9c8ba0ec49e0b50f34",
+        "unit:26525213ae5445a0727d25d8",
+        "unit:6992c1e9ab368b3d7cfb7dae",
+        "unit:b1ee8c008d6c482c9d8b5c20",
+        "unit:ceca41014efa408c85be620b"
+      ],
+      "status": "indeterminate",
+      "units": 6
+    }
+  ],
+  "content_sha256": "6d8d9f5c0bfae2d28f462ff43b60ea9da832368a23c1a8325d7e46db9a0824c6",
+  "corpus_id": "synthetic-numeric-context",
+  "corpus_sha256": "6066f185229a8c82a59ea7524051d026af905df10664e033672bec0af72f034f",
+  "gate": {
+    "adapter": "oracle-postgresql-sql",
+    "implementation": {
+      "lightyear_calibration.sql_context": "58c6c17728d2865b3aada0a25aea4558e8e5e1628c4a3bd578972d24f32e2ceb",
+      "lightyear_calibration.sql_gate": "ac0b0f702bbec89465f6ffc39f39043122a0c773716b6df724e55ad2ba5964e0",
+      "lightyear_calibration.sql_parser": "7e185c3642ab996b70ce5915ec41fb340ec1f301e926f55296adf9a1833d470b",
+      "lightyear_common.io": "8ead1c4e2221cca5a65b3e3ef3cb5d4a841f7d89d33f8b416357076056b3621e",
+      "lightyear_data.contracts": "a9f8cae57a0c256c3d405ec06468bc45734314b4f7692438726259e4bee56575",
+      "lightyear_data.idempiere_comparison": "c6ae90d2bfc5855377fae4c22671927c42d59b26d08b60d63bb2789bd2f026b2",
+      "lightyear_data.idempiere_sql": "7d3337a9b4f6a01c7df62e3849a027ff27e1ca099828781ac6a368a704976ee0",
+      "lightyear_data.semantic_core": "872e17477a138eec8f8fe37eb692acb971e76c0faa8596645fa3f775f9036c35"
+    },
+    "policy": {
+      "alignment": "full ordered alignment or a positional prefix ending before the first unknown/mismatch; no resynchronization",
+      "calibration_version": "2.0",
+      "context": "Optional input-bound schema/session contract; numeric literal DML only; expires at schema/unknown operations; static declared effects, no execution equivalence",
+      "retained_base": {
+        "administrative_boundary": "These known client settings and migration-registration effects are separately counted outside SQL-effect coverage; literal SQL execution and an existing search-path/schema mapping are assumptions, not verified client/runtime behavior. Any other session/client command remains unparsed.",
+        "administrative_exclusions": [
+          "Oracle SET DEFINE OFF",
+          "Oracle SET SQLBLANKLINES ON",
+          "SELECT register_migration_script with one filename literal FROM dual"
+        ],
+        "alignment_policy": "Keep order and repetitions. If ordered effect identities differ, all nonadministrative parsed units are indeterminate; do not guess resynchronization or silently drop unmatched operations.",
+        "authorities": [
+          "https://docs.oracle.com/en/database/oracle/oracle-database/19/sqlrf/Data-Types.html",
+          "https://docs.oracle.com/en/database/oracle/oracle-database/19/sqlrf/Nulls.html",
+          "https://www.postgresql.org/docs/16/datatype-numeric.html",
+          "https://www.postgresql.org/docs/16/datatype-character.html",
+          "https://www.postgresql.org/docs/16/datatype-datetime.html"
+        ],
+        "character_policy": "Empty string vs NULL, BYTE/CHAR length units, encoding and collation remain policy decisions even for equal declared lengths.",
+        "compatibility_classes": [
+          "exact",
+          "normalized-equivalent",
+          "policy-decision-required",
+          "lossy",
+          "unsupported"
+        ],
+        "content_sha256": "4ec8c13d317121492fed5b04e3c45abacf483b6daea3b0a3425862a020dcf85a",
+        "coverage_unit": "Non-comment top-level SQL statement or opaque procedural block on each dialect side, NOT token occurrences. A lexically broken file or unterminated Oracle block may form one opaque remainder unit. Expanded column effects never inflate the statement denominator.",
+        "datetime_policy": "Oracle DATE retains seconds; PostgreSQL DATE does not. Timestamp precision, time-zone and range differences remain unresolved without an admitted domain.",
+        "dml_policy": "Record INSERT VALUES, UPDATE assignments and DELETE predicates; literals are typed, nonliteral expressions opaque. Baseline column domains, triggers, predicates and coercions are not admitted; DML remains indeterminate, including identical text.",
+        "documentation_boundary": "Language references define this bounded profile; they do not establish the runtime database versions or configuration used by iDempiere deployments.",
+        "equivalence_requires": [
+          "all-in-scope-units-fully-parsed-and-decided",
+          "identical-ordered-effect-keys-without-resynchronization",
+          "at-least-one-in-scope-effect",
+          "no-opaque-expression-or-unresolved-domain"
+        ],
+        "finite_numeric_projection": "Compare explicit precision and scale only, 1<=p<=38 and 0<=s<=p. Excludes PostgreSQL NaN/infinities, runtime conversions and storage; no unrestricted NUMBER/NUMERIC equivalence.",
+        "helper_policy": "Project the five positional t_alter_column arguments using the pinned altercolumn.sql implementation. Never discharge catalog lookups, coercion, dependent views, permissions or helper deployment/version history.",
+        "milestone": 69,
+        "models_called": 0,
+        "ms70_handoff": "References to flagged source ranges only; no prompts, work orders, agents or billable calls are created by MS69. MS70 must bound and budget individual contexts using existing workcell controls.",
+        "policy_id": "idda-static-declared-effects-v1",
+        "provenance": "not-classified; generated-or-maintained output audit, not evidence of independent hand maintenance",
+        "schema_policy": "Compare declared column type facets, explicit defaults and nullability. Constraints, indexes and drops retain domain/catalog obligations. No baseline schema reconstruction, final-state proof, transaction or application claim.",
+        "schema_version": "1.0",
+        "semantic_core": "data-modernization/semantic-core/database-semantic-core.json",
+        "verdict_scope": "ordered-declared-schema-effects-not-final-state-or-execution"
+      }
+    }
+  },
+  "instrument": {
+    "__init__.py": "e06ba7141ca65e2cf73900ca879a77c0af53b693d3886cc1cf664bf693d88519",
+    "__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+    "adapters.py": "7cbf4a545e412b9880f93fdc870dd70f33e5be813c0d2d2fd89143c15e7e5b70",
+    "cli.py": "294eb48b27a7a264da9b08da3a52d9e6f5a01b7c832fd80889a95983a159ada8",
+    "contracts.py": "4c9d0db03120e5c3792e9988985c99e6a98c2f5c9307ab4a77326b6e43815836",
+    "instrument.py": "ca4ef796e9125e06cd9addadc093f4eb9e2dc9e2740947cd975f832cc71ed10c",
+    "replay.py": "87fa36dc078c3a8d1a89dcf4000f54f8299312bc41de088de8ac1de4f8c2276c",
+    "reporting.py": "0ecae5f66354f1f59485caf9a8d500522939301080604483fe8bdc4ee11b0d8d",
+    "sql_context.py": "58c6c17728d2865b3aada0a25aea4558e8e5e1628c4a3bd578972d24f32e2ceb",
+    "sql_gate.py": "ac0b0f702bbec89465f6ffc39f39043122a0c773716b6df724e55ad2ba5964e0",
+    "sql_parser.py": "7e185c3642ab996b70ce5915ec41fb340ec1f301e926f55296adf9a1833d470b"
+  },
+  "normalization_proposals": [],
+  "provenance": {
+    "excluded_files": {
+      "source": [],
+      "target": []
+    },
+    "inputs": [
+      {
+        "case_id": "equal.sql",
+        "source": {
+          "path": "equal.sql",
+          "sha256": "3822a5dbe4bd942dc12c947e9515383ab73e787879ae15c5332fc444b841a0bd"
+        },
+        "target": {
+          "path": "equal.sql",
+          "sha256": "3822a5dbe4bd942dc12c947e9515383ab73e787879ae15c5332fc444b841a0bd"
+        }
+      },
+      {
+        "case_id": "mismatch.sql",
+        "source": {
+          "path": "mismatch.sql",
+          "sha256": "3822a5dbe4bd942dc12c947e9515383ab73e787879ae15c5332fc444b841a0bd"
+        },
+        "target": {
+          "path": "mismatch.sql",
+          "sha256": "d2155b50f394ae1cf67805b4553b6a5a996c940c96a6cb213fb42307fbfd7f5a"
+        }
+      },
+      {
+        "case_id": "unknown-trigger.sql",
+        "source": {
+          "path": "unknown-trigger.sql",
+          "sha256": "3822a5dbe4bd942dc12c947e9515383ab73e787879ae15c5332fc444b841a0bd"
+        },
+        "target": {
+          "path": "unknown-trigger.sql",
+          "sha256": "3822a5dbe4bd942dc12c947e9515383ab73e787879ae15c5332fc444b841a0bd"
+        }
+      }
+    ],
+    "mode": "local-gate-replay",
+    "runtime_invocations": 0,
+    "scope": "all eligible files in the declared roots; other extensions explicitly excluded",
+    "source_authentication": "not-established"
+  },
+  "records": [
+    {
+      "case_id": "equal.sql",
+      "id": "unit:16c0fb9c8ba0ec49e0b50f34",
+      "kind": "update",
+      "lane": "oracle",
+      "outcomes": [
+        "indeterminate"
+      ],
+      "reason_codes": [
+        "dml-schema-trigger-and-coercion-context-required",
+        "expression-requires-dialect-or-session-semantics"
+      ],
+      "source": {
+        "end_line": 1,
+        "first_unit": 1,
+        "last_unit": 1,
+        "path": "equal.sql",
+        "sha256": "3822a5dbe4bd942dc12c947e9515383ab73e787879ae15c5332fc444b841a0bd",
+        "start_line": 1,
+        "unit_hashes_sha256": "734158d4b3d714dec9f863ad0af48aeae2f7b43f6205c1c8f6aa9aa963dce213"
+      },
+      "status": "indeterminate",
+      "units": 1
+    },
+    {
+      "case_id": "equal.sql",
+      "id": "unit:6992c1e9ab368b3d7cfb7dae",
+      "kind": "update",
+      "lane": "postgresql",
+      "outcomes": [
+        "indeterminate"
+      ],
+      "reason_codes": [
+        "dml-schema-trigger-and-coercion-context-required",
+        "expression-requires-dialect-or-session-semantics"
+      ],
+      "source": {
+        "end_line": 1,
+        "first_unit": 1,
+        "last_unit": 1,
+        "path": "equal.sql",
+        "sha256": "3822a5dbe4bd942dc12c947e9515383ab73e787879ae15c5332fc444b841a0bd",
+        "start_line": 1,
+        "unit_hashes_sha256": "734158d4b3d714dec9f863ad0af48aeae2f7b43f6205c1c8f6aa9aa963dce213"
+      },
+      "status": "indeterminate",
+      "units": 1
+    },
+    {
+      "case_id": "mismatch.sql",
+      "id": "unit:26525213ae5445a0727d25d8",
+      "kind": "update",
+      "lane": "oracle",
+      "outcomes": [
+        "indeterminate"
+      ],
+      "reason_codes": [
+        "dml-schema-trigger-and-coercion-context-required",
+        "expression-requires-dialect-or-session-semantics"
+      ],
+      "source": {
+        "end_line": 1,
+        "first_unit": 1,
+        "last_unit": 1,
+        "path": "mismatch.sql",
+        "sha256": "3822a5dbe4bd942dc12c947e9515383ab73e787879ae15c5332fc444b841a0bd",
+        "start_line": 1,
+        "unit_hashes_sha256": "734158d4b3d714dec9f863ad0af48aeae2f7b43f6205c1c8f6aa9aa963dce213"
+      },
+      "status": "indeterminate",
+      "units": 1
+    },
+    {
+      "case_id": "mismatch.sql",
+      "id": "unit:ceca41014efa408c85be620b",
+      "kind": "update",
+      "lane": "postgresql",
+      "outcomes": [
+        "indeterminate"
+      ],
+      "reason_codes": [
+        "dml-schema-trigger-and-coercion-context-required",
+        "expression-requires-dialect-or-session-semantics"
+      ],
+      "source": {
+        "end_line": 1,
+        "first_unit": 1,
+        "last_unit": 1,
+        "path": "mismatch.sql",
+        "sha256": "d2155b50f394ae1cf67805b4553b6a5a996c940c96a6cb213fb42307fbfd7f5a",
+        "start_line": 1,
+        "unit_hashes_sha256": "a35c285cecdf9790755996f973d86c2e42c2c8622c55eee784302567fbb8f714"
+      },
+      "status": "indeterminate",
+      "units": 1
+    },
+    {
+      "case_id": "unknown-trigger.sql",
+      "id": "unit:b1ee8c008d6c482c9d8b5c20",
+      "kind": "update",
+      "lane": "oracle",
+      "outcomes": [
+        "indeterminate"
+      ],
+      "reason_codes": [
+        "dml-schema-trigger-and-coercion-context-required",
+        "expression-requires-dialect-or-session-semantics"
+      ],
+      "source": {
+        "end_line": 1,
+        "first_unit": 1,
+        "last_unit": 1,
+        "path": "unknown-trigger.sql",
+        "sha256": "3822a5dbe4bd942dc12c947e9515383ab73e787879ae15c5332fc444b841a0bd",
+        "start_line": 1,
+        "unit_hashes_sha256": "734158d4b3d714dec9f863ad0af48aeae2f7b43f6205c1c8f6aa9aa963dce213"
+      },
+      "status": "indeterminate",
+      "units": 1
+    },
+    {
+      "case_id": "unknown-trigger.sql",
+      "id": "unit:07460470b835473c594b4dab",
+      "kind": "update",
+      "lane": "postgresql",
+      "outcomes": [
+        "indeterminate"
+      ],
+      "reason_codes": [
+        "dml-schema-trigger-and-coercion-context-required",
+        "expression-requires-dialect-or-session-semantics"
+      ],
+      "source": {
+        "end_line": 1,
+        "first_unit": 1,
+        "last_unit": 1,
+        "path": "unknown-trigger.sql",
+        "sha256": "3822a5dbe4bd942dc12c947e9515383ab73e787879ae15c5332fc444b841a0bd",
+        "start_line": 1,
+        "unit_hashes_sha256": "734158d4b3d714dec9f863ad0af48aeae2f7b43f6205c1c8f6aa9aa963dce213"
+      },
+      "status": "indeterminate",
+      "units": 1
+    }
+  ],
+  "schema_version": "1.0",
+  "summary": {
+    "cases": {
+      "decided": 0,
+      "decision_fraction": 0.0,
+      "divergent": 0,
+      "equivalent": 0,
+      "indeterminate": 3,
+      "total": 3
+    },
+    "decidability": {
+      "denominator": 6,
+      "fraction": 0.0,
+      "numerator": 0
+    },
+    "decided_fraction_of_all_input_units": 0.0,
+    "decided_units": 0,
+    "excluded_units": 0,
+    "in_scope_units": 6,
+    "indeterminate_units": 6,
+    "input_units": 6,
+    "unsupported_units": 0
+  },
+  "threshold": {
+    "boundary": "A coverage threshold never establishes equivalence or engagement readiness.",
+    "minimum_decidability": null,
+    "status": "not-configured"
+  }
+}

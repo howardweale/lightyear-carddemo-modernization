@@ -1,0 +1,11 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'">
+<title>iDempiere calibration results</title><style>body{font:18px/1.6 system-ui;max-width:1050px;margin:50px auto;padding:0 24px;color:#163044}h1{font-size:40px}table{border-collapse:collapse;width:100%}td,th{padding:14px;border-bottom:1px solid #ccd4dc;text-align:left}.metric{font-size:32px;color:#245e49}code{overflow-wrap:anywhere}</style>
+<h1>Does calibration raise decidability?</h1><p class="metric">776 → 780 decided SQL units</p>
+<p>Measured on the same 111,293 in-scope units and 1,078 paired migration files.</p>
+<table><tr><th>Units</th><th>Before</th><th>Parser extensions</th><th>Calibrated gate</th></tr><tr><td>Decided</td><td>776</td><td>776</td><td>780</td></tr><tr><td>Indeterminate</td><td>103,922</td><td>109,112</td><td>109,108</td></tr><tr><td>Unsupported</td><td>6,595</td><td>1,405</td><td>1,405</td></tr><tr><td>In scope</td><td>111,293</td><td>111,293</td><td>111,293</td></tr></table>
+<h2>What this proves</h2><p>The loop produced 4 additional decisions and reduced unsupported syntax by 5,190 units. No previous decision or divergence was lost. It also shows why parsing alone is insufficient.</p>
+<h2>What still blocks useful coverage</h2><p>Schema, session, trigger and expression semantics still dominate. The new acquisition baseline inventories those requirements without inventing runtime facts. 1,077 complete pairs remain indeterminate.</p>
+<p>This is a source comparison, not a customer runtime test or a proof of application equivalence.</p>
+<p><a href="report.md">Full explanation and causes</a> · <a href="measurement.json">Measured counts and changed decisions</a></p>
+<p><small>Pinned source: <code>731515dcdd5278b843db33b9d3109d155b881951</code></small></p></html>

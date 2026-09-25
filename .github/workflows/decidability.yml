@@ -7,6 +7,9 @@ on:
       - 'src/lightyear_qualification/protocol.py'
       - 'spec/calibration/**'
       - 'tests/test_decidability.py'
+      - 'tests/test_calibration_loop.py'
+      - 'tests/test_calibration_public.py'
+      - 'docs/calibration/**'
       - 'pyproject.toml'
       - '.github/workflows/decidability.yml'
   push:
@@ -17,6 +20,9 @@ on:
       - 'src/lightyear_qualification/protocol.py'
       - 'spec/calibration/**'
       - 'tests/test_decidability.py'
+      - 'tests/test_calibration_loop.py'
+      - 'tests/test_calibration_public.py'
+      - 'docs/calibration/**'
       - 'pyproject.toml'
       - '.github/workflows/decidability.yml'
 permissions:
@@ -37,7 +43,7 @@ jobs:
       - name: Verify cause accounting and safety boundaries
         env:
           PYTHONPATH: src
-        run: python -m unittest tests.test_decidability tests.test_idempiere_semantic_comparison -v
+        run: python -m unittest tests.test_decidability tests.test_calibration_loop tests.test_calibration_public tests.test_idempiere_semantic_comparison -v
       - name: Scan an unfamiliar corpus
         env:
           PYTHONPATH: src
@@ -50,3 +56,23 @@ jobs:
         run: |
           python -m lightyear_calibration import-idempiere --report factory/idempiere-divergence-audit/stage2-comparison.json --pairing-manifest factory/idempiere-divergence-audit/pairing-manifest.json --output work/calibration/idempiere
           python -m lightyear_calibration validate work/calibration/idempiere/report.json
+
+  pinned-calibration-replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7
+        with:
+          repository: idempiere/idempiere
+          ref: 731515dcdd5278b843db33b9d3109d155b881951
+          path: work/idempiere-public
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Reproduce calibration counts against pinned public SQL
+        env:
+          PYTHONPATH: src
+          IDEMPIERE_SOURCE: work/idempiere-public
+        run: python -m unittest tests.test_calibration_public -v

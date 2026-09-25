@@ -1,0 +1,139 @@
+{
+  "after": {
+    "cases": {
+      "decided": 2,
+      "decision_fraction": 0.6666666666666666,
+      "divergent": 1,
+      "equivalent": 1,
+      "indeterminate": 1,
+      "total": 3
+    },
+    "decidability": {
+      "denominator": 6,
+      "fraction": 0.6666666666666666,
+      "numerator": 4
+    },
+    "decided_fraction_of_all_input_units": 0.6666666666666666,
+    "decided_units": 4,
+    "excluded_units": 0,
+    "in_scope_units": 6,
+    "indeterminate_units": 2,
+    "input_units": 6,
+    "unsupported_units": 0
+  },
+  "after_sha256": "e3af82d20a1d0698bfabc66adac06e1d016e92ac514e5c7449d35dcbc89b788f",
+  "artifact_type": "lightyear-decidability-rerun",
+  "before": {
+    "cases": {
+      "decided": 0,
+      "decision_fraction": 0.0,
+      "divergent": 0,
+      "equivalent": 0,
+      "indeterminate": 3,
+      "total": 3
+    },
+    "decidability": {
+      "denominator": 6,
+      "fraction": 0.0,
+      "numerator": 0
+    },
+    "decided_fraction_of_all_input_units": 0.0,
+    "decided_units": 0,
+    "excluded_units": 0,
+    "in_scope_units": 6,
+    "indeterminate_units": 6,
+    "input_units": 6,
+    "unsupported_units": 0
+  },
+  "before_sha256": "6d8d9f5c0bfae2d28f462ff43b60ea9da832368a23c1a8325d7e46db9a0824c6",
+  "boundary": "Measures two supplied gate runs on identical inputs. No causal attribution, automatic approval or verdict promotion.",
+  "changed_cases": [
+    {
+      "after": "equivalent",
+      "before": "indeterminate",
+      "case_id": "equal.sql"
+    },
+    {
+      "after": "divergent",
+      "before": "indeterminate",
+      "case_id": "mismatch.sql"
+    }
+  ],
+  "changed_units": [
+    {
+      "after": "decided",
+      "after_outcomes": [
+        "equivalent"
+      ],
+      "before": "indeterminate",
+      "before_outcomes": [
+        "indeterminate"
+      ],
+      "record_id": "unit:16c0fb9c8ba0ec49e0b50f34"
+    },
+    {
+      "after": "decided",
+      "after_outcomes": [
+        "divergent"
+      ],
+      "before": "indeterminate",
+      "before_outcomes": [
+        "indeterminate"
+      ],
+      "record_id": "unit:26525213ae5445a0727d25d8"
+    },
+    {
+      "after": "decided",
+      "after_outcomes": [
+        "equivalent"
+      ],
+      "before": "indeterminate",
+      "before_outcomes": [
+        "indeterminate"
+      ],
+      "record_id": "unit:6992c1e9ab368b3d7cfb7dae"
+    },
+    {
+      "after": "decided",
+      "after_outcomes": [
+        "divergent"
+      ],
+      "before": "indeterminate",
+      "before_outcomes": [
+        "indeterminate"
+      ],
+      "record_id": "unit:ceca41014efa408c85be620b"
+    }
+  ],
+  "content_sha256": "28202123b81bfa80015e494776ff323e44bb021cde542bf9ebb6a0f1bf06b6e4",
+  "corpus_sha256": "6066f185229a8c82a59ea7524051d026af905df10664e033672bec0af72f034f",
+  "decidability_fraction_delta": 0.6666666666666666,
+  "divergences_no_longer_reported": [],
+  "gate_changed": true,
+  "lost_decisions": [],
+  "lost_unit_decisions": [],
+  "newly_decided_cases": 2,
+  "normalization_causality_established": false,
+  "review_required": false,
+  "schema_version": "1.0",
+  "transitions": [
+    {
+      "after": "divergent",
+      "before": "indeterminate",
+      "cases": 1
+    },
+    {
+      "after": "equivalent",
+      "before": "indeterminate",
+      "cases": 1
+    },
+    {
+      "after": "indeterminate",
+      "before": "indeterminate",
+      "cases": 1
+    }
+  ],
+  "unit_denominator_unchanged": true,
+  "unit_divergences_no_longer_reported": [],
+  "unit_partition_unchanged": true
+}

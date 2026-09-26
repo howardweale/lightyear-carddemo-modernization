@@ -4,7 +4,7 @@ import gzip
 import hashlib
 import json
 import zipfile
-from pathlib import Path
+from pathlib import Path, PureWindowsPath
 import unittest
 from lightyear_calibration.contracts import verify
 
@@ -43,7 +43,10 @@ class ReconciliationPublicationTests(unittest.TestCase):
         for key in ('application_equivalence','schema_equivalence','platform_qualification','oracle_catalog_native_conformance_claim'):
             self.assertFalse(receipt[key])
         for name,expected in receipt.get('implementation_sha256',{}).items():
-            self.assertEqual(expected,hashlib.sha256((ROOT.parents[2]/name).read_bytes().replace(b'\r\n',b'\n')).hexdigest(),name)
+            # The retained receipt was produced on Windows; decode its paths on
+            # either host without rewriting the sealed evidence or its hashes.
+            path=ROOT.parents[2].joinpath(*PureWindowsPath(name).parts)
+            self.assertEqual(expected,hashlib.sha256(path.read_bytes().replace(b'\r\n',b'\n')).hexdigest(),name)
         core=evidence_json('evidence/rerun/result.json');verify(core)
         self.assertEqual(receipt['release13']['migration_pairs'],len(core['pairs']))
         for pair in core['pairs']:

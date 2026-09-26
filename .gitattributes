@@ -78,3 +78,6 @@ docs/calibration/idempiere-runtime/evidence/** -text -whitespace
 # Preserve reconciliation evidence bytes and raw difference witnesses.
 docs/calibration/idempiere-reconciliation/evidence/** -text -whitespace
 docs/calibration/idempiere-reconciliation/evidence.zip binary
+
+# Preserve the exact executed application harness bytes bound by native receipts.
+docs/calibration/idempiere-application/LightyearJourneyTest.java -text -whitespace

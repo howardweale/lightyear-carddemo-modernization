@@ -84,6 +84,13 @@
       "title": "Native iDempiere reconciliation and historical replay",
       "customer_value": "Review matching starting data, explicit repairs and 1,125 historical pairs across 20 admitted release checkpoints; PR #215.",
       "status": "Corrected native replay completed; broader qualification unclaimed"
+    },
+    {
+      "number": 85,
+      "path": "MS-85/MS-85.md",
+      "title": "iDempiere schema alignment and native business journey",
+      "customer_value": "Verify schema repairs and one real customer-to-payment scenario on Oracle and PostgreSQL, retaining every raw difference.",
+      "status": "Bounded native journey passed; full schema, application and platform qualification unclaimed"
     }
   ]
 }

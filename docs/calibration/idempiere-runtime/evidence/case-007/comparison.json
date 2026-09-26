@@ -1,0 +1,369 @@
+{
+  "application_equivalence": false,
+  "artifact_type": "lightyear-native-migration-comparison",
+  "deltas": {
+    "oracle": {
+      "structure": {
+        "columns": {
+          "added": [
+            {
+              "char_length": 0,
+              "char_used": null,
+              "column_name": "TO_DOCTYPE_ID",
+              "data_default": "NULL\n",
+              "data_length": 22,
+              "data_precision": 10,
+              "data_scale": 0,
+              "data_type": "NUMBER",
+              "identity_column": "NO",
+              "nullable": "Y",
+              "table_name": "C_BANKTRANSFER",
+              "virtual_column": "NO"
+            },
+            {
+              "char_length": 0,
+              "char_used": null,
+              "column_name": "FROM_DOCTYPE_ID",
+              "data_default": "NULL\n",
+              "data_length": 22,
+              "data_precision": 10,
+              "data_scale": 0,
+              "data_type": "NUMBER",
+              "identity_column": "NO",
+              "nullable": "Y",
+              "table_name": "C_BANKTRANSFER",
+              "virtual_column": "NO"
+            }
+          ],
+          "removed": []
+        },
+        "constraints": {
+          "added": [
+            {
+              "constraint_name": "FROMDOCTYPE_CBANKTRANSFER",
+              "constraint_type": "R",
+              "deferrable": "DEFERRABLE",
+              "deferred": "DEFERRED",
+              "delete_rule": "NO ACTION",
+              "r_constraint_name": "C_DOCTYPE_KEY",
+              "search_condition": null,
+              "status": "ENABLED",
+              "table_name": "C_BANKTRANSFER",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "TODOCTYPE_CBANKTRANSFER",
+              "constraint_type": "R",
+              "deferrable": "DEFERRABLE",
+              "deferred": "DEFERRED",
+              "delete_rule": "NO ACTION",
+              "r_constraint_name": "C_DOCTYPE_KEY",
+              "search_condition": null,
+              "status": "ENABLED",
+              "table_name": "C_BANKTRANSFER",
+              "validated": "VALIDATED"
+            }
+          ],
+          "removed": []
+        }
+      },
+      "tables": {
+        "ad_column": {
+          "added": {
+            "4697611ac57f37450cd823f918407c6a4650911265bcd07f0dc7d17e64a22417": 1,
+            "c36096da13881d59bcd2ae57cd9df6f562fa94381f5698a27ccf4e2a4ceb603e": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_element": {
+          "added": {
+            "4a55a6c4374389f0da0e9d2177eae96ca57d0c7c92135a37d049a387df7f1883": 1,
+            "b4f6ce24d446ef5e1c3cb0264b93748ea83b4edb3566438e23a2de383aa8e47d": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_field": {
+          "added": {
+            "107d8718906c710398b8a7b9356acdc5586d059a9289528524526e38432a28bd": 1,
+            "5c8083d88c228b08d0b822d1ac0746fd5cabce68e385c7e1915c0227fdfa0b8b": 1,
+            "5d51f0d100c71dacde6d762926805d8fa94c1cb2a63b59dcc277bd5a4520835a": 1,
+            "63c1561b9f165a1c752147397cbf50b24a42ac7f8b0d072c2f074f3130240d70": 1,
+            "73d0cedf1eb953678ffbb9c6f1dada959c69828a45a67ceb11b057c6009c6855": 1,
+            "a4079d4814477ebb73e4efb62b0f0c38dc4c8d994b312a43c3e8ebb474f4823c": 1,
+            "a9694b64b1ec6e1d3e60739b17d89f671e858afa82e94f03ea13fd96fdc54032": 1,
+            "ac052b4343efa17e232da5fde16c75c570810467d1b3736b22b01a4ab9e47052": 1,
+            "bba4f63ad62007f29318d6a9c1af3429ecce25a187919533d56648dd873af7d1": 1,
+            "bd85f7b61e26eafc436c1cffffedfd7c0325925d8ac19fd3a1f55e144b6f5d22": 1,
+            "c200b0b4235a7c8b4c92626ff72c49fefac47afc59a8e5c18bb2324fcd91b563": 1,
+            "e383ebad4795737964bf07b36f0f1e4e75a8e0e4c5a3af413bbe8d690c5fe058": 1,
+            "e737afead92a66d023759aff322d3feb9ef9d77f2061fb5655f4838dc307f8aa": 1,
+            "ed7c43fe77ab5430aa4db45d7b19137eb8b6c2b47217e03edec01f845942a8d9": 1,
+            "f0b90aa9bdea6b68b7bbd138f25128a6e1208ab02b337307dbe99a0173ff3f84": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "113af00b317ad00c4d93e9e6a9ba14ee05cc95b92861b2ca3e69a74b95fa91e9": 1,
+            "2076c2fa59e0b1b4e4ee232cfb5aa059bcb07749cdfbe0b864bce32c512170ba": 1,
+            "306e5b5daf212989c7929013baf48785dcb3fab24889874921047ff9ca90eabb": 1,
+            "4a6c42435b22d10a46627d68c2e453d654c7ed5643e3e091480684c77b9f6bf5": 1,
+            "53cfaacc97279a95a7c327de4ae67de8e6076166818309ef3328290e14cecba4": 1,
+            "564c0c7295b798ce72a0c571bd03274f8c5f27fc8050336bb1a3bbd24b160a80": 1,
+            "8d5b9dfffe37c1805a50417eb68218e0659e2289cd8aaea6bc306d12d28f36c8": 1,
+            "97884b8c000560f260e18ed2d2a176d7874da39a177d37295a57c7deb15c088c": 1,
+            "9f54b923608069ccffea6f090cc6f3c067823cf82d3a59f384e473642757fc03": 1,
+            "a5afb2647fe5eaf7e36ee113f1a1832d45c58bd67072f08c8932ce07b99c9313": 1,
+            "a7c4cb4026144de827cdabdb28b75253bbffa74b0e46d40bb1db63e946b4b9fc": 1,
+            "a98017b2c08e2efc3d7f6a7e5176e900b694940f837fe51efe17c07d4bbe2408": 1,
+            "b060dffd54a51d9da67ba5468ac780e1dd22153b122e0ab49f14c6b8d77c6d79": 1
+          }
+        },
+        "ad_migrationscript": {
+          "added": {
+            "6dabc7fcf541fdf2f1dfe16ff91980db07efcb2c049cdb893dd1f3d3bd3302df": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_sequence": {
+          "added": {
+            "f8e6a6cb02828aa95c0c5781df6e66a630302036ab8a280e98e7dc79c40bc653": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "274b97ba4b8bff7a778508217f15acd71f5c3adfc2747aeaf1d33e003f170cd0": 1
+          }
+        },
+        "ad_val_rule": {
+          "added": {
+            "00e6300dad672ee4890e40d0c914a5e499c8838151da484cd4318ceb1156d3c8": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        }
+      }
+    },
+    "postgresql": {
+      "structure": {
+        "columns": {
+          "added": [
+            {
+              "character_maximum_length": null,
+              "column_default": "NULL::numeric",
+              "column_name": "from_doctype_id",
+              "data_type": "numeric",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "YES",
+              "numeric_precision": 10,
+              "numeric_scale": 0,
+              "table_name": "c_banktransfer"
+            },
+            {
+              "character_maximum_length": null,
+              "column_default": "NULL::numeric",
+              "column_name": "to_doctype_id",
+              "data_type": "numeric",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "YES",
+              "numeric_precision": 10,
+              "numeric_scale": 0,
+              "table_name": "c_banktransfer"
+            }
+          ],
+          "removed": []
+        },
+        "constraints": {
+          "added": [
+            {
+              "constraint_name": "fromdoctype_cbanktransfer",
+              "definition": "FOREIGN KEY (from_doctype_id) REFERENCES c_doctype(c_doctype_id) DEFERRABLE INITIALLY DEFERRED",
+              "table_name": "c_banktransfer"
+            },
+            {
+              "constraint_name": "todoctype_cbanktransfer",
+              "definition": "FOREIGN KEY (to_doctype_id) REFERENCES c_doctype(c_doctype_id) DEFERRABLE INITIALLY DEFERRED",
+              "table_name": "c_banktransfer"
+            }
+          ],
+          "removed": []
+        },
+        "triggers": {
+          "added": [
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_a_52339\" AFTER DELETE ON adempiere.c_doctype FROM c_banktransfer DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_noaction_del\"()",
+              "table_name": "c_doctype",
+              "trigger_name": "RI_ConstraintTrigger_a_52339"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_a_52340\" AFTER UPDATE ON adempiere.c_doctype FROM c_banktransfer DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_noaction_upd\"()",
+              "table_name": "c_doctype",
+              "trigger_name": "RI_ConstraintTrigger_a_52340"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_a_52333\" AFTER DELETE ON adempiere.c_doctype FROM c_banktransfer DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_noaction_del\"()",
+              "table_name": "c_doctype",
+              "trigger_name": "RI_ConstraintTrigger_a_52333"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_c_52336\" AFTER UPDATE ON adempiere.c_banktransfer FROM c_doctype DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_check_upd\"()",
+              "table_name": "c_banktransfer",
+              "trigger_name": "RI_ConstraintTrigger_c_52336"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_a_52334\" AFTER UPDATE ON adempiere.c_doctype FROM c_banktransfer DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_noaction_upd\"()",
+              "table_name": "c_doctype",
+              "trigger_name": "RI_ConstraintTrigger_a_52334"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_c_52342\" AFTER UPDATE ON adempiere.c_banktransfer FROM c_doctype DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_check_upd\"()",
+              "table_name": "c_banktransfer",
+              "trigger_name": "RI_ConstraintTrigger_c_52342"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_c_52341\" AFTER INSERT ON adempiere.c_banktransfer FROM c_doctype DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_check_ins\"()",
+              "table_name": "c_banktransfer",
+              "trigger_name": "RI_ConstraintTrigger_c_52341"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_c_52335\" AFTER INSERT ON adempiere.c_banktransfer FROM c_doctype DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_check_ins\"()",
+              "table_name": "c_banktransfer",
+              "trigger_name": "RI_ConstraintTrigger_c_52335"
+            }
+          ],
+          "removed": []
+        }
+      },
+      "tables": {
+        "ad_column": {
+          "added": {
+            "4697611ac57f37450cd823f918407c6a4650911265bcd07f0dc7d17e64a22417": 1,
+            "c36096da13881d59bcd2ae57cd9df6f562fa94381f5698a27ccf4e2a4ceb603e": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_element": {
+          "added": {
+            "4a55a6c4374389f0da0e9d2177eae96ca57d0c7c92135a37d049a387df7f1883": 1,
+            "b4f6ce24d446ef5e1c3cb0264b93748ea83b4edb3566438e23a2de383aa8e47d": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_field": {
+          "added": {
+            "107d8718906c710398b8a7b9356acdc5586d059a9289528524526e38432a28bd": 1,
+            "5c8083d88c228b08d0b822d1ac0746fd5cabce68e385c7e1915c0227fdfa0b8b": 1,
+            "5d51f0d100c71dacde6d762926805d8fa94c1cb2a63b59dcc277bd5a4520835a": 1,
+            "63c1561b9f165a1c752147397cbf50b24a42ac7f8b0d072c2f074f3130240d70": 1,
+            "73d0cedf1eb953678ffbb9c6f1dada959c69828a45a67ceb11b057c6009c6855": 1,
+            "a4079d4814477ebb73e4efb62b0f0c38dc4c8d994b312a43c3e8ebb474f4823c": 1,
+            "a9694b64b1ec6e1d3e60739b17d89f671e858afa82e94f03ea13fd96fdc54032": 1,
+            "ac052b4343efa17e232da5fde16c75c570810467d1b3736b22b01a4ab9e47052": 1,
+            "bba4f63ad62007f29318d6a9c1af3429ecce25a187919533d56648dd873af7d1": 1,
+            "bd85f7b61e26eafc436c1cffffedfd7c0325925d8ac19fd3a1f55e144b6f5d22": 1,
+            "c200b0b4235a7c8b4c92626ff72c49fefac47afc59a8e5c18bb2324fcd91b563": 1,
+            "e383ebad4795737964bf07b36f0f1e4e75a8e0e4c5a3af413bbe8d690c5fe058": 1,
+            "e737afead92a66d023759aff322d3feb9ef9d77f2061fb5655f4838dc307f8aa": 1,
+            "ed7c43fe77ab5430aa4db45d7b19137eb8b6c2b47217e03edec01f845942a8d9": 1,
+            "f0b90aa9bdea6b68b7bbd138f25128a6e1208ab02b337307dbe99a0173ff3f84": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "12efe693775cb7aaccaf9835909c9b19a1b69018d6a39ca3566b2664ff1baf29": 1,
+            "2076c2fa59e0b1b4e4ee232cfb5aa059bcb07749cdfbe0b864bce32c512170ba": 1,
+            "20e399387b721caf7229f071c0bbc89660837ba1898f6108e03cb64828ed6393": 1,
+            "34c46c0f29afa12026a4ac3aec3ba98ff16a6609fd1f85398403a75d754315c0": 1,
+            "3c66288067010d1bd055e2331ad81958952beb467a07dd746b391cfec82861e3": 1,
+            "53cfaacc97279a95a7c327de4ae67de8e6076166818309ef3328290e14cecba4": 1,
+            "567fcd2489de6b39886d11cc0d958c4a6223ffa3c75b642de8e794ece5d689aa": 1,
+            "60c6c482c65bcab8d95dd8370b1c3b06ef63ed2fe46a26f5d57fd45d04228e29": 1,
+            "78d57b6749fd9cf599d321a5a8ef644d80e583b97cb09ab93b3fd2a9c9be0c07": 1,
+            "97884b8c000560f260e18ed2d2a176d7874da39a177d37295a57c7deb15c088c": 1,
+            "c388f9ad8286b52cd8e1247808a369be9d9c5106f87920a4af3a891a3e5a73cc": 1,
+            "ea282661684bc63534cda8e1eee85857cb67f9be83daa856f01f8ce6d9380fef": 1,
+            "f042742607f00ae0e14e7c346d198bc3f59345195b6288f7bb7a234b2b451d4d": 1
+          }
+        },
+        "ad_migrationscript": {
+          "added": {
+            "f3436b4e9686e213fea8ebee4096fedf5c95ac877eea58a0ce49daf8c0e58133": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_sequence": {
+          "added": {
+            "c0b18dc77db73d54b8e684dfbda0dcc1a47dcac255711d1e395aedc83dc39741": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "b3d3c6d59a663dc019b973e0ed81a17b9ee9b58a5304cd74a0891fb5b2d6e232": 1
+          }
+        },
+        "ad_val_rule": {
+          "added": {
+            "00e6300dad672ee4890e40d0c914a5e499c8838151da484cd4318ceb1156d3c8": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        }
+      }
+    }
+  },
+  "evidence_class": "native-database-observation",
+  "execution": {
+    "oracle": {
+      "duration_seconds": 0.609,
+      "log_sha256": "59513f08a43b36e451dcdb4bef4db6e22d2be99885efbbb216998bf21803e027",
+      "native_client": "sqlplus",
+      "returncode": 0,
+      "source_path": "migration/iD13/oracle/202603031421_IDEMPIERE-6841.sql",
+      "source_sha256": "396493688e0e8fecc48417540bc40bb9b6d4a1a74fdd2a78e28b0b54a4c8bf75"
+    },
+    "postgresql": {
+      "duration_seconds": 0.422,
+      "log_sha256": "e0f6fa878f4cbd7ed020075d9a132164fa65fab4356229fee0b2eaa15dfdaea4",
+      "native_client": "psql",
+      "returncode": 0,
+      "source_path": "migration/iD13/postgresql/202603031421_IDEMPIERE-6841.sql",
+      "source_sha256": "890edd5d5eab38f9d08f24e3267cc01da111902ba875b9402c2934a38405702d"
+    }
+  },
+  "historical_upgrade_equivalence": false,
+  "non_registration_row_effects_match": false,
+  "registration_effects_retained": true,
+  "row_effects_match": false,
+  "schema_version": "1.0",
+  "scope": "observed effects on these imported reference seeds; initial states may differ; no runtime values suppressed",
+  "state_sha256": {
+    "oracle": {
+      "after": "02abf756ddd6cd546acb77369bdb183a2c88a3b4540e96dd916e42da1fc1204a",
+      "before": "46b13dbbd49ade5de8aa1afe663b9fcf9e84b3acb20c40cb9b756f0589840e06"
+    },
+    "postgresql": {
+      "after": "13d4594bd1f4e069261c159dfc982c7e83fc7a43293e5931503dbbcbf8d44cd0",
+      "before": "585f6c30a2004b5aa443513b3384979cd5130d9a77d7bc2e491b2ff2f86d0e77"
+    }
+  },
+  "status": "observed-effects-differ",
+  "structural_change_requires_review": true,
+  "content_sha256": "6581d17a075427dae8a35af17c3f454ae2363ed5ccba9f307229244e50424086"
+}

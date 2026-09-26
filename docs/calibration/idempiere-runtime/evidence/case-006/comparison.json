@@ -1,0 +1,176 @@
+{
+  "application_equivalence": false,
+  "artifact_type": "lightyear-native-migration-comparison",
+  "deltas": {
+    "oracle": {
+      "structure": {
+        "index_columns": {
+          "added": [
+            {
+              "column_name": "AD_ROLE_ID",
+              "column_position": 3,
+              "descend": "ASC",
+              "index_name": "PA_DASHBOARDPREFERENCE_UNIQUE",
+              "table_name": "PA_DASHBOARDPREFERENCE"
+            },
+            {
+              "column_name": "PA_DASHBOARDCONTENT_ID",
+              "column_position": 1,
+              "descend": "ASC",
+              "index_name": "PA_DASHBOARDPREFERENCE_UNIQUE",
+              "table_name": "PA_DASHBOARDPREFERENCE"
+            },
+            {
+              "column_name": "AD_USER_ID",
+              "column_position": 2,
+              "descend": "ASC",
+              "index_name": "PA_DASHBOARDPREFERENCE_UNIQUE",
+              "table_name": "PA_DASHBOARDPREFERENCE"
+            }
+          ],
+          "removed": []
+        },
+        "indexes": {
+          "added": [
+            {
+              "index_name": "PA_DASHBOARDPREFERENCE_UNIQUE",
+              "index_type": "NORMAL",
+              "status": "VALID",
+              "table_name": "PA_DASHBOARDPREFERENCE",
+              "uniqueness": "UNIQUE"
+            }
+          ],
+          "removed": []
+        }
+      },
+      "tables": {
+        "ad_indexcolumn": {
+          "added": {
+            "13da9a99ad0c1c6af5066bf65cb0e45c65dd42d31f50602dd7389a5bd3b98f85": 1,
+            "93c7fc48a3fd25de629b6ed17cba38e40b2dc8543438c73df2ca48a9e406fe91": 1,
+            "eac722e8fa46c99b7b83a36c06a445e4666cf9d02661ee5cc055298814b7a93a": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_migrationscript": {
+          "added": {
+            "fe9332412292404ebc1e3f0552da3816955ac47de2eb857183d65acedfceabf1": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_sequence": {
+          "added": {
+            "274b97ba4b8bff7a778508217f15acd71f5c3adfc2747aeaf1d33e003f170cd0": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "485324b01c74e9abea8a928d4fc3ed72985a734907c3eef0532ced39962346dc": 1
+          }
+        },
+        "ad_tableindex": {
+          "added": {
+            "fec76db2dd0ce7ddc5507b2f26d0dd3a202cdb3c549b65647257d5b56a8ebcc4": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        }
+      }
+    },
+    "postgresql": {
+      "structure": {
+        "indexes": {
+          "added": [
+            {
+              "indexdef": "CREATE UNIQUE INDEX pa_dashboardpreference_unique ON adempiere.pa_dashboardpreference USING btree (pa_dashboardcontent_id, ad_user_id, ad_role_id)",
+              "indexname": "pa_dashboardpreference_unique",
+              "tablename": "pa_dashboardpreference"
+            }
+          ],
+          "removed": []
+        }
+      },
+      "tables": {
+        "ad_indexcolumn": {
+          "added": {
+            "13da9a99ad0c1c6af5066bf65cb0e45c65dd42d31f50602dd7389a5bd3b98f85": 1,
+            "93c7fc48a3fd25de629b6ed17cba38e40b2dc8543438c73df2ca48a9e406fe91": 1,
+            "eac722e8fa46c99b7b83a36c06a445e4666cf9d02661ee5cc055298814b7a93a": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_migrationscript": {
+          "added": {
+            "07a46fc914811c7d7b6ac41a28d93e517ed3dde7094f5bfa8dcbf2a818ee8ba6": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_sequence": {
+          "added": {
+            "b3d3c6d59a663dc019b973e0ed81a17b9ee9b58a5304cd74a0891fb5b2d6e232": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "51e87e9758cae3671664eaf0f2054b8ac276bc3a71e8ad75001c49083e5b9937": 1
+          }
+        },
+        "ad_tableindex": {
+          "added": {
+            "fec76db2dd0ce7ddc5507b2f26d0dd3a202cdb3c549b65647257d5b56a8ebcc4": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        }
+      }
+    }
+  },
+  "evidence_class": "native-database-observation",
+  "execution": {
+    "oracle": {
+      "duration_seconds": 0.485,
+      "log_sha256": "efe0ed0b34a5195aa64f96b02404fe8577bbe8ddba1521a366281c48f49d33ce",
+      "native_client": "sqlplus",
+      "returncode": 0,
+      "source_path": "migration/iD13/oracle/202603031141_IDEMPIERE-6888.sql",
+      "source_sha256": "f24323ace32a81099e957ad5f06b441fdfb30d66b0cf044cbf69a794d43859ac"
+    },
+    "postgresql": {
+      "duration_seconds": 0.39,
+      "log_sha256": "e420c5c8421b645e2491f70d2cf90bdf54ed09e4497c67eab92f241fa7babcad",
+      "native_client": "psql",
+      "returncode": 0,
+      "source_path": "migration/iD13/postgresql/202603031141_IDEMPIERE-6888.sql",
+      "source_sha256": "9096f3735f82e0c21744df9d9258fb10bd65baf8445d1fe744b898398f1074e5"
+    }
+  },
+  "historical_upgrade_equivalence": false,
+  "non_registration_row_effects_match": false,
+  "registration_effects_retained": true,
+  "row_effects_match": false,
+  "schema_version": "1.0",
+  "scope": "observed effects on these imported reference seeds; initial states may differ; no runtime values suppressed",
+  "state_sha256": {
+    "oracle": {
+      "after": "46b13dbbd49ade5de8aa1afe663b9fcf9e84b3acb20c40cb9b756f0589840e06",
+      "before": "9c75fb6403f560b4175b0e742c7f4986f5846b9f127802bf50d6ac156adc4b65"
+    },
+    "postgresql": {
+      "after": "585f6c30a2004b5aa443513b3384979cd5130d9a77d7bc2e491b2ff2f86d0e77",
+      "before": "b7d5fc9fed8487fd25a4ec6e64a3d43f046a57994a8bf59937a8d01d54507d5a"
+    }
+  },
+  "status": "observed-effects-differ",
+  "structural_change_requires_review": true,
+  "content_sha256": "ce742b1f533cae2f81f1b942dcb741f975d3d87cef57996cb59a29479059331f"
+}

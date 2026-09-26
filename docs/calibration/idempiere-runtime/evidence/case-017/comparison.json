@@ -1,0 +1,142 @@
+{
+  "application_equivalence": false,
+  "artifact_type": "lightyear-native-migration-comparison",
+  "deltas": {
+    "oracle": {
+      "structure": {},
+      "tables": {
+        "ad_migrationscript": {
+          "added": {
+            "e3eaed58e29acc328e41091e7299b29c79ba7960790ff7a96ce698555fd6f946": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_sequence": {
+          "added": {
+            "6e759e395255cbecfd2ea92e5606ffacfebbac13817ed849e54c4b9d0fad8805": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "4d311185023ad332fdf99d927634308c9d777d57a684fa16f2c63f131fdffdef": 1
+          }
+        },
+        "ad_system": {
+          "added": {
+            "f46585d9fdf4b0e2927edf076f2d025de72193e6b5c8b45a0c96688d0ddfdcb3": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "49b681608fdb825fc7018a8a294881651bf61e6a29e11323691f9eaa33df7765": 1
+          }
+        },
+        "ad_tab": {
+          "added": {
+            "472fe1be7b0d05fe8b7a8c64bb60b2d68bbe7e7c89f53bfaac41739fe9ff6f98": 1,
+            "71f9a68e261677cd76fc05bf78c96cbcfe42067683e7caaf599a1148c77469f7": 1,
+            "9d6ff2425786eb6378f828875e50fa2c97cf9dc0206dd70b328e573b1f1d38d9": 1,
+            "a69d5ced54f1fb750f09ae428445df46a245314f25d1bf9d8acd4ca2b24dc014": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "495032c990bfc05ac06ae9cd19b8492f2a9a2b0fcb50ae9a6c4290014c38da9a": 1,
+            "7d6b949feb423b14e631bfc5584015d92cfd507cc64e3222f0dc4b9765f3c848": 1,
+            "d7d04c8fc991ae421734b7405818066c21f8d192f3504ddb29de1022dc260fde": 1,
+            "fb3369d2e8a19643b75210f94561766fbe52d704e7f52080c55d8ac90580d690": 1
+          }
+        }
+      }
+    },
+    "postgresql": {
+      "structure": {},
+      "tables": {
+        "ad_migrationscript": {
+          "added": {
+            "016272dedd11991ecd720f3d48287b1f889b19f00719142f713553457f48a6e3": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_sequence": {
+          "added": {
+            "a656cbd609fc6148a717bd974396219d8f79a7ada952eeb5aefab7c854f56cc6": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "d53d2a051083a29a030e5fc9ab5c268ae5472a660fe8b6dd91c3f21cff72a9a2": 1
+          }
+        },
+        "ad_system": {
+          "added": {
+            "5185fac099427c141c7796234abb7f08eb507213bcfe697fc9f670e2a1bd88e2": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "59d5d387406db8fb7d3483d6480df90f1ab30ccb5990f1088e21d329875e498a": 1
+          }
+        },
+        "ad_tab": {
+          "added": {
+            "472fe1be7b0d05fe8b7a8c64bb60b2d68bbe7e7c89f53bfaac41739fe9ff6f98": 1,
+            "71f9a68e261677cd76fc05bf78c96cbcfe42067683e7caaf599a1148c77469f7": 1,
+            "9d6ff2425786eb6378f828875e50fa2c97cf9dc0206dd70b328e573b1f1d38d9": 1,
+            "a69d5ced54f1fb750f09ae428445df46a245314f25d1bf9d8acd4ca2b24dc014": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "495032c990bfc05ac06ae9cd19b8492f2a9a2b0fcb50ae9a6c4290014c38da9a": 1,
+            "7d6b949feb423b14e631bfc5584015d92cfd507cc64e3222f0dc4b9765f3c848": 1,
+            "d7d04c8fc991ae421734b7405818066c21f8d192f3504ddb29de1022dc260fde": 1,
+            "fb3369d2e8a19643b75210f94561766fbe52d704e7f52080c55d8ac90580d690": 1
+          }
+        }
+      }
+    }
+  },
+  "evidence_class": "native-database-observation",
+  "execution": {
+    "oracle": {
+      "duration_seconds": 0.437,
+      "log_sha256": "820427234d6f6fbb7f5a2b2cb3bfb6d0f4510718cf60e79493a9eb0f97a4f1d1",
+      "native_client": "sqlplus",
+      "returncode": 0,
+      "source_path": "migration/iD13/oracle/202607060943_IDEMPIERE-7059.sql",
+      "source_sha256": "1670facc239bbf04a63d1993405d6cd1f64083f597c1c7238e0d44c40b5a25b0"
+    },
+    "postgresql": {
+      "duration_seconds": 0.359,
+      "log_sha256": "eae89a5b448662d7907c9061f3339bd3b06054dfc83987f3c3e00b1ebc8b0d10",
+      "native_client": "psql",
+      "returncode": 0,
+      "source_path": "migration/iD13/postgresql/202607060943_IDEMPIERE-7059.sql",
+      "source_sha256": "3611ae32f92ef566d05a9786cf27bc14b88a6f2bcef094b28260566af4d5ea07"
+    }
+  },
+  "historical_upgrade_equivalence": false,
+  "non_registration_row_effects_match": false,
+  "registration_effects_retained": true,
+  "row_effects_match": false,
+  "schema_version": "1.0",
+  "scope": "observed effects on these imported reference seeds; initial states may differ; no runtime values suppressed",
+  "state_sha256": {
+    "oracle": {
+      "after": "940db785a6351386e0a48505378b465099151e73966aba1cb3bdb28275688c38",
+      "before": "e29dc52a2dd166744b8f2b3412b0ff7b0d92afc772d5d05343e2bb579da8e3a0"
+    },
+    "postgresql": {
+      "after": "4abc3a0386ee37acc6d2761b91313629f4b49cafebb167de054b091ece222df3",
+      "before": "e65d69c616cbfae054c33a9bf512d1d5dbcb0f511c14c4d81146b92c5aaefa37"
+    }
+  },
+  "status": "observed-effects-differ",
+  "structural_change_requires_review": false,
+  "content_sha256": "48dd0b32d494995291ff333f73518e9cff406a336b3fe474508996ec0f1781a9"
+}

@@ -1,0 +1,16 @@
+{
+  "observed_at": "2026-09-26T00:40:04.849327+00:00",
+  "containers": [
+    {
+      "name": "ly-idda-20260925-888200-oracle-full",
+      "running": false,
+      "data_retained": true
+    },
+    {
+      "name": "ly-idda-20260925-888200-postgresql",
+      "running": false,
+      "data_retained": true
+    }
+  ],
+  "gcp_resources_started": false
+}

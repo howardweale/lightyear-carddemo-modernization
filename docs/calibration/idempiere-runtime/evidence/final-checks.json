@@ -1,0 +1,348 @@
+{
+  "artifact_type": "lightyear-native-migration-final-checks",
+  "checks": {
+    "oracle": {
+      "disabled_constraints": [],
+      "disabled_triggers": [],
+      "errors": [],
+      "executed_scripts_registered": {
+        "pair:03628fdfb5b1883b70079eb720d29a9fb525086339e93e5c4e1735bfafbb22aa": true,
+        "pair:07d909470b4aa475ef4b4eab512ca49e3c2c75fb4be4d25fae380b3c13117923": true,
+        "pair:1addf2414e8e81f72126d0aae99b281aacbdf4d1da23398772c306febf05cbab": true,
+        "pair:2c8892c19a4bb2b59bc3b6df74c52d1ef6154786f04c4953d1f947b5925741e2": true,
+        "pair:33be8579a196e44da039145c58f092403b0ed975a95ce790be35406c73d7ae14": true,
+        "pair:46060a7925db6bebc9c34ba19b8b0c01062869c357b5ceaef1afbbe8365d1c09": true,
+        "pair:50dfe1fdc875b31af48a2d2f01424b23c6aa0f12d69659d25d3f73d45419ff7e": true,
+        "pair:779185a214fc527cd72198b8d44796dd40c4d243a2da0f662838344b87cf1994": true,
+        "pair:7a5523b1e89cf10179469e09e1d721c7be015200760c8d95451c5d01b102411c": true,
+        "pair:7c2fc5c1e58aedbf0169981d944943982b53603bf187875cac612e7e1907465f": true,
+        "pair:7cdc5ebc9b88708529a78b39636767d1185a44ef85d386762b5333e3cabf8df1": true,
+        "pair:895a09179d917fbb5ed059b1af61749b74cde9e8ce49f419eaa37a083783696b": true,
+        "pair:8c4dbc64e1596a72fc830dcc2fa3f94e8f4b74b27d4eac2fb6039dc574d2818c": true,
+        "pair:99d71028e770608c39569396bd1c50d9ca7c263728617f23a2ff1f9b7bdd311f": true,
+        "pair:a165ed57366152d39fcac6c69e00fea401cdf2e5b6361b1498ff8b8157b64f18": true,
+        "pair:b19e2dff66b28e81879ddfb7712da752152df2bed1b28670bafb8b985bd63065": true,
+        "pair:b7e430177d29b1f3f6535917b202ba87df35ce9939a014a309ed094f6f664b14": true,
+        "pair:e9e5212c6a2dbb3eac557f82101a72911510b6780b7c87c7cfb2d1528cf27bdd": true,
+        "pair:f4336cbb9163e0e4ea913ece7434a43548db75713631c5af05fc34e1b614b187": true,
+        "pair:fd135bb6bd3f0e612993f00802f1b665ec77731738caa48fa947346e0b1c7bfe": true
+      },
+      "invalid_objects": [
+        {
+          "object_name": "AD_CHANGELOG_V",
+          "object_type": "VIEW",
+          "status": "INVALID"
+        },
+        {
+          "object_name": "AD_COLUMN_SYNC",
+          "object_type": "PROCEDURE",
+          "status": "INVALID"
+        },
+        {
+          "object_name": "C_ACCTSCHEMA_DEFAULT_COPY",
+          "object_type": "PROCEDURE",
+          "status": "INVALID"
+        },
+        {
+          "object_name": "C_BP_GROUP_ACCT_COPY",
+          "object_type": "PROCEDURE",
+          "status": "INVALID"
+        },
+        {
+          "object_name": "C_ORDER_DRILLDOWN",
+          "object_type": "PROCEDURE",
+          "status": "INVALID"
+        },
+        {
+          "object_name": "DBA_AFTERIMPORT",
+          "object_type": "PROCEDURE",
+          "status": "INVALID"
+        },
+        {
+          "object_name": "DBA_RECOMPILE",
+          "object_type": "PROCEDURE",
+          "status": "INVALID"
+        },
+        {
+          "object_name": "M_PRODUCT_CATEGORY_ACCT_COPY",
+          "object_type": "PROCEDURE",
+          "status": "INVALID"
+        },
+        {
+          "object_name": "M_TRANSACTION_V",
+          "object_type": "VIEW",
+          "status": "INVALID"
+        },
+        {
+          "object_name": "RV_REQUESTUPDATES",
+          "object_type": "VIEW",
+          "status": "INVALID"
+        },
+        {
+          "object_name": "RV_REQUESTUPDATES_ONLY",
+          "object_type": "VIEW",
+          "status": "INVALID"
+        },
+        {
+          "object_name": "RV_REQUESTUPDATES_V",
+          "object_type": "VIEW",
+          "status": "INVALID"
+        },
+        {
+          "object_name": "RV_TRANSACTION",
+          "object_type": "VIEW",
+          "status": "INVALID"
+        },
+        {
+          "object_name": "R_REQUEST_V",
+          "object_type": "VIEW",
+          "status": "INVALID"
+        }
+      ],
+      "query_sha256": {
+        "disabled_constraints": "b2364083974adc2e11e08b6f9169d0dbc407cdef858af858c91e68480815ea1a",
+        "disabled_triggers": "f60256a9f1832a39fd5fd28b386f857421956069cdfcc3c1f9410ffb423f4ce5",
+        "errors": "46eb2ec84b7fa7046df666df38b6a195486672835719864982c468a0b2bd8364",
+        "invalid_objects": "0c71cbe8a68f44a054119a6a1ea3285450136d5f65f861fa99659115c56f6f38",
+        "register": "e63f86d32e4942f7e366c6f381ccb1c608340f3919880bed64a423bf282dea37"
+      }
+    },
+    "postgresql": {
+      "disabled_triggers": [],
+      "executed_scripts_registered": {
+        "pair:03628fdfb5b1883b70079eb720d29a9fb525086339e93e5c4e1735bfafbb22aa": true,
+        "pair:07d909470b4aa475ef4b4eab512ca49e3c2c75fb4be4d25fae380b3c13117923": true,
+        "pair:1addf2414e8e81f72126d0aae99b281aacbdf4d1da23398772c306febf05cbab": true,
+        "pair:2c8892c19a4bb2b59bc3b6df74c52d1ef6154786f04c4953d1f947b5925741e2": true,
+        "pair:33be8579a196e44da039145c58f092403b0ed975a95ce790be35406c73d7ae14": true,
+        "pair:46060a7925db6bebc9c34ba19b8b0c01062869c357b5ceaef1afbbe8365d1c09": true,
+        "pair:50dfe1fdc875b31af48a2d2f01424b23c6aa0f12d69659d25d3f73d45419ff7e": true,
+        "pair:779185a214fc527cd72198b8d44796dd40c4d243a2da0f662838344b87cf1994": true,
+        "pair:7a5523b1e89cf10179469e09e1d721c7be015200760c8d95451c5d01b102411c": true,
+        "pair:7c2fc5c1e58aedbf0169981d944943982b53603bf187875cac612e7e1907465f": true,
+        "pair:7cdc5ebc9b88708529a78b39636767d1185a44ef85d386762b5333e3cabf8df1": true,
+        "pair:895a09179d917fbb5ed059b1af61749b74cde9e8ce49f419eaa37a083783696b": true,
+        "pair:8c4dbc64e1596a72fc830dcc2fa3f94e8f4b74b27d4eac2fb6039dc574d2818c": true,
+        "pair:99d71028e770608c39569396bd1c50d9ca7c263728617f23a2ff1f9b7bdd311f": true,
+        "pair:a165ed57366152d39fcac6c69e00fea401cdf2e5b6361b1498ff8b8157b64f18": true,
+        "pair:b19e2dff66b28e81879ddfb7712da752152df2bed1b28670bafb8b985bd63065": true,
+        "pair:b7e430177d29b1f3f6535917b202ba87df35ce9939a014a309ed094f6f664b14": true,
+        "pair:e9e5212c6a2dbb3eac557f82101a72911510b6780b7c87c7cfb2d1528cf27bdd": true,
+        "pair:f4336cbb9163e0e4ea913ece7434a43548db75713631c5af05fc34e1b614b187": true,
+        "pair:fd135bb6bd3f0e612993f00802f1b665ec77731738caa48fa947346e0b1c7bfe": true
+      },
+      "invalid_indexes": [],
+      "query_sha256": {
+        "disabled_triggers": "2e0d46e991b28ee8d914e774850e821d72ec23744e3fdd7fbc2ffe5cdfcd6147",
+        "invalid_indexes": "89e3c57fe3d475fb40c6b5e0ec7a5c2d4d02b8d698aee485ed841e967581ee89",
+        "register": "3ef765465c09e650c4ebb6cce9305c14b4b3560293c20c5e394911669b334a3b",
+        "unvalidated_constraints": "5ad6fbecec8ee0efd77859a9672ff79d85325e242225b8fd58749005d0d8bfe0"
+      },
+      "unvalidated_constraints": []
+    }
+  },
+  "client_logs": [
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-001/oracle-execution.log",
+      "sha256": "f17959fd484898b58bdadf31b477cdf9071cd9544fe2812f5e155ff3800e71f0"
+    },
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-001/postgresql-execution.log",
+      "sha256": "07434841760a276247a47eda3292852ab2a9e6153a13a2a26df11852c93185bc"
+    },
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-002/oracle-execution.log",
+      "sha256": "8a47659d68d2668d712e5e081a1f1ea522f9393e924b12418afb4987d7abaa65"
+    },
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-002/postgresql-execution.log",
+      "sha256": "794b8e8d027cdab3a706e66713866108cd1722a342636a6924d95f0e07de63b2"
+    },
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-003/oracle-execution.log",
+      "sha256": "b668ba9df785d34b718b411f4a0601c415b4f93ee60384af4145cbd8c1451da3"
+    },
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-003/postgresql-execution.log",
+      "sha256": "b316f88385c3abd0b8fa6b88821d3bbc49367aa7ab3e66fcb655bdb62bc92641"
+    },
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-004/oracle-execution.log",
+      "sha256": "451fcc4b60e78a28039284299921bf1b4a01f834587e7b624b53dec25176a262"
+    },
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-004/postgresql-execution.log",
+      "sha256": "313b8f662e3b7af618c6b6195e6a67555a3f99833e9c21417fb1d569e6d55723"
+    },
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-005/oracle-execution.log",
+      "sha256": "4d04e340c0541985f8a506124def9f0fda12354261a0daf687e662d69ab35c80"
+    },
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-005/postgresql-execution.log",
+      "sha256": "0584315b54b5093deafeab74e5e3fc0d0244d8fb94068d907af594294f7bcded"
+    },
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-006/oracle-execution.log",
+      "sha256": "e670b7069be8a17afe2758d763623d56be64ccc5af9dadf51305339fd2cfb4ef"
+    },
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-006/postgresql-execution.log",
+      "sha256": "238f9d5895082305504d367fe47fd75da34a8aa9fad08c12f7fabb12dd2feaa7"
+    },
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-007/oracle-execution.log",
+      "sha256": "08c95569483a7998e880ce87dc026b703582327ae42fbcc9089e7b101cd71264"
+    },
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-007/postgresql-execution.log",
+      "sha256": "b106af281423d451b9984634152b587136fb01eb23661c9dd65113951e341ba2"
+    },
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-008/oracle-execution.log",
+      "sha256": "5c49ccb3cc26f2cba6dd30ec9e31f5748437d3f797f8df72d63a8a23315e0382"
+    },
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-008/postgresql-execution.log",
+      "sha256": "c27863d86243ea5892cfa41892f4de9a505390ae35b04e9b0c152c181006d529"
+    },
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-009/oracle-execution.log",
+      "sha256": "8cb42ce952c6bc457445a2a7bde95ad072d7269089952015cecc74f22d61d6ef"
+    },
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-009/postgresql-execution.log",
+      "sha256": "50a7ec673983a74e65b8d140cbe58ad7a3d5007a9893c51e34a652837a3586ec"
+    },
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-010/oracle-execution.log",
+      "sha256": "fa3ea4e3a634526b30ed9e5cc7c0c3342f10d8fec302cb6d4191cb5ee274b1dc"
+    },
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-010/postgresql-execution.log",
+      "sha256": "23a3b9cd468cf3ff9c24c2e5fa8962542b1d85368b4d2a72b749106db7cb49db"
+    },
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-011/oracle-execution.log",
+      "sha256": "239e0fdf52700a67be8dbbc2b2adf461338ac4307399727e98182219319a83c3"
+    },
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-011/postgresql-execution.log",
+      "sha256": "f29a6a9d8a186a126a038ac04ac72005771f7ddfcbd6b4a622e19241f504794c"
+    },
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-012/oracle-execution.log",
+      "sha256": "d42e0425f8a42d72dcedcada9b90d28f2070d3cbc0ea9f85ee8f990b53e586d0"
+    },
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-012/postgresql-execution.log",
+      "sha256": "1d0dddc40acfe65214520a23194f60b41869172b7c1c46cf870d6074c8a9a7a1"
+    },
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-013/oracle-execution.log",
+      "sha256": "d171814e30ef8e28ed464c9ae34d280a0a4605952215228eb61dcb3c18dd4261"
+    },
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-013/postgresql-execution.log",
+      "sha256": "a5739bdbffdfe38770a95b3279d61abd5818c58639014a4102685a16f6e166ac"
+    },
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-014/oracle-execution.log",
+      "sha256": "bcf37ce2c648ca3c57af186645448c7ea6d5165d7f7cf6d86ab630012230b20e"
+    },
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-014/postgresql-execution.log",
+      "sha256": "d03515c59c2406df0c138a14bdab86d3ac38a1226f55a66350d8ae2382e21454"
+    },
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-015/oracle-execution.log",
+      "sha256": "3736d04185494ac49cd374104992e655e79f99233fe9fc7cbeca435558855705"
+    },
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-015/postgresql-execution.log",
+      "sha256": "7056027f0397b3a497785433837ce69e2fbac3e2b8a5adcc3827216121770c9f"
+    },
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-016/oracle-execution.log",
+      "sha256": "7c859b1581a426b9949d40fd5dbe65fcb05d920b4e805275af258ae315f3011e"
+    },
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-016/postgresql-execution.log",
+      "sha256": "b40d26874d6efe8ccec2c3721ed98c7d494a11c1fb083ea97c0a2e45ca932a29"
+    },
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-017/oracle-execution.log",
+      "sha256": "69ab721e821d9c7f40c365665819e067fc34395a8822ff8246a559e3fd0936fa"
+    },
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-017/postgresql-execution.log",
+      "sha256": "9797f4a6f27add918fb7845a583b04c11e1db1aa92811b4860fd96785e8ba30d"
+    },
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-018/oracle-execution.log",
+      "sha256": "e5569dd6b9a9c5209db6b7adff1ff3eead204a58021a89cd604d7ef5ac5140cf"
+    },
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-018/postgresql-execution.log",
+      "sha256": "a57026f6d932b8de16d89012b8840cf438f43f8678a77f13a632453f1a7bed73"
+    },
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-019/oracle-execution.log",
+      "sha256": "a9fe3fe0d6a2025fbc07dcd1a459b0361c346f79d8b71f0ec77678c9e57cab4a"
+    },
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-019/postgresql-execution.log",
+      "sha256": "8a08f49271339c93d6deb2dc59e688b7056aacda141d0ea66c68d5232cbd8dc0"
+    },
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-020/oracle-execution.log",
+      "sha256": "9a228d7282565dd69a8f6f9b089e92a7edeec69b492aa522aa002ce63823dc6b"
+    },
+    {
+      "error_or_warning_lines": [],
+      "path": "native-migrations/case-020/postgresql-execution.log",
+      "sha256": "a234972e1c891e73e13c8e8c50986ebf921606414dd0f6cc624a3f40d7be9781"
+    }
+  ],
+  "scope": "native database validity and registration checks after 20 pairs; not application validation",
+  "content_sha256": "c8de03156c72a5356deaf73428d8a421e3fb30cd502226c8f0a62047c42cb224"
+}

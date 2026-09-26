@@ -1,0 +1,329 @@
+{
+  "application_equivalence": false,
+  "artifact_type": "lightyear-native-migration-comparison",
+  "deltas": {
+    "oracle": {
+      "structure": {
+        "columns": {
+          "added": [
+            {
+              "char_length": 100,
+              "char_used": "C",
+              "column_name": "EXTERNALTRACEID",
+              "data_default": "NULL\n",
+              "data_length": 400,
+              "data_precision": null,
+              "data_scale": null,
+              "data_type": "VARCHAR2",
+              "identity_column": "NO",
+              "nullable": "Y",
+              "table_name": "AD_PINSTANCE",
+              "virtual_column": "NO"
+            },
+            {
+              "char_length": 100,
+              "char_used": "C",
+              "column_name": "EXTERNALTRACEID",
+              "data_default": "NULL\n",
+              "data_length": 400,
+              "data_precision": null,
+              "data_scale": null,
+              "data_type": "VARCHAR2",
+              "identity_column": "NO",
+              "nullable": "Y",
+              "table_name": "AD_CHANGELOG",
+              "virtual_column": "NO"
+            }
+          ],
+          "removed": []
+        },
+        "index_columns": {
+          "added": [
+            {
+              "column_name": "EXTERNALTRACEID",
+              "column_position": 1,
+              "descend": "ASC",
+              "index_name": "AD_CHANGELOG_EXTERNALTRACEID",
+              "table_name": "AD_CHANGELOG"
+            },
+            {
+              "column_name": "EXTERNALTRACEID",
+              "column_position": 1,
+              "descend": "ASC",
+              "index_name": "AD_PINSTANCE_EXTERNALTRACEID",
+              "table_name": "AD_PINSTANCE"
+            }
+          ],
+          "removed": []
+        },
+        "indexes": {
+          "added": [
+            {
+              "index_name": "AD_PINSTANCE_EXTERNALTRACEID",
+              "index_type": "NORMAL",
+              "status": "VALID",
+              "table_name": "AD_PINSTANCE",
+              "uniqueness": "NONUNIQUE"
+            },
+            {
+              "index_name": "AD_CHANGELOG_EXTERNALTRACEID",
+              "index_type": "NORMAL",
+              "status": "VALID",
+              "table_name": "AD_CHANGELOG",
+              "uniqueness": "NONUNIQUE"
+            }
+          ],
+          "removed": []
+        }
+      },
+      "tables": {
+        "ad_column": {
+          "added": {
+            "344120df6f08646b33e7f914782d3748e7247379cc70a0e42c33df798d0cceb8": 1,
+            "4658547868c5b0ade41bfb01dc023d0286e276254f47d362484d17864feeb558": 1,
+            "6661965961305d4179c4cae4cf5b3d2dfbc4c7e0dc313cf71de49cdddb17cf4e": 1,
+            "8db95c5e68a7db39c644e6c3d9e358b88ef6d4310c20ec13d56b86c72c318827": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "8d394adfe6cd5821716eef4e48b509fb7c0b365db5ab62da9d68b3ffa53da5bb": 1,
+            "ee2d58e457badb581986e45ed970b7deaee0917d2603bd077ccae58e612d4ce6": 1
+          }
+        },
+        "ad_element": {
+          "added": {
+            "53f4f851edc567336e1b8c39ed61fb75c7140e1ea0b3654e5918ca1379ab8074": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_field": {
+          "added": {
+            "219ac295b3bf9d4226f2c8ec91f793d22cac0cb531c6b21a3a66b891f5418b1e": 1,
+            "4abbd9ce0ea691850ed005bdb762207dbc3b28ed5f689ba8400de35a81a05b01": 1,
+            "c5e30ed85fec846c079f66f560303c628dc0c0ced9ac93256f29f41e6f2ee327": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_indexcolumn": {
+          "added": {
+            "e8f804336651d3d96be061d448caaed82bcc4b9bfccd9ca9933095da69e88744": 1,
+            "ebcdf99a37662e48bb927b9baa54cfd529e5c7ef103c0c8fc52155a7b9ad06a8": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_migrationscript": {
+          "added": {
+            "16ba7c64cd2017818bd8b9f49b9b3fa3f3706db0952babfb3935f01d787852c7": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_sequence": {
+          "added": {
+            "85ece2e500c933079fe648a1b672c0536f33a41a05febe6ac0c3ca933a144afb": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "4bde062485414e44e8ea839d937b50bf2be67fe59dcc74ff357ca9d89adb76f3": 1
+          }
+        },
+        "ad_system": {
+          "added": {
+            "fd96aa0208ee52b20c2cab197520b6fdb4aee4b2e4ebd2e1897395ef5930ea04": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "a1d0d49d302cdd96b59f5ab83acd36a5f6515c2ba2fdb72c89f1227bf52392eb": 1
+          }
+        },
+        "ad_tableindex": {
+          "added": {
+            "40825cbe108eb920f3cc419ae614a0ef4d3e334f75d15e8716375717cdf3af47": 1,
+            "e4b5e59058405287c92d00b24e8d5b6f5f6be87501151aa9923213445b3980a0": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        }
+      }
+    },
+    "postgresql": {
+      "structure": {
+        "columns": {
+          "added": [
+            {
+              "character_maximum_length": 100,
+              "column_default": "NULL::character varying",
+              "column_name": "externaltraceid",
+              "data_type": "character varying",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "YES",
+              "numeric_precision": null,
+              "numeric_scale": null,
+              "table_name": "ad_changelog"
+            },
+            {
+              "character_maximum_length": 100,
+              "column_default": "NULL::character varying",
+              "column_name": "externaltraceid",
+              "data_type": "character varying",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "YES",
+              "numeric_precision": null,
+              "numeric_scale": null,
+              "table_name": "ad_pinstance"
+            }
+          ],
+          "removed": []
+        },
+        "indexes": {
+          "added": [
+            {
+              "indexdef": "CREATE INDEX ad_pinstance_externaltraceid ON adempiere.ad_pinstance USING btree (externaltraceid)",
+              "indexname": "ad_pinstance_externaltraceid",
+              "tablename": "ad_pinstance"
+            },
+            {
+              "indexdef": "CREATE INDEX ad_changelog_externaltraceid ON adempiere.ad_changelog USING btree (externaltraceid)",
+              "indexname": "ad_changelog_externaltraceid",
+              "tablename": "ad_changelog"
+            }
+          ],
+          "removed": []
+        }
+      },
+      "tables": {
+        "ad_column": {
+          "added": {
+            "344120df6f08646b33e7f914782d3748e7247379cc70a0e42c33df798d0cceb8": 1,
+            "4658547868c5b0ade41bfb01dc023d0286e276254f47d362484d17864feeb558": 1,
+            "6661965961305d4179c4cae4cf5b3d2dfbc4c7e0dc313cf71de49cdddb17cf4e": 1,
+            "8db95c5e68a7db39c644e6c3d9e358b88ef6d4310c20ec13d56b86c72c318827": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "3b06a0a950fd8178be5382e212546600fa03990a5d7bad3f120973b1800b0293": 1,
+            "ab94036b17ec38aeac9d646b44d77d0540012764fdca80b6dbb5239e6d3188b6": 1
+          }
+        },
+        "ad_element": {
+          "added": {
+            "53f4f851edc567336e1b8c39ed61fb75c7140e1ea0b3654e5918ca1379ab8074": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_field": {
+          "added": {
+            "219ac295b3bf9d4226f2c8ec91f793d22cac0cb531c6b21a3a66b891f5418b1e": 1,
+            "4abbd9ce0ea691850ed005bdb762207dbc3b28ed5f689ba8400de35a81a05b01": 1,
+            "c5e30ed85fec846c079f66f560303c628dc0c0ced9ac93256f29f41e6f2ee327": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_indexcolumn": {
+          "added": {
+            "e8f804336651d3d96be061d448caaed82bcc4b9bfccd9ca9933095da69e88744": 1,
+            "ebcdf99a37662e48bb927b9baa54cfd529e5c7ef103c0c8fc52155a7b9ad06a8": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_migrationscript": {
+          "added": {
+            "d7b2ac7a489e86259a0891bf447ac1dee6c6f6e477373c3d3586f370d02444db": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_sequence": {
+          "added": {
+            "888670c0f746daf6e3a474581b894912163bd964135c40475651225cea8e6a38": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "6f74cead09901f974790b9b85fde3f3b1b0af4104091ea50f7e4cb0ed965029d": 1
+          }
+        },
+        "ad_system": {
+          "added": {
+            "c5bf469f010f77b8bcb5cc6e16adec0e56f886e78da543b31a6d05fb5b2bbfd7": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "a76348eec068bb91cc04bec1470ca85bb36cab53025232c04d16fa9fe233d7ad": 1
+          }
+        },
+        "ad_tableindex": {
+          "added": {
+            "40825cbe108eb920f3cc419ae614a0ef4d3e334f75d15e8716375717cdf3af47": 1,
+            "e4b5e59058405287c92d00b24e8d5b6f5f6be87501151aa9923213445b3980a0": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        }
+      }
+    }
+  },
+  "evidence_class": "native-database-observation",
+  "execution": {
+    "oracle": {
+      "duration_seconds": 0.781,
+      "log_sha256": "91238947f7a04acf4c6479dc12bdb89a5cc150b7227faaf0de1a5f760eda4b46",
+      "native_client": "sqlplus",
+      "returncode": 0,
+      "source_path": "migration/iD12/oracle/202603261259_IDEMPIERE-6910.sql",
+      "source_sha256": "b47c98ec264965fd7ffeba16668155a240e8fd550ded03575eba6a4e90db3058"
+    },
+    "postgresql": {
+      "duration_seconds": 0.469,
+      "log_sha256": "628f42ee131bac14b42592b7f63cb961fc139f5dff12d0d1af24bda110b1c213",
+      "native_client": "psql",
+      "returncode": 0,
+      "source_path": "migration/iD12/postgresql/202603261259_IDEMPIERE-6910.sql",
+      "source_sha256": "fe8c2c936958d81473a0e022503e3a4df8260002ca421ae1349ee6af5bc24ca1"
+    }
+  },
+  "historical_upgrade_equivalence": false,
+  "non_registration_row_effects_match": false,
+  "registration_effects_retained": true,
+  "row_effects_match": false,
+  "schema_version": "1.0",
+  "scope": "observed effects on these imported reference seeds; initial states may differ; no runtime values suppressed",
+  "state_sha256": {
+    "oracle": {
+      "after": "a74653124b5c9413174502da7887a6ebe5ea3300433bc0e48908d379874f77ea",
+      "before": "c9ac761610c454fba60c81621e5f9e2494018548ea810fbf3732a1fcad67a85f"
+    },
+    "postgresql": {
+      "after": "97de7af38d68c9f5a4a599b1e923c1affd5bade3c8d519ffd7c2966beb07a46b",
+      "before": "f093bc0196e8d24dc14f08e4103a0a3846e81b2099a23978fb4cfed62b07d8c2"
+    }
+  },
+  "status": "observed-effects-differ",
+  "structural_change_requires_review": true,
+  "content_sha256": "c2636d78a37cfe967b33f8f8e0b00f8bb781569fcf03f55d0ef6af11161223e6"
+}

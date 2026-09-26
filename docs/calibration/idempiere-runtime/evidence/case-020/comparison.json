@@ -1,0 +1,195 @@
+{
+  "application_equivalence": false,
+  "artifact_type": "lightyear-native-migration-comparison",
+  "deltas": {
+    "oracle": {
+      "structure": {
+        "columns": {
+          "added": [
+            {
+              "char_length": 0,
+              "char_used": null,
+              "column_name": "SALESREP_ID",
+              "data_default": "NULL\n",
+              "data_length": 22,
+              "data_precision": 10,
+              "data_scale": 0,
+              "data_type": "NUMBER",
+              "identity_column": "NO",
+              "nullable": "Y",
+              "table_name": "R_REQUEST",
+              "virtual_column": "NO"
+            }
+          ],
+          "removed": [
+            {
+              "char_length": 0,
+              "char_used": null,
+              "column_name": "SALESREP_ID",
+              "data_default": "NULL ",
+              "data_length": 22,
+              "data_precision": 10,
+              "data_scale": 0,
+              "data_type": "NUMBER",
+              "identity_column": "NO",
+              "nullable": "N",
+              "table_name": "R_REQUEST",
+              "virtual_column": "NO"
+            }
+          ]
+        },
+        "constraints": {
+          "added": [],
+          "removed": [
+            {
+              "constraint_name": "SYS_C0015909",
+              "constraint_type": "C",
+              "deferrable": "NOT DEFERRABLE",
+              "deferred": "IMMEDIATE",
+              "delete_rule": null,
+              "r_constraint_name": null,
+              "search_condition": "\"SALESREP_ID\" IS NOT NULL",
+              "status": "ENABLED",
+              "table_name": "R_REQUEST",
+              "validated": "VALIDATED"
+            }
+          ]
+        }
+      },
+      "tables": {
+        "ad_migrationscript": {
+          "added": {
+            "847cb64e3454c4d7ce15302716a6104725cd9b5175dfe845846e7c136a00c641": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_sequence": {
+          "added": {
+            "0fbe50c3f8a20167999849f24710f619a334b0b900d4777c0be6ed8d9b2ca209": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "4d825f1d25c80a4c7661e273cb2d581afec54f0878fc4265731626324f3ab466": 1
+          }
+        },
+        "ad_system": {
+          "added": {
+            "bcfa388be17d5b539dfb34f8472ad15e60ace87ae61052cbebfa03c70633ec67": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "b9780d7254a5414e32d170262c282fcb96cd0278b980d24fe742df210678ae39": 1
+          }
+        }
+      }
+    },
+    "postgresql": {
+      "structure": {
+        "columns": {
+          "added": [
+            {
+              "character_maximum_length": null,
+              "column_default": null,
+              "column_name": "salesrep_id",
+              "data_type": "numeric",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "YES",
+              "numeric_precision": 10,
+              "numeric_scale": 0,
+              "table_name": "r_request"
+            }
+          ],
+          "removed": [
+            {
+              "character_maximum_length": null,
+              "column_default": null,
+              "column_name": "salesrep_id",
+              "data_type": "numeric",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "NO",
+              "numeric_precision": 10,
+              "numeric_scale": 0,
+              "table_name": "r_request"
+            }
+          ]
+        }
+      },
+      "tables": {
+        "ad_migrationscript": {
+          "added": {
+            "35c096a14535233ead7813854d2bb6757ebad4e369e397eb3e8f47fb47e9d37e": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_sequence": {
+          "added": {
+            "9d58703e75c532ec3138ec012840137f56696830117c3721e668a4742a9c42e3": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "d0ea11c33be9c8a74a0282696a9e6adac6b57dd6db80850c2096bcd813c1a538": 1
+          }
+        },
+        "ad_system": {
+          "added": {
+            "b915ca1320e422126530f4a941c4b691f0513f5216db1f2b7c9f4027d5dfb566": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "df1ce1461e414dc2d586df54579891865fb18a0b596b58731944dfab4ad7d4c0": 1
+          }
+        }
+      }
+    }
+  },
+  "evidence_class": "native-database-observation",
+  "execution": {
+    "oracle": {
+      "duration_seconds": 0.484,
+      "log_sha256": "d9c3ce3c82f8d3fa6614e6486cfd93bca585cea1c9a515579dcd575ddeea654b",
+      "native_client": "sqlplus",
+      "returncode": 0,
+      "source_path": "migration/iD13/oracle/202607221326_IDEMPIERE-7065.sql",
+      "source_sha256": "95525fdfcfae3c1f93c6f2023c5b276e07e3c28c0231755876cae67ab3cb24d8"
+    },
+    "postgresql": {
+      "duration_seconds": 0.375,
+      "log_sha256": "dc37a41270fa5cf598f8e1aabfce14d6744f620bc2672f2e9d999fec43951ca7",
+      "native_client": "psql",
+      "returncode": 0,
+      "source_path": "migration/iD13/postgresql/202607221326_IDEMPIERE-7065.sql",
+      "source_sha256": "115be387faf242d56556f2c1b96596ec1e5fa94b45dc7c8fe9687ad12d6b08bf"
+    }
+  },
+  "historical_upgrade_equivalence": false,
+  "non_registration_row_effects_match": false,
+  "registration_effects_retained": true,
+  "row_effects_match": false,
+  "schema_version": "1.0",
+  "scope": "observed effects on these imported reference seeds; initial states may differ; no runtime values suppressed",
+  "state_sha256": {
+    "oracle": {
+      "after": "8d81bfdcf43a1a5a01bec73392062ecb46e2c112ff525b27a30edd31863ab941",
+      "before": "89a2b45ca504e8c6f2d33a7b124087ae935194e548bf1fe45f24da83d7d2b854"
+    },
+    "postgresql": {
+      "after": "18b1c78b79ac7d6b8e4b552ea32ee282c93bc2bf1fba28d2ee23b2a6f95b4131",
+      "before": "87096a0f199cf01168de458781a71b8d8df081df1149a2fcb978688a47764d68"
+    }
+  },
+  "status": "observed-effects-differ",
+  "structural_change_requires_review": true,
+  "content_sha256": "eb81b1d374b5b9f7fc117532a6771f9dfcce91741f51d0fd8b6f63e312005fac"
+}

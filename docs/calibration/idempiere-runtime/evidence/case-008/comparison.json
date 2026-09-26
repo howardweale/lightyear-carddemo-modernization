@@ -1,0 +1,1446 @@
+{
+  "application_equivalence": false,
+  "artifact_type": "lightyear-native-migration-comparison",
+  "deltas": {
+    "oracle": {
+      "structure": {
+        "columns": {
+          "added": [
+            {
+              "char_length": 0,
+              "char_used": null,
+              "column_name": "AD_CLIENT_ID",
+              "data_default": null,
+              "data_length": 22,
+              "data_precision": 10,
+              "data_scale": 0,
+              "data_type": "NUMBER",
+              "identity_column": "NO",
+              "nullable": "N",
+              "table_name": "AD_USERDEF_FORM",
+              "virtual_column": "NO"
+            },
+            {
+              "char_length": 1,
+              "char_used": "B",
+              "column_name": "ISACTIVE",
+              "data_default": "'Y' ",
+              "data_length": 1,
+              "data_precision": null,
+              "data_scale": null,
+              "data_type": "CHAR",
+              "identity_column": "NO",
+              "nullable": "N",
+              "table_name": "AD_USERDEF_FORM",
+              "virtual_column": "NO"
+            },
+            {
+              "char_length": 0,
+              "char_used": null,
+              "column_name": "AD_FORM_ID",
+              "data_default": null,
+              "data_length": 22,
+              "data_precision": 10,
+              "data_scale": 0,
+              "data_type": "NUMBER",
+              "identity_column": "NO",
+              "nullable": "N",
+              "table_name": "AD_USERDEF_FORM",
+              "virtual_column": "NO"
+            },
+            {
+              "char_length": 0,
+              "char_used": null,
+              "column_name": "AD_ROLE_ID",
+              "data_default": "NULL ",
+              "data_length": 22,
+              "data_precision": 10,
+              "data_scale": 0,
+              "data_type": "NUMBER",
+              "identity_column": "NO",
+              "nullable": "Y",
+              "table_name": "AD_USERDEF_FORM",
+              "virtual_column": "NO"
+            },
+            {
+              "char_length": 36,
+              "char_used": "B",
+              "column_name": "AD_USERDEF_FORM_UU",
+              "data_default": "NULL ",
+              "data_length": 36,
+              "data_precision": null,
+              "data_scale": null,
+              "data_type": "VARCHAR2",
+              "identity_column": "NO",
+              "nullable": "Y",
+              "table_name": "AD_USERDEF_FORM",
+              "virtual_column": "NO"
+            },
+            {
+              "char_length": 2000,
+              "char_used": "C",
+              "column_name": "HELP",
+              "data_default": "NULL ",
+              "data_length": 4000,
+              "data_precision": null,
+              "data_scale": null,
+              "data_type": "VARCHAR2",
+              "identity_column": "NO",
+              "nullable": "Y",
+              "table_name": "AD_USERDEF_FORM",
+              "virtual_column": "NO"
+            },
+            {
+              "char_length": 0,
+              "char_used": null,
+              "column_name": "CREATEDBY",
+              "data_default": null,
+              "data_length": 22,
+              "data_precision": 10,
+              "data_scale": 0,
+              "data_type": "NUMBER",
+              "identity_column": "NO",
+              "nullable": "N",
+              "table_name": "AD_USERDEF_FORM",
+              "virtual_column": "NO"
+            },
+            {
+              "char_length": 0,
+              "char_used": null,
+              "column_name": "AD_ORG_ID",
+              "data_default": null,
+              "data_length": 22,
+              "data_precision": 10,
+              "data_scale": 0,
+              "data_type": "NUMBER",
+              "identity_column": "NO",
+              "nullable": "N",
+              "table_name": "AD_USERDEF_FORM",
+              "virtual_column": "NO"
+            },
+            {
+              "char_length": 120,
+              "char_used": "C",
+              "column_name": "IMAGEURL",
+              "data_default": "NULL ",
+              "data_length": 480,
+              "data_precision": null,
+              "data_scale": null,
+              "data_type": "VARCHAR2",
+              "identity_column": "NO",
+              "nullable": "Y",
+              "table_name": "AD_USERDEF_FORM",
+              "virtual_column": "NO"
+            },
+            {
+              "char_length": 0,
+              "char_used": null,
+              "column_name": "UPDATEDBY",
+              "data_default": null,
+              "data_length": 22,
+              "data_precision": 10,
+              "data_scale": 0,
+              "data_type": "NUMBER",
+              "identity_column": "NO",
+              "nullable": "N",
+              "table_name": "AD_USERDEF_FORM",
+              "virtual_column": "NO"
+            },
+            {
+              "char_length": 0,
+              "char_used": null,
+              "column_name": "CREATED",
+              "data_default": null,
+              "data_length": 7,
+              "data_precision": null,
+              "data_scale": null,
+              "data_type": "DATE",
+              "identity_column": "NO",
+              "nullable": "N",
+              "table_name": "AD_USERDEF_FORM",
+              "virtual_column": "NO"
+            },
+            {
+              "char_length": 0,
+              "char_used": null,
+              "column_name": "AD_USER_ID",
+              "data_default": "NULL\n",
+              "data_length": 22,
+              "data_precision": 10,
+              "data_scale": 0,
+              "data_type": "NUMBER",
+              "identity_column": "NO",
+              "nullable": "Y",
+              "table_name": "AD_USERDEF_FORM",
+              "virtual_column": "NO"
+            },
+            {
+              "char_length": 0,
+              "char_used": null,
+              "column_name": "UPDATED",
+              "data_default": null,
+              "data_length": 7,
+              "data_precision": null,
+              "data_scale": null,
+              "data_type": "DATE",
+              "identity_column": "NO",
+              "nullable": "N",
+              "table_name": "AD_USERDEF_FORM",
+              "virtual_column": "NO"
+            },
+            {
+              "char_length": 6,
+              "char_used": "C",
+              "column_name": "AD_LANGUAGE",
+              "data_default": "NULL ",
+              "data_length": 24,
+              "data_precision": null,
+              "data_scale": null,
+              "data_type": "VARCHAR2",
+              "identity_column": "NO",
+              "nullable": "Y",
+              "table_name": "AD_USERDEF_FORM",
+              "virtual_column": "NO"
+            },
+            {
+              "char_length": 0,
+              "char_used": null,
+              "column_name": "AD_USERDEF_FORM_ID",
+              "data_default": null,
+              "data_length": 22,
+              "data_precision": 10,
+              "data_scale": 0,
+              "data_type": "NUMBER",
+              "identity_column": "NO",
+              "nullable": "N",
+              "table_name": "AD_USERDEF_FORM",
+              "virtual_column": "NO"
+            },
+            {
+              "char_length": 60,
+              "char_used": "C",
+              "column_name": "NAME",
+              "data_default": "NULL\n",
+              "data_length": 240,
+              "data_precision": null,
+              "data_scale": null,
+              "data_type": "VARCHAR2",
+              "identity_column": "NO",
+              "nullable": "Y",
+              "table_name": "AD_USERDEF_FORM",
+              "virtual_column": "NO"
+            },
+            {
+              "char_length": 255,
+              "char_used": "C",
+              "column_name": "DESCRIPTION",
+              "data_default": "NULL ",
+              "data_length": 1020,
+              "data_precision": null,
+              "data_scale": null,
+              "data_type": "VARCHAR2",
+              "identity_column": "NO",
+              "nullable": "Y",
+              "table_name": "AD_USERDEF_FORM",
+              "virtual_column": "NO"
+            }
+          ],
+          "removed": []
+        },
+        "constraints": {
+          "added": [
+            {
+              "constraint_name": "SYS_C0027375",
+              "constraint_type": "C",
+              "deferrable": "NOT DEFERRABLE",
+              "deferred": "IMMEDIATE",
+              "delete_rule": null,
+              "r_constraint_name": null,
+              "search_condition": "\"AD_CLIENT_ID\" IS NOT NULL",
+              "status": "ENABLED",
+              "table_name": "AD_USERDEF_FORM",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "SYS_C0027377",
+              "constraint_type": "C",
+              "deferrable": "NOT DEFERRABLE",
+              "deferred": "IMMEDIATE",
+              "delete_rule": null,
+              "r_constraint_name": null,
+              "search_condition": "\"AD_ORG_ID\" IS NOT NULL",
+              "status": "ENABLED",
+              "table_name": "AD_USERDEF_FORM",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "SYS_C0027379",
+              "constraint_type": "C",
+              "deferrable": "NOT DEFERRABLE",
+              "deferred": "IMMEDIATE",
+              "delete_rule": null,
+              "r_constraint_name": null,
+              "search_condition": "\"AD_USERDEF_FORM_ID\" IS NOT NULL",
+              "status": "ENABLED",
+              "table_name": "AD_USERDEF_FORM",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "ADCLIENT_ADUSERDEFFORM",
+              "constraint_type": "R",
+              "deferrable": "DEFERRABLE",
+              "deferred": "DEFERRED",
+              "delete_rule": "NO ACTION",
+              "r_constraint_name": "AD_CLIENT_KEY",
+              "search_condition": null,
+              "status": "ENABLED",
+              "table_name": "AD_USERDEF_FORM",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "ADUSER_ADUSERDEFFORM",
+              "constraint_type": "R",
+              "deferrable": "DEFERRABLE",
+              "deferred": "DEFERRED",
+              "delete_rule": "NO ACTION",
+              "r_constraint_name": "AD_USER_KEY",
+              "search_condition": null,
+              "status": "ENABLED",
+              "table_name": "AD_USERDEF_FORM",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "SYS_C0027384",
+              "constraint_type": "C",
+              "deferrable": "NOT DEFERRABLE",
+              "deferred": "IMMEDIATE",
+              "delete_rule": null,
+              "r_constraint_name": null,
+              "search_condition": "\"UPDATED\" IS NOT NULL",
+              "status": "ENABLED",
+              "table_name": "AD_USERDEF_FORM",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "AD_USERDEF_FORM_UU_IDX",
+              "constraint_type": "U",
+              "deferrable": "NOT DEFERRABLE",
+              "deferred": "IMMEDIATE",
+              "delete_rule": null,
+              "r_constraint_name": null,
+              "search_condition": null,
+              "status": "ENABLED",
+              "table_name": "AD_USERDEF_FORM",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "SYS_C0027382",
+              "constraint_type": "C",
+              "deferrable": "NOT DEFERRABLE",
+              "deferred": "IMMEDIATE",
+              "delete_rule": null,
+              "r_constraint_name": null,
+              "search_condition": "\"ISACTIVE\" IS NOT NULL",
+              "status": "ENABLED",
+              "table_name": "AD_USERDEF_FORM",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "SYS_C0027376",
+              "constraint_type": "C",
+              "deferrable": "NOT DEFERRABLE",
+              "deferred": "IMMEDIATE",
+              "delete_rule": null,
+              "r_constraint_name": null,
+              "search_condition": "\"AD_FORM_ID\" IS NOT NULL",
+              "status": "ENABLED",
+              "table_name": "AD_USERDEF_FORM",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "ADLANGUAGE_ADUSERDEFFORM",
+              "constraint_type": "R",
+              "deferrable": "DEFERRABLE",
+              "deferred": "DEFERRED",
+              "delete_rule": "NO ACTION",
+              "r_constraint_name": "AD_LANGUAGE_KEY",
+              "search_condition": null,
+              "status": "ENABLED",
+              "table_name": "AD_USERDEF_FORM",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "UPDATEDBY_ADUSERDEFFORM",
+              "constraint_type": "R",
+              "deferrable": "DEFERRABLE",
+              "deferred": "DEFERRED",
+              "delete_rule": "NO ACTION",
+              "r_constraint_name": "AD_USER_KEY",
+              "search_condition": null,
+              "status": "ENABLED",
+              "table_name": "AD_USERDEF_FORM",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "ADFORM_ADUSERDEFFORM",
+              "constraint_type": "R",
+              "deferrable": "DEFERRABLE",
+              "deferred": "DEFERRED",
+              "delete_rule": "NO ACTION",
+              "r_constraint_name": "AD_FORM_KEY",
+              "search_condition": null,
+              "status": "ENABLED",
+              "table_name": "AD_USERDEF_FORM",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "SYS_C0027381",
+              "constraint_type": "C",
+              "deferrable": "NOT DEFERRABLE",
+              "deferred": "IMMEDIATE",
+              "delete_rule": null,
+              "r_constraint_name": null,
+              "search_condition": "\"CREATEDBY\" IS NOT NULL",
+              "status": "ENABLED",
+              "table_name": "AD_USERDEF_FORM",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "SYS_C0027380",
+              "constraint_type": "C",
+              "deferrable": "NOT DEFERRABLE",
+              "deferred": "IMMEDIATE",
+              "delete_rule": null,
+              "r_constraint_name": null,
+              "search_condition": "\"CREATED\" IS NOT NULL",
+              "status": "ENABLED",
+              "table_name": "AD_USERDEF_FORM",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "ADROLE_ADUSERDEFFORM",
+              "constraint_type": "R",
+              "deferrable": "DEFERRABLE",
+              "deferred": "DEFERRED",
+              "delete_rule": "CASCADE",
+              "r_constraint_name": "AD_ROLE_KEY",
+              "search_condition": null,
+              "status": "ENABLED",
+              "table_name": "AD_USERDEF_FORM",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "AD_USERDEF_FORM_KEY",
+              "constraint_type": "P",
+              "deferrable": "NOT DEFERRABLE",
+              "deferred": "IMMEDIATE",
+              "delete_rule": null,
+              "r_constraint_name": null,
+              "search_condition": null,
+              "status": "ENABLED",
+              "table_name": "AD_USERDEF_FORM",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "SYS_C0027385",
+              "constraint_type": "C",
+              "deferrable": "NOT DEFERRABLE",
+              "deferred": "IMMEDIATE",
+              "delete_rule": null,
+              "r_constraint_name": null,
+              "search_condition": "\"UPDATEDBY\" IS NOT NULL",
+              "status": "ENABLED",
+              "table_name": "AD_USERDEF_FORM",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "ADORG_ADUSERDEFFORM",
+              "constraint_type": "R",
+              "deferrable": "DEFERRABLE",
+              "deferred": "DEFERRED",
+              "delete_rule": "NO ACTION",
+              "r_constraint_name": "AD_ORG_KEY",
+              "search_condition": null,
+              "status": "ENABLED",
+              "table_name": "AD_USERDEF_FORM",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "SYS_C0027386",
+              "constraint_type": "C",
+              "deferrable": "NOT DEFERRABLE",
+              "deferred": "IMMEDIATE",
+              "delete_rule": null,
+              "r_constraint_name": null,
+              "search_condition": "IsActive IN ('Y','N')",
+              "status": "ENABLED",
+              "table_name": "AD_USERDEF_FORM",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "CREATEDBY_ADUSERDEFFORM",
+              "constraint_type": "R",
+              "deferrable": "DEFERRABLE",
+              "deferred": "DEFERRED",
+              "delete_rule": "NO ACTION",
+              "r_constraint_name": "AD_USER_KEY",
+              "search_condition": null,
+              "status": "ENABLED",
+              "table_name": "AD_USERDEF_FORM",
+              "validated": "VALIDATED"
+            }
+          ],
+          "removed": []
+        },
+        "index_columns": {
+          "added": [
+            {
+              "column_name": "AD_USERDEF_FORM_UU",
+              "column_position": 1,
+              "descend": "ASC",
+              "index_name": "AD_USERDEF_FORM_UU_IDX",
+              "table_name": "AD_USERDEF_FORM"
+            },
+            {
+              "column_name": "AD_FORM_ID",
+              "column_position": 1,
+              "descend": "ASC",
+              "index_name": "AD_USERDEF_FORM_UU_UNIQUE",
+              "table_name": "AD_USERDEF_FORM"
+            },
+            {
+              "column_name": "AD_CLIENT_ID",
+              "column_position": 2,
+              "descend": "ASC",
+              "index_name": "AD_USERDEF_FORM_UU_UNIQUE",
+              "table_name": "AD_USERDEF_FORM"
+            },
+            {
+              "column_name": "AD_ORG_ID",
+              "column_position": 3,
+              "descend": "ASC",
+              "index_name": "AD_USERDEF_FORM_UU_UNIQUE",
+              "table_name": "AD_USERDEF_FORM"
+            },
+            {
+              "column_name": "SYS_NC00020$",
+              "column_position": 6,
+              "descend": "ASC",
+              "index_name": "AD_USERDEF_FORM_UU_UNIQUE",
+              "table_name": "AD_USERDEF_FORM"
+            },
+            {
+              "column_name": "AD_USERDEF_FORM_ID",
+              "column_position": 1,
+              "descend": "ASC",
+              "index_name": "AD_USERDEF_FORM_KEY",
+              "table_name": "AD_USERDEF_FORM"
+            },
+            {
+              "column_name": "SYS_NC00018$",
+              "column_position": 4,
+              "descend": "ASC",
+              "index_name": "AD_USERDEF_FORM_UU_UNIQUE",
+              "table_name": "AD_USERDEF_FORM"
+            },
+            {
+              "column_name": "SYS_NC00019$",
+              "column_position": 5,
+              "descend": "ASC",
+              "index_name": "AD_USERDEF_FORM_UU_UNIQUE",
+              "table_name": "AD_USERDEF_FORM"
+            }
+          ],
+          "removed": []
+        },
+        "indexes": {
+          "added": [
+            {
+              "index_name": "AD_USERDEF_FORM_UU_UNIQUE",
+              "index_type": "FUNCTION-BASED NORMAL",
+              "status": "VALID",
+              "table_name": "AD_USERDEF_FORM",
+              "uniqueness": "UNIQUE"
+            },
+            {
+              "index_name": "AD_USERDEF_FORM_UU_IDX",
+              "index_type": "NORMAL",
+              "status": "VALID",
+              "table_name": "AD_USERDEF_FORM",
+              "uniqueness": "UNIQUE"
+            },
+            {
+              "index_name": "AD_USERDEF_FORM_KEY",
+              "index_type": "NORMAL",
+              "status": "VALID",
+              "table_name": "AD_USERDEF_FORM",
+              "uniqueness": "UNIQUE"
+            }
+          ],
+          "removed": []
+        }
+      },
+      "tables": {
+        "ad_column": {
+          "added": {
+            "1ecf9b9b5803e578cf05c670dd4a8d0ff490f742394af1fa15a18220cae71ef8": 1,
+            "3a208156045e33e5d88d632b0a71b40591157c32bb492fbdcd9c566224d170da": 1,
+            "461608f89f8674415ef29e7f45142083a59e0f2cff7ca3504f80f6114faab917": 1,
+            "51902f849e35222f6f5746490c8d2a176c7fb22fca6600d7eb68407e49677870": 1,
+            "58422254f1463bf6a204e9e08e2f88a1c77f516708c3662f170d0cc8ea14cb08": 1,
+            "644b7e6ed8c8938847cd7044a87fc5f1b0d5751a04c8b588efae32de2a8f481b": 1,
+            "7b0ae8810e2db165d6c94b1f29bf0b5f5f9dd162d419f1fe47ffa4208a953bcc": 1,
+            "7c49da84cf916f778b10932d6796cb72534cdcbef6c155c7cc48ec1d33bf90ab": 1,
+            "7fb33ff7ca36f09ac6c0a0a4cf3d8dbaeaed4bc7edc8a4f240510af793ce6d37": 1,
+            "8c8c16f8dee3dae0204b43b69c2ae020650760dfeeebb716fac05752bf5dc7bb": 1,
+            "9f12f079fbf9696596f7e1e7915d48114350fa05c725a47ba5ebfd93a992d829": 1,
+            "acd8ae2274349a2c43b470f365f0b2171d6e7ace28d679b3a18bbe4c6600c58a": 1,
+            "ce1179d92aef6ee990f00522557d11f575c75c6446af1a538c771a9f2ca5a89d": 1,
+            "dc25968d9165d3328c841e24c41b9b07f2fa076967857dab999e763dec2f814b": 1,
+            "ee74cf71e2eb51cf2d9d815ce0b130380c6c3f14f7528438fececc2c7ec85b56": 1,
+            "efee9e27762e753e339ccbb0acbaeeda03d0971c4c6c4d4ca05f20953b4c7dcc": 1,
+            "fefc49f1b97fdd798ead6198b9691ca325ce26de0352bdeb2e870f78bfb19c37": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_element": {
+          "added": {
+            "2118d17197d809c32fad9c3c03d0767c5caebc93856907c60365af6748e21a9b": 1,
+            "c3a8f746745b3852aac9a17890af0ba4774f485d4feb0e07fbd1bbd5efd0fd64": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_field": {
+          "added": {
+            "009b34ddd54e1e7ff843a5cc1cf0d19448d3503b1ff0adc7e223d85aa5ce1cf1": 1,
+            "0237c5aba0a66c1f8de0f55fef16112b5c10a0559457b85d0c95ef14bdf5474a": 1,
+            "5c53fa24134165c8c25fe22f8cafea959e09d4f9fbefbcac6dc898d574fbc840": 1,
+            "872de0ce95be3183c24b4038137cdbeeb1dac40a366b88aa9eb41af9726dbc13": 1,
+            "b620651cbb9aac1006dede298d40cda9cd673b0602eeb40bfadad8349f097a39": 1,
+            "ca53e3777b8e8946680f6b40751463c45d1ee6053d1d20a225f82aed5f9e6982": 1,
+            "d8d8131921800361dfb93d2cf159e57d3b89885b14d7ce2d9f9021f17cc374f8": 1,
+            "d8dbf87009083db03f52a925fe0f89072458ff90701646c54d8acf788228d5b1": 1,
+            "d98f30d8a7a3bd3d1b27fc7142c9001a212cd24ef5ab4b7d817b2d8d7db888ec": 1,
+            "dff5246cfd58d6738afe210b73d1a0de18f285fb17f522c0191b8b963928ea61": 1,
+            "e284fbd79bab5d14063f771d92ec8d194afdc4732d8fd61e357b5a21d05297f3": 1,
+            "eb159d896cbb386cddb55a6c238b8e7609370b7a8d745d43d2d4c67b67b032fd": 1,
+            "f077590fab8516de9d4024786964fdb0eafaace206b0cce8a0291928d9c4b7da": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_indexcolumn": {
+          "added": {
+            "32b454322f5690052297031f76f73d1a95feb7da024051b79810ab99867e2ed1": 1,
+            "493e7367537c71f2b3f79f3905967b7cd026aac9018497bb052ba9ad9ce0045b": 1,
+            "584c6ca5f1ac4270ed47223b4f6acda7b9e61c9d004c212f9b0f125da8314d79": 1,
+            "679462a5ca10dd5c60c2e3440e5c0daff1fa1e5cad3dfaf2d533ac8f5cb4bf43": 1,
+            "683ebd7773b79d33f753d63f4735482e824574e176ddfdfd01a2d37c5536d914": 1,
+            "f18a3cd3cb018f2fe44443369fca19b0c7e9612b0fc98b169bff4827367ff7fc": 1,
+            "fae0560c4862b83acd9652d841276e20a83b5a4447d94df38e6745c7fd66dfe8": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_menu": {
+          "added": {
+            "1c220b9c330c03678cfc63970e84f064326094136bc620301375e40296981019": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_migrationscript": {
+          "added": {
+            "062cae8f1fe0dc3ae03459038bc542c59a3e7e81604afdc08725978406dd1dc8": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_sequence": {
+          "added": {
+            "5b96875be3fe1225a9f546809872449deb7b3e8d25fe114da417080bd37517a4": 1,
+            "ba2cb53c3e157a2ac0884d2871eb2ea46b1180491eefe8cf120ac9dc59fd2876": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "f8e6a6cb02828aa95c0c5781df6e66a630302036ab8a280e98e7dc79c40bc653": 1
+          }
+        },
+        "ad_tab": {
+          "added": {
+            "d40af7801b058ba416cebc3b3ba39ba873a8dfadb0d1dd539551626149efe585": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_table": {
+          "added": {
+            "3d086a07f83abfe02afc2540aad2c0430cd9b5220bb4102e0cc066ebbac85de5": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_tableindex": {
+          "added": {
+            "1241472edd25bd717af80f5b02c6593facaa7d5bdfa50a0bddc6095ab2a4d86a": 1,
+            "7a01a0560d3686d4346d82575cf42eed638d673d31354b72bf7adcf3ae3ef4b1": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_treenodemm": {
+          "added": {
+            "0984fcff742464ded68adc70007c4ba30db646c69fbe65148d36cf90933794d5": 1,
+            "0e2190f116e896360714e3d2856c77c411fd80db212177cd968ca3e4588ae166": 1,
+            "16954f56089c498403e948c574f4bd512375509c7420940c750c1389e888afe5": 1,
+            "260772a6a9651517057c24ca89a2553aa5ae155cb597da00afd362a951e10022": 1,
+            "2f203ca6e32dfb4c919a248207356d7f6dd7826e2fe694ea0bd908161913855e": 1,
+            "328a2f4ebaae1c2cb50c3b10849797e546b5f96cbda6b4959a8bf6ae54f94e10": 1,
+            "667044ae92588997cd27b31118e5ea07d43a738176ef5a9b91e8aa94c43733f6": 1,
+            "6bde6109fd25c54d3276b3d78dda2d21cd5b07d6960caa844ab1d9c4056173d6": 1,
+            "7d0b8cd6312ff6801b42cbc8d43f5cfb131fa5cbb899c20352d4c430fa319426": 1,
+            "ad18d10675c73a47493ae1b4944d9d6dd1c932a2f2c03cf9d4ede0651a9efc91": 1,
+            "d0f2611bddbdc3541b4f05ca3abd418b75724d4d8432a12e9642e254c7c72332": 1,
+            "d2cccc475dcfc67d2162c64f4d87f81dbb0242df0baf70692aea61db95e70e6c": 1,
+            "d65b0f5d3b4d7724eb0d70dc3dadcb46b12e15c1f1039f03eff8b269ddb4d236": 1,
+            "dc15f24233d6a915d14259eea034642ff8d3bba1f424bd51ca481545b6d48175": 1,
+            "e31be179769eaeb53d3f3b85973498f60326e7363f9b90530b4554595919de27": 1,
+            "fff6c81ecaa4cafb50eda12bb3e288f084855910e72bd24b7dc00bcb1e3532f3": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "24b7d7d90f48a281efba301f796f4858e80874d18101355c61d6ed3fa69f58da": 1,
+            "338f0bf423bbaaa7aa9d4e06c26756dc8af1200a0a862d2d850ffd47b9c2f979": 1,
+            "3e03266e1135453826ed62b92304eb11b8ee4fc03d12f08401760a8dc4eadb5f": 1,
+            "3f2261164ce9bc03ac50f3d34b6a2f04e2503e705e008588fd50d377a15a895a": 1,
+            "5f3778f77850b301784c26f1c16a71c7f2ace435a1059250dca4d29425f712f9": 1,
+            "6ac84e299fb1eef30456642e42d35269ed6895243b1a6005d194487bbe2382ac": 1,
+            "6bf4dde3d02f7a59aedc400b27afd419ff584acd06f3dec01c25775c9627652d": 1,
+            "70175407a42e234f05c316eaa887154faa805525cba4bc451865a965c2612815": 1,
+            "774cfc56d01a377849d72dce85c63779050d70648132fcd55965841b0be8d09a": 1,
+            "a7153a942b046831623283258bf8d2bdaacc0c2755ab7e4b0e7b52ae162133ed": 1,
+            "a9951c6c7cf48ffa2493bbbd91a7e878150b7eeb91b1e7dd014d1b52c471aba6": 1,
+            "ae989866789fcb80cff8f66bf4fb6c4525b311e0ecf5e63747e21dfc090c0bf1": 1,
+            "c17a17117287cce4609bda1e0832a96742246e8d69d6cec36cb73fe272e0341a": 1,
+            "e351c4aa0708dcd0bb161dc5a6342d61c4213561ec235a1bf04352832ed023d0": 1,
+            "f25312afe3b8d5a151fa2e8597f99e45d21b94b2fc911df0d9200a73c741cfaf": 1
+          }
+        },
+        "ad_userdef_form": {
+          "added": {},
+          "exists_after": true,
+          "exists_before": false,
+          "removed": {}
+        },
+        "ad_window": {
+          "added": {
+            "97c34369a9d43a31fb615b18217dabab2bb172caa684413e732f4fe9a7cef6e9": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        }
+      }
+    },
+    "postgresql": {
+      "structure": {
+        "columns": {
+          "added": [
+            {
+              "character_maximum_length": null,
+              "column_default": null,
+              "column_name": "created",
+              "data_type": "timestamp without time zone",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "NO",
+              "numeric_precision": null,
+              "numeric_scale": null,
+              "table_name": "ad_userdef_form"
+            },
+            {
+              "character_maximum_length": 6,
+              "column_default": "NULL::character varying",
+              "column_name": "ad_language",
+              "data_type": "character varying",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "YES",
+              "numeric_precision": null,
+              "numeric_scale": null,
+              "table_name": "ad_userdef_form"
+            },
+            {
+              "character_maximum_length": 60,
+              "column_default": null,
+              "column_name": "name",
+              "data_type": "character varying",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "YES",
+              "numeric_precision": null,
+              "numeric_scale": null,
+              "table_name": "ad_userdef_form"
+            },
+            {
+              "character_maximum_length": null,
+              "column_default": null,
+              "column_name": "ad_client_id",
+              "data_type": "numeric",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "NO",
+              "numeric_precision": 10,
+              "numeric_scale": 0,
+              "table_name": "ad_userdef_form"
+            },
+            {
+              "character_maximum_length": 255,
+              "column_default": "NULL::character varying",
+              "column_name": "description",
+              "data_type": "character varying",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "YES",
+              "numeric_precision": null,
+              "numeric_scale": null,
+              "table_name": "ad_userdef_form"
+            },
+            {
+              "character_maximum_length": null,
+              "column_default": null,
+              "column_name": "ad_userdef_form_id",
+              "data_type": "numeric",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "NO",
+              "numeric_precision": 10,
+              "numeric_scale": 0,
+              "table_name": "ad_userdef_form"
+            },
+            {
+              "character_maximum_length": null,
+              "column_default": null,
+              "column_name": "updated",
+              "data_type": "timestamp without time zone",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "NO",
+              "numeric_precision": null,
+              "numeric_scale": null,
+              "table_name": "ad_userdef_form"
+            },
+            {
+              "character_maximum_length": null,
+              "column_default": null,
+              "column_name": "createdby",
+              "data_type": "numeric",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "NO",
+              "numeric_precision": 10,
+              "numeric_scale": 0,
+              "table_name": "ad_userdef_form"
+            },
+            {
+              "character_maximum_length": null,
+              "column_default": "NULL::numeric",
+              "column_name": "ad_role_id",
+              "data_type": "numeric",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "YES",
+              "numeric_precision": 10,
+              "numeric_scale": 0,
+              "table_name": "ad_userdef_form"
+            },
+            {
+              "character_maximum_length": null,
+              "column_default": null,
+              "column_name": "ad_org_id",
+              "data_type": "numeric",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "NO",
+              "numeric_precision": 10,
+              "numeric_scale": 0,
+              "table_name": "ad_userdef_form"
+            },
+            {
+              "character_maximum_length": null,
+              "column_default": null,
+              "column_name": "ad_form_id",
+              "data_type": "numeric",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "NO",
+              "numeric_precision": 10,
+              "numeric_scale": 0,
+              "table_name": "ad_userdef_form"
+            },
+            {
+              "character_maximum_length": null,
+              "column_default": null,
+              "column_name": "ad_user_id",
+              "data_type": "numeric",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "YES",
+              "numeric_precision": 10,
+              "numeric_scale": 0,
+              "table_name": "ad_userdef_form"
+            },
+            {
+              "character_maximum_length": null,
+              "column_default": null,
+              "column_name": "ad_userdef_form_uu",
+              "data_type": "uuid",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "YES",
+              "numeric_precision": null,
+              "numeric_scale": null,
+              "table_name": "ad_userdef_form"
+            },
+            {
+              "character_maximum_length": 1,
+              "column_default": "'Y'::bpchar",
+              "column_name": "isactive",
+              "data_type": "character",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "NO",
+              "numeric_precision": null,
+              "numeric_scale": null,
+              "table_name": "ad_userdef_form"
+            },
+            {
+              "character_maximum_length": 2000,
+              "column_default": "NULL::character varying",
+              "column_name": "help",
+              "data_type": "character varying",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "YES",
+              "numeric_precision": null,
+              "numeric_scale": null,
+              "table_name": "ad_userdef_form"
+            },
+            {
+              "character_maximum_length": 120,
+              "column_default": "NULL::character varying",
+              "column_name": "imageurl",
+              "data_type": "character varying",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "YES",
+              "numeric_precision": null,
+              "numeric_scale": null,
+              "table_name": "ad_userdef_form"
+            },
+            {
+              "character_maximum_length": null,
+              "column_default": null,
+              "column_name": "updatedby",
+              "data_type": "numeric",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "NO",
+              "numeric_precision": 10,
+              "numeric_scale": 0,
+              "table_name": "ad_userdef_form"
+            }
+          ],
+          "removed": []
+        },
+        "constraints": {
+          "added": [
+            {
+              "constraint_name": "createdby_aduserdefform",
+              "definition": "FOREIGN KEY (createdby) REFERENCES ad_user(ad_user_id) DEFERRABLE INITIALLY DEFERRED",
+              "table_name": "ad_userdef_form"
+            },
+            {
+              "constraint_name": "aduser_aduserdefform",
+              "definition": "FOREIGN KEY (ad_user_id) REFERENCES ad_user(ad_user_id) DEFERRABLE INITIALLY DEFERRED",
+              "table_name": "ad_userdef_form"
+            },
+            {
+              "constraint_name": "ad_userdef_form_key",
+              "definition": "PRIMARY KEY (ad_userdef_form_id)",
+              "table_name": "ad_userdef_form"
+            },
+            {
+              "constraint_name": "updatedby_aduserdefform",
+              "definition": "FOREIGN KEY (updatedby) REFERENCES ad_user(ad_user_id) DEFERRABLE INITIALLY DEFERRED",
+              "table_name": "ad_userdef_form"
+            },
+            {
+              "constraint_name": "adorg_aduserdefform",
+              "definition": "FOREIGN KEY (ad_org_id) REFERENCES ad_org(ad_org_id) DEFERRABLE INITIALLY DEFERRED",
+              "table_name": "ad_userdef_form"
+            },
+            {
+              "constraint_name": "adlanguage_aduserdefform",
+              "definition": "FOREIGN KEY (ad_language) REFERENCES ad_language(ad_language) DEFERRABLE INITIALLY DEFERRED",
+              "table_name": "ad_userdef_form"
+            },
+            {
+              "constraint_name": "adrole_aduserdefform",
+              "definition": "FOREIGN KEY (ad_role_id) REFERENCES ad_role(ad_role_id) ON DELETE CASCADE DEFERRABLE INITIALLY DEFERRED",
+              "table_name": "ad_userdef_form"
+            },
+            {
+              "constraint_name": "adform_aduserdefform",
+              "definition": "FOREIGN KEY (ad_form_id) REFERENCES ad_form(ad_form_id) DEFERRABLE INITIALLY DEFERRED",
+              "table_name": "ad_userdef_form"
+            },
+            {
+              "constraint_name": "ad_userdef_form_uu_idx",
+              "definition": "UNIQUE (ad_userdef_form_uu)",
+              "table_name": "ad_userdef_form"
+            },
+            {
+              "constraint_name": "ad_userdef_form_isactive_check",
+              "definition": "CHECK ((isactive = ANY (ARRAY['Y'::bpchar, 'N'::bpchar])))",
+              "table_name": "ad_userdef_form"
+            },
+            {
+              "constraint_name": "adclient_aduserdefform",
+              "definition": "FOREIGN KEY (ad_client_id) REFERENCES ad_client(ad_client_id) DEFERRABLE INITIALLY DEFERRED",
+              "table_name": "ad_userdef_form"
+            }
+          ],
+          "removed": []
+        },
+        "indexes": {
+          "added": [
+            {
+              "indexdef": "CREATE UNIQUE INDEX ad_userdef_form_uu_unique ON adempiere.ad_userdef_form USING btree (ad_form_id, ad_client_id, ad_org_id, COALESCE(ad_role_id, (0)::numeric), COALESCE(ad_user_id, (0)::numeric), COALESCE(ad_language, ''::character varying))",
+              "indexname": "ad_userdef_form_uu_unique",
+              "tablename": "ad_userdef_form"
+            },
+            {
+              "indexdef": "CREATE UNIQUE INDEX ad_userdef_form_key ON adempiere.ad_userdef_form USING btree (ad_userdef_form_id)",
+              "indexname": "ad_userdef_form_key",
+              "tablename": "ad_userdef_form"
+            },
+            {
+              "indexdef": "CREATE UNIQUE INDEX ad_userdef_form_uu_idx ON adempiere.ad_userdef_form USING btree (ad_userdef_form_uu)",
+              "indexname": "ad_userdef_form_uu_idx",
+              "tablename": "ad_userdef_form"
+            }
+          ],
+          "removed": []
+        },
+        "triggers": {
+          "added": [
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_c_52397\" AFTER INSERT ON adempiere.ad_userdef_form FROM ad_user DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_check_ins\"()",
+              "table_name": "ad_userdef_form",
+              "trigger_name": "RI_ConstraintTrigger_c_52397"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_c_52372\" AFTER INSERT ON adempiere.ad_userdef_form FROM ad_language DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_check_ins\"()",
+              "table_name": "ad_userdef_form",
+              "trigger_name": "RI_ConstraintTrigger_c_52372"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_c_52392\" AFTER INSERT ON adempiere.ad_userdef_form FROM ad_user DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_check_ins\"()",
+              "table_name": "ad_userdef_form",
+              "trigger_name": "RI_ConstraintTrigger_c_52392"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_a_52370\" AFTER DELETE ON adempiere.ad_language FROM ad_userdef_form DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_noaction_del\"()",
+              "table_name": "ad_language",
+              "trigger_name": "RI_ConstraintTrigger_a_52370"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_a_52386\" AFTER UPDATE ON adempiere.ad_user FROM ad_userdef_form DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_noaction_upd\"()",
+              "table_name": "ad_user",
+              "trigger_name": "RI_ConstraintTrigger_a_52386"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_c_52362\" AFTER INSERT ON adempiere.ad_userdef_form FROM ad_client DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_check_ins\"()",
+              "table_name": "ad_userdef_form",
+              "trigger_name": "RI_ConstraintTrigger_c_52362"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_c_52377\" AFTER INSERT ON adempiere.ad_userdef_form FROM ad_org DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_check_ins\"()",
+              "table_name": "ad_userdef_form",
+              "trigger_name": "RI_ConstraintTrigger_c_52377"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_c_52387\" AFTER INSERT ON adempiere.ad_userdef_form FROM ad_user DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_check_ins\"()",
+              "table_name": "ad_userdef_form",
+              "trigger_name": "RI_ConstraintTrigger_c_52387"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_a_52361\" AFTER UPDATE ON adempiere.ad_client FROM ad_userdef_form DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_noaction_upd\"()",
+              "table_name": "ad_client",
+              "trigger_name": "RI_ConstraintTrigger_a_52361"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_c_52398\" AFTER UPDATE ON adempiere.ad_userdef_form FROM ad_user DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_check_upd\"()",
+              "table_name": "ad_userdef_form",
+              "trigger_name": "RI_ConstraintTrigger_c_52398"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_a_52385\" AFTER DELETE ON adempiere.ad_user FROM ad_userdef_form DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_noaction_del\"()",
+              "table_name": "ad_user",
+              "trigger_name": "RI_ConstraintTrigger_a_52385"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_c_52368\" AFTER UPDATE ON adempiere.ad_userdef_form FROM ad_form DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_check_upd\"()",
+              "table_name": "ad_userdef_form",
+              "trigger_name": "RI_ConstraintTrigger_c_52368"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_a_52360\" AFTER DELETE ON adempiere.ad_client FROM ad_userdef_form DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_noaction_del\"()",
+              "table_name": "ad_client",
+              "trigger_name": "RI_ConstraintTrigger_a_52360"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_a_52396\" AFTER UPDATE ON adempiere.ad_user FROM ad_userdef_form DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_noaction_upd\"()",
+              "table_name": "ad_user",
+              "trigger_name": "RI_ConstraintTrigger_a_52396"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_a_52380\" AFTER DELETE ON adempiere.ad_role FROM ad_userdef_form NOT DEFERRABLE INITIALLY IMMEDIATE FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_cascade_del\"()",
+              "table_name": "ad_role",
+              "trigger_name": "RI_ConstraintTrigger_a_52380"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_c_52363\" AFTER UPDATE ON adempiere.ad_userdef_form FROM ad_client DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_check_upd\"()",
+              "table_name": "ad_userdef_form",
+              "trigger_name": "RI_ConstraintTrigger_c_52363"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_a_52376\" AFTER UPDATE ON adempiere.ad_org FROM ad_userdef_form DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_noaction_upd\"()",
+              "table_name": "ad_org",
+              "trigger_name": "RI_ConstraintTrigger_a_52376"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_a_52381\" AFTER UPDATE ON adempiere.ad_role FROM ad_userdef_form DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_noaction_upd\"()",
+              "table_name": "ad_role",
+              "trigger_name": "RI_ConstraintTrigger_a_52381"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_c_52373\" AFTER UPDATE ON adempiere.ad_userdef_form FROM ad_language DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_check_upd\"()",
+              "table_name": "ad_userdef_form",
+              "trigger_name": "RI_ConstraintTrigger_c_52373"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_a_52365\" AFTER DELETE ON adempiere.ad_form FROM ad_userdef_form DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_noaction_del\"()",
+              "table_name": "ad_form",
+              "trigger_name": "RI_ConstraintTrigger_a_52365"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_c_52378\" AFTER UPDATE ON adempiere.ad_userdef_form FROM ad_org DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_check_upd\"()",
+              "table_name": "ad_userdef_form",
+              "trigger_name": "RI_ConstraintTrigger_c_52378"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_a_52390\" AFTER DELETE ON adempiere.ad_user FROM ad_userdef_form DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_noaction_del\"()",
+              "table_name": "ad_user",
+              "trigger_name": "RI_ConstraintTrigger_a_52390"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_c_52388\" AFTER UPDATE ON adempiere.ad_userdef_form FROM ad_user DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_check_upd\"()",
+              "table_name": "ad_userdef_form",
+              "trigger_name": "RI_ConstraintTrigger_c_52388"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_c_52367\" AFTER INSERT ON adempiere.ad_userdef_form FROM ad_form DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_check_ins\"()",
+              "table_name": "ad_userdef_form",
+              "trigger_name": "RI_ConstraintTrigger_c_52367"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_a_52371\" AFTER UPDATE ON adempiere.ad_language FROM ad_userdef_form DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_noaction_upd\"()",
+              "table_name": "ad_language",
+              "trigger_name": "RI_ConstraintTrigger_a_52371"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_c_52383\" AFTER UPDATE ON adempiere.ad_userdef_form FROM ad_role DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_check_upd\"()",
+              "table_name": "ad_userdef_form",
+              "trigger_name": "RI_ConstraintTrigger_c_52383"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_a_52366\" AFTER UPDATE ON adempiere.ad_form FROM ad_userdef_form DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_noaction_upd\"()",
+              "table_name": "ad_form",
+              "trigger_name": "RI_ConstraintTrigger_a_52366"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_c_52382\" AFTER INSERT ON adempiere.ad_userdef_form FROM ad_role DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_check_ins\"()",
+              "table_name": "ad_userdef_form",
+              "trigger_name": "RI_ConstraintTrigger_c_52382"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_a_52391\" AFTER UPDATE ON adempiere.ad_user FROM ad_userdef_form DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_noaction_upd\"()",
+              "table_name": "ad_user",
+              "trigger_name": "RI_ConstraintTrigger_a_52391"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_a_52395\" AFTER DELETE ON adempiere.ad_user FROM ad_userdef_form DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_noaction_del\"()",
+              "table_name": "ad_user",
+              "trigger_name": "RI_ConstraintTrigger_a_52395"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_a_52375\" AFTER DELETE ON adempiere.ad_org FROM ad_userdef_form DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_noaction_del\"()",
+              "table_name": "ad_org",
+              "trigger_name": "RI_ConstraintTrigger_a_52375"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_c_52393\" AFTER UPDATE ON adempiere.ad_userdef_form FROM ad_user DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_check_upd\"()",
+              "table_name": "ad_userdef_form",
+              "trigger_name": "RI_ConstraintTrigger_c_52393"
+            }
+          ],
+          "removed": []
+        }
+      },
+      "tables": {
+        "ad_column": {
+          "added": {
+            "1ecf9b9b5803e578cf05c670dd4a8d0ff490f742394af1fa15a18220cae71ef8": 1,
+            "3a208156045e33e5d88d632b0a71b40591157c32bb492fbdcd9c566224d170da": 1,
+            "461608f89f8674415ef29e7f45142083a59e0f2cff7ca3504f80f6114faab917": 1,
+            "51902f849e35222f6f5746490c8d2a176c7fb22fca6600d7eb68407e49677870": 1,
+            "58422254f1463bf6a204e9e08e2f88a1c77f516708c3662f170d0cc8ea14cb08": 1,
+            "644b7e6ed8c8938847cd7044a87fc5f1b0d5751a04c8b588efae32de2a8f481b": 1,
+            "7b0ae8810e2db165d6c94b1f29bf0b5f5f9dd162d419f1fe47ffa4208a953bcc": 1,
+            "7c49da84cf916f778b10932d6796cb72534cdcbef6c155c7cc48ec1d33bf90ab": 1,
+            "7fb33ff7ca36f09ac6c0a0a4cf3d8dbaeaed4bc7edc8a4f240510af793ce6d37": 1,
+            "8c8c16f8dee3dae0204b43b69c2ae020650760dfeeebb716fac05752bf5dc7bb": 1,
+            "9176b75732b451cc11280de8e28b9422c1856d4c94828dc3c7de47766696246e": 1,
+            "9f12f079fbf9696596f7e1e7915d48114350fa05c725a47ba5ebfd93a992d829": 1,
+            "acd8ae2274349a2c43b470f365f0b2171d6e7ace28d679b3a18bbe4c6600c58a": 1,
+            "ce1179d92aef6ee990f00522557d11f575c75c6446af1a538c771a9f2ca5a89d": 1,
+            "dc25968d9165d3328c841e24c41b9b07f2fa076967857dab999e763dec2f814b": 1,
+            "ee74cf71e2eb51cf2d9d815ce0b130380c6c3f14f7528438fececc2c7ec85b56": 1,
+            "efee9e27762e753e339ccbb0acbaeeda03d0971c4c6c4d4ca05f20953b4c7dcc": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_element": {
+          "added": {
+            "2118d17197d809c32fad9c3c03d0767c5caebc93856907c60365af6748e21a9b": 1,
+            "c3a8f746745b3852aac9a17890af0ba4774f485d4feb0e07fbd1bbd5efd0fd64": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_field": {
+          "added": {
+            "009b34ddd54e1e7ff843a5cc1cf0d19448d3503b1ff0adc7e223d85aa5ce1cf1": 1,
+            "0237c5aba0a66c1f8de0f55fef16112b5c10a0559457b85d0c95ef14bdf5474a": 1,
+            "5c53fa24134165c8c25fe22f8cafea959e09d4f9fbefbcac6dc898d574fbc840": 1,
+            "872de0ce95be3183c24b4038137cdbeeb1dac40a366b88aa9eb41af9726dbc13": 1,
+            "966cd5ddb1de448a29104d8c5f55266512de35434f80bc418ad8f1e18eeddd8f": 1,
+            "b620651cbb9aac1006dede298d40cda9cd673b0602eeb40bfadad8349f097a39": 1,
+            "ca53e3777b8e8946680f6b40751463c45d1ee6053d1d20a225f82aed5f9e6982": 1,
+            "d8d8131921800361dfb93d2cf159e57d3b89885b14d7ce2d9f9021f17cc374f8": 1,
+            "d8dbf87009083db03f52a925fe0f89072458ff90701646c54d8acf788228d5b1": 1,
+            "d98f30d8a7a3bd3d1b27fc7142c9001a212cd24ef5ab4b7d817b2d8d7db888ec": 1,
+            "e284fbd79bab5d14063f771d92ec8d194afdc4732d8fd61e357b5a21d05297f3": 1,
+            "eb159d896cbb386cddb55a6c238b8e7609370b7a8d745d43d2d4c67b67b032fd": 1,
+            "f077590fab8516de9d4024786964fdb0eafaace206b0cce8a0291928d9c4b7da": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_indexcolumn": {
+          "added": {
+            "32b454322f5690052297031f76f73d1a95feb7da024051b79810ab99867e2ed1": 1,
+            "493e7367537c71f2b3f79f3905967b7cd026aac9018497bb052ba9ad9ce0045b": 1,
+            "584c6ca5f1ac4270ed47223b4f6acda7b9e61c9d004c212f9b0f125da8314d79": 1,
+            "679462a5ca10dd5c60c2e3440e5c0daff1fa1e5cad3dfaf2d533ac8f5cb4bf43": 1,
+            "683ebd7773b79d33f753d63f4735482e824574e176ddfdfd01a2d37c5536d914": 1,
+            "f18a3cd3cb018f2fe44443369fca19b0c7e9612b0fc98b169bff4827367ff7fc": 1,
+            "fae0560c4862b83acd9652d841276e20a83b5a4447d94df38e6745c7fd66dfe8": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_menu": {
+          "added": {
+            "1c220b9c330c03678cfc63970e84f064326094136bc620301375e40296981019": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_migrationscript": {
+          "added": {
+            "dd950475ad692a194a188b86523265c1e08b9fc7d89fa19d47b453b6e4610d2e": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_sequence": {
+          "added": {
+            "5b96875be3fe1225a9f546809872449deb7b3e8d25fe114da417080bd37517a4": 1,
+            "64b08c825131a8eed00ccc29d0077a9012a23557c62b10bdf8c7d8c268035062": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "c0b18dc77db73d54b8e684dfbda0dcc1a47dcac255711d1e395aedc83dc39741": 1
+          }
+        },
+        "ad_tab": {
+          "added": {
+            "d40af7801b058ba416cebc3b3ba39ba873a8dfadb0d1dd539551626149efe585": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_table": {
+          "added": {
+            "3d086a07f83abfe02afc2540aad2c0430cd9b5220bb4102e0cc066ebbac85de5": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_tableindex": {
+          "added": {
+            "1241472edd25bd717af80f5b02c6593facaa7d5bdfa50a0bddc6095ab2a4d86a": 1,
+            "7a01a0560d3686d4346d82575cf42eed638d673d31354b72bf7adcf3ae3ef4b1": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_treenodemm": {
+          "added": {
+            "0f79addc107720db683b62ebddcbe6a623ea5be21dc0e3af0b706563f2c9b421": 1,
+            "198b5859bae1c2251f3d0c0d0720a9cee8c7c10d594a04ca6fe65d6bcb6ee002": 1,
+            "1c536da002e03fa5154c3d273bfe06603d19f9ad8ed84087e4b58338fb1cda9a": 1,
+            "260772a6a9651517057c24ca89a2553aa5ae155cb597da00afd362a951e10022": 1,
+            "58c093860562dce715a0b848031b8b8b1296dcb01280ccd6457738f511b13b2e": 1,
+            "5b5f60301176987f2d9a3d439f19e789e6fc517d36086d485f063eee5fc6f9ce": 1,
+            "692a7d85ad4b9d86dfe71828949f2e863d4accefbc436b67091247f6cb1f7af0": 1,
+            "6b53148f3b523f7bdb81c0193906c907f1236356c5ae9f0bc47a8d32bc0bd931": 1,
+            "84584da4f04b44077d939e5552f3cd52ed10295d8fcd6b1078d947b8ba354aee": 1,
+            "860ffdff64ca0c95e88840b466dfd75f54c6051c7b7cd8b367b7b1416dfc33b9": 1,
+            "8aa4784ed63539435b7d4301e84f66ab08846885dfca73fb535e2ab9ab6127fe": 1,
+            "b464f87b240f94e208a73d71a69d38054d1f8e0b0b516a609c94d13e05a44764": 1,
+            "bdbd09b5f8b644b921a28d359c44a721e30e042805d411fc5548dba125426f45": 1,
+            "da01096cbbbf4787f9ac09e14b4f370bdb1db17dac44c1c61317de0bb5590443": 1,
+            "fe21bc08ccb59b42d65a52bc9a6d0c8d00fa36bbe080b999492f3c04b7683447": 1,
+            "ff32943164cfcb3204d4cfd72b1d765e7800e1c8011a086625aa001f8d62415d": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "098d00f8a1acb304dd4aa5b9c8c3d8d1ebaa556e61ccfccf8eb02740b7cd7434": 1,
+            "0bfa8da04f7690bb5c30b46dd01005b85afc090e1bb1be2d4ac56a3a0be38a8c": 1,
+            "1028de78435248a1dc45c6383d1ef9aa30f65b61dacd99db399a0a699c41aa8e": 1,
+            "3210a435b21109c73bf4d79058c0ecadca84d37bfc3f7957bf82b0e3f6698324": 1,
+            "42f16db88aad43fa31c6d9615b846e82b14a528b53f8246a739766dfe1b5d530": 1,
+            "55f2f81c98d823e94c2c5d84435d3daf7e6435d5424e1c640bba002202fdc4e8": 1,
+            "6a87504d9e1469c7ad649859690c006261c55ad63da4768d6aa378c404c2c815": 1,
+            "6e8620adbdc09156e51cd65b7226a1c147686fbe48a0eb917e91e00dd8199713": 1,
+            "88732def469bf7f41dc54268f6ddb57810909339e669ecae519ee5768e5c5a4e": 1,
+            "938802a72d52dda99757f61eade5562bf8c8d5e6486d059685805593be0730d3": 1,
+            "94429e6c9ac4d5f90c2b9450bf60bf23096162f9f096dbd8396e35bb08501f3d": 1,
+            "a7153a942b046831623283258bf8d2bdaacc0c2755ab7e4b0e7b52ae162133ed": 1,
+            "b7f5b126e968e543270963bb9b74f496d0a5f206b7cde1b0b2dfe43a07c7167a": 1,
+            "c0846521f1c4c5495c161aa87ca271838e4329cb362c692094616ee8e025f394": 1,
+            "cd5c95a992bfef8b67bc345022083ba0b2e6c49bf56bffb18ea840a50ec5f676": 1
+          }
+        },
+        "ad_userdef_form": {
+          "added": {},
+          "exists_after": true,
+          "exists_before": false,
+          "removed": {}
+        },
+        "ad_window": {
+          "added": {
+            "97c34369a9d43a31fb615b18217dabab2bb172caa684413e732f4fe9a7cef6e9": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        }
+      }
+    }
+  },
+  "evidence_class": "native-database-observation",
+  "execution": {
+    "oracle": {
+      "duration_seconds": 0.828,
+      "log_sha256": "6d939f41323c48c9802e9344cbab0d23c0edafdf6f5f7007842d958ab04c870c",
+      "native_client": "sqlplus",
+      "returncode": 0,
+      "source_path": "migration/iD13/oracle/202603061658_IDEMPIERE-6893.sql",
+      "source_sha256": "a9fddc11766160fc0d81985efea8045915699e7ad339b87837072d89c8900442"
+    },
+    "postgresql": {
+      "duration_seconds": 0.515,
+      "log_sha256": "cda9110e7e02f45e9aa0c93d8eddc80419fb6a4ffc3b7950904c35fa66eecf9f",
+      "native_client": "psql",
+      "returncode": 0,
+      "source_path": "migration/iD13/postgresql/202603061658_IDEMPIERE-6893.sql",
+      "source_sha256": "b1d4ebe9323a08a5500cd79e92a5f4317254efbc55630ee1bd124120f821a47e"
+    }
+  },
+  "historical_upgrade_equivalence": false,
+  "non_registration_row_effects_match": false,
+  "registration_effects_retained": true,
+  "row_effects_match": false,
+  "schema_version": "1.0",
+  "scope": "observed effects on these imported reference seeds; initial states may differ; no runtime values suppressed",
+  "state_sha256": {
+    "oracle": {
+      "after": "9063804d5c61c2c7ed396ca0a87b4e4fdbf96eb28cdb650bdc812163b6173ba0",
+      "before": "02abf756ddd6cd546acb77369bdb183a2c88a3b4540e96dd916e42da1fc1204a"
+    },
+    "postgresql": {
+      "after": "387ebe75da5a7b1bb406862f1fd7fb6cdc661a7b34c623c4c841d3aa5c8dda3b",
+      "before": "13d4594bd1f4e069261c159dfc982c7e83fc7a43293e5931503dbbcbf8d44cd0"
+    }
+  },
+  "status": "observed-effects-differ",
+  "structural_change_requires_review": true,
+  "content_sha256": "d9316da96fc2c9856482c55d086a6f20fa73dace665b48325378b01907f3f385"
+}

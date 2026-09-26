@@ -1,0 +1,614 @@
+{
+  "application_equivalence": false,
+  "attempted_pairs": 20,
+  "cases": [
+    {
+      "changed_tables": {
+        "oracle": [
+          "ad_column",
+          "ad_element",
+          "ad_field",
+          "ad_indexcolumn",
+          "ad_migrationscript",
+          "ad_sequence",
+          "ad_system",
+          "ad_tableindex"
+        ],
+        "postgresql": [
+          "ad_column",
+          "ad_element",
+          "ad_field",
+          "ad_indexcolumn",
+          "ad_migrationscript",
+          "ad_sequence",
+          "ad_system",
+          "ad_tableindex"
+        ]
+      },
+      "comparison_sha256": "c2636d78a37cfe967b33f8f8e0b00f8bb781569fcf03f55d0ef6af11161223e6",
+      "non_registration_row_effects_match": false,
+      "ordinal": 1,
+      "pair_id": "pair:fd135bb6bd3f0e612993f00802f1b665ec77731738caa48fa947346e0b1c7bfe",
+      "returncodes": {
+        "oracle": 0,
+        "postgresql": 0
+      },
+      "row_effects_match": false,
+      "script": "202603261259_IDEMPIERE-6910.sql",
+      "status": "observed-effects-differ"
+    },
+    {
+      "changed_tables": {
+        "oracle": [
+          "ad_field",
+          "ad_migrationscript",
+          "ad_sequence",
+          "ad_system"
+        ],
+        "postgresql": [
+          "ad_field",
+          "ad_migrationscript",
+          "ad_sequence",
+          "ad_system"
+        ]
+      },
+      "comparison_sha256": "a5799543d685562dcced98db4674688365d9b956fe517aca1dcd8f4288f150e0",
+      "non_registration_row_effects_match": false,
+      "ordinal": 2,
+      "pair_id": "pair:99d71028e770608c39569396bd1c50d9ca7c263728617f23a2ff1f9b7bdd311f",
+      "returncodes": {
+        "oracle": 0,
+        "postgresql": 0
+      },
+      "row_effects_match": false,
+      "script": "202604231822_IDEMPIERE-6910.sql",
+      "status": "observed-effects-differ"
+    },
+    {
+      "changed_tables": {
+        "oracle": [
+          "ad_indexcolumn",
+          "ad_migrationscript",
+          "ad_sequence",
+          "ad_system"
+        ],
+        "postgresql": [
+          "ad_indexcolumn",
+          "ad_migrationscript",
+          "ad_sequence",
+          "ad_system"
+        ]
+      },
+      "comparison_sha256": "3db7162c8d668f2a46bea10dd0216ba9522183d61014f11b84363496f0f18cec",
+      "non_registration_row_effects_match": false,
+      "ordinal": 3,
+      "pair_id": "pair:1addf2414e8e81f72126d0aae99b281aacbdf4d1da23398772c306febf05cbab",
+      "returncodes": {
+        "oracle": 0,
+        "postgresql": 0
+      },
+      "row_effects_match": false,
+      "script": "202604282341_IDEMPIERE-6983.sql",
+      "status": "observed-effects-differ"
+    },
+    {
+      "changed_tables": {
+        "oracle": [
+          "ad_field",
+          "ad_migrationscript",
+          "ad_process_para",
+          "ad_sequence"
+        ],
+        "postgresql": [
+          "ad_field",
+          "ad_migrationscript",
+          "ad_process_para",
+          "ad_sequence"
+        ]
+      },
+      "comparison_sha256": "04d084412068e520cc50423d89c126a4ea2eeb5814405a7513dcb143b7998f2a",
+      "non_registration_row_effects_match": false,
+      "ordinal": 4,
+      "pair_id": "pair:779185a214fc527cd72198b8d44796dd40c4d243a2da0f662838344b87cf1994",
+      "returncodes": {
+        "oracle": 0,
+        "postgresql": 0
+      },
+      "row_effects_match": false,
+      "script": "202506251618_IDEMPIERE-5939.sql",
+      "status": "observed-effects-differ"
+    },
+    {
+      "changed_tables": {
+        "oracle": [
+          "ad_message",
+          "ad_migrationscript",
+          "ad_sequence"
+        ],
+        "postgresql": [
+          "ad_message",
+          "ad_migrationscript",
+          "ad_sequence"
+        ]
+      },
+      "comparison_sha256": "2e906b85c5acdfdc2f5ea8c60a10053fc9ab47c3334f297bf15f658e1a1b4af6",
+      "non_registration_row_effects_match": false,
+      "ordinal": 5,
+      "pair_id": "pair:e9e5212c6a2dbb3eac557f82101a72911510b6780b7c87c7cfb2d1528cf27bdd",
+      "returncodes": {
+        "oracle": 0,
+        "postgresql": 0
+      },
+      "row_effects_match": false,
+      "script": "202511191144_IDEMPIERE-6732.sql",
+      "status": "observed-effects-differ"
+    },
+    {
+      "changed_tables": {
+        "oracle": [
+          "ad_indexcolumn",
+          "ad_migrationscript",
+          "ad_sequence",
+          "ad_tableindex"
+        ],
+        "postgresql": [
+          "ad_indexcolumn",
+          "ad_migrationscript",
+          "ad_sequence",
+          "ad_tableindex"
+        ]
+      },
+      "comparison_sha256": "ce742b1f533cae2f81f1b942dcb741f975d3d87cef57996cb59a29479059331f",
+      "non_registration_row_effects_match": false,
+      "ordinal": 6,
+      "pair_id": "pair:7cdc5ebc9b88708529a78b39636767d1185a44ef85d386762b5333e3cabf8df1",
+      "returncodes": {
+        "oracle": 0,
+        "postgresql": 0
+      },
+      "row_effects_match": false,
+      "script": "202603031141_IDEMPIERE-6888.sql",
+      "status": "observed-effects-differ"
+    },
+    {
+      "changed_tables": {
+        "oracle": [
+          "ad_column",
+          "ad_element",
+          "ad_field",
+          "ad_migrationscript",
+          "ad_sequence",
+          "ad_val_rule"
+        ],
+        "postgresql": [
+          "ad_column",
+          "ad_element",
+          "ad_field",
+          "ad_migrationscript",
+          "ad_sequence",
+          "ad_val_rule"
+        ]
+      },
+      "comparison_sha256": "6581d17a075427dae8a35af17c3f454ae2363ed5ccba9f307229244e50424086",
+      "non_registration_row_effects_match": false,
+      "ordinal": 7,
+      "pair_id": "pair:8c4dbc64e1596a72fc830dcc2fa3f94e8f4b74b27d4eac2fb6039dc574d2818c",
+      "returncodes": {
+        "oracle": 0,
+        "postgresql": 0
+      },
+      "row_effects_match": false,
+      "script": "202603031421_IDEMPIERE-6841.sql",
+      "status": "observed-effects-differ"
+    },
+    {
+      "changed_tables": {
+        "oracle": [
+          "ad_column",
+          "ad_element",
+          "ad_field",
+          "ad_indexcolumn",
+          "ad_menu",
+          "ad_migrationscript",
+          "ad_sequence",
+          "ad_tab",
+          "ad_table",
+          "ad_tableindex",
+          "ad_treenodemm",
+          "ad_userdef_form",
+          "ad_window"
+        ],
+        "postgresql": [
+          "ad_column",
+          "ad_element",
+          "ad_field",
+          "ad_indexcolumn",
+          "ad_menu",
+          "ad_migrationscript",
+          "ad_sequence",
+          "ad_tab",
+          "ad_table",
+          "ad_tableindex",
+          "ad_treenodemm",
+          "ad_userdef_form",
+          "ad_window"
+        ]
+      },
+      "comparison_sha256": "d9316da96fc2c9856482c55d086a6f20fa73dace665b48325378b01907f3f385",
+      "non_registration_row_effects_match": false,
+      "ordinal": 8,
+      "pair_id": "pair:895a09179d917fbb5ed059b1af61749b74cde9e8ce49f419eaa37a083783696b",
+      "returncodes": {
+        "oracle": 0,
+        "postgresql": 0
+      },
+      "row_effects_match": false,
+      "script": "202603061658_IDEMPIERE-6893.sql",
+      "status": "observed-effects-differ"
+    },
+    {
+      "changed_tables": {
+        "oracle": [
+          "ad_migrationscript",
+          "ad_sequence"
+        ],
+        "postgresql": [
+          "ad_migrationscript",
+          "ad_sequence"
+        ]
+      },
+      "comparison_sha256": "3fa3a38ba37cdac678dcc6d1e9074edaab36700f3441ec1ba63afb4f0c228fae",
+      "non_registration_row_effects_match": false,
+      "ordinal": 9,
+      "pair_id": "pair:46060a7925db6bebc9c34ba19b8b0c01062869c357b5ceaef1afbbe8365d1c09",
+      "returncodes": {
+        "oracle": 0,
+        "postgresql": 0
+      },
+      "row_effects_match": false,
+      "script": "202603251035_IDEMPIERE-6650-generate_uuid.sql",
+      "status": "observed-effects-differ"
+    },
+    {
+      "changed_tables": {
+        "oracle": [
+          "ad_migrationscript",
+          "ad_sequence",
+          "ad_sysconfig"
+        ],
+        "postgresql": [
+          "ad_migrationscript",
+          "ad_sequence",
+          "ad_sysconfig"
+        ]
+      },
+      "comparison_sha256": "19388e0e49b84f1a17ef42b3f78807c7e2ef1e1402a569136e1437f71bb4dd6a",
+      "non_registration_row_effects_match": false,
+      "ordinal": 10,
+      "pair_id": "pair:f4336cbb9163e0e4ea913ece7434a43548db75713631c5af05fc34e1b614b187",
+      "returncodes": {
+        "oracle": 0,
+        "postgresql": 0
+      },
+      "row_effects_match": false,
+      "script": "202604131446_IDEMPIERE-6953.sql",
+      "status": "observed-effects-differ"
+    },
+    {
+      "changed_tables": {
+        "oracle": [
+          "ad_column",
+          "ad_field",
+          "ad_migrationscript",
+          "ad_sequence",
+          "ad_system",
+          "m_inventoryline"
+        ],
+        "postgresql": [
+          "ad_column",
+          "ad_field",
+          "ad_migrationscript",
+          "ad_sequence",
+          "ad_system",
+          "m_inventoryline"
+        ]
+      },
+      "comparison_sha256": "25d97d40e9fe123ef5198a887ef05822921eea1d1847ba74b3adcfbee5d4c03f",
+      "non_registration_row_effects_match": false,
+      "observation_retry": "Oracle read-only capture retried after ORA-01466; no migration replay",
+      "ordinal": 11,
+      "pair_id": "pair:7c2fc5c1e58aedbf0169981d944943982b53603bf187875cac612e7e1907465f",
+      "returncodes": {
+        "oracle": 0,
+        "postgresql": 0
+      },
+      "row_effects_match": false,
+      "script": "202605191839_IDEMPIERE-7010.sql",
+      "status": "observed-effects-differ"
+    },
+    {
+      "changed_tables": {
+        "oracle": [
+          "ad_migrationscript",
+          "ad_sequence",
+          "ad_system",
+          "ad_window",
+          "c_currency"
+        ],
+        "postgresql": [
+          "ad_migrationscript",
+          "ad_sequence",
+          "ad_system",
+          "ad_window",
+          "c_currency"
+        ]
+      },
+      "comparison_sha256": "ebb06a6e32ad6a0ae10174e6b5ff01e61840c2114dc9ff9b45cb92597c7b991b",
+      "non_registration_row_effects_match": false,
+      "ordinal": 12,
+      "pair_id": "pair:7a5523b1e89cf10179469e09e1d721c7be015200760c8d95451c5d01b102411c",
+      "returncodes": {
+        "oracle": 0,
+        "postgresql": 0
+      },
+      "row_effects_match": false,
+      "script": "202605270922_IDEMPIERE-7019.sql",
+      "status": "observed-effects-differ"
+    },
+    {
+      "changed_tables": {
+        "oracle": [
+          "ad_migrationscript",
+          "ad_sequence",
+          "ad_system"
+        ],
+        "postgresql": [
+          "ad_migrationscript",
+          "ad_sequence",
+          "ad_system"
+        ]
+      },
+      "comparison_sha256": "4cc53ba1ef34a97fbb83677968a65685e1dbe2221de9f6e42fab795a4fa91181",
+      "non_registration_row_effects_match": false,
+      "ordinal": 13,
+      "pair_id": "pair:a165ed57366152d39fcac6c69e00fea401cdf2e5b6361b1498ff8b8157b64f18",
+      "returncodes": {
+        "oracle": 0,
+        "postgresql": 0
+      },
+      "row_effects_match": false,
+      "script": "202606180500_IDEMPIERE-6993.sql",
+      "status": "observed-effects-differ"
+    },
+    {
+      "changed_tables": {
+        "oracle": [
+          "ad_message",
+          "ad_migrationscript",
+          "ad_process",
+          "ad_process_para",
+          "ad_sequence",
+          "ad_system",
+          "ad_toolbarbutton",
+          "ad_val_rule"
+        ],
+        "postgresql": [
+          "ad_message",
+          "ad_migrationscript",
+          "ad_process",
+          "ad_process_para",
+          "ad_sequence",
+          "ad_system",
+          "ad_toolbarbutton",
+          "ad_val_rule"
+        ]
+      },
+      "comparison_sha256": "702e5aa68458edd77b715796c51c688d335af7f2eac8974fa586fd8eb597eb96",
+      "non_registration_row_effects_match": false,
+      "ordinal": 14,
+      "pair_id": "pair:03628fdfb5b1883b70079eb720d29a9fb525086339e93e5c4e1735bfafbb22aa",
+      "returncodes": {
+        "oracle": 0,
+        "postgresql": 0
+      },
+      "row_effects_match": false,
+      "script": "202606191416_IDEMPIERE-7037.sql",
+      "status": "observed-effects-differ"
+    },
+    {
+      "changed_tables": {
+        "oracle": [
+          "ad_message",
+          "ad_migrationscript",
+          "ad_sequence",
+          "ad_system"
+        ],
+        "postgresql": [
+          "ad_message",
+          "ad_migrationscript",
+          "ad_sequence",
+          "ad_system"
+        ]
+      },
+      "comparison_sha256": "9316ead8c3f4f5c25f521f1e92deefc9742fa0b1440bfd49e8a8c34da204ba8d",
+      "non_registration_row_effects_match": false,
+      "ordinal": 15,
+      "pair_id": "pair:50dfe1fdc875b31af48a2d2f01424b23c6aa0f12d69659d25d3f73d45419ff7e",
+      "returncodes": {
+        "oracle": 0,
+        "postgresql": 0
+      },
+      "row_effects_match": false,
+      "script": "202606241259_IDEMPIERE-7048.sql",
+      "status": "observed-effects-differ"
+    },
+    {
+      "changed_tables": {
+        "oracle": [
+          "ad_migrationscript",
+          "ad_sequence",
+          "ad_sysconfig",
+          "ad_system"
+        ],
+        "postgresql": [
+          "ad_migrationscript",
+          "ad_sequence",
+          "ad_sysconfig",
+          "ad_system"
+        ]
+      },
+      "comparison_sha256": "49ff17a711bf8eea11f0330acfa3f9d69dc39aacc392dfdb75a006bd6c734b02",
+      "non_registration_row_effects_match": false,
+      "ordinal": 16,
+      "pair_id": "pair:07d909470b4aa475ef4b4eab512ca49e3c2c75fb4be4d25fae380b3c13117923",
+      "returncodes": {
+        "oracle": 0,
+        "postgresql": 0
+      },
+      "row_effects_match": false,
+      "script": "202606290916_IDEMPIERE-7056.sql",
+      "status": "observed-effects-differ"
+    },
+    {
+      "changed_tables": {
+        "oracle": [
+          "ad_migrationscript",
+          "ad_sequence",
+          "ad_system",
+          "ad_tab"
+        ],
+        "postgresql": [
+          "ad_migrationscript",
+          "ad_sequence",
+          "ad_system",
+          "ad_tab"
+        ]
+      },
+      "comparison_sha256": "48dd0b32d494995291ff333f73518e9cff406a336b3fe474508996ec0f1781a9",
+      "non_registration_row_effects_match": false,
+      "ordinal": 17,
+      "pair_id": "pair:b7e430177d29b1f3f6535917b202ba87df35ce9939a014a309ed094f6f664b14",
+      "returncodes": {
+        "oracle": 0,
+        "postgresql": 0
+      },
+      "row_effects_match": false,
+      "script": "202607060943_IDEMPIERE-7059.sql",
+      "status": "observed-effects-differ"
+    },
+    {
+      "changed_tables": {
+        "oracle": [
+          "ad_column",
+          "ad_element",
+          "ad_field",
+          "ad_indexcolumn",
+          "ad_menu",
+          "ad_message",
+          "ad_migrationscript",
+          "ad_passwordresettoken",
+          "ad_ref_list",
+          "ad_reference",
+          "ad_sequence",
+          "ad_sysconfig",
+          "ad_system",
+          "ad_tab",
+          "ad_table",
+          "ad_tableindex",
+          "ad_treenodemm",
+          "ad_window",
+          "r_mailtext"
+        ],
+        "postgresql": [
+          "ad_column",
+          "ad_element",
+          "ad_field",
+          "ad_indexcolumn",
+          "ad_menu",
+          "ad_message",
+          "ad_migrationscript",
+          "ad_passwordresettoken",
+          "ad_ref_list",
+          "ad_reference",
+          "ad_sequence",
+          "ad_sysconfig",
+          "ad_system",
+          "ad_tab",
+          "ad_table",
+          "ad_tableindex",
+          "ad_treenodemm",
+          "ad_window",
+          "r_mailtext"
+        ]
+      },
+      "comparison_sha256": "50483e9d8bedf89bcb29a3801d87dff08fe4953f5fd73105b53f37ac0614bf28",
+      "non_registration_row_effects_match": false,
+      "ordinal": 18,
+      "pair_id": "pair:2c8892c19a4bb2b59bc3b6df74c52d1ef6154786f04c4953d1f947b5925741e2",
+      "returncodes": {
+        "oracle": 0,
+        "postgresql": 0
+      },
+      "row_effects_match": false,
+      "script": "202607072011_IDEMPIERE-7060.sql",
+      "status": "observed-effects-differ"
+    },
+    {
+      "changed_tables": {
+        "oracle": [
+          "ad_migrationscript",
+          "ad_sequence",
+          "ad_sysconfig",
+          "ad_system"
+        ],
+        "postgresql": [
+          "ad_migrationscript",
+          "ad_sequence",
+          "ad_sysconfig",
+          "ad_system"
+        ]
+      },
+      "comparison_sha256": "174c5771a4bbb09ab3fb87f8fcc566bb34de7cbda3c081770d8cbfde3098413f",
+      "non_registration_row_effects_match": false,
+      "ordinal": 19,
+      "pair_id": "pair:b19e2dff66b28e81879ddfb7712da752152df2bed1b28670bafb8b985bd63065",
+      "returncodes": {
+        "oracle": 0,
+        "postgresql": 0
+      },
+      "row_effects_match": false,
+      "script": "202607082008_IDEMPIERE-7060.sql",
+      "status": "observed-effects-differ"
+    },
+    {
+      "changed_tables": {
+        "oracle": [
+          "ad_migrationscript",
+          "ad_sequence",
+          "ad_system"
+        ],
+        "postgresql": [
+          "ad_migrationscript",
+          "ad_sequence",
+          "ad_system"
+        ]
+      },
+      "comparison_sha256": "eb81b1d374b5b9f7fc117532a6771f9dfcce91741f51d0fd8b6f63e312005fac",
+      "non_registration_row_effects_match": false,
+      "ordinal": 20,
+      "pair_id": "pair:33be8579a196e44da039145c58f092403b0ed975a95ce790be35406c73d7ae14",
+      "returncodes": {
+        "oracle": 0,
+        "postgresql": 0
+      },
+      "row_effects_match": false,
+      "script": "202607221326_IDEMPIERE-7065.sql",
+      "status": "observed-effects-differ"
+    }
+  ],
+  "native_execution": true,
+  "plan_sha256": "e52bdd5a37f0a54dbc4d88a57f5075b2a1ec38c89ca180149ce3e114a782255f",
+  "planned_pairs": 20,
+  "remaining_pairs": 0,
+  "content_sha256": "332c0cde58c9a53d8425649d5ed06f07f0473bda5104fc061ef49fea363436d4"
+}

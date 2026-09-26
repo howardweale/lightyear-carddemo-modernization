@@ -1,0 +1,627 @@
+[
+  {
+    "comparison_status": "not-run",
+    "content_identical": false,
+    "maintenance_provenance": "not-classified",
+    "oracle": {
+      "bytes": 6072,
+      "lines": 71,
+      "logical_sha256": "0bbf6d4e26ada95dc1766f16934f97f1c9dbc66341383eec7e4c858dfae1bbdb",
+      "path": "migration/i6.2z/oracle/201906171811_IDEMPIERE-3413.sql",
+      "transport_sha256": "0bbf6d4e26ada95dc1766f16934f97f1c9dbc66341383eec7e4c858dfae1bbdb"
+    },
+    "pair_id": "pair:4d605b3080827a45b227bdcbd6bec70ede606e5ccb559630aa2a9a7503d4d72c",
+    "pairing_method": "exact-version-and-filename",
+    "pilot_slices": [],
+    "pilot_tables_referenced": [],
+    "postgresql": {
+      "bytes": 5939,
+      "lines": 63,
+      "logical_sha256": "d451be31f09af91e08852283ec5ff02b2fe071851d717c54bb562aedc7ea5f71",
+      "path": "migration/i6.2z/postgresql/201906171811_IDEMPIERE-3413.sql",
+      "transport_sha256": "d451be31f09af91e08852283ec5ff02b2fe071851d717c54bb562aedc7ea5f71"
+    },
+    "release_segment": "i6.2z",
+    "ticket_id": "IDEMPIERE-3413"
+  },
+  {
+    "comparison_status": "not-run",
+    "content_identical": false,
+    "maintenance_provenance": "not-classified",
+    "oracle": {
+      "bytes": 7853,
+      "lines": 86,
+      "logical_sha256": "b47c98ec264965fd7ffeba16668155a240e8fd550ded03575eba6a4e90db3058",
+      "path": "migration/iD12/oracle/202603261259_IDEMPIERE-6910.sql",
+      "transport_sha256": "b47c98ec264965fd7ffeba16668155a240e8fd550ded03575eba6a4e90db3058"
+    },
+    "pair_id": "pair:fd135bb6bd3f0e612993f00802f1b665ec77731738caa48fa947346e0b1c7bfe",
+    "pairing_method": "exact-version-and-filename",
+    "pilot_slices": [],
+    "pilot_tables_referenced": [],
+    "postgresql": {
+      "bytes": 7818,
+      "lines": 83,
+      "logical_sha256": "fe8c2c936958d81473a0e022503e3a4df8260002ca421ae1349ee6af5bc24ca1",
+      "path": "migration/iD12/postgresql/202603261259_IDEMPIERE-6910.sql",
+      "transport_sha256": "fe8c2c936958d81473a0e022503e3a4df8260002ca421ae1349ee6af5bc24ca1"
+    },
+    "release_segment": "iD12",
+    "ticket_id": "IDEMPIERE-6910"
+  },
+  {
+    "comparison_status": "not-run",
+    "content_identical": false,
+    "maintenance_provenance": "not-classified",
+    "oracle": {
+      "bytes": 533,
+      "lines": 14,
+      "logical_sha256": "84379c40c7541334afdbe85ee2c316d5c864a28eacd052be420ddba978bc1f7f",
+      "path": "migration/iD12/oracle/202604231822_IDEMPIERE-6910.sql",
+      "transport_sha256": "84379c40c7541334afdbe85ee2c316d5c864a28eacd052be420ddba978bc1f7f"
+    },
+    "pair_id": "pair:99d71028e770608c39569396bd1c50d9ca7c263728617f23a2ff1f9b7bdd311f",
+    "pairing_method": "exact-version-and-filename",
+    "pilot_slices": [],
+    "pilot_tables_referenced": [],
+    "postgresql": {
+      "bytes": 496,
+      "lines": 11,
+      "logical_sha256": "a4d2766ccf201fe2dd308d8f2ce3e2538e07751de9dc10f2bf94a248ca4019e5",
+      "path": "migration/iD12/postgresql/202604231822_IDEMPIERE-6910.sql",
+      "transport_sha256": "a4d2766ccf201fe2dd308d8f2ce3e2538e07751de9dc10f2bf94a248ca4019e5"
+    },
+    "release_segment": "iD12",
+    "ticket_id": "IDEMPIERE-6910"
+  },
+  {
+    "comparison_status": "not-run",
+    "content_identical": false,
+    "maintenance_provenance": "not-classified",
+    "oracle": {
+      "bytes": 2400,
+      "lines": 54,
+      "logical_sha256": "d9a432920e5cae601d8ea22264bfd74410bdb34cdaff236a90eb97df5d754cf2",
+      "path": "migration/iD12/oracle/202604282341_IDEMPIERE-6983.sql",
+      "transport_sha256": "d9a432920e5cae601d8ea22264bfd74410bdb34cdaff236a90eb97df5d754cf2"
+    },
+    "pair_id": "pair:1addf2414e8e81f72126d0aae99b281aacbdf4d1da23398772c306febf05cbab",
+    "pairing_method": "exact-version-and-filename",
+    "pilot_slices": [],
+    "pilot_tables_referenced": [],
+    "postgresql": {
+      "bytes": 2363,
+      "lines": 51,
+      "logical_sha256": "5a3b658366709f1f881bf6c486fce403d304b8b2755f92536cb9e5ce907ff714",
+      "path": "migration/iD12/postgresql/202604282341_IDEMPIERE-6983.sql",
+      "transport_sha256": "5a3b658366709f1f881bf6c486fce403d304b8b2755f92536cb9e5ce907ff714"
+    },
+    "release_segment": "iD12",
+    "ticket_id": "IDEMPIERE-6983"
+  },
+  {
+    "comparison_status": "not-run",
+    "content_identical": false,
+    "maintenance_provenance": "not-classified",
+    "oracle": {
+      "bytes": 990,
+      "lines": 17,
+      "logical_sha256": "acdad3b2c8482fff54e2a69b0dcbaf321ca0dd8e9d25f90bd500ba4b2ee8e06d",
+      "path": "migration/iD13/oracle/202506251618_IDEMPIERE-5939.sql",
+      "transport_sha256": "acdad3b2c8482fff54e2a69b0dcbaf321ca0dd8e9d25f90bd500ba4b2ee8e06d"
+    },
+    "pair_id": "pair:779185a214fc527cd72198b8d44796dd40c4d243a2da0f662838344b87cf1994",
+    "pairing_method": "exact-version-and-filename",
+    "pilot_slices": [],
+    "pilot_tables_referenced": [],
+    "postgresql": {
+      "bytes": 953,
+      "lines": 14,
+      "logical_sha256": "1d7edade571c34b2776beecd5b1b03a19a6505c30b0a414fa1c84bf7a02cb501",
+      "path": "migration/iD13/postgresql/202506251618_IDEMPIERE-5939.sql",
+      "transport_sha256": "1d7edade571c34b2776beecd5b1b03a19a6505c30b0a414fa1c84bf7a02cb501"
+    },
+    "release_segment": "iD13",
+    "ticket_id": "IDEMPIERE-5939"
+  },
+  {
+    "comparison_status": "not-run",
+    "content_identical": false,
+    "maintenance_provenance": "not-classified",
+    "oracle": {
+      "bytes": 642,
+      "lines": 11,
+      "logical_sha256": "99e73843610550e2a6c6c19172d68db60dcc2ba78c0eaf53cd47a60b421832af",
+      "path": "migration/iD13/oracle/202511191144_IDEMPIERE-6732.sql",
+      "transport_sha256": "99e73843610550e2a6c6c19172d68db60dcc2ba78c0eaf53cd47a60b421832af"
+    },
+    "pair_id": "pair:e9e5212c6a2dbb3eac557f82101a72911510b6780b7c87c7cfb2d1528cf27bdd",
+    "pairing_method": "exact-version-and-filename",
+    "pilot_slices": [],
+    "pilot_tables_referenced": [],
+    "postgresql": {
+      "bytes": 605,
+      "lines": 8,
+      "logical_sha256": "802c11934d7d16a0082cfd051f34f19bb7f0ee2e5c88e59422780501cdb2db95",
+      "path": "migration/iD13/postgresql/202511191144_IDEMPIERE-6732.sql",
+      "transport_sha256": "802c11934d7d16a0082cfd051f34f19bb7f0ee2e5c88e59422780501cdb2db95"
+    },
+    "release_segment": "iD13",
+    "ticket_id": "IDEMPIERE-6732"
+  },
+  {
+    "comparison_status": "not-run",
+    "content_identical": false,
+    "maintenance_provenance": "not-classified",
+    "oracle": {
+      "bytes": 2054,
+      "lines": 26,
+      "logical_sha256": "f24323ace32a81099e957ad5f06b441fdfb30d66b0cf044cbf69a794d43859ac",
+      "path": "migration/iD13/oracle/202603031141_IDEMPIERE-6888.sql",
+      "transport_sha256": "f24323ace32a81099e957ad5f06b441fdfb30d66b0cf044cbf69a794d43859ac"
+    },
+    "pair_id": "pair:7cdc5ebc9b88708529a78b39636767d1185a44ef85d386762b5333e3cabf8df1",
+    "pairing_method": "exact-version-and-filename",
+    "pilot_slices": [],
+    "pilot_tables_referenced": [],
+    "postgresql": {
+      "bytes": 2017,
+      "lines": 23,
+      "logical_sha256": "9096f3735f82e0c21744df9d9258fb10bd65baf8445d1fe744b898398f1074e5",
+      "path": "migration/iD13/postgresql/202603031141_IDEMPIERE-6888.sql",
+      "transport_sha256": "9096f3735f82e0c21744df9d9258fb10bd65baf8445d1fe744b898398f1074e5"
+    },
+    "release_segment": "iD13",
+    "ticket_id": "IDEMPIERE-6888"
+  },
+  {
+    "comparison_status": "not-run",
+    "content_identical": false,
+    "maintenance_provenance": "not-classified",
+    "oracle": {
+      "bytes": 8585,
+      "lines": 125,
+      "logical_sha256": "396493688e0e8fecc48417540bc40bb9b6d4a1a74fdd2a78e28b0b54a4c8bf75",
+      "path": "migration/iD13/oracle/202603031421_IDEMPIERE-6841.sql",
+      "transport_sha256": "396493688e0e8fecc48417540bc40bb9b6d4a1a74fdd2a78e28b0b54a4c8bf75"
+    },
+    "pair_id": "pair:8c4dbc64e1596a72fc830dcc2fa3f94e8f4b74b27d4eac2fb6039dc574d2818c",
+    "pairing_method": "exact-version-and-filename",
+    "pilot_slices": [],
+    "pilot_tables_referenced": [],
+    "postgresql": {
+      "bytes": 8564,
+      "lines": 122,
+      "logical_sha256": "890edd5d5eab38f9d08f24e3267cc01da111902ba875b9402c2934a38405702d",
+      "path": "migration/iD13/postgresql/202603031421_IDEMPIERE-6841.sql",
+      "transport_sha256": "890edd5d5eab38f9d08f24e3267cc01da111902ba875b9402c2934a38405702d"
+    },
+    "release_segment": "iD13",
+    "ticket_id": "IDEMPIERE-6841"
+  },
+  {
+    "comparison_status": "not-run",
+    "content_identical": false,
+    "maintenance_provenance": "not-classified",
+    "oracle": {
+      "bytes": 43483,
+      "lines": 416,
+      "logical_sha256": "a9fddc11766160fc0d81985efea8045915699e7ad339b87837072d89c8900442",
+      "path": "migration/iD13/oracle/202603061658_IDEMPIERE-6893.sql",
+      "transport_sha256": "a9fddc11766160fc0d81985efea8045915699e7ad339b87837072d89c8900442"
+    },
+    "pair_id": "pair:895a09179d917fbb5ed059b1af61749b74cde9e8ce49f419eaa37a083783696b",
+    "pairing_method": "exact-version-and-filename",
+    "pilot_slices": [],
+    "pilot_tables_referenced": [],
+    "postgresql": {
+      "bytes": 43543,
+      "lines": 413,
+      "logical_sha256": "b1d4ebe9323a08a5500cd79e92a5f4317254efbc55630ee1bd124120f821a47e",
+      "path": "migration/iD13/postgresql/202603061658_IDEMPIERE-6893.sql",
+      "transport_sha256": "b1d4ebe9323a08a5500cd79e92a5f4317254efbc55630ee1bd124120f821a47e"
+    },
+    "release_segment": "iD13",
+    "ticket_id": "IDEMPIERE-6893"
+  },
+  {
+    "comparison_status": "not-run",
+    "content_identical": false,
+    "maintenance_provenance": "not-classified",
+    "oracle": {
+      "bytes": 245,
+      "lines": 4,
+      "logical_sha256": "91465286a05e60faaa49bb69e050f0e6ed8e3cb6442904ab8322a3205c1bdf0a",
+      "path": "migration/iD13/oracle/202603251035_IDEMPIERE-6650-generate_uuid.sql",
+      "transport_sha256": "91465286a05e60faaa49bb69e050f0e6ed8e3cb6442904ab8322a3205c1bdf0a"
+    },
+    "pair_id": "pair:46060a7925db6bebc9c34ba19b8b0c01062869c357b5ceaef1afbbe8365d1c09",
+    "pairing_method": "exact-version-and-filename",
+    "pilot_slices": [],
+    "pilot_tables_referenced": [],
+    "postgresql": {
+      "bytes": 1676,
+      "lines": 38,
+      "logical_sha256": "2f5c9438a0bb557ca982d3ff8cdb78dcfc12dea5d66f24d49d9caa5091a55ab7",
+      "path": "migration/iD13/postgresql/202603251035_IDEMPIERE-6650-generate_uuid.sql",
+      "transport_sha256": "2f5c9438a0bb557ca982d3ff8cdb78dcfc12dea5d66f24d49d9caa5091a55ab7"
+    },
+    "release_segment": "iD13",
+    "ticket_id": "IDEMPIERE-6650"
+  },
+  {
+    "comparison_status": "not-run",
+    "content_identical": false,
+    "maintenance_provenance": "not-classified",
+    "oracle": {
+      "bytes": 1174,
+      "lines": 14,
+      "logical_sha256": "c59ef1fd607a1d0f707e3bcc3e8ee31d0919c2392574e704ebb1f3d74307e605",
+      "path": "migration/iD13/oracle/202604131446_IDEMPIERE-6953.sql",
+      "transport_sha256": "c59ef1fd607a1d0f707e3bcc3e8ee31d0919c2392574e704ebb1f3d74307e605"
+    },
+    "pair_id": "pair:f4336cbb9163e0e4ea913ece7434a43548db75713631c5af05fc34e1b614b187",
+    "pairing_method": "exact-version-and-filename",
+    "pilot_slices": [],
+    "pilot_tables_referenced": [],
+    "postgresql": {
+      "bytes": 1137,
+      "lines": 11,
+      "logical_sha256": "4f604a2750b6b5adccade1923e36ed263269b340c168bff733126c9efa02b56f",
+      "path": "migration/iD13/postgresql/202604131446_IDEMPIERE-6953.sql",
+      "transport_sha256": "4f604a2750b6b5adccade1923e36ed263269b340c168bff733126c9efa02b56f"
+    },
+    "release_segment": "iD13",
+    "ticket_id": "IDEMPIERE-6953"
+  },
+  {
+    "comparison_status": "not-run",
+    "content_identical": false,
+    "maintenance_provenance": "not-classified",
+    "oracle": {
+      "bytes": 8304,
+      "lines": 116,
+      "logical_sha256": "87a4d3af7442fae25ed5e72b696d9d2ce6701104b8b7878030f107bfc78059fb",
+      "path": "migration/iD13/oracle/202605191839_IDEMPIERE-7010.sql",
+      "transport_sha256": "87a4d3af7442fae25ed5e72b696d9d2ce6701104b8b7878030f107bfc78059fb"
+    },
+    "pair_id": "pair:7c2fc5c1e58aedbf0169981d944943982b53603bf187875cac612e7e1907465f",
+    "pairing_method": "exact-version-and-filename",
+    "pilot_slices": [],
+    "pilot_tables_referenced": [],
+    "postgresql": {
+      "bytes": 8350,
+      "lines": 113,
+      "logical_sha256": "cd08fa946f0388d39153f641fa04d1aedd05a0385d1bd1b6796f2fcbb87c11d2",
+      "path": "migration/iD13/postgresql/202605191839_IDEMPIERE-7010.sql",
+      "transport_sha256": "cd08fa946f0388d39153f641fa04d1aedd05a0385d1bd1b6796f2fcbb87c11d2"
+    },
+    "release_segment": "iD13",
+    "ticket_id": "IDEMPIERE-7010"
+  },
+  {
+    "comparison_status": "not-run",
+    "content_identical": false,
+    "maintenance_provenance": "not-classified",
+    "oracle": {
+      "bytes": 3251,
+      "lines": 33,
+      "logical_sha256": "5d01748665ae6e044fb71246808b000bbfc1590b1d06e46be155ec32e6b6bf19",
+      "path": "migration/iD13/oracle/202605270922_IDEMPIERE-7019.sql",
+      "transport_sha256": "5d01748665ae6e044fb71246808b000bbfc1590b1d06e46be155ec32e6b6bf19"
+    },
+    "pair_id": "pair:7a5523b1e89cf10179469e09e1d721c7be015200760c8d95451c5d01b102411c",
+    "pairing_method": "exact-version-and-filename",
+    "pilot_slices": [],
+    "pilot_tables_referenced": [],
+    "postgresql": {
+      "bytes": 3214,
+      "lines": 30,
+      "logical_sha256": "cdc2fd6935d67ee70a71a978084250ee9b039ed33fdf517066bbe71fca46074a",
+      "path": "migration/iD13/postgresql/202605270922_IDEMPIERE-7019.sql",
+      "transport_sha256": "cdc2fd6935d67ee70a71a978084250ee9b039ed33fdf517066bbe71fca46074a"
+    },
+    "release_segment": "iD13",
+    "ticket_id": "IDEMPIERE-7019"
+  },
+  {
+    "comparison_status": "not-run",
+    "content_identical": false,
+    "maintenance_provenance": "not-classified",
+    "oracle": {
+      "bytes": 751,
+      "lines": 21,
+      "logical_sha256": "c2fad18e18cc3431e0af59a8ce4975095671c13efd7ac6afc183615b74dd8b6a",
+      "path": "migration/iD13/oracle/202606180500_IDEMPIERE-6993.sql",
+      "transport_sha256": "c2fad18e18cc3431e0af59a8ce4975095671c13efd7ac6afc183615b74dd8b6a"
+    },
+    "pair_id": "pair:a165ed57366152d39fcac6c69e00fea401cdf2e5b6361b1498ff8b8157b64f18",
+    "pairing_method": "exact-version-and-filename",
+    "pilot_slices": [],
+    "pilot_tables_referenced": [],
+    "postgresql": {
+      "bytes": 714,
+      "lines": 18,
+      "logical_sha256": "3be94bed9af0f57309f6179e63c98329b63ba116aac526efed920286bd89ac6b",
+      "path": "migration/iD13/postgresql/202606180500_IDEMPIERE-6993.sql",
+      "transport_sha256": "3be94bed9af0f57309f6179e63c98329b63ba116aac526efed920286bd89ac6b"
+    },
+    "release_segment": "iD13",
+    "ticket_id": "IDEMPIERE-6993"
+  },
+  {
+    "comparison_status": "not-run",
+    "content_identical": false,
+    "maintenance_provenance": "not-classified",
+    "oracle": {
+      "bytes": 4682,
+      "lines": 51,
+      "logical_sha256": "a2c2657e5f88923672dcce67cee9635994c78c13e97d38d3099e48a793054ae4",
+      "path": "migration/iD13/oracle/202606191416_IDEMPIERE-7037.sql",
+      "transport_sha256": "a2c2657e5f88923672dcce67cee9635994c78c13e97d38d3099e48a793054ae4"
+    },
+    "pair_id": "pair:03628fdfb5b1883b70079eb720d29a9fb525086339e93e5c4e1735bfafbb22aa",
+    "pairing_method": "exact-version-and-filename",
+    "pilot_slices": [],
+    "pilot_tables_referenced": [],
+    "postgresql": {
+      "bytes": 4646,
+      "lines": 47,
+      "logical_sha256": "39185d2d6864f343a2573ca2c1d6b853ef3a9ec6b81aa2f0109569c3416fef4c",
+      "path": "migration/iD13/postgresql/202606191416_IDEMPIERE-7037.sql",
+      "transport_sha256": "39185d2d6864f343a2573ca2c1d6b853ef3a9ec6b81aa2f0109569c3416fef4c"
+    },
+    "release_segment": "iD13",
+    "ticket_id": "IDEMPIERE-7037"
+  },
+  {
+    "comparison_status": "not-run",
+    "content_identical": false,
+    "maintenance_provenance": "not-classified",
+    "oracle": {
+      "bytes": 621,
+      "lines": 10,
+      "logical_sha256": "58c34619d8613019f344a8fed6f1c36f40e3deeb51bc0ab7c3641ace3b4bf96b",
+      "path": "migration/iD13/oracle/202606241259_IDEMPIERE-7048.sql",
+      "transport_sha256": "58c34619d8613019f344a8fed6f1c36f40e3deeb51bc0ab7c3641ace3b4bf96b"
+    },
+    "pair_id": "pair:50dfe1fdc875b31af48a2d2f01424b23c6aa0f12d69659d25d3f73d45419ff7e",
+    "pairing_method": "exact-version-and-filename",
+    "pilot_slices": [],
+    "pilot_tables_referenced": [],
+    "postgresql": {
+      "bytes": 584,
+      "lines": 7,
+      "logical_sha256": "5ae76b7426f678067dc17392f91b2d0b98271c6dadad87cfb8095e119c4dc3c6",
+      "path": "migration/iD13/postgresql/202606241259_IDEMPIERE-7048.sql",
+      "transport_sha256": "5ae76b7426f678067dc17392f91b2d0b98271c6dadad87cfb8095e119c4dc3c6"
+    },
+    "release_segment": "iD13",
+    "ticket_id": "IDEMPIERE-7048"
+  },
+  {
+    "comparison_status": "not-run",
+    "content_identical": false,
+    "maintenance_provenance": "not-classified",
+    "oracle": {
+      "bytes": 651,
+      "lines": 10,
+      "logical_sha256": "b6a4eea32ce1d2e04843ca02b03908c7d8c30a4caa696c85b462aab8b2bab771",
+      "path": "migration/iD13/oracle/202606290916_IDEMPIERE-7056.sql",
+      "transport_sha256": "b6a4eea32ce1d2e04843ca02b03908c7d8c30a4caa696c85b462aab8b2bab771"
+    },
+    "pair_id": "pair:07d909470b4aa475ef4b4eab512ca49e3c2c75fb4be4d25fae380b3c13117923",
+    "pairing_method": "exact-version-and-filename",
+    "pilot_slices": [],
+    "pilot_tables_referenced": [],
+    "postgresql": {
+      "bytes": 614,
+      "lines": 7,
+      "logical_sha256": "52506725f7b9306a5712b95ba01f892b4c40a7340f2001b6e0728914e2979a3f",
+      "path": "migration/iD13/postgresql/202606290916_IDEMPIERE-7056.sql",
+      "transport_sha256": "52506725f7b9306a5712b95ba01f892b4c40a7340f2001b6e0728914e2979a3f"
+    },
+    "release_segment": "iD13",
+    "ticket_id": "IDEMPIERE-7056"
+  },
+  {
+    "comparison_status": "not-run",
+    "content_identical": false,
+    "maintenance_provenance": "not-classified",
+    "oracle": {
+      "bytes": 886,
+      "lines": 21,
+      "logical_sha256": "1670facc239bbf04a63d1993405d6cd1f64083f597c1c7238e0d44c40b5a25b0",
+      "path": "migration/iD13/oracle/202607060943_IDEMPIERE-7059.sql",
+      "transport_sha256": "1670facc239bbf04a63d1993405d6cd1f64083f597c1c7238e0d44c40b5a25b0"
+    },
+    "pair_id": "pair:b7e430177d29b1f3f6535917b202ba87df35ce9939a014a309ed094f6f664b14",
+    "pairing_method": "exact-version-and-filename",
+    "pilot_slices": [],
+    "pilot_tables_referenced": [],
+    "postgresql": {
+      "bytes": 849,
+      "lines": 18,
+      "logical_sha256": "3611ae32f92ef566d05a9786cf27bc14b88a6f2bcef094b28260566af4d5ea07",
+      "path": "migration/iD13/postgresql/202607060943_IDEMPIERE-7059.sql",
+      "transport_sha256": "3611ae32f92ef566d05a9786cf27bc14b88a6f2bcef094b28260566af4d5ea07"
+    },
+    "release_segment": "iD13",
+    "ticket_id": "IDEMPIERE-7059"
+  },
+  {
+    "comparison_status": "not-run",
+    "content_identical": false,
+    "maintenance_provenance": "not-classified",
+    "oracle": {
+      "bytes": 45000,
+      "lines": 363,
+      "logical_sha256": "8903f6b4fc1fb4d8a63e2c85811a2d3bde22a5dc1917b8eed5be2b65627af08f",
+      "path": "migration/iD13/oracle/202607072011_IDEMPIERE-7060.sql",
+      "transport_sha256": "8903f6b4fc1fb4d8a63e2c85811a2d3bde22a5dc1917b8eed5be2b65627af08f"
+    },
+    "pair_id": "pair:2c8892c19a4bb2b59bc3b6df74c52d1ef6154786f04c4953d1f947b5925741e2",
+    "pairing_method": "exact-version-and-filename",
+    "pilot_slices": [],
+    "pilot_tables_referenced": [],
+    "postgresql": {
+      "bytes": 45021,
+      "lines": 360,
+      "logical_sha256": "79662e4a9653b7f21ecab3acf596fd5f38a9404f2354bbc8becce0846e16c9c5",
+      "path": "migration/iD13/postgresql/202607072011_IDEMPIERE-7060.sql",
+      "transport_sha256": "79662e4a9653b7f21ecab3acf596fd5f38a9404f2354bbc8becce0846e16c9c5"
+    },
+    "release_segment": "iD13",
+    "ticket_id": "IDEMPIERE-7060"
+  },
+  {
+    "comparison_status": "not-run",
+    "content_identical": false,
+    "maintenance_provenance": "not-classified",
+    "oracle": {
+      "bytes": 1249,
+      "lines": 14,
+      "logical_sha256": "50b4b489496d0abcfd11cbf7a2ad4224ded8905bc671209acd20dca1effad242",
+      "path": "migration/iD13/oracle/202607082008_IDEMPIERE-7060.sql",
+      "transport_sha256": "50b4b489496d0abcfd11cbf7a2ad4224ded8905bc671209acd20dca1effad242"
+    },
+    "pair_id": "pair:b19e2dff66b28e81879ddfb7712da752152df2bed1b28670bafb8b985bd63065",
+    "pairing_method": "exact-version-and-filename",
+    "pilot_slices": [],
+    "pilot_tables_referenced": [],
+    "postgresql": {
+      "bytes": 1212,
+      "lines": 11,
+      "logical_sha256": "41308d5f52d6ff4ae9636530a7c846e89edaeaff017705de815d4aa65bff98be",
+      "path": "migration/iD13/postgresql/202607082008_IDEMPIERE-7060.sql",
+      "transport_sha256": "41308d5f52d6ff4ae9636530a7c846e89edaeaff017705de815d4aa65bff98be"
+    },
+    "release_segment": "iD13",
+    "ticket_id": "IDEMPIERE-7060"
+  },
+  {
+    "comparison_status": "not-run",
+    "content_identical": false,
+    "maintenance_provenance": "not-classified",
+    "oracle": {
+      "bytes": 364,
+      "lines": 14,
+      "logical_sha256": "95525fdfcfae3c1f93c6f2023c5b276e07e3c28c0231755876cae67ab3cb24d8",
+      "path": "migration/iD13/oracle/202607221326_IDEMPIERE-7065.sql",
+      "transport_sha256": "95525fdfcfae3c1f93c6f2023c5b276e07e3c28c0231755876cae67ab3cb24d8"
+    },
+    "pair_id": "pair:33be8579a196e44da039145c58f092403b0ed975a95ce790be35406c73d7ae14",
+    "pairing_method": "exact-version-and-filename",
+    "pilot_slices": [],
+    "pilot_tables_referenced": [],
+    "postgresql": {
+      "bytes": 380,
+      "lines": 11,
+      "logical_sha256": "115be387faf242d56556f2c1b96596ec1e5fa94b45dc7c8fe9687ad12d6b08bf",
+      "path": "migration/iD13/postgresql/202607221326_IDEMPIERE-7065.sql",
+      "transport_sha256": "115be387faf242d56556f2c1b96596ec1e5fa94b45dc7c8fe9687ad12d6b08bf"
+    },
+    "release_segment": "iD13",
+    "ticket_id": "IDEMPIERE-7065"
+  },
+  {
+    "comparison_status": "not-run",
+    "content_identical": false,
+    "maintenance_provenance": "not-classified",
+    "oracle": {
+      "bytes": 2694,
+      "lines": 85,
+      "logical_sha256": "ef7f576d1f033a040395638fd8b449cb6b7a65e66da80dd6b668310b69ed202d",
+      "path": "migration/processes_post_migration/oracle/01_add_missing_Translations.sql",
+      "transport_sha256": "3df8682e77555f03958b4ebc81990b1ae34f0a3f91662e9d1284405789f04d9d"
+    },
+    "pair_id": "pair:5b3efbb354411d6193b556f65cdc12fd3fe1c8d5ecc00df1a48f599865d62fdd",
+    "pairing_method": "exact-version-and-filename",
+    "pilot_slices": [],
+    "pilot_tables_referenced": [],
+    "postgresql": {
+      "bytes": 2510,
+      "lines": 80,
+      "logical_sha256": "9c44b7920c76c131d83b078af541b93a075067d3739ab2bf9090270511107e66",
+      "path": "migration/processes_post_migration/postgresql/01_add_missing_translations.sql",
+      "transport_sha256": "9c44b7920c76c131d83b078af541b93a075067d3739ab2bf9090270511107e66"
+    },
+    "release_segment": "processes_post_migration",
+    "ticket_id": null
+  },
+  {
+    "comparison_status": "not-run",
+    "content_identical": false,
+    "maintenance_provenance": "not-classified",
+    "oracle": {
+      "bytes": 29272,
+      "lines": 137,
+      "logical_sha256": "283406ff77f562d148743ac17b3193f7386fdf3bb72aebf453a21aff30912b09",
+      "path": "migration/processes_post_migration/oracle/02_SynchronizeTerminology.sql",
+      "transport_sha256": "283406ff77f562d148743ac17b3193f7386fdf3bb72aebf453a21aff30912b09"
+    },
+    "pair_id": "pair:0c4fe71f88708f433452766e5ca8098dfbd0c58b69bdd0a95ce567e610644404",
+    "pairing_method": "exact-version-and-filename",
+    "pilot_slices": [],
+    "pilot_tables_referenced": [],
+    "postgresql": {
+      "bytes": 32501,
+      "lines": 137,
+      "logical_sha256": "36e84f49e9d574fbae66e20d5ed7d667037b82480539b645c0af65fd55bf8cee",
+      "path": "migration/processes_post_migration/postgresql/02_SynchronizeTerminology.sql",
+      "transport_sha256": "36e84f49e9d574fbae66e20d5ed7d667037b82480539b645c0af65fd55bf8cee"
+    },
+    "release_segment": "processes_post_migration",
+    "ticket_id": null
+  },
+  {
+    "comparison_status": "not-run",
+    "content_identical": false,
+    "maintenance_provenance": "not-classified",
+    "oracle": {
+      "bytes": 5003,
+      "lines": 157,
+      "logical_sha256": "44803a90f3d49244a4dd0dc93def96e5b83b983d91c3566505624d2136f22269",
+      "path": "migration/processes_post_migration/oracle/03_update_sequences.sql",
+      "transport_sha256": "eb640283028ccc465ae88cc317545b7671b6e2c2fa63d6bb5a7690268daf3c10"
+    },
+    "pair_id": "pair:7eb07805d1b1b7b20300a82d8c432b6e2749c84a314d1cac84b38faa9beb685f",
+    "pairing_method": "exact-version-and-filename",
+    "pilot_slices": [],
+    "pilot_tables_referenced": [],
+    "postgresql": {
+      "bytes": 3896,
+      "lines": 131,
+      "logical_sha256": "31e13b905e08f017354f25327b1e98133b53dff90dd5f23cf0e15881a7b29fd1",
+      "path": "migration/processes_post_migration/postgresql/03_update_sequences.sql",
+      "transport_sha256": "ea2e14a0d798526e85ee6c5e19dd0b1e21371c2c1e70b2b4524511c46f6bd164"
+    },
+    "release_segment": "processes_post_migration",
+    "ticket_id": null
+  },
+  {
+    "comparison_status": "not-run",
+    "content_identical": false,
+    "maintenance_provenance": "not-classified",
+    "oracle": {
+      "bytes": 6376,
+      "lines": 109,
+      "logical_sha256": "a8a7f494976ba23e1b323556634629f2e572dfdf922413c4e30ebc35117e95c9",
+      "path": "migration/processes_post_migration/oracle/04_role_access_update.sql",
+      "transport_sha256": "2c27035ffb5049712bf39d6114cfaea56e4de08a17f33814d25bd70920410064"
+    },
+    "pair_id": "pair:8daedac6c13e37bc39c674ed0602e9596229ef51f1aebd473b2f2aefa3828b59",
+    "pairing_method": "exact-version-and-filename",
+    "pilot_slices": [],
+    "pilot_tables_referenced": [],
+    "postgresql": {
+      "bytes": 6417,
+      "lines": 107,
+      "logical_sha256": "b44d4fee3ae789ff2e955cfb791a3f73f0bf81a9a71a548c1d262099ed608a21",
+      "path": "migration/processes_post_migration/postgresql/04_role_access_update.sql",
+      "transport_sha256": "9c0badd9f7e4aef77b12606df5953ae25e792567bd1b5b09812009cbea9f3737"
+    },
+    "release_segment": "processes_post_migration",
+    "ticket_id": null
+  }
+]

@@ -1,0 +1,206 @@
+{
+  "application_equivalence": false,
+  "artifact_type": "lightyear-native-migration-comparison",
+  "deltas": {
+    "oracle": {
+      "structure": {
+        "index_columns": {
+          "added": [
+            {
+              "column_name": "RECORD_UU",
+              "column_position": 3,
+              "descend": "ASC",
+              "index_name": "CM_CHAT_RECORD",
+              "table_name": "CM_CHAT"
+            },
+            {
+              "column_name": "RECORD_UU",
+              "column_position": 3,
+              "descend": "ASC",
+              "index_name": "AD_ATTACHMENT_RECORD",
+              "table_name": "AD_ATTACHMENT"
+            },
+            {
+              "column_name": "RECORD_UU",
+              "column_position": 3,
+              "descend": "ASC",
+              "index_name": "AD_POSTIT_RECORD_ID_AD_TABLE_ID",
+              "table_name": "AD_POSTIT"
+            }
+          ],
+          "removed": []
+        }
+      },
+      "tables": {
+        "ad_indexcolumn": {
+          "added": {
+            "2168b2f91d998f0908b256e8f03cf280d0590973046bd3524961de59444783d1": 1,
+            "2c2905024d7de214430bcc54a2a490d8f769be8b21df29b07783b35fb7d3ebc7": 1,
+            "4d9faf0400634ee926e9f059e6141fa57af0b59cd9475a5db97a02bdac16780c": 1,
+            "ccaa39b946af0e3e90e34cc0ea339bbeb6b09ed8fbc8db98efeef61ce235dd8d": 1,
+            "fe25e50f6b2315077ae8baa2413784b15e936a5a362fd44cb8ffa22b64a20b5e": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "466e7bb52f93cba8b44c7c603842327218ca92d92625c8ccb7b6f3e7f5ffe728": 1,
+            "52efc71fe9a1cc56ef41f3da2da472d9268669eb65d02aa36912a01e90706067": 1,
+            "b7cf5b52e972d920f1214e59005f80123d17a4327fe64049eed97ef537373eef": 1
+          }
+        },
+        "ad_migrationscript": {
+          "added": {
+            "7e713a77eec125389cfd20a5676efe6f660c52646ed3d46073daa3d486defb59": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_sequence": {
+          "added": {
+            "a8e3c33eedc2e1ce4be248935757e04e89cd73852e0e2284b09c6a481902516c": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "da37eaaf22e7184b3b44646c144445b038c479eeb85a26225eddc453e645dd74": 1
+          }
+        },
+        "ad_system": {
+          "added": {
+            "8b9ffa5c9eda8da6477021eeff5b8b7e1719a7b17475a78b825c8b9ac8cc897d": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "6edaaf140fe94519c11df700ca84c1dbb25f29f1afe22f4a82518443e57a6694": 1
+          }
+        }
+      }
+    },
+    "postgresql": {
+      "structure": {
+        "indexes": {
+          "added": [
+            {
+              "indexdef": "CREATE UNIQUE INDEX cm_chat_record ON adempiere.cm_chat USING btree (ad_table_id, record_id, record_uu)",
+              "indexname": "cm_chat_record",
+              "tablename": "cm_chat"
+            },
+            {
+              "indexdef": "CREATE UNIQUE INDEX ad_postit_record_id_ad_table_id ON adempiere.ad_postit USING btree (record_id, ad_table_id, record_uu)",
+              "indexname": "ad_postit_record_id_ad_table_id",
+              "tablename": "ad_postit"
+            },
+            {
+              "indexdef": "CREATE UNIQUE INDEX ad_attachment_record ON adempiere.ad_attachment USING btree (ad_table_id, record_id, record_uu)",
+              "indexname": "ad_attachment_record",
+              "tablename": "ad_attachment"
+            }
+          ],
+          "removed": [
+            {
+              "indexdef": "CREATE UNIQUE INDEX ad_attachment_record ON adempiere.ad_attachment USING btree (ad_table_id, record_id)",
+              "indexname": "ad_attachment_record",
+              "tablename": "ad_attachment"
+            },
+            {
+              "indexdef": "CREATE UNIQUE INDEX ad_postit_record_id_ad_table_id ON adempiere.ad_postit USING btree (record_id, ad_table_id)",
+              "indexname": "ad_postit_record_id_ad_table_id",
+              "tablename": "ad_postit"
+            },
+            {
+              "indexdef": "CREATE UNIQUE INDEX cm_chat_record ON adempiere.cm_chat USING btree (ad_table_id, record_id)",
+              "indexname": "cm_chat_record",
+              "tablename": "cm_chat"
+            }
+          ]
+        }
+      },
+      "tables": {
+        "ad_indexcolumn": {
+          "added": {
+            "2168b2f91d998f0908b256e8f03cf280d0590973046bd3524961de59444783d1": 1,
+            "2c2905024d7de214430bcc54a2a490d8f769be8b21df29b07783b35fb7d3ebc7": 1,
+            "4d9faf0400634ee926e9f059e6141fa57af0b59cd9475a5db97a02bdac16780c": 1,
+            "ccaa39b946af0e3e90e34cc0ea339bbeb6b09ed8fbc8db98efeef61ce235dd8d": 1,
+            "fe25e50f6b2315077ae8baa2413784b15e936a5a362fd44cb8ffa22b64a20b5e": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "466e7bb52f93cba8b44c7c603842327218ca92d92625c8ccb7b6f3e7f5ffe728": 1,
+            "52efc71fe9a1cc56ef41f3da2da472d9268669eb65d02aa36912a01e90706067": 1,
+            "b7cf5b52e972d920f1214e59005f80123d17a4327fe64049eed97ef537373eef": 1
+          }
+        },
+        "ad_migrationscript": {
+          "added": {
+            "c3e1dc36f5e1f13797b9827373257949ee1987af0ceeb24e6de129b0cd44867f": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_sequence": {
+          "added": {
+            "976e80d666f11a4209aa6c9e0c1fd3049b7770c145f4e01c9e118b195a4c5756": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "1c5c753abac4407f858a4c34988ece84bfd2ae92641587031818e59320d7adb9": 1
+          }
+        },
+        "ad_system": {
+          "added": {
+            "d6cd3eaa58bd0c687f97ce860006f065b1d6aede86efd982227017a28e2abf10": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "70c195721c49c82c14257ea92d61ec818ee67d1018c2df345a7846dbbad520e9": 1
+          }
+        }
+      }
+    }
+  },
+  "evidence_class": "native-database-observation",
+  "execution": {
+    "oracle": {
+      "duration_seconds": 0.688,
+      "log_sha256": "03219b8c21a101edccfc99b5b3e31814f968d350d6df3a9d4192535a93241096",
+      "native_client": "sqlplus",
+      "returncode": 0,
+      "source_path": "migration/iD12/oracle/202604282341_IDEMPIERE-6983.sql",
+      "source_sha256": "d9a432920e5cae601d8ea22264bfd74410bdb34cdaff236a90eb97df5d754cf2"
+    },
+    "postgresql": {
+      "duration_seconds": 0.406,
+      "log_sha256": "d8072545cee92b555ce11304efff471644a893882a8cd1252c4250ade6f6398b",
+      "native_client": "psql",
+      "returncode": 0,
+      "source_path": "migration/iD12/postgresql/202604282341_IDEMPIERE-6983.sql",
+      "source_sha256": "5a3b658366709f1f881bf6c486fce403d304b8b2755f92536cb9e5ce907ff714"
+    }
+  },
+  "historical_upgrade_equivalence": false,
+  "non_registration_row_effects_match": false,
+  "registration_effects_retained": true,
+  "row_effects_match": false,
+  "schema_version": "1.0",
+  "scope": "observed effects on these imported reference seeds; initial states may differ; no runtime values suppressed",
+  "state_sha256": {
+    "oracle": {
+      "after": "d531413a710ac9e3a619c9ccfa222e2023b1828c371e938eb467034a557732ed",
+      "before": "43dc7ad370bd32d567c17a36429ba5316c648712060cb84902fb499c7c9fb685"
+    },
+    "postgresql": {
+      "after": "493b211fd33ac93e9e0d27fdd0b45489fa4beab84f93f9e7d20d3b4ab0b432e6",
+      "before": "c1712a2a6efbf3f37d49a5f169dd5b78bf9e9d9fcc7532dd26749c0a3f5b66ea"
+    }
+  },
+  "status": "observed-effects-differ",
+  "structural_change_requires_review": true,
+  "content_sha256": "3db7162c8d668f2a46bea10dd0216ba9522183d61014f11b84363496f0f18cec"
+}

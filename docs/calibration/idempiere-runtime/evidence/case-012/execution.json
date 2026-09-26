@@ -1,0 +1,18 @@
+{
+  "oracle": {
+    "returncode": 0,
+    "source_path": "migration/iD13/oracle/202605270922_IDEMPIERE-7019.sql",
+    "source_sha256": "5d01748665ae6e044fb71246808b000bbfc1590b1d06e46be155ec32e6b6bf19",
+    "native_client": "sqlplus",
+    "duration_seconds": 0.563,
+    "log_sha256": "fb35a3405ca6d02ca283d4046d85dd0f96951eae7bcb5d0cc0438b295cad7f6c"
+  },
+  "postgresql": {
+    "returncode": 0,
+    "source_path": "migration/iD13/postgresql/202605270922_IDEMPIERE-7019.sql",
+    "source_sha256": "cdc2fd6935d67ee70a71a978084250ee9b039ed33fdf517066bbe71fca46074a",
+    "native_client": "psql",
+    "duration_seconds": 0.437,
+    "log_sha256": "142f76e64c30f0a756c2f6b4c0fd20629b18e72b33a1100d3e4865cb575f96d1"
+  }
+}

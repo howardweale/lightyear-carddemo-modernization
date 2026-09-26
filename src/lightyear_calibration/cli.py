@@ -34,6 +34,8 @@ def parser():
     r.add_argument("--pairing-manifest", required=True, type=Path)
     r.add_argument("--output", required=True, type=Path)
     r.add_argument("--context", type=Path, help="Optional reviewed baseline from a prior pinned replay")
+    r.add_argument("--oracle-catalog", type=Path, help="Raw Oracle capture required for captured-catalog context")
+    r.add_argument("--postgresql-catalog", type=Path, help="Raw PostgreSQL capture required for captured-catalog context")
     i = commands.add_parser("import-idempiere", help="Calibrate a retained comparison report without claiming a fresh source replay")
     i.add_argument("--report", required=True, type=Path)
     i.add_argument("--pairing-manifest", required=True, type=Path)
@@ -76,7 +78,10 @@ def main(argv=None):
             write_new(args.output,baseline(snapshot,texts))
         elif args.command == 'replay-idempiere':
             from .replay import replay_idempiere
-            result=replay_idempiere(args.source,read_json(args.report),read_json(args.pairing_manifest),args.output,context=read_json(args.context) if args.context else None)
+            from .native_catalog import read_capture
+            require(bool(args.oracle_catalog)==bool(args.postgresql_catalog), 'Both catalog paths are required')
+            catalogs={'oracle':read_capture(args.oracle_catalog),'postgresql':read_capture(args.postgresql_catalog)} if args.oracle_catalog else None
+            result=replay_idempiere(args.source,read_json(args.report),read_json(args.pairing_manifest),args.output,context=read_json(args.context) if args.context else None,catalogs=catalogs)
             print(json.dumps(result['counts']))
             return 0
         elif args.command in {"scan", "import-idempiere"}:

@@ -1,0 +1,322 @@
+{
+  "application_equivalence": false,
+  "artifact_type": "lightyear-native-migration-comparison",
+  "deltas": {
+    "oracle": {
+      "structure": {
+        "columns": {
+          "added": [
+            {
+              "char_length": 0,
+              "char_used": null,
+              "column_name": "C_UOM_ID",
+              "data_default": "NULL\n",
+              "data_length": 22,
+              "data_precision": 10,
+              "data_scale": 0,
+              "data_type": "NUMBER",
+              "identity_column": "NO",
+              "nullable": "N",
+              "table_name": "M_INVENTORYLINE",
+              "virtual_column": "NO"
+            },
+            {
+              "char_length": 0,
+              "char_used": null,
+              "column_name": "QTYENTERED",
+              "data_default": "0 ",
+              "data_length": 22,
+              "data_precision": null,
+              "data_scale": null,
+              "data_type": "NUMBER",
+              "identity_column": "NO",
+              "nullable": "N",
+              "table_name": "M_INVENTORYLINE",
+              "virtual_column": "NO"
+            }
+          ],
+          "removed": []
+        },
+        "constraints": {
+          "added": [
+            {
+              "constraint_name": "CUOM_MINVENTORYLINE",
+              "constraint_type": "R",
+              "deferrable": "DEFERRABLE",
+              "deferred": "DEFERRED",
+              "delete_rule": "NO ACTION",
+              "r_constraint_name": "C_UOM_KEY",
+              "search_condition": null,
+              "status": "ENABLED",
+              "table_name": "M_INVENTORYLINE",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "SYS_C0027399",
+              "constraint_type": "C",
+              "deferrable": "NOT DEFERRABLE",
+              "deferred": "IMMEDIATE",
+              "delete_rule": null,
+              "r_constraint_name": null,
+              "search_condition": "\"QTYENTERED\" IS NOT NULL",
+              "status": "ENABLED",
+              "table_name": "M_INVENTORYLINE",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "SYS_C0027398",
+              "constraint_type": "C",
+              "deferrable": "NOT DEFERRABLE",
+              "deferred": "IMMEDIATE",
+              "delete_rule": null,
+              "r_constraint_name": null,
+              "search_condition": "\"C_UOM_ID\" IS NOT NULL",
+              "status": "ENABLED",
+              "table_name": "M_INVENTORYLINE",
+              "validated": "VALIDATED"
+            }
+          ],
+          "removed": []
+        }
+      },
+      "tables": {
+        "ad_column": {
+          "added": {
+            "555191a6183a232caddcc4f6090302f9e0c82882ce37b07917cdac67fe972c1a": 1,
+            "6a9b5c1dd49dce6de76ba03a7915cd28fd8284b57cee996892348af36537d60b": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_field": {
+          "added": {
+            "1818eb2b0022750492f263ac42b61d279e63034711b8a15b693d1ec171747bf5": 1,
+            "2b78134e34320b6fc5084227d15244ac36589f5664f4c560cbd9ebf12da10bc5": 1,
+            "70da842ed5c2a0dd78e2ac093db01159b2633c6a4943b6cbc03e8ac406d2e0a2": 1,
+            "9c4f363432d456bdd77789c54004e3187d1aa7e375e503dd541e3a6829c35ec5": 1,
+            "e1fd51ec92a261374d3c2637647a11b610041c0727810e3d57f04ffb104c2dfe": 1,
+            "f2b1376de90cd9f125ed64545c4083cb16980a1c25ab4f9c3df71da2be127707": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "72cdee0c868320a8ff1cbbc68888a50ea6d18f19584f24afa3d2cbaf9a23ba77": 1,
+            "ed1394991e677e7e8f9cf019f6cff40af69b63913e788b8f399945f13888272c": 1
+          }
+        },
+        "ad_migrationscript": {
+          "added": {
+            "d4f57d3fed2caa83bebf3627532370f56eae1a7803afce62cac8f4e270df60c5": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_sequence": {
+          "added": {
+            "4d1ba3e25bdf3c2bd3f08a2cc8a5c37d15a5297856a9920aa0c8941162e0d730": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "1ece448fe8d87493462afe7e4efb015702f938b1da82dfc17471cbabfc14ecfa": 1
+          }
+        },
+        "ad_system": {
+          "added": {
+            "88d3c8ad9e1f213d0b8f9e956512585ff3708c2a1b3d63e939b6d96da4a9060f": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "8b9ffa5c9eda8da6477021eeff5b8b7e1719a7b17475a78b825c8b9ac8cc897d": 1
+          }
+        },
+        "m_inventoryline": {
+          "added": {
+            "fa7dd6aaa0f447e6ffeddcacafd7effeb831dfd817e0ec84e880ccb81dd2ce5a": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "06e758439d4f3f357d649b08183a63f9d315b49ebd24744b3751da1829da3248": 1
+          }
+        }
+      }
+    },
+    "postgresql": {
+      "structure": {
+        "columns": {
+          "added": [
+            {
+              "character_maximum_length": null,
+              "column_default": "NULL::numeric",
+              "column_name": "c_uom_id",
+              "data_type": "numeric",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "NO",
+              "numeric_precision": 10,
+              "numeric_scale": 0,
+              "table_name": "m_inventoryline"
+            },
+            {
+              "character_maximum_length": null,
+              "column_default": "'0'::numeric",
+              "column_name": "qtyentered",
+              "data_type": "numeric",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "NO",
+              "numeric_precision": null,
+              "numeric_scale": null,
+              "table_name": "m_inventoryline"
+            }
+          ],
+          "removed": []
+        },
+        "constraints": {
+          "added": [
+            {
+              "constraint_name": "cuom_minventoryline",
+              "definition": "FOREIGN KEY (c_uom_id) REFERENCES c_uom(c_uom_id) DEFERRABLE INITIALLY DEFERRED",
+              "table_name": "m_inventoryline"
+            }
+          ],
+          "removed": []
+        },
+        "triggers": {
+          "added": [
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_a_52402\" AFTER DELETE ON adempiere.c_uom FROM m_inventoryline DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_noaction_del\"()",
+              "table_name": "c_uom",
+              "trigger_name": "RI_ConstraintTrigger_a_52402"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_c_52405\" AFTER UPDATE ON adempiere.m_inventoryline FROM c_uom DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_check_upd\"()",
+              "table_name": "m_inventoryline",
+              "trigger_name": "RI_ConstraintTrigger_c_52405"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_a_52403\" AFTER UPDATE ON adempiere.c_uom FROM m_inventoryline DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_noaction_upd\"()",
+              "table_name": "c_uom",
+              "trigger_name": "RI_ConstraintTrigger_a_52403"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_c_52404\" AFTER INSERT ON adempiere.m_inventoryline FROM c_uom DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_check_ins\"()",
+              "table_name": "m_inventoryline",
+              "trigger_name": "RI_ConstraintTrigger_c_52404"
+            }
+          ],
+          "removed": []
+        }
+      },
+      "tables": {
+        "ad_column": {
+          "added": {
+            "555191a6183a232caddcc4f6090302f9e0c82882ce37b07917cdac67fe972c1a": 1,
+            "6a9b5c1dd49dce6de76ba03a7915cd28fd8284b57cee996892348af36537d60b": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_field": {
+          "added": {
+            "1818eb2b0022750492f263ac42b61d279e63034711b8a15b693d1ec171747bf5": 1,
+            "2b78134e34320b6fc5084227d15244ac36589f5664f4c560cbd9ebf12da10bc5": 1,
+            "70da842ed5c2a0dd78e2ac093db01159b2633c6a4943b6cbc03e8ac406d2e0a2": 1,
+            "9c4f363432d456bdd77789c54004e3187d1aa7e375e503dd541e3a6829c35ec5": 1,
+            "e1fd51ec92a261374d3c2637647a11b610041c0727810e3d57f04ffb104c2dfe": 1,
+            "f2b1376de90cd9f125ed64545c4083cb16980a1c25ab4f9c3df71da2be127707": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "72cdee0c868320a8ff1cbbc68888a50ea6d18f19584f24afa3d2cbaf9a23ba77": 1,
+            "ed1394991e677e7e8f9cf019f6cff40af69b63913e788b8f399945f13888272c": 1
+          }
+        },
+        "ad_migrationscript": {
+          "added": {
+            "247a5144c949f330dcf890e04b5ef6d4a49aa7419a6e501770b05c09620ddf69": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_sequence": {
+          "added": {
+            "d160c0bbbecd0f4d3f8201cbee4b3fb7a4fe7283a11aa5546f60b046a77fd857": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "07bad4402b4cd3a48a0bf40d78bb33520c0b8e1dc7ac6f1ec4e3264e39822f0a": 1
+          }
+        },
+        "ad_system": {
+          "added": {
+            "c864a85a1747014f160edc8c534d59166f4bf857f6b9355181afddd1c0e28b45": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "d6cd3eaa58bd0c687f97ce860006f065b1d6aede86efd982227017a28e2abf10": 1
+          }
+        },
+        "m_inventoryline": {
+          "added": {
+            "fa7dd6aaa0f447e6ffeddcacafd7effeb831dfd817e0ec84e880ccb81dd2ce5a": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "06e758439d4f3f357d649b08183a63f9d315b49ebd24744b3751da1829da3248": 1
+          }
+        }
+      }
+    }
+  },
+  "evidence_class": "native-database-observation",
+  "execution": {
+    "oracle": {
+      "duration_seconds": 0.719,
+      "log_sha256": "1af9fb9b52706709a5c4f6f9a9a94ee3b30404a388ec97bc5f0a468831397a29",
+      "native_client": "sqlplus",
+      "returncode": 0,
+      "source_path": "migration/iD13/oracle/202605191839_IDEMPIERE-7010.sql",
+      "source_sha256": "87a4d3af7442fae25ed5e72b696d9d2ce6701104b8b7878030f107bfc78059fb"
+    },
+    "postgresql": {
+      "duration_seconds": 0.422,
+      "log_sha256": "954fd6b649ad32d02270c383db9275cbb2991692c0118d5e74786c0b56994223",
+      "native_client": "psql",
+      "returncode": 0,
+      "source_path": "migration/iD13/postgresql/202605191839_IDEMPIERE-7010.sql",
+      "source_sha256": "cd08fa946f0388d39153f641fa04d1aedd05a0385d1bd1b6796f2fcbb87c11d2"
+    }
+  },
+  "historical_upgrade_equivalence": false,
+  "non_registration_row_effects_match": false,
+  "registration_effects_retained": true,
+  "row_effects_match": false,
+  "schema_version": "1.0",
+  "scope": "observed effects on these imported reference seeds; initial states may differ; no runtime values suppressed",
+  "state_sha256": {
+    "oracle": {
+      "after": "5fcfbe93c37f744f784032fb8441fcfa9ce1a1c6eef46bc350599a21d2f2e549",
+      "before": "ea15f43f6fe53f598e480da63701ffa8270c8db67df1a33af1e20c748e94d7b7"
+    },
+    "postgresql": {
+      "after": "5a089160d0799a47a55b377503e1b61e648c309b9bbd33dd81897b415cc49fd5",
+      "before": "2c9d042021104cfdd7d39fcc21b681606aa2c36c3b4500cd6501c6d560d92474"
+    }
+  },
+  "status": "observed-effects-differ",
+  "structural_change_requires_review": true,
+  "content_sha256": "25d97d40e9fe123ef5198a887ef05822921eea1d1847ba74b3adcfbee5d4c03f"
+}

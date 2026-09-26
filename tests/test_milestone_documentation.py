@@ -27,14 +27,14 @@ class MilestoneDocumentationTests(unittest.TestCase):
         manifest = json.loads((DOC_ROOT / "manifest.json").read_text(encoding="utf-8"))
         self.assertEqual(manifest["schema_version"], "1.1")
         supplemental = manifest["supplemental_artifacts"]
-        self.assertEqual([a["path"] for a in supplemental], ["docs/milestones/MS-73/MS-73.md", "docs/milestones/MS-74/MS-74.md", "docs/milestones/MS-75/MS-75.md", "docs/milestones/MS-76/MS-76.md", "docs/milestones/MS-77/MS-77.md", "docs/milestones/MS-78/MS-78.md", "docs/milestones/MS-79/MS-79.md", "docs/milestones/MS-80/MS-80.md", "docs/milestones/MS-81/MS-81.md", "docs/milestones/MS-82/MS-82.md", "docs/milestones/MS-83/MS-83.md", "docs/milestones/MS-84/MS-84.md", "docs/milestones/MS-85/MS-85.md"])
+        self.assertEqual([a["path"] for a in supplemental], ["docs/milestones/MS-73/MS-73.md", "docs/milestones/MS-74/MS-74.md", "docs/milestones/MS-75/MS-75.md", "docs/milestones/MS-76/MS-76.md", "docs/milestones/MS-77/MS-77.md", "docs/milestones/MS-78/MS-78.md", "docs/milestones/MS-79/MS-79.md", "docs/milestones/MS-80/MS-80.md", "docs/milestones/MS-81/MS-81.md", "docs/milestones/MS-82/MS-82.md", "docs/milestones/MS-83/MS-83.md", "docs/milestones/MS-84/MS-84.md", "docs/milestones/MS-85/MS-85.md", "docs/milestones/MS-86/MS-86.md"])
         for artifact in supplemental:
             data = (ROOT / artifact["path"]).read_bytes()
             self.assertEqual(len(data), artifact["bytes"])
             self.assertEqual(hashlib.sha256(data).hexdigest(), artifact["sha256"])
         self.assertEqual(manifest["milestone_count"], 70)
-        self.assertEqual(manifest["supplemental_milestone_count"], 13)
-        self.assertEqual(manifest["searchable_milestone_count"], 83)
+        self.assertEqual(manifest["supplemental_milestone_count"], 14)
+        self.assertEqual(manifest["searchable_milestone_count"], 84)
         self.assertEqual(manifest["artifact_count"], 210)
         self.assertEqual(set(manifest["formats"]), {"md", "docx", "pdf"})
         for artifact in manifest["artifacts"]:
@@ -60,10 +60,10 @@ class MilestoneDocumentationTests(unittest.TestCase):
         readme = (DOC_ROOT / "README.md").read_text(encoding="utf-8")
         page = (DOC_ROOT / "index.html").read_text(encoding="utf-8")
         self.assertIn("Open the searchable milestone index", readme)
-        self.assertEqual(readme.count("https://github.com/"), 154)
+        self.assertEqual(readme.count("https://github.com/"), 155)
         self.assertEqual(readme.count("https://raw.githubusercontent.com/"), 70)
         self.assertNotRegex(readme, r"\]\(MS-\d{2}/")
-        self.assertEqual(page.count('class="milestone"'), 83)
+        self.assertEqual(page.count('class="milestone"'), 84)
         self.assertIn('id="search"', page)
         self.assertIn('id="phase"', page)
         self.assertIn("URLSearchParams", page)
@@ -104,7 +104,7 @@ class MilestoneDocumentationTests(unittest.TestCase):
         page = (DOC_ROOT / "index.html").read_text(encoding="utf-8")
         parsed = Rows(); parsed.feed(page)
         later = [row for row in parsed.rows if row["dataset"]["phase"] == "implementation"]
-        self.assertEqual(13, len(later))
+        self.assertEqual(14, len(later))
         script = re.search(r"<script>(.*?)</script>", page, re.DOTALL).group(1)
         harness = r'''const vm = require('node:vm');
 const fs = require('node:fs');
@@ -132,7 +132,7 @@ console.log(JSON.stringify(result));'''
         output = json.loads(result.stdout)
         for key, number in [("initial",79),("decidability",80),("cancellation",78),("pr214",83),("pr215",84)]:
             self.assertTrue(any(f"/MS-{number}/MS-{number}.md" in url for url in output[key]), (key, output))
-        self.assertEqual(13, len(output["later"]))
+        self.assertEqual(14, len(output["later"]))
         self.assertEqual(10, len(output["foundation"]))
 
     def test_brand_assets_are_consistent_across_surfaces(self) -> None:

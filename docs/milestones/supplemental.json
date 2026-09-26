@@ -91,6 +91,13 @@
       "title": "iDempiere schema alignment and native business journey",
       "customer_value": "Verify schema repairs and one real customer-to-payment scenario on Oracle and PostgreSQL, retaining every raw difference.",
       "status": "Bounded native journey passed; full schema, application and platform qualification unclaimed"
+    },
+    {
+      "number": 86,
+      "path": "MS-86/MS-86.md",
+      "title": "iDempiere boundary findings and operational journeys",
+      "customer_value": "Find actual timestamp and locking differences while testing fractional tax, discounts, Unicode, partial shipments, credit reversal and bounded recovery.",
+      "status": "Native boundary differences retained; operational scope is explicit; broad qualification unclaimed"
     }
   ]
 }

@@ -12,6 +12,8 @@ on:
       - 'tests/test_native_*.py'
       - 'tests/test_schema_*.py'
       - 'tests/test_application_*.py'
+      - 'tests/test_datatype_mappings.py'
+      - 'tests/test_boundary_*.py'
       - 'tests/test_idempiere_runtime_preflight.py'
       - 'tools/prepare_idempiere_runtime.py'
       - 'docs/calibration/**'
@@ -30,6 +32,8 @@ on:
       - 'tests/test_native_*.py'
       - 'tests/test_schema_*.py'
       - 'tests/test_application_*.py'
+      - 'tests/test_datatype_mappings.py'
+      - 'tests/test_boundary_*.py'
       - 'tests/test_idempiere_runtime_preflight.py'
       - 'tools/prepare_idempiere_runtime.py'
       - 'docs/calibration/**'
@@ -53,7 +57,7 @@ jobs:
       - name: Verify cause accounting and safety boundaries
         env:
           PYTHONPATH: src
-        run: python -m unittest tests.test_decidability tests.test_calibration_loop tests.test_calibration_public tests.test_idempiere_semantic_comparison tests.test_native_catalog tests.test_schema_equivalence tests.test_schema_probes tests.test_schema_constraint_probes tests.test_schema_publication tests.test_application_effects tests.test_application_journey tests.test_application_publication tests.test_native_effects tests.test_native_reconciliation tests.test_native_reconciliation_publication tests.test_native_execution tests.test_native_publication tests.test_idempiere_runtime_preflight -v
+        run: python -m unittest tests.test_decidability tests.test_calibration_loop tests.test_calibration_public tests.test_idempiere_semantic_comparison tests.test_native_catalog tests.test_datatype_mappings tests.test_boundary_contract tests.test_boundary_publication tests.test_schema_equivalence tests.test_schema_probes tests.test_schema_constraint_probes tests.test_schema_publication tests.test_application_effects tests.test_application_journey tests.test_application_publication tests.test_native_effects tests.test_native_reconciliation tests.test_native_reconciliation_publication tests.test_native_execution tests.test_native_publication tests.test_idempiere_runtime_preflight -v
       - name: Scan an unfamiliar corpus
         env:
           PYTHONPATH: src

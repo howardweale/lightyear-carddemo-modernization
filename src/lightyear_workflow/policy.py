@@ -26,6 +26,7 @@ CATALOG = MappingProxyType({
         "exact-entry-ledger-and-scope-binding", "unexpired-at-application-time",
         "retain-raw-divergence-and-human-decision-provenance")),
     "propose-normalization": ActionSpec("approval-required", "always-ask", "business-owner"),
+    "approve-declaration": ActionSpec("approval-required", "always-ask", "business-owner"),
     "classify-intentional-change": ActionSpec("approval-required", "always-ask", "business-owner"),
     "accept-contract-equivalence": ActionSpec("approval-required", "always-ask", "business-owner"),
     "promote-claim": ActionSpec("approval-required", "always-ask", "claim-owner"),

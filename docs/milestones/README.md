@@ -6,7 +6,7 @@
 
 This library is the customer-readable body of record for MS #1 through MS #70. Every milestone is
 published from one governed catalog in Markdown, Microsoft Word (`.docx`), and PDF.
-The same searchable index includes 14 later implementation records in Markdown.
+The same searchable index includes 16 later implementation records in Markdown.
 
 **[Open the searchable milestone index](https://howardweale.github.io/lightyear-carddemo-modernization/milestones/)** to filter by milestone number, title,
 customer value, capability, release, or roadmap phase.
@@ -108,6 +108,8 @@ or policy decisions.
 | MS #84 | Native iDempiere reconciliation and historical replay | Corrected native replay completed; broader qualification unclaimed | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-84/MS-84.md) |
 | MS #85 | iDempiere schema alignment and native business journey | Bounded native journey passed; full schema, application and platform qualification unclaimed | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-85/MS-85.md) |
 | MS #86 | iDempiere boundary findings and operational journeys | Native boundary differences retained; operational scope is explicit; broad qualification unclaimed | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-86/MS-86.md) |
+| MS #87 | Unattended native iDempiere journey replay | Two consecutive native replays accepted; timestamp decision remains open | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-87/MS-87.md) |
+| MS #88 | Agent-built partial invoicing with native judgement | Bounded native partial-invoicing equivalence passed after explicitly approved repairs; broader qualification unclaimed | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-88/MS-88.md) |
 
 ## Build and verification
 

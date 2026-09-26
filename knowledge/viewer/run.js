@@ -40,6 +40,7 @@
   function render(payload) {
     const host = document.getElementById('run-view');
     if (['oracle26ai-alloydb-number', 'oracle26ai-alloydb-core100', 'oracle26ai-alloydb-types260'].includes(payload.campaign_id)) { window.LightyearPaired.renderRun(host, payload); return; }
+    if (payload.source === 'native-journey-journal') { window.LightyearJourneys.render(host, payload); return; }
     host.replaceChildren();
     if (payload.status === 'unavailable') {
       host.append(node('p', payload.reason || 'No run recorded yet. No journal is available for the selected estate.', 'run-note'));
@@ -120,7 +121,7 @@
     if (!host) return;
     const request = ++sequence;
     const selectedContext = window.LightyearContext.query();
-    if (previousContext !== selectedContext || window.LightyearContext.state.campaignId === 'retained') host.replaceChildren(node('p', 'Reading the execution journal…', 'run-note'));
+    if (previousContext !== selectedContext || (window.LightyearContext.state.campaignId === 'retained' && window.LightyearContext.state.estate !== 'idempiere')) host.replaceChildren(node('p', 'Reading the execution journal…', 'run-note'));
     previousContext = selectedContext;
     try {
       const response = await fetch(`/api/workflow/execution?${window.LightyearContext.query()}`, { cache: 'no-store', credentials: 'omit' });
@@ -132,6 +133,6 @@
     }
   }
   document.addEventListener('tower-context-change', reload);
-  setInterval(() => { if (window.LightyearContext.state.campaignId !== 'retained' && !document.getElementById('run-workspace').hidden) reload(); }, 3000);
+  setInterval(() => { if ((window.LightyearContext.state.campaignId !== 'retained' || window.LightyearContext.state.estate === 'idempiere') && !document.getElementById('run-workspace').hidden) reload(); }, 3000);
   window.LightyearRun = { reload };
 })();

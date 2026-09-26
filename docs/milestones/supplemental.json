@@ -98,6 +98,20 @@
       "title": "iDempiere boundary findings and operational journeys",
       "customer_value": "Find actual timestamp and locking differences while testing fractional tax, discounts, Unicode, partial shipments, credit reversal and bounded recovery.",
       "status": "Native boundary differences retained; operational scope is explicit; broad qualification unclaimed"
+    },
+    {
+      "number": 87,
+      "path": "MS-87/MS-87.md",
+      "title": "Unattended native iDempiere journey replay",
+      "customer_value": "Repeat pinned native journeys, reproduce known findings and stop for signed human decisions with complete cleanup.",
+      "status": "Two consecutive native replays accepted; timestamp decision remains open"
+    },
+    {
+      "number": 88,
+      "path": "MS-88/MS-88.md",
+      "title": "Agent-built partial invoicing with native judgement",
+      "customer_value": "Generate one bounded application journey, reject unintended effects and verify split invoicing, payment, stock and accounting on both engines.",
+      "status": "Bounded native partial-invoicing equivalence passed after explicitly approved repairs; broader qualification unclaimed"
     }
   ]
 }

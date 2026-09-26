@@ -418,7 +418,12 @@ class SourceOnlyPilotTests(unittest.TestCase):
                 root = Path(directory)
                 target = root / "target.cbl"
                 target.write_text("IDENTIFICATION DIVISION.\n", encoding="utf-8")
-                os.symlink(target, root / "linked.cbl")
+                try:
+                    os.symlink(target, root / "linked.cbl")
+                except OSError as exc:
+                    if getattr(exc, "winerror", None) == 1314:
+                        self.skipTest("Windows process lacks symlink creation privilege; exercised on Linux")
+                    raise
                 with self.assertRaisesRegex(PilotError, "symbolic-links-are-not-accepted"):
                     build_intake_manifest(
                         root, PROFILE, approval_id="approved-reference", source_label="link"

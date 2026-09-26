@@ -442,19 +442,22 @@ jobs:
         shell: pwsh
         run: .\cloudbank-reference-estate.ps1 verify-inventory ..\cloudbank-upstream
 
-      - name: Install image helper for the selected Linux verifier Python
+      - name: Install image helper and signing support for the selected Linux verifier Python
         if: runner.os == 'Linux'
         run: |
           source ./python-runtime.sh
           lightyear_resolve_python
           "$LIGHTYEAR_PYTHON_BIN" -m pip install --require-hashes --only-binary=:all: -r factory/cloudbank/platform-qualification/gke/image-security-requirements.txt
+          "$LIGHTYEAR_PYTHON_BIN" -m pip install -e ".[control-tower]"
 
-      - name: Install image helper for the selected Windows verifier Python
+      - name: Install image helper and signing support for the selected Windows verifier Python
         if: runner.os == 'Windows'
         shell: pwsh
         run: |
           . .\python-runtime.ps1
           Invoke-FactoryDarkPython -m pip install --require-hashes --only-binary=:all: -r factory/cloudbank/platform-qualification/gke/image-security-requirements.txt
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          Invoke-FactoryDarkPython -m pip install -e ".[control-tower]"
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
       - name: Run unit and differential verification

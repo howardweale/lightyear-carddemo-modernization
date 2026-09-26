@@ -81,3 +81,6 @@ docs/calibration/idempiere-reconciliation/evidence.zip binary
 
 # Preserve the exact executed application harness bytes bound by native receipts.
 docs/calibration/idempiere-application/LightyearJourneyTest.java -text -whitespace
+
+# Preserve exact executed boundary and operations harnesses for receipt replay.
+docs/calibration/idempiere-boundaries/*.java -text -whitespace

@@ -1,0 +1,107 @@
+{
+  "application_equivalence": false,
+  "artifact_type": "lightyear-native-migration-comparison",
+  "deltas": {
+    "oracle": {
+      "structure": {},
+      "tables": {
+        "ad_migrationscript": {
+          "added": {
+            "7171b1f768a8034d0357dbb360074bed5c0dab4655077f434c9c33814cebe0e5": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_sequence": {
+          "added": {
+            "c2be8e3b9735823df461a5370842811803652be4318985a7e472804ff93970eb": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "ba2cb53c3e157a2ac0884d2871eb2ea46b1180491eefe8cf120ac9dc59fd2876": 1
+          }
+        }
+      }
+    },
+    "postgresql": {
+      "structure": {
+        "routines": {
+          "added": [
+            {
+              "arguments": "ts timestamp with time zone",
+              "definition": "CREATE OR REPLACE FUNCTION adempiere.generate_uuid(ts timestamp with time zone DEFAULT clock_timestamp())\n RETURNS uuid\n LANGUAGE plpgsql\nAS $function$\r\nDECLARE\r\n  unix_ts_ms bigint;\r\n  uuid_bytes bytea;\r\n  random_part bytea;\r\nBEGIN\r\n  IF current_setting('server_version_num')::int >= 180000 THEN\r\n    /* postgresql 18 uuidv7 use native */\r\n    RETURN uuidv7(ts - clock_timestamp());\r\n  ELSE\r\n    -- Get timestamp in milliseconds\r\n    unix_ts_ms = floor(extract(epoch from ts) * 1000)::bigint;\r\n    -- Convert timestamp to 6 bytes (48 bits)\r\n    unix_ts_ms = unix_ts_ms & x'FFFFFFFFFFFF'::bigint;\r\n    -- Get random bytes from gen_random_uuid()\r\n    random_part = decode(replace(gen_random_uuid()::text, '-', ''), 'hex');\r\n    -- Construct UUID v7: 48-bit timestamp + version/variant + random\r\n    uuid_bytes =\r\n      substring(int8send(unix_ts_ms) from 3 for 6) || -- 48-bit timestamp\r\n      substring(random_part from 7 for 2) ||           -- 16-bit random (with version)\r\n      substring(random_part from 9 for 8);             -- 64-bit random (with variant)\r\n    -- Set version to 7 (0111)\r\n    uuid_bytes = set_byte(uuid_bytes, 6, (get_byte(uuid_bytes, 6) & 15) | 112);\r\n    -- Set variant to 10\r\n    uuid_bytes = set_byte(uuid_bytes, 8, (get_byte(uuid_bytes, 8) & 63) | 128);\r\n    RETURN encode(uuid_bytes, 'hex')::uuid;\r\n  END IF;\r\nEND;\r\n$function$\n",
+              "proname": "generate_uuid"
+            }
+          ],
+          "removed": [
+            {
+              "arguments": "ts timestamp with time zone",
+              "definition": "CREATE OR REPLACE FUNCTION adempiere.generate_uuid(ts timestamp with time zone DEFAULT clock_timestamp())\n RETURNS uuid\n LANGUAGE plpgsql\nAS $function$\nDECLARE\n  unix_ts_ms bigint;\n  uuid_bytes bytea;\n  random_part bytea;\nBEGIN\n  /* NOTE: in postgresql 18 uuidv7 will be native, and you can change this script to benefit from the native function */\n  -- Get timestamp in milliseconds\n  unix_ts_ms = floor(extract(epoch from ts) * 1000)::bigint;\n  -- Convert timestamp to 6 bytes (48 bits)\n  unix_ts_ms = unix_ts_ms & x'FFFFFFFFFFFF'::bigint;\n  -- Get random bytes from gen_random_uuid()\n  random_part = decode(replace(gen_random_uuid()::text, '-', ''), 'hex');\n  -- Construct UUID v7: 48-bit timestamp + version/variant + random\n  uuid_bytes = \n    substring(int8send(unix_ts_ms) from 3 for 6) || -- 48-bit timestamp\n    substring(random_part from 7 for 2) ||           -- 16-bit random (with version)\n    substring(random_part from 9 for 8);             -- 64-bit random (with variant)\n  -- Set version to 7 (0111)\n  uuid_bytes = set_byte(uuid_bytes, 6, (get_byte(uuid_bytes, 6) & 15) | 112);\n  -- Set variant to 10\n  uuid_bytes = set_byte(uuid_bytes, 8, (get_byte(uuid_bytes, 8) & 63) | 128);\n  RETURN encode(uuid_bytes, 'hex')::uuid;\nEND;\n$function$\n",
+              "proname": "generate_uuid"
+            }
+          ]
+        }
+      },
+      "tables": {
+        "ad_migrationscript": {
+          "added": {
+            "826c6ab36f1bdd42206a1664ff831f9540aaf90426c931d8e3beaa39444beace": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_sequence": {
+          "added": {
+            "5b42c2639ede5ed20aa094f78690332b9e3e3ebcb30ce5f22d536a3d75898ed9": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "64b08c825131a8eed00ccc29d0077a9012a23557c62b10bdf8c7d8c268035062": 1
+          }
+        }
+      }
+    }
+  },
+  "evidence_class": "native-database-observation",
+  "execution": {
+    "oracle": {
+      "duration_seconds": 0.453,
+      "log_sha256": "ffafb8be6c2414cfbf66638eef320e68c363cc221fdd54d28254ba2208fc2237",
+      "native_client": "sqlplus",
+      "returncode": 0,
+      "source_path": "migration/iD13/oracle/202603251035_IDEMPIERE-6650-generate_uuid.sql",
+      "source_sha256": "91465286a05e60faaa49bb69e050f0e6ed8e3cb6442904ab8322a3205c1bdf0a"
+    },
+    "postgresql": {
+      "duration_seconds": 0.375,
+      "log_sha256": "7eee44eb72567d7b3123aa9f0a70e4220bf271861dc4f56381f06d38b63a302f",
+      "native_client": "psql",
+      "returncode": 0,
+      "source_path": "migration/iD13/postgresql/202603251035_IDEMPIERE-6650-generate_uuid.sql",
+      "source_sha256": "2f5c9438a0bb557ca982d3ff8cdb78dcfc12dea5d66f24d49d9caa5091a55ab7"
+    }
+  },
+  "historical_upgrade_equivalence": false,
+  "non_registration_row_effects_match": false,
+  "registration_effects_retained": true,
+  "row_effects_match": false,
+  "schema_version": "1.0",
+  "scope": "observed effects on these imported reference seeds; initial states may differ; no runtime values suppressed",
+  "state_sha256": {
+    "oracle": {
+      "after": "69a0e9e7e7ca87567fff67675e7da403df7e562d830e24a5e40d679af032fe06",
+      "before": "9063804d5c61c2c7ed396ca0a87b4e4fdbf96eb28cdb650bdc812163b6173ba0"
+    },
+    "postgresql": {
+      "after": "4acf1f782734a09406cc968c5a0b524ed11bb3ad5994a9ce04bf2147fec30e7d",
+      "before": "387ebe75da5a7b1bb406862f1fd7fb6cdc661a7b34c623c4c841d3aa5c8dda3b"
+    }
+  },
+  "status": "observed-effects-differ",
+  "structural_change_requires_review": true,
+  "content_sha256": "3fa3a38ba37cdac678dcc6d1e9074edaab36700f3441ec1ba63afb4f0c228fae"
+}

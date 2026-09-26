@@ -1,0 +1,375 @@
+{
+  "after_report_sha256": "2b45f28612a748465b39382b70cae1704bf8fa7f2d788720571545eee08060a6",
+  "application_equivalence": false,
+  "applied_context_sha256": "9b249c9313df8432ec08cd7d07ab68f200d63a2f9efd04af02ed2359b2fd5bc4",
+  "artifact_type": "lightyear-calibration-measurement",
+  "baseline_reproduced": true,
+  "before_report_sha256": "c6c003af86b651b77fd98178da453641c2083c0eaeb397586a1d9b55bca7e875",
+  "case_counts": {
+    "after": {
+      "divergent": 0,
+      "equivalent": 1,
+      "indeterminate": 1077
+    },
+    "before": {
+      "divergent": 0,
+      "equivalent": 1,
+      "indeterminate": 1077
+    },
+    "total": 1078
+  },
+  "catalog_capture_sha256": {
+    "oracle": "5d282cebfa1745228c0f3974252dc9dfaec6b3cde47ced99d63808f833b4eda5",
+    "postgresql": "907f404f384b2129209d59d005e7ba896b2e689b9c9174d2abeadf206422b8a6"
+  },
+  "changed_decisions": [
+    {
+      "after": "parsed-and-compared",
+      "after_outcomes": [
+        "equivalent"
+      ],
+      "before": "parsed-but-indeterminate",
+      "before_outcomes": [
+        "indeterminate"
+      ],
+      "case_id": "pair:9d5997aaf2d45e0e158d6e0fd74f75fd095cd9d64d1ec85426f927f59d994280",
+      "lane": "oracle",
+      "ordinal": 13
+    },
+    {
+      "after": "parsed-and-compared",
+      "after_outcomes": [
+        "equivalent"
+      ],
+      "before": "parsed-but-indeterminate",
+      "before_outcomes": [
+        "indeterminate"
+      ],
+      "case_id": "pair:9d5997aaf2d45e0e158d6e0fd74f75fd095cd9d64d1ec85426f927f59d994280",
+      "lane": "postgresql",
+      "ordinal": 11
+    },
+    {
+      "after": "parsed-and-compared",
+      "after_outcomes": [
+        "equivalent"
+      ],
+      "before": "parsed-but-indeterminate",
+      "before_outcomes": [
+        "indeterminate"
+      ],
+      "case_id": "pair:f010ff65575abaaca63805bd2ab33e70c5de65fbc732cb800bf7982a371a2257",
+      "lane": "oracle",
+      "ordinal": 17
+    },
+    {
+      "after": "parsed-and-compared",
+      "after_outcomes": [
+        "equivalent"
+      ],
+      "before": "parsed-but-indeterminate",
+      "before_outcomes": [
+        "indeterminate"
+      ],
+      "case_id": "pair:f010ff65575abaaca63805bd2ab33e70c5de65fbc732cb800bf7982a371a2257",
+      "lane": "postgresql",
+      "ordinal": 15
+    }
+  ],
+  "content_sha256": "0c9ca4df22ac2aab0984e23b4560b9b1ff56a04b90574f5466070c68f7887a7c",
+  "context_application_scope": "conditional static comparison on one observed imported baseline; historical entry states not established",
+  "context_baseline_sha256": "6d3ccfaedcbcb365b7c1e400afd69a981fd7e7f4d5c460924d4f09cf7bd4d803",
+  "context_lift_units": 0,
+  "context_mode": "captured-catalog",
+  "corpus_sha256": "82c81f74bf42434c9b8abddb5ae684c6b67da576160442ce470a63d26ae3e826",
+  "counts": {
+    "after": {
+      "administrative_units_excluded": 4127,
+      "input_units": 115420,
+      "parsed-and-compared": 780,
+      "parsed-but-indeterminate": 109108,
+      "sql_units": 111293,
+      "unparsed": 1405
+    },
+    "before": {
+      "administrative_units_excluded": 4127,
+      "input_units": 115420,
+      "parsed-and-compared": 776,
+      "parsed-but-indeterminate": 103922,
+      "sql_units": 111293,
+      "unparsed": 6595
+    },
+    "current_gate_without_context": {
+      "administrative_units_excluded": 4127,
+      "input_units": 115420,
+      "parsed-and-compared": 780,
+      "parsed-but-indeterminate": 109108,
+      "sql_units": 111293,
+      "unparsed": 1405
+    },
+    "parser_only": {
+      "administrative_units_excluded": 4127,
+      "input_units": 115420,
+      "parsed-and-compared": 776,
+      "parsed-but-indeterminate": 109112,
+      "sql_units": 111293,
+      "unparsed": 1405
+    }
+  },
+  "gate": {
+    "adapter": "oracle-postgresql-sql",
+    "context_sha256": "9b249c9313df8432ec08cd7d07ab68f200d63a2f9efd04af02ed2359b2fd5bc4",
+    "implementation": {
+      "lightyear_calibration.sql_context": "58c6c17728d2865b3aada0a25aea4558e8e5e1628c4a3bd578972d24f32e2ceb",
+      "lightyear_calibration.sql_gate": "ac0b0f702bbec89465f6ffc39f39043122a0c773716b6df724e55ad2ba5964e0",
+      "lightyear_calibration.sql_parser": "7e185c3642ab996b70ce5915ec41fb340ec1f301e926f55296adf9a1833d470b",
+      "lightyear_common.io": "8ead1c4e2221cca5a65b3e3ef3cb5d4a841f7d89d33f8b416357076056b3621e",
+      "lightyear_data.contracts": "a9f8cae57a0c256c3d405ec06468bc45734314b4f7692438726259e4bee56575",
+      "lightyear_data.idempiere_comparison": "c6ae90d2bfc5855377fae4c22671927c42d59b26d08b60d63bb2789bd2f026b2",
+      "lightyear_data.idempiere_sql": "7d3337a9b4f6a01c7df62e3849a027ff27e1ca099828781ac6a368a704976ee0",
+      "lightyear_data.semantic_core": "872e17477a138eec8f8fe37eb692acb971e76c0faa8596645fa3f775f9036c35"
+    },
+    "policy": {
+      "alignment": "full ordered alignment or a positional prefix ending before the first unknown/mismatch; no resynchronization",
+      "calibration_version": "2.0",
+      "context": "Optional input-bound schema/session contract; numeric literal DML only; expires at schema/unknown operations; static declared effects, no execution equivalence",
+      "retained_base": {
+        "administrative_boundary": "These known client settings and migration-registration effects are separately counted outside SQL-effect coverage; literal SQL execution and an existing search-path/schema mapping are assumptions, not verified client/runtime behavior. Any other session/client command remains unparsed.",
+        "administrative_exclusions": [
+          "Oracle SET DEFINE OFF",
+          "Oracle SET SQLBLANKLINES ON",
+          "SELECT register_migration_script with one filename literal FROM dual"
+        ],
+        "alignment_policy": "Keep order and repetitions. If ordered effect identities differ, all nonadministrative parsed units are indeterminate; do not guess resynchronization or silently drop unmatched operations.",
+        "authorities": [
+          "https://docs.oracle.com/en/database/oracle/oracle-database/19/sqlrf/Data-Types.html",
+          "https://docs.oracle.com/en/database/oracle/oracle-database/19/sqlrf/Nulls.html",
+          "https://www.postgresql.org/docs/16/datatype-numeric.html",
+          "https://www.postgresql.org/docs/16/datatype-character.html",
+          "https://www.postgresql.org/docs/16/datatype-datetime.html"
+        ],
+        "character_policy": "Empty string vs NULL, BYTE/CHAR length units, encoding and collation remain policy decisions even for equal declared lengths.",
+        "compatibility_classes": [
+          "exact",
+          "normalized-equivalent",
+          "policy-decision-required",
+          "lossy",
+          "unsupported"
+        ],
+        "content_sha256": "4ec8c13d317121492fed5b04e3c45abacf483b6daea3b0a3425862a020dcf85a",
+        "coverage_unit": "Non-comment top-level SQL statement or opaque procedural block on each dialect side, NOT token occurrences. A lexically broken file or unterminated Oracle block may form one opaque remainder unit. Expanded column effects never inflate the statement denominator.",
+        "datetime_policy": "Oracle DATE retains seconds; PostgreSQL DATE does not. Timestamp precision, time-zone and range differences remain unresolved without an admitted domain.",
+        "dml_policy": "Record INSERT VALUES, UPDATE assignments and DELETE predicates; literals are typed, nonliteral expressions opaque. Baseline column domains, triggers, predicates and coercions are not admitted; DML remains indeterminate, including identical text.",
+        "documentation_boundary": "Language references define this bounded profile; they do not establish the runtime database versions or configuration used by iDempiere deployments.",
+        "equivalence_requires": [
+          "all-in-scope-units-fully-parsed-and-decided",
+          "identical-ordered-effect-keys-without-resynchronization",
+          "at-least-one-in-scope-effect",
+          "no-opaque-expression-or-unresolved-domain"
+        ],
+        "finite_numeric_projection": "Compare explicit precision and scale only, 1<=p<=38 and 0<=s<=p. Excludes PostgreSQL NaN/infinities, runtime conversions and storage; no unrestricted NUMBER/NUMERIC equivalence.",
+        "helper_policy": "Project the five positional t_alter_column arguments using the pinned altercolumn.sql implementation. Never discharge catalog lookups, coercion, dependent views, permissions or helper deployment/version history.",
+        "milestone": 69,
+        "models_called": 0,
+        "ms70_handoff": "References to flagged source ranges only; no prompts, work orders, agents or billable calls are created by MS69. MS70 must bound and budget individual contexts using existing workcell controls.",
+        "policy_id": "idda-static-declared-effects-v1",
+        "provenance": "not-classified; generated-or-maintained output audit, not evidence of independent hand maintenance",
+        "schema_policy": "Compare declared column type facets, explicit defaults and nullability. Constraints, indexes and drops retain domain/catalog obligations. No baseline schema reconstruction, final-state proof, transaction or application claim.",
+        "schema_version": "1.0",
+        "semantic_core": "data-modernization/semantic-core/database-semantic-core.json",
+        "verdict_scope": "ordered-declared-schema-effects-not-final-state-or-execution"
+      }
+    }
+  },
+  "lost_decisions_or_divergences": [],
+  "native_catalog_capture": true,
+  "native_execution": false,
+  "native_migration_execution": false,
+  "normalization_rules_applied": 0,
+  "pairing_manifest_sha256": "acf3f2b21fb2ff205028a5a9239602f497ee09f99f82feaa56368e3f74add510",
+  "retained_report_sha256": "3ac96b87608118ea31e79e22eac42bc4954eda611855a310ef3abf277c910083",
+  "schema_session_inventory": {
+    "cases": 1078,
+    "complete_catalogs": 2,
+    "observed_declarations": 14639,
+    "table_references": 6692,
+    "verified_sessions": 2
+  },
+  "schema_version": "1.0",
+  "source_commit": "731515dcdd5278b843db33b9d3109d155b881951",
+  "statement_denominator_unchanged": true,
+  "unit_transitions": [
+    {
+      "after": "administrative-excluded",
+      "before": "administrative-excluded",
+      "units": 4127
+    },
+    {
+      "after": "parsed-and-compared",
+      "before": "parsed-and-compared",
+      "units": 776
+    },
+    {
+      "after": "parsed-and-compared",
+      "before": "parsed-but-indeterminate",
+      "units": 4
+    },
+    {
+      "after": "parsed-but-indeterminate",
+      "before": "parsed-but-indeterminate",
+      "units": 103918
+    },
+    {
+      "after": "parsed-but-indeterminate",
+      "before": "unparsed",
+      "units": 5190
+    },
+    {
+      "after": "unparsed",
+      "before": "unparsed",
+      "units": 1405
+    }
+  ],
+  "unresolved_causes": [
+    {
+      "reason": "catalog-side-effects-context-required",
+      "units": 91972
+    },
+    {
+      "reason": "schema-and-session-baseline-required",
+      "units": 89555
+    },
+    {
+      "reason": "column-domain-context-required",
+      "units": 86582
+    },
+    {
+      "reason": "insert-defaults-context-required",
+      "units": 50601
+    },
+    {
+      "reason": "context-evidence-required",
+      "units": 26339
+    },
+    {
+      "reason": "ordered-effect-alignment-required",
+      "units": 13150
+    },
+    {
+      "reason": "baseline-object-required",
+      "units": 5694
+    },
+    {
+      "reason": "constraint-column-domain-required",
+      "units": 5611
+    },
+    {
+      "reason": "paired-column-domain-context-required",
+      "units": 4082
+    },
+    {
+      "reason": "constraint-state-context-required",
+      "units": 2920
+    },
+    {
+      "reason": "character-empty-string-length-and-collation-policy",
+      "units": 1260
+    },
+    {
+      "reason": "expression-requires-dialect-or-session-semantics",
+      "units": 1206
+    },
+    {
+      "reason": "unsupported-syntax",
+      "units": 1181
+    },
+    {
+      "reason": "context-predicate-grammar-required",
+      "units": 789
+    },
+    {
+      "reason": "helper-catalog-and-dependent-view-effects",
+      "units": 741
+    },
+    {
+      "reason": "national-character-domain-context-required",
+      "units": 547
+    },
+    {
+      "reason": "opaque-default-expression",
+      "units": 410
+    },
+    {
+      "reason": "datetime-precision-range-and-zone-policy",
+      "units": 226
+    },
+    {
+      "reason": "index-null-collation-and-column-domain-required",
+      "units": 204
+    },
+    {
+      "reason": "context-expression-domain-unsupported",
+      "units": 144
+    },
+    {
+      "reason": "unbounded-or-nonportable-numeric-domain",
+      "units": 98
+    },
+    {
+      "reason": "unconsumed-syntax",
+      "units": 81
+    },
+    {
+      "reason": "procedural-block",
+      "units": 64
+    },
+    {
+      "reason": "default-coercion-context-required",
+      "units": 40
+    },
+    {
+      "reason": "unsupported-statement",
+      "units": 32
+    },
+    {
+      "reason": "unsupported-column-clause",
+      "units": 23
+    },
+    {
+      "reason": "unsupported-data-type",
+      "units": 10
+    },
+    {
+      "reason": "unsupported-drop-object",
+      "units": 8
+    },
+    {
+      "reason": "empty-string-null-domain",
+      "units": 6
+    },
+    {
+      "reason": "type-domain-policy-required",
+      "units": 6
+    },
+    {
+      "reason": "complete-base-table-catalog-required",
+      "units": 2
+    },
+    {
+      "reason": "insert-column-value-arity",
+      "units": 2
+    },
+    {
+      "reason": "unsupported-helper-signature",
+      "units": 2
+    },
+    {
+      "reason": "missing-statement-terminator",
+      "units": 1
+    },
+    {
+      "reason": "unsupported-constraint",
+      "units": 1
+    }
+  ]
+}

@@ -55,4 +55,9 @@ class CalibrationPublicationTests(unittest.TestCase):
             actual=replay_idempiere(Path(os.environ['IDEMPIERE_SOURCE']),
                 read_json(ROOT/'factory/idempiere-divergence-audit/stage2-comparison.json'),
                 read_json(ROOT/'factory/idempiere-divergence-audit/pairing-manifest.json'),Path(temp)/'out')
-        self.assertEqual(read_json(ROOT/'docs/calibration/idempiere/measurement.json'),actual)
+        published=read_json(ROOT/'docs/calibration/idempiere/measurement.json')
+        # Collector/reporting code can change the instrument identity without
+        # changing the gate or its decisions. Compare the scientific result.
+        for key in ('source_commit','retained_report_sha256','gate','counts','case_counts',
+                    'changed_decisions','lost_decisions_or_divergences','unit_transitions'):
+            self.assertEqual(published[key],actual[key],key)

@@ -1,0 +1,136 @@
+SET
+                                                          json_build_object                                                           
+--------------------------------------------------------------------------------------------------------------------------------------
+ {"current_schema" : "adempiere", "search_path" : "adempiere, pg_catalog", "time_zone" : "UTC", "standard_conforming_strings" : "on"}
+(1 row)
+
+                register_migration_script                
+---------------------------------------------------------
+ 202603061658_IDEMPIERE-6893.sql successfully registered
+(1 row)
+
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+UPDATE 1
+INSERT 0 1
+INSERT 0 1
+UPDATE 1
+UPDATE 1
+UPDATE 1
+UPDATE 1
+UPDATE 1
+UPDATE 1
+UPDATE 1
+UPDATE 1
+CREATE TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+CREATE INDEX
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+INSERT 0 1
+UPDATE 1
+UPDATE 0
+UPDATE 1
+UPDATE 1
+UPDATE 1
+UPDATE 1
+UPDATE 1
+UPDATE 1
+UPDATE 1
+UPDATE 1
+UPDATE 1
+UPDATE 1
+UPDATE 1
+UPDATE 1
+UPDATE 1
+UPDATE 1
+UPDATE 1
+UPDATE 1
+UPDATE 1
+UPDATE 1
+UPDATE 1
+UPDATE 1
+UPDATE 1
+UPDATE 1
+UPDATE 1
+UPDATE 1
+UPDATE 1
+UPDATE 1
+UPDATE 1
+UPDATE 1
+UPDATE 1
+ altercolumn 
+-------------
+ 
+(1 row)
+
+INSERT 0 0
+ altercolumn 
+-------------
+ 
+(1 row)
+
+INSERT 0 0
+ altercolumn 
+-------------
+ 
+(1 row)
+
+INSERT 0 0
+ altercolumn 
+-------------
+ 
+(1 row)
+
+INSERT 0 0
+psql:/tmp/ly-pair-case-008.sql:400: NOTICE:  executing -> alter table ad_userdef_form alter column name drop default 
+psql:/tmp/ly-pair-case-008.sql:404: NOTICE:  executing -> alter table ad_userdef_form alter column name drop not null
+psql:/tmp/ly-pair-case-008.sql:408: NOTICE:  executing -> alter table ad_userdef_form alter column ad_user_id drop default 
+psql:/tmp/ly-pair-case-008.sql:412: NOTICE:  executing -> alter table ad_userdef_form alter column ad_user_id drop not null

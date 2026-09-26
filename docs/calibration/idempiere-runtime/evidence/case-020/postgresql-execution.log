@@ -1,0 +1,25 @@
+SET
+                                                          json_build_object                                                           
+--------------------------------------------------------------------------------------------------------------------------------------
+ {"current_schema" : "adempiere", "search_path" : "adempiere, pg_catalog", "time_zone" : "UTC", "standard_conforming_strings" : "on"}
+(1 row)
+
+                register_migration_script                
+---------------------------------------------------------
+ 202607221326_IDEMPIERE-7065.sql successfully registered
+(1 row)
+
+ altercolumn 
+-------------
+ 
+(1 row)
+
+INSERT 0 0
+ altercolumn 
+-------------
+ 
+(1 row)
+
+INSERT 0 0
+psql:/tmp/ly-pair-case-020.sql:6: NOTICE:  executing -> alter table r_request alter column salesrep_id drop default 
+psql:/tmp/ly-pair-case-020.sql:10: NOTICE:  executing -> alter table r_request alter column salesrep_id drop not null

@@ -1,0 +1,1325 @@
+{
+  "application_equivalence": false,
+  "artifact_type": "lightyear-native-migration-comparison",
+  "deltas": {
+    "oracle": {
+      "structure": {
+        "columns": {
+          "added": [
+            {
+              "char_length": 0,
+              "char_used": null,
+              "column_name": "CREATEDBY",
+              "data_default": null,
+              "data_length": 22,
+              "data_precision": 10,
+              "data_scale": 0,
+              "data_type": "NUMBER",
+              "identity_column": "NO",
+              "nullable": "N",
+              "table_name": "AD_PASSWORDRESETTOKEN",
+              "virtual_column": "NO"
+            },
+            {
+              "char_length": 0,
+              "char_used": null,
+              "column_name": "AD_ORG_ID",
+              "data_default": null,
+              "data_length": 22,
+              "data_precision": 10,
+              "data_scale": 0,
+              "data_type": "NUMBER",
+              "identity_column": "NO",
+              "nullable": "N",
+              "table_name": "AD_PASSWORDRESETTOKEN",
+              "virtual_column": "NO"
+            },
+            {
+              "char_length": 0,
+              "char_used": null,
+              "column_name": "UPDATED",
+              "data_default": null,
+              "data_length": 7,
+              "data_precision": null,
+              "data_scale": null,
+              "data_type": "DATE",
+              "identity_column": "NO",
+              "nullable": "N",
+              "table_name": "AD_PASSWORDRESETTOKEN",
+              "virtual_column": "NO"
+            },
+            {
+              "char_length": 0,
+              "char_used": null,
+              "column_name": "VERIFIEDTOKENEXPIRES",
+              "data_default": "NULL ",
+              "data_length": 7,
+              "data_precision": null,
+              "data_scale": null,
+              "data_type": "DATE",
+              "identity_column": "NO",
+              "nullable": "Y",
+              "table_name": "AD_PASSWORDRESETTOKEN",
+              "virtual_column": "NO"
+            },
+            {
+              "char_length": 0,
+              "char_used": null,
+              "column_name": "CREATED",
+              "data_default": null,
+              "data_length": 7,
+              "data_precision": null,
+              "data_scale": null,
+              "data_type": "DATE",
+              "identity_column": "NO",
+              "nullable": "N",
+              "table_name": "AD_PASSWORDRESETTOKEN",
+              "virtual_column": "NO"
+            },
+            {
+              "char_length": 0,
+              "char_used": null,
+              "column_name": "ATTEMPTSUSED",
+              "data_default": "0 ",
+              "data_length": 22,
+              "data_precision": 10,
+              "data_scale": 0,
+              "data_type": "NUMBER",
+              "identity_column": "NO",
+              "nullable": "N",
+              "table_name": "AD_PASSWORDRESETTOKEN",
+              "virtual_column": "NO"
+            },
+            {
+              "char_length": 0,
+              "char_used": null,
+              "column_name": "UPDATEDBY",
+              "data_default": null,
+              "data_length": 22,
+              "data_precision": 10,
+              "data_scale": 0,
+              "data_type": "NUMBER",
+              "identity_column": "NO",
+              "nullable": "N",
+              "table_name": "AD_PASSWORDRESETTOKEN",
+              "virtual_column": "NO"
+            },
+            {
+              "char_length": 0,
+              "char_used": null,
+              "column_name": "EXPIRATION",
+              "data_default": null,
+              "data_length": 7,
+              "data_precision": null,
+              "data_scale": null,
+              "data_type": "DATE",
+              "identity_column": "NO",
+              "nullable": "N",
+              "table_name": "AD_PASSWORDRESETTOKEN",
+              "virtual_column": "NO"
+            },
+            {
+              "char_length": 60,
+              "char_used": "C",
+              "column_name": "EMAIL",
+              "data_default": null,
+              "data_length": 240,
+              "data_precision": null,
+              "data_scale": null,
+              "data_type": "VARCHAR2",
+              "identity_column": "NO",
+              "nullable": "N",
+              "table_name": "AD_PASSWORDRESETTOKEN",
+              "virtual_column": "NO"
+            },
+            {
+              "char_length": 1,
+              "char_used": "B",
+              "column_name": "ISACTIVE",
+              "data_default": "'Y' ",
+              "data_length": 1,
+              "data_precision": null,
+              "data_scale": null,
+              "data_type": "CHAR",
+              "identity_column": "NO",
+              "nullable": "N",
+              "table_name": "AD_PASSWORDRESETTOKEN",
+              "virtual_column": "NO"
+            },
+            {
+              "char_length": 0,
+              "char_used": null,
+              "column_name": "AD_PASSWORDRESETTOKEN_ID",
+              "data_default": null,
+              "data_length": 22,
+              "data_precision": 10,
+              "data_scale": 0,
+              "data_type": "NUMBER",
+              "identity_column": "NO",
+              "nullable": "N",
+              "table_name": "AD_PASSWORDRESETTOKEN",
+              "virtual_column": "NO"
+            },
+            {
+              "char_length": 100,
+              "char_used": "C",
+              "column_name": "ONETIMECODE",
+              "data_default": null,
+              "data_length": 400,
+              "data_precision": null,
+              "data_scale": null,
+              "data_type": "VARCHAR2",
+              "identity_column": "NO",
+              "nullable": "N",
+              "table_name": "AD_PASSWORDRESETTOKEN",
+              "virtual_column": "NO"
+            },
+            {
+              "char_length": 1,
+              "char_used": "B",
+              "column_name": "TOKENSTATUS",
+              "data_default": "'P' ",
+              "data_length": 1,
+              "data_precision": null,
+              "data_scale": null,
+              "data_type": "CHAR",
+              "identity_column": "NO",
+              "nullable": "N",
+              "table_name": "AD_PASSWORDRESETTOKEN",
+              "virtual_column": "NO"
+            },
+            {
+              "char_length": 100,
+              "char_used": "C",
+              "column_name": "VERIFIEDTOKENHASH",
+              "data_default": "NULL\n",
+              "data_length": 400,
+              "data_precision": null,
+              "data_scale": null,
+              "data_type": "VARCHAR2",
+              "identity_column": "NO",
+              "nullable": "Y",
+              "table_name": "AD_PASSWORDRESETTOKEN",
+              "virtual_column": "NO"
+            },
+            {
+              "char_length": 36,
+              "char_used": "B",
+              "column_name": "AD_PASSWORDRESETTOKEN_UU",
+              "data_default": "NULL ",
+              "data_length": 36,
+              "data_precision": null,
+              "data_scale": null,
+              "data_type": "VARCHAR2",
+              "identity_column": "NO",
+              "nullable": "Y",
+              "table_name": "AD_PASSWORDRESETTOKEN",
+              "virtual_column": "NO"
+            },
+            {
+              "char_length": 0,
+              "char_used": null,
+              "column_name": "AD_CLIENT_ID",
+              "data_default": null,
+              "data_length": 22,
+              "data_precision": 10,
+              "data_scale": 0,
+              "data_type": "NUMBER",
+              "identity_column": "NO",
+              "nullable": "N",
+              "table_name": "AD_PASSWORDRESETTOKEN",
+              "virtual_column": "NO"
+            }
+          ],
+          "removed": []
+        },
+        "constraints": {
+          "added": [
+            {
+              "constraint_name": "SYS_C0027413",
+              "constraint_type": "C",
+              "deferrable": "NOT DEFERRABLE",
+              "deferred": "IMMEDIATE",
+              "delete_rule": null,
+              "r_constraint_name": null,
+              "search_condition": "IsActive IN ('Y','N')",
+              "status": "ENABLED",
+              "table_name": "AD_PASSWORDRESETTOKEN",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "ADORG_ADPASSWORDRESETTOKEN",
+              "constraint_type": "R",
+              "deferrable": "DEFERRABLE",
+              "deferred": "DEFERRED",
+              "delete_rule": "NO ACTION",
+              "r_constraint_name": "AD_ORG_KEY",
+              "search_condition": null,
+              "status": "ENABLED",
+              "table_name": "AD_PASSWORDRESETTOKEN",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "SYS_C0027408",
+              "constraint_type": "C",
+              "deferrable": "NOT DEFERRABLE",
+              "deferred": "IMMEDIATE",
+              "delete_rule": null,
+              "r_constraint_name": null,
+              "search_condition": "\"EXPIRATION\" IS NOT NULL",
+              "status": "ENABLED",
+              "table_name": "AD_PASSWORDRESETTOKEN",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "SYS_C0027406",
+              "constraint_type": "C",
+              "deferrable": "NOT DEFERRABLE",
+              "deferred": "IMMEDIATE",
+              "delete_rule": null,
+              "r_constraint_name": null,
+              "search_condition": "\"CREATEDBY\" IS NOT NULL",
+              "status": "ENABLED",
+              "table_name": "AD_PASSWORDRESETTOKEN",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "SYS_C0027400",
+              "constraint_type": "C",
+              "deferrable": "NOT DEFERRABLE",
+              "deferred": "IMMEDIATE",
+              "delete_rule": null,
+              "r_constraint_name": null,
+              "search_condition": "\"AD_CLIENT_ID\" IS NOT NULL",
+              "status": "ENABLED",
+              "table_name": "AD_PASSWORDRESETTOKEN",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "SYS_C0027410",
+              "constraint_type": "C",
+              "deferrable": "NOT DEFERRABLE",
+              "deferred": "IMMEDIATE",
+              "delete_rule": null,
+              "r_constraint_name": null,
+              "search_condition": "\"TOKENSTATUS\" IS NOT NULL",
+              "status": "ENABLED",
+              "table_name": "AD_PASSWORDRESETTOKEN",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "CREATEDBY_ADPASSWORDRESETTOKEN",
+              "constraint_type": "R",
+              "deferrable": "DEFERRABLE",
+              "deferred": "DEFERRED",
+              "delete_rule": "NO ACTION",
+              "r_constraint_name": "AD_USER_KEY",
+              "search_condition": null,
+              "status": "ENABLED",
+              "table_name": "AD_PASSWORDRESETTOKEN",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "SYS_C0027404",
+              "constraint_type": "C",
+              "deferrable": "NOT DEFERRABLE",
+              "deferred": "IMMEDIATE",
+              "delete_rule": null,
+              "r_constraint_name": null,
+              "search_condition": "\"ONETIMECODE\" IS NOT NULL",
+              "status": "ENABLED",
+              "table_name": "AD_PASSWORDRESETTOKEN",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "SYS_C0027405",
+              "constraint_type": "C",
+              "deferrable": "NOT DEFERRABLE",
+              "deferred": "IMMEDIATE",
+              "delete_rule": null,
+              "r_constraint_name": null,
+              "search_condition": "\"CREATED\" IS NOT NULL",
+              "status": "ENABLED",
+              "table_name": "AD_PASSWORDRESETTOKEN",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "SYS_C0027412",
+              "constraint_type": "C",
+              "deferrable": "NOT DEFERRABLE",
+              "deferred": "IMMEDIATE",
+              "delete_rule": null,
+              "r_constraint_name": null,
+              "search_condition": "\"UPDATEDBY\" IS NOT NULL",
+              "status": "ENABLED",
+              "table_name": "AD_PASSWORDRESETTOKEN",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "SYS_C0027411",
+              "constraint_type": "C",
+              "deferrable": "NOT DEFERRABLE",
+              "deferred": "IMMEDIATE",
+              "delete_rule": null,
+              "r_constraint_name": null,
+              "search_condition": "\"UPDATED\" IS NOT NULL",
+              "status": "ENABLED",
+              "table_name": "AD_PASSWORDRESETTOKEN",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "SYS_C0027402",
+              "constraint_type": "C",
+              "deferrable": "NOT DEFERRABLE",
+              "deferred": "IMMEDIATE",
+              "delete_rule": null,
+              "r_constraint_name": null,
+              "search_condition": "\"AD_PASSWORDRESETTOKEN_ID\" IS NOT NULL",
+              "status": "ENABLED",
+              "table_name": "AD_PASSWORDRESETTOKEN",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "ADCLIENT_ADPASSWORDRESETTOKEN",
+              "constraint_type": "R",
+              "deferrable": "DEFERRABLE",
+              "deferred": "DEFERRED",
+              "delete_rule": "NO ACTION",
+              "r_constraint_name": "AD_CLIENT_KEY",
+              "search_condition": null,
+              "status": "ENABLED",
+              "table_name": "AD_PASSWORDRESETTOKEN",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "AD_PASSWORDRESETTOKEN_UU_IDX",
+              "constraint_type": "U",
+              "deferrable": "NOT DEFERRABLE",
+              "deferred": "IMMEDIATE",
+              "delete_rule": null,
+              "r_constraint_name": null,
+              "search_condition": null,
+              "status": "ENABLED",
+              "table_name": "AD_PASSWORDRESETTOKEN",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "SYS_C0027401",
+              "constraint_type": "C",
+              "deferrable": "NOT DEFERRABLE",
+              "deferred": "IMMEDIATE",
+              "delete_rule": null,
+              "r_constraint_name": null,
+              "search_condition": "\"AD_ORG_ID\" IS NOT NULL",
+              "status": "ENABLED",
+              "table_name": "AD_PASSWORDRESETTOKEN",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "UPDATEDBY_ADPASSWORDRESETTOKEN",
+              "constraint_type": "R",
+              "deferrable": "DEFERRABLE",
+              "deferred": "DEFERRED",
+              "delete_rule": "NO ACTION",
+              "r_constraint_name": "AD_USER_KEY",
+              "search_condition": null,
+              "status": "ENABLED",
+              "table_name": "AD_PASSWORDRESETTOKEN",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "AD_PASSWORDRESETTOKEN_KEY",
+              "constraint_type": "P",
+              "deferrable": "NOT DEFERRABLE",
+              "deferred": "IMMEDIATE",
+              "delete_rule": null,
+              "r_constraint_name": null,
+              "search_condition": null,
+              "status": "ENABLED",
+              "table_name": "AD_PASSWORDRESETTOKEN",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "SYS_C0027407",
+              "constraint_type": "C",
+              "deferrable": "NOT DEFERRABLE",
+              "deferred": "IMMEDIATE",
+              "delete_rule": null,
+              "r_constraint_name": null,
+              "search_condition": "\"EMAIL\" IS NOT NULL",
+              "status": "ENABLED",
+              "table_name": "AD_PASSWORDRESETTOKEN",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "SYS_C0027403",
+              "constraint_type": "C",
+              "deferrable": "NOT DEFERRABLE",
+              "deferred": "IMMEDIATE",
+              "delete_rule": null,
+              "r_constraint_name": null,
+              "search_condition": "\"ATTEMPTSUSED\" IS NOT NULL",
+              "status": "ENABLED",
+              "table_name": "AD_PASSWORDRESETTOKEN",
+              "validated": "VALIDATED"
+            },
+            {
+              "constraint_name": "SYS_C0027409",
+              "constraint_type": "C",
+              "deferrable": "NOT DEFERRABLE",
+              "deferred": "IMMEDIATE",
+              "delete_rule": null,
+              "r_constraint_name": null,
+              "search_condition": "\"ISACTIVE\" IS NOT NULL",
+              "status": "ENABLED",
+              "table_name": "AD_PASSWORDRESETTOKEN",
+              "validated": "VALIDATED"
+            }
+          ],
+          "removed": []
+        },
+        "index_columns": {
+          "added": [
+            {
+              "column_name": "AD_PASSWORDRESETTOKEN_ID",
+              "column_position": 1,
+              "descend": "ASC",
+              "index_name": "AD_PASSWORDRESETTOKEN_KEY",
+              "table_name": "AD_PASSWORDRESETTOKEN"
+            },
+            {
+              "column_name": "AD_PASSWORDRESETTOKEN_UU",
+              "column_position": 1,
+              "descend": "ASC",
+              "index_name": "AD_PASSWORDRESETTOKEN_UU_IDX",
+              "table_name": "AD_PASSWORDRESETTOKEN"
+            }
+          ],
+          "removed": []
+        },
+        "indexes": {
+          "added": [
+            {
+              "index_name": "AD_PASSWORDRESETTOKEN_UU_IDX",
+              "index_type": "NORMAL",
+              "status": "VALID",
+              "table_name": "AD_PASSWORDRESETTOKEN",
+              "uniqueness": "UNIQUE"
+            },
+            {
+              "index_name": "AD_PASSWORDRESETTOKEN_KEY",
+              "index_type": "NORMAL",
+              "status": "VALID",
+              "table_name": "AD_PASSWORDRESETTOKEN",
+              "uniqueness": "UNIQUE"
+            }
+          ],
+          "removed": []
+        }
+      },
+      "tables": {
+        "ad_column": {
+          "added": {
+            "132aa0cf68585eda76e377cb3ed7b7be872ba952211664de692b82a45bbaad1d": 1,
+            "19608a52301fca05220c9efeeacfb470a5cec47b0a074e96d6945ec455657fcb": 1,
+            "23614a420e50b18c0e6c86222364d8dd7f892617d7bccf5647a254f84becdbb1": 1,
+            "2499ef1335d52caf743f43b9d42531863dd300deb2ad59b0df09dfa3e892fd7a": 1,
+            "44a270e7cc9854737d6ada686ce7ecf3816e31edd5bf45dcca4d3921dc6f9d9e": 1,
+            "4ce4ca6ecaabfc48ed65ad03c610d715a6f28c5a8d1b5f634ffeb2475b3e8a02": 1,
+            "6a0b15145e66374d2c5c9d8884ab6f3b13490f05f99d64d0108ef4db0a5c1895": 1,
+            "813cf65d779eb9d05bf5cb328ff80ceac5f5d9a4f6f2618d94026e00a0951644": 1,
+            "83c4a43cad60658d893b08d1fb69825864c7f511899df58673712cc72b36a59a": 1,
+            "843fd2be9bfb01165d5aaf3504c8cfdeb78cb80b48252ae857c7e56775e4e64c": 1,
+            "8c02b9e9adc006aaa47650de123ab5788790199ae1ff9a6556c102bc13aa8586": 1,
+            "9a9f35618814832ab284af20681622452b3a8f7c39cd854cd63ae3f6f47d1052": 1,
+            "9e21f8fa4cf497122aa628c9ed2f43b7a14003050b11578a8dfff84857e9d877": 1,
+            "9e37c52fb40bb99ac5dc556acd630b701e66129b53363ee7afadd7de396faba3": 1,
+            "d825dbfbe55c37a6e273d229b9aca45225e2ea241a0747d2278610bcc33e9033": 1,
+            "fee0e828b94e60a3b4c8c25cf5795c1b8e5eb48fc2b40bafa3dc5196f289e518": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_element": {
+          "added": {
+            "2e4c661d97b70923ccd39f7650aa3dd42d2cfa7de06b7c0130d4df4a2e3ba73d": 1,
+            "4ead8c20c0ff507defa6e51221873a37e0dc5bbf37ea6dee2c947f4c50d4de96": 1,
+            "57bee368f85ae9560531ba9cb05a1b192f5f2c6e8681514e822c5b0f1c7a0d49": 1,
+            "5b52150582c3dfe8c369736e4f0e975542552c4f98d06fcd350773551793b682": 1,
+            "a4fcbbfbc4c4a80d9ca4624fb56fcdfa8bbc2f4c697149b278ee7f88d947db06": 1,
+            "a62a944ee30d831b8aba80fdafd6942d4dd7daa0dc3a1c36e8e2996a1083fb50": 1,
+            "b2b8d21b535c2bf0dd418b3f6e883f981f65ba98d73dc4c5d0f681bf824f2323": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_field": {
+          "added": {
+            "1984e2d49136244d9a4b1098947ae0da96bf1629fd50bfa7816721e41847b4b7": 1,
+            "1f2d05fdd15c5f8e371c4a791ac1e5a3d20c6f366547b7c8e88c3bbc7bbc5d90": 1,
+            "2c8a293a9e2293ea79a7aba4e15a32df35c7d54ba93746b889647d584e7c9dbc": 1,
+            "3bbc9f3d7d90634a548d5de15ed71f5c35c47aff4c1e833ede82739b81c54030": 1,
+            "778e188e9c0d36c211d0cfbe40563e69476c89136720ca113d3cbe9f80fca73d": 1,
+            "7d4e9cc2e70823801ab031577fe907a754ad6d16f0c1351ef432a3d291a9c4a3": 1,
+            "94b4ee3f206e30929132e65e9cda521d99dffc32736e8c68c169160bfdabe8c4": 1,
+            "9713a7ac4e6403be64c0b1de34f6da46eca65da4edbcd28233af757d71de73ca": 1,
+            "c0fa6113d90a95cb869809f99ad45c4bca3d2c4444e9aa6326724048c03a7d83": 1,
+            "c4011e8316f7c598fa65e42bc9bc77a68a166d1a5cd5ec134e05b3517cce0e36": 1,
+            "ceaf6ed0250bbfe88cf1ad8905771fc55196ab6342e902f3709498dc616b6182": 1,
+            "fe41b632bbe5d48079b22dfe1968f52e144e7559f51d519a1e7b7ad6b44eb5a3": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_indexcolumn": {
+          "added": {
+            "fa58c2aece03b432cb645719702f5f036de277a064e1be813d7a861140cdcde3": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_menu": {
+          "added": {
+            "fa3731bff8c1f4c6ff2a5668080c88a4ee553b9b4e5273eef1c2ba6562530105": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_message": {
+          "added": {
+            "0fc41ad25865a46ecc1576f8d86f3e63823954433de9b6343eb720814358dbc2": 1,
+            "30c220179f363c2356cc054f0c320a7ae95e7fe60cfc7cf5c199b5e4a5d84b9f": 1,
+            "7242ba9cb32f5fa72db41723882e254c683e4da550bea56b728c17e932f9b1b1": 1,
+            "78add7b7e6bbbecd7d2a681ddb0403771adc7bd2dfe8c4f993f558d8b296c5c4": 1,
+            "85c02c2aaa6532f524d35feb511a685d79bfac0131c917d781eef42af2848160": 1,
+            "bee52ad02df68f81b14d11f51f07ec70e0d4fd229aa49c4119a6fe6ef30ccb84": 1,
+            "c1cd021a534f9b8ffa96cd6cb7b0e6e123bdb7af2cfe1cd20b8ca955396c1bce": 1,
+            "dc713389d5e2db78ece6e494fcb81db3f405469d1c17242ef952a2f308c0ee75": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_migrationscript": {
+          "added": {
+            "a713b520b2e28a9fe886810493842ebb8bd142616c2b77a14f41a2d255acec47": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_passwordresettoken": {
+          "added": {},
+          "exists_after": true,
+          "exists_before": false,
+          "removed": {}
+        },
+        "ad_ref_list": {
+          "added": {
+            "706f50a60d8238e33f1cf07691c066e7aefcc3110e2f6f7975c6935776a67ae4": 1,
+            "8c4f9b7c370c4a6a3ac7bf8891b16509fb3abefd8bdcccdf47690b535bde11f1": 1,
+            "b341f8ea9aa2a74228c5eeffd5e9afd2e107dc5d03a667f8427d7948425faa70": 1,
+            "b679161c6d41a937e8b6151e3713e2fc2f692b006a1f3a04515aea7539318461": 1,
+            "bc16a8b075d481a03ba68392f8126fadc446c1c728540b1130ef0c0523315f9d": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_reference": {
+          "added": {
+            "b6bd38b36eadaa391a0692d64677523dfc3f2b0d95a1e3c030d882a24865a8fb": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_sequence": {
+          "added": {
+            "0fc908ac4aa7e7d7e2be9ca13a9fd83958a124a1d78e3827b7e8cce2583a400e": 1,
+            "111f86ba9e3815fa6efb7d0100b487db610c25723c9f75ef2a576cde516ac421": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "6e759e395255cbecfd2ea92e5606ffacfebbac13817ed849e54c4b9d0fad8805": 1
+          }
+        },
+        "ad_sysconfig": {
+          "added": {
+            "28999258afb140e8f58b377acad00bd911bc60717c001c26daf276b0222a72f9": 1,
+            "3a379d8a6266d345d394a9c42cd8a40bb2290cd7dd14324386765ccce64a6c3a": 1,
+            "43968f058751d37056fda1c2073e89c0266eca8f85119712dcc9cf8655c868fa": 1,
+            "635e65d1ade21e862189d291d68a400f7150a6bfcd8a6d5450346b75b2a5c0f1": 1,
+            "bb2f18773ed82c03ec6661a29c1d3c735af39c0e395e188f8b349de5dca4b873": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_system": {
+          "added": {
+            "7d24a024f0dbcc606b38ea6ed42bd298773eb491c8cfc0c54e5949e0d9d5da75": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "f46585d9fdf4b0e2927edf076f2d025de72193e6b5c8b45a0c96688d0ddfdcb3": 1
+          }
+        },
+        "ad_tab": {
+          "added": {
+            "1ec3593856ec887883df550eac6281e7673a81dcb00fc31fd6ea0c9c7f2fecdb": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_table": {
+          "added": {
+            "9eecbe4d1a4a56398e1d734f41fe44cba6b4c97985efd48c2e3e2f564fd4e00d": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_tableindex": {
+          "added": {
+            "c2f7c45071629eb0dabdfbf9781c164f2e0fa5b7ad76103840632439340ef8fb": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_treenodemm": {
+          "added": {
+            "4a019945d549ce2b07d77f7954ab478c991b2746b48f1e05870883ac24b61e26": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_window": {
+          "added": {
+            "ff27f7b4491ac296caa1457f37f981e09b9ec130d7bdde6dd28bb01d21b490fb": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "r_mailtext": {
+          "added": {
+            "9b773c0342b393e6afece326133560e82f88cd7ab7c858b4b57a784eeb53bad9": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        }
+      }
+    },
+    "postgresql": {
+      "structure": {
+        "columns": {
+          "added": [
+            {
+              "character_maximum_length": 1,
+              "column_default": "'P'::bpchar",
+              "column_name": "tokenstatus",
+              "data_type": "character",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "NO",
+              "numeric_precision": null,
+              "numeric_scale": null,
+              "table_name": "ad_passwordresettoken"
+            },
+            {
+              "character_maximum_length": null,
+              "column_default": null,
+              "column_name": "ad_client_id",
+              "data_type": "numeric",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "NO",
+              "numeric_precision": 10,
+              "numeric_scale": 0,
+              "table_name": "ad_passwordresettoken"
+            },
+            {
+              "character_maximum_length": null,
+              "column_default": "0",
+              "column_name": "attemptsused",
+              "data_type": "numeric",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "NO",
+              "numeric_precision": 10,
+              "numeric_scale": 0,
+              "table_name": "ad_passwordresettoken"
+            },
+            {
+              "character_maximum_length": null,
+              "column_default": null,
+              "column_name": "updated",
+              "data_type": "timestamp without time zone",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "NO",
+              "numeric_precision": null,
+              "numeric_scale": null,
+              "table_name": "ad_passwordresettoken"
+            },
+            {
+              "character_maximum_length": null,
+              "column_default": null,
+              "column_name": "verifiedtokenexpires",
+              "data_type": "timestamp without time zone",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "YES",
+              "numeric_precision": null,
+              "numeric_scale": null,
+              "table_name": "ad_passwordresettoken"
+            },
+            {
+              "character_maximum_length": 1,
+              "column_default": "'Y'::bpchar",
+              "column_name": "isactive",
+              "data_type": "character",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "NO",
+              "numeric_precision": null,
+              "numeric_scale": null,
+              "table_name": "ad_passwordresettoken"
+            },
+            {
+              "character_maximum_length": 100,
+              "column_default": null,
+              "column_name": "verifiedtokenhash",
+              "data_type": "character varying",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "YES",
+              "numeric_precision": null,
+              "numeric_scale": null,
+              "table_name": "ad_passwordresettoken"
+            },
+            {
+              "character_maximum_length": null,
+              "column_default": null,
+              "column_name": "ad_org_id",
+              "data_type": "numeric",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "NO",
+              "numeric_precision": 10,
+              "numeric_scale": 0,
+              "table_name": "ad_passwordresettoken"
+            },
+            {
+              "character_maximum_length": null,
+              "column_default": null,
+              "column_name": "expiration",
+              "data_type": "timestamp without time zone",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "NO",
+              "numeric_precision": null,
+              "numeric_scale": null,
+              "table_name": "ad_passwordresettoken"
+            },
+            {
+              "character_maximum_length": null,
+              "column_default": null,
+              "column_name": "ad_passwordresettoken_id",
+              "data_type": "numeric",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "NO",
+              "numeric_precision": 10,
+              "numeric_scale": 0,
+              "table_name": "ad_passwordresettoken"
+            },
+            {
+              "character_maximum_length": null,
+              "column_default": null,
+              "column_name": "createdby",
+              "data_type": "numeric",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "NO",
+              "numeric_precision": 10,
+              "numeric_scale": 0,
+              "table_name": "ad_passwordresettoken"
+            },
+            {
+              "character_maximum_length": null,
+              "column_default": null,
+              "column_name": "ad_passwordresettoken_uu",
+              "data_type": "uuid",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "YES",
+              "numeric_precision": null,
+              "numeric_scale": null,
+              "table_name": "ad_passwordresettoken"
+            },
+            {
+              "character_maximum_length": null,
+              "column_default": null,
+              "column_name": "created",
+              "data_type": "timestamp without time zone",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "NO",
+              "numeric_precision": null,
+              "numeric_scale": null,
+              "table_name": "ad_passwordresettoken"
+            },
+            {
+              "character_maximum_length": 60,
+              "column_default": null,
+              "column_name": "email",
+              "data_type": "character varying",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "NO",
+              "numeric_precision": null,
+              "numeric_scale": null,
+              "table_name": "ad_passwordresettoken"
+            },
+            {
+              "character_maximum_length": null,
+              "column_default": null,
+              "column_name": "updatedby",
+              "data_type": "numeric",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "NO",
+              "numeric_precision": 10,
+              "numeric_scale": 0,
+              "table_name": "ad_passwordresettoken"
+            },
+            {
+              "character_maximum_length": 100,
+              "column_default": null,
+              "column_name": "onetimecode",
+              "data_type": "character varying",
+              "generation_expression": null,
+              "is_generated": "NEVER",
+              "is_identity": "NO",
+              "is_nullable": "NO",
+              "numeric_precision": null,
+              "numeric_scale": null,
+              "table_name": "ad_passwordresettoken"
+            }
+          ],
+          "removed": []
+        },
+        "constraints": {
+          "added": [
+            {
+              "constraint_name": "createdby_adpasswordresettoken",
+              "definition": "FOREIGN KEY (createdby) REFERENCES ad_user(ad_user_id) DEFERRABLE INITIALLY DEFERRED",
+              "table_name": "ad_passwordresettoken"
+            },
+            {
+              "constraint_name": "ad_passwordresettoken_isactive_check",
+              "definition": "CHECK ((isactive = ANY (ARRAY['Y'::bpchar, 'N'::bpchar])))",
+              "table_name": "ad_passwordresettoken"
+            },
+            {
+              "constraint_name": "ad_passwordresettoken_key",
+              "definition": "PRIMARY KEY (ad_passwordresettoken_id)",
+              "table_name": "ad_passwordresettoken"
+            },
+            {
+              "constraint_name": "adorg_adpasswordresettoken",
+              "definition": "FOREIGN KEY (ad_org_id) REFERENCES ad_org(ad_org_id) DEFERRABLE INITIALLY DEFERRED",
+              "table_name": "ad_passwordresettoken"
+            },
+            {
+              "constraint_name": "adclient_adpasswordresettoken",
+              "definition": "FOREIGN KEY (ad_client_id) REFERENCES ad_client(ad_client_id) DEFERRABLE INITIALLY DEFERRED",
+              "table_name": "ad_passwordresettoken"
+            },
+            {
+              "constraint_name": "ad_passwordresettoken_uu_idx",
+              "definition": "UNIQUE (ad_passwordresettoken_uu)",
+              "table_name": "ad_passwordresettoken"
+            },
+            {
+              "constraint_name": "updatedby_adpasswordresettoken",
+              "definition": "FOREIGN KEY (updatedby) REFERENCES ad_user(ad_user_id) DEFERRABLE INITIALLY DEFERRED",
+              "table_name": "ad_passwordresettoken"
+            }
+          ],
+          "removed": []
+        },
+        "indexes": {
+          "added": [
+            {
+              "indexdef": "CREATE UNIQUE INDEX ad_passwordresettoken_uu_idx ON adempiere.ad_passwordresettoken USING btree (ad_passwordresettoken_uu)",
+              "indexname": "ad_passwordresettoken_uu_idx",
+              "tablename": "ad_passwordresettoken"
+            },
+            {
+              "indexdef": "CREATE UNIQUE INDEX ad_passwordresettoken_key ON adempiere.ad_passwordresettoken USING btree (ad_passwordresettoken_id)",
+              "indexname": "ad_passwordresettoken_key",
+              "tablename": "ad_passwordresettoken"
+            }
+          ],
+          "removed": []
+        },
+        "triggers": {
+          "added": [
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_a_52430\" AFTER DELETE ON adempiere.ad_user FROM ad_passwordresettoken DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_noaction_del\"()",
+              "table_name": "ad_user",
+              "trigger_name": "RI_ConstraintTrigger_a_52430"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_a_52435\" AFTER DELETE ON adempiere.ad_user FROM ad_passwordresettoken DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_noaction_del\"()",
+              "table_name": "ad_user",
+              "trigger_name": "RI_ConstraintTrigger_a_52435"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_c_52437\" AFTER INSERT ON adempiere.ad_passwordresettoken FROM ad_user DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_check_ins\"()",
+              "table_name": "ad_passwordresettoken",
+              "trigger_name": "RI_ConstraintTrigger_c_52437"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_a_52431\" AFTER UPDATE ON adempiere.ad_user FROM ad_passwordresettoken DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_noaction_upd\"()",
+              "table_name": "ad_user",
+              "trigger_name": "RI_ConstraintTrigger_a_52431"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_c_52428\" AFTER UPDATE ON adempiere.ad_passwordresettoken FROM ad_org DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_check_upd\"()",
+              "table_name": "ad_passwordresettoken",
+              "trigger_name": "RI_ConstraintTrigger_c_52428"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_c_52432\" AFTER INSERT ON adempiere.ad_passwordresettoken FROM ad_user DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_check_ins\"()",
+              "table_name": "ad_passwordresettoken",
+              "trigger_name": "RI_ConstraintTrigger_c_52432"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_c_52427\" AFTER INSERT ON adempiere.ad_passwordresettoken FROM ad_org DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_check_ins\"()",
+              "table_name": "ad_passwordresettoken",
+              "trigger_name": "RI_ConstraintTrigger_c_52427"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_a_52421\" AFTER UPDATE ON adempiere.ad_client FROM ad_passwordresettoken DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_noaction_upd\"()",
+              "table_name": "ad_client",
+              "trigger_name": "RI_ConstraintTrigger_a_52421"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_c_52422\" AFTER INSERT ON adempiere.ad_passwordresettoken FROM ad_client DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_check_ins\"()",
+              "table_name": "ad_passwordresettoken",
+              "trigger_name": "RI_ConstraintTrigger_c_52422"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_c_52438\" AFTER UPDATE ON adempiere.ad_passwordresettoken FROM ad_user DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_check_upd\"()",
+              "table_name": "ad_passwordresettoken",
+              "trigger_name": "RI_ConstraintTrigger_c_52438"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_a_52425\" AFTER DELETE ON adempiere.ad_org FROM ad_passwordresettoken DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_noaction_del\"()",
+              "table_name": "ad_org",
+              "trigger_name": "RI_ConstraintTrigger_a_52425"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_c_52433\" AFTER UPDATE ON adempiere.ad_passwordresettoken FROM ad_user DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_check_upd\"()",
+              "table_name": "ad_passwordresettoken",
+              "trigger_name": "RI_ConstraintTrigger_c_52433"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_a_52420\" AFTER DELETE ON adempiere.ad_client FROM ad_passwordresettoken DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_noaction_del\"()",
+              "table_name": "ad_client",
+              "trigger_name": "RI_ConstraintTrigger_a_52420"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_c_52423\" AFTER UPDATE ON adempiere.ad_passwordresettoken FROM ad_client DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_check_upd\"()",
+              "table_name": "ad_passwordresettoken",
+              "trigger_name": "RI_ConstraintTrigger_c_52423"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_a_52426\" AFTER UPDATE ON adempiere.ad_org FROM ad_passwordresettoken DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_noaction_upd\"()",
+              "table_name": "ad_org",
+              "trigger_name": "RI_ConstraintTrigger_a_52426"
+            },
+            {
+              "definition": "CREATE CONSTRAINT TRIGGER \"RI_ConstraintTrigger_a_52436\" AFTER UPDATE ON adempiere.ad_user FROM ad_passwordresettoken DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION \"RI_FKey_noaction_upd\"()",
+              "table_name": "ad_user",
+              "trigger_name": "RI_ConstraintTrigger_a_52436"
+            }
+          ],
+          "removed": []
+        }
+      },
+      "tables": {
+        "ad_column": {
+          "added": {
+            "132aa0cf68585eda76e377cb3ed7b7be872ba952211664de692b82a45bbaad1d": 1,
+            "19608a52301fca05220c9efeeacfb470a5cec47b0a074e96d6945ec455657fcb": 1,
+            "23614a420e50b18c0e6c86222364d8dd7f892617d7bccf5647a254f84becdbb1": 1,
+            "2499ef1335d52caf743f43b9d42531863dd300deb2ad59b0df09dfa3e892fd7a": 1,
+            "44a270e7cc9854737d6ada686ce7ecf3816e31edd5bf45dcca4d3921dc6f9d9e": 1,
+            "4ce4ca6ecaabfc48ed65ad03c610d715a6f28c5a8d1b5f634ffeb2475b3e8a02": 1,
+            "6a0b15145e66374d2c5c9d8884ab6f3b13490f05f99d64d0108ef4db0a5c1895": 1,
+            "813cf65d779eb9d05bf5cb328ff80ceac5f5d9a4f6f2618d94026e00a0951644": 1,
+            "83c4a43cad60658d893b08d1fb69825864c7f511899df58673712cc72b36a59a": 1,
+            "843fd2be9bfb01165d5aaf3504c8cfdeb78cb80b48252ae857c7e56775e4e64c": 1,
+            "8c02b9e9adc006aaa47650de123ab5788790199ae1ff9a6556c102bc13aa8586": 1,
+            "9e21f8fa4cf497122aa628c9ed2f43b7a14003050b11578a8dfff84857e9d877": 1,
+            "9e37c52fb40bb99ac5dc556acd630b701e66129b53363ee7afadd7de396faba3": 1,
+            "d825dbfbe55c37a6e273d229b9aca45225e2ea241a0747d2278610bcc33e9033": 1,
+            "dd97a52b8948d1bdd51522893ce52b8a50ffda15c7ff5e7656f4daaaa52c105c": 1,
+            "fee0e828b94e60a3b4c8c25cf5795c1b8e5eb48fc2b40bafa3dc5196f289e518": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_element": {
+          "added": {
+            "2e4c661d97b70923ccd39f7650aa3dd42d2cfa7de06b7c0130d4df4a2e3ba73d": 1,
+            "4ead8c20c0ff507defa6e51221873a37e0dc5bbf37ea6dee2c947f4c50d4de96": 1,
+            "57bee368f85ae9560531ba9cb05a1b192f5f2c6e8681514e822c5b0f1c7a0d49": 1,
+            "5b52150582c3dfe8c369736e4f0e975542552c4f98d06fcd350773551793b682": 1,
+            "a4fcbbfbc4c4a80d9ca4624fb56fcdfa8bbc2f4c697149b278ee7f88d947db06": 1,
+            "a62a944ee30d831b8aba80fdafd6942d4dd7daa0dc3a1c36e8e2996a1083fb50": 1,
+            "b2b8d21b535c2bf0dd418b3f6e883f981f65ba98d73dc4c5d0f681bf824f2323": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_field": {
+          "added": {
+            "1984e2d49136244d9a4b1098947ae0da96bf1629fd50bfa7816721e41847b4b7": 1,
+            "1f2d05fdd15c5f8e371c4a791ac1e5a3d20c6f366547b7c8e88c3bbc7bbc5d90": 1,
+            "2c8a293a9e2293ea79a7aba4e15a32df35c7d54ba93746b889647d584e7c9dbc": 1,
+            "3bbc9f3d7d90634a548d5de15ed71f5c35c47aff4c1e833ede82739b81c54030": 1,
+            "7d4e9cc2e70823801ab031577fe907a754ad6d16f0c1351ef432a3d291a9c4a3": 1,
+            "94b4ee3f206e30929132e65e9cda521d99dffc32736e8c68c169160bfdabe8c4": 1,
+            "9713a7ac4e6403be64c0b1de34f6da46eca65da4edbcd28233af757d71de73ca": 1,
+            "ad829ed15c0dcb8840fff347b2cfed8a558255da49328c9fada053255b76aa84": 1,
+            "c0fa6113d90a95cb869809f99ad45c4bca3d2c4444e9aa6326724048c03a7d83": 1,
+            "c4011e8316f7c598fa65e42bc9bc77a68a166d1a5cd5ec134e05b3517cce0e36": 1,
+            "ceaf6ed0250bbfe88cf1ad8905771fc55196ab6342e902f3709498dc616b6182": 1,
+            "fe41b632bbe5d48079b22dfe1968f52e144e7559f51d519a1e7b7ad6b44eb5a3": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_indexcolumn": {
+          "added": {
+            "fa58c2aece03b432cb645719702f5f036de277a064e1be813d7a861140cdcde3": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_menu": {
+          "added": {
+            "fa3731bff8c1f4c6ff2a5668080c88a4ee553b9b4e5273eef1c2ba6562530105": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_message": {
+          "added": {
+            "0fc41ad25865a46ecc1576f8d86f3e63823954433de9b6343eb720814358dbc2": 1,
+            "30c220179f363c2356cc054f0c320a7ae95e7fe60cfc7cf5c199b5e4a5d84b9f": 1,
+            "7242ba9cb32f5fa72db41723882e254c683e4da550bea56b728c17e932f9b1b1": 1,
+            "78add7b7e6bbbecd7d2a681ddb0403771adc7bd2dfe8c4f993f558d8b296c5c4": 1,
+            "85c02c2aaa6532f524d35feb511a685d79bfac0131c917d781eef42af2848160": 1,
+            "bee52ad02df68f81b14d11f51f07ec70e0d4fd229aa49c4119a6fe6ef30ccb84": 1,
+            "c1cd021a534f9b8ffa96cd6cb7b0e6e123bdb7af2cfe1cd20b8ca955396c1bce": 1,
+            "dc713389d5e2db78ece6e494fcb81db3f405469d1c17242ef952a2f308c0ee75": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_migrationscript": {
+          "added": {
+            "6c0fcb53c37f5a65fdc1e2a3cefaa32812d47af1bf233cbe13c2efd02ca12077": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_passwordresettoken": {
+          "added": {},
+          "exists_after": true,
+          "exists_before": false,
+          "removed": {}
+        },
+        "ad_ref_list": {
+          "added": {
+            "706f50a60d8238e33f1cf07691c066e7aefcc3110e2f6f7975c6935776a67ae4": 1,
+            "8c4f9b7c370c4a6a3ac7bf8891b16509fb3abefd8bdcccdf47690b535bde11f1": 1,
+            "b341f8ea9aa2a74228c5eeffd5e9afd2e107dc5d03a667f8427d7948425faa70": 1,
+            "b679161c6d41a937e8b6151e3713e2fc2f692b006a1f3a04515aea7539318461": 1,
+            "bc16a8b075d481a03ba68392f8126fadc446c1c728540b1130ef0c0523315f9d": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_reference": {
+          "added": {
+            "b6bd38b36eadaa391a0692d64677523dfc3f2b0d95a1e3c030d882a24865a8fb": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_sequence": {
+          "added": {
+            "111f86ba9e3815fa6efb7d0100b487db610c25723c9f75ef2a576cde516ac421": 1,
+            "32f45690efc766a70ca7b2aad1025d1f9f20a675610058698f4941390f877ada": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "a656cbd609fc6148a717bd974396219d8f79a7ada952eeb5aefab7c854f56cc6": 1
+          }
+        },
+        "ad_sysconfig": {
+          "added": {
+            "28999258afb140e8f58b377acad00bd911bc60717c001c26daf276b0222a72f9": 1,
+            "3a379d8a6266d345d394a9c42cd8a40bb2290cd7dd14324386765ccce64a6c3a": 1,
+            "43968f058751d37056fda1c2073e89c0266eca8f85119712dcc9cf8655c868fa": 1,
+            "635e65d1ade21e862189d291d68a400f7150a6bfcd8a6d5450346b75b2a5c0f1": 1,
+            "bb2f18773ed82c03ec6661a29c1d3c735af39c0e395e188f8b349de5dca4b873": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_system": {
+          "added": {
+            "2424ea448e0c68072fc5705650e0613416cabc5ea6f2d288cf7878228cb86c97": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "5185fac099427c141c7796234abb7f08eb507213bcfe697fc9f670e2a1bd88e2": 1
+          }
+        },
+        "ad_tab": {
+          "added": {
+            "1ec3593856ec887883df550eac6281e7673a81dcb00fc31fd6ea0c9c7f2fecdb": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_table": {
+          "added": {
+            "9eecbe4d1a4a56398e1d734f41fe44cba6b4c97985efd48c2e3e2f564fd4e00d": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_tableindex": {
+          "added": {
+            "c2f7c45071629eb0dabdfbf9781c164f2e0fa5b7ad76103840632439340ef8fb": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_treenodemm": {
+          "added": {
+            "aa5a9b38b495dce6b5ac75c022f6ae07a5ba6b00cf85c6d89d5d7830f2551c75": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_window": {
+          "added": {
+            "ff27f7b4491ac296caa1457f37f981e09b9ec130d7bdde6dd28bb01d21b490fb": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "r_mailtext": {
+          "added": {
+            "cd6c9c292820c3f68f949a1bfc5d3c393d4e752503fbd7d48c80e6160bb5005e": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        }
+      }
+    }
+  },
+  "evidence_class": "native-database-observation",
+  "execution": {
+    "oracle": {
+      "duration_seconds": 0.938,
+      "log_sha256": "90b2903bd390691b05043a496bc41fc21c947c2cb0397b22d7ed88bae215039f",
+      "native_client": "sqlplus",
+      "returncode": 0,
+      "source_path": "migration/iD13/oracle/202607072011_IDEMPIERE-7060.sql",
+      "source_sha256": "8903f6b4fc1fb4d8a63e2c85811a2d3bde22a5dc1917b8eed5be2b65627af08f"
+    },
+    "postgresql": {
+      "duration_seconds": 0.547,
+      "log_sha256": "76ebce73e4ebe46be5bb69430fd956091f968972900c969767e35c7b947cf9ad",
+      "native_client": "psql",
+      "returncode": 0,
+      "source_path": "migration/iD13/postgresql/202607072011_IDEMPIERE-7060.sql",
+      "source_sha256": "79662e4a9653b7f21ecab3acf596fd5f38a9404f2354bbc8becce0846e16c9c5"
+    }
+  },
+  "historical_upgrade_equivalence": false,
+  "non_registration_row_effects_match": false,
+  "registration_effects_retained": true,
+  "row_effects_match": false,
+  "schema_version": "1.0",
+  "scope": "observed effects on these imported reference seeds; initial states may differ; no runtime values suppressed",
+  "state_sha256": {
+    "oracle": {
+      "after": "97c84d3c85681644212a8b3eb760cf30a2629d819437601a36da58c26d215f3f",
+      "before": "940db785a6351386e0a48505378b465099151e73966aba1cb3bdb28275688c38"
+    },
+    "postgresql": {
+      "after": "bbd6c21c3dd31d6ef8059601225d8d3f9c316a6db996bf3cb20be804d44f617e",
+      "before": "4abc3a0386ee37acc6d2761b91313629f4b49cafebb167de054b091ece222df3"
+    }
+  },
+  "status": "observed-effects-differ",
+  "structural_change_requires_review": true,
+  "content_sha256": "50483e9d8bedf89bcb29a3801d87dff08fe4953f5fd73105b53f37ac0614bf28"
+}

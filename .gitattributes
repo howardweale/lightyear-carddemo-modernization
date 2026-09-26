@@ -71,3 +71,6 @@ spec/mainframe/copybooks/** -text -whitespace
 
 # The packed probe is a fingerprinted fixture, including its line ending.
 spec/mainframe/packed-golden.hex -text
+
+# Preserve native iDempiere capture, log and controller bytes bound by the receipt.
+docs/calibration/idempiere-runtime/evidence/** -text -whitespace

@@ -1,0 +1,126 @@
+{
+  "application_equivalence": false,
+  "artifact_type": "lightyear-native-migration-comparison",
+  "deltas": {
+    "oracle": {
+      "structure": {},
+      "tables": {
+        "ad_migrationscript": {
+          "added": {
+            "3b1bd0eff6c17afd20acade43915c934bb93363e7d5dbcb758080eb2a965db3b": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_sequence": {
+          "added": {
+            "4d311185023ad332fdf99d927634308c9d777d57a684fa16f2c63f131fdffdef": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "713b36eee013e896a08ccdcef690d723b282e918e1cb82ece223cff8b65b1356": 1
+          }
+        },
+        "ad_sysconfig": {
+          "added": {
+            "9d98a9dc3b0463ce81f50c1c632c968708a5f0a5a8528edb5a490d6a04a2dbe2": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_system": {
+          "added": {
+            "49b681608fdb825fc7018a8a294881651bf61e6a29e11323691f9eaa33df7765": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "b5992380cdc33833331a7f755671348faa4465a2c917d4e1b3244a7a5c9ef454": 1
+          }
+        }
+      }
+    },
+    "postgresql": {
+      "structure": {},
+      "tables": {
+        "ad_migrationscript": {
+          "added": {
+            "bd459117afc4185bb6c237c4aa70d4d59d7baf2ea418b04a329ae1185719a6b8": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_sequence": {
+          "added": {
+            "d53d2a051083a29a030e5fc9ab5c268ae5472a660fe8b6dd91c3f21cff72a9a2": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "df18a8e57db3c19e20078d3b4dd98828ae7f556e113bfd6b061a4dc57bfbcdfa": 1
+          }
+        },
+        "ad_sysconfig": {
+          "added": {
+            "9d98a9dc3b0463ce81f50c1c632c968708a5f0a5a8528edb5a490d6a04a2dbe2": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_system": {
+          "added": {
+            "59d5d387406db8fb7d3483d6480df90f1ab30ccb5990f1088e21d329875e498a": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "a8ac9bdd310a7e8bca8631793d66aeda79e8d81d8b7fef3a13c4ed942068c9e8": 1
+          }
+        }
+      }
+    }
+  },
+  "evidence_class": "native-database-observation",
+  "execution": {
+    "oracle": {
+      "duration_seconds": 0.5,
+      "log_sha256": "6d3bf2fcb115affab2cb1ffca1d82ddfe0c74daa5fa57a3a53d69be0cb601549",
+      "native_client": "sqlplus",
+      "returncode": 0,
+      "source_path": "migration/iD13/oracle/202606290916_IDEMPIERE-7056.sql",
+      "source_sha256": "b6a4eea32ce1d2e04843ca02b03908c7d8c30a4caa696c85b462aab8b2bab771"
+    },
+    "postgresql": {
+      "duration_seconds": 0.359,
+      "log_sha256": "81e462b8378b21f621f81bbd396ee805bf504a27bd9adc9966ec66ab6ab46eb3",
+      "native_client": "psql",
+      "returncode": 0,
+      "source_path": "migration/iD13/postgresql/202606290916_IDEMPIERE-7056.sql",
+      "source_sha256": "52506725f7b9306a5712b95ba01f892b4c40a7340f2001b6e0728914e2979a3f"
+    }
+  },
+  "historical_upgrade_equivalence": false,
+  "non_registration_row_effects_match": false,
+  "registration_effects_retained": true,
+  "row_effects_match": false,
+  "schema_version": "1.0",
+  "scope": "observed effects on these imported reference seeds; initial states may differ; no runtime values suppressed",
+  "state_sha256": {
+    "oracle": {
+      "after": "e29dc52a2dd166744b8f2b3412b0ff7b0d92afc772d5d05343e2bb579da8e3a0",
+      "before": "5eb07eb2bbbeecf805709b2a241f698caa5203c896ca5fd6b61384b6766bcdf3"
+    },
+    "postgresql": {
+      "after": "e65d69c616cbfae054c33a9bf512d1d5dbcb0f511c14c4d81146b92c5aaefa37",
+      "before": "5cd5bdfedac0480b37f3a3cc8e6b030cd794f0aeefa746859289e08d0d751e6d"
+    }
+  },
+  "status": "observed-effects-differ",
+  "structural_change_requires_review": false,
+  "content_sha256": "49ff17a711bf8eea11f0330acfa3f9d69dc39aacc392dfdb75a006bd6c734b02"
+}

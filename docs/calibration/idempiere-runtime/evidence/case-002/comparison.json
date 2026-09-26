@@ -1,0 +1,134 @@
+{
+  "application_equivalence": false,
+  "artifact_type": "lightyear-native-migration-comparison",
+  "deltas": {
+    "oracle": {
+      "structure": {},
+      "tables": {
+        "ad_field": {
+          "added": {
+            "447046446a400e95fcee661f3cda79363e672d707350e217872c5a2c2ce9aee3": 1,
+            "f0fe56d542697c79ff57ed5bf6d2bd3cdf2829462c6555ba944794e987ae1ea9": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "4abbd9ce0ea691850ed005bdb762207dbc3b28ed5f689ba8400de35a81a05b01": 1,
+            "c5e30ed85fec846c079f66f560303c628dc0c0ced9ac93256f29f41e6f2ee327": 1
+          }
+        },
+        "ad_migrationscript": {
+          "added": {
+            "d6c158f7bcbeb3894847e52bfd18022ed75d4aec5dd7f58c83c98ab413112a89": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_sequence": {
+          "added": {
+            "da37eaaf22e7184b3b44646c144445b038c479eeb85a26225eddc453e645dd74": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "85ece2e500c933079fe648a1b672c0536f33a41a05febe6ac0c3ca933a144afb": 1
+          }
+        },
+        "ad_system": {
+          "added": {
+            "6edaaf140fe94519c11df700ca84c1dbb25f29f1afe22f4a82518443e57a6694": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "fd96aa0208ee52b20c2cab197520b6fdb4aee4b2e4ebd2e1897395ef5930ea04": 1
+          }
+        }
+      }
+    },
+    "postgresql": {
+      "structure": {},
+      "tables": {
+        "ad_field": {
+          "added": {
+            "447046446a400e95fcee661f3cda79363e672d707350e217872c5a2c2ce9aee3": 1,
+            "f0fe56d542697c79ff57ed5bf6d2bd3cdf2829462c6555ba944794e987ae1ea9": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "4abbd9ce0ea691850ed005bdb762207dbc3b28ed5f689ba8400de35a81a05b01": 1,
+            "c5e30ed85fec846c079f66f560303c628dc0c0ced9ac93256f29f41e6f2ee327": 1
+          }
+        },
+        "ad_migrationscript": {
+          "added": {
+            "f536886a7dfdb612b756cda031226cd8ee28fd4a2ad4bcfd3ebb6cd72da7aca1": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {}
+        },
+        "ad_sequence": {
+          "added": {
+            "1c5c753abac4407f858a4c34988ece84bfd2ae92641587031818e59320d7adb9": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "888670c0f746daf6e3a474581b894912163bd964135c40475651225cea8e6a38": 1
+          }
+        },
+        "ad_system": {
+          "added": {
+            "70c195721c49c82c14257ea92d61ec818ee67d1018c2df345a7846dbbad520e9": 1
+          },
+          "exists_after": true,
+          "exists_before": true,
+          "removed": {
+            "c5bf469f010f77b8bcb5cc6e16adec0e56f886e78da543b31a6d05fb5b2bbfd7": 1
+          }
+        }
+      }
+    }
+  },
+  "evidence_class": "native-database-observation",
+  "execution": {
+    "oracle": {
+      "duration_seconds": 0.672,
+      "log_sha256": "363565ede7108c7fd1a0146d8faff227ad94397a791ec11ab0a7c973f2e3eb10",
+      "native_client": "sqlplus",
+      "returncode": 0,
+      "source_path": "migration/iD12/oracle/202604231822_IDEMPIERE-6910.sql",
+      "source_sha256": "84379c40c7541334afdbe85ee2c316d5c864a28eacd052be420ddba978bc1f7f"
+    },
+    "postgresql": {
+      "duration_seconds": 0.625,
+      "log_sha256": "eb05980b87d21b9b7faba4d55d104d1812f4f10820eacc621ac8a825fd9a91b6",
+      "native_client": "psql",
+      "returncode": 0,
+      "source_path": "migration/iD12/postgresql/202604231822_IDEMPIERE-6910.sql",
+      "source_sha256": "a4d2766ccf201fe2dd308d8f2ce3e2538e07751de9dc10f2bf94a248ca4019e5"
+    }
+  },
+  "historical_upgrade_equivalence": false,
+  "non_registration_row_effects_match": false,
+  "registration_effects_retained": true,
+  "row_effects_match": false,
+  "schema_version": "1.0",
+  "scope": "observed effects on these imported reference seeds; initial states may differ; no runtime values suppressed",
+  "state_sha256": {
+    "oracle": {
+      "after": "43dc7ad370bd32d567c17a36429ba5316c648712060cb84902fb499c7c9fb685",
+      "before": "a74653124b5c9413174502da7887a6ebe5ea3300433bc0e48908d379874f77ea"
+    },
+    "postgresql": {
+      "after": "c1712a2a6efbf3f37d49a5f169dd5b78bf9e9d9fcc7532dd26749c0a3f5b66ea",
+      "before": "97de7af38d68c9f5a4a599b1e923c1affd5bade3c8d519ffd7c2966beb07a46b"
+    }
+  },
+  "status": "observed-effects-differ",
+  "structural_change_requires_review": false,
+  "content_sha256": "a5799543d685562dcced98db4674688365d9b956fe517aca1dcd8f4288f150e0"
+}

@@ -1,0 +1,969 @@
+{
+  "artifact_type": "lightyear-idempiere-runtime-experiment",
+  "binary_seed_commit": "30af25e9db302a6cdefd9e6c3846f7cedc5ce4d0",
+  "coverage_statement": "All 1,078 pairs replayed statically with captured native context: 780 / 111,293 units decided, zero context lift. Twenty pending migration pairs executed on Oracle 26ai and PostgreSQL 15 (40 native executions); all clients exited successfully, all 20 strict row-effect comparisons differ. No whole-pair or application equivalence claim.",
+  "engine_images": {
+    "oracle": "container-registry.oracle.com/database/free@sha256:c4d9b15a1b2240ce90730c23ce298fcdd34f6793792c1b3849181a080009c322",
+    "postgresql": "postgres@sha256:724292da1f2e50bdccfc3302ce75bbba7f4a6076701b588cc795fcac65683550"
+  },
+  "environment": {
+    "gcp_resources_started": false,
+    "independently_attested": false,
+    "kind": "local-docker"
+  },
+  "evidence_files": [
+    {
+      "bytes": 1788537,
+      "path": "evidence/oracle-catalog.json.gz",
+      "sha256": "3166bff344950baf25257b315621891c1c5483156f5229baf262cd1ed4138350",
+      "uncompressed_sha256": "cf28bb7adc9ec974db91dd9fd4334162fffd5b83c36e6cf4405327f411478bbb"
+    },
+    {
+      "bytes": 26693,
+      "path": "evidence/oracle-pending-at-entry.json",
+      "sha256": "f3a879d1f2ccbce29a0c96ed33292fce8686e1a2e1e9301813fd8f4aa8c9f0a4",
+      "uncompressed_sha256": "f3a879d1f2ccbce29a0c96ed33292fce8686e1a2e1e9301813fd8f4aa8c9f0a4"
+    },
+    {
+      "bytes": 74721,
+      "path": "evidence/oracle-import.log",
+      "sha256": "7506a5b45b99406078af5e12254946365dec37933b5baafd39cd185d8b2faa8a",
+      "uncompressed_sha256": "7506a5b45b99406078af5e12254946365dec37933b5baafd39cd185d8b2faa8a"
+    },
+    {
+      "bytes": 2152820,
+      "path": "evidence/postgresql-catalog.json.gz",
+      "sha256": "35343c1a9965f3119dd3c4e0be0810647f3f66a5322215b4f456e0d9ec1fa9f1",
+      "uncompressed_sha256": "c1d846c6d8ea373d349faac26a1641a8dae23bac1475b494f6f09f06ac733a2e"
+    },
+    {
+      "bytes": 25630,
+      "path": "evidence/postgresql-pending-at-entry.json",
+      "sha256": "21ae55082db06c5333a065b7d972307c28df67fdec67fb9d78a04245a83d88c0",
+      "uncompressed_sha256": "21ae55082db06c5333a065b7d972307c28df67fdec67fb9d78a04245a83d88c0"
+    },
+    {
+      "bytes": 106813,
+      "path": "evidence/postgresql-import.log",
+      "sha256": "7111e3f069bbf37b3b17a5e560bc30b5694885e2b6a6bace9fbfdb7641a098c0",
+      "uncompressed_sha256": "7111e3f069bbf37b3b17a5e560bc30b5694885e2b6a6bace9fbfdb7641a098c0"
+    },
+    {
+      "bytes": 476,
+      "path": "evidence/oracle-after-import.log",
+      "sha256": "20f74d791bb8582965446a3788a878dd549a95d7c3587c5eca655700559fdfc9",
+      "uncompressed_sha256": "20f74d791bb8582965446a3788a878dd549a95d7c3587c5eca655700559fdfc9"
+    },
+    {
+      "bytes": 22744,
+      "path": "evidence/execution-plan.json",
+      "sha256": "917e2c3acde1ed8a099ab188523b1a4b566fcc1cf57c978300a4072d96862c73",
+      "uncompressed_sha256": "917e2c3acde1ed8a099ab188523b1a4b566fcc1cf57c978300a4072d96862c73"
+    },
+    {
+      "bytes": 18236,
+      "path": "evidence/run-result.json",
+      "sha256": "e5b423d04d3402d0e917d3b279bd088ba097d902401d0a9d9963d698a8637b6f",
+      "uncompressed_sha256": "e5b423d04d3402d0e917d3b279bd088ba097d902401d0a9d9963d698a8637b6f"
+    },
+    {
+      "bytes": 471531,
+      "path": "evidence/effect-diagnostics.json",
+      "sha256": "a7d7e1bdf99e574b78bbfae3da1ab62a45517ef0487b7f03b585194c69a0c4cd",
+      "uncompressed_sha256": "a7d7e1bdf99e574b78bbfae3da1ab62a45517ef0487b7f03b585194c69a0c4cd"
+    },
+    {
+      "bytes": 15219,
+      "path": "evidence/final-checks.json",
+      "sha256": "fac9b2d51a5641c595b586d013c1452d73891ac27ec85a0de8c4fd851935438d",
+      "uncompressed_sha256": "fac9b2d51a5641c595b586d013c1452d73891ac27ec85a0de8c4fd851935438d"
+    },
+    {
+      "bytes": 204,
+      "path": "evidence/case-001/dispatch.json",
+      "sha256": "0d8c66a32d19755ff7cfc5879e1fabc6cc0d7f328ad9dbd5a7ef01311ce65b8c",
+      "uncompressed_sha256": "0d8c66a32d19755ff7cfc5879e1fabc6cc0d7f328ad9dbd5a7ef01311ce65b8c"
+    },
+    {
+      "bytes": 730,
+      "path": "evidence/case-001/execution.json",
+      "sha256": "71a7ce9dd4f51f6037ba3ea406f064aa6d90f486ad3d135a99a0a9576b94cee4",
+      "uncompressed_sha256": "71a7ce9dd4f51f6037ba3ea406f064aa6d90f486ad3d135a99a0a9576b94cee4"
+    },
+    {
+      "bytes": 11976,
+      "path": "evidence/case-001/comparison.json",
+      "sha256": "ba73b89bc2e46199280f06482771a9de1249117c1c051416243574770da82087",
+      "uncompressed_sha256": "ba73b89bc2e46199280f06482771a9de1249117c1c051416243574770da82087"
+    },
+    {
+      "bytes": 581,
+      "path": "evidence/case-001/oracle-execution.log",
+      "sha256": "f17959fd484898b58bdadf31b477cdf9071cd9544fe2812f5e155ff3800e71f0",
+      "uncompressed_sha256": "f17959fd484898b58bdadf31b477cdf9071cd9544fe2812f5e155ff3800e71f0"
+    },
+    {
+      "bytes": 844,
+      "path": "evidence/case-001/postgresql-execution.log",
+      "sha256": "07434841760a276247a47eda3292852ab2a9e6153a13a2a26df11852c93185bc",
+      "uncompressed_sha256": "07434841760a276247a47eda3292852ab2a9e6153a13a2a26df11852c93185bc"
+    },
+    {
+      "bytes": 204,
+      "path": "evidence/case-002/dispatch.json",
+      "sha256": "85eee56c3f090e8a1021d630b867da2af1639ad94e594c04cd45294abda11ada",
+      "uncompressed_sha256": "85eee56c3f090e8a1021d630b867da2af1639ad94e594c04cd45294abda11ada"
+    },
+    {
+      "bytes": 730,
+      "path": "evidence/case-002/execution.json",
+      "sha256": "dff088c3f74dd02b04c97f160bedb2fd819e91d8892df39e3bada8095882e3c1",
+      "uncompressed_sha256": "dff088c3f74dd02b04c97f160bedb2fd819e91d8892df39e3bada8095882e3c1"
+    },
+    {
+      "bytes": 4921,
+      "path": "evidence/case-002/comparison.json",
+      "sha256": "79ec8f8d135b2d5066c201697053a65274ea6b06f52d7d872e2e6cfee4760aa5",
+      "uncompressed_sha256": "79ec8f8d135b2d5066c201697053a65274ea6b06f52d7d872e2e6cfee4760aa5"
+    },
+    {
+      "bytes": 221,
+      "path": "evidence/case-002/oracle-execution.log",
+      "sha256": "8a47659d68d2668d712e5e081a1f1ea522f9393e924b12418afb4987d7abaa65",
+      "uncompressed_sha256": "8a47659d68d2668d712e5e081a1f1ea522f9393e924b12418afb4987d7abaa65"
+    },
+    {
+      "bytes": 630,
+      "path": "evidence/case-002/postgresql-execution.log",
+      "sha256": "794b8e8d027cdab3a706e66713866108cd1722a342636a6924d95f0e07de63b2",
+      "uncompressed_sha256": "794b8e8d027cdab3a706e66713866108cd1722a342636a6924d95f0e07de63b2"
+    },
+    {
+      "bytes": 204,
+      "path": "evidence/case-003/dispatch.json",
+      "sha256": "945b4cea0a7c8ea79dfc6906515c280d26176e616a042a80e9876c6f77bdcec0",
+      "uncompressed_sha256": "945b4cea0a7c8ea79dfc6906515c280d26176e616a042a80e9876c6f77bdcec0"
+    },
+    {
+      "bytes": 730,
+      "path": "evidence/case-003/execution.json",
+      "sha256": "49156ac9c2a179023422e1a0cbdba4755d3acfadc443a82a73aead9e182b24fc",
+      "uncompressed_sha256": "49156ac9c2a179023422e1a0cbdba4755d3acfadc443a82a73aead9e182b24fc"
+    },
+    {
+      "bytes": 8129,
+      "path": "evidence/case-003/comparison.json",
+      "sha256": "3c17e816b2d53c9d9ccd44f2b0f7e7e90cd60a94071267a8ad2a77c8c090c7cb",
+      "uncompressed_sha256": "3c17e816b2d53c9d9ccd44f2b0f7e7e90cd60a94071267a8ad2a77c8c090c7cb"
+    },
+    {
+      "bytes": 421,
+      "path": "evidence/case-003/oracle-execution.log",
+      "sha256": "b668ba9df785d34b718b411f4a0601c415b4f93ee60384af4145cbd8c1451da3",
+      "uncompressed_sha256": "b668ba9df785d34b718b411f4a0601c415b4f93ee60384af4145cbd8c1451da3"
+    },
+    {
+      "bytes": 752,
+      "path": "evidence/case-003/postgresql-execution.log",
+      "sha256": "b316f88385c3abd0b8fa6b88821d3bbc49367aa7ab3e66fcb655bdb62bc92641",
+      "uncompressed_sha256": "b316f88385c3abd0b8fa6b88821d3bbc49367aa7ab3e66fcb655bdb62bc92641"
+    },
+    {
+      "bytes": 204,
+      "path": "evidence/case-004/dispatch.json",
+      "sha256": "77432fdf00104e65e8a0897faa01106f701e4c8defe1e5b5303a9972ff6aaf22",
+      "uncompressed_sha256": "77432fdf00104e65e8a0897faa01106f701e4c8defe1e5b5303a9972ff6aaf22"
+    },
+    {
+      "bytes": 730,
+      "path": "evidence/case-004/execution.json",
+      "sha256": "e756b1e6b8ae92a668b51c10c23a06741e3777b3a45d01afdc283e2cd8f1e0df",
+      "uncompressed_sha256": "e756b1e6b8ae92a668b51c10c23a06741e3777b3a45d01afdc283e2cd8f1e0df"
+    },
+    {
+      "bytes": 4933,
+      "path": "evidence/case-004/comparison.json",
+      "sha256": "a4e2210d9fcd1384d23606ad25fd192449db89a00895220e182e756aa000846f",
+      "uncompressed_sha256": "a4e2210d9fcd1384d23606ad25fd192449db89a00895220e182e756aa000846f"
+    },
+    {
+      "bytes": 241,
+      "path": "evidence/case-004/oracle-execution.log",
+      "sha256": "451fcc4b60e78a28039284299921bf1b4a01f834587e7b624b53dec25176a262",
+      "uncompressed_sha256": "451fcc4b60e78a28039284299921bf1b4a01f834587e7b624b53dec25176a262"
+    },
+    {
+      "bytes": 640,
+      "path": "evidence/case-004/postgresql-execution.log",
+      "sha256": "313b8f662e3b7af618c6b6195e6a67555a3f99833e9c21417fb1d569e6d55723",
+      "uncompressed_sha256": "313b8f662e3b7af618c6b6195e6a67555a3f99833e9c21417fb1d569e6d55723"
+    },
+    {
+      "bytes": 204,
+      "path": "evidence/case-005/dispatch.json",
+      "sha256": "61bad82c19d71068d9baa8bffca5cf564c1649f181be16433debe18515e9234b",
+      "uncompressed_sha256": "61bad82c19d71068d9baa8bffca5cf564c1649f181be16433debe18515e9234b"
+    },
+    {
+      "bytes": 729,
+      "path": "evidence/case-005/execution.json",
+      "sha256": "d23284183243e43e578b5897992edc46897e5c0383aee8ed881d855c85d4f0d6",
+      "uncompressed_sha256": "d23284183243e43e578b5897992edc46897e5c0383aee8ed881d855c85d4f0d6"
+    },
+    {
+      "bytes": 3714,
+      "path": "evidence/case-005/comparison.json",
+      "sha256": "499887e7cc407188321aaffb884a185449918dbda5ee111649bfb229dd11b1e3",
+      "uncompressed_sha256": "499887e7cc407188321aaffb884a185449918dbda5ee111649bfb229dd11b1e3"
+    },
+    {
+      "bytes": 201,
+      "path": "evidence/case-005/oracle-execution.log",
+      "sha256": "4d04e340c0541985f8a506124def9f0fda12354261a0daf687e662d69ab35c80",
+      "uncompressed_sha256": "4d04e340c0541985f8a506124def9f0fda12354261a0daf687e662d69ab35c80"
+    },
+    {
+      "bytes": 622,
+      "path": "evidence/case-005/postgresql-execution.log",
+      "sha256": "0584315b54b5093deafeab74e5e3fc0d0244d8fb94068d907af594294f7bcded",
+      "uncompressed_sha256": "0584315b54b5093deafeab74e5e3fc0d0244d8fb94068d907af594294f7bcded"
+    },
+    {
+      "bytes": 204,
+      "path": "evidence/case-006/dispatch.json",
+      "sha256": "057d74b2265e281450e47164ea85f36302900ebf4df1dfe29c88023e4ea5512c",
+      "uncompressed_sha256": "057d74b2265e281450e47164ea85f36302900ebf4df1dfe29c88023e4ea5512c"
+    },
+    {
+      "bytes": 729,
+      "path": "evidence/case-006/execution.json",
+      "sha256": "941d976233e9baea57c1811b33f1290f24d4daa3ae0bacfb4fc39f791f0ca75c",
+      "uncompressed_sha256": "941d976233e9baea57c1811b33f1290f24d4daa3ae0bacfb4fc39f791f0ca75c"
+    },
+    {
+      "bytes": 6237,
+      "path": "evidence/case-006/comparison.json",
+      "sha256": "ad7994933f8899d15ec2bd616493774245e8768198ac992b6da67b9cd1a4a369",
+      "uncompressed_sha256": "ad7994933f8899d15ec2bd616493774245e8768198ac992b6da67b9cd1a4a369"
+    },
+    {
+      "bytes": 281,
+      "path": "evidence/case-006/oracle-execution.log",
+      "sha256": "e670b7069be8a17afe2758d763623d56be64ccc5af9dadf51305339fd2cfb4ef",
+      "uncompressed_sha256": "e670b7069be8a17afe2758d763623d56be64ccc5af9dadf51305339fd2cfb4ef"
+    },
+    {
+      "bytes": 672,
+      "path": "evidence/case-006/postgresql-execution.log",
+      "sha256": "238f9d5895082305504d367fe47fd75da34a8aa9fad08c12f7fabb12dd2feaa7",
+      "uncompressed_sha256": "238f9d5895082305504d367fe47fd75da34a8aa9fad08c12f7fabb12dd2feaa7"
+    },
+    {
+      "bytes": 204,
+      "path": "evidence/case-007/dispatch.json",
+      "sha256": "1a4fd93440d6480b82fb100fe0cd2107e143eba62bbfb73bc54d37bfd2564b65",
+      "uncompressed_sha256": "1a4fd93440d6480b82fb100fe0cd2107e143eba62bbfb73bc54d37bfd2564b65"
+    },
+    {
+      "bytes": 730,
+      "path": "evidence/case-007/execution.json",
+      "sha256": "c0600a74875bcf38a533ffbd7c8e0684eb1a652dd024faeaf523492518d94be0",
+      "uncompressed_sha256": "c0600a74875bcf38a533ffbd7c8e0684eb1a652dd024faeaf523492518d94be0"
+    },
+    {
+      "bytes": 16987,
+      "path": "evidence/case-007/comparison.json",
+      "sha256": "32bd23d4406bd17065e0560843310dc4b35397427140fd970d09ec7ff5a67e19",
+      "uncompressed_sha256": "32bd23d4406bd17065e0560843310dc4b35397427140fd970d09ec7ff5a67e19"
+    },
+    {
+      "bytes": 781,
+      "path": "evidence/case-007/oracle-execution.log",
+      "sha256": "08c95569483a7998e880ce87dc026b703582327ae42fbcc9089e7b101cd71264",
+      "uncompressed_sha256": "08c95569483a7998e880ce87dc026b703582327ae42fbcc9089e7b101cd71264"
+    },
+    {
+      "bytes": 936,
+      "path": "evidence/case-007/postgresql-execution.log",
+      "sha256": "b106af281423d451b9984634152b587136fb01eb23661c9dd65113951e341ba2",
+      "uncompressed_sha256": "b106af281423d451b9984634152b587136fb01eb23661c9dd65113951e341ba2"
+    },
+    {
+      "bytes": 204,
+      "path": "evidence/case-008/dispatch.json",
+      "sha256": "c3864e4181bf1d93c39024dd9665fa3c01eb111e244c632f4a925fb297535b30",
+      "uncompressed_sha256": "c3864e4181bf1d93c39024dd9665fa3c01eb111e244c632f4a925fb297535b30"
+    },
+    {
+      "bytes": 730,
+      "path": "evidence/case-008/execution.json",
+      "sha256": "adb38f336c4639d90837176ebb435c466d1ea39d09c5eb2fa789dc605ca25315",
+      "uncompressed_sha256": "adb38f336c4639d90837176ebb435c466d1ea39d09c5eb2fa789dc605ca25315"
+    },
+    {
+      "bytes": 64822,
+      "path": "evidence/case-008/comparison.json",
+      "sha256": "920f17410a121a5f90a2d5fc0f0c96fb0c4348f6b4f8a6b757732f47a13c9246",
+      "uncompressed_sha256": "920f17410a121a5f90a2d5fc0f0c96fb0c4348f6b4f8a6b757732f47a13c9246"
+    },
+    {
+      "bytes": 2202,
+      "path": "evidence/case-008/oracle-execution.log",
+      "sha256": "5c49ccb3cc26f2cba6dd30ec9e31f5748437d3f797f8df72d63a8a23315e0382",
+      "uncompressed_sha256": "5c49ccb3cc26f2cba6dd30ec9e31f5748437d3f797f8df72d63a8a23315e0382"
+    },
+    {
+      "bytes": 2418,
+      "path": "evidence/case-008/postgresql-execution.log",
+      "sha256": "c27863d86243ea5892cfa41892f4de9a505390ae35b04e9b0c152c181006d529",
+      "uncompressed_sha256": "c27863d86243ea5892cfa41892f4de9a505390ae35b04e9b0c152c181006d529"
+    },
+    {
+      "bytes": 204,
+      "path": "evidence/case-009/dispatch.json",
+      "sha256": "1dbc7e4eaa2d995ac7019a09efb4efc254e979a4a71b6ae78e1870bc7206efda",
+      "uncompressed_sha256": "1dbc7e4eaa2d995ac7019a09efb4efc254e979a4a71b6ae78e1870bc7206efda"
+    },
+    {
+      "bytes": 758,
+      "path": "evidence/case-009/execution.json",
+      "sha256": "41fb00e6611e1ef63739b1d9b39fbe0712d886764905890c7d899e6562329897",
+      "uncompressed_sha256": "41fb00e6611e1ef63739b1d9b39fbe0712d886764905890c7d899e6562329897"
+    },
+    {
+      "bytes": 6386,
+      "path": "evidence/case-009/comparison.json",
+      "sha256": "f0867b572a662c5f00c1ef4a591953b76f606ca363062cf72425b72ce4f69b8c",
+      "uncompressed_sha256": "f0867b572a662c5f00c1ef4a591953b76f606ca363062cf72425b72ce4f69b8c"
+    },
+    {
+      "bytes": 195,
+      "path": "evidence/case-009/oracle-execution.log",
+      "sha256": "8cb42ce952c6bc457445a2a7bde95ad072d7269089952015cecc74f22d61d6ef",
+      "uncompressed_sha256": "8cb42ce952c6bc457445a2a7bde95ad072d7269089952015cecc74f22d61d6ef"
+    },
+    {
+      "bytes": 669,
+      "path": "evidence/case-009/postgresql-execution.log",
+      "sha256": "50a7ec673983a74e65b8d140cbe58ad7a3d5007a9893c51e34a652837a3586ec",
+      "uncompressed_sha256": "50a7ec673983a74e65b8d140cbe58ad7a3d5007a9893c51e34a652837a3586ec"
+    },
+    {
+      "bytes": 204,
+      "path": "evidence/case-010/dispatch.json",
+      "sha256": "0bba1160bc931427c8605da927f9596aace4c7d978a6fa3f29e26395fa74eebb",
+      "uncompressed_sha256": "0bba1160bc931427c8605da927f9596aace4c7d978a6fa3f29e26395fa74eebb"
+    },
+    {
+      "bytes": 729,
+      "path": "evidence/case-010/execution.json",
+      "sha256": "17d1dab42fd4463fdb71a5553bb3023f221d46a62641788dd4219f3fdffc6651",
+      "uncompressed_sha256": "17d1dab42fd4463fdb71a5553bb3023f221d46a62641788dd4219f3fdffc6651"
+    },
+    {
+      "bytes": 3886,
+      "path": "evidence/case-010/comparison.json",
+      "sha256": "65f688452afd46d90be00c84371a0ed2033e5a748607dd68764f73fd13d1bfa6",
+      "uncompressed_sha256": "65f688452afd46d90be00c84371a0ed2033e5a748607dd68764f73fd13d1bfa6"
+    },
+    {
+      "bytes": 221,
+      "path": "evidence/case-010/oracle-execution.log",
+      "sha256": "fa3ea4e3a634526b30ed9e5cc7c0c3342f10d8fec302cb6d4191cb5ee274b1dc",
+      "uncompressed_sha256": "fa3ea4e3a634526b30ed9e5cc7c0c3342f10d8fec302cb6d4191cb5ee274b1dc"
+    },
+    {
+      "bytes": 634,
+      "path": "evidence/case-010/postgresql-execution.log",
+      "sha256": "23a3b9cd468cf3ff9c24c2e5fa8962542b1d85368b4d2a72b749106db7cb49db",
+      "uncompressed_sha256": "23a3b9cd468cf3ff9c24c2e5fa8962542b1d85368b4d2a72b749106db7cb49db"
+    },
+    {
+      "bytes": 204,
+      "path": "evidence/case-011/dispatch.json",
+      "sha256": "dcc1f54e73e87d8212fb4db9676ce0b12682018a7f0906088db7372f9a15e844",
+      "uncompressed_sha256": "dcc1f54e73e87d8212fb4db9676ce0b12682018a7f0906088db7372f9a15e844"
+    },
+    {
+      "bytes": 730,
+      "path": "evidence/case-011/execution.json",
+      "sha256": "c70934d4741c2a4f4a28b8b7bfeede052d470c3ceeea8ce6b44baa4b338b6dbd",
+      "uncompressed_sha256": "c70934d4741c2a4f4a28b8b7bfeede052d470c3ceeea8ce6b44baa4b338b6dbd"
+    },
+    {
+      "bytes": 12515,
+      "path": "evidence/case-011/comparison.json",
+      "sha256": "39ff8a776d50820dfb07a22ad9a6d5e327c46f9c9ee4557ab81bc2075a55e9c6",
+      "uncompressed_sha256": "39ff8a776d50820dfb07a22ad9a6d5e327c46f9c9ee4557ab81bc2075a55e9c6"
+    },
+    {
+      "bytes": 662,
+      "path": "evidence/case-011/oracle-execution.log",
+      "sha256": "239e0fdf52700a67be8dbbc2b2adf461338ac4307399727e98182219319a83c3",
+      "uncompressed_sha256": "239e0fdf52700a67be8dbbc2b2adf461338ac4307399727e98182219319a83c3"
+    },
+    {
+      "bytes": 1084,
+      "path": "evidence/case-011/postgresql-execution.log",
+      "sha256": "f29a6a9d8a186a126a038ac04ac72005771f7ddfcbd6b4a622e19241f504794c",
+      "uncompressed_sha256": "f29a6a9d8a186a126a038ac04ac72005771f7ddfcbd6b4a622e19241f504794c"
+    },
+    {
+      "bytes": 204,
+      "path": "evidence/case-012/dispatch.json",
+      "sha256": "bab606ff8dd52d3b2e5d11aa9f0f98842ef937234edd0cbc73fdeb6e7abfef89",
+      "uncompressed_sha256": "bab606ff8dd52d3b2e5d11aa9f0f98842ef937234edd0cbc73fdeb6e7abfef89"
+    },
+    {
+      "bytes": 730,
+      "path": "evidence/case-012/execution.json",
+      "sha256": "7deb9994125ec6cc21dc85988479d4bc97eb53c40ffb004899be4b030764f040",
+      "uncompressed_sha256": "7deb9994125ec6cc21dc85988479d4bc97eb53c40ffb004899be4b030764f040"
+    },
+    {
+      "bytes": 5923,
+      "path": "evidence/case-012/comparison.json",
+      "sha256": "bc08637c02f8c1d3edc2d23d0633d0932ae2ac3ba5fd0dad0ee86eaaa678311f",
+      "uncompressed_sha256": "bc08637c02f8c1d3edc2d23d0633d0932ae2ac3ba5fd0dad0ee86eaaa678311f"
+    },
+    {
+      "bytes": 321,
+      "path": "evidence/case-012/oracle-execution.log",
+      "sha256": "d42e0425f8a42d72dcedcada9b90d28f2070d3cbc0ea9f85ee8f990b53e586d0",
+      "uncompressed_sha256": "d42e0425f8a42d72dcedcada9b90d28f2070d3cbc0ea9f85ee8f990b53e586d0"
+    },
+    {
+      "bytes": 692,
+      "path": "evidence/case-012/postgresql-execution.log",
+      "sha256": "1d0dddc40acfe65214520a23194f60b41869172b7c1c46cf870d6074c8a9a7a1",
+      "uncompressed_sha256": "1d0dddc40acfe65214520a23194f60b41869172b7c1c46cf870d6074c8a9a7a1"
+    },
+    {
+      "bytes": 204,
+      "path": "evidence/case-013/dispatch.json",
+      "sha256": "c96753c824084fb9694ba4500728e79a087aab2de8da0b91b943ce531fd707bb",
+      "uncompressed_sha256": "c96753c824084fb9694ba4500728e79a087aab2de8da0b91b943ce531fd707bb"
+    },
+    {
+      "bytes": 730,
+      "path": "evidence/case-013/execution.json",
+      "sha256": "d2771599ef0279d614450a20db087c3086f898bed92e215a1dfa5db33bbe2bdc",
+      "uncompressed_sha256": "d2771599ef0279d614450a20db087c3086f898bed92e215a1dfa5db33bbe2bdc"
+    },
+    {
+      "bytes": 3903,
+      "path": "evidence/case-013/comparison.json",
+      "sha256": "a3acae3d4ed8adc457f924f9c2fcb0c8400b69830614364719cd7192d285ec51",
+      "uncompressed_sha256": "a3acae3d4ed8adc457f924f9c2fcb0c8400b69830614364719cd7192d285ec51"
+    },
+    {
+      "bytes": 202,
+      "path": "evidence/case-013/oracle-execution.log",
+      "sha256": "d171814e30ef8e28ed464c9ae34d280a0a4605952215228eb61dcb3c18dd4261",
+      "uncompressed_sha256": "d171814e30ef8e28ed464c9ae34d280a0a4605952215228eb61dcb3c18dd4261"
+    },
+    {
+      "bytes": 620,
+      "path": "evidence/case-013/postgresql-execution.log",
+      "sha256": "a5739bdbffdfe38770a95b3279d61abd5818c58639014a4102685a16f6e166ac",
+      "uncompressed_sha256": "a5739bdbffdfe38770a95b3279d61abd5818c58639014a4102685a16f6e166ac"
+    },
+    {
+      "bytes": 204,
+      "path": "evidence/case-014/dispatch.json",
+      "sha256": "9bbb2ea269947ed930130c983078fb72bca12ed37fab932d42344071586133a5",
+      "uncompressed_sha256": "9bbb2ea269947ed930130c983078fb72bca12ed37fab932d42344071586133a5"
+    },
+    {
+      "bytes": 730,
+      "path": "evidence/case-014/execution.json",
+      "sha256": "d7cbbc401c098b10184cc341920fad6f791e058742b21f70ca582ddb46a9f0e5",
+      "uncompressed_sha256": "d7cbbc401c098b10184cc341920fad6f791e058742b21f70ca582ddb46a9f0e5"
+    },
+    {
+      "bytes": 6575,
+      "path": "evidence/case-014/comparison.json",
+      "sha256": "309afff28f720dbabe5b3c4a8526b00a816e368ab65c21173ad52dcc46c274d5",
+      "uncompressed_sha256": "309afff28f720dbabe5b3c4a8526b00a816e368ab65c21173ad52dcc46c274d5"
+    },
+    {
+      "bytes": 341,
+      "path": "evidence/case-014/oracle-execution.log",
+      "sha256": "bcf37ce2c648ca3c57af186645448c7ea6d5165d7f7cf6d86ab630012230b20e",
+      "uncompressed_sha256": "bcf37ce2c648ca3c57af186645448c7ea6d5165d7f7cf6d86ab630012230b20e"
+    },
+    {
+      "bytes": 702,
+      "path": "evidence/case-014/postgresql-execution.log",
+      "sha256": "d03515c59c2406df0c138a14bdab86d3ac38a1226f55a66350d8ae2382e21454",
+      "uncompressed_sha256": "d03515c59c2406df0c138a14bdab86d3ac38a1226f55a66350d8ae2382e21454"
+    },
+    {
+      "bytes": 204,
+      "path": "evidence/case-015/dispatch.json",
+      "sha256": "ce14988ed8887cc7555e497c0f5b24ee5f301a9e8489b630df3afdbadb1aaacc",
+      "uncompressed_sha256": "ce14988ed8887cc7555e497c0f5b24ee5f301a9e8489b630df3afdbadb1aaacc"
+    },
+    {
+      "bytes": 730,
+      "path": "evidence/case-015/execution.json",
+      "sha256": "84f80aee8d949c167b75a2cefa268f48b1701dbecb5839bbc1e605e74a1375c5",
+      "uncompressed_sha256": "84f80aee8d949c167b75a2cefa268f48b1701dbecb5839bbc1e605e74a1375c5"
+    },
+    {
+      "bytes": 4399,
+      "path": "evidence/case-015/comparison.json",
+      "sha256": "67f3bcdb7f1a06855745f6169d7eef553d649e816cef6144bf2367e8d1f7f07a",
+      "uncompressed_sha256": "67f3bcdb7f1a06855745f6169d7eef553d649e816cef6144bf2367e8d1f7f07a"
+    },
+    {
+      "bytes": 201,
+      "path": "evidence/case-015/oracle-execution.log",
+      "sha256": "3736d04185494ac49cd374104992e655e79f99233fe9fc7cbeca435558855705",
+      "uncompressed_sha256": "3736d04185494ac49cd374104992e655e79f99233fe9fc7cbeca435558855705"
+    },
+    {
+      "bytes": 622,
+      "path": "evidence/case-015/postgresql-execution.log",
+      "sha256": "7056027f0397b3a497785433837ce69e2fbac3e2b8a5adcc3827216121770c9f",
+      "uncompressed_sha256": "7056027f0397b3a497785433837ce69e2fbac3e2b8a5adcc3827216121770c9f"
+    },
+    {
+      "bytes": 204,
+      "path": "evidence/case-016/dispatch.json",
+      "sha256": "2f4e5a15050aaca69cf5b7230d93917da2c7bab81d7ed153d801001f866ecdf8",
+      "uncompressed_sha256": "2f4e5a15050aaca69cf5b7230d93917da2c7bab81d7ed153d801001f866ecdf8"
+    },
+    {
+      "bytes": 728,
+      "path": "evidence/case-016/execution.json",
+      "sha256": "66e21580715c81c34f7db69ed6add61adaff20305ea5f0b5c42061761e3225b5",
+      "uncompressed_sha256": "66e21580715c81c34f7db69ed6add61adaff20305ea5f0b5c42061761e3225b5"
+    },
+    {
+      "bytes": 4401,
+      "path": "evidence/case-016/comparison.json",
+      "sha256": "79d8101a27a3770599098acba67b185390f3e7f36dcb3af0cd34b86f89d27cfd",
+      "uncompressed_sha256": "79d8101a27a3770599098acba67b185390f3e7f36dcb3af0cd34b86f89d27cfd"
+    },
+    {
+      "bytes": 201,
+      "path": "evidence/case-016/oracle-execution.log",
+      "sha256": "7c859b1581a426b9949d40fd5dbe65fcb05d920b4e805275af258ae315f3011e",
+      "uncompressed_sha256": "7c859b1581a426b9949d40fd5dbe65fcb05d920b4e805275af258ae315f3011e"
+    },
+    {
+      "bytes": 622,
+      "path": "evidence/case-016/postgresql-execution.log",
+      "sha256": "b40d26874d6efe8ccec2c3721ed98c7d494a11c1fb083ea97c0a2e45ca932a29",
+      "uncompressed_sha256": "b40d26874d6efe8ccec2c3721ed98c7d494a11c1fb083ea97c0a2e45ca932a29"
+    },
+    {
+      "bytes": 204,
+      "path": "evidence/case-017/dispatch.json",
+      "sha256": "8a3cf917a434780b23b6f942acb35fb7a799ef390f2f27ca90b650a955c1b434",
+      "uncompressed_sha256": "8a3cf917a434780b23b6f942acb35fb7a799ef390f2f27ca90b650a955c1b434"
+    },
+    {
+      "bytes": 730,
+      "path": "evidence/case-017/execution.json",
+      "sha256": "fa6d47bede20fa174b82c96e2712c525aeac7d9add8aae556702a23c2504cc3d",
+      "uncompressed_sha256": "fa6d47bede20fa174b82c96e2712c525aeac7d9add8aae556702a23c2504cc3d"
+    },
+    {
+      "bytes": 5589,
+      "path": "evidence/case-017/comparison.json",
+      "sha256": "40f80aadabe49edbcfceace6639ecc95e55c2f3d603a64d9caa9e767e92a00ff",
+      "uncompressed_sha256": "40f80aadabe49edbcfceace6639ecc95e55c2f3d603a64d9caa9e767e92a00ff"
+    },
+    {
+      "bytes": 261,
+      "path": "evidence/case-017/oracle-execution.log",
+      "sha256": "69ab721e821d9c7f40c365665819e067fc34395a8822ff8246a559e3fd0936fa",
+      "uncompressed_sha256": "69ab721e821d9c7f40c365665819e067fc34395a8822ff8246a559e3fd0936fa"
+    },
+    {
+      "bytes": 650,
+      "path": "evidence/case-017/postgresql-execution.log",
+      "sha256": "9797f4a6f27add918fb7845a583b04c11e1db1aa92811b4860fd96785e8ba30d",
+      "uncompressed_sha256": "9797f4a6f27add918fb7845a583b04c11e1db1aa92811b4860fd96785e8ba30d"
+    },
+    {
+      "bytes": 204,
+      "path": "evidence/case-018/dispatch.json",
+      "sha256": "bc389c2005964766331dff18af5fc873a65f1657c09df273106debdeeebb770a",
+      "uncompressed_sha256": "bc389c2005964766331dff18af5fc873a65f1657c09df273106debdeeebb770a"
+    },
+    {
+      "bytes": 730,
+      "path": "evidence/case-018/execution.json",
+      "sha256": "180c663e54f3b117f2ce6ede2ce238b6017a75b867a7fcef0c0e58f206df5144",
+      "uncompressed_sha256": "180c663e54f3b117f2ce6ede2ce238b6017a75b867a7fcef0c0e58f206df5144"
+    },
+    {
+      "bytes": 55412,
+      "path": "evidence/case-018/comparison.json",
+      "sha256": "2ff454cb8a812897a9b51d54d28bc1101302f7b9a3233ba08f708c045e2832ee",
+      "uncompressed_sha256": "2ff454cb8a812897a9b51d54d28bc1101302f7b9a3233ba08f708c045e2832ee"
+    },
+    {
+      "bytes": 1921,
+      "path": "evidence/case-018/oracle-execution.log",
+      "sha256": "e5569dd6b9a9c5209db6b7adff1ff3eead204a58021a89cd604d7ef5ac5140cf",
+      "uncompressed_sha256": "e5569dd6b9a9c5209db6b7adff1ff3eead204a58021a89cd604d7ef5ac5140cf"
+    },
+    {
+      "bytes": 2130,
+      "path": "evidence/case-018/postgresql-execution.log",
+      "sha256": "a57026f6d932b8de16d89012b8840cf438f43f8678a77f13a632453f1a7bed73",
+      "uncompressed_sha256": "a57026f6d932b8de16d89012b8840cf438f43f8678a77f13a632453f1a7bed73"
+    },
+    {
+      "bytes": 204,
+      "path": "evidence/case-019/dispatch.json",
+      "sha256": "7b0c9fefa2e7fc95d3e97bfc38e79abdba7a423c42b6f61ccf90c2b4c8bf7a7e",
+      "uncompressed_sha256": "7b0c9fefa2e7fc95d3e97bfc38e79abdba7a423c42b6f61ccf90c2b4c8bf7a7e"
+    },
+    {
+      "bytes": 730,
+      "path": "evidence/case-019/execution.json",
+      "sha256": "8f4d6418e8aad665c5afe548b37cd27debea16910a8377bad5f25967d6284aa0",
+      "uncompressed_sha256": "8f4d6418e8aad665c5afe548b37cd27debea16910a8377bad5f25967d6284aa0"
+    },
+    {
+      "bytes": 4571,
+      "path": "evidence/case-019/comparison.json",
+      "sha256": "728520e4c3d5bf123b3b28a9bd2deb6c33ff846ee304dd2a15f965d3d0f3db23",
+      "uncompressed_sha256": "728520e4c3d5bf123b3b28a9bd2deb6c33ff846ee304dd2a15f965d3d0f3db23"
+    },
+    {
+      "bytes": 221,
+      "path": "evidence/case-019/oracle-execution.log",
+      "sha256": "a9fe3fe0d6a2025fbc07dcd1a459b0361c346f79d8b71f0ec77678c9e57cab4a",
+      "uncompressed_sha256": "a9fe3fe0d6a2025fbc07dcd1a459b0361c346f79d8b71f0ec77678c9e57cab4a"
+    },
+    {
+      "bytes": 634,
+      "path": "evidence/case-019/postgresql-execution.log",
+      "sha256": "8a08f49271339c93d6deb2dc59e688b7056aacda141d0ea66c68d5232cbd8dc0",
+      "uncompressed_sha256": "8a08f49271339c93d6deb2dc59e688b7056aacda141d0ea66c68d5232cbd8dc0"
+    },
+    {
+      "bytes": 204,
+      "path": "evidence/case-020/dispatch.json",
+      "sha256": "ea2bec94fb3f002490f5d71ee436a5aa7cde354d93bb236dbd894fd367bc9b26",
+      "uncompressed_sha256": "ea2bec94fb3f002490f5d71ee436a5aa7cde354d93bb236dbd894fd367bc9b26"
+    },
+    {
+      "bytes": 730,
+      "path": "evidence/case-020/execution.json",
+      "sha256": "7c9c99f4b311864ee30841ab032cfcd9fae5bfafc704cafde48376d04673c8a5",
+      "uncompressed_sha256": "7c9c99f4b311864ee30841ab032cfcd9fae5bfafc704cafde48376d04673c8a5"
+    },
+    {
+      "bytes": 6601,
+      "path": "evidence/case-020/comparison.json",
+      "sha256": "7489fbb5a164f53a1824414133f3aaa566af92afd932369277d4d739ae62aa38",
+      "uncompressed_sha256": "7489fbb5a164f53a1824414133f3aaa566af92afd932369277d4d739ae62aa38"
+    },
+    {
+      "bytes": 221,
+      "path": "evidence/case-020/oracle-execution.log",
+      "sha256": "9a228d7282565dd69a8f6f9b089e92a7edeec69b492aa522aa002ce63823dc6b",
+      "uncompressed_sha256": "9a228d7282565dd69a8f6f9b089e92a7edeec69b492aa522aa002ce63823dc6b"
+    },
+    {
+      "bytes": 959,
+      "path": "evidence/case-020/postgresql-execution.log",
+      "sha256": "a234972e1c891e73e13c8e8c50986ebf921606414dd0f6cc624a3f40d7be9781",
+      "uncompressed_sha256": "a234972e1c891e73e13c8e8c50986ebf921606414dd0f6cc624a3f40d7be9781"
+    },
+    {
+      "bytes": 13967,
+      "path": "evidence/stage-one-measurement.json",
+      "sha256": "37781967946a7b2fa741ba5bac940cff7de93ac6f9ae031cdb91665cd1de10c5",
+      "uncompressed_sha256": "37781967946a7b2fa741ba5bac940cff7de93ac6f9ae031cdb91665cd1de10c5"
+    },
+    {
+      "bytes": 1898,
+      "path": "evidence/stage-one/index.html",
+      "sha256": "75a6be1504e032639d3326474f526afe9363740125714e734251f9c199d4e730"
+    },
+    {
+      "bytes": 13967,
+      "path": "evidence/stage-one/measurement.json",
+      "sha256": "37781967946a7b2fa741ba5bac940cff7de93ac6f9ae031cdb91665cd1de10c5"
+    },
+    {
+      "bytes": 3601,
+      "path": "evidence/stage-one/report.md",
+      "sha256": "2ce3c4c4066e08adfdd26e6b4cf70c45e4b89a292b3e0320ee06013ef74c27f0"
+    },
+    {
+      "bytes": 5140,
+      "path": "evidence/controllers/execute-native-pairs.py",
+      "sha256": "3d5943229943df935a57ef121e88f4f1828152793c26c26f1465d8a3ae5624ee",
+      "uncompressed_sha256": "3d5943229943df935a57ef121e88f4f1828152793c26c26f1465d8a3ae5624ee"
+    },
+    {
+      "bytes": 5083,
+      "path": "evidence/controllers/resume-native-pairs-012.py",
+      "sha256": "6e2d26e4c574d88883286fe252f038b538b93d72f6f22672c9e84929b095828c",
+      "uncompressed_sha256": "6e2d26e4c574d88883286fe252f038b538b93d72f6f22672c9e84929b095828c"
+    },
+    {
+      "bytes": 1639,
+      "path": "evidence/controllers/recover-observation-011.py",
+      "sha256": "196c8e8dee32f8f11e7eb3dd68407d1444c41d820b43477bac4059ab2c5df75a",
+      "uncompressed_sha256": "196c8e8dee32f8f11e7eb3dd68407d1444c41d820b43477bac4059ab2c5df75a"
+    },
+    {
+      "bytes": 1311,
+      "path": "evidence/controllers/native-snapshots.py",
+      "sha256": "961e672ab7444fdf01b3fd59de3ef02f2274f1821da35da22d8e13d048f09e36",
+      "uncompressed_sha256": "961e672ab7444fdf01b3fd59de3ef02f2274f1821da35da22d8e13d048f09e36"
+    },
+    {
+      "bytes": 3807,
+      "path": "evidence/controllers/diagnose-native-effects.py",
+      "sha256": "188a4b6cf5c514ef183ffae9141cbdd1f95d31518e77fecee06f3aacdd7febe9",
+      "uncompressed_sha256": "188a4b6cf5c514ef183ffae9141cbdd1f95d31518e77fecee06f3aacdd7febe9"
+    },
+    {
+      "bytes": 2975,
+      "path": "evidence/controllers/validate-native-final.py",
+      "sha256": "0740bc654908261cee28d8c8571e7ba6b217bd40d845e01f4613917c17d2f560",
+      "uncompressed_sha256": "0740bc654908261cee28d8c8571e7ba6b217bd40d845e01f4613917c17d2f560"
+    },
+    {
+      "bytes": 1210,
+      "path": "evidence/controllers/capture-oracle.py",
+      "sha256": "428388055b2f1243190ad40e28181eabe909402746d8b3edf6e8be1058d87ecc",
+      "uncompressed_sha256": "428388055b2f1243190ad40e28181eabe909402746d8b3edf6e8be1058d87ecc"
+    },
+    {
+      "bytes": 1111,
+      "path": "evidence/controllers/capture-postgresql.py",
+      "sha256": "79628536359ab5cd2e9a2946ad740e636fbea737f2b9490aaa3a54b482119f82",
+      "uncompressed_sha256": "79628536359ab5cd2e9a2946ad740e636fbea737f2b9490aaa3a54b482119f82"
+    }
+  ],
+  "limitations": [
+    "Imported release-13 seeds differ before execution; this is an observation of those specific entry states.",
+    "Four post-migration maintenance pairs and one Oracle-only historical registration gap remain unresolved.",
+    "Fourteen Oracle objects became invalid; no post-tranche recompilation or complete upgrade certification is claimed.",
+    "Full row snapshots remain in the ignored local workspace. Published row hashes alone cannot reconstruct raw rows.",
+    "Native execution proves this seed-bound tranche, not all historical migrations or customer application behavior."
+  ],
+  "local_raw_evidence": "work/native-run-20260925/native-migrations",
+  "raw_row_files_in_git": false,
+  "schema_version": "1.0",
+  "source_commit": "731515dcdd5278b843db33b9d3109d155b881951",
+  "stage_one": {
+    "case_count": 1078,
+    "catalog_capture_sha256": {
+      "oracle": "5d282cebfa1745228c0f3974252dc9dfaec6b3cde47ced99d63808f833b4eda5",
+      "postgresql": "907f404f384b2129209d59d005e7ba896b2e689b9c9174d2abeadf206422b8a6"
+    },
+    "context_lift_units": 0,
+    "current_gate_without_context": {
+      "administrative_units_excluded": 4127,
+      "input_units": 115420,
+      "parsed-and-compared": 780,
+      "parsed-but-indeterminate": 109108,
+      "sql_units": 111293,
+      "unparsed": 1405
+    },
+    "measurement_sha256": "0c9ca4df22ac2aab0984e23b4560b9b1ff56a04b90574f5466070c68f7887a7c",
+    "scope": "conditional static comparison on one observed imported baseline; historical entry states not established",
+    "with_captured_context": {
+      "administrative_units_excluded": 4127,
+      "input_units": 115420,
+      "parsed-and-compared": 780,
+      "parsed-but-indeterminate": 109108,
+      "sql_units": 111293,
+      "unparsed": 1405
+    }
+  },
+  "stage_two": {
+    "additional_matching_field_transitions": 13,
+    "application_equivalence": false,
+    "attempted_pairs": 20,
+    "effect_diagnostics_sha256": "e4b252240de30dc54d1a4f30e0b6f8d450f683718b1c3c3278564f194e1d16c1",
+    "entry_states": {
+      "oracle": {
+        "rows": 185292,
+        "state_sha256": "c9ac761610c454fba60c81621e5f9e2494018548ea810fbf3732a1fcad67a85f",
+        "tables": 913
+      },
+      "postgresql": {
+        "rows": 185253,
+        "state_sha256": "f093bc0196e8d24dc14f08e4103a0a3846e81b2099a23978fb4cfed62b07d8c2",
+        "tables": 912
+      }
+    },
+    "exact_table_delta_matches": 49,
+    "excluded": {
+      "already_registered_on_both": 1053,
+      "oracle_only_unregistered": [
+        {
+          "comparison_status": "not-run",
+          "content_identical": false,
+          "maintenance_provenance": "not-classified",
+          "oracle": {
+            "bytes": 6072,
+            "lines": 71,
+            "logical_sha256": "0bbf6d4e26ada95dc1766f16934f97f1c9dbc66341383eec7e4c858dfae1bbdb",
+            "path": "migration/i6.2z/oracle/201906171811_IDEMPIERE-3413.sql",
+            "transport_sha256": "0bbf6d4e26ada95dc1766f16934f97f1c9dbc66341383eec7e4c858dfae1bbdb"
+          },
+          "pair_id": "pair:4d605b3080827a45b227bdcbd6bec70ede606e5ccb559630aa2a9a7503d4d72c",
+          "pairing_method": "exact-version-and-filename",
+          "pilot_slices": [],
+          "pilot_tables_referenced": [],
+          "postgresql": {
+            "bytes": 5939,
+            "lines": 63,
+            "logical_sha256": "d451be31f09af91e08852283ec5ff02b2fe071851d717c54bb562aedc7ea5f71",
+            "path": "migration/i6.2z/postgresql/201906171811_IDEMPIERE-3413.sql",
+            "transport_sha256": "d451be31f09af91e08852283ec5ff02b2fe071851d717c54bb562aedc7ea5f71"
+          },
+          "release_segment": "i6.2z",
+          "ticket_id": "IDEMPIERE-3413"
+        }
+      ],
+      "post_migration_maintenance_not_executed": [
+        {
+          "comparison_status": "not-run",
+          "content_identical": false,
+          "maintenance_provenance": "not-classified",
+          "oracle": {
+            "bytes": 2694,
+            "lines": 85,
+            "logical_sha256": "ef7f576d1f033a040395638fd8b449cb6b7a65e66da80dd6b668310b69ed202d",
+            "path": "migration/processes_post_migration/oracle/01_add_missing_Translations.sql",
+            "transport_sha256": "3df8682e77555f03958b4ebc81990b1ae34f0a3f91662e9d1284405789f04d9d"
+          },
+          "pair_id": "pair:5b3efbb354411d6193b556f65cdc12fd3fe1c8d5ecc00df1a48f599865d62fdd",
+          "pairing_method": "exact-version-and-filename",
+          "pilot_slices": [],
+          "pilot_tables_referenced": [],
+          "postgresql": {
+            "bytes": 2510,
+            "lines": 80,
+            "logical_sha256": "9c44b7920c76c131d83b078af541b93a075067d3739ab2bf9090270511107e66",
+            "path": "migration/processes_post_migration/postgresql/01_add_missing_translations.sql",
+            "transport_sha256": "9c44b7920c76c131d83b078af541b93a075067d3739ab2bf9090270511107e66"
+          },
+          "release_segment": "processes_post_migration",
+          "ticket_id": null
+        },
+        {
+          "comparison_status": "not-run",
+          "content_identical": false,
+          "maintenance_provenance": "not-classified",
+          "oracle": {
+            "bytes": 29272,
+            "lines": 137,
+            "logical_sha256": "283406ff77f562d148743ac17b3193f7386fdf3bb72aebf453a21aff30912b09",
+            "path": "migration/processes_post_migration/oracle/02_SynchronizeTerminology.sql",
+            "transport_sha256": "283406ff77f562d148743ac17b3193f7386fdf3bb72aebf453a21aff30912b09"
+          },
+          "pair_id": "pair:0c4fe71f88708f433452766e5ca8098dfbd0c58b69bdd0a95ce567e610644404",
+          "pairing_method": "exact-version-and-filename",
+          "pilot_slices": [],
+          "pilot_tables_referenced": [],
+          "postgresql": {
+            "bytes": 32501,
+            "lines": 137,
+            "logical_sha256": "36e84f49e9d574fbae66e20d5ed7d667037b82480539b645c0af65fd55bf8cee",
+            "path": "migration/processes_post_migration/postgresql/02_SynchronizeTerminology.sql",
+            "transport_sha256": "36e84f49e9d574fbae66e20d5ed7d667037b82480539b645c0af65fd55bf8cee"
+          },
+          "release_segment": "processes_post_migration",
+          "ticket_id": null
+        },
+        {
+          "comparison_status": "not-run",
+          "content_identical": false,
+          "maintenance_provenance": "not-classified",
+          "oracle": {
+            "bytes": 5003,
+            "lines": 157,
+            "logical_sha256": "44803a90f3d49244a4dd0dc93def96e5b83b983d91c3566505624d2136f22269",
+            "path": "migration/processes_post_migration/oracle/03_update_sequences.sql",
+            "transport_sha256": "eb640283028ccc465ae88cc317545b7671b6e2c2fa63d6bb5a7690268daf3c10"
+          },
+          "pair_id": "pair:7eb07805d1b1b7b20300a82d8c432b6e2749c84a314d1cac84b38faa9beb685f",
+          "pairing_method": "exact-version-and-filename",
+          "pilot_slices": [],
+          "pilot_tables_referenced": [],
+          "postgresql": {
+            "bytes": 3896,
+            "lines": 131,
+            "logical_sha256": "31e13b905e08f017354f25327b1e98133b53dff90dd5f23cf0e15881a7b29fd1",
+            "path": "migration/processes_post_migration/postgresql/03_update_sequences.sql",
+            "transport_sha256": "ea2e14a0d798526e85ee6c5e19dd0b1e21371c2c1e70b2b4524511c46f6bd164"
+          },
+          "release_segment": "processes_post_migration",
+          "ticket_id": null
+        },
+        {
+          "comparison_status": "not-run",
+          "content_identical": false,
+          "maintenance_provenance": "not-classified",
+          "oracle": {
+            "bytes": 6376,
+            "lines": 109,
+            "logical_sha256": "a8a7f494976ba23e1b323556634629f2e572dfdf922413c4e30ebc35117e95c9",
+            "path": "migration/processes_post_migration/oracle/04_role_access_update.sql",
+            "transport_sha256": "2c27035ffb5049712bf39d6114cfaea56e4de08a17f33814d25bd70920410064"
+          },
+          "pair_id": "pair:8daedac6c13e37bc39c674ed0602e9596229ef51f1aebd473b2f2aefa3828b59",
+          "pairing_method": "exact-version-and-filename",
+          "pilot_slices": [],
+          "pilot_tables_referenced": [],
+          "postgresql": {
+            "bytes": 6417,
+            "lines": 107,
+            "logical_sha256": "b44d4fee3ae789ff2e955cfb791a3f73f0bf81a9a71a548c1d262099ed608a21",
+            "path": "migration/processes_post_migration/postgresql/04_role_access_update.sql",
+            "transport_sha256": "9c0badd9f7e4aef77b12606df5953ae25e792567bd1b5b09812009cbea9f3737"
+          },
+          "release_segment": "processes_post_migration",
+          "ticket_id": null
+        }
+      ]
+    },
+    "final_checks_sha256": "c8de03156c72a5356deaf73428d8a421e3fb30cd502226c8f0a62047c42cb224",
+    "final_states": {
+      "oracle": {
+        "rows": 185470,
+        "state_sha256": "8d81bfdcf43a1a5a01bec73392062ecb46e2c112ff525b27a30edd31863ab941",
+        "tables": 915
+      },
+      "postgresql": {
+        "rows": 185431,
+        "state_sha256": "18b1c78b79ac7d6b8e4b552ea32ee282c93bc2bf1fba28d2ee23b2a6f95b4131",
+        "tables": 914
+      }
+    },
+    "historical_entry_states_verified": false,
+    "native_script_executions": 40,
+    "normalization_rules_applied": 0,
+    "observation_recovery": {
+      "case": 11,
+      "oracle_error": "ORA-01466 during read-only after-snapshot",
+      "resolution": "re-read snapshot into oracle-observation-retry; migration was not re-executed"
+    },
+    "oracle_invalid_objects_after_tranche": 14,
+    "plan_sha256": "e52bdd5a37f0a54dbc4d88a57f5075b2a1ec38c89ca180149ce3e114a782255f",
+    "run_result_sha256": "332c0cde58c9a53d8425649d5ed06f07f0473bda5104fc061ef49fea363436d4",
+    "strict_row_effects_differ_pairs": 20,
+    "successful_client_pairs": 20,
+    "table_delta_comparisons": 111,
+    "whole_pair_equivalence_claim_count": 0
+  },
+  "status": "measured-with-unresolved-differences",
+  "content_sha256": "ba682128d34b0785f034b7baf6a6ffa26d2f74760f14cdc1a38c43f399c44458"
+}

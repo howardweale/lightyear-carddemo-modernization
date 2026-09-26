@@ -1,0 +1,15 @@
+SET
+                                                          json_build_object                                                           
+--------------------------------------------------------------------------------------------------------------------------------------
+ {"current_schema" : "adempiere", "search_path" : "adempiere, pg_catalog", "time_zone" : "UTC", "standard_conforming_strings" : "on"}
+(1 row)
+
+                register_migration_script                
+---------------------------------------------------------
+ 202607060943_IDEMPIERE-7059.sql successfully registered
+(1 row)
+
+UPDATE 1
+UPDATE 1
+UPDATE 1
+UPDATE 1

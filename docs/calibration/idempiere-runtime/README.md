@@ -1,5 +1,7 @@
 # iDempiere: measured runtime context and native migration effects
 
+Follow-up: [native reconciliation and historical replay](../idempiere-reconciliation/README.md) resolves the release-13 findings and retains this original experiment unchanged.
+
 **Measured on local Docker, 25–26 September 2026.** No GCP resources were started.
 The [sealed receipt](receipt.json) separates the two experiments and names what
 remains unresolved. This is a public reference-estate experiment, not customer

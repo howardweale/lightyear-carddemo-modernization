@@ -1,0 +1,281 @@
+{
+  "schema_version": "1.0",
+  "template_type": "native-journey-campaign",
+  "id": "wo-idempiere-ms86-journeys",
+  "title": "iDempiere boundary and operational journeys on Oracle and PostgreSQL",
+  "goal": "Prepare fresh verified database pairs, run the MS86 boundary and operational journeys through the real application on both engines, verify business outcomes and every difference, route decisions the system may not make, and clean up.",
+  "mode": "replay",
+  "non_goals": [
+    "Application, schema or platform equivalence",
+    "Independent attestation",
+    "Closing the open timestamp decision without a recorded human decision",
+    "Changing a harness, expectation or rule during a run"
+  ],
+  "scope": {
+    "allowed_paths": [
+      "factory/idempiere/ms86-journeys/runs/"
+    ],
+    "graph_node_ids": []
+  },
+  "policy": {
+    "max_attempts": 2,
+    "retry_only_for": [
+      "container-start",
+      "timeout",
+      "transient-io"
+    ],
+    "max_model_calls": 0,
+    "allow_network": false,
+    "max_elapsed_seconds": 14400,
+    "agent_set": "local"
+  },
+  "environment": {
+    "cloud_resources": false,
+    "network": "internal-only",
+    "max_parallel_pairs": 1,
+    "engines": {
+      "oracle": {
+        "image_digest": "sha256:96c4bda58cd8a8dfda586b2d83a2eb2a3e9f28fda0f1915d3fd758c890dc02b7",
+        "expected_version": "23.26.3.0.0"
+      },
+      "postgresql": {
+        "image_digest": "sha256:6820c00e2aa9770bea672bc036646175d2bb5f5ce7343dc51e1dba5eb1d3da7f",
+        "expected_version": "15.19"
+      }
+    },
+    "image_names": "resolved from docs/calibration/idempiere-boundaries/receipt.json; the digest is authoritative",
+    "pairs": [
+      "boundary",
+      "operations"
+    ],
+    "credentials": "generated per run; never written to evidence"
+  },
+  "starting_state": {
+    "checkpoint": {
+      "receipt": "docs/calibration/idempiere-reconciliation/receipt.json",
+      "select": "admitted release-13 checkpoint"
+    },
+    "schema_successor": {
+      "receipt": "docs/calibration/idempiere-schema/receipt.json",
+      "select": "reviewed schema repairs"
+    },
+    "pinned_at": "plan time; the plan refuses to start if either reference cannot be resolved",
+    "verify_before_execution": [
+      "table-row multisets equal the admitted checkpoint",
+      "30 rollback-only constraint probes pass on each engine",
+      "3,826 matching foreign-key relationships"
+    ],
+    "on_mismatch": "halt: entry-state-mismatch (no retry)"
+  },
+  "application": {
+    "source_commit": "731515dcdd5278b843db33b9d3109d155b881951",
+    "seed_commit": "30af25e9db302a6cdefd9e6c3846f7cedc5ce4d0",
+    "client": "GardenWorld",
+    "jvm_properties": {
+      "user.timezone": "UTC"
+    },
+    "harnesses": [
+      {
+        "id": "boundary",
+        "pair": "boundary",
+        "test": "LightyearBoundaryTest",
+        "file": "docs/calibration/idempiere-boundaries/LightyearBoundaryTest.java",
+        "sha256": "e9e5440ce34abfb8c7d488d8cd50855564927ef80fdc884163094cf8da4d8296"
+      },
+      {
+        "id": "operations",
+        "pair": "operations",
+        "test": "LightyearOperationsTest",
+        "file": "docs/calibration/idempiere-boundaries/LightyearOperationsTest.java",
+        "sha256": "d2c1d28b9ede77606e68b6ee6cf2815475e5ff4ad98bf7ed6f98365d35e76ce8"
+      }
+    ]
+  },
+  "expected": {
+    "declared": "by a person, before any execution; the run may not alter them",
+    "boundary": {
+      "customer_name_preserved": "Café 東京 Łódź",
+      "empty_description_stored_as": null,
+      "net_total": "53.99",
+      "tax": "4.05",
+      "invoice_and_payment": "58.04",
+      "stock": {
+        "opening": 10,
+        "closing": 7
+      }
+    },
+    "operations": {
+      "partial_shipments": [
+        1,
+        2
+      ],
+      "credit_memo": "19.35",
+      "reversal": "-19.35",
+      "rollback_then_retry_creates_no_duplicate": true,
+      "locked_updates": [
+        "100.00",
+        "100.01",
+        "100.02"
+      ],
+      "new_application_issues": 0,
+      "unresolved_differences": 0
+    }
+  },
+  "known_findings": [
+    {
+      "id": "oracle-shipdate-fractional-seconds",
+      "expect": "Oracle stores 2026-09-26T12:34:56 for input 2026-09-26T12:34:56.123456; PostgreSQL preserves it",
+      "status": "open",
+      "decision": "accept-contract-equivalence"
+    },
+    {
+      "id": "oracle-first-only-for-update",
+      "expect": "ORA-03049 for Query.setForUpdate(true).firstOnly() on Oracle; PostgreSQL completes",
+      "status": "open",
+      "decision": "classify-intentional-change after an upstream fix"
+    }
+  ],
+  "differences": {
+    "admitting_rules": [
+      "application-clock-within-native-execution",
+      "fresh-unique-application-uuid",
+      "validated-generated-uuid",
+      "nonnegative-workflow-duration-bounded-by-execution",
+      "workflow-text-identical-with-exact-decimal-rendering",
+      "processed-epoch-milliseconds-within-native-execution",
+      "pinned-driver-address-matches-isolated-native-target",
+      "oracle-native-database-name-and-unchanged-postgresql-seed-metadata"
+    ],
+    "unknown_difference": "route: propose-normalization",
+    "missing_or_extra_keys": "fail",
+    "writes_outside_declared_footprint": "fail",
+    "new_application_issue": "fail"
+  },
+  "decisions": {
+    "first_run_of_a_declaration": "approve-declaration",
+    "unknown_difference": "propose-normalization",
+    "known_finding_changed_or_absent": "classify-intentional-change",
+    "timestamp_contract": "accept-contract-equivalence",
+    "changing_a_claim": "promote-claim",
+    "while_waiting": "clean up first, then halt at human-decision-required; resume re-runs only affected cases"
+  },
+  "cleanup": {
+    "runs_on": [
+      "success",
+      "failure",
+      "cancel",
+      "timeout",
+      "halt"
+    ],
+    "containers": "remove",
+    "retain_data_on_failure": true,
+    "network": "remove",
+    "credentials": "destroy",
+    "verify_nothing_left_running": true,
+    "record": "signed cleanup receipt",
+    "cleanup_failure": "recorded exception; the run cannot complete"
+  },
+  "acceptance": {
+    "gates": [
+      {
+        "id": "entry-state",
+        "timeout_seconds": 1800,
+        "command": [
+          "python",
+          "-m",
+          "lightyear_calibration.journey_order",
+          "verify-entry",
+          "--run",
+          "{run}"
+        ]
+      },
+      {
+        "id": "business-outcomes",
+        "timeout_seconds": 600,
+        "command": [
+          "python",
+          "-m",
+          "lightyear_calibration.journey_order",
+          "verify-outcomes",
+          "--run",
+          "{run}"
+        ]
+      },
+      {
+        "id": "difference-admission",
+        "timeout_seconds": 1800,
+        "command": [
+          "python",
+          "-m",
+          "lightyear_calibration.journey_order",
+          "verify-differences",
+          "--run",
+          "{run}"
+        ]
+      },
+      {
+        "id": "declared-footprint",
+        "timeout_seconds": 600,
+        "command": [
+          "python",
+          "-m",
+          "lightyear_calibration.journey_order",
+          "verify-footprint",
+          "--run",
+          "{run}"
+        ]
+      },
+      {
+        "id": "known-findings",
+        "timeout_seconds": 600,
+        "command": [
+          "python",
+          "-m",
+          "lightyear_calibration.journey_order",
+          "verify-known-findings",
+          "--run",
+          "{run}"
+        ]
+      },
+      {
+        "id": "cleanup",
+        "timeout_seconds": 900,
+        "command": [
+          "python",
+          "-m",
+          "lightyear_calibration.journey_order",
+          "verify-cleanup",
+          "--run",
+          "{run}"
+        ]
+      }
+    ],
+    "gate_output_exposed_to_builder": false
+  },
+  "status_vocabulary": {
+    "reproduced-with-known-findings": "every gate passed and each open known finding reproduced exactly",
+    "halted-for-decision": "cleaned up; waiting on a recorded human decision",
+    "failed": "a gate failed after the permitted retries; cleaned up"
+  },
+  "roles": {
+    "business-owner": "named at declaration approval",
+    "claim-owner": "named at declaration approval",
+    "engineering": "named at declaration approval"
+  },
+  "claim_boundary": {
+    "may_claim": [
+      "bounded operations equivalence for the declared operations journey on the two pinned engines",
+      "an unattended run: zero human interventions outside the designed decision stops"
+    ],
+    "must_not_claim": [
+      "application equivalence",
+      "schema equivalence",
+      "platform qualification",
+      "independent attestation",
+      "bounded boundary equivalence while the timestamp decision is open"
+    ]
+  },
+  "metrics": {
+    "human_interventions_outside_designed_stops": "recorded in the journal; must be 0 for an unattended-run claim"
+  }
+}

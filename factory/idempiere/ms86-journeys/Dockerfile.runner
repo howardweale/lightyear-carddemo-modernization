@@ -1,0 +1,10 @@
+FROM maven@sha256:c3c9d3ac4ce8431a3995c0318b8d390f448e693dd4fabc16e9b68d2e1f3d7b46
+# Dependency provisioning happens before a work order is planned. Live runs use
+# the resulting local image ID, an internal network and Maven offline mode.
+RUN apt-get update && apt-get install -y --no-install-recommends python3 python3-venv libgtk-3-0 xvfb && rm -rf /var/lib/apt/lists/*
+RUN python3 -m venv /opt/verification && /opt/verification/bin/pip install --no-cache-dir oracledb==3.4.2 'psycopg[binary]==3.2.13' cryptography==46.0.3
+ENV PATH="/opt/verification/bin:${PATH}"
+ENV PYTHONPATH=/verifier/src
+ENV JAVA_TOOL_OPTIONS=-Duser.timezone=UTC
+ENTRYPOINT []
+CMD ["sleep", "infinity"]

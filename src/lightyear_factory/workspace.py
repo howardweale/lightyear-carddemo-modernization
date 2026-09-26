@@ -26,8 +26,15 @@ class IsolatedWorkspace:
         shutil.copytree(
             self.source_root,
             self.root,
-            ignore=shutil.ignore_patterns(*EXCLUDED_NAMES, "*.pyc"),
+            ignore=self._ignore_runtime,
         )
+
+    def _ignore_runtime(self, directory, names):
+        ignored = set(shutil.ignore_patterns(*EXCLUDED_NAMES, "*.pyc")(directory, names))
+        relative = Path(directory).relative_to(self.source_root).as_posix()
+        if relative == "factory/idempiere/ms86-journeys" and "runs" in names:
+            ignored.add("runs")
+        return ignored
 
     def resolve(self, relative_path: str, require_allowed: bool = True) -> Path:
         normalized = safe_relative_path(relative_path)

@@ -636,15 +636,18 @@ class JavaProbeTests(unittest.TestCase):
                     client, _ = listener.accept()
                     with client:
                         if data is None:
-                            time.sleep(0.4)
+                            time.sleep(3)
                         else:
                             client.sendall(data.encode())
             thread = Thread(target=serve, daemon=True)
             thread.start()
-            raw = self.invoke("".join(f"test-{i} 127.0.0.1 {port} 200 {nonce}\n" for i in range(3)))
+            # The first loopback SYN can take more than 200 ms on Windows.
+            # Keep a genuine read timeout by withholding the third response
+            # longer than this connection/read deadline.
+            raw = self.invoke("".join(f"test-{i} 127.0.0.1 {port} 2000 {nonce}\n" for i in range(3)))
             self.assertEqual(raw.returncode, 0, raw.stderr)
             self.assertEqual([r["outcome"] for r in map(json.loads, raw.stdout.splitlines())], ["nonce-matched", "nonce-mismatch", "read-timeout"])
-            thread.join(timeout=2)
+            thread.join(timeout=4)
         raw = self.invoke(f"refused 127.0.0.1 {port} 200 -\n")
         self.assertEqual(json.loads(raw.stdout)["outcome"], "connection-refused")
 

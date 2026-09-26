@@ -84,3 +84,11 @@ docs/calibration/idempiere-application/LightyearJourneyTest.java -text -whitespa
 
 # Preserve exact executed boundary and operations harnesses for receipt replay.
 docs/calibration/idempiere-boundaries/*.java -text -whitespace
+factory/idempiere/ms86-journeys/work-order.json -text
+factory/idempiere/ms86-journeys/work-order.supplied.json -text
+factory/idempiere/partial-invoicing/work-order.json -text
+docs/calibration/idempiere-native-journeys/evidence.zip binary
+docs/calibration/idempiere-native-journeys/*.pem -text
+docs/calibration/idempiere-partial-invoicing/evidence.zip binary
+docs/calibration/idempiere-partial-invoicing/*.pem -text
+docs/calibration/idempiere-partial-invoicing/*.java -text -whitespace

@@ -23,3 +23,6 @@ Thumbs.db
 
 # Engine-owned local history is never a committed measurement fixture.
 control-tower/run-index.sqlite3*
+
+# Private journey outputs, journals and credentials are not source fixtures.
+factory/idempiere/ms86-journeys/runs/

@@ -1615,6 +1615,14 @@ class ExplorerRequestHandler(BaseHTTPRequestHandler):
         if path == "/api/workflow/campaign":
             self._json(read_campaign(self.server.project_root, estate, campaign, self._value(query, "run_id")))
             return
+        if path == "/api/workflow/runs" and estate == "idempiere" and campaign == "retained":
+            from .journey_view import read_runs as journey_runs
+            self._json(journey_runs(self.server.project_root))
+            return
+        if path == "/api/workflow/execution" and estate == "idempiere" and campaign == "retained":
+            from .journey_view import selected as journey_selected
+            self._json(journey_selected(self.server.project_root, self._value(query, "run_id")))
+            return
         if path == "/api/workflow/runs":
             self._json(read_runs(self.server.project_root, estate) if campaign == "retained" else
                        campaign_runs(self.server.project_root, campaign))

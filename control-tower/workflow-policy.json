@@ -9,6 +9,7 @@
     "widen-observation": "auto",
     "apply-ledger-entry": "auto-if-unexpired",
     "propose-normalization": "always-ask",
+    "approve-declaration": "always-ask",
     "classify-intentional-change": "always-ask",
     "accept-contract-equivalence": "always-ask",
     "promote-claim": "always-ask",

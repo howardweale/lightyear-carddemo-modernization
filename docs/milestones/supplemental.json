@@ -70,6 +70,20 @@
       "title": "Binary, overlay and variable-record decoding",
       "customer_value": "Read IBM binary fields, REDEFINES and bounded variable tables without guessing byte layouts.",
       "status": "Implemented and fixture-tested; native customer qualification unproven"
+    },
+    {
+      "number": 83,
+      "path": "MS-83/MS-83.md",
+      "title": "Native iDempiere context and migration measurement",
+      "customer_value": "Measure static coverage with observed database facts and expose actual native migration differences; PR #214.",
+      "status": "Native measurement completed; findings followed up in MS84"
+    },
+    {
+      "number": 84,
+      "path": "MS-84/MS-84.md",
+      "title": "Native iDempiere reconciliation and historical replay",
+      "customer_value": "Review matching starting data, explicit repairs and 1,125 historical pairs across 20 admitted release checkpoints; PR #215.",
+      "status": "Corrected native replay completed; broader qualification unclaimed"
     }
   ]
 }

@@ -1,0 +1,38 @@
+{
+  "admitted": true,
+  "allowed_differences": [
+    {
+      "column": "datenextrun",
+      "execution_windows": null,
+      "key": "[200002]",
+      "oracle": "2023-11-06T14:37:45.000000+00:00",
+      "postgresql": "2023-11-06T14:37:45+00:00",
+      "rule": "native-timestamptz-same-instant",
+      "script": null,
+      "table": "ad_scheduler"
+    },
+    {
+      "column": "datenextrun",
+      "execution_windows": null,
+      "key": "[200003]",
+      "oracle": "2023-12-14T15:58:59.000000+00:00",
+      "postgresql": "2023-12-14T15:58:59+00:00",
+      "rule": "native-timestamptz-same-instant",
+      "script": null,
+      "table": "ad_scheduler"
+    }
+  ],
+  "application_equivalence": false,
+  "artifact_type": "lightyear-native-logical-checkpoint",
+  "common_table_count": 911,
+  "exact_table_count": 910,
+  "policy_sha256": "3d5da746f5f3702ec02ac30c269862b488fa7cd529a0296e8bed039f429f4400",
+  "schema_equivalence": false,
+  "scope": "logical base-table data under explicit rules; no schema or application equivalence claim",
+  "state_sha256": {
+    "oracle": "6bcfc0c27223b538a62669a44e5129bafa7cc7c5f1017421b81d54bdb408d88b",
+    "postgresql": "51f44660ee9bea232b0542b72e5de7c09b0a35d38eacf1e0a8248c6f81da4ecb"
+  },
+  "unresolved_differences": [],
+  "content_sha256": "984704bb76ef8b776af6b8fd746ec394cbe6479256ef2291bc6e5c66eb42e310"
+}

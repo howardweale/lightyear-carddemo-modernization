@@ -37,6 +37,12 @@ def capture_rows(connection, lane, output):
     tables = query(connection, "SELECT table_name FROM user_tables WHERE nested='NO' AND secondary='N'" if lane=='oracle' else
                    "SELECT table_name FROM information_schema.tables WHERE table_schema='adempiere' AND table_type='BASE TABLE'")
     rows = {}
+    timezone_columns = {}
+    if lane == 'oracle':
+        for column in query(connection, "SELECT table_name,column_name,data_type FROM user_tab_cols WHERE hidden_column='NO' AND data_type LIKE '%TIME ZONE%'"):
+            precision = re.search(r'\((\d+)\)', column['data_type'])
+            require(precision is None or int(precision.group(1)) <= 6, 'Native timezone precision exceeds capture contract')
+            timezone_columns.setdefault(column['table_name'], set()).add(column['column_name'])
     for item in tables:
         table=item['table_name']
         require(re.fullmatch(r'[A-Z][A-Z0-9_$#]*' if lane=='oracle' else r'[a-z_][a-z_0-9]*',table), 'Unsupported native identifier')
@@ -44,7 +50,16 @@ def capture_rows(connection, lane, output):
         filename=hashlib.sha256(table.encode()).hexdigest()+'.rows.jsonl.gz'
         counts=Counter();total=0
         with connection.cursor() as cursor, gzip.open(output/filename,'wb') as file:
-            cursor.execute('SELECT * FROM '+('"'+table+'"' if lane=='oracle' else 'adempiere."'+table+'"'))
+            projection = '*'
+            if table in timezone_columns:
+                # python-oracledb returns naive datetimes for native TSTZ. Read
+                # the native offset explicitly; assigning UTC would lose facts.
+                cursor.execute('SELECT * FROM "'+table+'" WHERE 1=0')
+                identifiers = [d[0] for d in cursor.description]
+                projection = ','.join(
+                    'TO_CHAR("'+name.replace('"','""')+'",\'YYYY-MM-DD"T"HH24:MI:SS.FF6TZH:TZM\') AS "'+name.replace('"','""')+'"'
+                    if name in timezone_columns[table] else '"'+name.replace('"','""')+'"' for name in identifiers)
+            cursor.execute('SELECT '+projection+' FROM '+('"'+table+'"' if lane=='oracle' else 'adempiere."'+table+'"'))
             names=[c[0].lower() for c in cursor.description]
             require(len(names)==len(set(names)), 'Case-folded column collision')
             while batch:=cursor.fetchmany(1000):
@@ -77,6 +92,7 @@ def capture_rows(connection, lane, output):
     result=seal({'schema_version':'1.0','artifact_type':'lightyear-native-state-observation','lane':lane,
                  'observed_at':datetime.now(timezone.utc).isoformat(),'evidence_class':'native-database-observation',
                  'row_capture_scope':'all ordinary base tables, all columns, all rows; no sampling',
+                 'row_query_contract':'all-columns-v2-preserve-native-timezone-offsets',
                  'structure_query_sha256':digest(structure_queries),'tables':rows,'structure':structure})
     (output/'state.json').write_text(json.dumps(result,separators=(',',':')),encoding='utf-8')
     return result
@@ -87,6 +103,7 @@ def observed_delta(before, after):
     require(before['lane']==after['lane'], 'Cross-lane delta')
     require(before['evidence_class']==after['evidence_class']=='native-database-observation', 'Non-native state')
     require(before['structure_query_sha256']==after['structure_query_sha256'], 'Changed observation contract')
+    require(before.get('row_query_contract') == after.get('row_query_contract'), 'Changed row observation contract')
     tables={}
     for name in sorted(set(before['tables'])|set(after['tables'])):
         b=before['tables'].get(name);a=after['tables'].get(name)

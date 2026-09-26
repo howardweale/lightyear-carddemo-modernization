@@ -74,3 +74,7 @@ spec/mainframe/packed-golden.hex -text
 
 # Preserve native iDempiere capture, log and controller bytes bound by the receipt.
 docs/calibration/idempiere-runtime/evidence/** -text -whitespace
+
+# Preserve reconciliation evidence bytes and raw difference witnesses.
+docs/calibration/idempiere-reconciliation/evidence/** -text -whitespace
+docs/calibration/idempiere-reconciliation/evidence.zip binary

@@ -39,17 +39,59 @@ def read_run(root, run_id):
             require(verify_envelope(receipt, key) and receipt["run_id"] == run_id and receipt["plan_sha256"] == plan["content_sha256"], "Run receipt differs")
             require(events and events[-1]["type"] == "halted", "Missing terminal journal event")
             require(all(events[-1]["payload"].get(k) == v for k,v in receipt.items() if k not in ("signature", "content_sha256")), "Terminal receipt differs from journal")
+        from lightyear_calibration.journey_contracts import current_contract
+        contract = current_contract(root)
+        campaign = None
+        campaign_progress = None
+        controller_revisions = 0
+        if plan.get("campaign_directory"):
+            directory = safe(root, Path(plan["campaign_directory"]))
+            campaign_plan = read_json(directory / "plan.json"); verify(campaign_plan)
+            linked = campaign_plan
+            matched = False
+            for _ in range(20):
+                matched = matched or linked["content_sha256"] == plan["campaign_plan_sha256"]
+                controller_revisions += bool(linked.get('controller_revision'))
+                predecessor = linked.get("prior_plan_sha256")
+                if not predecessor: break
+                require(predecessor and len(predecessor)==64 and all(c in '0123456789abcdef' for c in predecessor), "Campaign ancestry differs")
+                linked = read_json(safe(root, (directory / "history" / (predecessor+'.json')).relative_to(root))); verify(linked)
+                require(linked['content_sha256']==predecessor, "Campaign predecessor changed")
+            require(matched and not linked.get('prior_plan_sha256'), "Campaign plan differs")
+            campaign_auth = read_json(directory / "authorization.json")
+            require(verify_envelope(campaign_auth,key) and campaign_auth['plan_sha256']==campaign_plan['content_sha256'], "Current campaign authorization differs")
+            calls=[]
+            for call_path in sorted((directory / "calls").glob('*/receipt.json')):
+                call=read_json(safe(root,call_path.relative_to(root)))
+                require(verify_envelope(call,key), "Agent call signature differs")
+                calls.append(call)
+            campaign_progress={'recorded_calls':len(calls),'call_limit':campaign_plan['max_client_invocations'],
+                'latest_recorded_role':calls[-1]['role'] if calls else None,
+                'calls_with_unknown_usage':sum(c.get('usage') is None for c in calls),
+                'input_tokens':sum((c.get('usage') or {}).get('input_tokens',0) for c in calls),
+                'output_tokens':sum((c.get('usage') or {}).get('output_tokens',0) for c in calls),
+                'scope':'Signed completed-call records only; an in-flight call may have additional unreported usage.'}
+            path = directory / "receipt.json"
+            if path.exists():
+                campaign = read_json(path)
+                require(verify_envelope(campaign,key) and campaign["plan_sha256"]==campaign_plan["content_sha256"], "Campaign receipt differs")
+                require(any(a["run_id"]==run_id and receipt and a["receipt_sha256"]==receipt["content_sha256"] for a in campaign["attempts"]), "Campaign does not bind this native run")
         return {**empty, "status": receipt["status"] if receipt else "running", "events": events,
                 "receipt": receipt, "mode": plan.get("mode", "replay"), "model_calls": plan.get("model_calls", 0), "journal_head_sha256": events[-1]["content_sha256"] if events else None,
                 "signature_verified": True, "independently_attested": False,
                 "started_at": events[0]["at"] if events else None,
-                "requests": pending(root, run_id)}
+                "requests": pending(root, run_id), "timestamp_contract": contract, "campaign": campaign,
+                "campaign_progress": campaign_progress,
+                "campaign_controller_revisions": controller_revisions,
+                "judge_sha256": plan.get("judge_sha256"), "builder_client": plan.get("builder_client")}
     except (ValueError, OSError, KeyError, TypeError):
         return {**empty, "status": "invalid", "reason": "The native journey journal could not be verified.", "events": []}
 
 
 def pending(root, run_id=None):
     key = authority(root); output = []
+    from lightyear_calibration.journey_contracts import current_contract
+    contract = current_contract(root)
     folder = safe(root, CONTROL / "requests")
     for path in sorted(folder.glob("*.json")):
         value = read_json(safe(root, path.relative_to(root)))
@@ -59,7 +101,9 @@ def pending(root, run_id=None):
         decision = read_json(decision_path) if decision_path.exists() else None
         if decision:
             require(verify_envelope(decision, key) and decision["request_sha256"] == value["content_sha256"], "Decision signature differs")
-        output.append({**value, "decision": decision, "status": "recorded" if decision else "awaiting-human"})
+        applicable = contract if contract and value.get("action_kind")=="accept-contract-equivalence" and value.get("affected_cases")==["boundary"] else None
+        output.append({**value, "decision": decision, "current_contract": applicable,
+            "status": "accepted-scoped-contract" if applicable and applicable["effective"] else "review-due" if applicable else "recorded" if decision else "awaiting-human"})
     return output
 
 

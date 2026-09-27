@@ -25,7 +25,7 @@ BRAND_ROOT = ROOT / "brand"
 BRAND_ASSETS = BRAND_ROOT / "assets"
 BRAND_LOGO_SVG = BRAND_ASSETS / "lightyear-primary.svg"
 BRAND_LOGO_PNG = BRAND_ASSETS / "lightyear-primary.png"
-GENERATOR_VERSION = "1.25"
+GENERATOR_VERSION = "1.26"
 REPOSITORY = "howardweale/lightyear-carddemo-modernization"
 DEFAULT_BRANCH = "main"
 GITHUB_BLOB_ROOT = f"https://github.com/{REPOSITORY}/blob/{DEFAULT_BRANCH}"
@@ -49,6 +49,11 @@ def load_supplemental() -> list[dict[str, Any]]:
             raise ValueError("supplemental milestone number overlaps the main catalog or is invalid")
         if entry.get("path") != f"MS-{number:02d}/MS-{number:02d}.md":
             raise ValueError("supplemental record must use its canonical milestone path")
+        formats = entry.get("formats", ["md"])
+        if (not isinstance(formats, list) or not formats or formats[0] != "md"
+                or any(value not in ("md", "docx", "pdf") for value in formats)
+                or len(formats) != len(set(formats))):
+            raise ValueError("invalid supplemental formats")
         for key in ("title", "customer_value", "status"):
             if not isinstance(entry.get(key), str) or not entry[key].strip():
                 raise ValueError(f"supplemental milestone requires {key}")
@@ -575,7 +580,12 @@ def write_markdown_index(models: list[dict[str, Any]]) -> None:
                   "| Milestone | Title | Status | Record |", "|---|---|---|---|"])
     for record in load_supplemental():
         url = github_blob("docs/milestones/" + record["path"])
-        lines.append(f"| MS #{record['number']:02d} | {record['title']} | {record['status']} | [Markdown]({url}) |")
+        links = [f"[Markdown]({url})"]
+        for suffix in record.get("formats", ["md"])[1:]:
+            path = "docs/milestones/" + str(Path(record["path"]).with_suffix("." + suffix)).replace("\\", "/")
+            label, target = ("Download Word", github_raw(path)) if suffix == "docx" else ("PDF", github_blob(path))
+            links.append(f"[{label}]({target})")
+        lines.append(f"| MS #{record['number']:02d} | {record['title']} | {record['status']} | {' - '.join(links)} |")
 
     lines.extend(["", "## Build and verification", "", "```bash", "./milestone-documentation.sh verify", "./milestone-documentation.sh build", "```", "", "Windows:", "", "```powershell", ".\\milestone-documentation.ps1 verify", ".\\milestone-documentation.ps1 build", "```", "", "`verify` uses only the Python standard library. `build` requires the `docs` optional dependency set.", "", f"The content-addressed [manifest]({github_blob('docs/milestones/manifest.json')}) fails verification if a canonical source changes, an artifact is missing or modified, or an untracked milestone artifact appears.", ""])
     (DOC_ROOT / "README.md").write_text("\n".join(lines), encoding="utf-8", newline="\n")
@@ -613,6 +623,10 @@ def write_html_index(models: list[dict[str, Any]]) -> None:
     supplemental = load_supplemental()
     for record in supplemental:
         url = github_blob("docs/milestones/" + record["path"])
+        links = [f'<a href="{url}">Read</a>']
+        for suffix in record.get("formats", ["md"])[1:]:
+            path = "docs/milestones/" + Path(record["path"]).with_suffix("." + suffix).as_posix()
+            links.append(f'<a href="{github_raw(path) if suffix == "docx" else github_blob(path)}">{"Word" if suffix == "docx" else "PDF"}</a>')
         body = (DOC_ROOT / record["path"]).read_text(encoding="utf-8")
         searchable = re.sub(r"\s+", " ", " ".join([f"MS {record['number']} {record['number']:02d}", record["title"],
                                record["customer_value"], record["status"], body])).lower()
@@ -621,7 +635,7 @@ def write_html_index(models: list[dict[str, Any]]) -> None:
               <td class="number"><span>MS #{record['number']:02d}</span></td>
               <td><a class="title" href="{url}">{html.escape(record['title'])}</a><p>{html.escape(record['customer_value'])}</p></td>
               <td class="phase"><span>Implementation</span><small>{html.escape(record['status'])}</small></td>
-              <td class="formats"><a href="{url}">Read</a></td>
+              <td class="formats">{''.join(links)}</td>
             </tr>'''
         )
     total = len(models) + len(supplemental)
@@ -790,9 +804,11 @@ def build() -> None:
 
 
 def supplemental_artifacts() -> list[dict]:
+    paths = [Path(entry["path"]).with_suffix("." + suffix)
+             for entry in load_supplemental() for suffix in entry.get("formats", ["md"])]
     return [{"path": (DOC_ROOT / p).relative_to(ROOT).as_posix(),
              "bytes": (DOC_ROOT / p).stat().st_size, "sha256": sha256_path(DOC_ROOT / p)}
-            for p in SUPPLEMENTAL_MARKDOWN]
+            for p in paths]
 
 
 def verify() -> None:

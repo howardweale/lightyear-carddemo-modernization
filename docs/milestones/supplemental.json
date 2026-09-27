@@ -112,6 +112,24 @@
       "title": "Agent-built partial invoicing with native judgement",
       "customer_value": "Generate one bounded application journey, reject unintended effects and verify split invoicing, payment, stock and accounting on both engines.",
       "status": "Bounded native partial-invoicing equivalence passed after explicitly approved repairs; broader qualification unclaimed"
+    },
+    {
+      "number": 89,
+      "path": "MS-89/MS-89.md",
+      "title": "Analyst-led repairs with an unchanged native judge",
+      "customer_value": "Let agents repair permitted structural failures, retain every attempt and judge hash, measure complete campaign effort and own the timestamp contract.",
+      "status": "Bounded repair workflow and attempt audit; native campaign results retain explicit limits"
+    },
+    {
+      "number": 90,
+      "path": "MS-90/MS-90.md",
+      "title": "Versioned judgement without rewriting history",
+      "customer_value": "Apply exact numeric and owned timestamp rules to retained native observations, preserving the original failed verdict and every raw difference.",
+      "status": "Bounded partial-invoicing contract v2 passed on retained native evidence; no new native execution or broader qualification",
+      "formats": [
+        "md",
+        "docx"
+      ]
     }
   ]
 }

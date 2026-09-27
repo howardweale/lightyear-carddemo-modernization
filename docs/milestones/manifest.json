@@ -1057,17 +1057,17 @@
     "docx",
     "pdf"
   ],
-  "generator_version": "1.25",
+  "generator_version": "1.26",
   "library_files": [
     {
-      "bytes": 35978,
+      "bytes": 36692,
       "path": "docs/milestones/README.md",
-      "sha256": "b22b27a318984bc0802d753bd5ca331e71cf0242ec95dc3db9c006b6be3f0a86"
+      "sha256": "ecdbd63919cbc89fd77b5647d54b70e19d82e24bc5c3320a636de8befcf45417"
     },
     {
-      "bytes": 315866,
+      "bytes": 348625,
       "path": "docs/milestones/index.html",
-      "sha256": "78acfd95bce3c3574c093551327a8af057e1c05781071bc099dc81cb9dbd93a9"
+      "sha256": "3a5e84f3f4a9768ce679c6ddd806721a2771da0fd49e0e5999c570905acdc060"
     },
     {
       "bytes": 805,
@@ -1077,8 +1077,8 @@
   ],
   "milestone_count": 70,
   "schema_version": "1.1",
-  "searchable_milestone_count": 86,
-  "source_sha256": "3bc4b1709ba0cda0e026954055a0930d045b21109ee94e59c41e5032393c7c59",
+  "searchable_milestone_count": 88,
+  "source_sha256": "75b9d149f6022d32239ee16f11e86a31854baeaef3ec31b1b8e32487418c7505",
   "supplemental_artifacts": [
     {
       "bytes": 4335,
@@ -1156,10 +1156,25 @@
       "sha256": "bd44a800a0213db6fe0fc8e7abe86d203ecc0e745a429835a8c3abb36f866c7d"
     },
     {
-      "bytes": 11206,
+      "bytes": 12230,
       "path": "docs/milestones/MS-88/MS-88.md",
-      "sha256": "5a973d3cd1661010baf55194d52a4909f389e0f550a7c3f634341e24f8136a7e"
+      "sha256": "0dfd79e88a4eeb780b8a531cf2fa32de6e74f625d455cd5c235642717df0f7c8"
+    },
+    {
+      "bytes": 16703,
+      "path": "docs/milestones/MS-89/MS-89.md",
+      "sha256": "543ab07a085c6fc612f7fa213ae77a3e652a2025bef1dc338d3b19020026db85"
+    },
+    {
+      "bytes": 12508,
+      "path": "docs/milestones/MS-90/MS-90.md",
+      "sha256": "1f2ded1c4472a1661b1e7a4d98e771d1de670e920742a91f2ae22387fe7a8a40"
+    },
+    {
+      "bytes": 50620,
+      "path": "docs/milestones/MS-90/MS-90.docx",
+      "sha256": "f56df8882d1707033b9e23be848d3c4097696cc1299f799986782de2634590a1"
     }
   ],
-  "supplemental_milestone_count": 16
+  "supplemental_milestone_count": 18
 }

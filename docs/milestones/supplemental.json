@@ -130,6 +130,17 @@
         "md",
         "docx"
       ]
+    },
+    {
+      "number": 91,
+      "path": "MS-91/MS-91.md",
+      "title": "Declared dark factory operations run",
+      "customer_value": "Generate and verify one native operations journey under a predeclared judge, controller and budget, with zero repair bytes and complete replayable captures.",
+      "status": "First candidate passed bounded Oracle/PostgreSQL operations comparison; no controller changes, no repairs, no broader qualification",
+      "formats": [
+        "md",
+        "docx"
+      ]
     }
   ]
 }

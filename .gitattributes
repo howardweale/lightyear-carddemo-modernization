@@ -99,3 +99,15 @@ docs/calibration/idempiere-analyst-repair/** -text -whitespace
 factory/idempiere/analyst-repair/*.json -text
 factory/idempiere/contracts/*.json -text
 docs/calibration/idempiere-judge-v2/** -text -whitespace
+
+# Frozen MS91 inputs and complete retained native capture publication.
+factory/idempiere/declared-factory/*.json -text
+docs/calibration/idempiere-judge-v2-captures/** -text -whitespace
+
+# Preserve the executed MS91 candidate and signed campaign/capture artifacts.
+docs/calibration/idempiere-declared-factory/** -text -whitespace
+
+# Retain mixed line endings in source bytes already frozen by native receipts.
+src/lightyear_calibration/journey_builder.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+src/lightyear_calibration/partial_invoicing.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+tools/publish_declared_evidence.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

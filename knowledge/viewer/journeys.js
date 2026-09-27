@@ -2,14 +2,15 @@
 (() => {
   const node = (tag, text, cls) => { const e = document.createElement(tag); if (text !== undefined) e.textContent = text; if (cls) e.className = cls; return e; };
   function requests(host, payload) {
-    document.getElementById('decision-count').textContent = String((payload.requests || []).filter(r => r.status === 'awaiting-human').length);
+    document.getElementById('decision-count').textContent = String((payload.requests || []).filter(r => ['awaiting-human', 'review-due'].includes(r.status)).length);
     host.append(node('h2', 'Decisions for this run'));
     if (!payload.requests?.length) host.append(node('p', 'No decision requests have been recorded for this run.'));
     for (const request of payload.requests || []) {
       const card = node('section', undefined, 'run-card');
       card.append(node('h3', request.action_kind), node('p', request.reason), node('p', `Owner: ${request.owner_role} · ${request.status}`));
       card.append(node('p', `Request ${request.id} · affected cases: ${request.affected_cases.join(', ')}`));
-      if (request.decision) card.append(node('p', `Recorded by ${request.decision.actor}: ${request.decision.outcome}`));
+      if (request.current_contract) card.append(node('p', `Current decision: ${request.current_contract.name}. Owner: ${request.current_contract.owner}. Review: ${request.current_contract.review_date}. Original observations and verdicts are retained.`));
+      else if (request.decision) card.append(node('p', `Recorded by ${request.decision.actor}: ${request.decision.outcome}`));
       else card.append(node('p', 'Use the signed journey CLI to record this decision. Replaying does not accept the timestamp loss or promote equivalence.'));
       host.append(card);
     }
@@ -18,7 +19,7 @@
     host.replaceChildren();
     if (payload.status === 'invalid' || payload.signature_verified !== true) throw new Error('The native journey signature could not be verified.');
     host.append(node('p', `iDempiere · ${payload.run_id}`, 'run-eyebrow'), node('h1', payload.mode === 'extend' ? 'Generated native journey' : 'Native journey replay'), node('p', payload.status, 'run-note'));
-    host.append(node('p', payload.mode === 'extend' ? `Local Oracle and PostgreSQL · agent-generated partial-invoicing harness · ${payload.model_calls} recorded builder invocation(s). Native verdicts are deterministic. Local signatures are not independent attestation.` : 'Local Oracle and PostgreSQL · unchanged MS86 harnesses · builder idle · zero model calls. Local signatures are not independent attestation.', 'run-note'));
+    host.append(node('p', payload.mode === 'extend' ? `Local Oracle and PostgreSQL · agent-generated partial-invoicing harness · ${payload.model_calls} ${payload.builder_client ? 'agent client calls recorded before this native attempt (builder and analyst)' : 'recorded builder invocations'}. Native verdicts are deterministic. Local signatures are not independent attestation.` : 'Local Oracle and PostgreSQL · unchanged MS86 harnesses · builder idle · zero model calls. Local signatures are not independent attestation.', 'run-note'));
     const latestStage = payload.events.filter(e => e.type === 'stage').at(-1);
     if (!payload.receipt && latestStage) host.append(node('p', `Current stage: ${latestStage.payload.stage}`, 'run-note'));
     const receipt = payload.receipt;
@@ -36,6 +37,30 @@
     const cleanup = payload.events.filter(e => e.type === 'cleanup').at(-1);
     host.append(node('p', cleanup ? `Cleanup recorded: ${cleanup.payload.complete ? 'complete' : 'incomplete'}. Credentials destroyed: ${cleanup.payload.credentials_destroyed}.` : 'Cleanup has not yet been recorded; the run may still own local containers.', 'run-note'));
     requests(host, payload);
+    if (payload.campaign_progress && !payload.campaign) {
+      const progress = payload.campaign_progress;
+        host.append(node('p', `Campaign continuing: ${progress.recorded_calls} signed client-call records against a limit of ${progress.call_limit}. Latest recorded role: ${progress.latest_recorded_role || 'none'}. ${progress.input_tokens.toLocaleString()} input and ${progress.output_tokens.toLocaleString()} output tokens recorded so far. ${progress.calls_with_unknown_usage ? `${progress.calls_with_unknown_usage} call(s) have unknown usage; totals are incomplete. ` : ''}${progress.scope} The native verdict above belongs to this selected attempt.`, 'run-note'));
+    }
+    if (payload.campaign) {
+      const c = payload.campaign, cost = c.cost;
+      const card = node('section', undefined, 'run-card');
+      card.append(node('h2', 'Whole journey cost and repairs'), node('p', `Campaign: ${c.status}. Human-authored repair bytes: ${c.human_authored_repair_bytes ?? 'unverified'}.`));
+      card.append(node('p', `${cost.client_invocations} total client calls: ${cost.builder_invocations} builder and ${cost.analyst_invocations} analyst. ${cost.failed_client_invocations} failed client calls; ${cost.failed_native_attempts} failed native attempts.`));
+      card.append(node('p', `${cost.input_tokens.toLocaleString()} input tokens (${cost.cached_input_tokens.toLocaleString()} cached), ${cost.output_tokens.toLocaleString()} output tokens. ${cost.usage_complete ? 'Usage reported for every call.' : `${cost.calls_with_unknown_usage} call(s) have unknown usage; totals are incomplete.`}`));
+      card.append(node('p', `Elapsed: ${(cost.total_elapsed_seconds / 60).toFixed(1)} minutes total; ${(cost.agent_elapsed_seconds / 60).toFixed(1)} agent; ${(cost.native_elapsed_seconds / 60).toFixed(1)} native.`));
+      card.append(node('p', cost.billing_basis), node('p', c.human_authored_repair_bytes_scope));
+      card.append(node('p', `${payload.campaign_controller_revisions} controller revision(s) recorded between stopped campaign segments. Controller development is excluded from candidate-repair bytes; zero repair bytes does not establish an unattended development process.`));
+      if (c.status === 'halted-nonrepairable') card.append(node('p', 'No permitted structural repair was available or selected. The campaign stopped without a verified journey; review the retained findings before changing the contract. This does not mean the defect is impossible to repair.'));
+      if (c.status === 'repair-feedback-ready') card.append(node('p', 'The analyst recheck accepted the structural diagnostic. Repair feedback is ready; this recheck generated no new candidate and ran no database journey. The native result above remains unchanged.'));
+      host.append(card);
+    }
+    if (payload.builder_client) host.append(node('p', `Pinned builder: ${payload.builder_client.version} · SHA-256 ${payload.builder_client.sha256}`, 'run-note'));
+    if (payload.judge_sha256) {
+      const details = node('details'); details.append(node('summary', 'Judge hashes pinned for this attempt'));
+      const list = node('ul');
+      for (const [path, hash] of Object.entries(payload.judge_sha256)) list.append(node('li', `${path}: ${hash}`));
+      details.append(list); host.append(details);
+    }
     const timeline = node('ol', undefined, 'run-steps');
     for (const event of payload.events) {
       const p = event.payload;
@@ -46,7 +71,11 @@
       timeline.append(step);
     }
     host.append(node('h2', 'Verified journal events'), timeline, node('p', `Journal head: ${payload.journal_head_sha256}`, 'run-note'));
-    host.append(node('p', 'No claim of full application, schema or platform equivalence. The fractional timestamp finding remains open.', 'run-note'));
+    const contract = payload.timestamp_contract;
+    host.append(node('p', 'No claim of full application, schema or platform equivalence.', 'run-note'));
+    host.append(node('p', contract
+      ? `${contract.name}: ${contract.effective ? 'accepted within its named scope' : 'review required'}. Owner: ${contract.owner}. Review date: ${contract.review_date}. Only ${contract.scope.columns.join(', ')}. Raw fractional loss and original verdicts remain recorded.`
+      : 'The fractional timestamp finding remains open.', 'run-note'));
   }
   let sequence = 0;
   async function refreshQueue() {

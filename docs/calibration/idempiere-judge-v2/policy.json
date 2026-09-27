@@ -1,0 +1,25 @@
+{
+  "id": "idempiere-partial-invoicing-comparison-v2",
+  "version": 2,
+  "owner": "Howard Weale",
+  "application_source_commit": "731515dcdd5278b843db33b9d3109d155b881951",
+  "timestamp_decision_id": "idempiere-oracle-date-seconds-v1",
+  "timestamp_decision_sha256": "f2444931aa1f7777fc6d7692ecae0506bdf694aaade37a625138270f1dbdff6a",
+  "timestamp_column": "adempiere.m_inout.shipdate",
+  "timestamp_stages": ["firstShipment", "shipment"],
+  "oracle_datatype": "DATE",
+  "postgresql_datatype": "timestamp without time zone",
+  "capture_session_timezone": "UTC",
+  "numeric_trace_fields": ["order.discount", "order.reserved", "shipment.delivered"],
+  "numeric_rule": "finite exact decimal equality with no rounding or tolerance",
+  "timestamp_rule": "Oracle has zero fractional seconds and both values match through seconds in the verified UTC capture context; bind trace values to their native shipment rows",
+  "assessment_kind": "new verdict over retained native observations",
+  "limits": [
+    "Keep the original judge and original failed verdict unchanged",
+    "No global numeric or timestamp normalization",
+    "Reject other columns, timezone contexts, invalid values and mismatched seconds",
+    "Do not admit new application issues, undeclared writes or different business outcomes",
+    "No new native execution or model call is implied",
+    "No full application, schema or platform qualification"
+  ]
+}

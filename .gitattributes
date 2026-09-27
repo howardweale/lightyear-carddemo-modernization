@@ -92,3 +92,10 @@ docs/calibration/idempiere-native-journeys/*.pem -text
 docs/calibration/idempiere-partial-invoicing/evidence.zip binary
 docs/calibration/idempiere-partial-invoicing/*.pem -text
 docs/calibration/idempiere-partial-invoicing/*.java -text -whitespace
+
+# Preserve signed attempt provenance and native analyst-repair exports exactly.
+docs/calibration/idempiere-partial-invoicing/attempt-audit/** -text -whitespace
+docs/calibration/idempiere-analyst-repair/** -text -whitespace
+factory/idempiere/analyst-repair/*.json -text
+factory/idempiere/contracts/*.json -text
+docs/calibration/idempiere-judge-v2/** -text -whitespace

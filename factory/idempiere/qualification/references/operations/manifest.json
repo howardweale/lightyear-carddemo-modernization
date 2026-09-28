@@ -1,0 +1,15 @@
+{
+  "artifact_type": "private-reference-test-equipment",
+  "origin_run": "journey-d8a88a4c337845d4bcaf42ef976ff028",
+  "origin_sha256": "b53e4959d806fa8a2362906213d8e7063b99cf3027f6c5fb1476fac11c5d5599",
+  "harness_sha256": "601d2805138971081545a64bceda7f59333336b837de96f8c1147594d747c28b",
+  "modifications": [
+    "1500ms explicit rollback observation window",
+    "1500ms contended lock window"
+  ],
+  "human_review_status": "pending",
+  "prepared_by": "Codex",
+  "model_calls": 0,
+  "autonomous_success": false,
+  "builder_exposure_forbidden": true
+}

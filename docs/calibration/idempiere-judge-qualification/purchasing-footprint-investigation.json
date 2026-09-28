@@ -1,0 +1,72 @@
+{
+  "artifact_type": "purchasing-footprint-investigation",
+  "source_commit": "731515dcdd5278b843db33b9d3109d155b881951",
+  "source_evidence": [
+    {
+      "path": "org.adempiere.base/src/org/compiere/model/MCostDetail.java",
+      "git_blob_sha256": "fd8a5b08bea6fd38c0a2d0405f7f50c00401823d9ad999efea8e4a08d67b3ebc",
+      "workspace_sha256": "ec2d626b0a8e788c0cdc09424d4a126f8cf3b3da7029a17145e16d267beb4471",
+      "only_line_endings_may_differ": true,
+      "lines": [
+        1591,
+        1712,
+        1715,
+        1995
+      ]
+    },
+    {
+      "path": "org.adempiere.base/src/org/compiere/acct/DocManager.java",
+      "git_blob_sha256": "07b1f2e6449468c7d1a4aef98f591c6ce9348606af0f6d737d0fe2b501358dd6",
+      "workspace_sha256": "9d02dae74b0ffe7e5bae37fa6f1b5ac8cee55a2c8b7e0cc62daa3e85b3b739c4",
+      "only_line_endings_may_differ": true,
+      "lines": [
+        293,
+        854,
+        879
+      ]
+    },
+    {
+      "path": "org.adempiere.base/src/org/compiere/acct/Doc.java",
+      "git_blob_sha256": "2c31c17b1b5faa8a2513a1f759c2d120134c9026eb4c0b73c3682166c20d570c",
+      "workspace_sha256": "2c31c17b1b5faa8a2513a1f759c2d120134c9026eb4c0b73c3682166c20d570c",
+      "only_line_endings_may_differ": true,
+      "lines": [
+        633,
+        768,
+        771
+      ]
+    }
+  ],
+  "sample_run": "journey-4a4f3f697e8f45afbb1b1f75a5e0315e",
+  "observed_failed_attempts": 8,
+  "unexpected_tables": [
+    "m_costqueue",
+    "m_costhistory",
+    "t_fact_acct_history"
+  ],
+  "sample_native_counts": {
+    "m_costqueue": {
+      "before": 0,
+      "after": 2
+    },
+    "m_costhistory": {
+      "before": 0,
+      "after": 8
+    },
+    "t_fact_acct_history": {
+      "before": 0,
+      "after": 4,
+      "ad_table_id": 472
+    }
+  },
+  "findings": [
+    "MCostDetail explicitly saves costing history and FIFO/LIFO cost queues.",
+    "DocManager has an internal back-date posting path that reposts matched invoices; Doc.post then calls deleteAcct, which inserts T_Fact_Acct_History.",
+    "The sampled generated harness calls the public posting overload with repost=false. Its history rows concern matched invoices (AD_Table_ID 472), not a direct blanket repost of its invoice or payment."
+  ],
+  "limits": [
+    "Source paths and row references support an application-owned side effect; they are not a complete dynamic call trace.",
+    "No rule is widened by this report. A fresh reference and bounded row-level validation are still required."
+  ],
+  "whitelist_changed": false
+}

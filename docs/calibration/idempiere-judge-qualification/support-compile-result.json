@@ -1,0 +1,14 @@
+{
+  "candidate_sha256": "e4a0ca8d47591d7a9d0b265629bb6f9f88dba996da68f1332050e7eb9025dad9",
+  "database_access": false,
+  "diagnostics": [],
+  "exit_code": 0,
+  "image": "sha256:f3bed005214fbaec7f580a2d27e0dffa7a868bfc913db8c231d6f2b3fe4e0300",
+  "network": "none",
+  "private_judge_access": false,
+  "raw_output_exposed": false,
+  "status": "compiled",
+  "support_sha256": "9e750e97280ce17405179895532ba72053b884d00a61ecb04e55ebb929cc00ab",
+  "tool": "compile",
+  "content_sha256": "b952ab727b6d75add2040e6992e3a4893b7c99bfe5e35b61693c42e7c4ac04af"
+}

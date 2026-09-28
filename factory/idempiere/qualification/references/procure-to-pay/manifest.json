@@ -1,0 +1,12 @@
+{
+  "artifact_type": "private-reference-test-equipment",
+  "origin_run": "journey-4a4f3f697e8f45afbb1b1f75a5e0315e",
+  "origin_status": "both-engine-execution-completed-private-footprint-failed",
+  "harness_sha256": "ae69e0999186a7c6ae7382dbc4881c1d594d78f872e5eefc6ff1d82a6f3bf6f9",
+  "modifications": [],
+  "human_review_status": "pending",
+  "known_correct": false,
+  "prepared_by": "Codex",
+  "autonomous_success": false,
+  "builder_exposure_forbidden": true
+}

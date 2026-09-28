@@ -6,7 +6,7 @@
 
 This library is the customer-readable body of record for MS #1 through MS #70. Every milestone is
 published from one governed catalog in Markdown, Microsoft Word (`.docx`), and PDF.
-The same searchable index includes 19 later implementation records in Markdown.
+The same searchable index includes 21 later implementation records in Markdown.
 
 **[Open the searchable milestone index](https://howardweale.github.io/lightyear-carddemo-modernization/milestones/)** to filter by milestone number, title,
 customer value, capability, release, or roadmap phase.
@@ -113,6 +113,8 @@ or policy decisions.
 | MS #89 | Analyst-led repairs with an unchanged native judge | Bounded repair workflow and attempt audit; native campaign results retain explicit limits | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-89/MS-89.md) |
 | MS #90 | Versioned judgement without rewriting history | Bounded partial-invoicing contract v2 passed on retained native evidence; no new native execution or broader qualification | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-90/MS-90.md) - [Download Word](https://raw.githubusercontent.com/howardweale/lightyear-carddemo-modernization/main/docs/milestones/MS-90/MS-90.docx) |
 | MS #91 | Declared dark factory operations run | First candidate passed bounded Oracle/PostgreSQL operations comparison; no controller changes, no repairs, no broader qualification | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-91/MS-91.md) - [Download Word](https://raw.githubusercontent.com/howardweale/lightyear-carddemo-modernization/main/docs/milestones/MS-91/MS-91.docx) |
+| MS #92 | Frozen factory repeatability experiment | 40 trials completed with zero verified successes; frozen failures preserved | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-92/MS-92.md) - [Download Word](https://raw.githubusercontent.com/howardweale/lightyear-carddemo-modernization/main/docs/milestones/MS-92/MS-92.docx) |
+| MS #93 | Judge and execution environment qualification | Bounded reference and control checks passed; development gates remain before a new autonomous campaign | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-93/MS-93.md) - [Download Word](https://raw.githubusercontent.com/howardweale/lightyear-carddemo-modernization/main/docs/milestones/MS-93/MS-93.docx) |
 
 ## Build and verification
 

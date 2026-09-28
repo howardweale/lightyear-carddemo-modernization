@@ -1,0 +1,81 @@
+{
+  "candidate_gate_output_exposed": false,
+  "document_shape": {
+    "invoice_lines": 1,
+    "line_link": "Vendor invoice line links to receipt line, which links to purchase-order line.",
+    "purchase_order_lines": 1,
+    "receipt_lines": 1
+  },
+  "inputs": {
+    "business_date": "2026-09-26",
+    "logical_key": "LY-PROCUREMENT",
+    "opening_stock": "0",
+    "optional_description": "",
+    "order_quantity": "3",
+    "price_actual": "17.9955",
+    "price_list": "19.995",
+    "tax": "DictionaryIDs.C_Tax.PST (fixture rate 7.5 percent)",
+    "vendor_name": "Caf\u00e9 \u6771\u4eac \u0141\u00f3d\u017a"
+  },
+  "optional_trace_fields": [
+    "failure"
+  ],
+  "private_business_expected_values_included": false,
+  "scenario": "procure-to-pay",
+  "trace_fields": [
+    "database",
+    "failure",
+    "inventory.onHand",
+    "newIssueCount",
+    "product.id",
+    "product.saved",
+    "product.uuid",
+    "productPrice.id",
+    "productPrice.saved",
+    "productPrice.uuid",
+    "purchaseOrder.discount",
+    "purchaseOrder.id",
+    "purchaseOrder.net",
+    "purchaseOrder.priceActual",
+    "purchaseOrder.saved",
+    "purchaseOrder.status",
+    "purchaseOrder.total",
+    "purchaseOrder.uuid",
+    "receipt.id",
+    "receipt.quantity",
+    "receipt.saved",
+    "receipt.status",
+    "receipt.uuid",
+    "status",
+    "vendor.id",
+    "vendor.saved",
+    "vendor.uuid",
+    "vendorInvoice.id",
+    "vendorInvoice.paid",
+    "vendorInvoice.saved",
+    "vendorInvoice.status",
+    "vendorInvoice.total",
+    "vendorInvoice.uuid",
+    "vendorLocation.id",
+    "vendorLocation.saved",
+    "vendorLocation.uuid",
+    "vendorPayment.amount",
+    "vendorPayment.id",
+    "vendorPayment.saved",
+    "vendorPayment.status",
+    "vendorPayment.uuid"
+  ],
+  "trace_rules": [
+    "Only declared keys; use unique XML Properties entries.",
+    "Never serialize a null as an empty XML node; use the declared SQL-NULL token for null descriptions.",
+    "Use plain decimal strings without exponent notation.",
+    "Record observed values, never expected monetary values."
+  ],
+  "transactions": [
+    "Complete and commit each document through native application workflow.",
+    "Only post a document when its typed Posted Boolean accessor is false.",
+    "On failure, explicitly roll back and close the transaction; retry uses the same caller key."
+  ],
+  "version": "idempiere-public-journey-contract-v1",
+  "content_sha256": "4b026ac253d34b081d4ce89ded7f6fde6c0b5a70a0bb816538c10a077ede5ba0"
+}

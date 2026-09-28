@@ -141,6 +141,28 @@
         "md",
         "docx"
       ]
+    },
+    {
+      "number": 92,
+      "path": "MS-92/MS-92.md",
+      "title": "Frozen factory repeatability experiment",
+      "customer_value": "Measure fresh generation across four frozen conditions and preserve every halt and its cost.",
+      "status": "40 trials completed with zero verified successes; frozen failures preserved",
+      "formats": [
+        "md",
+        "docx"
+      ]
+    },
+    {
+      "number": 93,
+      "path": "MS-93/MS-93.md",
+      "title": "Judge and execution environment qualification",
+      "customer_value": "Qualify a private reference and deliberate native faults before measuring factory reliability again.",
+      "status": "Bounded reference and control checks passed; development gates remain before a new autonomous campaign",
+      "formats": [
+        "md",
+        "docx"
+      ]
     }
   ]
 }

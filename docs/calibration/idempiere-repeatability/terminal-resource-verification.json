@@ -1,0 +1,15 @@
+{
+  "checked_at": "2026-09-28T08:57:16.780874+00:00",
+  "cleanup_receipts": 78,
+  "valid_cleanup_signatures": 78,
+  "remaining": {
+    "containers": [],
+    "networks": [],
+    "volumes": []
+  },
+  "unrelated_retained_resources": {
+    "containers": 0,
+    "networks": 0,
+    "volumes": 9
+  }
+}

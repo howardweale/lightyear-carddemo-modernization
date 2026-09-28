@@ -1,0 +1,993 @@
+{
+  "checked_at": "2026-09-28T09:09:13.175307+00:00",
+  "results": [
+    {
+      "publication": "001-baseline",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-44d76a99ed1642a4b15e26654fca3b25",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    },
+    {
+      "publication": "002-without-decimal",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-8ae7c56f6e72495a968965851d4d40c2",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    },
+    {
+      "publication": "003-without-boolean",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-bfdca068b4db4f8db76797d494f1ad64",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          },
+          {
+            "run_id": "journey-a16e57ba9eee4d359be4417c91dc43a0",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          },
+          {
+            "run_id": "journey-31516c48487a431d82f34aa8d8bc2b98",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    },
+    {
+      "publication": "004-procure-to-pay",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-30e4920af6dc4b89bbb5f4648ccfe09e",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    },
+    {
+      "publication": "005-procure-to-pay",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-75f060550b3541ee8d3aee9264b5edf9",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          },
+          {
+            "run_id": "journey-8876462bfb3c48c6ab2168947d28df5c",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          },
+          {
+            "run_id": "journey-4a4f3f697e8f45afbb1b1f75a5e0315e",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    },
+    {
+      "publication": "006-without-decimal",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-fdc6a725309b4bd6bab9d744adf1ae99",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          },
+          {
+            "run_id": "journey-58cc15bd741f453b8af27972584cc772",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          },
+          {
+            "run_id": "journey-8bbe1d697eea40e187c3a9b22e3fb4e7",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    },
+    {
+      "publication": "007-without-boolean",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-b2a98508424a42328a4fcaffa0b05fc4",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    },
+    {
+      "publication": "008-baseline",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-c11b797ac4354998aa6932fdf8b89681",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          },
+          {
+            "run_id": "journey-a39fa3ee004d496bb4048aac56e8e28d",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          },
+          {
+            "run_id": "journey-b7ee0697576b488496238454449e6cce",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    },
+    {
+      "publication": "009-baseline",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-a05eedfeaeca4451b4dccfe5ff7fb90f",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    },
+    {
+      "publication": "010-without-decimal",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-d4b242e8d0e1401b8852bab2984147bc",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          },
+          {
+            "run_id": "journey-0295c321bd5d4c1d8d24a655e63d60f3",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    },
+    {
+      "publication": "011-procure-to-pay",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-f5139e13f8de48c99f4a4babdceb9cae",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          },
+          {
+            "run_id": "journey-306cc9f5f2194c079d181023c5237088",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          },
+          {
+            "run_id": "journey-6107268cb7b94243bc837bda51388207",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    },
+    {
+      "publication": "012-without-boolean",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-da398a8c4ea2432ea589ba3b9c939869",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    },
+    {
+      "publication": "013-without-decimal",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-8b20e3fded2c41e3b166089a51e39596",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          },
+          {
+            "run_id": "journey-f6cbff3f137842cebc33d40bb65e0ab9",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          },
+          {
+            "run_id": "journey-8b63fce2ae234c0681a778e07b7f4f39",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    },
+    {
+      "publication": "014-without-boolean",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-00a888e36a2a4297bf4e40e43110702e",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    },
+    {
+      "publication": "015-procure-to-pay",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-bf5d9f41c5ff487ebf0ac99379bfcae8",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          },
+          {
+            "run_id": "journey-9c81baa30e9f4b649d26850cec12137f",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    },
+    {
+      "publication": "016-baseline",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-8157e25bbee24eb4b4ebdc414478269b",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    },
+    {
+      "publication": "017-baseline",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-d7744ee6c5a24b1bafdf229a6ec36a96",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          },
+          {
+            "run_id": "journey-8105acbe107d465c8280f2e3c8597e75",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    },
+    {
+      "publication": "018-without-boolean",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-f37ac36033304172b4721aef3841656e",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          },
+          {
+            "run_id": "journey-498ec6b2b8f644f3952686402c681d7f",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          },
+          {
+            "run_id": "journey-d352f477292a44d0bf5af9566a1b51b1",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    },
+    {
+      "publication": "019-without-decimal",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-48f7e81db2cc4419aa2b49be0e5d7315",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          },
+          {
+            "run_id": "journey-8cbc9508e02248949e878d1c70a88a45",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    },
+    {
+      "publication": "020-procure-to-pay",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-840f35126dd9473da5288eaa5b817670",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          },
+          {
+            "run_id": "journey-db7c2a341fd547308c2f8a447a3f6e77",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          },
+          {
+            "run_id": "journey-5eb8116c921d48099db148a5957a10d5",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    },
+    {
+      "publication": "021-without-boolean",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-c8b6f00514074dbb8108a6dc5770acd3",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          },
+          {
+            "run_id": "journey-be153adaae134a59b663e4627236e05a",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          },
+          {
+            "run_id": "journey-df8f6dd5977249f4a33937ee4edce492",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    },
+    {
+      "publication": "022-baseline",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-98778582402b4f0d8255c7c91675ccf1",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          },
+          {
+            "run_id": "journey-6875bbf26e2f46c6addf5eebc2dbff79",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    },
+    {
+      "publication": "023-procure-to-pay",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-5a015dbaed6942cab746eabbce8c8385",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          },
+          {
+            "run_id": "journey-6f2d9bffb50e457bbf4f054d4f574da2",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    },
+    {
+      "publication": "024-without-decimal",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-fd005a738ad048d68ead4d3b34840800",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    },
+    {
+      "publication": "025-without-decimal",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-3118bb5441844018b2802b44320dd37f",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          },
+          {
+            "run_id": "journey-cd3bcc6a54974c34bbf25fd4b6640be3",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          },
+          {
+            "run_id": "journey-ddf7036a2373422aa5d578635c3fa2b1",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    },
+    {
+      "publication": "026-baseline",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-7276348219a649a6a321cd4abcca0188",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    },
+    {
+      "publication": "027-without-boolean",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-ee9e2e3d6f944383bb6276ae0cc99f1a",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          },
+          {
+            "run_id": "journey-aaf6a3c09c214cfcb7b3c2a3942820e9",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    },
+    {
+      "publication": "028-procure-to-pay",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-35efcee839fb433f890e37086fd6a2f5",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          },
+          {
+            "run_id": "journey-fe5a27e62c1f4885a4802db8de8eb739",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          },
+          {
+            "run_id": "journey-6ea247bbcb684f838137781b8b894fca",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    },
+    {
+      "publication": "029-procure-to-pay",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-6c7896a8d5554c3e8e4bbc88115d87ce",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    },
+    {
+      "publication": "030-without-boolean",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-75d68380d557400886ffc563b6db2df9",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    },
+    {
+      "publication": "031-without-decimal",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-2cd6467e592c4016a70a751eef89d06f",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          },
+          {
+            "run_id": "journey-c53297e2a955421db2466f929ef114cc",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    },
+    {
+      "publication": "032-baseline",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-e6308402c85b4f26846fcbf234e60e04",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    },
+    {
+      "publication": "033-without-decimal",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-6f7132eddbf14aeba7dda26328e7799b",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          },
+          {
+            "run_id": "journey-2f096add0a35448b9be507a8b84ce624",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    },
+    {
+      "publication": "034-without-boolean",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-66e2704cc460452ea9ad526715348f9e",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          },
+          {
+            "run_id": "journey-fb34e9fbb7f4488389018ef0b9db2666",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    },
+    {
+      "publication": "035-procure-to-pay",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-f1f83c19df954ad5bae5e0a3aafd786e",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          },
+          {
+            "run_id": "journey-1ca4566637db486683cf2459ca3bbb0a",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    },
+    {
+      "publication": "036-baseline",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-beacec32bca9417897d2cfe35ecc6323",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          },
+          {
+            "run_id": "journey-aa03fd000896426b9b3f56558fdaed38",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    },
+    {
+      "publication": "037-without-decimal",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-847dc9924713401b901f82f5f2b34dda",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          },
+          {
+            "run_id": "journey-f1d1578ad5494bec8b7f749912ca3779",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    },
+    {
+      "publication": "038-procure-to-pay",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-adc952a4c6cb491193e477e3e1a0d5fc",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          },
+          {
+            "run_id": "journey-bf8ce7669e234a8d93b380ca577a5bcc",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          },
+          {
+            "run_id": "journey-b54a1d560255466cb2f155149817736d",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    },
+    {
+      "publication": "039-baseline",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-42b6cc72ee70435f97a8b37651d036ab",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          },
+          {
+            "run_id": "journey-76cf9f12d9bc4b64a3c3e718fd608ede",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    },
+    {
+      "publication": "040-without-boolean",
+      "result": {
+        "status": "verified-complete-frozen-campaign",
+        "judge_version": "idempiere-observed-journey-v1",
+        "attempts": [
+          {
+            "run_id": "journey-0597051fe1d64d12a2752c56ac61a53f",
+            "gate_replayed": false,
+            "passed": false,
+            "reason": "Execution failed before a complete paired capture/gate existed"
+          }
+        ],
+        "dark_factory_run": false,
+        "new_native_executions": 0,
+        "new_model_calls": 0,
+        "independently_attested": false
+      }
+    }
+  ]
+}

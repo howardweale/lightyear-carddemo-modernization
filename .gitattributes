@@ -111,3 +111,26 @@ docs/calibration/idempiere-declared-factory/** -text -whitespace
 src/lightyear_calibration/journey_builder.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 src/lightyear_calibration/partial_invoicing.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 tools/publish_declared_evidence.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+
+# Preserve the exact mixed-line-ending observer source qualified before MS92.
+src/lightyear_calibration/observer_probe.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+src/lightyear_calibration/observer_runtime.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+factory/idempiere/repeatability/*.json -text
+factory/idempiere/repeatability/*/*.json -text
+docs/calibration/idempiere-native-observer/** -text -whitespace
+
+# Preserve compact MS92/MS93 signed publications and frozen qualification inputs.
+factory/idempiere/repeatability/README.md -text -whitespace
+src/lightyear_calibration/measured_diagnostics.py -text -whitespace
+src/lightyear_calibration/measured_native.py -text -whitespace
+src/lightyear_calibration/measured_transport.py -text -whitespace
+docs/calibration/idempiere-repeatability/** -text -whitespace
+docs/calibration/idempiere-judge-qualification/** -text -whitespace
+factory/idempiere/qualification/** -text -whitespace
+src/lightyear_calibration/qualification_combined_v2.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+src/lightyear_calibration/qualification_observer_runtime_v3.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+src/lightyear_calibration/qualification_observer_v3.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+src/lightyear_calibration/qualified_judge_v3.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+tools/publish_observer_qualification.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+tools/qualification_procurement_effects.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+tools/qualification_purchasing_comparison.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

@@ -1,0 +1,91 @@
+{
+  "artifact_type": "factory-builder-input-provenance",
+  "baseline_path": "factory/idempiere/declared-factory/builder-input.json",
+  "baseline_sha256": "566e916102075a205c8f5a23790371c36e37f8627bf746312ebd97be13544e34",
+  "entries": [
+    {
+      "id": "ms86-api-example",
+      "input_paths": [
+        "api_reference.boundary_api_example"
+      ],
+      "origin": "MS86 native boundary journey; assertions removed for MS88/MS89",
+      "failure_source": null,
+      "classification": "prior successful implementation example",
+      "milestones": [
+        "MS88",
+        "MS89",
+        "MS91"
+      ]
+    },
+    {
+      "id": "collection-row-lock",
+      "input_paths": [
+        "journey",
+        "trace_contract.instructions"
+      ],
+      "origin": "MS86/MS87 Oracle firstOnly locking failure; reviewed Query.setForUpdate(true).list() pattern",
+      "failure_source": "docs/milestones/MS-87/MS-87.md",
+      "classification": "failure-derived API selection",
+      "milestones": [
+        "MS91"
+      ]
+    },
+    {
+      "id": "typed-boolean-accessor",
+      "input_paths": [
+        "api_reference.typed_boolean_signature"
+      ],
+      "origin": "MS88 invocation 2 and MS89 native attempt 4: Posted String accessor mismatch; MS89 builder call 12 used the typed Boolean accessor",
+      "failure_source": "docs/milestones/MS-89/MS-89.md",
+      "classification": "failure-derived representation hint",
+      "milestones": [
+        "MS91"
+      ]
+    },
+    {
+      "id": "accounting-schema-signature",
+      "input_paths": [
+        "api_reference.accounting_schema_signature",
+        "api_reference.posting_signature"
+      ],
+      "origin": "MS88 invocation 3 compile failure at Doc.postImmediate; invocation 4 single-call repair",
+      "failure_source": "docs/milestones/MS-88/MS-88.md",
+      "classification": "failure-derived public API signature",
+      "milestones": [
+        "MS89",
+        "MS91"
+      ]
+    },
+    {
+      "id": "avoid-reposting",
+      "input_paths": [
+        "journey",
+        "api_reference.posting_call_chain_source"
+      ],
+      "origin": "MS88 invocation 4 wrote T_Fact_Acct_History by reposting; invocation 5 guarded already-posted documents",
+      "failure_source": "docs/milestones/MS-88/MS-88.md",
+      "classification": "failure-derived footprint prevention",
+      "milestones": [
+        "MS89",
+        "MS91"
+      ]
+    },
+    {
+      "id": "plain-decimal-format",
+      "input_paths": [
+        "trace_contract.instructions"
+      ],
+      "origin": "MS89 final paired comparison exposed numerically equal trace spellings; MS90 narrowed numeric policy; MS91 required canonical intermediate decimal text before generation",
+      "failure_source": "docs/milestones/MS-90/MS-90.md",
+      "classification": "failure-derived serialization instruction",
+      "milestones": [
+        "MS91"
+      ]
+    }
+  ],
+  "limits": [
+    "Provenance describes supplied inputs, not the foundation model training data.",
+    "First-try means the first candidate after these inherited inputs, not a clean-room invention.",
+    "Ablation measures the marginal effect of an explicit hint while all other supplied knowledge remains."
+  ]
+}

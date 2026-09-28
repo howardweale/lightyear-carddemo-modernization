@@ -1,0 +1,23 @@
+{
+  "transport": "stdio",
+  "tools": [
+    "public_contract",
+    "public_api",
+    "deterministic_support",
+    "check_structure",
+    "compile_candidate_source"
+  ],
+  "checks": {
+    "public_contract": {
+      "succeeded": true
+    },
+    "public_api": {
+      "succeeded": true
+    },
+    "check_structure": {
+      "succeeded": true
+    }
+  },
+  "path_access_rejected": true,
+  "model_calls": 0
+}

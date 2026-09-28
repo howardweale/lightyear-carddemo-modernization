@@ -1,0 +1,210 @@
+[
+  {
+    "run": "journey-4a4f3f697e8f45afbb1b1f75a5e0315e",
+    "scope_check": "passed",
+    "lanes": {
+      "oracle": {
+        "admission_granted": false,
+        "balanced_history_groups": 2,
+        "captured_history_ids_unique": true,
+        "scoped_rows": {
+          "m_costhistory": 8,
+          "m_costqueue": 2,
+          "t_fact_acct_history": 4
+        }
+      },
+      "postgresql": {
+        "admission_granted": false,
+        "balanced_history_groups": 2,
+        "captured_history_ids_unique": true,
+        "scoped_rows": {
+          "m_costhistory": 8,
+          "m_costqueue": 2,
+          "t_fact_acct_history": 4
+        }
+      }
+    }
+  },
+  {
+    "run": "journey-306cc9f5f2194c079d181023c5237088",
+    "scope_check": "passed",
+    "lanes": {
+      "oracle": {
+        "admission_granted": false,
+        "balanced_history_groups": 2,
+        "captured_history_ids_unique": true,
+        "scoped_rows": {
+          "m_costhistory": 8,
+          "m_costqueue": 2,
+          "t_fact_acct_history": 4
+        }
+      },
+      "postgresql": {
+        "admission_granted": false,
+        "balanced_history_groups": 2,
+        "captured_history_ids_unique": true,
+        "scoped_rows": {
+          "m_costhistory": 8,
+          "m_costqueue": 2,
+          "t_fact_acct_history": 4
+        }
+      }
+    }
+  },
+  {
+    "run": "journey-9c81baa30e9f4b649d26850cec12137f",
+    "scope_check": "passed",
+    "lanes": {
+      "oracle": {
+        "admission_granted": false,
+        "balanced_history_groups": 2,
+        "captured_history_ids_unique": true,
+        "scoped_rows": {
+          "m_costhistory": 8,
+          "m_costqueue": 2,
+          "t_fact_acct_history": 4
+        }
+      },
+      "postgresql": {
+        "admission_granted": false,
+        "balanced_history_groups": 2,
+        "captured_history_ids_unique": true,
+        "scoped_rows": {
+          "m_costhistory": 8,
+          "m_costqueue": 2,
+          "t_fact_acct_history": 4
+        }
+      }
+    }
+  },
+  {
+    "run": "journey-840f35126dd9473da5288eaa5b817670",
+    "scope_check": "passed",
+    "lanes": {
+      "oracle": {
+        "admission_granted": false,
+        "balanced_history_groups": 2,
+        "captured_history_ids_unique": true,
+        "scoped_rows": {
+          "m_costhistory": 8,
+          "m_costqueue": 2,
+          "t_fact_acct_history": 4
+        }
+      },
+      "postgresql": {
+        "admission_granted": false,
+        "balanced_history_groups": 2,
+        "captured_history_ids_unique": true,
+        "scoped_rows": {
+          "m_costhistory": 8,
+          "m_costqueue": 2,
+          "t_fact_acct_history": 4
+        }
+      }
+    }
+  },
+  {
+    "run": "journey-5eb8116c921d48099db148a5957a10d5",
+    "scope_check": "passed",
+    "lanes": {
+      "oracle": {
+        "admission_granted": false,
+        "balanced_history_groups": 2,
+        "captured_history_ids_unique": true,
+        "scoped_rows": {
+          "m_costhistory": 8,
+          "m_costqueue": 2,
+          "t_fact_acct_history": 4
+        }
+      },
+      "postgresql": {
+        "admission_granted": false,
+        "balanced_history_groups": 2,
+        "captured_history_ids_unique": true,
+        "scoped_rows": {
+          "m_costhistory": 8,
+          "m_costqueue": 2,
+          "t_fact_acct_history": 4
+        }
+      }
+    }
+  },
+  {
+    "run": "journey-35efcee839fb433f890e37086fd6a2f5",
+    "scope_check": "passed",
+    "lanes": {
+      "oracle": {
+        "admission_granted": false,
+        "balanced_history_groups": 2,
+        "captured_history_ids_unique": true,
+        "scoped_rows": {
+          "m_costhistory": 8,
+          "m_costqueue": 2,
+          "t_fact_acct_history": 4
+        }
+      },
+      "postgresql": {
+        "admission_granted": false,
+        "balanced_history_groups": 2,
+        "captured_history_ids_unique": true,
+        "scoped_rows": {
+          "m_costhistory": 8,
+          "m_costqueue": 2,
+          "t_fact_acct_history": 4
+        }
+      }
+    }
+  },
+  {
+    "run": "journey-6ea247bbcb684f838137781b8b894fca",
+    "scope_check": "passed",
+    "lanes": {
+      "oracle": {
+        "admission_granted": false,
+        "balanced_history_groups": 2,
+        "captured_history_ids_unique": true,
+        "scoped_rows": {
+          "m_costhistory": 8,
+          "m_costqueue": 2,
+          "t_fact_acct_history": 4
+        }
+      },
+      "postgresql": {
+        "admission_granted": false,
+        "balanced_history_groups": 2,
+        "captured_history_ids_unique": true,
+        "scoped_rows": {
+          "m_costhistory": 8,
+          "m_costqueue": 2,
+          "t_fact_acct_history": 4
+        }
+      }
+    }
+  },
+  {
+    "run": "journey-b54a1d560255466cb2f155149817736d",
+    "scope_check": "passed",
+    "lanes": {
+      "oracle": {
+        "admission_granted": false,
+        "balanced_history_groups": 2,
+        "captured_history_ids_unique": true,
+        "scoped_rows": {
+          "m_costhistory": 8,
+          "m_costqueue": 2,
+          "t_fact_acct_history": 4
+        }
+      },
+      "postgresql": {
+        "admission_granted": false,
+        "balanced_history_groups": 2,
+        "captured_history_ids_unique": true,
+        "scoped_rows": {
+          "m_costhistory": 8,
+          "m_costqueue": 2,
+          "t_fact_acct_history": 4
+        }
+      }
+    }
+  }
+]

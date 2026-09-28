@@ -1,0 +1,103 @@
+[
+  {
+    "input": "LightyearOperationsTest.java:[60] Unhandled exception type SQLException",
+    "expected": [
+      {
+        "category": "compile-error",
+        "file": "LightyearOperationsTest.java",
+        "line": 60,
+        "column": null,
+        "code": "unhandled-checked-exception",
+        "exception_type": "SQLException"
+      }
+    ],
+    "source_log_sha256": "8c326f5fbd26ac184ed5a0088398c5d810fe9df6adf41869429f4b0203ad60ec",
+    "source_run": "journey-44d76a99ed1642a4b15e26654fca3b25"
+  },
+  {
+    "input": "LightyearOperationsTest.java:[78] The method postImmediate(Properties, int, int, int, boolean, String) in the type DocumentEngine is not applicable for the arguments (MAcctSchema[], int, int, boolean, String)",
+    "expected": [
+      {
+        "category": "compile-error",
+        "file": "LightyearOperationsTest.java",
+        "line": 78,
+        "column": null,
+        "code": "method-signature-mismatch",
+        "symbol": "postImmediate",
+        "declaring_type": "DocumentEngine",
+        "parameter_types": [
+          "Properties",
+          "int",
+          "int",
+          "int",
+          "boolean",
+          "String"
+        ],
+        "argument_types": [
+          "MAcctSchema[]",
+          "int",
+          "int",
+          "boolean",
+          "String"
+        ]
+      }
+    ],
+    "source_log_sha256": "5283c5b48191494a5f98ed3c1bd64142239c28c903d45d208a2deb7ae3015414",
+    "source_run": "journey-bfdca068b4db4f8db76797d494f1ad64"
+  },
+  {
+    "input": "LightyearOperationsTest.java:[66] The method postDocument(MAcctSchema[], int, int, boolean, boolean, boolean, String) from the type DocManager is not visible",
+    "expected": [
+      {
+        "category": "compile-error",
+        "file": "LightyearOperationsTest.java",
+        "line": 66,
+        "column": null,
+        "code": "method-not-visible",
+        "symbol": "postDocument",
+        "declaring_type": "DocManager",
+        "parameter_types": [
+          "MAcctSchema[]",
+          "int",
+          "int",
+          "boolean",
+          "boolean",
+          "boolean",
+          "String"
+        ]
+      }
+    ],
+    "source_log_sha256": "077a716aae2febab68ff00d1a6f67c4414527ae213403883192ef45ad7559915",
+    "source_run": "journey-75f060550b3541ee8d3aee9264b5edf9"
+  },
+  {
+    "input": "LightyearOperationsTest.java:[16] The import org.adempiere.acct cannot be resolved",
+    "expected": [
+      {
+        "category": "compile-error",
+        "file": "LightyearOperationsTest.java",
+        "line": 16,
+        "column": null,
+        "code": "unresolved-import",
+        "symbol": "org.adempiere.acct"
+      }
+    ],
+    "source_log_sha256": "541f2ef3a70c758da2bbd453234f473b72597ffc7f52c6db5826f883a25811db",
+    "source_run": "journey-c11b797ac4354998aa6932fdf8b89681"
+  },
+  {
+    "input": "LightyearOperationsTest.java:[72] DocManager cannot be resolved",
+    "expected": [
+      {
+        "category": "compile-error",
+        "file": "LightyearOperationsTest.java",
+        "line": 72,
+        "column": null,
+        "code": "cannot-find-symbol",
+        "symbol": "DocManager"
+      }
+    ],
+    "source_log_sha256": "541f2ef3a70c758da2bbd453234f473b72597ffc7f52c6db5826f883a25811db",
+    "source_run": "journey-c11b797ac4354998aa6932fdf8b89681"
+  }
+]

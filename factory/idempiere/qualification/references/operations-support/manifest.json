@@ -1,0 +1,17 @@
+{
+  "artifact_type": "private-reference-test-equipment",
+  "origin_sha256": "601d2805138971081545a64bceda7f59333336b837de96f8c1147594d747c28b",
+  "harness_sha256": "80ea0a4e4ebb0cb78d14d7cfbab35c436bb3373cc7dc77b56e33f791ddd2c706",
+  "public_support_sha256": "9e750e97280ce17405179895532ba72053b884d00a61ecb04e55ebb929cc00ab",
+  "assembly": "Append exact public support source, removing only duplicate package and public top-level class visibility for single-file worker compilation. Method bodies unchanged.",
+  "modifications": [
+    "Use deterministic trace insertion/replacement",
+    "Use typed skip-if-posted public posting helper",
+    "Use deterministic commit/rollback/close helper for rollback and retry"
+  ],
+  "human_review_status": "pending",
+  "prepared_by": "Codex",
+  "model_calls": 0,
+  "autonomous_success": false,
+  "builder_exposure_forbidden": true
+}

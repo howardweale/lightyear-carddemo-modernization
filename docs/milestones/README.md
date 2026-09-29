@@ -6,7 +6,7 @@
 
 This library is the customer-readable body of record for MS #1 through MS #70. Every milestone is
 published from one governed catalog in Markdown, Microsoft Word (`.docx`), and PDF.
-The same searchable index includes 21 later implementation records in Markdown.
+The same searchable index includes 22 later implementation records in Markdown.
 
 **[Open the searchable milestone index](https://howardweale.github.io/lightyear-carddemo-modernization/milestones/)** to filter by milestone number, title,
 customer value, capability, release, or roadmap phase.
@@ -115,6 +115,7 @@ or policy decisions.
 | MS #91 | Declared dark factory operations run | First candidate passed bounded Oracle/PostgreSQL operations comparison; no controller changes, no repairs, no broader qualification | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-91/MS-91.md) - [Download Word](https://raw.githubusercontent.com/howardweale/lightyear-carddemo-modernization/main/docs/milestones/MS-91/MS-91.docx) |
 | MS #92 | Frozen factory repeatability experiment | 40 trials completed with zero verified successes; frozen failures preserved | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-92/MS-92.md) - [Download Word](https://raw.githubusercontent.com/howardweale/lightyear-carddemo-modernization/main/docs/milestones/MS-92/MS-92.docx) |
 | MS #93 | Judge and execution environment qualification | Bounded reference and control checks passed; development gates remain before a new autonomous campaign | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-93/MS-93.md) - [Download Word](https://raw.githubusercontent.com/howardweale/lightyear-carddemo-modernization/main/docs/milestones/MS-93/MS-93.docx) |
+| MS #94 | Qualify equipment, then measure the factory | Stage A accepted: 62 checks and full evidence replay verified; Stage B not executed | [Markdown](https://github.com/howardweale/lightyear-carddemo-modernization/blob/main/docs/milestones/MS-94/MS-94.md) |
 
 ## Build and verification
 

@@ -1,0 +1,8 @@
+......................................................Executing <Task finished name='Task-2' coro=<Registration.test_only_public_tools_registered() done, defined at C:\Users\howar\OneDrive\Documents\ChatGPT\lightyear-carddemo-modernization\work\idempiere-runtime-evidence\tests\test_journey_builder_tools.py:62> result=None created at C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.12_3.12.2800.0_x64__qbz5n2kfra8p0\Lib\asyncio\runners.py:100> took 0.640 seconds
+{"run_id": "journey-b2a6d9dc55df459abe8045c134f68735", "stage": "native-started"}
+{"run_id": "journey-2bdbf0e7043c4e8d941bc20fd05b820f", "stage": "native-started"}
+...................................................................................
+----------------------------------------------------------------------
+Ran 137 tests in 13.016s
+
+OK

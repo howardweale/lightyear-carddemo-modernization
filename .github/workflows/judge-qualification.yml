@@ -5,6 +5,10 @@ on:
     paths:
       - 'src/lightyear_calibration/**'
       - 'factory/idempiere/qualification/**'
+      - 'factory/idempiere/qualification-ms94/**'
+      - 'factory/idempiere/qualification-ms94-v3/**'
+      - 'tools/ms94_*.py'
+      - 'tests/test_ms94_*.py'
       - 'factory/idempiere/repeatability/**'
       - 'tools/*qualification*'
       - 'tools/journey*'
@@ -18,6 +22,10 @@ on:
     paths:
       - 'src/lightyear_calibration/**'
       - 'factory/idempiere/qualification/**'
+      - 'factory/idempiere/qualification-ms94/**'
+      - 'factory/idempiere/qualification-ms94-v3/**'
+      - 'tools/ms94_*.py'
+      - 'tests/test_ms94_*.py'
       - 'factory/idempiere/repeatability/**'
       - 'tools/*qualification*'
       - 'tools/journey*'
@@ -50,7 +58,8 @@ jobs:
         run: >-
           python -m unittest
           tests.test_judge_qualification tests.test_qualified_judge_versions
-          tests.test_qualification_observer tests.test_qualification_observer_v3
+          tests.test_qualification_observer tests.test_qualification_observer_v3 tests.test_qualification_observer_v4
           tests.test_journey_builder_tools tests.test_procurement_scope
           tests.test_journey_support_java tests.test_qualification_transport_policy
           tests.test_measured_factory tests.test_repeatability tests.test_transaction_observer
+          tests.test_ms94_equipment tests.test_ms94_controller tests.test_ms94_review_revision tests.test_ms94_snapshot_execution

@@ -1,0 +1,446 @@
+{
+  "release": "ms94-stage-a-evidence",
+  "authority_sha256": "c2fbae3453e8bcae03e0830a9eb83f310f027ad51929deee967ecee1a41f399f",
+  "assets": [
+    {
+      "slot": 1,
+      "asset": "ms94-equipment-04-pair-01.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-01.zip",
+      "bytes": 96501697,
+      "sha256": "826ee4a2359c5a1bfcc57d8336d171f26bd9aed07838d80b5415ef9bdfa02057"
+    },
+    {
+      "slot": 2,
+      "asset": "ms94-equipment-04-pair-02.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-02.zip",
+      "bytes": 96493403,
+      "sha256": "f72f4e4ffdc78c32a51970986b70157863fee0cd95b7c9993403ba8679df47ef"
+    },
+    {
+      "slot": 3,
+      "asset": "ms94-equipment-04-pair-03.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-03.zip",
+      "bytes": 96503476,
+      "sha256": "c65e059bc031c565a9f365fac1c8ca199678afb27c7bcb3601c459f9b03eedfc"
+    },
+    {
+      "slot": 4,
+      "asset": "ms94-equipment-04-pair-04.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-04.zip",
+      "bytes": 96498362,
+      "sha256": "c46ccb9b1b7c0513bf2deb9138d8152a1633eee539fea12a4175ecaeb09169db"
+    },
+    {
+      "slot": 5,
+      "asset": "ms94-equipment-04-pair-05.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-05.zip",
+      "bytes": 96495181,
+      "sha256": "0f9e587514166e0925bc7e6cd67e731d6f017a5d778dd5eb9a2218baabc6b27e"
+    },
+    {
+      "slot": 6,
+      "asset": "ms94-equipment-04-pair-06.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-06.zip",
+      "bytes": 96496215,
+      "sha256": "20b65d3993d63d6add4e111620b60ed36b4351db0134ad856dab31ab11b0b6ff"
+    },
+    {
+      "slot": 7,
+      "asset": "ms94-equipment-04-pair-07.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-07.zip",
+      "bytes": 96503426,
+      "sha256": "f93ec3811168aa8a7b35441f7d20cb43bb37c84d1383f35a49a1ed54116a1787"
+    },
+    {
+      "slot": 8,
+      "asset": "ms94-equipment-04-pair-08.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-08.zip",
+      "bytes": 96498551,
+      "sha256": "f503d425d1e8438147fe7cc0d97ffc380ef3ddcd734a7447b985967798e58eb0"
+    },
+    {
+      "slot": 9,
+      "asset": "ms94-equipment-04-pair-09.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-09.zip",
+      "bytes": 96494700,
+      "sha256": "6f6f344e59e28a53ca2ab150ab60d036d0c6748755583b6eb32c89aadc959e90"
+    },
+    {
+      "slot": 10,
+      "asset": "ms94-equipment-04-pair-10.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-10.zip",
+      "bytes": 96500748,
+      "sha256": "d31be328ad838fbea9c2482761693ef2faceabeb5c90974e513bd7016dd31592"
+    },
+    {
+      "slot": 11,
+      "asset": "ms94-equipment-04-pair-11.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-11.zip",
+      "bytes": 96242091,
+      "sha256": "cdc9c0adf461d6917f18d98a047a47bf7fb37d6379a9918fb132c967834bf004"
+    },
+    {
+      "slot": 12,
+      "asset": "ms94-equipment-04-pair-12.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-12.zip",
+      "bytes": 96241961,
+      "sha256": "92b2fd00f8c226c20d78aa8ebdba679854c327f43bb7a29ff47106e7138ef987"
+    },
+    {
+      "slot": 13,
+      "asset": "ms94-equipment-04-pair-13.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-13.zip",
+      "bytes": 96242016,
+      "sha256": "74fc0873f6f55e62035605889fd2eca9128888bdd330acf850472874e8d80b5f"
+    },
+    {
+      "slot": 14,
+      "asset": "ms94-equipment-04-pair-14.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-14.zip",
+      "bytes": 96242074,
+      "sha256": "345b301226eb5fe41f81f03dd6a688952980d2e34f89ed84c339a7ab664bf2cb"
+    },
+    {
+      "slot": 15,
+      "asset": "ms94-equipment-04-pair-15.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-15.zip",
+      "bytes": 96242086,
+      "sha256": "6e48eb4a45815777d4b56ba33b25b694d5b971b8dd64fc3668467f1be421bfbc"
+    },
+    {
+      "slot": 16,
+      "asset": "ms94-equipment-04-pair-16.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-16.zip",
+      "bytes": 96242484,
+      "sha256": "d085f4905e00f5d3c6e50d82b1dd504397ff6d3364ec60b8a2a2b1c68d168f2a"
+    },
+    {
+      "slot": 17,
+      "asset": "ms94-equipment-04-pair-17.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-17.zip",
+      "bytes": 96242499,
+      "sha256": "a0379c8c50f4f3d0f0d9be06a90c195e050213e1a309731a5e532ee791314bf1"
+    },
+    {
+      "slot": 18,
+      "asset": "ms94-equipment-04-pair-18.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-18.zip",
+      "bytes": 96241414,
+      "sha256": "58a278a765c26f2f991436d0e91b524d23da1ee61825288fb455d65b053744a2"
+    },
+    {
+      "slot": 19,
+      "asset": "ms94-equipment-04-pair-19.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-19.zip",
+      "bytes": 96242354,
+      "sha256": "51c10805b4628fc687b23391d4e6b795ae76d5ddae6987f2ba4936685b367c01"
+    },
+    {
+      "slot": 20,
+      "asset": "ms94-equipment-04-pair-20.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-20.zip",
+      "bytes": 96240845,
+      "sha256": "77201f7e98d57fe38fe76d033628dbddd0325e4de01cda5c5417840706306042"
+    },
+    {
+      "slot": 21,
+      "asset": "ms94-equipment-04-pair-21.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-21.zip",
+      "bytes": 93552637,
+      "sha256": "8f5306604e2cfe8cd009dd1c2cf9ee7f7b40be6fd23ced4f015b758edc6ffed0"
+    },
+    {
+      "slot": 22,
+      "asset": "ms94-equipment-04-pair-22.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-22.zip",
+      "bytes": 93548465,
+      "sha256": "b73482b5dc550d6c8bbff565ca668307210984b7a9bf3b4b5bea5bcb0ac71351"
+    },
+    {
+      "slot": 23,
+      "asset": "ms94-equipment-04-pair-23.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-23.zip",
+      "bytes": 93547051,
+      "sha256": "e5ad83c08e08e653f876c6275ae477f1d3d3f0f8b539a35d214339bd1610322e"
+    },
+    {
+      "slot": 24,
+      "asset": "ms94-equipment-04-pair-24.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-24.zip",
+      "bytes": 93549360,
+      "sha256": "61aea4ba71ce346c087f4baacaf85fb143a717fd7fc3a9783d77d56004307bd0"
+    },
+    {
+      "slot": 25,
+      "asset": "ms94-equipment-04-pair-25.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-25.zip",
+      "bytes": 93557783,
+      "sha256": "9c7338d740b424722fa0f37beb2797f3474ab3e0c692d60d96e0fc501706615d"
+    },
+    {
+      "slot": 26,
+      "asset": "ms94-equipment-04-pair-26.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-26.zip",
+      "bytes": 93556050,
+      "sha256": "d1668530ab12a4a03138c83b423c4b5bb5eb7755aba486e5ae7fb2a31f24cef7"
+    },
+    {
+      "slot": 27,
+      "asset": "ms94-equipment-04-pair-27.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-27.zip",
+      "bytes": 93553628,
+      "sha256": "7eacaa0209d7ba538381cbed5d2bf5a6d2b474165ad110ff771c5000c99c8bc2"
+    },
+    {
+      "slot": 28,
+      "asset": "ms94-equipment-04-pair-28.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-28.zip",
+      "bytes": 93572164,
+      "sha256": "b97202d234d4f109f4a91de87beb376875bd4b03d4d86235eebaeffb35ea5945"
+    },
+    {
+      "slot": 29,
+      "asset": "ms94-equipment-04-pair-29.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-29.zip",
+      "bytes": 93569198,
+      "sha256": "128f73950b1fa7252275f574da2a61c5c1bfb8d4d40b22e12c27d55b69bfb838"
+    },
+    {
+      "slot": 30,
+      "asset": "ms94-equipment-04-pair-30.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-30.zip",
+      "bytes": 93550211,
+      "sha256": "049928ecc402388e11c7b3e63c5279296c8b9d07e970bc9f44cffaf271729998"
+    },
+    {
+      "slot": 31,
+      "asset": "ms94-equipment-04-pair-31.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-31.zip",
+      "bytes": 93550297,
+      "sha256": "cb7276a878a65ecde874be2f086ed00f0a445c6d4b94cd2919e19b7e50eeba67"
+    },
+    {
+      "slot": 32,
+      "asset": "ms94-equipment-04-pair-32.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-32.zip",
+      "bytes": 93548195,
+      "sha256": "ae7a515b4ded218dc92e9b43d33bdd1a9a1a48cecb789e0dd38f7f5c56cde98c"
+    },
+    {
+      "slot": 33,
+      "asset": "ms94-equipment-04-pair-33.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-33.zip",
+      "bytes": 93574618,
+      "sha256": "a20179f5d0cbe6b2d5012ff314cf6a555048c122a13b247bb326b0e7c6e253c9"
+    },
+    {
+      "slot": 34,
+      "asset": "ms94-equipment-04-pair-34.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-34.zip",
+      "bytes": 93583883,
+      "sha256": "c457ca4d4b44f2b4844c6dea21a6925d546368e0b9b7360509080d91cf67175b"
+    },
+    {
+      "slot": 35,
+      "asset": "ms94-equipment-04-pair-35.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-35.zip",
+      "bytes": 93559843,
+      "sha256": "6dd01a068f5c17c20790f731130fea205a03d52f0cc7ddd25cd9184f8a0de553"
+    },
+    {
+      "slot": 36,
+      "asset": "ms94-equipment-04-pair-36.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-36.zip",
+      "bytes": 93551879,
+      "sha256": "b988ecd15cf4be90be5227b55ca0205f688e7705c127f01e3fcb6b859ff8a32b"
+    },
+    {
+      "slot": 37,
+      "asset": "ms94-equipment-04-pair-37.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-37.zip",
+      "bytes": 93563604,
+      "sha256": "f0a01abd0cd9ff4753d42643ed55dc30ac614e9e999bd0904a77b418c9dacfb6"
+    },
+    {
+      "slot": 38,
+      "asset": "ms94-equipment-04-pair-38.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-38.zip",
+      "bytes": 93553872,
+      "sha256": "c421bba396871ab9ea2c65449d1d78898ef822a3b2b3247bb5978157d27188eb"
+    },
+    {
+      "slot": 39,
+      "asset": "ms94-equipment-04-pair-39.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-39.zip",
+      "bytes": 93550755,
+      "sha256": "2302467d27122d34d7467f076aa126e8a03ad4ef9680243bbbf3e27b2ba571ae"
+    },
+    {
+      "slot": 40,
+      "asset": "ms94-equipment-04-pair-40.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-40.zip",
+      "bytes": 93569162,
+      "sha256": "49eb1da8417d57a6f5aa1aa21921c982034863a905a99c806ff15fa81dc82334"
+    },
+    {
+      "slot": 41,
+      "asset": "ms94-equipment-04-pair-41.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-41.zip",
+      "bytes": 93547279,
+      "sha256": "78ce42200c4b73a434f7670e44778d012564bb986284e5bf5ec9426260e8f9e2"
+    },
+    {
+      "slot": 42,
+      "asset": "ms94-equipment-04-pair-42.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-42.zip",
+      "bytes": 93779129,
+      "sha256": "e283a7a779fd5871ff5d70b75c567446ce4fbf56a17b66c4ac029304b5e37112"
+    },
+    {
+      "slot": 43,
+      "asset": "ms94-equipment-04-pair-43.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-43.zip",
+      "bytes": 93791192,
+      "sha256": "438c16bc5240fa32bfed1c6c75175fc9e4c61d7e4ae19e8e657660747f4f7571"
+    },
+    {
+      "slot": 44,
+      "asset": "ms94-equipment-04-pair-44.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-44.zip",
+      "bytes": 93784086,
+      "sha256": "e2c9b0ca621c9357fb56eb5e7560b00ba0a651187bdecfb5bf78e038687065e8"
+    },
+    {
+      "slot": 45,
+      "asset": "ms94-equipment-04-pair-45.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-45.zip",
+      "bytes": 93367797,
+      "sha256": "045e843be9143330cfba417f31de09f63a7dcde37bfc8e4a4d3b5ad8897e8005"
+    },
+    {
+      "slot": 46,
+      "asset": "ms94-equipment-04-pair-46.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-46.zip",
+      "bytes": 93367141,
+      "sha256": "786d547bebe01cc169b9d75f597fb209c586a2a465498345bf750093ac716609"
+    },
+    {
+      "slot": 47,
+      "asset": "ms94-equipment-04-pair-47.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-47.zip",
+      "bytes": 93367017,
+      "sha256": "669713e37ddaaae948f34854f0100a8eb5ad2dc3e6ea9404d35d81c0d9659985"
+    },
+    {
+      "slot": 48,
+      "asset": "ms94-equipment-04-pair-48.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-48.zip",
+      "bytes": 93556275,
+      "sha256": "8a480ef4ace86ec3af17e3e54fa6e6dabece5844d96c995386c43d97e87e2650"
+    },
+    {
+      "slot": 49,
+      "asset": "ms94-equipment-04-pair-49.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-49.zip",
+      "bytes": 93572655,
+      "sha256": "82368b29af6c15e6cd0b9a7440365750a4c009ceeb8d926b3b257fc736f49d0b"
+    },
+    {
+      "slot": 50,
+      "asset": "ms94-equipment-04-pair-50.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-50.zip",
+      "bytes": 93553456,
+      "sha256": "6b746f59616a72d6530cc406733264e4874d3dc6ed7b7715e5aef1434e754ce6"
+    },
+    {
+      "slot": 51,
+      "asset": "ms94-equipment-04-pair-51.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-51.zip",
+      "bytes": 93562448,
+      "sha256": "f3e409406daa628af6238c1f868ef1874abf6f091893d5a27b96973e2e428243"
+    },
+    {
+      "slot": 52,
+      "asset": "ms94-equipment-04-pair-52.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-52.zip",
+      "bytes": 93566449,
+      "sha256": "1fae2b543a19cce7611cde0e4fbb9c998cb8cdfe853cabffe5da687530f36015"
+    },
+    {
+      "slot": 53,
+      "asset": "ms94-equipment-04-pair-53.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-53.zip",
+      "bytes": 93558752,
+      "sha256": "2af4c625dd3eb7af9960b1bb1568a8531a2a0167aaa2d8fde7db37e95cff9389"
+    },
+    {
+      "slot": 54,
+      "asset": "ms94-equipment-04-pair-54.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-54.zip",
+      "bytes": 96470721,
+      "sha256": "bc6e397d565f7850e626bc251479152c2529686825d492d028fb4e82a130d0da"
+    },
+    {
+      "slot": 55,
+      "asset": "ms94-equipment-04-pair-55.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-55.zip",
+      "bytes": 96475343,
+      "sha256": "7b23fb67c12f3672172d959367becbe11437cbf017fd725128187bc5cdb75aec"
+    },
+    {
+      "slot": 56,
+      "asset": "ms94-equipment-04-pair-56.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-56.zip",
+      "bytes": 96472328,
+      "sha256": "e5e03ee0e6fedcc5c25eb7801d6b193852cf7a0c1fbd6c060bab935fb810b8b6"
+    },
+    {
+      "slot": 57,
+      "asset": "ms94-equipment-04-pair-57.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-57.zip",
+      "bytes": 93371525,
+      "sha256": "2ef3c045a59e91d2451de80434b885bdf61fee8e0a47079642a6665deb30fcf3"
+    },
+    {
+      "slot": 58,
+      "asset": "ms94-equipment-04-pair-58.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-58.zip",
+      "bytes": 93371606,
+      "sha256": "c35ba9fd0d6f691bd8f12105c0db00868a1db35d80afa33ba4b7f158f20a6e84"
+    },
+    {
+      "slot": 59,
+      "asset": "ms94-equipment-04-pair-59.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-59.zip",
+      "bytes": 93371592,
+      "sha256": "3f9e2d61c441c5a55bf48cde702ac3589b0f3f17dffa30882c6fe0621ad39c1d"
+    },
+    {
+      "slot": 60,
+      "asset": "ms94-equipment-04-pair-60.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-60.zip",
+      "bytes": 93550881,
+      "sha256": "b1f67b81dcfd828819062f55ba669c59f38df4e74592ea1068ed33cdc19c5c61"
+    },
+    {
+      "slot": 61,
+      "asset": "ms94-equipment-04-pair-61.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-61.zip",
+      "bytes": 93542638,
+      "sha256": "341b51e4603c09a47557e7eb58258585a5ed0f30f0e40320bbccdbe3e70d1523"
+    },
+    {
+      "slot": 62,
+      "asset": "ms94-equipment-04-pair-62.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-pair-62.zip",
+      "bytes": 93531010,
+      "sha256": "9d20fde145dd5e30d22be184b2d1639cc8dc3e5fa5a1b373a1d430b33b6f3442"
+    },
+    {
+      "asset": "ms94-equipment-04-frozen-source.zip",
+      "url": "https://github.com/howardweale/lightyear-carddemo-modernization/releases/download/ms94-stage-a-evidence/ms94-equipment-04-frozen-source.zip",
+      "bytes": 34420631,
+      "sha256": "bee0092e70d29a8b5d00b591c02bfc48b61eb77b0f588af8ac1009943ef651b8"
+    }
+  ]
+}

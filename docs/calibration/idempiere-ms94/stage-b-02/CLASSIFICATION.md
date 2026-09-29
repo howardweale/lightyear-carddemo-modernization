@@ -1,4 +1,4 @@
-**Recorded cohort: 2/10 (20%); 95% Wilson interval 5.7%–51.0%. Human adjudication remains pending.**
+**Recorded cohort: 2/10 (20%); 95% Wilson interval 5.7%–51.0%. Both passes and Category A accepted by Howard; Category B retains a public-contract caveat.**
 
 # Stage B 02: post-run classification
 
@@ -99,10 +99,11 @@ unresolved set. This does not independently prove all possible business semantic
 However, the builder-visible prompt/shapes do not explicitly select an invoice
 type, require retention of the order-derived type, or explain whether these
 alternative types are forbidden. Structural validity is insufficient to declare
-either alternative semantically correct. A person must adjudicate the intended
-business contract and whether this is another MS-92-style false rejection.
-Until then these five remain recorded business failures with a **potential
-contract/equipment defect**, not five established model business-logic mistakes.
+either alternative semantically correct. Howard subsequently approved deterministic
+retention as a rule **for the next run**, without identifying an existing frozen
+clause. These five remain recorded business failures with a **public-contract
+gap**, not five established model business-logic mistakes. His prospective approval
+does not establish that the historical policy was fair or relabel old outcomes.
 
 All five current diagnostic exports are empty. A closed diagnostic containing
 only `invoice` plus `c_doctypetarget_id`/`c_doctype_id` would identify the location
@@ -112,19 +113,24 @@ contract meant. Revealing field names is not a substitute for resolving ambiguit
 ## Human review and next-run decision
 
 [REVIEW.md](REVIEW.md) contains separate pass reviews and the contract adjudication
-request. Human review is pending; no assistant assessment is labelled human approval.
+request. Howard Weale accepted cohort-05 and cohort-06 and confirmed all six
+Category A execution failures on 29 September 2026. He clarified that Category B
+approves a prospective retention rule. The original classification
+JSON remains unchanged as the pre-review evidence index; [human-review.json](human-review.json)
+records the subsequent human decisions against its exact hash.
 The signed report says `cohort_void=false`, which remains unchanged. If human
 review establishes a wrong judge, publish a separate adjudication invalidating
 the measurement's interpretation and requalify the equipment before measuring
 again. Never replace the old failure with a pass or silently recompute 7/10.
 
 Six of eleven failures are runtime crashes (54.5%; the cohort alone is tied at
-four crashes/four document-type cases). Under the requested decision rule the
-**provisional single intervention is a public smoke-run tool**, conditional on
-review finding no judge defect requiring precedence. Do not also widen holdout
-diagnostics or change the public contract in that same experimental condition.
-If the contract/judge review requires correction, that correction and equipment
-requalification take precedence; smoke-run work is deferred.
+four crashes/four document-type cases). This initially favored a public smoke-run
+tool. Howard's subsequent prospective contract approval gives the contract gap
+precedence: the **single next change is the public order-derived invoice-type
+retention rule and its matching structural acceptance rule**. See
+[the exact requirement and qualification boundary](NEXT-CONTRACT.md).
+Smoke-run work and diagnostic widening are deferred. Integrate and requalify the
+changed acceptance boundary before measuring; these steps have not yet been run.
 
 The next measurement will use **20 fresh cohort trials**, with any pilots excluded
 and declared separately. The existing ten are not extended or pooled into it.

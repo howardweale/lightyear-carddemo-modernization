@@ -134,3 +134,28 @@ src/lightyear_calibration/qualified_judge_v3.py -text whitespace=blank-at-eol,bl
 tools/publish_observer_qualification.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 tools/qualification_procurement_effects.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 tools/qualification_purchasing_comparison.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+
+# MS94 equipment declarations bind exact source and full publication bytes.
+tools/ms94_*.py -text
+src/lightyear_calibration/ms94_faults.py -text
+src/lightyear_calibration/ms94_faults_v2.py -text
+factory/idempiere/qualification-ms94/** -text
+docs/calibration/idempiere-ms94/** -text -whitespace
+factory/idempiere/qualification-ms94-v3/** -text
+src/lightyear_calibration/ms94_v3_*.py -text
+
+src/lightyear_calibration/ms94_v4_*.py -text
+src/lightyear_calibration/qualification_observer*v4.py -text
+
+# Keep reviewed Windows bytes while treating CRLF as a line ending in diffs.
+tools/ms94_*.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+src/lightyear_calibration/ms94_*.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+src/lightyear_calibration/qualification_observer*v4.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+factory/idempiere/qualification-ms94/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+factory/idempiere/qualification-ms94-v3/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+
+# These four qualified source files include a hash-bound terminal blank line.
+src/lightyear_calibration/ms94_v3_combined.py whitespace=blank-at-eol,space-before-tab,cr-at-eol,-blank-at-eof
+src/lightyear_calibration/ms94_v4_combined.py whitespace=blank-at-eol,space-before-tab,cr-at-eol,-blank-at-eof
+tools/ms94_native_v3.py whitespace=blank-at-eol,space-before-tab,cr-at-eol,-blank-at-eof
+tools/ms94_native_v4.py whitespace=blank-at-eol,space-before-tab,cr-at-eol,-blank-at-eof

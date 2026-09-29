@@ -11,7 +11,7 @@ from lightyear_calibration.contracts import CalibrationError, read_json, seal
 from lightyear_calibration.journey_order import save, file_hash
 from tools.ms94_controller_v4 import assemble, public_prompt, SUPPORT
 from tools.ms94_builder_mcp_v4 import RecordedTools, transcript, TOOLS, SERVER
-from tools.ms94_tool_policy_v4 import arguments, verify_events
+from tools.ms94_tool_policy_v4 import arguments, capability_arguments, verify_events, LEGACY_COLLAB_WARNING
 from tools.ms94_public_api_v4 import api, CATALOG
 from tools.ms94_stage_b_evidence import stage_a
 
@@ -47,9 +47,38 @@ class StageBEquipment04(unittest.TestCase):
         self.assertEqual(server['args'][1], 'tools.ms94_builder_mcp_v4')
         self.assertTrue(server['required'])
         self.assertIn('--ignore-user-config', args)
+        self.assertNotIn('collab', args)
+        self.assertIn('multi_agent', args)
+        self.assertIn('multi_agent', capability_arguments())
         for kind in ('command_execution', 'file_change', 'web_search', 'new_unknown_tool'):
             with self.assertRaises(CalibrationError):
                 verify_events([{'item':{'type':kind}}], 'builder', [])
+
+    def test_only_exact_non_executable_cli_warning_is_permitted(self):
+        event={'type':'item.completed','item':{'id':'item_0','type':'error','message':LEGACY_COLLAB_WARNING}}
+        self.assertTrue(verify_events([event], 'builder', [])['verified'])
+        for changed in (
+            {**event,'type':'item.started'},
+            {**event,'command':'hidden command'},
+            {**event,'item':{**event['item'],'command':'hidden command'}},
+            {**event,'item':{**event['item'],'message':LEGACY_COLLAB_WARNING+' extra'}},
+            {**event,'item':{**event['item'],'message':'provider request failed'}},
+            {'type':'turn.failed'}, {'type':'error'},
+        ):
+            with self.subTest(event=changed), self.assertRaises(CalibrationError):
+                verify_events([changed], 'builder', [])
+        with self.assertRaises(CalibrationError):
+            verify_events([event,{'item':{'type':'command_execution'}}], 'builder', [])
+
+    def test_captured_failed_pilot_transcript_replays_without_new_calls(self):
+        folder=ROOT/'work/ms94/execution-snapshots/stage-b-01/work/ms94/stage-b-01/trials/pilot-01/calls/001-builder'
+        if not (folder/'events.jsonl').exists(): self.skipTest('local failed pilot evidence required')
+        events=[json.loads(line) for line in (folder/'events.jsonl').read_text(encoding='utf-8').splitlines() if line.strip()]
+        records=read_json(folder/'tool-transcript.json')
+        self.assertEqual(verify_events(events,'builder',records)['tool_calls'],17)
+        # Recorded arguments/results remain binding despite a recognized warning.
+        altered=json.loads(json.dumps(records));altered[0]['result']['output']={'tampered':True}
+        with self.assertRaises(CalibrationError): verify_events(events,'builder',altered)
 
     def test_api_has_no_path_or_arbitrary_method_access(self):
         with self.assertRaises(CalibrationError): api(ROOT, '../../private/reference')
@@ -101,7 +130,11 @@ class StageBEquipment04(unittest.TestCase):
         self.assertEqual(len(plan['schedule']), 62); self.assertTrue(accepted['passed'])
         with patch('tools.ms94_stage_b_evidence.file_hash', return_value='changed'):
             with self.assertRaises(CalibrationError): stage_a(frozen, equipment)
-        with self.assertRaises(CalibrationError): stage_a(frozen, equipment, live=True)
+        def unpublished(path):
+            if Path(path).name=='published-assets.json': return {'release_published':False}
+            return read_json(path)
+        with patch('tools.ms94_stage_b_evidence.read_json',side_effect=unpublished):
+            with self.assertRaises(CalibrationError): stage_a(frozen, equipment, live=True)
 
     def test_stopping_result_is_visible_before_publication_replay(self):
         from tools import ms94_measure_v4 as measure

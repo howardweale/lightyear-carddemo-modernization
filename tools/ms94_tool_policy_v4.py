@@ -5,6 +5,19 @@ from lightyear_calibration.contracts import require
 from tools.qualification_transport_policy import toml
 from tools.ms94_builder_mcp_v4 import TOOLS,SERVER
 
+# Exact non-executable diagnostic emitted by the pinned CLI's legacy alias.
+# Do not accept arbitrary error items or infer safety from a message prefix.
+LEGACY_COLLAB_WARNING = (
+    '`[features].collab` is deprecated. Use `[features].multi_agent` instead. '
+    '(Enable it with `--enable multi_agent` or `[features].multi_agent` in config.toml. '
+    'See https://developers.openai.com/codex/config-basic#feature-flags for details.)'
+)
+
+
+def capability_arguments():
+    return ['--ignore-user-config','--disable','shell_tool','--disable','apps','--disable','multi_agent',
+            '--config','web_search="disabled"','--config','approval_policy="never"']
+
 
 def arguments(root,python,session_id,maximum):
     root=Path(root).resolve()
@@ -13,8 +26,7 @@ def arguments(root,python,session_id,maximum):
         'env':{'PYTHONPATH':os.pathsep.join((str(root/'src'),str(root))),'PYTHONUTF8':'1'},
         'enabled':True,'required':True,'enabled_tools':list(TOOLS),'startup_timeout_sec':30,
         'tool_timeout_sec':660,'default_tools_approval_mode':'approve'}
-    return ['--ignore-user-config','--disable','shell_tool','--disable','apps','--disable','collab',
-        '--config','web_search="disabled"','--config','approval_policy="never"','--config','mcp_servers='+toml({SERVER:server})]
+    return capability_arguments()+['--config','mcp_servers='+toml({SERVER:server})]
 
 
 def closed_output(result):
@@ -31,8 +43,15 @@ def verify_events(events,role,records):
     allowed={'reasoning','agent_message','mcp_tool_call'}
     completed=[];started={}
     for event in events:
+        require(event.get('type') not in ('error','turn.failed'),'Agent reported a transport failure')
         item=event.get('item')
         if item is None:continue
+        if item.get('type')=='error':
+            require(event.get('type')=='item.completed' and set(event)=={'type','item'}
+                    and set(item)=={'id','type','message'} and isinstance(item.get('id'),str)
+                    and bool(item['id']) and item.get('message')==LEGACY_COLLAB_WARNING,
+                    'Unrecognized CLI diagnostic')
+            continue
         kind=item.get('type');require(kind in allowed,'Undeclared agent capability')
         if kind!='mcp_tool_call':continue
         require(role=='builder' and item.get('server')==SERVER and item.get('tool') in TOOLS,'Undeclared MCP call')

@@ -3,7 +3,7 @@ import json
 import os
 import signal
 import sys
-from tools.ms94_tool_policy_v4 import arguments,verify_events
+from tools.ms94_tool_policy_v4 import arguments,capability_arguments,verify_events
 from tools.ms94_builder_mcp_v4 import transcript
 import subprocess
 import time
@@ -30,9 +30,8 @@ def invoke(root, campaign, executable, role, prompt, schema, remaining_seconds):
     require(remaining_seconds>0,'Campaign elapsed budget exhausted')
     session_id=plan['tool_session_id']
     before_tools=transcript(root,session_id)
-    capability_args=arguments(root,sys.executable,session_id,plan['max_compilations']) if role=='builder' else [
-        '--ignore-user-config','--disable','shell_tool','--disable','apps','--disable','collab',
-        '--config','mcp_servers={}','--config','web_search="disabled"','--config','approval_policy="never"']
+    capability_args=arguments(root,sys.executable,session_id,plan['max_compilations']) if role=='builder' else (
+        capability_arguments()+['--config','mcp_servers={}'])
     args=[str(executable),'exec','--model',plan['requested_model'],'--config','model_reasoning_effort='+json.dumps(plan['reasoning_effort']),
           '--skip-git-repo-check','--ephemeral','--sandbox','read-only','--json',*capability_args,
           '--output-schema',str((folder/'schema.json').resolve()),'-o',str((folder/'proposal.json').resolve()),

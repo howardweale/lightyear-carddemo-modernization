@@ -7,6 +7,7 @@ on:
       - 'factory/idempiere/qualification/**'
       - 'factory/idempiere/qualification-ms94/**'
       - 'factory/idempiere/qualification-ms94-v3/**'
+      - 'factory/idempiere/stage-b-v4/**'
       - 'tools/ms94_*.py'
       - 'tests/test_ms94_*.py'
       - 'factory/idempiere/repeatability/**'
@@ -24,6 +25,7 @@ on:
       - 'factory/idempiere/qualification/**'
       - 'factory/idempiere/qualification-ms94/**'
       - 'factory/idempiere/qualification-ms94-v3/**'
+      - 'factory/idempiere/stage-b-v4/**'
       - 'tools/ms94_*.py'
       - 'tests/test_ms94_*.py'
       - 'factory/idempiere/repeatability/**'
@@ -63,3 +65,4 @@ jobs:
           tests.test_journey_support_java tests.test_qualification_transport_policy
           tests.test_measured_factory tests.test_repeatability tests.test_transaction_observer
           tests.test_ms94_equipment tests.test_ms94_controller tests.test_ms94_review_revision tests.test_ms94_snapshot_execution
+          tests.test_ms94_stage_b_v4

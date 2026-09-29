@@ -1,0 +1,1319 @@
+{
+  "artifact_type": "ms94-stage-b-02-post-run-classification",
+  "assessment_status": "machine evidence reviewed; human adjudication pending",
+  "frozen_root": "work/ms94/execution-snapshots/stage-b-02",
+  "report_content_sha256": "9657ade08a907ace39b382907c82edca6152f631f16fbf7b5c5c6910a2f94673",
+  "report_file_sha256": "905956a3ca81d51c24c4af9e3de4aff0be96c86cca9379c5c09f671a1c1e523a",
+  "outcomes_relabelled": false,
+  "new_native_executions": 0,
+  "new_model_calls": 0,
+  "trials": [
+    {
+      "trial": "pilot-01",
+      "phase": "pilot",
+      "recorded_result_class": "execution-failure",
+      "trial_status": "halted-no-supported-repair",
+      "candidate_sha256": "0978cb8438b7cc7a196edb94a0b16372adbef38b2122689523ab0d48a096bf16",
+      "assembled_source_sha256": "28092a82f09f415ff854678237fd810ee176f374bd0ba5cbb208897bc6c050aa",
+      "candidate_path": "work/ms94/stage-b-02/trials/pilot-01/calls/001-builder/build/model-source.java",
+      "assembled_source_path": "work/ms94/stage-b-02/trials/pilot-01/calls/001-builder/build/workspace/LightyearOperationsTest.java",
+      "native_run_path": "factory/idempiere/ms86-journeys/runs/journey-a2fe2706461544139590418636d45150",
+      "gate_content_sha256": "56f224374fd2b145bc2a70c8a1febbd109efacdd43be2d418c4139cc5f50b0c6",
+      "gate_file_sha256": "e3ceaac25b67e96612aff6cb9426be1c472b50508be682981115f8e96de022b4",
+      "exit_codes": {
+        "oracle": 1,
+        "postgresql": 1
+      },
+      "first_try_pass": false,
+      "repaired_pass": false,
+      "human_review": "pending",
+      "cost": {
+        "agent_elapsed_seconds": 474.109,
+        "analyst_invocations": 0,
+        "billed_usd": null,
+        "billing_basis": "Signed-in account; no per-call invoice is exposed. Local compute and electricity not metered.",
+        "builder_invocations": 1,
+        "cached_input_tokens": 323200,
+        "calls_with_unknown_usage": 0,
+        "client_invocations": 1,
+        "failed_client_invocations": 0,
+        "failed_native_attempts": 1,
+        "input_tokens": 367882,
+        "internal_provider_retries": "not exposed; client invocations are the counting unit",
+        "native_attempts": 1,
+        "native_elapsed_seconds": 318.843,
+        "output_tokens": 13678,
+        "total_elapsed_seconds": 809.75,
+        "usage_complete": true
+      },
+      "exported_diagnostics": [],
+      "invoice_constructor_lines": [
+        238
+      ],
+      "generic_ari_selector_lines": [
+        239
+      ],
+      "exception": "java.lang.IllegalStateException: Missing accounting",
+      "candidate_stack": [
+        {
+          "method": "require",
+          "line": 30
+        },
+        {
+          "method": "accounting",
+          "line": 90
+        },
+        {
+          "method": "allocations",
+          "line": 108
+        },
+        {
+          "method": "operations",
+          "line": 321
+        },
+        {
+          "method": "lambda$6",
+          "line": 465
+        },
+        {
+          "method": "operationsJourney",
+          "line": 465
+        }
+      ],
+      "failure_stage": "credit/reversal allocation posting; candidate nonempty Fact_Acct assertion",
+      "primary_root_cause": "plain business-logic error: invented nonempty-accounting invariant",
+      "secondary_root_cause": "misunderstanding iDempiere reversal-allocation API semantics",
+      "judge_assessment": "Correct execution-failure: candidate aborted both lanes. Successful native posting does not require facts for this reversal allocation.",
+      "diagnostic_assessment": "Current permitted export was empty. A future public smoke run could expose the candidate-owned assertion and stage without private expected answers; repair is not guaranteed.",
+      "allocation_observations": {
+        "oracle": [
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 4
+          },
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 0
+          }
+        ],
+        "postgresql": [
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 4
+          },
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 0
+          }
+        ]
+      }
+    },
+    {
+      "trial": "pilot-02",
+      "phase": "pilot",
+      "recorded_result_class": "execution-failure",
+      "trial_status": "halted-no-supported-repair",
+      "candidate_sha256": "b2b7d5f9ff9a5bc7657cb62fcd389c711fe586e5ff9cc867b889c4a44f0db2f5",
+      "assembled_source_sha256": "02fb551f39556e4a0f218af8a5b5d852ad72233c65056d7b29feff74b383a357",
+      "candidate_path": "work/ms94/stage-b-02/trials/pilot-02/calls/001-builder/build/model-source.java",
+      "assembled_source_path": "work/ms94/stage-b-02/trials/pilot-02/calls/001-builder/build/workspace/LightyearOperationsTest.java",
+      "native_run_path": "factory/idempiere/ms86-journeys/runs/journey-c0a5f2ea5112474e94baa02b15d690f0",
+      "gate_content_sha256": "d6c5d3489a1b943640d1593c3a14c772f35d7ffc4b5b6eac796cebce9939ea24",
+      "gate_file_sha256": "cfac806ee454893f6687cca7b6ae44e219e9b63eefb06802921d9727e7da52de",
+      "exit_codes": {
+        "oracle": 1,
+        "postgresql": 1
+      },
+      "first_try_pass": false,
+      "repaired_pass": false,
+      "human_review": "pending",
+      "cost": {
+        "agent_elapsed_seconds": 483.328,
+        "analyst_invocations": 0,
+        "billed_usd": null,
+        "billing_basis": "Signed-in account; no per-call invoice is exposed. Local compute and electricity not metered.",
+        "builder_invocations": 1,
+        "cached_input_tokens": 301824,
+        "calls_with_unknown_usage": 0,
+        "client_invocations": 1,
+        "failed_client_invocations": 0,
+        "failed_native_attempts": 1,
+        "input_tokens": 341506,
+        "internal_provider_retries": "not exposed; client invocations are the counting unit",
+        "native_attempts": 1,
+        "native_elapsed_seconds": 349.907,
+        "output_tokens": 13780,
+        "total_elapsed_seconds": 850.547,
+        "usage_complete": true
+      },
+      "exported_diagnostics": [],
+      "invoice_constructor_lines": [
+        389
+      ],
+      "generic_ari_selector_lines": [],
+      "exception": "java.lang.IllegalStateException: Missing accounting",
+      "candidate_stack": [
+        {
+          "method": "require",
+          "line": 37
+        },
+        {
+          "method": "accounting",
+          "line": 77
+        },
+        {
+          "method": "allocations",
+          "line": 101
+        },
+        {
+          "method": "lambda$16",
+          "line": 474
+        },
+        {
+          "method": "operationsJourney",
+          "line": 463
+        }
+      ],
+      "failure_stage": "credit/reversal allocation posting; candidate nonempty Fact_Acct assertion",
+      "primary_root_cause": "plain business-logic error: invented nonempty-accounting invariant",
+      "secondary_root_cause": "misunderstanding iDempiere reversal-allocation API semantics",
+      "judge_assessment": "Correct execution-failure: candidate aborted both lanes. Successful native posting does not require facts for this reversal allocation.",
+      "diagnostic_assessment": "Current permitted export was empty. A future public smoke run could expose the candidate-owned assertion and stage without private expected answers; repair is not guaranteed.",
+      "allocation_observations": {
+        "oracle": [
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 4
+          }
+        ],
+        "postgresql": [
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 4
+          }
+        ]
+      }
+    },
+    {
+      "trial": "pilot-03",
+      "phase": "pilot",
+      "recorded_result_class": "business-failure",
+      "trial_status": "halted-no-supported-repair",
+      "candidate_sha256": "3c053fe9cb8d60fe9bc7aaabb07ed329b56ce138c78d11db8c02a84936f5bd33",
+      "assembled_source_sha256": "d0f79ea4636fca4ed61b13643735d99509387de6bad203757d9d4977b09b5001",
+      "candidate_path": "work/ms94/stage-b-02/trials/pilot-03/calls/001-builder/build/model-source.java",
+      "assembled_source_path": "work/ms94/stage-b-02/trials/pilot-03/calls/001-builder/build/workspace/LightyearOperationsTest.java",
+      "native_run_path": "factory/idempiere/ms86-journeys/runs/journey-e13c0f2fe1d742fc9ea8c728e39d2ba6",
+      "gate_content_sha256": "97f66f1b1084c16589c6d1553a1284b6e25eb493db6ecc456ab7c51634ded241",
+      "gate_file_sha256": "ca1635b365a347c4fbb8fca315382c5a043c2939c6dda4bf03b1cf59ef84e093",
+      "exit_codes": {
+        "oracle": 0,
+        "postgresql": 0
+      },
+      "first_try_pass": false,
+      "repaired_pass": false,
+      "human_review": "pending",
+      "cost": {
+        "agent_elapsed_seconds": 425.578,
+        "analyst_invocations": 0,
+        "billed_usd": null,
+        "billing_basis": "Signed-in account; no per-call invoice is exposed. Local compute and electricity not metered.",
+        "builder_invocations": 1,
+        "cached_input_tokens": 350848,
+        "calls_with_unknown_usage": 0,
+        "client_invocations": 1,
+        "failed_client_invocations": 0,
+        "failed_native_attempts": 1,
+        "input_tokens": 392560,
+        "internal_provider_retries": "not exposed; client invocations are the counting unit",
+        "native_attempts": 1,
+        "native_elapsed_seconds": 421.359,
+        "output_tokens": 11962,
+        "total_elapsed_seconds": 864.437,
+        "usage_complete": true
+      },
+      "exported_diagnostics": [],
+      "invoice_constructor_lines": [
+        205
+      ],
+      "generic_ari_selector_lines": [
+        206
+      ],
+      "divergent_fields": {
+        "ad_sequence.currentnext": 2,
+        "ad_wf_activity.textmsg": 2,
+        "ad_wf_eventaudit.textmsg": 2,
+        "ad_wf_process.textmsg": 1,
+        "c_invoice.c_doctype_id": 1,
+        "c_invoice.c_doctypetarget_id": 1,
+        "c_invoice.documentno": 1,
+        "fact_acct.description": 6
+      },
+      "unresolved_row_difference_count": 16,
+      "unresolved_trace_difference_count": 0,
+      "structure_passed": true,
+      "observer_checks": {
+        "oracle": {
+          "passed": true,
+          "rollback_observed": true,
+          "lock_wait_observed": true,
+          "generated_assertions_used": false,
+          "independently_attested": false
+        },
+        "postgresql": {
+          "passed": true,
+          "rollback_observed": true,
+          "lock_wait_observed": true,
+          "generated_assertions_used": false,
+          "independently_attested": false
+        }
+      },
+      "failure_stage": "invoice document-type selection; propagated numbering, workflow text and accounting descriptions",
+      "primary_root_cause": "unclear public contract: no explicit document-type selection or admissible alternative policy",
+      "secondary_root_cause": "nondeterministic iDempiere generic ARI selector after order-derived invoice constructor",
+      "judge_assessment": "Comparator correctly detects unequal persisted fields. Whether rejecting this otherwise structurally valid alternative is justified is unresolved; human contract adjudication required. Potential equipment defect; no outcome relabelled.",
+      "diagnostic_assessment": "Current export was empty. Stage plus c_invoice.c_doctypetarget_id/c_doctype_id, without values, would localize the issue but cannot decide the missing contract policy.",
+      "allocation_observations": {
+        "oracle": [
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 4
+          },
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 0
+          }
+        ],
+        "postgresql": [
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 4
+          },
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 0
+          }
+        ]
+      }
+    },
+    {
+      "trial": "cohort-01",
+      "phase": "cohort",
+      "recorded_result_class": "execution-failure",
+      "trial_status": "halted-no-supported-repair",
+      "candidate_sha256": "f0065079deed31f00c6028202ada84512d902fd582acd976f2ac39cb252e5d47",
+      "assembled_source_sha256": "12880613894119c66332a0acaf61725606e2e371da5460cc665e905cb0dbc77e",
+      "candidate_path": "work/ms94/stage-b-02/trials/cohort-01/calls/001-builder/build/model-source.java",
+      "assembled_source_path": "work/ms94/stage-b-02/trials/cohort-01/calls/001-builder/build/workspace/LightyearOperationsTest.java",
+      "native_run_path": "factory/idempiere/ms86-journeys/runs/journey-5e4f88a7e9844ddaaabb317fdd5bba90",
+      "gate_content_sha256": "9fcec8b6b91e1c70ad81914862c096fd584435397650619d7870aa634010cc84",
+      "gate_file_sha256": "8c6a2dd5c4ba6e7100ca56cda7407f7cebc54dbced706603ea28eaae1bff51f8",
+      "exit_codes": {
+        "oracle": 1,
+        "postgresql": 1
+      },
+      "first_try_pass": false,
+      "repaired_pass": false,
+      "human_review": "pending",
+      "cost": {
+        "agent_elapsed_seconds": 449.672,
+        "analyst_invocations": 0,
+        "billed_usd": null,
+        "billing_basis": "Signed-in account; no per-call invoice is exposed. Local compute and electricity not metered.",
+        "builder_invocations": 1,
+        "cached_input_tokens": 228736,
+        "calls_with_unknown_usage": 0,
+        "client_invocations": 1,
+        "failed_client_invocations": 0,
+        "failed_native_attempts": 1,
+        "input_tokens": 268135,
+        "internal_provider_retries": "not exposed; client invocations are the counting unit",
+        "native_attempts": 1,
+        "native_elapsed_seconds": 334.5,
+        "output_tokens": 12695,
+        "total_elapsed_seconds": 801.532,
+        "usage_complete": true
+      },
+      "exported_diagnostics": [],
+      "invoice_constructor_lines": [
+        233
+      ],
+      "generic_ari_selector_lines": [
+        234
+      ],
+      "exception": "java.lang.AssertionError: Missing accounting",
+      "candidate_stack": [
+        {
+          "method": "require",
+          "line": 32
+        },
+        {
+          "method": "readAccounting",
+          "line": 72
+        },
+        {
+          "method": "post",
+          "line": 83
+        },
+        {
+          "method": "postAllocations",
+          "line": 94
+        },
+        {
+          "method": "businessJourney",
+          "line": 314
+        },
+        {
+          "method": "lambda$6",
+          "line": 459
+        },
+        {
+          "method": "operationsJourney",
+          "line": 458
+        }
+      ],
+      "failure_stage": "credit/reversal allocation posting; candidate nonempty Fact_Acct assertion",
+      "primary_root_cause": "plain business-logic error: invented nonempty-accounting invariant",
+      "secondary_root_cause": "misunderstanding iDempiere reversal-allocation API semantics",
+      "judge_assessment": "Correct execution-failure: candidate aborted both lanes. Successful native posting does not require facts for this reversal allocation.",
+      "diagnostic_assessment": "Current permitted export was empty. A future public smoke run could expose the candidate-owned assertion and stage without private expected answers; repair is not guaranteed.",
+      "allocation_observations": {
+        "oracle": [
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 4
+          },
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 0
+          }
+        ],
+        "postgresql": [
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 4
+          },
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 0
+          }
+        ]
+      }
+    },
+    {
+      "trial": "cohort-02",
+      "phase": "cohort",
+      "recorded_result_class": "execution-failure",
+      "trial_status": "halted-no-supported-repair",
+      "candidate_sha256": "89a39cefede5877cd681d8dd0ea50340a05476caa83d16aea2c8e601d20df1bc",
+      "assembled_source_sha256": "180aaec8cfc4161a2c4c7953bcee5cff7bb03d2b3e3b37e57d06c5b6047dbdb6",
+      "candidate_path": "work/ms94/stage-b-02/trials/cohort-02/calls/001-builder/build/model-source.java",
+      "assembled_source_path": "work/ms94/stage-b-02/trials/cohort-02/calls/001-builder/build/workspace/LightyearOperationsTest.java",
+      "native_run_path": "factory/idempiere/ms86-journeys/runs/journey-b0d8b075451d4303ab139b83e77ab79f",
+      "gate_content_sha256": "ae5ce8587a96dab6c6efad7208d49ce316d47b8b68c594bd290f3342bd2aaeb6",
+      "gate_file_sha256": "68f3334745707e17f8d92c95bdcf75bd31efd429163cc1c5122c2918744d0348",
+      "exit_codes": {
+        "oracle": 1,
+        "postgresql": 1
+      },
+      "first_try_pass": false,
+      "repaired_pass": false,
+      "human_review": "pending",
+      "cost": {
+        "agent_elapsed_seconds": 420.36,
+        "analyst_invocations": 0,
+        "billed_usd": null,
+        "billing_basis": "Signed-in account; no per-call invoice is exposed. Local compute and electricity not metered.",
+        "builder_invocations": 1,
+        "cached_input_tokens": 352896,
+        "calls_with_unknown_usage": 0,
+        "client_invocations": 1,
+        "failed_client_invocations": 0,
+        "failed_native_attempts": 1,
+        "input_tokens": 396098,
+        "internal_provider_retries": "not exposed; client invocations are the counting unit",
+        "native_attempts": 1,
+        "native_elapsed_seconds": 311.046,
+        "output_tokens": 12014,
+        "total_elapsed_seconds": 747.422,
+        "usage_complete": true
+      },
+      "exported_diagnostics": [],
+      "invoice_constructor_lines": [
+        349
+      ],
+      "generic_ari_selector_lines": [],
+      "exception": "org.opentest4j.AssertionFailedError: Posted document must have accounting ==> expected: <true> but was: <false>",
+      "candidate_stack": [
+        {
+          "method": "readAccounting",
+          "line": 65
+        },
+        {
+          "method": "postAllocations",
+          "line": 81
+        },
+        {
+          "method": "operationsJourney",
+          "line": 430
+        }
+      ],
+      "failure_stage": "credit/reversal allocation posting; candidate nonempty Fact_Acct assertion",
+      "primary_root_cause": "plain business-logic error: invented nonempty-accounting invariant",
+      "secondary_root_cause": "misunderstanding iDempiere reversal-allocation API semantics",
+      "judge_assessment": "Correct execution-failure: candidate aborted both lanes. Successful native posting does not require facts for this reversal allocation.",
+      "diagnostic_assessment": "Current permitted export was empty. A future public smoke run could expose the candidate-owned assertion and stage without private expected answers; repair is not guaranteed.",
+      "allocation_observations": {
+        "oracle": [
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 4
+          },
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 0
+          }
+        ],
+        "postgresql": [
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 4
+          },
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 0
+          }
+        ]
+      }
+    },
+    {
+      "trial": "cohort-03",
+      "phase": "cohort",
+      "recorded_result_class": "business-failure",
+      "trial_status": "halted-no-supported-repair",
+      "candidate_sha256": "0aee887b5f9e8c468c37ab6ec4c0ea8c76157cf61c3849825964c73ae57e1381",
+      "assembled_source_sha256": "92c7c8f30ef67d03b175c7afbaaef420ec7a3cb8431e09611420fae141d5e240",
+      "candidate_path": "work/ms94/stage-b-02/trials/cohort-03/calls/001-builder/build/model-source.java",
+      "assembled_source_path": "work/ms94/stage-b-02/trials/cohort-03/calls/001-builder/build/workspace/LightyearOperationsTest.java",
+      "native_run_path": "factory/idempiere/ms86-journeys/runs/journey-8801a6f585164c1c90b54a2e8c12ea26",
+      "gate_content_sha256": "f9f03e349bcaf69344c6383772a70dd6420e8605ff14edafd53cc4ed3e15adeb",
+      "gate_file_sha256": "f8f492cee4994480ba7a7f603fb684026c20e60aeca94cdeddba5f34b32e6e08",
+      "exit_codes": {
+        "oracle": 0,
+        "postgresql": 0
+      },
+      "first_try_pass": false,
+      "repaired_pass": false,
+      "human_review": "pending",
+      "cost": {
+        "agent_elapsed_seconds": 438.859,
+        "analyst_invocations": 0,
+        "billed_usd": null,
+        "billing_basis": "Signed-in account; no per-call invoice is exposed. Local compute and electricity not metered.",
+        "builder_invocations": 1,
+        "cached_input_tokens": 342400,
+        "calls_with_unknown_usage": 0,
+        "client_invocations": 1,
+        "failed_client_invocations": 0,
+        "failed_native_attempts": 1,
+        "input_tokens": 387576,
+        "internal_provider_retries": "not exposed; client invocations are the counting unit",
+        "native_attempts": 1,
+        "native_elapsed_seconds": 423.344,
+        "output_tokens": 12124,
+        "total_elapsed_seconds": 879.234,
+        "usage_complete": true
+      },
+      "exported_diagnostics": [],
+      "invoice_constructor_lines": [
+        365
+      ],
+      "generic_ari_selector_lines": [
+        366
+      ],
+      "divergent_fields": {
+        "ad_sequence.currentnext": 2,
+        "ad_wf_activity.textmsg": 2,
+        "ad_wf_eventaudit.textmsg": 2,
+        "ad_wf_process.textmsg": 1,
+        "c_invoice.c_doctype_id": 1,
+        "c_invoice.c_doctypetarget_id": 1,
+        "c_invoice.documentno": 1,
+        "fact_acct.description": 6
+      },
+      "unresolved_row_difference_count": 16,
+      "unresolved_trace_difference_count": 0,
+      "structure_passed": true,
+      "observer_checks": {
+        "oracle": {
+          "passed": true,
+          "rollback_observed": true,
+          "lock_wait_observed": true,
+          "generated_assertions_used": false,
+          "independently_attested": false
+        },
+        "postgresql": {
+          "passed": true,
+          "rollback_observed": true,
+          "lock_wait_observed": true,
+          "generated_assertions_used": false,
+          "independently_attested": false
+        }
+      },
+      "failure_stage": "invoice document-type selection; propagated numbering, workflow text and accounting descriptions",
+      "primary_root_cause": "unclear public contract: no explicit document-type selection or admissible alternative policy",
+      "secondary_root_cause": "nondeterministic iDempiere generic ARI selector after order-derived invoice constructor",
+      "judge_assessment": "Comparator correctly detects unequal persisted fields. Whether rejecting this otherwise structurally valid alternative is justified is unresolved; human contract adjudication required. Potential equipment defect; no outcome relabelled.",
+      "diagnostic_assessment": "Current export was empty. Stage plus c_invoice.c_doctypetarget_id/c_doctype_id, without values, would localize the issue but cannot decide the missing contract policy.",
+      "allocation_observations": {
+        "oracle": [
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 4
+          },
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 0
+          }
+        ],
+        "postgresql": [
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 4
+          },
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 0
+          }
+        ]
+      }
+    },
+    {
+      "trial": "cohort-04",
+      "phase": "cohort",
+      "recorded_result_class": "execution-failure",
+      "trial_status": "halted-no-supported-repair",
+      "candidate_sha256": "82158959be7a60a985162cbd8da6d2003566f5dc8a612b31f395d85feb6c7289",
+      "assembled_source_sha256": "726c5d72e6ff440acc49e855b696c8aa2c53b89e82c49ac0ae0e3b62b58f08df",
+      "candidate_path": "work/ms94/stage-b-02/trials/cohort-04/calls/001-builder/build/model-source.java",
+      "assembled_source_path": "work/ms94/stage-b-02/trials/cohort-04/calls/001-builder/build/workspace/LightyearOperationsTest.java",
+      "native_run_path": "factory/idempiere/ms86-journeys/runs/journey-0cf87dfb69574dc3b576d9af2fbaa40b",
+      "gate_content_sha256": "54726716f27d8be3acedbe996f993d26a0d0067d42b79e49586d0b4fc43bb212",
+      "gate_file_sha256": "7542c64c9284349f77cdbe4d7e30ddedf2d71386dda8154695c4239181cd63e8",
+      "exit_codes": {
+        "oracle": 1,
+        "postgresql": 1
+      },
+      "first_try_pass": false,
+      "repaired_pass": false,
+      "human_review": "pending",
+      "cost": {
+        "agent_elapsed_seconds": 428.891,
+        "analyst_invocations": 0,
+        "billed_usd": null,
+        "billing_basis": "Signed-in account; no per-call invoice is exposed. Local compute and electricity not metered.",
+        "builder_invocations": 1,
+        "cached_input_tokens": 239104,
+        "calls_with_unknown_usage": 0,
+        "client_invocations": 1,
+        "failed_client_invocations": 0,
+        "failed_native_attempts": 1,
+        "input_tokens": 279903,
+        "internal_provider_retries": "not exposed; client invocations are the counting unit",
+        "native_attempts": 1,
+        "native_elapsed_seconds": 312.047,
+        "output_tokens": 12112,
+        "total_elapsed_seconds": 757.297,
+        "usage_complete": true
+      },
+      "exported_diagnostics": [],
+      "invoice_constructor_lines": [
+        366
+      ],
+      "generic_ari_selector_lines": [
+        367
+      ],
+      "exception": "org.opentest4j.AssertionFailedError: Posting must have accounting rows ==> expected: <true> but was: <false>",
+      "candidate_stack": [
+        {
+          "method": "post",
+          "line": 67
+        },
+        {
+          "method": "postAllocations",
+          "line": 86
+        },
+        {
+          "method": "lambda$7",
+          "line": 441
+        },
+        {
+          "method": "operationsJourney",
+          "line": 265
+        }
+      ],
+      "failure_stage": "credit/reversal allocation posting; candidate nonempty Fact_Acct assertion",
+      "primary_root_cause": "plain business-logic error: invented nonempty-accounting invariant",
+      "secondary_root_cause": "misunderstanding iDempiere reversal-allocation API semantics",
+      "judge_assessment": "Correct execution-failure: candidate aborted both lanes. Successful native posting does not require facts for this reversal allocation.",
+      "diagnostic_assessment": "Current permitted export was empty. A future public smoke run could expose the candidate-owned assertion and stage without private expected answers; repair is not guaranteed.",
+      "allocation_observations": {
+        "oracle": [
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 4
+          },
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 0
+          }
+        ],
+        "postgresql": [
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 4
+          },
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 0
+          }
+        ]
+      }
+    },
+    {
+      "trial": "cohort-05",
+      "phase": "cohort",
+      "recorded_result_class": "passed",
+      "trial_status": "passed",
+      "candidate_sha256": "319d30ee48a6aa0d0172d281948cf0ab10a855d096caf9036fb91a388a2f5498",
+      "assembled_source_sha256": "c24e8da5b072c0b0757a1b882eb4beb5c030262e124f74c0d2ff253950938d8b",
+      "candidate_path": "work/ms94/stage-b-02/trials/cohort-05/calls/001-builder/build/model-source.java",
+      "assembled_source_path": "work/ms94/stage-b-02/trials/cohort-05/calls/001-builder/build/workspace/LightyearOperationsTest.java",
+      "native_run_path": "factory/idempiere/ms86-journeys/runs/journey-d384af497ec7460587f7c45eb2157879",
+      "gate_content_sha256": "137a3973f26597303dd49aed4bbfcad0311b4d7398bea10da7e681f4cee4486f",
+      "gate_file_sha256": "94acbe08df0027d82c01da2c9c317542b2528ed807bc75a96b7da922df683234",
+      "exit_codes": {
+        "oracle": 0,
+        "postgresql": 0
+      },
+      "first_try_pass": true,
+      "repaired_pass": false,
+      "human_review": "pending",
+      "cost": {
+        "agent_elapsed_seconds": 474.344,
+        "analyst_invocations": 0,
+        "billed_usd": null,
+        "billing_basis": "Signed-in account; no per-call invoice is exposed. Local compute and electricity not metered.",
+        "builder_invocations": 1,
+        "cached_input_tokens": 355456,
+        "calls_with_unknown_usage": 0,
+        "client_invocations": 1,
+        "failed_client_invocations": 0,
+        "failed_native_attempts": 0,
+        "input_tokens": 387526,
+        "internal_provider_retries": "not exposed; client invocations are the counting unit",
+        "native_attempts": 1,
+        "native_elapsed_seconds": 392.938,
+        "output_tokens": 13270,
+        "total_elapsed_seconds": 884.109,
+        "usage_complete": true
+      },
+      "exported_diagnostics": null,
+      "invoice_constructor_lines": [
+        239
+      ],
+      "generic_ari_selector_lines": [],
+      "divergent_fields": {},
+      "unresolved_row_difference_count": 0,
+      "unresolved_trace_difference_count": 0,
+      "structure_passed": true,
+      "observer_checks": {
+        "oracle": {
+          "passed": true,
+          "rollback_observed": true,
+          "lock_wait_observed": true,
+          "generated_assertions_used": false,
+          "independently_attested": false
+        },
+        "postgresql": {
+          "passed": true,
+          "rollback_observed": true,
+          "lock_wait_observed": true,
+          "generated_assertions_used": false,
+          "independently_attested": false
+        }
+      },
+      "failure_stage": null,
+      "primary_root_cause": null,
+      "judge_assessment": "Frozen checks and offline publication replay passed; human candidate and acceptance-scope review pending.",
+      "allocation_observations": {
+        "oracle": [
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 4
+          },
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 0
+          }
+        ],
+        "postgresql": [
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 4
+          },
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 0
+          }
+        ]
+      }
+    },
+    {
+      "trial": "cohort-06",
+      "phase": "cohort",
+      "recorded_result_class": "passed",
+      "trial_status": "passed",
+      "candidate_sha256": "20f50344b7e537c0216c3f413471f3c43c942817b787a8ff18e477833cc6b39f",
+      "assembled_source_sha256": "b53fa16dcddcedd86fc13b4fc6a5f491bf930b20d7ac2ceadb33cd89271ecb97",
+      "candidate_path": "work/ms94/stage-b-02/trials/cohort-06/calls/001-builder/build/model-source.java",
+      "assembled_source_path": "work/ms94/stage-b-02/trials/cohort-06/calls/001-builder/build/workspace/LightyearOperationsTest.java",
+      "native_run_path": "factory/idempiere/ms86-journeys/runs/journey-9ab263e7087340bba7940e8d5be0814b",
+      "gate_content_sha256": "05353646990d04c74b61dd96ed99a12e372ae42016160569f2134526395a60cc",
+      "gate_file_sha256": "4c2f19b93d8a95bd902174c9217bdc312a9759d9de21ca9fb31ed0926385d60e",
+      "exit_codes": {
+        "oracle": 0,
+        "postgresql": 0
+      },
+      "first_try_pass": true,
+      "repaired_pass": false,
+      "human_review": "pending",
+      "cost": {
+        "agent_elapsed_seconds": 442.079,
+        "analyst_invocations": 0,
+        "billed_usd": null,
+        "billing_basis": "Signed-in account; no per-call invoice is exposed. Local compute and electricity not metered.",
+        "builder_invocations": 1,
+        "cached_input_tokens": 373504,
+        "calls_with_unknown_usage": 0,
+        "client_invocations": 1,
+        "failed_client_invocations": 0,
+        "failed_native_attempts": 0,
+        "input_tokens": 418504,
+        "internal_provider_retries": "not exposed; client invocations are the counting unit",
+        "native_attempts": 1,
+        "native_elapsed_seconds": 434.454,
+        "output_tokens": 12629,
+        "total_elapsed_seconds": 897.39,
+        "usage_complete": true
+      },
+      "exported_diagnostics": null,
+      "invoice_constructor_lines": [
+        357
+      ],
+      "generic_ari_selector_lines": [],
+      "divergent_fields": {},
+      "unresolved_row_difference_count": 0,
+      "unresolved_trace_difference_count": 0,
+      "structure_passed": true,
+      "observer_checks": {
+        "oracle": {
+          "passed": true,
+          "rollback_observed": true,
+          "lock_wait_observed": true,
+          "generated_assertions_used": false,
+          "independently_attested": false
+        },
+        "postgresql": {
+          "passed": true,
+          "rollback_observed": true,
+          "lock_wait_observed": true,
+          "generated_assertions_used": false,
+          "independently_attested": false
+        }
+      },
+      "failure_stage": null,
+      "primary_root_cause": null,
+      "judge_assessment": "Frozen checks and offline publication replay passed; human candidate and acceptance-scope review pending.",
+      "allocation_observations": {
+        "oracle": [
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 4
+          },
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 0
+          }
+        ],
+        "postgresql": [
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 4
+          },
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 0
+          }
+        ]
+      }
+    },
+    {
+      "trial": "cohort-07",
+      "phase": "cohort",
+      "recorded_result_class": "business-failure",
+      "trial_status": "halted-no-supported-repair",
+      "candidate_sha256": "09ee6b9cdfdcb9fcaff1ff5368f2d82ab94f6ba8d4dd79c565c79bfbb86d109a",
+      "assembled_source_sha256": "a36a81189093279249898637b731b15fcc3ae8adcef19f09d5ed0e18b68b06d0",
+      "candidate_path": "work/ms94/stage-b-02/trials/cohort-07/calls/001-builder/build/model-source.java",
+      "assembled_source_path": "work/ms94/stage-b-02/trials/cohort-07/calls/001-builder/build/workspace/LightyearOperationsTest.java",
+      "native_run_path": "factory/idempiere/ms86-journeys/runs/journey-af0a2ff5e4e9477db6906384ea152978",
+      "gate_content_sha256": "ae513e5996b5a279b7e4427bdd6ea1c8faf9bcd557bc274c5290726232a58422",
+      "gate_file_sha256": "d82810130750db6a096f39cda9e50df7de578e09aac4944f50ce17178627f9ea",
+      "exit_codes": {
+        "oracle": 0,
+        "postgresql": 0
+      },
+      "first_try_pass": false,
+      "repaired_pass": false,
+      "human_review": "pending",
+      "cost": {
+        "agent_elapsed_seconds": 441.235,
+        "analyst_invocations": 0,
+        "billed_usd": null,
+        "billing_basis": "Signed-in account; no per-call invoice is exposed. Local compute and electricity not metered.",
+        "builder_invocations": 1,
+        "cached_input_tokens": 234496,
+        "calls_with_unknown_usage": 0,
+        "client_invocations": 1,
+        "failed_client_invocations": 0,
+        "failed_native_attempts": 1,
+        "input_tokens": 276660,
+        "internal_provider_retries": "not exposed; client invocations are the counting unit",
+        "native_attempts": 1,
+        "native_elapsed_seconds": 424.078,
+        "output_tokens": 12618,
+        "total_elapsed_seconds": 882.688,
+        "usage_complete": true
+      },
+      "exported_diagnostics": [],
+      "invoice_constructor_lines": [
+        350,
+        392
+      ],
+      "generic_ari_selector_lines": [
+        351
+      ],
+      "divergent_fields": {
+        "ad_sequence.currentnext": 2,
+        "ad_wf_activity.textmsg": 2,
+        "ad_wf_eventaudit.textmsg": 2,
+        "ad_wf_process.textmsg": 1,
+        "c_invoice.c_doctype_id": 1,
+        "c_invoice.c_doctypetarget_id": 1,
+        "c_invoice.documentno": 1,
+        "fact_acct.description": 6
+      },
+      "unresolved_row_difference_count": 16,
+      "unresolved_trace_difference_count": 0,
+      "structure_passed": true,
+      "observer_checks": {
+        "oracle": {
+          "passed": true,
+          "rollback_observed": true,
+          "lock_wait_observed": true,
+          "generated_assertions_used": false,
+          "independently_attested": false
+        },
+        "postgresql": {
+          "passed": true,
+          "rollback_observed": true,
+          "lock_wait_observed": true,
+          "generated_assertions_used": false,
+          "independently_attested": false
+        }
+      },
+      "failure_stage": "invoice document-type selection; propagated numbering, workflow text and accounting descriptions",
+      "primary_root_cause": "unclear public contract: no explicit document-type selection or admissible alternative policy",
+      "secondary_root_cause": "nondeterministic iDempiere generic ARI selector after order-derived invoice constructor",
+      "judge_assessment": "Comparator correctly detects unequal persisted fields. Whether rejecting this otherwise structurally valid alternative is justified is unresolved; human contract adjudication required. Potential equipment defect; no outcome relabelled.",
+      "diagnostic_assessment": "Current export was empty. Stage plus c_invoice.c_doctypetarget_id/c_doctype_id, without values, would localize the issue but cannot decide the missing contract policy.",
+      "allocation_observations": {
+        "oracle": [
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 4
+          },
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 4
+          }
+        ],
+        "postgresql": [
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 4
+          },
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 4
+          }
+        ]
+      }
+    },
+    {
+      "trial": "cohort-08",
+      "phase": "cohort",
+      "recorded_result_class": "execution-failure",
+      "trial_status": "halted-no-supported-repair",
+      "candidate_sha256": "75e89abe8790f44de0a07f9d2dca9291664c56ce167a60de4c078a17b9120897",
+      "assembled_source_sha256": "0af5b3515545cfd2943e113407aa1390bd9c3555ae3ad153d2a7077a157a4a28",
+      "candidate_path": "work/ms94/stage-b-02/trials/cohort-08/calls/001-builder/build/model-source.java",
+      "assembled_source_path": "work/ms94/stage-b-02/trials/cohort-08/calls/001-builder/build/workspace/LightyearOperationsTest.java",
+      "native_run_path": "factory/idempiere/ms86-journeys/runs/journey-eae23b91e6bf42168206d43fdd7702c5",
+      "gate_content_sha256": "f654ec3140ae3549a0789f73a77827ccfc5611a3466b5f10f9eef7305e95239e",
+      "gate_file_sha256": "543c779f56ca350b6a719a0d7ff4f26d487bad123fa8d707b79470b9e8a8e622",
+      "exit_codes": {
+        "oracle": 1,
+        "postgresql": 1
+      },
+      "first_try_pass": false,
+      "repaired_pass": false,
+      "human_review": "pending",
+      "cost": {
+        "agent_elapsed_seconds": 434.062,
+        "analyst_invocations": 0,
+        "billed_usd": null,
+        "billing_basis": "Signed-in account; no per-call invoice is exposed. Local compute and electricity not metered.",
+        "builder_invocations": 1,
+        "cached_input_tokens": 331776,
+        "calls_with_unknown_usage": 0,
+        "client_invocations": 1,
+        "failed_client_invocations": 0,
+        "failed_native_attempts": 1,
+        "input_tokens": 376465,
+        "internal_provider_retries": "not exposed; client invocations are the counting unit",
+        "native_attempts": 1,
+        "native_elapsed_seconds": 353.563,
+        "output_tokens": 12230,
+        "total_elapsed_seconds": 805.422,
+        "usage_complete": true
+      },
+      "exported_diagnostics": [],
+      "invoice_constructor_lines": [
+        192
+      ],
+      "generic_ari_selector_lines": [
+        193
+      ],
+      "exception": "java.lang.IllegalStateException: Accounting rows missing",
+      "candidate_stack": [
+        {
+          "method": "require",
+          "line": 32
+        },
+        {
+          "method": "checkAccounting",
+          "line": 324
+        },
+        {
+          "method": "postAllocations",
+          "line": 317
+        },
+        {
+          "method": "runJourney",
+          "line": 272
+        },
+        {
+          "method": "lambda$0",
+          "line": 75
+        },
+        {
+          "method": "operationsJourney",
+          "line": 74
+        }
+      ],
+      "failure_stage": "credit/reversal allocation posting; candidate nonempty Fact_Acct assertion",
+      "primary_root_cause": "plain business-logic error: invented nonempty-accounting invariant",
+      "secondary_root_cause": "misunderstanding iDempiere reversal-allocation API semantics",
+      "judge_assessment": "Correct execution-failure: candidate aborted both lanes. Successful native posting does not require facts for this reversal allocation.",
+      "diagnostic_assessment": "Current permitted export was empty. A future public smoke run could expose the candidate-owned assertion and stage without private expected answers; repair is not guaranteed.",
+      "allocation_observations": {
+        "oracle": [
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 4
+          },
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 0
+          }
+        ],
+        "postgresql": [
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 4
+          },
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 0
+          }
+        ]
+      }
+    },
+    {
+      "trial": "cohort-09",
+      "phase": "cohort",
+      "recorded_result_class": "business-failure",
+      "trial_status": "halted-no-supported-repair",
+      "candidate_sha256": "ed80c4d2ba071d88a185f6ad8e570cf4e5f95130ad6e0018f3132fa80a3e02a9",
+      "assembled_source_sha256": "19565bf6fc96f6a29a47d01fe3377846a05591c3d5c4bfd8fdfe9eaa8f9f7347",
+      "candidate_path": "work/ms94/stage-b-02/trials/cohort-09/calls/001-builder/build/model-source.java",
+      "assembled_source_path": "work/ms94/stage-b-02/trials/cohort-09/calls/001-builder/build/workspace/LightyearOperationsTest.java",
+      "native_run_path": "factory/idempiere/ms86-journeys/runs/journey-d937b829513f4242a37abf740797ffbc",
+      "gate_content_sha256": "6cd48853d5c039b932fc027613e79370a4ed8d861b1f1932ec25c08a1446d230",
+      "gate_file_sha256": "1c85a1744f9e4d32d9d2bc01ea5be8f404f7f59bb2bf10aebf3fc5ea1ede02dc",
+      "exit_codes": {
+        "oracle": 0,
+        "postgresql": 0
+      },
+      "first_try_pass": false,
+      "repaired_pass": false,
+      "human_review": "pending",
+      "cost": {
+        "agent_elapsed_seconds": 441.015,
+        "analyst_invocations": 0,
+        "billed_usd": null,
+        "billing_basis": "Signed-in account; no per-call invoice is exposed. Local compute and electricity not metered.",
+        "builder_invocations": 1,
+        "cached_input_tokens": 239488,
+        "calls_with_unknown_usage": 0,
+        "client_invocations": 1,
+        "failed_client_invocations": 0,
+        "failed_native_attempts": 1,
+        "input_tokens": 271324,
+        "internal_provider_retries": "not exposed; client invocations are the counting unit",
+        "native_attempts": 1,
+        "native_elapsed_seconds": 409.078,
+        "output_tokens": 12113,
+        "total_elapsed_seconds": 867.579,
+        "usage_complete": true
+      },
+      "exported_diagnostics": [],
+      "invoice_constructor_lines": [
+        366
+      ],
+      "generic_ari_selector_lines": [
+        367
+      ],
+      "divergent_fields": {
+        "ad_sequence.currentnext": 2,
+        "ad_wf_activity.textmsg": 2,
+        "ad_wf_eventaudit.textmsg": 2,
+        "ad_wf_process.textmsg": 1,
+        "c_invoice.c_doctype_id": 1,
+        "c_invoice.c_doctypetarget_id": 1,
+        "c_invoice.documentno": 1,
+        "fact_acct.description": 6
+      },
+      "unresolved_row_difference_count": 16,
+      "unresolved_trace_difference_count": 0,
+      "structure_passed": true,
+      "observer_checks": {
+        "oracle": {
+          "passed": true,
+          "rollback_observed": true,
+          "lock_wait_observed": true,
+          "generated_assertions_used": false,
+          "independently_attested": false
+        },
+        "postgresql": {
+          "passed": true,
+          "rollback_observed": true,
+          "lock_wait_observed": true,
+          "generated_assertions_used": false,
+          "independently_attested": false
+        }
+      },
+      "failure_stage": "invoice document-type selection; propagated numbering, workflow text and accounting descriptions",
+      "primary_root_cause": "unclear public contract: no explicit document-type selection or admissible alternative policy",
+      "secondary_root_cause": "nondeterministic iDempiere generic ARI selector after order-derived invoice constructor",
+      "judge_assessment": "Comparator correctly detects unequal persisted fields. Whether rejecting this otherwise structurally valid alternative is justified is unresolved; human contract adjudication required. Potential equipment defect; no outcome relabelled.",
+      "diagnostic_assessment": "Current export was empty. Stage plus c_invoice.c_doctypetarget_id/c_doctype_id, without values, would localize the issue but cannot decide the missing contract policy.",
+      "allocation_observations": {
+        "oracle": [
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 4
+          },
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 0
+          }
+        ],
+        "postgresql": [
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 4
+          },
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 0
+          }
+        ]
+      }
+    },
+    {
+      "trial": "cohort-10",
+      "phase": "cohort",
+      "recorded_result_class": "business-failure",
+      "trial_status": "halted-no-supported-repair",
+      "candidate_sha256": "26d24d96f4b387d8c2c34c43d818daf299886362216dc7ea015a4d10f74d51a2",
+      "assembled_source_sha256": "f2071aad2176e0fbd9ada31e0911d1681f5d1fa80f49cd48c82d017f031f1fc2",
+      "candidate_path": "work/ms94/stage-b-02/trials/cohort-10/calls/001-builder/build/model-source.java",
+      "assembled_source_path": "work/ms94/stage-b-02/trials/cohort-10/calls/001-builder/build/workspace/LightyearOperationsTest.java",
+      "native_run_path": "factory/idempiere/ms86-journeys/runs/journey-e1a0b0f8fa83454285a1eb75c04edfc7",
+      "gate_content_sha256": "f9d24bf3a03ccc01e133d2440238a665c26e18dbf8d2825abf4705fe84f5ad72",
+      "gate_file_sha256": "c5c42098f2092948cdf0d6b903139a030e8fa434f01b0ee72f9d475da8732e7f",
+      "exit_codes": {
+        "oracle": 0,
+        "postgresql": 0
+      },
+      "first_try_pass": false,
+      "repaired_pass": false,
+      "human_review": "pending",
+      "cost": {
+        "agent_elapsed_seconds": 421.875,
+        "analyst_invocations": 0,
+        "billed_usd": null,
+        "billing_basis": "Signed-in account; no per-call invoice is exposed. Local compute and electricity not metered.",
+        "builder_invocations": 1,
+        "cached_input_tokens": 313216,
+        "calls_with_unknown_usage": 0,
+        "client_invocations": 1,
+        "failed_client_invocations": 0,
+        "failed_native_attempts": 1,
+        "input_tokens": 354703,
+        "internal_provider_retries": "not exposed; client invocations are the counting unit",
+        "native_attempts": 1,
+        "native_elapsed_seconds": 389.469,
+        "output_tokens": 11848,
+        "total_elapsed_seconds": 827.688,
+        "usage_complete": true
+      },
+      "exported_diagnostics": [],
+      "invoice_constructor_lines": [
+        356
+      ],
+      "generic_ari_selector_lines": [
+        357
+      ],
+      "divergent_fields": {
+        "ad_sequence.currentnext": 2,
+        "ad_wf_activity.textmsg": 2,
+        "ad_wf_eventaudit.textmsg": 2,
+        "ad_wf_process.textmsg": 1,
+        "c_invoice.c_doctype_id": 1,
+        "c_invoice.c_doctypetarget_id": 1,
+        "c_invoice.documentno": 1,
+        "fact_acct.description": 6
+      },
+      "unresolved_row_difference_count": 16,
+      "unresolved_trace_difference_count": 0,
+      "structure_passed": true,
+      "observer_checks": {
+        "oracle": {
+          "passed": true,
+          "rollback_observed": true,
+          "lock_wait_observed": true,
+          "generated_assertions_used": false,
+          "independently_attested": false
+        },
+        "postgresql": {
+          "passed": true,
+          "rollback_observed": true,
+          "lock_wait_observed": true,
+          "generated_assertions_used": false,
+          "independently_attested": false
+        }
+      },
+      "failure_stage": "invoice document-type selection; propagated numbering, workflow text and accounting descriptions",
+      "primary_root_cause": "unclear public contract: no explicit document-type selection or admissible alternative policy",
+      "secondary_root_cause": "nondeterministic iDempiere generic ARI selector after order-derived invoice constructor",
+      "judge_assessment": "Comparator correctly detects unequal persisted fields. Whether rejecting this otherwise structurally valid alternative is justified is unresolved; human contract adjudication required. Potential equipment defect; no outcome relabelled.",
+      "diagnostic_assessment": "Current export was empty. Stage plus c_invoice.c_doctypetarget_id/c_doctype_id, without values, would localize the issue but cannot decide the missing contract policy.",
+      "allocation_observations": {
+        "oracle": [
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 4
+          },
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 0
+          }
+        ],
+        "postgresql": [
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 4
+          },
+          {
+            "status": "CO",
+            "posted": "Y",
+            "fact_row_count": 0
+          }
+        ]
+      }
+    }
+  ]
+}

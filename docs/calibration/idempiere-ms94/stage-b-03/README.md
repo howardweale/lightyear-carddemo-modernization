@@ -36,3 +36,8 @@ organization API. Only the frozen controller may make model calls.
 
 Stage B 01's invalid outcome and Stage B 02's original 2/10 result and contract-gap
 caveat remain separate and unchanged. No old candidate or trial is reused.
+
+The [one-shot launch](launch.json) began on 29 September 2026 at 19:33:05 UTC.
+The signed [publication proof](published-plan.json) confirms remote commit
+`026fdf804fe27953cf41c8f9552f66476bff3ec9` before [authorization](authorization.json)
+and launch. Pilot 1 was observed active; this record makes no completed-cohort claim.

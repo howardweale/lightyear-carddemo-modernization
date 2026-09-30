@@ -1,0 +1,9 @@
+{
+  "recorded_at_utc": "2026-09-29T14:44:19.601954+00:00",
+  "plan_sha256": "040824a01d74dae376fd9986b3abaa5ceacbac7c6ff0e3013c42ae12c831aca0",
+  "snapshot_sha256": "d5119b86a622347f962949c23e6cec54be90d525861289b0f372037da7a36da3",
+  "stage_a_equipment_plan_sha256": "77b075d0cafebe41dc33df02e43150a18a72e4601750ca3faa0211884960257e",
+  "publication_timing": "Published after execution began; this is not a pre-start external timestamp. Pilots are excluded from measurement.",
+  "pilot_started_at": 1790692705.332317,
+  "plan_file_sha256": "c262a3f3629f889fff5d84f9ecd2b155da02012ac77861437558d32530814da0"
+}

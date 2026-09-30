@@ -1,0 +1,62 @@
+{
+  "artifact_type": "ms94-stage-b-human-review-intake",
+  "reviewer": "Howard Weale",
+  "review_date": "2026-09-29",
+  "provenance": "Explicit user statements in the Codex task; transcribed by the assistant. Not a cryptographic signature by the reviewer.",
+  "classification_file_sha256": "33b2afb200df487f1a58fea93e267561847c7b012e5172e9ddd782973159d2e1",
+  "report_content_sha256": "9657ade08a907ace39b382907c82edca6152f631f16fbf7b5c5c6910a2f94673",
+  "user_statements": [
+    "accept cohort -05 and -06. for category A confirming completed reversal allocations may have no facts and that  six candidate-owned assertions justify execution-failure. For Category B its ok for the public contract rules out either eligible ARI\ntype or mandates deterministic retention of the order-derived invoice type",
+    "Approve retention rule for next run"
+  ],
+  "pass_decisions": [
+    {
+      "trial": "cohort-05",
+      "candidate_sha256": "319d30ee48a6aa0d0172d281948cf0ab10a855d096caf9036fb91a388a2f5498",
+      "gate_content_sha256": "137a3973f26597303dd49aed4bbfcad0311b4d7398bea10da7e681f4cee4486f",
+      "decision": "accepted"
+    },
+    {
+      "trial": "cohort-06",
+      "candidate_sha256": "20f50344b7e537c0216c3f413471f3c43c942817b787a8ff18e477833cc6b39f",
+      "gate_content_sha256": "05353646990d04c74b61dd96ed99a12e372ae42016160569f2134526395a60cc",
+      "decision": "accepted"
+    }
+  ],
+  "category_a": {
+    "trials": [
+      "pilot-01",
+      "pilot-02",
+      "cohort-01",
+      "cohort-02",
+      "cohort-04",
+      "cohort-08"
+    ],
+    "decision": "confirmed execution-failure",
+    "rationale": "Completed reversal allocations may have no facts; the six candidate-owned assertions justify execution-failure."
+  },
+  "category_b": {
+    "trials": [
+      "pilot-03",
+      "cohort-03",
+      "cohort-07",
+      "cohort-09",
+      "cohort-10"
+    ],
+    "decision": "prospective retention rule approved",
+    "existing_frozen_clause_identified": false,
+    "historical_rejections_retroactively_justified": false,
+    "assessment": "Public-contract gap; original comparator rejections preserved. Prospective approval does not settle old verdict fairness."
+  },
+  "next_intervention": {
+    "single_change": "Public requirement to retain the order-derived original invoice type, with matching structural acceptance rule",
+    "public_clause": "NEXT-CONTRACT.md",
+    "public_clause_file_sha256": "a31a34c52496ecdd4c25c086cf51eebbe3000df456f3ccb23d7dea4ee3b919d1",
+    "smoke_run_tool": "deferred",
+    "diagnostic_widening": "deferred",
+    "cohort_size": 20,
+    "integration_and_requalification": "not yet performed",
+    "new_campaign_started": false
+  },
+  "effect_on_frozen_execution": "None. Original inputs, result classes, report, costs and slots are unchanged."
+}

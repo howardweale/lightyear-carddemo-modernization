@@ -1,3 +1,75 @@
+**95% Wilson interval: 38.7%–78.1%; Stage B 03: 12/20 first-try passes (60%).**
+
+## Stage B 03 terminal result
+
+All 20 fresh cohort trials and all three excluded pilots finished. Twelve cohort
+candidates passed on their first native attempt; eight ended in execution failure
+with no supported repair diagnostic. There were no repaired passes, invalids,
+unstarted slots, judge errors or insufficient-evidence outcomes. The signed report
+is nonvoid. The three qualification controls are not included in this rate.
+
+| Native class / disposition | Cohort | Pilots (excluded) |
+|---|---:|---:|
+| Passed | 12 | 1 |
+| Business failure | 0 | 0 |
+| Execution failure | 8 | 2 |
+| Judge error | 0 | 0 |
+| Insufficient evidence | 0 | 0 |
+| First-try / repaired passes | 12 / 0 | 1 / 0 |
+| Halted with no supported repair diagnostic | 8 | 2 |
+| Invalid / unstarted | 0 / 0 | 0 / 0 |
+
+| Consumption | Cohort | Pilots | Total |
+|---|---:|---:|---:|
+| Builder / analyst calls | 20 / 0 | 3 / 0 | 23 / 0 |
+| Compilations / native pairs | 22 / 20 | 3 / 3 | 25 / 23 |
+| Input tokens (includes cached input) | 6,883,993 | 1,167,069 | 8,051,062 |
+| Cached input tokens | 6,014,976 | 1,031,040 | 7,046,016 |
+| Output tokens | 251,914 | 39,915 | 291,829 |
+| Agent seconds | 8,829.203 | 1,379.172 | 10,208.375 |
+| Native seconds | 7,005.546 | 1,016.781 | 8,022.327 |
+
+Campaign elapsed time was 20,098.890 seconds (5h 34m 58.890s), including publication
+overhead. Independent replay then took 933.828 seconds,
+with zero additional model calls or native executions. The unchanged frozen
+`tools.ms94_publication_b_v5` reproduced all 23 complete gates and trial provenance.
+All signed cleanup records passed; actual Docker inventory confirmed all
+207 campaign-owned resources absent
+(161 containers,
+23 networks,
+23 volumes). The controller exited
+after writing the signed terminal report; no campaign error or stopping record appeared.
+The separate process/compilation cleanup record also confirms no remaining offline
+compilation containers.
+
+The frozen decision is **review the intermediate result before any further generation**.
+No purchasing run, ablation, restart or replacement slot was launched. The single
+intervention was the approved public order-derived invoice-type retention rule and
+matching acceptance predicate; no smoke tool, diagnostic widening or support change.
+
+This is one baseline operations journey, not a claim about unfamiliar journeys or
+production qualification. Mechanical replay does not substitute for human review
+of the new candidates. The prior 2/10 Stage B 02 result has a different public
+contract and five contract-gap rejections, so these samples are not pooled and no
+controlled causal improvement is claimed. Its 95% Wilson interval remains 5.7%–51.0%,
+with all eleven original failures preserved. Stage B 01 remains invalid-provenance
+and void, with its one call and 459.047 seconds kept separate.
+
+Requested model: `gpt-6-astra`, high reasoning, through the pinned signed-in CLI;
+provider-resolved model and per-call billed dollars are not exposed. Generation
+is nonzero as reported above. No GCP or organization API was used; local compute
+and electricity were not metered. Full native archives remain local. Only signed
+result/call/native/publication metadata, cleanup records and the readable summary
+are published here; no captures, candidate source or secrets are included.
+
+Signed report content SHA-256:
+`ba30e83bb2f29a5bc4e31927a245601e170848f3d533c8e57cf23eb803b49ec1`.
+Independent terminal verification content SHA-256:
+`00f846bad1407fc970ee057eabee5633a870a4d923f6c754bd64c8455f5f0780`.
+
+[Signed report](terminal/report.json), [summary](terminal/summary.json), and
+[independent verification](terminal/terminal-verification.json).
+
 # Stage B 03: prospective invoice-type retention contract
 
 Declared before generation: three excluded pilots, then 20 fresh cohort trials.
@@ -40,4 +112,4 @@ caveat remain separate and unchanged. No old candidate or trial is reused.
 The [one-shot launch](launch.json) began on 29 September 2026 at 19:33:05 UTC.
 The signed [publication proof](published-plan.json) confirms remote commit
 `026fdf804fe27953cf41c8f9552f66476bff3ec9` before [authorization](authorization.json)
-and launch. Pilot 1 was observed active; this record makes no completed-cohort claim.
+and launch. The launch record is retained as the pre-generation provenance; terminal results are above.

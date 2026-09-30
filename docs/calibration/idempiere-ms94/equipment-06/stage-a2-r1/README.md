@@ -1,4 +1,71 @@
-# Equipment 06, A2 revision 1: prospective diagnostic qualification
+# Equipment 06, A2 revision 1: qualification passed
+
+All 18 fresh Oracle/PostgreSQL pairs met their predeclared expectations, with
+zero model calls, no replacements, no restart and no unstarted slots. This is
+diagnostic equipment qualification, not an autonomous cohort-success result.
+
+| Planted control | Intended results obtained |
+|---|---:|
+| Missing rollback stimulus and wait; lock witness retained | 3/3 |
+| Reversal-allocation assertion | 3/3 |
+| Invoice null dereference | 3/3 |
+| Shipment API rejection | 3/3 |
+| Test-only support throw, feedback suppressed and equipment-suspect | 3/3 |
+| Nonnumeric public order identifier | 3/3 |
+
+Native verdicts were six contract violations and twelve execution failures.
+The three support controls exported no feedback and recorded equipment-suspect;
+this expected control result does not automatically void a measured campaign.
+All declared runtime origins, stages, exception classes and candidate frames
+matched. Both contract controls matched their exact findings in both engines.
+
+The revised rollback control omits both the draft database write and the
+post-rollback wait. **The original wait-only fault remains unqualified.** The
+original A2 failure, its five unstarted slots and all its costs remain preserved
+separately in [stage-a2](../stage-a2/README.md). This is the control scope change
+Howard authorized; it is not a reinterpretation of that failed experiment.
+
+All 18 archives independently replayed using the unchanged frozen
+`tools.ms94_diagnostic_publication_v7`, reproducing the complete gate and exported
+diagnostic bytes. All 90 native, cleanup, projection, publication and
+verification signatures checked. Actual Docker inventory before and after replay
+confirmed all 162 owned resources absent
+(126 containers,
+18 networks and
+18 volumes), plus all six offline compilation containers.
+All 887 frozen source files were guarded before and after replay.
+
+| Cost | Value |
+|---|---:|
+| Campaign elapsed seconds, including controller publication/replay | 6,566.890 |
+| Sum of native-pair seconds, included in campaign elapsed | 5,793.812 |
+| Independent terminal replay and cleanup verification seconds | 411.485 |
+| Native pairs / lane executions | 18 / 36 |
+| Model calls / model tokens | 0 / 0 |
+| Separate preparation compilation seconds | 263.578 |
+| Separate offline preparation compilations | 6 |
+
+The 35 focused tests, nine documentation tests and six preparation compilations
+were preparation evidence, not native qualification. Independent replay added no
+native executions or model calls. Preparation, this new qualification, the original
+failed A2, A1 and B01/B02/B03 remain separate measurements and costs.
+
+A1's 10/10 retained-reference result and one-sided 95% upper false-rejection bound
+of 25.9% remain unchanged. All inherited sources, the judge, observer, exporter
+and public support remain byte-identical. Operator review is not independent
+human source attestation. These controls do not establish performance on another
+journey or in production.
+
+A3 native private-value invariance is still required and is not yet qualified.
+B04 has not started and remains prohibited until A3 passes and its own exact
+23-slot plan, declaration, snapshot and allowlists have been publicly pushed.
+B03 remains 12/20 first-try, Wilson 38.7%–78.1%, nonvoid.
+
+[Signed report](report.json), [independent terminal verification](terminal-verification.json)
+and per-publication safe metadata are published here. Captures, archives and
+secrets remain local.
+
+## Original prospective declaration
 
 Howard authorized the four next steps on September 30, 2026: revise the failed
 control, freeze and publish a fresh qualification, perform native A3 invariance,

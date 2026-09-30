@@ -1,4 +1,50 @@
-# Equipment 06: private checkpoint preparation for A3
+# Equipment 06: A3 checkpoint preparation failed
+
+The single frozen preparation run stopped before admitting a new checkpoint.
+The recorded error is `CalibrationError: Schema captures must reference the same
+MS84 checkpoint`. The new catalog capture used a derivation-recipe lineage field,
+while the existing schema verifier requires the shared MS84 checkpoint lineage.
+This is a preparation implementation defect, not a candidate business failure
+or evidence that diagnostic value-invariance passed or failed.
+
+Both real database transformations completed. Their complete native captures
+passed the declared per-cell, structure and row-count audits; each engine's
+30 post-transformation constraint probes passed. Those partial checks do not
+admit a checkpoint. Schema assessment stopped, no admitted derived checkpoint
+was written, and no planted candidate or diagnostic comparison ran.
+
+Independent verification repeated both native transformation audits and reproduced
+the exact schema-verifier exception with the unchanged frozen code. All signed
+records checked, and actual Docker inventory confirmed all five owned resources
+absent. All 892 frozen files remained unchanged. The failed run was neither
+edited nor restarted; its captures remain local.
+
+| Cost | Value |
+|---|---:|
+| Failed native preparation elapsed seconds | 215.641 |
+| Independent evidence replay and cleanup verification seconds | 8.859 |
+| Isolated database pairs | 1 |
+| Candidate executions / Java compilations / model calls / model tokens | 0 / 0 / 0 / 0 |
+
+The follow-up is paused under the failure rule. A3 remains unqualified and B04
+remains blocked. The concrete repair is to bind new native catalog observations
+to the admitted predecessor checkpoint as the unchanged schema verifier requires,
+while retaining the derivation recipe in separate provenance. Such a correction
+requires a new source version, new freeze and fresh preparation; it cannot be
+applied retroactively to this failed run. A3's paired native fault qualification
+still needs its own implementation, freeze and execution afterward.
+
+A2 revision 1 remains passed: all 18 intended results, all 18 archives replayed,
+90 signatures verified and all 162 resources removed. Its original wait-only
+predecessor remains failed and separate. B03 remains 12/20 first-try, Wilson
+38.7%–78.1%, nonvoid. This preparation cost is separate from all qualification
+and measurement costs.
+
+[Signed failed report](report.json), [independent verification](terminal-verification.json)
+and [cleanup receipt](cleanup.json) are published. No native captures, raw
+checkpoint values, archives or secrets are included.
+
+## Original prospective preparation declaration
 
 This is a separate, zero-model preparation run. It does not qualify A3 or admit
 B04. A1 and revised A2 have passed and their terminal evidence is published.

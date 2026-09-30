@@ -1,6 +1,6 @@
 {
-  "artifact_type": "ms94-stage-b-03-post-run-classification-intake",
-  "assessment_status": "INCOMPLETE: mandatory support-origin stop; measurement-validity review required",
+  "artifact_type": "ms94-stage-b-03-post-run-classification",
+  "assessment_status": "Agent classification and pass review complete; operator validity/adjudication signature pending",
   "specs": [
     {
       "name": "TASK-MS94-B03-CLASSIFICATION.md",
@@ -26,10 +26,10 @@
   "outcomes_relabelled": false,
   "new_model_calls": 0,
   "new_native_executions": 0,
-  "completed_pass_reviews": 0,
-  "completed_failure_classifications": 0,
+  "completed_pass_reviews": 13,
+  "completed_failure_classifications": 10,
   "stop_findings": 1,
-  "next_round_status": "blocked by adopted task Part 1 question 3; no B04 implementation, freeze or launch",
+  "next_round_status": "B04 blocked pending adjudication of completed packet, including support-origin pilot-03",
   "trials": [
     {
       "trial": "pilot-01",
@@ -71,8 +71,166 @@
       "repaired_pass": false,
       "exported_diagnostics": [],
       "diagnostic_export_sha256": "9beeec8c318f0ed7c62895e0e6b3048b5e4e23facd3a1783ab7dfa32ef0d2d8e",
-      "review_status": "not completed: stopped for pilot-03 support-origin finding",
-      "human_review": "pending"
+      "review_status": "post-run agent assessment complete; operator adjudication pending",
+      "human_review": "operator mode approved; completed findings not yet adjudicated",
+      "public_input_literal_assessment": "Fixed dates, scenario keys, quantities, prices, credit-limit input/increment, text and DictionaryIDs are present in builder-visible inputs/API. No hardcoded generated invoice-type identifier was found.",
+      "invoice_constructor_lines": [
+        239
+      ],
+      "generic_ari_override_lines": [],
+      "lanes": {
+        "oracle": {
+          "exception_class": "IllegalStateException",
+          "candidate_stack": [
+            {
+              "method": "require",
+              "line": 34,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "checkAccounting",
+              "line": 89,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "post",
+              "line": 103,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "postAllocations",
+              "line": 115,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "business",
+              "line": 324,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "lambda$8",
+              "line": 470,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "operationsJourney",
+              "line": 470,
+              "file": "LightyearOperationsTest.java"
+            }
+          ],
+          "exit_code": 1,
+          "trace_status_failed": true,
+          "log_path": "factory/idempiere/ms86-journeys/runs/journey-cc5ec81f04644ab7ae2882b53ddf92f4/cases/operations/1/execution/oracle/maven.log",
+          "log_sha256": "7e141e6f360e93d36560391fb439c62559dfbdb862799fc8eb8ace2cf9044bc9",
+          "trace_path": "factory/idempiere/ms86-journeys/runs/journey-cc5ec81f04644ab7ae2882b53ddf92f4/cases/operations/1/execution/oracle/journey.xml",
+          "trace_sha256": "8f74411a8526796b380d33a38872cbf9bff8e038d274247ceb7bf110d492b1b5",
+          "execution_path": "factory/idempiere/ms86-journeys/runs/journey-cc5ec81f04644ab7ae2882b53ddf92f4/cases/operations/1/execution/oracle/execution.json",
+          "execution_sha256": "a9f49441028df3d827d4c88434583f6819377c4e09b2a79d9b4f41f3fcf38bb7",
+          "public_credit_field_names": [
+            "credit.finalStatus",
+            "credit.id",
+            "credit.net",
+            "credit.reversalId",
+            "credit.saved",
+            "credit.status",
+            "credit.total",
+            "credit.uuid"
+          ],
+          "recovery_trace_present": false,
+          "concurrency_trace_present": false
+        },
+        "postgresql": {
+          "exception_class": "IllegalStateException",
+          "candidate_stack": [
+            {
+              "method": "require",
+              "line": 34,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "checkAccounting",
+              "line": 89,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "post",
+              "line": 103,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "postAllocations",
+              "line": 115,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "business",
+              "line": 324,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "lambda$8",
+              "line": 470,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "operationsJourney",
+              "line": 470,
+              "file": "LightyearOperationsTest.java"
+            }
+          ],
+          "exit_code": 1,
+          "trace_status_failed": true,
+          "log_path": "factory/idempiere/ms86-journeys/runs/journey-cc5ec81f04644ab7ae2882b53ddf92f4/cases/operations/1/execution/postgresql/maven.log",
+          "log_sha256": "308b6409f7c8218d4f8e9c20f4bdccda16d6fa909c875938a06bf75b73d0b278",
+          "trace_path": "factory/idempiere/ms86-journeys/runs/journey-cc5ec81f04644ab7ae2882b53ddf92f4/cases/operations/1/execution/postgresql/journey.xml",
+          "trace_sha256": "14f59601da44910041dade31acbd3fe122d5dce2d44afc287fe0e2b1ab007bd9",
+          "execution_path": "factory/idempiere/ms86-journeys/runs/journey-cc5ec81f04644ab7ae2882b53ddf92f4/cases/operations/1/execution/postgresql/execution.json",
+          "execution_sha256": "c112d73718cd9af23718bc0c18055b57020fc961d341e52bcd34113ecb1958e2",
+          "public_credit_field_names": [
+            "credit.finalStatus",
+            "credit.id",
+            "credit.net",
+            "credit.reversalId",
+            "credit.saved",
+            "credit.status",
+            "credit.total",
+            "credit.uuid"
+          ],
+          "recovery_trace_present": false,
+          "concurrency_trace_present": false
+        }
+      },
+      "same_point_in_both_lanes": true,
+      "exception_class": "IllegalStateException",
+      "candidate_frame": {
+        "method": "require",
+        "line": 34,
+        "file": "LightyearOperationsTest.java"
+      },
+      "category": "A",
+      "thrown_by": "candidate",
+      "failure_stage": "credit/reversal allocation accounting",
+      "assertion_line": 89,
+      "allocation_caller_line": 324,
+      "throwing_frame": {
+        "method": "require",
+        "line": 34,
+        "file": "LightyearOperationsTest.java"
+      },
+      "root_cause": "Plain business-logic error: candidate requires nonempty Fact_Acct for a completed/posted credit-reversal allocation; pinned Doc_AllocationHdr.createFacts deliberately returns an empty facts list for this invoice/reversal pair (lines 197-214).",
+      "judge_assessment": {
+        "answer": "yes",
+        "reason": "The candidate aborts both lanes on its own extra invariant; it is not a completed valid alternative rejected by comparison. This finding does not establish later checks would pass."
+      },
+      "masked_checks": "Later reversal-cancellation/final accounting checks and recovery/retry/lock-interleaving completion are masked. Partial traces have no recovery or concurrency fields. No separate later defect established; fixing this abort does not predict a pass.",
+      "proposed_b04_diagnostic": {
+        "sent": true,
+        "localization": "uncertain-generic-helper",
+        "reason": "First candidate frame is generic require; the proposed single frame omits the accounting caller. Stage may narrow source search, but exact assertion localization is uncertain.",
+        "repair_success_predicted": false,
+        "api_call_caveat": "The throwing assertion/helper may have no uniquely resolvable admitted iDempiere method on that line. Do not invent a nearest API call.",
+        "public_stage_caveat": "Partial Properties XML is not chronological and has no allocation checkpoint. A deterministic declared mapping is needed; the last XML entry is not the active stage."
+      }
     },
     {
       "trial": "pilot-02",
@@ -114,8 +272,75 @@
       "repaired_pass": false,
       "exported_diagnostics": null,
       "diagnostic_export_sha256": null,
-      "review_status": "not completed: stopped for pilot-03 support-origin finding",
-      "human_review": "pending"
+      "review_status": "post-run agent assessment complete; operator adjudication pending",
+      "human_review": "operator mode approved; completed findings not yet adjudicated",
+      "public_input_literal_assessment": "Fixed dates, scenario keys, quantities, prices, credit-limit input/increment, text and DictionaryIDs are present in builder-visible inputs/API. No hardcoded generated invoice-type identifier was found.",
+      "invoice_constructor_lines": [
+        359
+      ],
+      "generic_ari_override_lines": [],
+      "pass_review": {
+        "disposition": "accepted-with-note",
+        "reason": "Explicitly asserts both invoice type fields against the order relationship. Default-bank selection remains fixture-dependent.",
+        "reviewer_kind": "agent static source/evidence assessment; not human signature",
+        "public_workflow": "Native models and MWorkflow document actions; two order-linked shipments, one aggregate order-linked invoice, observed-total payment, credit/reversal, explicit rollback/retry and primary-key lock paths.",
+        "native_action_lines": [
+          43
+        ],
+        "guarded_posting_lines": [
+          68,
+          372,
+          391,
+          431,
+          442,
+          443
+        ],
+        "direct_sql_write_lines_found": [],
+        "invoice_type": "new MInvoice(order,0,date) resolves the order relationship; no subsequent invoice target-type override or hardcoded invoice-type ID.",
+        "invoice_constructor_lines": [
+          359
+        ],
+        "fixture_dependencies": {
+          "public_literals": "Fixed public scenario inputs and declared DictionaryIDs used; not independent unfamiliar-fixture performance.",
+          "template_location_lines": [
+            272
+          ],
+          "template_location_policy": "getLocations(false) orders active locations by C_BPartner_Location_ID (MBPartner.java:515-517). Choosing the first is deterministic but assumes that template role is acceptable; a different fixture may need a role-specific choice.",
+          "default_bank_query_lines": [
+            378
+          ],
+          "default_bank_policy": "DB.getSQLValueEx takes the first row without uniqueness assertion or ORDER BY (DB.java:1098-1122). Both archived lanes have a unique matching default; multiple defaults in another fixture could silently select another account.",
+          "credit_type_policy": "Generic ARCreditMemo selector is retained under the unchanged public contract; deterministic selection with multiple equally ranked eligible credit types is not established."
+        },
+        "exception_handling": "Only the deliberately injected recovery failure is swallowed. Unexpected failures propagate or are rethrown after cleanup; worker Futures are read. Cleanup can mask a primary failure on an exceptional path but does not turn it into success.",
+        "recovery_catch_lines": [
+          133,
+          136,
+          463
+        ],
+        "observation_wait_lines": [
+          131,
+          144,
+          209
+        ],
+        "locking_query_lines": [
+          165,
+          215
+        ],
+        "accidental_pass_other_fixture": "Not ruled out: selectors and public-input literals are scoped to this admitted journey. No current-fixture false pass demonstrated.",
+        "independent_gate_checks": {
+          "structure_passed": true,
+          "unresolved_row_differences": 0,
+          "unresolved_trace_differences": 0,
+          "both_observers_passed": true
+        }
+      },
+      "failure_stage": null,
+      "category": null,
+      "judge_assessment": {
+        "answer": "yes-with-scope-note",
+        "reason": "Source assessment and existing replay support the recorded pass on the admitted fixture; no cross-fixture correctness claim."
+      }
     },
     {
       "trial": "pilot-03",
@@ -157,85 +382,87 @@
       "repaired_pass": false,
       "exported_diagnostics": [],
       "diagnostic_export_sha256": "9beeec8c318f0ed7c62895e0e6b3048b5e4e23facd3a1783ab7dfa32ef0d2d8e",
-      "review_status": "stop finding recorded; validity adjudication pending",
-      "human_review": "pending",
+      "review_status": "post-run agent assessment complete; operator adjudication pending",
+      "human_review": "operator mode approved; completed findings not yet adjudicated",
       "failure_stage": "opening inventory posting",
       "thrown_by": "support",
       "lanes": {
         "oracle": {
+          "exception_class": "IllegalStateException",
+          "candidate_stack": [
+            {
+              "method": "post",
+              "line": 72,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "businessJourney",
+              "line": 199,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "lambda$5",
+              "line": 482,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "operationsJourney",
+              "line": 482,
+              "file": "LightyearOperationsTest.java"
+            }
+          ],
+          "exit_code": 1,
+          "trace_status_failed": true,
           "log_path": "factory/idempiere/ms86-journeys/runs/journey-8375d966ae5741888a42db7d5017b6a8/cases/operations/1/execution/oracle/maven.log",
           "log_sha256": "d9964c5e0404a720ef9ef349ac797ac0a5c1b7e325fa67539a1b57aebb0d3198",
-          "execution_path": "factory/idempiere/ms86-journeys/runs/journey-8375d966ae5741888a42db7d5017b6a8/cases/operations/1/execution/oracle/execution.json",
-          "execution_sha256": "8ce90de5ecd340bc29097e5314252ecd627376c06e055f4e44726df90e6e2d93",
           "trace_path": "factory/idempiere/ms86-journeys/runs/journey-8375d966ae5741888a42db7d5017b6a8/cases/operations/1/execution/oracle/journey.xml",
           "trace_sha256": "691d2d0529ce078a6b0d64037f6e383c76f5657e943f0783f4466e9264945d56",
-          "public_trace_field_names": [
-            "openingInventory.id",
-            "openingInventory.quantity",
-            "openingInventory.saved",
-            "openingInventory.status",
-            "openingInventory.uuid"
-          ],
-          "trace_status_failed": true,
-          "exit_code": 1,
-          "exception_class": "IllegalStateException",
-          "throwing_frame": {
-            "owner": "JourneySupport",
-            "method": "postOnce",
-            "file": "LightyearOperationsTest.java",
-            "line": 540
-          },
-          "candidate_frames": [
-            {
-              "method": "post",
-              "line": 72
-            },
-            {
-              "method": "businessJourney",
-              "line": 199
-            }
-          ],
-          "nested_exception_class": "IllegalStateException"
+          "execution_path": "factory/idempiere/ms86-journeys/runs/journey-8375d966ae5741888a42db7d5017b6a8/cases/operations/1/execution/oracle/execution.json",
+          "execution_sha256": "8ce90de5ecd340bc29097e5314252ecd627376c06e055f4e44726df90e6e2d93",
+          "public_credit_field_names": [],
+          "recovery_trace_present": false,
+          "concurrency_trace_present": false
         },
         "postgresql": {
-          "log_path": "factory/idempiere/ms86-journeys/runs/journey-8375d966ae5741888a42db7d5017b6a8/cases/operations/1/execution/postgresql/maven.log",
-          "log_sha256": "11247e257cb5a08946f9e3ff3ee238a3f6a97e4f3176f936466489e9f7cd6b7f",
-          "execution_path": "factory/idempiere/ms86-journeys/runs/journey-8375d966ae5741888a42db7d5017b6a8/cases/operations/1/execution/postgresql/execution.json",
-          "execution_sha256": "c7f52728b117393e65948f8bcab480fcbacd04db97346e960fdbe3a9dded9383",
-          "trace_path": "factory/idempiere/ms86-journeys/runs/journey-8375d966ae5741888a42db7d5017b6a8/cases/operations/1/execution/postgresql/journey.xml",
-          "trace_sha256": "0836c2ce20ebbefd4de4863f0ac6fff1466b0471759da94660d0f1d6ea6049c9",
-          "public_trace_field_names": [
-            "openingInventory.id",
-            "openingInventory.quantity",
-            "openingInventory.saved",
-            "openingInventory.status",
-            "openingInventory.uuid"
-          ],
-          "trace_status_failed": true,
-          "exit_code": 1,
           "exception_class": "IllegalStateException",
-          "throwing_frame": {
-            "owner": "JourneySupport",
-            "method": "postOnce",
-            "file": "LightyearOperationsTest.java",
-            "line": 540
-          },
-          "candidate_frames": [
+          "candidate_stack": [
             {
               "method": "post",
-              "line": 72
+              "line": 72,
+              "file": "LightyearOperationsTest.java"
             },
             {
               "method": "businessJourney",
-              "line": 199
+              "line": 199,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "lambda$5",
+              "line": 482,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "operationsJourney",
+              "line": 482,
+              "file": "LightyearOperationsTest.java"
             }
           ],
-          "nested_exception_class": "IllegalStateException"
+          "exit_code": 1,
+          "trace_status_failed": true,
+          "log_path": "factory/idempiere/ms86-journeys/runs/journey-8375d966ae5741888a42db7d5017b6a8/cases/operations/1/execution/postgresql/maven.log",
+          "log_sha256": "11247e257cb5a08946f9e3ff3ee238a3f6a97e4f3176f936466489e9f7cd6b7f",
+          "trace_path": "factory/idempiere/ms86-journeys/runs/journey-8375d966ae5741888a42db7d5017b6a8/cases/operations/1/execution/postgresql/journey.xml",
+          "trace_sha256": "0836c2ce20ebbefd4de4863f0ac6fff1466b0471759da94660d0f1d6ea6049c9",
+          "execution_path": "factory/idempiere/ms86-journeys/runs/journey-8375d966ae5741888a42db7d5017b6a8/cases/operations/1/execution/postgresql/execution.json",
+          "execution_sha256": "c7f52728b117393e65948f8bcab480fcbacd04db97346e960fdbe3a9dded9383",
+          "public_credit_field_names": [],
+          "recovery_trace_present": false,
+          "concurrency_trace_present": false
         }
       },
       "same_point_in_both_lanes": true,
-      "category": "C: support-origin posting rejection; equipment-suspect pending adjudication",
-      "root_cause": "JourneySupport.postOnce wraps a nonempty rejection returned by DocManager.postDocument during opening-inventory posting. The application reports a posting-lock rejection; the underlying candidate/support/application-timing cause is unresolved.",
+      "category": "C",
+      "root_cause": "Misuse of the application posting sequence: candidate explicitly posts opening inventory after a native costing failure has left it in posting-error state. Doc.post rejects that state with force/repost disabled; JourneySupport propagates the rejection. No timing race or independently faulty support implementation is demonstrated.",
       "source_locations": {
         "candidate_call": 199,
         "candidate_wrapper": 72,
@@ -243,15 +470,53 @@
         "public_support_line": 45
       },
       "judge_assessment": {
-        "answer": "unresolved",
-        "reason": "Execution-failure correctly describes both nonzero exits. Whether this is a candidate-attributable failure or equipment finding requires measurement-validity adjudication; signed nonvoid report is unchanged."
+        "answer": "yes",
+        "reason": "Both lanes abort on the extra opening-inventory post. The public journey requires opening stock completion and explicit invoice/payment/allocation posting, not this additional inventory post. Support-origin remains an equipment-suspect review trigger under the adopted spec; final validity adjudication is still required."
       },
       "proposed_b04_diagnostic": {
         "sent": false,
-        "reason": "The proposed policy suppresses support-origin diagnostics and routes to halted-equipment-suspect. It would not supply a builder repair diagnostic for this case."
+        "localization": "suppressed-support-origin",
+        "reason": "The proposed rule suppresses this wrapper exception and routes to halted-equipment-suspect, even though source/log evidence supports candidate API-sequencing misuse."
       },
       "masked_checks": "The first blocking failure precedes order, shipment, invoice, payment/allocation, credit/reversal, rollback/retry and lock-interleaving completion; no claim about those unexecuted checks.",
-      "support_sha256": "1b50b77a98df8ae1a02c6eb2ce5446768d4f8293ee01725ded007a0887dbd831"
+      "support_sha256": "1b50b77a98df8ae1a02c6eb2ce5446768d4f8293ee01725ded007a0887dbd831",
+      "public_input_literal_assessment": "Fixed dates, scenario keys, quantities, prices, credit-limit input/increment, text and DictionaryIDs are present in builder-visible inputs/API. No hardcoded generated invoice-type identifier was found.",
+      "invoice_constructor_lines": [
+        252
+      ],
+      "generic_ari_override_lines": [],
+      "exception_class": "IllegalStateException",
+      "candidate_frame": {
+        "method": "post",
+        "line": 72,
+        "file": "LightyearOperationsTest.java"
+      },
+      "throwing_frame": {
+        "owner": "JourneySupport",
+        "method": "postOnce",
+        "file": "LightyearOperationsTest.java",
+        "line": 540
+      },
+      "causal_evidence": {
+        "candidate_call_line": 199,
+        "candidate_wrapper_line": 72,
+        "support_wrapper_line": 540,
+        "pinned_doc_inventory_no_costs_lines": [
+          319,
+          334
+        ],
+        "pinned_doc_post_admission_lines": [
+          591,
+          608
+        ],
+        "pinned_doc_manager_dispatch_lines": [
+          406,
+          428
+        ],
+        "prior_costing_error_in_both_lanes": true,
+        "posting_error_state_in_both_final_captures": true,
+        "interpretation": "These facts establish the observed rejection path; they do not prove a general absence of equipment defects."
+      }
     },
     {
       "trial": "cohort-01",
@@ -293,8 +558,146 @@
       "repaired_pass": false,
       "exported_diagnostics": [],
       "diagnostic_export_sha256": "9beeec8c318f0ed7c62895e0e6b3048b5e4e23facd3a1783ab7dfa32ef0d2d8e",
-      "review_status": "not completed: stopped for pilot-03 support-origin finding",
-      "human_review": "pending"
+      "review_status": "post-run agent assessment complete; operator adjudication pending",
+      "human_review": "operator mode approved; completed findings not yet adjudicated",
+      "public_input_literal_assessment": "Fixed dates, scenario keys, quantities, prices, credit-limit input/increment, text and DictionaryIDs are present in builder-visible inputs/API. No hardcoded generated invoice-type identifier was found.",
+      "invoice_constructor_lines": [
+        349
+      ],
+      "generic_ari_override_lines": [],
+      "lanes": {
+        "oracle": {
+          "exception_class": "AssertionFailedError",
+          "candidate_stack": [
+            {
+              "method": "accounting",
+              "line": 71,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "allocations",
+              "line": 90,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "lambda$6",
+              "line": 432,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "operationsJourney",
+              "line": 245,
+              "file": "LightyearOperationsTest.java"
+            }
+          ],
+          "exit_code": 1,
+          "trace_status_failed": true,
+          "log_path": "factory/idempiere/ms86-journeys/runs/journey-bd1c653fe67e46eda112760b890fc480/cases/operations/1/execution/oracle/maven.log",
+          "log_sha256": "c0ce4ab2a0bad6cb6f56c56dc8c53395b30d63edfcb2c6935053799e845ce8b2",
+          "trace_path": "factory/idempiere/ms86-journeys/runs/journey-bd1c653fe67e46eda112760b890fc480/cases/operations/1/execution/oracle/journey.xml",
+          "trace_sha256": "ccb5dd3937541cc56d1445ac861656585829e340f491504444d82552229efbd3",
+          "execution_path": "factory/idempiere/ms86-journeys/runs/journey-bd1c653fe67e46eda112760b890fc480/cases/operations/1/execution/oracle/execution.json",
+          "execution_sha256": "7a1362ddc719d5bd2f93004ea4809c7b2c045f33791612961f980c9500d2127e",
+          "public_credit_field_names": [
+            "credit.finalStatus",
+            "credit.id",
+            "credit.net",
+            "credit.reversalId",
+            "credit.saved",
+            "credit.status",
+            "credit.total",
+            "credit.uuid",
+            "creditReversal.id",
+            "creditReversal.saved",
+            "creditReversal.status",
+            "creditReversal.total",
+            "creditReversal.uuid"
+          ],
+          "recovery_trace_present": false,
+          "concurrency_trace_present": false
+        },
+        "postgresql": {
+          "exception_class": "AssertionFailedError",
+          "candidate_stack": [
+            {
+              "method": "accounting",
+              "line": 71,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "allocations",
+              "line": 90,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "lambda$6",
+              "line": 432,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "operationsJourney",
+              "line": 245,
+              "file": "LightyearOperationsTest.java"
+            }
+          ],
+          "exit_code": 1,
+          "trace_status_failed": true,
+          "log_path": "factory/idempiere/ms86-journeys/runs/journey-bd1c653fe67e46eda112760b890fc480/cases/operations/1/execution/postgresql/maven.log",
+          "log_sha256": "143941c9d76a4e9b186b5eee117465b319a0b30815d63914503c9ae23e70f64f",
+          "trace_path": "factory/idempiere/ms86-journeys/runs/journey-bd1c653fe67e46eda112760b890fc480/cases/operations/1/execution/postgresql/journey.xml",
+          "trace_sha256": "03c8ef0f97083f21770a62fa5785efcd5213920c40602839f7354eb528b183e7",
+          "execution_path": "factory/idempiere/ms86-journeys/runs/journey-bd1c653fe67e46eda112760b890fc480/cases/operations/1/execution/postgresql/execution.json",
+          "execution_sha256": "c32ebb2aa64a5c0bec93a24866d110d592459122ff4de617f7818d65a915f16d",
+          "public_credit_field_names": [
+            "credit.finalStatus",
+            "credit.id",
+            "credit.net",
+            "credit.reversalId",
+            "credit.saved",
+            "credit.status",
+            "credit.total",
+            "credit.uuid",
+            "creditReversal.id",
+            "creditReversal.saved",
+            "creditReversal.status",
+            "creditReversal.total",
+            "creditReversal.uuid"
+          ],
+          "recovery_trace_present": false,
+          "concurrency_trace_present": false
+        }
+      },
+      "same_point_in_both_lanes": true,
+      "exception_class": "AssertionFailedError",
+      "candidate_frame": {
+        "method": "accounting",
+        "line": 71,
+        "file": "LightyearOperationsTest.java"
+      },
+      "category": "A",
+      "thrown_by": "candidate",
+      "failure_stage": "credit/reversal allocation accounting",
+      "assertion_line": 71,
+      "allocation_caller_line": 432,
+      "throwing_frame": {
+        "method": "accounting",
+        "line": 71,
+        "file": "LightyearOperationsTest.java"
+      },
+      "root_cause": "Plain business-logic error: candidate requires nonempty Fact_Acct for a completed/posted credit-reversal allocation; pinned Doc_AllocationHdr.createFacts deliberately returns an empty facts list for this invoice/reversal pair (lines 197-214).",
+      "judge_assessment": {
+        "answer": "yes",
+        "reason": "The candidate aborts both lanes on its own extra invariant; it is not a completed valid alternative rejected by comparison. This finding does not establish later checks would pass."
+      },
+      "masked_checks": "Later reversal-cancellation/final accounting checks and recovery/retry/lock-interleaving completion are masked. Partial traces have no recovery or concurrency fields. No separate later defect established; fixing this abort does not predict a pass.",
+      "proposed_b04_diagnostic": {
+        "sent": true,
+        "localization": "direct",
+        "reason": "First candidate frame locates the nonempty-accounting assertion.",
+        "repair_success_predicted": false,
+        "api_call_caveat": "The throwing assertion/helper may have no uniquely resolvable admitted iDempiere method on that line. Do not invent a nearest API call.",
+        "public_stage_caveat": "Partial Properties XML is not chronological and has no allocation checkpoint. A deterministic declared mapping is needed; the last XML entry is not the active stage."
+      }
     },
     {
       "trial": "cohort-02",
@@ -336,8 +739,74 @@
       "repaired_pass": false,
       "exported_diagnostics": null,
       "diagnostic_export_sha256": null,
-      "review_status": "not completed: stopped for pilot-03 support-origin finding",
-      "human_review": "pending"
+      "review_status": "post-run agent assessment complete; operator adjudication pending",
+      "human_review": "operator mode approved; completed findings not yet adjudicated",
+      "public_input_literal_assessment": "Fixed dates, scenario keys, quantities, prices, credit-limit input/increment, text and DictionaryIDs are present in builder-visible inputs/API. No hardcoded generated invoice-type identifier was found.",
+      "invoice_constructor_lines": [
+        370
+      ],
+      "generic_ari_override_lines": [],
+      "pass_review": {
+        "disposition": "accepted-with-note",
+        "reason": "Uses the order constructor without overriding the derived invoice type. Default-bank selection remains fixture-dependent.",
+        "reviewer_kind": "agent static source/evidence assessment; not human signature",
+        "public_workflow": "Native models and MWorkflow document actions; two order-linked shipments, one aggregate order-linked invoice, observed-total payment, credit/reversal, explicit rollback/retry and primary-key lock paths.",
+        "native_action_lines": [
+          48
+        ],
+        "guarded_posting_lines": [
+          235,
+          380,
+          401,
+          437,
+          449,
+          450
+        ],
+        "direct_sql_write_lines_found": [],
+        "invoice_type": "new MInvoice(order,0,date) resolves the order relationship; no subsequent invoice target-type override or hardcoded invoice-type ID.",
+        "invoice_constructor_lines": [
+          370
+        ],
+        "fixture_dependencies": {
+          "public_literals": "Fixed public scenario inputs and declared DictionaryIDs used; not independent unfamiliar-fixture performance.",
+          "template_location_lines": [
+            281
+          ],
+          "template_location_policy": "getLocations(false) orders active locations by C_BPartner_Location_ID (MBPartner.java:515-517). Choosing the first is deterministic but assumes that template role is acceptable; a different fixture may need a role-specific choice.",
+          "default_bank_query_lines": [
+            387
+          ],
+          "default_bank_policy": "DB.getSQLValueEx takes the first row without uniqueness assertion or ORDER BY (DB.java:1098-1122). Both archived lanes have a unique matching default; multiple defaults in another fixture could silently select another account.",
+          "credit_type_policy": "Generic ARCreditMemo selector is retained under the unchanged public contract; deterministic selection with multiple equally ranked eligible credit types is not established."
+        },
+        "exception_handling": "Only the deliberately injected recovery failure is swallowed. Unexpected failures propagate or are rethrown after cleanup; worker Futures are read. Cleanup can mask a primary failure on an exceptional path but does not turn it into success.",
+        "recovery_catch_lines": [
+          130,
+          470
+        ],
+        "observation_wait_lines": [
+          133,
+          143,
+          208
+        ],
+        "locking_query_lines": [
+          167,
+          213
+        ],
+        "accidental_pass_other_fixture": "Not ruled out: selectors and public-input literals are scoped to this admitted journey. No current-fixture false pass demonstrated.",
+        "independent_gate_checks": {
+          "structure_passed": true,
+          "unresolved_row_differences": 0,
+          "unresolved_trace_differences": 0,
+          "both_observers_passed": true
+        }
+      },
+      "failure_stage": null,
+      "category": null,
+      "judge_assessment": {
+        "answer": "yes-with-scope-note",
+        "reason": "Source assessment and existing replay support the recorded pass on the admitted fixture; no cross-fixture correctness claim."
+      }
     },
     {
       "trial": "cohort-03",
@@ -379,8 +848,75 @@
       "repaired_pass": false,
       "exported_diagnostics": null,
       "diagnostic_export_sha256": null,
-      "review_status": "not completed: stopped for pilot-03 support-origin finding",
-      "human_review": "pending"
+      "review_status": "post-run agent assessment complete; operator adjudication pending",
+      "human_review": "operator mode approved; completed findings not yet adjudicated",
+      "public_input_literal_assessment": "Fixed dates, scenario keys, quantities, prices, credit-limit input/increment, text and DictionaryIDs are present in builder-visible inputs/API. No hardcoded generated invoice-type identifier was found.",
+      "invoice_constructor_lines": [
+        230
+      ],
+      "generic_ari_override_lines": [],
+      "pass_review": {
+        "disposition": "accepted-with-note",
+        "reason": "Main-thread first lock and worker second lock; waited flag and Future readback checked. Default-bank selection remains fixture-dependent.",
+        "reviewer_kind": "agent static source/evidence assessment; not human signature",
+        "public_workflow": "Native models and MWorkflow document actions; two order-linked shipments, one aggregate order-linked invoice, observed-total payment, credit/reversal, explicit rollback/retry and primary-key lock paths.",
+        "native_action_lines": [
+          43
+        ],
+        "guarded_posting_lines": [
+          98,
+          243,
+          263,
+          296,
+          307,
+          308
+        ],
+        "direct_sql_write_lines_found": [],
+        "invoice_type": "new MInvoice(order,0,date) resolves the order relationship; no subsequent invoice target-type override or hardcoded invoice-type ID.",
+        "invoice_constructor_lines": [
+          230
+        ],
+        "fixture_dependencies": {
+          "public_literals": "Fixed public scenario inputs and declared DictionaryIDs used; not independent unfamiliar-fixture performance.",
+          "template_location_lines": [
+            142
+          ],
+          "template_location_policy": "getLocations(false) orders active locations by C_BPartner_Location_ID (MBPartner.java:515-517). Choosing the first is deterministic but assumes that template role is acceptable; a different fixture may need a role-specific choice.",
+          "default_bank_query_lines": [
+            250
+          ],
+          "default_bank_policy": "DB.getSQLValueEx takes the first row without uniqueness assertion or ORDER BY (DB.java:1098-1122). Both archived lanes have a unique matching default; multiple defaults in another fixture could silently select another account.",
+          "credit_type_policy": "Generic ARCreditMemo selector is retained under the unchanged public contract; deterministic selection with multiple equally ranked eligible credit types is not established."
+        },
+        "exception_handling": "Only the deliberately injected recovery failure is swallowed. Unexpected failures propagate or are rethrown after cleanup; worker Futures are read. Cleanup can mask a primary failure on an exceptional path but does not turn it into success.",
+        "recovery_catch_lines": [
+          349,
+          352,
+          445
+        ],
+        "observation_wait_lines": [
+          350,
+          358,
+          409
+        ],
+        "locking_query_lines": [
+          378,
+          417
+        ],
+        "accidental_pass_other_fixture": "Not ruled out: selectors and public-input literals are scoped to this admitted journey. No current-fixture false pass demonstrated.",
+        "independent_gate_checks": {
+          "structure_passed": true,
+          "unresolved_row_differences": 0,
+          "unresolved_trace_differences": 0,
+          "both_observers_passed": true
+        }
+      },
+      "failure_stage": null,
+      "category": null,
+      "judge_assessment": {
+        "answer": "yes-with-scope-note",
+        "reason": "Source assessment and existing replay support the recorded pass on the admitted fixture; no cross-fixture correctness claim."
+      }
     },
     {
       "trial": "cohort-04",
@@ -422,8 +958,74 @@
       "repaired_pass": false,
       "exported_diagnostics": null,
       "diagnostic_export_sha256": null,
-      "review_status": "not completed: stopped for pilot-03 support-origin finding",
-      "human_review": "pending"
+      "review_status": "post-run agent assessment complete; operator adjudication pending",
+      "human_review": "operator mode approved; completed findings not yet adjudicated",
+      "public_input_literal_assessment": "Fixed dates, scenario keys, quantities, prices, credit-limit input/increment, text and DictionaryIDs are present in builder-visible inputs/API. No hardcoded generated invoice-type identifier was found.",
+      "invoice_constructor_lines": [
+        367
+      ],
+      "generic_ari_override_lines": [],
+      "pass_review": {
+        "disposition": "accepted-with-note",
+        "reason": "Repeated-key lookup verifies singleton identity before taking the row. Default-bank selection remains fixture-dependent.",
+        "reviewer_kind": "agent static source/evidence assessment; not human signature",
+        "public_workflow": "Native models and MWorkflow document actions; two order-linked shipments, one aggregate order-linked invoice, observed-total payment, credit/reversal, explicit rollback/retry and primary-key lock paths.",
+        "native_action_lines": [
+          41
+        ],
+        "guarded_posting_lines": [
+          102,
+          383,
+          404,
+          440,
+          454,
+          455
+        ],
+        "direct_sql_write_lines_found": [],
+        "invoice_type": "new MInvoice(order,0,date) resolves the order relationship; no subsequent invoice target-type override or hardcoded invoice-type ID.",
+        "invoice_constructor_lines": [
+          367
+        ],
+        "fixture_dependencies": {
+          "public_literals": "Fixed public scenario inputs and declared DictionaryIDs used; not independent unfamiliar-fixture performance.",
+          "template_location_lines": [
+            278
+          ],
+          "template_location_policy": "getLocations(false) orders active locations by C_BPartner_Location_ID (MBPartner.java:515-517). Choosing the first is deterministic but assumes that template role is acceptable; a different fixture may need a role-specific choice.",
+          "default_bank_query_lines": [
+            389
+          ],
+          "default_bank_policy": "DB.getSQLValueEx takes the first row without uniqueness assertion or ORDER BY (DB.java:1098-1122). Both archived lanes have a unique matching default; multiple defaults in another fixture could silently select another account.",
+          "credit_type_policy": "Generic ARCreditMemo selector is retained under the unchanged public contract; deterministic selection with multiple equally ranked eligible credit types is not established."
+        },
+        "exception_handling": "Only the deliberately injected recovery failure is swallowed. Unexpected failures propagate or are rethrown after cleanup; worker Futures are read. Cleanup can mask a primary failure on an exceptional path but does not turn it into success.",
+        "recovery_catch_lines": [
+          161,
+          471
+        ],
+        "observation_wait_lines": [
+          164,
+          173,
+          236
+        ],
+        "locking_query_lines": [
+          191,
+          242
+        ],
+        "accidental_pass_other_fixture": "Not ruled out: selectors and public-input literals are scoped to this admitted journey. No current-fixture false pass demonstrated.",
+        "independent_gate_checks": {
+          "structure_passed": true,
+          "unresolved_row_differences": 0,
+          "unresolved_trace_differences": 0,
+          "both_observers_passed": true
+        }
+      },
+      "failure_stage": null,
+      "category": null,
+      "judge_assessment": {
+        "answer": "yes-with-scope-note",
+        "reason": "Source assessment and existing replay support the recorded pass on the admitted fixture; no cross-fixture correctness claim."
+      }
     },
     {
       "trial": "cohort-05",
@@ -465,8 +1067,71 @@
       "repaired_pass": false,
       "exported_diagnostics": null,
       "diagnostic_export_sha256": null,
-      "review_status": "not completed: stopped for pilot-03 support-origin finding",
-      "human_review": "pending"
+      "review_status": "post-run agent assessment complete; operator adjudication pending",
+      "human_review": "operator mode approved; completed findings not yet adjudicated",
+      "public_input_literal_assessment": "Fixed dates, scenario keys, quantities, prices, credit-limit input/increment, text and DictionaryIDs are present in builder-visible inputs/API. No hardcoded generated invoice-type identifier was found.",
+      "invoice_constructor_lines": [
+        240
+      ],
+      "generic_ari_override_lines": [],
+      "pass_review": {
+        "disposition": "accepted-with-note",
+        "reason": "Read-only PreparedStatement accounting scan; non-locking firstOnly rejects duplicate caller keys. Default-bank selection remains fixture-dependent.",
+        "reviewer_kind": "agent static source/evidence assessment; not human signature",
+        "public_workflow": "Native models and MWorkflow document actions; two order-linked shipments, one aggregate order-linked invoice, observed-total payment, credit/reversal, explicit rollback/retry and primary-key lock paths.",
+        "native_action_lines": [
+          43
+        ],
+        "guarded_posting_lines": [
+          61
+        ],
+        "direct_sql_write_lines_found": [],
+        "invoice_type": "new MInvoice(order,0,date) resolves the order relationship; no subsequent invoice target-type override or hardcoded invoice-type ID.",
+        "invoice_constructor_lines": [
+          240
+        ],
+        "fixture_dependencies": {
+          "public_literals": "Fixed public scenario inputs and declared DictionaryIDs used; not independent unfamiliar-fixture performance.",
+          "template_location_lines": [
+            134
+          ],
+          "template_location_policy": "getLocations(false) orders active locations by C_BPartner_Location_ID (MBPartner.java:515-517). Choosing the first is deterministic but assumes that template role is acceptable; a different fixture may need a role-specific choice.",
+          "default_bank_query_lines": [
+            261
+          ],
+          "default_bank_policy": "DB.getSQLValueEx takes the first row without uniqueness assertion or ORDER BY (DB.java:1098-1122). Both archived lanes have a unique matching default; multiple defaults in another fixture could silently select another account.",
+          "credit_type_policy": "Generic ARCreditMemo selector is retained under the unchanged public contract; deterministic selection with multiple equally ranked eligible credit types is not established."
+        },
+        "exception_handling": "Only the deliberately injected recovery failure is swallowed. Unexpected failures propagate or are rethrown after cleanup; worker Futures are read. Cleanup can mask a primary failure on an exceptional path but does not turn it into success.",
+        "recovery_catch_lines": [
+          341,
+          384,
+          388,
+          447
+        ],
+        "observation_wait_lines": [
+          386,
+          395,
+          440
+        ],
+        "locking_query_lines": [
+          414,
+          461
+        ],
+        "accidental_pass_other_fixture": "Not ruled out: selectors and public-input literals are scoped to this admitted journey. No current-fixture false pass demonstrated.",
+        "independent_gate_checks": {
+          "structure_passed": true,
+          "unresolved_row_differences": 0,
+          "unresolved_trace_differences": 0,
+          "both_observers_passed": true
+        }
+      },
+      "failure_stage": null,
+      "category": null,
+      "judge_assessment": {
+        "answer": "yes-with-scope-note",
+        "reason": "Source assessment and existing replay support the recorded pass on the admitted fixture; no cross-fixture correctness claim."
+      }
     },
     {
       "trial": "cohort-06",
@@ -508,8 +1173,75 @@
       "repaired_pass": false,
       "exported_diagnostics": null,
       "diagnostic_export_sha256": null,
-      "review_status": "not completed: stopped for pilot-03 support-origin finding",
-      "human_review": "pending"
+      "review_status": "post-run agent assessment complete; operator adjudication pending",
+      "human_review": "operator mode approved; completed findings not yet adjudicated",
+      "public_input_literal_assessment": "Fixed dates, scenario keys, quantities, prices, credit-limit input/increment, text and DictionaryIDs are present in builder-visible inputs/API. No hardcoded generated invoice-type identifier was found.",
+      "invoice_constructor_lines": [
+        371
+      ],
+      "generic_ari_override_lines": [],
+      "pass_review": {
+        "disposition": "accepted-with-note",
+        "reason": "Rollback failures are attached as suppressed exceptions; primary failure is rethrown. Default-bank selection remains fixture-dependent.",
+        "reviewer_kind": "agent static source/evidence assessment; not human signature",
+        "public_workflow": "Native models and MWorkflow document actions; two order-linked shipments, one aggregate order-linked invoice, observed-total payment, credit/reversal, explicit rollback/retry and primary-key lock paths.",
+        "native_action_lines": [
+          48
+        ],
+        "guarded_posting_lines": [
+          110,
+          387,
+          408,
+          443,
+          457,
+          458
+        ],
+        "direct_sql_write_lines_found": [],
+        "invoice_type": "new MInvoice(order,0,date) resolves the order relationship; no subsequent invoice target-type override or hardcoded invoice-type ID.",
+        "invoice_constructor_lines": [
+          371
+        ],
+        "fixture_dependencies": {
+          "public_literals": "Fixed public scenario inputs and declared DictionaryIDs used; not independent unfamiliar-fixture performance.",
+          "template_location_lines": [
+            282
+          ],
+          "template_location_policy": "getLocations(false) orders active locations by C_BPartner_Location_ID (MBPartner.java:515-517). Choosing the first is deterministic but assumes that template role is acceptable; a different fixture may need a role-specific choice.",
+          "default_bank_query_lines": [
+            394
+          ],
+          "default_bank_policy": "DB.getSQLValueEx takes the first row without uniqueness assertion or ORDER BY (DB.java:1098-1122). Both archived lanes have a unique matching default; multiple defaults in another fixture could silently select another account.",
+          "credit_type_policy": "Generic ARCreditMemo selector is retained under the unchanged public contract; deterministic selection with multiple equally ranked eligible credit types is not established."
+        },
+        "exception_handling": "Only the deliberately injected recovery failure is swallowed. Unexpected failures propagate or are rethrown after cleanup; worker Futures are read. Cleanup can mask a primary failure on an exceptional path but does not turn it into success.",
+        "recovery_catch_lines": [
+          145,
+          147,
+          477
+        ],
+        "observation_wait_lines": [
+          143,
+          155,
+          218
+        ],
+        "locking_query_lines": [
+          173,
+          226
+        ],
+        "accidental_pass_other_fixture": "Not ruled out: selectors and public-input literals are scoped to this admitted journey. No current-fixture false pass demonstrated.",
+        "independent_gate_checks": {
+          "structure_passed": true,
+          "unresolved_row_differences": 0,
+          "unresolved_trace_differences": 0,
+          "both_observers_passed": true
+        }
+      },
+      "failure_stage": null,
+      "category": null,
+      "judge_assessment": {
+        "answer": "yes-with-scope-note",
+        "reason": "Source assessment and existing replay support the recorded pass on the admitted fixture; no cross-fixture correctness claim."
+      }
     },
     {
       "trial": "cohort-07",
@@ -551,8 +1283,166 @@
       "repaired_pass": false,
       "exported_diagnostics": [],
       "diagnostic_export_sha256": "9beeec8c318f0ed7c62895e0e6b3048b5e4e23facd3a1783ab7dfa32ef0d2d8e",
-      "review_status": "not completed: stopped for pilot-03 support-origin finding",
-      "human_review": "pending"
+      "review_status": "post-run agent assessment complete; operator adjudication pending",
+      "human_review": "operator mode approved; completed findings not yet adjudicated",
+      "public_input_literal_assessment": "Fixed dates, scenario keys, quantities, prices, credit-limit input/increment, text and DictionaryIDs are present in builder-visible inputs/API. No hardcoded generated invoice-type identifier was found.",
+      "invoice_constructor_lines": [
+        256
+      ],
+      "generic_ari_override_lines": [],
+      "lanes": {
+        "oracle": {
+          "exception_class": "AssertionFailedError",
+          "candidate_stack": [
+            {
+              "method": "accounting",
+              "line": 83,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "post",
+              "line": 103,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "postAllocations",
+              "line": 115,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "operations",
+              "line": 336,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "lambda$6",
+              "line": 487,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "operationsJourney",
+              "line": 486,
+              "file": "LightyearOperationsTest.java"
+            }
+          ],
+          "exit_code": 1,
+          "trace_status_failed": true,
+          "log_path": "factory/idempiere/ms86-journeys/runs/journey-9ac409ed90f444ae8b3cc688598cad41/cases/operations/1/execution/oracle/maven.log",
+          "log_sha256": "50ea3d0983827d539cf09322d34db747e566ede5586974aba34196a485facc06",
+          "trace_path": "factory/idempiere/ms86-journeys/runs/journey-9ac409ed90f444ae8b3cc688598cad41/cases/operations/1/execution/oracle/journey.xml",
+          "trace_sha256": "c292323844cb1f67ead6d96a2eb2cc57a81e33320a85cb57eaabdca3af952cec",
+          "execution_path": "factory/idempiere/ms86-journeys/runs/journey-9ac409ed90f444ae8b3cc688598cad41/cases/operations/1/execution/oracle/execution.json",
+          "execution_sha256": "5030e4f2389bdf4f4fc882d77ef0ebcee8495800cf4516ca1735faf35b8d63e2",
+          "public_credit_field_names": [
+            "credit.finalStatus",
+            "credit.id",
+            "credit.net",
+            "credit.reversalId",
+            "credit.saved",
+            "credit.status",
+            "credit.total",
+            "credit.uuid",
+            "creditReversal.id",
+            "creditReversal.saved",
+            "creditReversal.status",
+            "creditReversal.total",
+            "creditReversal.uuid"
+          ],
+          "recovery_trace_present": false,
+          "concurrency_trace_present": false
+        },
+        "postgresql": {
+          "exception_class": "AssertionFailedError",
+          "candidate_stack": [
+            {
+              "method": "accounting",
+              "line": 83,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "post",
+              "line": 103,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "postAllocations",
+              "line": 115,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "operations",
+              "line": 336,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "lambda$6",
+              "line": 487,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "operationsJourney",
+              "line": 486,
+              "file": "LightyearOperationsTest.java"
+            }
+          ],
+          "exit_code": 1,
+          "trace_status_failed": true,
+          "log_path": "factory/idempiere/ms86-journeys/runs/journey-9ac409ed90f444ae8b3cc688598cad41/cases/operations/1/execution/postgresql/maven.log",
+          "log_sha256": "84d8c0f59b69d7b5e3bedf6c5782e8b1d5ffc58cafc92d3a447058b5a98d56f7",
+          "trace_path": "factory/idempiere/ms86-journeys/runs/journey-9ac409ed90f444ae8b3cc688598cad41/cases/operations/1/execution/postgresql/journey.xml",
+          "trace_sha256": "4f6a4abc8a27f94bd96f6355c0ac601476ba637cc4f922101a0829cd6a4beeeb",
+          "execution_path": "factory/idempiere/ms86-journeys/runs/journey-9ac409ed90f444ae8b3cc688598cad41/cases/operations/1/execution/postgresql/execution.json",
+          "execution_sha256": "f6df7e5ee97b22c18dde4234b251d280189a291cea5c194410a7f68c71dcc162",
+          "public_credit_field_names": [
+            "credit.finalStatus",
+            "credit.id",
+            "credit.net",
+            "credit.reversalId",
+            "credit.saved",
+            "credit.status",
+            "credit.total",
+            "credit.uuid",
+            "creditReversal.id",
+            "creditReversal.saved",
+            "creditReversal.status",
+            "creditReversal.total",
+            "creditReversal.uuid"
+          ],
+          "recovery_trace_present": false,
+          "concurrency_trace_present": false
+        }
+      },
+      "same_point_in_both_lanes": true,
+      "exception_class": "AssertionFailedError",
+      "candidate_frame": {
+        "method": "accounting",
+        "line": 83,
+        "file": "LightyearOperationsTest.java"
+      },
+      "category": "A",
+      "thrown_by": "candidate",
+      "failure_stage": "credit/reversal allocation accounting",
+      "assertion_line": 83,
+      "allocation_caller_line": 336,
+      "throwing_frame": {
+        "method": "accounting",
+        "line": 83,
+        "file": "LightyearOperationsTest.java"
+      },
+      "root_cause": "Plain business-logic error: candidate requires nonempty Fact_Acct for a completed/posted credit-reversal allocation; pinned Doc_AllocationHdr.createFacts deliberately returns an empty facts list for this invoice/reversal pair (lines 197-214).",
+      "judge_assessment": {
+        "answer": "yes",
+        "reason": "The candidate aborts both lanes on its own extra invariant; it is not a completed valid alternative rejected by comparison. This finding does not establish later checks would pass."
+      },
+      "masked_checks": "Later reversal-cancellation/final accounting checks and recovery/retry/lock-interleaving completion are masked. Partial traces have no recovery or concurrency fields. No separate later defect established; fixing this abort does not predict a pass.",
+      "proposed_b04_diagnostic": {
+        "sent": true,
+        "localization": "direct",
+        "reason": "First candidate frame locates the nonempty-accounting assertion.",
+        "repair_success_predicted": false,
+        "api_call_caveat": "The throwing assertion/helper may have no uniquely resolvable admitted iDempiere method on that line. Do not invent a nearest API call.",
+        "public_stage_caveat": "Partial Properties XML is not chronological and has no allocation checkpoint. A deterministic declared mapping is needed; the last XML entry is not the active stage."
+      }
     },
     {
       "trial": "cohort-08",
@@ -594,8 +1484,146 @@
       "repaired_pass": false,
       "exported_diagnostics": [],
       "diagnostic_export_sha256": "9beeec8c318f0ed7c62895e0e6b3048b5e4e23facd3a1783ab7dfa32ef0d2d8e",
-      "review_status": "not completed: stopped for pilot-03 support-origin finding",
-      "human_review": "pending"
+      "review_status": "post-run agent assessment complete; operator adjudication pending",
+      "human_review": "operator mode approved; completed findings not yet adjudicated",
+      "public_input_literal_assessment": "Fixed dates, scenario keys, quantities, prices, credit-limit input/increment, text and DictionaryIDs are present in builder-visible inputs/API. No hardcoded generated invoice-type identifier was found.",
+      "invoice_constructor_lines": [
+        361
+      ],
+      "generic_ari_override_lines": [],
+      "lanes": {
+        "oracle": {
+          "exception_class": "IllegalStateException",
+          "candidate_stack": [
+            {
+              "method": "require",
+              "line": 30,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "accounting",
+              "line": 71,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "allocations",
+              "line": 88,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "lambda$7",
+              "line": 452,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "operationsJourney",
+              "line": 246,
+              "file": "LightyearOperationsTest.java"
+            }
+          ],
+          "exit_code": 1,
+          "trace_status_failed": true,
+          "log_path": "factory/idempiere/ms86-journeys/runs/journey-6cb668849f6e409a9bb64e1bbab64409/cases/operations/1/execution/oracle/maven.log",
+          "log_sha256": "f9aae992e888c0408d1ddeae5bce384dcd4cd42724dcfbf6123ba59a5e64fb63",
+          "trace_path": "factory/idempiere/ms86-journeys/runs/journey-6cb668849f6e409a9bb64e1bbab64409/cases/operations/1/execution/oracle/journey.xml",
+          "trace_sha256": "80befdd78fcc133f6b243f785ebdc751dc7a11d10be793535aee18ee5b8e4952",
+          "execution_path": "factory/idempiere/ms86-journeys/runs/journey-6cb668849f6e409a9bb64e1bbab64409/cases/operations/1/execution/oracle/execution.json",
+          "execution_sha256": "a4f24c85e16b79d5271294ae323552f249cf653909e11b060999a8a04af5cd93",
+          "public_credit_field_names": [
+            "credit.finalStatus",
+            "credit.id",
+            "credit.net",
+            "credit.reversalId",
+            "credit.saved",
+            "credit.status",
+            "credit.total",
+            "credit.uuid"
+          ],
+          "recovery_trace_present": false,
+          "concurrency_trace_present": false
+        },
+        "postgresql": {
+          "exception_class": "IllegalStateException",
+          "candidate_stack": [
+            {
+              "method": "require",
+              "line": 30,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "accounting",
+              "line": 71,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "allocations",
+              "line": 88,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "lambda$7",
+              "line": 452,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "operationsJourney",
+              "line": 246,
+              "file": "LightyearOperationsTest.java"
+            }
+          ],
+          "exit_code": 1,
+          "trace_status_failed": true,
+          "log_path": "factory/idempiere/ms86-journeys/runs/journey-6cb668849f6e409a9bb64e1bbab64409/cases/operations/1/execution/postgresql/maven.log",
+          "log_sha256": "55a6e87ebbdc1514464fff2359d9b3091b3cd7737d54479e8ce8dadc3ca1d502",
+          "trace_path": "factory/idempiere/ms86-journeys/runs/journey-6cb668849f6e409a9bb64e1bbab64409/cases/operations/1/execution/postgresql/journey.xml",
+          "trace_sha256": "0363d9f90e19349f20960a0374a9e27e311438e50b527e1dbbc8713ce38f03d4",
+          "execution_path": "factory/idempiere/ms86-journeys/runs/journey-6cb668849f6e409a9bb64e1bbab64409/cases/operations/1/execution/postgresql/execution.json",
+          "execution_sha256": "5629427f2f3edce99424f05fc929c1baff5f616b716b768f3329c5525d52e3d8",
+          "public_credit_field_names": [
+            "credit.finalStatus",
+            "credit.id",
+            "credit.net",
+            "credit.reversalId",
+            "credit.saved",
+            "credit.status",
+            "credit.total",
+            "credit.uuid"
+          ],
+          "recovery_trace_present": false,
+          "concurrency_trace_present": false
+        }
+      },
+      "same_point_in_both_lanes": true,
+      "exception_class": "IllegalStateException",
+      "candidate_frame": {
+        "method": "require",
+        "line": 30,
+        "file": "LightyearOperationsTest.java"
+      },
+      "category": "A",
+      "thrown_by": "candidate",
+      "failure_stage": "credit/reversal allocation accounting",
+      "assertion_line": 71,
+      "allocation_caller_line": 452,
+      "throwing_frame": {
+        "method": "require",
+        "line": 30,
+        "file": "LightyearOperationsTest.java"
+      },
+      "root_cause": "Plain business-logic error: candidate requires nonempty Fact_Acct for a completed/posted credit-reversal allocation; pinned Doc_AllocationHdr.createFacts deliberately returns an empty facts list for this invoice/reversal pair (lines 197-214).",
+      "judge_assessment": {
+        "answer": "yes",
+        "reason": "The candidate aborts both lanes on its own extra invariant; it is not a completed valid alternative rejected by comparison. This finding does not establish later checks would pass."
+      },
+      "masked_checks": "Later reversal-cancellation/final accounting checks and recovery/retry/lock-interleaving completion are masked. Partial traces have no recovery or concurrency fields. No separate later defect established; fixing this abort does not predict a pass.",
+      "proposed_b04_diagnostic": {
+        "sent": true,
+        "localization": "uncertain-generic-helper",
+        "reason": "First candidate frame is generic require; the proposed single frame omits the accounting caller. Stage may narrow source search, but exact assertion localization is uncertain.",
+        "repair_success_predicted": false,
+        "api_call_caveat": "The throwing assertion/helper may have no uniquely resolvable admitted iDempiere method on that line. Do not invent a nearest API call.",
+        "public_stage_caveat": "Partial Properties XML is not chronological and has no allocation checkpoint. A deterministic declared mapping is needed; the last XML entry is not the active stage."
+      }
     },
     {
       "trial": "cohort-09",
@@ -637,8 +1665,75 @@
       "repaired_pass": false,
       "exported_diagnostics": null,
       "diagnostic_export_sha256": null,
-      "review_status": "not completed: stopped for pilot-03 support-origin finding",
-      "human_review": "pending"
+      "review_status": "post-run agent assessment complete; operator adjudication pending",
+      "human_review": "operator mode approved; completed findings not yet adjudicated",
+      "public_input_literal_assessment": "Fixed dates, scenario keys, quantities, prices, credit-limit input/increment, text and DictionaryIDs are present in builder-visible inputs/API. No hardcoded generated invoice-type identifier was found.",
+      "invoice_constructor_lines": [
+        352
+      ],
+      "generic_ari_override_lines": [],
+      "pass_review": {
+        "disposition": "accepted-with-note",
+        "reason": "Initial credit-limit input is set on the created customer before the two lock transactions. Default-bank selection remains fixture-dependent.",
+        "reviewer_kind": "agent static source/evidence assessment; not human signature",
+        "public_workflow": "Native models and MWorkflow document actions; two order-linked shipments, one aggregate order-linked invoice, observed-total payment, credit/reversal, explicit rollback/retry and primary-key lock paths.",
+        "native_action_lines": [
+          45
+        ],
+        "guarded_posting_lines": [
+          89,
+          368,
+          389,
+          425,
+          439,
+          440
+        ],
+        "direct_sql_write_lines_found": [],
+        "invoice_type": "new MInvoice(order,0,date) resolves the order relationship; no subsequent invoice target-type override or hardcoded invoice-type ID.",
+        "invoice_constructor_lines": [
+          352
+        ],
+        "fixture_dependencies": {
+          "public_literals": "Fixed public scenario inputs and declared DictionaryIDs used; not independent unfamiliar-fixture performance.",
+          "template_location_lines": [
+            265
+          ],
+          "template_location_policy": "getLocations(false) orders active locations by C_BPartner_Location_ID (MBPartner.java:515-517). Choosing the first is deterministic but assumes that template role is acceptable; a different fixture may need a role-specific choice.",
+          "default_bank_query_lines": [
+            374
+          ],
+          "default_bank_policy": "DB.getSQLValueEx takes the first row without uniqueness assertion or ORDER BY (DB.java:1098-1122). Both archived lanes have a unique matching default; multiple defaults in another fixture could silently select another account.",
+          "credit_type_policy": "Generic ARCreditMemo selector is retained under the unchanged public contract; deterministic selection with multiple equally ranked eligible credit types is not established."
+        },
+        "exception_handling": "Only the deliberately injected recovery failure is swallowed. Unexpected failures propagate or are rethrown after cleanup; worker Futures are read. Cleanup can mask a primary failure on an exceptional path but does not turn it into success.",
+        "recovery_catch_lines": [
+          125,
+          129,
+          456
+        ],
+        "observation_wait_lines": [
+          127,
+          136,
+          196
+        ],
+        "locking_query_lines": [
+          157,
+          203
+        ],
+        "accidental_pass_other_fixture": "Not ruled out: selectors and public-input literals are scoped to this admitted journey. No current-fixture false pass demonstrated.",
+        "independent_gate_checks": {
+          "structure_passed": true,
+          "unresolved_row_differences": 0,
+          "unresolved_trace_differences": 0,
+          "both_observers_passed": true
+        }
+      },
+      "failure_stage": null,
+      "category": null,
+      "judge_assessment": {
+        "answer": "yes-with-scope-note",
+        "reason": "Source assessment and existing replay support the recorded pass on the admitted fixture; no cross-fixture correctness claim."
+      }
     },
     {
       "trial": "cohort-10",
@@ -680,8 +1775,75 @@
       "repaired_pass": false,
       "exported_diagnostics": null,
       "diagnostic_export_sha256": null,
-      "review_status": "not completed: stopped for pilot-03 support-origin finding",
-      "human_review": "pending"
+      "review_status": "post-run agent assessment complete; operator adjudication pending",
+      "human_review": "operator mode approved; completed findings not yet adjudicated",
+      "public_input_literal_assessment": "Fixed dates, scenario keys, quantities, prices, credit-limit input/increment, text and DictionaryIDs are present in builder-visible inputs/API. No hardcoded generated invoice-type identifier was found.",
+      "invoice_constructor_lines": [
+        358
+      ],
+      "generic_ari_override_lines": [],
+      "pass_review": {
+        "disposition": "accepted-with-note",
+        "reason": "Two shipments are created by iterating declared quantities; both use the same order line. Default-bank selection remains fixture-dependent.",
+        "reviewer_kind": "agent static source/evidence assessment; not human signature",
+        "public_workflow": "Native models and MWorkflow document actions; two order-linked shipments, one aggregate order-linked invoice, observed-total payment, credit/reversal, explicit rollback/retry and primary-key lock paths.",
+        "native_action_lines": [
+          45
+        ],
+        "guarded_posting_lines": [
+          71,
+          372,
+          393,
+          428,
+          441,
+          442
+        ],
+        "direct_sql_write_lines_found": [],
+        "invoice_type": "new MInvoice(order,0,date) resolves the order relationship; no subsequent invoice target-type override or hardcoded invoice-type ID.",
+        "invoice_constructor_lines": [
+          358
+        ],
+        "fixture_dependencies": {
+          "public_literals": "Fixed public scenario inputs and declared DictionaryIDs used; not independent unfamiliar-fixture performance.",
+          "template_location_lines": [
+            252
+          ],
+          "template_location_policy": "getLocations(false) orders active locations by C_BPartner_Location_ID (MBPartner.java:515-517). Choosing the first is deterministic but assumes that template role is acceptable; a different fixture may need a role-specific choice.",
+          "default_bank_query_lines": [
+            379
+          ],
+          "default_bank_policy": "DB.getSQLValueEx takes the first row without uniqueness assertion or ORDER BY (DB.java:1098-1122). Both archived lanes have a unique matching default; multiple defaults in another fixture could silently select another account.",
+          "credit_type_policy": "Generic ARCreditMemo selector is retained under the unchanged public contract; deterministic selection with multiple equally ranked eligible credit types is not established."
+        },
+        "exception_handling": "Only the deliberately injected recovery failure is swallowed. Unexpected failures propagate or are rethrown after cleanup; worker Futures are read. Cleanup can mask a primary failure on an exceptional path but does not turn it into success.",
+        "recovery_catch_lines": [
+          118,
+          121,
+          462
+        ],
+        "observation_wait_lines": [
+          116,
+          129,
+          187
+        ],
+        "locking_query_lines": [
+          153,
+          194
+        ],
+        "accidental_pass_other_fixture": "Not ruled out: selectors and public-input literals are scoped to this admitted journey. No current-fixture false pass demonstrated.",
+        "independent_gate_checks": {
+          "structure_passed": true,
+          "unresolved_row_differences": 0,
+          "unresolved_trace_differences": 0,
+          "both_observers_passed": true
+        }
+      },
+      "failure_stage": null,
+      "category": null,
+      "judge_assessment": {
+        "answer": "yes-with-scope-note",
+        "reason": "Source assessment and existing replay support the recorded pass on the admitted fixture; no cross-fixture correctness claim."
+      }
     },
     {
       "trial": "cohort-11",
@@ -723,8 +1885,74 @@
       "repaired_pass": false,
       "exported_diagnostics": null,
       "diagnostic_export_sha256": null,
-      "review_status": "not completed: stopped for pilot-03 support-origin finding",
-      "human_review": "pending"
+      "review_status": "post-run agent assessment complete; operator adjudication pending",
+      "human_review": "operator mode approved; completed findings not yet adjudicated",
+      "public_input_literal_assessment": "Fixed dates, scenario keys, quantities, prices, credit-limit input/increment, text and DictionaryIDs are present in builder-visible inputs/API. No hardcoded generated invoice-type identifier was found.",
+      "invoice_constructor_lines": [
+        351
+      ],
+      "generic_ari_override_lines": [],
+      "pass_review": {
+        "disposition": "accepted-with-note",
+        "reason": "Broad recovery catch suppresses only the exact injected exception object; others rethrow. Default-bank selection remains fixture-dependent.",
+        "reviewer_kind": "agent static source/evidence assessment; not human signature",
+        "public_workflow": "Native models and MWorkflow document actions; two order-linked shipments, one aggregate order-linked invoice, observed-total payment, credit/reversal, explicit rollback/retry and primary-key lock paths.",
+        "native_action_lines": [
+          41
+        ],
+        "guarded_posting_lines": [
+          218,
+          366,
+          386,
+          420,
+          432,
+          433
+        ],
+        "direct_sql_write_lines_found": [],
+        "invoice_type": "new MInvoice(order,0,date) resolves the order relationship; no subsequent invoice target-type override or hardcoded invoice-type ID.",
+        "invoice_constructor_lines": [
+          351
+        ],
+        "fixture_dependencies": {
+          "public_literals": "Fixed public scenario inputs and declared DictionaryIDs used; not independent unfamiliar-fixture performance.",
+          "template_location_lines": [
+            266
+          ],
+          "template_location_policy": "getLocations(false) orders active locations by C_BPartner_Location_ID (MBPartner.java:515-517). Choosing the first is deterministic but assumes that template role is acceptable; a different fixture may need a role-specific choice.",
+          "default_bank_query_lines": [
+            372
+          ],
+          "default_bank_policy": "DB.getSQLValueEx takes the first row without uniqueness assertion or ORDER BY (DB.java:1098-1122). Both archived lanes have a unique matching default; multiple defaults in another fixture could silently select another account.",
+          "credit_type_policy": "Generic ARCreditMemo selector is retained under the unchanged public contract; deterministic selection with multiple equally ranked eligible credit types is not established."
+        },
+        "exception_handling": "Only the deliberately injected recovery failure is swallowed. Unexpected failures propagate or are rethrown after cleanup; worker Futures are read. Cleanup can mask a primary failure on an exceptional path but does not turn it into success.",
+        "recovery_catch_lines": [
+          98,
+          454
+        ],
+        "observation_wait_lines": [
+          101,
+          110,
+          178
+        ],
+        "locking_query_lines": [
+          129,
+          184
+        ],
+        "accidental_pass_other_fixture": "Not ruled out: selectors and public-input literals are scoped to this admitted journey. No current-fixture false pass demonstrated.",
+        "independent_gate_checks": {
+          "structure_passed": true,
+          "unresolved_row_differences": 0,
+          "unresolved_trace_differences": 0,
+          "both_observers_passed": true
+        }
+      },
+      "failure_stage": null,
+      "category": null,
+      "judge_assessment": {
+        "answer": "yes-with-scope-note",
+        "reason": "Source assessment and existing replay support the recorded pass on the admitted fixture; no cross-fixture correctness claim."
+      }
     },
     {
       "trial": "cohort-12",
@@ -766,8 +1994,166 @@
       "repaired_pass": false,
       "exported_diagnostics": [],
       "diagnostic_export_sha256": "9beeec8c318f0ed7c62895e0e6b3048b5e4e23facd3a1783ab7dfa32ef0d2d8e",
-      "review_status": "not completed: stopped for pilot-03 support-origin finding",
-      "human_review": "pending"
+      "review_status": "post-run agent assessment complete; operator adjudication pending",
+      "human_review": "operator mode approved; completed findings not yet adjudicated",
+      "public_input_literal_assessment": "Fixed dates, scenario keys, quantities, prices, credit-limit input/increment, text and DictionaryIDs are present in builder-visible inputs/API. No hardcoded generated invoice-type identifier was found.",
+      "invoice_constructor_lines": [
+        240
+      ],
+      "generic_ari_override_lines": [],
+      "lanes": {
+        "oracle": {
+          "exception_class": "IllegalStateException",
+          "candidate_stack": [
+            {
+              "method": "require",
+              "line": 32,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "accounting",
+              "line": 91,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "post",
+              "line": 102,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "allocations",
+              "line": 114,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "operations",
+              "line": 318,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "lambda$7",
+              "line": 467,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "operationsJourney",
+              "line": 467,
+              "file": "LightyearOperationsTest.java"
+            }
+          ],
+          "exit_code": 1,
+          "trace_status_failed": true,
+          "log_path": "factory/idempiere/ms86-journeys/runs/journey-21dea22f24bf4e27a530a9820a388b70/cases/operations/1/execution/oracle/maven.log",
+          "log_sha256": "8c4d54c374d2f9971208dc060d3d6df109319a0b131ecfe9828bd258d55d6719",
+          "trace_path": "factory/idempiere/ms86-journeys/runs/journey-21dea22f24bf4e27a530a9820a388b70/cases/operations/1/execution/oracle/journey.xml",
+          "trace_sha256": "d51c3e3bb2f22e363b34f401d5830cf17e18bf976fb1e46a67fd6bf14d720a1c",
+          "execution_path": "factory/idempiere/ms86-journeys/runs/journey-21dea22f24bf4e27a530a9820a388b70/cases/operations/1/execution/oracle/execution.json",
+          "execution_sha256": "2654bccc67621a3739d5b6687f6abbd91ac85f9a8f485f9e1351540dcfac20c6",
+          "public_credit_field_names": [
+            "credit.finalStatus",
+            "credit.id",
+            "credit.net",
+            "credit.reversalId",
+            "credit.saved",
+            "credit.status",
+            "credit.total",
+            "credit.uuid"
+          ],
+          "recovery_trace_present": false,
+          "concurrency_trace_present": false
+        },
+        "postgresql": {
+          "exception_class": "IllegalStateException",
+          "candidate_stack": [
+            {
+              "method": "require",
+              "line": 32,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "accounting",
+              "line": 91,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "post",
+              "line": 102,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "allocations",
+              "line": 114,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "operations",
+              "line": 318,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "lambda$7",
+              "line": 467,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "operationsJourney",
+              "line": 467,
+              "file": "LightyearOperationsTest.java"
+            }
+          ],
+          "exit_code": 1,
+          "trace_status_failed": true,
+          "log_path": "factory/idempiere/ms86-journeys/runs/journey-21dea22f24bf4e27a530a9820a388b70/cases/operations/1/execution/postgresql/maven.log",
+          "log_sha256": "89c449cf6f9fd5b82c12206ee671352b0a5d5d35645d08e6cda7f25806789bca",
+          "trace_path": "factory/idempiere/ms86-journeys/runs/journey-21dea22f24bf4e27a530a9820a388b70/cases/operations/1/execution/postgresql/journey.xml",
+          "trace_sha256": "89bd5c8d56500514e8f8c1842c5977510283903dc47e516bcad3eba428ce2389",
+          "execution_path": "factory/idempiere/ms86-journeys/runs/journey-21dea22f24bf4e27a530a9820a388b70/cases/operations/1/execution/postgresql/execution.json",
+          "execution_sha256": "bf84f4269220393d04fee22df3f0b31f4a7bf2cd8c388a900825b4e1600d3755",
+          "public_credit_field_names": [
+            "credit.finalStatus",
+            "credit.id",
+            "credit.net",
+            "credit.reversalId",
+            "credit.saved",
+            "credit.status",
+            "credit.total",
+            "credit.uuid"
+          ],
+          "recovery_trace_present": false,
+          "concurrency_trace_present": false
+        }
+      },
+      "same_point_in_both_lanes": true,
+      "exception_class": "IllegalStateException",
+      "candidate_frame": {
+        "method": "require",
+        "line": 32,
+        "file": "LightyearOperationsTest.java"
+      },
+      "category": "A",
+      "thrown_by": "candidate",
+      "failure_stage": "credit/reversal allocation accounting",
+      "assertion_line": 91,
+      "allocation_caller_line": 318,
+      "throwing_frame": {
+        "method": "require",
+        "line": 32,
+        "file": "LightyearOperationsTest.java"
+      },
+      "root_cause": "Plain business-logic error: candidate requires nonempty Fact_Acct for a completed/posted credit-reversal allocation; pinned Doc_AllocationHdr.createFacts deliberately returns an empty facts list for this invoice/reversal pair (lines 197-214).",
+      "judge_assessment": {
+        "answer": "yes",
+        "reason": "The candidate aborts both lanes on its own extra invariant; it is not a completed valid alternative rejected by comparison. This finding does not establish later checks would pass."
+      },
+      "masked_checks": "Later reversal-cancellation/final accounting checks and recovery/retry/lock-interleaving completion are masked. Partial traces have no recovery or concurrency fields. No separate later defect established; fixing this abort does not predict a pass.",
+      "proposed_b04_diagnostic": {
+        "sent": true,
+        "localization": "uncertain-generic-helper",
+        "reason": "First candidate frame is generic require; the proposed single frame omits the accounting caller. Stage may narrow source search, but exact assertion localization is uncertain.",
+        "repair_success_predicted": false,
+        "api_call_caveat": "The throwing assertion/helper may have no uniquely resolvable admitted iDempiere method on that line. Do not invent a nearest API call.",
+        "public_stage_caveat": "Partial Properties XML is not chronological and has no allocation checkpoint. A deterministic declared mapping is needed; the last XML entry is not the active stage."
+      }
     },
     {
       "trial": "cohort-13",
@@ -809,8 +2195,126 @@
       "repaired_pass": false,
       "exported_diagnostics": [],
       "diagnostic_export_sha256": "9beeec8c318f0ed7c62895e0e6b3048b5e4e23facd3a1783ab7dfa32ef0d2d8e",
-      "review_status": "not completed: stopped for pilot-03 support-origin finding",
-      "human_review": "pending"
+      "review_status": "post-run agent assessment complete; operator adjudication pending",
+      "human_review": "operator mode approved; completed findings not yet adjudicated",
+      "public_input_literal_assessment": "Fixed dates, scenario keys, quantities, prices, credit-limit input/increment, text and DictionaryIDs are present in builder-visible inputs/API. No hardcoded generated invoice-type identifier was found.",
+      "invoice_constructor_lines": [
+        368
+      ],
+      "generic_ari_override_lines": [],
+      "lanes": {
+        "oracle": {
+          "exception_class": "AssertionFailedError",
+          "candidate_stack": [
+            {
+              "method": "readBalancedAccounting",
+              "line": 71,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "postAllocations",
+              "line": 86,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "operationsJourney",
+              "line": 453,
+              "file": "LightyearOperationsTest.java"
+            }
+          ],
+          "exit_code": 1,
+          "trace_status_failed": true,
+          "log_path": "factory/idempiere/ms86-journeys/runs/journey-97b17c10e1544292a0542dee49a5124d/cases/operations/1/execution/oracle/maven.log",
+          "log_sha256": "b1a97d6e748dcf00f2dd2bab30a19dfae63c0f503eed4a430b47bdf62757dbd0",
+          "trace_path": "factory/idempiere/ms86-journeys/runs/journey-97b17c10e1544292a0542dee49a5124d/cases/operations/1/execution/oracle/journey.xml",
+          "trace_sha256": "f19f2bd3e49dfe9d2d6dce370d072721886876ac6cf27cd584217c8ff11fe904",
+          "execution_path": "factory/idempiere/ms86-journeys/runs/journey-97b17c10e1544292a0542dee49a5124d/cases/operations/1/execution/oracle/execution.json",
+          "execution_sha256": "c10eb38c45f11ce75dcd187dff5a43873e0ae6d0f5b18f6079b43c47b0af79ab",
+          "public_credit_field_names": [
+            "credit.finalStatus",
+            "credit.id",
+            "credit.net",
+            "credit.reversalId",
+            "credit.saved",
+            "credit.status",
+            "credit.total",
+            "credit.uuid"
+          ],
+          "recovery_trace_present": false,
+          "concurrency_trace_present": false
+        },
+        "postgresql": {
+          "exception_class": "AssertionFailedError",
+          "candidate_stack": [
+            {
+              "method": "readBalancedAccounting",
+              "line": 71,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "postAllocations",
+              "line": 86,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "operationsJourney",
+              "line": 453,
+              "file": "LightyearOperationsTest.java"
+            }
+          ],
+          "exit_code": 1,
+          "trace_status_failed": true,
+          "log_path": "factory/idempiere/ms86-journeys/runs/journey-97b17c10e1544292a0542dee49a5124d/cases/operations/1/execution/postgresql/maven.log",
+          "log_sha256": "bbe25040891bad369ad7c432f0bfd44b4bc69a4429ebff82d2319e109f4b9883",
+          "trace_path": "factory/idempiere/ms86-journeys/runs/journey-97b17c10e1544292a0542dee49a5124d/cases/operations/1/execution/postgresql/journey.xml",
+          "trace_sha256": "c3744ec6d66b12ec9dc49855380e5a0258e532a7577f9524cc0a8ba6db011e81",
+          "execution_path": "factory/idempiere/ms86-journeys/runs/journey-97b17c10e1544292a0542dee49a5124d/cases/operations/1/execution/postgresql/execution.json",
+          "execution_sha256": "075e209629fa8f37f58211b2e8b03e34daff3cec94b9cd64090234ecf6c71020",
+          "public_credit_field_names": [
+            "credit.finalStatus",
+            "credit.id",
+            "credit.net",
+            "credit.reversalId",
+            "credit.saved",
+            "credit.status",
+            "credit.total",
+            "credit.uuid"
+          ],
+          "recovery_trace_present": false,
+          "concurrency_trace_present": false
+        }
+      },
+      "same_point_in_both_lanes": true,
+      "exception_class": "AssertionFailedError",
+      "candidate_frame": {
+        "method": "readBalancedAccounting",
+        "line": 71,
+        "file": "LightyearOperationsTest.java"
+      },
+      "category": "A",
+      "thrown_by": "candidate",
+      "failure_stage": "credit/reversal allocation accounting",
+      "assertion_line": 71,
+      "allocation_caller_line": 453,
+      "throwing_frame": {
+        "method": "readBalancedAccounting",
+        "line": 71,
+        "file": "LightyearOperationsTest.java"
+      },
+      "root_cause": "Plain business-logic error: candidate requires nonempty Fact_Acct for a completed/posted credit-reversal allocation; pinned Doc_AllocationHdr.createFacts deliberately returns an empty facts list for this invoice/reversal pair (lines 197-214).",
+      "judge_assessment": {
+        "answer": "yes",
+        "reason": "The candidate aborts both lanes on its own extra invariant; it is not a completed valid alternative rejected by comparison. This finding does not establish later checks would pass."
+      },
+      "masked_checks": "Later reversal-cancellation/final accounting checks and recovery/retry/lock-interleaving completion are masked. Partial traces have no recovery or concurrency fields. No separate later defect established; fixing this abort does not predict a pass.",
+      "proposed_b04_diagnostic": {
+        "sent": true,
+        "localization": "direct",
+        "reason": "First candidate frame locates the nonempty-accounting assertion.",
+        "repair_success_predicted": false,
+        "api_call_caveat": "The throwing assertion/helper may have no uniquely resolvable admitted iDempiere method on that line. Do not invent a nearest API call.",
+        "public_stage_caveat": "Partial Properties XML is not chronological and has no allocation checkpoint. A deterministic declared mapping is needed; the last XML entry is not the active stage."
+      }
     },
     {
       "trial": "cohort-14",
@@ -852,8 +2356,156 @@
       "repaired_pass": false,
       "exported_diagnostics": [],
       "diagnostic_export_sha256": "9beeec8c318f0ed7c62895e0e6b3048b5e4e23facd3a1783ab7dfa32ef0d2d8e",
-      "review_status": "not completed: stopped for pilot-03 support-origin finding",
-      "human_review": "pending"
+      "review_status": "post-run agent assessment complete; operator adjudication pending",
+      "human_review": "operator mode approved; completed findings not yet adjudicated",
+      "public_input_literal_assessment": "Fixed dates, scenario keys, quantities, prices, credit-limit input/increment, text and DictionaryIDs are present in builder-visible inputs/API. No hardcoded generated invoice-type identifier was found.",
+      "invoice_constructor_lines": [
+        203
+      ],
+      "generic_ari_override_lines": [],
+      "lanes": {
+        "oracle": {
+          "exception_class": "AssertionFailedError",
+          "candidate_stack": [
+            {
+              "method": "post",
+              "line": 55,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "allocations",
+              "line": 74,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "business",
+              "line": 283,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "lambda$6",
+              "line": 420,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "operationsJourney",
+              "line": 420,
+              "file": "LightyearOperationsTest.java"
+            }
+          ],
+          "exit_code": 1,
+          "trace_status_failed": true,
+          "log_path": "factory/idempiere/ms86-journeys/runs/journey-9d9fd88cec16470384e35d3812edc209/cases/operations/1/execution/oracle/maven.log",
+          "log_sha256": "a2fe917a95164e8ef95639b6faeb67c4ae39d50575b9292e2ad1f9e9c2dffd98",
+          "trace_path": "factory/idempiere/ms86-journeys/runs/journey-9d9fd88cec16470384e35d3812edc209/cases/operations/1/execution/oracle/journey.xml",
+          "trace_sha256": "d8f71371069d2c6a52da1a0a52117c1372fab60bf3c688317b5f930a47ef3e89",
+          "execution_path": "factory/idempiere/ms86-journeys/runs/journey-9d9fd88cec16470384e35d3812edc209/cases/operations/1/execution/oracle/execution.json",
+          "execution_sha256": "724c7c777f4936e231bbe8c9900681d5b094173d5db9a4090bc981355ef2d468",
+          "public_credit_field_names": [
+            "credit.finalStatus",
+            "credit.id",
+            "credit.net",
+            "credit.reversalId",
+            "credit.saved",
+            "credit.status",
+            "credit.total",
+            "credit.uuid",
+            "creditReversal.id",
+            "creditReversal.saved",
+            "creditReversal.status",
+            "creditReversal.total",
+            "creditReversal.uuid"
+          ],
+          "recovery_trace_present": false,
+          "concurrency_trace_present": false
+        },
+        "postgresql": {
+          "exception_class": "AssertionFailedError",
+          "candidate_stack": [
+            {
+              "method": "post",
+              "line": 55,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "allocations",
+              "line": 74,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "business",
+              "line": 283,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "lambda$6",
+              "line": 420,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "operationsJourney",
+              "line": 420,
+              "file": "LightyearOperationsTest.java"
+            }
+          ],
+          "exit_code": 1,
+          "trace_status_failed": true,
+          "log_path": "factory/idempiere/ms86-journeys/runs/journey-9d9fd88cec16470384e35d3812edc209/cases/operations/1/execution/postgresql/maven.log",
+          "log_sha256": "3da33042ba0858446a1b89ca78e3a1b0833cd9ccdd7bbba65c4778d9482dcb2e",
+          "trace_path": "factory/idempiere/ms86-journeys/runs/journey-9d9fd88cec16470384e35d3812edc209/cases/operations/1/execution/postgresql/journey.xml",
+          "trace_sha256": "3758f1ade72af9e330ae24b52d8067b62536746f773e13198a9b15a1df862824",
+          "execution_path": "factory/idempiere/ms86-journeys/runs/journey-9d9fd88cec16470384e35d3812edc209/cases/operations/1/execution/postgresql/execution.json",
+          "execution_sha256": "06ef813f68f193447620f5737f109d12d95e23b7b223e5b57c51634912a93a6d",
+          "public_credit_field_names": [
+            "credit.finalStatus",
+            "credit.id",
+            "credit.net",
+            "credit.reversalId",
+            "credit.saved",
+            "credit.status",
+            "credit.total",
+            "credit.uuid",
+            "creditReversal.id",
+            "creditReversal.saved",
+            "creditReversal.status",
+            "creditReversal.total",
+            "creditReversal.uuid"
+          ],
+          "recovery_trace_present": false,
+          "concurrency_trace_present": false
+        }
+      },
+      "same_point_in_both_lanes": true,
+      "exception_class": "AssertionFailedError",
+      "candidate_frame": {
+        "method": "post",
+        "line": 55,
+        "file": "LightyearOperationsTest.java"
+      },
+      "category": "A",
+      "thrown_by": "candidate",
+      "failure_stage": "credit/reversal allocation accounting",
+      "assertion_line": 55,
+      "allocation_caller_line": 283,
+      "throwing_frame": {
+        "method": "post",
+        "line": 55,
+        "file": "LightyearOperationsTest.java"
+      },
+      "root_cause": "Plain business-logic error: candidate requires nonempty Fact_Acct for a completed/posted credit-reversal allocation; pinned Doc_AllocationHdr.createFacts deliberately returns an empty facts list for this invoice/reversal pair (lines 197-214).",
+      "judge_assessment": {
+        "answer": "yes",
+        "reason": "The candidate aborts both lanes on its own extra invariant; it is not a completed valid alternative rejected by comparison. This finding does not establish later checks would pass."
+      },
+      "masked_checks": "Later reversal-cancellation/final accounting checks and recovery/retry/lock-interleaving completion are masked. Partial traces have no recovery or concurrency fields. No separate later defect established; fixing this abort does not predict a pass.",
+      "proposed_b04_diagnostic": {
+        "sent": true,
+        "localization": "direct",
+        "reason": "First candidate frame locates the nonempty-accounting assertion.",
+        "repair_success_predicted": false,
+        "api_call_caveat": "The throwing assertion/helper may have no uniquely resolvable admitted iDempiere method on that line. Do not invent a nearest API call.",
+        "public_stage_caveat": "Partial Properties XML is not chronological and has no allocation checkpoint. A deterministic declared mapping is needed; the last XML entry is not the active stage."
+      }
     },
     {
       "trial": "cohort-15",
@@ -895,8 +2547,75 @@
       "repaired_pass": false,
       "exported_diagnostics": null,
       "diagnostic_export_sha256": null,
-      "review_status": "not completed: stopped for pilot-03 support-origin finding",
-      "human_review": "pending"
+      "review_status": "post-run agent assessment complete; operator adjudication pending",
+      "human_review": "operator mode approved; completed findings not yet adjudicated",
+      "public_input_literal_assessment": "Fixed dates, scenario keys, quantities, prices, credit-limit input/increment, text and DictionaryIDs are present in builder-visible inputs/API. No hardcoded generated invoice-type identifier was found.",
+      "invoice_constructor_lines": [
+        222
+      ],
+      "generic_ari_override_lines": [],
+      "pass_review": {
+        "disposition": "accepted-with-note",
+        "reason": "Invoice constructor derives type; both completed fields are checked against that derived value. Default-bank selection remains fixture-dependent.",
+        "reviewer_kind": "agent static source/evidence assessment; not human signature",
+        "public_workflow": "Native models and MWorkflow document actions; two order-linked shipments, one aggregate order-linked invoice, observed-total payment, credit/reversal, explicit rollback/retry and primary-key lock paths.",
+        "native_action_lines": [
+          48
+        ],
+        "guarded_posting_lines": [
+          89,
+          233,
+          253,
+          287,
+          299,
+          300
+        ],
+        "direct_sql_write_lines_found": [],
+        "invoice_type": "new MInvoice(order,0,date) resolves the order relationship; no subsequent invoice target-type override or hardcoded invoice-type ID.",
+        "invoice_constructor_lines": [
+          222
+        ],
+        "fixture_dependencies": {
+          "public_literals": "Fixed public scenario inputs and declared DictionaryIDs used; not independent unfamiliar-fixture performance.",
+          "template_location_lines": [
+            138
+          ],
+          "template_location_policy": "getLocations(false) orders active locations by C_BPartner_Location_ID (MBPartner.java:515-517). Choosing the first is deterministic but assumes that template role is acceptable; a different fixture may need a role-specific choice.",
+          "default_bank_query_lines": [
+            240
+          ],
+          "default_bank_policy": "DB.getSQLValueEx takes the first row without uniqueness assertion or ORDER BY (DB.java:1098-1122). Both archived lanes have a unique matching default; multiple defaults in another fixture could silently select another account.",
+          "credit_type_policy": "Generic ARCreditMemo selector is retained under the unchanged public contract; deterministic selection with multiple equally ranked eligible credit types is not established."
+        },
+        "exception_handling": "Only the deliberately injected recovery failure is swallowed. Unexpected failures propagate or are rethrown after cleanup; worker Futures are read. Cleanup can mask a primary failure on an exceptional path but does not turn it into success.",
+        "recovery_catch_lines": [
+          343,
+          345,
+          458
+        ],
+        "observation_wait_lines": [
+          341,
+          352,
+          421
+        ],
+        "locking_query_lines": [
+          379,
+          426
+        ],
+        "accidental_pass_other_fixture": "Not ruled out: selectors and public-input literals are scoped to this admitted journey. No current-fixture false pass demonstrated.",
+        "independent_gate_checks": {
+          "structure_passed": true,
+          "unresolved_row_differences": 0,
+          "unresolved_trace_differences": 0,
+          "both_observers_passed": true
+        }
+      },
+      "failure_stage": null,
+      "category": null,
+      "judge_assessment": {
+        "answer": "yes-with-scope-note",
+        "reason": "Source assessment and existing replay support the recorded pass on the admitted fixture; no cross-fixture correctness claim."
+      }
     },
     {
       "trial": "cohort-16",
@@ -938,8 +2657,75 @@
       "repaired_pass": false,
       "exported_diagnostics": null,
       "diagnostic_export_sha256": null,
-      "review_status": "not completed: stopped for pilot-03 support-origin finding",
-      "human_review": "pending"
+      "review_status": "post-run agent assessment complete; operator adjudication pending",
+      "human_review": "operator mode approved; completed findings not yet adjudicated",
+      "public_input_literal_assessment": "Fixed dates, scenario keys, quantities, prices, credit-limit input/increment, text and DictionaryIDs are present in builder-visible inputs/API. No hardcoded generated invoice-type identifier was found.",
+      "invoice_constructor_lines": [
+        182
+      ],
+      "generic_ari_override_lines": [],
+      "pass_review": {
+        "disposition": "accepted-with-note",
+        "reason": "Invoice type checked against order relationship; retry and lock lookups enforce cardinality. Default-bank selection remains fixture-dependent.",
+        "reviewer_kind": "agent static source/evidence assessment; not human signature",
+        "public_workflow": "Native models and MWorkflow document actions; two order-linked shipments, one aggregate order-linked invoice, observed-total payment, credit/reversal, explicit rollback/retry and primary-key lock paths.",
+        "native_action_lines": [
+          40
+        ],
+        "guarded_posting_lines": [
+          64,
+          199,
+          219,
+          255,
+          268,
+          269
+        ],
+        "direct_sql_write_lines_found": [],
+        "invoice_type": "new MInvoice(order,0,date) resolves the order relationship; no subsequent invoice target-type override or hardcoded invoice-type ID.",
+        "invoice_constructor_lines": [
+          182
+        ],
+        "fixture_dependencies": {
+          "public_literals": "Fixed public scenario inputs and declared DictionaryIDs used; not independent unfamiliar-fixture performance.",
+          "template_location_lines": [
+            92
+          ],
+          "template_location_policy": "getLocations(false) orders active locations by C_BPartner_Location_ID (MBPartner.java:515-517). Choosing the first is deterministic but assumes that template role is acceptable; a different fixture may need a role-specific choice.",
+          "default_bank_query_lines": [
+            205
+          ],
+          "default_bank_policy": "DB.getSQLValueEx takes the first row without uniqueness assertion or ORDER BY (DB.java:1098-1122). Both archived lanes have a unique matching default; multiple defaults in another fixture could silently select another account.",
+          "credit_type_policy": "Generic ARCreditMemo selector is retained under the unchanged public contract; deterministic selection with multiple equally ranked eligible credit types is not established."
+        },
+        "exception_handling": "Only the deliberately injected recovery failure is swallowed. Unexpected failures propagate or are rethrown after cleanup; worker Futures are read. Cleanup can mask a primary failure on an exceptional path but does not turn it into success.",
+        "recovery_catch_lines": [
+          351,
+          353,
+          459
+        ],
+        "observation_wait_lines": [
+          349,
+          360,
+          422
+        ],
+        "locking_query_lines": [
+          378,
+          428
+        ],
+        "accidental_pass_other_fixture": "Not ruled out: selectors and public-input literals are scoped to this admitted journey. No current-fixture false pass demonstrated.",
+        "independent_gate_checks": {
+          "structure_passed": true,
+          "unresolved_row_differences": 0,
+          "unresolved_trace_differences": 0,
+          "both_observers_passed": true
+        }
+      },
+      "failure_stage": null,
+      "category": null,
+      "judge_assessment": {
+        "answer": "yes-with-scope-note",
+        "reason": "Source assessment and existing replay support the recorded pass on the admitted fixture; no cross-fixture correctness claim."
+      }
     },
     {
       "trial": "cohort-17",
@@ -981,8 +2767,74 @@
       "repaired_pass": false,
       "exported_diagnostics": null,
       "diagnostic_export_sha256": null,
-      "review_status": "not completed: stopped for pilot-03 support-origin finding",
-      "human_review": "pending"
+      "review_status": "post-run agent assessment complete; operator adjudication pending",
+      "human_review": "operator mode approved; completed findings not yet adjudicated",
+      "public_input_literal_assessment": "Fixed dates, scenario keys, quantities, prices, credit-limit input/increment, text and DictionaryIDs are present in builder-visible inputs/API. No hardcoded generated invoice-type identifier was found.",
+      "invoice_constructor_lines": [
+        228
+      ],
+      "generic_ari_override_lines": [],
+      "pass_review": {
+        "disposition": "accepted-with-note",
+        "reason": "Shipments iterated from public quantities; repeated lookup requires the existing caller-key row. Default-bank selection remains fixture-dependent.",
+        "reviewer_kind": "agent static source/evidence assessment; not human signature",
+        "public_workflow": "Native models and MWorkflow document actions; two order-linked shipments, one aggregate order-linked invoice, observed-total payment, credit/reversal, explicit rollback/retry and primary-key lock paths.",
+        "native_action_lines": [
+          49
+        ],
+        "guarded_posting_lines": [
+          76,
+          245,
+          264,
+          301,
+          312,
+          313
+        ],
+        "direct_sql_write_lines_found": [],
+        "invoice_type": "new MInvoice(order,0,date) resolves the order relationship; no subsequent invoice target-type override or hardcoded invoice-type ID.",
+        "invoice_constructor_lines": [
+          228
+        ],
+        "fixture_dependencies": {
+          "public_literals": "Fixed public scenario inputs and declared DictionaryIDs used; not independent unfamiliar-fixture performance.",
+          "template_location_lines": [
+            124
+          ],
+          "template_location_policy": "getLocations(false) orders active locations by C_BPartner_Location_ID (MBPartner.java:515-517). Choosing the first is deterministic but assumes that template role is acceptable; a different fixture may need a role-specific choice.",
+          "default_bank_query_lines": [
+            251
+          ],
+          "default_bank_policy": "DB.getSQLValueEx takes the first row without uniqueness assertion or ORDER BY (DB.java:1098-1122). Both archived lanes have a unique matching default; multiple defaults in another fixture could silently select another account.",
+          "credit_type_policy": "Generic ARCreditMemo selector is retained under the unchanged public contract; deterministic selection with multiple equally ranked eligible credit types is not established."
+        },
+        "exception_handling": "Only the deliberately injected recovery failure is swallowed. Unexpected failures propagate or are rethrown after cleanup; worker Futures are read. Cleanup can mask a primary failure on an exceptional path but does not turn it into success.",
+        "recovery_catch_lines": [
+          364,
+          453
+        ],
+        "observation_wait_lines": [
+          362,
+          372,
+          419
+        ],
+        "locking_query_lines": [
+          388,
+          427
+        ],
+        "accidental_pass_other_fixture": "Not ruled out: selectors and public-input literals are scoped to this admitted journey. No current-fixture false pass demonstrated.",
+        "independent_gate_checks": {
+          "structure_passed": true,
+          "unresolved_row_differences": 0,
+          "unresolved_trace_differences": 0,
+          "both_observers_passed": true
+        }
+      },
+      "failure_stage": null,
+      "category": null,
+      "judge_assessment": {
+        "answer": "yes-with-scope-note",
+        "reason": "Source assessment and existing replay support the recorded pass on the admitted fixture; no cross-fixture correctness claim."
+      }
     },
     {
       "trial": "cohort-18",
@@ -1024,8 +2876,176 @@
       "repaired_pass": false,
       "exported_diagnostics": [],
       "diagnostic_export_sha256": "9beeec8c318f0ed7c62895e0e6b3048b5e4e23facd3a1783ab7dfa32ef0d2d8e",
-      "review_status": "not completed: stopped for pilot-03 support-origin finding",
-      "human_review": "pending"
+      "review_status": "post-run agent assessment complete; operator adjudication pending",
+      "human_review": "operator mode approved; completed findings not yet adjudicated",
+      "public_input_literal_assessment": "Fixed dates, scenario keys, quantities, prices, credit-limit input/increment, text and DictionaryIDs are present in builder-visible inputs/API. No hardcoded generated invoice-type identifier was found.",
+      "invoice_constructor_lines": [
+        228
+      ],
+      "generic_ari_override_lines": [],
+      "lanes": {
+        "oracle": {
+          "exception_class": "IllegalStateException",
+          "candidate_stack": [
+            {
+              "method": "require",
+              "line": 33,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "readAccounting",
+              "line": 68,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "post",
+              "line": 78,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "postAllocations",
+              "line": 89,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "documents",
+              "line": 316,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "lambda$5",
+              "line": 445,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "operationsJourney",
+              "line": 445,
+              "file": "LightyearOperationsTest.java"
+            }
+          ],
+          "exit_code": 1,
+          "trace_status_failed": true,
+          "log_path": "factory/idempiere/ms86-journeys/runs/journey-35736857ffdd46609a5d511c42f1f6db/cases/operations/1/execution/oracle/maven.log",
+          "log_sha256": "73d30d7fcdf7bee27cd7fd7da2fdd0c69d9ec14196e3843d4e18c22620c251da",
+          "trace_path": "factory/idempiere/ms86-journeys/runs/journey-35736857ffdd46609a5d511c42f1f6db/cases/operations/1/execution/oracle/journey.xml",
+          "trace_sha256": "10252abbbd2374abe6f7ccaa1f4194c7872eb24652ff598b72f29f8ba1c80bc8",
+          "execution_path": "factory/idempiere/ms86-journeys/runs/journey-35736857ffdd46609a5d511c42f1f6db/cases/operations/1/execution/oracle/execution.json",
+          "execution_sha256": "1febbd8446ea5884f4a1feb0e35e0b58cfca7b2cdc0d807f1a90c10afdaf6aac",
+          "public_credit_field_names": [
+            "credit.finalStatus",
+            "credit.id",
+            "credit.net",
+            "credit.reversalId",
+            "credit.saved",
+            "credit.status",
+            "credit.total",
+            "credit.uuid",
+            "creditReversal.id",
+            "creditReversal.saved",
+            "creditReversal.status",
+            "creditReversal.total",
+            "creditReversal.uuid"
+          ],
+          "recovery_trace_present": false,
+          "concurrency_trace_present": false
+        },
+        "postgresql": {
+          "exception_class": "IllegalStateException",
+          "candidate_stack": [
+            {
+              "method": "require",
+              "line": 33,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "readAccounting",
+              "line": 68,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "post",
+              "line": 78,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "postAllocations",
+              "line": 89,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "documents",
+              "line": 316,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "lambda$5",
+              "line": 445,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "operationsJourney",
+              "line": 445,
+              "file": "LightyearOperationsTest.java"
+            }
+          ],
+          "exit_code": 1,
+          "trace_status_failed": true,
+          "log_path": "factory/idempiere/ms86-journeys/runs/journey-35736857ffdd46609a5d511c42f1f6db/cases/operations/1/execution/postgresql/maven.log",
+          "log_sha256": "4dfd53bf80336e1fe97932d79cc013805837cb2570bcda2fa2b2c83936390698",
+          "trace_path": "factory/idempiere/ms86-journeys/runs/journey-35736857ffdd46609a5d511c42f1f6db/cases/operations/1/execution/postgresql/journey.xml",
+          "trace_sha256": "f039df4802c2d9e586341f02414c888ace0e293f1b37fc790cdd4868e36cd77f",
+          "execution_path": "factory/idempiere/ms86-journeys/runs/journey-35736857ffdd46609a5d511c42f1f6db/cases/operations/1/execution/postgresql/execution.json",
+          "execution_sha256": "827fd24d7c72700a7875291262b3c230b3755345e8e53306bc55b3852985f838",
+          "public_credit_field_names": [
+            "credit.finalStatus",
+            "credit.id",
+            "credit.net",
+            "credit.reversalId",
+            "credit.saved",
+            "credit.status",
+            "credit.total",
+            "credit.uuid",
+            "creditReversal.id",
+            "creditReversal.saved",
+            "creditReversal.status",
+            "creditReversal.total",
+            "creditReversal.uuid"
+          ],
+          "recovery_trace_present": false,
+          "concurrency_trace_present": false
+        }
+      },
+      "same_point_in_both_lanes": true,
+      "exception_class": "IllegalStateException",
+      "candidate_frame": {
+        "method": "require",
+        "line": 33,
+        "file": "LightyearOperationsTest.java"
+      },
+      "category": "A",
+      "thrown_by": "candidate",
+      "failure_stage": "credit/reversal allocation accounting",
+      "assertion_line": 68,
+      "allocation_caller_line": 316,
+      "throwing_frame": {
+        "method": "require",
+        "line": 33,
+        "file": "LightyearOperationsTest.java"
+      },
+      "root_cause": "Plain business-logic error: candidate requires nonempty Fact_Acct for a completed/posted credit-reversal allocation; pinned Doc_AllocationHdr.createFacts deliberately returns an empty facts list for this invoice/reversal pair (lines 197-214).",
+      "judge_assessment": {
+        "answer": "yes",
+        "reason": "The candidate aborts both lanes on its own extra invariant; it is not a completed valid alternative rejected by comparison. This finding does not establish later checks would pass."
+      },
+      "masked_checks": "Later reversal-cancellation/final accounting checks and recovery/retry/lock-interleaving completion are masked. Partial traces have no recovery or concurrency fields. No separate later defect established; fixing this abort does not predict a pass.",
+      "proposed_b04_diagnostic": {
+        "sent": true,
+        "localization": "uncertain-generic-helper",
+        "reason": "First candidate frame is generic require; the proposed single frame omits the accounting caller. Stage may narrow source search, but exact assertion localization is uncertain.",
+        "repair_success_predicted": false,
+        "api_call_caveat": "The throwing assertion/helper may have no uniquely resolvable admitted iDempiere method on that line. Do not invent a nearest API call.",
+        "public_stage_caveat": "Partial Properties XML is not chronological and has no allocation checkpoint. A deterministic declared mapping is needed; the last XML entry is not the active stage."
+      }
     },
     {
       "trial": "cohort-19",
@@ -1067,8 +3087,146 @@
       "repaired_pass": false,
       "exported_diagnostics": [],
       "diagnostic_export_sha256": "9beeec8c318f0ed7c62895e0e6b3048b5e4e23facd3a1783ab7dfa32ef0d2d8e",
-      "review_status": "not completed: stopped for pilot-03 support-origin finding",
-      "human_review": "pending"
+      "review_status": "post-run agent assessment complete; operator adjudication pending",
+      "human_review": "operator mode approved; completed findings not yet adjudicated",
+      "public_input_literal_assessment": "Fixed dates, scenario keys, quantities, prices, credit-limit input/increment, text and DictionaryIDs are present in builder-visible inputs/API. No hardcoded generated invoice-type identifier was found.",
+      "invoice_constructor_lines": [
+        358
+      ],
+      "generic_ari_override_lines": [],
+      "lanes": {
+        "oracle": {
+          "exception_class": "IllegalStateException",
+          "candidate_stack": [
+            {
+              "method": "require",
+              "line": 30,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "post",
+              "line": 72,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "postAllocations",
+              "line": 89,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "lambda$8",
+              "line": 442,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "operationsJourney",
+              "line": 254,
+              "file": "LightyearOperationsTest.java"
+            }
+          ],
+          "exit_code": 1,
+          "trace_status_failed": true,
+          "log_path": "factory/idempiere/ms86-journeys/runs/journey-2737b6a328144db7a110f14c9d913d1b/cases/operations/1/execution/oracle/maven.log",
+          "log_sha256": "f966097d9de529c4428d2aab42f2f6aa81539d2384a10714e8f0bf80a924bdb5",
+          "trace_path": "factory/idempiere/ms86-journeys/runs/journey-2737b6a328144db7a110f14c9d913d1b/cases/operations/1/execution/oracle/journey.xml",
+          "trace_sha256": "5eb361e261114f7c251fbf709080ce1d923eb8aaff1fb253254ae6f38a699984",
+          "execution_path": "factory/idempiere/ms86-journeys/runs/journey-2737b6a328144db7a110f14c9d913d1b/cases/operations/1/execution/oracle/execution.json",
+          "execution_sha256": "62a02fa5babc1ddabe81d4fa46e701d73a0a30a8fb504ba49e9a29c1de76b0ef",
+          "public_credit_field_names": [
+            "credit.finalStatus",
+            "credit.id",
+            "credit.net",
+            "credit.reversalId",
+            "credit.saved",
+            "credit.status",
+            "credit.total",
+            "credit.uuid"
+          ],
+          "recovery_trace_present": false,
+          "concurrency_trace_present": false
+        },
+        "postgresql": {
+          "exception_class": "IllegalStateException",
+          "candidate_stack": [
+            {
+              "method": "require",
+              "line": 30,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "post",
+              "line": 72,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "postAllocations",
+              "line": 89,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "lambda$8",
+              "line": 442,
+              "file": "LightyearOperationsTest.java"
+            },
+            {
+              "method": "operationsJourney",
+              "line": 254,
+              "file": "LightyearOperationsTest.java"
+            }
+          ],
+          "exit_code": 1,
+          "trace_status_failed": true,
+          "log_path": "factory/idempiere/ms86-journeys/runs/journey-2737b6a328144db7a110f14c9d913d1b/cases/operations/1/execution/postgresql/maven.log",
+          "log_sha256": "41af85573479a57dcde1a39487083710c2b30c207ac871534d3ae5e55e144ff2",
+          "trace_path": "factory/idempiere/ms86-journeys/runs/journey-2737b6a328144db7a110f14c9d913d1b/cases/operations/1/execution/postgresql/journey.xml",
+          "trace_sha256": "a73bd20dcdb34354e3e2334fb348e26107e47d825f21b2412e66448646c16de1",
+          "execution_path": "factory/idempiere/ms86-journeys/runs/journey-2737b6a328144db7a110f14c9d913d1b/cases/operations/1/execution/postgresql/execution.json",
+          "execution_sha256": "91d27d8b86362010813fa8bb753942cd6a20fcfa6e0885e80cd8d2853fba7218",
+          "public_credit_field_names": [
+            "credit.finalStatus",
+            "credit.id",
+            "credit.net",
+            "credit.reversalId",
+            "credit.saved",
+            "credit.status",
+            "credit.total",
+            "credit.uuid"
+          ],
+          "recovery_trace_present": false,
+          "concurrency_trace_present": false
+        }
+      },
+      "same_point_in_both_lanes": true,
+      "exception_class": "IllegalStateException",
+      "candidate_frame": {
+        "method": "require",
+        "line": 30,
+        "file": "LightyearOperationsTest.java"
+      },
+      "category": "A",
+      "thrown_by": "candidate",
+      "failure_stage": "credit/reversal allocation accounting",
+      "assertion_line": 72,
+      "allocation_caller_line": 442,
+      "throwing_frame": {
+        "method": "require",
+        "line": 30,
+        "file": "LightyearOperationsTest.java"
+      },
+      "root_cause": "Plain business-logic error: candidate requires nonempty Fact_Acct for a completed/posted credit-reversal allocation; pinned Doc_AllocationHdr.createFacts deliberately returns an empty facts list for this invoice/reversal pair (lines 197-214).",
+      "judge_assessment": {
+        "answer": "yes",
+        "reason": "The candidate aborts both lanes on its own extra invariant; it is not a completed valid alternative rejected by comparison. This finding does not establish later checks would pass."
+      },
+      "masked_checks": "Later reversal-cancellation/final accounting checks and recovery/retry/lock-interleaving completion are masked. Partial traces have no recovery or concurrency fields. No separate later defect established; fixing this abort does not predict a pass.",
+      "proposed_b04_diagnostic": {
+        "sent": true,
+        "localization": "uncertain-generic-helper",
+        "reason": "First candidate frame is generic require; the proposed single frame omits the accounting caller. Stage may narrow source search, but exact assertion localization is uncertain.",
+        "repair_success_predicted": false,
+        "api_call_caveat": "The throwing assertion/helper may have no uniquely resolvable admitted iDempiere method on that line. Do not invent a nearest API call.",
+        "public_stage_caveat": "Partial Properties XML is not chronological and has no allocation checkpoint. A deterministic declared mapping is needed; the last XML entry is not the active stage."
+      }
     },
     {
       "trial": "cohort-20",
@@ -1110,8 +3268,116 @@
       "repaired_pass": false,
       "exported_diagnostics": null,
       "diagnostic_export_sha256": null,
-      "review_status": "not completed: stopped for pilot-03 support-origin finding",
-      "human_review": "pending"
+      "review_status": "post-run agent assessment complete; operator adjudication pending",
+      "human_review": "operator mode approved; completed findings not yet adjudicated",
+      "public_input_literal_assessment": "Fixed dates, scenario keys, quantities, prices, credit-limit input/increment, text and DictionaryIDs are present in builder-visible inputs/API. No hardcoded generated invoice-type identifier was found.",
+      "invoice_constructor_lines": [
+        365
+      ],
+      "generic_ari_override_lines": [],
+      "pass_review": {
+        "disposition": "accepted-with-note",
+        "reason": "Second connection allocated before announcing lock attempt; elapsed wait and Future results observed. Default-bank selection remains fixture-dependent.",
+        "reviewer_kind": "agent static source/evidence assessment; not human signature",
+        "public_workflow": "Native models and MWorkflow document actions; two order-linked shipments, one aggregate order-linked invoice, observed-total payment, credit/reversal, explicit rollback/retry and primary-key lock paths.",
+        "native_action_lines": [
+          51
+        ],
+        "guarded_posting_lines": [
+          107,
+          376,
+          400,
+          439,
+          452,
+          453
+        ],
+        "direct_sql_write_lines_found": [],
+        "invoice_type": "new MInvoice(order,0,date) resolves the order relationship; no subsequent invoice target-type override or hardcoded invoice-type ID.",
+        "invoice_constructor_lines": [
+          365
+        ],
+        "fixture_dependencies": {
+          "public_literals": "Fixed public scenario inputs and declared DictionaryIDs used; not independent unfamiliar-fixture performance.",
+          "template_location_lines": [
+            274
+          ],
+          "template_location_policy": "getLocations(false) orders active locations by C_BPartner_Location_ID (MBPartner.java:515-517). Choosing the first is deterministic but assumes that template role is acceptable; a different fixture may need a role-specific choice.",
+          "default_bank_query_lines": [
+            386
+          ],
+          "default_bank_policy": "DB.getSQLValueEx takes the first row without uniqueness assertion or ORDER BY (DB.java:1098-1122). Both archived lanes have a unique matching default; multiple defaults in another fixture could silently select another account.",
+          "credit_type_policy": "Generic ARCreditMemo selector is retained under the unchanged public contract; deterministic selection with multiple equally ranked eligible credit types is not established."
+        },
+        "exception_handling": "Only the deliberately injected recovery failure is swallowed. Unexpected failures propagate or are rethrown after cleanup; worker Futures are read. Cleanup can mask a primary failure on an exceptional path but does not turn it into success.",
+        "recovery_catch_lines": [
+          159,
+          475
+        ],
+        "observation_wait_lines": [
+          161,
+          170,
+          229
+        ],
+        "locking_query_lines": [
+          191,
+          238
+        ],
+        "accidental_pass_other_fixture": "Not ruled out: selectors and public-input literals are scoped to this admitted journey. No current-fixture false pass demonstrated.",
+        "independent_gate_checks": {
+          "structure_passed": true,
+          "unresolved_row_differences": 0,
+          "unresolved_trace_differences": 0,
+          "both_observers_passed": true
+        }
+      },
+      "failure_stage": null,
+      "category": null,
+      "judge_assessment": {
+        "answer": "yes-with-scope-note",
+        "reason": "Source assessment and existing replay support the recorded pass on the admitted fixture; no cross-fixture correctness claim."
+      }
     }
+  ],
+  "application_source_evidence": {
+    "commit": "731515dcdd5278b843db33b9d3109d155b881951",
+    "files": {
+      "org.adempiere.base/src/org/compiere/acct/Doc_AllocationHdr.java": "a8af0a1847efd2fc5db19459cc4d6b3f00b686a42778afd5e1e9047982b81422",
+      "org.adempiere.base/src/org/compiere/acct/Doc.java": "2c31c17b1b5faa8a2513a1f759c2d120134c9026eb4c0b73c3682166c20d570c",
+      "org.adempiere.base/src/org/compiere/acct/Doc_Inventory.java": "9d6d0de9be81b7656688049d0895f44601c9569a7d742779491e0bede9b5c716",
+      "org.adempiere.base/src/org/compiere/acct/DocManager.java": "9d02dae74b0ffe7e5bae37fa6f1b5ac8cee55a2c8b7e0cc62daa3e85b3b739c4",
+      "org.adempiere.base/src/org/compiere/model/MBPartner.java": "970adb40d1770cef1b25067ab93b0defc246fd013aefc938b015d32d663a1ec3",
+      "org.adempiere.base/src/org/compiere/model/Query.java": "3f963e60fdb66be96f493422c484d072226eb0e96a86911e495b1c1be2090b23",
+      "org.adempiere.base/src/org/compiere/model/MInvoice.java": "be4d1d6539d64862b00d25099c171ecf435825e2f96f8a1636d1fb18e878d601",
+      "org.adempiere.base/src/org/compiere/util/DB.java": "a9786937c02a1cc19d308ea36f35b18c166726dac20671fdfad1175f56ed2926"
+    }
+  },
+  "prior_stop_intake_sha256": "97742f95b289fc5808869cdeb821c7b16f46a93f904895b2fb5fe96761158de5",
+  "analysis_resume": {
+    "operator": "Howard Weale",
+    "statement": "classification may resume",
+    "scope": "Preserved-evidence classification and pass review only; not a validity adjudication or B04 execution approval."
+  },
+  "counts": {
+    "category_A_cohort": 8,
+    "category_A_pilots": 1,
+    "category_C_support_origin_pilots": 1,
+    "accepted_with_note_cohort": 12,
+    "accepted_with_note_pilots": 1,
+    "pass_concerns": 0
+  },
+  "diagnostic_prediction": {
+    "cohort_direct_localization": 4,
+    "cohort_generic_helper_uncertain": 4,
+    "primary_localization_prediction": 4,
+    "repair_success_prediction": null,
+    "status": "Prospective source-based prediction, not a B04 result"
+  },
+  "timing_group_finding": "Both early and late cohort groups are Category A; timing does not separate root causes.",
+  "limitations": [
+    "Static source/evidence review is not independent human attestation or a different-fixture execution.",
+    "All signed verdicts and prior costs remain unchanged.",
+    "Private exception messages, captured rows, monetary values and candidate source are excluded from this publication.",
+    "Properties XML entry order cannot establish chronological public stage.",
+    "No model calls, candidate reruns, repairs or native executions performed."
   ]
 }

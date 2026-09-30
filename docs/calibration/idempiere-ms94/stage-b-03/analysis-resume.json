@@ -1,0 +1,8 @@
+{
+  "operator": "Howard Weale",
+  "exact_statement": "classification may resume",
+  "scope": "Resume evidence-only classification after support-origin stop.",
+  "completed_classification_sha256": "b1bcd5f20729f1b5ac9893825e8e61f10c7df49e4a1a955f2910441fbe70262c",
+  "human_adjudication_of_completed_packet": false,
+  "cryptographic_human_signature": false
+}

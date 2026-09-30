@@ -1,0 +1,15 @@
+{
+  "artifact_type": "ms94-stage-b-03-operator-review-intake",
+  "operator": "Howard Weale",
+  "relationship": "Project operator and author/approver of B03 intervention",
+  "review_label": "operator review",
+  "reviewer_is_author": true,
+  "independent_reviewer_available": false,
+  "exact_statement": "operator approved",
+  "source": "User reply to reviewer-selection question in this task",
+  "approval_recorded": true,
+  "scope": "Operator approval in response to reviewer selection; not independent source attestation or an explicit pilot-03 validity adjudication.",
+  "cryptographic_human_signature": false,
+  "pilot_03_validity_decision": "pending",
+  "classification_sha256": "97742f95b289fc5808869cdeb821c7b16f46a93f904895b2fb5fe96761158de5"
+}

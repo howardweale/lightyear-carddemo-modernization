@@ -1,4 +1,66 @@
-# Equipment 06, A3: prospective native value-invariance qualification
+# Equipment 06, A3: stopped on invalid entry-admission signature
+
+The one frozen A3 campaign stopped on its first slot. The retained reference
+against the admitted checkpoint returned a native business pass, but publication
+verification rejected its full entry-admission signature. The campaign failed;
+13 slots were never started. No perturbed qualification slot or paired diagnostic
+comparison ran. A3 is unqualified and B04 remains blocked.
+
+The exact error was `CalibrationError: Invalid full entry admission signature`.
+The new A3 entry checker returns an already sealed object. The native wrapper
+passed that object directly to the signer, including its existing content hash.
+The standard envelope verifier excludes the content-hash field from its signed
+body, so the resulting envelope fails verification. This is an A3 evidence
+implementation defect, not a candidate business failure or a demonstrated
+diagnostic value-invariance failure.
+
+Independent replay of the sole available archive through the unchanged frozen
+`tools.ms94_a3_publication` reproduced the same rejection. The signed archive
+receipt, manifest, native receipt and diagnostic bindings checked; all decoded
+evidence and implementation checks preceding the rejection completed. The
+terminal audit checked 11 valid signed records and found the one invalid
+entry signature. Separately recomputing underlying entry checks and verifying
+the signature against the reconstructed already-sealed payload confirmed the
+cause for diagnosis only. This does not repair the invalid envelope, constitute
+successful full-entry archive replay, or earn qualification credit. Complete
+gate and diagnostic archive replay were not reached after that rejection.
+
+Actual Docker inventories before and after terminal replay confirmed all nine
+owned resources absent: seven containers, one network and one volume. All 911
+frozen source files remained unchanged. No evidence was amended, re-signed,
+reinterpreted, restarted or replaced. Private archives and captures remain local.
+
+| Cost / outcome | Value |
+|---|---:|
+| Campaign elapsed seconds, including controller publication/replay | 467.547 |
+| Native pair seconds, included in campaign elapsed | 435.078 |
+| Independent terminal verification seconds | 29.109 |
+| Frozen archive replay rejection seconds, included in terminal verification | 15.421 |
+| Started native pairs / lane executions | 1 / 2 |
+| Unstarted slots / completed paired comparisons | 13 / 0 |
+| Model calls / model tokens | 0 / 0 |
+
+The corrected checkpoint preparation remains separately passed: 269.906 seconds,
+27.734 seconds replay, zero candidate executions, compilations or model calls,
+and five resources absent. The earlier checkpoint preparation failure remains
+separate at 215.641 seconds plus 8.859 seconds replay. Neither preparation result
+qualifies A3. The 24 focused/documentation checks were preparation only.
+
+The follow-up is paused under the declared failure rule. A future correction
+must sign the unsealed entry body and verify the resulting envelope before
+candidate execution, receive suitable tests, and use a fresh public freeze and
+full native A3 qualification. It cannot resume these 13 slots or repair this
+frozen evidence retroactively.
+
+A1 and revised A2 remain accepted with their separate limitations and costs.
+The original wait-only fault remains unqualified. B03 remains 12/20 first-try,
+95% Wilson 38.7%–78.1%, nonvoid. These controls add no autonomous cohort success.
+
+[Signed failed report](report.json), [terminal failure verification](terminal-verification.json)
+and [independent archive rejection](publications/01/independent-verification.json)
+are published with safe metadata only.
+
+## Original prospective declaration
 
 Howard requested correcting the checkpoint binding and running A3. The corrected
 fresh checkpoint preparation passed and independently replayed. Its actual owned

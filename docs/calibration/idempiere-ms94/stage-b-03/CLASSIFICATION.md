@@ -1,4 +1,4 @@
-**Recorded Stage B 03: 12/20 (60%); 95% Wilson interval 38.7%–78.1%. Post-run assessment complete; operator adjudication pending.**
+**Recorded Stage B 03: 12/20 (60%); 95% Wilson interval 38.7%–78.1%. Post-run assessment complete; operator adjudication accepted.**
 
 # Stage B 03 post-run classification and pass review
 
@@ -7,7 +7,9 @@ one pilot) are assessed in [classification.json](classification.json). This is
 an agent source/evidence assessment, not a human signature or replacement
 verdict. Howard approved operator review and subsequently said “classification
 may resume” after the support-origin stop. That authorized this evidence-only
-investigation; adjudication of the completed packet remains pending.
+investigation. Howard subsequently accepted all four completed review decisions;
+see [operator-adjudication.json](operator-adjudication.json). The assessment below
+retains its original findings and distinguishes them from that later acceptance.
 
 No candidate was rerun, repaired or given this analysis. No model call or native
 execution was made. Every source/gate hash was checked against the prior intake;
@@ -102,7 +104,7 @@ checks are masked by the opening-inventory abort.
 3. **Any support/equipment throw? Yes: pilot-03.** The mandatory stop was recorded
    before further work; Howard then authorized classification to resume. The
    wrapper origin is confirmed, while evidence favors candidate misuse as the
-   underlying cause. Validity adjudication remains pending; no verdict changed.
+   underlying cause. Howard accepted the validity assessment; no verdict changed.
 4. **Did the public contract explicitly rule out the assumption? No.** It says
    “One payment settles the invoice; allocation headers are completed and all
    related accounting is posted and balanced.” It also separately requires
@@ -187,5 +189,5 @@ human review. The exact per-pass locations and qualifications are in the JSON.
 The dominant observed cause remains a candidate runtime assertion, so the
 proposed closed runtime diagnostic remains the candidate single intervention.
 Do not teach the reversal-allocation rule or supply this analysis to builders.
-The completed packet must be adjudicated before B04 implementation/freeze/run
-continues under this task's current boundary. See [REVIEW.md](REVIEW.md).
+Howard accepted the completed packet and its validity assessment, satisfying
+the classification prerequisite for B04. See [REVIEW.md](REVIEW.md).

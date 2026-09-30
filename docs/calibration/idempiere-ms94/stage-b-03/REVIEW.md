@@ -1,4 +1,4 @@
-# Stage B 03 operator review — completed packet awaiting adjudication
+# Stage B 03 operator review — completed packet accepted
 
 Read [CLASSIFICATION.md](CLASSIFICATION.md) and [classification.json](classification.json).
 
@@ -29,9 +29,17 @@ Classification SHA-256: `b1bcd5f20729f1b5ac9893825e8e61f10c7df49e4a1a955f2910441
    Four directly localized failures and four generic-helper cases are predictions,
    not repair results. Stage mapping must not infer chronology from XML key order.
 
-Decision / exceptions / evidence: **pending**.
+Decision: **Howard accepted decisions 1, 2, 3 and 4**, including the nine Category A
+failures, pilot-03 candidate posting-sequence diagnosis with no demonstrated
+equipment defect, all thirteen accepted-with-note passes, and the B04 review
+prerequisite. B03 remains nonvoid; no frozen verdict changes.
 
-Operator signed statement / date: **pending for this completed packet**.
+See [operator-adjudication.json](operator-adjudication.json), bound to the exact
+classification hash above. This subsequent acceptance supersedes the earlier
+pending-review status in the immutable assessment JSON.
+
+Operator signed statement: **“accepting 1,2,3 and 4. signed Howard Weale”**.
+Recorded UTC: 2026-09-30T14:09:53.775466+00:00.
 No cryptographic human signature has been supplied or invented.
 
 ## Local evidence for each reviewed outcome

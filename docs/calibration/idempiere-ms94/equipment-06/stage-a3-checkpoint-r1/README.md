@@ -1,4 +1,27 @@
-# Equipment 06: A3 checkpoint preparation revision 1
+# Equipment 06: A3 checkpoint preparation revision 1 passed
+
+The corrected fresh native preparation admitted the genuinely perturbed private
+checkpoint. Both complete per-cell audits, both sets of 30 constraint probes,
+shared predecessor lineage, schema assessment and native reconciliation passed.
+Independent terminal replay reproduced the native audits, schema and admission,
+and actual Docker inventory confirmed all five owned resources absent. All 897
+frozen source files remain unchanged. No earlier failed record was altered.
+
+Preparation took 269.906 seconds; independent verification took 27.734 seconds.
+There were zero Java compilations, candidate executions, model calls or tokens.
+These costs remain separate from the original failed preparation and from A3
+fault qualification. Nine focused checks were preparation evidence only.
+
+The admitted checkpoint content SHA is
+`04ced8e77cfe911f0f013548408a05d9828f71413ea1a6a621dc542710923cc0`.
+Raw checkpoint values and native captures remain private. [Signed report](report.json)
+and [independent verification](terminal-verification.json) provide safe metadata.
+
+This result does not qualify A3 or admit B04. Each revised fault must still run
+against both checkpoints and export exactly identical diagnostic bytes under a
+new frozen native qualification. The original wait-only fault remains unqualified.
+
+## Original prospective declaration
 
 Howard authorized correcting the binding and running A3. This is a new frozen
 preparation, preserving the original failed run unchanged. The only native

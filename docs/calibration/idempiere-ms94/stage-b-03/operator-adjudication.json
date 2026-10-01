@@ -1,0 +1,24 @@
+{
+  "artifact_type": "ms94-stage-b-03-operator-adjudication",
+  "reviewer": "Howard Weale",
+  "reviewer_is_author": true,
+  "relationship": "Project operator and approver of B03 intervention",
+  "review_mode": "operator review",
+  "independent_review": false,
+  "signed_statement": "accepting 1,2,3 and 4. signed Howard Weale",
+  "recorded_at_utc": "2026-09-30T14:09:53.775466+00:00",
+  "signature_type": "User-supplied typed signature in conversation; not a cryptographic signature",
+  "classification_sha256": "b1bcd5f20729f1b5ac9893825e8e61f10c7df49e4a1a955f2910441fbe70262c",
+  "classification_commit": "52813c5",
+  "accepted_decisions": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "category_a_failures_accepted": 9,
+  "pilot_03": "Accept candidate posting-sequence misuse propagated by support; no demonstrated equipment defect; B03 remains nonvoid",
+  "passes_accepted_with_note": 13,
+  "b04_classification_prerequisite_satisfied": true,
+  "frozen_verdicts_modified": false
+}

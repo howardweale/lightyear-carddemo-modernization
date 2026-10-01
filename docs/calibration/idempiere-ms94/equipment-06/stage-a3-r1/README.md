@@ -1,4 +1,67 @@
-# Equipment 06, A3 revision 1: prospective full native qualification
+# Equipment 06, A3 revision 1: retained reference failed on perturbed checkpoint
+
+The campaign stopped after two of fourteen slots. The retained reference passed
+against the admitted checkpoint, then returned `business-failure` against the
+perturbed checkpoint. All twelve planted-fault slots remain unstarted. A3 remains
+unqualified and B04 remains blocked. No slot was restarted or replaced.
+
+The unchanged judge reported `Accounting period cache is not bound to journey
+postings`. On both engines, the changed accounting schema's cached period did
+not match its eleven journey posting rows; client and actor bindings matched.
+Both application executions exited successfully and public trace structure passed.
+The recorded business-failure verdict is preserved without reinterpretation.
+
+Read-only diagnosis found the admitted run's cache and postings in September
+2026. In the perturbed run, the changed cache pointed to October 2026 while
+postings retained the reference's September 26 accounting date. The runs straddled
+the UTC month boundary. This is evidence of a possible wall-clock dependency;
+the experiment does not establish that the private-value perturbation caused
+the mismatch. Investigate that dependency before proposing any new equipment
+revision. No clock, candidate, judge or evidence was changed to force a pass.
+
+The entry-signing correction worked. Both full entry admissions had valid
+signatures; the genuine derived checkpoint restoration and full entry checks
+replayed. Both archives independently replayed through the unchanged frozen
+`tools.ms94_a3_publication`, reproducing complete gates and diagnostic projections.
+There were 12 valid native/entry/cleanup/projection/publication/verification
+signatures plus six campaign signatures. Actual inventories before and after
+replay confirmed all eighteen owned Docker resources absent (fourteen containers,
+two networks, two volumes). All 918 frozen files remained unchanged.
+
+The retained pair exported byte-identical empty diagnostics, equal
+equipment-suspect flags and equal dispositions. That equality cannot compensate
+for the retained reference's failed business predicate. None of the six planted
+faults ran against either checkpoint, so their native value-invariance remains
+unqualified. These controls earn no autonomous cohort-success credit.
+
+| Cost / outcome | Value |
+|---|---:|
+| Native campaign seconds, including controller publication/replay | 1,053.453 |
+| Sum of native-pair seconds, included in campaign elapsed | 881.453 |
+| Independent terminal replay and cleanup verification seconds | 119.719 |
+| Native pairs / lane executions | 2 / 4 |
+| Unstarted planted-fault slots | 12 |
+| Completed retained diagnostic comparisons / planted-fault comparisons | 1 / 0 |
+| Model calls / model tokens | 0 / 0 |
+
+Twenty-four focused tests and nine documentation checks were offline preparation
+evidence only. Preparation, this failed revision, independent replay and all
+earlier campaigns remain separate costs and results. No extra native execution
+or model call was made by terminal verification.
+
+The follow-up is paused under the failure rule. The previous A3 signature failure
+remains preserved separately (467.547 seconds plus 29.109 seconds verification,
+thirteen unstarted slots). The corrected checkpoint preparation remains admitted
+with its own limits and costs (269.906 seconds plus 27.734 seconds replay).
+A1 and revised A2 remain passed. The original wait-only omission remains
+unqualified; the stronger missing-stimulus-and-wait control is the authorized
+scope. B03 remains 12/20 first-try, 95% Wilson 38.7%–78.1%, nonvoid.
+
+[Signed failed report](report.json), [independent terminal verification](terminal-verification.json)
+and per-archive safe metadata are published. Raw checkpoints, captures, archives
+and secrets remain local.
+
+## Original prospective declaration
 
 Howard approved signing the unsealed entry record, testing that boundary, and
 freezing a fresh A3 campaign. This is a new fourteen-pair campaign, not a restart

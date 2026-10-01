@@ -1078,7 +1078,7 @@
   "milestone_count": 70,
   "schema_version": "1.1",
   "searchable_milestone_count": 92,
-  "source_sha256": "0ab5c45bc93e994c6060551c053bb9985a4a64a647ba24c61213b9c41d855628",
+  "source_sha256": "61821b3cbb010c7ab6ab9e9a4fc5a8f2c4897416f16f8244e976003b00bda30a",
   "supplemental_artifacts": [
     {
       "bytes": 4335,
@@ -1206,9 +1206,9 @@
       "sha256": "1bb141ee774b06d6a8a7b391f38bdcc110abae63b5261590d63985e143e58cd6"
     },
     {
-      "bytes": 29560,
+      "bytes": 30566,
       "path": "docs/milestones/MS-94/MS-94.md",
-      "sha256": "a8bb17aafcd4b38b4b2fffa93e53071913fa33b03af80c26a3d423a5b76a524b"
+      "sha256": "ab4ba4de7c09ad4a59a2ed2a9b5ff4424f3ccf830145da730fc76287a25716a2"
     }
   ],
   "supplemental_milestone_count": 22

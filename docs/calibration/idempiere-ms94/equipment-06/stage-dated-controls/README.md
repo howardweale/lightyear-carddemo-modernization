@@ -1,4 +1,56 @@
-# Equipment 06: explicit order accounting date, prospective requalification
+# Equipment 06: dated sources passed 28/28 intended outcomes
+
+All ten corrected retained references passed the complete unchanged business
+judge on fresh Oracle/PostgreSQL pairs. All eighteen planted-fault runs matched
+their declared expectations: six contract violations and twelve execution
+failures, including three support throws with empty feedback and equipment
+suspicion. No slot was restarted or replaced. There were zero model calls.
+
+Every one of the 28 signed archives independently replayed through the unchanged
+`tools.ms94_a3_publication` from this exact revision snapshot, reproducing full
+entry admission, complete business gates and exported diagnostics. All 168
+native/entry/cleanup/projection/publication/verification signatures and five
+campaign signatures verified. Actual Docker inventories before and after replay
+confirmed all 252 campaign resources absent (196 containers, 28 networks,
+28 volumes), plus all seven offline preparation containers. All 940 frozen
+files remained unchanged. Repeated runs of each control had equal canonical
+diagnostic bytes, equipment-suspect flags and dispositions.
+
+The new dated reference's 10/10 observed acceptance gives a one-sided 95% upper
+false-rejection bound of 25.9%. This is separate from historical A1's 10/10 and
+does not pool reference runs or claim autonomous cohort success. The historical
+equivalent, alternate-ARI and mutant results remain evidence for the unchanged
+judge and their original exact sources, not fresh dated-source results.
+
+| Cost / outcome | Value |
+|---|---:|
+| Offline preparation seconds / compilations | 313.313 / 7 |
+| Native campaign seconds, including controller publication/replay | 11,688.531 |
+| Sum of native-pair seconds, included in campaign elapsed | 9,852.064 |
+| Independent terminal replay and cleanup verification seconds | 1,403.922 |
+| Fresh native pairs / lane executions | 28 / 56 |
+| Intended reference / planted-fault outcomes | 10 / 18 |
+| Model calls / model tokens | 0 / 0 |
+
+Qualification ran on October 1, 2026 UTC. Application clock and period-window
+policies remain real-time; the fixed September 26 business date can age outside
+the permitted window. This result is bounded to its actual execution dates.
+The original WAIT-ONLY omission remains unqualified: the authorized stronger
+missing-stimulus-and-wait scope passed 3/3. Support throws remain equipment-suspect
+without automatically voiding a measured campaign.
+
+This admitted-checkpoint qualification does not establish private-value
+invariance. A fresh paired A3 must run these exact seven dated sources on the
+admitted and genuinely perturbed checkpoints and fully verify before B04.
+Earlier failures, costs and signatures remain preserved without reinterpretation.
+B03 remains 12/20 first-try, 95% Wilson 38.7%–78.1%, nonvoid; B04 is unstarted.
+
+[Signed report](report.json) and [independent verification](terminal-verification.json)
+bind all per-archive safe metadata. Captures, checkpoints, archives and secrets
+remain local. Preparation, native qualification and independent replay costs
+are reported separately.
+
+## Original prospective declaration
 
 Howard authorized continuing after the preserved A3 revision 1 clock diagnosis.
 The new retained reference and all six new planted sources add exactly one line:

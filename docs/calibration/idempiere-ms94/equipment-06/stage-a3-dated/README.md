@@ -1,4 +1,58 @@
-# Equipment 06: fresh paired A3 with qualified dated sources
+# Equipment 06: paired A3 dated sources passed 14/14 intended outcomes
+
+Both retained references passed the complete unchanged business judge, once on
+admitted values and once on genuinely perturbed values. All twelve fault runs
+met their exact dated-source expectations: four contract violations and eight
+execution failures, including two support throws with empty feedback and
+equipment suspicion. All seven admitted/perturbed comparisons have equal actual
+canonical diagnostic bytes, equipment-suspect flags and dispositions.
+
+Every one of the fourteen signed archives independently replayed full entry
+admission, complete business gates and diagnostics through unchanged
+`tools.ms94_a3_publication` from the exact frozen snapshot. Full admission ran
+before every candidate, including early throws. The seven perturbed runs each
+proved original multisets, real SQL per-cell transformations, unchanged structure
+and exact admitted derived multisets on both native engines. This qualifies the
+limited declared price, stock, identifier and sequence perturbation; it does
+not claim invariance to every private value or to the real-time application clock.
+
+All 84 native/entry/cleanup/projection/publication/verification signatures and
+five campaign signatures verified. Actual Docker inventories before and after
+independent replay confirmed all 126 campaign resources absent (98 containers,
+14 networks and 14 volumes), plus seven earlier offline compilation containers.
+All 946 frozen files remained unchanged. No slot was restarted or replaced.
+
+| Cost / outcome | Value |
+|---|---:|
+| New source compilations for paired A3 | 0 |
+| Native campaign seconds, including controller publication/replay | 5,998.484 |
+| Sum of native-pair seconds, included above | 5,094.296 |
+| Independent terminal replay and cleanup verification seconds | 594.407 |
+| Fresh native pairs / lane executions | 14 / 28 |
+| Complete retained passes / intended fault outcomes | 2 / 12 |
+| Equal admitted/perturbed diagnostic comparisons | 7 / 7 |
+| Model calls / tokens | 0 / 0 |
+
+Prior dated-source preparation (313.313 seconds and seven offline compilations),
+its 28-run qualification, and checkpoint preparation retain their separate costs.
+The dated-source 10/10 one-sided 95% upper false-rejection bound remains 25.9%,
+separate from historical A1's 10/10; these paired controls are not pooled into
+that bound and are never autonomous cohort successes. Historical equivalent,
+alternate-ARI and mutant evidence remains tied to original sources.
+
+Qualification ran October 1, 2026 UTC. The fixed September 26 business date can
+age outside the real-time period window; no universal clock invariance is claimed.
+Original WAIT-ONLY remains unqualified: this campaign qualifies the stronger
+missing-stimulus-and-wait scope. Support throws remain equipment-suspect without
+automatic measurement void. Earlier A3 failures and signatures remain unchanged.
+
+[Signed report](report.json) and [independent verification](terminal-verification.json)
+bind all safe per-archive metadata. Captures, checkpoints, archives and secrets
+remain local. B04 may now proceed to implementation and its own prospective
+23-slot public freeze; no B04 model call has occurred. B03 remains 12/20 first-try,
+95% Wilson 38.7%–78.1%, nonvoid.
+
+## Original prospective declaration
 
 This is a new prospective fourteen-run native campaign. The exact seven dated
 sources have passed [28 admitted-checkpoint runs and independent replay](../stage-dated-controls/README.md).

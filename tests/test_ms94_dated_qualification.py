@@ -33,8 +33,8 @@ class DatedSourcesTests(unittest.TestCase):
             if 'candidate_frame' in expected:
                 line=expected['candidate_frame']['line']
                 expected['candidate_frame']['line']+=1
-                before=(ROOT/old_source(name)).read_text().splitlines()
-                after=source.read_text().splitlines()
+                before=(ROOT/old_source(name)).read_text(encoding='utf-8').splitlines()
+                after=source.read_text(encoding='utf-8').splitlines()
                 self.assertEqual(before[line-1],after[line])
             self.assertEqual(new['expected'],expected)
 

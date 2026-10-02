@@ -665,9 +665,9 @@ class CampaignRegistry:
             "number-pilot": NumberSource,
         }[row["adapter"]]
         # Absolute source roots are LOCAL operator configuration only, never request input.
-        path = self.root / "control-tower/policy.json"
+        path = self.root / "control-tower/decision-console-policy.json"
         policy = (
-            read_json(path).get("decision_console_observer", POLICY)
+            read_json(path)
             if path.exists()
             else POLICY
         )

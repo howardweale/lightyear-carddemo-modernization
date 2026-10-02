@@ -1,0 +1,65 @@
+{
+  "schema": "readonly-regression-fixture/1",
+  "campaign": "stage-b-04",
+  "source": "Original B04 local signed archive; exact selected bytes. No captures or reference sources.",
+  "campaign_void": true,
+  "files": [
+    {
+      "path": "work/ms94/stage-b-04/plan.json",
+      "sha256": "45a70a008775f248ac9e0e9d17bccdd2a303bd18090e0619deb03fd428bbf7b3"
+    },
+    {
+      "path": "work/ms94/stage-b-04/declaration.json",
+      "sha256": "d77ad928fd8ce92d7f710f8dde72a822bcb057624ca89306d88e803d7da66607"
+    },
+    {
+      "path": "work/ms94/stage-b-04/authorization.json",
+      "sha256": "9fbc8f1c2e844914af560be7fcc012f7958c82c4a62402388ebc5b414eca2207"
+    },
+    {
+      "path": "work/ms94/stage-b-04/trials/cohort-01/receipt.json",
+      "sha256": "ac85e839eaf4f5ec8268624c51d929af52a0e7989c218cc4bc581c607aceb830"
+    },
+    {
+      "path": "factory/idempiere/ms86-journeys/runs/journey-d5d151ac0a4340bc998c39f0cd8ddded/gate.json",
+      "sha256": "61c9160d758a3450b548621a0a7d427a7421674743bc670f87b4e969d9c4d82a"
+    },
+    {
+      "path": "factory/idempiere/ms86-journeys/runs/journey-d5d151ac0a4340bc998c39f0cd8ddded/diagnostic-projection.json",
+      "sha256": "1ec5da22f436792bca4e1e5de91bb4ee142fa15042a2e487234966164d490ed7"
+    },
+    {
+      "path": "work/ms94/stage-b-04/trials/cohort-02/receipt.json",
+      "sha256": "eb5f8a52ba0cbb4460dd406564a34b435554323046224031424a69682e2dec01"
+    },
+    {
+      "path": "factory/idempiere/ms86-journeys/runs/journey-abdd71205e884229a6b3777f13140c88/gate.json",
+      "sha256": "6d0be636d26f844de1fbe16a1aecd474de4a2541e76af03035d33bee123746c9"
+    },
+    {
+      "path": "factory/idempiere/ms86-journeys/runs/journey-abdd71205e884229a6b3777f13140c88/diagnostic-projection.json",
+      "sha256": "b59b27e96138624026a47d76274e0c03bde4e12da317153046f76f429183b52b"
+    },
+    {
+      "path": "work/ms94/stage-b-04/trials/cohort-02/feedback-1.json",
+      "sha256": "0c8a748e76421fd9d9dee5993df625ec6f850f298d77742b1b70287765cdbac6"
+    },
+    {
+      "path": "work/ms94/stage-b-04/trials/cohort-03/receipt.json",
+      "sha256": "8c7b9587bfd180b880244e97c123d731ffb70e0dc97ec887273979846e24f4d1"
+    },
+    {
+      "path": "factory/idempiere/ms86-journeys/runs/journey-e31d839fa6df48ceb8722e827b5498dc/gate.json",
+      "sha256": "0dc5c3c0c7260f8ac9f2cb45d200620d5932b90407d2f078b6fd4c9cddab48b9"
+    },
+    {
+      "path": "factory/idempiere/ms86-journeys/runs/journey-e31d839fa6df48ceb8722e827b5498dc/diagnostic-projection.json",
+      "sha256": "e4774e1b94f547da4404f274fcd7a3ac4ae6c2db96ed6f868561ff8ec9ba7d57"
+    },
+    {
+      "path": "published/terminal/report.json",
+      "sha256": "85a74358d6435ba61190cf39dc6159eeb474c1ad50347b40c496042d421eee8c",
+      "source": "docs/calibration/idempiere-ms94/stage-b-04/terminal/report.json"
+    }
+  ]
+}

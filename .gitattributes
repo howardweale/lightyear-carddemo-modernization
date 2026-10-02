@@ -1,5 +1,8 @@
 * text=auto
 
+# Read-only regression receipts preserve the original signed archive bytes.
+tests/fixtures/decision-console/b04/** -text -whitespace
+
 *.py text eol=lf
 *.java text eol=lf
 *.xml text eol=lf

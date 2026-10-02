@@ -35,14 +35,19 @@ class B05AdmissionTests(unittest.TestCase):
             proc.assert_not_called();self.assertEqual(list(root.iterdir()),[])
     def test_26h_guard_is_same_qualified_function(self):
         root=Path(__file__).resolve().parents[1]
-        calendar=read_json(root/'factory/idempiere/ms94-b05-executable/preflight.json')['calendar']
+        calendar=read_json(root/'factory/idempiere/ms94-b05-executable-r2/preflight.json')['calendar']
         self.assertEqual(calendar['maximum_seconds'],93600)
         for stamp in ('2026-10-30T22:00:00+00:00','2026-10-31T00:00:00+00:00'):
             with self.assertRaises(CalibrationError):guard(calendar,datetime.fromisoformat(stamp))
         now=datetime.fromisoformat('2026-10-29T19:59:59+00:00');guard(calendar,now);period_guard(now,launching=True)
         with self.assertRaises(CalibrationError):period_guard(datetime.fromisoformat('2026-10-29T20:00:00+00:00'),launching=True)
+    def test_every_native_plan_path_uses_current_executable_configuration(self):
+        from tools.ms94_b05_admission import CONFIG
+        root=Path(__file__).resolve().parents[1]
+        for name in ['preflight',*[s['path'].split('/')[-1] for s in read_json(root/CONFIG/'campaign.json')['slots']]]:
+            self.assertEqual(read_json(root/CONFIG/(name+'.json'))['equipment_plan_path'],(CONFIG/'qualified-plan.json').as_posix())
     def test_fixed_trial_limits_and_prompt(self):
-        root=Path(__file__).resolve().parents[1];area=root/'factory/idempiere/ms94-b05-executable'
+        root=Path(__file__).resolve().parents[1];area=root/'factory/idempiere/ms94-b05-executable-r2'
         plans=[read_json(p) for p in area.glob('cohort-*.json')]+[read_json(p) for p in area.glob('pilot-*.json')]
         self.assertEqual(len(plans),23)
         for p in plans:

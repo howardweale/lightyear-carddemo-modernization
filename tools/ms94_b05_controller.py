@@ -1,6 +1,6 @@
-"""Separately versioned MS94 controller v2. Exact approval, no amendment/resume.
+"""B05 r2 controller: pre-outcome review amendment, no restarted slots.
 
-Equipment must already have passed Stage A including signed human reviews and
+Equipment must already have passed Stage A including signed operator reviews (not independent) and
 full replayable publication. Builder sees only public contracts/API and closed
 diagnostics. Deterministic support assembly is declared, not a human repair.
 """
@@ -18,7 +18,7 @@ from tools.ms94_v6_gate import VERSION
 from tools.ms94_tool_policy_v5 import verify_events
 from tools.ms94_b04_feedback_route import partition, route, verify_route
 
-CONTROLLER_VERSION='ms94-b05-calendar-direct-delivery-v1'
+CONTROLLER_VERSION='ms94-b05-calendar-direct-delivery-r2-review'
 HARNESS='LightyearOperationsTest.java'
 PLACEHOLDER='// LIGHTYEAR_BUILDER_JOURNEY\n'
 SUPPORT=Path('factory/idempiere/qualification-ms94-v3/public/JourneySupport.java')
@@ -84,6 +84,8 @@ def candidate(root,campaign,folder,proposal):
 
 def audit(root,campaign,attempts):
     plan=frozen(root,campaign);key=(root/'work/ms87/operator/authority.public.pem').read_bytes();previous=None
+    from tools.ms94_b05_stops import verify_causes
+    verify_causes(root,campaign,key)
     calls=sorted((campaign/'calls').glob('*/receipt.json'));tool_calls=0
     require(len(calls)==len(list((campaign/'calls').glob('*/invocation.json'))),'Incomplete call accounting')
     all_records=[]
@@ -149,12 +151,15 @@ def run(root,campaign,executable,remaining_seconds=None):
     from tools.qualification_feedback_v4 import export,equipment_suspect
     from tools.ms94_b05_admission import model_authorization
     model_authorization(root)
+    from tools.ms94_b05_supervisor import remaining_work
+    from tools.ms94_b05_stops import IMMEDIATE,notify,record_failure,signal_review
+    remaining_work(root,campaign)
     plan=frozen(root,campaign,live=True);signer=JourneySigner(root)
     check_client(executable,plan['builder_client'])
     with (campaign/'started.json').open('xb') as f:f.write(canonical({'plan_sha256':plan['content_sha256']}))
     started=time.monotonic();attempts=[];previous=None;feedback=[];status='halted';error=None
     limit=min(plan['max_elapsed_seconds'],remaining_seconds) if remaining_seconds is not None else plan['max_elapsed_seconds']
-    def remaining():return limit-(time.monotonic()-started)
+    def remaining():return min(limit-(time.monotonic()-started),remaining_work(root,campaign))
     try:
         while True:
             frozen(root,campaign);require(remaining()>0,'Trial budget exhausted')
@@ -177,6 +182,7 @@ def run(root,campaign,executable,remaining_seconds=None):
                                  api=read_json(root/'factory/idempiere/analyst-repair/api-provenance.json')):
                 require(not observed,'Equipment-suspect feedback must be empty')
                 status='halted-equipment-suspect';break
+            record_failure(root,campaign,native,gate,observed)
             if not observed:status='halted-no-supported-repair';break
             runtime,structural=partition(observed)
             additional_calls=1+bool(structural)
@@ -193,11 +199,12 @@ def run(root,campaign,executable,remaining_seconds=None):
             save(campaign/f'feedback-{len(attempts)}.json',signer.sign(routed))
             if not feedback:status='halted-analyst-declined';break
     except Exception as exc:error={'type':type(exc).__name__,'message':str(exc)};status='halted-controller-failure'
-    if status in ('void-equipment-failure','halted-controller-failure'):
-        save(campaign/'stopping.json',signer.sign({'status':status,'notify_immediately':True}))
-        print(json.dumps({'event':'trial-stopping','status':status}),flush=True)
+    if status in IMMEDIATE:notify(root,campaign,status)
+    elif status=='halted-equipment-suspect':signal_review(root,campaign,'equipment-suspect')
     try:provenance=audit(root,campaign,attempts)
-    except Exception as exc:provenance={'verified':False,'error_type':type(exc).__name__};status='invalid-provenance'
+    except Exception as exc:
+        provenance={'verified':False,'error_type':type(exc).__name__};status='invalid-provenance'
+        notify(root,campaign,status)
     calls=[read_json(p) for p in sorted((campaign/'calls').glob('*/receipt.json'))]
     from tools.ms94_b05_evidence import metrics
     measured=metrics(root,campaign,attempts)

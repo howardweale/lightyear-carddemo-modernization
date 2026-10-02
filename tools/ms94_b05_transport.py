@@ -18,6 +18,8 @@ def invoke(root, campaign, executable, role, prompt, schema, remaining_seconds):
     from tools.ms94_b05_controller import frozen
     from tools.ms94_b05_admission import model_authorization
     model_authorization(root)
+    from tools.ms94_b05_supervisor import remaining_work
+    remaining_seconds=min(remaining_seconds,remaining_work(root,campaign))
     plan = frozen(root,campaign,live=True)
     check_client(executable, plan['builder_client'])
     previous = sorted((campaign/'calls').glob('*/invocation.json'))

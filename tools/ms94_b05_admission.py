@@ -8,9 +8,9 @@ from lightyear_control_tower.decisions import verify_envelope
 from tools.ms94_b05_plan import check_plan, period_guard
 
 APPROVED = Path('docs/calibration/idempiere-ms94/stage-b-05')
-CONFIG = Path('factory/idempiere/ms94-b05-executable')
-CAMPAIGN = Path('work/ms94/stage-b-05')
-PREFLIGHT = Path('work/ms94/stage-b-05-preflight')
+CONFIG = Path('factory/idempiere/ms94-b05-executable-r2')
+CAMPAIGN = Path('work/ms94/stage-b-05-r2')
+PREFLIGHT = Path('work/ms94/stage-b-05-r2-preflight')
 PLAN = '56b13b23a319af3d207552f5022fd3bbaeb9744dba2f79cf535acb2b5fd49951'
 DECLARATION = '07bf81eb26edb82f9e74be3535af23e7ec51ae965f1581047bf82b87a6404cd2'
 
@@ -24,7 +24,16 @@ def bindings(root, live=False):
     require(plan['content_sha256']==PLAN, 'Approved B05 plan changed')
     declaration=signature(root,APPROVED/'declaration.json')
     require(declaration['content_sha256']==DECLARATION, 'Approved B05 declaration changed')
+    amendment=signature(root,APPROVED/'amendment-r2/amendment.json')
+    require(amendment['approved_plan_sha256']==PLAN and amendment['approved_declaration_sha256']==DECLARATION
+        and amendment['model_calls_authorized'] is False and amendment['primary_metric_changed'] is False
+        and amendment['verdicts_changed'] is False, 'Pre-outcome amendment binding differs')
+    require(read_json(root/CONFIG/'campaign.json')['amendment_sha256']==amendment['content_sha256'], 'Campaign amendment differs')
     q=plan['qualification_binding']
+    equipment=read_json(root/CONFIG/'qualified-plan.json');verify(equipment)
+    require(equipment['content_sha256']==q['plan_sha256'],'Qualified native plan differs')
+    for config in [root/CONFIG/'preflight.json',*[root/CONFIG/(Path(slot['path']).name+'.json') for slot in read_json(root/CONFIG/'campaign.json')['slots']]]:
+        require(read_json(config)['equipment_plan_path']==(CONFIG/'qualified-plan.json').as_posix(),'Native plan path escaped current executable configuration')
     snapshot=read_json(root/APPROVED/'qualification/execution-snapshot.json');verify(snapshot)
     require(snapshot['content_sha256']==q['snapshot_sha256'] and len(snapshot['files'])==q['frozen_files'], 'Qualification snapshot differs')
     for name,sha in snapshot['files'].items():
@@ -51,6 +60,7 @@ def preflight_authorization(root):
             and auth['snapshot_sha256']==snapshot['content_sha256'] and auth['approved_plan_sha256']==PLAN
             and auth['approved_declaration_sha256']==DECLARATION and auth['maximum_native_pairs']==2,
             'Preflight authorization differs')
+    require(auth['amendment_sha256']==read_json(root/APPROVED/'amendment-r2/amendment.json')['content_sha256'],'Preflight amendment differs')
     return auth
 
 def validate_model_authorization(auth, snapshot_sha, preflight_sha, publication_sha):
@@ -68,9 +78,18 @@ def model_authorization(root, launching=False):
     report=signature(root,PREFLIGHT/'report.json')
     published=signature(root,CAMPAIGN/'published-executable.json')
     require(report['passed'] and report['model_calls']==0 and report['snapshot_sha256']==snapshot['content_sha256'], 'Preflight did not pass')
+    supervision=signature(root,PREFLIGHT/'supervision-receipt.json')
+    require(supervision['completed_within_budget'] and supervision['error'] is None, 'Supervised preflight did not finish in budget')
+    supervised=signature(root,PREFLIGHT/'supervised-result.json')
+    require(supervised['content_sha256']==supervision['worker_result_sha256'] and supervised['result']==report, 'Supervised preflight report binding differs')
+    require(not (root/PREFLIGHT/'stopping.json').exists() and not (root/CAMPAIGN/'stopping.json').exists(), 'Stop rule forbids model calls or next slot')
     require(published['snapshot_sha256']==snapshot['content_sha256'] and published['preflight_report_sha256']==report['content_sha256']
             and published['all_public_bytes_verified'] is True, 'Executable is not publicly frozen')
     validate_model_authorization(auth,snapshot['content_sha256'],report['content_sha256'],published['content_sha256'])
+    amendment=read_json(root/APPROVED/'amendment-r2/amendment.json')['content_sha256']
+    require(auth.get('amendment_sha256')==published.get('amendment_sha256')==amendment,'Published launch amendment differs')
+    from tools.ms94_b05_review import require_review_clear
+    require_review_clear(root)
     period_guard(datetime.now(timezone.utc),launching=launching)
     return auth
 

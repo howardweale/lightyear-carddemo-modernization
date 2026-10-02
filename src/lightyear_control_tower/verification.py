@@ -97,9 +97,29 @@ def verify_decision(
         )
         if policy.independence == "required":
             check(
-                p.get("independence") == "independent"
+                p.get("independence")
+                == (
+                    "operator-review"
+                    if kind == "classification-acceptance"
+                    else "independent"
+                )
                 and not p.get("decider_is_proposer"),
                 "independence-required",
+            )
+        if kind == "classification-acceptance":
+            ids = p.get("classification_item_ids", [])
+            decisions = p.get("item_decisions", {})
+            check(
+                bool(ids)
+                and len(set(ids)) == len(ids)
+                and set(decisions) == set(ids)
+                and all(v in {"accept", "reject"} for v in decisions.values()),
+                "classification-items-required",
+            )
+            check(
+                p["outcome"] != "accept"
+                or all(v == "accept" for v in decisions.values()),
+                "classification-overall-mismatch",
             )
         later = [
             e

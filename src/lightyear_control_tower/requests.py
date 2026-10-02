@@ -67,6 +67,17 @@ class RequestInbox:
         self.registry = registry
         self.directory = self.root / "work/control-tower/requests" / self.scope
 
+    def classification_ids(self, item):
+        if item["kind"] != "classification-acceptance":
+            return []
+        value = read_json(confined(self.root, item["evidence"]["item_ids"]))
+        if not isinstance(value, list) or not value or len(value) > 500:
+            raise ValueError("Classification item_ids evidence must be a nonempty list")
+        ids = [identifier(v) for v in value]
+        if len(set(ids)) != len(ids):
+            raise ValueError("Classification IDs must be unique")
+        return ids
+
     def item(self, request_id):
         name = identifier(request_id)
         path = confined(

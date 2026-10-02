@@ -276,6 +276,7 @@ class ConsoleService(DecisionService):
             "latest_decision": latest,
             "evidence_view": evidence_view(self.root, item),
             "signature_description": "Service countersignature of authenticated operator intent",
+            "classification_item_ids": self.inbox.classification_ids(item),
         }
 
     def queue(self, token):
@@ -359,6 +360,7 @@ class ConsoleService(DecisionService):
                 **item,
                 "latest_decision": latest,
                 "evidence_view": evidence_view(self.root, item),
+                "classification_item_ids": self.inbox.classification_ids(item),
                 "latest_decisions_by_role": {
                     role: (self._latest(self.events(db), item, role) or {}).get(
                         "content_sha256"
@@ -393,6 +395,19 @@ class ConsoleService(DecisionService):
         ]["id"] in item.get("authored_by", [])
         if kind.independence == "required" and self_authored:
             raise DecisionUnauthorized("An independent reviewer is required")
+        classification_ids = self.inbox.classification_ids(item)
+        if classification_ids:
+            decisions = payload.get("item_decisions")
+            if (
+                not isinstance(decisions, dict)
+                or set(decisions) != set(classification_ids)
+                or any(v not in {"accept", "reject"} for v in decisions.values())
+            ):
+                raise ValueError(
+                    "Every bound classification item needs an accept or reject decision"
+                )
+            if payload["outcome"] == "accept" and "reject" in decisions.values():
+                raise ValueError("Overall acceptance requires all items accepted")
         if (
             kind.name in {"pilot-slice-approval", "reference-approval", "partner-share"}
             and session["actor"]["kind"] != "customer"
@@ -475,7 +490,10 @@ class ConsoleService(DecisionService):
             )
             # Operator-review-allowed is conservatively labelled operator review: a
             # different account alone is not evidence of organizational independence.
-            if kind.independence == "operator-review-allowed":
+            if (
+                kind.independence == "operator-review-allowed"
+                or kind.name == "classification-acceptance"
+            ):
                 independence = "operator-review"
             value = {
                 "schema": "tower-decision/1",
@@ -504,6 +522,9 @@ class ConsoleService(DecisionService):
                 "validation": validation,
                 "signature_type": "Service countersignature of authenticated operator intent",
             }
+            if classification_ids:
+                value["classification_item_ids"] = classification_ids
+                value["item_decisions"] = dict(payload["item_decisions"])
             event = self.append(
                 db, "tower_decision", value, session["actor"], session["id"]
             )

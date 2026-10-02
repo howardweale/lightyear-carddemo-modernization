@@ -43,7 +43,13 @@ class ConsoleTests(unittest.TestCase):
         for key in self.service.registry.get(kind).hashes:
             path = self.root / "evidence" / f"{name}-{key}.json"
             path.parent.mkdir(exist_ok=True)
-            path.write_text(json.dumps({"fixture": key}))
+            path.write_text(
+                json.dumps(
+                    ["cohort-01", "cohort-02"]
+                    if kind == "classification-acceptance" and key == "item_ids"
+                    else {"fixture": key}
+                )
+            )
             bound[key] = hashlib.sha256(path.read_bytes()).hexdigest()
             evidence[key] = path.relative_to(self.root).as_posix()
         request = {
@@ -89,6 +95,29 @@ class ConsoleTests(unittest.TestCase):
                 for e in self.service.export_session(self.token)["events"]
             )
         )
+
+    def test_classification_requires_every_item_and_is_operator_review(self):
+        self.make_request("classification-acceptance", "classify", proposed_by="other")
+        self.service.grant_roles(
+            "howard", ["operator", "classification-reviewer"], reason="Fixture reviewer"
+        )
+        p = self.payload(item_id="classify", outcome="accept")
+        with self.assertRaisesRegex(ValueError, "Every bound classification"):
+            self.service.decide(self.token, p)
+        p["item_decisions"] = {"cohort-01": "accept", "cohort-02": "reject"}
+        with self.assertRaisesRegex(ValueError, "Overall acceptance"):
+            self.service.decide(self.token, p)
+        p["outcome"] = "reject"
+        event = self.service.decide(self.token, p)
+        proof = self.service.proof(self.token, event["content_sha256"])
+        checked = verify_decision(
+            proof,
+            self.service.public_key,
+            "classification-acceptance",
+            event["payload"]["bound"],
+        )
+        self.assertEqual("operator-review", checked["independence"])
+        self.assertEqual(p["item_decisions"], checked["item_decisions"])
 
     def test_same_session_current_view_and_exact_bound_required(self):
         with self.assertRaises(DecisionConflict):

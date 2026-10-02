@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "tower-request/1",
+  "type": "object",
+  "required": ["schema", "scope", "id", "kind", "summary", "proposed_by", "bound", "evidence"],
+  "properties": {
+    "schema": {"const": "tower-request/1"},
+    "scope": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"},
+    "id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_.-]{0,127}$"},
+    "kind": {"type": "string"},
+    "summary": {"type": "string", "minLength": 1, "maxLength": 2000},
+    "proposed_by": {"type": "string", "minLength": 1},
+    "authored_by": {"type": "array", "items": {"type": "string"}},
+    "bound": {"type": "object", "additionalProperties": {"type": "string", "pattern": "^[a-f0-9]{64}$"}},
+    "evidence": {"type": "object", "additionalProperties": {"type": "string", "minLength": 1}},
+    "workload": {"type": ["string", "null"]},
+    "created_at_utc": {"type": "string", "format": "date-time"}
+  }
+}

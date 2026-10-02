@@ -115,6 +115,10 @@ def verify_envelope(envelope: dict, public_key: bytes) -> bool:
 
 class DecisionService:
     def __init__(self, root: Path, authority: Path, database: Path | None = None, graph_identity=None, recover_runs: bool = True, decision_only: bool = True):
+        from .kinds import default_registry
+        if not hasattr(self, 'registry'):
+            self.registry = default_registry()
+        self.normalization_kind = self.registry.get('normalization')
         from cryptography.hazmat.primitives import serialization
         self.root = root.resolve()
         self.decision_only = decision_only
@@ -300,11 +304,11 @@ class DecisionService:
             return item
 
     def decide(self, token: str, payload: dict) -> dict:
-        session = self.authenticate(token, "normalization-approver")
+        session = self.authenticate(token, self.normalization_kind.roles[0])
         reason = text_field(payload.get("reason"), "Reason")
         owner = text_field(payload.get("owner"), "Named owner", 200)
         outcome = payload.get("outcome")
-        if outcome not in {"approved", "rejected"}:
+        if outcome not in self.normalization_kind.outcomes:
             raise ValueError("Choose approved or rejected")
         if outcome == "approved":
             review_after = date.fromisoformat(text_field(payload.get("review_after"), "Review date", 10))
@@ -312,7 +316,7 @@ class DecisionService:
                 raise ValueError("Review date must be in the next 366 days")
         request_id = str(uuid.UUID(text_field(payload.get("request_id"), "Request ID", 36)))
         with self.transaction() as db:
-            session = self.authenticate(token, "normalization-approver")
+            session = self.authenticate(token, self.normalization_kind.roles[0])
             events = self.events(db)
             for event in events:
                 if event["kind"] == "normalization_decided" and event["payload"]["request_id"] == request_id:

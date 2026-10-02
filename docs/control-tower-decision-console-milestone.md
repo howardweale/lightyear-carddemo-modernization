@@ -57,6 +57,20 @@ These are implementation tests with disposable local authorities. They are not
 new equipment qualifications, autonomous cohort successes or independent human
 attestation. Repository CI results are tracked on the delivery pull requests.
 
+CI exposed two integration issues before merge. The broad suite does not install
+the optional MCP SDK, so its runtime tool-surface test now skips only when the SDK
+is absent; dedicated Console CI installs and exercises it. Observer policy now
+lives in `control-tower/decision-console-policy.json`, preserving the legacy
+`control-tower/policy.json` bytes. The actual legacy audit rebuild and comparator
+again produce `d4e89afa898c723625aca87b12f3eeeddbdd5779efc9834ae45147ea3a9cbd68`.
+No historical audit snapshot was regenerated or replaced.
+
+Delivery PRs: [foundation #226](https://github.com/howardweale/lightyear-carddemo-modernization/pull/226),
+[cockpit #227](https://github.com/howardweale/lightyear-carddemo-modernization/pull/227),
+[workflows #228](https://github.com/howardweale/lightyear-carddemo-modernization/pull/228),
+[catalogue #229](https://github.com/howardweale/lightyear-carddemo-modernization/pull/229),
+and [workspaces #230](https://github.com/howardweale/lightyear-carddemo-modernization/pull/230).
+
 ## Boundaries and remaining dependencies
 
 Production LAS native replay is not present at the baseline. Qualification

@@ -1,0 +1,16 @@
+{
+  "schema": "tower-observer-policy/1",
+  "version": 1,
+  "budget_thresholds": [
+    0.8,
+    1.0
+  ],
+  "visible_poll_seconds": 3,
+  "hidden_poll_seconds": 30,
+  "review_business_days": {
+    "difference-disposition": 3,
+    "default": 5
+  },
+  "changes_verdict": false,
+  "dispatch_enabled": false
+}

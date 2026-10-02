@@ -1,5 +1,8 @@
 # Decision Console
 
+See the [milestone record](control-tower-decision-console-milestone.md) for delivered
+scope, validation, publication units and remaining dependencies.
+
 The console records service-countersigned authenticated human intent. It cannot
 launch, resume, cancel, schedule or determine engine verdicts. Agent credentials
 can read scoped evidence and prepare labelled drafts; they cannot approve.

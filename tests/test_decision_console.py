@@ -1,5 +1,6 @@
 import copy
 import hashlib
+import importlib.util
 import json
 import tempfile
 import unittest
@@ -281,6 +282,7 @@ class ConsoleTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "another scope or authority"):
             ConsoleService(self.root, other)
 
+    @unittest.skipUnless(importlib.util.find_spec("mcp"), "Optional agent SDK; exercised by dedicated Console CI")
     def test_mcp_tool_surface_contains_only_reads_and_drafts(self):
         import asyncio
         from lightyear_control_tower.mcp import create_server

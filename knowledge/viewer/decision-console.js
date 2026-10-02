@@ -268,6 +268,19 @@ async function review(item) {
       "boundary",
     ),
   );
+  const itemChoices = {};
+  for (const id of i.classification_item_ids || []) {
+    const select = el("select");
+    select.required = true;
+    select.setAttribute("aria-label", "Classification decision for " + id);
+    for (const value of ["", "accept", "reject"]) {
+      const option = el("option", value || "Choose a decision");
+      option.value = value;
+      select.append(option);
+    }
+    itemChoices[id] = select;
+    form.append(el("label", id), select);
+  }
   const submit = el("button", "Record decision");
   submit.type = "submit";
   form.append(submit);
@@ -283,6 +296,10 @@ async function review(item) {
         previous_decision_sha256: i.latest_decision?.content_sha256 || null,
       };
       for (const [k, n] of Object.entries(fields)) p[k] = n.value;
+      if (Object.keys(itemChoices).length)
+        p.item_decisions = Object.fromEntries(
+          Object.entries(itemChoices).map(([id, select]) => [id, select.value]),
+        );
       if (slot) {
         p.decision_slot = slot.value;
         p.previous_decision_sha256 =

@@ -1,0 +1,108 @@
+"""Closed disclosure projections. Raw observations/captures never enter the UI."""
+
+from datetime import datetime, timezone, timedelta
+from .requests import read_json, confined
+
+
+def evidence_view(root, item):
+    output = {}
+    allowed = {
+        "qualification": (
+            "schema",
+            "content_sha256",
+            "scope",
+            "platform_versions",
+            "clock_policy",
+            "positive_controls",
+            "false_rejection_bound",
+            "mutation_score",
+            "limits",
+            "reference_review",
+            "controls",
+            "replay_command",
+            "fixture_only",
+        ),
+        "rule": (
+            "schema",
+            "id",
+            "title",
+            "operation",
+            "parameters",
+            "owner",
+            "review_after",
+            "workload",
+            "lane_pair",
+            "field",
+            "proposed_by",
+        ),
+        "diagnostic": (
+            "schema",
+            "id",
+            "category",
+            "class",
+            "kind",
+            "location",
+            "public_stage",
+            "thrown_by",
+            "candidate_frame",
+        ),
+        "plan": (
+            "schema",
+            "artifact_type",
+            "content_sha256",
+            "max_client_invocations",
+            "max_compilations",
+            "max_elapsed_seconds",
+            "limits",
+            "stop_rules",
+            "analysis",
+        ),
+        "slice": (
+            "id",
+            "lane_pair",
+            "programs",
+            "journeys",
+            "clock_policy",
+            "budget",
+            "success_criteria",
+        ),
+        "archive": ("schema", "scope", "disclosure", "content_sha256"),
+    }
+    for name, keys in allowed.items():
+        if name not in item["evidence"]:
+            continue
+        try:
+            value = read_json(confined(root, item["evidence"][name]))
+            if isinstance(value, dict):
+                output[name] = {k: value[k] for k in keys if k in value}
+        except (ValueError, OSError):
+            pass
+    return {
+        "disclosure": "no observation values or private captures",
+        "records": output,
+    }
+
+
+def age(item, days, *, now=None):
+    created = item.get("created_at_utc")
+    if not created:
+        return {"known": False, "overdue": False}
+    try:
+        start = datetime.fromisoformat(created)
+        if start.tzinfo is None:
+            raise ValueError("Timezone required")
+    except (ValueError, TypeError):
+        return {"known": False, "overdue": False}
+    due = start
+    for _ in range(days):
+        due += timedelta(days=1)
+        while due.weekday() >= 5:
+            due += timedelta(days=1)
+    current = now or datetime.now(timezone.utc)
+    return {
+        "known": True,
+        "created_at_utc": start.isoformat(),
+        "due_at_utc": due.isoformat(),
+        "waiting_seconds": max(0, (current - start).total_seconds()),
+        "overdue": current >= due,
+    }

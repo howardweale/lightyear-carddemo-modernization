@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "tower-decision/1",
+  "type": "object",
+  "required": ["schema", "kind", "kind_version", "scope", "item_id", "bound", "outcome", "reason", "actor", "roles_held", "session_id", "authentication", "proposed_by", "decider_is_proposer", "independence", "request_id", "request_sha256", "previous_decision_sha256", "channel"],
+  "properties": {
+    "schema": {"const": "tower-decision/1"},
+    "kind_version": {"const": 1},
+    "channel": {"const": "control-tower"},
+    "verdict_changed": {"const": false},
+    "bound": {"type": "object", "additionalProperties": {"type": "string", "pattern": "^[a-f0-9]{64}$"}},
+    "independence": {"enum": ["independent", "operator-review", "not-applicable"]},
+    "decider_is_proposer": {"type": "boolean"},
+    "request_id": {"type": "string", "format": "uuid"},
+    "request_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "roles_held": {"type": "array", "items": {"type": "string"}},
+    "previous_decision_sha256": {"type": ["string", "null"]},
+    "review_after": {"type": ["string", "null"], "format": "date"}
+  }
+}

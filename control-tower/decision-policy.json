@@ -8,10 +8,18 @@
   "session_ttl_seconds": 3600,
   "signature_algorithm": "Ed25519",
   "signer": "control-tower-service-countersigning-authenticated-operator-intent",
-  "allowed_decisions": ["normalization"],
-  "normalization_roles": ["normalization-approver"],
-  "proof_roles": ["proof-runner"],
-  "proof_workloads": ["workload:carddemo-intcalc"],
+  "allowed_decisions": [
+    "normalization"
+  ],
+  "normalization_roles": [
+    "normalization-approver"
+  ],
+  "proof_roles": [
+    "proof-runner"
+  ],
+  "proof_workloads": [
+    "workload:carddemo-intcalc"
+  ],
   "proof_executor": "lightyear_factory.private_benchmark",
   "ledger": "spec/comparison-normalizations.json",
   "gate": "lightyear-control-tower qualify",
@@ -28,5 +36,15 @@
   "browser_qualification_receipts_enabled": false,
   "customer_decision_deployment_enabled": false,
   "customer_identity_requirement": "implemented-and-tested-approved-sso-oidc",
-  "workflow_proposals": "read-only-engine-output-until-exact-terms-and-blast-radius-are-bound"
+  "workflow_proposals": "read-only-engine-output-until-exact-terms-and-blast-radius-are-bound",
+  "decision_console_v2": {
+    "implementation": "lightyear_control_tower.console.ConsoleService",
+    "provision_default_roles": [],
+    "scope_ownership": "one-root-one-key-one-journal",
+    "identity": "individual-local-credential",
+    "sso": "interface-only",
+    "domain_dispatch": false,
+    "schema": "tower-decision/1",
+    "verifier": "lightyear_control_tower.verify_decision"
+  }
 }

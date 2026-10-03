@@ -1,0 +1,17 @@
+MS94 B05: prospective preregistration; prepared, not launched or authorized. B04 remains VOID.
+
+Plan `56b13b23a319af3d207552f5022fd3bbaeb9744dba2f79cf535acb2b5fd49951`; signed declaration `07bf81eb26edb82f9e74be3535af23e7ec51ae965f1581047bf82b87a6404cd2`. All three pilots and 20 cohort slots have prospective plans/declarations. No model calls, native executions or Java compilations were made to prepare B05.
+
+The primary metric is final cohort pass rate over all 20 fixed cohort slots, with a two-sided Wilson 95% interval, only for a complete nonvoid campaign. Pilots are excluded. First-try rate and actual-delivery repair conversion are secondary. There is no B03 pooling; comparisons are descriptive only. All failures receive B03-category operator review, never independent-human-attestation claims or rewritten verdicts.
+
+Limits: 115 total client calls, 69 compilations, 26 campaign hours; each trial has five calls, three compilations and two hours; each client timeout remains 30 minutes. No replacement/restarted/resumed slots. Closed candidate-origin runtime diagnostics go directly to the builder; application-origin and other legacy diagnostics retain analyst review. Support/outside-origin throws send nothing and halt as equipment-suspect.
+
+Qualified snapshot `47baa4aeef7c778ac3f3ac65a01d91085a391d1ab364174ced2ff668a5dd3214`; terminal audit `e9cbd4f6bf6c2afa854ce10facf80fccc3962a0236461ad4e26d7503e16217e5`. Exact Oracle, PostgreSQL and application/runner image digests are in the plan. The 48-control qualification and both terminal-audit outcomes are preserved.
+
+October 1 scenario dates reuse the qualified prompt exactly: six date values differ from B03; all other bytes are identical. Documents predate orders created during the later real-time measurement; this is declared rather than repaired by clock manipulation. All application/database clocks and normal date policies remain real.
+
+The qualified rolling full-duration guard is retained with the 26-hour B05 limit (qualification used 16 hours). Every start/continuation requires now + 26 hours < November 1 00:00 UTC. To allow an entire 26-hour campaign before that rolling guard cuts off, latest safe launch is **October 29, 2026 19:59:59 UTC (12:59:59 PDT)**; its maximum ends October 30 21:59:59 UTC. The boundary-only start bound October 30 21:59:59 UTC is not the recommended full-duration launch bound. Application-specific date windows still apply. The current preparation-time-plus-26-hours check is recorded in the plan.
+
+Estimated model cost: **$82.66** for an assumed 46-call case at historical token volume with long-context pricing; **$206.64** if all 115 calls use that average. Standard short-context equivalents are $46.46 and $116.15. A long-context/no-cache sensitivity at 115 calls is $648.49. These are API-equivalent estimates, not a Codex invoice or hard dollar cap; token usage, cache behavior and service tier can differ. Pricing and arithmetic assumptions are pre-registered in cost-estimate.json. [Official model pricing](https://developers.openai.com/api/docs/models/gpt-6-astra).
+
+This public preregistration is a review packet, not a launchable executable snapshot. A B05 controller/native/provenance integration and exact executable freeze remain prelaunch requirements, and no approval or model-calling runtime is created by this packet. The preparation gate always rejects launch. Howard must approve before any model call. The five-minute monitor remains paused.

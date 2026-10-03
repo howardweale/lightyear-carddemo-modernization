@@ -42,6 +42,12 @@ The [readiness record](zos-intake-readiness.md) retains the full local validatio
 scope and hashes. Repository CI adds Windows and Linux public-only rehearsals;
 the PR checks are the authoritative record of their results.
 
+The first PR run passed both intake rehearsals and 22 of 23 checks. Windows
+completed all 2,167 unit tests in 1,627 seconds, then the 30-minute CI job limit
+interrupted the follow-on estate checks. The Windows CI allowance was increased
+to 45 minutes with every test and verification stage retained. This changes only
+the CI job allowance; no measurement/controller budget or frozen input changes.
+
 The pinned public ASCII/EBCDIC pairs contain documented line-ending, filler and
 two substantive source-pair discrepancies. The [bridge exception record](bridge-fixture-exceptions.md)
 explains them. The bridge retains the EBCDIC values; these exceptions never change

@@ -399,8 +399,9 @@ jobs:
       matrix:
         os: [ubuntu-latest, windows-latest]
     runs-on: ${{ matrix.os }}
-    # The full Windows suite can take 18 minutes before the remaining estate checks.
-    timeout-minutes: ${{ matrix.os == 'windows-latest' && 30 || 20 }}
+    # Windows' 2,167-test suite took 27 minutes before the remaining estate checks.
+    # Preserve every verification stage; allow time for them after the unit suite.
+    timeout-minutes: ${{ matrix.os == 'windows-latest' && 45 || 20 }}
 
     steps:
       - name: Check out source

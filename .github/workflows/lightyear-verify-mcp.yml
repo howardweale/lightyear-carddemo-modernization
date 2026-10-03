@@ -22,9 +22,9 @@ jobs:
           # Disposable CI runner only; permit bubblewrap's unprivileged namespaces.
           sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
           id 1000 || sudo useradd -u 1000 -m verify-judge
-          sudo python3 -m venv /opt/verify-test-venv
-          sudo /opt/verify-test-venv/bin/pip install 'mcp==2.2.0' 'cryptography>=46,<47'
+          sudo python3 -m venv /usr/local/lib/verify-test-venv
+          sudo /usr/local/lib/verify-test-venv/bin/pip install 'mcp==2.2.0' 'cryptography>=46,<47'
       - run: mvn -B -f candidate-java/pom.xml package
       - name: Real MCP SDK, separate users, sandbox execution, leak scan and replay
-        run: sudo /opt/verify-test-venv/bin/python tools/run_verify_acceptance.py
+        run: sudo env PATH=/usr/lib/jvm/java-21-openjdk-amd64/bin:/usr/sbin:/usr/bin:/sbin:/bin /usr/local/lib/verify-test-venv/bin/python tools/run_verify_acceptance.py
       # No private archives, logs, evaluation captures or keys are uploaded.

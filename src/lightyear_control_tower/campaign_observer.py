@@ -875,6 +875,10 @@ class CampaignRegistry:
                 if self.scope != SCOPE:
                     raise ValueError("B06 scope mismatch")
                 return project_b06(*args)
+            if row.get("producer_profile") == "lightyear-verify":
+                from .verify_status import project as project_verify
+
+                return project_verify(*args, scope=self.scope)
             return project_exports(
                 *args, scope=self.scope, profile=row.get("producer_profile")
             )

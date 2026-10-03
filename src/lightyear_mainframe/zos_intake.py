@@ -470,7 +470,7 @@ def inspect_run(original, folder, files, bindings):
     )
 
 
-def intake(folder, description, signer):
+def intake(folder, description, signer, *, review_root=None):
     bindings = load_bindings()
     arrival, manifest = freeze(folder, description, signer)
     groups = {}
@@ -537,7 +537,11 @@ def intake(folder, description, signer):
     )
     from lightyear_control_tower.carddemo_policy import write_request
 
-    write_request(ROOT, "intake-acceptance", {"intake": safe})
+    write_request(
+        review_root if review_root is not None else ROOT,
+        "intake-acceptance",
+        {"intake": safe},
+    )
     return arrival, safe
 
 

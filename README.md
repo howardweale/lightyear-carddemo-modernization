@@ -4,6 +4,10 @@
 
 # LIGHTYEAR CardDemo Modernization Factory
 
+[Lightyear Verify MCP](docs/verify/README.md) exposes the INTCALC judge to agent
+harnesses through a separate-user service, bounded submissions, closed diagnostics
+and signed receipts. Includes zero-model acceptance and Control Tower status.
+
 **[Mainframe preparation kit](docs/mainframe/README.md)** inventories 1,423 source decisions
 across 44 public CardDemo COBOL programs, decodes 501 public EBCDIC records, and
 rehearses both batch jobs against explicit mock spool bindings. Native coverage

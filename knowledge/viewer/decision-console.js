@@ -163,6 +163,13 @@ async function campaign(id) {
     grid.append(b);
   }
   content.append(grid);
+  if (v.verdicts) {
+    content.append(
+      el("p", `Submissions: ${v.submissions}; refused requests: ${v.refusals}`),
+    );
+    for (const r of v.verdicts)
+      content.append(el("p", `${r.id}: ${r.verdict} · receipt ${r.receipt_sha256}`));
+  }
   for (const a of v.alerts || [])
     content.append(
       el(

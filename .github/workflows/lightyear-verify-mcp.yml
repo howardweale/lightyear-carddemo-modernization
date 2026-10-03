@@ -1,0 +1,38 @@
+name: Lightyear Verify zero-model acceptance
+on:
+  pull_request:
+  push:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  isolated-judge:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+      - name: Install Linux isolation prerequisites
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y acl bubblewrap python3-venv openjdk-21-jdk-headless
+          # Hosted images leave this parent writable for runtime installers.
+          # Protect the packaged JVM for both unprivileged test identities.
+          sudo chown root:root /usr/lib/jvm
+          sudo chmod 0755 /usr/lib/jvm
+          # Include the packaged JVM's linked configuration and documentation.
+          sudo setfacl -Rb /usr/lib/jvm/java-21-openjdk-amd64 /etc/java-21-openjdk /usr/share/doc/openjdk-21-jre-headless /usr/share/doc/openjdk-21-jdk-headless
+          sudo setfacl -b /usr/share/doc /usr/share /usr/lib/jvm
+          sudo chmod go-w /usr/share/doc /usr/share
+          # Disposable CI runner only; permit bubblewrap's unprivileged namespaces.
+          sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+          id 1000 || sudo useradd -u 1000 -m verify-judge
+          sudo python3 -m venv /var/lib/verify-test-venv
+          sudo /var/lib/verify-test-venv/bin/pip install 'mcp==2.2.0' 'cryptography>=46,<47'
+      - run: mvn -B -f candidate-java/pom.xml package
+      - name: Real MCP SDK, separate users, sandbox execution, leak scan and replay
+        run: sudo env PATH=/usr/lib/jvm/java-21-openjdk-amd64/bin:/usr/sbin:/usr/bin:/sbin:/bin /var/lib/verify-test-venv/bin/python tools/run_verify_acceptance.py
+      # No private archives, logs, evaluation captures or keys are uploaded.

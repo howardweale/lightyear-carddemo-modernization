@@ -51,6 +51,14 @@ def default_registry():
     return KindRegistry(
         [
             K(
+                "verify-normalization",
+                ("approved", "rejected"),
+                ("normalization-approver",),
+                ("rule",),
+                required_fields=("reason", "named_owner", "review_after"),
+                consumer="judge-operator-rule-preparation",
+            ),
+            K(
                 "intake-acceptance",
                 ("accepted", "rejected"),
                 ("qualification-approver",),

@@ -264,10 +264,15 @@ def project_exports(directory, key, campaign_id, bindings, now, *, scope, profil
     value = read_exports(
         directory, key, campaign_id, bindings, scope=scope, profile=profile
     )
+    return project_value(value, now)
+
+
+def project_value(value, now):
+    """Project one already verified immutable export, without rereading a moving tip."""
     stale = freshness(value, now)
     result = {
         "schema": "tower-campaign-view/1",
-        "id": campaign_id,
+        "id": value["campaign_id"],
         "family": value["profile"],
         "status_export_schema": SCHEMA,
         "state": value["state"],

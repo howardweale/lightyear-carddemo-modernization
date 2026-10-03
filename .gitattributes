@@ -167,6 +167,9 @@ tools/ms94_native_v4.py whitespace=blank-at-eol,space-before-tab,cr-at-eol,-blan
 # Preserve the separately frozen Stage B driver bytes, including its EOF blank.
 tools/ms94_native_b_v4.py whitespace=blank-at-eol,space-before-tab,cr-at-eol,-blank-at-eof
 
+# Preserve reviewed B05 r2 executable bytes in the published Git objects.
+tests/test_ms94_b05*.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+factory/idempiere/ms94-b05-executable-r2/*.json -text
 # Public z/OS rehearsal inputs and pinned JCL/COBOL preserve exact hashed bytes.
 tests/mainframe/fixtures/** -text -whitespace
 spec/mainframe/public-source/** -text -whitespace

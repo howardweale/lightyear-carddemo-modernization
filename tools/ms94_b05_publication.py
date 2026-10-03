@@ -26,6 +26,11 @@ def publish(root,run,output):
     cp=read_json(campaign/'plan.json')
     paths += [p for p in campaign.rglob('*') if p.is_file()]
     from tools.ms94_b05_admission import CAMPAIGN,PREFLIGHT
+    paths += list((root/CAMPAIGN/'trials').glob('*/cause-*.json'))
+    for name in ('trial-review.json','receipt.json'):
+        paths += list((root/CAMPAIGN/'trials').glob('*/'+name))
+    paths += [p for p in (root/CAMPAIGN/'reviews').rglob('*') if p.is_file()]
+    if (root/CAMPAIGN/'review-active.json').exists():paths.append(root/CAMPAIGN/'review-active.json')
     for folder in (root/CAMPAIGN,root/PREFLIGHT):
         paths += [folder/n for n in ('authorization.json','published-executable.json','report.json','executable-declaration.json') if (folder/n).exists()]
     for attempt in read_json(campaign/'receipt.json')['attempts']:
@@ -96,6 +101,9 @@ def replay(root,publication,trusted_key_sha256,temporary_parent=None):
             require(audit(stage,campaign,cr['attempts'])==cr['provenance'],'Tool-inclusive provenance replay differs')
             from tools.ms94_b05_evidence import metrics
             require(metrics(stage,campaign,cr['attempts'])==cr['metrics'],'Repair delivery accounting differs')
+            from tools.ms94_b05_review import verify_trial_review,require_review_clear
+            verify_trial_review(stage,campaign,key);require_review_clear(stage)
+            replayed['operator_review_replayed']=True
         replayed.update(provenance_replayed=True,delivery_replayed=True)
         return {'verified':True,'run_id':run.name,'gate_sha256':actual['content_sha256'],
                 'status':actual['status'],**replayed,'complete_gate_replayed':True,'new_model_calls':0,'new_native_executions':0}

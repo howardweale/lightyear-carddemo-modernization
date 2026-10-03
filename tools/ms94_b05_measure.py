@@ -26,7 +26,9 @@ def interval(k,n):
 
 
 def run(root,output,executable):
-    from tools.ms94_b05_publication import publish,replay
+    from tools.ms94_b05_supervisor import run_unit
+    from tools.ms94_b05_stops import IMMEDIATE,notify
+    from tools.ms94_b05_review import wait_for_review
     import hashlib
     plan=read_json(output/'plan.json');verify(plan);signer=JourneySigner(root)
     from tools.ms94_b05_admission import model_authorization
@@ -35,46 +37,59 @@ def run(root,output,executable):
     model_authorization(root,launching=True)
     require(len(plan['slots'])==23 and [s['phase'] for s in plan['slots']]==['pilot']*3+['cohort']*20,'Slot schedule changed')
     with (output/'started.json').open('x') as f:json.dump({'plan_sha256':plan['content_sha256']},f)
-    start=time.monotonic();results=[];void=False;error=None
+    start=time.monotonic();results=[];void=False;error=None;started_slots=0;interrupted=None
     try:
         for slot in plan['slots']:
+            require(not (output/'stopping.json').exists(),'Campaign stop forbids next slot')
             model_authorization(root)
             require(time.monotonic()-start<plan['max_elapsed_seconds'],'Cohort time budget exhausted')
             save(output/'active.json',signer.sign({'phase':slot['phase'],'index':slot['index'],'started_at':time.time()}))
             trial=root/slot['path'];require(controller.frozen(root,trial)['content_sha256']==slot['plan_sha256'],'Frozen slot changed')
-            result=controller.run(root,trial,executable,plan['max_elapsed_seconds']-(time.monotonic()-start))
+            started_slots+=1
+            result=run_unit(root,trial,'measurement',executable,plan['max_elapsed_seconds']-(time.monotonic()-start))['result']
             entry={**slot,'receipt_sha256':result['content_sha256'],'status':result['status'],
                 'first_try_pass':result['first_try_pass'],'repaired_pass':result['repaired_pass'],
                 'attempts':[{'result_class':a['result_class'],'run_directory':a['run_directory']} for a in result['attempts']],
-                'cost':result['cost'],'metrics':result['metrics'],'published':False}
+                'cost':result['cost'],'metrics':result['metrics'],'published':True,
+                'supervision_sha256':read_json(trial/'supervision-receipt.json')['content_sha256'],
+                'total_with_finalization_seconds':read_json(trial/'supervision-receipt.json')['total_elapsed_seconds']}
             results.append(entry);save(output/'progress.json',signer.sign({'results':results}))
             print(json.dumps({'event':'trial-terminal','phase':slot['phase'],'index':slot['index'],'status':result['status']}),flush=True)
-            if result['status'] in ('void-equipment-failure','invalid-provenance','halted-controller-failure'):
-                save(output/'stopping.json',signer.sign({'slot':slot,'status':result['status'],'notify_immediately':True}))
-            for i,a in enumerate(result['attempts'],1):
-                publication=output/'publications'/f'{slot["phase"]}-{slot["index"]:02d}-{i}'
-                actual_cleanup(root/a['run_directory'])
-                publish(root,root/a['run_directory'],publication)
-                verified=replay(root,publication,hashlib.sha256(signer.public).hexdigest(),root/'work/ms94')
-                require(all(verified[k] for k in ('verified','full_entry_replayed','complete_gate_replayed','diagnostic_replayed','calendar_replayed','provenance_replayed','delivery_replayed')), 'Incomplete full B04 replay')
-                save(publication/'verification.json',signer.sign(verified))
-                actual_cleanup(root/a['run_directory'])
+            if result['status'] in IMMEDIATE:notify(root,trial,result['status'])
             require(sum(r['cost']['client_invocations'] for r in results)<=plan['max_client_invocations']
                     and sum(r['cost']['compilations'] for r in results)<=plan['max_compilations'], 'Aggregate budget exceeded')
             entry['published']=True
             save(output/'progress.json',signer.sign({'results':results}))
-            if result['status'] in ('void-equipment-failure','invalid-provenance','halted-controller-failure'):
-                void=True;break
+            if result['status'] in IMMEDIATE:
+                void=True
+                break
+            resolution=wait_for_review(root,trial,start,plan['max_elapsed_seconds'])
+            if resolution:
+                entry['operator_review']=resolution
+                save(output/'progress.json',signer.sign({'results':results}))
+                if resolution['action'] in ('stop','void'):
+                    void=resolution['action']=='void'
+                    break
     except Exception as exc:
         error={'type':type(exc).__name__,'message':str(exc)};void=True
         save(output/'stopping.json',signer.sign({'error':error,'notify_immediately':True}))
+        if started_slots>len(results):
+            interrupted={'slot':slot,'trial_directory':slot['path'],
+                'invocations_started':len(list(trial.glob('calls/*/invocation.json'))),
+                'completed_call_receipts':len(list(trial.glob('calls/*/receipt.json'))),
+                'receipt_exists':(trial/'receipt.json').exists(),
+                'supervision_receipt_exists':(trial/'supervision-receipt.json').exists(),
+                'cost_accounting_complete':False,
+                'note':'All interrupted call, compiler, native and recovery evidence retained locally; completed totals below exclude this interrupted slot and are not a full campaign cost.'}
     cohort=[r for r in results if r['phase']=='cohort'];passed=sum(r['status']=='passed' for r in cohort)
     measured=summary(results,void)
     value=signer.sign({'artifact_type':'ms94-b05-results','plan_sha256':plan['content_sha256'],
-        'results':results,'unstarted_slots':23-len(results),'cohort_completed':len(cohort),'cohort_passed':passed,
+        'results':results,'unstarted_slots':23-started_slots,'started_slots':started_slots,'interrupted_trial':interrupted,
+        'cost_accounting_complete':interrupted is None,'cohort_completed':len(cohort),'cohort_passed':passed,
         'cohort_void':void,'decision':decision(measured['repair_passes'],measured['repair_eligible'],len(cohort),void),'error':error,
         'primary_metric':'final cohort pass rate with Wilson 95% interval','failure_classification':'B03 categories; operator review, not independent',
         'measurement':measured,'first_attempt_comparison':plan['first_attempt_comparison'],
+        'operator_decisions':[r['operator_review'] for r in results if 'operator_review' in r],
         'pooled_first_try':None,
         'rate':passed/20 if len(cohort)==20 and not void else None,
         'interval':interval(passed,20) if len(cohort)==20 and not void else None,
@@ -109,7 +124,10 @@ def summary(results,void=False):
             'post_repair_business_failures':sum(r['metrics']['post_repair_business_failures'] for r in cohort),
             'equipment_suspect_review_required':[{'phase':r['phase'],'index':r['index']} for r in results
                                                 if r['status']=='halted-equipment-suspect'],
-            'cost_including_excluded_pilots':totals,'pilots_excluded_from_all_effectiveness_metrics':True}
+            'cost_including_excluded_pilots':totals,
+            'completed_trials_total_including_finalization_seconds':sum(r.get('total_with_finalization_seconds',0) for r in results),
+            'operator_waiting_seconds':sum(r.get('operator_review',{}).get('waiting_seconds',0) for r in results),
+            'pilots_excluded_from_all_effectiveness_metrics':True}
 
 
 if __name__=='__main__':

@@ -20,6 +20,8 @@ EXPECTED_REJECTION=FAULTS
 
 
 def execute_native(root,campaign,build,builder,remaining_seconds):
+    from tools.ms94_b05_supervisor import remaining_work
+    remaining_seconds=min(remaining_seconds,remaining_work(root,campaign))
     from tools.ms94_b05_controller import frozen
     cp=frozen(root,campaign,live=True)
     equipment_plan=read_json(root/cp['equipment_plan_path'])
@@ -119,6 +121,8 @@ def execute_native(root,campaign,build,builder,remaining_seconds):
     except Exception as exc:
         error={'type':type(exc).__name__,'message':str(exc).replace((getattr(runner,'password',None) or 'UNSET_SECRET'),'[redacted]')}
         emit('execution-error',error)
+        from tools.ms94_b05_stops import notify
+        notify(root,campaign,'halted-controller-failure',{'native_run':run.name,'error_type':type(exc).__name__})
     finally:
         if active:
             try:active.stop()
@@ -128,6 +132,9 @@ def execute_native(root,campaign,build,builder,remaining_seconds):
             cleaned={'complete':False,'errors':[type(exc).__name__],'remaining_containers':[],
                      'remaining_networks':[],'remaining_volumes':[],'inventory_known':False}
         save(run/'cleanup.json',signer.sign({'run_id':run.name,**cleaned}))
+        if not cleaned['complete']:
+            from tools.ms94_b05_stops import notify
+            notify(root,campaign,'void-equipment-failure',{'native_run':run.name,'reason':'cleanup'})
         for observer in observers:
             try:observer.publish_after_application_stopped(folder/'observers'/observer.lane)
             except Exception as exc:emit('observer-publication-error',{'type':type(exc).__name__})
@@ -146,6 +153,9 @@ def execute_native(root,campaign,build,builder,remaining_seconds):
         from tools.ms94_b05_evidence import projection
         projected=signer.sign(projection(root,run))
         save(run/'diagnostic-projection.json',projected)
+        if projected['equipment_suspect']:
+            from tools.ms94_b05_stops import signal_review
+            signal_review(root,campaign,'equipment-suspect')
         expected='passed'
         receipt=signer.sign({'artifact_type':'ms94-native-factory-attempt','run_id':run.name,
             'plan_sha256':plan['content_sha256'],'judge_version':judge_version,'fault':fault,'scenario':scenario,

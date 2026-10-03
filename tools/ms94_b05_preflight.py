@@ -60,6 +60,8 @@ def audit(root,campaign):
             'calendar_replayed':True,'provenance_replayed':True,'delivery_replayed':True,'model_calls':0}
 
 def run(root):
+    from tools.ms94_b05_supervisor import remaining_work
+    remaining_work(root,root/PREFLIGHT)
     from tools.ms94_b05_native import execute_native
     from tools.ms94_b05_publication import publish,replay
     auth=preflight_authorization(root);_,snapshot=bindings(root,True)
@@ -94,7 +96,7 @@ def run(root):
             'snapshot_sha256':snapshot['content_sha256'],'attempts':attempts,'model_calls':0,'agent_generated':False}))
         checks=audit(root,campaign)
         for index,attempt in enumerate(attempts,1):
-            publication=root/'work/ms94/stage-b-05-preflight-publications'/str(index)
+            publication=root/'work/ms94/stage-b-05-r2-preflight-publications'/str(index)
             one=time.monotonic();publish(root,root/attempt['run_directory'],publication)
             verified=replay(root,publication,hashlib.sha256(signer.public).hexdigest(),root/'work/ms94')
             require(all(verified.get(k) for k in ('full_entry_replayed','complete_gate_replayed','diagnostic_replayed','calendar_replayed','provenance_replayed','delivery_replayed')), 'Incomplete preflight replay')

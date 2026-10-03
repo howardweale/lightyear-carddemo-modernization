@@ -11,6 +11,7 @@ requires-python = ">=3.11"
 [project.optional-dependencies]
 control-tower = ["cryptography>=46,<47"]
 agent = ["cryptography>=46,<47", "mcp==2.2.0"]
+verify = ["cryptography>=46,<47", "mcp==2.2.0"]
 docs = [
     "python-docx>=1.1,<2",
     "reportlab>=4,<5",
@@ -33,6 +34,8 @@ lightyear-extensions = "lightyear_extensions.cli:main"
 lightyear-pilot = "lightyear_pilot.cli:main"
 lightyear-agent = "lightyear_agent.cli:main"
 lightyear-mcp = "lightyear_agent.mcp:main"
+lightyear-verify-mcp = "lightyear_toolkit.mcp:main"
+lightyear-judge = "lightyear_judge.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src", "extensions/runtime"]

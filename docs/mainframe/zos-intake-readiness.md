@@ -40,7 +40,8 @@ operator decision; signatures do not constitute independent attestation.
 
 The optional Console MCP surface test was skipped because this isolated environment
 has the Control Tower dependencies, not the agent SDK. The added CI workflow defines
-Windows and Linux public-only rehearsals; remote CI has not been run for this branch.
+Windows and Linux public-only rehearsals; remote CI had not run at this local
+readiness checkpoint. The publication PR records subsequent CI results.
 
 The seven requested broken deliveries are covered: text conversion, missing job
 output, truncated record, unknown file, JCL binding disagreement, non-zero return
@@ -81,4 +82,5 @@ missing. VB/BDW and spanned records require a resend in a supported framing.
 
 Work was performed in a fresh clone with its own virtual environment. There were
 zero model calls, zero Docker calls and zero native z/OS executions. B05, `work/ms94`
-and all execution snapshots were untouched. Nothing has been published by this task.
+and all execution snapshots were untouched. This record describes the local
+implementation checkpoint before the subsequent authorized publication.

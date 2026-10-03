@@ -139,6 +139,9 @@ The remaining access-dependent work is concentrated at those boundaries. The sou
 
 ## Maintec folder delivery
 
+The [delivery milestone](zos-intake-milestone.md) records the implemented scope,
+validation and remaining native-evidence boundary.
+
 See the [readiness and validation record](zos-intake-readiness.md) for the final
 public rehearsal hashes and limitations.
 

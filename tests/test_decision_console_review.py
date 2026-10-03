@@ -551,7 +551,7 @@ class ReviewTests(unittest.TestCase):
             self.f.decide(self.f.token, name, "resume")
         self.assertEqual("admitted", admitted()["status"])
 
-    def test_http_short_body_times_out_and_deep_json_returns_500(self):
+    def test_http_short_body_and_nested_json_fail_closed_with_catch_all_500(self):
         with patch("lightyear_control_tower.server.SOCKET_TIMEOUT", 0.2):
             http = create_server(self.s, port=0)
         thread = threading.Thread(target=http.serve_forever, daemon=True)
@@ -571,7 +571,14 @@ class ReviewTests(unittest.TestCase):
 
         self.assertIn(b"408", send(b"{", 100))
         nested = b"[" * 3000 + b"]" * 3000
-        self.assertIn(b"500", send(nested, len(nested)))
+        # JSON recursion thresholds differ between CPython versions/platforms.
+        # A parsed non-object is a 422; a parser RecursionError must return 500,
+        # never drop the connection. Exercise that branch deterministically too.
+        self.assertRegex(send(nested, len(nested)), rb"^HTTP/1\.0 (422|500) ")
+        with patch(
+            "lightyear_control_tower.server.json.loads", side_effect=RecursionError
+        ):
+            self.assertIn(b"500", send(b"{}", 2))
 
 
 if __name__ == "__main__":

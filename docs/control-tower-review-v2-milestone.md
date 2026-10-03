@@ -69,6 +69,12 @@ after a disposable database was removed; the suite completed successfully. That
 Explorer code was not changed. Local results do not substitute for required PR
 checks; repository CI records publication and merge validation separately.
 
+The initial Linux CI run exposed a test portability assumption: Python 3.13 can
+parse nesting that reaches the recursion limit on local Python, then rejects the
+non-object request with HTTP 422. The regression now accepts that safe refusal
+and separately injects a parser `RecursionError` to require HTTP 500. Socket timeout
+and catch-all behavior are unchanged; no check was disabled.
+
 Publication includes Console source changes, tests, example configuration and
 documentation only. It includes no new private captures, archives, checkpoints,
 reference sources or signing material. B04 remains VOID. No model calls, native

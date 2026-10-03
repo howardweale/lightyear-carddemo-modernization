@@ -1,0 +1,13 @@
+{
+  "schema": "tower-workspace-policy/1",
+  "scope": "carddemo-zos",
+  "disclosure_policy": "carddemo-zos-no-values/1",
+  "requests": "work/control-tower/requests/carddemo-zos/",
+  "arrival_view": "read-only",
+  "normalization_proposer": "zos-intake",
+  "normalization_decider": "howard-weale",
+  "normalization_sources": ["verified-tower-decisions", "verified-rule-register"],
+  "legacy_ledger_enabled": false,
+  "review": "operator review; not independent",
+  "release_roles": ["customer-sponsor", "campaign-authorizer"]
+}

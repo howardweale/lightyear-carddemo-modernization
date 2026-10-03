@@ -1,0 +1,662 @@
+{
+  "schema": "carddemo-zos-bindings/1",
+  "source_commit": "59cc6c2fd7ebd7ef7925cad552a01a4b8b6e4d5e",
+  "artifacts": {
+    "spec/mainframe/copybooks/CVACT01Y.cpy": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728",
+    "spec/mainframe/copybooks/CVACT02Y.cpy": "9f1c62ef31b9d541712f1ed28f79e011ea7338611f5e0f30f2e1cbf624181223",
+    "spec/mainframe/copybooks/CVACT03Y.cpy": "ffc6079e09b28739e154bf6c1e1c36d408209faa91f6cf7008078dc596a1c370",
+    "spec/mainframe/copybooks/CVCUS01Y.cpy": "944fd9a8eb10a683d0db97b9a87f2151982f649970287eb74358826056af25f8",
+    "spec/mainframe/copybooks/CVTRA01Y.cpy": "50637f13692c89b17a2fc60d249dc54e9eb3569d933afca3cdcf65b491a9d5ba",
+    "spec/mainframe/copybooks/CVTRA02Y.cpy": "7828fae489c59944b4310e223028a8d3a525ccf4ead113c062bcaff04b52bf9c",
+    "spec/mainframe/copybooks/CVTRA03Y.cpy": "fb15dbc4a6924cbddce0704932f9e61c067ac10004cd00839dff0ed7c7bb0667",
+    "spec/mainframe/copybooks/CVTRA04Y.cpy": "89803bc13a06347e1f3d8a599a5383b87235b203dce9f18a486bc233186479f8",
+    "spec/mainframe/copybooks/CVTRA05Y.cpy": "d7bde0e78ff608497087b9909c889ed39e347269f964bda767b92b547fbb5fec",
+    "spec/mainframe/copybooks/CVTRA06Y.cpy": "c5c69f1b86c5a10156d3c5881d7cf387e6b925aae32825360f85bf4056a554a1",
+    "spec/mainframe/copybooks/CVTRA07Y.cpy": "72ba597b1a40e1e6cf908e15da9e6a818a0ab899ef1d27d15edeb074963102fa",
+    "spec/mainframe/copybooks/CUSTREC.cpy": "f87a0a041fbd8f38dc9c23a9519b917af9c7008527e9cb924f91c2fb4e0a2ecc",
+    "spec/mainframe/copybooks/COSTM01.cpy": "108170f314aa951281fdda321c4609c89638caee8d4d7085d08cdca5dc6bec36",
+    "spec/mainframe/public-source/CBACT04C.cbl": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4",
+    "spec/mainframe/public-source/CBTRN02C.cbl": "708f3cadc555acab63f11e2f3238f5372ac7180e6b01197bf960d96bf0d2e83f",
+    "spec/mainframe/public-source/CBTRN03C.cbl": "8691e625502b7efcfd7ba4ae61797132e7b68f3fd5fedcdcc7dd6488f6871eef",
+    "spec/mainframe/public-source/CBSTM03A.CBL": "23c8753b6b4e0c24d4560c83861fe8162626bab195faec0fe88cf80b8bf432b5",
+    "spec/mainframe/public-source/CBSTM03B.CBL": "ac004f7f40dcb3f2a14dfb83a743f83fed9383675bc93452f3424c40cb6475a7",
+    "spec/mainframe/copybooks/POSTREJS.cpy": "c648ad37d5ed453c9176d0548db9904dc90db100fe2c432ec0f56150a6b3a5dd",
+    "spec/mainframe/copybooks/CUSTREC-INTAKE.cpy": "90a17b56e9338592d71f192c5c48b34fa91c1f21b5f769aee3cb5ec02259b99e",
+    "spec/mainframe/copybooks/PROVENANCE.json": "bfedc57e5caeb4886dfeb72c8a7135d8e052e56aaa86a2b369f1889b059dd30d",
+    "spec/mainframe/public-source/INTCALC.jcl": "61afa664a807558e58213641d9f3317ab3b354a350c4c1536a630897d194d275",
+    "spec/mainframe/public-source/POSTTRAN.jcl": "ecff62c691e6ce101de08690e72ec065bc98bd845744ddf914899097d37c9191",
+    "spec/mainframe/public-source/CREASTMT.JCL": "d32627022d7686d1811ba253faa2c5d86295c8055428b2a610a27d8f84751950",
+    "spec/mainframe/public-source/TRANREPT.jcl": "7d8fc0777e6b9fb1c62aee6b4b10a67d127057c84b92203c7152f230b3db9571",
+    "spec/mainframe/public-source/TRANREPT.prc": "1e4c34eeb874ec32a485e8f7b736df2715585f07264bb0fe0bd08332ea0d3144",
+    "spec/mainframe/public-source/REPROC.prc": "4562039d1c7b90f05cc946dd1cd1cb93571bb279740c5c9777acfa3ea23fbc9f"
+  },
+  "datasets": {
+    "account": {
+      "copybook": "spec/mainframe/copybooks/CVACT01Y.cpy",
+      "record_length": 300,
+      "recfm": "F",
+      "keys": [
+        "ACCOUNT-RECORD.ACCT-ID"
+      ],
+      "mode": "records",
+      "timestamp_fields": []
+    },
+    "card": {
+      "copybook": "spec/mainframe/copybooks/CVACT02Y.cpy",
+      "record_length": 150,
+      "recfm": "F",
+      "keys": [
+        "CARD-RECORD.CARD-NUM"
+      ],
+      "mode": "records",
+      "timestamp_fields": []
+    },
+    "xref": {
+      "copybook": "spec/mainframe/copybooks/CVACT03Y.cpy",
+      "record_length": 50,
+      "recfm": "F",
+      "keys": [
+        "CARD-XREF-RECORD.XREF-CARD-NUM"
+      ],
+      "mode": "records",
+      "timestamp_fields": []
+    },
+    "customer": {
+      "copybook": "spec/mainframe/copybooks/CVCUS01Y.cpy",
+      "record_length": 500,
+      "recfm": "F",
+      "keys": [
+        "CUSTOMER-RECORD.CUST-ID"
+      ],
+      "mode": "records",
+      "timestamp_fields": []
+    },
+    "statement-customer": {
+      "copybook": "spec/mainframe/copybooks/CUSTREC-INTAKE.cpy",
+      "record_length": 500,
+      "recfm": "F",
+      "keys": [
+        "CUSTOMER-RECORD.CUST-ID"
+      ],
+      "mode": "records",
+      "timestamp_fields": []
+    },
+    "balance": {
+      "copybook": "spec/mainframe/copybooks/CVTRA01Y.cpy",
+      "record_length": 50,
+      "recfm": "F",
+      "keys": [
+        "TRAN-CAT-BAL-RECORD.TRAN-CAT-KEY.TRANCAT-ACCT-ID",
+        "TRAN-CAT-BAL-RECORD.TRAN-CAT-KEY.TRANCAT-TYPE-CD",
+        "TRAN-CAT-BAL-RECORD.TRAN-CAT-KEY.TRANCAT-CD"
+      ],
+      "mode": "records",
+      "timestamp_fields": []
+    },
+    "disclosure": {
+      "copybook": "spec/mainframe/copybooks/CVTRA02Y.cpy",
+      "record_length": 50,
+      "recfm": "F",
+      "keys": [
+        "DIS-GROUP-RECORD.DIS-GROUP-KEY.DIS-ACCT-GROUP-ID",
+        "DIS-GROUP-RECORD.DIS-GROUP-KEY.DIS-TRAN-TYPE-CD",
+        "DIS-GROUP-RECORD.DIS-GROUP-KEY.DIS-TRAN-CAT-CD"
+      ],
+      "mode": "records",
+      "timestamp_fields": []
+    },
+    "type": {
+      "copybook": "spec/mainframe/copybooks/CVTRA03Y.cpy",
+      "record_length": 60,
+      "recfm": "F",
+      "keys": [
+        "TRAN-TYPE-RECORD.TRAN-TYPE"
+      ],
+      "mode": "records",
+      "timestamp_fields": []
+    },
+    "category": {
+      "copybook": "spec/mainframe/copybooks/CVTRA04Y.cpy",
+      "record_length": 60,
+      "recfm": "F",
+      "keys": [
+        "TRAN-CAT-RECORD.TRAN-CAT-KEY.TRAN-TYPE-CD",
+        "TRAN-CAT-RECORD.TRAN-CAT-KEY.TRAN-CAT-CD"
+      ],
+      "mode": "records",
+      "timestamp_fields": []
+    },
+    "transaction": {
+      "copybook": "spec/mainframe/copybooks/CVTRA05Y.cpy",
+      "record_length": 350,
+      "recfm": "F",
+      "keys": [
+        "TRAN-RECORD.TRAN-ID"
+      ],
+      "mode": "records",
+      "timestamp_fields": [
+        "TRAN-RECORD.TRAN-PROC-TS"
+      ]
+    },
+    "daily": {
+      "copybook": "spec/mainframe/copybooks/CVTRA06Y.cpy",
+      "record_length": 350,
+      "recfm": "F",
+      "keys": [
+        "DALYTRAN-RECORD.DALYTRAN-ID"
+      ],
+      "mode": "records",
+      "timestamp_fields": [
+        "DALYTRAN-RECORD.DALYTRAN-PROC-TS"
+      ]
+    },
+    "reject": {
+      "copybook": "spec/mainframe/copybooks/POSTREJS.cpy",
+      "record_length": 430,
+      "recfm": "F",
+      "keys": [
+        "REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-ID"
+      ],
+      "mode": "records",
+      "timestamp_fields": [
+        "REJECT-RECORD.DALYTRAN-RECORD.DALYTRAN-PROC-TS"
+      ]
+    },
+    "statement-transaction": {
+      "copybook": "spec/mainframe/copybooks/COSTM01.cpy",
+      "record_length": 350,
+      "recfm": "F",
+      "keys": [
+        "TRNX-RECORD.TRNX-KEY.TRNX-CARD-NUM",
+        "TRNX-RECORD.TRNX-KEY.TRNX-ID"
+      ],
+      "mode": "records",
+      "timestamp_fields": [
+        "TRNX-RECORD.TRNX-REST.TRNX-PROC-TS"
+      ]
+    },
+    "statement": {
+      "copybook": null,
+      "record_length": 80,
+      "recfm": "FB",
+      "keys": [],
+      "mode": "text",
+      "timestamp_fields": [],
+      "length_source": "CBSTM03A.CBL:FD-STMTFILE-REC"
+    },
+    "html": {
+      "copybook": null,
+      "record_length": 100,
+      "recfm": "FB",
+      "keys": [],
+      "mode": "text",
+      "timestamp_fields": [],
+      "length_source": "CBSTM03A.CBL:FD-HTMLFILE-REC"
+    },
+    "report": {
+      "copybook": null,
+      "record_length": 133,
+      "recfm": "FB",
+      "keys": [],
+      "mode": "text",
+      "timestamp_fields": [],
+      "length_source": "CBTRN03C.cbl:FD-REPTFILE-REC"
+    },
+    "dateparm": {
+      "copybook": null,
+      "record_length": 80,
+      "recfm": "FB",
+      "keys": [],
+      "mode": "text",
+      "timestamp_fields": [],
+      "length_source": "CBTRN03C.cbl:FD-DATEPARM-REC"
+    }
+  },
+  "jobs": {
+    "INTCALC": [
+      {
+        "step": "STEP15",
+        "dd": "STEPLIB",
+        "program": "CBACT04C",
+        "dsn": "AWS.M2.CARDDEMO.LOADLIB",
+        "dcb": {},
+        "dataset": null,
+        "dataset_name_pattern": "AWS\\.M2\\.CARDDEMO\\.LOADLIB"
+      },
+      {
+        "step": "STEP15",
+        "dd": "TCATBALF",
+        "program": "CBACT04C",
+        "dsn": "AWS.M2.CARDDEMO.TCATBALF.VSAM.KSDS",
+        "dcb": {},
+        "dataset": "balance",
+        "expected_record_length": 50,
+        "record_format": "F",
+        "dataset_name_pattern": "AWS\\.M2\\.CARDDEMO\\.TCATBALF\\.VSAM\\.KSDS"
+      },
+      {
+        "step": "STEP15",
+        "dd": "XREFFILE",
+        "program": "CBACT04C",
+        "dsn": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+        "dcb": {},
+        "dataset": "xref",
+        "expected_record_length": 50,
+        "record_format": "F",
+        "dataset_name_pattern": "AWS\\.M2\\.CARDDEMO\\.CARDXREF\\.VSAM\\.KSDS"
+      },
+      {
+        "step": "STEP15",
+        "dd": "XREFFIL1",
+        "program": "CBACT04C",
+        "dsn": "AWS.M2.CARDDEMO.CARDXREF.VSAM.AIX.PATH",
+        "dcb": {},
+        "dataset": "xref",
+        "expected_record_length": 50,
+        "record_format": "F",
+        "dataset_name_pattern": "AWS\\.M2\\.CARDDEMO\\.CARDXREF\\.VSAM\\.AIX\\.PATH"
+      },
+      {
+        "step": "STEP15",
+        "dd": "ACCTFILE",
+        "program": "CBACT04C",
+        "dsn": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+        "dcb": {},
+        "dataset": "account",
+        "expected_record_length": 300,
+        "record_format": "F",
+        "dataset_name_pattern": "AWS\\.M2\\.CARDDEMO\\.ACCTDATA\\.VSAM\\.KSDS"
+      },
+      {
+        "step": "STEP15",
+        "dd": "DISCGRP",
+        "program": "CBACT04C",
+        "dsn": "AWS.M2.CARDDEMO.DISCGRP.VSAM.KSDS",
+        "dcb": {},
+        "dataset": "disclosure",
+        "expected_record_length": 50,
+        "record_format": "F",
+        "dataset_name_pattern": "AWS\\.M2\\.CARDDEMO\\.DISCGRP\\.VSAM\\.KSDS"
+      },
+      {
+        "step": "STEP15",
+        "dd": "TRANSACT",
+        "program": "CBACT04C",
+        "dsn": "AWS.M2.CARDDEMO.SYSTRAN(+1)",
+        "dcb": {
+          "recfm": "F",
+          "lrecl": 350,
+          "blksize": 0
+        },
+        "dataset": "transaction",
+        "expected_record_length": 350,
+        "record_format": "F",
+        "dataset_name_pattern": "AWS\\.M2\\.CARDDEMO\\.SYSTRAN\\(\\+1\\)"
+      }
+    ],
+    "POSTTRAN": [
+      {
+        "step": "STEP15",
+        "dd": "STEPLIB",
+        "program": "CBTRN02C",
+        "dsn": "AWS.M2.CARDDEMO.LOADLIB",
+        "dcb": {},
+        "dataset": null,
+        "dataset_name_pattern": "AWS\\.M2\\.CARDDEMO\\.LOADLIB"
+      },
+      {
+        "step": "STEP15",
+        "dd": "TRANFILE",
+        "program": "CBTRN02C",
+        "dsn": "AWS.M2.CARDDEMO.TRANSACT.VSAM.KSDS",
+        "dcb": {},
+        "dataset": "transaction",
+        "expected_record_length": 350,
+        "record_format": "F",
+        "dataset_name_pattern": "AWS\\.M2\\.CARDDEMO\\.TRANSACT\\.VSAM\\.KSDS"
+      },
+      {
+        "step": "STEP15",
+        "dd": "DALYTRAN",
+        "program": "CBTRN02C",
+        "dsn": "AWS.M2.CARDDEMO.DALYTRAN.PS",
+        "dcb": {},
+        "dataset": "daily",
+        "expected_record_length": 350,
+        "record_format": "F",
+        "dataset_name_pattern": "AWS\\.M2\\.CARDDEMO\\.DALYTRAN\\.PS"
+      },
+      {
+        "step": "STEP15",
+        "dd": "XREFFILE",
+        "program": "CBTRN02C",
+        "dsn": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+        "dcb": {},
+        "dataset": "xref",
+        "expected_record_length": 50,
+        "record_format": "F",
+        "dataset_name_pattern": "AWS\\.M2\\.CARDDEMO\\.CARDXREF\\.VSAM\\.KSDS"
+      },
+      {
+        "step": "STEP15",
+        "dd": "DALYREJS",
+        "program": "CBTRN02C",
+        "dsn": "AWS.M2.CARDDEMO.DALYREJS(+1)",
+        "dcb": {
+          "recfm": "F",
+          "lrecl": 430,
+          "blksize": 0
+        },
+        "dataset": "reject",
+        "expected_record_length": 430,
+        "record_format": "F",
+        "dataset_name_pattern": "AWS\\.M2\\.CARDDEMO\\.DALYREJS\\(\\+1\\)"
+      },
+      {
+        "step": "STEP15",
+        "dd": "ACCTFILE",
+        "program": "CBTRN02C",
+        "dsn": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+        "dcb": {},
+        "dataset": "account",
+        "expected_record_length": 300,
+        "record_format": "F",
+        "dataset_name_pattern": "AWS\\.M2\\.CARDDEMO\\.ACCTDATA\\.VSAM\\.KSDS"
+      },
+      {
+        "step": "STEP15",
+        "dd": "TCATBALF",
+        "program": "CBTRN02C",
+        "dsn": "AWS.M2.CARDDEMO.TCATBALF.VSAM.KSDS",
+        "dcb": {},
+        "dataset": "balance",
+        "expected_record_length": 50,
+        "record_format": "F",
+        "dataset_name_pattern": "AWS\\.M2\\.CARDDEMO\\.TCATBALF\\.VSAM\\.KSDS"
+      }
+    ],
+    "CREASTMT": [
+      {
+        "step": "STEP010",
+        "dd": "SORTIN",
+        "program": "SORT",
+        "dsn": "AWS.M2.CARDDEMO.TRANSACT.VSAM.KSDS",
+        "dcb": {},
+        "dataset": "transaction",
+        "expected_record_length": 350,
+        "record_format": "F",
+        "dataset_name_pattern": "AWS\\.M2\\.CARDDEMO\\.TRANSACT\\.VSAM\\.KSDS"
+      },
+      {
+        "step": "STEP010",
+        "dd": "SORTOUT",
+        "program": "SORT",
+        "dsn": "AWS.M2.CARDDEMO.TRXFL.SEQ",
+        "dcb": {
+          "recfm": "FB",
+          "lrecl": 350,
+          "blksize": 3500
+        },
+        "dataset": "statement-transaction",
+        "expected_record_length": 350,
+        "record_format": "FB",
+        "dataset_name_pattern": "AWS\\.M2\\.CARDDEMO\\.TRXFL\\.SEQ"
+      },
+      {
+        "step": "STEP020",
+        "dd": "INFILE",
+        "program": "IDCAMS",
+        "dsn": "AWS.M2.CARDDEMO.TRXFL.SEQ",
+        "dcb": {},
+        "dataset": "statement-transaction",
+        "expected_record_length": 350,
+        "record_format": "F",
+        "dataset_name_pattern": "AWS\\.M2\\.CARDDEMO\\.TRXFL\\.SEQ"
+      },
+      {
+        "step": "STEP020",
+        "dd": "OUTFILE",
+        "program": "IDCAMS",
+        "dsn": "AWS.M2.CARDDEMO.TRXFL.VSAM.KSDS",
+        "dcb": {},
+        "dataset": "statement-transaction",
+        "expected_record_length": 350,
+        "record_format": "F",
+        "dataset_name_pattern": "AWS\\.M2\\.CARDDEMO\\.TRXFL\\.VSAM\\.KSDS"
+      },
+      {
+        "step": "STEP030",
+        "dd": "HTMLFILE",
+        "program": "IEFBR14",
+        "dsn": "AWS.M2.CARDDEMO.STATEMNT.HTML",
+        "dcb": {
+          "recfm": "FB",
+          "lrecl": 80,
+          "blksize": 3200
+        },
+        "dataset": "html",
+        "expected_record_length": 100,
+        "record_format": "FB",
+        "dataset_name_pattern": "AWS\\.M2\\.CARDDEMO\\.STATEMNT\\.HTML"
+      },
+      {
+        "step": "STEP030",
+        "dd": "STMTFILE",
+        "program": "IEFBR14",
+        "dsn": "AWS.M2.CARDDEMO.STATEMNT.PS",
+        "dcb": {
+          "recfm": "FB",
+          "lrecl": 80,
+          "blksize": 8000
+        },
+        "dataset": "statement",
+        "expected_record_length": 80,
+        "record_format": "FB",
+        "dataset_name_pattern": "AWS\\.M2\\.CARDDEMO\\.STATEMNT\\.PS"
+      },
+      {
+        "step": "STEP040",
+        "dd": "STEPLIB",
+        "program": "CBSTM03A",
+        "dsn": "AWS.M2.CARDDEMO.LOADLIB",
+        "dcb": {},
+        "dataset": null,
+        "dataset_name_pattern": "AWS\\.M2\\.CARDDEMO\\.LOADLIB"
+      },
+      {
+        "step": "STEP040",
+        "dd": "TRNXFILE",
+        "program": "CBSTM03A",
+        "dsn": "AWS.M2.CARDDEMO.TRXFL.VSAM.KSDS",
+        "dcb": {},
+        "dataset": "statement-transaction",
+        "expected_record_length": 350,
+        "record_format": "F",
+        "dataset_name_pattern": "AWS\\.M2\\.CARDDEMO\\.TRXFL\\.VSAM\\.KSDS"
+      },
+      {
+        "step": "STEP040",
+        "dd": "XREFFILE",
+        "program": "CBSTM03A",
+        "dsn": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+        "dcb": {},
+        "dataset": "xref",
+        "expected_record_length": 50,
+        "record_format": "F",
+        "dataset_name_pattern": "AWS\\.M2\\.CARDDEMO\\.CARDXREF\\.VSAM\\.KSDS"
+      },
+      {
+        "step": "STEP040",
+        "dd": "ACCTFILE",
+        "program": "CBSTM03A",
+        "dsn": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+        "dcb": {},
+        "dataset": "account",
+        "expected_record_length": 300,
+        "record_format": "F",
+        "dataset_name_pattern": "AWS\\.M2\\.CARDDEMO\\.ACCTDATA\\.VSAM\\.KSDS"
+      },
+      {
+        "step": "STEP040",
+        "dd": "CUSTFILE",
+        "program": "CBSTM03A",
+        "dsn": "AWS.M2.CARDDEMO.CUSTDATA.VSAM.KSDS",
+        "dcb": {},
+        "dataset": "statement-customer",
+        "expected_record_length": 500,
+        "record_format": "F",
+        "dataset_name_pattern": "AWS\\.M2\\.CARDDEMO\\.CUSTDATA\\.VSAM\\.KSDS"
+      },
+      {
+        "step": "STEP040",
+        "dd": "HTMLFILE",
+        "program": "CBSTM03A",
+        "dsn": "AWS.M2.CARDDEMO.STATEMNT.HTML",
+        "dcb": {
+          "recfm": "FB",
+          "lrecl": 100,
+          "blksize": 800
+        },
+        "dataset": "html",
+        "expected_record_length": 100,
+        "record_format": "FB",
+        "dataset_name_pattern": "AWS\\.M2\\.CARDDEMO\\.STATEMNT\\.HTML"
+      }
+    ],
+    "TRANREPT": [
+      {
+        "step": "STEP05R",
+        "dd": "PRC001.FILEIN",
+        "program": null,
+        "dsn": "AWS.M2.CARDDEMO.TRANSACT.VSAM.KSDS",
+        "dcb": {},
+        "dataset": "transaction",
+        "expected_record_length": 350,
+        "record_format": "F",
+        "dataset_name_pattern": "AWS\\.M2\\.CARDDEMO\\.TRANSACT\\.VSAM\\.KSDS"
+      },
+      {
+        "step": "STEP05R",
+        "dd": "PRC001.FILEOUT",
+        "program": null,
+        "dsn": "AWS.M2.CARDDEMO.TRANSACT.BKUP(+1)",
+        "dcb": {
+          "recfm": "FB",
+          "lrecl": 350,
+          "blksize": 0
+        },
+        "dataset": "transaction",
+        "expected_record_length": 350,
+        "record_format": "FB",
+        "dataset_name_pattern": "AWS\\.M2\\.CARDDEMO\\.TRANSACT\\.BKUP\\(\\+1\\)"
+      },
+      {
+        "step": "STEP05R",
+        "dd": "SORTIN",
+        "program": "SORT",
+        "dsn": "AWS.M2.CARDDEMO.TRANSACT.BKUP(+1)",
+        "dcb": {},
+        "dataset": "transaction",
+        "expected_record_length": 350,
+        "record_format": "F",
+        "dataset_name_pattern": "AWS\\.M2\\.CARDDEMO\\.TRANSACT\\.BKUP\\(\\+1\\)"
+      },
+      {
+        "step": "STEP05R",
+        "dd": "SORTOUT",
+        "program": "SORT",
+        "dsn": "AWS.M2.CARDDEMO.TRANSACT.DALY(+1)",
+        "dcb": {},
+        "dataset": "transaction",
+        "expected_record_length": 350,
+        "record_format": "F",
+        "dataset_name_pattern": "AWS\\.M2\\.CARDDEMO\\.TRANSACT\\.DALY\\(\\+1\\)"
+      },
+      {
+        "step": "STEP10R",
+        "dd": "STEPLIB",
+        "program": "CBTRN03C",
+        "dsn": "AWS.M2.CARDDEMO.LOADLIB",
+        "dcb": {},
+        "dataset": null,
+        "dataset_name_pattern": "AWS\\.M2\\.CARDDEMO\\.LOADLIB"
+      },
+      {
+        "step": "STEP10R",
+        "dd": "TRANFILE",
+        "program": "CBTRN03C",
+        "dsn": "AWS.M2.CARDDEMO.TRANSACT.DALY(+1)",
+        "dcb": {},
+        "dataset": "transaction",
+        "expected_record_length": 350,
+        "record_format": "F",
+        "dataset_name_pattern": "AWS\\.M2\\.CARDDEMO\\.TRANSACT\\.DALY\\(\\+1\\)"
+      },
+      {
+        "step": "STEP10R",
+        "dd": "CARDXREF",
+        "program": "CBTRN03C",
+        "dsn": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+        "dcb": {},
+        "dataset": "xref",
+        "expected_record_length": 50,
+        "record_format": "F",
+        "dataset_name_pattern": "AWS\\.M2\\.CARDDEMO\\.CARDXREF\\.VSAM\\.KSDS"
+      },
+      {
+        "step": "STEP10R",
+        "dd": "TRANTYPE",
+        "program": "CBTRN03C",
+        "dsn": "AWS.M2.CARDDEMO.TRANTYPE.VSAM.KSDS",
+        "dcb": {},
+        "dataset": "type",
+        "expected_record_length": 60,
+        "record_format": "F",
+        "dataset_name_pattern": "AWS\\.M2\\.CARDDEMO\\.TRANTYPE\\.VSAM\\.KSDS"
+      },
+      {
+        "step": "STEP10R",
+        "dd": "TRANCATG",
+        "program": "CBTRN03C",
+        "dsn": "AWS.M2.CARDDEMO.TRANCATG.VSAM.KSDS",
+        "dcb": {},
+        "dataset": "category",
+        "expected_record_length": 60,
+        "record_format": "F",
+        "dataset_name_pattern": "AWS\\.M2\\.CARDDEMO\\.TRANCATG\\.VSAM\\.KSDS"
+      },
+      {
+        "step": "STEP10R",
+        "dd": "DATEPARM",
+        "program": "CBTRN03C",
+        "dsn": "AWS.M2.CARDDEMO.DATEPARM",
+        "dcb": {},
+        "dataset": "dateparm",
+        "expected_record_length": 80,
+        "record_format": "F",
+        "dataset_name_pattern": "AWS\\.M2\\.CARDDEMO\\.DATEPARM"
+      },
+      {
+        "step": "STEP10R",
+        "dd": "TRANREPT",
+        "program": "CBTRN03C",
+        "dsn": "AWS.M2.CARDDEMO.TRANREPT(+1)",
+        "dcb": {
+          "recfm": "FB",
+          "lrecl": 133,
+          "blksize": 0
+        },
+        "dataset": "report",
+        "expected_record_length": 133,
+        "record_format": "FB",
+        "dataset_name_pattern": "AWS\\.M2\\.CARDDEMO\\.TRANREPT\\(\\+1\\)"
+      }
+    ]
+  },
+  "notes": [
+    "Exact DSNs at the pinned commit: renamed HLQs are findings, not silently admitted.",
+    "VSAM downloads must be sequential binary copies with explicit transfer framing.",
+    "TRANREPT public JCL repeats STEP05R and requires expanded submitted procedure/JCL review.",
+    "CUSTREC-INTAKE preserves CUSTREC declaration tokens with explicit indentation-only extraction; originals and transformation provenance retained."
+  ]
+}

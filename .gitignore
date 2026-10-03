@@ -12,6 +12,9 @@ tests/fixtures/request-logging/target/
 # Harness output
 work/
 
+# Maintec hidden answers and every derived delivery record are local only.
+work/mainframe/arrivals/
+
 # Pinned browser test dependencies
 tests/browser/node_modules/
 
@@ -23,6 +26,9 @@ Thumbs.db
 
 # Engine-owned local history is never a committed measurement fixture.
 control-tower/run-index.sqlite3*
+control-tower/campaigns.json
+control-tower/workspace.json
+control-tower/qualification-trust.json
 
 # Private journey outputs, journals and credentials are not source fixtures.
 factory/idempiere/ms86-journeys/runs/

@@ -4,10 +4,24 @@
 
 # LIGHTYEAR CardDemo Modernization Factory
 
+[Lightyear Verify MCP](docs/verify/README.md) exposes the INTCALC judge to agent
+harnesses through a separate-user service, bounded submissions, closed diagnostics
+and signed receipts. Includes zero-model acceptance and Control Tower status.
+
 **[Mainframe preparation kit](docs/mainframe/README.md)** inventories 1,423 source decisions
 across 44 public CardDemo COBOL programs, decodes 501 public EBCDIC records, and
 rehearses both batch jobs against explicit mock spool bindings. Native coverage
 and equivalence remain unobserved.
+
+The [Maintec Monday intake runbook](docs/mainframe/monday-runbook.md) prepares
+signed folder intake, strict dataset decoding, repeatability/delta checks and a
+Java INTCALC comparison with offline replay. Its rehearsal uses public synthetic
+data; Maintec's answers remain in the ignored arrival tree.
+
+The [CardDemo Tower v2 workspace](docs/mainframe/carddemo-zos-tower.md) connects
+intake acceptance, agent-proposed normalization, difference disposition and evidence
+release under a no-values policy. Its arrival view is read-only; INTCALC uses only
+verified Tower rules, with no parallel legacy ledger.
 
 **Native Oracle 26ai → AlloyDB PostgreSQL: 260/260 matching case pairs**, across
 13 datatype families and 65 bounded behaviours. The successful run contains

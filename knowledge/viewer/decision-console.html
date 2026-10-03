@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>LIGHTYEAR · Decision console</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/decision-console.css" />
+  </head>
+  <body>
+    <header class="tower-header">
+      <a href="/" class="wordmark">LIGHTYEAR</a><span>Decision console</span
+      ><span id="identity">Signed out</span>
+    </header>
+    <main>
+      <section class="intro">
+        <p class="eyebrow">OPERATOR LENS</p>
+        <h1>Evidence. Review. Decisions.</h1>
+        <p>
+          The engine produces the result. You review the evidence and record
+          your decision.
+        </p>
+        <p class="boundary">
+          Service countersignatures record authenticated intent. Operator review
+          is not independent review. This console cannot start or stop a
+          campaign.
+        </p>
+      </section>
+      <form id="login">
+        <label
+          >Individual credential
+          <input
+            name="credential"
+            type="password"
+            autocomplete="off"
+            required /></label
+        ><button>Sign in</button>
+      </form>
+      <nav aria-label="Console">
+        <button data-tab="campaigns">Campaigns</button
+        ><button data-tab="queue">Work queue</button
+        ><button data-tab="catalogue">Catalogue</button
+        ><button data-tab="workspace">Customer workspace</button
+        ><button data-tab="history">Decision history</button
+        ><button id="logout">Sign out</button>
+      </nav>
+      <div id="message" role="status" aria-live="polite"></div>
+      <section id="content" aria-label="Current view">
+        <p>Sign in with your scoped credential to review evidence.</p>
+      </section>
+      <aside id="drawer" hidden aria-label="Evidence detail"></aside>
+    </main>
+    <script src="/decision-console.js"></script>
+  </body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "schema": "tower-campaign-registry/1",
+  "campaigns": [
+    {
+      "id": "historical-stage-b-04",
+      "scope": "replace-with-local-scope",
+      "adapter": "ms94-stage-b",
+      "read_mode": "immutable-export",
+      "root": "/operator/configured/completed-campaign-export",
+      "published_directory": "/operator/configured/public-results",
+      "work_directory": "/operator/configured/completed-campaign-export/work/ms94/stage-b-04",
+      "snapshot": "/operator/configured/public-results/execution-snapshot.json",
+      "trusted_public_key": "/operator/configured/trusted.public.pem"
+    }
+  ]
+}

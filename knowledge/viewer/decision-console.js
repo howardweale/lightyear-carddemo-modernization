@@ -169,9 +169,12 @@ async function campaign(id) {
         "div",
         a.code +
           " · " +
-          (a.journey || "") + " " + (a.budget ? `${a.budget} ${100*a.threshold}%` : "") + " " + (a.diagnostic_class || "") +
-          " " +
-          (a.trials || []).join(", "),
+          [
+            a.journey,
+            a.budget ? `${a.budget} ${100*a.threshold}%` : "",
+            a.diagnostic_class,
+            (a.trials || []).join(", "),
+          ].filter(Boolean).join(" "),
         "alert",
       ),
     );

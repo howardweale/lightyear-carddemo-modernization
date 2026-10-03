@@ -107,7 +107,10 @@ The **31 full evidence archives remain local**, so public availability of the
 signed audit does not yet mean outside readers can replay the archives. The
 [archive publication proposal](archive-publication-proposal.md) records their
 measured size, leak-check findings and the release/replay gates. No archive
-upload has been performed or approved by publishing that proposal.
+upload has been performed. Howard subsequently approved uploading in this task
+on October 3; the proposal records that operator approval. The disclosure review
+and public-only replay rehearsal remain incomplete, so upload approval is not
+reported as leak clearance or public archive availability.
 
 Review is operator review, not independent attestation. This audit does not
 approve B06's preregistration or launch; J1 requalification, J2/J3 qualification

@@ -41,8 +41,8 @@ class B06Tests(unittest.TestCase):
         self.f.setUp()
         self.addCleanup(self.f.doCleanups)
         self.s = self.f.service
-        self.root = self.f.root
-        self.engine = Path(self.f.tmp.name) / "engine"
+        self.root = self.f.root.resolve()
+        self.engine = Path(self.f.tmp.name).resolve() / "engine"
         self.engine.mkdir()
         self.key = Ed25519PrivateKey.generate()
         self.public = self.key.public_key().public_bytes(

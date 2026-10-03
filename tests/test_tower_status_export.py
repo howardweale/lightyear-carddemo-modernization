@@ -26,7 +26,9 @@ class StatusExportTests(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
-        self.root = Path(self.tmp.name)
+        # macOS tempfile paths can begin with the system /var -> /private/var alias.
+        # Use the canonical operator-selected root; export symlinks stay forbidden.
+        self.root = Path(self.tmp.name).resolve()
         self.exports = self.root / "tower-export"
         self.key = Ed25519PrivateKey.generate()
         self.public = self.key.public_key().public_bytes(

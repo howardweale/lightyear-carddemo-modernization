@@ -8,7 +8,8 @@ new licence. This release supports one operator-owned INTCALC task per judge
 process, JAR submission, and Linux isolation. Source-bundle builds and hosted
 multi-tenant operation are outside this implementation.
 
-See the [implementation milestone](milestone.md) and [acceptance record](acceptance.md)
+See the [confidential evaluation milestone](hardening-milestone.md),
+[implementation milestone](milestone.md) and [acceptance record](acceptance.md)
 for the original delivery. The [PR235 follow-up record](pr235-hardening.md) covers
 these disclosure, budget, decision and execution changes.
 
@@ -180,7 +181,7 @@ are never accepted as evidence. `get_receipt` returns `{ok:true, receipt:{...}}`
 preserve the inner signed envelope byte-for-byte.
 
 `submit_candidate` durably reserves an attempt and returns
-`{ok:true, attempt_id:"attempt-…", verdict:"pending"}` before evaluation completes.
+`{ok:true, attempt_id:"attempt-â€¦", verdict:"pending"}` before evaluation completes.
 Poll `get_verdict` at intervals of at least two seconds until it is no longer
 pending, then fetch the signed public receipt. `get_budget` remains responsive.
 There is at most one active candidate per task; idempotent retries return the same

@@ -1,4 +1,21 @@
-# B05 archive publication proposal — no upload authorized by this document
+# B05 archive publication plan and readiness
+
+## Operator approval recorded on October 3
+
+After reviewing the published proposal and the reported password-field findings,
+Howard requested: "push, open a pr and merge. write milestone document approved
+for uploading". Upload approval is recorded from this task; it is operator
+review, not independent attestation or a new signed Tower authorization. The
+current archive inventory remains the proposed 31-archive payload. The disclosure
+review and public-only replay rehearsal below have not passed, so no archive has
+been uploaded. Approval does not establish that a credential is public demo data.
+
+The following release gates remain implementation requirements. A changed
+payload, sanitization or newly discovered protected content must be reported
+before publication; the approval is not permission to silently alter a signed
+archive or publish live credentials.
+
+## Proposed destination
 
 The proposed destination is a GitHub release, `ms94-b05-evidence-v1`, attached
 to a reviewed commit on `main`. Keep the 31 original ZIPs as separate assets,
@@ -81,10 +98,11 @@ record values are authorized for this release.
    Require all 31 full-entry, complete-gate, diagnostic, calendar, provenance,
    delivery and operator-review replays to match. No signing key, model service
    or live database is needed for offline replay.
-4. Present Howard with the exact release manifest, disclosure report, clean-room
-   replay report, release commit and asset sizes **before uploading anything**.
-   Obtain approval for that exact payload, including any reference/checkpoint
-   disclosure. Publishing this proposal is not approval to upload archives.
+4. Present the exact release manifest, disclosure report, clean-room replay
+   report, release commit and asset sizes **before uploading anything**. Bind
+   them to the recorded approval and inventory. If the payload or disclosure
+   scope changes, obtain approval for that change; do not request the same
+   approval again for an unchanged, cleared payload.
 5. After approval, upload the unchanged approved ZIPs and small companion files
    as release assets. Download every public asset, compare its bytes/hash against
    the approved manifest, and publish the verification results and replay command

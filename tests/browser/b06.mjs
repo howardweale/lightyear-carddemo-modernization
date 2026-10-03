@@ -33,8 +33,14 @@ try {
     await page.goto(url);
     await page.locator("#login input").fill(config.credential);
     await page.locator("#login button").click();
-    await page.getByRole("button", { name: "Review campaign" }).click();
-    await page.getByText("FIXTURE — zero-model integration rehearsal; not a measured B06 result.", { exact: true }).waitFor();
+    await page.locator("#content article").filter({ hasText: "generic-demo" }).getByRole("button", { name: "Review campaign" }).click();
+    await page.locator("#content h2").filter({ hasText: "generic-demo" }).waitFor();
+    await page.getByText("Read-only campaign status. Decision handling is defined by the campaign controller; the Tower never starts or stops processes.", { exact: true }).waitFor();
+    assert.match(await page.locator("#content").innerText(), /stale/);
+    assert.doesNotMatch(await page.locator("#content").innerText(), /completed cohort trials|B06 controller|J1:/);
+    await page.getByRole("button", { name: "All campaigns" }).click();
+    await page.locator("#content article").filter({ hasText: "ms94-b06" }).getByRole("button", { name: "Review campaign" }).click();
+    await page.getByText("FIXTURE — zero-model integration rehearsal; not a measured result.", { exact: true }).waitFor();
     const content = await page.locator("#content").innerText();
     assert.match(content, /FIXTURE/);
     assert.match(content, /J1: 1\/1/); assert.match(content, /J2: 1\/1/); assert.match(content, /J3: 1\/1/);

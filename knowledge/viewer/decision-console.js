@@ -98,13 +98,14 @@ async function campaign(id) {
       return load();
     }),
     el("h2", id),
-    badge(v.state || "observed"),
+    badge(v.stale ? "stale" : (v.state || "observed")),
   );
   content.append(
     el(
       "p",
       v.controller_reads_tower_decisions
         ? "B06 controller consumes verified launch and pause decisions. The Tower records operator intent; it never starts or stops processes. Operator review; not independent."
+        : v.status_export_schema ? "Read-only campaign status. Decision handling is defined by the campaign controller; the Tower never starts or stops processes."
         : "Frozen controller: decisions are recorded here, but this controller does not read them. Stop it outside the Tower if required.",
       "boundary",
     ),
@@ -123,7 +124,7 @@ async function campaign(id) {
     }),
   );
   const totals = v.totals || {};
-  content.append(
+  if (v.totals) content.append(
     el(
       "p",
       `${totals.cohort_passed ?? 0} passes · ${totals.cohort_completed ?? 0} completed cohort trials · pilots excluded`,
@@ -146,7 +147,7 @@ async function campaign(id) {
     p.value = v.used?.[k] || 0;
     content.append(el("small", `${k}: ${p.value} / ${limit}`), p);
   }
-  if (v.fixture) content.append(el("p", "FIXTURE — zero-model integration rehearsal; not a measured B06 result.", "boundary"));
+  if (v.fixture) content.append(el("p", "FIXTURE — zero-model integration rehearsal; not a measured result.", "boundary"));
   for (const j of v.journeys || []) {
     content.append(el("h3", `${j.id}: ${j.cohort_passed}/${j.cohort_completed} completed · ${j.planned} planned`));
     content.append(el("p", j.void ? "Journey VOID; no rate." :

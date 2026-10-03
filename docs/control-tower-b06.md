@@ -56,10 +56,13 @@ does not invent replacement slots or rewrite results.
 
 ## Windows-safe status channel
 
+B06 is the first producer of the generic [`tower-status-export/1` protocol](control-tower-status-export.md). Its profile adds B06 journey and budget validation without changing the common reader.
+
 After each state change, the producer signs `tower-export/000001.json`, then the
 next numbered file, chaining each to the preceding content hash. It writes and
-flushes a uniquely named pending file, closes it, and atomically links the final
-name without overwriting any existing file. Only then is the pending name removed.
+flushes a uniquely named pending file, closes it, and renames it exactly once into
+the final name using an OS-enforced no-replace operation. Existing files are never
+replaced. The rename removes the pending name.
 The observer opens only numbered completed files. It never opens `active.json`,
 `progress.json`, journals or other mutable controller files.
 
@@ -67,7 +70,7 @@ The adapter checks producer signatures, consecutive sequence numbers, chain,
 campaign bindings, closed schemas, nondecreasing timestamps/budgets and unchanged
 prior verdicts. Tampering or a gap makes the view unavailable. This proves the
 visible signed prefix; it does not prove that a withheld tail does not exist.
-Staleness is shown after 45 minutes without an export while a trial is active.
+Staleness is shown at 45 minutes without an export while a trial is active.
 No private archive replay is claimed by status verification.
 
 The cockpit shows J1/J2/J3 separately, pilots excluded, interim Wilson intervals,
@@ -79,7 +82,8 @@ measurements. B06 decisions are labelled operator review, not independent.
 
 Use a separate B06 Tower data root and authority outside the engine root. Do not
 point a legacy adapter at B05 or label mutable files as an immutable export.
-The `ms94-b06` adapter requires scope `ms94-b06` and read mode `write-once-status`.
+The generic `tower-status-export` adapter uses producer profile `ms94-b06`, scope
+`ms94-b06` and read mode `write-once-status`.
 
 Once the B06 freeze supplies a first signed ready export, its public key and
 `tower-bindings.json`, register it explicitly:
@@ -121,15 +125,23 @@ terminal-state refusal, disclosure schema, signature tampering and sequence hole
 consumer wording, pause alerts, launch time and exactly the three pause choices.
 It submits no browser decision and uses no models, databases or Docker.
 
-Local validation on Windows: all 13 focused integration tests passed. The broader
-regression run passed 54 tests with two existing platform/optional-SDK skips;
-the final focused run additionally covers usage accounting, decision polling and
-registration. The Chromium rehearsal passed with no page errors or external
-requests. These are software integration results, not native qualification or
-measurement evidence. CI includes the focused tests on Windows, Linux and macOS
-and the browser rehearsal on Linux; remote CI has not run for this local change.
+Local validation on Windows after the generic transport revision: 70 tests passed,
+with two existing platform/optional-SDK skips (72 total). This includes the 13 B06
+and five generic transport tests. Both real producer/reader concurrency tests and
+the competing-writers no-overwrite test passed. The Chromium rehearsal passed for
+a generic stale campaign and the B06 cockpit and pause choices, with no page
+errors or external requests. Its first attempt timed out during Chromium startup;
+a retry after the unit suite finished passed. These are software integration
+results, not native qualification or measurement evidence. CI includes the tests
+on Windows, Linux and macOS and the browser rehearsal on Linux; remote CI has not
+run for this local change.
 
 The full B06 executable must still run the required native zero-model preflight
 for all three journeys, under supervision, with archive replay, cleanup and this
 Tower round-trip. No production launch command or latest safe launch timestamp is
 claimed until that executable and its calendar-relative plan are frozen and approved.
+
+The B05 terminal audit passed before this protocol revision: all 31 archives
+replayed, 279 owned resources absent and 1,879 protected files unchanged. See the
+[B05 results](calibration/idempiere-ms94/stage-b-05/results/README.md). The audit
+was not rerun during this change.

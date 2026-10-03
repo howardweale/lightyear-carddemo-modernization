@@ -842,8 +842,12 @@ class CampaignRegistry:
             raise KeyError("Unknown campaign in this scope")
         try:
             return self._view(row, campaign_id, now=now)
+        except ValueError as exc:
+            # Closed issue code only; never expose arbitrary paths or exception text.
+            if str(exc) == "export-sequence-gap":
+                return unavailable_campaign(campaign_id, "export-sequence-gap")
+            return unavailable_campaign(campaign_id)
         except (
-            ValueError,
             KeyError,
             TypeError,
             OSError,
@@ -853,17 +857,26 @@ class CampaignRegistry:
             return unavailable_campaign(campaign_id)
 
     def _view(self, row, campaign_id, *, now):
-        if row["adapter"] == "ms94-b06":
-            from .b06 import project_exports, SCOPE
+        if row["adapter"] == "tower-status-export":
+            from .status_export import project_exports
 
-            if self.scope != SCOPE or row.get("read_mode") != "write-once-status":
-                raise ValueError("B06 requires its scoped write-once status adapter")
-            return project_exports(
+            if row.get("read_mode") != "write-once-status":
+                raise ValueError("Status exports require the write-once adapter")
+            args = (
                 row["export_directory"],
                 read_bytes(Path(row["trusted_public_key"])),
                 campaign_id,
                 row["bindings"],
                 now,
+            )
+            if row.get("producer_profile") == "ms94-b06":
+                from .b06 import project_exports as project_b06, SCOPE
+
+                if self.scope != SCOPE:
+                    raise ValueError("B06 scope mismatch")
+                return project_b06(*args)
+            return project_exports(
+                *args, scope=self.scope, profile=row.get("producer_profile")
             )
         adapter = {
             "ms94-stage-b": CampaignSource,

@@ -91,7 +91,8 @@ identity can log out, including auditors and partners.
 ## Local campaign registry and evidence
 
 B06 has a separate [write-once status and decision integration](control-tower-b06.md).
-Its `ms94-b06` adapter reads only completed numbered status exports on Windows;
+The generic [`tower-status-export/1` adapter](control-tower-status-export.md), with
+B06 as its first producer profile, reads only completed numbered exports on Windows;
 it does not relax the legacy live-file refusal below. The full B06 executable and
 native preflight must incorporate and qualify this integration before launch.
 

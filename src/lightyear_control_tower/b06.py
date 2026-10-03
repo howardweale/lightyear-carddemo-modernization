@@ -6,15 +6,14 @@ controller files. Tower decisions authorize the controller, not process control.
 
 import hashlib
 import math
-import os
-import re
-import uuid
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from .decisions import ZERO, canonical, digest, verify_envelope
 from .requests import read_json, identifier, SHA
 from .verification import check, verify_decision, verify_journal
+from . import status_export
+from .status_export import atomic_new
 
 SCOPE = "ms94-b06"
 SCHEMA = "b06-tower-status/1"
@@ -54,24 +53,6 @@ def hash_map(value, fields):
         and all(isinstance(v, str) and SHA.fullmatch(v) for v in value.values()),
         "b06-bindings-invalid",
     )
-
-
-def atomic_new(path, value):
-    """Publish a closed file without replacing an existing name (also on POSIX)."""
-    path = Path(path)
-    check(
-        not any(p.is_symlink() for p in (path, *path.parents)), "export-symlink-refused"
-    )
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_name("." + path.name + "." + uuid.uuid4().hex + ".pending")
-    with temporary.open("xb") as stream:
-        stream.write(canonical(value))
-        stream.flush()
-        os.fsync(stream.fileno())
-    try:
-        os.link(temporary, path)  # Final name only appears after the file is closed.
-    finally:
-        temporary.unlink()
 
 
 def validate_status(v):
@@ -182,84 +163,85 @@ def validate_status(v):
     check((v["state"] == "paused") == (v["pause"] is not None), "pause-state-invalid")
 
 
-class StatusWriter:
+def _profile_value(value):
+    check(
+        value["profile"] == SCOPE
+        and set(value["details"]) == {"calendar", "trials", "pause"},
+        "b06-profile-invalid",
+    )
+    return {
+        **{
+            k: v
+            for k, v in value.items()
+            if k not in {"profile", "details", "signature"}
+        },
+        **value["details"],
+        "schema": SCHEMA,
+    }
+
+
+def _validate_export(value):
+    validate_status(_profile_value(value))
+
+
+def _transition(previous, current):
+    old, new = previous["details"], current["details"]
+    check(old["calendar"] == new["calendar"], "calendar-changed")
+    check(new["trials"][: len(old["trials"])] == old["trials"], "prior-verdict-changed")
+
+
+class StatusWriter(status_export.StatusWriter):
+    """First producer profile on the campaign-neutral transport."""
+
     def __init__(self, directory, sign, key):
-        self.directory = Path(directory)
-        self.sign = sign
-        self.key = key
-        check(
-            not self.directory.exists() or not list(self.directory.iterdir()),
-            "export-writer-already-started",
+        super().__init__(
+            directory, sign, key, scope=SCOPE, profile=SCOPE, validator=_validate_export
         )
-        self.sequence = 0
-        self.previous = ZERO
 
     def emit(self, payload):
-        value = json_load(
-            canonical(
-                {
-                    **payload,
-                    "schema": SCHEMA,
-                    "scope": SCOPE,
-                    "sequence": self.sequence + 1,
-                    "previous_sha256": self.previous,
-                }
-            )
+        # Validate the producer's complete closed schema before wrapping it.
+        validate_status(
+            {
+                **payload,
+                "schema": SCHEMA,
+                "scope": SCOPE,
+                "sequence": self.sequence + 1,
+                "previous_sha256": self.previous,
+            }
         )
-        validate_status(value)
-        signed = self.sign(value)
-        check(verify_envelope(signed, self.key), "producer-signature-invalid")
-        atomic_new(self.directory / f'{value["sequence"]:06}.json', signed)
-        self.sequence += 1
-        self.previous = signed["content_sha256"]
-        return signed
+        value = {
+            k: v
+            for k, v in payload.items()
+            if k
+            not in {
+                "calendar",
+                "trials",
+                "pause",
+                "schema",
+                "scope",
+                "sequence",
+                "previous_sha256",
+                "signature",
+                "content_sha256",
+            }
+        }
+        value["details"] = {k: payload[k] for k in ("calendar", "trials", "pause")}
+        return super().emit(value)
 
 
 def read_exports(directory, key, campaign_id, bindings):
-    directory = Path(directory)
-    check(
-        not any(p.is_symlink() for p in (directory, *directory.parents)),
-        "export-directory-symlink",
-    )
-    check(
-        not any(
-            p.suffix == ".json" and not re.fullmatch(r"\d{6}\.json", p.name)
-            for p in directory.iterdir()
-        ),
-        "unexpected-export-file",
-    )
-    names = sorted(
-        p for p in directory.iterdir() if re.fullmatch(r"\d{6}\.json", p.name)
-    )
-    check(0 < len(names) <= 10000, "exports-unavailable-or-excessive")
-    previous = ZERO
-    last = None
-    for seq, path in enumerate(names, 1):
-        check(path.name == f"{seq:06}.json", "export-sequence-gap")
-        value = read_json(path)
-        validate_status(value)
-        check(verify_envelope(value, key), "export-signature-invalid")
-        check(
-            value["sequence"] == seq and value["previous_sha256"] == previous,
-            "export-chain-invalid",
+    return _profile_value(
+        status_export.read_exports(
+            directory,
+            key,
+            campaign_id,
+            bindings,
+            scope=SCOPE,
+            profile=SCOPE,
+            validator=_validate_export,
+            transition=_transition,
         )
-        check(
-            value["campaign_id"] == campaign_id and value["bindings"] == bindings,
-            "export-campaign-mismatch",
-        )
-        if last:
-            check(utc(value["at_utc"]) >= utc(last["at_utc"]), "export-time-regressed")
-            check(
-                all(value["used"][k] >= last["used"][k] for k in LIMITS),
-                "budget-regressed",
-            )
-            check(
-                value["trials"][: len(last["trials"])] == last["trials"],
-                "prior-verdict-changed",
-            )
-        previous = value["content_sha256"]
-        last = value
-    return last
+    )
 
 
 def project_exports(directory, key, campaign_id, bindings, now):
@@ -300,11 +282,8 @@ def project_exports(directory, key, campaign_id, bindings, now):
                     used=v["used"][budget],
                     limit=limit,
                 )
-    if (
-        v["active_trial"]
-        and v["state"] in {"running", "paused"}
-        and (now - utc(v["at_utc"])).total_seconds() > 2700
-    ):
+    stale = status_export.freshness(v, now)
+    if stale:
         alert("stale", observation_only=True)
     if v["state"] == "ready" and now > utc(v["calendar"]["latest_launch_utc"]):
         alert("latest-launch-expired")
@@ -339,6 +318,7 @@ def project_exports(directory, key, campaign_id, bindings, now):
         "schema": "tower-campaign-view/1",
         "id": campaign_id,
         "family": "ms94-b06",
+        "stale": stale,
         "state": v["state"],
         "read_only": True,
         "fixture": v["fixture"],
@@ -749,7 +729,8 @@ def register(root, export_directory, key_path, bindings, campaign_id="ms94-b06")
             {
                 "id": campaign_id,
                 "scope": SCOPE,
-                "adapter": "ms94-b06",
+                "adapter": "tower-status-export",
+                "producer_profile": SCOPE,
                 "read_mode": "write-once-status",
                 "export_directory": str(export_directory),
                 "trusted_public_key": str(key_path),

@@ -90,7 +90,8 @@ class B06Tests(unittest.TestCase):
                         {
                             "id": "ms94-b06",
                             "scope": SCOPE,
-                            "adapter": "ms94-b06",
+                            "adapter": "tower-status-export",
+                            "producer_profile": SCOPE,
                             "read_mode": "write-once-status",
                             "export_directory": str(self.exports),
                             "trusted_public_key": str(keypath),

@@ -10,6 +10,10 @@ MAX_BODY = ARTIFACT_LIMIT * 4 // 3 + 4096
 
 def create_server(judge, port=0):
     class Handler(BaseHTTPRequestHandler):
+        def setup(self):
+            super().setup()
+            self.connection.settimeout(10)
+
         def log_message(self, *_):
             pass  # No raw URLs, diagnostics, tokens or submitted values in logs.
 
@@ -26,11 +30,13 @@ def create_server(judge, port=0):
         def do_POST(self):
             self.connection.settimeout(10)
             if not hmac.compare_digest(
-                self.headers.get("Authorization", ""), "Bearer " + judge.token
+                self.headers.get("Authorization", "").encode("utf-8"),
+                ("Bearer " + judge.token).encode("utf-8"),
             ):
-                with judge.lock:
-                    judge.append("unauthorized")
+                judge.ingress("unauthorized")
                 return self.reply(401, {"ok": False, "error": "unauthorized"})
+            if not judge.ingress("query"):
+                return self.reply(429, {"ok": False, "error": "rate-limited"})
             try:
                 if (
                     self.headers.get("Transfer-Encoding")
@@ -61,14 +67,17 @@ def create_server(judge, port=0):
                 result = judge.invoke(self.path.removeprefix("/"), args)
                 return self.reply(200, result)
             except Exception:
-                with judge.lock:
-                    judge.append("invalid-http-request")
+                judge.ingress("invalid")
                 return self.reply(400, {"ok": False, "error": "request-refused"})
 
         def do_GET(self):
-            with judge.lock:
-                judge.append("invalid-http-request")
+            judge.ingress("invalid")
             self.reply(405, {"ok": False, "error": "method-refused"})
 
-    # Serial requests avoid concurrent evaluation and state side channels.
-    return HTTPServer(("127.0.0.1", port), Handler)
+    # Evaluation runs in a separate process; bounded serial HTTP requests remain responsive.
+    class Server(HTTPServer):
+        def handle_error(self, request, client_address):
+            # Malformed headers/disconnects must not become an unbounded stderr log.
+            judge.ingress("invalid")
+
+    return Server(("127.0.0.1", port), Handler)

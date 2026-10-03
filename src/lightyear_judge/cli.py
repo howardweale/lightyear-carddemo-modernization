@@ -21,6 +21,16 @@ def main(argv=None):
     audit.add_argument("--data-root", type=Path, required=True)
     audit.add_argument("--public-key", type=Path, required=True)
     audit.add_argument("--journal-head", required=True)
+    decision = commands.add_parser("import-decision")
+    decision.add_argument("--data-root", type=Path, required=True)
+    decision.add_argument("--attempt", required=True)
+    decision.add_argument("--proof", type=Path, required=True)
+    decision.add_argument("--trusted-head", required=True)
+    budget = commands.add_parser("inventory-budget")
+    budget.add_argument("--data-root", type=Path, required=True)
+    budget.add_argument("--new-limit", type=int, required=True)
+    budget.add_argument("--proof", type=Path)
+    budget.add_argument("--trusted-head")
     args = parser.parse_args(argv)
     if args.command == "init":
         initialize(args.data_root, json.loads(args.config.read_text()))
@@ -39,6 +49,28 @@ def main(argv=None):
         finally:
             server.server_close()
             judge.close()
+    elif args.command == "inventory-budget":
+        from .review import inventory_budget
+        from lightyear_mainframe.zos_evidence import read_json
+
+        print(
+            json.dumps(
+                inventory_budget(
+                    args.data_root,
+                    args.new_limit,
+                    proof=read_json(args.proof) if args.proof else None,
+                    expected_head=args.trusted_head,
+                )
+            )
+        )
+    elif args.command == "import-decision":
+        from .review import queue_decision
+        from lightyear_mainframe.zos_evidence import read_json
+
+        queue_decision(
+            args.data_root, args.attempt, read_json(args.proof), args.trusted_head
+        )
+        print(json.dumps({"status": "decision-imported", "model_calls": 0}))
     else:
         print(
             json.dumps(

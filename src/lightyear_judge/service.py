@@ -6,6 +6,10 @@ import os
 import secrets
 import threading
 import uuid
+import time
+import subprocess
+import sys
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 from lightyear_control_tower.decisions import canonical, digest, verify_envelope, ZERO
 from lightyear_control_tower.status_export import atomic_new, StatusWriter, read_exports
@@ -13,7 +17,10 @@ from lightyear_mainframe.zos_evidence import Signer, initialize_key, now, read_j
 from lightyear_mainframe import zos_evidence
 from lightyear_mainframe.zos_bridge import replay as replay_intcalc
 from lightyear_toolkit.workspace import ARTIFACT_LIMIT, sha
-from .evaluation import evaluate, summarize
+from .evaluation import summarize
+from .policy import disclosure, project, fingerprint
+from .ledger import Ledger
+from .review import verify_review, request_review
 from .sandbox import require_isolation, require_trusted_installation
 
 METHODS = {
@@ -24,6 +31,26 @@ METHODS = {
     "get_receipt": {"attempt_id"},
     "propose_normalization": {"attempt_id", "dataset", "field"},
 }
+
+
+def public_body(receipt):
+    return {
+        k: receipt[k]
+        for k in (
+            "schema",
+            "task_sha256",
+            "attempt_id",
+            "attempt_number",
+            "submission_limit",
+            "artifact_sha256",
+            "verdict",
+            "diagnostics",
+            "status",
+            "budget",
+            "review",
+            "disclosure_mode",
+        )
+    }
 
 
 def inventory(folder):
@@ -37,17 +64,7 @@ def inventory(folder):
 
 
 def implementation():
-    source = Path(__file__).resolve().parents[1]
-    return {
-        str(p.relative_to(source)): sha(p.read_bytes())
-        for package in (
-            "lightyear_judge",
-            "lightyear_toolkit",
-            "lightyear_mainframe",
-            "lightyear_control_tower",
-        )
-        for p in sorted((source / package).glob("*.py"))
-    }
+    return fingerprint()
 
 
 def initialize(root, config):
@@ -56,9 +73,13 @@ def initialize(root, config):
     require_isolation(root, config["agent_uid"])
     require_trusted_installation(config["agent_uid"])
     require_isolation(Path(config["evaluation"]), config["agent_uid"])
+    if "build_minutes" in config:
+        raise ValueError("use-attempt-slots-not-build-minutes")
     if (
-        not 1 <= config.get("submissions", 5) <= 100
-        or not 5 <= config.get("build_minutes", 25) <= 500
+        type(config.get("submissions", 5)) is not int
+        or not 1 <= config.get("submissions", 5) <= 100
+        or type(config.get("attempt_slots", 5)) is not int
+        or not 1 <= config.get("attempt_slots", 5) <= 100
     ):
         raise ValueError("operator-budget-invalid")
     if not Path(config["evaluation"]).resolve().is_relative_to(root.parent.resolve()):
@@ -67,10 +88,18 @@ def initialize(root, config):
         **config,
         "schema": "lightyear-verify-task/1",
         "submissions": config.get("submissions", 5),
-        "build_minutes": config.get("build_minutes", 25),
+        "attempt_slots": config.get("attempt_slots", 5),
+        "disclosure_mode": disclosure(config),
         "evaluation_inventory": inventory(config["evaluation"]),
         "implementation": implementation(),
     }
+    config["evaluation_inventory_sha256"] = digest(config["evaluation_inventory"])
+    ledger = Ledger(
+        config["evaluation_inventory_sha256"],
+        min(config["submissions"], config["attempt_slots"]),
+        tower_key=config.get("tower_public_key", ""),
+    )
+    config["inventory_ledger_public_key"] = ledger.signer.public.decode()
     initialize_key(root / "authority.pem")
     signer = Signer(root / "authority.pem")
     atomic_new(root / "task.json", signer.sign(config))
@@ -115,6 +144,21 @@ class Judge:
         fcntl.flock(self.lockfile, fcntl.LOCK_EX | fcntl.LOCK_NB)
         self.lock = threading.RLock()
         self.events = journal(self.root, self.signer.public)
+        self.ledger = Ledger(
+            self.config["evaluation_inventory_sha256"], self.config["attempt_slots"]
+        )
+        if (
+            self.ledger.signer.public.decode()
+            != self.config["inventory_ledger_public_key"]
+        ):
+            raise ValueError("inventory-authority-changed")
+        self.pool = ThreadPoolExecutor(
+            max_workers=1, thread_name_prefix="verify-finalizer"
+        )
+        self.active = None
+        self.ingress_counts = {}
+        self.ingress_tick = time.monotonic()
+        self.ingress_used = 0
         self.token = (self.root / "token").read_text().strip()
         self.exports = Path(self.config["exports"])
         self.bindings = {"task": self.config["content_sha256"]}
@@ -160,6 +204,7 @@ class Judge:
                 e["kind"] == "finished" and e["attempt_id"] == attempt["attempt_id"]
                 for e in self.events
             ):
+                self.write_public_receipt(self.receipt(attempt["attempt_id"]))
                 self.append(
                     "finished",
                     attempt_id=attempt["attempt_id"],
@@ -167,9 +212,23 @@ class Judge:
                         "content_sha256"
                     ],
                 )
+        for attempt in self.accepted():
+            receipt = self.receipt(attempt["attempt_id"])
+            self.write_public_receipt(receipt)
+            if receipt["status"] != "completed":
+                request_review(
+                    self.root,
+                    Path(self.config["tower_workspace"]),
+                    task,
+                    attempt["attempt_id"],
+                )
+        self.consume_decisions()
         self.export()
 
     def close(self):
+        self.pool.shutdown(wait=True)
+        with self.lock:
+            self.flush_ingress(force=True)
         self.lockfile.close()
 
     def append(self, kind, **body):
@@ -195,10 +254,50 @@ class Judge:
 
     def budget(self):
         used = len(self.accepted())
+        limit, cumulative = self.ledger.budget()
+        remaining = max(
+            0,
+            min(
+                self.config["submissions"] - used,
+                self.config["attempt_slots"] - used,
+                limit - cumulative,
+            ),
+        )
         return {
-            "submissions_left": max(0, self.config["submissions"] - used),
-            "build_minutes_left": max(0, self.config["build_minutes"] - used * 5),
+            "submissions_left": remaining,
+            "attempt_slots_left": remaining,
+            "inventory_attempts_used": cumulative,
+            "inventory_attempt_limit": limit,
         }
+
+    def flush_ingress(self, force=False):
+        if force or time.monotonic() - self.ingress_tick >= 60:
+            if self.ingress_counts:
+                self.append("ingress-summary", counts=self.ingress_counts)
+            self.ingress_counts = {}
+            self.ingress_used = 0
+            self.ingress_tick = time.monotonic()
+
+    def ingress(self, kind):
+        with self.lock:
+            self.flush_ingress()
+            # Fixed cardinality, saturating counters, at most one summary/minute.
+            if kind not in {"unauthorized", "invalid", "query", "throttled"}:
+                kind = "invalid"
+            self.ingress_counts[kind] = min(
+                2**31 - 1, self.ingress_counts.get(kind, 0) + 1
+            )
+            self.ingress_used = min(2**31 - 1, self.ingress_used + 1)
+            return self.ingress_used <= 120
+
+    def public_receipt(self, attempt_id):
+        private = self.receipt(attempt_id)
+        value = read_json(self.root / "public-receipts" / (attempt_id + ".json"))
+        if not verify_envelope(value, self.signer.public) or {
+            k: v for k, v in value.items() if k not in {"signature", "content_sha256"}
+        } != public_body(private):
+            raise ValueError("public-receipt-invalid")
+        return value
 
     def receipt(self, attempt_id):
         if attempt_id not in {e["attempt_id"] for e in self.accepted()}:
@@ -209,6 +308,7 @@ class Judge:
         return result
 
     def finish(self, attempt, verdict, diagnostics, evidence, status="completed"):
+        diagnostics = project(diagnostics, self.config["disclosure_mode"])
         evidence_path = (
             self.root / "private-evidence" / (attempt["attempt_id"] + ".json")
         )
@@ -228,6 +328,7 @@ class Judge:
                 artifact_sha256=attempt["artifact_sha256"],
                 verdict=verdict,
                 diagnostics=diagnostics,
+                disclosure_mode=self.config["disclosure_mode"],
                 status=status,
                 evidence_sha256=digest(evidence),
                 budget=self.budget(),
@@ -238,12 +339,47 @@ class Judge:
             )
         )
         atomic_new(self.root / "receipts" / (attempt["attempt_id"] + ".json"), receipt)
+        self.write_public_receipt(receipt)
         self.append(
             "finished",
             attempt_id=attempt["attempt_id"],
             receipt_sha256=receipt["content_sha256"],
         )
+        if status != "completed":
+            request_review(
+                self.root,
+                Path(self.config["tower_workspace"]),
+                self.config["task_id"],
+                attempt["attempt_id"],
+            )
         return receipt
+
+    def write_public_receipt(self, receipt):
+        public = self.signer.sign(public_body(receipt))
+        path = self.root / "public-receipts" / (receipt["attempt_id"] + ".json")
+        if path.exists():
+            if read_json(path) != public:
+                raise ValueError("public-receipt-binding-failed")
+        else:
+            atomic_new(path, public)
+
+    def consume_decisions(self):
+        applied = {
+            e["receipt_sha256"] for e in self.events if e["kind"] == "operator-decision"
+        }
+        for path in sorted((self.root / "operator-decisions").glob("*.json")):
+            bundle = read_json(path)
+            if not verify_envelope(bundle, self.signer.public):
+                raise ValueError("operator-import-invalid")
+            decision = verify_review(self.root, self.config, bundle)
+            if bundle["receipt_sha256"] not in applied:
+                self.append(
+                    "operator-decision",
+                    receipt_sha256=bundle["receipt_sha256"],
+                    outcome=decision["outcome"],
+                    bundle=bundle,
+                )
+                applied.add(bundle["receipt_sha256"])
 
     def export(self, active=None):
         receipts = [
@@ -259,9 +395,15 @@ class Judge:
             seen.add(h)
         exhausted = (
             self.budget()["submissions_left"] == 0
-            or self.budget()["build_minutes_left"] < 5
+            or self.budget()["attempt_slots_left"] < 1
         )
-        stopped = any(r["status"] != "completed" for r in receipts)
+        resolved = {
+            e["receipt_sha256"] for e in self.events if e["kind"] == "operator-decision"
+        }
+        stopped = any(
+            r["status"] != "completed" and r["content_sha256"] not in resolved
+            for r in receipts
+        )
         self.writer.emit(
             dict(
                 campaign_id=self.config["task_id"],
@@ -270,23 +412,32 @@ class Judge:
                 state=(
                     "running"
                     if active
-                    else "stopped" if stopped else "completed" if exhausted else "ready"
+                    else "paused" if stopped else "completed" if exhausted else "ready"
                 ),
                 active_trial={"id": active, "phase": "evaluation"} if active else None,
                 fixture=self.config.get("fixture", False),
                 limits={
                     "submissions": self.config["submissions"],
-                    "build_minutes": self.config["build_minutes"],
+                    "attempt_slots": self.config["attempt_slots"],
                 },
-                used={"submissions": used, "build_minutes": used * 5},
+                used={"submissions": used, "attempt_slots": used},
                 details={
                     "submissions": used,
-                    "refusals": sum(e["kind"] == "refused" for e in self.events),
+                    "refusals": sum(
+                        e.get("counts", {}).get("invalid", 0)
+                        + e.get("counts", {}).get("unauthorized", 0)
+                        for e in self.events
+                        if e["kind"] == "ingress-summary"
+                    )
+                    + self.ingress_counts.get("invalid", 0)
+                    + self.ingress_counts.get("unauthorized", 0),
                     "verdicts": [
                         {
                             "id": r["attempt_id"],
                             "verdict": r["verdict"],
-                            "receipt_sha256": r["content_sha256"],
+                            "receipt_sha256": self.public_receipt(r["attempt_id"])[
+                                "content_sha256"
+                            ],
                         }
                         for r in receipts
                     ],
@@ -305,12 +456,11 @@ class Judge:
                     or set(args) != METHODS[method]
                 ):
                     raise ValueError("request-invalid")
-                # Hash untrusted query arguments, never journal echoed values or artifact bodies.
-                self.append("query", method=method, arguments_sha256=digest(args))
                 if method == "get_task":
                     result = {
                         "work_order": "Implement CardDemo CBACT04C INTCALC in Java; submit a runnable JAR.",
                         "task_id": self.config["task_id"],
+                        "disclosure_mode": self.config["disclosure_mode"],
                         "public": self.config["public_task"],
                         "budget": self.budget(),
                         "rules": "Exact existing INTCALC comparator; normalization only by verified human Tower decisions.",
@@ -318,14 +468,22 @@ class Judge:
                 elif method == "get_budget":
                     result = self.budget()
                 elif method == "get_receipt":
-                    result = {"receipt": self.receipt(args["attempt_id"])}
+                    result = {"receipt": self.public_receipt(args["attempt_id"])}
                 elif method == "get_verdict":
-                    r = self.receipt(args["attempt_id"])
+                    if args["attempt_id"] == self.active:
+                        return {
+                            "ok": True,
+                            "verdict": "pending",
+                            "attempt_id": self.active,
+                        }
+                    r = self.public_receipt(args["attempt_id"])
                     result = {
                         "verdict": r["verdict"],
                         "diagnostics": r["diagnostics"],
                         "budget": self.budget(),
-                        "receipt_sha256": r["content_sha256"],
+                        "receipt_sha256": self.public_receipt(r["attempt_id"])[
+                            "content_sha256"
+                        ],
                     }
                 elif method == "propose_normalization":
                     result = self.propose(**args)
@@ -333,10 +491,7 @@ class Judge:
                     result = self.submit(**args)
                 return {"ok": True, **result}
             except Exception:
-                self.append(
-                    "refused", method=method if method in METHODS else "unknown"
-                )
-                self.export()
+                self.ingress("invalid")
                 return {
                     "ok": False,
                     "error": "request-refused",
@@ -361,14 +516,14 @@ class Judge:
             return {"attempt_id": previous[0]["attempt_id"]}
         if (
             self.budget()["submissions_left"] < 1
-            or self.budget()["build_minutes_left"] < 5
+            or self.budget()["attempt_slots_left"] < 1
         ):
             raise ValueError("budget-exhausted")
-        if any(
-            self.receipt(e["attempt_id"])["status"] != "completed"
-            for e in self.accepted()
-        ):
+        self.consume_decisions()
+        if self.active or self.unresolved():
             raise ValueError("operator-review-required")
+        if self.config["implementation"] != implementation():
+            raise ValueError("judge-implementation-changed")
         if inventory(self.config["evaluation"]) != self.config["evaluation_inventory"]:
             raise ValueError("evaluation-changed")
         attempt_id = "attempt-" + uuid.uuid4().hex
@@ -376,27 +531,81 @@ class Judge:
         path.parent.mkdir(exist_ok=True)
         with path.open("xb") as f:
             f.write(raw)
+        reservation = self.ledger.reserve(self.config["content_sha256"], attempt_id)
         attempt = self.append(
             "accepted",
+            inventory_reservation=reservation,
             attempt_id=attempt_id,
             attempt_number=len(self.accepted()) + 1,
             request_id=request_id,
             artifact_sha256=hashed,
         )
+        self.active = attempt_id
         self.export(active=attempt_id)
+        self.pool.submit(self.execute, attempt)
+        return {"attempt_id": attempt_id, "verdict": "pending"}
+
+    def execute(self, attempt):
+        attempt_id = attempt["attempt_id"]
         try:
-            outcome, ds, runs = evaluate(
-                self.root,
-                self.config["evaluation"],
-                path,
-                self.signer,
-                review_root=self.config["tower_workspace"],
+            subprocess.run(
+                [
+                    sys.executable,
+                    "-m",
+                    "lightyear_judge.worker",
+                    str(self.root),
+                    attempt_id,
+                ],
+                stdin=subprocess.DEVNULL,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+                check=True,
+                timeout=360,
             )
-            self.finish(attempt, outcome, ds, runs)
+            result = read_json(self.root / "worker-results" / (attempt_id + ".json"))
+            if (
+                not verify_envelope(result, self.signer.public)
+                or result["task"] != self.config["content_sha256"]
+                or result["attempt_id"] != attempt_id
+            ):
+                raise ValueError("worker-result-invalid")
+            with self.lock:
+                self.finish(
+                    attempt, result["verdict"], result["diagnostics"], result["runs"]
+                )
         except Exception:
-            self.finish(attempt, "indeterminate", [], [], "equipment-failure")
-        self.export()
-        return {"attempt_id": attempt_id}
+            with self.lock:
+                if not (self.root / "receipts" / (attempt_id + ".json")).exists():
+                    self.finish(attempt, "indeterminate", [], [], "equipment-failure")
+        finally:
+            with self.lock:
+                self.active = None
+                self.export()
+
+    def unresolved(self):
+        resolved = {
+            e["receipt_sha256"] for e in self.events if e["kind"] == "operator-decision"
+        }
+        pending = []
+        for e in self.accepted():
+            receipt = self.receipt(e["attempt_id"])
+            self.public_receipt(e["attempt_id"])
+            finished = [
+                f
+                for f in self.events
+                if f["kind"] == "finished" and f["attempt_id"] == e["attempt_id"]
+            ]
+            if (
+                len(finished) != 1
+                or finished[0]["receipt_sha256"] != receipt["content_sha256"]
+            ):
+                raise ValueError("attempt-finalization-incomplete")
+            if (
+                receipt["status"] != "completed"
+                and receipt["content_sha256"] not in resolved
+            ):
+                pending.append(receipt)
+        return pending
 
     def propose(self, attempt_id, dataset, field):
         from lightyear_mainframe.zos_bindings import load_bindings, dataset_binding
@@ -404,7 +613,7 @@ class Judge:
 
         receipt = self.receipt(attempt_id)
         if not any(
-            d["dataset"] == dataset and d["field"] == field
+            d["dataset"] == dataset and d.get("field") == field
             for d in receipt["diagnostics"]
         ):
             raise ValueError("proposal-unbound")
@@ -466,21 +675,43 @@ def replay(root, key, expected_head):
     for event in events:
         if event["task"] != config["content_sha256"]:
             raise ValueError("journal-task-mismatch")
+        if event["kind"] == "operator-decision":
+            decision = verify_review(root, config, event["bundle"])
+            if (
+                decision["outcome"] != event["outcome"]
+                or event["receipt_sha256"] != event["bundle"]["receipt_sha256"]
+            ):
+                raise ValueError("operator-decision-replay-failed")
         if event["kind"] != "accepted":
             continue
+        reservation = event["inventory_reservation"]
+        if (
+            not verify_envelope(
+                reservation, config["inventory_ledger_public_key"].encode()
+            )
+            or reservation["inventory_sha256"] != config["evaluation_inventory_sha256"]
+            or reservation["task_sha256"] != config["content_sha256"]
+            or reservation["attempt_id"] != event["attempt_id"]
+        ):
+            raise ValueError("inventory-reservation-invalid")
         attempts += 1
         if (
             event["attempt_number"] != attempts
             or event["attempt_id"] in ids
             or event["request_id"] in requests
             or attempts > config["submissions"]
-            or attempts * 5 > config["build_minutes"]
+            or attempts > config["attempt_slots"]
         ):
             raise ValueError("attempt-budget-or-identity-invalid")
         ids.add(event["attempt_id"])
         requests.add(event["request_id"])
         receipt = read_json(root / "receipts" / (event["attempt_id"] + ".json"))
         runs = read_json(root / "private-evidence" / (event["attempt_id"] + ".json"))
+        public = read_json(root / "public-receipts" / (event["attempt_id"] + ".json"))
+        if not verify_envelope(public, key) or {
+            k: v for k, v in public.items() if k not in {"signature", "content_sha256"}
+        } != public_body(receipt):
+            raise ValueError("public-receipt-replay-failed")
         if (
             not verify_envelope(receipt, key)
             or receipt["evidence_sha256"] != digest(runs)
@@ -516,7 +747,8 @@ def replay(root, key, expected_head):
                 raise ValueError("native-artifact-binding-failed")
             count += 1
         if receipt["status"] == "completed":
-            if not runs or summarize(runs) != (
+            outcome, ds = summarize(runs)
+            if not runs or (outcome, project(ds, config["disclosure_mode"])) != (
                 receipt["verdict"],
                 receipt["diagnostics"],
             ):

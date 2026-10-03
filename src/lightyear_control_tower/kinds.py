@@ -51,6 +51,20 @@ def default_registry():
     return KindRegistry(
         [
             K(
+                "verify-attempt-review",
+                ("continue", "void"),
+                ("campaign-authorizer",),
+                ("receipt",),
+                consumer="verify-next-attempt",
+            ),
+            K(
+                "verify-budget-increase",
+                ("approved", "rejected"),
+                ("campaign-authorizer",),
+                ("inventory", "budget", "new_limit"),
+                consumer="verify-inventory-budget",
+            ),
+            K(
                 "verify-normalization",
                 ("approved", "rejected"),
                 ("normalization-approver",),

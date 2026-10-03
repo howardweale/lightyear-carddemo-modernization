@@ -37,7 +37,10 @@ def main():
         # Report only public installation metadata if a hosted image is unsuitable.
         # This runs before creating any private judge session or signing key.
         probe = subprocess.run(
-            [sys.executable, "-c", """
+            [
+                sys.executable,
+                "-c",
+                """
 from lightyear_judge.sandbox import require_trusted_installation
 try:
     require_trusted_installation(65534)
@@ -47,12 +50,22 @@ except ValueError as exc:
         frame = frame.tb_next
     print('Installation refused:', frame.tb_frame.f_locals.get('p'), flush=True)
     raise
-"""], cwd=target, env=env,
+""",
+            ],
+            cwd=target,
+            env=env,
         )
         if probe.returncode:
             return probe.returncode
         result = subprocess.run(
-            [sys.executable, "-m", "unittest", "tests.test_verify_mcp", "-v"],
+            [
+                sys.executable,
+                "-m",
+                "unittest",
+                "tests.test_verify_mcp",
+                "tests.test_verify_hardening",
+                "-v",
+            ],
             cwd=target,
             env=env,
         )

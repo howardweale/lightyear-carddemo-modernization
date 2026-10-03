@@ -1,25 +1,41 @@
 """Read and draft-only Tower MCP. Never exposes approve/decide or engine tools."""
 
 from pathlib import Path
+from datetime import datetime
+from threading import Lock
 from .decisions import DecisionUnauthorized, utcnow
 
 
 class TowerTools:
     def __init__(self, service, credential):
         self.service = service
+        self._credential = credential
+        self._refresh_lock = Lock()
+        self._login()
+
+    def _login(self):
+        service, credential = self.service, self._credential
         session = service.login(credential)
         if session["actor"]["kind"] != "agent" or "agent" not in session["roles"]:
             service.logout(session["token"])
             raise DecisionUnauthorized("Tower MCP requires an agent identity")
         self.token = session["token"]
+        self.expires_at = datetime.fromisoformat(session["expires_at"])
+
+    def _session(self):
+        with self._refresh_lock:
+            if utcnow() >= self.expires_at:
+                self._login()
+            return self.token
 
     def queue(self):
-        return self.service.queue(self.token)
+        return self.service.queue(self._session())
 
     def item(self, item_id):
-        return self.service.item(self.token, item_id)
+        return self.service.item(self._session(), item_id)
 
     def campaign_status(self, campaign_id):
+        self._session()
         if hasattr(self.service, "campaign_status"):
             return self.service.campaign_status(self.token, campaign_id)
         from .features import feature
@@ -33,6 +49,7 @@ class TowerTools:
         )
 
     def catalogue(self):
+        self._session()
         if hasattr(self.service, "catalogue"):
             return self.service.catalogue(self.token)
         from .features import feature
@@ -46,17 +63,24 @@ class TowerTools:
                 "reason": "Catalogue adapter not installed",
             }
         return adapter.read_catalogue(
-            self.service.root, self.service.public_key, scope=self.service.scope
+            self.service.root,
+            self.service.public_key,
+            qualification_key=(
+                self.service.qualification_key()
+                if (self.service.root / "catalog/lanes.json").exists()
+                else None
+            ),
+            scope=self.service.scope,
         )
 
     def propose_rule(self, payload):
-        return self.service.propose(self.token, "rule-proposal", payload)
+        return self.service.propose(self._session(), "rule-proposal", payload)
 
     def prepare_classification(self, payload):
-        return self.service.propose(self.token, "classification-draft", payload)
+        return self.service.propose(self._session(), "classification-draft", payload)
 
     def annotate_request(self, payload):
-        return self.service.propose(self.token, "annotation", payload)
+        return self.service.propose(self._session(), "annotation", payload)
 
 
 def create_server(service, credential):

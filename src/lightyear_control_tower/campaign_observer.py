@@ -3,9 +3,11 @@
 import hashlib
 import json
 import math
+import os
 from datetime import datetime, timezone, timedelta
 from pathlib import Path
-from .decisions import canonical, digest, verify_envelope
+from .decisions import canonical, digest, verify_envelope, ZERO
+from .fileio import regular_reader
 from .requests import read_json, read_bytes, identifier, confined
 
 POLICY = {
@@ -14,7 +16,40 @@ POLICY = {
     "visible_poll_seconds": 3,
     "hidden_poll_seconds": 30,
 }
-ACCOUNTING_CACHE = "Accounting period cache is not bound to journey postings"
+
+
+def utc_time(value):
+    try:
+        if isinstance(value, (int, float)) and not isinstance(value, bool):
+            return datetime.fromtimestamp(value, timezone.utc)
+        if isinstance(value, str):
+            result = datetime.fromisoformat(value.replace("Z", "+00:00"))
+            return (
+                result.replace(tzinfo=timezone.utc)
+                if result.tzinfo is None
+                else result.astimezone(timezone.utc)
+            )
+    except (ValueError, TypeError, OverflowError, OSError):
+        pass
+    return None
+
+
+def origin_of(value):
+    origin = value.get("thrown_by", value.get("origin", "unknown"))
+    return (
+        origin
+        if origin
+        in {
+            "candidate",
+            "support",
+            "application",
+            "equipment",
+            "platform",
+            "outside",
+            "unknown",
+        }
+        else "unknown"
+    )
 
 
 def wilson(k, n):
@@ -48,15 +83,24 @@ def journal_lines(path):
 def closed_failures(gate, projection):
     failures = []
     error = gate.get("error") or {}
-    if (
-        error.get("type") == "BusinessViolation"
-        and error.get("message", "").rstrip(".") == ACCOUNTING_CACHE
-    ):
+    if isinstance(error, dict) and error:
+        stage = error.get("stage", gate.get("stage"))
+        identity = {
+            "status": gate.get("status"),
+            "type": error.get("type"),
+            "stage": stage,
+            "message_sha256": digest(error.get("message", "")),
+        }
         failures.append(
             {
-                "class": "accounting_cache",
-                "origin": "unknown",
-                "location": "combined-native-judge/accounting_cache",
+                "class": "gate-failure:" + digest(identity),
+                "origin": (
+                    origin_of(error)
+                    if origin_of(error) != "unknown"
+                    else origin_of(gate)
+                ),
+                "location": stage or "",
+                "identity": identity,
             }
         )
     diagnostics = projection.get("diagnostics", [])
@@ -67,23 +111,15 @@ def closed_failures(gate, projection):
             if isinstance(values, list)
             for d in values
         ]
+    if not isinstance(diagnostics, list):
+        diagnostics = []
     for d in diagnostics:
         if not isinstance(d, dict):
             continue
         frame = d.get("candidate_frame") or d.get("location") or {}
         if not isinstance(frame, dict):
             frame = {}
-        origin = d.get("thrown_by", d.get("origin", "unknown"))
-        if origin not in {
-            "candidate",
-            "support",
-            "application",
-            "equipment",
-            "platform",
-            "outside",
-            "unknown",
-        }:
-            origin = "unknown"
+        origin = origin_of(d)
         failures.append(
             {
                 "class": d.get("category", d.get("kind", "unknown")),
@@ -115,8 +151,9 @@ def alerts(view, *, now, policy=POLICY):
             loc = f.get("location")
             origin = f.get("origin")
             key = (t["phase"], f.get("class"), canonical(loc).decode())
-            groups.setdefault(key, set()).add(t["id"])
-            if origin not in {None, "candidate", "unknown"}:
+            if loc:
+                groups.setdefault(key, set()).add(t["id"])
+            if loc and origin not in {None, "candidate", "unknown"}:
                 groups.setdefault((t["phase"], "origin:" + origin, ""), set()).add(
                     t["id"]
                 )
@@ -127,6 +164,10 @@ def alerts(view, *, now, policy=POLICY):
                     origin=origin,
                     decision_kind="measurement-validity",
                 )
+        if t.get("equipment_suspect"):
+            add(
+                "equipment-suspect", trial=t["id"], decision_kind="measurement-validity"
+            )
         if t.get("gate_decline") == "insufficient-type-evidence" and any(
             f["class"] == "candidate-runtime-exception" for f in t.get("failures", [])
         ):
@@ -146,6 +187,8 @@ def alerts(view, *, now, policy=POLICY):
                 decision_kind="measurement-validity",
             )
     for key, limit in view["limits"].items():
+        if key not in {"calls", "compilations", "seconds"}:
+            continue
         used = view["used"].get(key)
         if (
             isinstance(limit, (int, float))
@@ -161,29 +204,37 @@ def alerts(view, *, now, policy=POLICY):
                         used=used,
                         limit=limit,
                     )
-    if not view["integrity"].get("verified"):
+    invalid = [
+        issue
+        for issue in view["integrity"].get("issues", [])
+        if "unavailable" not in issue
+    ]
+    if invalid:
         add(
             "integrity",
             decision_kind="measurement-validity",
-            details=view["integrity"].get("issues", []),
+            details=invalid,
         )
-    calendar = view.get("calendar", {})
-    if calendar.get("clock_mode") in {
-        "unmodified-real-time",
-        "real-time-period-guarded",
-    } and calendar.get("period_end_exclusive_utc"):
-        end = datetime.fromisoformat(calendar["period_end_exclusive_utc"])
-        remaining = max(
-            0, view["limits"].get("seconds", 0) - view["used"].get("seconds", 0)
-        )
-        if now + timedelta(seconds=remaining) >= end:
-            add("clock-boundary", decision_kind="measurement-validity")
-    last = view.get("last_event_utc")
+    now = utc_time(now.isoformat() if isinstance(now, datetime) else now)
+    calendar = view.get("calendar") or {}
+    end = utc_time(calendar.get("period_end_exclusive_utc"))
+    limit = view["limits"].get("seconds")
+    used = view["used"].get("seconds")
     if (
-        last
+        now
+        and end
+        and calendar.get("clock_mode")
+        in {"unmodified-real-time", "real-time-period-guarded"}
+    ):
+        if isinstance(limit, (int, float)) and isinstance(used, (int, float)):
+            if now + timedelta(seconds=max(0, limit - used)) >= end:
+                add("clock-boundary", decision_kind="measurement-validity")
+    last = utc_time(view.get("last_event_utc"))
+    if (
+        now
+        and last
         and not view.get("terminal")
-        and (now - datetime.fromisoformat(last)).total_seconds()
-        > view.get("per_trial_seconds", 7200)
+        and (now - last).total_seconds() > (view.get("per_trial_seconds") or 7200)
     ):
         add("stale", observation_only=True)
     return output
@@ -192,7 +243,17 @@ def alerts(view, *, now, policy=POLICY):
 class CampaignSource:
     family = "ms94-stage-b"
 
-    def __init__(self, root, published, campaign, key, *, snapshot=None, policy=None):
+    def __init__(
+        self,
+        root,
+        published,
+        campaign,
+        key,
+        *,
+        snapshot=None,
+        policy=None,
+        read_mode="live",
+    ):
         self.root = Path(root).resolve()
         self.published = Path(published).resolve()
         self.campaign = Path(campaign).resolve()
@@ -203,12 +264,44 @@ class CampaignSource:
             else self.root / "execution-snapshot.json"
         )
         self.policy = policy or POLICY
+        if read_mode not in {"live", "immutable-export"}:
+            raise ValueError("Unsupported campaign read mode")
+        self.read_mode = read_mode
 
     def project(self, campaign_id, *, now):
+        if os.name == "nt" and self.read_mode == "live":
+            return unavailable_campaign(
+                campaign_id, "live-windows-observation-unavailable-use-immutable-export"
+            )
+        try:
+            return self._project(campaign_id, now=now)
+        except (
+            ValueError,
+            TypeError,
+            KeyError,
+            AttributeError,
+            OSError,
+            RecursionError,
+        ):
+            return unavailable_campaign(campaign_id)
+
+    def _project(self, campaign_id, *, now):
+        now = utc_time(now.isoformat() if isinstance(now, datetime) else now)
         records = {}
         issues = []
         signature_status = {}
         times = []
+
+        def record_name(path):
+            path = Path(path)
+            for label, base in (
+                ("root", self.root),
+                ("published", self.published),
+                ("campaign", self.campaign),
+            ):
+                if path.is_relative_to(base):
+                    return label + "/" + path.relative_to(base).as_posix()
+            return "snapshot/" + path.name
 
         def load(path, *, signed=False):
             if not path.exists():
@@ -226,11 +319,9 @@ class CampaignSource:
                     == digest({k: v for k, v in value.items() if k != "content_sha256"})
                 )
                 if signed or "signature" in value:
-                    signature_status[
-                        path.name
-                        + ":"
-                        + hashlib.sha256(str(path).encode()).hexdigest()[:12]
-                    ] = ("verified" if "signature" in value and valid else "invalid")
+                    signature_status[record_name(path)] = (
+                        "verified" if "signature" in value and valid else "invalid"
+                    )
                 if sha and not valid:
                     issues.append("record-hash-or-signature-invalid:" + path.name)
                 if not sha and path.name in {
@@ -241,26 +332,19 @@ class CampaignSource:
                     issues.append("record-hash-missing:" + path.name)
                 if signed and "signature" not in value:
                     issues.append("missing-signature:" + path.name)
-                records[
-                    path.name
-                    + ":"
-                    + hashlib.sha256(str(path).encode()).hexdigest()[:12]
-                ] = hashlib.sha256(raw).hexdigest()
+                records[record_name(path)] = hashlib.sha256(raw).hexdigest()
                 for field in (
                     "recorded_at_utc",
                     "issued_at_utc",
                     "created_at_utc",
                     "started_at_utc",
+                    "started_at",
                     "ended_at",
                     "finished_at",
                 ):
-                    if isinstance(value.get(field), str):
-                        try:
-                            dt = datetime.fromisoformat(value[field])
-                            if dt.tzinfo:
-                                times.append(dt.isoformat())
-                        except ValueError:
-                            pass
+                    dt = utc_time(value.get(field))
+                    if dt:
+                        times.append(dt)
                 return value
             except (ValueError, OSError, TypeError):
                 issues.append("incomplete-or-invalid-record:" + path.name)
@@ -291,6 +375,48 @@ class CampaignSource:
         published_receipt = load(
             self.campaign / "published-executable.json", signed=True
         ) or load(self.campaign / "published-plan.json", signed=True)
+        journal_status = "unavailable"
+        journal_path = self.campaign / "events.jsonl"
+        if journal_path.exists():
+            try:
+                raw = read_bytes(journal_path)
+                records[record_name(journal_path)] = hashlib.sha256(raw).hexdigest()
+                complete = [
+                    json.loads(line)
+                    for line in raw.splitlines(keepends=True)
+                    if line.endswith(b"\n") and line.strip()
+                ]
+                if complete and all(
+                    isinstance(e, dict) and "sequence" in e and "previous_sha256" in e
+                    for e in complete
+                ):
+                    previous = ZERO
+                    for index, event in enumerate(complete, 1):
+                        if (
+                            event["sequence"] != index
+                            or event["previous_sha256"] != previous
+                            or not verify_envelope(event, self.key)
+                        ):
+                            raise ValueError("Invalid journal chain")
+                        previous = event["content_sha256"]
+                        dt = utc_time(
+                            event.get("occurred_at", event.get("recorded_at_utc"))
+                        )
+                        if dt:
+                            times.append(dt)
+                    journal_status = (
+                        "verified-complete-prefix"
+                        if raw and not raw.endswith(b"\n")
+                        else "verified"
+                    )
+                elif complete and any(
+                    isinstance(e, dict) and ("sequence" in e or "previous_sha256" in e)
+                    for e in complete
+                ):
+                    raise ValueError("Incomplete journal chain fields")
+            except (ValueError, OSError, TypeError, KeyError):
+                journal_status = "invalid"
+                issues.append("journal-chain-invalid")
         if not plan:
             issues.append("plan-unavailable")
         if not declaration:
@@ -311,7 +437,11 @@ class CampaignSource:
         declared_snapshot = auth.get(
             "snapshot_sha256", declaration.get("snapshot_sha256")
         )
-        if declared_snapshot and snapshot.get("content_sha256") != declared_snapshot:
+        if (
+            declared_snapshot
+            and snapshot
+            and snapshot.get("content_sha256") != declared_snapshot
+        ):
             issues.append("snapshot-mismatch")
         if not declared_snapshot:
             issues.append("snapshot-binding-unavailable")
@@ -321,7 +451,7 @@ class CampaignSource:
             for name, sha in snapshot["files"].items():
                 try:
                     # Streaming to bound memory even for large declared files.
-                    with confined(self.root, name).open("rb") as f:
+                    with regular_reader(confined(self.root, name, internal=True)) as f:
                         actual = hashlib.file_digest(f, "sha256").hexdigest()
                     if actual != sha:
                         issues.append("frozen-input-mismatch")
@@ -357,15 +487,20 @@ class CampaignSource:
                 if trial_path
                 else self.campaign / "trials" / name
             )
-            receipt = load(folder / "receipt.json", signed=True) or load(
-                self.published / "terminal/trials" / name / "receipt.json", signed=True
+            receipt = (
+                load(folder / "receipt.json", signed=True)
+                or load(
+                    self.published / "terminal/trials" / name / "receipt.json",
+                    signed=True,
+                )
+                or load(self.published / "trials" / name / "receipt.json", signed=True)
             )
             r = receipt or result
             status = r.get("status")
             if (
                 receipt
                 and result.get("receipt_sha256")
-                and receipt["content_sha256"] != result["receipt_sha256"]
+                and receipt.get("content_sha256") != result["receipt_sha256"]
             ):
                 issues.append("trial-receipt-binding-mismatch:" + name)
             started = load(folder / "supervision-start.json") or load(
@@ -387,7 +522,7 @@ class CampaignSource:
                                 "running"
                                 if active.get("phase") == phase
                                 and active.get("index") == idx
-                                else "pending"
+                                else "pending" if active else "unavailable"
                             )
                         )
                     )
@@ -399,6 +534,7 @@ class CampaignSource:
             failures = []
             trace = []
             gate_decline = None
+            equipment_suspect = bool(r.get("equipment_suspect"))
             attempts = r.get("attempts", [])
             if self.family == "ms94-equipment" and result.get("run_directory"):
                 attempts = [result]
@@ -410,17 +546,23 @@ class CampaignSource:
                 gate = load(native / "gate.json")
                 projection = load(native / "diagnostic-projection.json", signed=True)
                 if (
-                    a.get("gate_sha256")
+                    gate
+                    and a.get("gate_sha256")
                     and gate.get("content_sha256") != a["gate_sha256"]
                 ):
                     issues.append("gate-binding-mismatch:" + name)
-                if projection.get("gate_sha256") and projection[
-                    "gate_sha256"
-                ] != gate.get("content_sha256"):
+                if (
+                    gate
+                    and projection.get("gate_sha256")
+                    and projection["gate_sha256"] != gate.get("content_sha256")
+                ):
                     issues.append("diagnostic-gate-binding-mismatch:" + name)
                 if not gate:
                     issues.append("native-gate-unavailable:" + name)
                 failures.extend(closed_failures(gate, projection))
+                equipment_suspect = equipment_suspect or bool(
+                    projection.get("equipment_suspect")
+                )
                 # Public traces are explicitly named sanitized artifacts; never captures.
                 t = load(native / "public-trace.json")
                 trace.extend(
@@ -437,8 +579,11 @@ class CampaignSource:
                     else []
                 )
                 feedback = load(folder / f"feedback-{n}.json", signed=True)
-                for d in feedback.get("analyst_proposal", {}).get("decisions", []):
-                    if d.get("reason") == "insufficient-type-evidence":
+                for d in (feedback.get("analyst_proposal") or {}).get("decisions", []):
+                    if (
+                        d.get("disposition") == "reject"
+                        and d.get("reason") == "insufficient-type-evidence"
+                    ):
                         gate_decline = d["reason"]
             cost = r.get("cost", {})
             verdict = attempts[-1].get("result_class", status) if attempts else status
@@ -451,8 +596,9 @@ class CampaignSource:
                     "verdict": verdict,
                     "failures": failures,
                     "gate_decline": gate_decline,
-                    "calls": cost.get("client_invocations", 0),
-                    "compilations": cost.get("compilations", 0),
+                    "equipment_suspect": equipment_suspect,
+                    "calls": cost.get("client_invocations"),
+                    "compilations": cost.get("compilations"),
                     "start_utc": started.get("started_at_utc"),
                     "end_utc": r.get("finished_at"),
                     "trace": trace,
@@ -467,6 +613,25 @@ class CampaignSource:
         passed = sum(t["state"] == "passed" for t in cohort)
         completed = sum(t["state"] in {"passed", "failed"} for t in cohort)
         measured = terminal and not void and bool(cohort) and completed == len(cohort)
+        campaign_start = next(
+            (
+                stamp
+                for record in (progress, auth, active)
+                if (
+                    stamp := utc_time(
+                        record.get("started_at", record.get("started_at_utc"))
+                    )
+                )
+            ),
+            None,
+        )
+
+        def recorded_cost(field):
+            observed = [t for t in trials if t["state"] not in {"pending", "not-run"}]
+            if any(t[field] is None for t in observed):
+                return None
+            return sum(t[field] for t in observed)
+
         v = {
             "schema": "tower-campaign-view/1",
             "id": campaign_id,
@@ -476,7 +641,7 @@ class CampaignSource:
             "state": (
                 "void"
                 if void
-                else "terminal" if terminal else "running" if active else "pending"
+                else "terminal" if terminal else "running" if active else "unavailable"
             ),
             "plan_sha256": plan.get("content_sha256"),
             "declaration_sha256": declaration.get("content_sha256"),
@@ -494,14 +659,24 @@ class CampaignSource:
             "used": {
                 "calls": report.get(
                     "all_recorded_call_cost_including_interrupted_trial", {}
-                ).get("calls", sum(t["calls"] for t in trials)),
+                ).get("calls", recorded_cost("calls")),
                 "compilations": (
                     None
                     if report.get("interrupted_slot")
-                    else sum(t["compilations"] for t in trials)
+                    else recorded_cost("compilations")
                 ),
-                "seconds": report.get("elapsed_seconds"),
-                "slots": sum(t["state"] not in {"pending", "not-run"} for t in trials),
+                "seconds": (
+                    report.get("elapsed_seconds")
+                    if report
+                    else (
+                        max(0, (now - campaign_start).total_seconds())
+                        if campaign_start
+                        else None
+                    )
+                ),
+                "slots": sum(
+                    t["state"] in {"passed", "failed", "void"} for t in trials
+                ),
             },
             "trials": trials,
             "totals": {
@@ -517,13 +692,13 @@ class CampaignSource:
                 "issues": sorted(set(issues)),
                 "signatures": signature_status,
                 "record_hashes": records,
-                "journal_chain": "not-applicable-artifact-layout",
+                "journal_chain": journal_status,
             },
             "calendar": plan.get("calendar", {}),
             "stop_rules": {k: v for k, v in plan.items() if k.startswith("stop_")},
             "decision_rules": plan.get("decision_rules", {}),
             "per_trial_seconds": plan.get("per_trial_elapsed_seconds", 7200),
-            "last_event_utc": max(times) if times else None,
+            "last_event_utc": max(times).isoformat() if times else None,
             "legacy_approvals": [],
             "controller_reads_tower_decisions": False,
             "observer_policy": self.policy,
@@ -535,7 +710,9 @@ class CampaignSource:
                     "label": "legacy: typed statement, not countersigned",
                     "signature_type": legacy.get("signature_type"),
                     "independent_review": False,
-                    "content_sha256": legacy.get("content_sha256"),
+                    "content_sha256": hashlib.sha256(
+                        read_bytes(self.published / "operator-adjudication.json")
+                    ).hexdigest(),
                 }
             ]
         if auth.get("operator_approval"):
@@ -560,6 +737,10 @@ class NumberSource(CampaignSource):
     family = "number-pilot"
 
     def project(self, campaign_id, *, now):
+        if os.name == "nt" and self.read_mode == "live":
+            return unavailable_campaign(
+                campaign_id, "live-windows-observation-unavailable-use-immutable-export"
+            )
         from lightyear_workflow.campaign_journals import exported
         from lightyear_workflow.campaign_engine import project as replay_projection
 
@@ -659,6 +840,19 @@ class CampaignRegistry:
         row = next((r for r in self.entries() if r["id"] == campaign_id), None)
         if row is None:
             raise KeyError("Unknown campaign in this scope")
+        try:
+            return self._view(row, campaign_id, now=now)
+        except (
+            ValueError,
+            KeyError,
+            TypeError,
+            OSError,
+            AttributeError,
+            RecursionError,
+        ):
+            return unavailable_campaign(campaign_id)
+
+    def _view(self, row, campaign_id, *, now):
         adapter = {
             "ms94-stage-b": CampaignSource,
             "ms94-equipment": EquipmentSource,
@@ -666,11 +860,7 @@ class CampaignRegistry:
         }[row["adapter"]]
         # Absolute source roots are LOCAL operator configuration only, never request input.
         path = self.root / "control-tower/decision-console-policy.json"
-        policy = (
-            read_json(path)
-            if path.exists()
-            else POLICY
-        )
+        policy = read_json(path) if path.exists() else POLICY
         if not isinstance(policy.get("version"), int) or policy.get(
             "budget_thresholds"
         ) != [0.8, 1.0]:
@@ -679,8 +869,28 @@ class CampaignRegistry:
             row["root"],
             row["published_directory"],
             row["work_directory"],
-            Path(row["trusted_public_key"]).read_bytes(),
+            read_bytes(Path(row["trusted_public_key"])),
             snapshot=row.get("snapshot"),
             policy=policy,
+            read_mode=row.get("read_mode", "live"),
         )
         return src.project(campaign_id, now=now)
+
+
+def unavailable_campaign(campaign_id, reason="campaign-records-unavailable"):
+    value = {
+        "schema": "tower-campaign-view/1",
+        "id": campaign_id,
+        "state": "unavailable",
+        "read_only": True,
+        "trials": [],
+        "alerts": [],
+        "limits": {},
+        "used": {},
+        "integrity": {
+            "verified": False,
+            "issues": [reason],
+            "journal_chain": "unavailable",
+        },
+    }
+    return {**value, "content_sha256": digest(value)}

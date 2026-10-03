@@ -10,6 +10,8 @@ from .requests import identifier
 from .campaign_observer import CampaignRegistry
 from .features import feature
 
+SOCKET_TIMEOUT = 5
+
 READ_ROUTES = frozenset(
     {
         "queue",
@@ -49,7 +51,7 @@ class ConsoleAPI:
         if route == "queue":
             result = s.queue(token)
             if self.workflows:
-                with s.transaction() as db:
+                with s.connect() as db:
                     events = s.events(db)
                     for item in result["items"]:
                         if item.get("status") == "invalid" or item.get("kind") not in {
@@ -66,6 +68,23 @@ class ConsoleAPI:
                                 "passed": False,
                                 "reason_code": "required-evidence-validation-unavailable-or-failed",
                             }
+                from .workflows import rule_register
+
+                for row in rule_register(s, token)["rules"]:
+                    if row["review_due"]:
+                        result["items"].append(
+                            {
+                                "id": "review-due-" + row["approval_sha256"],
+                                "scope": s.scope,
+                                "kind": "rule-retirement",
+                                "status": "review due",
+                                "summary": "Rule review due: " + row["rule"]["title"],
+                                "decidable": False,
+                                "required_roles": ["business-owner"],
+                                "bound": {},
+                                "next_action": "Submit a renewal or retirement request bound to the authenticated rule proposal",
+                            }
+                        )
             return result
         if route == "item":
             return s.item(token, identifier(args["id"]))
@@ -83,7 +102,16 @@ class ConsoleAPI:
         if route == "catalogue":
             module = feature("catalogue")
             return (
-                module.read_catalogue(s.root, s.public_key, scope=s.scope)
+                module.read_catalogue(
+                    s.root,
+                    s.public_key,
+                    qualification_key=(
+                        s.qualification_key()
+                        if (s.root / "catalog/lanes.json").exists()
+                        else None
+                    ),
+                    scope=s.scope,
+                )
                 if module
                 else {
                     "available": False,
@@ -110,7 +138,7 @@ class ConsoleAPI:
             if not self.workflows:
                 raise DecisionConflict("Workflow validator not installed")
             item = s.inbox.item(identifier(args["id"]))
-            with s.transaction() as db:
+            with s.connect() as db:
                 return self.workflows.inspect(item, s.events(db))
         if route == "events":
             # No watcher, lock or write in any source directory. A bounded SSE
@@ -129,6 +157,8 @@ class ConsoleAPI:
         if route not in WRITE_ROUTES:
             raise KeyError("Unknown write route")
         s = self.service
+        if route == "logout":
+            return s.logout(token)
         s._write_access(token, route, deciding=route == "decide")
         if route == "review":
             return s.review(token, identifier(payload["id"]))
@@ -136,8 +166,6 @@ class ConsoleAPI:
             return s.decide(token, payload)
         if route == "propose":
             return s.propose(token, payload["proposal_type"], payload)
-        if route == "logout":
-            return s.logout(token)
 
 
 def create_server(service, *, port=8766, assets=None):
@@ -155,6 +183,8 @@ def create_server(service, *, port=8766, assets=None):
     }
 
     class Handler(BaseHTTPRequestHandler):
+        timeout = SOCKET_TIMEOUT
+
         def log_message(self, *args):
             pass  # Never print credentials or user evidence.
 
@@ -209,7 +239,10 @@ def create_server(service, *, port=8766, assets=None):
                         != "application/json"
                     ):
                         raise ValueError("JSON required")
-                    payload = json.loads(self.rfile.read(size))
+                    raw = self.rfile.read(size)
+                    if len(raw) != size:
+                        raise ValueError("Incomplete request body")
+                    payload = json.loads(raw)
                     if not isinstance(payload, dict):
                         raise ValueError("Object required")
                     result = (
@@ -239,8 +272,14 @@ def create_server(service, *, port=8766, assets=None):
                 )
             except KeyError:
                 return self.send(404, {"error": "scoped-item-not-found"})
+            except TimeoutError:
+                self.close_connection = True
+                return self.send(408, {"error": "request-timeout"})
             except (ValueError, TypeError, OSError):
                 return self.send(422, {"error": "invalid-or-unavailable-evidence"})
+            except Exception:
+                self.close_connection = True
+                return self.send(500, {"error": "internal-error"})
 
         def do_GET(self):
             self.process()

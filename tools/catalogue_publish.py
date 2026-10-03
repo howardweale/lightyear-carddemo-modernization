@@ -5,7 +5,7 @@ import hashlib
 from pathlib import Path
 from lightyear_control_tower.console import ConsoleService
 from lightyear_control_tower.catalogue import publish_record
-from lightyear_control_tower.requests import read_json, confined
+from lightyear_control_tower.requests import read_json, read_bytes, confined
 from lightyear_control_tower.decisions import canonical, verify_envelope
 
 
@@ -18,7 +18,8 @@ def main(argv=None):
     service = ConsoleService(args.root, args.authority)
     try:
         data = read_json(args.input)
-        with service.transaction() as db:
+        key = service.qualification_key()
+        with service.connect() as db:
             events = service.events(db)
             head = events[-1]["content_sha256"]
             record = publish_record(
@@ -27,14 +28,16 @@ def main(argv=None):
                 decision_head=head,
                 signer=service,
                 current_bindings=data["current_bindings"],
+                pending_bindings=data.get("pending_bindings"),
+                rule_register=data.get("rule_register"),
             )
             for e in record["entries"]:
                 path = confined(args.root, e["record"])
-                raw = path.read_bytes()
+                raw = read_bytes(path)
                 q = read_json(path)
                 if (
                     hashlib.sha256(raw).hexdigest() != e["record_sha256"]
-                    or not verify_envelope(q, service.public_key)
+                    or not verify_envelope(q, key)
                     or q.get("scope") != service.scope
                 ):
                     raise ValueError("Invalid qualification record")

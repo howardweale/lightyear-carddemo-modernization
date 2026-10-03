@@ -187,7 +187,8 @@ async function queue() {
         el("p", i.summary || "Invalid evidence — decision disabled."),
         el("small", (i.required_roles || []).join(", ")),
       );
-      if (i.status !== "invalid")
+      if (i.status === "review due") c.append(el("p", i.next_action));
+      else if (i.status !== "invalid")
         c.append(
           button(i.decidable ? "Review and decide" : "View evidence", () =>
             review(i),
@@ -253,6 +254,12 @@ async function review(item) {
   }
   let slot;
   if (item.kind === "evidence-release") {
+    d.append(
+      el(
+        "p",
+        "The frozen export will include both release decisions, including your identity and reason. Review the complete bound bundle before approving.",
+      ),
+    );
     slot = el("select");
     for (const role of item.required_roles) {
       const n = el("option", role);
@@ -355,9 +362,16 @@ async function catalogue() {
       if (!entries.length) td.append(el("span", "No signed entry"));
       for (const r of entries) {
         td.append(button(r.status, () => drawer(r.id).append(json(r))));
-        if (r.upcoming_expiry)
+        if (r.upcoming_expiry?.length)
           td.append(
             el("small", "Upcoming expiry: " + r.upcoming_expiry.join(", ")),
+          );
+        if (r.review_due?.length)
+          td.append(
+            el(
+              "small",
+              "Dependent rule review due: " + r.review_due.join(", "),
+            ),
           );
       }
       tr.append(td);

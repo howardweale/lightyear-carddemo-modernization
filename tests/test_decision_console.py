@@ -21,11 +21,16 @@ class ConsoleTests(unittest.TestCase):
     def setUp(self):
         self.tmp = tempfile.TemporaryDirectory()
         self.addCleanup(self.tmp.cleanup)
-        self.root = Path(self.tmp.name)
-        self.authority = self.root / "private/authority.json"
+        self.root = Path(self.tmp.name) / "data"
+        self.root.mkdir()
+        self.scope = getattr(self, "scope", "demo")
+        self.authority = Path(self.tmp.name) / "private/authority.json"
         self.credential = (
-            provision(self.authority, "demo", "howard", "Howard").read_text().strip()
+            provision(self.authority, self.scope, "howard", "Howard")
+            .read_text()
+            .strip()
         )
+        self.actor_credentials = {"howard": self.credential}
         self.service = ConsoleService(self.root, self.authority)
         self.addCleanup(self.service.close)
         self.service.grant_roles(
@@ -55,7 +60,7 @@ class ConsoleTests(unittest.TestCase):
             evidence[key] = path.relative_to(self.root).as_posix()
         request = {
             "schema": "tower-request/1",
-            "scope": "demo",
+            "scope": self.scope,
             "id": name,
             "kind": kind,
             "bound": bound,
@@ -63,9 +68,33 @@ class ConsoleTests(unittest.TestCase):
             "summary": "Review the exact fixture",
             "proposed_by": proposed_by,
         }
-        folder = self.root / "work/control-tower/requests/demo"
+        folder = self.root / "work/control-tower/requests" / self.scope
         folder.mkdir(parents=True, exist_ok=True)
         (folder / (name + ".json")).write_bytes(canonical(request))
+        if kind == "classification-acceptance":
+            if proposed_by not in self.actor_credentials:
+                self.actor_credentials[proposed_by] = self.service.add_identity(
+                    proposed_by, proposed_by
+                )
+                self.service.grant_roles(
+                    proposed_by, ["operator"], reason="Authenticated fixture author"
+                )
+            author_token = self.service.login(self.actor_credentials[proposed_by])[
+                "token"
+            ]
+            item = self.service.inbox.item(name)
+            event = self.service.propose(
+                author_token,
+                "classification-draft",
+                {
+                    "item_id": name,
+                    "bound": item["bound"],
+                    "text": "Authenticated draft",
+                    "request_id": str(uuid.uuid4()),
+                },
+            )
+            request["proposal_sha256"] = event["content_sha256"]
+            (folder / (name + ".json")).write_bytes(canonical(request))
         return request
 
     def payload(self, token=None, item_id="launch", outcome="authorized", view=True):
@@ -236,7 +265,7 @@ class ConsoleTests(unittest.TestCase):
         self.service.grant_roles(
             "howard", ["operator", "technical-reviewer"], reason="test"
         )
-        with self.assertRaises(DecisionConflict):
+        with self.assertRaises(DecisionUnauthorized):
             self.service.decide(
                 self.token, self.payload(item_id="rule", outcome="approved")
             )
@@ -277,12 +306,15 @@ class ConsoleTests(unittest.TestCase):
         self.assertNotIn("verdict", event["payload"])
 
     def test_second_scope_cannot_reuse_workspace_data_root(self):
-        other = self.root / "other/authority.json"
+        other = self.root.parent / "other/authority.json"
         provision(other, "other", "other", "Other")
         with self.assertRaisesRegex(ValueError, "another scope or authority"):
             ConsoleService(self.root, other)
 
-    @unittest.skipUnless(importlib.util.find_spec("mcp"), "Optional agent SDK; exercised by dedicated Console CI")
+    @unittest.skipUnless(
+        importlib.util.find_spec("mcp"),
+        "Optional agent SDK; exercised by dedicated Console CI",
+    )
     def test_mcp_tool_surface_contains_only_reads_and_drafts(self):
         import asyncio
         from lightyear_control_tower.mcp import create_server

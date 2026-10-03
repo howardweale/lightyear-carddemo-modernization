@@ -26,6 +26,7 @@ source = ROOT / "tests/fixtures/decision-console/b04"
                     "root": str(source),
                     "published_directory": str(source / "published"),
                     "work_directory": str(source / "work/ms94/stage-b-04"),
+                    "read_mode": "immutable-export",
                     "trusted_public_key": str(source / "authority.public.pem"),
                 }
             ]

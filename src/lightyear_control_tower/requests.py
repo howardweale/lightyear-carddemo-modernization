@@ -5,6 +5,7 @@ import json
 import re
 from pathlib import Path
 from .decisions import canonical, digest, text_field
+from .fileio import regular_reader
 
 ID = re.compile(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,127}\Z")
 SHA = re.compile(r"[a-f0-9]{64}\Z")
@@ -17,11 +18,16 @@ def identifier(value):
     return value
 
 
-def confined(root, relative):
+def confined(root, relative, *, internal=False):
     root = Path(root).resolve()
     if not isinstance(relative, str) or not relative or "\\" in relative:
         raise ValueError("Invalid evidence path")
     p = Path(relative)
+    if not internal and any(
+        part.lower() in {"control-tower", "private", "authority", "authorities"}
+        for part in p.parts
+    ):
+        raise ValueError("Authority and control-plane paths are not evidence")
     if (
         p.is_absolute()
         or any(part in {"..", "."} for part in p.parts)
@@ -37,7 +43,7 @@ def confined(root, relative):
 
 
 def read_bytes(path):
-    with Path(path).open("rb") as stream:
+    with regular_reader(path) as stream:
         value = stream.read(MAX_BYTES + 1)
     if len(value) > MAX_BYTES:
         raise ValueError("Evidence exceeds size bound")
@@ -81,7 +87,9 @@ class RequestInbox:
     def item(self, request_id):
         name = identifier(request_id)
         path = confined(
-            self.root, f"work/control-tower/requests/{self.scope}/{name}.json"
+            self.root,
+            f"work/control-tower/requests/{self.scope}/{name}.json",
+            internal=True,
         )
         value = read_json(path)
         if not isinstance(value, dict):
@@ -120,6 +128,11 @@ class RequestInbox:
             raise ValueError("Invalid author list")
         for author in authors:
             identifier(author)
+        proposal = value.get("proposal_sha256")
+        if proposal is not None and (
+            not isinstance(proposal, str) or not SHA.fullmatch(proposal)
+        ):
+            raise ValueError("Invalid proposal event hash")
         # The request envelope is itself bound, including summary, proposer and field policy.
         public = {
             k: value[k]
@@ -140,7 +153,11 @@ class RequestInbox:
         }
         return {
             **public,
-            "bound": {**bound, "request": digest(value)},
+            "bound": {
+                **bound,
+                "request": digest(value),
+                **({"proposal": proposal} if proposal else {}),
+            },
             "status": "pending",
             "proposed_by": proposed,
             "kind_version": kind.version,

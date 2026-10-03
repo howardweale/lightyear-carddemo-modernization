@@ -1,5 +1,8 @@
 # Decision Console
 
+The [v2 review milestone](control-tower-review-v2-milestone.md) records the combined
+security and observer fixes, validation, migration requirements and Windows limitation.
+
 See the [milestone record](control-tower-decision-console-milestone.md) for delivered
 scope, validation, publication units and remaining dependencies.
 
@@ -22,6 +25,12 @@ They include `id`, `scope`, registered `kind`, `summary`, `proposed_by`, `bound`
 relative evidence path. The service additionally binds the entire request object.
 Invalid or partially written requests are visible as invalid and cannot be decided.
 
+Independent reviews also require `proposal_sha256`: the authenticated, journaled
+`tower_proposal` event for those exact subject hashes. The service adds it to
+`bound.proposal`; it is an event identity, not a filesystem evidence path.
+Inbox author labels never establish independence. Campaign authorizations also
+bind a `campaign` identity alongside plan, declaration, limits and public commit.
+
 `tower-decision/1` records preserve evidence hashes, identity and held roles, the
 session that viewed the item, request idempotency and independence. A different
 account alone does not justify an independence claim: operator-review-allowed
@@ -43,12 +52,13 @@ are provided. No lane qualification is inferred from fixture data.
 ## Run locally
 
 Install the existing `control-tower` extra. Use a dedicated data root for each
-engagement. The authority must be inside that root. An ownership record prevents
+engagement. The authority, credentials and qualification trust configuration must
+be outside the engine-writable root. An ownership record prevents
 reusing the same root with another scope/key.
 
 ```powershell
 $consoleRoot = Join-Path (Get-Location) 'work/console-local'
-$consoleAuthority = Join-Path $consoleRoot 'private/authority.json'
+$consoleAuthority = Join-Path (Get-Location) 'work/console-authority/authority.json'
 python -m lightyear_control_tower provision --authority $consoleAuthority --scope local-review --operator-id reviewer --operator-name 'Local reviewer'
 python -m lightyear_control_tower grant-roles --root $consoleRoot --authority $consoleAuthority --operator-id reviewer --roles operator campaign-authorizer --reason 'Explicit local operator assignment'
 python -m lightyear_control_tower serve --root $consoleRoot --authority $consoleAuthority
@@ -75,6 +85,8 @@ python -m lightyear_control_tower.mcp --url http://127.0.0.1:8766 --credential-f
 
 The `agent` optional dependency supplies the existing MCP runtime. Only the seven
 read/draft tools are exposed. Human approval remains in the console.
+The client refreshes expired sessions with its own credential. Every authenticated
+identity can log out, including auditors and partners.
 
 ## Local campaign registry and evidence
 
@@ -86,15 +98,28 @@ equipment artifacts, and checkpointed NUMBER journal exports. A missing private
 snapshot remains unavailable; verifying public signatures never becomes a claim
 that private files were checked.
 
+On Windows, `read_mode: live` (the default) returns unavailable **before opening
+producer evidence**. `FILE_SHARE_DELETE` does not make Python's `os.replace` safe
+against an open destination on this host. Read retries or copying a live file
+would still expose the writer to that race. Use `read_mode: immutable-export`
+only for a separate, completed campaign export that has no writer. Do not relabel
+a live root as an export. This is local operator configuration, not proof that
+another process has stopped. No automatic copy, pause or producer change occurs.
+Do not point this observer at B05. Live POSIX reads use nonblocking, no-follow
+opens and reject special files.
+
 Observer settings extend the existing policy under `decision_console_observer`.
 Alerts carry that policy's hash. Polling is 3 seconds while visible, 30 while hidden.
 The bounded SSE endpoint uses the same scoped projection. Incomplete final JSONL
 records are ignored without truncation, repair, locking or writing to the source.
+Signed sequence/previous-hash journals have their complete prefix verified; absent
+or unrecognized chains remain unavailable. A malformed campaign cannot break the
+other campaign views or the SSE response.
 
 The B04 fixture preserves exact selected original signed records and a VOID report.
 Its provenance manifest hashes every copied file. It intentionally excludes private
 captures, checkpoints, reference sources and the full executable. Regression tests
-require `accounting_cache` to pair cohorts 1 and 3, and require the analyst's
+require the general gate-failure fingerprint to pair cohorts 1 and 3, and require the analyst's
 `insufficient-type-evidence` rejection on cohort 2 to trigger a gate-decline alert.
 No historic decision is re-signed or upgraded. B04 remains VOID.
 
@@ -108,6 +133,12 @@ approval binds a current technical decision and records whether the business own
 also performed that technical review. A derived register includes only approved,
 unretired rules; review-due warnings do not silently retire a rule. The Tower never
 installs rules into the judge or changes an existing divergent verdict.
+Review dates are bounded to 366 days. Active-rule membership changes advance the
+register major version from 1; renewing only owner/review metadata does not.
+Overdue reviews appear as read-only queue reminders requiring a new bound renewal
+or retirement request. Known pending binding changes produce `upcoming_expiry`;
+dependent entries also show review-due warnings. Warnings do not change a signed
+qualification status.
 
 LAS is not present at this baseline. The included qualification replay backend
 accepts only explicitly labelled **fixture** records and replays signed control
@@ -122,6 +153,10 @@ changes before signing the catalogue. The viewer only renders the resulting sign
 status. `catalogue-check` compares that hash and every status with both public
 projections. CI exercises its success and nonzero drift paths using disposable
 signed fixtures. No production catalogue/website claim is created by these tests.
+Qualification signatures use the separate lane trust key. Put
+`qualification-trust.json` beside the external Tower authority, with `scope` and
+`public_key` (relative to that file and also outside the data root). Tower proofs
+and catalogue signatures continue to use the Tower public key.
 
 Customer roots use `control-tower/workspace.json` to select a scoped signed estate
 projection and curated public-evidence bundle. Default views exclude observation
@@ -129,10 +164,22 @@ values and raw captures. Release requires two identities, one customer sponsor a
 one campaign authorizer, approving the exact same canonical archive bytes. Partners
 see only the customer's current share level; evidence sharing binds the released
 archive hash. Auditors can read and verify but all domain-write routes return 403.
+Shares are independent per partner. Status disclosure uses closed field allowlists
+and does not expose the per-journey list.
+
+Release format `tower-released-export/2` freezes the artifact transactionally when
+the second distinct identity approves. `Workspace.prepare_bundle` binds reviewed
+members, a signed prefix of hash commitments and the release-proof disclosure
+format into the approved bundle hash. The final envelope adds only the two release
+decisions and commitments through the second decision, never unrelated journal
+bodies or later events. Release signatures cannot themselves be inside the bytes
+they approve (a hash cycle); the approved bundle hash and final signed export hash
+are distinct. Any journal deliberately supplied as a bundle member is part of the
+reviewed bytes; do not put private journals in public bundles.
 
 ```text
 python -m lightyear_control_tower verify-export --archive export.json --trusted-public-key trusted.pem
-python -m lightyear_control_tower catalogue-check --root <root> --trusted-public-key trusted.pem --public lanes.public.json --website coverage.json
+python -m lightyear_control_tower catalogue-check --root <root> --trusted-public-key trusted.pem --qualification-trust <external-trust.json> --public lanes.public.json --website coverage.json
 ```
 
 Offline export verification checks the trusted signature, scope, members, journal
@@ -156,6 +203,14 @@ A resume request binds the SHA256 of the exact pause evidence file. Engine
 adapters write that file using `controller_decisions.pause_evidence(event)`;
 this binds the signed envelope bytes, not only its internal content hash.
 Missing historical cost fields display as unavailable, never as zero cost.
+
+Upgrade contracts fail closed. Independent approvals without authenticated proposal
+bindings, campaign authorizations without campaign bindings, and unfrozen v1
+release exports do not become new valid approvals. Preserve old bytes and obtain
+fresh explicit reviews. Supersession follows the kind's subject hashes across
+request IDs. Every pause requires its own exact bound resume; unrelated continue
+decisions cannot lift it. Do not copy an existing campaign signing key for this
+upgrade; provision a dedicated console authority outside its data root.
 
 Run the unchanged normalization tests and the new `test_decision_console*.py`
 suite. The browser test is `node tests/browser/decision-console.mjs` after installing

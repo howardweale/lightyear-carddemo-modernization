@@ -108,6 +108,7 @@ def build_parser() -> argparse.ArgumentParser:
     )
     cat.add_argument("--root", type=Path, default=Path("."))
     cat.add_argument("--trusted-public-key", type=Path, required=True)
+    cat.add_argument("--qualification-trust", type=Path, required=True)
     cat.add_argument(
         "--public", type=Path, default=Path("docs/catalogue/lanes.public.json")
     )
@@ -137,6 +138,13 @@ def main(argv: list[str] | None = None) -> int:
     if required and feature(required) is None:
         parser.error("The " + required + " delivery unit is not installed")
     if args.command in {"serve", "add-identity"}:
+        if (
+            args.command == "add-identity"
+            and args.credential_output.resolve().is_relative_to(args.root.resolve())
+        ):
+            parser.error(
+                "Credential output must be outside the engine-writable data root"
+            )
         from .console import ConsoleService
 
         service = ConsoleService(args.root, args.authority)
@@ -191,12 +199,16 @@ def main(argv: list[str] | None = None) -> int:
                 )
             else:
                 from .catalogue import consistency
+                from .trust import qualification_key
 
                 result = consistency(
                     args.root,
                     args.trusted_public_key.read_bytes(),
                     args.public,
                     args.website,
+                    qualification_key=qualification_key(
+                        args.root, args.qualification_trust
+                    ),
                 )
             print(json.dumps(result))
             return 0

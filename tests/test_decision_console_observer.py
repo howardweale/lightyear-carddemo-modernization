@@ -40,7 +40,11 @@ class ObserverTests(unittest.TestCase):
         (folder / "authorization.json").write_bytes(canonical(auth))
         (folder / "events.json").write_bytes(canonical(events))
         source = NumberSource(
-            fixture.root, folder, folder, engine.public_key(fixture.root)
+            fixture.root,
+            folder,
+            folder,
+            engine.public_key(fixture.root),
+            read_mode="immutable-export",
         )
         before = {p: (p.read_bytes(), p.stat().st_mtime_ns) for p in folder.iterdir()}
         with patch(
@@ -70,7 +74,11 @@ class ObserverTests(unittest.TestCase):
             )
         key = (FIXTURE / "authority.public.pem").read_bytes()
         source = CampaignSource(
-            FIXTURE, FIXTURE / "published", FIXTURE / "work/ms94/stage-b-04", key
+            FIXTURE,
+            FIXTURE / "published",
+            FIXTURE / "work/ms94/stage-b-04",
+            key,
+            read_mode="immutable-export",
         )
         before = {
             p: (p.stat().st_mtime_ns, hashlib.sha256(p.read_bytes()).hexdigest())
@@ -93,8 +101,8 @@ class ObserverTests(unittest.TestCase):
         )
         repeat = next(x for x in a["alerts"] if x["code"] == "repeated-cause")
         self.assertEqual(["cohort-01", "cohort-03"], repeat["trials"])
-        self.assertEqual("accounting_cache", repeat["diagnostic_class"])
-        self.assertIn("combined-native-judge/accounting_cache", repeat["location"])
+        self.assertTrue(repeat["diagnostic_class"].startswith("gate-failure:"))
+        self.assertIn("combined-native-judge", repeat["location"])
         self.assertTrue(
             any(
                 x["code"] == "gate-decline-pattern" and x["trial"] == "cohort-02"

@@ -18,6 +18,10 @@ class TowerControllerV2:
     def __init__(self, public_key, scope, campaign_hash, authorization_bound):
         self.key = public_key
         self.scope = scope
+        check(
+            authorization_bound.get("campaign") == campaign_hash,
+            "campaign-authorization-mismatch",
+        )
         self.campaign = campaign_hash
         self.bound = authorization_bound
 
@@ -32,6 +36,8 @@ class TowerControllerV2:
             expected_head=fresh_head,
             outcomes=("authorized",),
         )
+        campaign = auth["bound"]["campaign"]
+        check(campaign == self.campaign, "campaign-authorization-mismatch")
         events = verify_journal(
             proof["journal"], self.key, scope=self.scope, expected_head=fresh_head
         )
@@ -40,7 +46,7 @@ class TowerControllerV2:
             for e in events
             if e["kind"] == "tower_decision"
             and e["payload"]["kind"] == "measurement-validity"
-            and e["payload"]["bound"].get("campaign") == self.campaign
+            and e["payload"]["bound"].get("campaign") == campaign
         ]
         # Stop/void are terminal across items, not silently superseded by a continue.
         for e in relevant:
@@ -48,20 +54,8 @@ class TowerControllerV2:
                 e["payload"]["outcome"] not in {"stop", "void"},
                 "campaign-" + e["payload"]["outcome"],
             )
-        if relevant:
-            p = relevant[-1]["payload"]
-            verify_decision(
-                {
-                    "schema": "tower-decision-proof/1",
-                    "decision_sha256": relevant[-1]["content_sha256"],
-                    "journal": proof["journal"],
-                },
-                self.key,
-                "measurement-validity",
-                p["bound"],
-                scope=self.scope,
-                expected_head=fresh_head,
-            )
+        for pause in relevant:
+            p = pause["payload"]
             if p["outcome"] == "pause":
                 resumes = [
                     e
@@ -70,7 +64,8 @@ class TowerControllerV2:
                     and e["payload"]["kind"] == "resume"
                     and e["payload"]["bound"].get("campaign") == self.campaign
                     and e["payload"]["bound"].get("pause")
-                    == hashlib.sha256(pause_evidence(relevant[-1])).hexdigest()
+                    == hashlib.sha256(pause_evidence(pause)).hexdigest()
+                    and e["sequence"] > pause["sequence"]
                 ]
                 check(bool(resumes), "campaign-paused")
                 r = resumes[-1]

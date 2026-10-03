@@ -90,6 +90,25 @@ outcomes and does not contribute to effectiveness rates.
 
 ## Review and publication status
 
-These are local review artifacts. No new public publication or merge has been
-performed. The audit does not approve B06's preregistration or launch, and J2/J3
-qualification and the B06 native preflight remain pending.
+The signed terminal audit and these results are published on `main` through
+[PR #234](https://github.com/howardweale/lightyear-carddemo-modernization/pull/234),
+merge commit `d4a97d04ee84f63b556ec905297863d2ba60585b`.
+The preregistration and first executable/preflight evidence are also on `main`
+through [PR #236](https://github.com/howardweale/lightyear-carddemo-modernization/pull/236),
+merge commit `18a748d81b0c11953cffc91142d77743b0b15593`.
+The r2 amendment, executable and preflight evidence were merged through
+[PR #237](https://github.com/howardweale/lightyear-carddemo-modernization/pull/237),
+merge commit `2defbb7074d453b1dd3a8c5e544cae2fa08297e5`.
+The original plan head `0a157d0` and r2 head `51ada5e` are ancestors of that public
+commit; the r2 executable evidence and controller files retain their original
+bytes. These merges do not alter B05's frozen execution or B04's void status.
+
+The **31 full evidence archives remain local**, so public availability of the
+signed audit does not yet mean outside readers can replay the archives. The
+[archive publication proposal](archive-publication-proposal.md) records their
+measured size, leak-check findings and the release/replay gates. No archive
+upload has been performed or approved by publishing that proposal.
+
+Review is operator review, not independent attestation. This audit does not
+approve B06's preregistration or launch; J1 requalification, J2/J3 qualification
+and the B06 native preflight remain pending.

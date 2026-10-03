@@ -6,6 +6,7 @@ import uuid
 import contextlib
 import io
 from pathlib import Path
+from datetime import date, timedelta
 from tests import test_decision_console as fixture
 from carddemo_oracle.compare import NORMALIZATION_RULES
 from lightyear_control_tower.decisions import (
@@ -43,7 +44,10 @@ class WorkflowTests(unittest.TestCase):
         self.workspace = Workspace(self.service) if workspaces else None
 
     def actor(self, name, roles, kind="human", workloads=()):
-        credential = self.service.add_identity(name, name, identity_kind=kind)
+        credential = self.actor_credentials.get(name)
+        if credential is None:
+            credential = self.service.add_identity(name, name, identity_kind=kind)
+            self.actor_credentials[name] = credential
         self.service.grant_roles(
             name, roles, reason="Explicit fixture grant", workloads=workloads
         )
@@ -61,18 +65,40 @@ class WorkflowTests(unittest.TestCase):
             evidence[key] = relative
         request = {
             "schema": "tower-request/1",
-            "scope": "demo",
+            "scope": self.scope,
             "id": name,
             "kind": kind,
             "summary": "Fixture evidence review",
             "bound": bound,
             "evidence": evidence,
             "proposed_by": proposer,
-            "workload": workload,
+            "workload": workload or values.get("rule", {}).get("workload"),
         }
-        (self.root / f"work/control-tower/requests/demo/{name}.json").write_bytes(
-            canonical(request)
-        )
+        (
+            self.root / f"work/control-tower/requests/{self.scope}/{name}.json"
+        ).write_bytes(canonical(request))
+        if kind.startswith("rule-"):
+            cache = getattr(self, "proposals_by_rule", {})
+            rule_hash = bound["rule"]
+            if rule_hash not in cache:
+                author = self.actor(proposer, ["operator", "rule-proposer"])
+                item = self.service.inbox.item(name)
+                cache[rule_hash] = self.service.propose(
+                    author,
+                    "rule-proposal",
+                    {
+                        "item_id": name,
+                        "bound": item["bound"],
+                        "text": "Authenticated rule",
+                        "rule": values["rule"],
+                        "request_id": str(uuid.uuid4()),
+                    },
+                )["content_sha256"]
+                self.proposals_by_rule = cache
+            request["proposal_sha256"] = cache[rule_hash]
+            (
+                self.root / f"work/control-tower/requests/{self.scope}/{name}.json"
+            ).write_bytes(canonical(request))
         return self.service.inbox.item(name)
 
     def decide(self, token, item, outcome, **extra):
@@ -92,7 +118,7 @@ class WorkflowTests(unittest.TestCase):
             "field": "name",
             "operation": "fixed-width-right-padding",
             "parameters": {},
-            "review_after": "2099-01-01",
+            "review_after": (date.today() + timedelta(days=90)).isoformat(),
         }
 
     def technical(self, *, hide_fault=False):
@@ -111,7 +137,7 @@ class WorkflowTests(unittest.TestCase):
                     **r,
                     "reason": "Fixture",
                     "owner": "Fixture",
-                    "review_after": "2099-01-01",
+                    "review_after": (date.today() + timedelta(days=90)).isoformat(),
                 }
                 for r in NORMALIZATION_RULES
             ],
@@ -157,7 +183,7 @@ class WorkflowTests(unittest.TestCase):
                 "business",
                 "approved",
                 named_owner="Finance",
-                review_after="2099-01-01",
+                review_after=(date.today() + timedelta(days=90)).isoformat(),
             )
         self.service.grant_roles(
             "owner",
@@ -170,7 +196,7 @@ class WorkflowTests(unittest.TestCase):
             "business",
             "approved",
             named_owner="Finance",
-            review_after="2099-01-01",
+            review_after=(date.today() + timedelta(days=90)).isoformat(),
         )
         register = rule_register(self.service, self.token)
         self.assertEqual(1, len(register["rules"]))
@@ -184,23 +210,28 @@ class WorkflowTests(unittest.TestCase):
             workload="cards",
         )
         self.decide(
-            owner, "retire", "retired", named_owner="Finance", review_after="2099-01-01"
+            owner,
+            "retire",
+            "retired",
+            named_owner="Finance",
+            review_after=(date.today() + timedelta(days=90)).isoformat(),
         )
         self.assertEqual([], rule_register(self.service, self.token)["rules"])
 
-    def qualification(self):
-        receipt = self.service.sign(
+    def qualification(self, signer=None):
+        signer = signer or self.service
+        receipt = signer.sign(
             {
                 "schema": "lane-control/1",
-                "scope": "demo",
+                "scope": self.scope,
                 "id": "reference",
                 "outcome": "passed",
             }
         )
-        qualification = self.service.sign(
+        qualification = signer.sign(
             {
                 "schema": "lane-qualification/1",
-                "scope": "demo",
+                "scope": self.scope,
                 "controls": [
                     {
                         "id": "reference",
@@ -219,14 +250,14 @@ class WorkflowTests(unittest.TestCase):
             "qualification_sha256": qualification["content_sha256"],
             "receipts": [receipt],
         }
-        config = self.root / "control-tower"
+        config = self.authority.parent
         config.mkdir(exist_ok=True)
-        (config / "qualification.public.pem").write_bytes(self.service.public_key)
+        (config / "qualification.public.pem").write_bytes(signer.public_key)
         (config / "qualification-trust.json").write_bytes(
             canonical(
                 {
-                    "scope": "demo",
-                    "public_key": "control-tower/qualification.public.pem",
+                    "scope": self.scope,
+                    "public_key": "qualification.public.pem",
                 }
             )
         )
@@ -279,7 +310,12 @@ class WorkflowTests(unittest.TestCase):
         folder = self.root / "catalog"
         folder.mkdir()
         (folder / "lanes.json").write_bytes(canonical(catalog))
-        view = read_catalogue(self.root, self.service.public_key, scope="demo")
+        view = read_catalogue(
+            self.root,
+            self.service.public_key,
+            qualification_key=self.service.qualification_key(),
+            scope=self.scope,
+        )
         self.assertEqual("expired", view["entries"][0]["status"])
         projection = {
             "catalogue_sha256": catalog["content_sha256"],
@@ -290,7 +326,14 @@ class WorkflowTests(unittest.TestCase):
         p.write_bytes(canonical(projection))
         w.write_bytes(canonical(projection))
         self.assertEqual(
-            "verified", consistency(self.root, self.service.public_key, p, w)["status"]
+            "verified",
+            consistency(
+                self.root,
+                self.service.public_key,
+                p,
+                w,
+                qualification_key=self.service.qualification_key(),
+            )["status"],
         )
         from lightyear_control_tower.cli import main
 
@@ -300,6 +343,8 @@ class WorkflowTests(unittest.TestCase):
             str(self.root),
             "--trusted-public-key",
             str(self.authority.with_suffix(".public.pem")),
+            "--qualification-trust",
+            str(self.authority.parent / "qualification-trust.json"),
             "--public",
             str(p),
             "--website",
@@ -312,7 +357,13 @@ class WorkflowTests(unittest.TestCase):
         with self.assertRaisesRegex(
             DecisionVerificationError, "projection-status-mismatch"
         ):
-            consistency(self.root, self.service.public_key, p, w)
+            consistency(
+                self.root,
+                self.service.public_key,
+                p,
+                w,
+                qualification_key=self.service.qualification_key(),
+            )
         with contextlib.redirect_stdout(io.StringIO()):
             self.assertEqual(1, main(args))
 
@@ -322,24 +373,17 @@ class WorkflowTests(unittest.TestCase):
             record = (
                 self.service.export_session(self.token)
                 if kind == "journal"
-                else self.service.sign({"schema": kind + "/1", "scope": "demo"})
+                else self.service.sign({"schema": kind + "/1", "scope": self.scope})
             )
             members.append(
                 {
-                    "scope": "demo",
+                    "scope": self.scope,
                     "kind": kind,
                     "record": record,
                     "sha256": hashlib.sha256(canonical(record)).hexdigest(),
                 }
             )
-        return self.service.sign(
-            {
-                "schema": "tower-evidence-bundle/1",
-                "scope": "demo",
-                "disclosure": "public-evidence",
-                "members": members,
-            }
-        )
+        return self.workspace.prepare_bundle(members)
 
     @unittest.skipUnless(workspaces, "Workspace export is delivered in PR 5")
     def test_two_exact_release_decisions_offline_verify_and_tamper(self):

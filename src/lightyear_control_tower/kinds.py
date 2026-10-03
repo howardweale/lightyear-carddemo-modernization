@@ -17,6 +17,7 @@ class DecisionKind:
     source: str = "verified-request-inbox"
     verifier: str = "lightyear_control_tower.verify_decision"
     review_days: int = 5
+    max_review_days: int = 366
 
 
 class KindRegistry:
@@ -62,7 +63,7 @@ def default_registry():
                 "campaign-authorization",
                 ("authorized", "rejected"),
                 ("campaign-authorizer",),
-                ("plan", "declaration", "limits", "public_commit"),
+                ("campaign", "plan", "declaration", "limits", "public_commit"),
                 consumer="new-controller-launch",
             ),
             K(

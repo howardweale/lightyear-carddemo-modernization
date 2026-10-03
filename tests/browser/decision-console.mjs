@@ -55,9 +55,7 @@ try {
     await page.locator("#login button").click();
     await page.getByRole("button", { name: "Review campaign" }).click();
     await page
-      .getByText("repeated-cause · accounting_cache cohort-01, cohort-03", {
-        exact: true,
-      })
+      .getByText(/repeated-cause · gate-failure:[a-f0-9]+ cohort-01, cohort-03/)
       .waitFor();
     assert.match(
       await page.locator("#content").innerText(),

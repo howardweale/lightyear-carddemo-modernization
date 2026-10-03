@@ -1,20 +1,47 @@
 """Single-customer deployment, disclosure projections and offline release proofs."""
 
 import hashlib
+import json
 from pathlib import Path
 from .decisions import (
     DecisionUnauthorized,
     DecisionConflict,
     canonical,
     verify_envelope,
+    ZERO,
+    digest,
 )
 from .requests import read_json, confined
 from .verification import verify_decision, verify_journal, check
+from .presentation import workspace_status
+
+
+def chain_prefix(events):
+    # Commitments reveal no proposals, reasons, names or sessions.
+    return [
+        {k: e[k] for k in ("sequence", "previous_sha256", "content_sha256")}
+        for e in events
+    ]
+
+
+def verify_prefix(rows):
+    previous = ZERO
+    for index, row in enumerate(rows, 1):
+        check(
+            set(row) == {"sequence", "previous_sha256", "content_sha256"},
+            "prefix-disclosure-refused",
+        )
+        check(
+            row["sequence"] == index and row["previous_sha256"] == previous,
+            "broken-release-prefix",
+        )
+        previous = row["content_sha256"]
+    return previous
 
 
 def verify_export(archive, key, *, scope=None):
     check(
-        archive.get("schema") == "tower-released-export/1"
+        archive.get("schema") == "tower-released-export/2"
         and verify_envelope(archive, key),
         "invalid-export-signature",
     )
@@ -33,17 +60,53 @@ def verify_export(archive, key, *, scope=None):
         "archive-hash-mismatch",
     )
     check(verify_envelope(bundle, key), "bundle-signature-invalid")
+    context = bundle["release_proof"]["context"]
+    check(
+        bundle["release_proof"]["format"] == "release-only-with-chain-commitments/1",
+        "release-proof-format-refused",
+    )
+    check(
+        verify_envelope(context, key) and context.get("scope") == scope,
+        "release-context-invalid",
+    )
+    check(
+        verify_prefix(context["prefix"]) == context["head"],
+        "release-context-head-mismatch",
+    )
+    prefix = archive["decision_prefix"]
+    check(
+        prefix[: len(context["prefix"])] == context["prefix"],
+        "release-context-mismatch",
+    )
+    check(
+        verify_prefix(prefix) == archive["decision_head_sha256"],
+        "release-head-mismatch",
+    )
     role_actors = {}
     for role in ("customer-sponsor", "campaign-authorizer"):
-        proof = archive["release_decisions"][role]
-        p = verify_decision(
-            proof,
-            key,
-            "evidence-release",
-            archive["release_bound"],
-            scope=scope,
-            expected_head=archive["decision_head_sha256"],
-            outcomes=("approved",),
+        event = archive["release_decisions"][role]
+        check(
+            verify_envelope(event, key) and event.get("kind") == "tower_decision",
+            "release-decision-invalid",
+        )
+        check(event["sequence"] > len(context["prefix"]), "release-before-context")
+        check(
+            chain_prefix([event])[0] == prefix[event["sequence"] - 1],
+            "release-chain-position-mismatch",
+        )
+        p = event["payload"]
+        check(
+            p.get("kind") == "evidence-release"
+            and p.get("scope") == scope
+            and p.get("bound") == archive["release_bound"]
+            and p.get("outcome") == "approved"
+            and p.get("actor") == event["actor"]
+            and p.get("channel") == "control-tower"
+            and p.get("session_id") == event["session_id"]
+            and not {"agent", "auditor", "partner-viewer"}.intersection(
+                p.get("roles_held", [])
+            ),
+            "release-decision-refused",
         )
         check(
             p.get("decision_slot") == role and role in p["roles_held"],
@@ -53,6 +116,11 @@ def verify_export(archive, key, *, scope=None):
             check(p["actor"]["kind"] == "customer", "customer-identity-required")
         role_actors[role] = p["actor"]["id"]
     check(len(set(role_actors.values())) == 2, "two-release-identities-required")
+    check(
+        max(e["sequence"] for e in archive["release_decisions"].values())
+        == len(prefix),
+        "release-prefix-exceeds-decisions",
+    )
     check(
         archive["release_bound"]["archive"] == archive["archive_sha256"],
         "release-archive-mismatch",
@@ -97,6 +165,35 @@ class Workspace:
     def __init__(self, service):
         self.service = service
         service.validators["evidence-release"] = self.validate_release
+        service.finalizers["evidence-release"] = self.freeze_export
+        with service.transaction() as db:
+            db.execute(
+                "CREATE TABLE IF NOT EXISTS released_exports (release_key TEXT PRIMARY KEY, envelope TEXT NOT NULL)"
+            )
+
+    def prepare_bundle(self, members):
+        with self.service.transaction() as db:
+            events = self.service.events(db)
+            context = self.service.sign(
+                {
+                    "schema": "tower-release-context/1",
+                    "scope": self.service.scope,
+                    "prefix": chain_prefix(events),
+                    "head": events[-1]["content_sha256"] if events else ZERO,
+                }
+            )
+        return self.service.sign(
+            {
+                "schema": "tower-evidence-bundle/1",
+                "scope": self.service.scope,
+                "disclosure": "public-evidence",
+                "members": members,
+                "release_proof": {
+                    "format": "release-only-with-chain-commitments/1",
+                    "context": context,
+                },
+            }
+        )
 
     def config(self):
         p = self.service.root / "control-tower/workspace.json"
@@ -116,6 +213,17 @@ class Workspace:
         return record
 
     def validate_release(self, item, payload, events, session):
+        for role in ("customer-sponsor", "campaign-authorizer"):
+            other = self.service._latest(events, item, role)
+            if (
+                role != payload.get("decision_slot")
+                and other
+                and other["actor"]["id"] == session["actor"]["id"]
+                and other["payload"]["outcome"] == "approved"
+            ):
+                raise DecisionUnauthorized(
+                    "Two different release identities are required"
+                )
         if payload["outcome"] == "rejected":
             return
         if (
@@ -133,6 +241,19 @@ class Workspace:
             raise DecisionConflict("Evidence bundle must use canonical bytes")
         if not bundle.get("members"):
             raise DecisionConflict("Evidence archive is empty")
+        contract = bundle.get("release_proof", {})
+        context = contract.get("context", {})
+        if (
+            contract.get("format") != "release-only-with-chain-commitments/1"
+            or not verify_envelope(context, self.service.public_key)
+            or context.get("scope") != self.service.scope
+            or context.get("prefix")
+            != chain_prefix(events[: len(context.get("prefix", []))])
+            or verify_prefix(context.get("prefix", [])) != context.get("head")
+        ):
+            raise DecisionConflict(
+                "Archive must bind the reviewed release context and disclosure format"
+            )
         kinds = set()
         for member in bundle["members"]:
             kind = member.get("kind")
@@ -157,38 +278,69 @@ class Workspace:
             kinds.add(kind)
         if not {"receipt", "journal", "rule-register", "catalogue-entry"} <= kinds:
             raise DecisionConflict("Incomplete archive")
+        item["_release_bundle"] = bundle
+
+    def freeze_export(self, db, item, events):
+        decisions = {
+            role: self.service._latest(events, item, role)
+            for role in ("customer-sponsor", "campaign-authorizer")
+        }
+        if not all(
+            e
+            and e["payload"]["outcome"] == "approved"
+            and e["payload"]["bound"] == item["bound"]
+            for e in decisions.values()
+        ):
+            return
+        result = self.service.sign(
+            {
+                "schema": "tower-released-export/2",
+                "scope": self.service.scope,
+                "bundle": item["_release_bundle"],
+                "archive_sha256": item["bound"]["archive"],
+                "release_bound": item["bound"],
+                "release_decisions": decisions,
+                "decision_prefix": chain_prefix(events),
+                "decision_head_sha256": events[-1]["content_sha256"],
+                "README": "Verify the curated bundle, signed release decisions and countersigned chain commitments offline; private journal payloads are not included. No native execution or present-day authorization claim.",
+            }
+        )
+        verify_export(result, self.service.public_key, scope=self.service.scope)
+        key = digest({role: e["content_sha256"] for role, e in decisions.items()})
+        db.execute(
+            "INSERT INTO released_exports VALUES (?, ?)",
+            (key, canonical(result).decode()),
+        )
 
     def export(self, token, item_id):
         self.service._read_access(token)
         item = self.service.inbox.item(item_id)
         if item["kind"] != "evidence-release":
             raise ValueError("Not a release request")
-        journal = self.service.export_session(token)
-        events = journal["events"]
-        decisions = {}
-        for role in ("customer-sponsor", "campaign-authorizer"):
-            e = self.service._latest(events, item, role)
-            if not e:
-                raise DecisionUnauthorized("Both release decisions are required")
-            decisions[role] = {
-                "schema": "tower-decision-proof/1",
-                "decision_sha256": e["content_sha256"],
-                "journal": journal,
+        with self.service.transaction() as db:
+            events = self.service.events(db)
+            decisions = {
+                role: self.service._latest(events, item, role)
+                for role in ("customer-sponsor", "campaign-authorizer")
             }
-        result = self.service.sign(
-            {
-                "schema": "tower-released-export/1",
-                "scope": self.service.scope,
-                "bundle": self._record(item["evidence"]["archive"]),
-                "archive_sha256": item["bound"]["archive"],
-                "release_bound": item["bound"],
-                "release_decisions": decisions,
-                "decision_head_sha256": journal["journal_head_sha256"],
-                "README": "Offline: python -m lightyear_control_tower verify-export --archive export.json --trusted-public-key trusted.pem. "
-                "Verifies archived evidence and decisions; does not re-execute native workloads.",
-                "signature_type": "Service countersignature of authenticated operator intent",
-            }
-        )
+            if not all(
+                e
+                and e["payload"]["outcome"] == "approved"
+                and e["payload"]["bound"] == item["bound"]
+                for e in decisions.values()
+            ):
+                raise DecisionUnauthorized(
+                    "Both current release decisions are required"
+                )
+            key = digest({role: e["content_sha256"] for role, e in decisions.items()})
+            row = db.execute(
+                "SELECT envelope FROM released_exports WHERE release_key=?", (key,)
+            ).fetchone()
+        if row is None:
+            raise DecisionConflict(
+                "Frozen release is unavailable; legacy exports require fresh review"
+            )
+        result = json.loads(row[0])
         verify_export(result, self.service.public_key, scope=self.service.scope)
         return result
 
@@ -206,8 +358,25 @@ class Workspace:
             "scope": self.service.scope,
             "configured": True,
             "title": cfg.get("title", self.service.scope),
-            "slice": snapshot.get("slice", {}),
-            "progress": snapshot.get("progress", {}),
+            "slice": {
+                k: v
+                for k, v in snapshot.get("slice", {}).items()
+                if k
+                in {
+                    "id",
+                    "lane_pair",
+                    "programs",
+                    "journeys",
+                    "clock_policy",
+                    "budget",
+                    "success_criteria",
+                }
+            },
+            "progress": {
+                k: v
+                for k, v in snapshot.get("progress", {}).items()
+                if k in {"state", "completed", "total"}
+            },
             "verdicts": [
                 {k: r[k] for k in ("id", "verdict", "receipt_sha256") if k in r}
                 for r in snapshot.get("verdicts", [])
@@ -229,9 +398,11 @@ class Workspace:
                 ]
             level = "none"
             if shares:
-                p = shares[-1]["payload"]
-                item = self.service.inbox.item(p["item_id"])
-                if p["bound"] == item["bound"]:
+                for share in reversed(shares):
+                    p = share["payload"]
+                    item = self.service.inbox.item(p["item_id"])
+                    if p["bound"] != item["bound"]:
+                        continue
                     terms = read_json(
                         confined(self.service.root, item["evidence"]["share"])
                     )
@@ -240,6 +411,7 @@ class Workspace:
                         and terms.get("scope") == self.service.scope
                     ):
                         level = p["outcome"]
+                        break
             if level == "none":
                 return {
                     "scope": self.service.scope,
@@ -264,6 +436,8 @@ class Workspace:
                 }
                 for r in snapshot.get("estate", [])
             ]
+        if partner and level == "status":
+            base = workspace_status(base)
         base["shared_level"] = level
         if level == "evidence":
             # Already released offline artifact. Verify again on every read.

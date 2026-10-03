@@ -44,7 +44,7 @@ class HttpTests(unittest.TestCase):
         c = self.service.add_identity("audit", "Audit")
         self.service.grant_roles("audit", ["auditor"], reason="fixture")
         token = self.service.login(c)["token"]
-        for route in WRITE_ROUTES:
+        for route in WRITE_ROUTES - {"logout"}:
             self.assertEqual(403, self.call(route, token, {})[0], route)
         c = self.service.add_identity("bot", "Bot", identity_kind="agent")
         self.service.grant_roles("bot", ["agent"], reason="fixture")
@@ -101,7 +101,10 @@ class HttpTests(unittest.TestCase):
         event = self.service.decide(self.token, self.payload())
         proof = self.service.proof(self.token, event["content_sha256"])
         controller = TowerControllerV2(
-            self.service.public_key, "demo", "c" * 64, event["payload"]["bound"]
+            self.service.public_key,
+            "demo",
+            event["payload"]["bound"]["campaign"],
+            event["payload"]["bound"],
         )
         with self.assertRaisesRegex(
             DecisionVerificationError, "authorization-required"
@@ -110,7 +113,7 @@ class HttpTests(unittest.TestCase):
         bad = TowerControllerV2(
             self.service.public_key,
             "demo",
-            "c" * 64,
+            event["payload"]["bound"]["campaign"],
             {**event["payload"]["bound"], "plan": "a" * 64},
         )
         with self.assertRaisesRegex(DecisionVerificationError, "bound-hash-mismatch"):
@@ -134,7 +137,9 @@ class HttpTests(unittest.TestCase):
                             "kind": "measurement-validity",
                             "kind_version": 1,
                             "scope": "demo",
-                            "bound": {"campaign": "c" * 64},
+                            "bound": {
+                                "campaign": event["payload"]["bound"]["campaign"]
+                            },
                             "outcome": "void",
                         },
                         self.service.system_actor(),

@@ -10,13 +10,14 @@ from decimal import Decimal, InvalidOperation
 from pathlib import Path
 from carddemo_oracle.compare import validate_normalization_ledger, NORMALIZATION_RULES
 from .decisions import DecisionConflict, digest, verify_envelope
-from .requests import confined, read_json, identifier
-from .verification import verify_decision
+from .requests import confined, read_json, read_bytes, identifier
+from .verification import verify_decision, subject
+from .proposals import proposal_actor
 
 
 def evidence(root, item, name):
     path = confined(root, item["evidence"][name])
-    raw = path.read_bytes()
+    raw = read_bytes(path)
     if hashlib.sha256(raw).hexdigest() != item["bound"][name]:
         raise DecisionConflict("Evidence changed, review again")
     return read_json(path)
@@ -165,7 +166,8 @@ class WorkflowValidation:
                     for e in reversed(events)
                     if e["kind"] == "tower_decision"
                     and e["payload"]["kind"] == "rule-technical-review"
-                    and e["payload"]["item_id"] == p["item_id"]
+                    and subject("rule-technical-review", e["payload"]["bound"])
+                    == subject("rule-technical-review", p["bound"])
                 ),
                 None,
             )
@@ -177,7 +179,7 @@ class WorkflowValidation:
                 raise DecisionConflict(
                     "Technical review changed or applies to another rule"
                 )
-            if p["actor"]["id"] == rule["proposed_by"]:
+            if p["actor"]["id"] == proposal_actor(item, events):
                 raise DecisionConflict("Independent technical review required")
             result = {"passed": True, "technical_reviewer": p["actor"]["id"]}
         elif kind == "rule-retirement":
@@ -185,10 +187,7 @@ class WorkflowValidation:
             result = {"passed": True}
         elif kind == "qualification-acceptance":
             # Trusted issuer is locally configured, never read from the request.
-            cfg = read_json(s.root / "control-tower/qualification-trust.json")
-            if cfg.get("scope") != s.scope:
-                raise DecisionConflict("Wrong qualification trust scope")
-            key = confined(s.root, cfg["public_key"]).read_bytes()
+            key = s.qualification_key()
             result = qualification_replay(
                 evidence(s.root, item, "qualification"),
                 evidence(s.root, item, "replay"),
@@ -201,7 +200,7 @@ class WorkflowValidation:
             return
         if item["kind"].startswith("rule-"):
             rule = typed_rule(evidence(self.service.root, item, "rule"))
-            if rule["proposed_by"] == session["actor"]["id"]:
+            if proposal_actor(item, events) == session["actor"]["id"]:
                 raise DecisionConflict(
                     "The rule proposer cannot approve their own rule"
                 )
@@ -226,9 +225,10 @@ def rule_register(service, token, *, now=None):
     """
     service._read_access(token)
     today = now or date.today()
-    with service.transaction() as db:
+    with service.connect() as db:
         events = service.events(db)
         rules = {}
+        major = 1
         for e in events:
             if e["kind"] != "tower_decision":
                 continue
@@ -237,6 +237,7 @@ def rule_register(service, token, *, now=None):
             if kind not in {"rule-approval", "rule-retirement"}:
                 continue
             h = p["bound"]["rule"]
+            before = set(rules)
             if kind == "rule-approval" and p["outcome"] == "approved":
                 item = service.inbox.item(p["item_id"])
                 if item["bound"] != p["bound"]:
@@ -261,6 +262,8 @@ def rule_register(service, token, *, now=None):
                     review_after=p["review_after"],
                     renewal_sha256=e["content_sha256"],
                 )
+            if before != set(rules):
+                major += 1
         for r in rules.values():
             r["review_due"] = date.fromisoformat(r["review_after"]) <= today
         return service.sign(
@@ -272,7 +275,7 @@ def rule_register(service, token, *, now=None):
                     and e["payload"]["kind"].startswith("rule-")
                     for e in events
                 ),
-                "major_version": 1,
+                "major_version": major,
                 "rules": [rules[h] for h in sorted(rules)],
                 "verdicts_changed": False,
             }

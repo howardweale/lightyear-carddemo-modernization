@@ -1,5 +1,10 @@
 # Control Tower Decision Console milestone
 
+Follow-up: [combined v2 review milestone](control-tower-review-v2-milestone.md)
+records the subsequent security and observer corrections and supersedes the
+original live-observation and release behavior described below. This document
+preserves the original delivery record.
+
 Date: 2026-10-02. Scope: the Decision Console specification against main
 `819ef1e76e2e60d24ce0d207931a7ee977476c6a`. This is an implementation milestone,
 not a new MS94 measurement or a declaration of MS95 readiness.

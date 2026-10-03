@@ -2,14 +2,15 @@
 
 import hashlib
 from pathlib import Path
+from datetime import date
 from .decisions import digest, verify_envelope
-from .requests import confined, read_json
+from .requests import confined, read_json, read_bytes
 from .verification import verify_decision, check
 
 STATUSES = {"qualified", "qualified-limited", "in-qualification", "roadmap", "expired"}
 
 
-def read_catalogue(root, key, *, scope=None):
+def read_catalogue(root, key, *, qualification_key=None, scope=None, now=None):
     root = Path(root)
     path = root / "catalog/lanes.json"
     if not path.exists():
@@ -20,6 +21,7 @@ def read_catalogue(root, key, *, scope=None):
             "limitation": "Lane Adapter Standard catalogue is not installed; no qualification claims.",
         }
     record = read_json(path)
+    check(qualification_key is not None, "qualification-trust-required")
     check(
         record.get("schema") == "lane-catalogue/1" and verify_envelope(record, key),
         "invalid-catalogue-signature",
@@ -34,13 +36,16 @@ def read_catalogue(root, key, *, scope=None):
             "invalid-catalogue-entry",
         )
         ids.add(entry["id"])
-        raw = confined(root, entry["record"]).read_bytes()
+        raw = read_bytes(confined(root, entry["record"]))
         check(
             hashlib.sha256(raw).hexdigest() == entry["record_sha256"],
             "catalogue-record-hash-mismatch",
         )
         qualification = read_json(confined(root, entry["record"]))
-        check(verify_envelope(qualification, key), "invalid-qualification-signature")
+        check(
+            verify_envelope(qualification, qualification_key),
+            "invalid-qualification-signature",
+        )
         check(qualification.get("scope") == record["scope"], "catalogue-scope-mismatch")
         # The publisher embeds proofs so the consumer can independently verify
         # acceptance and supersession at the exact declared publication head.
@@ -60,7 +65,14 @@ def read_catalogue(root, key, *, scope=None):
         )
         entries.append(
             {k: v for k, v in entry.items() if k not in {"record", "acceptance_bound"}}
-            | {"qualification": qualification}
+            | {
+                "qualification": qualification,
+                "review_due": [
+                    r["rule_sha256"]
+                    for r in entry.get("rule_reviews", [])
+                    if date.fromisoformat(r["review_after"]) <= (now or date.today())
+                ],
+            }
         )
     return {
         "schema": "tower-catalogue-view/1",
@@ -72,8 +84,10 @@ def read_catalogue(root, key, *, scope=None):
     }
 
 
-def consistency(root, key, public_path, website_path, *, scope=None):
-    view = read_catalogue(root, key, scope=scope)
+def consistency(
+    root, key, public_path, website_path, *, qualification_key=None, scope=None
+):
+    view = read_catalogue(root, key, qualification_key=qualification_key, scope=scope)
     check(view.get("available"), "catalogue-unavailable")
     expected = {e["id"]: e["status"] for e in view["entries"]}
     for path in (public_path, website_path):
@@ -95,13 +109,29 @@ def consistency(root, key, public_path, website_path, *, scope=None):
     }
 
 
-def publish_record(entries, *, scope, decision_head, signer, current_bindings):
+def publish_record(
+    entries,
+    *,
+    scope,
+    decision_head,
+    signer,
+    current_bindings,
+    pending_bindings=None,
+    rule_register=None,
+):
     """Engine-side generator, not reachable from Tower HTTP/MCP.
 
     Caller supplies already verified accepted records. Compare LAS expiry inputs
     here, not in the UI; the signed result is authoritative for every projection.
     """
     output = []
+    pending_bindings = pending_bindings or {}
+    if rule_register is not None:
+        check(
+            verify_envelope(rule_register, signer.public_key)
+            and rule_register.get("scope") == scope,
+            "rule-register-trust-invalid",
+        )
     for entry in entries:
         row = dict(entry)
         check(row["status"] in STATUSES, "invalid-catalogue-status")
@@ -141,6 +171,30 @@ def publish_record(entries, *, scope, decision_head, signer, current_bindings):
         ]
         if expired:
             row.update(status="expired", expiry_triggers=expired)
+        row["upcoming_expiry"] = [
+            k
+            for k in sorted(required)
+            if k in pending_bindings.get(row["id"], {})
+            and current_bindings[row["id"]][k] != pending_bindings[row["id"]][k]
+        ]
+        dependencies = row.get("rule_dependencies", [])
+        if dependencies:
+            check(rule_register is not None, "rule-register-required")
+        if rule_register is not None:
+            check(
+                current_bindings[row["id"]]["rule_register_major"]
+                == rule_register["major_version"],
+                "rule-register-major-mismatch",
+            )
+            by_hash = {digest(r["rule"]): r for r in rule_register["rules"]}
+            missing_dependencies = sorted(set(dependencies) - set(by_hash))
+            check(not missing_dependencies or expired, "rule-dependency-unavailable")
+            row["unavailable_rule_dependencies"] = missing_dependencies
+            row["rule_reviews"] = [
+                {"rule_sha256": h, "review_after": by_hash[h]["review_after"]}
+                for h in dependencies
+                if h in by_hash
+            ]
         output.append(row)
     return signer.sign(
         {

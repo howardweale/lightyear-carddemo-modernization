@@ -26,6 +26,9 @@ from .identity import LocalIdentityProvider
 from .kinds import default_registry, ROLES, APPROVING_ROLES
 from .requests import RequestInbox, identifier, read_json
 from .presentation import evidence_view, age
+from .proposals import proposal_actor
+from .verification import subject
+from .trust import qualification_key
 
 
 def provision(path, scope, operator_id, name, *, identity_kind="human"):
@@ -47,9 +50,17 @@ class ConsoleService(DecisionService):
         self.scope = identifier(config.get("console_scope"))
         root = Path(root).resolve()
         authority = Path(authority).resolve()
-        if not authority.is_relative_to(root):
+        if authority.is_relative_to(root):
             raise ValueError(
-                "A console workspace must own its authority inside its data root"
+                "Console authority must be outside the engine-writable data root"
+            )
+        authority_files = [
+            (authority.parent / config[field]).resolve()
+            for field in ("private_key", "public_key")
+        ] + [authority.with_suffix(".credential.txt").resolve()]
+        if any(path.is_relative_to(root) for path in authority_files):
+            raise ValueError(
+                "Console keys and credentials must be outside the engine-writable data root"
             )
         # One engagement per data root. Two scopes/keys cannot accidentally share
         # files, journals or exports merely because a caller supplied another id.
@@ -82,6 +93,14 @@ class ConsoleService(DecisionService):
         self.validators = (
             {}
         )  # Kind validators are installed by trusted application code.
+        self.finalizers = {}
+
+    def qualification_key(self):
+        return qualification_key(
+            self.root,
+            self.authority_path.parent / "qualification-trust.json",
+            scope=self.scope,
+        )
 
     def dispatch(self, *args, **kwargs):
         raise DecisionUnauthorized("The Tower never dispatches work")
@@ -259,8 +278,9 @@ class ConsoleService(DecisionService):
                 e
                 for e in reversed(events)
                 if e["kind"] == "tower_decision"
-                and e["payload"]["item_id"] == item["id"]
                 and e["payload"]["kind"] == item["kind"]
+                and subject(item["kind"], e["payload"]["bound"])
+                == subject(item["kind"], item["bound"])
                 and e["payload"].get("decision_slot") == slot
             ),
             None,
@@ -281,10 +301,11 @@ class ConsoleService(DecisionService):
 
     def queue(self, token):
         session = self._read_access(token)
-        with self.transaction() as db:
+        inbox = self.inbox.queue()
+        with self.connect() as db:
             events = self.events(db)
             items = []
-            for item in self.inbox.queue():
+            for item in inbox:
                 if item["status"] != "invalid":
                     kind = self.registry.get(item["kind"])
                     latest = self._latest(events, item)
@@ -313,14 +334,20 @@ class ConsoleService(DecisionService):
                             item["next_action"] = (
                                 "typed-rule-proposal-required; verdict remains divergent"
                             )
-                    if kind.independence == "required" and (
-                        session["actor"]["id"] == item["proposed_by"]
-                        or session["actor"]["id"] in item.get("authored_by", [])
-                    ):
-                        item.update(
-                            decidable=False,
-                            decision_refusal="independent-reviewer-required",
-                        )
+                    if kind.independence == "required":
+                        try:
+                            author = proposal_actor(item, events)
+                            item["proposed_by"] = author
+                            if session["actor"]["id"] == author:
+                                item.update(
+                                    decidable=False,
+                                    decision_refusal="independent-reviewer-required",
+                                )
+                        except ValueError:
+                            item.update(
+                                decidable=False,
+                                decision_refusal="authenticated-proposal-required",
+                            )
                 items.append(item)
             return {
                 "schema": "tower-queue/1",
@@ -333,8 +360,10 @@ class ConsoleService(DecisionService):
 
     def review(self, token, item_id):
         session = self._write_access(token, "review")
+        item = self.inbox.item(item_id)
+        view = evidence_view(self.root, item)
+        classification_ids = self.inbox.classification_ids(item)
         with self.transaction() as db:
-            item = self.inbox.item(item_id)
             latest = self._latest(self.events(db), item)
             self.append(
                 db,
@@ -359,8 +388,8 @@ class ConsoleService(DecisionService):
             return {
                 **item,
                 "latest_decision": latest,
-                "evidence_view": evidence_view(self.root, item),
-                "classification_item_ids": self.inbox.classification_ids(item),
+                "evidence_view": view,
+                "classification_item_ids": classification_ids,
                 "latest_decisions_by_role": {
                     role: (self._latest(self.events(db), item, role) or {}).get(
                         "content_sha256"
@@ -382,17 +411,27 @@ class ConsoleService(DecisionService):
         if payload.get("outcome") not in kind.outcomes:
             raise ValueError("Outcome is not allowed for this kind")
         review_after = payload.get("review_after")
-        if review_after and date.fromisoformat(review_after) <= utcnow().date():
-            raise ValueError("Review date must be in the future")
+        if review_after and not utcnow().date() < date.fromisoformat(
+            review_after
+        ) <= utcnow().date() + timedelta(days=kind.max_review_days):
+            raise ValueError(
+                "Review date must be within the kind's maximum review interval"
+            )
         # Release uses two distinct role slots, both bound to the same archive.
         slot = payload.get("decision_slot") if kind.name == "evidence-release" else None
         if kind.name == "evidence-release" and (
             slot not in kind.roles or slot not in session["roles"]
         ):
             raise DecisionUnauthorized("Choose a release role held by this identity")
-        self_authored = session["actor"]["id"] == item["proposed_by"] or session[
-            "actor"
-        ]["id"] in item.get("authored_by", [])
+        with self.connect() as db:
+            prepared_events = self.events(db)
+        proposer = item["proposed_by"]
+        if kind.independence == "required":
+            try:
+                proposer = proposal_actor(item, prepared_events)
+            except ValueError as exc:
+                raise DecisionUnauthorized(str(exc)) from None
+        self_authored = session["actor"]["id"] == proposer
         if kind.independence == "required" and self_authored:
             raise DecisionUnauthorized("An independent reviewer is required")
         classification_ids = self.inbox.classification_ids(item)
@@ -413,6 +452,23 @@ class ConsoleService(DecisionService):
             and session["actor"]["kind"] != "customer"
         ):
             raise DecisionUnauthorized("Customer identity required")
+        # Parse/hash and execute trusted validators before taking the sole writer lock.
+        # A changed journal head invalidates this preparation at commit time.
+        validation = None
+        if kind.name in self.validators:
+            validation = self.validators[kind.name](
+                item, payload, prepared_events, session
+            )
+        elif kind.name in {
+            "rule-technical-review",
+            "rule-approval",
+            "rule-retirement",
+            "qualification-acceptance",
+            "evidence-release",
+        }:
+            raise DecisionConflict("Required evidence validator is not configured")
+        if self.inbox.item(item["id"])["bound"] != item["bound"]:
+            raise DecisionConflict("Evidence changed, review again")
         with self.transaction() as db:
             events = self.events(db)
             current_roles = self._roles(session["actor"]["id"], events)
@@ -447,7 +503,10 @@ class ConsoleService(DecisionService):
                     ] != digest(payload):
                         raise DecisionConflict("Request ID already used")
                     return event
-            item = self.inbox.item(item["id"])
+            if events != prepared_events:
+                raise DecisionConflict(
+                    "Journal changed during validation; review again"
+                )
             latest = self._latest(events, item, slot)
             if payload.get("bound") != item["bound"] or payload.get(
                 "previous_decision_sha256"
@@ -469,20 +528,6 @@ class ConsoleService(DecisionService):
                 raise DecisionConflict(
                     "View the current item in this session before deciding"
                 )
-            validation = None
-            if kind.name in self.validators:
-                validation = self.validators[kind.name](item, payload, events, session)
-            elif kind.name in {
-                "rule-technical-review",
-                "rule-approval",
-                "rule-retirement",
-                "qualification-acceptance",
-                "evidence-release",
-            }:
-                raise DecisionConflict("Required evidence validator is not configured")
-            # Re-read after trusted validators to reject evidence changed during review.
-            if self.inbox.item(item["id"])["bound"] != item["bound"]:
-                raise DecisionConflict("Evidence changed, review again")
             independence = (
                 "not-applicable"
                 if kind.independence == "not-applicable"
@@ -510,7 +555,7 @@ class ConsoleService(DecisionService):
                 "roles_held": session["roles"],
                 "session_id": session["id"],
                 "authentication": session["authentication"],
-                "proposed_by": item["proposed_by"],
+                "proposed_by": proposer,
                 "decider_is_proposer": self_authored,
                 "independence": independence,
                 "request_id": request_id,
@@ -528,6 +573,8 @@ class ConsoleService(DecisionService):
             event = self.append(
                 db, "tower_decision", value, session["actor"], session["id"]
             )
+            if kind.name in self.finalizers:
+                self.finalizers[kind.name](db, item, events + [event])
             if (
                 kind.name == "difference-disposition"
                 and payload["outcome"] == "intended-change"
@@ -598,7 +645,7 @@ class ConsoleService(DecisionService):
                     "request_sha256": digest(payload),
                     "label": (
                         "prepared by agent"
-                        if session["actor"]["kind"] == "agent"
+                        if "agent" in session["roles"]
                         else "operator proposal"
                     ),
                     "rule": typed,

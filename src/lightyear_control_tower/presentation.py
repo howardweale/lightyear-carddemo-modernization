@@ -4,6 +4,22 @@ from datetime import datetime, timezone, timedelta
 from .requests import read_json, confined
 
 
+def workspace_status(value):
+    """Status sharing exposes aggregate fields only, never journey/estate details."""
+    result = {k: value[k] for k in ("scope", "configured", "counts") if k in value}
+    result["slice"] = {
+        k: value.get("slice", {})[k]
+        for k in ("id", "lane_pair")
+        if k in value.get("slice", {})
+    }
+    result["progress"] = {
+        k: value.get("progress", {})[k]
+        for k in ("state", "completed", "total")
+        if k in value.get("progress", {})
+    }
+    return result
+
+
 def evidence_view(root, item):
     output = {}
     allowed = {

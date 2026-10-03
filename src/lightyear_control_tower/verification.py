@@ -16,6 +16,19 @@ def check(condition, code):
         raise DecisionVerificationError(code)
 
 
+def subject(kind, bound):
+    keys = {
+        "campaign-authorization": ("campaign", "plan", "declaration"),
+        "qualification-acceptance": ("qualification",),
+        "rule-technical-review": ("rule",),
+        "rule-approval": ("rule",),
+        "rule-retirement": ("rule",),
+        "classification-acceptance": ("classification", "item_ids"),
+        "evidence-release": ("archive",),
+    }.get(kind, default_registry().get(kind).hashes)
+    return tuple((k, bound.get(k)) for k in keys)
+
+
 def verify_journal(export, key, *, scope=None, expected_head=None):
     check(verify_envelope(export, key), "invalid-export-signature")
     check(
@@ -51,7 +64,7 @@ def verify_decision(
     expected_head=None,
     scope=None,
     outcomes=None,
-    now=None
+    now=None,
 ):
     """Verify a proof against its signed head; consumers pin a fresh head out of band.
 
@@ -83,6 +96,7 @@ def verify_decision(
         check(p.get("scope") == export.get("scope"), "scope-mismatch")
         check(p.get("bound") == bound, "bound-hash-mismatch")
         policy = default_registry().get(kind)
+        check(set(policy.hashes) <= set(bound), "incomplete-bound-hashes")
         check(p.get("outcome") in (outcomes or policy.outcomes), "outcome-refused")
         check(
             p.get("channel") == "control-tower"
@@ -96,6 +110,13 @@ def verify_decision(
             "role-refused",
         )
         if policy.independence == "required":
+            from .proposals import proposal_actor
+
+            author = proposal_actor(p, events[: event["sequence"] - 1])
+            check(
+                author != p["actor"]["id"] and p.get("proposed_by") == author,
+                "independence-required",
+            )
             check(
                 p.get("independence")
                 == (
@@ -126,8 +147,8 @@ def verify_decision(
             for e in events[event["sequence"] :]
             if e["kind"] == "tower_decision"
             and e["payload"].get("scope") == p["scope"]
-            and e["payload"].get("item_id") == p["item_id"]
             and e["payload"].get("kind") == kind
+            and subject(kind, e["payload"].get("bound", {})) == subject(kind, bound)
             and e["payload"].get("decision_slot") == p.get("decision_slot")
         ]
         check(not later, "decision-superseded")

@@ -47,6 +47,7 @@ historical ledger migration or permission to disclose customer data is implied.
 
 ## Publication
 
-This milestone accompanies the hardening pull request. Publication contains code,
+[PR #240](https://github.com/howardweale/lightyear-carddemo-modernization/pull/240)
+publishes this milestone and the hardening implementation. Publication contains code,
 public-fixture tests and documentation only; private task evidence and keys are
 excluded. Merge is contingent on the required repository checks.

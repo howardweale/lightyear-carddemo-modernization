@@ -67,6 +67,12 @@ proof. The README states the response-alphabet leakage bound.
 The dedicated Linux PR workflow repeats the real isolation and SDK acceptance.
 Repository checks record remote validation separately from these local results.
 
+Initial Linux CI correctly refused hosted-runner installation permissions before
+candidate execution. CI now uses a root-owned virtual environment under `/var/lib`,
+Ubuntu's packaged Java and a protected `/usr/lib/jvm` parent. A supervisor probe
+reports refused public installation paths before private sessions exist. The
+runtime permission guards remain unchanged; no isolation check was disabled.
+
 ## Publication and limits
 
 Publication contains implementation, tests, CI, documentation and the skill only.

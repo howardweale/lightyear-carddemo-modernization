@@ -18,11 +18,15 @@ jobs:
       - name: Install Linux isolation prerequisites
         run: |
           sudo apt-get update
-          sudo apt-get install -y bubblewrap python3-venv openjdk-21-jdk-headless
+          sudo apt-get install -y acl bubblewrap python3-venv openjdk-21-jdk-headless
           # Hosted images leave this parent writable for runtime installers.
           # Protect the packaged JVM for both unprivileged test identities.
           sudo chown root:root /usr/lib/jvm
           sudo chmod 0755 /usr/lib/jvm
+          # Include the packaged JVM's linked configuration and documentation.
+          sudo setfacl -Rb /usr/lib/jvm/java-21-openjdk-amd64 /etc/java-21-openjdk /usr/share/doc/openjdk-21-jre-headless /usr/share/doc/openjdk-21-jdk-headless
+          sudo setfacl -b /usr/share/doc /usr/share /usr/lib/jvm
+          sudo chmod go-w /usr/share/doc /usr/share
           # Disposable CI runner only; permit bubblewrap's unprivileged namespaces.
           sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
           id 1000 || sudo useradd -u 1000 -m verify-judge

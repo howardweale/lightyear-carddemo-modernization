@@ -209,6 +209,8 @@ async function review(item) {
   );
   const d = drawer(item.summary || item.id);
   d.append(badge(item.kind), json(i.bound), json(i.evidence_view));
+  if (item.scope === "carddemo-zos")
+    d.append(el("p", "No record values are shown or released. Notes are retained only as hash commitments. Review local intake evidence separately. Operator review; not independent.", "boundary"));
   if (item.kind.startsWith("rule-") || item.kind === "qualification-acceptance")
     d.append(
       button("Validate bound evidence", async () =>
@@ -248,6 +250,10 @@ async function review(item) {
       input = name === "reason" ? el("textarea") : el("input");
     input.required = true;
     if (name === "review_after") input.type = "date";
+    if (name === "named_owner" && item.scope === "carddemo-zos") {
+      input.value = "howard-weale";
+      input.readOnly = true;
+    }
     label.append(input);
     form.append(label);
     fields[name] = input;
@@ -257,7 +263,9 @@ async function review(item) {
     d.append(
       el(
         "p",
-        "The frozen export will include both release decisions, including your identity and reason. Review the complete bound bundle before approving.",
+        item.scope === "carddemo-zos"
+          ? "Release includes only the bound no-values bundle and both signed decisions. Notes appear only as hash commitments."
+          : "The frozen export will include both release decisions, including your identity and reason. Review the complete bound bundle before approving.",
       ),
     );
     slot = el("select");
@@ -391,6 +399,17 @@ async function workspace() {
         "empty",
       ),
     );
+    return;
+  }
+  if (v.scope === "carddemo-zos") {
+    content.append(el("p", "Read-only arrival view. Counts, hashes and review status only. Open Work queue to review a request; record values remain in local intake files.", "boundary"));
+    if (!v.arrivals.length) content.append(el("p", "No verified arrival requests yet."));
+    for (const arrival of v.arrivals) {
+      const card = el("article", undefined, "card");
+      card.append(badge(arrival.status), el("p", `${arrival.runs} runs · ${arrival.files} files · ${arrival.findings} findings`),
+        el("p", arrival.intake_sha256, "hash"));
+      content.append(card);
+    }
     return;
   }
   const labels = {

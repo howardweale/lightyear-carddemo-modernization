@@ -112,9 +112,14 @@ class IntakeCase(unittest.TestCase):
             verify_envelope(read_json(arrival / "intake.json"), self.signer.public)
         )
         self.assertEqual(3, len(runs))
-        request = RequestInbox(ROOT, "carddemo-zos", default_registry()).item(
-            arrival.name
+        from lightyear_control_tower.carddemo_policy import (
+            Inbox,
+            registry,
+            write_request,
         )
+
+        request_id = write_request(ROOT, "intake-acceptance", {"intake": result})["id"]
+        request = Inbox(ROOT, "carddemo-zos", registry()).item(request_id)
         self.assertEqual("intake-acceptance", request["kind"])
 
     def test_crlf_is_plain_words_finding(self):
@@ -385,9 +390,10 @@ class IntakeCase(unittest.TestCase):
 
         _, runs, _ = self.freeze()
         compared = compare_runs(runs[0], runs[1], self.signer.public)
-        rule = compared["proposals"][0]
-        ledger = read_json(runs[0] / "normalization-proposals.json")
-        request_id = rule["id"] + "-" + compared["runs"][0][:12]
+        from lightyear_control_tower.carddemo_policy import from_draft, write_request
+
+        rule = from_draft(compared["proposals"][0])
+        request_id = write_request(ROOT, "normalization", {"rule": rule})["id"]
         original_request = (
             ROOT / "work/control-tower/requests/carddemo-zos" / (request_id + ".json")
         )
@@ -405,18 +411,35 @@ class IntakeCase(unittest.TestCase):
         target.write_bytes(original_request.read_bytes())
         authority = self.root / "console-authority/authority.json"
         credential = (
-            provision(authority, "carddemo-zos", "fixture-reviewer", "Fixture reviewer")
+            provision(authority, "carddemo-zos", "howard-weale", "Howard Weale")
             .read_text()
             .strip()
         )
         service = ConsoleService(data, authority)
         self.addCleanup(service.close)
         service.grant_roles(
-            "fixture-reviewer",
+            "howard-weale",
             ["operator", "normalization-approver"],
             reason="Disposable unit test only",
         )
+        agent = service.add_identity(
+            "zos-intake", "Intake agent", identity_kind="agent"
+        )
+        service.grant_roles("zos-intake", ["agent"], reason="Disposable fixture")
+        agent_token = service.login(agent)["token"]
         token = service.login(credential)["token"]
+        initial = service.item(agent_token, request_id)
+        service.propose(
+            agent_token,
+            "rule-proposal",
+            dict(
+                item_id=request_id,
+                bound=initial["bound"],
+                request_id=str(uuid4()),
+                text="Public fixture proposal",
+                rule=rule,
+            ),
+        )
         item = service.review(token, request_id)
         event = service.decide(
             token,
@@ -425,7 +448,7 @@ class IntakeCase(unittest.TestCase):
                 bound=item["bound"],
                 outcome="approved",
                 reason="Disposable test decision",
-                named_owner="Fixture reviewer",
+                named_owner="howard-weale",
                 review_after=(
                     datetime.now(timezone.utc).date() + timedelta(days=2)
                 ).isoformat(),
@@ -434,7 +457,9 @@ class IntakeCase(unittest.TestCase):
             ),
         )
         proof = service.proof(token, event["content_sha256"])
-        bundle = dict(rules=[dict(rule=rule, ledger=ledger, proof=proof)])
+        bundle = dict(
+            schema="zos-approved-rules/1", rules=[dict(rule=rule, proof=proof)]
+        )
         head = proof["journal"]["journal_head_sha256"]
         valid = approved_paths(
             bundle,
@@ -466,6 +491,55 @@ class IntakeCase(unittest.TestCase):
             approved_paths(
                 bundle, None, None, compared["runs"][0], at=datetime.now(timezone.utc)
             )
+        if JAR.is_file():
+            from lightyear_mainframe.zos_bridge import compute_verdict
+
+            # The second public run has a planted timestamp delta. Actual Java
+            # output differs under exact comparison and matches only after the
+            # authenticated Tower rule is supplied. Nothing is overwritten.
+            prepare(runs[1], self.signer.public, self.signer)
+            run_candidate(runs[1], JAR, self.signer.public, self.signer)
+            self.assertEqual(
+                "divergent", compute_verdict(runs[1], self.signer.public)["verdict"]
+            )
+            register = service.register(token)
+            result = verdict(
+                runs[1],
+                self.signer.public,
+                self.signer,
+                normalizations=register,
+                tower_key=service.public_key,
+                tower_head=register["journal_head_sha256"],
+            )
+            self.assertEqual("equivalent", result["verdict"])
+            self.assertEqual([], result["base_rules"])
+            self.assertEqual(
+                "verified",
+                replay(runs[1], self.signer.public, tower_key=service.public_key)[
+                    "status"
+                ],
+            )
+
+    @unittest.skipUnless(
+        JAR.is_file(), "Build the Java candidate for the public divergence rehearsal"
+    )
+    def test_divergent_java_verdict_emits_closed_tower_request(self):
+        from lightyear_control_tower.carddemo_policy import Inbox, registry
+
+        _, runs, _ = self.freeze()
+        prepare(runs[1], self.signer.public, self.signer)
+        run_candidate(runs[1], JAR, self.signer.public, self.signer)
+        result = verdict(runs[1], self.signer.public, self.signer)
+        self.assertEqual("divergent", result["verdict"])
+        found = []
+        for item in Inbox(ROOT, "carddemo-zos", registry()).queue():
+            if item.get("kind") == "difference-disposition":
+                summary = read_json(ROOT / item["evidence"]["diagnostic"])
+                if summary["diagnostic_sha256"] == result["content_sha256"]:
+                    found.append(summary)
+        self.assertEqual(1, len(found))
+        self.assertGreater(found[0]["changed"], 0)
+        self.assertEqual(result["run_sha256"], found[0]["source_sha256"])
 
     def test_cli_never_echoes_unknown_file_contents(self):
         marker = "PRIVATE_RECORD_VALUE_NEVER_PRINT"

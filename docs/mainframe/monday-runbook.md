@@ -231,12 +231,12 @@ is permitted. The candidate is the unchanged source-faithful INTCALC JAR. Execut
 is bounded to five minutes, writes logs locally, records JAR/Java/input/output/log
 hashes, and refuses to overwrite a prior attempt.
 
-The signed verdict is `equivalent`, `divergent`, or `indeterminate`. It applies the
-existing governed decimal/padding/filler comparison contract and any **explicitly
-approved**, applicable timestamp rule. Canonical records retain untrimmed text;
+The signed verdict is `equivalent`, `divergent`, or `indeterminate`. It compares every decoded field exactly, including padding and filler, except for an
+**explicitly approved**, applicable timestamp rule from verified Tower decisions
+or the signed rule register. The old comparison ledger is neither loaded nor applied. Canonical records retain untrimmed text;
 normalization happens only in comparison. Diagnostics contain field paths and
 counts, never values. A non-zero execution, missing output, invalid key or expired
-comparison ledger cannot yield equivalence. Do not reinterpret a divergent result.
+Tower approval cannot yield equivalence. Do not reinterpret a divergent result.
 
 Offline replay verifies original bytes and signatures, recomputes the comparison,
 and requires the same implementation hashes and recorded approval time. It does
@@ -247,38 +247,41 @@ journal head, not whether a later decision now exists.
 POSTTRAN, CREASTMT and TRANREPT stop after intake/decoding/determinism/delta: no Java
 candidate exists for them here.
 
-### 5. Review normalization drafts in the existing Console
+### 5. Review through the CardDemo Tower v2 workspace
 
-Use a **separate** Console instance scoped `carddemo-zos` and rooted at this intake
-clone; do not alter a running campaign Console. Its authority/credentials must be
-outside this engine-writable clone. See the [Console operating guide](../control-tower-decision-console.md)
-for provisioning and role administration. The normalization request uses the
-existing `normalization` kind and `normalization-approver` role, bound to
-`workload:carddemo-intcalc`; it does not edit the legacy comparator's static ledger.
-Review and record the named owner, reason and review date, then export its signed
-decision proof. The `intake-acceptance` kind uses `qualification-approver`.
+Follow [CardDemo Tower setup and request flow](carddemo-zos-tower.md). This is a
+separate `carddemo-zos` authority and journal in the intake clone. Do not reuse a
+campaign Console. Intake and comparison write `tower-request/1` files under
+`work/control-tower/requests/carddemo-zos/`. A divergent INTCALC verdict also
+writes a difference-disposition request. The Workspace tab is a read-only arrival
+view; all routes, streams, MCP tools and exports use `carddemo-zos-no-values/1`.
 
-For an approved normalization, place a local bundle in the arrival with this shape:
+An authenticated `zos-intake` agent proposes the exact timestamp rule through
+`propose_rule`; Howard then decides in the Console. The file's proposer label alone
+is insufficient. Notes are retained only as hash commitments. Review sensitive
+record values in the private local files, never in Console notes.
+
+The `rules` route returns a signed `zos-rule-register/1` with the applicable rules
+and their decision proofs. Alternatively use an explicit decision bundle:
 
 ```json
-{"rules":[{"rule":"replace with the exact proposal object","ledger":"replace with the exact proposal ledger object","proof":"replace with the exported tower-decision-proof/1 object"}]}
+{"schema":"zos-approved-rules/1","rules":[{"rule":"exact zos-tower-rule/1 object","proof":"tower-decision-proof/1 object"}]}
 ```
 
-These are objects, not strings. The proposal and ledger are in
-`normalization-proposals.json` and the safe review mirror. Trust the Console public
-key and its latest journal head out of band. Supply the bundle on the **first**
-verdict invocation:
+The quoted descriptions stand for objects. Neither format contains or accepts a
+parallel ledger. Obtain the trusted public key and current journal head out of
+band. Supply the register or bundle on the **first** verdict invocation:
 
 ```powershell
 .\.venv\Scripts\python.exe -m lightyear_mainframe verdict-intcalc $Run1 --public-key $IntakePublicKey --key $IntakeKey --normalizations (Join-Path $Arrival 'approved-normalizations.json') --tower-public-key $TowerPublicKey --tower-head $TrustedTowerHead
 .\.venv\Scripts\python.exe -m lightyear_mainframe replay-intcalc $Run1 --public-key $IntakePublicKey --tower-public-key $TowerPublicKey
 ```
 
-Draft changes, stale heads, wrong roles/scopes, expired decisions, missing signatures
-or a field no longer matching the approved timestamp pattern are refused. An
-existing verdict is immutable; do not overwrite one with a different rule set.
-Operator review is not independent human attestation. Approval does not change
-original bytes or historical verdicts.
+Changed rules, stale heads, wrong roles/scopes, expired or superseded decisions,
+missing signatures or a field no longer matching the approved pattern are
+refused. Existing verdicts remain immutable. Offline replay proves validity at
+the archived head and approval time. Operator review is not independent human
+attestation. A difference disposition never changes a verdict or approves a rule.
 
 ## Before sharing any result
 

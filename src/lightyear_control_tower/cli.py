@@ -13,6 +13,11 @@ def build_parser() -> argparse.ArgumentParser:
         description="LIGHTYEAR live Control Tower utilities"
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
+    zos = subparsers.add_parser(
+        "init-carddemo-workspace",
+        help="Create a no-values intake workspace; no identities or approvals",
+    )
+    zos.add_argument("--root", type=Path, required=True)
     validate = subparsers.add_parser(
         "validate", help="Validate the operational event chain"
     )
@@ -129,6 +134,12 @@ def main(argv: list[str] | None = None) -> int:
     parser = build_parser()
     args = parser.parse_args(argv)
     from .features import feature
+
+    if args.command == "init-carddemo-workspace":
+        from .carddemo_policy import initialize_workspace
+
+        print(json.dumps(initialize_workspace(args.root)))
+        return 0
 
     required = {
         "serve": "server",

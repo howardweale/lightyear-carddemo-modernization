@@ -19,6 +19,7 @@ COMMANDS = {
     "replay-intcalc",
     "rehearse-intake",
     "bridge-self-test",
+    "request-evidence-release",
 }
 
 
@@ -31,6 +32,9 @@ def main(argv):
         p = sub.add_parser(name)
         if name == "init-intake-key":
             p.add_argument("key", type=Path)
+            continue
+        if name == "request-evidence-release":
+            p.add_argument("--members", required=True, type=Path, nargs="+")
             continue
         if name == "intake":
             p.add_argument("folder", type=Path)
@@ -65,7 +69,27 @@ def main(argv):
             if hasattr(args, "key") and args.command != "init-intake-key"
             else None
         )
-        if args.command == "init-intake-key":
+        if args.command == "request-evidence-release":
+            from lightyear_control_tower.carddemo_policy import (
+                write_request,
+                POLICY,
+                SCOPE,
+            )
+            from .zos_bindings import ROOT
+
+            bundle = dict(
+                schema="zos-evidence-release/1",
+                scope=SCOPE,
+                disclosure_policy=POLICY,
+                members=[read_json(f) for f in args.members],
+            )
+            request = write_request(ROOT, "evidence-release", {"archive": bundle})
+            result = dict(
+                status="requested",
+                id=request["id"],
+                archive_sha256=request["bound"]["archive"],
+            )
+        elif args.command == "init-intake-key":
             initialize_key(args.key)
             result = dict(
                 status="created",

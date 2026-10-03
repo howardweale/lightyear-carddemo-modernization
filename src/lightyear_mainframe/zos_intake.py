@@ -535,32 +535,9 @@ def intake(folder, description, signer):
         findings=len(gaps),
         status=index["status"],
     )
-    safe_path = (
-        ROOT
-        / "work/control-tower/requests/carddemo-zos/evidence"
-        / f"{arrival.name}.json"
-    )
-    safe_path.parent.mkdir(parents=True, exist_ok=True)
-    safe_path.write_bytes(canonical(safe) + b"\n")
-    # Evidence cannot live under control-plane paths in the current Tower; use an explicitly safe mirror.
-    mirror = ROOT / "work/mainframe/review" / f"{arrival.name}.json"
-    mirror.parent.mkdir(parents=True, exist_ok=True)
-    mirror.write_bytes(canonical(safe) + b"\n")
-    request = dict(
-        schema="tower-request/1",
-        scope="carddemo-zos",
-        id=arrival.name,
-        kind="intake-acceptance",
-        bound={"intake": sha(mirror.read_bytes())},
-        evidence={"intake": mirror.relative_to(ROOT).as_posix()},
-        summary=f"Intake review: {len(hashes)} runs, {len(gaps)} findings. Operator review; not independent.",
-        proposed_by="zos-intake",
-        authored_by=["zos-intake"],
-        workload="workload:carddemo-intcalc",
-    )
-    (safe_path.parent.parent / f"{arrival.name}.json").write_bytes(
-        canonical(request) + b"\n"
-    )
+    from lightyear_control_tower.carddemo_policy import write_request
+
+    write_request(ROOT, "intake-acceptance", {"intake": safe})
     return arrival, safe
 
 

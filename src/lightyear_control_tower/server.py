@@ -26,6 +26,7 @@ READ_ROUTES = frozenset(
         "export",
         "validation",
         "events",
+        "arrivals",
     }
 )
 WRITE_ROUTES = frozenset({"review", "decide", "propose", "logout"})
@@ -34,6 +35,12 @@ WRITE_ROUTES = frozenset({"review", "decide", "propose", "logout"})
 class ConsoleAPI:
     def __init__(self, service):
         self.service = service
+        self.carddemo = None
+        if service.scope == "carddemo-zos":
+            from .carddemo_console import CarddemoAPI
+
+            self.carddemo = CarddemoAPI(service)
+            return
         self.campaigns = CampaignRegistry(service.root, service.scope)
         workflows = feature("workflows")
         workspace = feature("workspace")
@@ -41,6 +48,8 @@ class ConsoleAPI:
         self.workspace = workspace.Workspace(service) if workspace else None
 
     def read(self, route, token, args):
+        if self.carddemo:
+            return self.carddemo.read(route, token, args)
         s = self.service
         if route == "workspace":
             if self.workspace:
@@ -48,6 +57,8 @@ class ConsoleAPI:
             s._read_access(token)
             return {"scope": s.scope, "configured": False}
         s._read_access(token)
+        if route == "arrivals":
+            return {"scope": s.scope, "available": False, "arrivals": []}
         if route == "queue":
             result = s.queue(token)
             if self.workflows:

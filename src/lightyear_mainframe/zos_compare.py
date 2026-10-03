@@ -207,34 +207,10 @@ def compare_runs(first, second, public_key):
             rules=proposals,
         )
         write_json(Path(first) / "normalization-proposals.json", ledger)
-        safe_dir = ROOT / "work/mainframe/review" / a["run_sha256"]
-        safe_dir.mkdir(parents=True, exist_ok=True)
-        ledger_path = safe_dir / "ledger.json"
-        ledger_path.write_bytes(canonical(ledger) + b"\n")
-        inbox = ROOT / "work/control-tower/requests/carddemo-zos"
-        inbox.mkdir(parents=True, exist_ok=True)
-        for rule in proposals:
-            entry_path = safe_dir / (rule["id"] + ".json")
-            entry_path.write_bytes(canonical(rule) + b"\n")
-            request = dict(
-                schema="tower-request/1",
-                scope="carddemo-zos",
-                id=rule["id"] + "-" + a["run_sha256"][:12],
-                kind="normalization",
-                bound={
-                    "entry": sha(entry_path.read_bytes()),
-                    "ledger": sha(ledger_path.read_bytes()),
-                },
-                evidence={
-                    "entry": entry_path.relative_to(ROOT).as_posix(),
-                    "ledger": ledger_path.relative_to(ROOT).as_posix(),
-                },
-                summary="Draft processing-timestamp rule with a still-caught non-timestamp mutation. Operator review required.",
-                proposed_by="zos-intake",
-                authored_by=["zos-intake"],
-                workload="workload:carddemo-intcalc",
-            )
-            (inbox / (request["id"] + ".json")).write_bytes(canonical(request) + b"\n")
+        from lightyear_control_tower.carddemo_policy import write_request, from_draft
+
+        for draft in proposals:
+            write_request(ROOT, "normalization", {"rule": from_draft(draft)})
     return result
 
 

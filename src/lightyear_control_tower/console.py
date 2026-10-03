@@ -45,6 +45,17 @@ def provision(path, scope, operator_id, name, *, identity_kind="human"):
 
 
 class ConsoleService(DecisionService):
+    def __new__(cls, root, authority, **kwargs):
+        # Scope selection is authority-owned, never controlled by an HTTP request.
+        if (
+            cls is ConsoleService
+            and read_json(authority).get("console_scope") == "carddemo-zos"
+        ):
+            from .carddemo_console import CarddemoConsole
+
+            return object.__new__(CarddemoConsole)
+        return object.__new__(cls)
+
     def __init__(self, root, authority, *, registry=None, identity_provider=None):
         config = read_json(authority)
         self.scope = identifier(config.get("console_scope"))

@@ -7,7 +7,6 @@ import time
 from datetime import datetime, timezone
 from pathlib import Path
 
-from carddemo_oracle.compare import validate_normalization_ledger, NORMALIZATION_RULES
 from lightyear_control_tower.decisions import canonical, verify_envelope
 from lightyear_control_tower.verification import verify_decision
 from .records import from_ascii_fixed, load_copybook, to_ascii_fixed
@@ -29,9 +28,11 @@ OUTPUTS = {"ACCTFILE": "acctdata.txt", "TRANSACT": "transactions.txt"}
 def implementation_hashes():
     files = sorted((ROOT / "src/lightyear_mainframe").glob("*.py"))
     files += [
-        ROOT / "src/carddemo_oracle/compare.py",
         ROOT / "spec/mainframe/carddemo-bindings.json",
-        ROOT / "spec/comparison-normalizations.json",
+    ]
+    files += [
+        ROOT / "src/lightyear_control_tower" / name
+        for name in ("carddemo_policy.py", "verification.py", "kinds.py")
     ]
     return {p.relative_to(ROOT).as_posix(): sha(p.read_bytes()) for p in files}
 
@@ -181,12 +182,41 @@ def approved_paths(bundle, public_key, head, run_hash, *, at):
             "Normalization requires an independently trusted Tower public key and journal head"
         )
     ignored = {}
-    for item in bundle["rules"]:
-        rule, proof = item["rule"], item["proof"]
-        entry_bytes, ledger_bytes = (
-            canonical(rule) + b"\n",
-            canonical(item["ledger"]) + b"\n",
+    from lightyear_control_tower.carddemo_policy import (
+        rule as validate_rule,
+        require,
+        POLICY,
+    )
+
+    require(bundle.get("schema") in {"zos-approved-rules/1", "zos-rule-register/1"})
+    require(isinstance(bundle.get("rules"), list))
+    require(
+        set(bundle)
+        == (
+            {"schema", "rules"}
+            if bundle["schema"] == "zos-approved-rules/1"
+            else {
+                "schema",
+                "rules",
+                "scope",
+                "disclosure_policy",
+                "journal_head_sha256",
+                "content_sha256",
+                "signature",
+            }
         )
+    )
+    if bundle["schema"] == "zos-rule-register/1":
+        require(
+            verify_envelope(bundle, public_key)
+            and bundle.get("scope") == "carddemo-zos"
+            and bundle.get("disclosure_policy") == POLICY
+            and bundle.get("journal_head_sha256") == head
+        )
+    for item in bundle["rules"]:
+        require(set(item) == {"rule", "proof"})
+        rule, proof = item["rule"], item["proof"]
+        validate_rule(rule)
         # Exact verified inbox binding includes a request hash; retain it from proof.
         event = next(
             e
@@ -194,14 +224,7 @@ def approved_paths(bundle, public_key, head, run_hash, *, at):
             if e["content_sha256"] == proof["decision_sha256"]
         )
         bound = event["payload"]["bound"]
-        if (
-            bound["entry"] != sha(entry_bytes)
-            or bound["ledger"] != sha(ledger_bytes)
-            or rule not in item["ledger"]["rules"]
-        ):
-            raise ValueError(
-                "Normalization draft does not match the approved entry and ledger"
-            )
+        require(bound["rule"] == sha(canonical(rule) + b"\n"))
         if (
             rule["workload"] != "workload:carddemo-intcalc"
             or rule["pattern"] != TIMESTAMP
@@ -247,9 +270,6 @@ def compute_verdict(
         reasons.append("Candidate did not complete successfully.")
     if run["findings"]:
         reasons.append("Intake has unresolved findings.")
-    ledger = ROOT / "spec/comparison-normalizations.json"
-    if validate_normalization_ledger(ledger, as_of=at.date())["status"] != "passed":
-        reasons.append("Existing normalization ledger is invalid or expired.")
     ignored = (
         approved_paths(
             normalizations, tower_key, tower_head, decoded["run_sha256"], at=at
@@ -299,7 +319,7 @@ def compute_verdict(
                         "Normalized field no longer matches timestamp pattern"
                     )
             comparisons[key] = compare_records(
-                item["records"], candidate, binding, base_rules=True, ignored=paths
+                item["records"], candidate, binding, ignored=paths
             )
         except ValueError:
             reasons.append(
@@ -323,7 +343,8 @@ def compute_verdict(
         input_manifest_sha256=manifest["content_sha256"],
         datasets=comparisons,
         reasons=sorted(set(reasons)),
-        base_rules=NORMALIZATION_RULES,
+        base_rules=[],
+        normalization_source="verified-tower-decisions-only",
         approved_normalization_sha256=(
             sha(canonical(normalizations)) if normalizations else None
         ),
@@ -343,6 +364,24 @@ def verdict(path, public_key, signer, **options):
         )
     result = signer.sign(compute_verdict(path, public_key, **options))
     write_json(Path(path) / "verdict.json", result)
+    if result["verdict"] == "divergent":
+        from lightyear_control_tower.carddemo_policy import write_request, registry
+
+        summary = dict(
+            schema="zos-difference-review/1",
+            source_sha256=result["run_sha256"],
+            target_sha256=result["execution_sha256"],
+            diagnostic_sha256=result["content_sha256"],
+            **{
+                key: sum(d[key] for d in result["datasets"].values())
+                for key in ("added", "deleted", "changed")
+            },
+        )
+        write_request(
+            ROOT,
+            "difference-disposition",
+            {key: summary for key in registry().get("difference-disposition").hashes},
+        )
     return result
 
 

@@ -14,6 +14,11 @@ signed folder intake, strict dataset decoding, repeatability/delta checks and a
 Java INTCALC comparison with offline replay. Its rehearsal uses public synthetic
 data; Maintec's answers remain in the ignored arrival tree.
 
+The [CardDemo Tower v2 workspace](docs/mainframe/carddemo-zos-tower.md) connects
+intake acceptance, agent-proposed normalization, difference disposition and evidence
+release under a no-values policy. Its arrival view is read-only; INTCALC uses only
+verified Tower rules, with no parallel legacy ledger.
+
 **Native Oracle 26ai → AlloyDB PostgreSQL: 260/260 matching case pairs**, across
 13 datatype families and 65 bounded behaviours. The successful run contains
 260 source and 260 target observations. Earlier overlapping campaigns are deduplicated.

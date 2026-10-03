@@ -40,6 +40,11 @@ def verify_prefix(rows):
 
 
 def verify_export(archive, key, *, scope=None):
+    if archive.get("schema") == "zos-released-export/1":
+        from .carddemo_console import verify_release
+
+        check(scope in (None, "carddemo-zos"), "scope-mismatch")
+        return verify_release(archive, key)
     check(
         archive.get("schema") == "tower-released-export/2"
         and verify_envelope(archive, key),

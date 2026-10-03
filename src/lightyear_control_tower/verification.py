@@ -17,6 +17,8 @@ def check(condition, code):
 
 
 def subject(kind, bound):
+    if kind == "normalization" and "rule" in bound:
+        return (("rule", bound["rule"]),)
     keys = {
         "campaign-authorization": ("campaign", "plan", "declaration"),
         "qualification-acceptance": ("qualification",),
@@ -96,6 +98,19 @@ def verify_decision(
         check(p.get("scope") == export.get("scope"), "scope-mismatch")
         check(p.get("bound") == bound, "bound-hash-mismatch")
         policy = default_registry().get(kind)
+        if p.get("scope") == "carddemo-zos":
+            from .carddemo_policy import registry, HOWARD, agent_proposal, POLICY
+
+            policy = registry().get(kind)
+            check(p.get("disclosure_policy") == POLICY, "disclosure-policy-required")
+            if kind != "evidence-release":
+                check(p["actor"]["id"] == HOWARD, "howard-decision-required")
+            if kind == "normalization":
+                proposal = agent_proposal(p, events[: event["sequence"] - 1])
+                check(
+                    p.get("validation", {}).get("agent_proposal_sha256") == proposal,
+                    "agent-proposal-binding-mismatch",
+                )
         check(set(policy.hashes) <= set(bound), "incomplete-bound-hashes")
         check(p.get("outcome") in (outcomes or policy.outcomes), "outcome-refused")
         check(

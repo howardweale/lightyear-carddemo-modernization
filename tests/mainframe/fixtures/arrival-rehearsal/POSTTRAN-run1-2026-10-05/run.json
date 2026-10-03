@@ -1,0 +1,143 @@
+{
+  "schema": "zos-delivery-run/1",
+  "job": "POSTTRAN",
+  "system_datetime": "2026-10-05T10:00:00Z",
+  "processing_date": null,
+  "candidate_timestamp": "2022-07-18-00.00.00.000000",
+  "starting_state_id": "public-restored-v1",
+  "datasets": [
+    {
+      "file": "before/ACCTFILE.bin",
+      "phase": "before",
+      "step": "STEP15",
+      "dd": "ACCTFILE",
+      "dsn": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "recfm": "F",
+      "lrecl": 300,
+      "blksize": 0,
+      "codec": "cp037"
+    },
+    {
+      "file": "before/TCATBALF.bin",
+      "phase": "before",
+      "step": "STEP15",
+      "dd": "TCATBALF",
+      "dsn": "AWS.M2.CARDDEMO.TCATBALF.VSAM.KSDS",
+      "recfm": "F",
+      "lrecl": 50,
+      "blksize": 0,
+      "codec": "cp037"
+    },
+    {
+      "file": "before/XREFFILE.bin",
+      "phase": "before",
+      "step": "STEP15",
+      "dd": "XREFFILE",
+      "dsn": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+      "recfm": "F",
+      "lrecl": 50,
+      "blksize": 0,
+      "codec": "cp037"
+    },
+    {
+      "file": "before/DALYTRAN.bin",
+      "phase": "before",
+      "step": "STEP15",
+      "dd": "DALYTRAN",
+      "dsn": "AWS.M2.CARDDEMO.DALYTRAN.PS",
+      "recfm": "F",
+      "lrecl": 350,
+      "blksize": 0,
+      "codec": "cp037"
+    },
+    {
+      "file": "before/TRANFILE.bin",
+      "phase": "before",
+      "step": "STEP15",
+      "dd": "TRANFILE",
+      "dsn": "AWS.M2.CARDDEMO.TRANSACT.VSAM.KSDS",
+      "recfm": "F",
+      "lrecl": 350,
+      "blksize": 0,
+      "codec": "cp037"
+    },
+    {
+      "file": "before/DALYREJS.bin",
+      "phase": "before",
+      "step": "STEP15",
+      "dd": "DALYREJS",
+      "dsn": "AWS.M2.CARDDEMO.DALYREJS(+1)",
+      "recfm": "F",
+      "lrecl": 430,
+      "blksize": 0,
+      "codec": "cp037"
+    },
+    {
+      "file": "after/ACCTFILE.bin",
+      "phase": "after",
+      "step": "STEP15",
+      "dd": "ACCTFILE",
+      "dsn": "AWS.M2.CARDDEMO.ACCTDATA.VSAM.KSDS",
+      "recfm": "F",
+      "lrecl": 300,
+      "blksize": 0,
+      "codec": "cp037"
+    },
+    {
+      "file": "after/TCATBALF.bin",
+      "phase": "after",
+      "step": "STEP15",
+      "dd": "TCATBALF",
+      "dsn": "AWS.M2.CARDDEMO.TCATBALF.VSAM.KSDS",
+      "recfm": "F",
+      "lrecl": 50,
+      "blksize": 0,
+      "codec": "cp037"
+    },
+    {
+      "file": "after/XREFFILE.bin",
+      "phase": "after",
+      "step": "STEP15",
+      "dd": "XREFFILE",
+      "dsn": "AWS.M2.CARDDEMO.CARDXREF.VSAM.KSDS",
+      "recfm": "F",
+      "lrecl": 50,
+      "blksize": 0,
+      "codec": "cp037"
+    },
+    {
+      "file": "after/DALYTRAN.bin",
+      "phase": "after",
+      "step": "STEP15",
+      "dd": "DALYTRAN",
+      "dsn": "AWS.M2.CARDDEMO.DALYTRAN.PS",
+      "recfm": "F",
+      "lrecl": 350,
+      "blksize": 0,
+      "codec": "cp037"
+    },
+    {
+      "file": "after/TRANFILE.bin",
+      "phase": "after",
+      "step": "STEP15",
+      "dd": "TRANFILE",
+      "dsn": "AWS.M2.CARDDEMO.TRANSACT.VSAM.KSDS",
+      "recfm": "F",
+      "lrecl": 350,
+      "blksize": 0,
+      "codec": "cp037"
+    },
+    {
+      "file": "after/DALYREJS.bin",
+      "phase": "after",
+      "step": "STEP15",
+      "dd": "DALYREJS",
+      "dsn": "AWS.M2.CARDDEMO.DALYREJS(+1)",
+      "recfm": "F",
+      "lrecl": 430,
+      "blksize": 0,
+      "codec": "cp037"
+    }
+  ],
+  "evidence_class": "synthetic-public-rehearsal"
+}

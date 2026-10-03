@@ -9,6 +9,11 @@ across 44 public CardDemo COBOL programs, decodes 501 public EBCDIC records, and
 rehearses both batch jobs against explicit mock spool bindings. Native coverage
 and equivalence remain unobserved.
 
+The [Maintec Monday intake runbook](docs/mainframe/monday-runbook.md) prepares
+signed folder intake, strict dataset decoding, repeatability/delta checks and a
+Java INTCALC comparison with offline replay. Its rehearsal uses public synthetic
+data; Maintec's answers remain in the ignored arrival tree.
+
 **Native Oracle 26ai → AlloyDB PostgreSQL: 260/260 matching case pairs**, across
 13 datatype families and 65 bounded behaviours. The successful run contains
 260 source and 260 target observations. Earlier overlapping campaigns are deduplicated.

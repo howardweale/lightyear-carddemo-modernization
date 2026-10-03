@@ -17,8 +17,15 @@ def write_json(path, data):
 
 
 def main(argv=None):
+    from .zos_cli import COMMANDS
+    supplied = sys.argv[1:] if argv is None else argv
+    if supplied and supplied[0] in COMMANDS:
+        from .zos_cli import main as zos_main
+        return zos_main(supplied)
     parser = argparse.ArgumentParser(description='COBOL source inventory and byte-preserving arrival kit')
     sub = parser.add_subparsers(dest='command', required=True)
+    for command in sorted(COMMANDS):
+        sub.add_parser(command, help='offline z/OS delivery command (use command --help)')
     inv = sub.add_parser('inventory', help='inventory a pinned local public source checkout')
     inv.add_argument('--source', required=True, type=Path)
     inv.add_argument('--output', required=True, type=Path)

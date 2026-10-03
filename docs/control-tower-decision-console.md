@@ -90,6 +90,11 @@ identity can log out, including auditors and partners.
 
 ## Local campaign registry and evidence
 
+B06 has a separate [write-once status and decision integration](control-tower-b06.md).
+Its `ms94-b06` adapter reads only completed numbered status exports on Windows;
+it does not relax the legacy live-file refusal below. The full B06 executable and
+native preflight must incorporate and qualify this integration before launch.
+
 Copy `control-tower/campaigns.example.json` into the **data root's**
 `control-tower/campaigns.json`, with explicitly selected local roots, a trusted
 public key and a scope matching the authority. Registry paths are ignored by Git

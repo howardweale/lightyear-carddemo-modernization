@@ -853,6 +853,18 @@ class CampaignRegistry:
             return unavailable_campaign(campaign_id)
 
     def _view(self, row, campaign_id, *, now):
+        if row["adapter"] == "ms94-b06":
+            from .b06 import project_exports, SCOPE
+
+            if self.scope != SCOPE or row.get("read_mode") != "write-once-status":
+                raise ValueError("B06 requires its scoped write-once status adapter")
+            return project_exports(
+                row["export_directory"],
+                read_bytes(Path(row["trusted_public_key"])),
+                campaign_id,
+                row["bindings"],
+                now,
+            )
         adapter = {
             "ms94-stage-b": CampaignSource,
             "ms94-equipment": EquipmentSource,

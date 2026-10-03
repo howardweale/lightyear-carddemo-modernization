@@ -103,7 +103,9 @@ async function campaign(id) {
   content.append(
     el(
       "p",
-      "Frozen controller: decisions are recorded here, but this controller does not read them. Stop it outside the Tower if required.",
+      v.controller_reads_tower_decisions
+        ? "B06 controller consumes verified launch and pause decisions. The Tower records operator intent; it never starts or stops processes. Operator review; not independent."
+        : "Frozen controller: decisions are recorded here, but this controller does not read them. Stop it outside the Tower if required.",
       "boundary",
     ),
   );
@@ -144,6 +146,14 @@ async function campaign(id) {
     p.value = v.used?.[k] || 0;
     content.append(el("small", `${k}: ${p.value} / ${limit}`), p);
   }
+  if (v.fixture) content.append(el("p", "FIXTURE — zero-model integration rehearsal; not a measured B06 result.", "boundary"));
+  for (const j of v.journeys || []) {
+    content.append(el("h3", `${j.id}: ${j.cohort_passed}/${j.cohort_completed} completed · ${j.planned} planned`));
+    content.append(el("p", j.void ? "Journey VOID; no rate." :
+      `${j.interim ? "Interim · " : ""}pilots excluded` + (j.wilson_95 ? ` · Wilson 95%: ${(100*j.wilson_95.lower).toFixed(1)}–${(100*j.wilson_95.upper).toFixed(1)}%` : "")));
+  }
+  if (v.calendar?.latest_launch_utc) content.append(el("p", `Latest launch (UTC): ${v.calendar.latest_launch_utc} · period closes ${v.calendar.period_end_exclusive_utc}`));
+  if (v.pause) content.append(el("p", `Paused: ${v.pause.reasons.join(", ")}. Review ${v.pause.request_id} in the Work queue. The controller consumes the signed decision; the Tower does not control processes.`, "boundary"));
   const grid = el("div", undefined, "trial-grid");
   for (const t of v.trials) {
     const b = button(t.id, () => drawer(t.id).append(json(t)));
@@ -158,7 +168,7 @@ async function campaign(id) {
         "div",
         a.code +
           " · " +
-          (a.diagnostic_class || "") +
+          (a.journey || "") + " " + (a.budget ? `${a.budget} ${100*a.threshold}%` : "") + " " + (a.diagnostic_class || "") +
           " " +
           (a.trials || []).join(", "),
         "alert",

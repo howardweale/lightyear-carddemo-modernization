@@ -127,13 +127,16 @@ against kernel exploits, malicious native-memory exhaustion or timing side chann
 
 ## AppArmor on Ubuntu 24.04 and WSL
 
-Keep host user-namespace restrictions enabled. Current Ubuntu ships a dedicated
-bubblewrap profile; install and load that profile, not a global sysctl exception:
+Keep host user-namespace restrictions enabled. Ubuntu 24.04 supplies the dedicated
+bubblewrap policy in the optional `apparmor-profiles` package. Install and load
+that policy; it is not necessarily present in `/etc/apparmor.d` by default:
 
 ```sh
-sudo apt-get install apparmor bubblewrap
-sudo test -f /etc/apparmor.d/bwrap
-sudo apparmor_parser -r /etc/apparmor.d/bwrap
+sudo apt-get install apparmor apparmor-profiles bubblewrap
+if [ ! -f /etc/apparmor.d/bwrap-userns-restrict ]; then
+  sudo install -o root -g root -m 0644 /usr/share/apparmor/extra-profiles/bwrap-userns-restrict /etc/apparmor.d/bwrap-userns-restrict
+fi
+sudo apparmor_parser -r /etc/apparmor.d/bwrap-userns-restrict
 sudo aa-status
 sudo -u lyjudge bwrap --unshare-all --ro-bind / / --proc /proc --dev /dev /usr/bin/true
 ```

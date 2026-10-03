@@ -435,6 +435,54 @@ def decode_fixed(layout: Layout, raw: bytes, **options):
             for i in range(0, len(raw), layout.record_length)]
 
 
+def decode_text_lines(raw: bytes, *, record_length: int, codec='cp037', asa=False):
+    """Decode explicitly framed print records, retaining blanks and carriage control."""
+    if codec not in ('cp037', 'cp500', 'cp1140'):
+        raise DecodeError('unsupported EBCDIC code page')
+    if type(record_length) is not int or not 1 <= record_length <= 32760:
+        raise DecodeError('declared text record length is required')
+    if len(raw) % record_length:
+        raise DecodeError('truncated fixed-length text; resend binary records with declared LRECL')
+    result = []
+    for offset in range(0, len(raw), record_length):
+        line = raw[offset:offset + record_length]
+        fields = []
+        if asa:
+            fields.append(dict(path='PRINT.ASA', value=line[:1].decode(codec), raw_hex=line[:1].hex(), filler=False))
+        fields.append(dict(path='PRINT.TEXT', value=line[int(asa):].decode(codec), raw_hex=line[int(asa):].hex(), filler=False))
+        result.append(dict(record_sha256=sha(line), raw_hex=line.hex(), codec=codec, fields=fields))
+    return result
+
+
+def to_ascii_fixed(layout: Layout, raw: bytes, *, codec='cp037') -> bytes:
+    """Strict DISPLAY-only bridge; EBCDIC overpunch maps to ASCII overpunch."""
+    decode_fixed(layout, raw, codec=codec)
+    if any(f.usage != 'DISPLAY' for f in layout.fields) or layout.variable or layout.overlays:
+        raise DecodeError('ASCII candidate bridge only supports fixed DISPLAY layouts')
+    try:
+        text = raw.decode(codec).encode('ascii')
+    except UnicodeError as exc:
+        raise DecodeError('non-ASCII character cannot be represented by the candidate') from exc
+    if any(b < 32 or b > 126 for b in text):
+        raise DecodeError('control bytes cannot be represented in line-oriented candidate inputs')
+    return b''.join(text[i:i + layout.record_length] + b'\n' for i in range(0, len(text), layout.record_length))
+
+
+def from_ascii_fixed(layout: Layout, raw: bytes, *, codec='cp037'):
+    """Decode candidate ASCII lines through the same copybook, with no padding guess."""
+    if raw and not raw.endswith(b'\n'):
+        raise DecodeError('candidate output must end with a line delimiter')
+    lines = raw.split(b'\n')[:-1] if raw else []
+    lines = [line[:-1] if line.endswith(b'\r') else line for line in lines]
+    if any(len(line) != layout.record_length for line in lines):
+        raise DecodeError('candidate ASCII line does not match copybook length')
+    try:
+        ebcdic = b''.join(line.decode('ascii').encode(codec) for line in lines)
+    except UnicodeError as exc:
+        raise DecodeError('candidate output contains non-ASCII bytes') from exc
+    return decode_fixed(layout, ebcdic, codec=codec)
+
+
 def spool_envelope(raw: bytes, layout: Layout) -> bytes:
     """Synthetic retained HEX export. This is not the z/OSMF binary protocol."""
     if layout.variable: raise DecodeError('variable layout cannot use an FB spool envelope')

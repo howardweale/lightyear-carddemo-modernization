@@ -136,3 +136,14 @@ PYTHONPATH=src python -m lightyear_mainframe coverage \
 4. Use paired customer observations to propose and review equivalence rules. Rerun known differences before accepting a rule. Decoder success and mock success never establish business equivalence.
 
 The remaining access-dependent work is concentrated at those boundaries. The source inventory, strict decoding and batch handoff rehearsal can all be reproduced now.
+
+## Maintec folder delivery
+
+See the [readiness and validation record](zos-intake-readiness.md) for the final
+public rehearsal hashes and limitations.
+
+The [Monday runbook](monday-runbook.md) adds signed, immutable folder intake,
+copybook-bound decoding, repeatability/delta reports, a strict Java INTCALC bridge,
+and offline signed-verdict replay. It is rehearsed on public synthetic data and
+does not claim native z/OS equivalence. Maintec records stay under the ignored
+`work/mainframe/arrivals/` tree.

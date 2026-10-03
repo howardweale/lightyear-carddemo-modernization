@@ -6,6 +6,29 @@
     "app/cpy/CVACT03Y.cpy": "ffc6079e09b28739e154bf6c1e1c36d408209faa91f6cf7008078dc596a1c370",
     "app/cpy/CVTRA01Y.cpy": "50637f13692c89b17a2fc60d249dc54e9eb3569d933afca3cdcf65b491a9d5ba",
     "app/cpy/CVTRA02Y.cpy": "7828fae489c59944b4310e223028a8d3a525ccf4ead113c062bcaff04b52bf9c",
-    "app/cpy/CVTRA05Y.cpy": "d7bde0e78ff608497087b9909c889ed39e347269f964bda767b92b547fbb5fec"
+    "app/cpy/CVTRA05Y.cpy": "d7bde0e78ff608497087b9909c889ed39e347269f964bda767b92b547fbb5fec",
+    "app/cpy/CVACT02Y.cpy": "9f1c62ef31b9d541712f1ed28f79e011ea7338611f5e0f30f2e1cbf624181223",
+    "app/cpy/CVCUS01Y.cpy": "944fd9a8eb10a683d0db97b9a87f2151982f649970287eb74358826056af25f8",
+    "app/cpy/CVTRA03Y.cpy": "fb15dbc4a6924cbddce0704932f9e61c067ac10004cd00839dff0ed7c7bb0667",
+    "app/cpy/CVTRA04Y.cpy": "89803bc13a06347e1f3d8a599a5383b87235b203dce9f18a486bc233186479f8",
+    "app/cpy/CVTRA06Y.cpy": "c5c69f1b86c5a10156d3c5881d7cf387e6b925aae32825360f85bf4056a554a1",
+    "app/cpy/COSTM01.CPY": "108170f314aa951281fdda321c4609c89638caee8d4d7085d08cdca5dc6bec36",
+    "app/cpy/CVTRA07Y.cpy": "72ba597b1a40e1e6cf908e15da9e6a818a0ab899ef1d27d15edeb074963102fa",
+    "app/cpy/CUSTREC.cpy": "f87a0a041fbd8f38dc9c23a9519b917af9c7008527e9cb924f91c2fb4e0a2ecc"
+  },
+  "derived": {
+    "POSTREJS.cpy": {
+      "sources": [
+        "app/cpy/CVTRA06Y.cpy",
+        "app/cbl/CBTRN02C.cbl"
+      ],
+      "method": "Nest daily transaction and validation trailer; storage and elementary fields unchanged."
+    },
+    "CUSTREC-INTAKE.cpy": {
+      "sources": [
+        "app/cpy/CUSTREC.cpy"
+      ],
+      "method": "Strip leading whitespace and place each complete level-01/05 declaration at column 8; no declaration tokens changed. Original tabs retained separately."
+    }
   }
 }

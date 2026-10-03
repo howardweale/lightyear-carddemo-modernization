@@ -51,6 +51,13 @@ def default_registry():
     return KindRegistry(
         [
             K(
+                "intake-acceptance",
+                ("accepted", "rejected"),
+                ("qualification-approver",),
+                ("intake",),
+                consumer="carddemo-zos-intake",
+            ),
+            K(
                 "normalization",
                 ("approved", "rejected"),
                 ("normalization-approver",),

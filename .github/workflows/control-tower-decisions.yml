@@ -30,6 +30,7 @@ jobs:
         run: |
           python -m unittest discover -s tests -p test_control_tower_decisions.py -v
           python -m unittest discover -s tests -p 'test_decision_console*.py' -v
+          python -m unittest tests.test_tower_status_export tests.test_b06_tower -v
           node --check knowledge/viewer/decision-console.js
           python -m unittest discover -s tests -p test_evidence_action_plan.py -v
           python -m unittest discover -s tests -p test_run_index.py -v
@@ -78,6 +79,7 @@ jobs:
           npm test
           node paired.mjs
           node decision-console.mjs
+          node b06.mjs
       - name: Retain browser screenshots and inspection results
         if: always()
         uses: actions/upload-artifact@v4

@@ -74,6 +74,13 @@ def default_registry():
                 consumer="new-controller-launch",
             ),
             K(
+                "b06-pause",
+                ("continue", "stop", "void"),
+                ("campaign-authorizer",),
+                ("campaign", "plan", "executable", "pause"),
+                consumer="b06-controller-next-slot",
+            ),
+            K(
                 "freeze-approval",
                 ("approved", "rejected"),
                 ("campaign-authorizer",),

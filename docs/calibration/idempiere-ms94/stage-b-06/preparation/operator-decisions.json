@@ -1,0 +1,48 @@
+{
+  "artifact_type": "b06-preparation-operator-decisions",
+  "recorded_at_utc": "2026-10-03T16:35:17.881478+00:00",
+  "source": "Explicit Howard message in this task",
+  "prior_preparation_record_sha256": "5d9abed95ae6a92fdf894b3177c14b23942db82e40e8f951e74311dfdce35c8a",
+  "headline": {
+    "minimum_final_passes_per_journey": 21,
+    "cohort_denominator_per_journey": 24,
+    "all_journeys_required": [
+      "J1",
+      "J2",
+      "J3"
+    ],
+    "j3_always_counts": true,
+    "wilson_confidence": 0.95,
+    "wilson_lower_at_threshold": 0.6899611872949993,
+    "displayed_wilson_lower_percent": 69.0,
+    "below_threshold": "Report per journey; no cross-journey claim",
+    "rounding_note": "21/24 has a Wilson lower bound displayed as 69.0% at one decimal place; the pass-count threshold is 21/24."
+  },
+  "journey_3": {
+    "selection": "materials: movement -> internal use -> physical count",
+    "confirmed": true,
+    "judge_requirements": [
+      "inventory costing and valuation",
+      "accounting facts for internal use",
+      "accounting facts for physical count differences"
+    ],
+    "engines": [
+      "Oracle",
+      "PostgreSQL"
+    ],
+    "quantity_only_judge_acceptable": false,
+    "required_mutants": [
+      "wrong cost",
+      "wrong account",
+      "wrong quantity sign"
+    ],
+    "novelty_verified": false,
+    "qualified": false,
+    "sealed": false
+  },
+  "audit_authorized": "B05 terminal audit with offline archive replay, read-only Docker cleanup inventory and new signed audit files outside frozen B05 root",
+  "model_calls_authorized": false,
+  "publication_authorized": false,
+  "review": "Operator review; not independent",
+  "note": "Instruction record, not a signed Tower launch decision."
+}

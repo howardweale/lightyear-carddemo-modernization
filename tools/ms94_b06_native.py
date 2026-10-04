@@ -16,10 +16,20 @@ from tools.ms94_calendar_runner import CalendarRunner
 from tools.ms94_b06_admission import (LANES, check, bound_file, verify_inputs,
                                     sign_once, full_entry, replay_entry, classify_failure)
 from tools.ms94_b06_native_gate import evaluate
+from tools.ms94_b06_runtime_contract import clock_record
+from tools.ms94_b06_candidate_result import CandidateTimeout
+from lightyear_calibration.journey_runtime import JourneyAbort
 
 
 def now():
     return datetime.now(timezone.utc).isoformat()
+
+
+def failure_record(exc):
+    kind = classify_failure(exc)
+    return {'kind': kind, 'exception_type': type(exc).__name__,
+            'closed_reason': 'candidate-timeout' if isinstance(exc, CandidateTimeout) else
+                             str(exc) if kind == 'insufficient-evidence' else None}
 
 
 class NativeRunner(CalendarRunner):
@@ -31,9 +41,21 @@ class NativeRunner(CalendarRunner):
         # Bracket each real SQL clock query with host UTC and monotonic time.
         start, monotonic = now(), time.monotonic()
         result = super().trusted_identity(lane)
-        self.clock_samples[lane].append({'host_before_utc': start, 'host_after_utc': now(),
+        stages = self.plan['evidence_contract']['clock_stages']
+        check(len(self.clock_samples[lane]) < len(stages), 'clock-sample-count')
+        self.clock_samples[lane].append({'stage': stages[len(self.clock_samples[lane])], 'host_before_utc': start, 'host_after_utc': now(),
                                          'monotonic': monotonic, 'value': result['clock']['value']})
         return result
+
+    def worker(self, command, payload, timeout):
+        try:
+            return super().worker(command, payload, timeout)
+        except JourneyAbort as exc:
+            # Only the inherited application watchdog code is candidate-shaped.
+            # Cancellation, calendar and controller deadlines retain their type.
+            if command == 'execute' and str(exc) == 'application-timeout':
+                raise CandidateTimeout() from exc
+            raise
 
 
 def execute_pair(root, run, signer):
@@ -90,15 +112,13 @@ def execute_pair(root, run, signer):
         runner.record_guard('pair-complete')
         clock_lanes = {}
         for lane in LANES:
-            a, b = runner.clock_samples[lane]
-            clock_lanes[lane] = {'host_start_utc': a['host_before_utc'], 'host_end_utc': b['host_before_utc'],
-                                 'monotonic_seconds': b['monotonic'] - a['monotonic'],
-                                 'queries': [a, b], 'execution_sha256': executions[lane]['content_sha256']}
+            clock_lanes[lane] = clock_record(runner.clock_samples[lane], executions[lane],
+                                              plan['evidence_contract']['clock_stages'])
         sign_once(run / 'b06-clock-evidence.json', {'artifact_type': 'ms94-b06-real-clock-evidence/1',
                   'plan_sha256': plan['content_sha256'], 'lanes': clock_lanes,
                   'runtime': read_json(run / 'real-time-containers.json')}, signer)
     except Exception as exc:
-        error = {'kind': classify_failure(exc), 'exception_type': type(exc).__name__}
+        error = failure_record(exc)
     finally:
         try:
             cleaned = cleanup_owned(runner)
@@ -109,7 +129,9 @@ def execute_pair(root, run, signer):
     if not cleaned['complete']:
         error = {'kind': 'equipment-failure', 'exception_type': 'CleanupIncomplete'}
     if error is None:
-        if any(x['exit_code'] for x in executions.values()):
+        if any(x['exit_code'] == 124 for x in executions.values()):
+            error = {'kind': 'candidate-timeout', 'exception_type': 'CandidateTimeout', 'closed_reason': 'candidate-timeout'}
+        elif any(x['exit_code'] for x in executions.values()):
             # Diagnostic/provenance qualification is a separate admission. Never
             # turn missing origin evidence into a candidate-origin error report.
             error = {'kind': 'execution-failure', 'exception_type': 'CandidateProcessFailed'}
@@ -118,7 +140,7 @@ def execute_pair(root, run, signer):
                 gate = evaluate(run, signer.public)
                 sign_once(run / 'gate.json', {k: v for k, v in gate.items() if k != 'content_sha256'}, signer)
             except Exception as exc:
-                error = {'kind': classify_failure(exc), 'exception_type': type(exc).__name__}
+                error = failure_record(exc)
     return sign_once(run / 'receipt.json', {
         'artifact_type': 'ms94-b06-native-receipt/1', 'plan_sha256': plan['content_sha256'],
         'authorization_sha256': auth['content_sha256'], 'cleanup_sha256': cleanup['content_sha256'],
@@ -126,6 +148,6 @@ def execute_pair(root, run, signer):
         'real_finished_utc': now(), 'status': error['kind'] if error else ('passed' if gate['passed'] else gate.get('status', 'contract-violation')),
         'error': error, 'execution_sha256': {l: x['content_sha256'] for l, x in executions.items()},
         'gate_sha256': read_json(run / 'gate.json')['content_sha256'] if (run / 'gate.json').exists() else None,
-        'equipment_suspect': error is not None and error['kind'] != 'business-failure',
+        'equipment_suspect': error is not None and error['kind'] not in ('business-failure', 'candidate-timeout'),
         'qualification_credit': False, 'independently_attested': False,
     }, signer)

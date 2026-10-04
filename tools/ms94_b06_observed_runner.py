@@ -8,6 +8,7 @@ from lightyear_calibration.contracts import canonical, require, seal
 from lightyear_calibration.journey_order import file_hash, save
 from lightyear_calibration.journey_runtime import docker, inspect, JourneyAbort
 from tools.ms94_b06_native import NativeRunner
+from tools.ms94_b06_candidate_result import CandidateTimeout
 from tools.ms94_b06_posting_broker import PostingBroker
 
 
@@ -56,10 +57,11 @@ class ObservedRunner(NativeRunner):
                     data = None; self.check_cancel()
                     require(broker.failure is None, 'Trusted posting observer failed')
                     if time.monotonic() - started > timeout:
-                        raise JourneyAbort('application-timeout')
+                        raise CandidateTimeout()
             require(process.returncode == 0, 'Separate application worker failed')
             code = json.loads(stdout)['exit_code']
-            require(broker.done.wait(15) and broker.failure is None, 'Trusted posting observer incomplete')
+            if code != 124:
+                require(broker.done.wait(15) and broker.failure is None, 'Trusted posting observer incomplete')
         finally:
             if process is not None and process.poll() is None:
                 process.kill(); process.communicate()
@@ -84,5 +86,6 @@ class ObservedRunner(NativeRunner):
             'application_mounts': [{'destination': m['Destination'], 'writable': m['RW']} for m in mounts if m['Type'] == 'bind'],
             'posting_observer': 'external-jdi-with-suspended-native-readback-v1'})
         save(out / 'execution.json', value)
-        broker.finish(value)
+        if code != 124:
+            broker.finish(value)
         return value

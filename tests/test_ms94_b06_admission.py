@@ -113,6 +113,9 @@ class AdmissionTests(unittest.TestCase):
                          'period_end_exclusive_utc': '2026-11-01T00:00:00Z'})
         plan = seal({'calendar': calendar, 'local': {'runner_image': 'image'},
                      'declaration': {'environment': {'engines': {l: {'image_digest': l} for l in ('oracle', 'postgresql')}}}})
+        from tools.ms94_b06_runtime_contract import runtime_contract
+        plan = seal({**{k: v for k, v in plan.items() if k != 'content_sha256'},
+                     'evidence_contract': {'clock_stages': ['before', 'after'], 'runtime': runtime_contract(plan, self.root.name)}})
         self.save('plan.json', plan)
         lanes = {}
         for lane in ('oracle', 'postgresql'):
@@ -120,10 +123,14 @@ class AdmissionTests(unittest.TestCase):
                               'native_clock_after': {'value': '2026-10-04T00:01:00Z'}})
             self.save('cases/operations/1/execution/' + lane + '/execution.json', execution)
             lanes[lane] = {'host_start_utc': '2026-10-04T00:00:00Z', 'host_end_utc': '2026-10-04T00:01:00Z',
-                           'monotonic_seconds': 60, 'execution_sha256': execution['content_sha256']}
+                           'monotonic_seconds': 60, 'execution_sha256': execution['content_sha256'],
+                           'queries': [{'stage': stage, 'host_before_utc': execution['native_clock_' + stage]['value'],
+                                        'host_after_utc': execution['native_clock_' + stage]['value'],
+                                        'monotonic': i * 60, 'value': execution['native_clock_' + stage]['value']}
+                                       for i, stage in enumerate(('before', 'after'))]}
         return {'plan_sha256': plan['content_sha256'], 'lanes': lanes,
-                'runtime': [{'container': str(i), 'image': 'image', 'clock_manipulation_environment': False,
-                             'privileged': False, 'sys_time_capability': False} for i in range(5)]}
+                'runtime': [{**r, 'clock_manipulation_environment': False,
+                             'privileged': False, 'sys_time_capability': False} for r in plan['evidence_contract']['runtime'].values()]}
 
     def test_real_clock_replay_rejects_drift_manipulation_and_duplicate_runtime(self):
         body = self.clock_fixture()

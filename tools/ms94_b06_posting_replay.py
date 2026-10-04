@@ -10,13 +10,13 @@ from pathlib import Path
 from lightyear_calibration.contracts import read_json, verify, digest
 from lightyear_calibration.b06_posting_probe import queries_for
 from lightyear_control_tower.decisions import verify_envelope
-from tools.ms94_b06_admission import check, bound_file, replay_entry
+from tools.ms94_b06_admission import check, bound_file, replay_entry, replay_clocks
 from tools.ms94_b06_classfile import inspect_class
 
 SUPPORT = 'org.idempiere.test.JourneySupport'
 CANDIDATE = 'org.idempiere.test.LightyearOperationsTest'
-FRAMEWORK = {'org.compiere.model.PO', 'org.compiere.acct.Doc', 'org.compiere.acct.DocManager'}
-TARGETS = {SUPPORT: {'postOnce(Lorg/compiere/model/PO;[Lorg/compiere/model/MAcctSchema;)V'},
+FRAMEWORK = {'org.compiere.model.PO', 'org.compiere.acct.Doc', 'org.compiere.acct.DocManager', 'org.compiere.util.DB'}
+TARGETS = {'org.compiere.util.DB': {'executeUpdate(Ljava/lang/String;Ljava/lang/String;)I'}, SUPPORT: {'postOnce(Lorg/compiere/model/PO;[Lorg/compiere/model/MAcctSchema;)V'},
            'org.compiere.model.PO': {'lock()Z'},
            'org.compiere.acct.Doc': {'post(ZZZ)Ljava/lang/String;'},
            'org.compiere.acct.DocManager': {
@@ -73,6 +73,7 @@ def replay_stream(folder, receipt, classes, lane):
     check(len(lines) == receipt['event_count'] and 2 <= len(lines) <= 50000, 'observer-event-count')
     previous, ready, death = None, False, False
     stacks, loaders, observations, captures, exceptions = {}, {}, [], [], []
+    readbacks, entries = {}, {}
     for sequence, line in enumerate(lines, 1):
         check(len(line) <= 4 * 1024 * 1024, 'observer-event-too-large')
         item = json.loads(line); verify(item)
@@ -95,6 +96,7 @@ def replay_stream(folder, receipt, classes, lane):
                 top = frames[0]
                 check(top['method'] + top['signature'] in TARGETS.get(top['class'], set()), 'observer-unselected-entry')
                 stack.append(event)
+                entries[sequence] = event
             elif kind == 'method-exit':
                 check(stack and stack[-1]['sequence'] == event['call_sequence'], 'observer-return-without-call')
                 entry = stack.pop()
@@ -124,17 +126,26 @@ def replay_stream(folder, receipt, classes, lane):
                   {k: v['sql'] for k, v in capture['results'].items()} == queries, 'observer-readback-query-changed')
             check(capture['results']['health']['rows'] == [{'value': 1}], 'observer-readback-health-failed')
             captures.append(capture['content_sha256'])
+            readbacks[sequence] = capture
         else:
             check(item['readback_sha256'] is None, 'observer-unexpected-readback')
     check(ready and death and previous == receipt['last_event_sha256'], 'observer-incomplete-stream')
-    return {'observations': observations, 'exceptions': exceptions, 'verified_capture_hashes': captures,
+    return {'entries': entries, 'readbacks': readbacks, 'observations': observations, 'exceptions': exceptions, 'verified_capture_hashes': captures,
             'event_count': len(lines), 'collection_complete': True}
 
 
 def replay(root, run, lane, public_key):
     root, run = Path(root), Path(run)
+    plan = read_json(run / 'plan.json'); verify(plan)
+    for name, expected in plan['implementation_sha256'].items():
+        bound_file(root, name, expected)
+    authorization = read_json(run / 'authorization.json')
+    check(verify_envelope(authorization, public_key) and authorization['run_id'] == run.name and
+          authorization['scope'] == 'zero-model-native-qualification' and
+          authorization['plan']['plan_sha256'] == plan['content_sha256'], 'observer-authorization-binding')
     entry = replay_entry(run, public_key)  # Actually reruns full native admission.
-    plan = read_json(run / 'plan.json'); spec = plan['posting_observer']
+    clocks = replay_clocks(run, public_key)
+    spec = plan['posting_observer']
     execution = read_json(run / 'cases/operations/1/execution' / lane / 'execution.json'); verify(execution)
     folder = run / 'posting-observer' / lane
     receipt = read_json(folder / 'receipt.json')
@@ -152,5 +163,6 @@ def replay(root, run, lane, public_key):
           receipt['target']['jvm']['arguments'], 'observer-target-binding')
     result = replay_stream(folder, receipt, catalog(root, spec['target_class_files_sha256']), lane)
     return {**result, 'full_entry_replayed': True, 'entry_sha256': entry['content_sha256'],
+            'clock': clocks, 'authorization_sha256': authorization['content_sha256'],
             'observer_replayed': True, 'receipt_sha256': receipt['content_sha256'],
             'attribution_qualified': False, 'diagnostics': []}

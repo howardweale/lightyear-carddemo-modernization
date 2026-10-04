@@ -87,7 +87,9 @@ class PostingControls(unittest.TestCase):
             classes = {name: {'constant_pool_sha256': 'a' * 64, 'methods': {method + signature: 'b' * 64}}
                        for name, (method, signature) in SIG.items()}
             replayed = replay_stream(folder, receipt, classes, lane)
-            return derive(replayed)
+            from tools.ms94_b06_lock_sql import TEMPLATE
+            return derive(replayed, seal({'artifact_type': 'ms94-b06-lock-sql-binding/1',
+                                          'template': TEMPLATE, 'synthetic_unit_fixture': True}))
 
     def test_prior_lock_native_processing_flag_transition_derived_both_engines(self):
         for lane in ('oracle', 'postgresql'):
@@ -110,7 +112,9 @@ class PostingControls(unittest.TestCase):
 
     def test_similar_message_or_failed_lock_cannot_establish_cause(self):
         for lane in ('oracle', 'postgresql'):
-            for index, field, value in ((2, 'return_value', False), (5, 'sql', 'UPDATE other SET Processing=1'),
+            with self.assertRaisesRegex(ValueError, 'cause-lock-sql-template-differs'):
+                self.replay(lane, 'prior-lock', lambda events: events[5].update(sql='UPDATE other SET Processing=1'))
+            for index, field, value in ((2, 'return_value', False),
                                         (5, 'force', True), (6, 'return_value', 1),
                                         (8, 'catch_location', {'class': CANDIDATE})):
                 result = self.replay(lane, 'prior-lock', lambda events: events[index].update({field: value}))

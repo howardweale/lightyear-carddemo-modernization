@@ -39,10 +39,13 @@ def assemble_slot(root, run, base, slot, input_files):
     check(base['declaration']['policy']['max_model_calls'] == 0, 'declaration-model-budget')
     verify(base['calendar'])
     check(base['calendar']['clock_mode'] == 'unmodified-real-time', 'slot-clock-policy')
+    proposed_window = base['docker_run_window']
+    check(proposed_window == window(base['calendar'], proposed_window['not_before_utc'],
+                                    proposed_window['deadline_utc']), 'slot-window-binding')
     plan = copy.deepcopy(base)
     plan.pop('content_sha256', None)
     check('authorization' not in plan, 'assembly-cannot-authorize')
-    plan.update(artifact_type='ms94-b06-native-pair-plan/1', slot_id=slot['id'],
+    plan.update(artifact_type='ms94-b06-native-pair-plan/1', execution_admission_version=3, slot_id=slot['id'],
                 control=slot['control'], expected=slot['expected'])
     data = {}
     for name, item in input_files.items():
@@ -61,11 +64,18 @@ def assemble_slot(root, run, base, slot, input_files):
     if slot['control'] == 'genuine-equipment-fault':
         from tools.ms94_b06_fault_hook import TRIGGER
         plan['native_fault_hook'] = {'kind': 'owned-database-stop', 'lane': slot['target_lane'], 'trigger': TRIGGER}
-    check(bool(plan['implementation_sha256']), 'slot-implementation-empty')
+    required_code = {p.relative_to(root).as_posix(): file_hash(p)
+                     for folder in ('src', 'tools') for p in (root / folder).rglob('*.py')}
+    check(required_code and all(plan['implementation_sha256'].get(n) == h for n, h in required_code.items()),
+          'slot-implementation-closure')
     for name, sha in plan['implementation_sha256'].items(): bound_file(root, name, sha)
     spec = plan['posting_observer']
     from tools.ms94_b06_posting_replay import catalog, TERMINAL
     classes = catalog(root, spec['target_class_files_sha256'])
+    from tools.ms94_b06_lock_sql import bind
+    lock = spec['lock_sql']
+    check(spec['target_class_files_sha256'].get(lock['class_file']) == lock['class_sha256'], 'slot-lock-catalog')
+    bind(bound_file(root, lock['class_file'], lock['class_sha256']).read_bytes(), lock)
     check(TERMINAL in classes and 'org.junit.platform.engine.support.hierarchical.NodeTestTask' in classes,
           'slot-terminal-catalog-incomplete')
     check(re.fullmatch('[a-f0-9]{64}', spec['java_binary_sha256']) is not None, 'slot-java-binding')
@@ -98,7 +108,7 @@ def freeze(source, destination, bindings, slot_plans):
         plan = read_json(path); verify(plan)
         check(plan['content_sha256'] == expected and name in bindings, 'freeze-slot-plan')
         verify_inputs(path.parent, plan)
-        required = {**plan['implementation_sha256'], **{
+        required = {**plan['implementation_sha256'], POLICY: file_hash(source / POLICY), **{
             (path.parent.relative_to(source) / 'inputs' / n).as_posix(): h
             for n, h in plan['inputs_sha256'].items()},
             **plan['posting_observer']['target_class_files_sha256'],

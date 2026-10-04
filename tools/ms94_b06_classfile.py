@@ -63,4 +63,5 @@ def inspect_class(data):
         methods[identity] = code_hash
     attributes(); check(reader.offset == len(data), 'trailing-class-bytes')
     return {'class': name, 'class_sha256': hashlib.sha256(data).hexdigest(),
-            'major': major, 'minor': minor, 'constant_pool_sha256': cp_hash, 'methods': methods}
+            'major': major, 'minor': minor, 'constant_pool_sha256': cp_hash, 'methods': methods,
+            'utf8_constants_hex': {str(i): value[1].hex() for i, value in pool.items() if value[0] == 'utf8'}}

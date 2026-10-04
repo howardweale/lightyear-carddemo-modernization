@@ -57,22 +57,30 @@ Windows sandbox restrictions prevented initial temporary-directory tests; the
 same local tests passed with approved execution access. WSL access was denied,
 so no Linux VM validation is attributed to that attempt.
 
-## Pending platform and live-client evidence
+## Platform and live-client evidence
 
-Ubuntu 24.04 Multipass **arm64 and x86_64 remain unverified** by this milestone.
-Neither an AppArmor load inside those VMs nor a full setup/start/stop/acceptance
-cycle on either Mac architecture was run locally. The kit's generated reports
-are the mechanism for recording those future results, not evidence that they
-have already passed.
+At implementation time, neither an AppArmor load inside a Multipass VM nor a full
+setup/start/stop/acceptance cycle on either Mac architecture was run locally.
+The kit's generated reports are a mechanism for recording platform checks, not
+evidence that those checks have already passed.
 
-No live Inspector browser session, Claude Code model test or Codex model test is
-claimed. No model calls or Docker operations were made for this implementation.
-All compilation/testing used public repository material. This milestone does
-not admit Maintec data, establish customer-data confidentiality, qualify a lane,
-or claim autonomous effectiveness.
+The subsequent [2026-10-04 smoke results](smoke-results.md) record Howard's
+**operator review; not independent attestation** on Apple Silicon / Ubuntu 24.04
+arm64: the Inspector 15-step zero-model walkthrough passed, and Claude Code
+reported the expected equivalent/divergent outcomes for all four prebuilt JARs,
+four retained receipts, 18 Verify tool calls, $0.76 at API rates and 9 minutes
+wall time. Codex remains **planned, not completed** after sign-in problems.
+x86_64 and independent platform/replay evidence remain outstanding in that record.
+
+No model calls or Docker operations were made to implement the kit or record
+these results; the reported Claude Code test is a separate operator-run live
+test. All implementation compilation/testing used public repository material.
+This milestone does not admit Maintec data, establish customer-data
+confidentiality, qualify a lane, or claim autonomous effectiveness.
 
 ## Publication
 
-This milestone travels with the setup-kit PR. Repository CI results are distinct
-from the unrun Multipass and live-client checks above. Approval to publish and
-merge the kit does not authorize those model calls.
+The setup kit and initial milestone were merged in PR #249; the sudo privilege
+check and executable shell modes were corrected in PR #250. Repository CI is
+distinct from the operator-reported live results and outstanding checks above.
+Approval to publish and merge documentation does not authorize new model calls.

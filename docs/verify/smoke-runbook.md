@@ -8,8 +8,10 @@ approval **before launching either live client or making any model call**.
 Use a dedicated Ubuntu **24.04** VM per manual test session/client. The kit
 records `uname -m` as `arm64` (aarch64) or `x86_64`; it does not emulate the other
 CPU. Run on an Apple Silicon Mac and an Intel Mac to claim both platform checks.
-Until their actual reports pass, both Ubuntu/macOS combinations are **unverified**.
-The host-side kit tests and Java builds are not a VM isolation test.
+The [recorded smoke results](smoke-results.md) distinguish operator-reported arm64
+walkthrough/client results from outstanding platform checks; x86_64 remains
+untested in that record. Host-side kit tests and Java builds are not a VM
+isolation test.
 
 ## Create and provision (Mac administrator terminal)
 
@@ -274,29 +276,72 @@ the requested authorization code. Check `/mcp` and select the approved model.
 If the installed version does not inherit the token, stop; do not paste it into
 `--env`, screenshots or the model prompt.
 
-Codex ([installation](https://learn.chatgpt.com/docs/codex/cli),
-[headless login](https://learn.chatgpt.com/docs/auth),
-[MCP environment allowlist](https://learn.chatgpt.com/docs/extend/mcp?surface=cli)):
+### Codex installation and VM sign-in
+
+Use the official npm package, as shown in OpenAI's
+[npm installation example](https://developers.openai.com/cookbook/examples/codex/using_goals_in_codex#quickstart-using-goals).
+Inside the approved Codex VM's **lyagent** shell, install Node using the Node-only
+steps above (through `node --version`; Inspector is not needed), then:
 
 ```sh
-curl -fsSL https://chatgpt.com/codex/install.sh -o "$HOME/codex-install.sh"
-# Review the downloaded installer before executing.
-sh "$HOME/codex-install.sh"
+export PATH="$HOME/.local/bin:$PATH"
+npm install --global --prefix "$HOME/.local" @openai/codex
+hash -r
+command -v codex
 codex --version
+npm list --global --prefix "$HOME/.local" @openai/codex
 mkdir -p "$HOME/.codex"
 # New dedicated identity only: do not overwrite an existing configuration.
 test ! -e "$HOME/.codex/config.toml"
 cp /srv/dev/codex-mcp.toml "$HOME/.codex/config.toml"
 chmod 600 "$HOME/.codex/config.toml"
-codex login --device-auth
+```
+
+Record the resolved package and CLI versions. The former install-script build
+failed sign-in with `invalid_client` in the [reported test](smoke-results.md);
+npm version 0.160.0 was installed, but its device login was not completed.
+
+For browser sign-in from the VM, forward the callback to the Mac. In a separate
+**Mac terminal**, provision the dedicated SSH public key on this VM and leave the
+tunnel running:
+
+```sh
+VM=lyverify-codex
+test -f "$HOME/.ssh/lyverify-smoke" || ssh-keygen -t ed25519 -f "$HOME/.ssh/lyverify-smoke" -N ''
+multipass transfer "$HOME/.ssh/lyverify-smoke.pub" "$VM":/home/ubuntu/lyverify-smoke.pub
+multipass exec "$VM" -- bash -c 'mkdir -p ~/.ssh; chmod 700 ~/.ssh; cat ~/lyverify-smoke.pub >> ~/.ssh/authorized_keys; chmod 600 ~/.ssh/authorized_keys'
+VM_IP=$(multipass info "$VM" --format json | python3 -c 'import json,sys; x=json.load(sys.stdin); print(next(iter(x["info"].values()))["ipv4"][0])')
+ssh -i "$HOME/.ssh/lyverify-smoke" -N -o ExitOnForwardFailure=yes \
+  -L 127.0.0.1:1455:localhost:1455 ubuntu@"$VM_IP"
+```
+
+Back in the VM's **lyagent** shell:
+
+```sh
+codex login
+# Open the printed sign-in URL in the Mac browser and complete sign-in.
+codex login status
+```
+
+The browser's `localhost:1455` callback reaches the VM through SSH. Keep that
+port free on the Mac; stop if the tunnel fails. Close the tunnel after login
+succeeds. This adapts OpenAI's documented
+[localhost callback forwarding](https://learn.chatgpt.com/docs/auth#fallback-forward-the-localhost-callback-over-ssh).
+Device login (`codex login --device-auth`) remains an alternative where enabled;
+it was not completed in the reported test. Keep auth files and login URLs out of
+results. Do not copy credentials between identities.
+
+After successful sign-in, and only with live-test approval:
+
+```sh
 codex mcp list
 codex
 ```
 
-Complete device login in the Mac browser. If device login is disabled, use the
-documented account setting/approved headless login flow; do not share credentials
-here. Confirm the approved model and the connected server before pasting the task.
-Keep normal client tool approvals enabled; never use unrestricted/bypass flags.
+Confirm the approved model and connected server before sending the task. Keep
+normal tool approvals enabled. See the
+[MCP environment allowlist](https://learn.chatgpt.com/docs/extend/mcp?surface=cli)
+for passing the existing Verify token to the MCP child.
 
 **Exact single task prompt for either client:**
 

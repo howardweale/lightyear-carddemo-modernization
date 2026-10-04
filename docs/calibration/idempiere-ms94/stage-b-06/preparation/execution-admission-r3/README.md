@@ -100,3 +100,25 @@ compilation and the target class catalog are still absent. The assembler
 refuses that absence. No empty or invented catalog is an executable plan.
 Group windows are explicit, remain strictly inside October, and cannot exceed
 the 96-hour calendar cap. Window creation conveys no Docker authorization.
+
+## 4. Signed builder denial admission
+
+The boolean `os_read_probe_passed` argument is removed. Admission now requires a
+hash-bound signed record, an actual AppContainer child, exact identity/policy/
+launcher/runtime bindings, a successful allowed-file control and Win32 error 5
+for the existing protected `tools/` file. Missing-file errors and synthetic
+records do not admit the transport.
+
+A real host-only attempt was made with the new no-capability AppContainer probe.
+The C# source compiled, but Windows security blocked its first `--identity`
+launch as "virus or potentially unwanted software" and the executable became
+unavailable. No protected read took place and no AppContainer child passed.
+`os-probe-blocked.json` preserves that failure, signed with the existing authority
+in place. Its content hash is
+`9af9699d3f4d7c68c04b961867211e24f9fb8154a88594c414be00de29c8f438`.
+No security protection was disabled and no retry evaded the block.
+
+This item remains **blocked**, not passed. The helper source is available for
+security review; there is no admitted builder launcher or successful denial
+record. An approved, policy-matched launcher must complete the actual probe
+before measurement admission. Unit fixtures test rejection rules only.

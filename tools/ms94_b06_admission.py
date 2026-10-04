@@ -43,6 +43,9 @@ def bound_file(root, name, expected):
 def verify_inputs(run, plan):
     verify(plan)
     check(plan["artifact_type"] == "ms94-b06-native-pair-plan/1", "wrong-native-plan")
+    if plan['journey'] == 'J1':
+        from tools.ms94_b06_j1_bridge import inputs
+        return inputs(run, plan)
     check(plan["journey"] in ("J2", "J3"), "adapter-does-not-own-J1")
     check(plan["model_calls"] == 0 and plan["qualification_only"] is True,
           "not-zero-model-qualification")
@@ -83,6 +86,9 @@ def full_entry(run, signer):
     run = Path(run)
     plan = read_json(run / "plan.json")
     contract = verify_inputs(run, plan)
+    if plan['journey'] == 'J1':
+        from tools.ms94_b06_j1_bridge import admit
+        return admit(run, signer)
     findings = entries(run, {"operations": run / "cases/operations/1"})
     before = {}
     for lane in LANES:
@@ -103,6 +109,9 @@ def replay_entry(run, public_key):
     run = Path(run)
     plan = read_json(run / "plan.json")
     verify_inputs(run, plan)
+    if plan['journey'] == 'J1':
+        from tools.ms94_b06_j1_bridge import replay_entry as j1_replay
+        return j1_replay(run, public_key)
     saved = read_json(run / "b06-entry-admission.json")
     check(verify_envelope(saved, public_key) and saved["passed"] is True and
           saved["plan_sha256"] == plan["content_sha256"] and

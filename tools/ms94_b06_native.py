@@ -96,17 +96,32 @@ def execute_pair(root, run, signer):
             'entry_sha256': entry['content_sha256'], 'plan_sha256': plan['content_sha256']}, signer)
     runner.before_candidate = before_candidate
     error, executions, cleaned, gate, delivery = None, {}, None, None, None
+    inherited_observers = []
     try:
         folder = runner.prepare('operations', 1)
+        if plan['journey'] == 'J1':
+            from lightyear_control_tower.status_export import atomic_new
+            atomic_new(run / 'selected-attempts.json', {'operations': 1})
         full_entry(run, signer)
         for lane in LANES:
             runner.checkpoint('execute-lane:' + lane)
-            executions[lane] = runner.worker('execute', {
-                'lane': lane, 'output': runner.inside(folder / 'execution' / lane),
-                'harness_sha256': plan['harness_sha256'], 'test': 'LightyearOperationsTest',
-                'source_commit': plan['declaration']['application']['source_commit'],
-                'timeout_seconds': plan['candidate_timeout_seconds']},
-                timeout=plan['candidate_timeout_seconds'] + 30)
+            original_observer = None
+            try:
+                if plan['journey'] == 'J1':
+                    from lightyear_calibration.qualification_observer_runtime_v4 import Observer
+                    original_observer = Observer(runner, lane)
+                    inherited_observers.append(original_observer)
+                    original_observer.start()
+                    runner.assert_real_runtime(original_observer.container)
+                executions[lane] = runner.worker('execute', {
+                    'lane': lane, 'output': runner.inside(folder / 'execution' / lane),
+                    'harness_sha256': plan['harness_sha256'], 'test': 'LightyearOperationsTest',
+                    'source_commit': plan['declaration']['application']['source_commit'],
+                    'timeout_seconds': plan['candidate_timeout_seconds']},
+                    timeout=plan['candidate_timeout_seconds'] + 30)
+            finally:
+                if original_observer is not None and original_observer.process is not None:
+                    original_observer.stop()
             # Early throws still have full entry and real after-state capture.
             runner.worker('capture', {'lane': lane, 'output': runner.inside(folder / 'after' / lane)}, timeout=1800)
         runner.record_guard('pair-complete')
@@ -126,6 +141,12 @@ def execute_pair(root, run, signer):
             cleaned = {'complete': False, 'inventory_known': False, 'exception_type': type(exc).__name__}
         cleanup = sign_once(run / 'cleanup.json', {'artifact_type': 'ms94-b06-native-cleanup/1',
                             'plan_sha256': plan['content_sha256'], 'run_id': run.name, **cleaned}, signer)
+        for observer in inherited_observers:
+            try:
+                observer.publish_after_application_stopped(folder / 'observers' / observer.lane)
+            except Exception as exc:
+                emit('J1-observer-publication-failure', {'lane': observer.lane, 'exception_type': type(exc).__name__})
+                error = error or failure_record(exc)
     if not cleaned['complete']:
         error = {'kind': 'equipment-failure', 'exception_type': 'CleanupIncomplete'}
     if error is None:
@@ -143,8 +164,15 @@ def execute_pair(root, run, signer):
                     delivery = None
         else:
             try:
-                gate = evaluate(run, signer.public)
-                sign_once(run / 'gate.json', {k: v for k, v in gate.items() if k != 'content_sha256'}, signer)
+                if plan['journey'] == 'J1':
+                    from tools.ms94_b06_j1_bridge import evaluate as j1_evaluate
+                    gate = j1_evaluate(run, signer.public)
+                    sign_once(run / 'b06-j1-gate-attestation.json', {
+                        'artifact_type': 'ms94-b06-J1-unchanged-gate-attestation/1',
+                        'plan_sha256': plan['content_sha256'], 'gate_sha256': gate['content_sha256']}, signer)
+                else:
+                    gate = evaluate(run, signer.public)
+                    sign_once(run / 'gate.json', {k: v for k, v in gate.items() if k != 'content_sha256'}, signer)
             except Exception as exc:
                 error = failure_record(exc)
     return sign_once(run / 'receipt.json', {

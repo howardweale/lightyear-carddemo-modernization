@@ -122,6 +122,8 @@ class PostingBroker:
                                  'real_utc': datetime.now(timezone.utc).isoformat()})
                     log.write(canonical(item) + b'\n'); log.flush()
                     self.previous = item['content_sha256']; self.records.append(item)
+                    from tools.ms94_b06_fault_hook import inject
+                    inject(self.runner, self.lane, item, self.signer)
                     if event['kind'] == 'ready': self.ready.set()
                     if event['kind'] == 'vm-death': death = True
                     if event['checkpoint']:

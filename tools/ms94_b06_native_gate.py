@@ -22,9 +22,11 @@ def material_bindings(trace):
 
 def evaluate(run, public_key):
     """Keep the same typed business rejection during independent offline replay."""
+    completed = {}
     try:
-        return verify_run(run, public_key)
+        return verify_run(run, public_key, completed)
     except BusinessViolation as exc:
+        check(completed.get('entry') is True, 'business-rejection-before-entry-replay')
         plan = read_json(Path(run) / 'plan.json')
         return seal({'artifact_type': 'ms94-b06-complete-native-gate/1',
                      'plan_sha256': plan['content_sha256'], 'journey': plan['journey'],
@@ -33,7 +35,7 @@ def evaluate(run, public_key):
                      'native_qualification': False, 'independently_attested': False})
 
 
-def verify_run(run, public_key):
+def verify_run(run, public_key, completed=None):
     run = Path(run)
     plan = read_json(run / 'plan.json')
     contract = verify_inputs(run, plan)
@@ -42,6 +44,8 @@ def verify_run(run, public_key):
           auth['plan']['plan_sha256'] == plan['content_sha256'] and
           auth['scope'] == 'zero-model-native-qualification', 'native-authorization-invalid')
     entry = replay_entry(run, public_key)
+    if completed is not None:
+        completed['entry'] = True
     clocks = replay_clocks(run, public_key)
     before, after, bindings = native_pair_tables(run)
     from tools.ms94_b06_expectations import verify_private_derivation

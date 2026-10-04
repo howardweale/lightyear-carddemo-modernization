@@ -116,9 +116,14 @@ def identities():
             raise ValueError("Unexpected account home or supplementary group")
         if user.pw_gid == (agent if user == judge else judge).pw_gid:
             raise ValueError("Shared primary group")
-        sudo = subprocess.run(["sudo", "-l", "-U", user.pw_name], capture_output=True)
-        if sudo.returncode == 0:
-            raise ValueError("Account has sudo privileges")
+        sudo = subprocess.run(
+            ["sudo", "-n", "-l", "-U", user.pw_name],
+            capture_output=True, text=True, env={**os.environ, "LC_ALL": "C"},
+        )
+        # Ubuntu sudo can return zero even when the account has no privileges.
+        # Only the explicit English denial establishes that it is unprivileged.
+        if "is not allowed to run sudo" not in sudo.stdout:
+            raise ValueError("Account sudo privileges are present or could not be ruled out")
     return judge, agent
 
 

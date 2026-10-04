@@ -1,15 +1,17 @@
 # Lightyear Verify: INTCALC through MCP
 
 Lightyear Verify accepts a runnable Java JAR, executes it against operator-held
-evaluation inputs, and returns an INTCALC verdict, closed field diagnostics and an
+evaluation inputs, and returns an INTCALC verdict, policy-limited diagnostics and an
 Ed25519 receipt. It reuses the existing z/OS intake, comparator and offline replay.
 The toolkit and judge live in separate Python namespaces; this does not select a
 new licence. This release supports one operator-owned INTCALC task per judge
 process, JAR submission, and Linux isolation. Source-bundle builds and hosted
 multi-tenant operation are outside this implementation.
 
-See the [implementation milestone](milestone.md) and [acceptance record](acceptance.md)
-for delivered behavior, validation and remaining limits.
+See the [confidential evaluation milestone](hardening-milestone.md),
+[implementation milestone](milestone.md) and [acceptance record](acceptance.md)
+for the original delivery. The [PR235 follow-up record](pr235-hardening.md) covers
+these disclosure, budget, decision and execution changes.
 
 ## Trust boundary and installation
 
@@ -65,7 +67,8 @@ Create private operator `config.json` (replace `agent_uid` with `id -u lyagent`)
   "exports": "/srv/verify-tower/exports",
   "tower_workspace": "/srv/verify-tower",
   "submissions": 5,
-  "build_minutes": 25,
+  "attempt_slots": 5,
+  "disclosure_mode": "field",
   "fixture": true,
   "public_task": {
     "source": "CBACT04C",
@@ -77,8 +80,17 @@ Create private operator `config.json` (replace `agent_uid` with `id -u lyagent`)
 ```
 
 `public_task` is explicitly public operator-authored metadata. Review it before
-initialization; it must contain no evaluation values. Set `fixture` false only for
-an actual held-out delivery. Do not claim rehearsal coverage as Maintec equivalence.
+initialization; it must contain no evaluation values. The example is public-fixture
+mode. For non-public data set `fixture: false` and omit `disclosure_mode` (or set
+it to `confidential`). Non-fixture tasks cannot select field mode. Confidential
+receipts return only the verdict and the affected dataset identities with the
+single kind `differs`: no field, exception kind, counts or count bands. Do not
+claim rehearsal coverage as Maintec equivalence.
+
+For Tower review, put the independently trusted Console public PEM **contents** in
+`tower_public_key` before initialization. This pins the operator authority; a
+proof cannot select its own key. Bind the same authority for every task using an
+inventory. Omitting it disables review imports and budget increases, fail-closed.
 
 ```sh
 sudo -u lyjudge /opt/lightyear-verify-venv/bin/lightyear-judge init \
@@ -113,6 +125,38 @@ or the host network. Logs stay private. Heap, process, file, CPU and wall-time
 limits bound execution. This is local namespace isolation, not a VM or a claim
 against kernel exploits, malicious native-memory exhaustion or timing side channels.
 
+## AppArmor on Ubuntu 24.04 and WSL
+
+Keep host user-namespace restrictions enabled. Ubuntu 24.04 supplies the dedicated
+bubblewrap policy in the optional `apparmor-profiles` package. Install and load
+that policy; it is not necessarily present in `/etc/apparmor.d` by default:
+
+```sh
+sudo apt-get install apparmor apparmor-profiles bubblewrap
+if [ ! -f /etc/apparmor.d/bwrap-userns-restrict ]; then
+  sudo install -o root -g root -m 0644 /usr/share/apparmor/extra-profiles/bwrap-userns-restrict /etc/apparmor.d/bwrap-userns-restrict
+fi
+sudo apparmor_parser -r /etc/apparmor.d/bwrap-userns-restrict
+sudo aa-status
+sudo -u lyjudge bwrap --unshare-all --ro-bind / / --proc /proc --dev /dev /usr/bin/true
+```
+
+Use the distribution's `bwrap-userns-restrict` policy where available: it grants
+bubblewrap setup permissions and restricts namespace creation by its children.
+If the profile is missing, update the distro packages or have the host administrator
+install the reviewed upstream profile for the actual resolved bwrap path. Do not
+silently replace an existing profile with a blanket unconfined profile. AppArmor
+availability varies with the WSL kernel; if `aa-status` reports that its filesystem
+is not mounted, record that limitation and validate namespace isolation separately.
+Production relying on AppArmor needs a host/kernel with the LSM and policy active.
+Our WSL native tests do not constitute an Ubuntu AppArmor policy-load test.
+
+References: [Ubuntu namespace restrictions](https://discourse.ubuntu.com/t/understanding-apparmor-user-namespace-restriction/58007),
+[upstream bubblewrap policy](https://gitlab.com/apparmor/apparmor/-/blob/master/profiles/apparmor/profiles/extras/bwrap-userns-restrict),
+[Ubuntu AppArmor administration](https://ubuntu.com/server/docs/how-to/security/apparmor/).
+CI loads the distro profile and fails if it is unavailable; it no longer disables
+the host restriction through `sysctl`.
+
 ## Public development workspace and tools
 
 `public.json` binds approved public bytes, not just filenames:
@@ -139,12 +183,41 @@ returns the same attempt; changing bytes under the same UUID is refused. Outputs
 are never accepted as evidence. `get_receipt` returns `{ok:true, receipt:{...}}`;
 preserve the inner signed envelope byte-for-byte.
 
-Each new accepted submission reserves one attempt and five build/execution minutes
-before execution. Unused minutes are not refunded. The default 5 submissions and
-25 minutes permit at most five candidate executions. The execution allowance is
-shared across all evaluation runs in the attempt. There is no source compilation
-in the judge's JAR-only mode. Reads do not consume submissions, but are journaled.
-An equipment error yields indeterminate and blocks further submissions.
+`submit_candidate` durably reserves an attempt and returns
+`{ok:true, attempt_id:"attempt-…", verdict:"pending"}` before evaluation completes.
+Poll `get_verdict` at intervals of at least two seconds until it is no longer
+pending, then fetch the signed public receipt. `get_budget` remains responsive.
+There is at most one active candidate per task; idempotent retries return the same
+attempt. A second new submission while pending is refused without consuming it.
+The evaluator is a separate process, so task-private arrival roots cannot race
+between HTTP threads or task processes. Service death kills its evaluator;
+restart consumes an unfinished reservation as an interrupted attempt, never reruns it.
+
+The limit is now named **attempt_slots**, not build minutes: no builds take place
+in this JAR-only judge. A slot admits at most 300 seconds of sandbox execution
+across the evaluation runs; the supervisor also limits worker lifetime to 360
+seconds including evidence preparation/replay. Slots are never refunded. Old
+`build_minutes` configurations are refused rather than silently reinterpreted.
+
+The judge also maintains a signed cumulative ledger under the judge account's
+OS-registered home, `.lightyear-verify-ledger/<evaluation_inventory_sha256>/`.
+Neither task paths nor the `HOME` environment select this location. Identical
+relative filenames and content hashes share the ledger even when copied into
+another task folder. Its initial cap is the smaller of the first task's submission
+and slot limits. New tasks inherit usage and cannot raise this cap. Cross-process
+locks make reservation and budget checking atomic; an interrupted reservation or
+operator-voided attempt remains consumed. A task's own smaller limit still applies.
+Use one managed judge identity for the protected inventory; backup the ledger and
+pin its terminal head. An administrator deleting ledgers, changing input bytes or
+creating new judge identities is outside the probing-budget trust boundary.
+
+HTTP requests are capped at 120 per minute per service. Invalid/unauthenticated
+traffic and ordinary queries use fixed-cardinality, saturating memory counters.
+Only a summary per minute with traffic (plus shutdown) is journaled; the last
+unflushed counters can be lost on a crash. Accepted attempts, receipts and operator
+decisions still have individual durable signed records. No URLs, tokens, error
+messages or candidate text enter the summaries. Flooding a local endpoint can
+still deny availability; this is not a public multi-tenant service.
 
 ## Control Tower
 
@@ -176,6 +249,44 @@ applies no normalization rules through the service. Any future rule integration
 must use the existing CardDemo qualification and verified rule-register workflow
 in a separately prepared, bound task. No agent approval tool exists.
 
+A non-completed receipt creates a `verify-attempt-review` Tower request, bound to
+the exact public receipt bytes. The task is paused for human review. A human with
+`campaign-authorizer` can choose `continue` (allow the next fresh attempt) or
+`void` (exclude the failed attempt from interpretation and allow the next fresh
+attempt). Neither rewrites a verdict, refunds a slot, reruns a candidate, or voids
+a completed receipt. Both are **operator review, not independent attestation**.
+The original indeterminate/equipment receipt and decision remain in the audit.
+
+Export the decision proof from Tower and obtain its current trusted journal head
+through the operator channel. As the judge account, import it while the service
+is running (this CLI does not acquire the service's writer lock):
+
+```sh
+lightyear-judge import-decision --data-root /var/lib/lightyear-verify/session \
+  --attempt attempt-<32 hex> --proof /private/tower-proof.json \
+  --trusted-head <current-Tower-journal-head>
+```
+
+The CLI verifies the pinned key, journal, human role, outcome, scope and receipt
+binding and writes a new signed import file. The service consumes it before the
+next submission; no agent approval tool or HTTP decision endpoint exists. A
+stale, mismatched or completed-receipt proof is refused. Import one decision per
+receipt. Offline replay re-verifies its complete proof at the imported head.
+
+To propose a cumulative inventory cap increase as the operator:
+
+```sh
+lightyear-judge inventory-budget --data-root /var/lib/lightyear-verify/session --new-limit 7
+# Review the resulting verify-budget-increase request in Tower, then:
+lightyear-judge inventory-budget --data-root /var/lib/lightyear-verify/session --new-limit 7 \
+  --proof /private/budget-proof.json --trusted-head <current-Tower-journal-head>
+```
+
+The decision binds the inventory, current ledger head/usage/limit and proposed
+new limit. If reservations intervene, prepare a fresh request. It cannot increase
+a task's sealed local limit. No authority bound on first use means no increases.
+The higher cap also increases the disclosure budget and must be reviewed as such.
+
 ## Offline evidence
 
 Public receipts can be verified with `lightyear_control_tower.decisions.verify_envelope`
@@ -187,29 +298,52 @@ lightyear-judge replay --data-root /var/lib/lightyear-verify/session \
 ```
 
 Replay checks the task, every journal signature/link, request identities, budget,
-artifact hash, receipt bindings and private evidence, then runs the existing
-INTCALC replay and reconstructs the closed result. Pin the terminal journal head
+artifact hash, signed inventory reservations, public/private receipt bindings and
+Tower decisions, then runs the existing
+INTCALC replay and reconstructs the policy-projected result. Task fingerprints bind
+all four packages, every `spec/mainframe` asset, the resolved bubblewrap executable
+and the full Java runtime including linked configuration. Admission, worker start
+and completion, and replay reject changed fingerprints. Runtime updates require
+a newly prepared task; they cannot silently change an existing comparator.
+Pin the terminal journal head
 externally: signatures alone cannot detect deletion of an entire valid suffix.
 Archive private evidence locally; publish only reviewed value-free receipts and
 status. The receipt explicitly states operator review, not independent attestation.
 
 ## Leakage bound
 
-Let F be the sum of the allowed output-copybook field counts plus one `$record`
-sentinel per dataset. For each of seven diagnostic kinds at each allowed field,
-there are at most four states: absent, count 1, count 2–10, count >10. There are
-three verdicts and three completion statuses. The closed business-result alphabet
-is at most `9 * 4^(7F)` per submission, hence at most
-`B * (log2(9) + 14F)` bits across B accepted submissions (default B=5). This is a
-conservative finite upper bound, not a claim that zero information is disclosed.
-Receipts also contain fixed-width commitments and signatures. Conservatively add
-2,560 bits per attempt for eight 256-bit fields plus a 512-bit signature; random
-attempt IDs, operator-fixed metadata, known artifact hashes and deterministic
-budget counters carry no additional hidden-answer semantics. Reads return the
-same receipt; no new business evaluation occurs. Exact runtime is not exposed in
-the public receipt. Wall-clock response timing and shared-host side channels are
-outside this JSON-alphabet bound. Protect the service from untrusted host users
-and resource denial of service; do not market this as cryptographic privacy.
+A candidate can read evaluation **inputs** inside `/inputs`. A malicious candidate
+can deliberately encode those values by selecting which output fields differ and
+which count bands appear. A literal protected-value scan does not detect this
+encoding attack. Isolation prevents direct file/network escape; it does not make
+the result channel confidential by itself.
+
+Deployment policy:
+
+- For public/synthetic fixtures, field mode is useful for development. For F=29,
+  seven kinds and four states (absent/three bands), the conservative business-result
+  bound is `B * (log2(9) + 14F)`, about 2,046 bits for five submissions.
+- For a customer's own trusted agent, confidential mode is still the default on
+  non-public data. The customer must review what information reaches any external
+  model provider; ownership alone does not imply authorization to disclose it.
+- For a third-party agent on bank/Maintec data, require confidential mode and an
+  operator-approved cumulative cap, preferably smaller than five if appropriate.
+  With two dataset presence bits, three verdicts and three statuses, a conservative
+  business-result bound is `B * log2(36)`: under 26 bits for five attempts. This
+  intentionally uses a conservative bound rather than claiming exactly 16 bits.
+  It is a bounded deliberate channel, **not zero leakage**. If even this budget is
+  unacceptable, do not expose adaptive evaluation to that agent.
+
+Confidential public receipts contain no private-evidence hash or raw verdict hash.
+Their signed body consists of known task/artifact identities, generated attempt
+identity, deterministic budgets, review label and the closed result. Private
+receipts retain full commitments for operator replay. Public responses and Tower
+exports refer to the public receipt. Ed25519 signatures are deterministic for that
+body and repeated reads do not create new result encodings. Operator-authored
+public metadata needs separate disclosure review. Exact runtime stays private;
+pending-result polling, completion timing, status-export timestamps and shared-host
+side channels are outside the result-alphabet bound. Do not describe this service
+as cryptographic privacy or approve actual customer data solely from these tests.
 
 The acceptance leak scan decodes every hidden input and expected output, trims
 padding and scans all strings/numbers/keys of at least four characters. Howard's
@@ -223,7 +357,8 @@ synthetic rehearsal is not a substitute for scanning an actual held-out delivery
 
 The operator must already be serving the judge. All examples inherit the task
 token from the agent launch environment; none starts a judge or makes a model call.
-Allow at least 340 seconds for a submission. Harness model smoke tests require
+Submissions return pending; allow time for JAR transfer and poll for completion.
+Harness model smoke tests require
 Howard's separate approval and cost recording.
 
 Claude Code ([official MCP setup](https://code.claude.com/docs/en/mcp)):
@@ -241,7 +376,7 @@ Codex `config.toml` ([official MCP settings](https://learn.chatgpt.com/docs/exte
 command = "/opt/lightyear-verify-venv/bin/lightyear-verify-mcp"
 args = ["--workspace", "/srv/dev", "--public-manifest", "/srv/dev/public.json", "--judge-url", "http://127.0.0.1:8770"]
 env_vars = ["LIGHTYEAR_VERIFY_TOKEN"]
-tool_timeout_sec = 360
+tool_timeout_sec = 60
 ```
 
 Strands Harness `mcp.json`, consumed by `create_harness(mcp_servers="./mcp.json")`
@@ -268,7 +403,7 @@ tools = McpToolset(connection_params=StdioConnectionParams(
         args=["--workspace", "/srv/dev", "--public-manifest", "/srv/dev/public.json",
               "--judge-url", "http://127.0.0.1:8770"],
         env={"LIGHTYEAR_VERIFY_TOKEN": os.environ["LIGHTYEAR_VERIFY_TOKEN"]}),
-    timeout=360))
+    timeout=60))
 # Attach tools to an agent only when a separately approved model run is intended.
 ```
 

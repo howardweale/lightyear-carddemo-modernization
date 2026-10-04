@@ -30,11 +30,12 @@ def dispatch(broker, name, arguments):
     return broker.call(name, args)
 
 
-def admit_transport(flags, available_tools, workspace_files, *, os_read_probe_passed):
-    """Future executable must supply actual zero-model OS denial-probe evidence."""
+def admit_transport(flags, available_tools, workspace_files, *, root, probe_binding, public_key, transport):
+    """Require a signed actual OS record bound by hash, never an asserted bool."""
     required = capability_arguments()
     require(flags == required, 'B06 CLI capability policy differs')
     require(set(available_tools) == set(ARGUMENTS) and not workspace_files,
             'B06 builder exposes additional inputs or tools')
-    require(os_read_probe_passed is True, 'B06 tools filesystem denial not demonstrated')
+    from tools.ms94_b06_os_probe import admit
+    admit(root, probe_binding, public_key, transport)
     return True

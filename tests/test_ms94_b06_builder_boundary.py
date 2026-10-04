@@ -21,7 +21,7 @@ class BuilderBoundaryTests(unittest.TestCase):
         broker.call.assert_not_called()
 
     def test_read_only_flag_is_not_accepted_as_os_confidentiality_proof(self):
-        with self.assertRaisesRegex(ValueError, 'filesystem denial not demonstrated'):
+        with self.assertRaises(TypeError):
             admit_transport(capability_arguments(), ARGUMENTS, [], os_read_probe_passed=False)
 
     def test_unknown_cli_read_capability_fails_closed(self):

@@ -60,7 +60,12 @@ def execute_pair(root, run, signer):
         from lightyear_calibration.contracts import canonical
         with (run / 'native-events.jsonl').open('ab') as stream:
             stream.write(canonical({'real_utc': now(), 'kind': kind, 'payload': payload}) + b'\n')
-    runner = NativeRunner(root, run, plan, emit)
+    if 'posting_observer' in plan:
+        from tools.ms94_b06_observed_runner import ObservedRunner
+        runner = ObservedRunner(root, run, plan, emit)
+        runner.signer = signer
+    else:
+        runner = NativeRunner(root, run, plan, emit)
     def before_candidate(lane):
         entry = replay_entry(run, signer.public)
         runner.checkpoint('candidate-admitted:' + lane)

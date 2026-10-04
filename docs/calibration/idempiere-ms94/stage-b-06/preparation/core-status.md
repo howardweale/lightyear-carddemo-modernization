@@ -1,5 +1,26 @@
 # B06 preparation status
 
+## October 4 admission preparation update
+
+The [J2/J3 adapter preparation](native-adapters-r1/README.md) is merged through
+PR #241. The [posting observer increment](posting-observer-r1/README.md) adds
+external JVM collection and offline integrity replay, but does not yet establish
+causal attribution or qualify diagnostic forwarding. Fifty B06 preparation
+tests pass. Two reference compilation checks and three observer compilation
+checks passed with no network, database execution, JVM attachment or model calls;
+all owned compiler containers were verified absent. Hash-only records and costs
+are in the linked manifests. No native qualification slots have been attempted.
+
+Against items 1-5 below: item 1 now has adapter/reference code and offline
+compilation; native acceptance, exact plan assembly and remaining register/scope
+admission are pending. Item 2 has collection/replay code; causal derivation and
+all native provenance controls are pending. Item 3 has no frozen qualification
+plan yet. Items 4 and 5 remain incomplete. Publication is preparation only and
+does not authorize native qualification or measurement. B05, work/ms94 and
+template-r1 remain untouched. Operator review, not independent attestation.
+
+## Earlier implementation checkpoint (October 3)
+
 This is an implementation checkpoint, not a qualification result, executable
 freeze, preregistration or launch authorization. No B06 model calls, Java
 compilations or native qualification pairs have been run by this preparation

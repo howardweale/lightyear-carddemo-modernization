@@ -76,4 +76,3 @@ or claim autonomous effectiveness.
 This milestone travels with the setup-kit PR. Repository CI results are distinct
 from the unrun Multipass and live-client checks above. Approval to publish and
 merge the kit does not authorize those model calls.
-

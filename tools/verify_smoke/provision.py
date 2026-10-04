@@ -259,4 +259,3 @@ if __name__ == "__main__":
     action = sys.argv[1]
     source = Path(sys.argv[2]).resolve() if len(sys.argv) > 2 else None
     {"install": install, "finish": finish, "verify": verify}[action](source)
-

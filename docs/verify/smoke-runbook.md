@@ -366,4 +366,3 @@ multipass delete --purge lyverify-inspector
 Repeat using separate names for the approved Claude/Codex VMs. Deletion is
 intentional disposal of a public-fixture test machine, not an evaluation budget
 reset on protected data.
-

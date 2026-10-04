@@ -95,7 +95,7 @@ def execute_pair(root, run, signer):
             'artifact_type': 'ms94-b06-candidate-start/1', 'lane': lane, 'real_utc': now(),
             'entry_sha256': entry['content_sha256'], 'plan_sha256': plan['content_sha256']}, signer)
     runner.before_candidate = before_candidate
-    error, executions, cleaned, gate = None, {}, None, None
+    error, executions, cleaned, gate, delivery = None, {}, None, None, None
     try:
         folder = runner.prepare('operations', 1)
         full_entry(run, signer)
@@ -132,9 +132,15 @@ def execute_pair(root, run, signer):
         if any(x['exit_code'] == 124 for x in executions.values()):
             error = {'kind': 'candidate-timeout', 'exception_type': 'CandidateTimeout', 'closed_reason': 'candidate-timeout'}
         elif any(x['exit_code'] for x in executions.values()):
-            # Diagnostic/provenance qualification is a separate admission. Never
-            # turn missing origin evidence into a candidate-origin error report.
             error = {'kind': 'execution-failure', 'exception_type': 'CandidateProcessFailed'}
+            if 'runtime_delivery' in plan:
+                try:
+                    from tools.ms94_b06_runtime_delivery import record_zero_model_delivery, replay_delivery
+                    delivery = record_zero_model_delivery(root, run, signer)
+                    replay_delivery(root, run, signer.public)
+                except Exception as exc:
+                    error = failure_record(exc)
+                    delivery = None
         else:
             try:
                 gate = evaluate(run, signer.public)
@@ -148,6 +154,8 @@ def execute_pair(root, run, signer):
         'real_finished_utc': now(), 'status': error['kind'] if error else ('passed' if gate['passed'] else gate.get('status', 'contract-violation')),
         'error': error, 'execution_sha256': {l: x['content_sha256'] for l, x in executions.items()},
         'gate_sha256': read_json(run / 'gate.json')['content_sha256'] if (run / 'gate.json').exists() else None,
-        'equipment_suspect': error is not None and error['kind'] not in ('business-failure', 'candidate-timeout'),
+        'runtime_delivery_sha256': delivery['content_sha256'] if delivery else None,
+        'equipment_suspect': (delivery['equipment_suspect'] if delivery else
+            error is not None and error['kind'] not in ('business-failure', 'candidate-timeout')),
         'qualification_credit': False, 'independently_attested': False,
     }, signer)

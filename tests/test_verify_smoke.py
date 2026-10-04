@@ -15,6 +15,36 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class KitTests(unittest.TestCase):
+    def test_identities_require_explicit_sudo_denial_not_exit_status(self):
+        users = {name: SimpleNamespace(pw_name=name, pw_dir=f"/home/{name}",
+                                      pw_uid=uid, pw_gid=uid)
+                 for name, uid in (("lyjudge", 2001), ("lyagent", 2002))}
+        fake_pwd = SimpleNamespace(getpwnam=users.__getitem__)
+        fake_grp = SimpleNamespace(getgrall=lambda: [])
+        cases = (
+            (0, "User lyjudge is not allowed to run sudo on smoke.\n", "", True),
+            (1, "User lyjudge is not allowed to run sudo on smoke.\n", "", True),
+            (0, "User lyjudge may run the following commands on smoke:\n    (ALL : ALL) ALL\n", "", False),
+            (1, "", "sudo: a password is required\n", False),
+            (0, "", "User lyjudge is not allowed to run sudo on smoke.\n", False),
+        )
+        for rc, stdout, stderr, allowed in cases:
+            with self.subTest(rc=rc, stdout=stdout, stderr=stderr), \
+                 patch.dict("sys.modules", pwd=fake_pwd, grp=fake_grp), \
+                 patch.object(provision.subprocess, "run", return_value=SimpleNamespace(
+                     returncode=rc, stdout=stdout, stderr=stderr)) as run:
+                if allowed:
+                    self.assertEqual(tuple(users.values()), provision.identities())
+                    self.assertEqual(2, run.call_count)
+                else:
+                    with self.assertRaisesRegex(ValueError, "sudo privileges"):
+                        provision.identities()
+                for call in run.call_args_list:
+                    self.assertEqual(["sudo", "-n", "-l", "-U"], call.args[0][:-1])
+                    self.assertEqual("C", call.kwargs["env"]["LC_ALL"])
+                    self.assertTrue(call.kwargs["capture_output"])
+                    self.assertTrue(call.kwargs["text"])
+
     def test_architecture_mapping_refuses_unknown(self):
         self.assertEqual("arm64", provision.architecture("aarch64"))
         self.assertEqual("x86_64", provision.architecture("x86_64"))

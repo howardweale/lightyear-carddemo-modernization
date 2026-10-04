@@ -15,6 +15,8 @@ from tools.ms94_b06_classfile import inspect_class
 
 SUPPORT = 'org.idempiere.test.JourneySupport'
 CANDIDATE = 'org.idempiere.test.LightyearOperationsTest'
+TERMINAL = 'org.junit.platform.launcher.core.ExecutionListenerAdapter'
+TERMINAL_SIGNATURE = '(Lorg/junit/platform/engine/TestDescriptor;Lorg/junit/platform/engine/TestExecutionResult;)V'
 FRAMEWORK = {'org.compiere.model.PO', 'org.compiere.acct.Doc', 'org.compiere.acct.DocManager', 'org.compiere.util.DB'}
 TARGETS = {'org.compiere.util.DB': {'executeUpdate(Ljava/lang/String;Ljava/lang/String;)I'}, SUPPORT: {'postOnce(Lorg/compiere/model/PO;[Lorg/compiere/model/MAcctSchema;)V'},
            'org.compiere.model.PO': {'lock()Z'},
@@ -39,7 +41,7 @@ def checked_frames(event, classes, loaders):
     check(isinstance(frames, list) and frames, 'observer-stack-empty')
     for frame in frames:
         name = frame['class']
-        if name in classes or name == SUPPORT or name.startswith(CANDIDATE) or name in FRAMEWORK:
+        if name in classes or name == SUPPORT or name.startswith(CANDIDATE) or name in FRAMEWORK or name.startswith(('org.junit.', 'org.opentest4j.', 'junit.framework.')):
             check(name in classes, 'observer-unbound-class')
             expected = classes[name]
             check(frame['constant_pool_sha256'] == expected['constant_pool_sha256'] and
@@ -73,7 +75,7 @@ def replay_stream(folder, receipt, classes, lane):
     check(len(lines) == receipt['event_count'] and 2 <= len(lines) <= 50000, 'observer-event-count')
     previous, ready, death = None, False, False
     stacks, loaders, observations, captures, exceptions = {}, {}, [], [], []
-    readbacks, entries = {}, {}
+    readbacks, entries, terminals = {}, {}, []
     for sequence, line in enumerate(lines, 1):
         check(len(line) <= 4 * 1024 * 1024, 'observer-event-too-large')
         item = json.loads(line); verify(item)
@@ -92,7 +94,21 @@ def replay_stream(folder, receipt, classes, lane):
             check(ready and event['checkpoint'] is True, 'observer-checkpoint-not-suspended')
             frames = checked_frames(event, classes, loaders)
             stack = stacks.setdefault(event['thread'], [])
-            if kind == 'method-entry':
+            if kind == 'test-terminal':
+                check(frames[0]['class'] == TERMINAL and frames[0]['method'] == 'executionFinished' and
+                      frames[0]['signature'] == TERMINAL_SIGNATURE, 'observer-terminal-method')
+                check(event['test_class'] == CANDIDATE and event['status'] in ('SUCCESSFUL', 'FAILED', 'ABORTED'),
+                      'observer-terminal-test')
+                check(not any(f['class'] == SUPPORT or f['class'].startswith(CANDIDATE) for f in frames),
+                      'observer-candidate-invoked-terminal')
+                check(any(f['class'] == 'org.junit.platform.engine.support.hierarchical.NodeTestTask' for f in frames[1:]),
+                      'observer-terminal-engine-stack')
+                check(all(f['class'] in classes for f in frames if f['class'].startswith('org.junit.')),
+                      'observer-terminal-unbound-framework')
+                check(not any(t['descriptor_id'] == event['descriptor_id'] for t in terminals),
+                      'observer-duplicate-terminal')
+                terminals.append(event)
+            elif kind == 'method-entry':
                 top = frames[0]
                 check(top['method'] + top['signature'] in TARGETS.get(top['class'], set()), 'observer-unselected-entry')
                 stack.append(event)
@@ -130,7 +146,7 @@ def replay_stream(folder, receipt, classes, lane):
         else:
             check(item['readback_sha256'] is None, 'observer-unexpected-readback')
     check(ready and death and previous == receipt['last_event_sha256'], 'observer-incomplete-stream')
-    return {'entries': entries, 'readbacks': readbacks, 'observations': observations, 'exceptions': exceptions, 'verified_capture_hashes': captures,
+    return {'entries': entries, 'readbacks': readbacks, 'observations': observations, 'exceptions': exceptions, 'terminals': terminals, 'verified_capture_hashes': captures,
             'event_count': len(lines), 'collection_complete': True}
 
 

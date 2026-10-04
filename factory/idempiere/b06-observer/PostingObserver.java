@@ -13,8 +13,9 @@ import java.util.*;
 public final class PostingObserver {
     private static final String SUPPORT = "org.idempiere.test.JourneySupport";
     private static final String CANDIDATE = "org.idempiere.test.LightyearOperationsTest";
+    private static final String TERMINAL = "org.junit.platform.launcher.core.ExecutionListenerAdapter";
     private static final Set<String> TYPES = Set.of(SUPPORT, "org.compiere.model.PO",
-        "org.compiere.acct.Doc", "org.compiere.acct.DocManager", "org.compiere.util.DB");
+        "org.compiere.acct.Doc", "org.compiere.acct.DocManager", "org.compiere.util.DB", TERMINAL);
     private final BufferedReader acknowledgements = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
     private final Map<Long, Deque<Call>> active = new HashMap<>();
     private final Map<String, String> code = new HashMap<>();
@@ -83,7 +84,7 @@ public final class PostingObserver {
         String identity = type.name() + "." + method.name() + method.signature();
         String cacheKey = type.classLoader() == null ? "bootstrap:" + identity : type.classLoader().uniqueID() + ":" + identity;
         if (!code.containsKey(cacheKey)) code.put(cacheKey, method.isNative() || method.isAbstract() ? "unavailable" : hash(method.bytecodes()));
-        return Map.of("class", type.name(), "method", method.name(), "signature", method.signature(),
+        return Map.of("class", type.name(), "method", method.name(), "signature", method.signature(), "line", location.lineNumber(),
                       "code_index", location.codeIndex(), "method_sha256", code.get(cacheKey),
                       "constant_pool_sha256", hash(type.constantPool()), "loader", cacheKey.split(":", 2)[0]);
     }
@@ -94,7 +95,9 @@ public final class PostingObserver {
     }
     private boolean selected(Method method) {
         String type = method.declaringType().name(), name = method.name(), signature = method.signature();
-        return (type.equals("org.compiere.util.DB") && name.equals("executeUpdate")
+        return (type.equals(TERMINAL) && name.equals("executionFinished")
+                && signature.equals("(Lorg/junit/platform/engine/TestDescriptor;Lorg/junit/platform/engine/TestExecutionResult;)V"))
+            || (type.equals("org.compiere.util.DB") && name.equals("executeUpdate")
                 && signature.equals("(Ljava/lang/String;Ljava/lang/String;)I"))
             || (type.equals(SUPPORT) && name.equals("postOnce") && signature.equals("(Lorg/compiere/model/PO;[Lorg/compiere/model/MAcctSchema;)V"))
             || (type.equals("org.compiere.model.PO") && name.equals("lock") && signature.equals("()Z"))
@@ -112,6 +115,9 @@ public final class PostingObserver {
     private void entry(BreakpointEvent event) throws Exception {
         ThreadReference thread = event.thread(); Method method = event.location().method();
         List<Map<String,Object>> stack = frames(thread);
+        if (method.declaringType().name().equals(TERMINAL)) {
+            terminal(thread, stack); return;
+        }
         if (stack.stream().noneMatch(f -> f.get("class").equals(SUPPORT) || f.get("class").toString().startsWith(CANDIDATE))) return;
         StackFrame modelFrame = thread.frame(0);
         boolean database = method.declaringType().name().equals("org.compiere.util.DB");
@@ -138,6 +144,27 @@ public final class PostingObserver {
         exit.setSuspendPolicy(EventRequest.SUSPEND_ALL); exit.enable();
         active.computeIfAbsent(thread.uniqueID(), unused -> new ArrayDeque<>()).push(new Call(id, method, document, exit, thread.frameCount()));
     }
+    private void terminal(ThreadReference thread, List<Map<String,Object>> stack) throws Exception {
+        // Read the real engine descriptor/result, not XML or candidate log text.
+        List<Value> args = thread.frame(0).getArgumentValues();
+        ObjectReference descriptor = (ObjectReference)args.get(0);
+        if (descriptor.referenceType().fieldByName("testMethod") == null) return; // container descriptor
+        ObjectReference method = (ObjectReference)field(descriptor, "testMethod");
+        ClassObjectReference owner = (ClassObjectReference)field(method, "clazz");
+        if (!owner.reflectedType().name().equals(CANDIDATE)) return;
+        ObjectReference result = (ObjectReference)args.get(1);
+        ObjectReference status = (ObjectReference)field(result, "status");
+        ObjectReference throwable = (ObjectReference)field(result, "throwable");
+        Map<String,Object> record = new LinkedHashMap<>();
+        record.put("kind", "test-terminal"); record.put("thread", thread.uniqueID());
+        record.put("frames", stack); record.put("descriptor_id", descriptor.uniqueID());
+        record.put("descriptor_class", descriptor.referenceType().name());
+        record.put("test_class", owner.reflectedType().name());
+        record.put("test_method", ((StringReference)field(method, "name")).value());
+        record.put("status", ((StringReference)field(status, "name")).value());
+        record.put("exception_id", throwable == null ? null : throwable.uniqueID());
+        emit(record, true);
+    }
     private void exit(MethodExitEvent event) throws Exception {
         Deque<Call> calls = active.get(event.thread().uniqueID());
         if (calls == null || calls.isEmpty() || !calls.peek().method().equals(event.method())
@@ -160,6 +187,7 @@ public final class PostingObserver {
         Map<String,Object> record = new LinkedHashMap<>();
         record.put("kind", "exception"); record.put("thread", event.thread().uniqueID());
         record.put("exception_class", event.exception().referenceType().name());
+        record.put("exception_id", event.exception().uniqueID());
         List<String> ancestry = new ArrayList<>();
         for (ClassType type = (ClassType)event.exception().referenceType(); type != null; type = type.superclass())
             ancestry.add(type.name());

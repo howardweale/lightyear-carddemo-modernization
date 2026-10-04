@@ -21,6 +21,7 @@ def require_trusted_installation(agent_uid):
     }
     paths = [
         Path(__file__).resolve().parents[2],
+        Path(shutil.which("bwrap") or "").resolve(),
         Path(sys.executable).absolute().parent.parent,
         Path(shutil.which("java") or "").resolve().parent.parent,
     ]
@@ -41,9 +42,7 @@ def require_trusted_installation(agent_uid):
                 raise ValueError("installation-acl-refused")
             # Sticky system temporary parents cannot replace another owner's child.
             sticky_parent = (
-                p != root
-                and info.st_mode & stat.S_ISVTX
-                and info.st_uid != agent_uid
+                p != root and info.st_mode & stat.S_ISVTX and info.st_uid != agent_uid
             )
             if (
                 info.st_uid == agent_uid

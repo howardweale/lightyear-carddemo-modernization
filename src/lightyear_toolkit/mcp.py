@@ -60,7 +60,7 @@ def create_server(workspace, client):
 
     @server.tool(annotations=submit)
     def submit_candidate(path: str, request_id: str) -> dict[str, Any]:
-        """Submit a runnable candidate JAR with an idempotency UUID. Never submit outputs."""
+        """Submit a JAR with an idempotency UUID; returns an attempt ID and pending verdict."""
 
         def send():
             if not path.endswith(".jar"):
@@ -76,7 +76,7 @@ def create_server(workspace, client):
 
     @server.tool(annotations=read)
     def get_verdict(attempt_id: str) -> dict[str, Any]:
-        """Read an evaluation verdict, closed diagnostics and remaining budget."""
+        """Poll pending, or read the final verdict and policy-limited diagnostics."""
         return safe(client.call, "get_verdict", attempt_id=attempt_id)
 
     @server.tool(annotations=read)

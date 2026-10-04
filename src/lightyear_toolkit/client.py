@@ -40,7 +40,7 @@ class JudgeClient:
         try:
             with urllib.request.build_opener(
                 urllib.request.ProxyHandler({}), NoRedirect
-            ).open(request, timeout=340) as response:
+            ).open(request, timeout=30) as response:
                 raw = response.read(4 * 1024 * 1024 + 1)
             if len(raw) > 4 * 1024 * 1024:
                 raise Refused("judge-response-too-large")

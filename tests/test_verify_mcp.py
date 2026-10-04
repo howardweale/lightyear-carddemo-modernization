@@ -97,7 +97,7 @@ class VerifyAcceptance(unittest.IsolatedAsyncioTestCase):
         self.eval.chmod(0o700)
         # A canary absent from all public files; identical before/after address change
         # does not change business semantics. Only synthetic rehearsal copies change.
-        self.canary = "QZX947162"
+        self.canary = "Q" + uuid.uuid4().hex[:8].upper()
         from lightyear_mainframe.records import load_copybook
 
         layout = load_copybook(ROOT / "spec/mainframe/copybooks/CVACT01Y.cpy")
@@ -181,8 +181,8 @@ class VerifyAcceptance(unittest.IsolatedAsyncioTestCase):
             "exports": str(self.tower / "exports"),
             "tower_workspace": str(self.tower),
             "submissions": 5,
-            "build_minutes": 25,
-            "fixture": True,
+            "attempt_slots": 5,
+            "fixture": self._testMethodName != "test_confidential_receipts_and_replay",
             "public_task": {
                 "development_manifest_sha256": sha(self.manifest.read_bytes()),
                 "shapes": ["ACCTFILE", "TRANSACT"],
@@ -317,7 +317,8 @@ class VerifyAcceptance(unittest.IsolatedAsyncioTestCase):
         scratch = self.private / "hostile"
         scratch.mkdir()
         source = scratch / "Probe.java"
-        source.write_text("""
+        source.write_text(
+            """
 import java.nio.file.*;
 import java.net.*;
 public class Probe {
@@ -334,7 +335,8 @@ public class Probe {
     new ProcessBuilder("/runtime/bin/java", "-jar", "/candidate.jar", "child").inheritIO().start();
   }
 }
-""")
+"""
+        )
         subprocess.run(["javac", str(source)], check=True, capture_output=True)
         jar = scratch / "probe.jar"
         subprocess.run(
@@ -403,6 +405,64 @@ public class Probe {
         verdict, ds = json.loads(result.stdout)
         self.assertEqual("divergent", verdict)
         self.assertTrue(any(d["field"].endswith("TRAN-PROC-TS") for d in ds))
+
+    async def test_confidential_receipts_and_replay(self):
+        from lightyear_toolkit.client import JudgeClient
+        from lightyear_judge.service import replay, journal
+
+        client = JudgeClient(self.url, self.env["LIGHTYEAR_VERIFY_TOKEN"])
+        replies = []
+        for name in ("good", "rounding", "skipped", "date", "date"):
+            submitted = await asyncio.to_thread(
+                client.call,
+                "submit_candidate",
+                request_id=str(uuid.uuid4()),
+                artifact=base64.b64encode(
+                    (self.public / (name + ".jar")).read_bytes()
+                ).decode(),
+            )
+            self.assertTrue(submitted["ok"], submitted)
+            self.assertEqual("pending", submitted["verdict"])
+            attempt = submitted["attempt_id"]
+            deadline = time.monotonic() + 340
+            while True:
+                result = await asyncio.to_thread(
+                    client.call, "get_verdict", attempt_id=attempt
+                )
+                self.assertTrue(result["ok"], result)
+                if result["verdict"] != "pending" or time.monotonic() >= deadline:
+                    break
+                await asyncio.sleep(2)
+            self.assertEqual(
+                "equivalent" if name == "good" else "divergent", result["verdict"]
+            )
+            for d in result["diagnostics"]:
+                self.assertEqual({"dataset", "kind"}, set(d))
+                self.assertEqual("differs", d["kind"])
+            receipt = (
+                await asyncio.to_thread(client.call, "get_receipt", attempt_id=attempt)
+            )["receipt"]
+            self.assertNotIn("evidence_sha256", receipt)
+            replies.extend([submitted, result, receipt])
+        key = (self.root / "authority.public.pem").read_bytes()
+        events = journal(self.root, key)
+        self.assertEqual(
+            5,
+            replay(self.root, key, events[-1]["content_sha256"])[
+                "native_verdicts_replayed"
+            ],
+        )
+        exposed = json.dumps(replies) + "".join(
+            p.read_text() for p in (self.tower / "exports").glob("*.json")
+        )
+        self.assertEqual(
+            [], [sha(v.encode()) for v in self.protected_values if v in exposed]
+        )
+        self.assertNotIn("count_band", exposed)
+        self.assertNotIn("TRAN-AMT", exposed)
+        print(
+            "VERIFY_CONFIDENTIAL: five real sandbox submissions and offline replays; zero protected-value matches"
+        )
 
     async def test_full_sdk_session_and_security(self):
         from mcp import ClientSession, StdioServerParameters
@@ -562,6 +622,12 @@ public class Probe {
                     )["attempt_id"],
                 )
                 verdict = await call("get_verdict", attempt_id=attempt)
+                deadline = time.monotonic() + 340
+                while (
+                    verdict.get("verdict") == "pending" and time.monotonic() < deadline
+                ):
+                    await asyncio.sleep(2)
+                    verdict = await call("get_verdict", attempt_id=attempt)
                 self.assertEqual(
                     "equivalent" if name == "good" else "divergent",
                     verdict["verdict"],

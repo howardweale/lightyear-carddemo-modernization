@@ -50,3 +50,34 @@ snapshot handling; a signed OS denial probe with hash admission; and lock-SQL
 template binding plus executable qualification versions. The final report will
 give exact plan hashes, group windows and observer compile/catalog estimates.
 No placeholder or synthetic evidence may clear an executable admission gate.
+
+## 2. Owned database fault and J1 collector integration
+
+The database hook acts once at the first observed `Doc.post` lock UPDATE, after
+the successful native before-readback is recorded and before the suspended JVM
+is acknowledged. It checks the exact container name, immutable ID, ownership
+label, image and running state, signs intent, stops only that owned database ID,
+then signs the observed stopped state. It never restarts a database. Separate
+Oracle-targeted and PostgreSQL-targeted slots are necessary: an early equipment
+fault may prevent the second engine from running.
+
+The resulting unavailable after-state is retained honestly. Partial event-chain,
+before-readback, injection and cleanup replay does not claim a complete gate or
+clock replay. Missing intent/observation, wrong ownership and cleanup failures
+cannot count as an intended equipment-control result.
+
+J1 now has a B06-only adapter for the existing full-entry admission and unchanged
+`tools.ms94_v6_gate.evaluate`. Its original rollback/lock observer runs alongside
+the external posting observer; both are included in plan-bound container roles.
+Original gate bytes are retained with a separate signed B06 attestation.
+
+All six [J1 control source bindings](j1-control-bindings.json) are materialized
+locally from the October retained source: prior-post, prior-lock, support-origin,
+outside-origin, wrong-document, and unchanged candidate with genuine host-injected
+database failure. Public files contain only their hashes and derivation metadata.
+No original J1 implementation or predicate was edited. These new controls are
+uncompiled and unqualified until the approved Docker group runs.
+
+Validation at this checkpoint: 77 offline B06 tests, with ownership/target/one-shot
+fault mutants and deterministic source-control tests. Docker is mocked in these
+tests. No Docker or model calls were made.

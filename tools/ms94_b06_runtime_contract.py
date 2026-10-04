@@ -14,6 +14,9 @@ def runtime_contract(plan, run_id):
         if 'posting_observer' in plan:
             expected['observer-' + lane] = {'container': run_id + '-posting-observer-' + lane,
                                            'image': plan['local']['runner_image']}
+        if plan.get('journey') == 'J1':
+            expected['rollback-lock-observer-' + lane] = {'container': run_id + '-observer-' + lane,
+                                                          'image': plan['local']['runner_image']}
     return expected
 
 

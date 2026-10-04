@@ -177,3 +177,6 @@ spec/mainframe/public-source/** -text -whitespace
 
 # Preserve the prospective B06 template test bytes bound by its signed freeze.
 tests/test_ms94_b06*.py -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+
+# VM setup scripts must execute with Unix line endings on Ubuntu.
+tools/verify_smoke/*.sh text eol=lf

@@ -13,6 +13,12 @@ See the [confidential evaluation milestone](hardening-milestone.md),
 for the original delivery. The [PR235 follow-up record](pr235-hardening.md) covers
 these disclosure, budget, decision and execution changes.
 
+For a dedicated macOS Multipass Ubuntu 24.04 rehearsal, use the
+[zero-model smoke setup kit and manual runbook](smoke-runbook.md). It records
+arm64/x86_64 platform checks separately; live model tests require approval.
+The [smoke-kit milestone](smoke-milestone.md) records local validation and the
+remaining VM checks.
+
 ## Trust boundary and installation
 
 The agent runs `lightyear-verify-mcp` over stdio. The operator separately launches

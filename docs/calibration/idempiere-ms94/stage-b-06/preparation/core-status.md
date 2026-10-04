@@ -1,5 +1,27 @@
 # B06 preparation status
 
+## PR243 execution-blocker follow-up
+
+The [execution-admission-r3 report](execution-admission-r3/README.md) records
+terminal-origin binding and actual zero-model inbox delivery/replay code, J1's
+unchanged-judge bridge and database fault hook, strict slot/snapshot assembly,
+hash-bound OS denial admission, and class-bound lock-SQL checking. These are
+preparation increments with no native qualification credit. J1's preflight now
+explicitly requires a candidate-origin runtime exception delivered directly.
+
+The attempted host OS probe was blocked by Windows security before a child
+started; its signed failure is preserved. No successful OS denial is claimed.
+Pinned-image compile/catalog work needs Docker approval. Actual private input
+assembly, legacy mutation/evidence-boundary integration and qualification
+finalization also remain before executable conversion. The 55/41/39 schedules
+have new explicitly blocked assembly specifications, not executable freezes.
+October 17 remains a conditional go/no-go; currently no-go. Proposed windows
+and estimates are in the report. Zero Docker commands and zero model calls.
+
+Core items 1–3 have additional tested code but remain unqualified; items 4–5
+remain incomplete. B05, `work/ms94`, template-r1 and J1 predicates are unchanged.
+Operator review, not independent attestation.
+
 ## PR241 review follow-up (October 4)
 
 The [review-r2 report and draft schedules](admission-review-r2/README.md) record

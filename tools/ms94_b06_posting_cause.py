@@ -8,8 +8,9 @@ from tools.ms94_b06_posting_replay import SUPPORT
 from tools.ms94_b06_admission import check
 
 
-def derive(replayed):
+def derive(replayed, lock_sql_binding):
     check(replayed['collection_complete'] is True, 'cause-incomplete-observer')
+    from tools.ms94_b06_lock_sql import render
     observations, exceptions, readbacks = (replayed[k] for k in ('observations', 'exceptions', 'readbacks'))
     # Even a caught JDBC/VM error defeats causal exclusion. SQL row count and
     # SELECT 1 alone do not prove absence of a genuine equipment fault.
@@ -32,11 +33,10 @@ def derive(replayed):
         key, thread = entry['document'], entry['thread']
         table = TABLES[key[0]]
         # Exact SQL and arguments produced by the bound Doc.post bytecode.
-        expected = (f"UPDATE {table} SET Processing='Y' WHERE {table}_ID={key[1]}"
-                    " AND Processed='Y' AND IsActive='Y' AND (Processing='N' OR Processing IS NULL)"
-                    " AND Posted IN ('N','d')")
+        expected = render(lock_sql_binding, table, key[1])
+        check(entry.get('sql', '').lower() == expected.lower(), 'cause-lock-sql-template-differs')
         if (entry.get('force') is not False or entry.get('repost') is not False or
-                entry.get('sql', '').lower() != expected.lower() or failed['origin'] != 'support'):
+                failed['origin'] != 'support'):
             continue
         state = row(entry)
         if not (state['processing'] == 'Y' and state['processed'] == 'Y' and
@@ -88,10 +88,17 @@ def replay_cause(root, run, lane, public_key):
     from lightyear_calibration.contracts import read_json
     from pathlib import Path
     execution = read_json(Path(run) / 'cases/operations/1/execution' / lane / 'execution.json')
-    cause = derive(result)
+    from tools.ms94_b06_admission import bound_file
+    from tools.ms94_b06_lock_sql import bind
+    plan = read_json(Path(run) / 'plan.json')
+    spec = plan['posting_observer']['lock_sql']
+    check(plan['posting_observer']['target_class_files_sha256'].get(spec['class_file']) == spec['class_sha256'],
+          'cause-lock-class-not-in-catalog')
+    binding = bind(bound_file(root, spec['class_file'], spec['class_sha256']).read_bytes(), spec)
+    cause = derive(result, binding)
     if cause['cause'] == 'candidate-prior-processing-flag':
         check(execution['exit_code'] != 0, 'cause-not-a-terminal-execution-failure')
-    return {**cause, 'entry_sha256': result['entry_sha256'],
+    return {**cause, 'lock_sql_binding_sha256': binding['content_sha256'], 'entry_sha256': result['entry_sha256'],
             'collector_receipt_sha256': result['receipt_sha256'],
             'observer_replayed': True, 'attribution_qualified': False,
             'diagnostics': []}  # Native control qualification remains a launch prerequisite.

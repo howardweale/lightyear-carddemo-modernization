@@ -21,6 +21,18 @@ from tools.ms94_b06_candidate_result import CandidateTimeout
 from lightyear_calibration.journey_runtime import JourneyAbort
 
 
+def group_window_guard(plan, moment=None, *, starting=False):
+    if plan.get('execution_admission_version') != 3:
+        return  # Historical fixture plans cannot be promoted by the v3 converter.
+    from tools.ms94_b06_admission import utc
+    current = utc(moment or now())
+    spec = plan['docker_run_window']
+    remaining = (utc(spec['deadline_utc']) - current).total_seconds()
+    check(utc(spec['not_before_utc']) <= current and remaining > 0, 'native-outside-approved-group-window')
+    if starting:
+        check(remaining >= plan['declaration']['policy']['max_elapsed_seconds'], 'native-no-full-pair-window')
+
+
 def now():
     return datetime.now(timezone.utc).isoformat()
 
@@ -36,6 +48,10 @@ class NativeRunner(CalendarRunner):
     def __init__(self, root, run, plan, emit):
         super().__init__(root, run, plan, emit)
         self.clock_samples = {l: [] for l in LANES}
+
+    def check_cancel(self):
+        group_window_guard(self.plan)
+        return super().check_cancel()
 
     def trusted_identity(self, lane):
         # Bracket each real SQL clock query with host UTC and monotonic time.
@@ -65,12 +81,15 @@ def execute_pair(root, run, signer):
     verify_inputs(run, plan)
     check(plan['harness_sha256'] == plan['inputs_sha256']['operations.java'], 'candidate-input-binding')
     guard(plan['calendar'])
+    group_window_guard(plan, starting=True)
     for name, expected in plan['implementation_sha256'].items():
         bound_file(root, name, expected)
     auth = read_json(run / 'authorization.json')
     check(verify_envelope(auth, signer.public) and auth['run_id'] == run.name and
           auth['plan']['plan_sha256'] == plan['content_sha256'] and
           auth['scope'] == 'zero-model-native-qualification', 'native-authorization-invalid')
+    if plan.get('execution_admission_version') == 3:
+        check(auth.get('docker_run_window') == plan['docker_run_window'], 'native-window-authorization-binding')
     check(not any((run / p).exists() for p in ('started.json', 'receipt.json', 'cases', 'resources.json')),
           'native-slot-already-attempted')
     sign_once(run / 'started.json', {'artifact_type': 'ms94-b06-native-start/1',

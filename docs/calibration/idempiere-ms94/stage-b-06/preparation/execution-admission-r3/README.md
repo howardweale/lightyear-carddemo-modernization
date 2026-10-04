@@ -122,3 +122,90 @@ This item remains **blocked**, not passed. The helper source is available for
 security review; there is no admitted builder launcher or successful denial
 record. An approved, policy-matched launcher must complete the actual probe
 before measurement admission. Unit fixtures test rejection rules only.
+
+## 5. Lock SQL binding and conversion gate
+
+`ms94_b06_lock_sql` checks the complete `Doc.class` hash, constant pool and
+`post(ZZZ)` method hash. The exact SQL template must be recoverable from complete
+literal constants or the compiled string-concatenation recipe. Unbound text,
+unknown recipes and a changed predicate fail admission. `posting_cause` now
+raises an evidence failure for different observed lock SQL instead of quietly
+falling through to an unattributed result. Synthetic class mutants cover these
+boundaries; the real pinned-image constants still need the approved catalog step.
+
+`ms94_b06_qualification_plan.convert` binds the exact snapshot, each slot's
+candidate/plan/image/calendar, a successful signed OS probe, and a declared
+journey-group window. It does not create permission to run. **No executable plan
+has been issued**: those required artifacts are not yet available. The new
+`*-assembly-v3.json` files are explicit blocked assembly specifications, preserve
+the earlier drafts, and correct J1 posting-control source bindings to the newly
+materialized private controls. They are not executable versions or run approval.
+Legacy native-mutation/evidence-boundary slot integration and the complete
+qualification finalization driver also remain to be completed and tested before
+conversion. This preparation must not be represented as closing all blockers.
+
+## Docker scheduling proposal — approval required
+
+A qualification **run** means one journey's fixed qualification group, with
+serial fresh Oracle/PostgreSQL pairs inside one declared approved time window.
+No replacement, restart or continuation beyond that window is implied. Maintec
+intake takes priority; every proposed window below requires Howard's confirmation.
+There have been zero Docker commands and zero model calls in this increment.
+
+| Operation | Planning estimate | Proposed UTC window | Pacific window |
+| --- | --- | --- | --- |
+| Offline observer compile | 5–15 minutes | October 14, 16:00–18:00, shared preparation window | October 14, 09:00–11:00 PDT |
+| Pinned class/Java catalog and terminal/SQL inspection | 5–15 minutes | Same preparation window | Same preparation window |
+| Offline distinct reference/control compilations | 45–90 minutes | Same preparation window | Same preparation window |
+| J1 qualification, 55 pairs | 9.2–18.3 hours | October 18 16:00–October 19 14:00 | October 18 09:00–October 19 07:00 PDT |
+| J2 qualification, 41 pairs | 6.8–13.7 hours | October 20 16:00–October 21 08:00 | October 20 09:00–October 21 01:00 PDT |
+| J3 qualification, 39 pairs | 6.5–13.0 hours | October 22 16:00–October 23 08:00 | October 22 09:00–October 23 01:00 PDT |
+
+The preparation window is a separately approved operation with no database
+execution. It includes pinned-image availability checks, extraction/compilation
+containers and read-only cleanup verification. No private keys are mounted.
+Every qualification group includes entry preparation, the required observers,
+candidate execution, readback/capture, declared control injection, independent
+replay and owned-resource cleanup checks. The estimates use historical 10–20
+minute pairs, not measured new-observer performance; the 7,190-second per-pair
+cap is a limit, not a runtime forecast. Reserve 1–3 additional host-only replay
+hours per journey; Docker verification remains within its approved window.
+
+October 17 is the requested **go/no-go**, currently **no-go**. Before go: resolve
+the blocked OS probe without bypassing security, complete the class/compilation
+bindings and all slot integration, assemble actual private inputs/registers,
+verify the new immutable snapshot and publish exact executable plans for approval.
+The October scenario uses real clocks. The existing 96-hour rule places the
+latest possible measurement launch at October 27 23:59:59 UTC (16:59:59 PDT),
+subject to all admission gates and separate measurement approval.
+
+## Core status and preparation hashes
+
+| Core item | Current position |
+| --- | --- |
+| 1: adapters/references | Added J1 bridge and fault hook; J2/J3 prior code preserved. Native acceptance and complete per-slot private input/register assembly remain pending. |
+| 2: posting observer/replay | Terminal exception binding, closed runtime delivery/replay and class-bound lock-SQL checks implemented. Native provenance controls remain unrun and attribution remains unqualified. |
+| 3: qualification plans | 55/41/39 review schedules preserved; new blocked assembly specifications and strict conversion code added. No executable qualification freeze or Docker authority. |
+| 4: executable measurement controller | Existing core remains preparation. No admitted builder transport; the actual host denial probe was blocked before its child started. |
+| 5: complete zero-model preflight | J1 runtime diagnostic delivery is an explicit acceptance item. No native preflight or qualification pair was run. |
+
+New assembly-specification content hashes (not executable hashes):
+
+- J1: `533cc94c457fb35189e939560866d8a8a178f27bbde30409e2bf74b18f035c91`
+- J2: `bf2bf4a827e4f502cb71cccf6a436b362d3f1af385fb8e4ecc295bcaba545189`
+- J3: `407b8652079ce44bc8792f6aad4701e54a1e7813c2b02dab87f7007a9300e009`
+- Docker proposal: `36cfc52f480c98b8b8b917397793ed3fd721031ce7d50e9084967cb0e90b1f8c`
+
+No B05 evidence, `work/ms94`, template-r1 or J1 predicate files were changed.
+Original failures remain preserved. Operator review, not independent attestation.
+
+Final offline validation: **85 B06 tests passed**, plus **9 milestone documentation
+checks**. Host Java syntax compilation passed. An initial conversion test expected
+the raw missing-file exception; it was corrected to expect the repository's
+`CalibrationError` wrapper, with rejection behavior unchanged. These results are
+preparation only. No Docker commands, native pairs or model calls occurred.
+
+Version-3 native plans bind the proposed window, and signed native authorization
+must repeat it exactly. Starting requires enough room for the complete declared
+pair budget. In-flight cancellation checks enforce the deadline; owned cleanup
+still executes on failure. Conversion refuses older plans without this guard.

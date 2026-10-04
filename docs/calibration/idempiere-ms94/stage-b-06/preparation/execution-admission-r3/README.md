@@ -81,3 +81,22 @@ uncompiled and unqualified until the approved Docker group runs.
 Validation at this checkpoint: 77 offline B06 tests, with ownership/target/one-shot
 fault mutants and deterministic source-control tests. Docker is mocked in these
 tests. No Docker or model calls were made.
+# 3. Exact slot assembly and snapshot path
+
+`tools.ms94_b06_executable` assembles each private native slot from explicit
+hash-bound input files, including checkpoint, register, full entry inventories,
+private expectations and candidate source. It binds the application runtime,
+observer classes, complete target class catalog and Java binary, derives the
+clock/container role inventory, and adds the zero-model delivery route.
+
+The exclusive destination is `work/b06-execution-snapshots/<new-group-version>`.
+The manifest is written last, after all copied bytes are rechecked. Existing
+paths are never overwritten, including incomplete preparations. Snapshot
+verification rehashes the recorded files; it is an integrity check, not a claim
+that a filesystem owner cannot modify bytes.
+
+No executable snapshot was made in this increment: pinned-image observer
+compilation and the target class catalog are still absent. The assembler
+refuses that absence. No empty or invented catalog is an executable plan.
+Group windows are explicit, remain strictly inside October, and cannot exceed
+the 96-hour calendar cap. Window creation conveys no Docker authorization.

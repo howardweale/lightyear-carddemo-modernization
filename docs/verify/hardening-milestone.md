@@ -36,9 +36,13 @@ protected-value scanning and offline replay. The final hardening regression
 passed 13 tests. Scoped Windows regression passed 96 tests with 12 platform skips.
 These are separate runs, not a combined count of unique tests.
 
-The local WSL host cannot validate AppArmor policy loading; the Ubuntu acceptance
-CI must validate that deployment step before merge. No model calls or customer
-data were used. B05, B06 and `work/ms94` remain outside this change.
+Ubuntu 24.04 [acceptance run 37163426350](https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/37163426350)
+passed all 19 tests in 54.048 seconds, including loading the distribution's
+AppArmor policy. The first CI attempt exposed the missing default profile path;
+the correction installs the optional `apparmor-profiles` package and loads its
+`bwrap-userns-restrict` profile. The host restriction remains enabled. Local WSL
+cannot validate policy loading. No model calls or customer data were used. B05,
+B06 and `work/ms94` remain outside this change.
 
 Confidential mode reduces disclosure; it does not eliminate deliberate encoding,
 timing channels or risks from a hostile host administrator. Existing inventory

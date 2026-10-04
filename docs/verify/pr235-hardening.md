@@ -1,8 +1,10 @@
 # PR235 review follow-up: confidential evaluation and durable probing limits
 
 Implemented on `codex/verify-pr235-hardening`, based on main `3e2d611`.
-Operator review; not independent. This record describes local validation, not
-publication or permission to admit customer data.
+Operator review; not independent. Published for review in
+[PR #240](https://github.com/howardweale/lightyear-carddemo-modernization/pull/240),
+with the [hardening milestone](hardening-milestone.md). Publication does not grant
+permission to admit customer data.
 
 ## Behavior
 
@@ -92,8 +94,11 @@ agent workflow now describes pending results and dataset-only diagnostics.
 CI now loads the distribution's bubblewrap-specific AppArmor profile instead of
 disabling user-namespace restrictions with a global sysctl. This WSL environment
 has no active AppArmor filesystem, so **policy loading has not been validated
-locally**. The Ubuntu CI job must confirm it before claiming that deployment
-path passed. Keep the fail-closed behavior if the profile is absent.
+locally**. Ubuntu 24.04 [CI run 37163426350](https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/37163426350)
+subsequently passed policy loading and all 19 acceptance tests in 54.048 seconds.
+The initial CI attempt failed because the profile was not installed at the assumed
+default path; the correction installs `apparmor-profiles` and loads the packaged
+`bwrap-userns-restrict` extra profile. Missing policy still fails closed.
 
 No optional model-backed harness smoke test was run. The supported claim remains
 “built and tested with the MCP SDK,” not universal live-harness compatibility.

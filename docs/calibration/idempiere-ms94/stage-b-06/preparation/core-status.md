@@ -1,5 +1,24 @@
 # B06 preparation status
 
+## PR241 review follow-up (October 4)
+
+The [review-r2 report and draft schedules](admission-review-r2/README.md) record
+candidate fault typing, evidence-bound rejection progress, plan-bound clock and
+runtime checks, and synthetic posting-origin controls for both engine formats.
+There have been no Docker commands, native pairs or model calls in this increment.
+A local JDK syntax compilation of the observer passed; it is not target-image
+qualification. Earlier failures and compilation records remain preserved.
+
+Items 1 and 2 have additional tested preparation, with native acceptance and
+production attribution/delivery still pending. Item 3 now has fixed review drafts
+of 55 J1, 41 J2 and 39 J3 pairs, binding known source and image hashes and listing
+unmaterialized native hooks and input/class-catalog prerequisites. These are not
+executable freezes or permission to run Docker. Items 4 and 5 remain incomplete.
+The builder capability boundary rejects tools/ reads, but OS-level confidentiality
+under an actual B06 executable has not yet been demonstrated. This remains a
+mandatory admission gate. Operator review, not independent attestation.
+
+
 ## October 4 admission preparation update
 
 The [J2/J3 adapter preparation](native-adapters-r1/README.md) is merged through

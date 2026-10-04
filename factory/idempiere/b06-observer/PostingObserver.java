@@ -14,7 +14,7 @@ public final class PostingObserver {
     private static final String SUPPORT = "org.idempiere.test.JourneySupport";
     private static final String CANDIDATE = "org.idempiere.test.LightyearOperationsTest";
     private static final Set<String> TYPES = Set.of(SUPPORT, "org.compiere.model.PO",
-        "org.compiere.acct.Doc", "org.compiere.acct.DocManager");
+        "org.compiere.acct.Doc", "org.compiere.acct.DocManager", "org.compiere.util.DB");
     private final BufferedReader acknowledgements = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
     private final Map<Long, Deque<Call>> active = new HashMap<>();
     private final Map<String, String> code = new HashMap<>();
@@ -94,7 +94,9 @@ public final class PostingObserver {
     }
     private boolean selected(Method method) {
         String type = method.declaringType().name(), name = method.name(), signature = method.signature();
-        return (type.equals(SUPPORT) && name.equals("postOnce") && signature.equals("(Lorg/compiere/model/PO;[Lorg/compiere/model/MAcctSchema;)V"))
+        return (type.equals("org.compiere.util.DB") && name.equals("executeUpdate")
+                && signature.equals("(Ljava/lang/String;Ljava/lang/String;)I"))
+            || (type.equals(SUPPORT) && name.equals("postOnce") && signature.equals("(Lorg/compiere/model/PO;[Lorg/compiere/model/MAcctSchema;)V"))
             || (type.equals("org.compiere.model.PO") && name.equals("lock") && signature.equals("()Z"))
             || (type.equals("org.compiere.acct.Doc") && name.equals("post") && signature.equals("(ZZZ)Ljava/lang/String;"))
             || (type.equals("org.compiere.acct.DocManager") && name.equals("postDocument")
@@ -111,10 +113,25 @@ public final class PostingObserver {
         ThreadReference thread = event.thread(); Method method = event.location().method();
         List<Map<String,Object>> stack = frames(thread);
         if (stack.stream().noneMatch(f -> f.get("class").equals(SUPPORT) || f.get("class").toString().startsWith(CANDIDATE))) return;
-        List<Integer> document = document(thread.frame(0));
+        StackFrame modelFrame = thread.frame(0);
+        boolean database = method.declaringType().name().equals("org.compiere.util.DB");
+        if (database) {
+            // Observe only the direct lock UPDATE in the hash-bound Doc.post;
+            // never assign a document from SQL text supplied by a candidate.
+            if (thread.frameCount() < 2 || !thread.frame(1).location().declaringType().name().equals("org.compiere.acct.Doc")
+                    || !thread.frame(1).location().method().name().equals("post")) return;
+            modelFrame = thread.frame(1);
+        }
+        List<Integer> document = document(modelFrame);
         Map<String,Object> record = new LinkedHashMap<>();
         record.put("kind", "method-entry"); record.put("thread", thread.uniqueID());
         record.put("document", document); record.put("frames", stack);
+        if (database) record.put("sql", ((StringReference)thread.frame(0).getArgumentValues().get(0)).value());
+        if (modelFrame.location().declaringType().name().equals("org.compiere.acct.Doc")) {
+            List<Value> args = modelFrame.getArgumentValues();
+            record.put("force", ((BooleanValue)args.get(0)).value());
+            record.put("repost", ((BooleanValue)args.get(1)).value());
+        }
         long id = emit(record, true);
         MethodExitRequest exit = vm.eventRequestManager().createMethodExitRequest();
         exit.addThreadFilter(thread); exit.addClassFilter(method.declaringType());
@@ -128,6 +145,7 @@ public final class PostingObserver {
         Call call = calls.pop(); vm.eventRequestManager().deleteEventRequest(call.exit());
         Value returned = event.returnValue(); Object value = null;
         if (returned instanceof BooleanValue b) value = b.value();
+        else if (returned instanceof IntegerValue i) value = i.value();
         else if (returned instanceof StringReference s) value = s.value();
         else if (returned != null && !(returned instanceof VoidValue)) throw new IllegalStateException("Unexpected posting return type");
         Map<String,Object> record = new LinkedHashMap<>();

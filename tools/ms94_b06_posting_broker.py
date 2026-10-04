@@ -45,6 +45,7 @@ class PostingBroker:
                '--memory', '768m', '--cpus', '1', '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges',
                '--mount', f'type=bind,src={classes},dst=/observer-classes,readonly', runner.plan['local']['runner_image'])
         runner.remember('container', self.name); docker('start', self.name)
+        runner.assert_real_runtime(self.name)
         self.target = {'container_id': info['Id'], 'image': info['Image'], 'network': runner.network,
                        'addresses': info['NetworkSettings']['Networks'][runner.network],
                        'ports_published': False, 'observer_private_mount_absent': True}
@@ -129,6 +130,19 @@ class PostingBroker:
             check(code == 0 and death and self.ready.is_set(), 'observer-incomplete-lifecycle')
         except Exception as exc:
             self.failure = type(exc).__name__ + ': ' + str(exc)
+            # Preserve a stopped checkpoint without inventing its SQL readback
+            # or a complete collector receipt. No exception prose is exported.
+            try:
+                sign_once(self.private / 'failure.json', {
+                    'artifact_type': 'ms94-b06-posting-collector-failure/1',
+                    'plan_sha256': self.runner.plan['content_sha256'], 'lane': self.lane,
+                    'real_utc': datetime.now(timezone.utc).isoformat(),
+                    'exception_type': type(exc).__name__, 'event_count': len(self.records),
+                    'last_event_sha256': self.previous, 'complete': False,
+                    'native_qualification': False,
+                }, self.signer)
+            except Exception as signing_error:
+                self.failure += '; failure-record:' + type(signing_error).__name__
         finally:
             self.stop_requested.set()
             if self.process is not None and self.process.poll() is None:
@@ -151,3 +165,5 @@ class PostingBroker:
         self.stop_requested.set()
         if self.process is not None and self.process.poll() is None:
             self.process.kill()
+        if self.thread is not None:
+            check(self.done.wait(30), 'observer-thread-not-finalized')

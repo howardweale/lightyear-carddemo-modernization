@@ -62,6 +62,8 @@ def verify_inputs(run, plan):
     check(hashlib.sha256(canonical(contract)).hexdigest() == plan["private_expectations_sha256"],
           "private-expectations-changed")
     check(contract["journey"] == plan["journey"], "private-expectation-journey")
+    from tools.ms94_b06_runtime_contract import admit_contract
+    admit_contract(plan, run.name)
     return contract
 
 
@@ -151,7 +153,10 @@ def row_delta(before, after):
 
 
 def utc(value):
-    result = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    try:
+        result = datetime.fromisoformat(str(value).replace("Z", "+00:00"))
+    except (ValueError, TypeError) as exc:
+        raise EvidenceFailure('clock-timestamp-invalid') from exc
     check(result.tzinfo is not None, "clock-timezone-missing")
     return result.astimezone(timezone.utc)
 
@@ -160,6 +165,8 @@ def replay_clocks(run, public_key):
     """Trusted host envelopes, real database clocks, and no clock-setting runtime."""
     run = Path(run)
     plan = read_json(run / "plan.json")
+    from tools.ms94_b06_runtime_contract import admit_contract, clock_record, verify_runtime
+    spec = admit_contract(plan, run.name)
     calendar = plan["calendar"]
     verify(calendar)
     check(calendar["clock_mode"] == "unmodified-real-time", "clock-mode-changed")
@@ -177,6 +184,8 @@ def replay_clocks(run, public_key):
         execution_path = run / "cases/operations/1/execution" / lane / "execution.json"
         execution = read_json(execution_path)
         verify(execution)
+        check(clock_record(record.get("queries"), execution, spec["clock_stages"]) == record,
+              "clock-record-does-not-replay")
         check(record["execution_sha256"] == execution["content_sha256"], "clock-execution-binding")
         for position, host in (("before", start), ("after", end)):
             stamp = execution["native_clock_" + position]["value"]
@@ -186,18 +195,14 @@ def replay_clocks(run, public_key):
                 observed = observed.replace(tzinfo=timezone.utc)
             check(low <= observed < high and abs((observed - host).total_seconds()) <= 5,
                   "native-real-clock-diverged")
-    runtime = evidence["runtime"]
-    check(len(runtime) == 5 and len({r["container"] for r in runtime}) == 5,
-          "runtime-clock-attestation-incomplete")
-    expected = {plan["local"]["runner_image"],
-                *(v["image_digest"] for v in plan["declaration"]["environment"]["engines"].values())}
-    check(all(r["image"] in expected and r["clock_manipulation_environment"] is False and
-              r["privileged"] is False and r["sys_time_capability"] is False for r in runtime),
-          "runtime-clock-manipulation")
+    verify_runtime(evidence["runtime"], spec)
     return {"clock_replayed": True, "clock_sha256": evidence["content_sha256"]}
 
 
 def classify_failure(error):
+    from tools.ms94_b06_candidate_result import CandidateTimeout
+    if isinstance(error, CandidateTimeout):
+        return "candidate-timeout"
     if isinstance(error, BusinessViolation):
         return "business-failure"
     if isinstance(error, EvidenceFailure):

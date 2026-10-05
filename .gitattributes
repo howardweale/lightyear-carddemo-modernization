@@ -180,3 +180,7 @@ tests/test_ms94_b06*.py -text whitespace=blank-at-eol,blank-at-eof,space-before-
 
 # VM setup scripts must execute with Unix line endings on Ubuntu.
 tools/verify_smoke/*.sh text eol=lf
+
+# Preserve exact Windows probe script bytes bound by signed host evidence.
+tools/ms94_b06_windows_acl_probe.ps1 -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+tools/ms94_b06_windows_probe_commands.ps1 -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

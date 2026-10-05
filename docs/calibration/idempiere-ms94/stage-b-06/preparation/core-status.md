@@ -1,5 +1,26 @@
 # B06 preparation status
 
+## October 5 host boundary and offline preparation
+
+PR #252 separates builder-free native qualification from the mandatory signed
+builder probe in measurement admission and preflight. PR #253 records the approved
+[offline compilation and class catalog](offline-catalog-r4/README.md), including
+preserved failures, actual Docker time and owned-container cleanup.
+
+The [Windows local-account probe](windows-denial-r4/README.md) now passes for the
+exact tested identity and tools/private directories. Its signed admission record
+requires actual native access-denied codes, a successful positive control and a
+distinct missing-file control. Earlier failures remain unchanged. The future
+measurement transport must bind this evidence; complete executable preflight is
+still outstanding. This probe used zero Docker runs and zero model calls.
+
+Against core items 1–5: items 1–2 have compiled catalogs and preparation code but
+remain natively unqualified; item 3 still needs integration/finalization and
+executable plan assembly; items 4–5 remain incomplete, with the host denial-proof
+prerequisite now demonstrated. No native pair or model launch is authorized.
+Operator review, not independent attestation. Earlier entries below describe
+their original checkpoints.
+
 ## PR243 execution-blocker follow-up
 
 The [execution-admission-r3 report](execution-admission-r3/README.md) records

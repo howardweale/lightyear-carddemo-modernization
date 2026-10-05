@@ -62,9 +62,10 @@ class CodexTransportTests(unittest.TestCase):
             signer=test_signer()
             proof,binding=record(root,source,root/'proof',root/'codex.exe',signer)
             self.assertEqual('passed',proof['status'])
-            self.assertTrue(admit_transport(capability_arguments(),ARGUMENTS,[],root=root,
-                probe_binding=binding['probe'],public_key=signer.public,transport=binding['transport'],
-                process_probe_binding=binding['process_probe']))
+            with self.assertRaisesRegex(ValueError,'pinned-exec-proof-required'):
+                admit_transport(capability_arguments(),ARGUMENTS,[],root=root,
+                    probe_binding=binding['probe'],public_key=signer.public,transport=binding['transport'],
+                    process_probe_binding=binding['process_probe'])
             write(source/'failure.json',{'status':'failed'})
             with self.assertRaisesRegex(ValueError,'failed-observation-preserved'):
                 record(root,source,root/'failure-proof',root/'codex.exe',signer)
@@ -96,7 +97,8 @@ class CodexTransportTests(unittest.TestCase):
             def admit(binding):
                 return admit_transport(capability_arguments(),ARGUMENTS,[],root=root,probe_binding={},
                     public_key=signer.public,transport=transport,process_probe_binding=binding)
-            with patch('tools.ms94_b06_os_probe.admit',return_value=os_record):
+            with patch('tools.ms94_b06_os_probe.admit',return_value=os_record), \
+                 patch('tools.ms94_b06_pinned_transport.admit'):
                 with self.assertRaisesRegex(ValueError,'proof-required'):admit(None)
                 self.assertTrue(admit(seal_process(body)))
                 for field,value in [('account_sid','other'),('targets_sha256',{'tools':'d'*64,'private':'c'*64})]:

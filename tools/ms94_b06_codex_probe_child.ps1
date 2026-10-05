@@ -10,7 +10,7 @@ $env:OPENAI_API_KEY=$null
 $env:AZURE_OPENAI_API_KEY=$null
 $env:CODEX_API_KEY=$null
 $env:CODEX_AUTH_JSON=$null
-$cli=Join-Path $Directory 'codex.exe'
+$cli=if ($policy.codex_path) { $policy.codex_path } else { Join-Path $Directory 'codex.exe' }
 if ((Get-FileHash -LiteralPath $cli -Algorithm SHA256).Hash.ToLowerInvariant() -ne $policy.codex_sha256) { throw 'Codex bytes changed' }
 $start=New-Object Diagnostics.ProcessStartInfo
 $start.FileName=$cli
@@ -77,7 +77,7 @@ try {
     @{artifact_type='ms94-b06-codex-process-observation/1';account_sid=$policy.account_sid;
       codex_pid=$codexPid;codex_sha256=$policy.codex_sha256;user_agent=$initialized.userAgent;reads=@($reads.ToArray());
       requests=@($messages.ToArray());exit_code=$process.ExitCode;model_calls=0;prompt_sent=$false;
-      network_method='temporary Windows Firewall outbound block for this copied executable';
+      network_method='temporary Windows Firewall outbound block for the exact executable';
       measurement_transport_admitted=$false}|ConvertTo-Json -Depth 15|Set-Content -Encoding UTF8 -LiteralPath (Join-Path $policy.results_directory 'observation.json')
 } finally {
     if ($process.Id -and !$process.HasExited) { & taskkill.exe /PID $process.Id /T /F | Out-Null }

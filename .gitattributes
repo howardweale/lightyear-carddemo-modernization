@@ -188,3 +188,8 @@ tools/ms94_b06_windows_probe_commands.ps1 -text whitespace=blank-at-eol,blank-at
 # Byte-bound B06 Codex account probe scripts.
 tools/ms94_b06_codex_account_probe.ps1 -text
 tools/ms94_b06_codex_probe_child.ps1 -text
+
+# Preserve exact pinned-client/WFP bytes bound by the B06 transport proof.
+tools/b06-account-egress.cs -text
+tools/ms94_b06_pinned_exec.ps1 -text
+tools/ms94_b06_pinned_probe.ps1 -text

@@ -3,16 +3,20 @@
 No Docker/model calls, signing, approval, retry or replacement authority here.
 """
 from pathlib import Path
+import re
 from lightyear_calibration.contracts import read_json, seal, verify
 from lightyear_calibration.journey_order import file_hash
 from tools.ms94_b06_admission import check, verify_inputs
 from tools.ms94_b06_executable import verify_snapshot, window
 
 
-def convert(root, draft, snapshot_sha256, start_utc, end_utc):
+def convert(root, draft, snapshot_sha256, start_utc, end_utc, *, tower_public_key_sha256=None):
     """Judge qualification has no builder identity or model transport to admit."""
     root = Path(root); verify(draft)
     manifest = verify_snapshot(root, snapshot_sha256)
+    check(isinstance(tower_public_key_sha256,str) and
+          re.fullmatch('[a-f0-9]{64}',tower_public_key_sha256) is not None,
+          'qualification-tower-key-required')
     check(draft.get('model_calls') == 0 and draft.get('measurement_authorized') is False,
           'qualification-only-no-builder')
     check(len(draft['schedule']) == draft['slot_count'] and
@@ -45,6 +49,8 @@ def convert(root, draft, snapshot_sha256, start_utc, end_utc):
                       'plan_file_sha256': file_hash(root / name), 'expected': slot['expected']})
     return seal({'artifact_type': 'ms94-b06-qualification-executable-plan/1',
                  'review_plan_sha256': draft['content_sha256'], 'snapshot_sha256': snapshot_sha256,
+                 'tower_public_key_sha256': tower_public_key_sha256,
+                 'authorization_kind': 'b06-qualification-group',
                  'journey': draft['journey'], 'images': draft['images'], 'calendar': calendar,
                  'docker_run_window': window(calendar, start_utc, end_utc), 'slots': slots,
                  'builder_present': False, 'slot_count': len(slots),

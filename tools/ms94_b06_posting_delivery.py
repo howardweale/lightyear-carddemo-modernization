@@ -54,6 +54,10 @@ def project(causes, labels, policy):
     if not all(c['cause']=='candidate-prior-processing-flag' and not c['equipment_suspect'] for c in causes.values()):
         return [],True
     check(set(labels)==set(causes), 'posting-label-lanes')
+    # Attribution must describe the same native document role in both engines.
+    # Two individually plausible labels do not justify two candidate diagnoses.
+    if labels['oracle'] != labels['postgresql']:
+        return [], True
     values=[]
     for label in sorted(set(labels.values())):
         check(label in policy['attribution']['document_labels'], 'posting-label-outside-policy')

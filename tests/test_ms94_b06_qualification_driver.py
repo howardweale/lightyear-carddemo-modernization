@@ -1,9 +1,10 @@
 """Offline controller faults. Fake native stages confer no qualification credit."""
 import tempfile
+import hashlib
 import unittest
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from unittest.mock import patch
+from unittest.mock import patch, Mock
 from lightyear_calibration.contracts import canonical, read_json, seal
 from lightyear_calibration.journey_order import file_hash
 from lightyear_calibration.journey_runtime import CONTROL
@@ -40,12 +41,16 @@ class DriverTests(unittest.TestCase):
             (run/'plan.json').write_bytes(canonical(plan))
             slots.append({'id':name, 'plan_path':name+'/plan.json',
                           'plan_sha256':plan['content_sha256'], 'plan_file_sha256':file_hash(run/'plan.json')})
-        group = seal({'model_calls':0,'measurement_authorized':False,'snapshot_sha256':'a'*64,
+        tower = test_signer()
+        group = seal({'tower_public_key_sha256':hashlib.sha256(tower.public).hexdigest(),'model_calls':0,'measurement_authorized':False,'snapshot_sha256':'a'*64,
                       'docker_run_window':window,'slots':slots})
         binding = {'plan_sha256':group['content_sha256'],'snapshot_sha256':'a'*64,'public_commit':'b'*40}
         (output/'authorization.json').write_bytes(canonical(signer.sign({**binding,
             'scope':'one-zero-model-journey-qualification-group','docker_run_window':window})))
         (output/'publication.json').write_bytes(canonical(signer.sign({**binding,'public_bytes_verified':True})))
+        self.reader = Mock(key=tower.public)
+        from tests.test_ms94_b06_group_decision import proof_for
+        self.reader.get.side_effect=lambda kind,bound,now: proof_for(tower,bound,now)
         return root, output, authority, group, signer
 
     def test_failures_stop_before_next_slot_and_replay_after_early_notification(self):
@@ -70,7 +75,7 @@ class DriverTests(unittest.TestCase):
                 with patch('tools.ms94_b06_qualification_driver.verify_snapshot'), \
                      patch('tools.ms94_b06_qualification_driver.supervised', side_effect=stage), \
                      patch('tools.ms94_b06_qualification_driver.recovery'):
-                    report=execute_group(root,group,out,signer,authority_root=authority)
+                    report=execute_group(root,group,out,signer,authority_root=authority,tower_reader=self.reader)
                     self.assertEqual(failure=='none', report['passed'])
                     self.assertEqual(0, report['model_calls'])
                     if failure!='none':
@@ -78,7 +83,7 @@ class DriverTests(unittest.TestCase):
                         self.assertFalse(any(slot=='j1-002' for _,slot in calls))
                     if failure in ('native','replay'): self.assertEqual(['j1-001'],report['unfinalized'])
                     with self.assertRaisesRegex(ValueError,'already-attempted'):
-                        execute_group(root,group,out,signer,authority_root=authority)
+                        execute_group(root,group,out,signer,authority_root=authority,tower_reader=self.reader)
 
     def test_archive_is_replayed_from_copy_and_cleanup_checked_twice(self):
         with tempfile.TemporaryDirectory() as tmp:

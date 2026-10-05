@@ -40,20 +40,20 @@ class ConversionTests(unittest.TestCase):
             # slot/source/image/calendar validation use real files and code.
             with patch('tools.ms94_b06_qualification_plan.verify_inputs') as inputs, patch(
                     'tools.ms94_b06_os_probe.admit', side_effect=AssertionError('no builder')):
-                result = convert(root, seal(body), manifest['content_sha256'], start, end)
+                result = convert(root, seal(body), manifest['content_sha256'], start, end,tower_public_key_sha256='a'*64)
                 inputs.assert_called_once()
                 self.assertFalse(result['builder_present'])
                 self.assertFalse(result['docker_authorized'])
                 self.assertNotIn('os_probe_sha256', result)
                 for field, value in [('model_calls', 1), ('measurement_authorized', True)]:
                     with self.assertRaisesRegex(ValueError, 'qualification-only-no-builder'):
-                        convert(root, seal({**body, field: value}), manifest['content_sha256'], start, end)
+                        convert(root, seal({**body, field: value}), manifest['content_sha256'], start, end,tower_public_key_sha256='a'*64)
                 changed = {**body, 'images': {**images, 'oracle': 'other'}}
                 with self.assertRaisesRegex(ValueError, 'qualification-image-binding'):
-                    convert(root, seal(changed), manifest['content_sha256'], start, end)
+                    convert(root, seal(changed), manifest['content_sha256'], start, end,tower_public_key_sha256='a'*64)
             (root / 'plan.json').write_bytes(b'changed')
             with self.assertRaisesRegex(ValueError, 'bound-file-changed'):
-                convert(root, seal(body), manifest['content_sha256'], start, end)
+                convert(root, seal(body), manifest['content_sha256'], start, end,tower_public_key_sha256='a'*64)
 
 
 if __name__ == '__main__': unittest.main()

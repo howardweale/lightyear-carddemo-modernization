@@ -179,7 +179,7 @@ def preliminary(plan, receipt, cleanup):
           'qualification-equipment-failure')
 
 
-def execute_group(root, group, directory, signer, *, authority_root):
+def execute_group(root, group, directory, signer, *, authority_root, tower_reader=None):
     """Single-use entry. Merely converting/publishing a plan cannot call Docker."""
     root, directory = Path(root).resolve(), Path(directory).resolve()
     authority_root = Path(authority_root).resolve()
@@ -189,19 +189,17 @@ def execute_group(root, group, directory, signer, *, authority_root):
           (authority_root/CONTROL/'authority.key.pem').is_file(), 'qualification-existing-authority-binding')
     verify(group); verify_snapshot(root, group['snapshot_sha256'])
     check(group['model_calls'] == 0 and group['measurement_authorized'] is False, 'qualification-only')
-    authorization = read_json(directory / 'authorization.json')
-    check(verify_envelope(authorization, signer.public) and
-          authorization['scope'] == 'one-zero-model-journey-qualification-group' and
-          authorization['plan_sha256'] == group['content_sha256'] and
-          authorization['snapshot_sha256'] == group['snapshot_sha256'] and
-          authorization['docker_run_window'] == group['docker_run_window'], 'qualification-group-not-authorized')
     publication = read_json(directory / 'publication.json')
     check(verify_envelope(publication, signer.public) and publication['public_bytes_verified'] is True and
           publication['plan_sha256'] == group['content_sha256'] and
-          publication['snapshot_sha256'] == group['snapshot_sha256'] and
-          authorization['public_commit'] == publication['public_commit'], 'qualification-public-plan-not-bound')
+          publication['snapshot_sha256'] == group['snapshot_sha256'], 'qualification-public-plan-not-bound')
     check(not any((directory/n).exists() for n in ('started.json','report.json','stopping.json')),
           'qualification-group-already-attempted')
+    from tools.ms94_b06_group_decision import authorize
+    from lightyear_control_tower.b06 import atomic_new
+    proof = authorize(group, publication['public_commit'], tower_reader, signer.public)
+    atomic_new(directory/'tower-authorization.json', proof)
+    authorization_sha = proof['decision_sha256']
     started = time.monotonic(); now = lambda: datetime.now(timezone.utc)
     spec = group['docker_run_window']; rows = []; attempted = []; failure = None
     def stopping(slot, exc):
@@ -214,7 +212,7 @@ def execute_group(root, group, directory, signer, *, authority_root):
             print('B06 qualification stopped: '+slot['id']+'; preserve evidence; no next slot.', flush=True)
     check(utc(spec['not_before_utc']) <= now() < utc(spec['deadline_utc']), 'qualification-outside-window')
     sign_once(directory/'started.json', {'artifact_type':'ms94-b06-qualification-start/1',
-        'plan_sha256':group['content_sha256'], 'authorization_sha256':authorization['content_sha256'],
+        'plan_sha256':group['content_sha256'], 'authorization_sha256':authorization_sha,
         'started_utc':now().isoformat(), 'model_calls':0}, signer)
     for slot in group['slots']:
         run = None; authorized = False
@@ -228,7 +226,7 @@ def execute_group(root, group, directory, signer, *, authority_root):
             check(not (run/'started.json').exists() and not (run/'authorization.json').exists(), 'qualification-slot-restart')
             sign_once(run/'authorization.json', {'scope':'zero-model-native-qualification','run_id':run.name,
                 'plan':{'plan_sha256':plan['content_sha256']},'docker_run_window':spec,
-                'group_authorization_sha256':authorization['content_sha256']}, signer)
+                'group_authorization_sha256':authorization_sha}, signer)
             authorized = True
             trial_started=time.monotonic()
             deadline = min(trial_started + plan['declaration']['policy']['max_elapsed_seconds'],

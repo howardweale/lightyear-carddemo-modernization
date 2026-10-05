@@ -51,6 +51,13 @@ def default_registry():
     return KindRegistry(
         [
             K(
+                "b06-qualification-group",
+                ("authorized", "rejected"),
+                ("campaign-authorizer",),
+                ("plan", "snapshot", "window", "public_commit"),
+                consumer="b06-execute-qualification-group",
+            ),
+            K(
                 "verify-attempt-review",
                 ("continue", "void"),
                 ("campaign-authorizer",),

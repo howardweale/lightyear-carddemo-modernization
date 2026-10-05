@@ -1,5 +1,20 @@
 # B06 preparation status
 
+## October 5 offline integration r5
+
+The [r5 report](execution-r5/README.md) records a J1 observer-to-inbox runtime
+diagnostic test, v2 Windows admission through Controller.launch, native mutation
+and evidence-boundary integration, and a bounded qualification finalization
+driver. All 103 B06 offline tests pass. No Docker command, native pair or model
+call ran in this increment.
+
+The new 55/41/39 assembly specifications bind the four corrected compilation
+sources, but are **not executable plans**. The extracted JUnit terminal classes
+have conflicting Maven-cache copies, and the resolved test classpath was not
+saved. No loaded copy is claimed. Native posting-cause projection and complete
+private slot assembly also remain unsealed; all native qualification credit is
+still withheld. The Codex-process account proof is a separate increment.
+
 ## October 5 host boundary and offline preparation
 
 PR #252 separates builder-free native qualification from the mandatory signed

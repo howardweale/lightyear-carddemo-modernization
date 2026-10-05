@@ -50,6 +50,6 @@ def convert(root, draft, snapshot_sha256, start_utc, end_utc):
                  'builder_present': False, 'slot_count': len(slots),
                  'model_calls': 0, 'measurement_authorized': False, 'docker_authorized': False,
                  'approval_of_this_plan_commit_required': True,
-                 'native_entrypoint': 'tools.ms94_b06_native.execute_pair',
+                 'native_entrypoint': 'tools.ms94_b06_qualification_driver.execute_group',
                  'restarts_allowed': False, 'replacement_slots_allowed': False,
                  'review': 'operator review; not independent attestation'})

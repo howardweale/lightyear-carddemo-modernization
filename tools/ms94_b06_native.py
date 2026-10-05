@@ -79,6 +79,8 @@ def execute_pair(root, run, signer):
     check(run.parent == (root / RUNS).resolve(), 'unexpected-native-run-location')
     plan = read_json(run / 'plan.json')
     verify_inputs(run, plan)
+    from tools.ms94_b06_qualification_controls import validate_plan, native_mutation, boundary_body
+    validate_plan(plan)
     check(plan['harness_sha256'] == plan['inputs_sha256']['operations.java'], 'candidate-input-binding')
     guard(plan['calendar'])
     group_window_guard(plan, starting=True)
@@ -142,6 +144,7 @@ def execute_pair(root, run, signer):
                 if original_observer is not None and original_observer.process is not None:
                     original_observer.stop()
             # Early throws still have full entry and real after-state capture.
+            native_mutation(runner, lane, executions[lane], folder, signer)
             runner.worker('capture', {'lane': lane, 'output': runner.inside(folder / 'after' / lane)}, timeout=1800)
         runner.record_guard('pair-complete')
         clock_lanes = {}
@@ -192,8 +195,22 @@ def execute_pair(root, run, signer):
                 else:
                     gate = evaluate(run, signer.public)
                     sign_once(run / 'gate.json', {k: v for k, v in gate.items() if k != 'content_sha256'}, signer)
+                # Empty feedback must be projected and recorded too. Offline
+                # replay may not infer a delivery check from an absent inbox.
+                if 'runtime_delivery' in plan:
+                    from tools.ms94_b06_runtime_delivery import record_zero_model_delivery, replay_delivery
+                    delivery = record_zero_model_delivery(root, run, signer)
+                    replay_delivery(root, run, signer.public)
             except Exception as exc:
                 error = failure_record(exc)
+    boundary = None
+    if error is None and plan.get('slot_kind') == 'evidence-boundary':
+        try:
+            boundary = sign_once(run / 'evidence-boundary.json', boundary_body(run, plan, gate, signer.public), signer)
+            error = {'kind': 'insufficient-evidence', 'exception_type': 'DeclaredEvidenceBoundary',
+                     'closed_reason': boundary['closed_reason']}
+        except Exception as exc:
+            error = failure_record(exc)
     return sign_once(run / 'receipt.json', {
         'artifact_type': 'ms94-b06-native-receipt/1', 'plan_sha256': plan['content_sha256'],
         'authorization_sha256': auth['content_sha256'], 'cleanup_sha256': cleanup['content_sha256'],
@@ -202,7 +219,9 @@ def execute_pair(root, run, signer):
         'error': error, 'execution_sha256': {l: x['content_sha256'] for l, x in executions.items()},
         'gate_sha256': read_json(run / 'gate.json')['content_sha256'] if (run / 'gate.json').exists() else None,
         'runtime_delivery_sha256': delivery['content_sha256'] if delivery else None,
-        'equipment_suspect': (delivery['equipment_suspect'] if delivery else
-            error is not None and error['kind'] not in ('business-failure', 'candidate-timeout')),
+        'evidence_boundary_sha256': boundary['content_sha256'] if boundary else None,
+        'equipment_suspect': (bool(delivery and delivery['equipment_suspect']) or
+            bool(error and error['kind'] not in ('business-failure', 'candidate-timeout', 'execution-failure')) or
+            bool(error and error['kind'] == 'execution-failure' and delivery is None)),
         'qualification_credit': False, 'independently_attested': False,
     }, signer)

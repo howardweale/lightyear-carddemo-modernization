@@ -6,11 +6,12 @@ import unittest
 from unittest.mock import patch
 
 from lightyear_calibration.contracts import canonical, read_json, seal
+from lightyear_calibration.journey_order import file_hash
 from tests.test_ms94_a3_entry_v2 import test_signer
 from tests.test_ms94_b06_posting_controls import write_stream, frame
 from tools.ms94_b06_admission import EvidenceFailure
 from tools.ms94_b06_posting_replay import CANDIDATE, SUPPORT, TERMINAL, TERMINAL_SIGNATURE, replay_stream
-from tools.ms94_b06_runtime_delivery import terminal_projection, route, record_zero_model_delivery, replay_delivery
+from tools.ms94_b06_runtime_delivery import POLICY, terminal_projection, route, record_zero_model_delivery, replay_delivery
 
 SOURCE = 'class LightyearOperationsTest { void test() {\n throw new NullPointerException();\n}}\nfinal class JourneySupport {}'
 ENGINE = 'org.junit.platform.engine.support.hierarchical.NodeTestTask'
@@ -35,6 +36,73 @@ def runtime_fixture(origin=CANDIDATE):
 
 
 class RuntimeDeliveryTests(unittest.TestCase):
+    def test_J1_offline_observer_to_B05_shaped_inbox_and_independent_replay(self):
+        # Synthetic native-admission and class-file seams only. The stream chain,
+        # terminal root binding, paired projection, signatures, actual inbox and
+        # delivery replay are real code. This grants no native qualification.
+        for origin in (CANDIDATE, SUPPORT, 'outside.Helper'):
+            with self.subTest(origin=origin), tempfile.TemporaryDirectory() as tmp:
+                root = Path(tmp); run = root/'j1'; (run/'inputs').mkdir(parents=True)
+                (run/'inputs/operations.java').write_text(SOURCE, encoding='utf-8')
+                policy = root/POLICY; policy.parent.mkdir(parents=True)
+                policy.write_bytes(canonical({'direct_categories': ['candidate-runtime-exception'],
+                                             'runtime_origin_required': 'candidate'}))
+                signer = test_signer()
+                spec = {'class_files_sha256': {'Observer.class': 'a'*64},
+                        'java_binary_sha256': 'b'*64, 'target_class_files_sha256': {}}
+                plan = seal({'journey': 'J1', 'model_calls': 0, 'qualification_only': True,
+                             'implementation_sha256': {}, 'posting_observer': spec,
+                             'local': {'runner_image': 'sha256:'+'c'*64},
+                             'harness_sha256': file_hash(run/'inputs/operations.java'),
+                             'runtime_delivery': {'policy_sha256': file_hash(policy),
+                                                  'consumer': 'zero-model-preflight-inbox/1'}})
+                (run/'plan.json').write_bytes(canonical(plan))
+                (run/'authorization.json').write_bytes(canonical(signer.sign({
+                    'run_id': run.name, 'scope': 'zero-model-native-qualification',
+                    'plan': {'plan_sha256': plan['content_sha256']}})))
+                event, terminal = runtime_fixture(origin)
+                classes = {f['class']: {'constant_pool_sha256': f['constant_pool_sha256'],
+                    'methods': {f['method']+f['signature']: f['method_sha256']}}
+                    for f in event['frames']+terminal['frames']}
+                for lane in ('oracle', 'postgresql'):
+                    folder = run/'posting-observer'/lane; folder.mkdir(parents=True)
+                    exdir = run/'cases/operations/1/execution'/lane; exdir.mkdir(parents=True)
+                    execution = seal({'exit_code': 1})
+                    (exdir/'execution.json').write_bytes(canonical(execution))
+                    receipt = write_stream(folder, lane, [
+                        {'kind': 'ready', 'checkpoint': False, 'sequence': 1}, event, terminal,
+                        {'kind': 'vm-death', 'checkpoint': False, 'sequence': 4}])
+                    receipt.pop('content_sha256', None)
+                    receipt.update(artifact_type='ms94-b06-posting-collector-receipt/1', lane=lane,
+                        plan_sha256=plan['content_sha256'], execution_sha256=execution['content_sha256'],
+                        complete=True, observer_class_files_sha256=spec['class_files_sha256'],
+                        target={'image': plan['local']['runner_image'], 'ports_published': False,
+                                'observer_private_mount_absent': True, 'jvm': {
+                                'java_binary_sha256': spec['java_binary_sha256'], 'arguments': [
+                                '-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5005']}})
+                    (folder/'receipt.json').write_bytes(canonical(signer.sign(receipt)))
+                with patch('tools.ms94_b06_posting_replay.replay_entry', return_value=seal({'fixture': 'entry'})), \
+                     patch('tools.ms94_b06_posting_replay.replay_clocks', return_value={'fixture': 'clocks'}), \
+                     patch('tools.ms94_b06_posting_replay.catalog', return_value=classes):
+                    delivered = record_zero_model_delivery(root, run, signer)
+                    replayed = replay_delivery(root, run, signer.public)
+                    self.assertTrue(replayed['runtime_origin_replayed'] and replayed['delivery_replayed'])
+                    self.assertEqual(0, delivered['analyst_invocations'])
+                    self.assertEqual(origin == CANDIDATE, replayed['delivered'])
+                    self.assertEqual(origin != CANDIDATE, replayed['equipment_suspect'])
+                    if origin == CANDIDATE:
+                        inbox = read_json(run/'zero-model-builder-inbox.json')
+                        self.assertEqual([{'id': 'runtime-1', 'category': 'candidate-runtime-exception',
+                            'exception_class': 'NullPointerException', 'thrown_by': 'candidate',
+                            'candidate_frame': {'method': 'test', 'line': 2}, 'lanes': 'both'}], inbox['diagnostics'])
+                        # A still-signed altered payload cannot pass replay.
+                        body = {k:v for k,v in inbox.items() if k not in ('signature', 'content_sha256')}
+                        body['diagnostics'][0]['candidate_frame']['line'] = 3
+                        (run/'zero-model-builder-inbox.json').write_bytes(canonical(signer.sign(body)))
+                        with self.assertRaises(EvidenceFailure): replay_delivery(root, run, signer.public)
+                    else:
+                        self.assertFalse((run/'zero-model-builder-inbox.json').exists())
+
     def test_terminal_binding_and_closed_B05_shape(self):
         event, terminal = runtime_fixture()
         stream = {'collection_complete': True, 'exceptions': [event], 'terminals': [terminal]}

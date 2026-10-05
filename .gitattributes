@@ -184,3 +184,7 @@ tools/verify_smoke/*.sh text eol=lf
 # Preserve exact Windows probe script bytes bound by signed host evidence.
 tools/ms94_b06_windows_acl_probe.ps1 -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
 tools/ms94_b06_windows_probe_commands.ps1 -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+
+# Byte-bound B06 Codex account probe scripts.
+tools/ms94_b06_codex_account_probe.ps1 -text
+tools/ms94_b06_codex_probe_child.ps1 -text

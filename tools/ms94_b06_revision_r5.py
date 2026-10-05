@@ -30,11 +30,15 @@ def revise(draft, summary, catalogs, classpath_audit):
         slot['source'].update(compiled=True, native_qualified_here=False,
             compilation_record_sha256=catalog['compilation_record_sha256'],
             class_catalog_sha256=catalog['content_sha256'])
+        if slot['control']=='duplicate-trace-key':
+            # The bound source calls JourneySupport.fact; its exception is
+            # support-origin even though the candidate misused that API.
+            slot['expected'].update(equipment_suspect=True, delivery='empty')
     result.update(artifact_type='ms94-b06-qualification-assembly-specification/5',
         previous_assembly_sha256=draft['content_sha256'], source_revisions=changed,
         compilation_summary_sha256=SUMMARY, classpath_audit_sha256=classpath_audit['content_sha256'],
         executable_snapshot_sha256=None, status='blocked-before-executable-conversion',
         execution_blockers=['Resolved Tycho/Surefire/OSGi terminal class identity is unavailable.',
-            'Native posting-cause closed projection and full private per-slot input assembly remain unsealed.'],
+            'Posting projection is implemented but unqualified; full private per-slot input assembly remains unsealed.'],
         native_pairs=0, model_calls=0, measurement_authorized=False, docker_runs_authorized=False)
     return seal(result)

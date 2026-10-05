@@ -173,7 +173,8 @@ def preliminary(plan, receipt, cleanup):
     if status and status != 'rejected':
         check(receipt['status'] == status, 'qualification-unexpected-status')
     if status == 'rejected':
-        check(receipt['status'] in ('business-failure', 'contract-violation'), 'qualification-unexpected-mutant-status')
+        allowed = ('execution-failure',) if plan['control']=='duplicate-trace-key' else ('business-failure', 'contract-violation')
+        check(receipt['status'] in allowed, 'qualification-unexpected-mutant-status')
     check(receipt['status'] != 'equipment-failure' or plan['control'] == 'genuine-equipment-fault',
           'qualification-equipment-failure')
 

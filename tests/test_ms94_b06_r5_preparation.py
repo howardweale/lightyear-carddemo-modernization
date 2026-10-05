@@ -33,7 +33,10 @@ class PreparationTests(unittest.TestCase):
             self.assertFalse(new['docker_runs_authorized'])
             for before,after in zip(old['schedule'],new['schedule']):
                 self.assertEqual(before['id'],after['id'])
-                self.assertEqual(before['expected'],after['expected'])
+                expected={**before['expected']}
+                if before['control']=='duplicate-trace-key':
+                    expected.update(equipment_suspect=True,delivery='empty')
+                self.assertEqual(expected,after['expected'])
                 if before['source']['sha256'] != after['source']['sha256']:
                     revised.add(after['source']['sha256'])
                 self.assertTrue(after['source']['compiled'])

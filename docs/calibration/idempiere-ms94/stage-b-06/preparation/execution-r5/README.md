@@ -7,9 +7,10 @@ Operator review; not independent attestation. Zero Docker commands, native pairs
 - J1 test connects authenticated synthetic observer streams for both engine formats to the actual paired closed projection, signed zero-model inbox and independent replay. Candidate runtime exceptions use the B05 field shape and bypass the analyst; support/outside origins produce an empty payload and equipment suspicion. This is an offline integration test, not native qualification or an actual builder invocation.
 - A synthetic v2 Windows record passes builder_gate and Controller.launch; callback booleans do not replace the signed-record gate.
 - Native mutation/evidence-boundary integration preserves original captures. Empty runtime feedback now has an actual signed projection and replay record, rather than inferring successful replay from an absent inbox.
+- Posting attribution now requires the failed terminal to name the same exception object and thread as the support unwind. Closed document labels come from independently captured new document/type rows, not a candidate trace. Offline tests connect both-engine cause derivation to the signed inbox and delivery replay, and reject changed roots, threads, origins, documents and engine disagreement. Native qualification remains outstanding.
 - The group finalizer uses bounded host subprocesses for native work and archive/replay under one finalization-inclusive deadline. It stops before another slot, signs and announces unexpected results before replay, checks actual cleanup before and after replay, and records attempted/unfinalized/unstarted slots separately. Recovery is limited to the exact authorized run and is charged outside valid trial time. This driver remains unqualified.
 - Container window 3 is explained in the offline-catalog-r4 README. Its original evidence is unchanged. Compile-worker hash and final-result checks now raise explicitly under Python optimization.
-- 103 B06 offline tests passed on Windows. Tests substitute native boundaries; no tests ran Docker or models. Repository CI is pending publication.
+- 108 B06 offline tests passed on Windows. Tests substitute native boundaries; no tests ran Docker or models. Repository CI is tracked on PR #255.
 
 ## Classpath finding — executable freeze blocked
 
@@ -55,11 +56,13 @@ All four source corrections from the signed offline-catalog-r4 summary are bound
 
 | Journey | Slots | Assembly content SHA-256 | Estimated serial Docker hours |
 |---|---:|---|---|
-| J1 | 55 | `61d17efd6c9cb25c78a829be01ebc79875596f2278562324e140ca927d8e0614` | 9.17–18.33 |
-| J2 | 41 | `70ec168a73cf7ea1c63c97d26dc44f1cd79912de661b726847424f9fc6021eeb` | 6.83–13.67 |
-| J3 | 39 | `d3ece84b7982035bef71ad6210637ccd71b5db8a83d76ccabf2369f7d9caf214` | 6.5–13.0 |
+| J1 | 55 | `5d876f692f263082bf78d410fffc576311dbea83ce2c679a9e45ea21a9164507` | 9.17–18.33 |
+| J2 | 41 | `124bd9f11b15dd0255359e03e3bf41de6cdda99bce56d0b548f8c74f1b687f4a` | 6.83–13.67 |
+| J3 | 39 | `dd3ce3bcd549869cf030fd9d6f4308894df048976f7c82f904abd1151107ef89` | 6.5–13.0 |
 
-These are deliberately blocked assembly specifications. No executable snapshot hash or approval-ready native plan is issued. Besides classpath resolution, the native posting-cause closed projection/delivery and complete private per-slot input assembly remain unsealed. In particular, a prior-lock cause is not yet connected to the closed posting diagnostic; runtime-exception delivery does not qualify it. The finalizer refuses to credit missing posting replay.
+These are deliberately blocked assembly specifications. No executable snapshot hash or approval-ready native plan is issued. Besides classpath resolution, complete private per-slot input assembly remains unsealed. Posting-cause projection/delivery is now connected and tested offline, but has no native qualification credit. The finalizer refuses to credit missing posting replay.
+
+Before any outcome, the revised J1 assembly explicitly records empty feedback and equipment suspicion for `duplicate-trace-key`: the bound candidate misuses `JourneySupport.fact`, and the throw originates in support. The exact duplicate-key negative check must still replay; an arbitrary execution failure cannot pass. This changes no J1 predicate. Earlier draft hashes remain in Git history; none was frozen or run.
 
 Core-status items 1–2: additional offline integration, no native qualification. Item 3: four source revisions bound; executable assembly blocked as above. Item 4: host-denial admission tested, Codex process proof is a separate increment. Item 5: complete executable preflight remains outstanding.
 

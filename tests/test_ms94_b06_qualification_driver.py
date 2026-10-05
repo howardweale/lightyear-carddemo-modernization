@@ -12,6 +12,15 @@ from tools.ms94_b06_qualification_driver import execute_group, intended, prelimi
 
 
 class DriverTests(unittest.TestCase):
+    def test_duplicate_trace_requires_execution_failure_and_specific_replay(self):
+        plan={'control':'duplicate-trace-key','expected':{'status':'rejected','equipment_suspect':True,'delivery':'empty'}}
+        preliminary(plan,{'status':'execution-failure','equipment_suspect':True},{'complete':True})
+        for status in ('passed','business-failure','contract-violation','equipment-failure'):
+            with self.subTest(status=status),self.assertRaises(ValueError):
+                preliminary(plan,{'status':status,'equipment_suspect':True},{'complete':True})
+        replay={'full_entry_replayed':True,'clock_replayed':True,'native_mutation_replayed':False,'equipment_suspect':True}
+        with self.assertRaisesRegex(ValueError,'specific-mutant-not-replayed'): intended(plan,{'replay':replay})
+
     def fixture(self, directory):
         base = Path(directory); root = base/'snapshot'; root.mkdir()
         output = base/'audit'; output.mkdir(); authority = base/'authority'

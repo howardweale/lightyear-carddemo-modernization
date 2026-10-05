@@ -1,8 +1,20 @@
 """Closed labels from native document rows; no trace or candidate provenance."""
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 from lightyear_calibration.b06_posting_probe import TABLES
 from lightyear_calibration.contracts import digest
 from tools.ms94_b06_admission import check
+
+
+def quantity(value):
+    if isinstance(value, dict):
+        check(set(value)=={'decimal'}, 'posting-label-quantity-invalid')
+        value=value['decimal']
+    try:
+        result=Decimal(str(value))
+    except (InvalidOperation, ValueError):
+        check(False, 'posting-label-quantity-invalid')
+    check(result.is_finite(), 'posting-label-quantity-invalid')
+    return result
 
 
 def native_label(journey, key, before, after):
@@ -27,7 +39,7 @@ def native_label(journey, key, before, after):
         elif subtype=='PI':
             lines=[r for r in after['m_inventoryline'] if r['m_inventory_id']==identity]
             check(len(lines)==1, 'posting-label-inventory-lines-ambiguous')
-            book=Decimal(str(lines[0]['qtybook']));count=Decimal(str(lines[0]['qtycount']))
+            book=quantity(lines[0]['qtybook']);count=quantity(lines[0]['qtycount'])
             if book==0 and count>0: label='openingInventory'
             elif journey=='J3' and book>0: label='physicalCount'
     check(label is not None, 'posting-label-unavailable')

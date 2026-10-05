@@ -89,11 +89,26 @@ def project_pair(root, run, public_key):
                     {k: v for k, v in d.items() if k not in ('id', 'lanes')} == value for d in output):
                 output.append({'id': 'runtime-' + str(len(output) + 1), **value,
                                'lanes': 'both' if values.count(value) == 2 else 'one'})
+    posting = {}
+    if plan.get('slot_kind') == 'posting-origin':
+        from tools.ms94_b06_posting_cause import replay_cause
+        from tools.ms94_b06_posting_delivery import native_label, project
+        from tools.ms94_b06_admission import native_pair_tables
+        causes = {lane: replay_cause(root, run, lane, public_key) for lane in ('oracle','postgresql')}
+        labels = {}
+        if all(c['cause'] == 'candidate-prior-processing-flag' and not c['equipment_suspect'] for c in causes.values()):
+            before, after, captures = native_pair_tables(run)
+            labels = {lane: native_label(plan['journey'], causes[lane]['document_key'], before[lane], after[lane])
+                      for lane in causes}
+            posting['label_capture_bindings'] = captures
+        output, suspect = project(causes, labels, policy)
+        suspects = ['posting-origin'] if suspect else []
+        posting.update(posting_causes=causes, posting_control_replayed=True)
     return {'artifact_type': 'ms94-b06-runtime-projection/1', 'plan_sha256': plan['content_sha256'],
             'policy_sha256': plan['runtime_delivery']['policy_sha256'], 'native_bindings': bindings,
             'diagnostics': output, 'equipment_suspect': bool(suspects),
             'route': 'halt-equipment-suspect' if suspects else 'direct-builder' if output else 'none',
-            'model_calls': 0}
+            'model_calls': 0, **posting}
 
 
 def route(diagnostics, policy, *, equipment_suspect):

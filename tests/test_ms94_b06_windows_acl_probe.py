@@ -74,6 +74,26 @@ class WindowsACLAdmissionTests(unittest.TestCase):
                 (root/'record.json').write_bytes(canonical(signer.sign(body)))
                 return admit(root,{'path':'record.json','sha256':file_hash(root/'record.json')},signer.public,transport)
             test(record)
+            # Synthetic v2 signature fixture through both measurement boundaries.
+            # This tests integration, not an actual Windows denial or native run.
+            from datetime import datetime, timezone
+            from lightyear_calibration.contracts import digest, seal
+            from tools.ms94_b06_measurement_admission import builder_gate
+            from tools.ms94_b06_controller import ADMISSIONS, Controller
+            from tools.ms94_b06_design import LIMITS, TRIAL_LIMITS, calendar, schedule
+            from tests.test_ms94_b06_controller import BoundaryFixture
+            context = {'root': root, 'public_key': signer.public, 'transport': transport}
+            now = datetime(2026, 10, 5, tzinfo=timezone.utc)
+            plan = seal({'builder_boundary': {
+                'probe': {'path': 'record.json', 'sha256': file_hash(root/'record.json')},
+                'transport_sha256': digest(transport)},
+                'schedule': schedule('12'*32), 'calendar': calendar(now, '2026-10-01'),
+                'limits': LIMITS, 'trial_limits': TRIAL_LIMITS})
+            self.assertEqual(file_hash(root/'record.json'), builder_gate(plan, context)['probe_file_sha256'])
+            controller = Controller(root/'campaign', BoundaryFixture(plan), plan, seal, monotonic=lambda: 100.)
+            controller.launch(None, None, None, None, now, {k: lambda: True for k in ADMISSIONS},
+                              builder_context=context)
+            self.assertTrue((root/'campaign/started.json').exists())
             native=copy.deepcopy(record)
             for target in native['targets']:
                 target.update(exception_type='System.ComponentModel.Win32Exception',

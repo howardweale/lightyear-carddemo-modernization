@@ -7,14 +7,15 @@ import unittest
 
 from lightyear_calibration.contracts import canonical, digest, seal
 from lightyear_calibration.b06_posting_probe import queries_for
-from tools.ms94_b06_posting_replay import replay_stream, SUPPORT, CANDIDATE
+from tools.ms94_b06_posting_replay import replay_stream, SUPPORT, CANDIDATE, TERMINAL, TERMINAL_SIGNATURE
 from tools.ms94_b06_posting_cause import derive
 
 PO, DOC, DB = 'org.compiere.model.PO', 'org.compiere.acct.Doc', 'org.compiere.util.DB'
 SIG = {PO: ('lock', '()Z'), DOC: ('post', '(ZZZ)Ljava/lang/String;'),
        DB: ('executeUpdate', '(Ljava/lang/String;Ljava/lang/String;)I'),
        SUPPORT: ('postOnce', '(Lorg/compiere/model/PO;[Lorg/compiere/model/MAcctSchema;)V'),
-       CANDIDATE: ('test', '()V')}
+       CANDIDATE: ('test', '()V'), TERMINAL: ('executionFinished', TERMINAL_SIGNATURE),
+       'org.junit.platform.engine.support.hierarchical.NodeTestTask': ('call', '()V')}
 
 
 def frame(name):
@@ -41,10 +42,14 @@ def control(kind):
               event('method-exit', 7, DB, callers=(DOC, SUPPORT, CANDIDATE), call_sequence=6, return_value=0),
               event('method-exit', 8, DOC, callers=(SUPPORT, CANDIDATE), call_sequence=5, return_value='private localized reason'),
               {'kind': 'exception', 'sequence': 9, 'checkpoint': True, 'thread': 1,
+               'exception_id': 99,
                'frames': [frame(SUPPORT), frame(CANDIDATE)], 'exception_class': 'java.lang.AssertionError',
                'exception_ancestry': ['java.lang.AssertionError', 'java.lang.Error', 'java.lang.Throwable', 'java.lang.Object'],
                'caught': True, 'catch_location': {'class': 'org.junit.Engine'}, 'unwound_calls': [4]},
-              {'kind': 'vm-death', 'sequence': 10, 'checkpoint': False}]
+              {'kind': 'test-terminal', 'sequence': 10, 'checkpoint': True, 'thread': 1,
+               'frames': [frame(TERMINAL), frame('org.junit.platform.engine.support.hierarchical.NodeTestTask')],
+               'descriptor_id': 1, 'test_class': CANDIDATE, 'test_method': 'test', 'status': 'FAILED', 'exception_id': 99},
+              {'kind': 'vm-death', 'sequence': 11, 'checkpoint': False}]
     if kind == 'genuine-equipment-fault':
         events[8]['exception_class'] = 'java.sql.SQLException'
         events[8]['exception_ancestry'] = ['java.sql.SQLException', 'java.lang.Exception', 'java.lang.Throwable', 'java.lang.Object']
@@ -116,7 +121,8 @@ class PostingControls(unittest.TestCase):
                 self.replay(lane, 'prior-lock', lambda events: events[5].update(sql='UPDATE other SET Processing=1'))
             for index, field, value in ((2, 'return_value', False),
                                         (5, 'force', True), (6, 'return_value', 1),
-                                        (8, 'catch_location', {'class': CANDIDATE})):
+                                        (8, 'catch_location', {'class': CANDIDATE}),
+                                        (9, 'exception_id', 100), (9, 'thread', 2)):
                 result = self.replay(lane, 'prior-lock', lambda events: events[index].update({field: value}))
                 self.assertTrue(result['equipment_suspect'])
 

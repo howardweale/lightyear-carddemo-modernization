@@ -47,6 +47,11 @@ def derive(replayed, lock_sql_binding):
                             and (e.get('catch_location') is None or
                                  not e['catch_location']['class'].startswith('org.idempiere.test.'))]
         for failure in support_failures:
+            terminals = [t for t in replayed.get('terminals', []) if t['status'] == 'FAILED']
+            if not (len(terminals) == 1 and failure.get('exception_id') is not None and
+                    terminals[0]['exception_id'] == failure['exception_id'] and
+                    terminals[0]['thread'] == thread and terminals[0]['sequence'] > failure['sequence']):
+                continue  # A caught or different throwable is not the terminal failure.
             # Locate the actual unwound support entry, not a caught earlier error.
             support = next((readbacks[n] for n in failure['unwound_calls']
                             if n in readbacks and readbacks[n]['document'] == key and n < entry['sequence']

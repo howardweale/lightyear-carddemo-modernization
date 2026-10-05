@@ -15,7 +15,8 @@ def main():
     results = []
     for item in specification['sources']:
         source = inputs / item['path']
-        assert hashlib.sha256(source.read_bytes()).hexdigest() == item['sha256']
+        if hashlib.sha256(source.read_bytes()).hexdigest() != item['sha256']:
+            raise ValueError('Catalog source hash mismatch')
         folder = output / item['sha256']; folder.mkdir(exist_ok=False)
         # Remove only previously compiled control classes, so absent output cannot
         # be mistaken for this source's successful compilation.
@@ -46,7 +47,8 @@ def main():
         # Each distinct source is a preparation input, not a qualification slot.
         # Collect all compile outcomes; never retry or change a source here.
     (output / 'compilations.json').write_text(json.dumps(results, sort_keys=True, indent=2), encoding='utf-8')
-    assert len(results) == len(specification['sources']) and all(r['exit_code'] == 0 for r in results)
+    if len(results) != len(specification['sources']) or any(r['exit_code'] != 0 for r in results):
+        raise RuntimeError('Catalog compilation/extraction failed; preserve all outcomes')
 
 
 if __name__ == '__main__': main()

@@ -47,6 +47,11 @@ def assemble_slot(root, run, base, slot, input_files):
     check('authorization' not in plan, 'assembly-cannot-authorize')
     plan.update(artifact_type='ms94-b06-native-pair-plan/1', execution_admission_version=3, slot_id=slot['id'],
                 control=slot['control'], expected=slot['expected'])
+    plan['slot_kind'] = slot['kind']
+    if 'fault_recipe' in slot: plan['fault_recipe'] = copy.deepcopy(slot['fault_recipe'])
+    plan['fault'] = slot['control'] if slot['kind'] == 'native-mutator' else 'none'
+    from tools.ms94_b06_qualification_controls import validate_plan
+    validate_plan(plan)
     data = {}
     for name, item in input_files.items():
         check(Path(name).name == name and name not in ('.', '..'), 'slot-input-name')

@@ -38,6 +38,12 @@ Failures remain preserved:
 - One source lacked an assertNull import; two lacked assertTrue imports. Their
   original failing source hashes and compiler-log hashes remain recorded. New
   sources fully qualify those JUnit calls and passed compilation.
+- Container window 3 ran for 367.015 seconds with worker
+  `63f848ca4b2841cab0a626cc263f63423b3d9306652492cbb3c44c9befffc06a`.
+  Nine sources compiled before source `363c49d6…fb9734` failed because
+  `assertNull(String)` was undefined. That worker exited with `AssertionError`;
+  this is the first recorded assertion-import failure above, not an additional
+  native failure. Its window, compiler log and cleanup result remain unchanged.
 - The duplicate-trace-key draft reused the retained hash. The declared source
   transformation is now materialized and compiled separately. The next plan
   revision must bind its new hash explicitly.
@@ -48,5 +54,6 @@ does not establish the expected native outcome. The signed summary hash is
 
 Remaining: native slot assembly and finalization, closed posting-cause delivery,
 exact executable plan commits and operator-approved Docker windows. The actual
-Windows builder-denial record is also outstanding; it gates measurement and
-preflight, not zero-model judge qualification.
+Windows builder-denial record passed in PR #254; it gates measurement and
+preflight, not zero-model judge qualification. Codex-process transport proof is
+still separate and outstanding.

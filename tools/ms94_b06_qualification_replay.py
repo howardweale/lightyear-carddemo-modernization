@@ -105,6 +105,11 @@ def replay_pair(root, run, public_key):
         else:
             check(receipt['status'] == ('passed' if expected['passed'] else expected.get('status','contract-violation')),
                   'qualification-verdict-differs')
+    if plan.get('slot_kind') == 'posting-origin':
+        projection = signed(run / 'runtime-diagnostic.json', public_key)
+        check(result['diagnostic_replayed'] and result['delivery_replayed'] and
+              projection['posting_control_replayed'] is True, 'qualification-posting-delivery-missing')
+        result.update(posting_control_replayed=True, posting_causes=projection['posting_causes'])
     if plan.get('slot_kind') == 'native-mutator':
         from tools.ms94_v3_negative_checks import negative_checks
         from lightyear_calibration.ms94_faults_v2 import FAULTS

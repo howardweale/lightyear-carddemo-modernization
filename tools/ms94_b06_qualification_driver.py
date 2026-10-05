@@ -148,6 +148,10 @@ def intended(plan, result):
     if expected.get('delivery') == 'empty':
         check(actual['diagnostics'] == [] and actual.get('delivered', False) is False,
               'qualification-unexpected-feedback')
+    if expected.get('delivery') == 'qualified-closed-projection-to-zero-model-sink':
+        check(actual.get('delivered') is True and actual['delivery_replayed'] is True and
+              actual['diagnostics'] and all(d['category']=='candidate-posting-sequence-misuse'
+              for d in actual['diagnostics']), 'qualification-posting-delivery-not-observed')
     if 'cause' in expected or expected.get('attribution_available') is not None:
         # Native cause and its recorded closed delivery must be replayed; the
         # ordinary runtime exception route cannot qualify posting attribution.

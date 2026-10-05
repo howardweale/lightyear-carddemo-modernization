@@ -30,12 +30,18 @@ def dispatch(broker, name, arguments):
     return broker.call(name, args)
 
 
-def admit_transport(flags, available_tools, workspace_files, *, root, probe_binding, public_key, transport):
+def admit_transport(flags, available_tools, workspace_files, *, root, probe_binding, public_key, transport,
+                    process_probe_binding=None):
     """Require a signed actual OS record bound by hash, never an asserted bool."""
     required = capability_arguments()
     require(flags == required, 'B06 CLI capability policy differs')
     require(set(available_tools) == set(ARGUMENTS) and not workspace_files,
             'B06 builder exposes additional inputs or tools')
     from tools.ms94_b06_os_probe import admit
-    admit(root, probe_binding, public_key, transport)
+    record = admit(root, probe_binding, public_key, transport)
+    require(record.get('method') == 'windows-local-account' and
+            record.get('account_sid') == transport.get('account_sid'),
+            'B06 Codex transport requires the admitted local account SID')
+    from tools.ms94_b06_codex_transport import admit_process
+    admit_process(root, process_probe_binding, public_key, transport, record)
     return True

@@ -22,6 +22,7 @@ from .policy import disclosure, project, fingerprint
 from .ledger import Ledger
 from .review import verify_review, request_review
 from .sandbox import require_isolation, require_trusted_installation
+from lightyear_toolkit.graph_approval import receipt_context, load_approved, SHA
 
 METHODS = {
     "get_task": set(),
@@ -34,7 +35,7 @@ METHODS = {
 
 
 def public_body(receipt):
-    return {
+    result = {
         k: receipt[k]
         for k in (
             "schema",
@@ -51,6 +52,9 @@ def public_body(receipt):
             "disclosure_mode",
         )
     }
+    if receipt["schema"] == "lightyear-verify-receipt/2":
+        result["context_projection_sha256"] = receipt["context_projection_sha256"]
+    return result
 
 
 def inventory(folder):
@@ -68,6 +72,17 @@ def implementation():
 
 
 def initialize(root, config):
+    context = config.get("context_projection_sha256")
+    if context is not None:
+        graph = config["graph_context"]
+        payload, manifest, decision = load_approved(graph["directory"],
+            read_json(graph["decision"]), graph["trust"])
+        if (context != manifest["projection_sha256"] or manifest["mode"] != disclosure(config)):
+            raise ValueError("context-approval-mismatch")
+        certificate = read_json(Path(graph["directory"]) / "graph-leak-certificate.json")
+        if certificate["evaluation_inventory_sha256"] != digest(inventory(config["evaluation"])):
+            raise ValueError("context-evaluation-mismatch")
+        config = {**config, "context_lane_sha256": manifest["lane_sha256"]}
     root = Path(root).absolute()
     root.mkdir(mode=0o700)
     require_isolation(root, config["agent_uid"])
@@ -305,6 +320,7 @@ class Judge:
         result = read_json(self.root / "receipts" / (attempt_id + ".json"))
         if not verify_envelope(result, self.signer.public):
             raise ValueError("receipt-integrity-failed")
+        receipt_context(result, self.config)
         return result
 
     def finish(self, attempt, verdict, diagnostics, evidence, status="completed"):
@@ -320,7 +336,8 @@ class Judge:
             atomic_new(evidence_path, evidence)
         receipt = self.signer.sign(
             dict(
-                schema="lightyear-verify-receipt/1",
+                schema="lightyear-verify-receipt/2",
+                context_projection_sha256=self.config.get("context_projection_sha256"),
                 task_sha256=self.config["content_sha256"],
                 attempt_id=attempt["attempt_id"],
                 attempt_number=attempt["attempt_number"],
@@ -381,6 +398,28 @@ class Judge:
                 )
                 applied.add(bundle["receipt_sha256"])
 
+    def graph_status(self):
+        context = self.config.get("context_projection_sha256")
+        if context is None:
+            from lightyear_control_tower.verify_status import graph_card
+            status = graph_card(self.config.get("graph_projection_status", {"state": "none"}))
+            if status["state"] not in {"none","pending","rejected"}:
+                raise ValueError("unadmitted-graph-status")
+            return status
+        graph = self.config["graph_context"]
+        try:
+            _, manifest, decision = load_approved(graph["directory"],
+                read_json(graph["decision"]), graph["trust"])
+        except Exception as exc:
+            state = "expired" if getattr(exc, "code", None) == "decision-expired" else "rejected"
+            return {"state": state, "projection_sha256": context}
+        return dict(state="approved", projection_sha256=context, mode=manifest["mode"],
+            node_count=sum(manifest["included_kinds"].values()),
+            edge_count=sum(manifest["included_relations"].values()),
+            excluded_count=sum(manifest["excluded"].values()),
+            leak_check="approved", decision_sha256=decision.get("content_sha256",
+                read_json(graph["decision"])["decision_sha256"]))
+
     def export(self, active=None):
         receipts = [
             self.receipt(e["attempt_id"])
@@ -435,6 +474,7 @@ class Judge:
                         {
                             "id": r["attempt_id"],
                             "verdict": r["verdict"],
+                            "context_projection_sha256": r.get("context_projection_sha256"),
                             "receipt_sha256": self.public_receipt(r["attempt_id"])[
                                 "content_sha256"
                             ],
@@ -443,6 +483,7 @@ class Judge:
                     ],
                     "budget_exhausted": exhausted,
                     "repeated_diagnostics": repeated,
+                    "graph_projection": self.graph_status(),
                 },
             )
         )
@@ -461,6 +502,8 @@ class Judge:
                         "work_order": "Implement CardDemo CBACT04C INTCALC in Java; submit a runnable JAR.",
                         "task_id": self.config["task_id"],
                         "disclosure_mode": self.config["disclosure_mode"],
+                        "context_projection_sha256": self.config.get("context_projection_sha256"),
+                        "context_lane_sha256": self.config.get("context_lane_sha256"),
                         "public": self.config["public_task"],
                         "budget": self.budget(),
                         "rules": "Exact existing INTCALC comparator; normalization only by verified human Tower decisions.",
@@ -499,6 +542,8 @@ class Judge:
                 }
 
     def submit(self, request_id, artifact):
+        if self.config.get("context_projection_sha256") and self.graph_status()["state"] != "approved":
+            raise ValueError("graph-approval-unavailable")
         if str(uuid.UUID(request_id)) != request_id:
             raise ValueError("request-id-invalid")
         if not isinstance(artifact, str) or len(artifact) > (
@@ -706,6 +751,7 @@ def replay(root, key, expected_head):
         ids.add(event["attempt_id"])
         requests.add(event["request_id"])
         receipt = read_json(root / "receipts" / (event["attempt_id"] + ".json"))
+        receipt_context(receipt, config)
         runs = read_json(root / "private-evidence" / (event["attempt_id"] + ".json"))
         public = read_json(root / "public-receipts" / (event["attempt_id"] + ".json"))
         if not verify_envelope(public, key) or {

@@ -16,12 +16,18 @@ from tools.ms94_b06_posting_replay import SUPPORT
 
 
 class PostingDeliveryTests(unittest.TestCase):
+    def test_cross_engine_document_disagreement_is_suspect_without_feedback(self):
+        policy=read_json(Path(__file__).resolve().parents[1]/POLICY)
+        fixture=controls.PostingControls()
+        causes={lane:fixture.replay(lane,'prior-lock') for lane in ('oracle','postgresql')}
+        self.assertEqual(([],True),project(causes,{'oracle':'invoice','postgresql':'credit'},policy))
+
     def test_native_cause_projection_is_recorded_consumed_and_replayed(self):
         # Admission/capture seams are synthetic; cause derivation, projection,
         # signatures, inbox consumption and independent delivery replay execute.
         fixture=controls.PostingControls()
         policy_bytes=(Path(__file__).resolve().parents[1]/POLICY).read_bytes()
-        for kind in ('prior-lock','support-origin','outside-origin','wrong-document','genuine-equipment-fault'):
+        for kind in ('prior-lock','support-origin','outside-origin','wrong-document','genuine-equipment-fault','label-mismatch'):
             with self.subTest(kind=kind),tempfile.TemporaryDirectory() as tmp:
                 root=Path(tmp); run=root/'j1'; (run/'inputs').mkdir(parents=True)
                 (run/'inputs/operations.java').write_text(SOURCE,encoding='utf-8')
@@ -30,7 +36,7 @@ class PostingDeliveryTests(unittest.TestCase):
                     'harness_sha256':file_hash(run/'inputs/operations.java'),'runtime_delivery':{
                     'policy_sha256':file_hash(policy),'consumer':'zero-model-preflight-inbox/1'}})
                 (run/'plan.json').write_bytes(canonical(plan))
-                causes={lane:fixture.replay(lane,kind) for lane in ('oracle','postgresql')}
+                causes={lane:fixture.replay(lane,'prior-lock' if kind=='label-mismatch' else kind) for lane in ('oracle','postgresql')}
                 for lane in causes:
                     folder=run/'cases/operations/1/execution'/lane; folder.mkdir(parents=True)
                     (folder/'execution.json').write_bytes(canonical(seal({'exit_code':1})))
@@ -40,6 +46,7 @@ class PostingDeliveryTests(unittest.TestCase):
                 before={lane:{'c_invoice':[]} for lane in causes}
                 after={lane:{'c_invoice':[{'c_invoice_id':123,'c_doctype_id':7}],
                              'c_doctype':[{'c_doctype_id':7,'docbasetype':'ARI'}]} for lane in causes}
+                if kind=='label-mismatch':after['postgresql']['c_doctype'][0]['docbasetype']='ARC'
                 signer=test_signer()
                 with patch('tools.ms94_b06_runtime_delivery.replay',return_value=stream), \
                      patch('tools.ms94_b06_posting_cause.replay_cause',side_effect=lambda r,u,l,k:causes[l]), \

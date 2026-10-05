@@ -9,13 +9,12 @@ from tools.ms94_b06_admission import check, verify_inputs
 from tools.ms94_b06_executable import verify_snapshot, window
 
 
-def convert(root, draft, snapshot_sha256, start_utc, end_utc, *, public_key, transport, probe_binding):
-    from tools.ms94_b06_os_probe import admit
+def convert(root, draft, snapshot_sha256, start_utc, end_utc):
+    """Judge qualification has no builder identity or model transport to admit."""
     root = Path(root); verify(draft)
     manifest = verify_snapshot(root, snapshot_sha256)
-    probe = admit(root, probe_binding, public_key, transport)
-    check(manifest['files_sha256'].get(probe_binding['path']) == probe_binding['sha256'],
-          'qualification-probe-not-frozen')
+    check(draft.get('model_calls') == 0 and draft.get('measurement_authorized') is False,
+          'qualification-only-no-builder')
     check(len(draft['schedule']) == draft['slot_count'] and
           len({s['id'] for s in draft['schedule']}) == draft['slot_count'], 'qualification-slot-inventory')
     by_id = {}
@@ -48,7 +47,7 @@ def convert(root, draft, snapshot_sha256, start_utc, end_utc, *, public_key, tra
                  'review_plan_sha256': draft['content_sha256'], 'snapshot_sha256': snapshot_sha256,
                  'journey': draft['journey'], 'images': draft['images'], 'calendar': calendar,
                  'docker_run_window': window(calendar, start_utc, end_utc), 'slots': slots,
-                 'os_probe_sha256': probe['content_sha256'], 'slot_count': len(slots),
+                 'builder_present': False, 'slot_count': len(slots),
                  'model_calls': 0, 'measurement_authorized': False, 'docker_authorized': False,
                  'approval_of_this_plan_commit_required': True,
                  'native_entrypoint': 'tools.ms94_b06_native.execute_pair',

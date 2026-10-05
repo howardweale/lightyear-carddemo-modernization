@@ -6,6 +6,7 @@ from lightyear_control_tower.b06 import B06TowerBoundary, StatusWriter, write_re
 from tests import test_b06_tower
 from tools.ms94_b06_controller import Controller, ADMISSIONS
 from tools.ms94_b06_design import schedule, calendar, LIMITS, TRIAL_LIMITS
+from tests.test_ms94_b06_measurement_admission import builder_fixture
 
 
 class ControllerTowerTests(unittest.TestCase):
@@ -15,7 +16,8 @@ class ControllerTowerTests(unittest.TestCase):
         self.addCleanup(f.doCleanups)
         # Calendar is a fixed test fixture; no clock is altered.
         now = datetime(2026, 10, 3, tzinfo=timezone.utc)
-        plan = seal({'schedule': schedule('34'*32), 'calendar': calendar(now, '2026-10-01'),
+        spec, builder_context = builder_fixture(f.engine)
+        plan = seal({'builder_boundary': spec, 'schedule': schedule('34'*32), 'calendar': calendar(now, '2026-10-01'),
                      'limits': LIMITS, 'trial_limits': TRIAL_LIMITS})
         artifacts = {**f.artifacts, 'plan': canonical(plan)}
         item, bound = write_request(f.root, 'campaign-authorization', artifacts)
@@ -28,7 +30,7 @@ class ControllerTowerTests(unittest.TestCase):
         proof = f.decide(item, 'authorized')
         head = proof['journal']['journal_head_sha256']
         admissions = {name: lambda: True for name in ADMISSIONS}
-        controller.launch(proof, f.s.public_key, bound, head, now, admissions)
+        controller.launch(proof, f.s.public_key, bound, head, now, admissions, builder_context=builder_context)
         review_artifacts = {key: artifacts[key] for key in ('campaign','plan','executable')}
         # J1 repeats in a distinct trial; J2/J3's identical fingerprint cannot pause J1.
         pause = None

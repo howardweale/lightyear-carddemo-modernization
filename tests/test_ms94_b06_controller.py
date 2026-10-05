@@ -7,6 +7,7 @@ from pathlib import Path
 from lightyear_calibration.contracts import canonical, seal
 from tools.ms94_b06_controller import ADMISSIONS, Controller
 from tools.ms94_b06_design import LIMITS, TRIAL_LIMITS, calendar, schedule
+from tests.test_ms94_b06_measurement_admission import builder_fixture
 
 
 class BoundaryFixture:
@@ -31,12 +32,13 @@ class ControllerTests(unittest.TestCase):
         self.addCleanup(self.tmp.cleanup)
         self.now = datetime(2026,10,3,tzinfo=timezone.utc)
         self.tick = 100.0
-        self.plan = seal({'schedule':schedule('12'*32), 'calendar':calendar(self.now,'2026-10-01'),
+        builder_spec, self.builder_context = builder_fixture(self.tmp.name)
+        self.plan = seal({'builder_boundary': builder_spec, 'schedule':schedule('12'*32), 'calendar':calendar(self.now,'2026-10-01'),
                           'limits':LIMITS,'trial_limits':TRIAL_LIMITS})
         self.tower = BoundaryFixture(self.plan)
         self.c = Controller(Path(self.tmp.name)/'campaign',self.tower,self.plan,seal,monotonic=lambda:self.tick)
         self.admissions = {k:lambda:True for k in ADMISSIONS}
-    def launch(self): self.c.launch(None,None,None,None,self.now,self.admissions)
+    def launch(self): self.c.launch(None,None,None,None,self.now,self.admissions, builder_context=self.builder_context)
     def pause(self):
         return self.c.provider_interruption(self.now,receipt_sha256='a'*64,review_root=None,artifacts=None)
 
@@ -53,6 +55,14 @@ class ControllerTests(unittest.TestCase):
         self.tower.value['bindings']['plan'] = 'b'*64
         with self.assertRaises(Exception):
             Controller(self.c.directory,self.tower,self.plan,seal,monotonic=lambda:0)
+
+    def test_true_callbacks_cannot_skip_builder_probe(self):
+        with self.assertRaisesRegex(ValueError, 'measurement-builder-probe-required'):
+            self.c.launch(None,None,None,None,self.now,self.admissions)
+        self.assertFalse((self.c.directory/'started.json').exists())
+        (Path(self.tmp.name)/'probe.json').write_bytes(b'changed')
+        with self.assertRaisesRegex(ValueError, 'bound-file-changed'): self.launch()
+        self.assertFalse((self.c.directory/'started.json').exists())
 
     def test_provider_retry_same_slot_preserves_budget_deadline_and_counts_campaignwide(self):
         self.launch(); active=self.c.start_next(self.now)

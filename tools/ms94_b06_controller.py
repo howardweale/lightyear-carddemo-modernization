@@ -56,7 +56,7 @@ class Controller:
             'plan_sha256': self.plan['content_sha256'], 'previous_sha256': previous,
             'kind': kind, **payload}))
 
-    def launch(self, proof, key, bound, head, now, admissions):
+    def launch(self, proof, key, bound, head, now, admissions, *, builder_context=None):
         require(not (self.directory/'started.json').exists() and self.started is None,
                 'B06 cannot restart')
         require(set(admissions) == ADMISSIONS, 'Incomplete launch admissions')
@@ -65,6 +65,9 @@ class Controller:
         for name in sorted(ADMISSIONS):
             results[name] = admissions[name]()
             require(results[name] is True, 'B06 admission failed: ' + name)
+        from tools.ms94_b06_measurement_admission import builder_gate
+        # This direct gate cannot be replaced by a callback returning True.
+        results['builder_os_probe'] = builder_gate(self.plan, builder_context)
         # The Tower checks signatures, exact launch bindings and its calendar.
         # No started record exists during interpreter/package/CLI/client checks.
         self.tower.launch(proof, key, bound, head, now, lambda: True)

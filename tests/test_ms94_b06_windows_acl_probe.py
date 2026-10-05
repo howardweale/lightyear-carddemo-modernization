@@ -13,7 +13,8 @@ from tools.ms94_b06_windows_probe_record import record as record_observation
 class WindowsACLAdmissionTests(unittest.TestCase):
     def test_recorder_binds_observation_and_refuses_failed_or_changed_child(self):
         with tempfile.TemporaryDirectory() as directory:
-            root=Path(directory); (root/'tools').mkdir(); (root/'private').mkdir()
+            # Match the recorder's canonical paths (Windows CI temp may use RUNNER~1).
+            root=Path(directory).resolve(); (root/'tools').mkdir(); (root/'private').mkdir()
             observed=root/'observed'; (observed/'public').mkdir(parents=True); (observed/'child-output').mkdir()
             launcher=root/'tools/ms94_b06_windows_acl_probe.ps1'
             target=root/'tools/target.py'; private=root/'private/control'; runtime=root/'powershell.exe'
@@ -49,7 +50,8 @@ class WindowsACLAdmissionTests(unittest.TestCase):
 
     def test_real_error_five_existing_targets_limited_identity_and_positive_control_required(self):
         with tempfile.TemporaryDirectory() as directory:
-            root=Path(directory); (root/'tools').mkdir(); (root/'private').mkdir()
+            # Match the recorder's canonical paths (Windows CI temp may use RUNNER~1).
+            root=Path(directory).resolve(); (root/'tools').mkdir(); (root/'private').mkdir()
             for name in ('tools/probe.ps1','tools/target.py','private/control','child.ps1','policy.json','powershell.exe'):
                 (root/name).write_bytes(name.encode())
             transport={'method':'windows-local-account','account_sid':'S-1-fixture',

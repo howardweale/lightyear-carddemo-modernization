@@ -11,7 +11,7 @@ LAUNCHER = 'tools/ms94_b06_codex_account_probe.ps1'
 PROTOCOL = 'tools/ms94_b06_codex_probe_child.ps1'
 
 
-def record(root, source, destination, codex, signer):
+def record(root, source, destination, codex, signer, *, launcher=LAUNCHER):
     root, source, destination, codex = map(lambda p:Path(p).resolve(), (root,source,destination,codex))
     check(destination.is_relative_to(root) and not destination.exists(), 'codex-new-local-proof-directory-required')
     check(not (source/'failure.json').exists(), 'codex-failed-observation-preserved')
@@ -25,7 +25,8 @@ def record(root, source, destination, codex, signer):
           host['account_sid']==child['account_sid']==policy['account_sid'] and
           host['local_group_sids']==['S-1-5-32-545'] and protocol['requests']==child['requests'],
           'codex-observation-binding')
-    check(host['launcher_sha256']==file_hash(root/LAUNCHER) and
+    check(launcher in (LAUNCHER,'tools/ms94_b06_pinned_probe.ps1'), 'codex-probe-launcher-not-allowed')
+    check(host['launcher_sha256']==file_hash(root/launcher) and
           file_hash(source/'public/child.ps1')==file_hash(root/PROTOCOL), 'codex-probe-code-changed')
     for name,sha in host['input_sha256'].items():
         check(file_hash(Path(name))==sha, 'codex-probe-input-changed')
@@ -49,7 +50,7 @@ def record(root, source, destination, codex, signer):
           'account_disabled_after':cleanup['account_disabled'],'firewall_removed_after':cleanup['firewall_rule_removed'],
           'outbound_block_observed':host['firewall_block_observed']=='Block',
           'targets_sha256':{'tools':file_hash(paths[2]),'private':file_hash(paths[3])},
-          'implementation_sha256':{name:file_hash(root/name) for name in (LAUNCHER,PROTOCOL,
+          'implementation_sha256':{name:file_hash(root/name) for name in (launcher,PROTOCOL,
                'tools/ms94_b06_builder_boundary.py','tools/ms94_b06_codex_transport.py')},
           'observation_hashes':{name:file_hash(source/name) for name in
                ('host.json','cleanup.json','public/policy.json','child-output/observation.json','child-output/protocol.json')},
@@ -58,7 +59,7 @@ def record(root, source, destination, codex, signer):
                'codex_path':str(codex),'codex_sha256':child['codex_sha256'],
                'runtime_path':policy['powershell'],'runtime_sha256':file_hash(Path(policy['powershell'])),
                'private_directory':paths[3].parent.relative_to(root).as_posix(),
-               'launcher_path':LAUNCHER,'launcher_sha256':file_hash(root/LAUNCHER),
+               'launcher_path':launcher,'launcher_sha256':file_hash(root/launcher),
                'child_script_path':PROTOCOL,'child_script_sha256':file_hash(root/PROTOCOL),
                'policy_path':(destination/'policy.json').relative_to(root).as_posix(),
                'policy_sha256':file_hash(source/'public/policy.json')}

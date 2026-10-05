@@ -44,4 +44,6 @@ def admit_transport(flags, available_tools, workspace_files, *, root, probe_bind
             'B06 Codex transport requires the admitted local account SID')
     from tools.ms94_b06_codex_transport import admit_process
     admit_process(root, process_probe_binding, public_key, transport, record)
+    from tools.ms94_b06_pinned_transport import admit as admit_pinned
+    admit_pinned(root, transport, public_key, process_probe_binding)
     return True

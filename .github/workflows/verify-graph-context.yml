@@ -1,0 +1,38 @@
+name: Verify graph context (zero model)
+on:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  graph:
+    if: startsWith(github.head_ref, 'codex/verify-graph-')
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - run: python -m pip install -e ".[verify]"
+      - name: Protected paths and offline tests
+        shell: pwsh
+        env:
+          PYTHONPATH: src;.
+          PYTHONUTF8: '1'
+          PYTHONDONTWRITEBYTECODE: '1'
+          BASE: ${{ github.event.pull_request.base.sha }}
+        run: |
+          python tools/check_verify_graph_boundary.py --base $env:BASE
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          python -m unittest discover -s tests -p "test_verify*.py"
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          python -m unittest discover -s tests -p "test_ms94_b06*.py"
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          python -m unittest discover -s tests -p "test_*tower*.py"
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          python -m unittest discover -s tests -p "test_decision_console*.py"
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          python -m unittest tests.test_graph_explorer
+          exit $LASTEXITCODE

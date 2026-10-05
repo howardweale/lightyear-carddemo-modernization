@@ -19,6 +19,29 @@ arm64/x86_64 platform checks separately; live model tests require approval.
 The [smoke-kit milestone](smoke-milestone.md) records local validation and the
 remaining VM checks.
 
+## Optional graph context
+
+The [operator guide](graph-context-operator.md) describes signed public-source
+projections, a judge-side leak check and the expiring Tower approval. With no
+approved projection configured, tool names and schemas remain the original ten.
+No private graph, evidence pack or evaluation records are loaded by the toolkit.
+
+| Optional tool | Read-only output |
+| --- | --- |
+| `graph_search` | Paged node identities, summaries and provenance |
+| `graph_node` | Allowlisted properties and optional approved source |
+| `graph_neighbors` | Paged structural edges, depth one or two |
+| `graph_references` | Up to 50 lexical source references to a field |
+| `explain_divergence` | Code/layout context for the existing visible verdict |
+
+Graph responses default to 8 KiB and are capped at 32 KiB. With graph tools
+enabled, `decode_records` also accepts `offset`, `limit` (50 default, 200 max),
+`fields` and `summary`; these operate only on bound public development files.
+The graph-off decode signature/default stays unchanged for existing smoke clients.
+Receipt v2 binds the approved projection hash; old v1 receipts imply null.
+See the [supplied spec](specs/graph-context-tools.md) and the
+[prospective A/B draft](specs/graph-context-ab.md). No live comparison is authorized.
+
 ## Trust boundary and installation
 
 The agent runs `lightyear-verify-mcp` over stdio. The operator separately launches

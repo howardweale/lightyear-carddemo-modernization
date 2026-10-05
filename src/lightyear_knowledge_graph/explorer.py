@@ -558,14 +558,16 @@ class GraphExplorerIndex:
         max_nodes: int = 300,
         ontology: dict[str, Any] | None = None,
         runtime_store: RuntimeEvidenceStore | None = None,
+        projection_only: bool = False,
     ) -> None:
         self.payload = payload
         self.max_nodes = max_nodes
         self.ontology = ontology or load_ontology()
         self.relation_definitions = self.ontology["relations"]
         self.runtime_store = runtime_store
+        self.projection_only = projection_only
         try:
-            self.cloudbank_publication = load_publication()
+            self.cloudbank_publication = None if projection_only else load_publication()
         except (OSError, ValueError, KeyError, TypeError):
             # A packaged installation may not contain the repository evidence.
             # Missing or changed evidence must leave the admission posture intact.
@@ -801,6 +803,7 @@ class GraphExplorerIndex:
         limit: int = 25,
         audience: str = "implementer",
         customer_id: str = "",
+        offset: int = 0,
     ) -> list[dict[str, Any]]:
         audience = self._audience(audience)
         normalized = query.strip().casefold()
@@ -825,7 +828,7 @@ class GraphExplorerIndex:
             score = 0 if node["name"].casefold().startswith(normalized) else 1
             matches.append((score, node["kind"], node["name"], node))
         matches.sort(key=lambda item: (item[0], item[1], item[2], item[3]["id"]))
-        return [self._summary(item[3]) for item in matches[: max(1, min(limit, 100))]]
+        return [self._summary(item[3]) for item in matches[offset:offset + max(1, min(limit, 100))]]
 
     def node(self, node_id: str, audience: str = "implementer") -> dict[str, Any]:
         audience = self._audience(audience)
@@ -927,6 +930,8 @@ class GraphExplorerIndex:
         depth: int = 2,
         audience: str = "implementer",
         limit: int | None = None,
+        relations: tuple[str, ...] = (),
+        direction: str = "both",
     ) -> GraphSelection:
         if node_id not in self.node_by_id:
             raise KeyError(node_id)
@@ -934,7 +939,7 @@ class GraphExplorerIndex:
         if self._hidden(self.node_by_id[node_id], audience):
             raise KeyError(node_id)
         depth = max(0, min(depth, 5))
-        node_limit = max(10, min(limit or self.max_nodes, 1000))
+        node_limit = max(10, min(limit or self.max_nodes, len(self.node_by_id) if self.projection_only else 1000))
         seen = {node_id}
         selected_edges: set[str] = set()
         queue = deque([(node_id, 0)])
@@ -944,6 +949,13 @@ class GraphExplorerIndex:
             if distance >= depth:
                 continue
             for edge_id, neighbor in self.adjacency.get(current, []):
+                edge = self.edge_by_id[edge_id]
+                if relations and edge["relation"] not in relations:
+                    continue
+                if direction == "out" and edge["source"] != current:
+                    continue
+                if direction == "in" and edge["target"] != current:
+                    continue
                 if self._edge_hidden(self.edge_by_id[edge_id], audience):
                     continue
                 neighbor_node = self.node_by_id[neighbor]

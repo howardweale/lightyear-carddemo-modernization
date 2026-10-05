@@ -1,5 +1,20 @@
 # B06 preparation status
 
+## October 5 qualification and pinned transport r6
+
+The [r6 milestone](milestone-r6.md) records PRs #257 and #258: sealed hash-only
+private input manifests for all 135 qualification slots, Tower-bound group
+authorization, equipment suspicion for cross-engine document-label disagreement,
+and the passed zero-model dedicated-account probe using pinned Codex 0.160.0.
+The probe includes actual denied reads, positive/missing controls, IPv4/IPv6
+network denial and verified cleanup; earlier failed attempts remain preserved.
+
+The 55/41/39 assemblies are still **not executable qualification freezes**.
+Resolved native class identities remain blocked on an explicitly approved Docker
+window. Native qualification, full model/MCP transport integration and immutable
+measurement preflight remain outstanding. No Docker run, native pair or model
+call was made in this r6 increment. Operator review, not independent attestation.
+
 ## October 5 offline integration r5
 
 The [r5 report](execution-r5/README.md) records a J1 observer-to-inbox runtime

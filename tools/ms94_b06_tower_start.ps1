@@ -4,7 +4,7 @@ param([Parameter(Mandatory=$true)][string]$Repository,
 $ErrorActionPreference='Stop'
 $runtime='C:\ProgramData\Lightyear\B06TowerRuntime-r8'
 $authority='C:\ProgramData\Lightyear\B06TowerAuthority\authority.json'
-$root=Join-Path $Repository 'work/b06-tower-r8'
+$root='C:\ProgramData\Lightyear\B06TowerData-r8'
 if(Test-Path -LiteralPath $OutputDirectory){throw 'Fresh output required'}
 if(Get-NetTCPConnection -LocalPort 8766 -State Listen -ErrorAction SilentlyContinue){throw 'Port 8766 is already occupied; do not replace another Tower'}
 $account=Get-LocalUser lyb06tower

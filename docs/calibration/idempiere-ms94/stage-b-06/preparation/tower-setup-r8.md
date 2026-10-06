@@ -89,3 +89,36 @@ then choose the Tower outcome. Only an `authorized` decision admits the group.
 The console is decision-only and does not itself dispatch the smoke run.
 `tools/ms94_b06_tower_start.ps1` refuses an occupied port and a changed runtime
 or confirmed key; it must not be rerun while this service is active.
+
+## Inbox repair, October 6 21:25 UTC
+
+The initial service marked the request invalid because its path-confinement
+reader could not inspect profile-ancestor metadata under lyb06tower. Host-account
+validation had missed this identity-specific deployment failure. A slow metadata
+ACL repair was stopped; automatic approval review rejected a broader retry.
+The single unused metadata grant was subsequently removed.
+
+The safer repair copied six ownership/request/evidence files and the four-event
+journal into `C:\ProgramData\Lightyear\B06TowerData-r8`. Bytes, signatures,
+sequence and journal head were verified. The original data root is preserved.
+The authority, credentials, pinned runtime, plan and request hashes are unchanged.
+No private key or credential was copied. The unchanged Tower restarted under
+PID 42344. Existing UI sessions require sign-in again. The actual Tower-account
+reader now verifies the request as **pending**.
+
+See [migration record](tower-data-migration-r8.json). The startup helper now uses
+the dedicated ProgramData root. Future requests must be written there; the old
+root is historical and must not be used to start a second writer. No group
+decision, Docker command or model call was issued by this repair.
+
+## Operator decision received
+
+Howard recorded three `authorized` decisions for the same request. Their
+signatures, journal chain, actor and exact request/plan/snapshot/window/public
+commit bindings were verified. The latest superseding decision is
+`2dd8fc24cb7f550c778b83411c1b15943f7a0d433af6c8410eaf078b0f19774d`.
+This authorizes one three-slot J1 smoke group in the declared October 7
+03:00–09:00 UTC window. It does not authorize three groups, a measurement,
+replacement slots or model calls. No smoke has run as of this update.
+Admission must still obtain a fresh Tower journal and pass the frozen controller's
+remaining launch checks inside that window. Operator review; not independent.

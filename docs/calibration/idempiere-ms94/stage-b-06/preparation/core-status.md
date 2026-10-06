@@ -1,5 +1,33 @@
 # B06 preparation status
 
+## October 6 approved runtime-resolution probe
+
+The [runtime-resolution report](runtime-resolution-r7/README.md) records one
+passed approved Docker attempt: 100.594 seconds including verified cleanup,
+zero native pairs and zero model calls. The six actual loaded class identities
+are now resolved; both JUnit terminal classes came from Tycho's Surefire bundle
+under `.m2`. A separate read-only audit checked 1,905 recorded output files.
+
+The local three-slot J1 smoke snapshot has 2,106 verified files and complete
+per-slot input closures. Twenty relevant offline tests pass. Its group plan
+and exact Tower request remain pending identification of the distinct B06 Tower
+public key and a verified public plan commit. The October 7 03:00–09:00 UTC
+window remains conditional on that exact Tower decision; no smoke has run.
+Core items 1–2 remain natively unqualified, item 3 has this local smoke
+preparation but no authorized group, and items 4–5 remain incomplete.
+Operator review, not independent attestation.
+
+## October 5 HTTP transport design r7
+
+The [host broker/argv draft](transport-r7/README.md) separates host tools from
+the restricted builder and specifies per-session loopback HTTP authentication.
+The [preregistration draft](measurement-preregistration-draft.md) declares the
+0.160.0 versus B05 0.155.0-alpha.9.2 client deviation. Neither is a transport
+freeze or launch approval. Windows denied both S4U login-status task attempts;
+actual builder login availability remains unverified. Earlier pinned/denial
+proofs and the approved runtime-resolution probe are unchanged. Zero Docker
+commands, model calls or native pairs in this increment.
+
 ## October 5 qualification and pinned transport r6
 
 The [r6 milestone](milestone-r6.md) records PRs #257 and #258: sealed hash-only

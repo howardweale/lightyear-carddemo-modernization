@@ -79,5 +79,7 @@ in the review commits.
    decode paging, operator documentation and CI.
 3. Prospective A/B design and this implementation record (documentation only).
 
-These units are prepared locally. Publication, remote CI and merge are not
-claimed by this record. Each later PR must retain the zero-model boundary.
+Public review units are [projection #259](https://github.com/howardweale/lightyear-carddemo-modernization/pull/259),
+[toolkit #260](https://github.com/howardweale/lightyear-carddemo-modernization/pull/260), and
+[comparison/milestone #261](https://github.com/howardweale/lightyear-carddemo-modernization/pull/261).
+CI and merge status are recorded by those PRs. Each retains the zero-model boundary.

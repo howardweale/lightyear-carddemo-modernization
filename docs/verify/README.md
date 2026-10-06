@@ -25,6 +25,9 @@ The [operator guide](graph-context-operator.md) describes signed public-source
 projections, a judge-side leak check and the expiring Tower approval. With no
 approved projection configured, tool names and schemas remain the original ten.
 No private graph, evidence pack or evaluation records are loaded by the toolkit.
+The [graph implementation milestone](graph-context-milestone.md) records the
+offline checks and remaining platform limits; the [A/B draft](specs/graph-context-ab.md)
+requires separate approval before any live model test.
 
 | Optional tool | Read-only output |
 | --- | --- |

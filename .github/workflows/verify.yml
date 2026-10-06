@@ -179,6 +179,18 @@ jobs:
           distribution: temurin
           java-version: "21"
 
+      # The pinned upstream plugin requires Maven 3's Jansi API.
+      # Do not inherit the hosted image's changing Maven distribution.
+      - name: Install checksum-pinned Maven 3 for the upstream plugin contract
+        shell: bash
+        run: |
+          archive="$RUNNER_TEMP/apache-maven-3.9.11-bin.tar.gz"
+          curl --fail --location --retry 3 --output "$archive" https://archive.apache.org/dist/maven/maven-3/3.9.11/binaries/apache-maven-3.9.11-bin.tar.gz
+          echo "bcfe4fe305c962ace56ac7b5fc7a08b87d5abd8b7e89027ab251069faebee516b0ded8961445d6d91ec1985dfe30f8153268843c89aa392733d1a3ec956c9978  $archive" | sha512sum --check --strict
+          tar -xzf "$archive" -C "$RUNNER_TEMP"
+          echo "$RUNNER_TEMP/apache-maven-3.9.11/bin" >> "$GITHUB_PATH"
+          "$RUNNER_TEMP/apache-maven-3.9.11/bin/mvn" --version
+
       - name: Verify request log privacy and real OpenTelemetry span correlation
         run: python tools/test_cloudbank_request_logging.py
 

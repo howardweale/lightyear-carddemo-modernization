@@ -452,13 +452,20 @@ class ModelAgentSet:
         schema: dict[str, Any],
     ) -> dict[str, Any]:
         bounded = self._provider_for(order)
-        result = bounded.complete(role, instruction, payload, schema)
-        self.pending_evidence.append(result.evidence)
+        calls = bounded.calls
+        start = len(calls)
+        try:
+            result = bounded.complete(role, instruction, payload, schema)
+        finally:
+            self.pending_evidence.extend(calls[start:])
         return result.content
 
     def _provider_for(self, order: WorkOrder) -> BoundedModelProvider:
         if self.bounded_provider is None:
-            self.bounded_provider = BoundedModelProvider(self.provider, order)
+            from .budgeted_providers import AccountedModelProvider
+            budget_class = AccountedModelProvider if getattr(self.provider, "manage_failure_budget", False) else BoundedModelProvider
+            self.bounded_provider = (self.provider.bind_order(order) if hasattr(self.provider, "bind_order")
+                                     else budget_class(self.provider, order))
             self.order_sha256 = order.content_sha256
         elif self.order_sha256 != order.content_sha256:
             raise ContractError("A model agent set cannot span different work orders")

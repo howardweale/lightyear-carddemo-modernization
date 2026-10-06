@@ -99,9 +99,15 @@ class GraphTools:
                 response_bytes=len(canonical(result)), timestamp=datetime.now(timezone.utc).isoformat()))+b"\n")
         return result
 
-    def _graph_search(self, query, kind="", limit=10, cursor=""):
+    def _graph_search(self, query, kind="", limit=10, cursor="", mode="lexical", anchor=None):
         if not isinstance(query,str) or len(query)>512 or not 1 <= limit <= 25:
             raise Refused("graph-search-input")
+        if mode not in {"lexical", "hybrid"}:
+            raise Refused("graph-search-mode")
+        if mode == "hybrid":
+            from lightyear_knowledge_graph.hybrid import search
+            rows = [r for r in search(self.payload, query, anchor) if not kind or r["kind"] == kind]
+            return self._page(rows, digest(["hybrid", query, kind, anchor]), limit, cursor)
         # Reuse explorer ranking/search; fetch all pages before response-byte paging.
         rows = []
         for offset in range(0, len(self.index.node_by_id), 100):
@@ -112,6 +118,10 @@ class GraphTools:
                 provenance=self.index.node_by_id[n["id"]]["properties"]["provenance"]) for n in found)
             if len(found)<100: break
         return self._page(rows, digest(["search",query,kind]),limit,cursor)
+
+    def _graph_guidance(self, node_id):
+        from .guidance import guidance
+        return guidance(self.payload, [node_id], cap=min(4096, self.cap))
 
     def _graph_node(self, node_id, include_source=False):
         if type(include_source) is not bool:

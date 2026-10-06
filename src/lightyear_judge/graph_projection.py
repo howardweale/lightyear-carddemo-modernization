@@ -85,7 +85,7 @@ def sources(lane, root):
 
 
 def build(graph_path, evidence_path, policy_path, lane_id, mode, customer_id,
-          out, signer, *, source_root, watch=()):
+          out, signer, *, source_root, watch=(), annotation_ledger=None, hybrid=False, include_inferred=False):
     out = Path(out)
     if out.exists():
         raise ValueError("graph-output-exists")
@@ -188,6 +188,22 @@ def build(graph_path, evidence_path, policy_path, lane_id, mode, customer_id,
         verified_by=sorted(verified,key=lambda e:(e["source"],e["target"])),
         dataset_copybooks=lane.get("dataset_copybooks", {}),
         dataset_file_names=lane.get("dataset_file_names", {}))
+    extensions = {}
+    if annotation_ledger is not None:
+        from lightyear_factory.annotations import retrieve
+        states = annotation_ledger.replay()
+        # Only approved, non-expired, unflagged records on included public anchors.
+        rows = retrieve(states, ids, edges, customer_id, cap=4*1024*1024, include_inferred=include_inferred)["items"]
+        rows = [a for a in rows if set(a["anchors"]) <= ids]
+        if any(tainted(a) or any(v and v in canonical(a).decode() for v in watch) for a in rows):
+            raise ValueError("annotation projection leak")
+        projection["annotations"] = rows
+        extensions["annotation_ledger_sha256"] = sha(annotation_ledger.path.read_bytes())
+    if hybrid:
+        from lightyear_knowledge_graph.hybrid import build_index
+        projection["search_index"] = build_index(projection)
+        extensions["search_index_sha256"] = projection["search_index"]["content_sha256"]
+        extensions["embedding_provider"] = projection["search_index"]["provider"]
     packed = gzip.compress(canonical(projection), mtime=0)
     manifest = signer.sign(dict(schema="verify-graph-manifest/1", lane=lane_id, mode=mode,
         customer_id=customer_id, lane_sha256=digest(lane), projection_sha256=sha(packed),
@@ -195,7 +211,7 @@ def build(graph_path, evidence_path, policy_path, lane_id, mode, customer_id,
         policy_sha256=sha(Path(policy_path).read_bytes()),
         included_kinds=dict(sorted(Counter(n["kind"] for n in nodes).items())),
         included_relations=dict(sorted(Counter(e["relation"] for e in edges+verified).items())),
-        excluded=dict(sorted(excluded.items())), model_calls=0))
+        excluded=dict(sorted(excluded.items())), model_calls=0, **extensions))
     out.mkdir(parents=True)
     (out/"projection.json.gz").write_bytes(packed)
     (out/"projection-manifest.json").write_bytes(canonical(manifest))

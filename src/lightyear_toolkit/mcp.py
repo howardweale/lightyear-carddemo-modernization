@@ -114,9 +114,14 @@ def create_server(workspace, client, graph=None):
 
     if graph is not None:
         @server.tool(annotations=read)
-        def graph_search(query: str, kind: str = "", limit: int = 10, cursor: str = "") -> dict[str, Any]:
+        def graph_search(query: str, kind: str = "", limit: int = 10, cursor: str = "", mode: str = "lexical", anchor: str | None = None) -> dict[str, Any]:
             """Search approved structure; opaque cursors are scoped to this query and projection."""
-            return safe(graph.call, "graph_search", query=query, kind=kind, limit=limit, cursor=cursor)
+            return safe(graph.call, "graph_search", query=query, kind=kind, limit=limit, cursor=cursor, mode=mode, anchor=anchor)
+
+        @server.tool(annotations=read)
+        def graph_guidance(node_id: str) -> dict[str, Any]:
+            """Read bounded Tower-approved guidance within this approved projection."""
+            return safe(graph.call, "graph_guidance", node_id=node_id)
 
         @server.tool(annotations=read)
         def graph_node(node_id: str, include_source: bool = False) -> dict[str, Any]:
@@ -145,7 +150,7 @@ def create_server(workspace, client, graph=None):
         async def list_current_tools():
             nonlocal retired
             if not graph.active() and not retired:
-                for name in ("graph_search","graph_node","graph_neighbors","graph_references","explain_divergence","decode_records"):
+                for name in ("graph_search","graph_node","graph_neighbors","graph_references","explain_divergence","graph_guidance","decode_records"):
                     server.remove_tool(name)
                 server.tool(annotations=read)(decode_records)
                 retired = True

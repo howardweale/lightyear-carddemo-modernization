@@ -14,6 +14,10 @@ def parsers(commands):
     for name in ("lane", "customer-id"):
         p.add_argument("--"+name, required=True)
     p.add_argument("--mode", choices=("field","confidential"), required=True)
+    p.add_argument("--hybrid",action="store_true")
+    p.add_argument("--annotation-ledger",type=Path)
+    p.add_argument("--annotation-trust",type=Path)
+    p.add_argument("--include-inferred",action="store_true")
     p = commands.add_parser("graph-leak-check")
     for name in ("projection","policy","source-root","evaluation","signing-key","operator-public-key"):
         p.add_argument("--"+name,type=Path,required=True)
@@ -25,8 +29,14 @@ def parsers(commands):
 def execute(args):
     signer = Signer(args.signing_key)
     if args.command == "graph-project":
+        ledger=None
+        if args.annotation_ledger:
+            from lightyear_factory.annotations import AnnotationLedger
+            c=read(args.annotation_trust)
+            keys={k:Path(c[k]).read_bytes() for k in ("ledger_key","tower_key","judge_key")}
+            ledger=AnnotationLedger(args.annotation_ledger,**keys,scope=c["scope"],inventory_sha256=c["inventory_sha256"])
         return build(args.graph,args.evidence,args.policy,args.lane,args.mode,args.customer_id,
-            args.out,signer,source_root=args.source_root)
+            args.out,signer,source_root=args.source_root,hybrid=args.hybrid,annotation_ledger=ledger,include_inferred=args.include_inferred)
     root=args.projection
     manifest=read(root/"projection-manifest.json")
     lane=read(args.policy)["lanes"][args.lane]

@@ -6,7 +6,8 @@ import subprocess
 def protected(path):
     return (path.startswith(("tools/ms94_b06_", "tools/ms94_builder_mcp",
                              "tools/journey_builder_mcp.py", "work/ms94/"))
-            or "/template-r1/" in path or "/stage-b-05/" in path
+            or "/template-r1/" in path or "/stage-b-05/" in path or "/stage-b-06/" in path
+            or path.startswith(("tests/test_ms94_b06", "tests/test_ms94_b05"))
             or path.startswith("src/lightyear_control_tower/b06"))
 
 
@@ -15,6 +16,7 @@ def main():
     p.add_argument("--base",required=True)
     args=p.parse_args()
     paths=subprocess.check_output(["git","diff","--name-only",args.base,"--"],text=True).splitlines()
+    paths+=subprocess.check_output(["git","ls-files","--others","--exclude-standard"],text=True).splitlines()
     refused=[path for path in paths if protected(path)]
     if refused: raise SystemExit("Protected paths changed: "+", ".join(refused))
     print("Verify graph diff: no B05/B06/template-r1/work-ms94 changes")

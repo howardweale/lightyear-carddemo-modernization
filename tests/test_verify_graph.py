@@ -84,7 +84,7 @@ class ToolkitGraphTests(GraphFixture):
         self.assertEqual({"path","copybook","codec","framing"},set(decode.input_schema["properties"]) if hasattr(decode,"input_schema") else set(decode.inputSchema["properties"]))
         graph,_=self.tools()
         on=asyncio.run(create_server(Mock(),Mock(),graph).list_tools())
-        self.assertEqual(15,len(on))
+        self.assertEqual(16,len(on))
         for t in on:
             if t.name.startswith("graph_") or t.name=="explain_divergence":
                 self.assertTrue(t.annotations.read_only_hint if hasattr(t.annotations,"read_only_hint") else t.annotations.readOnlyHint)
@@ -128,7 +128,7 @@ class ToolkitGraphTests(GraphFixture):
         args=["--workspace",str(self.root),"--public-manifest",str(config),"--judge-url","http://127.0.0.1:1"]
         with patch.object(mcp,"JudgeClient",return_value=client),patch.object(MCPServer,"run",new=no_serve),patch.dict(os.environ,LIGHTYEAR_VERIFY_TOKEN="fixture"):
             mcp.main(args+["--graph-projection",str(self.out),"--graph-decision",str(decision)])
-            self.assertEqual(15,observed[-1])
+            self.assertEqual(16,observed[-1])
             client.call.return_value["context_projection_sha256"]="f"*64
             log=io.StringIO()
             with redirect_stderr(log):

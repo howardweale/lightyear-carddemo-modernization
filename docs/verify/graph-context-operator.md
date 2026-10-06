@@ -130,3 +130,12 @@ never evaluation data. This avoids silently changing existing smoke clients.
 Only hashes of generated artifacts should be committed/published. No Maintec
 or private customer source/data is supported by this policy. Live model tests
 need commit-specific approval; see the [A/B draft](specs/graph-context-ab.md).
+
+## Optional verified memory and hybrid search
+
+The [graph-memory guide](../factory/graph-memory.md) describes signed annotation
+review, projection-bound `graph_guidance` (the sixth optional graph tool), and
+`graph_search(mode="hybrid")`. Lexical search remains the default. Annotations
+and the search index are covered by the projection hash and the same leak check
+and Tower approval. Existing ten-tool clients remain unchanged when graph tools
+are disabled. No campaign enables these features.

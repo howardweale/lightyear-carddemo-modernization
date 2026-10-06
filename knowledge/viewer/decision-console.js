@@ -55,7 +55,7 @@ async function load() {
   clearTimeout(timer);
   $("message").textContent = "";
   try {
-    await { campaigns, queue, catalogue, workspace, history }[current]();
+    await { campaigns, queue, catalogue, workspace, history, knowledge }[current]();
   } catch (e) {
     showError(e);
   }
@@ -244,6 +244,51 @@ async function queue() {
   render();
   content.append(filter, list);
 }
+async function knowledge() {
+  const status = await api("knowledge");
+  content.replaceChildren(el("h2", "Graph memory"), el("p", "Operator review; not independent attestation. Outcomes show correlation, not causation."));
+  if (status.available) {
+    content.append(el("h3", "Annotation health"), json(status.health), el("h3", "Routing policy and run shares"), json(status.routing), el("h3", "Search indexes"), json(status.search));
+  } else content.append(el("p", "No signed knowledge status configured in this scope."));
+  const q = await api("queue");
+  const items = q.items.filter(i => ["graph-annotation", "graph-annotation-verified"].includes(i.kind));
+  const selected = new Set();
+  for (const item of items) {
+    const row = el("article", undefined, "card"), select = el("input");
+    select.type = "checkbox"; select.disabled = !item.decidable;
+    select.setAttribute("aria-label", "Select " + item.id);
+    select.addEventListener("change", () => select.checked ? selected.add(item.id) : selected.delete(item.id));
+    row.append(select, badge(item.kind), badge(item.status), button("Review anchors and evidence", () => review(item)));
+    content.append(row);
+  }
+  content.append(button("Review selected decisions", async () => {
+    clearTimeout(timer);
+    const rows = [];
+    for (const id of selected) rows.push({...await api("review", {id}), outcomes:items.find(item=>item.id===id).outcomes});
+    const d = drawer("Bulk annotation decisions"), form = el("form"), outcome = el("select");
+    for (const value of ["approved", "rejected", "retired"]) { const o=el("option",value); o.value=value; outcome.append(o); }
+    const inputs = {};
+    for (const name of ["reason", "named_owner", "review_after"]) {
+      const input=el("input"); input.required=true; if(name==="review_after") input.type="date";
+      const label=el("label",name); label.append(input); form.append(label); inputs[name]=input;
+    }
+    for (const row of rows) d.append(json({id:row.id,bound:row.bound,evidence:row.evidence_view}));
+    const submit=el("button","Record selected decisions"); submit.type="submit"; form.append(outcome,submit); d.append(form);
+    form.addEventListener("submit",async e=>{
+      e.preventDefault(); submit.disabled=true;
+      try {
+        for (const row of rows) {
+          const value=row.kind==="graph-annotation-verified" && outcome.value==="approved" ? "verified" : outcome.value;
+          if (!(row.outcomes || []).includes(value)) throw Error("Selected outcome is not allowed for " + row.id);
+          await api("decide",{item_id:row.id,bound:row.bound,outcome:value,
+            ...Object.fromEntries(Object.entries(inputs).map(([k,v])=>[k,v.value])),
+            previous_decision_sha256:row.latest_decision?.content_sha256||null,request_id:crypto.randomUUID()});
+        }
+        d.hidden=true; await knowledge();
+      } catch(error) { showError(error); } finally { submit.disabled=false; }
+    });
+  }));
+}
 async function review(item) {
   clearTimeout(timer);
   const i = await api(
@@ -252,6 +297,9 @@ async function review(item) {
   );
   const d = drawer(item.summary || item.id);
   d.append(badge(item.kind), json(i.bound), json(i.evidence_view));
+  for (const anchor of i.evidence_view?.records?.annotation?.anchors || []) {
+    const link=el("a",anchor); link.href="/?node="+encodeURIComponent(anchor); d.append(link);
+  }
   if (item.scope === "carddemo-zos")
     d.append(el("p", "No record values are shown or released. Notes are retained only as hash commitments. Review local intake evidence separately. Operator review; not independent.", "boundary"));
   if (item.kind.startsWith("rule-") || item.kind === "qualification-acceptance")

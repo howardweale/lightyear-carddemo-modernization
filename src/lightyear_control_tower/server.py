@@ -27,6 +27,7 @@ READ_ROUTES = frozenset(
         "validation",
         "events",
         "arrivals",
+        "knowledge",
     }
 )
 WRITE_ROUTES = frozenset({"review", "decide", "propose", "logout"})
@@ -49,6 +50,9 @@ class ConsoleAPI:
 
     def read(self, route, token, args):
         if self.carddemo:
+            if route == "knowledge":
+                self.service._read_access(token)
+                return {"available": False}
             return self.carddemo.read(route, token, args)
         s = self.service
         if route == "workspace":
@@ -57,6 +61,9 @@ class ConsoleAPI:
             s._read_access(token)
             return {"scope": s.scope, "configured": False}
         s._read_access(token)
+        if route == "knowledge":
+            from .knowledge_status import read_status
+            return read_status(s.root,s.scope)
         if route == "arrivals":
             return {"scope": s.scope, "available": False, "arrivals": []}
         if route == "queue":

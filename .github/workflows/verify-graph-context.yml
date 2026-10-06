@@ -58,4 +58,6 @@ jobs:
           Pop-Location
           if ($LASTEXITCODE) { exit $LASTEXITCODE }
           node tests/browser/graph-memory.mjs
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          node tests/browser/verify-graph-review.mjs
           exit $LASTEXITCODE

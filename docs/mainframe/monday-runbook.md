@@ -1,6 +1,7 @@
 # Monday: Maintec CardDemo folder intake
 
-This runbook is for the October 5 delivery. It operates in a **separate clone**
+This runbook covers the expected October delivery; use the actual receipt date.
+For the operator click-by-click sequence, see the [Tower user manual](../control-tower-users-manual.md). It operates in a **separate clone**
 and never opens a B05 snapshot, runs Docker, calls a model, or submits a z/OS job.
 The public rehearsal exercises local Java only. Its after-images were generated
 by the local Python reference and are not native z/OS observations.
@@ -216,6 +217,11 @@ hashes and a planted non-timestamp change that remains detectable. No draft is
 applied automatically.
 
 ### 4. Prepare inputs and run the existing Java INTCALC candidate
+
+Before sealing the first verdict, finish any normalization review in step 5.
+Choose exact comparison or the verified-rule command there; never execute both
+against the same immutable verdict. The unqualified command below is the exact
+comparison path. A later rule decision does not authorize overwriting its result.
 
 ```powershell
 .\.venv\Scripts\python.exe -m lightyear_mainframe prepare-intcalc-inputs $Run1 --public-key $IntakePublicKey --key $IntakeKey

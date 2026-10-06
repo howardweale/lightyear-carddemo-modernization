@@ -99,3 +99,11 @@ is a separate CI-only Maven 3.9.11 pin with Apache's SHA-512; every existing
 build and test remains enabled. Its result and the final merge states are
 recorded by the linked PRs. No new model calls or local Docker runs were made
 for publication.
+
+## Post-merge review follow-up
+
+The [review remediation record](graph-review-remediation.md) separates the
+public-overlap and Tower usability fixes from the still-required real projection
+approval and Linux activation. The [Tower user manual](../control-tower-users-manual.md)
+now gives the CardDemo intake sequence, including normalization before an immutable
+verdict. Historical October 4 results remain unchanged.

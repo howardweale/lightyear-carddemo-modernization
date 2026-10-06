@@ -167,7 +167,8 @@ async function campaign(id) {
     const g = v.graph_projection;
     if (g) {
       content.append(el("h3", "Verify graph context"),
-        el("p", `Projection: ${g.state} · ${g.mode || "off"} · ${g.projection_sha256 || "none"}`));
+        el("p", `Projection: ${g.state} · ${g.mode || "off"} · ${g.projection_sha256 || "none"}`),
+        el("p", "Public CardDemo reference only. Customer and Maintec source are not enabled. Approval expiry stops judge submissions and removes graph tools.", "boundary"));
       if (g.node_count !== undefined) content.append(el("p",
         `${g.node_count} nodes · ${g.edge_count} edges · ${g.excluded_count} exclusions · leak check ${g.leak_check}`));
       if (g.decision_sha256) {
@@ -297,6 +298,14 @@ async function review(item) {
   );
   const d = drawer(item.summary || item.id);
   d.append(badge(item.kind), json(i.bound), json(i.evidence_view));
+  const graphReview = i.evidence_view?.records?.graph_review;
+  if (graphReview) {
+    d.append(el("h3", "Public graph projection review"),
+      el("p", "Public CardDemo reference only; this does not authorize Maintec or customer source."),
+      el("p", "Expiry is 00:00 UTC at the start of the review date. Allow time for the complete session; expiry stops judge submissions and removes graph tools."),
+      el("p", graphReview.eligible ? "Review the bound source and acknowledge every listed public overlap hash in your reason." : "Approval blocked: protected matches or unsupported lane. Rejection remains available."));
+    for (const token of graphReview.required_acknowledgments) d.append(el("code", token));
+  }
   for (const anchor of i.evidence_view?.records?.annotation?.anchors || []) {
     const link=el("a",anchor); link.href="/?node="+encodeURIComponent(anchor); d.append(link);
   }
@@ -327,13 +336,13 @@ async function review(item) {
     n.value = o;
     if (
       ["approved", "accepted"].includes(o) &&
-      item.validation?.passed === false
+      (item.validation?.passed === false || graphReview?.eligible === false)
     )
       n.disabled = true;
     choice.append(n);
   }
   if (item.validation) d.append(json(item.validation));
-  if (item.validation?.passed === false) choice.value = "rejected";
+  if (item.validation?.passed === false || graphReview?.eligible === false) choice.value = "rejected";
   form.append(el("label", "Decision"), choice);
   const fields = {};
   for (const name of item.required_fields) {
@@ -402,6 +411,12 @@ async function review(item) {
         previous_decision_sha256: i.latest_decision?.content_sha256 || null,
       };
       for (const [k, n] of Object.entries(fields)) p[k] = n.value;
+      if (graphReview && p.outcome === "approved") {
+        const acknowledged = new Set(p.reason.split(/\s+/));
+        if (!graphReview.eligible) throw Error("Protected matches cannot be approved.");
+        if (graphReview.required_acknowledgments.some(t => !acknowledged.has(t)))
+          throw Error("Acknowledge every listed public-source hash in your reason after reviewing the source.");
+      }
       if (Object.keys(itemChoices).length)
         p.item_decisions = Object.fromEntries(
           Object.entries(itemChoices).map(([id, select]) => [id, select.value]),

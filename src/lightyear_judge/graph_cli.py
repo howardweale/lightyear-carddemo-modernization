@@ -4,7 +4,7 @@ from pathlib import Path
 from lightyear_control_tower.decisions import canonical, digest, verify_envelope
 from lightyear_control_tower.status_export import atomic_new
 from lightyear_mainframe.zos_evidence import Signer
-from .graph_projection import read, build, watch_values, leak_check, sources, sha
+from .graph_projection import read, build, watch_values, leak_check, source_bytes, sha
 
 
 def parsers(commands):
@@ -45,7 +45,7 @@ def execute(args):
             manifest["policy_sha256"] != sha(args.policy.read_bytes()) or
             manifest["projection_sha256"] != sha((root/"projection.json.gz").read_bytes())):
         raise ValueError("graph-leak-input-binding")
-    text="\n".join("\n".join(v) for v in sources(lane,args.source_root).values())
+    text=tuple(source_bytes(lane,args.source_root).values())
     from .service import inventory
     before=inventory(args.evaluation)
     watch=watch_values(args.evaluation,args.lane)

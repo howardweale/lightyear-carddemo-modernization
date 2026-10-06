@@ -46,6 +46,8 @@ from lightyear_execution.integration import HardenedExecutionContext
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(description="LIGHTYEAR autonomous modernization factory")
     subparsers = parser.add_subparsers(dest="command", required=True)
+    from .annotation_cli import parser as annotation_parser
+    annotation_parser(subparsers)
 
     run = subparsers.add_parser("run", help="Execute one approved factory work order")
     run.add_argument("--work-order", type=Path)
@@ -56,7 +58,9 @@ def build_parser() -> argparse.ArgumentParser:
     run.add_argument(
         "--evidence-pack", type=Path, default=Path("knowledge/evidence/source.pack.json.gz")
     )
-    run.add_argument("--provider", choices=["local", "openai"], default="local")
+    run.add_argument("--provider", choices=["local", "openai", "configured"], default="local")
+    run.add_argument("--model-config",type=Path)
+    run.add_argument("--approved-projection",type=Path,help="Host-owned JSON with directory, proof and trust")
     run.add_argument("--run-id")
     run.add_argument("--execution-policy", type=Path, default=Path("factory/execution/policy.json"))
     run.add_argument("--execution-runtime", choices=["docker", "podman"])
@@ -323,6 +327,10 @@ def build_parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     args = build_parser().parse_args(argv)
+    if args.command == "annotate":
+        from .annotation_cli import run
+        print(json.dumps(run(args), indent=2, sort_keys=True))
+        return 0
     if args.command.startswith("durable-"):
         if args.command == "durable-conformance":
             result = run_durable_conformance(args.project_root, args.output)
@@ -625,6 +633,14 @@ def main(argv: list[str] | None = None) -> int:
         order = WorkOrder.load(args.work_order)
     if args.provider == "local":
         agents = LocalAgentSet()
+    elif args.provider == "configured":
+        if execution_context:
+            raise ContractError("Configured providers require a dedicated secret-store adapter for hardened execution")
+        if not args.model_config:
+            raise ContractError("--model-config required")
+        from .model_config import load_router
+        from .agents import ModelAgentSet
+        agents=ModelAgentSet(load_router(args.model_config))
     elif execution_context:
         agents = OpenAIAgentSet(
             execution_context.lease_secret(
@@ -641,6 +657,10 @@ def main(argv: list[str] | None = None) -> int:
         if args.disable_memory
         else SemanticMemoryStore.from_policy_path(args.memory_root, memory_policy_path)
     )
+    approved_projection=None
+    if args.approved_projection:
+        binding=json.loads(args.approved_projection.read_bytes())
+        approved_projection=(Path(binding["directory"]),binding["proof"],binding["trust"])
     receipt = FactoryOrchestrator(
         args.source_root,
         args.runs_root,
@@ -649,6 +669,7 @@ def main(argv: list[str] | None = None) -> int:
         evidence_path=args.evidence_pack,
         execution_context=execution_context,
         memory_store=memory_store,
+        approved_projection=approved_projection,
     ).run(order, args.run_id)
     print(json.dumps(receipt, indent=2, sort_keys=True))
     return 0 if receipt["status"] == "passed" else 1

@@ -28,6 +28,12 @@ jobs:
           if ($LASTEXITCODE) { exit $LASTEXITCODE }
           python -m unittest discover -s tests -p "test_verify*.py"
           if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          python -m unittest discover -s tests -p "test_graph_memory*.py"
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          python -m unittest discover -s tests -p "test_factory.py"
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          python -m unittest discover -s tests -p "test_measured_factory.py"
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
           python -m unittest discover -s tests -p "test_ms94_b06*.py"
           if ($LASTEXITCODE) { exit $LASTEXITCODE }
           python -m unittest discover -s tests -p "test_*tower*.py"
@@ -35,4 +41,21 @@ jobs:
           python -m unittest discover -s tests -p "test_decision_console*.py"
           if ($LASTEXITCODE) { exit $LASTEXITCODE }
           python -m unittest tests.test_graph_explorer
+          exit $LASTEXITCODE
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+      - name: Graph memory browser acceptance
+        shell: pwsh
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+          PYTHONUTF8: '1'
+        run: |
+          npm ci --prefix tests/browser --ignore-scripts --no-audit --no-fund
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          Push-Location tests/browser
+          npx playwright install chromium
+          Pop-Location
+          if ($LASTEXITCODE) { exit $LASTEXITCODE }
+          node tests/browser/graph-memory.mjs
           exit $LASTEXITCODE

@@ -72,6 +72,7 @@ class FactoryOrchestrator:
         prepare_workspace: Callable[[IsolatedWorkspace, WorkOrder], None] | None = None,
         execution_context: Any | None = None,
         memory_store: SemanticMemoryStore | None = None,
+        approved_projection=None,
     ) -> None:
         self.source_root = source_root.resolve()
         self.runs_root = runs_root.resolve()
@@ -86,6 +87,7 @@ class FactoryOrchestrator:
         self.prepare_workspace = prepare_workspace
         self.execution_context = execution_context
         self.memory_store = memory_store
+        self.approved_projection = approved_projection
         self.memory_retrieval: dict[str, Any] | None = None
 
     def run(self, order: WorkOrder, run_id: str | None = None) -> dict[str, Any]:
@@ -290,6 +292,7 @@ class FactoryOrchestrator:
             )
         except Exception as exc:
             state = "BLOCKED"
+            self._record_agent_evidence(artifacts, ledger, references, "controller", "verifier_private")
             ledger.append(
                 state,
                 "controller_error",
@@ -324,8 +327,9 @@ class FactoryOrchestrator:
             self.graph_path,
             self.evidence_path,
             max_nodes=160,
+            approved_projection=self.approved_projection,
         ).assemble(order, workspace_root)
-        if self.memory_store:
+        if self.memory_store and context.get("schema_version") != "1.1":
             self.memory_retrieval = self.memory_store.retrieve(
                 order,
                 context.get("graph_content_sha256"),
@@ -497,6 +501,11 @@ class FactoryOrchestrator:
                 *security_limitations,
             ],
         }
+        if context.get("schema_version") == "1.1":
+            receipt["annotation_context"] = dict(annotation_ids=context["annotation_ids"],
+                context_sha256=context["content_sha256"], context_projection_sha256=context["context_projection_sha256"])
+        if intelligence.get("routing"):
+            receipt["routing"] = intelligence["routing"]
         if self.memory_store:
             try:
                 memory_decision = self.memory_store.observe_run(

@@ -20,12 +20,19 @@ class GraphContextAssembler:
         graph_path: Path | None,
         evidence_path: Path | None,
         max_nodes: int = 160,
+        approved_projection=None,
     ) -> None:
         self.graph_path = graph_path
         self.evidence_path = evidence_path
         self.max_nodes = max_nodes
+        self.approved_projection = approved_projection
 
     def assemble(self, order: WorkOrder, workspace_root: Path) -> dict[str, Any]:
+        schema = order.metadata.get("context_schema", "1.0")
+        if schema == "1.1":
+            return self._assemble_annotated(order)
+        if schema != "1.0":
+            raise ContractError("Unsupported context schema")
         base: dict[str, Any] = {
             "schema_version": "1.0",
             "context_type": "lightyear-graph-grounded-implementer-context",
@@ -153,6 +160,50 @@ class GraphContextAssembler:
             "Context is bounded to approved roots, two graph hops, shared evidence, and explicit byte limits."
         )
         return self._finish(base, order)
+
+    def _assemble_annotated(self, order):
+        from lightyear_toolkit.graph_approval import load_approved
+        from lightyear_toolkit.guidance import guidance
+        if (self.approved_projection is None or order.metadata.get("evaluation_class") == "sealed-holdout"
+                or order.metadata.get("campaign_id") or order.metadata.get("calibration_campaign")):
+            raise ContractError("Annotated context requires an approved factory projection")
+        projection, manifest, _ = load_approved(*self.approved_projection)
+        if projection["customer_id"] != order.metadata.get("customer_id"):
+            raise ContractError("Annotation customer mismatch")
+        annotations = guidance(projection, order.graph_node_ids,
+                               include_inferred=order.metadata.get("include_inferred_annotations") is True)
+        index = GraphExplorerIndex(projection, ontology={"relations": {}}, projection_only=True)
+        nodes, edges = {}, {}
+        for root in order.graph_node_ids:
+            selection = index.neighborhood(root, 2, "implementer", self.max_nodes)
+            nodes.update({n["id"]:n for n in selection.nodes})
+            edges.update({e["id"]:e for e in selection.edges})
+        result = dict(schema_version="1.1", context_type="lightyear-graph-grounded-implementer-context",
+            audience="implementer", context_projection_sha256=manifest["projection_sha256"],
+            graph_content_sha256=None, evidence_pack_sha256=None, approved_roots=list(order.graph_node_ids),
+            nodes=[], edges=[], source_excerpts=[], allowed_files=[], semantic_memory=None,
+            annotations=annotations, annotation_ids=[a["id"] for a in annotations["items"]],
+            truncated=annotations["truncated"], limitations=["Approved projection only; annotation outcomes are correlation, not causation."])
+        for n in sorted(nodes.values(),key=lambda n:n["id"]):
+            if not self._append_within(result,"nodes",n,order): result["truncated"]=True; break
+        included={n["id"] for n in result["nodes"]}
+        for n in result["nodes"]:
+            for source in n.get("source",[]):
+                if "text" not in source: continue
+                excerpt=dict(capsule_id="projection:"+canonical_hash(dict(node=n["id"],source=source)),
+                    path=source["path"],line_start=source["line_start"],line_end=source["line_end"],
+                    confidence="observed",language=Path(source["path"]).suffix.lstrip("."),
+                    lines=[dict(number=source["line_start"]+i,text=line,highlighted=i==0)
+                           for i,line in enumerate(source["text"].splitlines())],
+                    supports=[dict(owner_type="node",owner_id=n["id"])])
+                if not self._append_within(result,"source_excerpts",excerpt,order):
+                    result["truncated"]=True; break
+        for e in sorted(edges.values(),key=lambda e:e["id"]):
+            if e["source"] in included and e["target"] in included:
+                if not self._append_within(result,"edges",e,order): result["truncated"]=True; break
+        if len(json.dumps(result).encode()) > order.max_context_bytes:
+            raise ContractError("Annotation context exceeds work order budget")
+        return self._finish(result,order)
 
     @staticmethod
     def attach_semantic_memory(
@@ -300,6 +351,9 @@ class GraphContextAssembler:
             ),
             "source_context_bytes": context.get("statistics", {}).get("context_bytes", 0),
         }
+        if context.get("schema_version") == "1.1":
+            payload.update(schema_version="1.1", annotations=context["annotations"],
+                           annotation_ids=context["annotation_ids"], context_projection_sha256=context["context_projection_sha256"])
         return _finish_projection(payload)
 
     @staticmethod
@@ -376,6 +430,9 @@ class GraphContextAssembler:
             ),
             "source_context_bytes": context.get("statistics", {}).get("context_bytes", 0),
         }
+        if context.get("schema_version") == "1.1":
+            payload.update(schema_version="1.1", annotations=context["annotations"],
+                           annotation_ids=context["annotation_ids"], context_projection_sha256=context["context_projection_sha256"])
         return _finish_projection(payload)
 
     @staticmethod

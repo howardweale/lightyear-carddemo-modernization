@@ -50,6 +50,20 @@ def default_registry():
     K = DecisionKind
     return KindRegistry(
         [
+            K("graph-annotation", ("approved", "rejected", "retired"),
+              ("knowledge-approver",), ("annotation", "leak_check"),
+              required_fields=("reason", "named_owner", "review_after"),
+              consumer="factory-annotation-ledger"),
+            K("graph-annotation-verified", ("verified", "rejected"),
+              ("knowledge-approver",), ("annotation", "outcome_summary"),
+              consumer="factory-annotation-ledger"),
+            K("embedding-provider-approval", ("approved", "rejected"),
+              ("campaign-authorizer",), ("provider", "customer", "mode"),
+              required_fields=("reason", "review_after"), consumer="hybrid-index-build"),
+            K("model-routing-policy", ("approved", "rejected"),
+              ("campaign-authorizer",), ("policy", "matrix_receipt"),
+              required_fields=("reason", "review_after"), consumer="factory-model-router",
+              max_review_days=90),
             K("verify-graph-projection", ("approved", "rejected"),
               ("qualification-approver",), ("projection", "policy", "leak_check", "lane"),
               required_fields=("reason", "named_owner", "review_after"),
@@ -226,6 +240,7 @@ def default_registry():
 ROLES = frozenset(
     {
         "operator",
+        "knowledge-approver",
         "campaign-authorizer",
         "classification-reviewer",
         "rule-proposer",

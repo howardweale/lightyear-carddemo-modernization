@@ -32,3 +32,8 @@ control-tower/qualification-trust.json
 
 # Private journey outputs, journals and credentials are not source fixtures.
 factory/idempiere/ms86-journeys/runs/
+
+# Deployment knowledge state and trust configuration stay local.
+factory/annotations/ledger.jsonl
+factory/annotations/ledger.lock
+factory/knowledge-console.json

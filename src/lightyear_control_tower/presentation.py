@@ -23,6 +23,11 @@ def workspace_status(value):
 def evidence_view(root, item):
     output = {}
     allowed = {
+        "leak_check": ("schema", "annotation", "eligible", "inventory_sha256", "portable"),
+        "outcome_summary": ("annotation", "runs", "passes", "failures", "eligible_for_verified", "flagged", "failure_after_apply_rate", "attribution"),
+        "policy": ("schema", "routes", "review_after"),
+        "matrix_receipt": ("schema", "content_sha256", "cells", "false_acceptances"),
+        "provider": ("id", "version", "local"),
         "qualification": (
             "schema",
             "content_sha256",
@@ -93,6 +98,9 @@ def evidence_view(root, item):
                 output[name] = {k: value[k] for k in keys if k in value}
         except (ValueError, OSError):
             pass
+    if item.get("kind") in {"graph-annotation","graph-annotation-verified"}:
+        from .knowledge_status import annotation_view
+        output["annotation"] = annotation_view(root,item)
     if item.get("kind") == "verify-graph-projection":
         for name, keys in {
             "manifest": ("included_kinds", "included_relations", "excluded", "mode", "projection_sha256"),

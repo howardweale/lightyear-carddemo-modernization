@@ -462,8 +462,10 @@ class ModelAgentSet:
 
     def _provider_for(self, order: WorkOrder) -> BoundedModelProvider:
         if self.bounded_provider is None:
+            from .budgeted_providers import AccountedModelProvider
+            budget_class = AccountedModelProvider if getattr(self.provider, "manage_failure_budget", False) else BoundedModelProvider
             self.bounded_provider = (self.provider.bind_order(order) if hasattr(self.provider, "bind_order")
-                                     else BoundedModelProvider(self.provider, order))
+                                     else budget_class(self.provider, order))
             self.order_sha256 = order.content_sha256
         elif self.order_sha256 != order.content_sha256:
             raise ContractError("A model agent set cannot span different work orders")

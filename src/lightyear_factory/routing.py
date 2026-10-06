@@ -3,7 +3,8 @@
 from datetime import date, datetime, timezone
 from lightyear_control_tower.decisions import digest
 from .knowledge_trust import approve
-from .providers import BoundedModelProvider, ProviderError
+from .providers import ProviderError
+from .budgeted_providers import AccountedModelProvider
 from .contracts import ContractError, canonical_hash
 
 TASKS = {
@@ -95,7 +96,7 @@ class TaskRouter:
 class RoutedBudget:
     def __init__(self, router, order):
         self.router = router
-        self.budget = BoundedModelProvider(router.providers[router.default], order)
+        self.budget = AccountedModelProvider(router.providers[router.default], order)
         self.routing = []
 
     @property

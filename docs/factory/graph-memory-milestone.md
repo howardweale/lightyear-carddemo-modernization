@@ -37,6 +37,10 @@ The no-values z/OS workspace does not expose the knowledge status route.
 - The existing Explorer SSE teardown emitted a background connection/database
   closure trace after its temporary fixture closed; the suite reported no
   failures. No Explorer implementation was changed.
+- Initial full Ubuntu CI found that the historical MS70 triage artifacts bind
+  `providers.py`. The original provider file was restored byte-for-byte and
+  new failed-call accounting moved to the opt-in `AccountedModelProvider`
+  subclass. Historical calibration artifacts were not regenerated or changed.
 
 Offline verification includes synthetic signed Tower decisions and judge
 attestations, tamper/chain/freshness/role boundaries, leak refusal, outcome

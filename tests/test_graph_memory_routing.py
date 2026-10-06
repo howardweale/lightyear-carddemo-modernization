@@ -10,9 +10,11 @@ from lightyear_control_tower.decisions import digest
 from lightyear_factory.benchmark import benchmark_work_order
 from lightyear_factory.contracts import canonical_hash, ContractError
 from lightyear_factory.providers import (
-    BoundedModelProvider,
     ProviderError,
     ProviderResult,
+)
+from lightyear_factory.budgeted_providers import (
+    AccountedModelProvider as BoundedModelProvider,
 )
 from lightyear_factory.additional_providers import (
     AnthropicMessagesProvider,

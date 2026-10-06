@@ -114,7 +114,9 @@ requiring an unconfigured provider.
 
 `additional_providers.AnthropicMessagesProvider` and `GeminiProvider` implement
 the same structured-result contract as OpenAI and run behind
-`BoundedModelProvider`. Model identifiers and positive prices are configuration;
+`BoundedModelProvider` through the opt-in `AccountedModelProvider` subclass.
+The original provider module remains byte-identical to its historical
+calibration binding. Model identifiers and positive prices are configuration;
 credentials come from `ANTHROPIC_API_KEY`, `GEMINI_API_KEY` or `OPENAI_API_KEY`.
 Malformed/refused/truncated output is a result error and cannot trigger fallback.
 Transport failures retain call evidence and are conservatively charged against

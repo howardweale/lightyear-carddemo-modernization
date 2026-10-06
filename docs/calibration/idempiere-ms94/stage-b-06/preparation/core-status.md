@@ -1,5 +1,19 @@
 # B06 preparation status
 
+## October 6 PR262 review follow-up r8
+
+The [r8 report](review-r8.md) records the implemented closed loopback HTTP
+broker, explicit file credential-store argv, supervised builder-login scripts
+and operator-key-bound smoke preparation helper. 139 B06 offline tests passed
+in 29.881 seconds;
+all 2,106 existing smoke snapshot files reverified unchanged. No model call,
+Docker command or native pair ran. Actual builder login and the final
+account/WFP/client transport probe are still pending. Howard approved the
+new isolated Tower and confirmed its key; the exact group is public at
+`ec639ba6f56940e235e04b41c1cb3f013c25e568`, with all 11 files byte-verified.
+The request is in the running Tower inbox; the exact operator decision is pending. No smoke or measurement is admitted. Earlier proofs and
+failures remain preserved. Operator review, not independent attestation.
+
 ## October 6 approved runtime-resolution probe
 
 The [runtime-resolution report](runtime-resolution-r7/README.md) records one

@@ -1,0 +1,43 @@
+{
+  "artifact_type": "ms94-b06-http-exec-draft/1",
+  "status": "draft-not-admitted",
+  "executable": "C:\\Program Files\\Lightyear\\Codex\\0.160.0\\codex.exe",
+  "executable_sha256": "4b01d5920e6785614727443bbecf343f4dedbb7347052b72ba805aab6353ef01",
+  "argv": [
+    "exec",
+    "--ignore-user-config",
+    "--disable",
+    "shell_tool",
+    "--disable",
+    "apps",
+    "--disable",
+    "multi_agent",
+    "--config",
+    "web_search=\"disabled\"",
+    "--config",
+    "approval_policy=\"never\"",
+    "--ignore-rules",
+    "--strict-config",
+    "--model",
+    "gpt-6-astra",
+    "--config",
+    "model_reasoning_effort=\"high\"",
+    "--config",
+    "mcp_servers={\"qualified_journey_public\"={\"url\"=\"http://127.0.0.1:49152/mcp\",\"bearer_token_env_var\"=\"B06_MCP_TOKEN\",\"enabled\"=true,\"required\"=true,\"enabled_tools\"=[\"public_contract\",\"public_api\",\"deterministic_support\",\"check_structure\",\"compile\"],\"startup_timeout_sec\"=30,\"tool_timeout_sec\"=660,\"default_tools_approval_mode\"=\"approve\"}}",
+    "--json",
+    "--ephemeral",
+    "--skip-git-repo-check",
+    "--sandbox",
+    "read-only",
+    "--cd",
+    "C:\\ProgramData\\Lightyear\\b06-session\\empty",
+    "-"
+  ],
+  "environment_names": [
+    "CODEX_HOME",
+    "B06_MCP_TOKEN"
+  ],
+  "stdin": "exact bound builder request; no argv prompt",
+  "model_calls_authorized": false,
+  "requires_new_transport_proof": true
+}

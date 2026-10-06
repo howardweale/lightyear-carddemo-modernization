@@ -1,0 +1,179 @@
+[
+  {
+    "name": "describe_copybook",
+    "inputSchema": {
+      "properties": {
+        "path": {
+          "title": "Path",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path"
+      ],
+      "title": "describe_copybookArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "decode_records",
+    "inputSchema": {
+      "properties": {
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "copybook": {
+          "title": "Copybook",
+          "type": "string"
+        },
+        "codec": {
+          "default": "cp037",
+          "title": "Codec",
+          "type": "string"
+        },
+        "framing": {
+          "default": "fixed",
+          "title": "Framing",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "copybook"
+      ],
+      "title": "decode_recordsArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "read_job_log",
+    "inputSchema": {
+      "properties": {
+        "path": {
+          "title": "Path",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path"
+      ],
+      "title": "read_job_logArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "lane_status",
+    "inputSchema": {
+      "properties": {
+        "source": {
+          "default": "CBACT04C",
+          "title": "Source",
+          "type": "string"
+        },
+        "target": {
+          "default": "Java",
+          "title": "Target",
+          "type": "string"
+        }
+      },
+      "title": "lane_statusArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "get_task",
+    "inputSchema": {
+      "properties": {},
+      "title": "get_taskArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "submit_candidate",
+    "inputSchema": {
+      "properties": {
+        "path": {
+          "title": "Path",
+          "type": "string"
+        },
+        "request_id": {
+          "title": "Request Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "path",
+        "request_id"
+      ],
+      "title": "submit_candidateArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "get_verdict",
+    "inputSchema": {
+      "properties": {
+        "attempt_id": {
+          "title": "Attempt Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "attempt_id"
+      ],
+      "title": "get_verdictArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "get_budget",
+    "inputSchema": {
+      "properties": {},
+      "title": "get_budgetArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "get_receipt",
+    "inputSchema": {
+      "properties": {
+        "attempt_id": {
+          "title": "Attempt Id",
+          "type": "string"
+        }
+      },
+      "required": [
+        "attempt_id"
+      ],
+      "title": "get_receiptArguments",
+      "type": "object"
+    }
+  },
+  {
+    "name": "propose_normalization",
+    "inputSchema": {
+      "properties": {
+        "attempt_id": {
+          "title": "Attempt Id",
+          "type": "string"
+        },
+        "dataset": {
+          "title": "Dataset",
+          "type": "string"
+        },
+        "field": {
+          "title": "Field",
+          "type": "string"
+        }
+      },
+      "required": [
+        "attempt_id",
+        "dataset",
+        "field"
+      ],
+      "title": "propose_normalizationArguments",
+      "type": "object"
+    }
+  }
+]

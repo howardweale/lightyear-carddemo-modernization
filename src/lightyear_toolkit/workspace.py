@@ -103,6 +103,37 @@ class Workspace:
     def log(self, name):
         return observe(self.read(name, purpose="development-log").decode("utf-8"))
 
+    def decode_page(self, name, copybook, codec="cp037", framing="fixed",
+                    offset=0, limit=50, fields=None, summary=False):
+        if (type(offset) is not int or offset < 0 or type(limit) is not int or
+                not 1 <= limit <= 200 or type(summary) is not bool):
+            raise Refused("decode-page-invalid")
+        allowed = {f.path for f in self.layout(copybook).fields}
+        if fields is not None and (not isinstance(fields, list) or
+                not all(isinstance(f, str) for f in fields) or not set(fields) <= allowed):
+            raise Refused("decode-fields-invalid")
+        decoded = self.decode(name, copybook, codec, framing)
+        records = decoded["records"]
+        selected = allowed if fields is None else set(fields)
+        result = dict(sha256=decoded["sha256"], total_records=len(records))
+        if summary:
+            from decimal import Decimal
+            result["summary"] = {}
+            numeric = {f.path for f in self.layout(copybook).fields if f.digits}
+            for field in sorted(selected):
+                values = [f["value"] for r in records for f in r["fields"] if f["path"] == field]
+                key = Decimal if field in numeric else str
+                result["summary"][field] = dict(count=len(values), distinct=len(set(map(str, values))),
+                    min=min(values, key=key) if values else None, max=max(values, key=key) if values else None)
+            result["summary_scope"] = "all public development records"
+        else:
+            # Do not retain record-level raw data when projecting fields.
+            result.update(offset=offset, limit=limit,
+                records=[{"fields":[f for f in r["fields"] if f["path"] in selected]}
+                         for r in records[offset:offset+limit]],
+                next_offset=offset+limit if offset+limit<len(records) else None)
+        return result
+
     def lane(self, source, target):
         from lightyear_control_tower.catalogue import read_catalogue
 

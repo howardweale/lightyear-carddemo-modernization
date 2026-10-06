@@ -4,7 +4,8 @@ Implemented on 2026-10-06 from main `990369c1`, on
 `codex/verify-graph-memory`. Operator review; not independent attestation.
 Zero Docker and zero model calls. No live authority roles or routing policies
 were granted. Publication and merge were requested by Howard on 2026-10-06.
-The delivery PR records the reviewed source commit, CI checks and merge status.
+[Delivery PR #264](https://github.com/howardweale/lightyear-carddemo-modernization/pull/264)
+records the reviewed source commit, CI checks and merge status.
 
 ## Delivered
 

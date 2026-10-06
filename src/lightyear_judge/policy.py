@@ -39,6 +39,7 @@ def fingerprint(source=None):
         "lightyear_toolkit",
         "lightyear_mainframe",
         "lightyear_control_tower",
+        "lightyear_knowledge_graph",
     ):
         for p in sorted((source / package).rglob("*.py")):
             result[str(p.relative_to(source))] = sha(p.read_bytes())

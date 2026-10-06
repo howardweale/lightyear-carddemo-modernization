@@ -93,6 +93,13 @@ def evidence_view(root, item):
                 output[name] = {k: value[k] for k in keys if k in value}
         except (ValueError, OSError):
             pass
+    if item.get("kind") == "verify-graph-projection":
+        for name, keys in {
+            "manifest": ("included_kinds", "included_relations", "excluded", "mode", "projection_sha256"),
+            "leak_check": ("passed", "watch_list_size", "matches", "projection_sha256"),
+        }.items():
+            value = read_json(confined(root, item["evidence"][name]))
+            output[name] = {k:value[k] for k in keys if k in value}
     return {
         "disclosure": "no observation values or private captures",
         "records": output,

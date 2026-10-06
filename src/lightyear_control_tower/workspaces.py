@@ -383,7 +383,7 @@ class Workspace:
                 if k in {"state", "completed", "total"}
             },
             "verdicts": [
-                {k: r[k] for k in ("id", "verdict", "receipt_sha256") if k in r}
+                {k: r[k] for k in ("id", "verdict", "receipt_sha256", "context_projection_sha256") if k in r}
                 for r in snapshot.get("verdicts", [])
             ],
         }
@@ -391,6 +391,9 @@ class Workspace:
             v: sum(r.get("verdict") == v for r in base["verdicts"])
             for v in ("equivalent", "divergent", "indeterminate")
         }
+        if "graph_projection" in snapshot:
+            from .verify_status import graph_card
+            base["graph_projection"] = graph_card(snapshot["graph_projection"])
         partner = "partner-viewer" in session["roles"]
         level = "operator"
         if partner:

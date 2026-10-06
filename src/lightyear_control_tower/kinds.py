@@ -50,6 +50,10 @@ def default_registry():
     K = DecisionKind
     return KindRegistry(
         [
+            K("verify-graph-projection", ("approved", "rejected"),
+              ("qualification-approver",), ("projection", "policy", "leak_check", "lane"),
+              required_fields=("reason", "named_owner", "review_after"),
+              consumer="verify-toolkit-graph"),
             K(
                 "b06-qualification-group",
                 ("authorized", "rejected"),

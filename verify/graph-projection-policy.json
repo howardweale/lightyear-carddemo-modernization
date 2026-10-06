@@ -1,0 +1,313 @@
+{
+  "schema": "verify-graph-projection-policy/1",
+  "source_methods": [
+    "deterministic-extraction"
+  ],
+  "node_properties": {
+    "source_file": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "cobol_program": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "cobol_paragraph": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "cobol_field": [
+      "statement",
+      "line_start",
+      "line_end",
+      "picture",
+      "pic",
+      "usage",
+      "length"
+    ],
+    "copybook": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "cobol_file_handle": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "jcl_job": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "jcl_step": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "jcl_dd_name": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "jcl_dd_allocation": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "dataset": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "vsam_cluster": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "vsam_component": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "vsam_path": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "vsam_alternate_index": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "cics_transaction": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "cics_program_resource": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "cics_file_resource": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "cics_command": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "bms_map": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "bms_mapset": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "bms_field": [
+      "statement",
+      "line_start",
+      "line_end",
+      "picture",
+      "pic",
+      "usage",
+      "length"
+    ],
+    "db2_table": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "db2_column": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "db2_constraint": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "db2_index": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "db2_dcl": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "db2_sql_statement": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "ims_database": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "ims_dataset_group": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "ims_dli_statement": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "ims_field": [
+      "statement",
+      "line_start",
+      "line_end",
+      "picture",
+      "pic",
+      "usage",
+      "length"
+    ],
+    "ims_pcb": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "ims_psb": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "ims_segment": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "assembler_dsect": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "assembler_field": [
+      "statement",
+      "line_start",
+      "line_end",
+      "picture",
+      "pic",
+      "usage",
+      "length"
+    ],
+    "assembler_instruction": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "assembler_macro": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "assembler_program": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "assembler_symbol": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "java_type": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "java_method": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "modernization_workload": [
+      "statement",
+      "line_start",
+      "line_end"
+    ],
+    "business_rule": [
+      "statement",
+      "line_start",
+      "line_end"
+    ]
+  },
+  "relations": [
+    "CONTAINS",
+    "CALLS",
+    "USES_COPYBOOK",
+    "HAS_FIELD",
+    "READS",
+    "WRITES",
+    "READS_WRITES",
+    "EXECUTES",
+    "HAS_DD",
+    "ALLOCATES",
+    "ISSUES",
+    "ISSUES_CICS",
+    "ISSUES_SQL",
+    "USES_DATABASE",
+    "USES_FILE",
+    "USES_MAP",
+    "STARTS_PROGRAM",
+    "REFERENCES_COLUMN",
+    "WRITES_TABLE",
+    "IMPLEMENTED_BY",
+    "RESOLVES_TO",
+    "DEPENDS_ON",
+    "DECLARES",
+    "BINDS",
+    "HAS_RULE"
+  ],
+  "lanes": {
+    "INTCALC": {
+      "customer_id": "carddemo-reference",
+      "public_fixture_only": true,
+      "program_sources": [
+        "source:aws-carddemo:app/cbl/CBACT04C.cbl"
+      ],
+      "approved_sources": {
+        "source:aws-carddemo:app/cbl/CBACT04C.cbl": {
+          "file": "spec/mainframe/public-source/CBACT04C.cbl",
+          "sha256": "5084bb8b0c9a0f0199f737487ae1863f12e43cabbdc459a62b6b67bedc683cc4"
+        },
+        "source:aws-carddemo:app/cpy/CVACT01Y.cpy": {
+          "file": "spec/mainframe/copybooks/CVACT01Y.cpy",
+          "sha256": "81a08bad15af5664326a6f0af3650f570821c4857ffdec3a6a39f91f07dca728"
+        },
+        "source:aws-carddemo:app/cpy/CVTRA05Y.cpy": {
+          "file": "spec/mainframe/copybooks/CVTRA05Y.cpy",
+          "sha256": "d7bde0e78ff608497087b9909c889ed39e347269f964bda767b92b547fbb5fec"
+        }
+      },
+      "dataset_copybooks": {
+        "STEP15/ACCTFILE": [
+          "CVACT01Y"
+        ],
+        "STEP15/TRANSACT": [
+          "CVTRA05Y"
+        ]
+      },
+      "dataset_file_names": {
+        "STEP15/ACCTFILE": ["ACCOUNT-FILE", "FD-ACCTFILE-REC"],
+        "STEP15/TRANSACT": ["TRANSACT-FILE", "FD-TRANFILE-REC"]
+      },
+      "reviewed_mapping_ids": [],
+      "public_scenario_ids": []
+    }
+  }
+}

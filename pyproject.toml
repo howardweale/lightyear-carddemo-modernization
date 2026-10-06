@@ -36,6 +36,7 @@ lightyear-agent = "lightyear_agent.cli:main"
 lightyear-mcp = "lightyear_agent.mcp:main"
 lightyear-verify-mcp = "lightyear_toolkit.mcp:main"
 lightyear-judge = "lightyear_judge.cli:main"
+lightyear-verify = "lightyear_judge.cli:main"
 
 [tool.setuptools.packages.find]
 where = ["src", "extensions/runtime"]

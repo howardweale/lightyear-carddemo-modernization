@@ -164,11 +164,33 @@ async function campaign(id) {
   }
   content.append(grid);
   if (v.verdicts) {
+    const g = v.graph_projection;
+    if (g) {
+      content.append(el("h3", "Verify graph context"),
+        el("p", `Projection: ${g.state} · ${g.mode || "off"} · ${g.projection_sha256 || "none"}`));
+      if (g.node_count !== undefined) content.append(el("p",
+        `${g.node_count} nodes · ${g.edge_count} edges · ${g.excluded_count} exclusions · leak check ${g.leak_check}`));
+      if (g.decision_sha256) {
+        const link = el("a", `Tower decision ${g.decision_sha256}`);
+        link.href = "#drawer";
+        link.addEventListener("click", async (event) => {
+          event.preventDefault();
+          try {
+            const journal = await api("history");
+            const decision = journal.events.find((e) => e.kind === "tower_decision" &&
+              e.content_sha256 === g.decision_sha256);
+            if (!decision) throw Error("Decision is unavailable in this Tower scope.");
+            drawer("Graph projection decision").append(json(decision));
+          } catch (error) { showError(error); }
+        });
+        content.append(link);
+      }
+    }
     content.append(
       el("p", `Submissions: ${v.submissions}; refused requests: ${v.refusals}`),
     );
     for (const r of v.verdicts)
-      content.append(el("p", `${r.id}: ${r.verdict} · receipt ${r.receipt_sha256}`));
+      content.append(el("p", `${r.id}: ${r.verdict} · receipt ${r.receipt_sha256} · context ${r.context_projection_sha256 || "none"}`));
   }
   for (const a of v.alerts || [])
     content.append(

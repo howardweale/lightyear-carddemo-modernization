@@ -62,7 +62,7 @@ tool-schema compatibility, expiry, cursor/response limits and signed receipt
 versions. The public ACCT-CURR-BAL check finds CBACT04C paragraphs.
 
 JavaScript syntax, whitespace and protected-path checks passed. A Windows
-graph CI job is included; remote CI has not run for this increment. Linux
+graph CI job is included; its initial local checkpoint preceded remote CI. Linux
 separate-user/bubblewrap acceptance and live-client tests have not been rerun
 on this Windows host. No improved model effectiveness or cost is claimed.
 
@@ -83,3 +83,19 @@ Public review units are [projection #259](https://github.com/howardweale/lightye
 [toolkit #260](https://github.com/howardweale/lightyear-carddemo-modernization/pull/260), and
 [comparison/milestone #261](https://github.com/howardweale/lightyear-carddemo-modernization/pull/261).
 CI and merge status are recorded by those PRs. Each retains the zero-model boundary.
+
+## October 6 publication validation
+
+The [Windows graph CI job](https://github.com/howardweale/lightyear-carddemo-modernization/actions/runs/37508345006/job/112422651286)
+passed on toolkit head `871f31efd9ab08ef77fd9d7ac158643d76bf70f0`:
+285 tests ran, 17 platform-specific skips, no failures. This includes 47 Verify,
+123 B06, 51 Tower, 50 Console and 14 graph-explorer tests. The protected-path
+check passed. Existing platform skips do not establish Linux isolation.
+
+An unrelated hosted CloudBank source-build plugin failed to load Jansi during
+initial PR259 CI, cascading into a missing local common artifact. The original
+failure remains in its job log. [PR263](https://github.com/howardweale/lightyear-carddemo-modernization/pull/263)
+is a separate CI-only Maven 3.9.11 pin with Apache's SHA-512; every existing
+build and test remains enabled. Its result and the final merge states are
+recorded by the linked PRs. No new model calls or local Docker runs were made
+for publication.

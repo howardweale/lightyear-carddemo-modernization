@@ -61,3 +61,31 @@ Full remaining slot budget must fit; no extensions, replacements or models.
 Publication of the exact group, byte verification at the public commit, and
 Howard's exact `b06-qualification-group` Tower decision are still required.
 Confirming the key did not authorize the smoke. No decision is fabricated here.
+
+## Public request and console
+
+The plan was published at `ec639ba6f56940e235e04b41c1cb3f013c25e568`.
+`git ls-remote`, a fresh fetch and direct blob comparisons verified all 11 files.
+The exact request is
+`b06-q-a46318812b318df1f29a82bf409352638e1fe0a4675c37fbf0dbdd0d0600c16b`.
+Its evidence binds this public commit; later documentation commits do not change it.
+
+The pinned Tower service was started under `lyb06tower` at
+2026-10-06T21:09:30Z on `http://127.0.0.1:8766/`, PID 45340. Its Windows owner
+SID was verified. The account was disabled for new logons after startup;
+the existing service process remains running. All 598 runtime files were checked
+again immediately before startup. No login or operator decision was performed
+by Codex. The launch record stays local.
+
+Howard can view his credential in his own Administrator PowerShell console:
+
+```powershell
+Get-Content -LiteralPath 'C:\ProgramData\Lightyear\B06TowerAuthority\authority.credential.txt'
+```
+
+Paste it directly into the local Tower login, never into chat or repository files.
+Review the request, its three slots, exact public commit and October 7 window,
+then choose the Tower outcome. Only an `authorized` decision admits the group.
+The console is decision-only and does not itself dispatch the smoke run.
+`tools/ms94_b06_tower_start.ps1` refuses an occupied port and a changed runtime
+or confirmed key; it must not be rerun while this service is active.

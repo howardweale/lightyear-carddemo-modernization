@@ -74,3 +74,7 @@ is claimed by this implementation.
 The [Mac command sheet](mac-graph-review-commands.md) runs the fresh isolation and baseline protocol checks. A [separate Verify authority](tower-authority-proposal.md) is proposed after Howard confirmed none exists. It has not been provisioned. The Tower manual is also supplied as a Word document at ../control-tower-users-manual.docx.
 
 The five-page Word manual was rendered using installed Microsoft Word and every page was visually inspected. The packaged LibreOffice renderer was attempted first but LibreOffice is not installed on this Windows host. Rendered QA files remain local and are not publication payloads.
+
+## CI dependency correction
+
+The first PR267 broad Ubuntu run executed 2,482 tests and failed the new MCP protocol test because that baseline job does not install the optional MCP SDK. The test now follows existing optional-SDK skips in baseline jobs. The dedicated Verify workflow installs the verify extra and explicitly imports MCP before tests, so a missing SDK fails that job rather than silently skipping protocol acceptance. The original failed CI log remains available.

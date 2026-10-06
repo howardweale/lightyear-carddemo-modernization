@@ -1,4 +1,5 @@
 import unittest
+import importlib.util
 from tools.verify_graph_activation_check import BASE, GRAPH, validate
 
 class ActivationCheckTests(unittest.TestCase):
@@ -20,6 +21,7 @@ class ActivationCheckTests(unittest.TestCase):
 from tests.verify_graph_support import GraphFixture, read, leak_check, digest, canonical
 
 
+@unittest.skipUnless(importlib.util.find_spec('mcp'), 'Optional MCP SDK; required by Verify CI')
 class ActivationProtocolTests(GraphFixture):
     def test_checker_uses_real_stdio_toolkit_and_loopback_fixture(self):
         import asyncio

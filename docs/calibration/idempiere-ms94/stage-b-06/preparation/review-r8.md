@@ -32,8 +32,8 @@ private-key read-open under both the Codex host identity and builder identity,
 with successful public controls and missing-file error 2. No key bytes were
 exported. The exact smoke group is public at
 `ec639ba6f56940e235e04b41c1cb3f013c25e568` (all 11 files byte-verified),
-and its request is in the running Tower inbox. Howard's exact Tower decision
-remains pending.
+and its request is in the running Tower inbox. Howard's exact Tower authorization has since been verified; see the
+[r8 milestone](milestone-r8.md) for its hash and the inbox deployment repair.
 
 The conditional window remains **October 7, 03:00–09:00 UTC**. The three
 7,190-second limits leave only 30 seconds at the extreme bound. No slot may
@@ -139,7 +139,8 @@ WFP exception is not a destination-domain allowlist; web search stays disabled.
   not a login, final transport probe, model request or qualification result.
 
 Core-status items 1–2 remain natively unqualified; item 3 has the intact smoke
-snapshot but awaits exact Tower trust/publication/decision. Item 4 has this
+snapshot and a verified exact Tower authorization; native admission/run remain
+pending in the approved window. Item 4 has this
 transport implementation but no admitted measurement launcher; item 5 awaits
 actual transport evidence and immutable per-journey zero-model preflight.
 No B05 evidence, `work/ms94`, template-r1, J1 predicates, or files bound by the

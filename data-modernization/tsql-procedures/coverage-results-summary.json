@@ -1,0 +1,3318 @@
+{
+  "actual_cleanup_review_sha256": "f3ac5312544c5cf79a77919e463f3d566327147fc3e5ff595c1e12883807618e",
+  "bridge_sha256": "46d8195e2ef853c777bc06d3fe3f5146c7bf6a89dd22657c0474fe5b1eca0cd5",
+  "certificate_issued": false,
+  "claim": "Operator review; not independent attestation",
+  "collector_sha256": "9188d9d003df70557e0b0322c3934f874b3eece3e4e32164c98540d333c58beb",
+  "corpus_sha256": "dafc928fc5ce0b9866e883d17286953a9a748c4216d7cd0fbdb83a664befb198",
+  "counts": {
+    "divergent": 40,
+    "equivalent": 36,
+    "insufficient-evidence": 24
+  },
+  "coverage_qualification_file_sha256": "6ce3183ae0fe01b36870dc73e7850e6e99243862c284a6ba5e922dd3718d1873",
+  "ended_utc": "2026-10-07T21:03:02.491570+00:00",
+  "families": 25,
+  "images": {
+    "postgresql": "sha256:b03ef125d79567173ab5622d9c5b05c9baf353a4eb78f8c13a938de4141de30d",
+    "sqlserver": "mcr.microsoft.com/mssql/server@sha256:4402d880dd4c34bfa7d8705e56a86cd6c88da80a1f6bbbe741f999e76264a090"
+  },
+  "independent_audits": [
+    {
+      "files": 1694,
+      "pairs": 100,
+      "run": "tsql-native-attempt-009",
+      "seconds": 0.6869999999980791,
+      "sha256": "3c627052754398151356cf7f3ec24b812359da499104fb9a6beae8988fd490f9"
+    },
+    {
+      "files": 1726,
+      "pairs": 100,
+      "run": "tsql-native-attempt-010",
+      "seconds": 0.7030000000013388,
+      "sha256": "463d14ad44b60384cb73e0bf9461f5d711cb4bfbf061111044e165ad7db51d34"
+    },
+    {
+      "files": 118,
+      "pairs": 7,
+      "run": "tsql-native-coverage-controls-002",
+      "seconds": 0.046999999998661224,
+      "sha256": "5406ea8c92609a39c9ecc99be27bd37a1cdd585bd23f2af7ec779199c5a86b28"
+    }
+  ],
+  "limitations": [
+    "procedural coverage only; SQL expression and dynamic-body branch coverage excluded",
+    "PostgreSQL native branch fraction retained; per-handler proof conservative at 100%",
+    "seven public controls, not universal instrumentation proof",
+    "Twenty ambiguous-choice policy cases remain held",
+    "Four non-policy correct twins match but do not meet coverage proof",
+    "Signed report claim text still says coverage unqualified; the bound plan and collector qualification are authoritative; report preserved unchanged",
+    "No Tower policy or certificate-release decision issued; full M0 acceptance remains unmet"
+  ],
+  "m0_qualified": false,
+  "model_calls": 0,
+  "native_costs": [
+    {
+      "cleanup_passed": true,
+      "elapsed_seconds": 35.70994087600047,
+      "fatal_type": null,
+      "records": 8,
+      "report_sha256": "01b0a250bd95946fd7ebe07ce5208fb5fa57ee63296b8654e5f211d924a37441",
+      "run": "tsql-native-attempt-006"
+    },
+    {
+      "cleanup_passed": true,
+      "elapsed_seconds": 15.08872725800029,
+      "fatal_type": "RuntimeError",
+      "records": 1,
+      "report_sha256": "4a425d3848b7d949488b98f8e1c495b503fe2ee216649c0d2b5b8946cc781159",
+      "run": "tsql-native-attempt-007"
+    },
+    {
+      "cleanup_passed": true,
+      "elapsed_seconds": 38.25507652200031,
+      "fatal_type": null,
+      "records": 10,
+      "report_sha256": "70ef99ea064fb7117868ca676ab0358853ba475ee2d21436f04492ab016db8f2",
+      "run": "tsql-native-attempt-008"
+    },
+    {
+      "cleanup_passed": true,
+      "elapsed_seconds": 267.4465045490015,
+      "fatal_type": null,
+      "records": 100,
+      "report_sha256": "733a0a5d6774c7edd78d30494ab544239237ac87ee11c1a586c12f203fbd89b4",
+      "run": "tsql-native-attempt-009"
+    },
+    {
+      "cleanup_passed": true,
+      "elapsed_seconds": 268.06441905300017,
+      "fatal_type": null,
+      "records": 100,
+      "report_sha256": "7ec005f292917b0bc4bd478b024eacb9a88bbeb1d5d6437bce341ea25ec62dce",
+      "run": "tsql-native-attempt-010"
+    },
+    {
+      "cleanup_passed": true,
+      "elapsed_seconds": 28.002099160999933,
+      "fatal_type": null,
+      "records": 5,
+      "report_sha256": "0983a8ae3ea331b880173bc91a457d4f60f3e261975907ccf3c19903b0786f58",
+      "run": "tsql-native-coverage-controls-001"
+    },
+    {
+      "cleanup_passed": true,
+      "elapsed_seconds": 30.238027166000393,
+      "fatal_type": null,
+      "records": 7,
+      "report_sha256": "d45ac6915421409a5d6966131632735e320fe1c17ba5d2969c1586b48957238a",
+      "run": "tsql-native-coverage-controls-002"
+    }
+  ],
+  "native_run": "tsql-native-attempt-010",
+  "pairs": [
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "ci-equality",
+      "index": 1,
+      "manifest_sha256": "99f79d24b9a8c4658204532dfc74acfd3c3cf27b955973b47053e0660d446fd4",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 1,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 1
+        }
+      ],
+      "id": "ci-equality",
+      "index": 2,
+      "manifest_sha256": "fa63547ab33dc025ee6ec5e7bbdedc37ac2e05ad9973e4f855a0dae3a8c8dbd6",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 1,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "ci-join",
+      "index": 3,
+      "manifest_sha256": "345b62de073f876596591919ac23c5164138e6c3972d2e08ef655799aac7dd45",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 1,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 1
+        }
+      ],
+      "id": "ci-join",
+      "index": 4,
+      "manifest_sha256": "43585cc294a36183884ad001c6381f41945ca72f5fa72b06abac8b1dbd19a2b3",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 1,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "ci-group",
+      "index": 5,
+      "manifest_sha256": "c347de9a5eb5c99b84213a086050c35464053efb1b9f290d52a8dd48fe737ccd",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 1,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 1
+        }
+      ],
+      "id": "ci-group",
+      "index": 6,
+      "manifest_sha256": "d0fd2284ef2a2c4d38bfdd07306eee6244ffdab0a494d361a76b2acbd99f54f5",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 1,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "ci-distinct",
+      "index": 7,
+      "manifest_sha256": "1e862902cf53de8b5d048b08787e1c322814af5aad69f90d99bab63d2b7ce5e6",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 1,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 1
+        }
+      ],
+      "id": "ci-distinct",
+      "index": 8,
+      "manifest_sha256": "5087bdf607a32b683517e5010343b2fadc7ed7fc77def46fa9bcb87e5c706e68",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 1,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": false,
+          "minimum_module_branch_fraction": 0.5,
+          "missing_error_paths": [],
+          "statement_fraction": 0.8333333333333334
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "ci-unique",
+      "index": 9,
+      "manifest_sha256": "143a1ee700842eba959c040b2d0b439e4dc547d90c125df8afa3ee37f21843cb",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 1,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": false,
+          "minimum_module_branch_fraction": 0.5,
+          "missing_error_paths": [],
+          "statement_fraction": 0.8333333333333334
+        },
+        "target": {
+          "eligible": false,
+          "minimum_module_branch_fraction": 0.5,
+          "missing_error_paths": [
+            {
+              "module": "dbo.trap()",
+              "site": "all-native-branches-including-handlers"
+            }
+          ],
+          "statement_fraction": 0.75
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "return_code",
+          "trap_family": 1
+        },
+        {
+          "classification": "lossy",
+          "observable": "all-table-after",
+          "trap_family": 1
+        },
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 1
+        }
+      ],
+      "id": "ci-unique",
+      "index": 10,
+      "manifest_sha256": "39404515167207d44435e2a744be317d05a1514ab17bd52c6efba8a21f8fce0b",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 1,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "trailing-char",
+      "index": 11,
+      "manifest_sha256": "a99180a25e47dd2dd76117819a2284e365b8e0c964af38655d12e153f46e6f92",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 2,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 2
+        }
+      ],
+      "id": "trailing-char",
+      "index": 12,
+      "manifest_sha256": "55fc482307aa1128bd8822740c75a12e74456614a57df8a61ce4b63d1bcba037",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 2,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "trailing-varchar",
+      "index": 13,
+      "manifest_sha256": "c4a4252010f8fe2ba7ac891765653c18e20678d3030efbca03d3c7702bd7855f",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 2,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 2
+        }
+      ],
+      "id": "trailing-varchar",
+      "index": 14,
+      "manifest_sha256": "f8c4bf404ebaebb3b6b6d74716ffe4cffc54fc2d2bbf9314533e6accf926d3b4",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 2,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "len",
+      "index": 15,
+      "manifest_sha256": "a8d6f1a1a4b96b8324ce546d4d9639b5965a48878c7c5c90b5d0f8b730d830cd",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 3,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 3
+        }
+      ],
+      "id": "len",
+      "index": 16,
+      "manifest_sha256": "11546b358938f8f931819a54ec765a88b7ff6c9950c49ae11ef13f60694a5c3e",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 3,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "integer-division",
+      "index": 17,
+      "manifest_sha256": "53539489bd9dd8376764ab190e4e94ef78f2b82ecf0bbf946edc687193e63863",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 4,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 4
+        }
+      ],
+      "id": "integer-division",
+      "index": 18,
+      "manifest_sha256": "37260425c500e89b7d4b10a54b925bfc64d2f56e1e55b2edf7cd76d9e1f53ebb",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 4,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "type-precedence",
+      "index": 19,
+      "manifest_sha256": "27e0b18caad78baa886663cf4b23a0da35655ce7b36f575a04413262e15c8862",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 4,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 4
+        }
+      ],
+      "id": "type-precedence",
+      "index": 20,
+      "manifest_sha256": "8980fe7bc0271d1ad19a9390f2f4855f427a5b568ea7facc212ba23c3f5b0110",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 4,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "isnull-length",
+      "index": 21,
+      "manifest_sha256": "7b82cd1e52418402c0f3f577873f485c5114f3a4b7370630045d56f0edf6594d",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 5,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 5
+        }
+      ],
+      "id": "isnull-length",
+      "index": 22,
+      "manifest_sha256": "9c32e49c5ec2916810aa1d15dbeee15dce5a8d3ecc985b75282f91d53d02b4e4",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 5,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "empty-int",
+      "index": 23,
+      "manifest_sha256": "13861cf864784f9ae4577d821f352b9a0cb64650d5b7f70b6f81527dec47abca",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 6,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 6
+        }
+      ],
+      "id": "empty-int",
+      "index": 24,
+      "manifest_sha256": "d0c5577f7e87fdc94c66796decde2ccf200b5f924f2f74c1d3522070becb0946",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 6,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "empty-date",
+      "index": 25,
+      "manifest_sha256": "89f646ecfc5c8755c6006f9f0f04709ff362d0ea03f20dd687b704fdbe3930b7",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 6,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 6
+        }
+      ],
+      "id": "empty-date",
+      "index": 26,
+      "manifest_sha256": "b2cd013e00910aa2de90eeb43be20b305a8656a8720d31b0454851bbf09e01a1",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 6,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "datetime-001",
+      "index": 27,
+      "manifest_sha256": "08b7116cd4514947af33fc530be5ebdbbf3fbfa1d05598b1042ea66c1d7454a7",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 7,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 7
+        }
+      ],
+      "id": "datetime-001",
+      "index": 28,
+      "manifest_sha256": "84f9ae5d79b51fad03e585a32432c3b9f622e138fc548c91b6ddeda20fce3415",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 7,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "datetime-002",
+      "index": 29,
+      "manifest_sha256": "bd03f94d5cd478a09dca1c00a260c2f6d58c7a1f6e5ff32ed3b19f368c289eaa",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 7,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 7
+        }
+      ],
+      "id": "datetime-002",
+      "index": 30,
+      "manifest_sha256": "c8d3f952b8db298233f67c74d889b2d627d9cfbcaf7c7a4d9bef5cab1190361b",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 7,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "datediff-day",
+      "index": 31,
+      "manifest_sha256": "946d82b891648a7331d827e57e0dbd6a51d2eef214967db900fc2bd2195d9438",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 8,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 8
+        }
+      ],
+      "id": "datediff-day",
+      "index": 32,
+      "manifest_sha256": "0cdc1344556503673957ff2a2b99ca7d9b43b4c5cf339d7be31d1b4a902d22e9",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 8,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "datediff-year",
+      "index": 33,
+      "manifest_sha256": "2013e519aec4c308c9d7d375677b583a87c0ceff1c199ce9a4c44a9daa22172d",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 8,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 8
+        }
+      ],
+      "id": "datediff-year",
+      "index": 34,
+      "manifest_sha256": "b05feaf0c8502e38d3fee9c72e301c76a089938302cf3f11494c7cebb1050ba7",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 8,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "datefirst",
+      "index": 35,
+      "manifest_sha256": "809047523005cb1866198d0da75e858669ed30afe5b80125001992faeb42883b",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 9,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 9
+        }
+      ],
+      "id": "datefirst",
+      "index": 36,
+      "manifest_sha256": "1ff93c3941865ebfce3b94218ca8bdd4c4cb9ec5ef666a993db6ee491d5935ed",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 9,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "dateformat",
+      "index": 37,
+      "manifest_sha256": "eba7e0ee8e3947b3babcb32a156565cd36467576c6928cc3b501b595e03076b8",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 9,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 9
+        }
+      ],
+      "id": "dateformat",
+      "index": 38,
+      "manifest_sha256": "4768a7a2b004d45883627f22048c475cfc075e797cb3a9fad403acadca826ece",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 9,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "convert-style",
+      "index": 39,
+      "manifest_sha256": "2481bdd500e8e94537dcbecc451e0041bc86407c38ab15a1a94b43c900ce7724",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 9,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 9
+        }
+      ],
+      "id": "convert-style",
+      "index": 40,
+      "manifest_sha256": "09d699af324b5308d4b061870cfe3631c927ce1389495efd1948f157c4636ec8",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 9,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "round-negative",
+      "index": 41,
+      "manifest_sha256": "6a176c8a51c3f38b7e3b6d5ffada7cef99ea76d15cffb823ff9293793be3d34b",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 10,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 10
+        }
+      ],
+      "id": "round-negative",
+      "index": 42,
+      "manifest_sha256": "39570df201e722979af890af3ba25ac7890ddef8de654fc182fe81ed6298b7f7",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 10,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "money-scale",
+      "index": 43,
+      "manifest_sha256": "330ae3f32fdf9b82472b24c51d9870e0e9e198a261a4a19a7d211384d260d862",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 10,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 10
+        }
+      ],
+      "id": "money-scale",
+      "index": 44,
+      "manifest_sha256": "5c8a18535759376030ca8485199a2a25745213cc1d5e0a79201ae3e765193bad",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 10,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "catch-retains-prior-work",
+      "index": 45,
+      "manifest_sha256": "8fed39bb68876071704ca88b858256dff6dfed34c536717551265582a9104c30",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 11,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "all-table-after",
+          "trap_family": 11
+        },
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 11
+        }
+      ],
+      "id": "catch-retains-prior-work",
+      "index": 46,
+      "manifest_sha256": "3a0db7b9c09a3dc667c73dc5d91207ba942ead052298ed32e80a8e1be9b46adf",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 11,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": false,
+          "minimum_module_branch_fraction": 0.5,
+          "missing_error_paths": [],
+          "statement_fraction": 0.9
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "xact-abort",
+      "index": 47,
+      "manifest_sha256": "27fabc6720456b204a83fd6821a5ab2650b94fbc8e5351ca92387756e3dcfada",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 12,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": false,
+          "minimum_module_branch_fraction": 0.5,
+          "missing_error_paths": [],
+          "statement_fraction": 0.9
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "all-table-after",
+          "trap_family": 12
+        },
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 12
+        }
+      ],
+      "id": "xact-abort",
+      "index": 48,
+      "manifest_sha256": "09294ae53cf0ec5fb8fe2a60e7a16d24a8382704bdfad6ca9bd88dbfacfdd1d7",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 12,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": false,
+          "minimum_module_branch_fraction": 0.5,
+          "missing_error_paths": [
+            {
+              "module": "dbo.trap()",
+              "site": "all-native-branches-including-handlers"
+            }
+          ],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "nested-transaction-rollback",
+      "index": 49,
+      "manifest_sha256": "b9aed35600203f050c02024ea9435f526cedf015e91f407625e9f20195adff15",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 12,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": false,
+          "minimum_module_branch_fraction": 0.5,
+          "missing_error_paths": [
+            {
+              "module": "dbo.trap()",
+              "site": "all-native-branches-including-handlers"
+            }
+          ],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "all-table-after",
+          "trap_family": 12
+        },
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 12
+        }
+      ],
+      "id": "nested-transaction-rollback",
+      "index": 50,
+      "manifest_sha256": "a06581949055fbae433dc6bf39bc04570cd8228c3fa17a084d3bc8298d49e882",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 12,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "informational-raiserror",
+      "index": 51,
+      "manifest_sha256": "5bc9c65ead681290287977f2dd079e6762c82ee699f42a8016b417b63e282c57",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 13,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": false,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 0.5
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "return_code",
+          "trap_family": 13
+        },
+        {
+          "classification": "lossy",
+          "observable": "error-presence",
+          "trap_family": 13
+        },
+        {
+          "classification": "lossy",
+          "observable": "informational-message-text",
+          "trap_family": 13
+        },
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 13
+        }
+      ],
+      "id": "informational-raiserror",
+      "index": 52,
+      "manifest_sha256": "b1c9a69b8bf2f9a6aafa5fa61834c1c677bc185d9a81709aae1dac0b58a8c70f",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 13,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "scope-identity-trigger",
+      "index": 53,
+      "manifest_sha256": "a69b52ad4c432d0ff7ac63a490c25816c531eea60e777b22f3864956ad27bfcf",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 14,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 14
+        }
+      ],
+      "id": "scope-identity-trigger",
+      "index": 54,
+      "manifest_sha256": "a2c082402d03bd928d3d781947d61f940adbbba186f77143a967697861593289",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 14,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": false,
+          "minimum_module_branch_fraction": 0.5,
+          "missing_error_paths": [
+            {
+              "module": "dbo.trap()",
+              "site": "all-native-branches-including-handlers"
+            }
+          ],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "identity-rollback-gap",
+      "index": 55,
+      "manifest_sha256": "ae2a5d29d7436d6448aaff786d4dc4e187dcbbb051372d8c296dc06b6a0381ef",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 14,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": false,
+          "minimum_module_branch_fraction": 0.5,
+          "missing_error_paths": [
+            {
+              "module": "dbo.trap()",
+              "site": "all-native-branches-including-handlers"
+            }
+          ],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "all-table-after",
+          "trap_family": 14
+        },
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 14
+        },
+        {
+          "classification": "lossy",
+          "observable": "identity-sequence-after",
+          "trap_family": 14
+        }
+      ],
+      "id": "identity-rollback-gap",
+      "index": 56,
+      "manifest_sha256": "1e10a4c1d7b2e6a6ad9dbd98c6c0afbfe097bbf6ce0b2cd44731b9957158065c",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 14,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "rowcount-lifetime",
+      "index": 57,
+      "manifest_sha256": "96990b50d2bf9ae0191573a95673c70aba093ecb84cd9fc9815ebd175bc2c9a9",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 15,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 15
+        }
+      ],
+      "id": "rowcount-lifetime",
+      "index": 58,
+      "manifest_sha256": "b1259718b56b3f81bc34713469326bfe9e0e9b796ed1ed0efd2f02de69029159",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 15,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "multiple-result-sets",
+      "index": 59,
+      "manifest_sha256": "5f31ee1806d9ad17ee56068e2e32d1361c21b1c910d4948e677f84d397de78c5",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 16,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 16
+        }
+      ],
+      "id": "multiple-result-sets",
+      "index": 60,
+      "manifest_sha256": "791f5ec51aeb762359eaeea56561ce5c26f5596127fbdb04d5603c9c8cdaee8a",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 16,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "output-parameter",
+      "index": 61,
+      "manifest_sha256": "df62d53517e02a0f8e2f493f77b5c6cd3538abe270fefc7e5b9144153e837fc7",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 17,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "output_parameters",
+          "trap_family": 17
+        }
+      ],
+      "id": "output-parameter",
+      "index": 62,
+      "manifest_sha256": "af5091c3a4cc55742b8b24c8397689655c98b9c7964fe69147fd09a828b46e55",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 17,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "default-return-code",
+      "index": 63,
+      "manifest_sha256": "93da08f87cbe0c4db87ded378d56a696bfa37997759a4b3974ff551bcb229f03",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 17,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "return_code",
+          "trap_family": 17
+        }
+      ],
+      "id": "default-return-code",
+      "index": 64,
+      "manifest_sha256": "22b79a589d7fbf053dab4264c90bf101904f1f85afb8d51bafcb9ac5bb8b9d46",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 17,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "update-from-ambiguous",
+      "index": 65,
+      "manifest_sha256": "b02b9d402ea4be10828d5c36e983cbadcf92f8e0a8ca1e6319669d056b819190",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 18,
+      "unresolved": [
+        {
+          "classification": "policy-decision-required",
+          "observable": "unordered-choice-policy-required",
+          "trap_family": 18
+        }
+      ],
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "update-from-ambiguous",
+      "index": 66,
+      "manifest_sha256": "18062352f8a7abaa5ef277137d7fe18ee48ded218c986d0630b69116e0946be6",
+      "repeat": 2,
+      "status": "match-on-compared-observables",
+      "trap_family": 18,
+      "unresolved": [
+        {
+          "classification": "policy-decision-required",
+          "observable": "unordered-choice-policy-required",
+          "trap_family": 18
+        }
+      ],
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "update-from-ambiguous",
+      "index": 67,
+      "manifest_sha256": "aad420da0722d67e6ef2e05016d10d20589039009c65969f488f96ed58c85901",
+      "repeat": 3,
+      "status": "match-on-compared-observables",
+      "trap_family": 18,
+      "unresolved": [
+        {
+          "classification": "policy-decision-required",
+          "observable": "unordered-choice-policy-required",
+          "trap_family": 18
+        }
+      ],
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "update-from-ambiguous",
+      "index": 68,
+      "manifest_sha256": "50562a38d023b6269e439604b450b1a954c47bdf6d30fcecf808b7e808e76f0d",
+      "repeat": 4,
+      "status": "match-on-compared-observables",
+      "trap_family": 18,
+      "unresolved": [
+        {
+          "classification": "policy-decision-required",
+          "observable": "unordered-choice-policy-required",
+          "trap_family": 18
+        }
+      ],
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "update-from-ambiguous",
+      "index": 69,
+      "manifest_sha256": "2151d3ecd65e5287a8322f3a209d7e4a69a1e054fe8c2ad7bc42a237b6f87b96",
+      "repeat": 5,
+      "status": "match-on-compared-observables",
+      "trap_family": 18,
+      "unresolved": [
+        {
+          "classification": "policy-decision-required",
+          "observable": "unordered-choice-policy-required",
+          "trap_family": 18
+        }
+      ],
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "all-table-after",
+          "trap_family": 18
+        },
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 18
+        }
+      ],
+      "id": "update-from-ambiguous",
+      "index": 70,
+      "manifest_sha256": "591aa919370c663a1619cd9131247f4e53759e313c52413c31aac0b39b36cb1d",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 18,
+      "unresolved": [
+        {
+          "classification": "policy-decision-required",
+          "observable": "unordered-choice-policy-required",
+          "trap_family": 18
+        }
+      ],
+      "variant": "wrong",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "all-table-after",
+          "trap_family": 18
+        },
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 18
+        }
+      ],
+      "id": "update-from-ambiguous",
+      "index": 71,
+      "manifest_sha256": "7a8e73ea55c027301fd7cc8558f457088f9c4b70088d1cc39d056962e6914435",
+      "repeat": 2,
+      "status": "divergent",
+      "trap_family": 18,
+      "unresolved": [
+        {
+          "classification": "policy-decision-required",
+          "observable": "unordered-choice-policy-required",
+          "trap_family": 18
+        }
+      ],
+      "variant": "wrong",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "all-table-after",
+          "trap_family": 18
+        },
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 18
+        }
+      ],
+      "id": "update-from-ambiguous",
+      "index": 72,
+      "manifest_sha256": "8fc07aec89fd6f5f1e9dc7b60e1677931e8ee0147ab0ad98e276ccc1a4c73faa",
+      "repeat": 3,
+      "status": "divergent",
+      "trap_family": 18,
+      "unresolved": [
+        {
+          "classification": "policy-decision-required",
+          "observable": "unordered-choice-policy-required",
+          "trap_family": 18
+        }
+      ],
+      "variant": "wrong",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "all-table-after",
+          "trap_family": 18
+        },
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 18
+        }
+      ],
+      "id": "update-from-ambiguous",
+      "index": 73,
+      "manifest_sha256": "678468eef07bfd8c1c605371d9ba31068cc80aee19f37e2ab01eb305b0e1a9f7",
+      "repeat": 4,
+      "status": "divergent",
+      "trap_family": 18,
+      "unresolved": [
+        {
+          "classification": "policy-decision-required",
+          "observable": "unordered-choice-policy-required",
+          "trap_family": 18
+        }
+      ],
+      "variant": "wrong",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "all-table-after",
+          "trap_family": 18
+        },
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 18
+        }
+      ],
+      "id": "update-from-ambiguous",
+      "index": 74,
+      "manifest_sha256": "37751bf2cbc4fbb27958e56f975e563f981f7c22474e58d7f4a516f74d1425bc",
+      "repeat": 5,
+      "status": "divergent",
+      "trap_family": 18,
+      "unresolved": [
+        {
+          "classification": "policy-decision-required",
+          "observable": "unordered-choice-policy-required",
+          "trap_family": 18
+        }
+      ],
+      "variant": "wrong",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "merge-upsert",
+      "index": 75,
+      "manifest_sha256": "0fd1f2dd2368df53adf3a279911a37d3dec200893a3307cc3633b62d99ee14a2",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 19,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "all-table-after",
+          "trap_family": 19
+        },
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 19
+        }
+      ],
+      "id": "merge-upsert",
+      "index": 76,
+      "manifest_sha256": "4b91d1ea4020c7ab049afd86ab658d1a38b6941fcd0d889eca42f9742f259518",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 19,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "temp-table-scope",
+      "index": 77,
+      "manifest_sha256": "41e0c2ac15e04feef654c3497749d7a80e6747d839f827192ab3fb3387e807a1",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 20,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "temp_objects",
+          "trap_family": 20
+        }
+      ],
+      "id": "temp-table-scope",
+      "index": 78,
+      "manifest_sha256": "96fca06dde75a0805042a8caf8d378bd1db283b3669df5fafc13a7431b843b39",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 20,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "table-variable-scope",
+      "index": 79,
+      "manifest_sha256": "146e62a0953e8ea2794b3a95383dbb60ffa5e948935a7ec241723c91013214ca",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 20,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "temp_objects",
+          "trap_family": 20
+        }
+      ],
+      "id": "table-variable-scope",
+      "index": 80,
+      "manifest_sha256": "1dfac951456db3f2859cc9ede6ef8cba43f422f1bbd3a7a13b7e198f406f36fd",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 20,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "dynamic-parameter-binding",
+      "index": 81,
+      "manifest_sha256": "f782d861bcf609f01e42452d2dcad8a68d5d94473d47520ba88521c0266367f7",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 21,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": false,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 0.5
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "return_code",
+          "trap_family": 21
+        },
+        {
+          "classification": "lossy",
+          "observable": "error-presence",
+          "trap_family": 21
+        },
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 21
+        }
+      ],
+      "id": "dynamic-parameter-binding",
+      "index": 82,
+      "manifest_sha256": "00fab1975c19052e27f78c8771613326fa069829a85ba0b77a37371757cb9036",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 21,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 0.9166666666666666
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "cursor-fetch-status",
+      "index": 83,
+      "manifest_sha256": "be7cc6be9af3f15abc054e0cd1737e2109be64fa62946d244c73b812732a1933",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 22,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 0.9166666666666666
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 22
+        }
+      ],
+      "id": "cursor-fetch-status",
+      "index": 84,
+      "manifest_sha256": "cf6f2ab31c355d19f4fb7a887b0841e35c9b231ee966d00f11a8e4e7f0a84f01",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 22,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "set-trigger",
+      "index": 85,
+      "manifest_sha256": "5023aefa49fd0bfff46c8aaf8499d814b087fe050268ad202e222ceb6d258f72",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 23,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "all-table-after",
+          "trap_family": 23
+        },
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 23
+        }
+      ],
+      "id": "set-trigger",
+      "index": 86,
+      "manifest_sha256": "77410d5db8ff50b11be8cee0a8215ce3c76f3f96cd674bef8db6a9a7038b1a3d",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 23,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "bit",
+      "index": 87,
+      "manifest_sha256": "c58c8a5b0d362350d86300b2affe5b102b93417ce7c25ed76ae422c7ea1f51c2",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 24,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 24
+        }
+      ],
+      "id": "bit",
+      "index": 88,
+      "manifest_sha256": "62623606709b8efa427fd129657c69b5d4284b9d82627da36202950720a17b87",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 24,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "uuid-case",
+      "index": 89,
+      "manifest_sha256": "1fbbcaced5ebeebe6a872f1117f0487d058e8d97a1333a461d80df360ff6b7f0",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 24,
+      "unresolved": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 24
+        }
+      ],
+      "id": "uuid-case",
+      "index": 90,
+      "manifest_sha256": "6eeda6a45c6f3d1a6613cad65807f89ec54274b34b19781da6ac25c3df566e0e",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 24,
+      "unresolved": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "unordered-top",
+      "index": 91,
+      "manifest_sha256": "28c099380e1cc9b8d5edb3c6957b288025b61048a4e0c3f826468f4d10533146",
+      "repeat": 1,
+      "status": "match-on-compared-observables",
+      "trap_family": 25,
+      "unresolved": [
+        {
+          "classification": "policy-decision-required",
+          "observable": "unordered-choice-policy-required",
+          "trap_family": 25
+        }
+      ],
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "unordered-top",
+      "index": 92,
+      "manifest_sha256": "0aee9b6a7136319a509d0e31944f559bba8f7ce1e319a0c6a4fe78bfa74ba7d0",
+      "repeat": 2,
+      "status": "match-on-compared-observables",
+      "trap_family": 25,
+      "unresolved": [
+        {
+          "classification": "policy-decision-required",
+          "observable": "unordered-choice-policy-required",
+          "trap_family": 25
+        }
+      ],
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "unordered-top",
+      "index": 93,
+      "manifest_sha256": "c7328fc71f21bceeb237bbc0b676e18a3525f97664d5863b4615e03e7fe4fb36",
+      "repeat": 3,
+      "status": "match-on-compared-observables",
+      "trap_family": 25,
+      "unresolved": [
+        {
+          "classification": "policy-decision-required",
+          "observable": "unordered-choice-policy-required",
+          "trap_family": 25
+        }
+      ],
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "unordered-top",
+      "index": 94,
+      "manifest_sha256": "e5edef34913855f0fd097534b891d7e84e2755331bafdb18aa2264abc80fbf84",
+      "repeat": 4,
+      "status": "match-on-compared-observables",
+      "trap_family": 25,
+      "unresolved": [
+        {
+          "classification": "policy-decision-required",
+          "observable": "unordered-choice-policy-required",
+          "trap_family": 25
+        }
+      ],
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [],
+      "id": "unordered-top",
+      "index": 95,
+      "manifest_sha256": "364f4585d2bad8ca8d99c3bbcfc89db6034e67719ba7dde4977d15201f7dac2a",
+      "repeat": 5,
+      "status": "match-on-compared-observables",
+      "trap_family": 25,
+      "unresolved": [
+        {
+          "classification": "policy-decision-required",
+          "observable": "unordered-choice-policy-required",
+          "trap_family": 25
+        }
+      ],
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 25
+        }
+      ],
+      "id": "unordered-top",
+      "index": 96,
+      "manifest_sha256": "a194b8293228503172a5b51b23ff674a14e9843c1499cea204de484309202c47",
+      "repeat": 1,
+      "status": "divergent",
+      "trap_family": 25,
+      "unresolved": [
+        {
+          "classification": "policy-decision-required",
+          "observable": "unordered-choice-policy-required",
+          "trap_family": 25
+        }
+      ],
+      "variant": "wrong",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 25
+        }
+      ],
+      "id": "unordered-top",
+      "index": 97,
+      "manifest_sha256": "8b7bf60cdb8cdcd801be25e70273440df6992344b1ee9600e3576df2dd97c861",
+      "repeat": 2,
+      "status": "divergent",
+      "trap_family": 25,
+      "unresolved": [
+        {
+          "classification": "policy-decision-required",
+          "observable": "unordered-choice-policy-required",
+          "trap_family": 25
+        }
+      ],
+      "variant": "wrong",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 25
+        }
+      ],
+      "id": "unordered-top",
+      "index": 98,
+      "manifest_sha256": "b60152f94b56855ac078cc0a8ece275abbb771eeed7002842fc101168771d623",
+      "repeat": 3,
+      "status": "divergent",
+      "trap_family": 25,
+      "unresolved": [
+        {
+          "classification": "policy-decision-required",
+          "observable": "unordered-choice-policy-required",
+          "trap_family": 25
+        }
+      ],
+      "variant": "wrong",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 25
+        }
+      ],
+      "id": "unordered-top",
+      "index": 99,
+      "manifest_sha256": "ad1597b9aa6d33b0c8a9ef291f9e19fba824eebde09a3e6b9970156b7d19da32",
+      "repeat": 4,
+      "status": "divergent",
+      "trap_family": 25,
+      "unresolved": [
+        {
+          "classification": "policy-decision-required",
+          "observable": "unordered-choice-policy-required",
+          "trap_family": 25
+        }
+      ],
+      "variant": "wrong",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "coverage": {
+        "source": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        },
+        "target": {
+          "eligible": true,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "statement_fraction": 1.0
+        }
+      },
+      "differences": [
+        {
+          "classification": "lossy",
+          "observable": "result_sets",
+          "trap_family": 25
+        }
+      ],
+      "id": "unordered-top",
+      "index": 100,
+      "manifest_sha256": "f0903791ccdad6ff29eef3fa308d5339b652029e52a602896878cc9277d8c7aa",
+      "repeat": 5,
+      "status": "divergent",
+      "trap_family": 25,
+      "unresolved": [
+        {
+          "classification": "policy-decision-required",
+          "observable": "unordered-choice-policy-required",
+          "trap_family": 25
+        }
+      ],
+      "variant": "wrong",
+      "verdict": "insufficient-evidence"
+    }
+  ],
+  "plan_file_sha256": "411f7ca473fb4c4e3baf041622819c6d6ffc7b5ac53c87f8cb6ab7b7dad11965",
+  "plan_sha256": "fddb4b0b9985f123c301fc7a640e353e06817367a72e2591e469881d22dc374b",
+  "policy_register_sha256": "d121f7fe5b8eaa154a6e944cce443238187ff6e3fff7bb64bda7bcb7018c4d13",
+  "procedures": 42,
+  "recorder_public_key_sha256": "f5bdd5002b137b56f6dd315e4746d9ba336ec14b50f64387811826b3a1cb01f7",
+  "report_sha256": "7ec005f292917b0bc4bd478b024eacb9a88bbeb1d5d6437bce341ea25ec62dce",
+  "schema": "tsql-measured-coverage-results/1",
+  "started_utc": "2026-10-07T20:58:34.427152+00:00",
+  "tests": {
+    "native_control_engines": 2,
+    "native_coverage_controls_passed": 7,
+    "scoped_offline_passed": 73
+  },
+  "three_twins": [
+    {
+      "id": "ci-unique",
+      "observed_status": "match-on-compared-observables",
+      "source_return": -4,
+      "target_return": -4,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "id": "ci-unique",
+      "observed_status": "divergent",
+      "source_return": -4,
+      "target_return": 0,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "id": "catch-retains-prior-work",
+      "observed_status": "match-on-compared-observables",
+      "source_return": -6,
+      "target_return": -6,
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "id": "catch-retains-prior-work",
+      "observed_status": "divergent",
+      "source_return": -6,
+      "target_return": -6,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "id": "xact-abort",
+      "observed_status": "match-on-compared-observables",
+      "source_return": -6,
+      "target_return": -6,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "id": "xact-abort",
+      "observed_status": "divergent",
+      "source_return": -6,
+      "target_return": -6,
+      "variant": "wrong",
+      "verdict": "divergent"
+    }
+  ]
+}

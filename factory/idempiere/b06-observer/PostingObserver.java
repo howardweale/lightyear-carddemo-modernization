@@ -18,7 +18,7 @@ public final class PostingObserver {
         "org.compiere.acct.Doc", "org.compiere.acct.DocManager", "org.compiere.util.DB", TERMINAL);
     private final BufferedReader acknowledgements = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
     private final Map<Long, Deque<Call>> active = new HashMap<>();
-    private final Map<String, String> code = new HashMap<>();
+    private final Set<String> definitions = new HashSet<>();
     private final Set<String> configured = new HashSet<>();
     private VirtualMachine vm;
     private long sequence = 0;
@@ -81,12 +81,36 @@ public final class PostingObserver {
     private Map<String,Object> location(Location location) throws Exception {
         Method method = location.method();
         ReferenceType type = location.declaringType();
-        String identity = type.name() + "." + method.name() + method.signature();
-        String cacheKey = type.classLoader() == null ? "bootstrap:" + identity : type.classLoader().uniqueID() + ":" + identity;
-        if (!code.containsKey(cacheKey)) code.put(cacheKey, method.isNative() || method.isAbstract() ? "unavailable" : hash(method.bytecodes()));
+        String loader = type.classLoader() == null ? "bootstrap" : Long.toString(type.classLoader().uniqueID());
+        byte[] pool = type.constantPool();
+        boolean unavailable = method.isNative() || method.isAbstract();
+        byte[] bytes = unavailable ? new byte[0] : method.bytecodes();
+        String methodHash = unavailable ? "unavailable" : hash(bytes), poolHash = hash(pool);
+        String id = loader + ":" + type.classObject().uniqueID() + ":" + method.name() + method.signature()
+            + ":" + poolHash + ":" + methodHash;
+        // Capture every definition, including all hidden classes, without a name allowlist.
+        // This external JDI read invokes no target method and reads no captured values.
+        if (definitions.add(id)) {
+            Map<String,Object> definition = new LinkedHashMap<>();
+            definition.put("definition_id", id); definition.put("class", type.name());
+            definition.put("class_signature", type.signature());
+            definition.put("class_object_id", type.classObject().uniqueID());
+            definition.put("class_modifiers", type.modifiers()); definition.put("loader", loader);
+            definition.put("method", method.name()); definition.put("signature", method.signature());
+            definition.put("method_modifiers", method.modifiers()); definition.put("native_or_abstract", unavailable);
+            definition.put("constant_pool_count", type.constantPoolCount());
+            definition.put("constant_pool_hex", HexFormat.of().formatHex(pool));
+            definition.put("constant_pool_sha256", poolHash);
+            definition.put("bytecode_hex", HexFormat.of().formatHex(bytes));
+            definition.put("method_sha256", methodHash);
+            List<Map<String,Object>> fields = new ArrayList<>();
+            for (Field f : type.fields()) fields.add(Map.of("name", f.name(), "signature", f.signature(), "modifiers", f.modifiers()));
+            definition.put("fields", fields);
+            emit(new LinkedHashMap<>(Map.of("kind", "frame-definition", "definition", definition)), false);
+        }
         return Map.of("class", type.name(), "method", method.name(), "signature", method.signature(), "line", location.lineNumber(),
-                      "code_index", location.codeIndex(), "method_sha256", code.get(cacheKey),
-                      "constant_pool_sha256", hash(type.constantPool()), "loader", cacheKey.split(":", 2)[0]);
+                      "code_index", location.codeIndex(), "method_sha256", methodHash,
+                      "constant_pool_sha256", poolHash, "loader", loader, "definition_id", id);
     }
     private List<Map<String,Object>> frames(ThreadReference thread) throws Exception {
         List<Map<String,Object>> result = new ArrayList<>();

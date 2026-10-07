@@ -1,0 +1,171 @@
+{
+  "acceptance": [
+    "full entry and clock guards on both engines",
+    "all recorded frames/catch sites admitted under approved binding policy",
+    "retained reference business gate passes; no equipment suspicion",
+    "duplicate invoice-line mutant rejected for preregistered reason",
+    "candidate null dereference terminal identity bound; exact closed diagnostic directly delivered to zero-model sink",
+    "all available archives independently replay entry, gate, observer provenance and diagnostic delivery",
+    "signed terminal/finalization records plus owned-resource cleanup verification"
+  ],
+  "amendment_file_sha256": "a6ae76dee979c59badeec20630b54e83dbcaddc85d8467ff3d4e1adb9d4b8898",
+  "artifact_type": "ms94-b06-smoke-preparation-draft/1",
+  "calendar_guard": "retain full declared maximum guard at assembly, launch and each slot; approved absolute deadline still required",
+  "candidate_timeout_seconds": 1800,
+  "census_counts_as_smoke_success": false,
+  "clock_mode": "unmodified-real-time",
+  "docker_authorized": false,
+  "historical_group_sha256": "562cb793b3f9f5267403eac7cbd16cbc1276b2ac401b87d9d8db6513ee0593d5",
+  "historical_snapshot_sha256": "e5790d832a18ea0272b24a1bfd611ad60aa3f45c340fc68997e3c6ed30409c06",
+  "historical_terminal_report_sha256": "e58224f7a45f474bd65867889560eeafb75b37f24a9b12952eba12f2a93d81aa",
+  "images": {
+    "application": "sha256:f3bed005214fbaec7f580a2d27e0dffa7a868bfc913db8c231d6f2b3fe4e0300",
+    "oracle": "sha256:96c4bda58cd8a8dfda586b2d83a2eb2a3e9f28fda0f1915d3fd758c890dc02b7",
+    "postgresql": "sha256:6820c00e2aa9770bea672bc036646175d2bb5f5ce7343dc51e1dba5eb1d3da7f"
+  },
+  "maximum_group_seconds": 21600,
+  "measurement_authorized": false,
+  "model_calls": 0,
+  "new_snapshot_path": "work/b06-execution-snapshots/j1-smoke-r11",
+  "not_executable_reason": "Runtime provenance and approved policy are missing. This draft is intentionally not the executable-plan schema and must not be passed to execute_group.",
+  "offline_census_summary_file_sha256": "e363262bb0c9b3d403d3da1c11063a3bea87434a4e13231469bb9eb73eb90d8d",
+  "one_attempt_per_fresh_slot": true,
+  "per_slot_seconds_including_finalization": 7190,
+  "period_end_exclusive_utc": "2026-11-01T00:00:00Z",
+  "prerequisites": [
+    "operator approval of observer-binding amendment",
+    "implement approved provenance capture and independent replay; offline negative controls pass",
+    "approved preparation/census Tower decision and window before any Docker execution",
+    "new both-engine provenance census resolves generated identities and HierarchicalTestEngine pool discrepancy",
+    "compile and bind changed observer using pinned image in approved preparation window",
+    "freeze exact native plans and new executable snapshot without reusing any old slot output",
+    "publish exact approved executable plan bytes",
+    "fresh Tower decision binds final plan, snapshot, public commit and absolute window; authorizations are not yet issued"
+  ],
+  "public_commit": null,
+  "replacement_slots_allowed": false,
+  "restarts_allowed": false,
+  "resume_allowed": false,
+  "review": "operator review; not independent attestation",
+  "revision": "j1-smoke-r11",
+  "scenario_date": "2026-10-01",
+  "slot_count": 3,
+  "slots": [
+    {
+      "control": "retained-reference",
+      "expected": {
+        "diagnostics": [],
+        "equipment_suspect": false,
+        "status": "passed"
+      },
+      "id": "j1-smoke-r11-001",
+      "inputs_sha256": {
+        "JourneySupport.java": "1b50b77a98df8ae1a02c6eb2ce5446768d4f8293ee01725ded007a0887dbd831",
+        "checkpoint.json": "06a5a6872d163bd4e33f511f5dddb1f747d1b35e4d9736531d0e318964b0ab19",
+        "comparison-register.json": "0f10b3fad375016f52e1001caf2d7015e091832c4ffe09f3837e80ec28a5f60c",
+        "datatype-inventory.json": "5c52eb20a27754c193de22a5bdf547618cc32752baa99f33fc5e085d4be8b283",
+        "diagnostic-issues.json": "9149077cbfc9ce97ea12291a569a918851adb22bd11e316dc29367608be82d05",
+        "diagnostic.java": "261434fbff33fb859fff2304a6419eed9178246f227bf1125e8156b7492666f1",
+        "history-bound.json": "3ef5fa9d35b155704d07987beb7c404ec0535ee819a0009911e0f81df62c8a75",
+        "invoice-type-contract.json": "4a946a30b33c52d0f117f6927382e7e42d7a337cd8243f123451c7c91eabfaa9",
+        "operations.java": "329a873b773be8ebce48b6f69dcdb75c79d6c044f3d65f092bb4b27e159c25fe",
+        "oracle-entry-manifest.json": "e5eb053c65bc133faf9d5c5fb32bdf0a8c8aa7cae7e6238963fc1c2103fe0a8e",
+        "oracle-entry-multisets.json": "7012b2fe031a541197a3c9c9469b6a5bcfb5bb5bfa637d145730c0df02634512",
+        "oracle-repairs.json": "08c597b38b51a9b9755ee72c8c9d3483c3c32236f3a8183737374ce7a4f00a7e",
+        "postgresql-entry-manifest.json": "c99c20580114bbcf55c652d6d60c7d086a1c441ff431c1168b75a3989a9d26d4",
+        "postgresql-entry-multisets.json": "3b5b3f99b2ebee693d39fde771a89851ce16b2784458dba34b9bc4ca81f0960a",
+        "postgresql-repairs.json": "6bf0c817583170cd49743e3c341f91e852c0a2e854c7719ce2ed657fcb277475",
+        "primary-keys.json": "c90d41b3f27c065ea42a4853c22d448b056fdc98a5fda3925644896008897df3"
+      },
+      "model_calls": 0,
+      "native_run_id": "journey-bc34ba849d41583880e65203e10b867e",
+      "new_native_plan_sha256": null,
+      "preserves_fault_recipe_from_prior_input_plan": false,
+      "prior_input_plan_sha256": "ae882fe49249d86d7cdb25bdd593a160c82529b7a9972f21297cad47e5d00c09",
+      "slot_kind": "candidate"
+    },
+    {
+      "control": "duplicate-invoice-line",
+      "expected": {
+        "closed_reason": "Missing or ambiguous committed application record: c_invoiceline",
+        "status": "rejected"
+      },
+      "id": "j1-smoke-r11-002",
+      "inputs_sha256": {
+        "JourneySupport.java": "1b50b77a98df8ae1a02c6eb2ce5446768d4f8293ee01725ded007a0887dbd831",
+        "checkpoint.json": "06a5a6872d163bd4e33f511f5dddb1f747d1b35e4d9736531d0e318964b0ab19",
+        "comparison-register.json": "0f10b3fad375016f52e1001caf2d7015e091832c4ffe09f3837e80ec28a5f60c",
+        "datatype-inventory.json": "5c52eb20a27754c193de22a5bdf547618cc32752baa99f33fc5e085d4be8b283",
+        "diagnostic-issues.json": "9149077cbfc9ce97ea12291a569a918851adb22bd11e316dc29367608be82d05",
+        "diagnostic.java": "261434fbff33fb859fff2304a6419eed9178246f227bf1125e8156b7492666f1",
+        "history-bound.json": "3ef5fa9d35b155704d07987beb7c404ec0535ee819a0009911e0f81df62c8a75",
+        "invoice-type-contract.json": "4a946a30b33c52d0f117f6927382e7e42d7a337cd8243f123451c7c91eabfaa9",
+        "operations.java": "329a873b773be8ebce48b6f69dcdb75c79d6c044f3d65f092bb4b27e159c25fe",
+        "oracle-entry-manifest.json": "e5eb053c65bc133faf9d5c5fb32bdf0a8c8aa7cae7e6238963fc1c2103fe0a8e",
+        "oracle-entry-multisets.json": "7012b2fe031a541197a3c9c9469b6a5bcfb5bb5bfa637d145730c0df02634512",
+        "oracle-repairs.json": "08c597b38b51a9b9755ee72c8c9d3483c3c32236f3a8183737374ce7a4f00a7e",
+        "postgresql-entry-manifest.json": "c99c20580114bbcf55c652d6d60c7d086a1c441ff431c1168b75a3989a9d26d4",
+        "postgresql-entry-multisets.json": "3b5b3f99b2ebee693d39fde771a89851ce16b2784458dba34b9bc4ca81f0960a",
+        "postgresql-repairs.json": "6bf0c817583170cd49743e3c341f91e852c0a2e854c7719ce2ed657fcb277475",
+        "primary-keys.json": "c90d41b3f27c065ea42a4853c22d448b056fdc98a5fda3925644896008897df3"
+      },
+      "model_calls": 0,
+      "native_run_id": "journey-2be7a4e66e0153f6b6296fadccf82985",
+      "new_native_plan_sha256": null,
+      "preserves_fault_recipe_from_prior_input_plan": true,
+      "prior_input_plan_sha256": "b97cca8e483a8c1e1934a2bf5fd90c80961756a3559eef8cf9162918678c3884",
+      "slot_kind": "native-mutator"
+    },
+    {
+      "control": "invoice-null-dereference",
+      "expected": {
+        "candidate_frame": {
+          "line": 409,
+          "method": "operationsJourney"
+        },
+        "delivery": "builder-direct",
+        "equipment_suspect": false,
+        "exception_class": "NullPointerException",
+        "public_stage": "invoice",
+        "status": "execution-failure",
+        "thrown_by": "candidate"
+      },
+      "id": "j1-smoke-r11-003",
+      "inputs_sha256": {
+        "JourneySupport.java": "1b50b77a98df8ae1a02c6eb2ce5446768d4f8293ee01725ded007a0887dbd831",
+        "checkpoint.json": "06a5a6872d163bd4e33f511f5dddb1f747d1b35e4d9736531d0e318964b0ab19",
+        "comparison-register.json": "0f10b3fad375016f52e1001caf2d7015e091832c4ffe09f3837e80ec28a5f60c",
+        "datatype-inventory.json": "5c52eb20a27754c193de22a5bdf547618cc32752baa99f33fc5e085d4be8b283",
+        "diagnostic-issues.json": "9149077cbfc9ce97ea12291a569a918851adb22bd11e316dc29367608be82d05",
+        "diagnostic.java": "261434fbff33fb859fff2304a6419eed9178246f227bf1125e8156b7492666f1",
+        "history-bound.json": "3ef5fa9d35b155704d07987beb7c404ec0535ee819a0009911e0f81df62c8a75",
+        "invoice-type-contract.json": "4a946a30b33c52d0f117f6927382e7e42d7a337cd8243f123451c7c91eabfaa9",
+        "operations.java": "2ffab264d852b65eb79c68606fff81900899a55872859f881746932125b41db9",
+        "oracle-entry-manifest.json": "e5eb053c65bc133faf9d5c5fb32bdf0a8c8aa7cae7e6238963fc1c2103fe0a8e",
+        "oracle-entry-multisets.json": "7012b2fe031a541197a3c9c9469b6a5bcfb5bb5bfa637d145730c0df02634512",
+        "oracle-repairs.json": "08c597b38b51a9b9755ee72c8c9d3483c3c32236f3a8183737374ce7a4f00a7e",
+        "postgresql-entry-manifest.json": "c99c20580114bbcf55c652d6d60c7d086a1c441ff431c1168b75a3989a9d26d4",
+        "postgresql-entry-multisets.json": "3b5b3f99b2ebee693d39fde771a89851ce16b2784458dba34b9bc4ca81f0960a",
+        "postgresql-repairs.json": "6bf0c817583170cd49743e3c341f91e852c0a2e854c7719ce2ed657fcb277475",
+        "primary-keys.json": "c90d41b3f27c065ea42a4853c22d448b056fdc98a5fda3925644896008897df3"
+      },
+      "model_calls": 0,
+      "native_run_id": "journey-8859acfbb2dc5baab1174aa92d21c463",
+      "new_native_plan_sha256": null,
+      "preserves_fault_recipe_from_prior_input_plan": false,
+      "prior_input_plan_sha256": "2bc3a7496405fbd1ce4de10d5b2f4135844fb5cb861ebff4baee5c28170547b4",
+      "slot_kind": "candidate"
+    }
+  ],
+  "snapshot_sha256": null,
+  "status": "blocked-prospective-amendment-and-provenance-census",
+  "stop_rules": [
+    "any equipment-suspect or provenance/evidence/cleanup failure",
+    "any unexpected control outcome",
+    "hard trial/group or period-boundary deadline",
+    "unknown or ambiguous frame generation/origin"
+  ],
+  "tower_decision_sha256": null,
+  "window": null,
+  "content_sha256": "1096ddd974ea77ecc5850fa7a750cad654173b8a4a299864f2d49f7d286a97c5"
+}

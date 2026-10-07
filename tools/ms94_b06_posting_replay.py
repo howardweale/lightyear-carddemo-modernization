@@ -5,6 +5,7 @@ a signed assertion that an equipment fault was absent is never sufficient.
 """
 import hashlib
 import json
+import re
 from pathlib import Path
 
 from lightyear_calibration.contracts import read_json, verify, digest
@@ -36,11 +37,27 @@ def catalog(root, bindings):
     return result
 
 
-def checked_frames(event, classes, loaders):
+def checked_frames(event, classes, loaders, definitions=None, stub_policy=None, host_entries=None):
     frames = event['frames']
     check(isinstance(frames, list) and frames, 'observer-stack-empty')
+    frames = [dict(f) for f in frames]
     for frame in frames:
+        frame.pop('_verified_forwarding_host', None)
+    for index, frame in enumerate(frames):
         name = frame['class']
+        if stub_policy is not None:
+            from tools.ms94_b06_forwarding_stub import POLICY, validate_stub
+            check(stub_policy == {'policy':POLICY, 'adjacent_target':'younger'}, 'observer-stub-policy')
+            raw = (definitions or {}).get(frame.get('definition_id'))
+            check(raw is not None and all(raw[k] == frame[k] for k in
+                  ('class','method','signature','loader','constant_pool_sha256','method_sha256')),
+                  'observer-frame-definition-missing-or-differs')
+            if name not in classes and '/' in name:
+                proof = validate_stub(raw, frame, frames[index-1] if index else None, classes, host_entries or {})
+                frame['_verified_forwarding_host'] = proof['host_class']
+                loaders.setdefault(name, frame['loader'])
+                check(loaders[name] == frame['loader'], 'observer-class-loader-changed')
+                continue
         if name in classes or name == SUPPORT or name.startswith(CANDIDATE) or name in FRAMEWORK or name.startswith(('org.junit.', 'org.opentest4j.', 'junit.framework.')):
             check(name in classes, 'observer-unbound-class')
             expected = classes[name]
@@ -56,7 +73,7 @@ def origin(frames):
     # Inspect the nearest caller, not an arbitrary candidate deeper in the stack.
     # Unknown helpers remain outside-origin even when called by the candidate.
     for frame in frames[1:]:
-        name = frame['class']
+        name = frame.get('_verified_forwarding_host', frame['class'])
         if name in FRAMEWORK:
             continue
         if name == SUPPORT:
@@ -67,13 +84,18 @@ def origin(frames):
     return 'outside'
 
 
-def replay_stream(folder, receipt, classes, lane):
+def replay_stream(folder, receipt, classes, lane, stub_policy=None, host_entries=None):
     """Pure content verification; caller must authenticate receipt and full entry."""
     data = (folder / 'events.jsonl').read_bytes()
     check(hashlib.sha256(data).hexdigest() == receipt['event_file_sha256'], 'observer-event-file-changed')
     lines = data.splitlines()
     check(len(lines) == receipt['event_count'] and 2 <= len(lines) <= 50000, 'observer-event-count')
+    all_records = [json.loads(line) for line in lines]
+    if stub_policy is not None:
+        from tools.ms94_b06_forwarding_stub import receipt_records
+        check(receipt.get('frame_records') == receipt_records(all_records), 'observer-signed-frame-records-differ')
     previous, ready, death = None, False, False
+    definitions = {}
     stacks, loaders, observations, captures, exceptions = {}, {}, [], [], []
     readbacks, entries, terminals = {}, {}, []
     for sequence, line in enumerate(lines, 1):
@@ -86,13 +108,22 @@ def replay_stream(folder, receipt, classes, lane):
         if kind == 'ready':
             check(sequence == 1 and not ready and event['checkpoint'] is False, 'observer-ready-order')
             ready = True
+        elif kind == 'frame-definition':
+            from tools.ms94_b06_forwarding_stub import definition
+            check(stub_policy is not None and ready and event['checkpoint'] is False, 'observer-definition-order')
+            raw = event['definition']; definition(raw)
+            check(raw['definition_id'] not in definitions, 'observer-duplicate-definition')
+            definitions[raw['definition_id']] = raw
         elif kind == 'vm-death':
             check(ready and sequence == len(lines) and event['checkpoint'] is False and
                   not any(stacks.values()), 'observer-death-with-open-calls')
             death = True
         else:
             check(ready and event['checkpoint'] is True, 'observer-checkpoint-not-suspended')
-            frames = checked_frames(event, classes, loaders)
+            frames = checked_frames(event, classes, loaders, definitions, stub_policy, host_entries)
+            event = {**event, 'frames':frames}
+            if stub_policy is not None and event.get('catch_location'):
+                checked_frames({'frames':[event['catch_location']]}, classes, loaders, definitions, stub_policy, host_entries)
             stack = stacks.setdefault(event['thread'], [])
             if kind == 'test-terminal':
                 check(frames[0]['class'] == TERMINAL and frames[0]['method'] == 'executionFinished' and
@@ -103,7 +134,8 @@ def replay_stream(folder, receipt, classes, lane):
                       'observer-candidate-invoked-terminal')
                 check(any(f['class'] == 'org.junit.platform.engine.support.hierarchical.NodeTestTask' for f in frames[1:]),
                       'observer-terminal-engine-stack')
-                check(all(f['class'] in classes for f in frames if f['class'].startswith('org.junit.')),
+                check(all(f['class'] in classes or f.get('_verified_forwarding_host') in classes
+                          for f in frames if f['class'].startswith('org.junit.')),
                       'observer-terminal-unbound-framework')
                 check(not any(t['descriptor_id'] == event['descriptor_id'] for t in terminals),
                       'observer-duplicate-terminal')
@@ -172,6 +204,22 @@ def replay(root, run, lane, public_key):
           receipt['execution_sha256'] == execution['content_sha256'] and receipt['complete'] is True,
           'observer-receipt-invalid')
     validate_jvm(receipt['target']['jvm'], spec)
+    if spec.get('forwarding_stub') is not None:
+        from tools.ms94_b06_forwarding_stub import validate_spec
+        validate_spec(spec, catalog(root, spec['target_class_files_sha256']))
+        entries = receipt.get('host_jar_entries', {})
+        check(set(entries) == set(spec['host_jar_entries']), 'observer-host-jar-closure')
+        for name, expected in spec['host_jar_entries'].items():
+            check(all(entries[name].get(k) == v for k,v in expected.items()) and
+                  re.fullmatch('[a-f0-9]{64}', entries[name].get('jar_sha256','')) is not None,
+                  'observer-host-jar-binding')
+        census = read_json(folder / 'frame-census.json')
+        check(verify_envelope(census, public_key) and census['complete'] is True and
+              census['plan_sha256'] == plan['content_sha256'] and census['lane'] == lane and
+              census['frame_records'] == receipt['frame_records'] and
+              census['host_jar_entries'] == entries and census['event_count'] == receipt['event_count'] and
+              census['last_event_sha256'] == receipt['last_event_sha256'] and
+              census['event_file_sha256'] == receipt['event_file_sha256'], 'observer-census-receipt-binding')
     check(receipt['observer_class_files_sha256'] == spec['class_files_sha256'] and
           receipt['target']['image'] == plan['local']['runner_image'] and
           receipt['target']['ports_published'] is False and
@@ -179,7 +227,8 @@ def replay(root, run, lane, public_key):
           receipt['target']['jvm']['java_binary_sha256'] == spec['java_binary_sha256'] and
           '-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5005' in
           receipt['target']['jvm']['arguments'], 'observer-target-binding')
-    result = replay_stream(folder, receipt, catalog(root, spec['target_class_files_sha256']), lane)
+    result = replay_stream(folder, receipt, catalog(root, spec['target_class_files_sha256']), lane,
+                           spec.get('forwarding_stub'), receipt.get('host_jar_entries', {}))
     return {**result, 'full_entry_replayed': True, 'entry_sha256': entry['content_sha256'],
             'clock': clocks, 'authorization_sha256': authorization['content_sha256'],
             'observer_replayed': True, 'receipt_sha256': receipt['content_sha256'],

@@ -1,0 +1,135 @@
+{
+  "schema": "b06-owned-label-inventory/1",
+  "checked_utc": "2026-10-07T16:55:06.4526102Z",
+  "read_only": true,
+  "scope": "r10 three declared native-run owner labels",
+  "checks": [
+    {
+      "owner": "journey-043b16c21aa653508923c184f4759197",
+      "kind": "container",
+      "arguments": [
+        "ps",
+        "--all",
+        "--filter",
+        "label=lightyear.journey=journey-043b16c21aa653508923c184f4759197",
+        "--format",
+        "{{json .}}"
+      ],
+      "exit_code": 0,
+      "output": []
+    },
+    {
+      "owner": "journey-043b16c21aa653508923c184f4759197",
+      "kind": "network",
+      "arguments": [
+        "network",
+        "ls",
+        "--filter",
+        "label=lightyear.journey=journey-043b16c21aa653508923c184f4759197",
+        "--format",
+        "{{json .}}"
+      ],
+      "exit_code": 0,
+      "output": []
+    },
+    {
+      "owner": "journey-043b16c21aa653508923c184f4759197",
+      "kind": "volume",
+      "arguments": [
+        "volume",
+        "ls",
+        "--filter",
+        "label=lightyear.journey=journey-043b16c21aa653508923c184f4759197",
+        "--format",
+        "{{json .}}"
+      ],
+      "exit_code": 0,
+      "output": []
+    },
+    {
+      "owner": "journey-876d7a1e384f5f9d96504f4f5c33af6c",
+      "kind": "container",
+      "arguments": [
+        "ps",
+        "--all",
+        "--filter",
+        "label=lightyear.journey=journey-876d7a1e384f5f9d96504f4f5c33af6c",
+        "--format",
+        "{{json .}}"
+      ],
+      "exit_code": 0,
+      "output": []
+    },
+    {
+      "owner": "journey-876d7a1e384f5f9d96504f4f5c33af6c",
+      "kind": "network",
+      "arguments": [
+        "network",
+        "ls",
+        "--filter",
+        "label=lightyear.journey=journey-876d7a1e384f5f9d96504f4f5c33af6c",
+        "--format",
+        "{{json .}}"
+      ],
+      "exit_code": 0,
+      "output": []
+    },
+    {
+      "owner": "journey-876d7a1e384f5f9d96504f4f5c33af6c",
+      "kind": "volume",
+      "arguments": [
+        "volume",
+        "ls",
+        "--filter",
+        "label=lightyear.journey=journey-876d7a1e384f5f9d96504f4f5c33af6c",
+        "--format",
+        "{{json .}}"
+      ],
+      "exit_code": 0,
+      "output": []
+    },
+    {
+      "owner": "journey-3a781fbeaeec57d990d156902df275d4",
+      "kind": "container",
+      "arguments": [
+        "ps",
+        "--all",
+        "--filter",
+        "label=lightyear.journey=journey-3a781fbeaeec57d990d156902df275d4",
+        "--format",
+        "{{json .}}"
+      ],
+      "exit_code": 0,
+      "output": []
+    },
+    {
+      "owner": "journey-3a781fbeaeec57d990d156902df275d4",
+      "kind": "network",
+      "arguments": [
+        "network",
+        "ls",
+        "--filter",
+        "label=lightyear.journey=journey-3a781fbeaeec57d990d156902df275d4",
+        "--format",
+        "{{json .}}"
+      ],
+      "exit_code": 0,
+      "output": []
+    },
+    {
+      "owner": "journey-3a781fbeaeec57d990d156902df275d4",
+      "kind": "volume",
+      "arguments": [
+        "volume",
+        "ls",
+        "--filter",
+        "label=lightyear.journey=journey-3a781fbeaeec57d990d156902df275d4",
+        "--format",
+        "{{json .}}"
+      ],
+      "exit_code": 0,
+      "output": []
+    }
+  ],
+  "limitation": "Label-filtered inventory only; does not prove absence of unlabelled or relabelled resources."
+}

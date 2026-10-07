@@ -1,5 +1,12 @@
 * text=auto
 
+# Preserve the exact T-SQL implementation/corpus bytes bound by native run plans.
+src/lightyear_data/tsql_procedures/** -text
+data-modernization/tsql-procedures/corpus/** -text
+tools/tsql_scriptdom/** -text
+tools/run_tsql_native.py -text
+tools/replay_tsql_native.py -text
+
 
 # Read-only regression receipts preserve the original signed archive bytes.
 tests/fixtures/decision-console/b04/** -text -whitespace

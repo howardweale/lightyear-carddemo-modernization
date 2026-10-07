@@ -1,0 +1,1150 @@
+{
+  "archive_file_sha256": "2d66d98f90ed29f03fd045d3578a75306b9e20a3be6a0127e4076be8c585c51a",
+  "at_utc": "2026-10-07T19:02:04.388574+00:00",
+  "claim": "Operator review, not independent attestation",
+  "cleanup_recheck_file_sha256": "2bed20279bf064fa3f5b4334e2b738571c1cddf251d7de318b0092e1acc295a2",
+  "coverage": "unavailable; equivalent verdicts fail closed",
+  "equivalent_certificates": 0,
+  "independent_audit_file_sha256": "1ecf544b0f573852830ef3cd3aac8900f858b846b5658b3b9ab481d2712ddfa5",
+  "model_calls": 0,
+  "non_policy_correct_divergent": 3,
+  "non_policy_correct_observed_matches": 37,
+  "non_policy_wrong_twins_divergent": 40,
+  "pairs": 100,
+  "policy_runs": 20,
+  "procedures": 42,
+  "recorder_public_key_sha256": "d2ba91299470034ce7b835d6735a47725a7e2bf0b5954ae5c3819d613277f45a",
+  "report_content_sha256": "2c959ed46d0df07843daba0f82d65f95152803f54d939f63cb677ffa1618d23d",
+  "report_file_sha256": "b703601d23c39a45fb0563c71405c4e01fb305f7f1b0df2066e7bd2169d09fe5",
+  "rows": [
+    {
+      "differences": [],
+      "id": "ci-equality",
+      "manifest_sha256": "e7dfbd278c3fb575f6d525fd6fe77a501f90d0814348f4ee7ef06974acc016c0",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 1,
+      "trap_family": 1,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets"
+      ],
+      "id": "ci-equality",
+      "manifest_sha256": "9ff5be97e50af3a976cb10f5fa0c019fe55d0cd753758a8be6b8b4175c1594f5",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 1,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [],
+      "id": "ci-join",
+      "manifest_sha256": "62a81eda1530f0f164c72836a4440da2413220816024badcc5ba6539fc9a586f",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 1,
+      "trap_family": 1,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets"
+      ],
+      "id": "ci-join",
+      "manifest_sha256": "612985d5a5a5139bc45415d4559a7123a6d813ac1fe0fca48c8ce10989a96c72",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 1,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [],
+      "id": "ci-group",
+      "manifest_sha256": "b36e3e570f6ea58ab6c6ae049bf80baf665ae691d9325b454ff92a56b532daf9",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 1,
+      "trap_family": 1,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets"
+      ],
+      "id": "ci-group",
+      "manifest_sha256": "1ab2e859e587c53cdded421729b922508c0f925a254b2f04edc36a2afe376e61",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 1,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [],
+      "id": "ci-distinct",
+      "manifest_sha256": "e378e195a9bac9d377d90ee2afd2b7830f31e7ec4364df871359f22e77c7277c",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 1,
+      "trap_family": 1,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets"
+      ],
+      "id": "ci-distinct",
+      "manifest_sha256": "007f2e2786f38a67b02b21c5f05bf330150ced7ed2eddaf0d0ca1ff4329113ef",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 1,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [
+        "return_code"
+      ],
+      "id": "ci-unique",
+      "manifest_sha256": "da48ab91f861136802252b6a080a47a5217bdc87fe252de8f950503cd2a4350b",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 1,
+      "variant": "correct",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [
+        "result_sets",
+        "return_code",
+        "all-table-after"
+      ],
+      "id": "ci-unique",
+      "manifest_sha256": "b8cf601bf0a0e291dc5a920312662ab5d282d0049d826698059db63726d731f8",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 1,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [],
+      "id": "trailing-char",
+      "manifest_sha256": "2c6b7e01d950ace1f4dda93495f75ab22f7c2de66b7ed2986de1ba9314283926",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 1,
+      "trap_family": 2,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets"
+      ],
+      "id": "trailing-char",
+      "manifest_sha256": "df29acc3e21577161a667288b66a83b4f5d16f3b8b3a4b091b8d2fe4d7fa81c2",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 2,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [],
+      "id": "trailing-varchar",
+      "manifest_sha256": "0b888fdf2d091734ac1a9a2f92630b5324fdfd8159b4efec2be90f447f324966",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 1,
+      "trap_family": 2,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets"
+      ],
+      "id": "trailing-varchar",
+      "manifest_sha256": "5f7d8bc6749352633949b1126d191dad65a9f99c9eaf53ae090791a3008b076f",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 2,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [],
+      "id": "len",
+      "manifest_sha256": "9511e7f616e8d4e3e0dd17f879ae8a2a027ce94e04ff9183556b1cc66ec4b737",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 1,
+      "trap_family": 3,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets"
+      ],
+      "id": "len",
+      "manifest_sha256": "8e0d1e480a87c6c422b4d0888dc9367e1fde24a61fea9e411880ee464cdd4f21",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 3,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [],
+      "id": "integer-division",
+      "manifest_sha256": "d545e3dfe23093dfbe1da5ec8d3a93fbe749f4def90b6b0880531bf6f2662745",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 1,
+      "trap_family": 4,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets"
+      ],
+      "id": "integer-division",
+      "manifest_sha256": "2342477b49119d26ff8c6334fdaf49b5d1053dfdf473fa7991657427d9999132",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 4,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [],
+      "id": "type-precedence",
+      "manifest_sha256": "4a5aeb6552193825a1a39bb3104283c8cc5413f0425bcc8337b98df2d96a0315",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 1,
+      "trap_family": 4,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets"
+      ],
+      "id": "type-precedence",
+      "manifest_sha256": "f388aa78162fdbcc6a6e3f0f448d658fae3e5b51d26222954b6cbb981b1afd9e",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 4,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [],
+      "id": "isnull-length",
+      "manifest_sha256": "3c38fc28d1bcb9e12ff83f67a265274fd8be8f43f8edb8af4dc16bc88e9a1803",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 1,
+      "trap_family": 5,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets"
+      ],
+      "id": "isnull-length",
+      "manifest_sha256": "be729b093854719a6fb8eb4b7ba6d25aa6de6dbbfe4f0458d223883b1c9df2c5",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 5,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [],
+      "id": "empty-int",
+      "manifest_sha256": "3b52d1c646ac15d5f611f878c09b55a18d8738c9b8c00b020cf650fa37b71a3b",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 1,
+      "trap_family": 6,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets"
+      ],
+      "id": "empty-int",
+      "manifest_sha256": "947649993ba2f0a13552e0d30171cb3dfd3b3f887d53b70f42bf1ddb9a06c78a",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 6,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [],
+      "id": "empty-date",
+      "manifest_sha256": "682ea860a9bf667d1c77ca4bad5066092ea4e8b8320b9f9c8b48074592c67d91",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 1,
+      "trap_family": 6,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets"
+      ],
+      "id": "empty-date",
+      "manifest_sha256": "07ca93e2f4346e496da8b745dbbd52f6bda35466e5796271ed189d08b5f22299",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 6,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [],
+      "id": "datetime-001",
+      "manifest_sha256": "4edbd4d152adceff26db8c5d2f76efb4d9cb0de4b7065f5fee2344fef5d761b5",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 1,
+      "trap_family": 7,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets"
+      ],
+      "id": "datetime-001",
+      "manifest_sha256": "6f1ff98907a8d529e7eaba9a8dc679d76716cbd520a33016975f4f51a2a3922c",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 7,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [],
+      "id": "datetime-002",
+      "manifest_sha256": "e2f532095acb222ae79bce8ed9b99ee6d8683de16b2b8382aa98abd7a7b68aae",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 1,
+      "trap_family": 7,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets"
+      ],
+      "id": "datetime-002",
+      "manifest_sha256": "d1966aed389f62890ad60c1dcb1ba57c97e176488bc56844a0457367e9de0193",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 7,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [],
+      "id": "datediff-day",
+      "manifest_sha256": "a2df4bcdc9e4df4ff21a2548148db0f92048bac4f63212f623cfe981962fd4fd",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 1,
+      "trap_family": 8,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets"
+      ],
+      "id": "datediff-day",
+      "manifest_sha256": "bcf07b36be07c9700edf8b7ffabfc7e5924ab59b0b6f721f9ba0171d1e215cae",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 8,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [],
+      "id": "datediff-year",
+      "manifest_sha256": "be7495bb86b5a1a239f8bf4c9aff3b2f57d99c8b6efe101c02b5a8dc625d0b11",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 1,
+      "trap_family": 8,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets"
+      ],
+      "id": "datediff-year",
+      "manifest_sha256": "5531d5cb6794ca461f3bd2fac3b4156b9fae4957079c8d0dfd6c0cdb2927803f",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 8,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [],
+      "id": "datefirst",
+      "manifest_sha256": "e82ced4892adb710eb794302dd62b0df69cb209edf8ba2556d0c69e5ae52c187",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 1,
+      "trap_family": 9,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets"
+      ],
+      "id": "datefirst",
+      "manifest_sha256": "1602042432d720bf15322256ca1708e24810f04f39d3394f9d50bbb3587b7a9e",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 9,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [],
+      "id": "dateformat",
+      "manifest_sha256": "952e803c97898f410db412ee0dfdb01e343f12b35327765ac61bafe31e0ad4a9",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 1,
+      "trap_family": 9,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets"
+      ],
+      "id": "dateformat",
+      "manifest_sha256": "5201689001340673d3f12c13d4a015a2b35250c8602b61974cabdb8bb5a909b3",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 9,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [],
+      "id": "convert-style",
+      "manifest_sha256": "a8876d351d0338054523137c00362c970234dbf7ac1374bf49ccf34367134b1b",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 1,
+      "trap_family": 9,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets"
+      ],
+      "id": "convert-style",
+      "manifest_sha256": "c5da72e005435cf1bf1a88e43f34ed9a9c324f0528ba210ee325d809d38b71e7",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 9,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [],
+      "id": "round-negative",
+      "manifest_sha256": "a196f792b9c2d962e793ad61d1593e6068eabb10b2f210f0516a5cac049f5979",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 1,
+      "trap_family": 10,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets"
+      ],
+      "id": "round-negative",
+      "manifest_sha256": "c1341d599a1c8327e1ee29f51748ac8dc86dcbd89d80c50d88aabaf735dd8e8b",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 10,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [],
+      "id": "money-scale",
+      "manifest_sha256": "5fe7e25856e286f00b14df33b16a563a57616c29c8f7f60c09ae98f6b4551f3e",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 1,
+      "trap_family": 10,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets"
+      ],
+      "id": "money-scale",
+      "manifest_sha256": "c4565b9801d5b47b68488a01d4549af686b34464a2d3d4a811dafb1f034fe346",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 10,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [
+        "return_code"
+      ],
+      "id": "catch-retains-prior-work",
+      "manifest_sha256": "02379d2f889fd3f595c459a167eefa123da92117737d1bfd8762631ab841abd0",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 11,
+      "variant": "correct",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [
+        "result_sets",
+        "return_code",
+        "all-table-after"
+      ],
+      "id": "catch-retains-prior-work",
+      "manifest_sha256": "5c42ba9a40bd8f041862038100e18685e47f94c99637b43ffbac32f59c17ff1e",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 11,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [
+        "return_code"
+      ],
+      "id": "xact-abort",
+      "manifest_sha256": "e42bec7f0038823608d116d76c5e8971244f58e267bdf4a31642cc842999fd12",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 12,
+      "variant": "correct",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [
+        "result_sets",
+        "return_code",
+        "all-table-after"
+      ],
+      "id": "xact-abort",
+      "manifest_sha256": "0879627f429ce56da00c30c4f3eb14915282e55814dac3f5b4cb21c3a4751f12",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 12,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [],
+      "id": "nested-transaction-rollback",
+      "manifest_sha256": "c3b921ed573ebd7b4c94c73c5bcfc3a05523f265f48b73733b42f0a5961ad1bd",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 1,
+      "trap_family": 12,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets",
+        "all-table-after"
+      ],
+      "id": "nested-transaction-rollback",
+      "manifest_sha256": "ed6449492bb0dda09f7525ff8db5db5241fd7a25546378a2d0e537d704f4de11",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 12,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [],
+      "id": "informational-raiserror",
+      "manifest_sha256": "27d16f2f20fd413b7dfc7b86898e3c67370d2537b3322e9b377f2e3d17473142",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 1,
+      "trap_family": 13,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets",
+        "return_code",
+        "error-presence",
+        "informational-message-text"
+      ],
+      "id": "informational-raiserror",
+      "manifest_sha256": "6c3391a8557fb27ac76464896c6145bd653a129234dde5b2c03f15e298b2c06e",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 13,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [],
+      "id": "scope-identity-trigger",
+      "manifest_sha256": "8966fca4c86fb3a483f87d34098f212cd1fded7fc93d0ac9423c9e8d55059c14",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 1,
+      "trap_family": 14,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets"
+      ],
+      "id": "scope-identity-trigger",
+      "manifest_sha256": "6688e75d28505d03f1aec173116e4b3ad0b8acaac84e6e764bb77510bd1e62f2",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 14,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [],
+      "id": "identity-rollback-gap",
+      "manifest_sha256": "359a174d538706a8e05e10ed062943a836d7c91698d20e02e7b4c571a6206bf1",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 1,
+      "trap_family": 14,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets",
+        "all-table-after"
+      ],
+      "id": "identity-rollback-gap",
+      "manifest_sha256": "be9b1ccb009a61baa4179ebd7f655bdf138d680218aec723fe9df1836089db05",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 14,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [],
+      "id": "rowcount-lifetime",
+      "manifest_sha256": "3b12db562e03ce3dc31c367a6efb940f71b5413b3392604fa23cab49bf728c00",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 1,
+      "trap_family": 15,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets"
+      ],
+      "id": "rowcount-lifetime",
+      "manifest_sha256": "44543135a7ce8cd20750a530fdb041782f3f7a832a40df1857f483a874ec5f42",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 15,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [],
+      "id": "multiple-result-sets",
+      "manifest_sha256": "69eca3a2978335e5aed21c4e8b6550c5ce0de9beb50b950e6da2fb547a4a5935",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 1,
+      "trap_family": 16,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets"
+      ],
+      "id": "multiple-result-sets",
+      "manifest_sha256": "666b82e90e6b1008f9549e99d845d225addff003c55995e59de6f0336ce03568",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 16,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [],
+      "id": "output-parameter",
+      "manifest_sha256": "f1880d215c6ce8ebb7dc1734a344695f815b3bf6fbc546e319d4ca5136bf7f2b",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 1,
+      "trap_family": 17,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "output_parameters"
+      ],
+      "id": "output-parameter",
+      "manifest_sha256": "6a5c28b229654f129736aff967f7723772bf64c5b418c120199dc79924597be4",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 17,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [],
+      "id": "default-return-code",
+      "manifest_sha256": "0bb8f89c0eef88f62a35171a26348ed55293fc155cf87080526dff6a6c7d5829",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 1,
+      "trap_family": 17,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "return_code"
+      ],
+      "id": "default-return-code",
+      "manifest_sha256": "aff68ca7166de61ac6952564a477e0983006e360239573c4efab8b958187d7ad",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 17,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [],
+      "id": "update-from-ambiguous",
+      "manifest_sha256": "c94af967565140e1184fd105f1ff469524adbfa20f01b4b4dde91bb87ccb5344",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 1,
+      "trap_family": 18,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [],
+      "id": "update-from-ambiguous",
+      "manifest_sha256": "a832ed05be03edd080432e900860894b4d3302b4f4765e21515876128d823f93",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 2,
+      "trap_family": 18,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [],
+      "id": "update-from-ambiguous",
+      "manifest_sha256": "a01847579e37f6ad0686e4f8aec696da9b17022560700484563d94f7db2fd0ea",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 3,
+      "trap_family": 18,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [],
+      "id": "update-from-ambiguous",
+      "manifest_sha256": "7a66ce54cac70a0131bd35ee16f2d7f320b4a1b271d3c2f2b53ec316bb6b391d",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 4,
+      "trap_family": 18,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [],
+      "id": "update-from-ambiguous",
+      "manifest_sha256": "d86748527c8d791918d1450221c46a125283de07271e315baed6cba3653e6788",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 5,
+      "trap_family": 18,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets",
+        "all-table-after"
+      ],
+      "id": "update-from-ambiguous",
+      "manifest_sha256": "c373ced36bcae9ae6e603c17af4ff97d58d8c2f1c0a27a8addcf8bcd4042df97",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 18,
+      "variant": "wrong",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets",
+        "all-table-after"
+      ],
+      "id": "update-from-ambiguous",
+      "manifest_sha256": "c7433df2c7c5354c5e6ac3f8a62fcbfa4fab80517972c1f1270c924fe750322f",
+      "observed_status": "divergent",
+      "repeat": 2,
+      "trap_family": 18,
+      "variant": "wrong",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets",
+        "all-table-after"
+      ],
+      "id": "update-from-ambiguous",
+      "manifest_sha256": "3c357cc35f275195654cd834e2b175f53cf4f9386c989a50db4d50f1829c862f",
+      "observed_status": "divergent",
+      "repeat": 3,
+      "trap_family": 18,
+      "variant": "wrong",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets",
+        "all-table-after"
+      ],
+      "id": "update-from-ambiguous",
+      "manifest_sha256": "03c4340edbb67b4a3faf1b8bb5705d7d4e4b47d997ed52b2c2c28bb2d586c9a7",
+      "observed_status": "divergent",
+      "repeat": 4,
+      "trap_family": 18,
+      "variant": "wrong",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets",
+        "all-table-after"
+      ],
+      "id": "update-from-ambiguous",
+      "manifest_sha256": "de4d37f8292073bfab2b6f89ca28ca6bad37afa20cb97bd6050cb743d9945468",
+      "observed_status": "divergent",
+      "repeat": 5,
+      "trap_family": 18,
+      "variant": "wrong",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [],
+      "id": "merge-upsert",
+      "manifest_sha256": "1490d5302f6928f7390d27c14057512b46ae87f104edee11cdc082363d5d82f9",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 1,
+      "trap_family": 19,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets",
+        "all-table-after"
+      ],
+      "id": "merge-upsert",
+      "manifest_sha256": "d8ed28c4f3483d7dca8209001c7a9e60f3f0cbf8c4841ebd5b74eff632c46c3a",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 19,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [],
+      "id": "temp-table-scope",
+      "manifest_sha256": "f917138cbb313a39fb7bd9b1ceb9b3ff0bcc0b6bae4b70b7829dfad412dc0e9e",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 1,
+      "trap_family": 20,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "temp_objects"
+      ],
+      "id": "temp-table-scope",
+      "manifest_sha256": "e64fb584c25230bbd739905bbf45b578a0e95021c0c7e209f4860bb64685da2f",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 20,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [],
+      "id": "table-variable-scope",
+      "manifest_sha256": "be78f30f4cb1b78c676d2b5b79879d67313d1edf2fbc3eb97728b5dc6a3d93e1",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 1,
+      "trap_family": 20,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "temp_objects"
+      ],
+      "id": "table-variable-scope",
+      "manifest_sha256": "18dd6e4e9280211bc06d0f494f6307901f63375c2954e330e42243a53024669f",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 20,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [],
+      "id": "dynamic-parameter-binding",
+      "manifest_sha256": "81daee3b4d840079703ea148782d7c08e8753991ba458dc30fd6d9e2197cea3e",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 1,
+      "trap_family": 21,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets",
+        "return_code",
+        "error-presence"
+      ],
+      "id": "dynamic-parameter-binding",
+      "manifest_sha256": "c771b012494e24ecf5c5731a0e7e13a36c5aba025ca7f6f8971f500ee6a5fb93",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 21,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [],
+      "id": "cursor-fetch-status",
+      "manifest_sha256": "7ad019b1ef7682efaf5e028250de4cf7273c60e6e4ea1e74750cb76e141c907c",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 1,
+      "trap_family": 22,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets"
+      ],
+      "id": "cursor-fetch-status",
+      "manifest_sha256": "60d7728226934571164c794a64bbadfab035f836e88b596f9b31922490bf5d12",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 22,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [],
+      "id": "set-trigger",
+      "manifest_sha256": "14100b982a00ccd5ecd0feaf25d2200f4bb9d03caa45e2b7ea5ce676c8c0b970",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 1,
+      "trap_family": 23,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets",
+        "all-table-after"
+      ],
+      "id": "set-trigger",
+      "manifest_sha256": "17dd5410c15861618e777aa10afa8f334520079d6a233a16d26ae89f9858d1ce",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 23,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [],
+      "id": "bit",
+      "manifest_sha256": "49746d9e3a750af8ab200370b983727cbd2ce4c15766e9a153c52d2b6bfe4a6c",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 1,
+      "trap_family": 24,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets"
+      ],
+      "id": "bit",
+      "manifest_sha256": "ad3bf6e4cbfd920d00b15ac0dd410839edf829fd248e2723e7e68aba0ac0eac1",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 24,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [],
+      "id": "uuid-case",
+      "manifest_sha256": "b23591602c19b518ed297e0f783fcdf008bd1200e4f584dd6cedfa804a47854e",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 1,
+      "trap_family": 24,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets"
+      ],
+      "id": "uuid-case",
+      "manifest_sha256": "a6f34e653902f53f6938ded5cac363df4f37a934b6846a909beb80c0b0c67118",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 24,
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "differences": [],
+      "id": "unordered-top",
+      "manifest_sha256": "f2fce1edb73c0b8a53f1e5779b0bc0b8f95b482b992a346447572297a6e1c0a1",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 1,
+      "trap_family": 25,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [],
+      "id": "unordered-top",
+      "manifest_sha256": "dafc101e4452882aa19d63756b9aaa68db0d45e4136dd6168ca4220d56180dba",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 2,
+      "trap_family": 25,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [],
+      "id": "unordered-top",
+      "manifest_sha256": "6cbcbb5184d00623d658a83f1dea238a1abead4116fdd5e984c4f58d955a1551",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 3,
+      "trap_family": 25,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [],
+      "id": "unordered-top",
+      "manifest_sha256": "dd45daa97fc23e376700194b2e5b3eec05fdb989e70c94458bf42db8499350bb",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 4,
+      "trap_family": 25,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [],
+      "id": "unordered-top",
+      "manifest_sha256": "7f3ebec09a2ec71183da7edeb00360a5dfc2b3d4df0fd38b2b011eb7f9ad4566",
+      "observed_status": "match-on-compared-observables",
+      "repeat": 5,
+      "trap_family": 25,
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets"
+      ],
+      "id": "unordered-top",
+      "manifest_sha256": "882dac1852142f79c383c34373c27b7a622cc7d90dfeef5c8396d39c5590cf3c",
+      "observed_status": "divergent",
+      "repeat": 1,
+      "trap_family": 25,
+      "variant": "wrong",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets"
+      ],
+      "id": "unordered-top",
+      "manifest_sha256": "423f8095277b45a21176620f7f7d6b3565d98748da3b2154f7435d849f02d0bd",
+      "observed_status": "divergent",
+      "repeat": 2,
+      "trap_family": 25,
+      "variant": "wrong",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets"
+      ],
+      "id": "unordered-top",
+      "manifest_sha256": "4401680b3c09a5182b4d3954aadd5aa240636959c499e39c9465f3daf6c6312e",
+      "observed_status": "divergent",
+      "repeat": 3,
+      "trap_family": 25,
+      "variant": "wrong",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets"
+      ],
+      "id": "unordered-top",
+      "manifest_sha256": "25862f2ddeaaac3e63ac4a4be8f8d3aee387461212aaa70f9ff0921fe5984e91",
+      "observed_status": "divergent",
+      "repeat": 4,
+      "trap_family": 25,
+      "variant": "wrong",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "differences": [
+        "result_sets"
+      ],
+      "id": "unordered-top",
+      "manifest_sha256": "0529e349a9070b4ea452981876919890cb280ef61bc8cfa97cc5a9598780cd83",
+      "observed_status": "divergent",
+      "repeat": 5,
+      "trap_family": 25,
+      "variant": "wrong",
+      "verdict": "insufficient-evidence"
+    }
+  ],
+  "schema": "tsql-native-public-summary/1",
+  "status": "native-comparison-completed; M0-not-qualified",
+  "wall_seconds": 222.21419033499978
+}

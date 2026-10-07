@@ -68,6 +68,12 @@ jobs:
           node-version: '22'
       - name: Install campaign signing support
         run: python -m pip install -e ".[control-tower]"
+      - name: Use the official Ubuntu archive for browser dependencies
+        run: |
+          # The hosted runner's Azure mirror can stall before browser tests start.
+          # Preserve Ubuntu's suites, components and Signed-By verification.
+          sudo sed -i 's|^URIs:.*|URIs: https://archive.ubuntu.com/ubuntu/|' /etc/apt/sources.list.d/ubuntu.sources
+          printf 'Acquire::http::Timeout "30";\nAcquire::https::Timeout "30";\nAcquire::Retries "2";\n' | sudo tee /etc/apt/apt.conf.d/80lightyear-download-timeouts
       - name: Install pinned browser test dependencies
         working-directory: tests/browser
         run: |

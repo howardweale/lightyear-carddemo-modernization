@@ -16,6 +16,7 @@ import time
 from lightyear_calibration.contracts import canonical, digest, read_json, verify
 from lightyear_control_tower.status_export import atomic_new
 from lightyear_control_tower.verification import verify_decision
+from .extract import LIMITS, verify_catalogue
 
 IMAGE = 'sha256:f3bed005214fbaec7f580a2d27e0dffa7a868bfc913db8c231d6f2b3fe4e0300'
 KIND = 'campaign-authorization'
@@ -54,6 +55,8 @@ def verify_snapshot(root, plan):
           'extraction-only-plan')
     check(core['maximum_extraction_seconds'] == 900 and core['cleanup_reserve_seconds'] == 600 and
           core['container_count'] == 1 and core['retries'] == 0, 'extraction-limits')
+    check(core.get('catalogue_schema') == 'b06-image-artifact-catalogue/2' and
+          core.get('extraction_limits') == LIMITS, 'catalogue-limits-not-bound')
     check(EXTRACTOR in m['files_sha256'], 'extractor-missing')
     return m, core
 
@@ -113,7 +116,7 @@ def publication(repository, root, plan, commit, ref):
     repository, root = Path(repository), Path(root)
     def git(*args):
         return subprocess.check_output(['git','-C',str(repository),*args], stderr=subprocess.PIPE, timeout=60)
-    check(ref == 'refs/heads/codex/b06-observer-v2-preparation', 'publication-ref')
+    check(ref == plan.get('public_ref') and re.fullmatch(r'refs/heads/codex/[a-z0-9][a-z0-9-]*', ref), 'publication-ref')
     check(git('remote','get-url','origin').decode().strip() ==
           'https://github.com/howardweale/lightyear-carddemo-modernization.git', 'publication-repository')
     refs = git('ls-remote','origin',ref).decode().split()
@@ -185,11 +188,10 @@ def execute(root, plan, output, commit, reader, signer, *, public_verified=False
         state = json.loads(command('container','inspect',name).stdout)[0]['State']
         check(result.returncode == 0 and not state['Running'] and state['ExitCode'] == 0, 'extractor-failed')
         path = output/'catalogue/catalogue.json'; catalogue = read_json(path)
-        check(catalogue['schema'] == 'b06-image-artifact-catalogue/1' and catalogue['model_calls'] ==
+        check(catalogue['schema'] == 'b06-image-artifact-catalogue/2' and catalogue['model_calls'] ==
               catalogue['native_pairs'] == catalogue['target_jvm_executions'] == 0, 'catalogue-kind')
-        for item in [*catalogue['artifacts'], *catalogue['classes'], *catalogue['runtime_files']]:
-            h = item['sha256']; check(re.fullmatch('[a-f0-9]{64}',h), 'catalogue-blob-name')
-            check(sha(output/'catalogue/blobs'/h) == h, 'catalogue-blob-changed')
+        replay = verify_catalogue(output/'catalogue', catalogue)
+        atomic_new(output/'catalogue-replay.json', replay)
         catalogue_hash = sha(path)
     except BaseException as exc:
         if isinstance(exc, subprocess.TimeoutExpired):

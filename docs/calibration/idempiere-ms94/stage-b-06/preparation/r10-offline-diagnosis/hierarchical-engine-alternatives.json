@@ -1,0 +1,114 @@
+{
+  "schema": "b06-r10-framework-alternatives/1",
+  "observed_constant_pool_sha256": "b6eb2698546644b688cf9fc195a7445dff77fea21a0de5125e5f929440e14411",
+  "observed_execute_sha256": "4e8ecde35f3bcd89eb803b85bd50021fa3c61b7b9ea4394e7c2d78883072252d",
+  "saved_origins": [
+    {
+      "member": "org/junit/platform/engine/support/hierarchical/HierarchicalTestEngine.class",
+      "origin": "/application/org.idempiere.p2.targetplatform/target/target-platform-repository/plugins/junit-platform-engine_1.9.1.jar",
+      "sha256": "b6ebf7618c7572195ec833104be65f54aaa090263dc14297bd471f9c4a1cd056",
+      "constant_pool_sha256": "9be5af719cc23a87f944e51bceff4f10a61d043ba9352870a4b706752967a0e7",
+      "execute_sha256": "4e8ecde35f3bcd89eb803b85bd50021fa3c61b7b9ea4394e7c2d78883072252d"
+    },
+    {
+      "member": "org/junit/platform/engine/support/hierarchical/HierarchicalTestEngine.class",
+      "origin": "/root/.m2/repository/org/eclipse/tycho/org.eclipse.tycho.surefire.junit5/4.0.8/org.eclipse.tycho.surefire.junit5-4.0.8.jar",
+      "sha256": "178136807853f6ed7eae0dd185944bbbcf12d228397a607705491b68480e9208",
+      "constant_pool_sha256": "64cbd6ead95c2f8e730a303634eef8c43be20d74019901db92bf03cc25f10195",
+      "execute_sha256": "c80f19e2d366c58aaad891c1897ca32bc7d69ee0142809739de4ebc4defc0156"
+    },
+    {
+      "member": "org/junit/platform/engine/support/hierarchical/HierarchicalTestEngine.class",
+      "origin": "/root/.m2/repository/org/eclipse/tycho/org.eclipse.tycho.surefire.junit54/4.0.8/org.eclipse.tycho.surefire.junit54-4.0.8.jar",
+      "sha256": "be4487cb51684a8b2273598e66bf281e1cde53e550f043725580e573512812c4",
+      "constant_pool_sha256": "a7d751f9695bdb4eda7993a51f194f1692f32dcaee192c84cdb42dd4e6b5aa33",
+      "execute_sha256": "6733328be8d4eb57952adf2d7641f13df681fd642bd707848fc3bc96a312156b"
+    },
+    {
+      "member": "org/junit/platform/engine/support/hierarchical/HierarchicalTestEngine.class",
+      "origin": "/root/.m2/repository/org/eclipse/tycho/org.eclipse.tycho.surefire.junit55/4.0.8/org.eclipse.tycho.surefire.junit55-4.0.8.jar",
+      "sha256": "be4487cb51684a8b2273598e66bf281e1cde53e550f043725580e573512812c4",
+      "constant_pool_sha256": "a7d751f9695bdb4eda7993a51f194f1692f32dcaee192c84cdb42dd4e6b5aa33",
+      "execute_sha256": "6733328be8d4eb57952adf2d7641f13df681fd642bd707848fc3bc96a312156b"
+    },
+    {
+      "member": "org/junit/platform/engine/support/hierarchical/HierarchicalTestEngine.class",
+      "origin": "/root/.m2/repository/org/eclipse/tycho/org.eclipse.tycho.surefire.junit56/4.0.8/org.eclipse.tycho.surefire.junit56-4.0.8.jar",
+      "sha256": "be4487cb51684a8b2273598e66bf281e1cde53e550f043725580e573512812c4",
+      "constant_pool_sha256": "a7d751f9695bdb4eda7993a51f194f1692f32dcaee192c84cdb42dd4e6b5aa33",
+      "execute_sha256": "6733328be8d4eb57952adf2d7641f13df681fd642bd707848fc3bc96a312156b"
+    },
+    {
+      "member": "org/junit/platform/engine/support/hierarchical/HierarchicalTestEngine.class",
+      "origin": "/root/.m2/repository/org/eclipse/tycho/org.eclipse.tycho.surefire.junit57/4.0.8/org.eclipse.tycho.surefire.junit57-4.0.8.jar",
+      "sha256": "be4487cb51684a8b2273598e66bf281e1cde53e550f043725580e573512812c4",
+      "constant_pool_sha256": "a7d751f9695bdb4eda7993a51f194f1692f32dcaee192c84cdb42dd4e6b5aa33",
+      "execute_sha256": "6733328be8d4eb57952adf2d7641f13df681fd642bd707848fc3bc96a312156b"
+    },
+    {
+      "member": "org/junit/platform/engine/support/hierarchical/HierarchicalTestEngine.class",
+      "origin": "/root/.m2/repository/org/eclipse/tycho/org.eclipse.tycho.surefire.junit57withvintage/4.0.8/org.eclipse.tycho.surefire.junit57withvintage-4.0.8.jar",
+      "sha256": "be4487cb51684a8b2273598e66bf281e1cde53e550f043725580e573512812c4",
+      "constant_pool_sha256": "a7d751f9695bdb4eda7993a51f194f1692f32dcaee192c84cdb42dd4e6b5aa33",
+      "execute_sha256": "6733328be8d4eb57952adf2d7641f13df681fd642bd707848fc3bc96a312156b"
+    },
+    {
+      "member": "org/junit/platform/engine/support/hierarchical/HierarchicalTestEngine.class",
+      "origin": "/root/.m2/repository/org/eclipse/tycho/org.eclipse.tycho.surefire.junit58/4.0.8/org.eclipse.tycho.surefire.junit58-4.0.8.jar",
+      "sha256": "b6ebf7618c7572195ec833104be65f54aaa090263dc14297bd471f9c4a1cd056",
+      "constant_pool_sha256": "9be5af719cc23a87f944e51bceff4f10a61d043ba9352870a4b706752967a0e7",
+      "execute_sha256": "4e8ecde35f3bcd89eb803b85bd50021fa3c61b7b9ea4394e7c2d78883072252d"
+    },
+    {
+      "member": "org/junit/platform/engine/support/hierarchical/HierarchicalTestEngine.class",
+      "origin": "/root/.m2/repository/org/eclipse/tycho/org.eclipse.tycho.surefire.junit58withvintage/4.0.8/org.eclipse.tycho.surefire.junit58withvintage-4.0.8.jar",
+      "sha256": "b6ebf7618c7572195ec833104be65f54aaa090263dc14297bd471f9c4a1cd056",
+      "constant_pool_sha256": "9be5af719cc23a87f944e51bceff4f10a61d043ba9352870a4b706752967a0e7",
+      "execute_sha256": "4e8ecde35f3bcd89eb803b85bd50021fa3c61b7b9ea4394e7c2d78883072252d"
+    },
+    {
+      "member": "org/junit/platform/engine/support/hierarchical/HierarchicalTestEngine.class",
+      "origin": "/root/.m2/repository/org/eclipse/tycho/org.eclipse.tycho.surefire.junit59/4.0.8/org.eclipse.tycho.surefire.junit59-4.0.8.jar",
+      "sha256": "b6ebf7618c7572195ec833104be65f54aaa090263dc14297bd471f9c4a1cd056",
+      "constant_pool_sha256": "9be5af719cc23a87f944e51bceff4f10a61d043ba9352870a4b706752967a0e7",
+      "execute_sha256": "4e8ecde35f3bcd89eb803b85bd50021fa3c61b7b9ea4394e7c2d78883072252d"
+    },
+    {
+      "member": "org/junit/platform/engine/support/hierarchical/HierarchicalTestEngine.class",
+      "origin": "/root/.m2/repository/org/eclipse/tycho/org.eclipse.tycho.surefire.junit59withvintage/4.0.8/org.eclipse.tycho.surefire.junit59withvintage-4.0.8.jar",
+      "sha256": "b6ebf7618c7572195ec833104be65f54aaa090263dc14297bd471f9c4a1cd056",
+      "constant_pool_sha256": "9be5af719cc23a87f944e51bceff4f10a61d043ba9352870a4b706752967a0e7",
+      "execute_sha256": "4e8ecde35f3bcd89eb803b85bd50021fa3c61b7b9ea4394e7c2d78883072252d"
+    },
+    {
+      "member": "org/junit/platform/engine/support/hierarchical/HierarchicalTestEngine.class",
+      "origin": "/root/.m2/repository/org/junit/platform/junit-platform-engine/1.10.1/junit-platform-engine-1.10.1.jar",
+      "sha256": "4a80e2230bd2020dae67137218ab02b6be4e03ec20b3c322bcfe4e8b1f724836",
+      "constant_pool_sha256": "fc5adf70c0cfbe6b99bdc03506f7ed04bf1669ac3188dc85b346055b7a8537ae",
+      "execute_sha256": "4e8ecde35f3bcd89eb803b85bd50021fa3c61b7b9ea4394e7c2d78883072252d"
+    },
+    {
+      "member": "org/junit/platform/engine/support/hierarchical/HierarchicalTestEngine.class",
+      "origin": "/root/.m2/repository/org/junit/platform/junit-platform-engine/1.12.2/junit-platform-engine-1.12.2.jar",
+      "sha256": "6c901de4135d9e375c5de03ee6d8175a9cc8693feed103002b369eaf7693125f",
+      "constant_pool_sha256": "d105dab1477b01e56c26ea348b659ea579ca30a250bd54633b489cb93e556160",
+      "execute_sha256": "4e8ecde35f3bcd89eb803b85bd50021fa3c61b7b9ea4394e7c2d78883072252d"
+    },
+    {
+      "member": "org/junit/platform/engine/support/hierarchical/HierarchicalTestEngine.class",
+      "origin": "/root/.m2/repository/org/junit/platform/junit-platform-engine/1.9.1/junit-platform-engine-1.9.1.jar",
+      "sha256": "b6ebf7618c7572195ec833104be65f54aaa090263dc14297bd471f9c4a1cd056",
+      "constant_pool_sha256": "9be5af719cc23a87f944e51bceff4f10a61d043ba9352870a4b706752967a0e7",
+      "execute_sha256": "4e8ecde35f3bcd89eb803b85bd50021fa3c61b7b9ea4394e7c2d78883072252d"
+    },
+    {
+      "member": "org/junit/platform/engine/support/hierarchical/HierarchicalTestEngine.class",
+      "origin": "/root/.m2/repository/org/junit/platform/junit-platform-engine/6.0.3/junit-platform-engine-6.0.3.jar",
+      "sha256": "847f723f0f0b8293b83cda1bda7f4ae1a34e01ba38864cb39dc70e0780750bc5",
+      "constant_pool_sha256": "532cf6a4ad17fe1b5d6e3a5165873c4e63e65f377f6af974a5673a54b9a6258d",
+      "execute_sha256": "916663bca029be3297cafc4f5d0185f9504f881e868a43100cedb65dded25906"
+    }
+  ],
+  "any_saved_constant_pool_match": false,
+  "interpretation": "Cause unresolved; hashes alone do not distinguish runtime constant-pool evolution, transformation or a different definition. Do not change accepted hashes based on this observation."
+}

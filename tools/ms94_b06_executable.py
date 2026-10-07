@@ -97,6 +97,9 @@ def assemble_slot(root, run, base, slot, input_files):
     validate_policy(spec)
     from tools.ms94_b06_posting_replay import catalog, TERMINAL
     classes = catalog(root, spec['target_class_files_sha256'])
+    if spec.get('forwarding_stub') is not None:
+        from tools.ms94_b06_forwarding_stub import validate_spec
+        validate_spec(spec, classes)
     from tools.ms94_b06_lock_sql import bind
     lock = spec['lock_sql']
     check(spec['target_class_files_sha256'].get(lock['class_file']) == lock['class_sha256'], 'slot-lock-catalog')

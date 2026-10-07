@@ -42,6 +42,18 @@ class PostingBroker:
         check(not info['HostConfig'].get('PortBindings'), 'observer-debug-port-published')
         check(all(not Path(m['Source']).resolve().is_relative_to(self.private.resolve())
                   for m in info['Mounts'] if m['Type'] == 'bind'), 'observer-output-visible-to-candidate')
+        self.host_jar_entries = {}
+        if self.spec.get('forwarding_stub') is not None:
+            host_spec = self.spec['host_jar_entries']
+            for item in host_spec.values():
+                jar = Path(item['jar'])
+                check(not any(jar == Path(m['Destination']) or jar.is_relative_to(Path(m['Destination']))
+                              for m in info['Mounts']), 'observer-framework-jar-shadowed')
+            source = bound_file(runner.root, 'tools/ms94_b06_host_jar_probe.py',
+                                runner.plan['implementation_sha256']['tools/ms94_b06_host_jar_probe.py'])
+            probe = docker('exec', '-i', self.app, 'python', '-c', source.read_text(encoding='utf-8'),
+                           input=canonical(host_spec), timeout=60)
+            self.host_jar_entries = json.loads(probe.stdout)
         docker('create', '--name', self.name, '--label', runner.label, '--network', runner.network,
                '--memory', '768m', '--cpus', '1', '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges',
                '--mount', f'type=bind,src={classes},dst=/observer-classes,readonly', runner.plan['local']['runner_image'])
@@ -145,6 +157,22 @@ class PostingBroker:
             except Exception as signing_error:
                 self.failure += '; failure-record:' + type(signing_error).__name__
         finally:
+            # Commit to all retained definitions/adjacent host observations even if
+            # execution or collection fails. This record grants no frame trust.
+            try:
+                from tools.ms94_b06_forwarding_stub import receipt_records
+                self.frame_census = receipt_records(self.records)
+                sign_once(self.private / 'frame-census.json', {
+                    'artifact_type':'ms94-b06-generated-frame-census/1',
+                    'plan_sha256':self.runner.plan['content_sha256'], 'lane':self.lane,
+                    'complete':self.failure is None, 'event_count':len(self.records),
+                    'last_event_sha256':self.previous, 'frame_records':self.frame_census,
+                    'host_jar_entries':self.host_jar_entries,
+                    'event_file_sha256':hashlib.sha256((self.private/'events.jsonl').read_bytes()).hexdigest(),
+                    'native_qualification':False, 'model_calls':0,
+                }, self.signer)
+            except Exception as census_error:
+                self.failure = (self.failure or '') + '; census-record:' + type(census_error).__name__
             self.stop_requested.set()
             if self.process is not None and self.process.poll() is None:
                 self.process.kill(); self.process.wait()
@@ -159,6 +187,8 @@ class PostingBroker:
             'observer_class_files_sha256': self.spec['class_files_sha256'],
             'event_count': len(self.records), 'last_event_sha256': self.previous,
             'event_file_sha256': hashlib.sha256((self.private / 'events.jsonl').read_bytes()).hexdigest(),
+            'frame_records': self.frame_census,
+            'host_jar_entries': self.host_jar_entries,
             'complete': True, 'native_qualification': False,
         }, self.signer)
 

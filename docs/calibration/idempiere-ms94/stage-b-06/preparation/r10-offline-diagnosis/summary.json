@@ -1,0 +1,186 @@
+{
+  "schema": "b06-r10-offline-frame-census/1",
+  "review": "operator review; not independent attestation",
+  "snapshot_sha256": "e5790d832a18ea0272b24a1bfd611ad60aa3f45c340fc68997e3c6ed30409c06",
+  "frozen_files_verified": 2117,
+  "native_plan_sha256": "ae882fe49249d86d7cdb25bdd593a160c82529b7a9972f21297cad47e5d00c09",
+  "preserved_signed_records": {
+    "report.json": "e58224f7a45f474bd65867889560eeafb75b37f24a9b12952eba12f2a93d81aa",
+    "stopping.json": "e8e26ded4368d0d1a85c9cfbcc6fcaf98ee1775c7fc662eb872ddaabfa4d41a5",
+    "journey-043b16c21aa653508923c184f4759197-recovery.json": "6fd5db4746ff05bd7c269144246a33f4576f7f0d82d7cdd597295f051259814a"
+  },
+  "catalogue_classes": 1373,
+  "lanes": {
+    "oracle": {
+      "receipt_sha256": "1f81e8e091a4a822b9c54e37b7b0a1cfffa432202cc4499e0cedf82da31caedb",
+      "events_sha256": "154289c189dab98ccd17c57cdc5531e68968066f4559e5981444ff2694cbb0d0",
+      "event_count": 351,
+      "event_kinds": {
+        "ready": 1,
+        "exception": 264,
+        "method-entry": 42,
+        "method-exit": 42,
+        "test-terminal": 1,
+        "vm-death": 1
+      },
+      "readback_hashes_verified": 84,
+      "signature_and_chain_verified": true,
+      "ready_and_vm_death_present": true,
+      "classes": 135,
+      "methods": 282,
+      "categories": {
+        "JDK": {
+          "classes": 10,
+          "methods": 16,
+          "unbound_classes": 10,
+          "mismatched_methods": 0
+        },
+        "OSGi/Tycho/JUnit framework": {
+          "classes": 42,
+          "methods": 78,
+          "unbound_classes": 20,
+          "mismatched_methods": 1
+        },
+        "candidate": {
+          "classes": 1,
+          "methods": 7,
+          "unbound_classes": 0,
+          "mismatched_methods": 0
+        },
+        "generated/hidden": {
+          "classes": 22,
+          "methods": 22,
+          "unbound_classes": 22,
+          "mismatched_methods": 0
+        },
+        "iDempiere application": {
+          "classes": 47,
+          "methods": 134,
+          "unbound_classes": 43,
+          "mismatched_methods": 0
+        },
+        "other dependency": {
+          "classes": 12,
+          "methods": 23,
+          "unbound_classes": 12,
+          "mismatched_methods": 0
+        },
+        "support": {
+          "classes": 1,
+          "methods": 2,
+          "unbound_classes": 0,
+          "mismatched_methods": 0
+        }
+      },
+      "first_r10_binding_failure": {
+        "sequence": 2,
+        "frame_index": 29,
+        "kind": "exception",
+        "class": "org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor$$Lambda/0x000076e1305faa00",
+        "method": "apply(Lorg/junit/jupiter/api/extension/InvocationInterceptor;Lorg/junit/jupiter/api/extension/InvocationInterceptor$Invocation;Lorg/junit/jupiter/api/extension/ReflectiveInvocationContext;Lorg/junit/jupiter/api/extension/ExtensionContext;)V",
+        "binding": "UNBOUND"
+      },
+      "terminals": [
+        {
+          "sequence": 350,
+          "status": "SUCCESSFUL",
+          "test_class": "org.idempiere.test.LightyearOperationsTest",
+          "test_method": "operationsJourney"
+        }
+      ],
+      "catch_locations_catalogued_separately": 9,
+      "full_observer_replay_passed": false,
+      "runtime_provenance_census_complete": false
+    },
+    "postgresql": {
+      "receipt_sha256": "9147be2d86433982c328b71787a3f1036aa924ec52f681a0efa855e370fe0c66",
+      "events_sha256": "53489a946a8c24be1fe4e91c267e32aa0b19915d276fc8c25daa786efa1ece93",
+      "event_count": 274,
+      "event_kinds": {
+        "ready": 1,
+        "exception": 187,
+        "method-entry": 42,
+        "method-exit": 42,
+        "test-terminal": 1,
+        "vm-death": 1
+      },
+      "readback_hashes_verified": 84,
+      "signature_and_chain_verified": true,
+      "ready_and_vm_death_present": true,
+      "classes": 135,
+      "methods": 292,
+      "categories": {
+        "JDK": {
+          "classes": 14,
+          "methods": 27,
+          "unbound_classes": 14,
+          "mismatched_methods": 0
+        },
+        "OSGi/Tycho/JUnit framework": {
+          "classes": 44,
+          "methods": 82,
+          "unbound_classes": 22,
+          "mismatched_methods": 1
+        },
+        "candidate": {
+          "classes": 1,
+          "methods": 7,
+          "unbound_classes": 0,
+          "mismatched_methods": 0
+        },
+        "generated/hidden": {
+          "classes": 22,
+          "methods": 22,
+          "unbound_classes": 22,
+          "mismatched_methods": 0
+        },
+        "iDempiere application": {
+          "classes": 46,
+          "methods": 133,
+          "unbound_classes": 42,
+          "mismatched_methods": 0
+        },
+        "other dependency": {
+          "classes": 7,
+          "methods": 19,
+          "unbound_classes": 7,
+          "mismatched_methods": 0
+        },
+        "support": {
+          "classes": 1,
+          "methods": 2,
+          "unbound_classes": 0,
+          "mismatched_methods": 0
+        }
+      },
+      "first_r10_binding_failure": {
+        "sequence": 2,
+        "frame_index": 29,
+        "kind": "exception",
+        "class": "org.junit.jupiter.engine.descriptor.TestMethodTestDescriptor$$Lambda/0x0000772a045ff3a8",
+        "method": "apply(Lorg/junit/jupiter/api/extension/InvocationInterceptor;Lorg/junit/jupiter/api/extension/InvocationInterceptor$Invocation;Lorg/junit/jupiter/api/extension/ReflectiveInvocationContext;Lorg/junit/jupiter/api/extension/ExtensionContext;)V",
+        "binding": "UNBOUND"
+      },
+      "terminals": [
+        {
+          "sequence": 273,
+          "status": "SUCCESSFUL",
+          "test_class": "org.idempiere.test.LightyearOperationsTest",
+          "test_method": "operationsJourney"
+        }
+      ],
+      "catch_locations_catalogued_separately": 10,
+      "full_observer_replay_passed": false,
+      "runtime_provenance_census_complete": false
+    }
+  },
+  "model_calls": 0,
+  "docker_calls": 0,
+  "native_runs": 0,
+  "signatures_created": 0,
+  "historical_verdict_changed": false,
+  "inventory_file_sha256": {
+    "observed-frames.csv": "5c2f74cd6be564717b7e50f1cdc223ab0f429ea83aba89bc0ea921240dc24c9f",
+    "observed-frames.json": "3972c7aa41f39dfdc9f4e38ffa138e4438d831fe08fea567f802982d5ec7cd98"
+  }
+}

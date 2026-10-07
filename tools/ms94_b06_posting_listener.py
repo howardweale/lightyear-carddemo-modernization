@@ -21,11 +21,18 @@ def listener(proc=Path('/proc')):
                 continue
             executable = (process / 'exe').resolve(strict=True)
             args = (process / 'cmdline').read_bytes().split(b'\0')
+            # Record names only: other environment entries may contain secrets.
+            option_names = {b'JAVA_TOOL_OPTIONS', b'JDK_JAVA_OPTIONS', b'_JAVA_OPTIONS'}
+            option_environment = sorted({entry.split(b'=', 1)[0].decode('ascii')
+                for entry in (process / 'environ').read_bytes().split(b'\0')
+                if b'=' in entry and entry.split(b'=', 1)[0] in option_names
+                and entry.split(b'=', 1)[1]})
             stat = (process / 'stat').read_text().rsplit(')', 1)[1].split()
             owners.append({'pid': int(process.name), 'start_ticks': int(stat[19]),
                            'executable': str(executable),
                            'java_binary_sha256': hashlib.sha256(executable.read_bytes()).hexdigest(),
                            'arguments': [arg.decode('utf-8') for arg in args if arg],
+                           'jvm_option_environment_present': option_environment,
                            'socket_inodes': sorted(inodes)})
         except (FileNotFoundError, ProcessLookupError):
             continue

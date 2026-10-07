@@ -17,6 +17,10 @@ def inputs(run, plan):
     for name, sha in plan['inputs_sha256'].items():
         check(Path(name).name == name, 'j1-nested-input')
         bound_file(Path(run) / 'inputs', name, sha)
+    from tools.ms94_b06_register_inputs import admit
+    admit(run, plan)
+    from tools.ms94_b06_bytecode_policy import validate_policy
+    validate_policy(plan['posting_observer'])
     from tools.ms94_b06_runtime_contract import admit_contract
     admit_contract(plan, Path(run).name)
     return {'journey': 'J1'}

@@ -1,5 +1,20 @@
 # B06 preparation status
 
+## October 7 r9 native failure and offline correction r10
+
+The r9 retained-reference slot ran on both engines but failed as
+equipment-suspect: JaCoCo transformed the executing classes relative to the
+catalog, and J1 received the purchasing comparison register. The other two
+slots never started. The [r10 diagnosis and correction](smoke-bindings-r10/README.md)
+preserves all failed evidence and 2,106 frozen files, disables coverage in the
+prospective B06 worker with live/offline JVM admission, validates journey-specific
+registers before assembly/entry, and repairs the archive replay directory layout.
+Fresh hash-only private manifests cover 55 J1 qualification slots and three smoke
+slots. No new snapshot, authority, Docker window, native pair or model call.
+Core items 1–2 remain natively unqualified; item 3 needs a fresh executable smoke
+plan and exact Tower approval; items 4–5 remain incomplete. Operator review, not
+independent attestation.
+
 ## October 6 J1 smoke failure and correction r9
 
 The authorized smoke failed before candidate execution because the readable slot

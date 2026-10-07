@@ -5,10 +5,23 @@ The host broker attaches before allowing the candidate JVM to run.
 """
 from datetime import date
 import json
+import os
 from pathlib import Path
 import shutil
 import subprocess
 import sys
+
+
+def maven_arguments():
+    # The bound class catalog contains uninstrumented bytes. Tycho normally
+    # adds JaCoCo through tycho.testArgLine; disable preparation AND clear it.
+    # The host independently refuses agents in the actual suspended JVM.
+    return ['mvn', '-o', '-B', 'verify', '-DskipTests=false', '-Dtest=LightyearOperationsTest',
+            '-DfailIfNoTests=false', '-DmaterializeProduct=none', '-DassembleRepository=none',
+            '-Djacoco.skip=true', '-Dtycho.testArgLine=',
+            '-Dp1=-DPropertyFile=/secrets/application.properties -Dlightyear.output=/results/journey.xml '
+            '-Duser.timezone=UTC -Djunit.jupiter.execution.parallel.enabled=false '
+            '-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5005']
 
 
 def main():
@@ -24,15 +37,13 @@ def main():
     connection = f'CConnection[name=Lightyear isolated,type={"Oracle" if lane == "oracle" else "PostgreSQL"},DBhost={lane},DBport={port},DBname={name},UID=adempiere,PWD={password}]'
     props.write_text('Connection=' + connection + '\nTraceLevel=WARNING\nTraceFile=N\nToday=' + scenario_date + '\n', encoding='ascii')
     props.chmod(0o600)
-    args = ['mvn', '-o', '-B', 'verify', '-DskipTests=false', '-Dtest=LightyearOperationsTest',
-            '-DfailIfNoTests=false', '-DmaterializeProduct=none', '-DassembleRepository=none',
-            '-Dp1=-DPropertyFile=/secrets/application.properties -Dlightyear.output=/results/journey.xml '
-            '-Duser.timezone=UTC -Djunit.jupiter.execution.parallel.enabled=false '
-            '-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5005']
+    args = maven_arguments()
+    environment = {k: v for k, v in os.environ.items()
+                   if k not in ('JAVA_TOOL_OPTIONS', 'JDK_JAVA_OPTIONS', '_JAVA_OPTIONS')}
     try:
         with Path('/results/maven.log').open('wb') as stream:
             code = subprocess.run(args, cwd='/application', stdout=stream, stderr=subprocess.STDOUT,
-                                  timeout=spec['timeout_seconds']).returncode
+                                  timeout=spec['timeout_seconds'], env=environment).returncode
     except subprocess.TimeoutExpired:
         code = 124
     finally:

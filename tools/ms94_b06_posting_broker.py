@@ -15,6 +15,7 @@ import time
 from lightyear_calibration.contracts import canonical, read_json, seal, verify
 from lightyear_calibration.journey_runtime import docker, inspect
 from tools.ms94_b06_admission import check, bound_file, sign_once
+from tools.ms94_b06_bytecode_policy import validate_jvm
 
 
 class PostingBroker:
@@ -68,9 +69,7 @@ class PostingBroker:
                 if owners:
                     check(len(owners) == 1, 'observer-ambiguous-listener')
                     owner = owners[0]
-                    check(owner['java_binary_sha256'] == self.spec['java_binary_sha256'], 'observer-java-changed')
-                    check('-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5005' in
-                          owner['arguments'], 'observer-not-suspended-at-start')
+                    validate_jvm(owner, self.spec)
                     self.target['jvm'] = owner
                     break
                 check(time.monotonic() < deadline, 'observer-target-listener-timeout')

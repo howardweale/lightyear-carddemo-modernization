@@ -215,4 +215,3 @@ def receipt_records(events):
                 'stub_method_sha256':frame['method_sha256'], 'observed_neighbours':neighbours,
                 'first_event_sha256':item['content_sha256'], 'host_verified':False})
     return {'definitions':records, 'generated_adjacencies':adjacencies}
-

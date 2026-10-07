@@ -28,4 +28,3 @@ def verify_entries(spec):
 
 if __name__ == '__main__':
     print(json.dumps(verify_entries(json.load(sys.stdin))), flush=True)
-

@@ -50,6 +50,10 @@ def default_registry():
     K = DecisionKind
     return KindRegistry(
         [
+            K("procedure-equivalence-policy", ("approved", "rejected", "retired"),
+              ("normalization-approver",), ("inventory", "procedure", "policy", "evidence"),
+              required_fields=("reason", "named_owner", "review_after"),
+              consumer="tsql-procedure-policy-admission"),
             K("graph-annotation", ("approved", "rejected", "retired"),
               ("knowledge-approver",), ("annotation", "leak_check"),
               required_fields=("reason", "named_owner", "review_after"),

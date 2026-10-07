@@ -56,11 +56,16 @@ def main():
     p.add_argument('--variants',nargs='+',choices=['correct','wrong'],default=['correct','wrong'])
     p.add_argument('--expected-host',default='ly-tsql-m0')
     p.add_argument('--coverage-bridge',type=Path)
+    p.add_argument('--coverage-revision',type=int,choices=(1,2),default=1)
+    p.add_argument('--coverage-schema',action='append',dest='coverage_schemas')
+    p.add_argument('--semantic-bridge',type=Path,required=True)
     p.add_argument('--pg-image',default=PG_IMAGE)
     p.add_argument('--coverage-controls-evidence',type=Path)
     p.add_argument('--coverage-controls-report-sha256')
     p.add_argument('--coverage-controls-key-sha256')
     args=p.parse_args()
+    if args.coverage_revision==1 and args.coverage_schemas not in (None,['dbo']):
+        raise ValueError('coverage-v1-schema-fixed')
     if platform.system()!='Linux' or platform.machine()!='x86_64' or platform.node()!=args.expected_host:
         raise SystemExit('Refusing: dedicated approved x86_64 Linux VM required')
     if importlib.metadata.version('python-tds')!='1.16.1': raise SystemExit('TDS driver not pinned')
@@ -71,11 +76,28 @@ def main():
     items=[v for v in corpus['procedures'] if not args.ids or v['id'] in args.ids]
     if args.ids and {v['id'] for v in items}!=set(args.ids): raise ValueError('unknown-id')
     items=expand(items)
+    from lightyear_data.tsql_procedures.inventory import parse
+    from lightyear_data.tsql_procedures.semantics import contract
+    from lightyear_data.tsql_procedures.comparison_v5 import compare as compare_v5
+    from copy import deepcopy
+    cases=[]
+    for item in items:
+        syntax=parse(asset(root,item['assets']['source']),('dotnet',str(args.semantic_bridge)),allow_sqlglot=False)
+        if syntax['status']!='parsed':raise ValueError('native-source-syntax-required')
+        semantic=contract(syntax)
+        if len(semantic['procedures'])!=1:raise ValueError('native-single-procedure-contract')
+        for case in item['cases']:
+            one=deepcopy(item);one['cases']=[case];one['source_syntax']=syntax['ast']
+            one['procedure_contract']=semantic['procedures'][0]
+            if len(item['cases'])>1:one['scenario']+=':'+case['id']
+            cases.append(one)
+    items=cases
     # Verify EVERY selected byte before any container or SQL action.
     for item in items:
         for a in item['assets'].values(): asset(root,a)
     qualification=None
     if args.coverage_controls_evidence:
+        if args.coverage_revision!=1:raise ValueError('coverage-v2-needs-new-native-control-qualification')
         from lightyear_data.tsql_procedures.coverage_qualification import qualify
         from lightyear_data.tsql_procedures import coverage as coverage_module
         qualification=qualify(args.coverage_controls_evidence,args.coverage_controls_report_sha256,args.coverage_controls_key_sha256)
@@ -97,6 +119,9 @@ def main():
           'host':platform.node(),'architecture':platform.machine(),'corpus_sha256':sha(manifest_path.read_bytes()),
           'images':{'sqlserver':SQL_IMAGE,'postgresql':args.pg_image},
           'coverage_bridge_sha256':sha(args.coverage_bridge.read_bytes()) if args.coverage_bridge else None,
+          'coverage_revision':args.coverage_revision,'coverage_schemas':args.coverage_schemas or ['dbo'],
+          'semantic_bridge_sha256':sha(args.semantic_bridge.read_bytes()),'comparison_revision':5,
+          'sqlserver_profile':{'collation':'Latin1_General_100_CI_AS','compatibility_level':160},
           'ids':[v['id'] for v in items],'variants':args.variants,
           'pairs':sum(v['cases'][0]['repeated_runs']*len(args.variants) for v in items),
           'code_sha256':{f.relative_to(root).as_posix():sha(f.read_bytes()) for f in sorted((root/'src/lightyear_data').rglob('*.py'))},
@@ -151,8 +176,11 @@ def main():
                 except Exception:
                     if time.monotonic()>deadline: raise RuntimeError('database-readiness-timeout')
                     time.sleep(3)
-        engines={'source':NativeEngine('sqlserver',sql_conn,owner,args.coverage_bridge),
-                 'target':NativeEngine('postgresql',pg_conn,owner,args.coverage_bridge)}
+        engines={'source':NativeEngine('sqlserver',sql_conn,owner,args.coverage_bridge,plan['sqlserver_profile'],
+                                      args.coverage_revision,args.coverage_schemas or ('dbo',)),
+                 'target':NativeEngine('postgresql',pg_conn,owner,args.coverage_bridge,
+                                      coverage_revision=args.coverage_revision,
+                                      coverage_schemas=args.coverage_schemas or ('dbo',))}
         write(out/'ready.json',sign({'schema':'tsql-native-ready/1','at_utc':utc(),'images':images,
               'ports_bind':'unpublished; host access to dedicated internal bridge only','versions':{n:importlib.metadata.version(n) for n in ('python-tds','psycopg','cryptography')},'model_calls':0},key))
         print(json.dumps({'event':'ready','owner':owner,'planned_pairs':plan['pairs'],'at_utc':utc()}),flush=True)
@@ -180,8 +208,7 @@ def main():
                             write(pair/(lane+'.json'),lanes[lane])
                             phase='provision'
                         phase='compare'
-                        comparison=(compare_v2(lanes['source'],lanes['target'],profile(item),qualification,revision=4) if args.coverage_bridge
-                                    else compare(lanes['source'],lanes['target'],item['trap_family']))
+                        comparison=compare_v5(lanes['source'],lanes['target'],profile(item),qualification)
                         write(pair/'comparison.json',comparison)
                         envelope=seal_pair(pair,dict(record,assets=item['assets'],images=plan['images'],plan_sha256=sha((out/'plan.json').read_bytes())),key)
                         replay=replay_pair(pair,public,envelope['content_sha256'])
@@ -233,7 +260,8 @@ def main():
                         +'operator review, not independent attestation'}
         if not fatal and report['cleanup_passed'] and qualification and not args.ids and args.variants==['correct','wrong']:
             try:
-                acceptance=accept(out,corpus,plan,records,public)
+                from lightyear_data.tsql_procedures.m0_v2 import accept as accept_v2
+                acceptance=accept_v2(out,corpus,plan,records,public)
                 acceptance['native_elapsed_seconds']=report['elapsed_seconds']
                 acceptance['pairs_per_minute']=len(records)/(report['elapsed_seconds']/60)
                 write(out/'m0-acceptance.json',sign(acceptance,key))

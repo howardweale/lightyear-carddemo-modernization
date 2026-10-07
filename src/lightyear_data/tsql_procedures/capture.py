@@ -134,7 +134,7 @@ def query(connection, sql, parameters=(), *, maximum_rows=1000000):
         cursor.close()
 
 
-def capture_state(connection, engine, *, maximum_rows=1000000):
+def capture_state(connection, engine, *, maximum_rows=1000000, include_sequences=False):
     """Enumerate every ordinary user table, including trigger targets.
 
     PostgreSQL partition roots include their partition rows exactly once.
@@ -190,11 +190,17 @@ def capture_state(connection, engine, *, maximum_rows=1000000):
                 owner=[owner_schema,owner_table,owner_column],seed=seed,increment=increment)
     if inventory != query(connection, TABLES[engine], maximum_rows=maximum_rows):
         raise CaptureIncomplete("table-inventory-changed-during-capture")
+    extra={}
+    if include_sequences and engine=='sqlserver':
+        extra['standalone_sequences']=[list(map(scalar,r)) for r in query(connection,"""SELECT SCHEMA_NAME(schema_id),name,
+CONVERT(varchar(100),start_value),CONVERT(varchar(100),increment),CONVERT(varchar(100),current_value),
+CONVERT(varchar(100),minimum_value),CONVERT(varchar(100),maximum_value),is_cycling,is_exhausted
+FROM sys.sequences ORDER BY schema_id,name""")]
     return seal({
         "schema": "tsql-state-capture/1", "engine": engine,
         "table_inventory": sorted(tables), "tables": tables,
         "identity_sequence_state": identities, "all_user_tables_captured": True,
-        "mapping_applied": False,
+        "mapping_applied": False,**extra,
     })
 
 

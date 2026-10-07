@@ -227,13 +227,31 @@ def corpus():
                 row[variant]=sql
             row['calling_convention']=dict(row['calling_convention'],target='CALL dbo.trap(NULL,NULL)',
                 transaction_contract='top-level procedure commits the first insert before the second statement')
+    add('null-and-collation-order',26,
+        sp("SELECT v AS value FROM (VALUES (CAST(NULL AS varchar(10))),('a'),('B')) t(v) ORDER BY v COLLATE Latin1_General_100_CI_AS;"),
+        fn("RETURN QUERY SELECT v FROM (VALUES (NULL::text),('a'),('B')) t(v) ORDER BY lower(v) COLLATE \"C\" NULLS FIRST;"),
+        fn("RETURN QUERY SELECT v FROM (VALUES (NULL::text),('a'),('B')) t(v) ORDER BY v COLLATE \"C\";"),
+        'Uses PostgreSQL NULLS LAST and binary order instead of declared SQL Server order.')
+    # Exercise inventory-derived RPC names, typed named arguments and fresh
+    # case databases with a second case of the existing integer-division trap.
+    from copy import deepcopy
+    division=next(r for r in rows if r['id']=='integer-division')
+    division['source_sql']=sp('SELECT CONVERT(varchar(200),@lhs/@rhs) AS value;','@lhs int,@rhs int')
+    for key,expr in [('correct_sql','lhs/rhs'),('wrong_sql','lhs::numeric/rhs')]:
+        division[key]=fn('RETURN QUERY SELECT ('+expr+')::text;').replace('dbo.trap()','dbo.calculate(lhs integer,rhs integer)')
+    division['source_sql']=division['source_sql'].replace('dbo.trap','dbo.calculate')
+    division['calling_convention']=dict(division['calling_convention'],source='RPC dbo.calculate',
+        target='SELECT * FROM dbo.calculate(%s,%s)',target_parameters=['lhs','rhs'])
+    division['cases'][0]['parameters']={'lhs':7,'rhs':2}
+    second=deepcopy(division['cases'][0]);second.update(id='negative-02',parameters={'lhs':-7,'rhs':2})
+    division['cases'].append(second)
     return rows
 
 
 def artifacts(root: Path) -> dict[str,bytes]:
     outputs={}
     rows=corpus()
-    if len(rows)!=42 or {r["trap_family"] for r in rows}!=set(range(1,26)):
+    if len(rows)!=43 or {r["trap_family"] for r in rows}!=set(range(1,27)):
         raise ValueError("trap-family-or-case-closure")
     public=[]
     for row in rows:
@@ -270,7 +288,7 @@ def artifacts(root: Path) -> dict[str,bytes]:
             record['coverage_scenarios'].append({'id':scenario,'assets':scenario_assets,'calling_convention':convention})
         public.append(record)
     manifest=seal({"schema":"tsql-trap-corpus/1","public_fixture":True,"authored_original":True,
-                   "case_count":len(rows),"family_count":25,"procedures":public,"native_pairs_run":0,
+                   "case_count":len(rows),"family_count":26,"procedures":public,"native_pairs_run":0,
                    "correct_twins_qualified":0,"wrong_twins_killed":0,"signed_native_receipts":0,
                    "coverage_source":None,"coverage_target":None,
                    "acceptance":"unassessed; expected labels are not observations"})

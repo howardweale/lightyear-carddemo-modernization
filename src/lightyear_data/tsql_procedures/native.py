@@ -118,12 +118,22 @@ def tds_tokens(session):
 
 class NativeEngine:
     """Credential-free engine boundary. Connector must return autocommit sessions."""
-    def __init__(self, engine, connector, prefix, coverage_bridge=None):
+    def __init__(self, engine, connector, prefix, coverage_bridge=None, engine_profile=None,
+                 coverage_revision=1, coverage_schemas=('dbo',)):
         if engine not in ('sqlserver', 'postgresql'): raise ValueError('engine')
         if not re.fullmatch(r'lytsql_[a-f0-9]{12}', prefix): raise ValueError('owned-prefix')
         self.engine, self.connector, self.prefix = engine, connector, prefix
         self.owned = set()
         self.coverage_bridge = coverage_bridge
+        if coverage_revision not in (1,2):raise ValueError('coverage-revision')
+        if coverage_revision==1 and tuple(coverage_schemas)!=('dbo',):raise ValueError('coverage-v1-schema-fixed')
+        self.coverage_revision=coverage_revision
+        self.coverage_schemas=tuple(coverage_schemas)
+        self.engine_profile=engine_profile
+        if engine_profile and (set(engine_profile)!={'collation','compatibility_level'}
+                or not re.fullmatch('[A-Za-z0-9_]+',engine_profile['collation'])
+                or engine_profile['compatibility_level'] not in (150,160)):
+            raise ValueError('engine-profile')
 
     def name(self, suffix):
         if not re.fullmatch(r'[a-z0-9_]{1,45}', suffix): raise ValueError('database-suffix')
@@ -137,10 +147,15 @@ class NativeEngine:
         db = self.name(suffix)
         with self.connector(None) as c:
             # CREATE, never CREATE IF NOT EXISTS: an old slot cannot be reused.
-            execute(c, 'CREATE DATABASE ' + identifier(db, self.engine))
+            execute(c, 'CREATE DATABASE ' + identifier(db, self.engine)+
+                    (' COLLATE '+self.engine_profile['collation'] if self.engine=='sqlserver' and self.engine_profile else ''))
         self.owned.add(db)
         with self.connector(db) as c:
             if self.engine == 'sqlserver':
+                if self.engine_profile:
+                    execute(c,'ALTER DATABASE '+self._q(db)+' SET COMPATIBILITY_LEVEL='+str(self.engine_profile['compatibility_level']))
+                    actual=query(c,'SELECT collation_name,compatibility_level FROM sys.databases WHERE name=DB_NAME()')[0]
+                    if actual!=[self.engine_profile['collation'],self.engine_profile['compatibility_level']]:raise ValueError('database-profile-differs')
                 for sql in go_batches(setup) + go_batches(procedure): execute(c, sql)
             else:
                 if self.coverage_bridge: execute(c, 'CREATE EXTENSION plpgsql_check')
@@ -149,6 +164,7 @@ class NativeEngine:
         receipt = {'engine': self.engine, 'database': db, 'created_utc': utc(),
                    'setup_sha256': hashlib.sha256(setup.encode()).hexdigest(),
                    'procedure_sha256': hashlib.sha256(procedure.encode()).hexdigest()}
+        receipt['engine_profile']=self.engine_profile
         if self.engine == 'sqlserver':
             backup = '/var/opt/mssql/data/' + db + '.bak'
             with self.connector(None) as c:
@@ -184,7 +200,7 @@ class NativeEngine:
                 'reset_elapsed_seconds':time.monotonic()-tick}
 
     def capture_state(self, connection):
-        result = capture_state(_QmarkConnection(connection) if self.engine == 'sqlserver' else connection, self.engine)
+        result = capture_state(_QmarkConnection(connection) if self.engine == 'sqlserver' else connection, self.engine,include_sequences=True)
         return result
 
     def call(self, reset, item, on_capture=None):
@@ -211,12 +227,16 @@ class NativeEngine:
             collector=None
             if self.coverage_bridge:
                 from .coverage import SqlCoverage, PgCoverage
-                collector=(SqlCoverage(c,db,self.coverage_bridge) if self.engine=='sqlserver' else PgCoverage(c))
+                if self.coverage_revision==2:
+                    from .coverage_v2 import SqlCoverage, PgCoverage
+                collector=(SqlCoverage(c,db,self.coverage_bridge) if self.engine=='sqlserver'
+                           else PgCoverage(c,self.coverage_schemas) if self.coverage_revision==2 else PgCoverage(c))
                 collector.start()
             started, tick = utc(), time.monotonic()
             obs = self._sql_call(c,item) if self.engine == 'sqlserver' else self._pg_call(c,item)
             obs.update(started_utc=started, ended_utc=utc(), elapsed_seconds=time.monotonic()-tick,
                        engine_version=version, session_settings=settings, database_clock_before=clock)
+            if self.engine=='sqlserver' and 'source_syntax' in item:obs['source_syntax']=item['source_syntax']
             if on_capture: on_capture('protocol',obs)
             if self.engine == 'sqlserver':
                 obs['transaction_after'] = query(c, 'SELECT @@TRANCOUNT,XACT_STATE()')[0]
@@ -238,17 +258,22 @@ FROM tempdb.sys.tables WHERE name LIKE '#%' ORDER BY name""")
 
     def _sql_call(self, connection, item):
         import pytds
+        from pytds.tds_base import Param, fByRefValue
+        from pytds.tds_types import sql_type_by_declaration
         sets, outputs, err, status = [], {}, None, None
         with connection.cursor() as cur:
-            parameters = [pytds.output(None, int)] if item['id']=='output-parameter' else []
+            from .invocation import bind
+            procedure,bound=bind(item)
+            parameters={p['name']:Param(name=p['name'],type=sql_type_by_declaration(p['type']),
+                value=p['value'],flags=fByRefValue if p['output'] else 0) for p in bound}
             with tds_tokens(cur._session) as tokens:
                 try:
-                    cur.callproc('dbo.trap', parameters)
+                    cur.callproc(procedure, parameters)
                     while True:
                         if cur.description: sets.append(result_set(cur))
                         if not cur.nextset(): break
                     values = cur.get_proc_outputs()
-                    if parameters: outputs = dict(zip(item['parameters'], [scalar(v) for v in values]))
+                    outputs = dict(zip([p['name'].lstrip('@') for p in bound if p['output']], [scalar(v) for v in values],strict=True))
                     status = cur.get_proc_return_status()
                 except pytds.Error as ex:
                     err = {'class': type(ex).__name__, 'message': str(ex),
@@ -260,16 +285,31 @@ FROM tempdb.sys.tables WHERE name LIKE '#%' ORDER BY name""")
 
     def _pg_call(self, connection, item):
         import psycopg
-        sets, outputs, err, status, notices = [], {}, None, 0, []
+        sets, outputs, err, status, notices = [], {}, None, None, []
         def notice(diag):
             notices.append({k:getattr(diag,k,None) for k in ('severity_nonlocalized','sqlstate','message_primary','message_detail','context')})
         connection.add_notice_handler(notice)
         convention = item['calling_convention']
+        supported=any(k in convention for k in ('result_return_mapping','return_mapping')) or convention.get('target_return_code')=='mapped-default-zero'
+        if convention.get('target_return_code')=='mapped-default-zero':status=0
+        arguments=item.get('cases',[{'parameters':{}}])[0]['parameters']
+        bindings=convention.get('target_parameters',[])
+        if set(bindings)!=set(arguments) and arguments and set(arguments)!=set(convention.get('output_mapping',{})):
+            raise ValueError('target-argument-contract-required')
+        if bindings:
+            from .invocation import bind
+            _,typed=bind(item)
+            by_name={p['name'].lstrip('@'):p['value'] for p in typed}
+            values=[by_name[k.lstrip('@')] for k in bindings]
+        else:values=[]
+        def call(cur):
+            if values:cur.execute(convention['target'],values)
+            else:cur.execute(convention['target'])
         try:
             with connection.cursor() as cur:
                 if 'refcursor_order' in convention:
                     cur.execute('BEGIN')
-                    cur.execute(convention['target'])
+                    call(cur)
                     handles = cur.fetchone()
                     if list(handles) != convention['refcursor_order']: raise ValueError('refcursor-contract')
                     for handle in handles:
@@ -277,7 +317,7 @@ FROM tempdb.sys.tables WHERE name LIKE '#%' ORDER BY name""")
                         sets.append(result_set(cur))
                     cur.execute('COMMIT')
                 else:
-                    cur.execute(convention['target'])
+                    call(cur)
                     if cur.description:
                         rs = result_set(cur)
                         if 'result_return_mapping' in convention:
@@ -308,7 +348,7 @@ FROM tempdb.sys.tables WHERE name LIKE '#%' ORDER BY name""")
             if connection.info.transaction_status.name != 'IDLE': raise RuntimeError('failed-caller-transaction-capture-unavailable') from ex
         finally: connection.remove_notice_handler(notice)
         return {'result_sets':sets,'output_parameters':outputs,'return_code':status,
-                'error':err,'tds_tokens':[],'notices':notices}
+                'return_contract_supported':supported,'error':err,'tds_tokens':[],'notices':notices}
 
     def drop(self, database):
         q = self._q(database)
@@ -320,5 +360,7 @@ FROM tempdb.sys.tables WHERE name LIKE '#%' ORDER BY name""")
     def coverage(self, captured, procedure=None):
         """Return the replay-checked native summary, never synthesize counts."""
         from .coverage import replay_coverage
+        if self.coverage_revision==2:
+            from .coverage_v2 import replay_coverage
         record=captured['observation'].get('coverage')
         return replay_coverage(record) if record is not None else None

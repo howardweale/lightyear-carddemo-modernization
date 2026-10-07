@@ -2,6 +2,23 @@
 
 October 7, 2026. Operator review; not independent attestation.
 
+## PR269 review follow-up
+
+The [fresh review result](../data-modernization/tsql-procedures/review-results.md)
+supersedes the current implementation counts below: 43 procedures, 26 families,
+108 native pairs, all 108 independently replayed on Linux and Windows; actual
+owned-resource absence verified. All 43 wrong variants were rejected; 41 correct
+variants met aggregate gates and two remain policy-gated. ORDER BY and AST-derived
+policy routing close the reported false-acceptance paths. Named typed invocation,
+fresh per-case reset, pinned/read-back collation/compatibility, error/type contracts,
+SEQUENCE capture and per-pair intake refusal are implemented. 89 T-SQL offline
+tests and 18 Tower registry tests pass. Zero model calls.
+
+Collector revision 2, case proposal/shrink APIs and Tower policy verification are
+offline-tested; they do not claim new native collector or customer qualification.
+Full customer dependency closure and release remain gated. The following is the
+preserved earlier milestone, not the current run's results.
+
 Implemented ScriptDom inventory, native SQL Server/PostgreSQL adapters, fresh
 backup/template resets, all-table and protocol capture, signed evidence and
 database-free replay. The public corpus covers 42 procedures and 25 trap families.

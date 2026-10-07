@@ -71,6 +71,8 @@ def audit(root, expected_report, expected_key):
     qualified=False
     if (root/'m0-acceptance.json').exists():
         from lightyear_data.tsql_procedures.m0 import accept
+        if plan.get('comparison_revision')==5:
+            from lightyear_data.tsql_procedures.m0_v2 import accept
         saved=verify(json.loads((root/'m0-acceptance.json').read_bytes()),public)
         reproduced=accept(root,json.loads((root/'corpus.json').read_bytes()),plan,body['records'],public)
         reproduced['native_elapsed_seconds']=body['elapsed_seconds']

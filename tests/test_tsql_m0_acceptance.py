@@ -40,12 +40,12 @@ class M0AcceptanceTests(unittest.TestCase):
         generated=artifacts(Path(__file__).resolve().parents[1])
         manifest=json.loads(generated['data-modernization/tsql-procedures/corpus.json'])
         cases=expand(manifest['procedures'])
-        self.assertEqual(len(cases),44)
+        self.assertEqual(len(cases),45)
         for item in manifest['procedures']:
             for case in item['coverage_scenarios']:
                 for role in ('source','correct','wrong'):
                     self.assertEqual(case['assets'][role],item['assets'][role])
-        self.assertEqual(sum(i['cases'][0]['repeated_runs']*2 for i in cases),104)
+        self.assertEqual(sum(i['cases'][0]['repeated_runs']*2 for i in cases),106)
 
 
 if __name__=='__main__':unittest.main()

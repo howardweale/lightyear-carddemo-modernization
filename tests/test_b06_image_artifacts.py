@@ -19,6 +19,7 @@ from cryptography.hazmat.primitives import serialization
 from lightyear_workflow.campaign_engine import Signer
 from tools.b06_image_artifacts import controller as c
 from tools.b06_image_artifacts.extract import collect
+from tools.b06_image_artifacts.prepare import prepare
 
 
 def test_signer():
@@ -41,6 +42,25 @@ def proof(signer, bound, now, outcome='authorized'):
 
 
 class ExtractionTests(unittest.TestCase):
+    def test_freeze_namespace_packages_uses_exact_git_bytes_and_refuses_reuse(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            repo=Path(tmp);pub=repo/'public';snap=repo/'snapshot';key=repo/'tower.public.pem'
+            key.write_bytes(test_signer().public)
+            names=[c.EXTRACTOR,'src/fixture.py','tests/test_b06_image_artifacts.py',
+                   'tools/ms94_b06_qualification_worker.py','tools/ms94_b06_admission.py']
+            exact=b'# exact git fixture\r\n'
+            def git(args,**kwargs):
+                op=args[3:]
+                if op[0]=='rev-parse':return ('a'*40+'\n').encode()
+                if op[0]=='ls-tree':return ('\n'.join(names)+'\n').encode()
+                self.assertEqual(op[:2],['cat-file','blob']);return exact
+            with patch('tools.b06_image_artifacts.prepare.subprocess.check_output',side_effect=git):
+                plan=prepare(repo,'a'*40,snap,pub,'2026-10-07T21:30:00Z',key)
+                c.verify_snapshot(snap,plan)
+                self.assertEqual((snap/c.EXTRACTOR).read_bytes(),exact)
+                with self.assertRaisesRegex(ValueError,'already-exists'):
+                    prepare(repo,'a'*40,snap,pub,'2026-10-07T21:30:00Z',key)
+
     def test_duplicate_jar_entries_and_origins_preserved_without_resolution_claim(self):
         with tempfile.TemporaryDirectory() as tmp:
             p=Path(tmp);app=p/'app';app.mkdir();jdk=p/'jdk'

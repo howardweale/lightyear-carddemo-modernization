@@ -18,7 +18,8 @@ def prepare(repository, commit, snapshot, public, start, tower_key):
     names = git('ls-tree','-r','--name-only',commit).decode().splitlines()
     selected = {n for n in names if n.startswith('src/') and n.endswith('.py')}
     selected.update(n for n in names if n.startswith('tools/b06_image_artifacts/') and n.endswith('.py'))
-    selected.update(('tools/__init__.py','tests/__init__.py','tests/test_b06_image_artifacts.py',
+    selected.update(n for n in ('tools/__init__.py','tests/__init__.py') if n in names)
+    selected.update(('tests/test_b06_image_artifacts.py',
                      'tools/ms94_b06_qualification_worker.py','tools/ms94_b06_admission.py'))
     check(selected <= set(names), 'source-closure-missing')
     snapshot.mkdir(parents=True, exist_ok=False); public.mkdir(parents=True, exist_ok=False)

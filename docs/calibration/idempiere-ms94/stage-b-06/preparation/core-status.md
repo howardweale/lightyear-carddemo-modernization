@@ -1,5 +1,17 @@
 # B06 preparation status
 
+## October 6 J1 smoke failure and correction r9
+
+The authorized smoke failed before candidate execution because the readable slot
+name violated the inherited native journey resource-owner contract. The failed
+report, absent-resource checks and 2,106-file integrity audit are preserved.
+The [r9 correction](j1-smoke-r9/README.md) binds fresh native journey IDs and
+validates them before assembly/freeze/conversion. The new exact plan and snapshot
+require a new Tower decision; earlier approvals are not reused. Zero models ran.
+No J1/J2/J3 native qualification or measurement readiness is claimed. Historical
+“no smoke has run” statements below describe their publication time, before this
+failed attempt.
+
 ## October 6 PR262 review follow-up r8
 
 The [r8 report](review-r8.md) records the implemented closed loopback HTTP

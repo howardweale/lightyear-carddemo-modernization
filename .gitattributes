@@ -193,3 +193,6 @@ tools/ms94_b06_codex_probe_child.ps1 -text
 tools/b06-account-egress.cs -text
 tools/ms94_b06_pinned_exec.ps1 -text
 tools/ms94_b06_pinned_probe.ps1 -text
+
+# Retain exact host-probe source bytes bound in observer-v2 preparation records.
+tools/b06_host_probe/** -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol

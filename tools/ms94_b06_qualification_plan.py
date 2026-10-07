@@ -7,7 +7,7 @@ import re
 from lightyear_calibration.contracts import read_json, seal, verify
 from lightyear_calibration.journey_order import file_hash
 from tools.ms94_b06_admission import check, verify_inputs
-from tools.ms94_b06_executable import verify_snapshot, window
+from tools.ms94_b06_executable import verify_snapshot, window, validate_native_owner
 
 
 def convert(root, draft, snapshot_sha256, start_utc, end_utc, *, tower_public_key_sha256=None):
@@ -24,6 +24,7 @@ def convert(root, draft, snapshot_sha256, start_utc, end_utc, *, tower_public_ke
     by_id = {}
     for name, sha in manifest['slot_plans_sha256'].items():
         p = root / name; plan = read_json(p); verify(plan)
+        validate_native_owner(p.parent)
         check(plan['content_sha256'] == sha and plan['journey'] == draft['journey'], 'qualification-slot-binding')
         check(plan['slot_id'] not in by_id, 'qualification-duplicate-slot')
         verify_inputs(p.parent, plan)

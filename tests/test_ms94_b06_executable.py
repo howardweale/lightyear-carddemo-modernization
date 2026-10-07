@@ -4,10 +4,27 @@ from pathlib import Path
 from unittest.mock import patch
 from lightyear_calibration.contracts import seal, canonical
 from lightyear_calibration.journey_order import RUNS, file_hash
-from tools.ms94_b06_executable import assemble_slot, freeze, verify_snapshot, window, POLICY
+from tools.ms94_b06_executable import assemble_slot, freeze, verify_snapshot, window, POLICY, native_run_name
 
 
 class ExecutableTests(unittest.TestCase):
+    def test_logical_smoke_id_is_not_a_native_owner_and_no_slot_is_written(self):
+        with tempfile.TemporaryDirectory() as d:
+            root = Path(d)
+            run = root / RUNS / 'j1-smoke-r6-001'
+            with self.assertRaisesRegex(ValueError, 'Invalid local journey resource owner'):
+                assemble_slot(root, run, {}, {}, {})
+            self.assertFalse(run.exists())
+
+    def test_revision_scoped_native_ids_use_real_network_policy_without_docker(self):
+        from lightyear_execution.journey_network import InternalOnlyNetwork
+        first = native_run_name('j1-smoke-r9', 'j1-smoke-r6-001')
+        self.assertEqual(first, native_run_name('j1-smoke-r9', 'j1-smoke-r6-001'))
+        self.assertNotEqual(first, native_run_name('j1-smoke-r10', 'j1-smoke-r6-001'))
+        self.assertNotEqual(first, native_run_name('j1-smoke-r9', 'j1-smoke-r6-002'))
+        policy = InternalOnlyNetwork(first)
+        self.assertIn('lightyear.journey=' + first, policy.create_args(first + '-operations-1-net'))
+
     def test_running_guard_and_full_pair_window_are_distinct(self):
         from tools.ms94_b06_native import group_window_guard
         p = {'execution_admission_version': 3, 'docker_run_window': {
@@ -31,7 +48,7 @@ class ExecutableTests(unittest.TestCase):
 
     def test_incomplete_native_bundle_never_creates_slot(self):
         with tempfile.TemporaryDirectory() as d:
-            root = Path(d); run = root / RUNS / 'j2-001'
+            root = Path(d); run = root / RUNS / ('journey-' + 'a'*32)
             base = {'journey': 'J2', 'model_calls': 0, 'qualification_only': True,
                     'declaration': {'policy': {'max_model_calls': 1}}}
             with self.assertRaisesRegex(ValueError, 'declaration-model-budget'):
@@ -46,7 +63,7 @@ class ExecutableTests(unittest.TestCase):
             (root / 'impl.py').write_bytes(b'no model transport')
             (root / POLICY).parent.mkdir(parents=True)
             (root / POLICY).write_bytes(b'unchanged policy fixture')
-            p = root / RUNS / 'j2-001' / 'plan.json'; p.parent.mkdir(parents=True)
+            p = root / RUNS / ('journey-' + 'a'*32) / 'plan.json'; p.parent.mkdir(parents=True)
             plan = seal({'implementation_sha256': {'impl.py': file_hash(root / 'impl.py')},
                          'inputs_sha256': {}, 'posting_observer': {'target_class_files_sha256': {},
                           'classes_directory': 'classes', 'class_files_sha256': {}}})

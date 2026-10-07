@@ -29,9 +29,11 @@ class ConversionTests(unittest.TestCase):
                          'local': {'runner_image': 'a'}, 'declaration': {'environment': {'engines': {
                              k: {'image_digest': images[k]} for k in ('oracle', 'postgresql')}}},
                          'harness_sha256': 'source', 'control': 'retained-reference', 'expected': {'status': 'passed'}})
-            (root / 'plan.json').write_bytes(canonical(plan))
-            manifest = seal({'files_sha256': {'plan.json': file_hash(root / 'plan.json')},
-                             'slot_plans_sha256': {'plan.json': plan['content_sha256']}})
+            name = 'journey-' + 'a'*32 + '/plan.json'
+            (root / name).parent.mkdir()
+            (root / name).write_bytes(canonical(plan))
+            manifest = seal({'files_sha256': {name: file_hash(root / name)},
+                             'slot_plans_sha256': {name: plan['content_sha256']}})
             (root / 'b06-executable-snapshot.json').write_bytes(canonical(manifest))
             body = {'journey': 'J1', 'model_calls': 0, 'measurement_authorized': False,
                     'slot_count': 1, 'images': images, 'schedule': [{'id': 'j1-001',
@@ -51,7 +53,7 @@ class ConversionTests(unittest.TestCase):
                 changed = {**body, 'images': {**images, 'oracle': 'other'}}
                 with self.assertRaisesRegex(ValueError, 'qualification-image-binding'):
                     convert(root, seal(changed), manifest['content_sha256'], start, end,tower_public_key_sha256='a'*64)
-            (root / 'plan.json').write_bytes(b'changed')
+            (root / name).write_bytes(b'changed')
             with self.assertRaisesRegex(ValueError, 'bound-file-changed'):
                 convert(root, seal(body), manifest['content_sha256'], start, end,tower_public_key_sha256='a'*64)
 

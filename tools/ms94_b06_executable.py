@@ -6,6 +6,7 @@ inputs leave an unsealed preparation directory, not an executable snapshot.
 import copy
 import hashlib
 import re
+from uuid import NAMESPACE_URL, uuid5
 from pathlib import Path
 
 from lightyear_calibration.contracts import canonical, read_json, seal, verify
@@ -14,6 +15,20 @@ from lightyear_control_tower.status_export import atomic_new
 from tools.ms94_b06_admission import bound_file, check, verify_inputs, utc
 from tools.ms94_b06_runtime_contract import runtime_contract
 from tools.ms94_b06_runtime_delivery import POLICY
+
+
+def native_run_name(revision, slot_id):
+    """Keep logical schedule IDs separate from the native resource-owner ID."""
+    check(all(isinstance(v, str) and re.fullmatch(r'[a-z0-9-]+', v)
+              for v in (revision, slot_id)), 'native-run-identity')
+    return 'journey-' + uuid5(NAMESPACE_URL, 'lightyear/b06/' + revision + '/' + slot_id).hex
+
+
+def validate_native_owner(run):
+    # Use the actual inherited network policy before writing or freezing inputs.
+    # Do not widen that policy or change J1's business predicates.
+    from lightyear_execution.journey_network import InternalOnlyNetwork
+    InternalOnlyNetwork(Path(run).name)
 
 
 def window(calendar, start, end):
@@ -34,6 +49,7 @@ def assemble_slot(root, run, base, slot, input_files):
     root, run = Path(root).resolve(), Path(run).resolve()
     check(run.parent == (root / RUNS).resolve(), 'slot-run-path')
     check(not run.exists() and re.fullmatch(r'[a-z0-9-]+', run.name), 'slot-already-exists')
+    validate_native_owner(run)
     check(base['journey'] in ('J1', 'J2', 'J3') and base['model_calls'] == 0 and
           base['qualification_only'] is True, 'slot-not-qualification')
     check(base['declaration']['policy']['max_model_calls'] == 0, 'declaration-model-budget')
@@ -110,6 +126,7 @@ def freeze(source, destination, bindings, slot_plans):
     for name, sha in bindings.items(): bound_file(source, name, sha)
     for name, expected in slot_plans.items():
         path = source / name
+        validate_native_owner(path.parent)
         plan = read_json(path); verify(plan)
         check(plan['content_sha256'] == expected and name in bindings, 'freeze-slot-plan')
         verify_inputs(path.parent, plan)

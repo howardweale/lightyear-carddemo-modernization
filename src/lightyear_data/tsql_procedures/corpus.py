@@ -188,6 +188,11 @@ def corpus():
     # remain in their retained bundles. Status is produced by the twin's actual
     # exception path, never supplied as a constant by the adapter/comparator.
     for row in rows:
+        if row['id'] in ('nested-transaction-rollback','identity-rollback-gap'):
+            # Semantically inert, but actually executed and visible to the native
+            # profiler. Preserve the former NULL-handler sources in prior runs.
+            for variant in ('correct_sql','wrong_sql'):
+                row[variant]=row[variant].replace("THEN NULL;", "THEN PERFORM 1;")
         if row['id'] not in ('ci-unique','catch-retains-prior-work','xact-abort'):
             continue
         row['calling_convention'] = dict(row['calling_convention'],
@@ -204,6 +209,24 @@ def corpus():
             sql=sql.replace('RETURN QUERY SELECT count(*)::text FROM dbo.',
                 'RETURN QUERY SELECT count(*)::text, mapped_status FROM dbo.')
             row[variant]=sql
+        if row['id']=='xact-abort':
+            for variant in ('correct_sql','wrong_sql'):
+                row[variant]=row[variant].replace('INSERT INTO dbo.effects VALUES(1,10);',
+                    'INSERT INTO dbo.effects VALUES(1,10); mapped_status:=-6;').replace(
+                    'THEN mapped_status:=-6; NULL;', 'THEN PERFORM 1;')
+        if row['id']=='ci-unique':
+            # SQL Server commits the first insert before the caught second insert.
+            # A PostgreSQL function would roll it back on an unhandled exception;
+            # a top-level procedure preserves that public partial-commit contract.
+            for variant in ('correct_sql','wrong_sql'):
+                sql=row[variant].replace('FUNCTION dbo.trap() RETURNS TABLE(value text, tsql_return_code integer)',
+                    'PROCEDURE dbo.trap(OUT value text, OUT tsql_return_code integer)')
+                sql=sql.replace("INSERT INTO dbo.names(v) VALUES ('A');", "INSERT INTO dbo.names(v) VALUES ('A'); COMMIT;")
+                sql=sql.replace('RETURN QUERY SELECT count(*)::text, mapped_status FROM dbo.names;',
+                    'SELECT count(*)::text, mapped_status INTO value, tsql_return_code FROM dbo.names;')
+                row[variant]=sql
+            row['calling_convention']=dict(row['calling_convention'],target='CALL dbo.trap(NULL,NULL)',
+                transaction_contract='top-level procedure commits the first insert before the second statement')
     return rows
 
 
@@ -225,6 +248,26 @@ def artifacts(root: Path) -> dict[str,bytes]:
         if outputs[assets["correct"]["path"]]==outputs[assets["wrong"]["path"]] and outputs[assets["target-setup"]["path"]]==outputs[assets["wrong-setup"]["path"]]:
             raise ValueError("mutant-has-no-changed-bytes")
         record["assets"]=assets
+        record['coverage_scenarios']=[]
+        if row['id'] in ('ci-unique','xact-abort'):
+            scenario='unexpected-check' if row['id']=='ci-unique' else 'trigger-rollback'
+            if row['id']=='ci-unique':
+                extra_source="ALTER TABLE dbo.names ADD CONSTRAINT names_upper CHECK(v COLLATE Latin1_General_100_BIN2 <> 'a');\nGO\n"
+                extra_target="ALTER TABLE dbo.names ADD CONSTRAINT names_upper CHECK(v <> 'a');\n"
+                convention=dict(record['calling_convention'],public_error_equivalence='check-constraint-547-23514')
+            else:
+                extra_source="CREATE TRIGGER dbo.rollback_probe ON dbo.effects AFTER INSERT AS BEGIN SET NOCOUNT ON; ROLLBACK TRANSACTION; DECLARE @zero int=0,@unused int; SET @unused=1/@zero; END;\nGO\n"
+                extra_target="CREATE FUNCTION dbo.rollback_probe() RETURNS trigger LANGUAGE plpgsql AS $$ BEGIN RAISE EXCEPTION 'public rollback coverage case' USING ERRCODE='22012'; END; $$; CREATE TRIGGER rollback_probe BEFORE INSERT ON dbo.effects FOR EACH ROW EXECUTE FUNCTION dbo.rollback_probe();\n"
+                convention=dict(record['calling_convention'])
+            scenario_assets=dict(assets)
+            for role,key,extra in [('source-setup','source_setup',extra_source),('target-setup','target_setup',extra_target),('wrong-setup','wrong_setup',extra_target)]:
+                name=ROOT_DIR+'/corpus/'+row['id']+'/'+scenario+'-'+role+'.sql'
+                setup=row[key]
+                if row['id']=='ci-unique' and role=='source-setup':
+                    setup=setup.replace('Latin1_General_100_CI_AS','Latin1_General_100_BIN2')
+                raw=(setup+extra).encode();outputs[name]=raw
+                scenario_assets[role]={'path':name,'sha256':hashlib.sha256(raw).hexdigest()}
+            record['coverage_scenarios'].append({'id':scenario,'assets':scenario_assets,'calling_convention':convention})
         public.append(record)
     manifest=seal({"schema":"tsql-trap-corpus/1","public_fixture":True,"authored_original":True,
                    "case_count":len(rows),"family_count":25,"procedures":public,"native_pairs_run":0,

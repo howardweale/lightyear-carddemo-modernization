@@ -205,7 +205,7 @@ class InventoryTests(unittest.TestCase):
 class CorpusLedgerTests(unittest.TestCase):
     def test_generated_assets_exact_and_hash_bound(self):
         expected=artifacts(ROOT)
-        self.assertEqual(254,len(expected))
+        self.assertEqual(260,len(expected))
         for name,raw in expected.items():
             with self.subTest(name=name): self.assertEqual(raw,(ROOT/name).read_bytes())
         manifest=json.loads(expected["data-modernization/tsql-procedures/corpus.json"])

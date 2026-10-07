@@ -147,7 +147,12 @@ def compare_v2(source,target,mapping,qualification=None,revision=2):
         'exact-name schema/table/column inference flagged',
         'identity -> owned sequence; unconsumed value -> null, exact seed/increment/last consumed'])
     a,b=source['observation'],target['observation']
-    if a['error'] and b['error']:pending('error-map-required')
+    if a['error'] and b['error']:
+        error_contract=mapping['calling_convention'].get('public_error_equivalence')
+        if (revision>=4 and error_contract=='check-constraint-547-23514' and
+                a['error'].get('number')==547 and b['error'].get('sqlstate')=='23514'):
+            normalized.append('public supplemental CHECK violation: SQL Server 547 -> PostgreSQL 23514; raw messages retained')
+        else:pending('error-map-required')
     if any(t.get('flags',0)&0x10 for t in a['tds_tokens']):pending('row-count-policy-required')
     infos=[t['message'] for t in a['tds_tokens'] if t['token']==171]
     if any(not 0<=t['severity']<=10 for t in infos) or any(
@@ -208,7 +213,7 @@ def replay_pair(directory, public, expected_hash):
         if sha(raw)!=digest: raise ValueError('evidence-changed')
         values[name]=json.loads(raw)
     saved=values['comparison.json']
-    if saved['schema'] in ('tsql-native-comparison/2','tsql-native-comparison/3'):
+    if saved['schema'] in ('tsql-native-comparison/2','tsql-native-comparison/3','tsql-native-comparison/4'):
         if saved['mapping']['assets']!=body['assets']:raise ValueError('mapping-asset-binding')
         result=compare_v2(values['source.json'],values['target.json'],saved['mapping'],saved.get('coverage_qualification'),int(saved['schema'][-1]))
     else:result=compare(values['source.json'],values['target.json'],body['trap_family'])

@@ -1,0 +1,2079 @@
+{
+  "schema": "tsql-M0-public-summary/1",
+  "report_sha256": "a61623ae2da0f85611821fa35de761570f25e117dd8dacd3f912f9a3a2fe8b33",
+  "acceptance_sha256": "d43172e3c12f0257299febcf12d9cbb4c9ab628e6ee7e582451abbe26be12675",
+  "public_key_sha256": "9f452baaa9778a88a2e9ddf1f7bfc5efea10f651383e92d4bfa2c07fcdeaae18",
+  "local_audit_sha256": "812501cf38aabfb2d8a98d074bea24b71f8d5b465858cd1777b85a30ecccebaa",
+  "vm_audit_sha256": "9d8159fc0549b65756f16ee926c3b278957e9fda925c98e679720138e07d7de5",
+  "passed": true,
+  "native_pairs": 104,
+  "procedures": 42,
+  "model_calls": 0,
+  "native_elapsed_seconds": 286.6192828550011,
+  "pairs_per_minute": 21.771040447256922,
+  "reset_benchmark": {
+    "source": {
+      "count": 104,
+      "maximum_seconds": 0.8868072369987203,
+      "mean_seconds": 0.7713116674710293,
+      "minimum_seconds": 0.7056717049999861,
+      "total_seconds": 80.21641341698705
+    },
+    "target": {
+      "count": 104,
+      "maximum_seconds": 0.07160547700186726,
+      "mean_seconds": 0.06272263039430143,
+      "minimum_seconds": 0.05859975299972575,
+      "total_seconds": 6.523153561007348
+    }
+  },
+  "procedure_outcomes": [
+    {
+      "id": "bit",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 24,
+      "case_manifests": [
+        "d46061e36095f5037a3fbc82a95f3ed9f609f15451c6fc7e628c40a1215100a5"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "bit",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 24,
+      "case_manifests": [
+        "d5a85a1db888cdcdc560f18ee8c2a5f41a28de5f9eb1b9a50e337699495c7866"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "catch-retains-prior-work",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 11,
+      "case_manifests": [
+        "c5461113383cb1073d7d55745461cb3eb6c33ee1a5c1a229900975305827f0da"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "catch-retains-prior-work",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 11,
+      "case_manifests": [
+        "ab1a5a1c00a29b9b4622e0efe7bcde3d66589d8cba4d493c8a4f8461e339446d"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "ci-distinct",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 1,
+      "case_manifests": [
+        "fcf7121bfb6b6f2b3f23b945e9b5aa6eebd54f75072f2e25a2f4adeaa79db477"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "ci-distinct",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 1,
+      "case_manifests": [
+        "08a684f148dee0a99071a7be8efdf6b193155d82b67d0064b246eb82e6542995"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "ci-equality",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 1,
+      "case_manifests": [
+        "b0ea42510de0b61841abebdb6b094a6324b25c293ec5abca8376107a5c36db36"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "ci-equality",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 1,
+      "case_manifests": [
+        "b83675272c23719ab2559df7a20ef4a4d7d3aa7cab24162f2a8af80dd736f2ff"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "ci-group",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 1,
+      "case_manifests": [
+        "ab37336a43f9c865650ef51f192d820472a1428e6e046f96cd0787bb2eead4a7"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "ci-group",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 1,
+      "case_manifests": [
+        "5230322f0129e795fd44022b454d68a0f1259b0106ad98d5f62115637d2c53ff"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "ci-join",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 1,
+      "case_manifests": [
+        "a3a42abf7ee838103b6ae5e3d57a92ffa80364207bb42e4d62df73f9523b6f33"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "ci-join",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 1,
+      "case_manifests": [
+        "f6263810166a1cc05487dc92ab42948d24651f1433dff1090e036af6bd30dc36"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "ci-unique",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 1,
+      "case_manifests": [
+        "42349b21cba1bf7e00858f5705672157ae39d5baeeee42967e791f202b590b89",
+        "492c6654635ad637183ced58a6fa8647b93c8224f39e9fa98a3c08708c8fa1bf"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "ci-unique",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 1,
+      "case_manifests": [
+        "f4464eb4197e8f500e728b1b0d193b14a2ee103e1b6f3114a611f65799657e58",
+        "9aa8ca4fb58c0e845b6d247e9e3410d2b01e5316b6f9ae2caf610550edb38426"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 0.8,
+          "minimum_module_branch_fraction": 0.5,
+          "missing_error_paths": [
+            {
+              "module": "dbo.trap()",
+              "site": "one-native-case-complete-module-branches-and-handlers"
+            }
+          ],
+          "eligible": false
+        }
+      }
+    },
+    {
+      "id": "convert-style",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 9,
+      "case_manifests": [
+        "76c5aa2a5d54f76c91df7cb6421bffa60cdf228ab0d567086e99736f75606318"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "convert-style",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 9,
+      "case_manifests": [
+        "a473831b0cb04bc6986818dbef62399a8b7e34cea3bba5ff920c4aaf515a09a6"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "cursor-fetch-status",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 22,
+      "case_manifests": [
+        "ad54c85064f5586fd4a2f72c8b894959705018c30b99afd0299b27a92f1a9966"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 0.9166666666666666,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "cursor-fetch-status",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 22,
+      "case_manifests": [
+        "353813051c5b0e651f3f02ca3a281d5575b27bde0228ee91e5f8387bb3f313e5"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 0.9166666666666666,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "datediff-day",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 8,
+      "case_manifests": [
+        "47296ffba1ab3c2329b928786ca4fa78589796aaf7d6b503f65306467d219c66"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "datediff-day",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 8,
+      "case_manifests": [
+        "3270f1fe4daa781832d9499e301cef5a1c86a9f311cde25c39666bf4ff0f2295"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "datediff-year",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 8,
+      "case_manifests": [
+        "08f92c7d12b7fc637c2585d7ea1c82f6d5e983d8d54c60b55764dec9066b4011"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "datediff-year",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 8,
+      "case_manifests": [
+        "7d23037f16166475faed7e4528a0e1b1816ea56e6f81f54ea9f9586e09466b61"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "datefirst",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 9,
+      "case_manifests": [
+        "8f5a8928e57928c931e29865aeacb4248bab977c7b13050e7224f592f39fc6e3"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "datefirst",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 9,
+      "case_manifests": [
+        "bda6f09ead49bdebf92f52ab05ae9b6c831e743a8c9cde348edd3becfa7a1bde"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "dateformat",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 9,
+      "case_manifests": [
+        "f5b5cfe2c5873192045402dc08fe2f2c117635f1f6411ba7c15607576d61ee8d"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "dateformat",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 9,
+      "case_manifests": [
+        "e5b20c5fddcae566c3b306ebc96562df271c7b84fe01b38ecb479f2fcacdbe01"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "datetime-001",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 7,
+      "case_manifests": [
+        "e370af451befe71583ef98bfa46c140e2a6fa9ec0773e59ae49f157eed774d83"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "datetime-001",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 7,
+      "case_manifests": [
+        "a3307f433d31202286b8663b85d9126f575a38468773c66a59f6400c9ee15a80"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "datetime-002",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 7,
+      "case_manifests": [
+        "75e6e9b88cf25c8fa8b1cb0e54df0c59d205688d8c44ae751d77fa2f16dec158"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "datetime-002",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 7,
+      "case_manifests": [
+        "c8cd92014451ad0e673d9fa3da77d9fe822dad1f43d4dd1e2d4ea0331c88adc4"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "default-return-code",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 17,
+      "case_manifests": [
+        "c6f98410736c56dca02e8f0fe0736bc3547ec278db24f816e10601c91aa238d7"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "default-return-code",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 17,
+      "case_manifests": [
+        "ac9fd24361aed26a22bcc5f7fee9d75aff269016569c28bfd91738e45d00cc59"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "dynamic-parameter-binding",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 21,
+      "case_manifests": [
+        "3f1b46cba72769ae26537d2be3a9bdd67d3c88bd5167bef788233c563f149960"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "dynamic-parameter-binding",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 21,
+      "case_manifests": [
+        "c4ca79977feaffc07a1ed85714ee593021a2e2623762920bed8b3569ee5562ad"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 0.5,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": false
+        }
+      }
+    },
+    {
+      "id": "empty-date",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 6,
+      "case_manifests": [
+        "21b6ba4ee208454db9699955bd0cf6cdae159491e8f888e4aeb61b73fa0caf21"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "empty-date",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 6,
+      "case_manifests": [
+        "81c9e4612542dffac7fb2cda9af1a9554649fe67744ac531d55a6b7aba2e75bb"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "empty-int",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 6,
+      "case_manifests": [
+        "747f8fb2223a7c88da336b295366586763c6eb86f34b252f544306fe24e9b9de"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "empty-int",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 6,
+      "case_manifests": [
+        "5b545e4e5b888db3cc80ccd2d9ae6d76a45aba119998d7f3af0a2f4e4204c06c"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "identity-rollback-gap",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 14,
+      "case_manifests": [
+        "112353b9f0f71cc7e62e4a23f8ed670a9caf05cfd08eb5568fba532fa3936555"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "identity-rollback-gap",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 14,
+      "case_manifests": [
+        "3d50248e844970a5f5403a94cbae3237d423e483c61082a03687a473a81fd53f"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "informational-raiserror",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 13,
+      "case_manifests": [
+        "ea4d2e5a3f6296bb725e8d3244b4e16bb9448c7fde23282020187bb0cbc16c0d"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "informational-raiserror",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 13,
+      "case_manifests": [
+        "611ce03110077b9163dd9bead3d680765fd119bcca66500f74bb4afa0e1eacc9"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 0.5,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": false
+        }
+      }
+    },
+    {
+      "id": "integer-division",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 4,
+      "case_manifests": [
+        "8c1efed50c35bbfcff58a7fb610bb261e3785e8f14eac9855dd73e81e67643b4"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "integer-division",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 4,
+      "case_manifests": [
+        "a6fa827cf32ff83af8a73f36edf81aed27a2a8516dd09dda72414c3dad851515"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "isnull-length",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 5,
+      "case_manifests": [
+        "b3262be656598a09a1dc3b312f599a4f862a1a3dbd9e66e535a2afa0fa79d232"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "isnull-length",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 5,
+      "case_manifests": [
+        "5850b069ab5f47047778a1775113d33b6c1467b1d0d154d5f30c13300d90e66c"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "len",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 3,
+      "case_manifests": [
+        "f1ad07eb934c9325950124a04da8a5ef8d56fb6bf81d2adf4ccb6129801f9918"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "len",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 3,
+      "case_manifests": [
+        "77ba0b9ab3e27b736489096ab4d5cfedc911c4acb7766aba9c03bce5b10bf510"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "merge-upsert",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 19,
+      "case_manifests": [
+        "68d21fc41aa42137ede0a55f06ea4074f64c4e0bd69cbcf882658cb2769313c9"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "merge-upsert",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 19,
+      "case_manifests": [
+        "408dd9ee0f99fc33f35b0225c4b4c5db587c06d516942013f206c7f1ecb441fa"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "money-scale",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 10,
+      "case_manifests": [
+        "7852436283fe631a54d43ee09fdefe958ab55939dec6138065c1055756ad18e8"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "money-scale",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 10,
+      "case_manifests": [
+        "0552274cd1d94993ecd702d38443bc044cf3bc3bf772312c07174cfe86b064ff"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "multiple-result-sets",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 16,
+      "case_manifests": [
+        "8ed0ff1c98e8d9bc37aca43d27616a7a39712a91a577deb06cb5d39cd33a764d"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "multiple-result-sets",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 16,
+      "case_manifests": [
+        "3b49d07664176d3d92f58d63d006f408f3f19e0de400edc440d387df6e3651e7"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "nested-transaction-rollback",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 12,
+      "case_manifests": [
+        "7b16fab5435b9871ac3ed1eee04de50f8b042efebdf5a7808fad55a8ab7cea34"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "nested-transaction-rollback",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 12,
+      "case_manifests": [
+        "3c68c9ea5a77ec1357411001e1cecd4592b66dc604a376fba56dc3211276d8a0"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "output-parameter",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 17,
+      "case_manifests": [
+        "7920e3c91e7655e862f5b96d8885bbe7093fe04acabb0078dadb529b3e64cf47"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "output-parameter",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 17,
+      "case_manifests": [
+        "dd26b0b7c714cec4dcda4aaf9f46265e8e9c89011d55ec4820d04131fc2faeb4"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "round-negative",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 10,
+      "case_manifests": [
+        "d29a28a0469c66204f711242dcf0677de7f7941bba6ea62d74a57e270a49b73c"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "round-negative",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 10,
+      "case_manifests": [
+        "ba8c22cd24fff698d87a1a39079edb5f820e98a2586b77129c710d455cb6c176"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "rowcount-lifetime",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 15,
+      "case_manifests": [
+        "6955e9eba8794de09fd99cde8c76ee375029653c78a9403bf3ffcd08a8d611a3"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "rowcount-lifetime",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 15,
+      "case_manifests": [
+        "3158a49dd32aed09b3e01827028aae0392c4a124ab3535c383a29c2031067523"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "scope-identity-trigger",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 14,
+      "case_manifests": [
+        "f481b1e201a213b49269219d69005c035e41e3d5f78d369288669a1782e714e1"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "scope-identity-trigger",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 14,
+      "case_manifests": [
+        "8db68ea3435ae46dfb6a23da911f2190d6bcc7f2ef5b68b580fb7824eee814a6"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "set-trigger",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 23,
+      "case_manifests": [
+        "5ae31e57ceefc54ad1056265586c2cc8d42f61521873153dd1224b5f2f61074d"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "set-trigger",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 23,
+      "case_manifests": [
+        "01aa608de0882ed6b89c44c70362216f4f9001e0ae26a1a619a4831b0fa1534b"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "table-variable-scope",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 20,
+      "case_manifests": [
+        "abb6325bae616b1b9d8e6c768d748b06830e007706f7211121bf002ca3c935b9"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "table-variable-scope",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 20,
+      "case_manifests": [
+        "43f48e46d42de22fd44337c5b7fcbf7cda5e06438b46ebc18d80136ed0b4b17e"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "temp-table-scope",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 20,
+      "case_manifests": [
+        "6f8b7dc50bb3d48af07bcb2e407c1c90367aa5bc9b91856ed6e7a09edc772058"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "temp-table-scope",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 20,
+      "case_manifests": [
+        "cfe5ebf7088390e2cab51add2d034cc8e0e1f7706e7b8ff20a540b6d93301b19"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "trailing-char",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 2,
+      "case_manifests": [
+        "76a4fe882ec201ae51ec1b9204c755caa97cdc920ec3f39ebe42462ce1a2c237"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "trailing-char",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 2,
+      "case_manifests": [
+        "0cef09a12fac37600629f187c468f441f719724a32ffc9eda91daf342540680c"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "trailing-varchar",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 2,
+      "case_manifests": [
+        "74da65b24fcbd777877ffa759b6898938f79b2dd8bcbdee85b4936ed004d55eb"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "trailing-varchar",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 2,
+      "case_manifests": [
+        "41e48b54be735141b647f22207c730063d4c28cc68253355e28e3be0de05a9a2"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "type-precedence",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 4,
+      "case_manifests": [
+        "d06defc213a899560b1e6b2a6dc2deba3d17361ffb642e0f3f3253d940bb09e8"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "type-precedence",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 4,
+      "case_manifests": [
+        "f89e34ce45fd0edee67af341e1ec47b354e630b0c4123c67cf7e05daf19a6309"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "unordered-top",
+      "variant": "correct",
+      "verdict": "policy-decision-required",
+      "accepted": true,
+      "trap_family": 25,
+      "case_manifests": [
+        "05cf3bf64c9d96c8e458559c1578e4efe8c5a40e7f1c8e92cfe8d7f4400e04f6",
+        "c4dd5603d1925157aaaf221473ebdcdbb96f1a1b65a05543b84d2b3ef7414cf3",
+        "5126cf2011e99965091d2a6f53060457ccf3aab1a629dd0d40519243900173a8",
+        "bcd35d502c27b3a358dd09c18e41eb5b656b72d3e5fdb30a1512bba22ee7e88b",
+        "8808b062dff1a774b4681ee011b596adcd0576354aa72b86a01f3000b6175a80"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "unordered-top",
+      "variant": "wrong",
+      "verdict": "policy-decision-required",
+      "accepted": true,
+      "trap_family": 25,
+      "case_manifests": [
+        "b12dbc8860fd778efd73610e49b1410c0b7827ccf8d045872f743171ee88a46d",
+        "470fc98c722707957c3da87ecffc6b8b041f27255c4f40e51d41c6a3f8d02bb4",
+        "6f003cf3275357cc6c14e5079e7979abba8544e25f8e3cea39551e56740d6dea",
+        "17855ee921c83e62c4789035a111a03ac73a52af0a13d1e366a4434bfdacd4a7",
+        "93a1c881430f554126b041431ae78b18fd2e5d6ecaf8424495049ec368ea44ba"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "update-from-ambiguous",
+      "variant": "correct",
+      "verdict": "policy-decision-required",
+      "accepted": true,
+      "trap_family": 18,
+      "case_manifests": [
+        "a535bfd6be9b95dd158ba89586c52f969e618cff70de000bfc93f0a53e5350cb",
+        "a4e35e0bca955bfb64a9522eaeaa80d90dc5550ae08058fb81fb9381801e6da3",
+        "0c177b709f9a26c7bb1d164eba02c071708b7a8782878011bdfd1a4e73b3accc",
+        "69df87065b7dc55e2578e2a9ed2ffe92340e91f3189ba55881d0658b55c33c78",
+        "51004c375cdac88fc75b4d93d75bb8cc70f2206fea14097a78962924bd1daf8f"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "update-from-ambiguous",
+      "variant": "wrong",
+      "verdict": "policy-decision-required",
+      "accepted": true,
+      "trap_family": 18,
+      "case_manifests": [
+        "526929581624a25daaa891e1fbeaae98502d033e05fca6846e0dc19df56973cd",
+        "772d5b6ee0ea2d4b329486c59c67fa084728ecf9668fea7af61a055d9127202b",
+        "87fe52ad350ca6a478e874fb263ae34ea156499dc9bfe3b6edfdc91351574585",
+        "a7e8b6d9da508fa416d5755c6f33b10da840729258218bed5d228a8c73540fb1",
+        "6250e55ae2c4dedf88138bce14a60e55988068be7c2f647cb45c60f54e38cee6"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "uuid-case",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 24,
+      "case_manifests": [
+        "9a160448a085b7331a23febf2970fdeec703fac06038cce802f524d942ae113b"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "uuid-case",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 24,
+      "case_manifests": [
+        "9fed75dc6440a2e9f1368df28f963562d2b7afc6a0413ee7aab43205a276c834"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "xact-abort",
+      "variant": "correct",
+      "verdict": "equivalent",
+      "accepted": true,
+      "trap_family": 12,
+      "case_manifests": [
+        "d782d5182c546d1b07d4ee5436e6e25baef865d0342c91c281dc9488d8835fb8",
+        "34512f324d4aba481f92b03cfe5c8fc341d0777f9f03ed11da84d19cbeaa09e0"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 0.9285714285714286,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    },
+    {
+      "id": "xact-abort",
+      "variant": "wrong",
+      "verdict": "divergent",
+      "accepted": true,
+      "trap_family": 12,
+      "case_manifests": [
+        "d7b657d13dbf69faab4483418814adddc67355308b086d24b93e61fc8cd3cf65",
+        "62d97d2cb3243857bf175edf76782ed62289b744e8e9aa52818534adcd70ff3e"
+      ],
+      "coverage": {
+        "source": {
+          "statement_fraction": 0.9285714285714286,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        },
+        "target": {
+          "statement_fraction": 1.0,
+          "minimum_module_branch_fraction": 1.0,
+          "missing_error_paths": [],
+          "eligible": true
+        }
+      }
+    }
+  ],
+  "pair_verdict_counts": {
+    "equivalent": 38,
+    "divergent": 41,
+    "insufficient-evidence": 25
+  },
+  "claim": "Operator review; not independent attestation; public corpus qualification, not customer equivalence"
+}

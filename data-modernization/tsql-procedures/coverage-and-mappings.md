@@ -82,12 +82,20 @@ increment does not promote ASE evidence into SQL Server qualification.
 ## Three prospective twin corrections
 
 `ci-unique` now returns `-4` only from its `unique_violation` handler.
-`catch-retains-prior-work` and `xact-abort` return `-6` only from their
-`division_by_zero` handlers. Each exposes `tsql_return_code` as an actual integer
+`catch-retains-prior-work` returns `-6` from its `division_by_zero` handler.
+The r14 XACT_ABORT twin advances its mapped status after the insert succeeds, so
+a trigger rollback before that point retains zero; the subsequent arithmetic
+error retains `-6`. The unique-index twin uses a top-level procedure to preserve
+the first committed insert on an unexpected later error. Each exposes
+`tsql_return_code` as an actual integer
 result column. The adapter validates a unique, nonempty, consistent return column,
 removes that transport column from business results, and compares its value with
 the native TDS return status. It never substitutes a desired constant. The original
 wrong-twin faults remain and must still be rejected.
+
+R14 adds two prospectively declared setup cases and procedure-level coverage
+acceptance. Exact source sites may accumulate across cases; anonymous native
+branch fractions may not. See [the final qualification](m0-results-r14.md).
 
 ## Remaining authority boundary
 

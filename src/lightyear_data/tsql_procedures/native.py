@@ -158,6 +158,7 @@ class NativeEngine:
         return receipt
 
     def reset(self, baseline, suffix):
+        tick=time.monotonic()
         name = self.name(suffix)
         if name in self.owned: raise ValueError('slot-already-used')
         source = baseline['database']
@@ -179,7 +180,8 @@ class NativeEngine:
                 method = 'fresh-database-from-template'
         self.owned.add(name)
         return {'database': name, 'baseline': source, 'method': method,
-                'restored_utc': utc(), 'outer_rollback': False}
+                'restored_utc': utc(), 'outer_rollback': False,
+                'reset_elapsed_seconds':time.monotonic()-tick}
 
     def capture_state(self, connection):
         result = capture_state(_QmarkConnection(connection) if self.engine == 'sqlserver' else connection, self.engine)

@@ -68,12 +68,22 @@ def audit(root, expected_report, expected_key):
             raise ValueError('reported-verdict-mismatch')
         replays.append({'index':index,'manifest_sha256':record['manifest_sha256'],
                         'status':result['comparison']['observed_status'],'verified':True})
+    qualified=False
+    if (root/'m0-acceptance.json').exists():
+        from lightyear_data.tsql_procedures.m0 import accept
+        saved=verify(json.loads((root/'m0-acceptance.json').read_bytes()),public)
+        reproduced=accept(root,json.loads((root/'corpus.json').read_bytes()),plan,body['records'],public)
+        reproduced['native_elapsed_seconds']=body['elapsed_seconds']
+        reproduced['pairs_per_minute']=len(body['records'])/(body['elapsed_seconds']/60)
+        if saved!=reproduced:raise ValueError('M0-acceptance-replay')
+        qualified=bool(saved['passed'] and not body['fatal'] and body['cleanup_passed'])
+    if body['qualification_passed']!=qualified:raise ValueError('M0-report-verdict')
     return {'schema':'tsql-independent-offline-audit/1','report_sha256':expected_report,
             'public_key_sha256':expected_key,'file_count':len(files),'pairs_replayed':len(replays),
             'replays':replays,'cleanup_receipt_passed':body['cleanup_passed'],
             'actual_docker_check':'not performed by offline replay',
             'elapsed_seconds':time.monotonic()-tick,'database_calls':0,'model_calls':0,
-            'qualification_passed':False,'claim':'Operator review; not independent attestation'}
+            'qualification_passed':qualified,'claim':'Operator review; not independent attestation'}
 
 
 if __name__=='__main__':

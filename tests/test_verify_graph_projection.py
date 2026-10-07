@@ -111,8 +111,8 @@ class ProjectionTests(GraphFixture):
         # Public source contains the quoted error text; choose it as a synthetic watch value.
         literal="ACCOUNT-FILE"
         leak_check(self.out,digest(self.lane),{literal},self.signer,evaluation_inventory_sha256=digest({}),approved_source="'ACCOUNT-FILE'")
-        proof,trust=self.approve(m)
-        with self.assertRaises(ValueError): load_approved(self.out,proof,trust)
+        with self.assertRaisesRegex(ValueError, "Acknowledge every"):
+            self.approve(m)
         proof,trust=self.approve(m,reason="Reviewed source-literal:"+sha(literal.encode()))
         # Only a source-literal report can be accepted, and all exact hashes are acknowledged.
         load_approved(self.out,proof,trust)
@@ -150,3 +150,58 @@ class ProjectionTests(GraphFixture):
         self.build(mode="confidential",watch={"OTHER-PRIVATE-TOKEN"},out=self.root/"other")
         for name in ("projection.json.gz","projection-manifest.json"):
             self.assertEqual((self.out/name).read_bytes(),(self.root/"other"/name).read_bytes())
+
+
+    def test_unquoted_public_overlap_requires_acknowledgment(self):
+        m = self.build()
+        p = read(self.out / "projection.json.gz")
+        p["nodes"][0]["properties"]["statement"] = "1200 CUSTOMER"
+        (self.out / "projection.json.gz").write_bytes(gzip.compress(canonical(p), mtime=0))
+        # Bind the planted test projection before issuing its real test decision.
+        m = self.signer.sign({k: v for k, v in m.items()
+                             if k not in {"signature", "content_sha256"}} | {
+            "projection_sha256": sha((self.out / "projection.json.gz").read_bytes())})
+        (self.out / "projection-manifest.json").write_bytes(canonical(m))
+        report = leak_check(self.out, digest(self.lane), {"1200", "CUSTOMER"}, self.signer,
+                            evaluation_inventory_sha256=digest({}),
+                            approved_source=(b"VALUE 1200.", b"01 CUSTOMER PIC X(6)."))
+        self.assertFalse(report["passed"])
+        self.assertEqual({"source-literal"}, {r["classification"] for r in report["matches"]})
+        with self.assertRaisesRegex(ValueError, "Acknowledge every"):
+            self.approve(m)
+        reason = "Reviewed " + " ".join("source-literal:" + sha(v.encode()) for v in ("1200", "CUSTOMER"))
+        proof, trust = self.approve(m, reason=reason)
+        load_approved(self.out, proof, trust)
+
+    def test_public_overlap_does_not_cross_files_or_normalize_case(self):
+        self.build()
+        p = read(self.out / "projection.json.gz")
+        p["nodes"][0]["properties"]["statement"] = "SECRET 1200 CUSTOMER"
+        (self.out / "projection.json.gz").write_bytes(gzip.compress(canonical(p), mtime=0))
+        report = leak_check(self.out, digest(self.lane), {"SECRET", "1200", "CUSTOMER"}, self.signer,
+                            evaluation_inventory_sha256=digest({}),
+                            approved_source=(b"SEC", b"RET", b"12 00", b"customer"))
+        self.assertEqual({"protected"}, {r["classification"] for r in report["matches"]})
+        self.assertFalse(read(self.out / "graph-leak-certificate.json")["eligible"])
+
+    def test_changed_public_source_cannot_authorize_overlap(self):
+        from lightyear_judge.graph_projection import source_bytes
+        public = self.root / "public"
+        public.mkdir()
+        (public / "source.cbl").write_bytes(b"CHANGED 1200")
+        lane = dict(public_fixture_only=True, customer_id="carddemo-reference",
+                    approved_sources={"source":dict(file="source.cbl", sha256=sha(b"ORIGINAL"))})
+        with self.assertRaisesRegex(ValueError, "graph-approved-source-changed"):
+            source_bytes(lane, public)
+
+
+    def test_tower_refuses_protected_match_even_if_hash_acknowledged(self):
+        m = self.build()
+        literal = "ACCOUNT-FILE"
+        leak_check(self.out, digest(self.lane), {literal}, self.signer,
+                   evaluation_inventory_sha256=digest({}))
+        with self.assertRaisesRegex(ValueError, "protected matches"):
+            self.approve(m, reason="Reviewed source-literal:" + sha(literal.encode()))
+        proof, trust = self.approve(m, outcome="rejected")
+        with self.assertRaises(ValueError):
+            load_approved(self.out, proof, trust)

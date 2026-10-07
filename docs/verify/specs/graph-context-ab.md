@@ -15,7 +15,7 @@ task/session behavior on one program, not generalization across 20 programs.
 Any additional lane requires a new preregistration before its calls.
 
 Each pair has graph off (the original ten-tool interface) and graph on (the
-five graph tools plus paged decode). This compares the bundled context
+six graph tools (including graph_guidance) plus paged decode). This compares the bundled context
 intervention, not graph access separately from decode paging. All other
 prompts, public development inputs, judge inventory, normalization policy,
 attempt limits, model/client parameters and resources are identical. Freeze
@@ -40,6 +40,33 @@ and total cost divided by verified programs; undefined if none pass. Also
 report total model and tool calls, decode response bytes, graph response bytes,
 and transport/equipment failures. Agent query logs are untrusted telemetry,
 not proof of correctness or model consumption.
+
+### Prespecified paired efficiency analysis (before any calls)
+
+The success primary above is unchanged. **Key secondary outcomes** are provider
+cost and model tokens per verified program, paired by replicate. Freeze this
+analysis with the experiment commit, before any invocation, to handle a ceiling
+in the pass-within-five-attempts outcome without selecting a new primary later.
+For each arm use total session cost / number of verified programs, and total
+input + output model tokens / number of verified programs. Include costs and
+tokens of failed sessions in the numerator; zero verified programs means
+undefined, never zero. Cached input tokens are included once in total input,
+reported separately, and charged at the frozen provider's cached rate.
+
+Report graph-on minus graph-off differences and ratios of these aggregate
+quantities. Quantify uncertainty with 10,000 paired bootstrap resamples of the
+20 replicate IDs, resampling each pair together, using fixed seed 259261.
+Use percentile 95% intervals; disclose how many resamples had zero successes in
+an arm and hence undefined ratios. If any are undefined, report the finite
+interval as conditional, never as an unconditional confidence interval.
+Also report each pair's raw cost/token differences and an exact paired sign-flip
+randomization test of the mean raw difference (all 2^20 assignments). Report
+both secondary p-values and Holm-adjusted values for this two-outcome family.
+These are secondary efficiency results, not a second way to declare primary
+success. A both-arms-pass-only paired summary may be descriptive, labelled as
+selected on outcome; it must not replace the full-population analysis.
+Missing provider cost or token counts stay missing, with completeness counts;
+no zero imputation and no definitive efficiency claim from incomplete accounting.
 
 Freeze a 30-minute wall cap per session and 24-hour cap per agent experiment.
 Stop on budget exhaustion, a leakage match, a projection/receipt mismatch,

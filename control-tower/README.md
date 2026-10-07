@@ -1,5 +1,9 @@
 # Live Evidence and Control Tower Plane
 
+Start with the [current Tower user manual](../docs/control-tower-users-manual.md)
+for incoming CardDemo files and scoped decisions. The commands below describe
+the separate legacy read-only evidence viewer.
+
 **Current workflow increment:** [Step 1 — emit actions](../docs/control-tower-workflow.md).
 
 For explicit normalization proposals, measured pattern reach, and the distinction between
@@ -102,3 +106,5 @@ evidence, unavailable recovery projections, and blocked release promotion.
 
 A decision becomes evidence through its authenticated identity, exact content binding, current
 review date, signed record, and enforced gate. A browser button alone conveys no authority.
+
+A [Word edition of the operator manual](../docs/control-tower-users-manual.docx) is available for offline use.

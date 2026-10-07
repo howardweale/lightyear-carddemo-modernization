@@ -1,5 +1,8 @@
 # Decision Console
 
+For the current operator workflow and incoming CardDemo files, use the
+[Tower user manual](control-tower-users-manual.md).
+
 The [v2 review milestone](control-tower-review-v2-milestone.md) records the combined
 security and observer fixes, validation, migration requirements and Windows limitation.
 

@@ -421,6 +421,9 @@ class ConsoleService(DecisionService):
             text_field(payload.get(field), field)
         if payload.get("outcome") not in kind.outcomes:
             raise ValueError("Outcome is not allowed for this kind")
+        if kind.name == "verify-graph-projection":
+            from .graph_review import validate_approval
+            validate_approval(self.root, item, payload)
         review_after = payload.get("review_after")
         if review_after and not utcnow().date() < date.fromisoformat(
             review_after

@@ -71,8 +71,8 @@ def watch_values(evaluation, lane_id):
     return result
 
 
-def sources(lane, root):
-    """Exact public source bytes, not an evidence capsule's claimed content."""
+def source_bytes(lane, root):
+    """Hash-verified public files, kept separate without text normalization."""
     output = {}
     if lane.get("public_fixture_only") is not True or lane["customer_id"] != "carddemo-reference":
         raise ValueError("graph-public-source-only")
@@ -80,8 +80,14 @@ def sources(lane, root):
         raw = confined(root, item["file"]).read_bytes()
         if sha(raw) != item["sha256"]:
             raise ValueError("graph-approved-source-changed")
-        output[key] = raw.decode("utf-8").splitlines()
+        output[key] = raw
     return output
+
+
+def sources(lane, root):
+    """Source excerpts use only the same hash-verified public bytes."""
+    return {key: raw.decode("utf-8").splitlines()
+            for key, raw in source_bytes(lane, root).items()}
 
 
 def build(graph_path, evidence_path, policy_path, lane_id, mode, customer_id,
@@ -228,7 +234,10 @@ def leak_check(directory, lane_hash, watch, signer, *, evaluation_inventory_sha2
     projection = read(root/"projection.json.gz")
     if projection["lane_sha256"] != lane_hash:
         raise ValueError("graph-leak-lane")
-    literals = set(re.findall(r"""['"]([^'"]+)['"]""", approved_source))
+    # A public overlap need not be quoted. Preserve exact case/bytes and file
+    # boundaries; concatenation could invent a match not present in any file.
+    public_files = (approved_source,) if isinstance(approved_source, (str, bytes)) else tuple(approved_source)
+    public_files = tuple(s.encode("utf-8") if isinstance(s, str) else s for s in public_files)
     matches = []
     for path, text in strings(projection):
         for value in sorted(watch):
@@ -240,7 +249,7 @@ def leak_check(directory, lane_hash, watch, signer, *, evaluation_inventory_sha2
                 safe=lambda text: "sha256:"+sha(text.encode()) if any(v in text for v in watch) else text
                 matches.append(dict(node_id=safe(node_id), property=safe(path),
                     location_sha256=sha(path.encode()), value_sha256=sha(value.encode()),
-                    classification="source-literal" if value in literals else "protected"))
+                    classification="source-literal" if any(value.encode("utf-8") in source for source in public_files) else "protected"))
     report = signer.sign(dict(schema="verify-graph-leak/1", projection_sha256=sha(raw),
         evaluation_inventory_sha256=evaluation_inventory_sha256,
         lane_sha256=lane_hash, watch_list_size=len(watch), matches=matches,

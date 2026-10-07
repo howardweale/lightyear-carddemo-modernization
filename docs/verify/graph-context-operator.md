@@ -44,9 +44,12 @@ lightyear-verify graph-leak-check \
 ```
 
 No values or watch-list are printed. Every match fails the scan. Non-source
-matches prohibit release. A source-literal exception remains failed until
+matches prohibit release. A public-source overlap (quoted or unquoted, exact bytes in one approved file)
+uses the historical `source-literal` label. An exception remains failed until
 Howard explicitly acknowledges each `source-literal:<value-sha256>` in the
-signed Tower decision's reason. The request includes manifest counts and
+signed Tower decision's reason. Tower now refuses approval if an acknowledgment
+is missing or a protected match remains; rejecting the projection is still allowed.
+The request includes manifest counts and
 the hash-only leak summary. Review dates expire at the start of the named UTC
 date. No campaign key or agent approval can substitute for Tower.
 
@@ -139,3 +142,25 @@ review, projection-bound `graph_guidance` (the sixth optional graph tool), and
 and the search index are covered by the projection hash and the same leak check
 and Tower approval. Existing ten-tool clients remain unchanged when graph tools
 are disabled. No campaign enables these features.
+
+
+## Activation readiness and updated interface
+
+Current builds expose **16 tools** when context is approved: the ten baseline
+plus six graph tools, including `graph_guidance`. The older 15-tool checklist
+predates verified graph memory. With graph off/expired/rejected, expect exactly
+the original ten tool schemas. Do not report the graph tools as active merely
+because their code and unit tests exist.
+
+Follow [the activation checklist](graph-activation-checklist.md). A fresh Linux
+separate-user acceptance and graph-off Inspector walkthrough must be recorded
+before a demo. The October 4 Claude Code result remains historical. No live
+model run or A/B is authorized by an activation check.
+
+Revocation is checked against the trusted journal head supplied to admission.
+An archived proof cannot discover future decisions offline. Distribute a fresh
+verified proof/head and stop the old judge before admitting a replacement task;
+do not imply that an unchanged file instantly discovers a later rejection.
+Expiry is checked against real UTC while serving. Never move the clock or edit
+signed dates to simulate production expiry; test those boundaries in isolated
+regression tests and record live expiry separately if observed.

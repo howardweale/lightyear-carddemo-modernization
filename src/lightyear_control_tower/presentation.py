@@ -102,6 +102,8 @@ def evidence_view(root, item):
         from .knowledge_status import annotation_view
         output["annotation"] = annotation_view(root,item)
     if item.get("kind") == "verify-graph-projection":
+        from .graph_review import projection_review
+        output["graph_review"] = projection_review(root, item)
         for name, keys in {
             "manifest": ("included_kinds", "included_relations", "excluded", "mode", "projection_sha256"),
             "leak_check": ("passed", "watch_list_size", "matches", "projection_sha256"),

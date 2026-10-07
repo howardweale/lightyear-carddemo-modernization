@@ -21,7 +21,9 @@ from .extract import LIMITS, verify_catalogue
 IMAGE = 'sha256:f3bed005214fbaec7f580a2d27e0dffa7a868bfc913db8c231d6f2b3fe4e0300'
 KIND = 'campaign-authorization'
 SCOPE = 'ms94-b06'
-EXTRACTOR = 'tools/b06_image_artifacts/extract.py'
+EXTRACTOR = 'tools/b06_image_artifacts/inventory.py'
+ENTRYPOINT = ['python3','-B','/extract.py','--root','/application','--root','/root/.m2',
+              '--jdk-auto','--output','/evidence/inventory']
 
 
 def check(value, reason):
@@ -55,8 +57,9 @@ def verify_snapshot(root, plan):
           'extraction-only-plan')
     check(core['maximum_extraction_seconds'] == 900 and core['cleanup_reserve_seconds'] == 600 and
           core['container_count'] == 1 and core['retries'] == 0, 'extraction-limits')
-    check(core.get('catalogue_schema') == 'b06-image-artifact-catalogue/2' and
-          core.get('extraction_limits') == LIMITS, 'catalogue-limits-not-bound')
+    check(core.get('operation')=='inventory-only' and core.get('catalogue_schema')=='b06-image-inventory/1'
+          and core.get('class_bytes_copied')==0, 'inventory-only-plan-required')
+    check(core.get('entrypoint') == ENTRYPOINT, 'inventory-entrypoint-binding')
     check(EXTRACTOR in m['files_sha256'], 'extractor-missing')
     return m, core
 
@@ -64,7 +67,7 @@ def verify_snapshot(root, plan):
 def request(plan, commit):
     verify(plan); check(re.fullmatch('[a-f0-9]{40}', commit), 'public-commit')
     artifacts = {
-        'campaign': {'id': plan['id'], 'purpose': 'offline-image-artifact-extraction'},
+        'campaign': {'id': plan['id'], 'purpose': 'inventory-only-no-class-copies'},
         'plan': plan, 'declaration': {'native_pairs': 0, 'model_calls': 0,
               'target_jvm_executions': 0, 'database_containers': 0, 'network': 'none',
               'only_owned_cleanup': True, 'five_path_census_authorized': False},
@@ -77,7 +80,7 @@ def request(plan, commit):
     value = {'schema': 'tower-request/1', 'scope': SCOPE, 'kind': KIND,
              'bound': bound, 'evidence': evidence, 'proposed_by': 'b06-image-artifact-preparation',
              'workload': plan['id'],
-             'summary': 'One offline pinned-image artifact extraction, NOT a smoke run. '
+             'summary': 'One pinned-image inventory only: paths, sizes, hashes and archive entry counts; no class copies. '
                         'No databases, target JVM, native pairs, network or models. '
                         'One owned container; 15 minutes extraction plus 10 minutes cleanup reserve. '
                         'Window '+plan['window']['not_before_utc']+' to '+plan['window']['deadline_utc']+
@@ -174,7 +177,7 @@ def execute(root, plan, output, commit, reader, signer, *, public_verified=False
                 '--memory','2g','--cpus','1','--env','PYTHONDONTWRITEBYTECODE=1',
                 '--mount','type=bind,src='+str(source)+',dst=/extract.py,readonly',
                 '--mount','type=bind,src='+str(output)+',dst=/evidence',
-                '--entrypoint','python3',IMAGE,'-B','/extract.py')
+                '--entrypoint',ENTRYPOINT[0],IMAGE,*ENTRYPOINT[1:])
         inspect = json.loads(command('container','inspect',name).stdout)[0]
         check(inspect['Image'] == IMAGE and inspect['Config']['Labels'].get('lightyear.b06.artifacts') == name,
               'created-container-ownership')
@@ -187,11 +190,14 @@ def execute(root, plan, output, commit, reader, signer, *, public_verified=False
         (output/'extract.stdout').write_bytes(result.stdout); (output/'extract.stderr').write_bytes(result.stderr)
         state = json.loads(command('container','inspect',name).stdout)[0]['State']
         check(result.returncode == 0 and not state['Running'] and state['ExitCode'] == 0, 'extractor-failed')
-        path = output/'catalogue/catalogue.json'; catalogue = read_json(path)
-        check(catalogue['schema'] == 'b06-image-artifact-catalogue/2' and catalogue['model_calls'] ==
-              catalogue['native_pairs'] == catalogue['target_jvm_executions'] == 0, 'catalogue-kind')
-        replay = verify_catalogue(output/'catalogue', catalogue)
-        atomic_new(output/'catalogue-replay.json', replay)
+        path = output/'inventory/inventory.json'; catalogue = read_json(path)
+        check(catalogue['schema']=='b06-image-inventory/1' and catalogue['failure'] is None and
+              catalogue['model_calls']==catalogue['native_pairs']==catalogue['class_bytes_copied']==0,'inventory-kind')
+        records=[json.loads(line) for line in (output/'inventory/progress.jsonl').read_text().splitlines()]
+        check([r['artifact'] for r in records]==catalogue['artifacts'],'inventory-progress-closure')
+        check(records and records[-1]['root_counts']==catalogue['roots'],'inventory-root-counts')
+        atomic_new(output/'inventory-replay.json',dict(progress_verified=True,artifact_count=len(records),
+            class_bytes_replayed=False,native_admission=False))
         catalogue_hash = sha(path)
     except BaseException as exc:
         if isinstance(exc, subprocess.TimeoutExpired):
@@ -236,7 +242,7 @@ def main():
     p = argparse.ArgumentParser()
     for name in ('root','plan','repository','output','public-commit','authority','tower-key','credential'):
         p.add_argument('--'+name, required=True)
-    p.add_argument('--ref',default='refs/heads/codex/b06-observer-v2-preparation')
+    p.add_argument('--ref',default='refs/heads/codex/b06-image-inventory-r1')
     p.add_argument('--tower-url',default='http://127.0.0.1:8766')
     args = p.parse_args(); root = Path(args.root).resolve()
     check(Path.cwd().resolve() == root and Path(__file__).resolve().is_relative_to(root), 'frozen-cwd-imports-required')

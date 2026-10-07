@@ -212,6 +212,8 @@ def preliminary(plan, receipt, cleanup):
 
 def execute_group(root, group, directory, signer, *, authority_root, tower_reader=None):
     """Single-use entry. Merely converting/publishing a plan cannot call Docker."""
+    check(group.get('content_sha256')!='aa22263615aaaf143cf3eda22330fdfbba64dfc08a21dc017bd59e5b58522d9b',
+          'r11-withdrawn-unqualified-generated-provenance')
     root, directory = Path(root).resolve(), Path(directory).resolve()
     authority_root = Path(authority_root).resolve()
     from lightyear_calibration.journey_runtime import CONTROL

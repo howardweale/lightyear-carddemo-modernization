@@ -6,12 +6,12 @@ from pathlib import Path
 import subprocess
 
 from lightyear_calibration.contracts import canonical, seal
-from .controller import IMAGE, check, utc, verify_snapshot
+from .controller import IMAGE, ENTRYPOINT, check, utc, verify_snapshot
 from .extract import LIMITS
 
 
 def prepare(repository, commit, snapshot, public, start, tower_key,
-            public_ref='refs/heads/codex/b06-image-extraction-r2'):
+            public_ref='refs/heads/codex/b06-image-inventory-r1'):
     repository, snapshot, public = map(Path, (repository, snapshot, public))
     check(not snapshot.exists() and not public.exists(), 'freeze-output-already-exists')
     def git(*args):
@@ -33,10 +33,10 @@ def prepare(repository, commit, snapshot, public, start, tower_key,
     core = seal({'schema':'b06-image-extraction-core/1','source_commit':commit,'image':IMAGE,
         'native_pairs':0,'model_calls':0,'target_jvm_executions':0,'database_containers':0,
         'network':'none','container_count':1,'retries':0,'maximum_extraction_seconds':900,
-        'catalogue_schema':'b06-image-artifact-catalogue/2','extraction_limits':LIMITS,
-        'cleanup_reserve_seconds':600,'entrypoint':['python3','-B','/extract.py'],
+        'operation':'inventory-only','catalogue_schema':'b06-image-inventory/1','class_bytes_copied':0,
+        'cleanup_reserve_seconds':600,'entrypoint':ENTRYPOINT,
         'artifact_roots':['/application','/root/.m2'],'jdk':'resolved image java executable parent',
-        'purpose':'Collect immutable original artifacts; not loaded-source or native admission evidence.',
+        'purpose':'Inventory paths, sizes, entry counts and hashes; no class copies or runtime admission.',
         'raw_artifacts_public':False,'five_path_census_authorized':False})
     raw=canonical(core); (snapshot/'core.json').write_bytes(raw); (public/'core.json').write_bytes(raw)
     hashes['core.json']=hashlib.sha256(raw).hexdigest()
@@ -45,7 +45,7 @@ def prepare(repository, commit, snapshot, public, start, tower_key,
     prefix=public.resolve().relative_to(repository.resolve()).as_posix()
     mapping.update({'core.json':prefix+'/core.json','snapshot.json':prefix+'/snapshot.json'})
     at=utc(start)
-    plan=seal({'schema':'b06-image-extraction-plan/1','id':'b06-image-observer-v2-r2',
+    plan=seal({'schema':'b06-image-extraction-plan/1','id':'b06-image-inventory-r1',
         'public_ref':public_ref,
         'core_sha256':core['content_sha256'],'snapshot_sha256':manifest['content_sha256'],
         'public_plan_path':prefix+'/plan.json','public_files':mapping,
@@ -61,7 +61,7 @@ def prepare(repository, commit, snapshot, public, start, tower_key,
 def main():
     p=argparse.ArgumentParser()
     for n in ('repository','commit','snapshot','public','start','tower-key'): p.add_argument('--'+n, required=True)
-    p.add_argument('--public-ref',default='refs/heads/codex/b06-image-extraction-r2')
+    p.add_argument('--public-ref',default='refs/heads/codex/b06-image-inventory-r1')
     a=p.parse_args()
     v=prepare(a.repository,a.commit,a.snapshot,a.public,a.start,a.tower_key,public_ref=a.public_ref)
     print('plan='+v['content_sha256']+' snapshot='+v['snapshot_sha256'])

@@ -180,10 +180,7 @@ def verify_catalogue(output, report):
 
 
 def main():
-    check(len(sys.argv) == 1, 'no-input-overrides')
-    java = shutil.which('java'); check(java is not None, 'image-java-missing')
-    jdk = Path(java).resolve(strict=True).parent.parent
-    collect([Path('/application'), Path('/root/.m2')], jdk, Path('/evidence/catalogue'))
+    raise ValueError('broad-extraction-withdrawn: inventory and measured resolved-runtime closure required')
 
 
 if __name__ == '__main__': main()

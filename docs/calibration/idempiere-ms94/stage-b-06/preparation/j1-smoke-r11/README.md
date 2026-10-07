@@ -1,5 +1,13 @@
 # B06 J1 smoke r11 — prospective forwarding-stub census
 
+**Withdrawn; do not launch.** On October 7 Howard reported rejecting the Tower
+request with reason “Superseded: generated-class provenance and runtime-closure
+extraction are not qualified.” This is an operator-reported decision, not a
+newly verified journal export. The current driver independently refuses the
+plan hash below before authorization or Docker. Its frozen snapshot and all
+historical preparation records remain unchanged. The rest of this page records
+the original proposal; its old window and approvals cannot authorize a successor.
+
 Prepared, not launched. Zero Docker commands, native pairs and model calls during
 this preparation. Operator review; not independent attestation. r10 remains
 failed, with all 2,117 frozen file hashes unchanged.

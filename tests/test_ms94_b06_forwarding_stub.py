@@ -10,7 +10,7 @@ from types import SimpleNamespace
 import zipfile
 
 from tools.ms94_b06_admission import EvidenceFailure
-from tools.ms94_b06_forwarding_stub import validate_stub, receipt_records, definition, validate_spec
+from tools.ms94_b06_forwarding_stub import validate_stub_body as validate_stub, receipt_records, definition, validate_spec
 from tools.ms94_b06_posting_replay import checked_frames, origin, CANDIDATE
 from lightyear_calibration.contracts import seal
 from lightyear_calibration.contracts import canonical
@@ -183,9 +183,10 @@ class ForwardingTests(unittest.TestCase):
         raw,f,t,c=fixture()
         # A host frame definition is needed for all frames, even ordinary ones.
         defs={raw['definition_id']:raw, t['definition_id']:t}
-        frames=checked_frames({'frames':[t,f]},c,{},defs,
-                              {'policy':'exact-forwarding-stub-v1','adjacent_target':'younger'}, {})
-        self.assertEqual(origin(frames),'candidate')
+        # Body-only synthetic frames no longer establish generation provenance.
+        with self.assertRaisesRegex(EvidenceFailure,'generation-provenance-missing'):
+            checked_frames({'frames':[t,f]},c,{},defs,
+                           {'policy':'exact-forwarding-stub-v1','adjacent_target':'younger'}, {})
         with self.assertRaisesRegex(EvidenceFailure,'missing-adjacent'):
             checked_frames({'frames':[f,t]},c,{},defs,
                            {'policy':'exact-forwarding-stub-v1','adjacent_target':'younger'}, {})
@@ -234,8 +235,8 @@ class ForwardingTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             folder=Path(temp); (folder/'events.jsonl').write_bytes(data)
             policy={'policy':'exact-forwarding-stub-v1','adjacent_target':'younger'}
-            result=replay_stream(folder,receipt,c,'oracle',policy,{})
-            self.assertTrue(result['collection_complete'])
+            with self.assertRaisesRegex(EvidenceFailure,'generation-provenance-missing'):
+                replay_stream(folder,receipt,c,'oracle',policy,{})
             broken=copy.deepcopy(receipt);broken['frame_records']['generated_adjacencies']={}
             with self.assertRaisesRegex(EvidenceFailure,'signed-frame-records'):
                 replay_stream(folder,broken,c,'oracle',policy,{})

@@ -14,14 +14,18 @@ class PreparationTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             root=Path(tmp)/'inputs'
             files={n:canonical(seal({'fixture':True})) for n in required('J1')}
+            from tools.ms94_b06_register_inputs import register_path
+            repo=Path(__file__).resolve().parents[1]
+            files['comparison-register.json']=(repo/register_path('J1')).read_bytes()
+            files['datatype-inventory.json']=(repo/'docs/calibration/idempiere-boundaries/mappings.json').read_bytes()
             files['operations.java']=b'public synthetic fixture'
             slot={'id':'smoke-001','source':{'sha256':hashlib.sha256(files['operations.java']).hexdigest()},'control':'retained-reference'}
             with self.assertRaisesRegex(ValueError,'incomplete'):
-                seal_inputs(root,'J1',[slot],{slot['id']:{k:v for k,v in files.items() if k!='checkpoint.json'}})
+                seal_inputs(root,'J1',[slot],{slot['id']:{k:v for k,v in files.items() if k!='checkpoint.json'}},assessed_on='2026-10-06')
             self.assertFalse(root.exists())
-            record=seal_inputs(root,'J1',[slot],{slot['id']:files})
+            record=seal_inputs(root,'J1',[slot],{slot['id']:files},assessed_on='2026-10-06')
             self.assertTrue(verify_assembly(root,record))
-            with self.assertRaisesRegex(ValueError,'no-replacement'):seal_inputs(root,'J1',[slot],{slot['id']:files})
+            with self.assertRaisesRegex(ValueError,'no-replacement'):seal_inputs(root,'J1',[slot],{slot['id']:files},assessed_on='2026-10-06')
             (root/'blobs'/slot['source']['sha256']).write_bytes(b'changed')
             with self.assertRaisesRegex(ValueError,'bound-file-changed'):verify_assembly(root,record)
 

@@ -75,6 +75,8 @@ def assemble_slot(root, run, base, slot, input_files):
     plan['inputs_sha256'] = {n: hashlib.sha256(b).hexdigest() for n, b in data.items()}
     check(plan['inputs_sha256']['operations.java'] == slot['source']['sha256'], 'slot-source-differs')
     plan['harness_sha256'] = plan['inputs_sha256']['operations.java']
+    from tools.ms94_b06_register_inputs import validate_files
+    validate_files(plan['journey'], data, plan['assessed_on'], plan['comparison_register_sha256'])
     if plan['journey'] != 'J1':
         import json
         plan['private_expectations_sha256'] = hashlib.sha256(canonical(
@@ -91,6 +93,8 @@ def assemble_slot(root, run, base, slot, input_files):
           'slot-implementation-closure')
     for name, sha in plan['implementation_sha256'].items(): bound_file(root, name, sha)
     spec = plan['posting_observer']
+    from tools.ms94_b06_bytecode_policy import validate_policy
+    validate_policy(spec)
     from tools.ms94_b06_posting_replay import catalog, TERMINAL
     classes = catalog(root, spec['target_class_files_sha256'])
     from tools.ms94_b06_lock_sql import bind
@@ -130,6 +134,9 @@ def freeze(source, destination, bindings, slot_plans):
         plan = read_json(path); verify(plan)
         check(plan['content_sha256'] == expected and name in bindings, 'freeze-slot-plan')
         verify_inputs(path.parent, plan)
+        if plan.get('journey') == 'J1':
+            from tools.ms94_b06_qualification_driver import J1_REPLAY_CONTEXT
+            check(all(n in bindings for n in J1_REPLAY_CONTEXT), 'freeze-J1-replay-context-missing')
         required = {**plan['implementation_sha256'], POLICY: file_hash(source / POLICY), **{
             (path.parent.relative_to(source) / 'inputs' / n).as_posix(): h
             for n, h in plan['inputs_sha256'].items()},

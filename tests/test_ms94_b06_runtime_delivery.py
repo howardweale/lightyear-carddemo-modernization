@@ -49,6 +49,7 @@ class RuntimeDeliveryTests(unittest.TestCase):
                                              'runtime_origin_required': 'candidate'}))
                 signer = test_signer()
                 spec = {'class_files_sha256': {'Observer.class': 'a'*64},
+                        'bytecode_policy': 'untransformed-classes-jdwp-only-v1',
                         'java_binary_sha256': 'b'*64, 'target_class_files_sha256': {}}
                 plan = seal({'journey': 'J1', 'model_calls': 0, 'qualification_only': True,
                              'implementation_sha256': {}, 'posting_observer': spec,
@@ -78,6 +79,7 @@ class RuntimeDeliveryTests(unittest.TestCase):
                         complete=True, observer_class_files_sha256=spec['class_files_sha256'],
                         target={'image': plan['local']['runner_image'], 'ports_published': False,
                                 'observer_private_mount_absent': True, 'jvm': {
+                                'jvm_option_environment_present': [],
                                 'java_binary_sha256': spec['java_binary_sha256'], 'arguments': [
                                 '-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5005']}})
                     (folder/'receipt.json').write_bytes(canonical(signer.sign(receipt)))

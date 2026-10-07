@@ -162,6 +162,7 @@ def replay(root, run, lane, public_key):
     entry = replay_entry(run, public_key)  # Actually reruns full native admission.
     clocks = replay_clocks(run, public_key)
     spec = plan['posting_observer']
+    from tools.ms94_b06_bytecode_policy import validate_jvm
     execution = read_json(run / 'cases/operations/1/execution' / lane / 'execution.json'); verify(execution)
     folder = run / 'posting-observer' / lane
     receipt = read_json(folder / 'receipt.json')
@@ -170,6 +171,7 @@ def replay(root, run, lane, public_key):
           receipt['plan_sha256'] == plan['content_sha256'] and receipt['lane'] == lane and
           receipt['execution_sha256'] == execution['content_sha256'] and receipt['complete'] is True,
           'observer-receipt-invalid')
+    validate_jvm(receipt['target']['jvm'], spec)
     check(receipt['observer_class_files_sha256'] == spec['class_files_sha256'] and
           receipt['target']['image'] == plan['local']['runner_image'] and
           receipt['target']['ports_published'] is False and

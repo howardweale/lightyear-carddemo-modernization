@@ -17,7 +17,7 @@ def required(journey):
     return shared|{'private-expectations.json','private-work-order.json','private-selection.json'}
 
 
-def seal_inputs(destination, journey, schedule, inputs_by_slot):
+def seal_inputs(destination, journey, schedule, inputs_by_slot, *, assessed_on):
     destination=Path(destination).resolve()
     check('work/ms94' not in destination.as_posix().lower(),'private-assembly-protected-path')
     ids=[s['id'] for s in schedule]
@@ -34,6 +34,8 @@ def seal_inputs(destination, journey, schedule, inputs_by_slot):
         hashes={n:hashlib.sha256(b).hexdigest() for n,b in files.items()}
         check(hashes['operations.java']==slot['source']['sha256'],'private-assembly-source')
         verify(json.loads(files['checkpoint.json']))
+        from tools.ms94_b06_register_inputs import validate_files
+        validate_files(journey, files, assessed_on)
         if journey!='J1':check(json.loads(files['private-expectations.json'])['journey']==journey,'private-assembly-contract')
         rows[slot['id']]={'inputs_sha256':hashes,'control':slot['control']}
     destination.mkdir(parents=True,exist_ok=False)
@@ -43,7 +45,8 @@ def seal_inputs(destination, journey, schedule, inputs_by_slot):
             blob=destination/'blobs'/rows[slot['id']]['inputs_sha256'][name]
             if not blob.exists():
                 with blob.open('xb') as stream:stream.write(raw)
-    record=seal({'artifact_type':'ms94-b06-private-input-assembly/1','journey':journey,'slots':rows,
+    record=seal({'artifact_type':'ms94-b06-private-input-assembly/2','journey':journey,'slots':rows,
+                 'assessed_on':assessed_on,
                  'native_pairs':0,'model_calls':0,'private_values_published':False})
     atomic_new(destination/'manifest.json',record)
     verify_assembly(destination,record)
@@ -52,10 +55,15 @@ def seal_inputs(destination, journey, schedule, inputs_by_slot):
 
 def verify_assembly(root,record):
     verify(record)
+    check(record['artifact_type']=='ms94-b06-private-input-assembly/2','private-assembly-old-version')
     for slot,row in record['slots'].items():
         check(Path(slot).name==slot,'private-assembly-slot-path')
         check(required(record['journey'])<=set(row['inputs_sha256']),'private-assembly-incomplete')
         for name,sha in row['inputs_sha256'].items():
             check(Path(name).name==name,'private-assembly-input-path')
             bound_file(root,'blobs/'+sha,sha)
+        from tools.ms94_b06_register_inputs import validate_files
+        files={n:(Path(root)/'blobs'/row['inputs_sha256'][n]).read_bytes()
+               for n in ('comparison-register.json','datatype-inventory.json')}
+        validate_files(record['journey'],files,record['assessed_on'])
     return True

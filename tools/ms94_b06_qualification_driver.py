@@ -17,6 +17,36 @@ from lightyear_control_tower.decisions import verify_envelope
 from tools.ms94_b06_admission import check, sign_once, bound_file, utc
 from tools.ms94_b06_executable import verify_snapshot
 
+J1_REPLAY_CONTEXT = (
+    'factory/idempiere/qualification/public/operations.json',
+    'factory/idempiere/qualification-ms94-v3/public/operations.json',
+    'work/ms87/operator/authority.public.pem',
+)
+
+
+def replay_context(root, destination, run, public_key):
+    """Restore the unchanged J1 judge's expected layout, with public files only.
+
+    The native archive is untouched. No signature is replaced and no private
+    authority is copied. Bound implementation/class bytes still use `root`.
+    """
+    from lightyear_calibration.journey_order import RUNS
+    root, destination = Path(root), Path(destination)
+    plan = read_json(Path(run) / 'plan.json'); verify(plan)
+    if plan['journey'] == 'J1':
+        manifest = read_json(root / 'b06-executable-snapshot.json'); verify(manifest)
+        for name in J1_REPLAY_CONTEXT:
+            check(name in manifest['files_sha256'], 'qualification-replay-context-unbound')
+            raw = bound_file(root, name, manifest['files_sha256'][name]).read_bytes()
+            if name.endswith('.pem'):
+                check(raw == public_key, 'qualification-replay-key-differs')
+            target = destination / name
+            target.parent.mkdir(parents=True, exist_ok=True)
+            with target.open('xb') as stream: stream.write(raw)
+    parent = destination / RUNS
+    parent.mkdir(parents=True, exist_ok=True)
+    return parent
+
 
 def supervised(stage, root, run, directory, authority, deadline):
     """One deadline covers native work, archive, replay, cleanup and signing."""
@@ -98,13 +128,14 @@ def finalize(root, run, directory, public_key, signer):
     sha = archive_run(run, archive)
     started = time.monotonic()
     with tempfile.TemporaryDirectory(prefix='b06-offline-', dir=directory) as temporary:
+        parent = replay_context(root, Path(temporary), run, public_key)
         with zipfile.ZipFile(archive) as stream:
             for info in stream.infolist():
                 name = Path(info.filename)
                 check(not name.is_absolute() and '..' not in name.parts and name.parts[0] == run.name,
                       'qualification-archive-path')
-            stream.extractall(temporary)
-        replayed = replay_pair(root, Path(temporary) / run.name, public_key)
+            stream.extractall(parent)
+        replayed = replay_pair(root, parent / run.name, public_key)
     check(file_hash(archive) == sha, 'qualification-archive-changed')
     after = cleanup_check(run)
     # Gate details contain native private values: keep this signed audit LOCAL.

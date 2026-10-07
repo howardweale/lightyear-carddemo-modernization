@@ -61,6 +61,11 @@ def verify_inputs(run, plan):
     for name, expected in plan["inputs_sha256"].items():
         check(Path(name).name == name, "nested-private-input-refused")
         bound_file(run / "inputs", name, expected)
+    if plan.get('execution_admission_version') == 3:
+        from tools.ms94_b06_register_inputs import admit
+        admit(run, plan)
+        from tools.ms94_b06_bytecode_policy import validate_policy
+        validate_policy(plan['posting_observer'])
     contract = read_json(run / "inputs/private-expectations.json")
     check(hashlib.sha256(canonical(contract)).hexdigest() == plan["private_expectations_sha256"],
           "private-expectations-changed")

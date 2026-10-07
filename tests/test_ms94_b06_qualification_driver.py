@@ -88,9 +88,23 @@ class DriverTests(unittest.TestCase):
     def test_archive_is_replayed_from_copy_and_cleanup_checked_twice(self):
         with tempfile.TemporaryDirectory() as tmp:
             root,out,_,_,signer=self.fixture(tmp); run=root/'j1-001'
+            from tools.ms94_b06_qualification_driver import J1_REPLAY_CONTEXT
+            from lightyear_calibration.journey_order import RUNS
+            context = {}
+            for name in J1_REPLAY_CONTEXT:
+                path=root/name; path.parent.mkdir(parents=True,exist_ok=True)
+                path.write_bytes(signer.public if name.endswith('.pem') else canonical(seal({'fixture':'public contract'})))
+                context[name]=file_hash(path)
+            (root/'b06-executable-snapshot.json').write_bytes(canonical(seal({'files_sha256':context})))
             original=(run/'plan.json').read_bytes()
-            def replay(root, copy, key):
+            def replay(source_root, copy, key):
                 self.assertNotEqual(copy,run)
+                self.assertEqual(root,source_root)
+                inferred=copy.parents[len(RUNS.parts)]
+                self.assertNotEqual(inferred,root)
+                for name in J1_REPLAY_CONTEXT:
+                    self.assertEqual((root/name).read_bytes(),(inferred/name).read_bytes())
+                self.assertFalse((inferred/'work/ms87/operator/authority.key.pem').exists())
                 self.assertEqual(original,(copy/'plan.json').read_bytes())
                 (copy/'gate.json').write_bytes(b'only extracted copy')
                 return {'full_entry_replayed':True}

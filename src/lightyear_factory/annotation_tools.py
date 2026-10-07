@@ -26,8 +26,8 @@ def propose(
     execution_kind="factory",
     evaluation_class="public-calibration",
 ):
-    if execution_kind != "factory" or evaluation_class != "public-calibration":
-        raise ValueError("annotation proposals are factory public-calibration only")
+    if execution_kind != "factory" or evaluation_class not in {"public-calibration", "customer-factory"}:
+        raise ValueError("annotation proposals require non-holdout factory work")
     body = {**body, "provenance": "inferred", "portable": False}
     item = annotation(body)
     return ledger.append("create", {"annotation": item}, signer)

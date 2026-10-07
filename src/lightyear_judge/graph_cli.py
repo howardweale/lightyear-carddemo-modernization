@@ -15,6 +15,8 @@ def parsers(commands):
         p.add_argument("--"+name, required=True)
     p.add_argument("--mode", choices=("field","confidential"), required=True)
     p.add_argument("--hybrid",action="store_true")
+    p.add_argument('--embedding-assets',type=Path)
+    p.add_argument('--embedding-manifest',type=Path)
     p.add_argument("--annotation-ledger",type=Path)
     p.add_argument("--annotation-trust",type=Path)
     p.add_argument("--include-inferred",action="store_true")
@@ -30,13 +32,20 @@ def execute(args):
     signer = Signer(args.signing_key)
     if args.command == "graph-project":
         ledger=None
+        provider=None
+        if args.embedding_assets or args.embedding_manifest:
+            if not args.embedding_assets or not args.embedding_manifest or not args.hybrid:
+                raise ValueError('local embeddings need assets, manifest and explicit hybrid option')
+            from lightyear_knowledge_graph.local_onnx import LocalOnnxEmbedding
+            provider=LocalOnnxEmbedding(args.embedding_assets,read(args.embedding_manifest))
         if args.annotation_ledger:
             from lightyear_factory.annotations import AnnotationLedger
             c=read(args.annotation_trust)
             keys={k:Path(c[k]).read_bytes() for k in ("ledger_key","tower_key","judge_key")}
             ledger=AnnotationLedger(args.annotation_ledger,**keys,scope=c["scope"],inventory_sha256=c["inventory_sha256"])
         return build(args.graph,args.evidence,args.policy,args.lane,args.mode,args.customer_id,
-            args.out,signer,source_root=args.source_root,hybrid=args.hybrid,annotation_ledger=ledger,include_inferred=args.include_inferred)
+            args.out,signer,source_root=args.source_root,hybrid=args.hybrid,annotation_ledger=ledger,
+            include_inferred=args.include_inferred,embedding_provider=provider)
     root=args.projection
     manifest=read(root/"projection-manifest.json")
     lane=read(args.policy)["lanes"][args.lane]

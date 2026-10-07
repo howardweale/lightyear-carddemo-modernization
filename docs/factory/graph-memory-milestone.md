@@ -72,3 +72,14 @@ are deployment steps. No customer ledger or key is committed.
 
 See the [operator guide](graph-memory.md), [source specification](specs/verified-graph-memory-and-routing.md)
 and [parallel queue design](specs/parallel-work-queue.md).
+
+
+## October 7 review follow-up
+
+The implementation state above is historical. See [review revision 2](graph-review-r2/README.md)
+for the live signed revocation channel, earlier flagging, customer-factory
+outcomes, descendant pitfalls, first-attempt correction, sample floor/version
+expiry, local hash-pinned ONNX adapter, scoped secret leases, policy compiler and
+separately declared escalation arm. The default is keyword plus graph proximity.
+No live matrix, memory A/B or semantic benchmark has run; no effectiveness or
+model-arbitrage claim has been established.

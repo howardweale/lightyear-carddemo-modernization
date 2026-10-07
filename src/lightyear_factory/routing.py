@@ -16,7 +16,7 @@ TASKS = {
 }
 
 
-def admitted_policy(policy, matrix, proof, trust, *, now=None):
+def admitted_policy(policy, matrix, proof, trust, *, now=None, versions=None):
     now = now or datetime.now(timezone.utc)
     if proof is None:
         return None
@@ -53,11 +53,14 @@ def admitted_policy(policy, matrix, proof, trust, *, now=None):
             if matrix["content_sha256"] not in route["matrix_receipts"]:
                 return None
             for model in (route["primary"], route.get("fallback")):
-                if model and not any(
-                    c["model"] == model and c["task_type"] == task
-                    for c in matrix["cells"]
-                ):
-                    return None
+                if not model:continue
+                cells=[c for c in matrix['cells'] if c['model']==model and c['task_type']==task]
+                if not cells:return None
+                for c in cells:
+                    if (c.get('run_count',0)<10 or len(set(c.get('runs',[])))!=c['run_count'] or
+                            len(set(c.get('pair_ids',[])))!=c['run_count'] or
+                            c.get('model_version')!=policy['model_versions'].get(model) or
+                            versions is not None and versions.get(model)!=c['model_version']):return None
         return dict(
             policy=policy, sha256=digest(policy), review_after=d["review_after"]
         )
@@ -116,7 +119,8 @@ class RoutedBudget:
         if task not in TASKS:
             raise ContractError("unknown routed task")
         r = self.router
-        admitted = admitted_policy(r.policy, r.matrix, r.proof, r.trust, now=r.clock())
+        admitted = admitted_policy(r.policy, r.matrix, r.proof, r.trust, now=r.clock(),
+            versions={m:p.model for m,p in r.providers.items()})
         route = (
             admitted["policy"]["routes"].get(task, {"primary": r.default})
             if admitted

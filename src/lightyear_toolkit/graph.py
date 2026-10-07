@@ -17,13 +17,15 @@ class GraphTools:
     def active(self):
         return date.fromisoformat(self.decision["review_after"]) > datetime.now(timezone.utc).date()
 
-    def __init__(self, payload, manifest, decision, workspace, client, *, cap=8192):
+    def __init__(self, payload, manifest, decision, workspace, client, *, cap=8192, revocations=None, embedding_provider=None):
         if type(cap) is not int or not 1024 <= cap <= 32768:
             raise Refused("graph-response-cap")
         self.payload, self.manifest, self.decision = payload, manifest, decision
         self.workspace, self.client, self.cap = Path(workspace), client, cap
         self.hash = manifest["projection_sha256"]
         self.key = secrets.token_bytes(32)
+        self.revocations=revocations
+        self.embedding_provider=embedding_provider
         # No source graph, evidence pack, ontology or publication file is loaded.
         self.index = GraphExplorerIndex(payload, ontology={"relations": {}}, projection_only=True)
 
@@ -35,7 +37,18 @@ class GraphTools:
                 task.get("disclosure_mode") != manifest["mode"] or
                 task.get("context_lane_sha256") != manifest["lane_sha256"]):
             raise Refused("graph-judge-context-mismatch")
-        return cls(data, manifest, decision, workspace, client)
+        revocations=None
+        if data.get('annotations'):
+            from .revocations import RevocationReader
+            revocations=RevocationReader(Path(directory)/'revocations',data['revocation_binding'],manifest['projection_sha256'])
+            revocations.read()
+        provider=None
+        if data.get('search_index',{}).get('provider',{}).get('id')=='local-onnx-mean-pooling':
+            from lightyear_knowledge_graph.local_onnx import LocalOnnxEmbedding
+            config=trust['local_embeddings']
+            provider=LocalOnnxEmbedding(config['directory'],config['manifest'])
+            if provider.version!=data['search_index']['provider']['version']:raise Refused('embedding-binding')
+        return cls(data, manifest, decision, workspace, client,revocations=revocations,embedding_provider=provider)
 
     def _cursor(self, query, offset):
         raw = canonical([self.hash, query, offset])
@@ -106,7 +119,7 @@ class GraphTools:
             raise Refused("graph-search-mode")
         if mode == "hybrid":
             from lightyear_knowledge_graph.hybrid import search
-            rows = [r for r in search(self.payload, query, anchor) if not kind or r["kind"] == kind]
+            rows = search(self.payload, query, anchor, provider=self.embedding_provider,top_k=1000, kind=kind)
             return self._page(rows, digest(["hybrid", query, kind, anchor]), limit, cursor)
         # Reuse explorer ranking/search; fetch all pages before response-byte paging.
         rows = []
@@ -121,7 +134,7 @@ class GraphTools:
 
     def _graph_guidance(self, node_id):
         from .guidance import guidance
-        return guidance(self.payload, [node_id], cap=min(4096, self.cap))
+        return guidance(self.payload, [node_id], cap=min(4096, self.cap),revocations=self.revocations)
 
     def _graph_node(self, node_id, include_source=False):
         if type(include_source) is not bool:

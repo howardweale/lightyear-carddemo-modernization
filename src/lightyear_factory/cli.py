@@ -622,7 +622,8 @@ def main(argv: list[str] | None = None) -> int:
             OCIContainerBackend(policy, args.execution_runtime, execute=True),
             admission,
             identity_key,
-            {"OPENAI_API_KEY": os.environ.get("OPENAI_API_KEY", "")},
+            {name:os.environ.get(name,'') for name in ('OPENAI_API_KEY','ANTHROPIC_API_KEY','GEMINI_API_KEY')
+             if name in policy.allowed_secret_names},
         )
         execution_context.bind(order.content_sha256, datetime.now(timezone.utc).isoformat())
     else:
@@ -634,13 +635,13 @@ def main(argv: list[str] | None = None) -> int:
     if args.provider == "local":
         agents = LocalAgentSet()
     elif args.provider == "configured":
-        if execution_context:
-            raise ContractError("Configured providers require a dedicated secret-store adapter for hardened execution")
         if not args.model_config:
             raise ContractError("--model-config required")
         from .model_config import load_router
+        from .provider_secrets import HardenedSecretStore
         from .agents import ModelAgentSet
-        agents=ModelAgentSet(load_router(args.model_config))
+        agents=ModelAgentSet(load_router(args.model_config,
+            secret_store=HardenedSecretStore(execution_context) if execution_context else None))
     elif execution_context:
         agents = OpenAIAgentSet(
             execution_context.lease_secret(

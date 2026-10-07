@@ -1,0 +1,28 @@
+{
+  "additional_rule": "MRR must not decrease",
+  "assets_manifest_sha256": "de3e5f9ec720ed862e3d1aeb0fe86b7a6c5453f9c017ac39b3699e3b3629c734",
+  "constraints": [
+    "no search tuning after labels are revealed",
+    "label author must differ from search tuner",
+    "full graph projection/source closure required; include both paraphrase and exact identifier queries",
+    "literal nodes excluded in both arms",
+    "freeze exact query, labels, graph/projection, implementation and asset hashes before evaluation"
+  ],
+  "default": "keyword; no promotion without a passing held-out report",
+  "graph": {
+    "content_sha256": "d98bd92d752f23ee19263aa0957c28ee5aac52966d1322f6a31d4a9960394dc9",
+    "edges": 13491,
+    "nodes": 11336,
+    "path": "knowledge/graph.snapshot.json.gz",
+    "sha256": "07e419b195293c7e6c2e901769a013dcff2520da9836827c5f71150c60764bec"
+  },
+  "hybrid_arm": "same projection and tokenizer; pinned local ONNX plus BM25 and graph proximity",
+  "keyword_arm": "BM25 plus graph proximity, no embedding",
+  "label_author": null,
+  "labels_sha256": null,
+  "minimum_recall5_gain": 0.05,
+  "query_count": 75,
+  "schema": "graph-search-benchmark-draft/1",
+  "search_tuner": "Codex graph implementation",
+  "status": "awaiting external labels"
+}

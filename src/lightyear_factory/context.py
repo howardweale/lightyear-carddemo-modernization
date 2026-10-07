@@ -170,7 +170,12 @@ class GraphContextAssembler:
         projection, manifest, _ = load_approved(*self.approved_projection)
         if projection["customer_id"] != order.metadata.get("customer_id"):
             raise ContractError("Annotation customer mismatch")
-        annotations = guidance(projection, order.graph_node_ids,
+        revocations=None
+        if projection.get('annotations'):
+            from lightyear_toolkit.revocations import RevocationReader
+            revocations=RevocationReader(Path(self.approved_projection[0])/'revocations',
+                projection['revocation_binding'],manifest['projection_sha256'])
+        annotations = guidance(projection, order.graph_node_ids,revocations=revocations,
                                include_inferred=order.metadata.get("include_inferred_annotations") is True)
         index = GraphExplorerIndex(projection, ontology={"relations": {}}, projection_only=True)
         nodes, edges = {}, {}

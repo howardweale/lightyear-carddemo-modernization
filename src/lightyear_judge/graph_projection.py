@@ -91,7 +91,8 @@ def sources(lane, root):
 
 
 def build(graph_path, evidence_path, policy_path, lane_id, mode, customer_id,
-          out, signer, *, source_root, watch=(), annotation_ledger=None, hybrid=False, include_inferred=False):
+          out, signer, *, source_root, watch=(), annotation_ledger=None, hybrid=False, include_inferred=False,
+          embedding_provider=None):
     out = Path(out)
     if out.exists():
         raise ValueError("graph-output-exists")
@@ -204,10 +205,12 @@ def build(graph_path, evidence_path, policy_path, lane_id, mode, customer_id,
         if any(tainted(a) or any(v and v in canonical(a).decode() for v in watch) for a in rows):
             raise ValueError("annotation projection leak")
         projection["annotations"] = rows
+        from lightyear_factory.revocations import binding
+        projection['revocation_binding']=binding(annotation_ledger)
         extensions["annotation_ledger_sha256"] = sha(annotation_ledger.path.read_bytes())
     if hybrid:
         from lightyear_knowledge_graph.hybrid import build_index
-        projection["search_index"] = build_index(projection)
+        projection["search_index"] = build_index(projection,embedding_provider)
         extensions["search_index_sha256"] = projection["search_index"]["content_sha256"]
         extensions["embedding_provider"] = projection["search_index"]["provider"]
     packed = gzip.compress(canonical(projection), mtime=0)

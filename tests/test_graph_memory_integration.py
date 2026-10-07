@@ -234,10 +234,14 @@ class ProjectionIntegrationTests(GraphFixture):
             evaluation_inventory_sha256="a" * 64,
         )
         proof, trust = self.approve(manifest)
-        tools = GraphTools(p, manifest, {"review_after": "2099-01-01"}, self.root, None)
+        from lightyear_factory.revocations import subscribe
+        from lightyear_toolkit.revocations import RevocationReader
+        subscribe(f.ledger,f.signer,self.out)
+        reader=RevocationReader(self.out/'revocations',p['revocation_binding'],manifest['projection_sha256'])
+        tools = GraphTools(p, manifest, {"review_after": "2099-01-01"}, self.root, None,revocations=reader)
         guidance = tools._graph_guidance(anchor)
         self.assertIn(a["id"], json.dumps(guidance))
-        self.assertIn(a["text"], json.dumps(p["search_index"]))
+        self.assertNotIn(a["text"], json.dumps(p["search_index"]))
         second = self.root / "second-projection"
         self.build(annotation_ledger=f.ledger, hybrid=True, out=second)
         report = leak_check(

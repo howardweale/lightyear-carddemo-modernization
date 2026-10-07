@@ -1,7 +1,7 @@
 """Deterministic projection-only BM25/RRF search. No model downloads or API calls.
 
-The local vector baseline is feature hashing, not a trained language model. Its
-small public vocabulary expansion is explicit and versioned, not learned memory.
+The default is keyword plus graph-proximity search. Semantic ranking requires a
+separately pinned local provider and a passing held-out benchmark.
 """
 
 import hashlib
@@ -27,31 +27,26 @@ class EmbeddingProvider(Protocol):
 
 
 class LocalEmbedding:
-    provider_id, version, local = "local-feature-hash", "1", True
-    vocabulary = {
-        "monthly": ("month",),
-        "account": ("acct",),
-        "balance": ("bal",),
-        "calculation": ("compute", "calculate"),
-        "interest": ("interest",),
-    }
+    provider_id, version, local = "keyword-only", "2", True
 
     def embed(self, texts):
-        result = []
-        for text in texts:
-            tokens = terms(text)
-            expanded = [
-                t for token in tokens for t in (token, *self.vocabulary.get(token, ()))
-            ]
-            vector = [0.0] * 256
-            for token, count in Counter(expanded).items():
-                h = hashlib.sha256(token.encode()).digest()
-                vector[int.from_bytes(h[:2], "big") % 256] += (
-                    1 if h[2] & 1 else -1
-                ) * math.log1p(count)
-            norm = math.sqrt(sum(v * v for v in vector)) or 1
-            result.append([round(v / norm, 10) for v in vector])
-        return result
+        return [[0.0] for _ in texts]
+
+
+def indexable(node):
+    return 'literal' not in node['kind'].lower() and not re.fullmatch(r'[\W\d_]+',node['name'])
+
+
+def abbreviations(nodes):
+    """Learn only explicit expansion notation in approved source comments."""
+    candidates={}
+    for node in nodes:
+        for source in node.get('source',[]):
+            for line in source.get('text','').splitlines():
+                if not ('*>' in line or len(line)>6 and line[6]=='*'):continue
+                for word,short in re.findall(r'\b([A-Za-z]{4,})\s*\(([A-Z]{2,6})\)',line):
+                    if len(short)<len(word):candidates.setdefault(short.lower(),set()).add(word.lower())
+    return {short:next(iter(words)) for short,words in sorted(candidates.items()) if len(words)==1}
 
 
 def build_index(projection, provider=None, *, approval=None, trust=None, now=None):
@@ -77,22 +72,19 @@ def build_index(projection, provider=None, *, approval=None, trust=None, now=Non
         )
         authorization = approval["decision_sha256"]
     docs = []
+    vocabulary=abbreviations(projection['nodes'])
     for n in sorted(projection["nodes"], key=lambda n: n["id"]):
+        if not indexable(n):continue
         text = " ".join(
             [
                 n["name"],
                 n.get("statement", ""),
                 n.get("properties", {}).get("statement", ""),
                 *(s.get("text", "") for s in n.get("source", [])),
-                *(
-                    a["text"]
-                    for a in projection.get("annotations", [])
-                    if n["id"] in a["anchors"]
-                    and a["provenance"] in {"asserted", "verified"}
-                ),
             ]
         )
-        docs.append(dict(id=n["id"], text=text, terms=terms(text)))
+        tokens=terms(text)
+        docs.append(dict(id=n["id"], text=text, terms=[*tokens,*(vocabulary[t] for t in tokens if t in vocabulary)]))
     vectors = provider.embed([d["text"] for d in docs])
     if len(vectors) != len(docs) or any(
         not v or any(not math.isfinite(x) for x in v) for v in vectors
@@ -110,11 +102,13 @@ def build_index(projection, provider=None, *, approval=None, trust=None, now=Non
         ),
         documents=docs,
         vectors=vectors,
+        abbreviations=vocabulary,
     )
     return {**body, "content_sha256": digest(body)}
 
 
-def search(projection, query, anchor=None, provider=None):
+def search(projection, query, anchor=None, provider=None, *, top_k=100, kind=''):
+    if type(top_k) is not int or not 1<=top_k<=1000:raise ValueError('search top_k')
     index = projection["search_index"]
     if (
         digest({k: v for k, v in index.items() if k != "content_sha256"})
@@ -130,9 +124,11 @@ def search(projection, query, anchor=None, provider=None):
     if anchor is not None and anchor not in nodes:
         raise ValueError("anchor outside projection")
     docs = index["documents"]
-    if set(nodes) != {d["id"] for d in docs}:
+    if {n['id'] for n in nodes.values() if indexable(n)} != {d["id"] for d in docs}:
         raise ValueError("index outside projection")
     q = set(terms(query))
+    q |= {index.get('abbreviations',{})[t] for t in list(q) if t in index.get('abbreviations',{})}
+    term_sets={d['id']:set(d['terms']) for d in docs}
     n = len(docs)
     avg = sum(len(d["terms"]) for d in docs) / max(1, n) or 1
     df = Counter(t for d in docs for t in set(d["terms"]))
@@ -176,7 +172,7 @@ def search(projection, query, anchor=None, provider=None):
                     paths[b] = [*paths[a], b]
                     todo.append(b)
     scores = {
-        node: sum(1 / (60 + r[node]) for r in ranks if node in r) for node in nodes
+        d['id']: sum(1 / (60 + r[d['id']]) for r in ranks if d['id'] in r) for d in docs
     }
     if anchor:
         scores = {
@@ -194,7 +190,7 @@ def search(projection, query, anchor=None, provider=None):
             ],
             why=dict(
                 terms=sorted(
-                    q & set(next(d["terms"] for d in docs if d["id"] == node))
+                    q & term_sets[node]
                 ),
                 vector_similarity=(
                     "high"
@@ -204,6 +200,6 @@ def search(projection, query, anchor=None, provider=None):
                 graph_path=paths.get(node, []),
             ),
         )
-        for node in sorted(nodes, key=lambda k: (-scores[k], k))
-        if scores[node] > 0
+        for node in sorted((n for n in scores if scores[n]>0 and (not kind or nodes[n]['kind']==kind)),
+                           key=lambda k: (-scores[k], k))[:top_k]
     ]

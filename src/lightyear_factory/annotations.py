@@ -115,7 +115,7 @@ def outcome_summary(state):
         failures=failures,
         failure_after_apply_rate=failures / len(runs) if runs else None,
         eligible_for_verified=passes >= 5 and failures == 0,
-        flagged=len(runs) >= 5 and failures / len(runs) > 0.2,
+        flagged=failures >= 2 and failures / len(runs) >= 0.4,
         outcome_hashes=sorted(digest(r) for r in runs),
         attribution="correlation-not-causation",
     )
@@ -184,7 +184,7 @@ class AnnotationLedger:
                     or not verify_envelope(r, self.judge_key)
                     or r.get("schema") != "annotation-outcome/1"
                     or sealed(r)
-                    or r.get("evaluation_class") != "public-calibration"
+                    or r.get("evaluation_class") not in {"public-calibration", "customer-factory"}
                     or r.get("independently_replayed") is not True
                     or r.get("customer_id") != s["annotation"]["customer_id"]
                     or p["id"] not in r["context"]["annotation_ids"]
@@ -284,10 +284,21 @@ class AnnotationLedger:
                 )
             )
             self.replay([*events, row])
+            registry=self.path.with_suffix('.revocation-subscriptions.json')
+            subscriptions=json.loads(registry.read_bytes()) if registry.exists() else []
+            if subscriptions:
+                from .revocations import replace,binding
+                for subscription in subscriptions:
+                    replace(Path(subscription['directory'])/'head.json',signer.sign(dict(
+                        schema='annotation-live-head/1',channel=binding(self)['channel'],
+                        sequence=row['sequence'],ledger_head=row['content_sha256'])))
             with self.path.open("ab") as f:
                 f.write(canonical(row) + b"\n")
                 f.flush()
                 os.fsync(f.fileno())
+            if subscriptions:
+                from .revocations import publish
+                publish(self,signer,subscriptions,now=now)
             return row
         finally:
             os.close(fd)
@@ -307,12 +318,27 @@ def ancestors(roots, edges):
         found |= more
 
 
+def descendants(roots, edges):
+    """Shortest containment distance, bounded even for malformed cyclic graphs."""
+    distances={r:0 for r in roots}
+    todo=list(roots)
+    children={}
+    for edge in edges:
+        if edge['relation']=='CONTAINS':children.setdefault(edge['source'],[]).append(edge['target'])
+    for node in todo:
+        for child in children.get(node,[]):
+            if child not in distances:
+                distances[child]=distances[node]+1;todo.append(child)
+    return distances
+
+
 def retrieve(
     states, roots, edges, customer_id, *, now=None, include_inferred=False, cap=4096
 ):
     today = (now or datetime.now(timezone.utc)).date()
     roots = set(roots)
     parents = ancestors(roots, edges)
+    below = descendants(roots, edges)
     selected = []
     for s in states.values():
         a = s["annotation"]
@@ -330,7 +356,7 @@ def retrieve(
             and not s.get("portable", False)
         ):
             continue
-        eligible = roots if a["scope"] == "node" else parents
+        eligible = (set(below) if a['type']=='pitfall' else roots) if a["scope"] == "node" else parents
         if not set(a["anchors"]) & eligible:
             continue
         selected.append(
@@ -344,6 +370,7 @@ def retrieve(
         )
     selected.sort(
         key=lambda a: (
+            min((below.get(n, 1000000) for n in a['anchors']), default=1000000),
             SCOPES.index(a["scope"]),
             {"verified": 0, "asserted": 1, "inferred": 2, "observed": 3}[
                 a["provenance"]

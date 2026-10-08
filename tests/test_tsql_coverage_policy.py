@@ -85,7 +85,10 @@ class CoveragePolicyTests(unittest.TestCase):
         for row in corpus():
             if row['id'] in ('ci-unique','catch-retains-prior-work','xact-abort'):
                 self.assertIn('EXCEPTION WHEN',row['correct_sql'])
-                self.assertIn('THEN mapped_status:=',row['correct_sql'])
+                if row['id']=='xact-abort':
+                    self.assertIn('VALUES(1,10); mapped_status:=-6;',row['correct_sql'])
+                    self.assertIn('THEN PERFORM 1;',row['correct_sql'])
+                else:self.assertIn('THEN mapped_status:=',row['correct_sql'])
                 self.assertIn('count(*)::text, mapped_status',row['correct_sql'])
                 self.assertEqual(row['calling_convention']['result_return_mapping']['column'],'tsql_return_code')
 

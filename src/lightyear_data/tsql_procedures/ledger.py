@@ -31,6 +31,7 @@ FAMILIES = {
 23:("set-based-triggers","inserted-deleted-tables","Multirow inserted/deleted facts must match statement semantics, not per-row assumptions."),
 24:("bit-and-uuid","timestamp-row-version","SQL Server bit/uniqueidentifier are not ASE timestamp rowversions; explicit canonical types."),
 25:("unordered-top","sort-order-collation","TOP without ORDER BY always requires a policy; a coincidental matching row is not equivalence."),
+26:("null-and-collation-order","sort-order-collation","Preserve source ORDER BY; compare NULL position and declared collation order without sorting the evidence."),
 }
 
 

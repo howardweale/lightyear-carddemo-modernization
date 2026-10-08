@@ -1,0 +1,73 @@
+{
+  "audit_sha256": "9e69393318192f9100f8751e66ee0a26afa46232bc3f41d6898a219e1f8c6fd4",
+  "claim": "Operator review; not independent attestation",
+  "cleanup": [
+    {
+      "command": [
+        "ps",
+        "-a"
+      ],
+      "status": "absent"
+    },
+    {
+      "command": [
+        "network",
+        "ls"
+      ],
+      "status": "absent"
+    },
+    {
+      "command": [
+        "volume",
+        "ls"
+      ],
+      "status": "absent"
+    }
+  ],
+  "elapsed_seconds": 312.4701740760029,
+  "files_verified": 1856,
+  "linux_replay_seconds": 1.79306320500109,
+  "local_audit_sha256": "7b1dc6bf0bbf3fe4502da90acd5a66a31ce83e260192cc83522c9b8a9e28543d",
+  "local_replay_seconds": 1.0620000000017171,
+  "model_calls": 0,
+  "native_run": 15,
+  "pairs_per_minute": 20.73797929406169,
+  "pairs_replayed": 108,
+  "pending": [
+    "native qualification of coverage revision 2",
+    "customer dependency closure",
+    "expanded native type/error controls",
+    "Tower policy and certificate release"
+  ],
+  "procedure_verdicts": {
+    "divergent": 43,
+    "equivalent": 41,
+    "policy-decision-required": 2
+  },
+  "public_key_sha256": "6be40d9f3e66163de4f25e7b7af07659348ac963bef2286c07f83f02dac3cb63",
+  "qualification_scope": "43 authored public procedures and 26 trap families; not customer qualification",
+  "qualified": true,
+  "report_sha256": "c3b2534082f961beb0b9f8d463975c23fb95ee80c9804737216ebae81bb78fee",
+  "reset_benchmark": {
+    "source": {
+      "count": 108,
+      "maximum_seconds": 0.8377700029996049,
+      "mean_seconds": 0.7250544913056527,
+      "minimum_seconds": 0.6878567040002963,
+      "total_seconds": 78.30588506101049
+    },
+    "target": {
+      "count": 108,
+      "maximum_seconds": 0.08766772799936007,
+      "mean_seconds": 0.06125930374074179,
+      "minimum_seconds": 0.05681599499803269,
+      "total_seconds": 6.616004804000113
+    }
+  },
+  "schema": "tsql-review-public-summary/1",
+  "verdicts": {
+    "divergent": 53,
+    "equivalent": 40,
+    "insufficient-evidence": 15
+  }
+}

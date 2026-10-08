@@ -80,7 +80,7 @@ class InventoryTests(unittest.TestCase):
     def test_nondeterminism_and_cross_database(self):
         h=scan(SQL+" SELECT GETDATE(),NEWID() FROM db.dbo.t;")
         self.assertEqual(["GETDATE","NEWID"],h["nondeterministic_calls"])
-        self.assertIn("cross-database",h["unsupported_features"])
+        self.assertNotIn("cross-database",h["unsupported_features"]) # AST dependency role, not a three-part token
 
     def test_no_parser_is_unparsed(self):
         self.assertEqual("unparsed",parse(SQL,allow_sqlglot=False)["reason"])
@@ -188,7 +188,12 @@ class InventoryTests(unittest.TestCase):
                 if mode=="reused": pairs[0]["twin"]="source.sql"
                 if mode=="duplicate": pairs.append(dict(pairs[0]))
                 if mode=="escape": pairs[0]["source"]="../outside.sql"
-                with self.assertRaises(ValueError): inventory(root,pairs,allow_sqlglot=False)
+                if mode in ('reused','duplicate'):
+                    with self.assertRaises(ValueError): inventory(root,pairs,allow_sqlglot=False)
+                else:
+                    result=inventory(root,pairs,allow_sqlglot=False)
+                    self.assertFalse(result['inventory_complete'])
+                    if mode!='unpaired':self.assertEqual(result['pairs'][0]['reason'],'missing-or-outside-pair-input')
 
     def test_empty_inventory_refused(self):
         with tempfile.TemporaryDirectory() as d,self.assertRaisesRegex(ValueError,"empty-pair"):
@@ -205,7 +210,7 @@ class InventoryTests(unittest.TestCase):
 class CorpusLedgerTests(unittest.TestCase):
     def test_generated_assets_exact_and_hash_bound(self):
         expected=artifacts(ROOT)
-        self.assertEqual(254,len(expected))
+        self.assertEqual(266,len(expected))
         for name,raw in expected.items():
             with self.subTest(name=name): self.assertEqual(raw,(ROOT/name).read_bytes())
         manifest=json.loads(expected["data-modernization/tsql-procedures/corpus.json"])
@@ -216,9 +221,9 @@ class CorpusLedgerTests(unittest.TestCase):
 
     def test_family_closure_and_one_deliberate_mutation_each(self):
         rows=corpus()
-        self.assertEqual(42,len(rows))
-        self.assertEqual(set(range(1,26)),{r["trap_family"] for r in rows})
-        self.assertEqual(42,len({r["id"] for r in rows}))
+        self.assertEqual(43,len(rows))
+        self.assertEqual(set(range(1,27)),{r["trap_family"] for r in rows})
+        self.assertEqual(43,len({r["id"] for r in rows}))
         for r in rows:
             self.assertTrue(r["mutation"])
             self.assertNotEqual((r["correct_sql"],r["target_setup"]),(r["wrong_sql"],r["wrong_setup"]))
@@ -242,7 +247,7 @@ class CorpusLedgerTests(unittest.TestCase):
     def test_ledger_retains_107_ase_review_obligations(self):
         value=build_ledger(ROOT)
         self.assertEqual(107,len(value["entries"]))
-        self.assertEqual(25,len(value["trap_families"]))
+        self.assertEqual(26,len(value["trap_families"]))
         self.assertFalse(value["inherited_decisions_applied"])
         self.assertFalse(value["sqlserver_native_qualification"])
         self.assertTrue(all(x["decision"] is None for x in value["entries"]))

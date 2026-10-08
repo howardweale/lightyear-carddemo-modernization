@@ -1,6 +1,6 @@
 -- Authored public M0 trap; NOT natively qualified.
-CREATE OR REPLACE FUNCTION dbo.trap() RETURNS TABLE(value text) LANGUAGE plpgsql AS $trap$
+CREATE OR REPLACE FUNCTION dbo.calculate(lhs integer,rhs integer) RETURNS TABLE(value text) LANGUAGE plpgsql AS $trap$
 BEGIN
- RETURN QUERY SELECT (7.0/2)::text;
+ RETURN QUERY SELECT (lhs::numeric/rhs)::text;
 END;
 $trap$;

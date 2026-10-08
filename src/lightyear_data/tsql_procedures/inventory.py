@@ -28,7 +28,6 @@ UNSUPPORTED = {
     "service-broker": r"\b(?:BEGIN\s+DIALOG|SEND\s+ON\s+CONVERSATION|RECEIVE|END\s+CONVERSATION)\b",
     "sql-agent": r"\bSP_(?:START|ADD|UPDATE|DELETE)_JOB\b",
     "filestream": r"\bFILESTREAM\b",
-    "cross-database": r"\b\w+\s*\.\s*\w*\s*\.\s*\w+\b",
 }
 TRAPS = {
     1:r"\b(?:COLLATE|GROUP\s+BY|DISTINCT|JOIN|UNIQUE)\b",
@@ -185,7 +184,11 @@ def inventory(root: Path, pairs: list[dict], scriptdom=None, *, allow_sqlglot=Tr
         identity = pair["id"]
         if not isinstance(identity,str) or not identity or identity in seen: raise ValueError("duplicate-or-invalid-pair-id")
         seen.add(identity)
-        paths = [_input(root,pair[k]) for k in ("source","twin")]
+        try:paths = [_input(root,pair[k]) for k in ("source","twin")]
+        except (KeyError,ValueError):
+            rows.append(dict(id=identity,status='unsupported',reason='missing-or-outside-pair-input',
+                source_sha256=None,twin_sha256=None,inventory={'tier':'high'},native_cases=0))
+            continue
         if paths[0]==paths[1] or any(p in files for p in paths): raise ValueError("reused-pair-file")
         files.update(paths)
         raw, twin = (p.read_bytes() for p in paths)
@@ -200,14 +203,17 @@ def inventory(root: Path, pairs: list[dict], scriptdom=None, *, allow_sqlglot=Tr
         if parsed["status"]=="parsed" and (len(hints["procedure_names"])!=1 or parsed["ast"]["procedure_count"]!=1):
             reason="requires-explicit-single-procedure-pairing"
         if hints["unsupported_features"]: reason="unsupported-feature"
+        if any(d.get('cross_database') for d in parsed.get('ast',{}).get('semantic_catalogue',{}).get('dependencies',[])):
+            reason='cross-database-dependency'
         rows.append({"id":identity,"source_sha256":sha(raw),"twin_sha256":sha(twin),
                      "syntax":parsed,"inventory":hints,"status":"unsupported" if reason else "inventoried",
                      "reason":reason,"twin_syntax":"not-assessed","native_cases":0})
     # Every delivered SQL file must be paired; nothing silently dropped.
     delivered={p.resolve() for p in root.rglob("*") if p.is_file() and p.suffix.lower()==".sql"}
-    if files!=delivered: raise ValueError("unpaired-sql-files")
+    unpaired=sorted(sha(p.read_bytes()) for p in delivered-files)
     return seal({"schema":"tsql-procedure-inventory/1","pairs":rows,"pair_count":len(rows),
-                 "inventory_complete":True,"dependency_closure":False,"native_execution":False})
+                 "inventory_complete":not unpaired,"unpaired_sql_sha256":unpaired,
+                 "dependency_closure":False,"native_execution":False})
 
 
 def public_summary(value: dict) -> dict:

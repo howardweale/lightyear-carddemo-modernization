@@ -2,6 +2,28 @@
 
 October 7, 2026. Operator review; not independent attestation.
 
+## PR269 review follow-up
+
+The [fresh review result](../data-modernization/tsql-procedures/review-results.md)
+supersedes the current implementation counts below: 43 procedures, 26 families,
+108 native pairs, all 108 independently replayed on Linux and Windows; actual
+owned-resource absence verified. All 43 wrong variants were rejected; 41 correct
+variants met aggregate gates and two remain policy-gated. ORDER BY and AST-derived
+policy routing close the reported false-acceptance paths. Named typed invocation,
+fresh per-case reset, pinned/read-back collation/compatibility, error/type contracts,
+SEQUENCE capture and per-pair intake refusal are implemented. 89 T-SQL offline
+tests and 18 Tower registry tests pass. Zero model calls.
+
+Collector revision 2 is now [natively qualified on nine controls](../data-modernization/tsql-procedures/coverage-v2-results.md),
+including non-dbo schema capture and view exclusion. All nine controls and six
+fresh consuming comparison pairs replayed on Linux and Windows; actual owned
+cleanup passed. The consumption check produced three equivalent correct cases
+and three divergent wrong cases. The current offline suite passes 93 tests.
+Earlier failed attempts remain preserved. Case proposal/shrink APIs and Tower
+policy verification remain offline-tested, without customer qualification.
+Full customer dependency closure and release remain gated. The following is the
+preserved earlier milestone, not the current run's results.
+
 Implemented ScriptDom inventory, native SQL Server/PostgreSQL adapters, fresh
 backup/template resets, all-table and protocol capture, signed evidence and
 database-free replay. The public corpus covers 42 procedures and 25 trap families.
@@ -9,16 +31,30 @@ Explicit asset-bound mappings and native procedural coverage are implemented.
 The three return-contract twins have prospective corrections with new evidence;
 all original failures and source bundles remain preserved.
 
-The latest approved-VM run completed 100 pairs: 36 equivalent, 40 divergent,
-24 insufficient-evidence. All 40 non-policy wrong twins were rejected. All 100
-final pairs and seven native collector controls passed independent offline replay;
-owned-resource cleanup was verified. The scoped offline suite passed 73 tests.
+The fresh approved-VM run completed 104 pairs and passed procedure-level M0
+acceptance: 40 non-policy correct twins equivalent across their declared cases,
+40 corresponding wrong twins rejected in the correct trap family, and two
+ambiguous-choice families routed to policy review (both variants). All 104 pairs
+passed independent offline replay, bound to the earlier seven-control native
+coverage qualification. Actual
+owned containers, networks and volumes were absent. The scoped offline suite
+passed 77 tests.
 Zero model calls; no Windows Docker or B06 resource use.
 
-**This is implementation progress, not completed M0 qualification.** Four correct
-twins match observations but lack sufficient coverage proof; twenty repeated
-ambiguous-choice policy cases remain held. Customer policies, certificate release,
-security/concurrency/performance claims and the reset-only benchmark remain open.
+**Public-corpus M0 qualification passed.** Pair verdicts remain 38 equivalent,
+41 divergent and 25 insufficient-evidence: coverage is also evaluated at procedure
+level across the prospectively declared fresh cases, without changing any pair
+verdict. Twenty repeated ambiguous-choice cases remain policy-gated. Customer
+policies and certificate release remain separate approvals; security, concurrency
+and performance equivalence are outside this M0 claim.
+
+Native execution and cleanup took 286.619 seconds (21.77 pairs/minute). Mean
+reset-only time was 0.771 seconds for SQL Server and 0.063 seconds for PostgreSQL.
+Runs 011 and 012 preserve the added-case mismatches that led to the final reference
+corrections; neither was overwritten or promoted to a pass.
+
+- [M0 final results and exact hashes](../data-modernization/tsql-procedures/m0-results-r14.json)
+- [M0 qualification interpretation and preserved failures](../data-modernization/tsql-procedures/m0-results-r14.md)
 
 - [Native results, costs, limitations and full hashes](../data-modernization/tsql-procedures/coverage-results.md)
 - [Every pair's verdict, coverage and manifest hash](../data-modernization/tsql-procedures/coverage-results-summary.json)

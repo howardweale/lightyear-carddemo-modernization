@@ -18,6 +18,10 @@ var statements = new List<object>();
 var branches = new List<object>();
 var handlers = new List<object>();
 var excludedDeclarations = new List<object>();
+var procedureContracts = new List<object>();
+var dependencies = new List<object>();
+var nondeterministic = new HashSet<string>();
+var generator = new Sql160ScriptGenerator();
 object Span(TSqlFragment f) => new { start_utf16=f.StartOffset, length_utf16=f.FragmentLength, line=f.StartLine };
 int procedures = 0;
 void Walk(TSqlFragment f) {
@@ -25,6 +29,21 @@ void Walk(TSqlFragment f) {
     if (seen.Count > 100000) throw new InvalidDataException("AST limit");
     string kind = f.GetType().Name;
     if (kind is "CreateProcedureStatement" or "CreateOrAlterProcedureStatement" or "AlterProcedureStatement") procedures++;
+    if (f is ProcedureStatementBody proc) {
+        var name=proc.ProcedureReference.Name;
+        procedureContracts.Add(new { schema=name.SchemaIdentifier?.Value ?? "dbo", name=name.BaseIdentifier.Value,
+            parameters=proc.Parameters.Select(p => {
+                generator.GenerateScript(p.DataType,out string type);
+                return new { name=p.VariableName.Value, type, output=p.Modifier.ToString()=="Output", has_default=p.Value is not null };
+            }).ToArray() });
+    }
+    if (f is NamedTableReference table) {
+        var name=table.SchemaObject;
+        dependencies.Add(new { kind="table-or-view", parts=name.Identifiers.Select(i=>i.Value).ToArray(),
+            cross_database=name.DatabaseIdentifier is not null || name.ServerIdentifier is not null });
+    }
+    if (f is FunctionCall call && new[]{"GETDATE","SYSDATETIME","GETUTCDATE","SYSUTCDATETIME","NEWID","RAND"}.Contains(call.FunctionName.Value.ToUpperInvariant()))
+        nondeterministic.Add(call.FunctionName.Value.ToUpperInvariant());
     // AST spans use UTF-16 offsets, explicitly declared; no source literals/errors echoed.
     nodes.Add(new { kind, start_utf16 = f.StartOffset, length_utf16 = f.FragmentLength, line = f.StartLine });
     bool declarationWithoutRuntimeStatement = f is DeclareTableVariableStatement
@@ -59,6 +78,9 @@ var payload = new {
     version = typeof(TSql160Parser).Assembly.GetName().Version!.ToString(),
     errors = errors.Select(e => new { number = e.Number, line = e.Line, column = e.Column }),
     ast_nodes = nodes,
+    semantic_catalogue = new { schema="tsql-scriptdom-semantics/1", procedures=procedureContracts,
+        dependencies, nondeterministic_functions=nondeterministic.OrderBy(x=>x).ToArray(),
+        dependency_closure="partial; native catalogue closure required" },
     coverage_catalogue = new { schema="tsql-scriptdom-coverage/1", statements, branches, handlers,
         excluded_declarations=excludedDeclarations,
         scope="procedural statements, IF/WHILE edges and CATCH paths; SQL expression branches excluded" }

@@ -115,9 +115,11 @@ def seal_pair(directory, body, key):
     return manifest
 
 
-def compare_v2(source,target,mapping,qualification=None,revision=2):
+def compare_v2(source,target,mapping,qualification=None,revision=2,coverage_module=None):
     from .policy import validate,table_contract,identity_contract
-    from .coverage import replay_coverage
+    if coverage_module is None:
+        from . import coverage as coverage_module
+    replay_coverage=coverage_module.replay_coverage
     validate(mapping)
     family=mapping['trap_family']
     original=compare(source,target,family) # includes delta and reset validation
@@ -147,7 +149,12 @@ def compare_v2(source,target,mapping,qualification=None,revision=2):
         'exact-name schema/table/column inference flagged',
         'identity -> owned sequence; unconsumed value -> null, exact seed/increment/last consumed'])
     a,b=source['observation'],target['observation']
-    if a['error'] and b['error']:pending('error-map-required')
+    if a['error'] and b['error']:
+        error_contract=mapping['calling_convention'].get('public_error_equivalence')
+        if (revision>=4 and error_contract=='check-constraint-547-23514' and
+                a['error'].get('number')==547 and b['error'].get('sqlstate')=='23514'):
+            normalized.append('public supplemental CHECK violation: SQL Server 547 -> PostgreSQL 23514; raw messages retained')
+        else:pending('error-map-required')
     if any(t.get('flags',0)&0x10 for t in a['tds_tokens']):pending('row-count-policy-required')
     infos=[t['message'] for t in a['tds_tokens'] if t['token']==171]
     if any(not 0<=t['severity']<=10 for t in infos) or any(
@@ -161,10 +168,9 @@ def compare_v2(source,target,mapping,qualification=None,revision=2):
         if record is None:pending(lane+'-coverage-missing','unsupported')
         else:coverage[lane]=replay_coverage(record)
     eligible=len(coverage)==2 and all(c['eligible'] for c in coverage.values())
-    qualified=qualification is not None and qualification.get('schema')=='tsql-coverage-qualification/1' and qualification.get('passed') is True
+    qualified=qualification is not None and qualification.get('schema') in ('tsql-coverage-qualification/1','tsql-coverage-qualification/2') and qualification.get('passed') is True
     if qualification is not None and not qualified:raise ValueError('coverage-qualification-contract')
     if qualified:
-        from . import coverage as coverage_module
         if (sha(Path(coverage_module.__file__).read_bytes())!=qualification['collector_sha256']
                 or source['observation']['coverage']['raw']['bridge_sha256']!=qualification['bridge_sha256']):
             raise ValueError('coverage-qualification-code-binding')
@@ -173,7 +179,7 @@ def compare_v2(source,target,mapping,qualification=None,revision=2):
     result={'schema':'tsql-native-comparison/'+str(revision),'mapping':mapping,
         'differences':differences,'unresolved':unresolved,'coverage':coverage,
         'coverage_thresholds_met':eligible,'coverage_qualification':qualification,
-        'collector_qualification':(('five' if len(qualification['controls'])==5 else 'seven')+'-native-controls-passed') if qualified else 'pending-native-controls',
+        'collector_qualification':({5:'five',7:'seven',9:'nine'}[len(qualification['controls'])]+'-native-controls-passed') if qualified else 'pending-native-controls',
         'observed_status':'divergent' if differences else 'match-on-compared-observables',
         'verdict':verdict,
         'normalized_fields':normalized,'inferred_mappings_flagged':True,
@@ -208,7 +214,11 @@ def replay_pair(directory, public, expected_hash):
         if sha(raw)!=digest: raise ValueError('evidence-changed')
         values[name]=json.loads(raw)
     saved=values['comparison.json']
-    if saved['schema'] in ('tsql-native-comparison/2','tsql-native-comparison/3'):
+    if saved['schema']=='tsql-native-comparison/5':
+        from .comparison_v5 import compare as compare_v5
+        if saved['mapping']['assets']!=body['assets']:raise ValueError('mapping-asset-binding')
+        result=compare_v5(values['source.json'],values['target.json'],saved['mapping'],saved.get('coverage_qualification'))
+    elif saved['schema'] in ('tsql-native-comparison/2','tsql-native-comparison/3','tsql-native-comparison/4'):
         if saved['mapping']['assets']!=body['assets']:raise ValueError('mapping-asset-binding')
         result=compare_v2(values['source.json'],values['target.json'],saved['mapping'],saved.get('coverage_qualification'),int(saved['schema'][-1]))
     else:result=compare(values['source.json'],values['target.json'],body['trap_family'])

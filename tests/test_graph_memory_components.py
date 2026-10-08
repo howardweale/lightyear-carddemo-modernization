@@ -190,3 +190,24 @@ class SecondReviewComponentTests(unittest.TestCase):
             verify.assert_called_once()
         with patch('lightyear_factory.knowledge_trust.approve',return_value={'named_owner':'tuner'}):
             with self.assertRaisesRegex(ValueError,'owner'):run(plan,labels,projection,provider,{}, {})
+
+
+class SnapshotProviderBoundaryTests(unittest.TestCase):
+    def test_raw_response_identity_required_without_changing_historical_provider(self):
+        from io import BytesIO
+        import json
+        from lightyear_factory.model_versions import SnapshotOpenAIResponsesProvider
+        from lightyear_factory.contracts import ContractError
+        model='test-2026-10-01'
+        for actual in (model, 'test-2026-09-01', None):
+            with self.subTest(actual=actual):
+                payload={'output':[{'content':[{'type':'output_text','text':'{}'}]}]}
+                if actual is not None:payload['model']=actual
+                provider=SnapshotOpenAIResponsesProvider('unit-not-a-key',model=model,
+                    token_preflight=False,max_retries=0,
+                    opener=lambda *a,**k:BytesIO(json.dumps(payload).encode()))
+                if actual==model:
+                    self.assertEqual({},provider.complete('builder','unit',{}, {'type':'object'}).content)
+                else:
+                    with self.assertRaises(ContractError):
+                        provider.complete('builder','unit',{}, {'type':'object'})

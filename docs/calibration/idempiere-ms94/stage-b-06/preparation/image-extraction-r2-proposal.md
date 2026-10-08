@@ -1,5 +1,9 @@
 # Image extraction revision 2 — prospective repair
 
+**Superseded; not an execution proposal.** The PR271 review established that
+scope, not a larger bound, must be corrected. Use the [inventory-first follow-up](review-pr269-271/README.md).
+This page preserves the earlier proposal only; it grants no Docker authority.
+
 October 7, 2026. Operator review; not independent attestation.
 
 The authorized r1 launcher started successfully. Its extractor failed after

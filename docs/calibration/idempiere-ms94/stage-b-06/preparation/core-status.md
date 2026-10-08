@@ -1,5 +1,28 @@
 # B06 preparation status
 
+## October 8 frozen practice r9: failed final audit; captures and replay completed
+
+The [terminal review](runtime-fidelity-r9/terminal/README.md) preserves the exact
+failure `; finalization: tycho-file-url-required` at the six-check census. Bundle
+ID 0's `System Bundle` location was parsed as a file URL before the ID branch.
+Practice duration 388.922 seconds; producer/offline replay completed and actual
+owned cleanup verified. All 776 frozen files are unchanged. Zero models/native
+pairs. No retry or Tower request.
+
+Separate offline diagnosis confirms 350 bundles, 102/102 source-only transients,
+correct Tycho binding and no new baseline warnings or structured error files.
+The four retained historical application copies now match exactly (1,577/141/
+62/65 entries), restoring all 39 omissions. Forty historical full copies remain
+unavailable; 44/44 comparison is not claimed. This diagnosis does not turn the
+failed frozen acceptance into a pass.
+
+
+The census correction is implemented only in the unfrozen development checkout.
+Nine focused tests passed; the corrected checker was exercised offline against
+the saved output and still refuses overall acceptance because historical
+application content is missing. No frozen bytes or result were changed.
+
+
 ## October 8 closure fidelity r9: prepared offline, practice approval pending
 
 The [r9 preparation](runtime-fidelity-r9/README.md) replaces broad filename/path

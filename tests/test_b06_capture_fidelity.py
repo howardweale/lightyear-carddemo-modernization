@@ -65,3 +65,19 @@ class FidelityTests(unittest.TestCase):
   self.assertEqual(artifacts['plan'],plan);self.assertEqual(artifacts['practice'],checks)
   checks['snapshot_sha256']='4'*64
   with self.assertRaisesRegex(ValueError,'practice-plan-binding'):request(plan,'3'*40,window=window,practice=checks)
+
+ def test_real_system_bundle_sentinel_census(self):
+  from tools.b06_image_artifacts.frozen_runtime import bundle_census
+  observed=dict(install_area='file:/application/org.idempiere.test/target/work',bundles=[
+   dict(id=0,location='System Bundle'),
+   dict(id=1,location='reference:file:/root/.m2/framework.jar'),
+   dict(id=2,location='file:/application/test'),
+   dict(id=3,location='file:/tmp/tycho_wrapped_source123.jar')])
+  self.assertEqual(bundle_census(observed),{'system':1,'/root/.m2':1,'/application':1,'/tmp':1,'other':0})
+  observed['bundles'][1]['location']='System Bundle'
+  with self.assertRaisesRegex(ValueError,'tycho-file-url-required'):bundle_census(observed)
+
+ def test_prepare_rejects_invalid_revision_before_writes(self):
+  from tools.b06_image_artifacts.frozen_runtime import prepare
+  with self.assertRaisesRegex(ValueError,'invalid-runtime-plan-id'):
+   prepare(None,None,None,None,None,None,None,None,plan_id='../r10')

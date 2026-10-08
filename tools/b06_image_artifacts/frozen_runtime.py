@@ -8,7 +8,9 @@ from pathlib import Path
 from lightyear_calibration.contracts import seal,digest,canonical,verify
 from .controller import IMAGE
 
-def prepare(repository,commit,snapshot,public,baseline,historical,tower_key,java_sha256):
+def prepare(repository,commit,snapshot,public,baseline,historical,tower_key,java_sha256,*,plan_id="b06-runtime-fidelity-r9"):
+ import re
+ if not re.fullmatch(r"b06-runtime-fidelity-r[1-9][0-9]*",plan_id):raise ValueError("invalid-runtime-plan-id")
  repo=Path(repository).resolve();snapshot=Path(snapshot).resolve();public=Path(public).resolve()
  if snapshot.exists() or public.exists():raise ValueError('fresh-freeze-paths-required')
  def git(*args):return subprocess.check_output(['git','-C',str(repo),*args],timeout=60)
@@ -29,7 +31,7 @@ def prepare(repository,commit,snapshot,public,baseline,historical,tower_key,java
  measured,_=launch_arguments()
  # Guard this preparation import against the selected committed input.
  if Path('tools/ms94_b06_observed_worker.py').read_bytes()!=git('cat-file','blob',commit+':tools/ms94_b06_observed_worker.py'):raise ValueError('preparer-measured-worker-differs')
- plan=seal(dict(schema='b06-runtime-closure-plan/2',id='b06-runtime-fidelity-r9',source_commit=commit,image=IMAGE,
+ plan=seal(dict(schema='b06-runtime-closure-plan/2',id=plan_id,source_commit=commit,image=IMAGE,
   files_sha256=hashes,snapshot_sha256=digest(hashes),public_files=selected,
   public_ref='refs/heads/codex/b06-closure-lifecycle-r8',public_plan_path=public.relative_to(repo).as_posix()+'/plan.json',
   warning_baseline_sha256=hashes['warning-baseline.json'],historical_content_sha256=hashes['historical-content.json'],
@@ -39,16 +41,27 @@ def prepare(repository,commit,snapshot,public,baseline,historical,tower_key,java
   requires_practice_six_checks=True,run_authorized=False,review='operator review; not independent attestation'))
  (public/'plan.json').write_bytes(canonical(plan));return plan
 
+def bundle_census(observation):
+ """The system bundle has a sentinel location, not a file URL."""
+ from .tycho_runtime import path
+ counts={'system':0,'/root/.m2':0,'/application':0,'/tmp':0,'other':0}
+ for b in observation['bundles']:
+  if b['id']==0:
+   counts['system']+=1
+   continue
+  p=path(b['location'],path(observation['install_area']))
+  key=next((n for n in ('/root/.m2','/application','/tmp') if p.startswith(n+'/')),'other')
+  counts[key]+=1
+ return counts
+
+
 def six_checks(results,plan,snapshot,cleanup):
  from .tycho_runtime import path,read
  from .transient_sources import classify,copies_at,catalogue
  from .content_comparison import identity,compare
  from .warning_baseline import check
  out=Path(results);root=Path(snapshot);obs=json.loads((out/'worker-observation.json').read_bytes())
- counts={'system':0,'/root/.m2':0,'/application':0,'/tmp':0,'other':0}
- for b in obs['bundles']:
-  p=path(b['location'],path(obs['install_area']))
-  key='system' if b['id']==0 else next((n for n in ('/root/.m2','/application','/tmp') if p.startswith(n+'/')),'other');counts[key]+=1
+ counts=bundle_census(obs)
  sources=classify(obs,copies_at(obs,out),catalogue((out/'runtime-catalogue.tsv').read_bytes()))
  hist=json.loads((root/'historical-content.json').read_bytes());comparisons=[]
  for b in obs['bundles']:

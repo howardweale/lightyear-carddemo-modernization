@@ -22,7 +22,8 @@ IMAGE = 'sha256:f3bed005214fbaec7f580a2d27e0dffa7a868bfc913db8c231d6f2b3fe4e0300
 KIND = 'campaign-authorization'
 SCOPE = 'ms94-b06'
 EXTRACTOR = 'tools/b06_image_artifacts/inventory.py'
-ENTRYPOINT = ['python3','-B','/extract.py','--root','/application','--root','/root/.m2',
+EXTRACTOR_DIRECTORY = 'tools/b06_image_artifacts'
+ENTRYPOINT = ['python3','-B','/extract/inventory.py','--root','/application','--root','/root/.m2',
               '--jdk-auto','--output','/evidence/inventory']
 
 
@@ -175,7 +176,7 @@ def execute(root, plan, output, commit, reader, signer, *, public_verified=False
         command('create','--name',name,'--label',label,'--network','none','--read-only',
                 '--cap-drop','ALL','--security-opt','no-new-privileges','--pids-limit','64',
                 '--memory','2g','--cpus','1','--env','PYTHONDONTWRITEBYTECODE=1',
-                '--mount','type=bind,src='+str(source)+',dst=/extract.py,readonly',
+                '--mount','type=bind,src='+str(root/EXTRACTOR_DIRECTORY)+',dst=/extract,readonly',
                 '--mount','type=bind,src='+str(output)+',dst=/evidence',
                 '--entrypoint',ENTRYPOINT[0],IMAGE,*ENTRYPOINT[1:])
         inspect = json.loads(command('container','inspect',name).stdout)[0]

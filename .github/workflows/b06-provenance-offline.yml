@@ -4,18 +4,22 @@ on:
     paths:
       - 'tools/b06_host_probe/**'
       - 'tools/b06_image_artifacts/**'
-      - 'tools/ms94_b06_forwarding_stub.py'
+      - 'tools/ms94_b06_*.py'
+      - 'factory/idempiere/b06-observer/**'
       - 'tests/b06_synthetic_classfiles.py'
-      - 'tests/test_b06_review_improvements.py'
+      - 'tests/test_b06_*.py'
+      - 'tests/test_ms94_b06_*.py'
       - '.github/workflows/b06-provenance-offline.yml'
   push:
     branches: [main]
     paths:
       - 'tools/b06_host_probe/**'
       - 'tools/b06_image_artifacts/**'
-      - 'tools/ms94_b06_forwarding_stub.py'
+      - 'tools/ms94_b06_*.py'
+      - 'factory/idempiere/b06-observer/**'
       - 'tests/b06_synthetic_classfiles.py'
-      - 'tests/test_b06_review_improvements.py'
+      - 'tests/test_b06_*.py'
+      - 'tests/test_ms94_b06_*.py'
       - '.github/workflows/b06-provenance-offline.yml'
 permissions:
   contents: read
@@ -33,4 +37,8 @@ jobs:
           python-version: '3.12'
       - run: python -m pip install -e '.[control-tower]'
       - name: Authored fixtures; no local JDI evidence, Docker or models
-        run: python -B -m unittest discover -s tests -p 'test_b06_review_improvements.py' -v
+        shell: bash
+        run: |
+          set -e
+          python -B -m unittest discover -s tests -p 'test_b06_*.py' -v
+          python -B -m unittest discover -s tests -p 'test_ms94_b06_*.py' -v

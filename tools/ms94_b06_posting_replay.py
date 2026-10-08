@@ -98,6 +98,8 @@ def replay_stream(folder, receipt, classes, lane, stub_policy=None, host_entries
         check(receipt.get('frame_records') == receipt_records(all_records), 'observer-signed-frame-records-differ')
     previous, ready, death = None, False, False
     definitions = {}
+    generation_pending = {}
+    generation_complete = {}
     stacks, loaders, observations, captures, exceptions = {}, {}, [], [], []
     readbacks, entries, terminals = {}, {}, []
     for sequence, line in enumerate(lines, 1):
@@ -110,13 +112,29 @@ def replay_stream(folder, receipt, classes, lane, stub_policy=None, host_entries
         if kind == 'ready':
             check(sequence == 1 and not ready and event['checkpoint'] is False, 'observer-ready-order')
             ready = True
+        elif kind in ('generation-entry','generation-return'):
+            check(ready and event['checkpoint'] is False,'observer-generation-order')
+            record=event['record'];thread=record['thread_id']
+            stack=generation_pending.setdefault(thread,[])
+            if kind=='generation-entry':stack.append(record)
+            else:
+                check(bool(stack),'observer-generation-return-without-entry')
+                entry=stack.pop()
+                check(all(record.get(k)==v for k,v in entry.items()),'observer-generation-entry-return-differs')
+                generated=record['returned_class']['class_object_id']
+                if 'lambda_factory' in record:generation_complete[generated]=record
         elif kind == 'frame-definition':
             from tools.ms94_b06_forwarding_stub import definition
             check(stub_policy is not None and ready and event['checkpoint'] is False, 'observer-definition-order')
-            raw = event['definition']; definition(raw)
+            raw = event['definition']
+            if 'generation' in raw:
+                record=raw['generation']['record']
+                check(generation_complete.get(record['returned_class']['class_object_id'])==record,'observer-generation-not-recorded')
+            definition(raw)
             check(raw['definition_id'] not in definitions, 'observer-duplicate-definition')
             definitions[raw['definition_id']] = raw
         elif kind == 'vm-death':
+            check(not any(generation_pending.values()),'observer-generation-incomplete')
             check(ready and sequence == len(lines) and event['checkpoint'] is False and
                   not any(stacks.values()), 'observer-death-with-open-calls')
             death = True

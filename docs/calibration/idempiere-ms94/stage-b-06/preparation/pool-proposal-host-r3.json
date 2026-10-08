@@ -1,0 +1,233 @@
+{
+  "claim": "Host observations only; prospective modifier mapping requires approval; no production admission",
+  "content_sha256": "01e68ba3204c828508c170584da813c9a13fe5800c82f86009bc16a6327bda47",
+  "docker_commands": 0,
+  "model_calls": 0,
+  "observation_sha256": "2666e773e1a102b4b93022e76e6cef889aabfcdd6f3140823592e78fdf3905db",
+  "passed": true,
+  "samples": [
+    {
+      "class_name": "org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine",
+      "class_sha256": "b6ebf7618c7572195ec833104be65f54aaa090263dc14297bd471f9c4a1cd056",
+      "comparison": {
+        "approval_required": true,
+        "bound_classes": {
+          "java/lang/Object": "10cc90d16479279e1d6ee258fdaea4c5640ac6125acb5a7100a7b0a20237a9f2",
+          "org/junit/platform/engine/TestEngine": "39e55d27efe8115cb22488f22ef92e613de65d79cecbe51caeba7e1a72f5900e",
+          "org/junit/platform/engine/support/hierarchical/HierarchicalTestEngine": "b6ebf7618c7572195ec833104be65f54aaa090263dc14297bd471f9c4a1cd056"
+        },
+        "derived_methods": [
+          [
+            "discover",
+            "(Lorg/junit/platform/engine/EngineDiscoveryRequest;Lorg/junit/platform/engine/UniqueId;)Lorg/junit/platform/engine/TestDescriptor;"
+          ],
+          [
+            "getId",
+            "()Ljava/lang/String;"
+          ]
+        ],
+        "original_pool_sha256": "9be5af719cc23a87f944e51bceff4f10a61d043ba9352870a4b706752967a0e7",
+        "production_admission": false,
+        "schema": "proposed-bound-overpass-pool/2"
+      },
+      "modifier_mapping": []
+    },
+    {
+      "class_name": "org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine",
+      "class_sha256": "b6ebf7618c7572195ec833104be65f54aaa090263dc14297bd471f9c4a1cd056",
+      "comparison": {
+        "approval_required": true,
+        "bound_classes": {
+          "java/lang/Object": "10cc90d16479279e1d6ee258fdaea4c5640ac6125acb5a7100a7b0a20237a9f2",
+          "org/junit/platform/engine/TestEngine": "39e55d27efe8115cb22488f22ef92e613de65d79cecbe51caeba7e1a72f5900e",
+          "org/junit/platform/engine/support/hierarchical/HierarchicalTestEngine": "b6ebf7618c7572195ec833104be65f54aaa090263dc14297bd471f9c4a1cd056"
+        },
+        "derived_methods": [
+          [
+            "discover",
+            "(Lorg/junit/platform/engine/EngineDiscoveryRequest;Lorg/junit/platform/engine/UniqueId;)Lorg/junit/platform/engine/TestDescriptor;"
+          ],
+          [
+            "getId",
+            "()Ljava/lang/String;"
+          ]
+        ],
+        "original_pool_sha256": "9be5af719cc23a87f944e51bceff4f10a61d043ba9352870a4b706752967a0e7",
+        "production_admission": false,
+        "schema": "proposed-bound-overpass-pool/2"
+      },
+      "modifier_mapping": []
+    },
+    {
+      "class_name": "org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine",
+      "class_sha256": "b6ebf7618c7572195ec833104be65f54aaa090263dc14297bd471f9c4a1cd056",
+      "comparison": {
+        "approval_required": true,
+        "bound_classes": {
+          "java/lang/Object": "10cc90d16479279e1d6ee258fdaea4c5640ac6125acb5a7100a7b0a20237a9f2",
+          "org/junit/platform/engine/TestEngine": "39e55d27efe8115cb22488f22ef92e613de65d79cecbe51caeba7e1a72f5900e",
+          "org/junit/platform/engine/support/hierarchical/HierarchicalTestEngine": "b6ebf7618c7572195ec833104be65f54aaa090263dc14297bd471f9c4a1cd056"
+        },
+        "derived_methods": [
+          [
+            "discover",
+            "(Lorg/junit/platform/engine/EngineDiscoveryRequest;Lorg/junit/platform/engine/UniqueId;)Lorg/junit/platform/engine/TestDescriptor;"
+          ],
+          [
+            "getId",
+            "()Ljava/lang/String;"
+          ]
+        ],
+        "original_pool_sha256": "9be5af719cc23a87f944e51bceff4f10a61d043ba9352870a4b706752967a0e7",
+        "production_admission": false,
+        "schema": "proposed-bound-overpass-pool/2"
+      },
+      "modifier_mapping": []
+    },
+    {
+      "class_name": "org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine",
+      "class_sha256": "b6ebf7618c7572195ec833104be65f54aaa090263dc14297bd471f9c4a1cd056",
+      "comparison": {
+        "approval_required": true,
+        "bound_classes": {
+          "java/lang/Object": "10cc90d16479279e1d6ee258fdaea4c5640ac6125acb5a7100a7b0a20237a9f2",
+          "org/junit/platform/engine/TestEngine": "39e55d27efe8115cb22488f22ef92e613de65d79cecbe51caeba7e1a72f5900e",
+          "org/junit/platform/engine/support/hierarchical/HierarchicalTestEngine": "b6ebf7618c7572195ec833104be65f54aaa090263dc14297bd471f9c4a1cd056"
+        },
+        "derived_methods": [
+          [
+            "discover",
+            "(Lorg/junit/platform/engine/EngineDiscoveryRequest;Lorg/junit/platform/engine/UniqueId;)Lorg/junit/platform/engine/TestDescriptor;"
+          ],
+          [
+            "getId",
+            "()Ljava/lang/String;"
+          ]
+        ],
+        "original_pool_sha256": "9be5af719cc23a87f944e51bceff4f10a61d043ba9352870a4b706752967a0e7",
+        "production_admission": false,
+        "schema": "proposed-bound-overpass-pool/2"
+      },
+      "modifier_mapping": []
+    },
+    {
+      "class_name": "org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine",
+      "class_sha256": "b6ebf7618c7572195ec833104be65f54aaa090263dc14297bd471f9c4a1cd056",
+      "comparison": {
+        "approval_required": true,
+        "bound_classes": {
+          "java/lang/Object": "10cc90d16479279e1d6ee258fdaea4c5640ac6125acb5a7100a7b0a20237a9f2",
+          "org/junit/platform/engine/TestEngine": "39e55d27efe8115cb22488f22ef92e613de65d79cecbe51caeba7e1a72f5900e",
+          "org/junit/platform/engine/support/hierarchical/HierarchicalTestEngine": "b6ebf7618c7572195ec833104be65f54aaa090263dc14297bd471f9c4a1cd056"
+        },
+        "derived_methods": [
+          [
+            "discover",
+            "(Lorg/junit/platform/engine/EngineDiscoveryRequest;Lorg/junit/platform/engine/UniqueId;)Lorg/junit/platform/engine/TestDescriptor;"
+          ],
+          [
+            "getId",
+            "()Ljava/lang/String;"
+          ]
+        ],
+        "original_pool_sha256": "9be5af719cc23a87f944e51bceff4f10a61d043ba9352870a4b706752967a0e7",
+        "production_admission": false,
+        "schema": "proposed-bound-overpass-pool/2"
+      },
+      "modifier_mapping": []
+    },
+    {
+      "class_name": "org.junit.platform.engine.support.descriptor.AbstractTestDescriptor",
+      "class_sha256": "ae8b6f3bd6318a3b4d506b55d7f9a9abebe9cc0cae7e160caf184ce5e21c89e5",
+      "comparison": {
+        "approval_required": true,
+        "bound_classes": {
+          "java/lang/Object": "10cc90d16479279e1d6ee258fdaea4c5640ac6125acb5a7100a7b0a20237a9f2",
+          "org/junit/platform/engine/TestDescriptor": "f89fe72e5c02d782b820626b0e918b0bb8faae7b9b3231a1f35376cd6449128b",
+          "org/junit/platform/engine/support/descriptor/AbstractTestDescriptor": "ae8b6f3bd6318a3b4d506b55d7f9a9abebe9cc0cae7e160caf184ce5e21c89e5"
+        },
+        "derived_methods": [
+          [
+            "getType",
+            "()Lorg/junit/platform/engine/TestDescriptor$Type;"
+          ]
+        ],
+        "original_pool_sha256": "1076a94e43474dbac53be453c3d300375e9a0e339b080d6c0baa1c4561b4844e",
+        "production_admission": false,
+        "schema": "proposed-bound-overpass-pool/2"
+      },
+      "modifier_mapping": [
+        {
+          "class_file_flags": 4106,
+          "jdi_modifiers": -268431350,
+          "method": "lambda$findByUniqueId$1(Lorg/junit/platform/engine/UniqueId;Lorg/junit/platform/engine/TestDescriptor;)Ljava/util/Optional;"
+        },
+        {
+          "class_file_flags": 4106,
+          "jdi_modifiers": -268431350,
+          "method": "lambda$removeFromHierarchy$0(Lorg/junit/platform/engine/TestDescriptor;)V"
+        }
+      ]
+    },
+    {
+      "class_name": "org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine",
+      "class_sha256": "b6ebf7618c7572195ec833104be65f54aaa090263dc14297bd471f9c4a1cd056",
+      "comparison": {
+        "approval_required": true,
+        "bound_classes": {
+          "java/lang/Object": "10cc90d16479279e1d6ee258fdaea4c5640ac6125acb5a7100a7b0a20237a9f2",
+          "org/junit/platform/engine/TestEngine": "39e55d27efe8115cb22488f22ef92e613de65d79cecbe51caeba7e1a72f5900e",
+          "org/junit/platform/engine/support/hierarchical/HierarchicalTestEngine": "b6ebf7618c7572195ec833104be65f54aaa090263dc14297bd471f9c4a1cd056"
+        },
+        "derived_methods": [
+          [
+            "discover",
+            "(Lorg/junit/platform/engine/EngineDiscoveryRequest;Lorg/junit/platform/engine/UniqueId;)Lorg/junit/platform/engine/TestDescriptor;"
+          ],
+          [
+            "getId",
+            "()Ljava/lang/String;"
+          ]
+        ],
+        "original_pool_sha256": "9be5af719cc23a87f944e51bceff4f10a61d043ba9352870a4b706752967a0e7",
+        "production_admission": false,
+        "schema": "proposed-bound-overpass-pool/2"
+      },
+      "modifier_mapping": []
+    },
+    {
+      "class_name": "org.junit.platform.engine.support.descriptor.AbstractTestDescriptor",
+      "class_sha256": "ae8b6f3bd6318a3b4d506b55d7f9a9abebe9cc0cae7e160caf184ce5e21c89e5",
+      "comparison": {
+        "approval_required": true,
+        "bound_classes": {
+          "java/lang/Object": "10cc90d16479279e1d6ee258fdaea4c5640ac6125acb5a7100a7b0a20237a9f2",
+          "org/junit/platform/engine/TestDescriptor": "f89fe72e5c02d782b820626b0e918b0bb8faae7b9b3231a1f35376cd6449128b",
+          "org/junit/platform/engine/support/descriptor/AbstractTestDescriptor": "ae8b6f3bd6318a3b4d506b55d7f9a9abebe9cc0cae7e160caf184ce5e21c89e5"
+        },
+        "derived_methods": [
+          [
+            "getType",
+            "()Lorg/junit/platform/engine/TestDescriptor$Type;"
+          ]
+        ],
+        "original_pool_sha256": "1076a94e43474dbac53be453c3d300375e9a0e339b080d6c0baa1c4561b4844e",
+        "production_admission": false,
+        "schema": "proposed-bound-overpass-pool/2"
+      },
+      "modifier_mapping": [
+        {
+          "class_file_flags": 4106,
+          "jdi_modifiers": -268431350,
+          "method": "lambda$findByUniqueId$1(Lorg/junit/platform/engine/UniqueId;Lorg/junit/platform/engine/TestDescriptor;)Ljava/util/Optional;"
+        },
+        {
+          "class_file_flags": 4106,
+          "jdi_modifiers": -268431350,
+          "method": "lambda$removeFromHierarchy$0(Lorg/junit/platform/engine/TestDescriptor;)V"
+        }
+      ]
+    }
+  ],
+  "schema": "b06-host-pool-proposal/3"
+}

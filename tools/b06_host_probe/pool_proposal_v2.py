@@ -1,8 +1,7 @@
 """Prospective general overpass comparison; NEVER used for native admission.
 
-Expected methods come from a byte-bound superclass/interface closure. Default
-interface methods and conflicting declarations remain unsupported in this first
-proposal. The approved single-class production rule is unchanged.
+Expected methods come from a byte-bound superclass/interface closure. Default methods are allowed but only inherited abstract interface requirements
+absent from the class hierarchy are proposed as overpasses. The approved single-class production rule is unchanged.
 """
 from collections import Counter
 import hashlib
@@ -11,7 +10,7 @@ from tools.ms94_b06_forwarding_stub import pool,text
 
 def expected_methods(source,closure):
     from .generation_replay import class_file
-    root=class_file(source);seen=set();requirements={};class_methods={};hashes={}
+    root=class_file(source);seen=set();requirements={};class_methods={};hashes={};interfaces={}
     if not root['flags']&0x400:raise ValueError('proposal-requires-abstract-class')
     def visit(raw,interface=False,active=()):
         c=class_file(raw);name=c['name']
@@ -22,8 +21,8 @@ def expected_methods(source,closure):
             if m['name'].startswith('<') or m['flags']&(8|2):continue
             key=m['name']+m['signature']
             if not interface:class_methods.setdefault(key,m['flags'])
-            if m['flags']&0x400:requirements[key]=(m['name'],m['signature'])
-            elif interface:raise ValueError('default-interface-method-not-proposed')
+            if interface:requirements.setdefault(key,[]).append((name,m['name'],m['signature'],m['flags']))
+        if interface:interfaces[name]={text(c['pool'],c['pool'][i][1]) for i in c['interfaces']}
         parents=list(c['interfaces'])+([c['parent']] if c['parent'] else [])
         for p in parents:
             name=text(c['pool'],c['pool'][p][1])
@@ -32,7 +31,16 @@ def expected_methods(source,closure):
             if class_file(parent)['name']!=name:raise ValueError('hierarchy-class-name')
             visit(parent,p in c['interfaces'],active+(c['name'],))
     visit(source)
-    return root['name'],sorted(v for k,v in requirements.items() if k not in class_methods or class_methods[k]&0x400),hashes
+    def extends(child,parent):
+        return parent in interfaces.get(child,set()) or any(extends(p,parent) for p in interfaces.get(child,set()))
+    abstract=[]
+    for key,declarations in requirements.items():
+        if key in class_methods:continue
+        maximal=[d for d in declarations if not any(other[0]!=d[0] and extends(other[0],d[0]) for other in declarations)]
+        defaults=[d for d in maximal if not d[3]&0x400]
+        if len(defaults)>1:raise ValueError('ambiguous-interface-defaults')
+        if not defaults:abstract.append((maximal[0][1],maximal[0][2]))
+    return root['name'],sorted(abstract),hashes
 
 def extension_nodes(name,methods):
     def u(s):return [1,s.encode().hex()]
@@ -56,3 +64,25 @@ def compare(source,closure,runtime_hex,runtime_count,methods):
     check_methods(source,methods)
     return dict(schema='proposed-bound-overpass-pool/2',bound_classes=hashes,derived_methods=abstract,
         original_pool_sha256=hashlib.sha256(raw).hexdigest(),production_admission=False,approval_required=True)
+
+
+def reviewed_host_modifiers(source,observed):
+    """Diagnostic proposal ONLY: no production imports or admission change.
+
+    Preserve exact low class-file flags. Accept the single measured high-word
+    pattern only for private/static/synthetic methods of this exact reviewed
+    AbstractTestDescriptor. Record every normalization for operator review.
+    """
+    import copy
+    from .pool_analysis import method_flags
+    identity=hashlib.sha256(source).hexdigest()
+    flags=method_flags(source);out=copy.deepcopy(observed);changes=[]
+    for method in out:
+        key=method['name']+method['signature'];actual=method.get('modifiers');expected=flags.get(key)
+        if actual==expected:continue
+        if (identity!='ae8b6f3bd6318a3b4d506b55d7f9a9abebe9cc0cae7e160caf184ce5e21c89e5'
+            or expected!=0x100a or type(actual) is not int or (actual & 0xffffffff)!=0xf000100a):
+            raise ValueError('unapproved-host-modifier-difference')
+        changes.append(dict(method=key,class_file_flags=expected,jdi_modifiers=actual))
+        method['modifiers']=expected
+    return out,changes

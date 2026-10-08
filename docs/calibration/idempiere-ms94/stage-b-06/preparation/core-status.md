@@ -1,5 +1,51 @@
 # B06 preparation status
 
+## October 8 application-identity triage completed offline
+
+The [22-bundle triage](application-identity-triage-r1/README.md) classifies every
+changed entry: the 21 source bundles have 21 properties timestamp comments (b)
+and 21 generated manifests (c), zero changed classes (a) or other resources (d).
+A draft two-rule normalization is enumerated per file and bundle; five tests
+and all 42 observed entry pairs pass. No normalization is active.
+
+The test bundle's probe class is identical, but seven non-candidate entries differ
+(two properties, three descriptors, two nested JAR resources). Its 324 nested
+class entries are identical. A class-only exemption cannot fix those resource
+differences. Exact exclusion inventory and a build-once amendment/practice draft
+are prepared for review. All 98 differing byte files (21,399,748 bytes) are
+preserved locally with hashes. No Docker, models, Tower request or publication.
+There is no historical-content admission requirement. Earlier failures unchanged.
+
+
+## October 8 operator amendment: no historical content requirement
+
+Howard removed the historical-content requirement. The [prospective amendment](runtime-history-amendment/README.md)
+and plan schema /3 omit prior-run comparisons and validate current captures.
+Missing old content and supplemental r9/r10 differences are no longer historical
+admission gates. Current capture, source-only, Tycho, warning, cleanup, snapshot
+and later closure-to-measured identity checks remain. Legacy r9/r10 records are
+unchanged. 32 offline tests passed; all 44 saved r10 current captures validate
+under the new check, while the legacy report reproduces exactly. No Docker,
+new freeze, Tower request or launch.
+
+
+## October 8 frozen practice r10: pipeline/replay complete; acceptance blocked
+
+The [terminal review](runtime-fidelity-r10/terminal/README.md) records the single
+authorized run: 387.672 seconds, zero models/native pairs, owned cleanup confirmed,
+776 frozen hashes unchanged. The corrected census audit completes. Census,
+source-only transients, Tycho, warning baseline and frozen-byte checks pass;
+application-content acceptance remains false for 40 unavailable historical copies.
+Exact outcome: `frozen-practice-six-checks-not-satisfied`.
+
+Supplemental r9/r10 comparison covers all 44 application bundles: every entry set
+matches, but only 22 bundles match allowed normalized bytes. Twenty-one source
+bundles retain host-qualifier/timestamp changes, and the test folder retains seven
+changed build-artifact entries. No policy was widened. No Tower request or retry.
+A future baseline/identity or build-once decision is needed; repeated runs alone
+do not resolve these blockers. Operator review, not independent attestation.
+
+
 ## October 8 frozen practice r9: failed final audit; captures and replay completed
 
 The [terminal review](runtime-fidelity-r9/terminal/README.md) preserves the exact
@@ -537,3 +583,10 @@ rehearsals preserve specific errors, including unavailable Windows process argv;
 new qualification claimed. Practice plan `65c596c2514a03d57ab17f88a5d20929126fe9f5a7df7bb5577951535be7d6e8` is prepared, not authorized
 or run. Zero Docker/model calls; no Tower request. r7 and every prior failure
 remain preserved. Native admission stays blocked.
+
+
+## October 8: build-once preparation r1
+
+Howard approved implementing build-once preparation. [Design and bounded practice](build-once-r1/README.md) now define one pinned-image build and two direct Equinox consumers on its read-only derived image. Non-candidate application content remains byte-exact; only the enumerated probe class differs under separate compiled/observed/capture binding. No draft source normalization is enabled. Historical content is not an admission requirement; all earlier failures remain preserved.
+
+Preparation adds offline capture/replay, host-JVM byte-recorder and mocked lifecycle tests. The preserved r10 data is readable as 44 application bundles, 207 runtime artifacts and 102 source-only JARs. This does not pass a new native run. No Docker commands, models or Tower request were executed in this increment. The proposed practice needs an approved one-hour window, with 45 minutes work plus 10 minutes cleanup reserve. The derived image digest can only be reported after that build. Native admission remains false; generated-class proof, five-path census, J1/J2/J3 qualification and final preflight are still outstanding.

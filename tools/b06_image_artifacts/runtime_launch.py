@@ -15,12 +15,32 @@ from .runtime_producer import produce
 REQUIRED={'runtime_closure.py','runtime_launch.py','runtime_producer.py','runtime_worker.py','runtime_inventory.py','resolved_runtime.py','tycho_runtime.py','transient_sources.py','application_identity.py','runtime_capture.py','bundle_content.py','archive.py',
           'B06RuntimeCatalogAgent.java','B06RuntimeCatalogTest.java','RuntimeClosureAgent.java','ms94_b06_observed_worker.py'}
 
+HISTORY_AMENDMENT = {
+    'schema':'b06-runtime-history-amendment/1',
+    'operator':'Howard Weale',
+    'date':'2026-10-08',
+    'statement':'there is now no historical content requirement',
+    'scope':'prospective plans only; historical results unchanged',
+    'review':'operator review; not independent attestation',
+}
+
+
+def historical_policy(plan):
+    if plan.get('schema')=='b06-runtime-closure-plan/3':
+        check(plan.get('historical_content_required') is False,'historical-policy-required')
+        check(plan.get('historical_content_amendment')==HISTORY_AMENDMENT,'historical-amendment-required')
+        check('historical_content_sha256' not in plan,'removed-history-binding-refused')
+        return False
+    return True
+
+
 def validate(root,plan):
     verify(plan);root=Path(root).resolve()
-    check(plan['schema'] in ('b06-runtime-closure-plan/1','b06-runtime-closure-plan/2') and plan['image']==IMAGE,'runtime-plan-required')
+    check(plan['schema'] in ('b06-runtime-closure-plan/1','b06-runtime-closure-plan/2','b06-runtime-closure-plan/3') and plan['image']==IMAGE,'runtime-plan-required')
     check(plan['model_calls']==plan['native_pairs']==plan['database_containers']==0,'runtime-only-scope')
     check(plan['retries']==0 and plan['network']=='none','runtime-isolation')
     check(0<plan['maximum_runtime_seconds']<=3000 and plan['cleanup_reserve_seconds']==600,'runtime-limits')
+    historical_policy(plan)
     files=plan['files_sha256'];check(REQUIRED<=set(files),'runtime-source-closure')
     check(all(isinstance(n,str) and not Path(n).is_absolute() and '..' not in Path(n).parts for n in files),'runtime-source-path')
     check(all(re.fullmatch('[a-f0-9]{64}',v) for v in files.values()),'runtime-source-hash')
@@ -38,8 +58,11 @@ def validate(root,plan):
     return root
 
 def request(plan,commit,*,window=None,practice=None):
-    frozen=plan.get('schema')=='b06-runtime-closure-plan/2'
+    frozen=plan.get('schema') in ('b06-runtime-closure-plan/2','b06-runtime-closure-plan/3')
     if frozen:
+        historical_policy(plan)
+        if plan['schema']=='b06-runtime-closure-plan/3':
+            check(isinstance(practice,dict) and practice.get('application_content_basis')=='current-capture-validation','current-capture-check-required')
         check(isinstance(practice,dict) and practice.get('passed') is True and all(practice.get('checks',{}).get(k) is True for k in ('census','source_only','application_content','tycho','warning_baseline','frozen_bytes','cleanup')),'frozen-practice-six-checks-required-before-Tower-request')
         check(all(practice.get(k)==plan.get(k) for k in ('source_commit','snapshot_sha256')) and practice.get('plan_sha256')==plan['content_sha256'],'frozen-practice-plan-binding')
         check(isinstance(window,dict) and set(window)=={'not_before_utc','latest_start_utc','deadline_utc'},'authorization-window-required')
@@ -91,7 +114,7 @@ def publication(repository,root,plan,commit):
 def execute(repository,root,plan,output,commit,reader,signer,*,practice_directory=None,authorization_window=None):
     root=validate(root,plan);output=Path(output).resolve();publication(repository,root,plan,commit)
     kwargs={}
-    if plan['schema']=='b06-runtime-closure-plan/2':
+    if plan['schema'] in ('b06-runtime-closure-plan/2','b06-runtime-closure-plan/3'):
         from .frozen_runtime import verify_practice
         kwargs=dict(window=authorization_window,practice=verify_practice(root,plan,practice_directory))
     now=datetime.now(timezone.utc);w=authorization_window if kwargs else plan['window'];deadline=utc(w['deadline_utc'])

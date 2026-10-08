@@ -122,7 +122,7 @@ public final class RuntimeClosureAgent {
                   if(!original.isAbsolute())original=install.resolve(original);
                   original=original.normalize();
                   Path tmp=Path.of(System.getProperty("java.io.tmpdir")).toAbsolutePath().normalize();
-                  if(original.startsWith(tmp)) {
+                  if(original.startsWith(tmp) || original.startsWith(Path.of("/tmp"))) {
                     if(Files.isSymbolicLink(original) || !Files.isRegularFile(original))throw new IllegalStateException("transient bundle file required");
                     if(Files.size(original)>134217728)throw new IllegalStateException("transient bundle bound");
                     stage="transient-capture:"+id;

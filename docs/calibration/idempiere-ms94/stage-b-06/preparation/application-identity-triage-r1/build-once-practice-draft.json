@@ -1,0 +1,28 @@
+{
+  "base_image": "sha256:f3bed005214fbaec7f580a2d27e0dffa7a868bfc913db8c231d6f2b3fe4e0300",
+  "database_containers": 0,
+  "historical_content_required": false,
+  "limits": {
+    "build_containers": 1,
+    "cleanup_seconds": 600,
+    "consumer_containers": 2,
+    "parallelism": 1,
+    "retries": 0,
+    "work_seconds": 2700
+  },
+  "model_calls": 0,
+  "native_pairs": 0,
+  "network": "none",
+  "non_candidate_identity": "exact entries and bytes",
+  "per_run_class_identity": "explicit manifest plus trusted observed bytes/loader/origin; replay required",
+  "public_commit": null,
+  "requires_operator_approval": true,
+  "review": "operator review; not independent attestation",
+  "run_authorized": false,
+  "runtime_layer_digest": null,
+  "schema": "b06-build-once-practice-draft/1",
+  "snapshot_sha256": null,
+  "status": "draft-not-executable",
+  "tower_request_created": false,
+  "window": null
+}

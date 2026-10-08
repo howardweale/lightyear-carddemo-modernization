@@ -45,7 +45,7 @@ def replay(results):
  return dict(replayed=True,native_admission=False,maximum_classes=closure['maximum_classes'],claim='In-memory test-signature check only; no production or Tower signing authority used')
 
 def run(plan_path,*,snapshot=None,output=None):
- plan_path=Path(plan_path).resolve();original_plan=json.loads(plan_path.read_bytes());frozen=original_plan.get('schema')=='b06-runtime-closure-plan/2'
+ plan_path=Path(plan_path).resolve();original_plan=json.loads(plan_path.read_bytes());frozen=original_plan.get('schema') in ('b06-runtime-closure-plan/2','b06-runtime-closure-plan/3')
  if frozen:
   if snapshot is None or output is None:raise ValueError('frozen-snapshot-and-fresh-output-required')
   from .runtime_launch import validate

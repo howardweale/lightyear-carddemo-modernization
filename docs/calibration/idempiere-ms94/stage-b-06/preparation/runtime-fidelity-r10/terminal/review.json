@@ -1,0 +1,1111 @@
+{
+  "census": {
+    "/application": 44,
+    "/root/.m2": 203,
+    "/tmp": 102,
+    "other": 0,
+    "system": 1
+  },
+  "claim": "Operator review; not independent attestation. Non-evidence practice, not qualification.",
+  "cleanup_independent_readonly": true,
+  "database_containers": 0,
+  "elapsed_seconds": 387.6719999999914,
+  "error_files": [],
+  "failure": "frozen-practice-six-checks-not-satisfied",
+  "frozen_files_verified": 776,
+  "hashes": {
+    "practice-report.json": "20bd1f0e7800f9aa595bb45236ba3f39c9bb6fee9570b5a4f20ac714679b556c",
+    "results/closure-observation.json": "7114e40936e079a38b187546b75a974063cf37bde9ab40b65a91a37f7030e6b9",
+    "results/maven.log": "af52ab07d44c6ac57bd05d30c71254d34806b56625b9bd68069fbffa0bfdd345",
+    "results/measured-inventory.json": "f1ca95061ddc790be734eb09051b185edd8c12a3c090ee7912a1d148aadb590d",
+    "results/worker-observation.json": "6649b86fddf0bc71671f61af15ede810aa3af35ee681251e66223a472972d1ae",
+    "six-checks.json": "c84a6c677a280d99baea8349a9602b1049be887f460bced438c0e2de052b73d0"
+  },
+  "historical_comparisons": [
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.adempiere.replication"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.adempiere.replication"
+    },
+    {
+      "added": [],
+      "changed": [],
+      "current_entries": 1577,
+      "passed": true,
+      "previous_entries": 1577,
+      "removed": [],
+      "run": "r4-window2",
+      "symbolic_name": "org.adempiere.ui.zk"
+    },
+    {
+      "added": [],
+      "changed": [],
+      "current_entries": 1577,
+      "passed": true,
+      "previous_entries": 1577,
+      "removed": [],
+      "run": "r5b",
+      "symbolic_name": "org.adempiere.ui.zk"
+    },
+    {
+      "added": [],
+      "changed": [],
+      "current_entries": 141,
+      "passed": true,
+      "previous_entries": 141,
+      "removed": [],
+      "run": "r4-window2",
+      "symbolic_name": "org.adempiere.server"
+    },
+    {
+      "added": [],
+      "changed": [],
+      "current_entries": 141,
+      "passed": true,
+      "previous_entries": 141,
+      "removed": [],
+      "run": "r5b",
+      "symbolic_name": "org.adempiere.server"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.idempiere.webservices.resources"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.idempiere.webservices.resources"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.idempiere.test"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.idempiere.test"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.adempiere.pipo"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.adempiere.pipo"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.adempiere.payment.processor"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.adempiere.payment.processor"
+    },
+    {
+      "added": [],
+      "changed": [],
+      "current_entries": 62,
+      "passed": true,
+      "previous_entries": 62,
+      "removed": [],
+      "run": "r4-window2",
+      "symbolic_name": "org.idempiere.webservices"
+    },
+    {
+      "added": [],
+      "changed": [],
+      "current_entries": 62,
+      "passed": true,
+      "previous_entries": 62,
+      "removed": [],
+      "run": "r5b",
+      "symbolic_name": "org.idempiere.webservices"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.adempiere.install"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.adempiere.install"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.adempiere.replication.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.adempiere.replication.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.apache.ecs.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.apache.ecs.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.idempiere.webservices.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.idempiere.webservices.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.idempiere.zk.extra"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.idempiere.zk.extra"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.adempiere.base.process.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.adempiere.base.process.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.adempiere.ui.zk.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.adempiere.ui.zk.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.adempiere.report.jasper"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.adempiere.report.jasper"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.adempiere.base.callout"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.adempiere.base.callout"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.compiere.db.oracle.provider.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.compiere.db.oracle.provider.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.adempiere.pipo.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.adempiere.pipo.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.adempiere.ui"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.adempiere.ui"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.compiere.db.postgresql.provider.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.compiere.db.postgresql.provider.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.adempiere.base.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.adempiere.base.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.idempiere.tablepartition.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.idempiere.tablepartition.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.idempiere.zk.billboard"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.idempiere.zk.billboard"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.compiere.db.postgresql.provider"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.compiere.db.postgresql.provider"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.adempiere.base.process"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.adempiere.base.process"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.adempiere.plugin.utils"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.adempiere.plugin.utils"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.idempiere.webservices.resources.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.idempiere.webservices.resources.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.idempiere.hazelcast.service"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.idempiere.hazelcast.service"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.idempiere.zk.extra.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.idempiere.zk.extra.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.idempiere.zk.billboard.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.idempiere.zk.billboard.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.adempiere.base.callout.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.adempiere.base.callout.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.adempiere.base"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.adempiere.base"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.apache.ecs"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.apache.ecs"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.adempiere.plugin.utils.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.adempiere.plugin.utils.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.adempiere.payment.processor.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.adempiere.payment.processor.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.adempiere.report.jasper.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.adempiere.report.jasper.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.compiere.db.oracle.provider"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.compiere.db.oracle.provider"
+    },
+    {
+      "added": [],
+      "changed": [],
+      "current_entries": 65,
+      "passed": true,
+      "previous_entries": 65,
+      "removed": [],
+      "run": "r4-window2",
+      "symbolic_name": "org.apache.ant"
+    },
+    {
+      "added": [],
+      "changed": [],
+      "current_entries": 65,
+      "passed": true,
+      "previous_entries": 65,
+      "removed": [],
+      "run": "r5b",
+      "symbolic_name": "org.apache.ant"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.adempiere.server.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.adempiere.server.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.idempiere.tablepartition"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.idempiere.tablepartition"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.adempiere.ui.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.adempiere.ui.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.adempiere.install.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.adempiere.install.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r4-window2",
+      "symbolic_name": "org.idempiere.hazelcast.service.source"
+    },
+    {
+      "passed": false,
+      "reason": "historical-content-not-retained",
+      "run": "r5b",
+      "symbolic_name": "org.idempiere.hazelcast.service.source"
+    }
+  ],
+  "model_calls": 0,
+  "native_pairs": 0,
+  "network": "none",
+  "owned_label": "lightyear.b06.practice=b06-runtime-practice-5d3d767bdad1",
+  "passed": false,
+  "pipeline_replayed": true,
+  "plan_sha256": "397102089f2979d3d36637bab6551348ab3e6b489a875daac906b96ffdbf05c7",
+  "public_commit": "f3dd63efb0263c08afe48c1066c919ef39f6eabf",
+  "schema": "b06-frozen-practice-terminal-review/1",
+  "six_checks": {
+    "application_content": false,
+    "census": true,
+    "cleanup": true,
+    "frozen_bytes": true,
+    "source_only": true,
+    "tycho": true,
+    "warning_baseline": true
+  },
+  "snapshot_sha256": "db6cc35a7927b26987c1a052149ba818ca006f9fb5430dc8207c01a9f7b1e3d3",
+  "source_commit": "c90723b8dfdad4db6beba5e2e74554e844d6965e",
+  "source_only_qualified": 102,
+  "supplemental_examples": [
+    {
+      "diff": "--- r9\n+++ r10\n@@ -3,8 +3,8 @@\n Build-Jdk-Spec: 21\r\n Bundle-ManifestVersion: 2\r\n Bundle-SymbolicName: org.adempiere.base.source\r\n-Bundle-Version: 13.0.0.202610081942\r\n-Eclipse-SourceBundle: org.adempiere.base;version=\"13.0.0.202610081942\";r\r\n+Bundle-Version: 13.0.0.202610082001\r\n+Eclipse-SourceBundle: org.adempiere.base;version=\"13.0.0.202610082001\";r\r\n  oots:=\".\"\r\n Bundle-Name: %bundleName\r\n Bundle-Vendor: %bundleVendor\r\n",
+      "entry": "META-INF/MANIFEST.MF",
+      "symbolic_name": "org.adempiere.base.source"
+    },
+    {
+      "diff": "--- r9\n+++ r10\n@@ -1,4 +1,4 @@\n #Source Bundle Localization\n-#Thu Oct 08 19:43:04 UTC 2026\n+#Thu Oct 08 20:01:48 UTC 2026\n bundleName=iDempiere Core Source\n bundleVendor=iDempiere Community\n",
+      "entry": "OSGI-INF/l10n/bundle-src.properties",
+      "symbolic_name": "org.adempiere.base.source"
+    },
+    {
+      "diff": "--- r9\n+++ r10\n@@ -2,7 +2,7 @@\n Bundle-ManifestVersion: 2\r\n Bundle-Name: iDempiere Unit Testing\r\n Bundle-SymbolicName: org.idempiere.test\r\n-Bundle-Version: 13.0.0.202610081942\r\n+Bundle-Version: 13.0.0.202610082001\r\n Bundle-Vendor: iDempiere\r\n Automatic-Module-Name: org.idempiere.test\r\n Import-Package: com.lowagie.text;version=\"[1.3.0,2.0.0)\",com.lowagie.tex\r\n",
+      "entry": "target/MANIFEST.MF",
+      "symbolic_name": "org.idempiere.test"
+    },
+    {
+      "diff": "--- r9\n+++ r10\n@@ -1,4 +1,4 @@\n-#Thu Oct 08 19:43:34 UTC 2026\n+#Thu Oct 08 20:02:19 UTC 2026\n artifact.attached.p2artifacts=/application/org.idempiere.test/target/p2artifacts.xml\n artifact.attached.p2metadata=/application/org.idempiere.test/target/p2content.xml\n artifact.attached.sources=/application/org.idempiere.test/target/org.idempiere.test-13.0.0-SNAPSHOT-sources.jar\n",
+      "entry": "target/local-artifacts.properties",
+      "symbolic_name": "org.idempiere.test"
+    },
+    {
+      "diff": "--- r9\n+++ r10\n@@ -1,4 +1,4 @@\n #Source Bundle Localization\n-#Thu Oct 08 19:43:33 UTC 2026\n+#Thu Oct 08 20:02:18 UTC 2026\n bundleName=iDempiere Unit Testing Source\n bundleVendor=iDempiere\n",
+      "entry": "target/sourcebundle-l10n-gen/OSGI-INF/l10n/bundle-src.properties",
+      "symbolic_name": "org.idempiere.test"
+    }
+  ],
+  "supplemental_not_replacement_baseline": true,
+  "supplemental_r9_r10_comparisons": [
+    {
+      "added": [],
+      "changed": [],
+      "current_entries": 3219,
+      "passed": true,
+      "previous_entries": 3219,
+      "removed": [],
+      "symbolic_name": "org.adempiere.base"
+    },
+    {
+      "added": [],
+      "changed": [],
+      "current_entries": 67,
+      "passed": true,
+      "previous_entries": 67,
+      "removed": [],
+      "symbolic_name": "org.adempiere.base.callout"
+    },
+    {
+      "added": [],
+      "changed": [
+        "META-INF/MANIFEST.MF",
+        "OSGI-INF/l10n/bundle-src.properties"
+      ],
+      "current_entries": 63,
+      "passed": false,
+      "previous_entries": 63,
+      "removed": [],
+      "symbolic_name": "org.adempiere.base.callout.source"
+    },
+    {
+      "added": [],
+      "changed": [],
+      "current_entries": 222,
+      "passed": true,
+      "previous_entries": 222,
+      "removed": [],
+      "symbolic_name": "org.adempiere.base.process"
+    },
+    {
+      "added": [],
+      "changed": [
+        "META-INF/MANIFEST.MF",
+        "OSGI-INF/l10n/bundle-src.properties"
+      ],
+      "current_entries": 213,
+      "passed": false,
+      "previous_entries": 213,
+      "removed": [],
+      "symbolic_name": "org.adempiere.base.process.source"
+    },
+    {
+      "added": [],
+      "changed": [
+        "META-INF/MANIFEST.MF",
+        "OSGI-INF/l10n/bundle-src.properties"
+      ],
+      "current_entries": 3018,
+      "passed": false,
+      "previous_entries": 3018,
+      "removed": [],
+      "symbolic_name": "org.adempiere.base.source"
+    },
+    {
+      "added": [],
+      "changed": [],
+      "current_entries": 82,
+      "passed": true,
+      "previous_entries": 82,
+      "removed": [],
+      "symbolic_name": "org.adempiere.install"
+    },
+    {
+      "added": [],
+      "changed": [
+        "META-INF/MANIFEST.MF",
+        "OSGI-INF/l10n/bundle-src.properties"
+      ],
+      "current_entries": 71,
+      "passed": false,
+      "previous_entries": 71,
+      "removed": [],
+      "symbolic_name": "org.adempiere.install.source"
+    },
+    {
+      "added": [],
+      "changed": [],
+      "current_entries": 21,
+      "passed": true,
+      "previous_entries": 21,
+      "removed": [],
+      "symbolic_name": "org.adempiere.payment.processor"
+    },
+    {
+      "added": [],
+      "changed": [
+        "META-INF/MANIFEST.MF",
+        "OSGI-INF/l10n/bundle-src.properties"
+      ],
+      "current_entries": 14,
+      "passed": false,
+      "previous_entries": 14,
+      "removed": [],
+      "symbolic_name": "org.adempiere.payment.processor.source"
+    },
+    {
+      "added": [],
+      "changed": [],
+      "current_entries": 45,
+      "passed": true,
+      "previous_entries": 45,
+      "removed": [],
+      "symbolic_name": "org.adempiere.pipo"
+    },
+    {
+      "added": [],
+      "changed": [
+        "META-INF/MANIFEST.MF",
+        "OSGI-INF/l10n/bundle-src.properties"
+      ],
+      "current_entries": 39,
+      "passed": false,
+      "previous_entries": 39,
+      "removed": [],
+      "symbolic_name": "org.adempiere.pipo.source"
+    },
+    {
+      "added": [],
+      "changed": [],
+      "current_entries": 33,
+      "passed": true,
+      "previous_entries": 33,
+      "removed": [],
+      "symbolic_name": "org.adempiere.plugin.utils"
+    },
+    {
+      "added": [],
+      "changed": [
+        "META-INF/MANIFEST.MF",
+        "OSGI-INF/l10n/bundle-src.properties"
+      ],
+      "current_entries": 15,
+      "passed": false,
+      "previous_entries": 15,
+      "removed": [],
+      "symbolic_name": "org.adempiere.plugin.utils.source"
+    },
+    {
+      "added": [],
+      "changed": [],
+      "current_entries": 29,
+      "passed": true,
+      "previous_entries": 29,
+      "removed": [],
+      "symbolic_name": "org.adempiere.replication"
+    },
+    {
+      "added": [],
+      "changed": [
+        "META-INF/MANIFEST.MF",
+        "OSGI-INF/l10n/bundle-src.properties"
+      ],
+      "current_entries": 24,
+      "passed": false,
+      "previous_entries": 24,
+      "removed": [],
+      "symbolic_name": "org.adempiere.replication.source"
+    },
+    {
+      "added": [],
+      "changed": [],
+      "current_entries": 33,
+      "passed": true,
+      "previous_entries": 33,
+      "removed": [],
+      "symbolic_name": "org.adempiere.report.jasper"
+    },
+    {
+      "added": [],
+      "changed": [
+        "META-INF/MANIFEST.MF",
+        "OSGI-INF/l10n/bundle-src.properties"
+      ],
+      "current_entries": 26,
+      "passed": false,
+      "previous_entries": 26,
+      "removed": [],
+      "symbolic_name": "org.adempiere.report.jasper.source"
+    },
+    {
+      "added": [],
+      "changed": [],
+      "current_entries": 141,
+      "passed": true,
+      "previous_entries": 141,
+      "removed": [],
+      "symbolic_name": "org.adempiere.server"
+    },
+    {
+      "added": [],
+      "changed": [
+        "META-INF/MANIFEST.MF",
+        "OSGI-INF/l10n/bundle-src.properties"
+      ],
+      "current_entries": 76,
+      "passed": false,
+      "previous_entries": 76,
+      "removed": [],
+      "symbolic_name": "org.adempiere.server.source"
+    },
+    {
+      "added": [],
+      "changed": [],
+      "current_entries": 133,
+      "passed": true,
+      "previous_entries": 133,
+      "removed": [],
+      "symbolic_name": "org.adempiere.ui"
+    },
+    {
+      "added": [],
+      "changed": [
+        "META-INF/MANIFEST.MF",
+        "OSGI-INF/l10n/bundle-src.properties"
+      ],
+      "current_entries": 114,
+      "passed": false,
+      "previous_entries": 114,
+      "removed": [],
+      "symbolic_name": "org.adempiere.ui.source"
+    },
+    {
+      "added": [],
+      "changed": [],
+      "current_entries": 1577,
+      "passed": true,
+      "previous_entries": 1577,
+      "removed": [],
+      "symbolic_name": "org.adempiere.ui.zk"
+    },
+    {
+      "added": [],
+      "changed": [
+        "META-INF/MANIFEST.MF",
+        "OSGI-INF/l10n/bundle-src.properties"
+      ],
+      "current_entries": 1253,
+      "passed": false,
+      "previous_entries": 1253,
+      "removed": [],
+      "symbolic_name": "org.adempiere.ui.zk.source"
+    },
+    {
+      "added": [],
+      "changed": [],
+      "current_entries": 65,
+      "passed": true,
+      "previous_entries": 65,
+      "removed": [],
+      "symbolic_name": "org.apache.ant"
+    },
+    {
+      "added": [],
+      "changed": [],
+      "current_entries": 151,
+      "passed": true,
+      "previous_entries": 151,
+      "removed": [],
+      "symbolic_name": "org.apache.ecs"
+    },
+    {
+      "added": [],
+      "changed": [
+        "META-INF/MANIFEST.MF",
+        "OSGI-INF/l10n/bundle-src.properties"
+      ],
+      "current_entries": 143,
+      "passed": false,
+      "previous_entries": 143,
+      "removed": [],
+      "symbolic_name": "org.apache.ecs.source"
+    },
+    {
+      "added": [],
+      "changed": [],
+      "current_entries": 26,
+      "passed": true,
+      "previous_entries": 26,
+      "removed": [],
+      "symbolic_name": "org.compiere.db.oracle.provider"
+    },
+    {
+      "added": [],
+      "changed": [
+        "META-INF/MANIFEST.MF",
+        "OSGI-INF/l10n/bundle-src.properties"
+      ],
+      "current_entries": 19,
+      "passed": false,
+      "previous_entries": 19,
+      "removed": [],
+      "symbolic_name": "org.compiere.db.oracle.provider.source"
+    },
+    {
+      "added": [],
+      "changed": [],
+      "current_entries": 27,
+      "passed": true,
+      "previous_entries": 27,
+      "removed": [],
+      "symbolic_name": "org.compiere.db.postgresql.provider"
+    },
+    {
+      "added": [],
+      "changed": [
+        "META-INF/MANIFEST.MF",
+        "OSGI-INF/l10n/bundle-src.properties"
+      ],
+      "current_entries": 20,
+      "passed": false,
+      "previous_entries": 20,
+      "removed": [],
+      "symbolic_name": "org.compiere.db.postgresql.provider.source"
+    },
+    {
+      "added": [],
+      "changed": [],
+      "current_entries": 26,
+      "passed": true,
+      "previous_entries": 26,
+      "removed": [],
+      "symbolic_name": "org.idempiere.hazelcast.service"
+    },
+    {
+      "added": [],
+      "changed": [
+        "META-INF/MANIFEST.MF",
+        "OSGI-INF/l10n/bundle-src.properties"
+      ],
+      "current_entries": 16,
+      "passed": false,
+      "previous_entries": 16,
+      "removed": [],
+      "symbolic_name": "org.idempiere.hazelcast.service.source"
+    },
+    {
+      "added": [],
+      "changed": [],
+      "current_entries": 21,
+      "passed": true,
+      "previous_entries": 21,
+      "removed": [],
+      "symbolic_name": "org.idempiere.tablepartition"
+    },
+    {
+      "added": [],
+      "changed": [
+        "META-INF/MANIFEST.MF",
+        "OSGI-INF/l10n/bundle-src.properties"
+      ],
+      "current_entries": 16,
+      "passed": false,
+      "previous_entries": 16,
+      "removed": [],
+      "symbolic_name": "org.idempiere.tablepartition.source"
+    },
+    {
+      "added": [],
+      "changed": [
+        "target/MANIFEST.MF",
+        "target/local-artifacts.properties",
+        "target/org.idempiere.test-13.0.0-SNAPSHOT-sources.jar",
+        "target/org.idempiere.test-13.0.0-SNAPSHOT.jar",
+        "target/p2artifacts.xml",
+        "target/p2content.xml",
+        "target/sourcebundle-l10n-gen/OSGI-INF/l10n/bundle-src.properties"
+      ],
+      "current_entries": 531,
+      "passed": false,
+      "previous_entries": 531,
+      "removed": [],
+      "symbolic_name": "org.idempiere.test"
+    },
+    {
+      "added": [],
+      "changed": [],
+      "current_entries": 62,
+      "passed": true,
+      "previous_entries": 62,
+      "removed": [],
+      "symbolic_name": "org.idempiere.webservices"
+    },
+    {
+      "added": [],
+      "changed": [],
+      "current_entries": 23,
+      "passed": true,
+      "previous_entries": 23,
+      "removed": [],
+      "symbolic_name": "org.idempiere.webservices.resources"
+    },
+    {
+      "added": [],
+      "changed": [
+        "META-INF/MANIFEST.MF",
+        "OSGI-INF/l10n/bundle-src.properties"
+      ],
+      "current_entries": 21,
+      "passed": false,
+      "previous_entries": 21,
+      "removed": [],
+      "symbolic_name": "org.idempiere.webservices.resources.source"
+    },
+    {
+      "added": [],
+      "changed": [
+        "META-INF/MANIFEST.MF",
+        "OSGI-INF/l10n/bundle-src.properties"
+      ],
+      "current_entries": 86,
+      "passed": false,
+      "previous_entries": 86,
+      "removed": [],
+      "symbolic_name": "org.idempiere.webservices.source"
+    },
+    {
+      "added": [],
+      "changed": [],
+      "current_entries": 41,
+      "passed": true,
+      "previous_entries": 41,
+      "removed": [],
+      "symbolic_name": "org.idempiere.zk.billboard"
+    },
+    {
+      "added": [],
+      "changed": [
+        "META-INF/MANIFEST.MF",
+        "OSGI-INF/l10n/bundle-src.properties"
+      ],
+      "current_entries": 38,
+      "passed": false,
+      "previous_entries": 38,
+      "removed": [],
+      "symbolic_name": "org.idempiere.zk.billboard.source"
+    },
+    {
+      "added": [],
+      "changed": [],
+      "current_entries": 19,
+      "passed": true,
+      "previous_entries": 19,
+      "removed": [],
+      "symbolic_name": "org.idempiere.zk.extra"
+    },
+    {
+      "added": [],
+      "changed": [
+        "META-INF/MANIFEST.MF",
+        "OSGI-INF/l10n/bundle-src.properties"
+      ],
+      "current_entries": 10,
+      "passed": false,
+      "previous_entries": 10,
+      "removed": [],
+      "symbolic_name": "org.idempiere.zk.extra.source"
+    }
+  ],
+  "warnings": {
+    "baseline_sha256": "d4b0f432b3e62d9bf196f4be41876ba0ee7d5168a8accc5aa31e4c696fd5e0ab",
+    "lines": 74,
+    "log_sha256": "af52ab07d44c6ac57bd05d30c71254d34806b56625b9bd68069fbffa0bfdd345",
+    "new": [],
+    "passed": true
+  }
+}

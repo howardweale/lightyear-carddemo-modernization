@@ -1,0 +1,89 @@
+[
+  {
+    "run": "r4-window2",
+    "proposed_excluded_entries": [],
+    "actual_identity_exclusions_applied": [],
+    "nested_occurrences": [],
+    "capture_available": false,
+    "reported_testcases": [
+      "org.idempiere.test.B06RuntimeCatalogTest"
+    ],
+    "limitation": "Full test-bundle capture unavailable; no verified entry exclusion list or class byte hash can be asserted."
+  },
+  {
+    "run": "r5b",
+    "proposed_excluded_entries": [],
+    "actual_identity_exclusions_applied": [],
+    "nested_occurrences": [],
+    "capture_available": false,
+    "reported_testcases": [
+      "org.idempiere.test.B06RuntimeCatalogTest"
+    ],
+    "limitation": "Full test-bundle capture unavailable; no verified entry exclusion list or class byte hash can be asserted."
+  },
+  {
+    "run": "r8-failed",
+    "proposed_excluded_entries": [],
+    "actual_identity_exclusions_applied": [],
+    "nested_occurrences": [],
+    "capture_available": false,
+    "reported_testcases": [
+      "org.idempiere.test.B06RuntimeCatalogTest"
+    ],
+    "limitation": "Full test-bundle capture unavailable; no verified entry exclusion list or class byte hash can be asserted."
+  },
+  {
+    "run": "r8b",
+    "proposed_excluded_entries": [
+      {
+        "path": "target/classes/org/idempiere/test/B06RuntimeCatalogTest.class",
+        "sha256": "5637bcde6f2cee5dc25f7915ff0d9330ee5523dbf83d733aa4c7b02bb4d573b1",
+        "bytes": 2306
+      }
+    ],
+    "actual_identity_exclusions_applied": [],
+    "nested_occurrences": [],
+    "capture_available": true,
+    "capture_sha256": "6e42fd0ccb66f4cc6484e228f734ea80c9bdd366009e4ffa39c7e543b2345f3e"
+  },
+  {
+    "run": "r9",
+    "proposed_excluded_entries": [
+      {
+        "path": "target/classes/org/idempiere/test/B06RuntimeCatalogTest.class",
+        "sha256": "5637bcde6f2cee5dc25f7915ff0d9330ee5523dbf83d733aa4c7b02bb4d573b1",
+        "bytes": 2306
+      }
+    ],
+    "actual_identity_exclusions_applied": [],
+    "nested_occurrences": [
+      {
+        "path": "target/org.idempiere.test-13.0.0-SNAPSHOT.jar!/org/idempiere/test/B06RuntimeCatalogTest.class",
+        "sha256": "5637bcde6f2cee5dc25f7915ff0d9330ee5523dbf83d733aa4c7b02bb4d573b1",
+        "bytes": 2306
+      }
+    ],
+    "capture_available": true,
+    "capture_sha256": "4b68c3f984c62ac08f265bb0a26a785f5be6b5bc57136a77001e2a88fbdf3855"
+  },
+  {
+    "run": "r10",
+    "proposed_excluded_entries": [
+      {
+        "path": "target/classes/org/idempiere/test/B06RuntimeCatalogTest.class",
+        "sha256": "5637bcde6f2cee5dc25f7915ff0d9330ee5523dbf83d733aa4c7b02bb4d573b1",
+        "bytes": 2306
+      }
+    ],
+    "actual_identity_exclusions_applied": [],
+    "nested_occurrences": [
+      {
+        "path": "target/org.idempiere.test-13.0.0-SNAPSHOT.jar!/org/idempiere/test/B06RuntimeCatalogTest.class",
+        "sha256": "5637bcde6f2cee5dc25f7915ff0d9330ee5523dbf83d733aa4c7b02bb4d573b1",
+        "bytes": 2306
+      }
+    ],
+    "capture_available": true,
+    "capture_sha256": "ff278c62140d642468e6e90cb345a5c9baa862c8affbbe1b5f4730dcb4864916"
+  }
+]

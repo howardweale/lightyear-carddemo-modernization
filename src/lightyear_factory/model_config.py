@@ -4,7 +4,7 @@ import json
 import math
 import os
 from pathlib import Path
-from .providers import OpenAIResponsesProvider
+from .model_versions import SnapshotOpenAIResponsesProvider
 from .additional_providers import AnthropicMessagesProvider, GeminiProvider
 from .routing import TaskRouter
 
@@ -40,7 +40,7 @@ def configured_models(config, *, secret_store=None):
         key=secret_store.read(name) if secret_store is not None else os.environ.get(name,'')
         if not key:raise ValueError('provider credential unavailable')
         if c["provider"] == "openai":
-            p = OpenAIResponsesProvider(
+            p = SnapshotOpenAIResponsesProvider(
                 key,
                 model=c["model"],
                 max_retries=0,

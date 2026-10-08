@@ -96,3 +96,5 @@ CardDemo mining now uses public identifiers and removes the 82 misparsed metadat
 Graph CI now runs for relevant changes on all PR branches and main. No model evaluation, memory A/B, policy promotion or semantic benchmark was launched. The 840-trial draft has no approved cost: the previous USD100 cap cannot be reused, and the USD350 linear placeholder is not a quote. Exact model snapshots/prices, per-cell limits, independent labels and a new Tower budget decision are still required.
 
 Publication CI caught a historical MS70 source-hash coupling. The base provider bytes remain unchanged; prospective graph runs now use a separate response-verifying adapter. Matching response snapshots pass, and missing/mismatched raw response identities fail. The historical triage artifacts were not regenerated.
+
+The approved provider-only lease scope also changes the deterministic execution-policy conformance hash. Its static receipt and derived unsigned demo audit/dossier were regenerated and validated; their BLOCKED promotion result and simulated assurance remain unchanged. This is not new native evidence or a signed authority decision.

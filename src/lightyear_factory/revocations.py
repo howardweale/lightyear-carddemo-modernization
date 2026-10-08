@@ -2,7 +2,7 @@
 import os
 import json
 from pathlib import Path
-from datetime import datetime,timezone,date
+from datetime import datetime,timezone,date,timedelta
 from lightyear_control_tower.decisions import canonical,digest,ZERO
 from .annotations import outcome_summary
 
@@ -20,9 +20,27 @@ def replace(path,value):
     os.replace(temporary,path)
 
 
+def validity(now=None):
+    issued=now or datetime.now(timezone.utc)
+    return dict(issued_at=issued.isoformat(),valid_until=(issued+timedelta(minutes=15)).isoformat())
+
+
+def subscriptions_for(ledger,events=None):
+    events=ledger.events() if events is None else events
+    expected=[]
+    for event in events:
+        if event['event']=='revocation-subscription' and event['payload'] not in expected:
+            expected.append(event['payload'])
+    registry=ledger.path.with_suffix('.revocation-subscriptions.json')
+    actual=json.loads(registry.read_bytes()) if registry.exists() else []
+    if actual != expected:raise ValueError('bound projection subscription missing or changed')
+    return expected
+
+
 def publish(ledger,signer,subscriptions,*,now=None):
     events=ledger.events();states=ledger.replay(events);today=(now or datetime.now(timezone.utc)).date()
-    common=dict(channel=binding(ledger)['channel'],sequence=len(events),
+    if subscriptions!=subscriptions_for(ledger,events):raise ValueError('subscription binding')
+    common=dict(**validity(now),channel=binding(ledger)['channel'],sequence=len(events),
                 ledger_head=events[-1]['content_sha256'] if events else ZERO)
     # Publish each head first: an interrupted list update refuses guidance.
     for subscription in subscriptions:
@@ -48,14 +66,15 @@ def subscribe(ledger,signer,projection_directory):
     import hashlib
     item=dict(directory=str(directory/'revocations'),projection_sha256=hashlib.sha256(raw).hexdigest(),
               annotation_ids=sorted(a['id'] for a in projection.get('annotations',[])))
-    registry=ledger.path.with_suffix('.revocation-subscriptions.json')
-    lock=ledger.path.with_suffix('.lock')
-    fd=os.open(lock,os.O_CREAT|os.O_EXCL|os.O_WRONLY,0o600)
-    try:
-        subscriptions=json.loads(registry.read_bytes()) if registry.exists() else []
-        if item not in subscriptions:subscriptions.append(item)
-        replace(registry,subscriptions)
-        publish(ledger,signer,subscriptions)
-    finally:
-        os.close(fd);lock.unlink()
+    ledger.append('revocation-subscription',item,signer)
     return item
+
+
+def refresh(ledger,signer,*,now=None):
+    """Authority heartbeat: publish a fresh validity window without a ledger edit.
+
+    Operators schedule this at less than 15 minutes (recommended five). Missing
+    subscription state refuses; offline authorities cause readers to fail closed.
+    """
+    if signer.public!=ledger.ledger_key:raise ValueError('revocation authority')
+    return publish(ledger,signer,subscriptions_for(ledger),now=now)

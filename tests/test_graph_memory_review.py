@@ -41,7 +41,7 @@ class ReviewTests(fixtures.MemoryTests):
         out=self.root/'projection';out.mkdir()
         raw=gzip.compress(canonical(p),mtime=0);(out/'projection.json.gz').write_bytes(raw)
         subscription=subscribe(self.ledger,self.signer,out)
-        reader=RevocationReader(out/'revocations',p['revocation_binding'],subscription['projection_sha256'])
+        reader=RevocationReader(out/'revocations',p['revocation_binding'],subscription['projection_sha256'],state_directory=self.root/'reader-state')
         return p,reader,out
 
     def test_live_flag_removes_pitfall_from_unchanged_projection(self):
@@ -82,3 +82,25 @@ class ReviewTests(fixtures.MemoryTests):
         self.outcome(a,3,'failed');self.outcome(a,4,'failed')
         self.assertTrue(outcome_summary(self.ledger.replay()[a['id']])['flagged'])
         self.assertEqual(retrieve(self.ledger.replay(),['program'],edges,'public')['items'],[])
+
+    def test_new_reader_refuses_rolled_back_signed_pair(self):
+        a=self.create();self.approve(a);p,reader,out=self.projection(a)
+        old={name:(out/'revocations'/name).read_bytes() for name in ('head.json','revocations.json')}
+        reader.read();self.outcome(a,1,'failed');reader.read()
+        for name,data in old.items():(out/'revocations'/name).write_bytes(data)
+        new=RevocationReader(reader.directory,reader.binding,reader.projection,state_directory=reader.state_directory)
+        with self.assertRaisesRegex(ValueError,'rollback'):new.read()
+
+    def test_missing_subscription_refuses_append(self):
+        a=self.create();self.approve(a);p,reader,out=self.projection(a)
+        before=len(self.ledger.events())
+        self.ledger.path.with_suffix('.revocation-subscriptions.json').unlink()
+        with self.assertRaisesRegex(ValueError,'subscription'):self.outcome(a,1,'failed')
+        self.assertEqual(len(self.ledger.events()),before)
+
+    def test_expired_head_refuses_fresh_reader(self):
+        from datetime import datetime,timezone,timedelta
+        a=self.create();self.approve(a);p,reader,out=self.projection(a)
+        new=RevocationReader(reader.directory,reader.binding,reader.projection,state_directory=reader.state_directory,
+            now=lambda:datetime.now(timezone.utc)+timedelta(minutes=16))
+        with self.assertRaisesRegex(ValueError,'expired'):new.read()

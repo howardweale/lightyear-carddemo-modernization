@@ -83,3 +83,14 @@ expiry, local hash-pinned ONNX adapter, scoped secret leases, policy compiler an
 separately declared escalation arm. The default is keyword plus graph proximity.
 No live matrix, memory A/B or semantic benchmark has run; no effectiveness or
 model-arbitrage claim has been established.
+
+
+## PR274 completion increment — October 8 UTC
+
+Live revocation heads now expire after at most 15 minutes. A durable host-owned SQLite watermark outside the projection detects rollback across fresh readers; a missing subscription registry blocks retirement propagation instead of silently losing it. Host ACLs and the real host clock remain part of this boundary.
+
+Routing admission recompiles the exact approved matrix policy. The sample floor is 35 paired cases per cell, including correct no-change first attempts. Only eligible models can become the primary or provider-error fallback. Dated model snapshot IDs and provider response identities are required before matrix execution. The separately declared cheap-first/strong-repair arm runs through the matrix controller. The provider-only OpenAI/Anthropic/Gemini credential scope was explicitly approved by Howard; builder and verifier roles gain no leases.
+
+CardDemo mining now uses public identifiers and removes the 82 misparsed metadata headings. The recorded 31 abbreviation hypotheses are lexical proposals, not validated synonyms or retrieval-quality evidence. The benchmark computes actual local search rankings and requires a Tower-bound label owner independent of the search tuner. Customer outcomes have an executable INTCALC Verify replay producer with separate executor/judge bindings; unsupported judge families remain refused.
+
+Graph CI now runs for relevant changes on all PR branches and main. No model evaluation, memory A/B, policy promotion or semantic benchmark was launched. The 840-trial draft has no approved cost: the previous USD100 cap cannot be reused, and the USD350 linear placeholder is not a quote. Exact model snapshots/prices, per-cell limits, independent labels and a new Tower budget decision are still required.

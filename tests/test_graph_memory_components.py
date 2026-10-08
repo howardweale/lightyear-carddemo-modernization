@@ -75,7 +75,7 @@ class ComponentTests(unittest.TestCase):
         self.assertEqual(store.read('OPENAI_API_KEY'),'test-secret')
         self.assertEqual(context.lease_secret.call_args.args[:2],('provider','OPENAI_API_KEY'))
         with self.assertRaises(ValueError):store.read('UNSCOPED_SECRET')
-        config=dict(models={'x':dict(provider='openai',model='test-version',input_usd_per_million=1,
+        config=dict(models={'x':dict(provider='openai',model='test-2026-10-07',input_usd_per_million=1,
                                      output_usd_per_million=1,max_output_tokens=10)})
         context.lease_secret.side_effect=PermissionError('not admitted')
         with patch.dict('os.environ',{'OPENAI_API_KEY':'must-not-be-used'}):
@@ -94,7 +94,8 @@ class ComponentTests(unittest.TestCase):
         policy=compile_policy(self.matrix(),margin=.1)
         self.assertEqual(policy['routes']['implement']['primary'],'cheap')
         # Even perfect 10/10 does not clear a 90% lower-bound rule.
-        self.assertEqual(compile_policy(self.matrix(10),margin=.1)['routes'],{})
+        with self.assertRaisesRegex(ValueError,'floor'):compile_policy(self.matrix(10),margin=.1)
+        self.assertEqual(compile_policy(self.matrix(35),margin=.1)['routes']['implement']['primary'],'cheap')
         with self.assertRaisesRegex(ValueError,'floor'):compile_policy(self.matrix(9),margin=.1)
         matrix=self.matrix();matrix['cells'][0]['pair_ids'][0]='different'
         matrix=hashed({k:v for k,v in matrix.items() if k!='content_sha256'})
@@ -132,7 +133,8 @@ class ComponentTests(unittest.TestCase):
         plan=dict(label_author='external-reviewer',search_tuner='implementation',query_count=75,
                   labels_sha256=digest(labels),minimum_recall5_gain=.05)
         miss={str(i):['b'] for i in range(75)};hit={str(i):['a'] for i in range(75)}
-        self.assertTrue(evaluate(plan,labels,miss,hit)['promote_hybrid'])
+        self.assertTrue(evaluate(plan,labels,miss,hit)['measured_gain_eligible'])
+        self.assertFalse(evaluate(plan,labels,miss,hit)['promote_hybrid'])
         self.assertFalse(evaluate(plan,labels,hit,hit)['promote_hybrid'])
         with self.assertRaises(ValueError):evaluate({**plan,'label_author':'implementation'},labels,miss,hit)
         with self.assertRaises(ValueError):evaluate(plan,labels[:-1],miss,hit)
@@ -151,3 +153,40 @@ class ComponentTests(unittest.TestCase):
             self.assertEqual(aggregate(plan,[cell])['cells'][0]['first_attempt_pass'],1)
             ev['results'][0]['attempts']=2;ev=hashed({k:v for k,v in ev.items() if k!='content_sha256'})
             with self.assertRaisesRegex(ContractError,'attempt'):aggregate(plan,[{**cell,'evaluation':ev}])
+
+
+class SecondReviewComponentTests(unittest.TestCase):
+    def test_snapshot_alias_and_response_drift_are_refused(self):
+        from lightyear_factory.model_versions import require_snapshot,verify_response
+        for alias in ('latest','gpt-6','model-2026-02-30'):
+            with self.assertRaises(ValueError):require_snapshot(alias)
+        p=SimpleNamespace(model='test-2026-10-01',provider_id='openai-responses',require_snapshot_response=True)
+        verify_response(p,{'model':p.model})
+        for response in ({},{'model':'test-2026-10-02'}):
+            with self.assertRaises(ValueError):verify_response(p,response)
+        p.provider_id='gemini-generate-content';verify_response(p,{'modelVersion':p.model})
+
+    def test_abbreviations_are_not_arbitrary_subsequences_and_headers_are_dropped(self):
+        p=dict(mode='public',customer_id='public',nodes=[dict(id='a',kind='field',name='PROC-COUNT'),
+            dict(id='b',kind='paragraph',name='PROCESSING'),dict(id='c',kind='field',name='NEXT'),
+            dict(id='d',kind='field',name='NOEXTENDED'),dict(id='e',kind='paragraph',name='PROGRAM-ID')],edges=[])
+        index=build_index(p)
+        self.assertEqual(index['abbreviations'].get('proc'),'processing')
+        self.assertNotIn('next',index['abbreviations'])
+        self.assertNotIn('e',{d['id'] for d in index['documents']})
+
+    def test_benchmark_computes_both_rankings_and_binds_label_owner(self):
+        from lightyear_knowledge_graph.search_benchmark import run
+        provider=SimpleNamespace(provider_id='synthetic-local',version='hash-bound',local=True,embed=lambda texts:[[1.] for _ in texts])
+        projection=dict(mode='public',customer_id='public',nodes=[dict(id='a',kind='field',name='AMOUNT')],edges=[])
+        labels=[dict(id=str(i),query='amount',relevant_ids=['a']) for i in range(50)]
+        plan=dict(label_author='label-owner',search_tuner='tuner',query_count=50,labels_sha256=digest(labels),
+                  projection_sha256=digest(projection),provider=dict(id=provider.provider_id,version=provider.version),minimum_recall5_gain=.05)
+        with patch('lightyear_factory.knowledge_trust.approve',return_value={'named_owner':'label-owner'}) as verify:
+            result=run(plan,labels,projection,provider,{'signed':'synthetic'}, {})
+            self.assertEqual(result['keyword']['recall_at_5'],1)
+            self.assertEqual(len(result['rankings_sha256']),2)
+            self.assertFalse(result['promote_hybrid'])
+            verify.assert_called_once()
+        with patch('lightyear_factory.knowledge_trust.approve',return_value={'named_owner':'tuner'}):
+            with self.assertRaisesRegex(ValueError,'owner'):run(plan,labels,projection,provider,{}, {})

@@ -176,6 +176,10 @@ class AnnotationLedger:
                     annotation=a, status="proposed", outcomes={}, decisions=[]
                 )
                 continue
+            if op == 'revocation-subscription':
+                if set(p) != {'directory','projection_sha256','annotation_ids'} or not p['directory'] or len(p['projection_sha256']) != 64 or not set(p['annotation_ids']) <= set(states):
+                    raise ValueError('invalid revocation subscription')
+                continue
             s = states[p["id"]]
             if op == "outcome":
                 r = p["receipt"]
@@ -285,12 +289,18 @@ class AnnotationLedger:
             )
             self.replay([*events, row])
             registry=self.path.with_suffix('.revocation-subscriptions.json')
-            subscriptions=json.loads(registry.read_bytes()) if registry.exists() else []
+            from .revocations import subscriptions_for
+            subscriptions=subscriptions_for(self,events)
+            if event == 'revocation-subscription' and payload not in subscriptions:
+                subscriptions.append(payload)
+                from .revocations import replace
+                replace(registry,subscriptions)
             if subscriptions:
                 from .revocations import replace,binding
                 for subscription in subscriptions:
                     replace(Path(subscription['directory'])/'head.json',signer.sign(dict(
                         schema='annotation-live-head/1',channel=binding(self)['channel'],
+                        **__import__('lightyear_factory.revocations',fromlist=['validity']).validity(now),
                         sequence=row['sequence'],ledger_head=row['content_sha256'])))
             with self.path.open("ab") as f:
                 f.write(canonical(row) + b"\n")

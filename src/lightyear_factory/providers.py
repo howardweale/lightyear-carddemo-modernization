@@ -234,6 +234,9 @@ class OpenAIResponsesProvider:
                 self.sleep(delay)
         if response_payload is None:
             raise ProviderError(role, "empty_response", retryable=False)
+        from .model_versions import verify_response
+        try:verify_response(self,response_payload)
+        except ValueError as exc:raise ContractError(str(exc)) from None
         elapsed_ms = int((time.monotonic() - started) * 1000)
         if response_payload.get("status") == "incomplete":
             reason = (

@@ -118,7 +118,7 @@ def aggregate(plan, cells):
                 passed=passed,
                 wilson_95=wilson(passed,count),
                 first_attempt_pass=sum(
-                    r['status']=='passed' and not r['false_acceptance'] and r.get('attempts')==1
+                    r['status']=='passed' and not r['false_acceptance'] and r.get('attempts') in (0,1)
                     for r in results
                 ),
                 false_acceptances=evaluation["false_acceptances"],
@@ -159,6 +159,7 @@ def run_matrix(
     agent_factories,
     catalogs,
     sealed_keys=None,
+    providers=None,
 ):
     """Explicitly invoked only after commit/matrix/models/budget operator approval.
 
@@ -170,7 +171,7 @@ def run_matrix(
 
     if plan["commit"] != commit or not plan["cells"]:
         raise ContractError("matrix commit mismatch")
-    models = sorted({c["model"] for c in plan["cells"]})
+    models = sorted({m for c in plan["cells"] for m in (c["escalation_arm"]["model_versions"] if c.get("escalation_arm") else [c["model"]])})
     budget = plan["max_cost_usd"]
     if not math.isfinite(budget) or budget <= 0:
         raise ContractError("matrix dollar budget required")
@@ -216,7 +217,7 @@ def run_matrix(
             raise ContractError("invalid matrix cell")
         if (
             c["evaluation_class"] not in {"public-calibration", "sealed-holdout"}
-            or c["model"] not in agent_factories
+            or (not c.get("escalation_arm") and c["model"] not in agent_factories)
         ):
             raise ContractError("invalid evaluation class or model")
         policy = EvaluationPolicy(**{**c["policy"], "require_cost_estimate": True})
@@ -243,18 +244,43 @@ def run_matrix(
             or catalog["workload_id"].upper() != c["workload"]
         ):
             raise ContractError("matrix catalog class or workload mismatch")
-        prepared.append((c, path, catalog, binding, policy))
+        factory=agent_factories.get(c['model'])
+        if c.get('escalation_arm'):
+            from .escalation import EvaluationLadder
+            from .agents import ModelAgentSet
+            if providers is None:raise ContractError('matrix escalation provider map required')
+            ladder=EvaluationLadder(providers,c['escalation_arm'])
+            factory=lambda ladder=ladder:ModelAgentSet(ladder)
+        if factory is None:raise ContractError('matrix model factory missing')
+        prepared.append((c, path, catalog, binding, policy, factory))
+    # Complete all structural checks before enforcing the exact provider set.
+    # Never accept an arbitrary factory that bypasses snapshot-response checks.
+    from .model_versions import require_snapshot
+    from .agents import ModelAgentSet
+    checked=[]
+    for c,path,catalog,binding,policy,factory in prepared:
+        versions=c['escalation_arm']['model_versions'] if c.get('escalation_arm') else {c['model']:c.get('model_id',c['model'])}
+        for alias,version in versions.items():
+            require_snapshot(version)
+            provider=(providers or {}).get(alias)
+            if provider is None or provider.model!=version or getattr(provider,'require_snapshot_response',False) is not True:
+                raise ContractError('matrix requires response-verified snapshot providers')
+        if not c.get('escalation_arm'):
+            provider=providers[c['model']]
+            factory=lambda provider=provider:ModelAgentSet(provider)
+        checked.append((c,path,catalog,binding,policy,factory))
+    prepared=checked
     output = Path(output_root)
     output.mkdir(parents=True, exist_ok=False)
     (output / "authorization.json").write_bytes(canonical(proof))
     cells = []
-    for i, (c, path, catalog, binding, policy) in enumerate(prepared):
+    for i, (c, path, catalog, binding, policy, factory) in enumerate(prepared):
         target = output / str(i)
         evaluation = run_model_evaluation(
             Path(project_root),
             target,
             path,
-            agent_factories[c["model"]],
+            factory,
             policy=policy,
             catalog_override=catalog,
             sealed_binding=binding,

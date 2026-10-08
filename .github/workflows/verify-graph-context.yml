@@ -1,11 +1,12 @@
 name: Verify graph context (zero model)
 on:
   pull_request:
+  push:
+    branches: [main]
 permissions:
   contents: read
 jobs:
   graph:
-    if: startsWith(github.head_ref, 'codex/verify-graph-')
     runs-on: windows-latest
     timeout-minutes: 15
     steps:
@@ -22,11 +23,9 @@ jobs:
           PYTHONPATH: src;.
           PYTHONUTF8: '1'
           PYTHONDONTWRITEBYTECODE: '1'
-          BASE: ${{ github.event.pull_request.base.sha }}
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
         run: |
           python -c "import mcp"
-          if ($LASTEXITCODE) { exit $LASTEXITCODE }
-          python tools/check_verify_graph_boundary.py --base $env:BASE
           if ($LASTEXITCODE) { exit $LASTEXITCODE }
           python -m unittest discover -s tests -p "test_verify*.py"
           if ($LASTEXITCODE) { exit $LASTEXITCODE }

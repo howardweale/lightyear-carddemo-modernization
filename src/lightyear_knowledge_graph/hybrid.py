@@ -34,19 +34,40 @@ class LocalEmbedding:
 
 
 def indexable(node):
-    return 'literal' not in node['kind'].lower() and not re.fullmatch(r'[\W\d_]+',node['name'])
+    header=node['name'].upper().rstrip('.')
+    invalid='paragraph' in node['kind'].lower() and (header in {'PROGRAM-ID','AUTHOR','INSTALLATION','DATE-WRITTEN','DATE-COMPILED','SECURITY','REMARKS'} or header.startswith('DATE-'))
+    return not invalid and 'literal' not in node['kind'].lower() and not re.fullmatch(r'[\W\d_]+',node['name'])
 
 
 def abbreviations(nodes):
-    """Learn only explicit expansion notation in approved source comments."""
+    """Learn explicit comments and unique token contractions from projected names.
+
+    Expansions must themselves occur in approved names/source; no hand vocabulary.
+    Ambiguous contractions remain unexpanded.
+    """
     candidates={}
+    def contraction(short,word):
+        if not short.isalpha() or not word.isalpha() or not 3<=len(short)<=5 or not len(short)+2<=len(word)<=len(short)*3:return False
+        # Exact prefix stems (three/four letters), or vowel deletion. Arbitrary
+        # subsequences produced spurious expansions such as next -> noextended.
+        consonants=re.sub('[aeiou]','',word)
+        kept_initial=word[0]+re.sub('[aeiou]','',word[1:])
+        return (len(short)<=4 and word.startswith(short)) or short in (consonants,kept_initial)
     for node in nodes:
         for source in node.get('source',[]):
             for line in source.get('text','').splitlines():
                 if not ('*>' in line or len(line)>6 and line[6]=='*'):continue
                 for word,short in re.findall(r'\b([A-Za-z]{4,})\s*\(([A-Z]{2,6})\)',line):
-                    if len(short)<len(word):candidates.setdefault(short.lower(),set()).add(word.lower())
+                    letters=iter(word.lower())
+                    if short[0].lower()==word[0].lower() and len(short)<len(word) and all(any(c==v for c in letters) for v in short.lower()):
+                        candidates.setdefault(short.lower(),set()).add(word.lower())
+    names={token for n in nodes if indexable(n) and any(k in n['kind'].lower() for k in ('field','paragraph','copybook','column')) for token in terms(n['name'])}
+    vocabulary={word for word in names if word.isalpha() and re.search('[aeiou]',word) and not re.search(r'(.)\1\1',word)}
+    for short in sorted(names):
+        inferred={word for word in vocabulary if contraction(short,word)}
+        if len(inferred)==1:candidates.setdefault(short,set()).update(inferred)
     return {short:next(iter(words)) for short,words in sorted(candidates.items()) if len(words)==1}
+
 
 
 def build_index(projection, provider=None, *, approval=None, trust=None, now=None):

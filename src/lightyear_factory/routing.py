@@ -21,6 +21,9 @@ def admitted_policy(policy, matrix, proof, trust, *, now=None, versions=None):
     if proof is None:
         return None
     try:
+        from .routing_policy import compile_policy
+        if policy != compile_policy(matrix, margin=policy['rule']['margin']):
+            return None
         d = approve(
             proof,
             trust,
@@ -57,7 +60,7 @@ def admitted_policy(policy, matrix, proof, trust, *, now=None, versions=None):
                 cells=[c for c in matrix['cells'] if c['model']==model and c['task_type']==task]
                 if not cells:return None
                 for c in cells:
-                    if (c.get('run_count',0)<10 or len(set(c.get('runs',[])))!=c['run_count'] or
+                    if (c.get('run_count',0)<35 or len(set(c.get('runs',[])))!=c['run_count'] or
                             len(set(c.get('pair_ids',[])))!=c['run_count'] or
                             c.get('model_version')!=policy['model_versions'].get(model) or
                             versions is not None and versions.get(model)!=c['model_version']):return None

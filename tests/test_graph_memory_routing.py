@@ -178,24 +178,14 @@ class RoutingTests(unittest.TestCase):
     proof = fixtures.MemoryTests.proof
 
     def router(self, providers, *, approved=True, clock=None):
-        matrix = dict(
-            schema="factory-evaluation-matrix/1",
-            false_acceptances=0,
-            cells=[dict(model=m,model_version=m,task_type="plan",run_count=10,
-                runs=[m+str(i) for i in range(10)],pair_ids=[str(i) for i in range(10)]) for m in providers],
-        )
-        matrix["content_sha256"] = digest(matrix)
-        policy = dict(
-            schema="factory-routing-policy/1",
-            model_versions={m:m for m in providers},
-            routes={
-                "plan": dict(
-                    primary="primary",
-                    fallback="fallback",
-                    matrix_receipts=[matrix["content_sha256"]],
-                )
-            },
-        )
+        from lightyear_factory.routing_policy import compile_policy
+        matrix = hashed(dict(schema='factory-evaluation-matrix/1', false_acceptances=0,
+            cells=[dict(model=m, model_version=m, task_type='plan', workload='INTCALC',
+                run_count=35,passed=35,false_acceptances=0,
+                cost_per_verified_task={'primary':1,'fallback':2,'default':3}[m],
+                runs=[m+str(i) for i in range(35)],pair_ids=[str(i) for i in range(35)])
+                for m in providers]))
+        policy = compile_policy(matrix,margin=.1)
         proof = (
             self.proof(
                 "model-routing-policy",

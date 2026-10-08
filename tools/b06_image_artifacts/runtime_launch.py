@@ -12,7 +12,7 @@ from lightyear_control_tower.verification import verify_decision
 from .controller import IMAGE,check,utc
 from .runtime_producer import produce
 
-REQUIRED={'runtime_launch.py','runtime_producer.py','runtime_worker.py','runtime_inventory.py','resolved_runtime.py','archive.py',
+REQUIRED={'runtime_launch.py','runtime_producer.py','runtime_worker.py','runtime_inventory.py','resolved_runtime.py','tycho_runtime.py','archive.py',
           'B06RuntimeCatalogAgent.java','B06RuntimeCatalogTest.java','RuntimeClosureAgent.java','ms94_b06_observed_worker.py'}
 
 def validate(root,plan):
@@ -119,9 +119,10 @@ def execute(repository,root,plan,output,commit,reader,signer):
         check(json.loads((results/'command.json').read_bytes())==closure,'runtime-closure-command-changed')
         inventory=json.loads((results/'measured-inventory.json').read_bytes())
         raw=(results/'closure-observation.json').read_bytes();config=(results/'effective-config.ini').read_bytes();surefire=(results/'effective-surefire.properties').read_bytes()
-        expected=dict(measured_command_sha256=hashlib.sha256((results/'measured-command.json').read_bytes()).hexdigest(),closure_command_sha256=hashlib.sha256((results/'command.json').read_bytes()).hexdigest(),probe_sha256=plan['files_sha256']['RuntimeClosureAgent.java'],image=IMAGE,java_sha256=plan['java_sha256'],plan_sha256=plan['content_sha256'],tower_decision_sha256=proof['decision_sha256'])
+        fork_command=(results/'fork-command.json').read_bytes()
+        expected=dict(fork_command_sha256=hashlib.sha256(fork_command).hexdigest(),measured_command_sha256=hashlib.sha256((results/'measured-command.json').read_bytes()).hexdigest(),closure_command_sha256=hashlib.sha256((results/'command.json').read_bytes()).hexdigest(),probe_sha256=plan['files_sha256']['RuntimeClosureAgent.java'],image=IMAGE,java_sha256=plan['java_sha256'],plan_sha256=plan['content_sha256'],tower_decision_sha256=proof['decision_sha256'])
         h=lambda b:hashlib.sha256(b).hexdigest()
-        pending=(raw,config,surefire,inventory,expected)
+        pending=(raw,config,surefire,inventory,expected,fork_command)
     except BaseException as ex:
         failure=type(ex).__name__+': '+str(ex);print('B06 runtime closure failed; preserve output; no retry.',flush=True)
     finally:
@@ -135,10 +136,10 @@ def execute(repository,root,plan,output,commit,reader,signer):
                 check(not docker('ps','-a','-q','--filter','label='+label).stdout.strip(),'runtime-cleanup-not-absent')
             cleaned=True;validate(root,plan)
             if failure is None and pending is not None:
-                raw,config,surefire,inventory,expected=pending
-                receipt=signer.sign(dict(schema='b06-runtime-launch-receipt/2',passed=True,bindings=expected,cleanup_passed=True,
-                   outputs={'observation':h(raw),'config.ini':h(config),'surefire.properties':h(surefire),'inventory':h(json.dumps(inventory,sort_keys=True).encode())}))
-                resolution=produce(raw,config,surefire,inventory,receipt,signer.public,expected)
+                raw,config,surefire,inventory,expected,fork_command=pending
+                receipt=signer.sign(dict(schema='b06-runtime-launch-receipt/3',passed=True,bindings=expected,cleanup_passed=True,
+                   outputs={'fork-command':h(fork_command),'observation':h(raw),'config.ini':h(config),'surefire.properties':h(surefire),'inventory':h(json.dumps(inventory,sort_keys=True).encode())}))
+                resolution=produce(raw,config,surefire,inventory,receipt,signer.public,expected,fork_command=fork_command)
                 atomic_new(output/'runtime-launch-receipt.json',receipt);atomic_new(output/'resolved-runtime.json',resolution)
         except BaseException as ex:failure=(failure or '')+'; cleanup/snapshot: '+str(ex)
         report=signer.sign(dict(schema='b06-runtime-terminal/1',passed=failure is None and cleaned,cleanup_passed=cleaned,failure=failure,

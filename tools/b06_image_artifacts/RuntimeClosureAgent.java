@@ -35,14 +35,18 @@ public final class RuntimeClosureAgent {
                 String location=String.valueOf(call(bundle,item,"getLocation"));
                 if(id==0) {if(state!=32)ready=false; }
                 else if(state!=2 && !RESOLVED.contains(state))throw new IllegalStateException("unknown bundle state");
-                rows.add("{\"id\":"+id+",\"state\":"+state+",\"location\":"+q(location)+"}");
+                rows.add("{\"id\":"+id+",\"state\":"+state+",\"location\":"+q(location)+",\"symbolic_name\":"+q(String.valueOf(call(bundle,item,"getSymbolicName")))+"}");
               }
               if(!ready)continue;
               // Identify the framework's actual loaded defining JAR, not osgi.bundles.
               Class<?> impl=ctx.getClass();
               if(impl.getProtectionDomain().getCodeSource()==null)throw new IllegalStateException("framework code source absent");
               framework=impl.getProtectionDomain().getCodeSource().getLocation().toExternalForm();
-              String json="{\"configuration_url\":"+q(System.getProperty("osgi.configuration.area",""))+",\"schema\":\"b06-runtime-launch-observation/1\",\"bundles\":["+String.join(",",rows)+"],\"framework_url\":"+q(framework)+",\"java_class_path\":"+q(System.getProperty("java.class.path"))+",\"java_home\":"+q(System.getProperty("java.home"))+"}";
+              ProcessHandle.Info process=ProcessHandle.current().info();
+              List<String> command=new ArrayList<>();command.add(process.command().orElseThrow());
+              command.addAll(Arrays.asList(process.arguments().orElseThrow()));
+              String fork=command.stream().map(RuntimeClosureAgent::q).reduce((a,v)->a+","+v).orElseThrow();
+              String json="{\"configuration_url\":"+q(System.getProperty("osgi.configuration.area",""))+",\"schema\":\"b06-runtime-launch-observation/2\",\"bundles\":["+String.join(",",rows)+"],\"framework_url\":"+q(framework)+",\"java_class_path\":"+q(System.getProperty("java.class.path"))+",\"java_home\":"+q(System.getProperty("java.home"))+",\"install_area\":"+q(System.getProperty("osgi.install.area",""))+",\"fork_command\":["+fork+"]}";
               Files.writeString(Path.of(destination),json,StandardCharsets.UTF_8,StandardOpenOption.CREATE_NEW);
               return;
             }

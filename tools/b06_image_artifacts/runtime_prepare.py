@@ -5,7 +5,7 @@ from datetime import timedelta
 from lightyear_calibration.contracts import canonical,seal,digest
 from .controller import IMAGE,check,utc
 
-def prepare(repository,commit,snapshot,public,start,tower_key,java_sha256,public_ref):
+def prepare(repository,commit,snapshot,public,start,tower_key,java_sha256,public_ref,*,plan_id='b06-runtime-closure-r5'):
     repository,snapshot,public=map(Path,(repository,snapshot,public))
     check(not snapshot.exists() and not public.exists(),'freeze-output-already-exists')
     def git(*args):return subprocess.check_output(['git','-C',str(repository),*args],timeout=60)
@@ -48,7 +48,7 @@ def prepare(repository,commit,snapshot,public,start,tower_key,java_sha256,public
     selected.update({'tools/B06RuntimeCatalogAgent.java','tools/B06RuntimeCatalogTest.java','tools/b06_image_artifacts/RuntimeClosureAgent.java'})
     snapshot.mkdir(parents=True);public.mkdir(parents=True)
     mapping={n:n for n in selected}
-    for n in ('runtime_launch.py','runtime_producer.py','runtime_worker.py','runtime_inventory.py','resolved_runtime.py','archive.py','RuntimeClosureAgent.java'):
+    for n in ('runtime_launch.py','runtime_producer.py','runtime_worker.py','runtime_inventory.py','resolved_runtime.py','tycho_runtime.py','archive.py','RuntimeClosureAgent.java'):
         mapping[n]='tools/b06_image_artifacts/'+n
     for n in ('B06RuntimeCatalogAgent.java','B06RuntimeCatalogTest.java','ms94_b06_observed_worker.py'):mapping[n]='tools/'+n
     hashes={}
@@ -57,7 +57,7 @@ def prepare(repository,commit,snapshot,public,start,tower_key,java_sha256,public
         hashes[name]=hashlib.sha256(raw).hexdigest()
     from tools.ms94_b06_observed_worker import maven_arguments
     at=utc(start);prefix=public.resolve().relative_to(repository.resolve()).as_posix()
-    plan=seal(dict(schema='b06-runtime-closure-plan/1',id='b06-runtime-closure-r4',source_commit=commit,image=IMAGE,
+    plan=seal(dict(schema='b06-runtime-closure-plan/1',id=plan_id,source_commit=commit,image=IMAGE,
         model_calls=0,native_pairs=0,database_containers=0,retries=0,network='none',maximum_runtime_seconds=2700,cleanup_reserve_seconds=600,
         files_sha256=hashes,snapshot_sha256=digest(hashes),public_files=mapping,public_ref=public_ref,public_plan_path=prefix+'/plan.json',
         tower_public_key_sha256=hashlib.sha256(Path(tower_key).read_bytes()).hexdigest(),java_sha256=java_sha256,

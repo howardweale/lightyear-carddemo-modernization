@@ -16,6 +16,10 @@ def measure(observation,output,booter_classpath=()):
     def path(url):
         try:from .resolved_runtime import file_path
         except ImportError:from resolved_runtime import file_path
+        if observation.get('schema')=='b06-runtime-launch-observation/2':
+            try:from .tycho_runtime import path as tycho_path
+            except ImportError:from tycho_runtime import path as tycho_path
+            return Path(tycho_path(url,tycho_path(observation['install_area'])))
         return Path(file_path(url))
     java=Path(observation['java_home']);tool=java/'bin/jimage';modules=java/'lib/modules'
     selected={path(b['location']) for b in observation['bundles'] if b['id']!=0}

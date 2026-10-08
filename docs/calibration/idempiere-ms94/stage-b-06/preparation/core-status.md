@@ -300,3 +300,32 @@ possible launch as October 27 at 23:59:59 UTC (16:59:59 PDT). This is a calculat
 boundary, not approval to launch. The actual plan must bind its freeze date,
 scenario dates and launch guard after qualification; J1's B05 work order remains
 unchanged. No measurement snapshot or model launch is admitted by this document.
+
+## Runtime closure r4 window2 failure — October 8, 2026
+
+The 09:30 PDT authorized runtime-closure attempt failed after 137 seconds;
+Maven completed successfully. The exact worker error was
+`ValueError: unambiguous-surefire-configuration-required` at frozen
+`runtime_worker.py:100`, in `main()` during effective Surefire configuration
+discovery, after Maven/test/class capture and before runtime inventory and
+signed resolution. The controller recorded `ValueError: runtime-worker-failed`.
+Signed terminal report:
+`ddef351691fe724f7bbbb7c55d9cbf40f27d871a8ac8805dc3f55562c3ef3235`.
+All 275 frozen files were unchanged; signed cleanup and a separate read-only
+owned-container absence check passed. Zero native pairs and model calls.
+The failure is preserved and has not been rerun or reclassified.
+
+The worker assumed Maven-Surefire `classPathUrl.N` properties. Tycho 4.0.8 uses
+its test-provider properties and an Equinox `-jar` / `-testproperties` launch;
+the old worker also omitted `target/surefire.properties` from capture. The saved
+attempt has no copy of that file. No replacement properties or successful
+receipt may be fabricated to complete replay.
+
+[The r5 offline correction](tycho-runtime-r5/README.md) adds a separate closed
+Tycho reader, exact file capture, observed fork argv/test bundle identity,
+`b06-resolved-runtime/3` production and replay, and preserves `/2` history.
+The new parser checks the preserved command/configuration layout successfully;
+complete producer replay remains blocked by missing properties, new observation
+fields, measured inventory and a successful signed launch receipt. This is
+preparation only; remaining items 2–5 above are not admitted by it.
+Operator review; not independent attestation.

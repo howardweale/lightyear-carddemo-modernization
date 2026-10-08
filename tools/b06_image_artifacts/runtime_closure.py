@@ -18,17 +18,24 @@ def check(v,reason):
 
 def assemble(inventory,resolution,*,launch_key=None,expected_launch=None):
     check(inventory['schema']=='b06-image-inventory/1' and inventory['failure'] is None,'inventory-required')
-    check(resolution['schema']=='b06-resolved-runtime/2' and resolution['resolved'] is True,'resolved-runtime-required')
+    check(resolution['schema'] in ('b06-resolved-runtime/2','b06-resolved-runtime/3') and resolution['resolved'] is True,'resolved-runtime-required')
     raw=resolution['configuration_utf8']
-    parsed=read_resolution(raw['config.ini'].encode(),raw['surefire.properties'].encode())
+    modern=resolution['schema']=='b06-resolved-runtime/3'
+    encoding='iso-8859-1' if modern else 'utf-8'
+    config=raw['config.ini'].encode(encoding);surefire=raw['surefire.properties'].encode(encoding)
+    if modern:
+        from .tycho_runtime import read as read_tycho
+        parsed=read_tycho(config,surefire,json.loads(resolution['observation_utf8']),json.loads(resolution['fork_command_utf8']))
+    else: parsed=read_resolution(config,surefire)
     check(resolution['installation_inputs']==parsed,'resolved-configuration-differs')
     from .runtime_producer import produce
     check(launch_key is not None and expected_launch is not None,'trusted-launch-authority-required')
-    rebuilt=produce(resolution['observation_utf8'].encode(),raw['config.ini'].encode(),raw['surefire.properties'].encode(),inventory,resolution['launch_receipt'],launch_key,expected_launch)
+    extra={'fork_command':resolution['fork_command_utf8'].encode('utf-8')} if modern else {}
+    rebuilt=produce(resolution['observation_utf8'].encode(),config,surefire,inventory,resolution['launch_receipt'],launch_key,expected_launch,**extra)
     check(rebuilt==resolution,'runtime-producer-replay-differs')
     records={r['path']:r for r in inventory['artifacts']}
     check(resolution.get('launch_observed') is True and resolution.get('framework_jar'),'observed-launch-resolution-required')
-    paths=list(dict.fromkeys(resolution['equinox_bundles']+resolution['surefire_booter_classpath']+[resolution['framework_jar'],resolution['jdk_modules']]))
+    paths=list(dict.fromkeys(resolution['equinox_bundles']+resolution['boot_classpath' if modern else 'surefire_booter_classpath']+[resolution['framework_jar'],resolution['jdk_modules']]))
     check(paths,'runtime-closure-empty')
     check(all(p in records for p in paths),'runtime-artifact-not-in-inventory')
     check(all(resolution['artifact_sha256'].get(p)==records[p]['sha256'] for p in paths),'resolution-inventory-bytes')

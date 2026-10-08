@@ -82,27 +82,22 @@ def main():
                   'model_calls':0,'native_pairs':0,'database_containers':0,
                   'qualified':False,'clock_manipulation':False}
         (out/'attempt.json').write_text(json.dumps(metadata,sort_keys=True),encoding='utf-8')
+        from tycho_runtime import capture_properties
+        capture_properties(target,out/'runtime')
     rows=accept(out,code)
     # Required even if Maven/test XML passed. A daemon failure must not disappear.
     observation=json.loads((out/'closure-observation.json').read_bytes())
-    if observation.get('schema')!='b06-runtime-launch-observation/1':raise ValueError('closure-observation-required')
-    from resolved_runtime import file_path,read
-    config_path=Path(file_path(observation['configuration_url']))/'config.ini'
+    if observation.get('schema')!='b06-runtime-launch-observation/2':raise ValueError('closure-observation-required')
+    from tycho_runtime import path,read,one_properties_file
+    config_path=Path(path(observation['configuration_url']))/'config.ini'
     config=config_path.read_bytes()
-    # Preserve all candidates, but accept only one distinct effective property
-    # file containing the required runtime classpath keys. No guessed fallback.
-    candidates={}
-    for path in (out/'runtime').rglob('*'):
-        if path.is_file() and path.suffix=='.properties':
-            raw=path.read_bytes()
-            if b'ClassPathUrl.' in raw or b'classPathUrl.' in raw:
-                read(config,raw);candidates[hashlib.sha256(raw).hexdigest()]=raw
-    if len(candidates)!=1:raise ValueError('unambiguous-surefire-configuration-required')
-    surefire=next(iter(candidates.values()))
+    surefire=one_properties_file(out/'runtime').read_bytes()
+    command=observation['fork_command']
+    (out/'fork-command.json').write_text(json.dumps(command),encoding='utf-8')
     (out/'effective-config.ini').write_bytes(config);(out/'effective-surefire.properties').write_bytes(surefire)
-    parsed=read(config,surefire)
+    parsed=read(config,surefire,observation,command)
     from runtime_inventory import measure
-    inventory=measure(observation,out/'runtime-inventory',parsed['surefire_booter_classpath'])
+    inventory=measure(observation,out/'runtime-inventory',parsed['boot_classpath'])
     (out/'measured-inventory.json').write_text(json.dumps(inventory,sort_keys=True),encoding='utf-8')
     (out/'result.json').write_text(json.dumps({'loaded_classes':rows,**metadata,'passed':True},sort_keys=True),encoding='utf-8')
 

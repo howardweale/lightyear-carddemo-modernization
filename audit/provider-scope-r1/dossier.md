@@ -1,10 +1,10 @@
 # LIGHTYEAR release evidence dossier
 
-**Release:** `release:carddemo-intcalc:v0.19-demo`
+**Release:** `release:carddemo-intcalc:provider-scope-r1`
 
 **Decision:** **BLOCKED**
 
-**Dossier identity:** `c64bab4e12af99a385fc0a23a13f247da1ce32ad628d17010c2da3728c4f656c`
+**Dossier identity:** `30d819da53b9e06a9db4c94ca5e15db4cd6ebf11736903fba831204290f2ac31`
 
 ## Promotion rationale
 
@@ -37,12 +37,12 @@ Release is blocked until every independent runtime and execution-security gate h
 | `portfolio_plan` | `carddemo:modernization:v0.26` | `f9f6480b735f3b76…` |
 | `operational_control_policy` | `control-tower:live-evidence-plane` | `e3a398c0eae32d2b…` |
 | `source_evidence_pack` | `evidence:source-pack` | `af5bd3b1d7838d51…` |
-| `decision_input` | `execution:carddemo-hardened-plane` | `83d937880f17192b…` |
+| `decision_input` | `execution:carddemo-hardened-plane` | `9cdf54c0a7014c36…` |
 | `durable_conformance_receipt` | `factory:durable-conformance` | `1b1b7aa9f4a93aa5…` |
 | `durable_execution_policy` | `factory:durable-control-plane` | `72b0c927dc60dc8b…` |
 | `graph_snapshot` | `lightyear:carddemo-modernization` | `d98bd92d752f23ee…` |
 | `semantic_memory_snapshot` | `memory:verified-experiences` | `42000f0e821e12b7…` |
-| `decision_input` | `release:carddemo-intcalc:v0.19-demo` | `d98bd92d752f23ee…` |
+| `decision_input` | `release:carddemo-intcalc:provider-scope-r1` | `d98bd92d752f23ee…` |
 | `decision_input` | `runtime-run:local-oracle-intcalc-reference` | `9ada6983de37a9aa…` |
 | `decision_input` | `runtime-run:recorded-zos-intcalc-replay` | `d7d2cb1562f26f1c…` |
 | `decision_input` | `runtime-run:zosmf-intcalc-job00001` | `c821cdbcd2ba17c4…` |
@@ -67,7 +67,7 @@ Release is blocked until every independent runtime and execution-security gate h
 
 - Ledger: `lightyear:carddemo:audit`
 - Events: 21
-- Ledger head: `16e7b52b5f234a05796f974348394c0adfb6aebcf3afbb3e5fbb0f189e1eb11f`
+- Ledger head: `2e56de4f75412028ecfaf6e4ca4e8678617e24b58edb0b1f749eacfd9333b90a`
 - Signature algorithm: `none`
 
 ## CICS/VSAM readiness

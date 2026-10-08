@@ -43,8 +43,7 @@ There is no overwrite or silent repair of a damaged ledger.
 
 Five distinct independently replayed passing runs on the same anchors, with no
 matching-anchor failure, create eligibility and a `graph-annotation-verified`
-request. A person still decides. More than 20% failures over at least five runs
-flags the annotation. Flagged and expired entries are excluded by retrieval.
+request. A person still decides. Two or more failures at a rate of at least 40% flag the annotation. Flagged and expired entries are excluded by retrieval.
 These outcome associations are **correlation, not causation**.
 
 `KnowledgeService.sync()` (also `annotate sync --input ... --tower-root ...`)
@@ -56,7 +55,7 @@ the basis of an agent's verdict. Its input bundle stays host-private, including
 protected-value watch lists. It never creates or signs a judge attestation.
 
 The judge attestation schema is `annotation-outcome/1`: signed by the configured
-judge key, with `evaluation_class=public-calibration`, `independently_replayed`,
+judge key, with `evaluation_class=public-calibration` or `customer-factory`, `independently_replayed`,
 `run_id`, `run_receipt_sha256`, `customer_id`, `status`, affected `anchors`, and
 `context` containing `annotation_ids` and `full_context_sha256`; `context_sha256`
 hashes that context object. Sealed holdouts are rejected. Repair proposals accept
@@ -87,28 +86,53 @@ Build a fresh projection using the existing judge `graph-project` command with
 the existing **full** `graph-leak-check` and Tower projection approval. Annotations
 and the complete search index are inside `projection.json.gz`, so the manifest,
 leak certificate and Verify receipt's `context_projection_sha256` cover both.
-Regenerate/reapprove projections after ledger changes. An immutable projection
-is a reviewed snapshot, not a live view of later outcomes; revoke its approval
-and reload the reader when guidance is retired or flagged. Hosts must refresh
-Tower heads, not accept a head supplied by an agent.
+After building an annotated projection, the authority operator runs
+`annotate subscribe-revocations --projection PROJECTION_DIRECTORY` with the
+same ledger/trust/signing-key arguments used for ledger maintenance. This
+registers a host-owned signed revocation channel bound to the compressed
+projection hash and ledger public key. It does not approve the projection.
+Protect the ledger, subscription registry and projection `revocations/` directory
+against agent writes, including replacement of both head and list. Before any
+ledger event is appended, subscribed heads advance; an interrupted publication
+fails closed. Every guidance read verifies the live head, list, signature,
+projection, sequence and expiry. Flags, rejection and retirement take effect
+without rebuilding the projection. Missing, inconsistent or stale-head lists
+refuse guidance. New content or new trust promotions still need a new projection
+and approval. Signatures alone cannot stop an administrator rolling back both
+host files. Hosts must maintain trusted Tower heads independently of agents.
 
-Guidance includes node anchors or CONTAINS ancestors, ordered by specificity,
+Guidance includes node anchors, CONTAINS ancestors and descendant pitfalls ranked by proximity, then specificity,
 verified/asserted provenance and observed outcome strength, capped at 4 KB.
 `inspector_private`, expired and flagged entries are excluded. Inferred material
 requires **both** an operator-approved projection built with `--include-inferred`
 and the work order's `include_inferred_annotations: true`; Verify guidance always
 excludes inferred items.
 
-`graph_search(mode="hybrid", anchor=...)` combines deterministic BM25, local
-feature-hash vector ranking and graph distance using reciprocal ranks. Results
-carry lexical matches, a similarity bucket, graph paths and exact source ranges.
-The default vector provider is an explicitly versioned vocabulary/feature-hash
-baseline, **not** a pretrained embedding model; semantic quality beyond the
-public acceptance query remains unmeasured. It downloads nothing. The provider
-protocol admits separately configured implementations; external embedding needs
-a customer/mode-bound Tower proof and is always forbidden in confidential mode.
-The bundled Verify reader uses only the local provider and refuses an index
-requiring an unconfigured provider.
+`graph_search(mode="hybrid", anchor=...)` combines BM25 and graph proximity.
+The default provider is explicitly `keyword-only/2`: the hashed-vector baseline
+and hand-written five-word vocabulary have been removed. Literal-value nodes
+are excluded. Unambiguous abbreviation expansions come from explicit expansion
+notation in approved source comments, not acceptance-query words. The library
+caps results before building explanations (default 100, maximum 1,000). Old
+feature-hash indexes require rebuilding and reapproval; they are not silently
+interpreted under the new provider.
+
+A local CPU ONNX provider is available as an opt-in. Install the optional
+`graph-embeddings` dependencies, place the two public assets at a host-protected
+local directory, and verify the [pinned asset manifest](graph-review-r2/local-embedding-manifest.json).
+Pass `--hybrid --embedding-assets DIRECTORY --embedding-manifest MANIFEST` to
+`graph-project`. Configure the approved reader's host trust `local_embeddings`
+with `directory` and the manifest object. The provider verifies both hashes,
+loads ONNX from bytes with no download or remote-code path, masks padding before
+mean pooling and normalizes vectors. Text stays local. Nonempty annotations are
+never indexed: revoked guidance cannot linger through immutable search text.
+External embeddings remain forbidden in confidential mode.
+
+**No semantic-quality claim yet.** The [75-query plan](graph-review-r2/search-plan.json)
+binds the full graph (11,336 nodes), with a blank label pack for a reviewer who
+has not tuned search. Freeze their labels and exact projection before running.
+Hybrid promotion requires at least 5 percentage points absolute recall@5 gain
+and no MRR decrease. No embedding inference or held-out evaluation has run.
 
 ## Providers, matrix and routing
 
@@ -126,9 +150,12 @@ not a billing claim. No provider API was called during tests.
 `lightyear-factory run --provider configured --model-config host.json` uses
 `model_config.load_router`. The JSON has `models` (configuration ID → provider,
 model, input/output USD per million and max output tokens), `default`, optional
-`policy`, `matrix_receipt`, `approval` proof and host `trust`. Raw credentials are
-refused. The existing hardened executor needs a dedicated secret-store adapter
-for these providers; the CLI fails closed rather than reusing its OpenAI lease.
+`policy`, `matrix_receipt`, `approval` proof and host `trust`. Raw credentials in configuration are
+refused. In hardened execution, `HardenedSecretStore` leases each provider's
+named credential through the admitted work-order-scoped broker; the execution
+policy must allow that secret and role. A denied lease never falls back to an
+environment credential. Host compatibility mode retains environment credentials.
+No credential values are added to receipts.
 
 `evaluation_matrix.run_matrix()` requires an exact commit-specific Tower campaign
 authorization binding the matrix, models, dollar budget and public commit. The
@@ -137,14 +164,14 @@ trust config pins Howard's operator ID. Every cell invokes the existing
 No implicit retries or resume are permitted. Task type describes the cell's
 work objective, not isolated skill at a single role. Receipts bind catalog,
 evaluation, runs and each model-call record; missing/mismatched evidence fails.
-Metrics include pass rate, first-attempt passes, false accepts, tokens/cost per
+Metrics include pass rate with Wilson 95% intervals, first-attempt passes (`passed` on attempt 1 for every task), false accepts, tokens/cost per
 verified task, run wall time, separate elapsed model time and closed categories (holdout categories stay
 private). Runtime/mainframe qualification remains a separate claim.
 
 `factory/routing/policy.json` ships with no routes. A route only takes effect with
 a Tower `model-routing-policy` decision backed by the matrix and a review date at
 most 90 days from issue. Otherwise the single default model is used. Routes name
-primary/fallback configuration IDs and supporting matrix receipt hashes. Fallback
+primary/fallback configuration IDs, exact provider versions, and supporting matrix receipt hashes. Every relevant cell needs at least 10 distinct paired runs; a version change expires the policy. Fallback
 is only for provider errors, uses the **same** budget and never follows a failed
 business verdict. Every choice is recorded in the factory receipt. Campaign code
 does not import or invoke this router.
@@ -168,3 +195,22 @@ expiring entries, routing usage and search index/provider identities. Status is
 informational; admission always verifies the underlying proofs.
 
 No production parallel runner was added. See [the queue seam](specs/parallel-work-queue.md).
+
+## Prospective evaluations
+
+[Review revision 2](graph-review-r2/README.md) contains 16 inferred proposal drafts,
+a 75-query blank label pack, and draft matrix/A-B budgets. Nothing is approved or
+launched by those files. `routing_policy.compile_policy` proposes the cheapest
+single-model route meeting the predeclared Wilson rule on every workload with
+zero false accepts. If no model qualifies it emits no route. Tower displays the
+rule, cell-level intervals and exact versions. The existing empty default policy
+is unchanged.
+
+`escalation.EvaluationLadder` is a separate matrix arm: cheap on the first builder
+attempt, strong on later attempts with a closed diagnostic, within the original
+judge attempt/call/token/cost/deadline limits. It never starts a repair itself or
+falls back on a bad verdict. Every call (including failed calls) binds the arm,
+attempt and selected model. Matrix replay checks the ordered choices. A ladder
+cannot be promoted as if it were a single model; it needs its own reviewed
+policy after its separate matrix results. Live provider compatibility and cost
+savings remain unmeasured.

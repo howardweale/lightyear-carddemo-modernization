@@ -1,0 +1,426 @@
+{
+  "graph": {
+    "content_sha256": "d98bd92d752f23ee19263aa0957c28ee5aac52966d1322f6a31d4a9960394dc9",
+    "edges": 13491,
+    "nodes": 11336,
+    "path": "knowledge/graph.snapshot.json.gz",
+    "sha256": "07e419b195293c7e6c2e901769a013dcff2520da9836827c5f71150c60764bec"
+  },
+  "proposals": [
+    {
+      "annotation": {
+        "anchors": [
+          "workload:carddemo-intcalc"
+        ],
+        "created_by": "agent:graph-review",
+        "customer_id": "carddemo-reference",
+        "evidence": [],
+        "id": "ann:79eab60f51a5b441bb407f56a1596961aaed291553c1de0d2e64dfef342de5b1",
+        "portable": false,
+        "provenance": "inferred",
+        "review_after": "2026-11-06",
+        "scope": "workload",
+        "source": "agent-proposed",
+        "text": "For INTCALC, review the decimal semantics contract before accepting a repair. This is an inferred checklist from the public factory corpus, not evidence that this guidance improves outcomes.",
+        "type": "pitfall",
+        "visibility": "implementer"
+      },
+      "category": "decimal-semantics",
+      "source_case_id": "rounding",
+      "source_catalog": "factory/evals/intcalc-v0.26-public.json",
+      "source_catalog_sha256": "16be537b4bd627ea8a5b3841e82cea0af9064542f17e0ef43ff556cb70a819d2",
+      "tower_decision": null,
+      "trust": "proposal-only"
+    },
+    {
+      "annotation": {
+        "anchors": [
+          "workload:carddemo-intcalc"
+        ],
+        "created_by": "agent:graph-review",
+        "customer_id": "carddemo-reference",
+        "evidence": [],
+        "id": "ann:7a779d4b601d23296dec41f2e2ecf71b8de4aa1b746113ab0f630edcc33ad22a",
+        "portable": false,
+        "provenance": "inferred",
+        "review_after": "2026-11-06",
+        "scope": "workload",
+        "source": "agent-proposed",
+        "text": "For INTCALC, review the interest policy contract before accepting a repair. This is an inferred checklist from the public factory corpus, not evidence that this guidance improves outcomes.",
+        "type": "pitfall",
+        "visibility": "implementer"
+      },
+      "category": "interest-policy",
+      "source_case_id": "divisor",
+      "source_catalog": "factory/evals/intcalc-v0.26-public.json",
+      "source_catalog_sha256": "16be537b4bd627ea8a5b3841e82cea0af9064542f17e0ef43ff556cb70a819d2",
+      "tower_decision": null,
+      "trust": "proposal-only"
+    },
+    {
+      "annotation": {
+        "anchors": [
+          "workload:carddemo-intcalc"
+        ],
+        "created_by": "agent:graph-review",
+        "customer_id": "carddemo-reference",
+        "evidence": [],
+        "id": "ann:0691a58a4b0a806795f5c5c2649b2dd4dbd91a5d44ce01065bf8f72664317bc3",
+        "portable": false,
+        "provenance": "inferred",
+        "review_after": "2026-11-06",
+        "scope": "workload",
+        "source": "agent-proposed",
+        "text": "For INTCALC, review the disclosure policy contract before accepting a repair. This is an inferred checklist from the public factory corpus, not evidence that this guidance improves outcomes.",
+        "type": "pitfall",
+        "visibility": "implementer"
+      },
+      "category": "disclosure-policy",
+      "source_case_id": "fallback",
+      "source_catalog": "factory/evals/intcalc-v0.26-public.json",
+      "source_catalog_sha256": "16be537b4bd627ea8a5b3841e82cea0af9064542f17e0ef43ff556cb70a819d2",
+      "tower_decision": null,
+      "trust": "proposal-only"
+    },
+    {
+      "annotation": {
+        "anchors": [
+          "workload:carddemo-intcalc"
+        ],
+        "created_by": "agent:graph-review",
+        "customer_id": "carddemo-reference",
+        "evidence": [],
+        "id": "ann:953e98473af0988eef49dc9f3b68e0d471f76d138a25a1d530a53f996d4d53a3",
+        "portable": false,
+        "provenance": "inferred",
+        "review_after": "2026-11-06",
+        "scope": "workload",
+        "source": "agent-proposed",
+        "text": "For INTCALC, review the transaction policy contract before accepting a repair. This is an inferred checklist from the public factory corpus, not evidence that this guidance improves outcomes.",
+        "type": "pitfall",
+        "visibility": "implementer"
+      },
+      "category": "transaction-policy",
+      "source_case_id": "zero-rate",
+      "source_catalog": "factory/evals/intcalc-v0.26-public.json",
+      "source_catalog_sha256": "16be537b4bd627ea8a5b3841e82cea0af9064542f17e0ef43ff556cb70a819d2",
+      "tower_decision": null,
+      "trust": "proposal-only"
+    },
+    {
+      "annotation": {
+        "anchors": [
+          "legacy:cobol-paragraph:CBTRN02C:2000-POST-TRANSACTION",
+          "legacy:jcl-job:POSTTRAN"
+        ],
+        "created_by": "agent:graph-review",
+        "customer_id": "carddemo-reference",
+        "evidence": [],
+        "id": "ann:3a56fd2022e5e6b2c77b9baa76da8dc7421ec0cf61eefc75149a7b1a87330f9b",
+        "portable": false,
+        "provenance": "inferred",
+        "review_after": "2026-11-06",
+        "scope": "workload",
+        "source": "agent-proposed",
+        "text": "For POSTTRAN, review the program binding contract before accepting a repair. This is an inferred checklist from the public factory corpus, not evidence that this guidance improves outcomes.",
+        "type": "pitfall",
+        "visibility": "implementer"
+      },
+      "category": "program-binding",
+      "source_case_id": "program",
+      "source_catalog": "factory/evals/posttran-v0.26-public.json",
+      "source_catalog_sha256": "218f38bf5d4f10c2ce08455ff92899d682dbf938ad97ad07ccaa3ece374f3e84",
+      "tower_decision": null,
+      "trust": "proposal-only"
+    },
+    {
+      "annotation": {
+        "anchors": [
+          "legacy:cobol-paragraph:CBTRN02C:2000-POST-TRANSACTION",
+          "legacy:jcl-job:POSTTRAN"
+        ],
+        "created_by": "agent:graph-review",
+        "customer_id": "carddemo-reference",
+        "evidence": [],
+        "id": "ann:0ac73550a2924003b238a936afb85465c71a6845d2c01197ce140d3fd3fb0e9f",
+        "portable": false,
+        "provenance": "inferred",
+        "review_after": "2026-11-06",
+        "scope": "workload",
+        "source": "agent-proposed",
+        "text": "For POSTTRAN, review the record layout contract before accepting a repair. This is an inferred checklist from the public factory corpus, not evidence that this guidance improves outcomes.",
+        "type": "pitfall",
+        "visibility": "implementer"
+      },
+      "category": "record-layout",
+      "source_case_id": "transaction-length",
+      "source_catalog": "factory/evals/posttran-v0.26-public.json",
+      "source_catalog_sha256": "218f38bf5d4f10c2ce08455ff92899d682dbf938ad97ad07ccaa3ece374f3e84",
+      "tower_decision": null,
+      "trust": "proposal-only"
+    },
+    {
+      "annotation": {
+        "anchors": [
+          "legacy:cobol-paragraph:CBTRN02C:2000-POST-TRANSACTION",
+          "legacy:jcl-job:POSTTRAN"
+        ],
+        "created_by": "agent:graph-review",
+        "customer_id": "carddemo-reference",
+        "evidence": [],
+        "id": "ann:0ac73550a2924003b238a936afb85465c71a6845d2c01197ce140d3fd3fb0e9f",
+        "portable": false,
+        "provenance": "inferred",
+        "review_after": "2026-11-06",
+        "scope": "workload",
+        "source": "agent-proposed",
+        "text": "For POSTTRAN, review the record layout contract before accepting a repair. This is an inferred checklist from the public factory corpus, not evidence that this guidance improves outcomes.",
+        "type": "pitfall",
+        "visibility": "implementer"
+      },
+      "category": "record-layout",
+      "source_case_id": "balance-length",
+      "source_catalog": "factory/evals/posttran-v0.26-public.json",
+      "source_catalog_sha256": "218f38bf5d4f10c2ce08455ff92899d682dbf938ad97ad07ccaa3ece374f3e84",
+      "tower_decision": null,
+      "trust": "proposal-only"
+    },
+    {
+      "annotation": {
+        "anchors": [
+          "legacy:cobol-paragraph:CBTRN02C:2000-POST-TRANSACTION",
+          "legacy:jcl-job:POSTTRAN"
+        ],
+        "created_by": "agent:graph-review",
+        "customer_id": "carddemo-reference",
+        "evidence": [],
+        "id": "ann:f24435fbae8cb6f62420a8e25a6846ab9c8bba1b178db7d70e131eb0d61b692d",
+        "portable": false,
+        "provenance": "inferred",
+        "review_after": "2026-11-06",
+        "scope": "workload",
+        "source": "agent-proposed",
+        "text": "For POSTTRAN, review the transaction policy contract before accepting a repair. This is an inferred checklist from the public factory corpus, not evidence that this guidance improves outcomes.",
+        "type": "pitfall",
+        "visibility": "implementer"
+      },
+      "category": "transaction-policy",
+      "source_case_id": "approved-status",
+      "source_catalog": "factory/evals/posttran-v0.26-public.json",
+      "source_catalog_sha256": "218f38bf5d4f10c2ce08455ff92899d682dbf938ad97ad07ccaa3ece374f3e84",
+      "tower_decision": null,
+      "trust": "proposal-only"
+    },
+    {
+      "annotation": {
+        "anchors": [
+          "legacy:cobol-paragraph:CBSTM03A:5000-CREATE-STATEMENT",
+          "legacy:jcl-job:CREASTMT"
+        ],
+        "created_by": "agent:graph-review",
+        "customer_id": "carddemo-reference",
+        "evidence": [],
+        "id": "ann:e02d936addbeae83d536bebee046a6a6c1d115f4ddfbbd0685c90adb76993698",
+        "portable": false,
+        "provenance": "inferred",
+        "review_after": "2026-11-06",
+        "scope": "workload",
+        "source": "agent-proposed",
+        "text": "For CREASTMT, review the program binding contract before accepting a repair. This is an inferred checklist from the public factory corpus, not evidence that this guidance improves outcomes.",
+        "type": "pitfall",
+        "visibility": "implementer"
+      },
+      "category": "program-binding",
+      "source_case_id": "program",
+      "source_catalog": "factory/evals/creastmt-v0.26-public.json",
+      "source_catalog_sha256": "030430d47ef6c3d5d9409f20cd2fc81ff8f39fd7705b6f09927310c19927d2dd",
+      "tower_decision": null,
+      "trust": "proposal-only"
+    },
+    {
+      "annotation": {
+        "anchors": [
+          "legacy:cobol-paragraph:CBSTM03A:5000-CREATE-STATEMENT",
+          "legacy:jcl-job:CREASTMT"
+        ],
+        "created_by": "agent:graph-review",
+        "customer_id": "carddemo-reference",
+        "evidence": [],
+        "id": "ann:f79964e26ba281b579f0f70f077f232d9cd0d58f07507fb1cfc03945c854c306",
+        "portable": false,
+        "provenance": "inferred",
+        "review_after": "2026-11-06",
+        "scope": "workload",
+        "source": "agent-proposed",
+        "text": "For CREASTMT, review the record layout contract before accepting a repair. This is an inferred checklist from the public factory corpus, not evidence that this guidance improves outcomes.",
+        "type": "pitfall",
+        "visibility": "implementer"
+      },
+      "category": "record-layout",
+      "source_case_id": "record-length",
+      "source_catalog": "factory/evals/creastmt-v0.26-public.json",
+      "source_catalog_sha256": "030430d47ef6c3d5d9409f20cd2fc81ff8f39fd7705b6f09927310c19927d2dd",
+      "tower_decision": null,
+      "trust": "proposal-only"
+    },
+    {
+      "annotation": {
+        "anchors": [
+          "legacy:cobol-paragraph:CBSTM03A:5000-CREATE-STATEMENT",
+          "legacy:jcl-job:CREASTMT"
+        ],
+        "created_by": "agent:graph-review",
+        "customer_id": "carddemo-reference",
+        "evidence": [],
+        "id": "ann:a62ac720ea2936ebb06153e91a0a55ee462f2aafd5d866207eb27dc61c540eea",
+        "portable": false,
+        "provenance": "inferred",
+        "review_after": "2026-11-06",
+        "scope": "workload",
+        "source": "agent-proposed",
+        "text": "For CREASTMT, review the output contract contract before accepting a repair. This is an inferred checklist from the public factory corpus, not evidence that this guidance improves outcomes.",
+        "type": "pitfall",
+        "visibility": "implementer"
+      },
+      "category": "output-contract",
+      "source_case_id": "html-output",
+      "source_catalog": "factory/evals/creastmt-v0.26-public.json",
+      "source_catalog_sha256": "030430d47ef6c3d5d9409f20cd2fc81ff8f39fd7705b6f09927310c19927d2dd",
+      "tower_decision": null,
+      "trust": "proposal-only"
+    },
+    {
+      "annotation": {
+        "anchors": [
+          "legacy:cobol-paragraph:CBSTM03A:5000-CREATE-STATEMENT",
+          "legacy:jcl-job:CREASTMT"
+        ],
+        "created_by": "agent:graph-review",
+        "customer_id": "carddemo-reference",
+        "evidence": [],
+        "id": "ann:319e710044bdb69e5a171a7653f472682c210fcac1c0b43661ce8d0931fc8fb7",
+        "portable": false,
+        "provenance": "inferred",
+        "review_after": "2026-11-06",
+        "scope": "workload",
+        "source": "agent-proposed",
+        "text": "For CREASTMT, review the ordering contract before accepting a repair. This is an inferred checklist from the public factory corpus, not evidence that this guidance improves outcomes.",
+        "type": "pitfall",
+        "visibility": "implementer"
+      },
+      "category": "ordering",
+      "source_case_id": "sort-order",
+      "source_catalog": "factory/evals/creastmt-v0.26-public.json",
+      "source_catalog_sha256": "030430d47ef6c3d5d9409f20cd2fc81ff8f39fd7705b6f09927310c19927d2dd",
+      "tower_decision": null,
+      "trust": "proposal-only"
+    },
+    {
+      "annotation": {
+        "anchors": [
+          "legacy:cobol-program:CBACT04C",
+          "legacy:db2-table:CARDDEMO.AUTHFRDS"
+        ],
+        "created_by": "agent:graph-review",
+        "customer_id": "carddemo-reference",
+        "evidence": [],
+        "id": "ann:a3deae6b31bb53ee15d33bc69e8bf0e4497511a63bdfcb08dd7f10d207b2dd4f",
+        "portable": false,
+        "provenance": "inferred",
+        "review_after": "2026-11-06",
+        "scope": "workload",
+        "source": "agent-proposed",
+        "text": "For ACCTPL1, review the risk policy contract before accepting a repair. This is an inferred checklist from the public factory corpus, not evidence that this guidance improves outcomes.",
+        "type": "pitfall",
+        "visibility": "implementer"
+      },
+      "category": "risk-policy",
+      "source_case_id": "fraud-score",
+      "source_catalog": "factory/evals/acctpl1-v0.26-public.json",
+      "source_catalog_sha256": "a7640605cbcbe600c10b60b74bb737abc52b1b7cab7f18d11b339c4c7cb3f5f5",
+      "tower_decision": null,
+      "trust": "proposal-only"
+    },
+    {
+      "annotation": {
+        "anchors": [
+          "legacy:cobol-program:CBACT04C",
+          "legacy:db2-table:CARDDEMO.AUTHFRDS"
+        ],
+        "created_by": "agent:graph-review",
+        "customer_id": "carddemo-reference",
+        "evidence": [],
+        "id": "ann:1b28c5c8463cb674a6f6ce01f2aad8bfb7eb7f24eec8ced2ffdd271230f6d70c",
+        "portable": false,
+        "provenance": "inferred",
+        "review_after": "2026-11-06",
+        "scope": "workload",
+        "source": "agent-proposed",
+        "text": "For ACCTPL1, review the decimal semantics contract before accepting a repair. This is an inferred checklist from the public factory corpus, not evidence that this guidance improves outcomes.",
+        "type": "pitfall",
+        "visibility": "implementer"
+      },
+      "category": "decimal-semantics",
+      "source_case_id": "divisor",
+      "source_catalog": "factory/evals/acctpl1-v0.26-public.json",
+      "source_catalog_sha256": "a7640605cbcbe600c10b60b74bb737abc52b1b7cab7f18d11b339c4c7cb3f5f5",
+      "tower_decision": null,
+      "trust": "proposal-only"
+    },
+    {
+      "annotation": {
+        "anchors": [
+          "legacy:cobol-program:CBACT04C",
+          "legacy:db2-table:CARDDEMO.AUTHFRDS"
+        ],
+        "created_by": "agent:graph-review",
+        "customer_id": "carddemo-reference",
+        "evidence": [],
+        "id": "ann:4303b2588c518df14fbfcc1099373bea3fd0af651343ab66034e745e8fde7e01",
+        "portable": false,
+        "provenance": "inferred",
+        "review_after": "2026-11-06",
+        "scope": "workload",
+        "source": "agent-proposed",
+        "text": "For ACCTPL1, review the db2 boundary contract before accepting a repair. This is an inferred checklist from the public factory corpus, not evidence that this guidance improves outcomes.",
+        "type": "pitfall",
+        "visibility": "implementer"
+      },
+      "category": "db2-boundary",
+      "source_case_id": "db-assignment",
+      "source_catalog": "factory/evals/acctpl1-v0.26-public.json",
+      "source_catalog_sha256": "a7640605cbcbe600c10b60b74bb737abc52b1b7cab7f18d11b339c4c7cb3f5f5",
+      "tower_decision": null,
+      "trust": "proposal-only"
+    },
+    {
+      "annotation": {
+        "anchors": [
+          "legacy:cobol-program:CBACT04C",
+          "legacy:db2-table:CARDDEMO.AUTHFRDS"
+        ],
+        "created_by": "agent:graph-review",
+        "customer_id": "carddemo-reference",
+        "evidence": [],
+        "id": "ann:6f9a0f5a091ef29a5a5c7e662160d6c96db4ef08d77a9e9dbcf1ef96ca4b2892",
+        "portable": false,
+        "provenance": "inferred",
+        "review_after": "2026-11-06",
+        "scope": "workload",
+        "source": "agent-proposed",
+        "text": "For ACCTPL1, review the mixed language call contract before accepting a repair. This is an inferred checklist from the public factory corpus, not evidence that this guidance improves outcomes.",
+        "type": "pitfall",
+        "visibility": "implementer"
+      },
+      "category": "mixed-language-call",
+      "source_case_id": "cobol-target",
+      "source_catalog": "factory/evals/acctpl1-v0.26-public.json",
+      "source_catalog_sha256": "a7640605cbcbe600c10b60b74bb737abc52b1b7cab7f18d11b339c4c7cb3f5f5",
+      "tower_decision": null,
+      "trust": "proposal-only"
+    }
+  ],
+  "schema": "graph-memory-seed-drafts/1",
+  "source": "public factory repair categories only; no campaign evidence or invented Tower decisions",
+  "status": "unsubmitted"
+}

@@ -25,7 +25,7 @@ def evidence_view(root, item):
     allowed = {
         "leak_check": ("schema", "annotation", "eligible", "inventory_sha256", "portable"),
         "outcome_summary": ("annotation", "runs", "passes", "failures", "eligible_for_verified", "flagged", "failure_after_apply_rate", "attribution"),
-        "policy": ("schema", "routes", "review_after"),
+        "policy": ("schema", "routes", "review_after", "rule", "compiler_output", "model_versions"),
         "matrix_receipt": ("schema", "content_sha256", "cells", "false_acceptances"),
         "provider": ("id", "version", "local"),
         "qualification": (

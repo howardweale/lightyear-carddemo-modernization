@@ -200,6 +200,8 @@ class MemoryTests(unittest.TestCase):
         self.outcome(a, 5, "failed")
         self.assertFalse(outcome_summary(self.ledger.replay()[a["id"]])["flagged"])
         self.outcome(a, 6, "failed")
+        self.outcome(a, 7, "failed")
+        self.outcome(a, 8, "failed")
         self.assertEqual(
             retrieve(self.ledger.replay(), ["paragraph"], [], "public")["items"], []
         )

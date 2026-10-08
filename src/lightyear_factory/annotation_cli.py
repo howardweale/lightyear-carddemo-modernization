@@ -29,6 +29,8 @@ def parser(subparsers):
     add.add_argument("--scope", default="node")
     subs.add_parser("health")
     subs.add_parser("replay")
+    live=subs.add_parser('subscribe-revocations')
+    live.add_argument('--projection',type=Path,required=True)
     apply = subs.add_parser("apply")
     apply.add_argument(
         "--event",
@@ -87,6 +89,9 @@ def run(args):
             json.loads(args.leak_checks.read_bytes()),
         )
     signer = Signer(args.signing_key)
+    if args.annotation_command=='subscribe-revocations':
+        from .revocations import subscribe
+        return subscribe(ledger,signer,args.projection)
     if args.annotation_command in {"sync", "status-export"}:
         from .knowledge_service import KnowledgeService
 

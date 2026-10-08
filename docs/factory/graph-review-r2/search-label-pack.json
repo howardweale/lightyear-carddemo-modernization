@@ -1,0 +1,539 @@
+{
+  "graph": {
+    "content_sha256": "d98bd92d752f23ee19263aa0957c28ee5aac52966d1322f6a31d4a9960394dc9",
+    "edges": 13491,
+    "nodes": 11336,
+    "path": "knowledge/graph.snapshot.json.gz",
+    "sha256": "07e419b195293c7e6c2e901769a013dcff2520da9836827c5f71150c60764bec"
+  },
+  "instructions": "A reviewer who did not tune search supplies the query and relevant graph node IDs. Spread across programs, paragraphs, copybooks, fields, jobs and relationships; do not copy acceptance-test queries.",
+  "queries": [
+    {
+      "author": null,
+      "category": "paragraph",
+      "id": "q001",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "copybook",
+      "id": "q002",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "field",
+      "id": "q003",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "job",
+      "id": "q004",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "relationship",
+      "id": "q005",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "program",
+      "id": "q006",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "paragraph",
+      "id": "q007",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "copybook",
+      "id": "q008",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "field",
+      "id": "q009",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "job",
+      "id": "q010",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "relationship",
+      "id": "q011",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "program",
+      "id": "q012",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "paragraph",
+      "id": "q013",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "copybook",
+      "id": "q014",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "field",
+      "id": "q015",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "job",
+      "id": "q016",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "relationship",
+      "id": "q017",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "program",
+      "id": "q018",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "paragraph",
+      "id": "q019",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "copybook",
+      "id": "q020",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "field",
+      "id": "q021",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "job",
+      "id": "q022",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "relationship",
+      "id": "q023",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "program",
+      "id": "q024",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "paragraph",
+      "id": "q025",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "copybook",
+      "id": "q026",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "field",
+      "id": "q027",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "job",
+      "id": "q028",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "relationship",
+      "id": "q029",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "program",
+      "id": "q030",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "paragraph",
+      "id": "q031",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "copybook",
+      "id": "q032",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "field",
+      "id": "q033",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "job",
+      "id": "q034",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "relationship",
+      "id": "q035",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "program",
+      "id": "q036",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "paragraph",
+      "id": "q037",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "copybook",
+      "id": "q038",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "field",
+      "id": "q039",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "job",
+      "id": "q040",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "relationship",
+      "id": "q041",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "program",
+      "id": "q042",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "paragraph",
+      "id": "q043",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "copybook",
+      "id": "q044",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "field",
+      "id": "q045",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "job",
+      "id": "q046",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "relationship",
+      "id": "q047",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "program",
+      "id": "q048",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "paragraph",
+      "id": "q049",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "copybook",
+      "id": "q050",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "field",
+      "id": "q051",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "job",
+      "id": "q052",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "relationship",
+      "id": "q053",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "program",
+      "id": "q054",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "paragraph",
+      "id": "q055",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "copybook",
+      "id": "q056",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "field",
+      "id": "q057",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "job",
+      "id": "q058",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "relationship",
+      "id": "q059",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "program",
+      "id": "q060",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "paragraph",
+      "id": "q061",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "copybook",
+      "id": "q062",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "field",
+      "id": "q063",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "job",
+      "id": "q064",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "relationship",
+      "id": "q065",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "program",
+      "id": "q066",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "paragraph",
+      "id": "q067",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "copybook",
+      "id": "q068",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "field",
+      "id": "q069",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "job",
+      "id": "q070",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "relationship",
+      "id": "q071",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "program",
+      "id": "q072",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "paragraph",
+      "id": "q073",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "copybook",
+      "id": "q074",
+      "query": null,
+      "relevant_ids": []
+    },
+    {
+      "author": null,
+      "category": "field",
+      "id": "q075",
+      "query": null,
+      "relevant_ids": []
+    }
+  ],
+  "schema": "graph-search-label-pack/1",
+  "status": "blank; not gold labels"
+}

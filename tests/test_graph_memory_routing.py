@@ -181,11 +181,13 @@ class RoutingTests(unittest.TestCase):
         matrix = dict(
             schema="factory-evaluation-matrix/1",
             false_acceptances=0,
-            cells=[dict(model=m, task_type="plan") for m in providers],
+            cells=[dict(model=m,model_version=m,task_type="plan",run_count=10,
+                runs=[m+str(i) for i in range(10)],pair_ids=[str(i) for i in range(10)]) for m in providers],
         )
         matrix["content_sha256"] = digest(matrix)
         policy = dict(
             schema="factory-routing-policy/1",
+            model_versions={m:m for m in providers},
             routes={
                 "plan": dict(
                     primary="primary",
@@ -230,6 +232,15 @@ class RoutingTests(unittest.TestCase):
             b.complete("planner", "", {}, SCHEMA)
             self.assertEqual(providers["default"].calls, 1)
             self.assertIsNone(b.summary()["routing"][0]["policy_sha256"])
+
+    def test_changed_provider_version_expires_approved_policy(self):
+        providers={m:FakeProvider(m) for m in ('default','primary','fallback')}
+        router=self.router(providers)
+        providers['primary'].model='unreviewed-version'
+        b=router.bind_order(benchmark_work_order('rounding-mode'))
+        b.complete('planner','',{},SCHEMA)
+        self.assertEqual(providers['primary'].calls,0)
+        self.assertEqual(providers['default'].calls,1)
 
     def test_provider_error_only_fallback_and_shared_budget(self):
         providers = {m: FakeProvider(m) for m in ("default", "primary", "fallback")}

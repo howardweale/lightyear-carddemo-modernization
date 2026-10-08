@@ -13,6 +13,14 @@ from lightyear_control_tower.decisions import digest, canonical
 WORKLOADS = {"INTCALC", "POSTTRAN", "CREASTMT", "ACCTPL1"}
 
 
+def wilson(successes, count):
+    if not count:return None
+    z=1.959963984540054;p=successes/count;d=1+z*z/count
+    center=(p+z*z/(2*count))/d
+    half=z*math.sqrt(p*(1-p)/count+z*z/(4*count*count))/d
+    return [max(0,center-half),min(1,center+half)]
+
+
 def check_hash(value):
     if value.get("content_sha256") != canonical_hash(value, {"content_sha256"}):
         raise ContractError("matrix evidence content hash mismatch")
@@ -39,6 +47,7 @@ def aggregate(plan, cells):
         used_runs = set()
         wall_ms = 0
         for result in evaluation["results"]:
+            builder_attempt = 0
             ref = result["receipt_sha256"]
             if ref not in runs or ref in used_runs:
                 raise ContractError("missing or reused matrix run")
@@ -47,6 +56,8 @@ def aggregate(plan, cells):
             used_runs.add(ref)
             if run["status"] != result["status"]:
                 raise ContractError("matrix verdict mismatch")
+            if result.get('attempts')!=run.get('attempts'):
+                raise ContractError('matrix attempt-count mismatch')
             start, end = (
                 datetime.fromisoformat(run[k]) for k in ("started_at", "completed_at")
             )
@@ -62,8 +73,13 @@ def aggregate(plan, cells):
                 c = calls[ref]
                 check_hash(c)
                 used.add(ref)
-                if c["model"] != expected.get("model_id", expected["model"]):
+                if expected.get('escalation_arm'):
+                    from .escalation import replay_call
+                    builder_attempt = replay_call(c, expected['escalation_arm'], builder_attempt)
+                elif c["model"] != expected.get("model_id", expected["model"]):
                     raise ContractError("matrix model mismatch")
+            if expected.get('escalation_arm') and builder_attempt != run.get('attempts'):
+                raise ContractError('matrix ladder attempt-count mismatch')
         if used != set(calls) or used_runs != set(runs):
             raise ContractError("unbound matrix evidence")
         results = evaluation["results"]
@@ -88,15 +104,21 @@ def aggregate(plan, cells):
             dict(
                 task_type=expected["task_type"],
                 model=expected["model"],
+                model_version=expected.get('model_id',expected['model']),
+                escalation_arm=expected.get('escalation_arm'),
                 workload=expected["workload"],
                 evaluation_class=expected["evaluation_class"],
                 catalog_sha256=expected["catalog_sha256"],
                 evaluation_sha256=evaluation["content_sha256"],
                 runs=sorted(runs),
+                pair_ids=sorted(r['case_ref'] for r in results if r.get('case_ref')),
                 model_calls=sorted(calls),
                 pass_rate=passed / count if count else None,
+                run_count=count,
+                passed=passed,
+                wilson_95=wilson(passed,count),
                 first_attempt_pass=sum(
-                    bool(r.get("first_attempt_repair") or r.get("correct_no_change"))
+                    r['status']=='passed' and not r['false_acceptance'] and r.get('attempts')==1
                     for r in results
                 ),
                 false_acceptances=evaluation["false_acceptances"],

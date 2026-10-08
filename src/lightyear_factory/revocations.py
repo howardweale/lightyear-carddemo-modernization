@@ -40,7 +40,7 @@ def subscriptions_for(ledger,events=None):
 def publish(ledger,signer,subscriptions,*,now=None):
     events=ledger.events();states=ledger.replay(events);today=(now or datetime.now(timezone.utc)).date()
     if subscriptions!=subscriptions_for(ledger,events):raise ValueError('subscription binding')
-    common=dict(**validity(now),channel=binding(ledger)['channel'],sequence=len(events),
+    common=dict(**validity(now),channel=binding(ledger)['channel'],sequence=len(events)*10000000+today.toordinal(),ledger_sequence=len(events),
                 ledger_head=events[-1]['content_sha256'] if events else ZERO)
     # Publish each head first: an interrupted list update refuses guidance.
     for subscription in subscriptions:

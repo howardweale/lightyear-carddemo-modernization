@@ -14,7 +14,7 @@ def configured_models(config, *, secret_store=None):
     for identifier, c in config["models"].items():
         if not c.get("model") or any(k in c for k in ("api_key", "token", "password")):
             raise ValueError(
-                "configure model identifiers and environment credentials only"
+                "configure model identifiers and scoped credential broker only"
             )
         prices = {
             k: c[k]
@@ -37,7 +37,8 @@ def configured_models(config, *, secret_store=None):
         require_snapshot(c["model"])
         from .provider_secrets import NAMES
         name=NAMES[c['provider']]
-        key=secret_store.read(name) if secret_store is not None else os.environ.get(name,'')
+        if secret_store is None:raise ValueError('scoped credential broker required')
+        key=secret_store.read(name)
         if not key:raise ValueError('provider credential unavailable')
         if c["provider"] == "openai":
             p = SnapshotOpenAIResponsesProvider(

@@ -1,0 +1,9 @@
+[Unit]
+Description=Refresh annotation revocations every five minutes
+[Timer]
+OnBootSec=30s
+OnUnitActiveSec=5min
+AccuracySec=10s
+Persistent=true
+[Install]
+WantedBy=timers.target

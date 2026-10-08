@@ -183,7 +183,7 @@ class RoutingTests(unittest.TestCase):
             cells=[dict(model=m, model_version=m, task_type='plan', workload='INTCALC',
                 run_count=35,passed=35,false_acceptances=0,
                 cost_per_verified_task={'primary':1,'fallback':2,'default':3}[m],
-                runs=[m+str(i) for i in range(35)],pair_ids=[str(i) for i in range(35)])
+                runs=[m+str(i) for i in range(35)],pair_ids=[str(i) for i in range(35)],paired_outcomes={str(i):True for i in range(35)})
                 for m in providers]))
         policy = compile_policy(matrix,margin=.1)
         proof = (

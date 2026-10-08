@@ -61,7 +61,7 @@ class ComponentTests(unittest.TestCase):
             dict(id='b',kind='field',name='AMT-TOTAL'),
             dict(id='c',kind='literal',name='AMT'),dict(id='d',kind='field',name='15')])
         p['search_index']=build_index(p)
-        self.assertEqual(p['search_index']['abbreviations'],{'amt':'amount'})
+        self.assertEqual(p['search_index']['abbreviations'],{})
         self.assertEqual({r['id'] for r in p['search_index']['documents']},{'a','b'})
         self.assertEqual(len(search(p,'amount',top_k=1)),1)
         self.assertEqual(search(p,'monthly interest on account balance'),[])
@@ -87,7 +87,7 @@ class ComponentTests(unittest.TestCase):
             for workload in ('INTCALC','POSTTRAN','CREASTMT','ACCTPL1'):
                 rows.append(dict(task_type='implement',model=model,model_version=model+'-v1',workload=workload,
                     run_count=n,passed=n,runs=[f'{model}/{workload}/{i}' for i in range(n)],
-                    pair_ids=[str(i) for i in range(n)],false_acceptances=0,cost_per_verified_task=cost))
+                    pair_ids=[str(i) for i in range(n)],paired_outcomes={str(i):True for i in range(n)},false_acceptances=0,cost_per_verified_task=cost))
         return hashed(dict(schema='factory-evaluation-matrix/1',false_acceptances=0,cells=rows))
 
     def test_compiler_wilson_sample_floor_pairing_and_no_false_accepts(self):
@@ -171,7 +171,7 @@ class SecondReviewComponentTests(unittest.TestCase):
             dict(id='b',kind='paragraph',name='PROCESSING'),dict(id='c',kind='field',name='NEXT'),
             dict(id='d',kind='field',name='NOEXTENDED'),dict(id='e',kind='paragraph',name='PROGRAM-ID')],edges=[])
         index=build_index(p)
-        self.assertEqual(index['abbreviations'].get('proc'),'processing')
+        self.assertEqual(index['abbreviations'],{})
         self.assertNotIn('next',index['abbreviations'])
         self.assertNotIn('e',{d['id'] for d in index['documents']})
 

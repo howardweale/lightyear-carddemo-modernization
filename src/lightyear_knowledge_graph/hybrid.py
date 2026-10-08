@@ -93,7 +93,8 @@ def build_index(projection, provider=None, *, approval=None, trust=None, now=Non
         )
         authorization = approval["decision_sha256"]
     docs = []
-    vocabulary=abbreviations(projection['nodes'])
+    # Mining is a review queue only. No independently approved vocabulary exists yet.
+    vocabulary={}
     for n in sorted(projection["nodes"], key=lambda n: n["id"]):
         if not indexable(n):continue
         text = " ".join(

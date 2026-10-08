@@ -1,0 +1,127 @@
+{
+  "launch_conditions": "No model execution, local embedding evaluation, policy promotion or Tower approval is implied by these drafts.",
+  "memory_ab": {
+    "arms": [
+      "memory-off",
+      "approved-memory-on"
+    ],
+    "blockers": [
+      "leak certificates and Tower decisions for selected seed proposals",
+      "five judge-replayed outcomes before any verified promotion",
+      "paired task catalog and exact projection/context hashes",
+      "Howard exact plan and budget approval"
+    ],
+    "paired_cases_per_workload": 10,
+    "primary": "cost per verified program",
+    "proposed_max_cost_usd": 50,
+    "report": [
+      "pass rate and Wilson interval",
+      "tokens per verified program",
+      "zero-pass denominator undefined",
+      "failures and all attempts retained"
+    ],
+    "total_trials": 80,
+    "workloads": [
+      "INTCALC",
+      "POSTTRAN",
+      "CREASTMT",
+      "ACCTPL1"
+    ]
+  },
+  "model_calls": 0,
+  "models": {
+    "cheap": null,
+    "strong": null
+  },
+  "schema": "graph-evaluation-proposals/2",
+  "source_catalogs": [
+    {
+      "catalog_sha256": "5d6de9551b14b7641eda67c979394e3bdd52c4cd458e5c837c8220ca312ac006",
+      "path": "factory/evals/intcalc-v0.26-public.json",
+      "sha256": "16be537b4bd627ea8a5b3841e82cea0af9064542f17e0ef43ff556cb70a819d2",
+      "workload": "INTCALC"
+    },
+    {
+      "catalog_sha256": "890613e47000347a8e92e17260d8bb3f7c559092f7039ddff2ce29bd0de51b4e",
+      "path": "factory/evals/posttran-v0.26-public.json",
+      "sha256": "218f38bf5d4f10c2ce08455ff92899d682dbf938ad97ad07ccaa3ece374f3e84",
+      "workload": "POSTTRAN"
+    },
+    {
+      "catalog_sha256": "ed0d4db999a0578d67efe205a440a69b489bdb3f72c945eb24dafc874f326ba5",
+      "path": "factory/evals/creastmt-v0.26-public.json",
+      "sha256": "030430d47ef6c3d5d9409f20cd2fc81ff8f39fd7705b6f09927310c19927d2dd",
+      "workload": "CREASTMT"
+    },
+    {
+      "catalog_sha256": "931ec402a5ab442af7bffd0ab6a2d6f8278b27911e300a01b0ae53317df73215",
+      "path": "factory/evals/acctpl1-v0.26-public.json",
+      "sha256": "a7640605cbcbe600c10b60b74bb737abc52b1b7cab7f18d11b339c4c7cb3f5f5",
+      "workload": "ACCTPL1"
+    }
+  ],
+  "status": "draft; not launchable",
+  "single_model_matrix": {
+    "arms": [
+      "cheap-only",
+      "strong-only"
+    ],
+    "blockers": [
+      "exact provider IDs, versions and prices",
+      "35 distinct approved task cases per task/workload, including true implement tasks; existing repair catalog is not relabelled implement",
+      "per-cell token/call/cost limits and exact source commit",
+      "Howard commit/models/budget Tower decision"
+    ],
+    "max_attempts_per_trial": 3,
+    "minimum_cell_runs": 35,
+    "paired_runs_per_cell": 35,
+    "policy": "Wilson 95% lower >= 0.80 on each workload and Newcombe paired difference lower >= -0.10 against each peer; zero false accepts",
+    "policy_margin": 0.1,
+    "proposed_max_cost_usd": null,
+    "task_types": [
+      "implement",
+      "repair-from-closed-diagnostic"
+    ],
+    "total_trials": 560,
+    "workloads": [
+      "INTCALC",
+      "POSTTRAN",
+      "CREASTMT",
+      "ACCTPL1"
+    ],
+    "costing": {
+      "previous_trials": 240,
+      "previous_draft_cap_usd": 100,
+      "trial_multiplier": 3.5,
+      "linear_cap_placeholder_usd": 350,
+      "status": "Not a quote or approved budget. Freeze dated provider IDs, current token prices and per-cell token limits; compute the sum of worst-case cell costs before Tower approval."
+    },
+    "absolute_wilson_lower": 0.8
+  },
+  "escalation_matrix": {
+    "task_types": [
+      "implement",
+      "repair-from-closed-diagnostic"
+    ],
+    "workloads": [
+      "INTCALC",
+      "POSTTRAN",
+      "CREASTMT",
+      "ACCTPL1"
+    ],
+    "paired_runs_per_cell": 35,
+    "max_attempts_per_trial": 3,
+    "blockers": [
+      "exact provider IDs, versions and prices",
+      "35 distinct approved task cases per task/workload, including true implement tasks; existing repair catalog is not relabelled implement",
+      "per-cell token/call/cost limits and exact source commit",
+      "Howard commit/models/budget Tower decision"
+    ],
+    "arms": [
+      "cheap-first-strong-repair"
+    ],
+    "total_trials": 280,
+    "policy_promotion": false,
+    "comparison": "descriptive paired comparison to separately bound single-model matrix; separate approval required"
+  }
+}

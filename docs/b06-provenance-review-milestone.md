@@ -35,3 +35,14 @@ The prospective runtime producer is connected to a no-database Tycho launch work
 The revised overpass algorithm is checked against both real saved JUnit classes. All eight host observations pass under the **prospective** exact modifier mapping in [pool proposal r3](calibration/idempiere-ms94/stage-b-06/preparation/pool-modifier-proposal-r3.md). The earlier failed host comparison is preserved. No general production rule was silently widened.
 
 Remaining authority/native gates: approve the exact modifier amendment; publish and freeze the [runtime-closure proposal](calibration/idempiere-ms94/stage-b-06/preparation/runtime-closure-proposal-r2.md) with a new Tower window; execute the native runtime closure and scoped extraction; prove the generated bodies; then obtain a separate five-path census decision. The [JVMTI alternative](calibration/idempiere-ms94/stage-b-06/preparation/generated-class-alternative-r2.md) is available prospectively if the Oct 9 time box expires. No new B06 Docker or model run occurred in this increment. B05, template-r1, work/ms94, J1 predicates and historical evidence remain untouched.
+
+
+## PR275 review completion - October 8, 2026
+
+The observer now confines return-value events to selected generation methods at their return instructions. It records only relevant definitions, removes the arbitrary class-count ceiling, and replays caught class-definition unwinds. A real host JVM test recorded 609 entries, 608 returns and one unwind, with zero pending entries. The measured lambda-heavy host overhead is about 71x; this remains a scheduling risk and is not pinned-image qualification.
+
+Runtime closure now handles Equinox location prefixes and folder paths, inventories INSTALLED bundles explicitly, and binds its declared argument differences to the unchanged measured launcher. The prospective pool proposal uses concrete default-method inheritance and the general JDWP synthetic marker. It does not silently change production admission.
+
+Validation: 173 ms94_b06 tests, 30 focused review tests and two real host JVM tests passed. No B06 Docker commands or model calls. Real Equinox output, native LambdaForm proof and pinned-image overhead remain unverified. The next gate is a fresh exact runtime-closure plan/snapshot/public commit and Tower window, followed by scoped extraction and a separately approved five-path census. r10 stays failed; r11 stays rejected.
+
+[Detailed implementation, host measurements and remaining gates](calibration/idempiere-ms94/stage-b-06/preparation/review-r3/README.md). Operator review, not independent attestation.

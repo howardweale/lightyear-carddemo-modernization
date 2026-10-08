@@ -13,7 +13,7 @@ from .controller import IMAGE,check,utc
 from .runtime_producer import produce
 
 REQUIRED={'runtime_launch.py','runtime_producer.py','runtime_worker.py','runtime_inventory.py','resolved_runtime.py','archive.py',
-          'B06RuntimeCatalogAgent.java','B06RuntimeCatalogTest.java','RuntimeClosureAgent.java'}
+          'B06RuntimeCatalogAgent.java','B06RuntimeCatalogTest.java','RuntimeClosureAgent.java','ms94_b06_observed_worker.py'}
 
 def validate(root,plan):
     verify(plan);root=Path(root).resolve()
@@ -31,6 +31,9 @@ def validate(root,plan):
     check(hashlib.sha256(Path(__file__).read_bytes()).hexdigest()==files['runtime_launch.py'],'runtime-host-launcher-changed')
     from . import runtime_producer
     check(hashlib.sha256(Path(runtime_producer.__file__).read_bytes()).hexdigest()==files['runtime_producer.py'],'runtime-host-producer-changed')
+    from tools.ms94_b06_observed_worker import maven_arguments
+    check(plan.get('measured_maven_arguments')==maven_arguments(),'runtime-measured-launch-binding')
+    check(hashlib.sha256(Path(__file__).parents[1].joinpath('ms94_b06_observed_worker.py').read_bytes()).hexdigest()==files['ms94_b06_observed_worker.py'],'runtime-measured-worker-binding')
     return root
 
 def bound(plan,commit):
@@ -81,9 +84,13 @@ def execute(repository,root,plan,output,commit,reader,signer):
         check(r.returncode==0,'runtime-worker-failed')
         state=json.loads(docker('container','inspect',name).stdout)[0]
         check(not state['State']['Running'] and state['State']['ExitCode']==0,'runtime-worker-state')
+        from .runtime_worker import launch_arguments
+        measured,closure=launch_arguments()
+        check(json.loads((results/'measured-command.json').read_bytes())==measured==plan['measured_maven_arguments'],'runtime-measured-command-changed')
+        check(json.loads((results/'command.json').read_bytes())==closure,'runtime-closure-command-changed')
         inventory=json.loads((results/'measured-inventory.json').read_bytes())
         raw=(results/'closure-observation.json').read_bytes();config=(results/'effective-config.ini').read_bytes();surefire=(results/'effective-surefire.properties').read_bytes()
-        expected=dict(probe_sha256=plan['files_sha256']['RuntimeClosureAgent.java'],image=IMAGE,java_sha256=plan['java_sha256'],plan_sha256=plan['content_sha256'],tower_decision_sha256=proof['decision_sha256'])
+        expected=dict(measured_command_sha256=hashlib.sha256((results/'measured-command.json').read_bytes()).hexdigest(),closure_command_sha256=hashlib.sha256((results/'command.json').read_bytes()).hexdigest(),probe_sha256=plan['files_sha256']['RuntimeClosureAgent.java'],image=IMAGE,java_sha256=plan['java_sha256'],plan_sha256=plan['content_sha256'],tower_decision_sha256=proof['decision_sha256'])
         h=lambda b:hashlib.sha256(b).hexdigest()
         pending=(raw,config,surefire,inventory,expected)
     except BaseException as ex:
@@ -100,7 +107,7 @@ def execute(repository,root,plan,output,commit,reader,signer):
             cleaned=True;validate(root,plan)
             if failure is None and pending is not None:
                 raw,config,surefire,inventory,expected=pending
-                receipt=signer.sign(dict(schema='b06-runtime-launch-receipt/1',passed=True,bindings=expected,cleanup_passed=True,
+                receipt=signer.sign(dict(schema='b06-runtime-launch-receipt/2',passed=True,bindings=expected,cleanup_passed=True,
                    outputs={'observation':h(raw),'config.ini':h(config),'surefire.properties':h(surefire),'inventory':h(json.dumps(inventory,sort_keys=True).encode())}))
                 resolution=produce(raw,config,surefire,inventory,receipt,signer.public,expected)
                 atomic_new(output/'runtime-launch-receipt.json',receipt);atomic_new(output/'resolved-runtime.json',resolution)

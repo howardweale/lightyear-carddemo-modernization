@@ -26,14 +26,14 @@ def properties(raw):
 
 
 def file_path(value):
-    value = value.removeprefix('reference:')
+    value = value.removeprefix('initial@').removeprefix('reference:')
     url = urlsplit(value)
     if url.scheme != 'file' or url.netloc or url.query or url.fragment:
         raise ValueError('resolved-file-url-required')
     path = unquote(url.path)
     if not path.startswith('/') or '..' in path.split('/') or '\\' in path:
         raise ValueError('resolved-runtime-path')
-    return path
+    return path.rstrip('/') or '/'
 
 
 def read(config_ini, surefire_properties):

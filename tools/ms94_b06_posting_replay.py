@@ -112,7 +112,7 @@ def replay_stream(folder, receipt, classes, lane, stub_policy=None, host_entries
         if kind == 'ready':
             check(sequence == 1 and not ready and event['checkpoint'] is False, 'observer-ready-order')
             ready = True
-        elif kind in ('generation-entry','generation-return'):
+        elif kind in ('generation-entry','generation-return','generation-unwind'):
             check(ready and event['checkpoint'] is False,'observer-generation-order')
             record=event['record'];thread=record['thread_id']
             stack=generation_pending.setdefault(thread,[])
@@ -121,6 +121,9 @@ def replay_stream(folder, receipt, classes, lane, stub_policy=None, host_entries
                 check(bool(stack),'observer-generation-return-without-entry')
                 entry=stack.pop()
                 check(all(record.get(k)==v for k,v in entry.items()),'observer-generation-entry-return-differs')
+                if kind=='generation-unwind':
+                    check(event['catch_depth']<record['entry_depth'] and bool(event['exception_class']),'observer-generation-unwind-depth')
+                    continue
                 generated=record['returned_class']['class_object_id']
                 if 'lambda_factory' in record:generation_complete[generated]=record
         elif kind == 'frame-definition':

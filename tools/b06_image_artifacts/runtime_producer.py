@@ -13,9 +13,11 @@ def h(raw):return hashlib.sha256(raw).hexdigest()
 
 def produce(raw,config,surefire,inventory,receipt,key,expected):
     if not verify_envelope(receipt,key):raise ValueError("runtime-launch-signature")
-    if receipt.get('schema')!='b06-runtime-launch-receipt/1' or receipt.get('passed') is not True:
+    if receipt.get('schema') not in ('b06-runtime-launch-receipt/1','b06-runtime-launch-receipt/2') or receipt.get('passed') is not True:
         raise ValueError('successful-trusted-runtime-launch-required')
-    if receipt.get('bindings')!=expected or set(expected)!={'probe_sha256','image','java_sha256','plan_sha256','tower_decision_sha256'}:
+    keys={'probe_sha256','image','java_sha256','plan_sha256','tower_decision_sha256'}
+    if receipt['schema']=='b06-runtime-launch-receipt/2':keys|={'measured_command_sha256','closure_command_sha256'}
+    if receipt.get('bindings')!=expected or set(expected)!=keys:
         raise ValueError('runtime-launch-bindings')
     outputs={'observation':h(raw),'config.ini':h(config),'surefire.properties':h(surefire),'inventory':h(json.dumps(inventory,sort_keys=True).encode())}
     if receipt.get('outputs')!=outputs:raise ValueError('runtime-output-changed')
@@ -24,7 +26,7 @@ def produce(raw,config,surefire,inventory,receipt,key,expected):
     parsed=read(config,surefire);bundles=obs['bundles']
     ids=[b['id'] for b in bundles]
     if not bundles or len(ids)!=len(set(ids)) or 0 not in ids:raise ValueError('runtime-bundle-closure')
-    if any(b['state'] not in (4,8,16,32) or b['id']==0 and b['state']!=32 for b in bundles):raise ValueError('unresolved-runtime-bundle')
+    if any(b['state'] not in (2,4,8,16,32) or b['id']==0 and b['state']!=32 for b in bundles):raise ValueError('unresolved-runtime-bundle')
     framework=file_path(obs['framework_url'])
     paths=[file_path(b['location']) for b in bundles if b['id']!=0]
     classpath=[]
@@ -40,6 +42,8 @@ def produce(raw,config,surefire,inventory,receipt,key,expected):
     if not jdk.get('expanded_class_entries') or not jdk.get('expanded_class_bytes'):raise ValueError('measured-jimage-inventory-required')
     return dict(schema='b06-resolved-runtime/2',resolved=True,launch_observed=True,
         installation_inputs=parsed,equinox_bundles=paths,resolved_bundle_states=bundles,
+        unresolved_bundle_ids=[b['id'] for b in bundles if b['state']==2],
+        all_bundles_resolved=all(b['state']!=2 for b in bundles),
         surefire_booter_classpath=list(dict.fromkeys(classpath+parsed['surefire_booter_classpath'])),
         framework_jar=framework,jdk_modules=modules,jdk_class_entries=jdk['expanded_class_entries'],
         jdk_expanded_bytes=jdk['expanded_class_bytes'],jimage_tool=dict(path=tool,sha256=records[tool]['sha256']),

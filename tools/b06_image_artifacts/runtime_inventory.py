@@ -14,11 +14,9 @@ except ImportError:  # flat immutable worker mount
 def measure(observation,output,booter_classpath=()):
     output=Path(output);output.mkdir(exist_ok=False)
     def path(url):
-        parsed=urlsplit(url.removeprefix('reference:'))
-        if parsed.scheme!='file' or parsed.netloc or parsed.query or parsed.fragment:raise ValueError('runtime-file-url')
-        result=Path(unquote(parsed.path))
-        if not result.is_absolute() or '..' in result.parts:raise ValueError('runtime-path')
-        return result
+        try:from .resolved_runtime import file_path
+        except ImportError:from resolved_runtime import file_path
+        return Path(file_path(url))
     java=Path(observation['java_home']);tool=java/'bin/jimage';modules=java/'lib/modules'
     selected={path(b['location']) for b in observation['bundles'] if b['id']!=0}
     selected.update([path(observation['framework_url']),java/'bin/java',tool,modules])

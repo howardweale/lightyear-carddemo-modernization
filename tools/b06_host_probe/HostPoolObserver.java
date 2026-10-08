@@ -10,6 +10,7 @@ import java.util.concurrent.TimeUnit;
 /** Host-only diagnosis: JDI reads are the evidence; target-written dumps are not. */
 public final class HostPoolObserver {
     static final String ENGINE = "org.junit.platform.engine.support.hierarchical.HierarchicalTestEngine";
+    static final String DESCRIPTOR = "org.junit.platform.engine.support.descriptor.AbstractTestDescriptor";
     static String hash(byte[] data) throws Exception { return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256").digest(data)); }
     static String json(Object v) {
         if (v == null) return "null";
@@ -43,18 +44,21 @@ public final class HostPoolObserver {
         List<Object> samples=new ArrayList<>();Set<String> hidden=new HashSet<>();int snapshots=0;boolean death=false;
         long start=System.nanoTime();
         try {
-            for(String name:List.of(ENGINE,"HostPoolTarget")){ClassPrepareRequest q=vm.eventRequestManager().createClassPrepareRequest();q.addClassFilter(name);q.setSuspendPolicy(EventRequest.SUSPEND_ALL);q.enable();}
+            for(String name:List.of(ENGINE,DESCRIPTOR,"HostPoolTarget")){ClassPrepareRequest q=vm.eventRequestManager().createClassPrepareRequest();q.addClassFilter(name);q.setSuspendPolicy(EventRequest.SUSPEND_ALL);q.enable();}
             vm.resume();
             while(!death && (System.nanoTime()-start)<TimeUnit.SECONDS.toNanos(90)) {
                 EventSet set=vm.eventQueue().remove(1000);if(set==null)continue;
                 for(Event event:set) {
                     if(event instanceof ClassPrepareEvent e) {
-                        if(e.referenceType().name().equals(ENGINE)) samples.add(Map.of("stage","class-prepared","definition",read(e.referenceType())));
+                        if(!e.referenceType().name().equals("HostPoolTarget")) samples.add(Map.of("stage","class-prepared","definition",read(e.referenceType())));
                         else {BreakpointRequest q=vm.eventRequestManager().createBreakpointRequest(e.referenceType().methodsByName("checkpoint").get(0).location());q.setSuspendPolicy(EventRequest.SUSPEND_ALL);q.enable();}
                     } else if(event instanceof BreakpointEvent e) {
                         int phase=((IntegerValue)e.thread().frame(0).getArgumentValues().get(0)).value();snapshots++;
-                        List<ReferenceType> types=vm.classesByName(ENGINE);if(types.size()!=1)throw new IllegalStateException("ambiguous engine");
-                        samples.add(Map.of("stage","checkpoint-"+phase,"definition",read(types.get(0))));
+                        for(String bound:List.of(ENGINE,DESCRIPTOR)) {
+                            List<ReferenceType> types=vm.classesByName(bound);
+                            if(types.size()>1 || bound.equals(ENGINE) && types.size()!=1)throw new IllegalStateException("ambiguous bound class");
+                            if(!types.isEmpty())samples.add(Map.of("stage","checkpoint-"+phase,"definition",read(types.get(0))));
+                        }
                         for(ReferenceType type:vm.allClasses())if(type.name().contains("/")&&hidden.add(type.name())) {
                             try {samples.add(Map.of("stage","hidden-at-"+phase,"definition",read(type)));}
                             catch(Exception failure){samples.add(Map.of("stage","hidden-read-failed","class",type.name(),"error",failure.getClass().getName()));}

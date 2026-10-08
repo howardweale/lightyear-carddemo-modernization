@@ -10,19 +10,25 @@ from pathlib import Path
 import subprocess
 import zipfile
 from .inventory import digest
+from .archive import bundle_paths,folder_bytes,inspect as inspect_archive
 from .resolved_runtime import read as read_resolution
 
 def check(v,reason):
     if not v:raise ValueError(reason)
 
-def assemble(inventory,resolution):
+def assemble(inventory,resolution,*,launch_key=None,expected_launch=None):
     check(inventory['schema']=='b06-image-inventory/1' and inventory['failure'] is None,'inventory-required')
-    check(resolution['schema']=='b06-resolved-runtime/1' and resolution['resolved'] is True,'resolved-runtime-required')
+    check(resolution['schema']=='b06-resolved-runtime/2' and resolution['resolved'] is True,'resolved-runtime-required')
     raw=resolution['configuration_utf8']
     parsed=read_resolution(raw['config.ini'].encode(),raw['surefire.properties'].encode())
-    check(all(resolution[k]==v for k,v in parsed.items()),'resolved-configuration-differs')
+    check(resolution['installation_inputs']==parsed,'resolved-configuration-differs')
+    from .runtime_producer import produce
+    check(launch_key is not None and expected_launch is not None,'trusted-launch-authority-required')
+    rebuilt=produce(resolution['observation_utf8'].encode(),raw['config.ini'].encode(),raw['surefire.properties'].encode(),inventory,resolution['launch_receipt'],launch_key,expected_launch)
+    check(rebuilt==resolution,'runtime-producer-replay-differs')
     records={r['path']:r for r in inventory['artifacts']}
-    paths=list(dict.fromkeys(resolution['equinox_bundles']+resolution['surefire_booter_classpath']+[resolution['jdk_modules']]))
+    check(resolution.get('launch_observed') is True and resolution.get('framework_jar'),'observed-launch-resolution-required')
+    paths=list(dict.fromkeys(resolution['equinox_bundles']+resolution['surefire_booter_classpath']+[resolution['framework_jar'],resolution['jdk_modules']]))
     check(paths,'runtime-closure-empty')
     check(all(p in records for p in paths),'runtime-artifact-not-in-inventory')
     check(all(resolution['artifact_sha256'].get(p)==records[p]['sha256'] for p in paths),'resolution-inventory-bytes')
@@ -33,13 +39,13 @@ def assemble(inventory,resolution):
     check(type(resolution.get('jdk_class_entries')) is int and resolution['jdk_class_entries']>0,'jimage-list-count-required')
     tool=resolution['jimage_tool']
     check(tool['path'] in records and tool['sha256']==records[tool['path']]['sha256'],'bound-jimage-tool-required')
-    check(type(resolution.get('expanded_byte_limit')) is int and resolution['expanded_byte_limit']>0,
-          'measured-expanded-byte-limit-required')
+    check(type(resolution.get('jdk_expanded_bytes')) is int and resolution['jdk_expanded_bytes']>0,
+          'measured-jimage-expanded-byte-limit-required')
     return dict(schema='b06-runtime-closure/1',artifacts=artifacts,
         resolution_sha256=hashlib.sha256(json.dumps(resolution,sort_keys=True).encode()).hexdigest(),
         maximum_archive_bytes=sum(r['bytes'] for r in artifacts),
-        maximum_expanded_bytes=resolution['expanded_byte_limit'],jimage_tool=tool,
-        maximum_classes=sum(r.get('expanded_class_entries',r['class_entries']) for r in artifacts)+resolution['jdk_class_entries'],
+        maximum_expanded_bytes=sum(r.get('expanded_class_bytes',r['bytes']) for r in artifacts if r['path']!=resolution['jdk_modules'])+resolution['jdk_expanded_bytes'],jimage_tool=tool,
+        maximum_classes=sum(r.get('expanded_class_entries',r['class_entries']) for r in artifacts if r['path']!=resolution['jdk_modules'])+resolution['jdk_class_entries'],
         jdk_modules=resolution['jdk_modules'],jdk_method='jimage extract from bound lib/modules',
         jmods_authoritative=False,native_admission=False)
 
@@ -60,22 +66,35 @@ def extract(closure,output,jimage,*,run=subprocess.run):
     def archive(raw,origin,depth=0):
         check(depth<=4,'nested-archive-depth')
         with zipfile.ZipFile(io.BytesIO(raw)) as z:
+            inspect_archive(raw,budget=max(len(raw),closure['maximum_archive_bytes'],closure['maximum_expanded_bytes']))
+            paths=bundle_paths(z)
+            for member in paths:
+                if member!='.' and member not in z.namelist() and not any(n.startswith(member.rstrip('/')+'/') for n in z.namelist()):raise ValueError('missing-bundle-class-path-entry')
             for e in z.infolist():
                 check(e.file_size<=closure['maximum_expanded_bytes'] and not e.flag_bits&1,'archive-entry-bound')
-                if e.filename.endswith('.class'):retain(z.read(e),origin,e.filename)
-                elif e.filename.startswith('lib/') and e.filename.endswith('.jar'):
+                if e.filename.endswith('.class') and ('.' in paths or any(not p.endswith('.jar') and e.filename.startswith(p.rstrip('/')+'/') for p in paths)):retain(z.read(e),origin,e.filename)
+                elif e.filename in paths and e.filename.endswith('.jar'):
                     archive(z.read(e),origin+'!/'+e.filename,depth+1)
     progress=output/'progress.jsonl'
+    archive_bytes=0
     try:
         for row in closure['artifacts']:
-            p=Path(row['path']);check(digest(p)==row['sha256'] and p.stat().st_size==row['bytes'],'scoped-artifact-changed')
+            p=Path(row['path'])
+            if row.get('kind')=='folder-bundle':
+                raw,observed=folder_bytes(p)
+                check(all(observed[k]==row[k] for k in ('sha256','bytes','files')),'scoped-folder-changed')
+            else:
+                raw=p.read_bytes()
+                check(hashlib.sha256(raw).hexdigest()==row['sha256'] and len(raw)==row['bytes'],'scoped-artifact-changed')
+            archive_bytes+=row['bytes'];check(archive_bytes<=closure['maximum_archive_bytes'],'measured-archive-byte-bound')
             if str(p)==closure['jdk_modules']:
                 dest=output/'jimage';dest.mkdir()
-                done=run([str(jimage),'extract','--dir',str(dest),str(p)],capture_output=True,timeout=600,check=False)
+                bound_modules=output/'bound-modules';bound_modules.write_bytes(raw)
+                done=run([str(jimage),'extract','--dir',str(dest),str(bound_modules)],capture_output=True,timeout=600,check=False)
                 (output/'jimage.stdout').write_bytes(done.stdout);(output/'jimage.stderr').write_bytes(done.stderr)
                 check(done.returncode==0,'jimage-extract-failed')
                 for f in sorted(dest.rglob('*.class')):retain(f.read_bytes(),row['sha256'],f.relative_to(dest).as_posix())
-            else:archive(p.read_bytes(),row['sha256'])
+            else:archive(raw,row['sha256'])
             with progress.open('a',encoding='utf-8') as f:f.write(json.dumps(dict(path=row['path'],classes=len(rows)))+'\n')
     finally:
         (output/'classes.json').write_text(json.dumps(rows,sort_keys=True),encoding='utf-8')

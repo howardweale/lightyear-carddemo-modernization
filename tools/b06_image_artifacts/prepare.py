@@ -1,5 +1,7 @@
 """Freeze public Git bytes for an extraction proposal. Never executes Docker."""
 import argparse
+import ast
+import importlib.util
 from datetime import timedelta
 import hashlib
 from pathlib import Path
@@ -18,12 +20,41 @@ def prepare(repository, commit, snapshot, public, start, tower_key,
         return subprocess.check_output(['git','-C',str(repository),*args], timeout=60)
     check(git('rev-parse',commit).decode().strip() == commit, 'full-source-commit-required')
     names = git('ls-tree','-r','--name-only',commit).decode().splitlines()
-    selected = {n for n in names if n.startswith('src/') and n.endswith('.py')}
-    selected.update(n for n in names if n.startswith('tools/b06_image_artifacts/') and n.endswith('.py'))
-    selected.update(n for n in ('tools/__init__.py','tests/__init__.py') if n in names)
+    selected = {n for n in names if n.startswith('tools/b06_image_artifacts/') and n.endswith('.py')}
     selected.update(('tests/test_b06_image_artifacts.py',
                      'tools/ms94_b06_qualification_worker.py','tools/ms94_b06_admission.py'))
-    check(selected <= set(names), 'source-closure-missing')
+    # Static repository import closure, including relative imports and package
+    # initializers. External distributions are environment bindings, not src/.
+    files=set(names);seen=set();queue=list(selected)
+    def include(module):
+        path=module.replace('.','/')
+        for prefix in ('','src/'):
+            for candidate in (prefix+path+'.py',prefix+path+'/__init__.py'):
+                if candidate in files and candidate not in selected:
+                    selected.add(candidate);queue.append(candidate)
+        parts=module.split('.')
+        for count in range(1,len(parts)):
+            for prefix in ('','src/'):
+                candidate=prefix+'/'.join(parts[:count])+'/__init__.py'
+                if candidate in files and candidate not in selected:
+                    selected.add(candidate);queue.append(candidate)
+    while queue:
+        name=queue.pop()
+        if name in seen:continue
+        check(name in files,'source-closure-missing');seen.add(name)
+        module=name.removeprefix('src/').removesuffix('.py').replace('/','.')
+        package=module.removesuffix('.__init__') if module.endswith('.__init__') else module.rpartition('.')[0]
+        tree=ast.parse(git('cat-file','blob',commit+':'+name))
+        for node in ast.walk(tree):
+            if isinstance(node,ast.Import):
+                for alias in node.names:include(alias.name)
+            elif isinstance(node,ast.ImportFrom):
+                target=importlib.util.resolve_name('.'*node.level+(node.module or ''),package) if node.level else node.module
+                if target:
+                    include(target)
+                    for alias in node.names:
+                        if alias.name!='*':include(target+'.'+alias.name)
+    check(selected <= files,'source-closure-missing')
     snapshot.mkdir(parents=True, exist_ok=False); public.mkdir(parents=True, exist_ok=False)
     hashes = {}; mapping = {}
     for name in sorted(selected):

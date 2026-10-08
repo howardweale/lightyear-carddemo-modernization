@@ -50,6 +50,7 @@ def asset(root, descriptor):
 
 def main():
     p=argparse.ArgumentParser()
+    p.add_argument('--compatibility-level',type=int,choices=(110,120,130,140,150,160),default=160)
     p.add_argument('--root',type=Path,required=True)
     p.add_argument('--output',type=Path,required=True)
     p.add_argument('--ids',nargs='*')
@@ -88,7 +89,7 @@ def main():
     items=expand(items)
     from lightyear_data.tsql_procedures.inventory import parse
     from lightyear_data.tsql_procedures.semantics import contract
-    from lightyear_data.tsql_procedures.comparison_v7 import compare as compare_v7
+    from lightyear_data.tsql_procedures.comparison_v9 import compare as compare_v8
     from copy import deepcopy
     cases=[]
     for item in items:
@@ -162,9 +163,10 @@ def main():
           'images':{'sqlserver':SQL_IMAGE,'postgresql':args.pg_image},
           'coverage_bridge_sha256':sha(args.coverage_bridge.read_bytes()) if args.coverage_bridge else None,
           'coverage_revision':args.coverage_revision,'coverage_schemas':args.coverage_schemas or ['dbo'],
-          'semantic_bridge_sha256':sha(args.semantic_bridge.read_bytes()),'comparison_revision':7,
-          'sqlserver_profile':{'collation':'Latin1_General_100_CI_AS','compatibility_level':160},
+          'semantic_bridge_sha256':sha(args.semantic_bridge.read_bytes()),'comparison_revision':9,
+          'sqlserver_profile':{'collation':'Latin1_General_100_CI_AS','compatibility_level':args.compatibility_level},
           'ids':[v['id'] for v in items],'variants':args.variants,
+          'case_plan':[dict(id=i['id'],assets=i['assets'],calling_convention=i['calling_convention'],cases=i['cases']) for i in items],
           'case_generation':'declared-seeds-only' if args.seed_cases_only else 'typed-boundaries-v2',
           'maximum_shrink_calls_per_case':args.shrink_limit,
           'pairs':sum(v['cases'][0]['repeated_runs']*len(args.variants) for v in items),
@@ -263,7 +265,7 @@ def main():
                     write(pair/(lane+'.json'),lanes[lane])
                     phase='provision'
                 phase='compare'
-                comparison=compare_v7(lanes['source'],lanes['target'],profile(item),qualification)
+                comparison=compare_v8(lanes['source'],lanes['target'],profile(item),qualification)
                 write(pair/'comparison.json',comparison)
                 envelope=seal_pair(pair,dict(record,assets=item['assets'],images=plan['images'],policy_authority_sha256=args.policy_authority_sha256,plan_sha256=sha((out/'plan.json').read_bytes())),key)
                 replay=replay_pair(pair,public,envelope['content_sha256'])
@@ -334,9 +336,9 @@ def main():
                          if qualification and len(qualification.get('controls',[]))==7 else
                          'Native public-fixture comparison; see plan for coverage qualification; ')
                         +'operator review, not independent attestation'}
-        if not fatal and report['cleanup_passed'] and qualification and not args.ids and args.variants==['correct','wrong'] and args.seed_cases_only and not reductions:
+        if not fatal and report['cleanup_passed'] and qualification and not args.ids and args.variants==['correct','wrong'] :
             try:
-                from lightyear_data.tsql_procedures.m0_v3 import accept as accept_v2
+                from lightyear_data.tsql_procedures.m0_v5 import accept as accept_v2
                 acceptance=accept_v2(out,corpus,plan,records,public)
                 acceptance['native_elapsed_seconds']=report['elapsed_seconds']
                 acceptance['pairs_per_minute']=len(records)/(report['elapsed_seconds']/60)

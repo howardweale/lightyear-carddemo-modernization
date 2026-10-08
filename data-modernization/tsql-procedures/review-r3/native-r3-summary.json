@@ -1,0 +1,1314 @@
+{
+  "acceptance_sha256": "7c72c8a833955ffce7b3500a8c499a55cec288e2b97f439c0dd396821dfee678",
+  "audit": {
+    "actual_docker_check": "not performed by offline replay",
+    "claim": "Operator review; not independent attestation",
+    "cleanup_receipt_passed": true,
+    "database_calls": 0,
+    "elapsed_seconds": 3.7710334250000415,
+    "file_count": 1889,
+    "model_calls": 0,
+    "pairs_replayed": 108,
+    "public_key_sha256": "7f4d2b68f8c15e2aedc8f0645797e438ca54d7b451e863f865b3a1889ffa32c8",
+    "qualification_passed": false,
+    "replays": [
+      {
+        "index": 1,
+        "manifest_sha256": "71261f7e8d21010a2cb4ed66a9954a48ebfabdba4bc1e47bb6325a33ce745817",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 2,
+        "manifest_sha256": "a970fbe427998434661979ed4fb5832d1e5e4b68e96bee9d5b0eb34778d3b4ac",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 3,
+        "manifest_sha256": "a800e5ab2a325e252517837ca45a54b57fb7126970cfa0bc4b73d9f30941f04d",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 4,
+        "manifest_sha256": "bafa3f73986bbec07f062a17b09946c1471fb8082f4ec004a53229b316e1929e",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 5,
+        "manifest_sha256": "fb77a2b7e35c4100dcb331ca75c1ff027f0712eb009f841cbe4ddd9c5be99fb4",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 6,
+        "manifest_sha256": "368416482a402b409fedd11426b00032de517c6a38794925f8186d9a371be234",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 7,
+        "manifest_sha256": "a793c6ae5dfd652b909d1485a8c72dd0f2f871442c97fee92368f33d0658e5f4",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 8,
+        "manifest_sha256": "58b48901bab1070e731b37c021da6724a4aeaaf55d90e71815b49ea2e6b0a690",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 9,
+        "manifest_sha256": "cd9c07b77cece5ef97b2f50a2c796a873f5e841597ea2324468b8bcf583b4d0d",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 10,
+        "manifest_sha256": "9713264b2f0bb866abc812378c317e5ec79541be1ad3eba629438c12ee7790ea",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 11,
+        "manifest_sha256": "c0f7d8c5474d17bcf492527d4eecfa61530264d44b38b6e82079f41bd1a7e543",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 12,
+        "manifest_sha256": "5ed0fbb7f77e4650725663fd942a61b2e7ee7e2f391c4666bb68a976dda4014c",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 13,
+        "manifest_sha256": "d05b9f137f891ab0a47b35db11bd10a6aec5a57907bc4c0219728bf6bf503008",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 14,
+        "manifest_sha256": "3a97fd51642b1c88c44cd3c84fef0174298df07b81b114d512cebf098cdf808c",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 15,
+        "manifest_sha256": "ceb4c02f7bc6cc6cfb6863445b841871267c7c91d6c7c1d8aa9184f55b06e405",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 16,
+        "manifest_sha256": "4b06cf35c68e0d870beaa3178c321310ae5a6d62e7d3145fe50499f995e94e3b",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 17,
+        "manifest_sha256": "027e43df8034055d9d8ab43520bd2067a45a39910b94d5a78b85c5076495f933",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 18,
+        "manifest_sha256": "27d0c1fbc3fafecdb6c014858ee6e80047c27367a2b7ada7750be90e6d20aa83",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 19,
+        "manifest_sha256": "fa674a78e230b9c4d54ca8b81bc704678e45c11b4c2be349cbb4986e01cd51cc",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 20,
+        "manifest_sha256": "6ab95e3d08821d82ecc5e174d928af1aaccd0f840c66c7fa0d25127a211eef51",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 21,
+        "manifest_sha256": "a7e79790d1f5c99b1c34f604797a2d32da84e0603ad43b9ceb31a895aca3a500",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 22,
+        "manifest_sha256": "e4ea773c38763d3d8cf32ef8a5f5a32644696fcd82378e087eb5693102dc7688",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 23,
+        "manifest_sha256": "b8f447da45b2b7095f96b95caefe34815edd623d145835fa0dd093361fc2ebcb",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 24,
+        "manifest_sha256": "0cc90ea16f93a7be26500d346f53a2d6d7e6eee6312c1f49dbee295d6b5a87f6",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 25,
+        "manifest_sha256": "e90208b152e8e950831f46fa4010f949356d9f8f87874eb99dcca16faec1e01a",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 26,
+        "manifest_sha256": "e3673c83dd8878d8f8115a09a496151c1c84d8cca36857b16e3fabb015b453e3",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 27,
+        "manifest_sha256": "5d36237c3a148b93619e33192f801dc758285d6f11906a910d9db6837e9fc8ec",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 28,
+        "manifest_sha256": "7ee5f5497f8d2bcdd3e6e64783591f6c1643465d55b05b99ab5d1c6f6329a1c7",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 29,
+        "manifest_sha256": "701a8b23d0c574e474ab6acff9361ba3db7317b1cccd42d687ea7f7962af80dd",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 30,
+        "manifest_sha256": "6fb5caf34b969d7f0df6e479a537417be426c8425a0176477e1ee13a4cc207e6",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 31,
+        "manifest_sha256": "abff20fe71ff1f04a77517a7b85473bfff90e559754ff0df2b187b4881e51f99",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 32,
+        "manifest_sha256": "ea7a1eac3b0b6c76baa034bea8dbe1f82d145216894e49bbf41adbeadf37ff2e",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 33,
+        "manifest_sha256": "d7c98563a5a03fb56348e10c1a51ffd4d0cbefe635c32eb7f5af8644c3a9a9b1",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 34,
+        "manifest_sha256": "8100a170448caa2526e237e463231d194f6067ae78a535ae86504f89309fb788",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 35,
+        "manifest_sha256": "b01c3938acd5ae6af44212f4c563994bfd0933116561245f1b570b3eaa276c76",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 36,
+        "manifest_sha256": "733553d9c7de742f16112763c733e38d4dadf58826cdbcd42856ce94c04cb306",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 37,
+        "manifest_sha256": "59fb3bba7654bdd2ffeee4cba9c82545de4e1de1534f79f4ef295e0b26b258af",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 38,
+        "manifest_sha256": "deb10de46a9ed3600c91fa1a843b5a92a633fb927f5109271d76f4495e9f29d5",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 39,
+        "manifest_sha256": "eb3441cb5e9f0d515f540df4ae4fd71b9dd3598926422ffe2b437d2ebc5f7149",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 40,
+        "manifest_sha256": "e0d51f9a6f778da062a6d7c7a5b2035a9bde704cea11387bd4ac716bbf01d06d",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 41,
+        "manifest_sha256": "32d1fcc65cc88fa89f912396d3d5dbc7b326e7b92169759e9fec90c5e784a71b",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 42,
+        "manifest_sha256": "47d0217262f0cdbb0d218330669f58302b671b4d4dab27ca1e466e928e7d458f",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 43,
+        "manifest_sha256": "024bcc761e19c3f7b2427923b972deb72027bd0638b3822fc4fcad65605cd80a",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 44,
+        "manifest_sha256": "ac5cf3de3bdd0c157eb287a816f42610a6d39e935711d1d233b8b12d306f8d0c",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 45,
+        "manifest_sha256": "ef94a94ed733c3cc71c02d5581674282643c4bb0ffd161bca951d0f8cd62f5c8",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 46,
+        "manifest_sha256": "f1d998ce8be897d6754637c4259d45d8cd39b9feef17435ede84b5294ba2d4e1",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 47,
+        "manifest_sha256": "6ef2354ab0770e7b4701f3b0959a05d01023c73f367974d764d496f6f215f99f",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 48,
+        "manifest_sha256": "4d35e88114337debc2d528ccb42ea6f1a01b8c376e587f6f8732e4c46106f4c7",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 49,
+        "manifest_sha256": "a7ad0f474f047903605b0eb63a68859611742e311e153c248e5e33748d3dcaae",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 50,
+        "manifest_sha256": "cbabee82093e1dac52a9bd1c7396491c152c5fb33c83076274ff187c7d6dde07",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 51,
+        "manifest_sha256": "9f198692ccef31e4a6a2f2c007cebb8f2a3aa547542feb194105fac8b5a10bff",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 52,
+        "manifest_sha256": "c6221cdd04b74b3d21c236ff1173730140f4ea7dd7938a43db5af88e6cd11d2e",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 53,
+        "manifest_sha256": "8e90876525e95762c9b92f505e52e83d5a418bf0320d71321a05c7ab40978a1c",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 54,
+        "manifest_sha256": "2c6600f290040b031610d6646c4a84950c72004648b03e1a30e61064c8e1c045",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 55,
+        "manifest_sha256": "98eddc292962ad41853c410c7bbfbab0a49604420cb05d676dc2e31079f2163f",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 56,
+        "manifest_sha256": "31cea14a3a47572c1cfd9042c1afd47c9bfaceec262c19151140136b1b0fff64",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 57,
+        "manifest_sha256": "61b80abbd719929b6e795635ee778ad8f0288aa390e51f98fe0738925257d0b0",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 58,
+        "manifest_sha256": "6a1274ff99b3c7f9a545b2c88969fd29fa5c3d1aaf665b1a8a0915983054ce44",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 59,
+        "manifest_sha256": "71929b5d7213910082ece7f1ae1491d883a92372c71ad95101ac85a17d3e0cc5",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 60,
+        "manifest_sha256": "518d48482b1131528062cab686a315d54979212a0a39f3ded85dfcc75b65b93c",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 61,
+        "manifest_sha256": "88e650895028ec150ae13f57ee7e76bec0fc8a976c0a0e65927ecd7ba0bbd001",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 62,
+        "manifest_sha256": "bbc9e7c408fdd695c475cb6438fccf9b6b002a4115fda7c8fb40178c761dd3a7",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 63,
+        "manifest_sha256": "9eb6047702911ba2186858ea02cc3787f47bd4fefb4be56bee59c3f640d48eae",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 64,
+        "manifest_sha256": "8ac309a6db2407bfdc08ca6c8688c5a3da1cdb0365642531a74e44bfe1837a5a",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 65,
+        "manifest_sha256": "109a81d268d15b81faade43fbeb1844b51b344801344d977816adbf5a34b4433",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 66,
+        "manifest_sha256": "dae5b8314c1d461543df8c015834ce715a69bcd6198730ad44459835c09f3eae",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 67,
+        "manifest_sha256": "e39d2489272dc0fb3233c4fee0041992abed88da8b5d5fccca60d0fd41529a78",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 68,
+        "manifest_sha256": "4b8738a4a4f9a41ad3381b9854da37dd6f7008606416241322e4d0a8269e5501",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 69,
+        "manifest_sha256": "3fa0dee06504ec616bd3b7e3e0a14ce32711f9d02e77baa8f65d49d8a0235c45",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 70,
+        "manifest_sha256": "d1c921319147f4636c70b6de58835b2a0bb290f4d446be18bdc06b52ffdfa880",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 71,
+        "manifest_sha256": "98b5ba9d231c342eaf26b7082abf714fd6597e22187fd9d9dc7a242ba7853ce1",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 72,
+        "manifest_sha256": "e36f32df7264725f613a133819a89cd51797e9dc3bbe7946870a02715559a477",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 73,
+        "manifest_sha256": "f5d84e54e465236e038fd4f2d05949440b617c0d209eba7e6164d0585f73f00c",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 74,
+        "manifest_sha256": "b044bcdca5569192a4647695bc0c4856c10ebe6b3b105c801af32e1ccee7f099",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 75,
+        "manifest_sha256": "8b3c7f64da181dc6f5b58e147dc068740f4520dab5a2be95f03558ab3d723d19",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 76,
+        "manifest_sha256": "4f6d6d6481fc2c65039075cea7e7ca902760680338e6b4338eab3559401c92f9",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 77,
+        "manifest_sha256": "17a7f5da5369aa0f7ab548839c7ef077f8cdc5f5799f79751f98c207d5ea7e60",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 78,
+        "manifest_sha256": "379c96388baed674eb830a5113a07b8843bc079cdaeabd4c8cc36e1f5f249247",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 79,
+        "manifest_sha256": "3badd1702a247d2dc5bb598ebc24c1ae2490efacadda4b1d206d6df595c933f2",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 80,
+        "manifest_sha256": "d3059cfb503e1a013818ae8314835f32f35734abad0c1be1086286cbcf57e678",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 81,
+        "manifest_sha256": "79f5cccd31d46c3fac9110b03980bdbc64b038db1ab4fd4acd232ea45eda9792",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 82,
+        "manifest_sha256": "8eeeae1e84faa69bcba267bbaa54ba5d0ce62118aa8fcc516af6ad031a577159",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 83,
+        "manifest_sha256": "9ac86f501011c4b611278c88e8e328a7c973135c600488cc430dba4d51e52c43",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 84,
+        "manifest_sha256": "21fc0ddf0416c5b81fa1aaecc517c436c7dd7dea726ea89062f781624533709a",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 85,
+        "manifest_sha256": "dd7af1c0e4f9e2632793749bf1fef1c9a445b1edd94b13d344c25702498afc9f",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 86,
+        "manifest_sha256": "7a721555948deb819b7e8ac2122343c2eca55a2c10c300501572a88116e0c232",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 87,
+        "manifest_sha256": "59ea4c41ae16f467b8e892237c935c1a94ad0cc3218b911ed67b92e3b37204bf",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 88,
+        "manifest_sha256": "bd3097e12fe33525edf2942d65b33bd76728a569e3d68917e24e45e9ddc7419d",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 89,
+        "manifest_sha256": "a46e618ce6fb8cd68dad7f2662d99634ffa840819e924ae0f4669d4a8d378b8c",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 90,
+        "manifest_sha256": "69809034c197b92f8b346b1cc907a5494b60725d8ea601678732c1b84a90c68f",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 91,
+        "manifest_sha256": "4b83e6167de43e761d5275490e868883063e6c2e265d0a9e9576a8012c37325d",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 92,
+        "manifest_sha256": "f06216869479dfd070b667491a87c31ce88ad740ae46cae135ca9cf6236006af",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 93,
+        "manifest_sha256": "5db68901b351f40e3a182eac7ac3bd221ec07f50313befc41a52cb55d67c02d9",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 94,
+        "manifest_sha256": "8e1b32942a446d43d4a86080c6af12254d1caf3449cc836337fba7d57e10b172",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 95,
+        "manifest_sha256": "11e5df3a8a6e9c865f36ed95bccbd40f91236bcf7621c318a423ff0cd75a6cde",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 96,
+        "manifest_sha256": "741e7b14910ddfa58ef2b58afc42c3c018287a575a88101db69d957bd6f2cbe9",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 97,
+        "manifest_sha256": "43018115914d9aceab235936c39f36b0e2419a778f49e9992338696001515d00",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 98,
+        "manifest_sha256": "bbf9a590d4392b12e64b39a81f17b60562957ca4a5f8bd6cfbd102dfad478194",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 99,
+        "manifest_sha256": "9e6e601be0e70f07068434aa479e099a66103f72cb4ee05593a88b235f553909",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 100,
+        "manifest_sha256": "581573481f6e83541163de2f18ece787332c46f7a1e43c163013393c3aff447a",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 101,
+        "manifest_sha256": "e4220bfc3aaf79a70f7a71ccae645f1b5f79eb448389603c4e2bcefeabe23894",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 102,
+        "manifest_sha256": "70c91bb3d02efd66f118a819186401b67cfdd0ba4d159b40eb83cdffdce3a4b3",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 103,
+        "manifest_sha256": "5513e92afc43bb0f01da12fe660a13dde13b1d5070a2debf6374f3f0d90b7b68",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 104,
+        "manifest_sha256": "d4d51bccf8c65959f60e277d2fac28e6e1cc71eecc6dfea2709169945d1d4896",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 105,
+        "manifest_sha256": "d7a4fff53271f5c0d7d2de0832fc2945d30e922f131cc1ed01abf7eabec2d474",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 106,
+        "manifest_sha256": "643aae4292be6004ad38a1f2a23a9f173ec8e699ab236d6a7488c980c2017aa9",
+        "status": "divergent",
+        "verified": true
+      },
+      {
+        "index": 107,
+        "manifest_sha256": "25adc7a0a6fca1445061846250cff7ab0ea61b5a9c722607511bc10696b2dba9",
+        "status": "match-on-compared-observables",
+        "verified": true
+      },
+      {
+        "index": 108,
+        "manifest_sha256": "4f443e2c9575c121a9689ff4d944f2711d5214c1d9f0c40f96e3313f0245afbf",
+        "status": "divergent",
+        "verified": true
+      }
+    ],
+    "report_sha256": "3570055f0e945193e893c80f8560def4b7f3f97f88a9b7d8bba6347499448b48",
+    "schema": "tsql-independent-offline-audit/1"
+  },
+  "cleanup": {
+    "containers": true,
+    "networks": true,
+    "volumes": true
+  },
+  "counts": {
+    "divergent": 53,
+    "match-on-compared-observables": 55
+  },
+  "elapsed_seconds": 501.2044456740002,
+  "fatal": null,
+  "key_sha256": "7f4d2b68f8c15e2aedc8f0645797e438ca54d7b451e863f865b3a1889ffa32c8",
+  "model_calls": 0,
+  "outcomes": [
+    {
+      "accepted": true,
+      "id": "bit",
+      "issues": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "accepted": true,
+      "id": "bit",
+      "issues": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": true,
+      "id": "catch-retains-prior-work",
+      "issues": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "accepted": true,
+      "id": "catch-retains-prior-work",
+      "issues": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": true,
+      "id": "ci-distinct",
+      "issues": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "accepted": true,
+      "id": "ci-distinct",
+      "issues": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": true,
+      "id": "ci-equality",
+      "issues": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "accepted": true,
+      "id": "ci-equality",
+      "issues": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": true,
+      "id": "ci-group",
+      "issues": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "accepted": true,
+      "id": "ci-group",
+      "issues": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": true,
+      "id": "ci-join",
+      "issues": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "accepted": true,
+      "id": "ci-join",
+      "issues": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": false,
+      "id": "ci-unique",
+      "issues": [
+        "result-origin-count-unresolved"
+      ],
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "accepted": true,
+      "id": "ci-unique",
+      "issues": [
+        "result-origin-count-unresolved"
+      ],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": true,
+      "id": "convert-style",
+      "issues": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "accepted": true,
+      "id": "convert-style",
+      "issues": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": true,
+      "id": "cursor-fetch-status",
+      "issues": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "accepted": true,
+      "id": "cursor-fetch-status",
+      "issues": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": true,
+      "id": "datediff-day",
+      "issues": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "accepted": true,
+      "id": "datediff-day",
+      "issues": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": true,
+      "id": "datediff-year",
+      "issues": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "accepted": true,
+      "id": "datediff-year",
+      "issues": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": true,
+      "id": "datefirst",
+      "issues": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "accepted": true,
+      "id": "datefirst",
+      "issues": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": true,
+      "id": "dateformat",
+      "issues": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "accepted": true,
+      "id": "dateformat",
+      "issues": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": true,
+      "id": "datetime-001",
+      "issues": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "accepted": true,
+      "id": "datetime-001",
+      "issues": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": true,
+      "id": "datetime-002",
+      "issues": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "accepted": true,
+      "id": "datetime-002",
+      "issues": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": true,
+      "id": "default-return-code",
+      "issues": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "accepted": true,
+      "id": "default-return-code",
+      "issues": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": false,
+      "id": "dynamic-parameter-binding",
+      "issues": [
+        "target-dynamic-or-incremental-result-unresolved"
+      ],
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "accepted": true,
+      "id": "dynamic-parameter-binding",
+      "issues": [
+        "result-origin-count-unresolved",
+        "target-dynamic-or-incremental-result-unresolved"
+      ],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": true,
+      "id": "empty-date",
+      "issues": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "accepted": true,
+      "id": "empty-date",
+      "issues": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": true,
+      "id": "empty-int",
+      "issues": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "accepted": true,
+      "id": "empty-int",
+      "issues": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": true,
+      "id": "identity-rollback-gap",
+      "issues": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "accepted": true,
+      "id": "identity-rollback-gap",
+      "issues": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": true,
+      "id": "informational-raiserror",
+      "issues": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "accepted": true,
+      "id": "informational-raiserror",
+      "issues": [
+        "result-origin-count-unresolved"
+      ],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": true,
+      "id": "integer-division",
+      "issues": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "accepted": true,
+      "id": "integer-division",
+      "issues": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": true,
+      "id": "isnull-length",
+      "issues": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "accepted": true,
+      "id": "isnull-length",
+      "issues": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": true,
+      "id": "len",
+      "issues": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "accepted": true,
+      "id": "len",
+      "issues": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": true,
+      "id": "merge-upsert",
+      "issues": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "accepted": true,
+      "id": "merge-upsert",
+      "issues": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": true,
+      "id": "money-scale",
+      "issues": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "accepted": true,
+      "id": "money-scale",
+      "issues": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": false,
+      "id": "multiple-result-sets",
+      "issues": [
+        "target-syntax-unresolved"
+      ],
+      "variant": "correct",
+      "verdict": "insufficient-evidence"
+    },
+    {
+      "accepted": true,
+      "id": "multiple-result-sets",
+      "issues": [
+        "target-syntax-unresolved"
+      ],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": true,
+      "id": "nested-transaction-rollback",
+      "issues": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "accepted": true,
+      "id": "nested-transaction-rollback",
+      "issues": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": true,
+      "id": "null-and-collation-order",
+      "issues": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "accepted": true,
+      "id": "null-and-collation-order",
+      "issues": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": true,
+      "id": "output-parameter",
+      "issues": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "accepted": true,
+      "id": "output-parameter",
+      "issues": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": true,
+      "id": "round-negative",
+      "issues": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "accepted": true,
+      "id": "round-negative",
+      "issues": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": true,
+      "id": "rowcount-lifetime",
+      "issues": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "accepted": true,
+      "id": "rowcount-lifetime",
+      "issues": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": true,
+      "id": "scope-identity-trigger",
+      "issues": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "accepted": true,
+      "id": "scope-identity-trigger",
+      "issues": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": true,
+      "id": "set-trigger",
+      "issues": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "accepted": true,
+      "id": "set-trigger",
+      "issues": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": true,
+      "id": "table-variable-scope",
+      "issues": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "accepted": true,
+      "id": "table-variable-scope",
+      "issues": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": true,
+      "id": "temp-table-scope",
+      "issues": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "accepted": true,
+      "id": "temp-table-scope",
+      "issues": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": true,
+      "id": "trailing-char",
+      "issues": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "accepted": true,
+      "id": "trailing-char",
+      "issues": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": true,
+      "id": "trailing-varchar",
+      "issues": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "accepted": true,
+      "id": "trailing-varchar",
+      "issues": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": true,
+      "id": "type-precedence",
+      "issues": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "accepted": true,
+      "id": "type-precedence",
+      "issues": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": true,
+      "id": "unordered-top",
+      "issues": [
+        "target-limit-selection-unproven",
+        "unordered-top"
+      ],
+      "variant": "correct",
+      "verdict": "policy-decision-required"
+    },
+    {
+      "accepted": true,
+      "id": "unordered-top",
+      "issues": [
+        "target-limit-selection-unproven",
+        "unordered-top"
+      ],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": true,
+      "id": "update-from-ambiguous",
+      "issues": [
+        "update-from-cardinality-unproven"
+      ],
+      "variant": "correct",
+      "verdict": "policy-decision-required"
+    },
+    {
+      "accepted": true,
+      "id": "update-from-ambiguous",
+      "issues": [
+        "update-from-cardinality-unproven"
+      ],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": true,
+      "id": "uuid-case",
+      "issues": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "accepted": true,
+      "id": "uuid-case",
+      "issues": [],
+      "variant": "wrong",
+      "verdict": "divergent"
+    },
+    {
+      "accepted": true,
+      "id": "xact-abort",
+      "issues": [],
+      "variant": "correct",
+      "verdict": "equivalent"
+    },
+    {
+      "accepted": true,
+      "id": "xact-abort",
+      "issues": [
+        "result-origin-count-unresolved"
+      ],
+      "variant": "wrong",
+      "verdict": "divergent"
+    }
+  ],
+  "qualification_passed": false,
+  "report_sha256": "3570055f0e945193e893c80f8560def4b7f3f97f88a9b7d8bba6347499448b48",
+  "schema": "tsql-review-r3-native-summary/1"
+}

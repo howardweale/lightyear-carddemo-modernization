@@ -1,8 +1,8 @@
 """Prospective syntax-bound comparator. Historical v1-v5 replay is unchanged."""
 from copy import deepcopy
 from .native_evidence import canonical, compare_v2
-from .semantics_v7 import contract
-from .value_contract_v7 import result_sets, error_equivalent, RESULT_TYPES, table_contract
+from .semantics import contract
+from .value_contract import result_sets, error_equivalent, RESULT_TYPES, table_contract
 
 
 def compare(source, target, mapping, qualification=None):
@@ -20,13 +20,15 @@ def compare(source, target, mapping, qualification=None):
     bound=contract(syntax)
     if bound['source_sha256'] != source['baseline']['procedure_sha256']:
         raise ValueError('syntax-source-bytes-differ')
-    result=deepcopy(result);result['schema']='tsql-native-comparison/7'
+    from .semantics import resolve_results
+    bound=resolve_results(bound,source['observation'])
+    result=deepcopy(result);result['schema']='tsql-native-comparison/9'
     result['syntax_contract']=bound
     result['differences']=[d for d in result['differences'] if d['observable']!='result_sets']
     # An obsolete family label can neither add nor suppress an obligation.
     result['unresolved']=[u for u in result['unresolved'] if u['observable']!='unordered-choice-policy-required'
                           and not u['observable'].startswith('unmapped-result-type:')]
-    from .semantics_v7 import unique_update_join,target_contract
+    from .semantics import unique_update_join,target_contract
     proved={j['start_utf16'] for j in bound['update_joins'] if unique_update_join(j,source['before'])}
     target_source=target['observation'].get('target_source')
     if target_source is not None:
@@ -38,7 +40,7 @@ def compare(source, target, mapping, qualification=None):
     for obligation in bound['policy_obligations']:
         if obligation['kind']=='update-from-cardinality-unproven' and obligation['span']['start_utf16'] in proved:continue
         result['unresolved'].append(dict(observable=obligation['kind'],classification='policy-decision-required'))
-    from .dependencies_v7 import assess
+    from .dependencies import assess
     dependency_checks={}
     for name,lane in [('source',source),('target',target)]:
         records=[lane['observation'].get(k) for k in ('dependency_catalogue','dependency_catalogue_after')]
@@ -52,14 +54,35 @@ def compare(source, target, mapping, qualification=None):
     result['gates']['dependency-closure']='catalogue-assessed' if len(dependency_checks)==2 else 'incomplete'
     ordered=bound['order_by_present']
     rules=bound.get('result_contracts')
-    if rules and bound['conditional_results']:
-        result['unresolved'].append(dict(observable='conditional-result-origin',classification='unsupported'))
+    from .semantics import reached_results
+    rules=bound['result_contracts']
+    if bound.get('result_producers_complete') is not True:
+        result['unresolved'].append(dict(observable='result-producer-catalogue-incomplete',classification='unsupported'))
     try:
         a,b=result_sets(source['observation'],'sqlserver'),result_sets(target['observation'],'postgresql')
-        from .value_contract_v7 import normalize_result_dates
+        if source['observation']['error'] and not a and not b:rules=[]
+        from .value_contract import normalize_result_dates
         normalize_result_dates(a,b,source['observation'])
+        # Row/cardinality discrepancies survive incomplete order/reachability proof.
+        left,right=deepcopy(a),deepcopy(b)
+        for sets in (left,right):
+            for rs in sets:rs['rows']=sorted(rs['rows'],key=canonical)
+        if canonical(left)!=canonical(right):
+            result['differences'].append(dict(observable='result_sets',source=left,target=right,
+                classification='lossy',attribution='result-value-or-cardinality'))
+        target_rules=result.get('target_syntax_contract',{}).get('result_contracts')
+        cursors=mapping['calling_convention'].get('refcursor_order')
+        if cursors:
+            if target_rules is None or {r.get('cursor') for r in target_rules}!=set(cursors) or len(target_rules)!=len(cursors):raise ValueError('target-cursor-order-unresolved')
+            target_rules=[next(r for r in target_rules if r['cursor']==name) for name in cursors]
         if rules is not None:
             if len(a)!=len(rules) or len(b)!=len(rules):raise ValueError('result-origin-count-unresolved')
+            if any(rule['ordered'] for rule in rules):
+                if target_rules is None or len(target_rules)!=len(b):raise ValueError('target-result-origin-unresolved')
+                for rule,twin_rule in zip(rules,target_rules):
+                    if rule['ordered'] and not twin_rule['ordered']:
+                        result['differences'].append(dict(observable='target-order-contract-missing',classification='lossy',attribution='result-order-contract'))
+                    elif rule['ordered'] and not twin_rule['resolved']:raise ValueError('target-sort-key-unresolved')
             for sets in (a,b):
                 for rs,rule in zip(sets,rules):
                     if not rule['ordered']:rs['rows']=sorted(rs['rows'],key=canonical);continue
@@ -107,7 +130,7 @@ def compare(source, target, mapping, qualification=None):
     try:
         contracts=[(state,table_contract(source[state]),table_contract(target[state])) for state in ('before','after')]
         result['unresolved']=[u for u in result['unresolved'] if not u['observable'].startswith('unmapped-table-type:')]
-        from .value_contract_v7 import normalized_tables
+        from .value_contract import normalized_tables
         for state in ('before','after'):
             left,right=normalized_tables(source[state],target[state])
             key='all-table-'+state
@@ -119,7 +142,10 @@ def compare(source, target, mapping, qualification=None):
             if canonical(left)!=canonical(right) and not any(d['observable']==key for d in result['differences']):
                 result['differences'].append(dict(observable=key,source=left,target=right,
                     classification='lossy',attribution='observed-'+key))
-    except ValueError:pass # Existing unsupported record survives.
+    except ValueError as ex:
+        result['unresolved'].append(dict(observable=str(ex),classification='unsupported'))
+    rowversion=any(str(c['type_code'])=='189' for rs in source['observation']['result_sets'] for c in rs['columns']) or any(c[1].lower() in ('rowversion','timestamp') for state in ('before','after') for t in source[state]['tables'].values() for c in t['columns'])
+    if rowversion:result['unresolved'].append(dict(observable='engine-generated-rowversion-policy-required',classification='policy-decision-required'))
     admissions=[lane['observation'].get('policy_admission') for lane in (source,target)]
     policy_records=[]
     if any(admissions):
@@ -141,9 +167,12 @@ def compare(source, target, mapping, qualification=None):
         if not result['unresolved'] and result['coverage_thresholds_met'] and qualification else 'insufficient-evidence')
     result['normalized_fields']=[n for n in result['normalized_fields'] if 'row multisets' not in n]
     result['normalized_fields'].append('ordered result rows preserved' if ordered else 'unordered result rows: duplicate-preserving multiset')
-    result.update(cases_run=source['observation'].get('cases_run',1),minimal_case_sha256=source['observation'].get('minimal_case_sha256'),policy_decisions=policy_records,
+    binding=source['observation'].get('case_binding')
+    result.update(cases_run=1,minimal_case_sha256=binding.get('case_sha256') if binding and result['differences'] else None,
+        evaluated_case_sha256=binding.get('case_sha256') if binding else None,
+        minimal_case_status='observed failure witness only; no reduction or global minimum claimed' if result['differences'] else 'not-applicable-no-observed-difference',policy_decisions=policy_records,
         representation_policy=dict(schema='tsql-representation/3',result_types=RESULT_TYPES,
-            datetime='SQL datetime 1/300-second ticks; smalldatetime minute ticks; datetime2 exact',float='exact IEEE value unless a separately admitted Tower tolerance applies',
+            datetime='SQL datetime ticks plus exact observed value; no sub-tick rounding tolerance; datetime2 exact',float='exact IEEE value unless a separately admitted Tower tolerance applies',
             result_order='source-syntax-bound',decimal='exact numerical value; scale only normalized'),
         attribution='observed observable; corpus family is not causal evidence')
     return result

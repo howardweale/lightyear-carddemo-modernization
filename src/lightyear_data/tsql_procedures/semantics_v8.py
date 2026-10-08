@@ -108,7 +108,7 @@ def reached_results(bound,observation):
 
 
 def target_contract(source):
-    from .postgresql_syntax import contract as pg_contract
+    from .postgresql_syntax_v8 import contract as pg_contract
     return pg_contract(source)
 
 

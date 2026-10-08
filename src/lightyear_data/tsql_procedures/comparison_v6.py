@@ -1,8 +1,8 @@
 """Prospective syntax-bound comparator. Historical v1-v5 replay is unchanged."""
 from copy import deepcopy
 from .native_evidence import canonical, compare_v2
-from .semantics import contract
-from .value_contract import result_sets, error_equivalent, RESULT_TYPES, table_contract
+from .semantics_v7 import contract
+from .value_contract_v7 import result_sets, error_equivalent, RESULT_TYPES, table_contract
 
 
 def compare(source, target, mapping, qualification=None):
@@ -26,7 +26,7 @@ def compare(source, target, mapping, qualification=None):
     # An obsolete family label can neither add nor suppress an obligation.
     result['unresolved']=[u for u in result['unresolved'] if u['observable']!='unordered-choice-policy-required'
                           and not u['observable'].startswith('unmapped-result-type:')]
-    from .semantics import unique_update_join,target_contract
+    from .semantics_v7 import unique_update_join,target_contract
     proved={j['start_utf16'] for j in bound['update_joins'] if unique_update_join(j,source['before'])}
     target_source=target['observation'].get('target_source')
     if target_source is not None:
@@ -44,7 +44,7 @@ def compare(source, target, mapping, qualification=None):
         result['unresolved'].append(dict(observable='conditional-result-origin',classification='unsupported'))
     try:
         a,b=result_sets(source['observation'],'sqlserver'),result_sets(target['observation'],'postgresql')
-        from .value_contract import normalize_result_dates
+        from .value_contract_v7 import normalize_result_dates
         normalize_result_dates(a,b,source['observation'])
         if rules is not None:
             if len(a)!=len(rules) or len(b)!=len(rules):raise ValueError('result-origin-count-unresolved')
@@ -95,7 +95,7 @@ def compare(source, target, mapping, qualification=None):
     try:
         contracts=[(state,table_contract(source[state]),table_contract(target[state])) for state in ('before','after')]
         result['unresolved']=[u for u in result['unresolved'] if not u['observable'].startswith('unmapped-table-type:')]
-        from .value_contract import normalized_tables
+        from .value_contract_v7 import normalized_tables
         for state in ('before','after'):
             left,right=normalized_tables(source[state],target[state])
             key='all-table-'+state

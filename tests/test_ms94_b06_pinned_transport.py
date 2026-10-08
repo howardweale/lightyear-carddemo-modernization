@@ -70,12 +70,16 @@ class PinnedTransportTests(unittest.TestCase):
         root=Path(__file__).resolve().parents[1]
         command=r"""$ErrorActionPreference='Stop'
 . ./tools/ms94_b06_pinned_exec.ps1
-function Get-FileHash { param($LiteralPath,$Algorithm);return @{Hash='4b01d5920e6785614727443bbecf343f4dedbb7347052b72ba805aab6353ef01'} }
+# Import before mocking: New-Object may otherwise autoload Utility and replace the mock.
+Import-Module Microsoft.PowerShell.Utility
+$script:hashReads=0
+function Get-FileHash { param($LiteralPath,$Algorithm);$script:hashReads++;return @{Hash='4b01d5920e6785614727443bbecf343f4dedbb7347052b72ba805aab6353ef01'} }
 $secret=New-Object Security.SecureString
 $secret.AppendChar('x')
 $credential=New-Object Management.Automation.PSCredential('unit-no-launch',$secret)
 $policy=@{codex_path='C:\Program Files\Lightyear\Codex\0.160.0\codex.exe';codex_sha256='4b01d5920e6785614727443bbecf343f4dedbb7347052b72ba805aab6353ef01'}
 $info=New-B06PinnedExecStartInfo -Policy $policy -Credential $credential -WorkingDirectory (Get-Location).Path -CodexHome (Join-Path $env:TEMP 'unit-no-launch')
+if ($script:hashReads -ne 1) { throw 'Unit hash boundary was not exercised' }
 $info.Arguments
 $credential.Password.Dispose()
 """

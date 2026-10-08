@@ -2,8 +2,8 @@
   "audit": {
     "checkpoint_signature_algorithm": "none",
     "event_count": 21,
-    "ledger_content_sha256": "d4e89afa898c723625aca87b12f3eeeddbdd5779efc9834ae45147ea3a9cbd68",
-    "ledger_head_sha256": "16e7b52b5f234a05796f974348394c0adfb6aebcf3afbb3e5fbb0f189e1eb11f",
+    "ledger_content_sha256": "672b1d21b21cdd8575f6d7a3fc2cf7cfdcefdfe45e07f54ed18a132ce078caa1",
+    "ledger_head_sha256": "2e56de4f75412028ecfaf6e4ca4e8678617e24b58edb0b1f749eacfd9333b90a",
     "ledger_id": "lightyear:carddemo:audit"
   },
   "cics_vsam_readiness": {
@@ -17,7 +17,7 @@
       "No external equivalence signing key was configured."
     ]
   },
-  "content_sha256": "c64bab4e12af99a385fc0a23a13f247da1ce32ad628d17010c2da3728c4f656c",
+  "content_sha256": "30d819da53b9e06a9db4c94ca5e15db4cd6ebf11736903fba831204290f2ac31",
   "dossier_type": "lightyear-release-evidence",
   "durable_control_plane": {
     "approval_consumption": "exactly-once",
@@ -57,7 +57,7 @@
     {
       "id": "execution:carddemo-hardened-plane",
       "kind": "decision_input",
-      "sha256": "83d937880f17192b3ff8e5caa881481bf50feb307c20fab9da67543c94bb571e"
+      "sha256": "9cdf54c0a7014c36b9269c05d1cbf433e3dcb2a5fd3f4d3e919f6eaefc2503ba"
     },
     {
       "id": "factory:durable-conformance",
@@ -80,7 +80,7 @@
       "sha256": "42000f0e821e12b7716717db7aaa3de6e6ad75eea00d7fa5b18f67c35344fa38"
     },
     {
-      "id": "release:carddemo-intcalc:v0.19-demo",
+      "id": "release:carddemo-intcalc:provider-scope-r1",
       "kind": "decision_input",
       "sha256": "d98bd92d752f23ee19263aa0957c28ee5aac52966d1322f6a31d4a9960394dc9"
     },
@@ -107,7 +107,7 @@
   ],
   "execution_decisions": [
     {
-      "content_sha256": "a2f60a68ab91c3f02ac74cfba437c1e964565a39e2e6dc50dcac663db03221ba",
+      "content_sha256": "398e7f874c5ea24fd430f45ccbfcf6bf68f9983571759836b549c49e42f9c920",
       "evaluated_at": "2022-07-18T00:00:00.300Z",
       "exception": null,
       "gaps": [
@@ -120,7 +120,7 @@
       "inputs": {
         "assurance": "simulated",
         "evidence_class": "policy-conformance-simulation",
-        "execution_receipt_sha256": "83d937880f17192b3ff8e5caa881481bf50feb307c20fab9da67543c94bb571e",
+        "execution_receipt_sha256": "9cdf54c0a7014c36b9269c05d1cbf433e3dcb2a5fd3f4d3e919f6eaefc2503ba",
         "hardened_execution_ready": false
       },
       "override_allowed": false,
@@ -150,14 +150,14 @@
     "waves": 2
   },
   "promotion_decision": {
-    "content_sha256": "db4c5fe074469eea8637d5a18265596fa99c80bc5f642a98c92d9566730ed0f0",
+    "content_sha256": "176893fdb5137edae7dafb21cf1cbbcb1f87431bf2dfa42467de826bb2a30d3b",
     "evaluated_at": "2022-07-18T00:00:01.300Z",
     "exception": null,
     "gaps": [
       "hardened-execution-enforcement",
       "mainframe-equivalence"
     ],
-    "id": "decision:release:carddemo-intcalc:v0.19-demo:promotion",
+    "id": "decision:release:carddemo-intcalc:provider-scope-r1:promotion",
     "inputs": {
       "execution_decision_ids": [
         "decision:execution:hardened-readiness"
@@ -178,10 +178,10 @@
     "policy_version": "1.0",
     "rationale": "Release is blocked until every independent runtime and execution-security gate has evidence.",
     "status": "blocked",
-    "subject_id": "release:carddemo-intcalc:v0.19-demo"
+    "subject_id": "release:carddemo-intcalc:provider-scope-r1"
   },
   "rationale": "Release is blocked until every independent runtime and execution-security gate has evidence.",
-  "release_id": "release:carddemo-intcalc:v0.19-demo",
+  "release_id": "release:carddemo-intcalc:provider-scope-r1",
   "runtime_decisions": [
     {
       "content_sha256": "e1d76241cf75b4f33c54c475fe819db0c4d12f58ef196f708db2b68c3e72303d",

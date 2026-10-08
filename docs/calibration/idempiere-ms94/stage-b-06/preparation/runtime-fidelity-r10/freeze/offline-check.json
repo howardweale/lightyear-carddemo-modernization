@@ -1,0 +1,14 @@
+{
+  "schema": "b06-frozen-offline-check/1",
+  "source_commit": "c90723b8dfdad4db6beba5e2e74554e844d6965e",
+  "plan_sha256": "397102089f2979d3d36637bab6551348ab3e6b489a875daac906b96ffdbf05c7",
+  "snapshot_sha256": "db6cc35a7927b26987c1a052149ba818ca006f9fb5430dc8207c01a9f7b1e3d3",
+  "verified_files": 776,
+  "tests": 76,
+  "passed": true,
+  "elapsed_seconds": 15.687,
+  "production_imports": "frozen snapshot only",
+  "docker_commands": 0,
+  "model_calls": 0,
+  "native_pairs": 0
+}

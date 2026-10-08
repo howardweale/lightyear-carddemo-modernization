@@ -112,6 +112,7 @@ def aggregate(plan, cells):
                 evaluation_sha256=evaluation["content_sha256"],
                 runs=sorted(runs),
                 pair_ids=sorted(r['case_ref'] for r in results if r.get('case_ref')),
+                paired_outcomes={r['case_ref']:r['status']=='passed' and not r['false_acceptance'] for r in results if r.get('case_ref')},
                 model_calls=sorted(calls),
                 pass_rate=passed / count if count else None,
                 run_count=count,

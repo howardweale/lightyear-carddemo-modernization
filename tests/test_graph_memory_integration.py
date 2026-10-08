@@ -254,9 +254,10 @@ class ProjectionIntegrationTests(GraphFixture):
         )
         proof, trust = self.approve(manifest)
         from lightyear_factory.revocations import subscribe
-        from lightyear_toolkit.revocations import RevocationReader
+        from lightyear_toolkit.revocations import RevocationReader,provision_state
         subscribe(f.ledger,f.signer,self.out)
-        reader=RevocationReader(self.out/'revocations',p['revocation_binding'],manifest['projection_sha256'])
+        provision_state(self.root/'reader-state',p['revocation_binding'],manifest['projection_sha256'],json.loads((self.out/'revocations/head.json').read_bytes()),json.loads((self.out/'revocations/revocations.json').read_bytes()))
+        reader=RevocationReader(self.out/'revocations',p['revocation_binding'],manifest['projection_sha256'],state_directory=self.root/'reader-state')
         tools = GraphTools(p, manifest, {"review_after": "2099-01-01"}, self.root, None,revocations=reader)
         guidance = tools._graph_guidance(anchor)
         self.assertIn(a["id"], json.dumps(guidance))

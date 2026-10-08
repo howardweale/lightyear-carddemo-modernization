@@ -1,0 +1,10 @@
+[Unit]
+Description=Refresh signed annotation revocations (host authority)
+[Service]
+Type=oneshot
+User=lyjudge
+ExecStart=/opt/lightyear-verify-venv/bin/python -I -m lightyear_factory annotate --ledger /var/lib/lightyear-graph/ledger.jsonl --trust /etc/lightyear-graph/trust.json --signing-key /var/lib/lightyear-graph/authority.pem refresh-revocations
+NoNewPrivileges=true
+PrivateNetwork=true
+ProtectSystem=strict
+ReadWritePaths=/var/lib/lightyear-graph

@@ -40,7 +40,7 @@ class GraphTools:
         revocations=None
         if data.get('annotations'):
             from .revocations import RevocationReader
-            revocations=RevocationReader(Path(directory)/'revocations',data['revocation_binding'],manifest['projection_sha256'])
+            revocations=RevocationReader(Path(directory)/'revocations',data['revocation_binding'],manifest['projection_sha256'],state_directory=trust.get('revocation_state_directory'))
             revocations.read()
         provider=None
         if data.get('search_index',{}).get('provider',{}).get('id')=='local-onnx-mean-pooling':

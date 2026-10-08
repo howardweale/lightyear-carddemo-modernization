@@ -48,7 +48,7 @@ class JSONProvider:
         if not model or not isinstance(model, str):
             raise ValueError("model identifier required")
         self.model = model
-        self.api_key = api_key or os.environ.get(self.key_env, "")
+        self.api_key = api_key
         if not self.api_key:
             raise ValueError("provider credential required")
         self.input_usd_per_million = float(input_usd_per_million)

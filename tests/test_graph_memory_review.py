@@ -4,7 +4,7 @@ from pathlib import Path
 from unittest.mock import patch
 import test_graph_memory as fixtures
 from lightyear_factory.revocations import subscribe,binding
-from lightyear_toolkit.revocations import RevocationReader
+from lightyear_toolkit.revocations import RevocationReader,provision_state
 from lightyear_toolkit.guidance import guidance
 from lightyear_factory.annotations import retrieve,outcome_summary,leak_certificate
 from lightyear_control_tower.decisions import canonical,digest
@@ -41,6 +41,7 @@ class ReviewTests(fixtures.MemoryTests):
         out=self.root/'projection';out.mkdir()
         raw=gzip.compress(canonical(p),mtime=0);(out/'projection.json.gz').write_bytes(raw)
         subscription=subscribe(self.ledger,self.signer,out)
+        provision_state(self.root/'reader-state',p['revocation_binding'],subscription['projection_sha256'],json.loads((out/'revocations/head.json').read_bytes()),json.loads((out/'revocations/revocations.json').read_bytes()))
         reader=RevocationReader(out/'revocations',p['revocation_binding'],subscription['projection_sha256'],state_directory=self.root/'reader-state')
         return p,reader,out
 

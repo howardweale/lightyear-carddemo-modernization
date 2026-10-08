@@ -174,7 +174,7 @@ class GraphContextAssembler:
         if projection.get('annotations'):
             from lightyear_toolkit.revocations import RevocationReader
             revocations=RevocationReader(Path(self.approved_projection[0])/'revocations',
-                projection['revocation_binding'],manifest['projection_sha256'])
+                projection['revocation_binding'],manifest['projection_sha256'],state_directory=self.approved_projection[2].get('revocation_state_directory'))
         annotations = guidance(projection, order.graph_node_ids,revocations=revocations,
                                include_inferred=order.metadata.get("include_inferred_annotations") is True)
         index = GraphExplorerIndex(projection, ontology={"relations": {}}, projection_only=True)

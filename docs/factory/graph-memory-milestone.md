@@ -98,3 +98,12 @@ Graph CI now runs for relevant changes on all PR branches and main. No model eva
 Publication CI caught a historical MS70 source-hash coupling. The base provider bytes remain unchanged; prospective graph runs now use a separate response-verifying adapter. Matching response snapshots pass, and missing/mismatched raw response identities fail. The historical triage artifacts were not regenerated.
 
 The approved provider-only lease scope also changes the deterministic execution-policy conformance hash. Its static receipt was regenerated and validated. The historical v0.19 demo audit/dossier and source-only pilot bindings remain byte-identical, using their retained MS39 conformance input. A separate provider-scope-r1 audit uses the current policy; its BLOCKED promotion result and simulated assurance remain unchanged. This is not new native evidence or a signed authority decision.
+
+
+## PR276 review completion - October 8, 2026
+
+Routing now requires the actual paired outcome interval and Howard's selected Wilson 95% lower bound of at least 80% on every workload. Low-quality ties cannot produce a route. Expiry advances the signed revocation sequence; explicit host-owned watermark enrollment fails closed if missing or deleted. A five-minute service/timer template ships but is not installed. Legacy migration verifies old signatures and produces new unapproved proposals without transferring approvals.
+
+The draft single-model and escalation matrices are separate. Unreviewed abbreviations are excluded from retrieval. Provider credentials require scoped broker leases; environment fallbacks are removed. The graph protected-path CI check is restored.
+
+Validation: 143 graph-memory tests run successfully with one skip; supporting factory and Verify suites passed. No model evaluation or route promotion. Deployment still needs host permissions, watermark enrollment and timer activation. New evaluation approval and independent abbreviation review remain pending. [Review r3 and deployment steps](graph-review-r3/README.md). Operator review, not independent attestation.

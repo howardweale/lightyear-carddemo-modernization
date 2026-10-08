@@ -4,6 +4,8 @@ from datetime import date
 
 def require_snapshot(value):
     if not isinstance(value,str):raise ValueError('dated model snapshot required')
+    # Explicit numbered Gemini versions, never preview/latest or unversioned aliases.
+    if re.fullmatch(r'gemini-[0-9]+\.[0-9]+-[a-z]+(?:-[a-z]+)*-[0-9]{3}',value):return value
     match=re.search(r'(?:^|[-_])(20[0-9]{2})-?([01][0-9])-?([0-3][0-9])$',value)
     if not match:raise ValueError('dated model snapshot required; aliases are not admitted')
     date(*map(int,match.groups()))

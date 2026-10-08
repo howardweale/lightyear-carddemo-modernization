@@ -301,7 +301,7 @@ class AnnotationLedger:
                     replace(Path(subscription['directory'])/'head.json',signer.sign(dict(
                         schema='annotation-live-head/1',channel=binding(self)['channel'],
                         **__import__('lightyear_factory.revocations',fromlist=['validity']).validity(now),
-                        sequence=row['sequence'],ledger_head=row['content_sha256'])))
+                        sequence=row['sequence']*10000000+(now or datetime.now(timezone.utc)).date().toordinal(),ledger_sequence=row['sequence'],ledger_head=row['content_sha256'])))
             with self.path.open("ab") as f:
                 f.write(canonical(row) + b"\n")
                 f.flush()

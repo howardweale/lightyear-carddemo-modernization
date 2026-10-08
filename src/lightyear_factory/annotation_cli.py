@@ -29,6 +29,7 @@ def parser(subparsers):
     add.add_argument("--scope", default="node")
     subs.add_parser("health")
     subs.add_parser("replay")
+    subs.add_parser("refresh-revocations")
     live=subs.add_parser('subscribe-revocations')
     live.add_argument('--projection',type=Path,required=True)
     apply = subs.add_parser("apply")
@@ -89,6 +90,10 @@ def run(args):
             json.loads(args.leak_checks.read_bytes()),
         )
     signer = Signer(args.signing_key)
+    if args.annotation_command=="refresh-revocations":
+        from .revocations import refresh
+        refresh(ledger,signer)
+        return dict(status="refreshed",model_calls=0)
     if args.annotation_command=='subscribe-revocations':
         from .revocations import subscribe
         return subscribe(ledger,signer,args.projection)

@@ -22,7 +22,7 @@ def admitted_policy(policy, matrix, proof, trust, *, now=None, versions=None):
         return None
     try:
         from .routing_policy import compile_policy
-        if policy != compile_policy(matrix, margin=policy['rule']['margin']):
+        if policy != compile_policy(matrix, margin=policy['rule']['margin'],minimum_wilson_lower=policy['rule']['minimum_wilson_lower']):
             return None
         d = approve(
             proof,

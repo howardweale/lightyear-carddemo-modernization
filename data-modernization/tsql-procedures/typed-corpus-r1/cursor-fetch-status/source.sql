@@ -1,0 +1,8 @@
+-- Authored public M0 trap; NOT natively qualified.
+CREATE OR ALTER PROCEDURE dbo.trap_cursor_fetch_status @input_value int
+AS
+BEGIN
+ SET NOCOUNT ON;
+ DECLARE @n int,@total int=0; DECLARE c CURSOR LOCAL FAST_FORWARD FOR SELECT v FROM (VALUES(1),(2),(@input_value)) x(v) ORDER BY v; OPEN c; FETCH NEXT FROM c INTO @n; WHILE @@FETCH_STATUS=0 BEGIN SET @total=@total+@n; FETCH NEXT FROM c INTO @n; END; CLOSE c; DEALLOCATE c; SELECT CONVERT(varchar(20),@total) AS value;
+END;
+GO

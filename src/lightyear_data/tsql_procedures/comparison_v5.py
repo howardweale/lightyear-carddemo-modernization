@@ -1,8 +1,8 @@
 """Prospective syntax-bound comparator. Historical v1-v4 replay is unchanged."""
 from copy import deepcopy
 from .native_evidence import canonical, compare_v2
-from .semantics import contract
-from .value_contract import result_sets, error_equivalent, RESULT_TYPES, table_contract
+from .semantics_v5 import contract
+from .value_contract_v5 import result_sets, error_equivalent, RESULT_TYPES, table_contract
 
 
 def compare(source, target, mapping, qualification=None):

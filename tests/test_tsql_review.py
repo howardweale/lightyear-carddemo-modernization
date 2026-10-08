@@ -2,7 +2,7 @@
 import unittest
 from copy import deepcopy
 from test_tsql_native import lane
-from lightyear_data.tsql_procedures.comparison_v5 import compare
+from lightyear_data.tsql_procedures.comparison_v6 import compare
 from lightyear_data.tsql_procedures.semantics import contract
 from lightyear_data.tsql_procedures.policy import profile
 from lightyear_data.tsql_procedures.value_contract import error_equivalent, result_sets
@@ -64,7 +64,8 @@ class ReviewTests(unittest.TestCase):
         self.assertTrue(error_equivalent({'number':2627},{'sqlstate':'23505'},{}))
         self.assertFalse(error_equivalent({'number':8134},{'sqlstate':'23505'},{}))
         self.assertIsNone(error_equivalent({'number':547},{'sqlstate':'23503'},{}))
-        self.assertTrue(error_equivalent({'number':547},{'sqlstate':'23503'},{'constraint_kind':'foreign-key'}))
+        self.assertIsNone(error_equivalent({'number':547},{'sqlstate':'23503'},{'constraint_kind':'foreign-key'}))
+        self.assertTrue(error_equivalent({'number':547,'message':'conflicted with FOREIGN KEY constraint'},{'sqlstate':'23503'},{}))
         self.assertIsNone(error_equivalent({'number':50000},{'sqlstate':'P0001'},{}))
     def test_types_retain_numeric_values(self):
         a=lane('sqlserver')['observation'];a['result_sets'][0]['columns'][0]['type_code']='106'
@@ -96,3 +97,98 @@ class ReviewTests(unittest.TestCase):
             admit({},b'',bindings({}, {}, {}, {}),scope='fixture',head='a'*64,now=None)
 
 if __name__=='__main__':unittest.main()
+
+class SecondReviewTests(unittest.TestCase):
+    def test_exec_and_dynamic_results_cannot_be_equivalent_by_multiset(self):
+        for kind in ('ExecuteStatement','ExecutableProcedureReference','ExecutableStringList'):
+            a,b,m=inputs([node(kind)])
+            a['observation']['result_sets'][0]['rows']=[[None],['a'],['B']]
+            b['observation']['result_sets'][0]['rows']=[['B'],['a'],[None]]
+            r=compare(a,b,m)
+            self.assertNotEqual(r['verdict'],'equivalent')
+            self.assertIn('unresolved-exec-result-origin',[v['observable'] for v in r['unresolved']])
+
+    def test_schema_types_and_error_classes(self):
+        from lightyear_data.tsql_procedures.value_contract import table_contract
+        for source,target in [('datetime','timestamp without time zone'),('smalldatetime','timestamp without time zone'),
+            ('float','double precision'),('real','real'),('text','text'),('ntext','text'),('rowversion','bytea')]:
+            a={'engine':'sqlserver','tables':{'t':{'columns':[['x',source,8,53,0,True]],'primary_key':[]}}}
+            b={'engine':'postgresql','tables':{'t':{'columns':[['x',target,False,False]],'primary_key':[]}}}
+            with self.subTest(source=source):self.assertEqual(table_contract(a),table_contract(b))
+        for number,state in [(8152,'22001'),(2628,'22001'),(8115,'22003'),(1205,'40P01')]:
+            self.assertTrue(error_equivalent({'number':number},{'sqlstate':state},{}))
+        self.assertTrue(error_equivalent({'number':50000,'message':'business rule'},{'sqlstate':'P0001','message':'business rule'},{}))
+        self.assertFalse(error_equivalent({'number':50000,'message':'business rule'},{'sqlstate':'P0001','message':'other'},{}))
+
+    def test_datetime_ticks_and_exact_decimal_table_values(self):
+        from lightyear_data.tsql_procedures.value_contract import datetime_value
+        def dt(text):return dict(type='datetime',value='2026-10-01T00:00:00.'+text)
+        self.assertEqual(datetime_value(dt('003000'),'datetime'),datetime_value(dt('003333'),'datetime'))
+        self.assertNotEqual(datetime_value(dt('003000'),'datetime'),datetime_value(dt('007000'),'datetime'))
+        with self.assertRaisesRegex(ValueError,'naive'):
+            datetime_value(dict(type='datetime',value='2026-10-01T00:00:00+02:00'),'datetime')
+
+    def test_order_contract_is_per_result_and_ties_are_multisets(self):
+        a,b,m=inputs([node('OrderByClause')])
+        raw=a['observation']['source_syntax']
+        raw['semantic_catalogue']={'result_contracts':[
+            dict(ordered=True,resolved=True,key_indices=[0]),dict(ordered=False,resolved=True,key_indices=[])]}
+        for lane_value in (a,b):
+            rs=lane_value['observation']['result_sets'][0]
+            rs['columns']*=2;rs['rows']=[['a','x'],['a','y'],['b','z']]
+            lane_value['observation']['result_sets'].append(deepcopy(rs))
+        b['observation']['result_sets'][0]['rows']=[['a','y'],['a','x'],['b','z']]
+        b['observation']['result_sets'][1]['rows'].reverse()
+        self.assertFalse(compare(a,b,m)['differences'])
+        b['observation']['result_sets'][0]['rows'].reverse()
+        self.assertEqual(compare(a,b,m)['verdict'],'divergent')
+
+    def test_547_cannot_be_authorized_by_old_profile(self):
+        a,b,m=inputs([])
+        a['observation']['error']={'number':547,'message':'ambiguous constraint'}
+        b['observation']['error']={'sqlstate':'23514'}
+        m=profile(dict(id='public-check',trap_family=1,assets={},calling_convention={'public_error_equivalence':'check-constraint-547-23514'}))
+        self.assertIn('error-map-required',[u['observable'] for u in compare(a,b,m)['unresolved']])
+
+    def test_source_policy_and_target_volatile_selection(self):
+        from lightyear_data.tsql_procedures.semantics import target_contract
+        for kind in ('SetRowCountStatement','SelectSetVariable'):
+            self.assertTrue(contract(ast([node(kind)]))['policy_obligations'])
+        for source in ('SELECT x FROM t LIMIT 1','SELECT CURRENT_TIMESTAMP','SELECT row_number() OVER (ORDER BY x)',"SELECT string_agg(x,',') FROM t"):
+            self.assertTrue(target_contract(source)['policy_obligations'])
+        self.assertFalse(target_contract("SELECT 'LIMIT 1' AS x")['policy_obligations'])
+
+    def test_key_join_cardinality_is_bound_to_rhs_primary_key(self):
+        from lightyear_data.tsql_procedures.semantics import unique_update_join
+        j=dict(closed=True,join_type='Inner',target=['a'],left=dict(alias='a',parts=['dbo','a']),
+               right=dict(alias='b',parts=['dbo','b']),equalities=[[['a','id'],['b','id']]])
+        state={'tables':{'["dbo","a"]':dict(columns=[['id']],primary_key=['id']),
+                         '["dbo","b"]':dict(columns=[['id']],primary_key=['id'])}}
+        self.assertTrue(unique_update_join(j,state))
+        state['tables']['["dbo","b"]']['primary_key']=[]
+        self.assertFalse(unique_update_join(j,state))
+
+    def test_money_boundaries_and_nullable_shrink(self):
+        from lightyear_data.tsql_procedures.casegen import boundaries
+        self.assertIn('922337203685477.5807',boundaries('money'))
+        self.assertIn('-922337203685477.5808',boundaries('money'))
+        self.assertEqual(shrink({'x':123},'same',lambda c:'same')['case'],{'x':None})
+
+    def test_native_dictionary_table_rows_use_date_storage_ticks(self):
+        from lightyear_data.tsql_procedures.value_contract import normalized_tables
+        a=dict(tables={'t':dict(columns=[['at','datetime']],primary_key=[],rows=[{'at':dict(type='datetime',value='2026-10-01T00:00:00.003')}])})
+        b=dict(tables={'t':dict(columns=[['at','timestamp without time zone']],primary_key=[],rows=[{'at':dict(type='datetime',value='2026-10-01T00:00:00.003333')}])})
+        self.assertEqual(*normalized_tables(a,b))
+
+    def test_profile_failure_preserves_ownership_of_created_database(self):
+        from unittest.mock import patch
+        from contextlib import nullcontext
+        from lightyear_data.tsql_procedures.native import NativeEngine
+        engine=NativeEngine('postgresql',lambda db:nullcontext(object()),'lytsql_123456789abc')
+        def execute(conn,sql):
+            if sql.startswith('ALTER DATABASE'):
+                self.assertIn('lytsql_123456789abc_b1',engine.owned)
+                raise RuntimeError('profile failed')
+        with patch('lightyear_data.tsql_procedures.native.execute',side_effect=execute):
+            with self.assertRaisesRegex(RuntimeError,'profile failed'):engine.provision('b1','','')
+        self.assertEqual(engine.owned,{'lytsql_123456789abc_b1'})

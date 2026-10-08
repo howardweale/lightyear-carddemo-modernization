@@ -1,0 +1,302 @@
+{
+  "claim": "Operator review; source signatures and replay verified; full qualification has not passed; no independent attestation",
+  "content_sha256": "45db960c37aaecad62b00a91136050e20873583a4d5a3f239b54c7bbab67e931",
+  "independent_finalization": {
+    "code_sha256": "e4847bcbebf529a9d1839462336577f90584aac8e56c5eaa6e01f44194d35433",
+    "file_sha256": "4b1e893b47ba0820daa72f277c24754ca58a6d1b9449820f97b466f18c9e4a8c",
+    "passed": false,
+    "schema": "tsql-M0-acceptance/3",
+    "unaccepted": [
+      {
+        "id": "catch-retains-prior-work",
+        "unresolved": [
+          {
+            "classification": "unsupported",
+            "observable": "conditional-result-origin"
+          }
+        ],
+        "variant": "correct",
+        "verdict": "insufficient-evidence"
+      },
+      {
+        "id": "ci-unique",
+        "unresolved": [
+          {
+            "classification": "unsupported",
+            "observable": "conditional-result-origin"
+          },
+          {
+            "classification": "unsupported",
+            "observable": "conditional-result-origin"
+          },
+          {
+            "classification": "unsupported",
+            "observable": "result-origin-count-unresolved"
+          }
+        ],
+        "variant": "correct",
+        "verdict": "insufficient-evidence"
+      },
+      {
+        "id": "cursor-fetch-status",
+        "unresolved": [
+          {
+            "classification": "unsupported",
+            "observable": "conditional-result-origin"
+          },
+          {
+            "classification": "unsupported",
+            "observable": "result-origin-count-unresolved"
+          }
+        ],
+        "variant": "correct",
+        "verdict": "insufficient-evidence"
+      },
+      {
+        "id": "cursor-fetch-status",
+        "unresolved": [
+          {
+            "classification": "unsupported",
+            "observable": "conditional-result-origin"
+          },
+          {
+            "classification": "unsupported",
+            "observable": "result-origin-count-unresolved"
+          }
+        ],
+        "variant": "wrong",
+        "verdict": "insufficient-evidence"
+      },
+      {
+        "id": "dynamic-parameter-binding",
+        "unresolved": [
+          {
+            "classification": "policy-decision-required",
+            "observable": "unresolved-exec-result-origin"
+          },
+          {
+            "classification": "policy-decision-required",
+            "observable": "unresolved-exec-result-origin"
+          },
+          {
+            "classification": "unsupported",
+            "observable": "source-dynamic-module-dependency"
+          },
+          {
+            "classification": "unsupported",
+            "observable": "conditional-result-origin"
+          }
+        ],
+        "variant": "correct",
+        "verdict": "insufficient-evidence"
+      },
+      {
+        "id": "null-and-collation-order",
+        "unresolved": [
+          {
+            "classification": "unsupported",
+            "observable": "result-order-key-unresolved"
+          }
+        ],
+        "variant": "correct",
+        "verdict": "insufficient-evidence"
+      },
+      {
+        "id": "null-and-collation-order",
+        "unresolved": [
+          {
+            "classification": "unsupported",
+            "observable": "result-order-key-unresolved"
+          }
+        ],
+        "variant": "wrong",
+        "verdict": "insufficient-evidence"
+      },
+      {
+        "id": "scope-identity-trigger",
+        "unresolved": [
+          {
+            "classification": "unsupported",
+            "observable": "source-unresolved-module-dependency"
+          }
+        ],
+        "variant": "correct",
+        "verdict": "insufficient-evidence"
+      },
+      {
+        "id": "set-trigger",
+        "unresolved": [
+          {
+            "classification": "unsupported",
+            "observable": "source-unresolved-module-dependency"
+          }
+        ],
+        "variant": "correct",
+        "verdict": "insufficient-evidence"
+      },
+      {
+        "id": "xact-abort",
+        "unresolved": [
+          {
+            "classification": "unsupported",
+            "observable": "conditional-result-origin"
+          },
+          {
+            "classification": "unsupported",
+            "observable": "conditional-result-origin"
+          }
+        ],
+        "variant": "correct",
+        "verdict": "insufficient-evidence"
+      }
+    ]
+  },
+  "independent_replay_seconds": 3.524830713002302,
+  "model_calls": 0,
+  "runs": [
+    {
+      "actual_cleanup": [
+        {
+          "absent": true,
+          "kind": "containers"
+        },
+        {
+          "absent": true,
+          "kind": "networks"
+        },
+        {
+          "absent": true,
+          "kind": "volumes"
+        }
+      ],
+      "cases_run": 1,
+      "counts": {
+        "failed": 1
+      },
+      "fatal_type": "RuntimeError",
+      "native_seconds": 18.56529992400101,
+      "public_key_sha256": "0a2824a47264ca98173538d9e462bba66ef6f3d216fa5b634073fa216ab2ca73",
+      "qualification_passed": false,
+      "report_file_sha256": "8ef51ddd046cbd8ad7e96e7a03db8c64b01c52db23de24410445dd0e7c9c8743",
+      "report_sha256": "b89ef92e7bc2998c51bfe7d3aaf595a4c90236ca7bf77d4c5a14b28dadd383a8",
+      "run": "native-completion-r1"
+    },
+    {
+      "actual_cleanup": [
+        {
+          "absent": true,
+          "kind": "containers"
+        },
+        {
+          "absent": true,
+          "kind": "networks"
+        },
+        {
+          "absent": true,
+          "kind": "volumes"
+        }
+      ],
+      "cases_run": 35,
+      "counts": {
+        "divergent": 16,
+        "failed": 1,
+        "match-on-compared-observables": 18
+      },
+      "fatal_type": "RuntimeError",
+      "native_seconds": 117.6745800480021,
+      "public_key_sha256": "7ea15898113d3358e8695d4f8e393e958e87569e9b0384eb6ec4b36624fd184b",
+      "qualification_passed": false,
+      "report_file_sha256": "7a35f186f54f4ab30c218967606835e9c42f66ec496a56ac7b6f8072b7d05eee",
+      "report_sha256": "f8876992551805ffaebead4c8c5969e174f1a9f24fc4c2f5443a56a050ea882d",
+      "run": "native-completion-r2"
+    },
+    {
+      "actual_cleanup": [
+        {
+          "absent": true,
+          "kind": "containers"
+        },
+        {
+          "absent": true,
+          "kind": "networks"
+        },
+        {
+          "absent": true,
+          "kind": "volumes"
+        }
+      ],
+      "cases_run": 57,
+      "counts": {
+        "divergent": 27,
+        "failed": 1,
+        "match-on-compared-observables": 29
+      },
+      "fatal_type": "RuntimeError",
+      "native_seconds": 189.24941592400137,
+      "public_key_sha256": "f52d7edd7da63f26fd47cdb59a4eb423bfe4e909c7e6c3525c34ea15f68acfd4",
+      "qualification_passed": false,
+      "report_file_sha256": "14cdffd74e1028914e20651ab927e666ed7d5d445babe9db8f54d47f1240b579",
+      "report_sha256": "5001f440a4a2853bf06fd4227a86d6a4466fbcb88128246e9b1fe159d755c8ef",
+      "run": "native-completion-r3"
+    },
+    {
+      "actual_cleanup": [
+        {
+          "absent": true,
+          "kind": "containers"
+        },
+        {
+          "absent": true,
+          "kind": "networks"
+        },
+        {
+          "absent": true,
+          "kind": "volumes"
+        }
+      ],
+      "cases_run": 58,
+      "counts": {
+        "divergent": 27,
+        "failed": 1,
+        "match-on-compared-observables": 30
+      },
+      "fatal_type": "RuntimeError",
+      "native_seconds": 188.8887743660016,
+      "public_key_sha256": "b169aa9a1632772c4953888c4acc0fd4fe90a825dd8a1669c20f7a88cb58cc2a",
+      "qualification_passed": false,
+      "report_file_sha256": "0e9e009ff46f877298f15400015a97764e0cc975b49aaed5c938749a84eea7aa",
+      "report_sha256": "6b63490e13f7eea40f80fbf5075c44d808fd68bd72b5698b98b393eb1d5dae8d",
+      "run": "native-completion-r4"
+    },
+    {
+      "actual_cleanup": [
+        {
+          "absent": true,
+          "kind": "containers"
+        },
+        {
+          "absent": true,
+          "kind": "networks"
+        },
+        {
+          "absent": true,
+          "kind": "volumes"
+        }
+      ],
+      "cases_run": 108,
+      "counts": {
+        "divergent": 51,
+        "match-on-compared-observables": 57
+      },
+      "fatal_type": "ValueError",
+      "native_seconds": 345.98937617699994,
+      "public_key_sha256": "d1c02446810219b6bf6126f36fef7658feda6b5253a3c86ac3e37d174be8be43",
+      "qualification_passed": false,
+      "report_file_sha256": "f23531c932ab21bb43178b16a50b66f6fbebd88f6bf22542f89d68810f809cbe",
+      "report_sha256": "7c1dbfbb406a1de224bb4de7f213b6804e641eea75c7f4c7ac169cce3e81e9d9",
+      "run": "native-completion-r5"
+    }
+  ],
+  "schema": "tsql-review-native-summary/1",
+  "source_audit_sha256": "60728b6ca73ff11242f4a29709c7c983fb08cb198941fda807be75b15ad88656"
+}

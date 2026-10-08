@@ -1,0 +1,63 @@
+{
+  "accepted_reductions": 18,
+  "actual_cleanup": [
+    {
+      "absent": true,
+      "kind": "containers"
+    },
+    {
+      "absent": true,
+      "kind": "networks"
+    },
+    {
+      "absent": true,
+      "kind": "volumes"
+    }
+  ],
+  "case_origins": {
+    "proposed-not-executed": 52,
+    "shrink-probe": 40
+  },
+  "cases_run": 92,
+  "claim": "Public integer-division boundary/shrink integration check; not full qualification; operator review, not independent attestation",
+  "content_sha256": "1c25ad4d31bacd4019bbfbb66aeea229323dc5a6613d627562a1a146451134c4",
+  "counts": {
+    "divergent": 38,
+    "match-on-compared-observables": 54
+  },
+  "fatal_type": null,
+  "independent_replay_seconds": 0.9309380510021583,
+  "minimal_case_sha256": [
+    "ec639503166d27b54ab299387e5b441e2d710a906a893597e2ef25d970358336",
+    "ec639503166d27b54ab299387e5b441e2d710a906a893597e2ef25d970358336",
+    "ec639503166d27b54ab299387e5b441e2d710a906a893597e2ef25d970358336",
+    "ec639503166d27b54ab299387e5b441e2d710a906a893597e2ef25d970358336",
+    "ec639503166d27b54ab299387e5b441e2d710a906a893597e2ef25d970358336",
+    "e534145aeb34ba1b5f68804033c93aa838610cdd2ae9f0ff81a224691e364867",
+    "7fe025468a1b4d820c21c513c73ca198a2ef3a28072f2a30c38b11789085bdd1",
+    "fde2fe8238ee71bd83e89a96e9246bf70e32fc9a33f941127b2a871583c7c332",
+    "3dd43d755ed3e7112687d7c4a923c031a40233e0c5de3c625f1c2e263e6067ae",
+    "ec639503166d27b54ab299387e5b441e2d710a906a893597e2ef25d970358336",
+    "ec639503166d27b54ab299387e5b441e2d710a906a893597e2ef25d970358336",
+    "ec639503166d27b54ab299387e5b441e2d710a906a893597e2ef25d970358336",
+    "e534145aeb34ba1b5f68804033c93aa838610cdd2ae9f0ff81a224691e364867",
+    "7fe025468a1b4d820c21c513c73ca198a2ef3a28072f2a30c38b11789085bdd1",
+    "fde2fe8238ee71bd83e89a96e9246bf70e32fc9a33f941127b2a871583c7c332",
+    "3dd43d755ed3e7112687d7c4a923c031a40233e0c5de3c625f1c2e263e6067ae",
+    "ec639503166d27b54ab299387e5b441e2d710a906a893597e2ef25d970358336",
+    "ec639503166d27b54ab299387e5b441e2d710a906a893597e2ef25d970358336",
+    "ec639503166d27b54ab299387e5b441e2d710a906a893597e2ef25d970358336",
+    "ec639503166d27b54ab299387e5b441e2d710a906a893597e2ef25d970358336"
+  ],
+  "model_calls": 0,
+  "native_seconds": 289.06108519600093,
+  "public_key_sha256": "66ef7d7a457a7cb88a45ec14277659ef944a78e24629283fc0e41c40c6e721be",
+  "qualification_passed": false,
+  "reductions": 20,
+  "report_file_sha256": "b08f6795522dd9e7cdfac52b4ad66488027adb594e6f0b52b9349e086e5aae35",
+  "report_sha256": "e0fca8e8e5a17b37130653c3c7da3c650b9738404475bbe4b9f3b1a622999e4a",
+  "run": "native-generated-r1",
+  "schema": "tsql-generated-native-summary/1",
+  "shrink_oracle_calls": 40,
+  "source_audit_sha256": "517a7baed84b106cf6c46f9e0b1362a80af539d068204153321b96e2975877e2"
+}

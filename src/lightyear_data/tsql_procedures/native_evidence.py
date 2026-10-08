@@ -214,7 +214,18 @@ def replay_pair(directory, public, expected_hash):
         if sha(raw)!=digest: raise ValueError('evidence-changed')
         values[name]=json.loads(raw)
     saved=values['comparison.json']
-    if saved['schema']=='tsql-native-comparison/5':
+    if saved['schema']=='tsql-native-comparison/7':
+        from .comparison_v7 import compare as compare_v7
+        for lane in ('source.json','target.json'):
+            policy=values[lane]['observation'].get('policy_admission')
+            if policy and policy['trusted_key_sha256']!=body.get('policy_authority_sha256'):raise ValueError('pair-policy-authority-binding')
+        if saved['mapping']['assets']!=body['assets']:raise ValueError('mapping-asset-binding')
+        result=compare_v7(values['source.json'],values['target.json'],saved['mapping'],saved.get('coverage_qualification'))
+    elif saved['schema']=='tsql-native-comparison/6':
+        from .comparison_v6 import compare as compare_v6
+        if saved['mapping']['assets']!=body['assets']:raise ValueError('mapping-asset-binding')
+        result=compare_v6(values['source.json'],values['target.json'],saved['mapping'],saved.get('coverage_qualification'))
+    elif saved['schema']=='tsql-native-comparison/5':
         from .comparison_v5 import compare as compare_v5
         if saved['mapping']['assets']!=body['assets']:raise ValueError('mapping-asset-binding')
         result=compare_v5(values['source.json'],values['target.json'],saved['mapping'],saved.get('coverage_qualification'))

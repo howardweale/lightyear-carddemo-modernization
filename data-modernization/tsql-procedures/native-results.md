@@ -2,7 +2,7 @@
 
 **Native adapters, database capture and offline replay executed. M0 qualification has not passed.**
 
-Operator review; not independent attestation. Zero model calls. All Docker work ran on the approved dedicated `ly-tsql-m0` x86_64 Linux VM in project `lightyear-ms67-nonproduction`. No local Windows Docker commands; no B05/B06, template-r1, work/ms94 or frozen-evidence edits.
+Operator review; not independent attestation. Zero model calls. All Docker work ran on the approved dedicated `ly-tsql-m0` x86_64 Linux VM. No local Windows Docker commands; no B05/B06, template-r1, work/ms94 or frozen-evidence edits.
 
 ## Measured result
 
@@ -89,7 +89,7 @@ ScriptDom passed all 42 source procedures. The report and three build hashes sup
 - ScriptDom assembly `0c84098c3ceb902677d7f8fe2ed3bd338d88f5b03e0cb577fc6480bbc261ea60`.
 - Package lock `c5b9c98f04ae6e36b79006ab1317e48b0abd01cede1af5de27dda276db314aed`.
 
-Local raw evidence is under `work/tsql-m0-transfer/native-evidence/` in the main checkout. The VM retains `/home/howard_weale_gmail_com/tsql-native-attempt-001` through `-005`. Only this hash/count report and the hash-only summary belong in the repository. Nothing was uploaded publicly.
+Local raw evidence is under `work/tsql-m0-transfer/native-evidence/` in the main checkout. The VM retains `<private VM evidence path>` through `-005`. Only this hash/count report and the hash-only summary belong in the repository. Nothing was uploaded publicly.
 
 See [native-results-summary.json](native-results-summary.json) for every pair’s hash and outcome.
 

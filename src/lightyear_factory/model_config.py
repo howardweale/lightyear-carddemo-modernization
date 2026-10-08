@@ -4,7 +4,7 @@ import json
 import math
 import os
 from pathlib import Path
-from .providers import OpenAIResponsesProvider
+from .model_versions import SnapshotOpenAIResponsesProvider
 from .additional_providers import AnthropicMessagesProvider, GeminiProvider
 from .routing import TaskRouter
 
@@ -33,12 +33,14 @@ def configured_models(config, *, secret_store=None):
             or not 1 <= prices["max_output_tokens"] <= 65536
         ):
             raise ValueError("finite positive prices and output token cap required")
+        from .model_versions import require_snapshot
+        require_snapshot(c["model"])
         from .provider_secrets import NAMES
         name=NAMES[c['provider']]
         key=secret_store.read(name) if secret_store is not None else os.environ.get(name,'')
         if not key:raise ValueError('provider credential unavailable')
         if c["provider"] == "openai":
-            p = OpenAIResponsesProvider(
+            p = SnapshotOpenAIResponsesProvider(
                 key,
                 model=c["model"],
                 max_retries=0,
@@ -50,6 +52,7 @@ def configured_models(config, *, secret_store=None):
                 c["provider"]
             ]
             p = cls(c["model"], api_key=key, **prices)
+        p.require_snapshot_response=True
         providers[identifier] = p
     return providers
 

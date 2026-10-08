@@ -88,6 +88,8 @@ class JSONProvider:
             raise ContractError("provider response exceeds byte cap")
         try:
             response = json.loads(data)
+            from .model_versions import verify_response
+            verify_response(self,response)
             content, usage = self.parse(response)
             _validate_schema(content, schema, role)
             if any(type(v) is not int or v < 0 for v in usage.values()):

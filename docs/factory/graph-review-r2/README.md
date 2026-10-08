@@ -16,7 +16,7 @@ still has no promoted routes. No live provider call or embedding inference ran.
 | Slow flagging | At least two failures and at least 40% failure rate. |
 | Missing descendant pitfalls | Descendant pitfalls ranked by graph distance within the existing 4 KB guidance cap. |
 | First-attempt undercount | Any non-false-accept `passed` result on attempt 1 counts, for both task types; attempts must match its receipt. |
-| Small routing samples | Ten distinct paired runs per cell minimum, Wilson 95% intervals, exact model versions and expiry on version change. |
+| Small routing samples | Thirty-five distinct paired runs per cell minimum, Wilson 95% intervals, exact model versions and expiry on version change. |
 | Search cost | Precomputed term sets and top-K selection before explanation construction; maximum 1,000 results. |
 | Hardened provider credentials | Work-order-scoped secret broker leases; no environment fallback after a denied lease. |
 
@@ -24,8 +24,7 @@ The policy compiler proposes the cheapest single model whose Wilson lower bound
 is at least the best observed pass rate minus a predeclared margin on every
 workload, with zero false accepts. No qualifying model means no route. The Tower
 card carries the rule, cell-level decision output and model versions. In
-particular, 10/10 does **not** satisfy a 90% lower-bound criterion: the floor is a
-minimum sample, not sufficient evidence by itself.
+particular, 10/10 cannot satisfy a 90% lower-bound criterion. The revised floor is 35; a perfect 35/35 can meet that bar, while lesser evidence may still produce no route.
 
 The escalation implementation is a separate declared evaluation arm: cheap
 first, strong only for subsequent builder invocations carrying a closed
@@ -52,11 +51,13 @@ measurement; this increment supplies the evaluation arm only.
   reviewer must supply 75 queries/relevant-node labels and freeze their hashes
   before evaluation. Promotion requires at least 0.05 absolute recall@5 gain
   and no MRR loss. This is a prospective rule, not a measured result.
-- [Matrix and memory A/B drafts](evaluation-plans.json): proposed caps of $100
-  for 240 matrix trials (two models plus a separately measured ladder, two task
-  types, four workloads, ten paired cases per cell) and $50 for 80 memory A/B
-  trials. Neither budget is approved. Exact provider versions/prices, catalogues,
-  per-cell limits, source commit and Howard's Tower decision are required first.
+- [Matrix and memory A/B drafts](evaluation-plans.json): 840 matrix trials
+  (three arms, two task types, four workloads, 35 paired cases per cell).
+  The old USD100/240-trial draft is superseded. The linear USD350 figure is a
+  placeholder, not a quote or approved cap. The memory A/B draft remains 80
+  trials and a proposed USD50 cap. Neither budget is approved. Exact dated
+  provider snapshots/prices, catalogues, per-cell limits, source commit and
+  Howard's Tower decision are required first.
   Existing repair cases are not relabelled as implementation tasks.
 
 Before seeding an authority ledger, obtain leak certificates against the correct
@@ -91,3 +92,8 @@ test ran using the existing NumPy-enabled Python; no ONNX session loaded a real
 model. Remote CI and live provider compatibility have not been evaluated for
 this revision. The T-SQL VM qualification is reported separately from these
 offline software tests.
+
+
+## PR274 follow-up
+
+See [the updated milestone](../graph-memory-milestone.md#pr274-completion-increment--october-8-utc). Current code rejects expired or rolled-back revocations, unverified model aliases, hand-written routing policies, caller-ranked benchmarks and unbound customer outcomes. [CardDemo mining r2](carddemo-mining-r2.json) replaces the exploratory mining file for review. Hypotheses still need independent labels; no evaluation quality is claimed. Evaluation plans remain drafts with no spend authority.

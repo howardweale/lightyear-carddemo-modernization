@@ -52,6 +52,24 @@ class HardenedExecutionTests(unittest.TestCase):
         self.policy = ExecutionPolicy.load(POLICY_PATH)
         self.order = WorkOrder.load(WORK_ORDER_PATH)
 
+    def test_approved_provider_leases_are_denied_to_every_other_role(self):
+        authority = IdentityAuthority(self.policy, IDENTITY_KEY)
+        names = ("OPENAI_API_KEY", "ANTHROPIC_API_KEY", "GEMINI_API_KEY")
+        broker = SecretBroker(self.policy, authority, {name: "synthetic-value" for name in names})
+        work = "a" * 64
+        for role in self.policy.role_actions:
+            token, _ = authority.issue(role, work, ISSUED, "synthetic-" + role)
+            for name in names:
+                with self.subTest(role=role, name=name):
+                    if role == "provider":
+                        lease, receipt = broker.lease(token, name, work, NOW)
+                        self.assertNotIn("synthetic-value", json.dumps(receipt))
+                        self.assertEqual(lease.consume(), "synthetic-value")
+                        with self.assertRaises(ExecutionContractError): lease.consume()
+                    else:
+                        with self.assertRaisesRegex(ExecutionContractError, "authorize"):
+                            broker.lease(token, name, work, NOW)
+
     def test_policy_rejects_weakened_isolation_controls(self) -> None:
         payload = json.loads(POLICY_PATH.read_text(encoding="utf-8"))
         for field, value in (

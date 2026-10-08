@@ -213,6 +213,25 @@ class IntegrationTests(unittest.TestCase):
         self.assertFalse((self.root / "matrix").exists())
 
 
+    def test_matrix_refuses_alias_or_unverified_provider_before_calls(self):
+        catalog=dict(evaluation_class='public-calibration',workload_id='INTCALC')
+        h=canonical_hash(catalog);path=self.root/'catalog.json';path.write_bytes(canonical(catalog))
+        for version,verified in [('gpt-latest',True),('gpt-4.1-2025-04-14',False)]:
+            good=dict(model='m',model_id=version,task_type='implement',workload='INTCALC',
+                catalog_sha256=h,evaluation_class='public-calibration',policy=dict(max_cost_usd=1))
+            plan=dict(commit='abc',max_cost_usd=1,cells=[good])
+            with patch('lightyear_factory.evaluation_matrix.approve',return_value={'actor':{'id':'howard'}}), patch(
+                'lightyear_factory.evaluation_matrix.subprocess.run',side_effect=[Mock(stdout='abc'),Mock(stdout='')]), patch(
+                'lightyear_factory.evals.load_evaluation_catalog',return_value=catalog), patch(
+                'lightyear_factory.evals.run_model_evaluation') as execute:
+                with self.assertRaises((ContractError,ValueError)):
+                    run_matrix(plan,{}, {'operator_id':'howard'},commit='abc',project_root=self.root,output_root=self.root/'matrix',
+                        agent_factories={'m':Mock()},catalogs={h:path},
+                        providers={'m':Mock(model=version,require_snapshot_response=verified)})
+                execute.assert_not_called()
+            self.assertFalse((self.root/'matrix').exists())
+
+
 class ProjectionIntegrationTests(GraphFixture):
     def test_reviewed_annotation_reaches_guidance_and_protected_value_blocks_projection(
         self,

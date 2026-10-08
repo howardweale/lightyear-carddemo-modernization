@@ -8,28 +8,35 @@
     ],
     "blockers": [
       "exact provider IDs, versions and prices",
-      "ten distinct approved task cases per task/workload, including true implement tasks; existing repair catalog is not relabelled implement",
+      "35 distinct approved task cases per task/workload, including true implement tasks; existing repair catalog is not relabelled implement",
       "per-cell token/call/cost limits and exact source commit",
       "Howard commit/models/budget Tower decision"
     ],
     "escalation": "first builder uses cheap; subsequent builder calls require closed diagnostic and use strong; no added attempts or provider-error fallback; separate evaluated arm",
     "max_attempts_per_trial": 3,
-    "minimum_cell_runs": 10,
-    "paired_runs_per_cell": 10,
+    "minimum_cell_runs": 35,
+    "paired_runs_per_cell": 35,
     "policy": "cheapest model satisfying Wilson lower bound >= best pass rate minus 0.10 in every workload; zero false accepts",
     "policy_margin": 0.1,
-    "proposed_max_cost_usd": 100,
+    "proposed_max_cost_usd": null,
     "task_types": [
       "implement",
       "repair-from-closed-diagnostic"
     ],
-    "total_trials": 240,
+    "total_trials": 840,
     "workloads": [
       "INTCALC",
       "POSTTRAN",
       "CREASTMT",
       "ACCTPL1"
-    ]
+    ],
+    "costing": {
+      "previous_trials": 240,
+      "previous_draft_cap_usd": 100,
+      "trial_multiplier": 3.5,
+      "linear_cap_placeholder_usd": 350,
+      "status": "Not a quote or approved budget. Freeze dated provider IDs, current token prices and per-cell token limits; compute the sum of worst-case cell costs before Tower approval."
+    }
   },
   "memory_ab": {
     "arms": [

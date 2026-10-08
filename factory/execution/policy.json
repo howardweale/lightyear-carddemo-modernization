@@ -44,7 +44,7 @@
         "actions": ["factory:analyze-failure"]
       },
       "provider": {
-        "actions": ["secret:lease:OPENAI_API_KEY"]
+        "actions": ["secret:lease:OPENAI_API_KEY", "secret:lease:ANTHROPIC_API_KEY", "secret:lease:GEMINI_API_KEY"]
       },
       "verifier": {
         "actions": ["factory:verify"]
@@ -52,7 +52,7 @@
     }
   },
   "secrets": {
-    "allowed_names": ["OPENAI_API_KEY"],
+    "allowed_names": ["OPENAI_API_KEY", "ANTHROPIC_API_KEY", "GEMINI_API_KEY"],
     "persist_values": false
   }
 }

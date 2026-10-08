@@ -356,3 +356,25 @@ class AuditControlPlaneTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class HistoricalAuditBoundaryTests(unittest.TestCase):
+    def test_demo_and_current_policy_are_distinct_reproducible_outputs(self):
+        from contextlib import redirect_stdout
+        from io import StringIO
+        from lightyear_audit.cli import main
+        from lightyear_audit.ledger import load_snapshot
+        with tempfile.TemporaryDirectory() as tmp:
+            out=Path(tmp)
+            for name,extra,expected in (
+                ('historical',[],ROOT/'audit/audit.snapshot.json.gz'),
+                ('current',['--execution-receipt',str(EXECUTION),'--release',
+                    'release:carddemo-intcalc:provider-scope-r1'],ROOT/'audit/provider-scope-r1/audit.snapshot.json.gz')):
+                with redirect_stdout(StringIO()):
+                    self.assertEqual(0,main(['build','--output',str(out/(name+'.gz')),
+                        '--dossier-json',str(out/(name+'.json')),
+                        '--dossier-markdown',str(out/(name+'.md'))]+extra))
+                self.assertEqual(load_snapshot(expected)['content_sha256'],
+                    load_snapshot(out/(name+'.gz'))['content_sha256'])
+            self.assertNotEqual(load_snapshot(out/'historical.gz')['content_sha256'],
+                load_snapshot(out/'current.gz')['content_sha256'])

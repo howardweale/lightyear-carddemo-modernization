@@ -164,14 +164,14 @@ trust config pins Howard's operator ID. Every cell invokes the existing
 No implicit retries or resume are permitted. Task type describes the cell's
 work objective, not isolated skill at a single role. Receipts bind catalog,
 evaluation, runs and each model-call record; missing/mismatched evidence fails.
-Metrics include pass rate with Wilson 95% intervals, first-attempt passes (`passed` on attempt 1 for every task), false accepts, tokens/cost per
+Metrics include pass rate with Wilson 95% intervals, first-attempt passes (`passed` on attempt 0 for correct no-change controls or attempt 1), false accepts, tokens/cost per
 verified task, run wall time, separate elapsed model time and closed categories (holdout categories stay
 private). Runtime/mainframe qualification remains a separate claim.
 
 `factory/routing/policy.json` ships with no routes. A route only takes effect with
 a Tower `model-routing-policy` decision backed by the matrix and a review date at
 most 90 days from issue. Otherwise the single default model is used. Routes name
-primary/fallback configuration IDs, exact provider versions, and supporting matrix receipt hashes. Every relevant cell needs at least 10 distinct paired runs; a version change expires the policy. Fallback
+primary/fallback configuration IDs, exact provider versions, and supporting matrix receipt hashes. Every relevant cell needs at least 35 distinct paired runs; a version change expires the policy. Fallback
 is only for provider errors, uses the **same** budget and never follows a failed
 business verdict. Every choice is recorded in the factory receipt. Campaign code
 does not import or invoke this router.

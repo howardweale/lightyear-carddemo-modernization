@@ -1,0 +1,19 @@
+{
+  "schema": "b06-frozen-offline-check/1",
+  "source_commit": "4b81aa53eeb4f6529ddcbf89531499556d6beb8b",
+  "plan_sha256": "7c9d17040760c29a49f6208249d02412cf944bfb9584a3eb9eb426a902ae65a9",
+  "plan_file_sha256": "2a1a1af3a997f08071299a2679dacb3e6c65c1e24b3543c4b8df5ef5ee825d09",
+  "snapshot_sha256": "95759f307c69d02207495838624fdbebbccbd1c5b988f25d6cab2e865778d6ea",
+  "verified_files": 776,
+  "tests": 106,
+  "passed": true,
+  "elapsed_seconds": 16.735,
+  "production_imports": "frozen snapshot only",
+  "test_sources": "implementation commit tests",
+  "docker_commands": 0,
+  "model_calls": 0,
+  "native_pairs": 0,
+  "practice_started": false,
+  "tower_request_created": false,
+  "review": "operator review; not independent attestation"
+}

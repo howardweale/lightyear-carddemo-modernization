@@ -12,7 +12,7 @@ from lightyear_control_tower.verification import verify_decision
 from .controller import IMAGE,check,utc
 from .runtime_producer import produce
 
-REQUIRED={'runtime_launch.py','runtime_producer.py','runtime_worker.py','runtime_inventory.py','resolved_runtime.py','tycho_runtime.py','archive.py',
+REQUIRED={'runtime_closure.py','runtime_launch.py','runtime_producer.py','runtime_worker.py','runtime_inventory.py','resolved_runtime.py','tycho_runtime.py','archive.py',
           'B06RuntimeCatalogAgent.java','B06RuntimeCatalogTest.java','RuntimeClosureAgent.java','ms94_b06_observed_worker.py'}
 
 def validate(root,plan):

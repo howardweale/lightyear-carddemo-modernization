@@ -11,7 +11,7 @@ def prepare(repository,commit,snapshot,public,start,tower_key,java_sha256,public
     def git(*args):return subprocess.check_output(['git','-C',str(repository),*args],timeout=60)
     check(git('rev-parse',commit).decode().strip()==commit,'full-source-commit-required')
     names=git('ls-tree','-r','--name-only',commit).decode().splitlines()
-    selected={'tools/b06_image_artifacts/runtime_launch.py','tools/ms94_b06_qualification_worker.py',
+    selected={'tools/b06_image_artifacts/runtime_closure.py','tools/b06_image_artifacts/runtime_launch.py','tools/ms94_b06_qualification_worker.py',
               'src/lightyear_control_tower/client.py','src/lightyear_control_tower/b06.py'}
     # Static repository import closure, including relative imports and package
     # initializers. External distributions are environment bindings, not src/.
@@ -48,7 +48,7 @@ def prepare(repository,commit,snapshot,public,start,tower_key,java_sha256,public
     selected.update({'tools/B06RuntimeCatalogAgent.java','tools/B06RuntimeCatalogTest.java','tools/b06_image_artifacts/RuntimeClosureAgent.java'})
     snapshot.mkdir(parents=True);public.mkdir(parents=True)
     mapping={n:n for n in selected}
-    for n in ('runtime_launch.py','runtime_producer.py','runtime_worker.py','runtime_inventory.py','resolved_runtime.py','tycho_runtime.py','archive.py','RuntimeClosureAgent.java'):
+    for n in ('runtime_launch.py','runtime_closure.py','runtime_producer.py','runtime_worker.py','runtime_inventory.py','resolved_runtime.py','tycho_runtime.py','archive.py','RuntimeClosureAgent.java'):
         mapping[n]='tools/b06_image_artifacts/'+n
     for n in ('B06RuntimeCatalogAgent.java','B06RuntimeCatalogTest.java','ms94_b06_observed_worker.py'):mapping[n]='tools/'+n
     hashes={}

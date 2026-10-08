@@ -329,3 +329,56 @@ complete producer replay remains blocked by missing properties, new observation
 fields, measured inventory and a successful signed launch receipt. This is
 preparation only; remaining items 2–5 above are not admitted by it.
 Operator review; not independent attestation.
+
+
+## Runtime closure r5b failure and r6 offline census — October 8, 2026
+
+r5b failed after 391.297 seconds at `runtime_inventory.measure`, `p.stat()`,
+with exact worker error `FileNotFoundError: [Errno 2] No such file or directory:
+'/tmp/tycho_wrapped_source10021272085316246407.jar'`. Controller:
+`ValueError: runtime-worker-failed`. The Tycho properties/command checks had
+passed; completed inventory/resolution had not. Signed terminal report:
+`f182d02a75c63c0c628e861014c3a41dbe59f46ad5c3db46426bfd2408c45fd9`.
+All 281 frozen files unchanged; signed cleanup and read-only owned-label
+container/network/volume absence verified. Zero model calls/native pairs.
+
+[The r6 correction and full saved-location census](transient-source-r6/README.md)
+cover **203 `/root/.m2`, 44 `/application`, 102 `/tmp`, 0 other** non-system
+bundles (349 total, plus one system bundle). All temporary paths match the
+Tycho wrapper shape, but the old evidence cannot prove source-only eligibility.
+New in-process copy/header/identity and loaded-class evidence is required;
+the producer and replay re-inspect preserved bytes. `/2` and `/3` history and
+the Tycho properties fix remain intact. 67 focused offline tests passed.
+
+**Another blocker was found offline:** `org.adempiere.ui.zk`,
+`org.adempiere.server` and `org.idempiere.webservices` changed both path and
+manifest bytes/version between the two saved attempts (build qualifiers
+`202610081632` versus `202610081715`). These non-source bundles stay exact.
+Other Maven-generated application artifacts have no demonstrated byte stability.
+Do not consume a new Tower window until an explicit deterministic runtime/build
+strategy resolves this. No new snapshot, request, Docker run or model call in r6.
+Operator review, not independent attestation.
+
+
+## Prospective application content identity r7 — October 8, 2026
+
+The required saved-catalogue comparison found **4 application classes compared,
+4 identical, 0 different**, all in `org.adempiere.base`; no loaded-class records
+exist for the three timestamped bundles. Every saved class blob was verified.
+Supplemental retained-folder inspection found **2,891 identical class entries**
+across UI ZK (1,301), server (59), webservices (145) and Ant (1,386), with zero
+changed/added/missing entries. Artifact contents are not a loaded-class census.
+All 44 application bundles and their coverage gaps are in
+[the r7 report](application-content-r7/README.md).
+
+Howard explicitly approved prospective content-identity implementation while
+**keeping native admission blocked pending complete evidence**. The implementation
+normalizes only the Bundle-Version qualifier, Built-By, Bnd-LastModified and
+Build-Timestamp main-header values; all class/resource entry bytes, entry names
+and other manifest differences stay exact. Source-only transient identities and
+exact Maven-cache/JDK/framework/launcher hashes retain their separate rules.
+Per-run application copies, paths, qualifiers, archive hashes, byte-replayed
+production and the measured posting-class consumer are implemented. The rule
+passed against all four complete saved folder bundles (1,845 file entries total).
+80 focused offline tests passed. No Docker/model/Tower run or native admission.
+This supersedes the proposed deterministic-build remedy in r6, not its evidence.

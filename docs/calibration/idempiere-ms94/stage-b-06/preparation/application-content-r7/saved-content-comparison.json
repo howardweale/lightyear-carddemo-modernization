@@ -1,0 +1,122 @@
+{
+  "bundles": [
+    {
+      "changed_entries": [],
+      "current_content_sha256": "e7b9b52266294f1574e2b67d309c647a24f8c8db40e3661034daf45fc37827cd",
+      "current_manifest_sha256": "3bac37cc43b08b36b3bb38a19bafef89bbea9040acb1ecf0ee1e57645b790187",
+      "entries_current": 1577,
+      "entries_previous": 1577,
+      "evidence_kind": "saved-folder-content-not-loaded-catalogue",
+      "normalized_headers_current": [
+        {
+          "header": "Bundle-Version",
+          "normalized_value": "13.0.0",
+          "original_value": "13.0.0.202610081715"
+        }
+      ],
+      "normalized_headers_previous": [
+        {
+          "header": "Bundle-Version",
+          "normalized_value": "13.0.0",
+          "original_value": "13.0.0.202610081632"
+        }
+      ],
+      "passed": true,
+      "previous_content_sha256": "e7b9b52266294f1574e2b67d309c647a24f8c8db40e3661034daf45fc37827cd",
+      "previous_manifest_sha256": "f82a77bc5f1ef80f1fd60cbb6a79f471f1f9c19d60db2049300c2e3ecdd94dea",
+      "symbolic_name": "org.adempiere.ui.zk"
+    },
+    {
+      "changed_entries": [],
+      "current_content_sha256": "08517e2a1ab064befcf8b02dc9159430447c28210b7d9e170cc421fcd865f405",
+      "current_manifest_sha256": "27fe309c93cc2dbf94da3cb7a1c44bcf8044da8bf9bdfe89483890b8a92212cf",
+      "entries_current": 141,
+      "entries_previous": 141,
+      "evidence_kind": "saved-folder-content-not-loaded-catalogue",
+      "normalized_headers_current": [
+        {
+          "header": "Bundle-Version",
+          "normalized_value": "13.0.0",
+          "original_value": "13.0.0.202610081715"
+        }
+      ],
+      "normalized_headers_previous": [
+        {
+          "header": "Bundle-Version",
+          "normalized_value": "13.0.0",
+          "original_value": "13.0.0.202610081632"
+        }
+      ],
+      "passed": true,
+      "previous_content_sha256": "08517e2a1ab064befcf8b02dc9159430447c28210b7d9e170cc421fcd865f405",
+      "previous_manifest_sha256": "1914a53141dca02c2b1e6867348f575e57f1aff74747383b626c9629073233bd",
+      "symbolic_name": "org.adempiere.server"
+    },
+    {
+      "changed_entries": [],
+      "current_content_sha256": "0bc59485e8d80ba2bcb4ca1c4eb1191057e61a381d92ed885b24deb299e79cb7",
+      "current_manifest_sha256": "da1b236c7646b22f73547adf41522ae2c9db1181419334df39b1230c6b3ae251",
+      "entries_current": 62,
+      "entries_previous": 62,
+      "evidence_kind": "saved-folder-content-not-loaded-catalogue",
+      "normalized_headers_current": [
+        {
+          "header": "Bundle-Version",
+          "normalized_value": "13.0.0",
+          "original_value": "13.0.0.202610081715"
+        }
+      ],
+      "normalized_headers_previous": [
+        {
+          "header": "Bundle-Version",
+          "normalized_value": "13.0.0",
+          "original_value": "13.0.0.202610081632"
+        }
+      ],
+      "passed": true,
+      "previous_content_sha256": "0bc59485e8d80ba2bcb4ca1c4eb1191057e61a381d92ed885b24deb299e79cb7",
+      "previous_manifest_sha256": "4e6d008977c9c619594eb3045e984ca6ac2ae29dc2190ad6a027cdbc03c71f27",
+      "symbolic_name": "org.idempiere.webservices"
+    },
+    {
+      "changed_entries": [],
+      "current_content_sha256": "335ee75b4bd2a5d0a91477b7744ad8f712f5835b33a109ea9c2aed25be7448cf",
+      "current_manifest_sha256": "07e4a3ea960fafba8f1cdc3a83e8974ae3ae9047415dd3d08c4466f4d2b7e416",
+      "entries_current": 65,
+      "entries_previous": 65,
+      "evidence_kind": "saved-folder-content-not-loaded-catalogue",
+      "normalized_headers_current": [
+        {
+          "header": "Built-By",
+          "normalized_value": "<build-metadata>",
+          "original_value": "default"
+        },
+        {
+          "header": "Bundle-Version",
+          "normalized_value": "1.10.12",
+          "original_value": "1.10.12.v20211102-1452"
+        }
+      ],
+      "normalized_headers_previous": [
+        {
+          "header": "Built-By",
+          "normalized_value": "<build-metadata>",
+          "original_value": "default"
+        },
+        {
+          "header": "Bundle-Version",
+          "normalized_value": "1.10.12",
+          "original_value": "1.10.12.v20211102-1452"
+        }
+      ],
+      "passed": true,
+      "previous_content_sha256": "335ee75b4bd2a5d0a91477b7744ad8f712f5835b33a109ea9c2aed25be7448cf",
+      "previous_manifest_sha256": "07e4a3ea960fafba8f1cdc3a83e8974ae3ae9047415dd3d08c4466f4d2b7e416",
+      "symbolic_name": "org.apache.ant"
+    }
+  ],
+  "docker_commands": 0,
+  "model_calls": 0,
+  "native_admission": false,
+  "schema": "b06-saved-content-comparison/1"
+}

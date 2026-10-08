@@ -52,8 +52,12 @@ def produce_v2(raw,config,surefire,inventory,receipt,key,expected):
         observation_utf8=raw.decode(),native_admission=False)
 
 
-def produce(raw,config,surefire,inventory,receipt,key,expected,*,fork_command=None):
-    if receipt.get('schema') != 'b06-runtime-launch-receipt/3':
+def produce(raw,config,surefire,inventory,receipt,key,expected,*,fork_command=None,transient_copies=None,application_copies=None):
+    content_mode=receipt.get('schema')=='b06-runtime-launch-receipt/5'
+    modern=receipt.get('schema') in ('b06-runtime-launch-receipt/4','b06-runtime-launch-receipt/5')
+    if not content_mode and application_copies is not None: raise ValueError('legacy-application-copies-refused')
+    if not modern and transient_copies is not None: raise ValueError('legacy-transient-copies-refused')
+    if receipt.get('schema') not in ('b06-runtime-launch-receipt/3','b06-runtime-launch-receipt/4','b06-runtime-launch-receipt/5'):
         if fork_command is not None: raise ValueError('legacy-runtime-unexpected-fork-command')
         return produce_v2(raw,config,surefire,inventory,receipt,key,expected)
     from .tycho_runtime import read as read_tycho, path
@@ -70,7 +74,7 @@ def produce(raw,config,surefire,inventory,receipt,key,expected,*,fork_command=No
              'inventory':h(json.dumps(inventory,sort_keys=True).encode()),'fork-command':h(fork_command)}
     if receipt.get('outputs')!=outputs: raise ValueError('runtime-output-changed')
     obs=json.loads(raw);command=json.loads(fork_command)
-    if obs.get('schema')!='b06-runtime-launch-observation/2': raise ValueError('tycho-observation-schema-required')
+    if obs.get('schema')!=('b06-runtime-launch-observation/4' if content_mode else 'b06-runtime-launch-observation/3' if modern else 'b06-runtime-launch-observation/2'): raise ValueError('tycho-observation-schema-required')
     if obs.get('fork_command')!=command: raise ValueError('tycho-observed-fork-command-mismatch')
     parsed=read_tycho(config,surefire,obs,command);bundles=obs['bundles']
     if inventory.get('schema')!='b06-image-inventory/1' or inventory.get('failure') is not None:
@@ -83,14 +87,29 @@ def produce(raw,config,surefire,inventory,receipt,key,expected,*,fork_command=No
     if not re.fullmatch('[a-f0-9]{64}',records[launcher].get('sha256','')): raise ValueError('tycho-launcher-hash-required')
     framework=path(obs['framework_url']);java=PurePosixPath(obs['java_home'])
     modules=str(java/'lib/modules');tool=str(java/'bin/jimage');java_path=str(java/'bin/java')
-    paths=parsed['observed_bundle_paths']
+    sources=[]
+    if modern:
+        from .transient_sources import classify
+        sources=classify(obs,transient_copies,inventory.get('runtime_catalogue'))
+        if sources!=inventory.get('transient_source_bundles'): raise ValueError('transient-inventory-differs')
+    applications=[]
+    if content_mode:
+        from .application_identity import records as application_records
+        applications=application_records(obs,application_copies)
+        if applications!=inventory.get('application_content_bundles'):raise ValueError('application-inventory-differs')
+        for app in applications:
+            if app['original_path'] not in records or records[app['original_path']]['sha256']!=app['archive_sha256']:raise ValueError('application-artifact-binding')
+    excluded={r['original_path'] for r in sources}
+    paths=[p for p in parsed['observed_bundle_paths'] if p not in excluded]
     selected=set(paths+parsed['boot_classpath']+[framework,modules,tool,java_path])
     if not selected<=records.keys(): raise ValueError('runtime-path-not-in-inventory')
     if records[java_path]['sha256']!=expected['java_sha256']: raise ValueError('runtime-java-changed')
     jdk=records[modules]
     if not jdk.get('expanded_class_entries') or not jdk.get('expanded_class_bytes'):
         raise ValueError('measured-jimage-inventory-required')
-    return dict(schema='b06-resolved-runtime/3',resolved=True,launch_observed=True,
+    extra=dict(transient_source_bundles=sources) if modern else {}
+    if content_mode:extra['application_content_bundles']=applications
+    return dict(**extra,schema='b06-resolved-runtime/5' if content_mode else 'b06-resolved-runtime/4' if modern else 'b06-resolved-runtime/3',resolved=True,launch_observed=True,
         installation_inputs=parsed,equinox_bundles=paths,resolved_bundle_states=bundles,
         unresolved_bundle_ids=[b['id'] for b in bundles if b['state']==2],
         all_bundles_resolved=all(b['state']!=2 for b in bundles),boot_classpath=parsed['boot_classpath'],

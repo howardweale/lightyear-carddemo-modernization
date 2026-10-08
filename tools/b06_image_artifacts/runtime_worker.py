@@ -87,7 +87,7 @@ def main():
     rows=accept(out,code)
     # Required even if Maven/test XML passed. A daemon failure must not disappear.
     observation=json.loads((out/'closure-observation.json').read_bytes())
-    if observation.get('schema')!='b06-runtime-launch-observation/2':raise ValueError('closure-observation-required')
+    if observation.get('schema')!='b06-runtime-launch-observation/4':raise ValueError('closure-observation-required')
     from tycho_runtime import path,read,one_properties_file
     config_path=Path(path(observation['configuration_url']))/'config.ini'
     config=config_path.read_bytes()
@@ -97,7 +97,12 @@ def main():
     (out/'effective-config.ini').write_bytes(config);(out/'effective-surefire.properties').write_bytes(surefire)
     parsed=read(config,surefire,observation,command)
     from runtime_inventory import measure
-    inventory=measure(observation,out/'runtime-inventory',parsed['boot_classpath'])
+    from transient_sources import copies_at,catalogue
+    copies=copies_at(observation,out)
+    loaded=catalogue((out/'runtime-catalogue.tsv').read_bytes())
+    from application_identity import copies_at as application_copies_at
+    application_copies=application_copies_at(observation,out)
+    inventory=measure(observation,out/'runtime-inventory',parsed['boot_classpath'],transient_copies=copies,loaded=loaded,application_copies=application_copies)
     (out/'measured-inventory.json').write_text(json.dumps(inventory,sort_keys=True),encoding='utf-8')
     (out/'result.json').write_text(json.dumps({'loaded_classes':rows,**metadata,'passed':True},sort_keys=True),encoding='utf-8')
 

@@ -16,11 +16,11 @@ from .resolved_runtime import read as read_resolution
 def check(v,reason):
     if not v:raise ValueError(reason)
 
-def assemble(inventory,resolution,*,launch_key=None,expected_launch=None):
+def assemble(inventory,resolution,*,launch_key=None,expected_launch=None,transient_copies=None,application_copies=None):
     check(inventory['schema']=='b06-image-inventory/1' and inventory['failure'] is None,'inventory-required')
-    check(resolution['schema'] in ('b06-resolved-runtime/2','b06-resolved-runtime/3') and resolution['resolved'] is True,'resolved-runtime-required')
+    check(resolution['schema'] in ('b06-resolved-runtime/2','b06-resolved-runtime/3','b06-resolved-runtime/4','b06-resolved-runtime/5') and resolution['resolved'] is True,'resolved-runtime-required')
     raw=resolution['configuration_utf8']
-    modern=resolution['schema']=='b06-resolved-runtime/3'
+    modern=resolution['schema'] in ('b06-resolved-runtime/3','b06-resolved-runtime/4','b06-resolved-runtime/5')
     encoding='iso-8859-1' if modern else 'utf-8'
     config=raw['config.ini'].encode(encoding);surefire=raw['surefire.properties'].encode(encoding)
     if modern:
@@ -31,6 +31,10 @@ def assemble(inventory,resolution,*,launch_key=None,expected_launch=None):
     from .runtime_producer import produce
     check(launch_key is not None and expected_launch is not None,'trusted-launch-authority-required')
     extra={'fork_command':resolution['fork_command_utf8'].encode('utf-8')} if modern else {}
+    if resolution['schema'] in ('b06-resolved-runtime/4','b06-resolved-runtime/5'): extra['transient_copies']=transient_copies
+    elif transient_copies is not None: raise ValueError('legacy-transient-copies-refused')
+    if resolution['schema']=='b06-resolved-runtime/5':extra['application_copies']=application_copies
+    elif application_copies is not None:raise ValueError('legacy-application-copies-refused')
     rebuilt=produce(resolution['observation_utf8'].encode(),config,surefire,inventory,resolution['launch_receipt'],launch_key,expected_launch,**extra)
     check(rebuilt==resolution,'runtime-producer-replay-differs')
     records={r['path']:r for r in inventory['artifacts']}
@@ -56,7 +60,7 @@ def assemble(inventory,resolution,*,launch_key=None,expected_launch=None):
         jdk_modules=resolution['jdk_modules'],jdk_method='jimage extract from bound lib/modules',
         jmods_authoritative=False,native_admission=False)
 
-def extract(closure,output,jimage,*,run=subprocess.run):
+def extract(closure,output,jimage,*,run=subprocess.run,application_copies=None):
     check(closure['schema']=='b06-runtime-closure/1','closure-schema')
     check(str(jimage)==closure['jimage_tool']['path'] and digest(Path(jimage))==closure['jimage_tool']['sha256'],
           'jimage-tool-changed')
@@ -87,7 +91,11 @@ def extract(closure,output,jimage,*,run=subprocess.run):
     try:
         for row in closure['artifacts']:
             p=Path(row['path'])
-            if row.get('kind')=='folder-bundle':
+            if row.get('kind')=='captured-application-bundle':
+                check(isinstance(application_copies,dict) and row['capture_path'] in application_copies,'application-extraction-copy-required')
+                raw=application_copies[row['capture_path']]
+                check(hashlib.sha256(raw).hexdigest()==row['sha256'] and len(raw)==row['bytes'],'application-extraction-copy-changed')
+            elif row.get('kind')=='folder-bundle':
                 raw,observed=folder_bytes(p)
                 check(all(observed[k]==row[k] for k in ('sha256','bytes','files')),'scoped-folder-changed')
             else:

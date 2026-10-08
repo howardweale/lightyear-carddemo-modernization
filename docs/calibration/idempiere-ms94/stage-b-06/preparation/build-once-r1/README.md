@@ -1,6 +1,6 @@
 # B06 build-once runtime preparation r1
 
-Status: offline implementation; no Docker run, Tower request, native qualification or model call. Operator review, not independent attestation. Howard approved build-once preparation on October 8, 2026. Prior failures remain failed. B04 stays void. B05, work/ms94, template-r1 and J1 predicates are unchanged.
+Current status: the authorized frozen practice passed; see the [terminal result and native handoff](terminal/README.md). No Tower evidence run, native qualification or model call. The preparation text below records the prospective design before that practice. Operator review, not independent attestation. Howard approved build-once preparation on October 8, 2026. Prior failures remain failed. B04 stays void. B05, work/ms94, template-r1 and J1 predicates are unchanged.
 
 ## Prospective amendment
 
@@ -24,7 +24,7 @@ The command is the captured fork argv with two declared additions: `-Djava.io.tm
 
 One fresh build container, then two serial consumer containers. No databases, native pairs, target candidates, external network, models or retries. Work cap 2,700 seconds: build at most 1,500 seconds, each consumer at most 600 seconds. Cleanup reserve 600 seconds. Approve a one-hour window; the runner refuses if fewer than 55 minutes remain. Failure stops the sequence and preserves output. Cleanup checks ownership before removing only this practice's containers and verifies the owned container/network/volume inventory is empty. The uniquely labelled derived image is deliberately retained locally for review, never uploaded by this runner.
 
-No practice has run. A Docker window must still be approved. The runner requires `--run`, the exact plan, snapshot, public commit and UTC start/end. It verifies public Git bytes and frozen hashes before Docker. The frozen plan has no run authorization and no Tower request; its implementation is committed before snapshot assembly.
+At preparation freeze no practice had run or window been approved. The later approved practice and its result are recorded in the terminal report above. The runner requires `--run`, the exact plan, snapshot, public commit and UTC start/end. It verifies public Git bytes and frozen hashes before Docker. The frozen plan has no run authorization and no Tower request; its implementation is committed before snapshot assembly.
 
 Acceptance requires all three captures and replays; exact 350-bundle census (1 system, 203 Maven, 44 application, 102 temporary); all 102 source-only records; unchanged application content except the one bound probe class; correct Tycho properties/launcher; no error file or warning outside the existing hash-bound baseline; unchanged frozen sources; and verified owned cleanup. The two consumer class hashes must differ. New warnings fail; existing accepted warnings remain visible.
 

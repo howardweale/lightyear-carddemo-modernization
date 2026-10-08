@@ -1,5 +1,38 @@
 # B06 preparation status
 
+## October 8 direct built-runtime launch implemented; census not launched
+
+The [native integration](built-native-r1/README.md) now provides direct Java launch,
+separately bound compiled classes, read-only application mounts, exact external
+JDI command admission and offline replay. All 61 source inputs (218 class
+references), including five census paths, are prepared from authenticated prior
+compilations. Focused offline tests pass; there is no native qualification claim.
+
+The full runtime catalogue still needs the 204 measured Maven/runtime archives
+(132,922,294 bytes; 62,978 expanded class entries). Their exact hash-only selection
+is prepared for a distinct Tower-gated copy, with no JVM/build/database/model
+execution. The requested 15:30 PDT census reservation does not waive this gate.
+No census Tower request or native launch has been created. Existing failures,
+B04 void status, B05, work/ms94, template-r1 and J1 predicates remain unchanged.
+
+
+## October 8 build-once practice passed; native integration remains blocked
+
+The [terminal result and handoff](build-once-r1/terminal/README.md) records one
+build and two direct consumers, 1,031.157 seconds, all captures/replays passed,
+44 application bundles exact except the bound probe class, 102/102 source-only
+temporaries, unchanged 777-file freeze and actual owned cleanup. The image is
+retained locally. Zero models/native pairs; practice is not qualification.
+
+The offline hash-bound handoff is prepared and 17 related tests pass. No new
+Tower request, Docker window, evidence driver execution or measurement launch.
+The native worker still uses Maven: direct built-image launch with external JDI,
+per-slot class/parameter binding, the five-path provenance census, journey
+qualification and final preflight remain. The handoff is non-executable until
+its separately bound host adapter and exact authorization are ready.
+
+
+
 ## October 8 application-identity triage completed offline
 
 The [22-bundle triage](application-identity-triage-r1/README.md) classifies every

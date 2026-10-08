@@ -37,7 +37,7 @@ class PostingBroker:
         check({p.relative_to(classes).as_posix() for p in classes.rglob('*') if p.is_file()} ==
               set(self.spec['class_files_sha256']), 'observer-extra-classpath-file')
         info = inspect('container', self.app)
-        check(info['Image'] == runner.plan['local']['runner_image'], 'observer-target-image-changed')
+        check(info['Image'] == runner.plan.get('built_runtime', {}).get('image',runner.plan['local']['runner_image']), 'observer-target-image-changed')
         check(set(info['NetworkSettings']['Networks']) == {runner.network}, 'observer-target-network-changed')
         check(not info['HostConfig'].get('PortBindings'), 'observer-debug-port-published')
         check(all(not Path(m['Source']).resolve().is_relative_to(self.private.resolve())
@@ -62,6 +62,14 @@ class PostingBroker:
         self.target = {'container_id': info['Id'], 'image': info['Image'], 'network': runner.network,
                        'addresses': info['NetworkSettings']['Networks'][runner.network],
                        'ports_published': False, 'observer_private_mount_absent': True}
+        if 'built_runtime' in runner.plan:
+            from tools.ms94_b06_built_runtime import contract, mount_contract
+            manifest,launch,_=contract(runner.root,runner.plan)
+            mounts=sorted((m['Destination'],m['RW']) for m in info['Mounts'] if m['Type']=='bind')
+            check(info['HostConfig']['ReadonlyRootfs'] is True and mounts==mount_contract(manifest,launch['overlays']),
+                  'observer-built-runtime-mounts')
+            self.target.update(readonly_rootfs=True,built_launch_sha256=launch['content_sha256'],
+                application_mounts=[list(m) for m in mounts])
         self.thread = threading.Thread(target=self._collect, name='b06-posting-' + self.lane, daemon=True)
         self.thread.start()
 

@@ -97,6 +97,9 @@ def assemble_slot(root, run, base, slot, input_files):
     validate_policy(spec)
     from tools.ms94_b06_posting_replay import catalog, TERMINAL
     classes = catalog(root, spec['target_class_files_sha256'])
+    if 'built_runtime' in plan:
+        from tools.ms94_b06_built_runtime import contract
+        contract(root, plan)
     if spec.get('forwarding_stub') is not None:
         from tools.ms94_b06_forwarding_stub import validate_spec
         validate_spec(spec, classes)
@@ -146,6 +149,9 @@ def freeze(source, destination, bindings, slot_plans):
             **plan['posting_observer']['target_class_files_sha256'],
             **{(Path(plan['posting_observer']['classes_directory']) / n).as_posix(): h
                for n, h in plan['posting_observer']['class_files_sha256'].items()}}
+        if 'built_runtime' in plan:
+            from tools.ms94_b06_built_runtime import required_inputs
+            required.update(required_inputs(plan['built_runtime']))
         check(all(bindings.get(n) == h for n, h in required.items()), 'freeze-input-closure')
     destination.mkdir(parents=True, exist_ok=False)
     for name, sha in bindings.items():

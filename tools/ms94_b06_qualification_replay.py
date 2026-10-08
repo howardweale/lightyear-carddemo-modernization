@@ -53,6 +53,9 @@ def replay_pair(root, run, public_key):
               ex['harness_sha256'] == plan['harness_sha256'] and
               ex['application_source_commit'] == plan['declaration']['application']['source_commit'],
               'qualification-execution-binding')
+        if 'built_runtime' in plan:
+            from tools.ms94_b06_built_runtime import replay as replay_built
+            replay_built(root, plan, ex, run / 'cases/operations/1/execution' / lane)
         executions[lane] = ex
     if receipt['status'] == 'candidate-timeout':
         check(any(ex['exit_code'] == 124 for ex in executions.values()) and

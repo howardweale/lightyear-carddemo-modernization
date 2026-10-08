@@ -27,17 +27,31 @@ class ObservedRunner(NativeRunner):
         staging.mkdir(parents=True, exist_ok=False)
         app = self.owner + '-application-' + lane
         worker = self.root / 'tools/ms94_b06_observed_worker.py'
+        built = self.plan.get('built_runtime') is not None
+        launch = None
+        if built:
+            from tools.ms94_b06_built_runtime import prepare
+            mount_args, expected_mounts, launch = prepare(self.root, self.run, self.plan, staging)
+        else:
+            # Historical plans retain their historical worker; fresh built plans never fall back.
+            mount_args = ['--mount', f'type=bind,src={source},dst=/candidate/LightyearOperationsTest.java,readonly',
+                '--mount', f'type=bind,src={worker},dst=/runtime/worker.py,readonly',
+                '--mount', f'type=bind,src={staging},dst=/results']
+            expected_mounts = [dict(destination='/candidate/LightyearOperationsTest.java',writable=False),
+                dict(destination='/runtime/worker.py',writable=False),dict(destination='/results',writable=True)]
+        image = launch['image'] if built else self.plan['local']['runner_image']
+        carrier = ['--entrypoint','/bin/sh'] if built else []
+        tail = ['-c','exec sleep infinity'] if built else []
         docker('create', '--name', app, '--label', self.label, '--network', self.network, '--memory', '8g', '--cpus', '4',
                '--cap-drop', 'ALL', '--security-opt', 'no-new-privileges', '--tmpfs', '/secrets:rw,noexec,nosuid,size=268435456',
-               '--mount', f'type=bind,src={source},dst=/candidate/LightyearOperationsTest.java,readonly',
-               '--mount', f'type=bind,src={worker},dst=/runtime/worker.py,readonly',
-               '--mount', f'type=bind,src={staging},dst=/results', self.plan['local']['runner_image'])
+               *mount_args, *carrier, image, *tail)
         self.remember('container', app); docker('start', app)
-        mounts = inspect('container', app)['Mounts']
-        require({m['Destination'] for m in mounts if m['Type'] == 'bind'} ==
-                {'/candidate/LightyearOperationsTest.java', '/runtime/worker.py', '/results'}, 'Unexpected application mount')
-        require(all(not m['RW'] for m in mounts if m['Destination'] in
-                    ('/candidate/LightyearOperationsTest.java', '/runtime/worker.py')), 'Writable application input')
+        app_info = inspect('container', app); mounts = app_info['Mounts']
+        require(sorted((m['Destination'],m['RW']) for m in mounts if m['Type']=='bind') ==
+                sorted((m['destination'],m['writable']) for m in expected_mounts), 'Unexpected application mount')
+        if built:
+            require(app_info['Image']==launch['image'] and app_info['HostConfig']['ReadonlyRootfs'] is True,
+                    'Built application image or readonly root changed')
         self.record_guard('before-candidate:' + lane)
         self.assert_real_runtime(app); self.before_candidate(lane)
         before = self.trusted_identity(lane); started = time.monotonic()
@@ -59,7 +73,10 @@ class ObservedRunner(NativeRunner):
                     if time.monotonic() - started > timeout:
                         raise CandidateTimeout()
             require(process.returncode == 0, 'Separate application worker failed')
-            code = json.loads(stdout)['exit_code']
+            response = json.loads(stdout); code = response['exit_code']
+            if built:
+                require(response.get('launch_sha256')==launch['content_sha256'] and response.get('offline_maven') is False,
+                        'Built worker response binding')
             if code != 124:
                 require(broker.done.wait(15) and broker.failure is None, 'Trusted posting observer incomplete')
         finally:
@@ -69,7 +86,7 @@ class ObservedRunner(NativeRunner):
             broker.cancel()
         after = self.trusted_identity(lane)
         out.mkdir(parents=True, exist_ok=False)
-        for name in ('journey.xml', 'maven.log'):
+        for name in (('journey.xml','runtime.log','built-before.json','built-after.json') if built else ('journey.xml','maven.log')):
             path = staging / name
             require(not path.is_symlink(), 'Symbolic application output')
             if path.exists():
@@ -82,9 +99,16 @@ class ObservedRunner(NativeRunner):
             'elapsed_seconds': round(time.monotonic() - started, 1), 'native_clock_before': before['clock'],
             'native_clock_after': after['clock'], 'harness_sha256': payload['harness_sha256'],
             'application_source_commit': payload['source_commit'], 'journey_output_exists': (out / 'journey.xml').exists(),
-            'offline_maven': True, 'private_judge_mount': False, 'trusted_execution_envelope_written_by': 'host-controller',
+            'offline_maven': not built, 'private_judge_mount': False, 'trusted_execution_envelope_written_by': 'host-controller',
             'application_mounts': [{'destination': m['Destination'], 'writable': m['RW']} for m in mounts if m['Type'] == 'bind'],
             'posting_observer': 'external-jdi-with-suspended-native-readback-v1'})
+        if built:
+            body={k:v for k,v in value.items() if k!='content_sha256'}
+            body.update(launch_sha256=launch['content_sha256'],runtime_image=launch['image'],application_readonly=True,
+                built_runtime_checks_sha256={n:file_hash(out/n) for n in ('built-before.json','built-after.json')})
+            value=seal(body)
+            from tools.ms94_b06_built_runtime import replay
+            replay(self.root,self.plan,value,out)
         save(out / 'execution.json', value)
         if code != 124:
             broker.finish(value)

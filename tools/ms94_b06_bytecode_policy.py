@@ -25,4 +25,6 @@ def validate_jvm(owner, spec):
     check(agents == [JDWP], 'observer-unapproved-bytecode-agent')
     check(not any(a.startswith('@') for a in args), 'observer-unexpanded-jvm-arguments')
     check(owner.get('jvm_option_environment_present') == [], 'observer-jvm-option-environment')
+    if 'expected_jvm_arguments' in spec:
+        check(args == spec['expected_jvm_arguments'], 'observer-built-command-differs')
     return True

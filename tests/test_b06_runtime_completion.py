@@ -20,11 +20,11 @@ class RuntimeCompletionTests(unittest.TestCase):
    from tools.b06_image_artifacts import runtime_producer
    for name in launch.REQUIRED:
     raw=Path(launch.__file__).read_bytes() if name=='runtime_launch.py' else (
-       Path(runtime_producer.__file__).read_bytes() if name=='runtime_producer.py' else b'bound worker')
+       Path(runtime_producer.__file__).read_bytes() if name=='runtime_producer.py' else (Path(launch.__file__).parents[1].joinpath(name).read_bytes() if name=='ms94_b06_observed_worker.py' else b'bound worker'))
     (root/name).write_bytes(raw);files[name]=hashlib.sha256(raw).hexdigest()
    plan=seal(dict(schema='b06-runtime-closure-plan/1',image=launch.IMAGE,model_calls=0,native_pairs=0,
      database_containers=0,retries=0,network='none',maximum_runtime_seconds=3000,cleanup_reserve_seconds=600,
-     files_sha256=files,snapshot_sha256=digest(files)))
+     files_sha256=files,snapshot_sha256=digest(files),measured_maven_arguments=__import__('tools.ms94_b06_observed_worker',fromlist=['maven_arguments']).maven_arguments()))
    self.assertEqual(launch.validate(root,plan),root.resolve())
    (root/'RuntimeClosureAgent.java').write_bytes(b'changed')
    with self.assertRaisesRegex(Exception,'snapshot-changed'):launch.validate(root,plan)
@@ -40,7 +40,7 @@ class RuntimeCompletionTests(unittest.TestCase):
    changed=copy.deepcopy(observed);changed[0]['modifiers']=0xe000100a
    with self.assertRaises(ValueError):reviewed_host_modifiers(b'fixture',changed)
   with patch('tools.b06_host_probe.pool_analysis.method_flags',return_value={'m()V':0x100a}):
-   with self.assertRaises(ValueError):reviewed_host_modifiers(b'wrong host',observed)
+   self.assertEqual(reviewed_host_modifiers(b'another byte-bound host',observed)[0][0]['modifiers'],0x100a)
 
  def test_default_interface_does_not_invent_overpasses_or_override_class_methods(self):
   from b06_synthetic_classfiles import pool_builder,u2

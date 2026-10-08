@@ -90,7 +90,40 @@ public final class PostingObserver {
             for(Method m:t.methods())if(selected(m)){
                 BreakpointRequest q=vm.eventRequestManager().createBreakpointRequest(m.location());
                 q.setSuspendPolicy(EventRequest.SUSPEND_ALL);q.enable();
+                for(int index:returnInstructions(m.bytecodes())) {
+                    BreakpointRequest ret=vm.eventRequestManager().createBreakpointRequest(m.locationOfCodeIndex(index));
+                    ret.putProperty("generation-return",true);ret.setSuspendPolicy(EventRequest.SUSPEND_ALL);ret.enable();
+                }
             }
+        }
+        // Walk instructions, never search raw operand bytes for opcode 0xb0.
+        static List<Integer> returnInstructions(byte[] code) {
+            List<Integer> result=new ArrayList<>();
+            java.nio.ByteBuffer b=java.nio.ByteBuffer.wrap(code);
+            for(int i=0;i<code.length;) {
+                int op=code[i]&255, size=1;
+                if(op==0xb0)result.add(i);
+                if(op==0xaa || op==0xab) {
+                    int start=(i+4)&~3;
+                    if(op==0xaa) {int low=b.getInt(start+4),high=b.getInt(start+8);if(high<low)throw new IllegalStateException("bad switch");size=start-i+12+Math.multiplyExact(high-low+1,4);}
+                    else {int pairs=b.getInt(start+4);if(pairs<0)throw new IllegalStateException("bad switch");size=start-i+8+Math.multiplyExact(pairs,8);}
+                } else if(op==0xc4) {size=(code[i+1]&255)==0x84?6:4;}
+                else if(op==0xb9 || op==0xba || op==0xc8 || op==0xc9)size=5;
+                else if(op==0xc5)size=4;
+                else if(op==0x11 || op==0x13 || op==0x14 || op==0x84 || op>=0x99 && op<=0xa8 || op>=0xb2 && op<=0xb8 || op==0xbb || op==0xbd || op==0xc0 || op==0xc1 || op==0xc6 || op==0xc7)size=3;
+                else if(op==0x10 || op==0x12 || op>=0x15 && op<=0x19 || op>=0x36 && op<=0x3a || op==0xa9 || op==0xbc)size=2;
+                else if(op>0xc9)throw new IllegalStateException("unsupported opcode");
+                if(size<=0 || i+size>code.length)throw new IllegalStateException("truncated instruction");i+=size;
+            }
+            return result;
+        }
+        void atReturn(VirtualMachine vm,BreakpointEvent e) {
+            // JDI has no operand-stack read. Arm an exact class/thread exit only
+            // at ARETURN; no intervening Java invocation can occur.
+            if(exits.containsKey(e.thread().uniqueID()))throw new IllegalStateException("duplicate return arm");
+            MethodExitRequest q=vm.eventRequestManager().createMethodExitRequest();
+            q.addThreadFilter(e.thread());q.addClassFilter(e.location().declaringType());
+            q.setSuspendPolicy(EventRequest.SUSPEND_ALL);q.enable();exits.put(e.thread().uniqueID(),q);
         }
         Map<String,Object> enter(VirtualMachine vm,BreakpointEvent e) throws Exception {
             ThreadReference t=e.thread();
@@ -101,10 +134,6 @@ public final class PostingObserver {
                 r.put("lambda_factory",selected(t.frame(0).thisObject(),List.of("targetClass","factoryType","interfaceClass","interfaceMethodName","interfaceMethodType","implementation","implMethodType","implInfo","implKind","implIsInstanceMethod","implClass","dynamicMethodType","isSerializable","altInterfaces","altMethods","implMethodClassName","implMethodName","implMethodDesc","argNames","argDescs","useImplMethodHandle"),2));
             }
             pending.computeIfAbsent(t.uniqueID(),k->new ArrayDeque<>()).push(r);
-            if(!exits.containsKey(t.uniqueID())){
-                MethodExitRequest q=vm.eventRequestManager().createMethodExitRequest();q.addThreadFilter(t);
-                q.addClassFilter("java.lang.invoke.*");q.setSuspendPolicy(EventRequest.SUSPEND_ALL);q.enable();exits.put(t.uniqueID(),q);
-            }
             return r;
         }
         Map<String,Object> returned(VirtualMachine vm,MethodExitEvent e) throws Exception {
@@ -116,15 +145,20 @@ public final class PostingObserver {
             if(!(e.returnValue() instanceof ClassObjectReference c))throw new IllegalStateException("generation return not Class");
             remember(c.reflectedType());r.put("returned_class",value(c,0));
             if(name.startsWith(FACTORY+"."))completed.put(c.uniqueID(),r);
-            if(q.isEmpty()){vm.eventRequestManager().deleteEventRequest(exits.remove(e.thread().uniqueID()));pending.remove(e.thread().uniqueID());}
+            MethodExitRequest armed=exits.remove(e.thread().uniqueID());
+            if(armed==null || !armed.equals(e.request()))throw new IllegalStateException("unarmed generation exit");
+            vm.eventRequestManager().deleteEventRequest(armed);
+            if(q.isEmpty())pending.remove(e.thread().uniqueID());
             return r;
         }
         Map<String,Object> proof(ReferenceType t) throws Exception {
             Map<String,Object> record=completed.get(t.classObject().uniqueID());
             if(record==null)return null;
             remember(t);
-            if(definitions.size()>4096)throw new IllegalStateException("generation definition bound");
-            return Map.of("record",record,"definitions",new LinkedHashMap<>(definitions));
+            Map<?,?> factory=(Map<?,?>)record.get("lambda_factory");
+            Map<?,?> host=(Map<?,?>)factory.get("targetClass");
+            String hostId=host.get("class_object_id").toString(), generatedId=Long.toString(t.classObject().uniqueID());
+            return Map.of("record",record,"definitions",Map.of(hostId,definitions.get(hostId),generatedId,definitions.get(generatedId)));
         }
     }
     private final Generation generation=new Generation();
@@ -247,6 +281,7 @@ public final class PostingObserver {
         }
     }
     private void entry(BreakpointEvent event) throws Exception {
+        if(Boolean.TRUE.equals(event.request().getProperty("generation-return"))) {generation.atReturn(vm,event);return;}
         if(generation.selected(event.location().method())) {
             emit(new LinkedHashMap<>(Map.of("kind","generation-entry","record",generation.enter(vm,event))),false);return;
         }
@@ -324,6 +359,25 @@ public final class PostingObserver {
         emit(record, true);
     }
     private void failure(ExceptionEvent event) throws Exception {
+        Deque<Map<String,Object>> generated=generation.pending.get(event.thread().uniqueID());
+        if(generated!=null) {
+            int catchDepth=-1;
+            if(event.catchLocation()!=null) {
+                List<StackFrame> fs=event.thread().frames();
+                for(int i=0;i<fs.size();i++)if(fs.get(i).location().method().equals(event.catchLocation().method())) {
+                    if(catchDepth!=-1)throw new IllegalStateException("ambiguous generation catch");catchDepth=fs.size()-i;
+                }
+                if(catchDepth<0)throw new IllegalStateException("generation catch absent");
+            }
+            while(!generated.isEmpty() && ((Number)generated.peek().get("entry_depth")).intValue()>catchDepth) {
+                Map<String,Object> unwound=generated.pop();
+                emit(new LinkedHashMap<>(Map.of("kind","generation-unwind","record",unwound,
+                    "exception_class",event.exception().referenceType().name(),"catch_depth",catchDepth)),false);
+            }
+            if(generated.isEmpty())generation.pending.remove(event.thread().uniqueID());
+            MethodExitRequest armed=generation.exits.remove(event.thread().uniqueID());
+            if(armed!=null)vm.eventRequestManager().deleteEventRequest(armed);
+        }
         List<Map<String,Object>> stack = frames(event.thread());
         if (stack.stream().noneMatch(f -> f.get("class").equals(SUPPORT) || f.get("class").toString().startsWith(CANDIDATE))) return;
         Map<String,Object> record = new LinkedHashMap<>();

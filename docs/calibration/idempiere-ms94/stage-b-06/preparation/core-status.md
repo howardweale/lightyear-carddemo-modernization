@@ -1,5 +1,9 @@
 # B06 preparation status
 
+## October 8 PR275 follow-up
+
+Host observer, replay and runtime-closure repairs are tested; native readiness is still blocked. See [review r3](review-r3/README.md). Core items 1-2 need native provenance/qualification; item 3 needs the runtime closure, scoped artifacts, pinned-image overhead, corrected pool approval and a fresh five-path plan/Tower decision. Items 4-5 remain not measurement-ready. No new Docker window or model launch is authorized by this code publication.
+
 | Current state (October 7 review follow-up) | Status |
 | --- | --- |
 | Native readiness | r10 failed; r11 rejected by Howard (operator-reported); no replacement authorized. Inventory-only and scoped runtime extraction prepared offline; generated-class/native runtime proof remains incomplete. See [review follow-up](review-pr269-271/README.md). |

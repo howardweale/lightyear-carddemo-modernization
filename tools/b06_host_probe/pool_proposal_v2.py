@@ -33,6 +33,9 @@ def expected_methods(source,closure):
     visit(source)
     def extends(child,parent):
         return parent in interfaces.get(child,set()) or any(extends(p,parent) for p in interfaces.get(child,set()))
+    # HotSpot creates overpasses only when this hierarchy has a default method.
+    if not any(not flags&0x400 for declarations in requirements.values() for _,_,_,flags in declarations):
+        return root['name'],[],hashes
     abstract=[]
     for key,declarations in requirements.items():
         if key in class_methods:continue
@@ -69,20 +72,19 @@ def compare(source,closure,runtime_hex,runtime_count,methods):
 def reviewed_host_modifiers(source,observed):
     """Diagnostic proposal ONLY: no production imports or admission change.
 
-    Preserve exact low class-file flags. Accept the single measured high-word
-    pattern only for private/static/synthetic methods of this exact reviewed
-    AbstractTestDescriptor. Record every normalization for operator review.
+    Preserve exact low class-file flags. Use the general JDWP synthetic
+    high-word marker, including signed 32-bit wire representation. This is
+    the same rule used in production replay; no class-name exception.
     """
     import copy
     from .pool_analysis import method_flags
-    identity=hashlib.sha256(source).hexdigest()
     flags=method_flags(source);out=copy.deepcopy(observed);changes=[]
     for method in out:
         key=method['name']+method['signature'];actual=method.get('modifiers');expected=flags.get(key)
-        if actual==expected:continue
-        if (identity!='ae8b6f3bd6318a3b4d506b55d7f9a9abebe9cc0cae7e160caf184ce5e21c89e5'
-            or expected!=0x100a or type(actual) is not int or (actual & 0xffffffff)!=0xf000100a):
-            raise ValueError('unapproved-host-modifier-difference')
-        changes.append(dict(method=key,class_file_flags=expected,jdi_modifiers=actual))
+        if expected is None:raise ValueError('unbound-host-method')
+        wire=expected | (0xf0000000 if expected & 0x1000 else 0)
+        if wire>=0x80000000:wire-=0x100000000
+        if actual!=wire:raise ValueError('method-wire-flags-differ')
+        if actual!=expected:changes.append(dict(method=key,class_file_flags=expected,jdi_modifiers=actual))
         method['modifiers']=expected
     return out,changes

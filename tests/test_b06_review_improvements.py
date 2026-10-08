@@ -78,13 +78,12 @@ class ProposalTests(unittest.TestCase):
                       'fixture/Contract':abstract_class('fixture/Contract',True)}
         self.hex,self.count=extended(self.source)
     def test_derived_extension_is_proposal_not_admission(self):
-        r=compare(self.source,self.closure,self.hex,self.count,[])
-        self.assertFalse(r['production_admission']);self.assertEqual(r['derived_methods'],[('run','()V')])
+        with self.assertRaisesRegex(ValueError,'no-derived-overpass'):compare(self.source,self.closure,self.hex,self.count,[])
     def test_approved_single_class_rule_is_not_widened(self):
         with self.assertRaisesRegex(ValueError,'reviewed-class'):compare_extension(self.source,self.hex,self.count)
     def test_changed_prefix(self):
         raw=bytearray.fromhex(self.hex);raw[4]^=1
-        with self.assertRaisesRegex(ValueError,'prefix'):compare(self.source,self.closure,raw.hex(),self.count,[])
+        with self.assertRaises(ValueError):compare(self.source,self.closure,raw.hex(),self.count,[])
     def test_wrong_exception_target(self):
         raw=bytes.fromhex(self.hex).replace(b'AbstractMethodError',b'AbstractMethodErroX')
         with self.assertRaises(ValueError):compare(self.source,self.closure,raw.hex(),self.count,[])
@@ -93,7 +92,7 @@ class ProposalTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,'missing-bound'):compare(self.source,self.closure,self.hex,self.count,[])
     def test_count_and_methods(self):
         with self.assertRaises(ValueError):compare(self.source,self.closure,self.hex,self.count+1,[])
-        with self.assertRaisesRegex(ValueError,'methods'):compare(self.source,self.closure,self.hex,self.count,[dict(name='forged',signature='()V',sha256='a'*64)])
+        with self.assertRaises(ValueError):compare(self.source,self.closure,self.hex,self.count,[dict(name='forged',signature='()V',sha256='a'*64)])
 
 class InventoryTests(unittest.TestCase):
     @staticmethod

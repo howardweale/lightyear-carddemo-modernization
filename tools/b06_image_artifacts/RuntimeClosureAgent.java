@@ -34,7 +34,7 @@ public final class RuntimeClosureAgent {
                 int state=((Number)call(bundle,item,"getState")).intValue();
                 String location=String.valueOf(call(bundle,item,"getLocation"));
                 if(id==0) {if(state!=32)ready=false; }
-                else if(!RESOLVED.contains(state))ready=false;
+                else if(state!=2 && !RESOLVED.contains(state))throw new IllegalStateException("unknown bundle state");
                 rows.add("{\"id\":"+id+",\"state\":"+state+",\"location\":"+q(location)+"}");
               }
               if(!ready)continue;
@@ -49,7 +49,7 @@ public final class RuntimeClosureAgent {
           }
           Thread.sleep(50);
         }
-        throw new IllegalStateException("no fully resolved running Equinox runtime within 120 seconds");
+        throw new IllegalStateException("no running Equinox runtime with loaded test classes within 120 seconds");
       } catch(Throwable e) {System.err.println("B06 runtime closure probe failed: "+e.getClass().getName());}
     },"b06-runtime-closure-probe");
     probe.setDaemon(true);probe.start();

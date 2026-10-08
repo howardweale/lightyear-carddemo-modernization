@@ -31,6 +31,27 @@ def accept(root, returncode):
     return rows
 
 
+def launch_arguments():
+    try:from tools.ms94_b06_observed_worker import maven_arguments
+    except ImportError:from ms94_b06_observed_worker import maven_arguments
+    measured=maven_arguments()
+    args=[]
+    for value in measured:
+        if value=='-Dtest=LightyearOperationsTest':value='-Dtest=B06RuntimeCatalogTest'
+        elif value.startswith('-Dp1='):
+            parts=value[5:].split()
+            # No DB settings or journey output and no suspended debugger in this
+            # separate no-candidate process. Every difference is explicit.
+            allowed=['-DPropertyFile=/secrets/application.properties','-Dlightyear.output=/results/journey.xml',
+                '-agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5005']
+            if not all(p in parts for p in allowed):raise ValueError('measured-launch-shape-changed')
+            parts=[p for p in parts if p not in allowed]
+            parts+=['-javaagent:/results/agent.jar=/results/loaded','-javaagent:/results/closure-agent.jar=/results/closure-observation.json']
+            value='-Dp1='+' '.join(parts)
+        args.append(value)
+    return measured,args
+
+
 def main():
     app,out=Path('/application'),Path('/results')
     if not (app/'org.idempiere.test/pom.xml').is_file() or any(out.iterdir()):raise ValueError('Fresh pinned container output required')
@@ -47,10 +68,8 @@ def main():
         shutil.copyfile('/source/B06RuntimeCatalogTest.java',target)
         previous=app/'org.idempiere.test/target/surefire-reports'
         if previous.exists():shutil.move(str(previous),str(out/'previous-reports'))
-        args=['mvn','-o','-B','verify','-DskipTests=false','-Dtest=B06RuntimeCatalogTest','-DfailIfNoTests=false',
-              '-DmaterializeProduct=none','-DassembleRepository=none',
-              '-Dp1=-Duser.timezone=UTC -Djunit.jupiter.execution.parallel.enabled=false -verbose:class '
-              '-javaagent:/results/agent.jar=/results/loaded -javaagent:/results/closure-agent.jar=/results/closure-observation.json']
+        measured,args=launch_arguments()
+        (out/'measured-command.json').write_text(json.dumps(measured),encoding='utf-8')
         (out/'command.json').write_text(json.dumps(args),encoding='utf-8')
         with (out/'maven.log').open('xb') as log:
             code=subprocess.run(args,cwd=app,stdout=log,stderr=subprocess.STDOUT,timeout=1800).returncode

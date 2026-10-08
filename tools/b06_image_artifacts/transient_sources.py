@@ -35,7 +35,7 @@ def catalogue(raw):
     return rows
 
 def classify(observation,copies,loaded):
-    check(observation.get('schema') in ('b06-runtime-launch-observation/3','b06-runtime-launch-observation/4'),'transient-observation-required')
+    check(observation.get('schema') in ('b06-runtime-launch-observation/3','b06-runtime-launch-observation/4','b06-runtime-launch-observation/5'),'transient-observation-required')
     check(isinstance(observation.get('loaded_bundle_classes'),list),'bundle-class-catalogue-required')
     check(isinstance(loaded,list) and bool(loaded),'runtime-catalogue-required')
     check(isinstance(copies,dict),'transient-copies-required')
@@ -85,7 +85,7 @@ def classify(observation,copies,loaded):
 
 def binding(resolution):
     """Comparison representation; only proven source-only rows lose path/hash."""
-    check(resolution.get('schema') in ('b06-resolved-runtime/4','b06-resolved-runtime/5'),'transient-resolution-required')
+    check(resolution.get('schema') in ('b06-resolved-runtime/4','b06-resolved-runtime/5','b06-resolved-runtime/6'),'transient-resolution-required')
     sources={r['bundle_id']:r for r in resolution['transient_source_bundles']};rows=[]
     applications={r['bundle_id']:r for r in resolution.get('application_content_bundles',[])}
     obs=json.loads(resolution['observation_utf8']);install=path(obs['install_area'])

@@ -64,6 +64,9 @@ def content(raw,origin,symbolic_name,version):
             if n=='META-INF/MANIFEST.MF':manifest_bytes=data
             entries[n]=dict(kind='directory' if e.is_dir() else 'file',bytes=len(data),sha256=sha(data))
     check(manifest_bytes is not None,'application-manifest-required')
+    try:from .bundle_content import bundle_content_view
+    except ImportError:from bundle_content import bundle_content_view
+    check(entries==bundle_content_view(raw,kind='jar')['entries'],'application-shared-view-differs')
     normal,headers,changes=manifest(manifest_bytes)
     check(headers['bundle-symbolicname'].split(';',1)[0]==symbolic_name and headers['bundle-version']==version,'application-observed-identity-mismatch')
     base,qualifier=base_version(version)
@@ -94,6 +97,10 @@ def records(observation,copies):
     try:from .tycho_runtime import path
     except ImportError:from tycho_runtime import path
     check(isinstance(copies,dict),'application-copies-required')
+    if observation.get('schema')=='b06-runtime-launch-observation/5':
+        try:from .runtime_capture import validate_capture
+        except ImportError:from runtime_capture import validate_capture
+        validate_capture(observation,copies)
     install=path(observation['install_area']);rows=[];used=set();identities=set()
     for b in observation['bundles']:
         if b['id']==0:continue
@@ -101,7 +108,7 @@ def records(observation,copies):
         if not origin.startswith('/application/'):
             check(c is None,'nonapplication-copy-refused');continue
         check(isinstance(c,dict) and set(c)=={'path','sha256','bytes','kind'},'application-copy-required')
-        check(c['kind'] in ('jar','folder-archive') and c['path']==f"/results/runtime-application/{b['id']}.jar",'application-copy-path')
+        check(c['kind'] in ('jar','folder-archive','folder-runtime-archive') and c['path']==f"/results/runtime-application/{b['id']}.jar",'application-copy-path')
         check(c['path'] in copies and c['path'] not in used,'application-copy-missing-or-duplicate');used.add(c['path'])
         raw=copies[c['path']];check(sha(raw)==c['sha256'] and len(raw)==c['bytes'],'application-copy-bytes')
         row=content(raw,origin,b['symbolic_name'],b['version'])
@@ -121,7 +128,8 @@ def bind_posting_class(resolution,class_name,defining_path,class_bytes,*,invento
     from .archive import bundle_paths
     found=[];member=class_name.replace('.','/')+'.class'
     with zipfile.ZipFile(io.BytesIO(raw)) as z:
-        for prefix in bundle_paths(z):
+        selected=next(b for b in json.loads(resolution['observation_utf8'])['bundles'] if b['id']==row['bundle_id'])
+        for prefix in selected.get('runtime_selection',{}).get('classpath',bundle_paths(z)):
             if prefix.endswith('.jar'):
                 with zipfile.ZipFile(io.BytesIO(z.read(prefix))) as inner:
                     if member in inner.namelist():found.append(inner.read(member))

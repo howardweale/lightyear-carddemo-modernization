@@ -1,5 +1,93 @@
 # B06 preparation status
 
+## October 8 closure fidelity r9: prepared offline, practice approval pending
+
+The [r9 preparation](runtime-fidelity-r9/README.md) replaces broad filename/path
+filtering with a single bundle-content view used by capture, producer, replay
+and comparison. JAR bytes stay exact; folder exclusions name six run-written
+paths and their reasons. The 61-message warning baseline is the intersection
+of r4, r5b and practice logs (74 severity lines each). New messages refuse.
+Frozen practice now binds a committed executable and common plan; all six checks
+are recomputed before a Tower request or evidence launch. No Docker/model calls
+or Tower request in this preparation. Forty historical application captures
+remain unavailable, so 44/44 historical equivalence is still blocked. Earlier
+failures and the passed-pipeline/failed-six-check practice remain unchanged.
+
+
+## October 8 practice r8b pre-window audit: blocked
+
+The [six-check audit](runtime-lifecycle-r8/six-check-audit.md) confirms the exact
+350-bundle census, 102/102 source-only temporary bundles and correct Tycho fork
+binding. It does **not** confirm evidence readiness: the four historically
+comparable application bundles lose 39 entries in practice captures; 40 other
+historical bundle contents were not retained. The log contains 71 warnings and
+three error-level messages despite Maven success and no structured error file.
+The practice binds file hashes but no exact committed executable/snapshot/Tower
+plan. Therefore no evidence window/request proceeds. The prior passed practice
+report describes pipeline completion only; all earlier results remain preserved.
+This audit ran offline, zero Docker/model calls. Operator review, not independent
+attestation.
+
+
+## October 8 corrected practice r8b passed
+
+The user-authorized fresh non-evidence practice passed in **387.000 seconds**
+(6 minutes 27 seconds), including worker finalization, producer, offline replay
+with an ephemeral in-memory test key, and owned cleanup. Independent read-only
+owned-label container/network/volume checks were empty afterward. No production
+signer or Tower authority was used. Zero model calls, databases and native pairs;
+network disabled. This is not a qualification result or measurement admission.
+
+All 350 observed bundles were processed, including 44 application copies and
+102 preserved source-only transient copies. The worker recorded the absent
+`org.idempiere.test/target/test-classes` dev output; classes loaded from
+`target/classes`. Folder-selection policy `/2` records this absence explicitly,
+keeps manifest roots mandatory and rejects loaded classes from absent roots.
+98 offline tests passed before the rerun, including complete pipeline replay
+and negative cases. Host/worker hashes remained unchanged during the run.
+
+Practice report SHA-256:
+`49f654a1e0f8b3df00cb560c69ad271b734c2751a14c4c6473bb46d49d58ba90`.
+Measured inventory SHA-256:
+`37107d2f9253c18ceef2110ed06cb12d4c9f8dabfc28bb4f62fdaef3317b7f46`.
+See [r8b review](runtime-lifecycle-r8/practice-r8b-review.json) and the
+[explicit capture rule](runtime-lifecycle-r8/optional-dev-output-fix.md).
+
+r7 and the failed r8 practice remain preserved. A future evidence run still
+requires a fresh exact snapshot, publication and Tower decision; none was
+created or launched here. Operator review, not independent attestation.
+
+
+## October 8 r8 non-evidence practice result
+
+Howard approved one bounded practice container. It failed after **127.532 seconds**;
+owned-container/network/volume absence was independently checked after cleanup.
+Zero models, native pairs and databases; no network. No retry or Tower request.
+
+The agent completed its observation and matching completion marker: 350 bundles
+and 102 preserved transient source copies. Maven succeeded. The worker then
+failed at `application-capture` with exact error
+`ValueError: runtime-folder-root-missing`. Producer/replay was not reached.
+Practice report SHA-256:
+`83ca2716ec5a6a1e6a4003d0384ac611228c59915fe9839cccc6efc9c86c21f7`.
+Observation SHA-256:
+`6a4f411e1a9c66570c0e7da11f3eedc9127439bca81351bfd8c7b1c3c01d64b7`.
+
+Partial application copies 9, 10, 22 and 48 precede bundle 52,
+`org.idempiere.test`, in the recorded capture order. Its dev.properties declares
+`target/classes` and `target/test-classes`. The compilation log and loaded-class
+catalogue confirm use of `target/classes`; `target/test-classes` is a suspected
+missing root, not an established fact. The old error omitted the path, and the
+full test-bundle root was not retained. The prospective error now includes the
+bundle, declared root and path; missing roots still refuse. A unit test checks
+that exact diagnostic. No capture/admission policy has been widened.
+
+The one-shot practice source, plan, results and failed r7 snapshot remain
+unchanged. See [practice review](runtime-lifecycle-r8/practice-review.json).
+Native admission remains blocked. A fresh practice requires separate approval;
+no qualification success or independent attestation is claimed.
+
+
 ## October 8 PR275 follow-up
 
 Host observer, replay and runtime-closure repairs are tested; native readiness is still blocked. See [review r3](review-r3/README.md). Core items 1-2 need native provenance/qualification; item 3 needs the runtime closure, scoped artifacts, pinned-image overhead, corrected pool approval and a fresh five-path plan/Tower decision. Items 4-5 remain not measurement-ready. No new Docker window or model launch is authorized by this code publication.
@@ -382,3 +470,47 @@ production and the measured posting-class consumer are implemented. The rule
 passed against all four complete saved folder bundles (1,845 file entries total).
 80 focused offline tests passed. No Docker/model/Tower run or native admission.
 This supersedes the proposed deterministic-build remedy in r6, not its evidence.
+
+
+## 2026-10-08 r7 diagnosis, recorded before lifecycle code changes
+
+Literal search of saved maven.log for `B06 runtime closure probe failed:`: zero matches.
+Maven exit 0 / BUILD SUCCESS; the JUnit test returned after 0.097 seconds.
+Exact worker exception at runtime_worker.py:89:
+`FileNotFoundError: [Errno 2] No such file or directory: '/results/closure-observation.json'`.
+No observation or error file exists. Partial bundle copies show capture began.
+JVM exit interrupting asynchronous capture is the leading explanation, not a
+recorded exception or proven exit mechanism: the test did not wait and a
+non-daemon thread cannot prevent System.exit. The evidence cannot establish
+a more exact cause. Writes before the final readiness check and recursive
+in-memory application-folder capture are additional confirmed code defects;
+there is no evidence of an r7 exception from either.
+
+Preserved copies (not a complete runtime catalogue):
+
+| Path | Bytes | SHA-256 |
+|---|---:|---|
+| runtime-transient/1.jar | 67213 | `4a22db763a964b1333e968a36d93363fbaa0f3a2543c6d58773d4c9fca041ed6` |
+| runtime-transient/2.jar | 525528 | `acf1661b9987f5aa8c1da3a69eafa76a6c8c1dbd7b6b14ecd18ff0b564e47e3c` |
+| runtime-transient/3.jar | 581 | `601a60288a1ab720b0eb105b20a69478ce13c002fe6a1d7e33c00e4286fabe26` |
+| runtime-transient/4.jar | 83609 | `f6dfb5e4bc733570c8e649f3cf7f1f275a2ade6d2217d1e8c1be84d74ef91a92` |
+| runtime-transient/6.jar | 34718 | `7a6db56c61d467f42d24355ed1b880f189d046e03291238067978021923db2d7` |
+| runtime-transient/7.jar | 158683 | `aaf8d17c90a8bcecd66dbe12c1d5416efb6b1efdfd3b47f5ca671057692c119e` |
+| runtime-application/9.jar | 40573 | `fc3b7114464c315f288711973741ce0ba131b6225cfd00e0fb2f74081320bfaf` |
+
+Terminal ae86ac24880c3dd5baa89a5d58d6a59ea400229ca380f3917862d8fb0e4370de:
+failed, 123.969 seconds, cleanup passed. Signature and 285 frozen hashes
+verified; actual owned-label container/network/volume inventory was empty.
+Zero model calls/native pairs. r7 remains failed; evidence is unchanged.
+Operator review, not independent attestation.
+
+
+## 2026-10-08 r8 offline lifecycle correction
+
+See [r8 review](runtime-lifecycle-r8/README.md). 92 focused tests passed; final
+10 targeted checks passed after the last mutation guard. Real host Equinox
+rehearsals preserve specific errors, including unavailable Windows process argv;
+350-bundle synthetic worker/producer/replay passed. No Linux practice result or
+new qualification claimed. Practice plan `65c596c2514a03d57ab17f88a5d20929126fe9f5a7df7bb5577951535be7d6e8` is prepared, not authorized
+or run. Zero Docker/model calls; no Tower request. r7 and every prior failure
+remain preserved. Native admission stays blocked.

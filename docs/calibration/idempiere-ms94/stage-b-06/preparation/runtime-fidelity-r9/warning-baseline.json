@@ -1,0 +1,1206 @@
+{
+  "schema": "b06-warning-baseline/1",
+  "normalization": [
+    "ISO UTC timestamp -> <timestamp>",
+    "Maven log UUID -> <run-id>",
+    "14-digit OSGi build qualifier -> <qualifier>",
+    "Tycho temporary source number -> <source-id>",
+    "/application and /root/.m2 roots -> stable root markers; suffix retained"
+  ],
+  "accepted": [
+    "<timestamp> Start Level: Equinox Container: <run-id> ERROR Log4j2 could not find a logging implementation. Please add log4j-core to the classpath. Using SimpleLogger to log to the console...",
+    "[ERROR] Invalid packaging for parent POM io.keikai.parent:keikai-build-oss:5.0.0.1.zk10, must be \"pom\" but is \"xml\" @ ",
+    "[ERROR] Invalid packaging for parent POM io.keikai.parent:keikai-build-oss:5.0.0.1.zk10, must be \"pom\" but is \"xml\" @ io.keikai.parent:keikai-build-oss:5.0.0.1.zk10",
+    "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+    "[WARNING] The POM for io.keikai:keikai-model-oss:jar:5.0.0.1.zk10 is invalid, transitive dependencies (if any) will not be available: 1 problem was encountered while building the effective model for io.keikai:keikai-model-oss:5.0.0.1.zk10",
+    "[WARNING] The POM for io.keikai:keikai-oss:jar:5.0.0.1.zk10 is invalid, transitive dependencies (if any) will not be available: 1 problem was encountered while building the effective model for io.keikai:keikai-oss:5.0.0.1.zk10",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.beust.jcommander,1.78.0.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.github.virtuald.curvesapi,1.6.0.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.google.http-client.google-http-client-gson,1.39.2.sp1.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.google.j2objc.j2objc-annotations,3.1.0.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.google.zxing.javase,3.4.1.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.oracle.database.jdbc.ojdbc17,23.26.0.0.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.sun.net.httpserver.http,20070405.0.0.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.sun.org.apache.xml.internal.resolver,20050927.0.0.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.zaxxer.SparseBitSet,1.2.0.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.de.rototor.pdfbox.graphics2d,0.30.0.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.dev.samstevens.totp.totp,1.7.1.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.io.grpc.grpc-context,1.27.2.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.io.opencensus.opencensus-api,0.28.0.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.io.opencensus.opencensus-contrib-http-util,0.28.0.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.net.sourceforge.barbecue.barbecue,1.5.0.beta1.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.activemq-broker,5.16.7.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.activemq-jaas,5.16.7.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.activemq-kahadb-store,5.16.7.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.activemq-openwire-legacy,5.16.7.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.protobuf.activemq-protobuf,1.1.0.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.cxf.cxf-rt-ws-transfer,3.6.5.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.lucene.lucene-analyzers-common,8.4.1.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.lucene.lucene-core,8.4.1.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.poi.poi,5.2.2.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.poi.poi-ooxml,5.2.2.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.poi.poi-ooxml-lite,5.2.2.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.xmlbeans.xmlbeans,5.0.3.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.xmlgraphics.xmlgraphics-commons,2.6.0.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.dom4j.dom4j,2.1.3.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.glassfish.jaxb.txw2,2.3.5.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.jboss.spec.javax.rmi.jboss-rmi-api_1.0_spec,1.0.6.Final.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.jfree.jcommon,1.0.24.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.jfree.jfreechart,1.0.19.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.mortbay.jetty.quiche.jetty-quiche-native,0.24.4.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-aop,5.3.27.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-beans,5.3.27.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-context,5.3.27.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-context-support,5.3.27.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-core,5.3.27.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-expression,5.3.27.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-web,5.3.27.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.wsdl4j.wsdl4j,1.6.3.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.xalan.xalan,2.7.3.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.xml-resolver.xml-resolver,1.2.0.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zcommon,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zel,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zhtml,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zk,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zkbind,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zkplus,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zkwebfragment,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zul,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zweb,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+    "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zweb-dsp,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+    "[WARNING] net.sourceforge.barbecue:barbecue:1.5-beta1: The default package '.' is not permitted by the Import-Package syntax."
+  ],
+  "runs": {
+    "practice-r8b": {
+      "sha256": "18a45eea29da55c5c3904bbb90aeb9ae67b3c083b9ff2cf3ae4f89c99b62ace5",
+      "rows": [
+        {
+          "line": 174,
+          "text": "[WARNING] net.sourceforge.barbecue:barbecue:1.5-beta1: The default package '.' is not permitted by the Import-Package syntax.",
+          "normalized": "[WARNING] net.sourceforge.barbecue:barbecue:1.5-beta1: The default package '.' is not permitted by the Import-Package syntax."
+        },
+        {
+          "line": 535,
+          "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+          "normalized": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+        },
+        {
+          "line": 586,
+          "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+          "normalized": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+        },
+        {
+          "line": 894,
+          "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+          "normalized": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+        },
+        {
+          "line": 1049,
+          "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+          "normalized": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+        },
+        {
+          "line": 1100,
+          "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+          "normalized": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+        },
+        {
+          "line": 1218,
+          "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+          "normalized": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+        },
+        {
+          "line": 1456,
+          "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+          "normalized": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+        },
+        {
+          "line": 1557,
+          "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+          "normalized": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+        },
+        {
+          "line": 1608,
+          "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+          "normalized": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+        },
+        {
+          "line": 1659,
+          "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+          "normalized": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+        },
+        {
+          "line": 1715,
+          "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+          "normalized": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+        },
+        {
+          "line": 1819,
+          "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+          "normalized": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+        },
+        {
+          "line": 1883,
+          "text": "[WARNING] The POM for io.keikai:keikai-oss:jar:5.0.0.1.zk10 is invalid, transitive dependencies (if any) will not be available: 1 problem was encountered while building the effective model for io.keikai:keikai-oss:5.0.0.1.zk10",
+          "normalized": "[WARNING] The POM for io.keikai:keikai-oss:jar:5.0.0.1.zk10 is invalid, transitive dependencies (if any) will not be available: 1 problem was encountered while building the effective model for io.keikai:keikai-oss:5.0.0.1.zk10"
+        },
+        {
+          "line": 1884,
+          "text": "[ERROR] Invalid packaging for parent POM io.keikai.parent:keikai-build-oss:5.0.0.1.zk10, must be \"pom\" but is \"xml\" @ io.keikai.parent:keikai-build-oss:5.0.0.1.zk10",
+          "normalized": "[ERROR] Invalid packaging for parent POM io.keikai.parent:keikai-build-oss:5.0.0.1.zk10, must be \"pom\" but is \"xml\" @ io.keikai.parent:keikai-build-oss:5.0.0.1.zk10"
+        },
+        {
+          "line": 1887,
+          "text": "[WARNING] The POM for io.keikai:keikai-model-oss:jar:5.0.0.1.zk10 is invalid, transitive dependencies (if any) will not be available: 1 problem was encountered while building the effective model for io.keikai:keikai-model-oss:5.0.0.1.zk10",
+          "normalized": "[WARNING] The POM for io.keikai:keikai-model-oss:jar:5.0.0.1.zk10 is invalid, transitive dependencies (if any) will not be available: 1 problem was encountered while building the effective model for io.keikai:keikai-model-oss:5.0.0.1.zk10"
+        },
+        {
+          "line": 1888,
+          "text": "[ERROR] Invalid packaging for parent POM io.keikai.parent:keikai-build-oss:5.0.0.1.zk10, must be \"pom\" but is \"xml\" @ ",
+          "normalized": "[ERROR] Invalid packaging for parent POM io.keikai.parent:keikai-build-oss:5.0.0.1.zk10, must be \"pom\" but is \"xml\" @ "
+        },
+        {
+          "line": 3047,
+          "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+          "normalized": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+        },
+        {
+          "line": 3061,
+          "text": "2026-10-08T19:10:51.020499471Z Start Level: Equinox Container: 67ed1275-8f2d-4085-b805-224fba3d915f ERROR Log4j2 could not find a logging implementation. Please add log4j-core to the classpath. Using SimpleLogger to log to the console...",
+          "normalized": "<timestamp> Start Level: Equinox Container: <run-id> ERROR Log4j2 could not find a logging implementation. Please add log4j-core to the classpath. Using SimpleLogger to log to the console..."
+        },
+        {
+          "line": 3318,
+          "text": "[WARNING] net.sourceforge.barbecue:barbecue:1.5-beta1: The default package '.' is not permitted by the Import-Package syntax.",
+          "normalized": "[WARNING] net.sourceforge.barbecue:barbecue:1.5-beta1: The default package '.' is not permitted by the Import-Package syntax."
+        },
+        {
+          "line": 3578,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.beust.jcommander,1.78.0.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.beust.jcommander,1.78.0."
+        },
+        {
+          "line": 3579,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.github.virtuald.curvesapi,1.6.0.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.github.virtuald.curvesapi,1.6.0."
+        },
+        {
+          "line": 3580,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.google.http-client.google-http-client-gson,1.39.2.sp1.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.google.http-client.google-http-client-gson,1.39.2.sp1."
+        },
+        {
+          "line": 3581,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.google.j2objc.j2objc-annotations,3.1.0.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.google.j2objc.j2objc-annotations,3.1.0."
+        },
+        {
+          "line": 3582,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.google.zxing.javase,3.4.1.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.google.zxing.javase,3.4.1."
+        },
+        {
+          "line": 3583,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.oracle.database.jdbc.ojdbc17,23.26.0.0.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.oracle.database.jdbc.ojdbc17,23.26.0.0."
+        },
+        {
+          "line": 3584,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.sun.net.httpserver.http,20070405.0.0.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.sun.net.httpserver.http,20070405.0.0."
+        },
+        {
+          "line": 3585,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.sun.org.apache.xml.internal.resolver,20050927.0.0.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.sun.org.apache.xml.internal.resolver,20050927.0.0."
+        },
+        {
+          "line": 3586,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.zaxxer.SparseBitSet,1.2.0.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.zaxxer.SparseBitSet,1.2.0."
+        },
+        {
+          "line": 3587,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.de.rototor.pdfbox.graphics2d,0.30.0.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.de.rototor.pdfbox.graphics2d,0.30.0."
+        },
+        {
+          "line": 3588,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.dev.samstevens.totp.totp,1.7.1.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.dev.samstevens.totp.totp,1.7.1."
+        },
+        {
+          "line": 3589,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.io.grpc.grpc-context,1.27.2.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.io.grpc.grpc-context,1.27.2."
+        },
+        {
+          "line": 3590,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.io.opencensus.opencensus-api,0.28.0.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.io.opencensus.opencensus-api,0.28.0."
+        },
+        {
+          "line": 3591,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.io.opencensus.opencensus-contrib-http-util,0.28.0.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.io.opencensus.opencensus-contrib-http-util,0.28.0."
+        },
+        {
+          "line": 3592,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.net.sourceforge.barbecue.barbecue,1.5.0.beta1.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.net.sourceforge.barbecue.barbecue,1.5.0.beta1."
+        },
+        {
+          "line": 3593,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.activemq-broker,5.16.7.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.activemq-broker,5.16.7."
+        },
+        {
+          "line": 3594,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.activemq-jaas,5.16.7.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.activemq-jaas,5.16.7."
+        },
+        {
+          "line": 3595,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.activemq-kahadb-store,5.16.7.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.activemq-kahadb-store,5.16.7."
+        },
+        {
+          "line": 3596,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.activemq-openwire-legacy,5.16.7.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.activemq-openwire-legacy,5.16.7."
+        },
+        {
+          "line": 3597,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.protobuf.activemq-protobuf,1.1.0.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.protobuf.activemq-protobuf,1.1.0."
+        },
+        {
+          "line": 3598,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.cxf.cxf-rt-ws-transfer,3.6.5.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.cxf.cxf-rt-ws-transfer,3.6.5."
+        },
+        {
+          "line": 3599,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.lucene.lucene-analyzers-common,8.4.1.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.lucene.lucene-analyzers-common,8.4.1."
+        },
+        {
+          "line": 3600,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.lucene.lucene-core,8.4.1.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.lucene.lucene-core,8.4.1."
+        },
+        {
+          "line": 3601,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.poi.poi,5.2.2.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.poi.poi,5.2.2."
+        },
+        {
+          "line": 3602,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.poi.poi-ooxml,5.2.2.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.poi.poi-ooxml,5.2.2."
+        },
+        {
+          "line": 3603,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.poi.poi-ooxml-lite,5.2.2.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.poi.poi-ooxml-lite,5.2.2."
+        },
+        {
+          "line": 3604,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.xmlbeans.xmlbeans,5.0.3.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.xmlbeans.xmlbeans,5.0.3."
+        },
+        {
+          "line": 3605,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.xmlgraphics.xmlgraphics-commons,2.6.0.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.xmlgraphics.xmlgraphics-commons,2.6.0."
+        },
+        {
+          "line": 3606,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.dom4j.dom4j,2.1.3.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.dom4j.dom4j,2.1.3."
+        },
+        {
+          "line": 3607,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.glassfish.jaxb.txw2,2.3.5.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.glassfish.jaxb.txw2,2.3.5."
+        },
+        {
+          "line": 3608,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.jboss.spec.javax.rmi.jboss-rmi-api_1.0_spec,1.0.6.Final.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.jboss.spec.javax.rmi.jboss-rmi-api_1.0_spec,1.0.6.Final."
+        },
+        {
+          "line": 3609,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.jfree.jcommon,1.0.24.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.jfree.jcommon,1.0.24."
+        },
+        {
+          "line": 3610,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.jfree.jfreechart,1.0.19.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.jfree.jfreechart,1.0.19."
+        },
+        {
+          "line": 3611,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.mortbay.jetty.quiche.jetty-quiche-native,0.24.4.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.mortbay.jetty.quiche.jetty-quiche-native,0.24.4."
+        },
+        {
+          "line": 3612,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-aop,5.3.27.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-aop,5.3.27."
+        },
+        {
+          "line": 3613,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-beans,5.3.27.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-beans,5.3.27."
+        },
+        {
+          "line": 3614,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-context,5.3.27.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-context,5.3.27."
+        },
+        {
+          "line": 3615,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-context-support,5.3.27.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-context-support,5.3.27."
+        },
+        {
+          "line": 3616,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-core,5.3.27.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-core,5.3.27."
+        },
+        {
+          "line": 3617,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-expression,5.3.27.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-expression,5.3.27."
+        },
+        {
+          "line": 3618,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-web,5.3.27.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-web,5.3.27."
+        },
+        {
+          "line": 3619,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.wsdl4j.wsdl4j,1.6.3.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.wsdl4j.wsdl4j,1.6.3."
+        },
+        {
+          "line": 3620,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.xalan.xalan,2.7.3.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.xalan.xalan,2.7.3."
+        },
+        {
+          "line": 3621,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.xml-resolver.xml-resolver,1.2.0.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.xml-resolver.xml-resolver,1.2.0."
+        },
+        {
+          "line": 3622,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zcommon,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zcommon,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+        },
+        {
+          "line": 3623,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zel,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zel,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+        },
+        {
+          "line": 3624,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zhtml,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zhtml,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+        },
+        {
+          "line": 3625,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zk,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zk,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+        },
+        {
+          "line": 3626,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zkbind,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zkbind,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+        },
+        {
+          "line": 3627,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zkplus,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zkplus,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+        },
+        {
+          "line": 3628,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zkwebfragment,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zkwebfragment,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+        },
+        {
+          "line": 3629,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zul,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zul,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+        },
+        {
+          "line": 3630,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zweb,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zweb,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+        },
+        {
+          "line": 3631,
+          "text": "[WARNING] [6040839f-65d0-4dc1-921f-61275ee5f4c9][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zweb-dsp,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zweb-dsp,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+        }
+      ]
+    },
+    "r4-window2": {
+      "sha256": "fe98c59d978cd067607dcaec2380f7eb8c789ddc2a8882e8f1e415a80714c4d5",
+      "rows": [
+        {
+          "line": 174,
+          "text": "[WARNING] net.sourceforge.barbecue:barbecue:1.5-beta1: The default package '.' is not permitted by the Import-Package syntax.",
+          "normalized": "[WARNING] net.sourceforge.barbecue:barbecue:1.5-beta1: The default package '.' is not permitted by the Import-Package syntax."
+        },
+        {
+          "line": 535,
+          "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+          "normalized": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+        },
+        {
+          "line": 586,
+          "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+          "normalized": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+        },
+        {
+          "line": 894,
+          "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+          "normalized": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+        },
+        {
+          "line": 1049,
+          "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+          "normalized": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+        },
+        {
+          "line": 1100,
+          "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+          "normalized": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+        },
+        {
+          "line": 1218,
+          "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+          "normalized": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+        },
+        {
+          "line": 1456,
+          "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+          "normalized": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+        },
+        {
+          "line": 1557,
+          "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+          "normalized": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+        },
+        {
+          "line": 1608,
+          "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+          "normalized": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+        },
+        {
+          "line": 1659,
+          "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+          "normalized": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+        },
+        {
+          "line": 1715,
+          "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+          "normalized": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+        },
+        {
+          "line": 1819,
+          "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+          "normalized": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+        },
+        {
+          "line": 1883,
+          "text": "[WARNING] The POM for io.keikai:keikai-oss:jar:5.0.0.1.zk10 is invalid, transitive dependencies (if any) will not be available: 1 problem was encountered while building the effective model for io.keikai:keikai-oss:5.0.0.1.zk10",
+          "normalized": "[WARNING] The POM for io.keikai:keikai-oss:jar:5.0.0.1.zk10 is invalid, transitive dependencies (if any) will not be available: 1 problem was encountered while building the effective model for io.keikai:keikai-oss:5.0.0.1.zk10"
+        },
+        {
+          "line": 1884,
+          "text": "[ERROR] Invalid packaging for parent POM io.keikai.parent:keikai-build-oss:5.0.0.1.zk10, must be \"pom\" but is \"xml\" @ io.keikai.parent:keikai-build-oss:5.0.0.1.zk10",
+          "normalized": "[ERROR] Invalid packaging for parent POM io.keikai.parent:keikai-build-oss:5.0.0.1.zk10, must be \"pom\" but is \"xml\" @ io.keikai.parent:keikai-build-oss:5.0.0.1.zk10"
+        },
+        {
+          "line": 1887,
+          "text": "[WARNING] The POM for io.keikai:keikai-model-oss:jar:5.0.0.1.zk10 is invalid, transitive dependencies (if any) will not be available: 1 problem was encountered while building the effective model for io.keikai:keikai-model-oss:5.0.0.1.zk10",
+          "normalized": "[WARNING] The POM for io.keikai:keikai-model-oss:jar:5.0.0.1.zk10 is invalid, transitive dependencies (if any) will not be available: 1 problem was encountered while building the effective model for io.keikai:keikai-model-oss:5.0.0.1.zk10"
+        },
+        {
+          "line": 1888,
+          "text": "[ERROR] Invalid packaging for parent POM io.keikai.parent:keikai-build-oss:5.0.0.1.zk10, must be \"pom\" but is \"xml\" @ ",
+          "normalized": "[ERROR] Invalid packaging for parent POM io.keikai.parent:keikai-build-oss:5.0.0.1.zk10, must be \"pom\" but is \"xml\" @ "
+        },
+        {
+          "line": 3047,
+          "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+          "normalized": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+        },
+        {
+          "line": 3061,
+          "text": "2026-10-08T16:33:37.440554222Z Start Level: Equinox Container: 6b041bde-61de-447a-ade7-a043c67f6fa4 ERROR Log4j2 could not find a logging implementation. Please add log4j-core to the classpath. Using SimpleLogger to log to the console...",
+          "normalized": "<timestamp> Start Level: Equinox Container: <run-id> ERROR Log4j2 could not find a logging implementation. Please add log4j-core to the classpath. Using SimpleLogger to log to the console..."
+        },
+        {
+          "line": 3318,
+          "text": "[WARNING] net.sourceforge.barbecue:barbecue:1.5-beta1: The default package '.' is not permitted by the Import-Package syntax.",
+          "normalized": "[WARNING] net.sourceforge.barbecue:barbecue:1.5-beta1: The default package '.' is not permitted by the Import-Package syntax."
+        },
+        {
+          "line": 3578,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.beust.jcommander,1.78.0.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.beust.jcommander,1.78.0."
+        },
+        {
+          "line": 3579,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.github.virtuald.curvesapi,1.6.0.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.github.virtuald.curvesapi,1.6.0."
+        },
+        {
+          "line": 3580,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.google.http-client.google-http-client-gson,1.39.2.sp1.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.google.http-client.google-http-client-gson,1.39.2.sp1."
+        },
+        {
+          "line": 3581,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.google.j2objc.j2objc-annotations,3.1.0.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.google.j2objc.j2objc-annotations,3.1.0."
+        },
+        {
+          "line": 3582,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.google.zxing.javase,3.4.1.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.google.zxing.javase,3.4.1."
+        },
+        {
+          "line": 3583,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.oracle.database.jdbc.ojdbc17,23.26.0.0.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.oracle.database.jdbc.ojdbc17,23.26.0.0."
+        },
+        {
+          "line": 3584,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.sun.net.httpserver.http,20070405.0.0.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.sun.net.httpserver.http,20070405.0.0."
+        },
+        {
+          "line": 3585,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.sun.org.apache.xml.internal.resolver,20050927.0.0.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.sun.org.apache.xml.internal.resolver,20050927.0.0."
+        },
+        {
+          "line": 3586,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.zaxxer.SparseBitSet,1.2.0.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.zaxxer.SparseBitSet,1.2.0."
+        },
+        {
+          "line": 3587,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.de.rototor.pdfbox.graphics2d,0.30.0.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.de.rototor.pdfbox.graphics2d,0.30.0."
+        },
+        {
+          "line": 3588,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.dev.samstevens.totp.totp,1.7.1.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.dev.samstevens.totp.totp,1.7.1."
+        },
+        {
+          "line": 3589,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.io.grpc.grpc-context,1.27.2.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.io.grpc.grpc-context,1.27.2."
+        },
+        {
+          "line": 3590,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.io.opencensus.opencensus-api,0.28.0.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.io.opencensus.opencensus-api,0.28.0."
+        },
+        {
+          "line": 3591,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.io.opencensus.opencensus-contrib-http-util,0.28.0.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.io.opencensus.opencensus-contrib-http-util,0.28.0."
+        },
+        {
+          "line": 3592,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.net.sourceforge.barbecue.barbecue,1.5.0.beta1.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.net.sourceforge.barbecue.barbecue,1.5.0.beta1."
+        },
+        {
+          "line": 3593,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.activemq-broker,5.16.7.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.activemq-broker,5.16.7."
+        },
+        {
+          "line": 3594,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.activemq-jaas,5.16.7.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.activemq-jaas,5.16.7."
+        },
+        {
+          "line": 3595,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.activemq-kahadb-store,5.16.7.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.activemq-kahadb-store,5.16.7."
+        },
+        {
+          "line": 3596,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.activemq-openwire-legacy,5.16.7.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.activemq-openwire-legacy,5.16.7."
+        },
+        {
+          "line": 3597,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.protobuf.activemq-protobuf,1.1.0.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.protobuf.activemq-protobuf,1.1.0."
+        },
+        {
+          "line": 3598,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.cxf.cxf-rt-ws-transfer,3.6.5.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.cxf.cxf-rt-ws-transfer,3.6.5."
+        },
+        {
+          "line": 3599,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.lucene.lucene-analyzers-common,8.4.1.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.lucene.lucene-analyzers-common,8.4.1."
+        },
+        {
+          "line": 3600,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.lucene.lucene-core,8.4.1.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.lucene.lucene-core,8.4.1."
+        },
+        {
+          "line": 3601,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.poi.poi,5.2.2.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.poi.poi,5.2.2."
+        },
+        {
+          "line": 3602,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.poi.poi-ooxml,5.2.2.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.poi.poi-ooxml,5.2.2."
+        },
+        {
+          "line": 3603,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.poi.poi-ooxml-lite,5.2.2.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.poi.poi-ooxml-lite,5.2.2."
+        },
+        {
+          "line": 3604,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.xmlbeans.xmlbeans,5.0.3.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.xmlbeans.xmlbeans,5.0.3."
+        },
+        {
+          "line": 3605,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.xmlgraphics.xmlgraphics-commons,2.6.0.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.xmlgraphics.xmlgraphics-commons,2.6.0."
+        },
+        {
+          "line": 3606,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.dom4j.dom4j,2.1.3.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.dom4j.dom4j,2.1.3."
+        },
+        {
+          "line": 3607,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.glassfish.jaxb.txw2,2.3.5.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.glassfish.jaxb.txw2,2.3.5."
+        },
+        {
+          "line": 3608,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.jboss.spec.javax.rmi.jboss-rmi-api_1.0_spec,1.0.6.Final.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.jboss.spec.javax.rmi.jboss-rmi-api_1.0_spec,1.0.6.Final."
+        },
+        {
+          "line": 3609,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.jfree.jcommon,1.0.24.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.jfree.jcommon,1.0.24."
+        },
+        {
+          "line": 3610,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.jfree.jfreechart,1.0.19.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.jfree.jfreechart,1.0.19."
+        },
+        {
+          "line": 3611,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.mortbay.jetty.quiche.jetty-quiche-native,0.24.4.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.mortbay.jetty.quiche.jetty-quiche-native,0.24.4."
+        },
+        {
+          "line": 3612,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-aop,5.3.27.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-aop,5.3.27."
+        },
+        {
+          "line": 3613,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-beans,5.3.27.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-beans,5.3.27."
+        },
+        {
+          "line": 3614,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-context,5.3.27.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-context,5.3.27."
+        },
+        {
+          "line": 3615,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-context-support,5.3.27.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-context-support,5.3.27."
+        },
+        {
+          "line": 3616,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-core,5.3.27.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-core,5.3.27."
+        },
+        {
+          "line": 3617,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-expression,5.3.27.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-expression,5.3.27."
+        },
+        {
+          "line": 3618,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-web,5.3.27.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-web,5.3.27."
+        },
+        {
+          "line": 3619,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.wsdl4j.wsdl4j,1.6.3.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.wsdl4j.wsdl4j,1.6.3."
+        },
+        {
+          "line": 3620,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.xalan.xalan,2.7.3.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.xalan.xalan,2.7.3."
+        },
+        {
+          "line": 3621,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.xml-resolver.xml-resolver,1.2.0.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.xml-resolver.xml-resolver,1.2.0."
+        },
+        {
+          "line": 3622,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zcommon,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zcommon,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+        },
+        {
+          "line": 3623,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zel,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zel,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+        },
+        {
+          "line": 3624,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zhtml,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zhtml,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+        },
+        {
+          "line": 3625,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zk,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zk,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+        },
+        {
+          "line": 3626,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zkbind,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zkbind,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+        },
+        {
+          "line": 3627,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zkplus,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zkplus,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+        },
+        {
+          "line": 3628,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zkwebfragment,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zkwebfragment,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+        },
+        {
+          "line": 3629,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zul,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zul,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+        },
+        {
+          "line": 3630,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zweb,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zweb,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+        },
+        {
+          "line": 3631,
+          "text": "[WARNING] [5d5ca661-0470-4454-a7b5-2ea5e91571b6][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zweb-dsp,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zweb-dsp,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+        }
+      ]
+    },
+    "r5b": {
+      "sha256": "fdd998beda56c7a0b11d5717ee7af325e0d5d7da9db228c269be649b4ca321e7",
+      "rows": [
+        {
+          "line": 174,
+          "text": "[WARNING] net.sourceforge.barbecue:barbecue:1.5-beta1: The default package '.' is not permitted by the Import-Package syntax.",
+          "normalized": "[WARNING] net.sourceforge.barbecue:barbecue:1.5-beta1: The default package '.' is not permitted by the Import-Package syntax."
+        },
+        {
+          "line": 535,
+          "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+          "normalized": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+        },
+        {
+          "line": 586,
+          "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+          "normalized": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+        },
+        {
+          "line": 894,
+          "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+          "normalized": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+        },
+        {
+          "line": 1049,
+          "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+          "normalized": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+        },
+        {
+          "line": 1100,
+          "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+          "normalized": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+        },
+        {
+          "line": 1218,
+          "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+          "normalized": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+        },
+        {
+          "line": 1456,
+          "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+          "normalized": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+        },
+        {
+          "line": 1557,
+          "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+          "normalized": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+        },
+        {
+          "line": 1608,
+          "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+          "normalized": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+        },
+        {
+          "line": 1659,
+          "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+          "normalized": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+        },
+        {
+          "line": 1715,
+          "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+          "normalized": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+        },
+        {
+          "line": 1819,
+          "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+          "normalized": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+        },
+        {
+          "line": 1883,
+          "text": "[WARNING] The POM for io.keikai:keikai-oss:jar:5.0.0.1.zk10 is invalid, transitive dependencies (if any) will not be available: 1 problem was encountered while building the effective model for io.keikai:keikai-oss:5.0.0.1.zk10",
+          "normalized": "[WARNING] The POM for io.keikai:keikai-oss:jar:5.0.0.1.zk10 is invalid, transitive dependencies (if any) will not be available: 1 problem was encountered while building the effective model for io.keikai:keikai-oss:5.0.0.1.zk10"
+        },
+        {
+          "line": 1884,
+          "text": "[ERROR] Invalid packaging for parent POM io.keikai.parent:keikai-build-oss:5.0.0.1.zk10, must be \"pom\" but is \"xml\" @ io.keikai.parent:keikai-build-oss:5.0.0.1.zk10",
+          "normalized": "[ERROR] Invalid packaging for parent POM io.keikai.parent:keikai-build-oss:5.0.0.1.zk10, must be \"pom\" but is \"xml\" @ io.keikai.parent:keikai-build-oss:5.0.0.1.zk10"
+        },
+        {
+          "line": 1887,
+          "text": "[WARNING] The POM for io.keikai:keikai-model-oss:jar:5.0.0.1.zk10 is invalid, transitive dependencies (if any) will not be available: 1 problem was encountered while building the effective model for io.keikai:keikai-model-oss:5.0.0.1.zk10",
+          "normalized": "[WARNING] The POM for io.keikai:keikai-model-oss:jar:5.0.0.1.zk10 is invalid, transitive dependencies (if any) will not be available: 1 problem was encountered while building the effective model for io.keikai:keikai-model-oss:5.0.0.1.zk10"
+        },
+        {
+          "line": 1888,
+          "text": "[ERROR] Invalid packaging for parent POM io.keikai.parent:keikai-build-oss:5.0.0.1.zk10, must be \"pom\" but is \"xml\" @ ",
+          "normalized": "[ERROR] Invalid packaging for parent POM io.keikai.parent:keikai-build-oss:5.0.0.1.zk10, must be \"pom\" but is \"xml\" @ "
+        },
+        {
+          "line": 3047,
+          "text": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported",
+          "normalized": "[WARNING] Checking Service-Component header that contains wildcards is currently not supported"
+        },
+        {
+          "line": 3061,
+          "text": "2026-10-08T17:16:33.478800676Z Start Level: Equinox Container: a431906f-7764-460f-970d-e6a28cb33836 ERROR Log4j2 could not find a logging implementation. Please add log4j-core to the classpath. Using SimpleLogger to log to the console...",
+          "normalized": "<timestamp> Start Level: Equinox Container: <run-id> ERROR Log4j2 could not find a logging implementation. Please add log4j-core to the classpath. Using SimpleLogger to log to the console..."
+        },
+        {
+          "line": 3318,
+          "text": "[WARNING] net.sourceforge.barbecue:barbecue:1.5-beta1: The default package '.' is not permitted by the Import-Package syntax.",
+          "normalized": "[WARNING] net.sourceforge.barbecue:barbecue:1.5-beta1: The default package '.' is not permitted by the Import-Package syntax."
+        },
+        {
+          "line": 3578,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.beust.jcommander,1.78.0.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.beust.jcommander,1.78.0."
+        },
+        {
+          "line": 3579,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.github.virtuald.curvesapi,1.6.0.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.github.virtuald.curvesapi,1.6.0."
+        },
+        {
+          "line": 3580,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.google.http-client.google-http-client-gson,1.39.2.sp1.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.google.http-client.google-http-client-gson,1.39.2.sp1."
+        },
+        {
+          "line": 3581,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.google.j2objc.j2objc-annotations,3.1.0.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.google.j2objc.j2objc-annotations,3.1.0."
+        },
+        {
+          "line": 3582,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.google.zxing.javase,3.4.1.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.google.zxing.javase,3.4.1."
+        },
+        {
+          "line": 3583,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.oracle.database.jdbc.ojdbc17,23.26.0.0.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.oracle.database.jdbc.ojdbc17,23.26.0.0."
+        },
+        {
+          "line": 3584,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.sun.net.httpserver.http,20070405.0.0.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.sun.net.httpserver.http,20070405.0.0."
+        },
+        {
+          "line": 3585,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.sun.org.apache.xml.internal.resolver,20050927.0.0.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.sun.org.apache.xml.internal.resolver,20050927.0.0."
+        },
+        {
+          "line": 3586,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.zaxxer.SparseBitSet,1.2.0.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.com.zaxxer.SparseBitSet,1.2.0."
+        },
+        {
+          "line": 3587,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.de.rototor.pdfbox.graphics2d,0.30.0.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.de.rototor.pdfbox.graphics2d,0.30.0."
+        },
+        {
+          "line": 3588,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.dev.samstevens.totp.totp,1.7.1.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.dev.samstevens.totp.totp,1.7.1."
+        },
+        {
+          "line": 3589,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.io.grpc.grpc-context,1.27.2.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.io.grpc.grpc-context,1.27.2."
+        },
+        {
+          "line": 3590,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.io.opencensus.opencensus-api,0.28.0.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.io.opencensus.opencensus-api,0.28.0."
+        },
+        {
+          "line": 3591,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.io.opencensus.opencensus-contrib-http-util,0.28.0.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.io.opencensus.opencensus-contrib-http-util,0.28.0."
+        },
+        {
+          "line": 3592,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.net.sourceforge.barbecue.barbecue,1.5.0.beta1.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.net.sourceforge.barbecue.barbecue,1.5.0.beta1."
+        },
+        {
+          "line": 3593,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.activemq-broker,5.16.7.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.activemq-broker,5.16.7."
+        },
+        {
+          "line": 3594,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.activemq-jaas,5.16.7.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.activemq-jaas,5.16.7."
+        },
+        {
+          "line": 3595,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.activemq-kahadb-store,5.16.7.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.activemq-kahadb-store,5.16.7."
+        },
+        {
+          "line": 3596,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.activemq-openwire-legacy,5.16.7.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.activemq-openwire-legacy,5.16.7."
+        },
+        {
+          "line": 3597,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.protobuf.activemq-protobuf,1.1.0.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.activemq.protobuf.activemq-protobuf,1.1.0."
+        },
+        {
+          "line": 3598,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.cxf.cxf-rt-ws-transfer,3.6.5.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.cxf.cxf-rt-ws-transfer,3.6.5."
+        },
+        {
+          "line": 3599,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.lucene.lucene-analyzers-common,8.4.1.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.lucene.lucene-analyzers-common,8.4.1."
+        },
+        {
+          "line": 3600,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.lucene.lucene-core,8.4.1.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.lucene.lucene-core,8.4.1."
+        },
+        {
+          "line": 3601,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.poi.poi,5.2.2.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.poi.poi,5.2.2."
+        },
+        {
+          "line": 3602,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.poi.poi-ooxml,5.2.2.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.poi.poi-ooxml,5.2.2."
+        },
+        {
+          "line": 3603,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.poi.poi-ooxml-lite,5.2.2.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.poi.poi-ooxml-lite,5.2.2."
+        },
+        {
+          "line": 3604,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.xmlbeans.xmlbeans,5.0.3.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.xmlbeans.xmlbeans,5.0.3."
+        },
+        {
+          "line": 3605,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.xmlgraphics.xmlgraphics-commons,2.6.0.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.apache.xmlgraphics.xmlgraphics-commons,2.6.0."
+        },
+        {
+          "line": 3606,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.dom4j.dom4j,2.1.3.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.dom4j.dom4j,2.1.3."
+        },
+        {
+          "line": 3607,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.glassfish.jaxb.txw2,2.3.5.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.glassfish.jaxb.txw2,2.3.5."
+        },
+        {
+          "line": 3608,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.jboss.spec.javax.rmi.jboss-rmi-api_1.0_spec,1.0.6.Final.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.jboss.spec.javax.rmi.jboss-rmi-api_1.0_spec,1.0.6.Final."
+        },
+        {
+          "line": 3609,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.jfree.jcommon,1.0.24.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.jfree.jcommon,1.0.24."
+        },
+        {
+          "line": 3610,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.jfree.jfreechart,1.0.19.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.jfree.jfreechart,1.0.19."
+        },
+        {
+          "line": 3611,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.mortbay.jetty.quiche.jetty-quiche-native,0.24.4.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.mortbay.jetty.quiche.jetty-quiche-native,0.24.4."
+        },
+        {
+          "line": 3612,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-aop,5.3.27.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-aop,5.3.27."
+        },
+        {
+          "line": 3613,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-beans,5.3.27.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-beans,5.3.27."
+        },
+        {
+          "line": 3614,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-context,5.3.27.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-context,5.3.27."
+        },
+        {
+          "line": 3615,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-context-support,5.3.27.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-context-support,5.3.27."
+        },
+        {
+          "line": 3616,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-core,5.3.27.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-core,5.3.27."
+        },
+        {
+          "line": 3617,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-expression,5.3.27.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-expression,5.3.27."
+        },
+        {
+          "line": 3618,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-web,5.3.27.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.org.springframework.spring-web,5.3.27."
+        },
+        {
+          "line": 3619,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.wsdl4j.wsdl4j,1.6.3.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.wsdl4j.wsdl4j,1.6.3."
+        },
+        {
+          "line": 3620,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.xalan.xalan,2.7.3.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.xalan.xalan,2.7.3."
+        },
+        {
+          "line": 3621,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.xml-resolver.xml-resolver,1.2.0.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] No digest algorithm is available to verify download of osgi.bundle,wrapped.xml-resolver.xml-resolver,1.2.0."
+        },
+        {
+          "line": 3622,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zcommon,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zcommon,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+        },
+        {
+          "line": 3623,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zel,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zel,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+        },
+        {
+          "line": 3624,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zhtml,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zhtml,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+        },
+        {
+          "line": 3625,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zk,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zk,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+        },
+        {
+          "line": 3626,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zkbind,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zkbind,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+        },
+        {
+          "line": 3627,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zkplus,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zkplus,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+        },
+        {
+          "line": 3628,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zkwebfragment,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zkwebfragment,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+        },
+        {
+          "line": 3629,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zul,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zul,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+        },
+        {
+          "line": 3630,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zweb,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zweb,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+        },
+        {
+          "line": 3631,
+          "text": "[WARNING] [6f3b172e-7ed3-4b7c-80ab-d4cf50279afd][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zweb-dsp,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider.",
+          "normalized": "[WARNING] [<run-id>][extension>org.eclipse.tycho:tycho-maven-plugin:4.0.8] The digest algorithms (md5) used to verify osgi.bundle,zweb-dsp,10.3.0.1 have severely compromised security. Please report this concern to the artifact provider."
+        }
+      ]
+    }
+  },
+  "unaccepted": {
+    "practice-r8b": [],
+    "r4-window2": [],
+    "r5b": []
+  },
+  "content_sha256": "d4b0f432b3e62d9bf196f4be41876ba0ee7d5168a8accc5aa31e4c696fd5e0ab"
+}

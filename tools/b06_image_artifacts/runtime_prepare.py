@@ -48,7 +48,7 @@ def prepare(repository,commit,snapshot,public,start,tower_key,java_sha256,public
     selected.update({'tools/B06RuntimeCatalogAgent.java','tools/B06RuntimeCatalogTest.java','tools/b06_image_artifacts/RuntimeClosureAgent.java'})
     snapshot.mkdir(parents=True);public.mkdir(parents=True)
     mapping={n:n for n in selected}
-    for n in ('runtime_launch.py','runtime_closure.py','runtime_producer.py','runtime_worker.py','runtime_inventory.py','resolved_runtime.py','tycho_runtime.py','transient_sources.py','application_identity.py','archive.py','RuntimeClosureAgent.java'):
+    for n in ('runtime_launch.py','runtime_closure.py','runtime_producer.py','runtime_worker.py','runtime_inventory.py','resolved_runtime.py','tycho_runtime.py','transient_sources.py','application_identity.py','runtime_capture.py','bundle_content.py','archive.py','RuntimeClosureAgent.java'):
         mapping[n]='tools/b06_image_artifacts/'+n
     for n in ('B06RuntimeCatalogAgent.java','B06RuntimeCatalogTest.java','ms94_b06_observed_worker.py'):mapping[n]='tools/'+n
     hashes={}

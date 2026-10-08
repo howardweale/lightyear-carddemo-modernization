@@ -12,12 +12,12 @@ from lightyear_control_tower.verification import verify_decision
 from .controller import IMAGE,check,utc
 from .runtime_producer import produce
 
-REQUIRED={'runtime_closure.py','runtime_launch.py','runtime_producer.py','runtime_worker.py','runtime_inventory.py','resolved_runtime.py','tycho_runtime.py','transient_sources.py','application_identity.py','archive.py',
+REQUIRED={'runtime_closure.py','runtime_launch.py','runtime_producer.py','runtime_worker.py','runtime_inventory.py','resolved_runtime.py','tycho_runtime.py','transient_sources.py','application_identity.py','runtime_capture.py','bundle_content.py','archive.py',
           'B06RuntimeCatalogAgent.java','B06RuntimeCatalogTest.java','RuntimeClosureAgent.java','ms94_b06_observed_worker.py'}
 
 def validate(root,plan):
     verify(plan);root=Path(root).resolve()
-    check(plan['schema']=='b06-runtime-closure-plan/1' and plan['image']==IMAGE,'runtime-plan-required')
+    check(plan['schema'] in ('b06-runtime-closure-plan/1','b06-runtime-closure-plan/2') and plan['image']==IMAGE,'runtime-plan-required')
     check(plan['model_calls']==plan['native_pairs']==plan['database_containers']==0,'runtime-only-scope')
     check(plan['retries']==0 and plan['network']=='none','runtime-isolation')
     check(0<plan['maximum_runtime_seconds']<=3000 and plan['cleanup_reserve_seconds']==600,'runtime-limits')
@@ -37,25 +37,33 @@ def validate(root,plan):
     check(hashlib.sha256(Path(__file__).parents[1].joinpath('ms94_b06_observed_worker.py').read_bytes()).hexdigest()==files['ms94_b06_observed_worker.py'],'runtime-measured-worker-binding')
     return root
 
-def request(plan,commit):
+def request(plan,commit,*,window=None,practice=None):
+    frozen=plan.get('schema')=='b06-runtime-closure-plan/2'
+    if frozen:
+        check(isinstance(practice,dict) and practice.get('passed') is True and all(practice.get('checks',{}).get(k) is True for k in ('census','source_only','application_content','tycho','warning_baseline','frozen_bytes','cleanup')),'frozen-practice-six-checks-required-before-Tower-request')
+        check(all(practice.get(k)==plan.get(k) for k in ('source_commit','snapshot_sha256')) and practice.get('plan_sha256')==plan['content_sha256'],'frozen-practice-plan-binding')
+        check(isinstance(window,dict) and set(window)=={'not_before_utc','latest_start_utc','deadline_utc'},'authorization-window-required')
+        check(utc(window['not_before_utc'])<=utc(window['latest_start_utc']) and (utc(window['deadline_utc'])-utc(window['latest_start_utc'])).total_seconds()>=plan['maximum_runtime_seconds']+plan['cleanup_reserve_seconds'],'authorization-window-reserve')
+    else:window=plan['window']
     verify(plan);check(re.fullmatch('[a-f0-9]{40}',commit),'full-public-commit')
     artifacts=dict(campaign=plan['id'],plan=plan,declaration=dict(runtime_only=True,models=0,native_pairs=0),
         limits=dict(seconds=plan['maximum_runtime_seconds'],cleanup=600,retries=0),snapshot=plan['snapshot_sha256'],
-        window=plan['window'],public_commit=commit)
+        window=window,public_commit=commit)
+    if frozen:artifacts['practice']=practice
     bindings={k:digest(v) for k,v in artifacts.items()}
     value=dict(schema='tower-request/1',scope='ms94-b06',kind='campaign-authorization',bound=bindings,
         evidence={k:'evidence/b06/runtime-closure/'+v+'.json' for k,v in bindings.items()},
         proposed_by='b06-runtime-closure-preparation',workload=plan['id'],
         summary='One network-free runtime-closure container; offline probe compilation, no-database Tycho/Equinox test JVM and jimage extraction. '
           'No native pairs, models or databases; no retry. 2700 seconds runtime plus 600 seconds cleanup reserve. '
-          'Window '+plan['window']['not_before_utc']+' to '+plan['window']['deadline_utc']+'. '
-          'Latest start '+plan['window']['latest_start_utc']+'. Five-path census is not authorized. Operator review; not independent attestation.')
+          'Window '+window['not_before_utc']+' to '+window['deadline_utc']+'. '
+          'Latest start '+window['latest_start_utc']+'. Five-path census is not authorized. Operator review; not independent attestation.')
     value['id']='b06-runtime-'+digest(value)
     return value,{**bindings,'request':digest(value)},artifacts
 
 
-def bound(plan,commit):
-    return request(plan,commit)[1]
+def bound(plan,commit,**kwargs):
+    return request(plan,commit,**kwargs)[1]
 
 
 def write_request(repository,plan,commit):
@@ -80,12 +88,16 @@ def publication(repository,root,plan,commit):
     for local,remote in plan['public_files'].items():check(git('cat-file','blob',commit+':'+remote)==(root/local).read_bytes(),'runtime-public-bytes')
     check(git('cat-file','blob',commit+':'+plan['public_plan_path'])==canonical(plan),'runtime-public-plan')
 
-def execute(repository,root,plan,output,commit,reader,signer):
+def execute(repository,root,plan,output,commit,reader,signer,*,practice_directory=None,authorization_window=None):
     root=validate(root,plan);output=Path(output).resolve();publication(repository,root,plan,commit)
-    now=datetime.now(timezone.utc);w=plan['window'];deadline=utc(w['deadline_utc'])
+    kwargs={}
+    if plan['schema']=='b06-runtime-closure-plan/2':
+        from .frozen_runtime import verify_practice
+        kwargs=dict(window=authorization_window,practice=verify_practice(root,plan,practice_directory))
+    now=datetime.now(timezone.utc);w=authorization_window if kwargs else plan['window'];deadline=utc(w['deadline_utc'])
     check(utc(w['not_before_utc'])<=now<=utc(w['latest_start_utc']) and (deadline-now).total_seconds()>=plan['maximum_runtime_seconds']+600,'runtime-window')
     check(hashlib.sha256(reader.key).hexdigest()==plan['tower_public_key_sha256'] and reader.key!=signer.public,'runtime-distinct-tower-authority')
-    bindings=bound(plan,commit);proof=reader.get('campaign-authorization',bindings,now)
+    bindings=bound(plan,commit,**kwargs);proof=reader.get('campaign-authorization',bindings,now)
     check(proof is not None and abs((now-utc(proof['journal']['exported_at'])).total_seconds())<60,'runtime-fresh-tower-decision')
     verify_decision(proof,reader.key,'campaign-authorization',bindings,scope='ms94-b06',outcomes={'authorized'},expected_head=proof['journal']['journal_head_sha256'],now=now)
     check(not output.exists() and not output.is_relative_to(root),'runtime-fresh-output')
@@ -118,7 +130,7 @@ def execute(repository,root,plan,output,commit,reader,signer):
         check(json.loads((results/'measured-command.json').read_bytes())==measured==plan['measured_maven_arguments'],'runtime-measured-command-changed')
         check(json.loads((results/'command.json').read_bytes())==closure,'runtime-closure-command-changed')
         inventory=json.loads((results/'measured-inventory.json').read_bytes())
-        raw=(results/'closure-observation.json').read_bytes();config=(results/'effective-config.ini').read_bytes();surefire=(results/'effective-surefire.properties').read_bytes()
+        raw=(results/'worker-observation.json').read_bytes();config=(results/'effective-config.ini').read_bytes();surefire=(results/'effective-surefire.properties').read_bytes()
         fork_command=(results/'fork-command.json').read_bytes()
         expected=dict(fork_command_sha256=hashlib.sha256(fork_command).hexdigest(),measured_command_sha256=hashlib.sha256((results/'measured-command.json').read_bytes()).hexdigest(),closure_command_sha256=hashlib.sha256((results/'command.json').read_bytes()).hexdigest(),probe_sha256=plan['files_sha256']['RuntimeClosureAgent.java'],image=IMAGE,java_sha256=plan['java_sha256'],plan_sha256=plan['content_sha256'],tower_decision_sha256=proof['decision_sha256'])
         h=lambda b:hashlib.sha256(b).hexdigest()
@@ -142,7 +154,7 @@ def execute(repository,root,plan,output,commit,reader,signer):
             cleaned=True;validate(root,plan)
             if failure is None and pending is not None:
                 raw,config,surefire,inventory,expected,fork_command,copies,application_copies=pending
-                receipt=signer.sign(dict(schema='b06-runtime-launch-receipt/5',passed=True,bindings=expected,cleanup_passed=True,
+                receipt=signer.sign(dict(schema='b06-runtime-launch-receipt/6',passed=True,bindings=expected,cleanup_passed=True,
                    outputs={'fork-command':h(fork_command),'observation':h(raw),'config.ini':h(config),'surefire.properties':h(surefire),'inventory':h(json.dumps(inventory,sort_keys=True).encode())}))
                 resolution=produce(raw,config,surefire,inventory,receipt,signer.public,expected,fork_command=fork_command,transient_copies=copies,application_copies=application_copies)
                 atomic_new(output/'runtime-launch-receipt.json',receipt);atomic_new(output/'resolved-runtime.json',resolution)
@@ -159,6 +171,7 @@ def main():
     p=argparse.ArgumentParser()
     for name in ('root','plan','repository','output','public-commit','authority','tower-key','credential'):
         p.add_argument('--'+name,required=True)
+    p.add_argument('--practice-directory');p.add_argument('--authorization-window')
     p.add_argument('--tower-url',default='http://127.0.0.1:8766')
     a=p.parse_args();root=Path(a.root).resolve()
     check(Path.cwd().resolve()==root and Path(__file__).resolve().is_relative_to(root),'frozen-cwd-imports-required')
@@ -170,7 +183,7 @@ def main():
     from lightyear_control_tower.client import ConsoleClient
     signer=existing_signer(a.authority)
     reader=DecisionReader(ConsoleClient(a.tower_url),Path(a.credential).read_text(encoding='utf-8-sig').strip(),Path(a.tower_key).read_bytes())
-    result=execute(a.repository,root,plan,a.output,a.public_commit,reader,signer)
+    result=execute(a.repository,root,plan,a.output,a.public_commit,reader,signer,practice_directory=a.practice_directory,authorization_window=json.loads(Path(a.authorization_window).read_bytes()) if a.authorization_window else None)
     if not result['passed']:raise SystemExit(1)
 
 if __name__=='__main__':main()

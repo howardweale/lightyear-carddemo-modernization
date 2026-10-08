@@ -18,9 +18,9 @@ def check(v,reason):
 
 def assemble(inventory,resolution,*,launch_key=None,expected_launch=None,transient_copies=None,application_copies=None):
     check(inventory['schema']=='b06-image-inventory/1' and inventory['failure'] is None,'inventory-required')
-    check(resolution['schema'] in ('b06-resolved-runtime/2','b06-resolved-runtime/3','b06-resolved-runtime/4','b06-resolved-runtime/5') and resolution['resolved'] is True,'resolved-runtime-required')
+    check(resolution['schema'] in ('b06-resolved-runtime/2','b06-resolved-runtime/3','b06-resolved-runtime/4','b06-resolved-runtime/5','b06-resolved-runtime/6') and resolution['resolved'] is True,'resolved-runtime-required')
     raw=resolution['configuration_utf8']
-    modern=resolution['schema'] in ('b06-resolved-runtime/3','b06-resolved-runtime/4','b06-resolved-runtime/5')
+    modern=resolution['schema'] in ('b06-resolved-runtime/3','b06-resolved-runtime/4','b06-resolved-runtime/5','b06-resolved-runtime/6')
     encoding='iso-8859-1' if modern else 'utf-8'
     config=raw['config.ini'].encode(encoding);surefire=raw['surefire.properties'].encode(encoding)
     if modern:
@@ -31,9 +31,9 @@ def assemble(inventory,resolution,*,launch_key=None,expected_launch=None,transie
     from .runtime_producer import produce
     check(launch_key is not None and expected_launch is not None,'trusted-launch-authority-required')
     extra={'fork_command':resolution['fork_command_utf8'].encode('utf-8')} if modern else {}
-    if resolution['schema'] in ('b06-resolved-runtime/4','b06-resolved-runtime/5'): extra['transient_copies']=transient_copies
+    if resolution['schema'] in ('b06-resolved-runtime/4','b06-resolved-runtime/5','b06-resolved-runtime/6'): extra['transient_copies']=transient_copies
     elif transient_copies is not None: raise ValueError('legacy-transient-copies-refused')
-    if resolution['schema']=='b06-resolved-runtime/5':extra['application_copies']=application_copies
+    if resolution['schema'] in ('b06-resolved-runtime/5','b06-resolved-runtime/6'):extra['application_copies']=application_copies
     elif application_copies is not None:raise ValueError('legacy-application-copies-refused')
     rebuilt=produce(resolution['observation_utf8'].encode(),config,surefire,inventory,resolution['launch_receipt'],launch_key,expected_launch,**extra)
     check(rebuilt==resolution,'runtime-producer-replay-differs')

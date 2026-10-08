@@ -52,9 +52,11 @@ def launch_arguments():
     return measured,args
 
 
-def main():
+def run():
     app,out=Path('/application'),Path('/results')
     if not (app/'org.idempiere.test/pom.xml').is_file() or any(out.iterdir()):raise ValueError('Fresh pinned container output required')
+    global STAGE
+    STAGE='compile-and-maven'
     started=time.monotonic();code=None
     (out/'agent').mkdir();(out/'loaded').mkdir();(out/'runtime').mkdir()
     try:
@@ -74,6 +76,11 @@ def main():
         with (out/'maven.log').open('xb') as log:
             code=subprocess.run(args,cwd=app,stdout=log,stderr=subprocess.STDOUT,timeout=1800).returncode
     finally:
+        STAGE='preserve-maven-output'
+        # A structured probe failure must not be masked by a preservation error.
+        if (out/'closure-error.json').exists():
+            import sys
+            sys.stderr.buffer.write((out/'closure-error.json').read_bytes()+b'\n');sys.stderr.buffer.flush()
         target=app/'org.idempiere.test/target'
         for name in ('work','surefire-reports','surefire','test-runtime','configuration'):
             path=target/name
@@ -84,27 +91,60 @@ def main():
         (out/'attempt.json').write_text(json.dumps(metadata,sort_keys=True),encoding='utf-8')
         from tycho_runtime import capture_properties
         capture_properties(target,out/'runtime')
+    process_outputs(out,code)
+
+
+def process_outputs(out,code,*,resolve=Path,measure_fn=None):
+    """Shared native/offline finalization; no Maven or Docker launch here."""
+    global STAGE
+    out=Path(out)
+    try:
+        from .runtime_capture import probe_result,capture_application
+        from .tycho_runtime import path,read,one_properties_file
+        from .runtime_inventory import measure
+        from .transient_sources import copies_at,catalogue
+        from .application_identity import copies_at as application_copies_at
+    except ImportError:
+        from runtime_capture import probe_result,capture_application
+        from tycho_runtime import path,read,one_properties_file
+        from runtime_inventory import measure
+        from transient_sources import copies_at,catalogue
+        from application_identity import copies_at as application_copies_at
+    STAGE='probe-completion'
+    observation=probe_result(out)  # Error takes priority over Maven/XML success.
+    STAGE='test-and-class-inventory'
     rows=accept(out,code)
-    # Required even if Maven/test XML passed. A daemon failure must not disappear.
-    observation=json.loads((out/'closure-observation.json').read_bytes())
-    if observation.get('schema')!='b06-runtime-launch-observation/4':raise ValueError('closure-observation-required')
-    from tycho_runtime import path,read,one_properties_file
-    config_path=Path(path(observation['configuration_url']))/'config.ini'
+    STAGE='application-capture'
+    observation=capture_application(observation,out,resolve=resolve)
+    STAGE='configuration'
+    config_path=resolve(path(observation['configuration_url']))/'config.ini'
     config=config_path.read_bytes()
     surefire=one_properties_file(out/'runtime').read_bytes()
     command=observation['fork_command']
     (out/'fork-command.json').write_text(json.dumps(command),encoding='utf-8')
     (out/'effective-config.ini').write_bytes(config);(out/'effective-surefire.properties').write_bytes(surefire)
     parsed=read(config,surefire,observation,command)
-    from runtime_inventory import measure
-    from transient_sources import copies_at,catalogue
+    STAGE='inventory'
     copies=copies_at(observation,out)
     loaded=catalogue((out/'runtime-catalogue.tsv').read_bytes())
-    from application_identity import copies_at as application_copies_at
     application_copies=application_copies_at(observation,out)
-    inventory=measure(observation,out/'runtime-inventory',parsed['boot_classpath'],transient_copies=copies,loaded=loaded,application_copies=application_copies)
+    inventory=(measure_fn or measure)(observation,out/'runtime-inventory',parsed['boot_classpath'],transient_copies=copies,loaded=loaded,application_copies=application_copies)
     (out/'measured-inventory.json').write_text(json.dumps(inventory,sort_keys=True),encoding='utf-8')
+    metadata=json.loads((out/'attempt.json').read_bytes())
     (out/'result.json').write_text(json.dumps({'loaded_classes':rows,**metadata,'passed':True},sort_keys=True),encoding='utf-8')
+    return inventory
+
+
+STAGE='worker-start'
+def main():
+    global STAGE
+    try:run()
+    except BaseException as error:
+        try:
+            from .runtime_capture import failure
+        except ImportError:from runtime_capture import failure
+        failure(Path('/results'),STAGE,error)
+        raise
 
 
 if __name__=='__main__':main()

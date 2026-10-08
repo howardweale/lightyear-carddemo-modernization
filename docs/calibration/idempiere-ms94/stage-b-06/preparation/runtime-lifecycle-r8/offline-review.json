@@ -1,0 +1,47 @@
+{
+  "schema": "b06-offline-rehearsal-review/1",
+  "review": "operator review; not independent attestation",
+  "native_admission": false,
+  "qualification": false,
+  "model_calls": 0,
+  "docker_commands": 0,
+  "tower_requests": 0,
+  "full_suite": {
+    "tests": 92,
+    "passed": true,
+    "elapsed_seconds": 16.654
+  },
+  "final_targeted": {
+    "tests": 10,
+    "passed": true,
+    "elapsed_seconds": 0.689
+  },
+  "host": {
+    "jdk": "Amazon Corretto 21.0.10_7 Windows",
+    "equinox_version": "3.18.500.v20230801-1826",
+    "equinox_sha256": "80b275d58379723b291ea650249cc3809c8f10b34f78aaf988132cd6d434ab4e",
+    "scenarios": [
+      "immediate test body with completion handshake",
+      "128 transient bundles, 32 MiB payload",
+      "explicit JVM exit before readiness",
+      "real folder bundle plus mutation during post-JVM capture"
+    ],
+    "result": "Specific errors correctly recorded; Windows ProcessHandle arguments unavailable. Not a successful Linux observation."
+  },
+  "pipeline": {
+    "bundles": 350,
+    "application": 44,
+    "maven": 203,
+    "transient": 102,
+    "system": 1,
+    "layouts": [
+      "r5b JAR",
+      "r7 folder plus osgi.dev output roots"
+    ],
+    "synthetic_jimage": true,
+    "ephemeral_test_signatures": true
+  },
+  "practice_plan_sha256": "65c596c2514a03d57ab17f88a5d20929126fe9f5a7df7bb5577951535be7d6e8",
+  "practice_run_authorized": false,
+  "preserved_r7_terminal_sha256": "ae86ac24880c3dd5baa89a5d58d6a59ea400229ca380f3917862d8fb0e4370de"
+}

@@ -2,8 +2,8 @@
   "audit": {
     "checkpoint_signature_algorithm": "none",
     "event_count": 21,
-    "ledger_content_sha256": "d4e89afa898c723625aca87b12f3eeeddbdd5779efc9834ae45147ea3a9cbd68",
-    "ledger_head_sha256": "16e7b52b5f234a05796f974348394c0adfb6aebcf3afbb3e5fbb0f189e1eb11f",
+    "ledger_content_sha256": "06305fbeb8019fb75f73fa711bd102eb51ff0f462448281ca28629aecfdac1e6",
+    "ledger_head_sha256": "b9f57f6a41b685437e04bb7807771d6fcca34a60853eba09c414a97259cfae46",
     "ledger_id": "lightyear:carddemo:audit"
   },
   "cics_vsam_readiness": {
@@ -17,7 +17,7 @@
       "No external equivalence signing key was configured."
     ]
   },
-  "content_sha256": "c64bab4e12af99a385fc0a23a13f247da1ce32ad628d17010c2da3728c4f656c",
+  "content_sha256": "76d0e04f75f2010a71c75c9d1178619f97215daaecbe9556784b71015df185d7",
   "dossier_type": "lightyear-release-evidence",
   "durable_control_plane": {
     "approval_consumption": "exactly-once",
@@ -57,7 +57,7 @@
     {
       "id": "execution:carddemo-hardened-plane",
       "kind": "decision_input",
-      "sha256": "83d937880f17192b3ff8e5caa881481bf50feb307c20fab9da67543c94bb571e"
+      "sha256": "9cdf54c0a7014c36b9269c05d1cbf433e3dcb2a5fd3f4d3e919f6eaefc2503ba"
     },
     {
       "id": "factory:durable-conformance",
@@ -107,7 +107,7 @@
   ],
   "execution_decisions": [
     {
-      "content_sha256": "a2f60a68ab91c3f02ac74cfba437c1e964565a39e2e6dc50dcac663db03221ba",
+      "content_sha256": "398e7f874c5ea24fd430f45ccbfcf6bf68f9983571759836b549c49e42f9c920",
       "evaluated_at": "2022-07-18T00:00:00.300Z",
       "exception": null,
       "gaps": [
@@ -120,7 +120,7 @@
       "inputs": {
         "assurance": "simulated",
         "evidence_class": "policy-conformance-simulation",
-        "execution_receipt_sha256": "83d937880f17192b3ff8e5caa881481bf50feb307c20fab9da67543c94bb571e",
+        "execution_receipt_sha256": "9cdf54c0a7014c36b9269c05d1cbf433e3dcb2a5fd3f4d3e919f6eaefc2503ba",
         "hardened_execution_ready": false
       },
       "override_allowed": false,
